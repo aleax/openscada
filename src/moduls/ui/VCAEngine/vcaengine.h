@@ -80,6 +80,7 @@ class Engine : public TUI
 	TElem &elWdgData( )	{ return wdgdata_el; }
 	TElem &elWdg( )		{ return wdg_el; }
 	TElem &elWdgIO( )	{ return wdgio_el; }
+	TElem &elWdgUIO( )	{ return wdguio_el; }
 	TElem &elInclWdg( )	{ return inclwdg_el; }
 	TElem &elProject( )	{ return prj_el; }
 	TElem &elPage( )	{ return page_el; }
@@ -97,6 +98,7 @@ class Engine : public TUI
 		wdgdata_el,	//Media and other data what use by widgets and stored into DB
 		wdg_el, 	//The table structure of library widgets
 		wdgio_el, 	//The table structure of library widget's atributes
+		wdguio_el,	//The table structure of library widget's user atributes
 		inclwdg_el,	//The table structure of container including widgets
 		prj_el,		//The generic table structure of project
 		page_el;	//The table structure of project's pages

@@ -51,11 +51,18 @@ namespace VISION
 	    void setPgOpenSrc( const string &vl );
 	    
 	    WdgView *newWdgItem( const string &iwid );
-	    void load( const string& item, bool update = false );
+	    void attrLoad( QMap<QString, QString> &attrs );
+	    
+	    void update( unsigned cnt, int div_max );
 	
 	protected:
 	    //- Protected methods -
 	    bool event( QEvent * event );
+	    
+	private:
+	    //- Attributes -
+	    unsigned reqtm;	//Request values time
+	    int	     curDiv;	//Current divider
     };
     
     //****************************************
@@ -73,8 +80,7 @@ namespace VISION
 	    bool findOpenPage( const string &pg );
 	    bool callPage( const string &pg_it, const string &pgGrp, const string &pgSrc );
 	    
-	    RunPageView *parent( );
-	    
+	    RunPageView *parent( );	    
 	    RunPageView *pgOpen( const string &pg );
 	    
 	protected:

@@ -37,6 +37,8 @@ using std::vector;
 class QMainWindow;
 class QComboBox;
 class QLineEdit;
+class QTextEdit;
+class QDialogButtonBox;
 
 namespace VISION
 {
@@ -109,6 +111,81 @@ namespace VISION
 	    QString	user_txt;
     };    
     
+    //*********************************************************************************************
+    //* Universal edit line widget. Contain support of: QLineEdit, QSpinBox, QDoubleSpinBox,      *
+    //* QTimeEdit, QDateEdit and QDateTimeEdit.                                                   *
+    //*********************************************************************************************
+    class LineEdit : public QWidget
+    {
+        Q_OBJECT
+		
+        public:
+	    //- Data -
+	    enum LType { Text, Integer, Real, Time, Date, DateTime, Combo };
+	    
+	    //- Methods -
+            LineEdit( QWidget *parent, LType tp = Text, bool prev_dis = false );
+	    
+	    LType type( ) 	{ return m_tp; }
+            QString value();
+
+	    void setType( LType tp );
+            void setValue(const QString &);
+	    void setCfg(const QString &);
+	    
+	    QWidget *workWdg()	{ return ed_fld; }
+        
+	signals:
+            void apply( );
+            void cancel( );
+	    void valChanged(const QString&);
+	
+	protected:
+            bool event( QEvent * e );
+        
+	private slots:
+            void changed( );
+            void applySlot( );
+        
+	private:
+	    LType       m_tp;
+	    QString     m_val;
+            QWidget	*ed_fld;
+    	    QPushButton *bt_fld;
+    };    
+
+    //*********************************************
+    //* Text edit widget                          *
+    //*********************************************
+    class TextEdit : public QWidget
+    {
+        Q_OBJECT
+	    
+        public:
+            TextEdit( QWidget *parent, bool prev_dis = false );
+						
+            QString text();
+            void setText(const QString &);
+						    
+            QTextEdit *workWdg() { return ed_fld; }
+	    
+        signals:
+            void apply( );
+            void cancel( );
+            void textChanged(const QString&);
+        
+	private slots:
+            void changed();
+            void applySlot( );
+            void cancelSlot( );
+        
+	private:
+    	    bool isInit;
+	    QString     m_text;
+            QTextEdit   *ed_fld;
+            QDialogButtonBox *but_box;
+    };
+
     //****************************************
     //* Shape widget view                    *
     //****************************************
@@ -129,20 +206,24 @@ namespace VISION
 	    QMainWindow *mainWin( )	{ return main_win; }
 	    int	   z( )			{ return z_coord;  }
 	    virtual string user( )	{ return ""; }
-	    QMap<QString, QString>  &dataReq()  { return reqdata; }
 	    QMap<QString, QVariant> &dataCache(){ return cache_data; }
 
 	    void   setZ( int val )	{ z_coord = val; }
-
-	    void orderUpdate( );
+	    
+	    virtual void attrLoad( QMap<QString, QString> &attrs );		
+	    bool attrSet( const string &attr, const string &val, bool locReload = false );
 
 	public slots:
 	    virtual WdgView *newWdgItem( const string &iwid );
-	    virtual void load( const string& item, bool update = false );
+	    virtual void load( const string& item );
 	    virtual void save( const string& item );
 	    
 	protected:
 	    //- Protected methods -
+	    void childsUpdate( bool newLoad = true );
+	    void shapeUpdate( );
+	    void orderUpdate( );	    
+	    
 	    bool event( QEvent * event );
 	    bool eventFilter( QObject *object, QEvent *event );	    
 	    
@@ -154,8 +235,6 @@ namespace VISION
 	    WdgShape		*shape;		//Link to root widget shape
 	    QMap<QString, QVariant> cache_data;	//Internal data cache
 	    QMainWindow		*main_win;	//Main window
-	    unsigned		reqtm;		//Request values time
-	    QMap<QString, QString> reqdata;	//Request values data    	
     };
 }
 

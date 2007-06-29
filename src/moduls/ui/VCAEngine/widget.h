@@ -47,7 +47,8 @@ class Attr : public TCntrNode
             Font    = 0x0800,	//Store font
 	    Address = 0x1000,	//Store address to a parameter or an attribute
 	    IsUser  = 0x2000,	//User created element
-            IsInher = 0x4000    //Inherit attribute
+            IsInher = 0x4000,	//Inherit attribute
+	    Mutable = 0x8000	//Mutable attribute, present depend from "Active" attribute value
         };
 
 	//- Link types -

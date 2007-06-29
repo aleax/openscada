@@ -34,9 +34,11 @@ class TError
 {
     public:
 	//Methods
-	TError( const char *icat, const char *fmt, ... );
+	TError( const char *cat, const char *fmt, ... );
+	TError( int cod, const char *cat, const char *fmt, ... );
 	
 	//Attributes
+	int	cod;
 	string  cat;
 	string  mess;
 };

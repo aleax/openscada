@@ -104,17 +104,7 @@ void OrigElFigure::postEnable( int flag )
 	attrAdd( new TFld("bordClr",_("Border:color"),TFld::String,Attr::Color,"20","#000000") );
 	attrAdd( new TFld("backgClr",_("Background:color"),TFld::String,Attr::Color,"20","") );
 	attrAdd( new TFld("backgImg",_("Background:image"),TFld::String,Attr::Image,"20","") );
-	attrAdd( new TFld("arrowBeginType",_("Arrow:begin type"),TFld::Integer,TFld::Selected,"2","0","0;1;2;3;4;5;6;7;8",
-                      _("No arrow;Arrow;Arc arrow;Line arrow;Two arrow;Rectangle;Rhomb;Cyrcle;Size line")) );
-	attrAdd( new TFld("arrowBeginWidth",_("Arrow:begin width"),TFld::Integer,TFld::NoFlag,"2","0","0;99") );
-	attrAdd( new TFld("arrowBeginHeight",_("Arrow:begin height"),TFld::Integer,TFld::NoFlag,"2","0","0;99") );
-	attrAdd( new TFld("arrowEndType",_("Arrow:end type"),TFld::Integer,TFld::Selected,"2","0","0;1;2;3;4;5;6;7;8",
-		      _("No arrow;Arrow;Arc arrow;Line arrow;Two arrow;Rectangle;Rhomb;Cyrcle;Size line")) );
-	attrAdd( new TFld("arrowEndWidth",_("Arrow:end width"),TFld::Integer,TFld::NoFlag,"2","0","0;99") );
-	attrAdd( new TFld("arrowEndHeight",_("Arrow:end height"),TFld::Integer,TFld::NoFlag,"2","0","0;99") );
-	//Elements: line, arc, besie, grad(line,biline, radial, square decLine, atForm)
 	attrAdd( new TFld("elLst",_("Element's list"),TFld::String,TFld::FullText,"300","") );
-	//Next is dynamic created Element's points attributes
     }
 }
 
@@ -153,10 +143,13 @@ bool OrigFormEl::attrChange( Attr &cfg )
     {
 	//- Delete specific attributes -
 	if( cfg.owner()->attrPresent("value") )		cfg.owner()->attrDel("value");
-	if( cfg.owner()->attrPresent("alignment") )	cfg.owner()->attrDel("alignment");
+	if( cfg.owner()->attrPresent("view") )		cfg.owner()->attrDel("view");
+	if( cfg.owner()->attrPresent("cfg") )		cfg.owner()->attrDel("cfg");
 	if( cfg.owner()->attrPresent("wordWrap") )	cfg.owner()->attrDel("wordWrap");
 	if( cfg.owner()->attrPresent("text") )		cfg.owner()->attrDel("text");
 	if( cfg.owner()->attrPresent("img") )		cfg.owner()->attrDel("img");
+	if( cfg.owner()->attrPresent("color") )		cfg.owner()->attrDel("color");
+	if( cfg.owner()->attrPresent("checkable") )	cfg.owner()->attrDel("checkable");
 	if( cfg.owner()->attrPresent("items") )		cfg.owner()->attrDel("items");
 	
 	//- Create specific attributes -
@@ -164,27 +157,31 @@ bool OrigFormEl::attrChange( Attr &cfg )
 	switch(tp)
 	{
 	    case 0: 
-		cfg.owner()->attrAdd( new TFld("value",_("Value"),TFld::String,TFld::NoFlag,"200") );
+		cfg.owner()->attrAdd( new TFld("view",_("View"),TFld::Integer,TFld::Selected|Attr::Mutable,
+		    "1","0","0;1;2;3;4;5;6",_("Text;Combo;Integer;Real;Time;Data;Data and time")) );
+		cfg.owner()->attrAdd( new TFld("value",_("Value"),TFld::String,Attr::Mutable,"200") );
+		cfg.owner()->attrAdd( new TFld("cfg",_("Config"),TFld::String,TFld::FullText|Attr::Mutable) );
 		break;
 	    case 1: 
-		cfg.owner()->attrAdd( new TFld("value",_("Value"),TFld::String,TFld::FullText) );
-		cfg.owner()->attrAdd( new TFld("alignment",_("Alignment"),TFld::Integer,TFld::Selected,"1","0","0;1;2;3",
-		            _("Left;Right;Center;Justify")) );
-		cfg.owner()->attrAdd( new TFld("wordWrap",_("Word wrap"),TFld::Boolean,TFld::NoFlag,"1","1") );
+		cfg.owner()->attrAdd( new TFld("value",_("Value"),TFld::String,TFld::FullText|Attr::Mutable) );
+		cfg.owner()->attrAdd( new TFld("wordWrap",_("Word wrap"),TFld::Boolean,Attr::Mutable,"1","1") );
 		break;
 	    case 2:
-		cfg.owner()->attrAdd( new TFld("value",_("Value"),TFld::Integer,TFld::NoFlag,"1") );
+		cfg.owner()->attrAdd( new TFld("value",_("Value"),TFld::Boolean,Attr::Mutable) );
 		break;
 	    case 3:
-		cfg.owner()->attrAdd( new TFld("img",_("Image"),TFld::String,Attr::Image) );
+		cfg.owner()->attrAdd( new TFld("value",_("Value"),TFld::Boolean,Attr::Mutable) );
+		cfg.owner()->attrAdd( new TFld("img",_("Image"),TFld::String,Attr::Image|Attr::Mutable) );
+		cfg.owner()->attrAdd( new TFld("color",_("Color"),TFld::String,Attr::Color|Attr::Mutable,"20") );
+		cfg.owner()->attrAdd( new TFld("checkable",_("Checkable"),TFld::Boolean,Attr::Mutable) );
 		break;
 	    case 4:
-		cfg.owner()->attrAdd( new TFld("value",_("Value"),TFld::String,TFld::NoFlag,"200") );
-		cfg.owner()->attrAdd( new TFld("items",_("Items"),TFld::String,TFld::FullText) );
+		cfg.owner()->attrAdd( new TFld("value",_("Value"),TFld::String,Attr::Mutable,"200") );
+		cfg.owner()->attrAdd( new TFld("items",_("Items"),TFld::String,TFld::FullText|Attr::Mutable) );
 		break;
 	    case 5:
-		cfg.owner()->attrAdd( new TFld("value",_("Value"),TFld::String,TFld::NoFlag,"200") );
-		cfg.owner()->attrAdd( new TFld("items",_("Items"),TFld::String,TFld::FullText) );		
+		cfg.owner()->attrAdd( new TFld("value",_("Value"),TFld::String,Attr::Mutable,"200") );
+		cfg.owner()->attrAdd( new TFld("items",_("Items"),TFld::String,TFld::FullText|Attr::Mutable) );
 		break;
 	}
 	//printf("TEST 00: FormEl type: %d\n",cfg.getI());

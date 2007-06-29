@@ -193,7 +193,8 @@ bool TBDS::dataGet( const string &bdn, const string &path, TConfig &cfg )
         try{ tbl.at().fieldGet(cfg); } 
 	catch(TError err)
 	{ 
-	    mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); 
+	    if( err.cod != TSYS::DBRowNoPresent ) 
+		mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
 	    db_true = false; 
 	}
 	tbl.free();

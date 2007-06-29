@@ -160,12 +160,20 @@ void Engine::postEnable( int flag )
     //- Make widget's IO DB structure -
     wdgio_el.fldAdd( new TFld("IDW",_("Widget ID"),TFld::String,TCfg::Key,"100") );
     wdgio_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"40") );
-    wdgio_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
-    wdgio_el.fldAdd( new TFld("IO_TYPE",_("Attribute generic flags and type"),TFld::Integer,TFld::NoFlag,"10") );
     wdgio_el.fldAdd( new TFld("IO_VAL",_("Attribute value"),TFld::String,TFld::NoFlag,"100000") );
     wdgio_el.fldAdd( new TFld("SELF_FLG",_("Attribute self flags"),TFld::Integer,TFld::NoFlag,"5") );
     wdgio_el.fldAdd( new TFld("CFG_TMPL",_("Configuration template"),TFld::String,TFld::NoFlag,"30") );
     wdgio_el.fldAdd( new TFld("CFG_VAL",_("Configuration value"),TFld::String,TFld::NoFlag,"1000") );
+    
+    //- Make widget's user IO DB structure -
+    wdguio_el.fldAdd( new TFld("IDW",_("Widget ID"),TFld::String,TCfg::Key,"100") );
+    wdguio_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"40") );
+    wdguio_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
+    wdguio_el.fldAdd( new TFld("IO_TYPE",_("Attribute generic flags and type"),TFld::Integer,TFld::NoFlag,"10") );
+    wdguio_el.fldAdd( new TFld("IO_VAL",_("Attribute value"),TFld::String,TFld::NoFlag,"100000") );
+    wdguio_el.fldAdd( new TFld("SELF_FLG",_("Attribute self flags"),TFld::Integer,TFld::NoFlag,"5") );
+    wdguio_el.fldAdd( new TFld("CFG_TMPL",_("Configuration template"),TFld::String,TFld::NoFlag,"30") );
+    wdguio_el.fldAdd( new TFld("CFG_VAL",_("Configuration value"),TFld::String,TFld::NoFlag,"1000") );    
 
     //- Make project's DB structure -
     prj_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
@@ -215,6 +223,10 @@ void Engine::preDisable( int flag )
 
 void Engine::modLoad( )
 {
+#if OSC_DEBUG
+    mess_debug(nodePath().c_str(),_("Load module."));
+#endif    
+
     //- Load parameters from command line -
     int next_opt;
     char *short_opt="h";
@@ -329,6 +341,10 @@ void Engine::modLoad( )
 
 void Engine::modSave( )
 {
+#if OSC_DEBUG
+    mess_debug(nodePath().c_str(),_("Save module."));
+#endif
+
     //- Save parameters -
     //-- Save widget's libraries --
     vector<string> ls;
@@ -343,6 +359,10 @@ void Engine::modSave( )
 
 void Engine::modStart()
 {
+#if OSC_DEBUG
+    mess_debug(nodePath().c_str(),_("Start module."));
+#endif
+
     //- Libraries start -
     vector<string> ls;
     wlbList(ls);
@@ -359,6 +379,10 @@ void Engine::modStart()
 
 void Engine::modStop()
 {
+#if OSC_DEBUG
+    mess_debug(nodePath().c_str(),_("Stop module."));
+#endif
+
     vector<string> ls;
     
     //- Stop sessions -

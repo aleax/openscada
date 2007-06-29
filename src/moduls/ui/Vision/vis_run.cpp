@@ -36,7 +36,8 @@
 
 using namespace VISION;
 
-VisRun::VisRun( const string &prj_it, string open_user ) : winClose(false), master_pg(NULL), m_period(0)
+VisRun::VisRun( const string &prj_it, string open_user ) : winClose(false), master_pg(NULL), 
+    m_period(0), w_prc_cnt(0)
 {    
     setAttribute(Qt::WA_DeleteOnClose,true);
     mod->regWin( this );
@@ -120,6 +121,7 @@ VisRun::VisRun( const string &prj_it, string open_user ) : winClose(false), mast
 VisRun::~VisRun()
 {
     updateTimer->stop();
+    while(updateTimer->isActive());
     winClose = true;
     
     //- Delete session -
@@ -226,8 +228,7 @@ void VisRun::initSess( const string &prj_it )
 	    ses_it = ses_it+"/"+prj_el;
 	    
 	//- Send open command -
-	set_req.setAttr("user",user())->setAttr("path",ses_it+"/%2fattr%2fpgOpen")->setText("1");
-	mod->cntrIfCmd(set_req);
+	wAttrSet(ses_it,"pgOpen","1");
 	    
 	callPage(ses_it);
     }
@@ -246,19 +247,12 @@ void VisRun::callPage( const string& pg_it )
     vector<int> idst;
     string pgGrp, pgSrc;
 
-    XMLNode get_req("get");
-    get_req.setAttr("user",user());
-    XMLNode set_req("set");
-    set_req.setAttr("user",user());    
-
     //- Scan opened pages -
     if( master_pg && master_pg->findOpenPage(pg_it) ) return;
     
     //- Get group and parent page -
-    get_req.setAttr("path",pg_it+"/%2fattr%2fpgGrp");
-    if( !mod->cntrIfCmd(get_req) ) pgGrp = get_req.text().c_str();
-    get_req.setAttr("path",pg_it+"/%2fattr%2fpgOpenSrc");
-    if( !mod->cntrIfCmd(get_req) ) pgSrc = get_req.text().c_str();
+    pgGrp = wAttrGet(pg_it,"pgGrp");
+    pgSrc = wAttrGet(pg_it,"pgOpenSrc");
     
     //- First master page creation -    
     if( !master_pg )
@@ -281,8 +275,7 @@ void VisRun::callPage( const string& pg_it )
 	if( pgGrp == "main" || master_pg->pgGrp() == pgGrp )
 	{
 	    //-- Send close command --
-	    set_req.setAttr("path",master_pg->id()+"/%2fattr%2fpgOpen")->setText("0");
-	    mod->cntrIfCmd(set_req);
+	    wAttrSet(master_pg->id(),"pgOpen","0");
 	    
 	    //-- Create widget view --
 	    master_pg = new RunPageView(pg_it,this,this);
@@ -299,6 +292,25 @@ void VisRun::callPage( const string& pg_it )
     //setGeometry(0,0,master_pg->width(),master_pg->height());
 }
 
+string VisRun::wAttrGet( const string &path, const string &attr )
+{
+    XMLNode get_req("get");
+    get_req.setAttr("user",user())->
+	    setAttr("path",path+"/%2fattr%2f"+attr);
+    if( !mod->cntrIfCmd(get_req) ) return get_req.text();
+    return "";
+}
+
+bool VisRun::wAttrSet( const string &path, const string &attr, const string &val )
+{
+    //- Send value to model -
+    XMLNode set_req("set");
+    set_req.setAttr("user",user())->
+    setAttr("path",path+"/%2fattr%2fscmd");
+    set_req.childAdd("el")->setAttr("id",attr)->setText(val);
+    return !mod->cntrIfCmd(set_req);
+}
+
 void VisRun::updatePage( )
 {
     XMLNode get_req("get");    
@@ -307,5 +319,7 @@ void VisRun::updatePage( )
         for( int i_ch = 0; i_ch < get_req.childSize(); i_ch++ )
 	    callPage(get_req.childGet(i_ch)->text());
     //- Update opened pages -
-    if( master_pg ) master_pg->load("",true);
+    if( master_pg ) master_pg->update(w_prc_cnt,5000/period());
+    
+    w_prc_cnt++;
 }

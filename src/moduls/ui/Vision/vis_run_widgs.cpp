@@ -24,6 +24,8 @@
 #include <QKeyEvent>
 #include <QApplication>
 
+#include <tsys.h>
+
 #include "tvision.h"
 #include "vis_run.h"
 #include "vis_run_widgs.h"
@@ -34,7 +36,7 @@ using namespace VISION;
 //* Shape widget view runtime mode       *
 //****************************************
 RunWdgView::RunWdgView( const string &iwid, int ilevel, VisRun *mainWind, QWidget* parent ) :
-    WdgView(iwid,ilevel,(QMainWindow*)mainWind,parent)
+    WdgView(iwid,ilevel,(QMainWindow*)mainWind,parent), reqtm(0), curDiv(1)
 {
 
 }
@@ -67,12 +69,7 @@ string RunWdgView::pgOpenSrc( )
 void RunWdgView::setPgOpenSrc( const string &vl )
 {
     dataCache()["pgOpenSrc"] = vl.c_str();
-    //- Send value to model -
-    XMLNode set_req("set");
-    set_req.setAttr("user",user())->
-	    setAttr("path",id()+"/%2fattr%2fpgOpenSrc")->
-    	    setText(vl);
-    mod->cntrIfCmd(set_req);
+    attrSet("pgOpenSrc",vl,true);
 }
 
 WdgView *RunWdgView::newWdgItem( const string &iwid )
@@ -80,32 +77,73 @@ WdgView *RunWdgView::newWdgItem( const string &iwid )
     return new RunWdgView(iwid,wLevel()+1,mainWin(),this);
 }
 
-void RunWdgView::load( const string& item, bool update )
+void RunWdgView::attrLoad( QMap<QString, QString> &attrs )
 {
-    WdgView::load(item,update);
-    if( root() == "UserEl" )
+    WdgView::attrLoad(attrs);
+    
+    if( root() == "UserEl" && !attrs.empty() )
     {
 	QMap<QString, QString>::const_iterator vl;
-	if( (vl=dataReq().find("pgGrp")) != dataReq().end() ) 	  dataCache()["pgGrp"] = vl.value();
-	if( (vl=dataReq().find("pgOpenSrc")) != dataReq().end() ) dataCache()["pgOpenSrc"] = vl.value();
+	if( (vl=attrs.find("pgGrp")) != attrs.end() ) 	  dataCache()["pgGrp"] = vl.value();
+	if( (vl=attrs.find("pgOpenSrc")) != attrs.end() ) dataCache()["pgOpenSrc"] = vl.value();
     }
+}
+
+void RunWdgView::update( unsigned cnt, int div_max )
+{
+    //childsUpdate( item==id() );
+    //shapeUpdate( );
+    
+    //- Request to widget for last attributes -
+    if( !((cnt+(unsigned)wLevel())%curDiv) )
+    {
+	//printf("TEST 00: %s\n",id().c_str());
+    	QMap<QString, QString> attrs;    
+	XMLNode get_req("get");
+	get_req.setAttr("user",user())->
+		setAttr("path",id()+"/%2fattr%2fscmd")->
+		setAttr("tm",TSYS::uint2str(reqtm));
+	if( !mod->cntrIfCmd(get_req) )
+	{
+    	    for( int i_el = 0; i_el < get_req.childSize(); i_el++ )
+        	attrs[get_req.childGet(i_el)->attr("id").c_str()] = get_req.childGet(i_el)->text().c_str();
+    	    reqtm = strtoul(get_req.attr("tm").c_str(),0,10);
+    	    attrLoad(attrs);
+	}
+	//-- Update divider --
+	if( curDiv > 1 && !attrs.empty() ) 	curDiv--;
+	if( curDiv < div_max && attrs.empty() )	curDiv++;
+    }
+    
+    //- Call childs for update -
+    for( int i_c = 0; i_c < children().size(); i_c++ )
+	if( qobject_cast<RunWdgView*>(children().at(i_c)) )
+    	    ((RunWdgView*)children().at(i_c))->update(cnt,div_max);
+    
+    //orderUpdate( );
 }
 
 bool RunWdgView::event( QEvent *event )
 {
     if( WdgView::event(event) )	return true;
+    //if( event->isAccepted() )	return false;
 
     //- Key events process for send to model -
+
     string mod_ev;
-    XMLNode set_req("set");
-    set_req.setAttr("user",user())->setAttr("path",id()+"/%2fattr%2fscmd");
-    
     switch( event->type() )
     {
 	case QEvent::KeyPress:
+	    //keyPressEvent((QKeyEvent *)event);
+	    //if(((QKeyEvent *)event)->isAccepted()) return true;
 	    mod_ev = "key_pres";
 	case QEvent::KeyRelease:
      	{
+	    //keyReleaseEvent((QKeyEvent *)event);
+            //if(((QKeyEvent *)event)->isAccepted()) return true;
+	
+	    //printf("TEST 00: %s: %d\n",id().c_str(),event->type());	
+	
 	    QKeyEvent *key = (QKeyEvent*)event;
 	    if( key->key() == Qt::Key_Tab ) { mod_ev = ""; break; }
 	    if( mod_ev.empty() ) mod_ev = "key_rels";
@@ -122,8 +160,8 @@ bool RunWdgView::event( QEvent *event )
 		case Qt::Key_Delete:	mod_ev+="Delete";	break;
 		case Qt::Key_Pause:	mod_ev+="Pause";	break;
 		case Qt::Key_Print:	mod_ev+="Print";        break;
-		case Qt::Key_SysReq:	mod_ev+="SysReq";	break;
-		case Qt::Key_Clear:	mod_ev+="Clear";	break;
+		//case Qt::Key_SysReq:	mod_ev+="SysReq";	break;
+		//case Qt::Key_Clear:	mod_ev+="Clear";	break;
 		case Qt::Key_Home:	mod_ev+="Home";		break;
 		case Qt::Key_End:	mod_ev+="End";		break;
 		case Qt::Key_Left:	mod_ev+="Left";		break;
@@ -241,13 +279,7 @@ bool RunWdgView::event( QEvent *event )
 	    mod_ev = "key_mouseDblClick";
 	    break;
     }
-    if( !mod_ev.empty() )
-    {
-	//- Send event -
-	set_req.childAdd("el")->setAttr("id","event")->setText(mod_ev.c_str());
-	mod->cntrIfCmd(set_req);
-	return true;
-    }
+    if( !mod_ev.empty() ) { attrSet("event",mod_ev); return true; }
     return QWidget::event(event);
 }
 					    
@@ -301,14 +333,7 @@ bool RunPageView::callPage( const string &pg_it, const string &pgGrp, const stri
 	    string pg_it_prev = ((RunWdgView*)children().at(i_ch))->pgOpenSrc();
 	    if( pg_it != pg_it_prev )
 	    {
-		if( !pg_it_prev.empty() )
-		{
-	    	    XMLNode set_req("set");
-		    set_req.setAttr("user",user())->
-			    setAttr("path",pg_it_prev+"/%2fattr%2fpgOpen")->
-			    setText("0");
-            	    mod->cntrIfCmd(set_req);
-		}
+		if( !pg_it_prev.empty() ) mainWin()->wAttrSet(pg_it_prev,"pgOpen","0");
 		((RunWdgView*)children().at(i_ch))->setPgOpenSrc(pg_it);
 	    }
 	    return true;
@@ -343,8 +368,5 @@ RunPageView *RunPageView::pgOpen( const string &ipg )
 void RunPageView::closeEvent( QCloseEvent *event )
 {
     //-- Send close command --
-    XMLNode set_req("set");
-    set_req.setAttr("user",user())->
-	    setAttr("path",id()+"/%2fattr%2fpgOpen")->setText("0");
-    mod->cntrIfCmd(set_req);
+    attrSet("pgOpen","0");
 }

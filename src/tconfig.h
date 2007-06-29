@@ -115,8 +115,8 @@ class TConfig: public TValElem
 	TCfg &cfg( const string &n_val );
 	void cfgViewAll( bool val = true );	//Hide all no key elements
 	
-	void elem(TElem *Elements, bool first = false); 
 	TElem &elem();
+	void setElem(TElem *Elements, bool first = false); 	
 
 	void cntrCmdMake( XMLNode *fld, const string &path, int pos, 
 		const string &user = "root", const string &grp = "root", int perm = 0664 );

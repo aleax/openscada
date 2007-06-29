@@ -150,6 +150,10 @@ string TUIMod::optDescr( )
 
 void TUIMod::modLoad( )
 {
+#if OSC_DEBUG
+    mess_debug(nodePath().c_str(),_("Load module."));
+#endif
+
     //========== Load parameters from command line ============
     int next_opt;
     char *short_opt="h";
@@ -200,6 +204,10 @@ void TUIMod::modLoad( )
 
 void TUIMod::modSave( )
 {
+#if OSC_DEBUG
+    mess_debug(nodePath().c_str(),_("Save module."));
+#endif
+
     //========== Save parameters to DB =============
     TBDS::genDBSet(nodePath()+"StartPath",start_path);
     TBDS::genDBSet(nodePath()+"StartUser",start_user);
@@ -268,22 +276,22 @@ QMainWindow *TUIMod::openWindow()
 
 void TUIMod::modStart()
 {
+#if OSC_DEBUG
+    mess_debug(nodePath().c_str(),_("Start module."));
+#endif
+
     run_st = true;
 }
 
 void TUIMod::modStop()
 {   
+#if OSC_DEBUG
+    mess_debug(nodePath().c_str(),_("Stop module."));
+#endif
+
     int i_w;
     for( i_w = 0; i_w < cfapp.size(); i_w++ )
         if( cfapp[i_w] ) cfapp[i_w]->close();//deleteLater();// close();
-    
-    //Wait real windows close 
-    /*do 
-	for( i_w = 0; i_w < cfapp.size(); i_w++ ) 
-	    if( cfapp[i_w] ) break;
-    while(i_w<cfapp.size());
-    struct timespec tm = {0,500000000};
-    nanosleep(&tm,NULL);*/
     
     run_st = false;
 }

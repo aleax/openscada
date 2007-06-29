@@ -50,6 +50,9 @@ class VisRun : public QMainWindow
 	
 	void initSess( const string &prj_it );	//Init session for project's item path
 	void callPage( const string &ses_it );	//Call session page
+	
+	string wAttrGet( const string &path, const string &attr );
+	bool wAttrSet( const string &path, const string &attr, const string &val );	
 
     protected:
 	//Protected methods
@@ -78,6 +81,7 @@ class VisRun : public QMainWindow
 	string 		work_sess, src_page;	//Work session and source page
 	RunPageView 	*master_pg;		//Master page of runtime session
 	int 		m_period;		//Clock's period
+	unsigned	w_prc_cnt;		//Process counter
 };
 
 }

@@ -24,7 +24,7 @@
 
 TConfig::TConfig( TElem *Elements ) : m_elem(NULL)
 {
-    elem(Elements,true);
+    setElem(Elements,true);
 }
 
 TConfig::~TConfig()
@@ -63,7 +63,7 @@ TConfig &TConfig::operator=(TConfig &config)
 
 void TConfig::detElem( TElem *el )
 {
-    if( el == m_elem )	elem(NULL);
+    if( el == m_elem )	setElem(NULL);
 }
 
 void TConfig::addFld( TElem *el, unsigned id )
@@ -105,7 +105,7 @@ void TConfig::cfgViewAll( bool val )
 	p->second->view(val);
 }
 
-void TConfig::elem(TElem *Elements, bool first)
+void TConfig::setElem(TElem *Elements, bool first)
 {
     if(m_elem == Elements && !first ) return;
     //Clear previos setting

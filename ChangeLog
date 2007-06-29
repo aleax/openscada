@@ -1,3 +1,21 @@
+2007-06-29 Roman
+- !!:/TSYS: Error code support is added to the error object (TError).
+- !!:/UI/VCAEngine: The widget's attributes DB table (*_io) separated to the work widget's attributes 
+    table (*_io) and the user widget's attributes table (*_uio). It allow made of ordered and faster loading
+    of work IO.
+- !!:/UI/VCAEngine: A attribute flag "Mutable" is added. It allow prevent of inherit mutable attributes.
+- !!:/UI/VCAEngine: The work for primitives "FormEl", "Text" and "UserEl" is finished.
+- !!:/UI/Vision: The access mechanism to a actual data for "RunTime" mode is updated.
+    A update call only if data changed. 
+    A request for data of frequency made self-adapting to data change frequency.
+- !:/UI/Vision: New widgets is added: "LineEdit" and "TextEdit" for shape "FormEl".
+- !:/UI/Vision: RunTime API is unified for attribute access and events send.
+- !!:/UI/Vision: The work for primitives "FormEl", "Text" and "UserEl" is finished.
+- /DB: Error code generation and control is added.
+- /SYS: Updated Demo DB.
+- /TConfig: The set function elem() is renamed to setElem().
+
+
 2007-06-19 Roman
 - !!!:/UI/Vision: Visual area "Run time" work realisation is made.
 - /UI/Vision: More generic updates and fixes.

@@ -27,6 +27,10 @@
 #include <QComboBox>
 #include <QEvent>
 #include <QDialogButtonBox>
+#include <QSpinBox>
+#include <QTimeEdit>
+#include <QKeyEvent>
+#include <QTextEdit>
 
 #include <tsys.h>
 
@@ -254,11 +258,326 @@ bool UserStBar::userSel()
     return false;
 }
 
+//*********************************************************************************************
+//* Universal edit line widget. Contain support of: QLineEdit, QSpinBox, QDoubleSpinBox,      *
+//* QTimeEdit, QDateEdit and QDateTimeEdit.                                                   *
+//*********************************************************************************************
+LineEdit::LineEdit( QWidget *parent, LType tp, bool prev_dis ) :
+    QWidget( parent ), m_tp((LineEdit::LType)-1), bt_fld(NULL), ed_fld(NULL)
+{
+    QHBoxLayout *box = new QHBoxLayout(this);
+    box->setMargin(0);
+    box->setSpacing(0);
+		
+    if( !prev_dis )
+    {
+        bt_fld = new QPushButton(this);
+        bt_fld->setIcon(QIcon(":/images/ok.png"));
+	bt_fld->setIconSize(QSize(12,12));
+	bt_fld->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed) );
+        bt_fld->setEnabled(false);
+        bt_fld->setVisible(false);
+        connect( bt_fld, SIGNAL( released() ), this, SLOT( applySlot() ) );
+        box->addWidget(bt_fld);
+    }
+    setType(tp);
+}											
+
+void LineEdit::setType( LType tp )
+{
+    if( tp == m_tp ) return;
+    
+    //- Delete previous -
+    if( tp >= 0 && ed_fld ) delete ed_fld;
+    
+    //- Create new widget -
+    switch( tp )
+    {
+	case Text:	
+	    ed_fld = new QLineEdit(this);
+	    connect( (QLineEdit*)ed_fld, SIGNAL( textEdited(const QString&) ), SLOT( changed() ) );
+	    break;
+	case Integer:	
+	    ed_fld = new QSpinBox(this);
+	    connect( (QSpinBox*)ed_fld, SIGNAL( valueChanged(int) ), SLOT( changed() ) );
+	    break;
+	case Real:
+	    ed_fld = new QDoubleSpinBox(this);
+	    connect( (QDoubleSpinBox*)ed_fld, SIGNAL( valueChanged(double) ), SLOT( changed() ) );
+	    break;
+	case Time:	
+	    ed_fld = new QTimeEdit(this);
+	    connect( (QTimeEdit*)ed_fld, SIGNAL( timeChanged(const QTime&) ), SLOT( changed() ) );
+	    break;
+	case Date:	
+	    ed_fld = new QDateEdit(this);
+	    connect( (QDateEdit*)ed_fld, SIGNAL( dateChanged(const QDate&) ), SLOT( changed() ) );
+	    break;
+	case DateTime:	
+	    ed_fld = new QDateTimeEdit(this);
+	    connect( (QDateTimeEdit*)ed_fld, SIGNAL( dateTimeChanged(const QDateTime&) ), SLOT( changed() ) );
+	    break;
+	case Combo:
+	    ed_fld = new QComboBox(this);
+	    ((QComboBox*)ed_fld)->setEditable(true);
+	    connect( (QComboBox*)ed_fld, SIGNAL( editTextChanged(const QString&) ), SLOT( changed() ) );
+	    break;	    
+    }    
+    ((QBoxLayout*)layout())->insertWidget(0,ed_fld);
+    if( bt_fld ) setTabOrder(ed_fld,bt_fld);
+    
+    m_tp = tp;
+}
+
+void LineEdit::changed( )
+{
+    //- Enable apply 
+    if( bt_fld && !bt_fld->isEnabled() )
+    {
+	bt_fld->setEnabled(true);
+        bt_fld->setVisible(true);
+    }
+    
+    emit valChanged(value());
+}
+
+void LineEdit::setValue(const QString &txt)
+{
+    switch(type())
+    {
+	case Text: 
+	    ((QLineEdit*)ed_fld)->setText(txt);
+	    ((QLineEdit*)ed_fld)->setCursorPosition(0);
+	    break;	    
+	case Integer:
+	    ((QSpinBox*)ed_fld)->setValue(txt.toInt());
+	    break;
+	case Real:
+	    ((QDoubleSpinBox*)ed_fld)->setValue(txt.toDouble());
+	    break;
+	case Time:
+	    ((QTimeEdit*)ed_fld)->setTime(QTime().addSecs(txt.toInt()));
+	    break;	 
+	case Date: case DateTime:
+	    ((QDateTimeEdit*)ed_fld)->setDateTime(QDateTime::fromTime_t(txt.toInt()));
+	    break;
+	case Combo:
+	    if( ((QComboBox*)ed_fld)->findText(txt) < 0 ) ((QComboBox*)ed_fld)->addItem(txt);
+	    ((QComboBox*)ed_fld)->setEditText(txt);
+	    break;
+    }
+    
+    m_val = txt;
+
+    if( bt_fld && bt_fld->isEnabled() )
+    {
+        bt_fld->setEnabled(false);
+        bt_fld->setVisible(false);
+    }    
+}
+
+void LineEdit::setCfg(const QString &cfg)
+{
+    switch(type())
+    {
+	case Text: 	((QLineEdit*)ed_fld)->setInputMask(cfg);	break;
+	case Integer:
+	{
+	    int	minv = 0, maxv = 100, sstep = 1;
+	    string pref, suff;
+	    if( !cfg.isEmpty() )
+	    {
+		minv  = atoi(TSYS::strSepParse(cfg.toAscii().data(),0,':').c_str());
+		maxv  = atoi(TSYS::strSepParse(cfg.toAscii().data(),1,':').c_str());
+		sstep = atoi(TSYS::strSepParse(cfg.toAscii().data(),2,':').c_str());
+		pref  = TSYS::strSepParse(cfg.toAscii().data(),3,':');
+		suff  = TSYS::strSepParse(cfg.toAscii().data(),4,':');
+	    }
+	    ((QSpinBox*)ed_fld)->setRange(minv,maxv);
+	    ((QSpinBox*)ed_fld)->setSingleStep(sstep);
+	    ((QSpinBox*)ed_fld)->setPrefix(pref.c_str());
+	    ((QSpinBox*)ed_fld)->setSuffix(suff.c_str());
+	    break;
+	}
+	case Real:	
+	{
+	    double minv = 0, maxv = 100, sstep = 1;
+	    string pref, suff;
+	    int    dec = 2;
+	    if( !cfg.isEmpty() )
+	    {
+		minv  = atof(TSYS::strSepParse(cfg.toAscii().data(),0,':').c_str());
+		maxv  = atof(TSYS::strSepParse(cfg.toAscii().data(),1,':').c_str());
+		sstep = atof(TSYS::strSepParse(cfg.toAscii().data(),2,':').c_str());
+		pref  = TSYS::strSepParse(cfg.toAscii().data(),3,':');
+		suff  = TSYS::strSepParse(cfg.toAscii().data(),4,':');
+		dec   = atoi(TSYS::strSepParse(cfg.toAscii().data(),5,':').c_str());
+	    }
+	    ((QDoubleSpinBox*)ed_fld)->setRange(minv,maxv);
+	    ((QDoubleSpinBox*)ed_fld)->setSingleStep(sstep);
+	    ((QDoubleSpinBox*)ed_fld)->setPrefix(pref.c_str());
+	    ((QDoubleSpinBox*)ed_fld)->setSuffix(suff.c_str());	
+	    ((QDoubleSpinBox*)ed_fld)->setDecimals(dec);
+	    break;
+	}
+	case Time: case Date: case DateTime:
+	    ((QDateTimeEdit*)ed_fld)->setDisplayFormat(cfg);
+	    break;
+	case Combo:
+	{
+	    QString ctext = ((QComboBox*)ed_fld)->currentText();
+	    ((QComboBox*)ed_fld)->clear();
+            ((QComboBox*)ed_fld)->addItems(cfg.split("\n"));
+	    if( !ctext.isEmpty() )
+	    {
+		if( ((QComboBox*)ed_fld)->findText(ctext) < 0 ) ((QComboBox*)ed_fld)->addItem(ctext);
+		((QComboBox*)ed_fld)->setEditText(ctext);
+	    }
+	    break;
+	}
+    }
+    if( bt_fld && bt_fld->isEnabled() )
+    {
+        bt_fld->setEnabled(false);
+        bt_fld->setVisible(false);
+    }        
+}
+				    
+QString LineEdit::value()
+{
+    switch(type())
+    {
+	case Text: 	return ((QLineEdit*)ed_fld)->text();
+	case Integer:	return QString::number(((QSpinBox*)ed_fld)->value());
+	case Real:	return QString::number(((QDoubleSpinBox*)ed_fld)->value());
+	case Time:	return QString::number(QTime().secsTo(((QTimeEdit*)ed_fld)->time()));
+	case Date: case DateTime: 	
+			return QString::number(((QDateTimeEdit*)ed_fld)->dateTime().toTime_t());
+	case Combo:	return ((QComboBox*)ed_fld)->currentText();
+    }
+    return "";
+}
+
+void LineEdit::applySlot( )
+{
+    bt_fld->setEnabled(false);
+    bt_fld->setVisible(false);
+    
+    m_val = value();
+	
+    emit apply();
+}
+	    
+bool LineEdit::event( QEvent * e )
+{
+    if(e->type() == QEvent::KeyRelease && bt_fld && bt_fld->isEnabled())
+    {
+        QKeyEvent *keyEvent = (QKeyEvent *)e;
+        if(keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return)
+        {
+            bt_fld->animateClick( );
+            return true;
+        }
+        else if(keyEvent->key() == Qt::Key_Escape )
+        {
+            emit cancel();
+	    setValue(m_val);
+            return true;
+        }
+    }
+    return QWidget::event(e);
+}
+
+//*************************************************
+//* Text edit widget                              *
+//*************************************************
+TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
+    QWidget(parent), but_box(NULL), isInit(false)
+{
+    QVBoxLayout *box = new QVBoxLayout(this);
+    box->setMargin(0);
+    box->setSpacing(0);
+		    
+    ed_fld = new QTextEdit(this);
+    connect( ed_fld, SIGNAL( textChanged() ), this, SLOT( changed() ) );
+    box->addWidget(ed_fld);
+				
+    if( !prev_dis )
+    {
+        but_box = new QDialogButtonBox(QDialogButtonBox::Apply|
+        QDialogButtonBox::Cancel,Qt::Horizontal,this);
+        QImage ico_t;
+        but_box->button(QDialogButtonBox::Apply)->setText("");
+        if(!ico_t.load(TUIS::icoPath("button_ok").c_str())) ico_t.load(":/images/button_ok.png");
+        but_box->button(QDialogButtonBox::Apply)->setIcon(QPixmap::fromImage(ico_t));
+	but_box->button(QDialogButtonBox::Apply)->setIconSize(QSize(12,12));
+        connect(but_box->button(QDialogButtonBox::Apply), SIGNAL(clicked()), this, SLOT(applySlot()));
+        but_box->button(QDialogButtonBox::Cancel)->setText("");
+	if(!ico_t.load(TUIS::icoPath("button_cancel").c_str())) ico_t.load(":/images/button_cancel.png");
+        but_box->button(QDialogButtonBox::Cancel)->setIcon(QPixmap::fromImage(ico_t));
+	but_box->button(QDialogButtonBox::Cancel)->setIconSize(QSize(12,12));
+        connect(but_box, SIGNAL(rejected()), this, SLOT(cancelSlot()));
+        but_box->setVisible(false);
+	but_box->setEnabled(false);
+        box->addWidget(but_box);
+    }
+}
+
+QString TextEdit::text()
+{
+    return ed_fld->toPlainText();
+}
+    
+void TextEdit::setText(const QString &text)
+{
+    isInit=true;
+    ed_fld->setPlainText(text);
+    if( but_box && but_box->isEnabled() )
+    {
+	but_box->setVisible(false);
+	but_box->setEnabled(false);
+    }    
+    isInit=false;
+    
+    m_text = text;
+}
+			    
+void TextEdit::changed()
+{
+    if( isInit ) return;
+    if( but_box && !but_box->isEnabled() && text() != m_text ) 
+    {
+	but_box->setVisible(true);
+	but_box->setEnabled(true);
+    }
+    emit textChanged(text());
+}
+
+void TextEdit::applySlot( )
+{
+    if( but_box && but_box->isEnabled() )
+    {
+	but_box->setVisible(false);
+	but_box->setEnabled(false);
+    }
+    
+    m_text = text();
+    
+    emit apply();
+}
+
+void TextEdit::cancelSlot( )
+{
+    setText(m_text);
+    
+    emit cancel();
+}
+
 //****************************************
 //* Shape widget view                    *
 //****************************************
 WdgView::WdgView( const string &iwid, int ilevel, QMainWindow *mainWind, QWidget *parent ) :
-    QWidget(parent), idWidget(iwid), shape(NULL), w_level(ilevel), main_win(mainWind), z_coord(0), reqtm(0)
+    QWidget(parent), idWidget(iwid), shape(NULL), w_level(ilevel), main_win(mainWind), z_coord(0)
 {
 
 }
@@ -279,112 +598,79 @@ WdgView *WdgView::newWdgItem( const string &iwid )
     return new WdgView(iwid,wLevel()+1,mainWin(),this);
 }
 
-void WdgView::load( const string& item, bool dt_up )
+void WdgView::attrLoad( QMap<QString, QString> &attrs )
+{
+    if( attrs.empty() )	return;
+    //- Load generic data -
+    bool act = false;
+    int g_x, g_y;
+    QMap<QString, QString>::const_iterator vl;	    
+    if( wLevel( ) > 0 )
+    {
+	//-- Update position --
+	if( (vl=attrs.find("geomX")) == attrs.end() ) g_x = pos().x();
+	else { act = true; g_x = vl.value().toInt(); }
+	if( (vl=attrs.find("geomY")) == attrs.end() ) g_y = pos().y();
+	else { act = true; g_y = vl.value().toInt(); }
+	if( act ) move(g_x,g_y);
+	//-- Update level --
+	if( (vl=attrs.find("geomZ")) != attrs.end() ) z_coord = vl.value().toInt();	
+    }
+    //-- Update size --
+    act = false;
+    if( (vl=attrs.find("geomW")) == attrs.end() ) g_x = size().width();
+    else { act = true; g_x = vl.value().toInt(); }
+    if( (vl=attrs.find("geomH")) == attrs.end() ) g_y = size().height();
+    else { act = true; g_y = vl.value().toInt(); }
+    if( act ) resize(g_x,g_y);
+
+    if( shape ) shape->load( this, attrs );
+}
+
+bool WdgView::attrSet( const string &attr, const string &val, bool locReload )
+{
+    //printf("TEST 00: %s: %s\n",attr.c_str(),val.c_str());
+    //- Send value to model -
+    XMLNode set_req("set");
+    set_req.setAttr("user",user())->
+	    setAttr("path",id()+"/%2fattr%2fscmd");
+    set_req.childAdd("el")->setAttr("id",attr)->setText(val);
+    if( !mod->cntrIfCmd(set_req) && locReload )
+    {
+	//- Reload new attribute -
+	QMap<QString, QString> attrs;
+	attrs[attr.c_str()] = val.c_str();
+        attrLoad(attrs);
+	return true;
+    }
+    return false;
+}
+
+void WdgView::load( const string& item )
 {
     if( item.empty() || item == id() )
-    {    
-	XMLNode get_req("get");
-	get_req.setAttr("user",user());
-	if( !dt_up )
-	{
-	    //- Init generic data -
-	    //-- Reinit childs --
-	    string b_nm = id();
-	    get_req.setAttr("user",user())->setAttr("path",id()+"/%2fwdg%2fcfg%2fpath")->setAttr("resLink","1");
-	    if( !mod->cntrIfCmd(get_req) ) b_nm = get_req.text();
-	    
-	    vector<string> lst;
-	    get_req.setAttr("user",user())->setAttr("path",b_nm+"/%2finclwdg%2fwdg");
-	    if( !mod->cntrIfCmd(get_req) )
-		for( int i_el = 0; i_el < get_req.childSize(); i_el++ )
-		    lst.push_back(get_req.childGet(i_el)->attr("id"));
-	    //--- Delete child widgets ---
-	    for( int i_c = 0; i_c < children().size(); i_c++ )
-	    {
-		if( !qobject_cast<WdgView*>(children().at(i_c)) ) continue;
-		int i_l;
-		for( i_l = 0; i_l < lst.size(); i_l++ )		
-		    if( qobject_cast<WdgView*>(children().at(i_c))->id() == (b_nm+"/wdg_"+lst[i_l]) )
-			break;
-		if( i_l >= lst.size() ) delete children().at(i_c);
-	    }
-	    //--- Create new child widget ---
-	    for( int i_l = 0; i_l < lst.size(); i_l++ )
-	    {	
-		int i_c;
-		for( i_c = 0; i_c < children().size(); i_c++ )
-		    if( qobject_cast<WdgView*>(children().at(i_c)) && 
-			    qobject_cast<WdgView*>(children().at(i_c))->id() == (b_nm+"/wdg_"+lst[i_l]) )
-			break;
-		if( i_c >= children().size() )
-		{
-		    WdgView *nwdg = newWdgItem(b_nm+"/wdg_"+lst[i_l]);
-		    if( nwdg )
-		    {			
-			nwdg->show();
-			if( !item.empty() ) load("",dt_up);
-		    }
-		}
-	    }
-            
-	    //-- Reinit shape --
-	    //--- Get root id ---
-	    get_req.setAttr("user",user())->setAttr("path",id()+"/%2fwdg%2fcfg%2froot");
-	    if( !mod->cntrIfCmd(get_req) && ( !shape || shape->id() != get_req.text() ) )
-	    {
-		if( shape ) shape->destroy(this);
-		shape = mod->getWdgShape(get_req.text());
-		if( shape ) shape->init(this);
-	    }
-	}
+    {
+	childsUpdate( item==id() );
+	shapeUpdate( );
 	
 	//- Request to widget for last attributes -
-	reqtm = dt_up ? reqtm : 0;
-	get_req.setAttr("user",user())->setAttr("path",id()+"/%2fattr%2fscmd")->setAttr("tm",TSYS::uint2str(reqtm));
-	get_req.childClean();
+	XMLNode get_req("get");	
+	get_req.setAttr("user",user())->
+		setAttr("path",id()+"/%2fattr%2fscmd");
 	if( !mod->cntrIfCmd(get_req) )
 	{
-	    dataReq().clear();
+	    QMap<QString, QString> attrs;
 	    for( int i_el = 0; i_el < get_req.childSize(); i_el++ )
-		dataReq()[get_req.childGet(i_el)->attr("id").c_str()] = get_req.childGet(i_el)->text().c_str();
-	    reqtm = strtoul(get_req.attr("tm").c_str(),0,10);
+		attrs[get_req.childGet(i_el)->attr("id").c_str()] = get_req.childGet(i_el)->text().c_str();		
+	    attrLoad(attrs);
 	}
-	
-	//- Load generic data -
-	bool act = false;
-	int g_x, g_y;
-	QMap<QString, QString>::const_iterator vl;	    
-	if( wLevel( ) > 0 )
-	{
-	    //-- Update position --
-	    if( (vl=dataReq().find("geomX")) == dataReq().end() ) g_x = pos().x();
-	    else { act = true; g_x = vl.value().toInt(); }
-	    if( (vl=dataReq().find("geomY")) == dataReq().end() ) g_y = pos().y();
-	    else { act = true; g_y = vl.value().toInt(); }
-	    if( act ) move(g_x,g_y);
-	    //-- Update level --
-	    if( (vl=dataReq().find("geomZ")) != dataReq().end() ) z_coord = vl.value().toInt();	
-	}
-	//-- Update size --
-	act = false;
-	if( (vl=dataReq().find("geomW")) == dataReq().end() ) g_x = size().width();
-	else { act = true; g_x = vl.value().toInt(); }
-	if( (vl=dataReq().find("geomH")) == dataReq().end() ) g_y = size().height();
-	else { act = true; g_y = vl.value().toInt(); }
-	if( act ) resize(g_x,g_y);
-
-	if( shape ) shape->load( this );
-	
-	//- Update view -
-	update();
     }
-
     if( item != id() )
 	for( int i_c = 0; i_c < children().size(); i_c++ )
 	    if( qobject_cast<WdgView*>(children().at(i_c)) )
-		((WdgView*)children().at(i_c))->load(item,dt_up);
+		((WdgView*)children().at(i_c))->load(item);
     
-    if( !dt_up ) orderUpdate( );
+    orderUpdate( );
 }
 
 void WdgView::save( const string& item )
@@ -404,6 +690,63 @@ void WdgView::save( const string& item )
 	for( int i_c = 0; i_c < children().size(); i_c++ )
 	    if( qobject_cast<WdgView*>(children().at(i_c)) )
 		qobject_cast<WdgView*>(children().at(i_c))->save(item);
+}
+
+void WdgView::childsUpdate( bool newLoad )
+{
+    XMLNode get_req("get");
+    get_req.setAttr("user",user());
+    
+    string b_nm = id();
+    get_req.setAttr("path",id()+"/%2fwdg%2fcfg%2fpath")->setAttr("resLink","1");
+    if( !mod->cntrIfCmd(get_req) ) b_nm = get_req.text();
+	    
+    vector<string> lst;
+    get_req.setAttr("path",b_nm+"/%2finclwdg%2fwdg");
+    if( !mod->cntrIfCmd(get_req) )
+	for( int i_el = 0; i_el < get_req.childSize(); i_el++ )
+	    lst.push_back(get_req.childGet(i_el)->attr("id"));
+    //- Delete child widgets -
+    for( int i_c = 0; i_c < children().size(); i_c++ )
+    {
+	if( !qobject_cast<WdgView*>(children().at(i_c)) ) continue;
+	int i_l;
+	for( i_l = 0; i_l < lst.size(); i_l++ )		
+	    if( qobject_cast<WdgView*>(children().at(i_c))->id() == (b_nm+"/wdg_"+lst[i_l]) )
+		break;
+	if( i_l >= lst.size() ) delete children().at(i_c);
+    }
+    //- Create new child widget -
+    for( int i_l = 0; i_l < lst.size(); i_l++ )
+    {	
+	int i_c;
+	for( i_c = 0; i_c < children().size(); i_c++ )
+	    if( qobject_cast<WdgView*>(children().at(i_c)) && 
+		    qobject_cast<WdgView*>(children().at(i_c))->id() == (b_nm+"/wdg_"+lst[i_l]) )
+		break;
+	if( i_c >= children().size() )
+	{
+	    WdgView *nwdg = newWdgItem(b_nm+"/wdg_"+lst[i_l]);
+	    if( nwdg ) 
+	    {
+		nwdg->show();
+		if( newLoad ) nwdg->load("");
+	    }
+	}
+    }
+}
+
+void WdgView::shapeUpdate( )
+{
+    //- Get root id -
+    XMLNode get_req("get");
+    get_req.setAttr("user",user())->setAttr("path",id()+"/%2fwdg%2fcfg%2froot");
+    if( !mod->cntrIfCmd(get_req) && ( !shape || shape->id() != get_req.text() ) )
+    {
+	if( shape ) shape->destroy(this);
+	shape = mod->getWdgShape(get_req.text());
+	if( shape ) shape->init(this);
+    }
 }
 
 void WdgView::orderUpdate( )
@@ -433,7 +776,7 @@ bool WdgView::event( QEvent *event )
 	return true;
     }
 
-    return false; // QWidget::event(event);
+    return false; //QWidget::event(event);
 }
 
 bool WdgView::eventFilter( QObject *object, QEvent *event )

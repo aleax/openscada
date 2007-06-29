@@ -19,6 +19,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  ***************************************************************************/
 
+#include <math.h>
+
 #include <QEvent>
 #include <QPainter>
 #include <QVBoxLayout>
@@ -112,11 +114,10 @@ ShapeFormEl::ShapeFormEl( ) : WdgShape("FormEl")
 
 }
 
-void ShapeFormEl::load( WdgView *w )
+void ShapeFormEl::load( WdgView *w, QMap<QString, QString> &attrs )
 {
 
-    QMap<QString, QString>::const_iterator	vl, 
-    						end = w->dataReq().end();   
+    QMap<QString, QString>::const_iterator	vl, end = attrs.end();
 
     DevelWdgView *devW = qobject_cast<DevelWdgView*>(w);
     RunWdgView   *runW = qobject_cast<RunWdgView*>(w);
@@ -124,7 +125,7 @@ void ShapeFormEl::load( WdgView *w )
     //- Update generic properties -
     int el = w->dataCache().value("elType",-1).toInt();
     int el_new = -1;
-    if( (vl=w->dataReq().find("elType")) != end ) el_new = vl.value().toInt();
+    if( (vl=attrs.find("elType")) != end ) el_new = vl.value().toInt();
     QWidget *el_wdg = (QWidget *)w->dataCache().value("addrWdg").value< void* >();
     if( el >= 0 && el_new >= 0 && el != el_new ) delete el_wdg;
     if( el < 0 || (el_new >= 0 && el != el_new) )
@@ -133,86 +134,87 @@ void ShapeFormEl::load( WdgView *w )
 	QVBoxLayout *lay = (QVBoxLayout *)w->layout();
 	if( !lay ) lay = new QVBoxLayout(w);
 
-	QWidget *view_wdg = NULL;
-
 	switch(el_new)
 	{
-	    case 0: el_wdg = new QLineEdit(w);	break;
-	    case 1: 
-		el_wdg = new QTextEdit(w);
-		view_wdg = ((QTextEdit *)el_wdg)->viewport();
+	    case 0:	
+		el_wdg = new LineEdit(w);
+		if( runW ) connect( el_wdg, SIGNAL(apply()), this, SLOT(lineAccept()) );
 		break;
-	    case 2: el_wdg = new QCheckBox("test",w);	break;
+	    case 1: 
+		el_wdg = new TextEdit(w);
+		if( runW ) connect( el_wdg, SIGNAL(apply()), this, SLOT(textAccept()) );
+		break;
+	    case 2: 
+		el_wdg = new QCheckBox("test",w);
+		if( runW ) connect( el_wdg, SIGNAL(stateChanged(int)), this, SLOT(checkChange(int)) );
+		break;
 	    case 3: 
 	    	el_wdg = new QPushButton("test",w);
 		el_wdg->setSizePolicy( QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum) );
-		if( runW ) connect( el_wdg, SIGNAL(pressed()), this, SLOT(buttonPressed()) );
+		if( runW ) 
+		{
+		    connect( el_wdg, SIGNAL(pressed()), this, SLOT(buttonPressed()) );
+		    connect( el_wdg, SIGNAL(released()), this, SLOT(buttonReleased()) );
+		    connect( el_wdg, SIGNAL(toggled(bool)), this, SLOT(buttonToggled(bool)) );
+		}
 		break;
-	    case 4: el_wdg = new QComboBox(w);	break;
+	    case 4: 
+		el_wdg = new QComboBox(w);
+		if( runW ) connect( el_wdg, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(comboChange(const QString&)) );
+		break;
 	    case 5: 
-		el_wdg = new QListWidget(w);	
-		view_wdg = ((QListWidget *)el_wdg)->viewport();
+		el_wdg = new QListWidget(w);
+		if( runW ) connect( el_wdg, SIGNAL(currentRowChanged(int)), this, SLOT(listChange(int)) );
 		break;
 	}
-	//-- Install event's filter --
-	el_wdg->installEventFilter(w);
-	if( view_wdg )	view_wdg->installEventFilter(w);
-	//-- Init devel mode --
-	if( devW )
-	{
-	    el_wdg->setFocusPolicy(Qt::NoFocus);	
-	    el_wdg->setMouseTracking(true);
-	    if( view_wdg )
-	    {
-		view_wdg->setFocusPolicy(Qt::NoFocus);
-		view_wdg->setMouseTracking(true);		
-	    }
-	}
+	//-- Install event's filter and disable focus --	
+	if( devW ) eventFilterSet(w,el_wdg,true);
+	setFocus(w,el_wdg,false,devW);
 	//-- Fix widget --
 	lay->addWidget(el_wdg);
 	w->dataCache()["addrWdg"].setValue((void*)el_wdg);
 	w->dataCache()["elType"] = el_new;
     }    
-    if( (vl=w->dataReq().find("geomMargin")) != end ) w->layout()->setMargin(vl.value().toInt());
-    if( runW )
-    {
-	if( (vl=w->dataReq().find("en")) != end ) el_wdg->setVisible(vl.value().toInt());
-	if( (vl=w->dataReq().find("active")) != end )
-	{
-	    w->dataCache()["active"] = (bool)vl.value().toInt();
-	    el_wdg->setFocusPolicy( vl.value().toInt() ? Qt::StrongFocus : Qt::NoFocus );
-	}
-    }
     
     //- Update specific properties -
     switch(el_new)
     {
         case 0: 
-	    if( (vl=w->dataReq().find("value")) != end ) ((QLineEdit*)el_wdg)->setText(vl.value());
+	    if( (vl=attrs.find("view")) != end )
+	    {
+		LineEdit::LType tp = LineEdit::Text;
+		switch(vl.value().toInt())
+		{
+		    case 0: tp = LineEdit::Text; 	break;
+		    case 1: tp = LineEdit::Combo;	break;		    
+		    case 2: tp = LineEdit::Integer;	break;
+		    case 3: tp = LineEdit::Real;	break;
+		    case 4: tp = LineEdit::Time;	break;
+		    case 5: tp = LineEdit::Date;	break;
+		    case 6: tp = LineEdit::DateTime;	break;
+		}
+		((LineEdit*)el_wdg)->setType(tp);
+		if(devW) 
+		{
+		    eventFilterSet(w,el_wdg,true);
+		    setFocus(w,el_wdg,false,devW);
+		}
+	    }
+	    if( (vl=attrs.find("value")) != end ) 	((LineEdit*)el_wdg)->setValue(vl.value());
+	    if( (vl=attrs.find("cfg")) != end ) 	((LineEdit*)el_wdg)->setCfg(vl.value());
 	    break;
         case 1: 
-	    if( (vl=w->dataReq().find("value")) != end ) ((QTextEdit*)el_wdg)->setPlainText(vl.value());
-	    if( (vl=w->dataReq().find("alignment")) != end )
-	    {
-		Qt::Alignment txtal;
-		switch(vl.value().toInt()&0x3)
-		{
-		    case 0: txtal |= Qt::AlignLeft; 	break;
-		    case 1: txtal |= Qt::AlignRight;	break;
-		    case 2: txtal |= Qt::AlignHCenter;	break;
-		}
-		((QTextEdit*)el_wdg)->setAlignment(txtal);
-	    }
-	    if( (vl=w->dataReq().find("wordWrap")) != end )
-		((QTextEdit*)el_wdg)->setLineWrapMode( vl.value().toInt() ? QTextEdit::WidgetWidth : QTextEdit::NoWrap );
+	    if( (vl=attrs.find("value")) != end ) ((TextEdit*)el_wdg)->setText(vl.value());
+	    if( (vl=attrs.find("wordWrap")) != end )
+		((TextEdit*)el_wdg)->workWdg()->setLineWrapMode( vl.value().toInt() ? QTextEdit::WidgetWidth : QTextEdit::NoWrap );
 	    break;
 	case 2: 
-	    if( (vl=w->dataReq().find("value")) != end )((QCheckBox*)el_wdg)->setChecked(vl.value().toInt());
-	    if( (vl=w->dataReq().find("name")) != end )	((QCheckBox*)el_wdg)->setText(vl.value());
+	    if( (vl=attrs.find("value")) != end )	((QCheckBox*)el_wdg)->setChecked(vl.value().toInt());
+	    if( (vl=attrs.find("name")) != end )	((QCheckBox*)el_wdg)->setText(vl.value());
 	    break;
 	case 3: 
-	    if( (vl=w->dataReq().find("name")) != end )((QPushButton*)el_wdg)->setText(vl.value());
-	    if( (vl=w->dataReq().find("img")) != end )
+	    if( (vl=attrs.find("name")) != end )((QPushButton*)el_wdg)->setText(vl.value());
+	    if( (vl=attrs.find("img")) != end )
 	    {
 		XMLNode get_req("get");
     		get_req.setAttr("user",w->user())->setAttr("path",w->id()+"/%2fwdg%2fres")->setAttr("id",vl.value().toAscii().data());
@@ -222,19 +224,30 @@ void ShapeFormEl::load( WdgView *w )
 		    if( !backimg.empty() )
 		    {
 			QImage img;
-			if(img.loadFromData((const uchar*)backimg.c_str(),backimg.size()))	
+			if(img.loadFromData((const uchar*)backimg.c_str(),backimg.size()))
+			{
+			    int ic_sz = vmin(w->size().width(), w->size().height()) - w->layout()->margin() - 5;
+			    ((QPushButton*)el_wdg)->setIconSize(QSize(ic_sz,ic_sz));
 			    ((QPushButton*)el_wdg)->setIcon(QPixmap::fromImage(img));
+			}
 		    }
 		}
 	    }
+	    if( (vl=attrs.find("color")) != end )
+	    {
+		QColor clr(vl.value());
+		((QPushButton*)el_wdg)->setPalette( clr.isValid() ? QPalette(clr) : QPalette() );
+	    }
+	    if( (vl=attrs.find("checkable")) != end )	((QPushButton*)el_wdg)->setCheckable(vl.value().toInt());
+	    if( (vl=attrs.find("value")) != end )   	((QPushButton*)el_wdg)->setChecked(vl.value().toInt());
 	    break;
 	case 4:
-	    if( (vl=w->dataReq().find("items")) != end )
+	    if( (vl=attrs.find("items")) != end )
 	    {
 		((QComboBox*)el_wdg)->clear();
 		((QComboBox*)el_wdg)->addItems(vl.value().split("\n"));
 	    }
-	    if( (vl=w->dataReq().find("value")) != end )
+	    if( (vl=attrs.find("value")) != end )
 	    {
 		if( ((QComboBox*)el_wdg)->findText(vl.value()) < 0 )
 		    ((QComboBox*)el_wdg)->addItem(vl.value());
@@ -242,18 +255,30 @@ void ShapeFormEl::load( WdgView *w )
 	    }
 	    break;	    
 	case 5: 
-	    if( (vl=w->dataReq().find("items")) != end )
+	    if( (vl=attrs.find("items")) != end )
 	    {
 		((QListWidget*)el_wdg)->clear();
 		((QListWidget*)el_wdg)->addItems(vl.value().split("\n"));
 	    }
-	    if( (vl=w->dataReq().find("value")) != end )
+	    if( (vl=attrs.find("value")) != end )
 	    {
 		QList<QListWidgetItem *> its = ((QListWidget*)el_wdg)->findItems(vl.value(),Qt::MatchExactly);
 		if( its.size() ) ((QListWidget*)el_wdg)->setCurrentItem(its[0]);
 	    }	    
 	    break;
     }
+    if( (vl=attrs.find("geomMargin")) != end ) w->layout()->setMargin(vl.value().toInt());
+    if( runW )
+    {
+	if( (vl=attrs.find("en")) != end ) el_wdg->setVisible(vl.value().toInt());
+	if( (vl=attrs.find("active")) != end )
+	{
+	    w->dataCache()["active"] = (bool)vl.value().toInt();
+	    setFocus(w,el_wdg,vl.value().toInt());
+	    //eventFilterSet(w,el_wdg,!w->dataCache().value("active").toBool());
+	    //el_wdg->setFocusPolicy( vl.value().toInt() ? Qt::StrongFocus : Qt::NoFocus );
+	}
+    }    
 }
 
 bool ShapeFormEl::event( WdgView *view, QEvent *event )
@@ -263,32 +288,116 @@ bool ShapeFormEl::event( WdgView *view, QEvent *event )
 
 bool ShapeFormEl::eventFilter( WdgView *view, QObject *object, QEvent *event )
 {
-    if( qobject_cast<DevelWdgView*>(view) )
-	switch(event->type())
-	{
-	    case QEvent::MouseButtonPress: 
-	    case QEvent::MouseButtonRelease: 
-	    case QEvent::MouseMove: 
-	    case QEvent::Enter: 
-	    case QEvent::Leave:		
-		QApplication::sendEvent(view,event);
-		return true;
-	}
-    else if( view->dataCache().value("active",false).toBool() ) return false;
-    else if( event->type() == QEvent::Paint )	return false;
-    else return true;
-        
+    switch(event->type())
+    {
+	case QEvent::Enter:
+	case QEvent::Leave:	    
+	    return true;
+	case QEvent::MouseMove:	    
+	case QEvent::MouseButtonPress: 
+	case QEvent::MouseButtonRelease:
+	    QApplication::sendEvent(view,event);
+	return true;
+    }
+    
     return false;
+}
+
+void ShapeFormEl::lineAccept( )
+{
+    LineEdit *el   = (LineEdit*)sender();
+    WdgView  *view = (WdgView *)el->parentWidget();
+    
+    view->attrSet("value",el->value().toAscii().data());
+    view->attrSet("event","ws_LnAccept");
+}
+
+void ShapeFormEl::textAccept( )
+{
+    TextEdit *el   = (TextEdit*)sender();
+    WdgView  *view = (WdgView *)el->parentWidget();
+    
+    view->attrSet("value",el->text().toAscii().data());
+    view->attrSet("event","ws_TxtAccept");
+}
+
+void ShapeFormEl::checkChange(int st)
+{
+    WdgView *view = (WdgView *)((QCheckBox*)sender())->parentWidget();
+    view->attrSet("value",TSYS::int2str(st));
+    view->attrSet("event",st ? "ws_ChkOn" : "ws_ChkOff");
 }
 
 void ShapeFormEl::buttonPressed( )
 {
     WdgView *view = (WdgView *)((QPushButton*)sender())->parentWidget();
+    view->attrSet("event","ws_BtPress");
+}
+
+void ShapeFormEl::buttonReleased( )
+{
+    WdgView *view = (WdgView *)((QPushButton*)sender())->parentWidget();
+    view->attrSet("event","ws_BtRelease");
+}
+
+void ShapeFormEl::buttonToggled( bool val )
+{
+    WdgView *view = (WdgView *)((QPushButton*)sender())->parentWidget();
+    view->attrSet("event",string("ws_BtToggle")+(val?"On":"Off"));
+    view->attrSet("value",TSYS::int2str(val));
+}
+
+void ShapeFormEl::comboChange(const QString &val)
+{
+    WdgView *view = (WdgView *)((QWidget*)sender())->parentWidget();
     
-    XMLNode set_req("set");
-    set_req.setAttr("user",view->user())->setAttr("path",view->id()+"/%2fattr%2fscmd");
-    set_req.childAdd("el")->setAttr("id","event")->setText("ws_BtPress");
-    mod->cntrIfCmd(set_req);
+    view->attrSet("value",val.toAscii().data());
+    view->attrSet("event","ws_CombChange");
+}
+
+void ShapeFormEl::listChange( int row )
+{
+    if( row < 0 ) return;
+    
+    QListWidget *el   = (QListWidget*)sender();
+    WdgView     *view = (WdgView *)el->parentWidget();
+    
+    view->attrSet("value",el->item(row)->text().toAscii().data());
+    view->attrSet("event","ws_ListChange");
+}
+
+void ShapeFormEl::eventFilterSet( WdgView *view, QWidget *wdg, bool en )
+{
+    if( en ) 	wdg->installEventFilter(view);
+    else 	wdg->removeEventFilter(view);
+    //- Process childs -
+    for( int i_c = 0; i_c < wdg->children().size(); i_c++ )
+	if( qobject_cast<QWidget*>(wdg->children().at(i_c)) )
+	    eventFilterSet(view,(QWidget*)wdg->children().at(i_c),en);
+}
+
+void ShapeFormEl::setFocus(WdgView *view, QWidget *wdg, bool en, bool devel )
+{
+    int isFocus = wdg->windowIconText().toInt();
+    //- Set up current widget -
+    if( en )
+    { 
+	if( isFocus ) wdg->setFocusPolicy((Qt::FocusPolicy)isFocus);
+    }
+    else
+    {	
+	if( wdg->focusPolicy() != Qt::NoFocus )
+	{
+	    wdg->setWindowIconText(QString::number((int)wdg->focusPolicy()));	    
+	    wdg->setFocusPolicy(Qt::NoFocus);
+	}
+	if( devel ) wdg->setMouseTracking(true);
+    }
+    
+    //- Process childs -
+    for( int i_c = 0; i_c < wdg->children().size(); i_c++ )
+	if( qobject_cast<QWidget*>(wdg->children().at(i_c)) )
+	    setFocus(view,(QWidget*)wdg->children().at(i_c),en,devel);
 }
 
 //************************************************
@@ -299,25 +408,26 @@ ShapeText::ShapeText( ) : WdgShape("Text")
 
 }
 
-void ShapeText::load( WdgView *w )
+void ShapeText::load( WdgView *w, QMap<QString, QString> &attrs )
 {
-    QMap<QString, QString>::const_iterator	vl, 
-						end = w->dataReq().end();
+    QMap<QString, QString>::const_iterator	vl, end = attrs.end();
     
-    if( (vl=w->dataReq().find("geomMargin")) != end ) 	w->dataCache()["margin"] = vl.value().toInt();
-    if( (vl=w->dataReq().find("color")) != end )	w->dataCache()["color"].setValue(QColor(vl.value()));
-    if( (vl=w->dataReq().find("orient")) != end )	w->dataCache()["rotate"] = vl.value().toInt();    
-    if( (vl=w->dataReq().find("text")) != end )		w->dataCache()["text"] = vl.value();
+    bool up = false; 
+    
+    if( (vl=attrs.find("geomMargin")) != end ) 	{ w->dataCache()["margin"] = vl.value().toInt(); up = true; }
+    if( (vl=attrs.find("color")) != end )	{ w->dataCache()["color"].setValue(QColor(vl.value())); up = true; }
+    if( (vl=attrs.find("orient")) != end )	{ w->dataCache()["rotate"] = vl.value().toInt(); up = true; }
+    if( (vl=attrs.find("text")) != end )	{ w->dataCache()["text"] = vl.value(); up = true; }
     
     //- Font process -	
     QFont fnt = w->dataCache().value("font").value<QFont>();
-    if( (vl=w->dataReq().find("fontFamily")) != end )	fnt.setFamily(vl.value());
-    if( (vl=w->dataReq().find("fontSize")) != end )	fnt.setPointSize(vl.value().toInt());
-    if( (vl=w->dataReq().find("fontBold")) != end )	fnt.setBold(vl.value().toInt());
-    if( (vl=w->dataReq().find("fontItalic")) != end )	fnt.setItalic(vl.value().toInt());
-    if( (vl=w->dataReq().find("fontUnderline")) != end )fnt.setUnderline(vl.value().toInt());
-    if( (vl=w->dataReq().find("fontStrikeout")) != end )fnt.setStrikeOut(vl.value().toInt());
-    if( (vl=w->dataReq().find("font")) != end )
+    if( (vl=attrs.find("fontFamily")) != end )	{ fnt.setFamily(vl.value()); up = true; }
+    if( (vl=attrs.find("fontSize")) != end )	{ fnt.setPointSize(vl.value().toInt()); up = true; }
+    if( (vl=attrs.find("fontBold")) != end )	{ fnt.setBold(vl.value().toInt()); up = true; }
+    if( (vl=attrs.find("fontItalic")) != end )	{ fnt.setItalic(vl.value().toInt()); up = true; }
+    if( (vl=attrs.find("fontUnderline")) != end ){ fnt.setUnderline(vl.value().toInt()); up = true; }
+    if( (vl=attrs.find("fontStrikeout")) != end ){ fnt.setStrikeOut(vl.value().toInt()); up = true; }
+    if( (vl=attrs.find("font")) != end )
     {
 	char family[101];
 	int	 size, bold, italic, underline, strike;        
@@ -329,14 +439,15 @@ void ShapeText::load( WdgView *w )
 	if( pcnt >= 4 ) fnt.setItalic(italic);
 	if( pcnt >= 5 ) fnt.setUnderline(underline);
 	if( pcnt >= 6 ) fnt.setStrikeOut(strike);
+	up = true;
     }
     w->dataCache()["font"].setValue(fnt);
     
     //-- Set text flags --
     int txtflg = w->dataCache().value("text_flg",0).toInt();    
-    if( (vl=w->dataReq().find("wordWrap")) != end )	
-	txtflg = vl.value().toInt()?(txtflg|Qt::TextWordWrap):(txtflg&(~Qt::TextWordWrap));
-    if( (vl=w->dataReq().find("alignment")) != end )
+    if( (vl=attrs.find("wordWrap")) != end )
+    { txtflg = vl.value().toInt()?(txtflg|Qt::TextWordWrap):(txtflg&(~Qt::TextWordWrap)); up = true; }
+    if( (vl=attrs.find("alignment")) != end )
     {    
 	txtflg &= ~(Qt::AlignLeft|Qt::AlignRight|Qt::AlignHCenter|Qt::AlignTop|Qt::AlignBottom|Qt::AlignVCenter);
 	switch(vl.value().toInt()&0x3)
@@ -351,13 +462,14 @@ void ShapeText::load( WdgView *w )
 	    case 1: txtflg |= Qt::AlignBottom;	break;
 	    case 2: txtflg |= Qt::AlignVCenter;	break;		
 	}
+	up = true;
     }
     w->dataCache()["text_flg"] = txtflg;
     
     //- Decoration -
-    if( (vl=w->dataReq().find("backColor")) != end )	w->dataCache()["backColor"].setValue(QColor(vl.value()));
+    if( (vl=attrs.find("backColor")) != end )	{ w->dataCache()["backColor"].setValue(QColor(vl.value())); up = true; }
     //-- Prepare brush --
-    if( (vl=w->dataReq().find("backImg")) != end )
+    if( (vl=attrs.find("backImg")) != end )
     {	
 	XMLNode get_req("get");
         get_req.setAttr("user",w->user())->setAttr("path",w->id()+"/%2fwdg%2fres")->setAttr("id",vl.value().toAscii().data());
@@ -373,16 +485,19 @@ void ShapeText::load( WdgView *w )
 	    }
 	    w->dataCache()["backBrash"].setValue(brsh);	    
         }
+	up = true;
     }
     //-- Prepare border --
     QPen pen = w->dataCache().value("bordPen").value<QPen>();
-    if( (vl=w->dataReq().find("bordColor")) != end )	pen.setColor(QColor(vl.value()));
-    if( (vl=w->dataReq().find("bordWidth")) != end )	pen.setWidth(vl.value().toInt());
+    if( (vl=attrs.find("bordColor")) != end )	{ pen.setColor(QColor(vl.value())); up = true; }
+    if( (vl=attrs.find("bordWidth")) != end )	{ pen.setWidth(vl.value().toInt()); up = true; }
     w->dataCache()["bordPen"].setValue(pen);
     
     //-- Enable widget state --
-    if( qobject_cast<RunWdgView*>(w) && (vl=w->dataReq().find("en")) != end ) 
-	w->dataCache()["en"].setValue(vl.value().toInt());
+    if( qobject_cast<RunWdgView*>(w) && (vl=attrs.find("en")) != end )
+    { w->dataCache()["en"].setValue(vl.value().toInt()); up = true; }
+
+    if( up ) w->update();
 }
 
 bool ShapeText::event( WdgView *view, QEvent *event )
@@ -401,8 +516,18 @@ bool ShapeText::event( WdgView *view, QEvent *event )
 	    pnt.setViewport(view->rect().adjusted(margin,margin,-margin,-margin));
 	    
 	    pnt.translate(draw_area.width()/2,draw_area.height()/2 );
-	    pnt.rotate(view->dataCache().value("rotate").toInt());
-	    QRect draw_rect = QRect(QPoint(-draw_area.size().width()/2,-draw_area.size().height()/2),draw_area.size());
+	    int angle = view->dataCache().value("rotate").toInt();
+	    pnt.rotate(angle);
+	    //- Calc whidth and hight draw rect at rotate -
+	    double rad_angl  = fabs(3.14159*(double)angle/180.);
+	    double rect_rate = 1./(fabs(cos(rad_angl))+fabs(sin(rad_angl)));
+	    int wdth  = (int)(rect_rate*draw_area.size().width()+
+			    sin(rad_angl)*(draw_area.size().height()-draw_area.size().width()));
+	    int heigt = (int)(rect_rate*draw_area.size().height()+
+			    sin(rad_angl)*(draw_area.size().width()-draw_area.size().height()));
+	    
+	    //QRect draw_rect = QRect(QPoint(-draw_area.size().width()/2,-draw_area.size().height()/2),draw_area.size());
+	    QRect draw_rect = QRect(QPoint(-wdth/2,-heigt/2),QSize(wdth,heigt));
 	    //QSize asz(draw_area.size());
 	    
 	    //- Draw decoration -
@@ -510,19 +635,21 @@ void ShapeUserEl::init( WdgView *w )
     w->dataCache()["inclWidget"].setValue((void*)NULL);
 }
 
-void ShapeUserEl::load( WdgView *w )
+void ShapeUserEl::load( WdgView *w, QMap<QString, QString> &attrs )
 {
-    QMap<QString, QString>::const_iterator	vl, 
-						end = w->dataReq().end();
+    QMap<QString, QString>::const_iterator	vl, end = attrs.end();
+    
+    bool up = false;
 
-    if( (vl=w->dataReq().find("geomMargin")) != end )
+    if( (vl=attrs.find("geomMargin")) != end )
     {
 	w->dataCache()["margin"] = vl.value().toInt();
 	if( w->layout() ) w->layout()->setMargin( w->dataCache().value("margin").toInt() );
+	up = true;
     }
-    if( (vl=w->dataReq().find("backColor")) != end )	w->dataCache()["color"].setValue(QColor(vl.value()));
+    if( (vl=attrs.find("backColor")) != end )	{ w->dataCache()["color"].setValue(QColor(vl.value())); up = true; }
     //- Prepare brush -
-    if( (vl=w->dataReq().find("backImg")) != end )
+    if( (vl=attrs.find("backImg")) != end )
     {	
 	XMLNode get_req("get");
         get_req.setAttr("user",w->user())->setAttr("path",w->id()+"/%2fwdg%2fres")->setAttr("id",vl.value().toAscii().data());
@@ -538,14 +665,15 @@ void ShapeUserEl::load( WdgView *w )
 	    }
 	    w->dataCache()["brash"].setValue(brsh);	    
         }
+	up = true;
     }
     //- Prepare border -
     QPen pen = w->dataCache().value("pen").value<QPen>();
-    if( (vl=w->dataReq().find("bordColor")) != end )	pen.setColor(QColor(vl.value()));
-    if( (vl=w->dataReq().find("bordWidth")) != end )	pen.setWidth(vl.value().toInt());
+    if( (vl=attrs.find("bordColor")) != end )	{ pen.setColor(QColor(vl.value())); up = true; }    
+    if( (vl=attrs.find("bordWidth")) != end )	{ pen.setWidth(vl.value().toInt()); up = true; }
     w->dataCache()["pen"].setValue(pen);
     //- Check for include widget -
-    if( (vl=w->dataReq().find("pgOpenSrc")) != end && qobject_cast<RunWdgView*>(w) )
+    if( (vl=attrs.find("pgOpenSrc")) != end && qobject_cast<RunWdgView*>(w) )
     {
 	RunWdgView *el_wdg = (RunWdgView *)w->dataCache().value("inclWidget").value< void* >();	
 	//-- Delete previous include widget --
@@ -564,9 +692,10 @@ void ShapeUserEl::load( WdgView *w )
 		lay->setMargin(w->dataCache().value("margin").toInt());
 	    }
 	    w->dataCache()["inclWidget"].setValue((void*)el_wdg);
-	}
+	    up = true;
+	}	
     }        
-
+    if( up ) w->update();
 }
 
 bool ShapeUserEl::event( WdgView *view, QEvent *event )

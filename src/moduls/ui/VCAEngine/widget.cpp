@@ -207,6 +207,7 @@ void Widget::inheritAttr( const string &iattr )
     {
         if( !attrPresent(ls[i_l]) )
         {
+	    if( parent().at().attrAt(ls[i_l]).at().flgGlob()&Attr::Mutable ) continue;
             TFld *fel = new TFld(parent().at().attrAt(ls[i_l]).at().fld());
             //Clear user attribute flag and set inherit flag
             fel->setFlg(fel->flg()|Attr::IsInher);
@@ -269,7 +270,7 @@ bool Widget::attrChange( Attr &cfg )
 	if( cfg.owner() == this && cfg.id() == "active" )
 	{
 	    if( cfg.getB() && !cfg.owner()->attrPresent("evProc") )
-		cfg.owner()->attrAdd( new TFld("evProc",_("Events process"),TFld::String,TFld::FullText,"200") );
+		cfg.owner()->attrAdd( new TFld("evProc",_("Events process"),TFld::String,TFld::FullText|Attr::Mutable,"200") );
 	    if( !cfg.getB() && cfg.owner()->attrPresent("evProc") )
 	    	cfg.owner()->attrDel("evProc");
 	}

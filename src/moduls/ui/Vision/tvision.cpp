@@ -137,6 +137,10 @@ string TVision::optDescr( )
 
 void TVision::modLoad( )
 {
+#if OSC_DEBUG
+    mess_debug(nodePath().c_str(),_("Load module."));
+#endif
+
     //========== Load parameters from command line ============
     int next_opt;
     char *short_opt="h";
@@ -163,6 +167,9 @@ void TVision::modLoad( )
 
 void TVision::modSave( )
 {
+#if OSC_DEBUG
+    mess_debug(nodePath().c_str(),_("Save module."));
+#endif
     //========== Save parameters to DB =============
     TBDS::genDBSet(nodePath()+"StartUser",start_user);
 }
@@ -217,11 +224,19 @@ QMainWindow *TVision::openWindow()
 
 void TVision::modStart()
 {
+#if OSC_DEBUG
+    mess_debug(nodePath().c_str(),_("Start module."));
+#endif
+
     run_st = true;
 }
 
 void TVision::modStop()
 {   
+#if OSC_DEBUG
+    mess_debug(nodePath().c_str(),_("Stop module."));
+#endif
+
     int i_w;
     for( i_w = 0; i_w < mn_winds.size(); i_w++ )
         if( mn_winds[i_w] ) mn_winds[i_w]->close();//deleteLater();// close();

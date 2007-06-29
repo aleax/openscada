@@ -167,7 +167,7 @@ void MBD::postDisable(int flag)
     if( flag && owner().fullDeleteDB() )
     {
 	if(remove(addr().c_str()) != 0)
-    	    throw TError(nodePath().c_str(),_("Delete bd error: %s"),strerror(errno));
+    	    throw TError(TSYS::DBClose,nodePath().c_str(),_("Delete bd error: %s"),strerror(errno));
     }
 }
 
@@ -181,7 +181,7 @@ void MBD::enable( )
     { 
 	string err = sqlite3_errmsg(m_db);
 	sqlite3_close(m_db);
-	throw TError(nodePath().c_str(),_("Open DB file error: %s"),err.c_str());
+	throw TError(TSYS::DBOpen,nodePath().c_str(),_("Open DB file error: %s"),err.c_str());
     }
     
     TBD::enable( );    
@@ -204,7 +204,7 @@ void MBD::disable( )
 TTable *MBD::openTable( const string &inm, bool create )
 {
     if( !enableStat() )
-        throw TError(nodePath().c_str(),_("Error open table <%s>. DB disabled."),inm.c_str());
+        throw TError(TSYS::DBOpenTable,nodePath().c_str(),_("Error open table <%s>. DB disabled."),inm.c_str());
 	    
     return new MTable(inm,this,create);
 }
@@ -236,7 +236,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
     {
 	//Fix transaction
 	if((commCnt-1) < 0) commCnt=COM_MAX_CNT;
-	throw TError(nodePath().c_str(),_("Get table error: %s"),zErrMsg);
+	throw TError(TSYS::DBRequest,nodePath().c_str(),_("Get table error: %s"),zErrMsg);
     }
     if( tbl != NULL && ncol > 0 )
     {
@@ -311,7 +311,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
     //- Get present fields list -
     string req ="PRAGMA table_info('"+mod->sqlReqCode(name())+"');";
     owner().sqlReq( req, &tbl );	
-    if( tbl.size() == 0 ) throw TError(nodePath().c_str(),_("Table is empty."));
+    if( tbl.size() == 0 ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty."));
     
     //- Make WHERE -
     req = "SELECT ";
@@ -374,7 +374,7 @@ void MTable::fieldGet( TConfig &cfg )
     //Get present fields list
     string req ="PRAGMA table_info('"+mod->sqlReqCode(name())+"');";
     owner().sqlReq( req, &tbl );	
-    if( tbl.size() == 0 ) throw TError(nodePath().c_str(),_("Table is empty."));
+    if( tbl.size() == 0 ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty."));
     //Prepare request
     req = "SELECT ";
     string req_where;
@@ -402,7 +402,7 @@ void MTable::fieldGet( TConfig &cfg )
     //Query
     tbl.clear();
     owner().sqlReq( req, &tbl );
-    if( tbl.size() < 2 ) throw TError(nodePath().c_str(),_("Row no present."));
+    if( tbl.size() < 2 ) throw TError(TSYS::DBRowNoPresent,nodePath().c_str(),_("Row no present."));
     //Processing of query
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
 	for( int i_fld = 0; i_fld < tbl[0].size(); i_fld++ )
@@ -435,7 +435,7 @@ void MTable::fieldSet( TConfig &cfg )
     //Get present fields list
     string req ="PRAGMA table_info('"+mod->sqlReqCode(name())+"');";
     owner().sqlReq( req, &tbl_str );
-    if( tbl_str.size() == 0 ) throw TError(nodePath().c_str(),_("Table is empty."));
+    if( tbl_str.size() == 0 ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty."));
     
     //Get present fields list
     string req_where = "WHERE ";
@@ -531,7 +531,7 @@ void MTable::fieldDel( TConfig &cfg )
     //Get present fields list
     string req ="PRAGMA table_info('"+mod->sqlReqCode(name())+"');";
     owner().sqlReq( req, &tbl );
-    if( tbl.size() == 0 ) throw TError(nodePath().c_str(),_("Table is empty."));
+    if( tbl.size() == 0 ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty."));
     //Prepare request
     req = "DELETE FROM '"+mod->sqlReqCode(name())+"' WHERE ";
     //Add key list to queue

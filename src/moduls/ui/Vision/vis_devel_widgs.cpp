@@ -243,13 +243,10 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it ) // Item *it)
                 }
             //-- Check attribute item --
             int ga_id = cur_it->childGet(a_id);
-            if( ga_id < 0 )
-	    {
-		ga_id = cur_it->childInsert(a_id,-1,Item::Attr);
-		cur_it->child(ga_id)->setEdited(atoi(gnd->attr("acs").c_str())&SEQ_WR);
-		cur_it->child(ga_id)->setFlag( atoi(gnd->attr("wdgFlg").c_str()) );
-	    }
-            cur_it->child(ga_id)->setName(a_nm);
+            if( ga_id < 0 ) ga_id = cur_it->childInsert(a_id,-1,Item::Attr);
+            cur_it->child(ga_id)->setName(a_nm);	    
+	    cur_it->child(ga_id)->setEdited(atoi(gnd->attr("acs").c_str())&SEQ_WR);
+	    cur_it->child(ga_id)->setFlag( atoi(gnd->attr("wdgFlg").c_str()) );	    
             //-- Get Value --
 	    string sval;
 	    get_req.setAttr("path",it->id()+"/%2fattr%2f"+a_id);
@@ -1722,7 +1719,8 @@ bool DevelWdgView::event( QEvent *event )
                     rsel = rsel.united(((DevelWdgView*)children().at(i_c))->geometry());
             pntView->setSelArea(rsel,edit());
         }
-	return WdgView::event(event);
+	if( WdgView::event(event) )	return true;
+	return QWidget::event(event);
     }
     
     //- Other events process -
@@ -1835,7 +1833,7 @@ bool DevelWdgView::event( QEvent *event )
 		if( moveHold && !edit() )
 		{
 	    	    moveHold = false;
-	    	    if( cursor().shape() != Qt::ArrowCursor )	save("");
+	    	    if( cursor().shape() != Qt::ArrowCursor ) save(""); 
 	    	    return true;
 		}
      		break;
@@ -1989,7 +1987,7 @@ bool DevelWdgView::event( QEvent *event )
 			}			
 			//-- Set status bar --
 			mainWin()->statusBar()->showMessage(
-			    QString(_("Kadr: '%1' --- xy(%2:%3) wh[%4:%5]"))
+			    QString(_("Page: '%1' --- xy(%2:%3) wh[%4:%5]"))
 				.arg(id().c_str()).arg(pos().x()).arg(pos().y())
 				.arg(size().width()).arg(size().height()), 10000 );
 		    }
@@ -1998,9 +1996,10 @@ bool DevelWdgView::event( QEvent *event )
         	break;
 	    }
 	    case QEvent::KeyPress:
+	    {
+		QKeyEvent *key = static_cast<QKeyEvent*>(event);	    
 		if( edit() )
 		{
-		    QKeyEvent *key = static_cast<QKeyEvent*>(event);
 		    if( key->key() == Qt::Key_Escape )
 		    {	
 			//-- Unselect child widgets --
@@ -2012,14 +2011,52 @@ bool DevelWdgView::event( QEvent *event )
 			return true;
 		    }
 		}
+		else
+		{
+		    QPoint dP(0,0);
+		    switch( key->key() )
+		    {
+			case Qt::Key_Left: 	dP.setX(-1);	break;
+			case Qt::Key_Right: 	dP.setX(1);	break;
+			case Qt::Key_Up:	dP.setY(-1);	break;
+			case Qt::Key_Down:	dP.setY(1);	break;
+		    }
+		    if( !dP.isNull() )
+		    {
+			dP *= ((QApplication::keyboardModifiers()&Qt::ShiftModifier) ? 1 : 5);
+			for( int i_c = 0; i_c < children().size(); i_c++ )
+			{
+			    DevelWdgView *curw = qobject_cast<DevelWdgView*>(children().at(i_c));
+			    if( !curw || !curw->select() ) continue;
+			    curw->move(curw->pos()+dP);
+			}
+		    }
+		    //-- Set status bar --
+		    QRect srect;
+		    for( int i_c = 0; i_c < children().size(); i_c++ )
+			if( qobject_cast<DevelWdgView*>(children().at(i_c)) && 
+				((DevelWdgView*)children().at(i_c))->select( ) )
+			{
+			    srect = srect.united(((DevelWdgView*)children().at(i_c))->geometry());
+			    save(((DevelWdgView*)children().at(i_c))->id());
+			}
+		    mainWin()->statusBar()->showMessage(
+			QString(_("Elements: '%1' --- xy(%2:%3) wh[%4:%5]"))
+			    .arg(selectChilds().c_str())
+			    .arg(srect.x()).arg(srect.y())
+			    .arg(srect.width()).arg(srect.height()), 10000 );
+
+		}
 		break;
+	    }
     	}
     }
     
     //- Self widget view -
     if( shape && wLevel() <= 1 && edit() && shape->event(this,event) )	return true;
 
-    return WdgView::event(event);
+    if( WdgView::event(event) )	return true;
+    return QWidget::event(event);
 }
 
 //* Size points view widget              *

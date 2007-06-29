@@ -27,6 +27,7 @@
 #include <vector> 
 
 #include <QObject>
+#include <QMap>
 
 using std::string;
 using std::vector; 
@@ -59,7 +60,7 @@ class WdgShape : public QObject
 	virtual void editEnter( WdgView *view )	{ }
 	virtual void editExit( WdgView *view )	{ }
 	
-	virtual void load( WdgView *view )	{ }
+	virtual void load( WdgView *view, QMap<QString, QString> &attrs )	{ }
 	virtual void save( WdgView *view )	{ }
 	
 	virtual bool event( WdgView *view, QEvent *event );
@@ -100,12 +101,31 @@ class ShapeFormEl : public WdgShape
     public:
 	ShapeFormEl( );
 	
-	void load( WdgView *view );		
+	void load( WdgView *view, QMap<QString, QString> &attrs );
 	bool event( WdgView *view, QEvent *event );	
 	bool eventFilter( WdgView *view, QObject *object, QEvent *event );
     
     public slots:
+	//-- Edit line events --
+	void lineAccept( );
+	//-- Edit text events --	
+	void textAccept( );
+	//-- Check box events --
+	void checkChange(int);
+	//-- Combo box and list events --
+	void comboChange(const QString&);
+	//-- List events --
+	void listChange(int);	
+	//-- Button's events --
 	void buttonPressed( );
+	void buttonReleased( );
+	void buttonToggled( bool val );
+
+    private:
+	//- Private methods -
+	//Recursively widgets process for disable focusable and events filter set    
+	void eventFilterSet( WdgView *view, QWidget *wdg, bool en );
+	void setFocus(WdgView *view, QWidget *wdg, bool en = false, bool devel = false );
 };
 
 //************************************************
@@ -116,7 +136,7 @@ class ShapeText : public WdgShape
     public:
 	ShapeText( );
 
-	void load( WdgView *view );
+	void load( WdgView *view, QMap<QString, QString> &attrs );
 	bool event( WdgView *view, QEvent *event );
 }; 
 
@@ -180,7 +200,7 @@ class ShapeUserEl : public WdgShape
 
 	void init( WdgView *view );
 
-	void load( WdgView *view );
+	void load( WdgView *view, QMap<QString, QString> &attrs );
 	bool event( WdgView *view, QEvent *event );
 };
 

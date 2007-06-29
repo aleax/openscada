@@ -472,6 +472,9 @@ VisDevelop::VisDevelop( string open_user ) : prjLibPropDlg(NULL), visItPropDlg(N
 
 VisDevelop::~VisDevelop()
 {
+    work_wdgTimer->stop();
+    while(work_wdgTimer->isActive());
+
     winClose = true;
     
     //Save main window state

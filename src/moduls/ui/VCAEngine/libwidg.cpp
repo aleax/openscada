@@ -77,6 +77,9 @@ void WidgetLib::postDisable( int flag )
 	//-- Delete attributes table --
         SYS->db().at().open(fullDB()+"_io");
         SYS->db().at().close(fullDB()+"_io",true);
+	//-- Delete user attributes table --
+        SYS->db().at().open(fullDB()+"_uio");
+        SYS->db().at().close(fullDB()+"_uio",true);	
 	//-- Delete include widgets table --
 	SYS->db().at().open(fullDB()+"_incl");
 	SYS->db().at().close(fullDB()+"_incl",true);
@@ -123,6 +126,10 @@ void WidgetLib::setFullDB( const string &it )
 
 void WidgetLib::load( )
 {
+#if OSC_DEBUG
+    mess_debug(nodePath().c_str(),_("Load widget library."));
+#endif
+
     SYS->db().at().dataGet(DB()+"."+mod->wlbTable(),mod->nodePath()+"lib",*this);
 
     //Create new widgets 
@@ -144,6 +151,10 @@ void WidgetLib::load( )
 
 void WidgetLib::save( )
 {
+#if OSC_DEBUG
+    mess_debug(nodePath().c_str(),_("Save widget library."));
+#endif
+
     SYS->db().at().dataSet(DB()+"."+mod->wlbTable(),mod->nodePath()+"lib",*this);
 
     //- Save widgets -
@@ -169,6 +180,10 @@ void WidgetLib::save( )
 
 void WidgetLib::setEnable( bool val )
 {
+#if OSC_DEBUG
+    mess_debug(nodePath().c_str(),val ? _("Enable widget library.") : _("Disable widget library."));
+#endif
+
     vector<string> f_lst;
     list(f_lst);
     for( int i_ls = 0; i_ls < f_lst.size(); i_ls++ )
@@ -176,7 +191,7 @@ void WidgetLib::setEnable( bool val )
 	try{ at(f_lst[i_ls]).at().setEnable(val); }	
 	catch( TError err )
 	{ 
-	    mess_err(nodePath().c_str(),_("Enable widget '%s' error %s."),f_lst[i_ls].c_str(),err.mess.c_str()); 
+	    mess_err(nodePath().c_str(),_("Enable/disable widget '%s' error %s."),f_lst[i_ls].c_str(),err.mess.c_str()); 
 	}
     }
 
@@ -509,6 +524,11 @@ void LWidget::postDisable( int flag )
         c_el.cfg("IDW").setS(id());
         c_el.cfg("ID").setS("");
         SYS->db().at().dataDel(fullDB+"_io",mod->nodePath()+tbl+"_io",*this);
+	//Remove widget's user IO from library IO table
+        c_el.setElem(&mod->elWdgUIO());
+        c_el.cfg("IDW").setS(id());
+        c_el.cfg("ID").setS("");
+        SYS->db().at().dataDel(fullDB+"_uio",mod->nodePath()+tbl+"_uio",*this);	
     }
 }
 
@@ -620,15 +640,36 @@ void LWidget::load( )
 
 void LWidget::loadIO( )
 {
-    //- Load widget's attributes -
-    TConfig c_el(&mod->elWdgIO());
-
+    vector<string> als;
+    
+    if( !enable() ) return;
+    
+    //- Load widget's work attributes -
     string db  = owner().DB();
     string tbl = owner().tbl()+"_io";
+    
+    attrList( als );
+    TConfig c_el(&mod->elWdgIO());
+    c_el.cfg("IDW").setS(id());    
+    for( int i_a = 0; i_a < als.size(); i_a++ )
+    {
+	AutoHD<Attr> attr = attrAt(als[i_a]);
+	if( !(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser ) continue;
+	c_el.cfg("ID").setS(als[i_a]);
+	if( !SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el) ) continue;
+	attr.at().setS(c_el.cfg("IO_VAL").getS());
+	if( attr.at().flgGlob()&Attr::Active )	attrList( als );
+	attr.at().setFlgSelf((Attr::SelfAttrFlgs)c_el.cfg("SELF_FLG").getI());
+	attr.at().setCfgTempl(c_el.cfg("CFG_TMPL").getS());
+	attr.at().setCfgVal(c_el.cfg("CFG_VAL").getS());
+    }
 
-    int fld_cnt=0;
-    c_el.cfg("IDW").setS(id());
+    //- Load widget's user attributes -
+    tbl = owner().tbl()+"_uio";
+    c_el.setElem(&mod->elWdgUIO());
+    c_el.cfg("IDW").setS(id());        
     c_el.cfg("ID").setS("");
+    int fld_cnt = 0;
     while( SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el) )
     {
 	string sid = c_el.cfg("ID").getS();
@@ -637,13 +678,10 @@ void LWidget::loadIO( )
 
 	if( !TSYS::pathLev(sid,1).empty() ) continue;
         if( !attrPresent(sid) )
-        {
-	    if( !((flg>>4)&Attr::IsInher) && (flg>>4)&Attr::IsUser )
-                attrAdd( new TFld(sid.c_str(),c_el.cfg("NAME").getS().c_str(),(TFld::Type)(flg&0x0f),flg>>4) );
-	    else continue;
-        }
+            attrAdd( new TFld(sid.c_str(),c_el.cfg("NAME").getS().c_str(),(TFld::Type)(flg&0x0f),flg>>4) );
 	AutoHD<Attr> attr = attrAt(sid);
-        if( !((flg>>4)&Attr::IsInher) && (flg>>4)&Attr::IsUser )
+        if( !(!(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser) ) continue;
+	if( attr.at().flgGlob()&TFld::Selected )
 	{
 	    attr.at().setS(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),0,'|'));
 	    attr.at().fld().setValues(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),1,'|'));
@@ -654,10 +692,10 @@ void LWidget::loadIO( )
 	attr.at().setCfgTempl(c_el.cfg("CFG_TMPL").getS());
 	attr.at().setCfgVal(c_el.cfg("CFG_VAL").getS());
     }
-    
+
     //- Load cotainer widgets -
     if( !enable() || !isContainer() ) return;
-    c_el.elem(&mod->elInclWdg());
+    c_el.setElem(&mod->elInclWdg());
     c_el.cfgViewAll(false);
     tbl=owner().tbl()+"_incl";
     c_el.cfg("IDW").setS(id());
@@ -694,51 +732,63 @@ void LWidget::save( )
 
 void LWidget::saveIO( )
 {
-    TConfig c_el(&mod->elWdgIO());
+    vector<string> als;
+
+    if( !enable() ) return;
+    
+    //- Save widget's attributes -
     string db  = owner().DB();
     string tbl = owner().tbl()+"_io";
-
-    //Save allow IO
-    vector<string> atrr_ls;
-    attrList(atrr_ls);
-    c_el.cfg("IDW").setS( id() );
-    for( int i_io = 0; i_io < atrr_ls.size(); i_io++ )
+    string utbl = owner().tbl()+"_uio";
+    
+    attrList( als );
+    TConfig c_el(&mod->elWdgIO());    
+    c_el.cfg("IDW").setS(id());     
+    TConfig c_elu(&mod->elWdgUIO());
+    c_elu.cfg("IDW").setS(id());
+    for( int i_a = 0; i_a < als.size(); i_a++ )
     {
-	AutoHD<Attr> attr = attrAt(atrr_ls[i_io]);	
-	if( attr.at().modifVal() || attr.at().modifCfg() )
+ 	AutoHD<Attr> attr = attrAt(als[i_a]);	
+	if( !attr.at().modifVal() && !attr.at().modifCfg() )	continue;
+	if( !(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser )
 	{
-	    c_el.cfg("ID").setS( atrr_ls[i_io] );
-	    c_el.cfg("IO_TYPE").setI(0);
- 	    if( !(attr.at().fld().flg()&Attr::IsInher) && attr.at().fld().flg()&Attr::IsUser )
-	    {
-		c_el.cfg("IO_VAL").setS(attr.at().getS()+"|"+
-					attr.at().fld().values()+"|"+
-					attr.at().fld().selNames());
-		c_el.cfg("NAME").setS(attr.at().name());
-		c_el.cfg("IO_TYPE").setI(attr.at().fld().type()+(attr.at().fld().flg()<<4));
-    	    }
-	    else c_el.cfg("IO_VAL").setS(attr.at().getS());
+	    //-- User attribute store --	    
+    	    c_elu.cfg("ID").setS(als[i_a]);
+    	    c_elu.cfg("IO_VAL").setS(attr.at().getS()+"|"+
+				    attr.at().fld().values()+"|"+
+				    attr.at().fld().selNames());
+    	    c_elu.cfg("NAME").setS(attr.at().name());
+	    c_elu.cfg("IO_TYPE").setI(attr.at().fld().type()+(attr.at().fld().flg()<<4));
+	    c_elu.cfg("SELF_FLG").setI(attr.at().flgSelf());
+	    c_elu.cfg("CFG_TMPL").setS(attr.at().cfgTempl());
+	    c_elu.cfg("CFG_VAL").setS(attr.at().cfgVal());
+	    SYS->db().at().dataSet(db+"."+utbl,mod->nodePath()+utbl,c_elu);
+	}
+	else
+	{
+	    //-- Work attribute store --
+    	    c_el.cfg("ID").setS(als[i_a]);
+    	    c_el.cfg("IO_VAL").setS(attr.at().getS());
 	    c_el.cfg("SELF_FLG").setI(attr.at().flgSelf());
 	    c_el.cfg("CFG_TMPL").setS(attr.at().cfgTempl());
 	    c_el.cfg("CFG_VAL").setS(attr.at().cfgVal());
-
-	    SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,c_el);
+    	    SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,c_el);
 	}
     }
-
-    //Clear no present IO
+    
+    //- Clear no present IO for user io table -
     int fld_cnt=0;
-    c_el.cfg("ID").setS("");
-    c_el.cfgViewAll(false);
-    while( SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el) )
+    c_elu.cfg("ID").setS("");
+    c_elu.cfgViewAll(false);
+    while( SYS->db().at().dataSeek(db+"."+utbl,mod->nodePath()+utbl,fld_cnt++,c_elu) )
     {
-        string sid   = c_el.cfg("ID").getS();
+        string sid = c_elu.cfg("ID").getS();
 	if( TSYS::pathLev(sid,1).empty() && !attrPresent(TSYS::pathLev(sid,0)) )
         {
-            SYS->db().at().dataDel(db+"."+tbl,mod->nodePath()+tbl,c_el);
+            SYS->db().at().dataDel(db+"."+utbl,mod->nodePath()+utbl,c_elu);
             fld_cnt--;
         }
-	c_el.cfg("ID").setS("");
+	c_elu.cfg("ID").setS("");
     }
 }
 
@@ -827,13 +877,14 @@ void CWidget::postDisable(int flag)
         string fullDB = owner().owner().fullDB();
         string tbl = owner().owner().tbl();
 
-        //Remove from library table
+        //- Remove from library table -
         SYS->db().at().dataDel(fullDB+"_incl",mod->nodePath()+tbl+"_incl",*this);
-        //Remove widget's IO from library IO table
+ 	
+	//- Remove widget's work IO from library IO table -
         TConfig c_el(&mod->elWdgIO());
 	c_el.cfgViewAll(false);
         c_el.cfg("IDW").setS(owner().id());
-        c_el.cfg("ID").setS("");
+        c_el.cfg("ID").setS(""); 
         int fld_cnt=0;
         while( SYS->db().at().dataSeek(fullDB+"_io",mod->nodePath()+tbl+"_io",fld_cnt++,c_el) )
         {
@@ -841,6 +892,22 @@ void CWidget::postDisable(int flag)
             if( TSYS::pathLev(sid,0) == id() && TSYS::pathLev(sid,1).size() )
             {
                 SYS->db().at().dataDel(fullDB+"_io",mod->nodePath()+tbl+"_io",c_el);
+                fld_cnt--;
+            }
+            c_el.cfg("ID").setS("");
+        }        
+	//- Remove widget's user IO from library IO table -
+        c_el.setElem(&mod->elWdgUIO());
+	c_el.cfgViewAll(false);
+        c_el.cfg("IDW").setS(owner().id());
+        c_el.cfg("ID").setS(""); 
+        fld_cnt=0;
+        while( SYS->db().at().dataSeek(fullDB+"_uio",mod->nodePath()+tbl+"_uio",fld_cnt++,c_el) )
+        {
+	    string sid = c_el.cfg("ID").getS();
+            if( TSYS::pathLev(sid,0) == id() && TSYS::pathLev(sid,1).size() )
+            {
+                SYS->db().at().dataDel(fullDB+"_uio",mod->nodePath()+tbl+"_uio",c_el);
                 fld_cnt--;
             }
             c_el.cfg("ID").setS("");
@@ -907,41 +974,57 @@ void CWidget::load( )
 
 void CWidget::loadIO( )
 {
-    TConfig c_el(&mod->elWdgIO());
+    vector<string> als;
 
+    if( !enable() ) return;
+    
+    //- Load widget's work attributes -
     string db  = owner().owner().DB();
     string tbl = owner().owner().tbl()+"_io";
-
-    int fld_cnt=0;
-    c_el.cfg("IDW").setS( owner().id() );
+    
+    attrList( als );
+    TConfig c_el(&mod->elWdgIO());
+    c_el.cfg("IDW").setS(owner().id());    
+    for( int i_a = 0; i_a < als.size(); i_a++ )
+    { 
+ 	AutoHD<Attr> attr = attrAt(als[i_a]);
+	if( !(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser ) continue;
+	c_el.cfg("ID").setS(id()+"/"+als[i_a]);
+	if( !SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el) ) continue;
+	attr.at().setS(c_el.cfg("IO_VAL").getS());
+	if( attr.at().flgGlob()&Attr::Active )	attrList( als );
+	attr.at().setFlgSelf((Attr::SelfAttrFlgs)c_el.cfg("SELF_FLG").getI());
+	attr.at().setCfgTempl(c_el.cfg("CFG_TMPL").getS());
+	attr.at().setCfgVal(c_el.cfg("CFG_VAL").getS());
+    } 
+    //- Load widget's user attributes -
+    tbl = owner().owner().tbl()+"_uio";
+    c_el.setElem(&mod->elWdgUIO());
+    c_el.cfg("IDW").setS(owner().id());
     c_el.cfg("ID").setS("");
+    int fld_cnt = 0;
     while( SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el) )
     {
 	string sid = c_el.cfg("ID").getS();
 	unsigned flg = c_el.cfg("IO_TYPE").getI();
 	c_el.cfg("ID").setS("");
-	
-        if( TSYS::pathLev(sid,0) == id() && !TSYS::pathLev(sid,1).empty() ) 
-	    sid = TSYS::pathLev(sid,1);
-        else continue;
 
-        if(!attrPresent(sid))
-        {
-	    if( !((flg>>4)&Attr::IsInher) && (flg>>4)&Attr::IsUser )
-                attrAdd( new TFld(sid.c_str(),c_el.cfg("NAME").getS().c_str(),(TFld::Type)(flg&0x0f),flg>>4) );
-	    else continue;
-        }
-	
+        if( TSYS::pathLev(sid,0) == id() && !TSYS::pathLev(sid,1).empty() )
+	    sid = TSYS::pathLev(sid,1);
+        else continue; 
+
+        if( !attrPresent(sid) )
+            attrAdd( new TFld(sid.c_str(),c_el.cfg("NAME").getS().c_str(),(TFld::Type)(flg&0x0f),flg>>4) );
+
 	AutoHD<Attr> attr = attrAt(sid);
-	
-        if( !((flg>>4)&Attr::IsInher) && (flg>>4)&Attr::IsUser )
+        if( !(!(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser) ) continue;
+	if( attr.at().flgGlob()&TFld::Selected )
 	{
 	    attr.at().setS(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),0,'|'));
 	    attr.at().fld().setValues(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),1,'|'));
 	    attr.at().fld().setSelNames(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),2,'|'));
 	}
 	else attr.at().setS(c_el.cfg("IO_VAL").getS());
-
 	attr.at().setFlgSelf((Attr::SelfAttrFlgs)c_el.cfg("SELF_FLG").getI());
 	attr.at().setCfgTempl(c_el.cfg("CFG_TMPL").getS());
 	attr.at().setCfgVal(c_el.cfg("CFG_VAL").getS());
@@ -961,52 +1044,60 @@ void CWidget::save( )
 
 void CWidget::saveIO( )
 {
-    TConfig c_el(&mod->elWdgIO());
+    vector<string> als;
+    
+    //- Save widget's attributes -
     string db  = owner().owner().DB();
     string tbl = owner().owner().tbl()+"_io";
-
-    //Save allow IO
-    vector<string> atrr_ls;
-    attrList(atrr_ls);
-    c_el.cfg("IDW").setS( owner().id() );
-    for( int i_io = 0; i_io < atrr_ls.size(); i_io++ )
+    string utbl = owner().owner().tbl()+"_uio";
+    
+    attrList( als );
+    TConfig c_el(&mod->elWdgIO());    
+    c_el.cfg("IDW").setS(owner().id());     
+    TConfig c_elu(&mod->elWdgUIO());
+    c_elu.cfg("IDW").setS(owner().id());
+    for( int i_a = 0; i_a < als.size(); i_a++ )
     {
-
-	AutoHD<Attr> attr = attrAt(atrr_ls[i_io]);
-	if( attr.at().modifVal() || attr.at().modifCfg() )
+ 	AutoHD<Attr> attr = attrAt(als[i_a]);	
+	if( !attr.at().modifVal() && !attr.at().modifCfg() )	continue;
+	if( !(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser )
 	{
-	    c_el.cfg("ID").setS( id()+"/"+atrr_ls[i_io] );
-	    c_el.cfg("IO_TYPE").setI(0);
- 	    if( !(attr.at().fld().flg()&Attr::IsInher) && attr.at().fld().flg()&Attr::IsUser )
-	    {
-		c_el.cfg("IO_VAL").setS(attr.at().getS()+"|"+
-					attr.at().fld().values()+"|"+
-					attr.at().fld().selNames());
-		c_el.cfg("NAME").setS(attr.at().name());
-		c_el.cfg("IO_TYPE").setI(attr.at().fld().type()+(attr.at().fld().flg()<<4));
-    	    }
-	    else c_el.cfg("IO_VAL").setS(attr.at().getS());
+	    //-- User attribute store --
+	    c_elu.cfg("ID").setS( id()+"/"+als[i_a] );
+    	    c_elu.cfg("IO_VAL").setS(attr.at().getS()+"|"+
+				    attr.at().fld().values()+"|"+
+				    attr.at().fld().selNames());
+    	    c_elu.cfg("NAME").setS(attr.at().name());
+	    c_elu.cfg("IO_TYPE").setI(attr.at().fld().type()+(attr.at().fld().flg()<<4));
+	    c_elu.cfg("SELF_FLG").setI(attr.at().flgSelf());
+	    c_elu.cfg("CFG_TMPL").setS(attr.at().cfgTempl());
+	    c_elu.cfg("CFG_VAL").setS(attr.at().cfgVal());
+	    SYS->db().at().dataSet(db+"."+utbl,mod->nodePath()+utbl,c_elu);
+	}
+	else
+	{
+	    //-- Work attribute store --
+	    c_el.cfg("ID").setS( id()+"/"+als[i_a] );
+    	    c_el.cfg("IO_VAL").setS(attr.at().getS());
 	    c_el.cfg("SELF_FLG").setI(attr.at().flgSelf());
 	    c_el.cfg("CFG_TMPL").setS(attr.at().cfgTempl());
 	    c_el.cfg("CFG_VAL").setS(attr.at().cfgVal());
-
-	    SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,c_el);
+    	    SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,c_el);
 	}
-    }
-
-    //Clear no present IO
+    } 
+    //- Clear no present IO for user io table -
     int fld_cnt=0;
-    c_el.cfg("ID").setS("");
-    c_el.cfgViewAll(false);
-    while( SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el) )
+    c_elu.cfg("ID").setS("");
+    c_elu.cfgViewAll(false);
+    while( SYS->db().at().dataSeek(db+"."+utbl,mod->nodePath()+utbl,fld_cnt++,c_elu) )
     {
-        string sid = c_el.cfg("ID").getS();
+        string sid = c_elu.cfg("ID").getS();
         if( TSYS::pathLev(sid,0) == id() && TSYS::pathLev(sid,1).size() && !attrPresent(TSYS::pathLev(sid,1)) )
-    	{
-    	    SYS->db().at().dataDel(db+"."+tbl,mod->nodePath()+tbl,c_el);
-    	    fld_cnt--;    	    
-	}
-	c_el.cfg("ID").setS("");	
+        {
+            SYS->db().at().dataDel(db+"."+utbl,mod->nodePath()+utbl,c_elu);
+            fld_cnt--;
+        }
+	c_elu.cfg("ID").setS("");
     }
 }
 

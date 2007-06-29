@@ -933,10 +933,7 @@ bool SessWdg::attrChange( Attr &cfg )
     if( cfg.id() == "active" )
     {
         if( cfg.getB() && !attrPresent("event") )
-	{
-	    attrAdd( new TFld("event",_("Events"),TFld::String,TFld::NoFlag,"200") );
-	    //attrAt("event").at().setFlgSelf(Attr::ProcAttr);
-	}
+	    attrAdd( new TFld("event",_("Events"),TFld::String,Attr::Mutable,"200") );
 	if( !cfg.getB() && attrPresent("event") ) attrDel("event");
     }
 }

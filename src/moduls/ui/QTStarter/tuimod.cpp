@@ -104,6 +104,10 @@ TUIMod::~TUIMod()
 
 void TUIMod::modLoad( )
 {
+#if OSC_DEBUG
+    mess_debug(nodePath().c_str(),_("Load module."));
+#endif
+
     //========== Load parameters from command line ============
     int next_opt;
     char *short_opt="h";
@@ -132,6 +136,10 @@ void TUIMod::modLoad( )
 
 void TUIMod::modSave( )
 {
+#if OSC_DEBUG
+    mess_debug(nodePath().c_str(),_("Save module."));
+#endif
+
     TBDS::genDBSet(nodePath()+"StartMod",start_mod);
 }
 
@@ -145,6 +153,10 @@ void TUIMod::postEnable( int flag )
 
 void TUIMod::modStart()
 {
+#if OSC_DEBUG
+    mess_debug(nodePath().c_str(),_("Start module."));
+#endif
+
     if( run_st || dem_mode ) return;
     pthread_attr_t pthr_attr;
     
@@ -158,6 +170,10 @@ void TUIMod::modStart()
 
 void TUIMod::modStop()
 {    
+#if OSC_DEBUG
+    mess_debug(nodePath().c_str(),_("Stop module."));
+#endif
+
     if( run_st )
     {
 	end_run = true;

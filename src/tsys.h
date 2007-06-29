@@ -68,10 +68,24 @@ class TSYS : public TCntrNode
 {
 
     public:
-	//Public methods    
+	//Data
 	enum Code	{ PathEl, HttpURL, Html, JavaSc, SQL, Custom, base64, FormatPrint };
 	enum IntView 	{ Dec, Oct, Hex,   };
-    
+        enum Errors 	
+	{ 
+	    //- DB errors code -
+	    DBInit = 1,		//init DB error
+	    DBConn,		//connect to DB is error
+	    DBInernal,		//internal error
+	    DBRequest,		//request to DB is error
+	    DBOpen,		//open DB is error
+	    DBOpenTable,	//open table error
+	    DBClose,		//close DB or table error
+	    DBTableEmpty,	//table is empty
+	    DBRowNoPresent	//no present of requested row
+	};	    
+	
+	//Public methods    
 	TSYS( int argi, char ** argb, char **env );
 	~TSYS(  );
 
