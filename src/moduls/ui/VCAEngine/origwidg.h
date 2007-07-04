@@ -111,8 +111,10 @@ class OrigMedia : public PrWidget
 	string descr( );
  
     protected:
-	void postEnable( int flag );   
-};  
+	void postEnable( int flag );
+	bool attrChange( Attr &cfg );
+};
+
 //************************************************
 //* Trend view original widget                   *
 //************************************************

@@ -1796,10 +1796,9 @@ bool DevelWdgView::event( QEvent *event )
 	    		    if( !cwdg ) continue;
 	    		    if( cwdg->geometry().contains(curp) ) 
 	    		    {
-	    			if( !cwdg->select() ) { cwdg->setSelect(true); sel_modif = true; }
-	    			else if( cwdg->select() && sh_hold )
-	    			{ cwdg->setSelect(false); sel_modif = true; }
-	    			if( cwdg->select() ) chld_sel = true;
+	    			if( !cwdg->select() ) 	{ cwdg->setSelect(true);  sel_modif = true; }
+	    			else if( sh_hold )	{ cwdg->setSelect(false); sel_modif = true; }
+	    			if( cwdg->select() )	chld_sel = true;
 	    			break;
 	    		    }
 	    		}

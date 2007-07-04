@@ -1,3 +1,10 @@
+2007-07-04 Roman
+- /SYS: Updated Demo DB.
+- !:/DB/MySQL: Text field type "mediumtext" support is added.
+- !!:/UI/VCAEngine: The work for primitive "Media" is finished.
+- !!:/UI/Vision: The work for primitive "Media" is finished.
+
+
 2007-06-29 Roman
 - !!:/TSYS: Error code support is added to the error object (TError).
 - !!:/UI/VCAEngine: The widget's attributes DB table (*_io) separated to the work widget's attributes 

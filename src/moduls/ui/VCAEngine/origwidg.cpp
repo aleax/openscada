@@ -184,8 +184,8 @@ bool OrigFormEl::attrChange( Attr &cfg )
 		cfg.owner()->attrAdd( new TFld("items",_("Items"),TFld::String,TFld::FullText|Attr::Mutable) );
 		break;
 	}
-	//printf("TEST 00: FormEl type: %d\n",cfg.getI());
-    }    
+    }
+    return true;
 }
 
 //************************************************
@@ -257,11 +257,41 @@ void OrigMedia::postEnable( int flag )
     LWidget::postEnable(flag);
     
     if( flag&TCntrNode::NodeConnect )
-    { 
-        attrAdd( new TFld("src",_("Source"),TFld::String,TFld::NoFlag,"50","") );
-        attrAdd( new TFld("play",_("Media play"),TFld::Boolean,TFld::NoFlag,"1","0") );
-        attrAdd( new TFld("cycle",_("Media cyclic play"),TFld::Boolean,TFld::NoFlag,"1","0") );    
+    { 	
+        attrAdd( new TFld("backColor",_("Background:color"),TFld::String,Attr::Color,"","#FFFFFF") );
+        attrAdd( new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","") );
+        attrAdd( new TFld("bordWidth",_("Border:width"),TFld::Integer,TFld::NoFlag,"","0") );
+        attrAdd( new TFld("bordColor",_("Border:color"),TFld::String,Attr::Color,"","#000000") );
+        attrAdd( new TFld("src",_("Source"),TFld::String,TFld::NoFlag,"50","") );	
+        attrAdd( new TFld("type",_("Type"),TFld::Integer,TFld::Selected|Attr::Active,"1","0","0;1",_("Image;Movie")) );	
     }
+}
+
+bool OrigMedia::attrChange( Attr &cfg )
+{
+    if( cfg.flgGlob()&Attr::Active && cfg.id() == "type" )
+    {
+	//- Delete specific attributes -
+	if( cfg.owner()->attrPresent("scale") )		cfg.owner()->attrDel("scale");
+	if( cfg.owner()->attrPresent("fit") )		cfg.owner()->attrDel("fit");
+	if( cfg.owner()->attrPresent("play") )		cfg.owner()->attrDel("play");
+	if( cfg.owner()->attrPresent("speed") )		cfg.owner()->attrDel("speed");
+	
+	//- Create specific attributes -
+	int tp = cfg.getI();	
+	switch(tp)
+	{
+	    case 0:
+    		cfg.owner()->attrAdd( new TFld("scale",_("Scale ratio (0-10)"),TFld::Real,Attr::Mutable,"2.2","1","0:10") );
+		break;
+	    case 1:	    
+    		cfg.owner()->attrAdd( new TFld("play",_("Play"),TFld::Boolean,Attr::Mutable) );
+		cfg.owner()->attrAdd( new TFld("speed",_("Play speed"),TFld::Integer,Attr::Mutable,"3","100","0;900") );
+    		cfg.owner()->attrAdd( new TFld("fit",_("Fit to widget size"),TFld::Boolean,Attr::Mutable) );
+		break;
+	}
+    }
+    return true;
 }
 
 //************************************************
@@ -377,7 +407,7 @@ void OrigUserEl::postEnable( int flag )
         attrAdd( new TFld("backColor",_("Background:color"),TFld::String,Attr::Color,"","#FFFFFF") );
         attrAdd( new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","") );
         attrAdd( new TFld("bordWidth",_("Border:width"),TFld::Integer,TFld::NoFlag,"","0") );
-        attrAdd( new TFld("bordColor",_("Border:color"),TFld::String,Attr::Color,"","#000000") );	
+        attrAdd( new TFld("bordColor",_("Border:color"),TFld::String,Attr::Color,"","#000000") );
 	attrAdd( new TFld("pgOpen",_("Page:open state"),TFld::Boolean,TFld::NoFlag) );
 	attrAdd( new TFld("pgNoOpenProc",_("Page:no open process"),TFld::Boolean,TFld::NoFlag) );
         attrAdd( new TFld("pgOpenSrc",_("Page:open source"),TFld::String,TFld::NoFlag) );

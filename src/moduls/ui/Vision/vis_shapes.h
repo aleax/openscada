@@ -147,7 +147,11 @@ class ShapeMedia : public WdgShape
 {
     public:
 	ShapeMedia( );
-	//bool event( WdgView *view, QEvent *event );
+	
+	void init( WdgView *view );
+	void destroy( WdgView *view );
+	void load( WdgView *view, QMap<QString, QString> &attrs );
+	bool event( WdgView *view, QEvent *event );
 };
 
 //************************************************

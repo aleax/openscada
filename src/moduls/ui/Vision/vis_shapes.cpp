@@ -32,13 +32,14 @@
 #include <QListWidget>
 #include <QToolBar>
 #include <QAction>
+#include <QMovie>
+#include <QBuffer>
 
 #include <QApplication>
 
 #include <tsys.h>
 #include "tvision.h"
 #include "vis_devel.h"
-//#include "vis_widgs.h"
 #include "vis_run_widgs.h"
 #include "vis_devel_widgs.h"
 #include "vis_shapes.h"
@@ -565,10 +566,208 @@ ShapeMedia::ShapeMedia( ) : WdgShape("Media")
 
 }
 
-/*bool ShapeMedia::event( WdgView *view, QEvent *event )
+void ShapeMedia::init( WdgView *view )
 {
+    //- Create label widget -
+    QLabel *lab = new QLabel(view);
+    if( qobject_cast<DevelWdgView*>(view) ) lab->setMouseTracking(true);
+    lab->setAlignment(Qt::AlignCenter);
+    lab->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);    
+    view->dataCache()["labWdg"].setValue( (void*)lab );
+    QVBoxLayout *lay = new QVBoxLayout(view);
+    lay->addWidget(lab);
+}
 
-}*/
+void ShapeMedia::destroy( WdgView *view )
+{
+    QLabel *lab = (QLabel*)view->dataCache().value("labWdg").value< void* >();
+    if( lab && lab->movie() )
+    {
+	if(lab->movie()->device()) delete lab->movie()->device();
+	delete lab->movie();
+	lab->clear();
+    }
+}
+
+void ShapeMedia::load( WdgView *w, QMap<QString, QString> &attrs )
+{
+    QMap<QString, QString>::const_iterator	vl, end = attrs.end();
+    
+    bool up = false, reld_src = false;
+    QLabel *lab = (QLabel*)w->dataCache().value("labWdg").value< void* >();
+
+    //- Media data process -
+    if( (vl=attrs.find("type")) != end && w->dataCache().value("mediaType",-1).toInt() != vl.value().toInt() ) 
+    { 
+	w->dataCache()["mediaType"] = vl.value().toInt(); 
+	reld_src = true; 
+    }
+    if( (vl=attrs.find("src")) != end && w->dataCache().value("mediaSrc").toString() != vl.value() )
+    { 
+	w->dataCache()["mediaSrc"] = vl.value();
+	reld_src = true;
+    }
+    if( reld_src )
+    {
+	XMLNode get_req("get");
+        get_req.setAttr("user",w->user())->
+		setAttr("path",w->id()+"/%2fwdg%2fres")->
+		setAttr("id",w->dataCache().value("mediaSrc").toString().toAscii().data());
+        if( !mod->cntrIfCmd(get_req) )
+        {
+	    string sdata = TSYS::strDecode(get_req.text(),TSYS::base64);	    
+	    if( !sdata.empty() )
+		switch(w->dataCache().value("mediaType",0).toInt())
+		{
+		    case 0:
+		    {
+			QImage img;
+			//- Free movie data, if set -
+			if( lab->movie() )
+			{
+			    if(lab->movie()->device()) delete lab->movie()->device();
+			    delete lab->movie();
+			    lab->clear();
+			}
+			//- Set new image -
+			double scl_rat = w->dataCache().value("mediaScale",1).toDouble();
+			if( img.loadFromData((const uchar*)sdata.data(),sdata.size()) )
+ 			    lab->setPixmap(QPixmap::fromImage(img.scaled(
+					    (int)((double)img.width()*scl_rat),
+					    (int)((double)img.height()*scl_rat),
+					    Qt::KeepAspectRatio,Qt::SmoothTransformation)));        		    
+			break;
+		    }
+		    case 1:
+		    {
+			//- Clear previous movie data -
+			if( lab->movie() )
+			{
+			    if(lab->movie()->device()) delete lab->movie()->device();
+			    delete lab->movie();
+			    lab->clear();
+			}
+			//- Set new data -
+			QBuffer *buf = new QBuffer(w);
+			buf->setData( sdata.data(), sdata.size() );
+			buf->open( QIODevice::ReadOnly );
+			lab->setMovie( new QMovie(buf) );
+			break;
+		    }			
+		}
+	}
+    }
+    //-- Process self type options --
+    switch(w->dataCache().value("mediaType",-1).toInt())
+    {
+	case 0:
+	    if( (vl=attrs.find("scale")) != end )
+	    {
+		double scl_rat = vl.value().toDouble();
+		w->dataCache()["mediaScale"] = scl_rat;
+		if( scl_rat < 0.1 ) lab->setScaledContents(true);
+		else
+		{
+		    lab->setScaledContents(false);
+		    //- Reload image -
+	     	    XMLNode get_req("get");
+		    get_req.setAttr("user",w->user())->
+			    setAttr("path",w->id()+"/%2fwdg%2fres")->
+			    setAttr("id",w->dataCache().value("mediaSrc").toString().toAscii().data());
+		    if( mod->cntrIfCmd(get_req) ) break;
+		    string sdata = TSYS::strDecode(get_req.text(),TSYS::base64);	    
+		    if( sdata.empty() )	break;
+		    QImage img;
+    		    if( img.loadFromData((const uchar*)sdata.data(),sdata.size()) )
+			    lab->setPixmap(QPixmap::fromImage(img.scaled(
+					    (int)((double)img.width()*scl_rat),
+					    (int)((double)img.height()*scl_rat),
+					    Qt::KeepAspectRatio,Qt::SmoothTransformation)));
+    		}
+	    }
+	    break;
+	case 1:
+	    if( (vl=attrs.find("play")) != end && lab->movie() )
+		vl.value().toInt() ? lab->movie()->start() : lab->movie()->stop();
+	    if( (vl=attrs.find("speed")) != end && lab->movie() )
+		lab->movie()->setSpeed( vl.value().toInt() );
+	    if( (vl=attrs.find("fit")) != end && lab->movie() )
+		lab->setScaledContents(vl.value().toInt());
+	    break;
+    }
+    
+    //- Decoration -    
+    if( (vl=attrs.find("geomMargin")) != end ) 	
+    { 
+	w->dataCache()["margin"] = vl.value().toInt(); 
+	w->layout()->setMargin(w->dataCache().value("margin").toInt());
+	up = true;
+    }
+    if( (vl=attrs.find("backColor")) != end )	{ w->dataCache()["backColor"].setValue(QColor(vl.value())); up = true; }
+    //-- Prepare brush --
+    if( (vl=attrs.find("backImg")) != end )
+    {	
+	XMLNode get_req("get");
+        get_req.setAttr("user",w->user())->
+		setAttr("path",w->id()+"/%2fwdg%2fres")->
+		setAttr("id",vl.value().toAscii().data());
+        if( !mod->cntrIfCmd(get_req) )
+        {
+	    QBrush brsh;
+	    string backimg = TSYS::strDecode(get_req.text(),TSYS::base64);
+	    if( !backimg.empty() )
+	    {
+		QImage img;
+		if(img.loadFromData((const uchar*)backimg.c_str(),backimg.size()))	
+		    brsh.setTextureImage(img);
+	    }
+	    w->dataCache()["backBrash"].setValue(brsh);	    
+        }
+	up = true;
+    }
+    //-- Prepare border --
+    QPen pen = w->dataCache().value("bordPen").value<QPen>();
+    if( (vl=attrs.find("bordColor")) != end )	{ pen.setColor(QColor(vl.value())); up = true; }
+    if( (vl=attrs.find("bordWidth")) != end )	{ pen.setWidth(vl.value().toInt()); up = true; }
+    w->dataCache()["bordPen"].setValue(pen);
+    
+    //- Enable widget state -
+    if( qobject_cast<RunWdgView*>(w) && (vl=attrs.find("en")) != end )
+    { w->dataCache()["en"].setValue(vl.value().toInt()); up = true; }
+
+    if( up ) w->update();
+}
+
+bool ShapeMedia::event( WdgView *view, QEvent *event )
+{
+    if( !view->dataCache().value("en",1).toInt() ) return true;
+    if( event->type() == QEvent::Paint )
+    {
+	QPainter pnt( view );
+	    
+	//- Prepare draw area -
+	int margin = view->dataCache().value("margin").toInt();
+	QRect draw_area = view->rect().adjusted(0,0,-2*margin,-2*margin);	    
+        pnt.setWindow(draw_area);
+	pnt.setViewport(view->rect().adjusted(margin,margin,-margin,-margin));
+	
+	//- Draw decoration -
+	QColor bkcol = view->dataCache().value("backColor").value<QColor>();
+	if( bkcol.isValid() ) pnt.fillRect(draw_area,bkcol);
+	QBrush bkbrsh = view->dataCache().value("backBrash").value<QBrush>();
+	if( bkbrsh.style() != Qt::NoBrush ) pnt.fillRect(draw_area,bkbrsh);
+	    
+	QPen bpen = view->dataCache().value("bordPen").value<QPen>();
+	if( bpen.width() )
+	{
+	    pnt.setPen(bpen);
+	    pnt.drawRect(draw_area.adjusted(bpen.width()/2,bpen.width()/2,
+		        -bpen.width()/2-bpen.width()%2,-bpen.width()/2-bpen.width()%2));
+	}
+            return true;
+    }
+    return false;
+}
 
 //************************************************
 //* Trend view shape widget                      *

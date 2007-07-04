@@ -178,6 +178,9 @@ void TUIMod::modStop()
     {
 	end_run = true;
 	emit qApp->closeAllWindows();
+	
+	printf("TEST 100\n");
+	
 	if( TSYS::eventWait( run_st, false, nodePath()+"stop",5) )
 	    throw TError(nodePath().c_str(),_("QT starter no stoped!"));
 	pthread_join(pthr_tsk,NULL);

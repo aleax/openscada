@@ -594,9 +594,11 @@ void MTable::fieldFix( TConfig &cfg )
 		switch(u_cfg.fld().type())
 	    	{
     		    case TFld::String:
-			if( u_cfg.fld().len() < 200 )
+			if( u_cfg.fld().len() < 256 )
 			    f_tp = "char("+TSYS::int2str(u_cfg.fld().len())+")";
-			else f_tp = "text";
+			else if( u_cfg.fld().len() < 65536 )
+			    f_tp = "text";
+			else f_tp = "mediumtext";
 			break;
 		    case TFld::Integer:
 		   	f_tp = "int("+TSYS::int2str(u_cfg.fld().len())+")";     
@@ -647,9 +649,11 @@ void MTable::fieldPrmSet( TCfg &cfg, const string &last, string &req )
     switch(cfg.fld().type())
     {
 	case TFld::String:
-	    if( cfg.fld().len() < 200 )
+	    if( cfg.fld().len() < 256 )
 		req=req+"char("+SYS->int2str(cfg.fld().len())+") NOT NULL DEFAULT '"+cfg.fld().def()+"' ";
-	    else req=req+"text NOT NULL DEFAULT '"+cfg.fld().def()+"' ";
+	    else if( cfg.fld().len() < 65536 ) 
+		req=req+"text NOT NULL DEFAULT '"+cfg.fld().def()+"' ";
+	    else req=req+"mediumtext NOT NULL DEFAULT '"+cfg.fld().def()+"' ";
 	    break;
 	case TFld::Integer:
 	    req=req+"int("+SYS->int2str(cfg.fld().len())+") NOT NULL DEFAULT '"+cfg.fld().def()+"' ";
