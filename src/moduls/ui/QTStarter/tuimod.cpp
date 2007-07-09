@@ -32,6 +32,7 @@
 #include <QFrame>
 #include <QVBoxLayout>
 #include <QTextCodec>
+#include <QTimer>
 
 #include <tsys.h>
 #include <tmess.h>
@@ -176,11 +177,7 @@ void TUIMod::modStop()
 
     if( run_st )
     {
-	end_run = true;
-	emit qApp->closeAllWindows();
-	
-	printf("TEST 100\n");
-	
+	end_run = true;	
 	if( TSYS::eventWait( run_st, false, nodePath()+"stop",5) )
 	    throw TError(nodePath().c_str(),_("QT starter no stoped!"));
 	pthread_join(pthr_tsk,NULL);
@@ -211,7 +208,7 @@ void *TUIMod::Task( void * )
 
     QApplication *QtApp = new QApplication( (int&)SYS->argc,(char **)SYS->argv );
     QtApp->setQuitOnLastWindowClosed(false);
-    WinControl *winCntr = new WinControl();
+    WinControl *winCntr = new WinControl(mod->end_run);
     mod->run_st = true;
     
     int op_wnd = 0;
@@ -277,6 +274,21 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 }		    
 
 //=========================== Windows control =====================
+WinControl::WinControl( bool &iend_run ) : end_run(iend_run)
+{
+    tm = new QTimer(this);
+    tm->setSingleShot(false);
+    connect(tm, SIGNAL(timeout()), this, SLOT(checkForEnd()));
+    tm->start(STD_WAIT_DELAY);
+}
+
+void WinControl::checkForEnd( )
+{
+    if( !end_run ) return;
+    tm->stop();
+    ((QApplication*)QApplication::instance())->closeAllWindows();
+}
+
 void WinControl::callQTModule( )
 {
     QObject *obj = (QObject *)sender();

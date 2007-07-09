@@ -40,6 +40,7 @@
 #include <tsys.h>
 #include "tvision.h"
 #include "vis_devel.h"
+#include "vis_run.h"
 #include "vis_run_widgs.h"
 #include "vis_devel_widgs.h"
 #include "vis_shapes.h"
@@ -875,17 +876,35 @@ void ShapeUserEl::load( WdgView *w, QMap<QString, QString> &attrs )
     if( (vl=attrs.find("pgOpenSrc")) != end && qobject_cast<RunWdgView*>(w) )
     {
 	RunWdgView *el_wdg = (RunWdgView *)w->dataCache().value("inclWidget").value< void* >();	
-	//-- Delete previous include widget --
+	//-- Put previous include widget to page cache --
 	if( !el_wdg || vl.value() != el_wdg->id().c_str() ) 
 	{
-	    if( el_wdg ) { delete el_wdg; el_wdg = NULL; }
+	    if( el_wdg ) 
+	    { 
+		((RunWdgView*)w)->mainWin()->pgCacheAdd(el_wdg);
+		el_wdg->setEnabled(false);
+		el_wdg->setVisible(false);
+		el_wdg->setParent(NULL);
+		el_wdg = NULL; 
+	    }
 	    //-- Create new include widget --	
 	    if( vl.value().size() )
 	    {
 		QVBoxLayout *lay = (QVBoxLayout *)w->layout();
-		if( !lay ) lay = new QVBoxLayout(w);		
-		el_wdg = new RunWdgView(vl.value().toAscii().data(),0,(VisRun*)w->mainWin(),w);
-		el_wdg->load("");
+		if( !lay ) lay = new QVBoxLayout(w);
+		
+		el_wdg = ((RunWdgView*)w)->mainWin()->pgCacheGet(vl.value().toAscii().data());
+		if( el_wdg )
+		{
+		    el_wdg->setParent(w);
+		    el_wdg->setEnabled(true);
+		    el_wdg->setVisible(true);
+		}
+		else 
+		{
+		    el_wdg = new RunWdgView(vl.value().toAscii().data(),0,(VisRun*)w->mainWin(),w);
+		    el_wdg->load("");
+		}
 		//el_wdg->resize(w->size());
 		lay->addWidget(el_wdg);
 		lay->setMargin(w->dataCache().value("margin").toInt());

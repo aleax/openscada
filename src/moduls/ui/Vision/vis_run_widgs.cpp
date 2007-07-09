@@ -117,7 +117,7 @@ void RunWdgView::update( unsigned cnt, int div_max )
     
     //- Call childs for update -
     for( int i_c = 0; i_c < children().size(); i_c++ )
-	if( qobject_cast<RunWdgView*>(children().at(i_c)) )
+	if( qobject_cast<RunWdgView*>(children().at(i_c)) && ((RunWdgView*)children().at(i_c))->isEnabled() )
     	    ((RunWdgView*)children().at(i_c))->update(cnt,div_max);
     
     //orderUpdate( );

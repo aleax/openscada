@@ -80,7 +80,7 @@ class TCntrNode
 	TCntrNode( TCntrNode *prev = NULL );
 	virtual ~TCntrNode( );
 
-	void cntrCmd( XMLNode *opt, int lev = 0 );
+	void cntrCmd( XMLNode *opt, int lev = 0, const string &path = "" );
 	
 	//- Static functions -
 	static XMLNode *ctrId( XMLNode *inf, const string &n_id, bool noex = false );      //get node for it full identifier

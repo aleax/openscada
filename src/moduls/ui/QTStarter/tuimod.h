@@ -31,6 +31,8 @@
 #undef _
 #define _(mess) mod->I18N(mess)
 
+class QTimer;
+
 namespace QTStarter
 {    
 
@@ -38,15 +40,23 @@ class WinControl: public QObject
 {
     Q_OBJECT
     public:
-	WinControl( )	{ }
-	~WinControl( )	{ }
+	//Methods
+	WinControl( bool &end_run );
+	//~WinControl( )			{ }
  
 	bool callQTModule( const string &nm );
         void startDialog( );
 	
     private slots:
+	//Methods
+	void checkForEnd( );
 	void callQTModule( );
 	void lastWinClose( );
+
+    private:
+	//Attributes
+	QTimer 	*tm;
+	bool 	end_run;
 };
 
 class TUIMod: public TUI

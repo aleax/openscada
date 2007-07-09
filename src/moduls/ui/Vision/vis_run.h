@@ -24,18 +24,19 @@
 #define VIS_RUN_H
 
 #include <string>
-#include <vector>
+#include <deque>
 
 #include <QMainWindow>
 
 using std::string;
-using std::vector;
+using std::deque;
 
 namespace VISION
 {
 
 class UserStBar;
 class RunPageView;
+class RunWdgView;
 
 class VisRun : public QMainWindow
 {
@@ -51,8 +52,13 @@ class VisRun : public QMainWindow
 	void initSess( const string &prj_it );	//Init session for project's item path
 	void callPage( const string &ses_it );	//Call session page
 	
+	//- Cache commands -
+	void pgCacheAdd( RunWdgView *wdg );
+	RunWdgView *pgCacheGet( const string &id );
+	
+	//- Attributes commands -
 	string wAttrGet( const string &path, const string &attr );
-	bool wAttrSet( const string &path, const string &attr, const string &val );	
+	bool wAttrSet( const string &path, const string &attr, const string &val );
 
     protected:
 	//Protected methods
@@ -73,15 +79,17 @@ class VisRun : public QMainWindow
 	QMenu 	*mn_file, 			//Menu "File"
 		*mn_help;			//Menu "Help"
 
-	QTimer	*updateTimer;
-	
 	//- Main components -
+	QTimer		*updateTimer;	
 	bool		winClose;		//Close window flag
+	bool		proc_st;		//Timer process stat
 	UserStBar 	*w_user;		//User status widget
 	string 		work_sess, src_page;	//Work session and source page
 	RunPageView 	*master_pg;		//Master page of runtime session
 	int 		m_period;		//Clock's period
 	unsigned	w_prc_cnt;		//Process counter
+	
+	deque<RunWdgView *>  cache_pg;		//Pages cache
 };
 
 }

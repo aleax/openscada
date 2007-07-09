@@ -88,31 +88,30 @@ XMLNode *TCntrNode::ctrId( XMLNode *inf, const string &name_id, bool noex )
     throw TError("XML","Field id = %s(%s) no present!",name_id.c_str(),s_el.c_str());    
 }
 
-void TCntrNode::cntrCmd( XMLNode *opt, int lev )
+void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath )
 {   
-    string path = opt->attr("path");
+    string path = ipath.empty() ? opt->attr("path") : ipath;
     string s_br = TSYS::pathLev(path,lev,true);
 
     try
     {
-	if( s_br.size() && s_br[0] != '/' )
+	if( !s_br.empty() && s_br[0] != '/' )
 	{
 	    for( int i_g = 0; i_g < chGrp.size(); i_g++ )
     		if( s_br.substr(0,chGrp[i_g].id.size()) == chGrp[i_g].id )
 		{
-		    chldAt(i_g,s_br.substr(chGrp[i_g].id.size())).at().cntrCmd(opt,lev+1);
+		    chldAt(i_g,s_br.substr(chGrp[i_g].id.size())).at().cntrCmd(opt,lev+1,path);
 		    return;
 		}
 	    //Go to default thread
-	    if( chGrp.size() )	    
-		chldAt(0,s_br).at().cntrCmd(opt,lev+1);
+	    if( !chGrp.empty() ) chldAt(0,s_br).at().cntrCmd(opt,lev+1,path);
 	    return;
 	}
 	//Post command to node
 	opt->setAttr("path",s_br);
 	cntrCmdProc(opt);
 	if( opt->attr("rez") != "0" )
-	    throw TError("ContrItfc",_("%s:%s:> Control element <%s> error!"),opt->name().c_str(),path.c_str(),s_br.c_str());	    
+	    throw TError("ContrItfc",_("%s:%s:> Control element <%s> error!"),opt->name().c_str(),path.c_str(),s_br.c_str());
     }
     catch(TError err)
     {
@@ -483,7 +482,7 @@ XMLNode *TCntrNode::ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const cha
 bool TCntrNode::ctrChkNode( XMLNode *nd, const char *cmd, int perm, const char *user, const char *grp, char mode, const char *warn )
 {
     if( nd->name() != cmd ) return false;
-    if( SYS->security().at().access(nd->attr("user"),mode,user,grp,perm) != mode )
+    if( ((char)perm&mode) != mode && SYS->security().at().access(nd->attr("user"),mode,user,grp,perm) != mode )
 	throw TError("ContrItfc",_("Error access to element <%s>!"),nd->attr("path").c_str());
     if( warn && !atoi(nd->attr("force").c_str()) )
 	throw TError("warning",_("Element <%s> warning! %s"),nd->attr("path").c_str(),warn);

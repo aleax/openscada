@@ -27,6 +27,8 @@
 #include <tsys.h>
 #include <tmess.h>
 
+//#include <QApplication>
+//#include <QCloseEvent>
 #include <QIcon>
 #include <QMessageBox>
 #include <QErrorMessage>
@@ -240,6 +242,8 @@ void TVision::modStop()
     int i_w;
     for( i_w = 0; i_w < mn_winds.size(); i_w++ )
         if( mn_winds[i_w] ) mn_winds[i_w]->close();//deleteLater();// close();
+    //QApplication::postEvent(mn_winds[i_w], new QCloseEvent());
+    //while(mn_winds[i_w]) usleep(STD_WAIT_DELAY*1000);	
 
     run_st = false;
 }
@@ -327,6 +331,9 @@ void TVision::postMess( const QString &cat, const QString &mess, TVision::MessLe
 int TVision::cntrIfCmd( XMLNode &node )
 {
     //- Check local station request -
+    //unsigned long long st_tm = SYS->shrtCnt();
     SYS->ui().at().at("VCAEngine").at().cntrCmd(&node);
+    //double tm = 1.0e3*((double)(SYS->shrtCnt()-st_tm))/((double)SYS->sysClk());
+    //if( tm > 2 ) printf("TEST 00: Req <%s(%s)> time: %fms\n",node.name().c_str(),node.attr("path").c_str(),tm);
     return atoi(node.attr("rez").c_str());
 }

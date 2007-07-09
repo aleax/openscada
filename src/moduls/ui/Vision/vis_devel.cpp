@@ -43,7 +43,8 @@
 
 using namespace VISION;
 
-VisDevelop::VisDevelop( string open_user ) : prjLibPropDlg(NULL), visItPropDlg(NULL), winClose(false)
+VisDevelop::VisDevelop( string open_user ) : 
+    prjLibPropDlg(NULL), visItPropDlg(NULL), winClose(false), proc_st(false)
 {
     setAttribute(Qt::WA_DeleteOnClose,true);
     mod->regWin( this );
@@ -472,10 +473,9 @@ VisDevelop::VisDevelop( string open_user ) : prjLibPropDlg(NULL), visItPropDlg(N
 
 VisDevelop::~VisDevelop()
 {
-    work_wdgTimer->stop();
-    while(work_wdgTimer->isActive());
-
     winClose = true;
+    work_wdgTimer->stop();
+    while(proc_st);
     
     //Save main window state
     QByteArray st = saveState();
@@ -674,6 +674,7 @@ void VisDevelop::selectItem( const string &item )
     
 void VisDevelop::applyWorkWdg( )
 {    
+    proc_st   = true;
     bool isEn = false;
     
     //Set/update attributes inspector
@@ -681,7 +682,7 @@ void VisDevelop::applyWorkWdg( )
     lnkInsp->setWdg(work_wdg_new);
     
     //Update actions
-    if( work_wdg == work_wdg_new ) return;
+    if( work_wdg == work_wdg_new ) { proc_st = false; return; }
     work_wdg = work_wdg_new;
     
     string cur_wdg = TSYS::strSepParse(work_wdg,0,';');	//Get first select element
@@ -706,6 +707,8 @@ void VisDevelop::applyWorkWdg( )
     actVisItDel->setEnabled(isProj || isLib);
     actVisItProp->setEnabled(isProj || isLib);
     actVisItEdit->setEnabled((isProj || isLib) && sel2.size());
+    
+    proc_st = false;
 }
 
 void VisDevelop::updateMenuWindow()
@@ -854,7 +857,9 @@ void VisDevelop::visualItAdd( QAction *cact, const QPoint &pnt )
     string own_wdg = TSYS::strSepParse(work_wdg,0,';');
     string par_nm = cact->objectName().toAscii().data();
 
-    if( work_space->activeWindow() && !wdgTree->hasFocus() && !prjTree->hasFocus() && pnt.isNull() )	return;
+    if( work_space->activeWindow() && !wdgTree->hasFocus() && !prjTree->hasFocus() && pnt.isNull() && 
+	    !((DevelWdgView*)((QScrollArea*)work_space->activeWindow())->widget())->edit()  ) 
+	return;
     
     //Count level
     int p_el_cnt = 0;

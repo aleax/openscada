@@ -157,6 +157,7 @@ class VisDevelop : public QMainWindow
 
 	//- Main components -
 	bool		winClose;
+	bool            proc_st;        //Timer process stat
 	UserStBar 	*w_user;	//User status widget
 	QTimer      	*work_wdgTimer;
 	string		work_wdg, work_wdg_new;	//Work widget

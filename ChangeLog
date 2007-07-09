@@ -1,3 +1,12 @@
+2007-07-09 Roman
+- !:/TCntrNode: The control language speed optimisation is made.
+- !!:/UI/QtStarter: The call function closeAllWindows() move to main QT API thread.
+- !:/UI/VCAEngine: A data request speed optimisation is made.
+- FIX:/UI/Vision: A timer starting at time of a object destroy (VisDevelop and VisRun) is fixed.
+- FIX:/UI/Vision: The Widget's toolbar insert mode is fixed for inserting to edit mode form.
+- !:/UI/Vision: The page cache is added to "RunTime" for achieve of fast pages changing.
+
+
 2007-07-04 Roman
 - /SYS: Updated Demo DB.
 - !:/DB/MySQL: Text field type "mediumtext" support is added.

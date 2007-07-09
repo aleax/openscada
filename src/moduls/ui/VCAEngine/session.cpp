@@ -37,7 +37,7 @@ using namespace VCA;
 //************************************************
 Session::Session( const string &iid, const string &iproj ) :
     m_enable(false), m_start(false), endrun_req(false), tm_calc(0.0),
-    m_id(iid), m_user("root"), m_prjnm(iproj), m_per(200), m_calcClk(1)
+    m_id(iid), m_user("root"), m_prjnm(iproj), m_per(100), m_calcClk(1)
 {
     m_page = grpAdd("pg_");
     m_evRes = ResAlloc::resCreate();
@@ -126,6 +126,15 @@ void Session::setStart( bool val )
     	    if( TSYS::eventWait(m_start, true, nodePath()+"start",5) )
         	throw TError(nodePath().c_str(),_("Session process task no started!"));
         }
+	
+	//- Check blocking bug -
+	//-- Connect to widget --
+	/*try
+	{
+	    AutoHD<SessWdg> tstwdg = nodeAt("pg_so/pg_1/pg_mn/pg_1/wdg_FormEl");
+	    //-- Delete widget try --
+	    ((AutoHD<SessPage>)nodeAt("pg_so/pg_1/pg_mn/pg_1")).at().wdgDel("FormEl");
+	}catch(TError err) { printf("TEST 10: %s:%s\n",err.cat.c_str(),err.mess.c_str()); }*/
     }
     else
     {
@@ -162,48 +171,6 @@ void Session::add( const string &iid, const string &iparent )
     if( present(iid) )	return;
     chldAdd(m_page,new SessPage(iid,iparent));
 }
-
-/*void Session::openList( vector<string> &ls )
-{
-    vector<string> cur_ls, w_ls;
-    vector<int> idst;    
-    
-    ls.clear();
-    idst.push_back(0);
-    int it_lev = 0;
-    AutoHD<SessPage> cur_pg, w_pg;
-    list(cur_ls);    
-    //-- Get next item --
-    while( idst[it_lev] < cur_ls.size() )
-    {
-	w_pg = cur_pg.freeStat() ? at(cur_ls[idst[it_lev]]) : cur_pg.at().pageAt(cur_ls[idst[it_lev]]);
-	if( !w_pg.at().parent().at().parent().freeStat() && w_pg.at().attrAt("pgOpen").at().getB() )	
-	    ls.push_back(w_pg.at().path());
-	idst[it_lev]++;		
-	//-- Enter to page --
-	w_ls.clear();
-	w_pg.at().pageList(w_ls);
-	if( !w_ls.empty() )
-        {
-            cur_pg = w_pg;
-	    cur_ls = w_ls;
-            idst.push_back(0);
-            it_lev++;
-	    continue;
-	}
-        //-- Up to level --
-        while( idst[it_lev] >= cur_ls.size() ) 
-        {
-	    if( it_lev == 0 )	break;
-	    cur_pg = AutoHD<SessPage>(cur_pg.at().ownerPage());
-	    if( cur_pg.freeStat() ) list(cur_ls);
-	    else cur_pg.at().pageList(cur_ls);
-	    idst.pop_back();
-            it_lev--;
-	}
-	if( idst[it_lev] >= cur_ls.size() && it_lev == 0 ) break;
-    }	    
-}*/
 
 void Session::openReg( const string &iid )
 {
@@ -959,10 +926,14 @@ void SessWdg::cntrCmdProc( XMLNode *opt )
 	
 	    vector<string> ls;
 	    attrList(ls);
+	    AutoHD<Attr> attr;
 	    for( int i_l = 0; i_l < ls.size(); i_l++ )
-		if( !(attrAt(ls[i_l]).at().flgGlob()&Attr::IsUser) && 
-			attrAt(ls[i_l]).at().modifVal( ) >= tm )
-		    opt->childAdd("el")->setAttr("id",ls[i_l].c_str())->setText(attrAt(ls[i_l]).at().getS());
+	    {
+		attr = attrAt(ls[i_l]);
+		if( !(attr.at().flgGlob()&Attr::IsUser) && attr.at().modifVal() >= tm )
+		    opt->childAdd("el")->setAttr("id",ls[i_l].c_str())->setText(attr.at().getS());
+	    }
+	    
 	    opt->setAttr("tm",TSYS::uint2str(tm_n));
 	}
 	if( ctrChkNode(opt,"set",RWRWRW,"root","root",SEQ_WR) )

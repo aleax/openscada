@@ -528,16 +528,16 @@ string TSYS::strSepParse( const string &path, int level, char sep )
 string TSYS::pathLev( const string &path, int level, bool encode )
 {
     int an_dir = 0, t_lev = 0;
+    //- First separators pass -
     while(path[an_dir]=='/') an_dir++;
+    //- Path level process -
     while(true)
     {
         int t_dir = path.find("/",an_dir);
 			
         if( t_lev++ == level )
-        {
-            if( encode ) return strDecode(path.substr(an_dir,t_dir-an_dir),TSYS::PathEl);
-            return path.substr(an_dir,t_dir-an_dir);
-        }
+            return encode ? strDecode(path.substr(an_dir,t_dir-an_dir),TSYS::PathEl) : 
+			    path.substr(an_dir,t_dir-an_dir);
 	if( t_dir == string::npos ) return "";
         an_dir = t_dir;
         while( an_dir < path.size() && path[an_dir]=='/') an_dir++;

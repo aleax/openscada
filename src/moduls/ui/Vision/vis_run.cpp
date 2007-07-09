@@ -37,7 +37,7 @@
 using namespace VISION;
 
 VisRun::VisRun( const string &prj_it, string open_user ) : winClose(false), master_pg(NULL), 
-    m_period(0), w_prc_cnt(0)
+    m_period(0), w_prc_cnt(0), proc_st(false)
 {    
     setAttribute(Qt::WA_DeleteOnClose,true);
     mod->regWin( this );
@@ -120,9 +120,9 @@ VisRun::VisRun( const string &prj_it, string open_user ) : winClose(false), mast
 
 VisRun::~VisRun()
 {
-    updateTimer->stop();
-    while(updateTimer->isActive());
     winClose = true;
+    updateTimer->stop();
+    while(proc_st);
     
     //- Delete session -
     XMLNode del_req("del");
@@ -131,6 +131,13 @@ VisRun::~VisRun()
 
     //- Unregister window -
     mod->unregWin(this);
+    
+    //- Clear cache -
+    while( !cache_pg.empty() )
+    {
+        delete cache_pg.front();
+	cache_pg.pop_front();
+    }    
 }
 
 string VisRun::user()
@@ -292,6 +299,32 @@ void VisRun::callPage( const string& pg_it )
     //setGeometry(0,0,master_pg->width(),master_pg->height());
 }
 
+void VisRun::pgCacheAdd( RunWdgView *wdg )
+{
+    if( !wdg )	return;
+    cache_pg.push_front(wdg);
+    while( cache_pg.size() > 100 )
+    {
+	delete cache_pg.back();	
+	cache_pg.pop_back();
+    }
+}
+
+RunWdgView *VisRun::pgCacheGet( const string &id )
+{
+    RunWdgView *pg = NULL;
+
+    for( int i_pg = 0; i_pg < cache_pg.size(); i_pg++ )
+	if( cache_pg[i_pg]->id() == id )
+	{
+	    pg = cache_pg[i_pg];
+	    cache_pg.erase(cache_pg.begin()+i_pg);
+	    break;
+	}
+
+    return pg;
+}
+
 string VisRun::wAttrGet( const string &path, const string &attr )
 {
     XMLNode get_req("get");
@@ -313,13 +346,18 @@ bool VisRun::wAttrSet( const string &path, const string &attr, const string &val
 
 void VisRun::updatePage( )
 {
+    if( winClose ) return;
+    proc_st = true;
+
     XMLNode get_req("get");    
     get_req.setAttr("user",user())->setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fopenPg");
     if( !mod->cntrIfCmd(get_req) )
         for( int i_ch = 0; i_ch < get_req.childSize(); i_ch++ )
 	    callPage(get_req.childGet(i_ch)->text());
     //- Update opened pages -
-    if( master_pg ) master_pg->update(w_prc_cnt,5000/period());
+    if( master_pg ) master_pg->update(w_prc_cnt,1000/period());
     
     w_prc_cnt++;
+    
+    proc_st = false;
 }
