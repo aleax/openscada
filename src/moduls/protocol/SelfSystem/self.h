@@ -86,7 +86,7 @@ class TProt: public TProtocol
 	TProtocolIn *in_open( const string &name );
 	
 	//Attributes
-	int		ses_res;
+	Res		ses_res;
 	vector<SAuth>	auth_lst;
 	int		m_t_auth;
 };

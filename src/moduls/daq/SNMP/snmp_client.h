@@ -105,7 +105,7 @@ class TMdContr: public TController
 	string oid2str(oid *ioid, size_t isz);
 	
 	//Attributes
-	int	en_res;         //Resource for enable params
+	Res	en_res;         //Resource for enable params
 	int	&m_per,     	// s
 		&m_prior,	// Process task priority
 		&m_pattr_lim;	// Parameter's attributes limit

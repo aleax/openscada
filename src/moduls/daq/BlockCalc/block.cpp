@@ -22,7 +22,6 @@
 
 
 #include <tsys.h>
-#include <resalloc.h>
 #include <tmess.h>
 #include <math.h>
 
@@ -39,14 +38,11 @@ Block::Block( const string &iid, Contr *iown ) :
     m_func(cfg("FUNC").getSd()), m_to_en(cfg("EN").getBd()), m_to_prc(cfg("PROC").getBd())
 {
     m_id = iid;
-    lnk_res = ResAlloc::resCreate();
 }
 
 Block::~Block( )
 {
     if( enable() ) enable(false);
-    
-    ResAlloc::resDelete(lnk_res);
 }
 
 Block &Block::operator=(Block &blk)
@@ -329,7 +325,7 @@ void Block::calc( bool first, bool last )
     if(id_start>=0) 	setB(id_start,first);
     if(id_stop>=0)  	setB(id_stop,last);
     //Get values from input links
-    ResAlloc::resRequestR(lnk_res);
+    lnk_res.resRequestR( );
     try
     {
 	//Get input links
@@ -360,10 +356,10 @@ void Block::calc( bool first, bool last )
     }catch(TError err)
     {
 	err_cnt++;
-	ResAlloc::resReleaseR(lnk_res);
+	lnk_res.resReleaseR( );
         throw TError(nodePath().c_str(),_("Error read block's <%s> links."),id().c_str());
     }	
-    ResAlloc::resReleaseR(lnk_res);
+    lnk_res.resReleaseR( );
     	
     //Calc function
     try{ TValFunc::calc( ); }
@@ -374,7 +370,7 @@ void Block::calc( bool first, bool last )
     }
     
     //Put values to output links
-    ResAlloc::resRequestR(lnk_res);
+    lnk_res.resRequestR( );
     try
     {
         for( unsigned i_ln=0; i_ln < m_lnk.size(); i_ln++ )
@@ -404,10 +400,10 @@ void Block::calc( bool first, bool last )
     }catch(TError err)
     {
 	err_cnt++;
-	ResAlloc::resReleaseR(lnk_res);
+	lnk_res.resReleaseR( );
 	throw TError(nodePath().c_str(),_("Error write block's <%s> links."),id().c_str());
     }    
-    ResAlloc::resReleaseR(lnk_res);
+    lnk_res.resReleaseR( );
     err_cnt=0;
 }
 

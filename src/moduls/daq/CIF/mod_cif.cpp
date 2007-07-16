@@ -24,7 +24,6 @@
 #include <signal.h>
 
 #include <tsys.h>
-#include <resalloc.h>
 #include <tmess.h>
 #include <ttiparam.h>
 #include <tdaqs.h>
@@ -98,11 +97,8 @@ TTpContr::TTpContr( string name ) : drv_CIF_OK(false)
 TTpContr::~TTpContr()
 {    
     for(int i_b = 0; i_b < MAX_DEV_BOARDS; i_b++)
-    {
-	ResAlloc::resDelete(cif_devs[i_b].res);
 	if(cif_devs[i_b].present)
 	    DevExitBoard(i_b);
-    }
     if(drvCIFOK( ))	DevCloseDriver();
 }
 
@@ -144,7 +140,6 @@ void TTpContr::postEnable( int flag )
     //Clear CIF devices info
     for(int i_b = 0; i_b < MAX_DEV_BOARDS; i_b++)
     {
-	cif_devs[i_b].res = ResAlloc::resCreate();	
 	cif_devs[i_b].present = false;
 	cif_devs[i_b].board = -1;
 	cif_devs[i_b].phAddr = 0;
@@ -664,15 +659,12 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
 	m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId()), 
 	m_dev(cfg("CIF_DEV").getId()), m_addr(cfg("ADDR").getId())
 {    
-    en_res = ResAlloc::resCreate();
     cfg("PRM_BD").setS("CIFPrm_"+name_c);
 }
 
 TMdContr::~TMdContr()
 {
     if( run_st ) stop();
-    
-    ResAlloc::resDelete(en_res);    
 }
 
 void TMdContr::postDisable(int flag)
@@ -1033,7 +1025,7 @@ void *TMdContr::Task( void *icntr )
 	long long t_cnt = SYS->shrtCnt();
 	
 	//Update controller's data
-	ResAlloc::resRequestR(cntr.en_res);
+	cntr.en_res.resRequestR( );
 	//Acquisition data blocks
 	for(int i_b = 0; i_b < cntr.acqBlks.size(); i_b++)
 	    try
@@ -1049,7 +1041,7 @@ void *TMdContr::Task( void *icntr )
 	    try{ cntr.p_hd[i_p].at().calc(is_start,is_stop); }
 	    catch(TError err)
     	    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-	ResAlloc::resReleaseR(cntr.en_res);    
+	cntr.en_res.resReleaseR( );    
 	cntr.tm_calc = 1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
     
 	if(is_stop) break;

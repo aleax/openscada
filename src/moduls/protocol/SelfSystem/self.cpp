@@ -23,7 +23,6 @@
 #include <getopt.h>
 #include <string>
 
-#include <resalloc.h>
 #include <tsys.h>
 #include <tmess.h>
 #include <tmodule.h>
@@ -83,8 +82,6 @@ TProt::TProt( string name ) : m_t_auth(60)
     mDescr  	= DESCRIPTION;
     mLicense   	= LICENSE;
     mSource    	= name;
-    
-    ses_res = ResAlloc::resCreate( );    
 }
 
 TProt::~TProt()
@@ -92,8 +89,6 @@ TProt::~TProt()
     ResAlloc res(ses_res,true);
     while( auth_lst.size() )	auth_lst.erase(auth_lst.begin());
     res.release();
-				    
-    ResAlloc::resDelete( ses_res );
 }
 
 int TProt::ses_open(const char *user,const char *pass)

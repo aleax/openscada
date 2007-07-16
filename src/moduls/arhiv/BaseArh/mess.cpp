@@ -26,7 +26,6 @@
 #include <dirent.h>
 
 #include <tsys.h>
-#include <resalloc.h>
 #include "base.h"
 #include "mess.h"
 
@@ -40,14 +39,12 @@ ModMArch::ModMArch( const string &iid, const string &idb, TElem *cf_el ) :
     m_numb_files(cfg("BaseArhNFiles").getId()), m_time_size(cfg("BaseArhTmSize").getId()), 
     m_chk_tm(cfg("BaseArhTm").getId()), m_pack_tm(cfg("BaseArhPackTm").getId())
 {
-    m_res = ResAlloc::resCreate( );
+
 }
 
 ModMArch::~ModMArch( )
 {
     try{ stop(); }catch(...){}
-    
-    ResAlloc::resDelete( m_res );
 }
 
 void ModMArch::start()
@@ -314,7 +311,6 @@ MFileArch::MFileArch( ModMArch *owner ) :
     m_xml(true), m_owner(owner), scan(false), m_err(false), m_write(false), m_load(false), m_pack(false),
     m_size(0), m_chars("UTF-8"), m_beg(0), m_end(0), m_node(NULL) 
 {
-    m_res = ResAlloc::resCreate( );
     cach_pr.tm = cach_pr.off = 0;
 }
 
@@ -322,7 +318,6 @@ MFileArch::MFileArch( const string &iname, time_t ibeg, ModMArch *iowner, const 
     m_xml(ixml), m_owner(iowner), scan(false), m_err(false), m_write(false), m_load(false), m_pack(false),
     m_size(0), m_name(iname), m_chars(icharset), m_beg(ibeg), m_end(ibeg), m_node(NULL)
 {
-    m_res = ResAlloc::resCreate( );
     cach_pr.tm = cach_pr.off = 0;
     
     int hd = open( name().c_str(),O_RDWR|O_CREAT|O_TRUNC, 0666 );
@@ -359,8 +354,6 @@ MFileArch::~MFileArch()
     check();	//Check XML-archive
 
     if( m_node ) delete m_node;
-    
-    ResAlloc::resDelete( m_res );       
 }
 
 void MFileArch::attach( const string &iname, bool full )

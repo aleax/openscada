@@ -32,7 +32,6 @@
 
 #include <terror.h>
 #include <tsys.h>
-#include <resalloc.h>
 #include <tmess.h>
 #include <ttiparam.h>
 #include <tdaqs.h>
@@ -170,15 +169,12 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
 	m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId()), m_addr(cfg("ADDR").getSd()), m_comm(cfg("COMM").getSd()),
 	m_pattr_lim(cfg("PATTR_LIM").getId())
 {    
-    en_res = ResAlloc::resCreate();
     cfg("PRM_BD").setS("SNMPPrm_"+name_c);
 }
 
 TMdContr::~TMdContr()
 {
     if( run_st ) stop();
-    
-    ResAlloc::resDelete(en_res);    
 }
 
 TParamContr *TMdContr::ParamAttach( const string &name, int type )
@@ -276,7 +272,7 @@ void *TMdContr::Task( void *icntr )
 	
 	//Update controller's data
 	el_cnt = 0;
-	ResAlloc::resRequestR(cntr.en_res);
+	cntr.en_res.resRequestR( );
 	for(unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++)
 	    try
 	    {
@@ -367,7 +363,7 @@ void *TMdContr::Task( void *icntr )
 	    }
 	    catch(TError err)
     	    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-	ResAlloc::resReleaseR(cntr.en_res);    
+	cntr.en_res.resReleaseR( );    
 	cntr.tm_gath = 1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
     
         //Calc next work time and sleep

@@ -26,6 +26,8 @@
 #include <string>
 #include <vector>
 
+#include "resalloc.h"
+
 using std::string;
 using std::vector;
 
@@ -123,7 +125,7 @@ class TValBuf
 		}buf;
 	};
 	
-	int     	b_res;         //Access resource header
+	Res		b_res;          //Access resource
 	TFld::Type	m_val_tp;	//Store values type
 	union
 	{
@@ -227,7 +229,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
     
 	//Private attributes
-	int     a_res;
+	Res     a_res;
 	bool	run_st;
 	string  m_db;
 	//- Base params -
@@ -309,7 +311,7 @@ class TVArchivator : public TCntrNode, public TConfig
 	void postDisable(int flag);     //Delete all DB if flag 1	
 	
 	//Protected attributes
-	int	a_res;
+	Res	a_res;
         bool    run_st;
 	//- Phisical elements storing -
 	vector<TVArchEl *> arch_el;

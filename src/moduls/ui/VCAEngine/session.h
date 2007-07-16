@@ -70,7 +70,7 @@ class Session : public TCntrNode
 	void openReg( const string &id );
 	void openUnreg( const string &id );
 	
-	unsigned eventRes( )			{ return m_evRes; }
+	Res &eventRes( )			{ return m_evRes; }
 	
 	void uiComm( const string &com, const string &prm, const string &src );
 
@@ -96,7 +96,7 @@ class Session : public TCntrNode
 	unsigned  m_calcClk;			//Calc clock
 	double  tm_calc;                        //Scheme's calc time
 	AutoHD<Project> m_parent;
-	unsigned m_evRes;			//Event access resource
+	Res 	m_evRes;			//Event access resource
 	
 	vector<string>	m_open;
 };

@@ -23,7 +23,6 @@
 #include <pthread.h>
 #include <signal.h>
 
-#include <resalloc.h>
 #include <tsys.h>
 
 #include "vcaengine.h"
@@ -40,12 +39,11 @@ Session::Session( const string &iid, const string &iproj ) :
     m_id(iid), m_user("root"), m_prjnm(iproj), m_per(100), m_calcClk(1)
 {
     m_page = grpAdd("pg_");
-    m_evRes = ResAlloc::resCreate();
 }
 
 Session::~Session( )
 {
-    ResAlloc::resDelete(m_evRes);
+
 }
 
 void Session::postEnable( int flag )
@@ -749,21 +747,21 @@ AutoHD<SessWdg> SessWdg::wdgAt( const string &wdg )
 void SessWdg::eventAdd( const string &ev )
 {
     if( !attrPresent("event") )	return;
-    unsigned res = ownerSess()->eventRes();
-    ResAlloc::resRequestW(res);
+    Res &res = ownerSess()->eventRes();
+    res.resRequestW( );
     attrAt("event").at().setS(attrAt("event").at().getS()+ev);
-    ResAlloc::resReleaseW(res);
+    res.resReleaseW( );
 }
 
 string SessWdg::eventGet( bool clear )
 {
     if( !attrPresent("event") )	return "";
-    unsigned res = ownerSess()->eventRes();
+    Res &res = ownerSess()->eventRes();
     
-    ResAlloc::resRequestW(res);    
+    res.resRequestW( );    
     string rez = attrAt("event").at().getS();
     if( clear )	attrAt("event").at().setS("");
-    ResAlloc::resReleaseW(res);
+    res.resReleaseW( );
 
     return rez;
 }

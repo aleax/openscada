@@ -28,7 +28,6 @@
 #include <sys/types.h>
 
 #include <tsys.h>
-#include <resalloc.h>
 #include <terror.h>
 #include <tmess.h>
 #include "dbf.h"
@@ -198,7 +197,6 @@ MTable::MTable(const string &inm, MBD *iown, bool create) :
     codepage = owner().codePage().size()?owner().codePage():Mess->charset();
     n_table = owner().addr()+'/'+tbl_nm;
     
-    m_res = ResAlloc::resCreate( );
     basa = new TBasaDBF(  );
     if( basa->LoadFile( (char *)n_table.c_str() ) == -1 && !create )
     {
@@ -210,7 +208,6 @@ MTable::MTable(const string &inm, MBD *iown, bool create) :
 MTable::~MTable(  )
 {
     delete basa;
-    ResAlloc::resDelete( m_res );   
 }
 
 void MTable::postDisable(int flag)

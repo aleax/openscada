@@ -222,18 +222,20 @@ class TArchiveS : public TSubSYS
 	timer_t	tmIdMess;   		//Messages timer
 	bool   	prc_st_mess;		//Process messages flag
 	//-- Messages buffer --
-	int    	m_res;			//Mess access resource
+	Res    	m_res;			//Mess access resource
 	unsigned head_buf, 		//Head of messages buffer
 		head_lstread;    	//Last read and archived head of messages buffer
 	vector<TMess::SRec> m_buf; 	//Messages buffer
 	
 	//- Value archiving -
+ 	Res	v_res;			//Value access resource
 	int     m_val_per;             	//Value arhiving period
 	int	m_val_prior;		//Value archive task priority
 	pthread_t m_val_pthr;		//Value get realtime pthread	
 	bool	prc_st_val;		//Process value flag
 	bool    endrun_req_val;		//Endrun value request
-	int	m_aval, v_res;
+	int	m_aval;
+
 	vector< AutoHD<TVArchive> > act_up_src;
 };
 

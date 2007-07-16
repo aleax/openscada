@@ -32,7 +32,6 @@
 
 #include <terror.h>
 #include <tsys.h>
-#include <resalloc.h>
 #include <tmess.h>
 #include <tconfig.h>
 #include <tvalue.h>
@@ -223,7 +222,6 @@ Contr::Contr( string name_c, const string &daq_db, ::TElem *cfgelem) :
 {
     cfg("PRM_BD").setS("BlckCalcPrm_"+name_c);
     cfg("BLOCK_SH").setS("BlckCalcBlcks_"+name_c);
-    hd_res = ResAlloc::resCreate();
     m_bl = grpAdd("blk_");
     
     //Create sync DB timer
@@ -238,7 +236,6 @@ Contr::Contr( string name_c, const string &daq_db, ::TElem *cfgelem) :
 Contr::~Contr()
 {
     timer_delete(sncDBTm);
-    ResAlloc::resDelete(hd_res);
 }
 
 void Contr::postDisable(int flag)
@@ -356,7 +353,7 @@ void Contr::stop_( )
         if( TSYS::eventWait(prc_st,false,nodePath()+"stop",5) )
             throw TError(nodePath().c_str(),_("Acquisition task no stoped!"));
         pthread_join( calcPthr, NULL );
-    }
+    }else printf("TEST 10 %s\n",id().c_str());
 
     //Stop interval timer for periodic thread creating
     struct itimerspec itval;
@@ -435,7 +432,7 @@ void *Contr::Task( void *icontr )
 	//Check calk time
         unsigned long long t_cnt = SYS->shrtCnt();
 	
-	ResAlloc::resRequestR(cntr.hd_res);
+	cntr.hd_res.resRequestR( );
 	for(unsigned i_it = 0; i_it < cntr.m_iter; i_it++)
 	    for(unsigned i_blk = 0; i_blk < cntr.clc_blks.size(); i_blk++)
 	    {
@@ -446,13 +443,13 @@ void *Contr::Task( void *icontr )
 		    string blck = cntr.clc_blks[i_blk].at().id();
 		    mess_err(cntr.nodePath().c_str(),_("Block <%s> calc error."),blck.c_str());
 		    if( cntr.clc_blks[i_blk].at().errCnt() < 10 ) continue;
-		    ResAlloc::resReleaseR(cntr.hd_res);
+		    cntr.hd_res.resReleaseR( );
 		    mess_err(cntr.nodePath().c_str(),_("Block <%s> stoped."),blck.c_str());
 		    cntr.blkAt(blck).at().process(false);			
-		    ResAlloc::resRequestR(cntr.hd_res);
+		    cntr.hd_res.resRequestR( );
 		}
 	    }
-	ResAlloc::resReleaseR(cntr.hd_res);	
+	cntr.hd_res.resReleaseR( );
 	
 	cntr.tm_calc = 1.0e6*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
 	

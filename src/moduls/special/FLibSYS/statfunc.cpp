@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 
-#include <resalloc.h>
 #include <tsys.h>
 
 #include "sysfnc.h"
@@ -87,12 +86,11 @@ Lib::Lib( string src )
     mSource    	= src;
     
     m_fnc = grpAdd("fnc_");
-    varch_res = ResAlloc::resCreate();
 }
 
 Lib::~Lib()
 {
-    ResAlloc::resDelete(varch_res);
+
 }
 
 void Lib::postEnable( int flag )

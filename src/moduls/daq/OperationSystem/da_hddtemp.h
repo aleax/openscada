@@ -48,7 +48,7 @@ class Hddtemp: public DA
         void dList( vector<string> &list );
 	
     private:
-	int     m_res;		//Resource for access to HDDTemp transport
+	Res     m_res;		//Resource for access to HDDTemp transport
         string	t_tr, n_tr;
 };
 

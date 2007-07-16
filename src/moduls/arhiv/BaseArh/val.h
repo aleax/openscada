@@ -115,7 +115,7 @@ namespace BaseArch
 	    // - State parameters -
     	    bool    m_err;     	// Archive err
 	    bool    m_pack;     // Archive packed
-    	    int     m_res;     	// resource to access
+    	    Res     m_res;     	// resource to access
 	    time_t  m_acces;	// Last access time
 	    
 	    // - File access atributes -
@@ -167,7 +167,7 @@ namespace BaseArch
 	    void checkArchivator( bool now = false );
 	    
 	private:
-    	    int       	m_res;     	// resource to access;	
+    	    Res       	m_res;     	// resource to access;	
 	    deque<VFileArch *>  arh_f;
     };
     

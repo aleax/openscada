@@ -35,7 +35,6 @@
 #include <errno.h>
 
 #include <tsys.h>
-#include <resalloc.h>
 #include <tmess.h>
 #include <tprotocols.h>
 #include <tmodule.h>
@@ -186,13 +185,12 @@ TSocketIn::TSocketIn( string name, const string &idb, TElem *el ) :
     TTransportIn(name,idb,el), cl_free(true), max_queue(cfg("SocketsMaxQueue").getId()), 
     max_fork(cfg("SocketsMaxClient").getId()), buf_len(cfg("SocketsBufLen").getId())
 {
-    sock_res = ResAlloc::resCreate();
+
 }
 
 TSocketIn::~TSocketIn()
 {
     try{ stop(); }catch(...){ }
-    ResAlloc::resDelete(sock_res);
 }
 
 void TSocketIn::start()

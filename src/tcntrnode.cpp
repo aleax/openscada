@@ -30,14 +30,11 @@
 
 #include "xml.h"
 #include "tsys.h"
-#include "resalloc.h"
 #include "tmess.h"
 #include "tcntrnode.h"
 
 TCntrNode::TCntrNode( TCntrNode *iprev ) : m_mod(Disable), m_use(0), m_oi(USHRT_MAX)
 {
-    hd_res   = ResAlloc::resCreate();
-    conn_res = ResAlloc::resCreate();
     prev.node = iprev;
     prev.grp = -1;
 }
@@ -45,8 +42,6 @@ TCntrNode::TCntrNode( TCntrNode *iprev ) : m_mod(Disable), m_use(0), m_oi(USHRT_
 TCntrNode::~TCntrNode()
 {
     nodeDelAll();
-    ResAlloc::resDelete(hd_res);
-    ResAlloc::resDelete(conn_res);
 }
 
 void TCntrNode::nodeDelAll( )
@@ -405,16 +400,16 @@ AutoHD<TCntrNode> TCntrNode::chldAt( unsigned igr, const string &name, const str
 
 void TCntrNode::AHDConnect()
 {
-    ResAlloc::resRequestW(conn_res);
+    conn_res.resRequestW( );
     m_use++;
-    ResAlloc::resReleaseW(conn_res);
+    conn_res.resReleaseW( );
 }
 
 void TCntrNode::AHDDisConnect()
 {
-    ResAlloc::resRequestW(conn_res);
+    conn_res.resRequestW( );
     m_use--;
-    ResAlloc::resReleaseW(conn_res);
+    conn_res.resReleaseW( );
 }
 
 XMLNode *TCntrNode::ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const char *path, const string &dscr,

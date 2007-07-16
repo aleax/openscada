@@ -88,7 +88,7 @@ namespace Sockets
 	private:
 	    pthread_t pthr_tsk;
 	    int       sock_fd;
-	    unsigned  sock_res;
+	    Res	      sock_res;
 	
 	    bool      endrun;      // Command for stop task	    
 	    bool      endrun_cl;   // Command for stop client tasks

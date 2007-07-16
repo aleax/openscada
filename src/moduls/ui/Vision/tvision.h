@@ -43,7 +43,9 @@ class TVision : public TUI
 	
 	//Methods
 	TVision( string name );
-	~TVision( );	
+	~TVision( );
+	
+	bool endRun()	{ return end_run; }
 	
 	void modStart();
 	void modStop();
@@ -76,10 +78,10 @@ class TVision : public TUI
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
 	//Attributes	
-	vector<QMainWindow *> mn_winds;	
-	string	start_user;
-	
-	vector<WdgShape *> shapesWdg;
+	vector<QMainWindow *> 	mn_winds;	
+	string			start_user;	
+	vector<WdgShape *>	shapesWdg;
+	bool    		end_run;	//End run command. Close all windows
 };
     
 extern TVision *mod;

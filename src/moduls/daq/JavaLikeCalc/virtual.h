@@ -168,7 +168,7 @@ class TipContr : public TTipDAQ
 	void lbUnreg( const string &id, int flg = 0 )	{ chldDel(m_lib,id,-1,flg); }
 	AutoHD<Lib> lbAt( const string &id )	{ return chldAt(m_lib,id); }
 	
-	int &parseRes( ){ return parse_res; }
+	Res &parseRes( )			{ return parse_res; }
 	
         //Named constant
         NConst *constGet( const char *nm );
@@ -192,7 +192,7 @@ class TipContr : public TTipDAQ
 	TElem   	val_el, lb_el, fnc_el, fncio_el;
 	
 	//General parse data
-	int     	parse_res;	//Syntax analisator
+	Res     	parse_res;	//Syntax analisator
 	vector<NConst>  m_const;        //Name constant table
 	vector<BFunc>	m_bfunc;	//Buildin functions
 };

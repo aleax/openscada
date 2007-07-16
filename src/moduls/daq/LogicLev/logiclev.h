@@ -103,7 +103,7 @@ class TMdPrm : public TParamContr
         TElem   p_el;           //Work atribute elements
 	
 	bool	chk_lnk_need;	//Check lnk need flag
-	int 	moderes;	//Resource
+	Res 	moderes;	//Resource
 	int	id_freq, id_start, id_stop, id_err;	//Fixed system attributes identifiers
         
 	//Data
@@ -150,7 +150,7 @@ class TMdContr: public TController
 	static void *Task( void *icntr );
 	
 	//Attributes
-	int	en_res;         //Resource for enable params
+	Res	en_res;         //Resource for enable params
 	int	&m_per,     	// ms
 		&m_prior;	// Process task priority
 		

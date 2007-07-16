@@ -439,18 +439,24 @@ VisDevelop::VisDevelop( string open_user ) :
     attrInsp->setWhatsThis(_("Dock window for widget's attributes inspection."));
     lnkInsp  = new InspLnkDock(this);
     lnkInsp->setWhatsThis(_("Dock window for widget's links inspection."));
-    addDockWidget(Qt::RightDockWidgetArea,attrInsp);
-    addDockWidget(Qt::RightDockWidgetArea,lnkInsp);
+    addDockWidget(Qt::LeftDockWidgetArea,attrInsp);
+    addDockWidget(Qt::LeftDockWidgetArea,lnkInsp);
     tabifyDockWidget(attrInsp,lnkInsp);
     mn_view->addAction(attrInsp->toggleViewAction());
     mn_view->addAction(lnkInsp->toggleViewAction());
     mn_view->addSeparator();
     
     //- Create timers -
+    //-- Main widget's work timer --
     work_wdgTimer = new QTimer( this );
     work_wdgTimer->setSingleShot(true);
     work_wdgTimer->setInterval(200);
-    connect(work_wdgTimer, SIGNAL(timeout()), this, SLOT(applyWorkWdg()));
+    connect(work_wdgTimer, SIGNAL(timeout()), this, SLOT(applyWorkWdg()));    
+    //-- End run timer --
+    endRunTimer   = new QTimer( this );
+    endRunTimer->setSingleShot(false);
+    connect(endRunTimer, SIGNAL(timeout()), this, SLOT(endRunChk()));
+    endRunTimer->start(STD_WAIT_DELAY);
 
     //resize( 1000, 800 );
     setWindowState(Qt::WindowMaximized);
@@ -474,6 +480,7 @@ VisDevelop::VisDevelop( string open_user ) :
 VisDevelop::~VisDevelop()
 {
     winClose = true;
+    endRunTimer->stop();
     work_wdgTimer->stop();
     while(proc_st);
     
@@ -498,6 +505,11 @@ void VisDevelop::closeEvent( QCloseEvent* ce )
 {
     winClose = true;
     ce->accept();
+}
+
+void VisDevelop::endRunChk( )
+{
+    if( mod->endRun() )	close();
 }
 
 void VisDevelop::quitSt()

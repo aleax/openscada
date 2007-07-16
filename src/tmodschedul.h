@@ -83,7 +83,7 @@ class TModSchedul : public TSubSYS
 	string         	m_mod_path;
 	vector<string>	m_am_list;
    
-	unsigned     	hd_res;   
+	Res     	hd_res;   
 	int		m_per;	//Check to new modules period
 	vector<SHD *> 	SchHD;
 	timer_t 	tmId;   //Thread timer

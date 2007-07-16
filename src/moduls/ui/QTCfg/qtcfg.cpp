@@ -60,7 +60,6 @@
 
 #include <tmess.h>
 #include <tsys.h>
-#include <resalloc.h>
 #include <tsecurity.h>
 
 #include "selfwidg.h"
@@ -287,12 +286,14 @@ ConfApp::ConfApp( string open_user ) :
     statusBar()->showMessage(_("Ready"), 2000 );
     
     //- Other resources init -
-    //-- Display resource --
-    hd_res = ResAlloc::resCreate();
-    
     //-- Create auto update timer --
     autoUpdTimer = new QTimer( this );
     connect( autoUpdTimer, SIGNAL(timeout()), SLOT(pageRefresh()) );
+    //-- Create end run timer --
+    endRunTimer   = new QTimer( this );
+    endRunTimer->setSingleShot(false);
+    connect(endRunTimer, SIGNAL(timeout()), this, SLOT(endRunChk()));
+    endRunTimer->start(STD_WAIT_DELAY);			
     
     //-- Display root page and init external pages --
     initHosts();
@@ -302,13 +303,20 @@ ConfApp::ConfApp( string open_user ) :
 
 ConfApp::~ConfApp()
 {
-    ResAlloc::resDelete(hd_res);
+    endRunTimer->stop();
+    autoUpdTimer->stop();
+
     mod->unregWin( this );
 }
 
 void ConfApp::quitSt()
 {
     SYS->stop();
+}
+
+void ConfApp::endRunChk( )
+{
+    if( mod->endRun() ) close();
 }
 
 void ConfApp::pageUp()
@@ -923,12 +931,12 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		if(comb)
 		{
 		    if( *l_hbox ) (*l_hbox)->insertWidget( l_pos++, comb );	
-		    else delete comb;
+		    else { delete comb; comb = NULL; }
 		}
 		if(lab_r)
 		{
 		    if( *l_hbox ) (*l_hbox)->insertWidget( l_pos++, lab_r );
-                    else delete lab_r;
+                    else { delete lab_r; lab_r = NULL; }
 		}
 	    }
 	    
@@ -1022,12 +1030,12 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    if(chBox)
 		    {
 			if( *l_hbox ) (*l_hbox)->insertWidget( l_pos++, chBox );
-			else delete chBox;
+			else { delete chBox; chBox = NULL; }
 		    }
 		    if(lab_r)
                     {
                         if( *l_hbox ) (*l_hbox)->insertWidget( l_pos++, lab_r );
-                	else delete lab_r;
+                	else { delete lab_r; lab_r = NULL; }
 		    }
 		}	
 		
@@ -1132,7 +1140,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		else
 		{
 		    if( *l_hbox )	(*l_hbox)->insertWidget( l_pos++, val_w );
-		    else 	delete val_w;
+		    else 		{ delete val_w; val_w = NULL; }
 		}
 		
 		t_s.setAttr("addr_lab",TSYS::addr2str(lab));		
@@ -1150,7 +1158,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	}
 	//View other string and numberic fields	
 	else
-	{
+	{	
             QLabel *lab   	= NULL;
 	    QLabel *val_r 	= NULL;
 	    LineEdit *val_w	= NULL;	    
@@ -1160,6 +1168,8 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		if( !wr )
 		{
 		    val_r = new QLabel( widget );
+		    //if( val_r > (void*)0x9000000 )
+		    //	printf("TEST 00: %xh (%s)\n",val_r,(sel_path+"/"+br_path).c_str());
 		    val_r->setStatusTip((sel_path+"/"+br_path).c_str());
 		    QSizePolicy sp(QSizePolicy::Expanding, QSizePolicy::Preferred);
 		    sp.setHorizontalStretch(1);
@@ -1222,13 +1232,13 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    }
 		    else 
 		    {
-			if( val_w ) delete val_w;
-			if( val_r ) delete val_r;
+			if( val_w ) { delete val_w; val_w = NULL; }
+			if( val_r ) { delete val_r; val_r = NULL; }
 		    }
 		}
 		
 		t_s.setAttr("addr_lab",TSYS::addr2str(lab));
-		t_s.setAttr("addr_lew",TSYS::addr2str(val_w));		
+		t_s.setAttr("addr_lew",TSYS::addr2str(val_w));
 		t_s.setAttr("addr_ler",TSYS::addr2str(val_r));
 	    }
 	    else
@@ -1239,7 +1249,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    }	    
             //Fill line
  	    if( lab ) 	lab->setText((t_s.attr("dscr")+":").c_str());
-	    if( val_r ) val_r->setText((string("<b>")+TSYS::strEncode(data_req.text(),TSYS::Html)+"</b>").c_str());
+	    if( val_r )	val_r->setText((string("<b>")+TSYS::strEncode(data_req.text(),TSYS::Html)+"</b>").c_str());
 	    if( val_w )	val_w->setText(data_req.text().c_str());
 	}
     }

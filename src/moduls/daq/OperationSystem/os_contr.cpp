@@ -29,7 +29,6 @@
 
 #include <terror.h>
 #include <tsys.h>
-#include <resalloc.h>
 #include <tmess.h>
 #include <ttransports.h>
 #include <ttiparam.h>
@@ -212,15 +211,12 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
 	::TController(name_c,daq_db,cfgelem), prc_st(false), endrun_req(false), 
 	m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId()), tm_calc(0.0)
 {    
-    en_res = ResAlloc::resCreate();
     cfg("PRM_BD").setS("OSPrm_"+name_c);
 }
 
 TMdContr::~TMdContr()
 {
     if( run_st ) stop();
-    
-    ResAlloc::resDelete(en_res);    
 }
 
 TParamContr *TMdContr::ParamAttach( const string &name, int type )
@@ -313,10 +309,10 @@ void *TMdContr::Task( void *icntr )
 	{
 	    unsigned long long t_cnt = SYS->shrtCnt();
 	    
-	    ResAlloc::resRequestR(cntr.en_res);
+	    cntr.en_res.resRequestR();
 	    for(unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++)
 		cntr.p_hd[i_p].at().getVal();
-	    ResAlloc::resReleaseR(cntr.en_res);
+	    cntr.en_res.resReleaseR();
 		
 	    cntr.tm_calc = 1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());	
 	} catch(TError err)

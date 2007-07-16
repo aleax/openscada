@@ -66,6 +66,7 @@ typedef map<string, TCntrNode* > TMap;
 
 #include "xml.h"
 #include "autohd.h"
+#include "resalloc.h"
 
 #define DEF_TIMEOUT 2
 
@@ -151,8 +152,8 @@ class TCntrNode
     private:
 	//Attributes
 	//- Childs -	
-	int 	hd_res;			//Resource HD
-	int     conn_res;		//Connect resource	
+	Res 	hd_res,			//Resource HD
+		conn_res;		//Connect resource
 	struct GrpEl
 	{
 	    string 	id;

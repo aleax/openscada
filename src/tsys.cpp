@@ -126,15 +126,15 @@ string TSYS::real2str( double val )
 
 string TSYS::addr2str( void *addr )
 {
-    char buf[sizeof(void*)*2+1];
-    snprintf(buf,sizeof(buf),"%lX",addr);
+    char buf[sizeof(void*)*2+3];
+    snprintf(buf,sizeof(buf),"%p",addr);
 
     return buf;
 }
 	    
 void *TSYS::str2addr( const string &str )
 {
-    return (void *)strtol(str.c_str(),NULL,16);
+    return (void *)strtoul(str.c_str(),NULL,16);
 }
 
 bool TSYS::strEmpty( const string &val )

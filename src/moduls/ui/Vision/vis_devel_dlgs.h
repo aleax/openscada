@@ -37,8 +37,6 @@ using std::vector;
 class QLabel;
 class QComboBox;
 class QCheckBox;
-class QLineEdit;
-class QTextEdit;
 class QDialogButtonBox;
 class QTabWidget;
 class QTableWidget;
@@ -50,6 +48,8 @@ namespace VISION
 //* Widget's library and project properties dialog   *
 //****************************************************
 class VisDevelop;
+class LineEdit;
+class TextEdit;
 
 class LibProjProp: public QDialog
 {
@@ -86,15 +86,15 @@ class LibProjProp: public QDialog
 	QTabWidget  	*wdg_tabs;	//Tabs	
 	QPushButton	*obj_ico;	//Icon
 	QCheckBox	*obj_enable;	//Enabled stat
-        QLineEdit 	*obj_db;	//DB
+        LineEdit 	*obj_db;	//DB
 	QComboBox 	*obj_user,	//User 
 			*obj_grp,	//Group
 			*obj_accuser,	//User access
 			*obj_accgrp,	//Group access
 			*obj_accother;	//Other access
 	QLabel    	*obj_id;	//Id
-	QLineEdit 	*obj_name;	//Name
-	QTextEdit 	*obj_descr;	//Description
+	LineEdit 	*obj_name;	//Name
+	TextEdit 	*obj_descr;	//Description
 	
 	QTableWidget 	*mimeDataTable;
 	QPushButton 	*buttDataAdd,
@@ -169,14 +169,14 @@ class VisItProp : public QDialog
 			*obj_accother,	//Other access
 			*pg_tp;		//Page: Page type
 		 
-	QLineEdit 	*obj_name;	//Name
-	QTextEdit 	*obj_descr;	//Description
+	LineEdit 	*obj_name;	//Name
+	TextEdit 	*obj_descr;	//Description
 	
 	InspAttr  	*obj_attr;	//Attributes inspector
 	InspLnk	  	*obj_lnk;	//Links inspector
 	
 	QComboBox    	*proc_lang;	//Widget's procedure name
-	QTextEdit    	*proc_text;	//Widget's procedure programm text	
+	TextEdit    	*proc_text;	//Widget's procedure programm text
 	
 	QTreeWidget  	*obj_attr_cfg;	//Attribute configuration widget
 	QPushButton  	*buttAttrAdd,	//Add new attribute button

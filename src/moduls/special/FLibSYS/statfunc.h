@@ -72,7 +72,7 @@ class Lib : public TSpecial
 	int  m_fnc;
 	
 	//- Value archive resources -
-	int varch_res;	
+	Res varch_res;	
 	struct SVarch
 	{
 	    bool isArch;

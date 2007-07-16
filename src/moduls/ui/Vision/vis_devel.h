@@ -142,6 +142,7 @@ class VisDevelop : public QMainWindow
     private slots:
 	//Private slots
 	void applyWorkWdg( );	//Timeouted apply work widget
+	void endRunChk( );	//End run flag check
 
     private:
 	//Private attributes
@@ -159,7 +160,7 @@ class VisDevelop : public QMainWindow
 	bool		winClose;
 	bool            proc_st;        //Timer process stat
 	UserStBar 	*w_user;	//User status widget
-	QTimer      	*work_wdgTimer;
+	QTimer      	*endRunTimer, *work_wdgTimer;
 	string		work_wdg, work_wdg_new;	//Work widget
 	QSignalMapper 	*wMapper;	//Internal window mapper
 

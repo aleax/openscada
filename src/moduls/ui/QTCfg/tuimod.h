@@ -67,6 +67,8 @@ class TUIMod: public TUI
 	TUIMod( string name );
 	~TUIMod();
 	
+	bool endRun()   	{ return end_run; }
+	
 	string startPath()	{ return start_path; }
 	string startUser()	{ return start_user; }
 	string extTranspBD();
@@ -108,11 +110,13 @@ class TUIMod: public TUI
 	//Attributes
         vector<QMainWindow*> cfapp;	//Opened configurator opened window
 	vector<ExtHost>	extHostLs;	//External hosts list	
-	int 	extHostRes;		//External hosts resource id
+	Res 	extHostRes;		//External hosts resource id
 	TElem	el_ext;
 	
 	string	start_user;		//No password requested start user
 	string	start_path;		//Start path
+	
+	bool	end_run;        	//End run command. Close all windows
 };
     
 extern TUIMod *mod;

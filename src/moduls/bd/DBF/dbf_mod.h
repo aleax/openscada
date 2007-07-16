@@ -72,7 +72,7 @@ namespace BDDBF
 	    string codepage;
 	    TBasaDBF *basa;
 	    
-	    int    m_res;
+	    Res    m_res;
 	    bool   m_modify;
     };
 

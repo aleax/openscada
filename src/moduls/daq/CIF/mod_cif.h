@@ -205,7 +205,7 @@ class TMdContr: public TController
 	};
 	
 	//Attributes
-	int	en_res;         //Resource for enable params
+	Res	en_res;         //Resource for enable params
 	int	&m_per,     	// ms
 		&m_prior,	// Process task priority
 		&m_dev,		// CIF device number
@@ -267,7 +267,7 @@ class TTpContr: public TTipDAQ
 	
 	struct SCifDev
 	{
-	    int	   res;			//Device resource
+	    Res	   res;			//Device resource
 	    bool   present;		//Present flag
 	    int    board;		//Board number
 	    unsigned long phAddr;	//Physical address

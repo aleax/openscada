@@ -137,7 +137,7 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 			&m_func;	//Associated function
 	bool		&m_to_en, &m_to_prc;
 	
-	int		lnk_res;		//Link resource
+	Res		lnk_res;		//Link resource
 	int		err_cnt;
 	int     	id_freq, id_start, id_stop;     //Fixed system attributes identifiers
 };

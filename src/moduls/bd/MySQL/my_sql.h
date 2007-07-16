@@ -79,8 +79,8 @@ namespace BDMySQL
 	    string host, user, pass, bd, u_sock, cd_pg;
 	    int    port;
 	    
-	    MYSQL connect;
-	    int	conn_res;
+	    MYSQL  connect;
+	    Res	   conn_res;
     };
 
     class BDMod: public TTipBD

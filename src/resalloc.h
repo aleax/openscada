@@ -29,39 +29,42 @@
 
 using std::vector;
 
+//********************************************
+//* Resource object                          *
+//********************************************
+class Res 
+{
+    public: 
+	Res( unsigned val = 1 );
+	~Res( );
+
+	void resRequestW( long tm = 0 ); 	// Write request
+        void resReleaseW( );   			// Write release
+	void resRequestR( long tm = 0 ); 	// Read request
+	void resReleaseR( );             	// Read release
+	
+    private:
+	sem_t sem;	// semaphore id
+	sem_t sem_rc;	// read counter semaphore
+	int   rd_c;   	// readers counter
+};
+
+//********************************************
+//* Automatic resource allocator/deallocator *
+//********************************************
 class ResAlloc 
 {
     public: 
-	ResAlloc( unsigned id );
-	ResAlloc( unsigned id, bool write, long tm = 0 );
+	ResAlloc( Res &rid );
+	ResAlloc( Res &rid, bool write, long tm = 0 );
 	~ResAlloc( );
 
 	void request( bool write = false, long tm = 0 );
 	void release();
-	
-	// Static metods
-	static unsigned resCreate( unsigned val = 1 );
-	static void resDelete( unsigned res );
     
-	static void resRequestW( unsigned res, long tm = 0 ); // Write request
-        static void resReleaseW( unsigned res );              // Write release
-	static void resRequestR( unsigned res, long tm = 0 ); // Read request
-	static void resReleaseR( unsigned res );              // Read release
-	
-    private:
-	struct SSem
-	{
-	    bool  use;          // using flag
-	    bool  del;          // deleting flag
-	    sem_t sem;          // semaphore id
-	    sem_t sem_rc;	// read counter semaphore
-	    int   rd_c;         // readers counter
-	};
-    
-	int   m_id;     //
-	char  m_wr;     //0x01 - alloc; 0x02 - write
-	
-	static vector<SSem>  sems;
+    private:    
+	Res	&m_id;
+	char  	m_wr;	//0x01 - alloc; 0x02 - write
 };
 
 #endif // RESALLOC_H

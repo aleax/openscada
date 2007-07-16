@@ -82,7 +82,7 @@ class TUIMod: public TUI
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
     private:
-	bool	dem_mode;
+	bool	demon_mode;
 	bool	end_run;
         pthread_t pthr_tsk;
 	string	start_mod;

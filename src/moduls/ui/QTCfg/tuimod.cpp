@@ -27,7 +27,6 @@
 #include <QErrorMessage>
 #include <QIcon>
 
-#include <resalloc.h>
 #include <tsys.h>
 #include <tmess.h>
 #include "qtcfg.h"
@@ -83,7 +82,7 @@ using namespace QTCFG;
 //================= QTCFG::TUIMod =============================================
 //==============================================================================
 
-TUIMod::TUIMod( string name ) : start_path(string("/")+SYS->id())
+TUIMod::TUIMod( string name ) : start_path(string("/")+SYS->id()), end_run(false)
 {
     mId		= MOD_ID;
     mName       = MOD_NAME;
@@ -93,8 +92,6 @@ TUIMod::TUIMod( string name ) : start_path(string("/")+SYS->id())
     mDescr  	= DESCRIPTION;
     mLicense   	= LICENSE;
     mSource    	= name;
-    
-    extHostRes = ResAlloc::resCreate( );
     
     //Public export functions
     modFuncReg( new ExpFunc("QIcon icon();","Module QT-icon",(void(TModule::*)( )) &TUIMod::icon) );
@@ -113,8 +110,6 @@ TUIMod::TUIMod( string name ) : start_path(string("/")+SYS->id())
 TUIMod::~TUIMod()
 {
     if( run_st ) modStop();
-    
-    ResAlloc::resDelete(extHostRes);
 }
 
 string TUIMod::extTranspBD()
@@ -280,7 +275,8 @@ void TUIMod::modStart()
     mess_debug(nodePath().c_str(),_("Start module."));
 #endif
 
-    run_st = true;
+    end_run = false;
+    run_st  = true;
 }
 
 void TUIMod::modStop()
@@ -289,9 +285,10 @@ void TUIMod::modStop()
     mess_debug(nodePath().c_str(),_("Stop module."));
 #endif
 
-    int i_w;
-    for( i_w = 0; i_w < cfapp.size(); i_w++ )
-        if( cfapp[i_w] ) cfapp[i_w]->close();//deleteLater();// close();
+    end_run = true;
+    
+    for( int i_w = 0; i_w < cfapp.size(); i_w++ )
+	while(cfapp[i_w]) usleep(STD_WAIT_DELAY*1000);
     
     run_st = false;
 }

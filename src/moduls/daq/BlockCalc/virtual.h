@@ -70,7 +70,7 @@ class Contr: public TController
         AutoHD<Block> blkAt( const string &id )	{ return chldAt(m_bl,id); }
 	void copyBlock( const string &from_id, const string &cntr_id, const string &to_id, const string &to_name );	
 	
-	int res()		{ return hd_res; }
+	Res &res()		{ return hd_res; }
     
 	TipContr &owner()	{ return (TipContr&)TController::owner(); }
     
@@ -108,7 +108,7 @@ class Contr: public TController
 	vector< AutoHD<Block> >	clc_blks;	// Calc blocks HD
 	double	tm_calc;			// Scheme's calc time
 	
-	int	hd_res;		//Resource for process block
+	Res	hd_res;		//Resource for process block
 };
 
 class Prm : public TParamContr

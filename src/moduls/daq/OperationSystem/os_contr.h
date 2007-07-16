@@ -106,7 +106,7 @@ class TMdContr: public TController
 	static void *Task( void *icntr );
 	
 	//Attributes
-	int	en_res;         //Resource for enable params
+	Res	en_res;         //Resource for enable params
 	int	&m_per,     	// ms
 		&m_prior;	// Process task priority
 		

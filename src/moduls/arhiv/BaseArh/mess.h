@@ -94,7 +94,7 @@ namespace BaseArch
 	    vector<CacheEl> cache;
 	    CacheEl cach_pr;
 	    // - Specific parameters -
-    	    int     m_res;     	// resource to access;	    
+    	    Res	     m_res;     	// resource to access;	    
 	    ModMArch *m_owner;
     };
 
@@ -134,7 +134,7 @@ namespace BaseArch
 	    int		&m_chk_tm;	// period of check archive files directory;
 	    int		&m_pack_tm;	// pack the archive files timeout
 	
-    	    int       	m_res;     	// resource to access;	
+    	    Res       	m_res;     	// resource to access;	
 	    double  	tm_calc;        // Archiving time
 	    time_t  	m_lst_check;	// Last check directory time
 	    

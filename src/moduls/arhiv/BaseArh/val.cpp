@@ -27,7 +27,6 @@
 #include <math.h>
 
 #include <tsys.h>
-#include <resalloc.h>
 #include <tmess.h>
 #include "base.h"
 #include "val.h"
@@ -411,7 +410,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 ModVArchEl::ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator ) :
     TVArchEl(iachive,iarchivator)
 {
-    m_res = ResAlloc::resCreate( );
+
 }
 
 ModVArchEl::~ModVArchEl( )
@@ -424,9 +423,6 @@ ModVArchEl::~ModVArchEl( )
 	arh_f.pop_front();
     }
     res.release();
-	
-    //- Delete resource -
-    ResAlloc::resDelete( m_res );
 }
 
 void ModVArchEl::fullErase()
@@ -705,7 +701,6 @@ VFileArch::VFileArch( ModVArchEl *owner ) :
     m_owner(owner), m_err(true), m_size(0), m_beg(0), m_end(0), m_per(1000000), m_pack(false),
     m_tp(TFld::Real), fixVl(true), vSize(sizeof(double)), mpos(0)
 {
-    m_res = ResAlloc::resCreate( );
     cach_pr_rd.pos = cach_pr_rd.off = cach_pr_wr.pos = cach_pr_wr.off = 0;
     m_acces = time(NULL);
 }
@@ -716,7 +711,6 @@ VFileArch::VFileArch( const string &iname, long long ibeg, long long iend, long 
     m_per(iper), m_tp(itp)
 {
     char buf[1000];
-    m_res = ResAlloc::resCreate( );    
     cach_pr_rd.pos = cach_pr_rd.off = cach_pr_wr.pos = cach_pr_wr.off = 0;
     
     //- Round-up begin and end position to period -
@@ -826,7 +820,7 @@ VFileArch::VFileArch( const string &iname, long long ibeg, long long iend, long 
 
 VFileArch::~VFileArch()
 {
-    ResAlloc::resDelete( m_res );       
+
 }
 
 void VFileArch::delFile()

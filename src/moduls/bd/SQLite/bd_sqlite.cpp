@@ -24,7 +24,6 @@
 #include <errno.h>
 #include <sqlite3.h>
 
-#include <resalloc.h>
 #include <tsys.h>
 #include <tmess.h>
 #include "bd_sqlite.h"
@@ -152,12 +151,12 @@ string BDMod::sqlReqCode( const string &req, char symb )
 //=============================================================
 MBD::MBD( const string &iid, TElem *cf_el ) : TBD(iid,cf_el), commCnt(0)
 {
-    conn_res = ResAlloc::resCreate( );
+
 }
 
 MBD::~MBD( )
 {
-    ResAlloc::resDelete(conn_res);
+
 }
 
 void MBD::postDisable(int flag)

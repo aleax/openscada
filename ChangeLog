@@ -1,3 +1,11 @@
+2007-07-16 Roman
+- FIX:/SYS: The resource allocator mechanism is rebuilded and real thread access fixed.
+- FIX:/TCntrNode: Functions addr2str() and str2addr() is fixed.
+- FIX:/UI/QtCfg: Module's stop is made safe. Call close() window function move to QT main thread.
+- FIX:/UI/Vision: Module's stop is made safe. Call close() window function move to QT main thread.
+- /UI/Vision: Into dialog used visual applied edit widgets (LineEdit and TextEdit).
+
+
 2007-07-09 Roman
 - !:/TCntrNode: The control language speed optimisation is made.
 - !!:/UI/QtStarter: The call function closeAllWindows() move to main QT API thread.

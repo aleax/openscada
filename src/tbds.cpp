@@ -23,7 +23,6 @@
 #include <unistd.h>
 #include <getopt.h>
 
-#include "resalloc.h"
 #include "tsys.h"
 #include "tmess.h"
 #include "tmodule.h"
@@ -34,8 +33,6 @@
 //================================================================
 TBDS::TBDS( ) : TSubSYS("BD","Data Bases",true)
 {
-    genDBCacheRes = ResAlloc::resCreate( );
-
     //Generic system DB
     fldAdd( new TFld("user","User",TFld::String,TCfg::Key,"20") );
     fldAdd( new TFld("id","Value ID",TFld::String,TCfg::Key,"100") );
@@ -60,8 +57,6 @@ TBDS::~TBDS(  )
 	genDBCache.pop_front();
     }
     res.release();
-
-    ResAlloc::resDelete(genDBCacheRes);
 }
 
 string TBDS::realDBName( const string &bdn )

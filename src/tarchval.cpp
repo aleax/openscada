@@ -30,7 +30,6 @@
 #include <gdfonts.h>
 #include <gdfontt.h>
 
-#include "resalloc.h"
 #include "tsys.h"
 #include "tvalue.h"
 #include "tarchives.h"
@@ -46,7 +45,6 @@ TValBuf::TValBuf( ) :
     m_val_tp(TFld::Integer), m_size(100), m_per(0), m_hrd_grd(false), m_hg_res_tm(false), m_end(0), m_beg(0)
 {   
     buf.bl = NULL;
-    b_res = ResAlloc::resCreate();
     
     makeBuf(m_val_tp,m_size,m_per,m_hrd_grd,m_hg_res_tm);
 }
@@ -55,7 +53,6 @@ TValBuf::TValBuf( TFld::Type vtp, int isz, long long ipr, bool ihgrd, bool ihres
     m_val_tp(vtp), m_size(isz), m_per(ipr), m_hrd_grd(ihgrd), m_hg_res_tm(ihres), m_end(0), m_beg(0)
 {
     buf.bl = NULL;
-    b_res = ResAlloc::resCreate();
     
     makeBuf(m_val_tp,m_size,m_per,m_hrd_grd,m_hg_res_tm);
 }
@@ -80,7 +77,6 @@ TValBuf::~TValBuf( )
         case TFld::Real:    	delete buf.real;break;
         case TFld::String:  	delete buf.str; break;
     }
-    ResAlloc::resDelete(b_res);
 }
 
 int TValBuf::realSize()
@@ -780,14 +776,12 @@ TVArchive::TVArchive( const string &iid, const string &idb, TElem *cf_el ) :
     m_id = iid;
     m_vtype = TFld::Real;
     
-    a_res = ResAlloc::resCreate();
-    
     setUpBuf();
 }
 
 TVArchive::~TVArchive( )
 {
-    ResAlloc::resDelete(a_res);
+
 }
 
 void TVArchive::preDisable(int flag)
@@ -1638,8 +1632,6 @@ TVArchivator::TVArchivator( const string &iid, const string &idb, TElem *cf_el )
 {
     m_id = iid;
     
-    a_res = ResAlloc::resCreate();
-
     //Create calc timer
     struct sigevent sigev;
     sigev.sigev_notify = SIGEV_THREAD;
@@ -1652,8 +1644,6 @@ TVArchivator::TVArchivator( const string &iid, const string &idb, TElem *cf_el )
 TVArchivator::~TVArchivator()
 {
     timer_delete(tmId);
-    
-    ResAlloc::resDelete(a_res);
 }
 
 string TVArchivator::name()   

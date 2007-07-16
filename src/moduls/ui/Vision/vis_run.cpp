@@ -108,6 +108,12 @@ VisRun::VisRun( const string &prj_it, string open_user ) : winClose(false), mast
     statusBar()->showMessage(_("Ready"), 2000 );
 
     //- Create timers -
+    //-- End run timer --
+    endRunTimer   = new QTimer( this );
+    endRunTimer->setSingleShot(false);
+    connect(endRunTimer, SIGNAL(timeout()), this, SLOT(endRunChk()));
+    endRunTimer->start(STD_WAIT_DELAY);
+    //-- Update timer --    
     updateTimer = new QTimer( this );
     updateTimer->setSingleShot(false);    
     connect(updateTimer, SIGNAL(timeout()), this, SLOT(updatePage()));
@@ -121,6 +127,7 @@ VisRun::VisRun( const string &prj_it, string open_user ) : winClose(false), mast
 VisRun::~VisRun()
 {
     winClose = true;
+    endRunTimer->stop();
     updateTimer->stop();
     while(proc_st);
     
@@ -149,6 +156,11 @@ void VisRun::closeEvent( QCloseEvent* ce )
 {
     winClose = true;
     ce->accept();
+}
+
+void VisRun::endRunChk( )
+{
+    if( mod->endRun() ) close();
 }
 
 void VisRun::quitSt()

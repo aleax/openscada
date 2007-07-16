@@ -81,7 +81,7 @@ namespace BDSQLite
 	    string      cd_pg;
             sqlite3     *m_db;	    
             int        	commCnt;
-	    int		conn_res;
+	    Res		conn_res;
     };
 
     class BDMod: public TTipBD

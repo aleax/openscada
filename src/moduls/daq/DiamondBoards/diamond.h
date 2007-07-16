@@ -94,7 +94,7 @@ class TMdContr: public TController
 	    char comm;	// 0-free; 1-get AI; 2-set AO; 3-get DI; 4-set DO
 	    int  prm1;
 	    int  prm2;
-	    int  gen_res;
+	    Res  gen_res;
 	    pthread_cond_t  th_cv;
 	    pthread_mutex_t th_mut;
 	}DSC;	

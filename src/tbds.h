@@ -31,6 +31,7 @@
 #include <vector>
 #include <deque>
 
+#include "resalloc.h"
 #include "tsubsys.h"
 #include "tconfig.h"
 
@@ -217,7 +218,7 @@ class TBDS : public TSubSYS, public TElem
 	
 	//Private attributes
 	TElem	el_db;
-	int	genDBCacheRes;
+	Res	genDBCacheRes;
 	deque<TConfig*> genDBCache;
 };
 

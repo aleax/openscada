@@ -28,7 +28,6 @@
 #include <signal.h>
 #include <errno.h>
 
-#include <resalloc.h>
 #include <tsys.h>
 #include <ttiparam.h>
 
@@ -171,7 +170,6 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) : ad_
     cfg("ADGAIN").view(false);
     
     //DSC resources
-    DSC.gen_res = ResAlloc::resCreate();
     DSC.comm = 0;
     pthread_mutex_init(&DSC.th_mut,NULL);
     pthread_cond_init(&DSC.th_cv,NULL);
@@ -179,7 +177,6 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) : ad_
 
 TMdContr::~TMdContr()
 {
-    ResAlloc::resDelete(DSC.gen_res);
     pthread_cond_destroy(&DSC.th_cv);
     pthread_mutex_destroy(&DSC.th_mut);
 }
@@ -249,12 +246,12 @@ void TMdContr::stop_( )
     if( dsc_st )
     {
         endrun_req_dsc = true;
-	ResAlloc::resRequestW(DSC.gen_res); //Request access to DSC
-        pthread_mutex_lock(&DSC.th_mut);    //Request DSC ready
+	DSC.gen_res.resRequestW( ); 		//Request access to DSC
+        pthread_mutex_lock(&DSC.th_mut);    	//Request DSC ready
         DSC.comm = 0;
         pthread_cond_signal(&DSC.th_cv);
         pthread_mutex_unlock(&DSC.th_mut);
-        ResAlloc::resReleaseW(DSC.gen_res);
+        DSC.gen_res.resReleaseW( );
 											    
         if( TSYS::eventWait(dsc_st,false,nodePath()+"dsc_task_stop",5) )
             throw TError(nodePath().c_str(),_("DSC task no stoped!"));
@@ -778,7 +775,7 @@ void TMdPrm::vlSet( TVal &val )
 	    if(val.fld().reserve()==1)		code = (int)(4095.*val.getR(0,true)/100.);
 	    else if(val.fld().reserve()==2)	code = (int)(4095.*val.getR(0,true)/10.);
 
-	    ResAlloc::resRequestW(owner().DSC.gen_res);	//Request access to DSC
+	    owner().DSC.gen_res.resRequestW( );		//Request access to DSC
 	    pthread_mutex_lock(&owner().DSC.th_mut);	//Request DSC ready
 	    owner().DSC.comm = 2;
 	    owner().DSC.prm1 = m_cnl;
@@ -786,13 +783,13 @@ void TMdPrm::vlSet( TVal &val )
 	    pthread_cond_signal(&owner().DSC.th_cv);
 	    pthread_mutex_unlock(&owner().DSC.th_mut);
 	    while(owner().DSC.comm) pthread_yield();
-	    ResAlloc::resReleaseW(owner().DSC.gen_res);
+	    owner().DSC.gen_res.resReleaseW( );
 	    break;
 	}
 	case DO:
 	{
 	    //Get prev port stat
-	    ResAlloc::resRequestW(owner().DSC.gen_res);	//Request access to DSC
+	    owner().DSC.gen_res.resRequestW( );		//Request access to DSC
     	    pthread_mutex_lock(&owner().DSC.th_mut);	//Request DSC ready
 	    owner().DSC.comm = 4;
 	    owner().DSC.prm1 = m_dio_port;
@@ -800,7 +797,7 @@ void TMdPrm::vlSet( TVal &val )
 	    pthread_cond_signal(&owner().DSC.th_cv);
 	    pthread_mutex_unlock(&owner().DSC.th_mut);
 	    while(owner().DSC.comm) pthread_yield();
-	    ResAlloc::resReleaseW(owner().DSC.gen_res);
+	    owner().DSC.gen_res.resReleaseW( );
 	}
     }
 }
@@ -825,7 +822,7 @@ void TMdPrm::vlGet( TVal &val )
 	    short gval;
 	    if( enableStat() )
 	    {
-    		ResAlloc::resRequestW(owner().DSC.gen_res);	//Request access to DSC
+    		owner().DSC.gen_res.resRequestW( );		//Request access to DSC
 		pthread_mutex_lock(&owner().DSC.th_mut);	//Request DSC ready
 		owner().DSC.comm = 1;
 		owner().DSC.prm1 = m_cnl;
@@ -834,7 +831,7 @@ void TMdPrm::vlGet( TVal &val )
 		pthread_mutex_unlock(&owner().DSC.th_mut);
 		while(owner().DSC.comm) pthread_yield();
 		gval = owner().DSC.prm2;
-		ResAlloc::resReleaseW(owner().DSC.gen_res);
+		owner().DSC.gen_res.resReleaseW( );
 	    }
 	    switch(val.fld().reserve())
 	    {
@@ -849,7 +846,7 @@ void TMdPrm::vlGet( TVal &val )
 	    char gval = EVAL_BOOL;
 	    if( enableStat() )
             {
-                ResAlloc::resRequestW(owner().DSC.gen_res);	//Request access to DSC
+                owner().DSC.gen_res.resRequestW( );		//Request access to DSC
 		pthread_mutex_lock(&owner().DSC.th_mut);	//Request DSC ready
 		owner().DSC.comm = 3;
 		owner().DSC.prm1 = m_dio_port;
@@ -857,7 +854,7 @@ void TMdPrm::vlGet( TVal &val )
 		pthread_mutex_unlock(&owner().DSC.th_mut);
 		while(owner().DSC.comm) pthread_yield();
 		gval = (bool)owner().DSC.prm2;
-		ResAlloc::resReleaseW(owner().DSC.gen_res);
+		owner().DSC.gen_res.resReleaseW( );
 	    }
 	    val.setB(gval,0,true);
 	    break;

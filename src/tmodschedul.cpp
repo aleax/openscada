@@ -32,14 +32,11 @@
 #include <string>
 
 #include "tsys.h"
-#include "resalloc.h"
 #include "tmodschedul.h"
 
 TModSchedul::TModSchedul( ) : 
     TSubSYS("ModSched","Modules sheduler",false), prc_st(false), m_mod_path("./"), m_per(10)
 {
-    hd_res = ResAlloc::resCreate();
-
     //Create calc timer
     struct sigevent sigev;
     sigev.sigev_notify = SIGEV_THREAD;
@@ -52,7 +49,6 @@ TModSchedul::TModSchedul( ) :
 TModSchedul::~TModSchedul(  )
 {
     timer_delete(tmId);
-    ResAlloc::resDelete(hd_res);
 }
 
 void TModSchedul::preDisable(int flag)

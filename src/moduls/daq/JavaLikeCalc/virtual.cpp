@@ -26,7 +26,6 @@
 #include <sys/times.h>
 
 #include <tsys.h>
-#include <resalloc.h>
 #include <tmess.h>
 #include <ttiparam.h>
 
@@ -91,14 +90,11 @@ TipContr::TipContr( string src ) //: lib_dbs(".")
     mSource    	= src;
     
     m_lib = grpAdd("lib_");
-    
-    parse_res = ResAlloc::resCreate();
 }
 
 TipContr::~TipContr()
 {
     nodeDelAll();
-    ResAlloc::resDelete(parse_res);
 }
 
 void TipContr::postEnable( int flag )

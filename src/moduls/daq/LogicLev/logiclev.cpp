@@ -29,7 +29,6 @@
 
 #include <terror.h>
 #include <tsys.h>
-#include <resalloc.h>
 #include <tmess.h>
 #include <ttiparam.h>
 #include <tdaqs.h>
@@ -165,15 +164,12 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
 	::TController(name_c,daq_db,cfgelem), prc_st(false), endrun_req(false), tm_calc(0),
 	m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId())
 {    
-    en_res = ResAlloc::resCreate();
     cfg("PRM_BD").setS("LogLevPrm_"+name_c);
 }
 
 TMdContr::~TMdContr()
 {
     if( run_st ) stop();
-    
-    ResAlloc::resDelete(en_res);    
 }
 
 void TMdContr::postDisable(int flag)
@@ -283,12 +279,12 @@ void *TMdContr::Task( void *icntr )
 	long long t_cnt = SYS->shrtCnt();
 	
 	//Update controller's data
-	ResAlloc::resRequestR(cntr.en_res);
+	cntr.en_res.resRequestR( );
 	for(unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++)
 	    try{ cntr.p_hd[i_p].at().calc(is_start,is_stop); }
 	    catch(TError err)
     	    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-	ResAlloc::resReleaseR(cntr.en_res);    
+	cntr.en_res.resReleaseR( );    
 	cntr.tm_calc = 1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
     
 	if(is_stop) break;
@@ -332,14 +328,12 @@ TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
     TParamContr(name,tp_prm), p_el("w_attr"), prm_refl(NULL), m_wmode(TMdPrm::Free), chk_lnk_need(false), 
     id_freq(-1), id_start(-1), id_stop(-1), m_mode(cfg("MODE").getId()), m_prm(cfg("PRM").getSd())
 {
-    moderes = ResAlloc::resCreate( );
+
 }
 
 TMdPrm::~TMdPrm( )
 {
     nodeDelAll();    
-    
-    ResAlloc::resDelete( moderes );
 }
 
 void TMdPrm::postEnable( int flag )

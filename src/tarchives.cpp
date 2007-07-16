@@ -25,7 +25,6 @@
 #include <signal.h>
 #include <sys/time.h>
 
-#include "resalloc.h"
 #include "tsys.h"
 #include "tarchives.h"
 
@@ -44,9 +43,6 @@ TArchiveS::TArchiveS( ) :
     TSubSYS("Archive","Archives",true), prc_st_mess(false), prc_st_val(false), endrun_req_val(false), m_mess_per(2), 
     m_val_per(1000), m_val_prior(10), head_buf(0), head_lstread(0), el_mess(""), el_val(""), el_aval(""), buf_err(0)
 {
-    v_res = ResAlloc::resCreate( );
-    m_res = ResAlloc::resCreate( );
-    
     m_aval = grpAdd("va_");
     
     //Message archivator DB structure
@@ -109,9 +105,6 @@ TArchiveS::~TArchiveS(  )
     
     //Free other resources
     nodeDelAll();
-    
-    ResAlloc::resDelete( v_res );
-    ResAlloc::resDelete( m_res );
 }
 
 void TArchiveS::subLoad( )
@@ -674,7 +667,7 @@ void *TArchiveS::ArhValTask( void *param )
     {
 	work_tm = SYS->curTime();
 	
-	ResAlloc::resRequestR(arh.v_res);
+	arh.v_res.resRequestR( );
 	for(unsigned i_arh = 0; i_arh < arh.act_up_src.size(); i_arh++)
     	    try
 	    { 
@@ -683,7 +676,7 @@ void *TArchiveS::ArhValTask( void *param )
 	    }
     	    catch(TError err)
     	    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-	ResAlloc::resReleaseR(arh.v_res);	
+	arh.v_res.resReleaseR( );	
     
 	//Calc next work time and sleep
 	clock_gettime(CLOCK_REALTIME,&get_tm);

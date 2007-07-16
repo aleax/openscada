@@ -29,6 +29,7 @@
 #include <QWidget>
 #include <QMainWindow>
 
+#include <resalloc.h>
 #include <tcntrnode.h>
 #include <xml.h>
 
@@ -71,13 +72,15 @@ namespace QTCFG
             void pageNext();
 	    void pageRefresh();
             void pageCyclRefrStart();
-            void pageCyclRefrStop();				    
+            void pageCyclRefrStop();
 
             void userSel();
 	    
 	    void about();
 	    void aboutQt();
 	    void enterWhatsThis();
+	    
+	    void endRunChk( );      			//End run flag check
 
 	    //QListView	    
 	    void selectItem( );				//Processing of select item signal
@@ -122,7 +125,7 @@ namespace QTCFG
 	    int cntrIfCmd( XMLNode &node );
 	    
 	private:
-            QTimer	*autoUpdTimer;
+            QTimer	*endRunTimer, *autoUpdTimer;
 	    
 	    QTreeWidget	*CtrTree;
 	    QLabel	*titleIco;
@@ -145,7 +148,7 @@ namespace QTCFG
 	    vector<string>	prev;
 	    vector<string>	next;
 	    
-	    int 	hd_res;
+	    Res 	hd_res;
 	    bool	block_tabs;
 	    
 	    bool 	tbl_init;

@@ -72,6 +72,7 @@ class VisRun : public QMainWindow
         void aboutQt( );			//About at QT library
 	void enterWhatsThis( );			//What is GUI components
 	void updatePage( );			//Update page data
+	void endRunChk( );      		//End run flag check
 
     private:
 	//Private attributes
@@ -80,7 +81,7 @@ class VisRun : public QMainWindow
 		*mn_help;			//Menu "Help"
 
 	//- Main components -
-	QTimer		*updateTimer;	
+	QTimer		*endRunTimer, *updateTimer;
 	bool		winClose;		//Close window flag
 	bool		proc_st;		//Timer process stat
 	UserStBar 	*w_user;		//User status widget

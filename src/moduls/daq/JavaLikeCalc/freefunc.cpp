@@ -23,7 +23,6 @@
 #include <math.h>
 
 #include <tsys.h>
-#include <resalloc.h>
 #include <tmess.h>
 #include "virtual.h"
 #include "freelib.h"
@@ -42,12 +41,11 @@ Func::Func( const char *id, const char *name ) :
     cfg("ID").setS(id);
     m_name = name;
     if( !m_name.size() ) m_name = id;	
-    calc_res = ResAlloc::resCreate();
 }
 
 Func::~Func( )
 {
-    ResAlloc::resDelete(calc_res);
+
 }
 
 void Func::preDisable(int flag)
@@ -998,7 +996,7 @@ void Func::setValS( TValFunc *io, RegW &rg, const string &val )
 
 void Func::calc( TValFunc *val )
 { 
-    ResAlloc::resRequestR(calc_res);
+    calc_res.resRequestR( );
     
     //Init list of registers
     RegW reg[m_regs.size()];
@@ -1014,7 +1012,7 @@ void Func::calc( TValFunc *val )
     ExecData dt = { 1, 0, 0 };
     try{ exec(val,reg,(const BYTE *)prg.c_str(),dt); }
     catch(TError err){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-    ResAlloc::resReleaseR(calc_res);
+    calc_res.resReleaseR( );
     if( dt.flg&0x07 == 0x01 )	start(false);
 }
 

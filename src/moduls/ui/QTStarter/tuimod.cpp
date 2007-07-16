@@ -86,7 +86,7 @@ using namespace QTStarter;
 //================= QTStarter::TUIMod ==========================================
 //==============================================================================
 
-TUIMod::TUIMod( string name ) : end_run(false), dem_mode(false)
+TUIMod::TUIMod( string name ) : end_run(false), demon_mode(false)
 {
     mId		= MOD_ID;
     mName       = MOD_NAME;
@@ -126,7 +126,7 @@ void TUIMod::modLoad( )
         switch(next_opt)
         {
             case 'h': fprintf(stdout,optDescr().c_str()); break;
-	    case 'd': dem_mode = true; break;
+	    case 'd': demon_mode = true; break;
             case -1 : break;
         }
     } while(next_opt != -1);
@@ -158,9 +158,10 @@ void TUIMod::modStart()
     mess_debug(nodePath().c_str(),_("Start module."));
 #endif
 
-    if( run_st || dem_mode ) return;
-    pthread_attr_t pthr_attr;
+    if( run_st || demon_mode ) return;
+    end_run = false;
     
+    pthread_attr_t pthr_attr;    
     pthread_attr_init(&pthr_attr);
     pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
     pthread_create(&pthr_tsk,&pthr_attr,Task,this);

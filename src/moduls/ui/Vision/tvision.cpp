@@ -87,8 +87,7 @@ using namespace VISION;
 //==============================================================================
 //================= QTCFG::TVision =============================================
 //==============================================================================
-
-TVision::TVision( string name )
+TVision::TVision( string name ) : end_run(false)
 {
     mId		= MOD_ID;
     mName       = MOD_NAME;
@@ -230,7 +229,8 @@ void TVision::modStart()
     mess_debug(nodePath().c_str(),_("Start module."));
 #endif
 
-    run_st = true;
+    end_run = false;
+    run_st  = true;
 }
 
 void TVision::modStop()
@@ -238,12 +238,10 @@ void TVision::modStop()
 #if OSC_DEBUG
     mess_debug(nodePath().c_str(),_("Stop module."));
 #endif
+    end_run = true;
 
-    int i_w;
-    for( i_w = 0; i_w < mn_winds.size(); i_w++ )
-        if( mn_winds[i_w] ) mn_winds[i_w]->close();//deleteLater();// close();
-    //QApplication::postEvent(mn_winds[i_w], new QCloseEvent());
-    //while(mn_winds[i_w]) usleep(STD_WAIT_DELAY*1000);	
+    for(int i_w = 0; i_w < mn_winds.size(); i_w++ )
+	while(mn_winds[i_w]) usleep(STD_WAIT_DELAY*1000);	
 
     run_st = false;
 }

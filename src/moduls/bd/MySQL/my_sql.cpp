@@ -25,7 +25,6 @@
 #include <mysql/mysql.h>
 #include <mysql/errmsg.h>
 
-#include <resalloc.h>
 #include <tsys.h>
 #include <tmess.h>
 #include "my_sql.h"
@@ -140,13 +139,13 @@ void BDMod::modLoad( )
 //====================== BDMySQL::MBD =========================
 //=============================================================
 MBD::MBD( string iid, TElem *cf_el ) : TBD(iid,cf_el)
-{    
-    conn_res = ResAlloc::resCreate( );
+{
+
 }
 
 MBD::~MBD( )
-{   
-    ResAlloc::resDelete(conn_res);
+{
+
 }
 
 void MBD::postDisable(int flag)

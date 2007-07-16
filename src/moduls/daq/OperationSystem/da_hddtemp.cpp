@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include <tsys.h>
-#include <resalloc.h>
 
 #include "os_contr.h"
 #include "da_hddtemp.h"
@@ -33,7 +32,6 @@ using namespace SystemCntr;
 //======================================================================
 Hddtemp::Hddtemp( ) : t_tr("Sockets"), n_tr("HDDTemp")
 {
-    m_res = ResAlloc::resCreate();    
     //HDD value structure
     fldAdd( new TFld("disk",_("Name"),TFld::String,TFld::NoWrite,"",EVAL_STR) );
     fldAdd( new TFld("ed",_("Measure unit"),TFld::String,TFld::NoWrite,"",EVAL_STR) );
@@ -44,8 +42,6 @@ Hddtemp::~Hddtemp()
 {
     if( ((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outPresent(n_tr) )
 	((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outDel(n_tr);
-    
-    ResAlloc::resDelete(m_res);	
 }
 
 void Hddtemp::init( TMdPrm *prm )

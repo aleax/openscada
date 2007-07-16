@@ -367,7 +367,7 @@ class Func : public TConfig, public TFunction
 	string	&prg_src;
 
 	bool	be_start;		//Change structure check
-	int	calc_res;
+	Res	calc_res;
 	
 	//- Parser's data -
 	string  prg;                    //Build prog
@@ -377,7 +377,7 @@ class Func : public TConfig, public TFunction
         vector<Reg*>    m_regs;         //Work registers list
 	vector<Reg*>    m_tmpregs;	//Constant temporary list
 	deque<Reg*>	f_prmst;	//Function's parameters stack
-	int     &parse_res;	
+	Res	&parse_res;
 };				    
 
 extern Func *p_fnc;

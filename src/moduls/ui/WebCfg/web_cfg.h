@@ -117,7 +117,7 @@ namespace WebCfg
 	    void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	    
 	    //Attributes
-	    int             m_res;
+	    Res             m_res;
 	    vector<SAuth *> m_auth;
 	    int             m_t_auth;          	//Time of sesion life (minutes)
 	    string	    m_CSStables;	//CSS tables

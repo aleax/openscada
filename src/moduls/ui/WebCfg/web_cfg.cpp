@@ -26,7 +26,6 @@
 
 #include <config.h>
 #include <tsys.h>
-#include <resalloc.h>
 #include <tmess.h>
 #include <tsecurity.h>
 
@@ -97,8 +96,6 @@ TWEB::TWEB( string name ) : m_t_auth(10)
     modFuncReg( new ExpFunc("void HttpPost(const string&,string&,const string&,vector<string>&,const string&);",
         "Process Set comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpPost) );
     
-    m_res = ResAlloc::resCreate( );
-    
     //Default CSS tables init
     m_CSStables = 
 	"hr {width:100%; size:3}\n"
@@ -123,8 +120,6 @@ TWEB::~TWEB()
 	m_auth.erase(m_auth.begin()); 
     }
     res.release();
-    
-    ResAlloc::resDelete( m_res );
 }
 
 string TWEB::modInfo( const string &name )
