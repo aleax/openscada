@@ -207,7 +207,7 @@ class Widget : public TCntrNode, public TValElem
 	bool cntrCmdLinks( XMLNode *opt );
 	bool cntrCmdProcess( XMLNode *opt );	
 
-        virtual bool attrChange( Attr &cfg );   //Process attribute change local and into terminator
+        virtual bool attrChange( Attr &cfg, void *prev );   //Process attribute change local and into terminator
 
         void addFld( TElem *el, unsigned id );
         void delFld( TElem *el, unsigned id );

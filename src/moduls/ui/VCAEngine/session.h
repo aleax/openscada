@@ -145,7 +145,7 @@ class SessWdg : public Widget, public TValFunc
 
     protected:
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-	bool attrChange( Attr &cfg );
+	bool attrChange( Attr &cfg, void *prev );
     
     private:
 	//Data
@@ -198,7 +198,7 @@ class SessPage : public SessWdg
     protected:
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
-	bool attrChange( Attr &cfg );
+	bool attrChange( Attr &cfg, void *prev );
 
     private:
 	int     m_page;		//Pages container identifier

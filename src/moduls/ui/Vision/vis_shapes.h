@@ -155,12 +155,12 @@ class ShapeMedia : public WdgShape
 };
 
 //************************************************
-//* Trend view shape widget                      *
+//* Diagram view shape widget                    *
 //************************************************
-class ShapeTrend : public WdgShape
+class ShapeDiagram : public WdgShape
 {
     public:
-	ShapeTrend( );
+	ShapeDiagram( );
 	//bool event( WdgView *view, QEvent *event );
 };    
 
@@ -197,10 +197,10 @@ class ShapeFunction : public WdgShape
 //************************************************
 //* User element shape widget                    *
 //************************************************
-class ShapeUserEl : public WdgShape
+class ShapeBox : public WdgShape
 {
     public:
-	ShapeUserEl( );
+	ShapeBox( );
 
 	void init( WdgView *view );
 

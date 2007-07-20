@@ -34,6 +34,14 @@ PrWidget::PrWidget( const string &iid ) : LWidget(iid)
 { 
 
 }
+
+void PrWidget::preDisable(int flag)
+{
+    if( flag )
+	throw TError(mod->nodePath().c_str(),_("Deleting of main primitive widgets is error."));
+    
+    Widget::preDisable(flag);
+}
     
 string PrWidget::ico( )
 {
@@ -42,6 +50,26 @@ string PrWidget::ico( )
     if( TUIS::icoPresent("VCA.wdg_"+id()) )
         return TSYS::strEncode(TUIS::icoGet("VCA.wdg_"+id()),TSYS::base64);
     return "";
+}
+
+void PrWidget::setEnable( bool val )
+{
+    if( enable() == val ) return;
+    
+    LWidget::setEnable( val );
+    
+    //- Init active attributes -
+    if( val )
+    {
+	vector<string> ls;
+	attrList(ls);
+	for(int i_l = 0; i_l < ls.size(); i_l++)
+            if( attrAt(ls[i_l]).at().flgGlob()&Attr::Active )
+	    {
+		attrAt(ls[i_l]).at().setS(attrAt(ls[i_l]).at().getS(),0,true);
+		attrList(ls);
+	    }    
+    }
 }
 
 void PrWidget::cntrCmdProc( XMLNode *opt )
@@ -63,13 +91,7 @@ void PrWidget::cntrCmdProc( XMLNode *opt )
     else cntrCmdGeneric(opt) || cntrCmdAttributes(opt);
 }
 
-void PrWidget::preDisable(int flag)
-{
-    if( flag )
-	throw TError(mod->nodePath().c_str(),_("Deleting of main primitive widgets is error."));
-    
-    Widget::preDisable(flag);
-}
+
 
 //============ Original widgets based at primitive widget template ============
 
@@ -137,24 +159,37 @@ void OrigFormEl::postEnable( int flag )
     }
 }
 								  
-bool OrigFormEl::attrChange( Attr &cfg )
+bool OrigFormEl::attrChange( Attr &cfg, void *prev )
 {
     if( cfg.flgGlob()&Attr::Active && cfg.id() == "elType" )
     {
 	//- Delete specific attributes -
-	if( cfg.owner()->attrPresent("value") )		cfg.owner()->attrDel("value");
-	if( cfg.owner()->attrPresent("view") )		cfg.owner()->attrDel("view");
-	if( cfg.owner()->attrPresent("cfg") )		cfg.owner()->attrDel("cfg");
-	if( cfg.owner()->attrPresent("wordWrap") )	cfg.owner()->attrDel("wordWrap");
-	if( cfg.owner()->attrPresent("text") )		cfg.owner()->attrDel("text");
-	if( cfg.owner()->attrPresent("img") )		cfg.owner()->attrDel("img");
-	if( cfg.owner()->attrPresent("color") )		cfg.owner()->attrDel("color");
-	if( cfg.owner()->attrPresent("checkable") )	cfg.owner()->attrDel("checkable");
-	if( cfg.owner()->attrPresent("items") )		cfg.owner()->attrDel("items");
+	switch(*(int*)prev)
+	{
+	    case 0: 
+		cfg.owner()->attrDel("value");
+		cfg.owner()->attrDel("view");
+		cfg.owner()->attrDel("cfg");
+		break;
+	    case 1: 
+		cfg.owner()->attrDel("value");
+		cfg.owner()->attrDel("wordWrap");
+		break;
+	    case 2:	cfg.owner()->attrDel("value");	break;
+	    case 3:
+		cfg.owner()->attrDel("value");
+	        cfg.owner()->attrDel("img");
+		cfg.owner()->attrDel("color");
+		cfg.owner()->attrDel("checkable");
+		break;
+	    case 4: case 5:
+		cfg.owner()->attrDel("value");
+		cfg.owner()->attrDel("items");
+		break;
+	}
 	
 	//- Create specific attributes -
-	int tp = cfg.getI();	
-	switch(tp)
+	switch(cfg.getI())
 	{
 	    case 0: 
 		cfg.owner()->attrAdd( new TFld("view",_("View"),TFld::Integer,TFld::Selected|Attr::Mutable,
@@ -267,19 +302,23 @@ void OrigMedia::postEnable( int flag )
     }
 }
 
-bool OrigMedia::attrChange( Attr &cfg )
+bool OrigMedia::attrChange( Attr &cfg, void *prev )
 {
     if( cfg.flgGlob()&Attr::Active && cfg.id() == "type" )
     {
 	//- Delete specific attributes -
-	if( cfg.owner()->attrPresent("scale") )		cfg.owner()->attrDel("scale");
-	if( cfg.owner()->attrPresent("fit") )		cfg.owner()->attrDel("fit");
-	if( cfg.owner()->attrPresent("play") )		cfg.owner()->attrDel("play");
-	if( cfg.owner()->attrPresent("speed") )		cfg.owner()->attrDel("speed");
+	switch(*(int*)prev)
+	{
+	    case 0:	cfg.owner()->attrDel("scale");	break;
+	    case 1:
+		cfg.owner()->attrDel("fit");
+		cfg.owner()->attrDel("play");
+		cfg.owner()->attrDel("speed");		
+		break;
+	}	
 	
 	//- Create specific attributes -
-	int tp = cfg.getI();	
-	switch(tp)
+	switch(cfg.getI())
 	{
 	    case 0:
     		cfg.owner()->attrAdd( new TFld("scale",_("Scale ratio (0-10)"),TFld::Real,Attr::Mutable,"2.2","1","0:10") );
@@ -295,36 +334,118 @@ bool OrigMedia::attrChange( Attr &cfg )
 }
 
 //************************************************
-//* Trend view original widget                   *
+//* Diagram view original widget                 *
 //************************************************
-OrigTrend::OrigTrend( ) : PrWidget("Trend")
+OrigDiagram::OrigDiagram( ) : PrWidget("Diagram")
 {
 
 }
     
-string OrigTrend::name( )      
+string OrigDiagram::name( )      
 { 
-    return _("Trend view"); 
+    return _("Diagram view");
 }
 
-string OrigTrend::descr( )     
+string OrigDiagram::descr( )     
 { 
-    return _("Trend view widget of the end visualisation."); 
+    return _("Diagram view widget of the end visualisation.");
 }
  
-void OrigTrend::postEnable( int flag )
+void OrigDiagram::postEnable( int flag )
 {
     LWidget::postEnable(flag);
     
     if( flag&TCntrNode::NodeConnect ) 
     { 
-        attrAdd( new TFld("type",_("Type"),TFld::Integer,TFld::Selected,"1","0","0;1",
-                          _("Tradition;Cyrcle")) );
-        attrAdd( new TFld("widthTime",_("Width time (ms)"),TFld::Integer,TFld::Selected,"6","60000","10;360000") );
-        attrAdd( new TFld("number",_("Number"),TFld::Integer,TFld::Selected,"1","0","1;2;3;4;5;6;7;8","1;2;3;4;5;6;7;8") );
-	//Next is dynamic created individual trend's item attributes    
+        attrAdd( new TFld("backColor",_("Background:color"),TFld::String,Attr::Color,"","#FFFFFF") );
+        attrAdd( new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","") );    
+        attrAdd( new TFld("perUpd",_("Update period (s)"),TFld::Real,TFld::NoFlag,"4","1","0.1;10") );	
+        attrAdd( new TFld("type",_("Type"),TFld::Integer,TFld::Selected|Attr::Active,"1","0","0",_("Trend")) );
     }
 } 
+
+bool OrigDiagram::attrChange( Attr &cfg, void *prev )
+{
+    if( cfg.flgGlob()&Attr::Active )
+    {
+	if( cfg.id() == "type" )
+	{
+	    //- Delete specific attributes -
+	    switch(*(int*)prev)
+	    {
+		case 0:
+		    cfg.owner()->attrDel("winSize");
+		    cfg.owner()->attrDel("curPrc");
+		    cfg.owner()->attrDel("curSek");
+		    cfg.owner()->attrDel("curMSek");
+		    cfg.owner()->attrDel("sclColor");
+		    cfg.owner()->attrDel("sclHor");
+		    cfg.owner()->attrDel("sclVer");
+		    cfg.owner()->attrDel("valArch");
+		    cfg.owner()->attrDel("parNum");
+		    break;
+	    }	    
+	
+	    //- Create specific attributes -
+	    switch(cfg.getI())
+	    {
+		case 0:
+    		    cfg.owner()->attrAdd( new TFld("winSize",_("Trend window size (час)"),TFld::Real,Attr::Mutable,"4","0","0;10000") );
+    		    cfg.owner()->attrAdd( new TFld("curPrc",_("Cursor pos.:%"),TFld::Real,Attr::Mutable,"1","0","0;100") );
+    		    cfg.owner()->attrAdd( new TFld("curSek",_("Cursor pos.:sekonds"),TFld::Integer,Attr::Mutable) );
+    		    cfg.owner()->attrAdd( new TFld("curMSek",_("Cursor pos.:msek"),TFld::Integer,Attr::Mutable) );
+    		    cfg.owner()->attrAdd( new TFld("sclColor",_("Scale:color"),TFld::String,Attr::Color|Attr::Mutable) );
+    		    cfg.owner()->attrAdd( new TFld("sclHor",_("Scale:horizontal"),TFld::Integer,Attr::Mutable|TFld::Selected,
+			"1","0","0;1;2;3",_("No draw;Grid;Markers;Grid and markers")) );
+    		    cfg.owner()->attrAdd( new TFld("sclVer",_("Scale:vertical"),TFld::Integer,Attr::Mutable|TFld::Selected,
+			"1","0","0;1;2;3;5;6;7",_("No draw;Grid;Markers;Grid and markers;Grid (log);Marker (log);Grid and markers (log)")) );
+    		    cfg.owner()->attrAdd( new TFld("valArch",_("Value archivator"),TFld::String,Attr::Mutable) );
+    		    cfg.owner()->attrAdd( new TFld("parNum",_("Parameters number"),TFld::Integer,Attr::Mutable|Attr::Active,"1","1","0;10") );
+		    break;
+	    }
+	}
+	else if( cfg.id() == "parNum" )
+	{
+	    string fid("prm"), fnm(_("Parametr ")), fidp, fnmp;
+	    //- Delete specific unnecessary attributes of parameters -
+	    for( int i_p = 0; true; i_p++ )
+	    {
+		fidp = fid+TSYS::int2str(i_p); 
+		if( !cfg.owner()->attrPresent( fidp+"addr" ) )	break;
+		else if( i_p >= cfg.getI() )
+		{
+		    cfg.owner()->attrDel(fidp+"addr");
+		    cfg.owner()->attrDel(fidp+"bordL");
+		    cfg.owner()->attrDel(fidp+"bordU");
+		    cfg.owner()->attrDel(fidp+"color");
+		    cfg.owner()->attrDel(fidp+"prior");
+		    cfg.owner()->attrDel(fidp+"val");
+		}
+	    }
+	    //- Create ullage attributes of parameters -
+	    for( int i_p = 0; i_p < cfg.getI(); i_p++ )
+	    {
+		fidp = fid+TSYS::int2str(i_p);
+		fnmp = fnm+TSYS::int2str(i_p);
+		if( cfg.owner()->attrPresent( fidp+"addr" ) ) continue;
+    		cfg.owner()->attrAdd( new TFld((fidp+"addr").c_str(),(fnmp+_(":address")).c_str(),
+					       TFld::String,Attr::Address|Attr::Mutable) );
+    		cfg.owner()->attrAdd( new TFld((fidp+"bordL").c_str(),(fnmp+_(":view border:lower")).c_str(),
+					       TFld::Real,Attr::Mutable) );
+    		cfg.owner()->attrAdd( new TFld((fidp+"bordU").c_str(),(fnmp+_(":view border:upper")).c_str(),
+					       TFld::Real,Attr::Mutable) );
+    		cfg.owner()->attrAdd( new TFld((fidp+"color").c_str(),(fnmp+_(":color")).c_str(),
+					       TFld::String,Attr::Color|Attr::Mutable) );
+    		cfg.owner()->attrAdd( new TFld((fidp+"prior").c_str(),(fnmp+_(":priority")).c_str(),
+					       TFld::Integer,Attr::Mutable,"1","1","0;10") );
+    		cfg.owner()->attrAdd( new TFld((fidp+"val").c_str(),(fnmp+_(":value")).c_str(),
+					       TFld::Real,Attr::Mutable) );
+	    }
+	}
+    }
+    
+    return true;
+}
 
 //************************************************
 //* Protocol view original widget                *
@@ -383,22 +504,22 @@ string OrigFunction::descr( )
 //************************************************
 //* User element original widget                 *
 //************************************************
-OrigUserEl::OrigUserEl( ) : PrWidget("UserEl")
+OrigBox::OrigBox( ) : PrWidget("Box")
 {
 
 }
 
-string OrigUserEl::name( )
+string OrigBox::name( )
 { 
-    return _("User element"); 
+    return _("Elements box");
 }
 
-string OrigUserEl::descr( )
+string OrigBox::descr( )
 { 
-    return _("User element widget of the end visualisation."); 
+    return _("Elements box widget of the end visualisation.");
 }
 
-void OrigUserEl::postEnable( int flag )
+void OrigBox::postEnable( int flag )
 {
     LWidget::postEnable(flag);
     

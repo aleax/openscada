@@ -44,7 +44,8 @@ class PrWidget : public LWidget
 	string descr( )    	{ return "Abstract root primitive"; }
 
 	void setName( const string &inm )     { };
-	void setDescr( const string &idscr )  { };
+	void setDescr( const string &idscr )  { };	
+	void setEnable( bool val );
 
     protected:
 	void preDisable( int flag );
@@ -81,7 +82,7 @@ class OrigFormEl : public PrWidget
     
     protected:
 	void postEnable( int flag );
-	bool attrChange( Attr &cfg );
+	bool attrChange( Attr &cfg, void *prev );
 };
 
 //************************************************
@@ -112,22 +113,23 @@ class OrigMedia : public PrWidget
  
     protected:
 	void postEnable( int flag );
-	bool attrChange( Attr &cfg );
+	bool attrChange( Attr &cfg, void *prev );
 };
 
 //************************************************
-//* Trend view original widget                   *
+//* Diagram view original widget                 *
 //************************************************
-class OrigTrend : public PrWidget
+class OrigDiagram : public PrWidget
 {
     public:
-    	OrigTrend( );
+    	OrigDiagram( );
     
 	string name( );
 	string descr( );
     
     protected:
 	void postEnable( int flag );
+	bool attrChange( Attr &cfg, void *prev );
 };    
 
 //************************************************
@@ -167,12 +169,12 @@ class OrigFunction : public PrWidget
 };
 
 //************************************************
-//* User element original widget                 *
+//* Box original widget                          *
 //************************************************
-class OrigUserEl : public PrWidget
+class OrigBox : public PrWidget
 {
     public:
-	OrigUserEl( );
+	OrigBox( );
     
 	string name( );
 	string descr( );

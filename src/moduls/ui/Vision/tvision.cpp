@@ -196,11 +196,11 @@ QMainWindow *TVision::openWindow()
 	shapesWdg.push_back( new ShapeFormEl );
 	shapesWdg.push_back( new ShapeText );
 	shapesWdg.push_back( new ShapeMedia );
-	shapesWdg.push_back( new ShapeTrend );
+	shapesWdg.push_back( new ShapeDiagram );
 	shapesWdg.push_back( new ShapeProtocol );
 	shapesWdg.push_back( new ShapeDocument );
 	shapesWdg.push_back( new ShapeFunction );
-	shapesWdg.push_back( new ShapeUserEl );
+	shapesWdg.push_back( new ShapeBox );
 	shapesWdg.push_back( new ShapeLink );
     }
 

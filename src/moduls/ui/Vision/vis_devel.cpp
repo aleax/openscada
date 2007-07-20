@@ -144,6 +144,7 @@ VisDevelop::VisDevelop( string open_user ) :
     actVisItAdd->setToolTip(_("Add visual item into library, container widget, project or page"));
     actVisItAdd->setWhatsThis(_("The button for adding visual item into library, container widget, project or page"));
     actVisItAdd->setStatusTip(_("Press for adding visual item into library, container widget, project or page."));
+    actVisItAdd->setShortcut(QKeySequence("Ctrl+A"));
     actVisItAdd->setEnabled(false);
     actVisItAdd->setCheckable(true);
     //--- Visual item delete ---
@@ -152,6 +153,7 @@ VisDevelop::VisDevelop( string open_user ) :
     actVisItDel->setToolTip(_("Delete visual item from library, container widget, project or page"));
     actVisItDel->setWhatsThis(_("The button for deleting visual item from library, container widget, project or page"));
     actVisItDel->setStatusTip(_("Press for deleting visual item library, container widget, project or page."));
+    actVisItDel->setShortcut(QKeySequence("Ctrl+D"));
     actVisItDel->setEnabled(false);
     connect(actVisItDel, SIGNAL(activated()), this, SLOT(visualItDel()));
     //--- Visual item properties ---
@@ -160,6 +162,7 @@ VisDevelop::VisDevelop( string open_user ) :
     actVisItProp->setToolTip(_("Get visual item properties"));
     actVisItProp->setWhatsThis(_("The button for getting of visual item properies"));
     actVisItProp->setStatusTip(_("Press for getting of visual item properies."));
+    actVisItProp->setShortcut(QKeySequence("Ctrl+P"));
     actVisItProp->setEnabled(false);
     connect(actVisItProp, SIGNAL(activated()), this, SLOT(visualItProp()));
     //--- Visual item graphical edit ---
@@ -168,6 +171,7 @@ VisDevelop::VisDevelop( string open_user ) :
     actVisItEdit->setToolTip(_("Goes visual item edit"));
     actVisItEdit->setWhatsThis(_("The button for goes to visual item edition"));
     actVisItEdit->setStatusTip(_("Press for goes to visual item edition."));
+    actVisItEdit->setShortcut(QKeySequence("Ctrl+E"));
     actVisItEdit->setEnabled(false);
     connect(actVisItEdit, SIGNAL(activated()), this, SLOT(visualItEdit()));
 
@@ -344,6 +348,7 @@ VisDevelop::VisDevelop( string open_user ) :
     mn_widg->addAction(actVisItDel);
     mn_widg->addAction(actVisItProp);
     mn_widg->addAction(actVisItEdit);
+    mn_widg->addSeparator();
     mn_widg_fnc = new QMenu(_("&View"));
     mn_widg_fnc->addAction(actLevRise);
     mn_widg_fnc->addAction(actLevLower);
@@ -357,6 +362,7 @@ VisDevelop::VisDevelop( string open_user ) :
     mn_widg_fnc->addAction(actAlignHCenter);
     mn_widg_fnc->addAction(actAlignBottom);
     mn_widg->addMenu(mn_widg_fnc);
+    mn_widg->addSeparator();
     mn_window = menuBar()->addMenu(_("&Window"));
     connect(mn_window, SIGNAL(aboutToShow()), this, SLOT(updateMenuWindow()));
     wMapper = new QSignalMapper(this);

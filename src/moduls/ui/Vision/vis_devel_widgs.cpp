@@ -180,17 +180,16 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it ) // Item *it)
 		}
 	    }
 	    //-- Enter to group --
-	    if( curit->child(idst[it_lev])->type( ) == Item::AttrGrp )
+	    else if( curit->child(idst[it_lev])->type( ) == Item::AttrGrp )
 	    {
 		curmod = index(idst[it_lev],0,curmod);
 		curit = static_cast<Item*>(curmod.internalPointer());
-		
-		idst[it_lev]++;
 		
 		idst.push_back(0);
 		it_lev++;
 		continue;
 	    }
+	    
 	    //-- Up to level --
 	    idst[it_lev]++;
 	    while( idst[it_lev] >= curit->childCount() )
@@ -210,8 +209,7 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it ) // Item *it)
 		    beginRemoveRows(curmod,idst[it_lev],idst[it_lev]);
             	    curit->childDel(idst[it_lev]);
 		    endRemoveRows();
-		    idst[it_lev]--;
-		}
+		}else idst[it_lev]++;
 	    }
 	    if( idst[it_lev] >= curit->childCount() && it_lev == 0 )	break;
 	}

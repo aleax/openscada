@@ -498,7 +498,7 @@ void SessPage::calc( bool first, bool last, unsigned clcClk )
         pageAt(ls[i_l]).at().calc(first,last,clcClk);
 }
 
-bool SessPage::attrChange( Attr &cfg )
+bool SessPage::attrChange( Attr &cfg, void *prev )
 {
     if( cfg.id() == "pgOpen" && enable() )
     {
@@ -514,7 +514,7 @@ bool SessPage::attrChange( Attr &cfg )
 	}
     }
     
-    return SessWdg::attrChange( cfg );
+    return SessWdg::attrChange( cfg, prev );
 }
 
 void SessPage::cntrCmdProc( XMLNode *opt )
@@ -892,9 +892,9 @@ void SessWdg::calc( bool first, bool last, unsigned clc )
     }    
 }
 
-bool SessWdg::attrChange( Attr &cfg )
+bool SessWdg::attrChange( Attr &cfg, void *prev )
 {
-    Widget::attrChange( cfg );
+    Widget::attrChange( cfg, prev );
     if( cfg.id() == "active" )
     {
         if( cfg.getB() && !attrPresent("event") )

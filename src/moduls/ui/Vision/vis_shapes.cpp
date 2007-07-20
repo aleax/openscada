@@ -771,14 +771,14 @@ bool ShapeMedia::event( WdgView *view, QEvent *event )
 }
 
 //************************************************
-//* Trend view shape widget                      *
+//* Diagram view shape widget                      *
 //************************************************
-ShapeTrend::ShapeTrend( ) : WdgShape("Trend")
+ShapeDiagram::ShapeDiagram( ) : WdgShape("Diagram")
 {
 
 }
 
-/*bool ShapeTrend::event( WdgView *view, QEvent *event )
+/*bool ShapeDiagram::event( WdgView *view, QEvent *event )
 {
 
 }*/
@@ -825,17 +825,17 @@ ShapeFunction::ShapeFunction( ) : WdgShape("Function")
 //************************************************
 //* User element shape widget                    *
 //************************************************
-ShapeUserEl::ShapeUserEl( ) : WdgShape("UserEl")
+ShapeBox::ShapeBox( ) : WdgShape("Box")
 {
 
 }
 
-void ShapeUserEl::init( WdgView *w )
+void ShapeBox::init( WdgView *w )
 {
     w->dataCache()["inclWidget"].setValue((void*)NULL);
 }
 
-void ShapeUserEl::load( WdgView *w, QMap<QString, QString> &attrs )
+void ShapeBox::load( WdgView *w, QMap<QString, QString> &attrs )
 {
     QMap<QString, QString>::const_iterator	vl, end = attrs.end();
     
@@ -916,7 +916,7 @@ void ShapeUserEl::load( WdgView *w, QMap<QString, QString> &attrs )
     if( up ) w->update();
 }
 
-bool ShapeUserEl::event( WdgView *view, QEvent *event )
+bool ShapeBox::event( WdgView *view, QEvent *event )
 {
     switch(event->type())
     {

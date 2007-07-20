@@ -81,7 +81,7 @@ void RunWdgView::attrLoad( QMap<QString, QString> &attrs )
 {
     WdgView::attrLoad(attrs);
     
-    if( root() == "UserEl" && !attrs.empty() )
+    if( root() == "Box" && !attrs.empty() )
     {
 	QMap<QString, QString>::const_iterator vl;
 	if( (vl=attrs.find("pgGrp")) != attrs.end() ) 	  dataCache()["pgGrp"] = vl.value();
@@ -309,7 +309,7 @@ bool RunPageView::findOpenPage( const string &ipg )
     //- Check to included widgets -
     for( int i_ch = 0; i_ch < children().size(); i_ch++ )
         if( !qobject_cast<RunPageView*>(children().at(i_ch)) &&
-        	((RunWdgView*)children().at(i_ch))->root() == "UserEl" &&
+        	((RunWdgView*)children().at(i_ch))->root() == "Box" &&
         	((RunWdgView*)children().at(i_ch))->pgOpenSrc() == ipg.c_str() )    
     	    return true;
     //- Put checking to childs -
@@ -327,7 +327,7 @@ bool RunPageView::callPage( const string &pg_it, const string &pgGrp, const stri
     //- Check for set include page -
     for( int i_ch = 0; i_ch < children().size(); i_ch++ )
         if( !pgGrp.empty() && !qobject_cast<RunPageView*>(children().at(i_ch)) &&
-		((RunWdgView *)children().at(i_ch))->root() == "UserEl" &&
+		((RunWdgView *)children().at(i_ch))->root() == "Box" &&
 	    	((RunWdgView*)children().at(i_ch))->pgGrp() == pgGrp )
 	{
 	    string pg_it_prev = ((RunWdgView*)children().at(i_ch))->pgOpenSrc();

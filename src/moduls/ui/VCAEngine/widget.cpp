@@ -257,22 +257,22 @@ void Widget::attrAdd( TFld *attr )
 
 void Widget::attrDel( const string &attr )
 {
-    if(attrPresent(attr))
-        attr_cfg.fldDel(attr_cfg.fldId(attr));
+    if( !attrPresent(attr) )	return;
+    attr_cfg.fldDel(attr_cfg.fldId(attr));
 }
 
-bool Widget::attrChange( Attr &cfg )
+bool Widget::attrChange( Attr &cfg, void *prev )
 {
     //- Process Active attribute's mode
     if( cfg.flgGlob()&Attr::Active )
     {
-	if( !parent().freeStat() ) parent().at().attrChange(cfg);
+	if( !parent().freeStat() ) parent().at().attrChange(cfg,prev);
 	if( cfg.owner() == this && cfg.id() == "active" )
 	{
-	    if( cfg.getB() && !cfg.owner()->attrPresent("evProc") )
+	    if( !cfg.getB() )	
+		cfg.owner()->attrDel("evProc");	
+	    if( cfg.getB() )	
 		cfg.owner()->attrAdd( new TFld("evProc",_("Events process"),TFld::String,TFld::FullText|Attr::Mutable,"200") );
-	    if( !cfg.getB() && cfg.owner()->attrPresent("evProc") )
-	    	cfg.owner()->attrDel("evProc");
 	}
     }
     if( cfg.owner() != this )	return false;
@@ -1183,10 +1183,10 @@ void Attr::setS( const string &val, unsigned mod_vl, bool strongPrev )
     {
 	case TFld::String:
 	{
-	    if( !strongPrev && *(m_val.s_val) == val )	break;
+	    if( !strongPrev && *(m_val.s_val) == val )	break;	    
             string t_str = *(m_val.s_val);
     	    *(m_val.s_val) = val;
-            if( !owner()->attrChange(*this) )
+            if( !owner()->attrChange(*this,&t_str) )
                 *(m_val.s_val) = t_str;
 	    else vl_modif = mod_vl?mod_vl:vl_modif+1;
             break;
@@ -1213,7 +1213,7 @@ void Attr::setR( double val, unsigned mod_vl, bool strongPrev )
 	    if( !strongPrev && m_val.r_val == val )	break;
             double t_val = m_val.r_val;
             m_val.r_val = val;
-            if( !owner()->attrChange(*this) )
+            if( !owner()->attrChange(*this,&t_val) )
                 m_val.r_val = t_val;
 	    else vl_modif = mod_vl?mod_vl:vl_modif+1;		
             break;
@@ -1237,7 +1237,7 @@ void Attr::setI( int val, unsigned mod_vl, bool strongPrev )
 	    if( !strongPrev && m_val.i_val == val )	break;
             int t_val = m_val.i_val;
             m_val.i_val = val;
-            if( !owner()->attrChange(*this) )
+            if( !owner()->attrChange(*this,&t_val) )
                 m_val.i_val = t_val;
 	    else vl_modif = mod_vl?mod_vl:vl_modif+1;		
             break;
@@ -1259,7 +1259,7 @@ void Attr::setB( bool val, unsigned mod_vl, bool strongPrev )
 	    if( !strongPrev && m_val.b_val == val )	break;
             bool t_val = m_val.b_val;
             m_val.b_val = val;
-            if( !owner()->attrChange(*this) )
+            if( !owner()->attrChange(*this,&t_val) )
                 m_val.b_val = t_val;
 	    else vl_modif = mod_vl?mod_vl:vl_modif+1;		
 	}

@@ -1,3 +1,13 @@
+2007-07-20 Roman
+- !!:/UI/VCAEngine: Primitives "UserEl" and "Trend" is renamed to "Box" and "Diagram".
+- !!:/UI/Vision: Primitives "UserEl" and "Trend" is renamed to "Box" and "Diagram".
+- FIX:/UI/VCAEngine: Primitives active attributes initialisation is fixed.
+- /UI/VCAEngine: An access to previous attrinute value, through attrChange() function, is added.
+- /UI/VCAEngine: The model data for primitive "Diagram", type "Trend", is prepared.
+- FIX:/UI/Vision: The atribute inspector is fixed for multilevel virtual groups process.
+- /SYS: Updated Demo DB.
+
+
 2007-07-16 Roman
 - FIX:/SYS: The resource allocator mechanism is rebuilded and real thread access fixed.
 - FIX:/TCntrNode: Functions addr2str() and str2addr() is fixed.
