@@ -57,7 +57,8 @@ am_ui_Vision_so_OBJECTS = tvision.$(OBJEXT) qrc_vision.$(OBJEXT) \
 	vis_devel_dlgs.$(OBJEXT) moc_vis_devel_dlgs.$(OBJEXT) \
 	vis_devel_widgs.$(OBJEXT) moc_vis_devel_widgs.$(OBJEXT) \
 	vis_run.$(OBJEXT) moc_vis_run.$(OBJEXT) \
-	vis_run_widgs.$(OBJEXT) moc_vis_run_widgs.$(OBJEXT)
+	vis_run_widgs.$(OBJEXT) moc_vis_run_widgs.$(OBJEXT) \
+	vis_shape_elfig.$(OBJEXT) moc_vis_shape_elfig.$(OBJEXT)
 ui_Vision_so_OBJECTS = $(am_ui_Vision_so_OBJECTS)
 ui_Vision_so_DEPENDENCIES =
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
@@ -201,7 +202,7 @@ AM_CXXFLAGS = -I$(QTINC) -I$(QTINC)/QtCore -I$(QTINC)/QtGui -I$(top_srcdir)/src 
 AM_LDFLAGS = -shared -module
 ui_Vision_so_SOURCES = tvision.cpp qrc_vision.cpp vis_widgs.cpp moc_vis_widgs.cpp vis_shapes.cpp moc_vis_shapes.cpp \
     vis_devel.cpp moc_vis_devel.cpp vis_devel_dlgs.cpp moc_vis_devel_dlgs.cpp vis_devel_widgs.cpp moc_vis_devel_widgs.cpp \
-    vis_run.cpp moc_vis_run.cpp vis_run_widgs.cpp moc_vis_run_widgs.cpp
+    vis_run.cpp moc_vis_run.cpp vis_run_widgs.cpp moc_vis_run_widgs.cpp vis_shape_elfig.cpp moc_vis_shape_elfig.cpp
 
 ui_Vision_so_LDADD = -lQtGui
 all: all-am
@@ -280,6 +281,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moc_vis_devel_widgs.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moc_vis_run.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moc_vis_run_widgs.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moc_vis_shape_elfig.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moc_vis_shapes.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moc_vis_widgs.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/qrc_vision.Po@am__quote@
@@ -289,6 +291,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vis_devel_widgs.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vis_run.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vis_run_widgs.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vis_shape_elfig.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vis_shapes.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vis_widgs.Po@am__quote@
 
@@ -511,10 +514,12 @@ moc_vis_run_widgs.cpp: vis_run_widgs.h
 	$(QTDIR)/bin/moc vis_run_widgs.h > moc_vis_run_widgs.cpp
 moc_vis_shapes.cpp: vis_shapes.h
 	$(QTDIR)/bin/moc vis_shapes.h > moc_vis_shapes.cpp
+moc_vis_shape_elfig.cpp: vis_shape_elfig.h
+	$(QTDIR)/bin/moc vis_shape_elfig.h > moc_vis_shape_elfig.cpp
 
 clean-local:
 	rm -f qrc_vision.cpp moc_vis_widgs.cpp moc_vis_devel.cpp moc_vis_devel_widgs.cpp moc_vis_devel_dlgs.cpp \
-     moc_vis_run.cpp moc_vis_run_widgs.cpp moc_vis_shapes.cpp
+    moc_vis_run.cpp moc_vis_run_widgs.cpp moc_vis_shapes.cpp moc_vis_shape_elfig.cpp
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

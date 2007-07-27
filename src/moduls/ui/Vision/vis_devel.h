@@ -45,11 +45,13 @@ class InspAttrDock;
 class InspLnkDock;
 class LibProjProp;
 class VisItProp;
+class ShapeElFigure;
 
 class VisDevelop : public QMainWindow
 {
     Q_OBJECT
     
+
     public:
 	//Public methods
 	VisDevelop( string open_user );
@@ -65,7 +67,7 @@ class VisDevelop : public QMainWindow
 	//Public slots
 	void selectItem( const string &item );	//Update enabled actions state
 	void updateLibToolbar();		//Update lib's toolbars
-	
+
         void quitSt( );		//Full quit OpenSCADA
 
 	void about( );		//About at programm
@@ -112,6 +114,7 @@ class VisDevelop : public QMainWindow
 		*actElFigLine,		//Create line
 		*actElFigArc,		//Create arc
 		*actElFigBesie,		//Create Besie curve
+                *actElFigCheckAct,
 	//-- Window manipulation actions --	
 		*actWinClose,		//Close window
 		*actWinCloseAll,	//Close all windows
@@ -167,6 +170,7 @@ class VisDevelop : public QMainWindow
 	//- Main dialogs -
 	LibProjProp 	*prjLibPropDlg;	//Widget's library and project properties dialog
 	VisItProp    	*visItPropDlg;	//Visual item properties properties dialog
+        
 };
 
 }

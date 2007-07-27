@@ -37,6 +37,7 @@
 #include "vis_run.h"
 #include "vis_widgs.h"
 #include "vis_shapes.h"
+#include "vis_shape_elfig.h"
 #include "tvision.h"
 
 //============ Modul info! =====================================================
@@ -76,10 +77,10 @@ extern "C"
 	VISION::TVision *self_addr = NULL;
 
 	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = VISION::mod = new VISION::TVision( source );       
+	    self_addr = VISION::mod = new VISION::TVision( source );
 
 	return self_addr;
-    }    
+    }
 }
 
 using namespace VISION;
@@ -107,7 +108,7 @@ TVision::~TVision()
 {
     //- Free widget's shapes -
     for( int i_sw = 0; i_sw < shapesWdg.size(); i_sw++ )
-	delete shapesWdg[i_sw];
+        delete shapesWdg[i_sw];
     shapesWdg.clear();
 }
 
@@ -210,7 +211,7 @@ QMainWindow *TVision::openWindow()
 	{
     	    DlgUser d_usr;
             int rez = d_usr.exec();
-            if( rez == DlgUser::SelCancel )	return NULL;
+            if( rez == DlgUser::SelCancel ) return NULL;
 	    if( rez == DlgUser::SelErr )
 	    {
                 postMess(nodePath().c_str(),_("Auth wrong!!!"));
@@ -249,8 +250,8 @@ void TVision::modStop()
 WdgShape *TVision::getWdgShape( const string &iid )
 {
     for( int i_sw = 0; i_sw < shapesWdg.size(); i_sw++ )
-	if( shapesWdg[i_sw]->id() == iid )
-	    return shapesWdg[i_sw];
+        if( shapesWdg[i_sw]->id() == iid )
+            return shapesWdg[i_sw];
 
     return NULL;
 }

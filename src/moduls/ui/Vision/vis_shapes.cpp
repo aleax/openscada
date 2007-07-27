@@ -53,7 +53,7 @@ using namespace VISION;
 //*************************************************
 WdgShape::WdgShape( const string &iid ) : m_id(iid)
 { 
-
+    
 }
     
 bool WdgShape::event( WdgView *view, QEvent *event )
@@ -75,39 +75,6 @@ bool WdgShape::event( WdgView *view, QEvent *event )
 }
 
 //============ Support widget's shapes ============
-
-//*************************************************
-//* Elementary figures shape widget               *
-//*************************************************
-ShapeElFigure::ShapeElFigure( ) : WdgShape("ElFigure")
-{
-
-}
-
-void ShapeElFigure::editEnter( WdgView *view )
-{
-    ((VisDevelop *)view->mainWin())->elFigTool->setVisible(true);
-    connect( ((VisDevelop *)view->mainWin())->elFigTool, SIGNAL(actionTriggered(QAction*)),
-    	    this, SLOT(toolAct(QAction*)) );
-    //-- Init actions' address --
-    for( int i_a = 0; i_a < ((VisDevelop *)view->mainWin())->elFigTool->actions().size(); i_a++ )
-	((VisDevelop *)view->mainWin())->elFigTool->actions().at(i_a)->setIconText(TSYS::addr2str(view).c_str());
-}
-
-void ShapeElFigure::editExit( WdgView *view )
-{
-    disconnect( ((VisDevelop *)view->mainWin())->elFigTool, SIGNAL(actionTriggered(QAction*)),
-	    this, SLOT(toolAct(QAction*)) );
-    ((VisDevelop *)view->mainWin())->elFigTool->setVisible(false);
-    //-- Clear action;s address --
-    for( int i_a = 0; i_a < ((VisDevelop *)view->mainWin())->elFigTool->actions().size(); i_a++ )
-	((VisDevelop *)view->mainWin())->elFigTool->actions().at(i_a)->setIconText("");
-}
-
-void ShapeElFigure::toolAct( QAction *act )
-{
-
-}
 
 //*************************************************
 //* Form element shape widget                     *

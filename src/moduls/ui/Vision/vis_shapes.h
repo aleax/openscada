@@ -51,8 +51,8 @@ class WdgShape : public QObject
 	WdgShape( const string &iid );
 	
 	string id( )	{ return m_id; }
-	
-	virtual bool isEditable( ) 		{ return false; }
+    
+        virtual bool isEditable( ) 		{ return false; }
 	
 	virtual void init( WdgView *view )	{ }
 	virtual void destroy( WdgView *view )	{ }
@@ -62,7 +62,7 @@ class WdgShape : public QObject
 	
 	virtual void load( WdgView *view, QMap<QString, QString> &attrs )	{ }
 	virtual void save( WdgView *view )	{ }
-	
+    
 	virtual bool event( WdgView *view, QEvent *event );
 	virtual bool eventFilter( WdgView *view, QObject *object, QEvent *event )	{ }
 
@@ -71,25 +71,6 @@ class WdgShape : public QObject
 };
 
 //============ Support widget's shapes ============
-
-//*************************************************
-//* Elementary figures shape widget               *
-//*************************************************
-class ShapeElFigure : public WdgShape
-{
-    Q_OBJECT
-
-    public:    
-	ShapeElFigure( );
-	
-	bool isEditable( )	{ return true; }
-	
-	void editEnter( WdgView *view );
-	void editExit( WdgView *view );
-
-    public slots:
-    	void toolAct( QAction * );
-};
 
 //*************************************************
 //* Form element shape widget                     *

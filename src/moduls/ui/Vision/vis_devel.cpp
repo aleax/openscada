@@ -40,6 +40,7 @@
 #include "vis_widgs.h"
 #include "vis_run.h"
 #include "vis_devel.h"
+#include "vis_shape_elfig.h"
 
 using namespace VISION;
 
@@ -265,23 +266,32 @@ VisDevelop::VisDevelop( string open_user ) :
     actElFigLine = new QAction(QPixmap::fromImage(ico_t),_("Add line"),this);
     actElFigLine->setObjectName("line");
     actElFigLine->setToolTip(_("Add line to elementary figure"));
-    actElFigLine->setWhatsThis(_("The button for add line to elementary figure"));
+    actElFigLine->setWhatsThis(_("The button for adding line to elementary figure"));
     actElFigLine->setStatusTip(_("Press for add line to elementary figure."));
     //--- Arc creation ---
     if(!ico_t.load(TUIS::icoPath("vision_elfig_arc").c_str())) ico_t.load(":/images/elfig_arc.png");
     actElFigArc = new QAction(QPixmap::fromImage(ico_t),_("Add arc"),this);
     actElFigArc->setObjectName("arc");
     actElFigArc->setToolTip(_("Add arc to elementary figure"));
-    actElFigArc->setWhatsThis(_("The button for add arc to elementary figure"));
+    actElFigArc->setWhatsThis(_("The button for adding arc to elementary figure"));
     actElFigArc->setStatusTip(_("Press for add arc to elementary figure."));
     //--- Add Besie curve ---
     if(!ico_t.load(TUIS::icoPath("vision_elfig_besie").c_str())) ico_t.load(":/images/elfig_besie.png");
-    actElFigBesie = new QAction(QPixmap::fromImage(ico_t),_("Add besie curve"),this);
-    actElFigBesie->setObjectName("besie");
-    actElFigBesie->setToolTip(_("Add Besie curve to elementary figure"));
-    actElFigBesie->setWhatsThis(_("The button for add Besie curve to elementary figure"));
-    actElFigBesie->setStatusTip(_("Press for add Besie curve to elementary figure."));    
+    actElFigBesie = new QAction(QPixmap::fromImage(ico_t),_("Add besier curve"),this);
+    actElFigBesie->setObjectName("besier");
+    actElFigBesie->setToolTip(_("Add Besier curve to elementary figure"));
+    actElFigBesie->setWhatsThis(_("The button for adding Besier curve to elementary figure"));
+    actElFigBesie->setStatusTip(_("Press for add Besier curve to elementary figure."));    
 
+    actElFigCheckAct=new QAction(_("Holds"),this);
+    actElFigCheckAct->setCheckable(true);
+    actElFigCheckAct->setObjectName("hold");
+    actElFigCheckAct->setToolTip(_("Enable holds"));
+    actElFigCheckAct->setWhatsThis(_("The button for enabling holds"));
+    actElFigCheckAct->setStatusTip(_("Press for holds to be anabled"));
+    actElFigCheckAct->setEnabled(true);
+    
+    //connect(checkAct, SIGNAL(toggled(bool)),this, SLOT(setHold()));
     //-- MDI windows actions --
     //--- Close active window ---
     actWinClose = new QAction(_("Cl&ose"), this);
@@ -391,6 +401,7 @@ VisDevelop::VisDevelop( string open_user ) :
     visItToolBar->addAction(actVisItProp);
     visItToolBar->addAction(actVisItEdit);
     mn_view->addAction(visItToolBar->toggleViewAction());
+    mn_view->addSeparator(); 
     //-- Widget view functions toolbar --
     wdgToolView = new QToolBar(_("Widgets view functions"),this);
     wdgToolView->setObjectName("wdgToolView");
@@ -414,9 +425,9 @@ VisDevelop::VisDevelop( string open_user ) :
     elFigTool->addAction(actElFigLine);
     elFigTool->addAction(actElFigArc);
     elFigTool->addAction(actElFigBesie);
+    elFigTool->addAction(actElFigCheckAct);
     mn_view->addAction(elFigTool->toggleViewAction());    
     mn_view->addSeparator();
-
     //- Init status bar -
     w_user = new UserStBar(open_user.c_str(), this);
     w_user->setWhatsThis(_("This label display curent user."));

@@ -1,3 +1,8 @@
+2007-07-27 Maxim
+- !!!:/UI/Vision: The first implementation of primitive "ElFig" is added.
+- /UI/Vision: Add files vis_shape_elfig.cpp and vis_shape_elfig.h.
+
+
 2007-07-27 Roman
 - /Value: Control interface function TVal::cntrCmdProc() is added for service functions of 
 archive access (UI trend access).
