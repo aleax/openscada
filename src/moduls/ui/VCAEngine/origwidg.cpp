@@ -247,7 +247,10 @@ void OrigText::postEnable( int flag )
     
     if( flag&TCntrNode::NodeConnect )
     { 
-    	attrAdd( new TFld("text",_("Text"),TFld::String,TFld::FullText,"1000","Text") );
+        attrAdd( new TFld("backColor",_("Background:color"),TFld::String,Attr::Color,"","") );
+        attrAdd( new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","") );
+        attrAdd( new TFld("bordWidth",_("Border:width"),TFld::Integer,TFld::NoFlag,"","0") );
+        attrAdd( new TFld("bordColor",_("Border:color"),TFld::String,Attr::Color,"","#000000") );
 	attrAdd( new TFld("font",_("Font:full"),TFld::String,TFld::NoFlag,"50","Arial 11") );
 	attrAdd( new TFld("fontFamily",_("Font:family"),TFld::String,TFld::NoFlag,"10","Arial") );
 	attrAdd( new TFld("fontSize",_("Font:size"),TFld::Integer,TFld::NoFlag,"2","11") );
@@ -262,10 +265,8 @@ void OrigText::postEnable( int flag )
                           _("Top left;Top right;Top center;Top justify;"
 			    "Bottom left;Bottom right;Bottom center;Bottom justify;"
 			    "V center left; V center right; Center; V center justify")) );
-        attrAdd( new TFld("backColor",_("Background:color"),TFld::String,Attr::Color,"","") );
-        attrAdd( new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","") );
-        attrAdd( new TFld("bordWidth",_("Border:width"),TFld::Integer,TFld::NoFlag,"","0") );
-        attrAdd( new TFld("bordColor",_("Border:color"),TFld::String,Attr::Color,"","#000000") );	
+    	attrAdd( new TFld("text",_("Text"),TFld::String,TFld::FullText,"0","Text") );
+    	attrAdd( new TFld("numbPrec",_("Number precision"),TFld::Integer,TFld::NoFlag) );
     }
 } 
 
@@ -358,7 +359,9 @@ void OrigDiagram::postEnable( int flag )
     if( flag&TCntrNode::NodeConnect ) 
     { 
         attrAdd( new TFld("backColor",_("Background:color"),TFld::String,Attr::Color,"","#FFFFFF") );
-        attrAdd( new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","") );    
+        attrAdd( new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","") );
+        attrAdd( new TFld("bordWidth",_("Border:width"),TFld::Integer,TFld::NoFlag,"","0") );
+        attrAdd( new TFld("bordColor",_("Border:color"),TFld::String,Attr::Color,"","#000000") );	
         attrAdd( new TFld("perUpd",_("Update period (s)"),TFld::Real,TFld::NoFlag,"4","1","0.1;10") );	
         attrAdd( new TFld("type",_("Type"),TFld::Integer,TFld::Selected|Attr::Active,"1","0","0",_("Trend")) );
     }

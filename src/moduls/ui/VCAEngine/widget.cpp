@@ -123,10 +123,10 @@ void Widget::setEnable( bool val )
 	    {
 		if( parentNm() == ".." ) m_parent=AutoHD<TCntrNode>(nodePrev());
 		else m_parent=mod->nodeAt(parentNm());
-		//- Register of heritater -
-		parent().at().heritReg(this);
 		//- Check for enable parent widget and enable if not -
 		if( !parent().at().enable() )	parent().at().setEnable(true);
+		//- Register of heritater -
+		parent().at().heritReg(this);		
 		//- Inherit -
     		inheritAttr( );
     		inheritIncl( );
@@ -158,7 +158,8 @@ void Widget::setEnable( bool val )
     vector<string>	ls;
     wdgList(ls);
     for(int i_l = 0; i_l < ls.size(); i_l++ )
-        wdgAt(ls[i_l]).at().setEnable(val);
+	try { wdgAt(ls[i_l]).at().setEnable(val); }
+	catch(...){ mess_err(nodePath().c_str(),_("Child widget <%s> enabling error"),ls[i_l].c_str()); }
 
     m_enable = val;
 }
@@ -532,7 +533,8 @@ bool Widget::cntrCmdAttributes( XMLNode *opt )
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/attr/scmd" )	//Service command for access to attributes
+    //- Service commands process -
+    if( a_path == "/attr/scmd" )
     {
 	if( ctrChkNode(opt,"get",RWRWRW,"root","root",SEQ_RD) )
 	{
@@ -545,6 +547,7 @@ bool Widget::cntrCmdAttributes( XMLNode *opt )
 	    for( int i_ch = 0; i_ch < opt->childSize(); i_ch++ )
 		attrAt(opt->childGet(i_ch)->attr("id")).at().setS(opt->childGet(i_ch)->text());
     }
+    //- Cofiguration command process -
     else if( a_path.substr(0,5) == "/attr" && 
 	    TSYS::pathLev(a_path,1).size() > 4 && 
 	    TSYS::pathLev(a_path,1).substr(0,4) == "sel_" && TCntrNode::ctrChkNode(opt) )

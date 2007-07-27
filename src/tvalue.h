@@ -77,7 +77,8 @@ class TVal : public TCntrNode
 	AutoHD<TVArchive> arch();
 	void arch(const AutoHD<TVArchive> &vl);	
 	
-    protected:    
+    protected:
+	void cntrCmdProc( XMLNode *opt );
 	void vlSet(  );
 	void vlGet(  );
 	

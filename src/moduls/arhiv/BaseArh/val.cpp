@@ -344,7 +344,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/bs/tm" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::real2str(time_size));
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::real2str(time_size,4));
 	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	time_size = atof(opt->text().c_str());
     }	
     else if( a_path == "/bs/fn" )
@@ -354,7 +354,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/bs/round" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::real2str(round_proc));
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::real2str(round_proc,4));
 	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	round_proc = atof(opt->text().c_str());
     }
     else if( a_path == "/bs/pcktm" )
@@ -965,8 +965,8 @@ void VFileArch::getVal( TValBuf &buf, long long beg, long long end )
     if( vpos_beg > mpos )	return;
     vpos_end = vmin(mpos,(end-begin())/period());
     if( vpos_end < 0 )   	return;
-    if( (vpos_end-vpos_beg) > (TArchiveS::max_req_vals-buf.realSize()) )
-	vpos_end = vpos_beg+TArchiveS::max_req_vals-buf.realSize();
+    //if( (vpos_end-vpos_beg) > (TArchiveS::max_req_vals-buf.realSize()) )
+    //	vpos_end = vpos_beg+TArchiveS::max_req_vals-buf.realSize();
     if( vpos_beg > vpos_end )	return;
 
     if( m_pack ) 
@@ -1232,8 +1232,10 @@ void VFileArch::setVal( TValBuf &buf, long long ibeg, long long iend )
     //Init pack index buffer
     vpos_beg = (ibeg-begin())/period();
     vpos_end = (iend-begin())/period();    
-    string pid_b(fixVl?(vpos_end/8)-(vpos_beg/8)+1:vSize*(vpos_end-vpos_beg+1),'\0');    
+    string pid_b( fixVl ? (vpos_end/8)-(vpos_beg/8)+1 : vSize*(vpos_end-vpos_beg+1), '\0' );
     
+    //Reserve memory for values buffer
+    val_b.reserve(fixVl ? vSize*(vpos_end-vpos_beg+1)/2 : 10*(vpos_end-vpos_beg+1));
     //printf("TEST 00: beg=%lld; end=%lld\n",ibeg,iend);
     
     //- Get values, make value buffer and init the pack index table -
@@ -1437,6 +1439,7 @@ void VFileArch::setVal( TValBuf &buf, long long ibeg, long long iend )
 string VFileArch::getValue( int hd, int voff, int vsz )
 { 
     string get_vl;
+    get_vl.reserve(10);
     
     lseek(hd,voff,SEEK_SET);
     read(hd,&tbt,1);

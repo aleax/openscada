@@ -2361,17 +2361,19 @@ void ConfApp::applyButton( )
     string path = bwidg->objectName().toAscii().data();
 
     try
-    {    
-	XMLNode *n_el = SYS->ctrId(root,TSYS::strDecode(path,TSYS::PathEl) );    
-	mess_info(mod->nodePath().c_str(),_("%s| Change <%s> to: <%s>!"), 
-		w_user->user().toAscii().data(), (sel_path+"/"+path).c_str(), n_el->text().c_str() );
+    {   
+	string sval = SYS->ctrId(root,TSYS::strDecode(path,TSYS::PathEl))->text();
 	
-	XMLNode n_el1("set");
-	n_el1.setAttr("path",sel_path+"/"+path)->setAttr("user",w_user->user().toAscii().data())->
-	    setText(n_el->text());
-	if( cntrIfCmd(n_el1) ) 
+	mess_info(mod->nodePath().c_str(),_("%s| Change <%s> to: <%s>!"), 
+		w_user->user().toAscii().data(), (sel_path+"/"+path).c_str(), sval.c_str() );
+	
+	XMLNode n_el("set");
+	n_el.setAttr("path",sel_path+"/"+path)->
+	     setAttr("user",w_user->user().toAscii().data())->
+	     setText(sval);
+	if( cntrIfCmd(n_el) ) 
 	{ 
-	    mod->postMess(n_el1.attr("mcat"),n_el1.text(),TUIMod::Error,this);
+	    mod->postMess(n_el.attr("mcat"),n_el.text(),TUIMod::Error,this);
 	    return; 
 	}
     }catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }

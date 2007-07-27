@@ -817,18 +817,18 @@ string TVArchive::tbl( )
 long long TVArchive::end( const string &arch )
 {
     long long rez = 0;
-    if( !arch.size() || arch == BUF_ARCH_NM )
+    if( arch.empty() || arch == BUF_ARCH_NM )
     {
 	rez = TValBuf::end();
-	if( arch.size() ) return rez;
+	if( !arch.empty() ) return rez;
     }
 	
     ResAlloc res(a_res,false);
     for( int i_a = 0; i_a < arch_el.size(); i_a++ )
-        if( (!arch.size() || arch == arch_el[i_a]->archivator().workId()) && arch_el[i_a]->end() > rez )
+        if( (arch.empty() || arch == arch_el[i_a]->archivator().workId()) && arch_el[i_a]->end() > rez )
 	{
             rez = arch_el[i_a]->end();
-	    if( arch.size() )	break;
+	    if( !arch.empty() )	break;
 	}
     return rez;	    
 }
@@ -836,18 +836,18 @@ long long TVArchive::end( const string &arch )
 long long TVArchive::begin( const string &arch )
 {
     long long rez = TSYS::curTime();
-    if( !arch.size() || arch == BUF_ARCH_NM )
+    if( arch.empty() || arch == BUF_ARCH_NM )
     {
         rez = TValBuf::begin();
-	if( arch.size() ) return rez;
+	if( !arch.empty() ) return rez;
     }
 	
     ResAlloc res(a_res,false);
     for( int i_a = 0; i_a < arch_el.size(); i_a++ )
-        if( (!arch.size() || arch == arch_el[i_a]->archivator().workId()) && arch_el[i_a]->begin() < rez )
+        if( (arch.empty() || arch == arch_el[i_a]->archivator().workId()) && arch_el[i_a]->begin() < rez )
 	{
             rez = arch_el[i_a]->begin();
-	    if( arch.size() )   break;
+	    if( !arch.empty() )	break;
 	}
     return rez;	
 }
@@ -975,14 +975,14 @@ void TVArchive::setSrcMode( SrcMode vl, const string &isrc )
 string TVArchive::getS( long long *tm, bool up_ord, const string &arch )
 {    
     //Get from buffer
-    if( (!arch.size() || arch == BUF_ARCH_NM) && (!tm || (*tm >= begin() && *tm <= end())) )
+    if( (arch.empty() || arch == BUF_ARCH_NM) && (!tm || (*tm >= begin() && *tm <= end())) )
 	return TValBuf::getS(tm,up_ord);
     //Get from archivators
     else 
     {
 	ResAlloc res(a_res,false);
 	for( int i_a = 0; i_a < arch_el.size(); i_a++ )	
-	    if( (!arch.size() || arch == arch_el[i_a]->archivator().workId()) && 
+	    if( (arch.empty() || arch == arch_el[i_a]->archivator().workId()) && 
 		    (!tm || (*tm >= arch_el[i_a]->begin() && *tm <= arch_el[i_a]->end())) )
 		return arch_el[i_a]->getS(tm,up_ord);
     }
@@ -992,14 +992,14 @@ string TVArchive::getS( long long *tm, bool up_ord, const string &arch )
 double TVArchive::getR( long long *tm, bool up_ord, const string &arch )
 {
     //Get from buffer
-    if( (!arch.size() || arch == BUF_ARCH_NM) && (!tm || (*tm >= begin() && *tm <= end())) )
+    if( (arch.empty() || arch == BUF_ARCH_NM) && (!tm || (*tm >= begin() && *tm <= end())) )
         return TValBuf::getR(tm,up_ord);
     //Get from archivators	
     else 
     {
 	ResAlloc res(a_res,false);
 	for( int i_a = 0; i_a < arch_el.size(); i_a++ )	
-	    if( (!arch.size() || arch == arch_el[i_a]->archivator().workId()) && 
+	    if( (arch.empty() || arch == arch_el[i_a]->archivator().workId()) && 
 		    (!tm || (*tm >= arch_el[i_a]->begin() && *tm <= arch_el[i_a]->end())) )
 		return arch_el[i_a]->getR(tm,up_ord);
     }
@@ -1009,14 +1009,14 @@ double TVArchive::getR( long long *tm, bool up_ord, const string &arch )
 int TVArchive::getI( long long *tm, bool up_ord, const string &arch )
 {
     //Get from buffer
-    if( (!arch.size() || arch == BUF_ARCH_NM) && (!tm || (*tm >= begin() && *tm <= end())) )
+    if( (arch.empty() || arch == BUF_ARCH_NM) && (!tm || (*tm >= begin() && *tm <= end())) )
 	return TValBuf::getI(tm,up_ord);
     //Get from archivators
     else 
     {
 	ResAlloc res(a_res,false);
 	for( int i_a = 0; i_a < arch_el.size(); i_a++ )	
-	    if( (!arch.size() || arch == arch_el[i_a]->archivator().workId()) && 
+	    if( (arch.empty() || arch == arch_el[i_a]->archivator().workId()) && 
 		    (!tm || (*tm >= arch_el[i_a]->begin() && *tm <= arch_el[i_a]->end())) )
 		return arch_el[i_a]->getI(tm,up_ord);
     }
@@ -1026,25 +1026,26 @@ int TVArchive::getI( long long *tm, bool up_ord, const string &arch )
 char TVArchive::getB( long long *tm, bool up_ord, const string &arch )
 {
     //Get from buffer
-    if( (!arch.size() || arch == BUF_ARCH_NM) && (!tm || (*tm >= begin() && *tm <= end())) )
+    if( (arch.empty() || arch == BUF_ARCH_NM) && (!tm || (*tm >= begin() && *tm <= end())) )
         return TValBuf::getB(tm,up_ord);	
     //Get from archivators
     else 
     {
 	ResAlloc res(a_res,false);
 	for( int i_a = 0; i_a < arch_el.size(); i_a++ )	
-	    if( (!arch.size() || arch == arch_el[i_a]->archivator().workId()) && 
+	    if( (arch.empty() || arch == arch_el[i_a]->archivator().workId()) && 
 		    (!tm || (*tm >= arch_el[i_a]->begin() && *tm <= arch_el[i_a]->end())) )
 		return arch_el[i_a]->getB(tm,up_ord);
     }
     return EVAL_BOOL;
 }
 
-void TVArchive::getVal( TValBuf &buf, long long ibeg, long long iend, const string &arch )
+void TVArchive::getVal( TValBuf &buf, long long ibeg, long long iend, const string &arch, int limit )
 {
     //Get from buffer
-    if( (!arch.size() || arch == BUF_ARCH_NM) && vOK(ibeg,iend) )
-    {	
+    if( (arch.empty() || arch == BUF_ARCH_NM) && vOK(ibeg,iend) )
+    {
+	ibeg = vmax(ibeg,iend-TValBuf::period()*limit);
 	TValBuf::getVal(buf,ibeg,iend);
 	iend = buf.begin()-1;
     }
@@ -1052,9 +1053,10 @@ void TVArchive::getVal( TValBuf &buf, long long ibeg, long long iend, const stri
     ResAlloc res(a_res,false);
     for( int i_a = 0; i_a < arch_el.size(); i_a++ )
     {
-    	if( (!arch.size() || arch == arch_el[i_a]->archivator().workId()) &&
+    	if( (arch.empty() || arch == arch_el[i_a]->archivator().workId()) &&
 		((!ibeg || ibeg <= arch_el[i_a]->end()) && (!iend || iend > arch_el[i_a]->begin())) && ibeg <= iend )
 	{
+	    ibeg = vmax(ibeg,iend-(long long)(1000000.*arch_el[i_a]->archivator().valPeriod())*(limit-buf.realSize()));
 	    arch_el[i_a]->getVal(buf,ibeg,iend);
 	    iend = buf.begin()-1;
 	}
@@ -1066,7 +1068,7 @@ void TVArchive::setVal( TValBuf &buf, long long ibeg, long long iend, const stri
     //Put to archivators
     ResAlloc res(a_res,false);
     for( int i_a = 0; i_a < arch_el.size(); i_a++ )
-    	if( (!arch.size() || arch == arch_el[i_a]->archivator().workId()) )
+    	if( (arch.empty() || arch == arch_el[i_a]->archivator().workId()) )
 	    arch_el[i_a]->setVal(buf,ibeg,iend);
 }
 
@@ -1098,7 +1100,8 @@ bool TVArchive::archivatorPresent( const string &arch )
     ResAlloc res(a_res,false);
     try
     {
-	AutoHD<TVArchivator> archivat = owner().at(TSYS::strSepParse(arch,0,'.')).at().valAt(TSYS::strSepParse(arch,1,'.'));
+	AutoHD<TVArchivator> archivat = owner().at(TSYS::strSepParse(arch,0,'.')).at().
+						valAt(TSYS::strSepParse(arch,1,'.'));
 	for( int i_l = 0; i_l < arch_el.size(); i_l++ )
     	    if( &arch_el[i_l]->archivator() == &archivat.at() )
     		return true;
@@ -1213,7 +1216,7 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
     
     //--- Select most like archivator ---
     string rarch = iarch;
-    if(!rarch.size() && !vOK(ibeg,iend))
+    if(rarch.empty() && !vOK(ibeg,iend))
     {	
 	double best_a_per = 0;
 	ResAlloc res(a_res,false);
@@ -1226,7 +1229,7 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
 	    }
     }
     
-    getVal(buf,h_min,h_max,rarch);
+    getVal(buf,h_min,h_max,rarch,600000);
     if(!buf.end() || !buf.begin())      return rez;
 	
     //--- Draw horisontal grid and symbols ---
@@ -1398,7 +1401,13 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/prm/st/st" )
+    //- Service commands process -
+    if( a_path == "/val/scmd" && ctrChkNode(opt) )
+    {
+    
+    }
+    //- Cofiguration command process -
+    else if( a_path == "/prm/st/st" )
     {
 	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(run_st?"1":"0");
 	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	atoi(opt->text().c_str())?start():stop();
@@ -1590,7 +1599,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		     atoi(TBDS::genDBGet(owner().nodePath()+"vaBeg_u","0",opt->attr("user")).c_str()), 
 		     (long long)atoi(TBDS::genDBGet(owner().nodePath()+"vaEnd","0",opt->attr("user")).c_str())*1000000+
 		     atoi(TBDS::genDBGet(owner().nodePath()+"vaEnd_u","0",opt->attr("user")).c_str()), 
-		     TBDS::genDBGet(nodePath()+"vArch","",opt->attr("user")) );
+		     TBDS::genDBGet(nodePath()+"vArch","",opt->attr("user")), 2000 );
 	    
         XMLNode *n_tm   = ctrMkNode("list",opt,-1,"/val/val/0","",0440);
 	XMLNode *n_val  = ctrMkNode("list",opt,-1,"/val/val/1","",0440);
@@ -1955,7 +1964,7 @@ void TVArchivator::cntrCmdProc( XMLNode *opt )
         if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )      opt->setText(run_st?"1":"0");
         if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )      atoi(opt->text().c_str())?start():stop();
     }
-    else if( a_path == "/prm/st/tarch" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(tm_calc));
+    else if( a_path == "/prm/st/tarch" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(tm_calc,6));
     else if( a_path == "/prm/st/db" )
     {
 	if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )      opt->setText(m_db);

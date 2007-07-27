@@ -243,6 +243,7 @@ VisDevelop *LibProjProp::owner()
 void LibProjProp::showDlg( const string &iit, bool reload )
 {
     vector<string> ls;
+    string sval;
     QImage ico_t;
     ed_it = iit;    
 
@@ -293,9 +294,8 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	obj_user->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );        
 	if( gnd )
 	{
- 	    string luser;
     	    prm_req.setAttr("path",ed_it+"/"+TSYS::strEncode(obj_user->objectName().toAscii().data(),TSYS::PathEl));
-	    if( !mod->cntrIfCmd(prm_req) )	luser = prm_req.text();
+	    if( !mod->cntrIfCmd(prm_req) )	sval = prm_req.text();
 
 	    prm_req.setAttr("path",ed_it+"/"+TSYS::strEncode("/obj/u_lst",TSYS::PathEl));
 	    obj_user->clear();
@@ -304,7 +304,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 		for(int i_l = 0; i_l < prm_req.childSize(); i_l++)
 		{
 		    obj_user->addItem(prm_req.childGet(i_l)->text().c_str());
-		    if( luser == prm_req.childGet(i_l)->text() )	obj_user->setCurrentIndex(i_l);
+		    if( sval == prm_req.childGet(i_l)->text() )	obj_user->setCurrentIndex(i_l);
 		}
 	}
  	//-- Group --
@@ -312,9 +312,8 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	obj_grp->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );            
 	if( gnd )
 	{
-	    string lgrp;
     	    prm_req.setAttr("path",ed_it+"/"+TSYS::strEncode(obj_grp->objectName().toAscii().data(),TSYS::PathEl));
-	    if( !mod->cntrIfCmd(prm_req) )	lgrp = prm_req.text();
+	    if( !mod->cntrIfCmd(prm_req) )	sval = prm_req.text();
 	
    	    prm_req.setAttr("path",ed_it+"/"+TSYS::strEncode("/obj/g_lst",TSYS::PathEl));
     	    obj_grp->clear();
@@ -323,7 +322,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 		for(int i_l = 0; i_l < prm_req.childSize(); i_l++)
 		{
 		    obj_grp->addItem(prm_req.childGet(i_l)->text().c_str());
-		    if( lgrp == prm_req.childGet(i_l)->text() )	obj_grp->setCurrentIndex(i_l);
+		    if( sval == prm_req.childGet(i_l)->text() )	obj_grp->setCurrentIndex(i_l);
 		}
 	}                                          
  	//-- Icon --
@@ -332,12 +331,9 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	if( gnd )
 	{
 	    prm_req.setAttr("path",ed_it+"/"+TSYS::strEncode(obj_ico->objectName().toAscii().data(),TSYS::PathEl));
-    	    if( !mod->cntrIfCmd(prm_req) )
-	    { 
-		string simg = TSYS::strDecode(prm_req.text(),TSYS::base64);
-		if(ico_t.loadFromData((const uchar*)simg.c_str(),simg.size()))
-		    obj_ico->setIcon(QPixmap::fromImage(ico_t));
-	    }
+    	    if( !mod->cntrIfCmd(prm_req) && (sval = TSYS::strDecode(prm_req.text(),TSYS::base64)).size() && 
+		    ico_t.loadFromData((const uchar*)sval.c_str(),sval.size()) )
+		obj_ico->setIcon(QPixmap::fromImage(ico_t));
 	    else obj_ico->setIcon(QIcon());
 	} 
  	//-- Permition --
@@ -419,7 +415,6 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    mimeDataTable->setRowCount(id_col->childSize());        	
     	    for( int i_l = 0; i_l < id_col->childSize(); i_l++ )
 	    {
-		string mimeType;
 		if( !mimeDataTable->item(i_l,0) ) 	
 		{
 		    mimeDataTable->setItem(i_l,0,new QTableWidgetItem());
@@ -500,7 +495,10 @@ void LibProjProp::isModify( )
     prm_req.setAttr("user",owner()->user())->setAttr("path",ed_it+"/"+TSYS::strEncode(oname.toAscii().data(),TSYS::PathEl));
     
     if( oname == obj_enable->objectName() )
+    {
 	prm_req.setText(TSYS::int2str(obj_enable->isChecked()));
+	update = true;
+    }
     else if( oname == obj_db->objectName() || oname == obj_name->objectName() )
 	prm_req.setText(((LineEdit*)sender())->value().toAscii().data());        
     else if( oname == obj_user->objectName() || oname == obj_grp->objectName() )
@@ -943,6 +941,7 @@ VisDevelop *VisItProp::owner()
 void VisItProp::showDlg( const string &iit, bool reload )
 {
     vector<string> ls;
+    string sval;
     QImage ico_t;
     ed_it = iit;
 
@@ -992,9 +991,8 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	obj_user->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
 	if( gnd )
 	{
-	    string luser;
     	    prm_req.setAttr("path",ed_it+"/"+TSYS::strEncode(obj_user->objectName().toAscii().data(),TSYS::PathEl));
-	    if( !mod->cntrIfCmd(prm_req) )	luser = prm_req.text();
+	    if( !mod->cntrIfCmd(prm_req) )	sval = prm_req.text();
 	    prm_req.setAttr("path",ed_it+"/"+TSYS::strEncode("/wdg/u_lst",TSYS::PathEl));
 	    obj_user->clear();
 	    prm_req.childClean();
@@ -1002,7 +1000,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
 		for(int i_l = 0; i_l < prm_req.childSize(); i_l++)
 		{
 		    obj_user->addItem(prm_req.childGet(i_l)->text().c_str());
-		    if( luser == prm_req.childGet(i_l)->text() )	obj_user->setCurrentIndex(i_l);
+		    if( sval == prm_req.childGet(i_l)->text() )	obj_user->setCurrentIndex(i_l);
 		}
 	}
 	//-- Group --
@@ -1010,9 +1008,8 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	obj_grp->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );    
 	if( gnd )
 	{
-	    string lgrp;
     	    prm_req.setAttr("path",ed_it+"/"+TSYS::strEncode(obj_grp->objectName().toAscii().data(),TSYS::PathEl));
-	    if( !mod->cntrIfCmd(prm_req) )	lgrp = prm_req.text();
+	    if( !mod->cntrIfCmd(prm_req) )	sval = prm_req.text();
    	    prm_req.setAttr("path",ed_it+"/"+TSYS::strEncode("/wdg/g_lst",TSYS::PathEl));
     	    obj_grp->clear();
 	    prm_req.childClean();
@@ -1020,7 +1017,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
 		for(int i_l = 0; i_l < prm_req.childSize(); i_l++)
 		{
 		    obj_grp->addItem(prm_req.childGet(i_l)->text().c_str());
-		    if( lgrp == prm_req.childGet(i_l)->text() )	obj_grp->setCurrentIndex(i_l);
+		    if( sval == prm_req.childGet(i_l)->text() )	obj_grp->setCurrentIndex(i_l);
 		}
 	}
 	
@@ -1030,12 +1027,9 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	if( gnd )
 	{    
 	    prm_req.setAttr("path",ed_it+"/"+TSYS::strEncode(obj_ico->objectName().toAscii().data(),TSYS::PathEl));
-    	    if( !mod->cntrIfCmd(prm_req) )
-	    { 
-		string simg = TSYS::strDecode(prm_req.text(),TSYS::base64);
-		if(ico_t.loadFromData((const uchar*)simg.c_str(),simg.size()))
-		    obj_ico->setIcon(QPixmap::fromImage(ico_t));
-	    }
+    	    if( !mod->cntrIfCmd(prm_req) && (sval = TSYS::strDecode(prm_req.text(),TSYS::base64)).size() &&
+		    ico_t.loadFromData((const uchar*)sval.c_str(),sval.size()) )
+		obj_ico->setIcon(QPixmap::fromImage(ico_t));
 	    else obj_ico->setIcon(QIcon());
 	}
 	//-- Permition --
@@ -1251,8 +1245,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	if( gnd )
 	{
 	    prm_req.setAttr("path",ed_it+"/"+TSYS::strEncode(proc_lang->objectName().toAscii().data(),TSYS::PathEl));
-	    string cur_val;
-	    if( !mod->cntrIfCmd(prm_req) ) cur_val = prm_req.text().c_str();
+	    if( !mod->cntrIfCmd(prm_req) ) sval = prm_req.text().c_str();
 	    //---- Get combo list ----
 	    prm_req.childClean();
 	    proc_lang->clear();
@@ -1260,9 +1253,9 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	    if( !mod->cntrIfCmd(prm_req) )
 		for( int i_el = 0; i_el < prm_req.childSize(); i_el++ )
 		    proc_lang->addItem(prm_req.childGet(i_el)->text().c_str());
-	    int cur_el = proc_lang->findText(cur_val.c_str());
-	    if( cur_el < 0 ) proc_lang->addItem(cur_val.c_str());
-	    proc_lang->setCurrentIndex(proc_lang->findText(cur_val.c_str()));
+	    int cur_el = proc_lang->findText(sval.c_str());
+	    if( cur_el < 0 ) proc_lang->addItem(sval.c_str());
+	    proc_lang->setCurrentIndex(proc_lang->findText(sval.c_str()));
 	}
 	//--- Calc procedure ---
  	gnd=TCntrNode::ctrId(root,proc_text->objectName().toAscii().data(),true);
@@ -1351,7 +1344,10 @@ void VisItProp::isModify( )
     prm_req.setAttr("user",owner()->user())->setAttr("path",ed_it+"/"+TSYS::strEncode(oname.toAscii().data(),TSYS::PathEl));
     
     if( oname == obj_enable->objectName() )
+    {
 	prm_req.setText(TSYS::int2str(((QCheckBox*)sender())->isChecked()));
+	update = true;
+    }
     else if( oname == obj_parent->objectName() )
  	prm_req.setText(((QComboBox*)sender())->currentText().toAscii().data());
     else if( oname == obj_user->objectName() || oname == obj_grp->objectName() || oname == proc_lang->objectName() )

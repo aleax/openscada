@@ -113,7 +113,7 @@ namespace QTCFG
 	    QDateTimeEdit *ed_fld;
 	    QPushButton	*bt_fld;
     };
-    
+
     //*********************************************
     //* Text edit widget                          *
     //*********************************************
@@ -143,7 +143,7 @@ namespace QTCFG
 	    bool	isInit;
 	    QTextEdit	*ed_fld;
 	    QDialogButtonBox *but_box;
-    };     
+    };
     
     //*********************************************
     //* Image view widget                         *

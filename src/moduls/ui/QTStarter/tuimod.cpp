@@ -178,7 +178,7 @@ void TUIMod::modStop()
 
     if( run_st )
     {
-	end_run = true;	
+	end_run = true;
 	if( TSYS::eventWait( run_st, false, nodePath()+"stop",5) )
 	    throw TError(nodePath().c_str(),_("QT starter no stoped!"));
 	pthread_join(pthr_tsk,NULL);
@@ -287,7 +287,7 @@ void WinControl::checkForEnd( )
 {
     if( !end_run ) return;
     tm->stop();
-    ((QApplication*)QApplication::instance())->closeAllWindows();
+    qApp->closeAllWindows();
 }
 
 void WinControl::callQTModule( )
@@ -303,8 +303,8 @@ void WinControl::callQTModule( )
 
 void WinControl::lastWinClose( )
 {
-    if(mod->endRun() || SYS->stopSignal( ))	
-	emit qApp->quit();
+    if(mod->endRun() || SYS->stopSignal( ))
+	qApp->quit();
     else startDialog( );
 }
 

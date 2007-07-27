@@ -150,7 +150,7 @@ void Block::saveIO( )
 	    cfg.cfg("ID").setS(func()->io(i_ln)->id());		    
 	    cfg.cfg("TLNK").setI(m_lnk[i_ln].tp);	//Type link
 	    cfg.cfg("LNK").setS((m_lnk[i_ln].tp == FREE)?"":m_lnk[i_ln].lnk);	//Link
-	    cfg.cfg("VAL").setS(getS(i_ln));		//Value	    
+	    cfg.cfg("VAL").setS(getS(i_ln));	//Value
 	    
 	    SYS->db().at().dataSet(bd,mod->nodePath()+bd_tbl,cfg);
 	}
@@ -561,7 +561,8 @@ void Block::cntrCmdProc( XMLNode *opt )
     else if( a_path.substr(0,7) == "/lio/io" && enable() )
     {
 	int id = ioId(TSYS::pathLev(a_path,2));
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(getS(id));
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	
+	    opt->setText( (ioType(id)==IO::Real) ? TSYS::real2str(getR(id),6) : getS(id));
 	if( !linkActive(id) && ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
 	    setS(id,opt->text());
     }

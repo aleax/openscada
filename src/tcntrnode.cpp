@@ -206,13 +206,11 @@ void TCntrNode::nodeList(vector<string> &list, const string& gid)
 	}
 }
 
-AutoHD<TCntrNode> TCntrNode::nodeAt(const string &path, int lev, char sep)
+AutoHD<TCntrNode> TCntrNode::nodeAt( const string &path, int lev, char sep, int off )
 {
-    string s_br;
-    if( sep != 0 )	s_br = TSYS::strDecode(TSYS::strSepParse(path,lev,sep),TSYS::PathEl);
-    else 		s_br = TSYS::strDecode(TSYS::pathLev(path,lev,false),TSYS::PathEl);
-
-    if( !s_br.size() )
+    string s_br = sep ? TSYS::strDecode(TSYS::strSepParse(path,lev,sep,&off),TSYS::PathEl) :
+			TSYS::pathLev(path,lev,true,&off);
+    if( s_br.empty() )
     {	
 	if( nodeMode() == Disable ) throw TError(nodePath().c_str(),"Node is disabled!");
 	return this;
@@ -220,10 +218,9 @@ AutoHD<TCntrNode> TCntrNode::nodeAt(const string &path, int lev, char sep)
     ResAlloc res(hd_res,false);
     for( int i_g = 0; i_g < chGrp.size(); i_g++ )
         if( s_br.substr(0,chGrp[i_g].id.size()) == chGrp[i_g].id )
-            return chldAt(i_g,s_br.substr(chGrp[i_g].id.size())).at().nodeAt(path,lev+1,sep);
-    //Go to default thread
-    if( chGrp.size() )
-	return chldAt(0,s_br).at().nodeAt(path,lev+1,sep);
+            return chldAt(i_g,s_br.substr(chGrp[i_g].id.size())).at().nodeAt(path,0,sep,off);
+    //Go to default group
+    if( chGrp.size() )	return chldAt(0,s_br).at().nodeAt(path,0,sep,off);
 }
 
 /*void TCntrNode::nodeDel( const string &path, char sep, int flag )

@@ -161,7 +161,14 @@ class ShapeDiagram : public WdgShape
 {
     public:
 	ShapeDiagram( );
-	//bool event( WdgView *view, QEvent *event );
+	
+	void init( WdgView *view );
+	void destroy( WdgView *view );
+	void load( WdgView *view, QMap<QString, QString> &attrs );
+	bool event( WdgView *view, QEvent *event );
+	
+    private:
+	void update( WdgView *view );
 };    
 
 //************************************************

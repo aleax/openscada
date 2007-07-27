@@ -296,8 +296,10 @@ void TFunction::cntrCmdProc( XMLNode *opt )
         for( int i_io = 0; i_io < m_io.size(); i_io++ )
     	    if( io_id == io(i_io)->id() )
 	    {
-		if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(m_tval->getS(i_io));
-		if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_tval->setS(i_io,opt->text());
+		if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	
+		    opt->setText( (m_tval->ioType(i_io)==IO::Real) ? TSYS::real2str(m_tval->getR(i_io),6) : m_tval->getS(i_io) );
+		if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
+		    m_tval->setS(i_io,opt->text());
 		break;
 	    }
     }

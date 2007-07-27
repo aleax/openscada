@@ -34,6 +34,7 @@
 #include <QAction>
 #include <QMovie>
 #include <QBuffer>
+#include <QPicture>
 
 #include <QApplication>
 
@@ -420,6 +421,7 @@ void ShapeText::load( WdgView *w, QMap<QString, QString> &attrs )
     if( (vl=attrs.find("color")) != end )	{ w->dataCache()["color"].setValue(QColor(vl.value())); up = true; }
     if( (vl=attrs.find("orient")) != end )	{ w->dataCache()["rotate"] = vl.value().toInt(); up = true; }
     if( (vl=attrs.find("text")) != end )	{ w->dataCache()["text"] = vl.value(); up = true; }
+    if( (vl=attrs.find("numbPrec")) != end )	{ w->dataCache()["numbPrec"] = vl.value().toInt(); up = true; }
     
     //- Font process -	
     QFont fnt = w->dataCache().value("font").value<QFont>();
@@ -550,7 +552,11 @@ bool ShapeText::event( WdgView *view, QEvent *event )
 	    //- Draw text -
 	    pnt.setPen(view->dataCache().value("color").value<QColor>());
 	    pnt.setFont(view->dataCache().value("font").value<QFont>());
-	    pnt.drawText(draw_rect,view->dataCache().value("text_flg").toInt(),view->dataCache().value("text").toString());
+	    
+	    QString textv = view->dataCache().value("text").toString();
+	    int numbPrec = view->dataCache().value("numbPrec").toInt();
+	    if( numbPrec ) textv = QString::number(textv.toDouble(),'f',numbPrec);
+	    pnt.drawText(draw_rect,view->dataCache().value("text_flg").toInt(),textv);
 	    
             event->accept();
             return true;
@@ -592,7 +598,7 @@ void ShapeMedia::destroy( WdgView *view )
 
 void ShapeMedia::load( WdgView *w, QMap<QString, QString> &attrs )
 {
-    QMap<QString, QString>::const_iterator	vl, end = attrs.end();
+    QMap<QString, QString>::const_iterator vl, end = attrs.end();
     
     bool up = false, reld_src = false;
     QLabel *lab = (QLabel*)w->dataCache().value("labWdg").value< void* >();
@@ -765,7 +771,7 @@ bool ShapeMedia::event( WdgView *view, QEvent *event )
 	    pnt.drawRect(draw_area.adjusted(bpen.width()/2,bpen.width()/2,
 		        -bpen.width()/2-bpen.width()%2,-bpen.width()/2-bpen.width()%2));
 	}
-            return true;
+        return true;
     }
     return false;
 }
@@ -778,10 +784,98 @@ ShapeDiagram::ShapeDiagram( ) : WdgShape("Diagram")
 
 }
 
-/*bool ShapeDiagram::event( WdgView *view, QEvent *event )
+void ShapeDiagram::init( WdgView *view )
 {
+    QPicture *pict = new QPicture();
+    view->dataCache()["pictObj"].setValue( (void*)pict );
+}
 
-}*/
+void ShapeDiagram::destroy( WdgView *view )
+{
+    delete (QPicture*)view->dataCache().value("pictObj").value< void* >();
+}
+
+void ShapeDiagram::load( WdgView *w, QMap<QString, QString> &attrs )
+{
+    QMap<QString, QString>::const_iterator vl, end = attrs.end();
+    bool up = false;  
+    
+    if( qobject_cast<RunWdgView*>(w) && (vl=attrs.find("en")) != end )
+    { w->dataCache()["en"].setValue(vl.value().toInt()); up = true; }        
+    if( (vl=attrs.find("geomMargin")) != end )	{ w->dataCache()["margin"] = vl.value().toInt(); up = true; }
+    if( (vl=attrs.find("backColor")) != end )	{ w->dataCache()["backColor"].setValue(QColor(vl.value())); up = true; }
+    if( (vl=attrs.find("backImg")) != end )
+    {	
+	XMLNode get_req("get");
+        get_req.setAttr("user",w->user())->
+		setAttr("path",w->id()+"/%2fwdg%2fres")->
+		setAttr("id",vl.value().toAscii().data());
+        if( !mod->cntrIfCmd(get_req) )
+        {
+	    QBrush brsh;
+	    string backimg = TSYS::strDecode(get_req.text(),TSYS::base64);
+	    if( !backimg.empty() )
+	    {
+		QImage img;
+		if(img.loadFromData((const uchar*)backimg.c_str(),backimg.size()))	
+		    brsh.setTextureImage(img);
+	    }
+	    w->dataCache()["backBrash"].setValue(brsh);	    
+        }
+	up = true;
+    }
+    //-- Prepare border --
+    QPen pen = w->dataCache().value("bordPen").value<QPen>();
+    if( (vl=attrs.find("bordColor")) != end )	{ pen.setColor(QColor(vl.value())); up = true; }
+    if( (vl=attrs.find("bordWidth")) != end )	{ pen.setWidth(vl.value().toInt()); up = true; }
+    w->dataCache()["bordPen"].setValue(pen);    
+    
+    if( up )	update(w);
+}
+
+void ShapeDiagram::update( WdgView *w )
+{
+    if( !w->dataCache().value("en",1).toInt() )	return;
+
+    //- Prepare picture -    
+    QPainter pnt((QPicture*)w->dataCache().value("pictObj").value< void* >());
+	
+    int margin = w->dataCache().value("margin").toInt();	
+    QRect draw_area = w->rect().adjusted(0,0,-2*margin,-2*margin);	    
+    pnt.setWindow(draw_area);
+    pnt.setViewport(w->rect().adjusted(margin,margin,-margin,-margin));
+	
+    //- Draw decoration -
+    QColor bkcol = w->dataCache().value("backColor").value<QColor>();
+    if( bkcol.isValid() ) pnt.fillRect(draw_area,bkcol);
+    QBrush bkbrsh = w->dataCache().value("backBrash").value<QBrush>();
+    if( bkbrsh.style() != Qt::NoBrush ) pnt.fillRect(draw_area,bkbrsh);
+    
+    QPen bpen = w->dataCache().value("bordPen").value<QPen>();
+    if( bpen.width() )
+    {
+        pnt.setPen(bpen);
+        pnt.drawRect(draw_area.adjusted(bpen.width()/2,bpen.width()/2,
+	        -bpen.width()/2-bpen.width()%2,-bpen.width()/2-bpen.width()%2));
+    }
+	
+    pnt.drawEllipse(10,20, 80,70);
+    
+    //- Call repaint -
+    w->update();
+}
+
+bool ShapeDiagram::event( WdgView *view, QEvent *event )
+{
+    if( !view->dataCache().value("en",1).toInt() ) return true;
+    if( event->type() == QEvent::Paint )
+    {
+	QPainter pnt( view );
+	pnt.drawPicture(0, 0,*(QPicture*)view->dataCache().value("pictObj").value< void* >());
+        return true;
+    }
+    return false;
+}
 
 //************************************************
 //* Protocol view shape widget                   *

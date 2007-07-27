@@ -110,9 +110,9 @@ class TCntrNode
        	virtual string nodeName( )	{ return "NO Named!"; }
 	string nodePath( char sep = 0, bool from_root = false );
 	
-	void nodeList( vector<string> &list, const string& gid = "" );		//Full node list
-	AutoHD<TCntrNode> nodeAt( const string &path, int lev = 0, char sep = 0 );	//Get node for full path
-	//void nodeDel( const string &path, char sep = 0, int flag = 0 );	//Delete node at full path
+	void nodeList( vector<string> &list, const string& gid = "" );				//Full node list
+	AutoHD<TCntrNode> nodeAt( const string &path, int lev = 0, char sep = 0, int off = 0 );	//Get node for full path
+	//void nodeDel( const string &path, char sep = 0, int flag = 0 );			//Delete node at full path
 	
 	TCntrNode *nodePrev( bool noex = false );
         Mode nodeMode()			{ return m_mod; }

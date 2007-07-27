@@ -802,10 +802,10 @@ void SessWdg::calc( bool first, bool last, unsigned clc )
 		{
 		    if( attr.at().cfgVal()[0] == 'V' )	attr.at().setS(attr.at().cfgVal().substr(2),clc);
 		    else if( attr.at().cfgVal()[0] == 'P' )
-			attr.at().setS(SYS->daq().at().at(TSYS::strSepParse(attr.at().cfgVal(),1,'.')).at().
-			  			       at(TSYS::strSepParse(attr.at().cfgVal(),2,'.')).at().
-					      	       at(TSYS::strSepParse(attr.at().cfgVal(),3,'.')).at().
-					      	       vlAt(TSYS::strSepParse(attr.at().cfgVal(),4,'.')).at().getS(),clc);
+		    {
+			if( attr.at().flgGlob()&Attr::Address )	attr.at().setS(attr.at().cfgVal().substr(2));
+			else attr.at().setS(((AutoHD<TVal>)SYS->daq().at().nodeAt(attr.at().cfgVal(),1,'.')).at().getS(),clc);
+		    }
     		}
     	    }
 	

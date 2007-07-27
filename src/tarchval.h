@@ -197,7 +197,8 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	void stop( bool full_del = false );
 	
 	//- Get value -
-	void getVal( TValBuf &buf, long long beg = 0, long long end = 0, const string &arch = "" );
+	void getVal( TValBuf &buf, long long beg = 0, long long end = 0, 
+		const string &arch = "", int limit = 100000 );
         string getS( long long *tm = NULL, bool up_ord = false, const string &arch = "" );
         double getR( long long *tm = NULL, bool up_ord = false, const string &arch = "" );
         int    getI( long long *tm = NULL, bool up_ord = false, const string &arch = "" );
@@ -218,6 +219,8 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	string makeTrendImg( long long beg, long long end, const string &arch, int hsz = 650, int vsz = 230 );
 	
 	TArchiveS &owner();
+
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
     private:
 	//Private methods
@@ -226,7 +229,6 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
     
 	void setUpBuf();
 	string nodeName()	{ return m_id; }
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
     
 	//Private attributes
 	Res     a_res;

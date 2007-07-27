@@ -326,11 +326,12 @@ void TVision::postMess( const QString &cat, const QString &mess, TVision::MessLe
     }
 }
 
-int TVision::cntrIfCmd( XMLNode &node )
+int TVision::cntrIfCmd( XMLNode &node, bool global )
 {
     //- Check local station request -
     //unsigned long long st_tm = SYS->shrtCnt();
-    SYS->ui().at().at("VCAEngine").at().cntrCmd(&node);
+    if( global ) SYS->cntrCmd(&node);
+    else SYS->ui().at().at("VCAEngine").at().cntrCmd(&node);
     //double tm = 1.0e3*((double)(SYS->shrtCnt()-st_tm))/((double)SYS->sysClk());
     //if( tm > 2 ) printf("TEST 00: Req <%s(%s)> time: %fms\n",node.name().c_str(),node.attr("path").c_str(),tm);
     return atoi(node.attr("rez").c_str());

@@ -159,7 +159,7 @@ class TSYS : public TCntrNode
         static string int2str( int val, IntView view = Dec );
         static string uint2str( unsigned val, IntView view = Dec );	
 	static string ll2str( long long val, IntView view = Dec );
-        static string real2str( double val );
+        static string real2str( double val, int prec = 15 );
 	
         //Adress convertors
         static string addr2str( void *addr );
@@ -168,14 +168,14 @@ class TSYS : public TCntrNode
 	//- Path and string parse -
 	static string fNameFix( const string &fname );
 	static bool strEmpty( const string &val );
-        static string strSepParse( const string &path, int level, char sep );
-	static string pathLev( const string &path, int level, bool encode = true );
+        static string strSepParse( const string &path, int level, char sep, int *off = NULL );
+	static string pathLev( const string &path, int level, bool encode = true, int *off = NULL );
         static string strEncode( const string &in, Code tp, const string &symb = " \t\n");
         static string strDecode( const string &in, Code tp = Custom );
 	
 	//Public attributes
 	const int argc;		// Comand line seting counter.	
-	const char **argv;	// Comand line seting buffer.	
+	const char **argv;	// Comand line seting buffer.
 	const char **envp;	// System environment.
 
     private:

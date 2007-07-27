@@ -69,7 +69,7 @@ class TVision : public TUI
 		MessLev type = Info, QWidget *parent = NULL );
 	
 	//- Request to OpenSCADA control interface -
-	int cntrIfCmd( XMLNode &node );
+	int cntrIfCmd( XMLNode &node, bool global = false );
 
     private:
 	//Methods

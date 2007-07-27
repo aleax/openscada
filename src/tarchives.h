@@ -197,7 +197,6 @@ class TArchiveS : public TSubSYS
 	
 	//Public attributes
         static int max_req_mess;
-        static int max_req_vals;
 
     private:
 	//Private methods

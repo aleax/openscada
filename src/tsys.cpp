@@ -116,10 +116,10 @@ string TSYS::ll2str( long long val, IntView view )
     return buf;
 }
 
-string TSYS::real2str( double val )
+string TSYS::real2str( double val, int prec )
 {
     char buf[STR_BUF_LEN];
-    snprintf(buf,sizeof(buf),"%g",val); 
+    snprintf(buf,sizeof(buf),"%.*g",prec,val);
 
     return buf;
 }
@@ -512,111 +512,149 @@ bool TSYS::eventWait( bool &m_mess_r_stat, bool exempl, const string &loc, time_
     return false;
 }
 
-string TSYS::strSepParse( const string &path, int level, char sep )
+string TSYS::strSepParse( const string &path, int level, char sep, int *off )
 {
-    int an_dir = 0, t_lev = 0;
+    int an_dir = off ? *off : 0;
+    int	t_lev = 0;
+    int t_dir;
+    
+    if( an_dir >= path.size() )	return "";
     while(true)
     {
-        int t_dir = path.find(sep,an_dir);
-		    
-        if( t_lev++ == level )	return path.substr(an_dir,t_dir-an_dir);
-        if( t_dir == string::npos ) return "";
+        t_dir = path.find(sep,an_dir);
+        if( t_dir == string::npos )	
+	{ 
+	    if( off ) *off = path.size(); 
+	    return (t_lev == level) ? path.substr(an_dir) : "";
+	}
+        else if( t_lev == level )
+	{
+	    if( off ) *off = t_dir+1;
+	    return path.substr(an_dir,t_dir-an_dir); 
+	}
         an_dir = t_dir+1;
+	t_lev++;
     }
+    return "";
 }		
 
-string TSYS::pathLev( const string &path, int level, bool encode )
+string TSYS::pathLev( const string &path, int level, bool encode, int *off )
 {
-    int an_dir = 0, t_lev = 0;
+    int an_dir = off ? *off : 0;
+    int t_lev = 0;
+    int t_dir;
+    
+    if( an_dir >= path.size() ) return "";    
     //- First separators pass -
-    while(path[an_dir]=='/') an_dir++;
+    while( path[an_dir]=='/' ) an_dir++;
     //- Path level process -
     while(true)
     {
-        int t_dir = path.find("/",an_dir);
-			
-        if( t_lev++ == level )
-            return encode ? strDecode(path.substr(an_dir,t_dir-an_dir),TSYS::PathEl) : 
-			    path.substr(an_dir,t_dir-an_dir);
-	if( t_dir == string::npos ) return "";
+	t_dir = path.find("/",an_dir);
+	if( t_dir == string::npos )
+        {
+            if( off ) *off = path.size();
+            return (t_lev == level) ? ( encode ? TSYS::strDecode(path.substr(an_dir),TSYS::PathEl) : path.substr(an_dir) ) : "";
+        }
+	else if( t_lev == level )
+	{
+	    if( off ) *off = t_dir;
+	    return encode ? TSYS::strDecode(path.substr(an_dir,t_dir-an_dir),TSYS::PathEl) : path.substr(an_dir,t_dir-an_dir);
+	}
         an_dir = t_dir;
-        while( an_dir < path.size() && path[an_dir]=='/') an_dir++;
+	t_lev++;
+        while( an_dir<path.size() && path[an_dir]=='/' ) an_dir++;
     }
 }
 
 string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 {
     int i_sz;
-    string sout = in;
+    string sout;
     
     switch(tp)	
     {
 	case TSYS::PathEl:
-	    for( i_sz = 0; i_sz < sout.size(); i_sz++ )
-		switch(sout[i_sz])
-		{
+	    sout = in;
+            for( i_sz = 0; i_sz < sout.size(); i_sz++ )
+                switch(sout[i_sz])
+                {
 		    case '/': sout.replace(i_sz,1,"%2f"); i_sz+=2; break;
 		    case '%': sout.replace(i_sz,1,"%25"); i_sz+=2; break;
 		}
 	    break;	
 	case TSYS::HttpURL:
-	    for( i_sz = 0; i_sz < sout.size(); i_sz++ )
-		switch(sout[i_sz])
-		{
+	    sout = in;
+    	    for( i_sz = 0; i_sz < sout.size(); i_sz++ )
+        	switch(sout[i_sz])
+                {
 		    case '%': sout.replace(i_sz,1,"%25"); i_sz+=2; break;
 		    case ' ': sout.replace(i_sz,1,"%20"); i_sz+=2; break;
 		    case '\t': sout.replace(i_sz,1,"%09"); i_sz+=2; break;
 		    default:
-			if( sout[i_sz]&0x80 )
-			{
-			    char buf[4];
-		    	    snprintf(buf,sizeof(buf),"%%%02X",(unsigned char)sout[i_sz]);
+                	if( sout[i_sz]&0x80 )
+                        {
+                            char buf[4];
+			    snprintf(buf,sizeof(buf),"%%%02X",(unsigned char)sout[i_sz]);
 			    sout.replace(i_sz,1,buf);
 			    i_sz+=2;
-			    break;
-			}
-		}	
+                            break;
+                	}
+		}
 	    break;	
 	case TSYS::Html:
-	    for( i_sz = 0; i_sz < sout.size(); i_sz++ )
-		switch(sout[i_sz])
+	    sout.reserve(in.size()+10);	
+	    for( i_sz = 0; i_sz < in.size(); i_sz++ )
+		switch(in[i_sz])
 		{ 
-		    case '>': sout.replace(i_sz,1,"&gt;"); i_sz+=3; break;
-		    case '<': sout.replace(i_sz,1,"&lt;"); i_sz+=3; break;
-		    case '"': sout.replace(i_sz,1,"&quot;"); i_sz+=5; break;
-		    case '&': sout.replace(i_sz,1,"&amp;"); i_sz+=4; break;
-		    case '\'': sout.replace(i_sz,1,"&#039;"); i_sz+=5; break;			     
+		    case '>': 	sout+="&gt;";	break;
+		    case '<': 	sout+="&lt;"; 	break;
+		    case '"': 	sout+="&quot;";	break;
+		    case '&': 	sout+="&amp;"; 	break;
+		    case '\'': 	sout+="&#039;";	break;
+		    default: 	sout+=in[i_sz];
 		}
 	    break;	
 	case TSYS::JavaSc:
-	    for( i_sz = 0; i_sz < sout.size(); i_sz++ )
-                if( sout[i_sz] == '\n' ) { sout.replace(i_sz,1,"\\n"); i_sz++; }	
+	    sout.reserve(in.size()+10);
+	    for( i_sz = 0; i_sz < in.size(); i_sz++ )
+		switch(in[i_sz])
+                {
+            	    case '\n':	sout+="\\n"; break;
+		    default:    sout+=in[i_sz];
+		}	
 	    break;
 	case TSYS::SQL:
-	    for( i_sz = 0; i_sz < sout.size(); i_sz++ )
-		switch(sout[i_sz])
+	    sout.reserve(in.size()+10);		
+	    for( i_sz = 0; i_sz < in.size(); i_sz++ )
+		switch(in[i_sz])
 		{
-		    case '\'': sout.replace(i_sz,1,"\\'"); i_sz++; break;
-		    case '\"': sout.replace(i_sz,1,"\\\""); i_sz++; break;
-		    case '`':  sout.replace(i_sz,1,"\\`"); i_sz++; break;
-		    case '\\': sout.replace(i_sz,1,"\\\\"); i_sz++; break;
+		    case '\'':	sout+="\\'";	break;
+		    case '\"':	sout+="\\\"";	break;
+		    case '`':  	sout+="\\`";	break;
+		    case '\\':	sout+="\\\\";	break;
+		    default:    sout+=in[i_sz];
 		}	    	
             break;
 	case TSYS::Custom:
-	    for( i_sz = 0; i_sz < sout.size(); i_sz++ )
-		for( int i_smb = 0; i_smb < symb.size(); i_smb++ )
-		    if( sout[i_sz] == symb[i_smb] )
+	    sout.reserve(in.size()+10);
+	    for( i_sz = 0; i_sz < in.size(); i_sz++ )
+	    {
+		int i_smb;
+		for( i_smb = 0; i_smb < symb.size(); i_smb++ )
+		    if( in[i_sz] == symb[i_smb] )
 		    {
 			char buf[4];
-                        sprintf(buf,"%%%02X",(unsigned char)sout[i_sz]);
-                        sout.replace(i_sz,1,buf);
-                        i_sz+=2;
+                        sprintf(buf,"%%%02X",(unsigned char)in[i_sz]);
+                        sout+=buf;
 			break;
 		    }
+		if( i_smb >= symb.size() ) sout+=in[i_sz];
+	    }
 	    break;
 	case TSYS::base64:
 	{
-	    sout = "";
+	    sout.reserve(in.size()+in.size()/4+in.size()/57+10);
 	    char *base64alph = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 	    for( i_sz = 0; i_sz < in.size(); i_sz+=3 )
 	    {
@@ -645,8 +683,9 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 	    break;
 	}
 	case TSYS::FormatPrint:
+	    sout = in;
 	    for( i_sz = 0; i_sz < sout.size(); i_sz++ )
-                if( sout[i_sz] == '%' ) { sout.replace(i_sz,1,"%%"); i_sz++; }
+		if( sout[i_sz] == '%' ) { sout.replace(i_sz,1,"%%"); i_sz++; }
 	    break;
     }
     return sout;
@@ -667,17 +706,27 @@ unsigned char TSYS::getBase64Code(unsigned char asymb)
 string TSYS::strDecode( const string &in, TSYS::Code tp )
 {
     int i_sz;
-    string sout = in;
+    string sout;
 
     switch(tp)
-    {
+    {    
 	case TSYS::PathEl: case TSYS::HttpURL: case TSYS::Custom:
-	    for( i_sz = 0; i_sz < (int)sout.size()-2; i_sz++ )
-		if( sout[i_sz] == '%' )
-		    sout.replace(i_sz,3,1,(char)strtol(sout.substr(i_sz+1,2).c_str(),NULL,16));
+	    sout.reserve(in.size());	    
+	    for( i_sz = 0; i_sz < in.size(); i_sz++ )
+		switch(in[i_sz])
+		{
+		    case '%':
+			if( i_sz+2 < in.size() )
+			{
+			    sout+=(char)strtol(in.substr(i_sz+1,2).c_str(),NULL,16);
+			    i_sz+=2;
+			}else sout+=in[i_sz];
+			break;
+		    default: sout+=in[i_sz];
+		}
 	    break;
 	case TSYS::base64:
-	    sout = "";
+	    sout.reserve(in.size());
 	    for( i_sz = 0; i_sz < in.size(); )
 	    {
 		if(in[i_sz] == '\n')	i_sz+=sizeof('\n');

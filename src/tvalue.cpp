@@ -171,7 +171,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",(vl.at().fld().flg()&TFld::NoWrite)?0440:0660,"root","root",SEQ_RD) )
 	{
 	    if( vl.at().fld().flg()&TFld::Selected )	opt->setText(vl.at().getSEL());
-	    else					opt->setText(vl.at().getS());
+	    else opt->setText( (vl.at().fld().type()==TFld::Real) ? TSYS::real2str(vl.at().getR(),6) : vl.at().getS() );
 	}
 	if( ctrChkNode(opt,"set",(vl.at().fld().flg()&TFld::NoWrite)?0440:0660,"root","root",SEQ_WR) )
 	{
@@ -565,3 +565,18 @@ void TVal::setB( char value, long long tm, bool sys )
     }        
 }
 
+void TVal::cntrCmdProc( XMLNode *opt )
+{
+    if( opt->name() == "info" )	
+    {
+	TCntrNode::cntrCmdProc(opt);
+	return;
+    }
+    //Process command to page
+    string a_path = opt->attr("path");
+    //- Service commands process -
+    if( a_path == "/val/scmd" && ctrChkNode(opt) )
+    {
+	if( !arch().freeStat() ) arch().at().cntrCmdProc(opt);
+    }
+}

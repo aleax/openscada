@@ -1,3 +1,17 @@
+2007-07-27 Roman
+- /Value: Control interface function TVal::cntrCmdProc() is added for service functions of 
+archive access (UI trend access).
+- FIX:/TSYS: Real values convert function, TSYS::real2str(), is fixed. Precision point attribute is added.
+  Default value set to 15 items, maximum double resolution.
+- !!:/TSYS: Made optimal string and path parsing. Add a current offset support to functions: 
+  TSYS::strSepParse() and TSYS::pathLev().
+- !!:/TCntrNode: Made optimal access at function TCntrNode::nodeAt(). Used string uffset on parsing.
+- /Archive: The limit parameter is added to function TVArchive::getVal() for preserve too big archives blocks access.
+- FIX:/UI/QtStarter: Module stop mechanism is fixed.
+- FIX:/UI/VCAEngine: The widget lock after failed enabling is fixed.
+- /UI/Vision: Global requesting to OpenSCADA kernel support is added.
+
+
 2007-07-20 Roman
 - !!:/UI/VCAEngine: Primitives "UserEl" and "Trend" is renamed to "Box" and "Diagram".
 - !!:/UI/Vision: Primitives "UserEl" and "Trend" is renamed to "Box" and "Diagram".

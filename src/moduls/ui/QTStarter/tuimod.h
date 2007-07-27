@@ -56,7 +56,7 @@ class WinControl: public QObject
     private:
 	//Attributes
 	QTimer 	*tm;
-	bool 	end_run;
+	bool 	&end_run;
 };
 
 class TUIMod: public TUI

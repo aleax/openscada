@@ -113,6 +113,8 @@ LineEdit::LineEdit( QWidget *parent, bool prev_dis ) :
     {
 	bt_fld = new QPushButton(this);		
 	bt_fld->setIcon(QIcon(":/images/ok.png"));
+	bt_fld->setIconSize(QSize(12,12));
+        bt_fld->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed) );		
 	bt_fld->setEnabled(false);
 	bt_fld->setVisible(false);	
 	connect( bt_fld, SIGNAL( released() ), this, SLOT( applySlot() ) );
@@ -236,7 +238,7 @@ void TextEdit::changed()
     if( isInit ) return;
     if( but_box ) but_box->setVisible(ed_fld->document()->isModified());
     emit textChanged(text());
-}   
+}
 
 //*************************************************
 //* Data and time edit widget                     *
@@ -249,12 +251,15 @@ DateTimeEdit::DateTimeEdit( QWidget *parent, bool prev_dis ) :
     box->setSpacing(0);    
     
     ed_fld = new QDateTimeEdit(this);
+    ed_fld->setDisplayFormat("dd.MM.yyyy hh:mm:ss");
     connect( ed_fld, SIGNAL( dateTimeChanged(const QDateTime&) ), this, SLOT( changed(const QDateTime&) ) );
     box->addWidget(ed_fld);
     if( !prev_dis )
     {
-	bt_fld = new QPushButton(this);		
+	bt_fld = new QPushButton(this);
 	bt_fld->setIcon(QIcon(":/images/ok.png"));
+	bt_fld->setIconSize(QSize(12,12));
+        bt_fld->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed) );
 	bt_fld->setEnabled(false);
 	bt_fld->setVisible(false);	
 	connect( bt_fld, SIGNAL( released() ), this, SLOT( applySlot() ) );

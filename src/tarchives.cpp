@@ -37,7 +37,6 @@
 
 //=============== TArchiveS =======================================
 int TArchiveS::max_req_mess = 3000;
-int TArchiveS::max_req_vals = 100000;
 
 TArchiveS::TArchiveS( ) :
     TSubSYS("Archive","Archives",true), prc_st_mess(false), prc_st_val(false), endrun_req_val(false), m_mess_per(2), 
@@ -135,7 +134,6 @@ void TArchiveS::subLoad( )
     m_val_per = atoi(TBDS::genDBGet(nodePath()+"ValPeriod",TSYS::int2str(m_val_per)).c_str());
     m_val_prior = atoi(TBDS::genDBGet(nodePath()+"ValPriority",TSYS::int2str(m_val_prior)).c_str());
     max_req_mess = atoi(TBDS::genDBGet(nodePath()+"MaxReqMess",TSYS::int2str(max_req_mess)).c_str());
-    max_req_vals = atoi(TBDS::genDBGet(nodePath()+"MaxReqVals",TSYS::int2str(max_req_vals)).c_str());
 
     //---- LidDB ----
     //Message archivators load
@@ -303,7 +301,6 @@ void TArchiveS::subSave( )
     TBDS::genDBSet(nodePath()+"ValPeriod",TSYS::int2str(m_val_per));
     TBDS::genDBSet(nodePath()+"ValPriority",TSYS::int2str(m_val_prior));
     TBDS::genDBSet(nodePath()+"MaxReqMess",TSYS::int2str(max_req_mess));
-    TBDS::genDBSet(nodePath()+"MaxReqVals",TSYS::int2str(max_req_vals));
 
     //Value archives save to DB
     valList(o_lst);
@@ -703,7 +700,6 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,0,"/sub",_("Subsystem"),0444,"root",my_gr.c_str()))
 	{
 	    ctrMkNode("fld",opt,-1,"/sub/max_am_req",_("Maximum requested messages"),0664,"root",my_gr.c_str(),1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/sub/max_av_req",_("Maximum requested values"),0664,"root",my_gr.c_str(),1,"tp","dec");
 	    ctrMkNode("comm",opt,-1,"/sub/load_db",_("Load"),0660,"root",my_gr.c_str());
 	    ctrMkNode("comm",opt,-1,"/sub/upd_db",_("Save"),0660,"root",my_gr.c_str());
 	}
@@ -742,11 +738,6 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
     {
 	if( ctrChkNode(opt,"get",0664,"root",my_gr.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str(max_req_mess));
 	if( ctrChkNode(opt,"set",0664,"root",my_gr.c_str(),SEQ_WR) )	max_req_mess = atoi(opt->text().c_str());
-    }
-    else if( a_path == "/sub/max_av_req" )
-    {
-	if( ctrChkNode(opt,"get",0664,"root",my_gr.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str(max_req_vals));
-	if( ctrChkNode(opt,"set",0664,"root",my_gr.c_str(),SEQ_WR) )	max_req_vals = atoi(opt->text().c_str());
     }
     else if( a_path == "/m_arch/per" )
     {	
