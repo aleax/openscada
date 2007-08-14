@@ -503,9 +503,8 @@ bool TGroup::user( const string &inm )
 {
     if( owner().usrPresent(inm) )
     {
-        int pos = 0;
 	string val;
-	while( (val=TSYS::strSepParse(m_usrs,pos++,';')).size() )
+	for( int off = 0; (val=TSYS::strSepParse(m_usrs,0,';',&off)).size(); )
 	    if(val==inm) return true;
     }
     return false;
@@ -555,9 +554,8 @@ void TGroup::cntrCmdProc( XMLNode *opt )
     {
 	if( ctrChkNode(opt,"get",0664,"root",owner().subId().c_str(),SEQ_RD) )
 	{
-	    int pos = 0;
 	    string val;
-	    while( (val=TSYS::strSepParse(m_usrs,pos++,';')).size() )
+	    for( int off = 0; (val=TSYS::strSepParse(m_usrs,0,';',&off)).size(); )
 		opt->childAdd("el")->setText(val);
 	}
 	if( ctrChkNode(opt,"add",0664,"root",owner().subId().c_str(),SEQ_WR) )	userAdd(opt->text());

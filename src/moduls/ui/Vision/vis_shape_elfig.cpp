@@ -255,19 +255,19 @@ ShapeElFigure::ShapeElFigure() : WdgShape("ElFigure")
 void ShapeElFigure::init( WdgView *w )
 {
     QList<ShapeItem> *shapeItems = new QList<ShapeItem>();
-    w->dataCache()["shapeItems"].setValue((void*)shapeItems);
+    w->dc()["shapeItems"].setValue((void*)shapeItems);
 }
 
 void ShapeElFigure::destroy( WdgView *w )
 {
-    QList<ShapeItem> *shapeItems = (QList<ShapeItem> *)w->dataCache().value("shapeItems",(void*)0).value< void* >();
+    QList<ShapeItem> *shapeItems = (QList<ShapeItem> *)w->dc().value("shapeItems",(void*)0).value< void* >();
     if( shapeItems ) delete shapeItems;
     rectItems.clear();
 }
 
-void ShapeElFigure::load( WdgView *view, QMap<QString, QString> &attrs )
+bool ShapeElFigure::attrSet( WdgView *view, int uiPrmPos, const string &val )
 {
-    QMap<QString, QString>::const_iterator vl, end = attrs.end();
+    return false;
 }
 
 void ShapeElFigure::editEnter( WdgView *view )
@@ -317,7 +317,7 @@ void ShapeElFigure::toolAct( QAction *act )
 
 bool ShapeElFigure::event( WdgView *view, QEvent *event )
 {
-    QList<ShapeItem> &shapeItems = *(QList<ShapeItem> *)view->dataCache().value("shapeItems",(void*)0).value< void* >();
+    QList<ShapeItem> &shapeItems = *(QList<ShapeItem> *)view->dc().value("shapeItems",(void*)0).value< void* >();
    
     bool flag_hold_rect;
     flag_hold_rect=false;//Дополнительная переменная, служащая флагом для рисования кружочка при привязках

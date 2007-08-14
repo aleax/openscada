@@ -27,6 +27,7 @@
 #include <tsys.h>
 
 #include "tvision.h"
+#include "vis_shapes.h"
 #include "vis_run.h"
 #include "vis_run_widgs.h"
 
@@ -58,35 +59,23 @@ VisRun *RunWdgView::mainWin( )
 
 string RunWdgView::pgGrp( )
 {
-    return dataCache().value("pgGrp").toString().toAscii().data();
+    return dc().value("pgGrp").toString().toAscii().data();
 }
 
 string RunWdgView::pgOpenSrc( )
 {
-    return dataCache().value("pgOpenSrc").toString().toAscii().data();
+    return dc().value("pgOpenSrc").toString().toAscii().data();
 }
 
 void RunWdgView::setPgOpenSrc( const string &vl )
 {
-    dataCache()["pgOpenSrc"] = vl.c_str();
-    attrSet("pgOpenSrc",vl,true);
+    dc()["pgOpenSrc"] = vl.c_str();
+    attrSet("pgOpenSrc",vl,26);
 }
 
 WdgView *RunWdgView::newWdgItem( const string &iwid )
 {
     return new RunWdgView(iwid,wLevel()+1,mainWin(),this);
-}
-
-void RunWdgView::attrLoad( QMap<QString, QString> &attrs )
-{
-    WdgView::attrLoad(attrs);
-    
-    if( root() == "Box" && !attrs.empty() )
-    {
-	QMap<QString, QString>::const_iterator vl;
-	if( (vl=attrs.find("pgGrp")) != attrs.end() ) 	  dataCache()["pgGrp"] = vl.value();
-	if( (vl=attrs.find("pgOpenSrc")) != attrs.end() ) dataCache()["pgOpenSrc"] = vl.value();
-    }
 }
 
 void RunWdgView::update( unsigned cnt, int div_max )
@@ -97,22 +86,22 @@ void RunWdgView::update( unsigned cnt, int div_max )
     //- Request to widget for last attributes -
     if( !((cnt+(unsigned)wLevel())%curDiv) )
     {
-	//printf("TEST 00: %s\n",id().c_str());
-    	QMap<QString, QString> attrs;    
+	bool change = false;
+	//printf("TEST 00: %s\n",id().c_str());	
 	XMLNode get_req("get");
 	get_req.setAttr("user",user())->
 		setAttr("path",id()+"/%2fattr%2fscmd")->
-		setAttr("tm",TSYS::uint2str(reqtm));
+		setAttr("tm",TSYS::uint2str(reqtm));	
 	if( !mod->cntrIfCmd(get_req) )
 	{
     	    for( int i_el = 0; i_el < get_req.childSize(); i_el++ )
-        	attrs[get_req.childGet(i_el)->attr("id").c_str()] = get_req.childGet(i_el)->text().c_str();
+		if( attrSet("",get_req.childGet(i_el)->text(),atoi(get_req.childGet(i_el)->attr("pos").c_str())) )
+		    change = true;
     	    reqtm = strtoul(get_req.attr("tm").c_str(),0,10);
-    	    attrLoad(attrs);
 	}
 	//-- Update divider --
-	if( curDiv > 1 && !attrs.empty() ) 	curDiv--;
-	if( curDiv < div_max && attrs.empty() )	curDiv++;
+	if( curDiv > 1 && change ) 		curDiv--;
+	if( curDiv < div_max && !change )	curDiv++;
     }
     
     //- Call childs for update -
@@ -125,7 +114,7 @@ void RunWdgView::update( unsigned cnt, int div_max )
 
 bool RunWdgView::event( QEvent *event )
 {
-    if( WdgView::event(event) )	return true;
+    if( WdgView::event(event) || (shape&&shape->event(this,event)) )	return true;
     //if( event->isAccepted() )	return false;
 
     //- Key events process for send to model -

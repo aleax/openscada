@@ -317,7 +317,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/cntr/st/calc_tm" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(tm_calc));
+    if( a_path == "/cntr/st/calc_tm" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(tm_calc,6));
     else TController::cntrCmdProc(opt);
 }
 
@@ -495,7 +495,9 @@ void TMdPrm::mode( TMdPrm::Mode md, const string &prm )
         try
 	{
             prm_refl->free();
-            *prm_refl = SYS->daq().at().at(TSYS::strSepParse(prm,0,'.')).at().at(TSYS::strSepParse(prm,1,'.')).at().at(TSYS::strSepParse(prm,2,'.'));
+            *prm_refl = SYS->daq().at().at(TSYS::strSepParse(prm,0,'.')).at().
+					at(TSYS::strSepParse(prm,1,'.')).at().
+					at(TSYS::strSepParse(prm,2,'.'));
             prm_refl->at().vlList(list);
             for( int i_l = 0; i_l < list.size(); i_l++ )
                 if( !vlPresent(list[i_l]) )
@@ -864,14 +866,12 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     else if( a_path == "/cfg/prmp_lst" && ctrChkNode(opt) )
     {
 	int c_lv = 0;
-	string c_path = "";
+	string c_path = "", c_el;
         opt->childAdd("el")->setText(c_path);
-        while(TSYS::strSepParse(m_prm,c_lv,'.').size())
+        for( int c_off = 0; (c_el=TSYS::strSepParse(m_prm,0,'.',&c_off)).size(); c_lv++ )
         {
-    	    if( c_lv ) c_path+=".";
-            c_path = c_path+TSYS::strSepParse(m_prm,c_lv,'.');
+            c_path += c_lv ? "."+c_el : c_el;
     	    opt->childAdd("el")->setText(c_path);
-            c_lv++;
         }
         if(c_lv) c_path+=".";
 	string prm0 = TSYS::strSepParse(m_prm,0,'.');
@@ -908,7 +908,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     	{
 	    string lnk_val = lnk(lnkId(atoi(a_path.substr(12).c_str()))).prm_attr;
 	    int c_lvl = 0;
-	    while(TSYS::strSepParse(lnk_val,c_lvl,'.').size())  c_lvl++;
+	    for( int c_off = 0; TSYS::strSepParse(lnk_val,0,'.',&c_off).size(); c_lvl++ );
 	    if( c_lvl==4 ) opt->setText(lnk_val.substr(0,lnk_val.rfind(".")));
 	    else opt->setText(lnk_val);	
         }
@@ -919,7 +919,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
             string p_nm = TSYS::strSepParse(tmpl->val.func()->io(lnk(lnkId(atoi(a_path.substr(12).c_str()))).io_id)->def(),0,'|');
             string p_vl = opt->text();    
 	    int c_lvl = 0;
-            while(TSYS::strSepParse(p_vl,c_lvl,'.').size())  c_lvl++;	    
+            for( int c_off = 0; TSYS::strSepParse(p_vl,0,'.',&c_off).size(); c_lvl++ );
 	    AutoHD<TValue> prm;
 	    if(c_lvl==3) 
 		prm = SYS->daq().at().at(TSYS::strSepParse(p_vl,0,'.')).at().
@@ -951,16 +951,15 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     else if( (a_path.substr(0,12) == "/cfg/prm/pl_" || a_path.substr(0,12) == "/cfg/prm/ls_") && 
 	    mode() == TMdPrm::Template && ctrChkNode(opt) )
     {
-	int c_lv;
+	int c_lv = 0;
 	string l_prm = lnk(lnkId(atoi(a_path.substr(12).c_str()))).prm_attr;
         bool is_pl = (a_path.substr(0,12) == "/cfg/prm/pl_");
-	string c_path = "";
+	string c_path = "", c_el;
         opt->childAdd("el")->setText(c_path);
-	for( c_lv = 0; TSYS::strSepParse(l_prm,c_lv,'.').size(); c_lv++ )
+	for( int c_off = 0; (c_el=TSYS::strSepParse(l_prm,0,'.',&c_off)).size(); c_lv++ )
         {
             if( is_pl && c_lv>2 ) break;
-            if( c_lv ) c_path+=".";
-            c_path = c_path+TSYS::strSepParse(l_prm,c_lv,'.');
+            c_path += c_lv ? "."+c_el : c_el;
             opt->childAdd("el")->setText(c_path);
 	}
 	if(c_lv) c_path+=".";

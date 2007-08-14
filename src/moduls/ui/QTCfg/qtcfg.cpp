@@ -674,6 +674,9 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 			    *t_linf->childAdd() = *t_lsel->childGet(i_rw);
 		    }	
 		
+		    //Collumns adjusting flag
+		    bool adjCol = !refr || !tbl->rowCount();
+		    
 		    //Calc rows and columns
 		    int n_col = t_s.childSize();
 		    int n_row = (n_col)?t_s.childGet(0)->childSize():0;
@@ -751,7 +754,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 			    else thd_it->setFlags(Qt::ItemIsEnabled|Qt::ItemIsEditable);
 			}
     		    }
-		    if(!refr) 
+		    if(adjCol) 
 		    {
 			tbl->resizeColumnsToContents();
 			//Resize too long columns
@@ -2071,8 +2074,7 @@ void ConfApp::tablePopup( const QPoint &pos )
 		{
 		    //Get Key columns
             	    string key;
-		    int i_key = 0;
-		    while((key = TSYS::strSepParse(n_el->attr("key"),i_key++,',')).size())
+		    for( int i_off = 0; (key=TSYS::strSepParse(n_el->attr("key"),0,',',&i_off)).size(); )
 		        for( int i_el = 0; i_el < n_el->childSize(); i_el++ )
 		            if( n_el->childGet(i_el)->attr("id") == key )
 		            { 
@@ -2244,8 +2246,7 @@ void ConfApp::tableSet( int row, int col )
 	{
 	    //Get Key columns
 	    string key;
-	    int i_key = 0;	    
-	    while((key = TSYS::strSepParse(n_el->attr("key"),i_key++,',')).size())
+	    for( int i_off = 0; (key=TSYS::strSepParse(n_el->attr("key"),0,',',&i_off)).size(); )
 		for( int i_el = 0; i_el < n_el->childSize(); i_el++ )
 		    if( n_el->childGet(i_el)->attr("id") == key )
 		    { 

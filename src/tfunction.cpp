@@ -289,7 +289,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(TBDS::genDBGet(nodePath()+"ntCalc","10",opt->attr("user")));
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	TBDS::genDBSet(nodePath()+"ntCalc",opt->text(),opt->attr("user"));
     }	
-    else if( a_path == "/exec/tm" && m_tval && ctrChkNode(opt) )opt->setText(TSYS::real2str(m_tval->calcTm()));	
+    else if( a_path == "/exec/tm" && m_tval && ctrChkNode(opt) )opt->setText(TSYS::real2str(m_tval->calcTm(),6));
     else if( a_path.substr(0,8) == "/exec/io" && m_tval )
     {
 	string io_id = TSYS::pathLev(a_path,2);

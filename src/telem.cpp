@@ -185,7 +185,7 @@ string TFld::values()
 	    break;	
         case TFld::Real:    
 	    for(int i_el = 0; i_el < m_val.v_r->size(); i_el++)
-		rez=rez+TSYS::real2str((*m_val.v_r)[i_el])+";";    
+		rez=rez+TSYS::real2str((*m_val.v_r)[i_el],6)+";";
 	    break;	
         case TFld::Boolean: 
 	    for(int i_el = 0; i_el < m_val.v_b->size(); i_el++)
@@ -212,8 +212,8 @@ void TFld::setValues( const string &vls )
     if( flg()&TFld::Selected )
     {
 	//Count alements amount
-	int i_lvl;
-        for( i_lvl = 0; TSYS::strSepParse(vls,i_lvl,';').size(); i_lvl++ );
+	int i_lvl = 0, i_off = 0;
+        while( TSYS::strSepParse(vls,0,';',&i_off).size() ) i_lvl++;
 	
 	switch(type())
 	{
@@ -235,9 +235,9 @@ void TFld::setValues( const string &vls )
 		break;
 	}
         //Get elements
-	for( int i = 0; i < i_lvl; i++ )
+	for( int i = 0, i_off=0; i < i_lvl; i++ )
 	{
-	    string s_el = TSYS::strSepParse(vls,i,';');
+	    string s_el = TSYS::strSepParse(vls,0,';',&i_off);
     	    switch(type())
 	    {
 		case TFld::String:	(*m_val.v_s)[i] = s_el; break;
@@ -270,14 +270,14 @@ void TFld::setSelNames( const string &slnms )
     //set value list
     if( !(flg()&TFld::Selected) ) return;
     
-    int i_lvl;
-    for( i_lvl = 0; TSYS::strSepParse(slnms,i_lvl,';').size(); i_lvl++ );
+    int i_lvl = 0;
+    for( int i_off = 0; TSYS::strSepParse(slnms,0,';',&i_off).size(); i_lvl++ );
     
     if(!m_sel)  m_sel = new vector<string>;
     m_sel->resize(i_lvl,"");
     
-    for( int i = 0; i < i_lvl; i++ )
-	(*m_sel)[i] = TSYS::strSepParse(slnms,i,';');
+    for( int i = 0, i_off = 0; i < i_lvl; i++ )
+	(*m_sel)[i] = TSYS::strSepParse(slnms,0,';',&i_off);
 }
 
 const vector<string> &TFld::selValS()

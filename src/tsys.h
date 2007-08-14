@@ -91,7 +91,7 @@ class TSYS : public TCntrNode
 
 	void load( );
 	void save( );
-	int start( );
+	int  start( );
 	void stop( );
 	
 	int stopSignal( )	{ return stop_signal; }
@@ -168,15 +168,18 @@ class TSYS : public TCntrNode
 	//- Path and string parse -
 	static string fNameFix( const string &fname );
 	static bool strEmpty( const string &val );
-        static string strSepParse( const string &path, int level, char sep, int *off = NULL );
+        static string strSepParse( const string &str, int level, char sep, int *off = NULL );
 	static string pathLev( const string &path, int level, bool encode = true, int *off = NULL );
+	static string path2sepstr( const string &path, char sep = '.' );
+	static string sepstr2path( const string &str, char sep = '.' );
         static string strEncode( const string &in, Code tp, const string &symb = " \t\n");
         static string strDecode( const string &in, Code tp = Custom );
 	
 	//Public attributes
-	const int argc;		// Comand line seting counter.	
-	const char **argv;	// Comand line seting buffer.
-	const char **envp;	// System environment.
+	static bool finalKill;	//Final object's kill flag. For dead requsted resources
+	const int argc;		//Comand line seting counter.	
+	const char **argv;	//Comand line seting buffer.
+	const char **envp;	//System environment.
 
     private:
 	//Private methods

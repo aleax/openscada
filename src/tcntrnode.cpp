@@ -59,14 +59,14 @@ void TCntrNode::nodeDelAll( )
 
 XMLNode *TCntrNode::ctrId( XMLNode *inf, const string &name_id, bool noex )
 {
-    int level = 0;
+    int l_off = 0;
     string s_el;
 
     XMLNode *t_node = inf;    
     while(true)
     {
-	s_el = TSYS::pathLev(name_id,level);
-	if( !s_el.size() ) return t_node;
+	s_el = TSYS::pathLev(name_id,0,true,&l_off);
+	if( s_el.empty() ) return t_node;
 	bool ok = false;
 	for( unsigned i_f = 0; i_f < t_node->childSize(); i_f++)
 	    if( t_node->childGet(i_f)->attr("id") == s_el ) 
@@ -76,17 +76,16 @@ XMLNode *TCntrNode::ctrId( XMLNode *inf, const string &name_id, bool noex )
 		break;
 	    }
 	if( !ok ) break;
-	level++;
     }
 
     if(noex) return NULL;	
     throw TError("XML","Field id = %s(%s) no present!",name_id.c_str(),s_el.c_str());    
 }
 
-void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath )
+void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 {   
     string path = ipath.empty() ? opt->attr("path") : ipath;
-    string s_br = TSYS::pathLev(path,lev,true);
+    string s_br = TSYS::pathLev(path,lev,true,&off);
 
     try
     {
@@ -95,11 +94,11 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath )
 	    for( int i_g = 0; i_g < chGrp.size(); i_g++ )
     		if( s_br.substr(0,chGrp[i_g].id.size()) == chGrp[i_g].id )
 		{
-		    chldAt(i_g,s_br.substr(chGrp[i_g].id.size())).at().cntrCmd(opt,lev+1,path);
+		    chldAt(i_g,s_br.substr(chGrp[i_g].id.size())).at().cntrCmd(opt,0,path,off);
 		    return;
 		}
 	    //Go to default thread
-	    if( !chGrp.empty() ) chldAt(0,s_br).at().cntrCmd(opt,lev+1,path);
+	    if( !chGrp.empty() ) chldAt(0,s_br).at().cntrCmd(opt,0,path,off);
 	    return;
 	}
 	//Post command to node
@@ -175,7 +174,12 @@ void TCntrNode::nodeDis(long tm, int flag)
 #endif	    
 	    //Check timeout
 	    if( tm && time(NULL) > t_cur+tm)
-		throw TError(nodePath().c_str(),_("Timeouted of wait. Object used by %d users. Free object first!"),m_use);
+	    {
+		if( !TSYS::finalKill )
+		    throw TError(nodePath().c_str(),_("Timeouted of wait. Object used by %d users. Free object first!"),m_use);
+		mess_err(nodePath().c_str(),_("Blocking node error. Inform developpers please!"));
+		break;
+	    }
 	    usleep(STD_WAIT_DELAY*1000);	    
 	}
         res.request(true);
@@ -203,6 +207,7 @@ void TCntrNode::nodeList(vector<string> &list, const string& gid)
 	    chldList(i_gr,tls);
 	    for( int i_l = 0; i_l < tls.size(); i_l++ )
 		list.push_back(chGrp[i_gr].id+tls[i_l]);
+	    if( !gid.empty() )	break;
 	}
 }
 
@@ -412,16 +417,16 @@ void TCntrNode::AHDDisConnect()
 XMLNode *TCntrNode::ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const char *path, const string &dscr,
     int perm, const char *user, const char *grp, int n_attr, ... )
 {
-    int i_lv;
+    int woff = 0;
     string req = nd->attr("path");
-    string reqt, patht;
+    string reqt, reqt1;
     
     //- Check displaing node -
     int itbr = 0;
-    for( i_lv = 0; (reqt=TSYS::pathLev(req,i_lv)).size(); i_lv++ )
-	if( reqt != (patht=TSYS::pathLev(path,i_lv)) )
+    for( int i_off = 0, i_off1 = 0; (reqt=TSYS::pathLev(req,0,true,&i_off)).size(); woff=i_off )
+	if( reqt != (reqt1=TSYS::pathLev(path,0,true,&i_off1)) )
 	{
-	    if(patht.size()) return NULL;
+	    if( !reqt1.empty() ) return NULL;
 	    itbr = 1;
 	    break;
 	}    
@@ -440,16 +445,17 @@ XMLNode *TCntrNode::ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const cha
     }
     
     //- Go to element -    
-    for( ;TSYS::pathLev(path,i_lv).size(); i_lv++ )
+    for( ;(reqt=TSYS::pathLev(path,0,true,&woff)).size(); reqt1=reqt )
     {
-        XMLNode *obj1 = obj->childGet("id",TSYS::pathLev(path,i_lv),true);
+        XMLNode *obj1 = obj->childGet("id",reqt,true);
 	if( obj1 ) { obj = obj1; continue; }
-	if( TSYS::pathLev(path,i_lv+1).size() )	
+	//int wofft = woff;
+	if( TSYS::pathLev(path,0,true,&woff).size() )	
 	    throw TError("ContrItfc",_("Some tags on path <%s> missed!"),req.c_str());
 	obj = obj->childIns(pos);
     }
     obj->setName(n_nd);
-    obj->setAttr("id",TSYS::pathLev(path,i_lv-1));
+    obj->setAttr("id",reqt1);
     obj->setAttr("dscr",dscr);
     obj->setAttr("acs",TSYS::int2str(n_acs));
     

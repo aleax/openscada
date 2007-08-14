@@ -344,7 +344,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/bs/tm" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::real2str(time_size,4));
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::real2str(time_size,6));
 	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	time_size = atof(opt->text().c_str());
     }	
     else if( a_path == "/bs/fn" )
@@ -354,7 +354,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/bs/round" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::real2str(round_proc,4));
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::real2str(round_proc,6));
 	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	round_proc = atof(opt->text().c_str());
     }
     else if( a_path == "/bs/pcktm" )
@@ -379,9 +379,9 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
         for( int i_l = 0; i_l < arch_el.size(); i_l++ )
         {
             if(n_arch)	n_arch->childAdd("el")->setText(arch_el[i_l]->archive().id());
-	    if(n_per)	n_per->childAdd("el")->setText(TSYS::real2str((double)arch_el[i_l]->archive().period()/1000000.));
+	    if(n_per)	n_per->childAdd("el")->setText(TSYS::real2str((double)arch_el[i_l]->archive().period()/1000000.,6));
 	    if(n_size)	n_size->childAdd("el")->setText(TSYS::int2str(arch_el[i_l]->archive().size()));
-	    if(f_size)	f_size->childAdd("el")->setText(TSYS::real2str((double)((ModVArchEl *)arch_el[i_l])->size()/1024.));
+	    if(f_size)	f_size->childAdd("el")->setText(TSYS::real2str((double)((ModVArchEl *)arch_el[i_l])->size()/1024.,6));
 	}
     }
     else if( a_path == "/arch/lst" && ctrChkNode(opt) )
@@ -573,21 +573,23 @@ long long ModVArchEl::begin()
     return 0;
 }
 
-void ModVArchEl::getVal( TValBuf &buf, long long beg, long long end )
+void ModVArchEl::getVal( TValBuf &buf, long long ibeg, long long iend )
 {
-    long long n_end, n_beg;
-    
+    iend = vmin( iend, end() );
+    ibeg = vmax( ibeg, begin() );
+
     ResAlloc res(m_res,false);
     for( int i_a = 0; i_a < arh_f.size(); i_a++ )
-	if( beg >= end ) break;
-	else if( !arh_f[i_a]->err() && 
-	    beg <= arh_f[i_a]->end() && end > arh_f[i_a]->begin() )
+	if( ibeg > iend ) break;
+	else if( !arh_f[i_a]->err() && ibeg <= arh_f[i_a]->end() && iend >= arh_f[i_a]->begin() )
         {
-    	    n_end = vmin(end,arh_f[i_a]->end());
-	    n_beg = vmax(beg,arh_f[i_a]->begin());
-            arh_f[i_a]->getVal(buf,n_beg,n_end);
-    	    beg = n_end;
+	    for( ; ibeg < arh_f[i_a]->begin(); ibeg+=(long long)(archivator().valPeriod()*1000000.) )
+		buf.setI(EVAL_INT,ibeg);
+            arh_f[i_a]->getVal(buf,ibeg,vmin(iend,arh_f[i_a]->end()));
+	    ibeg = arh_f[i_a]->end()+1;
 	}
+    for( ; ibeg <= iend; ibeg+=(long long)(archivator().valPeriod()*1000000.) )
+	buf.setI(EVAL_INT,ibeg);
 }
 
 string ModVArchEl::getS( long long *tm, bool up_ord )

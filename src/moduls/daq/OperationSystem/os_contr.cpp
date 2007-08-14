@@ -343,7 +343,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/cntr/st/ctm" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(tm_calc));
+    if( a_path == "/cntr/st/ctm" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(tm_calc,6));
     else TController::cntrCmdProc(opt);
 }						    
 

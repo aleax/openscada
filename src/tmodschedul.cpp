@@ -175,10 +175,9 @@ void TModSchedul::subLoad( )
     
 
     string opt = TBDS::genDBGet(nodePath()+"ModAuto");
-    int el_cnt = 0;    
     string ovl;    
     m_am_list.clear();    
-    while( (ovl=TSYS::strSepParse(opt,el_cnt++,';')).size())
+    for( int el_off = 0; (ovl=TSYS::strSepParse(opt,0,';',&el_off)).size(); )
         m_am_list.push_back(ovl);
 }
 

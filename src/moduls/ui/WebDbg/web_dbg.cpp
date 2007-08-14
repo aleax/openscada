@@ -147,11 +147,9 @@ void TWEB::modLoad( )
     } while(next_opt != -1);    
     
     //========== Load parameters from config file =============
-    string trnds = TBDS::genDBGet(nodePath()+"Trends");
-    string trnd_el;
-    int el_cnt = 0;
+    string trnds = TBDS::genDBGet(nodePath()+"Trends"), trnd_el;
     trnd_lst.clear();
-    while( (trnd_el=TSYS::strSepParse(trnds,el_cnt++,';')).size())
+    for( int el_off = 0; (trnd_el=TSYS::strSepParse(trnds,0,';',&el_off)).size(); )
 	trnd_lst.push_back(trnd_el);
     n_col = atoi(TBDS::genDBGet(nodePath()+"n_col",TSYS::int2str(n_col)).c_str());
     h_sz = atoi(TBDS::genDBGet(nodePath()+"h_sz",TSYS::int2str(h_sz)).c_str());

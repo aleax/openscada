@@ -526,24 +526,16 @@ void Block::cntrCmdProc( XMLNode *opt )
 	if( !func() && ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_func = opt->text();
     }
     else if( a_path == "/blck/cfg/func_lnk" && ctrChkNode(opt,"get",0440,"root","root",SEQ_RD) )
-    {	
-	int c_lv = 0;
-	string path = "/";
-	while(TSYS::strSepParse(m_func,c_lv,'.').size())
-	    path+=TSYS::strSepParse(m_func,c_lv++,'.')+"/";
-	opt->setText(path);
-    }
+	opt->setText(TSYS::sepstr2path(m_func,'.'));
     else if( a_path == "/blck/cfg/fncs" && ctrChkNode(opt) )
     {
 	vector<string> list;
         int c_lv = 0;
-        string c_path = "";
-        while(TSYS::strSepParse(m_func,c_lv,'.').size())
+        string c_path = "", c_el;
+        for( int c_off = 0; (c_el=TSYS::strSepParse(m_func,0,'.',&c_off)).size(); c_lv++ )
         {
             opt->childAdd("el")->setText(c_path);
-            if( c_lv ) c_path+=".";
-            c_path = c_path+TSYS::strSepParse(m_func,c_lv,'.');
-            c_lv++;
+            c_path += c_lv ? "."+c_el : c_el;
         }
         opt->childAdd("el")->setText(c_path);
         if( c_lv != 0 ) c_path += ".";
@@ -580,15 +572,13 @@ void Block::cntrCmdProc( XMLNode *opt )
 	    else if( lev == '3' )
 	    {	
 		int c_lv = 0;
-                string c_path = "";
+                string c_path = "", c_el;
 			
 		opt->childAdd("el")->setText(c_path);    
-            	while(TSYS::strSepParse(lnk,c_lv,'.').size())
+            	for( int c_off = 0; (c_el=TSYS::strSepParse(lnk,0,'.',&c_off)).size(); c_lv++ )
             	{
-                    if( c_lv ) c_path+=".";
-                    c_path = c_path+TSYS::strSepParse(lnk,c_lv,'.');
+                    c_path += c_lv ? "."+c_el : c_el;
 		    opt->childAdd("el")->setText(c_path);
-                    c_lv++;
             	}
                 if(c_lv) c_path+=".";
 		switch(m_lnk[id].tp)

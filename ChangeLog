@@ -1,3 +1,26 @@
+2007-08-14 Roman
+- !!:/TSYS: Path elements speed optimisation is made: TArchiveS, TCntrNode, TElem, TModShedule, TPrmTmpl, 
+    TSecurity, DAQ/BlockCalc, DAQ/CIF, DAQ/JavaLikeCalc, DAQ/LogicLev, DAQ/SNMP, UI/QTStarter, UI/VCAEngine,
+    UI/Vision, UI/WebCfg and UI/WebDbg
+- !!:/SYS/Archive: Service commands for external access to values of archive data.
+- !!:/SYS/Value: Service commands for external access to curen values and values of archive data.
+- !!:/TCntrNode: Speed optimisation is made for function TCntrNode::cntrCmd().
+- FIX:/SYS: Precision of double real values default is fixed.
+- /TSYS: Added functions path2sepstr() and sepstr2path() for path form convertion.
+- /TSYS: The final kill flag is added for force disabling of control objects at final programm exited.
+- FIX:/Archive/BaseArch: Get arhive's values function (ModVArchEl::getVal() ) is fixed.
+- FIX:/UI/QTCfg: Columns adjusting is fixed.
+- FIX:/UI/QTStarter: Open QT-modules procedure is fixed.
+- !!:/UI/VCAEngine: The attribute's identifier support is added, for fast changing of attributes process, 
+    at visualisation level.
+- !!!!:/UI/VCAEngine: Full support of a the primitive "Diagram" type "Trend" is added.
+- FIX:/UI/Vision: The attrbute inspector boolean attributes process is fixed.
+- !!:/UI/Vision: The attribute's identifier support is added, for fast changing of attributes process,
+    at visualisation level.
+- !!!!:/UI/Vision: Full support of a the primitive "Diagram" type "Trend" is added.
+- /SYS: Updated Demo DB.
+
+
 2007-07-27 Maxim
 - !!!:/UI/Vision: The first implementation of primitive "ElFig" is added.
 - /UI/Vision: Add files vis_shape_elfig.cpp and vis_shape_elfig.h.

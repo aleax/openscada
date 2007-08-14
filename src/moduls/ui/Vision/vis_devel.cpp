@@ -786,9 +786,8 @@ void VisDevelop::itDBLoad( )
 	    _("Load visual item's data from DB"),false,false);
     if( dlg.exec() == QDialog::Accepted )
     {
-	int i_it = 0;
      	string cur_wdg;
-	while( !(cur_wdg=TSYS::strSepParse(own_wdg,i_it++,';')).empty() )
+	for( int i_off = 0; (cur_wdg=TSYS::strSepParse(own_wdg,0,';',&i_off)).size(); )
 	{
 	    //-- Send load request --
 	    string sel2 = TSYS::pathLev(cur_wdg,1);
@@ -813,9 +812,8 @@ void VisDevelop::itDBSave( )
 	    _("Save visual item's data to DB"),false,false);
     if( dlg.exec() == QDialog::Accepted )
     {
-	int i_it = 0;    
      	string cur_wdg;	
-	while( !(cur_wdg=TSYS::strSepParse(own_wdg,i_it++,';')).empty() )
+	for( int i_off = 0; (cur_wdg=TSYS::strSepParse(own_wdg,0,';',&i_off)).size(); )
 	{
 	    //-- Send load request --
 	    string sel2 = TSYS::pathLev(cur_wdg,1);
@@ -892,7 +890,7 @@ void VisDevelop::visualItAdd( QAction *cact, const QPoint &pnt )
     
     //Count level
     int p_el_cnt = 0;
-    while( TSYS::pathLev(own_wdg,p_el_cnt).size() ) p_el_cnt++;
+    for( int i_off = 0; TSYS::pathLev(own_wdg,0,true,&i_off).size(); p_el_cnt++ ) ;
     
     //Make request id and name dialog
     InputDlg dlg(this,cact->icon(),
@@ -962,8 +960,7 @@ void VisDevelop::visualItAdd( QAction *cact, const QPoint &pnt )
 void VisDevelop::visualItDel( )
 {
     string del_wdg;
-    int w_cnt = 0;
-    while((del_wdg=TSYS::strSepParse(work_wdg,w_cnt++,';')).size())
+    for( int w_off = 0; (del_wdg=TSYS::strSepParse(work_wdg,0,';',&w_off)).size(); )
     {
 	//- Get owner object path and deleted item identifier -
 	string it_own, it_id;
@@ -1045,8 +1042,7 @@ void VisDevelop::visualItProp( )
 void VisDevelop::visualItEdit( )
 {
     string ed_wdg;
-    int w_cnt = 0;
-    while((ed_wdg=TSYS::strSepParse(work_wdg,w_cnt++,';')).size())
+    for( int w_off = 0; (ed_wdg=TSYS::strSepParse(work_wdg,0,';',&w_off)).size(); )
     {
 	QString w_title(QString(_("Widget: %1")).arg(ed_wdg.c_str()));
 	//Check to already opened widget window

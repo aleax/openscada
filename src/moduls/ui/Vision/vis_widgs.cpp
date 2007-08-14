@@ -598,52 +598,29 @@ WdgView *WdgView::newWdgItem( const string &iwid )
     return new WdgView(iwid,wLevel()+1,mainWin(),this);
 }
 
-void WdgView::attrLoad( QMap<QString, QString> &attrs )
-{
-    if( attrs.empty() )	return;
-    //- Load generic data -
-    bool act = false;
-    int g_x, g_y;
-    QMap<QString, QString>::const_iterator vl;	    
-    if( wLevel( ) > 0 )
-    {
-	//-- Update position --
-	if( (vl=attrs.find("geomX")) == attrs.end() ) g_x = pos().x();
-	else { act = true; g_x = vl.value().toInt(); }
-	if( (vl=attrs.find("geomY")) == attrs.end() ) g_y = pos().y();
-	else { act = true; g_y = vl.value().toInt(); }
-	if( act ) move(g_x,g_y);
-	//-- Update level --
-	if( (vl=attrs.find("geomZ")) != attrs.end() ) z_coord = vl.value().toInt();	
-    }
-    //-- Update size --
-    act = false;
-    if( (vl=attrs.find("geomW")) == attrs.end() ) g_x = size().width();
-    else { act = true; g_x = vl.value().toInt(); }
-    if( (vl=attrs.find("geomH")) == attrs.end() ) g_y = size().height();
-    else { act = true; g_y = vl.value().toInt(); }
-    if( act ) resize(g_x,g_y);
-
-    if( shape ) shape->load( this, attrs );
-}
-
-bool WdgView::attrSet( const string &attr, const string &val, bool locReload )
+bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 {
     //printf("TEST 00: %s: %s\n",attr.c_str(),val.c_str());
     //- Send value to model -
-    XMLNode set_req("set");
-    set_req.setAttr("user",user())->
-	    setAttr("path",id()+"/%2fattr%2fscmd");
-    set_req.childAdd("el")->setAttr("id",attr)->setText(val);
-    if( !mod->cntrIfCmd(set_req) && locReload )
+    if( !attr.empty() )
     {
-	//- Reload new attribute -
-	QMap<QString, QString> attrs;
-	attrs[attr.c_str()] = val.c_str();
-        attrLoad(attrs);
-	return true;
+	XMLNode set_req("set");
+	set_req.setAttr("user",user())->
+		setAttr("path",id()+"/%2fattr%2fscmd");
+	set_req.childAdd("el")->setAttr("id",attr)->setText(val);
+	mod->cntrIfCmd(set_req);
     }
-    return false;
+    switch(uiPrmPos)
+    {
+	case 0:	 return false;
+	case 7:	 if(wLevel( )>0) move(atoi(val.c_str()),pos().y());	break;
+	case 8:	 if(wLevel( )>0) move(pos().x(),atoi(val.c_str()));	break;
+	case 9:	 resize(atoi(val.c_str()),size().height());		break;
+	case 10: resize(size().width(),atoi(val.c_str()));		break;
+	case 11: if(wLevel( )>0) z_coord = atoi(val.c_str());		break;
+	//default: if( shape ) return shape->attrSet(this,uiPrmPos,val);
+    }
+    return shape ? shape->attrSet(this,uiPrmPos,val) : true;
 }
 
 void WdgView::load( const string& item )
@@ -658,12 +635,8 @@ void WdgView::load( const string& item )
 	get_req.setAttr("user",user())->
 		setAttr("path",id()+"/%2fattr%2fscmd");
 	if( !mod->cntrIfCmd(get_req) )
-	{
-	    QMap<QString, QString> attrs;
 	    for( int i_el = 0; i_el < get_req.childSize(); i_el++ )
-		attrs[get_req.childGet(i_el)->attr("id").c_str()] = get_req.childGet(i_el)->text().c_str();		
-	    attrLoad(attrs);
-	}
+		attrSet("",get_req.childGet(i_el)->text(),atoi(get_req.childGet(i_el)->attr("pos").c_str()));
     }
     if( item != id() )
 	for( int i_c = 0; i_c < children().size(); i_c++ )
@@ -671,25 +644,6 @@ void WdgView::load( const string& item )
 		((WdgView*)children().at(i_c))->load(item);
     
     orderUpdate( );
-}
-
-void WdgView::save( const string& item )
-{
-    if( item.empty() || item == id() )
-    {
-	XMLNode set_req("set");
-	set_req.setAttr("user",user())->setAttr("path",id()+"/%2fattr%2fscmd");
-	set_req.childAdd("el")->setAttr("id","geomX")->setText(TSYS::int2str(pos().x()));
-	set_req.childAdd("el")->setAttr("id","geomY")->setText(TSYS::int2str(pos().y()));
-	set_req.childAdd("el")->setAttr("id","geomW")->setText(TSYS::int2str(size().width()));
-	set_req.childAdd("el")->setAttr("id","geomH")->setText(TSYS::int2str(size().height()));
-	set_req.childAdd("el")->setAttr("id","geomZ")->setText(TSYS::int2str(z_coord));	
-	mod->cntrIfCmd(set_req);
-    }
-    if( item != id() && wLevel() == 0 )
-	for( int i_c = 0; i_c < children().size(); i_c++ )
-	    if( qobject_cast<WdgView*>(children().at(i_c)) )
-		qobject_cast<WdgView*>(children().at(i_c))->save(item);
 }
 
 void WdgView::childsUpdate( bool newLoad )

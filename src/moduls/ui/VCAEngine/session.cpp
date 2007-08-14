@@ -191,20 +191,20 @@ AutoHD<SessPage> Session::at( const string &id )
 
 void Session::uiComm( const string &com, const string &prm, const string &src )
 {
-    //- Find of pattern adequancy opened page -
+    //- Find of pattern adequancy for opened page -
     string oppg;		//Opened page according of pattern
 
     vector<string> &op_ls = openList();
     for( int i_op = 0; i_op < op_ls.size(); i_op++ )
     {
-	string cur_pt_el;
-	int i_el = 0;
-	while((cur_pt_el=TSYS::pathLev(prm,i_el++)).size())	
-	{
-	    string cur_el = TSYS::pathLev(op_ls[i_op],i_el);
+	string cur_pt_el, cur_el;
+        int i_el = 0;
+        while((cur_pt_el=TSYS::pathLev(prm,i_el++)).size())
+        {
+    	    cur_el = TSYS::pathLev(op_ls[i_op],i_el);
 	    if( cur_el.empty() || (cur_pt_el.substr(0,3) == "pg_" && cur_pt_el != cur_el) ) break;
 	}
-	if( cur_pt_el.empty() )	{ oppg = op_ls[i_op]; break; }
+	if( cur_pt_el.empty() ) { oppg = op_ls[i_op]; break; }
     }
     //printf("TEST 20: UI Prm %s; Open page %s\n",prm.c_str(),oppg.c_str());    
     //- Individual commands process -
@@ -366,7 +366,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",RWR_R_,user().c_str(),"UI",SEQ_RD) )	opt->setText(projNm());
 	if( ctrChkNode(opt,"set",RWR_R_,user().c_str(),"UI",SEQ_WR) )	setProjNm(opt->text());
     }
-    else if( a_path == "/obj/st/calc_tm" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(calcTm()));
+    else if( a_path == "/obj/st/calc_tm" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(calcTm(),6));
     else if( a_path == "/obj/prj_ls" && ctrChkNode(opt) )
     {
 	vector<string> lst;
@@ -868,17 +868,14 @@ void SessWdg::calc( bool first, bool last, unsigned clc )
     //-- Process widget's events --
     if( !wevent.empty() )
     {    
-	string sevup;
-	string sev;
-	int elevcnt = 0;
-	while( (sev=TSYS::strSepParse(wevent,elevcnt++,';')).size() )
+	string sevup, sev;
+	for( int el_off = 0; (sev=TSYS::strSepParse(wevent,0,';',&el_off)).size(); )
 	{
 	    //-- Check for process events --
-	    string sprc_lst = attrAt("evProc").at().getS();
-	    string sprc;	
-	    int elpcnt = 0;
+	    string sprc_lst = attrAt("evProc").at().getS(), 
+		   sprc;	
 	    bool evProc = false;
-	    while( (sprc=TSYS::strSepParse(sprc_lst,elpcnt++,'\n')).size() )
+	    for( int elp_off = 0; (sprc=TSYS::strSepParse(sprc_lst,0,'\n',&elp_off)).size(); )
 		if( TSYS::strSepParse(sprc,0,':') == sev )
 		{
 	    	    ownerSess()->uiComm(TSYS::strSepParse(sprc,1,':'),TSYS::strSepParse(sprc,2,':'),path());
@@ -889,7 +886,7 @@ void SessWdg::calc( bool first, bool last, unsigned clc )
 	//-- Put left events to parent widget --
 	SessWdg *owner = ownerSessWdg(true);
 	if( owner && !sevup.empty() ) owner->eventAdd(sevup);
-    }    
+    }
 }
 
 bool SessWdg::attrChange( Attr &cfg, void *prev )
@@ -929,7 +926,9 @@ void SessWdg::cntrCmdProc( XMLNode *opt )
 	    {
 		attr = attrAt(ls[i_l]);
 		if( !(attr.at().flgGlob()&Attr::IsUser) && attr.at().modifVal() >= tm )
-		    opt->childAdd("el")->setAttr("id",ls[i_l].c_str())->setText(attr.at().getS());
+		    opt->childAdd("el")->setAttr("id",ls[i_l].c_str())->
+					 setAttr("pos",TSYS::int2str(attr.at().fld().reserve()))->
+					 setText(attr.at().getS());
 	    }
 	    
 	    opt->setAttr("tm",TSYS::uint2str(tm_n));
@@ -940,7 +939,7 @@ void SessWdg::cntrCmdProc( XMLNode *opt )
 	    for( int i_ch = 0; i_ch < opt->childSize(); i_ch++ )
 	    {
 		string aid = opt->childGet(i_ch)->attr("id");
-		if( aid == "event" )	eventAdd(opt->childGet(i_ch)->text()+";");
+		if( aid == "event" ) eventAdd(opt->childGet(i_ch)->text()+";");
 		else attrAt(aid).at().setS(opt->childGet(i_ch)->text(),tm);
 	    }
 	}

@@ -963,12 +963,9 @@ void TMArchivator::save( )
 void TMArchivator::categ( vector<string> &list )
 {
     list.clear();
-    int i_lv = 0;
-    while(TSYS::strSepParse(m_cat_o,i_lv,';').size())
-    {
-	list.push_back(TSYS::strSepParse(m_cat_o,i_lv,';'));
-	i_lv++;
-    }
+    string c_vl;
+    for( int i_off = 0; (c_vl=TSYS::strSepParse(m_cat_o,0,';',&i_off)).size(); )
+	list.push_back(c_vl);
 }
 
 bool TMArchivator::chkMessOK( const string &icateg, TMess::Type ilvl )

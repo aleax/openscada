@@ -68,8 +68,7 @@ void ModInspAttr::setWdg( const string &iwdg )
     vector<string> wdg_ls;
 
     //- Get widgets list -
-    int v_cnt = 0;
-    while((sval=TSYS::strSepParse(iwdg,v_cnt++,';')).size())
+    for( int v_off = 0; (sval=TSYS::strSepParse(iwdg,0,';',&v_off)).size(); )
         wdg_ls.push_back(sval);
     if( wdg_ls.size() == 0 )
     {
@@ -222,7 +221,7 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it ) // Item *it)
             string a_nm = gnd->attr("dscr");
             Item *cur_it = it;
             //-- Parse attributes group --
-            if(TSYS::strSepParse(a_nm,1,':').size())
+            if( TSYS::strSepParse(a_nm,1,':').size() )
                 for(int i_l = 0; true; i_l++)
                 {
                     string c_sel = TSYS::strSepParse(a_nm,i_l,':');
@@ -379,7 +378,8 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &value, int 
       	XMLNode set_req("set");
     	set_req.setAttr("user",user())->
 		setAttr("path",nwdg+"/%2fattr%2f"+nattr)->
-		setText(value.toString().toAscii().data());
+		setText((value.type()==QVariant::Bool) ? 
+			(value.toBool()?"1":"0") : value.toString().toAscii().data());
 	if( !mod->cntrIfCmd(set_req) )
 	{
 	    it->setData( (it->data().type()==QVariant::Bool) ? value.toBool() : value );
@@ -1425,12 +1425,31 @@ WdgView *DevelWdgView::newWdgItem( const string &iwid )
     return wdg;
 }
 
-void DevelWdgView::save( const string& item )
+void DevelWdgView::saveGeom( const string& item )
 {
-    WdgView::save(item);
+    if( item.empty() || item == id() )
+    {
+	attrSet("geomX", TSYS::int2str(pos().x()),7);
+	attrSet("geomY", TSYS::int2str(pos().y()),8);
+	attrSet("geomW", TSYS::int2str(size().width()),9);
+	attrSet("geomH", TSYS::int2str(size().height()),10);
+	attrSet("geomZ", TSYS::int2str(z_coord),11);
+        /*XMLNode set_req("set");
+        set_req.setAttr("user",user())->setAttr("path",id()+"/%2fattr%2fscmd");
+        set_req.childAdd("el")->setAttr("id","geomX")->setText(TSYS::int2str(pos().x()));
+        set_req.childAdd("el")->setAttr("id","geomY")->setText(TSYS::int2str(pos().y()));
+        set_req.childAdd("el")->setAttr("id","geomW")->setText(TSYS::int2str(size().width()));
+        set_req.childAdd("el")->setAttr("id","geomH")->setText(TSYS::int2str(size().height()));
+        set_req.childAdd("el")->setAttr("id","geomZ")->setText(TSYS::int2str(z_coord));
+        mod->cntrIfCmd(set_req);*/
+    }
+    if( item != id() && wLevel() == 0 )
+        for( int i_c = 0; i_c < children().size(); i_c++ )
+            if( qobject_cast<DevelWdgView*>(children().at(i_c)) )
+                ((DevelWdgView*)children().at(i_c))->saveGeom(item);
 
     //- For top items (like inspector) data update -
-    if( wLevel() == 0 )  setSelect(true);
+    if( wLevel() == 0  )  setSelect(true);
 }
 
 void DevelWdgView::setSelect( bool vl, bool childs )
@@ -1614,7 +1633,7 @@ void DevelWdgView::wdgViewTool( QAction *act )
                     cwdg->move(cwdg->pos().x(), selRect.y()+(selRect.height()-cwdg->height())/2);
             }
         }
-        save("");
+        saveGeom("");
     }
     else if( sact.at(0) == "level" )
     {
@@ -1625,9 +1644,8 @@ void DevelWdgView::wdgViewTool( QAction *act )
         string sel_ws = selectChilds();
         string sel_w;
 
-        int w_cnt=0;
         if( is_rise || is_up )
-        while( (sel_w=TSYS::strSepParse(sel_ws,w_cnt++,';')).size() )
+        for( int w_off=0; (sel_w=TSYS::strSepParse(sel_ws,0,';',&w_off)).size(); )
         {
             bool is_move = false;
             DevelWdgView *cwdg = NULL;
@@ -1654,9 +1672,8 @@ void DevelWdgView::wdgViewTool( QAction *act )
         	cwdg->setZ(ewdg->z()+1);
             }
         }
-        w_cnt=0;
         if( is_lower || is_down )
-        while( (sel_w=TSYS::strSepParse(sel_ws,w_cnt++,';')).size() )
+        for( int w_off=0; (sel_w=TSYS::strSepParse(sel_ws,0,';',&w_off)).size(); )
         {
             bool is_move = false;
             DevelWdgView *cwdg = NULL;
@@ -1681,7 +1698,7 @@ void DevelWdgView::wdgViewTool( QAction *act )
                 cwdg->setZ(ewdg->z()-1);
             }
 	}
-        save("");
+        saveGeom("");
     }
 }
 
@@ -1830,7 +1847,7 @@ bool DevelWdgView::event( QEvent *event )
 		if( moveHold && !edit() )
 		{
 	    	    moveHold = false;
-	    	    if( cursor().shape() != Qt::ArrowCursor ) save(""); 
+	    	    if( cursor().shape() != Qt::ArrowCursor ) saveGeom(""); 
 	    	    return true;
 		}
      		break;
@@ -2035,7 +2052,7 @@ bool DevelWdgView::event( QEvent *event )
 				((DevelWdgView*)children().at(i_c))->select( ) )
 			{
 			    srect = srect.united(((DevelWdgView*)children().at(i_c))->geometry());
-			    save(((DevelWdgView*)children().at(i_c))->id());
+			    saveGeom(((DevelWdgView*)children().at(i_c))->id());
 			}
 		    mainWin()->statusBar()->showMessage(
 			QString(_("Elements: '%1' --- xy(%2:%3) wh[%4:%5]"))

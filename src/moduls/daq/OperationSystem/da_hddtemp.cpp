@@ -70,14 +70,10 @@ void Hddtemp::dList( vector<string> &list )
 {    
     try 
     { 
-	string val = getHDDTemp( );
-	int p_cnt = 0;
+	string val = getHDDTemp( ), c_el;
 	list.clear();
-        while( TSYS::strSepParse(val,p_cnt+1,'|').size() )
-        {
-            list.push_back(TSYS::strSepParse(val,p_cnt+1,'|'));
-            p_cnt+=5;
-        }
+        for( int p_cnt = 0; (c_el=TSYS::strSepParse(val,p_cnt+1,'|')).size(); p_cnt+=5 )
+            list.push_back(c_el);
     }
     catch( TError err ) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
@@ -86,22 +82,17 @@ void Hddtemp::getVal( TMdPrm *prm )
 {    
     try 
     { 
-       	string dev = prm->cfg("SUBT").getS();
-	
-	string val = getHDDTemp( );
-	
-	int p_cnt = 0;
-        while( TSYS::strSepParse(val,p_cnt+1,'|').size() )
-        {
-	    if( TSYS::strSepParse(val,p_cnt+1,'|') == dev )
+       	string dev = prm->cfg("SUBT").getS(),	
+	       val = getHDDTemp( ),
+	       c_el;	
+        for( int p_cnt = 0; (c_el=TSYS::strSepParse(val,p_cnt+1,'|')).size(); p_cnt+=5 )
+	    if( c_el == dev )
 	    {
 		prm->vlAt("disk").at().setS( TSYS::strSepParse(val,p_cnt+2,'|'), 0, true );
 		prm->vlAt("t").at().setI( atoi(TSYS::strSepParse(val,p_cnt+3,'|').c_str()), 0, true );
 		prm->vlAt("ed").at().setS( TSYS::strSepParse(val,p_cnt+4,'|'), 0, true );
 		break;
-	    }	    
-            p_cnt+=5;
-	}
+	    }
     }    
     catch( TError err ) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }

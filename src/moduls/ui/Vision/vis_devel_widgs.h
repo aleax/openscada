@@ -372,7 +372,7 @@ class DevelWdgView: public WdgView
     
     public slots:
         void wdgViewTool( QAction* );               //View order and align of included widgets operated
-	void save( const string& item );	
+	void saveGeom( const string& item );	
 	
     protected:
         //- Protected methods -

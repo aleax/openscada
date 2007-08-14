@@ -131,8 +131,9 @@ class ShapeElFigure : public WdgShape
     
         void editEnter( WdgView *view );
         void editExit( WdgView *view );
+	
+	bool attrSet( WdgView *view, int uiPrmPos, const string &val);
     
-	void load( WdgView *view, QMap<QString, QString> &attrs );
 	bool event( WdgView *view, QEvent *event );
     
 	//Процедура создания экземнпляра класса ShapeItem

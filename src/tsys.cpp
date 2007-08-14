@@ -44,12 +44,14 @@
 //Continuously access variable
 TMess 	*Mess;
 TSYS  	*SYS;
+bool TSYS::finalKill = false;
 
 TSYS::TSYS( int argi, char ** argb, char **env ) : 
     m_confFile("/etc/oscada.xml"), m_id("EmptySt"), m_name("Empty Station"),
     m_user("root"),argc(argi), envp((const char **)env), argv((const char **)argb), stop_signal(0), 
     m_sysOptCfg(false), mWorkDB(""), mSaveAtExit(false)
 {
+    finalKill = false;
     SYS = this;		//Init global access value
     m_subst = grpAdd("sub_",true);
     nodeEn();
@@ -72,6 +74,8 @@ TSYS::TSYS( int argi, char ** argb, char **env ) :
 
 TSYS::~TSYS(  )
 {
+    finalKill = true;
+
     //Delete all nodes in order
     del("ModSched");
     del("UI");
@@ -567,6 +571,27 @@ string TSYS::pathLev( const string &path, int level, bool encode, int *off )
     }
 }
 
+string TSYS::path2sepstr( const string &path, char sep )
+{
+    string rez, curv;
+    int off = 0;
+    while( !(curv=TSYS::pathLev(path,0,false,&off)).empty() )
+	rez+=curv+sep;
+    if(!rez.empty())	rez.resize(rez.size()-1);
+    
+    return rez;
+}
+
+string TSYS::sepstr2path( const string &str, char sep )
+{
+    string rez, curv;
+    int off = 0;
+    while( !(curv=TSYS::strSepParse(str,0,sep,&off)).empty() )
+	rez+="/"+curv;
+
+    return rez;
+}
+
 string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 {
     int i_sz;
@@ -824,12 +849,12 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     else if( a_path == "/gen/prog" && ctrChkNode(opt) )	opt->setText(PACKAGE_NAME);
     else if( a_path == "/gen/ver" && ctrChkNode(opt) )	opt->setText(VERSION);
     else if( a_path == "/gen/stat" && ctrChkNode(opt) )	opt->setText(name());
-    else if( a_path == "/gen/frq" && ctrChkNode(opt) )	opt->setText(TSYS::real2str((float)sysClk()/1000000.));
+    else if( a_path == "/gen/frq" && ctrChkNode(opt) )	opt->setText(TSYS::real2str((float)sysClk()/1000000.,6));
     else if( a_path == "/gen/clk_res" && ctrChkNode(opt) )	
     {
         struct timespec tmval;
         clock_getres(CLOCK_REALTIME,&tmval);
-        opt->setText(TSYS::real2str((float)tmval.tv_nsec/1000000.));
+        opt->setText(TSYS::real2str((float)tmval.tv_nsec/1000000.,6));
     }
     else if( a_path == "/gen/in_charset" && ctrChkNode(opt) )	opt->setText(Mess->charset());
     else if( a_path == "/gen/config" && ctrChkNode(opt) )	opt->setText(m_confFile);

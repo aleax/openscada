@@ -575,7 +575,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/scheme/ctm" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(tm_calc));
+    if( a_path == "/scheme/ctm" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(tm_calc,6));
     else if( a_path == "/scheme/sch" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
@@ -642,10 +642,9 @@ void Prm::enable()
         throw TError(nodePath().c_str(),_("Block not connected."));
     
     //Init elements
-    int io_cnt = 0;
-    while(TSYS::strSepParse(cfg("IO").getS(),io_cnt,';').size())
+    string mio;
+    for( int io_off = 0; (mio=TSYS::strSepParse(cfg("IO").getS(),0,';',&io_off)).size(); )
     {
-	string mio = TSYS::strSepParse(cfg("IO").getS(),io_cnt,';');
         unsigned flg = TVal::DirWrite|TVal::DirRead;
         TFld::Type    tp  = TFld::String;
         int           io_id = ((Contr &)owner()).blkAt(m_blck).at().ioId(mio);
@@ -668,17 +667,15 @@ void Prm::enable()
 		v_el.fldAdd( new TFld(mio.c_str(),((Contr &)owner()).blkAt(m_blck).at().func()->io(io_id)->name().c_str(),tp,flg) );
     	    }
 	}
-	io_cnt++;
     }
     
     //Check and delete no used fields
     for(int i_fld = 0; i_fld < v_el.fldSize(); i_fld++)
     {
         string fel;
-        int io_cnt = 0;
-        while( (fel = TSYS::strSepParse(cfg("IO").getS(),io_cnt++,';')).size() )
+        for( int io_off = 0; (fel=TSYS::strSepParse(cfg("IO").getS(),0,';',&io_off)).size(); )
     	    if( fel == v_el.fldAt(i_fld).name() ) break;
-        if( !fel.size() )
+        if( fel.empty() )
         {
             v_el.fldDel(i_fld);
             i_fld--;

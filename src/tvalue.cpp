@@ -343,7 +343,7 @@ string TVal::getS( long long *tm, bool sys )
 	{ char vl = getB(tm,sys); return (vl==EVAL_BOOL)?EVAL_STR:TSYS::int2str((bool)vl); }
 	case TFld::String:
 	    //Get from archive
-	    if( tm && !m_arch.freeStat() && *tm/m_arch.at().period() < time/m_arch.at().period() ) 
+	    if( tm && (*tm) && !m_arch.freeStat() && *tm/m_arch.at().period() < time/m_arch.at().period() ) 
 		return m_arch.at().getS(tm);
 	    //Get value from config
 	    if( m_cfg )
@@ -370,7 +370,7 @@ double TVal::getR( long long *tm, bool sys )
 	{ char vl = getB(tm,sys); return (vl==EVAL_BOOL)?EVAL_REAL:(bool)vl; }
 	case TFld::Real:		
 	    //Get from archive
-	    if( tm && !m_arch.freeStat() && *tm/m_arch.at().period() < time/m_arch.at().period() ) 
+	    if( tm && (*tm) && !m_arch.freeStat() && *tm/m_arch.at().period() < time/m_arch.at().period() ) 
 		return m_arch.at().getR(tm);
 	    //Get value from config
 	    if( m_cfg )
@@ -397,7 +397,7 @@ int TVal::getI( long long *tm, bool sys )
 	{ char vl = getB(tm,sys); return (vl==EVAL_BOOL)?EVAL_INT:(bool)vl; }
 	case TFld::Integer:
 	    //Get from archive
-	    if( tm && !m_arch.freeStat() && *tm/m_arch.at().period() < time/m_arch.at().period() ) 
+	    if( tm && (*tm) && !m_arch.freeStat() && *tm/m_arch.at().period() < time/m_arch.at().period() ) 
 		return m_arch.at().getI(tm);
 	    //Get value from config
 	    if( m_cfg )
@@ -424,7 +424,7 @@ char TVal::getB( long long *tm, bool sys )
 	{ double vl = getR(tm,sys); return (vl==EVAL_REAL)?EVAL_BOOL:(bool)vl; }
 	case TFld::Boolean:
 	    //Get from archive
-	    if( tm && !m_arch.freeStat() && *tm/m_arch.at().period() < time/m_arch.at().period() ) 
+	    if( tm && (*tm) && !m_arch.freeStat() && *tm/m_arch.at().period() < time/m_arch.at().period() ) 
 		return m_arch.at().getB(tm);
 	    //Get value from config
 	    if( m_cfg )
@@ -567,16 +567,42 @@ void TVal::setB( char value, long long tm, bool sys )
 
 void TVal::cntrCmdProc( XMLNode *opt )
 {
+    string a_path = opt->attr("path");
+    //- Service commands process -
+    if( a_path.substr(0,6) == "/serv/"  )
+	switch( atoi(a_path.substr(6).c_str()) )
+	{
+	    case 0:	//Archive information
+		if( !ctrChkNode(opt) )	break;
+		if( !arch().freeStat() ) arch().at().cntrCmdProc(opt);
+		else
+		{
+            	    opt->setAttr("arh_end","0")->setAttr("arh_beg","0")->setAttr("arh_per","0");
+            	    opt->setAttr("arh_vtp",TSYS::int2str(fld().type()));
+		}
+		return;
+	    case 1:	//Values request
+		if( !ctrChkNode(opt) )	break;
+		if( !atoll(opt->attr("tm_grnd").c_str()) )
+		{
+		    long long tm = atoll(opt->attr("tm").c_str());	
+		    opt->setText(getS(&tm));
+		    opt->setAttr("tm",TSYS::ll2str(tm));
+		    return;
+		}
+		if( !arch().freeStat() ) arch().at().cntrCmdProc(opt);
+		else throw TError(nodePath().c_str(),"Attribute not have archive");
+		return;
+	    default:	return;
+	}
+
+    //- Interface comands process -
+    //-- Info command process --
     if( opt->name() == "info" )	
     {
 	TCntrNode::cntrCmdProc(opt);
 	return;
     }
-    //Process command to page
-    string a_path = opt->attr("path");
-    //- Service commands process -
-    if( a_path == "/val/scmd" && ctrChkNode(opt) )
-    {
-	if( !arch().freeStat() ) arch().at().cntrCmdProc(opt);
-    }
+    //-- Process command to page --
+    TCntrNode::cntrCmdProc(opt);
 }

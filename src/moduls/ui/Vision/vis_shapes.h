@@ -24,13 +24,13 @@
 #define VIS_SHAPES_H
 
 #include <string>
-#include <vector> 
+#include <deque> 
 
 #include <QObject>
 #include <QMap>
 
 using std::string;
-using std::vector; 
+using std::deque; 
 
 class QEvent;
 class QAction;
@@ -50,7 +50,7 @@ class WdgShape : public QObject
     public:
 	WdgShape( const string &iid );
 	
-	string id( )	{ return m_id; }
+	string id( )				{ return m_id; }
     
         virtual bool isEditable( ) 		{ return false; }
 	
@@ -60,9 +60,8 @@ class WdgShape : public QObject
 	virtual void editEnter( WdgView *view )	{ }
 	virtual void editExit( WdgView *view )	{ }
 	
-	virtual void load( WdgView *view, QMap<QString, QString> &attrs )	{ }
-	virtual void save( WdgView *view )	{ }
-    
+	virtual bool attrSet( WdgView *view, int uiPrmPos, const string &val )		{ return false; }
+	
 	virtual bool event( WdgView *view, QEvent *event );
 	virtual bool eventFilter( WdgView *view, QObject *object, QEvent *event )	{ }
 
@@ -82,7 +81,8 @@ class ShapeFormEl : public WdgShape
     public:
 	ShapeFormEl( );
 	
-	void load( WdgView *view, QMap<QString, QString> &attrs );
+	void init( WdgView *view );
+	bool attrSet( WdgView *view, int uiPrmPos, const string &val);
 	bool event( WdgView *view, QEvent *event );	
 	bool eventFilter( WdgView *view, QObject *object, QEvent *event );
     
@@ -117,7 +117,9 @@ class ShapeText : public WdgShape
     public:
 	ShapeText( );
 
-	void load( WdgView *view, QMap<QString, QString> &attrs );
+	void init( WdgView *view );
+	void destroy( WdgView *view );
+	bool attrSet( WdgView *view, int uiPrmPos, const string &val);
 	bool event( WdgView *view, QEvent *event );
 }; 
 
@@ -130,8 +132,8 @@ class ShapeMedia : public WdgShape
 	ShapeMedia( );
 	
 	void init( WdgView *view );
-	void destroy( WdgView *view );
-	void load( WdgView *view, QMap<QString, QString> &attrs );
+	void destroy( WdgView *view );	
+	bool attrSet( WdgView *view, int uiPrmPos, const string &val);
 	bool event( WdgView *view, QEvent *event );
 };
 
@@ -140,16 +142,77 @@ class ShapeMedia : public WdgShape
 //************************************************
 class ShapeDiagram : public WdgShape
 {
+    Q_OBJECT
+
     public:
+	//Methods
 	ShapeDiagram( );
 	
 	void init( WdgView *view );
 	void destroy( WdgView *view );
-	void load( WdgView *view, QMap<QString, QString> &attrs );
+	bool attrSet( WdgView *view, int uiPrmPos, const string &val);
 	bool event( WdgView *view, QEvent *event );
 	
+    private slots:
+	void tracing( );	//Trends tracing
+
     private:
-	void update( WdgView *view );
+	//Data
+	//- Trend object's class -
+	class TrendObj
+	{
+	    public:
+		//Data
+		class SHg  
+		{ 
+		    public:
+			SHg( long long itm, double ival ) : tm(itm), val(ival) { }
+			long long tm; 
+			double val;
+		};
+		//Methods
+		TrendObj( WdgView *view );
+		
+		string addr()		{ return m_addr; }
+		double bordL()		{ return m_bord_low; }
+		double bordU()		{ return m_bord_up; }
+		string color()		{ return m_color; }
+		double curVal()		{ return m_curvl; }
+		int    valTp()		{ return val_tp; }
+		long long valBeg();
+		long long valEnd();
+		int val( long long tm );
+		deque<SHg> &val()	{ return vals; }
+
+		void setAddr( const string &vl );
+		void setBordL( double vl )	{ m_bord_low = vl; }
+		void setBordU( double vl )	{ m_bord_up  = vl; }
+		void setColor( const string &vl ){ m_color = vl; }
+		void setCurVal( double vl )	{ m_curvl = vl; }
+
+		void loadData( bool full = false );
+		
+	    private:		
+		//Attributes
+		string 		m_addr;		//A parameter or an archive item address
+		double m_bord_low, m_bord_up;	//Borders
+		double		m_curvl;	//Curent value
+		string 		m_color;	//Values line color
+                //- Archive -		
+        	int		arh_per;	//Archive period
+		long long       arh_beg;        //Archive begin time
+		long long       arh_end;        //Archive end time
+		//- Values -
+		int    		val_tp;		//Values type
+		deque<SHg>	vals;		//Values buffer
+		
+		WdgView 	*view;
+	};
+	
+	//Methods
+	void makeTrendsPicture( WdgView *view );
+	void loadTrendsData( WdgView *view, bool full = false );
+	void setCursor( WdgView *view, long long itm );
 };    
 
 //************************************************
@@ -191,8 +254,9 @@ class ShapeBox : public WdgShape
 	ShapeBox( );
 
 	void init( WdgView *view );
+	void destroy( WdgView *view );
 
-	void load( WdgView *view, QMap<QString, QString> &attrs );
+	bool attrSet( WdgView *view, int uiPrmPos, const string &val);
 	bool event( WdgView *view, QEvent *event );
 };
 

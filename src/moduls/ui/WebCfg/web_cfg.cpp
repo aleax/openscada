@@ -1163,8 +1163,7 @@ int TWEB::post_table( SSess &ses, XMLNode &node, string prs_path )
 			{
 			    //Get Key columns
 			    string key;
-			    int i_key = 0;
-			    while((key = TSYS::strSepParse(node.attr("key"),i_key++,',')).size())
+			    for( int i_off = 0; (key=TSYS::strSepParse(node.attr("key"),0,',',&i_off)).size(); )
 				for( int i_el = 0; i_el < dt_tbl.childSize(); i_el++ )
 				    if( dt_tbl.childGet(i_el)->attr("id") == key )
 				    { 
@@ -1216,8 +1215,7 @@ int TWEB::post_table( SSess &ses, XMLNode &node, string prs_path )
 		{
 		     //Get Key columns
 		     string key;
-		     int i_key = 0;
-		     while((key = TSYS::strSepParse(node.attr("key"),i_key++,',')).size())
+		     for( int i_off = 0; (key=TSYS::strSepParse(node.attr("key"),0,',',&i_off)).size(); )
                         for( int i_el = 0; i_el < dt_tbl.childSize(); i_el++ )
 			    if( dt_tbl.childGet(i_el)->attr("id") == key )
 			    { n_el1.setAttr("key_"+key,dt_tbl.childGet(i_el)->childGet(i_rw)->text()); break; }		

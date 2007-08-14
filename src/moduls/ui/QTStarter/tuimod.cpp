@@ -220,17 +220,12 @@ void *TUIMod::Task( void * )
 		mod->owner().modAt(list[i_l]).at().modFuncPresent("QMainWindow *openWindow();") )
 	{
 	    //Search module into start list
-	    int i_el = 0;
+	    int i_off = 0;
 	    string s_el;
-	    while( TSYS::strSepParse(mod->start_mod,i_el,';').size() )
-	    {
-		if( TSYS::strSepParse(mod->start_mod,i_el,';') == list[i_l] )	break;
-		i_el++;
-	    }
-	    if( s_el.size() || !i_el ) 
-	    {
-		if(winCntr->callQTModule(list[i_l]))	op_wnd++;
-	    }
+	    while( (s_el=TSYS::strSepParse(mod->start_mod,0,';',&i_off)).size() )
+		if( s_el == list[i_l] )	break;
+	    if( !s_el.empty() || !i_off ) 
+		if(winCntr->callQTModule(list[i_l])) op_wnd++;
 	}
     //-------------- Start call dialog --------------------
     if(!op_wnd) winCntr->startDialog( );

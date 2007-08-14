@@ -51,18 +51,18 @@ void Widget::postEnable(int flag)
     if( flag&TCntrNode::NodeConnect )
     {
 	//- Add main attributes -
-	attrAdd( new TFld("id",_("Id"),TFld::String,TFld::NoWrite,"","") );
-        attrAdd( new TFld("name",_("Name"),TFld::String,TFld::NoFlag,"","") );
-	attrAdd( new TFld("dscr",_("Description"),TFld::String,TFld::FullText,"","") );
-        attrAdd( new TFld("path",_("Path"),TFld::String,TFld::NoWrite,"","") );
-	attrAdd( new TFld("en",_("Enabled"),TFld::Boolean,TFld::NoFlag,"","1") );
-	attrAdd( new TFld("active",_("Active"),TFld::Boolean,Attr::Active,"","0") );
-	attrAdd( new TFld("geomX",_("Geometry:x"),TFld::Integer,TFld::NoFlag,"","0","0;10000") );
-	attrAdd( new TFld("geomY",_("Geometry:y"),TFld::Integer,TFld::NoFlag,"","0","0;10000") );
-	attrAdd( new TFld("geomW",_("Geometry:width"),TFld::Integer,TFld::NoFlag,"","100","0;10000") );
-	attrAdd( new TFld("geomH",_("Geometry:height"),TFld::Integer,TFld::NoFlag,"","100","0;10000") );
-	attrAdd( new TFld("geomZ",_("Geometry:z"),TFld::Integer,TFld::NoFlag,"","0","-1000000;1000000") );
-	attrAdd( new TFld("geomMargin",_("Geometry:margin"),TFld::Integer,TFld::NoFlag,"","0","0;1000") );
+	attrAdd( new TFld("id",_("Id"),TFld::String,TFld::NoWrite,"","","","",1) );
+        attrAdd( new TFld("name",_("Name"),TFld::String,TFld::NoFlag,"","","","",2) );
+	attrAdd( new TFld("dscr",_("Description"),TFld::String,TFld::FullText,"","","","",3) );
+        attrAdd( new TFld("path",_("Path"),TFld::String,TFld::NoWrite,"","","","",4) );
+	attrAdd( new TFld("en",_("Enabled"),TFld::Boolean,TFld::NoFlag,"","1","","",5) );
+	attrAdd( new TFld("active",_("Active"),TFld::Boolean,Attr::Active,"","0","","",6) );
+	attrAdd( new TFld("geomX",_("Geometry:x"),TFld::Integer,TFld::NoFlag,"","0","0;10000","",7) );
+	attrAdd( new TFld("geomY",_("Geometry:y"),TFld::Integer,TFld::NoFlag,"","0","0;10000","",8) );
+	attrAdd( new TFld("geomW",_("Geometry:width"),TFld::Integer,TFld::NoFlag,"","100","0;10000","",9) );
+	attrAdd( new TFld("geomH",_("Geometry:height"),TFld::Integer,TFld::NoFlag,"","100","0;10000","",10) );
+	attrAdd( new TFld("geomZ",_("Geometry:z"),TFld::Integer,TFld::NoFlag,"","0","-1000000;1000000","",11) );
+	attrAdd( new TFld("geomMargin",_("Geometry:margin"),TFld::Integer,TFld::NoFlag,"","0","0;1000","",12) );
     }
     
     attrAt("id").at().setS(id());	attrAt("id").at().setModifVal(0);
@@ -125,12 +125,17 @@ void Widget::setEnable( bool val )
 		else m_parent=mod->nodeAt(parentNm());
 		//- Check for enable parent widget and enable if not -
 		if( !parent().at().enable() )	parent().at().setEnable(true);
-		//- Register of heritater -
-		parent().at().heritReg(this);		
 		//- Inherit -
     		inheritAttr( );
     		inheritIncl( );
-	    }catch(...) { m_parent.free(); throw; }
+		//- Register of heritater -
+		parent().at().heritReg(this);
+	    }catch(TError err) 
+	    { 
+		mess_err(err.cat.c_str(),err.mess.c_str());
+		m_parent.free(); 
+		throw;
+	    }
 	}
 	m_enable = true;
         //- Load self values from DB -
@@ -472,15 +477,14 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
     else if( a_path == "/wdg/w_lst" && ctrChkNode(opt) )
     {
         int c_lv = 0;
-        string c_path = "";
+        string c_path = "", c_el;
         string lnk = parentNm();
 
 	opt->childAdd("el")->setText(c_path);
-	while(TSYS::pathLev(lnk,c_lv).size())
+	for( int c_off = 0; (c_el=TSYS::pathLev(lnk,0,true,&c_off)).size(); c_lv++ )
 	{
-	    c_path = c_path+"/"+TSYS::pathLev(lnk,c_lv);
+	    c_path += "/"+c_el;
 	    opt->childAdd("el")->setText(c_path);
-	    c_lv++;
 	}
         vector<string>  ls;
         switch(c_lv)
@@ -540,8 +544,14 @@ bool Widget::cntrCmdAttributes( XMLNode *opt )
 	{
     	    vector<string> ls;
     	    attrList(ls);
+	    AutoHD<Attr> attr;
     	    for( int i_l = 0; i_l < ls.size(); i_l++ )
-        	opt->childAdd("el")->setAttr("id",ls[i_l].c_str())->setText(attrAt(ls[i_l]).at().getS());
+	    {
+		attr = attrAt(ls[i_l]);
+        	opt->childAdd("el")->setAttr("id",ls[i_l].c_str())->
+				     setAttr("pos",TSYS::int2str(attr.at().fld().reserve()))->
+				     setText(attr.at().getS());
+	    }
 	}
 	if( ctrChkNode(opt,"set",RWRWRW,"root","root",SEQ_WR) )
 	    for( int i_ch = 0; i_ch < opt->childSize(); i_ch++ )
@@ -669,7 +679,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
 	    string obj_tp  = TSYS::strSepParse(cfg_val,0,'.');
 	    
 	    int c_lvl = 0;
-	    while(TSYS::strSepParse(cfg_val,c_lvl,'.').size())	c_lvl++;
+	    for( int c_off = 0; TSYS::strSepParse(cfg_val,0,'.',&c_off).size(); c_lvl++ );
 	    if( (obj_tp == "P" && c_lvl==5) || (obj_tp == "W" && c_lvl==3) )
 		opt->setText(cfg_val.substr(0,cfg_val.rfind(".")));
 	    else opt->setText(cfg_val);
@@ -683,7 +693,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
 	    string obj_tp  = TSYS::strSepParse(cfg_val,0,'.');
 	    string p_nm = TSYS::strSepParse(srcwdg.at().attrAt(nattr).at().cfgTempl(),0,'|');
 	    int c_lvl = 0;
-	    while(TSYS::strSepParse(cfg_val,c_lvl,'.').size())  c_lvl++;
+	    for( int c_off = 0; TSYS::strSepParse(cfg_val,0,'.',&c_off).size(); c_lvl++ ) ;
 
 	    srcwdg.at().attrList(a_ls);
 
@@ -737,15 +747,14 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
 	string m_prm = srcwdg.at().attrAt(nattr).at().cfgVal();
 	
 	bool is_pl = (a_path.substr(0,14) == "/links/lnk/pl_");
-        int c_lv;
-	string c_path = "";
+        int c_lv = 0;
+	string c_path = "", c_el;
 	opt->childAdd("el")->setText(c_path);
 	string obj_tp = TSYS::strSepParse(m_prm,0,'.');
-	for( c_lv = 0; TSYS::strSepParse(m_prm,c_lv,'.').size(); c_lv++ )
+	for( int c_off = 0; (c_el=TSYS::strSepParse(m_prm,0,'.',&c_off)).size(); c_lv++ )
 	{
 	    if( is_pl && ((obj_tp=="P" && c_lv>3) || (obj_tp=="W" && c_lv)) )	break;
-	    if( c_lv ) c_path += ".";
-	    c_path = c_path+TSYS::strSepParse(m_prm,c_lv,'.');
+	    c_path += c_lv ? "."+c_el : c_el;
 	    opt->childAdd("el")->setText(c_path);
 	}
 	if(c_lv) c_path+=".";
@@ -998,14 +1007,12 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
     {
 	string tplng = calcLang();
         int c_lv = 0;
-        string c_path = "";
+        string c_path = "", c_el;
 	opt->childAdd("el")->setText(c_path);
-        while(TSYS::strSepParse(tplng,c_lv,'.').size())
+        for( int c_off = 0; (c_el=TSYS::strSepParse(tplng,0,'.',&c_off)).size(); c_lv++ )
         {
-            if( c_lv ) c_path+=".";
-            c_path = c_path+TSYS::strSepParse(tplng,c_lv,'.');
+            c_path += c_lv ? "."+c_el : c_el;
             opt->childAdd("el")->setText(c_path);
-            c_lv++;
         }
         if(c_lv) c_path+=".";
         vector<string>  ls;

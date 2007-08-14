@@ -647,14 +647,12 @@ void Contr::cntrCmdProc( XMLNode *opt )
     {
 	vector<string> lst;
         int c_lv = 0;
-        string c_path = "";
+        string c_path = "", c_el;
 	opt->childAdd("el")->setText(c_path);
-        while(TSYS::strSepParse(m_fnc,c_lv,'.').size())
+        for( int c_off = 0; (c_el=TSYS::strSepParse(m_fnc,0,'.',&c_off)).size(); c_lv++ )
 	{
-            if( c_lv ) c_path+=".";
-            c_path = c_path+TSYS::strSepParse(m_fnc,c_lv,'.');
+            c_path += c_lv ? "."+c_el : c_el;
 	    opt->childAdd("el")->setText(c_path);
-	    c_lv++;
         }
         if(c_lv) c_path+=".";
         switch(c_lv)
@@ -668,7 +666,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
         for( unsigned i_a=0; i_a < lst.size(); i_a++ )
     	    opt->childAdd("el")->setText(c_path+lst[i_a]);
     }
-    else if( a_path == "/fnc/clc_tm" && enableStat() && ctrChkNode(opt) )	opt->setText(TSYS::real2str(calcTm( )));
+    else if( a_path == "/fnc/clc_tm" && enableStat() && ctrChkNode(opt) )	opt->setText(TSYS::real2str(calcTm( ),6));
     else if( a_path == "/fnc/io" && enableStat() )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
@@ -758,10 +756,9 @@ void Prm::enable()
     if( enableStat() )  return;
     
     //Init elements    
-    int fld_cnt = 0;
-    while(TSYS::strSepParse(cfg("FLD").getS(),fld_cnt,';').size())
+    string dfld;
+    for( int fld_off = 0; (dfld=TSYS::strSepParse(cfg("FLD").getS(),0,';',&fld_off)).size(); )
     {
-	string dfld = TSYS::strSepParse(cfg("FLD").getS(),fld_cnt,';');
 	unsigned flg = TVal::DirWrite|TVal::DirRead;
 	TFld::Type    tp  = TFld::String;
 	int           io_id = ((Contr &)owner()).ioId(dfld);
@@ -782,23 +779,17 @@ void Prm::enable()
 	    {
 		if(v_el.fldPresent(dfld)) v_el.fldDel(v_el.fldId(dfld));
     		v_el.fldAdd( new TFld(dfld.c_str(),((Contr &)owner()).func()->io(io_id)->name().c_str(),tp,flg) );
-	    }	    
-	}	    
-	fld_cnt++;    
+	    }
+	}
     }
     
     //Check and delete no used fields
     for(int i_fld = 0; i_fld < v_el.fldSize(); i_fld++)
     {
 	string fel;  
-	int fld_cnt = 0;
-	while( (fel = TSYS::strSepParse(cfg("FLD").getS(),fld_cnt++,';')).size() )
+	for( int fld_off = 0; (fel = TSYS::strSepParse(cfg("FLD").getS(),0,';',&fld_off)).size(); )
 	    if( fel == v_el.fldAt(i_fld).name() ) break;	
-	if( !fel.size() )
-	{ 
-	    v_el.fldDel(i_fld);
-	    i_fld--;
-	}
+	if( fel.empty() )	{ v_el.fldDel(i_fld); i_fld--; }
     }
     
     TParamContr::enable();

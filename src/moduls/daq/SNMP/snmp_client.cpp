@@ -401,7 +401,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/cntr/st/gath_tm" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(tm_gath));
+    if( a_path == "/cntr/st/gath_tm" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(tm_gath,6));
     else TController::cntrCmdProc(opt);
 }
 
@@ -465,8 +465,7 @@ void TMdPrm::parseOIDList(const string &ioid)
     ls_oid.clear();
     
     string sel;
-    int iel = 0;
-    while((sel = TSYS::strSepParse(m_oid,iel++,'\n')).size())
+    for( int ioff = 0; (sel=TSYS::strSepParse(m_oid,0,'\n',&ioff)).size(); )
     {
 	tmpoid_len = MAX_OID_LEN;
 	if(snmp_parse_oid(sel.c_str(),tmpoid,&tmpoid_len))

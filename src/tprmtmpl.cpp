@@ -325,14 +325,12 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
     {
 	string tplng = progLang();
         int c_lv = 0;
-        string c_path = "";
+        string c_path = "", c_el;
         opt->childAdd("el")->setText(c_path);
-        while(TSYS::strSepParse(tplng,c_lv,'.').size())
+        for( int c_off = 0; (c_el=TSYS::strSepParse(tplng,0,'.',&c_off)).size(); c_lv++ )
         {
-    	    if( c_lv ) c_path+=".";
-            c_path = c_path+TSYS::strSepParse(tplng,c_lv,'.');
+            c_path += c_lv ? "."+c_el : c_el;
             opt->childAdd("el")->setText(c_path);
-            c_lv++;
         }
         if(c_lv) c_path+=".";
         vector<string>  ls;
@@ -340,7 +338,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
         {
             case 0:	SYS->daq().at().modList(ls);	break;
             case 1:	
-                if(SYS->daq().at().modPresent(TSYS::strSepParse(tplng,0,'.')))
+                if( SYS->daq().at().modPresent(TSYS::strSepParse(tplng,0,'.')) )
             	    SYS->daq().at().at(TSYS::strSepParse(tplng,0,'.')).at().compileFuncLangs(ls);
                 break;
         }

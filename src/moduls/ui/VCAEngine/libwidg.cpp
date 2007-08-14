@@ -483,7 +483,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 	    {
 		string mimeType;
 		if( mimeDataGet( "res:/"+idmime, mimeType ) )
-		    mimeDataSet( idmime, TSYS::strSepParse(mimeType,0,';')+";"+TSYS::real2str((float)opt->text().size()/1024.),opt->text() );
+		    mimeDataSet( idmime, TSYS::strSepParse(mimeType,0,';')+";"+TSYS::real2str((float)opt->text().size()/1024.,6),opt->text() );
 	    }
 	}
     }

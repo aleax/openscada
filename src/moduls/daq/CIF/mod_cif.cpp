@@ -571,7 +571,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/mod/st/drv" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(drvCIFOK()));
+    if( a_path == "/mod/st/drv" && ctrChkNode(opt) )	opt->setText(TSYS::int2str(drvCIFOK()));
     else if( a_path == "/mod/dev" )
     {
 	if(ctrChkNode(opt))
@@ -1074,7 +1074,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/cntr/st/acq_tm" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(tm_calc));
+    if( a_path == "/cntr/st/acq_tm" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(tm_calc,6));
     else TController::cntrCmdProc(opt);
 }
 
@@ -1497,14 +1497,12 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     else if( a_path == "/cfg/prmp_lst" && ctrChkNode(opt) )
     {
 	int c_lv = 0;
-	string c_path = "";
+	string c_path = "", c_el;
         opt->childAdd("el")->setText(c_path);
-        while(TSYS::strSepParse(m_tmpl,c_lv,'.').size())
+        for( int c_off = 0; (c_el=TSYS::strSepParse(m_tmpl,0,'.',&c_off)).size(); c_lv++ )
         {
-    	    if( c_lv ) c_path+=".";
-            c_path = c_path+TSYS::strSepParse(m_tmpl,c_lv,'.');
+            c_path += c_lv ? "."+c_el : c_el;
     	    opt->childAdd("el")->setText(c_path);
-            c_lv++;
         }
         if(c_lv) c_path+=".";
 	string prm0 = TSYS::strSepParse(m_tmpl,0,'.');
@@ -1553,7 +1551,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		sscanf(TSYS::strSepParse(func()->io(lnk(i_l).io_id)->def(),1,'|').c_str(),"%d.%d",&coff,&cbit);
 		csz   = atoi(TSYS::strSepParse(func()->io(lnk(i_l).io_id)->def(),2,'|').c_str());		
                 if( p_nm == cp_nm )
-		{		    
+		{
 		    lnk(i_l).db_addr = sdb+"."+TSYS::int2str(off+coff);
 		    if(ioType(lnk(i_l).io_id)==IO::Boolean)
 			lnk(i_l).db_addr = lnk(i_l).db_addr+"."+TSYS::int2str(cbit);

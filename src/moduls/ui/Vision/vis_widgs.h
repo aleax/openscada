@@ -206,17 +206,15 @@ namespace VISION
 	    QMainWindow *mainWin( )	{ return main_win; }
 	    int	   z( )			{ return z_coord;  }
 	    virtual string user( )	{ return ""; }
-	    QMap<QString, QVariant> &dataCache(){ return cache_data; }
+	    QMap<QString, QVariant> &dc(){ return cache_data; }
 
 	    void   setZ( int val )	{ z_coord = val; }
 	    
-	    virtual void attrLoad( QMap<QString, QString> &attrs );		
-	    bool attrSet( const string &attr, const string &val, bool locReload = false );
+	    bool attrSet( const string &attr, const string &val, int uiPrmPos = 0 );
 
 	public slots:
 	    virtual WdgView *newWdgItem( const string &iwid );
 	    virtual void load( const string& item );
-	    virtual void save( const string& item );
 	    
 	protected:
 	    //- Protected methods -
