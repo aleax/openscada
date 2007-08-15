@@ -762,15 +762,19 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    break;
 	case 26:	//scale
 	    w->dc()["mediaScale"] = atof(val.c_str()); reld_src = true; break;
-	case 27:	//play
-	    if( !lab->movie() )	break;
-	    atoi(val.c_str()) ? lab->movie()->start() : lab->movie()->stop();
-	    break;
-	case 28: 	//speed
+	case 27: 	//speed
+	{
 	    if( !lab->movie() ) break;
-	    lab->movie()->setSpeed( atoi(val.c_str()) );
+	    int vl = atoi(val.c_str());
+	    if( vl <= 1 ) lab->movie()->stop();
+	    else
+	    {
+		lab->movie()->setSpeed(vl);
+		lab->movie()->start();
+	    }
 	    break;
-	case 29: 	//fit
+	}
+	case 28: 	//fit
 	    if( !lab->movie() ) break;
 	    lab->setScaledContents( atoi(val.c_str()) );
 	    break;

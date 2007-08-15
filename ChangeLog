@@ -1,6 +1,8 @@
 2007-08-15 Roman
 - /Transport/Socket: SO_REUSEADDR flag set for TCP sockets. Exclude close socket timeout at restart OpenSCADA.
 - FIX:/UI/Vision: A single empty trend show is fixed.
+- FIX:/UI/Vision: Development mode memory leak is fixed.
+- FIX:/UI/Vision: The primitive "Media", type "Movie" attribute's speed zero value trap is fixed.
 - /SYS: Updated Demo DB.
 
 2007-08-14 Roman

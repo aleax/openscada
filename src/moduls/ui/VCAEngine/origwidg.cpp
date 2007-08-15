@@ -311,7 +311,6 @@ bool OrigMedia::attrChange( Attr &cfg, void *prev )
 	    case 0:	cfg.owner()->attrDel("scale");	break;
 	    case 1:
 		cfg.owner()->attrDel("fit");
-		cfg.owner()->attrDel("play");
 		cfg.owner()->attrDel("speed");		
 		break;
 	}	
@@ -323,9 +322,8 @@ bool OrigMedia::attrChange( Attr &cfg, void *prev )
     		cfg.owner()->attrAdd( new TFld("scale",_("Scale ratio (0-10)"),TFld::Real,Attr::Mutable,"2.2","1","0:10","",26) );
 		break;
 	    case 1:	    
-    		cfg.owner()->attrAdd( new TFld("play",_("Play"),TFld::Boolean,Attr::Mutable,"","","","",27) );
-		cfg.owner()->attrAdd( new TFld("speed",_("Play speed"),TFld::Integer,Attr::Mutable,"3","100","0;900","",28) );
-    		cfg.owner()->attrAdd( new TFld("fit",_("Fit to widget size"),TFld::Boolean,Attr::Mutable,"","","","",29) );
+		cfg.owner()->attrAdd( new TFld("speed",_("Play speed"),TFld::Integer,Attr::Mutable,"3","100","1;900","",27) );
+    		cfg.owner()->attrAdd( new TFld("fit",_("Fit to widget size"),TFld::Boolean,Attr::Mutable,"","","","",28) );
 		break;
 	}
     }

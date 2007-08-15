@@ -1726,6 +1726,8 @@ bool DevelWdgView::event( QEvent *event )
                     rsel = rsel.united(((DevelWdgView*)children().at(i_c))->geometry());
             pntView->setSelArea(rsel,edit());
         }
+	pnt.end();
+	
 	if( WdgView::event(event) )	return true;
 	return QWidget::event(event);
     }
