@@ -205,6 +205,8 @@ void TSocketIn::start()
     {
     	if( (sock_fd = socket(PF_INET,SOCK_STREAM,0) )== -1 ) 
     	    throw TError(nodePath().c_str(),_("Error create %s socket!"),s_type.c_str());
+	int vl = 1;
+	setsockopt(sock_fd,SOL_SOCKET,SO_REUSEADDR,&vl,sizeof(int));
 	type = SOCK_TCP;
     }
     else if( s_type == S_NM_UDP )

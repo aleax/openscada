@@ -1229,6 +1229,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    //----- Check trend for valid data -----
 	    aVbeg = vmax(tBeg,sTr->valBeg());
 	    aVend = vmin(tEnd,sTr->valEnd());
+
 	    if( aVbeg >= aVend ) return;
 	    //----- Calc value borders -----
 	    vsMax = -3e300, vsMin = 3e300;
@@ -1238,8 +1239,10 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		vsMin  = vmin(vsMin,sTr->val()[ipos].val);
                 vsMax  = vmax(vsMax,sTr->val()[ipos].val);
 	    }
+	    if( vsMax == -3e300 ) { vsMax = 1; vsMin = 0; }
 	}
     }
+    
     float vmax_ln = tAr.height()/20;
     if( vmax_ln >= 2 )
     {
@@ -1271,7 +1274,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    }
 	}
     }
-
+    
     //-- Draw trends --
     for( int i_t = 0; i_t < parNum; i_t++ )
     {
@@ -1568,6 +1571,7 @@ void ShapeDiagram::TrendObj::loadData( bool full )
 	}
 	return;
     }
+    
     if( !arh_per )	return;
     //- Correct request to archive border -
     wantPer   = (vmax(wantPer,arh_per)/arh_per)*arh_per;

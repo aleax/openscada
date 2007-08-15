@@ -1,3 +1,8 @@
+2007-08-15 Roman
+- /Transport/Socket: SO_REUSEADDR flag set for TCP sockets. Exclude close socket timeout at restart OpenSCADA.
+- FIX:/UI/Vision: A single empty trend show is fixed.
+- /SYS: Updated Demo DB.
+
 2007-08-14 Roman
 - !!:/TSYS: Path elements speed optimisation is made: TArchiveS, TCntrNode, TElem, TModShedule, TPrmTmpl, 
     TSecurity, DAQ/BlockCalc, DAQ/CIF, DAQ/JavaLikeCalc, DAQ/LogicLev, DAQ/SNMP, UI/QTStarter, UI/VCAEngine,

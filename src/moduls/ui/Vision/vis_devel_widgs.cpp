@@ -1434,14 +1434,6 @@ void DevelWdgView::saveGeom( const string& item )
 	attrSet("geomW", TSYS::int2str(size().width()),9);
 	attrSet("geomH", TSYS::int2str(size().height()),10);
 	attrSet("geomZ", TSYS::int2str(z_coord),11);
-        /*XMLNode set_req("set");
-        set_req.setAttr("user",user())->setAttr("path",id()+"/%2fattr%2fscmd");
-        set_req.childAdd("el")->setAttr("id","geomX")->setText(TSYS::int2str(pos().x()));
-        set_req.childAdd("el")->setAttr("id","geomY")->setText(TSYS::int2str(pos().y()));
-        set_req.childAdd("el")->setAttr("id","geomW")->setText(TSYS::int2str(size().width()));
-        set_req.childAdd("el")->setAttr("id","geomH")->setText(TSYS::int2str(size().height()));
-        set_req.childAdd("el")->setAttr("id","geomZ")->setText(TSYS::int2str(z_coord));
-        mod->cntrIfCmd(set_req);*/
     }
     if( item != id() && wLevel() == 0 )
         for( int i_c = 0; i_c < children().size(); i_c++ )
@@ -1709,7 +1701,7 @@ bool DevelWdgView::event( QEvent *event )
     {
     	QPainter pnt( this );
         pnt.setWindow( rect() );
-    	    
+    	
 	//- Draw background for root widget -
         if( wLevel() == 0 )
         {
@@ -2113,7 +2105,7 @@ void DevelWdgView::SizePntWdg::paintEvent ( QPaintEvent *event )
     {
 	QPainter pnt( this );
 	pnt.setWindow( rect() );
-	
+
 	if( m_edit )
 	{
 	    pnt.fillRect(rect(),QBrush(Qt::black,Qt::Dense4Pattern));
