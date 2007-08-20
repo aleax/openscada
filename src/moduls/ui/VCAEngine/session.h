@@ -146,26 +146,13 @@ class SessWdg : public Widget, public TValFunc
     protected:
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	bool attrChange( Attr &cfg, void *prev );
+	unsigned int modifVal()		{ return m_clc; }
     
     private:
-	//Data
-	//- Link types -
-	/*enum LnkT { Const, Param, LocAttr };
-	//- Define link structures -
-	struct SLnk
-	{
-	    LnkT tp;    //Link type
-            string lnk; //Link value
-            union
-            {
-	        AutoHD<TVal>    *aprm;  //Parameter atribute link structure
-	    };
-        };*/
-
 	//Attributes
 	bool	m_proc;
 	string	work_prog;
-	//vector<SLnk>	m_lnk;
+	unsigned int m_clc;
 };
 
 //************************************************

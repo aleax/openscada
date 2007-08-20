@@ -606,7 +606,7 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
     {
 	XMLNode set_req("set");
 	set_req.setAttr("user",user())->
-		setAttr("path",id()+"/%2fattr%2fscmd");
+		setAttr("path",id()+"/%2fserv%2f0");
 	set_req.childAdd("el")->setAttr("id",attr)->setText(val);
 	mod->cntrIfCmd(set_req);
     }
@@ -633,7 +633,7 @@ void WdgView::load( const string& item )
 	//- Request to widget for last attributes -
 	XMLNode get_req("get");	
 	get_req.setAttr("user",user())->
-		setAttr("path",id()+"/%2fattr%2fscmd");
+		setAttr("path",id()+"/%2fserv%2f0");
 	if( !mod->cntrIfCmd(get_req) )
 	    for( int i_el = 0; i_el < get_req.childSize(); i_el++ )
 		attrSet("",get_req.childGet(i_el)->text(),atoi(get_req.childGet(i_el)->attr("pos").c_str()));

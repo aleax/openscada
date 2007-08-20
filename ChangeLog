@@ -1,3 +1,19 @@
+2007-08-20 Roman
+- !!!:/DAQ/: The module of realisation "ModBus TCP/IP" protocol is added.
+- !:/DAQ/Value: The virtual function vlArchMake() is added for a value archive intits, on creation, 
+  from DAQ modules.
+- FIX:/UI/VCAEngine: User attributes saving is fixed.
+- /UI/VCAEngine: The attributes modify counters merge to one counter.
+- /UI/VCAEngine: Service control functions separated from main interface functions.
+- !!:/UI/VCAEngine: Change link mechanism to service path view: prm:/DAQ/LogicLev/experiment/F3/val.
+- FIX:/UI/VCAEngine: Only created child widget's heritable widgets no enabling is fixed.
+- FIX:/UI/Vision: The configure visual items dialog, process tab, is fixed.
+- FIX:/UI/Vision: Current value tracing on primitive "Diagram" is fixed.
+- /UI/Vision: No update cached pages on primitive "Diagram" is made.
+- !:/UI/Vision: Cursor manipulation for primitive "Diagram" is made.
+- /SYS: Updated Demo DB.
+
+
 2007-08-15 Roman
 - /Transport/Socket: SO_REUSEADDR flag set for TCP sockets. Exclude close socket timeout at restart OpenSCADA.
 - FIX:/UI/Vision: A single empty trend show is fixed.

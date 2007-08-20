@@ -153,7 +153,7 @@ void TTpContr::postEnable( int flag )
     fldAdd( new TFld("PATTR_LIM",_("Param's attributes limit"),TFld::Integer,TFld::NoFlag,"3","100") );
     //==== Parameter type bd structure ====
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
-    tpPrmAt(t_prm).fldAdd( new TFld("OID_LS",_("OID list (next line separated)"),TFld::String,TCfg::NoVal,"100","") );
+    tpPrmAt(t_prm).fldAdd( new TFld("OID_LS",_("OID list (next line separated)"),TFld::String,TFld::FullText,"100","") );
 }
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
@@ -490,4 +490,13 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	parseOIDList(opt->text());
     }	
     else TParamContr::cntrCmdProc(opt);
+}
+
+void TMdPrm::vlArchMake( TVal &val )
+{
+    if( val.arch().freeStat() ) return;
+    val.arch().at().setSrcMode(TVArchive::PassiveAttr,val.arch().at().srcData());
+    val.arch().at().setPeriod((long long)(owner().period()*1000000));
+    val.arch().at().setHardGrid( true );
+    val.arch().at().setHighResTm( true );
 }

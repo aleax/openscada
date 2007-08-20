@@ -769,6 +769,7 @@ string SessWdg::eventGet( bool clear )
 void SessWdg::calc( bool first, bool last, unsigned clc )
 {
     if( !process() )	return;
+    m_clc = clc;
 
     //- Calculate include widgets -
     vector<string> ls;	
@@ -785,7 +786,7 @@ void SessWdg::calc( bool first, bool last, unsigned clc )
 	{    
 	    //- Process self data -
 	    //time_t tm = time(NULL);
-	    string sw_attr, s_attr;	
+	    string sw_attr, s_attr, obj_tp;
 	    AutoHD<Attr> attr;
 	
 	    //- Load events to calc procedure -
@@ -800,12 +801,34 @@ void SessWdg::calc( bool first, bool last, unsigned clc )
 		if( attr.at().flgSelf()&Attr::CfgConst )	attr.at().setS(attr.at().cfgVal());
 		else if( attr.at().flgSelf()&Attr::CfgLnkIn && !attr.at().cfgVal().empty() )
 		{
-		    if( attr.at().cfgVal()[0] == 'V' )	attr.at().setS(attr.at().cfgVal().substr(2),clc);
-		    else if( attr.at().cfgVal()[0] == 'P' )
+		    obj_tp = TSYS::strSepParse(attr.at().cfgVal(),0,':')+":";
+		    if( obj_tp == "val:" )	attr.at().setS(attr.at().cfgVal().substr(obj_tp.size()));
+		    else if( obj_tp == "prm:" )
 		    {
-			if( attr.at().flgGlob()&Attr::Address )	attr.at().setS(attr.at().cfgVal().substr(2));
-			else attr.at().setS(((AutoHD<TVal>)SYS->daq().at().nodeAt(attr.at().cfgVal(),1,'.')).at().getS(),clc);
+			if( attr.at().flgGlob()&Attr::Address )	
+			    attr.at().setS("/DAQ"+attr.at().cfgVal().substr(obj_tp.size()));
+			else switch( attr.at().type() )
+			{
+			    case TFld::Boolean:
+				attr.at().setB(((AutoHD<TVal>)SYS->daq().at().nodeAt(
+				    attr.at().cfgVal(),0,0,obj_tp.size())).at().getB());
+				break;
+			    case TFld::Integer:
+				attr.at().setI(((AutoHD<TVal>)SYS->daq().at().nodeAt(
+				    attr.at().cfgVal(),0,0,obj_tp.size())).at().getI());
+				break;
+			    case TFld::Real:
+				attr.at().setR(((AutoHD<TVal>)SYS->daq().at().nodeAt(
+				    attr.at().cfgVal(),0,0,obj_tp.size())).at().getR());
+				break;
+			    case TFld::String:
+				attr.at().setS(((AutoHD<TVal>)SYS->daq().at().nodeAt(
+				    attr.at().cfgVal(),0,0,obj_tp.size())).at().getS());
+				break;
+			}
 		    }
+		    else if( obj_tp == "addr:" )
+			attr.at().setS(attr.at().cfgVal().substr(obj_tp.size()));
     		}
     	    }
 	
@@ -836,10 +859,10 @@ void SessWdg::calc( bool first, bool last, unsigned clc )
     		attr = (sw_attr==".")?attrAt(s_attr):wdgAt(sw_attr).at().attrAt(s_attr);
     		switch(ioType(i_io))
     		{
-    		    case IO::String:	attr.at().setS(getS(i_io),clc);	break;
-    		    case IO::Integer:	attr.at().setI(getI(i_io),clc);	break;
-    		    case IO::Real:     	attr.at().setR(getR(i_io),clc);	break;
-    		    case IO::Boolean:   	attr.at().setB(getB(i_io),clc);	break;
+    		    case IO::String:	attr.at().setS(getS(i_io));	break;
+    		    case IO::Integer:	attr.at().setI(getI(i_io));	break;
+    		    case IO::Real:     	attr.at().setR(getR(i_io));	break;
+    		    case IO::Boolean:   attr.at().setB(getB(i_io));	break;
     		}
     	    }
 	
@@ -847,11 +870,27 @@ void SessWdg::calc( bool first, bool last, unsigned clc )
     	    for( int i_a = 0; i_a < ls.size(); i_a++ )
     	    {
     		attr = attrAt(ls[i_a]);
-    		if( attr.at().flgSelf()&Attr::CfgLnkOut && !attr.at().cfgVal().empty() && attr.at().cfgVal()[0] == 'P' )
-    			SYS->daq().at().at(TSYS::strSepParse(attr.at().cfgVal(),1,'.')).at().
-    					at(TSYS::strSepParse(attr.at().cfgVal(),2,'.')).at().
-    					at(TSYS::strSepParse(attr.at().cfgVal(),3,'.')).at().
-    					vlAt(TSYS::strSepParse(attr.at().cfgVal(),4,'.')).at().setS(attr.at().getS());
+		obj_tp = TSYS::strSepParse(attr.at().cfgVal(),0,':')+":";
+    		if( attr.at().flgSelf()&Attr::CfgLnkOut && !attr.at().cfgVal().empty() && obj_tp == "prm:" )
+		    switch( attr.at().type() )
+		    {
+			case TFld::Boolean:		
+			    ((AutoHD<TVal>)SYS->daq().at().nodeAt(
+				attr.at().cfgVal(),0,0,obj_tp.size())).at().setB(attr.at().getB());
+			    break;
+			case TFld::Integer:
+			    ((AutoHD<TVal>)SYS->daq().at().nodeAt(
+				attr.at().cfgVal(),0,0,obj_tp.size())).at().setI(attr.at().getI());
+			    break;
+			case TFld::Real:
+			    ((AutoHD<TVal>)SYS->daq().at().nodeAt(
+				attr.at().cfgVal(),0,0,obj_tp.size())).at().setR(attr.at().getR());
+			    break;
+			case TFld::String:
+			    ((AutoHD<TVal>)SYS->daq().at().nodeAt(
+				attr.at().cfgVal(),0,0,obj_tp.size())).at().setS(attr.at().getS());
+			    break;
+		    }
     	    }
 
 	    //-- Save events from calc procedure --
@@ -902,6 +941,41 @@ bool SessWdg::attrChange( Attr &cfg, void *prev )
 
 void SessWdg::cntrCmdProc( XMLNode *opt )
 {
+    string a_path = opt->attr("path");
+    //- Service commands process -
+    if( a_path.substr(0,6) == "/serv/" )
+    switch( atoi(a_path.substr(6).c_str()) )
+    {
+        case 0:     //Attribute's value access
+	    if( ctrChkNode(opt,"get",RWRWRW,"root","root",SEQ_RD) )
+	    {
+		unsigned  tm = strtoul(opt->attr("tm").c_str(),0,10),
+			tm_n = ownerSess()->calcClk( );
+	
+		vector<string> ls;
+		attrList(ls);
+		AutoHD<Attr> attr;
+		for( int i_l = 0; i_l < ls.size(); i_l++ )
+		{
+		    attr = attrAt(ls[i_l]);
+		    if( !(attr.at().flgGlob()&Attr::IsUser) && attr.at().modif() >= tm )
+			opt->childAdd("el")->setAttr("id",ls[i_l].c_str())->
+					     setAttr("pos",TSYS::int2str(attr.at().fld().reserve()))->
+					     setText(attr.at().getS());
+		}	    
+		opt->setAttr("tm",TSYS::uint2str(tm_n));
+	    }
+	    if( ctrChkNode(opt,"set",RWRWRW,"root","root",SEQ_WR) )
+		for( int i_ch = 0; i_ch < opt->childSize(); i_ch++ )
+		{
+		    string aid = opt->childGet(i_ch)->attr("id");
+		    if( aid == "event" ) eventAdd(opt->childGet(i_ch)->text()+";");
+		    else attrAt(aid).at().setS(opt->childGet(i_ch)->text());
+		}
+	    return;
+    }
+    if( cntrCmdServ(opt) ) return;
+
     //Get page info
     if( opt->name() == "info" )
     {
@@ -911,40 +985,7 @@ void SessWdg::cntrCmdProc( XMLNode *opt )
         return;
     }
     //Process command to page
-    string a_path = opt->attr("path");
-    if( a_path == "/attr/scmd" )
-    {
-	if( ctrChkNode(opt,"get",RWRWRW,"root","root",SEQ_RD) )
-	{
-	    unsigned  tm = strtoul(opt->attr("tm").c_str(),0,10),
-		    tm_n = ownerSess()->calcClk( );//  time(NULL);
-	
-	    vector<string> ls;
-	    attrList(ls);
-	    AutoHD<Attr> attr;
-	    for( int i_l = 0; i_l < ls.size(); i_l++ )
-	    {
-		attr = attrAt(ls[i_l]);
-		if( !(attr.at().flgGlob()&Attr::IsUser) && attr.at().modifVal() >= tm )
-		    opt->childAdd("el")->setAttr("id",ls[i_l].c_str())->
-					 setAttr("pos",TSYS::int2str(attr.at().fld().reserve()))->
-					 setText(attr.at().getS());
-	    }
-	    
-	    opt->setAttr("tm",TSYS::uint2str(tm_n));
-	}
-	if( ctrChkNode(opt,"set",RWRWRW,"root","root",SEQ_WR) )
-	{
-	    unsigned tm = ownerSess()->calcClk( );// time(NULL);
-	    for( int i_ch = 0; i_ch < opt->childSize(); i_ch++ )
-	    {
-		string aid = opt->childGet(i_ch)->attr("id");
-		if( aid == "event" ) eventAdd(opt->childGet(i_ch)->text()+";");
-		else attrAt(aid).at().setS(opt->childGet(i_ch)->text(),tm);
-	    }
-	}
-    }
-    else if( a_path.substr(0,5) == "/attr" &&
+    if( a_path.substr(0,5) == "/attr" &&
             TSYS::pathLev(a_path,1).size() > 4 &&
             TSYS::pathLev(a_path,1).substr(0,4) == "sel_" && TCntrNode::ctrChkNode(opt) )
     {
@@ -954,7 +995,7 @@ void SessWdg::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path.substr(0,6) == "/attr/" )
     {
-	unsigned tm = ownerSess()->calcClk( );//time(NULL);    
+	//unsigned tm = ownerSess()->calcClk( );//time(NULL);    
         AutoHD<Attr> attr = attrAt(TSYS::pathLev(a_path,1));
 	if( ctrChkNode(opt,"get",(attr.at().fld().flg()&TFld::NoWrite)?(permit()&~0222):permit(),user().c_str(),grp().c_str(),SEQ_RD) )
         {
@@ -965,8 +1006,8 @@ void SessWdg::cntrCmdProc( XMLNode *opt )
         {
 	    if( attr.at().id() == "event" )	eventAdd(opt->text()+";");
             else if( attr.at().fld().flg()&TFld::Selected )  
-						attr.at().setSEL(opt->text(),tm);
-            else				attr.at().setS(opt->text(),tm);
+						attr.at().setSEL(opt->text());
+            else				attr.at().setS(opt->text());
         }
     }
     else if( cntrCmdGeneric(opt) || cntrCmdAttributes(opt) );

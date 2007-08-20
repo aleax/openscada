@@ -66,7 +66,7 @@ void PrWidget::setEnable( bool val )
 	for(int i_l = 0; i_l < ls.size(); i_l++)
             if( attrAt(ls[i_l]).at().flgGlob()&Attr::Active )
 	    {
-		attrAt(ls[i_l]).at().setS(attrAt(ls[i_l]).at().getS(),0,true);
+		attrAt(ls[i_l]).at().setS(attrAt(ls[i_l]).at().getS(),true);
 		attrList(ls);
 	    }    
     }
@@ -74,6 +74,7 @@ void PrWidget::setEnable( bool val )
 
 void PrWidget::cntrCmdProc( XMLNode *opt )
 {
+    if( cntrCmdServ(opt) ) return;
     //Get page info
     if( opt->name() == "info" )
     {

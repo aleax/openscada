@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.SNMP file: snmp.h
+//OpenSCADA system module DAQ.SNMP file: snmp_client.h
 /***************************************************************************
  *   Copyright (C) 2006 by Roman Savochenko                                *
  *   rom_as@fromru.com                                                     *
@@ -64,6 +64,7 @@ class TMdPrm : public TParamContr
 	//Methods
         void postEnable( int flag );
 	void cntrCmdProc( XMLNode *opt );
+	void vlArchMake( TVal &val );
 	
 	void parseOIDList(const string &ioid);
 	
@@ -84,7 +85,9 @@ class TMdContr: public TController
     	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem);
 	~TMdContr();   
 
-	int pAttrLimit()	{ return m_pattr_lim; }
+	double period()         { return m_per; }
+        int    prior()          { return m_prior; }
+	int    pAttrLimit()	{ return m_pattr_lim; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 

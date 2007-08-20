@@ -1370,10 +1370,13 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 void ShapeDiagram::tracing( )
 {
     WdgView *w = (WdgView *)((QTimer*)sender())->parent();
+    if( !w->isEnabled() ) return;
     
     long long tTime  = w->dc()["tTime"].toLongLong();
     long long trcPer = w->dc()["trcPer"].toInt();
-    if( tTime )	w->dc()["tTime"] = tTime+trcPer*1000000;
+    if( w->dc()["tTimeCurent"].toBool() )
+	w->dc()["tTime"] = (long long)time(NULL)*1000000;
+    else if( tTime )	w->dc()["tTime"] = tTime+trcPer*1000000;
     loadTrendsData(w);
     makeTrendsPicture(w);
     
@@ -1397,62 +1400,73 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
     QRect *tAr = (QRect*)w->dc()["pictRect"].value<void*>();    
     
     //- Process event -
-    if( event->type() == QEvent::Paint )
+    switch( event->type() )
     {
-	QPainter pnt( w );
+	case QEvent::Paint:
+	{
+	    QPainter pnt( w );
 	
-	//- Decoration draw -
-	int margin = w->dc()["geomMargin"].toInt();	
-	QRect dA = w->rect().adjusted(0,0,-2*margin,-2*margin);	    
-	pnt.setWindow(dA);
-	pnt.setViewport(w->rect().adjusted(margin,margin,-margin,-margin));
+	    //- Decoration draw -
+	    int margin = w->dc()["geomMargin"].toInt();	
+	    QRect dA = w->rect().adjusted(0,0,-2*margin,-2*margin);	    
+	    pnt.setWindow(dA);
+	    pnt.setViewport(w->rect().adjusted(margin,margin,-margin,-margin));
 	
-	//- Draw decoration -
-	QColor bkcol = w->dc()["backColor"].value<QColor>();
-	if( bkcol.isValid() ) pnt.fillRect(dA,bkcol);
-	QBrush bkbrsh = w->dc()["backImg"].value<QBrush>();
-	if( bkbrsh.style() != Qt::NoBrush ) pnt.fillRect(dA,bkbrsh);
+	    //- Draw decoration -
+	    QColor bkcol = w->dc()["backColor"].value<QColor>();
+	    if( bkcol.isValid() ) pnt.fillRect(dA,bkcol);
+	    QBrush bkbrsh = w->dc()["backImg"].value<QBrush>();
+	    if( bkbrsh.style() != Qt::NoBrush ) pnt.fillRect(dA,bkbrsh);
     
-	QPen *bpen = (QPen*)w->dc()["border"].value<void*>();
-	if( bpen->width() )
-	{
-    	    pnt.setPen(*bpen);
-    	    pnt.drawRect(dA.adjusted(bpen->width()/2,bpen->width()/2,
-	        -bpen->width()/2-bpen->width()%2,-bpen->width()/2-bpen->width()%2));
+	    QPen *bpen = (QPen*)w->dc()["border"].value<void*>();
+	    if( bpen->width() )
+	    {
+    		pnt.setPen(*bpen);
+    		pnt.drawRect(dA.adjusted(bpen->width()/2,bpen->width()/2,
+	    	    -bpen->width()/2-bpen->width()%2,-bpen->width()/2-bpen->width()%2));
+	    }
+	
+	    //- Trend's picture -
+	    pnt.drawPicture(0, 0,*(QPicture*)w->dc()["pictObj"].value<void*>());
+	
+	    //- Draw focused border -
+	    if( w->hasFocus() )	qDrawShadeRect(&pnt,dA.x(),dA.y(),dA.width(),dA.height(),w->palette());
+	
+	    //- Draw cursor -
+	    if( w->dc().value("active",1).toInt() && (curTime >= tTimeGrnd || curTime <= tTime) )
+	    {
+		int curPos = tAr->x()+tAr->width()*(curTime-tTimeGrnd)/(tTime-tTimeGrnd);
+		QPen curpen(QColor(w->dc()["curColor"].toString()));
+		curpen.setWidth(1);
+		pnt.setPen(curpen);
+		pnt.drawLine(curPos,tAr->y(),curPos,tAr->y()+tAr->height());
+	    }	
+    	    return true;
 	}
-	
-	//- Trend's picture -
-	pnt.drawPicture(0, 0,*(QPicture*)w->dc()["pictObj"].value<void*>());
-	
-	//- Draw focused border -
-	if( w->hasFocus() )	qDrawShadeRect(&pnt,dA.x(),dA.y(),dA.width(),dA.height(),w->palette());
-	
-	//- Draw cursor -
-	if( w->dc().value("active",1).toInt() && (curTime >= tTimeGrnd || curTime <= tTime) )
+	case QEvent::KeyPress:
 	{
-	    int curPos = tAr->x()+tAr->width()*(curTime-tTimeGrnd)/(tTime-tTimeGrnd);
-	    QPen curpen(QColor(w->dc()["curColor"].toString()));
-	    curpen.setWidth(1);
-	    pnt.setPen(curpen);
-	    pnt.drawLine(curPos,tAr->y(),curPos,tAr->y()+tAr->height());
-	}	    	
-	
-        return true;
-    }
-    else if( event->type() == QEvent::KeyPress )
-    {
-    	QKeyEvent *key = static_cast<QKeyEvent*>(event);
+    	    QKeyEvent *key = static_cast<QKeyEvent*>(event);
 
-	switch(key->key())
+	    switch(key->key())
+	    {
+		case Qt::Key_Left:
+		    if( curTime <= tTimeGrnd ) break;
+		    setCursor( w, curTime-(tTime-tTimeGrnd)/tAr->width() );
+		    return true;
+		case Qt::Key_Right:
+		    if( curTime >= tTime ) break;
+		    setCursor( w, curTime+(tTime-tTimeGrnd)/tAr->width() );
+		    return true;
+	    }
+	    break;
+	}
+	case QEvent::MouseButtonPress:
 	{
-	    case Qt::Key_Left:
-		if( curTime <= tTimeGrnd ) break;
-		setCursor( w, curTime-(tTime-tTimeGrnd)/tAr->width() );
-		return true;
-	    case Qt::Key_Right:
-		if( curTime >= tTime ) break;
-		setCursor( w, curTime+(tTime-tTimeGrnd)/tAr->width() );
-		return true;
+	    if( !w->hasFocus() ) break;
+	    QPoint curp = w->mapFromGlobal(w->cursor().pos());
+	    if( curp.x() < tAr->x() || curp.x() > (tAr->x()+tAr->width()) ) break;
+	    setCursor( w, tTimeGrnd + (tTime-tTimeGrnd)*(curp.x()-tAr->x())/tAr->width() );
+	    break;
 	}
     }
     
@@ -1513,9 +1527,8 @@ int ShapeDiagram::TrendObj::val( long long tm )
 
 void ShapeDiagram::TrendObj::setAddr( const string &vl )
 {
-    string new_addr = TSYS::sepstr2path(vl,'.');
-    if( new_addr == m_addr ) return;
-    m_addr = new_addr;
+    if( vl == m_addr ) return;
+    m_addr = vl;
     loadData( true );
 }
 
@@ -1542,14 +1555,14 @@ void ShapeDiagram::TrendObj::loadData( bool full )
 	get_req.setAttr("user",view->user())->
     		setAttr("arch",arch)->
 		setAttr("path",addr()+"/%2fserv%2f0");
-	if( mod->cntrIfCmd(get_req,true) || atoi(get_req.attr("arh_vtp").c_str()) == 5 )
+	if( mod->cntrIfCmd(get_req,true) || atoi(get_req.attr("vtp").c_str()) == 5 )
 	    arh_per = arh_beg = arh_end = 0;
 	else
 	{
-	    val_tp  = atoi(get_req.attr("arh_vtp").c_str());
-	    arh_beg = atoll(get_req.attr("arh_beg").c_str());
-	    arh_end = atoll(get_req.attr("arh_end").c_str());
-	    arh_per = atoi(get_req.attr("arh_per").c_str());
+	    val_tp  = atoi(get_req.attr("vtp").c_str());
+	    arh_beg = atoll(get_req.attr("beg").c_str());
+	    arh_end = atoll(get_req.attr("end").c_str());
+	    arh_per = atoi(get_req.attr("per").c_str());
 	}
     }
     //- One request check and prepare -
@@ -1570,6 +1583,7 @@ void ShapeDiagram::TrendObj::loadData( bool full )
 	    double curVal = atof(get_req.text().c_str());
 	    if( (val_tp == 0 && curVal == EVAL_BOOL) || (val_tp == 1 && curVal == EVAL_INT) ) curVal = EVAL_REAL;
 	    //printf("TEST 10: %lld %f\n",lst_tm,curVal);
+	    if( valEnd() && (lst_tm-valEnd())/trcPer > 2 ) vals.push_back(SHg(lst_tm-trcPer,EVAL_REAL));
 	    vals.push_back(SHg(lst_tm,curVal));
 	    while( vals.size() > 2000 )	vals.pop_front();
 	}

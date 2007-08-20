@@ -90,7 +90,7 @@ void RunWdgView::update( unsigned cnt, int div_max )
 	//printf("TEST 00: %s\n",id().c_str());	
 	XMLNode get_req("get");
 	get_req.setAttr("user",user())->
-		setAttr("path",id()+"/%2fattr%2fscmd")->
+		setAttr("path",id()+"/%2fserv%2f0")->
 		setAttr("tm",TSYS::uint2str(reqtm));	
 	if( !mod->cntrIfCmd(get_req) )
 	{

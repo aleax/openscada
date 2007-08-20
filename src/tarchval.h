@@ -163,7 +163,8 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	const string &id()	{ return m_id; }
 	string name();
 	string dscr()		{ return m_dscr; }
-	SrcMode srcMode() 	{ return (TVArchive::SrcMode)m_srcmode; }	
+	SrcMode srcMode() 	{ return (TVArchive::SrcMode)m_srcmode; }
+	string  srcData()	{ return m_dsourc; }
 	bool toStart()  	{ return m_start; }
         bool startStat()	{ return run_st; }
 	

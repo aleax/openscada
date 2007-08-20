@@ -861,3 +861,13 @@ void TMdPrm::vlGet( TVal &val )
 	}
     }
 }	
+
+void TMdPrm::vlArchMake( TVal &val )
+{
+    if( val.arch().freeStat() ) return;
+    val.arch().at().setSrcMode(owner().ADIIntMode() ? TVArchive::PassiveAttr : TVArchive::ActiveAttr,
+		val.arch().at().srcData());
+    val.arch().at().setPeriod(owner().ADIIntMode() ? 1000000/owner().cfg("ADCONVRATE").getI() : 1000000);
+    val.arch().at().setHardGrid( true );
+    val.arch().at().setHighResTm( true );
+}

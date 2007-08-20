@@ -84,6 +84,7 @@ class TMdPrm : public TParamContr
 						
         void vlGet( TVal &val );
         void vlSet( TVal &val );
+	void vlArchMake( TVal &val );
 	
 	//- Template link operations -
         int lnkSize();

@@ -135,6 +135,7 @@ class TValue: public TCntrNode, public TValElem
 	
 	virtual void vlSet( TVal &val ){};
 	virtual void vlGet( TVal &val ){};
+	virtual void vlArchMake( TVal &val ){};
 	
     private:
 	//Methods

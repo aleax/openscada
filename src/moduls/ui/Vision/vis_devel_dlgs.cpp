@@ -1170,7 +1170,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	    int i_w;
 	    for( i_w = 0; i_w < wlst.size(); i_w++ )
 		if( obj_attr_cfg->topLevelItem(i_r)->text(0) == wlst[i_w].c_str() ) break;
-	    if( i_w >= wlst.size() )	delete obj_attr_cfg->topLevelItem(i_r);
+	    if( i_w >= wlst.size() )	delete obj_attr_cfg->topLevelItem(i_r--);
 	}
 	
 	//--- Add root items ---
@@ -1197,9 +1197,9 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	    {
 		int i_l;
 		for( i_l = 0; i_l < prm_req.childGet(0)->childSize(); i_l++ )
-		    if( root_it->child(i_r)->text(0) == prm_req.childGet("id","id")->childGet(i_l)->text().c_str() ) 
+		    if( root_it->child(i_r)->text(0) == prm_req.childGet("id","id")->childGet(i_l)->text().c_str() )
 			break;
-		if( i_l >= prm_req.childGet(0)->childSize() )	delete root_it->child(i_r);
+		if( i_l >= prm_req.childGet(0)->childSize() )	delete root_it->child(i_r--);
 	    }
 	    
 	    //--- Add widget's items ---

@@ -70,14 +70,12 @@ class Attr : public TCntrNode
         TFld::Type type( );
 	int flgGlob( );		//Global attribite's flags
 	SelfAttrFlgs flgSelf( )	{ return self_flg; }
-	unsigned modifVal( )	{ return vl_modif; }
-	unsigned modifCfg( )	{ return cfg_modif; }
+	unsigned modif( )	{ return m_modif; }
 	string cfgTempl( )	{ return cfg_tmpl; }
 	string cfgVal( )	{ return cfg_val; }
 	
 	void setFlgSelf( SelfAttrFlgs flg );
-	void setModifVal( unsigned set )	{ vl_modif = set; }
-        void setModifCfg( unsigned set )	{ cfg_modif = set; }
+	void setModif( unsigned set )	{ m_modif = set; }
 	void setCfgTempl( const string &vl );
 	void setCfgVal( const string &vl );
 
@@ -89,11 +87,11 @@ class Attr : public TCntrNode
 	bool   getB( );
 
 	//- Set value -
-	void setSEL( const string &val, unsigned mod_vl = 0, bool strongPrev = false );
-	void setS( const string &val, unsigned mod_vl = 0, bool strongPrev = false );
-	void setR( double val, unsigned mod_vl = 0, bool strongPrev = false );
-	void setI( int val, unsigned mod_vl = 0, bool strongPrev = false );
-	void setB( bool val, unsigned mod_vl = 0, bool strongPrev = false );
+	void setSEL( const string &val, bool strongPrev = false );
+	void setS( const string &val, bool strongPrev = false );
+	void setR( double val, bool strongPrev = false );
+	void setI( int val, bool strongPrev = false );
+	void setB( bool val, bool strongPrev = false );
 
 	TFld &fld()  			{ return *m_fld; }
 	
@@ -114,8 +112,7 @@ class Attr : public TCntrNode
         }m_val;
         //- Attributes -
         TFld	*m_fld;			//Base field
-	unsigned vl_modif,		//Value modify counter
-		 cfg_modif;		//Configuration modify counter
+	unsigned m_modif;		//Modify counter
 	SelfAttrFlgs self_flg;		//Self attributes flags
 	
 	string 	cfg_tmpl, cfg_val;	//Config template and value
@@ -202,12 +199,14 @@ class Widget : public TCntrNode, public TValElem
 	void postEnable( int flag );
 	void preDisable( int flag );
 	
+	bool cntrCmdServ( XMLNode *opt );
 	bool cntrCmdGeneric( XMLNode *opt );
 	bool cntrCmdAttributes( XMLNode *opt );
 	bool cntrCmdLinks( XMLNode *opt );
 	bool cntrCmdProcess( XMLNode *opt );	
 
         virtual bool attrChange( Attr &cfg, void *prev );   //Process attribute change local and into terminator
+	virtual unsigned int modifVal()	{ return 0; }
 
         void addFld( TElem *el, unsigned id );
         void delFld( TElem *el, unsigned id );

@@ -758,6 +758,15 @@ void Prm::vlGet( TVal &val )
     }catch(TError err) { disable(); }
 }
 
+void Prm::vlArchMake( TVal &val )
+{
+    if( val.arch().freeStat() ) return;
+	val.arch().at().setSrcMode(TVArchive::ActiveAttr,val.arch().at().srcData());
+    val.arch().at().setPeriod(1000000);
+    val.arch().at().setHardGrid( true );
+    val.arch().at().setHighResTm( false );
+}
+
 void Prm::cntrCmdProc( XMLNode *opt )
 {
     //Get page info

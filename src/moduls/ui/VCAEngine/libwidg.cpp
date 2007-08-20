@@ -681,13 +681,9 @@ void LWidget::loadIO( )
             attrAdd( new TFld(sid.c_str(),c_el.cfg("NAME").getS().c_str(),(TFld::Type)(flg&0x0f),flg>>4) );
 	AutoHD<Attr> attr = attrAt(sid);
         if( !(!(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser) ) continue;
-	if( attr.at().flgGlob()&TFld::Selected )
-	{
-	    attr.at().setS(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),0,'|'));
-	    attr.at().fld().setValues(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),1,'|'));
-	    attr.at().fld().setSelNames(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),2,'|'));
-	}
-	else attr.at().setS(c_el.cfg("IO_VAL").getS());
+	attr.at().setS(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),0,'|'));
+	attr.at().fld().setValues(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),1,'|'));
+	attr.at().fld().setSelNames(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),2,'|'));
 	attr.at().setFlgSelf((Attr::SelfAttrFlgs)c_el.cfg("SELF_FLG").getI());
 	attr.at().setCfgTempl(c_el.cfg("CFG_TMPL").getS());
 	attr.at().setCfgVal(c_el.cfg("CFG_VAL").getS());
@@ -749,7 +745,7 @@ void LWidget::saveIO( )
     for( int i_a = 0; i_a < als.size(); i_a++ )
     {
  	AutoHD<Attr> attr = attrAt(als[i_a]);	
-	if( !attr.at().modifVal() && !attr.at().modifCfg() )	continue;
+	if( !attr.at().modif() )	continue;
 	if( !(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser )
 	{
 	    //-- User attribute store --	    
@@ -824,9 +820,10 @@ string LWidget::resourceGet( const string &id, string *mime )
 
 void LWidget::cntrCmdProc( XMLNode *opt )
 {
+    if( cntrCmdServ(opt) ) return;
     //Get page info
     if( opt->name() == "info" )
-    {
+    {	
 	cntrCmdGeneric(opt);
 	cntrCmdAttributes(opt );
 	cntrCmdLinks(opt);
@@ -1059,7 +1056,7 @@ void CWidget::saveIO( )
     for( int i_a = 0; i_a < als.size(); i_a++ )
     {
  	AutoHD<Attr> attr = attrAt(als[i_a]);	
-	if( !attr.at().modifVal() && !attr.at().modifCfg() )	continue;
+	if( !attr.at().modif() )	continue;
 	if( !(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser )
 	{
 	    //-- User attribute store --
@@ -1114,6 +1111,7 @@ string CWidget::resourceGet( const string &id, string *mime )
 
 void CWidget::cntrCmdProc( XMLNode *opt )
 {
+    if( cntrCmdServ(opt) ) return;
     //Get page info
     if( opt->name() == "info" )
     {

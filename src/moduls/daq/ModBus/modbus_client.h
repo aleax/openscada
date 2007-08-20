@@ -1,7 +1,7 @@
 
-//OpenSCADA system module DAQ.OperationSystem file: os_contr.h
+//OpenSCADA system module DAQ.ModBus file: modbus_client.h
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2007 by Roman Savochenko                                *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -20,10 +20,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
  
-#ifndef OS_CONTR_H
-#define OS_CONTR_H
+#ifndef MODBUS_CLIENT_H
+#define MODBUS_CLIENT_H
 
-#include <tmodule.h>
 #include <tcontroller.h>
 #include <ttipdaq.h>
 #include <tparamcontr.h>
@@ -31,104 +30,102 @@
 #include <string>
 #include <vector>
 
-#include "da.h"
-
 #undef _
 #define _(mess) mod->I18N(mess)
 
 using std::string;
 using std::vector;
 
-namespace SystemCntr
+namespace ModBusDAQ
 {
 
-//======================================================================
-//==== TMdPrm 
-//======================================================================
+//******************************************************
+//* TMdPrm                                             *
+//******************************************************
 class TMdContr;
-
+    
 class TMdPrm : public TParamContr
 {
     public:
     	TMdPrm( string name, TTipParam *tp_prm );
-	~TMdPrm( );	
-	
-	void enable();
-	void disable();
-	void load( );
-	void save( );
-	
-	void autoC( bool val )	{ m_auto = val; }
-	bool autoC( )	{ return m_auto; }
+	~TMdPrm( );
 
-	//set perameter type
-	void setType( const string &da_id );
-	//get new value
-	void getVal();
-	
-	TMdContr &owner()       { return (TMdContr&)TParamContr::owner(); }
-	
-    protected:
-        bool cfgChange( TCfg &cfg );	//config change
-		       
-	void vlGet( TVal &val );
-	void vlArchMake( TVal &val );
+	void enable( );
+	void disable( );
 
-	void postEnable( int flag );
-	//void preDisable(int flag);
+	TElem &elem()		{ return p_el; }
+	TMdContr &owner()	{ return (TMdContr&)TParamContr::owner(); }
 	
     private:
-	bool	m_auto;	//Autocreated
-	DA	*m_da;
+	//Methods
+        void postEnable( int flag );
+	void vlSet( TVal &val );
+	void vlArchMake( TVal &val );
+	
+        //Attributes
+	string  &m_attrLs;
+        TElem   p_el;           //Work atribute elements
 };
 
-//======================================================================
-//==== TMdContr 
-//======================================================================
+//******************************************************
+//* TMdContr                                           *
+//******************************************************
 class TMdContr: public TController
 {
-    friend class TMdPrm;
+    //friend class TMdPrm;
     public:
+	//Methods
     	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem);
 	~TMdContr();   
 
-	int period( )	{ return m_per; }
-	int prior( )	{ return m_prior; }
+	double period()		{ return m_per; }
+	int    prior()		{ return m_prior; }
 
-	AutoHD<TMdPrm> at( const string &nm )
-        { return TController::at(nm); }
+	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
 	void load( );
 	void save( );
-	void enable_( );
 	void start_( );
-	void stop_( );    
+	void stop_( );
 	
-    protected:
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	void prmEn( const string &id, bool val );
-    	
+	string modBusReq( string &pdu );
+
+	//Attributes
+	bool    isErr;		//Error present
+
+    protected:
+    	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	
     private:
 	//Methods
 	TParamContr *ParamAttach( const string &name, int type );
 	static void *Task( void *icntr );
 	
+	//unsigned int crc16( const string &modbusframe );
+	
 	//Attributes
-	Res	en_res;         //Resource for enable params
-	int	&m_per,     	// ms
-		&m_prior;	// Process task priority
+	Res	en_res, req_res;//Resource for enable params and request values
+	double	&m_per;     	//Acquisition task (seconds)
+	int	&m_prior,	//Process task priority
+		&m_node;	//Server node
+	string	&m_tr,		//Used output transport
+		&m_addr;	//Remote host address
 		
-	bool    prc_st,		// Process task active
-		endrun_req;	// Request to stop of the Process task
-	vector< AutoHD<TMdPrm> >  p_hd;    
-
-	double  tm_calc;	// Scheme's calc time
-	pthread_t procPthr;     // Process task thread
+	bool    prc_st,		//Process task active
+		endrun_req;	//Request to stop of the Process task
+        vector< AutoHD<TMdPrm> >  p_hd;
+	
+	pthread_t procPthr;     //Process task thread
+	
+	double 	tm_gath;	//Gathering time
+	
+	//static  char crc_table[];	//Crec calc table
 };
 
-//======================================================================
-//==== TTpContr 
-//======================================================================
+//******************************************************
+//* TTpContr                                           *
+//******************************************************
 class TTpContr: public TTipDAQ
 {
     public:
@@ -138,19 +135,14 @@ class TTpContr: public TTipDAQ
 	void postEnable( int flag );
 	void modLoad( );
 
-	void daList( vector<string> &da );
-	void daReg( DA *da );
-	DA  *daGet( const string &da );	
-    
     private:
+	//Methods
 	TController *ContrAttach( const string &name, const string &daq_db );
 	string optDescr( );
-	vector<DA *> m_da;
 };
 
 extern TTpContr *mod;
 
 } //End namespace 
 
-#endif //OS_CONTR_H
-
+#endif //MODBUS_CLIENT_H

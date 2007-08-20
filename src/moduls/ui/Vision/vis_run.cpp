@@ -351,7 +351,7 @@ bool VisRun::wAttrSet( const string &path, const string &attr, const string &val
     //- Send value to model -
     XMLNode set_req("set");
     set_req.setAttr("user",user())->
-    setAttr("path",path+"/%2fattr%2fscmd");
+    setAttr("path",path+"/%2fserv%2f0");
     set_req.childAdd("el")->setAttr("id",attr)->setText(val);
     return !mod->cntrIfCmd(set_req);
 }

@@ -414,6 +414,15 @@ void TMdPrm::getVal()
     if( m_da )	m_da->getVal(this);
 }
 
+void TMdPrm::vlArchMake( TVal &val )
+{
+    if( val.arch().freeStat() ) return;
+    val.arch().at().setSrcMode(TVArchive::PassiveAttr,val.arch().at().srcData());
+    val.arch().at().setPeriod(((long long)owner().period())*1000);
+    val.arch().at().setHardGrid( true );
+    val.arch().at().setHighResTm( true );
+}
+
 void TMdPrm::setType( const string &da_id )
 {
     if( m_da && da_id == m_da->id() )	return;

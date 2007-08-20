@@ -91,6 +91,7 @@ class Prm : public TParamContr
 		
         void vlSet( TVal &val );
         void vlGet( TVal &val );
+	void vlArchMake( TVal &val );
 	
     private:
 	TElem  v_el;   //Values elem
@@ -117,7 +118,7 @@ class Contr: public TController, public TValFunc
 	void loadFunc( );
         void save( );
         void enable_( );
-        void disable_( );	
+        void disable_( );
         void start_( );
         void stop_( );
 	

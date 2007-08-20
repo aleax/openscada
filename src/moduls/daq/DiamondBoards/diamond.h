@@ -67,6 +67,7 @@ class TMdPrm : public TParamContr
 	bool cfgChange( TCfg &cfg );
 	void vlSet( TVal &val );
         void vlGet( TVal &val );
+	void vlArchMake( TVal &val );
 
 	void postEnable( int flag );
 	//void preDisable( int flag );    

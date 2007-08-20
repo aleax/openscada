@@ -698,6 +698,15 @@ void TMdPrm::vlSet( TVal &val )
         }
     }catch(TError err) {  }
 }
+
+void TMdPrm::vlArchMake( TVal &val )
+{
+    if( val.arch().freeStat() ) return;
+    val.arch().at().setSrcMode(TVArchive::ActiveAttr,val.arch().at().srcData());
+    val.arch().at().setPeriod(((long long)owner().period())*1000);
+    val.arch().at().setHardGrid( true );
+    val.arch().at().setHighResTm( true );
+}
 																																																				    
 int TMdPrm::lnkSize()
 {

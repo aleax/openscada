@@ -1335,17 +1335,17 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    {
         	if( !ctrChkNode(opt) )  break;
 		string arch = opt->attr("arch");
-		opt->setAttr("arh_end",TSYS::ll2str(end(arch)));
-		opt->setAttr("arh_beg",TSYS::ll2str(begin(arch)));
-		opt->setAttr("arh_vtp",TSYS::int2str(TValBuf::valType()));
+		opt->setAttr("end",TSYS::ll2str(end(arch)));
+		opt->setAttr("beg",TSYS::ll2str(begin(arch)));
+		opt->setAttr("vtp",TSYS::int2str(TValBuf::valType()));
 		if( arch.empty() || arch == BUF_ARCH_NM )
-		    opt->setAttr("arh_per",TSYS::ll2str(TValBuf::period()));
+		    opt->setAttr("per",TSYS::ll2str(TValBuf::period()));
 		else
 		{
 		    ResAlloc res(a_res,false);
 		    for( int i_a = 0; i_a < arch_el.size(); i_a++ )
     			if( arch == arch_el[i_a]->archivator().workId() )
-			{ opt->setAttr("arh_per",TSYS::ll2str((long long)(1000000.*arch_el[i_a]->archivator().valPeriod()))); break;  }
+			{ opt->setAttr("per",TSYS::ll2str((long long)(1000000.*arch_el[i_a]->archivator().valPeriod()))); break;  }
 		}
 		return;
 	    }

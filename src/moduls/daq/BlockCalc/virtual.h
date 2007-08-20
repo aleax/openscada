@@ -129,6 +129,7 @@ class Prm : public TParamContr
     
 	void vlSet( TVal &val );
 	void vlGet( TVal &val );
+	void vlArchMake( TVal &val );
     
     private:
 	string m_blck;	//Assign block

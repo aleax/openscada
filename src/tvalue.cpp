@@ -225,10 +225,11 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		//Create new archive		
 		SYS->archive().at().valAdd(rez_nm);
 		SYS->archive().at().valAt(rez_nm).at().setValType(vlAt(attr).at().fld().type());
-		SYS->archive().at().valAt(rez_nm).at().setSrcMode(TVArchive::ActiveAttr,
+		SYS->archive().at().valAt(rez_nm).at().setSrcMode(TVArchive::PassiveAttr,
 		    vlAt(attr).at().nodePath('.').substr(SYS->id().size()+1));
 		SYS->archive().at().valAt(rez_nm).at().setToStart(true);
 		SYS->archive().at().valAt(rez_nm).at().start();
+		vlArchMake(vlAt(attr).at());
 	    }
 	    //Check for delete archive
 	    if( col == "prc" && !v_get && !vlAt(attr).at().arch().freeStat() )
@@ -577,8 +578,8 @@ void TVal::cntrCmdProc( XMLNode *opt )
 		if( !arch().freeStat() ) arch().at().cntrCmdProc(opt);
 		else
 		{
-            	    opt->setAttr("arh_end","0")->setAttr("arh_beg","0")->setAttr("arh_per","0");
-            	    opt->setAttr("arh_vtp",TSYS::int2str(fld().type()));
+            	    opt->setAttr("end","0")->setAttr("beg","0")->setAttr("per","0");
+            	    opt->setAttr("vtp",TSYS::int2str(fld().type()));
 		}
 		return;
 	    case 1:	//Values request

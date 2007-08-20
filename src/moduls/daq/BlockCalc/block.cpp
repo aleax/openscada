@@ -539,7 +539,7 @@ void Block::cntrCmdProc( XMLNode *opt )
         }
         opt->childAdd("el")->setText(c_path);
         if( c_lv != 0 ) c_path += ".";
-    	    SYS->nodeAt(c_path,0,'.').at().nodeList(list);
+    	SYS->nodeAt(c_path,0,'.').at().nodeList(list);
 	for( unsigned i_a=0; i_a < list.size(); i_a++ )
 	    opt->childAdd("el")->setText(c_path+list[i_a]);
     }

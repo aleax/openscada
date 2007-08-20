@@ -645,7 +645,7 @@ void Page::saveIO( )
     for( int i_a = 0; i_a < als.size(); i_a++ )
     {
  	AutoHD<Attr> attr = attrAt(als[i_a]);	
-	if( !attr.at().modifVal() && !attr.at().modifCfg() )	continue;
+	if( !attr.at().modif() )	continue;
 	if( !(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser )
 	{
 	    //-- User attribute store --	    
@@ -750,6 +750,7 @@ string Page::resourceGet( const string &id, string *mime )
 
 void Page::cntrCmdProc( XMLNode *opt )
 {
+    if( cntrCmdServ(opt) ) return;
     //Get page info
     if( opt->name() == "info" )
     {
@@ -1043,7 +1044,7 @@ void PageWdg::saveIO( )
     for( int i_a = 0; i_a < als.size(); i_a++ )
     {
  	AutoHD<Attr> attr = attrAt(als[i_a]);	
-	if( !attr.at().modifVal() && !attr.at().modifCfg() )	continue;
+	if( !attr.at().modif() )	continue;
 	if( !(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser )
 	{
 	    //-- User attribute store --
@@ -1097,6 +1098,7 @@ string PageWdg::resourceGet( const string &id, string *mime )
 
 void PageWdg::cntrCmdProc( XMLNode *opt )
 {
+    if( cntrCmdServ(opt) ) return;
     //Get page info
     if( opt->name() == "info" )
     {

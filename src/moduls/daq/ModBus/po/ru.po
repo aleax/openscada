@@ -1,0 +1,268 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#: snmp_client.cpp:68 snmp_client.cpp:149 snmp_client.cpp:157
+#: snmp_client.cpp:345 snmp_client.cpp:348 snmp_client.cpp:351
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenScada 0.1.17\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-01-15 10:44+0200\n"
+"PO-Revision-Date: 2004-03-20 10:37+0200\n"
+"Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
+"Language-Team: <ru@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+#: snmp_client.cpp:43
+msgid "SNMP"
+msgstr ""
+
+#: snmp_client.cpp:44
+msgid "SNMP client"
+msgstr "SNMP клиент"
+
+#: snmp_client.cpp:45
+msgid "DAQ"
+msgstr ""
+
+#: snmp_client.cpp:47
+msgid "0.3.0"
+msgstr ""
+
+#: snmp_client.cpp:48
+msgid "Roman Savochenko"
+msgstr "Роман Савоченко"
+
+#: snmp_client.cpp:49
+msgid "Allow realising of SNMP client service."
+msgstr "Предоставляет реализацию клиентского сервиса протокола SNMP."
+
+#: snmp_client.cpp:50
+msgid "GPL"
+msgstr ""
+
+#: snmp_client.cpp:55
+msgid "C"
+msgstr ""
+
+#: snmp_client.cpp:101
+msgid "OpenSCADA SNMP client"
+msgstr "OpenSCADA SNMP клиент"
+
+#: snmp_client.cpp:114
+#, c-format
+msgid ""
+"======================= The module <%s:%s> options =======================\n"
+"---------- Parameters of the module section <%s> in config file ----------\n"
+"\n"
+msgstr ""
+"========================== Опции модуля <%s:%s> ==========================\n"
+"-------- Параметры модульной секции <%s> в конфигурационном файле --------\n"
+"\n"
+
+#: snmp_client.cpp:125
+msgid "h"
+msgstr ""
+
+#: snmp_client.cpp:128
+msgid "help"
+msgstr ""
+
+#: snmp_client.cpp:149 snmp_client.cpp:156 snmp_client.cpp:174
+msgid "PRM_BD"
+msgstr ""
+
+#: snmp_client.cpp:149
+msgid "Parameteres table"
+msgstr "Таблица параметров"
+
+#: snmp_client.cpp:149 snmp_client.cpp:152
+msgid "30"
+msgstr ""
+
+#: snmp_client.cpp:150 snmp_client.cpp:170
+msgid "PERIOD"
+msgstr ""
+
+#: snmp_client.cpp:150
+msgid "Gather data period (s)"
+msgstr "Период сбора данных (с)"
+
+#: snmp_client.cpp:150 snmp_client.cpp:154
+msgid "3"
+msgstr ""
+
+#: snmp_client.cpp:150
+msgid "1"
+msgstr ""
+
+#: snmp_client.cpp:150 snmp_client.cpp:151
+msgid "0;100"
+msgstr ""
+
+#: snmp_client.cpp:151 snmp_client.cpp:170
+msgid "PRIOR"
+msgstr ""
+
+#: snmp_client.cpp:151
+msgid "Gather task priority"
+msgstr "Уровень приоритета задачи сбора данных"
+
+#: snmp_client.cpp:151
+msgid "2"
+msgstr ""
+
+#: snmp_client.cpp:151
+msgid "0"
+msgstr ""
+
+#: snmp_client.cpp:152 snmp_client.cpp:170
+msgid "ADDR"
+msgstr ""
+
+#: snmp_client.cpp:152
+msgid "Remote host address"
+msgstr "Адрес удалённого хоста"
+
+#: snmp_client.cpp:152
+msgid "localhost"
+msgstr ""
+
+#: snmp_client.cpp:153 snmp_client.cpp:170
+msgid "COMM"
+msgstr ""
+
+#: snmp_client.cpp:153
+msgid "Server community"
+msgstr "Группа сервера"
+
+#: snmp_client.cpp:153
+msgid "20"
+msgstr ""
+
+#: snmp_client.cpp:153
+msgid "public"
+msgstr ""
+
+#: snmp_client.cpp:154 snmp_client.cpp:171
+msgid "PATTR_LIM"
+msgstr ""
+
+#: snmp_client.cpp:154
+msgid "Param's attributes limit"
+msgstr "Ограничение на количество атрибутов"
+
+#: snmp_client.cpp:154 snmp_client.cpp:157
+msgid "100"
+msgstr ""
+
+#: snmp_client.cpp:156
+msgid "std"
+msgstr ""
+
+#: snmp_client.cpp:156
+msgid "Standard"
+msgstr "Стандарт"
+
+#: snmp_client.cpp:157 snmp_client.cpp:442 snmp_client.cpp:513
+msgid "OID_LS"
+msgstr ""
+
+#: snmp_client.cpp:157
+msgid "OID list (next line separated)"
+msgstr "Список OID (разделение след. строкой)"
+
+#: snmp_client.cpp:174
+msgid "SNMPPrm_"
+msgstr ""
+
+#: snmp_client.cpp:211 snmp_client.cpp:429 snmp_client.cpp:518
+msgid "root"
+msgstr ""
+
+#: snmp_client.cpp:219
+msgid "start"
+msgstr ""
+
+#: snmp_client.cpp:220
+msgid "Gathering task no started!"
+msgstr "Задача сбора данных не запущена!"
+
+#: snmp_client.cpp:244
+msgid "stop"
+msgstr ""
+
+#: snmp_client.cpp:245
+msgid "Gathering task no stoped!"
+msgstr "Задача сбора данных не остановлена!"
+
+#: snmp_client.cpp:292 snmp_client.cpp:395
+#, c-format
+msgid "%s"
+msgstr ""
+
+#: snmp_client.cpp:292
+msgid "Error SNMP session open."
+msgstr "Ошибка открытия SNMP сессии."
+
+#: snmp_client.cpp:368
+#, c-format
+msgid "TEST 02: %xh\n"
+msgstr ""
+
+#: snmp_client.cpp:386
+#, c-format
+msgid "Timeout: No Response from %s."
+msgstr "Время ожидания ответа от %s превышено."
+
+#: snmp_client.cpp:419
+msgid "_"
+msgstr ""
+
+#: snmp_client.cpp:426 snmp_client.cpp:510
+msgid "info"
+msgstr ""
+
+#: snmp_client.cpp:429 snmp_client.cpp:513
+msgid "fld"
+msgstr ""
+
+#: snmp_client.cpp:429 snmp_client.cpp:434
+msgid "/cntr/st/gath_tm"
+msgstr ""
+
+#: snmp_client.cpp:429
+msgid "Gather data time (ms)"
+msgstr "Время сбора данных (мс)"
+
+#: snmp_client.cpp:429
+msgid "tp"
+msgstr ""
+
+#: snmp_client.cpp:429
+msgid "real"
+msgstr ""
+
+#: snmp_client.cpp:433 snmp_client.cpp:517
+msgid "path"
+msgstr ""
+
+#: snmp_client.cpp:442
+msgid "w_attr"
+msgstr ""
+
+#: snmp_client.cpp:513 snmp_client.cpp:518
+msgid "/prm/cfg/OID_LS"
+msgstr ""
+
+#: snmp_client.cpp:518
+msgid "set"
+msgstr ""
+
+#: snmp_client.cpp:520
+msgid "Parameter is enabled."
+msgstr "Параметр включен."
