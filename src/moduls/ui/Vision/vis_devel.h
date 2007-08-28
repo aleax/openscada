@@ -27,6 +27,9 @@
 #include <vector>
 
 #include <QMainWindow>
+#include <QLabel>
+
+#include "tvision.h"
 
 using std::string;
 using std::vector;
@@ -49,15 +52,19 @@ class ShapeElFigure;
 
 class VisDevelop : public QMainWindow
 {
-    Q_OBJECT
-    
+    Q_OBJECT    
 
     public:
 	//Public methods
-	VisDevelop( string open_user );
+	VisDevelop( const string &open_user, const string &VCAstat );
 	~VisDevelop( );
 	
 	string user();
+	string VCAStation()	{ return host.stat; }
+	
+	void setVCAStation( const string& st );
+	
+	int cntrIfCmd( XMLNode &node, bool glob = false );
 	
     signals:
 	//Public signals
@@ -163,14 +170,15 @@ class VisDevelop : public QMainWindow
 	bool		winClose;
 	bool            proc_st;        //Timer process stat
 	UserStBar 	*w_user;	//User status widget
+	QLabel		*w_stat;	//VCA engine station
 	QTimer      	*endRunTimer, *work_wdgTimer;
 	string		work_wdg, work_wdg_new;	//Work widget
 	QSignalMapper 	*wMapper;	//Internal window mapper
+	VCAHost		host;	
 
 	//- Main dialogs -
 	LibProjProp 	*prjLibPropDlg;	//Widget's library and project properties dialog
 	VisItProp    	*visItPropDlg;	//Visual item properties properties dialog
-        
 };
 
 }

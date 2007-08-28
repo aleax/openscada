@@ -1,3 +1,23 @@
+2007-08-28 Roman
+- /SYS/Archive: The service functions of control interface is made unification.
+- /SYS/Config: Config parameters made view on write to them value.
+- FIX:/SYS/Elem: TElem object's fields list no clear is fixed.
+- FIX:/XML: Memory leak is fixed. XML-parser is reviewed.
+- /UI/QTCfg: Vertical scrolbar position save is made.
+- !:/Protocol/SelfSystem: Data size control for requests is added.
+- FIX:/UI/QTCfg: Field's type no checking is fixed.
+- !!:/UI/VCAEngine: The control interface structure is rebuild.
+- !!:/UI/VCAEngine: Arguments support is added to primitive "Text".
+- !!:/UI/VCAEngine: Multiconnection to sessions, and background execution support is added.
+- !!:/UI/VCAEngine: Session's process task is optimized on time.
+- FIX:/UI/VCAEngine: Widget's attributes storing mode unificated.
+- !!:/UI/Vision: Independent RunTime start is made.
+- !!!!:/UI/Vision: External stations work mode is added.
+- !!!!:/UI/Vision: Communication interface to VCAEngine is otimized.
+- !!:/UI/Vision: Arguments support is added to primitive "Text".
+- FIX:/UI/Vision: Enable and active mode is fixed for primitive "ElForm".
+
+
 2007-08-20 Roman
 - !!!:/DAQ/: The module of realisation "ModBus TCP/IP" protocol is added.
 - !:/DAQ/Value: The virtual function vlArchMake() is added for a value archive intits, on creation, 
@@ -20,6 +40,7 @@
 - FIX:/UI/Vision: Development mode memory leak is fixed.
 - FIX:/UI/Vision: The primitive "Media", type "Movie" attribute's speed zero value trap is fixed.
 - /SYS: Updated Demo DB.
+
 
 2007-08-14 Roman
 - !!:/TSYS: Path elements speed optimisation is made: TArchiveS, TCntrNode, TElem, TModShedule, TPrmTmpl, 

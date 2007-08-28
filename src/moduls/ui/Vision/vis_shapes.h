@@ -28,6 +28,7 @@
 
 #include <QObject>
 #include <QMap>
+#include <QVariant>
 
 using std::string;
 using std::deque; 
@@ -121,6 +122,27 @@ class ShapeText : public WdgShape
 	void destroy( WdgView *view );
 	bool attrSet( WdgView *view, int uiPrmPos, const string &val);
 	bool event( WdgView *view, QEvent *event );
+
+    private:
+ 	//Data
+	//- Argument object's class -
+	class ArgObj
+	{
+	    public:
+		//Methods
+		ArgObj( ){ };
+		
+		string &cfg()		{ return m_cfg; }
+		QVariant val()		{ return m_val; }
+
+		void setCfg( const string &vl )		{ m_cfg = vl; }
+		void setVal( const QVariant &vl )	{ m_val = vl; }
+		
+	    private:		
+		//Attributes
+		QVariant	m_val;
+		string		m_cfg;
+	};        
 }; 
 
 //************************************************

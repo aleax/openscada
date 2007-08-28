@@ -438,6 +438,47 @@ AutoHD<Session> Engine::sesAt( const string &id )
 
 void Engine::cntrCmdProc( XMLNode *opt )
 {
+    string a_path = opt->attr("path");
+    //- Service commands process -
+    if( a_path == "/serv/0" )	//Session operation
+    {
+    	if( ctrChkNode(opt,"list",RWRWRW,"root","root",SEQ_RD) ) //List session for some project
+        {
+	    string prj = opt->attr("prj");
+    	    vector<string> ls;
+    	    sesList(ls);
+    	    for( int i_l = 0; i_l < ls.size(); i_l++ )
+		if( prj.empty() || sesAt(ls[i_l]).at().projNm() == prj )			    
+                    opt->childAdd("el")->setText(ls[i_l]);
+	}
+        else if( ctrChkNode(opt,"connect",RWRWRW,"root","root",SEQ_WR) )
+	{
+	    string sess = opt->attr("sess");
+	    string prj  = opt->attr("prj");
+	    if( !sess.empty() ) sesAt(sess).at().connect();
+	    else if( !prj.empty() )
+	    {
+		//- Prepare session name -
+		sess = prj;
+		for( int p_cnt = 0; sesPresent(sess); p_cnt++ )
+                    sess = prj+TSYS::int2str(p_cnt);
+		sesAdd( sess, prj );
+		sesAt(sess).at().setUser(opt->attr("user"));
+		sesAt(sess).at().setStart(true);
+		sesAt(sess).at().connect();
+		opt->setAttr("sess",sess);
+	    }else throw TError(nodePath().c_str(),_("Connect/create session arguments error."));
+	}
+	else if( ctrChkNode(opt,"disconnect",RWRWRW,"root","root",SEQ_WR) )
+	{
+	    string sess = opt->attr("sess");
+	    sesAt(sess).at().disconnect();
+	    if( sesAt(sess).at().connects( ) == 0 && !sesAt(sess).at().backgrnd( ) )
+		sesDel(sess);
+	}
+	return;
+    }
+		
     //- Get page info -
     if( opt->name() == "info" )
     {
@@ -456,8 +497,8 @@ void Engine::cntrCmdProc( XMLNode *opt )
     	    ctrMkNode("list",opt,-1,"/ses/ses",_("Sessions"),0664,"root","UI",3,"tp","br","s_com","add,del","br_pref","ses_");
         return;
     }
+    
     //- Process command for page -
-    string a_path = opt->attr("path");
     if( a_path == "/prm/cfg/prj" )
     {
         if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
@@ -505,6 +546,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	{
 	    sesAdd(opt->text());
 	    sesAt(opt->text()).at().setUser(opt->attr("user"));
+	    sesAt(opt->text()).at().setBackgrnd(true);
 	}
         if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )   sesDel(opt->text(),true);
     }        

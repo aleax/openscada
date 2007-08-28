@@ -50,6 +50,8 @@ class Session : public TCntrNode
 	double calcTm( )	{ return tm_calc; }		//Calc session time
 	bool   enable( )	{ return m_enable; }		//Enable stat
   	bool   start( )		{ return m_start; }		//Start stat
+	bool   backgrnd( )	{ return m_backgrnd; }		//Background session execution
+	int    connects( )	{ return m_connects; }		//Connections counter
 	unsigned calcClk( )	{ return m_calcClk; }		//Calc clock
 	AutoHD<Project> parent( );
 
@@ -58,6 +60,9 @@ class Session : public TCntrNode
 	void setPeriod( int val )		{ m_per = val; }
         void setEnable( bool val );
         void setStart( bool val );
+	void setBackgrnd( bool val )		{ m_backgrnd = val; }
+	void connect( )				{ m_connects++; }
+	void disconnect( )			{ if(m_connects>0) m_connects--; }
 
 	//- Pages -
         void list( vector<string> &ls ) 	{ chldList(m_page,ls); }
@@ -91,10 +96,13 @@ class Session : public TCntrNode
         string  m_id, m_prjnm, m_user;
 	int	m_per;
 	bool    m_enable, m_start, endrun_req;	//Enabled, Started and endrun stats
+	bool	m_backgrnd;			//Backgrounded execution of a session
+	int	m_connects;			//Connections counter
 	
 	pthread_t calcPthr;     		//Calc pthread
 	unsigned  m_calcClk;			//Calc clock
-	double  tm_calc;                        //Scheme's calc time
+	float     tm_calc;			//Scheme's calc time
+	float	  rez_calc;	
 	AutoHD<Project> m_parent;
 	Res 	m_evRes;			//Event access resource
 	
@@ -126,6 +134,7 @@ class SessWdg : public Widget, public TValFunc
 	void setEnable( bool val );
         virtual void setProcess( bool val );
 	
+	virtual void prcElListUpdate( );
 	virtual void calc( bool first, bool last, unsigned clcClk );
 	
         //- Include widgets -
@@ -144,15 +153,21 @@ class SessWdg : public Widget, public TValFunc
         Session	 *ownerSess();
 
     protected:
+	bool cntrCmdServ( XMLNode *opt );
+	bool cntrCmdGeneric( XMLNode *opt );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	bool attrChange( Attr &cfg, void *prev );
-	unsigned int modifVal()		{ return m_clc; }
+	unsigned int modifVal( Attr &cfg );
     
     private:
 	//Attributes
 	bool	m_proc;
 	string	work_prog;
-	unsigned int m_clc;
+	unsigned int m_clc, m_mdfClc;
+	
+	vector<string> 	m_wdgChldAct,	//Active childs widget's list
+			m_attrUILs, 	//UI attributes list
+			m_attrLnkLs;	//Linked attributes list
 };
 
 //************************************************
@@ -182,8 +197,8 @@ class SessPage : public SessWdg
         void pageAdd( const string &id, const string &parent = "" );
         void pageDel( const string &id, bool full = false )	{ chldDel(m_page,id,-1,full); }
 	
-    protected:
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+    protected:    
+	bool cntrCmdGeneric( XMLNode *opt );
 	
 	bool attrChange( Attr &cfg, void *prev );
 

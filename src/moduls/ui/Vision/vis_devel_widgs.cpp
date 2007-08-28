@@ -48,7 +48,7 @@ using namespace VISION;
 //****************************************
 //* Inspector of attributes model        *
 //**************************************** 
-ModInspAttr::ModInspAttr( const string &iwdg, const string &iuser ) : m_user(iuser)
+ModInspAttr::ModInspAttr( const string &iwdg, VisDevelop *mainWind ) : main_win(mainWind)
 {
     rootItem = new Item("wgrp",Item::WdgGrp);
     setWdg(iwdg);
@@ -58,6 +58,11 @@ ModInspAttr::~ModInspAttr( )
 {
     //Delete root item
     delete rootItem;
+}
+
+string ModInspAttr::user( )
+{
+    return mainWin( )->user();
 }
 
 void ModInspAttr::setWdg( const string &iwdg )
@@ -138,17 +143,14 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it ) // Item *it)
     try
     {
      	XMLNode info_req("info");
-    	info_req.setAttr("user",user()); 
-
-     	XMLNode get_req("get");
-    	get_req.setAttr("user",user());
+     	XMLNode req("get");
 
         //- Set/update widget name -
-    	get_req.setAttr("path",it->id()+"/"+TSYS::strEncode("/wdg/cfg/name",TSYS::PathEl));
-	if( !mod->cntrIfCmd(get_req) )	it->setName(get_req.text().c_str());        
+    	req.setAttr("path",it->id()+"/"+TSYS::strEncode("/wdg/cfg/name",TSYS::PathEl));
+	if( !mainWin()->cntrIfCmd(req) )	it->setName(req.text().c_str());        
 
 	info_req.setAttr("path",it->id()+"/%2fattr" );
-	mod->cntrIfCmd(info_req);
+	mainWin()->cntrIfCmd(info_req);
     	XMLNode *root = info_req.childGet(0); 
 	
         //- Delete items of a no present attributes -
@@ -246,8 +248,8 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it ) // Item *it)
 	    cur_it->child(ga_id)->setFlag( atoi(gnd->attr("wdgFlg").c_str()) );	    
             //-- Get Value --
 	    string sval;
-	    get_req.setAttr("path",it->id()+"/%2fattr%2f"+a_id);
-	    if( !mod->cntrIfCmd(get_req) )	sval = get_req.text();
+	    req.clear()->setAttr("path",it->id()+"/%2fattr%2f"+a_id);
+	    if( !mainWin()->cntrIfCmd(req) )	sval = req.text();
 	    string stp = gnd->attr("tp");
 	    if( stp == "bool" )		cur_it->child(ga_id)->setData((bool)atoi(sval.c_str()));
 	    else if( stp == "dec" || stp == "hex" || stp == "oct" )
@@ -257,13 +259,12 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it ) // Item *it)
 	    //--- Get selected list ---
             if( gnd->attr("dest") == "select" )
             {
-		get_req.setAttr("path",it->id()+"/"+TSYS::strEncode(gnd->attr("select"),TSYS::PathEl));
-		get_req.childClean();
-		if( !mod->cntrIfCmd(get_req) )
+		req.clear()->setAttr("path",it->id()+"/"+TSYS::strEncode(gnd->attr("select"),TSYS::PathEl));
+		if( !mainWin()->cntrIfCmd(req) )
 		{
 		    QStringList	el_ls;
-		    for( int i_el = 0; i_el < get_req.childSize(); i_el++ )
-			el_ls.push_back(get_req.childGet(i_el)->text().c_str());
+		    for( int i_el = 0; i_el < req.childSize(); i_el++ )
+			el_ls.push_back(req.childGet(i_el)->text().c_str());
             	    cur_it->child(ga_id)->setDataEdit(el_ls);
 		}
             }	    
@@ -375,12 +376,11 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &value, int 
 
     try
     {    
-      	XMLNode set_req("set");
-    	set_req.setAttr("user",user())->
-		setAttr("path",nwdg+"/%2fattr%2f"+nattr)->
-		setText((value.type()==QVariant::Bool) ? 
+      	XMLNode req("set");
+    	req.setAttr("path",nwdg+"/%2fattr%2f"+nattr)->
+	    setText((value.type()==QVariant::Bool) ? 
 			(value.toBool()?"1":"0") : value.toString().toAscii().data());
-	if( !mod->cntrIfCmd(set_req) )
+	if( !mainWin()->cntrIfCmd(req) )
 	{
 	    it->setData( (it->data().type()==QVariant::Bool) ? value.toBool() : value );
 	    emit modified(nwdg);
@@ -472,7 +472,7 @@ QVariant ModInspAttr::Item::dataEdit( )
 //****************************************
 //* Inspector of attributes widget       *
 //****************************************
-InspAttr::InspAttr( QWidget * parent, const string &iuser ) : QTreeView(parent), modelData("",iuser)
+InspAttr::InspAttr( QWidget * parent, VisDevelop *mainWind ) : QTreeView(parent), modelData("",mainWind)
 {
     //setEditTriggers(QAbstractItemView::AllEditTriggers);
     setAlternatingRowColors(true);
@@ -634,7 +634,7 @@ InspAttrDock::InspAttrDock( VisDevelop *parent ) : QDockWidget(_("Attributes"),(
     setObjectName("InspAttrDock");
     setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
     
-    ainsp_w = new InspAttr(this,owner()->user());
+    ainsp_w = new InspAttr(this,owner());
     setWidget(ainsp_w);
     connect(ainsp_w, SIGNAL(modified(const string &)), this, SIGNAL(modified(const string &)));
 }
@@ -662,7 +662,7 @@ void InspAttrDock::setWdg( const string &iwdg )
 //****************************************
 //* Inspector of links widget            *
 //****************************************
-InspLnk::InspLnk( QWidget * parent, const string &iuser ) : QTreeWidget(parent), show_init(false), m_user(iuser)
+InspLnk::InspLnk( QWidget * parent, VisDevelop *mainWind ) : main_win(mainWind), show_init(false)
 {
     //setEditTriggers(QAbstractItemView::AllEditTriggers);
     setAlternatingRowColors(true);
@@ -678,6 +678,11 @@ InspLnk::~InspLnk( )
 {
 
 }
+
+string InspLnk::user( )
+{
+    return mainWin()->user();
+}
     
 void InspLnk::setWdg( const string &iwdg )
 {
@@ -689,13 +694,12 @@ void InspLnk::setWdg( const string &iwdg )
 
     show_init = true;
     //Update tree
-    XMLNode get_req("get");
-    get_req.setAttr("user",user());    
+    XMLNode req("get");
     
     //- Get links info -
     XMLNode info_req("info");
-    info_req.setAttr("user",user())->setAttr("path",it_wdg+"/%2flinks%2flnk")->setAttr("showAttr","1");
-    if( mod->cntrIfCmd(info_req) ) return;
+    info_req.setAttr("path",it_wdg+"/%2flinks%2flnk")->setAttr("showAttr","1");
+    if( mainWin()->cntrIfCmd(info_req) ) return;
     XMLNode *rootel = info_req.childGet(0);
     //- Create widget's root items -
     for( int i_l = 0; i_l < rootel->childSize(); i_l++ )
@@ -738,9 +742,9 @@ void InspLnk::setWdg( const string &iwdg )
 		wdg_it->setData(0,Qt::UserRole,QString(lnid.substr(3).c_str()));
 	    }
 	    //--- Get group value ---
-	    get_req.setAttr("path",it_wdg+"/%2flinks%2flnk%2fpr_"+lnid.substr(3));
-	    if( !mod->cntrIfCmd(get_req) )
-	        wdg_it->setText(1,get_req.text().c_str());
+	    req.clear()->setAttr("path",it_wdg+"/%2flinks%2flnk%2fpr_"+lnid.substr(3));
+	    if( !mainWin()->cntrIfCmd(req) )
+	        wdg_it->setText(1,req.text().c_str());
 	}
 	//-- Search parameter --
 	QTreeWidgetItem *prm_it;
@@ -756,9 +760,9 @@ void InspLnk::setWdg( const string &iwdg )
     	    prm_it->setData(0,Qt::UserRole,QString(lnid.substr(3).c_str()));
 	}
 	//--- Get parameter's value ---
-	get_req.setAttr("path",it_wdg+"/%2flinks%2flnk%2f"+lnid);
-	if( !mod->cntrIfCmd(get_req) )
-	    prm_it->setText(1,get_req.text().c_str());
+	req.clear()->setAttr("path",it_wdg+"/%2flinks%2flnk%2f"+lnid);
+	if( !mainWin()->cntrIfCmd(req) )
+	    prm_it->setText(1,req.text().c_str());
     }
     
     //- Set widget's path -
@@ -774,12 +778,11 @@ void InspLnk::changeLnk( QTreeWidgetItem *index, int col )
     string wdg_it  = topLevelItem(0)->data(0,Qt::UserRole).toString().toAscii().data();
     string attr_id = index->data(0,Qt::UserRole).toString().toAscii().data();    
     
-    XMLNode set_req("set");
-    set_req.setAttr("user",user())->
-	    setAttr("path",wdg_it+"/%2flinks%2flnk%2f"+(index->childCount()?"pr_":"el_")+attr_id)->
-	    setText(index->text(1).toAscii().data());
-    if( mod->cntrIfCmd(set_req) )
-	mod->postMess(set_req.attr("mcat").c_str(),set_req.text().c_str(),TVision::Error,this);
+    XMLNode req("set");
+    req.setAttr("path",wdg_it+"/%2flinks%2flnk%2f"+(index->childCount()?"pr_":"el_")+attr_id)->
+	setText(index->text(1).toAscii().data());
+    if( mainWin()->cntrIfCmd(req) )
+	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
     else setWdg(it_wdg);
 }
 
@@ -805,15 +808,14 @@ QWidget *InspLnk::ItemDelegate::createEditor(QWidget *parent, const QStyleOption
     string attr_id = id_it.data(Qt::UserRole).toString().toAscii().data();
 
     //- Get combobox values -
-    XMLNode get_req("get");
-    get_req.setAttr("user",owner()->user())->
-	    setAttr("path",wdg_it+"/%2flinks%2flnk%2f"+(id_it.child(0,0).isValid()?"pl_":"ls_")+attr_id);
-    if( !mod->cntrIfCmd(get_req) )
+    XMLNode req("get");
+    req.setAttr("path",wdg_it+"/%2flinks%2flnk%2f"+(id_it.child(0,0).isValid()?"pl_":"ls_")+attr_id);
+    if( !owner()->mainWin()->cntrIfCmd(req) )
     {
 	w_del = new QComboBox(parent);
 	((QComboBox*)w_del)->setEditable(true);
-	for( int i_l = 0; i_l < get_req.childSize(); i_l++ )
-	    ((QComboBox*)w_del)->addItem(get_req.childGet(i_l)->text().c_str());
+	for( int i_l = 0; i_l < req.childSize(); i_l++ )
+	    ((QComboBox*)w_del)->addItem(req.childGet(i_l)->text().c_str());
     }
     else
     {
@@ -847,18 +849,23 @@ void InspLnk::ItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *mo
 //****************************************
 //* Inspector of links dock widget       *
 //****************************************
-InspLnkDock::InspLnkDock( QWidget * parent ) : QDockWidget(_("Links"),parent)
+InspLnkDock::InspLnkDock( VisDevelop * parent ) : QDockWidget(_("Links"),(QWidget*)parent)
 {
     setObjectName("InspLnkDock");
     setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
     
-    ainsp_w = new InspLnk(this);
+    ainsp_w = new InspLnk(this,owner());
     setWidget(ainsp_w);
 }
 
 InspLnkDock::~InspLnkDock( )
 {
 
+}
+
+VisDevelop *InspLnkDock::owner()
+{
+    return (VisDevelop*)parentWidget();
 }
  
 void InspLnkDock::setWdg( const string &iwdg )
@@ -991,13 +998,12 @@ void WdgTree::updateTree( const string &vca_it )
 
     if( !vca_it.empty() && TSYS::pathLev(vca_it,0).substr(0,4) != "wlb_" )return;
 
-    XMLNode prm_req("get");
-    prm_req.setAttr("user",owner()->user());
+    XMLNode req("get");
 
     //- Get widget's libraries list -
     XMLNode lb_req("get");    
-    lb_req.setAttr("user",owner()->user())->setAttr("path","/%2fprm%2fcfg%2fwlb");
-    if( mod->cntrIfCmd(lb_req) )
+    lb_req.setAttr("path","/%2fprm%2fcfg%2fwlb");
+    if( owner()->cntrIfCmd(lb_req) )
     {
 	mod->postMess(lb_req.attr("mcat").c_str(),lb_req.text().c_str(),TVision::Error,this);
 	return;
@@ -1026,10 +1032,10 @@ void WdgTree::updateTree( const string &vca_it )
 	else nit = treeW->topLevelItem(i_top);
 
 	//-- Update libraries data --
-	prm_req.setAttr("path","/wlb_"+list_wl[i_l]+"/%2fico");
-	if( !mod->cntrIfCmd(prm_req) )
+	req.clear()->setAttr("path","/wlb_"+list_wl[i_l]+"/%2fico");
+	if( !owner()->cntrIfCmd(req) )
 	{
-	    simg = TSYS::strDecode(prm_req.text(),TSYS::base64);
+	    simg = TSYS::strDecode(req.text(),TSYS::base64);
 	    if( img.loadFromData((const uchar*)simg.c_str(),simg.size()) )
 		nit->setIcon(0,QPixmap::fromImage(img));
 	}
@@ -1041,8 +1047,8 @@ void WdgTree::updateTree( const string &vca_it )
 	//-- Update librarie's widgets --
 	//--- Get librarie's widgets list ---
 	XMLNode lbw_req("get");
-	lbw_req.setAttr("user",owner()->user())->setAttr("path","/wlb_"+list_wl[i_l]+"/%2fwdg%2fwdg");
-	if( mod->cntrIfCmd(lbw_req) )
+	lbw_req.setAttr("path","/wlb_"+list_wl[i_l]+"/%2fwdg%2fwdg");
+	if( owner()->cntrIfCmd(lbw_req) )
 	{
 	    mod->postMess(lbw_req.attr("mcat").c_str(),lbw_req.text().c_str(),TVision::Error,this);
 	    return;
@@ -1072,10 +1078,10 @@ void WdgTree::updateTree( const string &vca_it )
 	    else nit_w = nit->child(i_topwl);
 	    
 	    //--- Update widget's data ---
-	    prm_req.setAttr("path","/wlb_"+list_wl[i_l]+"/wdg_"+list_w[i_w]+"/%2fico");
-	    if( !mod->cntrIfCmd(prm_req) )
+	    req.clear()->setAttr("path","/wlb_"+list_wl[i_l]+"/wdg_"+list_w[i_w]+"/%2fico");
+	    if( !owner()->cntrIfCmd(req) )
 	    {
-		simg = TSYS::strDecode(prm_req.text(),TSYS::base64);
+		simg = TSYS::strDecode(req.text(),TSYS::base64);
 		if( img.loadFromData((const uchar*)simg.c_str(),simg.size()) )
 		    nit_w->setIcon(0,QPixmap::fromImage(img));
 	    }
@@ -1086,8 +1092,8 @@ void WdgTree::updateTree( const string &vca_it )
 	    //--- Update container's widgets ---
 	    //---- Get container's widgets ---
 	    XMLNode w_req("get");
-	    w_req.setAttr("user",owner()->user())->setAttr("path","/wlb_"+list_wl[i_l]+"/wdg_"+list_w[i_w]+"/%2finclwdg%2fwdg");
-	    if( mod->cntrIfCmd(w_req) )
+	    w_req.setAttr("path","/wlb_"+list_wl[i_l]+"/wdg_"+list_w[i_w]+"/%2finclwdg%2fwdg");
+	    if( owner()->cntrIfCmd(w_req) )
 	    {
 		mod->postMess(w_req.attr("mcat").c_str(),w_req.text().c_str(),TVision::Error,this);
 		return;
@@ -1116,10 +1122,10 @@ void WdgTree::updateTree( const string &vca_it )
 		    nit_cw = new QTreeWidgetItem(nit_w);
 		else nit_cw = nit_w->child(i_topcwl);
 		//--- Update widget's data ---
-		prm_req.setAttr("path","/wlb_"+list_wl[i_l]+"/wdg_"+list_w[i_w]+"/wdg_"+list_wc[i_cw]+"/%2fico");
-		if( !mod->cntrIfCmd(prm_req) )
+		req.clear()->setAttr("path","/wlb_"+list_wl[i_l]+"/wdg_"+list_w[i_w]+"/wdg_"+list_wc[i_cw]+"/%2fico");
+		if( !owner()->cntrIfCmd(req) )
 		{
-		    simg = TSYS::strDecode(prm_req.text(),TSYS::base64);
+		    simg = TSYS::strDecode(req.text(),TSYS::base64);
 		    if( img.loadFromData((const uchar*)simg.c_str(),simg.size()) )
 			nit_cw->setIcon(0,QPixmap::fromImage(img));
 		}
@@ -1238,8 +1244,7 @@ void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it )
     string simg;
     QImage img;    
 
-    XMLNode prm_req("get");
-    prm_req.setAttr("user",owner()->user());
+    XMLNode req("get");
 
     if( !it )
     {
@@ -1247,8 +1252,8 @@ void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it )
 	//- Process top level items and project's list -
 	//-- Get widget's libraries list --
 	XMLNode prj_req("get");    
-	prj_req.setAttr("user",owner()->user())->setAttr("path","/%2fprm%2fcfg%2fprj");
-	if( mod->cntrIfCmd(prj_req) )
+	prj_req.setAttr("path","/%2fprm%2fcfg%2fprj");
+	if( owner()->cntrIfCmd(prj_req) )
 	{
 	    mod->postMess(prj_req.attr("mcat").c_str(),prj_req.text().c_str(),TVision::Error,this);
 	    return;
@@ -1278,10 +1283,10 @@ void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it )
 	    else nit = treeW->topLevelItem(i_top);
 
 	    //-- Update libraries data --
-	    prm_req.setAttr("path","/prj_"+list_pr[i_l]+"/%2fico");
-	    if( !mod->cntrIfCmd(prm_req) )
+	    req.clear()->setAttr("path","/prj_"+list_pr[i_l]+"/%2fico");
+	    if( !owner()->cntrIfCmd(req) )
 	    {
-		simg = TSYS::strDecode(prm_req.text(),TSYS::base64);
+		simg = TSYS::strDecode(req.text(),TSYS::base64);
 		if( img.loadFromData((const uchar*)simg.c_str(),simg.size()) )
 		    nit->setIcon(0,QPixmap::fromImage(img));
 	    }	    
@@ -1300,15 +1305,15 @@ void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it )
     QTreeWidgetItem *cur_el = nit;
     while(cur_el)
     {
-	work_wdg.insert(0,string(cur_el->parent()?"/pg_":"prj_")+cur_el->text(2).toAscii().data());
+	work_wdg.insert(0,string(cur_el->parent()?"/pg_":"/prj_")+cur_el->text(2).toAscii().data());
 	cur_el=cur_el->parent();
     }
     bool is_prj = TSYS::pathLev(work_wdg,1).empty();
     //-- Update include pages --
     //--- Get page's list ---
     XMLNode pg_req("get");
-    pg_req.setAttr("user",owner()->user())->setAttr("path",work_wdg+"/%2fpage%2fpage");
-    if( mod->cntrIfCmd(pg_req) )
+    pg_req.setAttr("path",work_wdg+"/%2fpage%2fpage");
+    if( owner()->cntrIfCmd(pg_req) )
     {
 	mod->postMess(pg_req.attr("mcat").c_str(),pg_req.text().c_str(),TVision::Error,this);
 	return;
@@ -1337,11 +1342,11 @@ void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it )
 	    nit_pg = new QTreeWidgetItem(it);
 	else nit_pg = it->child(i_pit);
 		
-	//--- Update page's data ---	
-	prm_req.setAttr("path",work_wdg+"/pg_"+list_pg[i_p]+"/%2fico");
-	if( !mod->cntrIfCmd(prm_req) )
+	//--- Update page's data ---
+	req.clear()->setAttr("path",work_wdg+"/pg_"+list_pg[i_p]+"/%2fico");
+	if( !owner()->cntrIfCmd(req) )
 	{
-	    simg = TSYS::strDecode(prm_req.text(),TSYS::base64);
+	    simg = TSYS::strDecode(req.text(),TSYS::base64);
 	    if( img.loadFromData((const uchar*)simg.c_str(),simg.size()) )
 		nit_pg->setIcon(0,QPixmap::fromImage(img));
 	}	    	
@@ -1423,6 +1428,11 @@ WdgView *DevelWdgView::newWdgItem( const string &iwid )
     DevelWdgView *wdg = new DevelWdgView(iwid,wLevel()+1,mainWin(),this);
     if( wLevel() == 0 )  pntView->raise();
     return wdg;
+}
+
+int DevelWdgView::cntrIfCmd( XMLNode &node, bool glob )
+{
+    return mainWin()->cntrIfCmd(node,glob);
 }
 
 void DevelWdgView::saveGeom( const string& item )

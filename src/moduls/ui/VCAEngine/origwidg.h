@@ -49,6 +49,7 @@ class PrWidget : public LWidget
 
     protected:
 	void preDisable( int flag );
+	bool cntrCmdGeneric( XMLNode *opt );
 	void cntrCmdProc( XMLNode *opt );
 };
 
@@ -97,7 +98,8 @@ class OrigText : public PrWidget
 	string descr( );
 
      protected:
-	void postEnable( int flag );    
+	void postEnable( int flag );	
+	bool attrChange( Attr &cfg, void *prev );
 }; 
 
 //************************************************

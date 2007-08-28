@@ -748,20 +748,12 @@ string Page::resourceGet( const string &id, string *mime )
     return mimeData;
 }
 
-void Page::cntrCmdProc( XMLNode *opt )
-{
-    if( cntrCmdServ(opt) ) return;
+bool Page::cntrCmdGeneric( XMLNode *opt )
+{   
     //Get page info
     if( opt->name() == "info" )
     {
-        cntrCmdGeneric(opt);
-
-	if( !parent( ).freeStat() )
-	{
-    	    cntrCmdAttributes(opt);
-    	    cntrCmdLinks(opt);
-    	    cntrCmdProcess(opt);
-	}
+        Widget::cntrCmdGeneric(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Project page: ")+path());
 	if(ctrMkNode("area",opt,-1,"/wdg",_("Widget")) && ctrMkNode("area",opt,-1,"/wdg/cfg",_("Config")))
         {
@@ -776,16 +768,13 @@ void Page::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
 		ctrMkNode("grp",opt,-1,"/br/pg_",_("Page"),R_R_R_,"root","UI",1,"list","/page/page");
 	}
-        return;
+	return true;
     }
-    //Process command to page
+    
+    //Process command to page    
     string a_path = opt->attr("path");    
-    if( cntrCmdGeneric(opt) || 
-	(parent( ).freeStat() ? false : cntrCmdAttributes(opt) || cntrCmdLinks(opt) || cntrCmdProcess(opt)) )
-    {
-	if( a_path == "/wdg/w_lst" && ctrChkNode(opt) && ownerPage() && ownerPage()->prjFlags()&Page::Template )
-	    opt->childIns(0,"el")->setText("..");    
-    }
+    if( a_path == "/wdg/w_lst" && ctrChkNode(opt) && ownerPage() && ownerPage()->prjFlags()&Page::Template )
+	opt->childIns(0,"el")->setText("..");
     else if( a_path == "/wdg/st/pgTp" )
     {
 	if( ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) ) 
@@ -817,8 +806,30 @@ void Page::cntrCmdProc( XMLNode *opt )
 	}
         if( ctrChkNode(opt,"del",permit(),user().c_str(),grp().c_str(),SEQ_WR) ) pageDel(opt->attr("id"),true);
     }
+    else if( Widget::cntrCmdGeneric(opt) ) return true;
+    else return false;
+    
+    return true;
 }
 
+void Page::cntrCmdProc( XMLNode *opt )
+{
+    if( cntrCmdServ(opt) ) return;
+    //Get page info
+    if( opt->name() == "info" )
+    {
+        cntrCmdGeneric(opt);
+	if( !parent( ).freeStat() )
+	{
+    	    cntrCmdAttributes(opt);
+    	    cntrCmdLinks(opt);
+    	    cntrCmdProcess(opt);
+	}
+        return;
+    }
+    //Process command to page
+    cntrCmdGeneric(opt) || (parent( ).freeStat() ? false : cntrCmdAttributes(opt) || cntrCmdLinks(opt) || cntrCmdProcess(opt));
+}
 
 //************************************************
 //* Container stored widget                      *

@@ -88,6 +88,7 @@ bool TElem::fldPresent( const string &name )
 
 void TElem::fldList( vector<string> &list )
 {
+    list.clear();
     for(unsigned i = 0; i < elem.size(); i++) 
 	list.push_back(elem[i]->name());
 }

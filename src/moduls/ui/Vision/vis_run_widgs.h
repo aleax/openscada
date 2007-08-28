@@ -58,6 +58,7 @@ namespace VISION
 	protected:
 	    //- Protected methods -
 	    bool event( QEvent * event );
+	    int cntrIfCmd( XMLNode &node, bool glob = false );
 	    
 	private:
 	    //- Attributes -

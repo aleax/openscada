@@ -173,6 +173,7 @@ class Page : public Widget, public TConfig
 	void postEnable( int flag );
         void postDisable( int flag );
 	
+	bool cntrCmdGeneric( XMLNode *opt );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
     private:

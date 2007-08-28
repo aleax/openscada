@@ -310,6 +310,7 @@ void TCfg::setSEL( const string &val )
 	case TFld::Real:	setR( m_fld->selNm2VlR(val) );	break;
 	case TFld::Boolean:	setB( m_fld->selNm2VlB(val) );	break;
     }
+    view(true);
 }
 
 void TCfg::setS( const string &val )
@@ -330,6 +331,7 @@ void TCfg::setS( const string &val )
 	case TFld::Real:	setR( atof(val.c_str()) );	break;
 	case TFld::Boolean:	setB( atoi(val.c_str()) );	break;
     }
+    view(true);    
 }
 
 void TCfg::setR( double val )
@@ -355,6 +357,7 @@ void TCfg::setR( double val )
 	    break;
 	case TFld::Boolean:	setB( val );	break;
     }
+    view(true);    
 }
 
 void TCfg::setI( int val )
@@ -380,6 +383,7 @@ void TCfg::setI( int val )
 	case TFld::Real:	setR( val );    break;
 	case TFld::Boolean:	setB( val );	break;
     }
+    view(true);    
 }
 
 void TCfg::setB( bool val )
@@ -400,6 +404,7 @@ void TCfg::setB( bool val )
 	    else m_val.b_val = val;				
 	    break;
     }
+    view(true);
 }
 
 bool TCfg::operator==(TCfg & cfg)

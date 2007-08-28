@@ -57,6 +57,7 @@
 #include <QScrollArea>
 #include <QCloseEvent>
 #include <QFileDialog>
+#include <QScrollBar>
 
 #include <tmess.h>
 #include <tsys.h>
@@ -517,6 +518,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		QWidget *wdg = scrl->widget();
 		if( !refresh )
 		{
+		    int v_scrl = (scrl->verticalScrollBar()) ? scrl->verticalScrollBar()->value() : 0;
 		    if( wdg != NULL ) delete wdg;
 		
 		    wdg = new QFrame(scrl);		
@@ -528,6 +530,8 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
     		    wdg_lay->addItem( new QSpacerItem( 20, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 		    scrl->setWidget(wdg);
 		    scrl->setWidgetResizable(true);
+		    
+		    if( scrl->verticalScrollBar() ) scrl->verticalScrollBar()->setValue(v_scrl);
 		    
 		    wdg->show();
                     //tabs->showPage(tabs->currentWidget());				    
@@ -1378,9 +1382,12 @@ bool ConfApp::upStruct(XMLNode &w_nd, const XMLNode &n_nd)
 	    str_ch = true;
 	    
 	//Check base fields destination change
-	if( w_nd.childGet(i_w)->name() == "fld" && w_nd.childGet(i_w)->attr("dest") != n_nd.childGet(i_n)->attr("dest") )
+	if( w_nd.childGet(i_w)->name() == "fld" && 
+	    (w_nd.childGet(i_w)->attr("dest") != n_nd.childGet(i_n)->attr("dest") || 
+	     w_nd.childGet(i_w)->attr("tp") != n_nd.childGet(i_n)->attr("tp")) )
 	{
 	    w_nd.childGet(i_w)->setAttr("dest","");
+	    w_nd.childGet(i_w)->setAttr("tp","");
 	    str_ch = true;
 	}
 
@@ -1504,10 +1511,11 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, int level )
 
 int ConfApp::cntrIfCmd( XMLNode &node )
 {
+    int path_off = 0;
     string path = node.attr("path");
-    string station = TSYS::pathLev(path,0,false);
-    if( !station.size() ) station = sel_path = SYS->id();
-    else node.setAttr("path",path.substr(station.size()+1));
+    string station = TSYS::pathLev(path,0,false,&path_off);
+    if( station.empty() ) station = sel_path = SYS->id();
+    else node.setAttr("path",path.substr(path_off));
     
     //- Check local station request -    
     if( station == SYS->id() )
@@ -1553,7 +1561,8 @@ int ConfApp::cntrIfCmd( XMLNode &node )
 		mod->extHostSet(host);
 	    }
 	    //--- Request ---
-	    req = "REQ "+TSYS::int2str(host.ses_id)+"\n"+node.save();
+	    string data = node.save();
+	    req = "REQ "+TSYS::int2str(host.ses_id)+" "+TSYS::int2str(data.size())+"\n"+data;
 	    buf[0] = 0;
 	    resp_len = tr.at().messIO(req.c_str(),req.size(),buf,sizeof(buf),20);
 	    resp.assign(buf,resp_len);

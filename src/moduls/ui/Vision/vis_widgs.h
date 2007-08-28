@@ -31,6 +31,8 @@
 #include <QMap>
 #include <QVariant>
 
+#include <xml.h>
+
 using std::string;
 using std::vector;
 
@@ -212,6 +214,8 @@ namespace VISION
 	    
 	    bool attrSet( const string &attr, const string &val, int uiPrmPos = 0 );
 
+	    virtual int cntrIfCmd( XMLNode &node, bool glob = false )	{ };
+
 	public slots:
 	    virtual WdgView *newWdgItem( const string &iwid );
 	    virtual void load( const string& item );
@@ -220,7 +224,7 @@ namespace VISION
 	    //- Protected methods -
 	    void childsUpdate( bool newLoad = true );
 	    void shapeUpdate( );
-	    void orderUpdate( );	    
+	    void orderUpdate( );
 	    
 	    bool event( QEvent * event );
 	    bool eventFilter( QObject *object, QEvent *event );	    

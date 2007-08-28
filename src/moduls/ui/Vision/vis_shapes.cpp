@@ -86,14 +86,16 @@ ShapeFormEl::ShapeFormEl( ) : WdgShape("FormEl")
 
 }
 
-void ShapeFormEl::init( WdgView *view )
+void ShapeFormEl::init( WdgView *w )
 {
-    QVBoxLayout *lay = new QVBoxLayout(view);
-    view->dc()["addrWdg"].setValue((void*)NULL);
-    view->dc()["elType"] = -1;
+    QVBoxLayout *lay = new QVBoxLayout(w);
+    w->dc()["en"] = true;
+    w->dc()["active"] = true;
+    w->dc()["addrWdg"].setValue((void*)NULL);
+    w->dc()["elType"] = -1;
 }
 
-bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val)
+bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 {
     DevelWdgView *devW = qobject_cast<DevelWdgView*>(w);
     RunWdgView   *runW = qobject_cast<RunWdgView*>(w);
@@ -112,12 +114,17 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    else if( el == 3 )	((QPushButton*)el_wdg)->setText(val.c_str());
 	    break;
 	case 5:		//en
-	    if(runW) w->setVisible(atoi(val.c_str())); break;
+	    if(runW) 
+	    { 
+		w->dc()["en"] = (bool)atoi(val.c_str());
+		if(el >= 0) el_wdg->setVisible(atoi(val.c_str()));
+	    }
+	    break;
 	case 6:		//active
-	    if(runW && el >= 0) 
+	    if(runW) 
 	    {
 		w->dc()["active"] = (bool)atoi(val.c_str());
-		setFocus(w,el_wdg,atoi(val.c_str()));
+		if( el >= 0 ) setFocus(w,el_wdg,atoi(val.c_str()));
 	    }
 	    break;
 	case 12:	//geomMargin
@@ -265,13 +272,12 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val)
 		//- Name -
 		((QPushButton*)el_wdg)->setText(w->dc()["name"].toString());
 		//- Img -
-		XMLNode get_req("get");
-    		get_req.setAttr("user",w->user())->
-			setAttr("path",w->id()+"/%2fwdg%2fres")->
-			setAttr("id",w->dc()["img"].toString().toAscii().data());
-    		if( !mod->cntrIfCmd(get_req) )
+		XMLNode req("get");
+    		req.setAttr("path",w->id()+"/%2fwdg%2fres")->
+		    setAttr("id",w->dc()["img"].toString().toAscii().data());
+    		if( !w->cntrIfCmd(req) )
     		{
-		    string backimg = TSYS::strDecode(get_req.text(),TSYS::base64);
+		    string backimg = TSYS::strDecode(req.text(),TSYS::base64);
 		    if( !backimg.empty() )
 		    {
 			QImage img;
@@ -333,6 +339,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    //-- Install event's filter and disable focus --	
 	    if( devW ) eventFilterSet(w,el_wdg,true);
 	    setFocus(w,el_wdg,w->dc()["active"].toInt(),devW);
+	    el_wdg->setVisible(w->dc()["en"].toInt());
 	    //-- Fix widget --
 	    ((QVBoxLayout*)w->layout())->addWidget(el_wdg);
 	    w->dc()["addrWdg"].setValue((void*)el_wdg);
@@ -447,8 +454,8 @@ void ShapeFormEl::setFocus(WdgView *view, QWidget *wdg, bool en, bool devel )
     int isFocus = wdg->windowIconText().toInt();
     //- Set up current widget -
     if( en )
-    { 
-	if( isFocus ) wdg->setFocusPolicy((Qt::FocusPolicy)isFocus);
+    {
+	if( isFocus )	wdg->setFocusPolicy((Qt::FocusPolicy)isFocus);
     }
     else
     {	
@@ -474,22 +481,28 @@ ShapeText::ShapeText( ) : WdgShape("Text")
 
 }
 
-void ShapeText::init( WdgView *view )
+void ShapeText::init( WdgView *w )
 {
-    view->dc()["QFont"].setValue( (void*)new QFont() );
-    view->dc()["border"].setValue( (void*)new QPen() );
+    w->dc()["numbArg"] = 0;
+    w->dc()["QFont"].setValue( (void*)new QFont() );
+    w->dc()["border"].setValue( (void*)new QPen() );
 }
 
-void ShapeText::destroy( WdgView *view )
+void ShapeText::destroy( WdgView *w )
 {
-    delete (QFont*)view->dc()["QFont"].value<void*>();
-    delete (QPen*)view->dc()["border"].value<void*>();
+    delete (QFont*)w->dc()["QFont"].value<void*>();
+    delete (QPen*)w->dc()["border"].value<void*>();
+    //- Clear argument's data objects -
+    int numbArg = w->dc()["numbArg"].toInt();
+    for( int i_a = 0; i_a < numbArg; i_a++ )
+        delete (ArgObj*)w->dc().value(QString("arg_%1").arg(i_a)).value<void*>();
 }
 
 bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 {    
     bool up = true, 		//Update view checking
-	 rel_fnt = false;	//Reload font checking
+	 rel_fnt = false,	//Reload font checking
+	 reform;		//Text reformation
 
     switch(uiPrmPos)
     {
@@ -503,14 +516,13 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    w->dc()["backColor"] = QColor(val.c_str());	break;
 	case 21:	//backImg
 	{
-	    XMLNode get_req("get");
-    	    get_req.setAttr("user",w->user())->
-		    setAttr("path",w->id()+"/%2fwdg%2fres")->
-		    setAttr("id",val);
-    	    if( !mod->cntrIfCmd(get_req) )
+	    XMLNode req("get");
+    	    req.setAttr("path",w->id()+"/%2fwdg%2fres")->
+		setAttr("id",val);
+    	    if( !w->cntrIfCmd(req) )
     	    {
 		QBrush brsh;
-		string backimg = TSYS::strDecode(get_req.text(),TSYS::base64);
+		string backimg = TSYS::strDecode(req.text(),TSYS::base64);
 		if( !backimg.empty() )
 		{
 		    QImage img;
@@ -581,17 +593,43 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    break;
 	}
 	case 35:	//text
+	{ w->dc()["text_tmpl"] = val.c_str(); break; }
+	case 36:	//numbArg
 	{
-	    QString cval = val.c_str();
-	    int numbPrec = w->dc()["numbPrec"].toInt();
-	    if( numbPrec ) cval = QString::number(cval.toDouble(),'f',numbPrec);
-	    if( w->dc()["text"].toString() == cval ) up = false;
-	    else w->dc()["text"] = cval;
+	    int numbArgPrev = w->dc()["numbArg"].toInt();
+	    int numbArg = atoi(val.c_str());
+	    if( numbArgPrev == numbArg ) break;
+	    for( int i_a = 0; i_a < 10; i_a++ )
+		if( i_a < numbArgPrev && i_a >= numbArg )
+    		    delete (ArgObj*)w->dc()[QString("arg_%1").arg(i_a)].value<void*>();
+		else if( i_a >= numbArgPrev && i_a < numbArg )
+		    w->dc()[QString("arg_%1").arg(i_a)].setValue( (void*)new ArgObj() );
+	    w->dc()["numbArg"] = numbArg;
+	    reform = true;
 	    break;
 	}
-	case 36:	//numbPrec
-	    w->dc()["numbPrec"] = atoi(val.c_str());	break;
-	default: up = false;
+	default: 
+ 	    //- Individual arguments process -
+	    if( uiPrmPos >= 50 && uiPrmPos < 150 )
+	    {
+		int argN = (uiPrmPos/10)-5;
+		ArgObj *arg = (ArgObj*)w->dc()[QString("arg_%1").arg(argN)].value<void*>();
+		if((uiPrmPos%10) == 0 || (uiPrmPos%10) == 1 )
+		{
+		    QVariant gval = arg->val();
+		    int tp = (gval.type()==QVariant::Double) ? 1 : ((gval.type()==QVariant::String) ? 2 : 0);
+		    if( (uiPrmPos%10) == 0 )	gval = val.c_str();
+		    if( (uiPrmPos%10) == 1 )	tp = atoi(val.c_str());
+		    switch( tp )
+    		    {
+			case 0: arg->setVal(gval.toInt());	break;
+		    	case 1: arg->setVal(gval.toDouble());	break;
+    			case 2: arg->setVal(gval.toString());	break;
+		    }
+		}
+		if( (uiPrmPos%10) == 2 ) arg->setCfg(val.c_str());
+    		reform = true;
+	    }else up = false;
     }
 
     //- Reload generic font record -
@@ -610,8 +648,36 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	if( pcnt >= 6 )	fnt->setStrikeOut(strike);
 	up = true;
     }
+
+    //- Text reformation -
+    if( reform )
+    {
+	ArgObj *arg;
+	int numbArg = w->dc()["numbArg"].toInt();
+	QString text = w->dc()["text_tmpl"].toString();
+	for( int i_a = 0; i_a < numbArg; i_a++ )
+	{
+	    arg = (ArgObj*)w->dc()[QString("arg_%1").arg(i_a)].value<void*>();
+	    switch(arg->val().type())
+	    {
+		case QVariant::String: text = text.arg(arg->val().toString(),atoi(arg->cfg().c_str())); break;
+		case QVariant::Double:
+		{
+		    int off = 0;
+		    int wdth = atoi(TSYS::strSepParse(arg->cfg(),0,';',&off).c_str());
+		    string form = TSYS::strSepParse(arg->cfg(),0,';',&off);
+		    int prec = atoi(TSYS::strSepParse(arg->cfg(),0,';',&off).c_str());
+		    text = text.arg(arg->val().toDouble(),wdth,form.empty()?0:form[0],prec,' ');
+		    break;
+		}
+		default: text = text.arg(arg->val().toInt(),atoi(arg->cfg().c_str())); break;
+	    }
+	}
+	if( w->dc()["text"].toString() == text ) up = false;
+	else { w->dc()["text"] = text; up = true; }
+    }
     
-    if( up ) w->update();
+    if( up &&  w->isVisible() ) w->update();
     
     return up;
 }
@@ -728,14 +794,13 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    w->dc()["backColor"] = QColor(val.c_str()); break;
 	case 21:	//backImg
 	{
-	    XMLNode get_req("get");
-    	    get_req.setAttr("user",w->user())->
-		    setAttr("path",w->id()+"/%2fwdg%2fres")->
-		    setAttr("id",val);
-    	    if( !mod->cntrIfCmd(get_req) )
+	    XMLNode req("get");
+    	    req.setAttr("path",w->id()+"/%2fwdg%2fres")->
+		setAttr("id",val);
+    	    if( !w->cntrIfCmd(req) )
     	    {
 		QBrush brsh;
-		string backimg = TSYS::strDecode(get_req.text(),TSYS::base64);
+		string backimg = TSYS::strDecode(req.text(),TSYS::base64);
 		if( !backimg.empty() )
 		{
 		    QImage img;
@@ -782,13 +847,12 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
     
     if( reld_src )
     {
-	XMLNode get_req("get");
-        get_req.setAttr("user",w->user())->
-		setAttr("path",w->id()+"/%2fwdg%2fres")->
-		setAttr("id",w->dc()["mediaSrc"].toString().toAscii().data());
-        if( !mod->cntrIfCmd(get_req) )
+	XMLNode req("get");
+        req.setAttr("path",w->id()+"/%2fwdg%2fres")->
+	    setAttr("id",w->dc()["mediaSrc"].toString().toAscii().data());
+        if( !w->cntrIfCmd(req) )
         {
-	    string sdata = TSYS::strDecode(get_req.text(),TSYS::base64);	    
+	    string sdata = TSYS::strDecode(req.text(),TSYS::base64);	    
 	    if( !sdata.empty() )
 		switch(w->dc()["mediaType"].toInt())
 		{
@@ -836,7 +900,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	}
     }
 
-    if( up ) w->update();
+    if( up && w->isVisible() ) w->update();
     
     return up;
 }
@@ -935,14 +999,13 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    w->dc()["backColor"] = QColor(val.c_str()); make_pct = true; break;
 	case 21:	//backImg
 	{
-	    XMLNode get_req("get");
-    	    get_req.setAttr("user",w->user())->
-		    setAttr("path",w->id()+"/%2fwdg%2fres")->
-		    setAttr("id",val);
-    	    if( !mod->cntrIfCmd(get_req) )
+	    XMLNode req("get");
+    	    req.setAttr("path",w->id()+"/%2fwdg%2fres")->
+		setAttr("id",val);
+    	    if( !w->cntrIfCmd(req) )
     	    {
 		QBrush brsh;
-		string backimg = TSYS::strDecode(get_req.text(),TSYS::base64);
+		string backimg = TSYS::strDecode(req.text(),TSYS::base64);
 		if( !backimg.empty() )
 		{
 		    QImage img;
@@ -1050,7 +1113,7 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
     
     if( reld_tr_dt )	loadTrendsData(w,reld_tr_dt==2);
     if( make_pct )	makeTrendsPicture(w);
-    if( up )		w->update();
+    if( up && w->isVisible() )	w->update();
     
     return up;
 }
@@ -1551,18 +1614,17 @@ void ShapeDiagram::TrendObj::loadData( bool full )
     //- Get archive parameters -
     if( !arh_per || tTime > arh_end )
     {
-	XMLNode get_req("get");
-	get_req.setAttr("user",view->user())->
-    		setAttr("arch",arch)->
-		setAttr("path",addr()+"/%2fserv%2f0");
-	if( mod->cntrIfCmd(get_req,true) || atoi(get_req.attr("vtp").c_str()) == 5 )
+	XMLNode req("info");
+	req.setAttr("arch",arch)->
+	    setAttr("path",addr()+"/%2fserv%2f0");
+	if( view->cntrIfCmd(req,true) || atoi(req.attr("vtp").c_str()) == 5 )
 	    arh_per = arh_beg = arh_end = 0;
 	else
 	{
-	    val_tp  = atoi(get_req.attr("vtp").c_str());
-	    arh_beg = atoll(get_req.attr("beg").c_str());
-	    arh_end = atoll(get_req.attr("end").c_str());
-	    arh_per = atoi(get_req.attr("per").c_str());
+	    val_tp  = atoi(req.attr("vtp").c_str());
+	    arh_beg = atoll(req.attr("beg").c_str());
+	    arh_end = atoll(req.attr("end").c_str());
+	    arh_per = atoi(req.attr("per").c_str());
 	}
     }
     //- One request check and prepare -
@@ -1570,17 +1632,16 @@ void ShapeDiagram::TrendObj::loadData( bool full )
     if( view->dc()["tTimeCurent"].toBool() && trcPer && 
 	(!arh_per || (arh_per >= trcPer && (tTime-valEnd())/trcPer < 2)) )
     {
-	XMLNode get_req("get");
-	get_req.setAttr("user",view->user())->
-	    setAttr("path",addr()+"/%2fserv%2f1")->
+	XMLNode req("get");
+	req.setAttr("path",addr()+"/%2fserv%2f0")->
     	    setAttr("tm",TSYS::ll2str(tTime))->
       	    setAttr("tm_grnd","0");
-    	if( mod->cntrIfCmd(get_req,true) )	return;
+    	if( view->cntrIfCmd(req,true) )	return;
 	
-    	long long lst_tm = atoll(get_req.attr("tm").c_str());
+    	long long lst_tm = atoll(req.attr("tm").c_str());
 	if( lst_tm > valEnd() )
 	{
-	    double curVal = atof(get_req.text().c_str());
+	    double curVal = atof(req.text().c_str());
 	    if( (val_tp == 0 && curVal == EVAL_BOOL) || (val_tp == 1 && curVal == EVAL_INT) ) curVal = EVAL_REAL;
 	    //printf("TEST 10: %lld %f\n",lst_tm,curVal);
 	    if( valEnd() && (lst_tm-valEnd())/trcPer > 2 ) vals.push_back(SHg(lst_tm-trcPer,EVAL_REAL));
@@ -1613,10 +1674,10 @@ void ShapeDiagram::TrendObj::loadData( bool full )
     vector<SHg>	buf;
     deque<SHg>::iterator bufEndOff = vals.end();
     //printf("TEST 00: (%lld - %lld):%d -- (%lld - %lld)\n",tTimeGrnd,tTime,wantPer,valBeg(),valEnd());
-    XMLNode get_req("get");
-    m1: get_req.setAttr("user",view->user())->
-    	    setAttr("arch",arch)->
-	    setAttr("path",addr()+"/%2fserv%2f1")->
+    XMLNode req("get");
+    m1: req.clear()->
+	    setAttr("arch",arch)->
+	    setAttr("path",addr()+"/%2fserv%2f0")->
     	    setAttr("tm",TSYS::ll2str(tTime))->
       	    setAttr("tm_grnd",TSYS::ll2str(tTimeGrnd))->
 	    setAttr("per",TSYS::ll2str(wantPer))->
@@ -1624,17 +1685,17 @@ void ShapeDiagram::TrendObj::loadData( bool full )
 	    setAttr("real_prec","4")->
 	    setAttr("round_perc","1");
     //printf("TEST 00a: (%lld - %lld):%d\n",tTimeGrnd,tTime,wantPer);
-    if( mod->cntrIfCmd(get_req,true) )	return;
+    if( view->cntrIfCmd(req,true) )	return;
     //- Get data buffer parameters -
-    bbeg = atoll(get_req.attr("tm_grnd").c_str());
-    bend = atoll(get_req.attr("tm").c_str());
-    bper = atoi(get_req.attr("per").c_str());
+    bbeg = atoll(req.attr("tm_grnd").c_str());
+    bend = atoll(req.attr("tm").c_str());
+    bper = atoi(req.attr("per").c_str());
     //printf("TEST 01: (%lld - %lld):%d\n",bbeg,bend,bper);
 	    
     prevPos = 0;
     prevVal = EVAL_REAL;
     buf.clear();
-    for( int v_off = 0; (svl=TSYS::strSepParse(get_req.text(),0,'\n',&v_off)).size(); )
+    for( int v_off = 0; (svl=TSYS::strSepParse(req.text(),0,'\n',&v_off)).size(); )
     {
 	sscanf(svl.c_str(),"%d %lf",&curPos,&curVal);
 	if( (val_tp == 0 && curVal == EVAL_BOOL) || (val_tp == 1 && curVal == EVAL_INT) ) curVal = EVAL_REAL;
@@ -1735,14 +1796,13 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    w->dc()["backColor"] = QColor(val.c_str()); break;
 	case 21: 	//backImg
 	{
-	    XMLNode get_req("get");
-    	    get_req.setAttr("user",w->user())->
-		    setAttr("path",w->id()+"/%2fwdg%2fres")->
-		    setAttr("id",val);
-    	    if( !mod->cntrIfCmd(get_req) )
+	    XMLNode req("get");
+    	    req.setAttr("path",w->id()+"/%2fwdg%2fres")->
+		setAttr("id",val);
+    	    if( !w->cntrIfCmd(req) )
     	    {
 	        QBrush brsh;
-		string backimg = TSYS::strDecode(get_req.text(),TSYS::base64);
+		string backimg = TSYS::strDecode(req.text(),TSYS::base64);
 		if( !backimg.empty() )
 		{
 		    QImage img;
@@ -1807,7 +1867,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	default: up = false;
     }
     
-    if( up ) w->update();
+    if( up && w->isVisible() ) w->update();
     
     return up;
 }

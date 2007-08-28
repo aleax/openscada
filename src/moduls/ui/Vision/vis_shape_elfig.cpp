@@ -449,7 +449,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                   }
                   else // Т.е не попали не по какой фигуре
                   {
-                     rectItems.clear();
+		      rectItems.clear();
                       view->repaint();
                   }
               }

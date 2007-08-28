@@ -219,9 +219,8 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		//Make archive name
 		string a_nm = nodeName()+"_"+attr;
 		string rez_nm = a_nm;
-		int p_cnt = 0;
-		while(SYS->archive().at().valPresent(rez_nm))
-		    rez_nm = a_nm+TSYS::int2str(p_cnt++);
+		for( int p_cnt = 0; SYS->archive().at().valPresent(rez_nm); p_cnt++ )
+		    rez_nm = a_nm+TSYS::int2str(p_cnt);
 		//Create new archive		
 		SYS->archive().at().valAdd(rez_nm);
 		SYS->archive().at().valAt(rez_nm).at().setValType(vlAt(attr).at().fld().type());
@@ -570,32 +569,30 @@ void TVal::cntrCmdProc( XMLNode *opt )
 {
     string a_path = opt->attr("path");
     //- Service commands process -
-    if( a_path.substr(0,6) == "/serv/"  )
-	switch( atoi(a_path.substr(6).c_str()) )
+    if( a_path == "/serv/0"  )		//Values access
+    {
+	if( ctrChkNode(opt,"info",RWRWRW,"root","root",SEQ_RD) )	//Value's data information
 	{
-	    case 0:	//Archive information
-		if( !ctrChkNode(opt) )	break;
-		if( !arch().freeStat() ) arch().at().cntrCmdProc(opt);
-		else
-		{
-            	    opt->setAttr("end","0")->setAttr("beg","0")->setAttr("per","0");
-            	    opt->setAttr("vtp",TSYS::int2str(fld().type()));
-		}
-		return;
-	    case 1:	//Values request
-		if( !ctrChkNode(opt) )	break;
-		if( !atoll(opt->attr("tm_grnd").c_str()) )
-		{
-		    long long tm = atoll(opt->attr("tm").c_str());	
-		    opt->setText(getS(&tm));
-		    opt->setAttr("tm",TSYS::ll2str(tm));
-		    return;
-		}
-		if( !arch().freeStat() ) arch().at().cntrCmdProc(opt);
-		else throw TError(nodePath().c_str(),"Attribute not have archive");
-		return;
-	    default:	return;
+	    if( !arch().freeStat() ) arch().at().cntrCmdProc(opt);
+	    else
+	    {
+		opt->setAttr("end","0")->setAttr("beg","0")->setAttr("per","0");
+		opt->setAttr("vtp",TSYS::int2str(fld().type()));
+	    }
 	}
+	else if( ctrChkNode(opt,"get",RWRWRW,"root","root",SEQ_RD) )    //Value's data request
+	{
+	    if( !atoll(opt->attr("tm_grnd").c_str()) )
+	    {
+		long long tm = atoll(opt->attr("tm").c_str());	
+		opt->setText(getS(&tm));
+		opt->setAttr("tm",TSYS::ll2str(tm));
+	    }
+	    else if( !arch().freeStat() ) arch().at().cntrCmdProc(opt);
+	    else throw TError(nodePath().c_str(),"Attribute not have archive");
+	}
+	return;
+    }
 
     //- Interface comands process -
     //-- Info command process --

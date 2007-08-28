@@ -36,7 +36,8 @@ using namespace VCA;
 //************************************************
 Session::Session( const string &iid, const string &iproj ) :
     m_enable(false), m_start(false), endrun_req(false), tm_calc(0.0),
-    m_id(iid), m_user("root"), m_prjnm(iproj), m_per(100), m_calcClk(1)
+    m_id(iid), m_user("root"), m_prjnm(iproj), m_per(100), m_calcClk(1),
+    m_backgrnd(false), m_connects(0)
 {
     m_page = grpAdd("pg_");
 }
@@ -124,15 +125,6 @@ void Session::setStart( bool val )
     	    if( TSYS::eventWait(m_start, true, nodePath()+"start",5) )
         	throw TError(nodePath().c_str(),_("Session process task no started!"));
         }
-	
-	//- Check blocking bug -
-	//-- Connect to widget --
-	/*try
-	{
-	    AutoHD<SessWdg> tstwdg = nodeAt("pg_so/pg_1/pg_mn/pg_1/wdg_FormEl");
-	    //-- Delete widget try --
-	    ((AutoHD<SessPage>)nodeAt("pg_so/pg_1/pg_mn/pg_1")).at().wdgDel("FormEl");
-	}catch(TError err) { printf("TEST 10: %s:%s\n",err.cat.c_str(),err.mess.c_str()); }*/
     }
     else
     {
@@ -296,7 +288,13 @@ void *Session::Task( void *icontr )
 
 	if( (ses.m_calcClk++) == 0 ) ses.m_calcClk = 1;
 
-	ses.tm_calc = 1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
+	ses.tm_calc = 1.0e3*((float)(SYS->shrtCnt()-t_cnt))/((float)SYS->sysClk());
+	/*ses.rez_calc+=ses.tm_calc;
+	if( !(ses.calcClk()%10) )
+	{
+	    printf("Session calc time: %d = %f\n",ses.calcClk(),ses.rez_calc);
+	    ses.rez_calc=0;
+	}*/
 	
 	if(is_stop) break;
 	
@@ -319,6 +317,19 @@ void *Session::Task( void *icontr )
 
 void Session::cntrCmdProc( XMLNode *opt )
 {
+    string a_path = opt->attr("path");
+    //- Service commands process -
+    if( a_path == "/serv/0" )	//Pages operations
+    {
+	if( ctrChkNode(opt,"openlist",RWRWRW,"root","root",SEQ_RD) )	//Open pages list
+	{
+	    vector<string> &lst = openList();
+	    for( int i_f = 0; i_f < lst.size(); i_f++ )
+		opt->childAdd("el")->setText(lst[i_f]);
+	}
+	return;
+    }
+
     //Get page info
     if( opt->name() == "info" )
     {
@@ -334,6 +345,8 @@ void Session::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/obj/st/start",_("Start"),RWRWR_,user().c_str(),"UI",1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/obj/st/user",_("User"),R_R_R_,"root","root",1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/obj/st/prj",_("Project"),RWR_R_,user().c_str(),"UI",3,"tp","str","dest","sel_ed","select","/obj/prj_ls");
+		ctrMkNode("fld",opt,-1,"/obj/st/backgrnd",_("Background execution mode"),R_R_R_,"root","root",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/obj/st/connect",_("Connections counter"),R_R_R_,"root","root",1,"tp","int");
 		ctrMkNode("fld",opt,-1,"/obj/st/calc_tm",_("Calc session time (ms)"),R_R_R_,"root","root",1,"tp","real");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/obj/cfg",_("Config")))
@@ -347,8 +360,6 @@ void Session::cntrCmdProc( XMLNode *opt )
         return;
     }
     //Process command to page
-    string a_path = opt->attr("path");
-    
     if( a_path == "/ico" && ctrChkNode(opt) )   opt->setText(ico());
     else if( a_path == "/obj/st/en" )
     {
@@ -366,6 +377,8 @@ void Session::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",RWR_R_,user().c_str(),"UI",SEQ_RD) )	opt->setText(projNm());
 	if( ctrChkNode(opt,"set",RWR_R_,user().c_str(),"UI",SEQ_WR) )	setProjNm(opt->text());
     }
+    else if( a_path == "/obj/st/backgrnd" && ctrChkNode(opt) )	opt->setText(TSYS::int2str(backgrnd()));
+    else if( a_path == "/obj/st/connect" && ctrChkNode(opt) )	opt->setText(TSYS::int2str(connects()));
     else if( a_path == "/obj/st/calc_tm" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(calcTm(),6));
     else if( a_path == "/obj/prj_ls" && ctrChkNode(opt) )
     {
@@ -450,7 +463,6 @@ void SessPage::setEnable( bool val )
 	for(int i_l = 0; i_l < pg_ls.size(); i_l++ )
 	    pageAt(pg_ls[i_l]).at().setEnable(true);
     }
-
 }
 
 void SessPage::setProcess( bool val )
@@ -517,12 +529,12 @@ bool SessPage::attrChange( Attr &cfg, void *prev )
     return SessWdg::attrChange( cfg, prev );
 }
 
-void SessPage::cntrCmdProc( XMLNode *opt )
+bool SessPage::cntrCmdGeneric( XMLNode *opt )
 {
     //Get page info
     if( opt->name() == "info" )
     {
-        SessWdg::cntrCmdProc(opt);
+        SessWdg::cntrCmdGeneric(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Session page: ")+ownerFullId()+"/"+id());
 	if( enable() && !(parent().at().prjFlags( )&Page::Empty) )
 	    ctrMkNode("fld",opt,1,"/wdg/st/open",_("Open"),RWRWR_,user().c_str(),grp().c_str(),1,"tp","bool");
@@ -533,7 +545,7 @@ void SessPage::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
 	        ctrMkNode("grp",opt,-1,"/br/pg_",_("Page"),R_R_R_,"root","UI",1,"list","/page/page");
 	}
-        return;
+        return true;
     }
     //Process command to page
     string a_path = opt->attr("path");    
@@ -551,7 +563,8 @@ void SessPage::cntrCmdProc( XMLNode *opt )
 	for( unsigned i_f=0; i_f < lst.size(); i_f++ )
 	    opt->childAdd("el")->setAttr("id",lst[i_f])->setText(pageAt(lst[i_f]).at().name());
     }
-    else SessWdg::cntrCmdProc(opt);
+    else if( SessWdg::cntrCmdGeneric(opt) ) return true;
+    else return false;
 }
 
 
@@ -559,7 +572,7 @@ void SessPage::cntrCmdProc( XMLNode *opt )
 //* Session page's widget                        *
 //************************************************
 SessWdg::SessWdg( const string &iid, const string &iparent ) : 
-    Widget(iid,iparent), m_proc(false), TValFunc(iid+"_wdg",NULL)
+    Widget(iid,iparent), m_proc(false), TValFunc(iid+"_wdg",NULL), m_clc(0), m_mdfClc(0)
 {
     
 }
@@ -625,7 +638,7 @@ void SessWdg::setEnable( bool val )
 
 void SessWdg::setProcess( bool val )
 {
-    if( !enable() ) setEnable(true);
+    if( val && !enable() ) setEnable(true);
     //- Prepare process function value level -
     if( val && calcProg().size() )
     {
@@ -672,6 +685,7 @@ void SessWdg::setProcess( bool val )
                     compileFunc(TSYS::strSepParse(calcLang(),1,'.'),fio,calcProg());
 	//-- Connect to compiled function --
 	TValFunc::func(&((AutoHD<TFunction>)SYS->nodeAt(work_prog,1)).at());
+
     }
     if( !val )	TValFunc::func(NULL);
 
@@ -680,6 +694,9 @@ void SessWdg::setProcess( bool val )
     wdgList(ls);
     for(int i_l = 0; i_l < ls.size(); i_l++ )
         wdgAt(ls[i_l]).at().setProcess(val);
+
+    //-- Make process element's lists --
+    if( val ) prcElListUpdate( );
 
     m_proc = val;
 }
@@ -766,71 +783,98 @@ string SessWdg::eventGet( bool clear )
     return rez;
 }
 
+void SessWdg::prcElListUpdate( )
+{
+    vector<string> ls;
+    wdgList(ls);
+    m_wdgChldAct.clear();
+    for(int i_l = 0; i_l < ls.size(); i_l++ )
+	if( wdgAt(ls[i_l]).at().process() )
+	    m_wdgChldAct.push_back(ls[i_l]);
+    attrList(ls);
+    m_attrLnkLs.clear();
+    m_attrUILs.clear();
+    for( int i_a = 0; i_a < ls.size(); i_a++ )
+    {
+	AutoHD<Attr> attr = attrAt(ls[i_a]);
+	if( attr.at().flgSelf()&(Attr::CfgConst|Attr::CfgLnkIn|Attr::CfgLnkOut) && !attr.at().cfgVal().empty() )
+	    m_attrLnkLs.push_back(ls[i_a]);
+	if( !(attr.at().flgGlob()&Attr::IsUser) ) m_attrUILs.push_back(ls[i_a]);
+    }
+}
+
+unsigned int SessWdg::modifVal( Attr &cfg )
+{ 
+    if( !(cfg.flgGlob()&Attr::IsUser) )	m_mdfClc = m_clc;
+    return m_clc; 
+}
+
 void SessWdg::calc( bool first, bool last, unsigned clc )
 {
+    string sw_attr, s_attr, obj_tp;
+
     if( !process() )	return;
     m_clc = clc;
 
+    if( !(clc%100) ) prcElListUpdate( );
+
     //- Calculate include widgets -
-    vector<string> ls;	
-    wdgList(ls);
-    for(int i_l = 0; i_l < ls.size(); i_l++ )
-        wdgAt(ls[i_l]).at().calc(first,last,clc);
-
-    //- Load events to process -
-    string wevent = eventGet(true);
-
-    if( TValFunc::func() )
-    {
-	try
-	{    
-	    //- Process self data -
-	    //time_t tm = time(NULL);
-	    string sw_attr, s_attr, obj_tp;
-	    AutoHD<Attr> attr;
+    //vector<string> ls;	
+    //wdgList(ls);
+    for(int i_l = 0; i_l < m_wdgChldAct.size(); i_l++ )
+        wdgAt(m_wdgChldAct[i_l]).at().calc(first,last,clc);
 	
+    try
+    {    
+	//- Load events to process -
+	string wevent = eventGet(true);
+	
+	//- Process input links and constants -    
+	AutoHD<Attr> attr;    
+	//attrList(ls);
+	for( int i_a = 0; i_a < m_attrLnkLs.size(); i_a++ )
+	{
+	    attr = attrAt(m_attrLnkLs[i_a]);
+	    if( attr.at().flgSelf()&Attr::CfgConst )	attr.at().setS(attr.at().cfgVal());
+	    else if( attr.at().flgSelf()&Attr::CfgLnkIn && !attr.at().cfgVal().empty() )
+	    {
+		obj_tp = TSYS::strSepParse(attr.at().cfgVal(),0,':')+":";
+		if( obj_tp == "val:" )	attr.at().setS(attr.at().cfgVal().substr(obj_tp.size()));
+		else if( obj_tp == "prm:" )
+		{
+		    
+		    if( attr.at().flgGlob()&Attr::Address )	
+			attr.at().setS("/DAQ"+attr.at().cfgVal().substr(obj_tp.size()));
+		    else switch( attr.at().type() )
+		    {
+			case TFld::Boolean:
+			    attr.at().setB(((AutoHD<TVal>)SYS->daq().at().nodeAt(
+				attr.at().cfgVal(),0,0,obj_tp.size())).at().getB());
+			    break;
+			case TFld::Integer:
+			    attr.at().setI(((AutoHD<TVal>)SYS->daq().at().nodeAt(
+				attr.at().cfgVal(),0,0,obj_tp.size())).at().getI());
+			    break;
+			case TFld::Real:
+			    attr.at().setR(((AutoHD<TVal>)SYS->daq().at().nodeAt(
+				attr.at().cfgVal(),0,0,obj_tp.size())).at().getR());
+			    break;
+			case TFld::String:
+			    attr.at().setS(((AutoHD<TVal>)SYS->daq().at().nodeAt(
+				attr.at().cfgVal(),0,0,obj_tp.size())).at().getS());
+			    break;
+		    }
+		}
+		else if( obj_tp == "addr:" )
+		    attr.at().setS(attr.at().cfgVal().substr(obj_tp.size()));
+    	    }
+	}
+
+	if( TValFunc::func() )
+	{    
 	    //- Load events to calc procedure -
 	    int evId = ioId("event");
 	    if( evId >= 0 )	setS(evId,wevent);
-
-	    //-- Process input links and constants --
-	    attrList(ls);
-	    for( int i_a = 0; i_a < ls.size(); i_a++ )
-	    {                    
-		attr = attrAt(ls[i_a]);
-		if( attr.at().flgSelf()&Attr::CfgConst )	attr.at().setS(attr.at().cfgVal());
-		else if( attr.at().flgSelf()&Attr::CfgLnkIn && !attr.at().cfgVal().empty() )
-		{
-		    obj_tp = TSYS::strSepParse(attr.at().cfgVal(),0,':')+":";
-		    if( obj_tp == "val:" )	attr.at().setS(attr.at().cfgVal().substr(obj_tp.size()));
-		    else if( obj_tp == "prm:" )
-		    {
-			if( attr.at().flgGlob()&Attr::Address )	
-			    attr.at().setS("/DAQ"+attr.at().cfgVal().substr(obj_tp.size()));
-			else switch( attr.at().type() )
-			{
-			    case TFld::Boolean:
-				attr.at().setB(((AutoHD<TVal>)SYS->daq().at().nodeAt(
-				    attr.at().cfgVal(),0,0,obj_tp.size())).at().getB());
-				break;
-			    case TFld::Integer:
-				attr.at().setI(((AutoHD<TVal>)SYS->daq().at().nodeAt(
-				    attr.at().cfgVal(),0,0,obj_tp.size())).at().getI());
-				break;
-			    case TFld::Real:
-				attr.at().setR(((AutoHD<TVal>)SYS->daq().at().nodeAt(
-				    attr.at().cfgVal(),0,0,obj_tp.size())).at().getR());
-				break;
-			    case TFld::String:
-				attr.at().setS(((AutoHD<TVal>)SYS->daq().at().nodeAt(
-				    attr.at().cfgVal(),0,0,obj_tp.size())).at().getS());
-				break;
-			}
-		    }
-		    else if( obj_tp == "addr:" )
-			attr.at().setS(attr.at().cfgVal().substr(obj_tp.size()));
-    		}
-    	    }
 	
 	    //-- Load data to calc area --
 	    setR(0,1000./ownerSess()->period());
@@ -850,7 +894,7 @@ void SessWdg::calc( bool first, bool last, unsigned clc )
     		}	
     	    }
     	    //-- Calc --
-    	    TValFunc::calc();
+	    TValFunc::calc();
     	    //-- Load data from calc area --
     	    for( int i_io = 3; i_io < ioSize( ); i_io++ )
     	    {
@@ -865,66 +909,65 @@ void SessWdg::calc( bool first, bool last, unsigned clc )
     		    case IO::Boolean:   attr.at().setB(getB(i_io));	break;
     		}
     	    }
-	
-    	    //-- Process output links --
-    	    for( int i_a = 0; i_a < ls.size(); i_a++ )
-    	    {
-    		attr = attrAt(ls[i_a]);
-		obj_tp = TSYS::strSepParse(attr.at().cfgVal(),0,':')+":";
-    		if( attr.at().flgSelf()&Attr::CfgLnkOut && !attr.at().cfgVal().empty() && obj_tp == "prm:" )
-		    switch( attr.at().type() )
-		    {
-			case TFld::Boolean:		
-			    ((AutoHD<TVal>)SYS->daq().at().nodeAt(
-				attr.at().cfgVal(),0,0,obj_tp.size())).at().setB(attr.at().getB());
-			    break;
-			case TFld::Integer:
-			    ((AutoHD<TVal>)SYS->daq().at().nodeAt(
-				attr.at().cfgVal(),0,0,obj_tp.size())).at().setI(attr.at().getI());
-			    break;
-			case TFld::Real:
-			    ((AutoHD<TVal>)SYS->daq().at().nodeAt(
-				attr.at().cfgVal(),0,0,obj_tp.size())).at().setR(attr.at().getR());
-			    break;
-			case TFld::String:
-			    ((AutoHD<TVal>)SYS->daq().at().nodeAt(
-				attr.at().cfgVal(),0,0,obj_tp.size())).at().setS(attr.at().getS());
-			    break;
-		    }
-    	    }
-
 	    //-- Save events from calc procedure --
 	    if( evId >= 0 ) wevent = getS(evId);
 	}
-	catch(TError err)
+    	
+	//-- Process output links --
+    	for( int i_a = 0; i_a < m_attrLnkLs.size(); i_a++ )
     	{
-    	    mess_err(err.cat.c_str(),err.mess.c_str());
-    	    mess_err(nodePath().c_str(),_("Widget '%s' calc is error. Process disabled."),path().c_str());
-    	    setProcess(false);
-	}
-    }
-
-    //-- Process widget's events --
-    if( !wevent.empty() )
-    {    
-	string sevup, sev;
-	for( int el_off = 0; (sev=TSYS::strSepParse(wevent,0,';',&el_off)).size(); )
-	{
-	    //-- Check for process events --
-	    string sprc_lst = attrAt("evProc").at().getS(), 
-		   sprc;	
-	    bool evProc = false;
-	    for( int elp_off = 0; (sprc=TSYS::strSepParse(sprc_lst,0,'\n',&elp_off)).size(); )
-		if( TSYS::strSepParse(sprc,0,':') == sev )
+    	    attr = attrAt(m_attrLnkLs[i_a]);
+	    obj_tp = TSYS::strSepParse(attr.at().cfgVal(),0,':')+":";
+    	    if( attr.at().flgSelf()&Attr::CfgLnkOut && !attr.at().cfgVal().empty() && obj_tp == "prm:" )
+		switch( attr.at().type() )
 		{
-	    	    ownerSess()->uiComm(TSYS::strSepParse(sprc,1,':'),TSYS::strSepParse(sprc,2,':'),path());
-		    evProc = true;
+		    case TFld::Boolean:		
+		        ((AutoHD<TVal>)SYS->daq().at().nodeAt(
+			    attr.at().cfgVal(),0,0,obj_tp.size())).at().setB(attr.at().getB());
+			break;
+		    case TFld::Integer:
+			((AutoHD<TVal>)SYS->daq().at().nodeAt(
+			    attr.at().cfgVal(),0,0,obj_tp.size())).at().setI(attr.at().getI());
+			break;
+		    case TFld::Real:
+			((AutoHD<TVal>)SYS->daq().at().nodeAt(
+			    attr.at().cfgVal(),0,0,obj_tp.size())).at().setR(attr.at().getR());
+			break;
+		    case TFld::String:
+		        ((AutoHD<TVal>)SYS->daq().at().nodeAt(
+			    attr.at().cfgVal(),0,0,obj_tp.size())).at().setS(attr.at().getS());
+			break;
 		}
-	    if( !evProc ) sevup+=sev+";";
-	}
-	//-- Put left events to parent widget --
-	SessWdg *owner = ownerSessWdg(true);
-	if( owner && !sevup.empty() ) owner->eventAdd(sevup);
+    	}
+    
+	//-- Process widget's events --
+	if( !wevent.empty() )
+	{
+	    string sevup, sev;
+	    for( int el_off = 0; (sev=TSYS::strSepParse(wevent,0,';',&el_off)).size(); )
+	    {
+		//-- Check for process events --
+		string sprc_lst = attrAt("evProc").at().getS(), 
+		       sprc;	
+		bool evProc = false;
+		for( int elp_off = 0; (sprc=TSYS::strSepParse(sprc_lst,0,'\n',&elp_off)).size(); )
+		    if( TSYS::strSepParse(sprc,0,':') == sev )
+		    {
+	    		ownerSess()->uiComm(TSYS::strSepParse(sprc,1,':'),TSYS::strSepParse(sprc,2,':'),path());
+			evProc = true;
+		    }
+		if( !evProc ) sevup+=sev+";";
+	    }
+	    //-- Put left events to parent widget --
+	    SessWdg *owner = ownerSessWdg(true);
+	    if( owner && !sevup.empty() ) owner->eventAdd(sevup);
+	}	
+    }
+    catch(TError err)
+    {
+        mess_err(err.cat.c_str(),err.mess.c_str());
+        mess_err(nodePath().c_str(),_("Widget '%s' calc is error. Process disabled."),path().c_str());
+        setProcess(false);
     }
 }
 
@@ -939,52 +982,53 @@ bool SessWdg::attrChange( Attr &cfg, void *prev )
     }
 }
 
-void SessWdg::cntrCmdProc( XMLNode *opt )
+bool SessWdg::cntrCmdServ( XMLNode *opt )
 {
     string a_path = opt->attr("path");
-    //- Service commands process -
-    if( a_path.substr(0,6) == "/serv/" )
-    switch( atoi(a_path.substr(6).c_str()) )
+    if( a_path == "/serv/0" )		//Attribute's value operations
     {
-        case 0:     //Attribute's value access
-	    if( ctrChkNode(opt,"get",RWRWRW,"root","root",SEQ_RD) )
-	    {
-		unsigned  tm = strtoul(opt->attr("tm").c_str(),0,10),
-			tm_n = ownerSess()->calcClk( );
-	
-		vector<string> ls;
-		attrList(ls);
-		AutoHD<Attr> attr;
-		for( int i_l = 0; i_l < ls.size(); i_l++ )
-		{
-		    attr = attrAt(ls[i_l]);
-		    if( !(attr.at().flgGlob()&Attr::IsUser) && attr.at().modif() >= tm )
-			opt->childAdd("el")->setAttr("id",ls[i_l].c_str())->
-					     setAttr("pos",TSYS::int2str(attr.at().fld().reserve()))->
-					     setText(attr.at().getS());
-		}	    
-		opt->setAttr("tm",TSYS::uint2str(tm_n));
-	    }
-	    if( ctrChkNode(opt,"set",RWRWRW,"root","root",SEQ_WR) )
-		for( int i_ch = 0; i_ch < opt->childSize(); i_ch++ )
-		{
-		    string aid = opt->childGet(i_ch)->attr("id");
-		    if( aid == "event" ) eventAdd(opt->childGet(i_ch)->text()+";");
-		    else attrAt(aid).at().setS(opt->childGet(i_ch)->text());
-		}
-	    return;
-    }
-    if( cntrCmdServ(opt) ) return;
+	if( ctrChkNode(opt,"get",RWRWRW,"root","root",SEQ_RD) )		//Get values
+	{
+	    unsigned  tm = strtoul(opt->attr("tm").c_str(),0,10);
 
+	    //vector<string> ls;
+	    //attrList(ls);
+	    AutoHD<Attr> attr;
+	    if( m_mdfClc >= tm )
+		for( int i_l = 0; i_l < m_attrUILs.size(); i_l++ )
+		{
+		    attr = attrAt(m_attrUILs[i_l]);
+		    if( !(attr.at().flgGlob()&Attr::IsUser) && attr.at().modif() >= tm )
+			opt->childAdd("el")->setAttr("id",m_attrUILs[i_l].c_str())->
+				    	     setAttr("pos",TSYS::int2str(attr.at().fld().reserve()))->
+					     setText(attr.at().getS());
+		}
+	    opt->setAttr("tm",TSYS::uint2str(m_clc));
+	}
+	else if( ctrChkNode(opt,"set",RWRWRW,"root","root",SEQ_WR) )	//Set values
+	    for( int i_ch = 0; i_ch < opt->childSize(); i_ch++ )
+	    {
+	        string aid = opt->childGet(i_ch)->attr("id");
+	        if( aid == "event" ) eventAdd(opt->childGet(i_ch)->text()+";");
+	        else attrAt(aid).at().setS(opt->childGet(i_ch)->text());
+	    }
+	return true;
+    }else return Widget::cntrCmdServ(opt);
+    
+    return false;
+}
+
+bool SessWdg::cntrCmdGeneric( XMLNode *opt )
+{
     //Get page info
     if( opt->name() == "info" )
     {
-        cntrCmdGeneric(opt);
-        cntrCmdAttributes(opt);
+        Widget::cntrCmdGeneric(opt);
 	ctrMkNode("fld",opt,1,"/wdg/st/proc",_("Process"),RWRWR_,user().c_str(),grp().c_str(),1,"tp","bool");
-        return;
+        return true;
     }
     //Process command to page
+    string a_path = opt->attr("path");    
     if( a_path.substr(0,5) == "/attr" &&
             TSYS::pathLev(a_path,1).size() > 4 &&
             TSYS::pathLev(a_path,1).substr(0,4) == "sel_" && TCntrNode::ctrChkNode(opt) )
@@ -1010,10 +1054,25 @@ void SessWdg::cntrCmdProc( XMLNode *opt )
             else				attr.at().setS(opt->text());
         }
     }
-    else if( cntrCmdGeneric(opt) || cntrCmdAttributes(opt) );
     else if( a_path == "/wdg/st/proc" )
     {
 	if( ctrChkNode(opt,"get",RWRWR_,user().c_str(),grp().c_str(),SEQ_RD) ) opt->setText(TSYS::int2str(process()));
 	if( ctrChkNode(opt,"set",RWRWR_,user().c_str(),grp().c_str(),SEQ_WR) ) setProcess(atoi(opt->text().c_str()));
     }
+    else if( Widget::cntrCmdGeneric(opt) ) return true;
+    else return false;
+}
+
+void SessWdg::cntrCmdProc( XMLNode *opt )
+{
+    if( cntrCmdServ(opt) ) return;
+
+    //Get page info
+    if( opt->name() == "info" )
+    {
+        cntrCmdGeneric(opt);
+        cntrCmdAttributes(opt);
+        return;
+    }
+    cntrCmdGeneric(opt) || cntrCmdAttributes(opt);
 }

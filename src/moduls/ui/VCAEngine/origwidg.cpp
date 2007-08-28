@@ -72,6 +72,25 @@ void PrWidget::setEnable( bool val )
     }
 }
 
+bool PrWidget::cntrCmdGeneric( XMLNode *opt )
+{
+    //Get page info
+    if( opt->name() == "info" )
+    {
+        Widget::cntrCmdGeneric(opt);
+        ctrMkNode("oscada_cntr",opt,-1,"/",_("Base widget: ")+id());
+	ctrMkNode("fld",opt,-1,"/wdg/st/parent",_("Parent"),R_R_R_,user().c_str(),grp().c_str(),
+		2,"tp","str","dest","");		
+        return true;
+    }
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/wdg/st/parent" && ctrChkNode(opt,"get",R_R_R_,user().c_str(),grp().c_str(),SEQ_RD) )
+	opt->setText(parentNm());
+    else if( Widget::cntrCmdGeneric(opt) ) return true;
+    else return false;
+}
+
 void PrWidget::cntrCmdProc( XMLNode *opt )
 {
     if( cntrCmdServ(opt) ) return;
@@ -80,18 +99,11 @@ void PrWidget::cntrCmdProc( XMLNode *opt )
     {
         cntrCmdGeneric(opt);
         cntrCmdAttributes(opt );
-        ctrMkNode("oscada_cntr",opt,-1,"/",_("Base widget: ")+id());
-	ctrMkNode("fld",opt,-1,"/wdg/st/parent",_("Parent"),R_R_R_,user().c_str(),grp().c_str(),
-		2,"tp","str","dest","");		
         return;
     }
     //Process command to page
-    string a_path = opt->attr("path");
-    if( a_path == "/wdg/st/parent" && ctrChkNode(opt,"get",R_R_R_,user().c_str(),grp().c_str(),SEQ_RD) )
-	opt->setText(parentNm());
-    else cntrCmdGeneric(opt) || cntrCmdAttributes(opt);
+    cntrCmdGeneric(opt) || cntrCmdAttributes(opt);
 }
-
 
 
 //============ Original widgets based at primitive widget template ============
@@ -265,9 +277,57 @@ void OrigText::postEnable( int flag )
 			    "Bottom left;Bottom right;Bottom center;Bottom justify;"
 			    "V center left; V center right; Center; V center justify"),34) );
     	attrAdd( new TFld("text",_("Text"),TFld::String,TFld::FullText,"0","Text","","",35) );
-    	attrAdd( new TFld("numbPrec",_("Number precision"),TFld::Integer,TFld::NoFlag,"","","","",36) );
+    	attrAdd( new TFld("numbArg",_("Arguments number"),TFld::Integer,Attr::Active,"","0","0;10","",36) );
     }
 } 
+
+bool OrigText::attrChange( Attr &cfg, void *prev )
+{
+    if( cfg.flgGlob()&Attr::Active )
+    {
+     	if( cfg.id() == "numbArg" )
+	{
+	    string fid("arg"), fnm(_("Argument ")), fidp, fnmp;
+	    //- Delete specific unnecessary attributes of parameters -
+	    for( int i_p = 0; true; i_p++ )
+	    {
+		fidp = fid+TSYS::int2str(i_p); 
+		if( !cfg.owner()->attrPresent( fidp+"val" ) )	break;
+		else if( i_p >= cfg.getI() )
+		{
+		    cfg.owner()->attrDel(fidp+"val");
+		    cfg.owner()->attrDel(fidp+"tp");
+		    cfg.owner()->attrDel(fidp+"cfg");
+		}
+	    }
+	    //- Create ullage attributes of parameters -
+	    for( int i_p = 0; i_p < cfg.getI(); i_p++ )
+	    {
+		fidp = fid+TSYS::int2str(i_p);
+		fnmp = fnm+TSYS::int2str(i_p);
+		if( cfg.owner()->attrPresent( fidp+"val" ) ) continue;
+		cfg.owner()->attrAdd( new TFld((fidp+"tp").c_str(),(fnmp+_(":type")).c_str(),
+		    TFld::Real,TFld::Selected|Attr::Mutable|Attr::Active,"","0","0;1;2",_("Integer;Real;String"),51+10*i_p) );
+		cfg.owner()->attrAdd( new TFld((fidp+"val").c_str(),(fnmp+_(":value")).c_str(),
+		    TFld::Integer,Attr::Mutable,"","","","",50+10*i_p) );		    		    
+		cfg.owner()->attrAdd( new TFld((fidp+"cfg").c_str(),(fnmp+_(":config")).c_str(),
+		    TFld::String,Attr::Mutable,"","","","",52+10*i_p) );
+	    }
+	}
+	else if( cfg.fld().reserve() >= 50 && (cfg.fld().reserve()%10) == 1 && *(int*)prev != cfg.getI() )
+	{
+	    int narg = (cfg.fld().reserve()/10)-5;
+	    string fid = "arg"+TSYS::int2str(narg)+"val";
+	    string fnm = _("Argument ")+TSYS::int2str(narg)+":value";
+	    int apos = cfg.owner()->attrPos(fid);
+	    cfg.owner()->attrDel(fid);
+	    cfg.owner()->attrAdd( new TFld(fid.c_str(),fnm.c_str(),
+			(cfg.getI()==1) ? TFld::Real : ((cfg.getI()==2) ? TFld::String : TFld::Integer),
+			Attr::Mutable,"","","","",50+10*narg), apos );
+	}
+    }
+    return true;
+}
 
 //************************************************
 //* Media view original widget                   *

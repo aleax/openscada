@@ -34,7 +34,7 @@ using namespace VCA;
 Widget::Widget( const string &id, const string &isrcwdg ) :
         m_enable(false), m_lnk(false), m_id(id), m_parent_nm(isrcwdg)
 {
-    attrId  = grpAdd("a_",true);
+    attrId  = grpAdd("a_");
     inclWdg = grpAdd("wdg_");    
 
     attr_cfg.valAtt(this);
@@ -259,14 +259,14 @@ void Widget::inheritIncl( const string &iwdg )
     	    wdgAdd(ls[i_w],"",parw.at().wdgAt(ls[i_w]).at().path());
 }
 
-void Widget::attrAdd( TFld *attr )
+void Widget::attrAdd( TFld *attr, int pos )
 {
     if(attrPresent(attr->name()))
     {
 	delete attr;
         throw TError(nodePath().c_str(),_("Attribut %s already present."),attr->name().c_str());
     }
-    attr_cfg.fldAdd(attr);
+    attr_cfg.fldAdd(attr,pos);
 }
 
 void Widget::attrDel( const string &attr )
@@ -357,27 +357,25 @@ bool Widget::cntrCmdServ( XMLNode *opt )
 {
     string a_path = opt->attr("path");
     //- Service commands process -
-    if( a_path.substr(0,6) == "/serv/" )
-    switch( atoi(a_path.substr(6).c_str()) )
+    if( a_path == "/serv/0" )	//Attribute's access
     {
-        case 0:     //Attribute's value access
-	    if( ctrChkNode(opt,"get",RWRWRW,"root","root",SEQ_RD) )
+	if( ctrChkNode(opt,"get",RWRWRW,"root","root",SEQ_RD) )		//Get values
+	{
+    	    vector<string> ls;
+    	    attrList(ls);
+	    AutoHD<Attr> attr;
+    	    for( int i_l = 0; i_l < ls.size(); i_l++ )
 	    {
-    		vector<string> ls;
-    		attrList(ls);
-		AutoHD<Attr> attr;
-    		for( int i_l = 0; i_l < ls.size(); i_l++ )
-		{
-		    attr = attrAt(ls[i_l]);
-        	    opt->childAdd("el")->setAttr("id",ls[i_l].c_str())->
-				     setAttr("pos",TSYS::int2str(attr.at().fld().reserve()))->
+		attr = attrAt(ls[i_l]);
+        	opt->childAdd("el")->setAttr("id",ls[i_l].c_str())->
+			    	     setAttr("pos",TSYS::int2str(attr.at().fld().reserve()))->
 				     setText(attr.at().getS());
-		}
 	    }
-	    if( ctrChkNode(opt,"set",RWRWRW,"root","root",SEQ_WR) )
-		for( int i_ch = 0; i_ch < opt->childSize(); i_ch++ )
-		    attrAt(opt->childGet(i_ch)->attr("id")).at().setS(opt->childGet(i_ch)->text());
-	    return true;
+	}
+	else if( ctrChkNode(opt,"set",RWRWRW,"root","root",SEQ_WR) )	//Set values
+	    for( int i_ch = 0; i_ch < opt->childSize(); i_ch++ )
+	        attrAt(opt->childGet(i_ch)->attr("id")).at().setS(opt->childGet(i_ch)->text());
+	return true;
     }
     return false;
 }
@@ -1170,7 +1168,7 @@ void Attr::setFlgSelf( SelfAttrFlgs flg )
 {
     if(self_flg == flg)	return;
     self_flg = flg;
-    unsigned imdf = owner()->modifVal();
+    unsigned imdf = owner()->modifVal(*this);
     m_modif = imdf ? imdf : m_modif+1;
 }
 
@@ -1257,7 +1255,7 @@ void Attr::setS( const string &val, bool strongPrev )
                 *(m_val.s_val) = t_str;
 	    else 
 	    {	
-		unsigned imdf = owner()->modifVal();
+		unsigned imdf = owner()->modifVal(*this);
 		m_modif = imdf ? imdf : m_modif+1;
 	    }
             break;
@@ -1288,7 +1286,7 @@ void Attr::setR( double val, bool strongPrev )
                 m_val.r_val = t_val;
 	    else
 	    {
-		unsigned imdf = owner()->modifVal();
+		unsigned imdf = owner()->modifVal(*this);
 		m_modif = imdf ? imdf : m_modif+1;
 	    }
             break;
@@ -1316,7 +1314,7 @@ void Attr::setI( int val, bool strongPrev )
                 m_val.i_val = t_val;
 	    else 
 	    {
-		unsigned imdf = owner()->modifVal();
+		unsigned imdf = owner()->modifVal(*this);
 		m_modif = imdf ? imdf : m_modif+1;
 	    }
             break;
@@ -1342,7 +1340,7 @@ void Attr::setB( bool val, bool strongPrev )
                 m_val.b_val = t_val;
 	    else 
 	    {
-		unsigned imdf = owner()->modifVal();
+		unsigned imdf = owner()->modifVal(*this);
 		m_modif = imdf ? imdf : m_modif+1;
 	    }
 	}
@@ -1354,7 +1352,7 @@ void Attr::setCfgTempl(const string &vl)
 {
     if(cfg_tmpl == vl) return;
     cfg_tmpl = vl;
-    unsigned imdf = owner()->modifVal();
+    unsigned imdf = owner()->modifVal(*this);
     m_modif = imdf ? imdf : m_modif+1;
 }
 
@@ -1362,7 +1360,7 @@ void Attr::setCfgVal( const string &vl )
 {
     if( cfg_val == vl )	return;
     cfg_val = vl;
-    unsigned imdf = owner()->modifVal();
+    unsigned imdf = owner()->modifVal(*this);
     m_modif = imdf ? imdf : m_modif+1;
 }
 

@@ -37,9 +37,9 @@ using namespace VISION;
 //* Shape widget view runtime mode       *
 //****************************************
 RunWdgView::RunWdgView( const string &iwid, int ilevel, VisRun *mainWind, QWidget* parent ) :
-    WdgView(iwid,ilevel,(QMainWindow*)mainWind,parent), reqtm(0), curDiv(1)
+    WdgView(iwid,ilevel,(QMainWindow*)mainWind,parent), reqtm(1)
 {
-
+    curDiv = vmax(1,1000/mainWin()->period());
 }
 
 RunWdgView::~RunWdgView( )
@@ -73,6 +73,11 @@ void RunWdgView::setPgOpenSrc( const string &vl )
     attrSet("pgOpenSrc",vl,26);
 }
 
+int RunWdgView::cntrIfCmd( XMLNode &node, bool glob )
+{
+    return mainWin()->cntrIfCmd(node,glob);
+}
+
 WdgView *RunWdgView::newWdgItem( const string &iwid )
 {
     return new RunWdgView(iwid,wLevel()+1,mainWin(),this);
@@ -80,24 +85,24 @@ WdgView *RunWdgView::newWdgItem( const string &iwid )
 
 void RunWdgView::update( unsigned cnt, int div_max )
 {
-    //childsUpdate( item==id() );
-    //shapeUpdate( );
-    
     //- Request to widget for last attributes -
     if( !((cnt+(unsigned)wLevel())%curDiv) )
     {
 	bool change = false;
-	//printf("TEST 00: %s\n",id().c_str());	
-	XMLNode get_req("get");
-	get_req.setAttr("user",user())->
-		setAttr("path",id()+"/%2fserv%2f0")->
-		setAttr("tm",TSYS::uint2str(reqtm));	
-	if( !mod->cntrIfCmd(get_req) )
+	//printf("TEST 00: %s\n",id().c_str());
+	XMLNode *req_el;
+	XMLNode req("get");
+	req.setAttr("path",id()+"/%2fserv%2f0")->
+	    setAttr("tm",TSYS::uint2str(reqtm));	
+	if( !cntrIfCmd(req) )
 	{
-    	    for( int i_el = 0; i_el < get_req.childSize(); i_el++ )
-		if( attrSet("",get_req.childGet(i_el)->text(),atoi(get_req.childGet(i_el)->attr("pos").c_str())) )
+    	    for( int i_el = 0; i_el < req.childSize(); i_el++ )
+	    {
+		req_el = req.childGet(i_el);
+		if( attrSet("",req_el->text(),atoi(req_el->attr("pos").c_str())) )
 		    change = true;
-    	    reqtm = strtoul(get_req.attr("tm").c_str(),0,10);
+	    }
+    	    reqtm = strtoul(req.attr("tm").c_str(),0,10);
 	}
 	//-- Update divider --
 	if( curDiv > 1 && change ) 		curDiv--;
@@ -108,31 +113,21 @@ void RunWdgView::update( unsigned cnt, int div_max )
     for( int i_c = 0; i_c < children().size(); i_c++ )
 	if( qobject_cast<RunWdgView*>(children().at(i_c)) && ((RunWdgView*)children().at(i_c))->isEnabled() )
     	    ((RunWdgView*)children().at(i_c))->update(cnt,div_max);
-    
-    //orderUpdate( );
 }
 
 bool RunWdgView::event( QEvent *event )
 {
     if( WdgView::event(event) || (shape&&shape->event(this,event)) )	return true;
-    //if( event->isAccepted() )	return false;
 
     //- Key events process for send to model -
-
     string mod_ev;
     switch( event->type() )
     {
 	case QEvent::KeyPress:
-	    //keyPressEvent((QKeyEvent *)event);
-	    //if(((QKeyEvent *)event)->isAccepted()) return true;
 	    mod_ev = "key_pres";
 	case QEvent::KeyRelease:
      	{
-	    //keyReleaseEvent((QKeyEvent *)event);
-            //if(((QKeyEvent *)event)->isAccepted()) return true;
-	
 	    //printf("TEST 00: %s: %d\n",id().c_str(),event->type());	
-	
 	    QKeyEvent *key = (QKeyEvent*)event;
 	    if( key->key() == Qt::Key_Tab ) { mod_ev = ""; break; }
 	    if( mod_ev.empty() ) mod_ev = "key_rels";

@@ -47,6 +47,8 @@ namespace VISION
 //****************************************
 //* Inspector of attributes model        *
 //**************************************** 
+class VisDevelop;
+
 class ModInspAttr: public QAbstractTableModel
 {
     Q_OBJECT
@@ -106,10 +108,10 @@ class ModInspAttr: public QAbstractTableModel
 	};                
 
 	//Public methods
-	ModInspAttr( const string &wdg = "", const string &user = "user" );
+	ModInspAttr( const string &wdg, VisDevelop *mainWind );
 	~ModInspAttr( );
 	
-	const string &user( )	{ return m_user; }
+	string user( );
 	
 	void setWdg( const string &iwdg );
 	
@@ -122,6 +124,8 @@ class ModInspAttr: public QAbstractTableModel
 	int columnCount( const QModelIndex &parent = QModelIndex() ) const;
 	QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const;
         bool setData ( const QModelIndex &index, const QVariant &value, int role = Qt::EditRole );
+	
+	VisDevelop *mainWin( )     { return main_win; }
 
     signals:
 	void modified( const string &idwdg );
@@ -132,8 +136,8 @@ class ModInspAttr: public QAbstractTableModel
 
 	//Private attributes
 	string cur_wdg;
-	string m_user;
 	Item *rootItem;
+	VisDevelop *main_win;
 };
 
 //****************************************
@@ -145,9 +149,9 @@ class InspAttr: public QTreeView
     
     public:
 	//Public methods
-	InspAttr( QWidget * parent = 0, const string &iuser = "user" );
-	~InspAttr( );	
-	
+	InspAttr( QWidget * parent, VisDevelop *mainWind );
+	~InspAttr( );
+		
 	bool hasFocus( );
 		
 	void setWdg( const string &iwdg );
@@ -192,7 +196,7 @@ class InspAttrDock: public QDockWidget
 
     public:
 	//Public methods
-	InspAttrDock( VisDevelop * parent = 0 );
+	InspAttrDock( VisDevelop * parent );
 	~InspAttrDock( );
 	
 	VisDevelop *owner( );
@@ -219,12 +223,14 @@ class InspLnk: public QTreeWidget
     
     public:
 	//Public methods
-	InspLnk( QWidget * parent = 0, const string &user = "user" );
+	InspLnk( QWidget * parent, VisDevelop *mainWind );
 	~InspLnk( );
 	
-	const string &user( )	{ return m_user; }
+	string user( );
 	
 	void setWdg( const string &iwdg );
+
+	VisDevelop *mainWin( )     { return main_win; }
 	
     public slots:
 	void changeLnk( QTreeWidgetItem*, int );
@@ -247,7 +253,8 @@ class InspLnk: public QTreeWidget
 	};
 	//Private attributes
 	bool show_init;
-	string it_wdg, m_user;
+	string it_wdg;
+	VisDevelop *main_win;
 };
  
 //****************************************
@@ -259,8 +266,10 @@ class InspLnkDock: public QDockWidget
 
     public:
 	//Public methods
-	InspLnkDock( QWidget * parent = 0 );
-	~InspLnkDock( );	
+	InspLnkDock( VisDevelop * parent );
+	~InspLnkDock( );
+	
+	VisDevelop *owner( );
 
     public slots:
 	void setWdg( const string &iwdg );	
@@ -376,7 +385,8 @@ class DevelWdgView: public WdgView
 	
     protected:
         //- Protected methods -
-	bool event( QEvent * event );			    
+	bool event( QEvent * event );
+	int cntrIfCmd( XMLNode &node, bool glob = false );
     
     private:
 	//- Private data -

@@ -88,7 +88,7 @@ using namespace VISION;
 //==============================================================================
 //================= QTCFG::TVision =============================================
 //==============================================================================
-TVision::TVision( string name ) : end_run(false)
+TVision::TVision( string name ) : end_run(false), vca_station(".")
 {
     mId		= MOD_ID;
     mName       = MOD_NAME;
@@ -102,6 +102,15 @@ TVision::TVision( string name ) : end_run(false)
     //- Export functions -
     modFuncReg( new ExpFunc("QIcon icon();","Module QT-icon",(void(TModule::*)( )) &TVision::icon) );
     modFuncReg( new ExpFunc("QMainWindow *openWindow();","Start QT GUI.",(void(TModule::*)( )) &TVision::openWindow) );
+    
+    //External hosts' conection DB struct
+    el_ext.fldAdd( new TFld("OP_USER",I18N("Open user"),TFld::String,TCfg::Key,"20") );
+    el_ext.fldAdd( new TFld("ID",I18N("ID"),TFld::String,TCfg::Key,"20") );
+    el_ext.fldAdd( new TFld("NAME",I18N("Name"),TFld::String,0,"50") );
+    el_ext.fldAdd( new TFld("TRANSP",I18N("Transport"),TFld::String,0,"20") );
+    el_ext.fldAdd( new TFld("ADDR",I18N("Transport address"),TFld::String,0,"50") );
+    el_ext.fldAdd( new TFld("USER",I18N("Request user"),TFld::String,0,"20") );
+    el_ext.fldAdd( new TFld("PASS",I18N("Request password"),TFld::String,0,"30") );    
 }
 
 TVision::~TVision()
@@ -110,6 +119,11 @@ TVision::~TVision()
     for( int i_sw = 0; i_sw < shapesWdg.size(); i_sw++ )
         delete shapesWdg[i_sw];
     shapesWdg.clear();
+}
+
+string TVision::extTranspBD()
+{
+    return SYS->workDB()+".CfgExtHosts";
 }
 
 void TVision::modInfo( vector<string> &list )
@@ -131,7 +145,9 @@ string TVision::optDescr( )
     snprintf(buf,sizeof(buf),_(
         "======================= The module <%s:%s> options =======================\n"
         "---------- Parameters of the module section <%s> in config file ----------\n"
-        "StartUser  <user>    No password requested start user.\n\n"),
+        "StartUser  <user>    No password requested start user.\n"
+	"RunPrjs    <list>    Run projects list on the module start.\n"
+	"VCAstation <id>      VCA station id ('.' - local)\n"),	
         MOD_TYPE,MOD_ID,nodePath().c_str());
 
     return buf;
@@ -164,7 +180,9 @@ void TVision::modLoad( )
     } while(next_opt != -1);
     
     //========== Load parameters from config file and DB =============
-    start_user = TBDS::genDBGet(nodePath()+"StartUser",start_user);    
+    setStartUser(TBDS::genDBGet(nodePath()+"StartUser",startUser()));
+    setRunPrjs(TBDS::genDBGet(nodePath()+"RunPrjs",runPrjs()));
+    setVCAStation(TBDS::genDBGet(nodePath()+"VCAstation",VCAStation()));
 }
 
 void TVision::modSave( )
@@ -173,7 +191,9 @@ void TVision::modSave( )
     mess_debug(nodePath().c_str(),_("Save module."));
 #endif
     //========== Save parameters to DB =============
-    TBDS::genDBSet(nodePath()+"StartUser",start_user);
+    TBDS::genDBSet(nodePath()+"StartUser",startUser());
+    TBDS::genDBSet(nodePath()+"RunPrjs",runPrjs());
+    TBDS::genDBSet(nodePath()+"VCAstation",VCAStation());
 }
 
 void TVision::postEnable( int flag )
@@ -205,7 +225,7 @@ QMainWindow *TVision::openWindow()
 	shapesWdg.push_back( new ShapeLink );
     }
 
-    string user_open = start_user;
+    string user_open = startUser();
     if(!SYS->security().at().usrPresent(user_open))	
 	while(true)
 	{
@@ -220,8 +240,26 @@ QMainWindow *TVision::openWindow()
             user_open = d_usr.user().toAscii().data();
             break;
         }
-	
-    return new VisDevelop(user_open);
+
+    //- Check for run projects need -
+    bool runPrj = false;
+    string sprj;
+    for( int p_off = 0; (sprj=TSYS::strSepParse(run_prjs,0,';',&p_off)).size(); )    
+    {
+	//-- Find for already opened run window --
+	int i_w = 0;
+	for( ; i_w < mn_winds.size(); i_w++ )
+	    if( qobject_cast<VisRun*>(mn_winds[i_w]) && ((VisRun*)mn_winds[i_w])->srcProject( ) == sprj )
+		break;
+	if( i_w < mn_winds.size() ) continue;
+	VisRun *sess = new VisRun( "/prj_"+sprj, user_open, VCAStation(), true );
+	sess->show();
+	sess->raise();
+	sess->activateWindow();
+	runPrj = true;
+    }
+    	
+    return runPrj ? NULL : new VisDevelop(user_open,VCAStation());
 }
 
 void TVision::modStart()
@@ -280,6 +318,17 @@ void TVision::cntrCmdProc( XMLNode *opt )
         if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
         {
             ctrMkNode("fld",opt,-1,"/prm/cfg/start_user",_("Configurator start user"),0664,"root","root",3,"tp","str","dest","select","select","/prm/cfg/u_lst");
+            ctrMkNode("fld",opt,-1,"/prm/cfg/run_prj",_("Run projects list (';' - sep)"),0664,"root","root",1,"tp","str");
+            ctrMkNode("fld",opt,-1,"/prm/cfg/stationVCA",_("VCA engine station"),0664,"root","root",4,"tp","str","idm","1","dest","select","select","/prm/cfg/vca_lst");
+	    if(ctrMkNode("table",opt,-1,"/prm/cfg/ehost",_("External hosts poll"),0666,"root","root",2,"s_com","add,del","key","id"))
+            {
+	        ctrMkNode("list",opt,-1,"/prm/cfg/ehost/id",_("Id"),0666,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/prm/cfg/ehost/name",_("Name"),0666,"root","root",1,"tp","str");
+	        ctrMkNode("list",opt,-1,"/prm/cfg/ehost/transp",_("Transport"),0666,"root","root",4,"tp","str","idm","1","dest","select","select","/prm/cfg/transps");
+	        ctrMkNode("list",opt,-1,"/prm/cfg/ehost/addr",_("Address"),0666,"root","root",1,"tp","str");
+	        ctrMkNode("list",opt,-1,"/prm/cfg/ehost/user",_("User"),0666,"root","root",1,"tp","str");
+	        ctrMkNode("list",opt,-1,"/prm/cfg/ehost/pass",_("Password"),0666,"root","root",1,"tp","str");
+	    }
             ctrMkNode("comm",opt,-1,"/prm/cfg/load",_("Load"),0660);
             ctrMkNode("comm",opt,-1,"/prm/cfg/save",_("Save"),0660);
         }
@@ -290,8 +339,82 @@ void TVision::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/prm/cfg/start_user" )
     {
-        if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )   opt->setText(start_user);
-        if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )   start_user = opt->text();
+        if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )   opt->setText(startUser());
+        if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )   setStartUser(opt->text());
+    }
+    else if( a_path == "/prm/cfg/run_prj" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(runPrjs());
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setRunPrjs(opt->text());
+    }
+    else if( a_path == "/prm/cfg/stationVCA" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(VCAStation());
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setVCAStation(opt->text());
+    }
+    else if( a_path == "/prm/cfg/ehost" )
+    {
+        TConfig c_el(&el_ext);
+        c_el.cfg("OP_USER").setS(opt->attr("user"));
+        if( ctrChkNode(opt,"get",0666,"root","root",SEQ_RD) )
+        {
+            XMLNode *n_id       = ctrMkNode("list",opt,-1,"/prm/cfg/ehost/id","",0666);
+            XMLNode *n_nm       = ctrMkNode("list",opt,-1,"/prm/cfg/ehost/name","",0666);
+	    XMLNode *n_tr       = ctrMkNode("list",opt,-1,"/prm/cfg/ehost/transp","",0666);
+            XMLNode *n_addr     = ctrMkNode("list",opt,-1,"/prm/cfg/ehost/addr","",0666);
+            XMLNode *n_user     = ctrMkNode("list",opt,-1,"/prm/cfg/ehost/user","",0666);
+            XMLNode *n_pass     = ctrMkNode("list",opt,-1,"/prm/cfg/ehost/pass","",0666);
+
+    	    for( int fld_cnt = 0; SYS->db().at().dataSeek(extTranspBD(),nodePath()+"ExtTansp/",fld_cnt,c_el); fld_cnt++ )	
+    	    {
+                if(n_id)        n_id->childAdd("el")->setText(c_el.cfg("ID").getS());
+                if(n_nm)        n_nm->childAdd("el")->setText(c_el.cfg("NAME").getS());
+                if(n_tr)        n_tr->childAdd("el")->setText(c_el.cfg("TRANSP").getS());
+                if(n_addr)      n_addr->childAdd("el")->setText(c_el.cfg("ADDR").getS());
+                if(n_user)      n_user->childAdd("el")->setText(c_el.cfg("USER").getS());
+                if(n_pass)      n_pass->childAdd("el")->setText(c_el.cfg("PASS").getS().size()?"*******":"");
+		c_el.cfg("ID").setS("");
+            }
+        }
+        if( ctrChkNode(opt,"add",0666,"root","root",SEQ_WR) )
+	{
+	    c_el.cfg("ID").setS(_("newHost"));
+	    c_el.cfg("NAME").setS(_("New external host"));
+	    c_el.cfg("USER").setS(opt->attr("user"));
+	    SYS->db().at().dataSet(extTranspBD(),nodePath()+"ExtTansp/",c_el);
+	}
+        if( ctrChkNode(opt,"del",0666,"root","root",SEQ_WR) )
+	{
+	    c_el.cfg("ID").setS(opt->attr("key_id"));
+	    SYS->db().at().dataDel(extTranspBD(),nodePath()+"ExtTansp/",c_el);
+	}
+        if( ctrChkNode(opt,"set",0666,"root","root",SEQ_WR) )
+        {
+            string col  = opt->attr("col");
+	    c_el.cfg("ID").setS(opt->attr("key_id"));	    
+            if( col == "id" )
+            {
+		SYS->db().at().dataGet(extTranspBD(),nodePath()+"ExtTansp/",c_el);
+		SYS->db().at().dataDel(extTranspBD(),nodePath()+"ExtTansp/",c_el);
+		c_el.cfg("ID").setS(opt->text());
+		SYS->db().at().dataSet(extTranspBD(),nodePath()+"ExtTansp/",c_el);
+		return;
+            }
+	    c_el.cfgViewAll(false);
+            if( col == "name" )    	c_el.cfg("NAME").setS(opt->text());
+            else if( col == "transp" )  c_el.cfg("TRANSP").setS(opt->text());
+            else if( col == "addr" )    c_el.cfg("ADDR").setS(opt->text());
+            else if( col == "user" )    c_el.cfg("USER").setS(opt->text());
+            else if( col == "pass" )    c_el.cfg("PASS").setS(opt->text());
+	    SYS->db().at().dataSet(extTranspBD(),nodePath()+"ExtTansp/",c_el);
+        }
+    }
+    else if( a_path == "/prm/cfg/transps" && ctrChkNode(opt) )
+    {
+        vector<string>  list;
+        SYS->transport().at().modList(list);
+        for( int i_a = 0; i_a < list.size(); i_a++ )
+            opt->childAdd("el")->setAttr("id",list[i_a])->setText(SYS->transport().at().modAt(list[i_a]).at().modName());
     }
     else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )   opt->setText(optDescr());
     else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )  modLoad();
@@ -303,6 +426,17 @@ void TVision::cntrCmdProc( XMLNode *opt )
         opt->childAdd("el")->setText("");
         for(int i_u = 0; i_u < ls.size(); i_u++)
     	    opt->childAdd("el")->setText(ls[i_u]);
+    }
+    else if( a_path == "/prm/cfg/vca_lst" && ctrChkNode(opt) )
+    {
+	opt->childAdd("el")->setAttr("id",".")->setText("Local");    
+        TConfig c_el(&el_ext);
+	c_el.cfg("OP_USER").setS(opt->attr("user"));
+        for( int fld_cnt = 0; SYS->db().at().dataSeek(extTranspBD(),nodePath()+"ExtTansp/",fld_cnt,c_el); fld_cnt++ )
+	{
+	    opt->childAdd("el")->setAttr("id",c_el.cfg("ID").getS())->setText(c_el.cfg("NAME").getS());
+	    c_el.cfg("ID").setS("");
+	}
     }
     else TUI::cntrCmdProc(opt);
 }
@@ -327,13 +461,84 @@ void TVision::postMess( const QString &cat, const QString &mess, TVision::MessLe
     }
 }
 
-int TVision::cntrIfCmd( XMLNode &node, bool global )
+int TVision::cntrIfCmd( XMLNode &node, VCAHost &host, bool glob )
 {
-    //- Check local station request -
-    //unsigned long long st_tm = SYS->shrtCnt();
-    if( global ) SYS->cntrCmd(&node);
-    else SYS->ui().at().at("VCAEngine").at().cntrCmd(&node);
-    //double tm = 1.0e3*((double)(SYS->shrtCnt()-st_tm))/((double)SYS->sysClk());
-    //if( tm > 2 ) printf("TEST 00: Req <%s(%s)> time: %fms\n",node.name().c_str(),node.attr("path").c_str(),tm);
-    return atoi(node.attr("rez").c_str());
+    //- Check for local VCAEngine path - 
+    if( !glob ) node.setAttr("path","/UI/VCAEngine"+node.attr("path"));
+    
+    //- Local station request -
+    if( host.stat.empty() || host.stat == "." ) 
+    {
+	SYS->cntrCmd(&node);
+	return atoi(node.attr("rez").c_str());
+    }
+    
+    //- Externel station request -
+    //-- Check transport --
+    string tr_nm = "VCAStat"+host.stat;
+    if(!SYS->transport().at().at(host.transp).at().outPresent(tr_nm))
+    {
+        SYS->transport().at().at(host.transp).at().outAdd(tr_nm);
+        SYS->transport().at().at(host.transp).at().outAt(tr_nm).at().setAddr(host.addr);
+    }
+    AutoHD<TTransportOut> tr = SYS->transport().at().at(host.transp).at().outAt(tr_nm);
+    if(!tr.at().startStat())    tr.at().start();
+    //-- Request to remote station --
+    char buf[1000], buf1[256];
+    string req, resp;
+    int rez, resp_len;
+
+    try
+    {
+        while(true)
+        {
+            //--- Session open ---
+            if(host.ses_id < 0)
+            {
+                req = "SES_OPEN "+host.user+" "+host.pass+"\n";
+                resp_len = tr.at().messIO(req.c_str(),req.size(),buf,sizeof(buf),20);
+                buf[resp_len] = 0;
+                buf1[0] = 0;
+                sscanf(buf,"REZ %d %255s\n",&rez,buf1);
+                if(rez == 1)    throw TError(mod->nodePath().c_str(),_("Station <%s> auth error: %s!"),host.stat.c_str(),buf1);
+                else if(rez > 0)throw TError(mod->nodePath().c_str(),_("Station <%s> error: %s!"),host.stat.c_str(),buf1);
+                host.ses_id = atoi(buf1);
+            }
+            //--- Request ---
+	    string data = node.save();
+            req = "REQ "+TSYS::int2str(host.ses_id)+" "+TSYS::int2str(data.size())+"\n"+data;
+            buf[0] = 0;
+            resp_len = tr.at().messIO(req.c_str(),req.size(),buf,sizeof(buf),20);
+            resp.assign(buf,resp_len);
+	    //Get head
+            buf1[0] = 0;
+            if(sscanf(resp.c_str(),"REZ %d %255s\n",&rez,buf1)<=0)
+        	throw TError(mod->nodePath().c_str(),_("Station respond <%s> error!"),host.stat.c_str());
+            if(rez == 1)        { host.ses_id = -1; continue; }
+            if(rez > 0) throw TError(mod->nodePath().c_str(),_("Station <%s> error: %d:%s!"),host.stat.c_str(),rez,buf1);
+    	    int head_end = resp.find("\n",0);
+            if(head_end == string::npos)
+        	throw TError(mod->nodePath().c_str(),_("Station <%s> error: Respond broken!"),host.stat.c_str());
+            int resp_size = atoi(buf1);
+            //Wait tail
+            while(resp.size() < resp_size+head_end+sizeof('\n'))
+            {
+                resp_len = tr.at().messIO(NULL,0,buf,sizeof(buf),20);
+                resp.append(buf,resp_len);
+            }
+	    
+    	    node.load(resp.substr(head_end));
+            host.link_ok = true;
+            return atoi(node.attr("rez").c_str());
+        }
+    }
+    catch(TError err)
+    {
+        if(host.link_ok)
+        {
+    	    host.link_ok = false;
+            tr.at().stop();
+        }
+        throw;
+    }    
 }

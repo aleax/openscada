@@ -34,7 +34,6 @@
 #include <QScrollArea>
 
 #include <tsys.h>
-#include "tvision.h"
 #include "vis_shapes.h"
 #include "vis_devel_dlgs.h"
 #include "vis_widgs.h"
@@ -44,8 +43,8 @@
 
 using namespace VISION;
 
-VisDevelop::VisDevelop( string open_user ) : 
-    prjLibPropDlg(NULL), visItPropDlg(NULL), winClose(false), proc_st(false)
+VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) : 
+    prjLibPropDlg(NULL), visItPropDlg(NULL), winClose(false), proc_st(false), host("","","","","")
 {
     setAttribute(Qt::WA_DeleteOnClose,true);
     mod->regWin( this );
@@ -433,7 +432,12 @@ VisDevelop::VisDevelop( string open_user ) :
     w_user->setWhatsThis(_("This label display curent user."));
     w_user->setToolTip(_("Field for display of the current user."));
     w_user->setStatusTip(_("Double click for change user."));    
-    statusBar()->insertPermanentWidget(0,w_user);    
+    statusBar()->insertPermanentWidget(0,w_user);
+    w_stat = new QLabel(VCAstat.c_str(), this);
+    w_stat->setWhatsThis(_("This label display used VCA engine station."));
+    w_stat->setToolTip(_("Field for display of the used VCA engine station."));
+    w_stat->setStatusTip(_("Double click for change VCA engine station."));
+    statusBar()->insertPermanentWidget(0,w_stat);    
 
     //- Init dock windows -
     prjTree = new ProjTree(this);
@@ -478,6 +482,8 @@ VisDevelop::VisDevelop( string open_user ) :
     //resize( 1000, 800 );
     setWindowState(Qt::WindowMaximized);
 
+    setVCAStation(VCAstat);
+
     connect(this, SIGNAL(modifiedItem(const string&)), this, SLOT(updateLibToolbar()));
     updateLibToolbar();
     wdgTree->updateTree();
@@ -491,7 +497,8 @@ VisDevelop::VisDevelop( string open_user ) :
     wdgToolView->setVisible(false);
     elFigTool->setVisible(false);
     
-    statusBar()->showMessage(_("Ready"), 2000 );    
+    w_stat->setText(host.st_nm.c_str());
+    statusBar()->showMessage(_("Ready"), 2000 );
 }
 
 VisDevelop::~VisDevelop()
@@ -511,6 +518,34 @@ VisDevelop::~VisDevelop()
     if( visItPropDlg )	delete visItPropDlg;
 
     mod->unregWin(this);
+}
+
+void VisDevelop::setVCAStation( const string& st )
+{    
+    host.stat  = st;
+    host.st_nm = _("Local");
+    if( st == "." ) return;
+    TConfig c_el(&mod->elExt());
+    c_el.cfg("OP_USER").setS(user());
+    c_el.cfg("ID").setS(st);
+    if(!SYS->db().at().dataGet(mod->extTranspBD(),mod->nodePath()+"ExtTansp/",c_el))
+	host.stat = ".";
+    else
+    {
+	host.st_nm   = c_el.cfg("NAME").getS();
+        host.transp  = c_el.cfg("TRANSP").getS();
+        host.addr    = c_el.cfg("ADDR").getS();
+        host.user    = c_el.cfg("USER").getS();
+        host.pass    = c_el.cfg("PASS").getS();
+	host.ses_id  = -1;
+	host.link_ok = false;
+    }
+}
+
+int VisDevelop::cntrIfCmd( XMLNode &node, bool glob )
+{
+    if( host.stat.empty() || host.stat == "." ) node.setAttr("user",user());
+    return mod->cntrIfCmd(node,host,glob);
 }
 
 string VisDevelop::user()
@@ -562,13 +597,12 @@ void VisDevelop::updateLibToolbar()
     QImage ico_t;
     string simg;
 
-    XMLNode prm_req("get");
-    prm_req.setAttr("user",user()); 
+    XMLNode req("get");
     
     //- Update library toolbars list -
     XMLNode lb_req("get");    
-    lb_req.setAttr("user",user())->setAttr("path","/%2fprm%2fcfg%2fwlb");
-    if( !mod->cntrIfCmd(lb_req) )
+    lb_req.setAttr("path","/%2fprm%2fcfg%2fwlb");
+    if( !cntrIfCmd(lb_req) )
 	for( int i_ch = 0; i_ch < lb_req.childSize(); i_ch++ )
 	    lbls.push_back(lb_req.childGet(i_ch)->attr("id"));
     //-- Delete toolbars --
@@ -624,19 +658,18 @@ void VisDevelop::updateLibToolbar()
 	    mn_widg->addMenu(lb_menu[i_m]);
 	}	
 	//--- Update menu icon ---
- 	prm_req.setAttr("path","/wlb_"+lbls[i_lb]+"/%2fico");
-	if( !mod->cntrIfCmd(prm_req) )
+	req.clear()->setAttr("path","/wlb_"+lbls[i_lb]+"/%2fico");
+	if( !cntrIfCmd(req) )
 	{
-	    simg = TSYS::strDecode(prm_req.text(),TSYS::base64);	    
+	    simg = TSYS::strDecode(req.text(),TSYS::base64);	    
 	    if( ico_t.loadFromData((const uchar*)simg.c_str(),simg.size()) )
 		lb_menu[i_m]->setIcon(QPixmap::fromImage(ico_t));
 	}
 	
 	//-- Get widget's actions list --	
     	vector<string> wdgls;  
-	lb_req.childClean();
-	lb_req.setAttr("path","/wlb_"+lbls[i_lb]+"/%2fwdg%2fwdg");
-	if( !mod->cntrIfCmd(lb_req) )
+	lb_req.clear()->setAttr("path","/wlb_"+lbls[i_lb]+"/%2fwdg%2fwdg");
+	if( !cntrIfCmd(lb_req) )
     	    for( int i_ch = 0; i_ch < lb_req.childSize(); i_ch++ )
     		wdgls.push_back(lb_req.childGet(i_ch)->attr("id"));
 	
@@ -656,9 +689,9 @@ void VisDevelop::updateLibToolbar()
 	    QAction *cur_act;
 	    //--- Get parent name ---
 	    string wipath = "/wlb_"+lbls[i_lb]+"/wdg_"+wdgls[i_w];
-	    prm_req.setAttr("path",wipath+"/%2fwdg%2fst%2fparent");
-    	    if( !mod->cntrIfCmd(prm_req) )
-	    	if(!root_allow && prm_req.text() == "root") root_allow = true;
+	    req.clear()->setAttr("path",wipath+"/%2fwdg%2fst%2fparent");
+    	    if( !cntrIfCmd(req) )
+	    	if(!root_allow && req.text() == "root") root_allow = true;
 	    //--- Delete action ---
 	    for(i_a = 0; i_a < use_act.size(); i_a++)	    
 		if( use_act[i_a]->objectName() == wipath.c_str() )
@@ -681,10 +714,10 @@ void VisDevelop::updateLibToolbar()
 		lb_menu[i_m]->addAction(cur_act);
 	    }	    
 	    //--- Update action ---
-	    prm_req.setAttr("path",wipath+"/%2fico");
-    	    if( !mod->cntrIfCmd(prm_req) )
+	    req.clear()->setAttr("path",wipath+"/%2fico");
+    	    if( !cntrIfCmd(req) )
     	    {
-    		simg = TSYS::strDecode(prm_req.text(),TSYS::base64);	    
+    		simg = TSYS::strDecode(req.text(),TSYS::base64);	    
     		if( ico_t.loadFromData((const uchar*)simg.c_str(),simg.size()) )
 		    cur_act->setIcon(QPixmap::fromImage(ico_t));
 	    }
@@ -792,12 +825,11 @@ void VisDevelop::itDBLoad( )
 	    //-- Send load request --
 	    string sel2 = TSYS::pathLev(cur_wdg,1);
 	    
-	    XMLNode prm_req("set");
-	    prm_req.setAttr("user",user())->
-		    setAttr("path",cur_wdg+"/"+TSYS::strEncode(sel2.empty()?"/obj/cfg/load":"/wdg/cfg/load",TSYS::PathEl));
+	    XMLNode req("set");
+	    req.setAttr("path",cur_wdg+"/"+TSYS::strEncode(sel2.empty()?"/obj/cfg/load":"/wdg/cfg/load",TSYS::PathEl));
         
-	    if( mod->cntrIfCmd(prm_req) )
-		mod->postMess(prm_req.attr("mcat").c_str(),prm_req.text().c_str(),TVision::Error,this);
+	    if( cntrIfCmd(req) )
+		mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 	}
     }
 }
@@ -818,12 +850,11 @@ void VisDevelop::itDBSave( )
 	    //-- Send load request --
 	    string sel2 = TSYS::pathLev(cur_wdg,1);
 	    
-	    XMLNode prm_req("set");
-	    prm_req.setAttr("user",user())->
-		    setAttr("path",cur_wdg+"/"+TSYS::strEncode(sel2.empty()?"/obj/cfg/save":"/wdg/cfg/save",TSYS::PathEl));
+	    XMLNode req("set");
+	    req.setAttr("path",cur_wdg+"/"+TSYS::strEncode(sel2.empty()?"/obj/cfg/save":"/wdg/cfg/save",TSYS::PathEl));
         
-	    if( mod->cntrIfCmd(prm_req) )
-		mod->postMess(prm_req.attr("mcat").c_str(),prm_req.text().c_str(),TVision::Error,this);
+	    if( cntrIfCmd(req) )
+		mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 	}
     }
 }
@@ -831,17 +862,11 @@ void VisDevelop::itDBSave( )
 void VisDevelop::prjRun( )
 {
     string own_wdg = TSYS::strSepParse(work_wdg,0,';');
-    
-    InputDlg dlg(this,actPrjRun->icon(),
-	    QString(_("You sure for run a new project's item session '%1'.")).arg(work_wdg.c_str()),
-	    _("Run project"),false,false);
-    if( dlg.exec() == QDialog::Accepted )
-    {
-	VisRun *sess = new VisRun( own_wdg, user() );
-	sess->show();
-	sess->raise();
-	sess->activateWindow();
-    }
+
+    VisRun *sess = new VisRun( own_wdg, user(), VCAStation() );
+    sess->show();
+    sess->raise();
+    sess->activateWindow();
 }
 
 void VisDevelop::prjNew( )
@@ -850,13 +875,12 @@ void VisDevelop::prjNew( )
 	    _("Enter new project's identifier and name."),_("New project"),true,true);
     if( dlg.exec() == QDialog::Accepted )
     {
-	XMLNode dt_req("add");
-	dt_req.setAttr("path","/%2fprm%2fcfg%2fprj")->
-	       setAttr("id",dlg.id().toAscii().data())->
-	       setAttr("user",user())->
-	       setText(dlg.name().toAscii().data());
-        if( mod->cntrIfCmd(dt_req) )	    
-	    mod->postMess(dt_req.attr("mcat").c_str(),dt_req.text().c_str(),TVision::Error,this);
+	XMLNode req("add");
+	req.setAttr("path","/%2fprm%2fcfg%2fprj")->
+	    setAttr("id",dlg.id().toAscii().data())->
+	    setText(dlg.name().toAscii().data());
+        if( cntrIfCmd(req) )	    
+	    mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 	else emit modifiedItem(string("prj_")+dlg.id().toAscii().data());
     }
 }
@@ -867,13 +891,12 @@ void VisDevelop::libNew( )
 	    _("Enter new widget's library identifier and name."),_("New widget's library"),true,true);
     if( dlg.exec() == QDialog::Accepted )
     {
-	XMLNode dt_req("add");
-	dt_req.setAttr("path","/%2fprm%2fcfg%2fwlb")->
-	       setAttr("id",dlg.id().toAscii().data())->
-	       setAttr("user",user())->
-	       setText(dlg.name().toAscii().data());
-        if( mod->cntrIfCmd(dt_req) )	    
-	    mod->postMess(dt_req.attr("mcat").c_str(),dt_req.text().c_str(),TVision::Error,this);
+	XMLNode req("add");
+	req.setAttr("path","/%2fprm%2fcfg%2fwlb")->
+	    setAttr("id",dlg.id().toAscii().data())->
+	    setText(dlg.name().toAscii().data());
+        if( cntrIfCmd(req) )	    
+	    mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 	else emit modifiedItem(string("wlb_")+dlg.id().toAscii().data());
     }    
 }
@@ -902,55 +925,53 @@ void VisDevelop::visualItAdd( QAction *cact, const QPoint &pnt )
     
 	string sid1 = TSYS::pathLev(own_wdg,0);
     
-	XMLNode add_req("add");
-	add_req.setAttr("user",user());
+	XMLNode req("add");
 	
 	//Check for widget's library
 	string new_wdg;
 	if( sid1.substr(0,4) == "wlb_" )
 	{
 	    if( p_el_cnt == 1 )
-		add_req.setAttr("path",own_wdg+"/%2fwdg%2fwdg")->setAttr("id",w_id)->setText(w_nm);
-	    else add_req.setAttr("path",own_wdg+"/%2finclwdg%2fwdg")->setAttr("id",w_id)->setText(w_nm);
+		req.setAttr("path",own_wdg+"/%2fwdg%2fwdg")->setAttr("id",w_id)->setText(w_nm);
+	    else req.setAttr("path",own_wdg+"/%2finclwdg%2fwdg")->setAttr("id",w_id)->setText(w_nm);
 	    new_wdg=own_wdg+"/wdg_"+w_id;
 	}
 	else if( sid1.substr(0,4) == "prj_" )
 	{
 	    if( pnt.isNull() )
 	    {
-		add_req.setAttr("path",own_wdg+"/%2fpage%2fpage")->setAttr("id",w_id)->setText(w_nm);
+		req.setAttr("path",own_wdg+"/%2fpage%2fpage")->setAttr("id",w_id)->setText(w_nm);
 		new_wdg=own_wdg+"/pg_"+w_id;
 	    }
 	    else
 	    {
-		add_req.setAttr("path",own_wdg+"/%2finclwdg%2fwdg")->setAttr("id",w_id)->setText(w_nm);
+		req.setAttr("path",own_wdg+"/%2finclwdg%2fwdg")->setAttr("id",w_id)->setText(w_nm);
 		new_wdg=own_wdg+"/wdg_"+w_id;
 	    }
 	}
 	//- Create widget -
-    	int err = mod->cntrIfCmd(add_req); 
-	if( err ) mod->postMess(add_req.attr("mcat").c_str(),add_req.text().c_str(),TVision::Error,this);
+    	int err = cntrIfCmd(req); 
+	if( err ) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 	else
 	{
 	    //- Set some parameters -
-	    XMLNode set_req("set");
-	    set_req.setAttr("user",user());
+	    req.clear()->setName("set");
 	    if( !par_nm.empty() )
 	    {
 		//-- Set parent widget name --
-	        set_req.setAttr("path",new_wdg+"/%2fwdg%2fst%2fparent")->setText(par_nm);
-		err = mod->cntrIfCmd(set_req);
-		set_req.setAttr("path",new_wdg+"/%2fwdg%2fst%2fen")->setText("1");
-		err = mod->cntrIfCmd(set_req);
+	        req.setAttr("path",new_wdg+"/%2fwdg%2fst%2fparent")->setText(par_nm);
+		err = cntrIfCmd(req);
+		req.setAttr("path",new_wdg+"/%2fwdg%2fst%2fen")->setText("1");
+		err = cntrIfCmd(req);
 	    }
 	    if( !err && !pnt.isNull() )
 	    {
-		set_req.setAttr("path",new_wdg+"/%2fattr%2fgeomX")->setText(TSYS::int2str(pnt.x()));
-		err = mod->cntrIfCmd(set_req);
-		set_req.setAttr("path",new_wdg+"/%2fattr%2fgeomY")->setText(TSYS::int2str(pnt.y()));
-		err = mod->cntrIfCmd(set_req);
+		req.setAttr("path",new_wdg+"/%2fattr%2fgeomX")->setText(TSYS::int2str(pnt.x()));
+		err = cntrIfCmd(req);
+		req.setAttr("path",new_wdg+"/%2fattr%2fgeomY")->setText(TSYS::int2str(pnt.y()));
+		err = cntrIfCmd(req);
 	    }
-	    if( err ) mod->postMess(set_req.attr("mcat").c_str(),set_req.text().c_str(),TVision::Error,this);
+	    if( err ) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 	    else emit modifiedItem(own_wdg);
 	}
     }
@@ -979,34 +1000,33 @@ void VisDevelop::visualItDel( )
 			_("Delete visual item"),false,false);
 	if( dlg.exec() == QDialog::Accepted )
 	{
-	    XMLNode dt_req("del");
-	    dt_req.setAttr("user",user());
+	    XMLNode req("del");
 	    
 	    string sid1 = TSYS::pathLev(it_own,0);
 	    //Check for widget's library
 	    if( sid1.empty() )
 	    {
 		if( it_id.substr(0,4) == "wlb_" )
-	    	    dt_req.setAttr("path","/%2fprm%2fcfg%2fwlb")->setAttr("id",it_id.substr(4));
+	    	    req.setAttr("path","/%2fprm%2fcfg%2fwlb")->setAttr("id",it_id.substr(4));
 		else if( it_id.substr(0,4) == "prj_" )
-	    	    dt_req.setAttr("path","/%2fprm%2fcfg%2fprj")->setAttr("id",it_id.substr(4));
+	    	    req.setAttr("path","/%2fprm%2fcfg%2fprj")->setAttr("id",it_id.substr(4));
 	    }
 	    else if( sid1.substr(0,4) == "wlb_" )
 	    {
 		if( p_el_cnt <= 2 )
-		    dt_req.setAttr("path",it_own+"/%2fwdg%2fwdg")->setAttr("id",it_id.substr(4));
-		else dt_req.setAttr("path",it_own+"/%2finclwdg%2fwdg")->setAttr("id",it_id.substr(4));
+		    req.setAttr("path",it_own+"/%2fwdg%2fwdg")->setAttr("id",it_id.substr(4));
+		else req.setAttr("path",it_own+"/%2finclwdg%2fwdg")->setAttr("id",it_id.substr(4));
 	    }
 	    else if( sid1.substr(0,4) == "prj_" )
 	    {
 		if( p_el_cnt <= 2 )
-		    dt_req.setAttr("path",it_own+"/%2fpage%2fpage")->setAttr("id",it_id.substr(3));
+		    req.setAttr("path",it_own+"/%2fpage%2fpage")->setAttr("id",it_id.substr(3));
 		else if( it_id.substr(0,3) == "pg_" )
-		    dt_req.setAttr("path",it_own+"/%2fpage%2fpage")->setAttr("id",it_id.substr(3));
-		else dt_req.setAttr("path",it_own+"/%2finclwdg%2fwdg")->setAttr("id",it_id.substr(4));
+		    req.setAttr("path",it_own+"/%2fpage%2fpage")->setAttr("id",it_id.substr(3));
+		else req.setAttr("path",it_own+"/%2finclwdg%2fwdg")->setAttr("id",it_id.substr(4));
 	    }
-    	    if( mod->cntrIfCmd(dt_req) )	    
-		mod->postMess(dt_req.attr("mcat").c_str(),dt_req.text().c_str(),TVision::Error,this);
+    	    if( cntrIfCmd(req) )	    
+		mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 	    else emit modifiedItem(it_own);
 	}	
     }
@@ -1065,12 +1085,12 @@ void VisDevelop::visualItEdit( )
 	scrl->setAttribute(Qt::WA_DeleteOnClose);
 	scrl->setWindowTitle(w_title);
 	//- Set window icon -
-	XMLNode prm_req("get");
-	prm_req.setAttr("user",user())->setAttr("path",ed_wdg+"/%2fico");
-        if( !mod->cntrIfCmd(prm_req) )
+	XMLNode req("get");
+	req.setAttr("path",ed_wdg+"/%2fico");
+        if( !cntrIfCmd(req) )
         {
     	    QImage ico_t;	
-            string simg = TSYS::strDecode(prm_req.text(),TSYS::base64);
+            string simg = TSYS::strDecode(req.text(),TSYS::base64);
     	    if( ico_t.loadFromData((const uchar*)simg.c_str(),simg.size()) )
         	scrl->setWindowIcon(QPixmap::fromImage(ico_t));
         }	

@@ -39,17 +39,16 @@ using std::vector;
 class XMLNode 
 {
     public:
-    	XMLNode( const string &name = "" ) : 
-    	    m_root(NULL), m_current_node(NULL), m_name ( name ), m_text("") {  }
+    	XMLNode( const string &name = "" ) : m_name(name), m_text(""), current_node(NULL) {  }
 	~XMLNode() { clear(); }
 
 	XMLNode &operator=(XMLNode &prm);
 
 	string 	name() const 			{ return m_name; }
-        void 	setName( const string &s ) 	{ m_name = s; }		
+        XMLNode* setName( const string &s ) 	{ m_name = s; return this; }
 
 	string	text() const 			{ return m_text; }
-        void 	setText( const string &s ) 	{ m_text = s; }		
+        XMLNode* setText( const string &s ) 	{ m_text = s; return this; }
 	
 	void	attrList( vector<string> & list ) const;
 	void	attrClear( );
@@ -59,7 +58,7 @@ class XMLNode
 
 	void 	load( const string & );
 	string 	save( unsigned char flgs = 0 );
-	void 	clear();
+	XMLNode* clear();
 
 	int 	childSize() const 	{ return m_children.size(); }
 	void 	childAdd( XMLNode * );
@@ -87,18 +86,10 @@ class XMLNode
 	vector<string>   v_attr;	
 
 	static const char *o_name;
-	
-    private:    
-	vector<XMLNode*>& node_stack() { return m_node_stack; }
-        XMLNode* current_node()        { return m_current_node; }
-	void set_current_node ( XMLNode* p ) { m_current_node = p; }
-	void set_root( XMLNode* p )    { if( m_root ) delete (m_root); m_root = p; }
-        XMLNode* root()                { return m_root; }
 
     private:
-        XMLNode *m_root;
-    	vector<XMLNode*> m_node_stack;
-        XMLNode* m_current_node;
+    	vector<XMLNode*> node_stack;
+        XMLNode* current_node;
 };
 
 #endif  //XML_H

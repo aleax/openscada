@@ -1328,216 +1328,211 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 {
     string a_path = opt->attr("path");
     //- Service commands process -
-    if( a_path.substr(0,6) == "/serv/" )
-        switch( atoi(a_path.substr(6).c_str()) )
+    if( a_path == "/serv/0" )		//Values access
+    {
+	if( ctrChkNode(opt,"info",RWRWRW,"root","root",SEQ_RD) )	//Value's data information
 	{
-    	    case 0:     //Archive information
+    	    string arch = opt->attr("arch");
+	    opt->setAttr("end",TSYS::ll2str(end(arch)));
+	    opt->setAttr("beg",TSYS::ll2str(begin(arch)));
+	    opt->setAttr("vtp",TSYS::int2str(TValBuf::valType()));
+	    if( arch.empty() || arch == BUF_ARCH_NM )
+		opt->setAttr("per",TSYS::ll2str(TValBuf::period()));
+	    else
 	    {
-        	if( !ctrChkNode(opt) )  break;
-		string arch = opt->attr("arch");
-		opt->setAttr("end",TSYS::ll2str(end(arch)));
-		opt->setAttr("beg",TSYS::ll2str(begin(arch)));
-		opt->setAttr("vtp",TSYS::int2str(TValBuf::valType()));
-		if( arch.empty() || arch == BUF_ARCH_NM )
-		    opt->setAttr("per",TSYS::ll2str(TValBuf::period()));
-		else
-		{
-		    ResAlloc res(a_res,false);
-		    for( int i_a = 0; i_a < arch_el.size(); i_a++ )
-    			if( arch == arch_el[i_a]->archivator().workId() )
-			{ opt->setAttr("per",TSYS::ll2str((long long)(1000000.*arch_el[i_a]->archivator().valPeriod()))); break;  }
-		}
+		ResAlloc res(a_res,false);
+		for( int i_a = 0; i_a < arch_el.size(); i_a++ )
+		    if( arch == arch_el[i_a]->archivator().workId() )
+		    { opt->setAttr("per",TSYS::ll2str((long long)(1000000.*arch_el[i_a]->archivator().valPeriod()))); break;  }
+	    }
+	}
+	else if( ctrChkNode(opt,"get",RWRWRW,"root","root",SEQ_RD) )	//Value's data request
+	{
+	    long long tm      = atoll(opt->attr("tm").c_str());
+	    long long tm_grnd = atoll(opt->attr("tm_grnd").c_str());
+	    string    arch    = opt->attr("arch");	
+
+	    //-- Process one value request --	
+	    if( !tm )	tm = TSYS::curTime();
+	    if( !tm_grnd )
+	    {
+		opt->setText(getS(&tm,false,arch));
+		opt->setAttr("tm",TSYS::ll2str(tm));
 		return;
 	    }
-    	    case 1:     //Values request
+	    if( tm < tm_grnd )	throw TError(nodePath().c_str(),"Range error");
+	    //-- Process of archive block request --	
+	    TValBuf buf( TValBuf::valType(), 100000, TValBuf::period(), true, true );
+	    //--- Get values buffer ---
+	    if( (arch.empty() || arch == BUF_ARCH_NM) && vOK(tm_grnd,tm) )	
 	    {
-        	if( !ctrChkNode(opt) )  break;
-		long long tm      = atoll(opt->attr("tm").c_str());
-		long long tm_grnd = atoll(opt->attr("tm_grnd").c_str());
-		string    arch    = opt->attr("arch");	
-
-		//-- Process one value request --	
-		if( !tm )	tm = TSYS::curTime();
-		if( !tm_grnd )
-    		{
-    		    opt->setText(getS(&tm,false,arch));
-        	    opt->setAttr("tm",TSYS::ll2str(tm));
-		    return;
-    		}
-		if( tm < tm_grnd )	throw TError(nodePath().c_str(),"Range error");
-		//-- Process of archive block request --	
-		TValBuf buf( TValBuf::valType(), 100000, TValBuf::period(), true, true );
-		//--- Get values buffer ---
-		if( (arch.empty() || arch == BUF_ARCH_NM) && vOK(tm_grnd,tm) )	
-		{
-		    TValBuf::getVal(buf,tm_grnd,tm);
-		    opt->setAttr("arch",BUF_ARCH_NM);
-		}
-		else
-		{
-		    ResAlloc res(a_res,false);
-		    for( int i_a = 0; i_a < arch_el.size(); i_a++ )
-    			if( (arch.empty() || arch == arch_el[i_a]->archivator().workId()) &&
-			    (tm_grnd <= arch_el[i_a]->end() && tm > arch_el[i_a]->begin()) )
-			{
-			    buf.setPeriod( (long long)(1000000.*arch_el[i_a]->archivator().valPeriod()) );
-			    arch_el[i_a]->getVal(buf,tm_grnd,tm);
-			    opt->setAttr("arch",arch_el[i_a]->archivator().workId());
-			    break;
-			}
-		}
-		//--- Prepare buffer's data for transfer ---
-		bool	isEnd = false;	//Last archive value process
-		string  text;
-		text.reserve(100);
-		int vpos_beg = 0, vpos_end = 0, vpos_cur;
-		long long ibeg = buf.begin(), iend = buf.end(), period = vmax(atoll(opt->attr("per").c_str()),buf.period());
-		int mode = atoi(opt->attr("mode").c_str());
-		if(mode < 0 || mode > 2 ) throw TError(nodePath().c_str(),"No support data mode '%d'",mode);
-		switch(buf.valType())
-		{		  
-		    case TFld::Boolean:
+		TValBuf::getVal(buf,tm_grnd,tm);
+		opt->setAttr("arch",BUF_ARCH_NM);
+	    }
+	    else
+	    {
+		ResAlloc res(a_res,false);
+		for( int i_a = 0; i_a < arch_el.size(); i_a++ )
+		    if( (arch.empty() || arch == arch_el[i_a]->archivator().workId()) &&
+			(tm_grnd <= arch_el[i_a]->end() && tm > arch_el[i_a]->begin()) )
 		    {
-			char tval_pr, tval_pr1;
-			while( ibeg <= iend )
-			{
-			    char tval = buf.getB(&ibeg,true);
-			    vpos_cur = (ibeg-buf.begin())/period;		    
-	        	    if( vpos_cur > vpos_end )
-				bool1: switch(mode)
-				{
-				    case 0: text+=TSYS::int2str(tval_pr)+"\n";	break;
-				    case 1: 
-					if( !vpos_end || tval_pr != tval_pr1 ) 
-					    text+=TSYS::int2str(vpos_end)+" "+TSYS::int2str(tval_pr)+"\n";
-					tval_pr1 = tval_pr;	
-					break;
-				    case 2: text+=tval_pr;	break;
-				}
-			    tval_pr = tval;
-			    vpos_end = vpos_cur;
-			    ibeg++;
-			    if( isEnd )	break;
-			    if( ibeg > iend )	{ isEnd = true;	goto bool1; }	//Flush last value			    
-			}
+			buf.setPeriod( (long long)(1000000.*arch_el[i_a]->archivator().valPeriod()) );
+			arch_el[i_a]->getVal(buf,tm_grnd,tm);
+			opt->setAttr("arch",arch_el[i_a]->archivator().workId());
 			break;
 		    }
-		    case TFld::Integer:
+	    }
+	    //--- Prepare buffer's data for transfer ---
+	    bool    isEnd = false;	//Last archive value process
+	    string  text;
+	    text.reserve(100);
+	    int vpos_beg = 0, vpos_end = 0, vpos_cur;
+	    long long ibeg = buf.begin(), iend = buf.end(), period = vmax(atoll(opt->attr("per").c_str()),buf.period());
+	    int mode = atoi(opt->attr("mode").c_str());
+	    if(mode < 0 || mode > 2 ) throw TError(nodePath().c_str(),"No support data mode '%d'",mode);
+	    switch(buf.valType())
+	    {		  
+		case TFld::Boolean:
+		{
+		    char tval_pr, tval_pr1;
+		    while( ibeg <= iend )
 		    {
-			float round_perc = atof(opt->attr("round_perc").c_str());
-			int tval_pr = EVAL_INT, tval_pr1;
-			while( ibeg <= iend )
-			{
-			    int tval = buf.getI(&ibeg,true);
-			    vpos_cur = (ibeg-buf.begin())/period;		    
-	        	    if( vpos_cur <= vpos_end )
-			    {
-				if( tval == EVAL_INT ) tval = tval_pr;
-				if( tval != EVAL_INT && tval_pr != EVAL_INT )
-				{
-				    int s_k = ibeg-period*(ibeg/period);
-				    int n_k = buf.period();
-                    		    tval = ((long long)tval_pr*s_k+(long long)tval*n_k)/(s_k+n_k);
-				}
-			    }
-			    else int1: switch(mode)
+			char tval = buf.getB(&ibeg,true);
+			vpos_cur = (ibeg-buf.begin())/period;		    
+			if( vpos_cur > vpos_end )
+			    bool1: switch(mode)
 			    {
 				case 0: text+=TSYS::int2str(tval_pr)+"\n";	break;
 				case 1: 
-				    if( !(vpos_end && ( tval_pr==tval_pr1 || (((tval_pr1 > 0 && tval_pr > 0) || (tval_pr1 < 0 && tval_pr < 0)) &&
-					    100.*(double)abs(tval_pr1-tval_pr)/(double)vmax(abs(tval_pr1),abs(tval_pr)) <= round_perc))) )
-				    {
+				    if( !vpos_end || tval_pr != tval_pr1 ) 
 					text+=TSYS::int2str(vpos_end)+" "+TSYS::int2str(tval_pr)+"\n";
-					tval_pr1 = tval_pr;
-				    }
+				    tval_pr1 = tval_pr;	
 				    break;
-				case 2: text+=string((char*)&tval_pr,sizeof(int)); break;
+				case 2: text+=tval_pr;	break;
 			    }
-			    tval_pr = tval;		    
-			    vpos_end = vpos_cur;
-			    ibeg++;
-			    if( isEnd )	break;
-			    if( ibeg > iend )	{ isEnd = true;	goto int1; }	//Flush last value
-			}
-			break;
+			tval_pr = tval;
+			vpos_end = vpos_cur;
+			ibeg++;
+			if( isEnd )	break;
+			if( ibeg > iend )	{ isEnd = true;	goto bool1; }	//Flush last value			    
 		    }
-		    case TFld::Real:
-		    {
-			float round_perc = atof(opt->attr("round_perc").c_str());
-			int   real_prec  = atoi(opt->attr("real_prec").c_str());
-			if( !real_prec ) real_prec = 6;
-			double tval_pr = EVAL_REAL, tval_pr1;
-			while( ibeg <= iend )
-			{
-			    double tval = buf.getR(&ibeg,true);
-			    vpos_cur = (ibeg-buf.begin())/period;
-	        	    if( vpos_cur <= vpos_end )
-			    {	
-				if( tval == EVAL_REAL ) tval = tval_pr;
-		    		if( tval != EVAL_REAL && tval_pr != EVAL_REAL )
-                    		{
-	                	    int s_k = ibeg-period*(ibeg/period);
-                        	    int n_k = buf.period();
-                        	    tval = (tval_pr*s_k+tval*n_k)/(s_k+n_k);
-                    		}
-			    }
-			    else real1: switch(mode)
-			    {
-				case 0: text+=TSYS::real2str(tval_pr,real_prec)+"\n";	break;
-				case 1:
-				    if( !(vpos_end && ( tval_pr==tval_pr1 || (((tval_pr1 > 0 && tval_pr > 0) || (tval_pr1 < 0 && tval_pr < 0)) &&
-					    100.*fabs(tval_pr1-tval_pr)/vmax(fabs(tval_pr1),fabs(tval_pr)) <= round_perc))) )
-				    {
-					text+=TSYS::int2str(vpos_end)+" "+TSYS::real2str(tval_pr,real_prec)+"\n";
-					tval_pr1 = tval_pr;
-				    }
-				    break;
-				case 2: text+=string((char*)&tval_pr,sizeof(double));	break;
-			    }
-			    tval_pr = tval;
-			    vpos_end = vpos_cur;
-			    ibeg++;
-			    if( isEnd )	break;
-			    if( ibeg > iend )	{ isEnd = true;	goto real1; }	//Flush last value
-		        }
-			break;
-		    }
-		    case TFld::String:
-		    {
-			string tval_pr = EVAL_STR, tval_pr1;
-			while( ibeg <= iend )
-			{
-			    string tval = buf.getS(&ibeg,true);
-			    vpos_cur = (ibeg-buf.begin())/period;		    
-	        	    if( vpos_cur > vpos_end )
-				str1: switch(mode)
-				{
-			    	    case 0: text+=TSYS::strEncode(tval_pr,TSYS::Custom,"\n")+"\n";	break;
-				    case 1: 
-					if( !vpos_end || tval_pr != tval_pr1 ) 
-					    text+=TSYS::int2str(vpos_end)+" "+TSYS::strEncode(tval_pr,TSYS::Custom,"\n")+"\n";
-					tval_pr1 = tval_pr;
-					break;
-				    case 2: throw TError(nodePath().c_str(),"Binary mode no support for string data");
-				}
-			    tval_pr = tval;
-			    vpos_end = vpos_cur;
-			    ibeg++;
-			    if( isEnd )	break;
-			    if( ibeg > iend )	{ isEnd = true;	goto str1; }	//Flush last value
-			}
-			break;
-		    }
+		    break;
 		}
-		//--- Set result and information attributes ---
-		opt->setAttr("tm",TSYS::ll2str( (buf.end()/period)*period ));
-		opt->setAttr("tm_grnd",TSYS::ll2str( (buf.begin()/period)*period + ((buf.begin()%period)?period:0) ));
-		opt->setAttr("per",TSYS::ll2str(period));
-		opt->setText( (mode==2) ? TSYS::strEncode(text,TSYS::base64) : text);
-		return;
+		case TFld::Integer:
+		{
+		    float round_perc = atof(opt->attr("round_perc").c_str());
+		    int tval_pr = EVAL_INT, tval_pr1;
+		    while( ibeg <= iend )
+		    {
+			int tval = buf.getI(&ibeg,true);
+			vpos_cur = (ibeg-buf.begin())/period;		    
+			if( vpos_cur <= vpos_end )
+			{
+			    if( tval == EVAL_INT ) tval = tval_pr;
+			    if( tval != EVAL_INT && tval_pr != EVAL_INT )
+			    {
+				int s_k = ibeg-period*(ibeg/period);
+				int n_k = buf.period();
+				tval = ((long long)tval_pr*s_k+(long long)tval*n_k)/(s_k+n_k);
+			    }
+			}
+			else int1: switch(mode)
+			{
+			    case 0: text+=TSYS::int2str(tval_pr)+"\n";	break;
+			    case 1: 
+				if( !(vpos_end && ( tval_pr==tval_pr1 || (((tval_pr1 > 0 && tval_pr > 0) || (tval_pr1 < 0 && tval_pr < 0)) &&
+					100.*(double)abs(tval_pr1-tval_pr)/(double)vmax(abs(tval_pr1),abs(tval_pr)) <= round_perc))) )
+				{
+				    text+=TSYS::int2str(vpos_end)+" "+TSYS::int2str(tval_pr)+"\n";
+				    tval_pr1 = tval_pr;
+				}
+				break;
+			    case 2: text+=string((char*)&tval_pr,sizeof(int)); break;
+			}
+			tval_pr = tval;		    
+			vpos_end = vpos_cur;
+    			ibeg++;
+			if( isEnd )	break;
+			if( ibeg > iend )	{ isEnd = true;	goto int1; }	//Flush last value
+		    }
+		    break;
+		}
+		case TFld::Real:
+		{
+		    float round_perc = atof(opt->attr("round_perc").c_str());
+		    int   real_prec  = atoi(opt->attr("real_prec").c_str());
+		    if( !real_prec ) real_prec = 6;
+		    double tval_pr = EVAL_REAL, tval_pr1;
+		    while( ibeg <= iend )
+		    {
+			double tval = buf.getR(&ibeg,true);
+			vpos_cur = (ibeg-buf.begin())/period;
+			if( vpos_cur <= vpos_end )
+			{	
+			    if( tval == EVAL_REAL ) tval = tval_pr;
+			    if( tval != EVAL_REAL && tval_pr != EVAL_REAL )
+			    {
+				int s_k = ibeg-period*(ibeg/period);
+				int n_k = buf.period();
+				tval = (tval_pr*s_k+tval*n_k)/(s_k+n_k);
+			    }
+			}
+			else real1: switch(mode)
+			{
+			    case 0: text+=TSYS::real2str(tval_pr,real_prec)+"\n";	break;
+			    case 1:
+				if( !(vpos_end && ( tval_pr==tval_pr1 || (((tval_pr1 > 0 && tval_pr > 0) || (tval_pr1 < 0 && tval_pr < 0)) &&
+					100.*fabs(tval_pr1-tval_pr)/vmax(fabs(tval_pr1),fabs(tval_pr)) <= round_perc))) )
+				{
+				    text+=TSYS::int2str(vpos_end)+" "+TSYS::real2str(tval_pr,real_prec)+"\n";
+				    tval_pr1 = tval_pr;
+				}
+				break;
+			    case 2: text+=string((char*)&tval_pr,sizeof(double));	break;
+			}
+			tval_pr = tval;
+			vpos_end = vpos_cur;
+			ibeg++;
+			if( isEnd )	break;
+			if( ibeg > iend )	{ isEnd = true;	goto real1; }	//Flush last value
+		    }
+		    break;
+		}
+		case TFld::String:
+		{
+		    string tval_pr = EVAL_STR, tval_pr1;
+		    while( ibeg <= iend )
+		    {
+			string tval = buf.getS(&ibeg,true);
+			vpos_cur = (ibeg-buf.begin())/period;		    
+			if( vpos_cur > vpos_end )
+			    str1: switch(mode)
+			    {
+				case 0: text+=TSYS::strEncode(tval_pr,TSYS::Custom,"\n")+"\n";	break;
+				case 1: 
+				    if( !vpos_end || tval_pr != tval_pr1 ) 
+					text+=TSYS::int2str(vpos_end)+" "+TSYS::strEncode(tval_pr,TSYS::Custom,"\n")+"\n";
+				    tval_pr1 = tval_pr;
+				    break;
+				case 2: throw TError(nodePath().c_str(),"Binary mode no support for string data");
+			    }
+			tval_pr = tval;
+			vpos_end = vpos_cur;
+			ibeg++;
+			if( isEnd )	break;
+			if( ibeg > iend )	{ isEnd = true;	goto str1; }	//Flush last value
+		    }
+    		    break;
+		}
 	    }
-	    default:	return;
+	    //--- Set result and information attributes ---
+	    opt->setAttr("tm",TSYS::ll2str( (buf.end()/period)*period ));
+	    opt->setAttr("tm_grnd",TSYS::ll2str( (buf.begin()/period)*period + ((buf.begin()%period)?period:0) ));
+	    opt->setAttr("per",TSYS::ll2str(period));
+	    opt->setText( (mode==2) ? TSYS::strEncode(text,TSYS::base64) : text);
 	}
+	return;
+    }
 
     //- Interface comands process -																    
     //-- Info command process --

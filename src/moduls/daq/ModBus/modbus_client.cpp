@@ -309,7 +309,6 @@ void *TMdContr::Task( void *icntr )
 	    //- Update controller's data -
 	    for( int i_p=0; i_p < cntr.p_hd.size(); i_p++)
 	    {               
-		als.clear();
 		cntr.p_hd[i_p].at().elem().fldList(als);
 		for( int i_a = 0; i_a < als.size(); i_a++ )
 		{

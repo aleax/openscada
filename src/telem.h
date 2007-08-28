@@ -157,7 +157,6 @@ class TElem
         string       	m_name;
 	vector<TFld*>	elem;
 	vector<TValElem*>	cont;        //Conteiners
-	static const char	*o_name;
 };
 
 //**********************************************************************

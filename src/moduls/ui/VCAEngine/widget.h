@@ -176,10 +176,11 @@ class Widget : public TCntrNode, public TValElem
         void inheritIncl( const string &wdg = "" );		//Inherit parent include widgets
 
         //- Widget's attributes -
-	void attrList( vector<string> &list )		{ chldList(attrId,list); }
-	void attrAdd( TFld *attr );
+	void attrList( vector<string> &list )		{ attr_cfg.fldList(list); }
+	void attrAdd( TFld *attr, int pos = -1 );
 	void attrDel( const string &attr );
 	bool attrPresent( const string &attr )		{ return chldPresent(attrId,attr); }
+	int  attrPos( const string &attr )		{ return attr_cfg.fldId(attr); }
 	AutoHD<Attr> attrAt( const string &attr )	{ return chldAt(attrId,attr); }
 
         //- Include widgets -
@@ -199,14 +200,14 @@ class Widget : public TCntrNode, public TValElem
 	void postEnable( int flag );
 	void preDisable( int flag );
 	
-	bool cntrCmdServ( XMLNode *opt );
-	bool cntrCmdGeneric( XMLNode *opt );
-	bool cntrCmdAttributes( XMLNode *opt );
-	bool cntrCmdLinks( XMLNode *opt );
-	bool cntrCmdProcess( XMLNode *opt );	
+	virtual bool cntrCmdServ( XMLNode *opt );
+	virtual bool cntrCmdGeneric( XMLNode *opt );
+	virtual bool cntrCmdAttributes( XMLNode *opt );
+	virtual bool cntrCmdLinks( XMLNode *opt );
+	virtual bool cntrCmdProcess( XMLNode *opt );
 
         virtual bool attrChange( Attr &cfg, void *prev );   //Process attribute change local and into terminator
-	virtual unsigned int modifVal()	{ return 0; }
+	virtual unsigned int modifVal( Attr &cfg )	{ return 0; }
 
         void addFld( TElem *el, unsigned id );
         void delFld( TElem *el, unsigned id );

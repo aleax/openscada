@@ -38,8 +38,8 @@ using std::vector;
 //================================================================
 
 //========================= TValBuf ==============================
-//Value buffer object. Contein a massif of values types: bool, decimal, 
-//real and string.
+//Value buffer object. Contain a massif of values types: bool, decimal, 
+//real or string.
 class TValBuf
 {
     public:

@@ -232,6 +232,7 @@ TProtIn::~TProtIn()
 bool TProtIn::mess( const string &request, string &answer, const string &sender )
 {
     int ses_id = -1;
+    int req_sz = -1;
     
     //Continue for full request
     if( m_nofull )
@@ -241,7 +242,7 @@ bool TProtIn::mess( const string &request, string &answer, const string &sender 
     }
     else req_buf=request;  //Save request to bufer
     
-    string req = req_buf.substr(0,req_buf.find("\n",0));
+    string req = req_buf.substr(0,req_buf.find("\n"));
     
     if( req.substr(0,8) == "SES_OPEN" )
     {
@@ -260,7 +261,7 @@ bool TProtIn::mess( const string &request, string &answer, const string &sender 
     }
     else if( req.substr(0,3) == "REQ" )
     {
-	sscanf(req.c_str(),"REQ %d",&ses_id);
+	sscanf(req.c_str(),"REQ %d %d",&ses_id,&req_sz);
 	TProt::SAuth auth = mod->ses_get(ses_id);
 	if( !auth.t_auth ) answer = "REZ 1 Auth error. Session no valid.\n";
 	else
@@ -268,7 +269,7 @@ bool TProtIn::mess( const string &request, string &answer, const string &sender 
 	    try
 	    {
 		XMLNode req_node;
-		if(req_buf.size() <= req.size()+strlen("\n"))
+		if(req_buf.size() < req.size()+strlen("\n")+((req_sz>=0)?req_sz:0))
 		{ m_nofull = true; return true; }
 		req_node.load(req_buf.substr(req.size()));
 		req_node.setAttr("user",auth.name);

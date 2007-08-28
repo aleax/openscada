@@ -27,6 +27,9 @@
 #include <deque>
 
 #include <QMainWindow>
+#include <QLabel>
+
+#include "tvision.h"
 
 using std::string;
 using std::deque;
@@ -43,13 +46,18 @@ class VisRun : public QMainWindow
     Q_OBJECT
     public:
 	//Public methods
-	VisRun( const string &prj_it, string open_user );
+	VisRun( const string &prj_it, const string &open_user, const string &VCAstat, bool crSessForce = false );
 	~VisRun( );
 	
 	string user( );
 	int    period( )	{ return m_period; }
+	string workSess( )	{ return work_sess; }
+	string srcProject( )	{ return src_prj; }	
+        string VCAStation()     { return host.stat; }
 	
-	void initSess( const string &prj_it );	//Init session for project's item path
+        void setVCAStation( const string& st );
+
+	void initSess( const string &prj_it, bool crSessForce = false ); //Init session for project's item path
 	void callPage( const string &ses_it );	//Call session page
 	
 	//- Cache commands -
@@ -59,6 +67,8 @@ class VisRun : public QMainWindow
 	//- Attributes commands -
 	string wAttrGet( const string &path, const string &attr );
 	bool wAttrSet( const string &path, const string &attr, const string &val );
+
+	int cntrIfCmd( XMLNode &node, bool glob = false );
 
     protected:
 	//Protected methods
@@ -85,10 +95,13 @@ class VisRun : public QMainWindow
 	bool		winClose;		//Close window flag
 	bool		proc_st;		//Timer process stat
 	UserStBar 	*w_user;		//User status widget
-	string 		work_sess, src_page;	//Work session and source page
+	QLabel          *w_stat;        	//VCA engine station
+	string 		work_sess, src_prj;	//Work session and source project
 	RunPageView 	*master_pg;		//Master page of runtime session
 	int 		m_period;		//Clock's period
 	unsigned	w_prc_cnt;		//Process counter
+	float		upd_tm;
+	VCAHost         host;	
 	
 	deque<RunWdgView *>  cache_pg;		//Pages cache
 };

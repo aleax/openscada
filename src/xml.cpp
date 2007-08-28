@@ -161,16 +161,18 @@ XMLNode* XMLNode::setAttr( const string &name, const string &val )
     return this;
 }
 
-void XMLNode::clear()
+XMLNode* XMLNode::clear()
 {
     attrClear();
+    setText("");
 
     for( unsigned i_ch = 0; i_ch < m_children.size(); i_ch++ )
     	if( m_children[i_ch] ) delete m_children[i_ch];    
 
     m_children.clear();
-    set_root( NULL );
-    m_current_node = 0;
+    current_node = NULL;
+    
+    return this;
 }
 
 string XMLNode::save( unsigned char flg )
@@ -184,7 +186,9 @@ string XMLNode::save( unsigned char flg )
 	xml+= (flg&(XML_BR_OPEN_PAST|XML_BR_CLOSE_PAST))?"/>\n":"/>";
     else	
     {
-	xml = xml + ((flg&XML_BR_OPEN_PAST)?">\n":">") + Mess->codeConvOut("UTF8",encode(text())) + ((flg&XML_BR_TEXT_PAST)?"\n":"");
+	xml = xml + ((flg&XML_BR_OPEN_PAST)?">\n":">") + 
+		    Mess->codeConvOut("UTF8",encode(text())) + 
+		    ((flg&XML_BR_TEXT_PAST)?"\n":"");
 
 	for( int child_index = 0; child_index < childSize(); child_index++ )
 	{
@@ -218,82 +222,74 @@ void XMLNode::load( const string &s )
 {
     clear();
 
-    XML_Parser p = XML_ParserCreate ( "UTF-8" );
-    if( ! p ) throw TError(o_name,"Couldn't allocate memory for parser.");
+    XML_Parser p = XML_ParserCreate("UTF-8");
+    if( !p ) throw TError(o_name,"Couldn't allocate memory for parser.");
 
     XML_SetElementHandler( p, start_element, end_element );
     XML_SetCharacterDataHandler( p, characters );
-    XML_SetUserData ( p, this );    
+    XML_SetUserData( p, this );    
 
     if( !XML_Parse( p, s.c_str(), s.size(), true ) )
+    {
+	XML_ParserFree( p );
         throw TError(o_name,"Parse error at line %d --- %s", XML_GetCurrentLineNumber(p), XML_ErrorString(XML_GetErrorCode(p)) );
+    }
     XML_ParserFree( p );    
-    if( m_root )
+    /*if( m_root )
     {
 	m_name = m_root->m_name;
 	m_text = m_root->m_text;
-	for( unsigned i_atr = 0; i_atr < m_root->n_attr.size(); i_atr++)
+	for( int i_atr = 0; i_atr < m_root->n_attr.size(); i_atr++)
 	{
 	    n_attr.push_back(m_root->n_attr[i_atr]);
 	    v_attr.push_back(m_root->v_attr[i_atr]);
 	}	    
 	m_children = m_root->m_children;
 	m_root = NULL;
-    }
+    }*/
 }
 							  
 void XMLNode::start_element( void *data, const char *el, const char **attr )
 {
-    if( !data ) return;
-    XMLNode * p = ( XMLNode* )data;
-    XMLNode * n = new XMLNode();
+    XMLNode *p = (XMLNode*)data;
+    XMLNode *n = p;
+    
+    if( p->current_node )
+    {
+	n = new XMLNode();
+	p->current_node->childAdd( n );
+    }
 
-    if( !p->root() )        p->set_root( n );
-    if( p->current_node() ) p->current_node()->childAdd( n );
-
+    n->setName(el);
     while(*attr)
     {
 	n->n_attr.push_back(*attr++);
 	n->v_attr.push_back(Mess->codeConvIn("UTF8",*attr++));
     }
 
-    p->node_stack().push_back ( n );
-    p->set_current_node( n );
-    n->setName(el);
+    p->node_stack.push_back(n);
+    p->current_node = n;
 }
 
 void XMLNode::end_element( void *data, const char *el )
 {
-    if ( !data ) return;
-    XMLNode *p = ( XMLNode* )data;
-
-    if( !p->node_stack().size() ) return;
-    
-    p->current_node()->setText(Mess->codeConvIn("UTF8",p->current_node()->text()));
-    
-    p->node_stack().pop_back();
-
-    if( !p->node_stack().size() ) 
-	p->set_current_node( NULL );
-    else 
-	p->set_current_node( *(p->node_stack().begin()+p->node_stack().size()-1) );
+    XMLNode *p = (XMLNode*)data;
+    p->current_node->setText(Mess->codeConvIn("UTF8",p->current_node->text()));
+    if( !p->node_stack.empty() ) p->node_stack.pop_back();
+    if( p->node_stack.empty() ) p->current_node = NULL;
+    else p->current_node = p->node_stack[p->node_stack.size()-1];
 }
 
 void XMLNode::characters( void *userData, const XML_Char *s, int len )
 {
-    if( !userData ) return;
-    XMLNode *p = ( XMLNode* ) userData;
-    
-    if( p->current_node() && len )
-    {
-	if(p->current_node()->text().size())
-	    p->current_node()->setText(p->current_node()->text()+string(s,len));
-	else
-	    for(int i_ch = 0; i_ch < len; i_ch++)
-    		if(s[i_ch] != ' ' && s[i_ch] != '\n' && s[i_ch] != '\t' )
-		{ 
-		    p->current_node()->setText(string(s+i_ch,len-i_ch));
-		    break; 
-		}
-    }
+    XMLNode *p = (XMLNode*)userData;    
+    //if( !len )	return;
+    if( p->current_node->m_text.size() ) p->current_node->m_text.append(s,len);
+    else
+        for(int i_ch = 0; i_ch < len; i_ch++)
+	{
+	    if(s[i_ch] == ' ' || s[i_ch] == '\n' || s[i_ch] == '\t' )	continue;
+	    p->current_node->m_text.assign(s+i_ch,len-i_ch);
+	    break;
+	}
 }

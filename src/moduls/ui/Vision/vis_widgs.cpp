@@ -600,15 +600,14 @@ WdgView *WdgView::newWdgItem( const string &iwid )
 
 bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 {
-    //printf("TEST 00: %s: %s\n",attr.c_str(),val.c_str());
+    //printf("TEST 00: %s(%d): %s\n",attr.c_str(),uiPrmPos,val.c_str());
     //- Send value to model -
     if( !attr.empty() )
     {
-	XMLNode set_req("set");
-	set_req.setAttr("user",user())->
-		setAttr("path",id()+"/%2fserv%2f0");
-	set_req.childAdd("el")->setAttr("id",attr)->setText(val);
-	mod->cntrIfCmd(set_req);
+	XMLNode req("set");
+	req.setAttr("path",id()+"/%2fserv%2f0");
+	req.childAdd("el")->setAttr("id",attr)->setText(val);
+	cntrIfCmd(req);
     }
     switch(uiPrmPos)
     {
@@ -620,23 +619,25 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 	case 11: if(wLevel( )>0) z_coord = atoi(val.c_str());		break;
 	//default: if( shape ) return shape->attrSet(this,uiPrmPos,val);
     }
+    
     return shape ? shape->attrSet(this,uiPrmPos,val) : true;
 }
 
 void WdgView::load( const string& item )
 {
+    setVisible(false);
+    
     if( item.empty() || item == id() )
     {
 	childsUpdate( item==id() );
 	shapeUpdate( );
 	
 	//- Request to widget for last attributes -
-	XMLNode get_req("get");	
-	get_req.setAttr("user",user())->
-		setAttr("path",id()+"/%2fserv%2f0");
-	if( !mod->cntrIfCmd(get_req) )
-	    for( int i_el = 0; i_el < get_req.childSize(); i_el++ )
-		attrSet("",get_req.childGet(i_el)->text(),atoi(get_req.childGet(i_el)->attr("pos").c_str()));
+	XMLNode req("get");	
+	req.setAttr("path",id()+"/%2fserv%2f0");
+	if( !cntrIfCmd(req) )
+	    for( int i_el = 0; i_el < req.childSize(); i_el++ )
+		attrSet("",req.childGet(i_el)->text(),atoi(req.childGet(i_el)->attr("pos").c_str()));
     }
     if( item != id() )
 	for( int i_c = 0; i_c < children().size(); i_c++ )
@@ -644,22 +645,23 @@ void WdgView::load( const string& item )
 		((WdgView*)children().at(i_c))->load(item);
     
     orderUpdate( );
+    
+    setVisible(true);
 }
 
 void WdgView::childsUpdate( bool newLoad )
 {
-    XMLNode get_req("get");
-    get_req.setAttr("user",user());
+    XMLNode req("get");
     
     string b_nm = id();
-    get_req.setAttr("path",id()+"/%2fwdg%2fcfg%2fpath")->setAttr("resLink","1");
-    if( !mod->cntrIfCmd(get_req) ) b_nm = get_req.text();
+    req.setAttr("path",id()+"/%2fwdg%2fcfg%2fpath")->setAttr("resLink","1");
+    if( !cntrIfCmd(req) ) b_nm = req.text();
 	    
     vector<string> lst;
-    get_req.setAttr("path",b_nm+"/%2finclwdg%2fwdg");
-    if( !mod->cntrIfCmd(get_req) )
-	for( int i_el = 0; i_el < get_req.childSize(); i_el++ )
-	    lst.push_back(get_req.childGet(i_el)->attr("id"));
+    req.clear()->setAttr("path",b_nm+"/%2finclwdg%2fwdg");
+    if( !cntrIfCmd(req) )
+	for( int i_el = 0; i_el < req.childSize(); i_el++ )
+	    lst.push_back(req.childGet(i_el)->attr("id"));
     //- Delete child widgets -
     for( int i_c = 0; i_c < children().size(); i_c++ )
     {
@@ -693,12 +695,12 @@ void WdgView::childsUpdate( bool newLoad )
 void WdgView::shapeUpdate( )
 {
     //- Get root id -
-    XMLNode get_req("get");
-    get_req.setAttr("user",user())->setAttr("path",id()+"/%2fwdg%2fcfg%2froot");
-    if( !mod->cntrIfCmd(get_req) && ( !shape || shape->id() != get_req.text() ) )
+    XMLNode req("get");
+    req.setAttr("path",id()+"/%2fwdg%2fcfg%2froot");
+    if( !cntrIfCmd(req) && ( !shape || shape->id() != req.text() ) )
     {
 	if( shape ) shape->destroy(this);
-	shape = mod->getWdgShape(get_req.text());
+	shape = mod->getWdgShape(req.text());
 	if( shape ) shape->init(this);
     }
 }
@@ -726,6 +728,7 @@ bool WdgView::event( QEvent *event )
     if( event->type() == QEvent::Paint )
     {
 	//- Self widget view -
+	//printf("TEST 20: Paint %s\n",id().c_str());
 	if( shape )	return shape->event(this,event);
 	return true;
     }
