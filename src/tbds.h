@@ -50,8 +50,10 @@ class TTable : public TCntrNode
 
 	string &name()	{ return(m_name); }
 
+	virtual void fieldStruct( TConfig &cfg )
+        { throw TError(nodePath().c_str(),_("Function <%s> no support!"),"fieldStruct"); }
 	virtual bool fieldSeek( int row, TConfig &cfg )
-        { throw TError(nodePath().c_str(),_("Function <%s> no support!"),"fieldSeek"); }		
+        { throw TError(nodePath().c_str(),_("Function <%s> no support!"),"fieldSeek"); }
 	virtual void fieldGet( TConfig &cfg )
         { throw TError(nodePath().c_str(),_("Function <%s> no support!"),"fieldGet"); }
 	virtual void fieldSet( TConfig &cfg )
@@ -60,6 +62,10 @@ class TTable : public TCntrNode
         { throw TError(nodePath().c_str(),_("Function <%s> no support!"),"fieldDel"); }
 	
 	TBD &owner()	{ return *(TBD *)nodePrev(); }	
+
+    protected:
+	//Protected methods
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
     
     private:
 	//Private methods
@@ -69,6 +75,9 @@ class TTable : public TCntrNode
 	string m_name;
 };    
 
+//************************************************
+//* TBD                                          *
+//************************************************ 
 class TTipBD;
 
 class TBD : public TCntrNode, public TConfig
@@ -101,6 +110,8 @@ class TBD : public TCntrNode, public TConfig
         virtual void save( );
 	
 	//- Opened DB tables -
+	virtual void allowList( vector<string> &list )
+        { throw TError(nodePath().c_str(),_("Function <%s> no support!"),"allowList"); }
 	void list( vector<string> &list )	{ chldList(m_tbl,list); }
 	bool openStat( const string &table )	{ return chldPresent(m_tbl,table); }
 	void open( const string &table, bool create );
@@ -142,6 +153,9 @@ class TBD : public TCntrNode, public TConfig
 	int	m_tbl;
 };
 
+//************************************************
+//* TTipBD                                       *
+//************************************************ 
 class TBDS;
 
 class TTipBD : public TModule
@@ -174,6 +188,9 @@ class TTipBD : public TModule
 	int	m_db;
 };
 
+//************************************************
+//* TBDS                                         *
+//************************************************ 
 class TSYS;
 
 class TBDS : public TSubSYS, public TElem

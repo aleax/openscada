@@ -38,67 +38,91 @@ using std::vector;
 
 namespace BDSQLite
 {
-    class MBD;
-    class MTable : public TTable
-    {
-	public:
-	    MTable(string name, MBD *bd, bool create);
-	    ~MTable(  );
 
-	    //Fields
-	    bool fieldSeek( int row, TConfig &cfg );
-	    void fieldGet( TConfig &cfg );
-	    void fieldSet( TConfig &cfg );
-	    void fieldDel( TConfig &cfg );
-	    
-	    MBD &owner()	{ return (MBD&)TTable::owner(); }
-	    
-	private:
-	    void postDisable(int flag);
-	    void fieldFix( TConfig &cfg );
-    };
+//************************************************
+//* MBDMySQL::Table                              *
+//************************************************ 
+class MBD;
+class MTable : public TTable
+{
+    public:
+	//Public methods
+	MTable(string name, MBD *bd, bool create);
+	~MTable(  );
 
-    class MBD : public ::TBD
-    {
-	friend class MTable;
-	public:
-	    MBD( const string &iid, TElem *cf_el );
-	    ~MBD(  );
+	//- Field's operations -
+	void fieldStruct( TConfig &cfg );
+	bool fieldSeek( int row, TConfig &cfg );
+	void fieldGet( TConfig &cfg );
+	void fieldSet( TConfig &cfg );
+	void fieldDel( TConfig &cfg );
 	    
-	    void enable( );
-            void disable( );			
+	MBD &owner()	{ return (MBD&)TTable::owner(); }
+	    
+    private:
+	//Private methods
+	void postDisable(int flag);
+	void fieldFix( TConfig &cfg );
+	    
+	//Private attributes
+	vector< vector<string> > tblStrct;
+};
 
-	    void sqlReq( const string &req, vector< vector<string> > *tbl = NULL );
+//************************************************
+//* BDSQLite::MBD                                *
+//************************************************ 
+class MBD : public TBD
+{
+    friend class MTable;
+    public:
+    	//Public methods
+	MBD( const string &iid, TElem *cf_el );
+	~MBD(  );
+	    
+	void enable( );
+	void disable( );			
+
+	void allowList( vector<string> &list );
+	void sqlReq( const string &req, vector< vector<string> > *tbl = NULL );
 	
-	protected:
-	    void cntrCmdProc( XMLNode *opt );       //Control interface command process
+    protected:
+	//Protected methods
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 			
-	private:
-	    //Methods
-            void postDisable(int flag);    
-	    TTable *openTable( const string &name, bool create );
-	    //Attributes
-	    string      cd_pg;
-            sqlite3     *m_db;	    
-            int        	commCnt;
-	    Res		conn_res;
-    };
-
-    class BDMod: public TTipBD
-    {
-	public:
-	    BDMod( string name );
-	    ~BDMod();
+    private:
+	//Private methods
+	void postDisable(int flag);    
+	TTable *openTable( const string &name, bool create );
 	
-	    void modLoad( );
+	//Private attributes
+	string      cd_pg;
+	sqlite3     *m_db;	    
+	int        	commCnt;
+	Res		conn_res;
+};
+
+
+//*************************************************
+//* BDSQLite::BDMod                               *
+//*************************************************
+class BDMod: public TTipBD
+{
+    public:
+	//Public methods
+	BDMod( string name );
+	~BDMod();
+	
+	void modLoad( );
 	    
-	    static string sqlReqCode( const string &req, char symb = '\'' );
+	static string sqlReqCode( const string &req, char symb = '\'' );
 	    
-	private:
-	    TBD *openBD( const string &iid );
-	    string optDescr( );
-    };
-    extern BDMod *mod;
+    private:
+	//Private methods
+	TBD *openBD( const string &iid );
+	string optDescr( );
+};
+
+extern BDMod *mod;
 }
 
 #endif // BD_SQLITE

@@ -39,70 +39,89 @@ class TBasaDBF;
 
 namespace BDDBF
 {
-    struct Shd
-    {
-	int      use;
-	string   name_bd;
+
+struct Shd
+{
+    int      use;
+    string   name_bd;
+    TBasaDBF *basa;
+    string   codepage;
+};
+
+//************************************************
+//* BDDBF::MTable                                *
+//************************************************ 
+class MBD;    
+class MTable : public TTable
+{
+    public:
+	//Public methods
+	MTable(const string &name, MBD *iown, bool create );
+	~MTable(  );
+	    
+	bool fieldSeek( int row, TConfig &cfg );
+	void fieldGet( TConfig &cfg );
+	void fieldSet( TConfig &cfg );
+	void fieldDel( TConfig &cfg );
+	    
+	MBD &owner() { return (MBD&)TTable::owner(); }
+	    
+    private:
+	//Private methods
+	void postDisable(int flag);
+	void save( );	    
+	int  findKeyLine( TConfig &cfg, int cnt = 0 );
+	void fieldPrmSet( TCfg &e_cfg, db_str_rec &n_rec );
+	    
+	//Private atributes
+	string n_table;
+	string codepage;
 	TBasaDBF *basa;
-	string   codepage;
-    };
+	    
+	Res    m_res;
+	bool   m_modify;
+};
+ 
+//************************************************
+//* BDDBF::MBD                                   *
+//************************************************ 
+class BDMod;    
+class MBD : public TBD
+{
+    public:
+	//Public methods
+	MBD( string name, TElem *cf_el );
+	~MBD(  );
+	    
+	void enable( );
+	void allowList( vector<string> &list );
+	    
+    private:
+	//Private methods
+	void postDisable(int flag);
+	TTable *openTable( const string &table, bool create );
+};
 
-    class MBD;    
-    class MTable : public TTable
-    {
-	public:
-	    MTable(const string &name, MBD *iown, bool create );
-	    ~MTable(  );
-	    
-	    bool fieldSeek( int row, TConfig &cfg );
-	    void fieldGet( TConfig &cfg );
-	    void fieldSet( TConfig &cfg );
-	    void fieldDel( TConfig &cfg );
-	    
-	    MBD &owner() { return (MBD&)TTable::owner(); }
-	    
-	private:
-	    void postDisable(int flag);
-	    void save( );	    
-	    int  findKeyLine( TConfig &cfg, int cnt = 0 );
-	    void fieldPrmSet( TCfg &e_cfg, db_str_rec &n_rec );
-	    
-	private:
-	    string n_table;
-	    string codepage;
-	    TBasaDBF *basa;
-	    
-	    Res    m_res;
-	    bool   m_modify;
-    };
-
-    class BDMod;    
-    class MBD : public TBD
-    {
-	public:
-	    MBD( string name, TElem *cf_el );
-	    ~MBD(  );
-	    
-	    void enable( );
-	    
-	private:
-	    void postDisable(int flag);
-	    TTable *openTable( const string &table, bool create );
-    };
-
-    class BDMod : public TTipBD
-    {
-    	public:
-    	    BDMod( string name );
-    	    ~BDMod(  );
+//************************************************
+//* BDDBF::BDMod                                 *
+//************************************************ 
+class BDMod : public TTipBD
+{
+    public:
+	//Public methods
+	BDMod( string name );
+	~BDMod(  );
     
-	    void modLoad( );
+	void modLoad( );
 	    
-	private:
-	    TBD *openBD( const string &iid );
-	    string optDescr( );
-    };
-    extern BDMod *mod;
+    private:
+	//Private methods
+	TBD *openBD( const string &iid );
+	string optDescr( );
+};
+
+extern BDMod *mod;
+
 }
 
 #endif // TEST_BD_H

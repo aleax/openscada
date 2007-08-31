@@ -1,3 +1,17 @@
+2007-08-31 Roman
+- !!!:/DB: Allow tables, into DB, (TBD::allowList()) and get table's structure (TTable::fieldStruct()) 
+    functions is added. Support of new functions is added to modules 'SQLite' and 'MySQL'. 
+    DB module 'DBF' no support structure get function, what DBF-files no store primary key.
+- !!:/DB: User function for copying of DBs and tables is added.
+- /DB: Access to tables throw control interface is added.
+- /DB: Allow tables into DB information throw control interface is added.
+- !!:/DB: Tables data edit is added throw control interface is added.
+- !!:/DB/MySQL: Made performance optimization for access to DB.
+- !!:/DB/SQLite: Made performance optimization for access to DB.
+- /UI/QTCfg: User information move from each request to control interface function.
+- /SYS: Updated Demo DB.
+
+
 2007-08-28 Roman
 - /SYS/Archive: The service functions of control interface is made unification.
 - /SYS/Config: Config parameters made view on write to them value.

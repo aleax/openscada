@@ -235,7 +235,6 @@ bool TModSchedul::CheckFile( const string &iname )
     void *h_lib = dlopen(iname.c_str(),RTLD_LAZY|RTLD_GLOBAL);
     if(h_lib == NULL)
     {
-	printf("TEST 00\n");
         mess_warning(nodePath().c_str(),_("SO <%s> error: %s !"),iname.c_str(),dlerror());
         return(false);
     }

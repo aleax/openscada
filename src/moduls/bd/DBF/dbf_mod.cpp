@@ -26,6 +26,7 @@
 #include <errno.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <dirent.h>
 
 #include <tsys.h>
 #include <terror.h>
@@ -33,7 +34,8 @@
 #include "dbf.h"
 #include "dbf_mod.h"
 
-//============ Modul info! =====================================================
+//************************************************
+//* Modul info!                                  *
 #define MOD_ID      "DBF"
 #define MOD_NAME    "DB DBF"
 #define MOD_TYPE    "BD"
@@ -42,7 +44,7 @@
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "BD modul. Allow support of the *.dbf files, version 3.0."
 #define LICENSE     "GPL"
-//==============================================================================
+//************************************************
 
 BDDBF::BDMod *BDDBF::mod;
 
@@ -60,7 +62,7 @@ extern "C"
     	}
 	else
 	    AtMod.id	= "";
-	return( AtMod );
+	return AtMod;
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
@@ -70,16 +72,15 @@ extern "C"
 	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
     	    self_addr = BDDBF::mod = new BDDBF::BDMod( source );
 
-	return ( self_addr );
+	return self_addr;
     }
 }
 
 using namespace BDDBF;
 
-//==============================================================================
-//======================= BDDBF::BDMod =========================================
-//==============================================================================
-
+//************************************************
+//* BDDBF::BDMod                                 *
+//************************************************
 BDMod::BDMod( string name ) 
 {
     mId 	= MOD_ID;
@@ -111,12 +112,12 @@ string BDMod::optDescr( )
 	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 
-    return(buf);
+    return buf;
 }
 
 void BDMod::modLoad( )
 {
-    //========== Load parameters from command line ============
+    //- Load parameters from command line -
     int next_opt;
     char *short_opt = "h";
     struct option long_opt[] = 
@@ -137,12 +138,12 @@ void BDMod::modLoad( )
     }
     while ( next_opt != -1 );
     
-    //========== Load parameters from config file =============
+    //- Load parameters from config file -
 }
 
-//=============================================================
-//=================== BDDBF::MBD ==============================
-//=============================================================
+//************************************************
+//* BDDBF::MBD                                   *
+//************************************************
 MBD::MBD( string iid, TElem *cf_el ) : TBD(iid,cf_el)
 {
 
@@ -174,6 +175,27 @@ void MBD::enable( )
     TBD::enable( );
 }
 
+void MBD::allowList( vector<string> &list )
+{
+    string nfile;
+    list.clear();
+
+    struct stat file_stat;
+    dirent *scan_dirent;    
+    DIR *IdDir = opendir(addr().c_str());
+    if(IdDir == NULL) return;
+    while((scan_dirent = readdir(IdDir)) != NULL)
+    {
+	nfile = scan_dirent->d_name;
+        if( nfile == ".." || nfile == "." || 
+	    nfile.rfind(".") == string::npos || nfile.substr(nfile.rfind(".")) != ".dbf" ) continue;
+	stat((addr()+"/"+nfile).c_str(),&file_stat);
+	if( (file_stat.st_mode&S_IFMT) != S_IFREG ) continue;
+	list.push_back(nfile.substr(0,nfile.rfind(".")));
+    }
+    closedir(IdDir);
+}
+
 TTable *MBD::openTable( const string &nm, bool create )
 {    
     if( !enableStat() )
@@ -181,16 +203,16 @@ TTable *MBD::openTable( const string &nm, bool create )
     return new MTable(nm,this,create);
 }
 
-//=============================================================
-//==================== BDDBF::MTable ==========================
-//=============================================================
+//************************************************
+//* BDDBF::MTable                                *
+//************************************************
 MTable::MTable(const string &inm, MBD *iown, bool create) : 
     TTable(inm), m_modify(false)
 {
     string tbl_nm = name();
     nodePrev(iown);
 
-    //Set file extend
+    //- Set file extend -
     if( !(tbl_nm.size() > 4 && tbl_nm.substr(tbl_nm.size()-4,4) == ".dbf") )
 	tbl_nm=tbl_nm+".dbf";
 
@@ -217,7 +239,7 @@ void MTable::postDisable(int flag)
     if( flag )
     {
 	string n_tbl = name();
-	//Set file extend
+	//- Set file extend -
 	if( !(n_tbl.size() > 4 && n_tbl.substr(n_tbl.size()-4,4) == ".dbf") )
 	    n_tbl=n_tbl+".dbf";
 	
@@ -235,32 +257,32 @@ bool MTable::fieldSeek( int i_ln, TConfig &cfg )
     i_ln = findKeyLine(cfg,i_ln);    
     if( i_ln < 0 ) return false;
     
-    //Get config fields list
+    //- Get config fields list -
     vector<string> cf_el;
     cfg.cfgList(cf_el);
     
-    //Write data to cfg    
+    //- Write data to cfg - 
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
     {
 	TCfg &e_cfg = cfg.cfg(cf_el[i_cf]);
 	
-	//Find collumn
+	//-- Find collumn --
 	db_str_rec *fld_rec;
 	for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
 	    if( cf_el[i_cf].substr(0,10) == fld_rec->name ) break;
     	if(fld_rec == NULL) continue;
 	
-	//Get table volume
+	//-- Get table volume --
 	string val;
 	if( basa->GetFieldIt( i_ln, i_clm, val ) < 0) 
 	    throw TError(TSYS::DBInernal,nodePath().c_str(),_("Cell error!"));
 	
-	//Write value
+	//-- Write value --
 	switch(e_cfg.fld().type())
 	{
 	    case TFld::String:
 	    {
-    		//Remove spaces from end
+    		//--- Remove spaces from end ---
 		int i;
     		for(i = val.size(); i > 0; i--) if(val[i-1]!=' ') break;
     		if(i != (int)val.size()) val.resize(i);
@@ -281,39 +303,39 @@ void MTable::fieldGet( TConfig &cfg )
 {    
     int i_ln, i_clm;
 
-    //Alloc resource
+    //- Alloc resource -
     ResAlloc res(m_res,false);
     
-    //Get key line
+    //- Get key line -
     i_ln = findKeyLine( cfg );    
     if( i_ln < 0 ) throw TError(TSYS::DBRowNoPresent,nodePath().c_str(),_("Field no avoid!"));
     
-    //Get config fields list
+    //- Get config fields list -
     vector<string> cf_el;
     cfg.cfgList(cf_el);
     
-    //Write data to cfg    
+    //- Write data to cfg -
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
     {
 	TCfg &e_cfg = cfg.cfg(cf_el[i_cf]);
 	
-	//Find collumn
+	//-- Find collumn --
 	db_str_rec *fld_rec;
 	for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
 	    if( cf_el[i_cf].substr(0,10) == fld_rec->name ) break;
     	if(fld_rec == NULL) continue;
 	
-	//Get table volume
+	//-- Get table volume --
 	string val;
 	if( basa->GetFieldIt( i_ln, i_clm, val ) < 0) 
 	    throw TError(TSYS::DBInernal,nodePath().c_str(),_("Cell error!"));	
 	
-	//Write value
+	//-- Write value --
 	switch(e_cfg.fld().type())
 	{
 	    case TFld::String:
 	    {
-    		//Remove spaces from end
+    		//--- Remove spaces from end ---
 		int i;
     		for(i = val.size(); i > 0; i--) if(val[i-1]!=' ') break;
     		if(i != (int)val.size()) val.resize(i);
@@ -332,25 +354,25 @@ void MTable::fieldSet( TConfig &cfg )
 {
     int i_ln, i_clm;
 
-    //Alloc resource
+    //- Alloc resource -
     ResAlloc res(m_res,true);
 
-    //Get config fields list
+    //- Get config fields list -
     vector<string> cf_el;
     cfg.cfgList(cf_el);
     
-    //Check and fix structure of table
+    //- Check and fix structure of table -
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
     {
 	TCfg &e_cfg = cfg.cfg(cf_el[i_cf]);
 	
-	//Find collumn
+	//-- Find collumn --
 	db_str_rec *fld_rec;
 	for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
 	    if( cf_el[i_cf].substr(0,10) == fld_rec->name ) break;
 	if(fld_rec == NULL) 
 	{
-	    //Create new collumn
+	    //-- Create new collumn --
 	    db_str_rec n_rec;
 	    
 	    fieldPrmSet( e_cfg, n_rec );    
@@ -359,7 +381,7 @@ void MTable::fieldSet( TConfig &cfg )
 	}
 	else
 	{
-	    //Check collumn parameters
+	    //-- Check collumn parameters --
 	    switch(e_cfg.fld().type())
 	    {
 		case TFld::String:
@@ -384,7 +406,7 @@ void MTable::fieldSet( TConfig &cfg )
 		throw TError(TSYS::DBInernal,nodePath().c_str(),_("Column error!"));
 	}
     }
-    //Del no used collumn
+    //- Del no used collumn -
     db_str_rec *fld_rec;
     for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
     {
@@ -395,21 +417,21 @@ void MTable::fieldSet( TConfig &cfg )
 	    if( basa->DelField(i_clm) < 0 ) 
 		throw TError(TSYS::DBClose,nodePath().c_str(),_("Delete field error!"));
     }    
-    //Get key line
+    //- Get key line -
     i_ln = findKeyLine( cfg );    
     if( i_ln < 0 ) i_ln = basa->CreateItems(-1);
-    //Write data to bd
+    //- Write data to bd -
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
     {
 	TCfg &e_cfg = cfg.cfg(cf_el[i_cf]);
 	
-	//Find collumn
+	//-- Find collumn --
 	db_str_rec *fld_rec;
 	for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
 	    if( cf_el[i_cf].substr(0,10) == fld_rec->name ) break;
 	if(fld_rec == NULL) continue;
 
-	//Prepare value	
+	//-- Prepare value --
 	string val;
        	switch(e_cfg.fld().type())
 	{
@@ -425,7 +447,7 @@ void MTable::fieldSet( TConfig &cfg )
 	    case TFld::Boolean:	val = (e_cfg.getB() == true)?"T":"F";	break;
 	}
 	
-	//Set table volume
+	//-- Set table volume --
 	if( basa->ModifiFieldIt( i_ln, i_clm,val.c_str() ) < 0 )
 	    throw TError(TSYS::DBInernal,nodePath().c_str(),_("Cell error!"));	    
     }    
@@ -435,10 +457,10 @@ void MTable::fieldSet( TConfig &cfg )
 
 void MTable::fieldDel( TConfig &cfg )
 {
-    //Alloc resource
+    //- Alloc resource -
     ResAlloc res(m_res,true);
     
-    //Get key line
+    //- Get key line -
     bool i_ok = false;
     int i_ln;     
     while((i_ln = findKeyLine(cfg)) >= 0)
@@ -456,46 +478,49 @@ int MTable::findKeyLine( TConfig &cfg, int cnt )
 {
     int i_ln, i_clm, i_cnt = 0;
     
-    //Get config fields list
+    //- Get config fields list -
     vector<string> cf_el;
-    cfg.cfgList(cf_el);    
+    cfg.cfgList(cf_el);
+    //- Left only keys into list -
+    for( int i_cf = 0; i_cf < cf_el.size(); )
+	if( cfg.cfg(cf_el[i_cf]).fld().flg()&TCfg::Key ) i_cf++;
+    	else cf_el.erase(cf_el.begin()+i_cf);
 
-    //Find want field
+    //- Find want field -
     for( i_ln = 0; i_ln < basa->GetCountItems(  ); i_ln++ )
     {
 	int cnt_key = 0;
 	for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
-	    if( cfg.cfg(cf_el[i_cf]).fld().flg()&TCfg::Key )
+	{
+	    if( !cfg.cfg(cf_el[i_cf]).getS().size() )
 	    {
-		if( !cfg.cfg(cf_el[i_cf]).getS().size() )
-		{
-		    cnt_key++;
-		    continue;		
-		}
-		//string key = cfg.cfg(cf_el[i_cf]).name();
-		//Check key
-		//Find collumn
-		db_str_rec *fld_rec;
-		for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
-		    if( cf_el[i_cf].substr(0,10) == fld_rec->name ) break;
-		if(fld_rec == NULL) 
-		    throw TError(TSYS::DBInernal,nodePath().c_str(),_("Key column <%s> no avoid!"),cf_el[i_cf].c_str());
-		//Get table volume
-		string val;
-		if( basa->GetFieldIt( i_ln, i_clm, val ) < 0) 
-		    throw TError(TSYS::DBInernal,nodePath().c_str(),_("Cell error!"));
-		//Remove spaces from end
-		int i;
-		for(i = val.size(); i > 0; i--) if(val[i-1]!=' ') break;
-		if(i != (int)val.size()) val.resize(i);
-		//Compare value
-		if( val != cfg.cfg(cf_el[i_cf]).getS() )
-		{
-		    cnt_key = 0;
-		    break;
-		}
 		cnt_key++;
+		continue;		
 	    }
+	    //string key = cfg.cfg(cf_el[i_cf]).name();
+	    //- Check key -
+	    //-- Find collumn --
+	    db_str_rec *fld_rec;
+	    for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
+		if( cf_el[i_cf].substr(0,10) == fld_rec->name ) break;
+	    if(fld_rec == NULL) 
+		throw TError(TSYS::DBInernal,nodePath().c_str(),_("Key column <%s> no avoid!"),cf_el[i_cf].c_str());
+	    //-- Get table volume --
+	    string val;
+	    if( basa->GetFieldIt( i_ln, i_clm, val ) < 0) 
+		throw TError(TSYS::DBInernal,nodePath().c_str(),_("Cell error!"));
+	    //-- Remove spaces from end --
+	    int i;
+	    for(i = val.size(); i > 0; i--) if(val[i-1]!=' ') break;
+	    if(i != (int)val.size()) val.resize(i);
+	    //-- Compare value --
+	    if( val != cfg.cfg(cf_el[i_cf]).getS() )
+	    {
+		cnt_key = 0;
+		break;
+	    }
+	    cnt_key++;
+	}
 	if(cnt_key && cnt <= i_cnt++) break;	
     }
     if(i_ln >= basa->GetCountItems(  )) return -1;

@@ -98,7 +98,7 @@ class WidgetLib : public TCntrNode, public TConfig
 	int     m_wdg;
 
     private:
-        string  &m_id, &m_name, &m_descr, &m_dbt, &m_user, &m_grp, &m_ico, work_lib_db, res_lst_db;
+        string  &m_id, &m_name, &m_descr, &m_dbt, &m_user, &m_grp, &m_ico, work_lib_db;
 	int	&m_permit;
 	bool    m_enable;
 };

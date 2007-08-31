@@ -35,67 +35,89 @@ using std::string;
 
 namespace BDMySQL
 {
-    class MBD;
-    class MTable : public TTable
-    {
-	public:
-	    MTable(string name, MBD *iown, bool create);
-	    ~MTable(  );
-	    
-	    //Fields
-	    bool fieldSeek( int row, TConfig &cfg );
-            void fieldGet( TConfig &cfg );
-            void fieldSet( TConfig &cfg );
-            void fieldDel( TConfig &cfg );
 
-	    MBD &owner()	{ return (MBD&)TTable::owner(); }
+//************************************************
+//* MBDMySQL::Table                              *
+//************************************************ 
+class MBD;
+class MTable : public TTable
+{
+    public:
+	//Public methods
+	MTable(string name, MBD *iown, bool create);
+	~MTable(  );
 	    
-	private:
-	    void postDisable(int flag);
-	    void fieldFix( TConfig &cfg );
-	    void fieldPrmSet( TCfg &cfg, const string &last, string &req );
-    };
+	//- Field's functions -
+	void fieldStruct( TConfig &cfg );
+	bool fieldSeek( int row, TConfig &cfg );
+	void fieldGet( TConfig &cfg );
+	void fieldSet( TConfig &cfg );
+	void fieldDel( TConfig &cfg );
 
-    class BDMod;
-    class MBD : public TBD
-    {
-	friend class MTable;	
+	MBD &owner()	{ return (MBD&)TTable::owner(); }
+	    
+    private:
+	//Private methods
+	void postDisable(int flag);
+	void fieldFix( TConfig &cfg );
+	void fieldPrmSet( TCfg &cfg, const string &last, string &req );
+	    
+	//Private attributes
+	vector< vector<string> > tblStrct;
+};
+
+//************************************************
+//* BDMySQL::MBD                                 *
+//************************************************ 
+class BDMod;
+class MBD : public TBD
+{
+    friend class MTable;	
     
-	public:
-	    MBD( string iid, TElem *cf_el );
-	    ~MBD(  );	    
+    public:
+    	//Public methods
+	MBD( string iid, TElem *cf_el );
+	~MBD(  );	    
 
-	    void enable( );
-            void disable( );
+	void enable( );
+	void disable( );
 
-	    void sqlReq( const string &req, vector< vector<string> > *tbl = NULL );	    
+	void allowList( vector<string> &list );
+	void sqlReq( const string &req, vector< vector<string> > *tbl = NULL );	    
 	    
-	private:
-	    //Methods	    
-	    void postDisable(int flag);
-	    TTable *openTable( const string &name, bool create );
+    private:
+	//Private methods	    
+	void postDisable(int flag);
+	TTable *openTable( const string &name, bool create );
 	
-	    //Attributes
-	    string host, user, pass, bd, u_sock, cd_pg;
-	    int    port;
+	//Private attributes
+	string host, user, pass, bd, u_sock, cd_pg;
+	int    port;
 	    
-	    MYSQL  connect;
-	    Res	   conn_res;
-    };
+	MYSQL  connect;
+	Res    conn_res;
+};
+ 
+//************************************************
+//* BDMySQL::BDMod                               *
+//************************************************ 
+class BDMod: public TTipBD
+{
+    public:
+	//Public methods
+	BDMod( string name );
+	~BDMod();
+	    
+	void modLoad( );
+	    
+    private:
+	//Private methods
+	TBD *openBD( const string &iid );
+	string optDescr( );
+};
 
-    class BDMod: public TTipBD
-    {
-	public:
-	    BDMod( string name );
-	    ~BDMod();
-	    
-	    void modLoad( );
-	    
-	private:
-	    TBD *openBD( const string &iid );
-	    string optDescr( );
-    };
-    extern BDMod *mod;
+extern BDMod *mod;
+
 }
 
 #endif // MY_SQL_H

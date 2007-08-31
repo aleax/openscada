@@ -44,8 +44,6 @@ WidgetLib::WidgetLib( const string &id, const string &name, const string &lib_db
     m_name = name;
     m_dbt = string("wlb_")+id;
     m_wdg = grpAdd("wdg_",(id=="originals")?true:false);
-    
-    res_lst_db = TBDS::realDBName(lib_db);
 }
 
 WidgetLib::~WidgetLib( )
@@ -162,20 +160,6 @@ void WidgetLib::save( )
     list(f_lst);
     for( int i_ls = 0; i_ls < f_lst.size(); i_ls++ )
         at(f_lst[i_ls]).at().save();
-	
-    //- Copy mime data if table change -
-    if( res_lst_db != TBDS::realDBName(DB()) )
-    {
-	string wtbl = tbl()+"_mime";
-	TConfig c_el(&mod->elWdgData());
-	int fld_cnt = 0;	
-	while( SYS->db().at().dataSeek(res_lst_db+"."+wtbl,mod->nodePath()+wtbl,fld_cnt++,c_el) )
-	{
-	    SYS->db().at().dataSet(DB()+"."+wtbl,mod->nodePath()+wtbl,c_el);
-	    c_el.cfg("ID").setS("");
-	}
-	res_lst_db = TBDS::realDBName(DB());
-    }
 }
 
 void WidgetLib::setEnable( bool val )
@@ -205,8 +189,7 @@ void WidgetLib::mimeDataList( vector<string> &list )
     c_el.cfgViewAll(false);
     
     list.clear();    
-    int fld_cnt = 0;
-    while( SYS->db().at().dataSeek(DB()+"."+wtbl,mod->nodePath()+wtbl, fld_cnt++,c_el) )
+    for( int fld_cnt = 0; SYS->db().at().dataSeek(DB()+"."+wtbl,mod->nodePath()+wtbl,fld_cnt,c_el); fld_cnt++ )
     {
         list.push_back(c_el.cfg("ID").getS());
 	c_el.cfg("ID").setS("");
@@ -260,8 +243,6 @@ void WidgetLib::mimeDataSet( const string &iid, const string &mimeType, const st
     if(!mimeData.size()) c_el.cfg("DATA").view(false);
     else c_el.cfg("DATA").setS(mimeData);
     SYS->db().at().dataSet(DB()+"."+wtbl,mod->nodePath()+wtbl,c_el);
-    
-    res_lst_db = TBDS::realDBName(DB());
 }			
 
 void WidgetLib::mimeDataDel( const string &iid )
