@@ -291,18 +291,14 @@ void TCntrNode::chldAdd( unsigned igr, TCntrNode *node, int pos )
     if( igr >= chGrp.size() )	throw TError(nodePath().c_str(),"Group of childs <%d> error!",igr);
     if( nodeMode() != Enable ) 	throw TError(nodePath().c_str(),"Node is not enabled!");
     
-    if( TSYS::strEmpty( node->nodeName() ) )
+    TMap::iterator p;
+    if( TSYS::strEmpty(node->nodeName()) || 
+	(p=chGrp[igr].elem.find(node->nodeName())) != chGrp[igr].elem.end() )
     {
 	delete node;
-        throw TError(nodePath().c_str(),"Add child id is empty!");
+        throw TError(nodePath().c_str(),"Add child id is empty or already present!");
     }
         
-    //check object present
-    TMap::iterator p=chGrp[igr].elem.find(node->nodeName());
-    if(p!=chGrp[igr].elem.end())
-	throw TError(nodePath().c_str(),"Child <%s> already present!",node->nodeName().c_str());
-    res.release();
-    
     res.request(true);
     node->prev.node = this;
     node->prev.grp = igr;
@@ -310,7 +306,7 @@ void TCntrNode::chldAdd( unsigned igr, TCntrNode *node, int pos )
     {
 	pos = (pos<0||pos>chGrp[igr].elem.size())?chGrp[igr].elem.size():pos;
 	node->m_oi = pos;
-	for( TMap::iterator p=chGrp[igr].elem.begin(); p!=chGrp[igr].elem.end(); p++ )	
+	for( p = chGrp[igr].elem.begin(); p != chGrp[igr].elem.end(); p++ )
 	    if( p->second->m_oi >= pos ) p->second->m_oi++;
     }
     chGrp[igr].elem.insert(std::pair<string,TCntrNode*>(node->nodeName(),node));

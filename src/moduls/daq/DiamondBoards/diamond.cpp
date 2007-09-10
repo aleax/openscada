@@ -33,7 +33,8 @@
 
 #include "diamond.h"
 
-//============ Modul info! =====================================================
+//*************************************************
+//* Modul info!                                   *
 #define MOD_ID      "DiamondBoards"
 #define MOD_NAME    "Diamond DA boards"
 #define MOD_TYPE    "DAQ"
@@ -42,7 +43,7 @@
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow access to Diamond systems DA boards. Include support of Athena board."
 #define LICENSE     "GPL"
-//==============================================================================
+//*************************************************
 
 Diamond::TTpContr *Diamond::mod;
 
@@ -61,7 +62,7 @@ extern "C"
 	else
     	    AtMod.id	= "";
 
-	return( AtMod );
+	return AtMod;
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
@@ -71,15 +72,15 @@ extern "C"
     	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
 	    self_addr = Diamond::mod = new Diamond::TTpContr( source );
 
-	return ( self_addr );
+	return self_addr;
     }
 }
 
 using namespace Diamond;
 
-//======================================================================
-//==== TTpContr ======================================================== 
-//======================================================================
+//*************************************************
+//* TTpContr                                      * 
+//*************************************************
 TTpContr::TTpContr( string name ) : 
     m_init(false), elem_ai("AI"), elem_ao("AO"), elem_di("DI"), elem_do("DO")
 {
@@ -91,19 +92,38 @@ TTpContr::TTpContr( string name ) :
     mDescr  	= DESCRIPTION;
     mLicense   	= LICENSE;
     mSource    	= name;    
+        
+    //- Init DSCAD -
+    //if( dscInit( DSC_VERSION ) != DE_NONE )
+    //	mess_err(mod->nodePath().c_str(),_("dscInit error."));
 }
 
 TTpContr::~TTpContr()
-{    
+{   
+    //- Free DSCAD - 
     dscFree();
+}
+
+void TTpContr::drvInit() 
+{ 
+    ResAlloc res(drvRes,true);
+    if( m_init ) return;
+    
+    //- Init DSCAD -
+    if( dscInit( DSC_VERSION ) != DE_NONE )
+    	mess_err(mod->nodePath().c_str(),_("dscInit error."));
+
+    m_init = true;
 }
 
 void TTpContr::postEnable( int flag )
 {    
     TModule::postEnable( flag );
     
-    //==== Controler's bd structure ====
-    fldAdd( new TFld("BOARD",_("Diamond system board"),TFld::Integer,TFld::Selected,"2","25","0;25","DMM16;ATHENA") );
+    //- Controler's bd structure -
+    fldAdd( new TFld("BOARD",_("Diamond system board"),TFld::Integer,TFld::Selected,"2","25",
+	(TSYS::int2str(DSC_DMM16)+";"+TSYS::int2str(DSC_ATHENA)+";"+TSYS::int2str(DSC_DMM32XAT)).c_str(),
+	"DMM16;ATHENA;DMM32XAT") );
     fldAdd( new TFld("PRM_BD_A",_("Analog parameters' table"),TFld::String,0,"30","diamond_prm_a") );
     fldAdd( new TFld("PRM_BD_D",_("Digital parameters' table"),TFld::String,0,"30","diamond_prm_d") );
     fldAdd( new TFld("DATA_EMUL",_("Data emulation"),TFld::Boolean,TCfg::Prevent,"1","0") );
@@ -119,33 +139,31 @@ void TTpContr::postEnable( int flag )
         (TSYS::int2str(GAIN_1)+";"+TSYS::int2str(GAIN_2)+";"+TSYS::int2str(GAIN_4)+";"+TSYS::int2str(GAIN_8)).c_str(),"x1;x2;x4;x8") );
     fldAdd( new TFld("ADCONVRATE",_("A/D convertion rate (Hz)"),TFld::Integer,0,"6","200","100;100000") );
     
-    //==== Parameter type bd structure ====
-    //---- Analog ----
+    //- Parameter type bd structure -
+    //-- Analog --
     int t_prm = tpParmAdd("a_prm","PRM_BD_A",_("Analog parameter"));
     tpPrmAt(t_prm).fldAdd( new TFld("TYPE",_("Analog parameter type"),TFld::Integer,TFld::Selected|TCfg::NoVal|TCfg::Prevent,"1","0","0;1",_("Input;Output")) );
     tpPrmAt(t_prm).fldAdd( new TFld("CNL",_("Channel"),TFld::Integer,TCfg::NoVal,"2","0") );
     tpPrmAt(t_prm).fldAdd( new TFld("GAIN",_("A/D converter gain"),TFld::Integer,TFld::Selected|TCfg::NoVal|TCfg::Prevent,"1",TSYS::int2str(GAIN_1).c_str(),
 	(TSYS::int2str(GAIN_1)+";"+TSYS::int2str(GAIN_2)+";"+TSYS::int2str(GAIN_4)+";"+TSYS::int2str(GAIN_8)).c_str(),"x1;x2;x4;x8") );
-    //---- Digit ----
+    //-- Digit --
     t_prm = tpParmAdd("d_prm","PRM_BD_D",_("Digital parameter"));
     tpPrmAt(t_prm).fldAdd( new TFld("TYPE",_("Digital parameter type"),TFld::Integer,TFld::Selected|TCfg::NoVal|TCfg::Prevent,"1","0","0;1",_("Input;Output")) );
     tpPrmAt(t_prm).fldAdd( new TFld("PORT",_("Port"),TFld::Integer,TFld::Selected|TCfg::NoVal|TCfg::Prevent,"2","0","0;1;2","A;B;C") );
     tpPrmAt(t_prm).fldAdd( new TFld("CNL",_("Channel"),TFld::Integer,TCfg::NoVal|TCfg::Prevent,"1") );
 
-    //==== Init value elements =====
-    //---- Analog input ----
+    //- Init value elements -
+    //-- Analog input --
     elem_ai.fldAdd( new TFld("value",_("Value %"),TFld::Real,TFld::NoWrite|TVal::DirRead,"",TSYS::real2str(EVAL_REAL).c_str(),"0;100","",1) );
     elem_ai.fldAdd( new TFld("voltage",_("Voltage V"),TFld::Real,TFld::NoWrite|TVal::DirRead,"",TSYS::real2str(EVAL_REAL).c_str(),"-10;10","",2) );
     elem_ai.fldAdd( new TFld("code",_("A/D code"),TFld::Integer,TFld::NoWrite|TVal::DirRead,"",TSYS::int2str(EVAL_INT).c_str(),"","",3) );
-    //---- Analog output ----
+    //-- Analog output --
     elem_ao.fldAdd( new TFld("value",_("Value %"),TFld::Real,TVal::DirWrite,"",TSYS::real2str(EVAL_REAL).c_str(),"0;100","",1) );
     elem_ao.fldAdd( new TFld("voltage",_("Voltage V"),TFld::Real,TVal::DirWrite,"",TSYS::real2str(EVAL_REAL).c_str(),"-10;10","",2) );
-    //---- Digit input ----
+    //-- Digit input --
     elem_di.fldAdd( new TFld("value",_("Value"),TFld::Boolean,TFld::NoWrite|TVal::DirRead,"",TSYS::int2str(EVAL_BOOL).c_str(),"","",1) );
-    //---- Digit output ----
+    //-- Digit output --
     elem_do.fldAdd( new TFld("value",_("Value"),TFld::Boolean,TVal::DirWrite,"",TSYS::int2str(EVAL_BOOL).c_str(),"","",1) );
-
-    m_init = true;
 }
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
@@ -153,9 +171,9 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
     return new TMdContr(name,daq_db,this);
 }
 
-//======================================================================
-//==== TMdContr 
-//======================================================================
+//*************************************************
+//* TMdContr                                      *
+//*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) : ad_dsc_st(false),
 	::TController(name_c,daq_db,cfgelem), 
 	data_emul(cfg("DATA_EMUL").getBd()), m_addr(cfg("ADDR").getId()), ad_int_mode(cfg("ADMODE").getBd())
@@ -199,9 +217,9 @@ void TMdContr::save( )
 void TMdContr::start_( )
 {
     //- Check inited of Diamond API -
-    if( !mod->initStat() )
-        throw TError(mod->nodePath().c_str(),_("Module no inited!"));
-    
+    //if( !mod->initStat() )
+    //    throw TError(mod->nodePath().c_str(),_("Module no inited!"));
+
     //-- Create DSC task --
     pthread_attr_t pthr_attr;
     pthread_attr_init(&pthr_attr);
@@ -301,21 +319,23 @@ void *TMdContr::DSCTask( void *param )
 	if(!cntr.dataEmul())
 	{
     	    //- Init DSCAD -
-	    if( dscInit( DSC_VERSION ) != DE_NONE )
+	    cntr.owner().drvInit();
+	    /*if( cntr.ad_int_mode && dscInit( DSC_VERSION ) != DE_NONE )	//!!!! Multithread DSCAD bug
 	    {
     		dscGetLastError(&errorParams);
-    		throw TError(mod->nodePath().c_str(),_("dscInit error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
-	    }
+    		throw TError(mod->nodePath().c_str(),_("dscInit error: %s %s"),
+		    dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
+	    }*/
 	    //- Init Board -
 	    DSCCB dsccb;
 	    dsccb.base_address = cntr.m_addr;	    
-	    dsccb.int_level = cntr.cfg("INT").getI();		    
+	    dsccb.int_level = cntr.cfg("INT").getI();
 	    if(dscInitBoard(cntr.cfg("BOARD").getI(), &dsccb, &dscb)!= DE_NONE)
 	    {
 		dscGetLastError(&errorParams);
-		throw TError(cntr.nodePath().c_str(),_("dscInit error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
+		throw TError(cntr.nodePath().c_str(),_("dscInitBoard %d(%xh) error: %s %s"),
+		    cntr.cfg("BOARD").getI(),cntr.m_addr,dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
 	    }
-	
     	    //- Set DIO config -
 	    BYTE cfg_byte = cntr.cfg("DIO_CFG").getI()|0x80;
 	    if( (result = dscDIOSetConfig(dscb, &cfg_byte)) != DE_NONE)
@@ -323,7 +343,6 @@ void *TMdContr::DSCTask( void *param )
 		dscGetLastError(&errorParams);
 		throw TError(cntr.nodePath().c_str(),_("dscDIOSetConfig error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
 	    }
-	
 	    //- Init AD acquisition -
 	    dscadsettings.range = cntr.cfg("ADRANGE").getI();
 	    dscadsettings.polarity = cntr.cfg("ADPOLAR").getI();
@@ -440,11 +459,12 @@ void *TMdContr::AD_DSCTask( void *param )
 	if(!cntr.dataEmul())
 	{
     	    //- Init DSCAD -
-	    if( dscInit( DSC_VERSION ) != DE_NONE )
+	    cntr.owner().drvInit();
+	    /*if( cntr.ad_int_mode && dscInit( DSC_VERSION ) != DE_NONE )	//!!!! Multithread DSCAD bug
 	    {
     		dscGetLastError(&errorParams);
     		throw TError(mod->nodePath().c_str(),_("dscInit error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
-	    }   	 
+	    }*/  	 
 	    //- Init Board -
 	    DSCCB dsccb;
 	    dsccb.base_address = cntr.m_addr;

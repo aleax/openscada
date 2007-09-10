@@ -320,9 +320,9 @@ void *TSocketIn::Task(void *sock_in)
     TSocketIn *sock = (TSocketIn *)sock_in;
     AutoHD<TProtocolIn> prot_in;
 
-#if OSC_DEBUG
-    mess_debug(sock->nodePath().c_str(),_("Thread <%d> started!"),getpid());
-#endif	
+//#if OSC_DEBUG
+//    mess_debug(sock->nodePath().c_str(),_("Thread <%d> started!"),gettid());
+//#endif	
     
     pthread_t      th;
     pthread_attr_t pthr_attr;

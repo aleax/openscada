@@ -42,9 +42,9 @@ using std::vector;
 namespace Diamond
 {
 
-//======================================================================
-//==== TMdPrm 
-//======================================================================
+//*************************************************
+//* TMdPrm                                        *
+//*************************************************
 class TMdContr;
 
 class TMdPrm : public TParamContr
@@ -82,9 +82,11 @@ class TMdPrm : public TParamContr
 	};
 };
 
-//======================================================================
-//==== TMdContr 
-//======================================================================
+//*************************************************
+//* TMdContr                                      *
+//*************************************************
+class TTpContr;
+
 class TMdContr: public TController
 {
     public:
@@ -114,6 +116,8 @@ class TMdContr: public TController
 	void start_( );
 	void stop_( );
 
+	TTpContr &owner()       { return (TTpContr&)TController::owner(); }
+
     protected:
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	bool cfgChange( TCfg &cfg );
@@ -135,9 +139,9 @@ class TMdContr: public TController
 		dsc_st, endrun_req_dsc;
 };
 
-//======================================================================
-//==== TTpContr 
-//======================================================================
+//*************************************************
+//* TTpContr                                      *
+//*************************************************
 class TTpContr: public TTipDAQ
 {
     public:
@@ -146,14 +150,14 @@ class TTpContr: public TTipDAQ
 	
 	void postEnable( int flag );
 	
-	bool initStat() { return m_init; }
+	void drvInit( );
     
 	TController *ContrAttach( const string &name, const string &daq_db );
 	
-	TElem &elemAI() { return elem_ai; }
-	TElem &elemAO() { return elem_ao; }
-	TElem &elemDI() { return elem_di; }
-	TElem &elemDO() { return elem_do; }
+	TElem &elemAI( )	{ return elem_ai; }
+	TElem &elemAO( )	{ return elem_ao; }
+	TElem &elemDI( ) 	{ return elem_di; }
+	TElem &elemDO( ) 	{ return elem_do; }
 	
     private:
 	bool	m_init;	
@@ -162,6 +166,8 @@ class TTpContr: public TTipDAQ
 	TElem   elem_ao;
 	TElem   elem_di;
 	TElem   elem_do;
+	
+	Res  	drvRes;
 };
 
 extern TTpContr *mod;

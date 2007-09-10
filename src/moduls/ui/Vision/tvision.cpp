@@ -401,11 +401,11 @@ void TVision::cntrCmdProc( XMLNode *opt )
 		return;
             }
 	    c_el.cfgViewAll(false);
-            if( col == "name" )    	c_el.cfg("NAME").setS(opt->text());
-            else if( col == "transp" )  c_el.cfg("TRANSP").setS(opt->text());
-            else if( col == "addr" )    c_el.cfg("ADDR").setS(opt->text());
-            else if( col == "user" )    c_el.cfg("USER").setS(opt->text());
-            else if( col == "pass" )    c_el.cfg("PASS").setS(opt->text());
+            if( col == "name" )    	c_el.cfg("NAME").setS(opt->text(),true);
+            else if( col == "transp" )  c_el.cfg("TRANSP").setS(opt->text(),true);
+            else if( col == "addr" )    c_el.cfg("ADDR").setS(opt->text(),true);
+            else if( col == "user" )    c_el.cfg("USER").setS(opt->text(),true);
+            else if( col == "pass" )    c_el.cfg("PASS").setS(opt->text(),true);
 	    SYS->db().at().dataSet(extTranspBD(),nodePath()+"ExtTansp/",c_el);
         }
     }

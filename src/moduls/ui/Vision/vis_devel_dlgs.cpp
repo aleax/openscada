@@ -63,11 +63,12 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     tab_lay->setMargin(5);
     wdg_tabs = new QTabWidget(this);
     tab_lay->addWidget(wdg_tabs);
+    connect(wdg_tabs, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
     
     //- Add tab 'Widget' -
     //--------------------
     wdg_tabs->addTab(new QWidget,_("Widgets library"));    
-    QWidget *tab_w = wdg_tabs->widget(0); 
+    QWidget *tab_w = wdg_tabs->widget(0);     
     
     dlg_lay = new QGridLayout(tab_w);
     dlg_lay->setMargin(9);
@@ -398,10 +399,27 @@ void LibProjProp::showDlg( const string &iit, bool reload )
     //- Mime data page -
     gnd=TCntrNode::ctrId(root,"/mime",true);
     wdg_tabs->setTabEnabled(1,gnd);
-    if( gnd )
+    if( gnd )	wdg_tabs->setTabText(1,gnd->attr("dscr").c_str());
+
+    is_modif = false;
+
+    //- Show dialog -
+    show();
+    raise();
+    activateWindow();
+
+    if( !reload ) wdg_tabs->setCurrentIndex(0);
+
+    show_init = false;
+}
+
+void LibProjProp::tabChanged( int itb )
+{
+    if( itb == 1 )
     {
-    	wdg_tabs->setTabText(1,gnd->attr("dscr").c_str());
+	show_init = true;
     	//- Load mime data -
+	XMLNode req("get");
     	req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/mime/mime",TSYS::PathEl));
     	if( !owner()->cntrIfCmd(req) )
 	{
@@ -432,18 +450,8 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    }
 	    mimeDataTable->resizeColumnsToContents();
 	}
+	show_init = false;
     }
-
-    is_modif = false;
-
-    //- Show dialog -
-    show();
-    raise();
-    activateWindow();
-
-    if( !reload ) wdg_tabs->setCurrentIndex(0);
-
-    show_init = false;
 }
 
 void LibProjProp::selectIco( )
@@ -559,8 +567,8 @@ void LibProjProp::addMimeData( )
     req.setAttr("path",ed_it+"/"+TSYS::strEncode("/mime/mime",TSYS::PathEl));    
     if( owner()->cntrIfCmd(req) )
 	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
-	
-    showDlg(ed_it,true);
+
+    tabChanged(1);
 }
 
 void LibProjProp::delMimeData( )
@@ -577,8 +585,8 @@ void LibProjProp::delMimeData( )
 	setAttr("key_id",mimeDataTable->item(row,0)->text().toAscii().data());
     if( owner()->cntrIfCmd(req) )
 	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
-	
-    showDlg(ed_it,true);
+
+    tabChanged(1);	
 }
 
 void LibProjProp::loadMimeData( )
@@ -605,8 +613,8 @@ void LibProjProp::loadMimeData( )
 	setText(TSYS::strEncode(string(data.data(),data.size()),TSYS::base64));
     if( owner()->cntrIfCmd(req) )
 	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
-    
-    showDlg(ed_it,true);
+
+    tabChanged(1);    
 }
 
 void LibProjProp::unloadMimeData( )
@@ -653,8 +661,8 @@ void LibProjProp::mimeDataChange( int row, int column )
 	setText(mimeDataTable->item(row,column)->text().toAscii().data());
     if( owner()->cntrIfCmd(req) )
 	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
-    
-    showDlg(ed_it,true);
+
+    tabChanged(1);
 }
 
 
@@ -676,6 +684,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     tab_lay->setMargin(5);
     wdg_tabs = new QTabWidget(this);
     tab_lay->addWidget(wdg_tabs);
+    connect(wdg_tabs, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
     
     //- Add tab 'Widget' -
     //--------------------
@@ -1120,133 +1129,16 @@ void VisItProp::showDlg( const string &iit, bool reload )
     //- Attributes dialog's page -
     gnd=TCntrNode::ctrId(root,"/attr",true);
     wdg_tabs->setTabEnabled(1,gnd);
-    if( gnd )
-    {
-    	wdg_tabs->setTabText(1,gnd->attr("dscr").c_str());
-	obj_attr->setWdg(iit);
-    }
+    if( gnd )	wdg_tabs->setTabText(1,gnd->attr("dscr").c_str());
 
     gnd=TCntrNode::ctrId(root,"/links",true);
     wdg_tabs->setTabEnabled(3,gnd);
-    if( gnd )
-    {
-        wdg_tabs->setTabText(3,gnd->attr("dscr").c_str());
-        obj_lnk->setWdg(iit);
-    }
+    if( gnd )	wdg_tabs->setTabText(3,gnd->attr("dscr").c_str());
 
     //- Process dialog's page -
     gnd=TCntrNode::ctrId(root,"/proc",true);
     wdg_tabs->setTabEnabled(2,gnd);
-    if( gnd )
-    {
-        wdg_tabs->setTabText(2,gnd->attr("dscr").c_str());
-	
-	//-- Get widgets list --
-	vector<string>	wlst;
-	req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/proc/w_lst",TSYS::PathEl));
-	if( !owner()->cntrIfCmd(req) )
-	    for( int i_w = 0; i_w < req.childSize(); i_w++ )
-		wlst.push_back(req.childGet(i_w)->attr("id"));
-	
-	//--- Fill table ---
-	//--- Delete no present root items ---
-	for( int i_r = 0; i_r < obj_attr_cfg->topLevelItemCount(); i_r++ )
-	{
-	    int i_w;
-	    for( i_w = 0; i_w < wlst.size(); i_w++ )
-		if( obj_attr_cfg->topLevelItem(i_r)->text(0) == wlst[i_w].c_str() ) break;
-	    if( i_w >= wlst.size() )	delete obj_attr_cfg->topLevelItem(i_r--);
-	}
-	
-	//--- Add root items ---
-	for( int i_w = 0; i_w < wlst.size(); i_w++ )
-	{
-	    QTreeWidgetItem *root_it;	
-	    int i_r;
-	    for( i_r = 0; i_r < obj_attr_cfg->topLevelItemCount(); i_r++ )
-		if( obj_attr_cfg->topLevelItem(i_r)->text(0) == wlst[i_w].c_str() ) break;		
-	    if( i_r < obj_attr_cfg->topLevelItemCount() ) root_it = obj_attr_cfg->topLevelItem(i_r);
-	    else root_it = new QTreeWidgetItem(0);
-	
-	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_attr_cfg->objectName().toAscii().data(),TSYS::PathEl))->
-		setAttr("wdg",wlst[i_w].c_str());
-	    if( owner()->cntrIfCmd(req) ) continue;
-	    
-	    root_it->setText(0,wlst[i_w].c_str());
-	    root_it->setData(0,Qt::UserRole,0);
-	    obj_attr_cfg->addTopLevelItem(root_it);
-	    
-	    //--- Delete no presents widget's items ---
-	    for( int i_r = 0; i_r < root_it->childCount(); i_r++ )
-	    {
-		int i_l;
-		for( i_l = 0; i_l < req.childGet(0)->childSize(); i_l++ )
-		    if( root_it->child(i_r)->text(0) == req.childGet("id","id")->childGet(i_l)->text().c_str() )
-			break;
-		if( i_l >= req.childGet(0)->childSize() )	delete root_it->child(i_r--);
-	    }
-	    
-	    //--- Add widget's items ---
-	    for( int i_l = 0; i_l < req.childGet(0)->childSize(); i_l++ )
-	    {
-		QTreeWidgetItem *cur_it;	    
-		int i_r;
-		for( i_r = 0; i_r < root_it->childCount(); i_r++ )
-		    if( root_it->child(i_r)->text(0) == req.childGet("id","id")->childGet(i_l)->text().c_str() ) 
-			break;
-		if( i_r < root_it->childCount() ) cur_it = root_it->child(i_r);
-		else cur_it = new QTreeWidgetItem(root_it);
-		cur_it->setFlags(Qt::ItemIsEnabled|Qt::ItemIsEditable|Qt::ItemIsSelectable);
-		cur_it->setText(0,req.childGet("id","id")->childGet(i_l)->text().c_str());
-		cur_it->setData(0,Qt::UserRole,cur_it->text(0));
-		cur_it->setText(1,req.childGet("id","name")->childGet(i_l)->text().c_str());
- 		cur_it->setData(2,Qt::DisplayRole,atoi(req.childGet("id","type")->childGet(i_l)->text().c_str()));
-		cur_it->setText(3,req.childGet("id","wa")->childGet(i_l)->text().c_str());
- 		cur_it->setData(4,Qt::DisplayRole,(bool)atoi(req.childGet("id","proc")->childGet(i_l)->text().c_str()));
- 		cur_it->setData(5,Qt::DisplayRole,atoi(req.childGet("id","cfg")->childGet(i_l)->text().c_str()));
- 		cur_it->setText(6,req.childGet("id","cfgtmpl")->childGet(i_l)->text().c_str());
-	    }
-	}
-	//--- Load types and configs ---
-	QStringList	atypes;
-	req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/proc/tp_ls",TSYS::PathEl));
-	if( !owner()->cntrIfCmd(req) )
-	    for( int i_el = 0; i_el < req.childSize(); i_el++ )
-		atypes.push_back( (req.childGet(i_el)->text()+"|"+req.childGet(i_el)->attr("id")).c_str() );
-	obj_attr_cfg->topLevelItem(0)->setData(0,Qt::UserRole,atypes);
-	atypes.clear();
-	req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/proc/lnk_ls",TSYS::PathEl));
-	if( !owner()->cntrIfCmd(req) )
-	    for( int i_el = 0; i_el < req.childSize(); i_el++ )
-		atypes.push_back( (req.childGet(i_el)->text()+"|"+req.childGet(i_el)->attr("id")).c_str() );
-	obj_attr_cfg->topLevelItem(0)->setData(0,Qt::UserRole+1,atypes);
-
-        //--- Calc language ---
-	gnd=TCntrNode::ctrId(root,proc_lang->objectName().toAscii().data(),true);
-	proc_lang->setEnabled(gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR);
-	if( gnd )
-	{
-	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(proc_lang->objectName().toAscii().data(),TSYS::PathEl));
-	    if( !owner()->cntrIfCmd(req) ) sval = req.text().c_str();
-	    //---- Get combo list ----
-	    proc_lang->clear();
-	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(gnd->attr("select"),TSYS::PathEl));
-	    if( !owner()->cntrIfCmd(req) )
-		for( int i_el = 0; i_el < req.childSize(); i_el++ )
-		    proc_lang->addItem(req.childGet(i_el)->text().c_str());
-	    int cur_el = proc_lang->findText(sval.c_str());
-	    if( cur_el < 0 ) proc_lang->addItem(sval.c_str());
-	    proc_lang->setCurrentIndex(proc_lang->findText(sval.c_str()));
-	}
-	//--- Calc procedure ---
- 	gnd=TCntrNode::ctrId(root,proc_text->objectName().toAscii().data(),true);
-	proc_text->setEnabled(gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR);
-	if( gnd )
-	{
-	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(proc_text->objectName().toAscii().data(),TSYS::PathEl));
-	    if( !owner()->cntrIfCmd(req) )	proc_text->setText(req.text().c_str());
-	}                                                                                                     
-    }
+    if( gnd )	wdg_tabs->setTabText(2,gnd->attr("dscr").c_str());
     is_modif = false;
 
     //- Show dialog -
@@ -1256,6 +1148,143 @@ void VisItProp::showDlg( const string &iit, bool reload )
     if( !reload ) wdg_tabs->setCurrentIndex(0);
     
     show_init = false;
+}
+
+void VisItProp::tabChanged( int itb )
+{    
+    switch(itb)
+    {
+	case 1:	obj_attr->setWdg(ed_it);break;
+	case 2:
+	{
+	    show_init = true;
+
+	    XMLNode req("get");
+	    
+	    //-- Get node information --
+	    XMLNode info_req("info");
+	    info_req.setAttr("path",ed_it);
+	    if( owner()->cntrIfCmd(info_req) )
+	    {
+		mod->postMess( mod->nodePath().c_str(),
+			QString(_("Get node '%1' information error.")).arg(ed_it.c_str()),TVision::Error, this );
+		return;
+	    }
+    
+	    string sval;
+	    XMLNode *root, *gnd;    
+	    root = info_req.childGet(0);     
+
+	    //-- Get widgets list --
+	    vector<string>	wlst;
+	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/proc/w_lst",TSYS::PathEl));
+	    if( !owner()->cntrIfCmd(req) )
+		for( int i_w = 0; i_w < req.childSize(); i_w++ )
+		    wlst.push_back(req.childGet(i_w)->attr("id"));
+	
+	    //--- Fill table ---
+	    //--- Delete no present root items ---
+	    for( int i_r = 0; i_r < obj_attr_cfg->topLevelItemCount(); i_r++ )
+	    {
+		int i_w;
+		for( i_w = 0; i_w < wlst.size(); i_w++ )
+		    if( obj_attr_cfg->topLevelItem(i_r)->text(0) == wlst[i_w].c_str() ) break;
+		if( i_w >= wlst.size() )	delete obj_attr_cfg->topLevelItem(i_r--);
+	    }
+	
+	    //--- Add root items ---
+	    for( int i_w = 0; i_w < wlst.size(); i_w++ )
+	    {
+		QTreeWidgetItem *root_it;	
+		int i_r;
+		for( i_r = 0; i_r < obj_attr_cfg->topLevelItemCount(); i_r++ )
+		    if( obj_attr_cfg->topLevelItem(i_r)->text(0) == wlst[i_w].c_str() ) break;		
+		if( i_r < obj_attr_cfg->topLevelItemCount() ) root_it = obj_attr_cfg->topLevelItem(i_r);
+		else root_it = new QTreeWidgetItem(0);
+	
+		req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_attr_cfg->objectName().toAscii().data(),TSYS::PathEl))->
+		    setAttr("wdg",wlst[i_w].c_str());
+		if( owner()->cntrIfCmd(req) ) continue;
+	    
+		root_it->setText(0,wlst[i_w].c_str());
+		root_it->setData(0,Qt::UserRole,0);
+		obj_attr_cfg->addTopLevelItem(root_it);
+	    
+		//--- Delete no presents widget's items ---
+		for( int i_r = 0; i_r < root_it->childCount(); i_r++ )
+		{
+		    int i_l;
+		    for( i_l = 0; i_l < req.childGet(0)->childSize(); i_l++ )
+			if( root_it->child(i_r)->text(0) == req.childGet("id","id")->childGet(i_l)->text().c_str() )
+			    break;
+		    if( i_l >= req.childGet(0)->childSize() )	delete root_it->child(i_r--);
+		}
+	    
+		//--- Add widget's items ---
+		for( int i_l = 0; i_l < req.childGet(0)->childSize(); i_l++ )
+		{
+		    QTreeWidgetItem *cur_it;	    
+		    int i_r;
+		    for( i_r = 0; i_r < root_it->childCount(); i_r++ )
+			if( root_it->child(i_r)->text(0) == req.childGet("id","id")->childGet(i_l)->text().c_str() ) 
+			    break;
+		    if( i_r < root_it->childCount() ) cur_it = root_it->child(i_r);
+		    else cur_it = new QTreeWidgetItem(root_it);
+		    cur_it->setFlags(Qt::ItemIsEnabled|Qt::ItemIsEditable|Qt::ItemIsSelectable);
+		    cur_it->setText(0,req.childGet("id","id")->childGet(i_l)->text().c_str());
+		    cur_it->setData(0,Qt::UserRole,cur_it->text(0));
+		    cur_it->setText(1,req.childGet("id","name")->childGet(i_l)->text().c_str());
+ 		    cur_it->setData(2,Qt::DisplayRole,atoi(req.childGet("id","type")->childGet(i_l)->text().c_str()));
+		    cur_it->setText(3,req.childGet("id","wa")->childGet(i_l)->text().c_str());
+ 		    cur_it->setData(4,Qt::DisplayRole,(bool)atoi(req.childGet("id","proc")->childGet(i_l)->text().c_str()));
+ 		    cur_it->setData(5,Qt::DisplayRole,atoi(req.childGet("id","cfg")->childGet(i_l)->text().c_str()));
+ 		    cur_it->setText(6,req.childGet("id","cfgtmpl")->childGet(i_l)->text().c_str());
+		}
+	    }
+	    //--- Load types and configs ---
+	    QStringList	atypes;
+	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/proc/tp_ls",TSYS::PathEl));
+	    if( !owner()->cntrIfCmd(req) )
+		for( int i_el = 0; i_el < req.childSize(); i_el++ )
+		    atypes.push_back( (req.childGet(i_el)->text()+"|"+req.childGet(i_el)->attr("id")).c_str() );
+	    obj_attr_cfg->topLevelItem(0)->setData(0,Qt::UserRole,atypes);
+	    atypes.clear();
+	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/proc/lnk_ls",TSYS::PathEl));
+	    if( !owner()->cntrIfCmd(req) )
+		for( int i_el = 0; i_el < req.childSize(); i_el++ )
+		    atypes.push_back( (req.childGet(i_el)->text()+"|"+req.childGet(i_el)->attr("id")).c_str() );
+	    obj_attr_cfg->topLevelItem(0)->setData(0,Qt::UserRole+1,atypes);
+
+    	    //--- Calc language ---
+	    gnd = TCntrNode::ctrId(root,proc_lang->objectName().toAscii().data(),true);
+	    proc_lang->setEnabled(gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR);
+	    if( gnd )
+	    {
+		req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(proc_lang->objectName().toAscii().data(),TSYS::PathEl));
+		if( !owner()->cntrIfCmd(req) ) sval = req.text().c_str();
+		//---- Get combo list ----
+		proc_lang->clear();
+		req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(gnd->attr("select"),TSYS::PathEl));
+		if( !owner()->cntrIfCmd(req) )
+		    for( int i_el = 0; i_el < req.childSize(); i_el++ )
+			proc_lang->addItem(req.childGet(i_el)->text().c_str());
+		int cur_el = proc_lang->findText(sval.c_str());
+		if( cur_el < 0 ) proc_lang->addItem(sval.c_str());
+		proc_lang->setCurrentIndex(proc_lang->findText(sval.c_str()));
+	    }
+	    //--- Calc procedure ---
+ 	    gnd=TCntrNode::ctrId(root,proc_text->objectName().toAscii().data(),true);
+	    proc_text->setEnabled(gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR);
+	    if( gnd )
+	    {
+		req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(proc_text->objectName().toAscii().data(),TSYS::PathEl));
+		if( !owner()->cntrIfCmd(req) )	proc_text->setText(req.text().c_str());
+	    }
+
+	    show_init = false;
+	}
+	case 3:	obj_lnk->setWdg(ed_it);	break;
+    }
 }
 
 void VisItProp::selectParent( )
@@ -1423,7 +1452,7 @@ void VisItProp::addAttr( )
 	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
     else 
     {
-	showDlg(ed_it,true);    
+	tabChanged(2);
 	is_modif = true;
     }
 }
@@ -1482,14 +1511,23 @@ void VisItProp::changeAttr(QTreeWidgetItem *it, int col)
 	setAttr("col",scol.toAscii().data())->setText(sval.toAscii().data());
     if( owner()->cntrIfCmd(req) )
     {
-	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
-	showDlg(ed_it,true);
+	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);	
+	if( scol == "id" )
+	{
+	    show_init = true;	
+	    it->setText(0,it->data(0,Qt::UserRole).toString());
+	    show_init = false;
+	}	    
+	tabChanged(2);
     }
     else     
     {
-	show_init = true;
-	if( scol == "id" )	it->setData(0,Qt::UserRole,it->text(0));
-	show_init = false;
+	if( scol == "id" )
+	{
+	    show_init = true;
+	    it->setData(0,Qt::UserRole,it->text(0));
+	    show_init = false;
+	}
 	
 	is_modif = true;
     }

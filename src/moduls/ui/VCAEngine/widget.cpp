@@ -217,7 +217,8 @@ void Widget::inheritAttr( const string &iattr )
     if( !iattr.empty() && parent().at().attrPresent(iattr) )
 	ls.push_back(iattr);
     else parent().at().attrList(ls);
-    
+
+    AutoHD<Attr> attr, pattr;
     for(int i_l = 0; i_l < ls.size(); i_l++)
     {
         if( !attrPresent(ls[i_l]) )
@@ -230,14 +231,22 @@ void Widget::inheritAttr( const string &iattr )
         }
 	if( ls[i_l]!="id" && ls[i_l]!="path" && !attrAt(ls[i_l]).at().modif() )
 	{
-	    attrAt(ls[i_l]).at().setFlgSelf(parent().at().attrAt(ls[i_l]).at().flgSelf());	
-	    attrAt(ls[i_l]).at().setS(parent().at().attrAt(ls[i_l]).at().getS(),true);
+	    attr  = attrAt(ls[i_l]);
+	    pattr = parent().at().attrAt(ls[i_l]);
+	    attr.at().setFlgSelf(pattr.at().flgSelf());
+	    switch(attr.at().type())
+	    {
+		case TFld::Boolean:	attr.at().setB(pattr.at().getB(),true);	break;
+		case TFld::Integer:	attr.at().setI(pattr.at().getI(),true);	break;
+		case TFld::Real:	attr.at().setR(pattr.at().getR(),true);	break;
+		case TFld::String:	attr.at().setS(pattr.at().getS(),true);	break;
+	    }	    
 	    //- No inherit calc flag for links -
 	    if( isLink() && !parent().at().isLink() )
-		attrAt(ls[i_l]).at().setFlgSelf((Attr::SelfAttrFlgs)(attrAt(ls[i_l]).at().flgSelf()&(~Attr::ProcAttr)));
-	    attrAt(ls[i_l]).at().setCfgTempl(parent().at().attrAt(ls[i_l]).at().cfgTempl());
-	    attrAt(ls[i_l]).at().setCfgVal(parent().at().attrAt(ls[i_l]).at().cfgVal());
-	    attrAt(ls[i_l]).at().setModif(0);
+		attr.at().setFlgSelf((Attr::SelfAttrFlgs)(attr.at().flgSelf()&(~Attr::ProcAttr)));
+	    attr.at().setCfgTempl(pattr.at().cfgTempl());
+	    attr.at().setCfgVal(pattr.at().cfgVal());
+	    attr.at().setModif(0);
 	}
     }
 }
@@ -261,10 +270,11 @@ void Widget::inheritIncl( const string &iwdg )
 
 void Widget::attrAdd( TFld *attr, int pos )
 {
-    if(attrPresent(attr->name()))
+    string anm = attr->name();
+    if(attrPresent(anm))
     {
 	delete attr;
-        throw TError(nodePath().c_str(),_("Attribut %s already present."),attr->name().c_str());
+        throw TError(nodePath().c_str(),_("Attribut %s already present."),anm.c_str());
     }
     attr_cfg.fldAdd(attr,pos);
 }
@@ -278,7 +288,7 @@ void Widget::attrDel( const string &attr )
 bool Widget::attrChange( Attr &cfg, void *prev )
 {
     //- Process Active attribute's mode
-    if( cfg.flgGlob()&Attr::Active )
+    if( cfg.flgGlob()&Attr::Active && prev )
     {
 	if( !parent().freeStat() ) parent().at().attrChange(cfg,prev);
 	if( cfg.owner() == this && cfg.id() == "active" )
@@ -715,7 +725,8 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
 		    if( !custom && sel.find(cfg_val) != 0 ) custom = true;
 		    rez += sel+", ";
 		}
-	    if( !custom ) rez = cfg_val;
+	    if( cfg_val.empty() )	rez = "";
+	    else if( !custom ) 		rez = cfg_val;
 	    
 	    opt->setText(rez);	    
 	}
@@ -1164,14 +1175,6 @@ int Attr::flgGlob()
     return fld().flg();
 }
 
-void Attr::setFlgSelf( SelfAttrFlgs flg )
-{
-    if(self_flg == flg)	return;
-    self_flg = flg;
-    unsigned imdf = owner()->modifVal(*this);
-    m_modif = imdf ? imdf : m_modif+1;
-}
-
 string Attr::getSEL( )
 {
     if( !(fld().flg()&TFld::Selected) )
@@ -1350,7 +1353,7 @@ void Attr::setB( bool val, bool strongPrev )
 
 void Attr::setCfgTempl(const string &vl)
 {
-    if(cfg_tmpl == vl) return;
+    if( cfg_tmpl == vl || !owner()->attrChange(*this,NULL) )	return;
     cfg_tmpl = vl;
     unsigned imdf = owner()->modifVal(*this);
     m_modif = imdf ? imdf : m_modif+1;
@@ -1358,10 +1361,16 @@ void Attr::setCfgTempl(const string &vl)
 
 void Attr::setCfgVal( const string &vl )
 {
-    if( cfg_val == vl )	return;
+    if( cfg_val == vl || !owner()->attrChange(*this,NULL) )	return;
     cfg_val = vl;
     unsigned imdf = owner()->modifVal(*this);
     m_modif = imdf ? imdf : m_modif+1;
 }
 
-
+void Attr::setFlgSelf( SelfAttrFlgs flg )
+{
+    if( self_flg == flg || !owner()->attrChange(*this,NULL) )	return;
+    self_flg = flg;
+    unsigned imdf = owner()->modifVal(*this);
+    m_modif = imdf ? imdf : m_modif+1;
+}

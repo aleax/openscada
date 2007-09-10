@@ -272,16 +272,14 @@ void MBD::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TBD::cntrCmdProc(opt);
-        if(ctrMkNode("area",opt,-1,"/serv",_("DB service")))
-    	    ctrMkNode("comm",opt,-1,"/serv/end_tr",_("Close transaction"),0660);
+	if( commCnt )
+	    ctrMkNode("comm",opt,-1,"/prm/st/end_tr",_("Close openned transaction"),0660);
 	return;
     }
     //- Process command to page -
     string a_path = opt->attr("path");
-    if( a_path == "/serv/end_tr" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )
-    {
-	if( commCnt ) { commCnt = COM_MAX_CNT; sqlReq(""); }
-    }
+    if( a_path == "/prm/st/end_tr" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) && commCnt )
+    { commCnt = COM_MAX_CNT; sqlReq(""); }
     else TBD::cntrCmdProc(opt);			
 }
 
@@ -463,7 +461,8 @@ void MTable::fieldSet( TConfig &cfg )
     
     //- Prepare query -
     string req = "SELECT 1 FROM '"+mod->sqlReqCode(name())+"' "+req_where+";";
-    owner().sqlReq( req, &tbl );
+    try{ owner().sqlReq( req, &tbl ); }
+    catch(TError err)	{ fieldFix(cfg); owner().sqlReq( req ); }
     if( tbl.size() < 2 )
     {
 	//-- Add new record --
@@ -522,13 +521,7 @@ void MTable::fieldSet( TConfig &cfg )
     //- Query -
     //printf("TEST 02: query: <%s>\n",req.c_str());
     try{ owner().sqlReq( req ); }
-    catch(TError err)
-    {
-        //-- Fix fields --
-        fieldFix(cfg);
-        //-- Repeate request --
-        owner().sqlReq( req );
-    }
+    catch(TError err)	{ fieldFix(cfg); owner().sqlReq( req ); }
     //printf("TEST 01b: End from set\n");
 }
 

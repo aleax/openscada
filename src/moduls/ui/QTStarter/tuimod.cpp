@@ -203,9 +203,9 @@ void *TUIMod::Task( void * )
     vector<string> list;
     bool first_ent = true;
 
-#if OSC_DEBUG
-    mess_debug(mod->nodePath().c_str(),_("Thread <%d> started!"),getpid());
-#endif        
+//#if OSC_DEBUG
+//    mess_debug(mod->nodePath().c_str(),_("Thread <%d> started!"),gettid());
+//#endif        
 
     QApplication *QtApp = new QApplication( (int&)SYS->argc,(char **)SYS->argv );
     QtApp->setQuitOnLastWindowClosed(false);

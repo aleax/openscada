@@ -78,6 +78,8 @@ class VisRun : public QMainWindow
 	//Private slots	    
         void quitSt( );				//Full quit OpenSCADA
 
+	void fullScreen( bool vl );		//Full screen toggle
+
 	void about( );				//About at programm
         void aboutQt( );			//About at QT library
 	void enterWhatsThis( );			//What is GUI components
@@ -88,7 +90,11 @@ class VisRun : public QMainWindow
 	//Private attributes
 	//- Menu root items -
 	QMenu 	*mn_file, 			//Menu "File"
+		*mn_view,			//Menu "View"
 		*mn_help;			//Menu "Help"
+
+	//- Actions -
+	QAction *actFullScr;			//Full screen action
 
 	//- Main components -
 	QTimer		*endRunTimer, *updateTimer;

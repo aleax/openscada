@@ -72,11 +72,11 @@ class TCfg
         int    &getId( );
         bool   &getBd( );					
 	
-	void setSEL( const string &val );
-	void setS( const string &val );
-	void setR( double val );
-	void setI( int val );
-	void setB( bool val );
+	void setSEL( const string &val, bool forcView = false );
+	void setS( const string &val, bool forcView = false );
+	void setR( double val, bool forcView = false );
+	void setI( int val, bool forcView = false );
+	void setB( bool val, bool forcView = false );
 	
     private:
 	//Data

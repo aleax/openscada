@@ -68,6 +68,7 @@ class OrigElFigure : public PrWidget
     
     protected:
 	void postEnable( int flag );
+	bool attrChange( Attr &cfg, void *prev );
 };
 
 //*************************************************

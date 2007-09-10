@@ -139,7 +139,18 @@ void OrigElFigure::postEnable( int flag )
 	attrAdd( new TFld("bordClr",_("Border:color"),TFld::String,Attr::Color,"20","#000000","","",24) );
 	attrAdd( new TFld("backgClr",_("Background:color"),TFld::String,Attr::Color,"20","","","",25) );
 	attrAdd( new TFld("backgImg",_("Background:image"),TFld::String,Attr::Image,"20","","","",26) );
-	attrAdd( new TFld("elLst",_("Element's list"),TFld::String,TFld::FullText,"300","","","",27) );
+	attrAdd( new TFld("elLst",_("Element's list"),TFld::String,TFld::FullText|Attr::Active,"300","","","",27) );
+    }
+}
+
+bool OrigElFigure::attrChange( Attr &cfg, void *prev )
+{
+    if( cfg.flgGlob()&Attr::Active && cfg.id() == "elLst" )
+    {
+	//- Parse last attributes list and make point list -
+	//????
+	//- Parse new attributes list and update point's attributes -
+	//????
     }
 }
 
@@ -617,6 +628,7 @@ void OrigBox::postEnable( int flag )
 	attrAdd( new TFld("pgNoOpenProc",_("Page:no open process"),TFld::Boolean,TFld::NoFlag,"","","","",25) );
         attrAdd( new TFld("pgOpenSrc",_("Page:open source"),TFld::String,TFld::NoFlag,"","","","",26) );
         attrAdd( new TFld("pgGrp",_("Page:group"),TFld::String,TFld::NoFlag,"","","","",27) );
+	attrAdd( new TFld("pgFullScr",_("Page:full screen"),TFld::Boolean,TFld::NoFlag,"","","","",28) );
     }
 } 
 

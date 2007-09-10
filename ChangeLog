@@ -1,3 +1,19 @@
+2007-09-10 Roman
+- FIX:/SYS: RPM-specification file codepage is fixed.
+- FIX:/SYS: Default config file DB file name is fixed.
+- !!:/SYS: The source tree version changed to 0.6.0.
+- FIX:/Config: Automatic fields view mechanism fixed.
+- FIX:/Control: A dublicate childs object no deleting is fixed.
+- FIX:/DB/MySQL: Error structured DB filed process is fixed.
+- FIX:/DB/SQLite: Error structured DB filed process is fixed.
+- !:/DAQ/DiamondBoards: Diamond boards driver updated and multiboard bug detected.
+- /UI/VCAEngine, /UI/Vision: Full screen mode support is added.
+- FIX:/UI/VCAEngine: Attributes user configuration inherit is fixed.
+- !!:/UI/Vision: Interactive configuration updating into main dialogs is made.
+- /UI/Vision: Data print by primitive "Diagram" made better.
+- /SYS: Updated Demo DB.
+
+
 2007-08-31 Roman
 - !!!:/DB: Allow tables, into DB, (TBD::allowList()) and get table's structure (TTable::fieldStruct()) 
     functions is added. Support of new functions is added to modules 'SQLite' and 'MySQL'. 

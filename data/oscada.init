@@ -6,7 +6,7 @@
 # description: Open SCADA System server daemon
 #
 # processname: openscada
-# config: /etc/openscada.xml
+# config: /etc/oscada.xml
 
 WITHOUT_RC_COMPAT=1
 

@@ -105,7 +105,8 @@ void TSecurity::usrDel( const string &name, bool complete )
 
 void TSecurity::grpAdd( const string &name, const string &idb )
 {
-    if( !chldPresent(m_grp,name) )	chldAdd(m_grp,new TGroup(name,idb,&grp_el));
+    if( chldPresent(m_grp,name) )	return;
+    chldAdd(m_grp,new TGroup(name,idb,&grp_el));
 }
 
 void TSecurity::grpDel( const string &name, bool complete )

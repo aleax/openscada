@@ -3,7 +3,7 @@
 	DSCUD.H
 	
 	Diamond Systems Corporation Universal Driver
-	Version 5.91
+	Version 5.92
 
 	Copyright (c) Diamond Systems Corporation 2005
 	All Rights Reserved.
@@ -26,11 +26,14 @@
 	EMERALD-OPTO
 	MERCURY
 	GARNET-MM
+	GPIO11
+	GPIO12
 	IR-104
 	ONYX-MM
 	ONYX-MM-DIO
 	OPAL-MM
 	PEARL-MM
+	POSEIDON
 	PROMETHEUS
 	QUARTZ-MM
 	RUBY-MM
@@ -161,43 +164,47 @@ typedef void (*DSCUserInterruptFunction) (void* parameter);
 // Board Types //
 ////////////// */
 
-#define DSC_DMM16    0		
-#define DSC_RMM      1
-#define DSC_TMM      2
-#define DSC_OPMM     3
-#define DSC_DMM      4
-#define DSC_SMM      5
-#define DSC_GMM      6
-#define DSC_QMM      7
-#define DSC_ZMM      8
-#define DSC_PMM      9
-#define DSC_OMM      10
-#define DSC_RMM416   11
-#define DSC_DMM32    12
-#define DSC_DMM32AT  12
-#define DSC_EMMDIO   13
-#define DSC_RMM1612  14
-#define DSC_DMMAT    15
-#define DSC_DMM16AT  16
-#define DSC_IR104    17
-#define DSC_EMM8	 18
-#define DSC_PROM	 19
-#define DSC_HERCEBX  20
-#define DSC_CPT      21
-#define DSC_DMM48    22
-#define DSC_DMM48AT  22
-#define DSC_OMMDIO	 23
-#define DSC_DIO82C55 24   
-#define DSC_MRC      24   
-#define DSC_EMMOPTO  24
-#define DSC_ATHENA   25
-#define DSC_METIS    26
-#define DSC_DMM32X   27
-#define DSC_DMM32XAT 27  
-#define DSC_ELEKTRA  28  
-#define DSC_TEST     126
-#define DSC_RAW      127
-#define DSC_DRVR     255
+#define DSC_DMM16		0			
+#define DSC_RMM			1
+#define DSC_TMM			2
+#define DSC_OPMM		3
+#define DSC_DMM			4
+#define DSC_SMM			5
+#define DSC_GMM			6
+#define DSC_QMM			7
+#define DSC_ZMM			8
+#define DSC_PMM			9
+#define DSC_OMM			10
+#define DSC_RMM416		11
+#define DSC_DMM32		12
+#define DSC_DMM32AT		12
+#define DSC_EMMDIO		13
+#define DSC_RMM1612		14
+#define DSC_DMMAT		15
+#define DSC_DMM16AT		16
+#define DSC_IR104		17
+#define DSC_EMM8		18
+#define DSC_PROM		19
+#define DSC_HERCEBX		20
+#define DSC_CPT			21
+#define DSC_DMM48		22
+#define DSC_DMM48AT		22
+#define DSC_OMMDIO		23
+#define DSC_DIO82C55	24   
+#define DSC_MRC			24   
+#define DSC_EMMOPTO		24
+#define DSC_ATHENA		25
+#define DSC_METIS		26
+#define DSC_DMM32X		27
+#define DSC_DMM32XAT	27  
+#define DSC_ELEKTRA		28  
+#define DSC_GPIO11_9513	29
+#define DSC_GPIO11_DIO	30	
+#define DSC_GPIO21      31
+#define DSC_PSD			32
+#define DSC_TEST		126
+#define DSC_RAW			127
+#define DSC_DRVR		255
 
 /*//////////////////////
 // A/D Mode Constants //
@@ -274,7 +281,7 @@ typedef void (*DSCUserInterruptFunction) (void* parameter);
 //	Hercules Watchdog Option Constants	//
 /////////////////////////////////////// */
 
-#define HERC_WD_TRIGGER_NMI             0x10
+#define HERC_WD_TRIGGER_SMI             0x10
 #define HERC_WD_TRIGGER_RESET			0x08
 #define HERC_WD_WDI_ASSERT_FALLING_EDGE 0x02
 #define HERC_WD_WDO_TRIGGERED_EARLY     0x04
@@ -297,6 +304,7 @@ typedef void (*DSCUserInterruptFunction) (void* parameter);
 #define ELEKTRA_WD_TRIGGER_SMI            0x20
 #define ELEKTRA_WD_ENABLE_WDO             0x40
 #define ELEKTRA_WD_ENABLE_WDI             0x80
+
 
 /*/////////////////////////////////////////////////////
 // Counter Defines Types for dscCounterSetRateSingle //
@@ -570,7 +578,7 @@ typedef struct
 	BYTE polarity;        /* INPUT: 0 = bipolar, 1 = unipolar */
 	BYTE load_cal;        /* INPUT: 0 = do not load calibration values, 1 = load */
 	BYTE scan_interval;   /* For DMM32, Hercules, DMM48 only. Use constants SCAN_INTERVAL_X */
-	BYTE addiff;		  /* For HERCULES only, 0 = SINGLE_ENDED or 1 = DIFFERENTIAL */
+	BYTE addiff;		  /* For Hercules and Elektra only, 0 = SINGLE_ENDED or 1 = DIFFERENTIAL */
 	
 } DSCADSETTINGS;
 
@@ -1181,9 +1189,9 @@ BYTE DSCUDAPICALL dscEMMDIOGetState(DSCB board, DSCEMMDIO* state);
 BYTE DSCUDAPICALL dscEMMDIOSetState(DSCB board, DSCEMMDIO* state);
 BYTE DSCUDAPICALL dscEMMDIOResetInt(DSCB board, DSCEMMDIORESETINT* edge);
 
-/*////////////////////
-// DMM32X Functions //
-/////////////////// */
+/*////////////////////////////////
+// DMM32X and POSEIDON/PSD Functions //
+//////////////////////////////// */
 
 BYTE DSCUDAPICALL dscEnhancedFeaturesEnable(DSCB board, BOOL enable);
 BYTE DSCUDAPICALL dscPICOutp(DSCB board, DWORD address, BYTE value);
@@ -1197,15 +1205,25 @@ BYTE DSCUDAPICALL dscWGCommand(DSCB board, DWORD cmd);
 BYTE DSCUDAPICALL dscWGConfigSet(DSCB board, DSCWGCONFIG *config);
 BYTE DSCUDAPICALL dscWGBufferSet(DSCB board, DWORD address, DSCDACODE value, DWORD channel, BOOL simul);
 
-/*/////////////////////
-// QMM SECTION BELOW //
-//////////////////// */
 
-/* QMM counter group */
+/*///////////////////////////
+// GPIO 11 and 21 Functions //
+////////////////////////////*/
+
+BYTE DSCUDAPICALL dscInterruptControl(DSCB board, BYTE* config_byte);
+
+
+/*//////////////////////////////
+// QMM and 9513 SECTION BELOW //
+///////////////////////////// */
+
+/* QMM and 9513 counter group */
 #define QMM_COUNTER_GROUP_1             1
 #define QMM_COUNTER_GROUP_2             2
+#define CT9513_COUNTER_GROUP_1          1
+#define CT9513_COUNTER_GROUP_2          2
 
-/* QMM fout/counter source */
+/* QMM and 9513 fout/counter source */
 #define QMM_SOURCE_E1_TC_NM1            0
 #define QMM_SOURCE_SRC1                 1
 #define QMM_SOURCE_SRC2                 2
@@ -1222,14 +1240,34 @@ BYTE DSCUDAPICALL dscWGBufferSet(DSCB board, DWORD address, DSCDACODE value, DWO
 #define QMM_SOURCE_F3_40KHZ             13
 #define QMM_SOURCE_F4_4KHZ              14
 #define QMM_SOURCE_F5_400HZ             15
+#define CT9513_SOURCE_E1_TC_NM1         0
+#define CT9513_SOURCE_SRC1              1
+#define CT9513_SOURCE_SRC2              2
+#define CT9513_SOURCE_SRC3              3
+#define CT9513_SOURCE_SRC4              4
+#define CT9513_SOURCE_SRC5              5
+#define CT9513_SOURCE_GATE1             6
+#define CT9513_SOURCE_GATE2             7
+#define CT9513_SOURCE_GATE3             8
+#define CT9513_SOURCE_GATE4             9
+#define CT9513_SOURCE_GATE5             10
+#define CT9513_SOURCE_F1_4MHZ           11
+#define CT9513_SOURCE_F2_400KHZ         12
+#define CT9513_SOURCE_F3_40KHZ          13
+#define CT9513_SOURCE_F4_4KHZ           14
+#define CT9513_SOURCE_F5_400HZ          15
 
-/* QMM time of day mode */
+/* QMM and 9513 time of day mode */
 #define QMM_TOD_DISABLED                0
 #define QMM_TOD_DIVIDE_BY_5             1
 #define QMM_TOD_DIVIDE_BY_6             2
 #define QMM_TOD_DIVIDE_BY_10            3
+#define CT9513_TOD_DISABLED             0
+#define CT9513_TOD_DIVIDE_BY_5          1
+#define CT9513_TOD_DIVIDE_BY_6          2
+#define CT9513_TOD_DIVIDE_BY_10         3
 
-/* QMM gating control */
+/* QMM and 9513 gating control */
 #define QMM_NO_GATING                   0
 #define QMM_ACTIVE_HIGH_TC_NM1          1
 #define QMM_ACTIVE_HIGH_LEVEL_GATE_NP1  2
@@ -1238,37 +1276,66 @@ BYTE DSCUDAPICALL dscWGBufferSet(DSCB board, DWORD address, DSCDACODE value, DWO
 #define QMM_ACTIVE_LOW_LEVEL_GATE_N     5
 #define QMM_ACTIVE_HIGH_EDGE_GATE_N     6
 #define QMM_ACTIVE_LOW_EDGE_GATE_N      7
+#define CT9513_NO_GATING                   0
+#define CT9513_ACTIVE_HIGH_TC_NM1          1
+#define CT9513_ACTIVE_HIGH_LEVEL_GATE_NP1  2
+#define CT9513_ACTIVE_HIGH_LEVEL_GATE_NM1  3
+#define CT9513_ACTIVE_HIGH_LEVEL_GATE_N    4
+#define CT9513_ACTIVE_LOW_LEVEL_GATE_N     5
+#define CT9513_ACTIVE_HIGH_EDGE_GATE_N     6
+#define CT9513_ACTIVE_LOW_EDGE_GATE_N      7
 
-/* QMM output control */
-#define QMM_INACTIVE_OUTPUT_LOW         0
-#define QMM_ACTIVE_HIGH_PULSE_ON_TC     1
-#define QMM_TOGGLE_ON_TC                2
-#define QMM_INACTIVE_OUTPUT_HIGH        4
-#define QMM_ACTIVE_LOW_PULSE_ON_TC      5
+/* QMM and 9513 output control */
+#define QMM_INACTIVE_OUTPUT_LOW            0
+#define QMM_ACTIVE_HIGH_PULSE_ON_TC        1
+#define QMM_TOGGLE_ON_TC                   2
+#define QMM_INACTIVE_OUTPUT_HIGH           4
+#define QMM_ACTIVE_LOW_PULSE_ON_TC         5
+#define CT9513_INACTIVE_OUTPUT_LOW         0
+#define CT9513_ACTIVE_HIGH_PULSE_ON_TC     1
+#define CT9513_TOGGLE_ON_TC                2
+#define CT9513_INACTIVE_OUTPUT_HIGH        4
+#define CT9513_ACTIVE_LOW_PULSE_ON_TC      5
 
-/* QMM counter actions */
-#define QMM_ACTION_NONE                 0
-#define QMM_ACTION_ARM                  1
-#define QMM_ACTION_LOAD                 2
-#define QMM_ACTION_LOAD_AND_ARM         3
-#define QMM_ACTION_DISARM_AND_SAVE      4
-#define QMM_ACTION_SAVE                 5
-#define QMM_ACTION_DISARM               6
+/* QMM and 9513 counter actions */
+#define QMM_ACTION_NONE					   0
+#define QMM_ACTION_ARM					   1
+#define QMM_ACTION_LOAD					   2
+#define QMM_ACTION_LOAD_AND_ARM			   3
+#define QMM_ACTION_DISARM_AND_SAVE		   4
+#define QMM_ACTION_SAVE                    5
+#define QMM_ACTION_DISARM                  6
+#define CT9513_ACTION_NONE                 0
+#define CT9513_ACTION_ARM                  1
+#define CT9513_ACTION_LOAD                 2
+#define CT9513_ACTION_LOAD_AND_ARM         3
+#define CT9513_ACTION_DISARM_AND_SAVE      4
+#define CT9513_ACTION_SAVE                 5
+#define CT9513_ACTION_DISARM               6
 
-/* QMM special counter actions */
-#define QMM_SPECIAL_CLEAR_TOGGLE_OUTPUT 0
-#define QMM_SPECIAL_SET_TOGGLE_OUTPUT   1
-#define QMM_SPECIAL_STEP_COUNTER        2
-#define QMM_SPECIAL_PROGRAM_ALARM       3
+/* QMM and 9513 special counter actions */
+#define QMM_SPECIAL_CLEAR_TOGGLE_OUTPUT		0
+#define QMM_SPECIAL_SET_TOGGLE_OUTPUT		1
+#define QMM_SPECIAL_STEP_COUNTER			2
+#define QMM_SPECIAL_PROGRAM_ALARM			3
+#define CT9513_SPECIAL_CLEAR_TOGGLE_OUTPUT	0
+#define CT9513_SPECIAL_SET_TOGGLE_OUTPUT	1
+#define CT9513_SPECIAL_STEP_COUNTER			2
+#define CT9513_SPECIAL_PROGRAM_ALARM		3
 
-/* QMM frequency intervals */
-#define QMM_INTERVAL_1MS_1KHZ           0
-#define QMM_INTERVAL_10MS_100HZ         1
-#define QMM_INTERVAL_100MS_10HZ         2
-#define QMM_INTERVAL_1S_1HZ             3
-#define QMM_INTERVAL_10S_01HZ           4
+/* QMM and 9513 frequency intervals */
+#define QMM_INTERVAL_1MS_1KHZ				0
+#define QMM_INTERVAL_10MS_100HZ				1
+#define QMM_INTERVAL_100MS_10HZ				2
+#define QMM_INTERVAL_1S_1HZ					3
+#define QMM_INTERVAL_10S_01HZ				4
+#define CT9513_INTERVAL_1MS_1KHZ			0
+#define CT9513_INTERVAL_10MS_100HZ			1
+#define CT9513_INTERVAL_100MS_10HZ			2
+#define CT9513_INTERVAL_1S_1HZ				3
+#define CT9513_INTERVAL_10S_01HZ			4
 
-/* QMM master mode register */
+/* QMM and 9513 master mode register */
 typedef struct
 {
 
@@ -1279,9 +1346,9 @@ typedef struct
 	BYTE compare2_enable;
 	BYTE tod_mode;
 
-} DSCQMM_MMR;
+} DSCQMM_MMR, DSC9513_MMR;
 
-/* QMM counter mode register */
+/* QMM and 9513 counter mode register */
 typedef struct
 {
 
@@ -1296,9 +1363,9 @@ typedef struct
 	BYTE count_direction;
 	BYTE output_control;
 
-} DSCQMM_CMR;
+} DSCQMM_CMR, DSC9513_CMR;
 
-/* QMM multiple counter control */
+/* QMM and 9513 multiple counter control */
 typedef struct
 {
 
@@ -1307,9 +1374,9 @@ typedef struct
 	BYTE group2_action;
 	BYTE group2_counter_select;
 	
-} DSCQMM_MCC;
+} DSCQMM_MCC, DSC9513_MCC;
 
-/* QMM special counter functions */
+/* QMM and 9513 special counter functions */
 typedef struct
 {
 
@@ -1317,11 +1384,11 @@ typedef struct
 	BYTE action;
 	WORD alarm_value;
 
-} DSCQMM_SCF;
+} DSCQMM_SCF, DSC9513_SCF;
 
 
 
-/* QMM pulse width modulation control */
+/* QMM and 9513 pulse width modulation control */
 typedef struct
 {
 
@@ -1335,30 +1402,42 @@ typedef struct
 	WORD  hold_reg;	
 	BYTE  hit_extreme;
 
-} DSCQMM_PWM;
+} DSCQMM_PWM, DSC9513_PWM;
 
 
 
-/* QMM Function Prototypes */
+/* QMM and 9513 Function Prototypes */
 
 BYTE DSCUDAPICALL dscQMMReset(DSCB board);
+BYTE DSCUDAPICALL dsc9513Reset(DSCB board);
 
 BYTE DSCUDAPICALL dscQMMSetMMR(DSCB board, DSCQMM_MMR* dscqmmmmr);
 BYTE DSCUDAPICALL dscQMMSetCMR(DSCB board, DSCQMM_CMR* dscqmmcmr);
 BYTE DSCUDAPICALL dscQMMCounterControl(DSCB board, DSCQMM_MCC* dscqmmmcc, BYTE * status);
 BYTE DSCUDAPICALL dscQMMSingleCounterControl(DSCB board, BYTE counter, BYTE action);
+BYTE DSCUDAPICALL dsc9513SetMMR(DSCB board, DSCQMM_MMR* dscqmmmmr);
+BYTE DSCUDAPICALL dsc9513SetCMR(DSCB board, DSCQMM_CMR* dscqmmcmr);
+BYTE DSCUDAPICALL dsc9513CounterControl(DSCB board, DSCQMM_MCC* dscqmmmcc, BYTE * status);
+BYTE DSCUDAPICALL dsc9513SingleCounterControl(DSCB board, BYTE counter, BYTE action);
 
 BYTE DSCUDAPICALL dscQMMSetLoadRegister(DSCB board, BYTE counter, WORD value);
 BYTE DSCUDAPICALL dscQMMSetHoldRegister(DSCB board, BYTE counter, WORD value);
 BYTE DSCUDAPICALL dscQMMReadHoldRegister(DSCB board, BYTE counter, WORD* value);
+BYTE DSCUDAPICALL dsc9513SetLoadRegister(DSCB board, BYTE counter, WORD value);
+BYTE DSCUDAPICALL dsc9513SetHoldRegister(DSCB board, BYTE counter, WORD value);
+BYTE DSCUDAPICALL dsc9513ReadHoldRegister(DSCB board, BYTE counter, WORD* value);
 
 BYTE DSCUDAPICALL dscQMMSpecialCounterFunction(DSCB board, DSCQMM_SCF* dscqmmscf);
 BYTE DSCUDAPICALL dscQMMMeasureFrequency(DSCB board, BYTE interval, BYTE source, FLOAT* freq);
 BYTE DSCUDAPICALL dscQMMMeasurePeriod(DSCB board, BYTE frequency, FLOAT* period);
+BYTE DSCUDAPICALL dsc9513SpecialCounterFunction(DSCB board, DSCQMM_SCF* dscqmmscf);
+BYTE DSCUDAPICALL dsc9513MeasureFrequency(DSCB board, BYTE interval, BYTE source, FLOAT* freq);
+BYTE DSCUDAPICALL dsc9513MeasurePeriod(DSCB board, BYTE frequency, FLOAT* period);
 
 BYTE DSCUDAPICALL dscQMMPulseWidthModulation(DSCB board, DSCQMM_PWM* dscqmmpwm);
+BYTE DSCUDAPICALL dsc9513PulseWidthModulation(DSCB board, DSCQMM_PWM* dscqmmpwm);
 
-/* END QMM SECTION */
+/* END QMM and 9513 SECTION */
 
 
 #ifdef __cplusplus

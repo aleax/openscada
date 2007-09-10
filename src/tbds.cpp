@@ -916,7 +916,7 @@ void TTable::cntrCmdProc( XMLNode *opt )
 	        fieldGet(req);
 	        fieldDel(req);
 	    }else req.cfgViewAll(false);
-	    req.cfg(col).setS(opt->text());
+	    req.cfg(col).setS(opt->text(),true);
 	    fieldSet(req);
 	}	
     }

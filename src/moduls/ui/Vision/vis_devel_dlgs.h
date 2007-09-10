@@ -65,7 +65,7 @@ class LibProjProp: public QDialog
 	VisDevelop *owner();
 
     signals:
-        void apply(const string &);		
+        void apply(const string &);
 
     private slots:
 	//Private slots
@@ -80,6 +80,8 @@ class LibProjProp: public QDialog
 	void loadMimeData( );
 	void unloadMimeData( );
 	void mimeDataChange(int,int);
+	
+	void tabChanged( int itb );	
 	
     private:
 	//Private attributes
@@ -139,6 +141,8 @@ class VisItProp : public QDialog
         void addAttr( );
         void delAttr( );
 	void changeAttr(QTreeWidgetItem *it, int col);
+	
+	void tabChanged( int itb );
 
     private:
 	//Private data

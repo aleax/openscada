@@ -47,6 +47,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) :
     prjLibPropDlg(NULL), visItPropDlg(NULL), winClose(false), proc_st(false), host("","","","","")
 {
     setAttribute(Qt::WA_DeleteOnClose,true);
+    setDockOptions(dockOptions() | QMainWindow::VerticalTabs);
     mod->regWin( this );
 
     setWindowTitle(_("Vision developing"));

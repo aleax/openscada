@@ -468,8 +468,10 @@ void MTable::fieldSet( TConfig &cfg )
     }
     
     //- Prepare query -
+    //-- Try for get already present field --
     string req = "SELECT 1 FROM `"+TSYS::strEncode(name(),TSYS::SQL)+"` "+req_where;
-    owner().sqlReq( req, &tbl );
+    try{ owner().sqlReq( req, &tbl ); }
+    catch(TError err)	{ fieldFix(cfg); owner().sqlReq( req ); }
     if( tbl.size() < 2 )
     {
         //-- Add new record --
@@ -528,13 +530,7 @@ void MTable::fieldSet( TConfig &cfg )
     //- Query -
     //printf("TEST 02: query: <%s>\n",req.c_str());
     try{ owner().sqlReq( req ); }
-    catch(TError err)
-    {
-	//-- Fix fields --
-	fieldFix(cfg);
-	//-- Repeate request --
-	owner().sqlReq( req );
-    }
+    catch(TError err)	{ fieldFix(cfg); owner().sqlReq( req ); }
 }
 
 void MTable::fieldDel( TConfig &cfg )

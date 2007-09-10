@@ -1207,12 +1207,12 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		pnt.setPen(mrkPen);
 		tm_t = tEnd/1000000;
 		ttm = localtime(&tm_t);
-		lab_dt = QString("%1-%2-%3").arg(ttm->tm_mday).arg(ttm->tm_mon+1).arg(ttm->tm_year+1900);
+		lab_dt = QString("%1-%2-%3").arg(ttm->tm_mday).arg(ttm->tm_mon+1,2,10,QChar('0')).arg(ttm->tm_year+1900);
 		if( ttm->tm_sec == 0 && tEnd%1000000 == 0 )
-		    lab_tm = QString("%1:%2").arg(ttm->tm_hour).arg(ttm->tm_min);
+		    lab_tm = QString("%1:%2").arg(ttm->tm_hour).arg(ttm->tm_min,2,10,QChar('0'));
 		else if( tEnd%1000000 == 0 )
-		    lab_tm = QString("%1:%2:%3").arg(ttm->tm_hour).arg(ttm->tm_min).arg(ttm->tm_sec);
-		else lab_tm = QString("%1:%2:%3.%4").arg(ttm->tm_hour).arg(ttm->tm_min).arg(ttm->tm_sec).arg(tEnd%1000000);
+		    lab_tm = QString("%1:%2:%3").arg(ttm->tm_hour).arg(ttm->tm_min,2,10,QChar('0')).arg(ttm->tm_sec,2,10,QChar('0'));
+		else lab_tm = QString("%1:%2:%3.%4").arg(ttm->tm_hour).arg(ttm->tm_min,2,10,QChar('0')).arg(ttm->tm_sec,2,10,QChar('0')).arg(tEnd%1000000);
 		int markBrd = tAr.x()+tAr.width()-pnt.fontMetrics().boundingRect(lab_tm).width();
 		endMarkBrd = vmin(endMarkBrd,markBrd);
 		pnt.drawText(markBrd,tAr.y()+tAr.height()+mrkHeight,lab_tm);
@@ -1247,15 +1247,15 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		    //Check for data present
 		    lab_dt.clear(), lab_tm.clear();
 		    if( hvLev == 5 || chLev >= 4 ) 					//Date
-			lab_dt = (chLev>=5) ? QString("%1-%2-%3").arg(ttm->tm_mday).arg(ttm->tm_mon+1).arg(ttm->tm_year+1900) :
+			lab_dt = (chLev>=5) ? QString("%1-%2-%3").arg(ttm->tm_mday).arg(ttm->tm_mon+1,2,10,QChar('0')).arg(ttm->tm_year+1900) :
 					      QString::number(ttm->tm_mday);
 		    if( (hvLev == 4 || hvLev == 3 || ttm->tm_min) && !ttm->tm_sec )	//Hours and minuts
-			lab_tm =  QString("%1:%2").arg(ttm->tm_hour).arg(ttm->tm_min);
+			lab_tm =  QString("%1:%2").arg(ttm->tm_hour).arg(ttm->tm_min,2,10,QChar('0'));
 		    else if( (hvLev == 2 || ttm->tm_sec) && !(i_h%1000000) )		//Seconds
-			lab_tm = (chLev>=2) ? QString("%1:%2:%3").arg(ttm->tm_hour).arg(ttm->tm_min).arg(ttm->tm_sec) :
+			lab_tm = (chLev>=2) ? QString("%1:%2:%3").arg(ttm->tm_hour).arg(ttm->tm_min,2,10,QChar('0')).arg(ttm->tm_sec,2,10,QChar('0')) :
 					      QString("%1s").arg(ttm->tm_sec);
 		    else if( hvLev <= 1 || i_h%1000000 )				//Milliseconds
-			lab_tm = (chLev>=2) ? QString("%1:%2:%3.%4").arg(ttm->tm_hour).arg(ttm->tm_min).arg(ttm->tm_sec).arg(i_h%1000000) :
+			lab_tm = (chLev>=2) ? QString("%1:%2:%3.%4").arg(ttm->tm_hour).arg(ttm->tm_min,2,10,QChar('0')).arg(ttm->tm_sec,2,10,QChar('0')).arg(i_h%1000000) :
 				 (chLev>=1) ? QString("%1.%2s").arg(ttm->tm_sec).arg(i_h%1000000) :
 					      QString("%1ms").arg((double)(i_h%1000000)/1000.,0,'g',4);
 		    int wdth;
@@ -1864,6 +1864,10 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    if( !qobject_cast<RunWdgView*>(w) )	{ up = false; break; }
 	    w->dc()["pgGrp"] = val.c_str(); 
 	    break;
+	case 28:	//pgFullScr
+	    w->dc()["pgFullScr"] = val.c_str();
+	    up = false;
+	    break;
 	default: up = false;
     }
     
@@ -1881,23 +1885,28 @@ bool ShapeBox::event( WdgView *w, QEvent *event )
 	    if( w->dc()["inclWidget"].value<void*>() ) return false;
     	    QPainter pnt( w );
 
+	    //- Apply margin -
 	    int margin = w->dc()["geomMargin"].toInt();
-	    QRect draw_area = w->rect().adjusted(0,0,-2*margin,-2*margin);	    
-            pnt.setWindow(draw_area);
+	    QRect dA = w->rect().adjusted(0,0,-2*margin,-2*margin);	    
+            pnt.setWindow(dA);
 	    pnt.setViewport(w->rect().adjusted(margin,margin,-margin,-margin));
 
+	    //- Draw background -
 	    QColor bkcol = w->dc()["backColor"].value<QColor>();
-	    if(  bkcol.isValid() ) pnt.fillRect(draw_area,bkcol);
+	    if(  bkcol.isValid() ) pnt.fillRect(dA,bkcol);
 	    QBrush bkbrsh = w->dc()["backImg"].value<QBrush>();
-	    if( bkbrsh.style() != Qt::NoBrush ) pnt.fillRect(draw_area,bkbrsh);
+	    if( bkbrsh.style() != Qt::NoBrush ) pnt.fillRect(dA,bkbrsh);
 	    
+	    //- Draw border -
 	    QPen *bpen = (QPen*)w->dc()["border"].value<void*>();
 	    if( bpen->width() )
 	    {
 		pnt.setPen(*bpen);
-		pnt.drawRect(draw_area.adjusted(bpen->width()/2,bpen->width()/2,
-						-bpen->width()/2-bpen->width()%2,-bpen->width()/2-bpen->width()%2));
+		pnt.drawRect(dA.adjusted(bpen->width()/2,bpen->width()/2,
+					-bpen->width()/2-bpen->width()%2,-bpen->width()/2-bpen->width()%2));
 	    }
+            //- Draw focused border -
+	    if( w->hasFocus() ) qDrawShadeRect(&pnt,dA.x(),dA.y(),dA.width(),dA.height(),w->palette());
 
             event->accept();
             return true;

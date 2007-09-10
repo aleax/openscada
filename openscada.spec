@@ -5,16 +5,14 @@
 #===== Generic Info ======
 Summary: Open SCADA system project
 Name: openscada
-Version: 0.5.0
-Release: ath10
+Version: 0.6.0
+Release: emb1
 Source: %{name}-%{version}.tar.gz
 License: GPL
 Group: Applications/SCADA
 Packager: Roman Savochenko <rom_as@fromru.com>
 URL: http://diyaorg.dp.ua/oscada
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
-#PreReq: chkconfig
-Conflicts: %{name}-athena
 
 %description
 Open SCADA system. For access use account "root" and password "openscada".
@@ -42,9 +40,9 @@ Group: Applications/SCADA
 #Requires: %{name}
 %description doc
 The %{name}-doc package include documents files.
-%description doc -l ru_RU.KOI8-R
+%description doc -l ru_RU.UTF8
 Пакет %{name}-doc включает файлы документации.
-%description doc -l uk_UA.KOI8-U
+%description doc -l uk_UA.UTF8
 Пакет %{name}-doc включає файли документації.
 
 
@@ -54,9 +52,9 @@ Group: Development/Libraries
 #Requires: %{name}
 %description devel
 The %{name}-devel package includes library archives and include files.
-%description devel -l ru_RU.KOI8-R
+%description devel -l ru_RU.UTF8
 Пакет %{name}-devel включает архив библиотек и включаемые файлы.
-%description devel -l uk_UA.KOI8-U
+%description devel -l uk_UA.UTF8
 Пакет %{name}-devel включає архів бібліотек та включаємі файли.
 
 
@@ -66,9 +64,9 @@ Group: Applications/SCADA
 Requires: %{name}
 %description demo
 The %{name}-demo package includes demo data bases and configs. For start use command <openscada_demo>. For access use account "root" and password "openscada" or account "user" without password.
-%description demo -l ru_RU.KOI8-R
+%description demo -l ru_RU.UTF8
 Пакет %{name}-demo включает демонстрационные базы данных и конфигурации. Для старта используйте команду <openscada_demo>. Для доступа используйте запись "root" и пароль "openscada" или запись "user" без пароля.
-%description demo -l uk_UA.KOI8-U
+%description demo -l uk_UA.UTF8
 Пакет %{name}-demo включає демонстраційні бази даних та конфігурації. Для старту використовуйте команду <openscada_demo>. Для доступу використовуйте запис "root" та пароль "openscada" або запис "user" без пароля.
 
 

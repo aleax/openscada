@@ -68,6 +68,16 @@ VisRun::VisRun( const string &prj_it, const string &open_user, const string &VCA
     actQuit->setWhatsThis(_("The button for full quit from OpenSCADA"));
     actQuit->setStatusTip(_("Press for full quit from OpenSCADA system."));    
     connect(actQuit, SIGNAL(activated()), this, SLOT(quitSt()));
+    //-- View actions --
+    //--- Fullscreen ---
+    actFullScr = new QAction(_("Full screen"),this);
+    actFullScr->setCheckable(true);
+    actFullScr->setToolTip(_("Full screen toggle"));
+    actFullScr->setWhatsThis(_("The button for full screen toggle"));
+    actFullScr->setStatusTip(_("Press for toggle full screen."));
+    connect(actFullScr, SIGNAL(toggled(bool)), this, SLOT(fullScreen(bool)));
+    
+    //-- Help actions --
     //--- About "System info" ---
     if(!ico_t.load(TUIS::icoPath("help").c_str())) ico_t.load(":/images/help.png");
     QAction *actAbout = new QAction(QPixmap::fromImage(ico_t),_("&About"),this);
@@ -94,6 +104,8 @@ VisRun::VisRun( const string &prj_it, const string &open_user, const string &VCA
     mn_file = menuBar()->addMenu(_("&File"));
     mn_file->addAction(actClose);
     mn_file->addAction(actQuit);
+    mn_view = menuBar()->addMenu(_("&View"));
+    mn_view->addAction(actFullScr);
     mn_help = menuBar()->addMenu(_("&Help"));
     mn_help->addAction(actAbout);
     mn_help->addAction(actQtAbout);
@@ -221,6 +233,12 @@ void VisRun::about()
 void VisRun::aboutQt()
 {
     QMessageBox::aboutQt( this, mod->modInfo("Name").c_str() );
+}
+
+void VisRun::fullScreen( bool vl )
+{
+    if( vl ) setWindowState(Qt::WindowFullScreen);
+    else setWindowState(Qt::WindowNoState);
 }
 
 void VisRun::enterWhatsThis()
@@ -382,6 +400,9 @@ void VisRun::callPage( const string& pg_it )
 	master_pg->setFocusPolicy( Qt::StrongFocus );
 	scrl->setWidget( master_pg );
 	setCentralWidget( scrl );
+	actFullScr->setChecked(master_pg->dc().value("pgFullScr",false).toBool());
+	//if( master_pg->dc().value("pgFullScr",false).toBool() )	setWindowState(Qt::WindowFullScreen);
+	//else	setWindowState(Qt::WindowNoState);
 	return;
     }
     else
