@@ -1,3 +1,8 @@
+2007-09-10 Maxim
+- !!:/UI/VCAEngine: Figure's points of the primitive "ElFig" support is added.
+- FIX:/UI/Vision: More bugs into primitive "ElFig" is fixed.
+
+
 2007-09-10 Roman
 - FIX:/SYS: RPM-specification file codepage is fixed.
 - FIX:/SYS: Default config file DB file name is fixed.

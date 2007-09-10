@@ -35,7 +35,7 @@ using namespace VISION;
 //*************************************************
 //* Elementary figures shape widget               *
 //*************************************************
-QPainterPath ShapeItem::path() const
+/*QPainterPath ShapeItem::path() const
 {
     return myPath;
 }
@@ -157,7 +157,7 @@ void ShapeItem::setType(int type)
 {
     myType = type;
 }
-
+*/
 ShapeItem &ShapeItem::operator=(const ShapeItem &item)
 {
     setToolTip(item.toolTip());
@@ -177,7 +177,7 @@ ShapeItem &ShapeItem::operator=(const ShapeItem &item)
 /////////////////////////////////////////////////////////////////////////////
 //RectItem.cpp
 /////////////////////////////////////////////////////////////////////////////
-QPainterPath RectItem::path() const
+/*QPainterPath RectItem::path() const
 {
     return myPath;
 }
@@ -221,7 +221,7 @@ void RectItem::setPen(const QPen &pen)
 {
     myPen = pen;
 }
-
+*/
 
 ShapeElFigure::ShapeElFigure() : WdgShape("ElFigure") 
 {
@@ -378,6 +378,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                   previousPosition = ev->pos();
                   if (index!= -1)//Проврка на то, что попали по фигуре
                   {
+                      printf ("0\n");
                       itemInMotion = &shapeItems[index];//Объявление указателя на выделенную фигуру
                         //previousPosition = ev->pos();//Определение начальной позиции для одной, не связанной ни с чем, фигуры
                       if (flag_ctrl && !status_hold) //Проверка на то, что нажат  Сtrl
@@ -386,6 +387,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                           if (rectItems.size() && !count_Shapes)// Проверка на то, что была выделена фигура до нажатия Сtrl
                           {
                               index_array[0]=shapeItems.size()-1;//Запись этой выделенной фигуры в нулевой элемент массива фигур, выделяемых с CTRL
+                              printf ("index_array[0]=%i\n",index_array[0]);
                               count_Shapes=1;
                           }
                           for (int i=0; i<count_Shapes; i++)
@@ -393,29 +395,49 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                   fn=true;// Проверка на то, что фигура выделяется впервые
                           if (!fn)//То есть по фигуре клацнули впервые
                           {
+                              printf ("!fn\n");
                               index_array[count_Shapes]=index; //Добавление индекса фигуры в массив индексов выделенных с CTRL фигур
+                              printf ("index_array[count_Shapes]=%i\n",index_array[count_Shapes]);
                               count_Shapes+=1;//Приращение колва фигур
                               itemInMotion=&shapeItems[index];
                               flag_ctrl_move=1;//Переменная показывае, что мы выделяем фигуру с CTRL и не начинаем её перемещать
                               moveItemTo(previousPosition, shapeItems);
+                              printf ("count_Shapes_1=%i\n",count_Shapes);
                           }
                       }
                       if (status_hold)
                       {
+                          printf ("1\n");
                           count_holds=0;//Обнуление числа связанных фигур
+                          //////////////////////////////////////////////////
+                          if (rect_num!= -1)
+                              for (int i=0; i<=shapeItems.size()-1; i++)
+                                  if((rectItems[rect_num].startposition()==shapeItems[i].startposition()) ||
+                                      (rectItems[rect_num].startposition()==shapeItems[i].endposition()) ||
+                                      (rectItems[rect_num].startposition()==shapeItems[i].ctrlposition_1()) ||
+                                      (rectItems[rect_num].startposition()==shapeItems[i].ctrlposition_2()) ||
+                                      (rectItems[rect_num].startposition()==shapeItems[i].ctrlposition_3()) ||
+                                      (rectItems[rect_num].startposition()==shapeItems[i].ctrlposition_4()))
+                                      index=i;
+                          //////////////////////////////////////////////////
                           Holds(shapeItems);
                            //Если есть связанные фигуры
                           ////////////////////////////
                           if (count_holds)
                           {
+                              printf ("2\n");
                               if (rect_num!= -1)
                               {
+                                  printf ("3\n");
                                   int rect_num_temp=rect_num;//Запоминание истинного номера квадратика в контейнере rectitems
                                   rect_num=Real_rect_num(rect_num,shapeItems);
+                                  itemInMotion = &shapeItems[index];
                                    //Проверка на то, что квадратик не startposition и не endposition
                                   ////////////////////////////////////////////////
                                   if ((rect_num==2 || rect_num==3) && shapeItems[index].type()==3)
+                                  
                                       flag_rect=false;
+                                  
                                   ////////////////////////////////////////////////
                                    //Проверка на то,  что квадратик или startposition или endposition
                                   /////////////////////////////////////////////
@@ -425,6 +447,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                    //Если клацнули по третьему или четвертому квадратику дуги
                                   //////////////////////////////////////////////////////////
                                   if ((rect_num==3 ||rect_num==4) && shapeItems[index].type()==2)
+                                  
                                       Rect_num_3_4(shapeItems);
                                  ////////////////////////////////////////////////////////////
                               }
@@ -503,28 +526,32 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     if(current_ss!=-1)
                     {
 
-                        if (itemInMotion->type()==2)//Если стыкует дугу, то к ней привязываем линию или Безье 
+                        printf ("POP current_ss!=-1\n ");
+                        if (itemInMotion->type()==2)//Если стыкует дугу, то к ней привязываем линию или Безье
                         shapeItems[current_ss].setStartPosition(itemInMotion->startposition());
                         else
                         itemInMotion->setStartPosition(shapeItems[current_ss].startposition());
                     }
                     if(current_se!=-1)
                     {
-                        if (itemInMotion->type()==2)//Если стыкует дугу, то к ней привязываем линию или Безье 
+                        printf ("POP current_se!=-1\n ");
+                        if (itemInMotion->type()==2)//Если стыкует дугу, то к ней привязываем линию или Безье
                         shapeItems[current_se].setStartPosition(itemInMotion->endposition());
                         else
                         itemInMotion->setEndPosition(shapeItems[current_se].startposition());
                     }
                     if(current_es!=-1)
                     {
-                        if (itemInMotion->type()==2)//Если стыкует дугу, то к ней привязываем линию или Безье  
+                        printf ("POP current_es!=-1\n ");
+                        if (itemInMotion->type()==2)//Если стыкует дугу, то к ней привязываем линию или Безье
                         shapeItems[current_es].setEndPosition(itemInMotion->startposition());
                         else
                         itemInMotion->setStartPosition(shapeItems[current_es].endposition());
                     }
                     if(current_ee!=-1)
                     {
-                        if (itemInMotion->type()==2)//Если стыкует дугу, то к ней привязываем линию или Безье  
+                        printf ("POP current_ee!=-1\n ");
+                        if (itemInMotion->type()==2)//Если стыкует дугу, то к ней привязываем линию или Безье
                         shapeItems[current_ee].setEndPosition(itemInMotion->endposition());
                         else
                         itemInMotion->setEndPosition(shapeItems[current_ee].endposition());
@@ -731,12 +758,15 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
         }
     case QEvent::MouseMove:
         {
+           
             int fl;//Вспомогательная переменная для игры с куrect_num=1
             int index_arc;
+            int temp;
             QMouseEvent *ev = static_cast<QMouseEvent*>(event); 
             Mouse_pos=ev->pos();
             if ((ev->buttons() && Qt::LeftButton) && itemInMotion && !status)
             {
+               
                 flag_m=true;//Возведение флага, сигнализирующего движение
                 if (count_holds)//Проврка на то, что существуют привязанные фигуры
                 {
@@ -760,6 +790,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         flag_hold_arc=true;
                   //Перемещение всех связанных(выделенных с Ctrl) фигур
                   ////////////////////
+                    
                     Move_all(ev->pos(),shapeItems);
                     view->repaint();
                     //////////////////////
@@ -768,6 +799,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                 ///////////////////////////////////////////////////
                 else
                 {
+                   
                     //Если есть связанные фигуры(перемещение квадратика, не являющегося общим для нескольких связанных фигур)
                     ////////////////////////////////////
                     if (count_holds)
@@ -781,17 +813,32 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         count_Shapes=1;
                         ////////////////////////////
                         itemInMotion=&shapeItems[index];
-                        if (itemInMotion->type()==2) rect_num=rect_num_arc; 
+                        if (rect_num==2 && itemInMotion->type()==2)
+                        {
+                            offset_all=QPointF(0,0);
+                        }
+                        if (itemInMotion->type()==2 && rect_num!=2) rect_num=rect_num_arc;
                         moveItemTo(ev->pos(),shapeItems);//Перемещение одной, ни с чем не связанной фигуры
                         flag_hold_rect=true;
+                        view->repaint();
                     }
                     ////////////////////////////////////
-                    else moveItemTo(ev->pos(),shapeItems);
-                    if (status_hold && !flag_rect && !flag_hold_rect)//Если включены привязки и перемещается квадратик у несвязанной вигуры либо сама фигура
+                    else
                     {
+                       
+                        moveItemTo(ev->pos(),shapeItems);
+                        view->repaint();
+                    }
+                    if (rect_num!=-1)
+                    temp=Real_rect_num (rect_num,shapeItems);
+                    printf ("temp=%i\n",temp);
+                    printf ("flag_rect=%i\n",flag_rect);
+                    if (status_hold &&(rect_num==-1||((temp==0 || temp==1) && !flag_rect)))//Если включены привязки и перемещается квадратик у несвязанной вигуры либо сама фигура
+                    {
+                        printf("status_hold\n");
                         current_se=-1;
                         current_ss=-1;
-                        current_ss=-1;
+                        current_ee=-1;
                         current_es=-1;
                         ellipse_draw_startPath=newPath;
                         ellipse_draw_endPath=newPath;
@@ -801,40 +848,56 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             ellipse_endPath=newPath;
                             if (i!=index)
                             { 
+                                printf("i!=index\n");
                                 ellipse_startPath.addEllipse(shapeItems[i].startposition().x()-8,shapeItems[i].startposition().y()-8,16,16);
                                 if (ellipse_startPath.contains(itemInMotion->startposition()))
                                 { 
-                                 ellipse_draw_startPath.addEllipse(shapeItems[i].startposition().x()-8,shapeItems[i].startposition().y()-8,16,16);
+                                    printf ("LA-LA_1\n");
+                                    if (temp==0 || rect_num==-1)
+                                    {
+                                    ellipse_draw_startPath.addEllipse(shapeItems[i].startposition().x()-8,shapeItems[i].startposition().y()-8,16,16);
                                     current_ss=i;
+                                    }
                                 }
                                 if (ellipse_startPath.contains(itemInMotion->endposition()))
-                                {  rectItems.clear();
+                                {    printf ("LA-LA_2\n");
+                                if (temp==1 || rect_num==-1)
+                                {
                                     ellipse_draw_startPath.addEllipse(shapeItems[i].startposition().x()-8,shapeItems[i].startposition().y()-8,16,16);
                                     current_se=i;
+                                }
                                 }
                                 ellipse_endPath.addEllipse(shapeItems[i].endposition().x()-8,shapeItems[i].endposition().y()-8,16,16);
                                 if (ellipse_endPath.contains(itemInMotion->endposition()))
                                {
+                                   printf ("LA-LA_3\n");
+                                   if (temp==1 || rect_num==-1)
+                                   {
                                    ellipse_draw_endPath.addEllipse(shapeItems[i].endposition().x()-8,shapeItems[i].endposition().y()-8,16,16);
                                     current_ee=i;
+                                   }
                                 }
                                 if (ellipse_endPath.contains(itemInMotion->startposition()))
                                 {
+                                    printf ("LA-LA_4\n");
+                                    if (temp==0 || rect_num==-1)
+                                    {
                                     ellipse_draw_endPath.addEllipse(shapeItems[i].endposition().x()-8,shapeItems[i].endposition().y()-8,16,16);
                                     current_es=i;
+                                    }
                                 }
                             }
-                            view->repaint();
+                           //view->repaint();
                         }
                     }
-                    view->repaint();
                 }
             }
              //Определяем вид курсора
             /////////////////////////////////////
             if (flag_cursor==0)
             {
-               if (flag_first_move)//Если пред этим двигали фигуру с помощью управляющих клавиш обнуляем
+                if (flag_down || flag_left || flag_right || flag_up) break;
+                if (flag_first_move)//Если пред этим двигали фигуру с помощью управляющих клавиш обнуляем
                 {
                     if (flag_ctrl && status_hold)
                     {
@@ -872,7 +935,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
             }
   /////////////////////////////////////
            return true;
-            
         }
     case QEvent::KeyPress:
         {
@@ -886,11 +948,16 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                 if (status_hold) break;
                 flag_ctrl=true;
                 index_array=new int[shapeItems.size()];
+                count_Shapes=0;
             }
             if ((ev->key() == Qt::Key_Up) && index_temp!=-1)
             {
-                if (flag_down || flag_left || flag_right || index<0 || index>shapeItems.size()-1) break;
+                if (flag_down || flag_left || flag_right || index<0 || index>shapeItems.size()-1)
+                {
+                    break;
+                }
                 flag_up=true;
+                printf("Popali\n");
                 offset_all=QPointF(0,-1);
                 Move_UP_DOWN(shapeItems);
                 view->repaint();
@@ -974,6 +1041,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
             return true;
         }
       }
+
 
     return false;
 } 
@@ -1510,30 +1578,60 @@ bool ShapeElFigure::Holds(QList<ShapeItem> &shapeItems)
 void ShapeElFigure::Move_UP_DOWN(QList<ShapeItem> &shapeItems)
 {
     int rect_num_temp;
+    count_moveItemTo=0;
+    if (flag_ctrl && count_Shapes)
+    {
+        printf ("flag_ctrl && count_Shapes\n");
+        Move_all(QPointF(0,0),shapeItems);
+    }
+    else 
     if (!flag_first_move)
     {
+        printf ("POP !flag_first_move\n");
         count_holds=0;
         flag_rect=false;
+
         Holds(shapeItems);//Вызов Holds для определения связана фигура с другими или нет
-        count_Shapes=count_holds+1;//Числу перемещаемых фигур присваиваем число всязаных
-        if ((flag_ctrl && count_Shapes) || count_holds)//Проверка на нажатие  Сtrl и на наличие выделенных фигур
-            if (rect_num!=-1)//Если попали по квадратику
+        printf ("count_holds=%i\n",count_holds);
+        if (count_holds)//Проверка на нажатие  Сtrl и на наличие выделенных фигур
         {
-            rect_num=Real_rect_num (rect_num,shapeItems);//Определяем номер квадратика, кот. нужен moveItemTo
-            if ((rect_num==2 || rect_num==3) && shapeItems[index].type()==3)//Если попали по несвязанному квадратику Бизье
-                flag_rect=false;
-            if ( rect_num==0 || rect_num==1)//Если попали по 1,2 квадратику
-                Rect_num_0_1(shapeItems,rect_num);
-            if ((rect_num==3 ||rect_num==4) && shapeItems[index].type()==2)//Если попали по 3,4 квадратику дуги
-                Rect_num_3_4(shapeItems);
+            printf ("POP count_holds\n");
+            count_Shapes=count_holds+1;//Числу перемещаемых фигур присваиваем число всязаных
+            printf ("count_Shapes_1=%i\n",count_Shapes);
+            printf ("rect_num=%i\n",rect_num);
+            
+            if (rect_num!=-1)//Если попали по квадратику
+            {
+                printf ("Popali rect_num!=-1\n");
+                rect_num_temp=rect_num;
+                rect_num=Real_rect_num (rect_num,shapeItems);//Определяем номер квадратика, кот. нужен moveItemTo
+                printf ("rect_num=%i\n",rect_num);
+                if ((rect_num==2 || rect_num==3) && shapeItems[index].type()==3)//Если попали по несвязанному квадратику Бизье
+                    flag_rect=false;
+                if ( rect_num==0 || rect_num==1)//Если попали по 1,2 квадратику
+                {
+                    printf ("Popali  rect_num==0 || rect_num==1\n ");
+                    Rect_num_0_1(shapeItems,rect_num_temp);
+                }
+                if ((rect_num==3 ||rect_num==4) && shapeItems[index].type()==2)//Если попали по 3,4 квадратику дуги
+                    Rect_num_3_4(shapeItems);
+            }
         }
         if (flag_rect || flag_arc_rect_3_4) //Если клацнули по квадратику, то число перемещаемых фигур равно числу фигур связаных с этим квадратиком
+        {
+            printf ("POPali flag_rect || flag_arc_rect_3_4\n");
+            printf("count_rects=%i\n",count_rects);
             count_Shapes=count_rects;
+        }
+        printf ("count_Shapes_2=%i\n",count_Shapes);
     }
-    count_moveItemTo=0;
+   //ount_moveItemTo=0;
     if (flag_rect || flag_arc_rect_3_4 || (rect_num==-1 && count_holds))//Вызов moveItemTo для всех выделенных фигур(если тяним за квадртик общий для нескольких фигур,
                                                                        //3,4 квадратик связанной с другими фигурами дуги, просто связанные фигуры)
+    {
+        printf ("count_Shapes=%i\n",count_Shapes);
         Move_all(QPointF(0,0),shapeItems);
+    }
     if ((!flag_ctrl  || (!flag_rect && rect_num!=-1)) && !flag_arc_rect_3_4)//Если двигаем несвязанную фигуру или ее квадратик
        if (index!=-1)
         {
@@ -1561,6 +1659,7 @@ int ShapeElFigure::Real_rect_num(int rect_num_old,QList<ShapeItem> &shapeItems)
             (rectItems[rect_num_old].startposition()==shapeItems[i].ctrlposition_4()))
             index=i;
 
+    printf("index=%i\n",index);
     //Определение номера квадратика, который нужно передать в moveItemTo
     ///////////////////////////////////////////
     if (shapeItems[index].type()==1)
@@ -1594,10 +1693,12 @@ void ShapeElFigure::Rect_num_0_1(QList<ShapeItem> &shapeItems,int rect_num_temp)
     count_rects=0;//Обнуление количества квадратиков в массиве|
     //Перебор всех связанных фигур, чтобы определить, у каких из них есть общие точки
     /////////////////////////////////////////////////////////////////////////////////
+    printf ("rect_num_temp=%i\n",rect_num_temp);
     for (int i=0; i<=count_holds; i++)
     {
         if (rectItems[rect_num_temp].startposition()==shapeItems[index_array[i]].startposition())
         {
+            printf ("ZAHLI\n");
             index_array_temp[count_rects]=index_array[i];//Заполняем массив связанными фигурами с общими точками
             rect_array[count_rects]=0;//Заполняем массив номерми квадратиков для moveItemTo
             count_rects++;
@@ -1651,7 +1752,6 @@ void ShapeElFigure::Rect_num_0_1(QList<ShapeItem> &shapeItems,int rect_num_temp)
 }
 void ShapeElFigure::Rect_num_3_4(QList<ShapeItem> &shapeItems)
 {
-                                     
     flag_arc_rect_3_4=true;
     //Выделение памяти под index_array_temp,arc_rect_array,fig_rect_array
     ////////////////////////////////////////////////////////////////////
@@ -1730,6 +1830,7 @@ void ShapeElFigure::Move_all(QPointF pos,QList<ShapeItem> &shapeItems)
         count_moveItemTo+=1;
         flag_ctrl_move=false;
         flag_ctrl=true;
+        printf("sss\n");
         itemInMotion=&shapeItems[index_array[i]];
         if (flag_rect)
         {
@@ -1742,6 +1843,7 @@ void ShapeElFigure::Move_all(QPointF pos,QList<ShapeItem> &shapeItems)
             arc_rect=arc_rect_array[i];//С каким квадратико дуги связан перемещаемый квадратик фигуры
         }
         index=index_array[i];
+        printf("index=%i\n",index);
         moveItemTo(pos,shapeItems);
     }
 }

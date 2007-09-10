@@ -147,10 +147,50 @@ bool OrigElFigure::attrChange( Attr &cfg, void *prev )
 {
     if( cfg.flgGlob()&Attr::Active && cfg.id() == "elLst" )
     {
-	//- Parse last attributes list and make point list -
-	//????
+	string sel;
+	string ls_prev = *(string*)prev;
+	vector<int> pntls, pntls_prev;	
+	int p[6];
+	//- Parse last attributes list and make point list -	
+	for( int off = 0; (sel=TSYS::strSepParse(ls_prev,0,'\n',&off)).size(); )
+	{
+	    for( int i_p = 0; i_p < sizeof(p)/sizeof(int); i_p++ ) p[i_p]=-1;
+	    sscanf(sel.c_str(),"line:%d:%d",&p[0],&p[1]) || 
+	    sscanf(sel.c_str(),"arc:%d:%d:%d:%d:%d:%d",&p[0],&p[1],&p[2],&p[3],&p[4],&p[5]) ||
+	    sscanf(sel.c_str(),"bezier:%d:%d:%d:%d",&p[0],&p[1],&p[2],&p[3]);
+	    for( int i_p = 0; i_p < sizeof(p)/sizeof(int); i_p++ ) 
+		if( p[i_p]>=0 ) pntls_prev.push_back(p[i_p]);
+	}
 	//- Parse new attributes list and update point's attributes -
-	//????
+	for( int off = 0; (sel=TSYS::strSepParse(cfg.getS(),0,'\n',&off)).size(); )
+	{
+	    for( int i_p = 0; i_p < sizeof(p)/sizeof(int); i_p++ ) p[i_p]=-1;	
+	    sscanf(sel.c_str(),"line:%d:%d",&p[0],&p[1]) || 
+	    sscanf(sel.c_str(),"arc:%d:%d:%d:%d:%d:%d",&p[0],&p[1],&p[2],&p[3],&p[4],&p[5]) ||
+	    sscanf(sel.c_str(),"bezier:%d:%d:%d:%d",&p[0],&p[1],&p[2],&p[3]);
+	    for( int i_p = 0; i_p < sizeof(p)/sizeof(int); i_p++ ) 
+		if( p[i_p] >= 0 )
+		{		    
+		    pntls.push_back(p[i_p]);
+		    if( cfg.owner()->attrPresent("p"+TSYS::int2str(p[i_p])+"x") )	continue;
+		    cfg.owner()->attrAdd( new TFld(("p"+TSYS::int2str(p[i_p])+"x").c_str(),(_("Point ")+TSYS::int2str(p[i_p])+":x").c_str(),
+			TFld::Integer,Attr::Mutable,"","0","","",30+p[i_p]*2) );
+		    cfg.owner()->attrAdd( new TFld(("p"+TSYS::int2str(p[i_p])+"y").c_str(),(_("Point ")+TSYS::int2str(p[i_p])+":y").c_str(),
+			TFld::Integer,Attr::Mutable,"","0","","",30+p[i_p]*2+1) );
+		}
+	}
+	//- Delete points -
+	for( int i_p = 0; i_p < pntls_prev.size(); i_p++ )
+	{
+	    int i_p1;
+	    for( i_p1 = 0; i_p1 < pntls.size(); i_p1++ )
+		if( pntls[i_p1] == pntls_prev[i_p] ) break;
+	    if( i_p1 >= pntls.size() )
+	    {
+		cfg.owner()->attrDel("p"+TSYS::int2str(pntls_prev[i_p])+"x");
+		cfg.owner()->attrDel("p"+TSYS::int2str(pntls_prev[i_p])+"y");
+	    }
+	}
     }
 }
 

@@ -51,32 +51,32 @@ namespace VISION
 class ShapeItem 
 {
     public:
-	void setPath(const QPainterPath &path);
-	void setToolTip(const QString &toolTip);
-	void setStartPosition(const QPointF &startposition);
-	void setEndPosition(const QPointF &endposition);
-	void setCtrlPosition_1(const QPointF &ctrlposition_1);
-	void setCtrlPosition_2(const QPointF &ctrlposition_2);
-	void setCtrlPosition_3(const QPointF &ctrlposition_3);
-	void setCtrlPosition_4(const QPointF &ctrlposition_4);
-	void setBrush(const QBrush &brush);
-	void setPen(const QPen &pen);
-	void setWidth(int width);
-	void setType (int type);
+        void setPath(const QPainterPath &path) {myPath = path;}
+        void setToolTip(const QString &toolTip){ myToolTip = toolTip;}
+        void setStartPosition(const QPointF &startposition){myStartPosition = startposition;}
+        void setEndPosition(const QPointF &endposition){myEndPosition = endposition;}
+        void setCtrlPosition_1(const QPointF &ctrlposition_1){myCtrlPosition_1 = ctrlposition_1;}
+        void setCtrlPosition_2(const QPointF &ctrlposition_2){myCtrlPosition_2 = ctrlposition_2;}
+        void setCtrlPosition_3(const QPointF &ctrlposition_3){myCtrlPosition_3 = ctrlposition_3;}
+        void setCtrlPosition_4(const QPointF &ctrlposition_4){myCtrlPosition_4 = ctrlposition_4;}
+        void setBrush(const QBrush &brush){ myBrush = brush;}
+        void setPen(const QPen &pen){myPen = pen;}
+        void setWidth(int width){myWidth = width;}
+        void setType (int type){myType = type;}
 	ShapeItem &operator=(const ShapeItem &other);
     
-	QPainterPath path() const;
-	QPointF startposition() const;
-	QPointF endposition() const;
-	QPointF ctrlposition_1() const;
-	QPointF ctrlposition_2() const;
-	QPointF ctrlposition_3() const;
-	QPointF ctrlposition_4() const;
-	QBrush brush() const;
-	QString toolTip() const;
-	QPen pen() const;
-	int width() const;
-	int type() const;
+        QPainterPath path() const {return myPath;}
+        QPointF startposition() const {return myStartPosition;}
+        QPointF endposition() const {return myEndPosition;}
+        QPointF ctrlposition_1() const {return myCtrlPosition_1;}
+        QPointF ctrlposition_2() const {return myCtrlPosition_2;}
+        QPointF ctrlposition_3() const {return myCtrlPosition_3;}
+        QPointF ctrlposition_4() const {return myCtrlPosition_4;}
+        QBrush brush() const{return myBrush;}
+        QString toolTip() const{return myToolTip;}
+        QPen pen() const{return myPen;}
+        int width() const{return myWidth;}
+        int type() const{return myType;}
     
     private:
 	QPainterPath myPath;
@@ -98,15 +98,15 @@ class ShapeItem
 class RectItem 
 {
     public:
-	void setPath(const QPainterPath &path);
-	void setStartPosition(const QPointF &startposition);
-	void setBrush(const QBrush &brush);
-	void setPen(const QPen &pen);
+        void setPath(const QPainterPath &path){ myPath = path;}
+        void setStartPosition(const QPointF &startposition){ myStartPosition = startposition;}
+        void setBrush(const QBrush &brush){myBrush = brush;}
+        void setPen(const QPen &pen){myPen = pen;}
     
-	QPainterPath path() const;
-	QPointF startposition() const;
-	QBrush brush() const;
-	QPen pen() const;
+        QPainterPath path() const{return myPath;}
+        QPointF startposition() const{return myStartPosition;}
+        QBrush brush() const{return myBrush;}
+        QPen pen() const{return myPen;}
     
     private:
 	QPainterPath myPath;
