@@ -82,7 +82,7 @@ void TConfig::delFld( TElem *el, unsigned id )
 TCfg &TConfig::cfg( const string &n_val )
 {
     TCfgMap::iterator p=value.find(n_val);
-    if(p==value.end())	throw TError("TConfig",_("Attribute %s no present!"),n_val.c_str());
+    if(p==value.end())	throw TError("TConfig",_("Attribute '%s' no present!"),n_val.c_str());
     return *p->second;
 }
 

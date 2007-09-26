@@ -38,7 +38,8 @@
 #include <ttiparam.h>
 #include "virtual.h"
 
-//============ Modul info! =====================================================
+//************************************************
+//* Modul info!                                  *
 #define MOD_ID      "BlockCalc"
 #define MOD_NAME    "Block based calculator"
 #define MOD_TYPE    "DAQ"
@@ -47,7 +48,7 @@
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow block based calculator."
 #define LICENSE     "GPL"
-//==============================================================================
+//************************************************
 
 Virtual::TipContr *Virtual::mod;
 
@@ -66,7 +67,7 @@ extern "C"
 	else
 	    AtMod.id	= "";
 
-	return( AtMod );
+	return AtMod;
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
@@ -76,16 +77,15 @@ extern "C"
 	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
 	    self_addr = Virtual::mod = new Virtual::TipContr( source );
 
-	return ( self_addr );
+	return self_addr;
     }
 }
 
 using namespace Virtual;
 
-//======================================================================
-//==== TipContr ======================================================== 
-//======================================================================
-
+//************************************************
+//* TipContr - BlockCalc type controller         *
+//************************************************ 
 TipContr::TipContr( string name ) 
 {
     mId 	= MOD_ID;
@@ -199,23 +199,92 @@ void TipContr::saveBD()
 
 }
 
+void TipContr::copy( const string &src, const string &dst )
+{
+    string s_el = TSYS::strSepParse(src,1,'.');
+    string d_el = TSYS::strSepParse(dst,1,'.');
+    string t_el;
+    vector<string>  el_ls, tmp_ls;
+    //- Check parameters -
+    //if( !s_el.empty() && d_el.empty() ) d_el = s_el;
+    if( !s_el.empty() && !d_el.empty() && ( s_el.size() <= 4 || d_el.size() <= 4 ||
+	    (s_el.substr(0,4) != "prm_" && s_el.substr(0,4) != "blk_") || 
+	    s_el.substr(0,4) != d_el.substr(0,4) ) )
+        throw TError(nodePath().c_str(),_("Parameters record error."));	
+
+    //- Connect to source and destination DB -
+    AutoHD<Contr> s_cntr = at(TSYS::strSepParse(src,0,'.'));
+    AutoHD<Contr> d_cntr = at(TSYS::strSepParse(dst,0,'.'));
+    //- Controllers list prepare -
+    if( s_el.empty() || s_el == "blk_*" )
+    {
+	s_cntr.at().blkList(tmp_ls);
+	for( int i_el = 0; i_el < tmp_ls.size(); i_el++ )
+	    el_ls.push_back("blk_"+tmp_ls[i_el]);
+    }
+    if( s_el.empty() || s_el == "prm_*" )
+    {
+	s_cntr.at().list(tmp_ls);
+	for( int i_el = 0; i_el < tmp_ls.size(); i_el++ )
+	    el_ls.push_back("prm_"+tmp_ls[i_el]);
+    }
+    if( el_ls.empty() ) el_ls.push_back(s_el);
+    if( el_ls.size() > 1 && !d_el.empty() )
+        throw TError(nodePath().c_str(),_("Copy several elements to one element not allow."));
+    //- Controllers list process -
+    for( int i_l = 0; i_l < el_ls.size(); i_l++ )
+    {
+	s_el = el_ls[i_l].substr(4);
+	t_el = d_el.empty()?s_el:d_el.substr(4);
+	if( el_ls[i_l].substr(0,4) == "blk_" )
+	{
+	    if( !d_cntr.at().blkPresent(t_el) )	d_cntr.at().blkAdd(t_el);
+	    d_cntr.at().blkAt(t_el).at() = s_cntr.at().blkAt(s_el).at();
+	}
+	else if( el_ls[i_l].substr(0,4) == "prm_" )
+	{
+	    if( !d_cntr.at().present(t_el) )	d_cntr.at().add(t_el,tpPrmToId("std"));
+	    d_cntr.at().at(t_el).at() = s_cntr.at().at(s_el).at();
+	}
+    }
+} 
+
 void TipContr::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
     if( opt->name() == "info" )
     {
         TTipDAQ::cntrCmdProc(opt);
+	if( ctrMkNode("area",opt,1,"/copy",_("Copy")) && 
+		ctrMkNode("comm",opt,-1,"/copy/copy",_("Copy controller/block/parameter"),0660) )
+	{
+	    ctrMkNode("fld",opt,-1,"/copy/copy/src",_("Source"),0660,"root","root",3,"tp","str","dest","select","select","/copy/cntrls");
+    	    ctrMkNode("fld",opt,-1,"/copy/copy/dst",_("Destination"),0660,"root","root",3,"tp","str","dest","select","select","/copy/cntrls");
+	}		
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) ) opt->setText(optDescr());
+    if( a_path == "/copy/copy" && ctrChkNode(opt,"set",0440) )
+	copy(ctrId(opt,"src")->text(),ctrId(opt,"dst")->text());
+    else if( a_path == "/copy/cntrls" && ctrChkNode(opt) )
+    {
+	vector<string> lst;
+        list(lst);
+    	for( unsigned i_a=0; i_a < lst.size(); i_a++ )
+	{
+            opt->childAdd("el")->setText(lst[i_a]);
+            opt->childAdd("el")->setText(lst[i_a]+".prm_*");
+            opt->childAdd("el")->setText(lst[i_a]+".blk_*");
+	}
+    }    
+    else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) ) opt->setText(optDescr());
     else TTipDAQ::cntrCmdProc(opt);
 }
 
-//======================================================================
-//==== Contr 
-//======================================================================
+//************************************************
+//* Contr - Blocks and parameters container      *
+//************************************************ 
 Contr::Contr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     ::TController(name_c, daq_db, cfgelem), prc_st(false), endrun_req(false), sync_st(false), tm_calc(0.0),
     m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId()), m_iter(cfg("ITER").getId()), m_dbper(cfg("PER_DB").getId())
@@ -513,30 +582,6 @@ void Contr::blkProc( const string & id, bool val )
 	clc_blks.erase(clc_blks.begin()+i_blk);
 }	
 
-void Contr::copyBlock( const string &from_id, const string &cntr_id, const string &to_id, const string &to_name )
-{
-    string contr = cntr_id;
-    string toid = to_id;
-    string toname = to_name;
-    
-    if( !blkPresent(from_id) )
-        throw TError(nodePath().c_str(),_("Block <%s> no present."),from_id.c_str());
-
-    if( !contr.size() )	contr = id();
-    if( !toid.size() )  toid  = blkAt(from_id).at().id();
-    if( !toname.size() )toname = blkAt(from_id).at().name();
-    
-    if( !mod->present(contr) )
-        throw TError(nodePath().c_str(),_("Controller <%s> no present."),contr.c_str());
-    if( mod->at(contr).at().blkPresent(toid) )
-        throw TError(nodePath().c_str(),_("Block <%s:%s> already present."),contr.c_str(),toid.c_str());
-	
-    //Make new function
-    mod->at(contr).at().blkAdd(toid);
-    mod->at(contr).at().blkAt(toid).at() = blkAt(from_id).at();
-    mod->at(contr).at().blkAt(toid).at().name(to_name);
-}
-
 bool Contr::cfgChange( TCfg &cfg )
 {
     if( startStat() )
@@ -563,13 +608,6 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	{
 	    ctrMkNode("fld",opt,-1,"/scheme/ctm",_("Calk time (usek)"),0444,"root","root",1,"tp","real");
 	    ctrMkNode("list",opt,-1,"/scheme/sch",_("Blocks"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","blk_");
-	    if(ctrMkNode("comm",opt,-1,"/scheme/copy",_("Copy block"),0440))
-	    {
-		ctrMkNode("fld",opt,-1,"/scheme/copy/blk",_("Block"),0660,"root","root",4,"tp","str","idm","1","dest","select","select","/scheme/ls_blck");
-    		ctrMkNode("fld",opt,-1,"/scheme/copy/cntr",_("To controller"),0660,"root","root",4,"tp","str","idm","1","dest","select","select","/scheme/ls_cntr");
-    		ctrMkNode("fld",opt,-1,"/scheme/copy/id",_("Name as"),0660,"root","root",2,"tp","str","len","10");
-    		ctrMkNode("fld",opt,-1,"/scheme/copy/nm","",0660,"root","root",1,"tp","str");
-	    }
 	}
         return;
     }
@@ -591,30 +629,14 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	    blkAt(opt->attr("id")).at().name(opt->text());
 	}
 	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	chldDel(m_bl,opt->attr("id"),-1,1);
-    }	
-    else if( a_path == "/scheme/ls_blck" && ctrChkNode(opt) )
-    {
-	vector<string> lst;
-        blkList(lst);
-	for( unsigned i_f=0; i_f < lst.size(); i_f++ )
-            opt->childAdd("el")->setAttr("id",lst[i_f])->setText(blkAt(lst[i_f]).at().name());
     }
-    else if( a_path == "/scheme/ls_cntr" && ctrChkNode(opt) )
-    {
-	vector<string> lst;
-        opt->childAdd("el")->setAttr("id","")->setText("");
-        mod->list(lst);
-    	for( unsigned i_a=0; i_a < lst.size(); i_a++ )
-            opt->childAdd("el")->setAttr("id",lst[i_a])->setText(mod->at(lst[i_a]).at().name());
-    }
-    else if( a_path == "/scheme/copy" && ctrChkNode(opt,"set",0440) )
-        copyBlock(ctrId(opt,"blk")->text(),ctrId(opt,"cntr")->text(), ctrId(opt,"id")->text(), ctrId(opt,"nm")->text());
     else TController::cntrCmdProc(opt);
 }	
 
-//======================================================================
-//==== Prm 
-//======================================================================
+//************************************************
+//* Prm - parameters for access to data          *
+//*       of calced blocks                       *
+//************************************************  
 Prm::Prm( string name, TTipParam *tp_prm ) : 
     TParamContr(name,tp_prm), v_el(name)
 {
@@ -769,15 +791,18 @@ void Prm::vlArchMake( TVal &val )
 
 void Prm::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Service commands process -
+    string a_path = opt->attr("path");
+    if( a_path.substr(0,6) == "/serv/" )  { TParamContr::cntrCmdProc(opt); return; }
+
+    //- Get page info -
     if( opt->name() == "info" )
     {
 	TParamContr::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/BLK",cfg("BLK").fld().descr(),0660,"root","root",3,"tp","str","dest","select","select","/prm/cfg/BLK_list");
 	return;
     }
-    //Process command to page
-    string a_path = opt->attr("path");	    
+    //- Process command to page -
     if( a_path == "/prm/cfg/BLK_list" && ctrChkNode(opt) )
     {
         vector<string> list;

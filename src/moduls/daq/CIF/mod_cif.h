@@ -42,36 +42,38 @@ using std::vector;
 namespace CIF
 {
 
-//**** Value data structure ****
+//************************************************
+//* Value data structure                         *
+//************************************************
 class SValData 
 { 
     public:
 	SValData( int idb, int ioff, int isz ) :
 	    db(idb), off(ioff), sz(isz) { }
 	
-	int db;	//DB
-	int off;//Data offset
-	int sz;	//Data size or boolean bit
+	int db;		//DB
+	int off;	//Data offset
+	int sz;		//Data size or boolean bit
 };
 
-//======================================================================
-//==== TMdPrm 
-//======================================================================
-//Parammeters errors list
-//1   - Parameter had disabled.
-//2   - Controller is stoped.
-//10  - CIF device error.
-//11  - Value not gathered.
-//12  - Put request is timeouted.
-//13  - Get request is timeouted.
-//14  - Request block too big.
-//15  - Board %d no present.
-//16  - Transmit block too big.
-//17  - No response of the remote station.
-//18  - Master not into the logical token ring.
-//19  - Request to DB error %d.
-//20  - Specified offset address or DB error.
-
+//************************************************
+//* TMdPrm                                       *
+//*----------------------------------------------*
+//* Parammeters errors list:                     *
+//* 1   - Parameter had disabled.                *
+//* 2   - Controller is stoped.                  *
+//* 10  - CIF device error.                      *
+//* 11  - Value not gathered.                    *
+//* 12  - Put request is timeouted.              *
+//* 13  - Get request is timeouted.              *
+//* 14  - Request block too big.                 *
+//* 15  - Board %d no present.                   *
+//* 16  - Transmit block too big.                *
+//* 17  - No response of the remote station.     *
+//* 18  - Master not into the logical token ring.*
+//* 19  - Request to DB error %d.                *
+//* 20  - Specified offset address or DB error.  *
+//************************************************
 class TMdContr;
 
 class TMdPrm : public TParamContr, public TValFunc
@@ -135,9 +137,9 @@ class TMdPrm : public TParamContr, public TValFunc
 	time_t	acq_err_tm;
 };
 
-//======================================================================
-//==== TMdContr 
-//======================================================================
+//************************************************
+//* TMdContr                                     *
+//************************************************
 class TTpContr;
 
 class TMdContr: public TController
@@ -146,9 +148,10 @@ class TMdContr: public TController
     public:
 	//Methods
     	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem);
-	~TMdContr();   
+	~TMdContr( );
 
-	int period()	{ return m_per; }
+	int period( )		{ return m_per; }
+	bool assincWrite( )	{ return m_assinc_wr; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
@@ -163,8 +166,8 @@ class TMdContr: public TController
 	
     protected:
 	//Methods	
-	void prmEn( const string &id, bool val );	//Enable parameter to process list	
-	void regVal( SValData ival, IO::Type itp );	//Register value for acquisition
+	void prmEn( const string &id, bool val );		//Enable parameter to process list	
+	void regVal( SValData ival, IO::Type itp, bool wr );	//Register value for acquisition
 	//- Values process -
 	char getValB( SValData ival, string &err );
 	int  getValI( SValData ival, string &err );
@@ -193,10 +196,10 @@ class TMdContr: public TController
 	    return obuf;
 	}
 	//Data
-	class SGetRec
+	class SDataRec
 	{
 	    public:
-	    	SGetRec( int idb, int ioff, int v_rez ) : db(idb), off(ioff)	
+	    	SDataRec( int idb, int ioff, int v_rez ) : db(idb), off(ioff)	
 	    	{ val.assign(v_rez,0); err="11:Value not gathered."; }
 	    
 	    	int db;		//Data block
@@ -206,25 +209,27 @@ class TMdContr: public TController
 	};
 	
 	//Attributes
-	Res	en_res;         //Resource for enable params
+	Res	en_res;         // Resource for enable params
 	int	&m_per,     	// ms
 		&m_prior,	// Process task priority
 		&m_dev,		// CIF device number
 		&m_addr;	// Remote host address
+	bool	&m_assinc_wr;	// Asynchronous write mode
 		
 	bool    prc_st,		// Process task active
 		endrun_req;	// Request to stop of the Process task
         vector< AutoHD<TMdPrm> >  p_hd;	// Parameter's process list
-	vector< SGetRec > acqBlks;	// Acquisition data blocks
+	vector< SDataRec > acqBlks;	// Acquisition data blocks
+	vector< SDataRec > writeBlks;	// Data block for write to a data source, for asynchronous write mode
 	
 	pthread_t procPthr;     // Process task thread
 	
 	double 	tm_calc;	// Template functions calc time
 };
 
-//======================================================================
-//==== TTpContr 
-//======================================================================
+//************************************************
+//* TTpContr                                     *
+//************************************************
 class TTpContr: public TTipDAQ
 {
     friend class TMdContr;

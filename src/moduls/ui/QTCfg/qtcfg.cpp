@@ -322,7 +322,7 @@ void ConfApp::endRunChk( )
 
 void ConfApp::pageUp()
 {
-    int i_l = string::npos;
+    long i_l = string::npos;
     while(true)
     {
 	i_l = sel_path.rfind("/",i_l);
@@ -1520,84 +1520,13 @@ int ConfApp::cntrIfCmd( XMLNode &node )
 	return atoi(node.attr("rez").c_str());
     }
     
-    //- Check remote station request -
-    ExtHost host = mod->extHostGet(w_user->user().toAscii().data(),station);
-    if(!host.id.size() || !SYS->transport().at().modPresent(host.transp))
-	throw TError(mod->nodePath().c_str(),_("Station <%s> error!"),station.c_str());
-    //-- Check transport --
-    string tr_nm = "RemStat"+station;
-    if(!SYS->transport().at().at(host.transp).at().outPresent(tr_nm))
-    {
-	SYS->transport().at().at(host.transp).at().outAdd(tr_nm);
-	SYS->transport().at().at(host.transp).at().outAt(tr_nm).at().setAddr(host.addr);
-    }
-    AutoHD<TTransportOut> tr = SYS->transport().at().at(host.transp).at().outAt(tr_nm);
+    //- Request to remote host -
+    TTransportS::ExtHost host = SYS->transport().at().extHostGet(w_user->user().toAscii().data(),station);
+    AutoHD<TTransportOut> tr = SYS->transport().at().extHost(host,"TrCntr");    
     if(!tr.at().startStat())	tr.at().start();
-    //-- Request to remote station --
-    char buf[1000], buf1[256];
-    string req, resp;
-    int rez, resp_len;
-    
-    try
-    {
-        while(true)
-	{
-	    //--- Session open ---
-	    if(host.ses_id < 0)
-	    {
-		req = "SES_OPEN "+host.user+" "+host.pass+"\n";
-		resp_len = tr.at().messIO(req.c_str(),req.size(),buf,sizeof(buf),20);
-		buf[resp_len] = 0;
-		buf1[0] = 0;
-		sscanf(buf,"REZ %d %255s\n",&rez,buf1);
-		if(rez == 1)	throw TError(mod->nodePath().c_str(),_("Station <%s> auth error: %s!"),station.c_str(),buf1);
-    		else if(rez > 0)throw TError(mod->nodePath().c_str(),_("Station <%s> error: %s!"),station.c_str(),buf1);		
-		host.ses_id = atoi(buf1);
-		mod->extHostSet(host);
-	    }
-	    //--- Request ---
-	    string data = node.save();
-	    req = "REQ "+TSYS::int2str(host.ses_id)+" "+TSYS::int2str(data.size())+"\n"+data;
-	    buf[0] = 0;
-	    resp_len = tr.at().messIO(req.c_str(),req.size(),buf,sizeof(buf),20);
-	    resp.assign(buf,resp_len);
-	    //Get head
-	    buf1[0] = 0;
-	    if(sscanf(resp.c_str(),"REZ %d %255s\n",&rez,buf1)<=0)
-		throw TError(mod->nodePath().c_str(),_("Station respond <%s> error!"),station.c_str());
-	    if(rez == 1)	{ host.ses_id = -1; continue; }
-	    if(rez > 0)	throw TError(mod->nodePath().c_str(),_("Station <%s> error: %d:%s!"),station.c_str(),rez,buf1);	    
-	    int head_end = resp.find("\n",0);
-	    if(head_end == string::npos)
-		throw TError(mod->nodePath().c_str(),_("Station <%s> error: Respond broken!"),station.c_str());	    
-	    int resp_size = atoi(buf1);	
-	    //Wait tail
-	    while(resp.size() < resp_size+head_end+sizeof('\n'))
-	    {
-		resp_len = tr.at().messIO(NULL,0,buf,sizeof(buf),20);
-		resp.append(buf,resp_len);
-	    }
-
-	    node.load(resp.substr(head_end));
-    	    node.setAttr("path",path);
-	    if(!host.link_ok)
-	    {
-		host.link_ok = true; 
-		mod->extHostSet(host);
-	    }
-	    return atoi(node.attr("rez").c_str());
-	}
-    }
-    catch(TError err)
-    {
-	if(host.link_ok)
-	{ 
-	    host.link_ok = false; 
-	    mod->extHostSet(host); 
-	    tr.at().stop();
-	}
-	throw;
-    }
+    node.load(tr.at().messProtIO(host.user+"\n"+host.pass+"\n"+node.save(),"SelfSystem"));
+    node.setAttr("path",path);
+    return atoi(node.attr("rez").c_str());
 }                          
 
 void ConfApp::initHosts()
@@ -1613,7 +1542,7 @@ void ConfApp::initHosts()
 	    it_present = true;
     	    continue;
 	}
-	ExtHost host = mod->extHostGet(w_user->user().toAscii().data(),TSYS::pathLev(nit->text(2).toAscii().data(),0));
+	TTransportS::ExtHost host = SYS->transport().at().extHostGet(w_user->user().toAscii().data(),TSYS::pathLev(nit->text(2).toAscii().data(),0));
 	if(host.id.size())	continue;
 	delete CtrTree->takeTopLevelItem(i_top);
 	i_top--;
@@ -1632,11 +1561,11 @@ void ConfApp::initHosts()
     
     //-- Init remote hosts --
     vector<string> list;
-    mod->extHostList(w_user->user().toAscii().data(),list);
+    SYS->transport().at().extHostList(w_user->user().toAscii().data(),list);
     for(int i_h = 0; i_h < list.size(); i_h++)
     {
-	ExtHost host = mod->extHostGet(w_user->user().toAscii().data(),list[i_h]);
-	//--- Find alreadi present items ---
+	TTransportS::ExtHost host = SYS->transport().at().extHostGet(w_user->user().toAscii().data(),list[i_h]);
+	//--- Find already present items ---
 	it_present = false;
 	for(int i_top = 0; i_top < CtrTree->topLevelItemCount(); i_top++)
 	{

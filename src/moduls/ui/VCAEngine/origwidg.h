@@ -145,6 +145,10 @@ class OrigProtocol : public PrWidget
     
 	string name( );
 	string descr( );
+
+    protected:
+	void postEnable( int flag );
+	bool attrChange( Attr &cfg, void *prev );
 };
 
 //************************************************

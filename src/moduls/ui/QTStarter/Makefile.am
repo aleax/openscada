@@ -1,5 +1,4 @@
-QTDIR=/usr/lib/qt4/
-QTINC=$(QTDIR)include/
+QTINC=$(oldincludedir)/qt4
 
 ## process this file with automake to generate Makefile.in
 EXTRA_DIST = *.h qtstarter.qrc images/* po/* doc/*
@@ -12,9 +11,9 @@ ui_QTStarter_so_SOURCES = tuimod.cpp moc_tuimod.cpp qrc_qtstarter.cpp
 ui_QTStarter_so_LDADD = -lQtGui
 
 qrc_qtstarter.cpp: qtstarter.qrc
-	$(QTDIR)/bin/rcc -name QTStarter qtstarter.qrc -o qrc_qtstarter.cpp
+	$(QT4_RCC) -name QTStarter qtstarter.qrc -o qrc_qtstarter.cpp
 moc_tuimod.cpp: tuimod.h
-	$(QTDIR)/bin/moc tuimod.h > moc_tuimod.cpp
+	$(QT4_MOC) tuimod.h > moc_tuimod.cpp
 
 #PO files process and doc install
 fm_name = Mod_Tr_QTStarter

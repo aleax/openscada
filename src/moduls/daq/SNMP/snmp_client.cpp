@@ -475,15 +475,18 @@ void TMdPrm::parseOIDList(const string &ioid)
 
 void TMdPrm::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Service commands process -
+    string a_path = opt->attr("path");
+    if( a_path.substr(0,6) == "/serv/" )  { TParamContr::cntrCmdProc(opt); return; }
+
+    //- Get page info -
     if( opt->name() == "info" )	
     {
 	TParamContr::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/OID_LS",cfg("OID_LS").fld().descr(),enableStat()?0444:0664);
 	return;
     }
-    //Process command to page
-    string a_path = opt->attr("path");
+    //- Process command to page -
     if( a_path == "/prm/cfg/OID_LS" && ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
     {
 	if( enableStat() )	throw TError(nodePath().c_str(),"Parameter is enabled.");

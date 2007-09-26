@@ -59,8 +59,8 @@ class VisDevelop : public QMainWindow
 	VisDevelop( const string &open_user, const string &VCAstat );
 	~VisDevelop( );
 	
-	string user();
-	string VCAStation()	{ return host.stat; }
+	string user( );
+	string VCAStation()	{ return m_stat; }
 	
 	void setVCAStation( const string& st );
 	
@@ -174,7 +174,7 @@ class VisDevelop : public QMainWindow
 	QTimer      	*endRunTimer, *work_wdgTimer;
 	string		work_wdg, work_wdg_new;	//Work widget
 	QSignalMapper 	*wMapper;	//Internal window mapper
-	VCAHost		host;	
+	string		m_stat;		//Station
 
 	//- Main dialogs -
 	LibProjProp 	*prjLibPropDlg;	//Widget's library and project properties dialog

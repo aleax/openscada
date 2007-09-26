@@ -1,5 +1,4 @@
-QTDIR=/usr/lib/qt4/
-QTINC=$(QTDIR)include/
+QTINC=$(oldincludedir)/qt4
 
 ## process this file with automake to generate Makefile.in
 EXTRA_DIST = *.h qtcfg.qrc images/* po/* doc/*
@@ -13,11 +12,11 @@ ui_QTCfg_so_SOURCES = tuimod.cpp qrc_qtcfg.cpp qtcfg.cpp selfwidg.cpp moc_qtcfg.
 ui_QTCfg_so_LDADD = -lQtGui
 
 qrc_qtcfg.cpp: qtcfg.qrc
-	$(QTDIR)/bin/rcc -name QTCfg qtcfg.qrc -o qrc_qtcfg.cpp
+	$(QT4_RCC) -name QTCfg qtcfg.qrc -o qrc_qtcfg.cpp
 moc_qtcfg.cpp: qtcfg.h
-	$(QTDIR)/bin/moc qtcfg.h > moc_qtcfg.cpp
+	$(QT4_MOC) qtcfg.h > moc_qtcfg.cpp
 moc_selfwidg.cpp: selfwidg.h
-	$(QTDIR)/bin/moc selfwidg.h > moc_selfwidg.cpp
+	$(QT4_MOC) selfwidg.h > moc_selfwidg.cpp
 
 
 #PO files process and doc install

@@ -42,14 +42,14 @@ class TParamContr : public TConfig, public TValue
     	const string &id()	{ return m_id; }
     	string name();
 	string descr()		{ return m_descr; }
+	bool toEnable()		{ return m_aen; }
+	bool enableStat()	{ return m_en; }	
 	
 	void setName( const string &inm ) 	{ m_name = inm; }
-	void setDescr( const string &idsc ){ m_descr = idsc; }
+	void setDescr( const string &idsc )	{ m_descr = idsc; }
+	void setToEnable( bool vl )		{ m_aen = vl; }
 	
 	TTipParam &type()	{ return *tipparm; }
-
-	bool toEnable()		{ return m_aen; }
-	bool enableStat()	{ return m_en; }
 	
     	virtual void enable( );	// Enable parameter and open access to value	
     	virtual void disable( );// Disable parameter and close access to value

@@ -804,8 +804,12 @@ void TMdPrm::calc( bool first, bool last )
 
 void TMdPrm::cntrCmdProc( XMLNode *opt )
 {
+    //- Service commands process -
+    string a_path = opt->attr("path");    
+    if( a_path.substr(0,6) == "/serv/" )  { TParamContr::cntrCmdProc(opt); return; }
+
     vector<string> list;
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
         TParamContr::cntrCmdProc(opt);
@@ -819,13 +823,13 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
         	{
 		    if( !(tmpl->val.func()->io(i_io)->flg()&(TPrmTempl::CfgLink|TPrmTempl::CfgPublConst)) )
 			continue;
-    		    //Check select param
+    		    //-- Check select param --
 		    bool is_lnk = tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink;
             	    if( is_lnk && tmpl->val.func()->io(i_io)->def().size() && 
 			!atoi(TBDS::genDBGet(mod->nodePath()+"onlAttr","0",opt->attr("user")).c_str()) )
             	    {
                 	string nprm = TSYS::strSepParse(tmpl->val.func()->io(i_io)->def(),0,'|');
-                	//Check already to present parameters
+                	//-- Check already to present parameters --
                 	bool f_ok = false;
                 	for( int i_l = 0; i_l < list.size(); i_l++ )
                     	    if( list[i_l] == nprm ) { f_ok = true; break; }
@@ -852,8 +856,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
         	}
         }
     }
-    //Process command to page
-    string a_path = opt->attr("path");
+    
+    //- Process command to page -
     if( a_path == "/prm/cfg/MODE" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )
     	try
 	{ 

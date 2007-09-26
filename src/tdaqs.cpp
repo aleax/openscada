@@ -241,34 +241,49 @@ void TDAQS::subStart(  )
 
     vector<string> m_l, tmpl_lst;
 
+    bool reply   = false;
+    int  try_cnt = 0;
     //Start template's libraries
-    tmplLibList(tmpl_lst);
-    for(int i_lb=0; i_lb < tmpl_lst.size(); i_lb++ )
-	try{ tmplLibAt(tmpl_lst[i_lb]).at().start(true); }
-	catch(TError err) 
-	{ 
-	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	    mess_err(nodePath().c_str(),_("Start template library <%s> error."),tmpl_lst[i_lb].c_str());
-	}
-
-    //Enable controllers
-    modList(m_l);
-    for( unsigned i_m = 0; i_m < m_l.size(); i_m++)
+    do
     {
-	vector<string> c_l;
-	at(m_l[i_m]).at().list(c_l);
-	for( unsigned i_c = 0; i_c < c_l.size(); i_c++)
-	{
-	    AutoHD<TController> cntr = at(m_l[i_m]).at().at(c_l[i_c]);
-	    if( !cntr.at().enableStat() && cntr.at().toEnable() )
-	        try{ cntr.at().enable(); }
-		catch(TError err) 
-		{ 
+	tmplLibList(tmpl_lst);
+	for( int i_lb = 0; i_lb < tmpl_lst.size(); i_lb++ )
+	    try { tmplLibAt(tmpl_lst[i_lb]).at().start(true); }
+	    catch(TError err) 
+	    { 
+		if( try_cnt )
+		{
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    mess_err(nodePath().c_str(),_("Enable controller <%s> error."),(m_l[i_m]+"."+c_l[i_c]).c_str());
+		    mess_err(nodePath().c_str(),_("Start template library <%s> error."),tmpl_lst[i_lb].c_str());
 		}
+		reply = true;
+	    }    
+
+	//Enable controllers
+	modList(m_l);
+	for( unsigned i_m = 0; i_m < m_l.size(); i_m++)
+	{
+	    vector<string> c_l;
+	    at(m_l[i_m]).at().list(c_l);
+	    for( unsigned i_c = 0; i_c < c_l.size(); i_c++)
+	    {
+		AutoHD<TController> cntr = at(m_l[i_m]).at().at(c_l[i_c]);
+		if( /*!cntr.at().enableStat() &&*/ cntr.at().toEnable() )
+	    	    try{ cntr.at().enable(); }
+		    catch(TError err) 
+		    {
+			if( try_cnt )
+	                { 
+			    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+			    mess_err(nodePath().c_str(),_("Enable controller <%s> error."),(m_l[i_m]+"."+c_l[i_c]).c_str());
+			}
+			reply = true;
+		    }
+	    }
 	}
+	try_cnt++;
     }
+    while( reply && try_cnt < 2 );
 
     //Start controllers
     /*for( unsigned i_m = 0; i_m < m_l.size(); i_m++)

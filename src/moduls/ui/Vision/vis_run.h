@@ -53,7 +53,7 @@ class VisRun : public QMainWindow
 	int    period( )	{ return m_period; }
 	string workSess( )	{ return work_sess; }
 	string srcProject( )	{ return src_prj; }	
-        string VCAStation()     { return host.stat; }
+        string VCAStation()     { return m_stat; }
 	
         void setVCAStation( const string& st );
 
@@ -107,7 +107,7 @@ class VisRun : public QMainWindow
 	int 		m_period;		//Clock's period
 	unsigned	w_prc_cnt;		//Process counter
 	float		upd_tm;
-	VCAHost         host;	
+	string		m_stat;			//Station
 	
 	deque<RunWdgView *>  cache_pg;		//Pages cache
 };

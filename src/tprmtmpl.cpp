@@ -107,6 +107,7 @@ void TPrmTempl::setProg( const string &iprg )
 
 void TPrmTempl::start( bool vl )
 {
+    if( startStat() == vl ) return;
     if(vl)
     {
 	//Check old compile function	????

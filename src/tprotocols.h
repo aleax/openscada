@@ -31,9 +31,9 @@
 
 using std::string;
 
-//================================================================
-//=========== TProtocolIn ========================================
-//================================================================
+//************************************************
+//* TProtocolIn                                  *
+//************************************************ 
 class TProtocol;
 
 class TProtocolIn : public TCntrNode
@@ -58,16 +58,18 @@ class TProtocolIn : public TCntrNode
 	string            m_name;
 };
 
-//================================================================
-//=========== TProtocol ==========================================
-//================================================================
+//************************************************
+//* TProtocol                                    *
+//************************************************ 
+class TTransportOut;
+
 class TProtocol: public TModule
 {
     public:
 	TProtocol( );
 	virtual ~TProtocol( );
 
-	//- Input protocols -
+	//- Input protocol -
 	void list( vector<string> &list )	{ chldList(m_pr,list); }
         bool openStat( const string &name )	{ return chldPresent(m_pr,name); } 
 	void open( const string &name );
@@ -75,19 +77,22 @@ class TProtocol: public TModule
 	AutoHD<TProtocolIn> at( const string &name )
 	{ return chldAt(m_pr,name); }
 	
+	//- Output protocol -
+	virtual string outMess( const string &in, TTransportOut &tro )
+	{ throw TError(nodePath().c_str(),"Function 'outMess' no support!"); }
+	
     private:
 	//Methods
 	virtual TProtocolIn *in_open( const string &name )
-	{throw TError(nodePath().c_str(),"Function 'in_open' no support!"); }		
+	{ throw TError(nodePath().c_str(),"Function 'in_open' no support!"); }
 	
 	//Attributes
 	int	m_pr;
 };
 
-//================================================================
-//=========== TProtocolS =========================================
-//================================================================
-
+//************************************************
+//* TProtocolS                                   *
+//************************************************ 
 class TProtocolS : public TSubSYS
 {
     public:
@@ -97,7 +102,9 @@ class TProtocolS : public TSubSYS
 	int subVer( ) 	{ return(VER_PROT); }
 	void subLoad( );
 
-	string optDescr( );	
+	AutoHD<TProtocol> at( const string &iid )	{ return modAt(iid); }
+
+	string optDescr( );
 
     private:
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process

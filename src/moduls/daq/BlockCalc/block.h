@@ -97,7 +97,7 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 		
     protected:
 	//Attributes
-	void loadIO( const string &blk_sh = "", const string &blk_id = "" );
+	void loadIO( const string &blk_db = "", const string &blk_id = "" );
 	void saveIO( );
 	    
 	string nodeName(){ return m_id; }

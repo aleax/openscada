@@ -133,7 +133,12 @@ void TParamContr::vlGet( TVal &val )
 
 void TParamContr::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    string a_path = opt->attr("path");
+
+    //- Service commands process -
+    if( a_path.substr(0,6) == "/serv/" ) { TValue::cntrCmdProc(opt); return; }
+
+    //- Get page info -
     if( opt->name() == "info" )
     {
 	TValue::cntrCmdProc(opt);
@@ -155,8 +160,7 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 	}
         return;
     }
-    //Process command to page
-    string a_path = opt->attr("path");
+    //- Process command to page -
     if( a_path == "/prm/st/type" && ctrChkNode(opt) )	opt->setText(type().lName());
     else if( a_path == "/prm/st/en" )
     {

@@ -38,6 +38,10 @@ using std::vector;
 #define EVAL_REAL -3.3E308
 #define EVAL_STR  "<EVAL>"
 
+
+//*************************************************
+//* TVal                                          *
+//*************************************************
 class TValue;
 class TVArchive;
 
@@ -105,7 +109,9 @@ class TVal : public TCntrNode
 	AutoHD<TVArchive>	m_arch;
 };
 
-
+//*************************************************
+//* TValue                                        *
+//*************************************************
 class TConfig;
 
 class TValue: public TCntrNode, public TValElem

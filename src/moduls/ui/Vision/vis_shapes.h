@@ -241,10 +241,27 @@ class ShapeDiagram : public WdgShape
 //* Protocol view shape widget                   *
 //************************************************
 class ShapeProtocol : public WdgShape
-{
+{    
+    Q_OBJECT
+
     public:
 	ShapeProtocol( );
-	//bool event( WdgView *view, QEvent *event );    
+
+	void init( WdgView *view );
+	void destroy( WdgView *w );
+	bool attrSet( WdgView *view, int uiPrmPos, const string &val);
+	bool event( WdgView *view, QEvent *event );
+	bool eventFilter( WdgView *view, QObject *object, QEvent *event );
+
+    private slots:
+	void tracing( );	//Trends tracing
+
+    private:
+ 	//Private methods
+	void loadData( WdgView *view, bool full = false );
+	//- Recursively widgets process for disable focusable and events filter set -
+	void eventFilterSet( WdgView *view, QWidget *wdg, bool en );    
+	void setFocus(WdgView *view, QWidget *wdg, bool en = false, bool devel = false );	
 };
 
 //************************************************

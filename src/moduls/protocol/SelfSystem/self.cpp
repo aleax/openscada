@@ -187,6 +187,62 @@ TProtocolIn *TProt::in_open( const string &name )
     return new TProtIn(name);
 }
 
+string TProt::outMess( const string &in, TTransportOut &tro )
+{
+    char buf[1000], buf1[256];
+    string req, resp;
+    int rez, resp_len;
+
+    int in_off = 0;
+    string user = TSYS::strSepParse(in,0,'\n',&in_off);
+    string pass = TSYS::strSepParse(in,0,'\n',&in_off);
+    string data = in.substr(in_off);
+    
+    try
+    {
+        while(true)
+        {
+            //--- Session open ---
+            if(tro.prm1() < 0)
+            {
+                req = "SES_OPEN "+user+" "+pass+"\n";
+                resp_len = tro.messIO(req.c_str(),req.size(),buf,sizeof(buf),20);
+                buf[resp_len] = 0;
+                buf1[0] = 0;
+                sscanf(buf,"REZ %d %255s\n",&rez,buf1);
+                if(rez == 1)    throw TError(nodePath().c_str(),_("Station <%s> auth error: %s!"),tro.id().c_str(),buf1);
+                else if(rez > 0)throw TError(nodePath().c_str(),_("Station <%s> error: %s!"),tro.id().c_str(),buf1);
+                tro.setPrm1(atoi(buf1));
+            }
+            //--- Request ---
+            req = "REQ "+TSYS::int2str(tro.prm1())+" "+TSYS::int2str(data.size())+"\n"+data;
+            buf[0] = 0;
+            resp_len = tro.messIO(req.c_str(),req.size(),buf,sizeof(buf),20);
+            resp.assign(buf,resp_len);
+            //---- Get head ----
+            buf1[0] = 0;
+            if(sscanf(resp.c_str(),"REZ %d %255s\n",&rez,buf1)<=0)
+        	throw TError(nodePath().c_str(),_("Station respond <%s> error!"),tro.id().c_str());
+            if(rez == 1)        { tro.setPrm1(-1); continue; }
+            if(rez > 0) throw TError(nodePath().c_str(),_("Station <%s> error: %d:%s!"),tro.id().c_str(),rez,buf1);
+            int head_end = resp.find("\n",0);
+            if(head_end == string::npos)
+        	throw TError(nodePath().c_str(),_("Station <%s> error: Respond broken!"),tro.id().c_str());
+            int resp_size = atoi(buf1);
+            //---- Wait tail ----
+            while(resp.size() < resp_size+head_end+sizeof('\n'))
+            {
+        	resp_len = tro.messIO(NULL,0,buf,sizeof(buf),20);
+        	resp.append(buf,resp_len);
+            }
+            return resp.substr(head_end);
+        }
+    }
+    catch(TError err)   { tro.stop(); throw; }
+
+    return "";
+}
+
 void TProt::cntrCmdProc( XMLNode *opt )
 {
     //Get page info

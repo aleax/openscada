@@ -44,10 +44,12 @@
 using namespace VISION;
 
 VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) : 
-    prjLibPropDlg(NULL), visItPropDlg(NULL), winClose(false), proc_st(false), host("","","","","")
+    prjLibPropDlg(NULL), visItPropDlg(NULL), winClose(false), proc_st(false)
 {
     setAttribute(Qt::WA_DeleteOnClose,true);
+#if QT_VERSION >= 0x040301
     setDockOptions(dockOptions() | QMainWindow::VerticalTabs);
+#endif
     mod->regWin( this );
 
     setWindowTitle(_("Vision developing"));
@@ -498,7 +500,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) :
     wdgToolView->setVisible(false);
     elFigTool->setVisible(false);
     
-    w_stat->setText(host.st_nm.c_str());
+    //w_stat->setText(host.st_nm.c_str());
     statusBar()->showMessage(_("Ready"), 2000 );
 }
 
@@ -522,31 +524,14 @@ VisDevelop::~VisDevelop()
 }
 
 void VisDevelop::setVCAStation( const string& st )
-{    
-    host.stat  = st;
-    host.st_nm = _("Local");
-    if( st == "." ) return;
-    TConfig c_el(&mod->elExt());
-    c_el.cfg("OP_USER").setS(user());
-    c_el.cfg("ID").setS(st);
-    if(!SYS->db().at().dataGet(mod->extTranspBD(),mod->nodePath()+"ExtTansp/",c_el))
-	host.stat = ".";
-    else
-    {
-	host.st_nm   = c_el.cfg("NAME").getS();
-        host.transp  = c_el.cfg("TRANSP").getS();
-        host.addr    = c_el.cfg("ADDR").getS();
-        host.user    = c_el.cfg("USER").getS();
-        host.pass    = c_el.cfg("PASS").getS();
-	host.ses_id  = -1;
-	host.link_ok = false;
-    }
+{
+    m_stat = st.empty() ? "." : st;
 }
 
 int VisDevelop::cntrIfCmd( XMLNode &node, bool glob )
 {
-    if( host.stat.empty() || host.stat == "." ) node.setAttr("user",user());
-    return mod->cntrIfCmd(node,host,glob);
+    if( VCAStation().empty() || VCAStation() == "." ) node.setAttr("user",user());
+    return mod->cntrIfCmd(node,user(),VCAStation(),glob);
 }
 
 string VisDevelop::user()

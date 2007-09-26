@@ -67,6 +67,20 @@ void ModMArch::stop()
     run_st = false;				    
 }
 
+time_t ModMArch::begin()
+{
+    ResAlloc res(m_res,false);
+    for( int i_arh = 0; i_arh < arh_s.size(); i_arh++ )
+	if( !arh_s[i_arh]->err() ) return arh_s[i_arh]->begin();
+}
+
+time_t ModMArch::end()
+{
+    ResAlloc res(m_res,false);
+    for( int i_arh = arh_s.size()-1; i_arh >= 0; i_arh-- ) 
+	if( !arh_s[i_arh]->err() ) return arh_s[i_arh]->end();
+}
+
 void ModMArch::put( vector<TMess::SRec> &mess )
 {
     unsigned long long t_cnt = SYS->shrtCnt();

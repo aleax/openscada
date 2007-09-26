@@ -34,26 +34,9 @@
 namespace VISION
 {
 
-class VCAHost
-{
-    public:
-        //Methods
-        VCAHost( const string &ist, const string &itransp, const string &iaddr, 
-	    const string &iuser, const string &ipass) :
-        	    stat(ist), transp(itransp), addr(iaddr), user(iuser), pass(ipass), 
-		    ses_id(-1), link_ok(false) { }
-							    
-        //Attributes
-	string  stat;		//External station
-	string  st_nm;		//External station name
-    	string  transp;         //Connect transport
-        string  addr;           //External host address
-        string  user;           //External host user
-        string  pass;           //External host password
-        int     ses_id;         //Session ID
-        bool    link_ok;        //Link OK
-};
-
+//*************************************************
+//* QTCFG::TVision                                *
+//*************************************************
 class WdgShape;
     
 class TVision : public TUI
@@ -67,7 +50,6 @@ class TVision : public TUI
 	~TVision( );
 	
 	bool endRun( )	{ return end_run; }
-	string extTranspBD();
 	string startUser( )	{ return start_user; }
 	string runPrjs( )	{ return run_prjs; }
 	string VCAStation( )	{ return vca_station; }
@@ -98,9 +80,7 @@ class TVision : public TUI
 		MessLev type = Info, QWidget *parent = NULL );
 	
 	//- Request to OpenSCADA control interface -
-	int cntrIfCmd( XMLNode &node, VCAHost &host, bool glob = false );
-
-	TElem &elExt( )		{ return el_ext; }
+	int cntrIfCmd( XMLNode &node, const string &user, const string &stat, bool glob = false );
 
     private:
 	//Methods
@@ -114,7 +94,6 @@ class TVision : public TUI
 				run_prjs;	//Run projects list on the module start
 	vector<WdgShape *>	shapesWdg;
 	bool    		end_run;	//End run command. Close all windows
-	TElem   		el_ext;		//Extarnal host element
 	
 	string			vca_station;	//VCA station id ('.' - for local station)
 };

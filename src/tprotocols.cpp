@@ -26,9 +26,9 @@
 #include "tmess.h"
 #include "tprotocols.h"
 
-//================================================================
-//=========== TProtocolS =========================================
-//================================================================
+//************************************************
+//* TProtocolS                                   *
+//************************************************
 TProtocolS::TProtocolS( ) : TSubSYS("Protocol","Transport protocols",true) 
 {
 
@@ -47,7 +47,7 @@ string TProtocolS::optDescr(  )
 
 void TProtocolS::subLoad()
 {
-    //========== Load parameters from command line ============
+    //- Load parameters from command line -
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -67,7 +67,7 @@ void TProtocolS::subLoad()
 	}
     } while(next_opt != -1);
     
-    //========== Load parameters from config file =============
+    //- Load parameters from config file -
 
     //Load modules
     TSubSYS::subLoad();
@@ -75,23 +75,23 @@ void TProtocolS::subLoad()
 
 void TProtocolS::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
         TSubSYS::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root",subId().c_str(),3,"tp","str","cols","90","rows","10");
 	return;
     }
-    //Process command to page
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440,"root",subId().c_str()) )	opt->setText(optDescr());
     else TSubSYS::cntrCmdProc(opt);
 }
 
 
-//================================================================
-//=========== TProtocol ==========================================
-//================================================================
+//************************************************
+//* TProtocol                                    *
+//************************************************
 TProtocol::TProtocol()
 {
     m_pr = grpAdd("pr_");
@@ -112,9 +112,9 @@ void TProtocol::close( const string &name )
     chldDel(m_pr,name);
 }
 
-//================================================================
-//=========== TProtocolIn ========================================
-//================================================================
+//************************************************
+//* TProtocolIn                                  *
+//************************************************
 TProtocolIn::TProtocolIn( const string &name ) : m_name(name)
 {
 

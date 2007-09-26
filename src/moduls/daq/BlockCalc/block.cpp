@@ -55,7 +55,7 @@ Block &Block::operator=(Block &blk)
     if( blk.enable() )
     {
 	enable(true);
-	loadIO(blk.owner().cfg("BLOCK_SH").getS(),blk.id());    
+	loadIO(blk.owner().DB()+"."+blk.owner().cfg("BLOCK_SH").getS(),blk.id());    
     }    
 }
 
@@ -108,14 +108,25 @@ void Block::save( )
     saveIO();
 }
 		
-void Block::loadIO( const string &blk_sh, const string &blk_id )
-{    
+void Block::loadIO( const string &blk_db, const string &blk_id )
+{   
+    string bd_tbl, bd; 
     if( !func() ) return;
     
     TConfig cfg(&mod->blockIOE());
-    cfg.cfg("BLK_ID").setS((blk_id.size())?blk_id:id());
-    string bd_tbl = ((blk_sh.size())?blk_sh:owner().cfg("BLOCK_SH").getS())+"_io";
-    string bd = owner().DB()+"."+bd_tbl;
+    cfg.cfg("BLK_ID").setS((blk_id.size())?blk_id:id());        
+    if( blk_db.empty() )
+    {
+	bd_tbl = owner().cfg("BLOCK_SH").getS()+"_io";
+	bd     = owner().DB()+"."+bd_tbl;
+    }
+    else
+    {
+	bd     = blk_db+"_io";
+	bd_tbl = TSYS::strSepParse(bd,2,'.');
+    }    
+    //string bd_tbl = ((blk_db.size())?blk_db:owner().cfg("BLOCK_SH").getS())+"_io";
+    //string bd = owner().DB()+"."+bd_tbl;
     
     for( int i_ln = 0; i_ln < m_val.size(); i_ln++ )
     {    
@@ -128,9 +139,9 @@ void Block::loadIO( const string &blk_sh, const string &blk_id )
 	cfg.cfg("ID").setS(func()->io(i_ln)->id());    
 	if(!SYS->db().at().dataGet(bd,mod->nodePath()+bd_tbl,cfg))
 	    continue;
-    	//Value
+    	//- Value -
 	setS(i_ln,cfg.cfg("VAL").getS());
-	//Config of link
+	//- Config of link -
 	link(i_ln,SET,(LnkT)cfg.cfg("TLNK").getI(),cfg.cfg("LNK").getS());
     }
 }
@@ -429,7 +440,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/blck/cfg/toen",_("To enable"),0664,"root","root",1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/blck/cfg/toprc",_("To process"),0664,"root","root",1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/blck/cfg/func",_("Function"),(!func())?0664:0444,"root","root",3,"tp","str","dest","sel_ed","select","/blck/cfg/fncs");
-		ctrMkNode("comm",opt,-1,"/blck/cfg/func_lnk",_("Go to function"),0440,"root","root",1,"tp","lnk");
+		ctrMkNode("comm",opt,-1,"/blck/cfg/func_lnk",_("Go to function"),0660,"root","root",1,"tp","lnk");
 		ctrMkNode("comm",opt,-1,"/blck/cfg/load",_("Load"),0660);
 		ctrMkNode("comm",opt,-1,"/blck/cfg/save",_("Save"),0660);
 	    }

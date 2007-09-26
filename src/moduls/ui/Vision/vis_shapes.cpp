@@ -37,6 +37,8 @@
 #include <QPicture>
 #include <QTimer>
 #include <QKeyEvent>
+#include <QTableWidget>
+#include <QDateTime>
 
 #include <QApplication>
 
@@ -114,18 +116,14 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    else if( el == 3 )	((QPushButton*)el_wdg)->setText(val.c_str());
 	    break;
 	case 5:		//en
-	    if(runW) 
-	    { 
-		w->dc()["en"] = (bool)atoi(val.c_str());
-		if(el >= 0) el_wdg->setVisible(atoi(val.c_str()));
-	    }
+	    if(!runW)	break;
+	    w->dc()["en"] = (bool)atoi(val.c_str());
+    	    if(el >= 0) el_wdg->setVisible(atoi(val.c_str()));
 	    break;
 	case 6:		//active
-	    if(runW) 
-	    {
-		w->dc()["active"] = (bool)atoi(val.c_str());
-		if( el >= 0 ) setFocus(w,el_wdg,atoi(val.c_str()));
-	    }
+	    if(!runW)	break;
+	    w->dc()["active"] = (bool)atoi(val.c_str());
+    	    if( el >= 0 ) setFocus(w,el_wdg,atoi(val.c_str()));
 	    break;
 	case 12:	//geomMargin
 	    w->layout()->setMargin(atoi(val.c_str()));	break;
@@ -353,7 +351,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 
 bool ShapeFormEl::event( WdgView *view, QEvent *event )
 {
-
+    return false;
 }
 
 bool ShapeFormEl::eventFilter( WdgView *view, QObject *object, QEvent *event )
@@ -1615,8 +1613,7 @@ void ShapeDiagram::TrendObj::loadData( bool full )
     if( !arh_per || tTime > arh_end )
     {
 	XMLNode req("info");
-	req.setAttr("arch",arch)->
-	    setAttr("path",addr()+"/%2fserv%2f0");
+	req.setAttr("arch",arch)->setAttr("path",addr()+"/%2fserv%2f0");
 	if( view->cntrIfCmd(req,true) || atoi(req.attr("vtp").c_str()) == 5 )
 	    arh_per = arh_beg = arh_end = 0;
 	else
@@ -1731,11 +1728,316 @@ ShapeProtocol::ShapeProtocol( ) : WdgShape("Protocol")
 {
 
 }
-
-/*bool ShapeProtocol::event( WdgView *view, QEvent *event )
+ 
+void ShapeProtocol::init( WdgView *w )
 {
+    w->dc()["en"] = true;
+    w->dc()["active"] = true; 
+    w->dc()["time"] = 0;
+    w->dc()["tSize"] = 60;
+    w->dc()["tTimeCurent"] = false; 
+    w->dc()["arhBeg"] = 0;
+    w->dc()["arhEnd"] = 0;
+    // - Init main widget -
+    QVBoxLayout *lay = new QVBoxLayout(w);
+    QTableWidget *tw = new QTableWidget(w);
+    //tw->setSortingEnabled(true);
+    DevelWdgView *devW = qobject_cast<DevelWdgView*>(w);
+    if( devW ) eventFilterSet(w,tw,true);
+    setFocus(w,tw,w->dc()["active"].toInt(),devW);
+    lay->addWidget(tw);    
+    w->dc()["addrWdg"].setValue((void*)tw);
+    //- Init tracing timer -
+    QTimer *tmr = new QTimer(w);
+    w->dc()["trcTimer"].setValue( (void*)tmr );
+    connect( tmr, SIGNAL(timeout()), this, SLOT(tracing()) );
+} 
 
-}*/
+void ShapeProtocol::destroy( WdgView *w )
+{
+    ((QTimer*)w->dc()["trcTimer"].value<void*>())->stop();
+} 
+
+bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val)
+{
+    int  reld_dt = 0;	//Reload data ( 1-reload addons, 2-full reload )
+    QTableWidget *tw = (QTableWidget *)w->dc()["addrWdg"].value<void*>();
+
+    switch(uiPrmPos)
+    {
+	case 5:		//en
+	    if( !qobject_cast<RunWdgView*>(w) )	break;
+	    w->dc()["en"] = (bool)atoi(val.c_str());
+	    tw->setVisible(atoi(val.c_str()));
+	    break;
+	case 6:		//active
+	    if( !qobject_cast<RunWdgView*>(w) ) break;
+	    w->dc()["active"] = (bool)atoi(val.c_str());
+	    setFocus(w,tw,atoi(val.c_str()));
+	    break;
+ 	case 12:	//geomMargin
+	    w->layout()->setMargin(atoi(val.c_str()));	break;
+	case 20:	//backColor
+	{
+	    QPalette plt;
+	    QColor clr(val.c_str());
+	    if( clr.isValid() )	plt.setColor(QPalette::Base,QColor(val.c_str()));
+	    tw->setPalette(plt);	    
+	    break;
+	}
+	case 21:	//backImg
+	{
+	    QPalette plt;	
+	    XMLNode req("get");
+    	    req.setAttr("path",w->id()+"/%2fwdg%2fres")->setAttr("id",val);
+    	    if( !w->cntrIfCmd(req) )
+    	    {
+		QImage img;	    
+		string backimg = TSYS::strDecode(req.text(),TSYS::base64);
+		if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
+		    plt.setBrush(QPalette::Base,QBrush(img));
+    	    }
+	    tw->setPalette(plt);
+	    break;
+	}
+	case 24:	//time
+	{
+            unsigned int tm = strtoul(val.c_str(),0,10);
+	    //if( w->dc()["time"].toUInt() == tm ) break;
+	    w->dc()["timeCurent"] = false;
+	    if( tm == 0 )
+	    {
+		w->dc()["time"] = (unsigned int)time(NULL);
+		w->dc()["timeCurent"] = true;
+	    }else w->dc()["time"] = tm;
+	    reld_dt = 1;
+	    break;
+	}
+	case 25:	//tSize
+	    if( w->dc()["tSize"].toUInt() == strtoul(val.c_str(),0,10) ) break;
+	    w->dc()["tSize"] = (unsigned int)strtoul(val.c_str(),0,10);
+	    reld_dt = 1;
+	    break;
+	case 26:	//trcPer
+	{
+	    unsigned int trcPer = strtoul(val.c_str(),0,10);
+	    if( w->dc()["trcPer"].toUInt() == trcPer ) break;
+	    w->dc()["trcPer"] = trcPer;
+ 	    if( trcPer )
+		((QTimer*)w->dc()["trcTimer"].value<void*>())->start(trcPer*1000);
+	    else ((QTimer*)w->dc()["trcTimer"].value<void*>())->stop();
+	    break;
+	}
+	case 27:	//arch
+	    if( w->dc()["arch"].toString() == val.c_str() ) break;
+	    w->dc()["arch"] = val.c_str();
+	    reld_dt = 2;
+	    break;
+	case 28:	//tmpl
+	    if( w->dc()["tmpl"].toString() == val.c_str() ) break;
+	    w->dc()["tmpl"] = val.c_str();
+	    reld_dt = 2;
+	    break;
+	case 29:	//lev
+	    if( w->dc()["lev"].toInt() == atoi(val.c_str()) ) break;
+	    w->dc()["lev"] = atoi(val.c_str());
+	    reld_dt = 2;
+	    break;
+	case 30:	//viewOrd
+	    if( w->dc()["viewOrd"].toInt() == atoi(val.c_str()) )	break;
+	    w->dc()["viewOrd"] = atoi(val.c_str());
+	    reld_dt = 2;
+	    break;
+	case 31:	//col
+	    if( w->dc()["col"].toString() == val.c_str() ) break;
+	    w->dc()["col"] =  val.c_str();
+	    reld_dt = 2;
+	    break;
+	case 32:	//itProp
+	    if( w->dc()["itProp"].toInt() == atoi(val.c_str()) ) break;
+	    w->dc()["itProp"] = atoi(val.c_str());
+	    reld_dt = 2;
+	    break;
+    }
+
+    if( reld_dt ) loadData(w,reld_dt==2);
+    
+    return true;
+} 
+
+void ShapeProtocol::loadData( WdgView *w, bool full )
+{     
+    QTableWidget *tw = (QTableWidget *)w->dc()["addrWdg"].value<void*>();
+    
+    //- Check for border of present data -
+    unsigned int tTime     = w->dc()["time"].toUInt();
+    unsigned int tTimeGrnd = tTime - w->dc()["tSize"].toUInt();
+    string arch = w->dc()["arch"].toString().toAscii().data();
+    unsigned int arhBeg = w->dc()["arhBeg"].toUInt();
+    unsigned int arhEnd = w->dc()["arhEnd"].toUInt();
+
+    if( full )
+    {
+	tw->setRowCount(0);
+	tw->setColumnCount(0);
+	string clm;
+	for( int c_off = 0; (clm=TSYS::strSepParse(w->dc()["col"].toString().toAscii().data(),0,';',&c_off)).size(); )
+	    if( clm == "tm" || clm == "lev" || clm == "cat" || clm == "mess" ) 
+	    {
+		int ncl = tw->columnCount();
+		tw->setColumnCount(ncl+1);	
+		tw->setHorizontalHeaderItem(ncl,new QTableWidgetItem());
+		if( clm == "tm" )	tw->horizontalHeaderItem(ncl)->setText(_("Time"));
+		else if( clm == "lev" )	tw->horizontalHeaderItem(ncl)->setText(_("Level"));
+		else if( clm == "cat" )	tw->horizontalHeaderItem(ncl)->setText(_("Category"));
+		else if( clm == "mess" )tw->horizontalHeaderItem(ncl)->setText(_("Message"));
+		tw->horizontalHeaderItem(ncl)->setData(Qt::UserRole,clm.c_str());
+	    }
+	arhBeg = arhEnd = 0;
+    }
+
+    //- Get archive parameters -
+    if( !arhBeg || !arhEnd || tTime > arhEnd )
+    {
+ 	XMLNode req("info");
+	req.setAttr("arch",arch)->setAttr("path","/Archive/%2fserv%2f0");
+	if( w->cntrIfCmd(req,true) )	arhBeg = arhEnd = 0;
+	else
+	{
+	    arhBeg = strtoul(req.attr("beg").c_str(),0,10);
+	    arhEnd = strtoul(req.attr("end").c_str(),0,10);
+	}
+    }
+    if( !tw->columnCount() || !arhBeg || !arhEnd )	return;
+    //- Correct request to archive border -
+    tTime     = vmin(tTime,arhEnd);
+    tTimeGrnd = vmax(tTimeGrnd,arhBeg); 
+    //- Clear data at time error -
+    unsigned int valEnd = (tw->rowCount() && tw->columnCount()) ? tw->item(0,0)->data(Qt::UserRole).toUInt() : 0;
+    unsigned int valBeg = (tw->rowCount() && tw->columnCount()) ? tw->item(tw->rowCount()-1,0)->data(Qt::UserRole).toUInt() : 0;    
+    if( tTime <= tTimeGrnd || (tTime < valEnd && tTimeGrnd > valBeg) )
+    {
+        tw->setRowCount(0);
+	valEnd = valBeg = 0;
+	return;
+    }
+    //- Correct request to present data -
+    bool toUp = false;
+    if( valEnd && tTime > valEnd )	{ tTimeGrnd = valEnd; toUp = true; }
+    else if( valBeg && tTimeGrnd < valBeg )	tTime = valBeg-1; 
+    //printf("TEST 00: %d - %d\n",tTimeGrnd,tTime);
+    //- Get values data -
+    XMLNode req("get");
+    req.clear()->
+	setAttr("arch",arch)->
+    	setAttr("path","/Archive/%2fserv%2f0")->
+	setAttr("tm",TSYS::ll2str(tTime))->
+	setAttr("tm_grnd",TSYS::ll2str(tTimeGrnd))->
+	setAttr("cat",w->dc()["tmpl"].toString().toAscii().data())->
+	setAttr("lev",TSYS::uint2str(w->dc()["lev"].toInt()));
+    if( w->cntrIfCmd(req,true) )	return;
+    int row = toUp ? 0 : tw->rowCount();
+    bool newFill = (tw->rowCount()==0);
+    for( int i_req = 0; i_req < req.childSize(); i_req++ )
+    {
+	XMLNode *rcd = req.childGet(i_req);
+	tw->insertRow(row);
+	//- Allow collumn process -
+	for( int i_c = 0; i_c < tw->columnCount(); i_c++ )
+	{
+	    QString sclm = tw->horizontalHeaderItem(i_c)->data(Qt::UserRole).toString();
+	    if( sclm == "tm" )
+	    {
+		QDateTime dtm;
+		dtm.setTime_t((time_t)strtoul(rcd->attr("time").c_str(),0,10));
+		tw->setItem( row, i_c, new QTableWidgetItem(dtm.toString(Qt::ISODate)) );
+	    }
+	    else if( sclm == "lev" )
+		tw->setItem( row, i_c, new QTableWidgetItem(rcd->attr("lev").c_str()) );
+	    else if( sclm == "cat" )
+		tw->setItem( row, i_c, new QTableWidgetItem(rcd->attr("cat").c_str()) );
+	    else if( sclm == "mess" )
+		tw->setItem( row, i_c, new QTableWidgetItem(rcd->text().c_str()) );
+	}
+	tw->item(row,0)->setData(Qt::UserRole,(unsigned int)strtoul(rcd->attr("time").c_str(),0,10));
+    }
+    if( newFill )
+    {
+	tw->resizeColumnsToContents();
+        //Resize too long columns
+        int max_col_sz = vmax(1024/tw->columnCount(),50);
+        for( int i_c = 0; i_c < tw->columnCount(); i_c++ )
+            tw->setColumnWidth(i_c,vmin(max_col_sz,tw->columnWidth(i_c)));
+    }
+}
+
+void ShapeProtocol::tracing( )
+{
+    WdgView *w = (WdgView *)((QTimer*)sender())->parent();
+    if( !w->isEnabled() ) return;
+    
+    unsigned int tm     = w->dc()["time"].toUInt();
+    unsigned int trcPer = w->dc()["trcPer"].toUInt();
+    if( w->dc()["timeCurent"].toBool() ) w->dc()["time"] = (unsigned int)time(NULL);
+    else if( tm )	w->dc()["time"] = tm+trcPer;
+    loadData(w);
+} 
+
+bool ShapeProtocol::event( WdgView *w, QEvent *event )
+{
+    return false;
+}
+ 
+bool ShapeProtocol::eventFilter( WdgView *view, QObject *object, QEvent *event )
+{
+    switch(event->type())
+    {
+	case QEvent::Enter:
+	case QEvent::Leave:	    
+	    return true;
+	case QEvent::MouseMove:	    
+	case QEvent::MouseButtonPress: 
+	case QEvent::MouseButtonRelease:
+	    QApplication::sendEvent(view,event);
+	return true;
+    }
+    
+    return false;
+} 
+ 
+void ShapeProtocol::eventFilterSet( WdgView *view, QWidget *wdg, bool en )
+{
+    if( en ) 	wdg->installEventFilter(view);
+    else 	wdg->removeEventFilter(view);
+    //- Process childs -
+    for( int i_c = 0; i_c < wdg->children().size(); i_c++ )
+	if( qobject_cast<QWidget*>(wdg->children().at(i_c)) )
+	    eventFilterSet(view,(QWidget*)wdg->children().at(i_c),en);
+} 
+
+void ShapeProtocol::setFocus(WdgView *view, QWidget *wdg, bool en, bool devel )
+{
+    int isFocus = wdg->windowIconText().toInt();
+    //- Set up current widget -
+    if( en )
+    {
+	if( isFocus )	wdg->setFocusPolicy((Qt::FocusPolicy)isFocus);
+    }
+    else
+    {	
+	if( wdg->focusPolicy() != Qt::NoFocus )
+	{
+	    wdg->setWindowIconText(QString::number((int)wdg->focusPolicy()));	    
+	    wdg->setFocusPolicy(Qt::NoFocus);
+	}
+	if( devel ) wdg->setMouseTracking(true);
+    }
+    
+    //- Process childs -
+    for( int i_c = 0; i_c < wdg->children().size(); i_c++ )
+	if( qobject_cast<QWidget*>(wdg->children().at(i_c)) )
+	    setFocus(view,(QWidget*)wdg->children().at(i_c),en,devel);
+}
 
 //************************************************
 //* Document view shape widget                   *

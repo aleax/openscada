@@ -79,6 +79,8 @@ class TProt: public TProtocol
 	void ses_close(int id_ses);
 	SAuth ses_get(int id_ses);
 
+	string outMess( const string &in, TTransportOut &tro );
+
     private:
 	//Methods
 	void cntrCmdProc( XMLNode *opt );

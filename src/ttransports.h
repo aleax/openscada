@@ -30,9 +30,10 @@
 #include "tbds.h"
 
 using std::string;
-//================================================================
-//=========== TTransportIn =======================================
-//================================================================
+
+//************************************************
+//* TTransportIn                                 *
+//************************************************ 
 class TTipTransport;
 
 class TTransportIn : public TCntrNode, public TConfig
@@ -90,9 +91,9 @@ class TTransportIn : public TCntrNode, public TConfig
 	string	m_db;
 };
 
-//================================================================
-//=========== TTransportOut ======================================
-//================================================================
+//************************************************
+//* TTransportOut                                *
+//************************************************ 
 class TTransportOut : public TCntrNode, public TConfig
 {
     public:
@@ -103,6 +104,8 @@ class TTransportOut : public TCntrNode, public TConfig
 	string name();
 	string dscr()		{ return m_dscr; }
 	string addr() 		{ return m_addr; }
+	int    prm1( )		{ return m_prm1; }
+	int    prm2( )		{ return m_prm2; }
 	
         string DB( )            { return m_db; }
         string tbl( );
@@ -114,6 +117,8 @@ class TTransportOut : public TCntrNode, public TConfig
 	void setName( const string &inm )	{ m_name = inm; }
 	void setDscr( const string &idscr )	{ m_dscr = idscr; }
 	void setAddr( const string &addr )	{ m_addr = addr; }
+	void setPrm1( int vl )			{ m_prm1 = vl; }
+	void setPrm2( int vl )                  { m_prm2 = vl; }
 	
 	void toStart( bool val )        { m_start = val; }
 	
@@ -124,6 +129,8 @@ class TTransportOut : public TCntrNode, public TConfig
 	
 	virtual int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0 )
 	{ return 0; }
+	
+	string messProtIO( const string &in, const string &prot );
 	
 	TTipTransport &owner() 	{ return *(TTipTransport*)nodePrev(); }
 	
@@ -148,11 +155,14 @@ class TTransportOut : public TCntrNode, public TConfig
 	string  &m_addr;
 	bool    &m_start;
 	string	m_db;
+	
+	//- Reserve parameters -
+	int	m_prm1, m_prm2;
 };
 
-//================================================================
-//=========== TTipTransport ======================================
-//================================================================
+//************************************************
+//* TTipTransport                                *
+//************************************************ 
 class TTransportS;
 
 class TTipTransport: public TModule
@@ -193,25 +203,57 @@ class TTipTransport: public TModule
 	int	m_in, m_out;
 };
 
-//================================================================
-//=========== TTransportS ========================================
-//================================================================
-
+//************************************************
+//* TTransportS                                  *
+//************************************************ 
 class TTransportS : public TSubSYS
 {
     public:
+	//Data
+	class ExtHost
+	{
+	    public:
+        	//Methods
+		ExtHost(const string &iuser_open, const string &iid, const string &iname, 
+			    const string &itransp, const string &iaddr, const string &iuser, const string &ipass) :
+	            user_open(iuser_open), id(iid), name(iname), transp(itransp), addr(iaddr),
+	            user(iuser), pass(ipass), link_ok(false) { }
+								    
+        	//Attributes
+	        string  user_open;      //User which open remote host
+        	string  id;             //External host id
+	        string  name;           //Name
+        	string  transp;         //Connect transport
+	        string  addr;           //External host address
+        	string  user;           //External host user
+	        string  pass;           //External host password
+	        bool    link_ok;        //Link OK
+	};
+    
+	//Methods
      	TTransportS( );
 	~TTransportS( );
 
-	int subVer( ) 	{ return(VER_TR); }
+	int subVer( ) 	{ return VER_TR; }
+	
+	//- External hosts -
+	bool sysHost( )	{ return sys_host; }
+	void setSysHost( bool vl )	{ sys_host = vl; }
+ 	string extHostsDB( );
+	void extHostList( const string &user, vector<string> &list );
+	bool extHostPresent( const string &user, const string &iid );
+	AutoHD<TTransportOut> extHost( TTransportS::ExtHost host, const string &pref = "" );
+	ExtHost extHostGet( const string &user, const string &id );
+	void extHostSet( const ExtHost &host );
+	void extHostDel( const string &user, const string &id );
 	
 	void subLoad( );
 	void subSave( );
 	void subStart( );
 	void subStop( );
 	
-	TElem &inEl()	{ return(el_in); }
-	TElem &outEl() 	{ return(el_out); }
+	TElem &inEl()	{ return el_in; }
+	TElem &outEl() 	{ return el_out; }
 	
         AutoHD<TTipTransport> at( const string &iid )	{ return modAt(iid); }
 	
@@ -221,8 +263,12 @@ class TTransportS : public TSubSYS
 	//Methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
-	//Attributes	
-	TElem  		el_in, el_out;
+	//Attributes
+	bool    sys_host;
+	TElem	el_in, el_out, el_ext;
+	
+	Res     extHostRes;             //External hosts resource
+	vector<ExtHost> extHostLs;      //External hosts list	
 };
 
 #endif // TTRANSPORTS_H

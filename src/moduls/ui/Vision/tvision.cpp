@@ -27,8 +27,6 @@
 #include <tsys.h>
 #include <tmess.h>
 
-//#include <QApplication>
-//#include <QCloseEvent>
 #include <QIcon>
 #include <QMessageBox>
 #include <QErrorMessage>
@@ -40,7 +38,8 @@
 #include "vis_shape_elfig.h"
 #include "tvision.h"
 
-//============ Modul info! =====================================================
+//*************************************************
+//* Modul info!                                   *
 #define MOD_ID      "Vision"
 #define MOD_NAME    "Operation user interface (QT)"
 #define MOD_TYPE    "UI"
@@ -50,7 +49,7 @@
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Visual operation user interface."
 #define LICENSE     "GPL"
-//==============================================================================
+//*************************************************
 
 VISION::TVision *VISION::mod;
 
@@ -77,7 +76,7 @@ extern "C"
 	VISION::TVision *self_addr = NULL;
 
 	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = VISION::mod = new VISION::TVision( source );
+	    self_addr = new VISION::TVision( source );
 
 	return self_addr;
     }
@@ -85,9 +84,9 @@ extern "C"
 
 using namespace VISION;
 
-//==============================================================================
-//================= QTCFG::TVision =============================================
-//==============================================================================
+//*************************************************
+//* QTCFG::TVision                                *
+//*************************************************
 TVision::TVision( string name ) : end_run(false), vca_station(".")
 {
     mId		= MOD_ID;
@@ -98,19 +97,11 @@ TVision::TVision( string name ) : end_run(false), vca_station(".")
     mDescr  	= DESCRIPTION;
     mLicense   	= LICENSE;
     mSource    	= name;
+    mod 	= this;
     
     //- Export functions -
     modFuncReg( new ExpFunc("QIcon icon();","Module QT-icon",(void(TModule::*)( )) &TVision::icon) );
     modFuncReg( new ExpFunc("QMainWindow *openWindow();","Start QT GUI.",(void(TModule::*)( )) &TVision::openWindow) );
-    
-    //External hosts' conection DB struct
-    el_ext.fldAdd( new TFld("OP_USER",I18N("Open user"),TFld::String,TCfg::Key,"20") );
-    el_ext.fldAdd( new TFld("ID",I18N("ID"),TFld::String,TCfg::Key,"20") );
-    el_ext.fldAdd( new TFld("NAME",I18N("Name"),TFld::String,0,"50") );
-    el_ext.fldAdd( new TFld("TRANSP",I18N("Transport"),TFld::String,0,"20") );
-    el_ext.fldAdd( new TFld("ADDR",I18N("Transport address"),TFld::String,0,"50") );
-    el_ext.fldAdd( new TFld("USER",I18N("Request user"),TFld::String,0,"20") );
-    el_ext.fldAdd( new TFld("PASS",I18N("Request password"),TFld::String,0,"30") );    
 }
 
 TVision::~TVision()
@@ -119,11 +110,6 @@ TVision::~TVision()
     for( int i_sw = 0; i_sw < shapesWdg.size(); i_sw++ )
         delete shapesWdg[i_sw];
     shapesWdg.clear();
-}
-
-string TVision::extTranspBD()
-{
-    return SYS->workDB()+".CfgExtHosts";
 }
 
 void TVision::modInfo( vector<string> &list )
@@ -159,7 +145,7 @@ void TVision::modLoad( )
     mess_debug(nodePath().c_str(),_("Load module."));
 #endif
 
-    //========== Load parameters from command line ============
+    //- Load parameters from command line -
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -179,7 +165,7 @@ void TVision::modLoad( )
 	}
     } while(next_opt != -1);
     
-    //========== Load parameters from config file and DB =============
+    //- Load parameters from config file and DB -
     setStartUser(TBDS::genDBGet(nodePath()+"StartUser",startUser()));
     setRunPrjs(TBDS::genDBGet(nodePath()+"RunPrjs",runPrjs()));
     setVCAStation(TBDS::genDBGet(nodePath()+"VCAstation",VCAStation()));
@@ -190,7 +176,7 @@ void TVision::modSave( )
 #if OSC_DEBUG
     mess_debug(nodePath().c_str(),_("Save module."));
 #endif
-    //========== Save parameters to DB =============
+    //- Save parameters to DB -
     TBDS::genDBSet(nodePath()+"StartUser",startUser());
     TBDS::genDBSet(nodePath()+"RunPrjs",runPrjs());
     TBDS::genDBSet(nodePath()+"VCAstation",VCAStation());
@@ -311,7 +297,7 @@ void TVision::unregWin( QMainWindow *mwd )
 
 void TVision::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
         TUI::cntrCmdProc(opt);
@@ -320,22 +306,15 @@ void TVision::cntrCmdProc( XMLNode *opt )
             ctrMkNode("fld",opt,-1,"/prm/cfg/start_user",_("Configurator start user"),0664,"root","root",3,"tp","str","dest","select","select","/prm/cfg/u_lst");
             ctrMkNode("fld",opt,-1,"/prm/cfg/run_prj",_("Run projects list (';' - sep)"),0664,"root","root",1,"tp","str");
             ctrMkNode("fld",opt,-1,"/prm/cfg/stationVCA",_("VCA engine station"),0664,"root","root",4,"tp","str","idm","1","dest","select","select","/prm/cfg/vca_lst");
-	    if(ctrMkNode("table",opt,-1,"/prm/cfg/ehost",_("External hosts poll"),0666,"root","root",2,"s_com","add,del","key","id"))
-            {
-	        ctrMkNode("list",opt,-1,"/prm/cfg/ehost/id",_("Id"),0666,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/prm/cfg/ehost/name",_("Name"),0666,"root","root",1,"tp","str");
-	        ctrMkNode("list",opt,-1,"/prm/cfg/ehost/transp",_("Transport"),0666,"root","root",4,"tp","str","idm","1","dest","select","select","/prm/cfg/transps");
-	        ctrMkNode("list",opt,-1,"/prm/cfg/ehost/addr",_("Address"),0666,"root","root",1,"tp","str");
-	        ctrMkNode("list",opt,-1,"/prm/cfg/ehost/user",_("User"),0666,"root","root",1,"tp","str");
-	        ctrMkNode("list",opt,-1,"/prm/cfg/ehost/pass",_("Password"),0666,"root","root",1,"tp","str");
-	    }
+	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to remote stations list configuration"),0660,"root","root",1,"tp","lnk");
             ctrMkNode("comm",opt,-1,"/prm/cfg/load",_("Load"),0660);
             ctrMkNode("comm",opt,-1,"/prm/cfg/save",_("Save"),0660);
         }
         ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
 	return;
     }
-    //Process command to page
+    
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/prm/cfg/start_user" )
     {
@@ -352,69 +331,10 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(VCAStation());
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setVCAStation(opt->text());
     }
-    else if( a_path == "/prm/cfg/ehost" )
+    else if( a_path == "/prm/cfg/host_lnk" && ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )
     {
-        TConfig c_el(&el_ext);
-        c_el.cfg("OP_USER").setS(opt->attr("user"));
-        if( ctrChkNode(opt,"get",0666,"root","root",SEQ_RD) )
-        {
-            XMLNode *n_id       = ctrMkNode("list",opt,-1,"/prm/cfg/ehost/id","",0666);
-            XMLNode *n_nm       = ctrMkNode("list",opt,-1,"/prm/cfg/ehost/name","",0666);
-	    XMLNode *n_tr       = ctrMkNode("list",opt,-1,"/prm/cfg/ehost/transp","",0666);
-            XMLNode *n_addr     = ctrMkNode("list",opt,-1,"/prm/cfg/ehost/addr","",0666);
-            XMLNode *n_user     = ctrMkNode("list",opt,-1,"/prm/cfg/ehost/user","",0666);
-            XMLNode *n_pass     = ctrMkNode("list",opt,-1,"/prm/cfg/ehost/pass","",0666);
-
-    	    for( int fld_cnt = 0; SYS->db().at().dataSeek(extTranspBD(),nodePath()+"ExtTansp/",fld_cnt,c_el); fld_cnt++ )	
-    	    {
-                if(n_id)        n_id->childAdd("el")->setText(c_el.cfg("ID").getS());
-                if(n_nm)        n_nm->childAdd("el")->setText(c_el.cfg("NAME").getS());
-                if(n_tr)        n_tr->childAdd("el")->setText(c_el.cfg("TRANSP").getS());
-                if(n_addr)      n_addr->childAdd("el")->setText(c_el.cfg("ADDR").getS());
-                if(n_user)      n_user->childAdd("el")->setText(c_el.cfg("USER").getS());
-                if(n_pass)      n_pass->childAdd("el")->setText(c_el.cfg("PASS").getS().size()?"*******":"");
-		c_el.cfg("ID").setS("");
-            }
-        }
-        if( ctrChkNode(opt,"add",0666,"root","root",SEQ_WR) )
-	{
-	    c_el.cfg("ID").setS(_("newHost"));
-	    c_el.cfg("NAME").setS(_("New external host"));
-	    c_el.cfg("USER").setS(opt->attr("user"));
-	    SYS->db().at().dataSet(extTranspBD(),nodePath()+"ExtTansp/",c_el);
-	}
-        if( ctrChkNode(opt,"del",0666,"root","root",SEQ_WR) )
-	{
-	    c_el.cfg("ID").setS(opt->attr("key_id"));
-	    SYS->db().at().dataDel(extTranspBD(),nodePath()+"ExtTansp/",c_el);
-	}
-        if( ctrChkNode(opt,"set",0666,"root","root",SEQ_WR) )
-        {
-            string col  = opt->attr("col");
-	    c_el.cfg("ID").setS(opt->attr("key_id"));	    
-            if( col == "id" )
-            {
-		SYS->db().at().dataGet(extTranspBD(),nodePath()+"ExtTansp/",c_el);
-		SYS->db().at().dataDel(extTranspBD(),nodePath()+"ExtTansp/",c_el);
-		c_el.cfg("ID").setS(opt->text());
-		SYS->db().at().dataSet(extTranspBD(),nodePath()+"ExtTansp/",c_el);
-		return;
-            }
-	    c_el.cfgViewAll(false);
-            if( col == "name" )    	c_el.cfg("NAME").setS(opt->text(),true);
-            else if( col == "transp" )  c_el.cfg("TRANSP").setS(opt->text(),true);
-            else if( col == "addr" )    c_el.cfg("ADDR").setS(opt->text(),true);
-            else if( col == "user" )    c_el.cfg("USER").setS(opt->text(),true);
-            else if( col == "pass" )    c_el.cfg("PASS").setS(opt->text(),true);
-	    SYS->db().at().dataSet(extTranspBD(),nodePath()+"ExtTansp/",c_el);
-        }
-    }
-    else if( a_path == "/prm/cfg/transps" && ctrChkNode(opt) )
-    {
-        vector<string>  list;
-        SYS->transport().at().modList(list);
-        for( int i_a = 0; i_a < list.size(); i_a++ )
-            opt->childAdd("el")->setAttr("id",list[i_a])->setText(SYS->transport().at().modAt(list[i_a]).at().modName());
+        SYS->transport().at().setSysHost(false);
+        opt->setText("/Transport");
     }
     else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )   opt->setText(optDescr());
     else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )  modLoad();
@@ -429,25 +349,23 @@ void TVision::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/prm/cfg/vca_lst" && ctrChkNode(opt) )
     {
-	opt->childAdd("el")->setAttr("id",".")->setText("Local");    
-        TConfig c_el(&el_ext);
-	c_el.cfg("OP_USER").setS(opt->attr("user"));
-        for( int fld_cnt = 0; SYS->db().at().dataSeek(extTranspBD(),nodePath()+"ExtTansp/",fld_cnt,c_el); fld_cnt++ )
-	{
-	    opt->childAdd("el")->setAttr("id",c_el.cfg("ID").getS())->setText(c_el.cfg("NAME").getS());
-	    c_el.cfg("ID").setS("");
-	}
+	opt->childAdd("el")->setAttr("id",".")->setText("Local");
+	vector<string> lst;
+        SYS->transport().at().extHostList(opt->attr("user"),lst);
+	for( int i_ls = 0; i_ls < lst.size(); i_ls++ )
+ 	    opt->childAdd("el")->setAttr("id",lst[i_ls])->
+		setText(SYS->transport().at().extHostGet(opt->attr("user"),lst[i_ls]).name);
     }
     else TUI::cntrCmdProc(opt);
 }
 
 void TVision::postMess( const QString &cat, const QString &mess, TVision::MessLev type, QWidget *parent )
 {
-    //Put system message.
+    //- Put system message. -
     message(cat.toAscii().data(),(type==TVision::Crit) ? TMess::Crit :
 			(type==TVision::Error)?TMess::Error:
 			(type==TVision::Warning)?TMess::Warning:TMess::Info,"%s",mess.toAscii().data());
-    //QT message
+    //- QT message -
     switch(type)
     {
 	case TVision::Info:	
@@ -461,17 +379,26 @@ void TVision::postMess( const QString &cat, const QString &mess, TVision::MessLe
     }
 }
 
-int TVision::cntrIfCmd( XMLNode &node, VCAHost &host, bool glob )
+int TVision::cntrIfCmd( XMLNode &node, const string &user, const string &stat, bool glob )
 {
     //- Check for local VCAEngine path - 
     if( !glob ) node.setAttr("path","/UI/VCAEngine"+node.attr("path"));
     
     //- Local station request -
-    if( host.stat.empty() || host.stat == "." ) 
+    if( stat.empty() || stat == "." ) 
     {
 	SYS->cntrCmd(&node);
 	return atoi(node.attr("rez").c_str());
     }
+
+    //- Request remote host -
+    TTransportS::ExtHost host = SYS->transport().at().extHostGet(user,stat);
+    AutoHD<TTransportOut> tr = SYS->transport().at().extHost(host,"VCAStat");
+    if(!tr.at().startStat())    tr.at().start();
+    node.load(tr.at().messProtIO(host.user+"\n"+host.pass+"\n"+node.save(),"SelfSystem"));
+    return atoi(node.attr("rez").c_str());
+    
+    /*			    
     
     //- Externel station request -
     //-- Check transport --
@@ -540,5 +467,5 @@ int TVision::cntrIfCmd( XMLNode &node, VCAHost &host, bool glob )
             tr.at().stop();
         }
         throw;
-    }    
+    }*/   
 }

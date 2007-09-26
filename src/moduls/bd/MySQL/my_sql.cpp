@@ -195,7 +195,7 @@ void MBD::enable( )
 	sqlReq(req);	
     }
     
-    sqlReq("USE `"+TSYS::strEncode(bd,TSYS::SQL)+"`");
+    //sqlReq("USE `"+TSYS::strEncode(bd,TSYS::SQL)+"`");
 }
 
 void MBD::disable( )
@@ -213,7 +213,7 @@ void MBD::allowList( vector<string> &list )
     if( !enableStat() )  return;
     list.clear();
     vector< vector<string> > tbl;
-    sqlReq("SHOW TABLES",&tbl);
+    sqlReq("SHOW TABLES FROM `"+TSYS::strEncode(bd,TSYS::SQL)+"`",&tbl);
     for( int i_t = 1; i_t < tbl.size(); i_t++ )
         list.push_back(tbl[i_t][0]);
 }
@@ -248,7 +248,8 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
 	    resource.request(true);
 	    irez = mysql_real_query(&connect,req.c_str(),req.size());
 	}
-	if(irez) throw TError(TSYS::DBRequest,nodePath().c_str(),_("Query to DB error: %s"),mysql_error(&connect));
+	if(irez) 
+	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("Query to DB error %d: %s"),irez,mysql_error(&connect));
     }
     if( mysql_field_count(&connect) == 0 ) return;
     if( !(res = mysql_store_result(&connect)) )
@@ -288,11 +289,12 @@ MTable::MTable(string name, MBD *iown, bool create ) : TTable(name)
     
     if( create )
     {
-        req = "CREATE TABLE IF NOT EXISTS `"+TSYS::strEncode(name,TSYS::SQL)+"` (`name` char(20) NOT NULL DEFAULT '' PRIMARY KEY)";
+        req = "CREATE TABLE IF NOT EXISTS `"+TSYS::strEncode(owner().bd,TSYS::SQL)+"`.`"+
+	    TSYS::strEncode(name,TSYS::SQL)+"` (`name` char(20) NOT NULL DEFAULT '' PRIMARY KEY)";
         owner().sqlReq( req );
     }
     //- Check for table present request -
-    req ="DESCRIBE `"+TSYS::strEncode(name,TSYS::SQL)+"`";
+    req ="DESCRIBE `"+TSYS::strEncode(owner().bd,TSYS::SQL)+"`.`"+TSYS::strEncode(name,TSYS::SQL)+"`";
     owner().sqlReq(req,&tblStrct);    
     //req = "SELECT * FROM `"+TSYS::strEncode(name,TSYS::SQL)+"` LIMIT 0,1";
     //owner().sqlReq( req );
@@ -307,7 +309,11 @@ void MTable::postDisable(int flag)
 {
     if( flag )
     {
-	try{ owner().sqlReq("DROP TABLE `"+TSYS::strEncode(name(),TSYS::SQL)+"`"); }
+	try
+	{ 
+	    owner().sqlReq("DROP TABLE `"+TSYS::strEncode(owner().bd,TSYS::SQL)+"`.`"+
+		TSYS::strEncode(name(),TSYS::SQL)+"`");
+	}
 	catch(TError err){ mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }    
     }
 }
@@ -372,7 +378,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
     }
 
     //- Request -
-    req = req + " FROM `"+TSYS::strEncode(name(),TSYS::SQL)+"` "+
+    req = req + " FROM `"+TSYS::strEncode(owner().bd,TSYS::SQL)+"`.`"+TSYS::strEncode(name(),TSYS::SQL)+"` "+
 		 ((next)?req_where:"") +" LIMIT "+TSYS::int2str(row)+",1";		 
     owner().sqlReq( req, &tbl );
     if( tbl.size() < 2 ) return false;
@@ -421,7 +427,8 @@ void MTable::fieldGet( TConfig &cfg )
 	    first_sel = false;
 	}		
     }
-    req = req+" FROM `"+TSYS::strEncode(name(),TSYS::SQL)+"` WHERE "+req_where;
+    req = req+" FROM `"+TSYS::strEncode(owner().bd,TSYS::SQL)+"`.`"+
+	TSYS::strEncode(name(),TSYS::SQL)+"` WHERE "+req_where;
     
     //- Query -
     //printf("TEST 01: query: <%s>\n",req.c_str());
@@ -469,13 +476,15 @@ void MTable::fieldSet( TConfig &cfg )
     
     //- Prepare query -
     //-- Try for get already present field --
-    string req = "SELECT 1 FROM `"+TSYS::strEncode(name(),TSYS::SQL)+"` "+req_where;
+    string req = "SELECT 1 FROM `"+TSYS::strEncode(owner().bd,TSYS::SQL)+"`.`"+
+	TSYS::strEncode(name(),TSYS::SQL)+"` "+req_where;
     try{ owner().sqlReq( req, &tbl ); }
     catch(TError err)	{ fieldFix(cfg); owner().sqlReq( req ); }
     if( tbl.size() < 2 )
     {
         //-- Add new record --
-        req = "INSERT INTO `"+TSYS::strEncode(name(),TSYS::SQL)+"` ";
+        req = "INSERT INTO `"+TSYS::strEncode(owner().bd,TSYS::SQL)+"`.`"+
+	    TSYS::strEncode(name(),TSYS::SQL)+"` ";
         string ins_name, ins_value;
         next = false;
 	for( int i_el = 0; i_el < cf_el.size(); i_el++ )
@@ -505,7 +514,8 @@ void MTable::fieldSet( TConfig &cfg )
     else
     {
         //-- Update present record --
-        req = "UPDATE `"+TSYS::strEncode(name(),TSYS::SQL)+"` SET ";
+        req = "UPDATE `"+TSYS::strEncode(owner().bd,TSYS::SQL)+"`.`"+
+	    TSYS::strEncode(name(),TSYS::SQL)+"` SET ";
         next = false;
 	for( int i_el = 0; i_el < cf_el.size(); i_el++ )
 	{
@@ -542,7 +552,8 @@ void MTable::fieldDel( TConfig &cfg )
     cfg.cfgList(cf_el);
 				    
     //- Prepare request -
-    string req = "DELETE FROM `"+TSYS::strEncode(name(),TSYS::SQL)+"` WHERE ";
+    string req = "DELETE FROM `"+TSYS::strEncode(owner().bd,TSYS::SQL)+"`.`"+
+	TSYS::strEncode(name(),TSYS::SQL)+"` WHERE ";
     //-- Add key list to query --
     bool next = false;
     for( int i_el = 0; i_el < cf_el.size(); i_el++ )
@@ -570,7 +581,8 @@ void MTable::fieldFix( TConfig &cfg )
     cfg.cfgList(cf_el);
 
     //- Prepare request for fix structure -
-    string req = "ALTER TABLE `"+TSYS::strEncode(name(),TSYS::SQL)+"` DROP PRIMARY KEY, ";
+    string req = "ALTER TABLE `"+TSYS::strEncode(owner().bd,TSYS::SQL)+"`.`"+
+	TSYS::strEncode(name(),TSYS::SQL)+"` DROP PRIMARY KEY, ";
 	    
     string pr_keys;
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
@@ -636,7 +648,7 @@ void MTable::fieldFix( TConfig &cfg )
     {
 	owner().sqlReq( req );
 	//- Update structure information -
-	req ="DESCRIBE `"+TSYS::strEncode(name(),TSYS::SQL)+"`";
+	req ="DESCRIBE `"+TSYS::strEncode(owner().bd,TSYS::SQL)+"`.`"+TSYS::strEncode(name(),TSYS::SQL)+"`";
 	owner().sqlReq( req, &tblStrct );	
     }
 }

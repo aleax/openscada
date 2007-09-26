@@ -137,8 +137,8 @@ void OrigElFigure::postEnable( int flag )
 	attrAdd( new TFld("lineDecor",_("Line:decorate"),TFld::Integer,TFld::Selected,"1","0","0;1",_("No decor;Pipe"),22) );
 	attrAdd( new TFld("bordWdth",_("Border:width"),TFld::Integer,TFld::NoFlag,"2","0","0;99","",23) );
 	attrAdd( new TFld("bordClr",_("Border:color"),TFld::String,Attr::Color,"20","#000000","","",24) );
-	attrAdd( new TFld("backgClr",_("Background:color"),TFld::String,Attr::Color,"20","","","",25) );
-	attrAdd( new TFld("backgImg",_("Background:image"),TFld::String,Attr::Image,"20","","","",26) );
+	attrAdd( new TFld("backColor",_("Background:color"),TFld::String,Attr::Color,"20","","","",25) );
+	attrAdd( new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"20","","","",26) );
 	attrAdd( new TFld("elLst",_("Element's list"),TFld::String,TFld::FullText|Attr::Active,"300","","","",27) );
     }
 }
@@ -192,6 +192,7 @@ bool OrigElFigure::attrChange( Attr &cfg, void *prev )
 	    }
 	}
     }
+    return true;
 }
 
 //*************************************************
@@ -598,6 +599,74 @@ string OrigProtocol::name( )
 string OrigProtocol::descr( )	
 { 
     return _("Protocol view widget of the end visualisation."); 
+}
+
+void OrigProtocol::postEnable( int flag )
+{
+    LWidget::postEnable(flag);
+    
+    if( flag&TCntrNode::NodeConnect ) 
+    { 
+        attrAdd( new TFld("backColor",_("Background:color"),TFld::String,Attr::Color,"","","","",20) );
+        attrAdd( new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","","","",21) );
+        //attrAdd( new TFld("bordWidth",_("Border:width"),TFld::Integer,TFld::NoFlag,"","0","","",22) );
+        //attrAdd( new TFld("bordColor",_("Border:color"),TFld::String,Attr::Color,"","#000000","","",23) );
+    	attrAdd( new TFld("time",_("Time, sek"),TFld::Integer,TFld::NoFlag,"","","","",24) );
+        attrAdd( new TFld("tSize",_("Size, sek"),TFld::Integer,TFld::NoFlag,"","3600","","",25) );
+        attrAdd( new TFld("trcPer",_("Tracing period (s)"),TFld::Integer,TFld::NoFlag,"","0","0;360","",26) );
+        attrAdd( new TFld("arch",_("Archival"),TFld::String,TFld::NoFlag,"","","","",27) );
+        attrAdd( new TFld("tmpl",_("Template"),TFld::String,TFld::NoFlag,"","","","",28) );
+        attrAdd( new TFld("lev",_("Level"),TFld::Integer,TFld::NoFlag,"","0","","",29) );
+        attrAdd( new TFld("viewOrd",_("View order"),TFld::Integer,TFld::Selected,"","0",
+	    "0;1;2","On time;On level;On level and trigered",30) );
+        attrAdd( new TFld("col",_("View columns"),TFld::String,TFld::NoFlag,"","pos;tm;lev;cat;mess","","",31) );
+        attrAdd( new TFld("itProp",_("Items properties"),TFld::Integer,Attr::Active,"","0","0;10","",32) );
+    }
+} 
+
+bool OrigProtocol::attrChange( Attr &cfg, void *prev )
+{
+    if( cfg.flgGlob()&Attr::Active )
+    {
+	if( cfg.id() == "itProp" )
+	{
+	    string fid("it"), fnm(_("Item ")), fidp, fnmp;
+	    //- Delete specific unnecessary items -
+	    for( int i_p = 0; true; i_p++ )
+	    {
+		fidp = fid+TSYS::int2str(i_p); 
+		if( !cfg.owner()->attrPresent( fidp+"lev" ) )	break;
+		else if( i_p >= cfg.getI() )
+		{
+		    cfg.owner()->attrDel(fidp+"lev");
+		    cfg.owner()->attrDel(fidp+"tmpl");
+		    cfg.owner()->attrDel(fidp+"fnt");
+		    cfg.owner()->attrDel(fidp+"img");
+		    cfg.owner()->attrDel(fidp+"color");
+		    cfg.owner()->attrDel(fidp+"blink");
+		}
+	    }
+	    //- Create ullage items -
+	    for( int i_p = 0; i_p < cfg.getI(); i_p++ )
+	    {
+		fidp = fid+TSYS::int2str(i_p);
+		fnmp = fnm+TSYS::int2str(i_p);
+		if( cfg.owner()->attrPresent( fidp+"lev" ) ) continue;
+    		cfg.owner()->attrAdd( new TFld((fidp+"lev").c_str(),(fnmp+_(":levels")).c_str(),
+					       TFld::String,Attr::Mutable,"","","","",50+10*i_p) );
+    		cfg.owner()->attrAdd( new TFld((fidp+"tmpl").c_str(),(fnmp+_(":template")).c_str(),
+					       TFld::String,Attr::Mutable,"","","","",51+10*i_p) );
+    		cfg.owner()->attrAdd( new TFld((fidp+"fnt").c_str(),(fnmp+_(":font")).c_str(),
+					       TFld::String,Attr::Font|Attr::Mutable,"","","","",52+10*i_p) );
+    		cfg.owner()->attrAdd( new TFld((fidp+"color").c_str(),(fnmp+_(":color")).c_str(),
+					       TFld::String,Attr::Color|Attr::Mutable,"","","","",53+10*i_p) );
+    		cfg.owner()->attrAdd( new TFld((fidp+"blink").c_str(),(fnmp+_(":blink")).c_str(),
+					       TFld::Boolean,Attr::Mutable,"","0","","",54+10*i_p) );
+	    }
+	    return true;
+	}
+    }
+    return false;
 }
 
 //************************************************

@@ -40,7 +40,42 @@ using std::vector;
 namespace Virtual
 {
 
-//class TConfig;
+//************************************************
+//* Prm - parameters for access to data          *
+//*       of calced blocks                       *
+//************************************************ 
+class Contr;
+    
+class Prm : public TParamContr
+{
+    public:
+	//Public methods
+     	Prm( string name, TTipParam *tp_prm );
+	~Prm();
+    
+	void enable();
+	void disable();
+	
+	Contr &owner()  { return (Contr&)TParamContr::owner(); }
+	
+    private:
+        //Private methods
+	void postEnable( int flag );
+	
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+    
+	void vlSet( TVal &val );
+	void vlGet( TVal &val );
+	void vlArchMake( TVal &val );
+    
+	//Private attributes
+	string m_blck;	//Assign block	
+	TElem  v_el;	//Values elem
+}; 
+
+//************************************************
+//* Contr - Blocks and parameters container      *
+//************************************************
 class TipContr;
 
 class Contr: public TController
@@ -48,6 +83,7 @@ class Contr: public TController
     friend class Block;    
 
     public:
+    	//Public methods
 	Contr( string name_c, const string &daq_db, ::TElem *cfgelem );
 	~Contr();   
 
@@ -62,19 +98,19 @@ class Contr: public TController
 	int period()  { return m_per; }
 	int iterate() { return m_iter; }
 	
-	//Scheme's functions
+	//- Scheme's functions -
         void blkList( vector<string> &ls )	{ chldList(m_bl,ls); }
         bool blkPresent( const string &id )    	{ return chldPresent(m_bl,id); }
         void blkAdd( const string &id );
         void blkDel( const string &id )    	{ chldDel(m_bl,id); }
         AutoHD<Block> blkAt( const string &id )	{ return chldAt(m_bl,id); }
-	void copyBlock( const string &from_id, const string &cntr_id, const string &to_id, const string &to_name );	
 	
 	Res &res()		{ return hd_res; }
     
 	TipContr &owner()	{ return (TipContr&)TController::owner(); }
     
     protected:
+	//Protected methods
 	bool cfgChange( TCfg &cfg );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
@@ -82,17 +118,17 @@ class Contr: public TController
 	void saveV( );
 	void freeV( );
 	
-        //Process stat
+        //- Process stat -
         void blkProc( const string & id, bool val );
 	
 	void postDisable(int flag);
     
     private:
-	//Methods
+	//Private methods
 	static void *Task( void *contr );
 	static void TaskDBSync(union sigval obj);
 	
-	//Attributes
+	//Private attributes
 	bool	prc_st,      	// Calc status
 		endrun_req,	// Endrun calc request
 		sync_st;	// Sync DB status
@@ -108,38 +144,16 @@ class Contr: public TController
 	vector< AutoHD<Block> >	clc_blks;	// Calc blocks HD
 	double	tm_calc;			// Scheme's calc time
 	
-	Res	hd_res;		//Resource for process block
+	Res	hd_res;		// Resource for process block
 };
 
-class Prm : public TParamContr
-{
-    public:
-     	Prm( string name, TTipParam *tp_prm );
-	~Prm();
-    
-	void enable();
-	void disable();
-	
-	Contr &owner()  { return (Contr&)TParamContr::owner(); }
-	
-    private:
-	void postEnable( int flag );
-	
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-    
-	void vlSet( TVal &val );
-	void vlGet( TVal &val );
-	void vlArchMake( TVal &val );
-    
-    private:
-	string m_blck;	//Assign block
-	
-	TElem  v_el;	//Values elem
-};
-
+//************************************************
+//* TipContr - BlockCalc type controller         *
+//************************************************
 class TipContr: public TTipDAQ
 {
     public:
+	//Public methods
 	TipContr( string name );
 	~TipContr();
 	
@@ -152,18 +166,21 @@ class TipContr: public TTipDAQ
 
 	AutoHD<Contr> at( const string &name, const string &who = "" )
 	{ return TTipDAQ::at(name,who); }
+ 	void copy( const string &src, const string &dst );
 	
     protected:
+	//Protected methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
     
     private:
+	//Private methods
 	void postEnable( int flag );
 	void preDisable( int flag );
         string optDescr( );
 	void loadBD();
 	void saveBD();
 	
-    private:
+        //Private attributes
 	TElem	blk_el;
 	TElem   blkio_el;	
 };

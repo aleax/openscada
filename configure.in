@@ -27,6 +27,14 @@ AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_LIBTOOL
 
+#Gettext utilites check
+AC_CHECK_PROG(XGETTEXT, xgettext, xgettext, false)
+AC_CHECK_PROG(MSGMERGE, msgmerge, msgmerge, false)
+AC_CHECK_PROG(MSGFMT, msgfmt, msgfmt, false)
+if test ${XGETTEXT} = false || test ${MSGMERGE} = false || ${MSGFMT} = false; then 
+    AC_MSG_ERROR([Some gettext I18N utilite no present! Install gettext utilites package.]) 
+fi
+
 AM_SANITY_CHECK
 
 # Checks for header files.
@@ -150,6 +158,8 @@ AC_ARG_ENABLE(CIF,AC_HELP_STRING([--disable-CIF], [disable build module DAQ/CIF]
 [ if test $enableval = yes; then ModCIF=true; else ModCIF=false; fi],[ ModCIF=true; ])
 AC_ARG_ENABLE(ModBus,AC_HELP_STRING([--disable-ModBus], [disable build module DAQ/ModBus]),
 [ if test $enableval = yes; then ModModBus=true; else ModModBus=false; fi],[ ModModBus=true; ])
+AC_ARG_ENABLE(DAQTransporter,AC_HELP_STRING([--disable-DAQTransporter], [disable build module DAQ/Transporter]),
+[ if test $enableval = yes; then ModDAQTransporter=true; else ModDAQTransporter=false; fi],[ ModDAQTransporter=true; ])
 #-- Transport modules --
 AC_ARG_ENABLE(Sockets,AC_HELP_STRING([--disable-Sockets], [disable build module Transport/Sockets]),
 [ if test $enableval = yes; then ModSockets=true; else ModSockets=false; fi],[ ModSockets=true; ])
@@ -255,13 +265,13 @@ if test ${ModJavaLikeCalc} = true; then
     DAQSub_mod="${DAQSub_mod}JavaLikeCalc "
     #--- Modules checkings ---
     AC_PROG_YACC
+    AC_CHECK_PROG(YACC_OK, ${YACC}, true, false)
+    if test ${YACC_OK} = false; then AC_MSG_ERROR([No one syntax generator present! Install YACC like programm: bison, zubr or byacc.]) fi
 fi
-if test ${ModDiamondBoards} = true; then
-    if test $target_cpu != "x86_64"; then 
-	AC_MSG_RESULT(Build module: DAQ/DiamondBoards)
-	AC_CONFIG_FILES(src/moduls/daq/DiamondBoards/Makefile)
-	DAQSub_mod="${DAQSub_mod}DiamondBoards "
-    fi
+if test ${ModDiamondBoards} = true && test $target_cpu != "x86_64"; then
+    AC_MSG_RESULT(Build module: DAQ/DiamondBoards)
+    AC_CONFIG_FILES(src/moduls/daq/DiamondBoards/Makefile)
+    DAQSub_mod="${DAQSub_mod}DiamondBoards "
 fi
 if test ${ModLogicLev} = true; then
     AC_MSG_RESULT(Build module: DAQ/LogicLev)
@@ -296,6 +306,11 @@ if test ${ModModBus} = true; then
     AC_CONFIG_FILES(src/moduls/daq/ModBus/Makefile)
     DAQSub_mod="${DAQSub_mod}ModBus "
 fi
+if test ${ModDAQTransporter} = true; then
+    AC_MSG_RESULT(Build module: DAQ/Transporter)
+    AC_CONFIG_FILES(src/moduls/daq/Transporter/Makefile)
+    DAQSub_mod="${DAQSub_mod}Transporter "
+fi
 #-- Transport modules --
 AC_SUBST(TranspSub_mod)
 if test ${ModSockets} = true; then
@@ -317,21 +332,19 @@ if test ${ModVision} = true; then
     AC_MSG_RESULT(Build module: UI/Vision)
     AC_CONFIG_FILES(src/moduls/ui/Vision/Makefile)
     UISub_mod="${UISub_mod}Vision "
+    QT4use=true;
 fi
 if test ${ModQTStarter} = true; then
     AC_MSG_RESULT(Build module: UI/QTStarter)
     AC_CONFIG_FILES(src/moduls/ui/QTStarter/Makefile)
     UISub_mod="${UISub_mod}QTStarter "
+    QT4use=true;    
 fi
 if test ${ModQTCfg} = true; then
     AC_MSG_RESULT(Build module: UI/QTCfg)
     AC_CONFIG_FILES(src/moduls/ui/QTCfg/Makefile)
     UISub_mod="${UISub_mod}QTCfg "
-    #--- Modules checkings ---    
-#    AC_CHECK_HEADERS([qt4/QtCore/Qt],[],
-#	[AC_MSG_ERROR(UI/QTCfg: Some QT4 library headers not found. Install or check of QT4 developing package!)])
-#    AC_CHECK_LIB([QtGui],[QApplication::QApplication],[AC_MSG_NOTICE(Pass global library using)],
-#	[AC_MSG_ERROR(UI/QTCfg: QT4 library not found. Install or check QT4 library package!)])
+    QT4use=true;
 fi
 if test ${ModWebCfg} = true; then
     AC_MSG_RESULT(Build module: UI/WebCfg)
@@ -344,5 +357,18 @@ if test ${ModWebDbg} = true; then
     UISub_mod="${UISub_mod}WebDbg "
 fi
 AC_MSG_RESULT(===========================================)
+
+#QT4 check
+if test ${QT4use} = true; then
+    AC_CHECK_PROGS(QT4_MOC, moc-qt4 moc, false)
+    AC_CHECK_PROGS(QT4_RCC, rcc-qt4 rcc, false)
+    if test ${QT4_MOC} = false || test ${QT4_RCC} = false; 
+    then AC_MSG_ERROR([QT4 development utilites no present! Install QT4 library development package.]) fi
+#--- Modules checkings ---    
+#    AC_CHECK_HEADERS([qt4/QtCore/Qt],[],
+#	[AC_MSG_ERROR(UI/QTCfg: Some QT4 library headers not found. Install or check of QT4 developing package!)])
+#    AC_CHECK_LIB([QtGui],[QApplication::QApplication],[AC_MSG_NOTICE(Pass global library using)],
+#	[AC_MSG_ERROR(UI/QTCfg: QT4 library not found. Install or check QT4 library package!)])
+fi
 
 AC_OUTPUT

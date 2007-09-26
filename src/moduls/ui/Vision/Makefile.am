@@ -1,5 +1,4 @@
-QTDIR=/usr/lib/qt4/
-QTINC=$(QTDIR)include/
+QTINC=$(oldincludedir)/qt4
 
 #SUBDIRS = po
 
@@ -16,23 +15,23 @@ ui_Vision_so_SOURCES = tvision.cpp qrc_vision.cpp vis_widgs.cpp moc_vis_widgs.cp
 ui_Vision_so_LDADD = -lQtGui
 
 qrc_vision.cpp: vision.qrc
-	$(QTDIR)/bin/rcc -name Vision vision.qrc -o qrc_vision.cpp
+	$(QT4_RCC) -name Vision vision.qrc -o qrc_vision.cpp
 moc_vis_devel.cpp: vis_devel.h
-	$(QTDIR)/bin/moc vis_devel.h > moc_vis_devel.cpp
+	$(QT4_MOC) vis_devel.h > moc_vis_devel.cpp
 moc_vis_devel_widgs.cpp: vis_devel_widgs.h
-	$(QTDIR)/bin/moc vis_devel_widgs.h > moc_vis_devel_widgs.cpp
+	$(QT4_MOC) vis_devel_widgs.h > moc_vis_devel_widgs.cpp
 moc_vis_devel_dlgs.cpp: vis_devel_dlgs.h
-	$(QTDIR)/bin/moc vis_devel_dlgs.h > moc_vis_devel_dlgs.cpp
+	$(QT4_MOC) vis_devel_dlgs.h > moc_vis_devel_dlgs.cpp
 moc_vis_widgs.cpp: vis_widgs.h
-	$(QTDIR)/bin/moc vis_widgs.h > moc_vis_widgs.cpp
+	$(QT4_MOC) vis_widgs.h > moc_vis_widgs.cpp
 moc_vis_run.cpp: vis_run.h
-	$(QTDIR)/bin/moc vis_run.h > moc_vis_run.cpp
+	$(QT4_MOC) vis_run.h > moc_vis_run.cpp
 moc_vis_run_widgs.cpp: vis_run_widgs.h
-	$(QTDIR)/bin/moc vis_run_widgs.h > moc_vis_run_widgs.cpp
+	$(QT4_MOC) vis_run_widgs.h > moc_vis_run_widgs.cpp
 moc_vis_shapes.cpp: vis_shapes.h
-	$(QTDIR)/bin/moc vis_shapes.h > moc_vis_shapes.cpp
+	$(QT4_MOC) vis_shapes.h > moc_vis_shapes.cpp
 moc_vis_shape_elfig.cpp: vis_shape_elfig.h
-	$(QTDIR)/bin/moc vis_shape_elfig.h > moc_vis_shape_elfig.cpp
+	$(QT4_MOC) vis_shape_elfig.h > moc_vis_shape_elfig.cpp
 
 clean-local:
 	rm -f qrc_vision.cpp moc_vis_widgs.cpp moc_vis_devel.cpp moc_vis_devel_widgs.cpp moc_vis_devel_dlgs.cpp \

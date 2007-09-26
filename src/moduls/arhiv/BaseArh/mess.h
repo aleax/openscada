@@ -106,6 +106,8 @@ namespace BaseArch
 	    ModMArch( const string &iid, const string &idb, TElem *cf_el );
 	    ~ModMArch( );
 
+	    time_t begin();
+            time_t end();
 	    void put( vector<TMess::SRec> &mess );
 	    void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0 );
 	    void start();

@@ -27,6 +27,9 @@
 #include "tcontroller.h"
 #include "tvalue.h"
 
+//*************************************************
+//* TValue                                        *
+//*************************************************
 TValue::TValue( ) : l_cfg(0), m_cfg(NULL)
 {
     m_vl = grpAdd("a_",true);
@@ -122,24 +125,55 @@ TElem &TValue::vlElem( const string &name )
 
 void TValue::cntrCmdProc( XMLNode *opt )
 {
-    vector<string> list_c, list_c2;
-    //Get page info
+    vector<string> list_c; 
+    string a_path = opt->attr("path");
+    //- Service commands process -
+    if( a_path == "/serv/0"  )		//Attributes access
+    {
+        vlList(list_c);
+	if( ctrChkNode(opt,"list",RWRWRW,"root","root",SEQ_RD) )	//Full info attributes list
+	{
+	    AutoHD<TVal> attr;
+    	    for( int i_el = 0; i_el < list_c.size(); i_el++ )
+	    {
+		attr = vlAt(list_c[i_el]);
+		opt->childAdd("el")->
+		    setAttr("id",list_c[i_el])->
+		    setAttr("nm",attr.at().fld().descr())->
+		    setAttr("flg",TSYS::int2str(attr.at().fld().flg()))->
+		    setAttr("tp",TSYS::int2str(attr.at().fld().type()))->
+		    setAttr("vals",attr.at().fld().values())->
+		    setAttr("names",attr.at().fld().selNames());
+	    }
+	}
+	if( ctrChkNode(opt,"get",RWRWRW,"root","root",SEQ_RD) )		//All attributes values
+    	    for( int i_el = 0; i_el < list_c.size(); i_el++ )
+		opt->childAdd("el")->setAttr("id",list_c[i_el])->setText(vlAt(list_c[i_el]).at().getS());
+	if( ctrChkNode(opt,"set",RWRWRW,"root","root",SEQ_WR) )		//Multi attributes set
+    	    for( int i_el = 0; i_el < opt->childSize(); i_el++ )
+		vlAt(opt->childGet(i_el)->attr("id")).at().setS(opt->childGet(i_el)->text());
+	return;
+    }
+
+    //- Interface comands process -
+    //-- Info command process --
     if( opt->name() == "info" )
     {
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter: ")+nodeName());
 	if(ctrMkNode("area",opt,-1,"/val",_("Atributes")))
 	{
-    	    //Add atributes list
+    	    //--- Add atributes list ---
     	    vlList(list_c);
     	    for( int i_el = 0; i_el < list_c.size(); i_el++ )
 		vlAt(list_c[i_el]).at().fld().cntrCmdMake(opt,"/val",-1);
 	}
-	//Archiving
+	//--- Archiving ---
 	if(ctrMkNode("area",opt,-1,"/arch",_("Archiving")))
 	{
 	    if(ctrMkNode("table",opt,-1,"/arch/arch",_("Archiving"),0664,"root","root",1,"key","atr"))
 	    {
-		//Prepare table headers
+		vector<string> list_c2;
+		//- Prepare table headers -
 		ctrMkNode("list",opt,-1,"/arch/arch/atr",_("Atribute"),0444,"root","root",1,"tp","str");
 		ctrMkNode("list",opt,-1,"/arch/arch/prc",_("Archiving"),0664,"root","root",1,"tp","bool");	
 		SYS->archive().at().modList(list_c);
@@ -156,8 +190,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	}
         return;
     }
-    //Process command to page
-    string a_path = opt->attr("path");
+    //-- Process command to page --    
     if( a_path.substr(0,4) == "/val" )
     {		
         if( a_path.size() > 9 && a_path.substr(0,9) == "/val/sel_" && ctrChkNode(opt) )
@@ -183,7 +216,8 @@ void TValue::cntrCmdProc( XMLNode *opt )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
 	{
-	    //Prepare headers
+	    vector<string> list_c2;
+	    //--- Prepare headers ---
 	    ctrMkNode("list",opt,-1,"/arch/arch/atr","",0444);
 	    ctrMkNode("list",opt,-1,"/arch/arch/prc","",0664);
 	    SYS->archive().at().modList(list_c);
@@ -193,7 +227,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		for( int i_a = 0; i_a < list_c2.size(); i_a++ )
 		    ctrMkNode("list",opt,-1,("/arch/arch/"+SYS->archive().at().at(list_c[i_ta]).at().valAt(list_c2[i_a]).at().workId()).c_str(),"",0664);
 	    }
-	    //Fill table
+	    //--- Fill table ---
 	    vlList(list_c);
 	    for( int i_v = 0; i_v < list_c.size(); i_v++ )
 		for( int i_a = 0; i_a < opt->childSize(); i_a++ )
@@ -208,20 +242,20 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	}
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
 	{
-	    bool create = false;	//Create archive
+	    bool create = false;	//--- Create archive ---
 	    bool v_get = atoi(opt->text().c_str());
 	    string attr = opt->attr("key_atr");
             string col  = opt->attr("col");
 			
-	    //Check for create new 
+	    //--- Check for create new ---
 	    if( v_get && vlAt(attr).at().arch().freeStat() )
 	    {
-		//Make archive name
+		//---- Make archive name ----
 		string a_nm = nodeName()+"_"+attr;
 		string rez_nm = a_nm;
 		for( int p_cnt = 0; SYS->archive().at().valPresent(rez_nm); p_cnt++ )
 		    rez_nm = a_nm+TSYS::int2str(p_cnt);
-		//Create new archive		
+		//---- Create new archive ----
 		SYS->archive().at().valAdd(rez_nm);
 		SYS->archive().at().valAt(rez_nm).at().setValType(vlAt(attr).at().fld().type());
 		SYS->archive().at().valAt(rez_nm).at().setSrcMode(TVArchive::PassiveAttr,
@@ -230,13 +264,13 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		SYS->archive().at().valAt(rez_nm).at().start();
 		vlArchMake(vlAt(attr).at());
 	    }
-	    //Check for delete archive
+	    //--- Check for delete archive ---
 	    if( col == "prc" && !v_get && !vlAt(attr).at().arch().freeStat() )
 	    {
 		string a_id = vlAt(attr).at().arch().at().id();
 		SYS->archive().at().valDel(a_id,true);
 	    }
-	    //Change archivator status
+	    //--- Change archivator status ---
 	    if( col != "prc" && !vlAt(attr).at().arch().freeStat() )
 	    {
 		if( v_get )	vlAt(attr).at().arch().at().archivatorAttach(col);
@@ -246,9 +280,9 @@ void TValue::cntrCmdProc( XMLNode *opt )
     }
 }    				    
 
-//****************************************************************************
-//************************* TVal *********************************************
-//****************************************************************************
+//*************************************************
+//* TVal                                          *
+//*************************************************
 TVal::TVal( TFld &fld, TValue *owner ) : 
     TCntrNode(owner), m_cfg(false)
 {

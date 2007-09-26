@@ -375,7 +375,7 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &value, int 
         else cit = cit->parent();
 
     try
-    {    
+    {   
       	XMLNode req("set");
     	req.setAttr("path",nwdg+"/%2fattr%2f"+nattr)->
 	    setText((value.type()==QVariant::Bool) ? 

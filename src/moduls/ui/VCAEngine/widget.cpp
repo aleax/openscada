@@ -287,6 +287,7 @@ void Widget::attrDel( const string &attr )
 
 bool Widget::attrChange( Attr &cfg, void *prev )
 {
+    //printf("TEST 00: %s.%s = %s\n",path().c_str(),cfg.id().c_str(),cfg.getS().c_str());
     //- Process Active attribute's mode
     if( cfg.flgGlob()&Attr::Active && prev )
     {
@@ -602,7 +603,11 @@ bool Widget::cntrCmdAttributes( XMLNode *opt )
 	if( ctrChkNode(opt,"set",(attr.at().fld().flg()&TFld::NoWrite)?(permit()&~0222):permit(),user().c_str(),grp().c_str(),SEQ_WR) )
 	{
 	    if( attr.at().fld().flg()&TFld::Selected )	attr.at().setSEL(opt->text());
-            else                                    	attr.at().setS(opt->text());
+            else 
+	    {
+		//printf("Set attr %s to %s\n",attr.at().id().c_str(),opt->text().c_str());
+		attr.at().setS(opt->text());
+	    }
 	}
     }
     else return false;

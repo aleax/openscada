@@ -38,11 +38,13 @@ using std::vector;
 
 #define BUF_ARCH_NM "<bufer>"
 
-//================================================================
-//===================== Message archivator =======================
-//================================================================
+//************************************************
+//* Message archivator                           *
+//************************************************
 
-//================ TMArchivator ==================================
+//************************************************
+//* TMArchivator                                 *
+//************************************************
 class TTipArchivator;
 
 class TMArchivator : public TCntrNode, public TConfig
@@ -75,6 +77,8 @@ class TMArchivator : public TCntrNode, public TConfig
         int    &level()	{ return m_level; }
         void   categ( vector<string> &list );
 
+        virtual time_t begin()	{ return 0; }
+        virtual time_t end() 	{ return 0; }
 	virtual void put( vector<TMess::SRec> &mess ){ };
         virtual void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0 ) { };
 
@@ -107,11 +111,13 @@ class TMArchivator : public TCntrNode, public TConfig
 	string  m_db;
 };
 
-//================================================================
-//=================== Archive subsystem ==========================
-//================================================================
+//************************************************
+//* Archive subsystem                            *
+//************************************************
 
-//=================== TTipArchivator =============================
+//************************************************
+//* TTipArchivator                               *
+//************************************************
 class TArchiveS;
 
 class TTipArchivator: public TModule
@@ -153,7 +159,9 @@ class TTipArchivator: public TModule
 	int	m_mess, m_val;
 };
 
-//===================== TArchiveS ================================
+//************************************************
+//* TArchiveS                                    *
+//************************************************
 class TArchiveS : public TSubSYS
 {
     public:
@@ -189,7 +197,10 @@ class TArchiveS : public TSubSYS
 	//- Message archive function -
  	void messPut( time_t tm, const string &categ, TMess::Type level, const string &mess );	
 	void messPut( const vector<TMess::SRec> &recs );
-        void messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const string &category = "", TMess::Type level = TMess::Debug, const string &arch = "" );
+        void messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const string &category = "", 
+		TMess::Type level = TMess::Debug, const string &arch = "" );
+	time_t messBeg( const string &arch = "" );
+	time_t messEnd( const string &arch = "" );
 
 	TElem &messE()	{ return el_mess; }
 	TElem &valE() 	{ return el_val; }

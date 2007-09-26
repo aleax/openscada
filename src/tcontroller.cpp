@@ -126,27 +126,28 @@ void TController::stop( )
 
 void TController::enable( )
 {
-    if( en_st )	return;
+    if( !en_st )
+    {
+        mess_info(nodePath().c_str(),_("Enable controller!"));
 
-    mess_info(nodePath().c_str(),_("Enable controller!"));
-
-    //Load parameters
-    LoadParmCfg( );
-
-    //Enable for children
-    enable_();
+	//- Enable for children -
+	enable_();
+	
+	//Load parameters
+	LoadParmCfg( );	
+    }
     
     //Enable parameters
     vector<string> prm_list;
     list(prm_list);
     for( int i_prm = 0; i_prm < prm_list.size(); i_prm++ )
         if( at(prm_list[i_prm]).at().toEnable() )
-        try{ at(prm_list[i_prm]).at().enable(); }
-        catch(TError err)
-        {
-            mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
-            mess_warning(nodePath().c_str(),_("Enable parameter <%s> error."),prm_list[i_prm].c_str());
-        }
+    	    try{ at(prm_list[i_prm]).at().enable(); }
+    	    catch(TError err)
+    	    {
+        	mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
+        	mess_warning(nodePath().c_str(),_("Enable parameter <%s> error."),prm_list[i_prm].c_str());
+	    }
 
     //Set enable stat flag
     en_st=true;
@@ -187,6 +188,7 @@ void TController::LoadParmCfg(  )
     //Search and create new parameters
     for( int i_tp = 0; i_tp < owner().tpPrmSize(); i_tp++ )
     {
+	if( owner().tpPrmAt(i_tp).BD().empty() ) continue;
 	try
 	{
     	    TConfig c_el(&owner().tpPrmAt(i_tp));
