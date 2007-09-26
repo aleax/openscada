@@ -5,8 +5,8 @@
 - !!!:/DAQ: The base realisation of transporting OpenSCADA remote DAQs module (Transport) is added.
 - !!:/DAQ: Reply DAQs start is made if first start error. Some DAQ-sources can start depend other DAQ-sources.
 - !!:/TValue: Service function for access to DAQ parameter's attributes is added.
-- !!!:/TArchives: Service function for message archives access is added. begin() and end() functions,
-  for messages archive border detection is added.
+- !!!:/TArchives: Service function for message archives access is added. begin() and end() functions.
+  For messages archive border detection is added.
 - !!!!:/TProtocols: Output protocol support is made. Output parts of protocol "SelfSystems" moved to this module.
   For modules: UI.QTCfg, UI.Vision and DAQ.Transport.
 - !!!!:/TransportS: All parts for configuration OpenSCADA remote hosts move to "Transport" subsystem.
@@ -14,8 +14,7 @@
 - FIX:/DB/MySQL: Session lost is final fixed.
 - !!:/DAQ/BlockCalc: Blocks copy function extended to full controllers copy.
 - !!:/DAQ/CIF: Asynchronous write mode support is added. For more and frequently data writing.
-- 
-
+- !:/UI/VCAEngine, /UI/Vision: First realisation of primitive "Protocol" is added.
 
 2007-09-10 Maxim
 - !!:/UI/VCAEngine: Figure's points of the primitive "ElFig" support is added.
