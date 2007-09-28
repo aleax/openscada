@@ -29,199 +29,36 @@
 #include "vis_devel.h"
 #include "vis_widgs.h"
 #include "vis_shape_elfig.h"
+#include "vis_devel_widgs.h"
+#include "vis_run_widgs.h"
+
 
 using namespace VISION;
 
 //*************************************************
 //* Elementary figures shape widget               *
 //*************************************************
-/*QPainterPath ShapeItem::path() const
-{
-    return myPath;
-}
 
-QPointF ShapeItem::startposition() const
-{
-    return myStartPosition;
-}
-
-QPointF ShapeItem::endposition() const
-{
-    return myEndPosition;
-}
-
-QPointF ShapeItem::ctrlposition_1() const
-{
-    return myCtrlPosition_1;
-}
-
-QPointF ShapeItem::ctrlposition_2() const
-{
-    return myCtrlPosition_2;
-}
-
-QPointF ShapeItem::ctrlposition_3() const
-{
-    return myCtrlPosition_3;
-}
-
-QPointF ShapeItem::ctrlposition_4() const
-{
-    return myCtrlPosition_4;
-}
-
-
-QBrush ShapeItem::brush() const
-{
-    return myBrush;
-}
-
-QString ShapeItem::toolTip() const
-{
-    return myToolTip;
-}
-
-QPen ShapeItem::pen() const
-{
-    return myPen;
-}
-
-int ShapeItem::width() const
-{
-    return myWidth;
-}
-
-int ShapeItem::type() const
-{
-    return myType;
-}
-
-
-void ShapeItem::setPath(const QPainterPath &path)
-{
-    myPath = path;
-}
-
-void ShapeItem::setToolTip(const QString &toolTip)
-{
-    myToolTip = toolTip;
-}
-
-void ShapeItem::setStartPosition(const QPointF &startposition)
-{
-    myStartPosition = startposition;
-}
-
-void ShapeItem::setEndPosition(const QPointF &endposition)
-{
-    myEndPosition = endposition;
-}
-
-void ShapeItem::setCtrlPosition_1(const QPointF &ctrlposition_1)
-{
-    myCtrlPosition_1 = ctrlposition_1;
-}
-
-void ShapeItem::setCtrlPosition_2(const QPointF &ctrlposition_2)
-{
-    myCtrlPosition_2 = ctrlposition_2;
-}
-
-void ShapeItem::setCtrlPosition_3(const QPointF &ctrlposition_3)
-{
-    myCtrlPosition_3 = ctrlposition_3;
-}
-
-void ShapeItem::setCtrlPosition_4(const QPointF &ctrlposition_4)
-{
-    myCtrlPosition_4 = ctrlposition_4;
-}
-
-
-void ShapeItem::setBrush(const QBrush &brush)
-{
-    myBrush = brush;
-}
-
-void ShapeItem::setPen(const QPen &pen)
-{
-    myPen = pen;
-}
-
-void ShapeItem::setWidth(int width)
-{
-    myWidth = width;
-}
-
-void ShapeItem::setType(int type)
-{
-    myType = type;
-}
-*/
 ShapeItem &ShapeItem::operator=(const ShapeItem &item)
 {
-    setToolTip(item.toolTip());
-    setStartPosition(item.startposition());
-    setEndPosition(item.endposition());
-    setCtrlPosition_1(item.ctrlposition_1());
-    setCtrlPosition_2(item.ctrlposition_2());
-    setCtrlPosition_3(item.ctrlposition_3());
-    setCtrlPosition_4(item.ctrlposition_4());
+ 
+    myNum_1=item.myNum_1;
+    myNum_2=item.myNum_2;
+    myNum_3=item.myNum_3;
+    myNum_4=item.myNum_4;
+    myNum_5=item.myNum_5;
+    myCtrlPosition_4= item.myCtrlPosition_4;
     setBrush(item.brush());
     setPen(item.pen());
     setWidth(item.width());
     setType(item.type());
     setPath(item.path());
+    setPathSimple(item.path_simple());
+    setPenSimple(item.pen_simple());
     return *this;
 }
 /////////////////////////////////////////////////////////////////////////////
-//RectItem.cpp
-/////////////////////////////////////////////////////////////////////////////
-/*QPainterPath RectItem::path() const
-{
-    return myPath;
-}
 
-QPointF RectItem::startposition() const
-{
-    return myStartPosition;
-}
-
-
-QBrush RectItem::brush() const
-{
-    return myBrush;
-}
-
-
-QPen RectItem::pen() const
-{
-    return myPen;
-}
-
-
-void RectItem::setPath(const QPainterPath &path)
-{
-    myPath = path;
-}
-
-
-void RectItem::setStartPosition(const QPointF &startposition)
-{
-    myStartPosition = startposition;
-}
-
-
-void RectItem::setBrush(const QBrush &brush)
-{
-    myBrush = brush;
-}
-
-void RectItem::setPen(const QPen &pen)
-{
-    myPen = pen;
-}
-*/
 
 ShapeElFigure::ShapeElFigure() : WdgShape("ElFigure") 
 {
@@ -248,33 +85,345 @@ ShapeElFigure::ShapeElFigure() : WdgShape("ElFigure")
     count_holds=0;
     count_rects=0;
     rect_num_arc=-1;
-    ////////////////////////////////////////
-    newPath.addEllipse(QRect(0, 0, 0, 0));//Задание нулевого пути
+     ////////////////////////////////////////
+    newPath.addEllipse(QRect(0, 0, 0, 0));//Задание нулевого пути;
+  
+    
 }
 
 void ShapeElFigure::init( WdgView *w )
 {
     QList<ShapeItem> *shapeItems = new QList<ShapeItem>();
     w->dc()["shapeItems"].setValue((void*)shapeItems);
+    PntMap *pnts = new PntMap;
+    w->dc()["shapePnts"].setValue((void*)pnts);
 }
 
 void ShapeElFigure::destroy( WdgView *w )
 {
-    QList<ShapeItem> *shapeItems = (QList<ShapeItem> *)w->dc().value("shapeItems",(void*)0).value< void* >();
-    if( shapeItems ) delete shapeItems;
+    delete (QList<ShapeItem> *)w->dc().value("shapeItems",(void*)0).value< void* >();
+    delete (PntMap*)w->dc().value("shapePnts",(void*)0).value< void* >();
     rectItems.clear();
 }
 
-bool ShapeElFigure::attrSet( WdgView *view, int uiPrmPos, const string &val )
+bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 {
-    return false;
+    DevelWdgView *devW = qobject_cast<DevelWdgView*>(w);
+    RunWdgView   *runW = qobject_cast<RunWdgView*>(w);
+        
+    bool rel_list=false;
+    bool up=false;
+    QPointF abc;
+    QList<ShapeItem> &shapeItems = *(QList<ShapeItem> *)w->dc().value("shapeItems",(void*)0).value< void* >();
+    PntMap *pnts = (PntMap*)w->dc().value("shapePnts",(void*)0).value< void* >();
+   // PntMap *pnts_temp = (PntMap*)w->dc().value("shapePnts",(void*)0).value< void* >();
+    QLineF line1, line2;
+    double ang;
+    QPointF StartMotionPos;//Первая контрольная точка(StartLine)
+    QPointF EndMotionPos;//Вторая контрольная точка(EndLine)
+    QPointF CtrlMotionPos_1;//Третья контрольная точка
+    QPointF CtrlMotionPos_2;//Четвёртая контрольная точка
+    QPointF CtrlMotionPos_3;//Пятая контрольная точка(для дуги)
+    QPointF CtrlMotionPos_4;//Шестая контрольная точка(для дуги)
+    double t_start, t_end, a, b, ang_t;
+    float MotionWidth;
+    QPainterPath circlePath;
+  
+    switch( uiPrmPos )
+    {
+        case 5:		//en
+            if(runW)    w->dc()["en"] = (bool)atoi(val.c_str());
+            break;
+        case 6:		//active
+            if(runW)    w->dc()["active"] = (bool)atoi(val.c_str());
+            break;
+        case 12:	//geomMargin
+            w->dc()["geomMargin"] = atoi(val.c_str());
+            up=true;
+            break;
+        case 20:	//lineWdth
+            w->dc()["lineWdth"] = atof(val.c_str());
+            rel_list=true;
+            break;
+        case 21:	//lineClr
+            w->dc()["lineClr"] =  QColor(val.c_str());
+            rel_list=true;
+            break;
+        case 22:	//lineDecor
+            w->dc()["lineDecor"] = atoi(val.c_str());
+            rel_list=true;
+            break;
+        case 23:	//bordWdth
+            w->dc()["bordWdth"] = atoi(val.c_str());
+            rel_list=true;
+            break;
+        case 24:	//bordClr
+            w->dc()["bordClr"] = QColor(val.c_str());
+            rel_list=true;
+            break;
+        case 25:	//backgClr
+            w->dc()["backgClr"] = QColor(val.c_str());
+            up=true;
+            break;
+        case 26:	//backgImg
+            w->dc()["backgImg"] = val.c_str();
+            up=true;
+            break;
+        case 27:	//elLst
+            w->dc()["elLst"] = val.c_str();
+            rel_list=true;
+            break;
+        default:
+            if( uiPrmPos >= 30 )
+            {
+                int pnt  = (uiPrmPos-30)/2;
+                int patr = (uiPrmPos-30)%2;
+                int pval  = atoi(val.c_str());
+                QPoint pnt_ = (*pnts)[pnt];
+                if( patr == 0 ) pnt_.setX(pval);
+                else pnt_.setY(pval);
+                (*pnts)[pnt] = pnt_;
+                rel_list = true;
+                
+            }
+    }
+	
+    if (rel_list)	
+    {
+        shapeItems.clear();
+            //- Parse last attributes list and make point list -
+        string sel;
+        int p[5];
+        QPoint ip[5];
+        for( int off = 0; (sel=TSYS::strSepParse(w->dc()["elLst"].toString().toAscii().data(),0,'\n',&off)).size(); )
+        {
+            //PntMap::iterator ip;
+            if(sscanf(sel.c_str(),"line:%d:%d",&p[0],&p[1]) == 2 )
+            {
+                for( int i_p = 0; i_p < 2; i_p++ )
+                    ip[i_p] = (*pnts)[p[i_p]];
+                    
+                if ( w->dc()["bordWdth"].toInt()>0)
+                {
+                    printf("Hard\n");
+                    line2=QLineF(ip[0],QPointF(ip[0].x()+10,ip[0].y()));
+                    line1=QLineF(ip[0],ip[1]);
+                    if (ip[0].y()<=ip[1].y())
+                        ang=360-line1.angle(line2);
+                    else
+                        ang=line1.angle(line2);
+                    circlePath = painter_path(w->dc()["lineWdth"].toInt(),1, ang, ip[0],ip[1],
+                                       QPointF(0,0), QPointF(0,0), QPointF(0,0), QPointF(0,0));
+                    createShapeItem(circlePath, newPath, p[0],p[1],-1,-1,-1,QPointF(0,0),
+                                    QBrush(w->dc()["lineClr"].value<QColor>(),Qt::SolidPattern),
+                                           QPen( w->dc()["bordClr"].value<QColor>(), w->dc()["bordWdth"].toInt(), Qt::SolidLine,Qt::FlatCap, Qt::MiterJoin),
+                                                   QPen( w->dc()["lineClr"].value<QColor>(), w->dc()["lineWdth"].toInt(), Qt::NoPen,Qt::FlatCap, Qt::MiterJoin),
+                                                           w->dc()["lineWdth"].toInt(), 1, shapeItems);
+                }
+                else
+                {
+                    printf("Simple\n");
+                    line2=QLineF(ip[0],QPointF(ip[0].x()+10,ip[0].y()));
+                    line1=QLineF(ip[0],ip[1]);
+                    if (ip[0].y()<=ip[1].y())
+                        ang=360-line1.angle(line2);
+                    else
+                        ang=line1.angle(line2);
+                    circlePath = painter_path_simple(1, ang, ip[0],ip[1] ,
+                                              QPointF(0,0), QPointF(0,0), QPointF(0,0), QPointF(0,0));
+                   QPainterPath bigPath = painter_path(w->dc()["lineWdth"].toInt(),1, ang, ip[0],ip[1],
+                                              QPointF(0,0), QPointF(0,0), QPointF(0,0), QPointF(0,0));
+                    
+                    createShapeItem(bigPath,circlePath,p[0],p[1],-1,-1,-1,QPointF(0,0),
+                                    QBrush(w->dc()["lineClr"].value<QColor>(),Qt::NoBrush),
+                                           QPen( w->dc()["bordClr"].value<QColor>(), w->dc()["bordWdth"].toInt(), Qt::NoPen,Qt::FlatCap, Qt::MiterJoin),
+                                                   QPen( w->dc()["lineClr"].value<QColor>(), w->dc()["lineWdth"].toInt(), Qt::SolidLine,Qt::FlatCap, Qt::MiterJoin),
+                                                           w->dc()["lineWdth"].toInt(),1,shapeItems);
+                }
+            }
+            else if(sscanf(sel.c_str(),"arc:%d:%d:%d:%d:%d",&p[0],&p[1],&p[2],&p[3],&p[4]) == 5)
+            {
+                for( int i_p = 0; i_p < 5; i_p++ )
+                    ip[i_p] = (*pnts)[p[i_p]];
+                
+                //////////////////////////////////////////////////////////////////////////////////
+                StartMotionPos=ip[0];
+                EndMotionPos=ip[1];
+                CtrlMotionPos_1=ip[2];
+                CtrlMotionPos_2=ip[3];
+               // CtrlMotionPos_3=ip[4];
+                CtrlMotionPos_4=ip[4];
+                MotionWidth=w->dc()["lineWdth"].toInt();
+                
+                line2=QLineF(CtrlMotionPos_1 ,QPointF(CtrlMotionPos_1.x()+10,CtrlMotionPos_1.y()));
+                line1=QLineF( CtrlMotionPos_1,CtrlMotionPos_4);
+                if (CtrlMotionPos_4.y()<=CtrlMotionPos_1.y()) ang=line1.angle(line2);
+                else ang=360-line1.angle(line2);
+                
+                a=Length(CtrlMotionPos_4, CtrlMotionPos_1);
+                b=Length(CtrlMotionPos_2, CtrlMotionPos_1);
+                CtrlMotionPos_2=QPointF(CtrlMotionPos_1.x()+ROTATE(ARC(0.25,a,b),ang).x(),
+                                        CtrlMotionPos_1.y()-ROTATE(ARC(0.25,a,b),ang).y());
+                CtrlMotionPos_4=UNROTATE(CtrlMotionPos_4,ang,CtrlMotionPos_1.x(),CtrlMotionPos_1.y());
+                StartMotionPos=UNROTATE(StartMotionPos,ang,CtrlMotionPos_1.x(),CtrlMotionPos_1.y());
+                line1=QLineF(QPointF(0,0),CtrlMotionPos_4);
+                line2=QLineF(QPointF(0,0),StartMotionPos);
+                if (StartMotionPos.y()<0)
+                    ang_t=Angle(line1,line2);
+                            
+                else ang_t=360-Angle(line1,line2);
+                
+                t_start=ang_t/360;
+               /* if (t_start>t_end) t_end+=1;
+                if ((t_end-1)>t_start) t_end-=1;*/
+                ///////////////////////////////////////////
+                            
+                //////////Tstart//////////////////////
+                ///////////////////////////////////
+               
+                EndMotionPos=UNROTATE(EndMotionPos,ang,CtrlMotionPos_1.x(),CtrlMotionPos_1.y());
+                     // line1=QLineF(QPointF(0,0),CtrlMotionPos_4);
+                line2=QLineF(QPointF(0,0),EndMotionPos);
+                if (EndMotionPos.y()<0)
+                    ang_t=Angle(line1,line2);
+                else ang_t=360-Angle(line1,line2);
+                if (t_start==t_end)
+                {
+                    t_start=0;
+                    t_end=0;
+                }
+                t_end=ang_t/360;
+                  
+                if (t_start>t_end) t_end+=1;
+                if ((t_end-1)>t_start) t_end-=1;
+                ///////////////////////////////////////////
+                CtrlMotionPos_4=QPointF(CtrlMotionPos_1.x()+ROTATE(ARC(0,a,b),ang).x(),
+                                        CtrlMotionPos_1.y()-ROTATE(ARC(0,a,b),ang).y());
+               
+                StartMotionPos=QPointF(CtrlMotionPos_1.x()+ROTATE(ARC(t_start,a-MotionWidth/2,b-MotionWidth/2),ang).x(),
+                CtrlMotionPos_1.y()-ROTATE(ARC(t_start,a-MotionWidth/2,b-MotionWidth/2),ang).y());
+                EndMotionPos=QPointF(CtrlMotionPos_1.x()+ROTATE(ARC(t_end,a-MotionWidth/2,b-MotionWidth/2),ang).x(),
+                CtrlMotionPos_1.y()-ROTATE(ARC(t_end,a-MotionWidth/2,b-MotionWidth/2),ang).y());
+                CtrlMotionPos_3=QPointF(t_start, t_end);
+                printf("a=%f\n",a);
+                printf("b=%f\n",b);
+                printf("T_start=%f\n",t_start);
+                printf("T_end=%f\n",t_end);
+                printf("StartMotionPos=(%f,%f)\n", StartMotionPos.x(), StartMotionPos.y());
+                printf("EndMotionPos=(%f,%f)\n", EndMotionPos.x(), EndMotionPos.y());
+                printf("CtrlMotionPos_2=(%f,%f)\n", CtrlMotionPos_2.x(), CtrlMotionPos_2.y());
+                printf("CtrlMotionPos_4=(%f,%f)\n", CtrlMotionPos_4.x(), CtrlMotionPos_4.y());
+                //////////////////////////////////////////////////////////////////////////////////
+                
+                                
+                if ( w->dc()["bordWdth"].toInt()>0)
+                {
+                    circlePath = painter_path(w->dc()["lineWdth"].toInt(),2, ang, StartMotionPos,EndMotionPos,
+                                              CtrlMotionPos_1, CtrlMotionPos_2,  CtrlMotionPos_4,CtrlMotionPos_3);
+                    createShapeItem(circlePath, newPath, p[0],p[1],p[2],p[3],p[4],CtrlMotionPos_3,
+                                    QBrush(w->dc()["lineClr"].value<QColor>(),Qt::SolidPattern),
+                                           QPen( w->dc()["bordClr"].value<QColor>(), w->dc()["bordWdth"].toInt(), Qt::SolidLine,Qt::FlatCap, Qt::MiterJoin),
+                                                   QPen( w->dc()["lineClr"].value<QColor>(), w->dc()["lineWdth"].toInt(), Qt::NoPen,Qt::FlatCap, Qt::MiterJoin),
+                                                           w->dc()["lineWdth"].toInt(), 2, shapeItems);
+                }
+                else
+                {
+                    QPainterPath bigPath = painter_path(w->dc()["lineWdth"].toInt(),2, ang, StartMotionPos,EndMotionPos,
+                            CtrlMotionPos_1, CtrlMotionPos_2,  CtrlMotionPos_4,CtrlMotionPos_3);
+                    circlePath = painter_path_simple(2, ang, StartMotionPos,EndMotionPos,
+                            CtrlMotionPos_1, CtrlMotionPos_2,  CtrlMotionPos_4,CtrlMotionPos_3);
+                    createShapeItem(bigPath,circlePath,p[0],p[1],p[2],p[3], p[4],CtrlMotionPos_3,
+                                    QBrush(w->dc()["lineClr"].value<QColor>(),Qt::NoBrush),
+                                           QPen( w->dc()["bordClr"].value<QColor>(), w->dc()["bordWdth"].toInt(), Qt::NoPen,Qt::FlatCap, Qt::MiterJoin),
+                                                   QPen( w->dc()["lineClr"].value<QColor>(), w->dc()["lineWdth"].toInt(), Qt::SolidLine,Qt::FlatCap, Qt::MiterJoin),
+                                                           w->dc()["lineWdth"].toInt(),2,shapeItems);
+                }
+            }
+            else if( sscanf(sel.c_str(),"bezier:%d:%d:%d:%d",&p[0],&p[1],&p[2],&p[3]) == 4 )
+            {
+                for( int i_p = 0; i_p < 4; i_p++ )
+                    ip[i_p] = (*pnts)[p[i_p]];
+                
+                if ( w->dc()["bordWdth"].toInt()>0)
+                {
+                    line2=QLineF(ip[0],QPointF(ip[0].x()+10,ip[0].y()));
+                    line1=QLineF(ip[0],ip[1]);
+                    if (ip[0].y()<=ip[1].y())
+                        ang=360-line1.angle(line2);
+                    else
+                        ang=line1.angle(line2);
+                    circlePath = painter_path(w->dc()["lineWdth"].toInt(),3, ang, ip[0],ip[1],
+                                              ip[2],ip[3], QPointF(0,0), QPointF(0,0));
+                    
+                    createShapeItem(circlePath, newPath, p[0], p[1], p[2], p[3],-1,QPointF(0,0),
+                                    QBrush(w->dc()["lineClr"].value<QColor>(),Qt::SolidPattern),
+                                           QPen( w->dc()["bordClr"].value<QColor>(), w->dc()["bordWdth"].toInt(), Qt::SolidLine,Qt::FlatCap, Qt::MiterJoin),
+                                                   QPen( w->dc()["lineClr"].value<QColor>(), w->dc()["lineWdth"].toInt(), Qt::NoPen,Qt::FlatCap, Qt::MiterJoin),
+                                                           w->dc()["lineWdth"].toInt(), 3, shapeItems);
+                }
+                else
+                {
+                    line2=QLineF(ip[0],QPointF(ip[0].x()+10,ip[0].y()));
+                    line1=QLineF(ip[0],ip[1]);
+                    if (ip[0].y()<=ip[1].y())
+                        ang=360-line1.angle(line2);
+                    else
+                        ang=line1.angle(line2);
+                    QPainterPath bigPath = painter_path(w->dc()["lineWdth"].toInt(),3, ang, ip[0],ip[1],
+                                              ip[2],ip[3], QPointF(0,0), QPointF(0,0));
+                    circlePath = painter_path_simple(3, ang, ip[0], ip[1], ip[2], ip[3], QPointF(0,0), QPointF(0,0));
+                    createShapeItem(bigPath,circlePath, p[0], p[1], p[2], p[3], -1,QPointF(0,0),
+                                    QBrush(w->dc()["lineClr"].value<QColor>(),Qt::NoBrush),
+                                           QPen( w->dc()["bordClr"].value<QColor>(), w->dc()["bordWdth"].toInt(), Qt::NoPen,Qt::FlatCap, Qt::MiterJoin),
+                                                   QPen( w->dc()["lineClr"].value<QColor>(), w->dc()["lineWdth"].toInt(), Qt::SolidLine,Qt::FlatCap, Qt::MiterJoin),
+                                                           w->dc()["lineWdth"].toInt(),3,shapeItems);
+                }
+            }
+        }
+        up = true;
+    }	
+        
+    if( up &&  w->isVisible() ) w->update();
+    
+    return up;
+}
+
+bool ShapeElFigure::shapeSave( WdgView *w )
+{
+    DevelWdgView *devW = qobject_cast<DevelWdgView*>(w);
+    QList<ShapeItem> &shapeItems = *(QList<ShapeItem> *)w->dc().value("shapeItems",(void*)0).value< void* >();
+    PntMap *pnts = (PntMap*)w->dc().value("shapePnts",(void*)0).value< void* >();
+    
+    string elList;
+    for( int i_s = 0; i_s < shapeItems.size(); i_s++ )
+    {
+        int pnt1=shapeItems[i_s].num_1();
+        int pnt2=shapeItems[i_s].num_2();
+        int pnt3=shapeItems[i_s].num_3();
+        int pnt4=shapeItems[i_s].num_4();
+        int pnt5=shapeItems[i_s].num_5();
+        if( shapeItems[i_s].type()==1 ) elList+="line:"+TSYS::int2str(pnt1)+":"+TSYS::int2str(pnt2)+"\n";
+        if( shapeItems[i_s].type()==2 ) elList+="arc:"+TSYS::int2str(pnt1)+":"+TSYS::int2str(pnt2)+":"+TSYS::int2str(pnt3)+":"+TSYS::int2str(pnt4)+":"+TSYS::int2str(pnt5)+"\n";
+        if( shapeItems[i_s].type()==3 ) elList+="bezier:"+TSYS::int2str(pnt1)+":"+TSYS::int2str(pnt2)+":"+TSYS::int2str(pnt3)+":"+TSYS::int2str(pnt4)+"\n";
+    }
+    printf("TEST 00: %s",elList.c_str());
+    w->attrSet( "elLst", elList );
+
+    //Write shapes points to data model
+    for( PntMap::iterator pi = pnts->begin(); pi != pnts->end(); pi++ )
+    {
+        w->attrSet("p"+TSYS::int2str(pi.key())+"x",TSYS::int2str(pi.value().x()));
+        w->attrSet("p"+TSYS::int2str(pi.key())+"y",TSYS::int2str(pi.value().y()));
+    }
+    //emit devW->selected(w->id());
+    devW->setSelect(true);
 }
 
 void ShapeElFigure::editEnter( WdgView *view )
 {
     ((VisDevelop *)view->mainWin())->elFigTool->setVisible(true);
     connect( ((VisDevelop *)view->mainWin())->elFigTool, SIGNAL(actionTriggered(QAction*)),
-            this, SLOT(toolAct(QAction*)) );
+               this, SLOT(toolAct(QAction*)) );
     //-- Init actions' address --
     for( int i_a = 0; i_a < ((VisDevelop *)view->mainWin())->elFigTool->actions().size(); i_a++ )
         ((VisDevelop *)view->mainWin())->elFigTool->actions().at(i_a)->setIconText(TSYS::addr2str(view).c_str());
@@ -284,7 +433,7 @@ void ShapeElFigure::editEnter( WdgView *view )
 void ShapeElFigure::editExit( WdgView *view )
 {
     disconnect( ((VisDevelop *)view->mainWin())->elFigTool, SIGNAL(actionTriggered(QAction*)),
-    	    this, SLOT(toolAct(QAction*)) );
+                  this, SLOT(toolAct(QAction*)) );
     ((VisDevelop *)view->mainWin())->elFigTool->setVisible(false);
     //-- Clear action;s address --
     for( int i_a = 0; i_a < ((VisDevelop *)view->mainWin())->elFigTool->actions().size(); i_a++ )
@@ -318,7 +467,7 @@ void ShapeElFigure::toolAct( QAction *act )
 bool ShapeElFigure::event( WdgView *view, QEvent *event )
 {
     QList<ShapeItem> &shapeItems = *(QList<ShapeItem> *)view->dc().value("shapeItems",(void*)0).value< void* >();
-   
+    PntMap *pnts = (PntMap*)view->dc().value("shapePnts",(void*)0).value< void* >();
     bool flag_hold_rect;
     flag_hold_rect=false;//Дополнительная переменная, служащая флагом для рисования кружочка при привязках
     switch(event->type())
@@ -326,18 +475,34 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
        
         case QEvent::Paint:
         {
-    	    QPainter pnt( view );
+            QPainter pnt( view );
+            //- Prepare draw area -
+            int margin = view->dc()["geomMargin"].toInt();
+            QRect draw_area = view->rect().adjusted(0,0,-2*margin,-2*margin);	    
+            pnt.setWindow(draw_area);
+            pnt.setViewport(view->rect().adjusted(margin,margin,-margin,-margin));
+            
+            //- Draw decoration -
+            QColor bkcol = view->dc()["backgClr"].value<QColor>();
+            if( bkcol.isValid() ) pnt.fillRect(draw_area,bkcol);
+            QBrush bkbrsh = view->dc()["backgImg"].value<QBrush>();
+            if( bkbrsh.style() != Qt::NoBrush ) pnt.fillRect(draw_area,bkbrsh);
             //Рисование всех экземпляров класса ShapeItem
             /////////////////////////////////////
             for (int k=0; k<=shapeItems.size() - 1; k++)
             {
+               // printf("StartMotionPos_paint=(%f,%f)\n", shapeItems[k].startposition().x(), shapeItems[k].startposition().y());
+                //printf("EndMotionPos_paint=(%f,%f)\n", shapeItems[k].endposition().x(), shapeItems[k].endposition().y());
                 pnt.setBrush(shapeItems[k].brush());
                 pnt.setPen(shapeItems[k].pen());
                 pnt.drawPath(shapeItems[k].path());
+                pnt.setPen(shapeItems[k].pen_simple());
+                pnt.setBrush(Qt::NoBrush);
+                pnt.drawPath(shapeItems[k].path_simple());
             }
             /////////////////////////////////////
             //Рисование всех экземпляров класса RectItem
-           /////////////////////////////////////
+            /////////////////////////////////////
             for (int k=0; k<=rectItems.size() - 1; k++)
             {
                 pnt.setBrush(rectItems[k].brush());
@@ -347,152 +512,176 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
             pnt.setPen(QColor(0,0,0,255));
             pnt.drawPath(ellipse_draw_startPath);
             pnt.drawPath(ellipse_draw_endPath);
-           /////////////////////////////////////
-            event->accept();
+            /////////////////////////////////////
             return true;
         }
-    case QEvent::MouseButtonPress:
-      {
-          QMouseEvent *ev = static_cast<QMouseEvent*>(event);
-          if (flag_down==0 && flag_up==0 && flag_left==0 && flag_right==0) //Условие ненажатия управляющих клавиш
-          {
-              if (ev->button() == Qt::RightButton)//Прекращение режима рисования
-              {
-                  view->unsetCursor();
-                  status=false;
-              }
+        case QEvent::MouseButtonPress:
+        {
+            QMouseEvent *ev = static_cast<QMouseEvent*>(event);
+            if (flag_down==0 && flag_up==0 && flag_left==0 && flag_right==0) //Условие ненажатия управляющих клавиш
+            {
+                if (ev->button() == Qt::RightButton)//Прекращение режима рисования
+                {
+                    view->unsetCursor();
+                    status=false;
+                }
                //Получение индекса перемещаемой фигуры и начальной позиции, от которой будет производиться перемещение
-              if (ev->button() == Qt::LeftButton && (status==false))
-              {
+                if (ev->button() == Qt::LeftButton && (status==false))
+                {
                   //Инициализация перемненных, отвечающих за то, какую комбинацию из двух точек связывать
-                  /////////////////////
-                  current_ss=-1;
-                  current_se=-1;
-                  current_es=-1;
-                  current_ee=-1;
-                  flag_holds=true;
-                  /////////////////////
-                  index = itemAt(ev->pos(),shapeItems);//Определение того, по какой фигуре клацнули
-                  index_temp = index;//Определение индекса для управляющих клавиш(он не меняется в зависимости от перемещения)
-                  previousPosition_all = ev->pos();//Определение начальной позиции для нескольких фигур(выделенных по CTRL или связанных по привязкам)
-                  previousPosition = ev->pos();
-                  if (index!= -1)//Проврка на то, что попали по фигуре
-                  {
-                      printf ("0\n");
-                      itemInMotion = &shapeItems[index];//Объявление указателя на выделенную фигуру
+                    /////////////////////
+                    current_ss=-1;
+                    current_se=-1;
+                    current_es=-1;
+                    current_ee=-1;
+                    flag_holds=true;
+                    /////////////////////
+                    index = itemAt(ev->pos(),shapeItems);//Определение того, по какой фигуре клацнули
+                    index_temp = index;//Определение индекса для управляющих клавиш(он не меняется в зависимости от перемещения)
+                    previousPosition_all = ev->pos();//Определение начальной позиции для нескольких фигур(выделенных по CTRL или связанных по привязкам)
+                    previousPosition = ev->pos();
+                    if (index!= -1)//Проврка на то, что попали по фигуре
+                    {
+                        itemInMotion = &shapeItems[index];//Объявление указателя на выделенную фигуру
                         //previousPosition = ev->pos();//Определение начальной позиции для одной, не связанной ни с чем, фигуры
-                      if (flag_ctrl && !status_hold) //Проверка на то, что нажат  Сtrl
-                      {
-                          bool fn=false;//Объявление и инициализация переменной, которая показывает клацали с CTRL по данной фигуре или клацают впервые
-                          if (rectItems.size() && !count_Shapes)// Проверка на то, что была выделена фигура до нажатия Сtrl
-                          {
-                              index_array[0]=shapeItems.size()-1;//Запись этой выделенной фигуры в нулевой элемент массива фигур, выделяемых с CTRL
-                              printf ("index_array[0]=%i\n",index_array[0]);
-                              count_Shapes=1;
-                          }
-                          for (int i=0; i<count_Shapes; i++)
-                              if (index_array[i]==index)
-                                  fn=true;// Проверка на то, что фигура выделяется впервые
-                          if (!fn)//То есть по фигуре клацнули впервые
-                          {
-                              printf ("!fn\n");
-                              index_array[count_Shapes]=index; //Добавление индекса фигуры в массив индексов выделенных с CTRL фигур
-                              printf ("index_array[count_Shapes]=%i\n",index_array[count_Shapes]);
-                              count_Shapes+=1;//Приращение колва фигур
-                              itemInMotion=&shapeItems[index];
-                              flag_ctrl_move=1;//Переменная показывае, что мы выделяем фигуру с CTRL и не начинаем её перемещать
-                              moveItemTo(previousPosition, shapeItems);
-                              printf ("count_Shapes_1=%i\n",count_Shapes);
-                          }
-                      }
-                      if (status_hold)
-                      {
-                          printf ("1\n");
-                          count_holds=0;//Обнуление числа связанных фигур
-                          //////////////////////////////////////////////////
-                          if (rect_num!= -1)
-                              for (int i=0; i<=shapeItems.size()-1; i++)
-                                  if((rectItems[rect_num].startposition()==shapeItems[i].startposition()) ||
-                                      (rectItems[rect_num].startposition()==shapeItems[i].endposition()) ||
-                                      (rectItems[rect_num].startposition()==shapeItems[i].ctrlposition_1()) ||
-                                      (rectItems[rect_num].startposition()==shapeItems[i].ctrlposition_2()) ||
-                                      (rectItems[rect_num].startposition()==shapeItems[i].ctrlposition_3()) ||
-                                      (rectItems[rect_num].startposition()==shapeItems[i].ctrlposition_4()))
-                                      index=i;
-                          //////////////////////////////////////////////////
-                          Holds(shapeItems);
+                        if (flag_ctrl && !status_hold) //Проверка на то, что нажат  Сtrl
+                        {
+                            bool fn=false;//Объявление и инициализация переменной, которая показывает клацали с CTRL по данной фигуре или клацают впервые
+                            if (rectItems.size() && !count_Shapes)// Проверка на то, что была выделена фигура до нажатия Сtrl
+                            {
+                                index_array[0]=shapeItems.size()-1;//Запись этой выделенной фигуры в нулевой элемент массива фигур, выделяемых с CTRL
+                                count_Shapes=1;
+                            }
+                            for (int i=0; i<count_Shapes; i++)
+                                if (index_array[i]==index)
+                                    fn=true;// Проверка на то, что фигура выделяется впервые
+                            if (!fn)//То есть по фигуре клацнули впервые
+                            {
+                                index_array[count_Shapes]=index; //Добавление индекса фигуры в массив индексов выделенных с CTRL фигур
+                                count_Shapes+=1;//Приращение колва фигур
+                                itemInMotion=&shapeItems[index];
+                                flag_ctrl_move=1;//Переменная показывае, что мы выделяем фигуру с CTRL и не начинаем её перемещать
+                                moveItemTo(previousPosition, shapeItems,pnts);
+                            }
+                        }
+                        if (status_hold)
+                        {
+                            count_holds=0;//Обнуление числа связанных фигур
+                            //////////////////////////////////////////////////
+                            if (rect_num!= -1)
+                                for (int i=0; i<=shapeItems.size()-1; i++)
+                            {
+                                if (shapeItems[i].type()==1)
+                                {
+                                    if((rectItems[rect_num].num()==shapeItems[i].num_1()) ||
+                                        (rectItems[rect_num].num()==shapeItems[i].num_2()))
+                                        index=i;
+                                }
+                                if (shapeItems[i].type()==2)
+                                {
+                                    if((rectItems[rect_num].num()==shapeItems[i].num_1()) ||
+                                        (rectItems[rect_num].num()==shapeItems[i].num_2())||
+                                        (rectItems[rect_num].num()==shapeItems[i].num_3())||
+                                        (rectItems[rect_num].num()==shapeItems[i].num_4())||
+                                        (rectItems[rect_num].num()==shapeItems[i].num_5()))
+                                        index=i;
+                                }
+                                if (shapeItems[i].type()==3)
+                                {
+                                   
+                                    if((rectItems[rect_num].num()==shapeItems[i].num_1()) ||
+                                        (rectItems[rect_num].num()==shapeItems[i].num_2())||
+                                        (rectItems[rect_num].num()==shapeItems[i].num_3())||
+                                        (rectItems[rect_num].num()==shapeItems[i].num_4()))
+                                        index=i;
+                                }
+                            }
+                            //////////////////////////////////////////////////
+                            Holds(shapeItems,pnts);
+                            printf ("rect_num=%i\n",rect_num);
+                            printf ("count_holds=%i\n",count_holds);
                            //Если есть связанные фигуры
-                          ////////////////////////////
-                          if (count_holds)
-                          {
-                              printf ("2\n");
-                              if (rect_num!= -1)
-                              {
-                                  printf ("3\n");
-                                  int rect_num_temp=rect_num;//Запоминание истинного номера квадратика в контейнере rectitems
-                                  rect_num=Real_rect_num(rect_num,shapeItems);
-                                  itemInMotion = &shapeItems[index];
+                            ////////////////////////////
+                            if (count_holds)
+                            {
+                                if (rect_num!= -1)
+                                {
+                                    int rect_num_temp=rect_num;//Запоминание истинного номера квадратика в контейнере rectitems
+                                    rect_num=Real_rect_num(rect_num,shapeItems,pnts);
+                                    printf ("Real_rect_num=%i\n",rect_num);
+                                    itemInMotion = &shapeItems[index];
                                    //Проверка на то, что квадратик не startposition и не endposition
-                                  ////////////////////////////////////////////////
-                                  if ((rect_num==2 || rect_num==3) && shapeItems[index].type()==3)
+                                    ////////////////////////////////////////////////
+                                    if ((rect_num==2 || rect_num==3) && shapeItems[index].type()==3)
                                   
-                                      flag_rect=false;
+                                        flag_rect=false;
                                   
-                                  ////////////////////////////////////////////////
+                                    ////////////////////////////////////////////////
                                    //Проверка на то,  что квадратик или startposition или endposition
-                                  /////////////////////////////////////////////
-                                  if ( rect_num==0 || rect_num==1)
-                                      Rect_num_0_1(shapeItems,rect_num_temp);
-                                  /////////////////////////////////////////////
+                                    /////////////////////////////////////////////
+                                    if ( rect_num==0 || rect_num==1)
+                                        Rect_num_0_1(shapeItems,rect_num_temp,pnts);
+                                    /////////////////////////////////////////////
                                    //Если клацнули по третьему или четвертому квадратику дуги
-                                  //////////////////////////////////////////////////////////
-                                  if ((rect_num==3 ||rect_num==4) && shapeItems[index].type()==2)
+                                    //////////////////////////////////////////////////////////
+                                    if ((rect_num==3 ||rect_num==4) && shapeItems[index].type()==2)
+                                    {
+                                       //(*pnts)[shapeItems[index].num_1()]
+                                        Prev_pos_1=(*pnts)[shapeItems[index].num_1()];
+                                        Prev_pos_2=(*pnts)[shapeItems[index].num_2()];
+                                        printf("Prev_pos_1_before=(%f,%f)\n", Prev_pos_1.x(), Prev_pos_1.y());
+                                        printf("Prev_pos_2_before=(%f,%f)\n", Prev_pos_2.x(), Prev_pos_2.y());
+                                        Rect_num_3_4(shapeItems,pnts);
+                                    }
+                                    ////////////////////////////////////////////////////////////
+                                }
+                                ////////////////////////////
+                                if ( rect_num==-1 )//Проврка на включение привязок
+                                {
+                                    offset_all=QPointF(0,0);//Определение нулевого смещения для связанных фигур
+                                    count_moveItemTo=0;//Обнулени количества вызова процедуры moveItemTo для связанных фигур
+                                   
                                   
-                                      Rect_num_3_4(shapeItems);
-                                 ////////////////////////////////////////////////////////////
-                              }
-                              ////////////////////////////
-                              if ( rect_num==-1 )//Проврка на включение привязок
-                              {
-                                  offset_all=QPointF(0,0);//Определение нулевого смещения для связанных фигур
-                                  count_moveItemTo=0;//Обнулени количества вызова процедуры moveItemTo для связанных фигур
-                                  for (int i=0; i<=count_holds; i++)//Вызов moveItemTo для всех связанных фигур
-                                  {
-                                      count_moveItemTo+=1;
-                                      flag_ctrl_move=0;//Переменная показывает, что мы перемещаем фигуры, выделенные по привязкам(по CTRL)
-                                      flag_ctrl=1;//Возведение флага CTRL в 1(для привязок)
-                                      itemInMotion=&shapeItems[index_array[i]];
-                                      index=index_array[i];
-                                      moveItemTo(itemInMotion->startposition(),shapeItems);
-                                      view->repaint();
-                                  }
-                              }
-                          }
-                      }
-                  }
-                  else // Т.е не попали не по какой фигуре
-                  {
-		      rectItems.clear();
-                      view->repaint();
-                  }
-              }
+                                    num_vector.clear();
+                                    for (int i=0; i<=count_holds; i++)//Вызов moveItemTo для всех связанных фигур
+                                    {
+                                        count_moveItemTo+=1;
+                                        flag_ctrl_move=0;//Переменная показывает, что мы перемещаем фигуры, выделенные по привязкам(по CTRL)
+                                        flag_ctrl=1;//Возведение флага CTRL в 1(для привязок)
+                                        itemInMotion=&shapeItems[index_array[i]];
+                                        index=index_array[i];
+                                        printf ("Dohli do moveItemTo\n");
+                                        moveItemTo((*pnts)[itemInMotion->num_1()],shapeItems,pnts);
+                                        printf ("Prohli do moveItemTo\n");
+                                        view->repaint();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else // Т.е не попали не по какой фигуре
+                    {
+                        rectItems.clear();
+                        view->repaint();
+                    }
+                }
               //Получение начальной точки для рисования фигуры
-              if ((ev->button() == Qt::LeftButton) && (status==true))
-                  StartLine=ev->pos();
+                if ((ev->button() == Qt::LeftButton) && (status==true))
+                    StartLine=ev->pos();
                //Перерисовка фигуры при её актвизации(не работает для связанных фигур)
-              ///////////////////////////////////////
-              if ((ev->buttons() && Qt::LeftButton) && (itemInMotion || (rect_num!=-1)) && (status==false) && flag_ctrl!=1 && count_holds==0)
-              {
-                  moveItemTo(ev->pos(),shapeItems);
-                  view->repaint();
-                  flag_cursor=1;
-              }
-          }
+                ///////////////////////////////////////
+                if ((ev->buttons() && Qt::LeftButton) && (itemInMotion || (rect_num!=-1)) && (status==false) && flag_ctrl!=1 && count_holds==0)
+                {
+                    moveItemTo(ev->pos(),shapeItems,pnts);
+                    view->repaint();
+                    flag_cursor=1;
+                }
+            }
 
-          return true;
-      }
+            return true;
+        }
 
-   case QEvent::MouseButtonDblClick:
+        case QEvent::MouseButtonDblClick:
         {
             QMouseEvent *ev = static_cast<QMouseEvent*>(event); 
             if (!flag_down && !flag_up && !flag_left && !flag_right) //Условие на ненажате управляющих клавиш
@@ -502,15 +691,38 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                 ///////////////////////////////////
                 if (ev->button() == Qt::LeftButton )
                 { 
-                    removeShapeItem(index,shapeItems);
+                    if(shapeItems.size() && index!=-1)
+                    {
+                        if (shapeItems[index].type()==1)
+                        {
+                            Drop_Point (shapeItems[index].num_1(),index, shapeItems,pnts);
+                            Drop_Point (shapeItems[index].num_2(),index,shapeItems,pnts);
+                        }
+                        if (shapeItems[index].type()==2)
+                        {
+                            Drop_Point (shapeItems[index].num_1(),index,shapeItems,pnts);
+                            Drop_Point (shapeItems[index].num_2(),index,shapeItems,pnts);
+                            Drop_Point (shapeItems[index].num_3(),index,shapeItems,pnts);
+                            Drop_Point (shapeItems[index].num_4(),index,shapeItems,pnts);
+                            Drop_Point (shapeItems[index].num_5(),index,shapeItems,pnts);
+                        }
+                        if (shapeItems[index].type()==3)
+                        {
+                            Drop_Point (shapeItems[index].num_1(),index,shapeItems,pnts);
+                            Drop_Point (shapeItems[index].num_2(),index,shapeItems,pnts);
+                            Drop_Point (shapeItems[index].num_3(),index,shapeItems,pnts);
+                            Drop_Point (shapeItems[index].num_4(),index,shapeItems,pnts);
+                        }
+                    removeShapeItem(index,shapeItems, pnts);
                     rectItems.clear();
+                    }
                 }
                 ///////////////////////////////////
                 view->repaint();
             }
             return true;
         }
-    case QEvent::MouseButtonRelease:
+        case QEvent::MouseButtonRelease:
         {
             QMouseEvent *ev = static_cast<QMouseEvent*>(event); 
             if (!flag_down && !flag_up && !flag_left && !flag_right) //Условие на ненажате управляющих клавиш
@@ -526,54 +738,84 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     if(current_ss!=-1)
                     {
 
-                        printf ("POP current_ss!=-1\n ");
                         if (itemInMotion->type()==2)//Если стыкует дугу, то к ней привязываем линию или Безье
-                        shapeItems[current_ss].setStartPosition(itemInMotion->startposition());
+                        {
+                            shapeItems[current_ss].setNum_1(itemInMotion->num_1());
+                            itemInMotion=& shapeItems[current_ss];
+                            index=current_ss;
+                            moveItemTo(ev->pos(),shapeItems,pnts);
+                            itemInMotion=&shapeItems[index_temp];
+                            index=index_temp;
+                        }
                         else
-                        itemInMotion->setStartPosition(shapeItems[current_ss].startposition());
+                            itemInMotion->setNum_1(shapeItems[current_ss].num_1());
                     }
                     if(current_se!=-1)
                     {
-                        printf ("POP current_se!=-1\n ");
                         if (itemInMotion->type()==2)//Если стыкует дугу, то к ней привязываем линию или Безье
-                        shapeItems[current_se].setStartPosition(itemInMotion->endposition());
+                        {
+                            shapeItems[current_se].setNum_1(itemInMotion->num_2());
+                            itemInMotion=& shapeItems[current_se];
+                            index=current_se;
+                            moveItemTo(ev->pos(),shapeItems,pnts);
+                            itemInMotion=&shapeItems[index_temp];
+                            index=index_temp;
+                        }
                         else
-                        itemInMotion->setEndPosition(shapeItems[current_se].startposition());
+                            itemInMotion->setNum_2(shapeItems[current_se].num_1());
                     }
                     if(current_es!=-1)
                     {
-                        printf ("POP current_es!=-1\n ");
                         if (itemInMotion->type()==2)//Если стыкует дугу, то к ней привязываем линию или Безье
-                        shapeItems[current_es].setEndPosition(itemInMotion->startposition());
+                        {
+                            shapeItems[current_es].setNum_2(itemInMotion->num_1());
+                            itemInMotion=& shapeItems[current_es];
+                            index=current_es;
+                            moveItemTo(ev->pos(),shapeItems,pnts);
+                            itemInMotion=&shapeItems[index_temp];
+                            index=index_temp;
+                        }
                         else
-                        itemInMotion->setStartPosition(shapeItems[current_es].endposition());
+                            itemInMotion->setNum_1(shapeItems[current_es].num_2());
                     }
                     if(current_ee!=-1)
                     {
-                        printf ("POP current_ee!=-1\n ");
                         if (itemInMotion->type()==2)//Если стыкует дугу, то к ней привязываем линию или Безье
-                        shapeItems[current_ee].setEndPosition(itemInMotion->endposition());
+                        {
+                            shapeItems[current_ee].setNum_2(itemInMotion->num_2());
+                            itemInMotion=& shapeItems[current_ee];
+                            index=current_ee;
+                            moveItemTo(ev->pos(),shapeItems,pnts);
+                            itemInMotion=&shapeItems[index_temp];
+                            index=index_temp;
+                        }
                         else
-                        itemInMotion->setEndPosition(shapeItems[current_ee].endposition());
+                            itemInMotion->setNum_2(shapeItems[current_ee].num_2());
                     }
                     //////////////////////////////////////////////
-                    if (!flag_ctrl && status_hold && rect_num==-1)//Проверка на то, что перемещаем одну фигуру с включёнными привязками
-                        moveItemTo(ev->pos(),shapeItems);
+                    if(itemInMotion->type() != 2)
+                    {
+                        if ((!flag_ctrl && status_hold))//Проверка на то, что перемещаем одну фигуру с включёнными привязками
+                        {
+                            moveItemTo(ev->pos(),shapeItems,pnts);
+                        }
+                    }
                     ellipse_draw_startPath=newPath;//Обнуление путей кружочков привязок
                     ellipse_draw_endPath=newPath;//Обнуление путей кружочков привязок
                     view->repaint();
                     //Если двигали какой-то из квадратиков дуги, связанной с другими фигурами, то при Release вызываем для всех связанных 
                     //фигур moveItemTo, чтобы не потерять связь
-                   if (count_holds && (flag_arc_rect_3_4 || (flag_rect && shapeItems[index_array[0]].type()==2)))
+                    if (count_holds && (flag_arc_rect_3_4 || (flag_rect && shapeItems[index_array[0]].type()==2)))
                     {
                         count_moveItemTo=0;
                         flag_ctrl_move=false;
                         flag_ctrl=true;
                         flag_hold_arc=true;
                         offset_all=QPointF(0,0);
-                        Move_all(ev->pos(),shapeItems);
+                        Move_all(ev->pos(),shapeItems,pnts);
                         view->repaint();
                     }
+                    shapeSave( view );
                     itemInMotion = 0;//Обнуление указателя на выделенную фигуру
                     if (flag_ctrl && status_hold)//Проверка на то, что при включённых привязках, было связано несколько фигур
                     {
@@ -595,8 +837,8 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         count_rects=0;
                         flag_hold_arc=false;
                         rect_num_arc=-1;
-                         flag_arc_rect_3_4=false;
-                 }
+                        flag_arc_rect_3_4=false;
+                    }
                     if(!flag_ctrl)//Если не нажат CTRL и соответственно нет связанных фигур
                         flag_m=false;//Обнуление флага, сигнализирующего движение(то, что был MouseMove и не было MouseButtonRelease)
 
@@ -606,9 +848,11 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                 double ang;
                 if ((ev->button() == Qt::LeftButton) && (status==true))
                 { 
-                   int Wdth=20;//Ширина фигуры
+                    float Wdth=20.0;//Ширина фигуры
                     QLineF line1,line2;
                     EndLine=ev->pos();
+                    if(EndLine==StartLine) break;
+                    QPainterPath circlePath, bigPath;
                     //Если фигура линия
                     /////////////////////////////////////
                     if (shapeType==1)
@@ -629,20 +873,42 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                 else ang=180;
                                 EndLine=QPointF(EndLine.x(), StartLine.y());
                             }
-                            circlePath.moveTo(StartLine.x()+ROTATE(QPointF(0,-Wdth/2),ang).x(),
-                                              StartLine.y()-ROTATE(QPointF(0,-Wdth/2),ang).y());
-                            circlePath.lineTo(StartLine.x()+ROTATE(QPointF(Length(EndLine,StartLine),-Wdth/2),ang).x(),
-                                              StartLine.y()-ROTATE(QPointF(Length(EndLine,StartLine),-Wdth/2),ang).y());
-                            circlePath.lineTo(StartLine.x()+ROTATE(QPointF(Length(EndLine,StartLine),Wdth/2),ang).x(),
-                                              StartLine.y()-ROTATE(QPointF(Length(EndLine,StartLine),Wdth/2),ang).y());
-                            circlePath.lineTo(StartLine.x()+ROTATE(QPointF(0,Wdth/2),ang).x(),
-                                              StartLine.y()-ROTATE(QPointF(0,Wdth/2),ang).y());
-                            circlePath.closeSubpath();
-                            createShapeItem(circlePath, _("Circle <%1>"),
-                                            StartLine,EndLine,StartLine,EndLine,StartLine,EndLine,QBrush(QColor(0,0,255,255),Qt::SolidPattern),
-                                            QPen(QColor(255, 0, 0), 0, Qt::SolidLine,Qt::FlatCap, Qt::MiterJoin),Wdth,1,shapeItems);
+                            
+                            if ( view->dc()["bordWdth"].toInt()>0)
+                            {
+                              
+                                circlePath = painter_path(view->dc()["lineWdth"].toInt(),1, ang, StartLine,EndLine,
+                                        QPointF(0,0), QPointF(0,0), QPointF(0,0), QPointF(0,0));
+                                createShapeItem(circlePath, newPath, -1,-1,-1,-1,-1,QPointF(0,0),
+                                        QBrush(view->dc()["lineClr"].value<QColor>(),Qt::SolidPattern),
+                                               QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::SolidLine,Qt::FlatCap, Qt::MiterJoin),
+                                                       QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::NoPen,Qt::FlatCap, Qt::MiterJoin),
+                                                               view->dc()["lineWdth"].toInt(), 1, shapeItems);
+                            }
+                            else
+                            {
+                               
+                                circlePath = painter_path_simple(1, ang, StartLine,EndLine,
+                                        QPointF(0,0), QPointF(0,0), QPointF(0,0), QPointF(0,0));
+                                QPainterPath bigPath = painter_path(view->dc()["lineWdth"].toInt(),1, ang, StartLine,EndLine,
+                                        QPointF(0,0), QPointF(0,0), QPointF(0,0), QPointF(0,0));
+                    
+                                createShapeItem(bigPath,circlePath,-1,-1,-1,-1,-1,QPointF(0,0),
+                                        QBrush(view->dc()["lineClr"].value<QColor>(),Qt::NoBrush),
+                                               QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::NoPen,Qt::FlatCap, Qt::MiterJoin),
+                                                       QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::SolidLine,Qt::FlatCap, Qt::MiterJoin),
+                                                               view->dc()["lineWdth"].toInt(),1,shapeItems);
+                            }
+                        
+                            
+                            int Num1=Append_Point(StartLine,shapeItems,pnts);
+                            shapeItems[shapeItems.size()-1].setNum_1(Num1);
+                            int Num2=Append_Point(EndLine,shapeItems, pnts);
+                            shapeItems[shapeItems.size()-1].setNum_2(Num2);
+                            shapeSave( view );
                             view->repaint();
                         }
+                        
                         /////////////////////////////////////
                         else
                         {
@@ -652,61 +918,93 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                 ang=360-line1.angle(line2);
                             else
                                 ang=line1.angle(line2);
-                            circlePath.moveTo(StartLine.x()+ROTATE(QPointF(0,-Wdth/2),ang).x(),
-                                              StartLine.y()-ROTATE(QPointF(0,-Wdth/2),ang).y());
-                            circlePath.lineTo(StartLine.x()+ROTATE(QPointF(Length(EndLine,StartLine),-Wdth/2),ang).x(),
-                                              StartLine.y()-ROTATE(QPointF(Length(EndLine,StartLine),-Wdth/2),ang).y());
-                            circlePath.lineTo(StartLine.x()+ROTATE(QPointF(Length(EndLine,StartLine),Wdth/2),ang).x(),
-                                              StartLine.y()-ROTATE(QPointF(Length(EndLine,StartLine),Wdth/2),ang).y());
-                            circlePath.lineTo(StartLine.x()+ROTATE(QPointF(0,Wdth/2),ang).x(),
-                                              StartLine.y()-ROTATE(QPointF(0,Wdth/2),ang).y());
-                            circlePath.closeSubpath();
-                            createShapeItem(circlePath , _("Circle <%1>"),
-                                            StartLine,EndLine,StartLine,EndLine,StartLine,EndLine,QBrush(QColor(0,0,255,255),Qt::SolidPattern),
-                                            QPen(QColor(255, 0, 0), 0, Qt::SolidLine,Qt::FlatCap, Qt::MiterJoin),Wdth,1,shapeItems);
+                           
+                            if ( view->dc()["bordWdth"].toInt()>0)
+                            {
+                              
+                                circlePath = painter_path(view->dc()["lineWdth"].toInt(),1, ang, StartLine,EndLine,
+                                        QPointF(0,0), QPointF(0,0), QPointF(0,0), QPointF(0,0));
+                                createShapeItem(circlePath, newPath, -1,-1,-1,-1,-1,QPointF(0,0),
+                                        QBrush(view->dc()["lineClr"].value<QColor>(),Qt::SolidPattern),
+                                               QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::SolidLine,Qt::FlatCap, Qt::MiterJoin),
+                                                       QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::NoPen,Qt::FlatCap, Qt::MiterJoin),
+                                                               view->dc()["lineWdth"].toInt(), 1, shapeItems);
+                            }
+                            else
+                            {
+                               
+                                circlePath = painter_path_simple(1, ang, StartLine,EndLine,
+                                        QPointF(0,0), QPointF(0,0), QPointF(0,0), QPointF(0,0));
+                                QPainterPath bigPath = painter_path(view->dc()["lineWdth"].toInt(),1, ang, StartLine,EndLine,
+                                        QPointF(0,0), QPointF(0,0), QPointF(0,0), QPointF(0,0));
+                    
+                                createShapeItem(bigPath,circlePath,-1,-1,-1,-1,-1,QPointF(0,0),
+                                        QBrush(view->dc()["lineClr"].value<QColor>(),Qt::NoBrush),
+                                               QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::NoPen,Qt::FlatCap, Qt::MiterJoin),
+                                                       QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::SolidLine,Qt::FlatCap, Qt::MiterJoin),
+                                                               view->dc()["lineWdth"].toInt(),1,shapeItems);
+                            }
+                            int Num1=Append_Point(StartLine,shapeItems, pnts);
+                            shapeItems[shapeItems.size()-1].setNum_1(Num1);
+                            int Num2=Append_Point(EndLine,shapeItems, pnts);
+                            shapeItems[shapeItems.size()-1].setNum_2(Num2);
+                            shapeSave( view );
                             view->repaint();
                         }
-                        circlePath=newPath;
                     }
-                     /////////////////////////////////////
+                    /////////////////////////////////////
                      //Если фигура кривая Безье
-                     /////////////////////////////////////
+                    /////////////////////////////////////
                     if (shapeType==3)
                     {
-                        QPointF CtrlPos,CtrlPos1,EndLine_temp;
-                        CtrlPos=QPointF(Length(EndLine,StartLine)/3,0);
-                        CtrlPos1=QPointF(2*Length(EndLine,StartLine)/3,0);
+                        QPointF CtrlPos_1,CtrlPos_2,EndLine_temp;
+                        CtrlPos_1=QPointF(Length(EndLine,StartLine)/3,0);
+                        CtrlPos_2=QPointF(2*Length(EndLine,StartLine)/3,0);
                         line2=QLineF(StartLine,QPointF(StartLine.x()+10,StartLine.y()));
                         line1=QLineF(StartLine,EndLine);
                         if (StartLine.y()<=EndLine.y())
                             ang=360-line1.angle(line2);
                         else
                             ang=line1.angle(line2);
-                        EndLine_temp=QPointF(Length(EndLine,StartLine),0);
-                        circlePath.moveTo(StartLine.x()+ROTATE(QPointF(0,-Wdth/2),ang).x(),
-                                          StartLine.y()-ROTATE(QPointF(0,-Wdth/2),ang).y());
-                        circlePath.cubicTo(QPointF(StartLine.x()+ROTATE(QPointF(CtrlPos.x(),CtrlPos.y()-Wdth/2),ang).x(),
-                            StartLine.y()-ROTATE(QPointF(CtrlPos.x(),CtrlPos.y()-Wdth/2),ang).y()),
-                                           QPointF(StartLine.x()+ROTATE(QPointF(CtrlPos1.x(),CtrlPos1.y()-Wdth/2),ang).x(),
-                                               StartLine.y()-ROTATE(QPointF(CtrlPos1.x(),CtrlPos1.y()-Wdth/2),ang).y()),
-                                           QPointF(StartLine.x()+ROTATE(QPointF(EndLine_temp.x(),EndLine_temp.y()-Wdth/2),ang).x(),
-                                               StartLine.y()-ROTATE(QPointF(EndLine_temp.x(),EndLine_temp.y()-Wdth/2),ang).y()));
-                        circlePath.lineTo(StartLine.x()+ROTATE(QPointF(EndLine_temp.x(),Wdth/2),ang).x(),
-                                          StartLine.y()-ROTATE(QPointF(EndLine_temp.x(),Wdth/2),ang).y());
-                        circlePath.cubicTo(QPointF(StartLine.x()+ROTATE(QPointF(CtrlPos1.x(),CtrlPos1.y()+Wdth/2),ang).x(),
-                            StartLine.y()-ROTATE(QPointF(CtrlPos1.x(),CtrlPos1.y()+Wdth/2),ang).y()),
-                                           QPointF(StartLine.x()+ROTATE(QPointF(CtrlPos.x(),CtrlPos.y()+Wdth/2),ang).x(),
-                                               StartLine.y()-ROTATE(QPointF(CtrlPos.x(),CtrlPos.y()+Wdth/2),ang).y()),
-                                           QPointF(StartLine.x()+ROTATE(QPointF(0,Wdth/2),ang).x(),
-                                               StartLine.y()-ROTATE(QPointF(0,Wdth/2),ang).y()));
-                        circlePath.closeSubpath();
-                        CtrlPos=QPointF(StartLine.x()+ROTATE(CtrlPos,ang).x(),StartLine.y()-ROTATE(CtrlPos,ang).y());
-                        CtrlPos1=QPointF(StartLine.x()+ROTATE(CtrlPos1,ang).x(),StartLine.y()-ROTATE(CtrlPos1,ang).y());
-                        createShapeItem(circlePath , tr("Circle <%1>"),
-                                        StartLine,EndLine, CtrlPos, CtrlPos1,StartLine,StartLine,QBrush(QColor(0,0,255,255),Qt::SolidPattern),
-                                        QPen(QColor(255, 0, 0), 1, Qt::SolidLine,Qt::FlatCap, Qt::MiterJoin),Wdth,3,shapeItems);
-                        circlePath=newPath;
-                        view->repaint();
+                        CtrlPos_1=QPointF(StartLine.x()+ROTATE(CtrlPos_1,ang).x(),StartLine.y()-ROTATE(CtrlPos_1,ang).y());
+                        CtrlPos_2=QPointF(StartLine.x()+ROTATE(CtrlPos_2,ang).x(),StartLine.y()-ROTATE(CtrlPos_2,ang).y());
+                        
+                        if ( view->dc()["bordWdth"].toInt()>0)
+                        {
+                            
+                            circlePath = painter_path(view->dc()["lineWdth"].toInt(),3, ang, StartLine,EndLine,
+                                    CtrlPos_1,CtrlPos_2, QPointF(0,0), QPointF(0,0));
+                    
+                            createShapeItem(circlePath, newPath, -1,-1,-1,-1,-1,QPointF(0,0),
+                                            QBrush(view->dc()["lineClr"].value<QColor>(),Qt::SolidPattern),
+                                                    QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::SolidLine,Qt::FlatCap, Qt::MiterJoin),
+                                                            QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::NoPen,Qt::FlatCap, Qt::MiterJoin),
+                                                                    view->dc()["lineWdth"].toInt(), 3, shapeItems);
+                        }
+                        else
+                        {
+                            
+                            bigPath = painter_path(view->dc()["lineWdth"].toInt(),3, ang, StartLine,EndLine,
+                                    CtrlPos_1,CtrlPos_2, QPointF(0,0), QPointF(0,0));
+                            circlePath = painter_path_simple(3, ang, StartLine,EndLine,CtrlPos_1,CtrlPos_2, QPointF(0,0), QPointF(0,0));
+                            createShapeItem(bigPath,circlePath, -1,-1,-1,-1,-1,QPointF(0,0),
+                                            QBrush(view->dc()["lineClr"].value<QColor>(),Qt::NoBrush),
+                                                    QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::NoPen,Qt::FlatCap, Qt::MiterJoin),
+                                                            QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::SolidLine,Qt::FlatCap, Qt::MiterJoin),
+                                                                    view->dc()["lineWdth"].toInt(),3,shapeItems);
+                        }
+                        
+                        
+                        int Num1=Append_Point(StartLine, shapeItems, pnts);
+                        shapeItems[shapeItems.size()-1].setNum_1(Num1);
+                        int Num2=Append_Point(EndLine,shapeItems, pnts);
+                        shapeItems[shapeItems.size()-1].setNum_2(Num2);
+                        int Num3=Append_Point(CtrlPos_1,shapeItems, pnts);
+                        shapeItems[shapeItems.size()-1].setNum_3(Num3);
+                        int Num4=Append_Point(CtrlPos_2,shapeItems, pnts);
+                        shapeItems[shapeItems.size()-1].setNum_4(Num4);
+                        shapeSave( view );
+                         view->repaint();
                     }
                     /////////////////////////////////////
                     //Если фигура дуга
@@ -720,45 +1018,60 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                           StartLine.y()+(EndLine.y()-StartLine.y())/2);
                         a=Length(EndLine,StartLine)/2+Wdth/2;
                         b=a+50;
-                        a_small=a-Wdth;
-                        b_small=a_small+50;
                         line2=QLineF( CtrlPos_1,QPointF(CtrlPos_1.x()+10,CtrlPos_1.y()));
                         line1=QLineF( CtrlPos_1,StartLine);
                         if (StartLine.y()<=EndLine.y()) ang=line1.angle(line2);
                         else ang=360-line1.angle(line2);
-                        circlePath.moveTo(CtrlPos_1.x()+ROTATE(ARC(0,a_small,b_small),ang).x(),
-                                          CtrlPos_1.y()-ROTATE(ARC(0,a_small,b_small),ang).y());
-                        circlePath.lineTo(CtrlPos_1.x()+ROTATE(ARC(0,a,b),ang).x(),
-                                          CtrlPos_1.y()-ROTATE(ARC(0,a,b),ang).y());
-                        for (t=0; t<0.50277777777778; t+=0.00277777777778) 
-                            circlePath.lineTo(QPointF(CtrlPos_1.x()+ROTATE(ARC(t,a,b),ang).x(),
-                                CtrlPos_1.y()-ROTATE(ARC(t,a,b),ang).y()));
-                        circlePath.lineTo(CtrlPos_1.x()+ROTATE(ARC(0.5,a_small,b_small),ang).x(),
-                                          CtrlPos_1.y()-ROTATE(ARC(0.5,a_small,b_small),ang).y());
-                        for (t=0.5; t>=0; t-=0.00277777777778) 
-                            circlePath.lineTo(QPointF(CtrlPos_1.x()+ROTATE(ARC(t,a_small,b_small),ang).x(),
-                                CtrlPos_1.y()-ROTATE(ARC(t,a_small,b_small),ang).y()));
-                        circlePath.closeSubpath();
                         CtrlPos_2=QPointF(CtrlPos_1.x()+ROTATE(ARC(0.25,a,b),ang).x(),
                                           CtrlPos_1.y()-ROTATE(ARC(0.25,a,b),ang).y());
-                        CtrlPos_4=QPointF(CtrlPos_1.x()+ROTATE(ARC(0,a,b),ang).x(),
+                        CtrlPos_3=QPointF(CtrlPos_1.x()+ROTATE(ARC(0,a,b),ang).x(),
                                           CtrlPos_1.y()-ROTATE(ARC(0,a,b),ang).y());
-                        CtrlPos_3=QPointF(0,0.5);
-                        createShapeItem(circlePath , tr("Circle <%1>"),
-                                        StartLine,EndLine,CtrlPos_1,CtrlPos_2,CtrlPos_3,CtrlPos_4,QBrush(QColor(0,0,255,255),Qt::SolidPattern),
-                                        QPen(QColor(255, 0, 0), 1, Qt::SolidLine,Qt::SquareCap,Qt::RoundJoin),Wdth,2,shapeItems);
-                        circlePath=newPath;
+                        CtrlPos_4=QPointF(0,0.5);
+                        
+                        if ( view->dc()["bordWdth"].toInt()>0)
+                        {
+                            circlePath = painter_path(view->dc()["lineWdth"].toInt(),2, ang, StartLine, EndLine,
+                                    CtrlPos_1, CtrlPos_2,  CtrlPos_3, CtrlPos_4);
+                            createShapeItem(circlePath, newPath, -1,-1,-1,-1, -1,CtrlPos_4,
+                                            QBrush(view->dc()["lineClr"].value<QColor>(),Qt::SolidPattern),
+                                                    QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::SolidLine,Qt::FlatCap, Qt::MiterJoin),
+                                                            QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::NoPen,Qt::FlatCap, Qt::MiterJoin),
+                                                                    view->dc()["lineWdth"].toInt(), 2, shapeItems);
+                        }
+                        else
+                        {
+                            QPainterPath bigPath = painter_path(view->dc()["lineWdth"].toInt(),2, ang, StartLine,EndLine,
+                                    CtrlPos_1, CtrlPos_2,  CtrlPos_3,CtrlPos_4);
+                            circlePath = painter_path_simple(2, ang, StartLine,EndLine,
+                                    CtrlPos_1, CtrlPos_2,  CtrlPos_3,CtrlPos_4);
+                            createShapeItem(bigPath,circlePath,-1,-1,-1,-1, -1,CtrlPos_4,
+                                            QBrush(view->dc()["lineClr"].value<QColor>(),Qt::NoBrush),
+                                                    QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::NoPen,Qt::FlatCap, Qt::MiterJoin),
+                                                            QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::SolidLine,Qt::FlatCap, Qt::MiterJoin),
+                                                                    view->dc()["lineWdth"].toInt(),2,shapeItems);
+                        }
+                        
+                        int Num1=Append_Point(StartLine, shapeItems, pnts);
+                        shapeItems[shapeItems.size()-1].setNum_1(Num1);
+                        int Num2=Append_Point(EndLine,shapeItems, pnts);
+                        shapeItems[shapeItems.size()-1].setNum_2(Num2);
+                        int Num3=Append_Point(CtrlPos_1,shapeItems, pnts);
+                        shapeItems[shapeItems.size()-1].setNum_3(Num3);
+                        int Num4=Append_Point(CtrlPos_2,shapeItems, pnts);
+                        shapeItems[shapeItems.size()-1].setNum_4(Num4);
+                        int Num5=Append_Point(CtrlPos_3,shapeItems, pnts);
+                        shapeItems[shapeItems.size()-1].setNum_5(Num5);
+                        shapeSave( view );
                         view->repaint();
                     }
-                   /////////////////////////////////////
+                    /////////////////////////////////////
                     flag_key=0;
                 }
             } 
             return true;
         }
-    case QEvent::MouseMove:
+        case QEvent::MouseMove:
         {
-           
             int fl;//Вспомогательная переменная для игры с куrect_num=1
             int index_arc;
             int temp;
@@ -766,7 +1079,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
             Mouse_pos=ev->pos();
             if ((ev->buttons() && Qt::LeftButton) && itemInMotion && !status)
             {
-               
                 flag_m=true;//Возведение флага, сигнализирующего движение
                 if (count_holds)//Проврка на то, что существуют привязанные фигуры
                 {
@@ -789,9 +1101,8 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     if (shapeItems[index_array[0]].type()==2)//Если среди связаных фигур есть дуга
                         flag_hold_arc=true;
                   //Перемещение всех связанных(выделенных с Ctrl) фигур
-                  ////////////////////
-                    
-                    Move_all(ev->pos(),shapeItems);
+                    ////////////////////
+                    Move_all(ev->pos(),shapeItems,pnts);
                     view->repaint();
                     //////////////////////
                     ///////////////////////////////////////////
@@ -799,15 +1110,15 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                 ///////////////////////////////////////////////////
                 else
                 {
-                   
                     //Если есть связанные фигуры(перемещение квадратика, не являющегося общим для нескольких связанных фигур)
                     ////////////////////////////////////
                     if (count_holds)
                     {
-                       offset_all=ev->pos()-previousPosition_all;
+                        offset_all=ev->pos()-previousPosition_all;
                         //Для того, чтобы фигура становилась на своё место в контейнере shapeItems
                         ////////////////////////////
                         flag_ctrl=true;
+                        flag_rect=false;
                         count_moveItemTo=1;
                         flag_ctrl_move=false;
                         count_Shapes=1;
@@ -818,76 +1129,93 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             offset_all=QPointF(0,0);
                         }
                         if (itemInMotion->type()==2 && rect_num!=2) rect_num=rect_num_arc;
-                        moveItemTo(ev->pos(),shapeItems);//Перемещение одной, ни с чем не связанной фигуры
+                        num_vector.clear();
+                        moveItemTo(ev->pos(),shapeItems,pnts);//Перемещение одной, ни с чем не связанной фигуры
                         flag_hold_rect=true;
                         view->repaint();
                     }
                     ////////////////////////////////////
                     else
                     {
-                       
-                        moveItemTo(ev->pos(),shapeItems);
+                        for (int i=0; i<shapeItems.size(); i++)
+                        {
+                            if (i!=index)
+                            {
+                            if ((shapeItems[index].num_1()==shapeItems[i].num_1()) || 
+                                 (shapeItems[index].num_1()==shapeItems[i].num_2()))
+                            {
+                                QPointF Temp=QPointF((*pnts)[shapeItems[index].num_1()].x(),(*pnts)[shapeItems[index].num_1()].y());
+                                int Num1=Append_Point(Temp,shapeItems,pnts);
+                                shapeItems[index].setNum_1(Num1);  
+                            }
+                            if ((shapeItems[index].num_2()==shapeItems[i].num_1()) || 
+                                 (shapeItems[index].num_2()==shapeItems[i].num_2()))
+                            {
+                                QPointF Temp=QPointF((*pnts)[shapeItems[index].num_2()].x(),(*pnts)[shapeItems[index].num_2()].y());
+                                int Num2=Append_Point(Temp,shapeItems,pnts);
+                                shapeItems[index].setNum_2(Num2);  
+                            }
+                            }
+                        }
+                        moveItemTo(ev->pos(),shapeItems,pnts);
                         view->repaint();
                     }
                     if (rect_num!=-1)
-                    temp=Real_rect_num (rect_num,shapeItems);
-                    printf ("temp=%i\n",temp);
-                    printf ("flag_rect=%i\n",flag_rect);
+                        temp=Real_rect_num (rect_num,shapeItems,pnts);
                     if (status_hold &&(rect_num==-1||((temp==0 || temp==1) && !flag_rect)))//Если включены привязки и перемещается квадратик у несвязанной вигуры либо сама фигура
                     {
-                        printf("status_hold\n");
                         current_se=-1;
                         current_ss=-1;
                         current_ee=-1;
                         current_es=-1;
                         ellipse_draw_startPath=newPath;
                         ellipse_draw_endPath=newPath;
+                        itemInMotion=&shapeItems[index];
                         for (int i=0;i<=shapeItems.size()-1;i++)
                         {
                             ellipse_startPath=newPath;
                             ellipse_endPath=newPath;
                             if (i!=index)
-                            { 
-                                printf("i!=index\n");
-                                ellipse_startPath.addEllipse(shapeItems[i].startposition().x()-8,shapeItems[i].startposition().y()-8,16,16);
-                                if (ellipse_startPath.contains(itemInMotion->startposition()))
+                            {
+                                    ellipse_startPath.addEllipse((*pnts)[shapeItems[i].num_1()].x()-8,(*pnts)[shapeItems[i].num_1()].y()-8,16,16);
+                                    if (ellipse_startPath.contains((*pnts)[shapeItems[index].num_1()]))
                                 { 
-                                    printf ("LA-LA_1\n");
                                     if (temp==0 || rect_num==-1)
                                     {
-                                    ellipse_draw_startPath.addEllipse(shapeItems[i].startposition().x()-8,shapeItems[i].startposition().y()-8,16,16);
-                                    current_ss=i;
+                                        if(itemInMotion->type()==2 && shapeItems[i].type()==2) break;
+                                        ellipse_draw_startPath.addEllipse((*pnts)[shapeItems[i].num_1()].x()-8,(*pnts)[shapeItems[i].num_1()].y()-8,16,16);
+                                        current_ss=i;
                                     }
                                 }
-                                if (ellipse_startPath.contains(itemInMotion->endposition()))
-                                {    printf ("LA-LA_2\n");
-                                if (temp==1 || rect_num==-1)
+                                if (ellipse_startPath.contains((*pnts)[shapeItems[index].num_2()]))
                                 {
-                                    ellipse_draw_startPath.addEllipse(shapeItems[i].startposition().x()-8,shapeItems[i].startposition().y()-8,16,16);
-                                    current_se=i;
+                                    if (temp==1 || rect_num==-1)
+                                    {
+                                        if(itemInMotion->type()==2 && shapeItems[i].type()==2) break;
+                                        ellipse_draw_startPath.addEllipse((*pnts)[shapeItems[i].num_1()].x()-8,(*pnts)[shapeItems[i].num_1()].y()-8,16,16);
+                                        current_se=i;
+                                    }
                                 }
-                                }
-                                ellipse_endPath.addEllipse(shapeItems[i].endposition().x()-8,shapeItems[i].endposition().y()-8,16,16);
-                                if (ellipse_endPath.contains(itemInMotion->endposition()))
-                               {
-                                   printf ("LA-LA_3\n");
-                                   if (temp==1 || rect_num==-1)
-                                   {
-                                   ellipse_draw_endPath.addEllipse(shapeItems[i].endposition().x()-8,shapeItems[i].endposition().y()-8,16,16);
-                                    current_ee=i;
-                                   }
-                                }
-                                if (ellipse_endPath.contains(itemInMotion->startposition()))
+                                ellipse_endPath.addEllipse((*pnts)[shapeItems[i].num_2()].x()-8,(*pnts)[shapeItems[i].num_2()].y()-8,16,16);
+                                if (ellipse_endPath.contains((*pnts)[shapeItems[index].num_2()]))
                                 {
-                                    printf ("LA-LA_4\n");
+                                    if (temp==1 || rect_num==-1)
+                                    {
+                                        if(itemInMotion->type()==2 && shapeItems[i].type()==2) break;
+                                        ellipse_draw_endPath.addEllipse((*pnts)[shapeItems[i].num_2()].x()-8,(*pnts)[shapeItems[i].num_2()].y()-8,16,16);
+                                        current_ee=i;
+                                    }
+                                }
+                                if (ellipse_endPath.contains((*pnts)[shapeItems[index].num_1()]))
+                                {
                                     if (temp==0 || rect_num==-1)
                                     {
-                                    ellipse_draw_endPath.addEllipse(shapeItems[i].endposition().x()-8,shapeItems[i].endposition().y()-8,16,16);
-                                    current_es=i;
+                                        if(itemInMotion->type()==2 && shapeItems[i].type()==2) break;
+                                        ellipse_draw_endPath.addEllipse((*pnts)[shapeItems[i].num_2()].x()-8,(*pnts)[shapeItems[i].num_2()].y()-8,16,16);
+                                        current_es=i;
                                     }
                                 }
                             }
-                           //view->repaint();
                         }
                     }
                 }
@@ -929,20 +1257,20 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                 if ((fl!= -1)&&(rect_num ==-1)&&(status==false))
                     view->setCursor(Qt::SizeAllCursor);
                 if ((status==false)&&(rect_num!=-1))
-                   view->setCursor(Qt::SizeHorCursor);
+                    view->setCursor(Qt::SizeHorCursor);
                 if (status==true)
                     view->setCursor(Qt::CrossCursor);
             }
-  /////////////////////////////////////
-           return true;
+            /////////////////////////////////////
+            return true;
         }
-    case QEvent::KeyPress:
+        case QEvent::KeyPress:
         {
             QKeyEvent *ev = static_cast<QKeyEvent*>(event);
             if(flag_m)  break;
             if (ev->key() == Qt::Key_Shift) flag_key=true;
             if (ev->key() == Qt::Key_Alt)
-                Holds(shapeItems);
+                Holds(shapeItems,pnts);
             if (ev->key() == Qt::Key_Control)
             {
                 if (status_hold) break;
@@ -957,9 +1285,8 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     break;
                 }
                 flag_up=true;
-                printf("Popali\n");
                 offset_all=QPointF(0,-1);
-                Move_UP_DOWN(shapeItems);
+                Move_UP_DOWN(shapeItems,pnts);
                 view->repaint();
             }
             if ((ev->key() == Qt::Key_Down) && index_temp!=-1)
@@ -967,7 +1294,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                 if (flag_up || flag_left || flag_right || index<0|| index>shapeItems.size()-1) break;
                 flag_down=true;
                 offset_all=QPointF(0,1);
-                Move_UP_DOWN(shapeItems);
+                Move_UP_DOWN(shapeItems,pnts);
                 view->repaint();
             }
 
@@ -976,7 +1303,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                 if (flag_down || flag_up || flag_right || index<0 || index>shapeItems.size()-1) break;
                 flag_left=true;
                 offset_all=QPointF(-1,0);
-                Move_UP_DOWN(shapeItems);
+                Move_UP_DOWN(shapeItems,pnts);
                 view->repaint();
             }
             if ((ev->key() == Qt::Key_Right) && index_temp!=-1)
@@ -984,12 +1311,12 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                 if (flag_down || flag_left || flag_up || index<0 || index>shapeItems.size()-1) break;
                 flag_right=true;
                 offset_all=QPointF(1,0);
-                Move_UP_DOWN(shapeItems);
+                Move_UP_DOWN(shapeItems,pnts);
                 view->repaint();
             }
             return true;
         }
-    case QEvent::KeyRelease:
+        case QEvent::KeyRelease:
         {
             QKeyEvent *ev = static_cast<QKeyEvent*>(event);
             if (ev->key() == Qt::Key_Shift) flag_key=false;
@@ -1012,11 +1339,11 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
             if (ev->key() == Qt::Key_Up)
             {
                 if (flag_down || flag_left || flag_right) break;
-                    flag_up=false;
-                    itemInMotion =0;
-                    flag_first_move=true;
+                flag_up=false;
+                itemInMotion =0;
+                flag_first_move=true;
 
-                }
+            }
             if (ev->key() == Qt::Key_Down)
             {
                 if (flag_up || flag_left || flag_right) break;
@@ -1040,7 +1367,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
             }
             return true;
         }
-      }
+    }
 
 
     return false;
@@ -1056,6 +1383,8 @@ QPointF ShapeElFigure::ROTATE(const QPointF &pnt, double alpha)
     QPointF rotate_pnt;
     rotate_pnt=QPointF (pnt.x()*cos((alpha*M_PI)/180)-pnt.y()*sin((alpha*M_PI)/180),
                         pnt.x()*sin((alpha*M_PI)/180)+pnt.y()*cos((alpha*M_PI)/180));
+    //printf("pnt_rotate=(%f,%f)\n", rotate_pnt.x(), rotate_pnt.y());
+    //printf("EndMotionPos__rotate=(%f,%f)\n", EndMotionPos.x(), EndMotionPos.y());
     return  rotate_pnt;
 }
 
@@ -1064,7 +1393,7 @@ QPointF ShapeElFigure::UNROTATE(const QPointF &pnt, double alpha, double a, doub
 {
     QPointF unrotate_pnt;
     unrotate_pnt=QPointF ((pnt.x()-a)*cos((alpha*M_PI)/180)-(pnt.y()-b)*sin((alpha*M_PI)/180),
-                          -(pnt.x()-a)*sin((alpha*M_PI)/180)-(pnt.y()-b)*cos((alpha*M_PI)/180));
+                           -(pnt.x()-a)*sin((alpha*M_PI)/180)-(pnt.y()-b)*cos((alpha*M_PI)/180));
     return  unrotate_pnt;
 }
 
@@ -1072,6 +1401,7 @@ QPointF ShapeElFigure::ARC(double t,double a,double b)
 {
     QPointF arc_pnt;  
     arc_pnt=QPointF(a*cos(t*M_PI*2),-b*sin(t*M_PI*2));
+    //printf("arc\n");
     return arc_pnt;
 }
 
@@ -1095,7 +1425,7 @@ double ShapeElFigure::Length(const QPointF pt1, const QPointF pt2)
 
 
 //Процедура передвижения фигуры(изменения её размеров)
-void ShapeElFigure::moveItemTo(const QPointF &pos,QList<ShapeItem> &shapeItems)
+void ShapeElFigure::moveItemTo(const QPointF &pos,QList<ShapeItem> &shapeItems, PntMap *pnts)
 {
     ShapeItem temp_shape;
     double ang_t;//Вспомогательный угол для определения t_start и t_end
@@ -1107,13 +1437,17 @@ void ShapeElFigure::moveItemTo(const QPointF &pos,QList<ShapeItem> &shapeItems)
     QPointF CtrlMotionPos_2;//Четвёртая контрольная точка
     QPointF CtrlMotionPos_3;//Пятая контрольная точка(для дуги)
     QPointF CtrlMotionPos_4;//Шестая контрольная точка(для дуги)
-    //QPointF Middle;//Середина прямой, соединяющей StartMotionPos и EndMotionPos выделенной дуги
-    //QPointF Top1,Top2,Top3,Top4;//Четыре вершины для рисования квадратика
     QPointF offset = pos - previousPosition;//Определение смещения перемещаемой точки
+    int MotionNum_1=itemInMotion->num_1();
+    int MotionNum_2=itemInMotion->num_2();
+    int MotionNum_3=itemInMotion->num_3();
+    int MotionNum_4=itemInMotion->num_4();
+    int MotionNum_5=itemInMotion->num_5();
     shapeType= itemInMotion->type();//Определение типа активной фигуры
     QBrush MotionBrush=itemInMotion->brush();//Определение заливки активной фигуры
     QPen MotionPen=itemInMotion->pen();//Определение пера активной фигуры
-    int MotionWidth=itemInMotion->width();//Определение толщины активной фигуры
+    QPen MotionPenSimple=itemInMotion->pen_simple();
+    float MotionWidth=itemInMotion->width();//Определение толщины активной фигуры
     QLineF line1,line2;//Линии, использующиеся для определения ang или ang_t
     QPointF Temp,EndMotionPos_temp,CtrlMotionPos_1_temp,CtrlMotionPos_2_temp;//Вспомогательные переменные для выполнения UNROTATE
     //Определение единичного смещения в зависимости от того, какая клавиша нажата
@@ -1125,54 +1459,89 @@ void ShapeElFigure::moveItemTo(const QPointF &pos,QList<ShapeItem> &shapeItems)
     if (flag_ctrl && !flag_ctrl_move)
         offset=offset_all;//Задание offset при одновременном перемещении нескольких фигур
     /////////////////////////////////////////////////////////////////////////////
-   if (rect_num==-1)//Указывает на то, что перемещать всю фигуру целиком
+    printf("shapeType=%i\n",shapeType);
+    printf("rect_num_1=%i\n",rect_num);
+    
+    bool flag_MotionNum_1=false;
+    bool flag_MotionNum_2=false;
+    printf ("num_vector.size()=%i\n",num_vector.size());
+    for (int i=0; i<num_vector.size(); i++)
+    {
+        if (num_vector[i]==MotionNum_1) flag_MotionNum_1=true;
+        if (num_vector[i]==MotionNum_2) flag_MotionNum_2=true;
+    }
+
+    if (rect_num==-1)//Указывает на то, что перемещать всю фигуру целиком
 
     {
-        StartMotionPos=itemInMotion->startposition() + offset;
-        EndMotionPos=itemInMotion->endposition()+offset;
-        CtrlMotionPos_1=itemInMotion->ctrlposition_1() + offset;
-        CtrlMotionPos_2=itemInMotion->ctrlposition_2() + offset;
-        if (shapeType==2)//Переопределяет данную операцию для дуги
+        if (status_hold && count_holds)
         {
-            CtrlMotionPos_3=itemInMotion->ctrlposition_3();
-            CtrlMotionPos_4=itemInMotion->ctrlposition_4()+offset;
-            a=Length(CtrlMotionPos_4,CtrlMotionPos_1);
+        if (!flag_MotionNum_1 )
+        {
+            printf ("Popali !flag_MotionNum_1\n");
+            printf ("MotionNum_1=%i\n",MotionNum_1);
+        StartMotionPos=(*pnts)[itemInMotion->num_1()] + offset;
+        num_vector.append(MotionNum_1);
+        }
+        else  StartMotionPos=(*pnts)[itemInMotion->num_1()];
+        if (!flag_MotionNum_2)
+        {
+            printf ("Popali !flag_MotionNum_2\n");
+            printf ("MotionNum_2=%i\n",MotionNum_2);
+        EndMotionPos= (*pnts)[itemInMotion->num_2()]+offset;
+        num_vector.append(MotionNum_2);
+        }
+        else EndMotionPos= (*pnts)[itemInMotion->num_2()];
+        }
+        else
+        {
+        StartMotionPos=(*pnts)[itemInMotion->num_1()] + offset;
+        EndMotionPos= (*pnts)[itemInMotion->num_2()]+offset; 
+        }  
+        CtrlMotionPos_1=(*pnts)[itemInMotion->num_3()] + offset;
+        CtrlMotionPos_2= (*pnts)[itemInMotion->num_4()] + offset;
+        
+       if (shapeType==2)//Переопределяет данную операцию для дуги
+        {
+            CtrlMotionPos_4=itemInMotion->ctrlposition_4();
+            CtrlMotionPos_3=(*pnts)[itemInMotion->num_5()]+offset;
+            a=Length(CtrlMotionPos_3,CtrlMotionPos_1);
             b=Length(CtrlMotionPos_1,CtrlMotionPos_2);
             line2=QLineF(CtrlMotionPos_1,QPointF(CtrlMotionPos_1.x()+10,CtrlMotionPos_1.y()));
-            line1=QLineF(CtrlMotionPos_1,CtrlMotionPos_4);
-            if (CtrlMotionPos_4.y()<=CtrlMotionPos_1.y()) ang=Angle(line1,line2);
+            line1=QLineF(CtrlMotionPos_1,CtrlMotionPos_3);
+            if (CtrlMotionPos_3.y()<=CtrlMotionPos_1.y()) ang=Angle(line1,line2);
             else ang=360-Angle(line1,line2);
-            t_start=CtrlMotionPos_3.x();
-            t_end=CtrlMotionPos_3.y();
+            t_start=CtrlMotionPos_4.x();
+            t_end=CtrlMotionPos_4.y();
             StartMotionPos=QPointF(CtrlMotionPos_1.x()+ROTATE(ARC(t_start,a-MotionWidth/2,b-MotionWidth/2),ang).x(),
                                    CtrlMotionPos_1.y()-ROTATE(ARC(t_start,a-MotionWidth/2,b-MotionWidth/2),ang).y());
             EndMotionPos=QPointF(CtrlMotionPos_1.x()+ROTATE(ARC(t_end,a-MotionWidth/2,b-MotionWidth/2),ang).x(),
                                  CtrlMotionPos_1.y()-ROTATE(ARC(t_end,a-MotionWidth/2,b-MotionWidth/2),ang).y()); 
-         }
+        }
     }
     if (rect_num==0)//Указывает на то, что перемещать StartLine, выбранной фигуры
     {
-        EndMotionPos=itemInMotion->endposition();
+        EndMotionPos= (*pnts)[itemInMotion->num_2()];
 
         if (shapeType==2)//Переопределяет данную операцию для дуги
         {
             StartMotionPos=Mouse_pos;
             if (flag_up || flag_down || flag_right || flag_left)
-                StartMotionPos=itemInMotion->startposition()+offset;
-            CtrlMotionPos_1=itemInMotion->ctrlposition_1();
-            CtrlMotionPos_2=itemInMotion->ctrlposition_2();
-            CtrlMotionPos_3=itemInMotion->ctrlposition_3();
+                StartMotionPos=(*pnts)[itemInMotion->num_1()]+offset;
+            CtrlMotionPos_1=(*pnts)[itemInMotion->num_3()];
+            CtrlMotionPos_2=(*pnts)[itemInMotion->num_4()];
+            CtrlMotionPos_3=(*pnts)[itemInMotion->num_5()];
             CtrlMotionPos_4=itemInMotion->ctrlposition_4();
-            a=Length(CtrlMotionPos_4,CtrlMotionPos_1);
+            a=Length(CtrlMotionPos_3,CtrlMotionPos_1);
             b=Length(CtrlMotionPos_2,CtrlMotionPos_1);
-            t_end=CtrlMotionPos_3.y();
+            t_end=CtrlMotionPos_4.y();
             line2=QLineF(CtrlMotionPos_1,QPointF(CtrlMotionPos_1.x()+100,CtrlMotionPos_1.y()));
-            line1=QLineF(CtrlMotionPos_1,CtrlMotionPos_4);
-            if (CtrlMotionPos_4.y()<=CtrlMotionPos_1.y()) ang=Angle(line1,line2);
+            line1=QLineF(CtrlMotionPos_1,CtrlMotionPos_3);
+            if (CtrlMotionPos_3.y()<=CtrlMotionPos_1.y()) ang=Angle(line1,line2);
             else ang=360-Angle(line1,line2);
-            CtrlMotionPos_4=UNROTATE(CtrlMotionPos_4,ang,CtrlMotionPos_1.x(),CtrlMotionPos_1.y());
+            CtrlMotionPos_3=UNROTATE(CtrlMotionPos_3,ang,CtrlMotionPos_1.x(),CtrlMotionPos_1.y());
             StartMotionPos=UNROTATE(StartMotionPos,ang,CtrlMotionPos_1.x(),CtrlMotionPos_1.y());
-            line1=QLineF(QPointF(0,0),CtrlMotionPos_4);
+            line1=QLineF(QPointF(0,0),CtrlMotionPos_3);
             line2=QLineF(QPointF(0,0),StartMotionPos);
             if (StartMotionPos.y()<0)
                 ang_t=Angle(line1,line2);
@@ -1187,59 +1556,69 @@ void ShapeElFigure::moveItemTo(const QPointF &pos,QList<ShapeItem> &shapeItems)
         }
         else
         {
-            if (!flag_hold_arc && !flag_arc_rect_3_4)//Если фигура не связана с дугой
+            if (!flag_hold_arc && !flag_arc_rect_3_4 )//Если фигура не связана с дугой
             {
-            StartMotionPos=itemInMotion->startposition() +offset;
-            CtrlMotionPos_1=itemInMotion->ctrlposition_1()+offset;
-            CtrlMotionPos_2=itemInMotion->ctrlposition_2()+offset;
+                if (status_hold && count_holds && flag_rect)
+                if (!flag_MotionNum_1)
+                {
+                    printf ("Popali !flag_MotionNum_1\n");
+                    printf ("MotionNum_1=%i\n",MotionNum_1);
+                    StartMotionPos=(*pnts)[itemInMotion->num_1()] + offset;
+                    num_vector.append(MotionNum_1);
+                }
+                else  StartMotionPos=(*pnts)[itemInMotion->num_1()];
+                else
+                StartMotionPos= (*pnts)[itemInMotion->num_1()] +offset;
+                CtrlMotionPos_1= (*pnts)[itemInMotion->num_3()]+offset;
+                CtrlMotionPos_2= (*pnts)[itemInMotion->num_4()]+offset;
             }
             if (flag_hold_arc || flag_arc_rect_3_4)//Если фигура связана с дугой
             {
                 if (arc_rect==0)
                 {
-                    StartMotionPos=shapeItems[index_array[0]].startposition();
-                    CtrlMotionPos_1=itemInMotion->ctrlposition_1()+offset;
-                    CtrlMotionPos_2=itemInMotion->ctrlposition_2()+offset;
+                    StartMotionPos=(*pnts)[shapeItems[index_array[0]].num_1()];
+                    CtrlMotionPos_1=(*pnts)[itemInMotion->num_3()]+offset;
+                    CtrlMotionPos_2=(*pnts)[itemInMotion->num_4()]+offset;
                 }
                 if (arc_rect==1)
                 {
-                    StartMotionPos=shapeItems[index_array[0]].endposition();
-                    CtrlMotionPos_1=itemInMotion->ctrlposition_1()+offset;
-                    CtrlMotionPos_2=itemInMotion->ctrlposition_2()+offset;
+                    StartMotionPos=(*pnts)[shapeItems[index_array[0]].num_2()];
+                    CtrlMotionPos_1=(*pnts)[itemInMotion->num_3()]+offset;
+                    CtrlMotionPos_2=(*pnts)[itemInMotion->num_4()]+offset;
                 }
             }
         }
     }
     if (rect_num==1)//Указывает на то, что перемещать EndLine, выбранной фигуры
     {
-        StartMotionPos=itemInMotion->startposition();
+        StartMotionPos=(*pnts)[itemInMotion->num_1()];
         if (shapeType==2)//Переопределяет данную операцию для дуги
         {
             EndMotionPos=Mouse_pos;
             if (flag_up || flag_down || flag_right || flag_left)
-                EndMotionPos=itemInMotion->endposition()+offset;
-            CtrlMotionPos_1=itemInMotion->ctrlposition_1();
-            CtrlMotionPos_2=itemInMotion->ctrlposition_2();
-            CtrlMotionPos_3=itemInMotion->ctrlposition_3();
+                EndMotionPos=(*pnts)[itemInMotion->num_2()]+offset;
+            CtrlMotionPos_1=(*pnts)[itemInMotion->num_3()];
+            CtrlMotionPos_2=(*pnts)[itemInMotion->num_4()];
+            CtrlMotionPos_3=(*pnts)[itemInMotion->num_5()];
             CtrlMotionPos_4=itemInMotion->ctrlposition_4();
             b=Length(CtrlMotionPos_2,CtrlMotionPos_1);
-            a=Length(CtrlMotionPos_4,CtrlMotionPos_1);
+            a=Length(CtrlMotionPos_3,CtrlMotionPos_1);
             line2=QLineF(CtrlMotionPos_1,QPointF(CtrlMotionPos_1.x()+10,CtrlMotionPos_1.y()));
-            line1=QLineF(CtrlMotionPos_1,CtrlMotionPos_4);
-            if (CtrlMotionPos_4.y()<=CtrlMotionPos_1.y()) ang=Angle(line1,line2);
+            line1=QLineF(CtrlMotionPos_1,CtrlMotionPos_3);
+            if (CtrlMotionPos_3.y()<=CtrlMotionPos_1.y()) ang=Angle(line1,line2);
             else ang=360-Angle(line1,line2);
-            CtrlMotionPos_4=UNROTATE(CtrlMotionPos_4,ang,CtrlMotionPos_1.x(),CtrlMotionPos_1.y());
+            CtrlMotionPos_3=UNROTATE(CtrlMotionPos_3,ang,CtrlMotionPos_1.x(),CtrlMotionPos_1.y());
             EndMotionPos=UNROTATE(EndMotionPos,ang,CtrlMotionPos_1.x(),CtrlMotionPos_1.y());
-            line1=QLineF(QPointF(0,0),CtrlMotionPos_4);
+            line1=QLineF(QPointF(0,0),CtrlMotionPos_3);
             line2=QLineF(QPointF(0,0),EndMotionPos);
             if (EndMotionPos.y()<0)
                 ang_t=Angle(line1,line2);
             else ang_t=360-Angle(line1,line2);
             t_end=ang_t/360;
-            t_start=CtrlMotionPos_3.x();
+            t_start=CtrlMotionPos_4.x();
             if (t_start>t_end) t_end+=1;
             if ((t_end-1)>t_start) t_end-=1;
-            CtrlMotionPos_4=QPointF(CtrlMotionPos_1.x()+ROTATE(ARC(0,a,b),ang).x(),
+            CtrlMotionPos_3=QPointF(CtrlMotionPos_1.x()+ROTATE(ARC(0,a,b),ang).x(),
                                     CtrlMotionPos_1.y()-ROTATE(ARC(0,a,b),ang).y());
             EndMotionPos=QPointF(CtrlMotionPos_1.x()+ROTATE(ARC(t_end,a-MotionWidth/2,b-MotionWidth/2),ang).x(),
                                  CtrlMotionPos_1.y()-ROTATE(ARC(t_end,a-MotionWidth/2,b-MotionWidth/2),ang).y());
@@ -1248,76 +1627,86 @@ void ShapeElFigure::moveItemTo(const QPointF &pos,QList<ShapeItem> &shapeItems)
         {
             if (!flag_hold_arc && !flag_arc_rect_3_4)//Если фигура не связана с дугой
             { 
-            EndMotionPos=itemInMotion->endposition()+offset;
-            CtrlMotionPos_1=itemInMotion->ctrlposition_1()+offset;
-            CtrlMotionPos_2=itemInMotion->ctrlposition_2()+offset;
+                if (status_hold && count_holds && flag_rect)
+                if (!flag_MotionNum_2)
+                {
+                    printf ("Popali !flag_MotionNum_2\n");
+                    printf ("MotionNum_2=%i\n",MotionNum_2);
+                    EndMotionPos= (*pnts)[itemInMotion->num_2()]+offset;
+                    num_vector.append(MotionNum_2);
+                }
+                else EndMotionPos= (*pnts)[itemInMotion->num_2()];
+                else
+                EndMotionPos= (*pnts)[itemInMotion->num_2()]+offset;
+                CtrlMotionPos_1=(*pnts)[itemInMotion->num_3()]+offset;
+                CtrlMotionPos_2= (*pnts)[itemInMotion->num_4()]+offset;
             }
-             if (flag_hold_arc || flag_arc_rect_3_4)//Если фигура связана с дугой
+            if (flag_hold_arc || flag_arc_rect_3_4)//Если фигура связана с дугой
             {
-             
-            if (arc_rect==0)
-             {
-              EndMotionPos=shapeItems[index_array[0]].startposition();
-              CtrlMotionPos_1=itemInMotion->ctrlposition_1()+offset;
-              CtrlMotionPos_2=itemInMotion->ctrlposition_2()+offset;
-              }
-            if (arc_rect==1)
-             {
-              EndMotionPos=shapeItems[index_array[0]].endposition();
-              CtrlMotionPos_1=itemInMotion->ctrlposition_1()+offset;
-              CtrlMotionPos_2=itemInMotion->ctrlposition_2()+offset;
-              }
-            } 
+                printf ("Popali flag_hold_arc || flag_arc_rect_3_4\n");
+                if (arc_rect==0)
+                {
+                    EndMotionPos=(*pnts)[shapeItems[index_array[0]].num_1()];
+                    CtrlMotionPos_1=(*pnts)[itemInMotion->num_3()]+offset;
+                    CtrlMotionPos_2=(*pnts)[itemInMotion->num_4()]+offset;
+                }
+                if (arc_rect==1)
+                {
+                    EndMotionPos=(*pnts)[shapeItems[index_array[0]].num_2()];
+                    CtrlMotionPos_1=(*pnts)[itemInMotion->num_3()]+offset;
+                    CtrlMotionPos_2=(*pnts)[itemInMotion->num_4()]+offset;
+                }
+            }
 
         }
     }
-     if (rect_num==2)//Указывает на то, что перемещать третью контрольную точку, выбранной фигуры
+    if (rect_num==2)//Указывает на то, что перемещать третью контрольную точку, выбранной фигуры
     {
-        StartMotionPos=itemInMotion->startposition();
-        EndMotionPos=itemInMotion->endposition(); 
+        StartMotionPos=(*pnts)[itemInMotion->num_1()];
+        EndMotionPos=(*pnts)[itemInMotion->num_2()]; 
         if (shapeType==2)//Переопределяет данную операцию для дуги
         {
-            StartMotionPos=itemInMotion->startposition();
-            EndMotionPos=itemInMotion->endposition();
-            CtrlMotionPos_1=itemInMotion->ctrlposition_1();
-            CtrlMotionPos_2=itemInMotion->ctrlposition_2();
-            CtrlMotionPos_3=itemInMotion->ctrlposition_3();
+            StartMotionPos=(*pnts)[itemInMotion->num_1()];
+            EndMotionPos=(*pnts)[itemInMotion->num_2()];
+            CtrlMotionPos_1=(*pnts)[itemInMotion->num_3()];
+            CtrlMotionPos_2=(*pnts)[itemInMotion->num_4()];
+            CtrlMotionPos_3=(*pnts)[itemInMotion->num_5()];
             CtrlMotionPos_4=itemInMotion->ctrlposition_4();
             b=Length(CtrlMotionPos_2,CtrlMotionPos_1);
-            a=Length(CtrlMotionPos_4,CtrlMotionPos_1);
+            a=Length(CtrlMotionPos_3,CtrlMotionPos_1);
             line2=QLineF(CtrlMotionPos_1,QPointF(CtrlMotionPos_1.x()+10,CtrlMotionPos_1.y()));
-            line1=QLineF(CtrlMotionPos_1,CtrlMotionPos_4);
-            if (CtrlMotionPos_4.y()<=CtrlMotionPos_1.y()) ang=Angle(line1,line2);
+            line1=QLineF(CtrlMotionPos_1,CtrlMotionPos_3);
+            if (CtrlMotionPos_3.y()<=CtrlMotionPos_1.y()) ang=Angle(line1,line2);
             else ang=360-Angle(line1,line2);
-            t_start=CtrlMotionPos_3.x();
-            t_end=CtrlMotionPos_3.y();
+            t_start=CtrlMotionPos_4.x();
+            t_end=CtrlMotionPos_4.y();
         }
         else
         {
-            CtrlMotionPos_2=itemInMotion->ctrlposition_2();
-            CtrlMotionPos_1=itemInMotion->ctrlposition_1()+offset;
+            CtrlMotionPos_2=(*pnts)[itemInMotion->num_4()];
+            CtrlMotionPos_1=(*pnts)[itemInMotion->num_3()]+offset;
         }
-     }
+    }
     if (rect_num==3)//Указывает на то, что перемещать четвёртую контрольную точку, выбранной фигуры
     {
-        StartMotionPos=itemInMotion->startposition();
-        EndMotionPos=itemInMotion->endposition();
+        StartMotionPos=(*pnts)[itemInMotion->num_1()];
+        EndMotionPos=(*pnts)[itemInMotion->num_2()];
         if (shapeType==2)//Переопределяет данную операцию для дуги
         {
-            CtrlMotionPos_1=itemInMotion->ctrlposition_1();
-            CtrlMotionPos_2=itemInMotion->ctrlposition_2()+offset;
-            CtrlMotionPos_3=itemInMotion->ctrlposition_3();
+            CtrlMotionPos_1=(*pnts)[itemInMotion->num_3()];
+            CtrlMotionPos_2=(*pnts)[itemInMotion->num_4()]+offset;
+            CtrlMotionPos_3=(*pnts)[itemInMotion->num_5()];
             CtrlMotionPos_4=itemInMotion->ctrlposition_4();
-            EndMotionPos=itemInMotion->endposition();
-            a=Length(CtrlMotionPos_4,CtrlMotionPos_1);
+            EndMotionPos=(*pnts)[itemInMotion->num_2()];
+            a=Length(CtrlMotionPos_3,CtrlMotionPos_1);
             b=Length(CtrlMotionPos_2,CtrlMotionPos_1);
-            t_start=CtrlMotionPos_3.x();
-            t_end=CtrlMotionPos_3.y();
+            t_start=CtrlMotionPos_4.x();
+            t_end=CtrlMotionPos_4.y();
             line2=QLineF(CtrlMotionPos_1,QPointF(CtrlMotionPos_1.x()+10,CtrlMotionPos_1.y()));
-            line1=QLineF( CtrlMotionPos_1,CtrlMotionPos_4);
-            if (CtrlMotionPos_4.y()<=CtrlMotionPos_1.y()) ang=Angle(line1,line2); 
+            line1=QLineF( CtrlMotionPos_1,CtrlMotionPos_3);
+            if (CtrlMotionPos_3.y()<=CtrlMotionPos_1.y()) ang=Angle(line1,line2); 
             else ang=360-Angle(line1,line2);
-            CtrlMotionPos_4=UNROTATE(CtrlMotionPos_4,ang,CtrlMotionPos_1.x(),CtrlMotionPos_1.y());
+            CtrlMotionPos_3=UNROTATE(CtrlMotionPos_3,ang,CtrlMotionPos_1.x(),CtrlMotionPos_1.y());
             CtrlMotionPos_2=UNROTATE(CtrlMotionPos_2,ang,CtrlMotionPos_1.x(),CtrlMotionPos_1.y());
             line2=QLineF(QPointF(0,0),QPointF(-100,0));
             line1=QLineF(QPointF(0,0),CtrlMotionPos_2);
@@ -1330,34 +1719,34 @@ void ShapeElFigure::moveItemTo(const QPointF &pos,QList<ShapeItem> &shapeItems)
         }
         else
         {
-            CtrlMotionPos_1=itemInMotion->ctrlposition_1();
-            CtrlMotionPos_2=itemInMotion->ctrlposition_2() + offset;
+            CtrlMotionPos_1=(*pnts)[itemInMotion->num_3()];
+            CtrlMotionPos_2=(*pnts)[itemInMotion->num_4()] + offset;
         }
     }
     if (rect_num==4)//Указывает на то, что перемещать пятую контрольную точку, выбранной фигуры
     {
-        CtrlMotionPos_1=itemInMotion->ctrlposition_1();
-        CtrlMotionPos_2=itemInMotion->ctrlposition_2();
-        CtrlMotionPos_3=itemInMotion->ctrlposition_3();
-        CtrlMotionPos_4=itemInMotion->ctrlposition_4()+offset;
-        EndMotionPos=itemInMotion->endposition();
-        a=Length(CtrlMotionPos_4,CtrlMotionPos_1);
+        CtrlMotionPos_1=(*pnts)[itemInMotion->num_3()];
+        CtrlMotionPos_2=(*pnts)[itemInMotion->num_4()];
+        CtrlMotionPos_3=(*pnts)[itemInMotion->num_5()]+offset;
+        CtrlMotionPos_4=itemInMotion->ctrlposition_4();
+        EndMotionPos=(*pnts)[itemInMotion->num_2()];
+        a=Length(CtrlMotionPos_3,CtrlMotionPos_1);
         b=Length(CtrlMotionPos_2,CtrlMotionPos_1);
-        t_start=CtrlMotionPos_3.x();
-        t_end=CtrlMotionPos_3.y();
+        t_start=CtrlMotionPos_4.x();
+        t_end=CtrlMotionPos_4.y();
         line2=QLineF(CtrlMotionPos_1,QPointF(CtrlMotionPos_1.x()+100,CtrlMotionPos_1.y()));
-        line1=QLineF(CtrlMotionPos_1,CtrlMotionPos_4);
-        if (CtrlMotionPos_4.y()<=CtrlMotionPos_1.y()) ang=Angle(line1,line2);
+        line1=QLineF(CtrlMotionPos_1,CtrlMotionPos_3);
+        if (CtrlMotionPos_3.y()<=CtrlMotionPos_1.y()) ang=Angle(line1,line2);
         else ang=360-Angle(line1,line2);
         StartMotionPos=QPointF(CtrlMotionPos_1.x()+ROTATE(ARC(t_start,a-MotionWidth/2,b-MotionWidth/2),ang).x(),
                                CtrlMotionPos_1.y()-ROTATE(ARC(t_start,a-MotionWidth/2,b-MotionWidth/2),ang).y());
         EndMotionPos=QPointF(CtrlMotionPos_1.x()+ROTATE(ARC(t_end,a-MotionWidth/2,b-MotionWidth/2),ang).x(),
                              CtrlMotionPos_1.y()-ROTATE(ARC(t_end,a-MotionWidth/2,b-MotionWidth/2),ang).y());
     }
-    removeShapeItem(index,shapeItems);//Удаляет перемещаемую фигуру
+    removeShapeItem(index,shapeItems, pnts);//Удаляет перемещаемую фигуру
     if (!flag_ctrl || (!flag_ctrl_move && count_Shapes==count_moveItemTo+count_Shapes-1))
         //Проверка на то, что не нажат Сtrl или нажат Сtrl,
-                                                                                              //выполняется движение и оно прошло один цикл
+        //выполняется движение и оно прошло один цикл
         rectItems.clear();//Очищает контейнер кваflag_arc_release=false;дратиков
     if (shapeType==1)//Если выбранная фигура линия
     {
@@ -1365,83 +1754,74 @@ void ShapeElFigure::moveItemTo(const QPointF &pos,QList<ShapeItem> &shapeItems)
         line1=QLineF(StartMotionPos,EndMotionPos);
         if (StartMotionPos.y()<=EndMotionPos.y()) ang=360-Angle(line1,line2);
         else ang=Angle(line1,line2);
-        circlePath.moveTo(StartMotionPos.x()+ROTATE(QPointF(0,MotionWidth/2),ang).x(),
-                          StartMotionPos.y()-ROTATE(QPointF(0,MotionWidth/2),ang).y());
-        circlePath.lineTo(StartMotionPos.x()+ROTATE(QPointF(Length(EndMotionPos,StartMotionPos),MotionWidth/2),ang).x(),
-                          StartMotionPos.y()-ROTATE(QPointF(Length(EndMotionPos,StartMotionPos),MotionWidth/2),ang).y());
-        circlePath.lineTo(StartMotionPos.x()+ROTATE(QPointF(Length(EndMotionPos,StartMotionPos),-MotionWidth/2),ang).x(),
-                          StartMotionPos.y()-ROTATE(QPointF(Length(EndMotionPos,StartMotionPos),-MotionWidth/2),ang).y());
-        circlePath.lineTo(StartMotionPos.x()+ROTATE(QPointF(0,-MotionWidth/2),ang).x(),
-                          StartMotionPos.y()-ROTATE(QPointF(0,-MotionWidth/2),ang).y());
-        circlePath.closeSubpath();
-        createShapeItem(circlePath , _("Circle <%1>"),
-                        StartMotionPos,EndMotionPos,StartMotionPos,EndMotionPos,StartMotionPos,StartMotionPos,MotionBrush,MotionPen,MotionWidth,1,shapeItems);
-        circlePath=newPath;
-/////////////////////////////////////////////////////
+        createShapeItem(painter_path(MotionWidth, 1, ang, StartMotionPos, EndMotionPos, QPointF(0,0), QPointF(0,0), QPointF(0,0), QPointF(0,0)), 
+                        painter_path_simple(1, ang, StartMotionPos,EndMotionPos, QPointF(0,0), QPointF(0,0), QPointF(0,0), QPointF(0,0)),
+                        MotionNum_1,MotionNum_2,-1,-1,-1,QPointF(0,0),MotionBrush,MotionPen,MotionPenSimple,
+                                MotionWidth,1,shapeItems);
+        printf ("Dohli do pnts_temp\n ");
+       
+        (*pnts).insert(MotionNum_1,StartMotionPos.toPoint ());
+        (*pnts).insert(MotionNum_2,EndMotionPos.toPoint ());
+              
+        /////////////////////////////////////////////////////
         //Определение центра квадратика_2
         rectPath.addRect(QRectF(QPointF(StartMotionPos.x()-4,StartMotionPos.y()-4),QSize(8,8)));
-        createRectItem(rectPath ,StartMotionPos, QBrush(QColor(127,127,127,128),Qt::SolidPattern),
+        createRectItem(rectPath ,MotionNum_1, QBrush(QColor(127,127,127,128),Qt::SolidPattern),
                        QPen(QColor(0, 0, 0),1, Qt::SolidLine,Qt::FlatCap, Qt::MiterJoin));
         rectPath=newPath;//Обнуление пути
         //Определение центра квадратика_1
         rectPath.addRect(QRectF(QPointF(EndMotionPos.x()-4,EndMotionPos.y()-4),QSize(8,8)));
-        createRectItem(rectPath ,EndMotionPos, QBrush(QColor(127,127,127,128),Qt::SolidPattern),
+        createRectItem(rectPath ,MotionNum_2, QBrush(QColor(127,127,127,128),Qt::SolidPattern),
                        QPen(QColor(0, 0, 0),1, Qt::SolidLine,Qt::FlatCap, Qt::MiterJoin));
         rectPath=newPath;//Обнуление пути
     }
     if (shapeType==2)//Если выбранная фигура дуга
     {
-        double t;
-        a_small=a-MotionWidth;
-        b_small=b-MotionWidth;
-        circlePath.moveTo(CtrlMotionPos_1.x()+ROTATE(ARC(t_start,a_small,b_small),ang).x(),
-                          CtrlMotionPos_1.y()-ROTATE(ARC(t_start,a_small,b_small),ang).y());
-        circlePath.lineTo(CtrlMotionPos_1.x()+ROTATE(ARC(t_start,a,b),ang).x(),
-                          CtrlMotionPos_1.y()-ROTATE(ARC(t_start,a,b),ang).y());//QPointF(50,50));
-        for (t=t_start; t<t_end+0.00277777777778; t+=0.00277777777778) 
-            circlePath.lineTo(QPointF(CtrlMotionPos_1.x()+ROTATE(ARC(t,a,b),ang).x(),
-                                      CtrlMotionPos_1.y()-ROTATE(ARC(t,a,b),ang).y()));
-        circlePath.lineTo(CtrlMotionPos_1.x()+ROTATE(ARC(t_end,a_small,b_small),ang).x(),
-                          CtrlMotionPos_1.y()-ROTATE(ARC(t_end,a_small,b_small),ang).y());
-        for (t=t_end; t>t_start; t-=0.00277777777778) 
-            circlePath.lineTo(QPointF(CtrlMotionPos_1.x()+ROTATE(ARC(t,a_small,b_small),ang).x(),
-                                      CtrlMotionPos_1.y()-ROTATE(ARC(t,a_small,b_small),ang).y()));
-        circlePath.closeSubpath();
+       double t;
         CtrlMotionPos_2=QPointF(CtrlMotionPos_1.x()+ROTATE(ARC(0.25,a,b),ang).x(),
-                                    CtrlMotionPos_1.y()-ROTATE(ARC(0.25,a,b),ang).y());
-
-        CtrlMotionPos_3=QPointF(t_start,t_end);
-        CtrlMotionPos_4=QPointF(CtrlMotionPos_1.x()+ROTATE(ARC(0,a,b),ang).x(),
+                                CtrlMotionPos_1.y()-ROTATE(ARC(0.25,a,b),ang).y());
+        CtrlMotionPos_4=QPointF(t_start,t_end);
+        CtrlMotionPos_3=QPointF(CtrlMotionPos_1.x()+ROTATE(ARC(0,a,b),ang).x(),
                                 CtrlMotionPos_1.y()-ROTATE(ARC(0,a,b),ang).y());
-        createShapeItem(circlePath , _("Circle <%1>"),
-                        StartMotionPos,EndMotionPos,CtrlMotionPos_1,CtrlMotionPos_2,CtrlMotionPos_3,CtrlMotionPos_4,MotionBrush,MotionPen,MotionWidth,2,shapeItems);
-        circlePath=newPath;//Обнуление пути
+        createShapeItem(painter_path(MotionWidth, 2, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3,
+                        CtrlMotionPos_4),
+                        painter_path_simple(2, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4),
+                        MotionNum_1,MotionNum_2,MotionNum_3,MotionNum_4,MotionNum_5,CtrlMotionPos_4,
+                        MotionBrush,MotionPen, MotionPenSimple, MotionWidth,2,shapeItems);
+        
+        (*pnts).insert(MotionNum_1,StartMotionPos.toPoint ());
+        (*pnts).insert(MotionNum_2,EndMotionPos.toPoint ());
+        (*pnts).insert(MotionNum_3,CtrlMotionPos_1.toPoint ());
+        (*pnts).insert(MotionNum_4,CtrlMotionPos_2.toPoint ());
+        (*pnts).insert(MotionNum_5,CtrlMotionPos_3.toPoint ());
+        
+ //       circlePath=newPath;//Обнуление пути
         //Рисование пяти квадратиков в четырёх контрольных точках
         rectPath.addRect(QRectF(QPointF(StartMotionPos.x()-4,StartMotionPos.y()-4),QSize(8,8)));
-        createRectItem(rectPath,StartMotionPos,QBrush(QColor(127,127,127,128),Qt::SolidPattern),
+        createRectItem(rectPath,MotionNum_1,QBrush(QColor(127,127,127,128),Qt::SolidPattern),
                        QPen(QColor(0, 0, 0),1, Qt::SolidLine,Qt::FlatCap, Qt::MiterJoin));
         rectPath=newPath;
         rectPath.addRect(QRectF(QPointF(EndMotionPos.x()-4,EndMotionPos.y()-4),QSize(8,8)));
-        createRectItem(rectPath ,EndMotionPos, QBrush(QColor(127,127,127,128),Qt::SolidPattern),
+        createRectItem(rectPath ,MotionNum_2, QBrush(QColor(127,127,127,128),Qt::SolidPattern),
                        QPen(QColor(0, 0, 0),1, Qt::SolidLine,Qt::FlatCap, Qt::MiterJoin));
         rectPath=newPath;
-        rectPath.addRect(QRectF( CtrlMotionPos_1,QSize(8,8)));
-        createRectItem(rectPath , CtrlMotionPos_1, QBrush(QColor(127,127,127,128),Qt::SolidPattern), 
+        rectPath.addRect(QRectF( CtrlMotionPos_1.toPoint(),QSize(8,8)));
+        createRectItem(rectPath , MotionNum_3, QBrush(QColor(127,127,127,128),Qt::SolidPattern), 
                        QPen(QColor(0, 0, 0),1, Qt::SolidLine,Qt::FlatCap, Qt::MiterJoin));
         rectPath=newPath;
         rectPath.addRect(QRectF(QPointF(CtrlMotionPos_2.x()-4,CtrlMotionPos_2.y()-4),QSize(8,8)));
-        createRectItem(rectPath,CtrlMotionPos_2, QBrush(QColor(127,127,127,128),Qt::SolidPattern), 
+        createRectItem(rectPath,MotionNum_4, QBrush(QColor(127,127,127,128),Qt::SolidPattern), 
                        QPen(QColor(0, 0, 0),1, Qt::SolidLine,Qt::FlatCap, Qt::MiterJoin));
         rectPath=newPath;
-        if (MotionWidth<=18) Temp=QPointF(CtrlMotionPos_4.x()-14,CtrlMotionPos_4.y()-4);
-        else Temp=QPointF(CtrlMotionPos_4.x()-4,CtrlMotionPos_4.y()-4);
+        if (MotionWidth<=18) Temp=QPointF(CtrlMotionPos_3.x()-20,CtrlMotionPos_3.y()-4);
+        else Temp=QPointF(CtrlMotionPos_3.x()-4,CtrlMotionPos_3.y()-4);
         rectPath.addRect(QRectF(Temp,QSize(8,8)));
-        createRectItem(rectPath ,CtrlMotionPos_4, QBrush(QColor(0,0,0,255),Qt::SolidPattern), 
+        createRectItem(rectPath, MotionNum_5, QBrush(QColor(0,0,0,255),Qt::SolidPattern), 
                        QPen(QColor(0, 0, 0),1, Qt::SolidLine,Qt::FlatCap, Qt::MiterJoin));
         //////////////////////////////////////////////////////
         rectPath=newPath;
     }
-     if (shapeType==3)//Если выбранная фигура кривая Безье
+    if (shapeType==3)//Если выбранная фигура кривая Безье
     {
         line2=QLineF(StartMotionPos,QPointF(StartMotionPos.x()+10,StartMotionPos.y()));
         line1=QLineF(StartMotionPos,EndMotionPos);
@@ -1449,56 +1829,38 @@ void ShapeElFigure::moveItemTo(const QPointF &pos,QList<ShapeItem> &shapeItems)
             ang=360-line1.angle(line2);
         else
             ang=line1.angle(line2);
-        CtrlMotionPos_1_temp=UNROTATE(CtrlMotionPos_1,ang,StartMotionPos.x(),StartMotionPos.y());
-        CtrlMotionPos_2_temp=UNROTATE(CtrlMotionPos_2,ang,StartMotionPos.x(),StartMotionPos.y());
-        EndMotionPos_temp=QPointF(Length(EndMotionPos,StartMotionPos),0);
-        circlePath.moveTo(StartMotionPos.x()+ROTATE(QPointF(0,-MotionWidth/2),ang).x(),
-                          StartMotionPos.y()-ROTATE(QPointF(0,-MotionWidth/2),ang).y());
-        circlePath.cubicTo(QPointF(StartMotionPos.x()+ROTATE(QPointF(CtrlMotionPos_1_temp.x(),CtrlMotionPos_1_temp.y()-MotionWidth/2),ang).x(),
-                                   StartMotionPos.y()-ROTATE(QPointF(CtrlMotionPos_1_temp.x(),CtrlMotionPos_1_temp.y()-MotionWidth/2),ang).y()),
-                           QPointF(StartMotionPos.x()+ROTATE(QPointF(CtrlMotionPos_2_temp.x(),CtrlMotionPos_2_temp.y()-MotionWidth/2),ang).x(),
-                                   StartMotionPos.y()-ROTATE(QPointF(CtrlMotionPos_2_temp.x(),CtrlMotionPos_2_temp.y()-MotionWidth/2),ang).y()),
-                           QPointF(StartMotionPos.x()+ROTATE(QPointF(EndMotionPos_temp.x(),EndMotionPos_temp.y()-MotionWidth/2),ang).x(),
-                                   StartMotionPos.y()-ROTATE(QPointF(EndMotionPos_temp.x(),EndMotionPos_temp.y()-MotionWidth/2),ang).y()));
-        circlePath.lineTo(StartMotionPos.x()+ROTATE(QPointF(EndMotionPos_temp.x(),MotionWidth/2),ang).x(),
-                          StartMotionPos.y()-ROTATE(QPointF(EndMotionPos_temp.x(),MotionWidth/2),ang).y());
-        circlePath.cubicTo(QPointF(StartMotionPos.x()+ROTATE(QPointF(CtrlMotionPos_2_temp.x(),CtrlMotionPos_2_temp.y()+MotionWidth/2),ang).x(),
-                                   StartMotionPos.y()-ROTATE(QPointF(CtrlMotionPos_2_temp.x(),CtrlMotionPos_2_temp.y()+MotionWidth/2),ang).y()),
-                           QPointF(StartMotionPos.x()+ROTATE(QPointF(CtrlMotionPos_1_temp.x(),CtrlMotionPos_1_temp.y()+MotionWidth/2),ang).x(),
-                                   StartMotionPos.y()-ROTATE(QPointF(CtrlMotionPos_1_temp.x(),CtrlMotionPos_1_temp.y()+MotionWidth/2),ang).y()),
-                           QPointF(StartMotionPos.x()+ROTATE(QPointF(0,MotionWidth/2),ang).x(),
-                                   StartMotionPos.y()-ROTATE(QPointF(0,MotionWidth/2),ang).y()));
-        circlePath.closeSubpath();
-        CtrlMotionPos_1=QPointF(StartMotionPos.x()+ROTATE(CtrlMotionPos_1_temp,ang).x(),StartMotionPos.y()-ROTATE(CtrlMotionPos_1_temp,ang).y());
-        CtrlMotionPos_2=QPointF(StartMotionPos.x()+ROTATE(CtrlMotionPos_2_temp,ang).x(),StartMotionPos.y()-ROTATE(CtrlMotionPos_2_temp,ang).y());
-        createShapeItem(circlePath , tr("Circle <%1>"),
-                        StartMotionPos,EndMotionPos,CtrlMotionPos_1, CtrlMotionPos_2,StartMotionPos,StartMotionPos,MotionBrush,
-                        MotionPen,MotionWidth,3,shapeItems);
+        createShapeItem(painter_path(MotionWidth, 3, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, QPointF(0,0), QPointF(0,0)),
+                        painter_path_simple(3, ang,StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, QPointF(0,0), QPointF(0,0)),
+                        MotionNum_1,MotionNum_2,MotionNum_3, MotionNum_4,-1,QPointF(0,0),MotionBrush,MotionPen,MotionPenSimple,MotionWidth,3,shapeItems);
+        (*pnts).insert(MotionNum_1,StartMotionPos.toPoint ());
+        (*pnts).insert(MotionNum_2,EndMotionPos.toPoint ());
+        (*pnts).insert(MotionNum_3,CtrlMotionPos_1.toPoint ());
+        (*pnts).insert(MotionNum_4,CtrlMotionPos_2.toPoint ());
         rectPath.addRect(QRectF(QPointF(StartMotionPos.x()-4,StartMotionPos.y()-4),QSize(8,8)));
-        createRectItem(rectPath ,StartMotionPos, QBrush(QColor(127,127,127,128),Qt::SolidPattern),
+        createRectItem(rectPath ,MotionNum_1, QBrush(QColor(127,127,127,128),Qt::SolidPattern),
                        QPen(QColor(0, 0, 0),1, Qt::SolidLine,Qt::FlatCap, Qt::MiterJoin));
         rectPath=newPath;//Обнуление пути
         rectPath.addRect(QRectF(QPointF(EndMotionPos.x()-4,EndMotionPos.y()-4),QSize(8,8)));
-        createRectItem(rectPath ,EndMotionPos, QBrush(QColor(127,127,127,128),Qt::SolidPattern),
+        createRectItem(rectPath ,MotionNum_2, QBrush(QColor(127,127,127,128),Qt::SolidPattern),
                        QPen(QColor(0, 0, 0),1, Qt::SolidLine,Qt::FlatCap, Qt::MiterJoin));
         rectPath=newPath;//Обнуление пути
         //Построение квадратика_3
         ////////////////////////////////////////////////
-        rectPath.addRect(QRectF( CtrlMotionPos_1,QSize(8,8)));
-        createRectItem(rectPath ,CtrlMotionPos_1, QBrush(QColor(127,127,127,128),Qt::SolidPattern),
+        rectPath.addRect(QRectF( CtrlMotionPos_1.toPoint(),QSize(8,8)));
+        createRectItem(rectPath, MotionNum_3, QBrush(QColor(127,127,127,128),Qt::SolidPattern),
                        QPen(QColor(0, 0, 0),1, Qt::SolidLine,Qt::FlatCap, Qt::MiterJoin));
         ////////////////////////////////////////////////
         rectPath=newPath;//Обнуление пути
         //Построение квадратика_4
         ////////////////////////////////////////////////
-        rectPath.addRect(QRectF( CtrlMotionPos_2,QSize(8,8)));
-        createRectItem(rectPath,CtrlMotionPos_2, QBrush(QColor(127,127,127,128),Qt::SolidPattern),
+        rectPath.addRect(QRectF( CtrlMotionPos_2.toPoint(),QSize(8,8)));
+        createRectItem(rectPath,MotionNum_4, QBrush(QColor(127,127,127,128),Qt::SolidPattern),
                        QPen(QColor(0, 0, 0),1, Qt::SolidLine,Qt::FlatCap, Qt::MiterJoin));
         ////////////////////////////////////////////////
         rectPath=newPath;//Обнуление пути
     }
 
-    circlePath=newPath;//Обнуление пути
+ //   circlePath=newPath;//Обнуление пути
     if (!flag_ctrl)// Если не нажат Сtrl, фигура добавляется в конец контейнера
     {
         index=shapeItems.size()-1;
@@ -1508,20 +1870,25 @@ void ShapeElFigure::moveItemTo(const QPointF &pos,QList<ShapeItem> &shapeItems)
     }
     if (flag_ctrl)//Если  нажат Сtrl, фигура добавляется в  контейнер на свое место
         for (int i=shapeItems.size()-1; i>index; i--)
-        {
-            temp_shape=shapeItems[i-1];
-            shapeItems[i-1]=shapeItems[i];
-            shapeItems[i]=temp_shape;
-        }
+    {
+        temp_shape=shapeItems[i-1];
+        shapeItems[i-1]=shapeItems[i];
+        shapeItems[i]=temp_shape;
+    }
 
     if (flag_ctrl && flag_ctrl_move) itemInMotion = &shapeItems[index];//Если нажат Сtrl и нет движения
     if (count_moveItemTo==count_Shapes && !flag_ctrl_move && flag_ctrl) 
+    {
         previousPosition_all=pos;//Если нажат Сtrl, есть движение и цикл выполнился один раз для всех перемещаемых фигур
+    }
+    
 }
 
 //Процедура удаления фигуры
-void ShapeElFigure::removeShapeItem(int num, QList<ShapeItem> &shapeItems)
+void ShapeElFigure::removeShapeItem(int num, QList<ShapeItem> &shapeItems,PntMap *pnts)
 { 
+   
+    
     shapeItems.removeAt(num);//Удаляет фигуру из контейнера по заданному индексу
 }
 
@@ -1531,15 +1898,19 @@ void ShapeElFigure::removeRectItem(int num)
     rectItems.removeAt(num);//Удаляет фигуру из контейнера по заданному индексу
 }
 
-bool ShapeElFigure::Holds(QList<ShapeItem> &shapeItems)
+bool ShapeElFigure::Holds(QList<ShapeItem> &shapeItems, PntMap *pnts)
 {
+    printf ("Holds\n");
     int num,index_hold;
     bool flag_equal;
     index_array=new int[shapeItems.size()];
+   
+   
     for (int l=0; l<shapeItems.size(); l++)
         index_array[l]=-1;
-           index_array[0]=index;
-     num=0;
+    index_array[0]=index;
+    num=0;
+    
     do
     {
         index_hold=index_array[num];
@@ -1547,145 +1918,153 @@ bool ShapeElFigure::Holds(QList<ShapeItem> &shapeItems)
         {
             if (i!=index_hold)
             {
-                                if ((((int(shapeItems[index_hold].startposition().x())==(int)shapeItems[i].startposition().x()) &&
-                                     (int(shapeItems[index_hold].startposition().y())==int(shapeItems[i].startposition().y()))) ||
-                                    ((int(shapeItems[index_hold].endposition().x())==int(shapeItems[i].startposition().x())) &&
-                                     (int(shapeItems[index_hold].endposition().y())==int(shapeItems[i].startposition().y()))) ||
-                                    ((int(shapeItems[index_hold].endposition().x())==int(shapeItems[i].endposition().x())) &&
-                                     (int(shapeItems[index_hold].endposition().y())==int(shapeItems[i].endposition().y()))) ||
-                                    ((int(shapeItems[index_hold].startposition().x())==int(shapeItems[i].endposition().x())) &&
-                                     (int(shapeItems[index_hold].startposition().y())==int(shapeItems[i].endposition().y())))))
-                                    if (ellipse_draw_startPath==newPath && ellipse_draw_endPath==newPath)
-                                {
-                                    flag_equal=0;
-                                    for (int j=0; j<=count_holds; j++)
-                                        if (index_array[j]==i) flag_equal=1;
-                                    if (flag_equal==0)
-                                    {
-                                        count_holds++;
-                                        index_array[count_holds]=i;
-                                    }
-                                }
-                            }
-                        }
-                        num++;
+                if ((shapeItems[index_hold].num_1()==shapeItems[i].num_1()) ||
+                    (shapeItems[index_hold].num_2()==shapeItems[i].num_2()) ||
+                    (shapeItems[index_hold].num_1()==shapeItems[i].num_2())||
+                    (shapeItems[index_hold].num_2()==shapeItems[i].num_1()))
+                   
+              
+                    if (ellipse_draw_startPath==newPath && ellipse_draw_endPath==newPath)
+                {
+                    flag_equal=0;
+                    for (int j=0; j<=count_holds; j++)
+                        if (index_array[j]==i) flag_equal=1;
+                    if (flag_equal==0)
+                    {
+                        count_holds++;
+                        index_array[count_holds]=i;
                     }
-                    while(num!=count_holds+1);
+                }
+            }
+        }
+        num++;
+    }
+    while(num!=count_holds+1);
+    printf ("Prohli\n");
     if (count_holds>0) return true;
     else return false;
 }
 
-void ShapeElFigure::Move_UP_DOWN(QList<ShapeItem> &shapeItems)
+void ShapeElFigure::Move_UP_DOWN(QList<ShapeItem> &shapeItems, PntMap *pnts)
 {
     int rect_num_temp;
     count_moveItemTo=0;
     if (flag_ctrl && count_Shapes)
     {
-        printf ("flag_ctrl && count_Shapes\n");
-        Move_all(QPointF(0,0),shapeItems);
+        Move_all(QPointF(0,0),shapeItems,pnts);
     }
     else 
-    if (!flag_first_move)
+        if (!flag_first_move)
     {
-        printf ("POP !flag_first_move\n");
         count_holds=0;
         flag_rect=false;
 
-        Holds(shapeItems);//Вызов Holds для определения связана фигура с другими или нет
-        printf ("count_holds=%i\n",count_holds);
+        Holds(shapeItems,pnts);//Вызов Holds для определения связана фигура с другими или нет
         if (count_holds)//Проверка на нажатие  Сtrl и на наличие выделенных фигур
         {
-            printf ("POP count_holds\n");
             count_Shapes=count_holds+1;//Числу перемещаемых фигур присваиваем число всязаных
-            printf ("count_Shapes_1=%i\n",count_Shapes);
-            printf ("rect_num=%i\n",rect_num);
-            
             if (rect_num!=-1)//Если попали по квадратику
             {
-                printf ("Popali rect_num!=-1\n");
                 rect_num_temp=rect_num;
-                rect_num=Real_rect_num (rect_num,shapeItems);//Определяем номер квадратика, кот. нужен moveItemTo
-                printf ("rect_num=%i\n",rect_num);
+                rect_num=Real_rect_num (rect_num,shapeItems,pnts);//Определяем номер квадратика, кот. нужен moveItemTo
                 if ((rect_num==2 || rect_num==3) && shapeItems[index].type()==3)//Если попали по несвязанному квадратику Бизье
                     flag_rect=false;
                 if ( rect_num==0 || rect_num==1)//Если попали по 1,2 квадратику
                 {
-                    printf ("Popali  rect_num==0 || rect_num==1\n ");
-                    Rect_num_0_1(shapeItems,rect_num_temp);
+                    Rect_num_0_1(shapeItems,rect_num_temp,pnts);
                 }
                 if ((rect_num==3 ||rect_num==4) && shapeItems[index].type()==2)//Если попали по 3,4 квадратику дуги
-                    Rect_num_3_4(shapeItems);
+                    Rect_num_3_4(shapeItems,pnts);
             }
         }
         if (flag_rect || flag_arc_rect_3_4) //Если клацнули по квадратику, то число перемещаемых фигур равно числу фигур связаных с этим квадратиком
         {
-            printf ("POPali flag_rect || flag_arc_rect_3_4\n");
-            printf("count_rects=%i\n",count_rects);
             count_Shapes=count_rects;
         }
-        printf ("count_Shapes_2=%i\n",count_Shapes);
     }
-   //ount_moveItemTo=0;
     if (flag_rect || flag_arc_rect_3_4 || (rect_num==-1 && count_holds))//Вызов moveItemTo для всех выделенных фигур(если тяним за квадртик общий для нескольких фигур,
                                                                        //3,4 квадратик связанной с другими фигурами дуги, просто связанные фигуры)
     {
-        printf ("count_Shapes=%i\n",count_Shapes);
-        Move_all(QPointF(0,0),shapeItems);
+        Move_all(QPointF(0,0),shapeItems,pnts);
     }
     if ((!flag_ctrl  || (!flag_rect && rect_num!=-1)) && !flag_arc_rect_3_4)//Если двигаем несвязанную фигуру или ее квадратик
-       if (index!=-1)
-        {
-            flag_ctrl=true;
-            flag_ctrl_move=false;
-            count_moveItemTo=1;
-            count_Shapes=1;
-            itemInMotion=&shapeItems[index];
-            moveItemTo(itemInMotion->startposition(),shapeItems);
-            flag_ctrl=false;
-        }
-        else
-            itemInMotion=0;
+        if (index!=-1)
+    {
+        flag_ctrl=true;
+        flag_ctrl_move=false;
+        count_moveItemTo=1;
+        count_Shapes=1;
+        itemInMotion=&shapeItems[index];
+         moveItemTo((*pnts)[itemInMotion->num_1()],shapeItems,pnts);
+        flag_ctrl=false;
+    }
+    else
+        itemInMotion=0;
 }
 
-int ShapeElFigure::Real_rect_num(int rect_num_old,QList<ShapeItem> &shapeItems)
+int ShapeElFigure::Real_rect_num(int rect_num_old,QList<ShapeItem> &shapeItems, PntMap *pnts)
 {
     int rect_num_new;
     for (int i=0; i<=shapeItems.size()-1; i++)
-        if((rectItems[rect_num_old].startposition()==shapeItems[i].startposition()) ||
-            (rectItems[rect_num_old].startposition()==shapeItems[i].endposition()) ||
-            (rectItems[rect_num_old].startposition()==shapeItems[i].ctrlposition_1()) ||
-            (rectItems[rect_num_old].startposition()==shapeItems[i].ctrlposition_2()) ||
-            (rectItems[rect_num_old].startposition()==shapeItems[i].ctrlposition_3()) ||
-            (rectItems[rect_num_old].startposition()==shapeItems[i].ctrlposition_4()))
+    {
+        if (shapeItems[i].type()==1)
+    {
+        if((rectItems[rect_num].num()==shapeItems[i].num_1()) ||
+           (rectItems[rect_num].num()==shapeItems[i].num_2()))
             index=i;
-
-    printf("index=%i\n",index);
+    }
+    if (shapeItems[i].type()==2)
+    {
+        if((rectItems[rect_num].num()==shapeItems[i].num_1()) ||
+            (rectItems[rect_num].num()==shapeItems[i].num_2())||
+            (rectItems[rect_num].num()==shapeItems[i].num_3())||
+            (rectItems[rect_num].num()==shapeItems[i].num_4())||
+            (rectItems[rect_num].num()==shapeItems[i].num_5()))
+            index=i;
+    }
+    if (shapeItems[i].type()==3)
+    {
+  
+        if((rectItems[rect_num].num()==shapeItems[i].num_1()) ||
+            (rectItems[rect_num].num()==shapeItems[i].num_2())||
+            (rectItems[rect_num].num()==shapeItems[i].num_3())||
+            (rectItems[rect_num].num()==shapeItems[i].num_4()))
+            index=i;
+    }
+    }
+    printf ("index=%i\n",index);
+    printf ("rect_num_old=%i\n",rect_num_old);
+    printf ("rectItems[rect_num_old].num()=%i\n",rectItems[rect_num_old].num());                           
     //Определение номера квадратика, который нужно передать в moveItemTo
     ///////////////////////////////////////////
     if (shapeItems[index].type()==1)
     {
-        if (rectItems[rect_num_old].startposition()==shapeItems[index].startposition()) rect_num_new=0;
-        if (rectItems[rect_num_old].startposition()==shapeItems[index].endposition()) rect_num_new=1;
+        printf ("shapeItems[index].type()==1\n");
+        printf ("rectItems[rect_num_old].num()=%i\n",rectItems[rect_num_old].num());
+        printf ("shapeItems[index].num_1()=%i\n",shapeItems[index].num_1());
+        printf ("shapeItems[index].num_2()=%i\n",shapeItems[index].num_2());
+        if (rectItems[rect_num_old].num()== shapeItems[index].num_1()) rect_num_new=0;
+        if (rectItems[rect_num_old].num()== shapeItems[index].num_2()) rect_num_new=1;
     }
     if (shapeItems[index].type()==2)
     {
-        if (rectItems[rect_num_old].startposition()==shapeItems[index].startposition()) rect_num_new=0;
-        if (rectItems[rect_num_old].startposition()==shapeItems[index].endposition()) rect_num_new=1;
-        if (rectItems[rect_num_old].startposition()==shapeItems[index].ctrlposition_1()) rect_num_new=2;
-        if (rectItems[rect_num_old].startposition()==shapeItems[index].ctrlposition_2()) rect_num_new=3;
-        if (rectItems[rect_num_old].startposition()==shapeItems[index].ctrlposition_4()) rect_num_new=4;
+        if (rectItems[rect_num_old].num()== shapeItems[index].num_1()) rect_num_new=0;
+        if (rectItems[rect_num_old].num()== shapeItems[index].num_2()) rect_num_new=1;
+        if (rectItems[rect_num_old].num()== shapeItems[index].num_3()) rect_num_new=2;
+        if (rectItems[rect_num_old].num()== shapeItems[index].num_4()) rect_num_new=3;
+        if (rectItems[rect_num_old].num()== shapeItems[index].num_5()) rect_num_new=4;
     }
     if (shapeItems[index].type()==3)
     {
-        if (rectItems[rect_num_old].startposition()==shapeItems[index].startposition()) rect_num_new=0;
-        if (rectItems[rect_num_old].startposition()==shapeItems[index].endposition()) rect_num_new=1;
-        if (rectItems[rect_num_old].startposition()==shapeItems[index].ctrlposition_1()) rect_num_new=2;
-        if (rectItems[rect_num_old].startposition()==shapeItems[index].ctrlposition_2()) rect_num_new=3;
+        if (rectItems[rect_num_old].num()==shapeItems[index].num_1()) rect_num_new=0;
+        if (rectItems[rect_num_old].num()== shapeItems[index].num_2()) rect_num_new=1;
+        if (rectItems[rect_num_old].num()== shapeItems[index].num_3()) rect_num_new=2;
+        if (rectItems[rect_num_old].num()== shapeItems[index].num_4()) rect_num_new=3;
     }
     return rect_num_new;
 }
 
-void ShapeElFigure::Rect_num_0_1(QList<ShapeItem> &shapeItems,int rect_num_temp)
+void ShapeElFigure::Rect_num_0_1(QList<ShapeItem> &shapeItems,int rect_num_temp, PntMap *pnts)
 {
     flag_rect=true;
     int* index_array_temp=new int[count_holds+1];//Выделение памяти под массив, в котором хранятся индексы фигур, у которых есть общие точки
@@ -1693,18 +2072,16 @@ void ShapeElFigure::Rect_num_0_1(QList<ShapeItem> &shapeItems,int rect_num_temp)
     count_rects=0;//Обнуление количества квадратиков в массиве|
     //Перебор всех связанных фигур, чтобы определить, у каких из них есть общие точки
     /////////////////////////////////////////////////////////////////////////////////
-    printf ("rect_num_temp=%i\n",rect_num_temp);
     for (int i=0; i<=count_holds; i++)
     {
-        if (rectItems[rect_num_temp].startposition()==shapeItems[index_array[i]].startposition())
+        if ((*pnts)[rectItems[rect_num_temp].num()]==(*pnts)[shapeItems[index_array[i]].num_1()])
         {
-            printf ("ZAHLI\n");
             index_array_temp[count_rects]=index_array[i];//Заполняем массив связанными фигурами с общими точками
             rect_array[count_rects]=0;//Заполняем массив номерми квадратиков для moveItemTo
             count_rects++;
             flag_rect=true;//Указывает на то, что мы щёлкнули по квадратику, который является общим для нескольких фигур
         }
-        if (rectItems[rect_num_temp].startposition()==shapeItems[index_array[i]].endposition() )
+        if ((*pnts)[rectItems[rect_num_temp].num()]==(*pnts)[shapeItems[index_array[i]].num_2()])
         {
             index_array_temp[count_rects]=index_array[i];
             rect_array[count_rects]=1;
@@ -1742,16 +2119,17 @@ void ShapeElFigure::Rect_num_0_1(QList<ShapeItem> &shapeItems,int rect_num_temp)
     // count_rects==1-фигура несвязана с другими
     if (count_rects==1)
     {
-      flag_rect=false;
-      if (shapeItems[index_array[0]].type()==2)
-          rect_num_arc=rect_num;
+        flag_rect=false;
+        if (shapeItems[index_array[0]].type()==2)
+            rect_num_arc=rect_num;
     }
     /////////////////////////////////
     delete [] index_array_temp;
 
 }
-void ShapeElFigure::Rect_num_3_4(QList<ShapeItem> &shapeItems)
+void ShapeElFigure::Rect_num_3_4(QList<ShapeItem> &shapeItems,PntMap *pnts)
 {
+    printf ("POPALI Rect_num_3_4\n");
     flag_arc_rect_3_4=true;
     //Выделение памяти под index_array_temp,arc_rect_array,fig_rect_array
     ////////////////////////////////////////////////////////////////////
@@ -1773,37 +2151,38 @@ void ShapeElFigure::Rect_num_3_4(QList<ShapeItem> &shapeItems)
         arc_rect_array[0]=4;
         fig_rect_array[0]=4;
     }
+    
     /////////////////////////////////////////////////////////////////////
     count_rects=1;
   //Для заполнения массивов index_array_temp, fig_rect_array,arc_rect_array находим какие фигуры,
  //какими точками связаны с какими точками дуги соответственно
-  /////////////////////////////////////////////////////////////////
-   for (int i=0; i<=count_holds;i++)
+    /////////////////////////////////////////////////////////////////
+    for (int i=0; i<=count_holds;i++)
     {
         if (index_array[i]!=index)
         {
-            if (shapeItems[index].startposition()==shapeItems[index_array[i]].startposition())
+            if (shapeItems[index].num_1()==shapeItems[index_array[i]].num_1())
             {
                 index_array_temp[count_rects]=index_array[i];
                 arc_rect_array[count_rects]=0;
                 fig_rect_array[count_rects]=0;
                 count_rects++;
             }
-            if (shapeItems[index].startposition()==shapeItems[index_array[i]].endposition())
+            if (shapeItems[index].num_1()==shapeItems[index_array[i]].num_2())
             {
                 index_array_temp[count_rects]=index_array[i];
                 arc_rect_array[count_rects]=0;
                 fig_rect_array[count_rects]=1;
                 count_rects++;
             }
-            if (shapeItems[index].endposition()==shapeItems[index_array[i]].startposition())
+            if (shapeItems[index].num_2()==shapeItems[index_array[i]].num_1())
             {
                 index_array_temp[count_rects]=index_array[i];
                 arc_rect_array[count_rects]=1;
                 fig_rect_array[count_rects]=0;
                 count_rects++;
             }
-            if (shapeItems[index].endposition()==shapeItems[index_array[i]].endposition())
+            if (shapeItems[index].num_2()==shapeItems[index_array[i]].num_2())
             {
                 index_array_temp[count_rects]=index_array[i];
                 arc_rect_array[count_rects]=1;
@@ -1823,14 +2202,16 @@ void ShapeElFigure::Rect_num_3_4(QList<ShapeItem> &shapeItems)
     delete [] index_array_temp;
 }
 
-void ShapeElFigure::Move_all(QPointF pos,QList<ShapeItem> &shapeItems)
+void ShapeElFigure::Move_all(QPointF pos,QList<ShapeItem> &shapeItems,PntMap *pnts)
 {
+    printf("Pop v Move_all");
+   
+    num_vector.clear();
     for (int i=0; i<count_Shapes; i++)
     {
         count_moveItemTo+=1;
         flag_ctrl_move=false;
         flag_ctrl=true;
-        printf("sss\n");
         itemInMotion=&shapeItems[index_array[i]];
         if (flag_rect)
         {
@@ -1839,13 +2220,34 @@ void ShapeElFigure::Move_all(QPointF pos,QList<ShapeItem> &shapeItems)
         }
         if (flag_arc_rect_3_4)
         {
+            if (i==0) offset_all=pos-previousPosition_all;
+            else
+                if (arc_rect_array[i]==0) 
+            {
+                offset_all=(*pnts)[shapeItems[index_array[0]].num_1()]-Prev_pos_1;
+                printf("Prev_pos_1\n");
+            }
+            else 
+            {
+                offset_all=(*pnts)[shapeItems[index_array[0]].num_2()]-Prev_pos_2;
+                printf("Prev_pos_1\n");
+            }
             rect_num=fig_rect_array[i];//Номер перемещаемого квадратика
+            printf ("rect_num=%i\n",rect_num);
             arc_rect=arc_rect_array[i];//С каким квадратико дуги связан перемещаемый квадратик фигуры
         }
         index=index_array[i];
-        printf("index=%i\n",index);
-        moveItemTo(pos,shapeItems);
+        moveItemTo(pos,shapeItems,pnts);
+        if (i==0 && flag_arc_rect_3_4)
+        {
+            Prev_pos_1=(*pnts)[shapeItems[index_array[0]].num_1()];
+            Prev_pos_2=(*pnts)[shapeItems[index_array[0]].num_2()];
+        }
     }
+    printf("Prev_pos_1=(%f,%f)\n", Prev_pos_1.x(), Prev_pos_1.y());
+    printf("Prev_pos_2=(%f,%f)\n", Prev_pos_2.x(), Prev_pos_2.y());
+    printf("Prohli  Move_all\n");
+    
 }
 
 
@@ -1861,54 +2263,179 @@ int ShapeElFigure::itemAt(const QPointF &pos, QList<ShapeItem> &shapeItems)
         if (item1.path().contains(pos)) rect_num=j;
     }
     for (int i =shapeItems.size()-1; i >=0; i--) 
-       {
-           const ShapeItem &item = shapeItems[i];
-           if (item.path().contains(pos)) return i;
-           for(int j=3; j>0; j-- )
-            {
-                point.setY(j);
-                point.setX(j);
-                if (item.path().contains(pos+point)) return i;
-            }
-             for(int j=3; j>0; j-- )
-            {
-                point.setY(j);
-                point.setX(j);
-                if (item.path().contains(pos-point)) return i;
-            }
-         }
+    {
+        const ShapeItem &item = shapeItems[i];
+        if (item.path().contains(pos)) return i;
+        for(int j=3; j>0; j-- )
+        {
+            point.setY(j);
+            point.setX(j);
+            if (item.path().contains(pos+point)) return i;
+        }
+        for(int j=3; j>0; j-- )
+        {
+            point.setY(j);
+            point.setX(j);
+            if (item.path().contains(pos-point)) return i;
+        }
+    }
     if(rect_num==-1) return -1;
     else return shapeItems.size()-1;
- }
+}
 
+ QPainterPath ShapeElFigure::painter_path(float el_width, int el_type, double el_ang, QPointF el_p1, QPointF el_p2, QPointF el_p3, QPointF el_p4, QPointF el_p5, QPointF el_p6)
+{
+    double arc_a_small, arc_b_small, t, t_start, t_end;
+    QPointF  CtrlMotionPos_1_temp, CtrlMotionPos_2_temp, EndMotionPos_temp;
+    //QLineF line1,line2;
+    QPainterPath circlePath;//Путь для создания экземнпляра класса ShapeItem
+    double arc_a, arc_b;
+    
+    circlePath=newPath;
+    if(el_type==1)
+    {
+        circlePath.moveTo(el_p1.x()+ROTATE(QPointF(0,-el_width/2),el_ang).x(),
+                          el_p1.y()-ROTATE(QPointF(0,-el_width/2),el_ang).y());
+        circlePath.lineTo(el_p1.x()+ROTATE(QPointF(Length(el_p2,el_p1),-el_width/2),el_ang).x(),
+                          el_p1.y()-ROTATE(QPointF(Length(el_p2,el_p1),-el_width/2),el_ang).y());
+        circlePath.lineTo(el_p1.x()+ROTATE(QPointF(Length(el_p2,el_p1),el_width/2),el_ang).x(),
+                          el_p1.y()-ROTATE(QPointF(Length(el_p2,el_p1),el_width/2),el_ang).y());
+        circlePath.lineTo(el_p1.x()+ROTATE(QPointF(0,el_width/2),el_ang).x(),
+                          el_p1.y()-ROTATE(QPointF(0,el_width/2),el_ang).y());
+        circlePath.closeSubpath();
+        circlePath.setFillRule ( Qt::WindingFill );
+    }
+    if(el_type==2)
+    {
+        arc_a=Length(el_p5,el_p3);
+        arc_b=Length(el_p3,el_p4);
+        arc_a_small=arc_a-el_width;
+        arc_b_small=arc_b-el_width;
+        t_start=el_p6.x();
+        t_end=el_p6.y();
+        circlePath.moveTo(el_p3.x()+ROTATE(ARC(t_start,arc_a_small,arc_b_small),el_ang).x(),
+                          el_p3.y()-ROTATE(ARC(t_start,arc_a_small,arc_b_small),el_ang).y());
+        circlePath.lineTo(el_p3.x()+ROTATE(ARC(t_start,arc_a,arc_b),el_ang).x(),
+                          el_p3.y()-ROTATE(ARC(t_start,arc_a,arc_b),el_ang).y());//QPointF(50,50));
+        for (t=t_start; t<t_end+0.00277777777778; t+=0.00277777777778) 
+            circlePath.lineTo(QPointF(el_p3.x()+ROTATE(ARC(t,arc_a,arc_b),el_ang).x(),
+                              el_p3.y()-ROTATE(ARC(t,arc_a,arc_b),el_ang).y()));
+        circlePath.lineTo(el_p3.x()+ROTATE(ARC(t_end,arc_a_small,arc_b_small),el_ang).x(),
+                          el_p3.y()-ROTATE(ARC(t_end,arc_a_small,arc_b_small),el_ang).y());
+        for (t=t_end; t>t_start; t-=0.00277777777778) 
+            circlePath.lineTo(QPointF(el_p3.x()+ROTATE(ARC(t,arc_a_small,arc_b_small),el_ang).x(),
+                              el_p3.y()-ROTATE(ARC(t,arc_a_small,arc_b_small),el_ang).y()));
+        circlePath.closeSubpath();
+        circlePath.setFillRule ( Qt::WindingFill );
+    }
+    if(el_type==3)
+    {
+        CtrlMotionPos_1_temp=UNROTATE(el_p3,el_ang,el_p1.x(),el_p1.y());
+        CtrlMotionPos_2_temp=UNROTATE(el_p4,el_ang,el_p1.x(),el_p1.y());
+        EndMotionPos_temp=QPointF(Length(el_p2,el_p1),0);
+        circlePath.moveTo(el_p1.x()+ROTATE(QPointF(0,-el_width/2),el_ang).x(),
+                          el_p1.y()-ROTATE(QPointF(0,-el_width/2),el_ang).y());
+        circlePath.cubicTo(QPointF(el_p1.x()+ROTATE(QPointF(CtrlMotionPos_1_temp.x(),CtrlMotionPos_1_temp.y()-el_width/2),el_ang).x(),
+                           el_p1.y()-ROTATE(QPointF(CtrlMotionPos_1_temp.x(),CtrlMotionPos_1_temp.y()-el_width/2),el_ang).y()),
+                                   QPointF(el_p1.x()+ROTATE(QPointF(CtrlMotionPos_2_temp.x(),CtrlMotionPos_2_temp.y()-el_width/2),el_ang).x(),
+                                           el_p1.y()-ROTATE(QPointF(CtrlMotionPos_2_temp.x(),CtrlMotionPos_2_temp.y()-el_width/2),el_ang).y()),
+                                           QPointF(el_p1.x()+ROTATE(QPointF(EndMotionPos_temp.x(),EndMotionPos_temp.y()-el_width/2),el_ang).x(),
+                                                   el_p1.y()-ROTATE(QPointF(EndMotionPos_temp.x(),EndMotionPos_temp.y()-el_width/2),el_ang).y()));
+        circlePath.lineTo(el_p1.x()+ROTATE(QPointF(EndMotionPos_temp.x(),el_width/2),el_ang).x(),
+                          el_p1.y()-ROTATE(QPointF(EndMotionPos_temp.x(),el_width/2),el_ang).y());
+        circlePath.cubicTo(QPointF(el_p1.x()+ROTATE(QPointF(CtrlMotionPos_2_temp.x(),CtrlMotionPos_2_temp.y()+el_width/2),el_ang).x(),
+                           el_p1.y()-ROTATE(QPointF(CtrlMotionPos_2_temp.x(),CtrlMotionPos_2_temp.y()+el_width/2),el_ang).y()),
+                                   QPointF(el_p1.x()+ROTATE(QPointF(CtrlMotionPos_1_temp.x(),CtrlMotionPos_1_temp.y()+el_width/2),el_ang).x(),
+                                           el_p1.y()-ROTATE(QPointF(CtrlMotionPos_1_temp.x(),CtrlMotionPos_1_temp.y()+el_width/2),el_ang).y()),
+                                           QPointF(el_p1.x()+ROTATE(QPointF(0,el_width/2),el_ang).x(),
+                                                   el_p1.y()-ROTATE(QPointF(0,el_width/2),el_ang).y()));
+        circlePath.closeSubpath();
+        circlePath.setFillRule ( Qt::WindingFill );
+    }
+    return circlePath;
+}
+ 
+ QPainterPath ShapeElFigure::painter_path_simple(int el_type, double el_ang, QPointF el_p1, QPointF el_p2, QPointF el_p3, QPointF el_p4, QPointF el_p5, QPointF el_p6)
+{
+    QPainterPath circlePath;//Путь для создания экземнпляра класса ShapeItem
+    double t;
+    circlePath=newPath;
+    double arc_a, arc_b;
+    if(el_type==1)
+    {
+        circlePath.moveTo(el_p1);
+        circlePath.lineTo(el_p2);
+    }
+    if(el_type==2)
+    {
+        arc_a=Length(el_p5,el_p3);
+        arc_b=Length(el_p3,el_p4);
+        t_start=el_p6.x();
+        t_end=el_p6.y();
+        circlePath.moveTo(el_p3.x()+ROTATE(ARC(t_start,arc_a,arc_b),el_ang).x(),
+                          el_p3.y()-ROTATE(ARC(t_start,arc_a,arc_b),el_ang).y());
+        for (t=t_start; t<t_end+0.00277777777778; t+=0.00277777777778) 
+            circlePath.lineTo(QPointF(el_p3.x()+ROTATE(ARC(t,arc_a,arc_b),el_ang).x(),
+                              el_p3.y()-ROTATE(ARC(t,arc_a,arc_b),el_ang).y()));
+    }
+    if(el_type==3)
+    {
+        circlePath.moveTo(el_p1);
+        circlePath.cubicTo(el_p3, el_p4, el_p2);
+    }
+    return circlePath;
+}
+
+int ShapeElFigure::Append_Point( QPointF &pos, QList<ShapeItem> &shapeItems,PntMap *pnts )
+{
+    int i;
+    for( i=0; (*pnts).contains(i); i++ ) ;
+    (*pnts).insert(i,pos.toPoint());
+    return i;
+}
+
+void ShapeElFigure::Drop_Point (int num, int num_shape, QList<ShapeItem> &shapeItems, PntMap *pnts)
+{
+    bool equal=false;
+    for(int i=0; i<shapeItems.size(); i++)
+        if(i!=num_shape && (num==shapeItems[i].num_1() || num==shapeItems[i].num_2()) )
+        {
+            equal=true;
+            break;
+        }
+    if(!equal) (*pnts).remove(num);
+}
 //Процедура создания фигуры
-void  ShapeElFigure::createShapeItem(const QPainterPath &path,
-                                const QString &toolTip, const QPointF &startpos,const QPointF &endpos,
-                                const QPointF &ctrlpos_1, const QPointF &ctrlpos_2,const QPointF &ctrlpos_3,
-                                const QPointF &ctrlpos_4, const QBrush &brush, const QPen &pen,
-                                const int width, const int type, QList<ShapeItem> &shapeItems)
+void  ShapeElFigure::createShapeItem(const QPainterPath &path, const QPainterPath &path_simple,
+                                     const int num_1,const int num_2,
+                                     const int num_3, const int num_4,const int num_5,
+                                     const QPointF &ctrlpos_4, const QBrush &brush, const QPen &pen, const QPen &pen_simple,
+                                     const float width, const int type, QList<ShapeItem> &shapeItems)
 {
     ShapeItem shapeItem;
-    shapeItem.setToolTip(toolTip);
-    shapeItem.setStartPosition(startpos);
-    shapeItem.setEndPosition(endpos);
-    shapeItem.setCtrlPosition_1(ctrlpos_1);
-    shapeItem.setCtrlPosition_2(ctrlpos_2);
-    shapeItem.setCtrlPosition_3(ctrlpos_3);
     shapeItem.setCtrlPosition_4(ctrlpos_4);
+    shapeItem.setNum_1(num_1);
+    shapeItem.setNum_2(num_2);
+    shapeItem.setNum_3(num_3);
+    shapeItem.setNum_4(num_4);
+    shapeItem.setNum_5(num_5);
     shapeItem.setBrush(brush);
     shapeItem.setPen(pen);
+    shapeItem.setPenSimple(pen_simple);
     shapeItem.setWidth(width);
     shapeItem.setType(type);
     shapeItem.setPath(path);
+    shapeItem.setPathSimple(path_simple);
+    
     shapeItems.append(shapeItem);
 
 }
+
 //Процедура создания квадратика
-void  ShapeElFigure::createRectItem(const QPainterPath &path, const QPointF &startpos, const QBrush &brush, const QPen &pen)
+void  ShapeElFigure::createRectItem(const QPainterPath &path, const int num, const QBrush &brush, const QPen &pen)
 {
     RectItem rectItem; 
-    rectItem.setStartPosition(startpos);
+    rectItem.setNum(num);
     rectItem.setBrush(brush);
     rectItem.setPen(pen);
     rectItem.setPath(path);

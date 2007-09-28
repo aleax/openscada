@@ -1,3 +1,7 @@
+2007-09-28 Maxim
+- !!:/UI/Vision: Into primitive 'ElFig' made loading and saving shape's configuration to data model.
+
+
 2007-09-26 Roman
 - !!!!:/SYS: Building on Linux distributions: Debian, Ubuntu and on x86_64 support is added. 
   Checking and name detection for: bison, gettext and QT utilites is made.
