@@ -1,6 +1,7 @@
 2007-10-01 Roman
 - !!!:/DB: FireBird DB support modul is added.
 - !!!:/UI/Vision: Code audit for primitive "ElFig" is made.
+- FIX:/UI/Vision: Save data to a model from level 1 editable widgets is fixed.
 
 
 2007-09-28 Maxim

@@ -261,7 +261,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
     if( tbl ) tbl->clear();
     if(!enableStat())	return; 
 
-    //printf("TEST 20: %s\n",ireq.c_str());
+    printf("TEST 20: %s\n",ireq.c_str());
 
     ResAlloc res(conn_res,true);
 
@@ -715,8 +715,6 @@ void MTable::fieldFix( TConfig &cfg )
             if( !next_key ) next_key = true;
             else pr_keys=pr_keys+",";
             pr_keys=pr_keys+"\""+mod->sqlReqCode(u_cfg.name(),'"')+"\"";
-	    //if( !next ) next = true; else req=req+",";
-            //req=req+"DROP CONSTRAINT \""+mod->sqlReqCode(u_cfg.name(),'"')+"\" ";
         }
         int i_fld;
         for( i_fld = 1; i_fld < tblStrct.size(); i_fld++ )
@@ -729,7 +727,7 @@ void MTable::fieldFix( TConfig &cfg )
                 case TFld::String:
 		    if( tblStrct[i_fld][1] == "37" && 
 			    (u_cfg.fld().len() == atoi(tblStrct[i_fld][2].c_str()) || 
-			    (u_cfg.fld().len() > 32765 && atoi(tblStrct[i_fld][2].c_str()) == 32765)) )
+			    (u_cfg.fld().len() > 32764 && atoi(tblStrct[i_fld][2].c_str()) == 32764)) )
 			continue;
             	    break;
         	case TFld::Integer:	if( tblStrct[i_fld][1] == "8" )	continue;	break;
@@ -746,7 +744,7 @@ void MTable::fieldFix( TConfig &cfg )
 	switch(u_cfg.fld().type())
 	{
 	    case TFld::String:
-		req=req+"VARCHAR("+((u_cfg.fld().len()<=0)?"10":(u_cfg.fld().len()>32765)?"32765":SYS->int2str(u_cfg.fld().len()).c_str())+") "
+		req=req+"VARCHAR("+((u_cfg.fld().len()<=0)?"10":(u_cfg.fld().len()>32764)?"32764":SYS->int2str(u_cfg.fld().len()).c_str())+") "
 		    "DEFAULT '"+u_cfg.fld().def()+"' NOT NULL ";
 		break;
 	    case TFld::Integer:

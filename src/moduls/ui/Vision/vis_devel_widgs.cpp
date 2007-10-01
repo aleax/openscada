@@ -1426,6 +1426,7 @@ VisDevelop *DevelWdgView::mainWin( )
 WdgView *DevelWdgView::newWdgItem( const string &iwid )
 {
     DevelWdgView *wdg = new DevelWdgView(iwid,wLevel()+1,mainWin(),this);
+    connect(wdg, SIGNAL(selected(const string&)), this, SIGNAL(selected(const string& )));
     if( wLevel() == 0 )  pntView->raise();
     return wdg;
 }
@@ -1462,7 +1463,7 @@ void DevelWdgView::setSelect( bool vl, bool childs )
     if( !vl && edit() ) setEdit(false);
 		    
     //- Level 0 process -
-    if( wLevel() != 0 ) return;
+    if( wLevel() != 0 && !edit() ) return;
 			    
     if( vl )
     {
