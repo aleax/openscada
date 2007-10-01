@@ -1,0 +1,336 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#: bd_sqlite.cpp:59 bd_sqlite.cpp:195 bd_sqlite.cpp:246 bd_sqlite.cpp:253
+#: bd_sqlite.cpp:274 bd_sqlite.cpp:323
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: my_sql 1.5.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-01-15 10:15+0200\n"
+"PO-Revision-Date: 2004-11-11 12:09+0200\n"
+"Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
+"Language-Team: <uk@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+#: bd_sqlite.cpp:34
+msgid "SQLite"
+msgstr ""
+
+#: bd_sqlite.cpp:35
+msgid "DB SQLite"
+msgstr "БД SQLite"
+
+#: bd_sqlite.cpp:36
+msgid "BD"
+msgstr "БД"
+
+#: bd_sqlite.cpp:38
+msgid "1.2.0"
+msgstr ""
+
+#: bd_sqlite.cpp:39
+msgid "Roman Savochenko"
+msgstr "Роман Савоченко"
+
+#: bd_sqlite.cpp:40
+msgid "BD modul. Allow support of the BD SQLite."
+msgstr "Модуль БД. Надає підтримку БД SQLite."
+
+#: bd_sqlite.cpp:41
+msgid "GPL"
+msgstr ""
+
+#: bd_sqlite.cpp:46
+msgid "C"
+msgstr ""
+
+#: bd_sqlite.cpp:108
+#, c-format
+msgid ""
+"======================= The module <%s:%s> options =======================\n"
+"---------- Parameters of the module section <%s> in config file ----------\n"
+"\n"
+msgstr ""
+"========================== Опції модуля <%s:%s> ==========================\n"
+"-------- Параметри модульної секції <%s> у конфігураційному файлі --------\n"
+"\n"
+
+#: bd_sqlite.cpp:120
+msgid "h"
+msgstr ""
+
+#: bd_sqlite.cpp:123
+msgid "help"
+msgstr ""
+
+#: bd_sqlite.cpp:170
+#, c-format
+msgid "Delete bd error: %s"
+msgstr ""
+
+#: bd_sqlite.cpp:184
+#, c-format
+msgid "Open DB file error: %s"
+msgstr ""
+
+#: bd_sqlite.cpp:207
+#, c-format
+msgid "Error open table <%s>. DB disabled."
+msgstr ""
+
+#: bd_sqlite.cpp:226
+msgid "BEGIN;"
+msgstr ""
+
+#: bd_sqlite.cpp:229
+msgid "COMMIT;"
+msgstr ""
+
+#: bd_sqlite.cpp:239
+#, c-format
+msgid "Get table error: %s"
+msgstr ""
+
+#: bd_sqlite.cpp:263
+msgid "info"
+msgstr ""
+
+#: bd_sqlite.cpp:266
+msgid "area"
+msgstr ""
+
+#: bd_sqlite.cpp:266
+msgid "/serv"
+msgstr ""
+
+#: bd_sqlite.cpp:266
+msgid "DB service"
+msgstr "Сервіс БД"
+
+#: bd_sqlite.cpp:267
+msgid "comm"
+msgstr ""
+
+#: bd_sqlite.cpp:267 bd_sqlite.cpp:272
+msgid "/serv/end_tr"
+msgstr ""
+
+#: bd_sqlite.cpp:267
+msgid "Close transaction"
+msgstr "Закрити транзакцію"
+
+#: bd_sqlite.cpp:271
+msgid "path"
+msgstr ""
+
+#: bd_sqlite.cpp:272
+msgid "set"
+msgstr ""
+
+#: bd_sqlite.cpp:272
+msgid "root"
+msgstr ""
+
+#: bd_sqlite.cpp:286 bd_sqlite.cpp:323 bd_sqlite.cpp:425
+msgid "SELECT * FROM '"
+msgstr ""
+
+#: bd_sqlite.cpp:286
+msgid "' LIMIT 0;"
+msgstr ""
+
+#: bd_sqlite.cpp:298
+msgid "DROP TABLE '"
+msgstr ""
+
+#: bd_sqlite.cpp:298 bd_sqlite.cpp:568 bd_sqlite.cpp:607
+msgid "';"
+msgstr ""
+
+#: bd_sqlite.cpp:299
+#, c-format
+msgid "%s"
+msgstr ""
+
+#: bd_sqlite.cpp:312 bd_sqlite.cpp:414
+msgid "WHERE "
+msgstr ""
+
+#: bd_sqlite.cpp:319 bd_sqlite.cpp:371 bd_sqlite.cpp:421 bd_sqlite.cpp:507
+msgid "AND "
+msgstr ""
+
+#: bd_sqlite.cpp:320 bd_sqlite.cpp:372 bd_sqlite.cpp:422 bd_sqlite.cpp:443
+#: bd_sqlite.cpp:476 bd_sqlite.cpp:508 bd_sqlite.cpp:541 bd_sqlite.cpp:581
+#: bd_sqlite.cpp:595
+msgid "\""
+msgstr ""
+
+#: bd_sqlite.cpp:320 bd_sqlite.cpp:372 bd_sqlite.cpp:422 bd_sqlite.cpp:476
+#: bd_sqlite.cpp:508
+msgid "\"='"
+msgstr ""
+
+#: bd_sqlite.cpp:320 bd_sqlite.cpp:323 bd_sqlite.cpp:422 bd_sqlite.cpp:425
+#: bd_sqlite.cpp:430 bd_sqlite.cpp:453 bd_sqlite.cpp:476 bd_sqlite.cpp:508
+#: bd_sqlite.cpp:585 bd_sqlite.cpp:587 bd_sqlite.cpp:588
+msgid "' "
+msgstr ""
+
+#: bd_sqlite.cpp:323
+msgid " LIMIT "
+msgstr ""
+
+#: bd_sqlite.cpp:323
+msgid ",1;"
+msgstr ""
+
+#: bd_sqlite.cpp:354 bd_sqlite.cpp:409 bd_sqlite.cpp:496 bd_sqlite.cpp:527
+msgid "PRAGMA table_info('"
+msgstr ""
+
+#: bd_sqlite.cpp:354 bd_sqlite.cpp:409 bd_sqlite.cpp:496 bd_sqlite.cpp:527
+msgid "');"
+msgstr ""
+
+#: bd_sqlite.cpp:356 bd_sqlite.cpp:411 bd_sqlite.cpp:498
+msgid "Table is empty."
+msgstr ""
+
+#: bd_sqlite.cpp:358
+msgid "SELECT * "
+msgstr ""
+
+#: bd_sqlite.cpp:372 bd_sqlite.cpp:453
+msgid "'"
+msgstr ""
+
+#: bd_sqlite.cpp:375 bd_sqlite.cpp:567
+msgid " FROM '"
+msgstr ""
+
+#: bd_sqlite.cpp:375 bd_sqlite.cpp:500
+msgid "' WHERE "
+msgstr ""
+
+#: bd_sqlite.cpp:375 bd_sqlite.cpp:425 bd_sqlite.cpp:480 bd_sqlite.cpp:510
+msgid ";"
+msgstr ""
+
+#: bd_sqlite.cpp:379
+msgid "Row no present."
+msgstr ""
+
+#: bd_sqlite.cpp:430 bd_sqlite.cpp:606
+msgid "INSERT INTO '"
+msgstr ""
+
+#: bd_sqlite.cpp:440 bd_sqlite.cpp:441 bd_sqlite.cpp:466 bd_sqlite.cpp:540
+#: bd_sqlite.cpp:579 bd_sqlite.cpp:594
+msgid ","
+msgstr ""
+
+#: bd_sqlite.cpp:443 bd_sqlite.cpp:581
+msgid "\" "
+msgstr ""
+
+#: bd_sqlite.cpp:455
+msgid "("
+msgstr ""
+
+#: bd_sqlite.cpp:455
+msgid ") VALUES ("
+msgstr ""
+
+#: bd_sqlite.cpp:455
+msgid ")"
+msgstr ""
+
+#: bd_sqlite.cpp:460
+msgid "UPDATE '"
+msgstr ""
+
+#: bd_sqlite.cpp:460
+msgid "' SET "
+msgstr ""
+
+#: bd_sqlite.cpp:500
+msgid "DELETE FROM '"
+msgstr ""
+
+#: bd_sqlite.cpp:544
+msgid "TEXT"
+msgstr ""
+
+#: bd_sqlite.cpp:546
+msgid "INTEGER"
+msgstr ""
+
+#: bd_sqlite.cpp:547
+msgid "DOUBLE"
+msgstr ""
+
+#: bd_sqlite.cpp:566
+msgid "CREATE TEMPORARY TABLE 'temp_"
+msgstr ""
+
+#: bd_sqlite.cpp:566 bd_sqlite.cpp:606
+msgid "'("
+msgstr ""
+
+#: bd_sqlite.cpp:566
+msgid ");INSERT INTO 'temp_"
+msgstr ""
+
+#: bd_sqlite.cpp:567
+msgid "' SELECT "
+msgstr ""
+
+#: bd_sqlite.cpp:567
+msgid "';DROP TABLE '"
+msgstr ""
+
+#: bd_sqlite.cpp:573
+msgid "CREATE TABLE '"
+msgstr ""
+
+#: bd_sqlite.cpp:573
+msgid "' ("
+msgstr ""
+
+#: bd_sqlite.cpp:585
+msgid "TEXT DEFAULT '"
+msgstr ""
+
+#: bd_sqlite.cpp:587
+msgid "INTEGER DEFAULT '"
+msgstr ""
+
+#: bd_sqlite.cpp:588
+msgid "DOUBLE DEFAULT '"
+msgstr ""
+
+#: bd_sqlite.cpp:598
+msgid ", PRIMARY KEY ("
+msgstr ""
+
+#: bd_sqlite.cpp:598
+msgid "));"
+msgstr ""
+
+#: bd_sqlite.cpp:606
+msgid ") SELECT "
+msgstr ""
+
+#: bd_sqlite.cpp:606
+msgid " FROM 'temp_"
+msgstr ""
+
+#: bd_sqlite.cpp:606
+msgid "';DROP TABLE 'temp_"
+msgstr ""

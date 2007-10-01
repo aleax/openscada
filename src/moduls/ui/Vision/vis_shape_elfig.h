@@ -50,88 +50,44 @@ class QGradient;
 namespace VISION
 {
 
+//************************************************
+//* ShapeItem                                    *
+//************************************************
 class ShapeItem 
 {
     public:
-        void setPath(const QPainterPath &path) {myPath = path;}
-        void setPathSimple(const QPainterPath &path_simple)     { myPathSimple = path_simple;}
-       /* void setStartPosition(const QPointF &istartposition)    {myStartPosition = istartposition;}
-        void setEndPosition(const QPointF &iendposition)        {myEndPosition = iendposition;}
-        void setCtrlPosition_1(const QPointF &ctrlposition_1){myCtrlPosition_1 = ctrlposition_1;}
-        void setCtrlPosition_2(const QPointF &ctrlposition_2){myCtrlPosition_2 = ctrlposition_2;}
-        void setCtrlPosition_3(const QPointF &ctrlposition_3){myCtrlPosition_3 = ctrlposition_3;}*/
-        void setCtrlPosition_4(const QPointF &ctrlposition_4){myCtrlPosition_4 = ctrlposition_4;}
-        void setNum_1(const int num_1){myNum_1 = num_1;}
-        void setNum_2(const int num_2){myNum_2 = num_2;}
-        void setNum_3(const int num_3){myNum_3 = num_3;}
-        void setNum_4(const int num_4){myNum_4 = num_4;}
-        void setNum_5(const int num_5){myNum_5 = num_5;}
-        void setBrush(const QBrush &brush){ myBrush = brush;}
-        void setPen(const QPen &pen){myPen = pen;}
-        void setPenSimple(const QPen &pen_simple){myPenSimple = pen_simple;}
-        void setWidth(float width){myWidth = width;}
-        void setType(int type){myType = type;}
-	ShapeItem &operator=(const ShapeItem &other);
-    
-        QPainterPath path() const {return myPath;}
-        QPainterPath path_simple() const {return myPathSimple;}
-      /*  QPointF &startposition()    { return myStartPosition; }
-        QPointF &endposition()      { return myEndPosition; }
-        QPointF &ctrlposition_1()   { return myCtrlPosition_1; }
-        QPointF &ctrlposition_2()   { return myCtrlPosition_2; }
-        QPointF &ctrlposition_3()   { return myCtrlPosition_3; }*/
-        QPointF &ctrlposition_4()   { return myCtrlPosition_4; }
-        int num_1() {return myNum_1;}
-        int num_2() {return myNum_2;}
-        int num_3() {return myNum_3;}
-        int num_4() {return myNum_4;}
-        int num_5() {return myNum_5;}
-        QBrush brush() const{return myBrush;}
-        QPen pen() const{return myPen;}
-        QPen pen_simple() const{return myPenSimple;}
-        float width() const{return myWidth;}
-        int type() const{return myType;}
-    
-    private:
-	QPainterPath myPath;
-	QPainterPath myPathSimple;
-	/*QPointF myStartPosition;
-	QPointF myEndPosition;
-	QPointF myCtrlPosition_1;
-	QPointF myCtrlPosition_2;
-	QPointF myCtrlPosition_3;*/
-	QPointF myCtrlPosition_4;
-        int myNum_1;
-        int myNum_2;
-        int myNum_3;
-        int myNum_4;
-        int myNum_5;
-        QBrush myBrush;
-	QPen myPen;
-        QPen myPenSimple;
-	float myWidth;
-	int myType;
+	ShapeItem( )	{ }
+	ShapeItem( const QPainterPath &ipath, const QPainterPath &path_simple, const int num_1,const int num_2, const int num_3, const int num_4,const int num_5,
+		    const QPointF &ctrlpos_4, const QBrush &brush, const QPen &ipen, const QPen &pen_simple, const float iwidth, const int itype ) : 
+    	    ctrlPos4(ctrlpos_4), n1(num_1), n2(num_2), n3(num_3), n4(num_4), n5(num_5), brush(brush),
+	    pen(ipen), penSimple(pen_simple), width(iwidth), type(itype), path(ipath), pathSimple(path_simple)
+	{ };								
+
+	QPainterPath 	path, 
+		        pathSimple;
+	QPointF		ctrlPos4;
+        int 		n1, n2, n3, n4, n5;
+	QBrush 		brush;
+	QPen 		pen, 
+			penSimple;
+	float 		width;
+	int 		type;
 };
 
+//************************************************
+//* RectItem                                     *
+//************************************************
 class RectItem 
 {
     public:
-        void setPath(const QPainterPath &path){ myPath = path;}
-        void setNum(const int num){ myNum = num;}
-        void setBrush(const QBrush &brush){myBrush = brush;}
-        void setPen(const QPen &pen){myPen = pen;}
-        
-    
-        QPainterPath path() const{return myPath;}
-        int  num() const{return myNum;}
-        QBrush brush() const{return myBrush;}
-        QPen pen() const{return myPen;}
-    
-    private:
-	QPainterPath myPath;
-	int myNum;
-	QBrush myBrush;
-	QPen myPen;
+	RectItem( )	{ }
+        RectItem( const QPainterPath &ipath, const int inum, const QBrush &ibrush, const QPen &ipen ) :
+	    num(inum), brush(ibrush), pen(ipen), path(ipath)	{  }
+
+	QPainterPath 	path;
+	int 		num;
+	QBrush 		brush;
+	QPen 		pen;
 };
 
 //*************************************************
@@ -141,9 +97,10 @@ class ShapeElFigure : public WdgShape
 {    
     Q_OBJECT    
     public:
-	ShapeElFigure();
+	//Public methods
+	ShapeElFigure( );
     
-        bool isEditable( )	{ return true; }
+        bool isEditable( )		{ return true; }
 
 	void init( WdgView *view );
         void destroy( WdgView *w );
@@ -156,108 +113,90 @@ class ShapeElFigure : public WdgShape
      
 	bool event( WdgView *view, QEvent *event );
     
-	//Процедура создания экземнпляра класса ShapeItem
-	////////////////////////////////////////////////
-        void createShapeItem(const QPainterPath &path, const QPainterPath &path_simple,
-                             const int num_1,  const int num_2, const int num_3, 
-                             const int num_4,const int num_5, const QPointF &ctrlpos_4, const QBrush &brush, 
-                            const QPen &pen, const QPen &pen_simple, const float width, const int type, QList<ShapeItem> &shapeItems);
-	////////////////////////////////////////////////
+ 	QString userFriendlyCurrentFile( );
+	QString currentFile( ) 		{ return curFile; }
+
+	//Public attributes
+	QList<RectItem> rectItems;		//RectItem's container
+	QPainterPath 	newPath,		//Null path
+			rectPath,		//Path fo RectItem creation
+        		ellipse_startPath, ellipse_endPath,
+        		ellipse_draw_startPath, ellipse_draw_endPath;
     
-	//Процедура создания экземнпляра класса RectItem
-	////////////////////////////////////////////////
-	void createRectItem(const QPainterPath &path, const int num, const QBrush &brush, 
-			    const QPen &pen);
-	////////////////////////////////////////////////
-    
-        void removeShapeItem(int num, QList<ShapeItem> &shapeItems, PntMap *pnts);//Процедура удаления экземнпляра класса ShapeItem из контейнера всех экземпляров
-	void removeRectItem(int num);//Процедура удаления экземнпляра класса RectItem из контейнера всех экземпляров
-       // void build_arc(QPoint &p);
-    
-	QList<RectItem> rectItems;////Контейнер для экземпляров класса RectItem
-	//QPainterPath circlePath;//Путь для создания экземнпляра класса ShapeItem
-	QPainterPath newPath;//Нулевой путь
-	QPainterPath rectPath;//Путь для создания экземнпляра класса RectItem
-        QPainterPath ellipse_startPath,ellipse_endPath;
-        
-        QPainterPath ellipse_draw_startPath,ellipse_draw_endPath;
-    
-	QString userFriendlyCurrentFile();
-	QString currentFile() { return curFile; }
-    
-	bool status; //Определяет нажата ли какая-либо кнопка рисования примитива 
-	int shapeType; //Определяет тип выделенной фигуры
-        int kr;
-    
+	bool status; 				//Check fo any primitive paint key pressed
+	int shapeType; 				//Selected figure type
+        int kr;    
     
     private slots:
 	void toolAct( QAction * );
     
-    private:   
-     	QPointF StartLine; //Начальная точка при создании фигуры(точка, из которой будет производится рисование фигуры)
-	QPointF EndLine;//Конечная точка при создании фигуры(точка, в которую будет производится рисование фигуры)
+    private:
+    	//Methods
+        int itemAt( const QPointF &pos, QList<ShapeItem> &shapeItems );			//Check for figure type under cursor
+        void moveItemTo(const QPointF &pos,QList<ShapeItem> &shapeItems, PntMap *pnts);	//Move figure procedure
     
-	QPointF previousPosition,previousPosition_all;//Предыдущая позиция точки, за которую тянем, при перемещении фигуры
-	ShapeItem *itemInMotion;//Выделенная(перемещаемая) фигура
-       
-        int itemAt(const QPointF &pos, QList<ShapeItem> &shapeItems);//Процедура определения фигуры, соответствующей положению курсора
-        void moveItemTo(const QPointF &pos,QList<ShapeItem> &shapeItems, PntMap *pnts);//Процедура перемещения фигуры
-    
-	/*bool maybeSave();*/
 	QGraphicsScene *scene;
 	void populateScene();
-	void setCurrentFile(const QString &fileName);
-	QString strippedName(const QString &fullFileName);
-	QPointF ROTATE(const QPointF &pnt,double alpha);//Процедура поворота данной точки на данный угол относительно начала координат
-	QPointF UNROTATE(const QPointF &pnt, double alpha,double a, double b);//Процедура, обратная к ROTATE
-	QPointF ARC(double t,double a,double b);//Процедура вычисления координат точки дуги с центром в точке [0,0], соответствующей параметру  t
-	double Angle(const QLineF &l,const QLineF &l1);//Процедура определения угла между двумя прямыми
-	double Length(const QPointF pt1, const QPointF pt2);//Процедура определения расстояния между двумя точками
-        bool Holds(QList<ShapeItem> &shapeItems, PntMap *pnts);//Процедура определения привязанных к данной фигуре других фигур
-        void Move_UP_DOWN (QList<ShapeItem> &shapeItems, PntMap *pnts);//Процедура перемещения фигуры с помощью управляющих клавиш
-        int Real_rect_num(int rect_num_old,QList<ShapeItem> &shapeItems, PntMap *pnts);//Определение истиного номера квадратика
-        void Rect_num_0_1(QList<ShapeItem> &shapeItems,int rect_num_temp, PntMap *pnts);//Что делать если попали по 1,2 квадратику
-        void Rect_num_3_4(QList<ShapeItem> &shapeItems, PntMap *pnts);//Что делать если попали по 2,4 квадратику дуги
-        void Move_all(QPointF pos,QList<ShapeItem> &shapeItems,PntMap *pnts);//Одновременное передвижение нескольних фигур(квадратиков)
-        QPainterPath painter_path(float el_width, int el_type, double el_ang, QPointF el_p1, QPointF el_p2, QPointF el_p3, QPointF el_p4, QPointF el_p5, QPointF el_p6);
-        QPainterPath painter_path_simple(int el_type, double el_ang, QPointF el_p1, QPointF el_p2, QPointF el_p3, QPointF el_p4, QPointF el_p5, QPointF el_p6);
-        int Append_Point (QPointF &pos, QList<ShapeItem> &shapeItems,PntMap *pnts);
-        void Drop_Point (int num, int num_shape, QList<ShapeItem> &shapeItems,PntMap *pnts);
-
+	void setCurrentFile( const QString &fileName );
+	QString strippedName( const QString &fullFileName );
+	QPointF ROTATE( const QPointF &pnt, double alpha );				//Процедура поворота данной точки на данный угол относительно начала координат
+	QPointF UNROTATE( const QPointF &pnt, double alpha, double a, double b );	//Процедура, обратная к ROTATE
+	QPointF ARC( double t, double a, double b);					//Процедура вычисления координат точки дуги с центром в точке [0,0], соответствующей параметру  t
+	double Angle( const QLineF &l, const QLineF &l1 );				//Процедура определения угла между двумя прямыми
+	double Length( const QPointF pt1, const QPointF pt2 );				//Процедура определения расстояния между двумя точками
+        bool Holds( QList<ShapeItem> &shapeItems, PntMap *pnts );			//Процедура определения привязанных к данной фигуре других фигур
+        void Move_UP_DOWN ( QList<ShapeItem> &shapeItems, PntMap *pnts );		//Процедура перемещения фигуры с помощью управляющих клавиш
+        int Real_rect_num( int rect_num_old, QList<ShapeItem> &shapeItems, PntMap *pnts );//Определение истиного номера квадратика
+        void Rect_num_0_1( QList<ShapeItem> &shapeItems, int rect_num_temp, PntMap *pnts);//Что делать если попали по 1,2 квадратику
+        void Rect_num_3_4( QList<ShapeItem> &shapeItems, PntMap *pnts );		//Что делать если попали по 2,4 квадратику дуги
+        void Move_all( QPointF pos, QList<ShapeItem> &shapeItems, PntMap *pnts );	//Одновременное передвижение нескольних фигур(квадратиков)
+        QPainterPath painter_path( float el_width, int el_type, double el_ang, 
+		QPointF el_p1 = QPointF(0,0), QPointF el_p2 = QPointF(0,0), QPointF el_p3 = QPointF(0,0), 
+		QPointF el_p4 = QPointF(0,0), QPointF el_p5 = QPointF(0,0), QPointF el_p6 = QPointF(0,0) );
+        QPainterPath painter_path_simple( int el_type, double el_ang, 
+		QPointF el_p1 = QPointF(0,0), QPointF el_p2 = QPointF(0,0), QPointF el_p3 = QPointF(0,0), 
+		QPointF el_p4 = QPointF(0,0), QPointF el_p5 = QPointF(0,0), QPointF el_p6 = QPointF(0,0) ) ;
+        int Append_Point( QPointF &pos, QList<ShapeItem> &shapeItems, PntMap *pnts );
+        void Drop_Point ( int num, int num_shape, QList<ShapeItem> &shapeItems, PntMap *pnts );
+      	
+	//Attributes
+	QPointF StartLine, EndLine,		//Start and end points for paint created figure    
+		previousPosition, previousPosition_all;	//Previous position for drag point by figure moving
+	ShapeItem *itemInMotion;		//Selected (moving) figure 
     
 	QString curFile;
 	bool isUntitled;
-        bool status_hold;//Статус нажатия кнопки привязок
+        bool status_hold;			//Статус нажатия кнопки привязок
     
-	int* index_array;//Массив, содержащий индексы фигур, которые выделяются с Сtrl
+	int* index_array;			//Массив, содержащий индексы фигур, которые выделяются с Сtrl
         
         int* rect_array;
       
       
         
         
-	int count_Shapes,count_moveItemTo;//Количество фигур, выделенных с Сtrl и количество вызовов процедуры moveItemTo для этих фигур соответственно
-	int index,index_temp;//Индекс фигуры в контейнере
-	int rect_num;//Номер выделенного квадратика(0..3)
-	bool flag_cursor,flag_key,flag_up,flag_down,flag_left,flag_right,flag_ctrl,flag,flag_ctrl_move,flag_m,flag_hold_arc;//Флаги для вида курсора и 
-					     							    //для управляющих клавиш соответственно
-        bool flag_rect, flag_arc_rect_3_4,flag_arc_release,flag_first_move,Flag;
-        int count_rects,rect_num_arc,arc_rect;
-        bool flag_holds;//Вспомогательная переменная для того, чтобы вызывать Holds() только один раз в начале движения
-        bool flag_hold_move;//Флаг передвижения привязанных фигур
-        double t_start,t_end;//Начальное и конечное значения параметра для рисования дуги
-	QPointF Mouse_pos,offset_all;//Текущая позиция мышки
-        int current_ss,current_se,current_ee,current_es;//Указывает, какую комбинацию из двух точек связывать 
-        int count_holds;//Количество привязанных фигур
-        int* arc_rect_array;//Содержит номера квадратиков дуги,связанные с другими фигурами
-        int* fig_rect_array;//Содержит номера квадратиков фигур,связанных с дугой 
-        int* index_array_all;
+	int count_Shapes, count_moveItemTo,	//Количество фигур, выделенных с Сtrl и количество вызовов процедуры moveItemTo для этих фигур соответственно
+	    index, index_temp,			//Индекс фигуры в контейнере
+	    rect_num;				//Номер выделенного квадратика(0..3)
+	bool flag_cursor, flag_key, flag_up, flag_down, flag_left, flag_right, 
+	     flag_ctrl, flag,flag_ctrl_move, flag_m, flag_hold_arc;	//Флаги для вида курсора и 
+					    	//для управляющих клавиш соответственно
+        bool flag_rect, flag_arc_rect_3_4, flag_arc_release, flag_first_move, Flag;
+        int count_rects, rect_num_arc, arc_rect;
+        bool flag_holds;			//Вспомогательная переменная для того, чтобы вызывать Holds() только один раз в начале движения
+        bool flag_hold_move;			//Флаг передвижения привязанных фигур
+        double t_start, t_end;			//Начальное и конечное значения параметра для рисования дуги
+	QPointF Mouse_pos, offset_all;		//Текущая позиция мышки
+        int current_ss, current_se, current_ee, current_es;	//Указывает, какую комбинацию из двух точек связывать 
+        int count_holds;			//Количество привязанных фигур
+        int *arc_rect_array;			//Содержит номера квадратиков дуги,связанные с другими фигурами
+        int *fig_rect_array;			//Содержит номера квадратиков фигур,связанных с дугой 
+        int *index_array_all;
         
-        QPointF Prev_pos_1,Prev_pos_2;
+        QPointF Prev_pos_1, Prev_pos_2;
        
-        QVector<int> num_vector;
-       
-       };
+        QVector<int> num_vector;       
+    };
 
 }
 

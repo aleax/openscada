@@ -1,3 +1,8 @@
+2007-10-01 Roman
+- !!!:/DB: FireBird DB support modul is added.
+- !!!:/UI/Vision: Code audit for primitive "ElFig" is made.
+
+
 2007-09-28 Maxim
 - !!:/UI/Vision: Into primitive 'ElFig' made loading and saving shape's configuration to data model.
 
@@ -19,6 +24,7 @@
 - !!:/DAQ/BlockCalc: Blocks copy function extended to full controllers copy.
 - !!:/DAQ/CIF: Asynchronous write mode support is added. For more and frequently data writing.
 - !:/UI/VCAEngine, /UI/Vision: First realisation of primitive "Protocol" is added.
+
 
 2007-09-10 Maxim
 - !!:/UI/VCAEngine: Figure's points of the primitive "ElFig" support is added.

@@ -293,7 +293,7 @@ MTable::MTable(string name, MBD *iown, bool create ) : TTable(name)
 	    TSYS::strEncode(name,TSYS::SQL)+"` (`name` char(20) NOT NULL DEFAULT '' PRIMARY KEY)";
         owner().sqlReq( req );
     }
-    //- Check for table present request -
+    //- Get table structure description -
     req ="DESCRIBE `"+TSYS::strEncode(owner().bd,TSYS::SQL)+"`.`"+TSYS::strEncode(name,TSYS::SQL)+"`";
     owner().sqlReq(req,&tblStrct);    
     //req = "SELECT * FROM `"+TSYS::strEncode(name,TSYS::SQL)+"` LIMIT 0,1";
