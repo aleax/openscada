@@ -1,3 +1,7 @@
+2007-10-02 Roman
+- FIX:/UI/Vision: First all attributes loading to widgets performance degradation is fixed.
+
+
 2007-10-01 Roman
 - !!!:/DB: FireBird DB support modul is added.
 - !!!:/UI/Vision: Code audit for primitive "ElFig" is made.
@@ -13,7 +17,7 @@
   Checking and name detection for: bison, gettext and QT utilites is made.
 - /SYS: Updated Demo DB.
 - !!!:/DAQ: The base realisation of transporting OpenSCADA remote DAQs module (Transport) is added.
-- !!:/DAQ: Reply DAQs start is made if first start error. Some DAQ-sources can start depend other DAQ-sources.
+- !!:/DAQ: Reply DAQs starting is made, if first start error. Some DAQ-sources can start depend other DAQ-sources.
 - !!:/TValue: Service function for access to DAQ parameter's attributes is added.
 - !!!:/TArchives: Service function for message archives access is added. begin() and end() functions.
   For messages archive border detection is added.

@@ -209,8 +209,10 @@ namespace VISION
 	    int	   z( )			{ return z_coord;  }
 	    virtual string user( )	{ return ""; }
 	    QMap<QString, QVariant> &dc(){ return cache_data; }
+	    bool allAttrLoad( )		{ return all_attr_load; }
 
 	    void   setZ( int val )	{ z_coord = val; }
+	    void   setAllAttrLoad( bool vl )	{ all_attr_load = vl; }
 	    
 	    bool attrSet( const string &attr, const string &val, int uiPrmPos = 0 );
 
@@ -230,6 +232,7 @@ namespace VISION
 	    bool eventFilter( QObject *object, QEvent *event );	    
 	    
 	    //- Protected attributes -
+	    bool		all_attr_load;	//All attributes load
 	    int 		w_level;	//Widget level
 	    int			z_coord;	//Z coordinate
 	    string		idWidget, 	//Full widget identifier

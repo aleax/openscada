@@ -83,6 +83,9 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
   
     switch( uiPrmPos )
     {
+	case -1:	//load
+	    rel_list = true;
+	    break;
         case 5:		//en
             if(runW)    w->dc()["en"] = (bool)atoi(val.c_str());
             break;
@@ -140,7 +143,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
             }
     }
 	
-    if (rel_list)	
+    if( rel_list && !w->allAttrLoad( ) )
     {
         shapeItems.clear();
             //- Parse last attributes list and make point list -
@@ -315,7 +318,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
         up = true;
     }	
         
-    if( up &&  w->isVisible() ) w->update();
+    if( up && !w->allAttrLoad( ) ) w->update();
     
     return up;
 }

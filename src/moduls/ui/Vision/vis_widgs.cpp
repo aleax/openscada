@@ -577,7 +577,8 @@ void TextEdit::cancelSlot( )
 //* Shape widget view                    *
 //****************************************
 WdgView::WdgView( const string &iwid, int ilevel, QMainWindow *mainWind, QWidget *parent ) :
-    QWidget(parent), idWidget(iwid), shape(NULL), w_level(ilevel), main_win(mainWind), z_coord(0)
+    QWidget(parent), idWidget(iwid), shape(NULL), w_level(ilevel), main_win(mainWind), 
+    z_coord(0), all_attr_load(false)
 {
 
 }
@@ -625,7 +626,7 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 
 void WdgView::load( const string& item )
 {
-    setVisible(false);
+    setAllAttrLoad(true);
     
     if( item.empty() || item == id() )
     {
@@ -639,14 +640,16 @@ void WdgView::load( const string& item )
 	    for( int i_el = 0; i_el < req.childSize(); i_el++ )
 		attrSet("",req.childGet(i_el)->text(),atoi(req.childGet(i_el)->attr("pos").c_str()));
     }
+    
+    setAllAttrLoad(false);
+    attrSet("","load",-1);
+    
     if( item != id() )
 	for( int i_c = 0; i_c < children().size(); i_c++ )
 	    if( qobject_cast<WdgView*>(children().at(i_c)) )
 		((WdgView*)children().at(i_c))->load(item);
     
     orderUpdate( );
-    
-    setVisible(true);
 }
 
 void WdgView::childsUpdate( bool newLoad )

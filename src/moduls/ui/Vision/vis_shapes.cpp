@@ -110,6 +110,9 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 
     switch( uiPrmPos )
     {
+	case -1:	//load
+	    rel_cfg = true;
+	    break;
 	case 2:		//name
 	    w->dc()["name"] = val.c_str();
 	    if( el == 2) 	((QCheckBox*)el_wdg)->setText(val.c_str());
@@ -133,8 +136,8 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    rel_cfg = true;
 	    break;
 	case 21:	//value
-	{
 	    w->dc()["value"] = val.c_str();
+	    if( !el_wdg ) break;
 	    switch(el)
 	    {
 		case 0: ((LineEdit*)el_wdg)->setValue(val.c_str());	break;
@@ -153,44 +156,45 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		}
 	    }
 	    break;
-	}
 	case 22:	//view, wordWrap, img, items
+	    rel_cfg = true;
 	    switch(el)
 	    {
 		case 0:	//view
-		    w->dc()["view"] = atoi(val.c_str()); rel_cfg = true;	break;
+		    w->dc()["view"] = atoi(val.c_str());	break;
 		case 1:	//wordWrap
-		    w->dc()["wordWrap"] = atoi(val.c_str());
-		    ((TextEdit*)el_wdg)->workWdg()->setLineWrapMode( atoi(val.c_str()) ? QTextEdit::WidgetWidth : QTextEdit::NoWrap );
-		    break;
+		    w->dc()["wordWrap"] = atoi(val.c_str());	break;
 		case 3:	//img
-		    w->dc()["img"] = val.c_str(); rel_cfg = true;	break;
+		    w->dc()["img"] = val.c_str(); 		break;
 		case 4: case 5:	//items
-		    w->dc()["items"] = val.c_str(); rel_cfg = true;	break;		    
+		    w->dc()["items"] = val.c_str(); 		break;
+		default: rel_cfg = false;
 	    }
 	    break;
 	case 23:	//cfg, color
+	    rel_cfg = true;
 	    switch(el)
 	    {	
 		case 0:	//cfg    
 		    w->dc()["cfg"] = val.c_str();
-		    ((LineEdit*)el_wdg)->setCfg(val.c_str());
+		    //((LineEdit*)el_wdg)->setCfg(val.c_str());
 		    break;
 		case 3:	//color
 		    w->dc()["color"] = val.c_str();
-		    ((QPushButton*)el_wdg)->setPalette( QColor(val.c_str()).isValid() ? QPalette(QColor(val.c_str())) : QPalette() );
-		break;
+		    //((QPushButton*)el_wdg)->setPalette( QColor(val.c_str()).isValid() ? QPalette(QColor(val.c_str())) : QPalette() );
+		    break;
+		default: rel_cfg = false;
 	    }
 	    break;
 	case 24:	//checkable
-	    w->dc()["checkable"] = atoi(val.c_str());	rel_cfg = true; break;
+	    w->dc()["checkable"] = atoi(val.c_str());	
+	    rel_cfg = true; 
+	    break;
     }
-    
-    if( rel_cfg )
+    if( rel_cfg && !w->allAttrLoad() )
     {
 	bool mk_new = false;
-	el = w->dc()["elType"].toInt();
-	switch(el)
+	switch(w->dc()["elType"].toInt())
 	{
 	    case 0:	//Line edit
 	    {
@@ -500,10 +504,13 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 {    
     bool up = true, 		//Update view checking
 	 rel_fnt = false,	//Reload font checking
-	 reform;		//Text reformation
+	 reform = false;	//Text reformation
 
     switch(uiPrmPos)
     {
+	case -1:	//load
+	    rel_fnt = reform = true;
+	    break;
 	case 5:		//en
 	    if( !qobject_cast<RunWdgView*>(w) )	{ up = false; break; }
 	    w->dc()["en"] = (bool)atoi(val.c_str());
@@ -631,7 +638,7 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
     }
 
     //- Reload generic font record -
-    if( rel_fnt )
+    if( rel_fnt && !w->allAttrLoad() )
     {
         QFont *fnt = (QFont*)w->dc()["QFont"].value<void*>();
 	char family[101];
@@ -648,7 +655,7 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
     }
 
     //- Text reformation -
-    if( reform )
+    if( reform && !w->allAttrLoad() )
     {
 	ArgObj *arg;
 	int numbArg = w->dc()["numbArg"].toInt();
@@ -675,7 +682,7 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	else { w->dc()["text"] = text; up = true; }
     }
     
-    if( up &&  w->isVisible() ) w->update();
+    if( up && !w->allAttrLoad( ) ) w->update();
     
     return up;
 }
@@ -780,6 +787,9 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 
     switch(uiPrmPos)
     {
+	case -1:	//load
+	    reld_src = true;
+	    break;
 	case 5:		//en
 	    if( !qobject_cast<RunWdgView*>(w) )	{ up = false; break; }
 	    w->dc()["en"] = (bool)atoi(val.c_str()); 
@@ -827,8 +837,9 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    w->dc()["mediaScale"] = atof(val.c_str()); reld_src = true; break;
 	case 27: 	//speed
 	{
-	    if( !lab->movie() ) break;
 	    int vl = atoi(val.c_str());
+	    w->dc()["mediaSpeed"] = vl;
+	    if( !lab->movie() ) break;
 	    if( vl <= 1 ) lab->movie()->stop();
 	    else
 	    {
@@ -838,12 +849,13 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    break;
 	}
 	case 28: 	//fit
+	    w->dc()["mediaFit"] = atoi(val.c_str());
 	    if( !lab->movie() ) break;
 	    lab->setScaledContents( atoi(val.c_str()) );
 	    break;
     }
     
-    if( reld_src )
+    if( reld_src && !w->allAttrLoad() )
     {
 	XMLNode req("get");
         req.setAttr("path",w->id()+"/%2fwdg%2fres")->
@@ -892,13 +904,23 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 			buf->setData( sdata.data(), sdata.size() );
 			buf->open( QIODevice::ReadOnly );
 			lab->setMovie( new QMovie(buf) );
+			//- Play speed set -
+			int vl = w->dc()["mediaSpeed"].toInt();
+	        	if( vl <= 1 ) lab->movie()->stop();
+			else
+			{
+			    lab->movie()->setSpeed(vl);
+			    lab->movie()->start();
+			}
+			//- Fit set -
+			lab->setScaledContents( w->dc()["mediaFit"].toInt() );
 			break;
 		    }			
 		}
 	}
     }
 
-    if( up && w->isVisible() ) w->update();
+    if( up && !w->allAttrLoad( ) ) w->update();
     
     return up;
 }
@@ -980,6 +1002,10 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 
     switch(uiPrmPos)
     {
+	case -1:	//load
+	    up = make_pct = true;
+	    reld_tr_dt = 2;
+	    break;
 	case 5:		//en
 	    if( !qobject_cast<RunWdgView*>(w) )	break;
 	    w->dc()["en"] = (bool)atoi(val.c_str());
@@ -1109,9 +1135,12 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    }
     }
     
-    if( reld_tr_dt )	loadTrendsData(w,reld_tr_dt==2);
-    if( make_pct )	makeTrendsPicture(w);
-    if( up && w->isVisible() )	w->update();
+    if( !w->allAttrLoad( ) )
+    {
+	if( reld_tr_dt )loadTrendsData(w,reld_tr_dt==2);
+	if( make_pct )	makeTrendsPicture(w);
+	if( up )	w->update();
+    }
     
     return up;
 }
@@ -1765,6 +1794,9 @@ bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val)
 
     switch(uiPrmPos)
     {
+	case -1:	//load
+	    reld_dt = 2;
+	    break;
 	case 5:		//en
 	    if( !qobject_cast<RunWdgView*>(w) )	break;
 	    w->dc()["en"] = (bool)atoi(val.c_str());
@@ -1860,7 +1892,7 @@ bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    break;
     }
 
-    if( reld_dt ) loadData(w,reld_dt==2);
+    if( reld_dt && !w->allAttrLoad( ) ) loadData(w,reld_dt==2);
     
     return true;
 } 
@@ -2173,7 +2205,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	default: up = false;
     }
     
-    if( up && w->isVisible() ) w->update();
+    if( up && !w->allAttrLoad( ) ) w->update();
     
     return up;
 }
