@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.OperationSystem file: da.h
+//OpenSCADA system module DAQ.System file: da_netstat.h
 /***************************************************************************
  *   Copyright (C) 2005-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
@@ -20,33 +20,34 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
  
-#ifndef DA_H
-#define DA_H
+#ifndef DA_NETSTAT_H
+#define DA_NETSTAT_H
 
-#include <tcontroller.h>
+#include "da.h"
 
 namespace SystemCntr
 {
-class TMdPrm;
-class TMdContr;
 
-class DA: public ::TElem
+class NetStat: public DA
 {
     public:
-        DA( ) : TElem("da_el") { }
+        NetStat( );
+	~NetStat( );
+	
+        string id( ) 	{ return "netstat"; }
+        string name( )	{ return "Net statistic"; }			
 		    
-	virtual string id() = 0;
-	virtual string name() = 0;
+        void init( TMdPrm *prm );
+        void getVal( TMdPrm *prm );
+	void setEVAL( TMdPrm *prm );
 	
-        virtual void init( TMdPrm *prm ) 	{ }
-	virtual void deInit( TMdPrm *prm )	{ }
-        virtual void getVal( TMdPrm *prm )	{ }
-	virtual void setEVAL( TMdPrm *prm )	{ }
+	void makeActiveDA( TMdContr *a_cntr );
 	
-	virtual void makeActiveDA( TMdContr *a_cntr )	{ }
+    private:
+        void dList( vector<string> &list, bool part = false );	
 };
 
 } //End namespace 
 
-#endif //DA_H
+#endif //DA_NETSTAT_H
 

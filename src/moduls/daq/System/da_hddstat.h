@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.OperationSystem file: da_smart.h
+//OpenSCADA system module DAQ.System file: da_hddstat.h
 /***************************************************************************
  *   Copyright (C) 2005-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
@@ -20,22 +20,22 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
  
-#ifndef DA_SMART_H
-#define DA_SMART_H
+#ifndef DA_HDDSTAT_H
+#define DA_HDDSTAT_H
 
 #include "da.h"
 
 namespace SystemCntr
 {
 
-class HddSmart: public DA
+class HddStat: public DA
 {
     public:
-        HddSmart( );
-	~HddSmart( );
+        HddStat( );
+	~HddStat( );
 	
-        string id( ) 	{ return "hddsmart"; }
-        string name( )	{ return "HDD Smart"; }			
+        string id( ) 	{ return "hddstat"; }
+        string name( )	{ return "HDD statistic"; }
 		    
         void init( TMdPrm *prm );
         void getVal( TMdPrm *prm );
@@ -44,13 +44,10 @@ class HddSmart: public DA
 	void makeActiveDA( TMdContr *a_cntr );
 	
     private:
-        void dList( vector<string> &list, bool part = false );
-	
-    private:
-	static char *smartval_cmd;
+        void dList( vector<string> &list, bool part = false );	
 };
 
 } //End namespace 
 
-#endif //DA_SMART_H
+#endif //DA_HDDSTAT_H
 

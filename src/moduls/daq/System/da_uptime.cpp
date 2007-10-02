@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.OperationSystem file: da_uptime.cpp
+//OpenSCADA system module DAQ.System file: da_uptime.cpp
 /***************************************************************************
  *   Copyright (C) 2005-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *

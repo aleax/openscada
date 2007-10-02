@@ -144,8 +144,8 @@ AC_ARG_ENABLE(FLibMath,AC_HELP_STRING([--disable-FLibMath], [disable build modul
 AC_ARG_ENABLE(FLibSYS,AC_HELP_STRING([--disable-FLibSYS], [disable build module Special/FLibSYS]),
 [ if test $enableval = yes; then ModFLibSYS=true; else ModFLibSYS=false; fi],[ ModFLibSYS=true; ])
 #-- DAQ modules --
-AC_ARG_ENABLE(OperationSystem,AC_HELP_STRING([--disable-OperationSystem], [disable build module DAQ/OperationSystem]),
-[ if test $enableval = yes; then ModOperationSystem=true; else ModOperationSystem=false; fi],[ ModOperationSystem=true; ])
+AC_ARG_ENABLE(System,AC_HELP_STRING([--disable-System], [disable build module DAQ/System]),
+[ if test $enableval = yes; then ModSystem=true; else ModSystem=false; fi],[ ModSystem=true; ])
 AC_ARG_ENABLE(BlockCalc,AC_HELP_STRING([--disable-BlockCalc], [disable build module DAQ/BlockCalc]),
 [ if test $enableval = yes; then ModBlockCalc=true; else ModBlockCalc=false; fi],[ ModBlockCalc=true; ])
 AC_ARG_ENABLE(JavaLikeCalc,AC_HELP_STRING([--disable-JavaLikeCalc], [disable build module DAQ/JavaLikeCalc]),
@@ -261,10 +261,10 @@ if test ${ModFLibSYS} = true; then
 fi
 #-- DAQ modules --
 AC_SUBST(DAQSub_mod)
-if test ${ModOperationSystem} = true; then
-    AC_MSG_RESULT(Build module: DAQ/OperationSystem)
-    AC_CONFIG_FILES(src/moduls/daq/OperationSystem/Makefile)
-    DAQSub_mod="${DAQSub_mod}OperationSystem "
+if test ${ModSystem} = true; then
+    AC_MSG_RESULT(Build module: DAQ/System)
+    AC_CONFIG_FILES(src/moduls/daq/System/Makefile)
+    DAQSub_mod="${DAQSub_mod}System "
 fi
 if test ${ModBlockCalc} = true; then
     AC_MSG_RESULT(Build module: DAQ/BlockCalc)

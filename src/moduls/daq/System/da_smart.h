@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.OperationSystem file: da_sensors.h
+//OpenSCADA system module DAQ.System file: da_smart.h
 /***************************************************************************
  *   Copyright (C) 2005-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
@@ -20,37 +20,37 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
  
-#ifndef DA_SENSORS_H
-#define DA_SENSORS_H
+#ifndef DA_SMART_H
+#define DA_SMART_H
 
 #include "da.h"
 
 namespace SystemCntr
 {
 
-class Sensors: public DA
+class HddSmart: public DA
 {
     public:
-        Sensors( );
-        ~Sensors( );
+        HddSmart( );
+	~HddSmart( );
 	
-        string id()     { return "sensors"; }
-        string name()   { return "Sensors"; }			
+        string id( ) 	{ return "hddsmart"; }
+        string name( )	{ return "HDD Smart"; }			
 		    
         void init( TMdPrm *prm );
-	void deInit( TMdPrm *prm );
         void getVal( TMdPrm *prm );
 	void setEVAL( TMdPrm *prm );
 	
 	void makeActiveDA( TMdContr *a_cntr );
 	
     private:
-	static char *mbmon_cmd;
-};									    
-
-
+        void dList( vector<string> &list, bool part = false );
+	
+    private:
+	static char *smartval_cmd;
+};
 
 } //End namespace 
 
-#endif //DA_SENSORS_H
+#endif //DA_SMART_H
 

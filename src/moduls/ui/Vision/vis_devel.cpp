@@ -284,8 +284,9 @@ VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) :
     actElFigBesie->setToolTip(_("Add Besier curve to elementary figure"));
     actElFigBesie->setWhatsThis(_("The button for adding Besier curve to elementary figure"));
     actElFigBesie->setStatusTip(_("Press for add Besier curve to elementary figure."));    
-
-    actElFigCheckAct=new QAction(_("Holds"),this);
+    //--- Add Hold points check ---
+    if(!ico_t.load(TUIS::icoPath("vision_elfig_lock").c_str())) ico_t.load(":/images/elfig_lock.png");
+    actElFigCheckAct=new QAction(QPixmap::fromImage(ico_t),_("Holds"),this);
     actElFigCheckAct->setCheckable(true);
     actElFigCheckAct->setObjectName("hold");
     actElFigCheckAct->setToolTip(_("Enable holds"));
@@ -1087,9 +1088,9 @@ void VisDevelop::visualItEdit( )
 	connect(this, SIGNAL(modifiedItem(const string&)), vw, SLOT(load(const string &)));
     
 	scrl->setWidget( vw );
-	work_space->addWindow(scrl);
-	scrl->show();
 	scrl->resize(vmax(300,vmin(650,vw->size().width()+10)),vmax(200,vmin(550,vw->size().height()+10)));
+	work_space->addWindow(scrl);	
+	scrl->show();	
     }
 }
 

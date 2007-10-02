@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.OperationSystem file: da_netstat.h
+//OpenSCADA system module DAQ.System file: da_sensors.h
 /***************************************************************************
  *   Copyright (C) 2005-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
@@ -20,34 +20,37 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
  
-#ifndef DA_NETSTAT_H
-#define DA_NETSTAT_H
+#ifndef DA_SENSORS_H
+#define DA_SENSORS_H
 
 #include "da.h"
 
 namespace SystemCntr
 {
 
-class NetStat: public DA
+class Sensors: public DA
 {
     public:
-        NetStat( );
-	~NetStat( );
+        Sensors( );
+        ~Sensors( );
 	
-        string id( ) 	{ return "netstat"; }
-        string name( )	{ return "Net statistic"; }			
+        string id()     { return "sensors"; }
+        string name()   { return "Sensors"; }			
 		    
         void init( TMdPrm *prm );
+	void deInit( TMdPrm *prm );
         void getVal( TMdPrm *prm );
 	void setEVAL( TMdPrm *prm );
 	
 	void makeActiveDA( TMdContr *a_cntr );
 	
     private:
-        void dList( vector<string> &list, bool part = false );	
-};
+	static char *mbmon_cmd;
+};									    
+
+
 
 } //End namespace 
 
-#endif //DA_NETSTAT_H
+#endif //DA_SENSORS_H
 

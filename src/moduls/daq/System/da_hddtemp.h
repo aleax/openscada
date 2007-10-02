@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.OperationSystem file: da_hddstat.h
+//OpenSCADA system module DAQ.System file: da_hddtemp.h
 /***************************************************************************
  *   Copyright (C) 2005-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
@@ -20,22 +20,22 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
  
-#ifndef DA_HDDSTAT_H
-#define DA_HDDSTAT_H
+#ifndef DA_HDDTEMP_H
+#define DA_HDDTEMP_H
 
 #include "da.h"
 
 namespace SystemCntr
 {
 
-class HddStat: public DA
+class Hddtemp: public DA
 {
     public:
-        HddStat( );
-	~HddStat( );
+        Hddtemp( );
+        ~Hddtemp( );
 	
-        string id( ) 	{ return "hddstat"; }
-        string name( )	{ return "HDD statistic"; }
+        string id( ) 	{ return "hddtemp"; }
+        string name( )	{ return "HDD temperature"; }			
 		    
         void init( TMdPrm *prm );
         void getVal( TMdPrm *prm );
@@ -44,10 +44,15 @@ class HddStat: public DA
 	void makeActiveDA( TMdContr *a_cntr );
 	
     private:
-        void dList( vector<string> &list, bool part = false );	
+	string getHDDTemp( );
+        void dList( vector<string> &list );
+	
+    private:
+	Res     m_res;		//Resource for access to HDDTemp transport
+        string	t_tr, n_tr;
 };
 
 } //End namespace 
 
-#endif //DA_HDDSTAT_H
+#endif //DA_HDDTEMP_H
 

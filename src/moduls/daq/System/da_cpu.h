@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.OperationSystem file: da_uptime.h
+//OpenSCADA system module DAQ.System file: da_cpu.h
 /***************************************************************************
  *   Copyright (C) 2005-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
@@ -20,34 +20,41 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
  
-#ifndef DA_UPTIME_H
-#define DA_UPTIME_H
+#ifndef DA_CPU_H
+#define DA_CPU_H
 
 #include "da.h"
 
 namespace SystemCntr
 {
 
-class UpTime: public DA
+class CPU: public DA
 {
     public:
-        UpTime( );
-        ~UpTime( );
-	
-        string id()     { return "uptime"; }
-        string name()   { return "Up time"; }
-		    
-        void init( TMdPrm *prm );
-        void getVal( TMdPrm *prm );
+	CPU( );
+	~CPU( );
+
+	string id()	{ return "CPU"; }
+	string name()	{ return "CPU"; }
+
+	void init( TMdPrm *prm );
+	void getVal( TMdPrm *prm );
 	void setEVAL( TMdPrm *prm );
 	
 	void makeActiveDA( TMdContr *a_cntr );
 	
     private:
-        time_t      st_tm;		
+	struct tval
+	{
+	    long user;
+	    long nice;
+	    long sys;
+	    long idle;
+	};
+	vector<tval>	c_vls;
 };
 
 } //End namespace 
 
-#endif //DA_UPTIME_H
+#endif //DA_CPU_H
 

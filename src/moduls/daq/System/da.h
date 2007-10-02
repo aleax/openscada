@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.OperationSystem file: da_hddtemp.h
+//OpenSCADA system module DAQ.System file: da.h
 /***************************************************************************
  *   Copyright (C) 2005-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
@@ -20,39 +20,33 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
  
-#ifndef DA_HDDTEMP_H
-#define DA_HDDTEMP_H
+#ifndef DA_H
+#define DA_H
 
-#include "da.h"
+#include <tcontroller.h>
 
 namespace SystemCntr
 {
+class TMdPrm;
+class TMdContr;
 
-class Hddtemp: public DA
+class DA: public ::TElem
 {
     public:
-        Hddtemp( );
-        ~Hddtemp( );
-	
-        string id( ) 	{ return "hddtemp"; }
-        string name( )	{ return "HDD temperature"; }			
+        DA( ) : TElem("da_el") { }
 		    
-        void init( TMdPrm *prm );
-        void getVal( TMdPrm *prm );
-	void setEVAL( TMdPrm *prm );
+	virtual string id() = 0;
+	virtual string name() = 0;
 	
-	void makeActiveDA( TMdContr *a_cntr );
+        virtual void init( TMdPrm *prm ) 	{ }
+	virtual void deInit( TMdPrm *prm )	{ }
+        virtual void getVal( TMdPrm *prm )	{ }
+	virtual void setEVAL( TMdPrm *prm )	{ }
 	
-    private:
-	string getHDDTemp( );
-        void dList( vector<string> &list );
-	
-    private:
-	Res     m_res;		//Resource for access to HDDTemp transport
-        string	t_tr, n_tr;
+	virtual void makeActiveDA( TMdContr *a_cntr )	{ }
 };
 
 } //End namespace 
 
-#endif //DA_HDDTEMP_H
+#endif //DA_H
 

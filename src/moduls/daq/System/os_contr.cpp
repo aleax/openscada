@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.OperationSystem file: os_contr.cpp
+//OpenSCADA system module DAQ.System file: os_contr.cpp
 /***************************************************************************
  *   Copyright (C) 2005-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
@@ -45,8 +45,8 @@
 #include "os_contr.h"
 
 //============ Modul info! =====================================================
-#define MOD_ID      "OperationSystem"
-#define MOD_NAME    "Operation system DA"
+#define MOD_ID      "System"
+#define MOD_NAME    "System DA"
 #define MOD_TYPE    "DAQ"
 #define VER_TYPE    VER_CNTR
 #define VERSION     "1.2.0"
