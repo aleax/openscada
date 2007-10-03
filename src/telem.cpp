@@ -40,7 +40,11 @@ int TElem::fldAdd( TFld *fld, int id )
 {
     //Find dublicates
     for( int i_f = 0; i_f < elem.size(); i_f++)
-	if(elem[i_f]->name() == fld->name()) return i_f;
+	if(elem[i_f]->name() == fld->name()) 
+	{
+	    delete fld;
+	    return i_f;
+	}
     if( id > elem.size() || id < 0 ) id = elem.size();
     elem.insert(elem.begin()+id,fld);
     //Add value and set them default

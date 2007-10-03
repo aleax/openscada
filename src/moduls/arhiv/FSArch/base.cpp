@@ -1,5 +1,5 @@
 
-//OpenSCADA system module Archive.BaseArh file: base.cpp
+//OpenSCADA system module Archive.FSArch file: base.cpp
 /***************************************************************************
  *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
@@ -32,13 +32,13 @@
 #include "base.h"
 
 //============ Modul info! =====================================================
-#define MOD_ID      "BaseArh"
-#define MOD_NAME    "Base archivator"
+#define MOD_ID      "FSArch"
+#define MOD_NAME    "File system archivator"
 #define MOD_TYPE    "Archive"
 #define VER_TYPE    VER_ARH
 #define VERSION     "0.9.0"
 #define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "The Archive module. Allow base functions of message and value arhiving to file system."
+#define DESCRIPTION "The Archive module. Allow functions for messages and values arhiving to file system."
 #define LICENSE     "GPL"
 //==============================================================================
 
@@ -101,39 +101,31 @@ void ModArch::postEnable( int flag )
 {
     TModule::postEnable( flag );
     
-    //Add self DB-fields for messages archive
-    if( !owner().messE().fldPresent("BaseArhXML") )
-	owner().messE().fldAdd( new TFld("BaseArhXML",_("XML archive files"),TFld::Boolean,TFld::NoFlag,"1","false") );
-    if( !owner().messE().fldPresent("BaseArhMSize") )
-	owner().messE().fldAdd( new TFld("BaseArhMSize",_("Maximum archive file size (kB)"),TFld::Integer,TFld::NoFlag,"4","300") );
-    if( !owner().messE().fldPresent("BaseArhNFiles") )
-	owner().messE().fldAdd( new TFld("BaseArhNFiles",_("Maximum files number"),TFld::Integer,TFld::NoFlag,"3","10") );
-    if( !owner().messE().fldPresent("BaseArhTmSize") )
-	owner().messE().fldAdd( new TFld("BaseArhTmSize",_("File's time size (days)"),TFld::Integer,TFld::NoFlag,"3","30") );
-    if( !owner().messE().fldPresent("BaseArhPackTm") )	
-	owner().messE().fldAdd( new TFld("BaseArhPackTm",_("Pack files timeout (min)"),TFld::Integer,TFld::NoFlag,"2","10") );
-    if( !owner().messE().fldPresent("BaseArhTm") )
-	owner().messE().fldAdd( new TFld("BaseArhTm",_("Check archives period (min)"),TFld::Integer,TFld::NoFlag,"2","60") );
+    if( flag&TCntrNode::NodeConnect )
+    {
+	//Add self DB-fields for messages archive
+	owner().messE().fldAdd( new TFld("FSArchXML",_("XML archive files"),TFld::Boolean,TFld::NoFlag,"1","false") );
+	owner().messE().fldAdd( new TFld("FSArchMSize",_("Maximum archive file size (kB)"),TFld::Integer,TFld::NoFlag,"4","300") );
+	owner().messE().fldAdd( new TFld("FSArchNFiles",_("Maximum files number"),TFld::Integer,TFld::NoFlag,"3","10") );
+	owner().messE().fldAdd( new TFld("FSArchTmSize",_("File's time size (days)"),TFld::Integer,TFld::NoFlag,"3","30") );
+	owner().messE().fldAdd( new TFld("FSArchPackTm",_("Pack files timeout (min)"),TFld::Integer,TFld::NoFlag,"2","10") );
+	owner().messE().fldAdd( new TFld("FSArchTm",_("Check archives period (min)"),TFld::Integer,TFld::NoFlag,"2","60") );
 	
-    //Add self DB-fields for value archive
-    if( !owner().valE().fldPresent("BaseArhTmSize") )
-	owner().valE().fldAdd( new TFld("BaseArhTmSize",_("File's time size (hours)"),TFld::Real,TFld::NoFlag,"4.2","800") );
-    if( !owner().valE().fldPresent("BaseArhNFiles") )
-    	owner().valE().fldAdd( new TFld("BaseArhNFiles",_("Maximum files number"),TFld::Integer,TFld::NoFlag,"3","10") );
-    if( !owner().valE().fldPresent("BaseArhRound") )
-	owner().valE().fldAdd( new TFld("BaseArhRound",_("Numberic values rounding (%)"),TFld::Real,TFld::NoFlag,"2.2","0.1","0;50") );
-    if( !owner().valE().fldPresent("BaseArhPackTm") )	
-	owner().valE().fldAdd( new TFld("BaseArhPackTm",_("Pack files timeout (min)"),TFld::Integer,TFld::NoFlag,"2","10") );    	
-    if( !owner().valE().fldPresent("BaseArhTm") )
-	owner().valE().fldAdd( new TFld("BaseArhTm",_("Check archives period (min)"),TFld::Integer,TFld::NoFlag,"2","60") );
+	//Add self DB-fields for value archive
+	owner().valE().fldAdd( new TFld("FSArchTmSize",_("File's time size (hours)"),TFld::Real,TFld::NoFlag,"4.2","800") );
+    	owner().valE().fldAdd( new TFld("FSArchNFiles",_("Maximum files number"),TFld::Integer,TFld::NoFlag,"3","10") );
+	owner().valE().fldAdd( new TFld("FSArchRound",_("Numberic values rounding (%)"),TFld::Real,TFld::NoFlag,"2.2","0.1","0;50") );
+	owner().valE().fldAdd( new TFld("FSArchPackTm",_("Pack files timeout (min)"),TFld::Integer,TFld::NoFlag,"2","10") );    	
+	owner().valE().fldAdd( new TFld("FSArchTm",_("Check archives period (min)"),TFld::Integer,TFld::NoFlag,"2","60") );
 	
-    //Pack files DB structure
-    el_packfl.fldAdd( new TFld("FILE",_("File"),TFld::String,TCfg::Key,"100") );
-    el_packfl.fldAdd( new TFld("BEGIN",_("Begin"),TFld::String,TFld::NoFlag,"20") );
-    el_packfl.fldAdd( new TFld("END",_("End"),TFld::String,TFld::NoFlag,"20") );
-    el_packfl.fldAdd( new TFld("PRM1",_("Parameter 1"),TFld::String,TFld::NoFlag,"20") );
-    el_packfl.fldAdd( new TFld("PRM2",_("Parameter 2"),TFld::String,TFld::NoFlag,"20") );
-    el_packfl.fldAdd( new TFld("PRM3",_("Parameter 3"),TFld::String,TFld::NoFlag,"20") );
+	//Pack files DB structure
+	el_packfl.fldAdd( new TFld("FILE",_("File"),TFld::String,TCfg::Key,"100") );
+	el_packfl.fldAdd( new TFld("BEGIN",_("Begin"),TFld::String,TFld::NoFlag,"20") );
+	el_packfl.fldAdd( new TFld("END",_("End"),TFld::String,TFld::NoFlag,"20") );
+	el_packfl.fldAdd( new TFld("PRM1",_("Parameter 1"),TFld::String,TFld::NoFlag,"20") );
+	el_packfl.fldAdd( new TFld("PRM2",_("Parameter 2"),TFld::String,TFld::NoFlag,"20") );
+	el_packfl.fldAdd( new TFld("PRM3",_("Parameter 3"),TFld::String,TFld::NoFlag,"20") );
+    }
 }
 
 ModArch::~ModArch()

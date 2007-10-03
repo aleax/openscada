@@ -1,6 +1,11 @@
+2007-10-03 Roman
+- !!:/Archive: Module "BaseArh" is renamed to "FSArch".
+- /SYS: Updated Demo DB.
+
+
 2007-10-02 Roman
 - FIX:/UI/Vision: First all attributes loading to widgets performance degradation is fixed.
-- !:/DAQ: Module "OperationSystem" renamed to "System".
+- !:/DAQ: Module "OperationSystem" is renamed to "System".
 - /UI/Vision: An icon for primitive's "ElFig" the toolbar button "Hold" is added.
 - /SYS: Updated Demo DB.
 

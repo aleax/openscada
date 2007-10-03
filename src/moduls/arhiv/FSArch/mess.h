@@ -1,5 +1,5 @@
 
-//OpenSCADA system module Archive.BaseArh file: mess.h
+//OpenSCADA system module Archive.FSArch file: mess.h
 /***************************************************************************
  *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *

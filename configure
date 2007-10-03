@@ -1037,7 +1037,7 @@ Optional Features:
   --enable-fast-install[=PKGS]
                           optimize for fast installation [default=yes]
   --disable-libtool-lock  avoid locking (might break parallel builds)
-  --disable-BaseArh       disable build module Archive/BaseArh
+  --disable-FSArch        disable build module Archive/FSArch
   --disable-DBF           disable build module DB/DBF
   --disable-MySQL         disable build module DB/MySQL
   --disable-SQLite        disable build module DB/SQLite
@@ -26242,12 +26242,12 @@ CXXFLAGS="-O2 -DOSC_DEBUG -DOSC_HASHMAP"
 
 #====== Check build modules ======
 #-- Archive modules --
-# Check whether --enable-BaseArh or --disable-BaseArh was given.
-if test "${enable_BaseArh+set}" = set; then
-  enableval="$enable_BaseArh"
-   if test $enableval = yes; then ModBaseArh=true; else ModBaseArh=false; fi
+# Check whether --enable-FSArch or --disable-FSArch was given.
+if test "${enable_FSArch+set}" = set; then
+  enableval="$enable_FSArch"
+   if test $enableval = yes; then ModFSArch=true; else ModFSArch=false; fi
 else
-   ModBaseArh=true;
+   ModFSArch=true;
 fi;
 #-- DB modules --
 # Check whether --enable-DBF or --disable-DBF was given.
@@ -26443,12 +26443,12 @@ echo "$as_me:$LINENO: result: ========== Build modules list =============" >&5
 echo "${ECHO_T}========== Build modules list =============" >&6
 #-- Archive modules --
 
-if test ${ModBaseArh} = true; then
-    echo "$as_me:$LINENO: result: Build module: Archive/BaseArh" >&5
-echo "${ECHO_T}Build module: Archive/BaseArh" >&6
-              ac_config_files="$ac_config_files src/moduls/arhiv/BaseArh/Makefile"
+if test ${ModFSArch} = true; then
+    echo "$as_me:$LINENO: result: Build module: Archive/FSArch" >&5
+echo "${ECHO_T}Build module: Archive/FSArch" >&6
+              ac_config_files="$ac_config_files src/moduls/arhiv/FSArch/Makefile"
 
-    ArchSub_mod="${ArchSub_mod}BaseArh "
+    ArchSub_mod="${ArchSub_mod}FSArch "
 fi
 #-- DB modules --
 
@@ -28706,7 +28706,7 @@ do
   "src/moduls/daq/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/daq/Makefile" ;;
   "src/moduls/transport/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/transport/Makefile" ;;
   "src/moduls/ui/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/ui/Makefile" ;;
-  "src/moduls/arhiv/BaseArh/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/arhiv/BaseArh/Makefile" ;;
+  "src/moduls/arhiv/FSArch/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/arhiv/FSArch/Makefile" ;;
   "src/moduls/bd/DBF/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/bd/DBF/Makefile" ;;
   "src/moduls/bd/MySQL/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/bd/MySQL/Makefile" ;;
   "src/moduls/bd/SQLite/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/bd/SQLite/Makefile" ;;

@@ -118,8 +118,8 @@ AC_CONFIG_FILES(Makefile src/Makefile src/moduls/Makefile
 
 #====== Check build modules ======
 #-- Archive modules --
-AC_ARG_ENABLE(BaseArh,AC_HELP_STRING([--disable-BaseArh], [disable build module Archive/BaseArh]),
-[ if test $enableval = yes; then ModBaseArh=true; else ModBaseArh=false; fi],[ ModBaseArh=true; ])
+AC_ARG_ENABLE(FSArch,AC_HELP_STRING([--disable-FSArch], [disable build module Archive/FSArch]),
+[ if test $enableval = yes; then ModFSArch=true; else ModFSArch=false; fi],[ ModFSArch=true; ])
 #-- DB modules --
 AC_ARG_ENABLE(DBF,AC_HELP_STRING([--disable-DBF], [disable build module DB/DBF]),
 [ if test $enableval = yes; then ModDBF=true; else ModDBF=false; fi],[ ModDBF=true; ])
@@ -183,10 +183,10 @@ AC_ARG_ENABLE(WebDbg,AC_HELP_STRING([--disable-WebDbg], [disable build module UI
 AC_MSG_RESULT(========== Build modules list =============)
 #-- Archive modules --
 AC_SUBST(ArchSub_mod)
-if test ${ModBaseArh} = true; then
-    AC_MSG_RESULT(Build module: Archive/BaseArh)
-    AC_CONFIG_FILES(src/moduls/arhiv/BaseArh/Makefile)
-    ArchSub_mod="${ArchSub_mod}BaseArh "
+if test ${ModFSArch} = true; then
+    AC_MSG_RESULT(Build module: Archive/FSArch)
+    AC_CONFIG_FILES(src/moduls/arhiv/FSArch/Makefile)
+    ArchSub_mod="${ArchSub_mod}FSArch "
 fi
 #-- DB modules --
 AC_SUBST(DBSub_mod)

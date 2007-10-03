@@ -1,5 +1,5 @@
 
-//OpenSCADA system module Archive.BaseArh file: base.h
+//OpenSCADA system module Archive.FSArch file: base.h
 /***************************************************************************
  *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *

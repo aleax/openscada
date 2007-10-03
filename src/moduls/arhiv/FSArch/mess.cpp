@@ -1,5 +1,5 @@
 
-//OpenSCADA system module Archive.BaseArh file: mess.cpp
+//OpenSCADA system module Archive.FSArch file: mess.cpp
 /***************************************************************************
  *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
@@ -35,9 +35,9 @@ using namespace BaseArch;
 //**** BaseArch::ModMArch ****
 ModMArch::ModMArch( const string &iid, const string &idb, TElem *cf_el ) : 
     TMArchivator(iid,idb,cf_el), tm_calc(0.0), m_lst_check(0),
-    m_use_xml(cfg("BaseArhXML").getBd()), m_max_size(cfg("BaseArhMSize").getId()), 
-    m_numb_files(cfg("BaseArhNFiles").getId()), m_time_size(cfg("BaseArhTmSize").getId()), 
-    m_chk_tm(cfg("BaseArhTm").getId()), m_pack_tm(cfg("BaseArhPackTm").getId())
+    m_use_xml(cfg("FSArchXML").getBd()), m_max_size(cfg("FSArchMSize").getId()), 
+    m_numb_files(cfg("FSArchNFiles").getId()), m_time_size(cfg("FSArchTmSize").getId()), 
+    m_chk_tm(cfg("FSArchTm").getId()), m_pack_tm(cfg("FSArchPackTm").getId())
 {
 
 }
@@ -270,12 +270,12 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/prm/st/tarch",_("Archiving time (msek)"),0444,"root",grp.c_str(),1,"tp","real");	
 	if(ctrMkNode("area",opt,1,"/bs",_("Additional options"),0444,"root",grp.c_str()))
 	{
-	    ctrMkNode("fld",opt,-1,"/bs/xml",cfg("BaseArhXML").fld().descr(),0664,"root",grp.c_str(),1,"tp","bool");
-	    ctrMkNode("fld",opt,-1,"/bs/sz",cfg("BaseArhMSize").fld().descr(),0664,"root",grp.c_str(),1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/bs/fl",cfg("BaseArhNFiles").fld().descr(),0664,"root",grp.c_str(),1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/bs/len",cfg("BaseArhTmSize").fld().descr(),0664,"root",grp.c_str(),1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/bs/pcktm",cfg("BaseArhPackTm").fld().descr(),0664,"root",grp.c_str(),1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/bs/tm",cfg("BaseArhTm").fld().descr(),0664,"root",grp.c_str(),1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/bs/xml",cfg("FSArchXML").fld().descr(),0664,"root",grp.c_str(),1,"tp","bool");
+	    ctrMkNode("fld",opt,-1,"/bs/sz",cfg("FSArchMSize").fld().descr(),0664,"root",grp.c_str(),1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/bs/fl",cfg("FSArchNFiles").fld().descr(),0664,"root",grp.c_str(),1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/bs/len",cfg("FSArchTmSize").fld().descr(),0664,"root",grp.c_str(),1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/bs/pcktm",cfg("FSArchPackTm").fld().descr(),0664,"root",grp.c_str(),1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/bs/tm",cfg("FSArchTm").fld().descr(),0664,"root",grp.c_str(),1,"tp","dec");
 	    ctrMkNode("comm",opt,-1,"/bs/chk_nw",_("Check archivator directory now"),0660,"root",grp.c_str());
 	}
         return;
