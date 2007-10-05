@@ -475,7 +475,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 //************************************************
 LWidget::LWidget( const string &id, const string &isrcwdg ) :
         Widget(id,isrcwdg), TConfig(&mod->elWdg()),
-        m_ico(cfg("ICO").getSd()), m_proc(cfg("PROC").getSd()),
+        m_ico(cfg("ICO").getSd()), m_proc(cfg("PROC").getSd()), m_proc_per(cfg("PROC_PER").getId()),
 	m_user(cfg("USER").getSd()), m_grp(cfg("GRP").getSd()), m_permit(cfg("PERMIT").getId())
 {
     cfg("ID").setS(id);
@@ -591,6 +591,13 @@ string LWidget::calcProg( )
     return iprg.substr(lng_end);
 }
 
+int LWidget::calcPer( )
+{
+    if( m_proc_per < 0 && !parent().freeStat() )
+	return parent().at().calcPer();
+    return m_proc_per;
+}
+
 void LWidget::setCalcLang( const string &ilng )
 {
     m_proc = m_proc.replace(0,m_proc.find("\n"),ilng);
@@ -606,6 +613,11 @@ void LWidget::setCalcProg( const string &iprg )
         lng_end=tmp_prg.find("\n");
     }
     m_proc = tmp_prg.replace(lng_end+1,string::npos,iprg);
+}
+
+void LWidget::setCalcPer( int vl )
+{
+    m_proc_per = vl;
 }
 
 void LWidget::load( )
@@ -936,6 +948,12 @@ string CWidget::calcProg( )
 {
     if( !parent().freeStat() )	return parent().at().calcProg();
     return "";
+}
+
+int CWidget::calcPer( )
+{
+    if( !parent().freeStat() )	return parent().at().calcPer();
+    return 0;
 }
 
 void CWidget::load( )

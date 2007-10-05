@@ -131,6 +131,7 @@ class Page : public Widget, public TConfig
 	string calcId( );
         string calcLang( );
         string calcProg( );
+	int    calcPer( );
 	string ownerFullId( bool contr = false );
 	int    prjFlags( )   	{ return m_flgs; }
 
@@ -140,6 +141,7 @@ class Page : public Widget, public TConfig
         void setPermit( short iperm )          { m_permit = iperm; }
         void setCalcLang( const string &ilng );
         void setCalcProg( const string &iprg );
+	void setCalcPer( int vl );
         void setParentNm( const string &isw );
 	void setPrjFlags( int val );
 
@@ -183,7 +185,8 @@ class Page : public Widget, public TConfig
                 &m_grp,         //Widget group
                 &m_proc;        //Widget procedure
 	int 	&m_permit,      //Widget permission
-		&m_flgs;	//Project's flags
+		&m_flgs,	//Project's flags
+		&m_proc_per;	//Process period
 };
 
 //************************************************
@@ -206,6 +209,7 @@ class PageWdg : public Widget, public TConfig
 	string calcId( );
         string calcLang( );
         string calcProg( );
+	int    calcPer( );
 
         void setParentNm( const string &isw );
 

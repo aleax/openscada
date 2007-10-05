@@ -598,7 +598,12 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    break;
 	}
 	case 35:	//text
-	{ w->dc()["text_tmpl"] = val.c_str(); break; }
+	{ 
+	    if( w->dc()["text_tmpl"] == val.c_str() )	break;
+	    w->dc()["text_tmpl"] = val.c_str();
+	    reform = true;
+	    break; 
+	}
 	case 36:	//numbArg
 	{
 	    int numbArgPrev = w->dc()["numbArg"].toInt();

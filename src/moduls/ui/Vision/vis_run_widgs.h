@@ -53,7 +53,7 @@ namespace VISION
 	    WdgView *newWdgItem( const string &iwid );
 	    void attrLoad( QMap<QString, QString> &attrs );
 	    
-	    void update( unsigned cnt, int div_max );
+	    void update( unsigned cnt, int div_max, const string &wpath = "" );
 	
 	protected:
 	    //- Protected methods -
@@ -78,7 +78,7 @@ namespace VISION
 	    RunPageView( const string &iwid, VisRun *mainWind, QWidget* parent = 0 );
     	    ~RunPageView( );
 	    
-	    bool findOpenPage( const string &pg );
+	    RunPageView *findOpenPage( const string &pg );
 	    bool callPage( const string &pg_it, const string &pgGrp, const string &pgSrc );
 	    
 	    RunPageView *parent( );	    

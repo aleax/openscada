@@ -159,7 +159,7 @@ AutoHD<Project> Session::parent( )
 void Session::add( const string &iid, const string &iparent )
 {
     if( present(iid) )	return;
-    chldAdd(m_page,new SessPage(iid,iparent));
+    chldAdd(m_page,new SessPage(iid,iparent,this));
 }
 
 void Session::openReg( const string &iid )
@@ -198,7 +198,6 @@ void Session::uiComm( const string &com, const string &prm, const string &src )
 	}
 	if( cur_pt_el.empty() ) { oppg = op_ls[i_op]; break; }
     }
-    //printf("TEST 20: UI Prm %s; Open page %s\n",prm.c_str(),oppg.c_str());    
     //- Individual commands process -
     try
     {	    
@@ -249,7 +248,6 @@ void Session::uiComm( const string &com, const string &prm, const string &src )
 	    else op_pg = cur_pt_el;
 	    //-- Go to next page --
 	    cpg = cpg.freeStat() ? at(op_pg) : cpg.at().pageAt(op_pg);
-	    //printf("TEST 21: Open page %s\n",cpg.at().path().c_str());
 	}
 	//- Open found page -
 	if( !cpg.freeStat() ) 
@@ -284,7 +282,7 @@ void *Session::Task( void *icontr )
 
 	//Calc session pages and all other items at recursion
 	for( int i_l = 0; i_l < pls.size(); i_l++ )
-	    ses.at(pls[i_l]).at().calc(is_start,is_stop,ses.calcClk());
+	    ses.at(pls[i_l]).at().calc(is_start,is_stop);
 
 	if( (ses.m_calcClk++) == 0 ) ses.m_calcClk = 1;
 
@@ -323,9 +321,21 @@ void Session::cntrCmdProc( XMLNode *opt )
     {
 	if( ctrChkNode(opt,"openlist",RWRWRW,"root","root",SEQ_RD) )	//Open pages list
 	{
+	    unsigned tm = strtoul(opt->attr("tm").c_str(),NULL,10);
 	    vector<string> &lst = openList();
 	    for( int i_f = 0; i_f < lst.size(); i_f++ )
-		opt->childAdd("el")->setText(lst[i_f]);
+	    {
+		XMLNode *pel = opt->childAdd("el");
+		pel->setText(lst[i_f]);
+		if( tm )
+		{
+		    vector<string> updEl;
+		    ((AutoHD<SessWdg>)nodeAt(lst[i_f],1)).at().getUpdtWdg("",tm,updEl);
+		    for( int i_e = 0; i_e < updEl.size(); i_e++ )
+		    	pel->childAdd("el")->setText(updEl[i_e]);
+		}
+	    }
+	    if( tm ) opt->setAttr("tm",TSYS::uint2str(calcClk()));
 	}
 	return;
     }
@@ -410,7 +420,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* Page of Project's session                    *
 //************************************************
-SessPage::SessPage( const string &iid, const string &ipage ) : SessWdg(iid,ipage)
+SessPage::SessPage( const string &iid, const string &ipage, Session *sess ) : SessWdg(iid,ipage,sess)
 {
     m_page = grpAdd("pg_");    
 }
@@ -490,7 +500,7 @@ AutoHD<Page> SessPage::parent( )
 void SessPage::pageAdd( const string &iid, const string &iparent )
 {
     if( pagePresent(iid) )return;
-    chldAdd(m_page,new SessPage(iid,iparent));
+    chldAdd(m_page,new SessPage(iid,iparent,ownerSess()));
 }
 
 AutoHD<SessPage> SessPage::pageAt( const string &iid )
@@ -498,16 +508,16 @@ AutoHD<SessPage> SessPage::pageAt( const string &iid )
     return chldAt(m_page,iid);
 }
 
-void SessPage::calc( bool first, bool last, unsigned clcClk )
+void SessPage::calc( bool first, bool last )
 {
     //- Process self data -
-    if( process() ) SessWdg::calc(first,last,clcClk);
+    if( process() ) SessWdg::calc(first,last);
     
     //- Put calculate to include pages -
     vector<string> ls;	
     pageList(ls);
     for(int i_l = 0; i_l < ls.size(); i_l++ )
-        pageAt(ls[i_l]).at().calc(first,last,clcClk);
+        pageAt(ls[i_l]).at().calc(first,last);
 }
 
 bool SessPage::attrChange( Attr &cfg, void *prev )
@@ -571,8 +581,8 @@ bool SessPage::cntrCmdGeneric( XMLNode *opt )
 //************************************************
 //* Session page's widget                        *
 //************************************************
-SessWdg::SessWdg( const string &iid, const string &iparent ) : 
-    Widget(iid,iparent), m_proc(false), TValFunc(iid+"_wdg",NULL), m_clc(0), m_mdfClc(0)
+SessWdg::SessWdg( const string &iid, const string &iparent, Session *isess ) : 
+    Widget(iid,iparent), m_proc(false), TValFunc(iid+"_wdg",NULL)/*, m_clc(0)*/, m_mdfClc(0), m_sess(isess)
 {
     
 }
@@ -599,14 +609,6 @@ SessPage *SessWdg::ownerPage()
     if( own )	return own->ownerPage( );
     return NULL;
 }
-
-Session *SessWdg::ownerSess()
-{
-    SessPage *own = ownerPage( );
-    if( own )   return own->ownerSess();
-    if( nodePrev(true) ) return dynamic_cast<Session*>(nodePrev());
-    return NULL;
-}				
 
 string SessWdg::path( )
 {
@@ -685,7 +687,6 @@ void SessWdg::setProcess( bool val )
                     compileFunc(TSYS::strSepParse(calcLang(),1,'.'),fio,calcProg());
 	//-- Connect to compiled function --
 	TValFunc::func(&((AutoHD<TFunction>)SYS->nodeAt(work_prog,1)).at());
-
     }
     if( !val )	TValFunc::func(NULL);
 
@@ -738,6 +739,12 @@ string SessWdg::calcProg( )
     return "";
 }
 
+int SessWdg::calcPer( )
+{
+    if( !parent().freeStat() )    return parent().at().calcPer( );
+    return 0;
+}
+
 string SessWdg::resourceGet( const string &id, string *mime )
 {
     string mimeType, mimeData;
@@ -753,7 +760,7 @@ void SessWdg::wdgAdd( const string &iid, const string &name, const string &ipare
     if( !isContainer() )  throw TError(nodePath().c_str(),_("No container widget!"));
     if( wdgPresent(iid) ) return;
 
-    chldAdd(inclWdg,new SessWdg(iid,iparent));
+    chldAdd(inclWdg,new SessWdg(iid,iparent,ownerSess()));
 }
 
 AutoHD<SessWdg> SessWdg::wdgAt( const string &wdg )
@@ -803,142 +810,148 @@ void SessWdg::prcElListUpdate( )
     }
 }
 
+void SessWdg::getUpdtWdg( const string &path, unsigned int tm, vector<string> &els )
+{
+    string wpath = path+"/"+id();
+    if( m_mdfClc >= tm ) els.push_back(wpath);
+    for( int i_ch = 0; i_ch < m_wdgChldAct.size(); i_ch++ )
+	wdgAt(m_wdgChldAct[i_ch]).at().getUpdtWdg(wpath,tm,els);
+}
+
 unsigned int SessWdg::modifVal( Attr &cfg )
 { 
+    int m_clc = ownerSess()->calcClk( );
     if( !(cfg.flgGlob()&Attr::IsUser) )	m_mdfClc = m_clc;
     return m_clc; 
 }
 
-void SessWdg::calc( bool first, bool last, unsigned clc )
+void SessWdg::calc( bool first, bool last )
 {
     string sw_attr, s_attr, obj_tp;
 
     if( !process() )	return;
-    m_clc = clc;
 
-    if( !(clc%100) ) prcElListUpdate( );
+    if( !(ownerSess()->calcClk()%100) ) prcElListUpdate( );
 
     //- Calculate include widgets -
-    //vector<string> ls;	
-    //wdgList(ls);
     for(int i_l = 0; i_l < m_wdgChldAct.size(); i_l++ )
-        wdgAt(m_wdgChldAct[i_l]).at().calc(first,last,clc);
+        wdgAt(m_wdgChldAct[i_l]).at().calc(first,last);
 	
     try
     {    
 	//- Load events to process -
 	string wevent = eventGet(true);
-	
-	//- Process input links and constants -    
-	AutoHD<Attr> attr;    
-	//attrList(ls);
-	for( int i_a = 0; i_a < m_attrLnkLs.size(); i_a++ )
+	if( !((ownerSess()->calcClk())%(vmax(calcPer()/ownerSess()->period(),1))) )
 	{
-	    attr = attrAt(m_attrLnkLs[i_a]);
-	    if( attr.at().flgSelf()&Attr::CfgConst )	attr.at().setS(attr.at().cfgVal());
-	    else if( attr.at().flgSelf()&Attr::CfgLnkIn && !attr.at().cfgVal().empty() )
+	    //- Process input links and constants -    
+	    AutoHD<Attr> attr;    
+	    for( int i_a = 0; i_a < m_attrLnkLs.size(); i_a++ )
 	    {
-		obj_tp = TSYS::strSepParse(attr.at().cfgVal(),0,':')+":";
-		if( obj_tp == "val:" )	attr.at().setS(attr.at().cfgVal().substr(obj_tp.size()));
-		else if( obj_tp == "prm:" )
+		attr = attrAt(m_attrLnkLs[i_a]);
+		if( attr.at().flgSelf()&Attr::CfgConst )	attr.at().setS(attr.at().cfgVal());
+		else if( attr.at().flgSelf()&Attr::CfgLnkIn && !attr.at().cfgVal().empty() )
 		{
-		    
-		    if( attr.at().flgGlob()&Attr::Address )	
-			attr.at().setS("/DAQ"+attr.at().cfgVal().substr(obj_tp.size()));
-		    else switch( attr.at().type() )
+		    obj_tp = TSYS::strSepParse(attr.at().cfgVal(),0,':')+":";
+		    if( obj_tp == "val:" )	attr.at().setS(attr.at().cfgVal().substr(obj_tp.size()));
+		    else if( obj_tp == "prm:" )
+		    {			
+			if( attr.at().flgGlob()&Attr::Address )	
+		    	    attr.at().setS("/DAQ"+attr.at().cfgVal().substr(obj_tp.size()));
+			else switch( attr.at().type() )
+			{
+			    case TFld::Boolean:
+				attr.at().setB(((AutoHD<TVal>)SYS->daq().at().nodeAt(
+				    attr.at().cfgVal(),0,0,obj_tp.size())).at().getB());
+				break;
+			    case TFld::Integer:
+				attr.at().setI(((AutoHD<TVal>)SYS->daq().at().nodeAt(
+				    attr.at().cfgVal(),0,0,obj_tp.size())).at().getI());
+				break;
+			    case TFld::Real:
+				attr.at().setR(((AutoHD<TVal>)SYS->daq().at().nodeAt(
+				    attr.at().cfgVal(),0,0,obj_tp.size())).at().getR());
+				break;
+			    case TFld::String:
+				attr.at().setS(((AutoHD<TVal>)SYS->daq().at().nodeAt(
+				    attr.at().cfgVal(),0,0,obj_tp.size())).at().getS());
+				break;
+			}
+		    }
+		    else if( obj_tp == "addr:" )
+			attr.at().setS(attr.at().cfgVal().substr(obj_tp.size()));
+		}
+	    }
+
+	    if( TValFunc::func() )
+	    {    
+		//- Load events to calc procedure -
+		int evId = ioId("event");
+		if( evId >= 0 )	setS(evId,wevent);
+	
+		//-- Load data to calc area --
+    		setR(0,1000./ownerSess()->period());
+    		setB(1,first);
+    		setB(2,last);
+		for( int i_io = 3; i_io < ioSize( ); i_io++ )
+	    	{
+		    sw_attr = TSYS::pathLev(func()->io(i_io)->rez(),0);	
+		    s_attr  = TSYS::pathLev(func()->io(i_io)->rez(),1);
+		    attr = (sw_attr==".")?attrAt(s_attr):wdgAt(sw_attr).at().attrAt(s_attr);
+		    switch(ioType(i_io))
 		    {
-			case TFld::Boolean:
-			    attr.at().setB(((AutoHD<TVal>)SYS->daq().at().nodeAt(
-				attr.at().cfgVal(),0,0,obj_tp.size())).at().getB());
-			    break;
-			case TFld::Integer:
-			    attr.at().setI(((AutoHD<TVal>)SYS->daq().at().nodeAt(
-				attr.at().cfgVal(),0,0,obj_tp.size())).at().getI());
-			    break;
-			case TFld::Real:
-			    attr.at().setR(((AutoHD<TVal>)SYS->daq().at().nodeAt(
-				attr.at().cfgVal(),0,0,obj_tp.size())).at().getR());
-			    break;
-			case TFld::String:
-			    attr.at().setS(((AutoHD<TVal>)SYS->daq().at().nodeAt(
-				attr.at().cfgVal(),0,0,obj_tp.size())).at().getS());
-			    break;
+			case IO::String:	setS(i_io,attr.at().getS());	break;
+			case IO::Integer: 	setI(i_io,attr.at().getI());	break;
+			case IO::Real:	setR(i_io,attr.at().getR());	break;
+			case IO::Boolean:	setB(i_io,attr.at().getB());	break;
 		    }
 		}
-		else if( obj_tp == "addr:" )
-		    attr.at().setS(attr.at().cfgVal().substr(obj_tp.size()));
-    	    }
-	}
-
-	if( TValFunc::func() )
-	{    
-	    //- Load events to calc procedure -
-	    int evId = ioId("event");
-	    if( evId >= 0 )	setS(evId,wevent);
-	
-	    //-- Load data to calc area --
-	    setR(0,1000./ownerSess()->period());
-	    setB(1,first);
-	    setB(2,last);
-    	    for( int i_io = 3; i_io < ioSize( ); i_io++ )
-	    {
-	    	sw_attr = TSYS::pathLev(func()->io(i_io)->rez(),0);	
-		s_attr  = TSYS::pathLev(func()->io(i_io)->rez(),1);
-		attr = (sw_attr==".")?attrAt(s_attr):wdgAt(sw_attr).at().attrAt(s_attr);
-		switch(ioType(i_io))
+		//-- Calc --
+		TValFunc::calc();
+		//-- Load data from calc area --
+		for( int i_io = 3; i_io < ioSize( ); i_io++ )
 		{
-		    case IO::String:	setS(i_io,attr.at().getS());	break;
-		    case IO::Integer: 	setI(i_io,attr.at().getI());	break;
-		    case IO::Real:	setR(i_io,attr.at().getR());	break;
-		    case IO::Boolean:	setB(i_io,attr.at().getB());	break;
-    		}	
-    	    }
-    	    //-- Calc --
-	    TValFunc::calc();
-    	    //-- Load data from calc area --
-    	    for( int i_io = 3; i_io < ioSize( ); i_io++ )
-    	    {
-    		sw_attr = TSYS::pathLev(func()->io(i_io)->rez(),0);
-    		s_attr  = TSYS::pathLev(func()->io(i_io)->rez(),1);
-    		attr = (sw_attr==".")?attrAt(s_attr):wdgAt(sw_attr).at().attrAt(s_attr);
-    		switch(ioType(i_io))
-    		{
-    		    case IO::String:	attr.at().setS(getS(i_io));	break;
-    		    case IO::Integer:	attr.at().setI(getI(i_io));	break;
-    		    case IO::Real:     	attr.at().setR(getR(i_io));	break;
-    		    case IO::Boolean:   attr.at().setB(getB(i_io));	break;
-    		}
-    	    }
-	    //-- Save events from calc procedure --
-	    if( evId >= 0 ) wevent = getS(evId);
-	}
-    	
-	//-- Process output links --
-    	for( int i_a = 0; i_a < m_attrLnkLs.size(); i_a++ )
-    	{
-    	    attr = attrAt(m_attrLnkLs[i_a]);
-	    obj_tp = TSYS::strSepParse(attr.at().cfgVal(),0,':')+":";
-    	    if( attr.at().flgSelf()&Attr::CfgLnkOut && !attr.at().cfgVal().empty() && obj_tp == "prm:" )
-		switch( attr.at().type() )
-		{
-		    case TFld::Boolean:		
-		        ((AutoHD<TVal>)SYS->daq().at().nodeAt(
-			    attr.at().cfgVal(),0,0,obj_tp.size())).at().setB(attr.at().getB());
-			break;
-		    case TFld::Integer:
-			((AutoHD<TVal>)SYS->daq().at().nodeAt(
-			    attr.at().cfgVal(),0,0,obj_tp.size())).at().setI(attr.at().getI());
-			break;
-		    case TFld::Real:
-			((AutoHD<TVal>)SYS->daq().at().nodeAt(
-			    attr.at().cfgVal(),0,0,obj_tp.size())).at().setR(attr.at().getR());
-			break;
-		    case TFld::String:
-		        ((AutoHD<TVal>)SYS->daq().at().nodeAt(
-			    attr.at().cfgVal(),0,0,obj_tp.size())).at().setS(attr.at().getS());
-			break;
+		    sw_attr = TSYS::pathLev(func()->io(i_io)->rez(),0);
+		    s_attr  = TSYS::pathLev(func()->io(i_io)->rez(),1);
+		    attr = (sw_attr==".")?attrAt(s_attr):wdgAt(sw_attr).at().attrAt(s_attr);
+		    switch(ioType(i_io))
+		    {
+			case IO::String:	attr.at().setS(getS(i_io));	break;
+			case IO::Integer:	attr.at().setI(getI(i_io));	break;
+			case IO::Real:     	attr.at().setR(getR(i_io));	break;
+			case IO::Boolean:   attr.at().setB(getB(i_io));	break;
+		    }
 		}
-    	}
+		//-- Save events from calc procedure --
+		if( evId >= 0 ) wevent = getS(evId);
+	    }
+    	
+	    //-- Process output links --
+	    for( int i_a = 0; i_a < m_attrLnkLs.size(); i_a++ )
+	    {
+		attr = attrAt(m_attrLnkLs[i_a]);
+		obj_tp = TSYS::strSepParse(attr.at().cfgVal(),0,':')+":";
+		if( attr.at().flgSelf()&Attr::CfgLnkOut && !attr.at().cfgVal().empty() && obj_tp == "prm:" )
+		    switch( attr.at().type() )
+		    {
+			case TFld::Boolean:		
+			    ((AutoHD<TVal>)SYS->daq().at().nodeAt(
+				attr.at().cfgVal(),0,0,obj_tp.size())).at().setB(attr.at().getB());
+			    break;
+			case TFld::Integer:
+			    ((AutoHD<TVal>)SYS->daq().at().nodeAt(
+				attr.at().cfgVal(),0,0,obj_tp.size())).at().setI(attr.at().getI());
+			    break;
+			case TFld::Real:
+			    ((AutoHD<TVal>)SYS->daq().at().nodeAt(
+				attr.at().cfgVal(),0,0,obj_tp.size())).at().setR(attr.at().getR());
+			    break;
+			case TFld::String:
+			    ((AutoHD<TVal>)SYS->daq().at().nodeAt(
+				attr.at().cfgVal(),0,0,obj_tp.size())).at().setS(attr.at().getS());
+			    break;
+		    }
+	    }
+	}
     
 	//-- Process widget's events --
 	if( !wevent.empty() )
@@ -990,9 +1003,6 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	if( ctrChkNode(opt,"get",RWRWRW,"root","root",SEQ_RD) )		//Get values
 	{
 	    unsigned  tm = strtoul(opt->attr("tm").c_str(),0,10);
-
-	    //vector<string> ls;
-	    //attrList(ls);
 	    AutoHD<Attr> attr;
 	    if( m_mdfClc >= tm )
 		for( int i_l = 0; i_l < m_attrUILs.size(); i_l++ )
@@ -1003,7 +1013,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 				    	     setAttr("pos",TSYS::int2str(attr.at().fld().reserve()))->
 					     setText(attr.at().getS());
 		}
-	    opt->setAttr("tm",TSYS::uint2str(m_clc));
+	    opt->setAttr("tm",TSYS::uint2str(ownerSess()->calcClk( )));
 	}
 	else if( ctrChkNode(opt,"set",RWRWRW,"root","root",SEQ_WR) )	//Set values
 	    for( int i_ch = 0; i_ch < opt->childSize(); i_ch++ )

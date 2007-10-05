@@ -104,7 +104,7 @@ class Session : public TCntrNode
 	float     tm_calc;			//Scheme's calc time
 	float	  rez_calc;	
 	AutoHD<Project> m_parent;
-	Res 	m_evRes;			//Event access resource
+	Res 	  m_evRes;			//Event access resource
 	
 	vector<string>	m_open;
 };
@@ -116,7 +116,7 @@ class SessWdg : public Widget, public TValFunc
 {
     public:
     	//Methods
-        SessWdg( const string &id, const string &parent = "" );
+        SessWdg( const string &id, const string &parent, Session *sess );
         ~SessWdg( );
 
 	//- Main parameters -
@@ -129,13 +129,15 @@ class SessWdg : public Widget, public TValFunc
         short  permit( );
         string calcLang( );
         string calcProg( );
+	int    calcPer( );
   	bool   process( )	{ return m_proc; }		//Process stat	
 
 	void setEnable( bool val );
         virtual void setProcess( bool val );
 	
 	virtual void prcElListUpdate( );
-	virtual void calc( bool first, bool last, unsigned clcClk );
+	virtual void calc( bool first, bool last );
+	void getUpdtWdg( const string &path, unsigned int tm, vector<string> &els );
 	
         //- Include widgets -
         void wdgAdd( const string &wid, const string &name, const string &parent );	//Implicit widget's creating on inherit
@@ -150,7 +152,7 @@ class SessWdg : public Widget, public TValFunc
 
         SessWdg  *ownerSessWdg( bool base = false );
 	SessPage *ownerPage();
-        Session	 *ownerSess();
+        Session	 *ownerSess()	{ return m_sess; }
 
     protected:
 	bool cntrCmdServ( XMLNode *opt );
@@ -163,11 +165,13 @@ class SessWdg : public Widget, public TValFunc
 	//Attributes
 	bool	m_proc;
 	string	work_prog;
-	unsigned int m_clc, m_mdfClc;
+	unsigned int m_mdfClc;
 	
 	vector<string> 	m_wdgChldAct,	//Active childs widget's list
 			m_attrUILs, 	//UI attributes list
 			m_attrLnkLs;	//Linked attributes list
+	
+	Session 	*m_sess;
 };
 
 //************************************************
@@ -177,7 +181,7 @@ class SessPage : public SessWdg
 {
     public:
 	//Methods
-        SessPage( const string &id, const string &page = "" );
+        SessPage( const string &id, const string &page, Session *sess );
         ~SessPage();
 
 	string path( );
@@ -186,7 +190,7 @@ class SessPage : public SessWdg
 	void setEnable( bool val );
 	void setProcess( bool val );
 
-	void calc( bool first, bool last, unsigned clcClk );
+	void calc( bool first, bool last );
 
 	AutoHD<Page> parent( );
 

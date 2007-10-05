@@ -873,17 +873,26 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     glay->setMargin(9);
     glay->setSpacing(6);
     
+
     lab = new QLabel(_("Procedure language:"),wdg_proc_fr);
     lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred) );    
     glay->addWidget(lab,1,0);
     proc_lang = new QComboBox(wdg_proc_fr);
+    proc_lang->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred) );
     proc_lang->setObjectName("/proc/calc/progLng");
     connect(proc_lang, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
     glay->addWidget(proc_lang,1,1);
+    lab = new QLabel(_("Procedure calc period:"),wdg_proc_fr);
+    lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred) );
+    glay->addWidget(lab,1,2);
+    proc_per = new LineEdit(wdg_proc_fr);
+    proc_per->setObjectName("/proc/calc/per");
+    connect( proc_per, SIGNAL(apply()), this, SLOT(isModify()));    
+    glay->addWidget(proc_per,1,3);
     proc_text = new TextEdit(wdg_proc_fr);
     proc_text->setObjectName("/proc/calc/prog");
     connect(proc_text, SIGNAL(apply()), this, SLOT(isModify()));
-    glay->addWidget(proc_text,2,0,1,2);    
+    glay->addWidget(proc_text,2,0,1,4);
 
     //- Add tab 'Links' -
     //------------------------
@@ -1255,6 +1264,14 @@ void VisItProp::tabChanged( int itb )
 		    atypes.push_back( (req.childGet(i_el)->text()+"|"+req.childGet(i_el)->attr("id")).c_str() );
 	    obj_attr_cfg->topLevelItem(0)->setData(0,Qt::UserRole+1,atypes);
 
+	    //--- Calc period ---
+	    gnd = TCntrNode::ctrId(root,proc_per->objectName().toAscii().data(),true);
+	    proc_per->setEnabled(gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR);
+	    if( gnd )
+	    {
+		req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(proc_per->objectName().toAscii().data(),TSYS::PathEl));
+		if( !owner()->cntrIfCmd(req) ) proc_per->setValue(req.text().c_str());
+	    }	    
     	    //--- Calc language ---
 	    gnd = TCntrNode::ctrId(root,proc_lang->objectName().toAscii().data(),true);
 	    proc_lang->setEnabled(gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR);
@@ -1368,8 +1385,8 @@ void VisItProp::isModify( )
 	req.setText(((QComboBox*)sender())->itemData(((QComboBox*)sender())->currentIndex()).toString().toAscii().data());
 	update = true;
     }
-    else if( oname == obj_name->objectName() )
-	req.setText(((LineEdit*)sender())->value().toAscii().data());    
+    else if( oname == obj_name->objectName() || oname == proc_per->objectName() )
+	req.setText(((LineEdit*)sender())->value().toAscii().data());
     else if( oname == obj_descr->objectName() || oname == proc_text->objectName() )
 	req.setText(((TextEdit*)sender())->text().toAscii().data());
     else if( oname == pg_tp->objectName() )

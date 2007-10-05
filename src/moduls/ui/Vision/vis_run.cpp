@@ -41,7 +41,7 @@
 using namespace VISION;
 
 VisRun::VisRun( const string &prj_it, const string &open_user, const string &VCAstat, bool crSessForce ) : 
-    winClose(false), master_pg(NULL), m_period(1000), w_prc_cnt(0), proc_st(false)
+    winClose(false), master_pg(NULL), m_period(1000), w_prc_cnt(0), proc_st(false), reqtm(1)
 {
     setAttribute(Qt::WA_DeleteOnClose,true);
     mod->regWin( this );
@@ -76,6 +76,13 @@ VisRun::VisRun( const string &prj_it, const string &open_user, const string &VCA
     actFullScr->setWhatsThis(_("The button for full screen toggle"));
     actFullScr->setStatusTip(_("Press for toggle full screen."));
     connect(actFullScr, SIGNAL(toggled(bool)), this, SLOT(fullScreen(bool)));
+    //--- Update only changed widgets ---
+    actUpdtMode = new QAction(_("Update only changed widgets"),this);
+    actUpdtMode->setCheckable(true);
+    actUpdtMode->setToolTip(_("Update only changed widgets toggle"));
+    actUpdtMode->setWhatsThis(_("The button for full toggle to update only changed widgets"));
+    actUpdtMode->setStatusTip(_("Press for toggle to update only changed widgets."));
+    actUpdtMode->setChecked(mod->runTimeUpdt());
     
     //-- Help actions --
     //--- About "System info" ---
@@ -106,6 +113,7 @@ VisRun::VisRun( const string &prj_it, const string &open_user, const string &VCA
     mn_file->addAction(actQuit);
     mn_view = menuBar()->addMenu(_("&View"));
     mn_view->addAction(actFullScr);
+    mn_view->addAction(actUpdtMode);
     mn_help = menuBar()->addMenu(_("&Help"));
     mn_help->addAction(actAbout);
     mn_help->addAction(actQtAbout);
@@ -179,6 +187,11 @@ string VisRun::user()
 void VisRun::setVCAStation( const string& st )
 {
     m_stat = st.empty() ? "." : st;
+}
+
+bool VisRun::runTimeUpdt( )
+{
+    return actUpdtMode->isChecked();
 }
 
 int VisRun::cntrIfCmd( XMLNode &node, bool glob )
@@ -358,13 +371,24 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
     updateTimer->start(period());
 }
 
-void VisRun::callPage( const string& pg_it )
+void VisRun::callPage( const string& pg_it, XMLNode *upw )
 {
     vector<int> idst;
-    string pgGrp, pgSrc;
+    string pgGrp, pgSrc, stmp;
 
-    //- Scan opened pages -
-    if( master_pg && master_pg->findOpenPage(pg_it) ) return;
+    //- Scan and update opened pages -
+    if( master_pg )
+    {
+	RunPageView *pg = master_pg->findOpenPage(pg_it);
+	if( pg && upw )
+	    for( int i_p = 0, off = 0; i_p < upw->childSize(); i_p++, off = 0 )
+	    {
+		stmp = upw->childGet(i_p)->text();
+		TSYS::pathLev(stmp,0,true,&off);
+		pg->update(1,0,stmp.substr(off));
+	    }
+	if( pg ) return;
+    }
     
     //- Get group and parent page -
     pgGrp = wAttrGet(pg_it,"pgGrp");
@@ -459,16 +483,25 @@ void VisRun::updatePage( )
     if( winClose ) return;
     proc_st = true;
 
-    XMLNode req("openlist");
-    req.setAttr("path","/ses_"+work_sess+"/%2fserv%2f0");
-    if( !cntrIfCmd(req) )
-        for( int i_ch = 0; i_ch < req.childSize(); i_ch++ )
-	    callPage(req.childGet(i_ch)->text());
-
     //unsigned long long t_cnt = SYS->shrtCnt();
 
-    //- Update opened pages -
-    if( master_pg ) master_pg->update(w_prc_cnt,1000/period());
+    XMLNode req("openlist");
+    if( runTimeUpdt() )
+    {
+	req.setAttr("tm",TSYS::uint2str(reqtm))->setAttr("path","/ses_"+work_sess+"/%2fserv%2f0");
+	if( !cntrIfCmd(req) )
+    	    for( int i_ch = 0; i_ch < req.childSize(); i_ch++ )
+	        callPage(req.childGet(i_ch)->text(),req.childGet(i_ch));
+	reqtm = strtoul(req.attr("tm").c_str(),NULL,10);
+    }
+    else
+    {
+	req.setAttr("path","/ses_"+work_sess+"/%2fserv%2f0");
+	if( !cntrIfCmd(req) )
+    	    for( int i_ch = 0; i_ch < req.childSize(); i_ch++ )
+	        callPage(req.childGet(i_ch)->text());
+	if( master_pg ) master_pg->update(w_prc_cnt,1000/period());
+    }
 
     /*upd_tm+=1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
     if( !(w_prc_cnt%10) )

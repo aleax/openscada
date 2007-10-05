@@ -346,7 +346,6 @@ bool ShapeElFigure::shapeSave( WdgView *w )
 		    TSYS::int2str(shapeItems[i_s].n3)+":"+TSYS::int2str(shapeItems[i_s].n4)+"\n";
 		break;
 	}
-    printf("TEST 00: %s",elList.c_str());
     w->attrSet( "elLst", elList );
 
     //Write shapes points to data model

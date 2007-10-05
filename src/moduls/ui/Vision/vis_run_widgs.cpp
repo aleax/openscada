@@ -39,6 +39,11 @@ using namespace VISION;
 RunWdgView::RunWdgView( const string &iwid, int ilevel, VisRun *mainWind, QWidget* parent ) :
     WdgView(iwid,ilevel,(QMainWindow*)mainWind,parent), reqtm(1)
 {
+    int endElSt = iwid.rfind("/");
+    if( endElSt == string::npos ) return;
+    string lstEl = iwid.substr(endElSt+1);
+    if( lstEl.size() > 4 && lstEl.substr(0,4) == "wdg_" ) setObjectName(lstEl.substr(4).c_str());
+    if( lstEl.size() > 3 && lstEl.substr(0,3) == "pg_" )  setObjectName(lstEl.substr(3).c_str());
     curDiv = vmax(1,1000/mainWin()->period());
 }
 
@@ -83,13 +88,20 @@ WdgView *RunWdgView::newWdgItem( const string &iwid )
     return new RunWdgView(iwid,wLevel()+1,mainWin(),this);
 }
 
-void RunWdgView::update( unsigned cnt, int div_max )
+void RunWdgView::update( unsigned cnt, int div_max, const string &wpath )
 {
-    //- Request to widget for last attributes -
-    if( !((cnt+(unsigned)wLevel())%curDiv) )
+    if( !wpath.empty() )
+    {
+	int off = 0;	
+	RunWdgView *wdg = findChild<RunWdgView*>(TSYS::pathLev(wpath,0,true,&off).c_str());
+	if( wdg ) wdg->update(1,0,wpath.substr(off));
+	return;
+    }
+    
+    //- Request to widget for last attributes -    
+    if( !div_max || !((cnt+(unsigned)wLevel())%curDiv) )
     {
 	bool change = false;
-	//printf("TEST 00: %s\n",id().c_str());
 	XMLNode *req_el;
 	XMLNode req("get");
 	req.setAttr("path",id()+"/%2fserv%2f0")->
@@ -110,9 +122,10 @@ void RunWdgView::update( unsigned cnt, int div_max )
     }
     
     //- Call childs for update -
-    for( int i_c = 0; i_c < children().size(); i_c++ )
-	if( qobject_cast<RunWdgView*>(children().at(i_c)) && ((RunWdgView*)children().at(i_c))->isEnabled() )
-    	    ((RunWdgView*)children().at(i_c))->update(cnt,div_max);
+    if( div_max )
+	for( int i_c = 0; i_c < children().size(); i_c++ )
+	    if( qobject_cast<RunWdgView*>(children().at(i_c)) && ((RunWdgView*)children().at(i_c))->isEnabled() )
+    		((RunWdgView*)children().at(i_c))->update(cnt,div_max);
 }
 
 bool RunWdgView::event( QEvent *event )
@@ -286,23 +299,25 @@ RunPageView *RunPageView::parent( )
     return qobject_cast<RunPageView*>(parentWidget());
 }
 
-bool RunPageView::findOpenPage( const string &ipg )
+RunPageView *RunPageView::findOpenPage( const string &ipg )
 {
     //- Self check -
-    if( id() == ipg ) return true;
+    if( id() == ipg ) return this;
     //- Check to included widgets -
     for( int i_ch = 0; i_ch < children().size(); i_ch++ )
         if( !qobject_cast<RunPageView*>(children().at(i_ch)) &&
         	((RunWdgView*)children().at(i_ch))->root() == "Box" &&
         	((RunWdgView*)children().at(i_ch))->pgOpenSrc() == ipg.c_str() )    
-    	    return true;
+    	    return (RunPageView*)children().at(i_ch);
     //- Put checking to childs -
     for( int i_ch = 0; i_ch < children().size(); i_ch++ )
-	if( qobject_cast<RunPageView*>(children().at(i_ch)) && 
-	    ((RunPageView*)children().at(i_ch))->findOpenPage(ipg) )
-		return true;
+	if( qobject_cast<RunPageView*>(children().at(i_ch)) )
+	{
+	    RunPageView *pg = ((RunPageView*)children().at(i_ch))->findOpenPage(ipg);
+	    if( pg ) return pg;
+	}
 
-    return false;
+    return NULL;
 }
 
 bool RunPageView::callPage( const string &pg_it, const string &pgGrp, const string &pgSrc )

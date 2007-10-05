@@ -314,8 +314,9 @@ void Project::cntrCmdProc( XMLNode *opt )
 //************************************************
 Page::Page( const string &id, const string &isrcwdg ) :
         Widget(id,isrcwdg), TConfig(&mod->elPage()),
-        m_ico(cfg("ICO").getSd()), m_proc(cfg("PROC").getSd()), m_flgs(cfg("FLGS").getId()),
-	m_user(cfg("USER").getSd()), m_grp(cfg("GRP").getSd()), m_permit(cfg("PERMIT").getId())
+        m_ico(cfg("ICO").getSd()), m_proc(cfg("PROC").getSd()), m_proc_per(cfg("PROC_PER").getId()),
+	m_flgs(cfg("FLGS").getId()), m_user(cfg("USER").getSd()), m_grp(cfg("GRP").getSd()), 
+	m_permit(cfg("PERMIT").getId())
 {
     cfg("ID").setS(id);
 
@@ -466,6 +467,13 @@ string Page::calcProg( )
     return iprg.substr(lng_end);
 }
 
+int Page::calcPer(  )
+{
+    if( m_proc_per < 0 && !parent().freeStat() )
+        return parent().at().calcPer();
+    return m_proc_per;
+}
+
 void Page::setCalcLang( const string &ilng )
 {
     m_proc = m_proc.replace(0,m_proc.find("\n"),ilng);
@@ -481,6 +489,11 @@ void Page::setCalcProg( const string &iprg )
         lng_end=tmp_prg.find("\n");
     }
     m_proc = tmp_prg.replace(lng_end+1,string::npos,iprg);
+}
+
+void Page::setCalcPer( int vl )
+{
+    m_proc_per = vl;
 }
 
 void Page::setPrjFlags( int val )
@@ -952,6 +965,12 @@ string PageWdg::calcProg( )
 {
     if( !parent().freeStat() )    return parent().at().calcProg();
     return "";
+}
+
+int PageWdg::calcPer(  )
+{
+    if( !parent().freeStat() )	return parent().at().calcPer();
+    return 0;
 }
 
 void PageWdg::load( )

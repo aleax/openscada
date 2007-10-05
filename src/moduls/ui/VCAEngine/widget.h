@@ -142,17 +142,19 @@ class Widget : public TCntrNode, public TValElem
 	virtual string calcId( )   	{ return m_id; }	//Compile function identifier
 	virtual string calcLang( ) 	{ return ""; }		//Calc procedure language
 	virtual string calcProg( ) 	{ return ""; }		//Calc procedure
-	virtual bool isContainer( );				//Is container (Is define of the terminator)
-        virtual bool isLink( )     	{ return m_lnk; }	//Widget as link
+	virtual int    calcPer( )	{ return -1; }		//Calc widget period. 0 value talk for calc on session period.
+	virtual bool   isContainer( );				//Is container (Is define of the terminator)
+        virtual bool   isLink( )     	{ return m_lnk; }	//Widget as link
 
         virtual void setName( const string &inm );
 	virtual void setDescr( const string &idscr );
-	virtual void setIco( const string &ico )      { };
-	virtual void setUser( const string &iuser )   { };
-	virtual void setGrp( const string &igrp )     { };
-	virtual void setPermit( short iperm )         { };
-	virtual void setCalcLang( const string &ilng ){ };
-        virtual void setCalcProg( const string &iprg ){ };
+	virtual void setIco( const string &ico )      	{ };
+	virtual void setUser( const string &iuser )   	{ };
+	virtual void setGrp( const string &igrp )     	{ };
+	virtual void setPermit( short iperm )         	{ };
+	virtual void setCalcLang( const string &ilng )	{ };
+        virtual void setCalcProg( const string &iprg )	{ };
+	virtual void setCalcPer( int vl )		{ };
 
 	//- Storing -
         virtual void load( )    { }     //Load widget

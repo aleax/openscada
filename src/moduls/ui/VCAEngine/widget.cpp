@@ -922,6 +922,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/proc/calc",_("Calculate")))
 	    {
 		ctrMkNode("fld",opt,-1,"/proc/calc/progLng",_("Programm language"),permit(),user().c_str(),grp().c_str(),3,"tp","str","dest","sel_ed","select","/proc/calc/plangLs");
+		ctrMkNode("fld",opt,-1,"/proc/calc/per",_("Programm calc period (ms)"),permit(),user().c_str(),grp().c_str(),1,"tp","dec");
 		ctrMkNode("fld",opt,-1,"/proc/calc/prog",_("Programm"),permit(),user().c_str(),grp().c_str(),3,"tp","str","cols","90","rows","8");
 	    }
 	}
@@ -1068,6 +1069,13 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
         if( ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) ) opt->setText(calcLang());
         if( ctrChkNode(opt,"set",permit(),user().c_str(),grp().c_str(),SEQ_WR) ) setCalcLang(opt->text());
     }
+    else if( a_path == "/proc/calc/per" )
+    {
+        if( ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) ) 
+	    opt->setText(TSYS::int2str(calcPer()));
+        if( ctrChkNode(opt,"set",permit(),user().c_str(),grp().c_str(),SEQ_WR) )
+	    setCalcPer(atoi(opt->text().c_str()));
+    }    
     else if( a_path == "/proc/calc/prog" )
     {
         if( ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) ) opt->setText(calcProg());

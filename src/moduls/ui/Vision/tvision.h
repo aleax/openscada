@@ -49,14 +49,16 @@ class TVision : public TUI
 	TVision( string name );
 	~TVision( );
 	
-	bool endRun( )	{ return end_run; }
-	string startUser( )	{ return start_user; }
-	string runPrjs( )	{ return run_prjs; }
-	string VCAStation( )	{ return vca_station; }
+	bool endRun( )				{ return end_run; }
+	string startUser( )			{ return start_user; }
+	string runPrjs( )			{ return run_prjs; }
+	string VCAStation( )			{ return vca_station; }
+	int    runTimeUpdt( )			{ return run_tm_upd; }
 	
 	void setStartUser( const string &user )	{ start_user = user; }
 	void setRunPrjs( const string &prj )	{ run_prjs = prj; }
 	void setVCAStation( const string &stat ){ vca_station = stat; }
+	void setRunTimeUpdt( int mod )		{ run_tm_upd = mod; }
 	
 	void modStart();
 	void modStop();
@@ -96,6 +98,8 @@ class TVision : public TUI
 	bool    		end_run;	//End run command. Close all windows
 	
 	string			vca_station;	//VCA station id ('.' - for local station)
+	int 			run_tm_upd;	//RunTime update mode (0 - all widgets periodic adaptive update,\n
+						//                     1 - update only changed widgets
 };
 
 

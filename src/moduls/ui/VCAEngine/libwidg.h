@@ -124,6 +124,7 @@ class LWidget : public Widget, public TConfig
 	string calcId( );
         string calcLang( );
         string calcProg( );
+	int    calcPer( );
 
         void setIco( const string &iico )      { m_ico = iico; }
         void setUser( const string &iuser );
@@ -131,6 +132,7 @@ class LWidget : public Widget, public TConfig
         void setPermit( short iperm )          { m_permit = iperm; }
         void setCalcLang( const string &ilng );
         void setCalcProg( const string &iprg );
+        void setCalcPer( int vl );
         void setParentNm( const string &isw );
 
         //- Storing -
@@ -158,7 +160,8 @@ class LWidget : public Widget, public TConfig
                 &m_user,        //Widget user
                 &m_grp,         //Widget group
                 &m_proc;        //Widget procedure
-        int 	&m_permit;	//Widget permission
+        int 	&m_permit,	//Widget permission
+		&m_proc_per;	//Widget period
 };
 
 //************************************************
@@ -181,6 +184,7 @@ class CWidget : public Widget, public TConfig
 	string calcId( );
         string calcLang( );
         string calcProg( );
+	int    calcPer( );
 
         void setParentNm( const string &isw );
 

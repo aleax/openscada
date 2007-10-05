@@ -87,7 +87,7 @@ using namespace VISION;
 //*************************************************
 //* QTCFG::TVision                                *
 //*************************************************
-TVision::TVision( string name ) : end_run(false), vca_station(".")
+TVision::TVision( string name ) : end_run(false), vca_station("."), run_tm_upd(0)
 {
     mId		= MOD_ID;
     mName       = MOD_NAME;
@@ -131,9 +131,11 @@ string TVision::optDescr( )
     snprintf(buf,sizeof(buf),_(
         "======================= The module <%s:%s> options =======================\n"
         "---------- Parameters of the module section <%s> in config file ----------\n"
-        "StartUser  <user>    No password requested start user.\n"
-	"RunPrjs    <list>    Run projects list on the module start.\n"
-	"VCAstation <id>      VCA station id ('.' - local)\n"),	
+        "StartUser   <user>    No password requested start user.\n"
+	"RunPrjs     <list>    Run projects list on the module start.\n"
+	"RunTimeUpdt <mode>    RunTime update mode (0 - all widgets periodic adaptive update,\n"
+	"		       1 - update only changed widgets).\n"
+	"VCAstation  <id>      VCA station id ('.' - local).\n"),
         MOD_TYPE,MOD_ID,nodePath().c_str());
 
     return buf;
@@ -169,6 +171,7 @@ void TVision::modLoad( )
     setStartUser(TBDS::genDBGet(nodePath()+"StartUser",startUser()));
     setRunPrjs(TBDS::genDBGet(nodePath()+"RunPrjs",runPrjs()));
     setVCAStation(TBDS::genDBGet(nodePath()+"VCAstation",VCAStation()));
+    setRunTimeUpdt(atoi(TBDS::genDBGet(nodePath()+"RunTimeUpdt",TSYS::int2str(runTimeUpdt())).c_str()));
 }
 
 void TVision::modSave( )
@@ -180,6 +183,7 @@ void TVision::modSave( )
     TBDS::genDBSet(nodePath()+"StartUser",startUser());
     TBDS::genDBSet(nodePath()+"RunPrjs",runPrjs());
     TBDS::genDBSet(nodePath()+"VCAstation",VCAStation());
+    TBDS::genDBSet(nodePath()+"RunTimeUpdt",TSYS::int2str(runTimeUpdt()));
 }
 
 void TVision::postEnable( int flag )
@@ -305,6 +309,7 @@ void TVision::cntrCmdProc( XMLNode *opt )
         {
             ctrMkNode("fld",opt,-1,"/prm/cfg/start_user",_("Configurator start user"),0664,"root","root",3,"tp","str","dest","select","select","/prm/cfg/u_lst");
             ctrMkNode("fld",opt,-1,"/prm/cfg/run_prj",_("Run projects list (';' - sep)"),0664,"root","root",1,"tp","str");
+            ctrMkNode("fld",opt,-1,"/prm/cfg/runModUpd",_("RunTime update mode"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/prm/cfg/rt_upd_lst");
             ctrMkNode("fld",opt,-1,"/prm/cfg/stationVCA",_("VCA engine station"),0664,"root","root",4,"tp","str","idm","1","dest","select","select","/prm/cfg/vca_lst");
 	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to remote stations list configuration"),0660,"root","root",1,"tp","lnk");
             ctrMkNode("comm",opt,-1,"/prm/cfg/load",_("Load"),0660);
@@ -326,6 +331,12 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(runPrjs());
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setRunPrjs(opt->text());
     }
+    else if( a_path == "/prm/cfg/runModUpd" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(TSYS::int2str(runTimeUpdt()));
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )   setRunTimeUpdt(atoi(opt->text().c_str()));
+    }
+    
     else if( a_path == "/prm/cfg/stationVCA" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(VCAStation());
@@ -346,6 +357,11 @@ void TVision::cntrCmdProc( XMLNode *opt )
         opt->childAdd("el")->setText("");
         for(int i_u = 0; i_u < ls.size(); i_u++)
     	    opt->childAdd("el")->setText(ls[i_u]);
+    }
+    else if( a_path == "/prm/cfg/rt_upd_lst" && ctrChkNode(opt) )
+    {
+	opt->childAdd("el")->setAttr("id","0")->setText(_("All widgets periodic adaptive update"));
+	opt->childAdd("el")->setAttr("id","1")->setText(_("Update only changed widgets"));
     }
     else if( a_path == "/prm/cfg/vca_lst" && ctrChkNode(opt) )
     {

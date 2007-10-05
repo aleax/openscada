@@ -54,11 +54,12 @@ class VisRun : public QMainWindow
 	string workSess( )	{ return work_sess; }
 	string srcProject( )	{ return src_prj; }	
         string VCAStation()     { return m_stat; }
+	bool   runTimeUpdt( );
 	
         void setVCAStation( const string& st );
 
 	void initSess( const string &prj_it, bool crSessForce = false ); //Init session for project's item path
-	void callPage( const string &ses_it );	//Call session page
+	void callPage( const string &ses_it, XMLNode *upw = NULL );	//Call session page
 	
 	//- Cache commands -
 	void pgCacheAdd( RunWdgView *wdg );
@@ -94,7 +95,8 @@ class VisRun : public QMainWindow
 		*mn_help;			//Menu "Help"
 
 	//- Actions -
-	QAction *actFullScr;			//Full screen action
+	QAction *actFullScr,			//Full screen action
+		*actUpdtMode;			//Update mode
 
 	//- Main components -
 	QTimer		*endRunTimer, *updateTimer;
@@ -108,6 +110,7 @@ class VisRun : public QMainWindow
 	unsigned	w_prc_cnt;		//Process counter
 	float		upd_tm;
 	string		m_stat;			//Station
+	unsigned 	reqtm;			//Requested time
 	
 	deque<RunWdgView *>  cache_pg;		//Pages cache
 };
