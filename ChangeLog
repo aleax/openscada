@@ -1,3 +1,7 @@
+2007-10-05 Maxim
+- !!:/UI/Vision: Path creation full rewrited for primitive "ElFig".
+
+
 2007-10-05 Roman
 - /UI/VCAEngine: Individual process period for widgets is added.
 - /UI/VCAEngine: The process session object address is transfered to all 

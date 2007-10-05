@@ -58,9 +58,9 @@ class ShapeItem
     public:
 	ShapeItem( )	{ }
 	ShapeItem( const QPainterPath &ipath, const QPainterPath &path_simple, const int num_1,const int num_2, const int num_3, const int num_4,const int num_5,
-		    const QPointF &ctrlpos_4, const QBrush &brush, const QPen &ipen, const QPen &pen_simple, const float iwidth, const int itype ) : 
+		    const QPointF &ctrlpos_4, const QBrush &brush, const QPen &ipen, const QPen &pen_simple, const float iwidth, const float bwidth, const int itype ) : 
     	    ctrlPos4(ctrlpos_4), n1(num_1), n2(num_2), n3(num_3), n4(num_4), n5(num_5), brush(brush),
-	    pen(ipen), penSimple(pen_simple), width(iwidth), type(itype), path(ipath), pathSimple(path_simple)
+	    pen(ipen), penSimple(pen_simple), width(iwidth), border_width(bwidth), type(itype), path(ipath), pathSimple(path_simple)
 	{ };								
 
 	QPainterPath 	path, 
@@ -71,6 +71,7 @@ class ShapeItem
 	QPen 		pen, 
 			penSimple;
 	float 		width;
+        float           border_width;
 	int 		type;
 };
 
@@ -150,7 +151,7 @@ class ShapeElFigure : public WdgShape
         void Rect_num_0_1( QList<ShapeItem> &shapeItems, int rect_num_temp, PntMap *pnts);//Что делать если попали по 1,2 квадратику
         void Rect_num_3_4( QList<ShapeItem> &shapeItems, PntMap *pnts );		//Что делать если попали по 2,4 квадратику дуги
         void Move_all( QPointF pos, QList<ShapeItem> &shapeItems, PntMap *pnts );	//Одновременное передвижение нескольних фигур(квадратиков)
-        QPainterPath painter_path( float el_width, int el_type, double el_ang, 
+        QPainterPath painter_path( float el_width, float el_border_width, int el_type, double el_ang, 
 		QPointF el_p1 = QPointF(0,0), QPointF el_p2 = QPointF(0,0), QPointF el_p3 = QPointF(0,0), 
 		QPointF el_p4 = QPointF(0,0), QPointF el_p5 = QPointF(0,0), QPointF el_p6 = QPointF(0,0) );
         QPainterPath painter_path_simple( int el_type, double el_ang, 
