@@ -1,13 +1,12 @@
 
 //OpenSCADA system file: tconfig.h
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -33,6 +32,9 @@ using std::string;
 using std::vector;
 using std::map;
 
+//*************************************************
+//* TCfg                                          *
+//*************************************************
 class TConfig;
 
 class TCfg
@@ -50,15 +52,15 @@ class TCfg
 	TCfg( TFld &fld, TConfig &owner );
 	~TCfg();
 	
-	const string &name();
+	const string &name( );
 	
-	bool operator==(TCfg &cfg);
-        TCfg &operator=(TCfg &cfg);		
+	bool operator==( TCfg &cfg );
+        TCfg &operator=( TCfg &cfg );
 	
-	bool  view( )		{ return m_view; }
-	void  view( bool vw )	{ m_view = vw; }
+	bool  view( )			{ return m_view; }
+	void  setView( bool vw )	{ m_view = vw; }
 	
-	TFld &fld()		{ return *m_fld; }	
+	TFld &fld( )			{ return *m_fld; }	
 	
 	//- Universal access -
         string getSEL( );
@@ -95,9 +97,10 @@ class TCfg
 	TConfig  &m_owner;	
 };
 
+//*************************************************
+//* TConfig                                       *
+//*************************************************
 typedef map< string, TCfg* > TCfgMap;
-
-class TTable;
 
 class TConfig: public TValElem
 {
@@ -106,17 +109,17 @@ class TConfig: public TValElem
     public:
 	//Methods
 	TConfig( TElem *Elements = NULL );
-	~TConfig();
+	~TConfig( );
 
-	TConfig &operator=(TConfig &cfg);
+	TConfig &operator=( TConfig &cfg );
 
 	void cfgList( vector<string> &list );
 	bool cfgPresent( const string &n_val );
 	TCfg &cfg( const string &n_val );
 	void cfgViewAll( bool val = true );	//Hide all no key elements
 	
-	TElem &elem();
-	void setElem(TElem *Elements, bool first = false); 	
+	TElem &elem( );
+	void setElem( TElem *Elements, bool first = false );
 
 	void cntrCmdMake( XMLNode *fld, const string &path, int pos, 
 		const string &user = "root", const string &grp = "root", int perm = 0664 );

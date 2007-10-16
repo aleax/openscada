@@ -1,13 +1,12 @@
 
 //OpenSCADA system file: tsecurity.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -27,18 +26,20 @@
 #include "tmess.h"
 #include "tsecurity.h"
 
-TSecurity::TSecurity( ) : 
-    TSubSYS("Security","Security",false)
+//*************************************************
+//* TSecurity                                     *
+//*************************************************
+TSecurity::TSecurity( ) : TSubSYS("Security","Security",false)
 {
     m_usr = TCntrNode::grpAdd("usr_");
     m_grp = TCntrNode::grpAdd("grp_");
     
-    //User BD structure
+    //- User BD structure -
     user_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::Key,"20") );
     user_el.fldAdd( new TFld("DESCR",_("Full name"),TFld::String,0,"50") );
     user_el.fldAdd( new TFld("PASS",_("Password"),TFld::String,0,"20") );
     user_el.fldAdd( new TFld("PICTURE",_("User picture"),TFld::String,0,"100000") );
-    //Group BD structure
+    //- Group BD structure -
     grp_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::Key,"20") );
     grp_el.fldAdd( new TFld("DESCR",_("Full name"),TFld::String,0,"50") );
     grp_el.fldAdd( new TFld("USERS",_("Users"),TFld::String,0,"200") );
@@ -120,14 +121,14 @@ char TSecurity::access( const string &user, char mode, const string &owner, cons
     char rez = 0;
 
     AutoHD<TUser> r_usr = usrAt(user);
-    // Check owner permision
+    //- Check owner permision -
     if( user == "root" || user == owner )	
 	rez = ((access&0700)>>6)&mode;
-    // Check other permision
+    //- Check other permision -
     if( rez == mode )	return rez;
     rez|=(access&07)&mode;
     if( rez == mode )   return rez;
-    // Check groupe permision
+    //- Check groupe permision -
     if( grpAt(group).at().user(user) || grpAt("root").at().user(user) )
 	rez|=((access&070)>>3)&mode;
 
@@ -136,7 +137,7 @@ char TSecurity::access( const string &user, char mode, const string &owner, cons
 
 void TSecurity::subLoad( )
 {
-    //========== Load commandline data ==================
+    //- Load commandline data -
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -156,19 +157,19 @@ void TSecurity::subLoad( )
 	}
     } while(next_opt != -1);
     
-    //========== Load parametrs ==================
+    //- Load parametrs -
 
-    //================ Load DB ==================
+    //- Load DB -
     string 	name;
     
-    //Search and create new users
+    //-- Search and create new users --
     try
     {
 	TConfig g_cfg(&user_el);
 	g_cfg.cfgViewAll(false);
 	vector<string> tdb_ls, db_ls;
 	
-	//- Search into DB -
+	//--- Search into DB ---
         SYS->db().at().modList(tdb_ls);
         for( int i_tp = 0; i_tp < tdb_ls.size(); i_tp++ )
         {
@@ -186,7 +187,7 @@ void TSecurity::subLoad( )
 	    }
 	}
 	
-	//- Search into config file -
+	//--- Search into config file ---
 	int fld_cnt=0;	
 	while( SYS->db().at().dataSeek("",nodePath()+subId()+"_user",fld_cnt++,g_cfg) )
 	{
@@ -200,14 +201,14 @@ void TSecurity::subLoad( )
 	mess_err(nodePath().c_str(),_("Search and create new users error."));
     }
     
-    //Search and create new user groups
+    //-- Search and create new user groups --
     try
     {
 	TConfig g_cfg(&grp_el);
 	g_cfg.cfgViewAll(false);
 	vector<string> tdb_ls, db_ls;
 	
-	//- Search into DB -
+	//--- Search into DB ---
         SYS->db().at().modList(tdb_ls);
         for( int i_tp = 0; i_tp < tdb_ls.size(); i_tp++ )
         {
@@ -225,7 +226,7 @@ void TSecurity::subLoad( )
 	    }
 	}
 	
-	//- Search into config file -
+	//--- Search into config file ---
         int fld_cnt=0;		
 	while( SYS->db().at().dataSeek("",nodePath()+subId()+"_grp",fld_cnt++,g_cfg) )
 	{
@@ -239,7 +240,7 @@ void TSecurity::subLoad( )
 	mess_err(nodePath().c_str(),_("Search and create new user's groups error."));
     }
     
-    //Load present user and groups
+    //-- Load present user and groups --
     vector<string> list;
     usrList(list);
     for( int i_l = 0; i_l < list.size(); i_l++ )
@@ -253,14 +254,14 @@ void TSecurity::subSave( )
 {
     vector<string> list;
     
-    //========== Save parametrs ==================
+    //- Save parametrs -
     
-    // Save users to bd
+    //-- Save users to bd --
     usrList(list);
     for( int i_l = 0; i_l < list.size(); i_l++ )
 	usrAt(list[i_l]).at().save();
     
-    // Save groups to bd
+    //-- Save groups to bd --
     grpList(list);
     for( int i_l = 0; i_l < list.size(); i_l++ )
 	grpAt(list[i_l]).at().save();
@@ -279,7 +280,7 @@ string TSecurity::optDescr( )
 
 void TSecurity::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
         TSubSYS::cntrCmdProc(opt);
@@ -298,7 +299,8 @@ void TSecurity::cntrCmdProc( XMLNode *opt )
     	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root",subId().c_str(),3,"tp","str","cols","90","rows","10");
 	return;
     }
-    //Process command to page
+    
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440,"root",subId().c_str()) )	opt->setText(optDescr());
     else if( a_path == "/usgr/users" )
@@ -330,10 +332,9 @@ void TSecurity::cntrCmdProc( XMLNode *opt )
     else TSubSYS::cntrCmdProc(opt);
 }
 
-//**************************************************************
-//*********************** TUser ********************************
-//**************************************************************
-    
+//*************************************************
+//* TUser                                         *
+//*************************************************    
 TUser::TUser( const string &nm, const string &idb, TElem *el ) : 
     TConfig(el), m_db(idb), m_lname(cfg("DESCR").getSd()), m_pass(cfg("PASS").getSd()), 
     m_name(cfg("NAME").getSd()), m_pict(cfg("PICTURE").getSd()), m_sysIt(false)
@@ -362,7 +363,7 @@ void TUser::postDisable(int flag)
     {
         if( flag )
 	    SYS->db().at().dataDel(fullDB(),owner().nodePath()+tbl(),*this);
-	//Remove user from groups
+	//- Remove user from groups -
 	vector<string> gls;
 	owner().usrGrpList(name(),gls);
 	for(int i_g = 0; i_g < gls.size(); i_g++)
@@ -389,7 +390,7 @@ void TUser::save( )
 void TUser::cntrCmdProc( XMLNode *opt )
 {
     string grp = owner().subId();
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("User ")+name());
@@ -409,7 +410,7 @@ void TUser::cntrCmdProc( XMLNode *opt )
 	}
         return;
     }
-    //Process command to page
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/prm/db" )
     {
@@ -436,7 +437,7 @@ void TUser::cntrCmdProc( XMLNode *opt )
     {
 	if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )
 	{
-	    //Prepare headers
+	    //-- Prepare headers --
 	    XMLNode *grp = ctrMkNode("list",opt,-1,"/prm/grps/grp","",0440);
 	    XMLNode *vl  = ctrMkNode("list",opt,-1,"/prm/grps/vl","",0660);
 	    vector<string> ls;
@@ -460,9 +461,9 @@ void TUser::cntrCmdProc( XMLNode *opt )
 	save();
 }	    
 
-//**************************************************************
-//*********************** TGroup *******************************
-//**************************************************************
+//*************************************************
+//* TGroup                                        *
+//*************************************************
 TGroup::TGroup( const string &nm, const string &idb, TElem *el ) : 
     TConfig(el), m_db(idb), m_lname(cfg("DESCR").getSd()), m_usrs(cfg("USERS").getSd()), 
     m_name(cfg("NAME").getSd()), m_sysIt(false)
@@ -524,7 +525,7 @@ void TGroup::userDel( const string &name )
 
 void TGroup::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Group ")+name());	
@@ -537,7 +538,8 @@ void TGroup::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("comm",opt,-1,"/prm/save",_("Save"),0660,"root",owner().subId().c_str());
         return;
     }
-    //Process command to page
+    
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/prm/db" )
     {

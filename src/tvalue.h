@@ -1,13 +1,12 @@
 
 //OpenSCADA system file: tvalue.h
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -130,8 +129,8 @@ class TValue: public TCntrNode, public TValElem
     protected:
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	//- Manipulation for config element -
-	TConfig *vlCfg()  { return m_cfg; }
-	void vlCfg( TConfig *cfg );	//Set configs. NULL - clear configs.
+	TConfig *vlCfg()  			{ return m_cfg; }
+	void setVlCfg( TConfig *cfg );		//Set configs. NULL - clear configs.
     
 	//- Manipulation for elements of value -
 	bool vlElemPresent( TElem *ValEl );
@@ -139,9 +138,9 @@ class TValue: public TCntrNode, public TValElem
 	void vlElemDet( TElem *ValEl );
 	TElem &vlElem( const string &name );
 	
-	virtual void vlSet( TVal &val ){};
-	virtual void vlGet( TVal &val ){};
-	virtual void vlArchMake( TVal &val ){};
+	virtual void vlSet( TVal &val )		{ };
+	virtual void vlGet( TVal &val )		{ };
+	virtual void vlArchMake( TVal &val )	{ };
 	
     private:
 	//Methods

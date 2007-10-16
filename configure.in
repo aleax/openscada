@@ -120,6 +120,8 @@ AC_CONFIG_FILES(Makefile src/Makefile src/moduls/Makefile
 #-- Archive modules --
 AC_ARG_ENABLE(FSArch,AC_HELP_STRING([--disable-FSArch], [disable build module Archive/FSArch]),
 [ if test $enableval = yes; then ModFSArch=true; else ModFSArch=false; fi],[ ModFSArch=true; ])
+AC_ARG_ENABLE(DBArch,AC_HELP_STRING([--disable-DBArch], [disable build module Archive/DBArch]),
+[ if test $enableval = yes; then ModDBArch=true; else ModDBArch=false; fi],[ ModDBArch=true; ])
 #-- DB modules --
 AC_ARG_ENABLE(DBF,AC_HELP_STRING([--disable-DBF], [disable build module DB/DBF]),
 [ if test $enableval = yes; then ModDBF=true; else ModDBF=false; fi],[ ModDBF=true; ])
@@ -187,6 +189,11 @@ if test ${ModFSArch} = true; then
     AC_MSG_RESULT(Build module: Archive/FSArch)
     AC_CONFIG_FILES(src/moduls/arhiv/FSArch/Makefile)
     ArchSub_mod="${ArchSub_mod}FSArch "
+fi
+if test ${ModDBArch} = true; then
+    AC_MSG_RESULT(Build module: Archive/DBArch)
+    AC_CONFIG_FILES(src/moduls/arhiv/DBArch/Makefile)
+    ArchSub_mod="${ArchSub_mod}DBArch "
 fi
 #-- DB modules --
 AC_SUBST(DBSub_mod)

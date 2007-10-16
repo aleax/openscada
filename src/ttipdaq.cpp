@@ -1,13 +1,12 @@
 
 //OpenSCADA system file: ttipdaq.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -31,7 +30,9 @@
 #include "ttiparam.h"
 #include "ttipdaq.h"
 
-
+//*************************************************
+//* TTipDAQ                                       *
+//*************************************************
 TTipDAQ::TTipDAQ( ) 
 {
     m_cntr = grpAdd("cntr_");
@@ -52,12 +53,12 @@ TTipDAQ::~TTipDAQ( )
 	delete paramt[0];
 	paramt.erase(paramt.begin());	
     }
-};      
+}
 
 void TTipDAQ::modStart( )
 {
     vector<string> lst;
-    //Start all controllers
+    //- Start all controllers -
     list(lst);
     for(int i_l=0; i_l < lst.size(); i_l++)
 	if( at(lst[i_l]).at().toStart() )
@@ -72,7 +73,7 @@ void TTipDAQ::modStart( )
 void TTipDAQ::modStop( )
 {
     vector<string> lst;
-    //Stop all controllers
+    //- Stop all controllers -
     list(lst);
     for(int i_l=0; i_l < lst.size(); i_l++)
         at(lst[i_l]).at().stop( );
@@ -94,7 +95,7 @@ TTipParam &TTipDAQ::tpPrmAt( unsigned id )
 bool TTipDAQ::tpPrmPresent( const string &name_t )
 {
     for(unsigned i_t=0; i_t < paramt.size(); i_t++)
-	if(paramt[i_t]->name() == name_t) return true;
+	if(paramt[i_t]->name == name_t) return true;
     return false;
 }
 
@@ -102,10 +103,10 @@ int TTipDAQ::tpParmAdd( const char *id, const char *n_db, const char *name )
 {
     if( tpPrmPresent(id) )	return tpPrmToId(id);    
     
-    //add type
+    //- Add type -
     int i_t = paramt.size();
     paramt.push_back(new TTipParam(id, name, n_db) );
-    //Add structure fields
+    //- Add structure fields -
     paramt[i_t]->fldAdd( new TFld("SHIFR",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,"20") );
     paramt[i_t]->fldAdd( new TFld("NAME",_("Name"),TFld::String,0,"50") );
     paramt[i_t]->fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::FullText,"200") );
@@ -117,7 +118,7 @@ int TTipDAQ::tpParmAdd( const char *id, const char *n_db, const char *name )
 int TTipDAQ::tpPrmToId( const string &name_t)
 {
     for(unsigned i_t=0; i_t < paramt.size(); i_t++)
-	if(paramt[i_t]->name() == name_t) return i_t;
+	if(paramt[i_t]->name == name_t) return i_t;
     throw TError(nodePath().c_str(),_("Parameter type is no present."));
 }
 
@@ -133,7 +134,7 @@ string TTipDAQ::compileFunc( const string &lang, TFunction &fnc_cfg, const strin
 
 void TTipDAQ::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
         TModule::cntrCmdProc(opt);
@@ -142,7 +143,7 @@ void TTipDAQ::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("list",opt,-1,"/tctr/ctr",_("Controllers"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","cntr_");
 	return;
     }
-    //Process command to page
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/tctr/ctr" )
     {

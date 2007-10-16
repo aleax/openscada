@@ -1,13 +1,12 @@
 
 //OpenSCADA system file: tprmtmpl.h
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -32,6 +31,9 @@
 using std::string;
 using std::vector;
 
+//*************************************************
+//* TPrmTempl                                     *
+//*************************************************
 class TPrmTmplLib;
 
 class TPrmTempl: public TFunction, public TConfig
@@ -52,11 +54,11 @@ class TPrmTempl: public TFunction, public TConfig
 	TPrmTempl( const char *id, const char *name = "" );
 	~TPrmTempl( );
 	
-	const string &id()	{ return m_id; }
-        string name();
-        string descr() 		{ return m_descr; }
-	string progLang();
-	string prog();
+	const string &id( )	{ return m_id; }
+        string name( );
+        string descr( )		{ return m_descr; }
+	string progLang( );
+	string prog( );
 	
 	void setName( const string &inm )  	{ m_name = inm; }
         void setDescr( const string &idsc )	{ m_descr = idsc; }
@@ -86,6 +88,9 @@ class TPrmTempl: public TFunction, public TConfig
 	string 	&m_id, &m_name, &m_descr, &m_prog, work_prog;
 };
 
+//*************************************************
+//* TPrmTmplLib                                   *
+//*************************************************
 class TDAQS;
 
 class TPrmTmplLib : public TCntrNode, public TConfig
@@ -94,12 +99,12 @@ class TPrmTmplLib : public TCntrNode, public TConfig
         TPrmTmplLib( const char *id, const char *name, const string &lib_db );
 	~TPrmTmplLib( );
 	
-        const string &id()      { return m_id; }
-        string name();
-        string descr()  { return m_descr; }
+        const string &id( )	{ return m_id; }
+        string name( );
+        string descr( )  	{ return m_descr; }
 	
 	string DB( )            { return work_lib_db; }
-	string tbl()    	{ return m_db; }
+	string tbl( )    	{ return m_db; }
         string fullDB( )        { return DB()+'.'+tbl(); }
 					
         bool startStat( )       { return run_st; }
@@ -114,16 +119,19 @@ class TPrmTmplLib : public TCntrNode, public TConfig
         void add( const char *id, const char *name = "" );
         void del( const char *id, bool full_del = false )	{ chldDel(m_ptmpl,id,-1,full_del); }
 	
-	TDAQS &owner()    { return *(TDAQS*)nodePrev(); }
+	TDAQS &owner( )    			{ return *(TDAQS*)nodePrev(); }
 		
     protected:
-        string nodeName()       { return m_id; }
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 				    
         void preDisable(int flag);
         void postDisable(int flag);
 					    
     private:
+	//Methods
+        string nodeName()       { return m_id; }
+	
+	//Attributes
         bool    run_st;
         int     m_ptmpl;
         string  &m_id, &m_name, &m_descr, &m_db, work_lib_db;

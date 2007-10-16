@@ -288,7 +288,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
 //************************************************
 MTable::MTable(string inm, MBD *iown, bool create ) : TTable(inm)
 {
-    nodePrev(iown);    
+    setNodePrev(iown);    
 
     try 
     {

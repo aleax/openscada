@@ -1,13 +1,12 @@
 
 //OpenSCADA system module Special.SystemTests file: test_kernel.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -32,7 +31,8 @@
 
 #include "test_kernel.h"
 
-//============ Modul info! =====================================================
+//*************************************************
+//* Modul info!                                   *
 #define MOD_ID      "SystemTests"
 #define MOD_NAME    "OpenSCADA system's tests"
 #define MOD_TYPE    "Special"
@@ -42,7 +42,7 @@
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow the group tests for OpenSCADA system."
 #define LICENSE     "GPL"
-//==============================================================================
+//*************************************************
 
 KernelTest::TTest *KernelTest::mod;
 
@@ -61,25 +61,22 @@ extern "C"
     	else
 	    AtMod.id	= "";
 
-	return( AtMod );
+	return AtMod;
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	KernelTest::TTest *self_addr = NULL;
-
     	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = KernelTest::mod = new KernelTest::TTest( source );       
-
-	return ( self_addr );
+	    return new KernelTest::TTest( source );
+	return NULL;
     }
 }
 
 using namespace KernelTest;
 
-//==============================================================================
-//================= BDTest::TTest ==============================================
-//==============================================================================
+//*************************************************
+//* BDTest::TTest                                 *
+//*************************************************
 TTest::TTest( string name )
 {
     mId 	= MOD_ID;
@@ -90,6 +87,8 @@ TTest::TTest( string name )
     mDescr  	= DESCRIPTION;
     mLicense   	= LICENSE;
     mSource    	= name;
+    
+    mod		= this;
 }
 
 TTest::~TTest()
@@ -160,7 +159,7 @@ string TTest::optDescr( )
 
 void TTest::modLoad( )
 {
-    //========== Load parameters from command line ============
+    //- Load parameters from command line -
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -180,7 +179,7 @@ void TTest::modLoad( )
 	}
     } while(next_opt != -1);
 
-    //========== Load parameters from config file =============
+    //- Load parameters from config file -
 }
 
 void TTest::modStart(  )

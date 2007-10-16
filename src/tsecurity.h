@@ -1,13 +1,12 @@
 
 //OpenSCADA system file: tsecurity.h
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -29,24 +28,24 @@
 #define SEQ_WR 0x02
 #define SEQ_RD 0x04
 
-class TSYS;
-class XMLNode;
-
+//*************************************************
+//* TUser                                         *
+//*************************************************
 class TSecurity;
 
 class TUser : public TCntrNode, public TConfig 
 {
     public:
 	//Methods
-	TUser( const string &name, const string &idb, TElem *el );
+	TUser( const string &name, const string &db, TElem *el );
 	~TUser(  );
 	
 	const string	&name() 	{ return m_name; }
 	const string	&lName()	{ return m_lname; }
 	const string	&picture()	{ return m_pict; }	
-	bool sysItem()			{ return m_sysIt; }	
+	bool sysItem( )			{ return m_sysIt; }	
 
-	bool auth( const string &ipass );
+	bool auth( const string &pass );
 	
 	string DB( )            { return m_db; }
         string tbl( );
@@ -78,15 +77,18 @@ class TUser : public TCntrNode, public TConfig
 	bool	m_sysIt;
 };
 
+//*************************************************
+//* TGroup                                        *
+//*************************************************
 class TGroup : public TCntrNode, public TConfig
 {
     public:
 	//Methods
-	TGroup( const string &name, const string &idb, TElem *el );
+	TGroup( const string &name, const string &db, TElem *el );
 	~TGroup(  );
 
-	const string &name()  	{ return(m_name); }
-	const string &lName() 	{ return(m_lname); }
+	const string &name()  	{ return m_name; }
+	const string &lName() 	{ return m_lname; }
 	bool sysItem()		{ return m_sysIt; }
 	
 	string DB( )            { return m_db; }
@@ -104,7 +106,7 @@ class TGroup : public TCntrNode, public TConfig
 	void load( );
 	void save( );
 	
-	TSecurity &owner(){ return *(TSecurity*)nodePrev(); }
+	TSecurity &owner()	{ return *(TSecurity*)nodePrev(); }
 	
     private:	 
 	//Methods   
@@ -120,16 +122,12 @@ class TGroup : public TCntrNode, public TConfig
 	bool    m_sysIt;
 };
 
+//*************************************************
+//* TSecurity                                     *
+//*************************************************
 class TSecurity : public TSubSYS
 {
     public:
-	//Data
-	/*enum Permit
-	{
-	    Execute = 0x01,
-	    Write   = 0x02,
-	    Read    = 0x04
-	};*/
 	//Methods
 	TSecurity( );    
 	~TSecurity( );
@@ -140,26 +138,23 @@ class TSecurity : public TSubSYS
 	char access( const string &user, char mode, const string &owner, const string &group, int access );
 	
 	//- Users -
-	void usrList( vector<string> &list )	{ chldList(m_usr,list); }
+	void usrList( vector<string> &list )		{ chldList(m_usr,list); }
 	void usrGrpList( const string &name, vector<string> &list );
-	bool usrPresent( const string &name ) 	{ return chldPresent(m_usr,name); }
-	void usrAdd( const string &name, const string &idb = "*.*" );
+	bool usrPresent( const string &name ) 		{ return chldPresent(m_usr,name); }
+	void usrAdd( const string &name, const string &db = "*.*" );
 	void usrDel( const string &name, bool complete = false );
-	AutoHD<TUser> usrAt( const string &name )
-	{ return chldAt(m_usr,name); }
+	AutoHD<TUser> usrAt( const string &name )	{ return chldAt(m_usr,name); }
 	
 	//- Groups -
-	void grpList( vector<string> &list ) 	{ chldList(m_grp,list); }
-	bool grpPresent( const string &name )	{ return chldPresent(m_grp,name); }
-	void grpAdd( const string &name, const string &idb = "*.*" );
+	void grpList( vector<string> &list ) 		{ chldList(m_grp,list); }
+	bool grpPresent( const string &name )		{ return chldPresent(m_grp,name); }
+	void grpAdd( const string &name, const string &db = "*.*" );
 	void grpDel( const string &name, bool complete = false );
-	AutoHD<TGroup> grpAt( const string &name )
-	{ return chldAt(m_grp,name); }
-	
-	string optDescr( );
+	AutoHD<TGroup> grpAt( const string &name )	{ return chldAt(m_grp,name); }
 	
     private:
 	//Methods
+	string optDescr( );	
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
 	void postEnable(int flag);

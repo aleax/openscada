@@ -179,7 +179,7 @@ void Block::enable( bool val )
     {
 	if( !func() && dynamic_cast<TFunction *>(&SYS->nodeAt(m_func,0,'.').at()) )
 	{
-	    func( (TFunction *)&SYS->nodeAt(m_func,0,'.').at() );
+	    setFunc( (TFunction *)&SYS->nodeAt(m_func,0,'.').at() );
 	    //Init system attributes identifiers
             id_freq  = func()->ioId("f_frq");
             id_start = func()->ioId("f_start");
@@ -201,7 +201,7 @@ void Block::enable( bool val )
 	m_lnk.clear();
 	
 	//Free func
-	func(NULL);
+	setFunc(NULL);
 	id_freq=id_start=id_stop=-1;
     }
     m_enable = val;

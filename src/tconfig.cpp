@@ -1,13 +1,12 @@
 
 //OpenSCADA system file: tconfig.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -22,6 +21,9 @@
 
 #include "tsys.h"
 
+//*************************************************
+//* TConfig                                       *
+//*************************************************
 TConfig::TConfig( TElem *Elements ) : m_elem(NULL)
 {
     setElem(Elements,true);
@@ -29,7 +31,7 @@ TConfig::TConfig( TElem *Elements ) : m_elem(NULL)
 
 TConfig::~TConfig()
 {
-    //Deinit value
+    //- Deinit value -
     TCfgMap::iterator p;
     while( (p=value.begin())!=value.end() )
     {
@@ -102,13 +104,14 @@ bool TConfig::cfgPresent( const string &n_val )
 void TConfig::cfgViewAll( bool val )
 {
     for( TCfgMap::iterator p = value.begin(); p != value.end(); p++ )
-	p->second->view(val);
+	p->second->setView(val);
 }
 
 void TConfig::setElem(TElem *Elements, bool first)
 {
     if(m_elem == Elements && !first ) return;
-    //Clear previos setting
+    
+    //- Clear previos setting -
     if(m_elem)
     {
 	TCfgMap::iterator p;
@@ -121,7 +124,7 @@ void TConfig::setElem(TElem *Elements, bool first)
 	if(single) delete m_elem;
     }
     
-    //Set new setting
+    //- Set new setting -
     if( !Elements )
     {
 	m_elem = new TElem("single");
@@ -175,11 +178,11 @@ void TConfig::cntrCmdProc( XMLNode *opt, const string &elem, const string &user,
 }
 
 //*************************************************
-//**************** TCfg ***************************
+//* TCfg                                          *
 //*************************************************
 TCfg::TCfg( TFld &fld, TConfig &owner ) : m_view(true), m_owner(owner)
 {
-    //Chek for self field for dinamic elements
+    //- Chek for self field for dinamic elements -
     if( fld.flg()&TFld::SelfFld )
     {
 	m_fld = new TFld();
@@ -325,7 +328,7 @@ void TCfg::setS( const string &val, bool forcView )
 		    *(m_val.s_val) = t_str;
 	    }	    
 	    else *(m_val.s_val) = val;
-	    if( forcView ) view(true);
+	    if( forcView ) setView(true);
 	    break;
 	case TFld::Integer:	setI( atoi(val.c_str()),forcView );	break;
 	case TFld::Real:	setR( atof(val.c_str()),forcView );	break;
@@ -353,7 +356,7 @@ void TCfg::setR( double val, bool forcView )
 		    m_val.r_val = t_val;
 	    }
 	    else m_val.r_val = val;
-	    if( forcView ) view(true);
+	    if( forcView ) setView(true);
 	    break;
 	case TFld::Boolean:	setB( val, forcView );	break;
     }
@@ -378,7 +381,7 @@ void TCfg::setI( int val, bool forcView )
 		    m_val.i_val = t_val;
 	    }
 	    else m_val.i_val = val;
-	    if( forcView ) view(true);
+	    if( forcView ) setView(true);
 	    break;
 	case TFld::Real:	setR( val,forcView );	break;
 	case TFld::Boolean:	setB( val,forcView );	break;
@@ -401,7 +404,7 @@ void TCfg::setB( bool val, bool forcView )
 		    m_val.b_val = t_val;
 	    }
 	    else m_val.b_val = val;
-	    if( forcView ) view(true);
+	    if( forcView ) setView(true);
 	    break;
     }
 }

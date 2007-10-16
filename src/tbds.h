@@ -1,13 +1,12 @@
 
 //OpenSCADA system file: tbds.h
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -39,6 +38,9 @@ using std::string;
 using std::vector;
 using std::deque;
 
+//*************************************************
+//* TTable                                        *
+//*************************************************
 class TBD;
 
 class TTable : public TCntrNode
@@ -48,7 +50,7 @@ class TTable : public TCntrNode
 	TTable( const string &name );
 	virtual ~TTable();
 
-	string &name()	{ return(m_name); }
+	string &name()		{ return m_name; }
 
 	virtual void fieldStruct( TConfig &cfg )
         { throw TError(nodePath().c_str(),_("Function <%s> no support!"),"fieldStruct"); }
@@ -61,7 +63,7 @@ class TTable : public TCntrNode
 	virtual void fieldDel( TConfig &cfg )
         { throw TError(nodePath().c_str(),_("Function <%s> no support!"),"fieldDel"); }
 	
-	TBD &owner()	{ return *(TBD *)nodePrev(); }	
+	TBD &owner( )		{ return *(TBD *)nodePrev(); }
 
     protected:
 	//Protected methods
@@ -85,17 +87,17 @@ class TBD : public TCntrNode, public TConfig
     public:
 	//Public methods
 	TBD( const string &iid, TElem *cf_el );
-	virtual ~TBD();
+	virtual ~TBD( );
 	
-	const string &id()	{ return m_id; }
-	string name();
-	const string &dscr()   	{ return m_dscr; }
-	const string &addr()   	{ return m_addr; }
-	const string &codePage(){ return m_codepage; } 
-	bool   create()		{ return m_creat; }
+	const string &id( )		{ return m_id; }
+	string       name( );
+	const string &dscr( )   	{ return m_dscr; }
+	const string &addr( )   	{ return m_addr; }
+	const string &codePage( )	{ return m_codepage; } 
+	bool         create( )		{ return m_creat; }
 	
-	bool enableStat()       { return m_en; }
-	bool toEnable()        	{ return m_toen; }
+	bool enableStat( )       	{ return m_en; }
+	bool toEnable( )        	{ return m_toen; }
 	
 	void setName( const string &inm )  	{ m_name = inm; }
 	void setDscr( const string &idscr )	{ m_dscr = idscr; }
@@ -122,15 +124,15 @@ class TBD : public TCntrNode, public TConfig
 	virtual void sqlReq( const string &req, vector< vector<string> > *tbl = NULL )
 	{ throw TError(nodePath().c_str(),_("Function <%s> no support!"),"sqlReq"); }
 
-	TTipBD &owner()		{ return *(TTipBD *)nodePrev(); }	
+	TTipBD &owner( )		{ return *(TTipBD *)nodePrev(); }	
 	
     protected:
 	//Protected methods
 	virtual TTable *openTable( const string &table, bool create )
 	{ throw TError(nodePath().c_str(),_("Function <%s> no support!"),"openTable"); }    
     
-	void preDisable(int flag);
-        void postDisable(int flag);
+	void preDisable( int flag );
+        void postDisable( int flag );
 	
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
@@ -165,7 +167,7 @@ class TTipBD : public TModule
 	TTipBD( );
 	virtual ~TTipBD( );
 	
-	bool fullDeleteDB()	{ return full_db_del; }
+	bool fullDeleteDB( )	{ return full_db_del; }
 	
 	//- Opened DB -
 	void list( vector<string> &list )	{ chldList(m_db,list); }
@@ -174,13 +176,13 @@ class TTipBD : public TModule
 	void close( const string &iid, bool erase = false )	{ chldDel(m_db,iid,-1,erase); }
 	AutoHD<TBD> at( const string &name )	{ return chldAt(m_db,name); }
 	
-	TBDS &owner()	{ return (TBDS&)TModule::owner(); }    	
+	TBDS &owner( )		{ return (TBDS&)TModule::owner(); }    	
 	
     private:
 	//Private methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
             
-	virtual TBD *openBD( const string &iid )
+	virtual TBD *openBD( const string &id )
 	{throw TError(nodePath().c_str(),_("Function <%s> no support!"),"openBD"); }
 
 	//Private attributes
@@ -200,7 +202,7 @@ class TBDS : public TSubSYS, public TElem
 	TBDS( );    
        	~TBDS( );
 
-	int subVer( ) { return(VER_BD); }
+	int subVer( ) 		{ return VER_BD; }
 	void subLoad( );
 	void subSave( );
 
@@ -217,17 +219,18 @@ class TBDS : public TSubSYS, public TElem
 	bool dataDel( const string &bdn, const string &path, TConfig &cfg );
 	
 	//- Generic DB table -
-	static string genDBGet(const string &path, const string &oval = "", const string &user = "root", bool onlyCfg = false );
-	static void genDBSet(const string &path, const string &val, const string &user = "root");
+	static string genDBGet( const string &path, const string &oval = "", 
+		const string &user = "root", bool onlyCfg = false );
+	static void genDBSet( const string &path, const string &val, const string &user = "root" );
 	
-	string fullDBSYS();
-	string fullDB();
+	string fullDBSYS( );
+	string fullDB( );
 	
-	TElem &openDB_E()	{ return el_db; }
+	TElem &openDB_E( )	{ return el_db; }
 	
 	AutoHD<TTipBD> at(const string &iid)	{ return modAt(iid); }
 
-	string optDescr(  );
+	string optDescr( );
 
     private:
 	//Private methods

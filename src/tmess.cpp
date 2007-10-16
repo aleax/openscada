@@ -1,13 +1,12 @@
 
 //OpenSCADA system file: tmess.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -38,6 +37,9 @@
 #include "resalloc.h"
 #include "tmess.h"
 
+//*************************************************
+//* TMess                                         *
+//*************************************************
 TMess::TMess(  ) : IOCharSet("UTF8"), m_mess_level(0), log_dir(0x2)
 {
     openlog(PACKAGE,0,LOG_USER);
@@ -76,7 +78,7 @@ void TMess::put( const char *categ, Type level, const char *fmt,  ... )
 	case Warning:	level_sys = LOG_WARNING;break;
 	case Error:	level_sys = LOG_ERR;	break;
 	case Crit:	level_sys = LOG_CRIT;	break;
-	case Allert:	level_sys = LOG_ALERT;	break;
+	case Alert:	level_sys = LOG_ALERT;	break;
 	case Emerg:	level_sys = LOG_EMERG;	break;
 	default: 	level_sys = LOG_DEBUG;
     }
@@ -112,7 +114,7 @@ void TMess::setLang( const string &lng )
 
 string TMess::codeConv( const string &fromCH, const string &toCH, const string &mess)
 {
-    //Make convert to blocks 100 bytes !!!    
+    //- Make convert to blocks 100 bytes !!! -
     string buf = ""; 
     char   *ibuf, outbuf[100], *obuf;
     size_t ilen, olen;
@@ -186,7 +188,7 @@ bool TMess::chkPattern( const string &val, const string &patt )
 
 void TMess::load()
 {
-    //======================= Load params from command line =========================
+    //- Load params from command line -
     int i,next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -210,7 +212,7 @@ void TMess::load()
 	}
     } while(next_opt != -1);
     
-    //======================= Load params config file =========================
+    //- Load params config file -
     i = atoi(TBDS::genDBGet(SYS->nodePath()+"MessLev",TSYS::int2str(messLevel()),"root",SYS->sysOptCfg()).c_str());
     if( i >= 0 && i <= 7 ) setMessLevel(i);
     setLogDirect(atoi(TBDS::genDBGet(SYS->nodePath()+"LogTarget",TSYS::int2str(logDirect()),"root",SYS->sysOptCfg()).c_str()));
@@ -221,5 +223,3 @@ void TMess::save()
     TBDS::genDBSet(SYS->nodePath()+"MessLev",TSYS::int2str(messLevel()));
     TBDS::genDBSet(SYS->nodePath()+"LogTarget",TSYS::int2str(logDirect()));
 }
-
-

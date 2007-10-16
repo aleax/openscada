@@ -1,13 +1,12 @@
 
 //OpenSCADA system module Protocol.HTTP file: http.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -29,7 +28,8 @@
 #include <tuis.h>
 #include "http.h"
 
-//============ Modul info! =====================================================
+//*************************************************
+//* Modul info!                                   *
 #define MOD_ID      "HTTP"
 #define MOD_NAME    "HTTP-realisation"
 #define MOD_TYPE    "Protocol"
@@ -38,9 +38,9 @@
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow support HTTP for WWW based UIs."
 #define LICENSE     "GPL"
-//==============================================================================
+//*************************************************
 
-pr_http::TProt *pr_http::mod;
+PrHTTP::TProt *PrHTTP::mod;
 
 extern "C"
 {
@@ -57,25 +57,22 @@ extern "C"
 	else
 	    AtMod.id	= "";
 
-	return( AtMod );
+	return AtMod;
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	pr_http::TProt *self_addr = NULL;
-
 	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-    	    self_addr = pr_http::mod = new pr_http::TProt( source );
-
-	return ( self_addr );
+    	    return new PrHTTP::TProt( source );
+	return NULL;
     }
 }
 
-using namespace pr_http;
+using namespace PrHTTP;
 
-//================================================================
-//=========== TProt ==============================================
-//================================================================
+//*************************************************
+//* TProt                                         *
+//*************************************************
 TProt::TProt( string name )
 {
     mId 	= MOD_ID;
@@ -86,6 +83,8 @@ TProt::TProt( string name )
     mDescr  	= DESCRIPTION;
     mLicense   	= LICENSE;
     mSource    	= name;
+    
+    mod		= this;
 }
 
 TProt::~TProt()
@@ -106,7 +105,7 @@ string TProt::optDescr( )
 
 void TProt::modLoad( )
 {
-    //========== Load parameters from command line ============
+    //- Load parameters from command line -
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -126,7 +125,7 @@ void TProt::modLoad( )
 	}
     } while(next_opt != -1);
 
-    //========== Load parameters from config file =============
+    //- Load parameters from config file -
 }
 
 TProtocolIn *TProt::in_open( const string &name )
@@ -134,9 +133,9 @@ TProtocolIn *TProt::in_open( const string &name )
     return new TProtIn(name);
 }
 
-//================================================================
-//=========== TProtIn ============================================
-//================================================================
+//*************************************************
+//* TProtIn                                       *
+//*************************************************
 TProtIn::TProtIn( string name ) : TProtocolIn(name), m_nofull(false)
 {
 

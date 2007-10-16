@@ -1,13 +1,12 @@
 
 //OpenSCADA system file: tmodschedul.h
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -27,23 +26,22 @@
 
 #include "tsubsys.h"
 
+//*************************************************
+//* TModSchedul                                   *
+//*************************************************
 class TModSchedul : public TSubSYS  
 {
-    public:	   
-	struct SUse
-	{
-    	    string mod_sub;
-	    string n_mod;
-	};
-    
+    public:
+	//Data
 	struct SHD
 	{
     	    void                *hd;         // NULL - share lib present but no attached
-	    vector<SUse>        use;         // if share lib attached to show who modules used
+	    vector<string>      use;         // if share lib attached to show who modules used    
 	    time_t              m_tm;        // data modify of share lib for automatic update
 	    string              name;        // share lib path
 	};
 	    
+	//Methods
 	TModSchedul( );    
 	~TModSchedul( );
 	
@@ -61,14 +59,14 @@ class TModSchedul : public TSubSYS
         void libLoad( const string &path, bool full );	// Load share libs for <dest> from <path> whith call gmdInit if set <full>
 	void libAtt( const string &name, bool full = false);	// Attach share libs
     	void libDet( const string &name );		// Detach share libs
-	
-	string optDescr( );				// Description of config help
 
     protected:
-	void preDisable(int flag);
+	//Methods
+	void preDisable( int flag );
 	
     private:
 	//Methods
+	string optDescr( );					// Description of config help	
     	void ScanDir( const string &Paths, vector<string> &files );//Scan directory for OpenSCADA share libs
     	bool CheckFile( const string &name );			//Check file to OpenSCADA share libs
     	int  libReg( const string &name );			//Registre present share lib
@@ -79,7 +77,7 @@ class TModSchedul : public TSubSYS
 
     	static void SchedTask(union sigval obj);    
 	
-	//Attribytes
+	//Attributes
 	string         	m_mod_path;
 	vector<string>	m_am_list;
    

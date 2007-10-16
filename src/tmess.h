@@ -1,13 +1,12 @@
 
 //OpenSCADA system file: tmess.h
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -37,18 +36,21 @@
 #define mess_warning(cat,fmt,args...) Mess->put(cat,TMess::Warning,fmt,##args)
 #define mess_err(cat,fmt,args...) Mess->put(cat,TMess::Error,fmt,##args)
 #define mess_crit(cat,fmt,args...) Mess->put(cat,TMess::Crit,fmt,##args)
-#define mess_allert(cat,fmt,args...) Mess->put(cat,TMess::Allert,fmt,##args)
+#define mess_alert(cat,fmt,args...) Mess->put(cat,TMess::Alert,fmt,##args)
 #define mess_emerg(cat,fmt,args...) Mess->put(cat,TMess::Emerg,fmt,##args)
 
 using std::string;
 using std::vector;
 using std::exception;
 
+//*************************************************
+//* TMess                                         *
+//*************************************************
 class TMess
 {
     public:
 	//Data
-	enum Type { Debug, Info, Notice, Warning, Error, Crit, Allert, Emerg };
+	enum Type { Debug, Info, Notice, Warning, Error, Crit, Alert, Emerg };
     
 	class SRec
 	{

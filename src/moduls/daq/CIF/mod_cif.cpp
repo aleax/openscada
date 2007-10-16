@@ -1172,11 +1172,11 @@ void TMdPrm::postDisable(int flag)
     {
         if( flag )
         {
-            string io_bd = owner().DB()+"."+owner().cfg(type().BD()).getS()+"_io";
+            string io_bd = owner().DB()+"."+owner().cfg(type().db).getS()+"_io";
             TConfig cfg(&mod->prmIOE());
 	    cfg.cfg("PRM_ID").setS(id());
 	    cfg.cfg("ID").setS("");
-	    SYS->db().at().dataDel(io_bd,owner().owner().nodePath()+owner().cfg(type().BD()).getS()+"_io",cfg);
+	    SYS->db().at().dataDel(io_bd,owner().owner().nodePath()+owner().cfg(type().db).getS()+"_io",cfg);
         }
     }catch(TError err)
     { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
@@ -1193,7 +1193,7 @@ void TMdPrm::enable()
 	bool to_make = false;
         if( !func() )
 	{
-    	    func(&SYS->daq().at().tmplLibAt(TSYS::strSepParse(m_tmpl,0,'.')).at().
+    	    setFunc(&SYS->daq().at().tmplLibAt(TSYS::strSepParse(m_tmpl,0,'.')).at().
 			          at(TSYS::strSepParse(m_tmpl,1,'.')).at().func().at());
     	    to_make = true;
 	}
@@ -1254,7 +1254,7 @@ void TMdPrm::disable()
         }
     
     //Template's function disconnect
-    func(NULL);
+    setFunc(NULL);
     id_freq=id_start=id_stop=id_err-1;
     
     TParamContr::disable();
@@ -1273,12 +1273,12 @@ void TMdPrm::loadIO()
     
     TConfig cfg(&mod->prmIOE());
     cfg.cfg("PRM_ID").setS(id());
-    string io_bd = owner().DB()+"."+owner().cfg(type().BD()).getS()+"_io";
+    string io_bd = owner().DB()+"."+owner().cfg(type().db).getS()+"_io";
 				    
     for( int i_io = 0; i_io < ioSize(); i_io++ )
     {
         cfg.cfg("ID").setS(func()->io(i_io)->id());
-        if(!SYS->db().at().dataGet(io_bd,owner().owner().nodePath()+owner().cfg(type().BD()).getS()+"_io",cfg))
+        if(!SYS->db().at().dataGet(io_bd,owner().owner().nodePath()+owner().cfg(type().db).getS()+"_io",cfg))
     	    continue;
         if( func()->io(i_io)->flg()&TPrmTempl::CfgLink )
     	    lnk(lnkId(i_io)).db_addr = cfg.cfg("VALUE").getS();
@@ -1300,7 +1300,7 @@ void TMdPrm::saveIO()
     
     TConfig cfg(&mod->prmIOE());
     cfg.cfg("PRM_ID").setS(id());
-    string io_bd = owner().DB()+"."+owner().cfg(type().BD()).getS()+"_io";
+    string io_bd = owner().DB()+"."+owner().cfg(type().db).getS()+"_io";
 		    
     for( int i_io = 0; i_io < func()->ioSize(); i_io++ )
     {
@@ -1308,7 +1308,7 @@ void TMdPrm::saveIO()
         if( func()->io(i_io)->flg()&TPrmTempl::CfgLink )
             cfg.cfg("VALUE").setS(lnk(lnkId(i_io)).db_addr);
         else cfg.cfg("VALUE").setS(getS(i_io));
-	SYS->db().at().dataSet(io_bd,owner().owner().nodePath()+owner().cfg(type().BD()).getS()+"_io",cfg);
+	SYS->db().at().dataSet(io_bd,owner().owner().nodePath()+owner().cfg(type().db).getS()+"_io",cfg);
     }
 }
 

@@ -350,11 +350,11 @@ void TMdPrm::postDisable(int flag)
     {
         if( flag )
         {
-            string io_bd = owner().DB()+"."+owner().cfg(type().BD()).getS()+"_io";
+            string io_bd = owner().DB()+"."+owner().cfg(type().db).getS()+"_io";
             TConfig cfg(&mod->prmIOE());
 	    cfg.cfg("PRM_ID").setS(id());
 	    cfg.cfg("ID").setS("");
-	    SYS->db().at().dataDel(io_bd,owner().owner().nodePath()+owner().cfg(type().BD()).getS()+"_io",cfg);
+	    SYS->db().at().dataDel(io_bd,owner().owner().nodePath()+owner().cfg(type().db).getS()+"_io",cfg);
         }
     }catch(TError err)
     { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
@@ -412,12 +412,12 @@ void TMdPrm::loadIO()
     {
         TConfig cfg(&mod->prmIOE());
         cfg.cfg("PRM_ID").setS(id());
-        string io_bd = owner().DB()+"."+owner().cfg(type().BD()).getS()+"_io";
+        string io_bd = owner().DB()+"."+owner().cfg(type().db).getS()+"_io";
 
 	for( int i_io = 0; i_io < tmpl->val.ioSize(); i_io++ )
         {
 	    cfg.cfg("ID").setS(tmpl->val.func()->io(i_io)->id());
-            if(!SYS->db().at().dataGet(io_bd,owner().owner().nodePath()+owner().cfg(type().BD()).getS()+"_io",cfg))
+            if(!SYS->db().at().dataGet(io_bd,owner().owner().nodePath()+owner().cfg(type().db).getS()+"_io",cfg))
             	continue;
             if( tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink )
                 lnk(lnkId(i_io)).prm_attr = cfg.cfg("VALUE").getS();
@@ -440,7 +440,7 @@ void TMdPrm::saveIO()
     {
         TConfig cfg(&mod->prmIOE());
         cfg.cfg("PRM_ID").setS(id());
-        string io_bd = owner().DB()+"."+owner().cfg(type().BD()).getS()+"_io";
+        string io_bd = owner().DB()+"."+owner().cfg(type().db).getS()+"_io";
 			    
         for( int i_io = 0; i_io < tmpl->val.func()->ioSize(); i_io++ )
         {
@@ -448,7 +448,7 @@ void TMdPrm::saveIO()
             if( tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink )
                 cfg.cfg("VALUE").setS(lnk(lnkId(i_io)).prm_attr);
             else cfg.cfg("VALUE").setS(tmpl->val.getS(i_io));
-            SYS->db().at().dataSet(io_bd,owner().owner().nodePath()+owner().cfg(type().BD()).getS()+"_io",cfg);
+            SYS->db().at().dataSet(io_bd,owner().owner().nodePath()+owner().cfg(type().db).getS()+"_io",cfg);
         }
     }
 }
@@ -519,7 +519,7 @@ void TMdPrm::mode( TMdPrm::Mode md, const string &prm )
         {
             if( !tmpl->val.func() )
             {
-                tmpl->val.func(&SYS->daq().at().tmplLibAt(TSYS::strSepParse(prm,0,'.')).at().
+                tmpl->val.setFunc(&SYS->daq().at().tmplLibAt(TSYS::strSepParse(prm,0,'.')).at().
 					        at(TSYS::strSepParse(prm,1,'.')).at().func().at());
                 tmpl->val.setVfName(id()+"_tmplprm");
                 to_make = true;

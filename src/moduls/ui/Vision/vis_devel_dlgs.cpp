@@ -1163,7 +1163,7 @@ void VisItProp::tabChanged( int itb )
 {    
     switch(itb)
     {
-	case 1:	obj_attr->setWdg(ed_it);break;
+	case 1:	obj_attr->setWdg(ed_it);	break;
 	case 2:
 	{
 	    show_init = true;
@@ -1299,6 +1299,7 @@ void VisItProp::tabChanged( int itb )
 	    }
 
 	    show_init = false;
+	    break;
 	}
 	case 3:	obj_lnk->setWdg(ed_it);	break;
     }

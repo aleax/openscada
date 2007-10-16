@@ -1,13 +1,12 @@
 
 //OpenSCADA system file: tarchval.h
 /***************************************************************************
- *   Copyright (C) 2006-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2006-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -33,13 +32,16 @@ using std::vector;
 
 #define BUF_ARCH_NM "<bufer>"
 
-//================================================================
-//===================== Value archivator =========================
-//================================================================
+//*************************************************
+//* Value archivator                              *
+//*************************************************
 
-//========================= TValBuf ==============================
-//Value buffer object. Contain a massif of values types: bool, decimal, 
-//real or string.
+
+//*************************************************
+//* TValBuf                                       *
+//*   Value buffer object. Contain a massif of    *
+//* values types: bool, decimal, real or string.  *
+//*************************************************
 class TValBuf
 {
     public:
@@ -48,17 +50,17 @@ class TValBuf
 	TValBuf( TFld::Type vtp, int isz, long long ipr, bool ihgrd = false, bool ihres = false );
 	~TValBuf( );
 	
-	void clear();
+	void clear( );
 
-	TFld::Type valType()	{ return m_val_tp; }
-	bool hardGrid()		{ return m_hrd_grd; }
-	bool highResTm()	{ return m_hg_res_tm; }
-        int size()		{ return m_size; }
-	int realSize();
-        long long period()	{ return m_per; }
+	TFld::Type valType( )	{ return m_val_tp; }
+	bool hardGrid( )	{ return m_hrd_grd; }
+	bool highResTm( )	{ return m_hg_res_tm; }
+        int size( )		{ return m_size; }
+	int realSize( );
+        long long period( )	{ return m_per; }
 
-	long long begin()       { return m_beg; }
-	long long end()        	{ return m_end; }
+	long long begin( )      { return m_beg; }
+	long long end( )       	{ return m_end; }
 	
 	bool vOK( long long ibeg, long long iend );	
 
@@ -102,7 +104,7 @@ class TValBuf
 		TpVal get( long long *tm = NULL, bool up_ord = false );
 		void  set( TpVal value, long long tm = 0 );
 		
-		//Create new or change buffer mode (all data into buffer will lost) 
+		//- Create new or change buffer mode (all data into buffer will lost) -
 		void makeBuf( int isz, long long ipr, bool hd_grd, bool hg_res );	
 		
 	    private:
@@ -144,7 +146,9 @@ class TValBuf
 };
 
 
-//========================= TVArchive ============================
+//*************************************************
+//* TVArchive                                     *
+//*************************************************
 class TVal;
 class TArchiveS;
 class TVArchEl;
@@ -156,17 +160,17 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
         enum SrcMode { Passive, PassiveAttr, ActiveAttr };
 	
 	//Public methods
-	TVArchive( const string &iid, const string &idb, TElem *cf_el );
+	TVArchive( const string &id, const string &db, TElem *cf_el );
 	~TVArchive( );
 	
 	//- Base functions -
-	const string &id()	{ return m_id; }
-	string name();
-	string dscr()		{ return m_dscr; }
-	SrcMode srcMode() 	{ return (TVArchive::SrcMode)m_srcmode; }
-	string  srcData()	{ return m_dsourc; }
-	bool toStart()  	{ return m_start; }
-        bool startStat()	{ return run_st; }
+	const string &id( )	{ return m_id; }
+	string name( );
+	string dscr( )		{ return m_dscr; }
+	SrcMode srcMode( ) 	{ return (TVArchive::SrcMode)m_srcmode; }
+	string  srcData( )	{ return m_dsourc; }
+	bool toStart( )  	{ return m_start; }
+        bool startStat( )	{ return run_st; }
 	
 	string DB( )            { return m_db; }
         string tbl( );
@@ -175,10 +179,10 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	long long end( const string &arch = BUF_ARCH_NM );
         long long begin( const string &arch = BUF_ARCH_NM );		
 	TFld::Type valType( )	{ return TValBuf::valType(); }
-        bool hardGrid()         { return TValBuf::hardGrid(); }
-        bool highResTm()        { return TValBuf::highResTm(); }
-	int size()              { return TValBuf::size(); }
-        long long period()      { return TValBuf::period(); }
+        bool hardGrid( ) 	{ return TValBuf::hardGrid(); }
+        bool highResTm( )	{ return TValBuf::highResTm(); }
+	int size( )		{ return TValBuf::size(); }
+        long long period( )	{ return TValBuf::period(); }
 	
 	void setName( const string &inm )	{ m_name = inm; }
         void setDscr( const string &idscr )	{ m_dscr = idscr; }
@@ -256,7 +260,9 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 };
 
 
-//======================= TVArchivator ===========================
+//*************************************************
+//* TVArchivator                                  *
+//*************************************************
 class TTipArchivator;
 
 class TVArchivator : public TCntrNode, public TConfig
@@ -266,28 +272,29 @@ class TVArchivator : public TCntrNode, public TConfig
 
     public:
 	//Public methods
-	TVArchivator( const string &iid, const string &idb, TElem *cf_el );
-	~TVArchivator();
+	TVArchivator( const string &id, const string &db, TElem *cf_el );
+	~TVArchivator( );
 
-	const string &id() 	{ return m_id; }
-	string workId();
-	string name();
-	string dscr()		{ return m_dscr; }
-	string addr()		{ return m_addr; }
-	double valPeriod()	{ return m_v_per; }
-	int    archPeriod()	{ return m_a_per; }
+	const string &id( ) 	{ return m_id; }
+	string workId( );
+	string name( );
+	string dscr( )		{ return m_dscr; }
+	string addr( )		{ return m_addr; }
+	double valPeriod( )	{ return m_v_per; }
+	int    archPeriod( )	{ return m_a_per; }
 	
-	bool toStart()  	{ return m_start; }
-        bool startStat()	{ return run_st; }	
+	bool toStart( )  	{ return m_start; }
+        bool startStat( )	{ return run_st; }	
 	
 	string DB( )            { return m_db; }
 	string tbl( );
 	string fullDB( )        { return DB()+'.'+tbl(); }			
 	
 	void setName( const string &inm )	{ m_name = inm; }
-        void setDscr( const string &idscr ){ m_dscr = idscr; }
-	virtual void setValPeriod( double iper );
-	virtual void setArchPeriod( int iper );
+        void setDscr( const string &idscr )	{ m_dscr = idscr; }
+	void setAddr( const string &vl )	{ m_addr = vl; }
+	virtual void setValPeriod( double per );
+	virtual void setArchPeriod( int per );
 	
 	virtual void load( );
 	virtual void save( );
@@ -304,14 +311,14 @@ class TVArchivator : public TCntrNode, public TConfig
 	//Protected methods
 	//- Protected place archive functions -
 	TVArchEl *archivePlace( TVArchive &item );
-        void archiveRemove( const string &iid, bool full = false );
+        void archiveRemove( const string &id, bool full = false );
     
 	virtual TVArchEl *getArchEl( TVArchive &arch );
 
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process    
-	void postEnable(int flag);
-	void preDisable(int flag);
-	void postDisable(int flag);     //Delete all DB if flag 1	
+	void postEnable( int flag );
+	void preDisable( int flag );
+	void postDisable( int flag );     //Delete all DB if flag 1	
 	
 	//Protected attributes
 	Res	a_res;
@@ -340,7 +347,9 @@ class TVArchivator : public TCntrNode, public TConfig
 };
 
 
-//========================= TVArchEl =============================
+//*************************************************
+//* TVArchEl                                      *
+//*************************************************
 class TVArchEl
 {
     friend class TVArchivator;
@@ -348,12 +357,12 @@ class TVArchEl
     public:
 	//Public methods
 	TVArchEl( TVArchive &iachive, TVArchivator &iarchivator );
-	virtual ~TVArchEl();
-	virtual void fullErase(){ }	
+	virtual ~TVArchEl( );
+	virtual void fullErase( )	{ }	
 		
-	virtual long long end()	{ return 0; }		//Archive end
-	virtual long long begin(){ return 0; }		//Archive begin
-	long long lastGet()	{ return m_last_get; }	//Last getted value time	
+	virtual long long end( )	{ return 0; }		//Archive end
+	virtual long long begin( )	{ return 0; }		//Archive begin
+	long long lastGet( )		{ return m_last_get; }	//Last getted value time	
 	
 	virtual void getVal( TValBuf &buf, long long beg = 0, long long end = 0 ) { }
 	virtual string getS( long long *tm, bool up_ord ) { }
@@ -363,8 +372,8 @@ class TVArchEl
 	
 	virtual void setVal( TValBuf &buf, long long beg = 0, long long end = 0 ) { }
 	
-	TVArchive &archive();
-	TVArchivator &archivator();
+	TVArchive &archive( );
+	TVArchivator &archivator( );
 	
 	//Public atributes
         // - Previous averaging value -

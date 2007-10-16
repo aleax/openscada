@@ -1,13 +1,12 @@
 
 //OpenSCADA system file: tcntrnode.h
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -26,7 +25,7 @@
 #include <string>
 #include <vector>
 
-//Security standard permissions
+//- Security standard permissions -
 #define R_R_R_  0444
 #define R_R___  0440
 #define R_____  0400
@@ -75,7 +74,7 @@ typedef map<string, TCntrNode* > TMap;
 //***************************************************************
 class TCntrNode
 {        
-    //******* Controll scenaries language section ***************
+    //* Controll scenaries language section *
     public:
 	//Methods
 	TCntrNode( TCntrNode *prev = NULL );
@@ -96,7 +95,7 @@ class TCntrNode
 	//Methods
 	virtual void cntrCmdProc( XMLNode *req );
 	
-    //*********** Resource section ******************************
+    //* Resource section *
     public:
 	//Data
 	enum Mode { MkDisable, Disable, MkEnable, Enable };
@@ -129,7 +128,7 @@ class TCntrNode
 	
 	void nodeDelAll( );	//For hard link objects
 	
-	void nodePrev( TCntrNode *node )	{ prev.node = node; }
+	void setNodePrev( TCntrNode *node )	{ prev.node = node; }
 	
 	//- Conteiners -
         unsigned grpSize()	{ return chGrp.size(); }
@@ -143,11 +142,11 @@ class TCntrNode
 
         AutoHD<TCntrNode> chldAt( unsigned igr, const string &name, const string &user = "" );
 	
-	virtual void preEnable(int flag)	{ }
-	virtual void postEnable(int flag)	{ }
+	virtual void preEnable( int flag )	{ }
+	virtual void postEnable( int flag )	{ }
 	
-	virtual void preDisable(int flag)	{ }
-	virtual void postDisable(int flag)	{ }
+	virtual void preDisable( int flag )	{ }
+	virtual void postDisable( int flag )	{ }
 
     private:
 	//Attributes

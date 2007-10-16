@@ -1,13 +1,12 @@
 
 //OpenSCADA system module Archive.FSArch file: val.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -31,9 +30,11 @@
 #include "base.h"
 #include "val.h"
 
-using namespace BaseArch;
+using namespace FSArch;
 
-//*** BaseArch::ModVArch - Value archivator ***
+//*************************************************
+//* FSArch::ModVArch - Value archivator           *
+//*************************************************
 ModVArch::ModVArch( const string &iid, const string &idb, TElem *cf_el ) : 
     TVArchivator(iid,idb,cf_el), m_lst_check(0),
     time_size(cfg("FSArchTmSize").getRd()), numb_files(cfg("FSArchNFiles").getId()), 
@@ -406,7 +407,9 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
     else TVArchivator::cntrCmdProc(opt);
 }
 
-//*** BaseArch::ModVArchEl - Value archive element ***
+//*************************************************
+//* FSArch::ModVArchEl - Value archive element    *
+//*************************************************
 ModVArchEl::ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator ) :
     TVArchEl(iachive,iarchivator)
 {
@@ -696,7 +699,9 @@ void ModVArchEl::setVal( TValBuf &buf, long long beg, long long end )
     }	    
 }
 
-//*** BaseArch::VFileArch - Value archivator file ***
+//*************************************************
+//* FSArch::VFileArch - Value archivator file     *
+//*************************************************
 string VFileArch::afl_id = "OpenSCADA Val Arch.";
 
 VFileArch::VFileArch( ModVArchEl *owner ) : 

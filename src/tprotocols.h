@@ -1,13 +1,12 @@
 
 //OpenSCADA system file: tprotocols.h
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -42,17 +41,17 @@ class TProtocolIn : public TCntrNode
 	TProtocolIn( const string &name );
 	virtual ~TProtocolIn();
 	
-	string &name()	{ return(m_name); }
+	string &name( )		{ return m_name; }
 	
 	//- Process input messages -
 	virtual bool mess( const string &request, string &answer, const string &sender )
 	{ answer = ""; }
 	
-	TProtocol &owner()	{ return *(TProtocol *)nodePrev(); }
+	TProtocol &owner( )	{ return *(TProtocol *)nodePrev(); }
 	
     private:
 	//Methods
-	string nodeName()	{ return m_name; }
+	string nodeName( )	{ return m_name; }
 	
 	//Attributes
 	string            m_name;
@@ -70,21 +69,20 @@ class TProtocol: public TModule
 	virtual ~TProtocol( );
 
 	//- Input protocol -
-	void list( vector<string> &list )	{ chldList(m_pr,list); }
-        bool openStat( const string &name )	{ return chldPresent(m_pr,name); } 
+	void list( vector<string> &list )		{ chldList(m_pr,list); }
+        bool openStat( const string &name )		{ return chldPresent(m_pr,name); } 
 	void open( const string &name );
 	void close( const string &name );
-	AutoHD<TProtocolIn> at( const string &name )
-	{ return chldAt(m_pr,name); }
+	AutoHD<TProtocolIn> at( const string &name )	{ return chldAt(m_pr,name); }
 	
 	//- Output protocol -
 	virtual string outMess( const string &in, TTransportOut &tro )
-	{ throw TError(nodePath().c_str(),"Function 'outMess' no support!"); }
+	{ throw TError(nodePath().c_str(),"Function <%s> no support!","outMess"); }
 	
     private:
 	//Methods
 	virtual TProtocolIn *in_open( const string &name )
-	{ throw TError(nodePath().c_str(),"Function 'in_open' no support!"); }
+	{ throw TError(nodePath().c_str(),"Function <%s> no support!","in_open"); }
 	
 	//Attributes
 	int	m_pr;
@@ -99,7 +97,7 @@ class TProtocolS : public TSubSYS
 	TProtocolS( );
 	~TProtocolS( );
     
-	int subVer( ) 	{ return(VER_PROT); }
+	int subVer( ) 		{ return(VER_PROT); }
 	void subLoad( );
 
 	AutoHD<TProtocol> at( const string &iid )	{ return modAt(iid); }

@@ -1,13 +1,12 @@
 
 //OpenSCADA system file: xml.h
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -23,11 +22,6 @@
 #ifndef XML_H
 #define XML_H
 
-#define XML_BR_OPEN_PREV  0x01	//Break preview open tag
-#define XML_BR_OPEN_PAST  0x02	//Break past open tag
-#define XML_BR_CLOSE_PAST 0x04	//Break past close tag
-#define XML_BR_TEXT_PAST  0x08	//Break past text
-
 #include <string>
 #include <vector>
 
@@ -36,18 +30,32 @@
 using std::string;
 using std::vector;
 
+//*************************************************
+//* XMLNode                                       *
+//*************************************************
 class XMLNode 
 {
     public:
-    	XMLNode( const string &name = "" ) : m_name(name), m_text(""), current_node(NULL) {  }
-	~XMLNode() { clear(); }
+	//Data
+	enum SaveView	
+	{ 
+	    BrOpenPrev  = 0x01,		//Break preview open tag
+	    BrOpenPast  = 0x02,		//Break past open tag
+	    BrClosePast = 0x04,		//Break past close tag
+	    BrTextPast  = 0x08		//Break past text
+	};
+	
+	//Methods
+    	XMLNode( const string &name = "" ) : m_name(name), m_text(""), current_node(NULL) 
+						{  }
+	~XMLNode() 				{ clear(); }
 
-	XMLNode &operator=(XMLNode &prm);
+	XMLNode &operator=( XMLNode &prm );
 
-	string 	name() const 			{ return m_name; }
+	string 	name( ) const 			{ return m_name; }
         XMLNode* setName( const string &s ) 	{ m_name = s; return this; }
 
-	string	text() const 			{ return m_text; }
+	string	text( ) const 			{ return m_text; }
         XMLNode* setText( const string &s ) 	{ m_text = s; return this; }
 	
 	void	attrList( vector<string> & list ) const;
@@ -56,14 +64,14 @@ class XMLNode
         XMLNode* setAttr( const string &name, const string &val );
 	XMLNode* setAttr_( const char *name, const char *val );
 
-	void 	load( const string & );
+	void 	load( const string &vl );
 	string 	save( unsigned char flgs = 0 );
-	XMLNode* clear();
+	XMLNode* clear( );
 
-	int 	childSize() const 	{ return m_children.size(); }
-	void 	childAdd( XMLNode * );
+	int 	childSize( ) const 		{ return m_children.size(); }
+	void 	childAdd( XMLNode *nd );
 	XMLNode* childAdd( const string &name = "" );
-	int 	childIns( unsigned id, XMLNode * );
+	int 	childIns( unsigned id, XMLNode *nd );
 	XMLNode* childIns( unsigned id, const string &name = "" );
 	void 	childDel( const unsigned id );
 	void 	childClean( const string &name = "" );
@@ -72,13 +80,14 @@ class XMLNode
 	XMLNode* childGet( const string &attr, const string &name, bool noex = false ) const;	
 
     private:
+	//Methods
 	string encode ( const string &s ) const;
 	
 	static void start_element ( void *data, const char *el, const char **attr );
 	static void end_element ( void *data, const char *el );
 	static void characters ( void *userData, const XML_Char *s, int len );
-	
-    private:	
+
+	//Attributes	
 	string m_name;
     	string m_text;
 	vector<XMLNode *> m_children;
@@ -87,7 +96,7 @@ class XMLNode
 
 	static const char *o_name;
 
-    private:
+	//- Parse/load XML attributes -
     	vector<XMLNode*> node_stack;
         XMLNode* current_node;
 };

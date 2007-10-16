@@ -1,13 +1,12 @@
 
 //OpenSCADA system file: tfunction.h
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -32,12 +31,16 @@
 using std::string;
 using std::vector;
 
+//*************************************************
+//* IO                                            *
+//*************************************************
 class TFunction;
 
 class IO
 {
     friend class TFunction;
-    public:		
+    public:
+	//Data
 	enum Type { String, Integer, Real, Boolean };
 	enum IOFlgs 
 	{ 
@@ -45,19 +48,20 @@ class IO
 	    Output  = 0x01,
 	    Return  = 0x02
 	};
-		
-	IO( const char *iid, const char *iname, IO::Type itype, unsigned iflgs, const char *idef = "", 
-		bool ihide = false, const char *irez = "" );
+	
+	//Methods	
+	IO( const char *id, const char *name, IO::Type type, unsigned flgs, const char *def = "", 
+		bool hide = false, const char *rez = "" );
 
-	IO &operator=(IO &iio);
+	IO &operator=( IO &iio );
 
-	const string &id() 	{ return m_id; }
-	const string &name() 	{ return m_name; }
-	const Type &type()	{ return m_type; }
-	unsigned flg()		{ return m_flg; }		
-	const string &def() 	{ return m_def; }
-	bool  hide() 		{ return m_hide; }
-	const string &rez()	{ return m_rez; }
+	const string &id( ) 	{ return m_id; }
+	const string &name( ) 	{ return m_name; }
+	const Type &type( )	{ return m_type; }
+	unsigned flg( )		{ return m_flg; }		
+	const string &def( ) 	{ return m_def; }
+	bool  hide( ) 		{ return m_hide; }
+	const string &rez( )	{ return m_rez; }
 
 	void setId( const string &val );
 	void setName( const string &val );
@@ -68,6 +72,7 @@ class IO
 	void setRez( const string &val );
 
     private:
+	//Attributes
 	string 	m_id;
 	string 	m_name;
 	Type	m_type;
@@ -79,29 +84,31 @@ class IO
 	TFunction *owner;
 };
 
-//Function abstract object
+//*************************************************
+//* Function abstract object                      *
+//*************************************************
 class TValFunc;
 
 class TFunction : public TCntrNode
 {
     public:
 	//Methods		
-	TFunction( const string &iid );
-	virtual ~TFunction();
+	TFunction( const string &id );
+	virtual ~TFunction( );
 	
-	TFunction &operator=(TFunction &func);
+	TFunction &operator=( TFunction &func );
 	
-	const string &id()	{ return m_id; };
-	virtual string name()	{ return ""; }
-	virtual string descr()	{ return ""; }
+	const string &id( )		{ return m_id; };
+	virtual string name( )		{ return ""; }
+	virtual string descr( )		{ return ""; }
 	
-	bool startStat()        { return run_st; }
+	bool startStat()        	{ return run_st; }
 	virtual void start( bool val )  { run_st = val; }
 	
 	//- IO -
 	void ioList( vector<string> &list );
 	int ioId( const string &id );
-	int ioSize();
+	int ioSize( );
 	IO *io( int id );
 	void ioAdd( IO *io );
 	void ioIns( IO *io, int pos );
@@ -136,7 +143,9 @@ class TFunction : public TCntrNode
 	vector<TValFunc*>	used;
 };
 
-
+//*************************************************
+//* TValFunc                                      *
+//*************************************************
 class TValFunc
 {
     public:
@@ -144,12 +153,12 @@ class TValFunc
 	TValFunc( const string &iname = "", TFunction *ifunc = NULL, bool iblk = true );
     	virtual ~TValFunc( );
 	
-	const string &vfName()	{ return m_name; }
+	const string &vfName( )			{ return m_name; }
     	void setVfName( const string &inm )	{ m_name = inm; }
 	
-	void 	ioList( vector<string> &list );	
-	int 	ioId( const string &id );	//IO id
-	int 	ioSize( );
+	void ioList( vector<string> &list );	
+	int  ioId( const string &id );
+	int  ioSize( );
 	IO::Type ioType( unsigned id )
 	{
 	    if( id >= m_val.size() )    throw TError("ValFunc",_("Id or IO %d error!"),id);
@@ -179,24 +188,24 @@ class TValFunc
 	void setB( unsigned id, bool val );
 
 	//- Blocked values screen -
-	bool	blk()			{ return m_blk; }
+	bool	blk( )			{ return m_blk; }
 
 	//- Dimension controll -
-	bool	dimens()		{ return m_dimens; }
-	void	dimens( bool set )	{ m_dimens = set; }
+	bool	dimens( )		{ return m_dimens; }
+	void	setDimens( bool set )	{ m_dimens = set; }
  	
 	//- Calc function -
 	virtual void calc( );
 	//- Calc time function -
 	double  calcTm( )		{ return tm_calc; }
-	void calcTm( double ivl )	{ tm_calc = ivl; }
+	void setCalcTm( double ivl )	{ tm_calc = ivl; }
 	
 	//- Attached function -
 	TFunction *func( )		{ return m_func; }
-	void func( TFunction *ifunc, bool att_det = true );
+	void setFunc( TFunction *func, bool att_det = true );
 	
-	virtual void preIOCfgChange();
-        virtual void postIOCfgChange();
+	virtual void preIOCfgChange( );
+        virtual void postIOCfgChange( );
 
     protected:
 	//Data

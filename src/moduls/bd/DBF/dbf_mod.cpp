@@ -210,7 +210,7 @@ MTable::MTable(const string &inm, MBD *iown, bool create) :
     TTable(inm), m_modify(false)
 {
     string tbl_nm = name();
-    nodePrev(iown);
+    setNodePrev(iown);
 
     //- Set file extend -
     if( !(tbl_nm.size() > 4 && tbl_nm.substr(tbl_nm.size()-4,4) == ".dbf") )

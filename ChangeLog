@@ -1,3 +1,9 @@
+2007-10-16 Roman
+- !!!!:/Archive: Archiving to DB on module DBArch is added.
+- !!!:/SYS: Full OpenSCADA kernel API is updated.
+- /UI/Vision: Link inspector items deleting is fixed.
+
+
 2007-10-05 Maxim
 - !!:/UI/Vision: Path creation full rewrited for primitive "ElFig".
 

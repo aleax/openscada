@@ -1,13 +1,12 @@
 
 //OpenSCADA system module UI.QTCfg file: selfwidg.h
 /***************************************************************************
- *   Copyright (C) 2004-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2004-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -46,192 +45,193 @@ class QDialogButtonBox;
 
 namespace QTCFG
 {
-    //*********************************************
-    //* Line edit widget                          *
-    //*********************************************
-    class LineEdit : public QWidget
-    {
-	Q_OBJECT
+//************************************************
+//* Line edit widget                             *
+//************************************************
+class LineEdit : public QWidget
+{
+    Q_OBJECT
 	
-	public:
-	    LineEdit( QWidget *parent, bool prev_dis = false );
+    public:
+	LineEdit( QWidget *parent, bool prev_dis = false );
+	
+	bool hasFocus() const;
+
+	void setText(const QString &);
+	QString text() const;
+
+	QLineEdit *edit()	{ return ed_fld; }
+
+    signals:
+	void apply( );
+	void cancel( );
+	void textChanged(const QString&);
 	    
-	    bool hasFocus() const;
+    protected:
+	bool event( QEvent * e );
 
-	    void setText(const QString &);
-	    QString text() const;
-
-	    QLineEdit	*edit()	{ return ed_fld; }
-
-	signals:
-	    void apply( );
-	    void cancel( );
-	    void textChanged(const QString&);
+    private slots:
+	void changed( const QString& );
+	void applySlot( );
 	    
-	protected:
-	    bool event( QEvent * e );
-
-	private slots:
-	    void changed( const QString& );
-	    void applySlot( );
-	    
-	private:
-	    QLineEdit	*ed_fld;
-	    QPushButton	*bt_fld;
-    }; 
+    private:
+	QLineEdit	*ed_fld;
+	QPushButton	*bt_fld;
+}; 
     
-    //*********************************************
-    //* Date and time edit widget                 *
-    //*********************************************
-    class DateTimeEdit : public QWidget
-    {
-	Q_OBJECT
-	
-	public:
-	    DateTimeEdit( QWidget *parent, bool prev_dis = false );
+//************************************************
+//* Date and time edit widget                    *
+//************************************************
+class DateTimeEdit : public QWidget
+{
+    Q_OBJECT
+    
+    public:
+	DateTimeEdit( QWidget *parent, bool prev_dis = false );
 	    
-	    bool hasFocus() const;
+	bool hasFocus() const;
 
-	    void setDateTime(const QDateTime & dt);
-	    QDateTime dateTime() const;
+	void setDateTime(const QDateTime & dt);
+	QDateTime dateTime() const;
 
-	    QDateTimeEdit *dtEdit() { return ed_fld; }
+	QDateTimeEdit *dtEdit() { return ed_fld; }
 
-	signals:
-            void apply( );
-	    void cancel( );
-            void valueChanged(const QDateTime&);	    	
+    signals:
+	void apply( );
+	void cancel( );
+	void valueChanged(const QDateTime&);	    	
 	    
-	protected:
-	    bool event( QEvent * e );	    
+    protected:
+	bool event( QEvent * e );	    
 		
-	private slots:
-	    void changed( const QDateTime & );
-	    void applySlot( );
+    private slots:
+	void changed( const QDateTime & );
+	void applySlot( );
 	    
-	private:
-	    QDateTimeEdit *ed_fld;
-	    QPushButton	*bt_fld;
-    };
+    private:
+	QDateTimeEdit *ed_fld;
+	QPushButton	*bt_fld;
+};
 
-    //*********************************************
-    //* Text edit widget                          *
-    //*********************************************
-    class TextEdit : public QWidget
-    {
-	Q_OBJECT
-	
-	public:
-	    TextEdit( QWidget *parent, const char * name = 0, bool prev_dis = false );
-
-	    bool hasFocus() const;
-
-	    QString text();	  
-	    void setText(const QString &);  
-
-	    QTextEdit	*edit()	{ return ed_fld; }
-
-	signals:
-	    void apply( );
-	    void cancel( );
- 	    void textChanged(const QString&);
-	    
-	private slots:
-	    void changed();
-	    
-	private:
-	    bool	isInit;
-	    QTextEdit	*ed_fld;
-	    QDialogButtonBox *but_box;
-    };
+//************************************************
+//* Text edit widget                             *
+//************************************************
+class TextEdit : public QWidget
+{
+    Q_OBJECT
     
-    //*********************************************
-    //* Image view widget                         *
-    //*********************************************
-    class ImgView : public QWidget
-    {
-    	Q_OBJECT
-    	public:
-	    ImgView( QWidget * parent = 0, Qt::WindowFlags f = 0, int ih_sz = 0, int iv_sz = 0 );
-	    ~ImgView( );
-	    
-	    QImage &image()	{ return m_img; }
-	    bool setImage( const string &imgdata );
+    public:
+	TextEdit( QWidget *parent, const char * name = 0, bool prev_dis = false );
 
-	protected:
-    	    void paintEvent( QPaintEvent * );
+	bool hasFocus() const;
+
+	QString text();	  
+	void setText(const QString &);  
+
+	QTextEdit	*edit()	{ return ed_fld; }
+
+    signals:
+	void apply( );
+	void cancel( );
+	void textChanged(const QString&);
+	    
+    private slots:
+	void changed();
+	    
+    private:
+	bool	isInit;
+	QTextEdit	*ed_fld;
+	QDialogButtonBox *but_box;
+};
+    
+//************************************************
+//* Image view widget                            *
+//************************************************
+class ImgView : public QWidget
+{
+    Q_OBJECT
+    public:
+	ImgView( QWidget * parent = 0, Qt::WindowFlags f = 0, int ih_sz = 0, int iv_sz = 0 );
+	~ImgView( );
+	    
+	QImage &image()	{ return m_img; }
+	bool setImage( const string &imgdata );
+
+    protected:
+	void paintEvent( QPaintEvent * );
 	
-	private:
-	    QImage m_img;
-	    int	   h_sz, v_sz;
+    private:
+	QImage m_img;
+	int   h_sz, v_sz;
     };
 
-    //*********************************************
-    //* Id and name input dialog                  *
-    //*********************************************
-    class InputDlg : public QDialog
-    {
-	public:
-	    InputDlg( bool with_id = false );
+//************************************************
+//* Id and name input dialog                     *
+//************************************************
+class InputDlg : public QDialog
+{
+    public:
+	InputDlg( bool with_id = false );
 	    
-	    QString id();
-	    QString name();
+	QString id();
+	QString name();
 
-	    void id(const QString &val);
-	    void name(const QString &val);	    
+	void id(const QString &val);
+	void name(const QString &val);	    
 
-	private:
-	    QLineEdit 	*m_id, *m_name;
-    };    
+    private:
+	QLineEdit *m_id, *m_name;
+};    
 
-    //*********************************************
-    //* User select dialog                        *
-    //*********************************************
-    class DlgUser : public QDialog
-    {
-        Q_OBJECT
+//************************************************
+//* User select dialog                           *
+//************************************************
+class DlgUser : public QDialog
+{
+    Q_OBJECT
 
-        public:
-            //Data
-            enum Results { SelCancel, SelOK, SelErr };
-            //Methods
-            DlgUser( QWidget * parent = 0 );
+    public:
+	//Data
+	enum Results { SelCancel, SelOK, SelErr };
+	//Methods
+	DlgUser( QWidget * parent = 0 );
             
-	    QString user();
-            QString password();
+	QString user();
+	QString password();
         
-	private slots:
-            void finish( int result );
+    private slots:
+	void finish( int result );
         
-	private:
-            QComboBox   *users;
-            QLineEdit   *passwd;
-    };
+    private:
+	QComboBox   *users;
+	QLineEdit   *passwd;
+};
     
-    //*********************************************
-    //* Status bar user widget                    *
-    //*********************************************
-    class UserStBar : public QLabel
-    {
-	Q_OBJECT
+//************************************************
+//* Status bar user widget                       *
+//************************************************
+class UserStBar : public QLabel
+{
+    Q_OBJECT
 
-        public:
-            UserStBar( const QString &iuser, QWidget * parent = 0 );
+    public:
+	UserStBar( const QString &iuser, QWidget * parent = 0 );
 			    
-            QString user();
-            void user( const QString &val );
+	QString user();
+	void user( const QString &val );
 		    
-            bool userSel( );
+	bool userSel( );
 	
-	signals:
-	    void userChanged();
+    signals:
+	void userChanged();
 	
-        protected:
-    	    bool event( QEvent *event );
+    protected:
+	bool event( QEvent *event );
 					    
-        private:
-            QString     user_txt;
-    };
+    private:
+	QString     user_txt;
+};
+
 }
 
 //*************************************************

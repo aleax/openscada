@@ -1,13 +1,12 @@
 
 //OpenSCADA system file: tcontroller.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -25,7 +24,9 @@
 #include "ttiparam.h"
 #include "tcontroller.h"
 
-//==== TController ====
+//*************************************************
+//* TController                                   *
+//*************************************************
 TController::TController( const string &id_c, const string &daq_db, TElem *cfgelem ) :
     m_db(daq_db), TConfig(cfgelem), run_st(false), en_st(false),
     m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()), m_descr(cfg("DESCR").getSd()),
@@ -52,13 +53,13 @@ void TController::postDisable(int flag)
     {
         if( flag )
 	{
-	    //Delete DB record
+	    //- Delete DB record -
 	    SYS->db().at().dataDel(fullDB(),owner().nodePath()+"DAQ",*this);
 
-	    //Delete parameter's tables
+	    //- Delete parameter's tables -
             for(unsigned i_tp = 0; i_tp < owner().tpPrmSize(); i_tp++)
 	    {
-		string tbl = DB()+"."+cfg(owner().tpPrmAt(i_tp).BD()).getS();
+		string tbl = DB()+"."+cfg(owner().tpPrmAt(i_tp).db).getS();
 		SYS->db().at().open(tbl);
 		SYS->db().at().close(tbl,true);
 	    }
@@ -83,7 +84,7 @@ void TController::load( )
 
     SYS->db().at().dataGet(fullDB(),owner().nodePath()+"DAQ",*this);
 
-    //Load parameters if enabled
+    //- Load parameters if enabled -
     if( en_st )	LoadParmCfg( );
 }
 
@@ -91,22 +92,22 @@ void TController::save( )
 {
     mess_info(nodePath().c_str(),_("Save controller's configs!"));
 
-    //Update type controller bd record
+    //- Update type controller bd record -
     SYS->db().at().dataSet(fullDB(),owner().nodePath()+"DAQ",*this);
 
-    //Save parameters if enabled
+    //- Save parameters if enabled -
     if( en_st ) SaveParmCfg( );
 }
 
 void TController::start( )
 {
-    //Enable if no enabled
+    //- Enable if no enabled -
     if( run_st ) return;
     if( !en_st ) enable();
 
     mess_info(nodePath().c_str(),_("Start controller!"));
 
-    //Start for children
+    //- Start for children -
     start_();
     
     run_st = true;
@@ -118,7 +119,7 @@ void TController::stop( )
 
     mess_info(nodePath().c_str(),_("Stop controller!"));
 
-    //Stop for children
+    //- Stop for children -
     stop_();
     
     run_st = false;
@@ -133,11 +134,11 @@ void TController::enable( )
 	//- Enable for children -
 	enable_();
 	
-	//Load parameters
+	//- Load parameters -
 	LoadParmCfg( );	
     }
     
-    //Enable parameters
+    //- Enable parameters -
     vector<string> prm_list;
     list(prm_list);
     for( int i_prm = 0; i_prm < prm_list.size(); i_prm++ )
@@ -149,19 +150,19 @@ void TController::enable( )
         	mess_warning(nodePath().c_str(),_("Enable parameter <%s> error."),prm_list[i_prm].c_str());
 	    }
 
-    //Set enable stat flag
+    //- Set enable stat flag -
     en_st=true;
 }
 
 void TController::disable( )
 {
     if( !en_st ) return;
-    //Stop if runed
+    //- Stop if runed -
     if( run_st ) stop();
 
     mess_info(nodePath().c_str(),_("Disable controller!"));
 
-    //Disable parameters
+    //- Disable parameters -
     vector<string> prm_list;
     list(prm_list);
     for( int i_prm = 0; i_prm < prm_list.size(); i_prm++ )
@@ -173,30 +174,30 @@ void TController::disable( )
             mess_warning(nodePath().c_str(),_("Disable parameter <%s> error."),prm_list[i_prm].c_str());
         }
 
-    //Disable for children
+    //- Disable for children -
     disable_();
 
-    //Free all parameters
+    //- Free all parameters -
     //FreeParmCfg();
 
-    //Clear enable flag
+    //- Clear enable flag -
     en_st = false;
 }
 
 void TController::LoadParmCfg(  )
 {
-    //Search and create new parameters
+    //- Search and create new parameters -
     for( int i_tp = 0; i_tp < owner().tpPrmSize(); i_tp++ )
     {
-	if( owner().tpPrmAt(i_tp).BD().empty() ) continue;
+	if( owner().tpPrmAt(i_tp).db.empty() ) continue;
 	try
 	{
     	    TConfig c_el(&owner().tpPrmAt(i_tp));
 	    c_el.cfgViewAll(false);
 	    
 	    int fld_cnt = 0;
-	    while( SYS->db().at().dataSeek(DB()+"."+cfg(owner().tpPrmAt(i_tp).BD()).getS(),
-					   owner().nodePath()+cfg(owner().tpPrmAt(i_tp).BD()).getS(),fld_cnt++,c_el) )
+	    while( SYS->db().at().dataSeek(DB()+"."+cfg(owner().tpPrmAt(i_tp).db).getS(),
+					   owner().nodePath()+cfg(owner().tpPrmAt(i_tp).db).getS(),fld_cnt++,c_el) )
     	    {
     		try
 		{ 
@@ -217,7 +218,7 @@ void TController::LoadParmCfg(  )
 	}
     }
     
-    //Load present parameters
+    //- Load present parameters -
     vector<string> prm_ls;
     list(prm_ls);
     for( int i_p = 0; i_p < prm_ls.size(); i_p++ )
@@ -254,7 +255,7 @@ TParamContr *TController::ParamAttach( const string &name, int type)
 
 void TController::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
     	ctrMkNode("oscada_cntr",opt,-1,"/",_("Controller: ")+name());
@@ -286,12 +287,13 @@ void TController::cntrCmdProc( XMLNode *opt )
 	}
         return;
     }
-    //Process command to page
+    
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/prm/t_prm" && owner().tpPrmSize() )
     {
 	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	
-	    opt->setText(TBDS::genDBGet(owner().nodePath()+"addType",owner().tpPrmAt(0).name(),opt->attr("user")));
+	    opt->setText(TBDS::genDBGet(owner().nodePath()+"addType",owner().tpPrmAt(0).name,opt->attr("user")));
 	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	
 	    TBDS::genDBSet(owner().nodePath()+"addType",opt->text(),opt->attr("user"));
     }
@@ -306,7 +308,7 @@ void TController::cntrCmdProc( XMLNode *opt )
 	}
 	if( ctrChkNode(opt,"add",0660,"root","root",SEQ_WR) )
 	{
-	    add(opt->attr("id"),owner().tpPrmToId(TBDS::genDBGet(owner().nodePath()+"addType",owner().tpPrmAt(0).name(),opt->attr("user"))));
+	    add(opt->attr("id"),owner().tpPrmToId(TBDS::genDBGet(owner().nodePath()+"addType",owner().tpPrmAt(0).name,opt->attr("user"))));
 	    at(opt->attr("id")).at().setName(opt->text());
 	}
 	if( ctrChkNode(opt,"del",0660,"root","root",SEQ_WR) )	del(opt->attr("id"),true);
@@ -314,7 +316,7 @@ void TController::cntrCmdProc( XMLNode *opt )
     else if( a_path == "/prm/t_lst" && owner().tpPrmSize() && ctrChkNode(opt,"get",0444) )
     {
 	for( unsigned i_a=0; i_a < owner().tpPrmSize(); i_a++ )
-	    opt->childAdd("el")->setAttr("id",owner().tpPrmAt(i_a).name())->setText(owner().tpPrmAt(i_a).lName());
+	    opt->childAdd("el")->setAttr("id",owner().tpPrmAt(i_a).name)->setText(owner().tpPrmAt(i_a).descr);
     }	
     else if( a_path == "/cntr/st/db" )
     {

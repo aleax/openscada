@@ -1,13 +1,12 @@
 
 //OpenSCADA system file: tdaqs.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -30,23 +29,26 @@
 #include "tdaqs.h"
 
 
+//*************************************************
+//* TDAQS                                         *
+//*************************************************
 TDAQS::TDAQS( ) : TSubSYS("DAQ","Data acquisition",true), el_err("Error")
 {
     m_tmplib = grpAdd("tmplb_");
     
-    //Lib's db structure
+    //- Lib's db structure -
     lb_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"10") );
     lb_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
     lb_el.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::FullText,"300") );
     lb_el.fldAdd( new TFld("DB",_("Data base"),TFld::String,TFld::NoFlag,"30") );
     
-    //Parameter template DB structure
+    //- Parameter template DB structure -
     el_tmpl.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
     el_tmpl.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
     el_tmpl.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::FullText,"200") );
     el_tmpl.fldAdd( new TFld("PROGRAM",_("Template programm"),TFld::String,TFld::NoFlag,"1000") );
 			
-    //Parameter template IO DB structure
+    //- Parameter template IO DB structure -
     el_tmpl_io.fldAdd( new TFld("TMPL_ID",_("Template ID"),TFld::String,TCfg::Key,"20") );
     el_tmpl_io.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
     el_tmpl_io.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
@@ -55,7 +57,7 @@ TDAQS::TDAQS( ) : TSubSYS("DAQ","Data acquisition",true), el_err("Error")
     el_tmpl_io.fldAdd( new TFld("VALUE",_("Value"),TFld::String,TFld::NoFlag,"50") );
     el_tmpl_io.fldAdd( new TFld("POS",_("Real position"),TFld::Integer,TFld::NoFlag,"4") );
     
-    //Error atributes
+    //- Error atributes -
     el_err.fldAdd( new TFld("err",_("Error"),TFld::String,TFld::NoWrite|TVal::DirRead) );
 }
 
@@ -71,7 +73,7 @@ TDAQS::~TDAQS( )
 
 void TDAQS::subLoad( )
 {
-    //========== Load parameters from command line ============
+    //- Load parameters from command line -
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -91,15 +93,15 @@ void TDAQS::subLoad( )
 	}
     } while(next_opt != -1);    
 
-    //=========== Load templates libraries of parameter =============
+    //- Load templates libraries of parameter -
     try
     {
-        //Search and create new libraries
+        //-- Search and create new libraries --
         TConfig c_el(&elLib());
 	c_el.cfgViewAll(false);
         vector<string> tdb_ls, db_ls;
 				    
-        //- Search into DB -
+        //--- Search into DB ---
         SYS->db().at().modList(tdb_ls);
         for( int i_tp = 0; i_tp < tdb_ls.size(); i_tp++ )
         {
@@ -117,7 +119,7 @@ void TDAQS::subLoad( )
             }
         }
 	
-        //- Search into config file -
+        //--- Search into config file ---
         int lib_cnt = 0;
 	while(SYS->db().at().dataSeek("",nodePath()+"tmplib",lib_cnt++,c_el) )
         {
@@ -126,7 +128,7 @@ void TDAQS::subLoad( )
             c_el.cfg("ID").setS("");
         }
 			    
-        //- Load present libraries -
+        //--- Load present libraries ---
         tmplLibList(tdb_ls);
         for( int l_id = 0; l_id < tdb_ls.size(); l_id++ )
             tmplLibAt(tdb_ls[l_id]).at().load();
@@ -136,7 +138,7 @@ void TDAQS::subLoad( )
 	mess_err(nodePath().c_str(),_("Load template's libraries error."));
     }
     
-    //========== Load parameters =============
+    //- Load parameters -
     try
     {
 	AutoHD<TTipDAQ> wmod;
@@ -149,7 +151,7 @@ void TDAQS::subLoad( )
 	    TConfig g_cfg(&wmod.at());
 	    g_cfg.cfgViewAll(false);
 	
-	    //Search into DB and create new controllers
+	    //-- Search into DB and create new controllers --
 	    SYS->db().at().modList(tdb_ls);	
 	    for( int i_tp = 0; i_tp < tdb_ls.size(); i_tp++ )
     	    {
@@ -174,7 +176,7 @@ void TDAQS::subLoad( )
 		    }
 		}
 	    }
-	    //Search into config file and create new controllers
+	    //-- Search into config file and create new controllers --
 	    int fld_cnt=0;
 	    while( SYS->db().at().dataSeek("",wmod.at().nodePath()+"DAQ",fld_cnt++,g_cfg) )
 	    {
@@ -191,22 +193,22 @@ void TDAQS::subLoad( )
             	g_cfg.cfg("ID").setS("");
 	    }	    
 	    
-	    //Load present controllers
+	    //-- Load present controllers --
 	    wmod.at().list(tdb_ls);
 	    for( int i_c = 0; i_c < tdb_ls.size(); i_c++ )
 		wmod.at().at(tdb_ls[i_c]).at().load();
 	}
     }catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 	
-    //Load modules
+    //- Load modules -
     TSubSYS::subLoad( );
 }
 
 void TDAQS::subSave(  )
 {	
-    //========== Save parameters =============
+    //- Save parameters -
 
-    //Save all controllers    
+    //-- Save all controllers --
     vector<string> m_l, c_l;
     modList(m_l);
     for( unsigned i_m = 0; i_m < m_l.size(); i_m++)
@@ -223,13 +225,13 @@ void TDAQS::subSave(  )
 	}
     }
     
-    //=========== Save template's libraries =============
+    //- Save template's libraries -
     vector<string> ls;
     tmplLibList(ls);
     for( int l_id = 0; l_id < ls.size(); l_id++ )
         tmplLibAt(ls[l_id]).at().save();
     
-    //Save modules
+    //- Save modules -
     TSubSYS::subSave( );					    
 }
 
@@ -371,7 +373,7 @@ string TDAQS::optDescr( )
 
 void TDAQS::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
         TSubSYS::cntrCmdProc(opt);
@@ -386,7 +388,8 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","10");
         return;
     }
-    //Process command to page
+    
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/tpllibs/lb" )
     {

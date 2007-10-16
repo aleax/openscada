@@ -1,13 +1,12 @@
 
-//OpenSCADA system file: ttiparam.cpp
+//OpenSCADA system module Archive.DBArch file: mess.h
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2007 by Roman Savochenko                                *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -20,18 +19,50 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "tmess.h"
-#include "ttiparam.h"
+#ifndef DB_MESS_H
+#define DB_MESS_H
 
+#include <string>
 
-TTipParam::TTipParam( const char *id, const char *name, const char *db ) 
-    : _name(id), _descr(name), _bd(db) 
-{ 
+using std::string;
 
-}
-
-TTipParam::~TTipParam(  )
+namespace DBArch
 {
 
+//************************************************
+//* DBArch::ModMArch - Messages archivator       *
+//************************************************
+class ModMArch: public TMArchivator
+{
+    public:
+	//Methods
+	ModMArch( const string &id, const string &db, TElem *cf_el );
+	~ModMArch( );
+
+	string archTbl( )	{ return "DBAMsg_"+id(); }
+	double maxSize( )	{ return m_max_size; }
+
+	time_t begin( );
+	time_t end( );
+	void put( vector<TMess::SRec> &mess );
+	void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0 );
+	
+	void load( );
+	void start( );
+	void stop( );
+
+    private:
+	//Methods
+	void postDisable( int flag );     //Delete all DB if flag 1
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+
+	//Attributes
+	double  tm_calc;        		//Archiving time
+	time_t  m_beg, m_end;
+	double  &m_max_size;			//Maximum archive size (hours)
+};
+
 }
+
+#endif //DB_MESS_H
 

@@ -1,13 +1,12 @@
 
 //OpenSCADA system file: telem.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -25,6 +24,9 @@
 #include "tbds.h"
 #include "telem.h"
 
+//*************************************************
+//* TElem                                         *
+//*************************************************
 TElem::TElem( const string &name ) : m_name(name) 
 {
 
@@ -38,7 +40,7 @@ TElem::~TElem()
 
 int TElem::fldAdd( TFld *fld, int id )
 {
-    //Find dublicates
+    //- Find dublicates -
     for( int i_f = 0; i_f < elem.size(); i_f++)
 	if(elem[i_f]->name() == fld->name()) 
 	{
@@ -47,7 +49,7 @@ int TElem::fldAdd( TFld *fld, int id )
 	}
     if( id > elem.size() || id < 0 ) id = elem.size();
     elem.insert(elem.begin()+id,fld);
-    //Add value and set them default
+    //- Add value and set them default -
     for(unsigned cfg_i=0; cfg_i < cont.size(); cfg_i++) 
 	cont[cfg_i]->addFld(this,id);
 
@@ -103,9 +105,9 @@ TFld &TElem::fldAt( unsigned int id )
     return(*elem[id]);
 }
 
-//**********************************************************************
-//******************** TFld - field of element *************************
-//**********************************************************************
+//*************************************************
+//* TFld - field of element                       *
+//*************************************************
 TFld::TFld( ) : m_type(TFld::Integer), m_flg(0)
 {
     m_sel = NULL;
@@ -213,10 +215,10 @@ string TFld::selNames()
 
 void TFld::setValues( const string &vls )
 {
-    //set value list
+    //- Set value list -
     if( flg()&TFld::Selected )
     {
-	//Count alements amount
+	//- Count alements amount -
 	int i_lvl = 0, i_off = 0;
         while( TSYS::strSepParse(vls,0,';',&i_off).size() ) i_lvl++;
 	
@@ -239,7 +241,7 @@ void TFld::setValues( const string &vls )
 		m_val.v_b->resize(i_lvl,false);
 		break;
 	}
-        //Get elements
+        //- Get elements -
 	for( int i = 0, i_off=0; i < i_lvl; i++ )
 	{
 	    string s_el = TSYS::strSepParse(vls,0,';',&i_off);
@@ -272,7 +274,7 @@ void TFld::setValues( const string &vls )
 
 void TFld::setSelNames( const string &slnms )
 {
-    //set value list
+    //- Set value list -
     if( !(flg()&TFld::Selected) ) return;
     
     int i_lvl = 0;
@@ -289,39 +291,39 @@ const vector<string> &TFld::selValS()
 { 
     if( flg()&TFld::Selected && type() == TFld::String ) 
 	return *m_val.v_s;
-    throw TError("Field",_("Error string values!"));
+    throw TError("Field",_("Field is not string."));
 }
 
 const vector<int> &TFld::selValI()
 { 
     if( type() == TFld::Integer ) 
 	return *m_val.v_i;
-    throw TError("Field",_("Error int values!"));
+    throw TError("Field",_("Field is not integer."));
 }
 
 const vector<double> &TFld::selValR()
 { 
     if( type() == TFld::Real ) 
 	return *m_val.v_r;
-    throw TError("Field",_("Error real values!"));
+    throw TError("Field",_("Field is not real."));
 }
 
 const vector<bool> &TFld::selValB()
 { 
     if( flg()&TFld::Selected && type() == TFld::Boolean ) 
 	return *m_val.v_b;
-    throw TError("Field",_("Error bool values!"));
+    throw TError("Field",_("Field is not boolean."));
 }
 
 const vector<string> &TFld::selNm()
 { 
     if( m_sel && flg()&TFld::Selected )	return *m_sel; 
-    throw TError("Field",_("No select type!"));
+    throw TError("Field",_("Field is not select type!"));
 }
 	
 TFld &TFld::operator=( TFld &fld )
 {
-    //free old
+    //- Free old -
     if( m_sel )	delete m_sel;    
     if( m_val.v_s != NULL )
 	switch(type())
@@ -331,7 +333,7 @@ TFld &TFld::operator=( TFld &fld )
 	    case TFld::Real:	delete m_val.v_r;	break;
 	    case TFld::Boolean:	delete m_val.v_b;	break;
 	}
-    //create new
+    //- Create new -
     m_name  = fld.name();
     m_descr = fld.descr();
     m_len   = fld.len();
@@ -340,7 +342,7 @@ TFld &TFld::operator=( TFld &fld )
     m_def   = fld.def();
     //m_vals  = fld.vals();
    
-    //Copy select and values border
+    //- Copy select and values border -
     if( flg()&TFld::Selected )
     {
 	m_sel  = new vector<string>;

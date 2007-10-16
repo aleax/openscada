@@ -1,13 +1,12 @@
 
 //OpenSCADA system module UI.QTCfg file: qtcfg.h
 /***************************************************************************
- *   Copyright (C) 2004-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2004-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -49,110 +48,115 @@ class QTabWidget;
 
 namespace QTCFG
 {
-    //Config application
-    class UserStBar;
-    class TUIMod;
 
-    class ConfApp: public QMainWindow
-    {
-        Q_OBJECT
+//************************************************
+//* QTCFG::ConfApp                               *
+//************************************************
+class UserStBar;
+class TUIMod;
 
-	public:
-	    ConfApp( string open_user );
-	    ~ConfApp( );
+class ConfApp: public QMainWindow
+{
+    Q_OBJECT
 
-	protected:
-	    void closeEvent( QCloseEvent* );
+    public:
+	ConfApp( string open_user );
+	~ConfApp( );
 
-	private slots:
-	    void quitSt();
-	    
-            void pageUp();	    
-            void pagePrev();
-            void pageNext();
-	    void pageRefresh();
-            void pageCyclRefrStart();
-            void pageCyclRefrStop();
+    protected:
+	void closeEvent( QCloseEvent* );
 
-            void userSel();
+    private slots:
+	void quitSt();
 	    
-	    void about();
-	    void aboutQt();
-	    void enterWhatsThis();
-	    
-	    void endRunChk( );      			//End run flag check
+	void pageUp();	    
+	void pagePrev();
+	void pageNext();
+	void pageRefresh();
+	void pageCyclRefrStart();
+	void pageCyclRefrStop();
 
-	    //QListView	    
-	    void selectItem( );				//Processing of select item signal
-	    void viewChild( QTreeWidgetItem * i );	//Processing of view item signal 
-	    void onItem( QTreeWidgetItem * i );		//View item path
-	    void ctrTreePopup( );
+	void userSel();
 	    
-	    //QTabWidget
-	    void tabSelect( QWidget *wdg );		//Change curent widget
+	void about();
+	void aboutQt();
+	void enterWhatsThis();
+	    
+	void endRunChk( );      			//End run flag check
 
-	    //Self widget's slots
-	    void checkBoxStChange( int stat ); 		//QCheckBox	    
-	    void buttonClicked( );			//Button
-	    //void editReturnPress( );			//QLineEdit
-	    void combBoxActivate( const QString& );	//QComboBox
-	    void listBoxGo( QListWidgetItem* );		//QListBox go for banch	    
-	    void listBoxPopup();			//QListBox popup menu
-	    void tablePopup( const QPoint &pos );	//QTable popup menu
-	    void tableSet( int row, int col );		//QTable set
-	    void dataTimeChange( const QDateTime & );	//Change data-time
-	    void editChange( const QString& );		//Change Edit (LineEdit and TextEdit)
-	    void applyButton( );			//Apply button
-	    void cancelButton( );			//Cancel button
-	    void imgPopup( const QPoint &pos );		//Image popup
+	//QListView	    
+	void selectItem( );				//Processing of select item signal
+	void viewChild( QTreeWidgetItem * i );	//Processing of view item signal 
+	void onItem( QTreeWidgetItem * i );		//View item path
+	void ctrTreePopup( );
 	    
-	private:	    
-	    //Page display
-	    void pageDisplay( const string &path );
-	    
-	    //View ListItem with recursive processing of the ControllArea
-	    void viewChildRecArea( QTreeWidgetItem *i, int level );
-	    
-	    //Update structure and put service labels
-	    bool upStruct(XMLNode &w_nd, const XMLNode &n_nd);
-	    
-	    //Select ListItem with recursive processing of the ControllArea	    
-	    void selectChildRecArea( const XMLNode &node, const string &a_path, QWidget *widget = NULL, bool refr = false );
-	    void basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, bool wr, QHBoxLayout **l_hbox, int &l_pos, bool refr, bool comm = false );
+	//QTabWidget
+	void tabSelect( QWidget *wdg );		//Change curent widget
 
-	    //Controll system requests
-	    void initHosts();
-	    int cntrIfCmd( XMLNode &node );
+	//Self widget's slots
+	void checkBoxStChange( int stat ); 		//QCheckBox	    
+	void buttonClicked( );			//Button
+	//void editReturnPress( );			//QLineEdit
+	void combBoxActivate( const QString& );	//QComboBox
+	void listBoxGo( QListWidgetItem* );		//QListBox go for banch	    
+	void listBoxPopup();			//QListBox popup menu
+	void tablePopup( const QPoint &pos );	//QTable popup menu
+	void tableSet( int row, int col );		//QTable set
+	void dataTimeChange( const QDateTime & );	//Change data-time
+	void editChange( const QString& );		//Change Edit (LineEdit and TextEdit)
+	void applyButton( );			//Apply button
+	void cancelButton( );			//Cancel button
+	void imgPopup( const QPoint &pos );		//Image popup
 	    
-	private:
-            QTimer	*endRunTimer, *autoUpdTimer;
+    private:
+	//Methods
+	//- Page display -
+	void pageDisplay( const string &path );
+	
+	//- View ListItem with recursive processing of the ControllArea -
+	void viewChildRecArea( QTreeWidgetItem *i, int level );
 	    
-	    QTreeWidget	*CtrTree;
-	    QLabel	*titleIco;
-	    QLabel	*titleLab;
-	    QTabWidget  *tabs;
-	    UserStBar	*w_user;
+	//- Update structure and put service labels -
+	bool upStruct(XMLNode &w_nd, const XMLNode &n_nd);
 	    
-	    QAction 	*actUp;
-	    QAction 	*actPrev;
-	    QAction 	*actNext;	    
-	    QAction 	*actUser;	    
-	    QAction 	*actStartUpd;
-	    QAction 	*actStopUpd;
+	//- Select ListItem with recursive processing of the ControllArea -
+	void selectChildRecArea( const XMLNode &node, const string &a_path, QWidget *widget = NULL, bool refr = false );
+	void basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, bool wr, QHBoxLayout **l_hbox, int &l_pos, bool refr, bool comm = false );
 
-	    XMLNode	pg_info;
-	    XMLNode 	*root;    
-	    string	sel_path;
+	//- Controll system requests -
+	void initHosts();
+	int cntrIfCmd( XMLNode &node );
+	    
+	//Attributes
+	QTimer	*endRunTimer, *autoUpdTimer;
+	    
+	QTreeWidget	*CtrTree;
+	QLabel		*titleIco;
+	QLabel		*titleLab;
+	QTabWidget  	*tabs;
+	UserStBar	*w_user;
+	    
+	QAction 	*actUp;
+	QAction 	*actPrev;
+	QAction 	*actNext;	    
+	QAction 	*actUser;	    
+	QAction 	*actStartUpd;
+	QAction 	*actStopUpd;
 
-	    int		que_sz;
-	    vector<string>	prev;
-	    vector<string>	next;
+	XMLNode		pg_info;
+	XMLNode 	*root;    
+	string		sel_path;
+
+	int		que_sz;
+	vector<string>	prev;
+	vector<string>	next;
+	
+	Res 		hd_res;
+	bool		block_tabs;
 	    
-	    Res 	hd_res;
-	    bool	block_tabs;
-	    
-	    bool 	tbl_init;
-    };    
+	bool 		tbl_init;
+    };
+
 }
 
 #endif //QTCFG_H

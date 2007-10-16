@@ -1,13 +1,12 @@
 
 //OpenSCADA system file: ttransports.h
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -39,32 +38,32 @@ class TTipTransport;
 class TTransportIn : public TCntrNode, public TConfig
 {
     public:
-	TTransportIn( const string &id, const string &idb, TElem *el );
-	virtual ~TTransportIn();
+	//Methods
+	TTransportIn( const string &id, const string &db, TElem *el );
+	virtual ~TTransportIn( );
 
-	const string &id()	{ return m_id; }
-	string name();
-        string dscr()		{ return m_dscr; }
-	string addr()		{ return m_addr; }
-	string protocol()	{ return m_prot; }
+	const string &id( )	{ return m_id; }
+	string name( );
+        string dscr( )		{ return m_dscr; }
+	string addr( )		{ return m_addr; }
+	string protocol( )	{ return m_prot; }
 	
-	bool toStart() 	{ return m_start; }
-	bool startStat(){ return run_st; }
+	bool toStart( ) 	{ return m_start; }
+	bool startStat( )	{ return run_st; }
 	
 	string DB( )            { return m_db; }
         string tbl( );
         string fullDB( )        { return DB()+'.'+tbl(); }
 	
-	void name( const string &inm )  { m_name = inm; }
-        void dscr( const string &idscr ){ m_dscr = idscr; }
-        void addr( const string &addr ) { m_addr = addr; }			
-	
-	virtual void start()	{ };
-	virtual void stop()	{ };
+	void setName( const string &inm )  	{ m_name = inm; }
+        void setDscr( const string &idscr )	{ m_dscr = idscr; }
+        void setAddr( const string &addr ) 	{ m_addr = addr; }			
 	
 	void load( );
-	void save( );
-	
+	void save( );	
+	virtual void start()	{ };
+	virtual void stop()	{ };
+		
 	TTipTransport &owner()	{ return *(TTipTransport*)nodePrev(); }
 	
     protected:
@@ -97,35 +96,34 @@ class TTransportIn : public TCntrNode, public TConfig
 class TTransportOut : public TCntrNode, public TConfig
 {
     public:
-	TTransportOut( const string &id, const string &idb, TElem *el );
+	//Methods
+	TTransportOut( const string &id, const string &db, TElem *el );
 	virtual ~TTransportOut();	
 	
-	const string &id()      { return m_id; }
-	string name();
-	string dscr()		{ return m_dscr; }
-	string addr() 		{ return m_addr; }
+	const string &id( )	{ return m_id; }
+	string name( );
+	string dscr( )		{ return m_dscr; }
+	string addr( ) 		{ return m_addr; }
 	int    prm1( )		{ return m_prm1; }
 	int    prm2( )		{ return m_prm2; }
+	bool   toStart()  	{ return m_start; }
+        bool   startStat()	{ return run_st; }	
 	
         string DB( )            { return m_db; }
         string tbl( );
         string fullDB( )        { return DB()+'.'+tbl(); }				
 	
-	bool toStart()  { return m_start; }
-        bool startStat(){ return run_st; }
-	
 	void setName( const string &inm )	{ m_name = inm; }
 	void setDscr( const string &idscr )	{ m_dscr = idscr; }
 	void setAddr( const string &addr )	{ m_addr = addr; }
 	void setPrm1( int vl )			{ m_prm1 = vl; }
-	void setPrm2( int vl )                  { m_prm2 = vl; }
-	
-	void toStart( bool val )        { m_start = val; }
-	
-	virtual void start( )		{ };
-	virtual void stop( )		{ };	
+	void setPrm2( int vl )                  { m_prm2 = vl; }	
+	void setToStart( bool val )        	{ m_start = val; }
+
 	void load( );
-	void save( );
+	void save( );	
+	virtual void start( )			{ };
+	virtual void stop( )			{ };
 	
 	virtual int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0 )
 	{ return 0; }
@@ -138,8 +136,8 @@ class TTransportOut : public TCntrNode, public TConfig
 	//Methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
-	void preEnable(int flag);	
-	void postDisable(int flag);     //Delete all DB if flag 1
+	void preEnable( int flag );
+	void postDisable( int flag );     	//Delete all DB if flag 1
 
 	//Attributes
 	bool    run_st;
@@ -168,24 +166,23 @@ class TTransportS;
 class TTipTransport: public TModule
 {
     public:
+	//Methods
     	TTipTransport( );
 	virtual ~TTipTransport();
 
 	//- Input transports -
-	void inList( vector<string> &list )	{ chldList(m_in,list); }
-        bool inPresent( const string &name )	{ return chldPresent(m_in,name); }
-	void inAdd( const string &name, const string &idb = "*.*" );
+	void inList( vector<string> &list )			{ chldList(m_in,list); }
+        bool inPresent( const string &name )			{ return chldPresent(m_in,name); }
+	void inAdd( const string &name, const string &db = "*.*" );
 	void inDel( const string &name, bool complete = false )	{ chldDel(m_in,name,-1,complete); }
-	AutoHD<TTransportIn> inAt( const string &name )	
-	{ return chldAt(m_in,name); }
+	AutoHD<TTransportIn> inAt( const string &name )		{ return chldAt(m_in,name); }
 
 	//- Output transports -
-	void outList( vector<string> &list ) 	{ chldList(m_out,list); }
-        bool outPresent( const string &name )	{ return chldPresent(m_out,name); }
+	void outList( vector<string> &list ) 			{ chldList(m_out,list); }
+        bool outPresent( const string &name )			{ return chldPresent(m_out,name); }
 	void outAdd( const string &name, const string &idb = "*.*" );
 	void outDel( const string &name, bool complete = false ){ chldDel(m_out,name,-1,complete); }
-	AutoHD<TTransportOut> outAt( const string &name )
-	{ return chldAt(m_out,name); }
+	AutoHD<TTransportOut> outAt( const string &name )	{ return chldAt(m_out,name); }
 	
 	TTransportS &owner()	{ return (TTransportS&)TModule::owner(); }
 	
@@ -193,9 +190,9 @@ class TTipTransport: public TModule
 	//Methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
-	virtual TTransportIn  *In( const string &name, const string &idb )
+	virtual TTransportIn  *In( const string &name, const string &db )
 	{ throw TError(nodePath().c_str(),_("Input transport no support!")); }
-	virtual TTransportOut *Out( const string &name, const string &idb )
+	virtual TTransportOut *Out( const string &name, const string &db )
 	{ throw TError(nodePath().c_str(),_("Output transport no support!")); }
 	
     private:	
@@ -234,14 +231,14 @@ class TTransportS : public TSubSYS
      	TTransportS( );
 	~TTransportS( );
 
-	int subVer( ) 	{ return VER_TR; }
+	int subVer( ) 			{ return VER_TR; }
 	
 	//- External hosts -
-	bool sysHost( )	{ return sys_host; }
+	bool sysHost( )			{ return sys_host; }
 	void setSysHost( bool vl )	{ sys_host = vl; }
  	string extHostsDB( );
 	void extHostList( const string &user, vector<string> &list );
-	bool extHostPresent( const string &user, const string &iid );
+	bool extHostPresent( const string &user, const string &id );
 	AutoHD<TTransportOut> extHost( TTransportS::ExtHost host, const string &pref = "" );
 	ExtHost extHostGet( const string &user, const string &id );
 	void extHostSet( const ExtHost &host );
@@ -257,10 +254,9 @@ class TTransportS : public TSubSYS
 	
         AutoHD<TTipTransport> at( const string &iid )	{ return modAt(iid); }
 	
-	string optDescr( );
-
     private:
 	//Methods
+	string optDescr( );	
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
 	//Attributes

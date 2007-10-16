@@ -222,7 +222,7 @@ bool WidgetLib::mimeDataGet( const string &iid, string &mimeType, string *mimeDa
 	
 	string wtbl = tbl()+"_mime";
 	TConfig c_el(&mod->elWdgData());
-	if(!mimeData) c_el.cfg("DATA").view(false);
+	if(!mimeData) c_el.cfg("DATA").setView(false);
 	c_el.cfg("ID").setS(dbid);
 	if(SYS->db().at().dataGet(DB()+"."+wtbl,mod->nodePath()+wtbl,c_el))
 	{
@@ -240,7 +240,7 @@ void WidgetLib::mimeDataSet( const string &iid, const string &mimeType, const st
     TConfig c_el(&mod->elWdgData());
     c_el.cfg("ID").setS(iid);
     c_el.cfg("MIME").setS(mimeType);    
-    if(!mimeData.size()) c_el.cfg("DATA").view(false);
+    if(!mimeData.size()) c_el.cfg("DATA").setView(false);
     else c_el.cfg("DATA").setS(mimeData);
     SYS->db().at().dataSet(DB()+"."+wtbl,mod->nodePath()+wtbl,c_el);
 }			

@@ -6,8 +6,7 @@
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -568,7 +567,7 @@ void TTipTransport::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )
 	{
 	    inAdd(opt->attr("id"));
-	    inAt(opt->attr("id")).at().name(opt->text());	
+	    inAt(opt->attr("id")).at().setName(opt->text());	
 	}
 	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	inDel(opt->attr("id"),true);
     }

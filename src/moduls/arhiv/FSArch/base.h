@@ -1,13 +1,12 @@
 
 //OpenSCADA system module Archive.FSArch file: base.h
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -35,49 +34,51 @@
 
 #define CHECK_ARH_PER 60
 
-namespace BaseArch
+namespace FSArch
 {
-    class ModArch: public TTipArchivator
-    {
-	public:
-	    ModArch( const string &name );
-	    ~ModArch();
+ 
+//*************************************************
+//* FSArch::ModArch                               *
+//*************************************************
+class ModArch: public TTipArchivator
+{
+    public:
+	ModArch( const string &name );
+	~ModArch();
 	    
-	    void modLoad( );
-	    void modStart( );
-            void modStop( );
+	void modLoad( );
+	void modStart( );
+	void modStop( );
 
-	    AutoHD<ModMArch> messAt( const string &iid ) 
-	    { return TTipArchivator::messAt(iid); }
-	    AutoHD<ModVArch> valAt( const string &iid )
-	    { return TTipArchivator::valAt(iid); }
+	AutoHD<ModMArch> messAt( const string &iid )	{ return TTipArchivator::messAt(iid); }
+	AutoHD<ModVArch> valAt( const string &iid )	{ return TTipArchivator::valAt(iid); }
 	    
-            //- Packing archives -
-            bool filePack( const string &anm );
-            string packArch( const string &anm, bool replace = true );
-            string unPackArch( const string &anm, bool replace = true );
+	//- Packing archives -
+	bool filePack( const string &anm );
+	string packArch( const string &anm, bool replace = true );
+	string unPackArch( const string &anm, bool replace = true );
 							    
-	    string filesDB();
-	    TElem &packFE()  { return el_packfl; }	    
+	string filesDB();
+	TElem &packFE()  { return el_packfl; }	    
 	    
-	private:
-	    //Methods
-	    void postEnable( int flag );
+    private:
+	//Methods
+	void postEnable( int flag );
 	    
-	    static void Task(union sigval obj);		//Checking archives task	    
+	static void Task(union sigval obj);		//Checking archives task	    
 
-	    TMArchivator *AMess( const string &iid, const string &idb );
-	    TVArchivator *AVal( const string &iid, const string &idb );
+	TMArchivator *AMess( const string &iid, const string &idb );
+	TVArchivator *AVal( const string &iid, const string &idb );
 	    
-	    string optDescr( );
+	string optDescr( );
 	    
-	    void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	    
-	    //Attributes
-	    bool 	prc_st;
-	    timer_t     tmId;   	//Thread timer
-	    TElem       el_packfl;	//Arch files elements
-    };
+	//Attributes
+	bool 	prc_st;
+	timer_t     tmId;   	//Thread timer
+	TElem       el_packfl;	//Arch files elements
+};
 
 extern ModArch *mod;
 }

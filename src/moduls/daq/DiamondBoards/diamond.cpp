@@ -182,10 +182,10 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) : ad_
     cfg("PRM_BD_D").setS("DiamPrmD_"+name_c);
     
     //Hide sevral config fields
-    cfg("INT").view(false);
-    cfg("DIO_CFG").view(false);
-    cfg("ADCONVRATE").view(false);
-    cfg("ADGAIN").view(false);
+    cfg("INT").setView(false);
+    cfg("DIO_CFG").setView(false);
+    cfg("ADCONVRATE").setView(false);
+    cfg("ADGAIN").setView(false);
     
     //DSC resources
     DSC.comm = 0;
@@ -283,15 +283,15 @@ bool TMdContr::cfgChange( TCfg &icfg )
     {
 	if(icfg.getB()) 
 	{
-	    cfg("INT").view(true);
-	    cfg("ADCONVRATE").view(true);
-	    cfg("ADGAIN").view(true);
+	    cfg("INT").setView(true);
+	    cfg("ADCONVRATE").setView(true);
+	    cfg("ADGAIN").setView(true);
 	}
 	else 
 	{
-	    cfg("INT").view(false);
-	    cfg("ADCONVRATE").view(false);
-	    cfg("ADGAIN").view(false);
+	    cfg("INT").setView(false);
+	    cfg("ADCONVRATE").setView(false);
+	    cfg("ADGAIN").setView(false);
 	}
 	if(startStat()) stop();
     }
@@ -703,8 +703,8 @@ void TMdPrm::postEnable( int flag )
 {
     TParamContr::postEnable( flag );
 
-    if( TParamContr::type().name() == "a_prm" )     	type(AI);
-    else if( TParamContr::type().name() == "d_prm" )	type(DI);
+    if( TParamContr::type().name == "a_prm" )     	type(AI);
+    else if( TParamContr::type().name == "d_prm" )	type(DI);
 }
 
 /*void TMdPrm::preDisable( int flag )
@@ -719,8 +719,8 @@ void TMdPrm::enable( )
     
     if( type() == AI )
     {
-	if( owner().ADIIntMode() )	cfg("GAIN").view(false);
-	else cfg("GAIN").view(true);    
+	if( owner().ADIIntMode() )	cfg("GAIN").setView(false);
+	else cfg("GAIN").setView(true);    
     }
 }
 
@@ -739,12 +739,12 @@ void TMdPrm::type( TMdPrm::Type vtp )
     switch(vtp)
     {
 	case AI:    
-	    cfg("GAIN").view(true);
+	    cfg("GAIN").setView(true);
 	    m_gain = cfg("GAIN").getI();
 	    vlElemAtt( &mod->elemAI() );
 	    break;
 	case AO:    
-	    cfg("GAIN").view(false);    
+	    cfg("GAIN").setView(false);    
 	    vlElemAtt( &mod->elemAO() );
 	    break;
 	case DI:

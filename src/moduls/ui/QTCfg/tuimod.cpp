@@ -1,13 +1,12 @@
 
 //OpenSCADA system module UI.QTCfg file: tuimod.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2004-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -33,7 +32,8 @@
 #include "selfwidg.h"
 #include "tuimod.h"
 
-//============ Modul info! =====================================================
+//*************************************************
+//* Modul info!                                   *
 #define MOD_ID      "QTCfg"
 #define MOD_NAME    "System configurator (QT)"
 #define MOD_TYPE    "UI"
@@ -43,7 +43,7 @@
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow the QT based OpenSCADA system configurator."
 #define LICENSE     "GPL"
-//==============================================================================
+//*************************************************
 
 QTCFG::TUIMod *QTCFG::mod;
 
@@ -67,21 +67,17 @@ extern "C"
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	QTCFG::TUIMod *self_addr = NULL;
-
 	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = QTCFG::mod = new QTCFG::TUIMod( source );       
-
-	return self_addr;
+	    return new QTCFG::TUIMod( source );
+	return NULL;
     }    
 }
 
 using namespace QTCFG;
 
-//==============================================================================
-//================= QTCFG::TUIMod =============================================
-//==============================================================================
-
+//*************************************************
+//* QTCFG::TUIMod                                 *
+//*************************************************
 TUIMod::TUIMod( string name ) : start_path(string("/")+SYS->id()), end_run(false)
 {
     mId		= MOD_ID;
@@ -92,6 +88,8 @@ TUIMod::TUIMod( string name ) : start_path(string("/")+SYS->id()), end_run(false
     mDescr  	= DESCRIPTION;
     mLicense   	= LICENSE;
     mSource    	= name;
+    
+    mod		= this;
     
     //Public export functions
     modFuncReg( new ExpFunc("QIcon icon();","Module QT-icon",(void(TModule::*)( )) &TUIMod::icon) );
@@ -135,7 +133,7 @@ void TUIMod::modLoad( )
     mess_debug(nodePath().c_str(),_("Load module."));
 #endif
 
-    //========== Load parameters from command line ============
+    //- Load parameters from command line -
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -155,7 +153,7 @@ void TUIMod::modLoad( )
 	}
     } while(next_opt != -1);
 
-    //========== Load parameters from config file and DB =============
+    //- Load parameters from config file and DB -
     start_path = TBDS::genDBGet(nodePath()+"StartPath",start_path);
     start_user = TBDS::genDBGet(nodePath()+"StartUser",start_user);
 }
@@ -166,7 +164,7 @@ void TUIMod::modSave( )
     mess_debug(nodePath().c_str(),_("Save module."));
 #endif
 
-    //========== Save parameters to DB =============
+    //- Save parameters to DB -
     TBDS::genDBSet(nodePath()+"StartPath",start_path);
     TBDS::genDBSet(nodePath()+"StartUser",start_user);
 }

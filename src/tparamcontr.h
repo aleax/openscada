@@ -1,13 +1,12 @@
 
 //OpenSCADA system file: tparamcontr.h
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -30,6 +29,9 @@ using std::string;
 #include "tcntrnode.h"
 #include "tvalue.h"
 
+//*************************************************
+//* TParamContr                                   *
+//*************************************************
 class TController;
 class TTipParam;
 
@@ -39,11 +41,11 @@ class TParamContr : public TConfig, public TValue
 	TParamContr( const string &name, TTipParam *tpprm ); 
 	virtual ~TParamContr();
 	
-    	const string &id()	{ return m_id; }
-    	string name();
-	string descr()		{ return m_descr; }
-	bool toEnable()		{ return m_aen; }
-	bool enableStat()	{ return m_en; }	
+    	const string &id( )	{ return m_id; }
+    	string name( );
+	string descr( )		{ return m_descr; }
+	bool toEnable( )	{ return m_aen; }
+	bool enableStat( )	{ return m_en; }	
 	
 	void setName( const string &inm ) 	{ m_name = inm; }
 	void setDescr( const string &idsc )	{ m_descr = idsc; }
@@ -66,9 +68,9 @@ class TParamContr : public TConfig, public TValue
     protected:
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
-	void postEnable(int flag);
-	void preDisable(int flag);
-        void postDisable(int flag);
+	void postEnable( int flag );
+	void preDisable( int flag );
+        void postDisable( int flag );
 	
 	void vlGet( TVal &val );
 	

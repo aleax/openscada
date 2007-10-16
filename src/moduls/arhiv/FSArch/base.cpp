@@ -1,13 +1,12 @@
 
 //OpenSCADA system module Archive.FSArch file: base.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -31,7 +30,8 @@
 
 #include "base.h"
 
-//============ Modul info! =====================================================
+//*************************************************
+//* Modul info!                                   *
 #define MOD_ID      "FSArch"
 #define MOD_NAME    "File system archivator"
 #define MOD_TYPE    "Archive"
@@ -40,9 +40,9 @@
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "The Archive module. Allow functions for messages and values arhiving to file system."
 #define LICENSE     "GPL"
-//==============================================================================
+//*************************************************
 
-BaseArch::ModArch *BaseArch::mod;
+FSArch::ModArch *FSArch::mod;
 
 extern "C"
 { 
@@ -58,25 +58,22 @@ extern "C"
 	}
 	else
 	    AtMod.id	= "";
-	return( AtMod );    
+	return AtMod;    
     }
     
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	BaseArch::ModArch *self_addr = NULL;
-	
 	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE ) 
-	    self_addr = BaseArch::mod = new BaseArch::ModArch( source );
-	    
-	return ( self_addr );
+	    return new FSArch::ModArch( source );
+	return NULL;
     }    
 }
 
-using namespace BaseArch;
+using namespace FSArch;
 
-//==============================================================================
-//========================== BaseArch::ModArch =================================
-//==============================================================================
+//*************************************************
+//* FSArch::ModArch                               *
+//*************************************************
 ModArch::ModArch( const string &name) : prc_st(false)
 {
     mId 	= MOD_ID;
@@ -87,6 +84,8 @@ ModArch::ModArch( const string &name) : prc_st(false)
     mDescr  	= DESCRIPTION;
     mLicense   	= LICENSE;
     mSource    	= name;
+    
+    mod 	= this;
     
     //- Create checking archivators timer -
     struct sigevent sigev;
@@ -103,7 +102,7 @@ void ModArch::postEnable( int flag )
     
     if( flag&TCntrNode::NodeConnect )
     {
-	//Add self DB-fields for messages archive
+	//- Add self DB-fields for messages archive -
 	owner().messE().fldAdd( new TFld("FSArchXML",_("XML archive files"),TFld::Boolean,TFld::NoFlag,"1","false") );
 	owner().messE().fldAdd( new TFld("FSArchMSize",_("Maximum archive file size (kB)"),TFld::Integer,TFld::NoFlag,"4","300") );
 	owner().messE().fldAdd( new TFld("FSArchNFiles",_("Maximum files number"),TFld::Integer,TFld::NoFlag,"3","10") );
@@ -111,14 +110,14 @@ void ModArch::postEnable( int flag )
 	owner().messE().fldAdd( new TFld("FSArchPackTm",_("Pack files timeout (min)"),TFld::Integer,TFld::NoFlag,"2","10") );
 	owner().messE().fldAdd( new TFld("FSArchTm",_("Check archives period (min)"),TFld::Integer,TFld::NoFlag,"2","60") );
 	
-	//Add self DB-fields for value archive
+	//- Add self DB-fields for value archive -
 	owner().valE().fldAdd( new TFld("FSArchTmSize",_("File's time size (hours)"),TFld::Real,TFld::NoFlag,"4.2","800") );
     	owner().valE().fldAdd( new TFld("FSArchNFiles",_("Maximum files number"),TFld::Integer,TFld::NoFlag,"3","10") );
 	owner().valE().fldAdd( new TFld("FSArchRound",_("Numberic values rounding (%)"),TFld::Real,TFld::NoFlag,"2.2","0.1","0;50") );
 	owner().valE().fldAdd( new TFld("FSArchPackTm",_("Pack files timeout (min)"),TFld::Integer,TFld::NoFlag,"2","10") );    	
 	owner().valE().fldAdd( new TFld("FSArchTm",_("Check archives period (min)"),TFld::Integer,TFld::NoFlag,"2","60") );
 	
-	//Pack files DB structure
+	//- Pack files DB structure -
 	el_packfl.fldAdd( new TFld("FILE",_("File"),TFld::String,TCfg::Key,"100") );
 	el_packfl.fldAdd( new TFld("BEGIN",_("Begin"),TFld::String,TFld::NoFlag,"20") );
 	el_packfl.fldAdd( new TFld("END",_("End"),TFld::String,TFld::NoFlag,"20") );

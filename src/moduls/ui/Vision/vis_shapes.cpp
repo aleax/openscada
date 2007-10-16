@@ -1785,6 +1785,9 @@ void ShapeProtocol::init( WdgView *w )
     QTimer *tmr = new QTimer(w);
     w->dc()["trcTimer"].setValue( (void*)tmr );
     connect( tmr, SIGNAL(timeout()), this, SLOT(tracing()) );
+    //- Init index map -
+    QMap<QString,int> *imp = new QMap<QString,int>();
+    w->dc()["indMap"].setValue( (void*)imp );
 } 
 
 void ShapeProtocol::destroy( WdgView *w )
@@ -1897,7 +1900,11 @@ bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    break;
     }
 
-    if( reld_dt && !w->allAttrLoad( ) ) loadData(w,reld_dt==2);
+    if( reld_dt && !w->allAttrLoad( ) ) 
+    {
+	printf("TEST 00: Load protocol.\n");
+	loadData(w,reld_dt==2);
+    }
     
     return true;
 } 
@@ -1905,6 +1912,7 @@ bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val)
 void ShapeProtocol::loadData( WdgView *w, bool full )
 {     
     QTableWidget *tw = (QTableWidget *)w->dc()["addrWdg"].value<void*>();
+    QMap<QString,int> *imp = (QMap<QString,int> *)w->dc()["indMap"].value<void*>();
     
     //- Check for border of present data -
     unsigned int tTime     = w->dc()["time"].toUInt();
@@ -1917,6 +1925,7 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
     {
 	tw->setRowCount(0);
 	tw->setColumnCount(0);
+	imp->clear();
 	string clm;
 	for( int c_off = 0; (clm=TSYS::strSepParse(w->dc()["col"].toString().toAscii().data(),0,';',&c_off)).size(); )
 	    if( clm == "tm" || clm == "lev" || clm == "cat" || clm == "mess" ) 
@@ -1929,6 +1938,7 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 		else if( clm == "cat" )	tw->horizontalHeaderItem(ncl)->setText(_("Category"));
 		else if( clm == "mess" )tw->horizontalHeaderItem(ncl)->setText(_("Message"));
 		tw->horizontalHeaderItem(ncl)->setData(Qt::UserRole,clm.c_str());
+		(*imp)[clm.c_str()] = ncl;
 	    }
 	arhBeg = arhEnd = 0;
     }
@@ -1964,6 +1974,10 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
     else if( valBeg && tTimeGrnd < valBeg )	tTime = valBeg-1; 
     //printf("TEST 00: %d - %d\n",tTimeGrnd,tTime);
     //- Get values data -
+    unsigned int rtm;			//Record's data
+    QDateTime    dtm;
+    QString   rlev, rcat, rmess;	//Record's level category and message
+    
     XMLNode req("get");
     req.clear()->
 	setAttr("arch",arch)->
@@ -1973,36 +1987,97 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	setAttr("cat",w->dc()["tmpl"].toString().toAscii().data())->
 	setAttr("lev",TSYS::uint2str(w->dc()["lev"].toInt()));
     if( w->cntrIfCmd(req,true) )	return;
-    int row = toUp ? 0 : tw->rowCount();
+    //int row = toUp ? 0 : tw->rowCount();
     bool newFill = (tw->rowCount()==0);
-    for( int i_req = 0; i_req < req.childSize(); i_req++ )
-    {
-	XMLNode *rcd = req.childGet(i_req);
-	tw->insertRow(row);
-	//- Allow collumn process -
-	for( int i_c = 0; i_c < tw->columnCount(); i_c++ )
+    
+    //- Get collumns indexes -
+    int c_tm   = imp->value("tm",-1),
+	c_lev  = imp->value("lev",-1),
+	c_cat  = imp->value("cat",-1),
+	c_mess = imp->value("mess",-1);    
+
+    //- Process records -
+    if( toUp )
+	for( int i_req = 0; i_req < req.childSize(); i_req++ )
 	{
-	    QString sclm = tw->horizontalHeaderItem(i_c)->data(Qt::UserRole).toString();
-	    if( sclm == "tm" )
+	    XMLNode *rcd = req.childGet(i_req);
+	    //-- Get parameters --
+	    rtm  = strtoul(rcd->attr("time").c_str(),0,10);
+	    rlev = rcd->attr("lev").c_str();
+	    rcat = rcd->attr("cat").c_str();
+	    rmess = rcd->text().c_str();
+
+	    //-- Check for dublicates --
+	    //--- Check for last message dublicate and like time messages ---
+	    bool is_dbl = false;
+	    for( int i_c = 0, i_p = 0; i_p < tw->rowCount(); i_p++, i_c++ )
 	    {
-		QDateTime dtm;
-		dtm.setTime_t((time_t)strtoul(rcd->attr("time").c_str(),0,10));
-		tw->setItem( row, i_c, new QTableWidgetItem(dtm.toString(Qt::ISODate)) );
+		if( rtm > tw->item(0,0)->data(Qt::UserRole).toUInt() && i_c )	continue;
+		if( (c_lev<0 || tw->item(i_p,c_lev)->text() == rlev) &&
+		    (c_cat<0 || tw->item(i_p,c_cat)->text() == rcat)  &&
+		    (c_mess<0 || tw->item(i_p,c_mess)->text() == rmess ) )
+		{ 
+		    is_dbl = true;
+		    break;
+		}	    
 	    }
-	    else if( sclm == "lev" )
-		tw->setItem( row, i_c, new QTableWidgetItem(rcd->attr("lev").c_str()) );
-	    else if( sclm == "cat" )
-		tw->setItem( row, i_c, new QTableWidgetItem(rcd->attr("cat").c_str()) );
-	    else if( sclm == "mess" )
-		tw->setItem( row, i_c, new QTableWidgetItem(rcd->text().c_str()) );
+	    if( is_dbl ) continue;	
+	    //--- Insert new row ---
+	    tw->insertRow(0);
+	    if( c_tm >= 0 )
+	    {
+		dtm.setTime_t(rtm);
+		tw->setItem( 0, c_tm, new QTableWidgetItem(dtm.toString(Qt::ISODate)) );
+	    }
+	    if( c_lev >= 0 )	tw->setItem( 0, c_lev, new QTableWidgetItem(rlev) );
+	    if( c_cat >= 0 )	tw->setItem( 0, c_cat, new QTableWidgetItem(rcat) );
+	    if( c_mess >= 0 )	tw->setItem( 0, c_mess, new QTableWidgetItem(rmess) );
+	    tw->item(0,0)->setData(Qt::UserRole,rtm);
 	}
-	tw->item(row,0)->setData(Qt::UserRole,(unsigned int)strtoul(rcd->attr("time").c_str(),0,10));
-    }
+    else    
+	for( int i_req = req.childSize()-1; i_req >= 0; i_req-- )
+	{
+	    XMLNode *rcd = req.childGet(i_req);
+	    //-- Get parameters --
+	    rtm  = strtoul(rcd->attr("time").c_str(),0,10);
+	    rlev = rcd->attr("lev").c_str();
+	    rcat = rcd->attr("cat").c_str();
+	    rmess = rcd->text().c_str();
+
+	    //-- Check for dublicates --
+	    //--- Check for last message dublicate and like time messages ---
+	    bool is_dbl = false;
+	    for( int i_c = 0, i_p = tw->rowCount()-1; i_p >= 0; i_p--, i_c++ )
+	    {
+		if( rtm < tw->item(0,0)->data(Qt::UserRole).toUInt() && i_c )	continue;
+		if( (c_lev<0 || tw->item(i_p,c_lev)->text() == rlev) &&
+		    (c_cat<0 || tw->item(i_p,c_cat)->text() == rcat)  &&
+		    (c_mess<0 || tw->item(i_p,c_mess)->text() == rmess ) )
+		{ 
+		    is_dbl = true;
+		    break;
+		}	    	
+	    }
+	    if( is_dbl ) continue;
+	
+	    //--- Insert new row ---
+	    int row = tw->rowCount();
+	    tw->insertRow(row);
+	    if( c_tm >= 0 )
+	    {
+		dtm.setTime_t(rtm);
+		tw->setItem( row, c_tm, new QTableWidgetItem(dtm.toString(Qt::ISODate)) );
+	    }
+	    if( c_lev >= 0 )	tw->setItem( row, c_lev, new QTableWidgetItem(rlev) );
+	    if( c_cat >= 0 )	tw->setItem( row, c_cat, new QTableWidgetItem(rcat) );
+	    if( c_mess >= 0 )	tw->setItem( row, c_mess, new QTableWidgetItem(rmess) );
+	    tw->item(row,0)->setData(Qt::UserRole,rtm);
+	}
     if( newFill )
     {
 	tw->resizeColumnsToContents();
         //Resize too long columns
-        int max_col_sz = vmax(1024/tw->columnCount(),50);
+        int max_col_sz = vmax(w->size().width()/tw->columnCount(),40);
         for( int i_c = 0; i_c < tw->columnCount(); i_c++ )
             tw->setColumnWidth(i_c,vmin(max_col_sz,tw->columnWidth(i_c)));
     }
@@ -2127,6 +2202,9 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 
     switch(uiPrmPos)
     {
+	case -1:	//load
+	    up = true;
+	    break;
 	case 12:	//geomMargin
 	    w->dc()["geomMargin"] = atoi(val.c_str());
 	    if( w->layout() ) w->layout()->setMargin( w->dc()["geomMargin"].toInt() );

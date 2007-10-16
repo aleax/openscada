@@ -52,12 +52,12 @@ Mem::~Mem()
 
 void Mem::init( TMdPrm *prm ) 
 {
-    prm->cfg("SUBT").view(false);
+    prm->cfg("SUBT").setView(false);
 }
 
 void Mem::deInit( TMdPrm *prm )
 {
-    prm->cfg("SUBT").view(true);
+    prm->cfg("SUBT").setView(true);
 }    
 
 void Mem::getVal( TMdPrm *prm )

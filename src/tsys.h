@@ -1,13 +1,12 @@
 
 //OpenSCADA system file: tsys.h
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -23,7 +22,7 @@
 #ifndef TSYS_H
 #define TSYS_H
 
-//Hardware dependent types
+//- Hardware independent types -
 typedef char si8;
 typedef short si16;
 typedef int si32;
@@ -33,7 +32,7 @@ typedef unsigned short ui16;
 typedef unsigned int ui32;
 typedef unsigned long long ui64;
 
-//Other system's constants
+//- Other system's constants -
 #define TO_FREE         NULL // Object free
 #define STR_BUF_LEN     3000 // Len of string buffers (no string class)
 #define STD_WAIT_DELAY  100 // Standart wait dalay (ms)
@@ -61,16 +60,16 @@ typedef unsigned long long ui64;
 using std::string;
 using std::vector;
 
-//======================================================================================
-//====================== TSYS ==========================================================
-//======================================================================================
+//*************************************************
+//* TSYS                                          *
+//*************************************************
 class TSYS : public TCntrNode 
 {
 
     public:
 	//Data
 	enum Code	{ PathEl, HttpURL, Html, JavaSc, SQL, Custom, base64, FormatPrint };
-	enum IntView 	{ Dec, Oct, Hex,   };
+	enum IntView 	{ Dec, Oct, Hex };
         enum Errors 	
 	{ 
 	    //- DB errors code -
@@ -176,14 +175,14 @@ class TSYS : public TCntrNode
         static string strDecode( const string &in, Code tp = Custom );
 	
 	//Public attributes
-	static bool finalKill;	//Final object's kill flag. For dead requsted resources
+    	static bool finalKill;	//Final object's kill flag. For dead requsted resources
 	const int argc;		//Comand line seting counter.	
 	const char **argv;	//Comand line seting buffer.
 	const char **envp;	//System environment.
 
     private:
 	//Private methods
-	string nodeName(){ return id(); }
+	string nodeName()	{ return id(); }
 	bool cfgFileLoad();
 	void cfgPrmLoad();
 	void cfgFileScan( bool first = false );

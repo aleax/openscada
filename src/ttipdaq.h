@@ -1,13 +1,12 @@
 
 //OpenSCADA system file: ttipdaq.h
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -31,6 +30,9 @@
 using std::string;
 using std::vector;
 
+//************************************************
+//* TTipDAQ                                      *
+//************************************************
 class TTipParam;
 
 class TTipDAQ : public TModule, public TElem
@@ -42,7 +44,7 @@ class TTipDAQ : public TModule, public TElem
 	void modStart( );
         void modStop( );
     
-	// Controllers
+	//- Controllers -
 	void list( vector<string> &list )	{ chldList(m_cntr,list); }
 	bool present( const string &name )	{ return chldPresent(m_cntr,name); }
 	void add( const string &name, const string &daq_db = "*.*" );
@@ -50,14 +52,14 @@ class TTipDAQ : public TModule, public TElem
 	AutoHD<TController> at( const string &name, const string &who = "" )
 	{ return chldAt(m_cntr,name); }
 	
-	//Parameter types (DB structure)
+	//- Parameter types (DB structure) -
 	bool tpPrmPresent( const string &name_t );
 	int tpPrmToId( const string &name_t );
 	int tpParmAdd( const char *id, const char *n_db, const char *name );
-	unsigned tpPrmSize( ) { return( paramt.size()); }
+	unsigned tpPrmSize( ) 			{ return( paramt.size()); }
 	TTipParam &tpPrmAt( unsigned id );
 
-	//Compile functions support API
+	//- Compile functions support API -
 	virtual void compileFuncLangs( vector<string> &ls )	{ }
 	virtual string compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text );
 	

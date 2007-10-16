@@ -400,7 +400,7 @@ string MBD::clrEndSpace( const string &vl )
 //************************************************
 MTable::MTable(string inm, MBD *iown, bool create ) : TTable(inm)
 {
-    nodePrev(iown);    
+    setNodePrev(iown);    
     
     if( create )
     {

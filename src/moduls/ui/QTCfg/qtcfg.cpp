@@ -1,13 +1,12 @@
 
 //OpenSCADA system module UI.QTCfg file: qtcfg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2004-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -71,9 +70,9 @@
 
 using namespace QTCFG;
 
-//==============================================================================
-//================= QTCFG::ConfApp ============================================
-//==============================================================================
+//*************************************************
+//* QTCFG::ConfApp                                *
+//*************************************************
 ConfApp::ConfApp( string open_user ) : 
     que_sz(20), block_tabs(false), pg_info("info"), root(&pg_info), tbl_init(false)
 {   
@@ -1110,24 +1109,37 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
         //View Data-Time fields
 	else if( t_s.attr("tp") == "time" )
         {
-            QLabel *lab   	 = NULL;
-	    DateTimeEdit *val_w;
+            QLabel 	 *lab   = NULL;
+	    QLabel 	 *val_r = NULL;
+	    DateTimeEdit *val_w = NULL;	    
 	    	    
-	    struct tm *tm_tm;
 	    time_t tm_t;
 	    if( data_req.text().size() ) tm_t = atoi(data_req.text().c_str());
 	    else tm_t = time(NULL);
-	    tm_tm = localtime(&tm_t);
+	    QDateTime dtm;
+	    dtm.setTime_t(tm_t);
 
 	    if( !refr )
-	    {	    
-		val_w = new DateTimeEdit( widget, comm );
-		val_w->setObjectName(br_path.c_str());
-		val_w->setStatusTip((sel_path+"/"+br_path).c_str());
-	    	connect( val_w, SIGNAL( valueChanged(const QDateTime &) ), this, SLOT( dataTimeChange(const QDateTime&) ) );
-		connect( val_w, SIGNAL( apply() ), this, SLOT( applyButton() ) );
-		connect( val_w, SIGNAL( cancel() ), this, SLOT( cancelButton() ) );
-		if(!wr) val_w->setDisabled(true);
+	    {
+		if( !wr )
+		{
+		    val_r = new QLabel( widget );
+		    val_r->setStatusTip((sel_path+"/"+br_path).c_str());
+		    QSizePolicy sp(QSizePolicy::Expanding, QSizePolicy::Preferred);
+		    sp.setHorizontalStretch(1);
+		    val_r->setSizePolicy( sp );
+		    val_r->setAlignment( Qt::AlignVCenter );
+		    val_r->setWordWrap(true);
+		}
+		else
+		{
+		    val_w = new DateTimeEdit( widget, comm );
+		    val_w->setObjectName(br_path.c_str());
+		    val_w->setStatusTip((sel_path+"/"+br_path).c_str());
+	    	    connect( val_w, SIGNAL( valueChanged(const QDateTime &) ), this, SLOT( dataTimeChange(const QDateTime&) ) );
+		    connect( val_w, SIGNAL( apply() ), this, SLOT( applyButton() ) );
+		    connect( val_w, SIGNAL( cancel() ), this, SLOT( cancelButton() ) );
+		}
 
 		//Check use label
 		if(t_s.attr("dscr").size()) 
@@ -1137,28 +1149,34 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    *l_hbox = new QHBoxLayout; l_pos = 0;
 		    (*l_hbox)->setSpacing(6);
 		    (*l_hbox)->insertWidget( l_pos++, lab);
-		    (*l_hbox)->insertWidget( l_pos++, val_w );
+		    if( val_w )	(*l_hbox)->insertWidget( l_pos++, val_w );
+		    if( val_r )
+		    { 
+			(*l_hbox)->insertWidget( l_pos++, val_r );
+			lab->setAlignment( Qt::AlignTop );
+		    }
 		    (*l_hbox)->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ) );
 		    widget->layout()->addItem(*l_hbox);
 		}
 		else
 		{
-		    if( *l_hbox )	(*l_hbox)->insertWidget( l_pos++, val_w );
-		    else 		{ delete val_w; val_w = NULL; }
-		}
-		
-		t_s.setAttr("addr_lab",TSYS::addr2str(lab));		
-		t_s.setAttr("addr_dtw",TSYS::addr2str(val_w));		
+		    if( *l_hbox ) (*l_hbox)->insertWidget( l_pos++, (val_w?(QWidget*)val_w:(QWidget*)val_r) );
+		    else { delete (val_w?(QWidget*)val_w:(QWidget*)val_r); val_w = NULL; val_r = NULL; }
+		}		
+		t_s.setAttr("addr_lab",TSYS::addr2str(lab));
+		t_s.setAttr("addr_dtw",TSYS::addr2str(val_w));
+		t_s.setAttr("addr_dtr",TSYS::addr2str(val_r));
 	    }
 	    else
 	    {
 		lab  = (QLabel *)TSYS::str2addr(t_s.attr("addr_lab"));
-		val_w = (DateTimeEdit *)TSYS::str2addr(t_s.attr("addr_dtw"));		
+		val_r = (QLabel *)TSYS::str2addr(t_s.attr("addr_dtr"));
+		val_w = (DateTimeEdit *)TSYS::str2addr(t_s.attr("addr_dtw"));
 	    }	    
             //Fill data
  	    if( lab ) 	lab->setText((t_s.attr("dscr")+":").c_str());
-	    if( val_w )	val_w->setDateTime( QDateTime( QDate(tm_tm->tm_year+1900,tm_tm->tm_mon+1,tm_tm->tm_mday),
-			    QTime(tm_tm->tm_hour,tm_tm->tm_min,tm_tm->tm_sec)) );
+	    if( val_r )	val_r->setText( "<b>"+dtm.toString("dd.MM.yyyy hh:mm:ss")+"</b>" );
+	    if( val_w )	val_w->setDateTime( dtm );
 	}
 	//View other string and numberic fields	
 	else

@@ -1,12 +1,11 @@
 //OpenSCADA system file: tuis.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -28,9 +27,9 @@
 #include "tmess.h"
 #include "tuis.h"
 
-//================================================================
-//================== TUIS ========================================
-//================================================================
+//*************************************************
+//* TUIS                                          *
+//*************************************************
 TUIS::TUIS( ) : TSubSYS("UI","User interfaces",true)
 {
 
@@ -44,7 +43,7 @@ string TUIS::optDescr( )
 
 void TUIS::subLoad( )
 {
-    //========== Load parameters from command line ============
+    //- Load parameters from command line -
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -64,9 +63,9 @@ void TUIS::subLoad( )
 	}
     } while(next_opt != -1);
     
-    //========== Load parameters from config file =============
+    //- Load parameters from config file -
 
-    //Load modules
+    //- Load modules -
     TSubSYS::subLoad();
 }
 
@@ -125,22 +124,22 @@ string TUIS::icoPath(const string &ico)
 
 void TUIS::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
         TSubSYS::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","10");
 	return;
     }
-    //Process command to page
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) ) opt->setText(optDescr());
     else TSubSYS::cntrCmdProc(opt);
 }		    
 
-//================================================================
-//================== TUI =========================================
-//================================================================
+//*************************************************
+//* TUI                                           *
+//*************************************************
 TUI::TUI() : run_st(false)
 {
 
@@ -148,7 +147,7 @@ TUI::TUI() : run_st(false)
 
 void TUI::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
         TModule::cntrCmdProc(opt);
@@ -157,7 +156,8 @@ void TUI::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/st/r_st",_("Runing"),0664,"root","root",1,"tp","bool");
 	return;
     }
-    //Process command to page
+    
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/prm/st/r_st" )
     {

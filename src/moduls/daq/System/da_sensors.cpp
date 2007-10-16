@@ -47,12 +47,12 @@ Sensors::~Sensors()
 
 void Sensors::init( TMdPrm *prm )
 {
-    prm->cfg("SUBT").view(false);
+    prm->cfg("SUBT").setView(false);
 }
 
 void Sensors::deInit( TMdPrm *prm )
 {
-    prm->cfg("SUBT").view(true);
+    prm->cfg("SUBT").setView(true);
 }	
 
 void Sensors::getVal( TMdPrm *prm )

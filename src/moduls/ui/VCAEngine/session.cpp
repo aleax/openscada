@@ -582,7 +582,8 @@ bool SessPage::cntrCmdGeneric( XMLNode *opt )
 //* Session page's widget                        *
 //************************************************
 SessWdg::SessWdg( const string &iid, const string &iparent, Session *isess ) : 
-    Widget(iid,iparent), m_proc(false), TValFunc(iid+"_wdg",NULL)/*, m_clc(0)*/, m_mdfClc(0), m_sess(isess)
+    Widget(iid,iparent), m_proc(false), TValFunc(iid+"_wdg",NULL), m_mdfClc(0), 
+    m_sess(isess), inLnkGet(true)
 {
     
 }
@@ -686,9 +687,9 @@ void SessWdg::setProcess( bool val )
 	work_prog = SYS->daq().at().at(TSYS::strSepParse(calcLang(),0,'.')).at().
                     compileFunc(TSYS::strSepParse(calcLang(),1,'.'),fio,calcProg());
 	//-- Connect to compiled function --
-	TValFunc::func(&((AutoHD<TFunction>)SYS->nodeAt(work_prog,1)).at());
+	TValFunc::setFunc(&((AutoHD<TFunction>)SYS->nodeAt(work_prog,1)).at());
     }
-    if( !val )	TValFunc::func(NULL);
+    if( !val )	TValFunc::setFunc(NULL);
 
     //- Change process for included widgets -
     vector<string> ls;
@@ -821,7 +822,34 @@ void SessWdg::getUpdtWdg( const string &path, unsigned int tm, vector<string> &e
 unsigned int SessWdg::modifVal( Attr &cfg )
 { 
     int m_clc = ownerSess()->calcClk( );
-    if( !(cfg.flgGlob()&Attr::IsUser) )	m_mdfClc = m_clc;
+    if( !(cfg.flgGlob()&Attr::IsUser) )
+    {
+	m_mdfClc = m_clc;
+	
+	if( !inLnkGet && cfg.flgSelf()&Attr::CfgLnkOut && !cfg.cfgVal().empty() )
+	{
+	    string obj_tp = TSYS::strSepParse(cfg.cfgVal(),0,':')+":";
+	    if( obj_tp == "prm:" )
+		try
+		{
+		    switch( cfg.type() )
+		    {
+			case TFld::Boolean:		
+			    ((AutoHD<TVal>)SYS->daq().at().nodeAt(cfg.cfgVal(),0,0,obj_tp.size())).at().setB(cfg.getB());
+			    break;
+			case TFld::Integer:
+			    ((AutoHD<TVal>)SYS->daq().at().nodeAt(cfg.cfgVal(),0,0,obj_tp.size())).at().setI(cfg.getI());
+			    break;
+			case TFld::Real:
+			    ((AutoHD<TVal>)SYS->daq().at().nodeAt(cfg.cfgVal(),0,0,obj_tp.size())).at().setR(cfg.getR());
+			    break;
+			case TFld::String:
+			    ((AutoHD<TVal>)SYS->daq().at().nodeAt(cfg.cfgVal(),0,0,obj_tp.size())).at().setS(cfg.getS());
+			    break;
+		    }
+		}catch(...)	{ }
+	}
+    }
     return m_clc; 
 }
 
@@ -844,7 +872,8 @@ void SessWdg::calc( bool first, bool last )
 	if( !((ownerSess()->calcClk())%(vmax(calcPer()/ownerSess()->period(),1))) )
 	{
 	    //- Process input links and constants -    
-	    AutoHD<Attr> attr;    
+	    AutoHD<Attr> attr;
+	    inLnkGet = true;
 	    for( int i_a = 0; i_a < m_attrLnkLs.size(); i_a++ )
 	    {
 		attr = attrAt(m_attrLnkLs[i_a]);
@@ -881,6 +910,7 @@ void SessWdg::calc( bool first, bool last )
 			attr.at().setS(attr.at().cfgVal().substr(obj_tp.size()));
 		}
 	    }
+	    inLnkGet = false;
 
 	    if( TValFunc::func() )
 	    {    
@@ -926,7 +956,7 @@ void SessWdg::calc( bool first, bool last )
 	    }
     	
 	    //-- Process output links --
-	    for( int i_a = 0; i_a < m_attrLnkLs.size(); i_a++ )
+	    /*for( int i_a = 0; i_a < m_attrLnkLs.size(); i_a++ )
 	    {
 		attr = attrAt(m_attrLnkLs[i_a]);
 		obj_tp = TSYS::strSepParse(attr.at().cfgVal(),0,':')+":";
@@ -950,7 +980,7 @@ void SessWdg::calc( bool first, bool last )
 				attr.at().cfgVal(),0,0,obj_tp.size())).at().setS(attr.at().getS());
 			    break;
 		    }
-	    }
+	    }*/
 	}
     
 	//-- Process widget's events --

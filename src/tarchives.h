@@ -1,13 +1,12 @@
 
 //OpenSCADA system file: tarchives.h
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -51,14 +50,17 @@ class TMArchivator : public TCntrNode, public TConfig
 {
     public:
 	//Public methods
-	TMArchivator(const string &iid, const string &idb, TElem *cf_el );
+	TMArchivator(const string &id, const string &db, TElem *cf_el );
 
-        const string &id()	{ return m_id; }
-	string workId();
-        string name();
-        string dscr()		{ return m_dscr; }
-	bool toStart() 		{ return m_start; }
-	bool startStat()	{ return run_st; }
+        const string &id( )	{ return m_id; }
+	string workId( );
+        string name( );
+        string dscr( )		{ return m_dscr; }
+	bool toStart( ) 	{ return m_start; }
+	bool startStat( )	{ return run_st; }
+        string &addr( )		{ return m_addr; }
+        int    &level( )	{ return m_level; }
+        void   categ( vector<string> &list );	
 
 	string DB( )            { return m_db; }
         string tbl( );
@@ -67,18 +69,15 @@ class TMArchivator : public TCntrNode, public TConfig
 	void setName( const string &vl )  	{ m_name = vl; }
         void setDscr( const string &vl )  	{ m_dscr = vl; }
 	void setToStart( bool vl )		{ m_start = vl; }
+	void setAddr( const string &vl )	{ m_addr = vl; }
 
         virtual void load( );
         virtual void save( );
         virtual void start( )	{ };
         virtual void stop( )	{ };
 
-        string &addr()	{ return m_addr; }
-        int    &level()	{ return m_level; }
-        void   categ( vector<string> &list );
-
-        virtual time_t begin()	{ return 0; }
-        virtual time_t end() 	{ return 0; }
+        virtual time_t begin( )	{ return 0; }
+        virtual time_t end( ) 	{ return 0; }
 	virtual void put( vector<TMess::SRec> &mess ){ };
         virtual void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0 ) { };
 
@@ -87,8 +86,9 @@ class TMArchivator : public TCntrNode, public TConfig
     protected:
 	//Protected methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-	void postEnable(int flag);
-	void postDisable(int flag);     //Delete all DB if flag 1
+	void postEnable( int flag );
+	void preDisable( int flag );
+	void postDisable( int flag );     //Delete all DB if flag 1
 
 	//- Check messages criteries -
 	bool chkMessOK( const string &icateg, TMess::Type ilvl );
@@ -132,16 +132,14 @@ class TTipArchivator: public TModule
         bool messPresent( const string &iid )	{ return chldPresent(m_mess,iid); }
 	void messAdd( const string &iid, const string &idb = "*.*" );
 	void messDel( const string &iid, bool full = false )	{ chldDel(m_mess,iid,-1,full); }
-	AutoHD<TMArchivator> messAt( const string &iid )
- 	{ return chldAt(m_mess,iid); }
+	AutoHD<TMArchivator> messAt( const string &iid ) 	{ return chldAt(m_mess,iid); }
 
 	//- Values -
 	void valList( vector<string> &list )	{ chldList(m_val,list); }
         bool valPresent( const string &iid )	{ return chldPresent(m_val,iid); }
 	void valAdd( const string &iid, const string &idb = "*.*" );
         void valDel( const string &iid, bool full = false )	{ chldDel(m_val,iid,-1,full); }
-	AutoHD<TVArchivator> valAt( const string &iid )
- 	{ return chldAt(m_val,iid); }
+	AutoHD<TVArchivator> valAt( const string &iid ) 	{ return chldAt(m_val,iid); }
 
 	TArchiveS &owner();
 
@@ -149,9 +147,9 @@ class TTipArchivator: public TModule
 	//Protected methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
-	virtual TMArchivator *AMess(const string &iid, const string &idb )
+	virtual TMArchivator *AMess(const string &id, const string &db )
 	{ throw TError(nodePath().c_str(),"Message arhiv no support!"); }
-	virtual TVArchivator *AVal(const string &iid, const string &idb )
+	virtual TVArchivator *AVal(const string &id, const string &db )
 	{ throw TError(nodePath().c_str(),"Value arhiv no support!"); }	
 
     private:
@@ -169,12 +167,12 @@ class TArchiveS : public TSubSYS
 	TArchiveS( );
 	~TArchiveS(  );
 
-	int subVer( )	{ return VER_ARH; }
+	int subVer( )		{ return VER_ARH; }
 	
-	int messPeriod(){ return m_mess_per; }
-	int valPeriod()		{ return m_val_per; }
+	int messPeriod( )	{ return m_mess_per; }
+	int valPeriod( )	{ return m_val_per; }
 	
-	void messPeriod( int ivl );
+	void setMessPeriod( int ivl );
 	void setValPeriod( int ivl )	{ m_val_per = ivl; }
 	
 	void subLoad( );
@@ -183,8 +181,8 @@ class TArchiveS : public TSubSYS
 	void subStop( );
 
 	//- Value archives functions -
-	void valList( vector<string> &list )	{ chldList(m_aval,list); }
-        bool valPresent( const string &iid )  	{ return chldPresent(m_aval,iid); }
+	void valList( vector<string> &list )			{ chldList(m_aval,list); }
+        bool valPresent( const string &iid )  			{ return chldPresent(m_aval,iid); }
 	void valAdd( const string &iid, const string &idb = "*.*" );
 	void valDel( const string &iid, bool db = false )	{ chldDel(m_aval,iid,-1,db); }
 	AutoHD<TVArchive> valAt( const string &iid )		{ return chldAt(m_aval,iid); }
@@ -192,7 +190,7 @@ class TArchiveS : public TSubSYS
 	void setActValArch( const string &id, bool val );
 
 	//- Archivators -
-	AutoHD<TTipArchivator> at( const string &name )	{ return modAt(name); }
+	AutoHD<TTipArchivator> at( const string &name )		{ return modAt(name); }
 
 	//- Message archive function -
  	void messPut( time_t tm, const string &categ, TMess::Type level, const string &mess );	
@@ -202,9 +200,9 @@ class TArchiveS : public TSubSYS
 	time_t messBeg( const string &arch = "" );
 	time_t messEnd( const string &arch = "" );
 
-	TElem &messE()	{ return el_mess; }
-	TElem &valE() 	{ return el_val; }
-	TElem &aValE()	{ return el_aval; }
+	TElem &messE( )		{ return el_mess; }
+	TElem &valE( ) 		{ return el_val; }
+	TElem &aValE( )		{ return el_aval; }
 	
 	//Public attributes
         static int max_req_mess;

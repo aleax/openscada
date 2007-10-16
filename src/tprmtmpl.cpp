@@ -1,13 +1,12 @@
 
 //OpenSCADA system file: tprmtmpl.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -23,6 +22,9 @@
 #include "tsys.h"
 #include "tprmtmpl.h"
 
+//*************************************************
+//* TPrmTempl                                     *
+//*************************************************
 TPrmTempl::TPrmTempl( const char *iid, const char *iname ) : 
     TFunction(string("tmpl_")+iid), TConfig(&SYS->daq().at().tplE()), 
     m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()), 
@@ -39,7 +41,7 @@ TPrmTempl::~TPrmTempl(  )
 
 void TPrmTempl::postEnable( int flag )
 {
-    //Create default IOs
+    //- Create default IOs -
     if( flag&TCntrNode::NodeConnect )
     {
 	ioIns( new IO("f_frq",_("Function calculate frequency (Hz)"),IO::Real,TPrmTempl::LockAttr,"1000",false),0);
@@ -56,7 +58,7 @@ void TPrmTempl::postDisable(int flag)
         if( flag )
 	{
             SYS->db().at().dataDel(owner().fullDB(),owner().owner().nodePath()+owner().tbl(),*this);
-	    //Delete template's IO
+	    //- Delete template's IO -
 	    TConfig cfg(&owner().owner().tplIOE());
 	    cfg.cfg("TMPL_ID").setS(id());
 	    cfg.cfg("ID").setS("");
@@ -112,7 +114,7 @@ void TPrmTempl::start( bool vl )
     {
 	//Check old compile function	????
     
-	//Compile new function
+	//- Compile new function -
 	if(prog().size())
 	    work_prog = SYS->daq().at().at(TSYS::strSepParse(progLang(),0,'.')).at().
 				        compileFunc(TSYS::strSepParse(progLang(),1,'.'),*this,prog());
@@ -129,10 +131,10 @@ AutoHD<TFunction> TPrmTempl::func()
 
 void TPrmTempl::load( )
 {
-    //Self load
+    //- Self load -
     SYS->db().at().dataGet(owner().fullDB(),owner().owner().nodePath()+owner().tbl(),*this);
     
-    //Load IO
+    //- Load IO -
     vector<int> u_pos;
     TConfig cfg(&owner().owner().tplIOE());
     cfg.cfg("TMPL_ID").setS(id());
@@ -142,7 +144,7 @@ void TPrmTempl::load( )
 	string sid = cfg.cfg("ID").getS();
 	cfg.cfg("ID").setS("");
 	
-	//Calc insert position
+	//- Calc insert position -
 	int pos = cfg.cfg("POS").getI();
 	int i_ps;
 	for( i_ps = 0; i_ps < u_pos.size(); i_ps++ )
@@ -167,10 +169,10 @@ void TPrmTempl::save( )
 {
     string w_db = owner().fullDB();
     string w_cfgpath = owner().owner().nodePath()+owner().tbl();
-    //Self save    
+    //- Self save -
     SYS->db().at().dataSet(w_db,w_cfgpath,*this);
 
-    //Save IO
+    //- Save IO -
     TConfig cfg(&owner().owner().tplIOE());
     cfg.cfg("TMPL_ID").setS(id());
     for(int i_io = 0; i_io < ioSize(); i_io++)
@@ -183,7 +185,7 @@ void TPrmTempl::save( )
 	cfg.cfg("POS").setI(i_io);
     	SYS->db().at().dataSet(w_db+"_io",w_cfgpath+"_io",cfg);
     }
-    //Clear IO
+    //- Clear IO -
     int fld_cnt=0;
     cfg.cfg("ID").setS("");
     cfg.cfgViewAll(false);
@@ -206,7 +208,7 @@ void TPrmTempl::preIOCfgChange()
 
 void TPrmTempl::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
         ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter template: ")+name());
@@ -240,7 +242,8 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	}
 	return;
     }
-    //Process command to page
+    
+    //- Process command to page -
     vector<string> list;    
     string a_path = opt->attr("path");
     if( a_path == "/tmpl/st/st" )
@@ -374,8 +377,10 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
     else if( a_path == "/tmpl/cfg/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	load();
     else if( a_path == "/tmpl/cfg/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	save();
 }
-	    
-//=================== TPrmTmplLib =======================
+
+//*************************************************
+//* TPrmTmplLib                                   *
+//*************************************************
 TPrmTmplLib::TPrmTmplLib( const char *id, const char *name, const string &lib_db ) :
     TConfig(&SYS->daq().at().elLib()), run_st(false), m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()), 
     m_descr(cfg("DESCR").getSd()), m_db(cfg("DB").getSd()), work_lib_db(lib_db)
@@ -400,10 +405,10 @@ void TPrmTmplLib::postDisable(int flag)
 {
     if( flag )
     {
-        //Delete libraries record
+        //- Delete libraries record -
         SYS->db().at().dataDel(work_lib_db+"."+owner().tmplLibTable(),owner().nodePath()+"tmplib",*this);
 			
-        //Delete temlate librarie's DBs
+        //- Delete temlate librarie's DBs -
         SYS->db().at().open(fullDB());
         SYS->db().at().close(fullDB(),true);
 						
@@ -421,7 +426,7 @@ void TPrmTmplLib::load( )
 {
     SYS->db().at().dataGet(work_lib_db+"."+owner().tmplLibTable(),owner().nodePath()+"tmplib",*this);
 
-    //Load templates
+    //- Load templates -
     TConfig c_el(&owner().tplE());
     c_el.cfgViewAll(false);
     int fld_cnt = 0;
@@ -439,7 +444,7 @@ void TPrmTmplLib::save( )
 {
     SYS->db().at().dataSet(work_lib_db+"."+owner().tmplLibTable(),owner().nodePath()+"tmplib",*this);
     
-    //Save functions
+    //- Save functions -
     vector<string> f_lst;
     list(f_lst);
     for( int i_ls = 0; i_ls < f_lst.size(); i_ls++ )
@@ -463,7 +468,7 @@ void TPrmTmplLib::add( const char *id, const char *name )
 	
 void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
         ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter templates library: ")+id());
@@ -489,7 +494,7 @@ void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("list",opt,-1,"/tmpl/tmpl",_("Templates"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","tmpl_");
         return;
     }
-    //Process command to page
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/lib/st/st" )
     {

@@ -1,13 +1,12 @@
 
 //OpenSCADA system file: xml.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -24,18 +23,21 @@
 #include "tmess.h"
 #include "xml.h"
 
+//*************************************************
+//* XMLNode                                       *
+//*************************************************
 const char *XMLNode::o_name = "XMLNode";
 
 XMLNode &XMLNode::operator=(XMLNode &prm)    
 {
-    //Delete self children and atributes
+    //- Delete self children and atributes -
     n_attr.clear();
     v_attr.clear();
     for( int i_ch = 0; i_ch < m_children.size(); i_ch++ )
 	delete m_children[i_ch];
     m_children.clear();    	
     
-    //Copy params (name,text and atributes)
+    //- Copy params (name,text and atributes) -
     setName( prm.name() );
     setText( prm.text() );
     vector<string> ls;
@@ -43,7 +45,7 @@ XMLNode &XMLNode::operator=(XMLNode &prm)
     for( int i_atr = 0; i_atr < ls.size(); i_atr++)
 	setAttr(ls[i_atr],prm.attr(ls[i_atr]));
 
-    //Recursive copy children
+    //- Recursive copy children -
     for( int i_ch = 0; i_ch < prm.childSize(); i_ch++ )
 	*childAdd() = *prm.childGet(i_ch);
     
@@ -177,25 +179,25 @@ XMLNode* XMLNode::clear()
 
 string XMLNode::save( unsigned char flg )
 {
-    string xml = ((flg&XML_BR_OPEN_PREV)?"\n<":"<") + encode( name() );
+    string xml = ((flg&XMLNode::BrOpenPrev)?"\n<":"<") + encode( name() );
 
     for(unsigned i_atr = 0; i_atr < n_attr.size(); i_atr++)
 	xml = xml + " " + n_attr[i_atr] + "=\"" + Mess->codeConvOut("UTF8",encode(v_attr[i_atr])) + "\"";
     	
     if(!childSize() && !text().size())
-	xml+= (flg&(XML_BR_OPEN_PAST|XML_BR_CLOSE_PAST))?"/>\n":"/>";
+	xml+= (flg&(XMLNode::BrOpenPast|XMLNode::BrClosePast))?"/>\n":"/>";
     else	
     {
-	xml = xml + ((flg&XML_BR_OPEN_PAST)?">\n":">") + 
+	xml = xml + ((flg&XMLNode::BrOpenPast)?">\n":">") + 
 		    Mess->codeConvOut("UTF8",encode(text())) + 
-		    ((flg&XML_BR_TEXT_PAST)?"\n":"");
+		    ((flg&XMLNode::BrTextPast)?"\n":"");
 
 	for( int child_index = 0; child_index < childSize(); child_index++ )
 	{
 	    XMLNode *child = childGet( child_index );
 	    if( child )  xml += child->save(flg);
 	}
-	xml+= string("</") + encode( name() ) + ((flg&XML_BR_CLOSE_PAST)?">\n":">");
+	xml+= string("</") + encode( name() ) + ((flg&XMLNode::BrClosePast)?">\n":">");
     }
 
     return xml;
@@ -235,18 +237,6 @@ void XMLNode::load( const string &s )
         throw TError(o_name,"Parse error at line %d --- %s", XML_GetCurrentLineNumber(p), XML_ErrorString(XML_GetErrorCode(p)) );
     }
     XML_ParserFree( p );    
-    /*if( m_root )
-    {
-	m_name = m_root->m_name;
-	m_text = m_root->m_text;
-	for( int i_atr = 0; i_atr < m_root->n_attr.size(); i_atr++)
-	{
-	    n_attr.push_back(m_root->n_attr[i_atr]);
-	    v_attr.push_back(m_root->v_attr[i_atr]);
-	}	    
-	m_children = m_root->m_children;
-	m_root = NULL;
-    }*/
 }
 							  
 void XMLNode::start_element( void *data, const char *el, const char **attr )

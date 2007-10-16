@@ -1,13 +1,12 @@
 
 //OpenSCADA system file: tfunction.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -26,7 +25,9 @@
 #include <tmess.h>
 #include "tfunction.h"
 
-//Function abstract object
+//*************************************************
+//* Function abstract object                      *
+//*************************************************
 TFunction::TFunction( const string &iid ) : m_id(iid), m_tval(NULL), run_st(false)
 {
 
@@ -41,12 +42,12 @@ TFunction::~TFunction()
 TFunction &TFunction::operator=(TFunction &func)
 {
     if(m_id.empty())	m_id = func.id();
-    //Copy IO
-    //- Clear no present IO -
+    //- Copy IO -
+    //-- Clear no present IO --
     for( int i_io = 0; i_io < ioSize(); )
 	if( func.ioId(io(i_io)->id()) < 0 )	ioDel(i_io);
 	else i_io++;
-    //- Update present and create new IO -
+    //-- Update present and create new IO --
     for( int i_io = 0; i_io < func.ioSize(); i_io++ )
     {
 	int dst_io = ioId(func.io(i_io)->id());
@@ -174,7 +175,7 @@ void TFunction::valDet( TValFunc *vfnc )
 
 void TFunction::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Function: ")+name());
@@ -202,7 +203,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,-1,"/exec",_("Execute")))
 	{
 	    ctrMkNode("fld",opt,-1,"/exec/en",_("Enable"),0660,"root","root",1,"tp","bool");
-	    //Add test form
+	    //-- Add test form --
 	    if( m_tval )
 	    {
 		if(ctrMkNode("area",opt,-1,"/exec/io",_("IO")))
@@ -220,7 +221,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 			}		
 			ctrMkNode("fld",opt,-1,("/exec/io/"+io(i_io)->id()).c_str(),io(i_io)->name(),0664,"root","root",1,"tp",tp);
 		    }
-		//Add Calc button and Calc time
+		//-- Add Calc button and Calc time --
 		ctrMkNode("fld",opt,-1,"/exec/n_clc",_("Number calcs"),0664,"root","root",1,"tp","dec");
 		ctrMkNode("fld",opt,-1,"/exec/tm",_("Calc time (mks)"),0444,"root","root",1,"tp","real");
 		ctrMkNode("comm",opt,-1,"/exec/calc",_("Calc"),0666);
@@ -228,7 +229,8 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	}
         return;
     }
-    //Process command to page
+    
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/func/st/st" )
     {
@@ -280,7 +282,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )
 	{
 	    bool to_en_exec = atoi(opt->text().c_str());
-	    if( to_en_exec && !m_tval )	{ m_tval = new TValFunc(id()+"_exec",this); m_tval->dimens(true); }
+	    if( to_en_exec && !m_tval )	{ m_tval = new TValFunc(id()+"_exec",this); m_tval->setDimens(true); }
 	    if( !to_en_exec && m_tval ) { delete m_tval; m_tval = NULL; }
 	}
     }
@@ -312,12 +314,14 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	    m_tval->calc();
 	    c_rez += m_tval->calcTm();
 	}
-        m_tval->calcTm(c_rez);
+        m_tval->setCalcTm(c_rez);
     }
 }		
 
 
-//**** IO ****
+//*************************************************
+//* IO                                            *
+//*************************************************
 IO::IO( const char *iid, const char *iname, IO::Type itype,  unsigned iflgs, const char *idef, bool ihide, const char *irez )
 {
     m_id   = iid;
@@ -396,13 +400,13 @@ void IO::setRez( const string &val )
     m_rez = val;
 }
 
-//===================================================
-//========== TValFunc ===============================
-//===================================================
+//*************************************************
+//* TValFunc                                      *
+//*************************************************
 TValFunc::TValFunc( const string &iname, TFunction *ifunc, bool iblk ) : 
     m_name(iname), m_func(NULL), m_dimens(false), tm_calc(0.0), m_blk(iblk)
 {   
-    func(ifunc);    
+    setFunc(ifunc);    
 }
 
 TValFunc::~TValFunc( )
@@ -410,7 +414,7 @@ TValFunc::~TValFunc( )
     if( m_func ) funcDisConnect();
 }
 
-void TValFunc::func( TFunction *ifunc, bool att_det )
+void TValFunc::setFunc( TFunction *ifunc, bool att_det )
 {
     if( m_func ) funcDisConnect(att_det);
     if( ifunc ) 
@@ -583,10 +587,10 @@ void TValFunc::calc( )
 
 void TValFunc::preIOCfgChange()
 {    
-    func( NULL, false );
+    setFunc( NULL, false );
 }
 
 void TValFunc::postIOCfgChange()
 {
-    func( m_func, false );
+    setFunc( m_func, false );
 }

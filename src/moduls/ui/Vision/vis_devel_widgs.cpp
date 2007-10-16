@@ -33,6 +33,8 @@
 #include <QToolBar>
 #include <QPainter>
 #include <QStatusBar>
+#include <QSpinBox>
+#include <QDoubleSpinBox>
 
 #include <tsys.h>
 
@@ -528,12 +530,24 @@ QWidget *InspAttr::ItemDelegate::createEditor(QWidget *parent, const QStyleOptio
     int flag = index.data(Qt::UserRole).toInt();
 
     if( flag&ModInspAttr::Item::Select )	w_del = new QComboBox(parent);
-    else if( value.type()==QVariant::String && flag&ModInspAttr::Item::FullText )
+    else if( value.type() == QVariant::String && flag&ModInspAttr::Item::FullText )
     {
 	w_del = new QTextEdit(parent);
 	((QTextEdit*)w_del)->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	((QTextEdit*)w_del)->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	((QTextEdit*)w_del)->resize(50,50);
+    }
+    else if( value.type() == QVariant::Int )
+    {
+	w_del = new QSpinBox(parent);
+	((QSpinBox*)w_del)->setMinimum(-2147483647);
+	((QSpinBox*)w_del)->setMaximum(2147483647);
+    }
+    else if( value.type() == QVariant::Double )
+    {
+	w_del = new QDoubleSpinBox(parent);
+	((QDoubleSpinBox*)w_del)->setMinimum(-1e100);
+	((QDoubleSpinBox*)w_del)->setMaximum(1e100);
     }
     else
     {
@@ -686,6 +700,8 @@ string InspLnk::user( )
     
 void InspLnk::setWdg( const string &iwdg )
 {
+    string lnid, lngrp, lnwdg, lnatr;
+    
     if( it_wdg != TSYS::strSepParse(iwdg,0,';') )
     { 
 	clear();
@@ -704,15 +720,11 @@ void InspLnk::setWdg( const string &iwdg )
     //- Create widget's root items -
     for( int i_l = 0; i_l < rootel->childSize(); i_l++ )
     {
-	string lnid  = rootel->childGet(i_l)->attr("id");
-	string lngrp = rootel->childGet(i_l)->attr("elGrp");
-	string lnwdg = TSYS::strSepParse(lnid.substr(3),0,'.');
-	string lnatr = TSYS::strSepParse(lnid.substr(3),1,'.');
-	if( lnatr.empty() )
-	{
-	    lnatr = lnwdg;
-	    lnwdg = ".";
-	}
+	lnid  = rootel->childGet(i_l)->attr("id");
+	lngrp = rootel->childGet(i_l)->attr("elGrp");
+	lnwdg = TSYS::strSepParse(lnid.substr(3),0,'.');
+	lnatr = TSYS::strSepParse(lnid.substr(3),1,'.');
+	if( lnatr.empty() )	{ lnatr = lnwdg; lnwdg = "."; }
 	
 	//- Search widget item -
 	QTreeWidgetItem *wdg_it;
@@ -764,6 +776,42 @@ void InspLnk::setWdg( const string &iwdg )
 	if( !mainWin()->cntrIfCmd(req) )
 	    prm_it->setText(1,req.text().c_str());
     }
+
+    //- Check for deleted links -
+    for( int i_it = 0; i_it < topLevelItemCount(); i_it++ )
+	for( int i_g = 0, i_a = 0; i_g < topLevelItem(i_it)->childCount(); )
+	{
+	    QTreeWidgetItem *wdg_g  = topLevelItem(i_it)->child(i_g);
+	    QTreeWidgetItem *wdg_it = (wdg_g->childCount())?wdg_g->child(i_a):wdg_g;
+	
+	    int i_l;
+	    for( i_l = 0; i_l < rootel->childSize(); i_l++ )
+		if( rootel->childGet(i_l)->attr("id") == ("el_"+wdg_it->data(0,Qt::UserRole).toString()).toAscii().data() &&
+			((bool)rootel->childGet(i_l)->attr("elGrp").size()^(wdg_g==wdg_it)) )
+		    break;
+	    if( i_l >= rootel->childSize() ) 
+	    {
+		delete wdg_it;
+		if( wdg_g != wdg_it && !wdg_g->childCount() )
+		{
+	    	    delete wdg_g; i_a = 0;
+		    if( topLevelItem(i_it)->childCount() )	continue;
+		    delete topLevelItem(i_it); i_it--;
+		    break;
+		}
+		if( wdg_g == wdg_it && !topLevelItem(i_it)->childCount() )
+		{
+		    delete topLevelItem(i_it); i_it--;
+		    break;		
+		}
+	    }
+	    else
+	    {
+		if( wdg_g == wdg_it ) i_g++; 
+		else i_a++;
+	    }
+	    if( wdg_g != wdg_it && i_a >= wdg_g->childCount() )	{ i_a = 0; i_g++; }
+	}
     
     //- Set widget's path -
     if( topLevelItemCount() )	topLevelItem(0)->setData(0,Qt::UserRole,QString(it_wdg.c_str()));
@@ -775,7 +823,7 @@ void InspLnk::changeLnk( QTreeWidgetItem *index, int col )
 {
     if( col != 1 || show_init ) return;
     
-    string wdg_it  = topLevelItem(0)->data(0,Qt::UserRole).toString().toAscii().data();
+    string wdg_it  = it_wdg;// topLevelItem(0)->data(0,Qt::UserRole).toString().toAscii().data();
     string attr_id = index->data(0,Qt::UserRole).toString().toAscii().data();    
     
     XMLNode req("set");

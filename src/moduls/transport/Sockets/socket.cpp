@@ -1,13 +1,12 @@
 
 //OpenSCADA system module Transport.Sockets file: socket.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -40,7 +39,8 @@
 #include <tmodule.h>
 #include "socket.h"
 
-//============ Modul info! =====================================================
+//************************************************
+//* Modul info!                                  *
 #define MOD_ID	    "Sockets"
 #define MOD_NAME    "Sockets"
 #define MOD_TYPE    "Transport"
@@ -49,7 +49,7 @@
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow sockets based transport. Support inet and unix sockets. Inet socket use TCP and UDP protocols."
 #define LICENSE     "GPL"
-//==============================================================================
+//************************************************
 
 Sockets::TTransSock *Sockets::mod;
 
@@ -68,26 +68,22 @@ extern "C"
 	else
     	    AtMod.id	= "";
 
-    	return( AtMod );
+    	return AtMod;
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	Sockets::TTransSock *self_addr = NULL;
-
 	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = Sockets::mod = new Sockets::TTransSock( source );
-
-	return ( self_addr );
+	    return new Sockets::TTransSock( source );
+	return NULL;
     }
 }
 
 using namespace Sockets;
 
-//==============================================================================
-//== TTransSock ================================================================
-//==============================================================================
-    
+//************************************************
+//* TTransSock                                   *
+//************************************************
 TTransSock::TTransSock( string name ) 
 {
     mId		= MOD_ID;
@@ -98,6 +94,8 @@ TTransSock::TTransSock( string name )
     mDescr  	= DESCRIPTION;
     mLicense   	= LICENSE;
     mSource    	= name;
+
+    mod 	= this;
 }
 
 TTransSock::~TTransSock()
@@ -177,10 +175,9 @@ void TTransSock::cntrCmdProc( XMLNode *opt )
     else TTipTransport::cntrCmdProc(opt);
 }	        
 
-//==============================================================================
-//== TSocketIn =================================================================
-//==============================================================================
-
+//************************************************
+//* TSocketIn                                    *
+//************************************************
 TSocketIn::TSocketIn( string name, const string &idb, TElem *el ) : 
     TTransportIn(name,idb,el), cl_free(true), max_queue(cfg("SocketsMaxQueue").getId()), 
     max_fork(cfg("SocketsMaxClient").getId()), buf_len(cfg("SocketsBufLen").getId())
@@ -583,10 +580,9 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
     else TTransportIn::cntrCmdProc(opt);
 }
 	    
-//==============================================================================
-//== TSocketOut ================================================================
-//==============================================================================
-
+//************************************************
+//* TSocketOut                                   *
+//************************************************
 TSocketOut::TSocketOut(string name, const string &idb, TElem *el) : 
     TTransportOut(name,idb,el), sock_fd(-1)
 {

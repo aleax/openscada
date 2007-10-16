@@ -1,13 +1,12 @@
 
 //OpenSCADA system module Protocol.HTTP file: http.h
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -32,12 +31,12 @@
 
 using std::string;
 
-namespace pr_http
+namespace PrHTTP
 {
 
-//================================================================
-//=========== TProtIn ============================================
-//================================================================
+//*************************************************
+//* TProtIn                                       *
+//*************************************************
 class TProtIn: public TProtocolIn
 {
     public:
@@ -59,9 +58,9 @@ class TProtIn: public TProtocolIn
 	string m_buf;
 };
 
-//================================================================
-//=========== TProt ==============================================
-//================================================================
+//*************************************************
+//* TProt                                         *
+//*************************************************
 class TProt: public TProtocol
 {
     public:
@@ -76,6 +75,6 @@ class TProt: public TProtocol
 };
 
 extern TProt *mod;
-} //End namespace pr_http
+} //End namespace PrHTTP
 #endif //HTTP_H
 

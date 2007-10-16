@@ -1,13 +1,12 @@
 
 //OpenSCADA system module Archive.FSArch file: mess.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -30,9 +29,11 @@
 #include "mess.h"
 
 
-using namespace BaseArch;
+using namespace FSArch;
 
-//**** BaseArch::ModMArch ****
+//************************************************
+//* FSArch::ModMArch - Messages archivator       *
+//************************************************
 ModMArch::ModMArch( const string &iid, const string &idb, TElem *cf_el ) : 
     TMArchivator(iid,idb,cf_el), tm_calc(0.0), m_lst_check(0),
     m_use_xml(cfg("FSArchXML").getBd()), m_max_size(cfg("FSArchMSize").getId()), 
@@ -318,9 +319,9 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
     else TMArchivator::cntrCmdProc(opt);
 }
 
-//==============================================================================
-//================= BaseArch::MFileArch ========================================
-//==============================================================================
+//*************************************************
+//* FSArch::MFileArch - Messages archivator file  *
+//*************************************************
 MFileArch::MFileArch( ModMArch *owner ) : 
     m_xml(true), m_owner(owner), scan(false), m_err(false), m_write(false), m_load(false), m_pack(false),
     m_size(0), m_chars("UTF-8"), m_beg(0), m_end(0), m_node(NULL) 
@@ -348,7 +349,7 @@ MFileArch::MFileArch( const string &iname, time_t ibeg, ModMArch *iowner, const 
 	m_node->setAttr("Version",mod->modInfo("Version"));
 	m_node->setAttr("Begin",TSYS::int2str(m_beg,TSYS::Hex));
 	m_node->setAttr("End",TSYS::int2str(m_end,TSYS::Hex));
-	string x_cf = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" + m_node->save(XML_BR_OPEN_PREV);
+	string x_cf = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" + m_node->save(XMLNode::BrOpenPrev);
 	write(hd,x_cf.c_str(),x_cf.size());
     }
     else
@@ -749,7 +750,7 @@ void MFileArch::check( bool free )
 	    int hd = open( m_name.c_str(),O_RDWR|O_TRUNC );
 	    if(hd > 0 ) 
 	    {		
-		string x_cf = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" + m_node->save(XML_BR_OPEN_PREV);
+		string x_cf = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" + m_node->save(XMLNode::BrOpenPrev);
 		m_size = x_cf.size();
 		write(hd,x_cf.c_str(),m_size);
 		close(hd);

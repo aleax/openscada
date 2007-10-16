@@ -382,7 +382,7 @@ Contr::Contr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     m_iter(cfg("ITER").getId()), m_fnc(cfg("FUNC").getSd())
 {
     cfg("PRM_BD").setS("JavaLikePrm_"+name_c);
-    dimens(true);
+    setDimens(true);
 
     //Create sync DB timer
     struct sigevent sigev;
@@ -424,7 +424,7 @@ void Contr::enable_( )
 	mess_info(nodePath().c_str(),_("Create new function <%s>."),m_fnc.c_str());
 	mod->lbAt(TSYS::strSepParse(m_fnc,0,'.')).at().add(TSYS::strSepParse(m_fnc,1,'.').c_str());
     }
-    func( &mod->lbAt(TSYS::strSepParse(m_fnc,0,'.')).at().at(TSYS::strSepParse(m_fnc,1,'.')).at() );
+    setFunc( &mod->lbAt(TSYS::strSepParse(m_fnc,0,'.')).at().at(TSYS::strSepParse(m_fnc,1,'.')).at() );
     try{ loadFunc( ); }
     catch(TError err)
     { 
@@ -435,7 +435,7 @@ void Contr::enable_( )
 
 void Contr::disable_( )
 {
-    func(NULL);
+    setFunc(NULL);
 }
 
 void Contr::load( )

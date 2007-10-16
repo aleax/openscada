@@ -1,13 +1,12 @@
 
 //OpenSCADA system file: tarchval.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2006-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -36,11 +35,13 @@
 #include "tarchval.h"
 
 
-//================================================================
-//===================== Value archivator =========================
-//================================================================
+//*************************************************
+//* Value archivator                              *
+//*************************************************
 
-//========================= TValBuf ==============================
+//*************************************************
+//* TValBuf                                       *
+//*************************************************
 TValBuf::TValBuf( ) : 
     m_val_tp(TFld::Integer), m_size(100), m_per(0), m_hrd_grd(false), m_hg_res_tm(false), m_end(0), m_beg(0)
 {   
@@ -327,7 +328,9 @@ void TValBuf::setVal( TValBuf &buf, long long ibeg, long long iend )
     buf.getVal( *this, ibeg, iend );
 }
 
-//======================= TValBuf::TBuf =============================
+//*************************************************
+//* TValBuf::TBuf                                 *
+//*************************************************
 template <class TpVal> TValBuf::TBuf<TpVal>::TBuf( TpVal ieval, int &isz, long long &ipr, bool &ihgrd, bool &ihres, long long& iend, long long& ibeg ) :
     eval(ieval), size(isz), per(ipr), hrd_grd(ihgrd), hg_res_tm(ihres), end(iend), beg(ibeg), cur(0)
 {
@@ -384,7 +387,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::makeBuf( int isz, long long ip
     
     if(recr_buf)
     {
-    	//Destroy buffer
+    	//- Destroy buffer -
     	cur = end = beg = 0;
 	if( buf.grid )
 	{
@@ -394,7 +397,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::makeBuf( int isz, long long ip
     	}
     	buf.grid = NULL;
 
-	//Make new buffer
+	//- Make new buffer -
 	if( ihd_grd )	buf.grid = new vector<TpVal>;
 	else if(ihg_res)buf.tm_high = new vector<SHg>;
 	else		buf.tm_low = new vector<SLw>;
@@ -409,7 +412,7 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( long long *itm, bool up_
 	throw TError("ValBuf",_("Value no present."));
     if( hrd_grd )
     {
-	//*** Process hard grid buffer ***
+	//- Process hard grid buffer -
 	int npos = up_ord?(end-tm)/per:(long long)buf.grid->size()-1-(tm-beg)/per;
 	if( npos < 0 || npos >= buf.grid->size() ) return eval;
 	if(itm)	*itm = end-npos*per;
@@ -417,7 +420,7 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( long long *itm, bool up_
     }
     else if( per )
     {
-	//*** Process soft grid buffer ***
+	//- Process soft grid buffer -
 	int npos = (up_ord?(end-tm):(tm-beg))/per;
 	if( hg_res_tm )
 	{
@@ -466,16 +469,16 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( long long *itm, bool up_
     }
     else
     {
-	//*** Proccess flow buffer ***
+	//- Proccess flow buffer -
 	if( hg_res_tm )
 	{
 	    int c_end = buf.tm_high->size()-1;	    
-	    //- Half divider -
+	    //-- Half divider --
 	    for( int d_win = c_end/2; d_win > 10; d_win/=2 )
 		if( !((!up_ord && tm >= (*buf.tm_high)[c_end-d_win].tm) ||
 			(up_ord && tm <= (*buf.tm_high)[buf.tm_high->size()-(c_end-d_win)-1].tm)) )
 		    c_end-=d_win;
-	    //- Scan last window -
+	    //-- Scan last window --
 	    while(c_end >= 0)
 	    {
 		if( !up_ord && tm >= (*buf.tm_high)[c_end].tm )
@@ -495,12 +498,12 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( long long *itm, bool up_
 	else
 	{
 	    int c_end = buf.tm_low->size()-1;
-	    //- Half divider -
+	    //-- Half divider --
 	    for( int d_win = c_end/2; d_win>10; d_win/=2 )
 		if( !((!up_ord && tm/1000000 >= (*buf.tm_low)[c_end-d_win].tm) ||
 			(up_ord && tm <= (long long)(*buf.tm_low)[buf.tm_low->size()-(c_end-d_win)-1].tm*1000000)) )
 		    c_end-=d_win;
-	    //- Scan last window -
+	    //-- Scan last window --
 	    while(c_end >= 0)
 	    {
 		if( !up_ord && tm/1000000 >= (*buf.tm_low)[c_end].tm )
@@ -528,9 +531,9 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
 
     if( hrd_grd )
     {
-	//*** Process hard grid buffer ***
+	//- Process hard grid buffer -
 	int npos = (tm-end)/per;
-	//Set value
+	//-- Set value --
 	if( !npos )	
 	{
 	    (*buf.grid)[(cur)?cur-1:buf.grid->size()-1] = value;	//Update last value
@@ -541,24 +544,24 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
 	    while(npos--)
 	    {
 		TpVal w_val = (npos)?eval:value;
-		//Set new value
+		//--- Set new value ---
 		if(cur >= buf.grid->size())	buf.grid->push_back(w_val);
 		else
 		{ 
 		    beg+=per;
 		    (*buf.grid)[cur]=w_val;
 		}
-		//Update cursor
+		//--- Update cursor ---
 		if( ++cur >= size ) cur = 0;
-		//Update end time
+		//--- Update end time ---
 		end+=per;			
 	    }
     }
     else if( per )
     {
-	//*** Process soft grid buffer ***
+	//- Process soft grid buffer -
 	int npos = (tm-end)/per;
-	//Set value	
+	//-- Set value --
 	if( npos < 0 )	throw TError("ValBuf",_("Grid mode no support inserting old values."));
 	else
 	{
@@ -566,7 +569,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
             {
 		SHg b_el;
 		
-    		//Update current end value
+    		//--- Update current end value ---
 		if( npos == 0)
 		{
 		    b_el.tm = end;
@@ -574,7 +577,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
 		    int h_el = (cur)?cur-1:buf.tm_high->size()-1;
 		    if( ((*buf.tm_high)[h_el].tm-end)/per )
 		    {
-			//Write new value
+			//---- Write new value ----
 			if(cur >= buf.tm_high->size()) buf.tm_high->push_back(b_el);
 			else
 			{
@@ -584,26 +587,26 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
 			    beg = per*(beg/per);
                             (*buf.tm_high)[cur]=b_el;
 			}
-			//Update cursor
+			//---- Update cursor ----
 			if( ++cur >= size ) cur = 0;			
 		    }
 		    else (*buf.tm_high)[h_el]=b_el;
 		    return;
 		}
 		
-    		//Insert new value
+    		//--- Insert new value ----
     		int c_npos = npos;
 		while(c_npos--)
 		{
-		    //Prepare data
+		    //---- Prepare data ----
 		    if(c_npos) 	{ b_el.tm = end+(npos-c_npos)*per;  b_el.val = eval; }
 		    else	{ b_el.tm = tm; b_el.val = value; }
-		    //Check previous value
+		    //---- Check previous value ----
 		    if( !buf.tm_high->size() || 
 			    (cur && (*buf.tm_high)[cur-1].val != b_el.val ) ||
 			    (!cur && (*buf.tm_high)[buf.tm_high->size()-1].val != b_el.val) )
 		    {
-			//Write new value
+			//---- Write new value ----
 			if(cur >= buf.tm_high->size())	buf.tm_high->push_back(b_el);
 			else
 			{
@@ -613,10 +616,10 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
 			    beg = per*(beg/per);
 			    (*buf.tm_high)[cur]=b_el;
 			}
-			//Update cursor
+			//---- Update cursor ----
 			if( ++cur >= size ) cur = 0;
 		    }
-		    //Update end time
+		    //---- Update end time ----
 		    end+=per;
 		}
 	    }
@@ -624,7 +627,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
 	    {
 		SLw b_el;
 
-    		//Update current end value
+    		//--- Update current end value ---
 		if( npos == 0)
 		{
 		    b_el.tm = end/1000000;
@@ -632,7 +635,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
 		    int h_el = (cur)?cur-1:buf.tm_low->size()-1;
 		    if( ((long long)(*buf.tm_low)[h_el].tm*1000000-end)/per )
 		    {
-			//Write new value
+			//---- Write new value ----
 			if(cur >= buf.tm_low->size()) buf.tm_low->push_back(b_el);
 			else
 			{
@@ -642,26 +645,26 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
 			    beg = per*(beg/per);
                             (*buf.tm_low)[cur]=b_el;
 			}
-			//Update cursor
+			//---- Update cursor ----
 			if( ++cur >= size ) cur = 0;			
 		    }
 		    else (*buf.tm_low)[h_el]=b_el;
 		    return;
 		}
 		
-    		//Insert new value		
+    		//--- Insert new value ---
     		int c_npos = npos;
 		while(c_npos--)
 		{		
-		    //Prepare data
+		    //---- Prepare data ----
 		    if(c_npos) 	{ b_el.tm = (end+(npos-c_npos)*per)/1000000; b_el.val = eval; }
 		    else	{ b_el.tm = tm/1000000; b_el.val = value; }
-		    //Check previous value
+		    //---- Check previous value ----
 		    if( !buf.tm_low->size() || 
 			    (cur && (*buf.tm_low)[cur-1].val != b_el.val ) ||
 			    (!cur && (*buf.tm_low)[buf.tm_low->size()-1].val != b_el.val) )
 		    {
-			//Write new value
+			//---- Write new value ----
 			if(cur >= buf.tm_low->size())	buf.tm_low->push_back(b_el);
 			else
 			{
@@ -671,10 +674,10 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
 			    beg = per*(beg/per);
 			    (*buf.tm_low)[cur]=b_el;
 			}
-			//Update cursor
+			//---- Update cursor ----
 			if( ++cur >= size ) cur = 0;
 		    }
-		    //Update end time
+		    //---- Update end time ----
 		    end+=per;
 		}
 	    }
@@ -682,7 +685,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
     }
     else
     {
-	//*** Proccess flow buffer ***
+	//- Proccess flow buffer -
 	if( hg_res_tm )
 	{
 	    SHg b_el = { tm, value };
@@ -690,7 +693,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
 		throw TError("ValBuf",_("Set too old value to buffer."));
 	    int c_pos = 0;
 	    
-	    //- Half divider -
+	    //-- Half divider --
 	    int d_win = buf.tm_high->size()/2;
 	    while(d_win>10)
 	    {
@@ -698,7 +701,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
 		    c_pos+=d_win;
 		d_win/=2;
 	    }
-	    //- Scan last window -
+	    //-- Scan last window --
 	    while( true )
 	    {
 		if( c_pos >= buf.tm_high->size() || tm < (*buf.tm_high)[c_pos].tm )
@@ -724,7 +727,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
 	    if( tm < beg && size && buf.tm_low->size() >= size )
 		throw TError("ValBuf",_("Set too old value to buffer."));
 	    int c_pos = 0;
-	    //- Half divider -
+	    //-- Half divider --
 	    int d_win = buf.tm_low->size()/2;
 	    while(d_win>10)
 	    {
@@ -732,7 +735,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
 		    c_pos+=d_win;
 		d_win/=2;
 	    }
-	    //- Scan last window -
+	    //-- Scan last window --
 	    while( true )
 	    {
 		if( c_pos >= buf.tm_low->size() || tm/1000000 < (*buf.tm_low)[c_pos].tm )
@@ -756,7 +759,9 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
 }
 
 
-//========================= TVArchive ============================
+//*************************************************
+//*  TVArchive                                    *
+//*************************************************
 TVArchive::TVArchive( const string &iid, const string &idb, TElem *cf_el ) : 
     TConfig(cf_el), run_st(false), m_db(idb),
     m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()), m_dscr(cfg("DESCR").getSd()), m_start(cfg("START").getBd()),
@@ -764,7 +769,7 @@ TVArchive::TVArchive( const string &iid, const string &idb, TElem *cf_el ) :
     m_bhgrd(cfg("BHGRD").getBd()), m_bhres(cfg("BHRES").getBd()), m_srcmode(cfg("SrcMode").getId()), 
     m_dsourc(cfg("Source").getSd()), m_archs(cfg("ArchS").getSd())
 {
-    //First init
+    //- First init -
     m_id = iid;
     m_vtype = TFld::Real;
     
@@ -889,7 +894,7 @@ void TVArchive::load( )
 
 void TVArchive::save( )
 {
-    //Update Archivators list
+    //- Update Archivators list -
     if( startStat() )
     {
 	vector<string> arch_ls;
@@ -910,7 +915,7 @@ void TVArchive::start( )
     
     setSrcMode((TVArchive::SrcMode)m_srcmode,m_dsourc);
     
-    //Attach to archivators
+    //- Attach to archivators -
     string arch;
     for( int i_off = 0; (arch = TSYS::strSepParse(m_archs,0,';',&i_off)).size();  )
 	if(!archivatorPresent(arch)) archivatorAttach(arch);
@@ -924,7 +929,7 @@ void TVArchive::stop( bool full_del )
     
     setSrcMode((TVArchive::SrcMode)m_srcmode,m_dsourc);
     
-    //Detach all archivators
+    //- Detach all archivators -
     vector<string> arch_ls;
     archivatorList(arch_ls);
     for( int i_l = 0; i_l < arch_ls.size(); i_l++ )
@@ -933,7 +938,7 @@ void TVArchive::stop( bool full_del )
 
 void TVArchive::setSrcMode( SrcMode vl, const string &isrc )
 {
-    //Disable all links
+    //- Disable all links -
     if( (!run_st || vl != ActiveAttr || isrc != m_dsourc) && !pattr_src.freeStat() )
     {
 	owner().setActValArch( id(), false );
@@ -948,7 +953,7 @@ void TVArchive::setSrcMode( SrcMode vl, const string &isrc )
     	    dynamic_cast<TVal&>(SYS->nodeAt(m_dsourc,0,'.').at()).arch(AutoHD<TVArchive>());
     }catch(...){  }
 	
-    //Set all links
+    //- Set all links -
     if( run_st && vl == ActiveAttr && dynamic_cast<TVal *>(&SYS->nodeAt(isrc,0,'.').at()) )
     {
 	dynamic_cast<TVal&>(SYS->nodeAt(isrc,0,'.').at()).arch(AutoHD<TVArchive>(this));
@@ -965,10 +970,10 @@ void TVArchive::setSrcMode( SrcMode vl, const string &isrc )
 
 string TVArchive::getS( long long *tm, bool up_ord, const string &arch )
 {    
-    //Get from buffer
+    //- Get from buffer -
     if( (arch.empty() || arch == BUF_ARCH_NM) && (!tm || (*tm >= begin() && *tm <= end())) )
 	return TValBuf::getS(tm,up_ord);
-    //Get from archivators
+    //- Get from archivators -
     else 
     {
 	ResAlloc res(a_res,false);
@@ -982,10 +987,10 @@ string TVArchive::getS( long long *tm, bool up_ord, const string &arch )
 
 double TVArchive::getR( long long *tm, bool up_ord, const string &arch )
 {
-    //Get from buffer
+    //- Get from buffer -
     if( (arch.empty() || arch == BUF_ARCH_NM) && (!tm || (*tm >= begin() && *tm <= end())) )
         return TValBuf::getR(tm,up_ord);
-    //Get from archivators	
+    //- Get from archivators -
     else 
     {
 	ResAlloc res(a_res,false);
@@ -999,10 +1004,10 @@ double TVArchive::getR( long long *tm, bool up_ord, const string &arch )
 
 int TVArchive::getI( long long *tm, bool up_ord, const string &arch )
 {
-    //Get from buffer
+    //- Get from buffer -
     if( (arch.empty() || arch == BUF_ARCH_NM) && (!tm || (*tm >= begin() && *tm <= end())) )
 	return TValBuf::getI(tm,up_ord);
-    //Get from archivators
+    //- Get from archivators -
     else 
     {
 	ResAlloc res(a_res,false);
@@ -1016,10 +1021,10 @@ int TVArchive::getI( long long *tm, bool up_ord, const string &arch )
 
 char TVArchive::getB( long long *tm, bool up_ord, const string &arch )
 {
-    //Get from buffer
+    //- Get from buffer -
     if( (arch.empty() || arch == BUF_ARCH_NM) && (!tm || (*tm >= begin() && *tm <= end())) )
         return TValBuf::getB(tm,up_ord);	
-    //Get from archivators
+    //- Get from archivators -
     else 
     {
 	ResAlloc res(a_res,false);
@@ -1033,14 +1038,14 @@ char TVArchive::getB( long long *tm, bool up_ord, const string &arch )
 
 void TVArchive::getVal( TValBuf &buf, long long ibeg, long long iend, const string &arch, int limit )
 {
-    //Get from buffer
+    //- Get from buffer -
     if( (arch.empty() || arch == BUF_ARCH_NM) && vOK(ibeg,iend) )
     {
 	ibeg = vmax(ibeg,iend-TValBuf::period()*limit);
 	TValBuf::getVal(buf,ibeg,iend);
 	iend = buf.begin()-1;
     }
-    //Get from archivators
+    //- Get from archivators -
     ResAlloc res(a_res,false);
     for( int i_a = 0; i_a < arch_el.size(); i_a++ )
     	if( (arch.empty() || arch == arch_el[i_a]->archivator().workId()) &&
@@ -1054,7 +1059,7 @@ void TVArchive::getVal( TValBuf &buf, long long ibeg, long long iend, const stri
 
 void TVArchive::setVal( TValBuf &buf, long long ibeg, long long iend, const string &arch )
 {
-    //Put to archivators
+    //- Put to archivators -
     ResAlloc res(a_res,false);
     for( int i_a = 0; i_a < arch_el.size(); i_a++ )
     	if( (arch.empty() || arch == arch_el[i_a]->archivator().workId()) )
@@ -1108,11 +1113,11 @@ void TVArchive::archivatorAttach( const string &arch )
     if(!archivat.at().startStat())
 	throw TError(nodePath().c_str(),"Archivator <%s> error or no started.",arch.c_str());	
 
-    //Find already present archivator
+    //- Find already present archivator -
     for( int i_l = 0; i_l < arch_el.size(); i_l++ )
         if( &arch_el[i_l]->archivator() == &archivat.at() )
 	    return;
-    //Find position
+    //- Find position -
     for( int i_l = 0; i_l < arch_el.size(); i_l++ )
         if( archivat.at().valPeriod() <= arch_el[i_l]->archivator().valPeriod() )
 	{
@@ -1128,7 +1133,7 @@ void TVArchive::archivatorDetach( const string &arch, bool full )
 
     AutoHD<TVArchivator> archivat = owner().at(TSYS::strSepParse(arch,0,'.')).at().
 					    valAt(TSYS::strSepParse(arch,1,'.'));
-    //Find archivator
+    //- Find archivator -
     for( int i_l = 0; i_l < arch_el.size(); i_l++ )
         if( &arch_el[i_l]->archivator() == &archivat.at() )
 	{
@@ -2113,7 +2118,7 @@ void TVArchivator::setArchPeriod( int iper )
 void TVArchivator::cntrCmdProc( XMLNode *opt )
 {
     string grp = owner().owner().subId();
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Value archivator: ")+name());
@@ -2147,7 +2152,8 @@ void TVArchivator::cntrCmdProc( XMLNode *opt )
 	    }
         return;
     }
-    //Process command to page
+    
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/prm/st/st" )
     {
@@ -2193,7 +2199,7 @@ void TVArchivator::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/arch/arch" && ctrChkNode(opt) )
     {
-        //Fill Archives table
+        //-- Fill Archives table --
         XMLNode *n_arch = ctrMkNode("list",opt,-1,"/arch/arch/0","");
         XMLNode *n_per  = ctrMkNode("list",opt,-1,"/arch/arch/1","");
 	XMLNode *n_size = ctrMkNode("list",opt,-1,"/arch/arch/2","");
@@ -2209,8 +2215,10 @@ void TVArchivator::cntrCmdProc( XMLNode *opt )
     else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_RD) )       load();
     else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_RD) )       save();
 }
-	    
-//========================= TVArchEl =============================
+
+//*************************************************
+//* TVArchEl                                      *
+//*************************************************
 TVArchEl::TVArchEl( TVArchive &iarchive, TVArchivator &iarchivator ) :
     m_achive(iarchive), m_archivator(iarchivator), m_last_get(0), prev_tm(0)
 {

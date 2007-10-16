@@ -388,7 +388,7 @@ TMdPrm::~TMdPrm( )
 void TMdPrm::postEnable( int flag )
 {
     TParamContr::postEnable(flag);
-    if(vlCfg())  vlCfg(NULL);
+    if(vlCfg())  setVlCfg(NULL);
     if(!vlElemPresent(&p_el))   vlElemAtt(&p_el);
 }
 
@@ -554,7 +554,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     	return;
     }
     //- Process command to page -
-    if( a_path == "/prm/st/type" && ctrChkNode(opt) )   opt->setText(type().lName());
+    if( a_path == "/prm/st/type" && ctrChkNode(opt) )   opt->setText(type().descr);
     else if( a_path == "/prm/st/en" )
     {
         if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )   opt->setText(enableStat()?"1":"0");

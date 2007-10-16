@@ -1,13 +1,12 @@
 
 //OpenSCADA system file: tarchives.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -666,7 +665,7 @@ void TArchiveS::setActValArch( const string &id, bool val )
         act_up_src.erase(act_up_src.begin()+i_arch);
 }					    
 
-void TArchiveS::messPeriod( int ivl )
+void TArchiveS::setMessPeriod( int ivl )
 {
     m_mess_per = ivl;
     struct itimerspec itval;
@@ -839,7 +838,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
     else if( a_path == "/m_arch/per" )
     {	
 	if( ctrChkNode(opt,"get",0664,"root",my_gr.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str(m_mess_per));
-	if( ctrChkNode(opt,"set",0664,"root",my_gr.c_str(),SEQ_WR) )	messPeriod(atoi(opt->text().c_str()));
+	if( ctrChkNode(opt,"set",0664,"root",my_gr.c_str(),SEQ_WR) )	setMessPeriod(atoi(opt->text().c_str()));
     }	
     else if( a_path == "/m_arch/size" )
     {
@@ -1026,6 +1025,11 @@ void TMArchivator::postEnable( int flag )
     cfg("MODUL").setS(owner().modId());
 }
 
+void TMArchivator::preDisable( int flag )
+{
+    if( startStat() )	stop( );
+}
+
 void TMArchivator::postDisable(int flag)
 {
     try
@@ -1095,6 +1099,8 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 	    {
 		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Runing"),0664,"root",grp.c_str(),1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Archivator DB (module.db)"),0660,"root","root",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/st/beg",_("Begin"),0444,"root","root",1,"tp","time");
+		ctrMkNode("fld",opt,-1,"/prm/st/end",_("End"),0444,"root","root",1,"tp","time");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Config")))
 	    {
@@ -1135,6 +1141,8 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->setText(m_db);
 	if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	m_db = opt->text();
     }
+    else if( a_path == "/prm/st/beg" && ctrChkNode(opt) )	opt->setText(TSYS::int2str(begin()));
+    else if( a_path == "/prm/st/end" && ctrChkNode(opt) )	opt->setText(TSYS::int2str(end()));
     else if( a_path == "/prm/cfg/id" && ctrChkNode(opt) )	opt->setText(id());
     else if( a_path == "/prm/cfg/nm" )
     {

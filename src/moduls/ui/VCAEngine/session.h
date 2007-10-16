@@ -163,7 +163,7 @@ class SessWdg : public Widget, public TValFunc
     
     private:
 	//Attributes
-	bool	m_proc;
+	bool	m_proc, inLnkGet;
 	string	work_prog;
 	unsigned int m_mdfClc;
 	

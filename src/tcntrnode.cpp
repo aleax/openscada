@@ -1,13 +1,12 @@
 
 //OpenSCADA system file: tcntrnode.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -33,6 +32,12 @@
 #include "tmess.h"
 #include "tcntrnode.h"
 
+//*************************************************
+//* TCntrNode                                     *
+//*************************************************
+
+//*************************************************
+//* Controll scenaries language section           *
 TCntrNode::TCntrNode( TCntrNode *iprev ) : m_mod(Disable), m_use(0), m_oi(USHRT_MAX)
 {
     prev.node = iprev;
@@ -97,11 +102,11 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 		    chldAt(i_g,s_br.substr(chGrp[i_g].id.size())).at().cntrCmd(opt,0,path,off);
 		    return;
 		}
-	    //Go to default thread
+	    //- Go to default thread -
 	    if( !chGrp.empty() ) chldAt(0,s_br).at().cntrCmd(opt,0,path,off);
 	    return;
 	}
-	//Post command to node
+	//- Post command to node -
 	opt->setAttr("path",s_br);
 	cntrCmdProc(opt);
 	if( opt->attr("rez") != "0" )
@@ -118,9 +123,8 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
     opt->setAttr("path",path);
 }
 
-//***********************************************************
-//*********** Resource section ******************************
-//***********************************************************
+//*************************************************
+//* Resource section                              *
 void TCntrNode::nodeEn( int flag )
 { 
     if( m_mod == Enable )	throw TError(nodePath().c_str(),"Node already enabled!");
@@ -164,7 +168,7 @@ void TCntrNode::nodeDis(long tm, int flag)
     		if( p->second->nodeMode() == Enable )
 		    p->second->nodeDis(tm,flag);
 	
-	//Wait of free node	
+	//- Wait of free node -
 	time_t t_cur = time(NULL);
 	while(1)
 	{
@@ -288,7 +292,7 @@ bool TCntrNode::chldPresent( unsigned igr, const string &name )
 void TCntrNode::chldAdd( unsigned igr, TCntrNode *node, int pos )
 {
     ResAlloc res(hd_res,false);
-    if( igr >= chGrp.size() )	throw TError(nodePath().c_str(),"Group of childs <%d> error!",igr);
+    if( igr >= chGrp.size() )	throw TError(nodePath().c_str(),"Group of childs %d error!",igr);
     if( nodeMode() != Enable ) 	throw TError(nodePath().c_str(),"Node is not enabled!");
     
     TMap::iterator p;
@@ -319,7 +323,7 @@ void TCntrNode::chldDel( unsigned igr, const string &name, long tm, int flag )
 {
     if( tm < 0 )	tm = DEF_TIMEOUT;
     ResAlloc res(hd_res,false);
-    if( igr >= chGrp.size() )	throw TError(nodePath().c_str(),"Group of childs <%d> error!",igr);
+    if( igr >= chGrp.size() )	throw TError(nodePath().c_str(),"Group of childs %d error!",igr);
     if( nodeMode() != Enable )	throw TError(nodePath().c_str(),"Node is not enabled!");    
     
     TMap::iterator p=chGrp[igr].elem.find(name);
@@ -386,7 +390,7 @@ TCntrNode *TCntrNode::nodePrev( bool noex )
 AutoHD<TCntrNode> TCntrNode::chldAt( unsigned igr, const string &name, const string &user )
 {
     ResAlloc res(hd_res,false);
-    if( igr >= chGrp.size() ) 	throw TError(nodePath().c_str(),"Group of childs <%d> error!",igr);
+    if( igr >= chGrp.size() ) 	throw TError(nodePath().c_str(),"Group of childs %d error!",igr);
     if( nodeMode() == Disable )	throw TError(nodePath().c_str(),"Node is disabled!");
 
     TMap::iterator p=chGrp[igr].elem.find(name);

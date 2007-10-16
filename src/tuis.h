@@ -1,13 +1,12 @@
 
 //OpenSCADA system file: tuis.h
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -31,10 +30,10 @@
 #include "tsubsys.h"
 
 using std::string;
-//================================================================
-//================== TUI =========================================
-//================================================================
 
+//*************************************************
+//* TUI                                           *
+//*************************************************
 class TUI : public TModule
 {
     public:
@@ -48,16 +47,15 @@ class TUI : public TModule
 	bool  run_st; 
 };
 
-//================================================================
-//================== TUIS ========================================
-//================================================================
-
+//*************************************************
+//* TUIS                                          *
+//*************************************************
 class TUIS : public TSubSYS
 {
     public:
 	TUIS( );
 
-	int subVer( ) { return(VER_UI); }
+	int subVer( ) 		{ return VER_UI; }
 	void subLoad( );
         void subStart( );
         void subStop( );
@@ -65,13 +63,12 @@ class TUIS : public TSubSYS
 	AutoHD<TUI> at( const string &name )	{ return modAt(name); }
 	
 	//- All system UI functions -
-	static bool icoPresent(const string &inm, string *tp = NULL);
-	static string icoGet(const string &inm, string *tp = NULL);
-	static string icoPath(const string &ico);
-
-	string optDescr( );
+	static bool icoPresent( const string &inm, string *tp = NULL );
+	static string icoGet( const string &inm, string *tp = NULL );
+	static string icoPath( const string &ico );
 
     private:
+	string optDescr( );    
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 };
 

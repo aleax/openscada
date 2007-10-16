@@ -1,13 +1,12 @@
 
 //OpenSCADA system file: telem.h
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -29,9 +28,11 @@
 using std::string;
 using std::vector;
 
+//*************************************************
+//* TFld                                          *
+//*************************************************
 class XMLNode;
 
-//Internal structures
 class TFld
 {
     public:    
@@ -57,24 +58,24 @@ class TFld
 	//Methods
 	TFld( );
 	TFld( TFld &ifld );
-	TFld( const char *name, const char *descr, Type itype, unsigned iflg,
+	TFld( const char *name, const char *descr, Type type, unsigned flg,
 	    const char *valLen = "", const char *valDef = "", 
 	    const char *vals = "", const char *nSel = "", int res = 0 );
 	~TFld( );
 	
-	TFld &operator=( TFld &fld );	
+	TFld &operator=( TFld &fld );
 
 	//- Base -
-	const string &name() 	{ return m_name; }	//Name
-	const string &descr() 	{ return m_descr; }	//Description
-	int len()     		{ return m_len; }	//Length
-	int dec()      		{ return m_dec; }	//Float dec
-	Type type()		{ return m_type; }	//Value type
-	unsigned flg()		{ return m_flg; }	//Flags
-	const string &def()  	{ return m_def; }	//Default value
-	string values();				//Values range or values list
-	string selNames();				//Select names list
-	int reserve()		{ return m_res; }	//Reserve field
+	const string &name( ) 	{ return m_name; }	//Name
+	const string &descr( ) 	{ return m_descr; }	//Description
+	int len( )     		{ return m_len; }	//Length
+	int dec( )     		{ return m_dec; }	//Float dec
+	Type type( )		{ return m_type; }	//Value type
+	unsigned flg( )		{ return m_flg; }	//Flags
+	const string &def( )  	{ return m_def; }	//Default value
+	string values( );				//Values range or values list
+	string selNames( );				//Select names list
+	int reserve( )		{ return m_res; }	//Reserve field
 	
 	void setDescr( const string &idscr )	{ m_descr = idscr; }
 	void setLen( int ivl )			{ m_len = ivl; }
@@ -128,7 +129,10 @@ class TFld
 	vector<string>     *m_sel;  
 }; 
 
-class TTable;
+
+//*************************************************
+//* TElem                                         *
+//*************************************************
 class TValElem;
 
 class TElem
@@ -138,10 +142,10 @@ class TElem
 	TElem( const string &name = "" );
 	~TElem();
 	
-	string &elName( )	{ return m_name; }
+	string &elName( )			{ return m_name; }
 	
 	void fldList( vector<string> &list );
-	unsigned fldSize()	{ return elem.size(); }
+	unsigned fldSize()			{ return elem.size(); }
 	unsigned fldId( const string &name );	
 	bool fldPresent( const string &name );
 	int fldAdd( TFld *fld, int id = -1 );
@@ -158,17 +162,16 @@ class TElem
 	vector<TValElem*>	cont;        //Conteiners
 };
 
-//**********************************************************************
-//************** TValElem - container of elements **********************
-//**********************************************************************
-
+//*************************************************
+//* TValElem - container of elements              *
+//*************************************************
 class TValElem
 {
     friend class TElem;
     
     public:	
 	//Methods
-	TValElem()	{ };
+	TValElem( )	{ };
 	
     protected:
 	//Methods
@@ -178,4 +181,4 @@ class TValElem
 };
 
 
-#endif // TCONFIGELEM_H
+#endif // TELEM_H

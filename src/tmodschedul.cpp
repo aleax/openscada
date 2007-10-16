@@ -1,13 +1,12 @@
 
 //OpenSCADA system file: tmodschedul.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -34,10 +33,13 @@
 #include "tsys.h"
 #include "tmodschedul.h"
 
+//*************************************************
+//* TModSchedul                                   *
+//*************************************************
 TModSchedul::TModSchedul( ) : 
     TSubSYS("ModSched","Modules sheduler",false), prc_st(false), m_mod_path("./"), m_per(10)
 {
-    //Create calc timer
+    //- Create calc timer -
     struct sigevent sigev;
     sigev.sigev_notify = SIGEV_THREAD;
     sigev.sigev_value.sival_ptr = this;
@@ -53,14 +55,15 @@ TModSchedul::~TModSchedul(  )
 
 void TModSchedul::preDisable(int flag)
 {
-    //Detach all share libs
+    //- Detach all share libs -
     ResAlloc res(hd_res,true);
     for( unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++ )
         if( SchHD[i_sh]->hd )
         {
             while( SchHD[i_sh]->use.size() )
             {
-                owner().at(SchHD[i_sh]->use[0].mod_sub).at().modDel( SchHD[i_sh]->use[0].n_mod );
+                owner().at(TSYS::strSepParse(SchHD[i_sh]->use[0],0,'.')).at().
+			modDel(TSYS::strSepParse(SchHD[i_sh]->use[0],1,'.'));
                 SchHD[i_sh]->use.erase(SchHD[i_sh]->use.begin());
     	    }
             dlclose(SchHD[i_sh]->hd);
@@ -91,7 +94,7 @@ void TModSchedul::subStart(  )
     mess_debug(nodePath().c_str(),_("Start subsystem."));
 #endif
 
-    //Start interval timer for periodic thread creating
+    //- Start interval timer for periodic thread creating -
     struct itimerspec itval;
     itval.it_interval.tv_sec = itval.it_value.tv_sec = m_per;
     itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
@@ -104,7 +107,7 @@ void TModSchedul::subStop(  )
     mess_debug(nodePath().c_str(),_("Stop subsystem."));
 #endif
 
-    //Stop interval timer for periodic thread creating
+    //- Stop interval timer for periodic thread creating -
     struct itimerspec itval;
     itval.it_interval.tv_sec = itval.it_interval.tv_nsec =
     	itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
@@ -147,7 +150,7 @@ void TModSchedul::loadLibS(  )
 
 void TModSchedul::subLoad( )
 {
-    //===================== Load parameters from command line ================================
+    //- Load parameters from command line -
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -169,7 +172,7 @@ void TModSchedul::subLoad( )
 	}
     } while(next_opt != -1);
     
-    //===================== Load parameters from command line ================================
+    //- Load parameters from command line -
     m_per = atoi(TBDS::genDBGet(nodePath()+"ChkPer",TSYS::int2str(m_per)).c_str());
     m_mod_path = TBDS::genDBGet(nodePath()+"ModPath",m_mod_path);
     
@@ -297,7 +300,7 @@ void TModSchedul::libAtt( const string &iname, bool full )
 	    if( !h_lib )
 		throw TError(nodePath().c_str(),_("SO <%s> error: %s !"),iname.c_str(),dlerror());	    
 	    
-	    //Connect to module function
+	    //- Connect to module function -
 	    TModule::SAt (*module)( int );
 	    module = (TModule::SAt (*)(int)) dlsym(h_lib,"module");
 	    if( dlerror() != NULL )
@@ -306,7 +309,7 @@ void TModSchedul::libAtt( const string &iname, bool full )
 		throw TError(nodePath().c_str(),_("SO <%s> error: %s !"),iname.c_str(),dlerror());
 	    }    
 	    
-	    //Connect to attach function	    
+	    //- Connect to attach function -
 	    TModule *(*attach)( const TModule::SAt &, const string & );
 	    attach = (TModule * (*)(const TModule::SAt &, const string &)) dlsym(h_lib,"attach");
 	    if( dlerror() != NULL )
@@ -329,29 +332,28 @@ void TModSchedul::libAtt( const string &iname, bool full )
 		    if( owner().at(list[i_sub]).at().subModule() && 
 			AtMod.type == owner().at(list[i_sub]).at().subId() )
 		    { 
-			//Check type module version
+			//-- Check type module version --
 			if( AtMod.t_ver != owner().at(list[i_sub]).at().subVer() )
 			{
 			    mess_warning(nodePath().c_str(),_("%s for type <%s> no support module version: %d!"),
 				AtMod.id.c_str(),AtMod.type.c_str(),AtMod.t_ver);
 			    break;
 			}
-			//Check module present
+			//-- Check module present --
 			if( owner().at(list[i_sub]).at().modPresent(AtMod.id) )
 			    mess_warning(nodePath().c_str(),_("Module <%s> already present!"),AtMod.id.c_str());
 			else
 			{
-			    //Attach new module
+			    //-- Attach new module --
 			    TModule *LdMod = (attach)( AtMod, iname );
 			    if( LdMod == NULL )
 			    {
 				mess_warning(nodePath().c_str(),_("Attach module <%s> error!"),AtMod.id.c_str());
 				break;
 			    }
-			    //Add atached module
+			    //-- Add atached module --
 			    owner().at(list[i_sub]).at().modAdd(LdMod);
-			    SUse t_suse = { list[i_sub], LdMod->modId() };
-			    SchHD[i_sh]->use.push_back( t_suse );
+			    SchHD[i_sh]->use.push_back( list[i_sub]+"."+LdMod->modId() );
 			    if(full)
 			    {
 				owner().at(list[i_sub]).at().subLoad();
@@ -381,12 +383,15 @@ void TModSchedul::libDet( const string &iname )
 	    {
 		try
 		{
-		    owner().at(SchHD[i_sh]->use[0].mod_sub).at().modAt(SchHD[i_sh]->use[0].n_mod).at().modStop();
-		    owner().at(SchHD[i_sh]->use[0].mod_sub).at().modDel( SchHD[i_sh]->use[0].n_mod );
+		    owner().at(TSYS::strSepParse(SchHD[i_sh]->use[0],0,'.')).at().
+			    modAt(TSYS::strSepParse(SchHD[i_sh]->use[0],1,'.')).at().modStop();
+		    owner().at(TSYS::strSepParse(SchHD[i_sh]->use[0],0,'.')).at().
+			    modDel(TSYS::strSepParse(SchHD[i_sh]->use[0],1,'.'));
 		}catch(TError err)
 		{   
 		    //owner().at(SchHD[i_sh]->use[0].mod_sub).at().modAt(SchHD[i_sh]->use[0].n_mod).at().modLoad();
-		    owner().at(SchHD[i_sh]->use[0].mod_sub).at().modAt(SchHD[i_sh]->use[0].n_mod).at().modStart();
+		    owner().at(TSYS::strSepParse(SchHD[i_sh]->use[0],0,'.')).at().
+			    modAt(TSYS::strSepParse(SchHD[i_sh]->use[0],1,'.')).at().modStart();
 		    throw;
 		}		
 		SchHD[i_sh]->use.erase(SchHD[i_sh]->use.begin());
@@ -459,7 +464,7 @@ void TModSchedul::libLoad( const string &iname, bool full)
 
 void TModSchedul::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
 	TSubSYS::cntrCmdProc(opt);
@@ -475,7 +480,8 @@ void TModSchedul::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","10");
         return;
     }
-    //Process command to page
+    
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/ms/chk_per" )
     {

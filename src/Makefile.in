@@ -60,10 +60,10 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 liboscada_la_DEPENDENCIES =
 am_liboscada_la_OBJECTS = tsys.lo resalloc.lo tarchives.lo tarchval.lo \
 	tbds.lo tconfig.lo tcontroller.lo tsecurity.lo tmess.lo \
-	tsubsys.lo tprotocols.lo ttransports.lo ttiparam.lo \
-	tspecials.lo ttipdaq.lo tprmtmpl.lo tvalue.lo terror.lo \
-	tuis.lo tmodschedul.lo telem.lo tparamcontr.lo tmodule.lo \
-	xml.lo tcntrnode.lo tdaqs.lo tfunction.lo
+	tsubsys.lo tprotocols.lo ttransports.lo tspecials.lo \
+	ttipdaq.lo tprmtmpl.lo tvalue.lo terror.lo tuis.lo \
+	tmodschedul.lo telem.lo tparamcontr.lo tmodule.lo xml.lo \
+	tcntrnode.lo tdaqs.lo tfunction.lo
 liboscada_la_OBJECTS = $(am_liboscada_la_OBJECTS)
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
@@ -220,9 +220,8 @@ AM_CXXFLAGS =
 lib_LTLIBRARIES = liboscada.la
 liboscada_la_SOURCES = tsys.cpp resalloc.cpp tarchives.cpp tarchval.cpp tbds.cpp tconfig.cpp \
     tcontroller.cpp tsecurity.cpp tmess.cpp tsubsys.cpp tprotocols.cpp ttransports.cpp \
-    ttiparam.cpp tspecials.cpp ttipdaq.cpp tprmtmpl.cpp \
-    tvalue.cpp terror.cpp tuis.cpp tmodschedul.cpp telem.cpp tparamcontr.cpp \
-    tmodule.cpp xml.cpp tcntrnode.cpp tdaqs.cpp tfunction.cpp
+    tspecials.cpp ttipdaq.cpp tprmtmpl.cpp tvalue.cpp terror.cpp tuis.cpp tmodschedul.cpp \
+    telem.cpp tparamcontr.cpp tmodule.cpp xml.cpp tcntrnode.cpp tdaqs.cpp tfunction.cpp
 
 liboscada_la_LIBADD = -ldl -lrt -lexpat -lcrypt -lgd
 liboscada_la_LDFLAGS = -no-undefined -version-info 0:0:0
@@ -355,7 +354,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tspecials.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tsubsys.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tsys.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ttiparam.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ttipdaq.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ttransports.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tuis.Plo@am__quote@

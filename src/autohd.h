@@ -1,13 +1,12 @@
 
 //OpenSCADA system file: autohd.h
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -58,7 +57,7 @@ template <class ORes> class AutoHD
 	}
 	~AutoHD( )	{ free(); }
 	
-	ORes &at() const
+	ORes &at( ) const
 	{ 
 	    if(m_node) return *m_node;
 	    throw TError("AutoHD","No init!");	    
@@ -72,13 +71,13 @@ template <class ORes> class AutoHD
 	    if(m_node)	m_node->AHDConnect();
 	}
 	
-	void free() 
+	void free( ) 
 	{
 	    if(m_node) 	m_node->AHDDisConnect();
 	    m_node = NULL;
 	}
 	
-	bool freeStat() const 
+	bool freeStat( ) const 
 	{ return (m_node==NULL)?true:false; }
 			    
     private:

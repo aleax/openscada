@@ -285,7 +285,7 @@ MTable::MTable(string name, MBD *iown, bool create ) : TTable(name)
 {
     string req;
     
-    nodePrev(iown);
+    setNodePrev(iown);
     
     if( create )
     {
