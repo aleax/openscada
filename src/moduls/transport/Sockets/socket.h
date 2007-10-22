@@ -45,11 +45,15 @@ class TSocketIn;
 //************************************************
 //* Sockets::SSockIn                             *
 //************************************************
-struct SSockIn 
+class SSockIn 
 {
-    TSocketIn *s_in;
-    int       cl_sock;
-    string    sender;
+    public:
+	SSockIn( TSocketIn *is_in, int icl_sock, string isender ) :
+	    s_in(is_in), cl_sock(icl_sock), sender(isender)	{  }
+	    
+	TSocketIn *s_in;
+	int       cl_sock;
+	string    sender;
 };
 
 //************************************************

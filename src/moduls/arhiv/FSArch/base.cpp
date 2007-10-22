@@ -36,7 +36,7 @@
 #define MOD_NAME    "File system archivator"
 #define MOD_TYPE    "Archive"
 #define VER_TYPE    VER_ARH
-#define VERSION     "0.9.0"
+#define VERSION     "0.9.5"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "The Archive module. Allow functions for messages and values arhiving to file system."
 #define LICENSE     "GPL"
@@ -194,7 +194,7 @@ string ModArch::optDescr( )
 
 void ModArch::modLoad()
 {
-    //========== Load parameters from command line ============
+    //- Load parameters from command line -
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -293,14 +293,14 @@ TVArchivator *ModArch::AVal(const string &iid, const string &idb)
 
 void ModArch::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
         TTipArchivator::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
 	return;
     }
-    //Process command to page
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) ) opt->setText(optDescr());
     else TTipArchivator::cntrCmdProc(opt);

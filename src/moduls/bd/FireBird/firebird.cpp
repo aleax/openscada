@@ -261,7 +261,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
     if( tbl ) tbl->clear();
     if(!enableStat())	return; 
 
-    printf("TEST 20: %s\n",ireq.c_str());
+    //printf("TEST 20: %s\n",ireq.c_str());
 
     ResAlloc res(conn_res,true);
 
@@ -366,6 +366,26 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
 			case SQL_DOUBLE:
 			    row.push_back(TSYS::real2str(*(double *)var.sqldata));
 			    break;
+			case SQL_BLOB:
+			{    
+			    //- Read blob data -
+			    ISC_QUAD blob_id = *((ISC_QUAD*)var.sqldata);
+			    ISC_STATUS blob_stat;
+			    isc_blob_handle blob_handle = NULL;
+			    char blob_segment[STR_BUF_LEN];
+			    unsigned short actual_seg_len;			    
+			    string bval;
+			    isc_open_blob2( status, &hdb, &trans, &blob_handle, &blob_id, 0, NULL );
+			    do
+			    {
+				blob_stat = isc_get_segment( status, &blob_handle, &actual_seg_len, sizeof(blob_segment), blob_segment );
+				bval.append(blob_segment,actual_seg_len);
+			    }
+			    while( blob_stat == 0 && status[1] == isc_segment );
+			    isc_close_blob( status, &blob_handle );
+			    row.push_back(bval);
+			    break;
+			}
 			default:
 			    row.push_back("");
 		    }
@@ -467,6 +487,8 @@ void MTable::fieldStruct( TConfig &cfg )
 	int flg = (tblStrct[i_fld][3]=="PRIMARY KEY") ? (int)TCfg::Key : (int)TFld::NoFlag;
 	if( tblStrct[i_fld][1] == "37" )
     	    cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::String,flg,tblStrct[i_fld][2].c_str()) );
+	else if( tblStrct[i_fld][1] == "261" )
+    	    cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::String,flg,"1048576") );
 	else if( tblStrct[i_fld][1] == "8" )
 	    cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::Integer,flg) );
 	else if( tblStrct[i_fld][1] == "27" )
@@ -725,10 +747,10 @@ void MTable::fieldFix( TConfig &cfg )
             switch(u_cfg.fld().type())
     	    {
                 case TFld::String:
-		    if( tblStrct[i_fld][1] == "37" && 
-			    (u_cfg.fld().len() == atoi(tblStrct[i_fld][2].c_str()) || 
-			    (u_cfg.fld().len() > 32764 && atoi(tblStrct[i_fld][2].c_str()) == 32764)) )
+		    if( tblStrct[i_fld][1] == "37" && (u_cfg.fld().len() <= 255 || u_cfg.fld().flg()&TCfg::Key) && 
+			    u_cfg.fld().len() == atoi(tblStrct[i_fld][2].c_str()) )
 			continue;
+		    else if( tblStrct[i_fld][1] == "261" && u_cfg.fld().len() > 255 )	continue;
             	    break;
         	case TFld::Integer:	if( tblStrct[i_fld][1] == "8" )	continue;	break;
                 case TFld::Real:	if( tblStrct[i_fld][1] == "27" )continue;	break;
@@ -744,8 +766,9 @@ void MTable::fieldFix( TConfig &cfg )
 	switch(u_cfg.fld().type())
 	{
 	    case TFld::String:
-		req=req+"VARCHAR("+((u_cfg.fld().len()<=0)?"10":(u_cfg.fld().len()>32764)?"32764":SYS->int2str(u_cfg.fld().len()).c_str())+") "
-		    "DEFAULT '"+u_cfg.fld().def()+"' NOT NULL ";
+		if( u_cfg.fld().len() <= 255 || u_cfg.fld().flg()&TCfg::Key )
+		    req=req+"VARCHAR("+SYS->int2str(vmax(10,vmin(255,u_cfg.fld().len())))+") DEFAULT '"+u_cfg.fld().def()+"' NOT NULL ";
+		else  req=req+"BLOB SUB_TYPE TEXT DEFAULT '"+u_cfg.fld().def()+"' NOT NULL ";
 		break;
 	    case TFld::Integer:
  		req=req+"INTEGER DEFAULT '"+TSYS::int2str(atoi(u_cfg.fld().def().c_str()))+"' NOT NULL ";

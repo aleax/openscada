@@ -22,8 +22,6 @@
 #ifndef ARCH_H
 #define ARCH_H
 
-//#include <tmodule.h>
-//#include <xml.h>
 #include <tarchives.h>
 
 #include "val.h"
@@ -31,8 +29,6 @@
 
 #undef _
 #define _(mess) mod->I18N(mess)
-
-//#define CHECK_ARH_PER 60
 
 namespace DBArch
 {

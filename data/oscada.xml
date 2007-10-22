@@ -33,8 +33,9 @@
 	    <tbl id="Transport_in">
                 <fld
             	    ID="WEB_1"
-		    DESCRIPT="Главный WWW-интерфейс"
 		    MODULE="Sockets"
+		    NAME="Главный WWW-интерфейс"
+		    DESCRIPT=""
 		    ADDR="TCP::10002:0"
 		    PROT="HTTP"
 		    START="1"
@@ -43,8 +44,9 @@
 		    SocketsMaxClient="10"/>
 		<fld
 		    ID="WEB_2"
-		    DESCRIPT="Резервный WWW-интерфейс"
 		    MODULE="Sockets"
+		    NAME="Резервный WWW-интерфейс"
+		    DESCRIPT=""
 		    ADDR="TCP::10004:0"
 		    PROT="HTTP"
 		    START="1"

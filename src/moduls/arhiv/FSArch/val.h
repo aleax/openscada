@@ -105,7 +105,7 @@ class VFileArch
 	    
 	void repairFile(int hd, bool fix = true );
 
-	// - Base parameters -
+	//- Base parameters -
 	string  m_name;    	// Name Archive file
 	int     m_size;  	// Arhive size
 	TFld::Type m_tp;    	// Value typ
@@ -113,20 +113,20 @@ class VFileArch
 	long long m_end;   	// End of archive file
 	long long m_per;	// Values period
 	    
-	// - State parameters -
+	//- State parameters -
 	bool    m_err;     	// Archive err
 	bool    m_pack;     	// Archive packed
 	Res     m_res;     	// resource to access
 	time_t  m_acces;	// Last access time
 	    
-	// - File access atributes -
+	//- File access atributes -
 	bool fixVl;		// Fix size values
 	int  vSize;		// Fix value size or address size (bytes)
 	string eVal;		// Eval data type value
 	int  mpos;		// Maximum value position into file
 	char tbt;		// Temporary byte
 	    
-	// - Cache parameters -
+	//- Cache parameters -
 	struct CacheEl
 	{
 	    int pos;
@@ -136,7 +136,7 @@ class VFileArch
 	vector<CacheEl> cache;
 	CacheEl cach_pr_rd, cach_pr_wr ;
 	 
-	// - Specific parameters -
+	//- Specific parameters -
 	ModVArchEl *m_owner;
 };
 

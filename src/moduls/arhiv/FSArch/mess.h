@@ -66,17 +66,17 @@ class MFileArch
 	bool    scan;    	// Archive scaned (for check deleted files). Use from ModMArch
 	
     private:
-	// - Cache methods -
+	//- Cache methods -
 	long    cacheGet( time_t tm );
 	void    cacheSet( time_t tm, long off, bool last = false );
 	void    cacheUpdate( time_t tm, long v_add );
 	    
-	// - Base parameters -
+	//- Base parameters -
 	string  m_name;    	// name Archive file;
 	bool    m_xml;		// XML mode file
 	int    	m_size;  	// Arhive size
 	string  m_chars;   	// Archive charset;
-	// - State parameters -
+	//- State parameters -
 	bool    m_err;     	// Archive err
 	bool    m_write;   	// Archive had changed but no writed to file
 	bool    m_load;    	// Archive load to m_node
@@ -84,9 +84,9 @@ class MFileArch
 	time_t  m_acces;   	// last of time acces to Archive file
 	time_t  m_beg;     	// begin Archive file;
 	time_t  m_end;     	// end Archive file;
-	// - XML-mode parametrs -
+	//- XML-mode parametrs -
 	XMLNode *m_node;    // XML-file tree
-	// - Cache parameters -
+	//- Cache parameters -
 	struct CacheEl
 	{
 	    time_t tm;
@@ -94,7 +94,7 @@ class MFileArch
 	};
 	vector<CacheEl> cache;
 	CacheEl cach_pr;
-	// - Specific parameters -
+	//- Specific parameters -
 	Res	 m_res;     	// resource to access;	    
 	ModMArch *m_owner;
     };

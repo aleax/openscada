@@ -867,12 +867,13 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     else if( a_path == "/prm/cfg/PRM" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )
         try
         { 
-	    m_prm = opt->text();
+	    m_prm = opt->text();	
+	    if( m_mode == TMdPrm::DirRefl && m_prm == owner().owner().modId()+"."+owner().id()+"."+id() )
+		m_prm = owner().owner().modId()+"."+owner().id();
 	    mode( (TMdPrm::Mode)m_mode, m_prm ); 
 	} catch(...){ disable(); throw; }    
     else if( a_path == "/cfg/mode_lst" && ctrChkNode(opt) )
     {
-        opt->childAdd("el")->setAttr("id",TSYS::int2str(TMdPrm::Free))->setText(_("Free parametr"));
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(TMdPrm::DirRefl))->setText(_("Direct reflection"));
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(TMdPrm::Template))->setText(_("Template"));
     }
@@ -893,17 +894,18 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
         switch(c_lv)
         {
             case 0:
-		if(m_mode == DirRefl)	SYS->daq().at().modList(ls);
-		if(m_mode == Template)	SYS->daq().at().tmplLibList(ls);
+		if( m_mode == DirRefl )		SYS->daq().at().modList(ls);
+		if( m_mode == Template )	SYS->daq().at().tmplLibList(ls);
         	break;
             case 1:
-		if(m_mode == DirRefl && SYS->daq().at().modPresent(prm0))
+		if( m_mode == DirRefl && SYS->daq().at().modPresent(prm0) )
 		    SYS->daq().at().at(prm0).at().list(ls);
-		if(m_mode == Template && SYS->daq().at().tmplLibPresent(prm0))
+		if( m_mode == Template && SYS->daq().at().tmplLibPresent(prm0) )
 		    SYS->daq().at().tmplLibAt(prm0).at().list(ls);
                 break;
 	    case 2:
-		if(m_mode == DirRefl && SYS->daq().at().modPresent(prm0) && SYS->daq().at().at(prm0).at().present(prm1))
+		if( m_mode == DirRefl && SYS->daq().at().modPresent(prm0) && 
+			SYS->daq().at().at(prm0).at().present(prm1) )
                     SYS->daq().at().at(prm0).at().at(prm1).at().list(ls);
 		break;
         }

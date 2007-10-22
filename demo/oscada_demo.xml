@@ -26,19 +26,16 @@
         	<fld
 		    NAME="root"
 		    DESCR="Super user"
-		    ID="0"
 		    PASS="openscada"/>
 		<fld
 		    NAME="user"
 		    DESCR="System user"
-		    ID="1"
 		    PASS=""/>
 	    </tbl>
 	    <tbl id="Security_grp">
 		<fld
 		    NAME="root"
 		    DESCR="Super users groups."
-		    ID="0"
 		    USERS="root;user"/>
             </tbl>-->
 	</node>
@@ -54,8 +51,9 @@
             <tbl id="Transport_in">
         	<fld
 		    ID="WEB_1"
-		    DESCRIPT="Generic transport for WEB interface."
 		    MODULE="Sockets"
+		    NAME="Generic transport for WEB interface."
+		    DESCRIPT=""
 		    ADDR="TCP::10002:0"
 		    PROT="HTTP"
 		    START="1"
@@ -64,8 +62,9 @@
 		    SocketsMaxClient="10"/>
 		<fld
 		    ID="WEB_2"
-		    DESCRIPT="Reserve transport for WEB interface."
-		    MODULE="Sockets"
+		    MODULE="Sockets"		    
+		    NAME="Reserve transport for WEB interface."
+		    DESCRIPT=""
 		    ADDR="TCP::10004:0"
 		    PROT="HTTP"
 		    START="1"
@@ -76,9 +75,9 @@
 	    <tbl id="Transport_out">
 	        <fld
 		    ID="WEB_test"
+		    MODULE="Sockets"		    
 		    NAME="WEB test"
 		    DESCRIPT="WEB output test"
-		    MODULE="Sockets"
 		    ADDR="TCP:127.0.0.1:10002"
 		    START="1"/>
             </tbl>-->

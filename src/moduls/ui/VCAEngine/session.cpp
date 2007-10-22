@@ -822,34 +822,7 @@ void SessWdg::getUpdtWdg( const string &path, unsigned int tm, vector<string> &e
 unsigned int SessWdg::modifVal( Attr &cfg )
 { 
     int m_clc = ownerSess()->calcClk( );
-    if( !(cfg.flgGlob()&Attr::IsUser) )
-    {
-	m_mdfClc = m_clc;
-	
-	if( !inLnkGet && cfg.flgSelf()&Attr::CfgLnkOut && !cfg.cfgVal().empty() )
-	{
-	    string obj_tp = TSYS::strSepParse(cfg.cfgVal(),0,':')+":";
-	    if( obj_tp == "prm:" )
-		try
-		{
-		    switch( cfg.type() )
-		    {
-			case TFld::Boolean:		
-			    ((AutoHD<TVal>)SYS->daq().at().nodeAt(cfg.cfgVal(),0,0,obj_tp.size())).at().setB(cfg.getB());
-			    break;
-			case TFld::Integer:
-			    ((AutoHD<TVal>)SYS->daq().at().nodeAt(cfg.cfgVal(),0,0,obj_tp.size())).at().setI(cfg.getI());
-			    break;
-			case TFld::Real:
-			    ((AutoHD<TVal>)SYS->daq().at().nodeAt(cfg.cfgVal(),0,0,obj_tp.size())).at().setR(cfg.getR());
-			    break;
-			case TFld::String:
-			    ((AutoHD<TVal>)SYS->daq().at().nodeAt(cfg.cfgVal(),0,0,obj_tp.size())).at().setS(cfg.getS());
-			    break;
-		    }
-		}catch(...)	{ }
-	}
-    }
+    if( !(cfg.flgGlob()&Attr::IsUser) )	m_mdfClc = m_clc;
     return m_clc; 
 }
 
@@ -924,6 +897,7 @@ void SessWdg::calc( bool first, bool last )
     		setB(2,last);
 		for( int i_io = 3; i_io < ioSize( ); i_io++ )
 	    	{
+		    if( func()->io(i_io)->rez().empty() ) continue;
 		    sw_attr = TSYS::pathLev(func()->io(i_io)->rez(),0);	
 		    s_attr  = TSYS::pathLev(func()->io(i_io)->rez(),1);
 		    attr = (sw_attr==".")?attrAt(s_attr):wdgAt(sw_attr).at().attrAt(s_attr);
@@ -940,6 +914,7 @@ void SessWdg::calc( bool first, bool last )
 		//-- Load data from calc area --
 		for( int i_io = 3; i_io < ioSize( ); i_io++ )
 		{
+		    if( func()->io(i_io)->rez().empty() ) continue;
 		    sw_attr = TSYS::pathLev(func()->io(i_io)->rez(),0);
 		    s_attr  = TSYS::pathLev(func()->io(i_io)->rez(),1);
 		    attr = (sw_attr==".")?attrAt(s_attr):wdgAt(sw_attr).at().attrAt(s_attr);
@@ -954,33 +929,6 @@ void SessWdg::calc( bool first, bool last )
 		//-- Save events from calc procedure --
 		if( evId >= 0 ) wevent = getS(evId);
 	    }
-    	
-	    //-- Process output links --
-	    /*for( int i_a = 0; i_a < m_attrLnkLs.size(); i_a++ )
-	    {
-		attr = attrAt(m_attrLnkLs[i_a]);
-		obj_tp = TSYS::strSepParse(attr.at().cfgVal(),0,':')+":";
-		if( attr.at().flgSelf()&Attr::CfgLnkOut && !attr.at().cfgVal().empty() && obj_tp == "prm:" )
-		    switch( attr.at().type() )
-		    {
-			case TFld::Boolean:		
-			    ((AutoHD<TVal>)SYS->daq().at().nodeAt(
-				attr.at().cfgVal(),0,0,obj_tp.size())).at().setB(attr.at().getB());
-			    break;
-			case TFld::Integer:
-			    ((AutoHD<TVal>)SYS->daq().at().nodeAt(
-				attr.at().cfgVal(),0,0,obj_tp.size())).at().setI(attr.at().getI());
-			    break;
-			case TFld::Real:
-			    ((AutoHD<TVal>)SYS->daq().at().nodeAt(
-				attr.at().cfgVal(),0,0,obj_tp.size())).at().setR(attr.at().getR());
-			    break;
-			case TFld::String:
-			    ((AutoHD<TVal>)SYS->daq().at().nodeAt(
-				attr.at().cfgVal(),0,0,obj_tp.size())).at().setS(attr.at().getS());
-			    break;
-		    }
-	    }*/
 	}
     
 	//-- Process widget's events --
@@ -1023,6 +971,31 @@ bool SessWdg::attrChange( Attr &cfg, void *prev )
 	    attrAdd( new TFld("event",_("Events"),TFld::String,Attr::Mutable,"200") );
 	if( !cfg.getB() && attrPresent("event") ) attrDel("event");
     }
+    //- External link process -
+    if( !inLnkGet && cfg.flgSelf()&Attr::CfgLnkOut && !cfg.cfgVal().empty() )
+    {
+        string obj_tp = TSYS::strSepParse(cfg.cfgVal(),0,':')+":";
+        if( obj_tp == "prm:" )
+	    try
+	    {
+	        switch( cfg.type() )
+	        {
+		    case TFld::Boolean:		
+		        ((AutoHD<TVal>)SYS->daq().at().nodeAt(cfg.cfgVal(),0,0,obj_tp.size())).at().setB(cfg.getB());
+		        break;
+		    case TFld::Integer:
+		        ((AutoHD<TVal>)SYS->daq().at().nodeAt(cfg.cfgVal(),0,0,obj_tp.size())).at().setI(cfg.getI());
+		        break;
+		    case TFld::Real:
+		        ((AutoHD<TVal>)SYS->daq().at().nodeAt(cfg.cfgVal(),0,0,obj_tp.size())).at().setR(cfg.getR());
+		        break;
+		    case TFld::String:
+		        ((AutoHD<TVal>)SYS->daq().at().nodeAt(cfg.cfgVal(),0,0,obj_tp.size())).at().setS(cfg.getS());
+		        break;
+		}
+	    }catch(...)	{ }
+    }    
+    return true;
 }
 
 bool SessWdg::cntrCmdServ( XMLNode *opt )

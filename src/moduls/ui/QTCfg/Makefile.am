@@ -1,9 +1,7 @@
-QTINC=$(oldincludedir)/qt4
-
 ## process this file with automake to generate Makefile.in
 EXTRA_DIST = *.h qtcfg.qrc images/* po/* doc/*
 
-AM_CXXFLAGS= -I$(QTINC) -I$(QTINC)/QtCore -I$(QTINC)/QtGui -I$(top_srcdir)/src  -fPIC -DPIC -DQT_EDITION=QT_EDITION_DESKTOP \
+AM_CXXFLAGS= -I$(QT4_INCL) -I$(QT4_INCL)/QtCore -I$(QT4_INCL)/QtGui -I$(top_srcdir)/src  -fPIC -DPIC -DQT_EDITION=QT_EDITION_DESKTOP \
     -DQT_USE_APPROXIMATE_CURSORS -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -DQT_GUI_LIB -DQT_CORE_LIB
 AM_LDFLAGS= -shared -module
 

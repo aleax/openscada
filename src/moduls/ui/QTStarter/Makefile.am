@@ -1,9 +1,7 @@
-QTINC=$(oldincludedir)/qt4
-
 ## process this file with automake to generate Makefile.in
 EXTRA_DIST = *.h qtstarter.qrc images/* po/* doc/*
 
-AM_CXXFLAGS= -I$(QTINC) -I$(QTINC)/QtCore -I$(QTINC)/QtGui -I$(top_srcdir)/src  -fPIC -DPIC
+AM_CXXFLAGS= -I$(QT4_INCL) -I$(QT4_INCL)/QtCore -I$(QT4_INCL)/QtGui -I$(top_srcdir)/src  -fPIC -DPIC
 AM_LDFLAGS= -shared -module
 
 oscd_modul_PROGRAMS = ui_QTStarter.so

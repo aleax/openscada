@@ -263,7 +263,7 @@ int ModMArch::size()
 void ModMArch::cntrCmdProc( XMLNode *opt )
 {
     string grp = owner().owner().subId();    
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
         TMArchivator::cntrCmdProc(opt);
@@ -281,7 +281,8 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
 	}
         return;
     }
-    //Process command to page
+    
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/prm/st/fsz" && ctrChkNode(opt) )		opt->setText(TSYS::real2str((double)size()/1024.,6));
     else if( a_path == "/prm/st/tarch" && ctrChkNode(opt) ) 	opt->setText(TSYS::real2str(tm_calc,6));
@@ -629,7 +630,7 @@ void MFileArch::put( TMess::SRec mess )
 		    fseek(f,mv_beg,SEEK_SET);
 		    fwrite(s_buf.c_str(),s_buf.size(),1,f);		    
 		    cacheUpdate(mess.time,s_buf.size());
-		    //Put last value to cache
+		    //--- Put last value to cache ---
 		    cacheSet(mess.time,mv_beg,true);
 		    break;
 	    	}

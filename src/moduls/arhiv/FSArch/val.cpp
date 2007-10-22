@@ -77,7 +77,7 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
     string a_fnm = anm;
     if( mod->filePack(anm) )
     {
-	//Get file info from DB
+	//- Get file info from DB -
 	TConfig c_el(&mod->packFE());
 	c_el.cfg("FILE").setS(anm);
 	if(SYS->db().at().dataGet(mod->filesDB(),mod->nodePath()+"Pack/",c_el))
@@ -92,16 +92,16 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
 	a_fnm = mod->unPackArch(anm,false);
         unpck = true;
     }
-    //Get params from file
+    //- Get params from file -
     int hd = open(a_fnm.c_str(),O_RDONLY);
     if( hd <= 0 )   return false;
-    //---- Read Header ----
+    //-- Read Header --
     VFileArch::FHead head;
     read(hd,&head,sizeof(VFileArch::FHead));
     close(hd);
     if( VFileArch::afl_id != head.f_tp || head.term != 0x55 )	
 	return false;
-    //---- Check to archive present ----
+    //-- Check to archive present --
     if( archive )       *archive = head.archive;
     if( abeg )          *abeg = head.beg;
     if( aend )          *aend = head.end;
@@ -111,7 +111,7 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
     if( unpck ) 
     {
 	remove(a_fnm.c_str());
-	//Write info to DB
+	//-- Write info to DB --
 	TConfig c_el(&mod->packFE());
 	c_el.cfg("FILE").setS(anm);
 	c_el.cfg("BEGIN").setS(TSYS::ll2str(head.beg,TSYS::Hex));
@@ -192,7 +192,7 @@ void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const stri
     
     if(file_tp == "wav")
     {
-	//Export to wav
+	//- Export to wav -
 	struct
 	{
 	    char riff[4];
@@ -236,7 +236,7 @@ void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const stri
 	off_t sz_pos = lseek(hd,0,SEEK_CUR);
 	write(hd,&chnk,sizeof(chnk));
     
-	//Calc overage and scale of value
+	//- Calc overage and scale of value -
 	float c_val, v_over=0, v_max=-1e30, v_min=1e30;	
     
 	c_tm = (long long)beg*1000000;
@@ -246,7 +246,7 @@ void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const stri
 	    end_tm = vmin(end_tm,(long long)end*1000000);
 	    SYS->archive().at().valAt(arch_nm).at().getVal(buf,c_tm,end_tm,workId());
 	
-	    //Check scale
+	    //-- Check scale --
 	    for(;c_tm <= buf.end();c_tm++)
 	    {
 		c_val = buf.getR(&c_tm,true);
@@ -258,7 +258,7 @@ void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const stri
 	}
 	buf.clear();	
 	
-	//Transver value
+	//- Transver value -
 	int val_cnt = 0;
 	c_tm = (long long)beg*1000000;
 	while( c_tm < (long long)end*1000000 )
@@ -277,7 +277,7 @@ void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const stri
 	    }
 	}
 	
-	//Write value count
+	//- Write value count -
 	lseek(hd,sz_pos,SEEK_SET);
 	chnk.chunksize = val_cnt*sizeof(float);
 	write(hd,&chnk,sizeof(chnk));
@@ -317,7 +317,7 @@ TVArchEl *ModVArch::getArchEl( TVArchive &arch )
 void ModVArch::cntrCmdProc( XMLNode *opt )
 {
     string grp = owner().owner().subId();
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
         TVArchivator::cntrCmdProc(opt);
@@ -341,7 +341,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 	}
         return;
     }
-    //Process command to page
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/bs/tm" )
     {
@@ -370,7 +370,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/arch/arch" && ctrChkNode(opt) )
     {
-        //Fill Archives table
+        //-- Fill Archives table --
         XMLNode *n_arch = ctrMkNode("list",opt,-1,"/arch/arch/0","");
         XMLNode *n_per  = ctrMkNode("list",opt,-1,"/arch/arch/1","");
         XMLNode *n_size = ctrMkNode("list",opt,-1,"/arch/arch/2","");
@@ -550,7 +550,7 @@ void ModVArchEl::checkArchivator( bool now )
             	    }
     }
     
-    //Check the archive's files
+    //- Check the archive's files -
     ResAlloc res(m_res,false);
     for( int i_arh = 0; i_arh < arh_f.size(); i_arh++)
         arh_f[i_arh]->check();
@@ -849,7 +849,7 @@ void VFileArch::attach( const string &name )
 	m_pack = mod->filePack(m_name);
 	m_err  = !owner().archivator().filePrmGet(m_name,NULL,&m_tp,&m_beg,&m_end,&m_per);
 	
-	//Init values type parameters
+	//- Init values type parameters -
 	switch(type())
 	{
 	    case TFld::String:
@@ -885,14 +885,14 @@ void VFileArch::attach( const string &name )
 	    }
 	}
 	
-	//Load previous val check	
+	//- Load previous val check -
 	bool load_prev = false;
 	long long cur_tm = TSYS::curTime();
 	if( cur_tm >= begin() && cur_tm <= end() && period() > 10000000 )
 	{ owner().prev_tm = cur_tm; load_prev = true; }	
 	
-	//Check and repare last archive files
-	//Get file size
+	//- Check and prepare last archive files -
+	//-- Get file size --
 	int hd = open(m_name.c_str(),O_RDWR);
 	if( hd == -1 )	throw TError(owner().archivator().nodePath().c_str(),_("Archive file <%s> no openned!"),name.c_str());
 	m_size = lseek(hd,0,SEEK_END);
@@ -902,7 +902,7 @@ void VFileArch::attach( const string &name )
 	close(hd);
 	res.release();
 	
-	//Load previous value
+	//-- Load previous value --
 	if( load_prev )
 	    switch(type())
 	    {
@@ -938,7 +938,7 @@ void VFileArch::check( )
 	m_name = mod->packArch(name());
 	m_pack = true;
 	
-        //Write info to DB
+        //-- Write info to DB --
         TConfig c_el(&mod->packFE());
         c_el.cfg("FILE").setS(m_name);
 	c_el.cfg("BEGIN").setS(TSYS::ll2str(begin(),TSYS::Hex));
@@ -948,7 +948,7 @@ void VFileArch::check( )
         c_el.cfg("PRM3").setS(TSYS::int2str(type()));
         SYS->db().at().dataSet(mod->filesDB(),mod->nodePath()+"Pack/",c_el);
 	
-	//Get file size
+	//-- Get file size --
 	int hd = open(m_name.c_str(),O_RDONLY);
 	if( hd > 0 )
 	{
@@ -1371,7 +1371,7 @@ void VFileArch::setVal( TValBuf &buf, long long ibeg, long long iend )
 		else setPkVal(hd,vpos_end+1,1);
 	    }
 	}
-	//Merge begin and end pack values	
+	//-- Merge begin and end pack values --
      	char tmp_pb;
 	lseek(hd,sizeof(FHead)+vpos_beg/8,SEEK_SET);
 	read(hd,&tmp_pb,1);
@@ -1492,7 +1492,7 @@ int VFileArch::calcVlOff( int hd, int vpos, int *vsz, bool wr )
 		}
 	    }
 	    voff += vSize*(bool)((0x01<<rest)&buf[i_bf]);
-	    //Update cache
+	    //- Update cache -
             if( (i_ps-cach_pos && !((i_ps-cach_pos)%VAL_CACHE_POS)) || i_ps == vpos )
                 cacheSet(i_ps,voff,0,i_ps==vpos,wr);
 	}
@@ -1524,7 +1524,7 @@ int VFileArch::calcVlOff( int hd, int vpos, int *vsz, bool wr )
 		if(i_ps) voff += lst_pk_vl;
 		lst_pk_vl = pk_vl;
 	    }
-	    //Update cache
+	    //- Update cache -
 	    if( (i_ps-cach_pos && !((i_ps-cach_pos)%VAL_CACHE_POS)) || i_ps == vpos )
                 cacheSet(i_ps,voff,lst_pk_vl,i_ps==vpos,wr);
 	}
@@ -1547,7 +1547,7 @@ void VFileArch::moveTail( int hd, int old_st, int new_st )
     if( old_st == new_st ) return;
     if( new_st > old_st )
     {
-	//Move down (insert)
+	//- Move down (insert) -
 	int beg_cur;
 	int mv_beg = old_st;
 	int mv_end = lseek(hd,0,SEEK_END);
@@ -1565,7 +1565,7 @@ void VFileArch::moveTail( int hd, int old_st, int new_st )
     }
     else
     {
-	//Move up (erase)
+	//- Move up (erase) -
 	int end_cur;
 	int mv_beg = old_st;
 	int mv_end = lseek(hd,0,SEEK_END);
@@ -1580,7 +1580,8 @@ void VFileArch::moveTail( int hd, int old_st, int new_st )
 	    mv_beg+=sizeof(buf);
 	}
 	while(end_cur!=mv_end);
-	//Truncate tail
+	
+	//- Truncate tail -
 	ftruncate(hd,mv_end-(old_st-new_st));
     }    
 }
@@ -1638,7 +1639,7 @@ void VFileArch::repairFile(int hd, bool fix)
 	    if( !dt )	return;
 	    mess_err(owner().archivator().nodePath().c_str(),
 		_("Error archive file structure: <%s>. Margin = %d byte. Will try fix it!"),name().c_str(),dt);
-	    //Fix file
+	    //- Fix file -
 	    if(fix)
 	    {
 		if(dt>0)

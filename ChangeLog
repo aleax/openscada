@@ -1,3 +1,15 @@
+2007-10-22 Roman
+- /SYS: QT4 directory checking to configure script is added.
+- !!:/Archive/DBArch: Translation is updated and version 0.5.0 is relised.
+- !!:/Archive/FSArch: Translation is updated and version 0.9.5 is relised.
+- !!:/DB/FireBird: Blob for storing big text data support is added.
+- FIX:/DAQ/LogicLev: Self direct linking preventing is made.
+- FIX:/Transport/Sockets: Blocking input transport by opened client on stoping is fixed.
+- !!:/Transport/Sockets: Translation and documentation is updated and version 1.3.0 is relised.
+- FIX:/UI/VCAEngine: Writing some no active atributes is fixed. 
+    Try for process empty linked procedure's parameters on calc is fixed.
+
+
 2007-10-16 Roman
 - !!!!:/Archive: Archiving to DB on module DBArch is added.
 - !!!:/SYS: Full OpenSCADA kernel API is updated.

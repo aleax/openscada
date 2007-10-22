@@ -78,7 +78,7 @@ TVArchEl *ModVArch::getArchEl( TVArchive &arch )
 void ModVArch::cntrCmdProc( XMLNode *opt )
 {
     string grp = owner().owner().subId();
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
         TVArchivator::cntrCmdProc(opt);
@@ -87,7 +87,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
         return;
     }
     
-    //Process command to page
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/bs/sz" )
     {
