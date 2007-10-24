@@ -6,8 +6,7 @@
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -37,13 +36,15 @@ using std::vector;
 namespace FLibSYS
 {
 
-//** Complex1 functions library **
+//*************************************************
+//* Lib: Complex1 functions library               *
+//*************************************************
 class Lib : public TSpecial
 {
     public:
 	//Methods
 	Lib( string src );
-	~Lib();
+	~Lib( );
 	
 	void modStart( );
         void modStop( );		
@@ -84,9 +85,6 @@ class Lib : public TSpecial
 	};
 	
 	vector<SVarch>	varch_lst;
-	//int  aval_res, vbf_res;
-	//vector< AutoHD<TVArchive> > aval_id_lst;
-	//vector<TValBuf*>	vbf_id_lst;
 };
 
 extern Lib *mod;

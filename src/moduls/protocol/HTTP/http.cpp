@@ -34,7 +34,7 @@
 #define MOD_NAME    "HTTP-realisation"
 #define MOD_TYPE    "Protocol"
 #define VER_TYPE    VER_PROT
-#define M_VERSION   "1.2.5"
+#define M_VERSION   "1.3.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow support HTTP for WWW based UIs."
 #define LICENSE     "GPL"
@@ -46,23 +46,13 @@ extern "C"
 {
     TModule::SAt module( int n_mod )
     {
-	TModule::SAt AtMod;
-
-	if(n_mod==0)
-	{
-	    AtMod.id	= MOD_ID;
-	    AtMod.type  = MOD_TYPE;
-	    AtMod.t_ver = VER_TYPE;
-	}
-	else
-	    AtMod.id	= "";
-
-	return AtMod;
+	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	return TModule::SAt("");
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
+	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
     	    return new PrHTTP::TProt( source );
 	return NULL;
     }
@@ -162,7 +152,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
     string req;
     vector<string> vars;    
     
-    //Continue for full reqst
+    //- Continue for full reqst -
     if( m_nofull ) 
     {    
 	m_buf = m_buf+reqst;
@@ -179,19 +169,13 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	request[request.size()] = '\0';
 	//mess_debug("DEBUG","Content: <%s>!",request.c_str());
 	
-	//Parse first record
-	//req = TSYS::strSepParse(request,0,'\n');
+	//- Parse first record -
 	req   = request.substr(0,request.find("\n",0)-1);
 	string method   = TSYS::strSepParse(req,0,' ');
 	string url      = TSYS::strSepParse(req,1,' ');
 	string protocol = TSYS::strSepParse(req,2,' ');
 	
-	//req   = request.substr(0,request.find("\n",0)-1);
-	//string method   = req.substr(pos,req.find(" ",pos)-pos); pos = req.find(" ",pos)+1;
-	//string url      = req.substr(pos,req.find(" ",pos)-pos); pos = req.find(" ",pos)+1;
-	//string protocol = req.substr(pos,req.find(" ",pos)-pos); pos = req.find(" ",pos)+1;	
-	
-	//Parse all next records to content
+	//- Parse all next records to content -
 	string   bound;
 	int      c_lng=-1;
 	request = request.substr(request.find("\n",0)+1);	
@@ -204,7 +188,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
     	    if( var == "Content-Type" )
 	    {	
 		if( c_lng < 0 ) c_lng = 0;
-		//Check full post message
+		//- Check full post message -
 		pos = req.find("boundary=",pos)+strlen("boundary=");
 		bound = req.substr(pos);
 	    }
@@ -217,7 +201,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	}
 	while( request.size() );
 	
-	//Check content length
+	//- Check content length -
 	if( c_lng >= 0 )
 	{
 	    pos = request.find(bound);		
@@ -226,9 +210,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	if( method == "POST" && c_lng < 0 )	m_nofull = true;
 	if( m_nofull ) return m_nofull;
 	
-	//printf("Request:\n %s \n",m_buf.c_str());
-	
-	//Check protocol version	
+	//- Check protocol version -
 	if( protocol != "HTTP/1.0" && protocol != "HTTP/1.1" )
 	{
 	    answer = "<html>\n"
@@ -249,7 +231,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	    if( mod.at().modInfo("SubType") != "WWW" )
 		throw TError(nodePath().c_str(),"Find no WWW subtype module!");
 	    
-    	    //Check metods
+    	    //- Check metods -
     	    int n_dir = url.find("/",1);
     	    if( n_dir == string::npos ) url = "/";
     	    else                        url = url.substr(n_dir,url.size()-n_dir);

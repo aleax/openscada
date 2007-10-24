@@ -1,13 +1,12 @@
 
 //OpenSCADA system module BD.DBF file: dbf_mod.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -40,7 +39,7 @@
 #define MOD_NAME    "DB DBF"
 #define MOD_TYPE    "BD"
 #define VER_TYPE    VER_BD
-#define VERSION     "1.8.0"
+#define VERSION     "1.8.1"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "BD modul. Allow support of the *.dbf files, version 3.0."
 #define LICENSE     "GPL"
@@ -52,27 +51,15 @@ extern "C"
 {
     TModule::SAt module( int n_mod )
     {
-	TModule::SAt AtMod;
-
-	if(n_mod==0)
-	{
-	    AtMod.id	= MOD_ID;
-    	    AtMod.type  = MOD_TYPE;
-	    AtMod.t_ver = VER_TYPE;
-    	}
-	else
-	    AtMod.id	= "";
-	return AtMod;
+	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	return TModule::SAt("");
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	BDDBF::BDMod *self_addr = NULL;
-
-	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-    	    self_addr = BDDBF::mod = new BDDBF::BDMod( source );
-
-	return self_addr;
+	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
+    	    return new BDDBF::BDMod( source );
+	return NULL;
     }
 }
 
@@ -91,6 +78,8 @@ BDMod::BDMod( string name )
     mDescr  	= DESCRIPTION; 
     mLicense   	= LICENSE; 
     mSource    	= name;
+    
+    mod		= this;
 }
 
 BDMod::~BDMod(  )
@@ -308,7 +297,7 @@ void MTable::fieldGet( TConfig &cfg )
     
     //- Get key line -
     i_ln = findKeyLine( cfg );    
-    if( i_ln < 0 ) throw TError(TSYS::DBRowNoPresent,nodePath().c_str(),_("Field no avoid!"));
+    if( i_ln < 0 ) throw TError(TSYS::DBRowNoPresent,nodePath().c_str(),_("Field no present!"));
     
     //- Get config fields list -
     vector<string> cf_el;
@@ -504,7 +493,7 @@ int MTable::findKeyLine( TConfig &cfg, int cnt )
 	    for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
 		if( cf_el[i_cf].substr(0,10) == fld_rec->name ) break;
 	    if(fld_rec == NULL) 
-		throw TError(TSYS::DBInernal,nodePath().c_str(),_("Key column <%s> no avoid!"),cf_el[i_cf].c_str());
+		throw TError(TSYS::DBInernal,nodePath().c_str(),_("Key column <%s> no present!"),cf_el[i_cf].c_str());
 	    //-- Get table volume --
 	    string val;
 	    if( basa->GetFieldIt( i_ln, i_clm, val ) < 0) 

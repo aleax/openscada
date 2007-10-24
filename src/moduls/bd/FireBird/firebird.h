@@ -6,8 +6,7 @@
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -30,8 +29,6 @@
 
 #undef _
 #define _(mess) mod->I18N(mess)
-
-//#define COM_MAX_CNT 100
 
 using std::string;
 using std::vector;
@@ -100,7 +97,6 @@ class MBD : public TBD
 	Res	conn_res;
 };
 
-
 //*************************************************
 //* FireBird::BDMod                               *
 //*************************************************
@@ -125,4 +121,3 @@ extern BDMod *mod;
 }
 
 #endif // FIREBIRD
-

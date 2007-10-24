@@ -6,8 +6,7 @@
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -34,7 +33,7 @@
 #define MOD_NAME    "DB FireBird"
 #define MOD_TYPE    "BD"
 #define VER_TYPE    VER_BD
-#define VERSION     "0.1.0"
+#define VERSION     "0.6.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "DB modul. Allow support of the DB FireBird."
 #define LICENSE     "GPL"
@@ -46,28 +45,15 @@ extern "C"
 {
     TModule::SAt module( int n_mod )
     {
-	TModule::SAt AtMod;
-
-	if(n_mod==0)
-	{
-	    AtMod.id	= MOD_ID;
-	    AtMod.type  = MOD_TYPE;
-	    AtMod.t_ver = VER_TYPE;
-    	}
-	else
-	    AtMod.id	= "";
-	    
-	return AtMod;
+	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	return TModule::SAt("");
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	FireBird::BDMod *self_addr = NULL;
-
-	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = new FireBird::BDMod( source );
-
-	return self_addr;
+	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
+	    return new FireBird::BDMod( source );
+	return NULL;
     }
 }
 
@@ -87,7 +73,7 @@ BDMod::BDMod(string name)
     mLicense   	= LICENSE;
     mSource    	= name;
 
-    mod = this;
+    mod 	= this;
 }
 
 BDMod::~BDMod()
@@ -796,4 +782,3 @@ void MTable::fieldFix( TConfig &cfg )
 	getStructDB( tblStrct );
     }
 }    
-

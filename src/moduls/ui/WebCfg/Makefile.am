@@ -8,7 +8,7 @@ oscd_modul_PROGRAMS = ui_WebCfg.so
 ui_WebCfg_so_SOURCES = web_cfg.cpp
 
 #PO files process and doc install
-fm_name = Mod_Tr_WebCfg
+fm_name = Mod_UI_WebCfg
 m_name = $(oscd_modulpref)WebCfg
 
 messages:

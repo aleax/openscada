@@ -198,7 +198,7 @@ ui_QTStarter_so_SOURCES = tuimod.cpp moc_tuimod.cpp qrc_qtstarter.cpp
 ui_QTStarter_so_LDADD = -lQtGui
 
 #PO files process and doc install
-fm_name = Mod_Tr_QTStarter
+fm_name = Mod_UI_QTStarter
 m_name = $(oscd_modulpref)QTStarter
 all: all-am
 

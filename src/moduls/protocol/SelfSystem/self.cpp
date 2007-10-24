@@ -1,13 +1,12 @@
 
 //OpenSCADA system module Protocol.SelfSystem file: self.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2007 by Roman Savochenko                                *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -28,16 +27,17 @@
 #include <tmodule.h>
 #include "self.h"
 
-//============ Modul info! =====================================================
+//*************************************************
+//* Modul info!                                   *
 #define MOD_ID      "SelfSystem"
 #define MOD_NAME    "Self system OpenSCADA protocol"
 #define MOD_TYPE    "Protocol"
 #define VER_TYPE    VER_PROT
-#define VERSION     "0.5.0"
+#define VERSION     "0.7.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Self OpenSCADA protocol, support generic functions."
 #define LICENSE     "GPL"
-//==============================================================================
+//*************************************************
 
 SelfPr::TProt *SelfPr::mod;
 
@@ -45,33 +45,23 @@ extern "C"
 {
     TModule::SAt module( int n_mod )
     {
-	TModule::SAt AtMod;
-
-	if(n_mod==0)
-    	{
-	    AtMod.id	= MOD_ID;
-	    AtMod.type  = MOD_TYPE;
-	    AtMod.t_ver = VER_TYPE;
-	}
-    	else
-    	    AtMod.id	= "";
-
-	return( AtMod );
+	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	return TModule::SAt("");
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	SelfPr::TProt *self_addr = NULL;
-
-    	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = SelfPr::mod = new SelfPr::TProt( source );
-
-	return self_addr;
+    	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
+	    return new SelfPr::TProt( source );
+	return NULL;
     }
 }
 
 using namespace SelfPr;
 
+//*************************************************
+//* TProt                                         *
+//*************************************************
 TProt::TProt( string name ) : m_t_auth(60)
 {
     mId 	= MOD_ID;
@@ -82,21 +72,23 @@ TProt::TProt( string name ) : m_t_auth(60)
     mDescr  	= DESCRIPTION;
     mLicense   	= LICENSE;
     mSource    	= name;
+    
+    mod		= this;
 }
 
-TProt::~TProt()
+TProt::~TProt( )
 {
     ResAlloc res(ses_res,true);
     while( auth_lst.size() )	auth_lst.erase(auth_lst.begin());
     res.release();
 }
 
-int TProt::ses_open(const char *user,const char *pass)
+int TProt::ses_open( const char *user,const char *pass )
 {
     if( !SYS->security().at().usrPresent(user) || !SYS->security().at().usrAt(user).at().auth(pass) )
 	return -1;
     
-    //Check sesion and close old sesion
+    //- Check sesion and close old sesion -
     ResAlloc res(ses_res,true);
     int i_s = 0;
     while( i_s < auth_lst.size() )    
@@ -104,7 +96,7 @@ int TProt::ses_open(const char *user,const char *pass)
     	    auth_lst.erase(auth_lst.begin() + i_s);
 	else i_s++;
 
-    //Make new sesion
+    //- Make new sesion -
     int id_ses = rand();
     auth_lst.push_back( TProt::SAuth(time(NULL), user, id_ses) );
     
@@ -153,7 +145,7 @@ string TProt::optDescr( )
 
 void TProt::modLoad( )
 {
-    //========== Load parameters from command line ============
+    //- Load parameters from command line -
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -173,7 +165,7 @@ void TProt::modLoad( )
 	}
     } while(next_opt != -1);    
     
-    //========== Load parameters from config file =============
+    //- Load parameters from config file -
     m_t_auth = atoi( TBDS::genDBGet(nodePath()+"SessTimeLife",TSYS::int2str(m_t_auth)).c_str() );
 }
 
@@ -202,7 +194,7 @@ string TProt::outMess( const string &in, TTransportOut &tro )
     {
         while(true)
         {
-            //--- Session open ---
+            //- Session open -
             if(tro.prm1() < 0)
             {
                 req = "SES_OPEN "+user+" "+pass+"\n";
@@ -214,12 +206,12 @@ string TProt::outMess( const string &in, TTransportOut &tro )
                 else if(rez > 0)throw TError(nodePath().c_str(),_("Station <%s> error: %s!"),tro.id().c_str(),buf1);
                 tro.setPrm1(atoi(buf1));
             }
-            //--- Request ---
+            //- Request -
             req = "REQ "+TSYS::int2str(tro.prm1())+" "+TSYS::int2str(data.size())+"\n"+data;
             buf[0] = 0;
             resp_len = tro.messIO(req.c_str(),req.size(),buf,sizeof(buf),20);
             resp.assign(buf,resp_len);
-            //---- Get head ----
+            //-- Get head --
             buf1[0] = 0;
             if(sscanf(resp.c_str(),"REZ %d %255s\n",&rez,buf1)<=0)
         	throw TError(nodePath().c_str(),_("Station respond <%s> error!"),tro.id().c_str());
@@ -229,7 +221,7 @@ string TProt::outMess( const string &in, TTransportOut &tro )
             if(head_end == string::npos)
         	throw TError(nodePath().c_str(),_("Station <%s> error: Respond broken!"),tro.id().c_str());
             int resp_size = atoi(buf1);
-            //---- Wait tail ----
+            //-- Wait tail --
             while(resp.size() < resp_size+head_end+sizeof('\n'))
             {
         	resp_len = tro.messIO(NULL,0,buf,sizeof(buf),20);
@@ -245,7 +237,7 @@ string TProt::outMess( const string &in, TTransportOut &tro )
 
 void TProt::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
         TProtocol::cntrCmdProc(opt);
@@ -259,7 +251,8 @@ void TProt::cntrCmdProc( XMLNode *opt )
         ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
         return;
     }
-    //Process command to page
+    
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/prm/cfg/lf_tm" )
     {
@@ -272,9 +265,9 @@ void TProt::cntrCmdProc( XMLNode *opt )
     else TProtocol::cntrCmdProc(opt);
 }
 
-//================================================================
-//=========== TProtIn ============================================
-//================================================================
+//*************************************************
+//* TProtIn                                       *
+//*************************************************
 TProtIn::TProtIn( string name ) : TProtocolIn( name ), m_nofull(false)
 {
 
@@ -290,7 +283,7 @@ bool TProtIn::mess( const string &request, string &answer, const string &sender 
     int ses_id = -1;
     int req_sz = -1;
     
-    //Continue for full request
+    //- Continue for full request -
     if( m_nofull )
     {
         req_buf = req_buf+request;
@@ -343,5 +336,3 @@ bool TProtIn::mess( const string &request, string &answer, const string &sender 
 	
     return false;
 }
-
-

@@ -3,53 +3,53 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: bd_sqlite.cpp:59 bd_sqlite.cpp:195 bd_sqlite.cpp:246 bd_sqlite.cpp:253
-#: bd_sqlite.cpp:274 bd_sqlite.cpp:323
+#: firebird.cpp:57 firebird.cpp:341 firebird.cpp:386 firebird.cpp:469
+#: firebird.cpp:529
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: my_sql 1.5.0\n"
+"Project-Id-Version: DB.FireBird 0.6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-15 10:15+0200\n"
-"PO-Revision-Date: 2004-11-11 12:09+0200\n"
+"POT-Creation-Date: 2007-10-23 12:52+0300\n"
+"PO-Revision-Date: 2007-10-23 12:52+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: bd_sqlite.cpp:34
-msgid "SQLite"
+#: firebird.cpp:32
+msgid "FireBird"
 msgstr ""
 
-#: bd_sqlite.cpp:35
-msgid "DB SQLite"
-msgstr "БД SQLite"
+#: firebird.cpp:33
+msgid "DB FireBird"
+msgstr "БД FireBird"
 
-#: bd_sqlite.cpp:36
+#: firebird.cpp:34
 msgid "BD"
 msgstr "БД"
 
-#: bd_sqlite.cpp:38
-msgid "1.2.0"
+#: firebird.cpp:36
+msgid "0.6.0"
 msgstr ""
 
-#: bd_sqlite.cpp:39
+#: firebird.cpp:37
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-#: bd_sqlite.cpp:40
-msgid "BD modul. Allow support of the BD SQLite."
-msgstr "Модуль БД. Надає підтримку БД SQLite."
+#: firebird.cpp:38
+msgid "DB modul. Allow support of the DB FireBird."
+msgstr "Модуль БД. Надає підтримку БД FireBird."
 
-#: bd_sqlite.cpp:41
+#: firebird.cpp:39
 msgid "GPL"
 msgstr ""
 
-#: bd_sqlite.cpp:46
+#: firebird.cpp:44
 msgid "C"
 msgstr ""
 
-#: bd_sqlite.cpp:108
+#: firebird.cpp:104
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
@@ -60,277 +60,334 @@ msgstr ""
 "-------- Параметри модульної секції <%s> у конфігураційному файлі --------\n"
 "\n"
 
-#: bd_sqlite.cpp:120
+#: firebird.cpp:116
 msgid "h"
 msgstr ""
 
-#: bd_sqlite.cpp:123
+#: firebird.cpp:119
 msgid "help"
 msgstr ""
 
-#: bd_sqlite.cpp:170
+#: firebird.cpp:176
 #, c-format
-msgid "Delete bd error: %s"
+msgid "Drop DB '%s' error: %s"
+msgstr "Помилка видалення БД '%s': %s"
+
+#: firebird.cpp:201
+#, c-format
+msgid "Open DB '%s' error: %s"
+msgstr "Помилка відкриття БД '%s': %s"
+
+#: firebird.cpp:205
+msgid "CREATE DATABASE '"
 msgstr ""
 
-#: bd_sqlite.cpp:184
-#, c-format
-msgid "Open DB file error: %s"
+#: firebird.cpp:205
+msgid "' USER '"
 msgstr ""
 
-#: bd_sqlite.cpp:207
+#: firebird.cpp:205
+msgid "' PASSWORD '"
+msgstr ""
+
+#: firebird.cpp:205 firebird.cpp:454 firebird.cpp:462 firebird.cpp:570
+#: firebird.cpp:654
+msgid "'"
+msgstr ""
+
+#: firebird.cpp:206
+#, c-format
+msgid "Create DB '%s' error: %s"
+msgstr "Помилка створення БД '%s': %s"
+
+#: firebird.cpp:228
+msgid ""
+"SELECT rdb$relation_name FROM rdb$relations WHERE ((rdb$system_flag = 0) OR "
+"(rdb$system_flag IS NULL)) AND (rdb$view_source IS NULL) ORDER BY rdb"
+"$relation_name"
+msgstr ""
+
+#: firebird.cpp:238
 #, c-format
 msgid "Error open table <%s>. DB disabled."
+msgstr "Помилка відкриття таблиці <%s>. БД вимкненно."
+
+#: firebird.cpp:248
+msgid ":"
 msgstr ""
 
-#: bd_sqlite.cpp:226
-msgid "BEGIN;"
+#: firebird.cpp:250
+msgid "-"
 msgstr ""
 
-#: bd_sqlite.cpp:229
-msgid "COMMIT;"
-msgstr ""
-
-#: bd_sqlite.cpp:239
+#: firebird.cpp:277
 #, c-format
-msgid "Get table error: %s"
+msgid "Allocate statement error: %s"
+msgstr "Помилка розміщення запиту: %s"
+
+#: firebird.cpp:279
+#, c-format
+msgid "Start trasaction error: %s"
+msgstr "Пимилка запущення транзакції: %s"
+
+#: firebird.cpp:282
+#, c-format
+msgid "DSQL prepare error: %s"
+msgstr "Помилка приготування DSQL: %s"
+
+#: firebird.cpp:284
+#, c-format
+msgid "DSQL describe error: %s"
+msgstr "Помилка опису DSQL: %s"
+
+#: firebird.cpp:318
+#, c-format
+msgid "DSQL execute error: %s"
+msgstr "Помилка виконання DSQL: %s"
+
+#: firebird.cpp:393
+#, c-format
+msgid "DSQL free statement error: %s"
+msgstr "Помилка звільнення запиту DSQL: %s"
+
+#: firebird.cpp:395
+#, c-format
+msgid "DSQL close transaction error: %s"
+msgstr "Помилка закриття транзакції: %s"
+
+#: firebird.cpp:423
+msgid ""
+"EXECUTE BLOCK AS BEGIN if (not exists(select 1 from rdb$relations where rdb"
+"$relation_name = '"
 msgstr ""
 
-#: bd_sqlite.cpp:263
-msgid "info"
+#: firebird.cpp:424
+msgid "')) then execute statement 'create table \""
 msgstr ""
 
-#: bd_sqlite.cpp:266
-msgid "area"
+#: firebird.cpp:425
+msgid "\" ( \"name\" VARCHAR(20) NOT NULL, CONSTRAINT \"pk_"
 msgstr ""
 
-#: bd_sqlite.cpp:266
-msgid "/serv"
+#: firebird.cpp:426
+msgid "\" PRIMARY KEY(\"name\") )'; END"
 msgstr ""
 
-#: bd_sqlite.cpp:266
-msgid "DB service"
-msgstr "Сервіс БД"
+#: firebird.cpp:432
+#, c-format
+msgid "Table '%s' no present."
+msgstr "Таблиця '%s' відсутня."
 
-#: bd_sqlite.cpp:267
-msgid "comm"
+#: firebird.cpp:444
+msgid "DROP TABLE \""
 msgstr ""
 
-#: bd_sqlite.cpp:267 bd_sqlite.cpp:272
-msgid "/serv/end_tr"
+#: firebird.cpp:444 firebird.cpp:518 firebird.cpp:522 firebird.cpp:523
+#: firebird.cpp:569 firebird.cpp:574 firebird.cpp:575 firebird.cpp:620
+#: firebird.cpp:645 firebird.cpp:677 firebird.cpp:707 firebird.cpp:735
+msgid "\""
 msgstr ""
 
-#: bd_sqlite.cpp:267
-msgid "Close transaction"
-msgstr "Закрити транзакцію"
-
-#: bd_sqlite.cpp:271
-msgid "path"
-msgstr ""
-
-#: bd_sqlite.cpp:272
-msgid "set"
-msgstr ""
-
-#: bd_sqlite.cpp:272
-msgid "root"
-msgstr ""
-
-#: bd_sqlite.cpp:286 bd_sqlite.cpp:323 bd_sqlite.cpp:425
-msgid "SELECT * FROM '"
-msgstr ""
-
-#: bd_sqlite.cpp:286
-msgid "' LIMIT 0;"
-msgstr ""
-
-#: bd_sqlite.cpp:298
-msgid "DROP TABLE '"
-msgstr ""
-
-#: bd_sqlite.cpp:298 bd_sqlite.cpp:568 bd_sqlite.cpp:607
-msgid "';"
-msgstr ""
-
-#: bd_sqlite.cpp:299
+#: firebird.cpp:445
 #, c-format
 msgid "%s"
 msgstr ""
 
-#: bd_sqlite.cpp:312 bd_sqlite.cpp:414
+#: firebird.cpp:452
+msgid ""
+"SELECT R.RDB$FIELD_NAME, F.RDB$FIELD_TYPE, F.RDB$FIELD_LENGTH FROM RDB"
+"$FIELDS F, RDB$RELATION_FIELDS R where F.RDB$FIELD_NAME = R.RDB$FIELD_SOURCE "
+"and R.RDB$SYSTEM_FLAG = 0 and R.RDB$RELATION_NAME = '"
+msgstr ""
+
+#: firebird.cpp:459
+msgid ""
+"SELECT I.RDB$FIELD_NAME, C.RDB$CONSTRAINT_TYPE FROM RDB$RELATION_CONSTRAINTS "
+"C, RDB$INDEX_SEGMENTS I WHERE C.RDB$INDEX_NAME = I.RDB$INDEX_NAME AND C.RDB"
+"$RELATION_NAME = '"
+msgstr ""
+
+#: firebird.cpp:463
+msgid "Key"
+msgstr "Ключ"
+
+#: firebird.cpp:476 firebird.cpp:501 firebird.cpp:554 firebird.cpp:691
+msgid "Table is empty."
+msgstr "Таблиця порожня."
+
+#: firebird.cpp:483
+msgid "PRIMARY KEY"
+msgstr ""
+
+#: firebird.cpp:484 firebird.cpp:746
+msgid "37"
+msgstr ""
+
+#: firebird.cpp:486 firebird.cpp:749
+msgid "261"
+msgstr ""
+
+#: firebird.cpp:487
+msgid "1048576"
+msgstr ""
+
+#: firebird.cpp:488 firebird.cpp:751
+msgid "8"
+msgstr ""
+
+#: firebird.cpp:490 firebird.cpp:752
+msgid "27"
+msgstr ""
+
+#: firebird.cpp:492 firebird.cpp:753
+msgid "7"
+msgstr ""
+
+#: firebird.cpp:504
+msgid "SELECT FIRST 1 SKIP "
+msgstr ""
+
+#: firebird.cpp:504
+msgid " "
+msgstr ""
+
+#: firebird.cpp:505 firebird.cpp:612
 msgid "WHERE "
 msgstr ""
 
-#: bd_sqlite.cpp:319 bd_sqlite.cpp:371 bd_sqlite.cpp:421 bd_sqlite.cpp:507
+#: firebird.cpp:517 firebird.cpp:568 firebird.cpp:619 firebird.cpp:706
 msgid "AND "
 msgstr ""
 
-#: bd_sqlite.cpp:320 bd_sqlite.cpp:372 bd_sqlite.cpp:422 bd_sqlite.cpp:443
-#: bd_sqlite.cpp:476 bd_sqlite.cpp:508 bd_sqlite.cpp:541 bd_sqlite.cpp:581
-#: bd_sqlite.cpp:595
-msgid "\""
-msgstr ""
-
-#: bd_sqlite.cpp:320 bd_sqlite.cpp:372 bd_sqlite.cpp:422 bd_sqlite.cpp:476
-#: bd_sqlite.cpp:508
+#: firebird.cpp:518 firebird.cpp:569 firebird.cpp:620 firebird.cpp:677
+#: firebird.cpp:707
 msgid "\"='"
 msgstr ""
 
-#: bd_sqlite.cpp:320 bd_sqlite.cpp:323 bd_sqlite.cpp:422 bd_sqlite.cpp:425
-#: bd_sqlite.cpp:430 bd_sqlite.cpp:453 bd_sqlite.cpp:476 bd_sqlite.cpp:508
-#: bd_sqlite.cpp:585 bd_sqlite.cpp:587 bd_sqlite.cpp:588
+#: firebird.cpp:518 firebird.cpp:621 firebird.cpp:654 firebird.cpp:677
+#: firebird.cpp:708
 msgid "' "
 msgstr ""
 
-#: bd_sqlite.cpp:323
-msgid " LIMIT "
+#: firebird.cpp:523 firebird.cpp:575
+msgid ",\""
 msgstr ""
 
-#: bd_sqlite.cpp:323
-msgid ",1;"
+#: firebird.cpp:529 firebird.cpp:579
+msgid " FROM \""
 msgstr ""
 
-#: bd_sqlite.cpp:354 bd_sqlite.cpp:409 bd_sqlite.cpp:496 bd_sqlite.cpp:527
-msgid "PRAGMA table_info('"
-msgstr ""
-
-#: bd_sqlite.cpp:354 bd_sqlite.cpp:409 bd_sqlite.cpp:496 bd_sqlite.cpp:527
-msgid "');"
-msgstr ""
-
-#: bd_sqlite.cpp:356 bd_sqlite.cpp:411 bd_sqlite.cpp:498
-msgid "Table is empty."
-msgstr ""
-
-#: bd_sqlite.cpp:358
-msgid "SELECT * "
-msgstr ""
-
-#: bd_sqlite.cpp:372 bd_sqlite.cpp:453
-msgid "'"
-msgstr ""
-
-#: bd_sqlite.cpp:375 bd_sqlite.cpp:567
-msgid " FROM '"
-msgstr ""
-
-#: bd_sqlite.cpp:375 bd_sqlite.cpp:500
-msgid "' WHERE "
-msgstr ""
-
-#: bd_sqlite.cpp:375 bd_sqlite.cpp:425 bd_sqlite.cpp:480 bd_sqlite.cpp:510
-msgid ";"
-msgstr ""
-
-#: bd_sqlite.cpp:379
-msgid "Row no present."
-msgstr ""
-
-#: bd_sqlite.cpp:430 bd_sqlite.cpp:606
-msgid "INSERT INTO '"
-msgstr ""
-
-#: bd_sqlite.cpp:440 bd_sqlite.cpp:441 bd_sqlite.cpp:466 bd_sqlite.cpp:540
-#: bd_sqlite.cpp:579 bd_sqlite.cpp:594
-msgid ","
-msgstr ""
-
-#: bd_sqlite.cpp:443 bd_sqlite.cpp:581
+#: firebird.cpp:529 firebird.cpp:625 firebird.cpp:631 firebird.cpp:645
+#: firebird.cpp:757 firebird.cpp:761 firebird.cpp:785
 msgid "\" "
 msgstr ""
 
-#: bd_sqlite.cpp:455
+#: firebird.cpp:557
+msgid "SELECT "
+msgstr ""
+
+#: firebird.cpp:579 firebird.cpp:698
+msgid "\" WHERE "
+msgstr ""
+
+#: firebird.cpp:583
+msgid "Row no present."
+msgstr "Запис відсутній."
+
+#: firebird.cpp:625
+msgid "SELECT 1 FROM \""
+msgstr ""
+
+#: firebird.cpp:631
+msgid "INSERT INTO \""
+msgstr ""
+
+#: firebird.cpp:642 firebird.cpp:643 firebird.cpp:668 firebird.cpp:734
+#: firebird.cpp:756 firebird.cpp:759 firebird.cpp:784
+msgid ","
+msgstr ""
+
+#: firebird.cpp:656
 msgid "("
 msgstr ""
 
-#: bd_sqlite.cpp:455
+#: firebird.cpp:656
 msgid ") VALUES ("
 msgstr ""
 
-#: bd_sqlite.cpp:455
+#: firebird.cpp:656
 msgid ")"
 msgstr ""
 
-#: bd_sqlite.cpp:460
-msgid "UPDATE '"
+#: firebird.cpp:661
+msgid "UPDATE \""
 msgstr ""
 
-#: bd_sqlite.cpp:460
-msgid "' SET "
+#: firebird.cpp:661
+msgid "\" SET "
 msgstr ""
 
-#: bd_sqlite.cpp:500
-msgid "DELETE FROM '"
+#: firebird.cpp:698
+msgid "DELETE FROM \""
 msgstr ""
 
-#: bd_sqlite.cpp:544
-msgid "TEXT"
+#: firebird.cpp:723
+msgid "ALTER TABLE \""
 msgstr ""
 
-#: bd_sqlite.cpp:546
-msgid "INTEGER"
+#: firebird.cpp:723
+msgid "\" DROP CONSTRAINT \"pk_"
 msgstr ""
 
-#: bd_sqlite.cpp:547
-msgid "DOUBLE"
+#: firebird.cpp:724
+msgid "\", "
 msgstr ""
 
-#: bd_sqlite.cpp:566
-msgid "CREATE TEMPORARY TABLE 'temp_"
+#: firebird.cpp:757 firebird.cpp:785
+msgid "DROP \""
 msgstr ""
 
-#: bd_sqlite.cpp:566 bd_sqlite.cpp:606
-msgid "'("
+#: firebird.cpp:761
+msgid "ADD \""
 msgstr ""
 
-#: bd_sqlite.cpp:566
-msgid ");INSERT INTO 'temp_"
+#: firebird.cpp:766
+msgid "VARCHAR("
 msgstr ""
 
-#: bd_sqlite.cpp:567
-msgid "' SELECT "
+#: firebird.cpp:766
+msgid ") DEFAULT '"
 msgstr ""
 
-#: bd_sqlite.cpp:567
-msgid "';DROP TABLE '"
+#: firebird.cpp:766 firebird.cpp:767 firebird.cpp:770 firebird.cpp:773
+#: firebird.cpp:776
+msgid "' NOT NULL "
 msgstr ""
 
-#: bd_sqlite.cpp:573
-msgid "CREATE TABLE '"
+#: firebird.cpp:767
+msgid "BLOB SUB_TYPE TEXT DEFAULT '"
 msgstr ""
 
-#: bd_sqlite.cpp:573
-msgid "' ("
-msgstr ""
-
-#: bd_sqlite.cpp:585
-msgid "TEXT DEFAULT '"
-msgstr ""
-
-#: bd_sqlite.cpp:587
+#: firebird.cpp:770
 msgid "INTEGER DEFAULT '"
 msgstr ""
 
-#: bd_sqlite.cpp:588
-msgid "DOUBLE DEFAULT '"
+#: firebird.cpp:773
+msgid "DOUBLE PRECISION DEFAULT '"
 msgstr ""
 
-#: bd_sqlite.cpp:598
-msgid ", PRIMARY KEY ("
+#: firebird.cpp:776
+msgid "SMALLINT DEFAULT '"
 msgstr ""
 
-#: bd_sqlite.cpp:598
-msgid "));"
+#: firebird.cpp:787
+msgid ", ADD CONSTRAINT \"pk_"
 msgstr ""
 
-#: bd_sqlite.cpp:606
-msgid ") SELECT "
+#: firebird.cpp:787
+msgid "\" PRIMARY KEY ("
 msgstr ""
 
-#: bd_sqlite.cpp:606
-msgid " FROM 'temp_"
-msgstr ""
-
-#: bd_sqlite.cpp:606
-msgid "';DROP TABLE 'temp_"
+#: firebird.cpp:787
+msgid ") "
 msgstr ""

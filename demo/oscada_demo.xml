@@ -83,25 +83,6 @@
             </tbl>-->
 	</node>
 
-	<node id="sub_Params">
-	    <!--
-	    <tbl id="Prm">
-		<fld SHIFR="KSH6open" NAME="KSH6 Open" DESCR="" EN="1" MODE="2" PRM="dsignal"/>
-	    </tbl>
-	    <tbl id="PrmIO">
-		<fld PRM_ID="KSH6open" ID="in" VALUE="DAQ.BlockCalc.Anast1to2node.КШ6.st_open"/>
-	    </tbl>
-	    <tbl id="Tmpl">
-		<fld ID="dsignal" NAME="Digit signal" DESCR="" FUNC="DAQ.JavaLikeCalc.lib_TemplFunc.d_alarm"/>
-	    </tbl>
-	    <tbl id="TmplIO">
-		<fld TMPL_ID="dsignal" ID="in" ATTR_MODE="1" ACCS_MODE="2" VALUE=""/>
-		<fld TMPL_ID="dsignal" ID="alrm_mess" ATTR_MODE="2" ACCS_MODE="0" VALUE="Error"/>
-		<fld TMPL_ID="dsignal" ID="alrm_md" ATTR_MODE="2" ACCS_MODE="0" VALUE=""/>
-		<fld TMPL_ID="dsignal" ID="alrm" ATTR_MODE="1" ACCS_MODE="0" VALUE=""/>
-	    </tbl>-->
-	</node>
-
 	<node id="sub_DAQ">
 	    <node id="mod_OperationSystem">
 		<!--
@@ -196,53 +177,54 @@
 	    <prm id="ValPeriod">1000</prm>
 	    <prm id="ValPriority">10</prm>
 	    <!--
-	    <tbl id="Archive_mess_proc">
-		<fld
-		    ID="StatErrors"
-		    NAME="Errors state"
-		    DESCR="Local errors archive"
-		    MODUL="BaseArh"
-		    START="1"
-		    CATEG="/DemoStation*"
-		    LEVEL="4"
-		    ADDR="ARCHIVES/MESS/stError/"
-		    BaseArhMSize="300"
-		    BaseArhNFiles="10"
-		    BaseArhTmSize="30"
-		    BaseArhXML="1"
-		    BaseArhPackTm="10"
-		    BaseArhTm="60"/>
-		<fld
-		    ID="NetRequsts"
-		    DESCR="Requests to servet throw transport the Sockets."
-		    MODUL="BaseArh"
-		    START="1"
-		    CATEG="/DemoStation/Transport/Sockets*"
-		    LEVEL="1"
-		    ADDR="ARCHIVES/MESS/Net/"
-		    BaseArhMSize="300"
-		    BaseArhNFiles="10"
-		    BaseArhTmSize="30"
-		    BaseArhXML="1"
-		    BaseArhPackTm="10"
-		    BaseArhTm="60"/>
-	    </tbl>
-	    <tbl id="Archive_val_proc">
-	        <fld
-		    ID="1h"
-		    NAME="1hour"
-		    MODUL="BaseArh"
-		    DESCR="Hour average"
-		    START="1"
-		    ADDR="ARCHIVES/VAL/1h/"
-		    V_PER="360"
-		    A_PER="60"
-		    BaseArhTmSize="8640"
-		    BaseArhNFiles="10"
-		    BaseArhRound="0.1"
-		    BaseArhPackTm="10"
-		    BaseArhTm="60"/>
-	    </tbl>
+            <tbl id="Archive_mess_proc">
+                <fld
+                    ID="StatErrors"
+                    MODUL="FSArch"
+                    NAME="Errors satt"
+                    DESCR="Архив локальных ощибок"
+                    START="1"
+                    CATEG="/DemoStation*"
+                    LEVEL="4"
+                    ADDR="ARCHIVES/MESS/stError/"
+                    FSArchMSize="300"
+                    FSArchNFiles="10"
+                    FSArchTmSize="30"
+                    FSArchXML="1"
+                    FSArchPackTm="10"
+                    FSArchTm="60"/>
+                <fld
+                    ID="NetRequsts"
+                    MODUL="FSArch"
+                    NAME="Net requests"
+                    DESCR="Запросы к серверу через транспорт Sockets."
+                    START="1"
+                    CATEG="/DemoStation/Transport/Sockets*"
+                    LEVEL="1"
+                    ADDR="ARCHIVES/MESS/Net/"
+                    FSArchMSize="300"
+                    FSArchNFiles="10"
+                    FSArchTmSize="30"
+                    FSArchXML="1"
+                    FSArchPackTm="10"
+                    FSArchTm="60"/>
+            </tbl>
+            <tbl id="Archive_val_proc">
+                <fld
+                    ID="1h"
+                    MODUL="FSArch"
+                    NAME="1час"
+                    DESCR="Усреднение за час"
+                    START="1"
+                    ADDR="ARCHIVES/VAL/1h/"
+                    V_PER="360"
+                    A_PER="60"
+                    FSArchTmSize="8640"
+                    FSArchNFiles="10"
+                    FSArchRound="0.1"
+                    FSArchPackTm="10"
+                    FSArchTm="60"/>
+            </tbl>
 	    <tbl id="Archive_val">
 	        <fld
 	    	    ID="test1"
@@ -276,7 +258,7 @@
     	    <node id="mod_SystemTests">
 		<prm id="PARAM" on="0" per="5" name="OperationSystem.AutoDA.CPULoad"/>
 		<prm id="XML" on="0" per="10" file="/etc/oscada.xml"/>
-		<prm id="MESS" on="0" per="10" categ="" arhtor="BaseArh.StatErrors"/>
+		<prm id="MESS" on="0" per="10" categ="" arhtor="FSArch.StatErrors"/>
 		<prm id="SOAttDet" on="0" per="20" name="../../lib/openscada/ui_Vision.so" full="1"/>
 		<prm id="Val" on="0" per="1" name="LogicLev.experiment.КШ6close.alrm" arch_len="5" arch_per="1000000"/>
 		<prm id="Val" on="0" per="1" name="OperationSystem.AutoDA.CPULoad.load" arch_len="10" arch_per="1000000"/>
@@ -288,7 +270,7 @@
 		<prm id="TrOut" on="0" per="1" addr="UNIX:./oscada" type="Sockets" req="time"/>
 		<prm id="TrOut" on="0" per="1" addr="UDP:127.0.0.1:daytime" type="Sockets" req="time"/>
 		<prm id="Func" on="0" per="10"/>
-		<prm id="SysContrLang" on="0" per="10" path="/Archive/BaseArh/mess_StatErrors/%2fprm%2fst"/>
+		<prm id="SysContrLang" on="0" per="10" path="/Archive/FSArch/mess_StatErrors/%2fprm%2fst"/>
 		<prm id="ValBuf" on="0" per="5"/>
 		<prm id="Archive" on="0" per="30" arch="test1" period="1000000"/>
 		<prm id="Base64Code" on="0" per="10"/>

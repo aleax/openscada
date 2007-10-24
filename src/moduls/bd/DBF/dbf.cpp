@@ -1,13 +1,12 @@
 
 //OpenSCADA system module BD.DBF file: dbf.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2001-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -30,10 +29,9 @@
 #include <stdio.h>
 #include "dbf.h"
 
-//extern long filelength_( int hd );
-//-------------------------------------------------------
-//----------------- TBasaDBF для работы с DBF -----------
-//-------------------------------------------------------
+//************************************************
+//* TBaseDBF                                     *
+//************************************************
 TBasaDBF::TBasaDBF(  )
 {
     db_head_ptr = ( db_head * ) calloc( sizeof( db_head ), 1 );
@@ -73,14 +71,14 @@ int TBasaDBF::LoadFile( char *Name )
 
 //    if( ( hd = open( Name, O_BINARY | O_RDONLY ) ) <= 0 )
     if( ( hd = open( Name, O_RDONLY ) ) <= 0 )
-	return ( -1 );
+	return -1;
     off_t f_len = lseek( hd, 0, SEEK_END );
     lseek( hd, 0, SEEK_SET );
-    read( hd, &db_head_temp, sizeof( db_head ) );	// читать заголовок  dbf-файла 
+    read( hd, &db_head_temp, sizeof( db_head ) );	// read of dbf-file header
     if( f_len != ( db_head_temp.len_head + ( db_head_temp.len_rec * db_head_temp.numb_rec ) + 1 ) )
     {
 	close( hd );
-	return ( -1 );
+	return -1;
     }
 
     if( db_field_ptr )
@@ -97,7 +95,7 @@ int TBasaDBF::LoadFile( char *Name )
     }
 
     lseek( hd, 0, SEEK_SET );
-    read( hd, db_head_ptr, sizeof( db_head ) );	// читать заголовок  dbf-файла 
+    read( hd, db_head_ptr, sizeof( db_head ) );	// read of dbf-file header
 
     db_field_ptr = ( db_str_rec * ) calloc( db_head_ptr->len_head - sizeof( db_head ) - 2, 1 );
     read( hd, db_field_ptr, db_head_ptr->len_head - sizeof( db_head ) - 2 );
@@ -110,7 +108,7 @@ int TBasaDBF::LoadFile( char *Name )
 	read( hd, items[i], db_head_ptr->len_rec );
     }
     close( hd );
-    return ( db_head_ptr->numb_rec );
+    return db_head_ptr->numb_rec;
 }
 
 int TBasaDBF::SaveFile( char *Name )
@@ -118,7 +116,7 @@ int TBasaDBF::SaveFile( char *Name )
     int i, hd;
 
     if( ( hd = open( Name, O_RDWR|O_CREAT|O_TRUNC, 0666 ) ) <= 0 )
-	return ( -1 );
+	return -1;
     ::write( hd, db_head_ptr, sizeof( db_head ) );
     ::write( hd, db_field_ptr, db_head_ptr->len_head - sizeof( db_head ) - 2 );
     ::write( hd, "\x0D\x00", 2 );
@@ -126,12 +124,12 @@ int TBasaDBF::SaveFile( char *Name )
 	::write( hd, items[i], db_head_ptr->len_rec );
     ::write( hd, "\x1A", 1 );
     close( hd );
-    return ( 0 );
+    return 0;
 }
 
 int TBasaDBF::GetCountItems(  )
 {
-    return ( db_head_ptr->numb_rec );
+    return db_head_ptr->numb_rec;
 }
 
 int TBasaDBF::LoadFields( db_str_rec * fields, int number )
@@ -160,7 +158,7 @@ int TBasaDBF::LoadFields( db_str_rec * fields, int number )
     for( i = 0; i < number; i++ )
 	db_head_ptr->len_rec += ( db_field_ptr + i )->len_fild;
 
-    return ( 0 );
+    return 0;
 }
 
 int TBasaDBF::DelField( int pos )
@@ -170,7 +168,7 @@ int TBasaDBF::DelField( int pos )
 
     number = ( db_head_ptr->len_head - sizeof( db_head ) - 2 ) / sizeof( db_str_rec );
     if( pos >= number )
-	return ( -1 );
+	return -1;
     if( db_head_ptr->numb_rec )
     {
 	field_ptr = db_field_ptr + pos;
@@ -198,7 +196,7 @@ int TBasaDBF::DelField( int pos )
     db_head_ptr->len_head -= sizeof( db_str_rec );
     db_head_ptr->len_rec -= len_fild;
 
-    return ( 0 );
+    return 0;
 }
 
 int TBasaDBF::DelField( char *NameField )
@@ -214,7 +212,7 @@ int TBasaDBF::DelField( char *NameField )
 	    break;
 	}
     if( pos == -1 )
-	return ( -1 );
+	return -1;
     if( db_head_ptr->numb_rec )
     {
 	field_ptr = db_field_ptr + pos;
@@ -242,7 +240,7 @@ int TBasaDBF::DelField( char *NameField )
     db_head_ptr->len_head -= sizeof( db_str_rec );
     db_head_ptr->len_rec -= len_fild;
 
-    return ( 0 );
+    return 0;
 }
 
 int TBasaDBF::addField( int pos, db_str_rec * field_ptr )
@@ -304,8 +302,8 @@ db_str_rec *TBasaDBF::getField( int posField )
 
     number = ( db_head_ptr->len_head - sizeof( db_head ) - 2 ) / sizeof( db_str_rec );
     if( posField >= number )
-	return ( NULL );
-    return ( db_field_ptr + posField );
+	return NULL;
+    return db_field_ptr + posField;
 }
 
 db_str_rec *TBasaDBF::getField( char *NameField )
@@ -320,8 +318,8 @@ db_str_rec *TBasaDBF::getField( char *NameField )
 	    break;
 	}
     if( posField == -1 )
-	return ( NULL );
-    return ( db_field_ptr + posField );
+	return NULL;
+    return db_field_ptr + posField;
 }
 
 
@@ -331,7 +329,7 @@ int TBasaDBF::setField( int posField, db_str_rec *attr )
     char *str_tmp;
 
     number = ( db_head_ptr->len_head - sizeof( db_head ) - 2 ) / sizeof( db_str_rec );
-    if( posField >= number ) return (-1);
+    if( posField >= number ) return -1;
  
     if( !strncmp(db_field_ptr[posField].name,attr->name,11) )
 	strncpy(db_field_ptr[posField].name,attr->name,11);
@@ -355,7 +353,7 @@ int TBasaDBF::setField( int posField, db_str_rec *attr )
     if( db_field_ptr[posField].dec_field != attr->dec_field )
 	db_field_ptr[posField].dec_field  = attr->dec_field;
 
-    return(0);
+    return 0;
 }
 
 int TBasaDBF::setField( char *NameField, db_str_rec *attr )
@@ -369,10 +367,9 @@ int TBasaDBF::setField( char *NameField, db_str_rec *attr )
 	    posField = i;
 	    break;
 	}
-    if( posField == -1 ) return (-1); 
-    return( setField( posField, attr ) ); 
+    if( posField == -1 ) return -1;
+    return setField( posField, attr );
 }
-
 
 int TBasaDBF::CreateItems( int pos )
 {
@@ -411,13 +408,13 @@ int TBasaDBF::ModifiFieldIt( int posItems, int posField, const char *str )
     int rec_len = 1, number, i;
 
     number = ( db_head_ptr->len_head - sizeof( db_head ) - 2 ) / sizeof( db_str_rec );
-    if( posField >= number ) return ( -1 );
+    if( posField >= number ) return -1;
     for( i = 0; i < posField; i++ )
 	rec_len += ( db_field_ptr + i )->len_fild;
-    if( posItems >= db_head_ptr->numb_rec ) return ( -1 );
+    if( posItems >= db_head_ptr->numb_rec ) return -1;
     strncpy( ( char * ) items[posItems] + rec_len, str, ( db_field_ptr + posField )->len_fild );
 
-    return ( 0 );
+    return 0;
 }
 
 int TBasaDBF::ModifiFieldIt( int posItems, char *NameField, const char *str )
@@ -433,11 +430,11 @@ int TBasaDBF::ModifiFieldIt( int posItems, char *NameField, const char *str )
 	    break;
 	}
     if( posField == -1 )
-	return ( -1 );
+	return -1;
     for( i = 0; i < posField; i++ )
 	rec_len += ( db_field_ptr + i )->len_fild;
     if( posItems >= db_head_ptr->numb_rec )
-	return ( -1 );
+	return -1;
 
 // if((db_field_ptr+posField)->tip_fild=='N')
 // {
@@ -445,7 +442,7 @@ int TBasaDBF::ModifiFieldIt( int posItems, char *NameField, const char *str )
 // }
     strncpy( ( char * ) items[posItems] + rec_len, str, ( db_field_ptr + posField )->len_fild );
 
-    return ( 0 );
+    return 0;
 }
 
 int TBasaDBF::GetFieldIt( int posItems, int posField, string & str )
@@ -454,15 +451,15 @@ int TBasaDBF::GetFieldIt( int posItems, int posField, string & str )
 
     number = ( db_head_ptr->len_head - sizeof( db_head ) - 2 ) / sizeof( db_str_rec );
     if( posField >= number )
-	return ( -1 );
+	return -1;
     for( i = 0; i < posField; i++ )
 	rec_len += ( db_field_ptr + i )->len_fild;
     if( posItems >= db_head_ptr->numb_rec )
-	return ( -1 );
+	return -1;
     str.assign( ( char * ) items[posItems] + rec_len, db_field_ptr[posField].len_fild );
     str.resize(strlen(str.c_str()));
 
-    return ( 0 );
+    return 0;
 }
 
 int TBasaDBF::GetFieldIt( int posItems, char *NameField, string & str )
@@ -477,15 +474,15 @@ int TBasaDBF::GetFieldIt( int posItems, char *NameField, string & str )
 	    break;
 	}
     if( posField == -1 )
-	return ( -1 );
+	return -1;
     for( i = 0; i < posField; i++ )
 	rec_len += ( db_field_ptr + i )->len_fild;
     if( posItems >= db_head_ptr->numb_rec )
-	return ( -1 );
+	return -1;
     str.assign( ( char * ) items[posItems] + rec_len, db_field_ptr[posField].len_fild ); 
     str.resize(strlen(str.c_str()));
     
-    return ( 0 );
+    return 0;
 }
 
 int TBasaDBF::DeleteItems( int pos, int fr )
@@ -494,7 +491,7 @@ int TBasaDBF::DeleteItems( int pos, int fr )
     int number = db_head_ptr->numb_rec;
 
     if( pos >= number )
-	return ( -1 );
+	return -1;
     if( pos != number - 1 )
     {
 	temp = ( void * ) calloc( number - pos - 1, sizeof( void * ) );
@@ -513,15 +510,15 @@ int TBasaDBF::DeleteItems( int pos, int fr )
     }
     db_head_ptr->numb_rec--;
 
-    return ( 0 );
+    return 0;
 }
 
 void *TBasaDBF::getItem( int posItem )
 {
     if( posItem >= db_head_ptr->numb_rec )
-	return ( items[db_head_ptr->numb_rec - 1] );
+	return items[db_head_ptr->numb_rec - 1];
     else
-	return ( items[posItem] );
+	return items[posItem];
 }
 
 void TBasaDBF::AddItem( int pos, void *it )
@@ -548,4 +545,3 @@ void TBasaDBF::AddItem( int pos, void *it )
     }
     db_head_ptr->numb_rec++;
 }
-

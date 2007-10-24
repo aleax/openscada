@@ -7,20 +7,20 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: direct_dbf 1.5.0\n"
+"Project-Id-Version: DB.DBF 1.8.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-15 10:07+0200\n"
-"PO-Revision-Date: 2004-11-11 12:09+0200\n"
+"POT-Creation-Date: 2007-10-23 12:09+0300\n"
+"PO-Revision-Date: 2007-10-23 12:09+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: dbf.cpp:124
+#: dbf.cpp:122
 msgid "\r"
 msgstr ""
 
-#: dbf.cpp:127
+#: dbf.cpp:125
 msgid ""
 msgstr ""
 
@@ -37,7 +37,7 @@ msgid "BD"
 msgstr "БД"
 
 #: dbf_mod.cpp:42
-msgid "1.8.0"
+msgid "1.8.1"
 msgstr ""
 
 #: dbf_mod.cpp:43
@@ -56,7 +56,7 @@ msgstr ""
 msgid "C"
 msgstr ""
 
-#: dbf_mod.cpp:111
+#: dbf_mod.cpp:109
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
@@ -67,83 +67,92 @@ msgstr ""
 "-------- Параметри модульної секції <%s> у конфігураційному файлі --------\n"
 "\n"
 
-#: dbf_mod.cpp:122
+#: dbf_mod.cpp:120
 msgid "h"
 msgstr ""
 
-#: dbf_mod.cpp:125
+#: dbf_mod.cpp:123
 msgid "help"
 msgstr ""
 
-#: dbf_mod.cpp:163
+#: dbf_mod.cpp:161
 msgid "Delete DB error!"
-msgstr ""
+msgstr "Помилка видалення БД!"
 
-#: dbf_mod.cpp:172
+#: dbf_mod.cpp:170
 #, c-format
 msgid "Error create DB directory <%s>!"
+msgstr "Помилка створення директорії БД <%s>!"
+
+#: dbf_mod.cpp:171
+msgid "Restore previous directory as curent is error."
+msgstr "Помилка відновлення минулої директорії як поточну."
+
+#: dbf_mod.cpp:188
+msgid ".."
 msgstr ""
 
-#: dbf_mod.cpp:181
-#, c-format
-msgid "Error open table <%s>. DB disabled."
+#: dbf_mod.cpp:188 dbf_mod.cpp:189 dbf_mod.cpp:192
+msgid "."
 msgstr ""
 
-#: dbf_mod.cpp:195 dbf_mod.cpp:196 dbf_mod.cpp:224 dbf_mod.cpp:225
+#: dbf_mod.cpp:189 dbf_mod.cpp:214 dbf_mod.cpp:215 dbf_mod.cpp:241
+#: dbf_mod.cpp:242
 msgid ".dbf"
 msgstr ""
 
-#: dbf_mod.cpp:206
-msgid "Open table error!"
-msgstr ""
-
-#: dbf_mod.cpp:227
+#: dbf_mod.cpp:190 dbf_mod.cpp:244
 msgid "/"
 msgstr ""
 
-#: dbf_mod.cpp:228
+#: dbf_mod.cpp:200
+#, c-format
+msgid "Error open table <%s>. DB disabled."
+msgstr "Помилка відкриття таблиці <%s>. БД вимкнено."
+
+#: dbf_mod.cpp:224
+msgid "Open table error!"
+msgstr "Помилка відкриття таблиці!"
+
+#: dbf_mod.cpp:245
 #, c-format
 msgid "%s"
 msgstr ""
 
-#: dbf_mod.cpp:259 dbf_mod.cpp:312 dbf_mod.cpp:433 dbf_mod.cpp:489
+#: dbf_mod.cpp:276 dbf_mod.cpp:329 dbf_mod.cpp:450 dbf_mod.cpp:509
 msgid "Cell error!"
-msgstr ""
+msgstr "Помилка чарунки!"
 
-#: dbf_mod.cpp:292
-msgid "Field no avoid!"
-msgstr ""
+#: dbf_mod.cpp:309 dbf_mod.cpp:472
+msgid "Field no present!"
+msgstr "Поле відсутне!"
 
-#: dbf_mod.cpp:361 dbf_mod.cpp:387
+#: dbf_mod.cpp:378 dbf_mod.cpp:404
 msgid "Column error!"
-msgstr ""
+msgstr "Помилка стовпчику!"
 
-#: dbf_mod.cpp:399
+#: dbf_mod.cpp:416
 msgid "Delete field error!"
-msgstr ""
+msgstr "Помилка видалення поля!"
 
-#: dbf_mod.cpp:424
+#: dbf_mod.cpp:441
 #, c-format
 msgid "%*.*f"
 msgstr ""
 
-#: dbf_mod.cpp:428
+#: dbf_mod.cpp:445
 msgid "T"
 msgstr ""
 
-#: dbf_mod.cpp:428
+#: dbf_mod.cpp:445
 msgid "F"
 msgstr ""
 
-#: dbf_mod.cpp:450
+#: dbf_mod.cpp:467
 msgid "Line error!"
-msgstr ""
+msgstr "Помилка лінії!"
 
-#: dbf_mod.cpp:455
-msgid "Field no present!"
-msgstr ""
-
-#: dbf_mod.cpp:485
+#: dbf_mod.cpp:505
 #, c-format
-msgid "Key column <%s> no avoid!"
-msgstr ""
+msgid "Key column <%s> no present!"
+msgstr "Ключовий стовпчик <%s> відсутнії!"

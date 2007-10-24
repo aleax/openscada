@@ -450,7 +450,7 @@ void TBDS::subLoad( )
 	{
             id = c_el.cfg("ID").getS();
     	    type = c_el.cfg("TYPE").getS();	    
-	    if( (type+"."+id) != SYS->workDB() && !at(type).at().openStat(id) )
+	    if( (type+"."+id) != SYS->workDB() && modPresent(type) && !at(type).at().openStat(id) )
     		at(type).at().open(id);
 	    c_el.cfg("ID").setS("");
             c_el.cfg("TYPE").setS("");

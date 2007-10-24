@@ -1,7 +1,23 @@
+2007-10-24 Roman
+- FIX:/DB: Loading DB interupt after broken DB record is fixed.
+- FIX:/Archive/DB: Special archivator's attributes broken size is fixed.
+- !!:/SYS/Module: Module API for all modules is updated.
+- !!:/DB/DBF: Translation and documentation is updated and version 1.8.1 is relised.
+- !!:/DB/FireBird: Translation and documentation is updated and version 0.6.0 is relised.
+- !!:/DB/MySQL: Translation and documentation is updated and version 1.3.0 is relised.
+- !!:/DB/SQLite: Translation and documentation is updated and version 1.3.0 is relised.
+- !!:/Protocol/HTTP: Translation and documentation is updated and version 1.3.0 is relised.
+- !!:/Protocol/SelfSystem: Translation and documentation is updated and version 0.7.0 is relised.
+- !!:/Special/FLibComplex1: Translation and documentation is updated and version 1.0.0 is relised.
+- !!:/Special/FLibMath: Translation and documentation is updated.
+- !!:/Special/FLibSYS: Translation and documentation is updated and version 0.5.0 is relised.
+- !!:/Special/SystemTests: Translation and documentation is updated and version 1.3.5 is relised.
+
+
 2007-10-22 Roman
 - /SYS: QT4 directory checking to configure script is added.
-- !!:/Archive/DBArch: Translation is updated and version 0.5.0 is relised.
-- !!:/Archive/FSArch: Translation is updated and version 0.9.5 is relised.
+- !!:/Archive/DBArch: Translation and documentation is updated and version 0.5.0 is relised.
+- !!:/Archive/FSArch: Translation and documentation is updated and version 0.9.5 is relised.
 - !!:/DB/FireBird: Blob for storing big text data support is added.
 - FIX:/DAQ/LogicLev: Self direct linking preventing is made.
 - FIX:/Transport/Sockets: Blocking input transport by opened client on stoping is fixed.

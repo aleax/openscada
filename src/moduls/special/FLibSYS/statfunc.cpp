@@ -6,8 +6,7 @@
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -27,7 +26,8 @@
 #include "timefnc.h"
 #include "statfunc.h"
 
-//============ Modul info! =====================================================
+//*************************************************
+//* Modul info!                                   *
 #define MOD_ID		"FLibSYS"
 #define MOD_NAME    	"System API functions"
 #define MOD_TYPE    	"Special"
@@ -36,8 +36,8 @@
 #define MOD_LICENSE	"GPL"
 #define VER_TYPE    	VER_SPC
 #define SUB_TYPE    	"LIB"
-#define VERSION     	"0.3.0"
-//==============================================================================
+#define VERSION     	"0.5.0"
+//*************************************************
 
 FLibSYS::Lib *FLibSYS::mod;
 
@@ -45,37 +45,26 @@ extern "C"
 {
     TModule::SAt module( int n_mod )
     {
-	TModule::SAt AtMod;
-
-	if(n_mod==0)
-	{
-	    AtMod.id	= MOD_ID;
-	    AtMod.type  = MOD_TYPE;
-	    AtMod.t_ver = VER_TYPE;
-	}
-    	else
-	    AtMod.id	= "";
-
-	return( AtMod );
+	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	return TModule::SAt("");
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	FLibSYS::Lib *self_addr = NULL;
-
-    	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    FLibSYS::mod = self_addr = new FLibSYS::Lib( source );
-
-	return ( self_addr );
+    	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
+	    return new FLibSYS::Lib( source );
+	return NULL;
     }
 }
 
 using namespace FLibSYS;
 
-//Complex1 functions library
+//*************************************************
+//* Lib: Complex1 functions library               *
+//*************************************************
 Lib::Lib( string src )
 {
-    //== Set modul info! ============
+    //- Set modul info! -
     mId 	= MOD_ID;
     mName       = MOD_NAME;
     mType  	= MOD_TYPE;
@@ -84,6 +73,8 @@ Lib::Lib( string src )
     mDescr  	= MOD_DESCR;
     mLicense   	= MOD_LICENSE;
     mSource    	= src;
+    
+    mod		= this;
     
     m_fnc = grpAdd("fnc_");
 }
@@ -97,8 +88,9 @@ void Lib::postEnable( int flag )
 {
     TModule::postEnable( flag );
     
-    if( flag&TCntrNode::NodeRestore )	return;        
-    //Reg functions    
+    if( flag&TCntrNode::NodeRestore )	return;
+    
+    //- Reg functions -
     reg( new varhOpen() );
     reg( new varhBufOpen() );
     reg( new varhClose() );
@@ -245,7 +237,7 @@ TValBuf *Lib::vbuf( int id )
 
 void Lib::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
         TSpecial::cntrCmdProc(opt);
@@ -253,7 +245,7 @@ void Lib::cntrCmdProc( XMLNode *opt )
         ctrMkNode("list",opt,-1,"/prm/func",_("Functions"),0444,"root","root",3,"tp","br","idm","1","br_pref","fnc_");
         return;
     }
-    //Process command to page
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/prm/func" && ctrChkNode(opt) )
     {

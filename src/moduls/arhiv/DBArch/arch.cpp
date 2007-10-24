@@ -48,22 +48,13 @@ extern "C"
 { 
     TModule::SAt module( int n_mod )
     {
-	TModule::SAt AtMod;
-	
-	if(n_mod==0) 
-	{
-	    AtMod.id	= MOD_ID;
-	    AtMod.type  = MOD_TYPE;
-	    AtMod.t_ver = VER_TYPE;
-	}
-	else
-	    AtMod.id	= "";
-	return AtMod;    
+	if( n_mod==0 ) 	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	return TModule::SAt("");    
     }
     
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE ) 
+	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) ) 
 	    return new DBArch::ModArch( source );
 	return NULL;
     }    
@@ -95,10 +86,10 @@ void ModArch::postEnable( int flag )
     if( flag&TCntrNode::NodeConnect )
     {
 	//- Add self DB-fields for messages archive -
-        owner().messE().fldAdd( new TFld("DBArchSize",_("Archive size (hours)"),TFld::Real,TFld::NoFlag,"9999.5","24") );
+        owner().messE().fldAdd( new TFld("DBArchSize",_("Archive size (hours)"),TFld::Real,TFld::NoFlag,"20.5","24") );
 
 	//- Add self DB-fields for value archive -
-	owner().valE().fldAdd( new TFld("DBArchSize",_("Archive size (hours)"),TFld::Real,TFld::NoFlag,"9999.5","24") );
+	owner().valE().fldAdd( new TFld("DBArchSize",_("Archive size (hours)"),TFld::Real,TFld::NoFlag,"20.5","24") );
 	    
         //- Archivators info table DB structure -
 	el_arch.fldAdd( new TFld("TBL",_("Table"),TFld::String,TCfg::Key,"50") );

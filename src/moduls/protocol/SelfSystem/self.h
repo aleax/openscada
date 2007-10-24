@@ -1,13 +1,12 @@
 
 //OpenSCADA system module Protocol.SelfSystem file: self.h
 /***************************************************************************
- *   Copyright (C) 2003-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2007 by Roman Savochenko                                *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -31,29 +30,33 @@
 namespace SelfPr
 {
 
-//================================================================
-//=========== TProtIn ============================================
-//================================================================
+//*************************************************
+//* TProtIn                                       *
+//*************************************************
 class TProtIn: public TProtocolIn
 {
     public:
+	//Methods
 	TProtIn( string name );
 	~TProtIn();
 
 	bool mess( const string &request, string &answer, const string &sender );
 	
     private:
+	//Attributes
 	bool m_nofull;
 	string req_buf;
 };
 
-//================================================================
-//=========== TProt ==============================================
-//================================================================
+//*************************************************
+//* TProt                                         *
+//*************************************************
 class TProt: public TProtocol
 {
     public:
 	//Data
+	//*****************************************
+	//* SAuth                                 *	
 	class SAuth
 	{
 	    public:
@@ -95,5 +98,6 @@ class TProt: public TProtocol
 
 extern TProt *mod;
 } //End namespace SelfPr
+
 #endif //SELF_H
 

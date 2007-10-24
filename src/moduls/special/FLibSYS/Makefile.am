@@ -1,5 +1,5 @@
 ## process this file with automake to generate Makefile.in
-EXTRA_DIST = *.h po/*
+EXTRA_DIST = *.h po/* doc/*
 
 AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
 AM_LDFLAGS= -shared -module 
@@ -29,7 +29,7 @@ install-data-local:
 	rm $$name ; \
 	done
 	install -m 755 -d $(oscd_docdir)/$(fm_name)
-#	install -m 644 doc/*.pdf $(oscd_docdir)/$(fm_name)
+	install -m 644 doc/*.pdf $(oscd_docdir)/$(fm_name)
 
 uninstall-local:
 	@catalogs=`find ./po -name \*.po` ; \

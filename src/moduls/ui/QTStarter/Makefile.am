@@ -14,7 +14,7 @@ moc_tuimod.cpp: tuimod.h
 	$(QT4_MOC) tuimod.h > moc_tuimod.cpp
 
 #PO files process and doc install
-fm_name = Mod_Tr_QTStarter
+fm_name = Mod_UI_QTStarter
 m_name = $(oscd_modulpref)QTStarter
 
 messages:

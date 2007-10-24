@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: statfunc.cpp:53
+#: statfunc.cpp:45
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: statfunc 1.0.0\n"
+"Project-Id-Version: Special.FLibMath 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-15 11:05+0200\n"
-"PO-Revision-Date: 2004-11-11 12:09+0200\n"
+"POT-Creation-Date: 2007-10-24 18:10+0300\n"
+"PO-Revision-Date: 2007-10-24 18:10+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -40,384 +40,384 @@ msgstr ""
 msgid "C"
 msgstr ""
 
-#: statfunc.cpp:79
+#: statfunc.cpp:68
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-#: statfunc.cpp:80
+#: statfunc.cpp:69
 msgid "Allow mathematic static function library."
 msgstr "Надає статичну бібліотеку математичних функцій."
 
-#: statfunc.cpp:81
+#: statfunc.cpp:70
 msgid "GPL"
 msgstr ""
 
-#: statfunc.cpp:84 statfunc.cpp:143
+#: statfunc.cpp:75 statfunc.cpp:136
 msgid "fnc_"
 msgstr ""
 
-#: statfunc.cpp:97 stdmath.h:49
-msgid "acos"
-msgstr ""
-
-#: statfunc.cpp:98 stdmath.h:71
-msgid "asin"
-msgstr ""
-
-#: statfunc.cpp:99 stdmath.h:93
-msgid "atan"
-msgstr ""
-
-#: statfunc.cpp:100 stdmath.h:115
-msgid "cos"
-msgstr ""
-
-#: statfunc.cpp:101 stdmath.h:137
-msgid "cosh"
-msgstr ""
-
-#: statfunc.cpp:102 stdmath.h:159
-msgid "exp"
-msgstr ""
-
-#: statfunc.cpp:103 stdmath.h:181
-msgid "ln"
-msgstr ""
-
-#: statfunc.cpp:104 stdmath.h:203
-msgid "lg"
-msgstr ""
-
-#: statfunc.cpp:105 stdmath.h:225
-msgid "pow"
-msgstr ""
-
-#: statfunc.cpp:106 stdmath.h:248
-msgid "sin"
-msgstr ""
-
-#: statfunc.cpp:107 stdmath.h:270
-msgid "sinh"
-msgstr ""
-
-#: statfunc.cpp:108 stdmath.h:292
-msgid "sqrt"
-msgstr ""
-
-#: statfunc.cpp:109 stdmath.h:314
-msgid "tan"
-msgstr ""
-
-#: statfunc.cpp:110 stdmath.h:336
-msgid "tanh"
-msgstr ""
-
-#: statfunc.cpp:111 stdmath.h:358
-msgid "ceil"
-msgstr ""
-
-#: statfunc.cpp:112 stdmath.h:380
-msgid "abs"
-msgstr ""
-
-#: statfunc.cpp:113 stdmath.h:402
-msgid "floor"
-msgstr ""
-
-#: statfunc.cpp:114 stdmath.h:424
-msgid "rand"
-msgstr ""
-
-#: statfunc.cpp:115 stdmath.h:445
-msgid "if"
-msgstr ""
-
-#: statfunc.cpp:139
+#: statfunc.cpp:132
 msgid "info"
 msgstr ""
 
-#: statfunc.cpp:142
+#: statfunc.cpp:135
 msgid "grp"
 msgstr ""
 
-#: statfunc.cpp:142
+#: statfunc.cpp:135
 msgid "/br/fnc_"
 msgstr ""
 
-#: statfunc.cpp:142
+#: statfunc.cpp:135
 msgid "Function"
 msgstr "Функція"
 
-#: statfunc.cpp:142 statfunc.cpp:143
+#: statfunc.cpp:135 statfunc.cpp:136
 msgid "root"
 msgstr ""
 
-#: statfunc.cpp:142 statfunc.cpp:143
+#: statfunc.cpp:135 statfunc.cpp:136
 msgid "list"
 msgstr ""
 
-#: statfunc.cpp:142 statfunc.cpp:143 statfunc.cpp:148
+#: statfunc.cpp:135 statfunc.cpp:136 statfunc.cpp:142
 msgid "/prm/func"
 msgstr ""
 
-#: statfunc.cpp:143
+#: statfunc.cpp:136
 msgid "Functions"
 msgstr "Функції"
 
-#: statfunc.cpp:143
+#: statfunc.cpp:136
 msgid "tp"
 msgstr ""
 
-#: statfunc.cpp:143
+#: statfunc.cpp:136
 msgid "br"
 msgstr ""
 
-#: statfunc.cpp:143
+#: statfunc.cpp:136
 msgid "idm"
 msgstr ""
 
-#: statfunc.cpp:143 stdmath.h:448
+#: statfunc.cpp:136 stdmath.h:449
 msgid "1"
 msgstr ""
 
-#: statfunc.cpp:143
+#: statfunc.cpp:136
 msgid "br_pref"
 msgstr ""
 
-#: statfunc.cpp:147
+#: statfunc.cpp:141
 msgid "path"
 msgstr ""
 
-#: statfunc.cpp:153
+#: statfunc.cpp:147
 msgid "el"
 msgstr ""
 
-#: statfunc.cpp:153
+#: statfunc.cpp:147
 msgid "id"
 msgstr ""
 
-#: stdmath.h:51 stdmath.h:73 stdmath.h:95 stdmath.h:117 stdmath.h:139
-#: stdmath.h:161 stdmath.h:183 stdmath.h:205 stdmath.h:227 stdmath.h:250
-#: stdmath.h:272 stdmath.h:294 stdmath.h:316 stdmath.h:338 stdmath.h:360
-#: stdmath.h:382 stdmath.h:404 stdmath.h:426 stdmath.h:447
-msgid "y"
-msgstr ""
-
-#: stdmath.h:51 stdmath.h:73 stdmath.h:95
-msgid "Y(rad.)"
-msgstr "Y(рад.)"
-
-#: stdmath.h:51 stdmath.h:52 stdmath.h:73 stdmath.h:74 stdmath.h:95
-#: stdmath.h:96 stdmath.h:117 stdmath.h:118 stdmath.h:139 stdmath.h:140
-#: stdmath.h:161 stdmath.h:162 stdmath.h:183 stdmath.h:184 stdmath.h:205
-#: stdmath.h:206 stdmath.h:227 stdmath.h:228 stdmath.h:229 stdmath.h:250
-#: stdmath.h:251 stdmath.h:272 stdmath.h:273 stdmath.h:294 stdmath.h:295
-#: stdmath.h:316 stdmath.h:317 stdmath.h:338 stdmath.h:339 stdmath.h:360
-#: stdmath.h:361 stdmath.h:382 stdmath.h:383 stdmath.h:404 stdmath.h:405
-#: stdmath.h:426 stdmath.h:447 stdmath.h:449 stdmath.h:450
-msgid "0"
+#: stdmath.h:50
+msgid "acos"
 msgstr ""
 
 #: stdmath.h:52 stdmath.h:74 stdmath.h:96 stdmath.h:118 stdmath.h:140
 #: stdmath.h:162 stdmath.h:184 stdmath.h:206 stdmath.h:228 stdmath.h:251
 #: stdmath.h:273 stdmath.h:295 stdmath.h:317 stdmath.h:339 stdmath.h:361
-#: stdmath.h:383 stdmath.h:405
+#: stdmath.h:383 stdmath.h:405 stdmath.h:427 stdmath.h:448
+msgid "y"
+msgstr ""
+
+#: stdmath.h:52 stdmath.h:74 stdmath.h:96
+msgid "Y(rad.)"
+msgstr "Y(рад.)"
+
+#: stdmath.h:52 stdmath.h:53 stdmath.h:74 stdmath.h:75 stdmath.h:96
+#: stdmath.h:97 stdmath.h:118 stdmath.h:119 stdmath.h:140 stdmath.h:141
+#: stdmath.h:162 stdmath.h:163 stdmath.h:184 stdmath.h:185 stdmath.h:206
+#: stdmath.h:207 stdmath.h:228 stdmath.h:229 stdmath.h:230 stdmath.h:251
+#: stdmath.h:252 stdmath.h:273 stdmath.h:274 stdmath.h:295 stdmath.h:296
+#: stdmath.h:317 stdmath.h:318 stdmath.h:339 stdmath.h:340 stdmath.h:361
+#: stdmath.h:362 stdmath.h:383 stdmath.h:384 stdmath.h:405 stdmath.h:406
+#: stdmath.h:427 stdmath.h:448 stdmath.h:450 stdmath.h:451
+msgid "0"
+msgstr ""
+
+#: stdmath.h:53 stdmath.h:75 stdmath.h:97 stdmath.h:119 stdmath.h:141
+#: stdmath.h:163 stdmath.h:185 stdmath.h:207 stdmath.h:229 stdmath.h:252
+#: stdmath.h:274 stdmath.h:296 stdmath.h:318 stdmath.h:340 stdmath.h:362
+#: stdmath.h:384 stdmath.h:406
 msgid "x"
 msgstr ""
 
-#: stdmath.h:52 stdmath.h:74 stdmath.h:96 stdmath.h:140 stdmath.h:162
-#: stdmath.h:184 stdmath.h:206 stdmath.h:228 stdmath.h:273 stdmath.h:295
-#: stdmath.h:339 stdmath.h:361 stdmath.h:383 stdmath.h:405
+#: stdmath.h:53 stdmath.h:75 stdmath.h:97 stdmath.h:141 stdmath.h:163
+#: stdmath.h:185 stdmath.h:207 stdmath.h:229 stdmath.h:274 stdmath.h:296
+#: stdmath.h:340 stdmath.h:362 stdmath.h:384 stdmath.h:406
 msgid "X"
 msgstr ""
 
-#: stdmath.h:55
+#: stdmath.h:56
 msgid "ArcCos"
 msgstr "Арккосинус"
 
-#: stdmath.h:56
+#: stdmath.h:57
 msgid "Arc cosine math function."
 msgstr "Мат. функція арккосинус."
 
-#: stdmath.h:77
+#: stdmath.h:72
+msgid "asin"
+msgstr ""
+
+#: stdmath.h:78
 msgid "ArcSin"
 msgstr "Арксинус"
 
-#: stdmath.h:78
+#: stdmath.h:79
 msgid "Arc sine math function."
 msgstr "Мат. функція арксинус."
 
-#: stdmath.h:99
+#: stdmath.h:94
+msgid "atan"
+msgstr ""
+
+#: stdmath.h:100
 msgid "ArcTan"
 msgstr "Арктангенс"
 
-#: stdmath.h:100
+#: stdmath.h:101
 msgid "Arc tangent math function."
 msgstr "Мат. функція арктангенс."
 
-#: stdmath.h:117 stdmath.h:139 stdmath.h:161 stdmath.h:183 stdmath.h:205
-#: stdmath.h:227 stdmath.h:250 stdmath.h:272 stdmath.h:294 stdmath.h:316
-#: stdmath.h:338 stdmath.h:360 stdmath.h:382 stdmath.h:404 stdmath.h:426
-#: stdmath.h:447
+#: stdmath.h:116
+msgid "cos"
+msgstr ""
+
+#: stdmath.h:118 stdmath.h:140 stdmath.h:162 stdmath.h:184 stdmath.h:206
+#: stdmath.h:228 stdmath.h:251 stdmath.h:273 stdmath.h:295 stdmath.h:317
+#: stdmath.h:339 stdmath.h:361 stdmath.h:383 stdmath.h:405 stdmath.h:427
+#: stdmath.h:448
 msgid "Y"
 msgstr ""
 
-#: stdmath.h:118 stdmath.h:251 stdmath.h:317
+#: stdmath.h:119 stdmath.h:252 stdmath.h:318
 msgid "X(rad.)"
 msgstr "X(рад.)"
 
-#: stdmath.h:121
+#: stdmath.h:122
 msgid "Cosine"
 msgstr "Косинус"
 
-#: stdmath.h:122
+#: stdmath.h:123
 msgid "Cosine math function."
 msgstr "Мат. функція косинус"
 
-#: stdmath.h:143
+#: stdmath.h:138
+msgid "cosh"
+msgstr ""
+
+#: stdmath.h:144
 msgid "Cosine hyperbolical"
 msgstr "Косинус гіпербалічний"
 
-#: stdmath.h:144
+#: stdmath.h:145
 msgid "Cosine hyperbolical math function."
 msgstr "Мат. функція косинус гіпербалічний."
 
-#: stdmath.h:165
+#: stdmath.h:160
+msgid "exp"
+msgstr ""
+
+#: stdmath.h:166
 msgid "Exponent"
 msgstr "Експонента"
 
-#: stdmath.h:166
+#: stdmath.h:167
 msgid "Exponent math function."
 msgstr "Мат. функція експонента."
 
-#: stdmath.h:187
+#: stdmath.h:182
+msgid "ln"
+msgstr ""
+
+#: stdmath.h:188
 msgid "Natural logarithm"
 msgstr "Натуральний логарифм"
 
-#: stdmath.h:188
+#: stdmath.h:189
 msgid "Natural logarithm math function."
 msgstr "Мат. функція натуральний логарифм."
 
-#: stdmath.h:209
+#: stdmath.h:204
+msgid "lg"
+msgstr ""
+
+#: stdmath.h:210
 msgid "Decimal logarithm"
 msgstr "Десятичний логарифм"
 
-#: stdmath.h:210
+#: stdmath.h:211
 msgid "Decimal logarithm math function."
 msgstr "Мат. функція десятичній логарифм."
 
-#: stdmath.h:229
+#: stdmath.h:226
+msgid "pow"
+msgstr ""
+
+#: stdmath.h:230
 msgid "p"
 msgstr ""
 
-#: stdmath.h:229 stdmath.h:232
+#: stdmath.h:230 stdmath.h:233
 msgid "Power"
 msgstr "Степінь"
 
-#: stdmath.h:233
+#: stdmath.h:234
 msgid "Power math function."
 msgstr "Мат. функція возведення у степінь"
 
-#: stdmath.h:254
+#: stdmath.h:249
+msgid "sin"
+msgstr ""
+
+#: stdmath.h:255
 msgid "Sine"
 msgstr "Синус"
 
-#: stdmath.h:255
+#: stdmath.h:256
 msgid "Sine math function."
 msgstr "Мат. функція синус."
 
-#: stdmath.h:276
+#: stdmath.h:271
+msgid "sinh"
+msgstr ""
+
+#: stdmath.h:277
 msgid "Sine hyperbolical"
 msgstr "Синус гіпербалічний"
 
-#: stdmath.h:277
+#: stdmath.h:278
 msgid "Sine hyperbolical math function."
 msgstr "Мат. функція синус гіпербалічний."
 
-#: stdmath.h:298
+#: stdmath.h:293
+msgid "sqrt"
+msgstr ""
+
+#: stdmath.h:299
 msgid "Square root"
 msgstr "Корінь квадратний"
 
-#: stdmath.h:299
+#: stdmath.h:300
 msgid "Square root math function."
 msgstr "Мат. функція корінь квадратний."
 
-#: stdmath.h:320
+#: stdmath.h:315
+msgid "tan"
+msgstr ""
+
+#: stdmath.h:321
 msgid "Tangent"
 msgstr "Тангенс"
 
-#: stdmath.h:321
+#: stdmath.h:322
 msgid "Tangent math function."
 msgstr "Мат. функція тангенс."
 
-#: stdmath.h:342
+#: stdmath.h:337
+msgid "tanh"
+msgstr ""
+
+#: stdmath.h:343
 msgid "Tangent hyperbolical"
 msgstr "Тангенс гіпербалічний"
 
-#: stdmath.h:343
+#: stdmath.h:344
 msgid "Tangent hyperbolical math function."
 msgstr "Мат. функція тангенс гіпербалічний."
 
-#: stdmath.h:364
+#: stdmath.h:359
+msgid "ceil"
+msgstr ""
+
+#: stdmath.h:365
 msgid "Ceil"
 msgstr "Округл. до більшого"
 
-#: stdmath.h:365
+#: stdmath.h:366
 msgid "Ceil math function."
 msgstr "Мат. функція округлення до більшого цілого."
 
-#: stdmath.h:386
+#: stdmath.h:381
+msgid "abs"
+msgstr ""
+
+#: stdmath.h:387
 msgid "Absolute"
 msgstr "Модуль"
 
-#: stdmath.h:387
+#: stdmath.h:388
 msgid "Absolute math function."
 msgstr "Мат. функція модуль значення."
 
-#: stdmath.h:408
+#: stdmath.h:403
+msgid "floor"
+msgstr ""
+
+#: stdmath.h:409
 msgid "Floor"
 msgstr "Округл. до меншого"
 
-#: stdmath.h:409
+#: stdmath.h:410
 msgid "Floor math function."
 msgstr "Мат. функція округлення до меншого цілого."
 
-#: stdmath.h:429
+#: stdmath.h:425
+msgid "rand"
+msgstr ""
+
+#: stdmath.h:430
 msgid "Rand"
 msgstr "Випадк. число"
 
-#: stdmath.h:430
+#: stdmath.h:431
 msgid "Rand math function."
 msgstr "Мат. функція генерації випадкових чисел."
 
-#: stdmath.h:448
+#: stdmath.h:446
+msgid "if"
+msgstr ""
+
+#: stdmath.h:449
 msgid "cond"
 msgstr ""
 
-#: stdmath.h:448
+#: stdmath.h:449
 msgid "Condition"
 msgstr "Умова"
 
-#: stdmath.h:449
+#: stdmath.h:450
 msgid "true"
 msgstr ""
 
-#: stdmath.h:449
+#: stdmath.h:450
 msgid "True value"
 msgstr "Дійсне значення"
 
-#: stdmath.h:450
+#: stdmath.h:451
 msgid "false"
 msgstr ""
 
-#: stdmath.h:450
+#: stdmath.h:451
 msgid "False value"
 msgstr "Помилкове значення"
 
-#: stdmath.h:453
+#: stdmath.h:454
 msgid "IF condition"
 msgstr "Умова Якщо"
 
-#: stdmath.h:454
+#: stdmath.h:455
 msgid "Function's type 'if'-condition."
 msgstr "Функція типу 'якщо'-умова."

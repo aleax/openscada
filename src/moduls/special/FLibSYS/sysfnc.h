@@ -1,13 +1,12 @@
 
 //OpenSCADA system module Special.FLibSYS file: sysfnc.h
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -32,20 +31,23 @@
 namespace FLibSYS
 {
 
-//Archive subsystem's functions
+//*************************************************
+//* Archive subsystem's functions                 *
 
-//- Value archive open -
+//*************************************************
+//* Value archive open                            *
+//*************************************************
 class varhOpen : public TFunction
 {
     public:
-	varhOpen() : TFunction("varhOpen")
+	varhOpen( ) : TFunction("varhOpen")
 	{
 	    ioAdd( new IO("id",_("Archive id"),IO::Integer,IO::Return) );
 	    ioAdd( new IO("name",_("Name"),IO::String,IO::Default) );
 	}
 	
-	string name()	{ return _("Varch: Open"); }
-	string descr()	{ return _("Open value archive."); }
+	string name( )	{ return _("Varch: Open"); }
+	string descr( )	{ return _("Open value archive."); }
 
 	void calc( TValFunc *val )
 	{
@@ -53,17 +55,19 @@ class varhOpen : public TFunction
 	}
 };
 
-//- Value archive close -
+//*************************************************
+//* Value archive close                           *
+//*************************************************
 class varhClose : public TFunction
 {
     public:
-	varhClose() : TFunction("varhClose")
+	varhClose( ) : TFunction("varhClose")
 	{
 	    ioAdd( new IO("id",_("Archive id"),IO::Integer,IO::Default) );
 	}
 	
-	string name()	{ return _("Varch: Close"); }
-	string descr()	{ return _("Close opened value archive or buffer."); }
+	string name( )	{ return _("Varch: Close"); }
+	string descr( )	{ return _("Close opened value archive or buffer."); }
 
 	void calc( TValFunc *val )
 	{
@@ -71,11 +75,13 @@ class varhClose : public TFunction
 	}
 };
 
-//- Value archive begin -
+//*************************************************
+//* Value archive begin                           *
+//*************************************************
 class varhBeg : public TFunction
 {
     public:
-	varhBeg() : TFunction("varhBeg")
+	varhBeg( ) : TFunction("varhBeg")
 	{	    
 	    ioAdd( new IO("id",_("Archive id"),IO::Integer,IO::Default) );
 	    ioAdd( new IO("sek",_("Seconds"),IO::Integer,IO::Output) );
@@ -83,8 +89,8 @@ class varhBeg : public TFunction
 	    ioAdd( new IO("archtor",_("Archivator"),IO::String,IO::Default) );	    
 	}
 	
-	string name()	{ return _("Varch: Begin"); }
-	string descr()	{ return _("Begin of opened value archive or buffer."); }
+	string name( )	{ return _("Varch: Begin"); }
+	string descr( )	{ return _("Begin of opened value archive or buffer."); }
 
 	void calc( TValFunc *val )
 	{	    
@@ -103,11 +109,13 @@ class varhBeg : public TFunction
 	}
 };
 
-//- Value archive end -
+//*************************************************
+//* Value archive end                             *
+//*************************************************
 class varhEnd : public TFunction
 {
     public:
-	varhEnd() : TFunction("varhEnd")
+	varhEnd( ) : TFunction("varhEnd")
 	{	    
 	    ioAdd( new IO("id",_("Archive id"),IO::Integer,IO::Default) );
 	    ioAdd( new IO("sek",_("Seconds"),IO::Integer,IO::Output) );
@@ -115,8 +123,8 @@ class varhEnd : public TFunction
 	    ioAdd( new IO("archtor",_("Archivator"),IO::String,IO::Default) );	    
 	}
 	
-	string name()	{ return _("Varch: End"); }
-	string descr()	{ return _("End of opened value archive or buffer."); }
+	string name( )	{ return _("Varch: End"); }
+	string descr( )	{ return _("End of opened value archive or buffer."); }
 
 	void calc( TValFunc *val )
 	{
@@ -135,11 +143,13 @@ class varhEnd : public TFunction
 	}
 };
 
-//- Value copy among archives and buffers -
+//*************************************************
+//* Value copy among archives and buffers         *
+//*************************************************
 class varhCopyBuf : public TFunction
 {
     public:
-	varhCopyBuf() : TFunction("varhCopyBuf")
+	varhCopyBuf( ) : TFunction("varhCopyBuf")
 	{	    
 	    ioAdd( new IO("sid",_("Source buffer id"),IO::Integer,IO::Default) );
 	    ioAdd( new IO("did",_("Destination buffer id"),IO::Integer,IO::Default) );
@@ -150,8 +160,8 @@ class varhCopyBuf : public TFunction
 	    ioAdd( new IO("archtor",_("Archivator"),IO::String,IO::Default) );
 	}
 	
-	string name()	{ return _("Varch: Copy values"); }
-	string descr()	{ return _("Copy values among value archives and buffers."); }
+	string name( )	{ return _("Varch: Copy values"); }
+	string descr( )	{ return _("Copy values among value archives and buffers."); }
 
 	void calc( TValFunc *val )
 	{
@@ -195,11 +205,13 @@ class varhCopyBuf : public TFunction
     	}
 };
 
-//- Value buffer open -
+//*************************************************
+//* Value buffer open                             *
+//*************************************************
 class varhBufOpen : public TFunction
 {
     public:
-	varhBufOpen() : TFunction("varhBufOpen")
+	varhBufOpen( ) : TFunction("varhBufOpen")
 	{
 	    ioAdd( new IO("id",_("Archive id"),IO::Integer,IO::Return) );
 	    ioAdd( new IO("tp",_("Type"),IO::Integer,IO::Default,"1") );
@@ -209,8 +221,8 @@ class varhBufOpen : public TFunction
 	    ioAdd( new IO("hres",_("High resolution"),IO::Boolean,IO::Default,"0") );        
 	}
 	
-	string name()	{ return _("Varch: Buffer open"); }
-	string descr()	{ return _("Open value buffer for temporary values storing."); }
+	string name( )	{ return _("Varch: Buffer open"); }
+	string descr( )	{ return _("Open value buffer for temporary values storing."); }
 
 	void calc( TValFunc *val )
 	{
@@ -218,11 +230,13 @@ class varhBufOpen : public TFunction
 	}
 };
 
-//- Get integer -
+//*************************************************
+//* Get integer                                   *
+//*************************************************
 class varhGetI : public TFunction
 {
     public:
-	varhGetI() : TFunction("varhGetI")
+	varhGetI( ) : TFunction("varhGetI")
 	{
 	    ioAdd( new IO("val",_("Return value"),IO::Integer,IO::Return) );
 	    ioAdd( new IO("id",_("Buffer id"),IO::Integer,IO::Default) );
@@ -232,8 +246,8 @@ class varhGetI : public TFunction
 	    ioAdd( new IO("archtor",_("Archivator"),IO::String,IO::Default) );
 	}
 	
-	string name()	{ return _("Varch: Get integer"); }
-	string descr()	{ return _("Get integer from archive or buffer."); }
+	string name( )	{ return _("Varch: Get integer"); }
+	string descr( )	{ return _("Get integer from archive or buffer."); }
 
 	void calc( TValFunc *val )
 	{
@@ -251,11 +265,13 @@ class varhGetI : public TFunction
 	}
 };
 
-//- Get real -
+//*************************************************
+//* Get real                                      *
+//*************************************************
 class varhGetR : public TFunction
 {
     public:
-	varhGetR() : TFunction("varhGetR")
+	varhGetR( ) : TFunction("varhGetR")
 	{
 	    ioAdd( new IO("val",_("Return value"),IO::Real,IO::Return) );
 	    ioAdd( new IO("id",_("Buffer id"),IO::Integer,IO::Default) );
@@ -265,8 +281,8 @@ class varhGetR : public TFunction
 	    ioAdd( new IO("archtor",_("Archivator"),IO::String,IO::Default) );	    
 	}
 	
-	string name()	{ return _("Varch: Get real"); }
-	string descr()	{ return _("Get real from archive or buffer."); }
+	string name( )	{ return _("Varch: Get real"); }
+	string descr( )	{ return _("Get real from archive or buffer."); }
 
 	void calc( TValFunc *val )
 	{
@@ -284,11 +300,13 @@ class varhGetR : public TFunction
 	}
 };
 
-//- Get boolean -
+//*************************************************
+//* Get boolean                                   *
+//*************************************************
 class varhGetB : public TFunction
 {
     public:
-	varhGetB() : TFunction("varhGetB")
+	varhGetB( ) : TFunction("varhGetB")
 	{
 	    ioAdd( new IO("val",_("Return value"),IO::Integer,IO::Return) );
 	    ioAdd( new IO("id",_("Buffer id"),IO::Integer,IO::Default) );
@@ -298,8 +316,8 @@ class varhGetB : public TFunction
 	    ioAdd( new IO("archtor",_("Archivator"),IO::String,IO::Default) );
 	}
 	
-	string name()	{ return _("Varch: Get boolean"); }
-	string descr()	{ return _("Get boolean from archive or buffer."); }
+	string name( )	{ return _("Varch: Get boolean"); }
+	string descr( )	{ return _("Get boolean from archive or buffer."); }
 
 	void calc( TValFunc *val )
 	{
@@ -317,11 +335,13 @@ class varhGetB : public TFunction
 	}
 };
 
-//- Get string -
+//*************************************************
+//* Get string                                    *
+//*************************************************
 class varhGetS : public TFunction
 {
     public:
-	varhGetS() : TFunction("varhGetS")
+	varhGetS( ) : TFunction("varhGetS")
 	{
 	    ioAdd( new IO("val",_("Return value"),IO::String,IO::Return) );
 	    ioAdd( new IO("id",_("Buffer id"),IO::Integer,IO::Default) );
@@ -331,8 +351,8 @@ class varhGetS : public TFunction
 	    ioAdd( new IO("archtor",_("Archivator"),IO::String,IO::Default) );	    
 	}
 	
-	string name()	{ return _("Varch: Get string"); }
-	string descr()	{ return _("Get string from archive or buffer."); }
+	string name( )	{ return _("Varch: Get string"); }
+	string descr( )	{ return _("Get string from archive or buffer."); }
 
 	void calc( TValFunc *val )
 	{
@@ -350,11 +370,13 @@ class varhGetS : public TFunction
 	}
 };
 
-//- Set integer -
+//*************************************************
+//* Set integer                                   *
+//*************************************************
 class varhSetI : public TFunction
 {
     public:
-	varhSetI() : TFunction("varhSetI")
+	varhSetI( ) : TFunction("varhSetI")
 	{
 	    ioAdd( new IO("id",_("Buffer id"),IO::Integer,IO::Default) );
 	    ioAdd( new IO("val",_("Value"),IO::Integer,IO::Default) );	    
@@ -362,8 +384,8 @@ class varhSetI : public TFunction
 	    ioAdd( new IO("usec",_("Microseconds"),IO::Integer,IO::Default) );
 	}
 	
-	string name()	{ return _("Varch: Set integer"); }
-	string descr()	{ return _("Set integer to archive or buffer."); }
+	string name( )	{ return _("Varch: Set integer"); }
+	string descr( )	{ return _("Set integer to archive or buffer."); }
 
 	void calc( TValFunc *val )
 	{
@@ -379,11 +401,13 @@ class varhSetI : public TFunction
 	}
 };
 
-//- Set real -
+//*************************************************
+//* Set real                                      *
+//*************************************************
 class varhSetR : public TFunction
 {
     public:
-	varhSetR() : TFunction("varhSetR")
+	varhSetR( ) : TFunction("varhSetR")
 	{
 	    ioAdd( new IO("id",_("Buffer id"),IO::Integer,IO::Default) );
 	    ioAdd( new IO("val",_("Value"),IO::Real,IO::Default) );
@@ -391,8 +415,8 @@ class varhSetR : public TFunction
 	    ioAdd( new IO("usec",_("Microseconds"),IO::Integer,IO::Default) );
 	}
 	
-	string name()	{ return _("Varch: Set real"); }
-	string descr()	{ return _("Set real to archive or buffer."); }
+	string name( )	{ return _("Varch: Set real"); }
+	string descr( )	{ return _("Set real to archive or buffer."); }
 
 	void calc( TValFunc *val )
 	{
@@ -408,11 +432,13 @@ class varhSetR : public TFunction
 	}
 };
 
-//- Set boolean -
+//*************************************************
+//* Set boolean                                   *
+//*************************************************
 class varhSetB : public TFunction
 {
     public:
-	varhSetB() : TFunction("varhSetB")
+	varhSetB( ) : TFunction("varhSetB")
 	{
 	    ioAdd( new IO("id",_("Buffer id"),IO::Integer,IO::Default) );
 	    ioAdd( new IO("val",_("Value"),IO::Boolean,IO::Default) );
@@ -420,8 +446,8 @@ class varhSetB : public TFunction
 	    ioAdd( new IO("usec",_("Microseconds"),IO::Integer,IO::Default) );
 	}
 	
-	string name()	{ return _("Varch: Set boolean"); }
-	string descr()	{ return _("Set boolean to archive or buffer."); }
+	string name( )	{ return _("Varch: Set boolean"); }
+	string descr( )	{ return _("Set boolean to archive or buffer."); }
 
 	void calc( TValFunc *val )
 	{
@@ -437,11 +463,13 @@ class varhSetB : public TFunction
 	}
 };
 
-//- Set string -
+//*************************************************
+//* Set string                                    *
+//*************************************************
 class varhSetS : public TFunction
 {
     public:
-	varhSetS() : TFunction("varhSetS")
+	varhSetS( ) : TFunction("varhSetS")
 	{
 	    ioAdd( new IO("id",_("Buffer id"),IO::Integer,IO::Default) );
 	    ioAdd( new IO("val",_("Value"),IO::Real,IO::Default) );
@@ -449,8 +477,8 @@ class varhSetS : public TFunction
 	    ioAdd( new IO("usec",_("Microseconds"),IO::Integer,IO::Default) );
 	}
 	
-	string name()	{ return _("Varch: Set string"); }
-	string descr()	{ return _("Set string to archive or buffer."); }
+	string name( )	{ return _("Varch: Set string"); }
+	string descr( )	{ return _("Set string to archive or buffer."); }
 
 	void calc( TValFunc *val )
 	{
@@ -466,19 +494,21 @@ class varhSetS : public TFunction
 	}
 };
 
-//- Put message -
+//*************************************************
+//* Put message                                   *
+//*************************************************
 class messPut : public TFunction
 {
     public:
-	messPut() : TFunction("messPut")
+	messPut( ) : TFunction("messPut")
 	{
 	    ioAdd( new IO("cat",_("Category"),IO::String,IO::Default) );
 	    ioAdd( new IO("lev",_("Level"),IO::Integer,IO::Default) );
 	    ioAdd( new IO("mess",_("Message"),IO::String,IO::Default) );
 	}
 	
-	string name()	{ return _("Mess: Put"); }
-	string descr()	{ return _("Put message to system."); }
+	string name( )	{ return _("Mess: Put"); }
+	string descr( )	{ return _("Put message to system."); }
 
 	void calc( TValFunc *val )
 	{

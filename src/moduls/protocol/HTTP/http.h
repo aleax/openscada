@@ -40,8 +40,9 @@ namespace PrHTTP
 class TProtIn: public TProtocolIn
 {
     public:
+	//Methods
 	TProtIn( string name );
-	~TProtIn();
+	~TProtIn( );
 
 	bool mess( const string &request, string &answer, const string &sender );
     
@@ -64,17 +65,20 @@ class TProtIn: public TProtocolIn
 class TProt: public TProtocol
 {
     public:
+	//Methods
 	TProt( string name );
 	~TProt();
 	
 	void modLoad( );
 
     private:
+	//Methods
 	string optDescr( );
 	TProtocolIn *in_open( const string &name );
 };
 
 extern TProt *mod;
 } //End namespace PrHTTP
+
 #endif //HTTP_H
 

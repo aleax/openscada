@@ -41,14 +41,30 @@ class TModule : public TCntrNode
     friend class TSubSYS;
     public:
 	//Data
-	//- Attach module struct -
-	struct SAt
+	//*****************************************
+	//* SAt: Attach module struct             *
+	class SAt
 	{
-	    string id;          //id module
-	    string type;        //Type module
-	    int    t_ver;       //Type version module
+	    public:
+		//Methods
+		SAt( )	{ }
+		SAt( const string &iid, const string &itype = "", int itver = 0 ) :
+		    id(iid), type(itype), t_ver(itver)	{ }
+		    
+		bool operator==( const TModule::SAt &amst ) const
+		{
+		    if( amst.id == id && amst.type == type && amst.t_ver == t_ver ) return true;
+		    return false;
+		}
+		
+		//Attributes
+		string id;          //id module
+		string type;        //Type module
+		int    t_ver;       //Type version module
 	};
 	
+	//*****************************************
+	//* ExpFunc                               *	
 	class ExpFunc
 	{
 	    public:
