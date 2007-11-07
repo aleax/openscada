@@ -1,13 +1,12 @@
 
 //OpenSCADA system module UI.WebDbg file: web_dbg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2004-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -29,17 +28,18 @@
 
 #include "web_dbg.h"
 
-//============ Modul info! =====================================================
+//************************************************
+//* Modul info!                                  *
 #define MOD_ID	    "WebDbg"
 #define MOD_NAME    "WEB debuger"
 #define MOD_TYPE    "UI"
 #define VER_TYPE    VER_UI
 #define SUB_TYPE    "WWW"
-#define MOD_VERSION "0.0.3"
+#define MOD_VERSION "0.1.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Web debug modul."
 #define LICENSE     "GPL"
-//==============================================================================
+//************************************************
 
 WebDbg::TWEB *WebDbg::mod;
 
@@ -47,36 +47,23 @@ extern "C"
 {
     TModule::SAt module( int n_mod )
     {
-    	TModule::SAt AtMod;
-
-	if(n_mod==0)
-	{
-	    AtMod.id	= MOD_ID;
-	    AtMod.type  = MOD_TYPE;
-    	    AtMod.t_ver = VER_TYPE;
-	}
-	else
-	    AtMod.id	= "";
-
-	return( AtMod );
+	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	return TModule::SAt("");
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	WebDbg::TWEB *self_addr = NULL;
-
-	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = WebDbg::mod = new WebDbg::TWEB( source );       
-
-	return ( self_addr );
+	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
+	    return new WebDbg::TWEB( source );       
+	return NULL;
     }    
 }
 
 using namespace WebDbg;
 
-//==============================================================================
-//================ WebDbg::TWEB ================================================
-//==============================================================================
+//************************************************
+//* TWEB                                         *
+//************************************************
 TWEB::TWEB( string name ) : n_col(1), h_sz(800),v_sz(300), trnd_len(10), trnd_tm(time(NULL)+31104000)
 {
     mId		= MOD_ID;
@@ -87,8 +74,10 @@ TWEB::TWEB( string name ) : n_col(1), h_sz(800),v_sz(300), trnd_len(10), trnd_tm
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;
+
+    mod		= this;
     
-    //Reg export functions
+    //- Reg export functions -
     modFuncReg( new ExpFunc("void HttpGet(const string&,string&,const string&,vector<string>&);",
         "Process Get comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpGet) );
     modFuncReg( new ExpFunc("void HttpPost(const string&,string&,const string&,vector<string>&,const string&);",
@@ -103,7 +92,7 @@ TWEB::~TWEB()
 string TWEB::modInfo( const string &name )
 {
     if( name == "SubType" ) return(SUB_TYPE);
-    else return( TModule::modInfo( name) );
+    else return TModule::modInfo(name);
 }
 
 void TWEB::modInfo( vector<string> &list )
@@ -121,12 +110,12 @@ string TWEB::optDescr( )
 	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 
-    return(buf);
+    return buf;
 }
 
 void TWEB::modLoad( )
 {
-    //========== Load parameters from command line ============
+    //- Load parameters from command line -
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -146,7 +135,7 @@ void TWEB::modLoad( )
 	}
     } while(next_opt != -1);    
     
-    //========== Load parameters from config file =============
+    //- Load parameters from config file -
     string trnds = TBDS::genDBGet(nodePath()+"Trends"), trnd_el;
     trnd_lst.clear();
     for( int el_off = 0; (trnd_el=TSYS::strSepParse(trnds,0,';',&el_off)).size(); )
@@ -160,7 +149,7 @@ void TWEB::modLoad( )
 
 void TWEB::modSave( )
 {
-    //========== Save parameters to config file =============
+    //- Save parameters to config file -
     string trnds;
     for(int i_el = 0; i_el < trnd_lst.size(); i_el++ )
         trnds+=trnd_lst[i_el]+";";
@@ -219,7 +208,7 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
     string ntrnd = TSYS::pathLev(url,0);
     if( !ntrnd.size() )
     {
-	//Make main page
+	//- Make main page -
 	page = w_head();
 	int i_col = 0;
 	page = page+"<table>\n";
@@ -272,7 +261,7 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 
 void TWEB::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
         TUI::cntrCmdProc(opt);
@@ -290,7 +279,8 @@ void TWEB::cntrCmdProc( XMLNode *opt )
         ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
         return;
     }
-    //Process command to page
+
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/prm/cfg/trnds" )
     {

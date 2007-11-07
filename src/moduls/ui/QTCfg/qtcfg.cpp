@@ -71,7 +71,7 @@
 using namespace QTCFG;
 
 //*************************************************
-//* QTCFG::ConfApp                                *
+//* ConfApp                                       *
 //*************************************************
 ConfApp::ConfApp( string open_user ) : 
     que_sz(20), block_tabs(false), pg_info("info"), root(&pg_info), tbl_init(false)
@@ -329,7 +329,7 @@ void ConfApp::pageUp()
 	if(sel_path.substr(i_l).size()>1)	break;
 	i_l--;
     }
-    //Prev and next
+    //- Prev and next -
     if( sel_path.size() )	prev.insert(prev.begin(),sel_path);
     if( prev.size() >= que_sz )	prev.pop_back();
     next.clear();
@@ -425,7 +425,7 @@ void ConfApp::selectItem( )
     { 
 	if(sel_path != sel_ls.at(0)->text(2).toAscii().data())
 	{
-    	    //Prev and next
+    	    //- Prev and next -
 	    if( sel_path.size() )	prev.insert(prev.begin(),sel_path);
 	    if( prev.size() >= que_sz )	prev.pop_back();
 	    next.clear();
@@ -443,16 +443,15 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 {
     QVBoxLayout *layout;
     
-    //For abbend no named widgets
+    //- For abbend no named widgets -
     QHBoxLayout *l_hbox = NULL;    
     int		i_area = 0;	//Areas counter
     int 	l_pos = 0;
 
-    //View title name
-    
-    if( a_path == "/" ) 
+    //- View title name -
+    if( a_path == "/" )
     {
-	//Set node icon
+	//-- Set node icon --
 	if( node.childGet("id","ico",true) )
         {
 	    XMLNode req("get");
@@ -468,10 +467,10 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	    }
         }else titleIco->clear();
 	
-	//Set title
+	//-- Set title --
 	titleLab->setText((string("<p align='center'><i><b>")+TSYS::strEncode(node.attr("dscr"),TSYS::Html)+"</b></i></p>").c_str());
 
-	//Delete tabs of deleted areas
+	//-- Delete tabs of deleted areas --
 	for( int i_tbs = 0; i_tbs < tabs->count(); i_tbs++ )
 	{
 	    unsigned i_cf;
@@ -491,7 +490,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		block_tabs = false;
 	    }
 	}
-	//Add new tabs
+	//-- Add new tabs --
 	for( unsigned i_cf = 0; i_cf < node.childSize(); i_cf++)
 	{
 	    XMLNode &t_s = *node.childGet(i_cf);
@@ -508,7 +507,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		t_s.setAttr("qview","0");
 	    }
 
-	    //Find and prepare curent tabs
+	    //--- Find and prepare curent tabs ---
 	    if( tabs->currentIndex() == i_area )
             {
 		bool refresh = atoi(t_s.attr("qview").c_str());
@@ -534,7 +533,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    wdg->show();
                     //tabs->showPage(tabs->currentWidget());				    
 				
-		    //Mark last drawed tabs       	    
+		    //---- Mark last drawed tabs ----
 		    t_s.setAttr("qview","1");		
 		}
 		else selectChildRecArea(t_s,a_path+t_s.attr("id")+'/',wdg,refresh);		
@@ -546,16 +545,16 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
     }
     else
     {
-	//Read node tree and create widgets
+	//- Read node tree and create widgets -
 	for( unsigned i_cf = 0; i_cf < node.childSize(); i_cf++)
 	{	    
 	    XMLNode &t_s = *node.childGet(i_cf);
     
-    	    //Check access to node
+    	    //-- Check access to node --
     	    bool wr = false;	
 	    if( atoi(t_s.attr("acs").c_str())&SEQ_WR ) wr = true;
 	
-	    //View areas
+	    //-- View areas --
 	    if( t_s.name() == "area" )
 	    {
 		QWidget *wdg;
@@ -572,7 +571,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		}else wdg = widget;
 		selectChildRecArea(t_s,a_path+t_s.attr("id")+'/',wdg,refr);
 	    }	
-	    //View list elements
+	    //-- View list elements --
 	    else if( t_s.name() == "list" )
 	    {
 		string br_path = TSYS::strEncode(a_path+t_s.attr("id"),TSYS::PathEl);
@@ -589,7 +588,8 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    lstbox->setContextMenuPolicy(Qt::CustomContextMenu);
     		    connect( lstbox, SIGNAL( customContextMenuRequested(const QPoint&) ),
     		    	this, SLOT( listBoxPopup() ) );
-    		    //Go branche signal connect
+			
+    		    //--- Go branche signal connect ---
     		    if( t_s.attr("tp") == "br" )
     			connect( lstbox, SIGNAL( itemDoubleClicked(QListWidgetItem*) ),
     			    this, SLOT( listBoxGo(QListWidgetItem*) ) );
@@ -614,7 +614,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    lstbox = (QListWidget *)TSYS::str2addr(t_s.attr("addr_el"));
 		    lstbox->clear();
 		}
-		//Fill list
+		//--- Fill list ---
 		lab->setText((t_s.attr("dscr")+":").c_str());
 		XMLNode req("get");
 		req.setAttr("path",sel_path+"/"+br_path);
@@ -624,7 +624,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
                 	if( req.childGet(i_el)->name() == "el")
                     	    lstbox->addItem(req.childGet(i_el)->text().c_str());
     	    }
-	    //View table elements
+	    //-- View table elements --
 	    else if( t_s.name() == "table" )
 	    {
 		string br_path = TSYS::strEncode(a_path+t_s.attr("id"),TSYS::PathEl);
@@ -659,13 +659,13 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    //lab = (QLabel *)TSYS::str2addr(t_s.attr("addr_lab"));
 		    tbl = (QTableWidget *)TSYS::str2addr(t_s.attr("addr_tbl"));
 		}		    
-		//Fill tasetNumRowsble
+		//--- Fill tasetNumRowsble ---
                 XMLNode req("get");
 		req.setAttr("path",sel_path+"/"+br_path);
 	        if(cntrIfCmd(req)) mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this);
 		else
 		{
-		    //Copy values to info tree
+		    //---- Copy values to info tree ----
 		    for( int i_col = 0; i_col < req.childSize(); i_col++ )
 		    {
 			XMLNode *t_lsel = req.childGet(i_col);
@@ -676,10 +676,10 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 			    *t_linf->childAdd() = *t_lsel->childGet(i_rw);
 		    }	
 		
-		    //Collumns adjusting flag
+		    //---- Collumns adjusting flag ----
 		    bool adjCol = !refr || !tbl->rowCount();
 		    
-		    //Calc rows and columns
+		    //---- Calc rows and columns ----
 		    int n_col = t_s.childSize();
 		    int n_row = (n_col)?t_s.childGet(0)->childSize():0;
 		    
@@ -700,7 +700,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 			}
 			thd_it->setData(Qt::DisplayRole,t_linf->attr("dscr").c_str());
 			
-			//Set elements
+			//---- Set elements ----
 			tbl_init = true;
 			for( int i_el = 0; i_el < t_linf->childSize(); i_el++ )
 			{
@@ -711,7 +711,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	                        tbl->setItem(i_el,i_lst,thd_it);
                             }
 			
-			    //Set element
+			    //---- Set element ----
 			    if( t_linf->attr("tp") == "bool" )
 				thd_it->setData(Qt::DisplayRole,(bool)atoi(t_linf->childGet(i_el)->text().c_str()));
 			    else if( t_linf->attr("dest") == "select" || t_linf->attr("dest") == "sel_ed" )
@@ -749,8 +749,8 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 				thd_it->setData(Qt::DisplayRole,c_tm);
 			    }
 			    else thd_it->setData(Qt::DisplayRole,t_linf->childGet(i_el)->text().c_str());
-			    //Set access
 			    
+			    //---- Set access ----
 			    if( !c_wr )	thd_it->setFlags(Qt::ItemIsEnabled);
 			    else thd_it->setFlags(Qt::ItemIsEnabled|Qt::ItemIsEditable);
 			}
@@ -758,7 +758,8 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    if(adjCol) 
 		    {
 			tbl->resizeColumnsToContents();
-			//Resize too long columns
+			
+			//--- Resize too long columns ---
 			int max_col_sz = vmax(700/tbl->columnCount(),50);
 			for( int i_c = 0; i_c < tbl->columnCount(); i_c++ )
 			    tbl->setColumnWidth(i_c,vmin(max_col_sz,tbl->columnWidth(i_c)));
@@ -767,7 +768,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    tbl_init = false;
 		}
 	    }
-	    //View images
+	    //-- View images --
 	    else if( t_s.name() == "img" )
 	    {
 		string br_path = TSYS::strEncode(a_path+t_s.attr("id"),TSYS::PathEl);
@@ -806,7 +807,8 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    lab = (QLabel *)TSYS::str2addr(t_s.attr("addr_lab"));
 		    img = (ImgView *)TSYS::str2addr(t_s.attr("addr_el"));
 		}
-		//Set image
+		
+		//--- Set image ---
 		lab->setText((t_s.attr("dscr")+":").c_str());
 		
 		XMLNode req("get");
@@ -814,7 +816,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
                 if(cntrIfCmd(req)) mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this);
 		else img->setImage(TSYS::strDecode(req.text(),TSYS::base64));
 	    }	    	
-	    //View standart fields
+	    //-- View standart fields --
 	    else if( t_s.name() == "fld" )
 		basicFields( t_s, a_path, widget, wr, &l_hbox, l_pos, refr );
 	    else if( t_s.name() == "comm" )
@@ -861,7 +863,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		else 
 		    button = (QPushButton *)TSYS::str2addr(t_s.attr("addr_butt"));
 		
-		//Update or create parameters
+		//--- Update or create parameters ---
 		for( unsigned i_cf = 0; i_cf < t_s.childSize(); i_cf++)
 		{
 		    XMLNode &t_scm = *t_s.childGet(i_cf);
@@ -869,7 +871,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 			basicFields( t_scm, a_path+t_s.attr("id")+'/', comm_pan, true, &c_hbox, c_pos, refr, true);
 		}
 		    
-		//Fill command
+		//--- Fill command ---
 		button->setText(t_s.attr("dscr").c_str());
 	    }	
 	}
@@ -891,7 +893,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	}
     }
 
-    //View select fields
+    //- View select fields -
     if( (t_s.attr("dest") == "select" || t_s.attr("dest") == "sel_ed") )
     {	
 	QLabel *lab     = NULL;
@@ -953,8 +955,9 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    lab  = (QLabel *)TSYS::str2addr(t_s.attr("addr_lab"));
 	    lab_r = (QLabel *)TSYS::str2addr(t_s.attr("addr_lab_r"));
     	    comb = (QComboBox *)TSYS::str2addr(t_s.attr("addr_comb"));
-	}	    
-	//Fill combo
+	}
+	
+	//-- Fill combo --
 	if( lab ) lab->setText((t_s.attr("dscr")+":").c_str());		
 	if( comb || lab_r )
 	{
@@ -979,7 +982,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 			    if(lab_r)	lab_r->setText((string("<b>")+x_lst.childGet(i_el)->text()+"</b>").c_str());
             		}
         	    }
-    		//Insert empty field if none selected
+    		//--- Insert empty field if none selected ---
     		if( !sel_ok )
     		{
 		    if(comb)
@@ -994,7 +997,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
     }	    
     else
     {		    
-	//View boolean fields
+	//- View boolean fields -
 	if( t_s.attr("tp") == "bool" )
 	{
             QLabel *lab	    	= NULL;
@@ -1053,12 +1056,12 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		lab_r = (QLabel *)TSYS::str2addr(t_s.attr("addr_lab_r"));
 	    }
 	    
-	    //Fill CheckBox
+	    //-- Fill CheckBox --
 	    if( lab )	lab->setText((t_s.attr("dscr")+":").c_str());
 	    if( chBox ) chBox->setChecked(atoi(data_req.text().c_str()));
 	    if( lab_r )	lab_r->setText((string("<b>")+(atoi(data_req.text().c_str())?_("On"):_("Off"))+string("</b>")).c_str());
 	}
-	//View edit fields
+	//- View edit fields -
 	else if( t_s.attr("tp") == "str" && (t_s.attr("rows").size() || t_s.attr("cols").size()) )
 	{
             QLabel *lab;
@@ -1102,11 +1105,11 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		lab  = (QLabel *)TSYS::str2addr(t_s.attr("addr_lab"));
 		edit = (TextEdit *)TSYS::str2addr(t_s.attr("addr_edit"));
 	    }
-	    //Fill Edit
+	    //-- Fill Edit --
 	    if( lab )	lab->setText((t_s.attr("dscr")+":").c_str());
 	    if( edit ) 	edit->setText(data_req.text().c_str());
 	}
-        //View Data-Time fields
+        //- View Data-Time fields -
 	else if( t_s.attr("tp") == "time" )
         {
             QLabel 	 *lab   = NULL;
@@ -1141,7 +1144,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    connect( val_w, SIGNAL( cancel() ), this, SLOT( cancelButton() ) );
 		}
 
-		//Check use label
+		//-- Check use label --
 		if(t_s.attr("dscr").size()) 
 		{
 		    lab = new QLabel(widget);
@@ -1172,13 +1175,14 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		lab  = (QLabel *)TSYS::str2addr(t_s.attr("addr_lab"));
 		val_r = (QLabel *)TSYS::str2addr(t_s.attr("addr_dtr"));
 		val_w = (DateTimeEdit *)TSYS::str2addr(t_s.attr("addr_dtw"));
-	    }	    
-            //Fill data
+	    }
+	    
+            //-- Fill data --
  	    if( lab ) 	lab->setText((t_s.attr("dscr")+":").c_str());
 	    if( val_r )	val_r->setText( "<b>"+dtm.toString("dd.MM.yyyy hh:mm:ss")+"</b>" );
 	    if( val_w )	val_w->setDateTime( dtm );
 	}
-	//View other string and numberic fields	
+	//- View other string and numberic fields -
 	else
 	{	
             QLabel *lab   	= NULL;
@@ -1186,7 +1190,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    LineEdit *val_w	= NULL;	    
 	    if( !refr )
 	    {	    
-		//View info
+		//-- View info --
 		if( !wr )
 		{
 		    val_r = new QLabel( widget );
@@ -1200,7 +1204,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    val_r->setWordWrap(true);
 		    //val_r->setFrameStyle(QFrame::Panel | QFrame::Sunken);
 		}
-		//View edit
+		//-- View edit --
 		else
 		{
 		    val_w = new LineEdit( widget, comm );
@@ -1213,7 +1217,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    connect( val_w, SIGNAL( apply() ), this, SLOT( applyButton() ) );
 		    connect( val_w, SIGNAL( cancel() ), this, SLOT( cancelButton() ) );
 		    
-		    // addon parameters			
+		    //--- addon parameters ---
 		    int val_n = atoi(t_s.attr("len").c_str());
 		    if( val_n > 0 )	val_w->edit()->setMaxLength( val_n );
 		
@@ -1228,7 +1232,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    }
 		    else val_w->setMinimumWidth( 7*15+30 );
     		}
-    		//Check use label
+    		//-- Check use label --
     		if(t_s.attr("dscr").size()) 
     		{
     		    *l_hbox = new QHBoxLayout; l_pos = 0;
@@ -1269,7 +1273,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		val_r = (QLabel *)TSYS::str2addr(t_s.attr("addr_ler"));
 		val_w = (LineEdit *)TSYS::str2addr(t_s.attr("addr_lew"));
 	    }	    
-            //Fill line
+            //-- Fill line --
  	    if( lab ) 	lab->setText((t_s.attr("dscr")+":").c_str());
 	    if( val_r )	val_r->setText((string("<b>")+TSYS::strEncode(data_req.text(),TSYS::Html)+"</b>").c_str());
 	    if( val_w )	val_w->setText(data_req.text().c_str());
@@ -1281,7 +1285,7 @@ void ConfApp::viewChild( QTreeWidgetItem * i )
 {    
     try
     { 
-	//Delete ViewItem childs
+	//- Delete ViewItem childs -
 	while(i->childCount())	delete i->takeChild(0);
 	viewChildRecArea(i,2);
 	CtrTree->resizeColumnToContents(0);	
@@ -1293,21 +1297,22 @@ void ConfApp::pageDisplay( const string &path )
 {
     ResAlloc res(hd_res,true);    
     
-    //Chek Up
+    //- Chek Up -
     if( path.rfind("/") == string::npos || path.rfind("/") == 0 ) 
 	actUp->setEnabled(false);
     else
 	actUp->setEnabled(true);
-    //Check Prev and Next
+	
+    //- Check Prev and Next -
     if( prev.size() )	actPrev->setEnabled(true);	    
     else		actPrev->setEnabled(false);
     if( next.size() )	actNext->setEnabled(true);	    
     else		actNext->setEnabled(false);
     
-    //Delete all tabs for new node
+    //- Delete all tabs for new node -
     if( path != pg_info.attr("path") ) //sel_path )
     {
-	//Stop refresh
+	//-- Stop refresh --
 	pageCyclRefrStop();
     
     	block_tabs = true;
@@ -1330,7 +1335,7 @@ void ConfApp::pageDisplay( const string &path )
     }
     else
     {    
-	//Check the new node structure and the old node
+	//-- Check the new node structure and the old node --
 	XMLNode n_node("info");
 	n_node.setAttr("path",sel_path);
 	if(cntrIfCmd(n_node)) 
@@ -1347,10 +1352,10 @@ bool ConfApp::upStruct(XMLNode &w_nd, const XMLNode &n_nd)
 {    
     bool str_ch = false;
     
-    //Check access    
+    //- Check access -
     if( w_nd.attr("acs") != n_nd.attr("acs") ) str_ch = true;
     
-    //Scan deleted nodes    
+    //- Scan deleted nodes -
     for( int i_w = 0; i_w < w_nd.childSize(); i_w++)
     {
 	int i_n;
@@ -1364,7 +1369,8 @@ bool ConfApp::upStruct(XMLNode &w_nd, const XMLNode &n_nd)
 	    if( w_nd.name() != "table" && w_nd.name() != "list" ) str_ch = true;
 	}
     }
-    //Scan for new nodes and check present nodes
+    
+    //- Scan for new nodes and check present nodes -
     for( int i_n = 0; i_n < n_nd.childSize(); i_n++)
     {	
 	int i_w;
@@ -1374,14 +1380,14 @@ bool ConfApp::upStruct(XMLNode &w_nd, const XMLNode &n_nd)
 		break;
 	if( i_w >= w_nd.childSize() )	
 	{
-	    //Add node
+	    //-- Add node --
 	    *w_nd.childIns(i_n) = *n_nd.childGet(i_n);
 	    str_ch = true;
 	    i_w = i_n;
 	}
 	else 
 	{
-	    //Check present node
+	    //-- Check present node --
 	    if( upStruct(*w_nd.childGet(i_w),*n_nd.childGet(i_n)) )	
 		str_ch = true;
 	    if( str_ch && w_nd.name() == "oscada_cntr" )
@@ -1391,11 +1397,12 @@ bool ConfApp::upStruct(XMLNode &w_nd, const XMLNode &n_nd)
 		continue;
 	    }
 	}
-	//Check of the description present
+	
+	//- Check of the description present -
 	if( (bool)w_nd.childGet(i_w)->attr("dscr").size() ^ (bool)n_nd.childGet(i_n)->attr("dscr").size() )
 	    str_ch = true;
 	    
-	//Check base fields destination change
+	//- Check base fields destination change -
 	if( w_nd.childGet(i_w)->name() == "fld" && 
 	    (w_nd.childGet(i_w)->attr("dest") != n_nd.childGet(i_n)->attr("dest") || 
 	     w_nd.childGet(i_w)->attr("tp") != n_nd.childGet(i_n)->attr("tp")) )
@@ -1405,7 +1412,7 @@ bool ConfApp::upStruct(XMLNode &w_nd, const XMLNode &n_nd)
 	    str_ch = true;
 	}
 
-	//Sync node parameters (text and atributes)
+	//- Sync node parameters (text and atributes) -
 	w_nd.childGet(i_w)->setText(n_nd.childGet(i_n)->text());
 	vector<string> ls;
 	n_nd.childGet(i_n)->attrList(ls);
@@ -1447,7 +1454,7 @@ void ConfApp::tabSelect(  QWidget * wdg )
 
 void ConfApp::viewChildRecArea( QTreeWidgetItem *i, int level )
 {
-    //Get icon
+    //- Get icon -
     string path = i->text(2).toAscii().data();
     if(path[0]=='*')	path = i->parent()->text(2).toAscii().data();
     if( i->text(2)[0] != '*' && i->icon(0).isNull() )
@@ -1455,7 +1462,6 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, int level )
 	XMLNode dt_req("get");
 	dt_req.setAttr("path",path+"/%2fico");
         if( !cntrIfCmd(dt_req) )
-	//else
 	{    
 	    string simg = TSYS::strDecode(dt_req.text(),TSYS::base64);
 	    QImage img;
@@ -1464,14 +1470,14 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, int level )
 	}
     }
     
-    //Get branches groups
+    //- Get branches groups -
     XMLNode br_req("info");
     br_req.setAttr("path",path+"/%2fbr");
     if( cntrIfCmd(br_req) ) return;
     XMLNode *brs = br_req.childGet(0,true);
     if( !brs )	return;
     
-    //Proccess branches groups
+    //- Proccess branches groups -
     for( int ibr = 0; ibr < brs->childSize(); ibr++ )
     {
 	XMLNode *br = brs->childGet(ibr);
@@ -1492,7 +1498,7 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, int level )
 	    it->setFont(0,fnt);
     	}
 	
-	//Get branches
+	//-- Get branches --
 	XMLNode req("get");
 	req.setAttr("path",path+"/"+TSYS::strEncode(br->attr("list"),TSYS::PathEl));
 	if( cntrIfCmd(req) ) 
@@ -1504,7 +1510,7 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, int level )
 	for( int i_lel = 0; i_lel < req.childSize(); i_lel++)
 	{
 	    XMLNode *br_el = req.childGet(i_lel);
-	    //Check index-list
+	    //--- Check index-list ---
 	    string br_path = br->attr("id");
 	    if( br_el->attr("id").size() )	br_path.append(br_el->attr("id"));
 	    else				br_path.append(br_el->text());
@@ -1515,7 +1521,7 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, int level )
 	    ch_it->setText(1,br->attr("dscr").c_str());
 	    ch_it->setText(2,(path+"/"+br_path).c_str());
 			    			    
-	    //Next node for next level
+	    //--- Next node for next level ---
 	    if( level-1 > 0 )	viewChildRecArea(ch_it,level-1);
 	}
     }    
@@ -1603,9 +1609,9 @@ void ConfApp::initHosts()
     }
 }
 
-//-------------------------------------------------------------
-//-------------- Self widget's slots --------------------------
-//-------------------------------------------------------------
+//*************************************************
+//* ConfApp: Self widget's slots                  *
+//*************************************************
 void ConfApp::checkBoxStChange( int stat )
 {
     XMLNode *n_el;
@@ -1616,7 +1622,8 @@ void ConfApp::checkBoxStChange( int stat )
     { 
 	string path = box->objectName().toAscii().data();
 	string val = (stat==Qt::Checked)?"1":"0";
-	//Check block element
+	
+	//- Check block element -
 	if(path[0] == 'b')
 	{
 	    SYS->ctrId(root,TSYS::strDecode(path.substr(1),TSYS::PathEl) )->setText(val);
@@ -1640,7 +1647,8 @@ void ConfApp::checkBoxStChange( int stat )
 	    if(cntrIfCmd(req))	mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this);
 	}
     }catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
-    //Redraw
+    
+    //- Redraw -
     autoUpdTimer->setSingleShot(true);
     autoUpdTimer->start(CH_REFR_TM);
 }
@@ -1655,7 +1663,7 @@ void ConfApp::buttonClicked( )
     {    
 	XMLNode *n_el = SYS->ctrId(root,TSYS::strDecode(button->objectName().toAscii().data(),TSYS::PathEl) );
 	
-	//Check link
+	//- Check link -
 	if( n_el->attr("tp") == "lnk")
 	{
 	    XMLNode req("get");
@@ -1670,7 +1678,7 @@ void ConfApp::buttonClicked( )
 	    
     	    mess_info(mod->nodePath().c_str(),_("%s| Go to link <%s>!"), w_user->user().toAscii().data(),url.c_str());
 	    
-	    //Prev and next
+	    //-- Prev and next --
     	    if( sel_path.size() )       prev.insert(prev.begin(),sel_path);
 	    if( prev.size() >= que_sz ) prev.pop_back();
 	    next.clear();			
@@ -1681,7 +1689,7 @@ void ConfApp::buttonClicked( )
 	{
 	    XMLNode req("set");
             req.setAttr("path",sel_path+"/"+button->objectName().toAscii().data());
-	    //Copy parameters
+	    //- Copy parameters -
 	    for( int i_ch = 0; i_ch < n_el->childSize(); i_ch++ )
 		*(req.childAdd()) = *(n_el->childGet(i_ch));
 	
@@ -1694,7 +1702,8 @@ void ConfApp::buttonClicked( )
 	    }
 	}
     }catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
-    //Redraw
+    
+    //- Redraw -
     autoUpdTimer->setSingleShot(true);
     autoUpdTimer->start(CH_REFR_TM);
 }
@@ -1717,7 +1726,7 @@ void ConfApp::combBoxActivate( const QString& ival )
 	
 	n_el = SYS->ctrId(root,TSYS::strDecode(path,TSYS::PathEl) );
 	
-        //Get list for index list check!
+        //- Get list for index list check! -
 	if( n_el->attr("dest") == "select" )
 	{
     	    bool find_ok = false;
@@ -1743,7 +1752,7 @@ void ConfApp::combBoxActivate( const QString& ival )
 	    }
 	}
 	
-	//Check block element. Command box!
+	//- Check block element. Command box! -
 	if( block ) { n_el->setText(val); return; }
 	else
 	{
@@ -1767,7 +1776,8 @@ void ConfApp::combBoxActivate( const QString& ival )
 	    }
 	}
     }catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
-    //Redraw
+    
+    //- Redraw -
     autoUpdTimer->setSingleShot(true);
     autoUpdTimer->start(CH_REFR_TM);
 }
@@ -1835,7 +1845,7 @@ void ConfApp::listBoxPopup( )
 	    
 	    if( item != NULL )
 	    {	    
-		//Get select id
+		//- Get select id -
 		XMLNode x_lst("get");
 		x_lst.setAttr("path",el_path);
 		if( cntrIfCmd(x_lst) )
@@ -1861,8 +1871,8 @@ void ConfApp::listBoxPopup( )
 		InputDlg dlg(ind_m);
 		if( rez == actEd )
 		{
-		    dlg.id(p_id.c_str());
-		    dlg.name(p_text.c_str());
+		    dlg.setId(p_id.c_str());
+		    dlg.setName(p_text.c_str());
 		}
 		int dlrez = dlg.exec();
 		id = dlg.id().toAscii().data();
@@ -1870,7 +1880,7 @@ void ConfApp::listBoxPopup( )
 		if( dlrez != QDialog::Accepted ) return; 
 	    }
 
-	    //Make command	    
+	    //- Make command -
 	    XMLNode n_el1;
 	    n_el1.setAttr("path",el_path);
 	    if( rez == actBr )
@@ -2020,7 +2030,7 @@ void ConfApp::tablePopup( const QPoint &pos )
 		}
 		else 
 		{
-		    //Get Key columns
+		    //-- Get Key columns --
             	    string key;
 		    for( int i_off = 0; (key=TSYS::strSepParse(n_el->attr("key"),0,',',&i_off)).size(); )
 		        for( int i_el = 0; i_el < n_el->childSize(); i_el++ )
@@ -2175,14 +2185,14 @@ void ConfApp::tableSet( int row, int col )
 	}
 	else value = val.toString().toAscii().data();
 	
-	//*** Prepare request ***
+	//- Prepare request -
 	XMLNode n_el1("set");
 	n_el1.setAttr("path",el_path)->setText(value);
-    	//Get current column id
+    	//-- Get current column id --
      	for( int i_el = 0; i_el < n_el->childSize(); i_el++ )
 	    if( tbl->horizontalHeaderItem(col)->data(Qt::DisplayRole).toString() == n_el->childGet(i_el)->attr("dscr").c_str() )
 	    { n_el1.setAttr("col",n_el->childGet(i_el)->attr("id")); break; }
-	//Get row position
+	//-- Get row position --
 	string row_addr;
 	if( !n_el->attr("key").size() )
 	{
@@ -2191,7 +2201,7 @@ void ConfApp::tableSet( int row, int col )
 	}
 	else
 	{
-	    //Get Key columns
+	    //-- Get Key columns --
 	    string key;
 	    for( int i_off = 0; (key=TSYS::strSepParse(n_el->attr("key"),0,',',&i_off)).size(); )
 		for( int i_el = 0; i_el < n_el->childSize(); i_el++ )
@@ -2203,7 +2213,7 @@ void ConfApp::tableSet( int row, int col )
 		    }
 	}
     
-	//Put request
+	//-- Put request --
 	mess_info(mod->nodePath().c_str(),_("%s| Set <%s> cell (<%s>:%s) to: %s."), 
 	    w_user->user().toAscii().data(), el_path.c_str(), row_addr.c_str(), n_el1.attr("col").c_str(), value.c_str());
 	if(cntrIfCmd(n_el1))	throw TError(n_el1.attr("mcat").c_str(),n_el1.text().c_str());    
@@ -2222,7 +2232,7 @@ void ConfApp::listBoxGo( QListWidgetItem* item )
     QListWidget *lbox = item->listWidget();
     try
     { 	
-        //Prev and next
+        //- Prev and next -
 	if( sel_path.size() )   	prev.insert(prev.begin(),sel_path);
 	if( prev.size() >= que_sz )	prev.pop_back();	
 
@@ -2233,7 +2243,8 @@ void ConfApp::listBoxGo( QListWidgetItem* item )
 	if(cntrIfCmd(req)) throw TError(mod->nodePath().c_str(),"%s",req.text().c_str(),4);
 	
 	string br_pref = t_c.attr("br_pref");
-	//Find selected index
+	
+	//- Find selected index -
         bool sel_ok = false;
         for( int i_el = 0; i_el < req.childSize(); i_el++ )
     	    if( req.childGet(i_el)->name() == "el" && req.childGet(i_el)->text() == item->text().toAscii().data() )
@@ -2246,7 +2257,7 @@ void ConfApp::listBoxGo( QListWidgetItem* item )
 	    }
 	if( !sel_ok ) throw TError(mod->nodePath().c_str(),_("Select element <%s> no present!"),item->text().toAscii().data());
 	
-        //Prev and next
+        //- Prev and next -
         if( sel_path.size() )       prev.insert(prev.begin(),sel_path);
         if( prev.size() >= que_sz ) prev.pop_back();
         next.clear();
@@ -2281,7 +2292,7 @@ void ConfApp::dataTimeChange( const QDateTime & qtm )
 	tm_tm.tm_isdst = -1;
 	string val = TSYS::int2str(mktime(&tm_tm));
 	
-	//Check block element
+	//- Check block element -
 	if(path[0] == 'b') path.erase(0,1);
 	n_el = SYS->ctrId(root,TSYS::strDecode(path,TSYS::PathEl) );    
     	n_el->setText(val);
@@ -2295,7 +2306,7 @@ void ConfApp::editChange( const QString& txt )
     try
     {   
 	string path = wed->objectName().toAscii().data();
-	//Check block element
+	//- Check block element -
 	if(path[0] == 'b') path.erase(0,1);
 	SYS->ctrId(root,TSYS::strDecode(path,TSYS::PathEl) )->setText(txt.toAscii().data());
     }catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
@@ -2322,14 +2333,15 @@ void ConfApp::applyButton( )
 	    return; 
 	}
     }catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
-    //Redraw
+    
+    //- Redraw -
     autoUpdTimer->setSingleShot(true);
     autoUpdTimer->start(CH_REFR_TM);
 }
 
 void ConfApp::cancelButton( )
 {
-    //Redraw
+    //- Redraw -
     autoUpdTimer->setSingleShot(true);
     autoUpdTimer->start(CH_REFR_TM);
 }

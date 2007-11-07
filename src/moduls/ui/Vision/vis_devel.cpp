@@ -214,49 +214,49 @@ VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) :
     
     //-- Widgets alignment actions --
     //--- Align widgets left ---
-    if(!ico_t.load(TUIS::icoPath("vision_allign_left").c_str())) ico_t.load(":/images/allign_left.png");
-    actAlignLeft = new QAction(QPixmap::fromImage(ico_t),_("Allign to left"),this);
-    actAlignLeft->setObjectName("allign_left");
+    if(!ico_t.load(TUIS::icoPath("vision_align_left").c_str())) ico_t.load(":/images/align_left.png");
+    actAlignLeft = new QAction(QPixmap::fromImage(ico_t),_("Align to left"),this);
+    actAlignLeft->setObjectName("align_left");
     actAlignLeft->setToolTip(_("Align selected widgets to left"));
     actAlignLeft->setWhatsThis(_("The button for align selected widgets to left"));
     actAlignLeft->setStatusTip(_("Press for align selected widgets to left."));
     actAlignLeft->setEnabled(false);
     //--- Align widgets to vertical center ---
-    if(!ico_t.load(TUIS::icoPath("vision_allign_vcenter").c_str())) ico_t.load(":/images/allign_vcenter.png");
-    actAlignVCenter = new QAction(QPixmap::fromImage(ico_t),_("Allign to vertical center"),this);
-    actAlignVCenter->setObjectName("allign_vcenter");
+    if(!ico_t.load(TUIS::icoPath("vision_align_vcenter").c_str())) ico_t.load(":/images/align_vcenter.png");
+    actAlignVCenter = new QAction(QPixmap::fromImage(ico_t),_("Align to vertical center"),this);
+    actAlignVCenter->setObjectName("align_vcenter");
     actAlignVCenter->setToolTip(_("Align selected widgets to vertical center"));
     actAlignVCenter->setWhatsThis(_("The button for align selected widgets to vertical center"));
     actAlignVCenter->setStatusTip(_("Press for align selected widgets to vertical center."));
     actAlignVCenter->setEnabled(false);
     //--- Align widgets to right ---
-    if(!ico_t.load(TUIS::icoPath("vision_allign_right").c_str())) ico_t.load(":/images/allign_right.png");
-    actAlignRight = new QAction(QPixmap::fromImage(ico_t),_("Allign to right"),this);
-    actAlignRight->setObjectName("allign_right");
+    if(!ico_t.load(TUIS::icoPath("vision_align_right").c_str())) ico_t.load(":/images/align_right.png");
+    actAlignRight = new QAction(QPixmap::fromImage(ico_t),_("Align to right"),this);
+    actAlignRight->setObjectName("align_right");
     actAlignRight->setToolTip(_("Align selected widgets to right"));
     actAlignRight->setWhatsThis(_("The button for align selected widgets to right"));
     actAlignRight->setStatusTip(_("Press for align selected widgets to right."));
     actAlignRight->setEnabled(false);
     //--- Align widgets to top ---
-    if(!ico_t.load(TUIS::icoPath("vision_allign_top").c_str())) ico_t.load(":/images/allign_top.png");
-    actAlignTop = new QAction(QPixmap::fromImage(ico_t),_("Allign to top"),this);
-    actAlignTop->setObjectName("allign_top");
+    if(!ico_t.load(TUIS::icoPath("vision_align_top").c_str())) ico_t.load(":/images/align_top.png");
+    actAlignTop = new QAction(QPixmap::fromImage(ico_t),_("Align to top"),this);
+    actAlignTop->setObjectName("align_top");
     actAlignTop->setToolTip(_("Align selected widgets to top"));
     actAlignTop->setWhatsThis(_("The button for align selected widgets to top"));
     actAlignTop->setStatusTip(_("Press for align selected widgets to top."));
     actAlignTop->setEnabled(false);
     //--- Align widgets to horizontal center ---
-    if(!ico_t.load(TUIS::icoPath("vision_allign_hcenter").c_str())) ico_t.load(":/images/allign_hcenter.png");
-    actAlignHCenter = new QAction(QPixmap::fromImage(ico_t),_("Allign to horizontal center"),this);
-    actAlignHCenter->setObjectName("allign_hcenter");
+    if(!ico_t.load(TUIS::icoPath("vision_align_hcenter").c_str())) ico_t.load(":/images/align_hcenter.png");
+    actAlignHCenter = new QAction(QPixmap::fromImage(ico_t),_("Align to horizontal center"),this);
+    actAlignHCenter->setObjectName("align_hcenter");
     actAlignHCenter->setToolTip(_("Align selected widgets to horizontal center"));
     actAlignHCenter->setWhatsThis(_("The button for align selected widgets to horizontal center"));
     actAlignHCenter->setStatusTip(_("Press for align selected widgets to horizontal center."));
     actAlignHCenter->setEnabled(false);
     //--- Align widgets to bottom ---
-    if(!ico_t.load(TUIS::icoPath("vision_allign_bottom").c_str())) ico_t.load(":/images/allign_bottom.png");
-    actAlignBottom = new QAction(QPixmap::fromImage(ico_t),_("Allign to bottom"),this);
-    actAlignBottom->setObjectName("allign_bottom");
+    if(!ico_t.load(TUIS::icoPath("vision_align_bottom").c_str())) ico_t.load(":/images/align_bottom.png");
+    actAlignBottom = new QAction(QPixmap::fromImage(ico_t),_("Align to bottom"),this);
+    actAlignBottom->setObjectName("align_bottom");
     actAlignBottom->setToolTip(_("Align selected widgets to bottom"));
     actAlignBottom->setWhatsThis(_("The button for align selected widgets to bottom"));
     actAlignBottom->setStatusTip(_("Press for align selected widgets to bottom."));
@@ -447,7 +447,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) :
     prjTree = new ProjTree(this);
     connect(this,SIGNAL(modifiedItem(const string&)),prjTree,SLOT(updateTree(const string&)));    
     connect(prjTree,SIGNAL(selectItem(const string&)),this,SLOT(selectItem(const string&)));
-    prjTree->setWhatsThis(_("Dock window for packet management."));
+    prjTree->setWhatsThis(_("Dock window for projects management."));
     wdgTree = new WdgTree(this);
     connect(this,SIGNAL(modifiedItem(const string&)),wdgTree,SLOT(updateTree(const string&)));
     connect(wdgTree,SIGNAL(selectItem(const string&)),this,SLOT(selectItem(const string&)));

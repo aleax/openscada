@@ -1,13 +1,12 @@
 
 //OpenSCADA system module DAQ.SNMP file: snmp_client.h
 /***************************************************************************
- *   Copyright (C) 2006 by Roman Savochenko                                *
+ *   Copyright (C) 2006-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -39,26 +38,27 @@ using std::vector;
 namespace SNMP_DAQ
 {
 
-//======================================================================
-//==== TMdPrm 
-//======================================================================
+//*************************************************
+//* TMdPrm                                        *
+//*************************************************
 class TMdContr;
     
 class TMdPrm : public TParamContr
 {
     public:
+	//Methods
     	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );	
 	
-	string &OIDList()	{ return m_oid; }
-	vector<string> &lsOID()	{ return ls_oid; }
-	TElem &elem()		{ return p_el; }
+	string &OIDList( )	{ return m_oid; }
+	vector<string> &lsOID( ){ return ls_oid; }
+	TElem &elem( )		{ return p_el; }
 
 	void enable( );
 	void disable( );
 	void load( );
 		
-	TMdContr &owner()	{ return (TMdContr&)TParamContr::owner(); }
+	TMdContr &owner( )	{ return (TMdContr&)TParamContr::owner(); }
 	
     private:
 	//Methods
@@ -66,7 +66,7 @@ class TMdPrm : public TParamContr
 	void cntrCmdProc( XMLNode *opt );
 	void vlArchMake( TVal &val );
 	
-	void parseOIDList(const string &ioid);
+	void parseOIDList( const string &ioid );
 	
         //Attributes
 	string	&m_oid;	//Gaher OID list. Single text
@@ -75,19 +75,20 @@ class TMdPrm : public TParamContr
         TElem   p_el;           //Work atribute elements
 };
 
-//======================================================================
-//==== TMdContr 
-//======================================================================
+//*************************************************
+//* TMdContr                                      *
+//*************************************************
 class TMdContr: public TController
 {
     friend class TMdPrm;
     public:
-    	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem);
-	~TMdContr();   
+	//Methods
+    	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem );
+	~TMdContr( );   
 
-	double period()         { return m_per; }
-        int    prior()          { return m_prior; }
-	int    pAttrLimit()	{ return m_pattr_lim; }
+	double period( )	{ return m_per; }
+        int    prior( )		{ return m_prior; }
+	int    pAttrLimit( )	{ return m_pattr_lim; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
@@ -97,6 +98,7 @@ class TMdContr: public TController
 	void stop_( );
 	
     protected:
+	//Methods
 	void prmEn( const string &id, bool val );
     	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
@@ -105,7 +107,7 @@ class TMdContr: public TController
 	TParamContr *ParamAttach( const string &name, int type );
 	static void *Task( void *icntr );
 	
-	string oid2str(oid *ioid, size_t isz);
+	string oid2str( oid *ioid, size_t isz );
 	
 	//Attributes
 	Res	en_res;         //Resource for enable params
@@ -124,14 +126,15 @@ class TMdContr: public TController
 	double 	tm_gath;	// Gathering time
 };
 
-//======================================================================
-//==== TTpContr 
-//======================================================================
+//*************************************************
+//* TTpContr                                      *
+//*************************************************
 class TTpContr: public TTipDAQ
 {
     public:
+	//Methods
     	TTpContr( string name );
-	~TTpContr();
+	~TTpContr( );
 	
 	void postEnable( int flag );
 	void modLoad( );

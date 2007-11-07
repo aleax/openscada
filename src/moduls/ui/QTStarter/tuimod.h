@@ -1,13 +1,12 @@
 
 //OpenSCADA system module UI.QTStarter file: tuimod.h
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -36,13 +35,15 @@ class QTimer;
 namespace QTStarter
 {    
 
+//*************************************************
+//* WinControl                                    *
+//*************************************************
 class WinControl: public QObject
 {
     Q_OBJECT
     public:
 	//Methods
 	WinControl( bool &end_run );
-	//~WinControl( )			{ }
  
 	bool callQTModule( const string &nm );
         void startDialog( );
@@ -59,13 +60,17 @@ class WinControl: public QObject
 	bool 	&end_run;
 };
 
+//*************************************************
+//* TUIMod                                        *
+//*************************************************
 class TUIMod: public TUI
 {
     public:
+	//Methods
 	TUIMod( string name );
-	~TUIMod();
+	~TUIMod( );
 	
- 	bool endRun()	{ return end_run; }
+ 	bool endRun( )	{ return end_run; }
 
 	void modLoad( );
 	void modSave( );
@@ -75,13 +80,12 @@ class TUIMod: public TUI
 	void postEnable( int flag );
 	
     private:
-        static void *Task(void *);
-	
-	string optDescr( );
-	
+	//Methods
+        static void *Task( void * );	
+	string optDescr( );	
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
-    private:
+	//Attributes
 	bool	demon_mode;
 	bool	end_run;
         pthread_t pthr_tsk;
@@ -94,4 +98,3 @@ extern TUIMod *mod;
 }
 
 #endif //TUIMOD_H
-

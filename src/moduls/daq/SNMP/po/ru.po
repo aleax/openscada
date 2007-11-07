@@ -3,57 +3,57 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: snmp_client.cpp:68 snmp_client.cpp:149 snmp_client.cpp:157
-#: snmp_client.cpp:345 snmp_client.cpp:348 snmp_client.cpp:351
+#: snmp_client.cpp:59 snmp_client.cpp:137 snmp_client.cpp:146
+#: snmp_client.cpp:305 snmp_client.cpp:308 snmp_client.cpp:311
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenScada 0.1.17\n"
+"Project-Id-Version: OpenSCADA.DAQ.SNMP 0.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-15 10:44+0200\n"
-"PO-Revision-Date: 2004-03-20 10:37+0200\n"
+"POT-Creation-Date: 2007-10-29 11:14+0200\n"
+"PO-Revision-Date: 2007-10-29 11:14+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: snmp_client.cpp:43
+#: snmp_client.cpp:42
 msgid "SNMP"
 msgstr ""
 
-#: snmp_client.cpp:44
+#: snmp_client.cpp:43
 msgid "SNMP client"
 msgstr "SNMP клиент"
 
-#: snmp_client.cpp:45
+#: snmp_client.cpp:44
 msgid "DAQ"
 msgstr ""
 
-#: snmp_client.cpp:47
+#: snmp_client.cpp:46
 msgid "0.3.0"
 msgstr ""
 
-#: snmp_client.cpp:48
+#: snmp_client.cpp:47
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-#: snmp_client.cpp:49
+#: snmp_client.cpp:48
 msgid "Allow realising of SNMP client service."
 msgstr "Предоставляет реализацию клиентского сервиса протокола SNMP."
 
-#: snmp_client.cpp:50
+#: snmp_client.cpp:49
 msgid "GPL"
 msgstr ""
 
-#: snmp_client.cpp:55
+#: snmp_client.cpp:54
 msgid "C"
 msgstr ""
 
-#: snmp_client.cpp:101
+#: snmp_client.cpp:89
 msgid "OpenSCADA SNMP client"
 msgstr "OpenSCADA SNMP клиент"
 
-#: snmp_client.cpp:114
+#: snmp_client.cpp:102
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
@@ -64,205 +64,209 @@ msgstr ""
 "-------- Параметры модульной секции <%s> в конфигурационном файле --------\n"
 "\n"
 
-#: snmp_client.cpp:125
+#: snmp_client.cpp:113
 msgid "h"
 msgstr ""
 
-#: snmp_client.cpp:128
+#: snmp_client.cpp:116
 msgid "help"
 msgstr ""
 
-#: snmp_client.cpp:149 snmp_client.cpp:156 snmp_client.cpp:174
+#: snmp_client.cpp:137 snmp_client.cpp:145 snmp_client.cpp:162
 msgid "PRM_BD"
 msgstr ""
 
-#: snmp_client.cpp:149
+#: snmp_client.cpp:137
 msgid "Parameteres table"
 msgstr "Таблица параметров"
 
-#: snmp_client.cpp:149 snmp_client.cpp:152
+#: snmp_client.cpp:137 snmp_client.cpp:140
 msgid "30"
 msgstr ""
 
-#: snmp_client.cpp:150 snmp_client.cpp:170
+#: snmp_client.cpp:138 snmp_client.cpp:159
 msgid "PERIOD"
 msgstr ""
 
-#: snmp_client.cpp:150
+#: snmp_client.cpp:138
 msgid "Gather data period (s)"
 msgstr "Период сбора данных (с)"
 
-#: snmp_client.cpp:150 snmp_client.cpp:154
+#: snmp_client.cpp:138 snmp_client.cpp:142
 msgid "3"
 msgstr ""
 
-#: snmp_client.cpp:150
+#: snmp_client.cpp:138
 msgid "1"
 msgstr ""
 
-#: snmp_client.cpp:150 snmp_client.cpp:151
+#: snmp_client.cpp:138 snmp_client.cpp:139
 msgid "0;100"
 msgstr ""
 
-#: snmp_client.cpp:151 snmp_client.cpp:170
+#: snmp_client.cpp:139 snmp_client.cpp:159
 msgid "PRIOR"
 msgstr ""
 
-#: snmp_client.cpp:151
+#: snmp_client.cpp:139
 msgid "Gather task priority"
 msgstr "Уровень приоритета задачи сбора данных"
 
-#: snmp_client.cpp:151
+#: snmp_client.cpp:139
 msgid "2"
 msgstr ""
 
-#: snmp_client.cpp:151
+#: snmp_client.cpp:139
 msgid "0"
 msgstr ""
 
-#: snmp_client.cpp:152 snmp_client.cpp:170
+#: snmp_client.cpp:140 snmp_client.cpp:159
 msgid "ADDR"
 msgstr ""
 
-#: snmp_client.cpp:152
+#: snmp_client.cpp:140
 msgid "Remote host address"
 msgstr "Адрес удалённого хоста"
 
-#: snmp_client.cpp:152
+#: snmp_client.cpp:140
 msgid "localhost"
 msgstr ""
 
-#: snmp_client.cpp:153 snmp_client.cpp:170
+#: snmp_client.cpp:141 snmp_client.cpp:159
 msgid "COMM"
 msgstr ""
 
-#: snmp_client.cpp:153
+#: snmp_client.cpp:141
 msgid "Server community"
 msgstr "Группа сервера"
 
-#: snmp_client.cpp:153
+#: snmp_client.cpp:141
 msgid "20"
 msgstr ""
 
-#: snmp_client.cpp:153
+#: snmp_client.cpp:141
 msgid "public"
 msgstr ""
 
-#: snmp_client.cpp:154 snmp_client.cpp:171
+#: snmp_client.cpp:142 snmp_client.cpp:160
 msgid "PATTR_LIM"
 msgstr ""
 
-#: snmp_client.cpp:154
+#: snmp_client.cpp:142
 msgid "Param's attributes limit"
 msgstr "Ограничение на количество атрибутов"
 
-#: snmp_client.cpp:154 snmp_client.cpp:157
+#: snmp_client.cpp:142 snmp_client.cpp:146
 msgid "100"
 msgstr ""
 
-#: snmp_client.cpp:156
+#: snmp_client.cpp:145
 msgid "std"
 msgstr ""
 
-#: snmp_client.cpp:156
+#: snmp_client.cpp:145
 msgid "Standard"
 msgstr "Стандарт"
 
-#: snmp_client.cpp:157 snmp_client.cpp:442 snmp_client.cpp:513
+#: snmp_client.cpp:146 snmp_client.cpp:402 snmp_client.cpp:476
 msgid "OID_LS"
 msgstr ""
 
-#: snmp_client.cpp:157
+#: snmp_client.cpp:146
 msgid "OID list (next line separated)"
 msgstr "Список OID (разделение след. строкой)"
 
-#: snmp_client.cpp:174
+#: snmp_client.cpp:162
 msgid "SNMPPrm_"
 msgstr ""
 
-#: snmp_client.cpp:211 snmp_client.cpp:429 snmp_client.cpp:518
+#: snmp_client.cpp:193 snmp_client.cpp:389 snmp_client.cpp:481
 msgid "root"
 msgstr ""
 
-#: snmp_client.cpp:219
+#: snmp_client.cpp:201
 msgid "start"
 msgstr ""
 
-#: snmp_client.cpp:220
+#: snmp_client.cpp:202
 msgid "Gathering task no started!"
 msgstr "Задача сбора данных не запущена!"
 
-#: snmp_client.cpp:244
+#: snmp_client.cpp:213
 msgid "stop"
 msgstr ""
 
-#: snmp_client.cpp:245
+#: snmp_client.cpp:214
 msgid "Gathering task no stoped!"
 msgstr "Задача сбора данных не остановлена!"
 
-#: snmp_client.cpp:292 snmp_client.cpp:395
+#: snmp_client.cpp:252 snmp_client.cpp:355
 #, c-format
 msgid "%s"
 msgstr ""
 
-#: snmp_client.cpp:292
+#: snmp_client.cpp:252
 msgid "Error SNMP session open."
 msgstr "Ошибка открытия SNMP сессии."
 
-#: snmp_client.cpp:368
+#: snmp_client.cpp:328
 #, c-format
 msgid "TEST 02: %xh\n"
 msgstr ""
 
-#: snmp_client.cpp:386
+#: snmp_client.cpp:346
 #, c-format
 msgid "Timeout: No Response from %s."
 msgstr "Время ожидания ответа от %s превышено."
 
-#: snmp_client.cpp:419
+#: snmp_client.cpp:379
 msgid "_"
 msgstr ""
 
-#: snmp_client.cpp:426 snmp_client.cpp:510
+#: snmp_client.cpp:386 snmp_client.cpp:473
 msgid "info"
 msgstr ""
 
-#: snmp_client.cpp:429 snmp_client.cpp:513
+#: snmp_client.cpp:389 snmp_client.cpp:476
 msgid "fld"
 msgstr ""
 
-#: snmp_client.cpp:429 snmp_client.cpp:434
+#: snmp_client.cpp:389 snmp_client.cpp:394
 msgid "/cntr/st/gath_tm"
 msgstr ""
 
-#: snmp_client.cpp:429
+#: snmp_client.cpp:389
 msgid "Gather data time (ms)"
 msgstr "Время сбора данных (мс)"
 
-#: snmp_client.cpp:429
+#: snmp_client.cpp:389
 msgid "tp"
 msgstr ""
 
-#: snmp_client.cpp:429
+#: snmp_client.cpp:389
 msgid "real"
 msgstr ""
 
-#: snmp_client.cpp:433 snmp_client.cpp:517
+#: snmp_client.cpp:393 snmp_client.cpp:469
 msgid "path"
 msgstr ""
 
-#: snmp_client.cpp:442
+#: snmp_client.cpp:402
 msgid "w_attr"
 msgstr ""
 
-#: snmp_client.cpp:513 snmp_client.cpp:518
+#: snmp_client.cpp:470
+msgid "/serv/"
+msgstr ""
+
+#: snmp_client.cpp:476 snmp_client.cpp:481
 msgid "/prm/cfg/OID_LS"
 msgstr ""
 
-#: snmp_client.cpp:518
+#: snmp_client.cpp:481
 msgid "set"
 msgstr ""
 
-#: snmp_client.cpp:520
+#: snmp_client.cpp:483
 msgid "Parameter is enabled."
 msgstr "Параметр включен."

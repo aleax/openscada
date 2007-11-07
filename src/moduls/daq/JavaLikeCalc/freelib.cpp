@@ -1,13 +1,12 @@
 
 //OpenSCADA system module DAQ.JavaLikeCalc file: freelib.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -29,7 +28,9 @@
 
 using namespace JavaLikeCalc;
 
-//================ Functions library ==================
+//*************************************************
+//* Lib: Functions library                        *
+//*************************************************
 Lib::Lib( const char *id, const char *name, const string &lib_db ) : 
     TConfig(&mod->elLib()), m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()), 
     m_descr(cfg("DESCR").getSd()), m_db(cfg("DB").getSd()), work_lib_db(lib_db)
@@ -40,24 +41,24 @@ Lib::Lib( const char *id, const char *name, const string &lib_db ) :
     m_fnc = grpAdd("fnc_");
 }
 
-Lib::~Lib()
+Lib::~Lib( )
 {
     
 }
 
-void Lib::preDisable(int flag)
+void Lib::preDisable( int flag )
 {
-    start(false);
+    setStart(false);
 }
 
-void Lib::postDisable(int flag)
+void Lib::postDisable( int flag )
 {   
     if( flag && DB().size() )
     {
-	//Delete libraries record
+	//- Delete libraries record -
 	SYS->db().at().dataDel(DB()+"."+mod->libTable(),mod->nodePath()+"lib/",*this);
 	
-	//Delete function's files
+	//- Delete function's files -
 	SYS->db().at().open(fullDB());
 	SYS->db().at().close(fullDB(),true);
 
@@ -66,7 +67,7 @@ void Lib::postDisable(int flag)
     }
 }
 
-string Lib::name()   
+string Lib::name( )
 { 
     return (m_name.size())?m_name:m_id;
 }
@@ -77,7 +78,7 @@ void Lib::load( )
     
     SYS->db().at().dataGet(work_lib_db+"."+mod->libTable(),mod->nodePath()+"lib/",*this);
 
-    //Load functions
+    //- Load functions -
     TConfig c_el(&mod->elFnc());
     c_el.cfgViewAll(false);
     int fld_cnt = 0;
@@ -98,19 +99,19 @@ void Lib::save( )
  
     SYS->db().at().dataSet(work_lib_db+"."+mod->libTable(),mod->nodePath()+"lib/",*this);
 
-    //Save functions
+    //- Save functions -
     vector<string> f_lst;
     list(f_lst);
     for( int i_ls = 0; i_ls < f_lst.size(); i_ls++ )
 	at(f_lst[i_ls]).at().save();
 }
 
-void Lib::start( bool val )
+void Lib::setStart( bool val )
 {
     vector<string> lst;
     list(lst);
     for( int i_f = 0; i_f < lst.size(); i_f++ )
-        at(lst[i_f]).at().start(val);
+        at(lst[i_f]).at().setStart(val);
 	    
     run_st = val;
 }
@@ -132,10 +133,11 @@ void Lib::copyFunc( const string &f_id, const string &l_id, const string &to_id,
 	throw TError(nodePath().c_str(),_("Library <%s> no present."),lib.c_str());
     if( mod->lbAt(lib).at().present(toid) )
 	throw TError(nodePath().c_str(),_("Function <%s:%s> already present."),lib.c_str(),toid.c_str());
-    //Make new function	
+
+    //- Make new function -
     mod->lbAt(lib).at().add(toid.c_str());
     mod->lbAt(lib).at().at(toid).at() = at(f_id).at();
-    mod->lbAt(lib).at().at(toid).at().name(to_name.c_str());
+    mod->lbAt(lib).at().at(toid).at().setName(to_name.c_str());
 }
 
 void Lib::add( const char *id, const char *name )
@@ -150,7 +152,7 @@ void Lib::del( const char *id )
 
 void Lib::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {	
     	ctrMkNode("oscada_cntr",opt,-1,"/",_("Function's library: ")+id());
@@ -186,12 +188,13 @@ void Lib::cntrCmdProc( XMLNode *opt )
 	}
         return;
     }
-    //Process command to page
+
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/lib/st/st" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(run_st?"1":"0");
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	start(atoi(opt->text().c_str()));
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setStart(atoi(opt->text().c_str()));
     }
     else if( a_path == "/lib/st/db" && DB().size() )
     {
@@ -224,12 +227,6 @@ void Lib::cntrCmdProc( XMLNode *opt )
         }
 	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )	add(opt->attr("id").c_str(),opt->text().c_str());
 	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	chldDel(m_fnc,opt->attr("id"),-1,1);
-	/*if( ctrChkNode(opt,"edit",0664,"root","root",SEQ_WR) )
-        {
-	    at(opt->attr("p_id")).at().chID(opt->attr("id").c_str());
-	    at(opt->attr("id")).at().name(opt->text().c_str());
-	    at(opt->attr("id")).at().save();
-	}*/
     }	
     else if( a_path == "/func/ls_lib" && ctrChkNode(opt) )
     {

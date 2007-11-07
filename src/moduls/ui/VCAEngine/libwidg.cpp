@@ -1,23 +1,22 @@
 
 //OpenSCADA system module UI.VCAEngine file: libwidg.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2007 by Roman Savochenko
- *   rom_as@diyaorg.dp.ua
- *
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation; either version 2 of the License, or
- *   (at your option) any later version.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, write to the
- *   Free Software Foundation, Inc.,
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *   Copyright (C) 2006-2007 by Roman Savochenko                           *
+ *   rom_as@fromru.com                                                     *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; version 2 of the License.               *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
 #include <tsys.h>
@@ -32,7 +31,7 @@
 using namespace VCA;
 
 //************************************************
-//* Widgets library                              *
+//* WidgetLib: Widgets library                   *
 //************************************************
 WidgetLib::WidgetLib( const string &id, const string &name, const string &lib_db ) :
     TConfig(&mod->elWdgLib()), m_enable(false), m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()),
@@ -105,7 +104,7 @@ string WidgetLib::grp( )
 void WidgetLib::setUser( const string &it )
 {
     m_user = it;
-    //Update librarie's group
+    //- Update librarie's group -
     if(SYS->security().at().grpAt("UI").at().user(it))
 	setGrp("UI");
     else
@@ -130,7 +129,7 @@ void WidgetLib::load( )
 
     SYS->db().at().dataGet(DB()+"."+mod->wlbTable(),mod->nodePath()+"lib",*this);
 
-    //Create new widgets 
+    //- Create new widgets -
     TConfig c_el(&mod->elWdg());
     c_el.cfgViewAll(false);
     int fld_cnt = 0;
@@ -140,7 +139,8 @@ void WidgetLib::load( )
 	c_el.cfg("ID").setS("");
         if( !present(f_id) )	add(f_id,"","");
     }
-    //Load present widgets
+    
+    //- Load present widgets -
     vector<string> f_lst;
     list(f_lst);
     for( int i_ls = 0; i_ls < f_lst.size(); i_ls++ )
@@ -273,7 +273,7 @@ AutoHD<LWidget> WidgetLib::at( const string &id )
 
 void WidgetLib::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
         ctrMkNode("oscada_cntr",opt,-1,"/",_("Widget's library: ")+id());
@@ -313,7 +313,8 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 	    }
         return;
     }
-    //Process command to page
+    
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/obj/st/en" )
     {
@@ -407,7 +408,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/mime/mime" )
     {
-        //Request data
+        //-- Request data --
         string idmime = opt->attr("key_id");
         string idcol  = opt->attr("col");    
 	
@@ -442,11 +443,11 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 	    mimeDataDel(opt->attr("key_id"));
         if( ctrChkNode(opt,"set",permit(),user().c_str(),grp().c_str(),SEQ_WR) )
 	{
-            //Request data
+            //-- Request data --
 	    if( idcol == "id" )
 	    {
 		string mimeType, mimeData;
-		//- Copy mime data to new record -
+		//--- Copy mime data to new record ---
 		if( mimeDataGet( "res:/"+idmime, mimeType, &mimeData ) )
 		{
 		    mimeDataSet( opt->text(), mimeType, mimeData );
@@ -456,7 +457,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 	    else if( idcol == "tp" )
 	    {
 		string mimeType;
-		//- Copy mime data to new record -
+		//--- Copy mime data to new record ---
 		if( mimeDataGet( "res:/"+idmime, mimeType ) )
 		    mimeDataSet( idmime, opt->text()+";"+TSYS::strSepParse(mimeType,1,';'), "");
 	    }
@@ -471,7 +472,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 }
 
 //************************************************
-//* Library stored widget                        *
+//* LWidget: Library stored widget               *
 //************************************************
 LWidget::LWidget( const string &id, const string &isrcwdg ) :
         Widget(id,isrcwdg), TConfig(&mod->elWdg()),
@@ -486,7 +487,7 @@ LWidget::~LWidget( )
 
 }
 
-WidgetLib &LWidget::owner()
+WidgetLib &LWidget::owner( )
 {
     return *(WidgetLib*)nodePrev( );
 }
@@ -498,14 +499,16 @@ void LWidget::postDisable( int flag )
         string fullDB = owner().fullDB();
         string tbl = owner().tbl();
 
-        //Remove from library table
+        //- Remove from library table -
         SYS->db().at().dataDel(fullDB,mod->nodePath()+tbl,*this);
-	//Remove widget's IO from library IO table
+	
+	//- Remove widget's IO from library IO table -
         TConfig c_el(&mod->elWdgIO());
         c_el.cfg("IDW").setS(id());
         c_el.cfg("ID").setS("");
         SYS->db().at().dataDel(fullDB+"_io",mod->nodePath()+tbl+"_io",*this);
-	//Remove widget's user IO from library IO table
+	
+	//- Remove widget's user IO from library IO table -
         c_el.setElem(&mod->elWdgUIO());
         c_el.cfg("IDW").setS(id());
         c_el.cfg("ID").setS("");
@@ -533,7 +536,7 @@ string LWidget::user( )
 void LWidget::setUser( const string &iuser )
 {
     m_user = iuser;
-    //Group update
+    //- Group update -
     if(SYS->security().at().grpAt("UI").at().user(iuser))
         setGrp("UI");
     else
@@ -622,7 +625,7 @@ void LWidget::setCalcPer( int vl )
 
 void LWidget::load( )
 {    
-    //Load generic widget's data
+    //- Load generic widget's data -
     string db  = owner().DB();
     string tbl = owner().tbl();
     SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,*this);
@@ -701,15 +704,15 @@ void LWidget::loadIO( )
 
 void LWidget::save( )
 {
-    //Save generic widget's data
+    //- Save generic widget's data -
     string db  = owner().DB();
     string tbl = owner().tbl();
     SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,*this);
 
-    //Save widget's attributes
+    //- Save widget's attributes -
     saveIO();
 
-    //Save cotainer widgets
+    //- Save cotainer widgets -
     if(isContainer())
     {
 	vector<string> ls;
@@ -814,7 +817,7 @@ string LWidget::resourceGet( const string &id, string *mime )
 void LWidget::cntrCmdProc( XMLNode *opt )
 {
     if( cntrCmdServ(opt) ) return;
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {	
 	cntrCmdGeneric(opt);
@@ -828,7 +831,7 @@ void LWidget::cntrCmdProc( XMLNode *opt )
 }
 
 //************************************************
-//* Container stored widget                      *
+//* CWidget: Container stored widget             *
 //************************************************
 CWidget::CWidget( const string &id, const string &isrcwdg ) :
         Widget(id,isrcwdg), TConfig(&mod->elInclWdg())
@@ -958,13 +961,13 @@ int CWidget::calcPer( )
 
 void CWidget::load( )
 {
-    //Load generic widget's data
+    //- Load generic widget's data -
     string db  = owner().owner().DB();
     string tbl = owner().owner().tbl()+"_incl";
     SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,*this);
     setParentNm(cfg("PARENT").getS());
 
-    //Load widget's attributes
+    //- Load widget's attributes -
     loadIO();
 }
 
@@ -1029,12 +1032,12 @@ void CWidget::loadIO( )
 
 void CWidget::save( )
 {
-    //Save generic widget's data
+    //- Save generic widget's data -
     string db  = owner().owner().DB();
     string tbl = owner().owner().tbl()+"_incl";
     SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,*this);
 
-    //Save widget's attributes
+    //- Save widget's attributes -
     saveIO();
 }
 
@@ -1111,7 +1114,7 @@ string CWidget::resourceGet( const string &id, string *mime )
 void CWidget::cntrCmdProc( XMLNode *opt )
 {
     if( cntrCmdServ(opt) ) return;
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
 	cntrCmdGeneric(opt);

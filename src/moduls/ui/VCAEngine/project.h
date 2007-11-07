@@ -1,23 +1,22 @@
 
 //OpenSCADA system module UI.VCAEngine file: project.h
 /***************************************************************************
- *   Copyright (C) 2007 by Roman Savochenko
- *   rom_as@diyaorg.dp.ua
- *
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation; either version 2 of the License, or
- *   (at your option) any later version.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, write to the
- *   Free Software Foundation, Inc.,
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *   Copyright (C) 2007 by Roman Savochenko                                *
+ *   rom_as@fromru.com                                                     *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; version 2 of the License.               *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
 #ifndef PROJECT_H
@@ -32,15 +31,16 @@ namespace VCA
 {
 
 //************************************************
-//* VCA project                              	 *
+//* Project: VCA project                     	 *
 //************************************************
 class Page;
     
 class Project : public TCntrNode, public TConfig
 {
     public:
+	//Methods
         Project( const string &id, const string &name, const string &lib_db = "*.*" );
-	~Project();
+	~Project( );
 
         const string &id( )	{ return m_id; }		//Identifier
         string name( );						//Name
@@ -81,7 +81,7 @@ class Project : public TCntrNode, public TConfig
 
     protected:
 	//Methods
-        string nodeName()       { return m_id; }
+        string nodeName( )	{ return m_id; }
         void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
 	void postEnable( int flag );
@@ -92,6 +92,7 @@ class Project : public TCntrNode, public TConfig
 	int     m_page;
 
     private:
+	//Attributes
         string  &m_id, 		//Identifier
 		&m_name, 	//Name
 		&m_descr, 	//Description
@@ -105,22 +106,24 @@ class Project : public TCntrNode, public TConfig
 };
 
 //************************************************
-//* Project's page                        	 *
+//* Page: Project's page                    	 *
 //************************************************
 class PageWdg;
 
 class Page : public Widget, public TConfig
 {
     public:
+	//Data
 	enum Flag
 	{ 
 	    Container = 0x01, 	//Page is container included pages
 	    Template  = 0x02,	//Page is template for included pages
 	    Empty     = 0x04	//No page, use for logical containers
 	};
-    //Methods
+	
+	//Methods
         Page( const string &id, const string &isrcwdg = "" );
-        ~Page();
+        ~Page( );
 
 	string path( );
         string ico( );
@@ -168,10 +171,11 @@ class Page : public Widget, public TConfig
 	//- Data access -
         string resourceGet( const string &id, string *mime = NULL );
 
-	Page 	*ownerPage();
-        Project *ownerProj();
+	Page 	*ownerPage( );
+        Project *ownerProj( );
 
     protected:
+	//Methods
 	void postEnable( int flag );
         void postDisable( int flag );
 	
@@ -179,6 +183,7 @@ class Page : public Widget, public TConfig
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
     private:
+	//Attributes
 	int     m_page;		//Page container identifier
         string  &m_ico,         //Widget icon
                 &m_user,        //Widget user
@@ -190,14 +195,14 @@ class Page : public Widget, public TConfig
 };
 
 //************************************************
-//* Page included widget                         *
+//* PageWdg: Page included widget                *
 //************************************************
 class PageWdg : public Widget, public TConfig
 {
     public:
     	//Methods
         PageWdg( const string &id, const string &isrcwdg = "" );
-        ~PageWdg();
+        ~PageWdg( );
 
 	//- Main parameters -
 	string path( );
@@ -222,9 +227,10 @@ class PageWdg : public Widget, public TConfig
 	//- Data access -
         string resourceGet( const string &id, string *mime = NULL );
 
-        Page &owner();
+        Page &owner( );
 
     protected:
+	//Methods
         void postEnable( int flag );
         void postDisable( int flag );
 	

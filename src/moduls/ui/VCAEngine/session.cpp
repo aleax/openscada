@@ -1,23 +1,22 @@
 
 //OpenSCADA system module UI.VCAEngine file: session.cpp
 /***************************************************************************
- *   Copyright (C) 2007 by Roman Savochenko
- *   rom_as@diyaorg.dp.ua
- *
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation; either version 2 of the License, or
- *   (at your option) any later version.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, write to the
- *   Free Software Foundation, Inc.,
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *   Copyright (C) 2007 by Roman Savochenko                                *
+ *   rom_as@fromru.com                                                     *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; version 2 of the License.               *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
 #include <pthread.h>
@@ -32,7 +31,7 @@
 using namespace VCA;
 
 //************************************************
-//* Project's session                       	 *
+//* Session: Project's session              	 *
 //************************************************
 Session::Session( const string &iid, const string &iproj ) :
     m_enable(false), m_start(false), endrun_req(false), tm_calc(0.0),
@@ -277,10 +276,10 @@ void *Session::Task( void *icontr )
     ses.list(pls);
     while(true)
     {
-        //Check calk time
+        //- Check calk time -
         unsigned long long t_cnt = SYS->shrtCnt();	
 
-	//Calc session pages and all other items at recursion
+	//- Calc session pages and all other items at recursion -
 	for( int i_l = 0; i_l < pls.size(); i_l++ )
 	    ses.at(pls[i_l]).at().calc(is_start,is_stop);
 
@@ -296,7 +295,7 @@ void *Session::Task( void *icontr )
 	
 	if(is_stop) break;
 	
-        //Calc next work time and sleep
+        //- Calc next work time and sleep -
 	clock_gettime(CLOCK_REALTIME,&get_tm);
 	work_tm = (((long long)get_tm.tv_sec*1000000000+get_tm.tv_nsec)/((long long)ses.period()*1000000) + 1)*(long long)ses.period()*1000000;
         if(work_tm == last_tm)  work_tm+=(long long)ses.period()*1000000; //Fix early call!
@@ -340,7 +339,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
         ctrMkNode("oscada_cntr",opt,-1,"/",_("Session: ")+id());
@@ -369,7 +368,8 @@ void Session::cntrCmdProc( XMLNode *opt )
     	    ctrMkNode("list",opt,-1,"/page/page",_("Pages"),R_R_R_,"root","root",3,"tp","br","idm","1","br_pref","pg_");
         return;
     }
-    //Process command to page
+    
+    //- Process command to page -
     if( a_path == "/ico" && ctrChkNode(opt) )   opt->setText(ico());
     else if( a_path == "/obj/st/en" )
     {
@@ -418,7 +418,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 }
 
 //************************************************
-//* Page of Project's session                    *
+//* SessPage: Page of Project's session          *
 //************************************************
 SessPage::SessPage( const string &iid, const string &ipage, Session *sess ) : SessWdg(iid,ipage,sess)
 {
@@ -541,7 +541,7 @@ bool SessPage::attrChange( Attr &cfg, void *prev )
 
 bool SessPage::cntrCmdGeneric( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
         SessWdg::cntrCmdGeneric(opt);
@@ -557,7 +557,8 @@ bool SessPage::cntrCmdGeneric( XMLNode *opt )
 	}
         return true;
     }
-    //Process command to page
+    
+    //- Process command to page -
     string a_path = opt->attr("path");    
     if( a_path == "/wdg/st/open" && enable() && !(parent().at().prjFlags( )&Page::Empty) )
     {
@@ -579,7 +580,7 @@ bool SessPage::cntrCmdGeneric( XMLNode *opt )
 
 
 //************************************************
-//* Session page's widget                        *
+//* SessWdg: Session page's widget               *
 //************************************************
 SessWdg::SessWdg( const string &iid, const string &iparent, Session *isess ) : 
     Widget(iid,iparent), m_proc(false), TValFunc(iid+"_wdg",NULL), m_mdfClc(0), 
@@ -1033,14 +1034,15 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 
 bool SessWdg::cntrCmdGeneric( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
         Widget::cntrCmdGeneric(opt);
 	ctrMkNode("fld",opt,1,"/wdg/st/proc",_("Process"),RWRWR_,user().c_str(),grp().c_str(),1,"tp","bool");
         return true;
     }
-    //Process command to page
+    
+    //- Process command to page -
     string a_path = opt->attr("path");    
     if( a_path.substr(0,5) == "/attr" &&
             TSYS::pathLev(a_path,1).size() > 4 &&
@@ -1080,7 +1082,7 @@ void SessWdg::cntrCmdProc( XMLNode *opt )
 {
     if( cntrCmdServ(opt) ) return;
 
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
         cntrCmdGeneric(opt);

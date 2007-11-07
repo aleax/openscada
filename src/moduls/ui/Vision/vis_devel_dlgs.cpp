@@ -222,6 +222,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     //butbox->button(QDialogButtonBox::Cancel)->setShortcut(QKeySequence("Esc"));
     connect(butbox->button(QDialogButtonBox::Cancel), SIGNAL(clicked()), this, SLOT(pressCancel()));
     //-- Init close button --
+    butbox->button(QDialogButtonBox::Close)->setText(_("Close"));    
     connect(butbox->button(QDialogButtonBox::Close), SIGNAL(clicked()), this, SLOT(pressClose()));
 
     tab_lay->addWidget(butbox);
@@ -603,7 +604,7 @@ void LibProjProp::loadMimeData( )
     QFile file(fileName);
     if(!file.open(QFile::ReadOnly))
 	mod->postMess( mod->nodePath().c_str(),
-		QString(_("Filed to open file '%1': %2")).arg(fileName).arg(file.errorString()),TVision::Error,this);
+		QString(_("Open file '%1' is fail: %2")).arg(fileName).arg(file.errorString()),TVision::Error,this);
     QByteArray data = file.readAll();		
 
     XMLNode req("set");
@@ -632,7 +633,7 @@ void LibProjProp::unloadMimeData( )
     QFile file(fileName);
     if(!file.open(QIODevice::WriteOnly|QIODevice::Truncate))
 	mod->postMess( mod->nodePath().c_str(),
-		QString(_("Filed to open file '%1': %2")).arg(fileName).arg(file.errorString()),TVision::Error,this);
+		QString(_("Open file '%1' is fail: %2")).arg(fileName).arg(file.errorString()),TVision::Error,this);
 
     XMLNode req("get");
     req.setAttr("path",ed_it+"/"+TSYS::strEncode("/mime/mime",TSYS::PathEl))->
@@ -646,7 +647,7 @@ void LibProjProp::unloadMimeData( )
 	string mimeData = TSYS::strDecode(req.text(),TSYS::base64);	
 	if( file.write(mimeData.data(),mimeData.size()) < 0 )
 	    mod->postMess( mod->nodePath().c_str(),
-		QString(_("Filed writing data to file '%1': %2")).arg(fileName).arg(file.errorString()),TVision::Error,this);
+		QString(_("Write data to file '%1' is fail: %2")).arg(fileName).arg(file.errorString()),TVision::Error,this);
     }
 }
 
@@ -1189,7 +1190,8 @@ void VisItProp::tabChanged( int itb )
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/proc/w_lst",TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) )
 		for( int i_w = 0; i_w < req.childSize(); i_w++ )
-		    wlst.push_back(req.childGet(i_w)->attr("id"));
+		    wlst.push_back(req.childGet(i_w)->text());
+		    //wlst.push_back(req.childGet(i_w)->attr("id"));
 	
 	    //--- Fill table ---
 	    //--- Delete no present root items ---

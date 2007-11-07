@@ -1,13 +1,12 @@
 
 //OpenSCADA system module DAQ.System file: da_sensors.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -32,15 +31,15 @@ using namespace SystemCntr;
 
 char *Sensors::mbmon_cmd = "mbmon -r -c 1";	//write one try to stdout
  
-//======================================================================
-//==== Sensors
-//======================================================================
+//*************************************************
+//* Sensors                                       *
+//*************************************************
 Sensors::Sensors( )
 {
 
 }
 
-Sensors::~Sensors()
+Sensors::~Sensors( )
 {
 
 }
@@ -96,7 +95,7 @@ void Sensors::makeActiveDA( TMdContr *a_cntr )
 	FILE *fp = popen(mbmon_cmd,"r");
 	if( fp != NULL )
 	{
-	    //Check monitor present
+	    //- Check monitor present -
 	    bool sens_avoid = false;
 	    while(fgets(buf,sizeof(buf),fp))
 		if( sscanf(buf, "%31s : %f", name, &val) == 2 )
@@ -116,4 +115,3 @@ void Sensors::makeActiveDA( TMdContr *a_cntr )
 	}	
     }
 }
-

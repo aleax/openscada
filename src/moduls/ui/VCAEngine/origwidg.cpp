@@ -1,23 +1,22 @@
 
 //OpenSCADA system module UI.VCAEngine file: origwidg.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2007 by Roman Savochenko
- *   rom_as@diyaorg.dp.ua
- *
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation; either version 2 of the License, or
- *   (at your option) any later version.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, write to the
- *   Free Software Foundation, Inc.,
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *   Copyright (C) 2006-2007 by Roman Savochenko                           *
+ *   rom_as@fromru.com                                                     *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; version 2 of the License.               *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
 #include <tsys.h>
@@ -28,7 +27,7 @@
 using namespace VCA;
 
 //*************************************************
-//* Primitive widget template                     *
+//* PrWidget: Primitive widget template           *
 //*************************************************
 PrWidget::PrWidget( const string &iid ) : LWidget(iid)
 { 
@@ -74,7 +73,7 @@ void PrWidget::setEnable( bool val )
 
 bool PrWidget::cntrCmdGeneric( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
         Widget::cntrCmdGeneric(opt);
@@ -83,7 +82,8 @@ bool PrWidget::cntrCmdGeneric( XMLNode *opt )
 		2,"tp","str","dest","");		
         return true;
     }
-    //Process command to page
+    
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/wdg/st/parent" && ctrChkNode(opt,"get",R_R_R_,user().c_str(),grp().c_str(),SEQ_RD) )
 	opt->setText(parentNm());
@@ -94,22 +94,27 @@ bool PrWidget::cntrCmdGeneric( XMLNode *opt )
 void PrWidget::cntrCmdProc( XMLNode *opt )
 {
     if( cntrCmdServ(opt) ) return;
-    //Get page info
+    
+    //- Get page info -
     if( opt->name() == "info" )
     {
         cntrCmdGeneric(opt);
         cntrCmdAttributes(opt );
         return;
     }
-    //Process command to page
+    
+    //- Process command to page -
     cntrCmdGeneric(opt) || cntrCmdAttributes(opt);
 }
 
 
-//============ Original widgets based at primitive widget template ============
+//*************************************************
+//* Original widgets based at primitive           *
+//* widget template                               *
 
 //*************************************************
-//* Elementary figures original widget            *
+//* OrigElFigure:                                 *
+//*  Elementary figures original widget           *
 //*************************************************
 OrigElFigure::OrigElFigure( ) : PrWidget("ElFigure")
 {
@@ -196,7 +201,7 @@ bool OrigElFigure::attrChange( Attr &cfg, void *prev )
 }
 
 //*************************************************
-//* Form element original widget                  *
+//* OrigFormEl: Form element original widget      *
 //*************************************************
 OrigFormEl::OrigFormEl( ) : PrWidget("FormEl")
 {
@@ -287,7 +292,7 @@ bool OrigFormEl::attrChange( Attr &cfg, void *prev )
 }
 
 //************************************************
-//* Text element original widget                 *
+//* OrigText: Text element original widget       *
 //************************************************
 OrigText::OrigText( ) : PrWidget("Text")	
 { 
@@ -382,7 +387,7 @@ bool OrigText::attrChange( Attr &cfg, void *prev )
 }
 
 //************************************************
-//* Media view original widget                   *
+//* OrigMedia: Media view original widget        *
 //************************************************
 OrigMedia::OrigMedia( ) : PrWidget("Media")
 {
@@ -391,12 +396,12 @@ OrigMedia::OrigMedia( ) : PrWidget("Media")
     
 string OrigMedia::name( )
 { 
-    return _("Media view"); 
+    return _("Media"); 
 }
 
 string OrigMedia::descr( )	
 { 
-    return _("Media view widget of the end visualisation."); 
+    return _("Media widget of the end visualisation."); 
 }
  
 void OrigMedia::postEnable( int flag )
@@ -444,7 +449,7 @@ bool OrigMedia::attrChange( Attr &cfg, void *prev )
 }
 
 //************************************************
-//* Diagram view original widget                 *
+//* OrigDiagram: Diagram original widget         *
 //************************************************
 OrigDiagram::OrigDiagram( ) : PrWidget("Diagram")
 {
@@ -453,12 +458,12 @@ OrigDiagram::OrigDiagram( ) : PrWidget("Diagram")
     
 string OrigDiagram::name( )      
 { 
-    return _("Diagram view");
+    return _("Diagram");
 }
 
 string OrigDiagram::descr( )     
 { 
-    return _("Diagram view widget of the end visualisation.");
+    return _("Diagram widget of the end visualisation.");
 }
  
 void OrigDiagram::postEnable( int flag )
@@ -584,21 +589,21 @@ bool OrigDiagram::attrChange( Attr &cfg, void *prev )
 }
 
 //************************************************
-//* Protocol view original widget                *
+//* OrigProtocol: Protocol original widget       *
 //************************************************
 OrigProtocol::OrigProtocol( ) : PrWidget("Protocol")
 { 
     
 }
     
-string OrigProtocol::name( )      
+string OrigProtocol::name( )
 { 
-    return _("Protocol view"); 
+    return _("Protocol"); 
 }
 
 string OrigProtocol::descr( )	
 { 
-    return _("Protocol view widget of the end visualisation."); 
+    return _("Protocol widget of the end visualisation.");
 }
 
 void OrigProtocol::postEnable( int flag )
@@ -614,11 +619,11 @@ void OrigProtocol::postEnable( int flag )
     	attrAdd( new TFld("time",_("Time, sek"),TFld::Integer,TFld::NoFlag,"","","","",24) );
         attrAdd( new TFld("tSize",_("Size, sek"),TFld::Integer,TFld::NoFlag,"","3600","","",25) );
         attrAdd( new TFld("trcPer",_("Tracing period (s)"),TFld::Integer,TFld::NoFlag,"","0","0;360","",26) );
-        attrAdd( new TFld("arch",_("Archival"),TFld::String,TFld::NoFlag,"","","","",27) );
+        attrAdd( new TFld("arch",_("Archivator"),TFld::String,TFld::NoFlag,"","","","",27) );
         attrAdd( new TFld("tmpl",_("Template"),TFld::String,TFld::NoFlag,"","","","",28) );
         attrAdd( new TFld("lev",_("Level"),TFld::Integer,TFld::NoFlag,"","0","","",29) );
         attrAdd( new TFld("viewOrd",_("View order"),TFld::Integer,TFld::Selected,"","0",
-	    "0;1;2","On time;On level;On level and trigered",30) );
+	    "0;1;2",_("On time;On level;On level and trigered"),30) );
         attrAdd( new TFld("col",_("View columns"),TFld::String,TFld::NoFlag,"","pos;tm;lev;cat;mess","","",31) );
         attrAdd( new TFld("itProp",_("Items properties"),TFld::Integer,Attr::Active,"","0","0;10","",32) );
     }
@@ -670,7 +675,7 @@ bool OrigProtocol::attrChange( Attr &cfg, void *prev )
 }
 
 //************************************************
-//* Document view original widget                *
+//* OrigDocument: Document original widget       *
 //************************************************
 OrigDocument::OrigDocument( ) : PrWidget("Document")
 { 
@@ -679,16 +684,16 @@ OrigDocument::OrigDocument( ) : PrWidget("Document")
     
 string OrigDocument::name( )      
 { 
-    return _("Document view"); 
+    return _("Document"); 
 }
 
 string OrigDocument::descr( )     
 { 
-    return _("Document view widget of the end visualisation."); 
+    return _("Document widget of the end visualisation."); 
 }
 
 //************************************************
-//* User function original widget                *
+//* OrigFunction: User function original widget  *
 //************************************************
 OrigFunction::OrigFunction( ) : PrWidget("Function")
 { 
@@ -702,11 +707,11 @@ string OrigFunction::name( )
 
 string OrigFunction::descr( )     
 { 
-    return _("Buildin function widget of the end visualisation."); 
+    return _("Buildin function widget."); 
 }
 
 //************************************************
-//* User element original widget                 *
+//* OrigBox: User element original widget        *
 //************************************************
 OrigBox::OrigBox( ) : PrWidget("Box")
 {
@@ -742,7 +747,7 @@ void OrigBox::postEnable( int flag )
 } 
 
 //************************************************
-//* Link original widget                         *
+//* OrigLink: Link original widget               *
 //************************************************
 OrigLink::OrigLink( ) : PrWidget("Link")
 {

@@ -1,13 +1,12 @@
 
 //OpenSCADA system module DAQ.LogicLev file: logiclev.h
 /***************************************************************************
- *   Copyright (C) 2006 by Roman Savochenko                                *
+ *   Copyright (C) 2006-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -83,7 +82,7 @@ class TMdPrm : public TParamContr, public TValFunc
 	class SLnk
 	{
 	    public:
-	        SLnk(int iid, const string &db_addr = "") : 
+	        SLnk( int iid, const string &db_addr = "" ) : 
 		    io_id(iid), db_addr(db_addr), val(-1,-1,0) { }
 
                 int     io_id;		//Template function io index
@@ -95,25 +94,25 @@ class TMdPrm : public TParamContr, public TValFunc
     	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );	
 	
-	void enable();
-	void disable();
+	void enable( );
+	void disable( );
 	void load( );
 	void save( );
 	
 	void calc( bool first, bool last );	//Calc template's algoritmes
 	
 	//- Template link operations -
-        int lnkSize();
+        int lnkSize( );
         int lnkId( int id );
         int lnkId( const string &id );
         SLnk &lnk( int num );
 	
-	TMdContr &owner()	{ return (TMdContr&)TParamContr::owner(); }
+	TMdContr &owner( )	{ return (TMdContr&)TParamContr::owner(); }
 	
     private:    
 	//Methods
-        void postEnable(int flag);
-        void postDisable(int flag);
+        void postEnable( int flag );
+        void postDisable( int flag );
 	
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process			
 						
@@ -121,9 +120,9 @@ class TMdPrm : public TParamContr, public TValFunc
         void vlSet( TVal &val );
 	void vlArchMake( TVal &val );
 	
-	void loadIO();
-        void saveIO();
-	void initLnks();
+	void loadIO( );
+        void saveIO( );
+	void initLnks( );
 							
         //Attributes
         string  &m_tmpl;
@@ -147,7 +146,7 @@ class TMdContr: public TController
     friend class TMdPrm;
     public:
 	//Methods
-    	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem);
+    	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem );
 	~TMdContr( );
 
 	int period( )		{ return m_per; }
@@ -162,7 +161,7 @@ class TMdContr: public TController
 	void start_( );
 	void stop_( );
 	
-	TTpContr &owner()	{ return *(TTpContr *)nodePrev(); }
+	TTpContr &owner( )	{ return *(TTpContr *)nodePrev(); }
 	
     protected:
 	//Methods	
@@ -180,7 +179,7 @@ class TMdContr: public TController
         void setValS( const string &ivl, SValData ival, string &err );
 	
 	//- Service -
-	void postDisable(int flag);     	//Delete all DB if flag 1
+	void postDisable( int flag );     	//Delete all DB if flag 1
     	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
     private:
@@ -188,7 +187,7 @@ class TMdContr: public TController
 	TParamContr *ParamAttach( const string &name, int type );
 	static void *Task( void *icntr );
 	int valSize( IO::Type itp, int iv_sz );	//Prepare value sizes
-	string revers(const string &ibuf)
+	string revers( const string &ibuf )
 	{
 	    string obuf;
 	    for(int i=ibuf.size()-1; i >= 0; i--)
@@ -236,7 +235,7 @@ class TTpContr: public TTipDAQ
     public:
 	//Methods
     	TTpContr( string name );
-	~TTpContr();
+	~TTpContr( );
 	
 	void modLoad( );
 	void modSave( );
@@ -245,17 +244,17 @@ class TTpContr: public TTipDAQ
 	bool drvCIFOK( );	
 	void initCIF( int dev );
 
-	TElem   &prmIOE()	{ return el_prm_io; }
-	TElem   &CIFDevE()	{ return el_cif_dev; }
+	TElem   &prmIOE( )	{ return el_prm_io; }
+	TElem   &CIFDevE( )	{ return el_cif_dev; }
 
 	//- Remote stations requests -
-	void getDBCIF(unsigned board, unsigned n_st, 
-		      unsigned n_db, long offset, string &buffer);
-	void putDBCIF(unsigned board, unsigned n_st, 
-	              unsigned n_db, long offset, const string &buffer);
+	void getDBCIF( unsigned board, unsigned n_st, 
+		        unsigned n_db, long offset, string &buffer );
+	void putDBCIF( unsigned board, unsigned n_st, 
+	                unsigned n_db, long offset, const string &buffer );
 
 	//- Life list of bus stations -
-	void getLifeListCIF(unsigned board, string &buffer);
+	void getLifeListCIF( unsigned board, string &buffer );
 	
     protected:
 	//Methods

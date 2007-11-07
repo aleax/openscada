@@ -1,13 +1,12 @@
 
 //OpenSCADA system module DAQ.LogicLev file: logiclev.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2006-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -35,7 +34,8 @@
 
 #include "logiclev.h"
 
-//============ Modul info! =====================================================
+//*************************************************
+//* Modul info!                                   *
 #define MOD_ID      "LogicLev"
 #define MOD_NAME    "Logic level"
 #define MOD_TYPE    "DAQ"
@@ -44,7 +44,7 @@
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow logic level paramers."
 #define LICENSE     "GPL"
-//==============================================================================
+//*************************************************
 
 LogicLev::TTpContr *LogicLev::mod;  //Pointer for direct access to module
 
@@ -52,36 +52,23 @@ extern "C"
 {
     TModule::SAt module( int n_mod )
     {
-	TModule::SAt AtMod;
-
-	if(n_mod==0)
-	{
-	    AtMod.id	= MOD_ID;
-	    AtMod.type  = MOD_TYPE;
-	    AtMod.t_ver = VER_TYPE;
-	}
-	else
-    	    AtMod.id	= "";
-
-	return AtMod;
+	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	return TModule::SAt("");
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	LogicLev::TTpContr *self_addr = NULL;
-
-    	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = LogicLev::mod = new LogicLev::TTpContr( source );
-
-	return self_addr;
+    	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
+	    return new LogicLev::TTpContr( source );
+	return NULL;
     }
 }
 
 using namespace LogicLev;
 
-//======================================================================
-//==== TTpContr ======================================================== 
-//======================================================================
+//*************************************************
+//* TTpContr                                      * 
+//*************************************************
 TTpContr::TTpContr( string name )  
 {
     mId 	= MOD_ID;
@@ -91,7 +78,9 @@ TTpContr::TTpContr( string name )
     mAutor    	= AUTORS;
     mDescr  	= DESCRIPTION;
     mLicense   	= LICENSE;
-    mSource    	= name;    
+    mSource    	= name;
+    
+    mod		= this;
 }
 
 TTpContr::~TTpContr()
@@ -113,7 +102,7 @@ string TTpContr::optDescr( )
 
 void TTpContr::modLoad( )
 {
-    //========== Load parameters from command line ============
+    //- Load parameters from command line -
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -138,15 +127,17 @@ void TTpContr::postEnable( int flag )
 {    
     TModule::postEnable( flag );
 
-    //==== Controler's bd structure ====    
+    //- Controler's bd structure -    
     fldAdd( new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30","") );
     fldAdd( new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","0;10000") );
     fldAdd( new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
-    //==== Parameter type bd structure ====
+    
+    //- Parameter type bd structure -
     int t_prm = tpParmAdd("std","PRM_BD",_("Logical"));
     tpPrmAt(t_prm).fldAdd( new TFld("MODE",_("Mode"),TFld::Integer,TCfg::NoVal,"1","0") );
     tpPrmAt(t_prm).fldAdd( new TFld("PRM","",TFld::String,TCfg::NoVal,"100","") );
-    //Logical level parameter IO BD structure
+    
+    //- Logical level parameter IO BD structure -
     el_prm_io.fldAdd( new TFld("PRM_ID",_("Parameter ID"),TFld::String,TCfg::Key,"20") );
     el_prm_io.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
     el_prm_io.fldAdd( new TFld("VALUE",_("Value"),TFld::String,TFld::NoFlag,"200") );
@@ -157,9 +148,9 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
     return new TMdContr(name,daq_db,this);
 }
 
-//======================================================================
-//==== TMdContr 
-//======================================================================
+//*************************************************
+//* TMdContr                                      *
+//*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
 	::TController(name_c,daq_db,cfgelem), prc_st(false), endrun_req(false), tm_calc(0),
 	m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId())
@@ -179,7 +170,7 @@ void TMdContr::postDisable(int flag)
     {
 	if( flag )
         {
-    	    //Delete parameter's io table
+    	    //- Delete parameter's io table -
             string tbl = DB()+"."+cfg("PRM_BD").getS()+"_io";
             SYS->db().at().open(tbl);
             SYS->db().at().close(tbl,true);
@@ -206,14 +197,14 @@ void TMdContr::save( )
 
 void TMdContr::start_( )
 {      
-    //Former process parameters list
+    //- Former process parameters list -
     vector<string> list_p;
     list(list_p);    
     for(int i_prm=0; i_prm < list_p.size(); i_prm++)
         if( at(list_p[i_prm]).at().enableStat() )
 	    prmEn(list_p[i_prm],true);
 
-    //Start the request data task    
+    //- Start the request data task -
     if( !prc_st )
     {
 	pthread_attr_t pthr_attr;
@@ -234,7 +225,7 @@ void TMdContr::start_( )
 
 void TMdContr::stop_( )
 {
-    //Stop the request and calc data task
+    //- Stop the request and calc data task -
     if( prc_st )
     {
         endrun_req = true;
@@ -244,7 +235,7 @@ void TMdContr::stop_( )
         pthread_join( procPthr, NULL );
     }
     
-    //Clear process parameters list
+    //- Clear process parameters list -
     p_hd.clear();
 } 
 
@@ -278,7 +269,7 @@ void *TMdContr::Task( void *icntr )
     {
 	long long t_cnt = SYS->shrtCnt();
 	
-	//Update controller's data
+	//- Update controller's data -
 	cntr.en_res.resRequestR( );
 	for(unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++)
 	    try{ cntr.p_hd[i_p].at().calc(is_start,is_stop); }
@@ -289,7 +280,7 @@ void *TMdContr::Task( void *icntr )
     
 	if(is_stop) break;
     
-        //Calc next work time and sleep
+        //- Calc next work time and sleep -
         clock_gettime(CLOCK_REALTIME,&get_tm);
         work_tm = (((long long)get_tm.tv_sec*1000000000+get_tm.tv_nsec)/((long long)cntr.m_per*1000000) + 1)*(long long)cntr.m_per*1000000;
 	if(last_tm == work_tm)	work_tm+=(long long)cntr.m_per*1000000;	//Fix early call
@@ -308,22 +299,22 @@ void *TMdContr::Task( void *icntr )
 
 void TMdContr::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
 	TController::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/cntr/st/calc_tm",_("Calc template functions time (ms)"),0444,"root","root",1,"tp","real");
 	return;
     }
-    //Process command to page
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/cntr/st/calc_tm" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(tm_calc,6));
     else TController::cntrCmdProc(opt);
 }
 
-//======================================================================
-//==== TMdPrm 
-//======================================================================
+//*************************************************
+//* TMdPrm                                        *
+//*************************************************
 TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : 
     TParamContr(name,tp_prm), p_el("w_attr"), prm_refl(NULL), m_wmode(TMdPrm::Free), chk_lnk_need(false), 
     id_freq(-1), id_start(-1), id_stop(-1), m_mode(cfg("MODE").getId()), m_prm(cfg("PRM").getSd())
@@ -372,7 +363,7 @@ void TMdPrm::enable()
         loadIO();
 	if(mode() == TMdPrm::Template)
 	{
-	    //Init system attributes identifiers
+	    //- Init system attributes identifiers -
 	    id_freq  = tmpl->val.func()->ioId("f_frq");	    
 	    id_start = tmpl->val.func()->ioId("f_start");
 	    id_stop  = tmpl->val.func()->ioId("f_stop");
@@ -407,7 +398,7 @@ void TMdPrm::load( )
 
 void TMdPrm::loadIO()
 {
-    //Load IO and init links
+    //- Load IO and init links -
     if( mode() == TMdPrm::Template )
     {
         TConfig cfg(&mod->prmIOE());
@@ -435,7 +426,7 @@ void TMdPrm::save( )
 
 void TMdPrm::saveIO()
 {
-    //Save IO and init links
+    //- Save IO and init links -
     if( mode() == TMdPrm::Template )
     {
         TConfig cfg(&mod->prmIOE());
@@ -461,7 +452,7 @@ void TMdPrm::mode( TMdPrm::Mode md, const string &prm )
 
     ResAlloc res(moderes,true);
 
-    //Free old mode
+    //- Free old mode -
     if( md != mode() || prm != m_wprm )
     {
         if( mode() == TMdPrm::DirRefl )
@@ -488,7 +479,7 @@ void TMdPrm::mode( TMdPrm::Mode md, const string &prm )
         }
     }
     
-    //Init/update new mode
+    //- Init/update new mode -
     if( md == TMdPrm::DirRefl )
     {
         if( !prm_refl ) prm_refl = new AutoHD<TValue>;
@@ -524,9 +515,9 @@ void TMdPrm::mode( TMdPrm::Mode md, const string &prm )
                 tmpl->val.setVfName(id()+"_tmplprm");
                 to_make = true;
             }
-	    //Set mode
+	    //-- Set mode --
             m_wmode = md;
-            //Init attrubutes
+            //-- Init attrubutes --
             for( int i_io = 0; i_io < tmpl->val.func()->ioSize(); i_io++ )
             {
 	        if( (tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink) && lnkId(i_io) < 0 )
@@ -549,7 +540,7 @@ void TMdPrm::mode( TMdPrm::Mode md, const string &prm )
                 }
                 if( to_make && (tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink) )	tmpl->val.setS(i_io,"0");
             }
-            //Init links
+            //-- Init links --
             initTmplLnks();
         }catch(TError err)
 	{
@@ -566,7 +557,7 @@ m_wmode = md;
 void TMdPrm::initTmplLnks()
 {
     if( mode() != TMdPrm::Template )    return;
-    //Init links
+    //- Init links -
     chk_lnk_need = false;
     for( int i_l = 0; i_l < lnkSize(); i_l++ )
     {
@@ -751,11 +742,13 @@ void TMdPrm::calc( bool first, bool last )
     {
 	ResAlloc res(moderes,false);
 	if(chk_lnk_need) initTmplLnks();
-	//Set fixed system attributes
+	
+	//- Set fixed system attributes -
 	if(id_freq>=0) 	tmpl->val.setR(id_freq,1000./owner().period());
 	if(id_start>=0)	tmpl->val.setB(id_start,first);
 	if(id_stop>=0)	tmpl->val.setB(id_stop,last);
-        //Get input links
+	
+        //- Get input links -
         for( int i_l = 0; i_l < lnkSize(); i_l++ )
             if( !lnk(i_l).aprm.freeStat() )
 		switch(tmpl->val.ioType(lnk(i_l).io_id))
@@ -773,9 +766,11 @@ void TMdPrm::calc( bool first, bool last )
 			tmpl->val.setB(lnk(i_l).io_id,lnk(i_l).aprm.at().getB());
 			break;
 		}
-	//Calc template
+	
+	//- Calc template -
         tmpl->val.calc();
-        //Put output links
+	
+        //- Put output links -
         for( int i_l = 0; i_l < lnkSize(); i_l++ )
             if( !lnk(i_l).aprm.freeStat() && 
 		    tmpl->val.ioFlg(lnk(i_l).io_id)&(IO::Output|IO::Return) && 

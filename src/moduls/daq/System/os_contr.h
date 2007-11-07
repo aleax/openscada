@@ -1,13 +1,12 @@
 
 //OpenSCADA system module DAQ.System file: os_contr.h
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -42,55 +41,58 @@ using std::vector;
 namespace SystemCntr
 {
 
-//======================================================================
-//==== TMdPrm 
-//======================================================================
+//*************************************************
+//* TMdPrm                                        *
+//*************************************************
 class TMdContr;
 
 class TMdPrm : public TParamContr
 {
     public:
+	//Methods
     	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );	
 	
-	void enable();
-	void disable();
+	void enable( );
+	void disable( );
 	void load( );
 	void save( );
 	
 	void autoC( bool val )	{ m_auto = val; }
-	bool autoC( )	{ return m_auto; }
+	bool autoC( )		{ return m_auto; }
 
-	//set perameter type
+	//- Set perameter type -
 	void setType( const string &da_id );
-	//get new value
-	void getVal();
+	//- Get new value -
+	void getVal( );
 	
-	TMdContr &owner()       { return (TMdContr&)TParamContr::owner(); }
+	TMdContr &owner( )       { return (TMdContr&)TParamContr::owner(); }
 	
     protected:
+	//Methods
         bool cfgChange( TCfg &cfg );	//config change
 		       
 	void vlGet( TVal &val );
 	void vlArchMake( TVal &val );
 
 	void postEnable( int flag );
-	//void preDisable(int flag);
 	
     private:
+	//Attributes
 	bool	m_auto;	//Autocreated
 	DA	*m_da;
 };
 
-//======================================================================
-//==== TMdContr 
-//======================================================================
+//*************************************************
+//* TMdContr                                      *
+//*************************************************
 class TMdContr: public TController
 {
     friend class TMdPrm;
     public:
-    	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem);
-	~TMdContr();   
+	//Methods
+    	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem );
+	~TMdContr( );   
 
 	int period( )	{ return m_per; }
 	int prior( )	{ return m_prior; }
@@ -105,6 +107,7 @@ class TMdContr: public TController
 	void stop_( );    
 	
     protected:
+	//Methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	void prmEn( const string &id, bool val );
     	
@@ -126,14 +129,15 @@ class TMdContr: public TController
 	pthread_t procPthr;     // Process task thread
 };
 
-//======================================================================
-//==== TTpContr 
-//======================================================================
+//*************************************************
+//* TTpContr                                      *
+//*************************************************
 class TTpContr: public TTipDAQ
 {
     public:
+	//Methods
     	TTpContr( string name );
-	~TTpContr();
+	~TTpContr( );
 	
 	void postEnable( int flag );
 	void modLoad( );
@@ -143,8 +147,11 @@ class TTpContr: public TTipDAQ
 	DA  *daGet( const string &da );	
     
     private:
+	//Methods
 	TController *ContrAttach( const string &name, const string &daq_db );
 	string optDescr( );
+	
+	//Attributes
 	vector<DA *> m_da;
 };
 

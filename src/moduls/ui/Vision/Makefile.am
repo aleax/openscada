@@ -1,6 +1,6 @@
 #SUBDIRS = po
 
-EXTRA_DIST = *.h vision.qrc images/*
+EXTRA_DIST = *.h vision.qrc images/* po/*
 
 AM_CXXFLAGS= -I$(QT4_INCL) -I$(QT4_INCL)/QtCore -I$(QT4_INCL)/QtGui -I$(top_srcdir)/src -fPIC -DPIC \
     -DQT_EDITION=QT_EDITION_DESKTOP -DQT_USE_APPROXIMATE_CURSORS -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -DQT_GUI_LIB -DQT_CORE_LIB
@@ -31,6 +31,37 @@ moc_vis_shapes.cpp: vis_shapes.h
 moc_vis_shape_elfig.cpp: vis_shape_elfig.h
 	$(QT4_MOC) vis_shape_elfig.h > moc_vis_shape_elfig.cpp
 
+#PO files process and doc install
+fm_name = Mod_UI_Vision
+m_name = $(oscd_modulpref)Vision
+
+messages:
+	@catalogs=`find ./po -name \*.po` ; \
+	name=po/$(m_name).pot ; \
+	xgettext -o $$name -C -a *.cpp *.h &> /dev/null ; \
+	for cat in $$catalogs; do \
+	msgmerge -U $$cat $$name ; \
+	done
+
+install-data-local:
+	@catalogs=`find ./po -name \*.po` ; \
+	name=$(m_name).mo ; \
+	for cat in $$catalogs; do \
+	mkdir -p $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES ; \
+	msgfmt -vo $$name $$cat ; \
+	cp $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
+	rm $$name ; \
+	done
+#       install -m 755 -d $(oscd_docdir)/$(fm_name)
+#       install -m 644 doc/*.pdf $(oscd_docdir)/$(fm_name)
+
+uninstall-local:
+	@catalogs=`find ./po -name \*.po` ; \
+	name=$(m_name).mo ; \
+	for cat in $$catalogs; do \
+	rm -f $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
+	done
+
 clean-local:
 	rm -f qrc_vision.cpp moc_vis_widgs.cpp moc_vis_devel.cpp moc_vis_devel_widgs.cpp moc_vis_devel_dlgs.cpp \
-    moc_vis_run.cpp moc_vis_run_widgs.cpp moc_vis_shapes.cpp moc_vis_shape_elfig.cpp
+    moc_vis_run.cpp moc_vis_run_widgs.cpp moc_vis_shapes.cpp moc_vis_shape_elfig.cpp po/$(m_name).pot po/*~

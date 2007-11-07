@@ -1,23 +1,22 @@
 
 //OpenSCADA system module UI.VCAEngine file: project.cpp
 /***************************************************************************
- *   Copyright (C) 2007 by Roman Savochenko
- *   rom_as@diyaorg.dp.ua
- *
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation; either version 2 of the License, or
- *   (at your option) any later version.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, write to the
- *   Free Software Foundation, Inc.,
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *   Copyright (C) 2007 by Roman Savochenko                                *
+ *   rom_as@fromru.com                                                     *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; version 2 of the License.               *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
 #include <tsys.h>
@@ -98,7 +97,7 @@ string Project::grp( )
 void Project::setUser( const string &it )
 {
     m_user = it;
-    //Update librarie's group
+    //- Update librarie's group -
     if(SYS->security().at().grpAt("UI").at().user(it))
 	setGrp("UI");
     else
@@ -119,7 +118,7 @@ void Project::load( )
 {
     SYS->db().at().dataGet(DB()+"."+mod->prjTable(),mod->nodePath()+"prj/",*this);
 
-    //Create new pages 
+    //- Create new pages -
     TConfig c_el(&mod->elPage());
     c_el.cfgViewAll(false);
     int fld_cnt = 0;
@@ -130,7 +129,8 @@ void Project::load( )
 	c_el.cfg("ID").setS("");
         if( !present(f_id) )	add(f_id,"","");
     }
-    //Load present pages
+    
+    //- Load present pages -
     vector<string> f_lst;
     list(f_lst);
     for( int i_ls = 0; i_ls < f_lst.size(); i_ls++ )
@@ -141,7 +141,7 @@ void Project::save( )
 {
     SYS->db().at().dataSet(DB()+"."+mod->prjTable(),mod->nodePath()+"prj/",*this);
 
-    //Save widgets
+    //- Save widgets -
     vector<string> f_lst;
     list(f_lst);
     for( int i_ls = 0; i_ls < f_lst.size(); i_ls++ )
@@ -182,7 +182,7 @@ AutoHD<Page> Project::at( const string &id )
 
 void Project::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
         ctrMkNode("oscada_cntr",opt,-1,"/",_("Project: ")+id());
@@ -215,7 +215,8 @@ void Project::cntrCmdProc( XMLNode *opt )
     	    ctrMkNode("list",opt,-1,"/page/page",_("Pages"),permit(),user().c_str(),grp().c_str(),4,"tp","br","idm","1","s_com","add,del","br_pref","pg_");
         return;
     }
-    //Process command to page
+    
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/obj/st/en" )
     {
@@ -310,7 +311,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 }
 
 //************************************************
-//* Project's page                               *
+//* Page: Project's page                         *
 //************************************************
 Page::Page( const string &id, const string &isrcwdg ) :
         Widget(id,isrcwdg), TConfig(&mod->elPage()),
@@ -374,14 +375,14 @@ void Page::postDisable( int flag )
         string fullDB = ownerProj()->fullDB();
         string tbl = ownerProj()->tbl();
 
-        //Remove from library table
+        //- Remove from library table -
         SYS->db().at().dataDel(fullDB,mod->nodePath()+tbl,*this);
-	//Remove widget's IO from library IO table
+	//- Remove widget's IO from library IO table -
         TConfig c_el(&mod->elWdgIO());
         c_el.cfg("IDW").setS(path());
         c_el.cfg("ID").setS("");
         SYS->db().at().dataDel(fullDB+"_io",mod->nodePath()+tbl+"_io",*this);
-	//Remove widget's user IO from library IO table
+	//- Remove widget's user IO from library IO table -
         c_el.setElem(&mod->elWdgUIO());
         c_el.cfg("IDW").setS(path());
         c_el.cfg("ID").setS("");
@@ -404,7 +405,7 @@ string Page::user( )
 void Page::setUser( const string &iuser )
 {
     m_user = iuser;
-    //Group update
+    //- Group update -
     if(SYS->security().at().grpAt("UI").at().user(iuser))
         setGrp("UI");
     else
@@ -536,7 +537,7 @@ void Page::load( )
     pageList(f_lst);
     for( int i_ls = 0; i_ls < f_lst.size(); i_ls++ )
         pageAt(f_lst[i_ls]).at().load();
-    
+
     //- Load widget attributes -
     loadIO();
 }
@@ -706,7 +707,7 @@ void Page::setEnable( bool val )
     if( enable() == val ) return;
     
     Widget::setEnable(val);
-    
+
     //- Enable/disable included pages -
     vector<string>      ls;
     pageList(ls);
@@ -763,7 +764,7 @@ string Page::resourceGet( const string &id, string *mime )
 
 bool Page::cntrCmdGeneric( XMLNode *opt )
 {   
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
         Widget::cntrCmdGeneric(opt);
@@ -784,7 +785,7 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 	return true;
     }
     
-    //Process command to page    
+    //- Process command to page -
     string a_path = opt->attr("path");    
     if( a_path == "/wdg/w_lst" && ctrChkNode(opt) && ownerPage() && ownerPage()->prjFlags()&Page::Template )
 	opt->childIns(0,"el")->setText("..");
@@ -828,7 +829,8 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 void Page::cntrCmdProc( XMLNode *opt )
 {
     if( cntrCmdServ(opt) ) return;
-    //Get page info
+    
+    //- Get page info -
     if( opt->name() == "info" )
     {
         cntrCmdGeneric(opt);
@@ -840,12 +842,13 @@ void Page::cntrCmdProc( XMLNode *opt )
 	}
         return;
     }
-    //Process command to page
+    
+    //- Process command to page -
     cntrCmdGeneric(opt) || (parent( ).freeStat() ? false : cntrCmdAttributes(opt) || cntrCmdLinks(opt) || cntrCmdProcess(opt));
 }
 
 //************************************************
-//* Container stored widget                      *
+//* PageWdg: Container stored widget             *
 //************************************************
 PageWdg::PageWdg( const string &id, const string &isrcwdg ) :
         Widget(id,isrcwdg), TConfig(&mod->elInclWdg())
@@ -975,13 +978,13 @@ int PageWdg::calcPer(  )
 
 void PageWdg::load( )
 {
-    //Load generic widget's data
+    //- Load generic widget's data -
     string db  = owner().ownerProj()->DB();
     string tbl = owner().ownerProj()->tbl()+"_incl";
     SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,*this);
     setParentNm(cfg("PARENT").getS());
 
-    //Load widget's attributes
+    //- Load widget's attributes -
     loadIO();
 }
 
@@ -1046,12 +1049,12 @@ void PageWdg::loadIO( )
 
 void PageWdg::save( )
 {
-    //Save generic widget's data
+    //- Save generic widget's data -
     string db  = owner().ownerProj()->DB();
     string tbl = owner().ownerProj()->tbl()+"_incl";
     SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,*this);
 
-    //Save widget's attributes
+    //- Save widget's attributes -
     saveIO();
 }
 
@@ -1129,7 +1132,7 @@ string PageWdg::resourceGet( const string &id, string *mime )
 void PageWdg::cntrCmdProc( XMLNode *opt )
 {
     if( cntrCmdServ(opt) ) return;
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
         cntrCmdGeneric(opt);

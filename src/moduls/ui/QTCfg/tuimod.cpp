@@ -39,7 +39,7 @@
 #define MOD_TYPE    "UI"
 #define VER_TYPE    VER_UI
 #define SUB_TYPE    "QT"
-#define VERSION     "1.2.0"
+#define VERSION     "1.5.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow the QT based OpenSCADA system configurator."
 #define LICENSE     "GPL"
@@ -51,23 +51,13 @@ extern "C"
 {
     TModule::SAt module( int n_mod )
     {
-    	TModule::SAt AtMod;
-
-	if(n_mod==0)
-	{
-	    AtMod.id	= MOD_ID;
-	    AtMod.type  = MOD_TYPE;
-    	    AtMod.t_ver = VER_TYPE;
-	}
-	else
-	    AtMod.id	= "";
-
-	return AtMod;
+	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	return TModule::SAt("");
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
+	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
 	    return new QTCFG::TUIMod( source );
 	return NULL;
     }    
@@ -76,7 +66,7 @@ extern "C"
 using namespace QTCFG;
 
 //*************************************************
-//* QTCFG::TUIMod                                 *
+//* TUIMod                                        *
 //*************************************************
 TUIMod::TUIMod( string name ) : start_path(string("/")+SYS->id()), end_run(false)
 {
@@ -96,7 +86,7 @@ TUIMod::TUIMod( string name ) : start_path(string("/")+SYS->id()), end_run(false
     modFuncReg( new ExpFunc("QMainWindow *openWindow();","Start QT GUI.",(void(TModule::*)( )) &TUIMod::openWindow) );
 }
 
-TUIMod::~TUIMod()
+TUIMod::~TUIMod( )
 {
     if( run_st ) modStop();
 }
@@ -174,14 +164,14 @@ void TUIMod::postEnable( int flag )
     TModule::postEnable(flag);
 }
 
-QIcon TUIMod::icon()
+QIcon TUIMod::icon( )
 {
     QImage ico_t;
     if(!ico_t.load(TUIS::icoPath("UI.QTCfg").c_str())) ico_t.load(":/images/oscada_cfg.png");
     return QPixmap::fromImage(ico_t);
 }
 
-QMainWindow *TUIMod::openWindow()
+QMainWindow *TUIMod::openWindow( )
 {
     string user_open = startUser();
     if(!SYS->security().at().usrPresent(user_open))
@@ -201,7 +191,7 @@ QMainWindow *TUIMod::openWindow()
     return new ConfApp(user_open);
 }
 
-void TUIMod::modStart()
+void TUIMod::modStart( )
 {
 #if OSC_DEBUG
     mess_debug(nodePath().c_str(),_("Start module."));
@@ -211,7 +201,7 @@ void TUIMod::modStart()
     run_st  = true;
 }
 
-void TUIMod::modStop()
+void TUIMod::modStop( )
 {   
 #if OSC_DEBUG
     mess_debug(nodePath().c_str(),_("Stop module."));
@@ -242,7 +232,7 @@ void TUIMod::unregWin( QMainWindow *win )
 
 void TUIMod::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
         TUI::cntrCmdProc(opt);
@@ -257,7 +247,8 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
         ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
         return;
     }
-    //Process command to page
+    
+    //- Process command to page -
     string a_path = opt->attr("path");    
     if( a_path == "/prm/cfg/start_path" )
     {
@@ -290,11 +281,12 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 
 void TUIMod::postMess( const string &cat, const string &mess, TUIMod::MessLev type, QWidget *parent )
 {
-    //Put system message.
+    //- Put system message. -
     message(cat.c_str(),(type==TUIMod::Crit)?TMess::Crit:
 	(type==TUIMod::Error)?TMess::Error:
 	(type==TUIMod::Warning)?TMess::Warning:TMess::Info,"%s",mess.c_str());
-    //QT message
+
+    //- QT message -
     switch(type)
     {
         case TUIMod::Info:

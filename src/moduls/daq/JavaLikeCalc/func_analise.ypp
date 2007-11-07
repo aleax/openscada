@@ -2,13 +2,12 @@
 %{
 //OpenSCADA system module DAQ.JavaLikeCalc file: func_analise.ypp
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -90,7 +89,7 @@ assign: VAR '=' expr
 	    {   
     		try
 		{
-		    if( $1->type() == Reg::Free ) $1->type($3->vType(p_fnc));
+		    if( $1->type() == Reg::Free ) $1->setType($3->vType(p_fnc));
 		    p_fnc->cdAssign($1,$3);
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
 	    }    
@@ -158,7 +157,7 @@ expr:	CONST	{ $$ = $1; }
 	    {
 		try
 		{
-		    if( $1->type() == Reg::Free ) $1->type($3->vType(p_fnc));
+		    if( $1->type() == Reg::Free ) $1->setType($3->vType(p_fnc));
 		    p_fnc->cdAssign($1,$3);
 		    $$ = $1;
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
@@ -454,12 +453,12 @@ int yylex( )
 	    try
 	    {
 		yylval.reg = p_fnc->regAt(p_fnc->regNew(true));
-		yylval.reg->name(smb_nm.c_str());
+		yylval.reg->setName(smb_nm.c_str());
 		yylval.reg->setPAttr(SYS->daq().at().at(TSYS::strSepParse(smb_nm,0,'.')).at().
 						     at(TSYS::strSepParse(smb_nm,1,'.')).at().
 						     at(TSYS::strSepParse(smb_nm,2,'.')).at().
 						     vlAt(TSYS::strSepParse(smb_nm,3,'.')));
-                yylval.reg->lock(true);
+                yylval.reg->setLock(true);
                 return VAR;
 	    }catch(...){ }
 	
@@ -472,17 +471,17 @@ int yylex( )
 	    if( p_fnc->io(i_io)->id() == smb_nm )
             {
 		yylval.reg = p_fnc->regAt(p_fnc->regNew(true));
-		yylval.reg->name(smb_nm.c_str());
+		yylval.reg->setName(smb_nm.c_str());
 		yylval.reg->setVar(i_io);
-		yylval.reg->lock(true);
+		yylval.reg->setLock(true);
 	        return VAR;
 	    }
 	//Get new register    
 	if( i_io >= p_fnc->ioSize() )
 	{
 	    yylval.reg = p_fnc->regAt(p_fnc->regNew(true));
-	    yylval.reg->name(smb_nm.c_str());
-	    yylval.reg->lock(true);
+	    yylval.reg->setName(smb_nm.c_str());
+	    yylval.reg->setLock(true);
 	    return VAR;		
 	}		
     }    

@@ -1,13 +1,12 @@
 
 //OpenSCADA system module DAQ.System file: da_hddtemp.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -27,9 +26,9 @@
 
 using namespace SystemCntr;
 
-//======================================================================
-//==== HddTemp
-//======================================================================
+//*************************************************
+//* HddTemp                                       *
+//*************************************************
 Hddtemp::Hddtemp( ) : t_tr("Sockets"), n_tr("HDDTemp")
 {
     //HDD value structure
@@ -38,7 +37,7 @@ Hddtemp::Hddtemp( ) : t_tr("Sockets"), n_tr("HDDTemp")
     fldAdd( new TFld("t",_("Temperature"),TFld::Integer,TFld::NoWrite,"0",TSYS::int2str(EVAL_INT).c_str()) );    
 }
 
-Hddtemp::~Hddtemp()
+Hddtemp::~Hddtemp( )
 {
     if( ((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outPresent(n_tr) )
 	((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outDel(n_tr);
@@ -48,7 +47,7 @@ void Hddtemp::init( TMdPrm *prm )
 {
     TCfg &c_subt = prm->cfg("SUBT");
     
-    //Create Config
+    //- Create Config -
     c_subt.fld().setDescr(_("Disk"));
 
     vector<string> list;
@@ -110,7 +109,7 @@ string Hddtemp::getHDDTemp( )
     char buf[20];
     
     ResAlloc res(m_res,true);
-    //Check connect and start
+    //- Check connect and start -
     if( !SYS->transport().at().at(t_tr).at().outPresent(n_tr) )
     {
         SYS->transport().at().at(t_tr).at().outAdd(n_tr);
@@ -126,7 +125,7 @@ string Hddtemp::getHDDTemp( )
 	throw;
     }
     
-    //Request
+    //- Request -
     int len;
     do{	    
         len = SYS->transport().at().at(t_tr).at().outAt(n_tr).at().messIO(NULL,0,buf,sizeof(buf),1);

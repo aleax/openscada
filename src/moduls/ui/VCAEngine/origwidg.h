@@ -1,23 +1,22 @@
 
 //OpenSCADA system module UI.VCAEngine file: origwidg.h
 /***************************************************************************
- *   Copyright (C) 2006-2007 by Roman Savochenko
- *   rom_as@diyaorg.dp.ua
- *
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation; either version 2 of the License, or
- *   (at your option) any later version.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, write to the
- *   Free Software Foundation, Inc.,
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *   Copyright (C) 2006-2007 by Roman Savochenko                           *
+ *   rom_as@fromru.com                                                     *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; version 2 of the License.               *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
 #ifndef ORIGWIDG_H
@@ -29,11 +28,12 @@ namespace VCA
 {
 
 //*************************************************
-//* Primitive widget template                     *
+//* PrWidget: Primitive widget template           *
 //*************************************************
 class PrWidget : public LWidget
 {
     public:
+	//Methods
 	PrWidget( const string &iid );    
 
 	string rootId( )	{ return id(); }
@@ -48,115 +48,132 @@ class PrWidget : public LWidget
 	void setEnable( bool val );
 
     protected:
+	//Methods
 	void preDisable( int flag );
 	bool cntrCmdGeneric( XMLNode *opt );
 	void cntrCmdProc( XMLNode *opt );
 };
 
-//============ Original widgets based at primitive widget template ============
+//*************************************************
+//* Original widgets based at primitive           *
+//* widget template                               *
 
 //*************************************************
-//* Elementary figures original widget            *
+//* OrigElFigure:                                 *
+//*  Elementary figures original widget           *
 //*************************************************
 class OrigElFigure : public PrWidget
 {
     public:
+	//Methods
 	OrigElFigure( );
 	
 	string name( );
 	string descr( );
     
     protected:
+	//Methods
 	void postEnable( int flag );
 	bool attrChange( Attr &cfg, void *prev );
 };
 
 //*************************************************
-//* Form element original widget                  *
+//* OrigFormEl: Form element original widget      *
 //*************************************************
 class OrigFormEl : public PrWidget
 {
     public:
+	//Methods
 	OrigFormEl( );
 
 	string name( );
 	string descr( );
     
     protected:
+	//Methods
 	void postEnable( int flag );
 	bool attrChange( Attr &cfg, void *prev );
 };
 
 //************************************************
-//* Text element original widget                 *
+//* OrigText: Text element original widget       *
 //************************************************
 class OrigText : public PrWidget
 {
     public:
+	//Methods
       	OrigText( );
     
 	string name( );
 	string descr( );
 
      protected:
+        //Methods
 	void postEnable( int flag );	
 	bool attrChange( Attr &cfg, void *prev );
 }; 
 
 //************************************************
-//* Media view original widget                   *
+//* OrigMedia: Media view original widget        *
 //************************************************
 class OrigMedia : public PrWidget
 {
     public:
+	//Methods
 	OrigMedia( );	
     
 	string name( );
 	string descr( );
  
     protected:
+	//Methods
 	void postEnable( int flag );
 	bool attrChange( Attr &cfg, void *prev );
 };
 
 //************************************************
-//* Diagram view original widget                 *
+//* OrigDiagram: Diagram view original widget    *
 //************************************************
 class OrigDiagram : public PrWidget
 {
     public:
+	//Methods
     	OrigDiagram( );
     
 	string name( );
 	string descr( );
     
     protected:
+	//Methods
 	void postEnable( int flag );
 	bool attrChange( Attr &cfg, void *prev );
 };    
 
 //************************************************
-//* Protocol view original widget                *
+//* OrigProtocol: Protocol view original widget  *
 //************************************************
 class OrigProtocol : public PrWidget
 {
     public:
+	//Methods
     	OrigProtocol( );
     
 	string name( );
 	string descr( );
 
     protected:
+	//Methods
 	void postEnable( int flag );
 	bool attrChange( Attr &cfg, void *prev );
 };
 
 //************************************************
-//* Document view original widget                *
+//* OrigDocument: Document view original widget  *
 //************************************************
 class OrigDocument : public PrWidget
 {
     public:
+	//Methods
     	OrigDocument( );
     
     	string name( );
@@ -164,11 +181,12 @@ class OrigDocument : public PrWidget
 };
 
 //************************************************
-//* User function original widget                *
+//* OrigFunction: User function original widget  *
 //************************************************
 class OrigFunction : public PrWidget
 {
     public:
+	//Methods
     	OrigFunction( );
     
 	string name( );
@@ -176,11 +194,12 @@ class OrigFunction : public PrWidget
 };
 
 //************************************************
-//* Box original widget                          *
+//* OrigBox: Box original widget                 *
 //************************************************
 class OrigBox : public PrWidget
 {
     public:
+	//Methods
 	OrigBox( );
     
 	string name( );
@@ -189,21 +208,24 @@ class OrigBox : public PrWidget
 	bool isContainer( )	{ return true; }
      
     protected:
+	//Methods
 	void postEnable( int flag );    
 };
 
 //************************************************
-//* Link original widget                         *
+//* OrigLink: Link original widget               *
 //************************************************
 class OrigLink : public PrWidget
 {
     public:
+	//Methods
     	OrigLink( );
     
 	string name( );
 	string descr( );
  
     protected:
+	//Methods
 	void postEnable( int flag );       
 };
 

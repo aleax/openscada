@@ -1460,8 +1460,8 @@ void ShapeElFigure::moveItemTo(const QPointF &pos,QList<ShapeItem> &shapeItems, 
     if (flag_ctrl && !flag_ctrl_move)
         offset=offset_all;//Задание offset при одновременном перемещении нескольких фигур
     /////////////////////////////////////////////////////////////////////////////
-    printf("shapeType=%i\n",shapeType);
-    printf("rect_num_1=%i\n",rect_num);
+    //printf("shapeType=%i\n",shapeType);
+    //printf("rect_num_1=%i\n",rect_num);
     
     bool flag_MotionNum_1=false;
     bool flag_MotionNum_2=false;
@@ -2241,7 +2241,7 @@ void ShapeElFigure::Move_all(QPointF pos,QList<ShapeItem> &shapeItems,PntMap *pn
                 printf("Prev_pos_1\n");
             }
             rect_num=fig_rect_array[i];//Номер перемещаемого квадратика
-            printf ("rect_num=%i\n",rect_num);
+//            printf ("rect_num=%i\n",rect_num);
             arc_rect=arc_rect_array[i];//С каким квадратико дуги связан перемещаемый квадратик фигуры
         }
         index=index_array[i];

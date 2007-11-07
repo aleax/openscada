@@ -1,13 +1,12 @@
 
 //OpenSCADA system module DAQ.CIF file: cif.cpp
 /***************************************************************************
- *   Copyright (C) 2007 by Roman Savochenko                                *
+ *   Copyright (C) 2006-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -41,7 +40,7 @@
 #define MOD_NAME    "Hilscher CIF CP"
 #define MOD_TYPE    "DAQ"
 #define VER_TYPE    VER_CNTR
-#define VERSION     "0.5.0"
+#define VERSION     "0.9.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow data source, goes data from Hilscher CIF cards use MPI protocol. Support Siemens controllers S7 series."
 #define LICENSE     "GPL"
@@ -53,28 +52,15 @@ extern "C"
 {
     TModule::SAt module( int n_mod )
     {
-	TModule::SAt AtMod;
-
-	if(n_mod==0)
-	{
-	    AtMod.id	= MOD_ID;
-	    AtMod.type  = MOD_TYPE;
-	    AtMod.t_ver = VER_TYPE;
-	}
-	else
-    	    AtMod.id	= "";
-
-	return AtMod;
+	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	return TModule::SAt("");
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	CIF::TTpContr *self_addr = NULL;
-
-    	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = CIF::mod = new CIF::TTpContr( source );
-
-	return self_addr;
+    	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
+	    return new CIF::TTpContr( source );
+	return NULL;
     }
 }
 
@@ -92,15 +78,16 @@ TTpContr::TTpContr( string name ) : drv_CIF_OK(false)
     mAutor    	= AUTORS;
     mDescr  	= DESCRIPTION;
     mLicense   	= LICENSE;
-    mSource    	= name;    
+    mSource    	= name;
+    
+    mod		= this;
 }
 
-TTpContr::~TTpContr()
+TTpContr::~TTpContr( )
 {    
-    for(int i_b = 0; i_b < MAX_DEV_BOARDS; i_b++)
-	if(cif_devs[i_b].present)
-	    DevExitBoard(i_b);
-    if(drvCIFOK( ))	DevCloseDriver();
+    for( int i_b = 0; i_b < MAX_DEV_BOARDS; i_b++ )
+	if( cif_devs[i_b].present )	DevExitBoard(i_b);
+    if( drvCIFOK( ) )	DevCloseDriver( );
 }
 
 string TTpContr::optDescr( )
@@ -191,7 +178,7 @@ void TTpContr::modLoad( )
 
 void TTpContr::modSave()
 {
-    //Save CIF devices configuration
+    //- Save CIF devices configuration -
     TConfig cfg(&CIFDevE());
     string bd_tbl = modId()+"_devs";
     for( int i_b = 0; i_b < MAX_DEV_BOARDS; i_b++ )
@@ -214,7 +201,8 @@ bool TTpContr::drvCIFOK()
 
     if(drv_CIF_OK) return drv_CIF_OK;
     drv_CIF_OK = (DevOpenDriver()==DRV_NO_ERROR);
-    //Load CIF boards configuration
+    
+    //- Load CIF boards configuration -
     if(drv_CIF_OK)
     {
 	BOARD_INFO brd_info;
@@ -366,8 +354,8 @@ void TTpContr::initCIF( int dev )
     while(tTaskState.bDPM_state!=OPERATE);
 }
 
-void TTpContr::getDBCIF(unsigned board, unsigned n_st, 
-                        unsigned n_db, long offset, string &buffer)
+void TTpContr::getDBCIF( unsigned board, unsigned n_st, 
+                    	unsigned n_db, long offset, string &buffer )
 {
     RCS_MESSAGE tMsg;
     int res, e_try = 4;
@@ -442,8 +430,8 @@ void TTpContr::getDBCIF(unsigned board, unsigned n_st,
     buffer.replace(0,buffer.size(),(char *)tMsg.d+8,buffer.size());
 }
 
-void TTpContr::putDBCIF(unsigned board, unsigned n_st, 
-                        unsigned n_db, long offset, const string &buffer)
+void TTpContr::putDBCIF( unsigned board, unsigned n_st, 
+                	unsigned n_db, long offset, const string &buffer )
 {
     RCS_MESSAGE tMsg;
     int res, e_try = 4;
@@ -503,7 +491,7 @@ void TTpContr::putDBCIF(unsigned board, unsigned n_st,
     if( tMsg.f == 0x85 )throw TError(nodePath().c_str(),_("20:Specified offset address or DB error."));   
 }
 
-void TTpContr::getLifeListCIF(unsigned board, string &buffer)
+void TTpContr::getLifeListCIF( unsigned board, string &buffer )
 {
     RCS_MESSAGE tMsg;
     RCS_TELEGRAMHEADER_10  *ptRcsTelegramheader10;
@@ -543,7 +531,7 @@ void TTpContr::getLifeListCIF(unsigned board, string &buffer)
 
 void TTpContr::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
 	TTipDAQ::cntrCmdProc(opt);
@@ -571,14 +559,14 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 	}
 	return;
     }
-    //Process command to page
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/mod/st/drv" && ctrChkNode(opt) )	opt->setText(TSYS::int2str(drvCIFOK()));
     else if( a_path == "/mod/dev" )
     {
 	if(ctrChkNode(opt))
 	{
-    	    //Fill Archives table
+    	    //- Fill Archives table -
     	    XMLNode *n_brd  = ctrMkNode("list",opt,-1,"/mod/dev/brd","");
     	    XMLNode *n_fwnm = ctrMkNode("list",opt,-1,"/mod/dev/fwnm","");
     	    XMLNode *n_fwver= ctrMkNode("list",opt,-1,"/mod/dev/fwver","");
@@ -664,19 +652,19 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     cfg("PRM_BD").setS("CIFPrm_"+name_c);
 }
 
-TMdContr::~TMdContr()
+TMdContr::~TMdContr( )
 {
-    if( run_st ) stop();
+    if( run_st ) stop( );
 }
 
-void TMdContr::postDisable(int flag)
+void TMdContr::postDisable( int flag )
 {
     TController::postDisable(flag);
     try
     {
 	if( flag )
         {
-    	    //Delete parameter's io table
+    	    //- Delete parameter's io table -
             string tbl = DB()+"."+cfg("PRM_BD").getS()+"_io";
             SYS->db().at().open(tbl);
             SYS->db().at().close(tbl,true);
@@ -708,7 +696,7 @@ void TMdContr::enable_( )
 
 void TMdContr::disable_( )
 {
-    //Clear acquisition data blocks and asynchronous write mode data blocks
+    //- Clear acquisition data blocks and asynchronous write mode data blocks -
     acqBlks.clear();
     writeBlks.clear();
 }
@@ -719,14 +707,14 @@ void TMdContr::start_( )
 	  owner().cif_devs[2].present||owner().cif_devs[3].present) )
 	throw TError(nodePath().c_str(),_("Driver or one boards no present."));
 	
-    //Former proccess parameters list
+    //- Former proccess parameters list -
     vector<string> list_p;
     list(list_p);
     for(int i_prm=0; i_prm < list_p.size(); i_prm++)
         if( at(list_p[i_prm]).at().enableStat() )
             prmEn( list_p[i_prm], true );    
    
-    //Start the request data task
+    //- Start the request data task -
     if( !prc_st )
     {
 	pthread_attr_t pthr_attr;
@@ -747,7 +735,7 @@ void TMdContr::start_( )
 
 void TMdContr::stop_( )
 {  
-    //Stop the request and calc data task
+    //- Stop the request and calc data task -
     if( prc_st )
     {
         endrun_req = true;
@@ -756,7 +744,7 @@ void TMdContr::stop_( )
             throw TError(nodePath().c_str(),_("Acquisition task no stoped!"));
         pthread_join( procPthr, NULL );
     }
-    //Clear proccess parameters list    
+    //- Clear proccess parameters list -
     p_hd.clear();
 }
 
@@ -1129,14 +1117,15 @@ void *TMdContr::Task( void *icntr )
 
 void TMdContr::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
 	TController::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/cntr/st/acq_tm",_("Acquisition time (ms)"),0444,"root","root",1,"tp","real");
 	return;
     }
-    //Process command to page
+    
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/cntr/st/acq_tm" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(tm_calc,6));
     else TController::cntrCmdProc(opt);
@@ -1187,7 +1176,7 @@ void TMdPrm::enable()
     if( enableStat() )	return;    
 
     TParamContr::enable();
-    //Template's function connect
+    //- Template's function connect -
     try
     {
 	bool to_make = false;
@@ -1197,7 +1186,7 @@ void TMdPrm::enable()
 			          at(TSYS::strSepParse(m_tmpl,1,'.')).at().func().at());
     	    to_make = true;
 	}
-	//Init attrubutes
+	//-- Init attrubutes --
 	for( int i_io = 0; i_io < func()->ioSize(); i_io++ )
 	{
     	    if( (func()->io(i_io)->flg()&TPrmTempl::CfgLink) && lnkId(i_io) < 0 )
@@ -1220,19 +1209,19 @@ void TMdPrm::enable()
     	    }
 	    if( to_make && (func()->io(i_io)->flg()&TPrmTempl::CfgLink) ) setS(i_io,"0");	
 	}
-	//Init links
+	//-- Init links --
 	initLnks();
     
-	//Set to process
+	//-- Set to process --
 	if(owner().startStat())	owner().prmEn( id(), true );
 	
-	//Init system attributes identifiers
+	//-- Init system attributes identifiers --
 	id_freq  = func()->ioId("f_frq");
 	id_start = func()->ioId("f_start");
 	id_stop  = func()->ioId("f_stop");
 	id_err   = func()->ioId("f_err");
 	
-	//Load IO at enabling
+	//-- Load IO at enabling --
 	if(to_make)	loadIO();
 	
     }catch(TError err) { disable(); throw; }
@@ -1242,10 +1231,10 @@ void TMdPrm::disable()
 {
     if( !enableStat() )  return;
     
-    //Unregister parameter
+    //- Unregister parameter -
     if(owner().startStat()) owner().prmEn( id(), false );
     
-    //Delete not using attributes
+    //- Delete not using attributes -
     for(int i_f = 0; i_f < p_el.fldSize(); i_f++ )
         if( vlAt(p_el.fldAt(i_f).name()).at().nodeUse() == 1 )
         {
@@ -1253,7 +1242,7 @@ void TMdPrm::disable()
             i_f--;
         }
     
-    //Template's function disconnect
+    //- Template's function disconnect -
     setFunc(NULL);
     id_freq=id_start=id_stop=id_err-1;
     
@@ -1268,7 +1257,7 @@ void TMdPrm::load( )
 
 void TMdPrm::loadIO()
 {
-    //Load IO and init links
+    //- Load IO and init links -
     if( !enableStat() )	return;
     
     TConfig cfg(&mod->prmIOE());
@@ -1295,7 +1284,7 @@ void TMdPrm::save( )
 
 void TMdPrm::saveIO()
 {
-    //Save IO and init links
+    //- Save IO and init links -
     if( !enableStat() )	return;
     
     TConfig cfg(&mod->prmIOE());
@@ -1436,7 +1425,7 @@ TMdPrm::SLnk &TMdPrm::lnk( int num )
 void TMdPrm::initLnks()
 {
     if( !enableStat() )	return;
-    //Init links
+    //- Init links -
     for( int i_l = 0; i_l < lnkSize(); i_l++ )
     {
 	if(ioType(lnk(i_l).io_id)==IO::Boolean)
@@ -1454,18 +1443,20 @@ void TMdPrm::calc( bool first, bool last )
 {
     try
     {
-	//Proccess error hold
+	//- Proccess error hold -
 	if(acq_err.size())
 	{
 	    time_t tm = time(NULL);
 	    if(!acq_err_tm)	acq_err_tm=tm+5;
 	    if(tm>acq_err_tm)	{ acq_err = ""; acq_err_tm=0; }
-	}    	
-        //Set fixed system attributes
+	}
+	
+        //- Set fixed system attributes -
         if(id_freq>=0)  setR(id_freq,1000./owner().period());
         if(id_start>=0) setB(id_start,first);
         if(id_stop>=0)  setB(id_stop,last);
-        //Get input links
+	
+        //- Get input links -
         for( int i_l = 0; i_l < lnkSize(); i_l++ )
             if( lnk(i_l).val.db >= 0 )
                 switch(ioType(lnk(i_l).io_id))
@@ -1483,9 +1474,10 @@ void TMdPrm::calc( bool first, bool last )
 		        setB(lnk(i_l).io_id,owner().getValB(lnk(i_l).val,acq_err));
 		        break;
                 }
-        //Calc template
+        //- Calc template -	
         TValFunc::calc();
-	//Put output links
+	
+	//- Put output links -
         for( int i_l = 0; i_l < lnkSize(); i_l++ )
             if( lnk(i_l).val.db >= 0 && ioFlg(lnk(i_l).io_id)&(IO::Output|IO::Return) )
                 switch(ioType(lnk(i_l).io_id))
@@ -1530,13 +1522,13 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
         	{
 		    if( !(func()->io(i_io)->flg()&(TPrmTempl::CfgLink|TPrmTempl::CfgPublConst)) )
 			continue;
-    		    //Check select param
+    		    //-- Check select param --
 		    bool is_lnk = func()->io(i_io)->flg()&TPrmTempl::CfgLink;
             	    if( is_lnk && func()->io(i_io)->def().size() && 
 			!atoi(TBDS::genDBGet(mod->nodePath()+"onlOff","0",opt->attr("user")).c_str()) )
             	    {
                 	string nprm = TSYS::strSepParse(func()->io(i_io)->def(),0,'|');
-                	//Check already to present parameters
+                	//-- Check already to present parameters --
                 	bool f_ok = false;
                 	for( int i_l = 0; i_l < list.size(); i_l++ )
                     	    if( list[i_l] == nprm ) { f_ok = true; break; }

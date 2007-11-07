@@ -1,13 +1,12 @@
 
 //OpenSCADA system module DAQ.System file: os_contr.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -44,7 +43,8 @@
 #include "da_netstat.h"
 #include "os_contr.h"
 
-//============ Modul info! =====================================================
+//*************************************************
+//* Modul info!                                   *
 #define MOD_ID      "System"
 #define MOD_NAME    "System DA"
 #define MOD_TYPE    "DAQ"
@@ -53,7 +53,7 @@
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow operation system data acquisition. Support OS Linux data sources: HDDTemp, Sensors, Uptime, Memory, CPU and other."
 #define LICENSE     "GPL"
-//==============================================================================
+//*************************************************
 
 SystemCntr::TTpContr *SystemCntr::mod;  //Pointer for direct access to module
 
@@ -61,37 +61,24 @@ extern "C"
 {
     TModule::SAt module( int n_mod )
     {
-	TModule::SAt AtMod;
-
-	if(n_mod==0)
-	{
-	    AtMod.id	= MOD_ID;
-	    AtMod.type  = MOD_TYPE;
-	    AtMod.t_ver = VER_TYPE;
-	}
-	else
-    	    AtMod.id	= "";
-
-	return( AtMod );
+	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	return TModule::SAt("");
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	SystemCntr::TTpContr *self_addr = NULL;
-
-    	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = SystemCntr::mod = new SystemCntr::TTpContr( source );
-
-	return ( self_addr );
+    	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
+	    return new SystemCntr::TTpContr( source );
+	return NULL;
     }
 }
 
 using namespace SystemCntr;
 
-//======================================================================
-//==== TTpContr ======================================================== 
-//======================================================================
-TTpContr::TTpContr( string name )  
+//*************************************************
+//* TTpContr                                      * 
+//*************************************************
+TTpContr::TTpContr( string name )
 {
     mId 	= MOD_ID;
     mName       = MOD_NAME;
@@ -100,7 +87,9 @@ TTpContr::TTpContr( string name )
     mAutor    	= AUTORS;
     mDescr  	= DESCRIPTION;
     mLicense   	= LICENSE;
-    mSource    	= name;    
+    mSource    	= name;
+    
+    mod		= this;
 }
 
 TTpContr::~TTpContr()
@@ -122,7 +111,7 @@ string TTpContr::optDescr( )
 
 void TTpContr::modLoad( )
 {
-    //========== Load parameters from command line ============
+    //- Load parameters from command line -
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -147,7 +136,7 @@ void TTpContr::postEnable( int flag )
 {    
     TModule::postEnable(flag);
 
-    //Init DA sources
+    //- Init DA sources -
     daReg( new CPU() );
     daReg( new Mem() );
     daReg( new Sensors() );
@@ -157,13 +146,14 @@ void TTpContr::postEnable( int flag )
     daReg( new HddStat() );
     daReg( new NetStat() );
 
-    //==== Controler's bd structure ====    
+    //- Controler's bd structure -
     fldAdd( new TFld("AUTO_FILL",_("Auto create active DA"),TFld::Boolean,TFld::NoFlag,"1","0") );
     fldAdd( new TFld("PRM_BD",_("System parameteres table"),TFld::String,TFld::NoFlag,"30","system") );
     fldAdd( new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","0;10000") );
     fldAdd( new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
-    //==== Parameter type bd structure ====
-    //Make enumerated
+    
+    //- Parameter type bd structure -
+    //-- Make enumerated --
     string el_id,el_name,el_def;
     vector<string> list;
     daList(list);
@@ -203,10 +193,9 @@ DA *TTpContr::daGet( const string &da )
     return NULL;
 }
 
-//======================================================================
-//==== TMdContr 
-//======================================================================
-
+//*************************************************
+//* TMdContr                                      *
+//*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
 	::TController(name_c,daq_db,cfgelem), prc_st(false), endrun_req(false), 
 	m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId()), tm_calc(0.0)
@@ -214,7 +203,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     cfg("PRM_BD").setS("OSPrm_"+name_c);
 }
 
-TMdContr::~TMdContr()
+TMdContr::~TMdContr( )
 {
     if( run_st ) stop();
 }
@@ -247,7 +236,7 @@ void TMdContr::save( )
 
 void TMdContr::start_( )
 {      
-    //Start the request data task
+    //- Start the request data task -
     if( !prc_st )
     {
 	pthread_attr_t pthr_attr;
@@ -268,7 +257,7 @@ void TMdContr::start_( )
 
 void TMdContr::stop_( )
 {  
-    //Stop the request and calc data task
+    //- Stop the request and calc data task -
     if( prc_st )
     {
         endrun_req = true;
@@ -304,7 +293,7 @@ void *TMdContr::Task( void *icntr )
     
     while(!cntr.endrun_req)
     {
-	//Update controller's data
+	//- Update controller's data -
 	try
 	{
 	    unsigned long long t_cnt = SYS->shrtCnt();
@@ -318,7 +307,7 @@ void *TMdContr::Task( void *icntr )
 	} catch(TError err)
 	{ mess_err(err.cat.c_str(),"%s",err.mess.c_str() ); }    
     
-        //Calc next work time and sleep
+        //- Calc next work time and sleep -
         clock_gettime(CLOCK_REALTIME,&get_tm);
         work_tm = (((long long)get_tm.tv_sec*1000000000+get_tm.tv_nsec)/((long long)cntr.m_per*1000000) + 1)*(long long)cntr.m_per*1000000;
 	if(last_tm == work_tm)  work_tm+=(long long)cntr.m_per*1000000; //Fix early call
@@ -334,23 +323,23 @@ void *TMdContr::Task( void *icntr )
 
 void TMdContr::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
         TController::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/cntr/st/ctm",_("Calk time (msek)"),0444,"root","root",1,"tp","real");
 	return;
     }
-    //Process command to page
+    
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/cntr/st/ctm" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(tm_calc,6));
     else TController::cntrCmdProc(opt);
 }						    
 
-//======================================================================
-//==== TMdPrm 
-//======================================================================
-
+//*************************************************
+//* TMdPrm                                        *
+//*************************************************
 TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : 
     TParamContr(name,tp_prm), m_da(NULL), m_auto(false)
 {
@@ -366,13 +355,12 @@ void TMdPrm::postEnable( int flag )
     if(list.size())	cfg("TYPE").setS(list[0]);
 }
 
-
 TMdPrm::~TMdPrm( )
 {
     nodeDelAll();    
 }
 
-void TMdPrm::enable()
+void TMdPrm::enable( )
 {
     if( enableStat() )	return;    
     cfgChange(cfg("TYPE"));
@@ -380,7 +368,7 @@ void TMdPrm::enable()
     ((TMdContr&)owner()).prmEn( id(), true );	//Put to process
 }
 
-void TMdPrm::disable()
+void TMdPrm::disable( )
 {
     if( !enableStat() )  return;
     ((TMdContr&)owner()).prmEn( id(), false );      //Remove from process 
@@ -409,7 +397,7 @@ void TMdPrm::vlGet( TVal &val )
     }
 }
 
-void TMdPrm::getVal()
+void TMdPrm::getVal( )
 {
     if( m_da )	m_da->getVal(this);
 }
@@ -427,7 +415,7 @@ void TMdPrm::setType( const string &da_id )
 {
     if( m_da && da_id == m_da->id() )	return;
         
-    //Free previous type
+    //- Free previous type -
     if( m_da )
     {	
 	m_da->deInit(this);
@@ -435,7 +423,7 @@ void TMdPrm::setType( const string &da_id )
 	m_da = NULL;
     }
 
-    //Create new type
+    //- Create new type -
     try 
     { 	
 	if(da_id.size())
@@ -453,7 +441,7 @@ void TMdPrm::setType( const string &da_id )
 
 bool TMdPrm::cfgChange( TCfg &i_cfg )
 {   
-    //Change TYPE parameter
+    //- Change TYPE parameter -
     if( i_cfg.name() == "TYPE" )
     {
 	setType(i_cfg.getS());

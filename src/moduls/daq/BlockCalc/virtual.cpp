@@ -44,7 +44,7 @@
 #define MOD_NAME    "Block based calculator"
 #define MOD_TYPE    "DAQ"
 #define VER_TYPE    VER_CNTR
-#define VERSION     "0.9.0"
+#define VERSION     "0.9.2"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow block based calculator."
 #define LICENSE     "GPL"
@@ -56,28 +56,15 @@ extern "C"
 {
     TModule::SAt module( int n_mod )
     {
-	TModule::SAt AtMod;
-
-	if(n_mod==0)
-    	{
-	    AtMod.id	= MOD_ID;
-	    AtMod.type  = MOD_TYPE;
-	    AtMod.t_ver = VER_TYPE;
-	}
-	else
-	    AtMod.id	= "";
-
-	return AtMod;
+	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	return TModule::SAt("");
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	Virtual::TipContr *self_addr = NULL;
-
-	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = Virtual::mod = new Virtual::TipContr( source );
-
-	return self_addr;
+	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
+	    return new Virtual::TipContr( source );
+	return NULL;
     }
 }
 
@@ -95,7 +82,9 @@ TipContr::TipContr( string name )
     mAutor    	= AUTORS;
     mDescr  	= DESCRIPTION;
     mLicense   	= LICENSE;
-    mSource    	= name;    
+    mSource    	= name;
+    
+    mod		= this;
 }
 
 TipContr::~TipContr()
@@ -350,7 +339,7 @@ void Contr::enable_( )
     blkList(lst);
     for( int i_l = 0; i_l < lst.size(); i_l++ )
         if( blkAt(lst[i_l]).at().toEnable() )
-	try{ blkAt(lst[i_l]).at().enable(true); }
+	try{ blkAt(lst[i_l]).at().setEnable(true); }
 	catch(TError err)
 	{ 
 	    mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); 
@@ -365,7 +354,7 @@ void Contr::disable_( )
     blkList(lst);
     for( int i_l = 0; i_l < lst.size(); i_l++ )
         if( blkAt(lst[i_l]).at().enable() )
-        try{ blkAt(lst[i_l]).at().enable(false); }
+        try{ blkAt(lst[i_l]).at().setEnable(false); }
 	    catch(TError err)
 	    { 
 		mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); 
@@ -380,7 +369,7 @@ void Contr::start_( )
     blkList(lst);
     for( int i_l = 0; i_l < lst.size(); i_l++ )
         if( blkAt(lst[i_l]).at().enable() && blkAt(lst[i_l]).at().toProcess() )	
-	try{ blkAt(lst[i_l]).at().process(true); }
+	try{ blkAt(lst[i_l]).at().setProcess(true); }
 	catch(TError err)
 	{ 
 	    mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); 
@@ -422,7 +411,7 @@ void Contr::stop_( )
         if( TSYS::eventWait(prc_st,false,nodePath()+"stop",5) )
             throw TError(nodePath().c_str(),_("Acquisition task no stoped!"));
         pthread_join( calcPthr, NULL );
-    }else printf("TEST 10 %s\n",id().c_str());
+    }
 
     //Stop interval timer for periodic thread creating
     struct itimerspec itval;
@@ -437,7 +426,7 @@ void Contr::stop_( )
     blkList(lst);
     for( int i_l = 0; i_l < lst.size(); i_l++ )
         if( blkAt(lst[i_l]).at().process() )
-    	    blkAt(lst[i_l]).at().process(false);
+    	    blkAt(lst[i_l]).at().setProcess(false);
 } 
 
 void Contr::loadV( )
@@ -514,7 +503,7 @@ void *Contr::Task( void *icontr )
 		    if( cntr.clc_blks[i_blk].at().errCnt() < 10 ) continue;
 		    cntr.hd_res.resReleaseR( );
 		    mess_err(cntr.nodePath().c_str(),_("Block <%s> stoped."),blck.c_str());
-		    cntr.blkAt(blck).at().process(false);			
+		    cntr.blkAt(blck).at().setProcess(false);			
 		    cntr.hd_res.resRequestR( );
 		}
 	    }
@@ -626,7 +615,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )		
 	{
 	    blkAdd(opt->attr("id"));
-	    blkAt(opt->attr("id")).at().name(opt->text());
+	    blkAt(opt->attr("id")).at().setName(opt->text());
 	}
 	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	chldDel(m_bl,opt->attr("id"),-1,1);
     }

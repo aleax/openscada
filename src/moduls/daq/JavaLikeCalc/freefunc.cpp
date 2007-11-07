@@ -1,13 +1,12 @@
 
 //OpenSCADA system module DAQ.JavaLikeCalc file: freefunc.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -32,7 +31,9 @@ using namespace JavaLikeCalc;
 
 Func *JavaLikeCalc::p_fnc;
 
-//================== Function ========================
+//*************************************************
+//* Func: Function                                *
+//*************************************************
 Func::Func( const char *id, const char *name ) : 
     TConfig(&mod->elFnc()), TFunction(id), parse_res(mod->parseRes( )),
     m_name(cfg("NAME").getSd()), m_descr(cfg("DESCR").getSd()),
@@ -48,14 +49,14 @@ Func::~Func( )
 
 }
 
-void Func::preDisable(int flag)
+void Func::preDisable( int flag )
 {
     if( m_tval ) { delete m_tval; m_tval = NULL; }
 }
 
-void Func::postDisable(int flag)
+void Func::postDisable( int flag )
 {
-    start(false);
+    setStart(false);
     if( flag && owner().DB().size() )
     {
 	try{ del( ); }
@@ -64,12 +65,12 @@ void Func::postDisable(int flag)
     }
 }
 
-Lib &Func::owner()
+Lib &Func::owner( )
 { 
     return *((Lib*)nodePrev()); 
 }
 
-string Func::name()
+string Func::name( )
 {
     return m_name.size()?m_name:id();
 }
@@ -79,21 +80,9 @@ Func &Func::operator=(Func &func)
     *(TConfig *)this = (TConfig&)func;
     *(TFunction *)this = (TFunction&)func;
     
-    //======== Set to DB ============
+    //- Set to DB -
     cfg("ID").setS(m_id);
 }
-
-/*void Func::chID( const char *iid )
-{
-    if( owner().present(iid) )
-	throw TError(nodePath().c_str(),_("Rename error. Function <%s> already present."),iid);
-    del();
-    //Set new ID
-    m_id = iid;
-    cfg("ID").setS(m_id);
-    //Save new function
-    save();
-}*/
 
 void Func::load( )
 {
@@ -114,7 +103,7 @@ void Func::loadIO( )
     while( SYS->db().at().dataSeek(owner().fullDB()+"_io",mod->nodePath()+owner().tbl()+"_io",fld_cnt++,cfg) )
     {	
 	string sid = cfg.cfg("ID").getS();
-	//Calc insert position	    
+	//- Calc insert position -
 	int pos = cfg.cfg("POS").getI();
 	int i_ps;
 	for( i_ps = 0; i_ps < u_pos.size(); i_ps++ )
@@ -125,7 +114,7 @@ void Func::loadIO( )
 	    ioIns( new IO(sid.c_str(),"",IO::Real,IO::Default), i_ps );
 		
 	int id = ioId(sid);		
-	//Set values
+	//- Set values -
 	io(id)->setName(cfg.cfg("NAME").getS());
 	io(id)->setType((IO::Type)cfg.cfg("TYPE").getI());
 	io(id)->setFlg(cfg.cfg("MODE").getI());
@@ -142,8 +131,8 @@ void Func::save( )
 
     SYS->db().at().dataSet(owner().fullDB(),mod->nodePath()+owner().tbl(),*this);
 
-    //Save io config
-    saveIO();
+    //- Save io config -
+    saveIO( );
 }
 
 void Func::saveIO( )
@@ -153,7 +142,7 @@ void Func::saveIO( )
     string io_bd = owner().fullDB()+"_io";
     string io_cfgpath = mod->nodePath()+owner().tbl()+"_io/";
 
-    //Save allow IO
+    //- Save allow IO -
     cfg.cfg("F_ID").setS(id());    
     for( int i_io = 0; i_io < ioSize(); i_io++ )
     {
@@ -165,8 +154,9 @@ void Func::saveIO( )
 	cfg.cfg("HIDE").setB(io(i_io)->hide());
 	cfg.cfg("POS").setI(i_io);
 	SYS->db().at().dataSet(io_bd,io_cfgpath,cfg);
-    }    
-    //Clear IO    
+    }
+    
+    //- Clear IO -
     int fld_cnt=0;
     cfg.cfg("ID").setS("");
     cfg.cfgViewAll(false);
@@ -187,8 +177,8 @@ void Func::del( )
 
     SYS->db().at().dataDel(owner().fullDB(),mod->nodePath()+owner().tbl(),*this);
 	    
-    //Delete io from DB
-    delIO();
+    //- Delete io from DB -
+    delIO( );
 }
 
 void Func::delIO( )
@@ -204,7 +194,7 @@ void Func::preIOCfgChange()
     be_start = startStat();
     if( be_start )
     {
-	start(false);
+	setStart(false);
 	if( m_tval ) { delete m_tval; m_tval = NULL; }
     }
     TFunction::preIOCfgChange();
@@ -212,23 +202,21 @@ void Func::preIOCfgChange()
 
 void Func::postIOCfgChange()
 {
-    if( be_start ) start(true);
+    if( be_start ) setStart(true);
     TFunction::postIOCfgChange();
 }
 
-void Func::start( bool val )
+void Func::setStart( bool val )
 {
-    //if( run_st == val )	return;
-    
     if( val )
     {	
-	//Start calc
+	//- Start calc -
 	progCompile( );
 	run_st = true;
     }
     else
     {
-	//Stop calc
+	//- Stop calc -
 	ResAlloc res(calc_res,true);
 	prg = "";
 	regClear();
@@ -267,21 +255,20 @@ int Func::funcGet( const string &path )
 { 
     try
     {
-	//Check to correct function's path
+	//- Check to correct function's path -
 	if( !dynamic_cast<TFunction *>(&SYS->nodeAt(path,0,'.').at()) )
 	    return -1;
-	//Get full path    
+	//- Get full path -
 	string f_path = SYS->nodeAt(path,0,'.').at().nodePath();    
 	for( int i_fnc = 0; i_fnc < m_fncs.size(); i_fnc++ )
 	    if( f_path == m_fncs[i_fnc]->func().at().nodePath() )
-	    //if( f_path == m_fncs[i_fnc]->valFunc().func()->nodePath() )    
 		return i_fnc;
  	m_fncs.push_back(new UFunc(path));
     	return m_fncs.size()-1; 
     }catch(...){ return -1; }
 }
 
-void Func::funcClear()        
+void Func::funcClear( )
 { 
     for( int i_fnc = 0; i_fnc < m_fncs.size(); i_fnc++ )
         delete m_fncs[i_fnc];
@@ -290,7 +277,7 @@ void Func::funcClear()
 
 int Func::regNew( bool var )
 {
-    //Get new register
+    //- Get new register -
     int i_rg = m_regs.size();
     if( !var )
 	for( i_rg = 0; i_rg < m_regs.size(); i_rg++ )
@@ -302,21 +289,21 @@ int Func::regNew( bool var )
 
 int Func::regGet( const char *nm )
 {
-    //Check allow registers
+    //- Check allow registers -
     for( int i_rg = 0; i_rg < m_regs.size(); i_rg++ )
 	if( m_regs[i_rg]->name() == nm )	
 	    return i_rg;
     return -1;
 }
 
-void Func::regClear()         
+void Func::regClear( )
 { 
     for( int i_rg = 0; i_rg < m_regs.size(); i_rg++ )
         delete m_regs[i_rg];			
     m_regs.clear(); 
 }
 
-Reg *Func::regTmpNew(  )
+Reg *Func::regTmpNew( )
 { 
     int i_rg;
     for( i_rg = 0; i_rg < m_tmpregs.size(); i_rg++ )
@@ -453,7 +440,7 @@ void Func::cdAssign( Reg *rez, Reg *op )
     }
     prg+=(BYTE)rez->pos(); 
     prg+=(BYTE)op->pos();
-    //Free temp operands    
+    //- Free temp operands -
     op->free();
 }
 
@@ -463,7 +450,7 @@ Reg *Func::cdMove( Reg *rez, Reg *op )
     op = cdMvi( op );
     if( rez_n == NULL ) rez_n = regAt(regNew());    
     rez_n = cdMvi( rez_n, true );
-    rez_n->type(op->vType(this));
+    rez_n->setType(op->vType(this));
     switch(rez_n->vType(this))
     {
         case Reg::Bool:         prg+=(BYTE)Reg::MovB;   break;
@@ -473,7 +460,8 @@ Reg *Func::cdMove( Reg *rez, Reg *op )
     }
     prg+=(BYTE)rez_n->pos();
     prg+=(BYTE)op->pos();
-    //Free temp operands
+    
+    //- Free temp operands -
     op->free();
     
     return rez_n;
@@ -481,7 +469,7 @@ Reg *Func::cdMove( Reg *rez, Reg *op )
 
 Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 {
-    //Check allowing type operations
+    //- Check allowing type operations -
     switch(op1->vType(this))
     {
 	case Reg::String:
@@ -503,7 +491,8 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 		    throw TError(nodePath().c_str(),_("Operation %d no support string type"),cod);
 	    }    
     }
-    //Check allow the buildin calc and calc
+    
+    //- Check allow the buildin calc and calc -
     if( op1->pos() < 0 && op2->pos() < 0 )
     {
 	op2 = cdTypeConv( op2, op1->vType(this), true);
@@ -582,8 +571,9 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 	
 	return op1;
     }
-    //Make operation cod    
-    //Prepare operands
+    
+    //- Make operation cod -
+    //-- Prepare operands --
     op1 = cdMvi( op1 );
     Reg::Type op1_tp = op1->vType(this);
     int op1_pos = op1->pos();
@@ -591,10 +581,10 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
     int op2_pos = op2->pos();
     op1->free();
     op2->free();    
-    //Prepare rezult    
+    //-- Prepare rezult --
     Reg *rez = regAt(regNew());
-    rez->type(op1_tp);
-    //Add code        
+    rez->setType(op1_tp);
+    //-- Add code --
     switch(op1_tp)
     {
 	case Reg::Bool:
@@ -657,7 +647,7 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 
 Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
 {
-    //Check allowing type operations
+    //- Check allowing type operations -
     switch(op->type())
     {
 	case Reg::String:
@@ -669,7 +659,8 @@ Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
 		    throw TError(nodePath().c_str(),_("Operation %d no support string type"),cod);
 	    }    
     }
-    //Check allow the buildin calc and calc
+    
+    //- Check allow the buildin calc and calc -
     if( op->pos() < 0 )
     {
 	switch(op->vType(this))
@@ -701,16 +692,17 @@ Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
 	
 	return op;
     }
-    //=========== Make operation cod =================
-    //Prepare operand
+    
+    //- Make operation cod -
+    //-- Prepare operand --
     op = cdMvi( op );
     Reg::Type op_tp = op->vType(this);
     int op_pos = op->pos();
     op->free();    
-    //Prepare rezult
+    //-- Prepare rezult --
     Reg *rez = regAt(regNew());
-    rez->type(op->vType(this));
-    //Add code        
+    rez->setType(op->vType(this));
+    //-- Add code --
     switch(op_tp)
     {
 	case Reg::Bool:
@@ -743,7 +735,7 @@ Reg *Func::cdCond( Reg *cond, int p_cmd, int p_else, int p_end, Reg *thn, Reg *e
     int a_sz = sizeof(WORD);
     string cd_tmp;
     
-    //Mvi cond register (insert to programm)
+    //- Mvi cond register (insert to programm) -
     cd_tmp = prg.substr(p_cmd);
     prg.erase(p_cmd);    
     cond = cdMvi(cond);    
@@ -755,7 +747,7 @@ Reg *Func::cdCond( Reg *cond, int p_cmd, int p_else, int p_end, Reg *thn, Reg *e
     
     if( thn != NULL && els != NULL )
     {
-	//Add Move command to "then" end (insert to programm)
+	//- Add Move command to "then" end (insert to programm) -
 	cd_tmp = prg.substr(p_else-1);	//-1 pass end command
 	prg.erase(p_else-1);
 	thn = cdMvi( thn );
@@ -763,7 +755,7 @@ Reg *Func::cdCond( Reg *cond, int p_cmd, int p_else, int p_end, Reg *thn, Reg *e
 	p_end+=prg.size()-p_else+1;
 	p_else = prg.size()+1;
 	prg+=cd_tmp;
-	//Add Move command to "else" end (insert to programm)
+	//- Add Move command to "else" end (insert to programm) -
 	cd_tmp = prg.substr(p_end-1);   //-1 pass end command
         prg.erase(p_end-1);
         els = cdMvi( els );
@@ -772,7 +764,7 @@ Reg *Func::cdCond( Reg *cond, int p_cmd, int p_else, int p_end, Reg *thn, Reg *e
         prg+=cd_tmp;
     }
     
-    //Make apropos adress
+    //- Make apropos adress -
     p_else -= p_cmd;
     p_end  -= p_cmd;
     
@@ -789,7 +781,7 @@ void Func::cdCycle(int p_cmd, Reg *cond, int p_solve, int p_end, int p_postiter 
     string cd_tmp;
     int p_body = (p_postiter?p_postiter:p_solve)-1;	//Include Reg::End command
     
-    //Mvi cond register (insert to programm)
+    //- Mvi cond register (insert to programm) -
     cd_tmp = prg.substr(p_body);
     prg.erase(p_body);
     cond = cdMvi(cond);    
@@ -800,7 +792,7 @@ void Func::cdCycle(int p_cmd, Reg *cond, int p_solve, int p_end, int p_postiter 
     int p_cond = cond->pos(); 
     cond->free();
     
-    //Make apropos adress
+    //- Make apropos adress -
     p_solve -= p_cmd;
     p_end   -= p_cmd;
     if( p_postiter ) p_postiter -= p_cmd;
@@ -820,15 +812,15 @@ Reg *Func::cdBldFnc( int f_cod, Reg *prm1, Reg *prm2 )
     if( (prm1 && prm1->vType(this) == Reg::String) || 
 	(prm2 && prm2->vType(this) == Reg::String) )
 	throw TError(nodePath().c_str(),_("Buildin functions no support string type"));
-    //Free parameter's registers
+    //- Free parameter's registers -
     if( prm1 ) 	{ prm1 = cdMvi( prm1 ); p1_pos = prm1->pos(); }
     if( prm2 )	{ prm2 = cdMvi( prm2 ); p2_pos = prm2->pos(); }
     if( prm1 )	prm1->free();
     if( prm2 )	prm2->free();
-    //Get rezult register        
+    //- Get rezult register -
     rez = regAt(regNew());    
-    rez->type(Reg::Real);
-    //Make code
+    rez->setType(Reg::Real);
+    //- Make code -
     prg+=(BYTE)f_cod;
     prg+=(BYTE)rez->pos();
     if( p1_pos >= 0 ) prg+=(BYTE)p1_pos;
@@ -843,42 +835,42 @@ Reg *Func::cdExtFnc( int f_id, int p_cnt, bool proc )
     Reg *rez = NULL;
     deque<int> p_pos;    
     
-    //Check return IO position
+    //- Check return IO position -
     bool ret_ok = false;
     for( r_pos = 0; r_pos < funcAt(f_id)->func().at().ioSize(); r_pos++ )
 	if( funcAt(f_id)->func().at().io(r_pos)->flg()&IO::Return )
 	{ ret_ok=true; break; }
-    //Check IO and parameters count
+    //- Check IO and parameters count -
     if( p_cnt > funcAt(f_id)->func().at().ioSize()-ret_ok )
 	throw TError(nodePath().c_str(),_("Request more %d parameters for function <%s>"),
 	    funcAt(f_id)->func().at().ioSize(),funcAt(f_id)->func().at().id().c_str());	
-    //Check the present return for fuction
+    //- Check the present return for fuction -
     if( !proc && !ret_ok )
 	throw TError(nodePath().c_str(),_("Request function <%s>, but it not have return IO"),funcAt(f_id)->func().at().id().c_str());
-    //Mvi all parameters
+    //- Mvi all parameters -
     for( int i_prm = 0; i_prm < p_cnt; i_prm++ )
 	f_prmst[i_prm] = cdMvi( f_prmst[i_prm] );
-    //Get parameters. Add check parameters type !!!!	
+    //- Get parameters. Add check parameters type !!!! -
     for( int i_prm = 0; i_prm < p_cnt; i_prm++ )
     {	
 	p_pos.push_front( f_prmst.front()->pos() );
 	f_prmst.front()->free();
 	f_prmst.pop_front();
     }    
-    //Make result
+    //- Make result -
     if( !proc )
     {
 	rez = regAt(regNew());
 	switch(funcAt(f_id)->func().at().io(r_pos)->type())
 	{
-	    case IO::String:	rez->type(Reg::String); break;
-	    case IO::Integer:	rez->type(Reg::Int);	break;
-	    case IO::Real:   	rez->type(Reg::Real);	break;	
-	    case IO::Boolean:	rez->type(Reg::Bool);   break;	    
+	    case IO::String:	rez->setType(Reg::String); break;
+	    case IO::Integer:	rez->setType(Reg::Int);	break;
+	    case IO::Real:   	rez->setType(Reg::Real);	break;	
+	    case IO::Boolean:	rez->setType(Reg::Bool);   break;	    
 	}
     }
     
-    //Make code
+    //- Make code -
     if( proc ) 	prg+=(BYTE)Reg::CProc;    
     else 	prg+=(BYTE)Reg::CFunc;
     prg+=(BYTE)f_id;
@@ -998,29 +990,30 @@ void Func::calc( TValFunc *val )
 { 
     calc_res.resRequestR( );
     
-    //Init list of registers
+    //- Init list of registers -
     RegW reg[m_regs.size()];
     for( int i_rg = 0; i_rg < m_regs.size(); i_rg++ )
     {
-        reg[i_rg].type(m_regs[i_rg]->type());
+        reg[i_rg].setType(m_regs[i_rg]->type());
         if(reg[i_rg].type() == Reg::Var) 
 	    reg[i_rg].val().io = m_regs[i_rg]->val().io;
 	else if(reg[i_rg].type() == Reg::PrmAttr)
 	    *reg[i_rg].val().p_attr = *m_regs[i_rg]->val().p_attr;
     }
-    //Exec calc	
+    
+    //- Exec calc -
     ExecData dt = { 1, 0, 0 };
     try{ exec(val,reg,(const BYTE *)prg.c_str(),dt); }
     catch(TError err){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
     calc_res.resReleaseR( );
-    if( dt.flg&0x07 == 0x01 )	start(false);
+    if( dt.flg&0x07 == 0x01 )	setStart(false);
 }
 
 void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
 {
     while( !(dt.flg&0x01) )
     {
-	//Calc time control mechanism 
+	//- Calc time control mechanism -
 	if( !((dt.com_cnt++)%1000) )
 	{
 	    if( !dt.start_tm )	dt.start_tm = time(NULL);
@@ -1031,11 +1024,11 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
 		return;	    
 	    }		
 	}
-	//Calc operation
+	//- Calc operation -
 	switch(*cprg)
 	{
 	    case Reg::End: return;
-	    //MVI codes
+	    //-- MVI codes --
 	    case Reg::MviB:
 #if DEBUG_VM
                 printf("CODE: Load bool %d to reg %d.\n",*(BYTE *)(cprg+2),*(BYTE *)(cprg+1));
@@ -1060,7 +1053,7 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
 #endif		
 		reg[*(BYTE *)(cprg+1)] = string((char *)cprg+3,*(BYTE *)(cprg+2));
             	cprg+=3+ *(BYTE *)(cprg+2); break;
-	    //Assign codes
+	    //-- Assign codes --
             case Reg::AssB:
 #if DEBUG_VM	    
                 printf("CODE: Assign boolean from %d to %d.\n",*(BYTE *)(cprg+2),*(BYTE *)(cprg+1));
@@ -1085,7 +1078,7 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
 #endif		
 		setValS(val,reg[*(BYTE *)(cprg+1)],getValS(val,reg[*(BYTE *)(cprg+2)]));
             	cprg+=3; break;
-	    //Mov codes
+	    //-- Mov codes --
 	    case Reg::MovB:
 #if DEBUG_VM	    
                 printf("CODE: Move boolean from %d to %d.\n",*(BYTE *)(cprg+2),*(BYTE *)(cprg+1));
@@ -1110,7 +1103,7 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
 #endif		
 		reg[*(BYTE *)(cprg+1)] = getValS(val,reg[*(BYTE *)(cprg+2)]);
             	cprg+=3; break;
-	    //Binary operations
+	    //-- Binary operations --
 	    case Reg::AddI: 
 #if DEBUG_VM	    
 		printf("CODE: Integer %d = %d + %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
@@ -1285,7 +1278,7 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
 #endif		
                 reg[*(BYTE *)(cprg+1)] = getValS(val,reg[*(BYTE *)(cprg+2)]) != getValS(val,reg[*(BYTE *)(cprg+3)]);
                 cprg+=4; break;			
-	    //Unary operations
+	    //-- Unary operations --
 	    case Reg::Not: 
 #if DEBUG_VM	    
 		printf("CODE: %d = !%d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
@@ -1310,7 +1303,7 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
 #endif		
 		reg[*(BYTE *)(cprg+1)] = -getValR(val,reg[*(BYTE *)(cprg+2)]);
             	cprg+=3; break;
-	    //Condition 
+	    //-- Condition --
 	    case Reg::If:
 #if DEBUG_VM	    
 		printf("CODE: Condition %d: %d|%d|%d.\n",*(BYTE *)(cprg+1),6,*(WORD *)(cprg+2),*(WORD *)(cprg+4));
@@ -1341,7 +1334,7 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
 		continue;
 	    case Reg::Break:	dt.flg|=0x03;	break;		
 	    case Reg::Continue:	dt.flg|=0x05;	break;
-	    //Buildin functions
+	    //-- Buildin functions --
 	    case Reg::FSin:
 #if DEBUG_VM	    
 		printf("CODE: Function %d=sin(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
@@ -1463,11 +1456,11 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
 #if DEBUG_VM		    
 		    printf("CODE: Call function/procedure %d = %s(%d).\n",*(BYTE *)(cprg+3),vfnc.func()->id().c_str(),*(BYTE *)(cprg+2));
 #endif		    
-		    //Get return position
+		    //--- Get return position ---
             	    int r_pos, i_p, p_p;
 		    for( r_pos = 0; r_pos < vfnc.func()->ioSize(); r_pos++ )
 		        if( vfnc.ioFlg(r_pos)&IO::Return ) break;
-		    //Process parameters
+		    //--- Process parameters ---
 		    for( i_p = 0; i_p < *(BYTE *)(cprg+2); i_p++ )
             	    {
 		        p_p = (i_p>=r_pos)?i_p+1:i_p;
@@ -1479,9 +1472,9 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
 			    case IO::Boolean:	vfnc.setB(p_p,getValB(val,reg[*(BYTE *)(cprg+4+i_p)])); break;			
 			}
 	            }
-		    //Make calc
+		    //--- Make calc ---
             	    vfnc.calc();	
-		    //Process outputs
+		    //--- Process outputs ---
             	    for( i_p = 0; i_p < *(BYTE *)(cprg+2); i_p++ )
 		    {
 			p_p = (i_p>=r_pos)?i_p+1:i_p;
@@ -1494,7 +1487,7 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
 				case IO::Boolean: setValB(val,reg[*(BYTE *)(cprg+4+i_p)],vfnc.getB(p_p)); break;				
 			    }
 		    }
-		    //Set return	
+		    //--- Set return ---
 		    if( *cprg == Reg::CFunc )
 		    { 
 			switch(vfnc.ioType(r_pos))
@@ -1508,7 +1501,7 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
 		    cprg+=4+ *(BYTE *)(cprg+2); break;
 		}
 	    default:
-		start(false);
+		setStart(false);
 		throw TError(nodePath().c_str(),_("Operation %c(%xh) error. Function <%s> stoped."),*cprg,*cprg,id().c_str());
 	}
     }	
@@ -1516,7 +1509,7 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
 
 void Func::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
         TFunction::cntrCmdProc(opt);
@@ -1540,7 +1533,8 @@ void Func::cntrCmdProc( XMLNode *opt )
 	}
         return;
     }
-    //Process command to page
+    
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/func/cfg/name" && ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )		m_name 	= opt->text();
     else if( a_path == "/func/cfg/descr" && ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_descr = opt->text();
@@ -1610,10 +1604,12 @@ void Func::cntrCmdProc( XMLNode *opt )
     else TFunction::cntrCmdProc(opt);
 }
 
-//================== Reg ========================
+//*************************************************
+//* Reg                                           *
+//*************************************************
 Reg &Reg::operator=( Reg &irg )
 {
-    type(irg.type());
+    setType(irg.type());
     switch(type())
     {
 	case Bool:	el.b_el = irg.el.b_el;  break;
@@ -1623,7 +1619,7 @@ Reg &Reg::operator=( Reg &irg )
 	case Var:	el.io = irg.el.io;  	break;
 	case PrmAttr:	*el.p_attr = *irg.el.p_attr;	break;
     }
-    name(irg.name().c_str());	//name
+    setName(irg.name().c_str());	//name
     m_lock = irg.m_lock;	//locked
     //m_pos = irg.m_pos;	//pos
     return *this;
@@ -1634,7 +1630,7 @@ string Reg::name() const
     return (m_nm)? *m_nm:"";
 }
 	
-void Reg::name( const char *nm )
+void Reg::setName( const char *nm )
 { 
     if(!m_nm) m_nm = new string;
     *m_nm = nm; 
@@ -1669,7 +1665,7 @@ void Reg::free()
 { 
     if(!lock())
     { 
-	type(Free);
+	setType(Free);
 	m_lock = false;
 	if(m_nm) 
 	{

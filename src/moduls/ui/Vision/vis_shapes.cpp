@@ -1901,10 +1901,7 @@ bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val)
     }
 
     if( reld_dt && !w->allAttrLoad( ) ) 
-    {
-	printf("TEST 00: Load protocol.\n");
 	loadData(w,reld_dt==2);
-    }
     
     return true;
 } 

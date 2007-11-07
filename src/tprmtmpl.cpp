@@ -89,14 +89,14 @@ string TPrmTempl::prog()
  
 void TPrmTempl::setProgLang( const string &ilng )
 {
-    if(startStat()) start(false);
+    if(startStat()) setStart(false);
     
     m_prog.replace(0,m_prog.find("\n"),ilng);
 }
 
 void TPrmTempl::setProg( const string &iprg )
 {
-    if(startStat()) start(false);
+    if(startStat()) setStart(false);
 
     int lng_end = m_prog.find("\n");
     if(lng_end == string::npos)
@@ -107,7 +107,7 @@ void TPrmTempl::setProg( const string &iprg )
     m_prog.replace(lng_end+1,string::npos,iprg);
 }
 
-void TPrmTempl::start( bool vl )
+void TPrmTempl::setStart( bool vl )
 {
     if( startStat() == vl ) return;
     if(vl)
@@ -119,7 +119,7 @@ void TPrmTempl::start( bool vl )
 	    work_prog = SYS->daq().at().at(TSYS::strSepParse(progLang(),0,'.')).at().
 				        compileFunc(TSYS::strSepParse(progLang(),1,'.'),*this,prog());
     }
-    TFunction::start(vl);
+    TFunction::setStart(vl);
 }
 
 AutoHD<TFunction> TPrmTempl::func()
@@ -203,7 +203,7 @@ void TPrmTempl::save( )
 
 void TPrmTempl::preIOCfgChange()
 {
-    if(startStat()) start(false);
+    if(startStat()) setStart(false);
 }
 
 void TPrmTempl::cntrCmdProc( XMLNode *opt )
@@ -249,7 +249,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
     if( a_path == "/tmpl/st/st" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(startStat()?"1":"0");
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	start(atoi(opt->text().c_str()));
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setStart(atoi(opt->text().c_str()));
     } 
     else if( a_path == "/tmpl/cfg/id" && ctrChkNode(opt) )	opt->setText(id());
     else if( a_path == "/tmpl/cfg/name" )
@@ -456,7 +456,7 @@ void TPrmTmplLib::start( bool val )
     vector<string> lst;
     list(lst);
     for( int i_f = 0; i_f < lst.size(); i_f++ )
-        at(lst[i_f]).at().start(val);
+        at(lst[i_f]).at().setStart(val);
 						
     run_st = val;
 }

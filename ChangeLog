@@ -1,3 +1,24 @@
+2007-11-07 Roman
+- !!!:/SYS: Module connection mechanism is made simpler.
+- !!:/UI/VCAEngine: Interface translation to Russian and Ukranian is added.
+- !!:/UI/Vision: Interface translation to Russian and Ukranian is added.
+- /SYS/Function: Function start(val) is renamed to setStart(val).
+- /DAQ/PrmTmpl: Function start(val) is renamed to setStart(val).
+- /Archive/DBArch and FSArch: License update, source clean and 
+    interface translation for Russian and Ukranian is updated.
+- /DB/DBF, FireBird, MySQL and SQLite: License update, source clean and 
+    interface translation for Russian and Ukranian is updated.
+- /DAQ/BlockCalc, CIF, DiamondBoards, JavaLikeCalc, LogicLev, ModBus, SNMP, System and Transporter: 
+    License update, source clean and interface translation for Russian and Ukranian is updated.
+- /Protocol/HTTP and SelfSystem: License update, source clean and 
+    interface translation for Russian and Ukranian is updated.
+- /Special/FLibComplex1, FLibMath, FLibSYS and SystemTests: License update, source clean and
+    interface translation for Russian and Ukranian is updated.
+- /Transporter/Sockets: License update, source clean and
+    interface translation for Russian and Ukranian is updated.
+- /UI/QTCfg, WebCfg and WebDbg: License update, source clean and
+    interface translation for Russian and Ukranian is updated.
+
 2007-10-24 Roman
 - FIX:/DB: Loading DB interupt after broken DB record is fixed.
 - FIX:/Archive/DB: Special archivator's attributes broken size is fixed.

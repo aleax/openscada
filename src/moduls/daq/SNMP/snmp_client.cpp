@@ -1,13 +1,12 @@
 
 //OpenSCADA system module DAQ.SNMP file: snmp.cpp
 /***************************************************************************
- *   Copyright (C) 2006 by Roman Savochenko                                *
+ *   Copyright (C) 2006-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -38,7 +37,8 @@
 
 #include "snmp_client.h"
 
-//============ Modul info! =====================================================
+//*************************************************
+//* Modul info!                                   *
 #define MOD_ID      "SNMP"
 #define MOD_NAME    "SNMP client"
 #define MOD_TYPE    "DAQ"
@@ -47,7 +47,7 @@
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow realising of SNMP client service."
 #define LICENSE     "GPL"
-//==============================================================================
+//*************************************************
 
 SNMP_DAQ::TTpContr *SNMP_DAQ::mod;  //Pointer for direct access to module
 
@@ -55,36 +55,23 @@ extern "C"
 {
     TModule::SAt module( int n_mod )
     {
-	TModule::SAt AtMod;
-
-	if(n_mod==0)
-	{
-	    AtMod.id	= MOD_ID;
-	    AtMod.type  = MOD_TYPE;
-	    AtMod.t_ver = VER_TYPE;
-	}
-	else
-    	    AtMod.id	= "";
-
-	return AtMod;
+	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	return TModule::SAt("");
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	SNMP_DAQ::TTpContr *self_addr = NULL;
-
-    	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = SNMP_DAQ::mod = new SNMP_DAQ::TTpContr( source );
-
-	return self_addr;
+    	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
+	    return new SNMP_DAQ::TTpContr( source );
+	return NULL;
     }
 }
 
 using namespace SNMP_DAQ;
 
-//======================================================================
-//==== TTpContr ======================================================== 
-//======================================================================
+//*************************************************
+//* TTpContr                                      * 
+//*************************************************
 TTpContr::TTpContr( string name )  
 {
     mId 	= MOD_ID;
@@ -95,8 +82,10 @@ TTpContr::TTpContr( string name )
     mDescr  	= DESCRIPTION;
     mLicense   	= LICENSE;
     mSource    	= name;    
+    
+    mod		= this;
 
-    //Once init of Net-SNMP
+    //- Once init of Net-SNMP -
     init_snmp("OpenSCADA SNMP client");
 }
 
@@ -119,7 +108,7 @@ string TTpContr::optDescr( )
 
 void TTpContr::modLoad( )
 {
-    //========== Load parameters from command line ============
+    //- Load parameters from command line -
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -144,14 +133,15 @@ void TTpContr::postEnable( int flag )
 {    
     TModule::postEnable(flag);
 
-    //==== Controler's bd structure ====    
+    //- Controler's bd structure -
     fldAdd( new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30","") );
     fldAdd( new TFld("PERIOD",_("Gather data period (s)"),TFld::Integer,TFld::NoFlag,"3","1","0;100") );
     fldAdd( new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
     fldAdd( new TFld("ADDR",_("Remote host address"),TFld::String,TFld::NoFlag,"30","localhost") );
     fldAdd( new TFld("COMM",_("Server community"),TFld::String,TFld::NoFlag,"20","public") );
     fldAdd( new TFld("PATTR_LIM",_("Param's attributes limit"),TFld::Integer,TFld::NoFlag,"3","100") );
-    //==== Parameter type bd structure ====
+    
+    //- Parameter type bd structure -
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
     tpPrmAt(t_prm).fldAdd( new TFld("OID_LS",_("OID list (next line separated)"),TFld::String,TFld::FullText,"100","") );
 }
@@ -161,9 +151,9 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
     return new TMdContr(name,daq_db,this);
 }
 
-//======================================================================
-//==== TMdContr 
-//======================================================================
+//*************************************************
+//* TMdContr                                      *
+//*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
 	::TController(name_c,daq_db,cfgelem), prc_st(false), endrun_req(false), tm_gath(0),
 	m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId()), m_addr(cfg("ADDR").getSd()), m_comm(cfg("COMM").getSd()),
@@ -172,7 +162,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     cfg("PRM_BD").setS("SNMPPrm_"+name_c);
 }
 
-TMdContr::~TMdContr()
+TMdContr::~TMdContr( )
 {
     if( run_st ) stop();
 }
@@ -194,7 +184,7 @@ void TMdContr::save( )
 
 void TMdContr::start_( )
 {      
-    //Start the gathering data task
+    //- Start the gathering data task -
     if( !prc_st )
     {
 	pthread_attr_t pthr_attr;
@@ -215,7 +205,7 @@ void TMdContr::start_( )
 
 void TMdContr::stop_( )
 {  
-    //Stop the request and calc data task
+    //- Stop the request and calc data task -
     if( prc_st )
     {
         endrun_req = true;
@@ -247,7 +237,7 @@ void *TMdContr::Task( void *icntr )
     int	   el_cnt;    
     string soid; 
  
-    //Start SNMP-net session    
+    //- Start SNMP-net session -
     struct snmp_session session;
     struct snmp_pdu *response;
     struct variable_list *vars;
@@ -270,7 +260,7 @@ void *TMdContr::Task( void *icntr )
     {	
 	long long t_cnt = SYS->shrtCnt();
 	
-	//Update controller's data
+	//-- Update controller's data --
 	el_cnt = 0;
 	cntr.en_res.resRequestR( );
 	for(unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++)
@@ -303,7 +293,7 @@ void *TMdContr::Task( void *icntr )
 					running = 0;
 					continue;
 				    }
-				    //Get or create element
+				    //-- Get or create element --
 				    soid = cntr.oid2str(vars->name,vars->name_length);
 				    if(!cprm.elem().fldPresent(soid))
 				    {
@@ -322,7 +312,7 @@ void *TMdContr::Task( void *icntr )
 						break;
 					}
 				    }
-				    //Set value
+				    //-- Set value --
 				    switch(vars->type)
 				    {
 					case ASN_OCTET_STR:
@@ -366,7 +356,7 @@ void *TMdContr::Task( void *icntr )
 	cntr.en_res.resReleaseR( );    
 	cntr.tm_gath = 1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
     
-        //Calc next work time and sleep
+        //- Calc next work time and sleep -
         clock_gettime(CLOCK_REALTIME,&get_tm);
         work_tm = (((long long)get_tm.tv_sec*1000000000+get_tm.tv_nsec)/((long long)cntr.m_per*1000000000) + 1)*(long long)cntr.m_per*1000000000;
 	if(last_tm == work_tm)	work_tm+=(long long)cntr.m_per*1000000000;	//Fix early call
@@ -392,22 +382,22 @@ string TMdContr::oid2str(oid *ioid, size_t isz)
 
 void TMdContr::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
 	TController::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/cntr/st/gath_tm",_("Gather data time (ms)"),0444,"root","root",1,"tp","real");
 	return;
     }
-    //Process command to page
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/cntr/st/gath_tm" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(tm_gath,6));
     else TController::cntrCmdProc(opt);
 }
 
-//======================================================================
-//==== TMdPrm 
-//======================================================================
+//*************************************************
+//* TMdPrm                                        *
+//*************************************************
 TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : 
     TParamContr(name,tp_prm), p_el("w_attr"), m_oid(cfg("OID_LS").getSd())
 {
@@ -442,7 +432,7 @@ void TMdPrm::disable()
     
     TParamContr::disable();
     
-    //Set EVAL to parameter attributes
+    //- Set EVAL to parameter attributes -
     vector<string> ls;
     elem().fldList(ls);
     for(int i_el = 0; i_el < ls.size(); i_el++)
@@ -486,6 +476,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/prm/cfg/OID_LS",cfg("OID_LS").fld().descr(),enableStat()?0444:0664);
 	return;
     }
+    
     //- Process command to page -
     if( a_path == "/prm/cfg/OID_LS" && ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
     {

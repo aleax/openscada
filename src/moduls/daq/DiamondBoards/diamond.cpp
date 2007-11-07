@@ -1,13 +1,12 @@
 
 //OpenSCADA system module DAQ.DiamondBoards file: diamond.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -39,7 +38,7 @@
 #define MOD_NAME    "Diamond DA boards"
 #define MOD_TYPE    "DAQ"
 #define VER_TYPE    VER_CNTR
-#define VERSION     "0.9.0"
+#define VERSION     "0.9.1"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow access to Diamond systems DA boards. Include support of Athena board."
 #define LICENSE     "GPL"
@@ -51,28 +50,15 @@ extern "C"
 {
     TModule::SAt module( int n_mod )
     {
-	TModule::SAt AtMod;
-
-	if(n_mod==0)
-	{
-	    AtMod.id	= MOD_ID;
-	    AtMod.type  = MOD_TYPE;
-	    AtMod.t_ver = VER_TYPE;
-	}
-	else
-    	    AtMod.id	= "";
-
-	return AtMod;
+	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	return TModule::SAt("");
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	Diamond::TTpContr *self_addr = NULL;
-
-    	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = Diamond::mod = new Diamond::TTpContr( source );
-
-	return self_addr;
+    	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
+	    return new Diamond::TTpContr( source );
+	return NULL;
     }
 }
 
@@ -91,8 +77,10 @@ TTpContr::TTpContr( string name ) :
     mAutor    	= AUTORS;
     mDescr  	= DESCRIPTION;
     mLicense   	= LICENSE;
-    mSource    	= name;    
-        
+    mSource    	= name;
+    
+    mod		= this;
+    
     //- Init DSCAD -
     //if( dscInit( DSC_VERSION ) != DE_NONE )
     //	mess_err(mod->nodePath().c_str(),_("dscInit error."));
@@ -181,13 +169,13 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) : ad_
     cfg("PRM_BD_A").setS("DiamPrmA_"+name_c);
     cfg("PRM_BD_D").setS("DiamPrmD_"+name_c);
     
-    //Hide sevral config fields
-    cfg("INT").setView(false);
-    cfg("DIO_CFG").setView(false);
-    cfg("ADCONVRATE").setView(false);
-    cfg("ADGAIN").setView(false);
+    //- Hide sevral config fields -
+    //cfg("INT").setView(false);
+    //cfg("DIO_CFG").setView(false);
+    //cfg("ADCONVRATE").setView(false);
+    //cfg("ADGAIN").setView(false);
     
-    //DSC resources
+    //- DSC resources -
     DSC.comm = 0;
     pthread_mutex_init(&DSC.th_mut,NULL);
     pthread_cond_init(&DSC.th_cv,NULL);
@@ -251,7 +239,7 @@ void TMdContr::start_( )
 
 void TMdContr::stop_( )
 {  
-    //Close AI DAQ task
+    //- Close AI DAQ task -
     if( ad_dsc_st )
     {
         endrun_req_ad_dsc = true;
@@ -306,27 +294,27 @@ void *TMdContr::DSCTask( void *param )
     cntr.endrun_req_dsc = false;
     cntr.dsc_st = true;
     
-    //DSC strucures init
+    //- DSC strucures init -
     BYTE result;
     DSCB dscb;    
     ERRPARAMS errorParams;
     DSCADSETTINGS dscadsettings;
     memset(&dscadsettings, 0, sizeof(DSCADSETTINGS));
     
-    //Main DSC code
+    //- Main DSC code -
     try
     {	
 	if(!cntr.dataEmul())
 	{
-    	    //- Init DSCAD -
+    	    //-- Init DSCAD --
 	    cntr.owner().drvInit();
-	    /*if( cntr.ad_int_mode && dscInit( DSC_VERSION ) != DE_NONE )	//!!!! Multithread DSCAD bug
+	    if( cntr.ad_int_mode && dscInit( DSC_VERSION ) != DE_NONE )	//!!!! Multithread DSCAD bug
 	    {
     		dscGetLastError(&errorParams);
     		throw TError(mod->nodePath().c_str(),_("dscInit error: %s %s"),
 		    dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
-	    }*/
-	    //- Init Board -
+	    }
+	    //-- Init Board --
 	    DSCCB dsccb;
 	    dsccb.base_address = cntr.m_addr;	    
 	    dsccb.int_level = cntr.cfg("INT").getI();
@@ -336,14 +324,14 @@ void *TMdContr::DSCTask( void *param )
 		throw TError(cntr.nodePath().c_str(),_("dscInitBoard %d(%xh) error: %s %s"),
 		    cntr.cfg("BOARD").getI(),cntr.m_addr,dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
 	    }
-    	    //- Set DIO config -
+    	    //-- Set DIO config --
 	    BYTE cfg_byte = cntr.cfg("DIO_CFG").getI()|0x80;
 	    if( (result = dscDIOSetConfig(dscb, &cfg_byte)) != DE_NONE)
      	    {
 		dscGetLastError(&errorParams);
 		throw TError(cntr.nodePath().c_str(),_("dscDIOSetConfig error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
 	    }
-	    //- Init AD acquisition -
+	    //-- Init AD acquisition --
 	    dscadsettings.range = cntr.cfg("ADRANGE").getI();
 	    dscadsettings.polarity = cntr.cfg("ADPOLAR").getI();
 	    dscadsettings.gain = cntr.cfg("ADGAIN").getI();
@@ -435,7 +423,7 @@ void *TMdContr::AD_DSCTask( void *param )
     get_tm.tv_sec = 0; get_tm.tv_nsec = 200000000;
     int prev_trans = -1;
     
-    //AI interrupt dequisition
+    //- AI interrupt dequisition -
     vector<string> ai_prm;
     int p_beg = 15, p_end = 0;    
 	
@@ -443,7 +431,7 @@ void *TMdContr::AD_DSCTask( void *param )
     cntr.endrun_req_ad_dsc = false;
     cntr.ad_dsc_st = true;
     
-    //DSC strucures init
+    //- DSC strucures init -
     BYTE result;
     DSCB dscb;    
     ERRPARAMS errorParams;
@@ -453,19 +441,19 @@ void *TMdContr::AD_DSCTask( void *param )
     memset(&dscaioint, 0, sizeof(DSCAIOINT));
     DSCS dscs;
     
-    //Main DSC code
+    //- Main DSC code -
     try    
     {
 	if(!cntr.dataEmul())
 	{
-    	    //- Init DSCAD -
+    	    //-- Init DSCAD --
 	    cntr.owner().drvInit();
-	    /*if( cntr.ad_int_mode && dscInit( DSC_VERSION ) != DE_NONE )	//!!!! Multithread DSCAD bug
+	    if( cntr.ad_int_mode && dscInit( DSC_VERSION ) != DE_NONE )	//!!!! Multithread DSCAD bug
 	    {
     		dscGetLastError(&errorParams);
     		throw TError(mod->nodePath().c_str(),_("dscInit error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
-	    }*/  	 
-	    //- Init Board -
+	    }  	 
+	    //-- Init Board --
 	    DSCCB dsccb;
 	    dsccb.base_address = cntr.m_addr;
 	    dsccb.int_level = cntr.cfg("INT").getI();		    
@@ -475,14 +463,14 @@ void *TMdContr::AD_DSCTask( void *param )
 		throw TError(cntr.nodePath().c_str(),_("dscInit error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
 	    }
 	
-	    //- Init AD acquisition -
+	    //-- Init AD acquisition --
 	    dscadsettings.range = cntr.cfg("ADRANGE").getI();
 	    dscadsettings.polarity = cntr.cfg("ADPOLAR").getI();
 	    dscadsettings.gain = cntr.cfg("ADGAIN").getI();
 	    dscadsettings.load_cal = 0;
 	}
 	    
-	//Get AI param list and address border
+	//- Get AI param list and address border -
 	cntr.list(ai_prm);
 	for( int i_p = 0; i_p < ai_prm.size(); i_p++ )
 	{
@@ -498,7 +486,7 @@ void *TMdContr::AD_DSCTask( void *param )
 	        p_end = vmax(p_end,prm.at().cnl());
 	    }
 	}
-	//Generic data
+	//- Generic data -
 	int convRate = 2*(cntr.cfg("ADCONVRATE").getI()/2);
 	
 	if(!cntr.dataEmul())
@@ -512,7 +500,7 @@ void *TMdContr::AD_DSCTask( void *param )
 	    	    throw TError(cntr.nodePath().c_str(),_("dscADSetSettings error: %s %s"), dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
 		}
 	    
-		//-- Init interrupt --
+		//- Init interrupt -
 		dscaioint.conversion_rate = convRate;
 		dscaioint.num_conversions = 2*(int)dscaioint.conversion_rate*(p_end-p_beg+1);
 		dscaioint.cycle = 1;
@@ -559,7 +547,7 @@ void *TMdContr::AD_DSCTask( void *param )
             		if(prm.at().type() != TMdPrm::AI || p_cnl < p_beg || p_cnl > p_end || !prm.at().enableStat() )
 		    	    continue;
 			int voff = (dscs.transfers+dscaioint.dump_threshold)%dscaioint.num_conversions;
-			//Get code
+			//- Get code -
 			AutoHD<TVal> val = prm.at().vlAt("code");
 			if(!val.at().arch().freeStat() && val.at().arch().at().srcMode() == TVArchive::PassiveAttr)
 			{
@@ -568,7 +556,7 @@ void *TMdContr::AD_DSCTask( void *param )
 				val.at().arch().at().setI(dscaioint.sample_values[voff+p_cnl-p_beg+i_smpl*p_cnt],vtm+(long long)i_smpl*1000000/(int)dscaioint.conversion_rate);
 			}
 			val.at().setI(dscaioint.sample_values[voff+p_cnl-p_beg+((int)dscaioint.conversion_rate-1)*p_cnt],vtm+((long long)dscaioint.conversion_rate-1)*1000000/(int)dscaioint.conversion_rate,true);
-			//Get procent
+			//- Get procent -
 			val = prm.at().vlAt("value");
 			if(!val.at().arch().freeStat() && val.at().arch().at().srcMode() == TVArchive::PassiveAttr)
 			{
@@ -577,7 +565,7 @@ void *TMdContr::AD_DSCTask( void *param )
 		    		val.at().arch().at().setR( 100.*(double)dscaioint.sample_values[voff+p_cnl-p_beg+i_smpl*p_cnt]/32768.,vtm+(long long)i_smpl*1000000/(int)dscaioint.conversion_rate);
 			}
 	    		val.at().setR( 100.*(double)dscaioint.sample_values[voff+p_cnl-p_beg+((int)dscaioint.conversion_rate-1)*p_cnt]/32768.,vtm+((long long)dscaioint.conversion_rate-1)*1000000/(int)dscaioint.conversion_rate,true);
-			//Get voltage
+			//- Get voltage -
 			//for( int i_smpl = 0; i_smpl < dscaioint.conversion_rate; i_smpl++ )
 			//	printf("Canal %d(%d): %xh\n",prm.at().cnl(),voff+prm.at().cnl()-p_beg+i_smpl*(p_end-p_beg+1),dscaioint.sample_values[voff+prm.at().cnl()-p_beg+i_smpl*(p_end-p_beg+1)]);
 		    }
@@ -600,7 +588,7 @@ void *TMdContr::AD_DSCTask( void *param )
 		    int p_cnl = prm.at().cnl();
             	    if(prm.at().type() != TMdPrm::AI || p_cnl < p_beg || p_cnl > p_end || !prm.at().enableStat() )
 		        continue;
-		    //Get code
+		    //- Get code -
 		    AutoHD<TVal> val = prm.at().vlAt("code");			
 		    if(!val.at().arch().freeStat() && val.at().arch().at().srcMode() == TVArchive::PassiveAttr)
 		    {
@@ -609,7 +597,7 @@ void *TMdContr::AD_DSCTask( void *param )
 			    val.at().arch().at().setI((int)((float)rand()*20000/RAND_MAX),vtm+(long long)i_smpl*1000000/convRate);
 		    }
 		    val.at().setI((int)((float)rand()*20000/RAND_MAX),vtm+((long long)convRate-1)*1000000/convRate,true);
-		    //Get procent
+		    //- Get procent -
 		    val = prm.at().vlAt("value");
 		    if(!val.at().arch().freeStat() && val.at().arch().at().srcMode() == TVArchive::PassiveAttr)
 		    {
@@ -622,7 +610,7 @@ void *TMdContr::AD_DSCTask( void *param )
 		vtm+=1000000;		
 	    	get_tm.tv_sec = vtm/1000000; get_tm.tv_nsec = 1000*(vtm%1000000);
 	    	clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&get_tm,NULL);
-	    }	
+	    }
     }catch( TError err )
     { 
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
@@ -643,7 +631,7 @@ void *TMdContr::AD_DSCTask( void *param )
 
 void TMdContr::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
         TController::cntrCmdProc(opt);
@@ -657,7 +645,8 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	    }
         return;
     }
-    //Process command to page
+    
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path.substr(0,11) == "/board/dio/" )    
     {
@@ -685,9 +674,9 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     else TController::cntrCmdProc(opt);
 }
 
-//======================================================================
-//==== TMdPrm 
-//======================================================================
+//*************************************************
+//* TMdPrm                                        *
+//*************************************************
 TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
     TParamContr(name,tp_prm), m_cnl(cfg("CNL").getId()), m_tp(NONE)
 {
@@ -703,8 +692,8 @@ void TMdPrm::postEnable( int flag )
 {
     TParamContr::postEnable( flag );
 
-    if( TParamContr::type().name == "a_prm" )     	type(AI);
-    else if( TParamContr::type().name == "d_prm" )	type(DI);
+    if( TParamContr::type().name == "a_prm" )     	setType(AI);
+    else if( TParamContr::type().name == "d_prm" )	setType(DI);
 }
 
 /*void TMdPrm::preDisable( int flag )
@@ -724,9 +713,9 @@ void TMdPrm::enable( )
     }
 }
 
-void TMdPrm::type( TMdPrm::Type vtp )
+void TMdPrm::setType( TMdPrm::Type vtp )
 {
-    //Free previos type
+    //- Free previos type -
     switch(m_tp)
     {
 	case AI: vlElemDet( &mod->elemAI() ); break;
@@ -735,7 +724,7 @@ void TMdPrm::type( TMdPrm::Type vtp )
 	case DO: vlElemDet( &mod->elemDO() ); break;
     }
     
-    //Init new type
+    //- Init new type -
     switch(vtp)
     {
 	case AI:    
@@ -760,13 +749,13 @@ void TMdPrm::type( TMdPrm::Type vtp )
 
 bool TMdPrm::cfgChange( TCfg &i_cfg )
 {
-    //Change TYPE parameter
+    //- Change TYPE parameter -
     if( i_cfg.name() == "TYPE" )
     {
-	if( i_cfg.getI() == 0 && type() == AO )		type(AI);
-	else if( i_cfg.getI() == 0 && type() == DO ) 	type(DI);
-	else if( i_cfg.getI() == 1 && type() == AI ) 	type(AO);
-        else if( i_cfg.getI() == 1 && type() == DI ) 	type(DO);
+	if( i_cfg.getI() == 0 && type() == AO )		setType(AI);
+	else if( i_cfg.getI() == 0 && type() == DO ) 	setType(DI);
+	else if( i_cfg.getI() == 1 && type() == AI ) 	setType(AO);
+        else if( i_cfg.getI() == 1 && type() == DI ) 	setType(DO);
 	else return false;
 	return true;
     }
@@ -808,7 +797,7 @@ void TMdPrm::vlSet( TVal &val )
 	}
 	case DO:
 	{
-	    //Get prev port stat
+	    //- Get prev port stat -
 	    owner().DSC.gen_res.resRequestW( );		//Request access to DSC
     	    pthread_mutex_lock(&owner().DSC.th_mut);	//Request DSC ready
 	    owner().DSC.comm = 4;

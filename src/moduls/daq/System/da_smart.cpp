@@ -1,13 +1,12 @@
 
 //OpenSCADA system module DAQ.System file: da_smart.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -35,9 +34,9 @@ using namespace SystemCntr;
 
 char *HddSmart::smartval_cmd = "smartctl -A -v N,raw48 /dev/";
 
-//======================================================================
-//==== HddSmart
-//======================================================================
+//*************************************************
+//* HddSmart                                      *
+//*************************************************
 HddSmart::HddSmart( )
 {
 
@@ -114,7 +113,7 @@ void HddSmart::getVal( TMdPrm *prm )
     
     string dev = prm->cfg("SUBT").getS();
     
-    //SMART Hdd info
+    //- SMART Hdd info -
     /*string cmd = "/usr/sbin/smartctl -i /dev/"+dev;	
     FILE *fp = popen(cmd.c_str(),"r");
     if( fp )
@@ -130,7 +129,8 @@ void HddSmart::getVal( TMdPrm *prm )
 	}	    
 	fclose(fp);    
     }*/   
-    //SMART atributes
+    
+    //- SMART atributes -
     string cmd = string(smartval_cmd)+dev;	
     FILE *fp = popen(cmd.c_str(),"r");
     if( fp ) 
@@ -183,4 +183,3 @@ void HddSmart::makeActiveDA( TMdContr *a_cntr )
         }
     }
 }
-

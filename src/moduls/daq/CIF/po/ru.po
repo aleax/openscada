@@ -3,43 +3,44 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: mod_cif.cpp:65 mod_cif.cpp:126 mod_cif.cpp:133 mod_cif.cpp:153
-#: mod_cif.cpp:585 mod_cif.cpp:586 mod_cif.cpp:587 mod_cif.cpp:588
-#: mod_cif.cpp:589 mod_cif.cpp:590 mod_cif.cpp:591 mod_cif.cpp:1043
-#: mod_cif.cpp:1122 mod_cif.cpp:1397 mod_cif.cpp:1508 mod_cif.h:84
+#: mod_cif.cpp:56 mod_cif.cpp:110 mod_cif.cpp:118 mod_cif.cpp:137
+#: mod_cif.cpp:570 mod_cif.cpp:571 mod_cif.cpp:572 mod_cif.cpp:573
+#: mod_cif.cpp:574 mod_cif.cpp:575 mod_cif.cpp:576 mod_cif.cpp:1076
+#: mod_cif.cpp:1087 mod_cif.cpp:1167 mod_cif.cpp:1451 mod_cif.cpp:1568
+#: mod_cif.h:85
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenScada 0.1.17\n"
+"Project-Id-Version: OpenSCADA.DAQ.CIF 0.9.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-04 16:20+0200\n"
-"PO-Revision-Date: 2004-03-20 10:37+0200\n"
+"POT-Creation-Date: 2007-10-28 09:21+0200\n"
+"PO-Revision-Date: 2007-10-28 09:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: mod_cif.cpp:40 mod_cif.cpp:553
+#: mod_cif.cpp:39 mod_cif.cpp:538
 msgid "CIF"
 msgstr ""
 
-#: mod_cif.cpp:41
+#: mod_cif.cpp:40
 msgid "Hilscher CIF CP"
 msgstr ""
 
-#: mod_cif.cpp:42
+#: mod_cif.cpp:41
 msgid "DAQ"
 msgstr ""
 
-#: mod_cif.cpp:44
+#: mod_cif.cpp:43
 msgid "0.5.0"
 msgstr ""
 
-#: mod_cif.cpp:45
+#: mod_cif.cpp:44
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-#: mod_cif.cpp:46
+#: mod_cif.cpp:45
 msgid ""
 "Allow data source, goes data from Hilscher CIF cards use MPI protocol. "
 "Support Siemens controllers S7 series."
@@ -48,15 +49,15 @@ msgstr ""
 "CIF с использованием протокола MPI. Поддерживаются контроллеры фирмы Siemens "
 "серии S7."
 
-#: mod_cif.cpp:47
+#: mod_cif.cpp:46
 msgid "GPL"
 msgstr ""
 
-#: mod_cif.cpp:52 cif_dev_i.h:52 cif_user.h:54 rcsdef.h:28 rcs_user.h:30
+#: mod_cif.cpp:51 cif_dev_i.h:52 cif_user.h:54 rcsdef.h:28 rcs_user.h:30
 msgid "C"
 msgstr ""
 
-#: mod_cif.cpp:114
+#: mod_cif.cpp:98
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
@@ -67,755 +68,772 @@ msgstr ""
 "-------- Параметры модульной секции <%s> в конфигурационном файле --------\n"
 "\n"
 
-#: mod_cif.cpp:126 mod_cif.cpp:132 mod_cif.cpp:668 mod_cif.cpp:686
+#: mod_cif.cpp:110 mod_cif.cpp:117 mod_cif.cpp:652 mod_cif.cpp:668
 msgid "PRM_BD"
 msgstr ""
 
-#: mod_cif.cpp:126
+#: mod_cif.cpp:110
 msgid "Parameteres table"
 msgstr "Таблица параметров"
 
-#: mod_cif.cpp:126
+#: mod_cif.cpp:110
 msgid "30"
 msgstr ""
 
-#: mod_cif.cpp:127 mod_cif.cpp:664
+#: mod_cif.cpp:111 mod_cif.cpp:649
 msgid "PERIOD"
 msgstr ""
 
-#: mod_cif.cpp:127
+#: mod_cif.cpp:111
 msgid "Request data period (ms)"
 msgstr "Период получения данных (мс)"
 
-#: mod_cif.cpp:127 mod_cif.cpp:141
+#: mod_cif.cpp:111 mod_cif.cpp:126
 msgid "5"
 msgstr ""
 
-#: mod_cif.cpp:127
+#: mod_cif.cpp:111
 msgid "1000"
 msgstr ""
 
-#: mod_cif.cpp:127
+#: mod_cif.cpp:111
 msgid "0;10000"
 msgstr ""
 
-#: mod_cif.cpp:128 mod_cif.cpp:664
+#: mod_cif.cpp:112 mod_cif.cpp:649
 msgid "PRIOR"
 msgstr ""
 
-#: mod_cif.cpp:128
+#: mod_cif.cpp:112
 msgid "Request task priority"
 msgstr "Уровень приоритета задачи получения данных"
 
-#: mod_cif.cpp:128 mod_cif.cpp:622
+#: mod_cif.cpp:112 mod_cif.cpp:607
 msgid "2"
 msgstr ""
 
-#: mod_cif.cpp:128 mod_cif.cpp:129 mod_cif.cpp:620 mod_cif.cpp:635
-#: mod_cif.cpp:641 mod_cif.cpp:1165 mod_cif.cpp:1303 mod_cif.cpp:1467
-#: mod_cif.cpp:1534
+#: mod_cif.cpp:112 mod_cif.cpp:113 mod_cif.cpp:115 mod_cif.cpp:605
+#: mod_cif.cpp:620 mod_cif.cpp:626 mod_cif.cpp:1210 mod_cif.cpp:1348
+#: mod_cif.cpp:1528 mod_cif.cpp:1592
 msgid "0"
 msgstr ""
 
-#: mod_cif.cpp:128
+#: mod_cif.cpp:112
 msgid "0;100"
 msgstr ""
 
-#: mod_cif.cpp:129 mod_cif.cpp:665
+#: mod_cif.cpp:113 mod_cif.cpp:650
 msgid "CIF_DEV"
 msgstr ""
 
-#: mod_cif.cpp:129
+#: mod_cif.cpp:113
 msgid "CIF board"
-msgstr ""
+msgstr "CIF плата"
 
-#: mod_cif.cpp:129 mod_cif.cpp:140 mod_cif.cpp:142 mod_cif.cpp:565
-#: mod_cif.cpp:621
+#: mod_cif.cpp:113 mod_cif.cpp:115 mod_cif.cpp:125 mod_cif.cpp:127
+#: mod_cif.cpp:550 mod_cif.cpp:606
 msgid "1"
 msgstr ""
 
-#: mod_cif.cpp:129
+#: mod_cif.cpp:113
 msgid "0;3"
 msgstr ""
 
-#: mod_cif.cpp:130 mod_cif.cpp:141 mod_cif.cpp:188 mod_cif.cpp:203
-#: mod_cif.cpp:665
+#: mod_cif.cpp:114 mod_cif.cpp:126 mod_cif.cpp:172 mod_cif.cpp:187
+#: mod_cif.cpp:650
 msgid "ADDR"
 msgstr ""
 
-#: mod_cif.cpp:130
+#: mod_cif.cpp:114
 msgid "Remote controller address"
 msgstr "Адрес удалённого контроллера"
 
-#: mod_cif.cpp:130 mod_cif.cpp:141 mod_cif.cpp:623
+#: mod_cif.cpp:114 mod_cif.cpp:126 mod_cif.cpp:608
 msgid "3"
 msgstr ""
 
-#: mod_cif.cpp:130
+#: mod_cif.cpp:114
 msgid "10"
 msgstr ""
 
-#: mod_cif.cpp:130
+#: mod_cif.cpp:114
 msgid "0;126"
 msgstr ""
 
-#: mod_cif.cpp:132
+#: mod_cif.cpp:115 mod_cif.cpp:650
+msgid "ASINC_WR"
+msgstr ""
+
+#: mod_cif.cpp:115
+msgid "Asynchronous write mode"
+msgstr "Асинхронный режим записи"
+
+#: mod_cif.cpp:117
 msgid "logic"
 msgstr ""
 
-#: mod_cif.cpp:132
+#: mod_cif.cpp:117
 msgid "Logical"
 msgstr "Логический"
 
-#: mod_cif.cpp:133 mod_cif.cpp:1095 mod_cif.cpp:1455
+#: mod_cif.cpp:118 mod_cif.cpp:1140 mod_cif.cpp:1516
 msgid "TMPL"
 msgstr ""
 
-#: mod_cif.cpp:133
+#: mod_cif.cpp:118
 msgid "Parameter template"
 msgstr "Шаблон параметра"
 
-#: mod_cif.cpp:133
+#: mod_cif.cpp:118
 msgid "50"
 msgstr ""
 
-#: mod_cif.cpp:135 mod_cif.cpp:1121 mod_cif.cpp:1219 mod_cif.cpp:1246
+#: mod_cif.cpp:120 mod_cif.cpp:1166 mod_cif.cpp:1264 mod_cif.cpp:1291
 msgid "PRM_ID"
 msgstr ""
 
-#: mod_cif.cpp:135
+#: mod_cif.cpp:120
 msgid "Parameter ID"
 msgstr "Идентификатор параметра"
 
-#: mod_cif.cpp:135 mod_cif.cpp:136
+#: mod_cif.cpp:120 mod_cif.cpp:121
 msgid "20"
 msgstr ""
 
-#: mod_cif.cpp:136 mod_cif.cpp:140 mod_cif.cpp:185 mod_cif.cpp:202
-#: mod_cif.cpp:1122 mod_cif.cpp:1224 mod_cif.cpp:1251
+#: mod_cif.cpp:121 mod_cif.cpp:125 mod_cif.cpp:169 mod_cif.cpp:186
+#: mod_cif.cpp:1167 mod_cif.cpp:1269 mod_cif.cpp:1296
 msgid "ID"
 msgstr ""
 
-#: mod_cif.cpp:137 mod_cif.cpp:1228 mod_cif.cpp:1229 mod_cif.cpp:1253
-#: mod_cif.cpp:1254
+#: mod_cif.cpp:122 mod_cif.cpp:1273 mod_cif.cpp:1274 mod_cif.cpp:1298
+#: mod_cif.cpp:1299
 msgid "VALUE"
 msgstr ""
 
-#: mod_cif.cpp:137
+#: mod_cif.cpp:122
 msgid "Value"
 msgstr "Значение"
 
-#: mod_cif.cpp:137
+#: mod_cif.cpp:122
 msgid "200"
 msgstr ""
 
-#: mod_cif.cpp:141
+#: mod_cif.cpp:126
 msgid "Address"
 msgstr "Адрес"
 
-#: mod_cif.cpp:142 mod_cif.cpp:189 mod_cif.cpp:204
+#: mod_cif.cpp:127 mod_cif.cpp:173 mod_cif.cpp:188
 msgid "SPEED"
 msgstr ""
 
-#: mod_cif.cpp:142
+#: mod_cif.cpp:127
 msgid "Speed"
 msgstr "Скорость"
 
-#: mod_cif.cpp:142 mod_cif.cpp:626
+#: mod_cif.cpp:127 mod_cif.cpp:611
 msgid "7"
 msgstr ""
 
-#: mod_cif.cpp:152
+#: mod_cif.cpp:136
 msgid "No device"
 msgstr "Нет устройства"
 
-#: mod_cif.cpp:162
+#: mod_cif.cpp:146
 msgid "h"
 msgstr ""
 
-#: mod_cif.cpp:165
+#: mod_cif.cpp:149
 msgid "help"
 msgstr ""
 
-#: mod_cif.cpp:182 mod_cif.cpp:199
+#: mod_cif.cpp:166 mod_cif.cpp:183
 msgid "_devs"
 msgstr ""
 
-#: mod_cif.cpp:186 mod_cif.cpp:205 mod_cif.cpp:686 mod_cif.cpp:1119
-#: mod_cif.cpp:1220 mod_cif.cpp:1247 mod_cif.cpp:1512 mod_cif.cpp:1517
-#: mod_cif.cpp:1548
+#: mod_cif.cpp:170 mod_cif.cpp:189 mod_cif.cpp:668 mod_cif.cpp:1164
+#: mod_cif.cpp:1265 mod_cif.cpp:1292 mod_cif.cpp:1572 mod_cif.cpp:1575
+#: mod_cif.cpp:1604 mod_cif.cpp:1623 mod_cif.cpp:1625
 msgid "."
 msgstr ""
 
-#: mod_cif.cpp:283
+#: mod_cif.cpp:268
 #, c-format
 msgid "CIF device %d or device driver error!"
 msgstr "Ошибка CIF устройства %d или драйвера!"
 
-#: mod_cif.cpp:291
+#: mod_cif.cpp:276
 #, c-format
 msgid "CIF device %d running (DevSetHostState(HOST_READY)) is error!"
 msgstr "Ошибка запуска (DevSetHostState(HOST_READY)) CIF устройства %d!"
 
-#: mod_cif.cpp:298
+#: mod_cif.cpp:283
 #, c-format
 msgid "CIF device %d. DevPutTaskParameter() error!"
 msgstr "CIF устройство %d. Ошибка DevPutTaskParameter()!"
 
-#: mod_cif.cpp:317
+#: mod_cif.cpp:302
 #, c-format
 msgid "CIF device %d. DevPutMessage() error!"
 msgstr "CIF устройство %d. Ошибка DevPutMessage()!"
 
-#: mod_cif.cpp:319
+#: mod_cif.cpp:304
 #, c-format
 msgid "CIF device %d. DevGetMessage() error!"
 msgstr "CIF устройство %d. Ошибка DevGetMessage()!"
 
-#: mod_cif.cpp:360
+#: mod_cif.cpp:345
 #, c-format
 msgid "Put request is error: %d."
 msgstr "Ошибка отправки сообщения: %d."
 
-#: mod_cif.cpp:362
+#: mod_cif.cpp:347
 #, c-format
 msgid "Get request is error: %d."
 msgstr "Ошибка получения сообщения: %d."
 
-#: mod_cif.cpp:379
+#: mod_cif.cpp:364
 msgid "14:Request block too big."
 msgstr "14:Запрошенный блок очень большой."
 
-#: mod_cif.cpp:381 mod_cif.cpp:457 mod_cif.cpp:516
+#: mod_cif.cpp:366 mod_cif.cpp:442 mod_cif.cpp:501
 #, c-format
 msgid "15:Board %d no present."
 msgstr "15:Плата %d отсутствует."
 
-#: mod_cif.cpp:412 mod_cif.cpp:490
+#: mod_cif.cpp:397 mod_cif.cpp:475
 msgid "12:Put request is timeouted."
 msgstr "12:Истекло время ожидания отправки сообщения."
 
-#: mod_cif.cpp:421 mod_cif.cpp:501
+#: mod_cif.cpp:406 mod_cif.cpp:486
 #, c-format
 msgid "19:Request to DB error %d."
 msgstr "19:Ошибка запроса DB: %d."
 
-#: mod_cif.cpp:423 mod_cif.cpp:503
+#: mod_cif.cpp:408 mod_cif.cpp:488
 msgid "13:Get request is timeouted."
 msgstr "13:Истекло время ожидания получения сообщения."
 
-#: mod_cif.cpp:424 mod_cif.cpp:504
+#: mod_cif.cpp:409 mod_cif.cpp:489
 msgid "17:No response of the remote station."
 msgstr "17:Нет ответа от удалённой станции."
 
-#: mod_cif.cpp:425 mod_cif.cpp:505
+#: mod_cif.cpp:410 mod_cif.cpp:490
 msgid "18:Master not into the logical token ring."
 msgstr "18:Мастер не внутри логического кольца."
 
-#: mod_cif.cpp:426 mod_cif.cpp:506
+#: mod_cif.cpp:411 mod_cif.cpp:491
 msgid "20:Specified offset address or DB error."
 msgstr "20:Ошибка в указанном смещении или БД."
 
-#: mod_cif.cpp:455
+#: mod_cif.cpp:440
 msgid "16:Transmit block too big."
 msgstr "16:Передаваемый блок очень большой."
 
-#: mod_cif.cpp:540
+#: mod_cif.cpp:525
 #, c-format
 msgid "12:Put request is error %d."
 msgstr "12:Ошибка отправки сообщения %d."
 
-#: mod_cif.cpp:542
+#: mod_cif.cpp:527
 #, c-format
 msgid "13:Get request is error %d."
 msgstr "13:Ошибка получения сообщения %d."
 
-#: mod_cif.cpp:550 mod_cif.cpp:1077 mod_cif.cpp:1452
+#: mod_cif.cpp:535 mod_cif.cpp:1121 mod_cif.cpp:1513
 msgid "info"
 msgstr ""
 
-#: mod_cif.cpp:553 mod_cif.cpp:555 mod_cif.cpp:570 mod_cif.cpp:1456
-#: mod_cif.cpp:1459
+#: mod_cif.cpp:538 mod_cif.cpp:540 mod_cif.cpp:555 mod_cif.cpp:1517
+#: mod_cif.cpp:1520
 msgid "area"
 msgstr ""
 
-#: mod_cif.cpp:553
+#: mod_cif.cpp:538
 msgid "/mod"
 msgstr ""
 
-#: mod_cif.cpp:555
+#: mod_cif.cpp:540
 msgid "/mod/st"
 msgstr ""
 
-#: mod_cif.cpp:555
+#: mod_cif.cpp:540
 msgid "Status"
 msgstr "Состояние"
 
-#: mod_cif.cpp:556 mod_cif.cpp:572 mod_cif.cpp:1080 mod_cif.cpp:1455
-#: mod_cif.cpp:1458 mod_cif.cpp:1476 mod_cif.cpp:1491
+#: mod_cif.cpp:541 mod_cif.cpp:557 mod_cif.cpp:1124 mod_cif.cpp:1516
+#: mod_cif.cpp:1519 mod_cif.cpp:1537 mod_cif.cpp:1552
 msgid "fld"
 msgstr ""
 
-#: mod_cif.cpp:556 mod_cif.cpp:579
+#: mod_cif.cpp:541 mod_cif.cpp:564
 msgid "/mod/st/drv"
 msgstr ""
 
-#: mod_cif.cpp:556
+#: mod_cif.cpp:541
 msgid "CIF driver"
 msgstr "CIF драйвер"
 
-#: mod_cif.cpp:556 mod_cif.cpp:557 mod_cif.cpp:559 mod_cif.cpp:560
-#: mod_cif.cpp:561 mod_cif.cpp:562 mod_cif.cpp:563 mod_cif.cpp:564
-#: mod_cif.cpp:565 mod_cif.cpp:572 mod_cif.cpp:573 mod_cif.cpp:604
-#: mod_cif.cpp:630 mod_cif.cpp:631 mod_cif.cpp:634 mod_cif.cpp:636
-#: mod_cif.cpp:740 mod_cif.cpp:1080 mod_cif.cpp:1455 mod_cif.cpp:1458
-#: mod_cif.cpp:1477 mod_cif.cpp:1492 mod_cif.cpp:1500 mod_cif.cpp:1533
-#: mod_cif.cpp:1535 mod_cif.cpp:1540 mod_cif.cpp:1542 mod_cif.cpp:1556
-#: mod_cif.cpp:1564
+#: mod_cif.cpp:541 mod_cif.cpp:542 mod_cif.cpp:544 mod_cif.cpp:545
+#: mod_cif.cpp:546 mod_cif.cpp:547 mod_cif.cpp:548 mod_cif.cpp:549
+#: mod_cif.cpp:550 mod_cif.cpp:557 mod_cif.cpp:558 mod_cif.cpp:589
+#: mod_cif.cpp:615 mod_cif.cpp:616 mod_cif.cpp:619 mod_cif.cpp:621
+#: mod_cif.cpp:723 mod_cif.cpp:1124 mod_cif.cpp:1516 mod_cif.cpp:1519
+#: mod_cif.cpp:1538 mod_cif.cpp:1553 mod_cif.cpp:1560 mod_cif.cpp:1591
+#: mod_cif.cpp:1593 mod_cif.cpp:1598 mod_cif.cpp:1607 mod_cif.cpp:1634
+#: mod_cif.cpp:1642
 msgid "root"
 msgstr ""
 
-#: mod_cif.cpp:556 mod_cif.cpp:559 mod_cif.cpp:560 mod_cif.cpp:561
-#: mod_cif.cpp:562 mod_cif.cpp:563 mod_cif.cpp:564 mod_cif.cpp:565
-#: mod_cif.cpp:572 mod_cif.cpp:573 mod_cif.cpp:1080 mod_cif.cpp:1455
-#: mod_cif.cpp:1458 mod_cif.cpp:1477 mod_cif.cpp:1492
+#: mod_cif.cpp:541 mod_cif.cpp:544 mod_cif.cpp:545 mod_cif.cpp:546
+#: mod_cif.cpp:547 mod_cif.cpp:548 mod_cif.cpp:549 mod_cif.cpp:550
+#: mod_cif.cpp:557 mod_cif.cpp:558 mod_cif.cpp:1124 mod_cif.cpp:1516
+#: mod_cif.cpp:1519 mod_cif.cpp:1538 mod_cif.cpp:1553
 msgid "tp"
 msgstr ""
 
-#: mod_cif.cpp:556 mod_cif.cpp:1458 mod_cif.cpp:1489
+#: mod_cif.cpp:541 mod_cif.cpp:1519 mod_cif.cpp:1550
 msgid "bool"
 msgstr ""
 
-#: mod_cif.cpp:557
+#: mod_cif.cpp:542
 msgid "table"
 msgstr ""
 
-#: mod_cif.cpp:557 mod_cif.cpp:580
+#: mod_cif.cpp:542 mod_cif.cpp:565
 msgid "/mod/dev"
 msgstr ""
 
-#: mod_cif.cpp:557
+#: mod_cif.cpp:542
 msgid "CIF devices"
 msgstr "CIF устройства"
 
-#: mod_cif.cpp:559 mod_cif.cpp:560 mod_cif.cpp:561 mod_cif.cpp:562
-#: mod_cif.cpp:563 mod_cif.cpp:564 mod_cif.cpp:565 mod_cif.cpp:573
-#: mod_cif.cpp:585 mod_cif.cpp:586 mod_cif.cpp:587 mod_cif.cpp:588
-#: mod_cif.cpp:589 mod_cif.cpp:590 mod_cif.cpp:591
+#: mod_cif.cpp:544 mod_cif.cpp:545 mod_cif.cpp:546 mod_cif.cpp:547
+#: mod_cif.cpp:548 mod_cif.cpp:549 mod_cif.cpp:550 mod_cif.cpp:558
+#: mod_cif.cpp:570 mod_cif.cpp:571 mod_cif.cpp:572 mod_cif.cpp:573
+#: mod_cif.cpp:574 mod_cif.cpp:575 mod_cif.cpp:576
 msgid "list"
 msgstr ""
 
-#: mod_cif.cpp:559 mod_cif.cpp:585
+#: mod_cif.cpp:544 mod_cif.cpp:570
 msgid "/mod/dev/brd"
 msgstr ""
 
-#: mod_cif.cpp:559
+#: mod_cif.cpp:544
 msgid "Board"
 msgstr "Плата"
 
-#: mod_cif.cpp:559 mod_cif.cpp:562 mod_cif.cpp:573 mod_cif.cpp:1455
-#: mod_cif.cpp:1477 mod_cif.cpp:1483
+#: mod_cif.cpp:544 mod_cif.cpp:547 mod_cif.cpp:558 mod_cif.cpp:1516
+#: mod_cif.cpp:1538 mod_cif.cpp:1544
 msgid "str"
 msgstr ""
 
-#: mod_cif.cpp:560 mod_cif.cpp:586
+#: mod_cif.cpp:545 mod_cif.cpp:571
 msgid "/mod/dev/fwnm"
 msgstr ""
 
-#: mod_cif.cpp:560
+#: mod_cif.cpp:545
 msgid "Firmware name"
 msgstr "Имя прошивки"
 
-#: mod_cif.cpp:560 mod_cif.cpp:1080 mod_cif.cpp:1488
+#: mod_cif.cpp:545 mod_cif.cpp:1124 mod_cif.cpp:1549
 msgid "real"
 msgstr ""
 
-#: mod_cif.cpp:561 mod_cif.cpp:587
+#: mod_cif.cpp:546 mod_cif.cpp:572
 msgid "/mod/dev/fwver"
 msgstr ""
 
-#: mod_cif.cpp:561
+#: mod_cif.cpp:546
 msgid "Firmware version"
 msgstr "Версия прошивки"
 
-#: mod_cif.cpp:561 mod_cif.cpp:563 mod_cif.cpp:564 mod_cif.cpp:565
-#: mod_cif.cpp:572 mod_cif.cpp:1487
+#: mod_cif.cpp:546 mod_cif.cpp:548 mod_cif.cpp:549 mod_cif.cpp:550
+#: mod_cif.cpp:557 mod_cif.cpp:1548
 msgid "dec"
 msgstr ""
 
-#: mod_cif.cpp:562 mod_cif.cpp:588
+#: mod_cif.cpp:547 mod_cif.cpp:573
 msgid "/mod/dev/phAddr"
 msgstr ""
 
-#: mod_cif.cpp:562
+#: mod_cif.cpp:547
 msgid "Physical address"
 msgstr "Физический адрес"
 
-#: mod_cif.cpp:563 mod_cif.cpp:589
+#: mod_cif.cpp:548 mod_cif.cpp:574
 msgid "/mod/dev/irq"
 msgstr ""
 
-#: mod_cif.cpp:563
+#: mod_cif.cpp:548
 msgid "IRQ"
 msgstr ""
 
-#: mod_cif.cpp:564 mod_cif.cpp:590
+#: mod_cif.cpp:549 mod_cif.cpp:575
 msgid "/mod/dev/addr"
 msgstr ""
 
-#: mod_cif.cpp:564
+#: mod_cif.cpp:549
 msgid "PB address"
 msgstr "PB адрес"
 
-#: mod_cif.cpp:565 mod_cif.cpp:591
+#: mod_cif.cpp:550 mod_cif.cpp:576
 msgid "/mod/dev/speed"
 msgstr ""
 
-#: mod_cif.cpp:565
+#: mod_cif.cpp:550
 msgid "PB speed"
 msgstr "PB скорость"
 
-#: mod_cif.cpp:565
+#: mod_cif.cpp:550
 msgid "idm"
 msgstr ""
 
-#: mod_cif.cpp:565 mod_cif.cpp:1455
+#: mod_cif.cpp:550 mod_cif.cpp:1516
 msgid "dest"
 msgstr ""
 
-#: mod_cif.cpp:565 mod_cif.cpp:1455
+#: mod_cif.cpp:550 mod_cif.cpp:1516
 msgid "select"
 msgstr ""
 
-#: mod_cif.cpp:565 mod_cif.cpp:618
+#: mod_cif.cpp:550 mod_cif.cpp:603
 msgid "/mod/dev/lsspd"
 msgstr ""
 
-#: mod_cif.cpp:567 mod_cif.cpp:568
+#: mod_cif.cpp:552 mod_cif.cpp:553
 msgid "comm"
 msgstr ""
 
-#: mod_cif.cpp:567 mod_cif.cpp:630
+#: mod_cif.cpp:552 mod_cif.cpp:615
 msgid "/mod/load"
 msgstr ""
 
-#: mod_cif.cpp:567
+#: mod_cif.cpp:552
 msgid "Load"
 msgstr "Загрузить"
 
-#: mod_cif.cpp:568 mod_cif.cpp:631
+#: mod_cif.cpp:553 mod_cif.cpp:616
 msgid "/mod/save"
 msgstr ""
 
-#: mod_cif.cpp:568
+#: mod_cif.cpp:553
 msgid "Save"
 msgstr "Сохранить"
 
-#: mod_cif.cpp:570
+#: mod_cif.cpp:555
 msgid "/PB"
 msgstr ""
 
-#: mod_cif.cpp:570
+#: mod_cif.cpp:555
 msgid "Profibus"
 msgstr ""
 
-#: mod_cif.cpp:572 mod_cif.cpp:632
+#: mod_cif.cpp:557 mod_cif.cpp:617
 msgid "/PB/dev"
 msgstr ""
 
-#: mod_cif.cpp:572
+#: mod_cif.cpp:557
 msgid "CIF device"
 msgstr "CIF устройство"
 
-#: mod_cif.cpp:573 mod_cif.cpp:639
+#: mod_cif.cpp:558 mod_cif.cpp:624
 msgid "/PB/lifels"
 msgstr ""
 
-#: mod_cif.cpp:573
+#: mod_cif.cpp:558
 msgid "Life stations list"
 msgstr "Список живых станций"
 
-#: mod_cif.cpp:578 mod_cif.cpp:1084 mod_cif.cpp:1499
+#: mod_cif.cpp:563 mod_cif.cpp:1129 mod_cif.cpp:1508
 msgid "path"
 msgstr ""
 
-#: mod_cif.cpp:595 mod_cif.cpp:596 mod_cif.cpp:597 mod_cif.cpp:598
-#: mod_cif.cpp:599 mod_cif.cpp:600 mod_cif.cpp:601 mod_cif.cpp:620
-#: mod_cif.cpp:621 mod_cif.cpp:622 mod_cif.cpp:623 mod_cif.cpp:624
-#: mod_cif.cpp:625 mod_cif.cpp:626 mod_cif.cpp:627 mod_cif.cpp:628
-#: mod_cif.cpp:649 mod_cif.cpp:650 mod_cif.cpp:651 mod_cif.cpp:654
-#: mod_cif.cpp:1509 mod_cif.cpp:1514 mod_cif.cpp:1529
+#: mod_cif.cpp:580 mod_cif.cpp:581 mod_cif.cpp:582 mod_cif.cpp:583
+#: mod_cif.cpp:584 mod_cif.cpp:585 mod_cif.cpp:586 mod_cif.cpp:605
+#: mod_cif.cpp:606 mod_cif.cpp:607 mod_cif.cpp:608 mod_cif.cpp:609
+#: mod_cif.cpp:610 mod_cif.cpp:611 mod_cif.cpp:612 mod_cif.cpp:613
+#: mod_cif.cpp:634 mod_cif.cpp:635 mod_cif.cpp:636 mod_cif.cpp:639
+#: mod_cif.cpp:1569 mod_cif.cpp:1573 mod_cif.cpp:1587
 msgid "el"
 msgstr ""
 
-#: mod_cif.cpp:604 mod_cif.cpp:630 mod_cif.cpp:631 mod_cif.cpp:636
-#: mod_cif.cpp:1500 mod_cif.cpp:1535 mod_cif.cpp:1542 mod_cif.cpp:1564
+#: mod_cif.cpp:589 mod_cif.cpp:615 mod_cif.cpp:616 mod_cif.cpp:621
+#: mod_cif.cpp:1560 mod_cif.cpp:1593 mod_cif.cpp:1607 mod_cif.cpp:1642
 msgid "set"
 msgstr ""
 
-#: mod_cif.cpp:606
+#: mod_cif.cpp:591
 msgid "row"
 msgstr ""
 
-#: mod_cif.cpp:607
+#: mod_cif.cpp:592
 msgid "col"
 msgstr ""
 
-#: mod_cif.cpp:608
+#: mod_cif.cpp:593
 #, c-format
 msgid "Board number %d error!"
 msgstr "Ошибка номера платы %d!"
 
-#: mod_cif.cpp:609 mod_cif.cpp:615
+#: mod_cif.cpp:594 mod_cif.cpp:600
 msgid "addr"
 msgstr ""
 
-#: mod_cif.cpp:614 mod_cif.cpp:615
+#: mod_cif.cpp:599 mod_cif.cpp:600
 msgid "speed"
 msgstr ""
 
-#: mod_cif.cpp:620 mod_cif.cpp:621 mod_cif.cpp:622 mod_cif.cpp:623
-#: mod_cif.cpp:624 mod_cif.cpp:625 mod_cif.cpp:626 mod_cif.cpp:627
-#: mod_cif.cpp:628
+#: mod_cif.cpp:605 mod_cif.cpp:606 mod_cif.cpp:607 mod_cif.cpp:608
+#: mod_cif.cpp:609 mod_cif.cpp:610 mod_cif.cpp:611 mod_cif.cpp:612
+#: mod_cif.cpp:613
 msgid "id"
 msgstr ""
 
-#: mod_cif.cpp:620
+#: mod_cif.cpp:605
 msgid "9600Baud"
 msgstr "9600Бод"
 
-#: mod_cif.cpp:621
+#: mod_cif.cpp:606
 msgid "19.2kBaud"
 msgstr "19.2kБод"
 
-#: mod_cif.cpp:622
+#: mod_cif.cpp:607
 msgid "93.75kBaud"
 msgstr "93.75kБод"
 
-#: mod_cif.cpp:623
+#: mod_cif.cpp:608
 msgid "187.5kBaud"
 msgstr "187.5kБод"
 
-#: mod_cif.cpp:624
+#: mod_cif.cpp:609
 msgid "4"
 msgstr ""
 
-#: mod_cif.cpp:624
+#: mod_cif.cpp:609
 msgid "500kBaud"
 msgstr "500kБод"
 
-#: mod_cif.cpp:625
+#: mod_cif.cpp:610
 msgid "6"
 msgstr ""
 
-#: mod_cif.cpp:625
+#: mod_cif.cpp:610
 msgid "1.5MBaud"
 msgstr "1.5MБод"
 
-#: mod_cif.cpp:626
+#: mod_cif.cpp:611
 msgid "3MBaud"
 msgstr "3MБод"
 
-#: mod_cif.cpp:627
+#: mod_cif.cpp:612
 msgid "8"
 msgstr ""
 
-#: mod_cif.cpp:627
+#: mod_cif.cpp:612
 msgid "6MBaud"
 msgstr "6МБод"
 
-#: mod_cif.cpp:628
+#: mod_cif.cpp:613
 msgid "9"
 msgstr ""
 
-#: mod_cif.cpp:628
+#: mod_cif.cpp:613
 msgid "12MBaud"
 msgstr "12МБод"
 
-#: mod_cif.cpp:634 mod_cif.cpp:1533 mod_cif.cpp:1540 mod_cif.cpp:1556
+#: mod_cif.cpp:619 mod_cif.cpp:1591 mod_cif.cpp:1598 mod_cif.cpp:1634
 msgid "get"
 msgstr ""
 
-#: mod_cif.cpp:635 mod_cif.cpp:637 mod_cif.cpp:641
+#: mod_cif.cpp:620 mod_cif.cpp:622 mod_cif.cpp:626
 msgid "lifeLsDev"
 msgstr ""
 
-#: mod_cif.cpp:635 mod_cif.cpp:637 mod_cif.cpp:641 mod_cif.cpp:1467
-#: mod_cif.cpp:1534 mod_cif.cpp:1536
+#: mod_cif.cpp:620 mod_cif.cpp:622 mod_cif.cpp:626 mod_cif.cpp:1528
+#: mod_cif.cpp:1592 mod_cif.cpp:1594
 msgid "user"
 msgstr ""
 
-#: mod_cif.cpp:649
+#: mod_cif.cpp:634
 msgid " : -------"
 msgstr ""
 
-#: mod_cif.cpp:650
+#: mod_cif.cpp:635
 msgid " : Active station"
 msgstr " : Активная станция"
 
-#: mod_cif.cpp:651
+#: mod_cif.cpp:636
 msgid " : Passive station"
 msgstr " : Пассивная станция"
 
-#: mod_cif.cpp:668
+#: mod_cif.cpp:652
 msgid "CIFPrm_"
 msgstr ""
 
-#: mod_cif.cpp:686 mod_cif.cpp:1119 mod_cif.cpp:1123 mod_cif.cpp:1220
-#: mod_cif.cpp:1225 mod_cif.cpp:1247 mod_cif.cpp:1255
+#: mod_cif.cpp:668 mod_cif.cpp:1164 mod_cif.cpp:1168 mod_cif.cpp:1265
+#: mod_cif.cpp:1270 mod_cif.cpp:1292 mod_cif.cpp:1300
 msgid "_io"
 msgstr ""
 
-#: mod_cif.cpp:691 mod_cif.cpp:1051 mod_cif.cpp:1126 mod_cif.cpp:1443
+#: mod_cif.cpp:673 mod_cif.cpp:1095 mod_cif.cpp:1171 mod_cif.cpp:1500
 #, c-format
 msgid "%s"
 msgstr ""
 
-#: mod_cif.cpp:725
+#: mod_cif.cpp:708
 msgid "Driver or one boards no present."
 msgstr "Нет ни одного CP или драйвера."
 
-#: mod_cif.cpp:748
+#: mod_cif.cpp:731
 msgid "start"
 msgstr ""
 
-#: mod_cif.cpp:749
+#: mod_cif.cpp:732
 msgid "Acquisition task no started!"
 msgstr "Задача сбора данных не запущена!"
 
-#: mod_cif.cpp:760
+#: mod_cif.cpp:743
 msgid "stop"
 msgstr ""
 
-#: mod_cif.cpp:761
+#: mod_cif.cpp:744
 msgid "Acquisition task no stoped!"
 msgstr "Задача сбора данных не остановлена!"
 
-#: mod_cif.cpp:829 mod_cif.cpp:857 mod_cif.cpp:883 mod_cif.cpp:904
-#: mod_cif.h:199
+#: mod_cif.cpp:853 mod_cif.cpp:881 mod_cif.cpp:907 mod_cif.cpp:928
+#: mod_cif.h:202
 msgid "11:Value not gathered."
 msgstr "11:Значения не получены."
 
-#: mod_cif.cpp:830 mod_cif.cpp:858 mod_cif.cpp:884 mod_cif.cpp:905
+#: mod_cif.cpp:854 mod_cif.cpp:882 mod_cif.cpp:908 mod_cif.cpp:929
 msgid "10:CIF device error."
 msgstr "10:Ошибка CIF устройства."
 
-#: mod_cif.cpp:1016
+#: mod_cif.cpp:1046
 msgid "Value type is error."
 msgstr "Ошибка в типе значения."
 
-#: mod_cif.cpp:1080 mod_cif.cpp:1085
+#: mod_cif.cpp:1124 mod_cif.cpp:1130
 msgid "/cntr/st/acq_tm"
 msgstr ""
 
-#: mod_cif.cpp:1080
+#: mod_cif.cpp:1124
 msgid "Acquisition time (ms)"
 msgstr "Время сбора (мс)"
 
-#: mod_cif.cpp:1093
+#: mod_cif.cpp:1138
 msgid "CIFprm"
 msgstr ""
 
-#: mod_cif.cpp:1093
+#: mod_cif.cpp:1138
 msgid "cif_attr"
 msgstr ""
 
-#: mod_cif.cpp:1174
+#: mod_cif.cpp:1219
 msgid "f_frq"
 msgstr ""
 
-#: mod_cif.cpp:1175
+#: mod_cif.cpp:1220
 msgid "f_start"
 msgstr ""
 
-#: mod_cif.cpp:1176
+#: mod_cif.cpp:1221
 msgid "f_stop"
 msgstr ""
 
-#: mod_cif.cpp:1177
+#: mod_cif.cpp:1222
 msgid "f_err"
 msgstr ""
 
-#: mod_cif.cpp:1263 mod_cif.cpp:1299
+#: mod_cif.cpp:1308 mod_cif.cpp:1344
 msgid "err"
 msgstr ""
 
-#: mod_cif.cpp:1266
+#: mod_cif.cpp:1311
 msgid "1:Parameter had disabled."
 msgstr "1:Параметр отключен."
 
-#: mod_cif.cpp:1268
+#: mod_cif.cpp:1313
 msgid "2:Controller is stoped."
-msgstr ""
+msgstr "2:Контроллер остановлен."
 
-#: mod_cif.cpp:1340 mod_cif.cpp:1347 mod_cif.cpp:1357
+#: mod_cif.cpp:1394 mod_cif.cpp:1401 mod_cif.cpp:1411
 msgid "Parameter disabled."
 msgstr "Параметр отключен."
 
-#: mod_cif.cpp:1367
+#: mod_cif.cpp:1421
 msgid "Parameter disabled or id error."
 msgstr "Параметр отключен или ошибка идентификатора."
 
-#: mod_cif.cpp:1379
+#: mod_cif.cpp:1433
 #, c-format
 msgid "DB%d.%d.%d"
 msgstr ""
 
-#: mod_cif.cpp:1382
+#: mod_cif.cpp:1436
 #, c-format
 msgid "DB%d.%d"
 msgstr ""
 
-#: mod_cif.cpp:1444
+#: mod_cif.cpp:1501
 msgid "Error calc template."
 msgstr "Ошибка вычисления шаблона."
 
-#: mod_cif.cpp:1455 mod_cif.cpp:1500
+#: mod_cif.cpp:1509
+msgid "/serv/"
+msgstr ""
+
+#: mod_cif.cpp:1516 mod_cif.cpp:1560
 msgid "/prm/cfg/TMPL"
 msgstr ""
 
-#: mod_cif.cpp:1455
+#: mod_cif.cpp:1516
 msgid "sel_ed"
 msgstr ""
 
-#: mod_cif.cpp:1455 mod_cif.cpp:1505
+#: mod_cif.cpp:1516 mod_cif.cpp:1565
 msgid "/cfg/prmp_lst"
 msgstr ""
 
-#: mod_cif.cpp:1456
+#: mod_cif.cpp:1517
 msgid "/cfg"
 msgstr ""
 
-#: mod_cif.cpp:1456
+#: mod_cif.cpp:1517
 msgid "Template config"
 msgstr "Конфигурация шаблона"
 
-#: mod_cif.cpp:1458 mod_cif.cpp:1531
+#: mod_cif.cpp:1519 mod_cif.cpp:1589
 msgid "/cfg/only_off"
 msgstr ""
 
-#: mod_cif.cpp:1458
+#: mod_cif.cpp:1519
 msgid "Only DB offsets show"
 msgstr "Показывать только смещения"
 
-#: mod_cif.cpp:1459
+#: mod_cif.cpp:1520
 msgid "/cfg/prm"
 msgstr ""
 
-#: mod_cif.cpp:1459
+#: mod_cif.cpp:1520
 msgid "Parameters"
 msgstr "Параметры"
 
-#: mod_cif.cpp:1467 mod_cif.cpp:1534 mod_cif.cpp:1536
+#: mod_cif.cpp:1528 mod_cif.cpp:1592 mod_cif.cpp:1594
 msgid "onlOff"
 msgstr ""
 
-#: mod_cif.cpp:1476 mod_cif.cpp:1538
+#: mod_cif.cpp:1537 mod_cif.cpp:1596
 msgid "/cfg/prm/pr_"
 msgstr ""
 
-#: mod_cif.cpp:1491 mod_cif.cpp:1554
+#: mod_cif.cpp:1552 mod_cif.cpp:1632
 msgid "/cfg/prm/el_"
+msgstr ""
+
+#: mod_cif.cpp:1619
+#, c-format
+msgid "%d.%d"
 msgstr ""
 
 #: cif_types.h:54

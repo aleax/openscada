@@ -235,7 +235,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
     if( a_path == "/func/st/st" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(run_st?"1":"0");
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	start(atoi(opt->text().c_str()));
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setStart(atoi(opt->text().c_str()));
     }
     else if( a_path == "/func/cfg/id" && ctrChkNode(opt) )	opt->setText(id());
     else if( a_path == "/func/cfg/name" && ctrChkNode(opt) )	opt->setText(name());

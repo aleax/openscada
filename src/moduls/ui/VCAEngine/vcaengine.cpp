@@ -1,23 +1,22 @@
 
 //OpenSCADA system module UI.VCAEngine file: vcaengine.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2007 by Roman Savochenko
- *   rom_as@diyaorg.dp.ua
- *
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation; either version 2 of the License, or
- *   (at your option) any later version.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, write to the
- *   Free Software Foundation, Inc.,
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *   Copyright (C) 2006-2007 by Roman Savochenko                           * 
+ *   rom_as@fromru.com                                                     *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; version 2 of the License.               *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
 #include <getopt.h>
@@ -30,17 +29,18 @@
 #include "origwidg.h"
 #include "vcaengine.h"
 
-//============ Modul info! =====================================================
+//*************************************************
+//* Modul info!                                   *
 #define MOD_ID      "VCAEngine"
 #define MOD_NAME    "Visual control area engine"
 #define MOD_TYPE    "UI"
 #define MOD_SUBTYPE "VCAEngine"
 #define VER_TYPE    VER_UI
-#define VERSION     "0.0.1"
+#define VERSION     "0.5.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Generic visual control area engine."
 #define LICENSE     "GPL"
-//==============================================================================
+//*************************************************
 
 VCA::Engine *VCA::mod;
 
@@ -48,34 +48,22 @@ extern "C"
 {
     TModule::SAt module( int n_mod )
     {
-    	TModule::SAt AtMod;
-
-	if(n_mod==0)
-	{
-	    AtMod.id	= MOD_ID;
-	    AtMod.type  = MOD_TYPE;
-    	    AtMod.t_ver = VER_TYPE;
-	}
-	else AtMod.id	= "";
-
-	return AtMod;
+	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	return TModule::SAt("");
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	VCA::Engine *self_addr = NULL;
-
-	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = VCA::mod = new VCA::Engine( source );
-
-	return self_addr;
+	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
+	    return new VCA::Engine( source );
+	return NULL;
     }
 }
 
 using namespace VCA;
 
 //************************************************
-//* VCA::Engine                                  *
+//* Engine                                       *
 //************************************************
 Engine::Engine( string name )
 {
@@ -87,13 +75,15 @@ Engine::Engine( string name )
     mDescr  	= DESCRIPTION;
     mLicense   	= LICENSE;
     mSource    	= name;
+    
+    mod		= this;
 
     id_wlb = grpAdd("wlb_");
     id_prj = grpAdd("prj_");
     id_ses = grpAdd("ses_");
 }
 
-Engine::~Engine()
+Engine::~Engine( )
 {
     nodeDelAll();
 }
@@ -316,7 +306,8 @@ void Engine::modLoad( )
                 {
                     string prj_id = c_el.cfg("ID").getS();
         	    c_el.cfg("ID").setS("");		    
-                    if( !prjPresent(prj_id) )	prjAdd(prj_id,"",(wbd==SYS->workDB())?"*.*":wbd);
+                    if( !prjPresent(prj_id) )
+			prjAdd(prj_id,"",(wbd==SYS->workDB())?"*.*":wbd);
                 }
             }
         }
@@ -330,7 +321,7 @@ void Engine::modLoad( )
             if( !prjPresent(prj_id) )	prjAdd(prj_id,"","*.*");
 	}
 
-	//--- Load present libraries ---
+	//--- Load present projects ---
         prjList(tdb_ls);
         for( int el_id = 0; el_id < tdb_ls.size(); el_id++ )
     	    prjAt(tdb_ls[el_id]).at().load();

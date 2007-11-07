@@ -6,8 +6,7 @@
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -47,14 +46,15 @@ class TMdContr;
 class TMdPrm : public TParamContr
 {
     public:
+	//Methods
     	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );
 
 	void enable( );
 	void disable( );
 
-	TElem &elem()		{ return p_el; }
-	TMdContr &owner()	{ return (TMdContr&)TParamContr::owner(); }
+	TElem &elem( )		{ return p_el; }
+	TMdContr &owner( )	{ return (TMdContr&)TParamContr::owner(); }
 	
     private:
 	//Methods
@@ -72,14 +72,13 @@ class TMdPrm : public TParamContr
 //******************************************************
 class TMdContr: public TController
 {
-    //friend class TMdPrm;
     public:
 	//Methods
     	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem);
-	~TMdContr();   
+	~TMdContr( );
 
-	double period()		{ return m_per; }
-	int    prior()		{ return m_prior; }
+	double period( )	{ return m_per; }
+	int    prior( )		{ return m_prior; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
@@ -95,6 +94,7 @@ class TMdContr: public TController
 	bool    isErr;		//Error present
 
     protected:
+	//Methods
     	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
     private:
@@ -129,8 +129,9 @@ class TMdContr: public TController
 class TTpContr: public TTipDAQ
 {
     public:
+	//Methods
     	TTpContr( string name );
-	~TTpContr();
+	~TTpContr( );
 	
 	void postEnable( int flag );
 	void modLoad( );

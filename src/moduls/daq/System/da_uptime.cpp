@@ -1,13 +1,12 @@
 
 //OpenSCADA system module DAQ.System file: da_uptime.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -29,14 +28,14 @@
 
 using namespace SystemCntr;
 
-//======================================================================
-//==== UpTime
-//======================================================================
+//*************************************************
+//* UpTime                                        *
+//*************************************************
 UpTime::UpTime( )
 {
     st_tm = time(NULL);
     
-    //Uptime value structure
+    //- Uptime value structure -
     fldAdd( new TFld("full",_("Full seconds"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
     fldAdd( new TFld("sec",_("Seconds"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
     fldAdd( new TFld("min",_("Minutes"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
@@ -44,14 +43,14 @@ UpTime::UpTime( )
     fldAdd( new TFld("day",_("Days"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
 }
 
-UpTime::~UpTime()
+UpTime::~UpTime( )
 {
 
 }
     
 void UpTime::init( TMdPrm *prm )
 {
-    //Create config
+    //- Create config -
     TCfg &c_subt = prm->cfg("SUBT");
     c_subt.fld().setDescr("");
 			
@@ -118,5 +117,4 @@ void UpTime::makeActiveDA( TMdContr *a_cntr )
 	a_cntr->at(ap_nm).at().cfg("SUBT").setS("stat");
 	a_cntr->at(ap_nm).at().cfg("EN").setB(true);
     }
-}									    
-				
+}

@@ -1,13 +1,12 @@
 
 //OpenSCADA system module UI.QTStarter file: tuimod.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -38,7 +37,8 @@
 #include <tmess.h>
 #include "tuimod.h"
 
-//============ Modul info! =====================================================
+//*************************************************
+//* Modul info!                                   *
 #define MOD_ID      "QTStarter"
 #define MOD_NAME    "QT GUI starter"
 #define MOD_TYPE    "UI"
@@ -47,7 +47,7 @@
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow QT GUI starter. It is single for all QT GUI modules!"
 #define LICENSE     "GPL"
-//==============================================================================
+//*************************************************
 
 QTStarter::TUIMod *QTStarter::mod;
 
@@ -55,37 +55,23 @@ extern "C"
 {
     TModule::SAt module( int n_mod )
     {
-    	TModule::SAt AtMod;
-
-	if(n_mod==0)
-	{
-	    AtMod.id	= MOD_ID;
-	    AtMod.type  = MOD_TYPE;
-    	    AtMod.t_ver = VER_TYPE;
-	}
-	else
-	    AtMod.id	= "";
-
-	return AtMod;
+	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	return TModule::SAt("");
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	QTStarter::TUIMod *self_addr = NULL;
-
-	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = QTStarter::mod = new QTStarter::TUIMod( source );
-
-	return self_addr;
+	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
+	    return new QTStarter::TUIMod( source );
+	return NULL;
     }    
 }
 
 using namespace QTStarter;
 
-//==============================================================================
-//================= QTStarter::TUIMod ==========================================
-//==============================================================================
-
+//*************************************************
+//* TUIMod                                        *
+//*************************************************
 TUIMod::TUIMod( string name ) : end_run(false), demon_mode(false)
 {
     mId		= MOD_ID;
@@ -96,6 +82,8 @@ TUIMod::TUIMod( string name ) : end_run(false), demon_mode(false)
     mDescr  	= DESCRIPTION;
     mLicense   	= LICENSE;
     mSource    	= name;
+    
+    mod		= this;
 }
 
 TUIMod::~TUIMod()
@@ -109,7 +97,7 @@ void TUIMod::modLoad( )
     mess_debug(nodePath().c_str(),_("Load module."));
 #endif
 
-    //========== Load parameters from command line ============
+    //- Load parameters from command line -
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -131,7 +119,7 @@ void TUIMod::modLoad( )
         }
     } while(next_opt != -1);
     
-    //========== Load parameters from config file =============
+    //- Load parameters from config file -
     start_mod = TBDS::genDBGet(nodePath()+"StartMod",start_mod);
 }
 
@@ -148,7 +136,7 @@ void TUIMod::postEnable( int flag )
 {
     TModule::postEnable(flag);
     
-    //Set QT environments    
+    //- Set QT environments -
     QTextCodec::setCodecForCStrings( QTextCodec::codecForLocale () ); //codepage for QT across QString recode!
 }
 
@@ -213,13 +201,13 @@ void *TUIMod::Task( void * )
     mod->run_st = true;
     
     int op_wnd = 0;
-    //------------- Start external modules ----------------
+    //- Start external modules -
     mod->owner().modList(list);
     for( unsigned i_l = 0; i_l < list.size(); i_l++ )
 	if( mod->owner().modAt(list[i_l]).at().modInfo("SubType") == "QT" &&
 		mod->owner().modAt(list[i_l]).at().modFuncPresent("QMainWindow *openWindow();") )
 	{
-	    //Search module into start list
+	    //-- Search module into start list --
 	    int i_off = 0;
 	    string s_el;
 	    while( (s_el=TSYS::strSepParse(mod->start_mod,0,';',&i_off)).size() )
@@ -227,7 +215,8 @@ void *TUIMod::Task( void * )
 	    if( !s_el.empty() || !i_off ) 
 		if(winCntr->callQTModule(list[i_l])) op_wnd++;
 	}
-    //-------------- Start call dialog --------------------
+    
+    //- Start call dialog -
     if(!op_wnd) winCntr->startDialog( );
 	
     QObject::connect( QtApp, SIGNAL(lastWindowClosed()), winCntr, SLOT(lastWinClose()) );
@@ -243,7 +232,7 @@ void *TUIMod::Task( void * )
 
 void TUIMod::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
         TUI::cntrCmdProc(opt);
@@ -256,7 +245,8 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
         ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
 	return;
     }
-    //Process command to page
+    
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/prm/cfg/st_mod" )
     {
@@ -269,7 +259,9 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     else TUI::cntrCmdProc(opt);
 }		    
 
-//=========================== Windows control =====================
+//*************************************************
+//* WinControl: Windows control                   *
+//*************************************************
 WinControl::WinControl( bool &iend_run ) : end_run(iend_run)
 {
     tm = new QTimer(this);
@@ -313,7 +305,7 @@ bool WinControl::callQTModule( const string &nm )
     QMainWindow *new_wnd = ((&qt_mod.at())->*openWindow)( );
     if(!new_wnd) return false;
 
-    //Make QT starter toolbar
+    //- Make QT starter toolbar -
     QToolBar *toolBar = new QToolBar(_("QTStarter toolbar"), new_wnd);
     toolBar->setObjectName("QTStarterTool");
     new_wnd->addToolBar(toolBar);

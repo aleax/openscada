@@ -6,8 +6,7 @@
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -28,17 +27,17 @@
 
 #include "modbus_client.h"
 
-//******************************************************
-//* Modul info!                                        *
+//*************************************************
+//* Modul info!                                   *
 #define MOD_ID      "ModBus"
 #define MOD_NAME    "ModBus client"
 #define MOD_TYPE    "DAQ"
 #define VER_TYPE    VER_CNTR
-#define VERSION     "0.1.0"
+#define VERSION     "0.4.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow realising of ModBus client service. On time realised only Modbus TCP/IP"
 #define LICENSE     "GPL"
-//******************************************************
+//*************************************************
 
 ModBusDAQ::TTpContr *ModBusDAQ::mod;  //Pointer for direct access to module
 
@@ -46,28 +45,15 @@ extern "C"
 {
     TModule::SAt module( int n_mod )
     {
-	TModule::SAt AtMod;
-
-	if(n_mod==0)
-	{
-	    AtMod.id	= MOD_ID;
-	    AtMod.type  = MOD_TYPE;
-	    AtMod.t_ver = VER_TYPE;
-	}
-	else
-    	    AtMod.id	= "";
-
-	return AtMod;
+	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	return TModule::SAt("");
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	ModBusDAQ::TTpContr *self_addr = NULL;
-
-    	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = ModBusDAQ::mod = new ModBusDAQ::TTpContr( source );
-
-	return self_addr;
+    	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
+	    return new ModBusDAQ::TTpContr( source );
+	return NULL;
     }
 }
 
@@ -86,6 +72,8 @@ TTpContr::TTpContr( string name )
     mDescr  	= DESCRIPTION;
     mLicense   	= LICENSE;
     mSource    	= name;
+    
+    mod		= this;
 }
 
 TTpContr::~TTpContr()
@@ -139,6 +127,7 @@ void TTpContr::postEnable( int flag )
     fldAdd( new TFld("TRANSP",_("Connection transport"),TFld::String,TFld::NoFlag,"30","Sockets") );
     fldAdd( new TFld("ADDR",_("Remote host address"),TFld::String,TFld::NoFlag,"30","") );
     fldAdd( new TFld("NODE",_("Server destination node"),TFld::Integer,TFld::NoFlag,"20","1","0;255") );
+    
     //- Parameter type bd structure -
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
     tpPrmAt(t_prm).fldAdd( new TFld("ATTR_LS",_("Attributes list (next line separated)"),TFld::String,TFld::FullText,"100","") );
@@ -244,7 +233,7 @@ string TMdContr::modBusReq( string &pdu )
     unsigned char buf[1000];
     AutoHD<TTransportOut> tr = SYS->transport().at().at(m_tr).at().outAt(mod->modId()+id());
     
-    //-- Encode MBAP (Modbus Application Protocol)
+    //- Encode MBAP (Modbus Application Protocol) -
     mbap  = (char)0x15;		//Transaction ID MSB
     mbap += (char)0x01;		//Transaction ID LSB
     mbap += (char)0x00;		//Protocol ID MSB
@@ -254,12 +243,12 @@ string TMdContr::modBusReq( string &pdu )
     mbap += (char)0xFF;		//Unit identifier
     try
     {
-    	//-- Send request --
+    	//- Send request -
     	int resp_len = tr.at().messIO((mbap+pdu).c_str(),mbap.size()+pdu.size(),(char*)buf,sizeof(buf),20);
     	if( resp_len < mbap.size() ) return _("13:Error server respond");
     	int resp_sz = (buf[4]<<8)+buf[5];
     	pdu.assign((char*)buf+mbap.size(),resp_len-mbap.size());
-    	//-- Wait tail --
+    	//- Wait tail -
     	while( pdu.size() < resp_sz-1 )
     	{
     	    resp_len = tr.at().messIO(NULL,0,(char*)buf,sizeof(buf),20);
@@ -285,7 +274,6 @@ string TMdContr::modBusReq( string &pdu )
 
     return "";
 }
-
 
 void *TMdContr::Task( void *icntr )
 {
@@ -425,14 +413,14 @@ unsigned int TMdContr::crc16( const string &mframe )
 
 void TMdContr::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
 	TController::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/cntr/st/gath_tm",_("Gather data time (ms)"),0444,"root","root",1,"tp","real");
 	return;
     }
-    //Process command to page
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/cntr/st/gath_tm" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(tm_gath,6));
     else TController::cntrCmdProc(opt);

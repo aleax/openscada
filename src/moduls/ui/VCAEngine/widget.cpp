@@ -1,23 +1,22 @@
 
 //OpenSCADA system module UI.VCAEngine file: widget.cpp
 /***************************************************************************
- *   Copyright (C) 2006 by Roman Savochenko
- *   rom_as@diyaorg.dp.ua
- *
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation; either version 2 of the License, or
- *   (at your option) any later version.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, write to the
- *   Free Software Foundation, Inc.,
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *   Copyright (C) 2006-2007 by Roman Savochenko                           *
+ *   rom_as@fromru.com                                                     *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; version 2 of the License.               *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
 #include <resalloc.h>
@@ -212,7 +211,7 @@ void Widget::inheritAttr( const string &iattr )
 {
     if( parent().freeStat() )	return;
 
-    //-- Create no present attributes --
+    //- Create no present attributes -
     vector<string>  ls;
     if( !iattr.empty() && parent().at().attrPresent(iattr) )
 	ls.push_back(iattr);
@@ -225,7 +224,7 @@ void Widget::inheritAttr( const string &iattr )
         {
 	    if( parent().at().attrAt(ls[i_l]).at().flgGlob()&Attr::Mutable ) continue;
             TFld *fel = new TFld(parent().at().attrAt(ls[i_l]).at().fld());
-            //Clear user attribute flag and set inherit flag
+            //-- Clear user attribute flag and set inherit flag --
             fel->setFlg(fel->flg()|Attr::IsInher);
             attrAdd(fel);
         }
@@ -241,7 +240,7 @@ void Widget::inheritAttr( const string &iattr )
 		case TFld::Real:	attr.at().setR(pattr.at().getR(),true);	break;
 		case TFld::String:	attr.at().setS(pattr.at().getS(),true);	break;
 	    }	    
-	    //- No inherit calc flag for links -
+	    //-- No inherit calc flag for links --
 	    if( isLink() && !parent().at().isLink() )
 		attr.at().setFlgSelf((Attr::SelfAttrFlgs)(attr.at().flgSelf()&(~Attr::ProcAttr)));
 	    attr.at().setCfgTempl(pattr.at().cfgTempl());
@@ -301,6 +300,7 @@ bool Widget::attrChange( Attr &cfg, void *prev )
 	}
     }
     if( cfg.owner() != this )	return false;
+    
     //- Update heritors attributes -
     for( int i_h = 0; i_h < m_herit.size(); i_h++ )
 	if( m_herit[i_h].at().enable( ) )
@@ -393,7 +393,7 @@ bool Widget::cntrCmdServ( XMLNode *opt )
 
 bool Widget::cntrCmdGeneric( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Widget: ")+id());
@@ -431,7 +431,8 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 	if(ico().size()) ctrMkNode("img",opt,-1,"/ico","",0444);	    
 	return true;
     }
-    //Process command to page
+    
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/wdg/res" && ctrChkNode(opt) )	//Service command for resources request
     {
@@ -564,12 +565,12 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 
 bool Widget::cntrCmdAttributes( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     { 
      	if(ctrMkNode("area",opt,-1,"/attr",_("Attributes")))
 	{
-	    //Properties form create
+	    //-- Properties form create --
 	    vector<string> list_a;
 	    attrList(list_a);
 	    for( unsigned i_el = 0; i_el < list_a.size(); i_el++ )
@@ -581,9 +582,9 @@ bool Widget::cntrCmdAttributes( XMLNode *opt )
 	}
 	return true;
     }
-    //Process command to page
+    
+    //- Process command to page -
     string a_path = opt->attr("path");
-    //- Cofiguration command process -
     if( a_path.substr(0,5) == "/attr" && 
 	    TSYS::pathLev(a_path,1).size() > 4 && 
 	    TSYS::pathLev(a_path,1).substr(0,4) == "sel_" && TCntrNode::ctrChkNode(opt) )
@@ -617,7 +618,7 @@ bool Widget::cntrCmdAttributes( XMLNode *opt )
 
 bool Widget::cntrCmdLinks( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
  	if(ctrMkNode("area",opt,-1,"/links",_("Links")))
@@ -645,19 +646,19 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
 			}
 			
 			if( !(wdg.at().attrAt(alist[i_a]).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut|Attr::CfgConst)) ) continue;
-			//Get attributes
+			//-- Get attributes --
 			bool shwAttr = atoi(opt->attr("showAttr").c_str()) || 
 				       atoi(TBDS::genDBGet(mod->nodePath()+"showAttr","0",opt->attr("user")).c_str());
 			bool shwTmpl = wdg.at().attrAt(alist[i_a]).at().cfgTempl().size();
 			if( shwTmpl )	grpprm = TSYS::strSepParse(wdg.at().attrAt(alist[i_a]).at().cfgTempl(),0,'|');
 			
-                	//Check select param
+                	//-- Check select param --
                 	if( shwTmpl && !shwAttr )
                 	{
                     	    nprm = grpprm;
 			    if( i_w >= 0 ) nprm.insert(0,wdg.at().name()+".");
 			    
-	            	    //Check already to present parameters
+	            	    //-- Check already to present parameters --
 	            	    bool f_ok = false;
 	            	    for( int i_l = 0; i_l < list.size(); i_l++ )
 				if( list[i_l] == nprm ) { f_ok = true; break; }
@@ -686,7 +687,8 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
 	}
 	return true;
     }
-    //Process command to page
+    
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/links/showAttr" )
     {
@@ -794,7 +796,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
 	string m_prm = srcwdg.at().attrAt(nattr).at().cfgVal();
 	
 	bool is_pl = (a_path.substr(0,14) == "/links/lnk/pl_");
-	//- Link interface process -
+	//-- Link interface process --
         int c_lv = 0;
 	string obj_tp = TSYS::strSepParse(m_prm,0,':')+":";
 	if( obj_tp.empty() || !(obj_tp == "val:" || obj_tp == "prm:" || obj_tp == "wdg:" || obj_tp == "addr:") )
@@ -808,7 +810,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
 	    opt->childAdd("el")->setText("wdg:");
 
 	}
-	//- Link elements process -
+	//-- Link elements process --
 	else
 	{
 	    int c_off = obj_tp.size();
@@ -823,10 +825,10 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
 	    }
 	    vector<string> ls;
 	    c_off = obj_tp.size();
-	    //-- Address interface elements list process --
+	    //--- Address interface elements list process ---
 	    if( obj_tp == "addr:" && !is_pl )
 		SYS->nodeAt(m_prm,0,0,c_off).at().nodeList(ls);
-	    //-- Other interface elements list process --
+	    //--- Other interface elements list process ---
 	    else
 	    {
 		string prm1 = TSYS::pathLev(m_prm,0,true,&c_off);
@@ -901,14 +903,15 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
     string wattr;
     
     if( isLink() ) return false;
-    //Get page info
+    
+    //- Get page info -
     if( opt->name() == "info" )
     { 
  	if(ctrMkNode("area",opt,-1,"/proc",_("Process")))
 	{
 	    ctrMkNode("fld",opt,-1,"/proc/wdg",_("Widget"),permit(),user().c_str(),grp().c_str(),3,"tp","str","dest","select","select","/proc/w_lst");
 	    wattr = TBDS::genDBGet(mod->nodePath()+"wdgAttr",".",opt->attr("user"));
-	    if( wattr == "." || !wdgPresent(wattr) )	wattr = ".";
+	    if( !wdgPresent(wattr) )	wattr = ".";
             if(ctrMkNode("table",opt,-1,"/proc/attr",_("Attributes"),permit(),user().c_str(),grp().c_str(),2,"s_com",((wattr==".")?"add,del":""),"key","id"))
             {
         	ctrMkNode("list",opt,-1,"/proc/attr/id",_("Id"),permit(),user().c_str(),grp().c_str(),1,"tp","str");
@@ -928,7 +931,8 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	}
 	return true;
     }
-    //Process command to page
+    
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/proc/wdg" )
     {
@@ -945,9 +949,11 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
     {
         vector<string> lst;
         wdgList(lst);
-        opt->childAdd("el")->setAttr("id",".")->setText("<Self>");
+        opt->childAdd("el")->setText(".");	
+        //opt->childAdd("el")->setAttr("id",".")->setText("<Self>");
         for( unsigned i_f=0; i_f < lst.size(); i_f++ )
-            opt->childAdd("el")->setAttr("id",lst[i_f])->setText(wdgAt(lst[i_f]).at().name());
+            opt->childAdd("el")->setText(lst[i_f]);
+            //opt->childAdd("el")->setAttr("id",lst[i_f])->setText(wdgAt(lst[i_f]).at().name());	    
     }    
     else if( a_path == "/proc/attr" )
     {
@@ -1001,7 +1007,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
         }
 	if( ctrChkNode(opt,"set",permit(),user().c_str(),grp().c_str(),SEQ_WR) )
         {
-            //Request data
+            //-- Request data --
             string idattr = opt->attr("key_id");
             string idcol  = opt->attr("col");
 
@@ -1133,11 +1139,11 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 }
 
 //************************************************
-//* Widget atribute                              *
+//* Attr: Widget atribute                        *
 //************************************************
 Attr::Attr( TFld &ifld ) : m_modif(0), self_flg((SelfAttrFlgs)0)
 {
-    //Chek for self field for dinamic elements
+    //- Chek for self field for dinamic elements -
     if( ifld.flg()&TFld::SelfFld )
     {
         m_fld = new TFld();

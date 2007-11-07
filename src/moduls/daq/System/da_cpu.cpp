@@ -1,13 +1,12 @@
 
 //OpenSCADA system module DAQ.System file: da_cpu.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -29,19 +28,19 @@
 
 using namespace SystemCntr;
 
-//======================================================================
-//==== CPU
-//======================================================================
+//*************************************************
+//* CPU                                           *
+//*************************************************
 CPU::CPU( )
 {   
-    //CPU value structure
+    //- CPU value structure -
     fldAdd( new TFld("load",_("Load (%)"),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
     fldAdd( new TFld("sys",_("System (%)"),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
     fldAdd( new TFld("user",_("User (%)"),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
     fldAdd( new TFld("idle",_("Idle (%)"),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
 }
 
-CPU::~CPU()
+CPU::~CPU( )
 {    
 
 }
@@ -49,13 +48,13 @@ CPU::~CPU()
 void CPU::init( TMdPrm *prm )
 {    
     char buf[256];
-    //Create config
+    //- Create config -
     TCfg &t_cf = prm->cfg("SUBT");
     t_cf.fld().setDescr("");
     
     //t_fl.selValI().push_back(-1); t_fl.selNm().push_back("OpenSCADA");
     
-    //Init start value
+    //- Init start value -
     FILE *f = fopen("/proc/stat","r");
     if( f == NULL ) return;
     
@@ -114,7 +113,7 @@ void CPU::getVal( TMdPrm *prm )
 	return;
     }*/
 
-    //File /proc/stat scan
+    //- File /proc/stat scan -
     int n_el;	//CPU number
     int n = 0;
     char buf[256];	
@@ -164,7 +163,8 @@ void CPU::makeActiveDA( TMdContr *a_cntr )
 
     FILE *f = fopen("/proc/stat","r");
     if( f == NULL ) return;
-    //=================== Check avoid CPU ==============
+    
+    //- Check for allow CPU -
     while( fgets(buf,sizeof(buf),f) != NULL )
     {
         int n_cpu;
@@ -199,4 +199,3 @@ void CPU::makeActiveDA( TMdContr *a_cntr )
     } 
     fclose(f);
 }
-

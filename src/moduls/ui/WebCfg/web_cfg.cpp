@@ -1,13 +1,12 @@
 
 //OpenSCADA system module UI.WebCfg file: web_cfg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2004-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -31,7 +30,8 @@
 
 #include "web_cfg.h"
 
-//============ Modul info! =====================================================
+//*************************************************
+//* Modul info!                                   *
 #define MOD_ID      "WebCfg"
 #define MOD_NAME    "System configurator (WEB)"
 #define MOD_TYPE    "UI"
@@ -41,7 +41,7 @@
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow the WEB based OpenSCADA system configurator."
 #define LICENSE     "GPL"
-//==============================================================================
+//*************************************************
 
 WebCfg::TWEB *WebCfg::mod;
 
@@ -49,36 +49,23 @@ extern "C"
 {
     TModule::SAt module( int n_mod )
     {
-    	TModule::SAt AtMod;
-
-	if(n_mod==0)
-	{
-	    AtMod.id	= MOD_ID;
-	    AtMod.type  = MOD_TYPE;
-    	    AtMod.t_ver = VER_TYPE;
-	}
-	else
-	    AtMod.id	= "";
-
-	return( AtMod );
+	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	return TModule::SAt("");
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	WebCfg::TWEB *self_addr = NULL;
-
-	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = WebCfg::mod = new WebCfg::TWEB( source );       
-
-	return ( self_addr );
+	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
+	    return new WebCfg::TWEB( source );
+	return NULL;
     }    
 }
 
 using namespace WebCfg;
 
-//==============================================================================
-//================= WebCfg::TWEB ===============================================
-//==============================================================================
+//*************************************************
+//* TWEB                                          *
+//*************************************************
 TWEB::TWEB( string name ) : m_t_auth(10)
 {
     mId		= MOD_ID;
@@ -89,14 +76,16 @@ TWEB::TWEB( string name ) : m_t_auth(10)
     mDescr  	= DESCRIPTION;
     mLicense   	= LICENSE;
     mSource    	= name;
+    
+    mod		= this;
 
-    //Reg export functions
+    //- Reg export functions -
     modFuncReg( new ExpFunc("void HttpGet(const string&,string&,const string&,vector<string>&);",
 	"Process Get comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpGet) );
     modFuncReg( new ExpFunc("void HttpPost(const string&,string&,const string&,vector<string>&,const string&);",
         "Process Set comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpPost) );
     
-    //Default CSS tables init
+    //- Default CSS init -
     m_CSStables = 
 	"hr {width:100%; size:3}\n"
 	"body {background-color:#818181; alink:#33ccff; link:#3366ff; text:#000000; vlink:#339999}\n"
@@ -141,7 +130,7 @@ string TWEB::optDescr( )
         "======================= The module <%s:%s> options =======================\n"
         "---------- Parameters of the module section <%s> in config file ----------\n"
 	"SessTimeLife <time>      Time of the sesion life, minutes (default 10).\n"
-	"CSSTables    <CSS>	  CSS tables for creating pages.\n\n"),
+	"CSSTables    <CSS>	  CSS for creating pages.\n\n"),
  	MOD_TYPE,MOD_ID,nodePath().c_str());
 
     return(buf);
@@ -149,7 +138,7 @@ string TWEB::optDescr( )
 
 void TWEB::modLoad( )
 {
-    //========== Load parameters from command line ============
+    //- Load parameters from command line -
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -169,7 +158,7 @@ void TWEB::modLoad( )
 	}
     } while(next_opt != -1);
 
-    //========== Load parameters from config file =============
+    //- Load parameters from config file -
     m_t_auth = atoi( TBDS::genDBGet(nodePath()+"SessTimeLife",TSYS::int2str(m_t_auth)).c_str() );
     m_CSStables = TBDS::genDBGet(nodePath()+"CSSTables",m_CSStables);
 }
@@ -237,7 +226,7 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 	if( zero_lev == "about" )	get_about(ses);
 	else if( zero_lev.substr(0,4) == "img_" )
 	{
-	    //Get global image
+	    //- Get global image -
 	    string itp;
 	    ses.page=TUIS::icoGet(zero_lev.substr(4),&itp);
 	    page = http_head("200 OK",ses.page.size(),string("image/")+itp)+ses.page;
@@ -256,7 +245,7 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 		
 		if(ses.root->name()=="img")
 		{
-		    //Transfer page image
+		    //-- Transfer page image --
 		    XMLNode req("get"); req.setAttr("path",ses.url)->setAttr("user",ses.user);
 	    	    if(cntrIfCmd(req)) throw TError(req.attr("mcat").c_str(),"%s",req.text().c_str());
 		    ses.page=TSYS::strDecode(req.text(),TSYS::base64);
@@ -265,7 +254,7 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 		}
 		else
 		{
-		    //Get area
+		    //-- Get area --
 		    get_head( ses );
 		    get_area( ses, *ses.root, "/" );
 		}
@@ -356,7 +345,7 @@ void TWEB::get_area( SSess &ses, XMLNode &node, string a_path )
 		ses.page = ses.page+"<fieldset><legend>"+t_s->attr("dscr")+"</legend>\n";
 	    
 	    //ses.page = ses.page+"<tr bgcolor=#CCCCCC><td>";
-	    //Get area's fields
+	    //- Get area's fields -
 	    c_cfg = 0;
 	    bool f_open = false;
 	    for( unsigned i_el = 0; i_el < t_s->childSize(); i_el++)
@@ -364,13 +353,13 @@ void TWEB::get_area( SSess &ses, XMLNode &node, string a_path )
 		XMLNode *t_c = t_s->childGet(i_el);
 		if( t_c->name() == "fld" )
 		{
-		    // First element
+		    //-- First element --
 		    if(c_cfg++ == 0)
 		    {
 			ses.page = ses.page+"<form action='"+path+"' method='post' enctype='multipart/form-data'>\n" 
 			    "<table><tbody>\n";
 		    }
-		    // Start full element
+		    //-- Start full element --
 		    if( t_c->attr("dscr").size() )
 		    {
 			if(f_open) ses.page = ses.page+"</td></tr>";
@@ -388,7 +377,7 @@ void TWEB::get_area( SSess &ses, XMLNode &node, string a_path )
 		ses.page = ses.page+"</form>\n<hr/>\n";
 	    }
 
-	    //Get area's lists
+	    //- Get area's lists -
 	    c_cfg = 0;
 	    for( unsigned i_el = 0; i_el < t_s->childSize(); i_el++)
 	    {
@@ -402,7 +391,7 @@ void TWEB::get_area( SSess &ses, XMLNode &node, string a_path )
 	    }	    
 	    //if(c_cfg > 0) ses.page = ses.page+"<hr/>\n";
 	    
-	    //Get area's tables
+	    //- Get area's tables -
 	    /*c_cfg = 0;
 	    for( unsigned i_el = 0; i_el < t_s->childSize(); i_el++)
 	    {
@@ -415,10 +404,10 @@ void TWEB::get_area( SSess &ses, XMLNode &node, string a_path )
 		}
 	    }*/
 	    if(c_cfg > 0) ses.page = ses.page+"<hr/>\n";	    
-            //Get area's commands
+            //- Get area's commands -
 	    for( unsigned i_el = 0; i_el < t_s->childSize(); i_el++)
 	    {
-    		// First element
+    		//-- First element --
 		XMLNode *t_c = t_s->childGet(i_el);
 		if( t_c->name() == "comm" )
 		    get_cmd(ses,*t_c,area_path+t_c->attr("id"));        
@@ -495,7 +484,7 @@ bool TWEB::get_val( SSess &ses, XMLNode &node, string a_path, bool rd )
                     }
                     ses.page = ses.page+">"+x_lst.childGet(i_el)->text()+"</option>";
         	}
-            //Check no selected
+            //- Check no selected -
             if( !sel_ok ) ses.page = ses.page+"<option value='' selected='selected'></option>";
 	    ses.page = ses.page+ "</select>\n";
 	}
@@ -510,7 +499,7 @@ bool TWEB::get_val( SSess &ses, XMLNode &node, string a_path, bool rd )
 	    }
 	    else
 	    {
-		// Draw text area 
+		//- Draw text area -
 		if( node.attr("tp") == "str" && (node.attr("rows").size() || node.attr("cols").size()) )
 		{
 		    ses.page = ses.page+"<textarea name='"+node.attr("id")+"' cols='"+node.attr("cols")+"' rows='"+node.attr("rows")+"'";
@@ -545,12 +534,12 @@ bool TWEB::get_val( SSess &ses, XMLNode &node, string a_path, bool rd )
 		}		
 		else
 		{
-		    // Other fields
+		    //- Other fields -
 		    if( !wr ) ses.page=ses.page+"<b>"+dt_req.text()+"</b>";
 		    else
 		    {
 			ses.page = ses.page+"<input type='text' name='"+node.attr("id")+"' value='"+TSYS::strEncode(dt_req.text(),TSYS::Html)+"'";
-			// addon parameters
+			//-- addon parameters --
 			int val_n = atoi(node.attr("len").c_str());
 			if( val_n > 0 ) ses.page = ses.page + " maxlength='"+TSYS::int2str(val_n)+"' size='"+TSYS::int2str((val_n>50)?50:val_n)+"'";
 			else
@@ -643,7 +632,8 @@ bool TWEB::get_val( SSess &ses, XMLNode &node, string a_path, bool rd )
 	
 	ses.page = ses.page + "<table border='1'>\n";
 	int clm_sz[req.childSize()]; 
-	//Draw head
+	
+	//- Draw head -
 	ses.page = ses.page + "<tr bgcolor='#FFA07A' align='center'>";
 	for( int i_cl=0; i_cl < req.childSize(); i_cl++)
 	{
@@ -652,7 +642,7 @@ bool TWEB::get_val( SSess &ses, XMLNode &node, string a_path, bool rd )
 	    if(!t_linf) continue;
 	    
 	    ses.page = ses.page + "<td>"+TSYS::strEncode(t_linf->attr("dscr"),TSYS::Html)+"</td>";
-	    //Calc column sizes
+	    //-- Calc column sizes --
 	    clm_sz[i_cl] = t_linf->attr("dscr").size();
 	    for( int i_rw=0; i_rw < t_lsel->childSize(); i_rw++)
 	    {
@@ -726,7 +716,7 @@ bool TWEB::get_val( SSess &ses, XMLNode &node, string a_path, bool rd )
 			":"+t_linf->attr("id")+"' value='"+TSYS::strEncode(x_el->text(),TSYS::Html)+"' size='"+TSYS::int2str(clm_sz[i_cl])+"'/></td>";
 		}
 	    }
-	    //Add modify buttons
+	    //-- Add modify buttons --
 	    if( wr ) ses.page = ses.page+"<td><input type='checkbox' name='row:"+TSYS::int2str(i_rw)+"'/></td>";
 	    ses.page = ses.page + "</tr>\n";
 	}
@@ -790,7 +780,7 @@ void TWEB::HttpPost( const string &urli, string &page, const string &sender, vec
     try
     {
 	cont_frm_data( ses );	//Parse contein
-	// Check autentification POST request
+	//- Check autentification POST request -
 	if( !my )
 	{
 	    kz = post_auth( ses );
@@ -799,7 +789,7 @@ void TWEB::HttpPost( const string &urli, string &page, const string &sender, vec
 	    if( my && !err ) 
 		http_add = "Set-Cookie: oscd_u_id="+TSYS::int2str(open_ses(ses.user))+"; path=/;\n"; 
 	}
-	// Check present sesion
+	//- Check present sesion -
 	if( !my )
 	{
 	    check_ses( ses );
@@ -810,7 +800,7 @@ void TWEB::HttpPost( const string &urli, string &page, const string &sender, vec
                 if(cntrIfCmd(ses.pg_info)) throw TError(ses.pg_info.attr("mcat").c_str(),"%s",ses.pg_info.text().c_str());
 	        ses.root = ses.pg_info.childGet(0);
 	    
-		//Parse post category and path to area
+		//-- Parse post category and path to area --
 		string prs_cat, prs_path;
 	    	unsigned i_el;
 		
@@ -837,7 +827,7 @@ void TWEB::HttpPost( const string &urli, string &page, const string &sender, vec
 		err = true; 
 	    }
 	}
-	//Request error
+	//- Request error -
 	if( !my ) post_mess(ses.page,nodePath(),"Post request broken!",3);
 	else if( !err )
 	{
@@ -885,7 +875,7 @@ int TWEB::post_area( SSess &ses, XMLNode &node, const string &prs_comm, int leve
 
 int  TWEB::post_val( SSess &ses, XMLNode &node, string prs_path)
 {
-    // Free no changed elements (polimorfic problem fix)    
+    //- Free no changed elements (polimorfic problem fix) -
     for( unsigned i_cf = 0; i_cf < node.childSize(); i_cf++)
     {
 	XMLNode *t_c = node.childGet(i_cf);
@@ -900,8 +890,9 @@ int  TWEB::post_val( SSess &ses, XMLNode &node, string prs_path)
 			break;
 		    }
 	}
-    }    
-    // Check and modify
+    }
+    
+    //- Check and modify -
     for( unsigned i_cf = 0; i_cf < node.childSize(); i_cf++)
     {
 	XMLNode *t_c = node.childGet(i_cf);
@@ -927,10 +918,10 @@ int  TWEB::post_val( SSess &ses, XMLNode &node, string prs_path)
 
 int TWEB::post_cmd( SSess &ses, XMLNode &node, string prs_path )
 { 
-    // Prepare command options
+    //- Prepare command options -
     try
     { 	
-	//Check link
+	//-- Check link --
 	if( node.attr("tp") == "lnk" )
 	{
 	    XMLNode req("get"); 
@@ -961,7 +952,8 @@ int TWEB::post_cmd( SSess &ses, XMLNode &node, string prs_path )
 	
 	XMLNode req("set"); 
 	req.setAttr("path",ses.url+"/"+TSYS::strEncode(prs_path,TSYS::PathEl))->setAttr("user",ses.user);
-	//Copy command parameters
+
+	//-- Copy command parameters --
 	for( int i_ch = 0; i_ch < node.childSize(); i_ch++ )
 	    *req.childAdd() = *node.childGet(i_ch);	
 	if(cntrIfCmd(req)) ses.mess.push_back(req.text().c_str());
@@ -981,7 +973,7 @@ int TWEB::post_list( SSess &ses, XMLNode &node, string prs_path )
     string 	f_path, l_path, nd_nm, l_com, ener_f, ener_id;
 
     bool ind_m = atoi(node.attr("idm").c_str());    
-    //Get command name and path
+    //- Get command name and path -
     int c_pos = 1;    
     while(true)
     {
@@ -995,8 +987,8 @@ int TWEB::post_list( SSess &ses, XMLNode &node, string prs_path )
 	c_pos = t_pos+1;	
     }
     f_path = ses.url+"/"+TSYS::strEncode(l_path,TSYS::PathEl);
-    //Get new element value
-    
+
+    //- Get new element value -
     for( int i_le = 0; i_le < ses.cnt_names.size(); i_le++ )
         if( ses.cnt_names[i_le] == "ener_id" )
         { ener_id = ses.cnt_vals[i_le]; break; }		    
@@ -1005,7 +997,8 @@ int TWEB::post_list( SSess &ses, XMLNode &node, string prs_path )
 	{ ener_f = ses.cnt_vals[i_le]; break; }
 
     string i_pos, i_el, l_el;
-    //Check selected item    
+    
+    //- Check selected item -
     if( l_com == "go" || l_com == "ins" || l_com == "edit" || 
 	l_com == "del" || l_com == "up" || l_com == "down" )
     {
@@ -1028,13 +1021,14 @@ int TWEB::post_list( SSess &ses, XMLNode &node, string prs_path )
     }
     if( l_com == "go" )
     { 
-        //Get branch prefix
+        //-- Get branch prefix --
         string br_pref = node.attr("br_pref");
         //if( node.attr("br_pref").size() )	br_pref = node.attr("br_pref");
         //else                                	br_pref = l_path;
-	//Check branch type
+	//-- Check branch type --
 	string url = path+"/";
-	//Check Index-list mode
+	
+	//-- Check Index-list mode --
 	if( i_el.size() )	url.append(TSYS::strEncode(TSYS::strEncode(br_pref+i_el,TSYS::PathEl),TSYS::HttpURL));
 	else			url.append(TSYS::strEncode(TSYS::strEncode(br_pref+l_el,TSYS::PathEl),TSYS::HttpURL));
 	
@@ -1115,7 +1109,7 @@ int TWEB::post_table( SSess &ses, XMLNode &node, string prs_path )
     bool wr = atoi(node.attr("acs").c_str())&SEQ_WR;
     if( !wr )	return 0x01;
     
-    //Get command name and path
+    //- Get command name and path -
     int c_pos = 1;
     while(true)
     {
@@ -1161,7 +1155,7 @@ int TWEB::post_table( SSess &ses, XMLNode &node, string prs_path )
 			}
 			else
 			{
-			    //Get Key columns
+			    //-- Get Key columns --
 			    string key;
 			    for( int i_off = 0; (key=TSYS::strSepParse(node.attr("key"),0,',',&i_off)).size(); )
 				for( int i_el = 0; i_el < dt_tbl.childSize(); i_el++ )
@@ -1171,7 +1165,7 @@ int TWEB::post_table( SSess &ses, XMLNode &node, string prs_path )
 					row_addr=row_addr+"key_"+key+"="+dt_tbl.childGet(i_el)->childGet(i_rw)->text()+",";
 					break; 
 				    }
-			    //Get current column id
+			    //-- Get current column id --
 			    n_el1.setAttr("col",t_linf->attr("id"));
 			}	
 			mess_info(nodePath().c_str(),_("%s| Set <%s> cell (<%s>:%s) to: %s."),
@@ -1213,7 +1207,7 @@ int TWEB::post_table( SSess &ses, XMLNode &node, string prs_path )
 		    n_el1.setAttr("row",TSYS::int2str(i_rw-op_cnt));
 		else 
 		{
-		     //Get Key columns
+		     //-- Get Key columns --
 		     string key;
 		     for( int i_off = 0; (key=TSYS::strSepParse(node.attr("key"),0,',',&i_off)).size(); )
                         for( int i_el = 0; i_el < dt_tbl.childSize(); i_el++ )
@@ -1248,7 +1242,7 @@ int TWEB::post_table( SSess &ses, XMLNode &node, string prs_path )
 
 void TWEB::post_mess( string &page, const string &cat, const string &mess, int type )
 {
-    //Put system message.    
+    //-- Put system message. --
     message(cat.c_str(),(type==3)?TMess::Error:(type==2)?TMess::Warning:TMess::Info,"%s",mess.c_str()); 
     
     page = page+"<table border='2' width='40%' align='center'><tbody>\n";
@@ -1345,10 +1339,11 @@ int TWEB::post_auth( SSess &ses )
     if( i_cnt < ses.cnt_names.size() )
     {
 	string pass;
-	//Get user name
+	//- Get user name -
 	for( i_cnt = 0; i_cnt < ses.cnt_names.size(); i_cnt++ ) 
 	    if( ses.cnt_names[i_cnt] == "user" ) ses.user = ses.cnt_vals[i_cnt];
-	//Get user password
+	
+	//- Get user password -
 	for( i_cnt = 0; i_cnt < ses.cnt_names.size(); i_cnt++ ) 
 	    if( ses.cnt_names[i_cnt] == "pass" ) pass = ses.cnt_vals[i_cnt];
 	try
@@ -1362,7 +1357,7 @@ int TWEB::post_auth( SSess &ses )
 	}
 	catch(TError err){ mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 	
-	post_mess(ses.page,nodePath(),"Auth wrong! Retry please.",3);
+	post_mess(ses.page,nodePath(),_("Auth wrong! Retry please."),3);
 	ses.page = ses.page+"\n";
 	get_auth( ses );
 	return 0x01|0x02;
@@ -1383,7 +1378,8 @@ int TWEB::open_ses( string name )
 {    
     SAuth *Auth;    
     bool  n_ses = true;
-    //Check sesion and close old sesion
+    
+    //- Check sesion and close old sesion -
     ResAlloc res(m_res,true);
     for( int i_s = 0; i_s < m_auth.size(); i_s++ )
 	if( time(NULL) > (m_auth[i_s]->t_auth+m_t_auth*60) ) 
@@ -1392,7 +1388,8 @@ int TWEB::open_ses( string name )
 	    m_auth.erase(m_auth.begin() + i_s);
 	    i_s--;
 	}
-    //Find opened sesion
+	
+    //- Find opened sesion -
     for( int i_s = 0; i_s < m_auth.size(); i_s++ )
 	if( name == m_auth[i_s]->name ) 
 	{
@@ -1404,7 +1401,7 @@ int TWEB::open_ses( string name )
     
     if(n_ses)
     {
-	//Make new sesion    
+	//-- Make new sesion --
 	Auth = new SAuth();
 	Auth->t_auth = time(NULL);
 	Auth->name   = name;
@@ -1419,7 +1416,8 @@ int TWEB::open_ses( string name )
 void TWEB::check_ses( SSess &ses )
 {    
     int id = atoi(get_cookie( "oscd_u_id", ses.vars ).c_str());
-    //Check sesion and close old sesion
+
+    //- Check sesion and close old sesion -
     ResAlloc res(m_res,false);
     for( unsigned i_s = 0; i_s < m_auth.size(); i_s++ )
 	if( time(NULL) > (m_auth[i_s]->t_auth+m_t_auth*60) ) 
@@ -1427,7 +1425,8 @@ void TWEB::check_ses( SSess &ses )
 	    delete m_auth[i_s];
 	    m_auth.erase(m_auth.begin() + i_s);
 	}
-    //Find id sesion
+
+    //- Find sesion id -
     for( unsigned i_s = 0; i_s < m_auth.size(); i_s++ )
 	if( m_auth[i_s]->id_ses == id )
 	{
@@ -1462,18 +1461,20 @@ void TWEB::cont_frm_data( SSess &ses )
 	pos += boundary.size()+strlen(c_term);
 	string c_head = ses.content.substr(pos, ses.content.find(c_term,pos)-pos);
         if( c_head.find(c_fd,0) == string::npos ) continue;
-	//Get name
+	
+	//- Get name -
 	i_bnd = c_head.find(c_name,0)+strlen(c_name);
 	string c_name = c_head.substr(i_bnd,c_head.find("\"",i_bnd)-i_bnd);	
 	i_bnd = c_head.find(c_file,0);
 	if( i_bnd == string::npos )
 	{	
-    	    //Get value
+    	    //-- Get value --
     	    pos += c_head.size()+(2*strlen(c_term));
 	    if(pos >= ses.content.size()) break;
     	    //string c_val  = ses.content.substr(pos, ses.content.find(c_term,pos)-pos);
     	    string c_val  = ses.content.substr(pos, ses.content.find(string(c_term)+c_end+boundary,pos)-pos);
-    	    //Save
+    	    
+	    //-- Save --
     	    ses.cnt_names.push_back(c_name);
     	    ses.cnt_vals.push_back(c_val);
 	}
@@ -1501,9 +1502,10 @@ string TWEB::get_cookie( string name, vector<string> &vars )
 
 void TWEB::down_colont( SSess &ses )
 {
-    // Draw path
+    //-- Draw path --
     ses.page = ses.page+"<hr/>"+ses.url+"<br/>\n";
-    // Make warning messages
+    
+    //-- Make warning messages --
     if( ses.mess.size() )
     {
 	ses.page = ses.page+"<SCRIPT LANGUAGE='JavaScript'>\n<!--\n";
@@ -1523,21 +1525,22 @@ string TWEB::cntGet( SSess &ses, const string &nm )
 
 void TWEB::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //-- Get page info --
     if( opt->name() == "info" )
     {
         TUI::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
 	{
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of auth sesion(min)"),0660,"root","root",1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/CSS",_("CSS tables"),0660,"root","root",3,"tp","str","cols","90","rows","7");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/CSS",_("CSS"),0660,"root","root",3,"tp","str","cols","90","rows","7");
 	    ctrMkNode("comm",opt,-1,"/prm/cfg/load",_("Load"),0660);
     	    ctrMkNode("comm",opt,-1,"/prm/cfg/save",_("Save"),0660);
 	}
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
         return;
     }
-    //Process command to page
+    
+    //-- Process command to page --
     string a_path = opt->attr("path");
     if( a_path == "/prm/cfg/lf_tm" )
     {
@@ -1553,5 +1556,4 @@ void TWEB::cntrCmdProc( XMLNode *opt )
     else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )  modLoad();
     else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )  modSave();
     else TUI::cntrCmdProc(opt);
-}			    
-
+}

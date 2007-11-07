@@ -6,8 +6,7 @@
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -34,7 +33,7 @@
 #define MOD_NAME    "Data sources transporter"
 #define MOD_TYPE    "DAQ"
 #define VER_TYPE    VER_CNTR
-#define VERSION     "0.1.0"
+#define VERSION     "0.3.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow to make transport data sources of remote OpenSCADA station to local OpenSCADA station."
 #define LICENSE     "GPL"
@@ -46,28 +45,15 @@ extern "C"
 {
     TModule::SAt module( int n_mod )
     {
-	TModule::SAt AtMod;
-
-	if(n_mod==0)
-	{
-	    AtMod.id	= MOD_ID;
-	    AtMod.type  = MOD_TYPE;
-	    AtMod.t_ver = VER_TYPE;
-	}
-	else
-    	    AtMod.id	= "";
-
-	return AtMod;
+	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	return TModule::SAt("");
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	DAQTrasport::TTpContr *self_addr = NULL;
-
-    	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = DAQTrasport::mod = new DAQTrasport::TTpContr( source );
-
-	return self_addr;
+    	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
+	    return new DAQTrasport::TTpContr( source );
+	return NULL;
     }
 }
 
@@ -86,9 +72,11 @@ TTpContr::TTpContr( string name )
     mDescr  	= DESCRIPTION;
     mLicense   	= LICENSE;
     mSource    	= name;
+    
+    mod		= this;
 }
 
-TTpContr::~TTpContr()
+TTpContr::~TTpContr( )
 {    
 
 }
@@ -177,7 +165,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
 
 }
 
-TMdContr::~TMdContr()
+TMdContr::~TMdContr( )
 {
     if( run_st ) stop();
 }
@@ -352,7 +340,7 @@ void *TMdContr::Task( void *icntr )
 
 void TMdContr::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
 	TController::cntrCmdProc(opt);
@@ -360,7 +348,8 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("comm",opt,-1,"/cntr/cfg/host_lnk",_("Go to remote stations list configuration"),0660,"root","root",1,"tp","lnk");
 	return;
     }
-    //Process command to page
+    
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/cntr/st/gath_tm" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(tm_gath,6));
     else if( a_path == "/cntr/cfg/host_lnk" && ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )

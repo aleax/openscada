@@ -1,23 +1,22 @@
 
 //OpenSCADA system module UI.VCAEngine file: vcaengine.h
 /***************************************************************************
- *   Copyright (C) 2006-2007 by Roman Savochenko
- *   rom_as@diyaorg.dp.ua                                                     
- *                                                                         
- *   This program is free software; you can redistribute it and/or modify  
- *   it under the terms of the GNU General Public License as published by  
- *   the Free Software Foundation; either version 2 of the License, or     
- *   (at your option) any later version.                                   
- *                                                                         
- *   This program is distributed in the hope that it will be useful,       
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         
- *   GNU General Public License for more details.                          
- *                                                                         
- *   You should have received a copy of the GNU General Public License     
- *   along with this program; if not, write to the                         
- *   Free Software Foundation, Inc.,                                       
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             
+ *   Copyright (C) 2006-2007 by Roman Savochenko                           *
+ *   rom_as@fromru.com                                                     *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; version 2 of the License.               *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
 #ifndef VCAENGINE_H
@@ -35,6 +34,9 @@
 namespace VCA
 {
 
+//*************************************************
+//* Engine                                        *
+//*************************************************
 class Engine : public TUI
 {
     public:
@@ -86,6 +88,7 @@ class Engine : public TUI
 	TElem &elPage( )	{ return page_el; }
 
     protected:
+	//Methods
 	void postEnable( int flag );
 	void preDisable( int flag );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process	
@@ -93,6 +96,7 @@ class Engine : public TUI
 	string optDescr( );
 	
     private:
+	//Attributes
 	int	id_wlb, id_prj, id_ses;
 	TElem	lbwdg_el, 	//The generic table structure of libraries
 		wdgdata_el,	//Media and other data what use by widgets and stored into DB

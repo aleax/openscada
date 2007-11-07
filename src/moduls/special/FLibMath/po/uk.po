@@ -7,7 +7,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Special.FLibMath 0.5.0\n"
+"Project-Id-Version: OpenSCADA.Special.FLibMath 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-10-24 18:10+0300\n"
 "PO-Revision-Date: 2007-10-24 18:10+0300\n"

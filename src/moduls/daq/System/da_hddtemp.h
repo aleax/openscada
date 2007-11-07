@@ -1,13 +1,12 @@
 
 //OpenSCADA system module DAQ.System file: da_hddtemp.h
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -28,9 +27,13 @@
 namespace SystemCntr
 {
 
+//*************************************************
+//* Hddtemp                                       *
+//*************************************************
 class Hddtemp: public DA
 {
     public:
+	//Methods
         Hddtemp( );
         ~Hddtemp( );
 	
@@ -44,10 +47,11 @@ class Hddtemp: public DA
 	void makeActiveDA( TMdContr *a_cntr );
 	
     private:
+	//Methods
 	string getHDDTemp( );
         void dList( vector<string> &list );
 	
-    private:
+	//Attributes
 	Res     m_res;		//Resource for access to HDDTemp transport
         string	t_tr, n_tr;
 };

@@ -1,23 +1,22 @@
 
 //OpenSCADA system module UI.VCAEngine file: session.h
 /***************************************************************************
- *   Copyright (C) 2007 by Roman Savochenko
- *   rom_as@diyaorg.dp.ua
- *
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation; either version 2 of the License, or
- *   (at your option) any later version.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, write to the
- *   Free Software Foundation, Inc.,
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *   Copyright (C) 2007 by Roman Savochenko                                *
+ *   rom_as@fromru.com                                                     *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; version 2 of the License.               *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
 #ifndef SESSION_H
@@ -32,15 +31,16 @@ namespace VCA
 {
 
 //************************************************
-//* VCA session                              	 *
+//* Session: VCA session                      	 *
 //************************************************
 class SessPage;
     
 class Session : public TCntrNode
 {
     public:
+	//Methods
         Session( const string &id, const string &proj = "" );
-	~Session();
+	~Session( );
 
         string ico( );
         const string &id( )	{ return m_id; }		//Identifier
@@ -81,7 +81,7 @@ class Session : public TCntrNode
 
     protected:
 	//Methods
-        string nodeName()       { return m_id; }
+        string nodeName( )	{ return m_id; }
         void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
 	void postEnable( int flag );
@@ -110,7 +110,7 @@ class Session : public TCntrNode
 };
 
 //************************************************
-//* Widget of included to session page           *
+//* SessWdg: Widget of included to session page  *
 //************************************************
 class SessWdg : public Widget, public TValFunc
 {
@@ -155,6 +155,7 @@ class SessWdg : public Widget, public TValFunc
         Session	 *ownerSess()	{ return m_sess; }
 
     protected:
+	//Methods
 	bool cntrCmdServ( XMLNode *opt );
 	bool cntrCmdGeneric( XMLNode *opt );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
@@ -175,14 +176,14 @@ class SessWdg : public Widget, public TValFunc
 };
 
 //************************************************
-//* Session's page                        	 *
+//* SessPage: Session's page                	 *
 //************************************************
 class SessPage : public SessWdg
 {
     public:
 	//Methods
         SessPage( const string &id, const string &page, Session *sess );
-        ~SessPage();
+        ~SessPage( );
 
 	string path( );
 	string type( )          { return "SessPage"; }
@@ -201,12 +202,14 @@ class SessPage : public SessWdg
         void pageAdd( const string &id, const string &parent = "" );
         void pageDel( const string &id, bool full = false )	{ chldDel(m_page,id,-1,full); }
 	
-    protected:    
+    protected:
+	//Methods
 	bool cntrCmdGeneric( XMLNode *opt );
 	
 	bool attrChange( Attr &cfg, void *prev );
 
     private:
+	//Attributes
 	int     m_page;		//Pages container identifier
 };
 

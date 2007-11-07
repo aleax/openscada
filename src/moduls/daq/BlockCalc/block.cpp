@@ -1,13 +1,12 @@
 
 //OpenSCADA system module DAQ.BlockCalc file: block.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -30,7 +29,9 @@
 
 using namespace Virtual;
 
-//Function block
+//*************************************************
+//* Block: Function block                         *
+//*************************************************
 Block::Block( const string &iid, Contr *iown ) : 
     TCntrNode(iown), TConfig( &((TipContr &)iown->owner()).blockE() ), TValFunc(iid+"_block",NULL), 
     m_enable(false), m_process(false), id_freq(-1), id_start(-1), id_stop(-1),
@@ -42,39 +43,40 @@ Block::Block( const string &iid, Contr *iown ) :
 
 Block::~Block( )
 {
-    if( enable() ) enable(false);
+    if( enable() ) setEnable(false);
 }
 
-Block &Block::operator=(Block &blk)
+Block &Block::operator=( Block &blk )
 {
     //- Copy parameters -
     string prev_id = m_id;
     *(TConfig *)this = (TConfig&)blk;
     if( !prev_id.empty() ) m_id = prev_id;
+    
     //- Copy IO and links -
     if( blk.enable() )
     {
-	enable(true);
+	setEnable(true);
 	loadIO(blk.owner().DB()+"."+blk.owner().cfg("BLOCK_SH").getS(),blk.id());    
     }    
 }
 
-void Block::preDisable(int flag)
+void Block::preDisable( int flag )
 {
-    if( process() ) process(false);
+    if( process() ) setProcess(false);
 }
 
-void Block::postDisable(int flag)
+void Block::postDisable( int flag )
 {
     try
     {
         if( flag )
         {
-	    //Delete block from BD
+	    //- Delete block from BD -
             string tbl = owner().DB()+"."+owner().cfg("BLOCK_SH").getS();
 	    SYS->db().at().dataDel(tbl,mod->nodePath()+owner().cfg("BLOCK_SH").getS(),*this);
 	    
-	    //Delete block's IO from BD
+	    //- Delete block's IO from BD -
 	    TConfig cfg(&owner().owner().blockIOE());
 	    tbl=tbl+"_io";
 	    cfg.cfg("BLK_ID").setS(id());   //Delete all block id records
@@ -85,9 +87,9 @@ void Block::postDisable(int flag)
     { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
-string Block::name()
+string Block::name( )
 {
-    return m_name.size()?m_name:id();
+    return m_name.size() ? m_name : id();
 }
 
 void Block::load( )
@@ -95,7 +97,7 @@ void Block::load( )
     string bd = owner().DB()+"."+owner().cfg("BLOCK_SH").getS();
     SYS->db().at().dataGet(bd,mod->nodePath()+owner().cfg("BLOCK_SH").getS(),*this);
      
-    //Load IO config
+    //- Load IO config -
     loadIO();
 }
 
@@ -104,7 +106,7 @@ void Block::save( )
     string bd = owner().DB()+"."+owner().cfg("BLOCK_SH").getS();
     SYS->db().at().dataSet(bd,mod->nodePath()+owner().cfg("BLOCK_SH").getS(),*this);
     
-    //Save IO config
+    //- Save IO config -
     saveIO();
 }
 		
@@ -125,8 +127,6 @@ void Block::loadIO( const string &blk_db, const string &blk_id )
 	bd     = blk_db+"_io";
 	bd_tbl = TSYS::strSepParse(bd,2,'.');
     }    
-    //string bd_tbl = ((blk_db.size())?blk_db:owner().cfg("BLOCK_SH").getS())+"_io";
-    //string bd = owner().DB()+"."+bd_tbl;
     
     for( int i_ln = 0; i_ln < m_val.size(); i_ln++ )
     {    
@@ -142,7 +142,7 @@ void Block::loadIO( const string &blk_db, const string &blk_id )
     	//- Value -
 	setS(i_ln,cfg.cfg("VAL").getS());
 	//- Config of link -
-	link(i_ln,SET,(LnkT)cfg.cfg("TLNK").getI(),cfg.cfg("LNK").getS());
+	setLink(i_ln,SET,(LnkT)cfg.cfg("TLNK").getI(),cfg.cfg("LNK").getS());
     }
 }
 
@@ -159,9 +159,9 @@ void Block::saveIO( )
         try
 	{ 	
 	    cfg.cfg("ID").setS(func()->io(i_ln)->id());		    
-	    cfg.cfg("TLNK").setI(m_lnk[i_ln].tp);	//Type link
+	    cfg.cfg("TLNK").setI(m_lnk[i_ln].tp);				//Type link
 	    cfg.cfg("LNK").setS((m_lnk[i_ln].tp == FREE)?"":m_lnk[i_ln].lnk);	//Link
-	    cfg.cfg("VAL").setS(getS(i_ln));	//Value
+	    cfg.cfg("VAL").setS(getS(i_ln));					//Value
 	    
 	    SYS->db().at().dataSet(bd,mod->nodePath()+bd_tbl,cfg);
 	}
@@ -172,57 +172,57 @@ void Block::saveIO( )
 	}
 }
 
-void Block::enable( bool val )
+void Block::setEnable( bool val )
 {
-    //Enable
+    //- Enable -
     if( val && !m_enable )
     {
 	if( !func() && dynamic_cast<TFunction *>(&SYS->nodeAt(m_func,0,'.').at()) )
 	{
 	    setFunc( (TFunction *)&SYS->nodeAt(m_func,0,'.').at() );
-	    //Init system attributes identifiers
+	    //-- Init system attributes identifiers --
             id_freq  = func()->ioId("f_frq");
             id_start = func()->ioId("f_start");
             id_stop  = func()->ioId("f_stop");				    
 	}
-	//Init links
+	//-- Init links --
 	loadIO( );
     }
-    //Disable
+    //- Disable -
     else if( !val && m_enable )
     {
-	if( process() ) process(false);
-	//Save IO config
+	if( process() ) setProcess(false);
+	//-- Save IO config --
         //saveIO();
 	
-	//Clean IO
+	//-- Clean IO --
 	for( unsigned i_ln = 0; i_ln < m_lnk.size(); i_ln++ )
-	    link(i_ln,SET,FREE);
+	    setLink(i_ln,SET,FREE);
 	m_lnk.clear();
 	
-	//Free func
+	//-- Free func --
 	setFunc(NULL);
 	id_freq=id_start=id_stop=-1;
     }
     m_enable = val;
 }
 
-void Block::process( bool val )
+void Block::setProcess( bool val )
 {
-    if( val && !enable() ) enable(true);
+    if( val && !enable() ) setEnable(true);
     
-    //Connect links
+    //- Connect links -
     if( val && !process() )
     {
 	for( int i_ln = 0; i_ln < m_lnk.size(); i_ln++ )
-	    link( i_ln, INIT );
+	    setLink( i_ln, INIT );
 	owner().blkProc( id(), val );
     }
-    //Disconnect links
+    //- Disconnect links -
     if( !val && process() )
     {
 	for( int i_ln = 0; i_ln < m_lnk.size(); i_ln++ )
-	    link( i_ln, DEINIT );
+	    setLink( i_ln, DEINIT );
 	owner().blkProc( id(), val );
     }
     m_process = val;
@@ -251,18 +251,18 @@ bool Block::linkActive( unsigned iid )
     return false;
 }
                                    				   
-void Block::link( unsigned iid, LnkCmd cmd, LnkT lnk, const string &vlnk )
+void Block::setLink( unsigned iid, LnkCmd cmd, LnkT lnk, const string &vlnk )
 {
     ResAlloc res(lnk_res,true);
     if( iid >= m_lnk.size() )	
 	throw TError(nodePath().c_str(),_("Link %d error!"),iid);
 
-    //Change type link
+    //- Change type link -
     if( cmd == SET )
     {   
 	if( lnk != m_lnk[iid].tp )
 	{
-	    //Free old structures
+	    //-- Free old structures --
 	    switch(m_lnk[iid].tp)
 	    {
 		case I_LOC: case I_GLB:	case O_LOC: case O_GLB:
@@ -271,7 +271,7 @@ void Block::link( unsigned iid, LnkCmd cmd, LnkT lnk, const string &vlnk )
 		    delete m_lnk[iid].aprm;	break;
 	    }
     
-	    //Make new structures
+	    //-- Make new structures --
 	    switch(lnk)
 	    {
 		case I_LOC: case I_GLB:	case O_LOC: case O_GLB:
@@ -283,7 +283,7 @@ void Block::link( unsigned iid, LnkCmd cmd, LnkT lnk, const string &vlnk )
 	}
 	m_lnk[iid].lnk = vlnk;
     }
-    //Connect new link and init
+    //- Connect new link and init -
     if( cmd == INIT || (cmd == SET && process()) )
     {
 	string	lo1 = TSYS::strSepParse(m_lnk[iid].lnk,0,'.');
@@ -318,7 +318,7 @@ void Block::link( unsigned iid, LnkCmd cmd, LnkT lnk, const string &vlnk )
 		break;
 	}				
     }
-    //Disconnect
+    //- Disconnect -
     if( cmd == DEINIT )
 	switch(m_lnk[iid].tp)
 	{
@@ -331,15 +331,16 @@ void Block::link( unsigned iid, LnkCmd cmd, LnkT lnk, const string &vlnk )
 
 void Block::calc( bool first, bool last )
 {
-    //Set fixed system attributes
-    if(id_freq>=0)	setR(id_freq,(1000.*(double)owner().iterate())/(double)owner().period());
-    if(id_start>=0) 	setB(id_start,first);
-    if(id_stop>=0)  	setB(id_stop,last);
-    //Get values from input links
+    //- Set fixed system attributes -
+    if( id_freq>=0 )	setR(id_freq,(1000.*(double)owner().iterate())/(double)owner().period());
+    if( id_start>=0 ) 	setB(id_start,first);
+    if( id_stop>=0 )  	setB(id_stop,last);
+    
+    //- Get values from input links -
     lnk_res.resRequestR( );
     try
     {
-	//Get input links
+	//-- Get input links --
 	for( unsigned i_ln=0; i_ln < m_lnk.size(); i_ln++ )
     	    switch( m_lnk[i_ln].tp )
     	    {
@@ -372,7 +373,7 @@ void Block::calc( bool first, bool last )
     }	
     lnk_res.resReleaseR( );
     	
-    //Calc function
+    //- Calc function -
     try{ TValFunc::calc( ); }
     catch(TError err)
     { 	
@@ -380,7 +381,7 @@ void Block::calc( bool first, bool last )
 	throw TError(nodePath().c_str(),_("Error calc block <%s>."),id().c_str());
     }
     
-    //Put values to output links
+    //- Put values to output links -
     lnk_res.resRequestR( );
     try
     {
@@ -420,7 +421,7 @@ void Block::calc( bool first, bool last )
 
 void Block::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Block: ")+id());
@@ -480,14 +481,14 @@ void Block::cntrCmdProc( XMLNode *opt )
 		{
 		    vector<string> list;
 		    ioList(list);
-		    //Put IO links
+		    //-- Put IO links --
 		    for( int i_io = 0; i_io < list.size(); i_io++ )
 		    {
 			int id = ioId(list[i_io]);
 	    
 			if( ioHide(id) && !atoi(TBDS::genDBGet(nodePath()+"showHide","0",opt->attr("user")).c_str()) ) continue;		
 		
-			//Add link's type	
+			//-- Add link's type --
 			ctrMkNode("fld",opt,-1,(string("/lnk/io/1|")+list[i_io]).c_str(),
 			    func()->io(id)->name().c_str(),0664,"root","root",3,"tp","dec","dest","select","select",(ioFlg(id)&(IO::Output|IO::Return))?"/lnk/otp":"/lnk/itp");
 			if( m_lnk[id].tp != FREE )
@@ -498,28 +499,28 @@ void Block::cntrCmdProc( XMLNode *opt )
 	}
         return;
     }
-    //Process command to page
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/blck/st/en" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(enable()?"1":"0");
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	enable(atoi(opt->text().c_str()));
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setEnable(atoi(opt->text().c_str()));
     }
     else if( a_path == "/blck/st/prc" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(process()?"1":"0");
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	process(atoi(opt->text().c_str()));
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setProcess(atoi(opt->text().c_str()));
     }
     else if( a_path == "/blck/cfg/id" && ctrChkNode(opt) )	opt->setText(id());
     else if( a_path == "/blck/cfg/name" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(name());
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	name(opt->text());
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setName(opt->text());
     }
     else if( a_path == "/blck/cfg/descr" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(descr());
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	descr(opt->text());
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setDescr(opt->text());
     }
     else if( a_path == "/blck/cfg/toen" )
     {
@@ -632,8 +633,8 @@ void Block::cntrCmdProc( XMLNode *opt )
 	{
 	    char lev = TSYS::pathLev(a_path,2)[0];
             int id = ioId(TSYS::pathLev(a_path,2).substr(2));
-            if( lev == '1' )            link(id,SET,(Block::LnkT)atoi(opt->text().c_str()));
-	    else if( lev == '2' )	link(id,SET,m_lnk[id].tp,opt->text());
+            if( lev == '1' )            setLink(id,SET,(Block::LnkT)atoi(opt->text().c_str()));
+	    else if( lev == '2' )	setLink(id,SET,m_lnk[id].tp,opt->text());
 	}	    		    
     }
     else if( a_path == "/lnk/itp" && enable() && ctrChkNode(opt) )

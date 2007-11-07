@@ -1,13 +1,12 @@
 
 //OpenSCADA system module DAQ.LogicLev file: logiclev.h
 /***************************************************************************
- *   Copyright (C) 2006 by Roman Savochenko                                *
+ *   Copyright (C) 2006-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -40,41 +39,56 @@ using std::vector;
 namespace LogicLev
 {
 
-//======================================================================
-//==== TMdPrm 
-//======================================================================
+//*************************************************
+//* TMdPrm                                        *
+//*************************************************
 class TMdContr;
     
 class TMdPrm : public TParamContr
 {
     public:
+	//Data
 	enum Mode { Free, DirRefl, Template };
 	
+	//Methods
     	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );	
 	
 	Mode mode( )	{ return m_wmode; }
         void mode( Mode md, const string &prm = "" );		
 	
-	void enable();
-	void disable();
+	void enable( );
+	void disable( );
 	void load( );
 	void save( );
 	
 	void calc( bool first, bool last );	//Calc template's algoritmes
 	
-	TMdContr &owner()	{ return (TMdContr&)TParamContr::owner(); }
+	TMdContr &owner( )	{ return (TMdContr&)TParamContr::owner(); }
 	
     private:
 	//Data
 	class SLnk
 	{
 	    public:
-	        SLnk(int iid, const string &iprm_attr = "") : io_id(iid), prm_attr(iprm_attr) { }
+	        SLnk( int iid, const string &iprm_attr = "" ) : 
+		    io_id(iid), prm_attr(iprm_attr) { }
 	        int 	io_id;
 		string  prm_attr;
 	        AutoHD<TVal> aprm;
 	};
+	
+        struct STmpl
+        {
+            TValFunc     val;
+    	    vector<SLnk> lnk;
+        };
+	
+	union
+        {
+            AutoHD<TValue> *prm_refl;   //Direct reflection
+            STmpl *tmpl;                //Template
+        };
 	
 	//Methods
         void postEnable( int flag );
@@ -87,7 +101,7 @@ class TMdPrm : public TParamContr
 	void vlArchMake( TVal &val );
 	
 	//- Template link operations -
-        int lnkSize();
+        int lnkSize( );
         int lnkId( int id );
         int lnkId( const string &id );
         SLnk &lnk( int num );
@@ -106,32 +120,20 @@ class TMdPrm : public TParamContr
 	bool	chk_lnk_need;	//Check lnk need flag
 	Res 	moderes;	//Resource
 	int	id_freq, id_start, id_stop, id_err;	//Fixed system attributes identifiers
-        
-	//Data
-        struct STmpl
-        {
-            TValFunc     	val;
-    	    vector<SLnk> 	lnk;
-        };
-	
-	union
-        {
-            AutoHD<TValue> *prm_refl;   //Direct reflection
-            STmpl *tmpl;                //Template
-        };
 };
 
-//======================================================================
-//==== TMdContr 
-//======================================================================
+//*************************************************
+//* TMdContr                                      *
+//*************************************************
 class TMdContr: public TController
 {
     friend class TMdPrm;
     public:
+	//Methods
     	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem);
-	~TMdContr();   
+	~TMdContr( );   
 
-	int period()	{ return m_per; }
+	int period( )	{ return m_per; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
@@ -141,8 +143,9 @@ class TMdContr: public TController
 	void stop_( );    
 	
     protected:
+	//Methods
 	void prmEn( const string &id, bool val );
-	void postDisable(int flag);     	//Delete all DB if flag 1
+	void postDisable( int flag );     	//Delete all DB if flag 1
     	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
     private:
@@ -164,19 +167,20 @@ class TMdContr: public TController
 	double 	tm_calc;	// Template functions calc time
 };
 
-//======================================================================
-//==== TTpContr 
-//======================================================================
+//*************************************************
+//* TTpContr                                      *
+//*************************************************
 class TTpContr: public TTipDAQ
 {
     public:
+	//Methods
     	TTpContr( string name );
-	~TTpContr();
+	~TTpContr( );
 	
 	void postEnable( int flag );
 	void modLoad( );
 
-	TElem   &prmIOE()	{ return el_prm_io; }
+	TElem   &prmIOE( )	{ return el_prm_io; }
 	
     private:
 	//Methods

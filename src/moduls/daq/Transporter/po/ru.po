@@ -3,57 +3,54 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: snmp_client.cpp:68 snmp_client.cpp:149 snmp_client.cpp:157
-#: snmp_client.cpp:345 snmp_client.cpp:348 snmp_client.cpp:351
+#: transporter.cpp:49 transporter.cpp:130 transporter.cpp:452
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenScada 0.1.17\n"
+"Project-Id-Version: OpenSCADA.DAQ.Transporter 0.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-15 10:44+0200\n"
-"PO-Revision-Date: 2004-03-20 10:37+0200\n"
+"POT-Creation-Date: 2007-10-29 12:40+0200\n"
+"PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: snmp_client.cpp:43
-msgid "SNMP"
-msgstr ""
+#: transporter.cpp:32
+msgid "Transporter"
+msgstr "Транспортёр"
 
-#: snmp_client.cpp:44
-msgid "SNMP client"
-msgstr "SNMP клиент"
+#: transporter.cpp:33
+msgid "Data sources transporter"
+msgstr "Транспортёр источников данных"
 
-#: snmp_client.cpp:45
+#: transporter.cpp:34
 msgid "DAQ"
 msgstr ""
 
-#: snmp_client.cpp:47
+#: transporter.cpp:36
 msgid "0.3.0"
 msgstr ""
 
-#: snmp_client.cpp:48
+#: transporter.cpp:37
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-#: snmp_client.cpp:49
-msgid "Allow realising of SNMP client service."
-msgstr "Предоставляет реализацию клиентского сервиса протокола SNMP."
+#: transporter.cpp:38
+msgid ""
+"Allow to make transport data sources of remote OpenSCADA station to local "
+"OpenSCADA station."
+msgstr "Позволяет выполнять транпортировку источников данных удалённых OpenSCADA станций на локальные."
 
-#: snmp_client.cpp:50
+#: transporter.cpp:39
 msgid "GPL"
 msgstr ""
 
-#: snmp_client.cpp:55
+#: transporter.cpp:44
 msgid "C"
 msgstr ""
 
-#: snmp_client.cpp:101
-msgid "OpenSCADA SNMP client"
-msgstr "OpenSCADA SNMP клиент"
-
-#: snmp_client.cpp:114
+#: transporter.cpp:89
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
@@ -64,205 +61,369 @@ msgstr ""
 "-------- Параметры модульной секции <%s> в конфигурационном файле --------\n"
 "\n"
 
-#: snmp_client.cpp:125
+#: transporter.cpp:100
 msgid "h"
 msgstr ""
 
-#: snmp_client.cpp:128
+#: transporter.cpp:103
 msgid "help"
 msgstr ""
 
-#: snmp_client.cpp:149 snmp_client.cpp:156 snmp_client.cpp:174
-msgid "PRM_BD"
-msgstr ""
-
-#: snmp_client.cpp:149
-msgid "Parameteres table"
-msgstr "Таблица параметров"
-
-#: snmp_client.cpp:149 snmp_client.cpp:152
-msgid "30"
-msgstr ""
-
-#: snmp_client.cpp:150 snmp_client.cpp:170
+#: transporter.cpp:124 transporter.cpp:162
 msgid "PERIOD"
 msgstr ""
 
-#: snmp_client.cpp:150
+#: transporter.cpp:124
 msgid "Gather data period (s)"
 msgstr "Период сбора данных (с)"
 
-#: snmp_client.cpp:150 snmp_client.cpp:154
-msgid "3"
+#: transporter.cpp:124 transporter.cpp:126
+msgid "6.2"
 msgstr ""
 
-#: snmp_client.cpp:150
+#: transporter.cpp:124 transporter.cpp:549
 msgid "1"
 msgstr ""
 
-#: snmp_client.cpp:150 snmp_client.cpp:151
+#: transporter.cpp:124 transporter.cpp:125
 msgid "0;100"
 msgstr ""
 
-#: snmp_client.cpp:151 snmp_client.cpp:170
+#: transporter.cpp:125 transporter.cpp:162
 msgid "PRIOR"
 msgstr ""
 
-#: snmp_client.cpp:151
+#: transporter.cpp:125
 msgid "Gather task priority"
 msgstr "Уровень приоритета задачи сбора данных"
 
-#: snmp_client.cpp:151
+#: transporter.cpp:125
 msgid "2"
 msgstr ""
 
-#: snmp_client.cpp:151
+#: transporter.cpp:125 transporter.cpp:549
 msgid "0"
 msgstr ""
 
-#: snmp_client.cpp:152 snmp_client.cpp:170
-msgid "ADDR"
+#: transporter.cpp:126 transporter.cpp:162
+msgid "SYNCPER"
 msgstr ""
 
-#: snmp_client.cpp:152
-msgid "Remote host address"
-msgstr "Адрес удалённого хоста"
+#: transporter.cpp:126
+msgid "Sync inter remote station period (s)"
+msgstr "Периодичность синхронизации с удалённой станцией (с)"
 
-#: snmp_client.cpp:152
-msgid "localhost"
+#: transporter.cpp:126
+msgid "60"
 msgstr ""
 
-#: snmp_client.cpp:153 snmp_client.cpp:170
-msgid "COMM"
+#: transporter.cpp:126
+msgid "0;1000"
 msgstr ""
 
-#: snmp_client.cpp:153
-msgid "Server community"
-msgstr "Группа сервера"
-
-#: snmp_client.cpp:153
-msgid "20"
+#: transporter.cpp:127 transporter.cpp:163
+msgid "STATIONS"
 msgstr ""
 
-#: snmp_client.cpp:153
-msgid "public"
-msgstr ""
+#: transporter.cpp:127
+msgid "Remote stations list"
+msgstr "Список удалённых станций"
 
-#: snmp_client.cpp:154 snmp_client.cpp:171
-msgid "PATTR_LIM"
-msgstr ""
-
-#: snmp_client.cpp:154
-msgid "Param's attributes limit"
-msgstr "Ограничение на количество атрибутов"
-
-#: snmp_client.cpp:154 snmp_client.cpp:157
+#: transporter.cpp:127
 msgid "100"
 msgstr ""
 
-#: snmp_client.cpp:156
+#: transporter.cpp:128 transporter.cpp:163
+msgid "CNTRPRM"
+msgstr ""
+
+#: transporter.cpp:128
+msgid "Remote cotrollers and parameters list"
+msgstr "Список удалённых контроллеров и параметров"
+
+#: transporter.cpp:128
+msgid "200"
+msgstr ""
+
+#: transporter.cpp:130 transporter.cpp:226
 msgid "std"
 msgstr ""
 
-#: snmp_client.cpp:156
+#: transporter.cpp:130
 msgid "Standard"
 msgstr "Стандарт"
 
-#: snmp_client.cpp:157 snmp_client.cpp:442 snmp_client.cpp:513
-msgid "OID_LS"
-msgstr ""
-
-#: snmp_client.cpp:157
-msgid "OID list (next line separated)"
-msgstr "Список OID (разделение след. строкой)"
-
-#: snmp_client.cpp:174
-msgid "SNMPPrm_"
-msgstr ""
-
-#: snmp_client.cpp:211 snmp_client.cpp:429 snmp_client.cpp:518
-msgid "root"
-msgstr ""
-
-#: snmp_client.cpp:219
-msgid "start"
-msgstr ""
-
-#: snmp_client.cpp:220
-msgid "Gathering task no started!"
-msgstr "Задача сбора данных не запущена!"
-
-#: snmp_client.cpp:244
-msgid "stop"
-msgstr ""
-
-#: snmp_client.cpp:245
-msgid "Gathering task no stoped!"
-msgstr "Задача сбора данных не остановлена!"
-
-#: snmp_client.cpp:292 snmp_client.cpp:395
-#, c-format
-msgid "%s"
-msgstr ""
-
-#: snmp_client.cpp:292
-msgid "Error SNMP session open."
-msgstr "Ошибка открытия SNMP сессии."
-
-#: snmp_client.cpp:368
-#, c-format
-msgid "TEST 02: %xh\n"
-msgstr ""
-
-#: snmp_client.cpp:386
-#, c-format
-msgid "Timeout: No Response from %s."
-msgstr "Время ожидания ответа от %s превышено."
-
-#: snmp_client.cpp:419
-msgid "_"
-msgstr ""
-
-#: snmp_client.cpp:426 snmp_client.cpp:510
-msgid "info"
-msgstr ""
-
-#: snmp_client.cpp:429 snmp_client.cpp:513
-msgid "fld"
-msgstr ""
-
-#: snmp_client.cpp:429 snmp_client.cpp:434
-msgid "/cntr/st/gath_tm"
-msgstr ""
-
-#: snmp_client.cpp:429
-msgid "Gather data time (ms)"
-msgstr "Время сбора данных (мс)"
-
-#: snmp_client.cpp:429
-msgid "tp"
-msgstr ""
-
-#: snmp_client.cpp:429
-msgid "real"
-msgstr ""
-
-#: snmp_client.cpp:433 snmp_client.cpp:517
+#: transporter.cpp:144 transporter.cpp:146 transporter.cpp:153
+#: transporter.cpp:211 transporter.cpp:224 transporter.cpp:353
+#: transporter.cpp:426 transporter.cpp:430 transporter.cpp:435
+#: transporter.cpp:470 transporter.cpp:486 transporter.cpp:503
+#: transporter.cpp:532 transporter.cpp:565 transporter.cpp:568
 msgid "path"
 msgstr ""
 
-#: snmp_client.cpp:442
+#: transporter.cpp:149 transporter.cpp:208
+msgid "*"
+msgstr ""
+
+#: transporter.cpp:150
+msgid "TrCntr"
+msgstr ""
+
+#: transporter.cpp:152
+msgid "\n"
+msgstr ""
+
+#: transporter.cpp:152
+msgid "SelfSystem"
+msgstr ""
+
+#: transporter.cpp:154
+msgid "rez"
+msgstr ""
+
+#: transporter.cpp:192 transporter.cpp:435
+msgid "list"
+msgstr ""
+
+#: transporter.cpp:205 transporter.cpp:512 transporter.cpp:565
+msgid "/"
+msgstr ""
+
+#: transporter.cpp:205
+msgid "/DAQ/"
+msgstr ""
+
+#: transporter.cpp:211 transporter.cpp:224 transporter.cpp:355
+#: transporter.cpp:419 transporter.cpp:464 transporter.cpp:549
+msgid "get"
+msgstr ""
+
+#: transporter.cpp:211
+#, c-format
+msgid "%2fprm%2fprm"
+msgstr ""
+
+#: transporter.cpp:214 transporter.cpp:441 transporter.cpp:450
+#: transporter.cpp:473 transporter.cpp:487
+msgid "id"
+msgstr ""
+
+#: transporter.cpp:224 transporter.cpp:426
+#, c-format
+msgid "/%2fprm%2fcfg%2fNAME"
+msgstr ""
+
+#: transporter.cpp:245 transporter.cpp:347 transporter.cpp:348
+#: transporter.cpp:355 transporter.cpp:517 transporter.cpp:519
+#: transporter.cpp:520 transporter.cpp:521 transporter.cpp:549
+#: transporter.cpp:550
+msgid "root"
+msgstr ""
+
+#: transporter.cpp:253
+msgid "start"
+msgstr ""
+
+#: transporter.cpp:254
+msgid "Gathering task no started!"
+msgstr "Задача сбора данных не запущена!"
+
+#: transporter.cpp:265
+msgid "stop"
+msgstr ""
+
+#: transporter.cpp:266
+msgid "Gathering task no stoped!"
+msgstr "Задача сбора данных не остановлена!"
+
+#: transporter.cpp:344 transporter.cpp:509 transporter.cpp:528
+msgid "info"
+msgstr ""
+
+#: transporter.cpp:347 transporter.cpp:517 transporter.cpp:519
+#: transporter.cpp:520 transporter.cpp:521
+msgid "fld"
+msgstr ""
+
+#: transporter.cpp:347 transporter.cpp:354
+msgid "/cntr/st/gath_tm"
+msgstr ""
+
+#: transporter.cpp:347
+msgid "Gather data time (ms)"
+msgstr "Время сбора данных (мс)"
+
+#: transporter.cpp:347 transporter.cpp:348 transporter.cpp:442
+#: transporter.cpp:517 transporter.cpp:519 transporter.cpp:520
+#: transporter.cpp:521
+msgid "tp"
+msgstr ""
+
+#: transporter.cpp:347
+msgid "real"
+msgstr ""
+
+#: transporter.cpp:348
+msgid "comm"
+msgstr ""
+
+#: transporter.cpp:348 transporter.cpp:355
+msgid "/cntr/cfg/host_lnk"
+msgstr ""
+
+#: transporter.cpp:348
+msgid "Go to remote stations list configuration"
+msgstr "Переход к конфигурации перечня удалённых станций"
+
+#: transporter.cpp:348
+msgid "lnk"
+msgstr ""
+
+#: transporter.cpp:358
+msgid "/Transport"
+msgstr ""
+
+#: transporter.cpp:367
 msgid "w_attr"
 msgstr ""
 
-#: snmp_client.cpp:513 snmp_client.cpp:518
-msgid "/prm/cfg/OID_LS"
+#: transporter.cpp:413
+msgid ";"
 msgstr ""
 
-#: snmp_client.cpp:518
+#: transporter.cpp:427 transporter.cpp:431 transporter.cpp:436
+#: transporter.cpp:471 transporter.cpp:488 transporter.cpp:533
+#: transporter.cpp:566
+msgid "mcat"
+msgstr ""
+
+#: transporter.cpp:430
+#, c-format
+msgid "/%2fprm%2fcfg%2fDESCR"
+msgstr ""
+
+#: transporter.cpp:435 transporter.cpp:470 transporter.cpp:486
+#, c-format
+msgid "/%2fserv%2f0"
+msgstr ""
+
+#: transporter.cpp:450
+msgid "nm"
+msgstr ""
+
+#: transporter.cpp:451
+msgid "flg"
+msgstr ""
+
+#: transporter.cpp:452
+msgid "vals"
+msgstr ""
+
+#: transporter.cpp:452
+msgid "names"
+msgstr ""
+
+#: transporter.cpp:485 transporter.cpp:550
 msgid "set"
 msgstr ""
 
-#: snmp_client.cpp:520
-msgid "Parameter is enabled."
-msgstr "Параметр включен."
+#: transporter.cpp:487
+msgid "el"
+msgstr ""
+
+#: transporter.cpp:506
+msgid "/serv/"
+msgstr ""
+
+#: transporter.cpp:512
+msgid "oscada_cntr"
+msgstr ""
+
+#: transporter.cpp:512
+msgid "Parameter: "
+msgstr "Параметры: "
+
+#: transporter.cpp:513 transporter.cpp:515 transporter.cpp:523
+msgid "area"
+msgstr ""
+
+#: transporter.cpp:513
+msgid "/prm"
+msgstr ""
+
+#: transporter.cpp:513
+msgid "Parameter"
+msgstr "Параметр"
+
+#: transporter.cpp:515
+msgid "/prm/st"
+msgstr ""
+
+#: transporter.cpp:515
+msgid "State"
+msgstr "Состояние"
+
+#: transporter.cpp:517 transporter.cpp:546
+msgid "/prm/st/type"
+msgstr ""
+
+#: transporter.cpp:517
+msgid "Type"
+msgstr "Тип"
+
+#: transporter.cpp:517 transporter.cpp:520 transporter.cpp:521
+msgid "str"
+msgstr ""
+
+#: transporter.cpp:519 transporter.cpp:547
+msgid "/prm/st/en"
+msgstr ""
+
+#: transporter.cpp:519
+msgid "Enable"
+msgstr "Включен"
+
+#: transporter.cpp:519
+msgid "bool"
+msgstr ""
+
+#: transporter.cpp:520 transporter.cpp:556
+msgid "/prm/st/id"
+msgstr ""
+
+#: transporter.cpp:520
+msgid "Id"
+msgstr ""
+
+#: transporter.cpp:521 transporter.cpp:557
+msgid "/prm/st/nm"
+msgstr ""
+
+#: transporter.cpp:521
+msgid "Name"
+msgstr "Имя"
+
+#: transporter.cpp:523 transporter.cpp:558
+msgid "/prm/cfg"
+msgstr ""
+
+#: transporter.cpp:523
+msgid "Config"
+msgstr "Конфигурация"
+
+#: transporter.cpp:532
+#, c-format
+msgid "/%2fprm%2fcfg"
+msgstr ""
+
+#: transporter.cpp:539
+msgid "dscr"
+msgstr ""
+
+#: transporter.cpp:539
+msgid "Remote station config"
+msgstr "Конфигурация удалённой станции"
+
+#: transporter.cpp:552
+msgid "Controller no started!"
+msgstr "Контроллер не запущен!"

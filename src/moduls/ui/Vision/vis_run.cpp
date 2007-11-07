@@ -80,7 +80,7 @@ VisRun::VisRun( const string &prj_it, const string &open_user, const string &VCA
     actUpdtMode = new QAction(_("Update only changed widgets"),this);
     actUpdtMode->setCheckable(true);
     actUpdtMode->setToolTip(_("Update only changed widgets toggle"));
-    actUpdtMode->setWhatsThis(_("The button for full toggle to update only changed widgets"));
+    actUpdtMode->setWhatsThis(_("The button for toggle to update only changed widgets"));
     actUpdtMode->setStatusTip(_("Press for toggle to update only changed widgets."));
     actUpdtMode->setChecked(mod->runTimeUpdt());
     
@@ -259,7 +259,7 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
 	QImage ico_t;
 	if(!ico_t.load(TUIS::icoPath("vision_prj_run").c_str())) ico_t.load(":/images/prj_run.png");
 	QDialog conreq(this);
-	conreq.setWindowTitle(_("Connection to session select"));
+	conreq.setWindowTitle(_("Select session for connection"));
         conreq.setMinimumSize( QSize( 150, 100 ) );
 	conreq.setWindowIcon(QPixmap::fromImage(ico_t));
         conreq.setSizeGripEnabled(true);

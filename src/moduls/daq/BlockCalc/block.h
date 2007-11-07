@@ -1,13 +1,12 @@
 
 //OpenSCADA system module DAQ.BlockCalc file: block.h
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -34,7 +33,9 @@ using std::vector;
 namespace Virtual
 {
 
-//Function block
+//*************************************************
+//* Block: Function block                         *
+//*************************************************
 class Contr;
 
 class Block : public TCntrNode, public TValFunc, public TConfig
@@ -52,39 +53,33 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	// O_PRM - output parameter link
 	enum LnkT { FREE, I_LOC, I_GLB, I_PRM, O_PRM, O_LOC, O_GLB };
 	//- Link comands -
-	enum LnkCmd {INIT, DEINIT, SET};
+	enum LnkCmd { INIT, DEINIT, SET };
     
 	//Attributes
 	Block( const string &iid, Contr *iown );
-	~Block();
+	~Block( );
 	
-	Block &operator=(Block &blk);
+	Block &operator=( Block &blk );
 
 	//- Block's parameters -
-        const string &id()	{ return m_id; }
-        string name();
-        string descr() 	{ return m_descr; }
-	int    errCnt(){ return err_cnt; }
+        const string &id( )	{ return m_id; }
+        string name( );
+        string descr( ) 	{ return m_descr; }
+	int    errCnt( )	{ return err_cnt; }
+	bool   enable( )	{ return m_enable; }	
+	bool   process( )	{ return m_process; }
+	bool   toEnable( )	{ return m_to_en; }
+	bool   toProcess( )	{ return m_to_prc; }	
 	
-        void name( const string &name ){ m_name = name; }
-        void descr( const string &dscr ){ m_descr = dscr; }	
-	
-	//- What make for init. -
-	bool toEnable()	{ return m_to_en; }
-	bool toProcess(){ return m_to_prc; }
-
-	//- Enable stat -
-	bool enable()	{ return m_enable; }
-	void enable( bool val );
-	
-	//- Process stat -
-	bool process()	{ return m_process; }
-	void process( bool val );
+        void setName( const string &name )	{ m_name = name; }
+        void setDescr( const string &dscr )	{ m_descr = dscr; }
+	void setEnable( bool val );
+	void setProcess( bool val );
 	
 	//- Link IO -
 	LnkT link( unsigned id );
 	bool linkActive( unsigned id );	
-	void link( unsigned id, LnkCmd cmd, LnkT lnk = FREE, const string &vlnk = "" );
+	void setLink( unsigned id, LnkCmd cmd, LnkT lnk = FREE, const string &vlnk = "" );
 	
 	//- Calc block -
 	void calc( bool first, bool last );
@@ -93,18 +88,18 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	void load( );
         void save( );	
 
-	Contr &owner()	{ return *(Contr *)nodePrev(); }
+	Contr &owner( )		{ return *(Contr *)nodePrev(); }
 		
     protected:
 	//Attributes
 	void loadIO( const string &blk_db = "", const string &blk_id = "" );
 	void saveIO( );
 	    
-	string nodeName(){ return m_id; }
+	string nodeName( )	{ return m_id; }
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
-	void preDisable(int flag);
-	void postDisable(int flag);     //Delete all DB if flag 1
+	void preDisable( int flag );
+	void postDisable( int flag );     	//Delete all DB if flag 1
 
     private:
 	//Data
@@ -118,8 +113,8 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	//- Define link structures -
 	struct SLnk
 	{
-	    LnkT tp;	//Link type
-	    string lnk;	//Link
+	    LnkT tp;			//Link type
+	    string lnk;			//Link
 	    union
 	    {
 		SLIBlk		*iblk;	//Input interblock link structure
@@ -129,7 +124,8 @@ class Block : public TCntrNode, public TValFunc, public TConfig
     
 	//Attributes
 	vector<SLnk>	m_lnk;
-	bool		m_enable, m_process;	//Processing block
+	bool		m_enable, 
+			m_process;	//Processing block
 	
 	string 		&m_id, 		//Block id
 			&m_name, 	//Block name

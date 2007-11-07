@@ -46,7 +46,7 @@ TModule::TModule( )
 
 TModule::~TModule(  )
 {
-    //Clean export function list
+    //- Clean export function list -
     for(int i=0; i < m_efunc.size(); i++)
         delete m_efunc[i];
 }
@@ -117,7 +117,7 @@ string TModule::modInfo( const string &name )
 
 void TModule::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Module: ")+modId());
@@ -132,8 +132,9 @@ void TModule::cntrCmdProc( XMLNode *opt )
 		    ctrMkNode("fld",opt,-1,(string("/help/m_inf/")+list[i_l]).c_str(),I18Ns(list[i_l]),0444,"root","root",1,"tp","str");
 	    }
         return;    
-    }    
-    //Process command to page
+    } 
+       
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/ico" && ctrChkNode(opt) )
     {
@@ -145,7 +146,6 @@ void TModule::cntrCmdProc( XMLNode *opt )
 	opt->setText(modInfo(TSYS::pathLev(a_path,2)));
 }
 
-//================== Translate functions ======================
 const char *TModule::I18N( const char *mess )   
 { 
     const char *rez = Mess->I18N(mess,lc_id.c_str());

@@ -1,13 +1,12 @@
 
 //OpenSCADA system module DAQ.System file: da_mem.h
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -28,14 +27,18 @@
 namespace SystemCntr
 {
 
+//*************************************************
+//* Mem                                           *
+//*************************************************
 class Mem: public DA
 {
     public:
+	//Methods
 	Mem( );
 	~Mem( );
 	
-        string id()     { return "MEM"; }
-        string name()   { return "Memory"; }			
+        string id( ) 	{ return "MEM"; }
+        string name( )	{ return "Memory"; }			
 
 	void init( TMdPrm *prm );
 	void deInit( TMdPrm *prm );
@@ -48,4 +51,3 @@ class Mem: public DA
 } //End namespace 
 
 #endif //DA_MEM_H
-

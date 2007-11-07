@@ -1,13 +1,12 @@
 
 //OpenSCADA system module DAQ.JavaLikeCalc file: freefunc.h
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -41,31 +40,34 @@ using std::deque;
 
 namespace JavaLikeCalc
 {
+
 //Bison parse function
 int yyparse( );
 
-//=======================================================
-//=========== Using func list element ===================
-//=======================================================
+//*************************************************
+//* UFunc: Using func list element                *
+//*************************************************
 class UFunc
 {
     public:
+	//Methods
 	UFunc( const string &path ) : m_path(path)
 	{ 	    
 	    if( dynamic_cast<TFunction *>(&SYS->nodeAt(path,0,'.').at()) )
 		m_func = SYS->nodeAt(path,0,'.');
 	}	
-	const string &path()		{ return m_path; }
-	AutoHD<TFunction> &func()	{ return m_func; }
+	const string &path( )		{ return m_path; }
+	AutoHD<TFunction> &func( )	{ return m_func; }
 	
     private:
+	//Attributes
 	string 		m_path;
 	AutoHD<TFunction> m_func;
 };
 
-//=======================================================
-//============ Register =================================
-//=======================================================
+//*************************************************
+//* Reg: Compile register                         *
+//*************************************************
 class Func;
 
 class Reg
@@ -173,26 +175,24 @@ class Reg
 	Reg( int ipos ) : m_tp(Free), m_lock(false), m_nm(NULL), m_pos(ipos) {  }
 	~Reg( )	
 	{ 
-	    type(Free); 
+	    setType(Free); 
 	    if(m_nm) delete m_nm; 
 	}
 
 	Reg &operator=( Reg &irg );
-	void operator=( bool ivar )		{ type(Bool);	el.b_el = ivar; }
-	void operator=( int ivar )		{ type(Int); 	el.i_el = ivar; }
-	void operator=( double ivar )		{ type(Real); 	el.r_el = ivar; }
-	void operator=( const string &ivar )	{ type(String);	*el.s_el = ivar;}
-	void setVar( int ivar )			{ type(Var);	el.io = ivar; }
-	void setPAttr( const AutoHD<TVal> &ivattr )	{ type(PrmAttr); *el.p_attr = ivattr; }
+	void operator=( bool ivar )		{ setType(Bool);	el.b_el = ivar; }
+	void operator=( int ivar )		{ setType(Int); 	el.i_el = ivar; }
+	void operator=( double ivar )		{ setType(Real); 	el.r_el = ivar; }
+	void operator=( const string &ivar )	{ setType(String);	*el.s_el = ivar;}
 
-	int pos()	{ return m_pos; }
-
-	string name() const;
-	void name( const char *nm );
-
-	Type type( ) const	{ return m_tp; }
-	Type vType( Func *fnc );
-	void type( Type tp )
+	string name( ) const;
+	Type type( ) const			{ return m_tp; }
+	Type vType( Func *fnc );	
+	int pos( )				{ return m_pos; }
+	bool lock( )				{ return m_lock; }	
+	
+	void setName( const char *nm );
+	void setType( Type tp )
 	{
 	    if( m_tp == tp )    return;
     	    //Free old type
@@ -203,13 +203,13 @@ class Reg
 	    else if( tp == Reg::PrmAttr )     	el.p_attr = new AutoHD<TVal>;
 	    m_tp = tp;	
 	}
+	void setLock( bool vl )			{ m_lock = vl; }
+	void setVar( int ivar )			{ setType(Var);	el.io = ivar; }
+	void setPAttr( const AutoHD<TVal> &ivattr )	{ setType(PrmAttr); *el.p_attr = ivattr; }	
 
-	void free();
+	void free( );
 
-	bool lock()		{ return m_lock; }
-	void lock( bool vl )	{ m_lock = vl; }
-
-	El &val() 	{ return el; }
+	El &val( ) 				{ return el; }
 
     private:
 	//Attributes
@@ -220,21 +220,22 @@ class Reg
 	El 	el;
 };
 
+//*************************************************
+//* RegW : Work register                          *
+//*************************************************
 class RegW
 {
     public:
 	RegW( ) : m_tp(Reg::Free) {  }
-	//RegW( const Reg &irg );
-	~RegW( ) { type(Reg::Free); }
+	~RegW( ) { setType(Reg::Free); }
 
-	void operator=( bool ivar )		{ type(Reg::Bool);	el.b_el = ivar; }
-	void operator=( int ivar )		{ type(Reg::Int); 	el.i_el = ivar; }
-	void operator=( double ivar )		{ type(Reg::Real); 	el.r_el = ivar; }
-	void operator=( const string &ivar )	{ type(Reg::String);	*el.s_el = ivar;}
-	//void setVar( int ivar )			{ type(Reg::Var);    	el.io = ivar; }
+	void operator=( bool ivar )		{ setType(Reg::Bool);	el.b_el = ivar; }
+	void operator=( int ivar )		{ setType(Reg::Int); 	el.i_el = ivar; }
+	void operator=( double ivar )		{ setType(Reg::Real); 	el.r_el = ivar; }
+	void operator=( const string &ivar )	{ setType(Reg::String);	*el.s_el = ivar;}
 	
-	Reg::Type type( ) const	{ return m_tp; }
-	void type( Reg::Type tp )
+	Reg::Type type( ) const			{ return m_tp; }
+	void setType( Reg::Type tp )
 	{
 	    if( m_tp == tp )    return;
     	    //Free old type
@@ -246,14 +247,16 @@ class RegW
 	    m_tp = tp;	
 	}
 	
-	Reg::El &val() 	{ return el; }	
+	Reg::El &val( ) 			{ return el; }	
 	
     private:	
 	Reg::Type 	m_tp;
 	Reg::El 	el;
 };
 
-//Function
+//*************************************************
+//* Func: Function                                *
+//*************************************************
 class Lib;
 
 class Func : public TConfig, public TFunction
@@ -264,19 +267,18 @@ class Func : public TConfig, public TFunction
     public:    
 	//Attributes
         Func( const char *, const char *name = "" );
-        ~Func();	
+        ~Func( );	
 	
-	Func &operator=(Func &func);
+	Func &operator=( Func &func );
 	    
-        string name();
-        string descr()	{ return m_descr; }	
-	const string &prog()    { return prg_src; }
+        string name( );
+        string descr( )			{ return m_descr; }	
+	const string &prog( )		{ return prg_src; }
 	
-	void name( const char *nm )	{ m_name = nm; }
-	void descr( const char *dscr )	{ m_descr = dscr; }
-	void prog( const char *prg )	{ prg_src = prg; }
-	
-	void start( bool val );
+	void setName( const char *nm )	{ m_name = nm; }
+	void setDescr( const char *dscr )	{ m_descr = dscr; }
+	void setProg( const char *prg )	{ prg_src = prg; }	
+	void setStart( bool val );
 	
 	void load( );
         void save( );
@@ -284,28 +286,26 @@ class Func : public TConfig, public TFunction
 	
         void calc( TValFunc *val );
 
-	//void chID( const char *id );
-
-	void preIOCfgChange();
-        void postIOCfgChange();		
+	void preIOCfgChange( );
+        void postIOCfgChange( );		
 
 	//- Functins` list functions -
 	int funcGet( const string &path );
 	UFunc *funcAt( int id )	{ return m_fncs.at(id); }
-        void funcClear();
+        void funcClear( );
 	
 	//- Registers` list functions -
 	int regNew( bool var = false );
 	int regGet( const char *nm );
 	Reg *regAt( int id )	{ return m_regs.at(id); }	
-        void regClear();	
+        void regClear( );	
 	
 	//- Temporary registers` list functions -
-	Reg *regTmpNew(  );
+	Reg *regTmpNew( );
 	void regTmpClean( );
 
 	//- Parse function -
-	void progCompile();
+	void progCompile( );
 
 	//- Code functions -
 	Reg *cdTypeConv( Reg *opi, Reg::Type tp, bool no_code = false );
@@ -330,12 +330,12 @@ class Func : public TConfig, public TFunction
 	void setValS( TValFunc *io, RegW &rg, const string &val );
 	
 	//- IO operations -
-	void ioAdd( IO *io )	{ TFunction::ioAdd(io); }
+	void ioAdd( IO *io )		{ TFunction::ioAdd(io); }
         void ioIns( IO *io, int pos )	{ TFunction::ioIns(io,pos); }
-        void ioDel( int pos )	{ TFunction::ioDel(pos); }
+        void ioDel( int pos )		{ TFunction::ioDel(pos); }
         void ioMove( int pos, int to )	{ TFunction::ioMove(pos,to); }
 
-	Lib &owner();
+	Lib &owner( );
 	
     protected:
  	//Data

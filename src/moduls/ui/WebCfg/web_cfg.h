@@ -1,13 +1,12 @@
 
 //OpenSCADA system module UI.WebCfg file: web_cfg.h
 /***************************************************************************
- *   Copyright (C) 2004-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2004-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -30,100 +29,118 @@
 
 namespace WebCfg
 {
-    struct SAuth
-    {
-	time_t t_auth;
-	string name;
-	int    id_ses;
-    };
-    
-    class SSess
-    {
-	public:	
-	    SSess( const string &iurl, const string &ipage, const string &isender, vector<string> &ivars, const string &icontent ) :
+
+//*************************************************
+//* SAuth                                         *
+//*************************************************
+struct SAuth
+{
+    time_t t_auth;
+    string name;
+    int    id_ses;
+};
+
+//*************************************************
+//* SSess                                         *
+//*************************************************    
+class SSess
+{
+    public:
+	//Methods
+        SSess( const string &iurl, const string &ipage, const string &isender, 
+		    vector<string> &ivars, const string &icontent ) :
 		url(iurl), page(ipage), sender(isender), vars(ivars), content(icontent) {  };
-    	    string url;		//request URL 
-	    string page;	
-	    string sender;	//request sender 
-	    string user;	//sesion user
-	    XMLNode pg_info;	//page node
-	    XMLNode *root;
-	    //HTTP vars and contein
-	    vector<string> vars;//request vars
-	    string content;	//POST contein
-	    //Parsed contein
-	    vector<string> cnt_names;
-	    vector<string> cnt_vals;
-	    //No interrupt messages
-	    vector<string> mess;
-    };
-
-    class TWEB: public TUI
-    {
-	public:
-	    TWEB( string name );
-	    ~TWEB();
-	    
-	    void modLoad( );
-	    void modSave( );
-	    
-	    void modStart();
-            void modStop();
-    
-	private:
-	    //Methods
-	    void down_colont( SSess &ses );
-
-	    string http_head( const string &rcode, int cln, const string &cnt_tp = "text/html", const string &addattr = "" );
-	    string w_head( );
-	    string w_tail( );	    
+    	
+	//Attributes
+	string url;		//request URL 
+	string page;	
+	string sender;		//request sender 
+	string user;		//sesion user
+	XMLNode pg_info;	//page node
+	XMLNode *root;
 	
-	    void HttpGet( const string &url, string &page, const string &sender, vector<string> &vars );
-	    void get_about( SSess &ses );
-	    void get_head( SSess &ses );
-	    void get_area( SSess &ses, XMLNode &node, string a_path );
-	    void get_cmd( SSess &ses, XMLNode &node, string a_path ); 
-	    bool get_val( SSess &ses, XMLNode &node, string a_path, bool rd = true );
-	    void get_auth( SSess &ses );
-	    string get_cookie( string name, vector<string> &vars );
-	    
-	    void HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &contein );
-	    int  post_auth( SSess &ses );
-	    int  post_area( SSess &ses, XMLNode &node, const string &prs_comm, int level = 0 );
-	    int  post_val( SSess &ses, XMLNode &node, string prs_path);
-	    bool prepare_val( SSess &ses, XMLNode &node, string prs_path, bool compare );	    
-	    int  post_cmd( SSess &ses, XMLNode &node, string prs_path );
-	    int  post_list( SSess &ses, XMLNode &node, string prs_path );
-	    int  post_table( SSess &ses, XMLNode &node, string prs_path );
-	    // Post message dialog 
-	    //   type: 1 - message, 2 - warning, 3 - error; 
-	    void post_mess( string &page, const string &cat, const string &mess, int type );
-	    // Parse http contein
-	    void cont_frm_data( SSess &ses );
-	    // Sesion manipulation function	    
-	    int open_ses( string name );
-	    void check_ses( SSess &ses );
+	//- HTTP vars and contein -
+	vector<string> vars;	//request vars
+	string content;		//POST contein
+	
+	//- Parsed contein -
+	vector<string> cnt_names;
+	vector<string> cnt_vals;
+	
+	//- No interrupt messages -
+	vector<string> mess;
+};
 
-	    //Get form content for name
-	    string cntGet( SSess &ses, const string &nm );
+//*************************************************
+//* TWEB                                          *
+//*************************************************
+class TWEB: public TUI
+{
+    public:
+	//Methods
+	TWEB( string name );
+	~TWEB( );
 	    
-	    //Controll system requests
-            int cntrIfCmd( XMLNode &node );
+	void modLoad( );
+	void modSave( );
 	    
-	    string optDescr( );	
-	    string modInfo( const string &name );
-	    void   modInfo( vector<string> &list );
-	    
-	    void cntrCmdProc( XMLNode *opt );       //Control interface command process
-	    
-	    //Attributes
-	    Res             m_res;
-	    vector<SAuth *> m_auth;
-	    int             m_t_auth;          	//Time of sesion life (minutes)
-	    string	    m_CSStables;	//CSS tables
-    };
+	void modStart( );
+        void modStop( );
     
-    extern TWEB *mod;
+    private:
+        //Methods
+	void down_colont( SSess &ses );
+
+	string http_head( const string &rcode, int cln, const string &cnt_tp = "text/html", const string &addattr = "" );
+	string w_head( );
+	string w_tail( );	    
+	
+	void HttpGet( const string &url, string &page, const string &sender, vector<string> &vars );
+	void get_about( SSess &ses );
+	void get_head( SSess &ses );
+	void get_area( SSess &ses, XMLNode &node, string a_path );
+	void get_cmd( SSess &ses, XMLNode &node, string a_path ); 
+	bool get_val( SSess &ses, XMLNode &node, string a_path, bool rd = true );
+	void get_auth( SSess &ses );
+	string get_cookie( string name, vector<string> &vars );
+	    
+	void HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &contein );
+	int  post_auth( SSess &ses );
+	int  post_area( SSess &ses, XMLNode &node, const string &prs_comm, int level = 0 );
+	int  post_val( SSess &ses, XMLNode &node, string prs_path);
+	bool prepare_val( SSess &ses, XMLNode &node, string prs_path, bool compare );	    
+	int  post_cmd( SSess &ses, XMLNode &node, string prs_path );
+	int  post_list( SSess &ses, XMLNode &node, string prs_path );
+	int  post_table( SSess &ses, XMLNode &node, string prs_path );
+	//- Post message dialog -
+	//   type: 1 - message, 2 - warning, 3 - error; 
+	void post_mess( string &page, const string &cat, const string &mess, int type );
+	//- Parse http contein -
+	void cont_frm_data( SSess &ses );
+	//- Sesion manipulation function -
+	int open_ses( string name );
+	void check_ses( SSess &ses );
+
+	//- Get form content for name -
+	string cntGet( SSess &ses, const string &nm );
+	    
+	//- Controll system requests -
+        int cntrIfCmd( XMLNode &node );
+	    
+	string optDescr( );	
+	string modInfo( const string &name );
+	void   modInfo( vector<string> &list );
+	    
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	    
+	//Attributes
+	Res             m_res;
+	vector<SAuth *> m_auth;
+	int             m_t_auth;          	//Time of sesion life (minutes)
+	string	    	m_CSStables;		//CSS tables
+};
+    
+extern TWEB *mod;
 }
 
 #endif //WEB_CFG_H

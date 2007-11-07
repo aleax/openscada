@@ -45,146 +45,167 @@ class QDialogButtonBox;
 
 namespace QTCFG
 {
-//************************************************
-//* Line edit widget                             *
-//************************************************
+
+//*************************************************
+//* LineEdit: Line edit widget                    *
+//*************************************************
 class LineEdit : public QWidget
 {
     Q_OBJECT
 	
     public:
+	//Methods
 	LineEdit( QWidget *parent, bool prev_dis = false );
 	
-	bool hasFocus() const;
+	QString text( ) const;	
+	bool hasFocus( ) const;
 
-	void setText(const QString &);
-	QString text() const;
+	void setText( const QString & );
 
-	QLineEdit *edit()	{ return ed_fld; }
+	QLineEdit *edit( )	{ return ed_fld; }
 
     signals:
+	//Signals
 	void apply( );
 	void cancel( );
 	void textChanged(const QString&);
 	    
     protected:
+	//Methods
 	bool event( QEvent * e );
 
     private slots:
+	//Private slots
 	void changed( const QString& );
 	void applySlot( );
 	    
     private:
+	//Attributes
 	QLineEdit	*ed_fld;
 	QPushButton	*bt_fld;
 }; 
     
-//************************************************
-//* Date and time edit widget                    *
-//************************************************
+//*************************************************
+//* DateTimeEdit: Date and time edit widget       *
+//*************************************************
 class DateTimeEdit : public QWidget
 {
     Q_OBJECT
     
     public:
+	//Methods
 	DateTimeEdit( QWidget *parent, bool prev_dis = false );
 	    
-	bool hasFocus() const;
+	QDateTime dateTime( ) const;
+	bool hasFocus( ) const;
 
-	void setDateTime(const QDateTime & dt);
-	QDateTime dateTime() const;
+	void setDateTime( const QDateTime & dt );
 
-	QDateTimeEdit *dtEdit() { return ed_fld; }
+	QDateTimeEdit *dtEdit( ) { return ed_fld; }
 
     signals:
+	//Signals
 	void apply( );
 	void cancel( );
-	void valueChanged(const QDateTime&);	    	
+	void valueChanged( const QDateTime& );
 	    
     protected:
+	//Methods
 	bool event( QEvent * e );	    
 		
     private slots:
+	//Private slots
 	void changed( const QDateTime & );
 	void applySlot( );
 	    
     private:
-	QDateTimeEdit *ed_fld;
+	//Attributes
+	QDateTimeEdit 	*ed_fld;
 	QPushButton	*bt_fld;
 };
 
-//************************************************
-//* Text edit widget                             *
-//************************************************
+//*************************************************
+//* TextEdit: Text edit widget                    *
+//*************************************************
 class TextEdit : public QWidget
 {
     Q_OBJECT
     
     public:
+	//Methods
 	TextEdit( QWidget *parent, const char * name = 0, bool prev_dis = false );
 
-	bool hasFocus() const;
+	QString text( );
+	bool hasFocus( ) const;
 
-	QString text();	  
-	void setText(const QString &);  
+	void setText( const QString & );
 
-	QTextEdit	*edit()	{ return ed_fld; }
+	QTextEdit *edit( )	{ return ed_fld; }
 
     signals:
+	//Signals
 	void apply( );
 	void cancel( );
-	void textChanged(const QString&);
+	void textChanged( const QString& );
 	    
     private slots:
-	void changed();
+	//Private slots
+	void changed( );
 	    
     private:
+	//Private attributes
 	bool	isInit;
 	QTextEdit	*ed_fld;
 	QDialogButtonBox *but_box;
 };
     
 //************************************************
-//* Image view widget                            *
+//* ImgView: Image view widget                   *
 //************************************************
 class ImgView : public QWidget
 {
     Q_OBJECT
     public:
+	//Methods
 	ImgView( QWidget * parent = 0, Qt::WindowFlags f = 0, int ih_sz = 0, int iv_sz = 0 );
 	~ImgView( );
 	    
-	QImage &image()	{ return m_img; }
+	QImage &image( )	{ return m_img; }
+	
 	bool setImage( const string &imgdata );
 
     protected:
+	//Methods
 	void paintEvent( QPaintEvent * );
 	
     private:
+	//Attributes
 	QImage m_img;
 	int   h_sz, v_sz;
     };
 
 //************************************************
-//* Id and name input dialog                     *
+//* InputDlg: Id and name input dialog           *
 //************************************************
 class InputDlg : public QDialog
 {
     public:
+	//Methods
 	InputDlg( bool with_id = false );
 	    
-	QString id();
-	QString name();
+	QString id( );
+	QString name( );
 
-	void id(const QString &val);
-	void name(const QString &val);	    
+	void setId( const QString &val );
+	void setName( const QString &val );
 
     private:
+	//Attributes
 	QLineEdit *m_id, *m_name;
 };    
 
 //************************************************
-//* User select dialog                           *
+//* DlgUser: User select dialog                  *
 //************************************************
 class DlgUser : public QDialog
 {
@@ -193,70 +214,77 @@ class DlgUser : public QDialog
     public:
 	//Data
 	enum Results { SelCancel, SelOK, SelErr };
+	
 	//Methods
 	DlgUser( QWidget * parent = 0 );
             
-	QString user();
-	QString password();
+	QString user( );
+	QString password( );
         
     private slots:
+	//Private slots
 	void finish( int result );
         
     private:
+	//Attributes
 	QComboBox   *users;
 	QLineEdit   *passwd;
 };
     
 //************************************************
-//* Status bar user widget                       *
+//* UserStBar: Status bar user widget            *
 //************************************************
 class UserStBar : public QLabel
 {
     Q_OBJECT
 
     public:
+	//Methods
 	UserStBar( const QString &iuser, QWidget * parent = 0 );
 			    
-	QString user();
-	void user( const QString &val );
-		    
-	bool userSel( );
+	QString user( );
+	bool userSel( );	
+	
+	void setUser( const QString &val );
 	
     signals:
-	void userChanged();
+	//Signals
+	void userChanged( );
 	
     protected:
+	//Methods
 	bool event( QEvent *event );
 					    
     private:
+	//Attributes
 	QString     user_txt;
 };
 
 }
 
 //*************************************************
-//* Combobox table delegate                       *
+//* TableDelegate: Combobox table delegate        *
 //*************************************************
 class TableDelegate : public QItemDelegate
 {
     Q_OBJECT
 	
     public:
-	//Public attributes
-	TableDelegate(QObject *parent = 0);
+	//- Public attributes -
+	TableDelegate( QObject *parent = 0 );
 	    
-	void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+	void paint( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
 	
-	QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+	QWidget *createEditor( QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
 					  
-    	void setEditorData(QWidget *editor, const QModelIndex &index) const;
-        void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
+    	void setEditorData( QWidget *editor, const QModelIndex &index ) const;
+        void setModelData( QWidget *editor, QAbstractItemModel *model, const QModelIndex &index ) const;
 									
-	void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+	void updateEditorGeometry( QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
     
     private:
-	//Private attributes
-	bool eventFilter(QObject *object, QEvent *event);
+	//- Private attributes -
+	bool eventFilter( QObject *object, QEvent *event );
 };
 
 #endif //SELFWIDG_H

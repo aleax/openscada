@@ -100,10 +100,10 @@ class TFunction : public TCntrNode
 	
 	const string &id( )		{ return m_id; };
 	virtual string name( )		{ return ""; }
-	virtual string descr( )		{ return ""; }
+	virtual string descr( )		{ return ""; }	
+	bool startStat( )        	{ return run_st; }
 	
-	bool startStat()        	{ return run_st; }
-	virtual void start( bool val )  { run_st = val; }
+	virtual void setStart( bool val )  { run_st = val; }
 	
 	//- IO -
 	void ioList( vector<string> &list );

@@ -1,13 +1,12 @@
 
 //OpenSCADA system module DAQ.JavaLikeCalc file: virtual.h
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -41,78 +40,84 @@ using std::vector;
 namespace JavaLikeCalc
 {
 
-//===================================================================
-//================ Constant structure ===============================
-//===================================================================
+//*************************************************
+//* NConst: Constant structure                    *
+//*************************************************
 class NConst
 {
     public:
+	//Methods
         NConst( TFld::Type itp, const string &inm, const string &ival ) : 
 	    tp(itp), name(inm), val(ival) { }
 	
+	//Attributes
 	TFld::Type tp;
         string name;
         string val;
 };
 
-//===================================================================
-//================ Buildin functions structure ======================
-//===================================================================
+//*************************************************
+//* BFunc: Buildin functions structure            *
+//*************************************************
 class BFunc
 {
     public:
+	//Methods    
 	BFunc( const char *inm, Reg::Code icd, int iprm ) : 
 	    name(inm), code(icd), prm(iprm) { }	
-    
+
+	//Attributes    
 	string 	name;
 	Reg::Code code;
 	int prm;
 };
 
-//===================================================================
-//================ Parameter object =================================
-//===================================================================
+//*************************************************
+//* Contr: Parameter object                       *
+//*************************************************
 class Contr;
 
 class Prm : public TParamContr
 {
     public:
+	//Methods
         Prm( string name, TTipParam *tp_prm );
 	~Prm( );
 
-	void enable();
-	void disable();
+	void enable( );
+	void disable( );
 	
-	Contr &owner()	{ return (Contr&)TParamContr::owner(); }
+	Contr &owner( )	{ return (Contr&)TParamContr::owner(); }
 			    
     private:
+	//Methods
 	void postEnable( int flag );
-	//void postDisable(int flag);
 		
         void vlSet( TVal &val );
         void vlGet( TVal &val );
 	void vlArchMake( TVal &val );
 	
-    private:
+	//Attributes
 	TElem  v_el;   //Values elem
 };						
 
-//===================================================================
-//================ Controller object ================================
-//===================================================================
+//*************************************************
+//* Contr: Controller object                      *
+//*************************************************
 class Contr: public TController, public TValFunc
 {
     public:
+	//Methods
         Contr( string name_c, const string &daq_db, ::TElem *cfgelem );
-        ~Contr();
+        ~Contr( );
 			
-        int period()  { return m_per; }
-        int iterate() { return m_iter; }
+        int period( )  	{ return m_per; }
+        int iterate( ) 	{ return m_iter; }
 	
     private:
 	//Methods
 	bool cfgChange( TCfg &cfg );
-	void postDisable(int flag);
+	void postDisable( int flag );
 	
 	void load( );
 	void loadFunc( );
@@ -126,7 +131,7 @@ class Contr: public TController, public TValFunc
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
 	static void *Task( void *icntr );
-	static void TaskDBSync(union sigval obj);
+	static void TaskDBSync( union sigval obj );
 	
 	//Attributes
         bool    prc_st,		// Process task active
@@ -142,26 +147,27 @@ class Contr: public TController, public TValFunc
 	timer_t sncDBTm;	// Sync DB timer
 };
 
-//===================================================================
-//======================= Type DAQ object ===========================
-//===================================================================
+//*************************************************
+//* Type DAQ object                               *
+//*************************************************
 class TipContr : public TTipDAQ
 {
     public:
+	//Methods
 	TipContr( string src );
-	~TipContr();
+	~TipContr( );
 
 	void modLoad( );
 	void modSave( );
 	void modStart( );
 	void modStop( );
 
-	string libTable()	{ return "UserFuncLibs"; }
+	string libTable( )	{ return "UserFuncLibs"; }
 	
-	TElem &elVal()  { return val_el; }
-	TElem &elLib()	{ return lb_el; }
-	TElem &elFnc()	{ return fnc_el; }
-	TElem &elFncIO(){ return fncio_el; }
+	TElem &elVal( )		{ return val_el; }
+	TElem &elLib( )		{ return lb_el; }
+	TElem &elFnc( )		{ return fnc_el; }
+	TElem &elFncIO( )	{ return fncio_el; }
 	
 	void lbList( vector<string> &ls ) 	{ chldList(m_lib,ls); }
 	bool lbPresent( const string &id )	{ return chldPresent(m_lib,id); }
@@ -171,28 +177,29 @@ class TipContr : public TTipDAQ
 	
 	Res &parseRes( )			{ return parse_res; }
 	
-        //Named constant
+        //- Named constant -
         NConst *constGet( const char *nm );
 	
-	//BuildIn functions
+	//- BuildIn functions -
 	BFunc *bFuncGet( const char *nm );	
 
 	void compileFuncLangs( vector<string> &ls );
         string compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text );
 
     protected:
+	//Methods
 	void postEnable( int flag );
-	//void preDisable(int flag);
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
 	TController *ContrAttach( const string &name, const string &daq_db );
 	string optDescr( );
 
     private:
-	int		m_lib;	//Function libraries
+	//Attributes
+	int		m_lib;		//Function libraries
 	TElem   	val_el, lb_el, fnc_el, fncio_el;
 	
-	//General parse data
+	//- General parse data -
 	Res     	parse_res;	//Syntax analisator
 	vector<NConst>  m_const;        //Name constant table
 	vector<BFunc>	m_bfunc;	//Buildin functions

@@ -200,7 +200,7 @@ target_alias = @target_alias@
 target_cpu = @target_cpu@
 target_os = @target_os@
 target_vendor = @target_vendor@
-EXTRA_DIST = *.h vision.qrc images/*
+EXTRA_DIST = *.h vision.qrc images/* po/*
 AM_CXXFLAGS = -I$(QT4_INCL) -I$(QT4_INCL)/QtCore -I$(QT4_INCL)/QtGui -I$(top_srcdir)/src -fPIC -DPIC \
     -DQT_EDITION=QT_EDITION_DESKTOP -DQT_USE_APPROXIMATE_CURSORS -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -DQT_GUI_LIB -DQT_CORE_LIB
 
@@ -210,6 +210,10 @@ ui_Vision_so_SOURCES = tvision.cpp qrc_vision.cpp vis_widgs.cpp moc_vis_widgs.cp
     vis_run.cpp moc_vis_run.cpp vis_run_widgs.cpp moc_vis_run_widgs.cpp vis_shape_elfig.cpp moc_vis_shape_elfig.cpp
 
 ui_Vision_so_LDADD = -lQtGui
+
+#PO files process and doc install
+fm_name = Mod_UI_Vision
+m_name = $(oscd_modulpref)Vision
 all: all-am
 
 .SUFFIXES:
@@ -380,7 +384,7 @@ distclean-tags:
 	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
 
 distdir: $(DISTFILES)
-	$(mkdir_p) $(distdir)/images
+	$(mkdir_p) $(distdir)/images $(distdir)/po
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
@@ -459,7 +463,7 @@ info: info-am
 
 info-am:
 
-install-data-am: install-oscd_modulPROGRAMS
+install-data-am: install-data-local install-oscd_modulPROGRAMS
 
 install-exec-am:
 
@@ -487,20 +491,22 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-info-am uninstall-oscd_modulPROGRAMS
+uninstall-am: uninstall-info-am uninstall-local \
+	uninstall-oscd_modulPROGRAMS
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
 	clean-libtool clean-local clean-oscd_modulPROGRAMS ctags \
 	distclean distclean-compile distclean-generic \
 	distclean-libtool distclean-tags distdir dvi dvi-am html \
 	html-am info info-am install install-am install-data \
-	install-data-am install-exec install-exec-am install-info \
-	install-info-am install-man install-oscd_modulPROGRAMS \
-	install-strip installcheck installcheck-am installdirs \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
-	pdf pdf-am ps ps-am tags uninstall uninstall-am \
-	uninstall-info-am uninstall-oscd_modulPROGRAMS
+	install-data-am install-data-local install-exec \
+	install-exec-am install-info install-info-am install-man \
+	install-oscd_modulPROGRAMS install-strip installcheck \
+	installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+	tags uninstall uninstall-am uninstall-info-am uninstall-local \
+	uninstall-oscd_modulPROGRAMS
 
 
 qrc_vision.cpp: vision.qrc
@@ -522,9 +528,36 @@ moc_vis_shapes.cpp: vis_shapes.h
 moc_vis_shape_elfig.cpp: vis_shape_elfig.h
 	$(QT4_MOC) vis_shape_elfig.h > moc_vis_shape_elfig.cpp
 
+messages:
+	@catalogs=`find ./po -name \*.po` ; \
+	name=po/$(m_name).pot ; \
+	xgettext -o $$name -C -a *.cpp *.h &> /dev/null ; \
+	for cat in $$catalogs; do \
+	msgmerge -U $$cat $$name ; \
+	done
+
+install-data-local:
+	@catalogs=`find ./po -name \*.po` ; \
+	name=$(m_name).mo ; \
+	for cat in $$catalogs; do \
+	mkdir -p $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES ; \
+	msgfmt -vo $$name $$cat ; \
+	cp $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
+	rm $$name ; \
+	done
+#       install -m 755 -d $(oscd_docdir)/$(fm_name)
+#       install -m 644 doc/*.pdf $(oscd_docdir)/$(fm_name)
+
+uninstall-local:
+	@catalogs=`find ./po -name \*.po` ; \
+	name=$(m_name).mo ; \
+	for cat in $$catalogs; do \
+	rm -f $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
+	done
+
 clean-local:
 	rm -f qrc_vision.cpp moc_vis_widgs.cpp moc_vis_devel.cpp moc_vis_devel_widgs.cpp moc_vis_devel_dlgs.cpp \
-    moc_vis_run.cpp moc_vis_run_widgs.cpp moc_vis_shapes.cpp moc_vis_shape_elfig.cpp
+    moc_vis_run.cpp moc_vis_run_widgs.cpp moc_vis_shapes.cpp moc_vis_shape_elfig.cpp po/$(m_name).pot po/*~
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

@@ -50,7 +50,7 @@ namespace QTCFG
 {
 
 //************************************************
-//* QTCFG::ConfApp                               *
+//* ConfApp                                      *
 //************************************************
 class UserStBar;
 class TUIMod;
@@ -60,43 +60,45 @@ class ConfApp: public QMainWindow
     Q_OBJECT
 
     public:
+	//Methods
 	ConfApp( string open_user );
 	~ConfApp( );
 
     protected:
+	//Methods
 	void closeEvent( QCloseEvent* );
 
     private slots:
-	void quitSt();
+	//Slots
+	void quitSt( );
 	    
-	void pageUp();	    
-	void pagePrev();
-	void pageNext();
-	void pageRefresh();
-	void pageCyclRefrStart();
-	void pageCyclRefrStop();
+	void pageUp( );
+	void pagePrev( );
+	void pageNext( );
+	void pageRefresh( );
+	void pageCyclRefrStart( );
+	void pageCyclRefrStop( );
 
-	void userSel();
+	void userSel( );
 	    
-	void about();
-	void aboutQt();
-	void enterWhatsThis();
+	void about( );
+	void aboutQt( );
+	void enterWhatsThis( );
 	    
 	void endRunChk( );      			//End run flag check
 
-	//QListView	    
+	//- QListView -
 	void selectItem( );				//Processing of select item signal
 	void viewChild( QTreeWidgetItem * i );	//Processing of view item signal 
 	void onItem( QTreeWidgetItem * i );		//View item path
 	void ctrTreePopup( );
 	    
-	//QTabWidget
+	//- QTabWidget -
 	void tabSelect( QWidget *wdg );		//Change curent widget
 
-	//Self widget's slots
+	//- Self widget's slots -
 	void checkBoxStChange( int stat ); 		//QCheckBox	    
 	void buttonClicked( );			//Button
-	//void editReturnPress( );			//QLineEdit
 	void combBoxActivate( const QString& );	//QComboBox
 	void listBoxGo( QListWidgetItem* );		//QListBox go for banch	    
 	void listBoxPopup();			//QListBox popup menu
@@ -160,4 +162,3 @@ class ConfApp: public QMainWindow
 }
 
 #endif //QTCFG_H
-

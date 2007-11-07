@@ -46,15 +46,15 @@ class TUIMod: public TUI
     
 	//Methods
 	TUIMod( string name );
-	~TUIMod();
+	~TUIMod( );
 	
-	bool endRun()   	{ return end_run; }
+	bool endRun( )   	{ return end_run; }
 	
-	string startPath()	{ return start_path; }
-	string startUser()	{ return start_user; }
+	string startPath( )	{ return start_path; }
+	string startUser( )	{ return start_user; }
 
-	void modStart();
-	void modStop();
+	void modStart( );
+	void modStop( );
 
 	void postEnable( int flag );
 	void modLoad( );
@@ -68,15 +68,15 @@ class TUIMod: public TUI
 	void regWin( QMainWindow *win );
 	void unregWin( QMainWindow *win );
 	
-	QIcon icon();
+	QIcon icon( );
 	
-	//Put message
+	//- Put message -
         void postMess( const string &cat, const string &mess, MessLev type = Info, QWidget *parent = 0 );
     
     private:
 	//Methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-	QMainWindow *openWindow();    
+	QMainWindow *openWindow( );    
 	
         string optDescr( );
 	
@@ -93,4 +93,3 @@ extern TUIMod *mod;
 }
 
 #endif //TUIMOD_H
-

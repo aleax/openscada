@@ -192,11 +192,11 @@ string TipContr::compileFunc( const string &lang, TFunction &fnc_cfg, const stri
 	lbAt("sys_compile").at().add(fnc_cfg.id().c_str(),"");
     AutoHD<Func> func = lbAt("sys_compile").at().at(fnc_cfg.id());
     ((TFunction&)func.at()).operator=(fnc_cfg);
-    func.at().prog(prog_text.c_str());
+    func.at().setProg(prog_text.c_str());
     try
     {
-	if(func.at().startStat()) func.at().start(false);
-	func.at().start(true); 
+	if(func.at().startStat()) func.at().setStart(false);
+	func.at().setStart(true); 
     }
     catch(TError err)
     {
@@ -306,7 +306,7 @@ void TipContr::modStart( )
     //Start functions
     lbList(lst);
     for(int i_lb=0; i_lb < lst.size(); i_lb++ )
-	lbAt(lst[i_lb]).at().start(true);
+	lbAt(lst[i_lb]).at().setStart(true);
 
     TTipDAQ::modStart( );	
 }
@@ -321,7 +321,7 @@ void TipContr::modStop( )
     //Stop functions    
     lbList(lst);
     for(int i_lb=0; i_lb < lst.size(); i_lb++ )
-	lbAt(lst[i_lb]).at().start(false);
+	lbAt(lst[i_lb]).at().setStart(false);
 }
 
 void TipContr::cntrCmdProc( XMLNode *opt )
@@ -502,7 +502,7 @@ void Contr::save( )
 
 void Contr::start_( )
 {
-    ((Func *)func())->start( true );
+    ((Func *)func())->setStart( true );
     
     //Start the request data task
     if( !prc_st )
@@ -724,7 +724,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(((Func *)func())->prog());
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
 	{
-	    ((Func *)func())->prog(opt->text().c_str());
+	    ((Func *)func())->setProg(opt->text().c_str());
 	    ((Func *)func())->progCompile();
 	}
     }

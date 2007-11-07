@@ -117,7 +117,7 @@ void Lib::modStart( )
     vector<string> lst;
     list(lst);
     for( int i_l = 0; i_l < lst.size(); i_l++ )
-	at(lst[i_l]).at().start(true);
+	at(lst[i_l]).at().setStart(true);
     run_st = true;	
 }
 	    
@@ -126,7 +126,7 @@ void Lib::modStop( )
     vector<string> lst;
     list(lst);
     for( int i_l = 0; i_l < lst.size(); i_l++ )
-        at(lst[i_l]).at().start(false);
+        at(lst[i_l]).at().setStart(false);
 
     varchFree( );	//Used value archives and buffers free
     	

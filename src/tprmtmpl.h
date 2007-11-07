@@ -64,15 +64,14 @@ class TPrmTempl: public TFunction, public TConfig
         void setDescr( const string &idsc )	{ m_descr = idsc; }
 	void setProgLang( const string &ilng );
 	void setProg( const string &iprg );
+	void setStart( bool val );		
 
 	void load( );
         void save( );
 
-	void start( bool val );	
+	AutoHD<TFunction>	func( );			//Programming language attached function
 	
-	AutoHD<TFunction>	func();			//Programming language attached function
-	
-	TPrmTmplLib &owner()	{ return *(TPrmTmplLib*)nodePrev(); }
+	TPrmTmplLib &owner( )	{ return *(TPrmTmplLib*)nodePrev(); }
 
     protected:
 	void preIOCfgChange();

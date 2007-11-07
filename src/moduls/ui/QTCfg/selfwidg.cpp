@@ -40,7 +40,7 @@
 using namespace QTCFG;
 
 //*************************************************
-//* Image view widget                             *
+//* ImgView: Image view widget.                   *
 //*************************************************
 ImgView::ImgView( QWidget * parent, Qt::WindowFlags f, int ih_sz, int iv_sz ) :
     QWidget(parent,f), h_sz(ih_sz), v_sz(iv_sz)
@@ -95,7 +95,7 @@ void ImgView::paintEvent( QPaintEvent * )
 }
 
 //*************************************************
-//* Line edit widget                              *
+//* LineEdit: Line edit widget.                   *
 //*************************************************
 LineEdit::LineEdit( QWidget *parent, bool prev_dis ) : 
     QWidget( parent ), bt_fld(NULL)
@@ -180,7 +180,7 @@ bool LineEdit::event( QEvent * e )
 }
 
 //*************************************************
-//* Text edit widget                              *
+//* TextEdit: Text edit widget.                   *
 //*************************************************
 TextEdit::TextEdit( QWidget *parent, const char *name, bool prev_dis ) : 
     QWidget(parent), but_box(NULL), isInit(false)
@@ -240,7 +240,7 @@ void TextEdit::changed()
 }
 
 //*************************************************
-//* Data and time edit widget                     *
+//* DateTimeEdit: Data and time edit widget.      *
 //*************************************************
 DateTimeEdit::DateTimeEdit( QWidget *parent, bool prev_dis ) : 
     QWidget( parent ), bt_fld(NULL)
@@ -323,7 +323,7 @@ bool DateTimeEdit::event( QEvent * e )
 } 
 
 //*************************************************
-//* Id and name input dialog                      *
+//* InputDlg: Id and name input dialog.           *
 //*************************************************
 InputDlg::InputDlg( bool with_id ) : m_id(NULL), m_name(NULL)
 {
@@ -380,18 +380,18 @@ QString InputDlg::name()
     return "";
 }
 	    
-void InputDlg::id(const QString &val)
+void InputDlg::setId(const QString &val)
 {
     if( m_id )	m_id->setText(val);
 }
 
-void InputDlg::name(const QString &val)
+void InputDlg::setName(const QString &val)
 {
     if( m_name )m_name->setText(val);
 }
 
 //*************************************************
-//* User select dialog                            *
+//* DlgUser: User select dialog                   *
 //*************************************************
 DlgUser::DlgUser( QWidget *parent ) : QDialog(parent)
 {
@@ -434,7 +434,7 @@ DlgUser::DlgUser( QWidget *parent ) : QDialog(parent)
 
     connect(this, SIGNAL(finished(int)), this, SLOT(finish(int)));
 										
-    //Fill users list
+    //- Fill users list -
     vector<string> u_list;
     SYS->security().at().usrList(u_list);
     for(int i_l = 0; i_l < u_list.size(); i_l++ )
@@ -461,7 +461,7 @@ void DlgUser::finish( int result )
 {
     if( result )
     {
-        //Check user
+        //- Check user -
         if( SYS->security().at().usrPresent(user().toAscii().data()) &&
         	SYS->security().at().usrAt(user().toAscii().data()).at().auth(password().toAscii().data()) )
             setResult(SelOK);
@@ -471,19 +471,19 @@ void DlgUser::finish( int result )
 }
 
 //*********************************************
-//* Status bar user widget                    *
+//* UserStBar: Status bar user widget.        *
 //*********************************************
 UserStBar::UserStBar( const QString &iuser, QWidget * parent ) : QLabel(parent)
 {
-    user(iuser);
+    setUser(iuser);
 }
     
-QString UserStBar::user()
+QString UserStBar::user( )
 {
     return user_txt;
 }
 	
-void UserStBar::user( const QString &val )
+void UserStBar::setUser( const QString &val )
 {
     setText(QString("<font color='%1'>%2</font>").arg((val=="root")?"red":"green").arg(val));
     user_txt = val;
@@ -495,13 +495,13 @@ bool UserStBar::event( QEvent *event )
     return QLabel::event( event );
 }
 
-bool UserStBar::userSel()
+bool UserStBar::userSel( )
 {
     DlgUser d_usr(parentWidget());
     int rez = d_usr.exec();
     if( rez == DlgUser::SelOK && d_usr.user() != user() )
     {
-        user( d_usr.user() );
+        setUser( d_usr.user() );
 	emit userChanged();
         return true;
     }
@@ -512,7 +512,7 @@ bool UserStBar::userSel()
 }	
 
 //*************************************************
-//* Combobox table delegate                       *
+//* TableDelegate: Combobox table delegate.       *
 //*************************************************
 TableDelegate::TableDelegate(QObject *parent) : QItemDelegate(parent)
 {
@@ -527,7 +527,7 @@ void TableDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
     switch(value.type())
     {
 	case QVariant::Bool:
-	    //painter->save();
+	    //painter->save(); 
 	    if(value.toBool())
 	    {
 		QImage img(":/images/ok.png");

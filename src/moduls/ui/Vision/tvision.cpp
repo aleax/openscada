@@ -45,7 +45,7 @@
 #define MOD_TYPE    "UI"
 #define VER_TYPE    VER_UI
 #define SUB_TYPE    "QT"
-#define VERSION     "0.1.0"
+#define VERSION     "0.5.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Visual operation user interface."
 #define LICENSE     "GPL"
@@ -307,7 +307,7 @@ void TVision::cntrCmdProc( XMLNode *opt )
         TUI::cntrCmdProc(opt);
         if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
         {
-            ctrMkNode("fld",opt,-1,"/prm/cfg/start_user",_("Configurator start user"),0664,"root","root",3,"tp","str","dest","select","select","/prm/cfg/u_lst");
+            ctrMkNode("fld",opt,-1,"/prm/cfg/start_user",_("Start user"),0664,"root","root",3,"tp","str","dest","select","select","/prm/cfg/u_lst");
             ctrMkNode("fld",opt,-1,"/prm/cfg/run_prj",_("Run projects list (';' - sep)"),0664,"root","root",1,"tp","str");
             ctrMkNode("fld",opt,-1,"/prm/cfg/runModUpd",_("RunTime update mode"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/prm/cfg/rt_upd_lst");
             ctrMkNode("fld",opt,-1,"/prm/cfg/stationVCA",_("VCA engine station"),0664,"root","root",4,"tp","str","idm","1","dest","select","select","/prm/cfg/vca_lst");

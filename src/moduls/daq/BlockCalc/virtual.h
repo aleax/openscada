@@ -1,13 +1,12 @@
 
 //OpenSCADA system module DAQ.BlockCalc file: virtual.h
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -40,10 +39,10 @@ using std::vector;
 namespace Virtual
 {
 
-//************************************************
-//* Prm - parameters for access to data          *
-//*       of calced blocks                       *
-//************************************************ 
+//*************************************************
+//* Prm: parameters for access to data            *
+//*      of calced blocks                         *
+//************************************************* 
 class Contr;
     
 class Prm : public TParamContr
@@ -51,12 +50,12 @@ class Prm : public TParamContr
     public:
 	//Public methods
      	Prm( string name, TTipParam *tp_prm );
-	~Prm();
+	~Prm( );
     
-	void enable();
-	void disable();
+	void enable( );
+	void disable( );
 	
-	Contr &owner()  { return (Contr&)TParamContr::owner(); }
+	Contr &owner( )		{ return (Contr&)TParamContr::owner( ); }
 	
     private:
         //Private methods
@@ -69,13 +68,13 @@ class Prm : public TParamContr
 	void vlArchMake( TVal &val );
     
 	//Private attributes
-	string m_blck;	//Assign block	
-	TElem  v_el;	//Values elem
+	string m_blck;				//Assign block	
+	TElem  v_el;				//Values elem
 }; 
 
-//************************************************
-//* Contr - Blocks and parameters container      *
-//************************************************
+//*************************************************
+//* Contr: Blocks and parameters container        *
+//*************************************************
 class TipContr;
 
 class Contr: public TController
@@ -85,7 +84,7 @@ class Contr: public TController
     public:
     	//Public methods
 	Contr( string name_c, const string &daq_db, ::TElem *cfgelem );
-	~Contr();   
+	~Contr( );
 
 	void load( );
 	void save( );
@@ -95,8 +94,8 @@ class Contr: public TController
 	void stop_( );
     
 	TParamContr *ParamAttach( const string &name, int type );
-	int period()  { return m_per; }
-	int iterate() { return m_iter; }
+	int period( )  				{ return m_per; }
+	int iterate( ) 				{ return m_iter; }
 	
 	//- Scheme's functions -
         void blkList( vector<string> &ls )	{ chldList(m_bl,ls); }
@@ -105,9 +104,9 @@ class Contr: public TController
         void blkDel( const string &id )    	{ chldDel(m_bl,id); }
         AutoHD<Block> blkAt( const string &id )	{ return chldAt(m_bl,id); }
 	
-	Res &res()		{ return hd_res; }
+	Res &res( )				{ return hd_res; }
     
-	TipContr &owner()	{ return (TipContr&)TController::owner(); }
+	TipContr &owner( )			{ return (TipContr&)TController::owner( ); }
     
     protected:
 	//Protected methods
@@ -155,14 +154,14 @@ class TipContr: public TTipDAQ
     public:
 	//Public methods
 	TipContr( string name );
-	~TipContr();
+	~TipContr( );
 	
 	void modLoad( );
 	
 	TController *ContrAttach( const string &name, const string &daq_db );
 	
-	TElem &blockE()		{ return blk_el; }
-	TElem &blockIOE()	{ return blkio_el; }
+	TElem &blockE( )	{ return blk_el; }
+	TElem &blockIOE( )	{ return blkio_el; }
 
 	AutoHD<Contr> at( const string &name, const string &who = "" )
 	{ return TTipDAQ::at(name,who); }
@@ -177,8 +176,8 @@ class TipContr: public TTipDAQ
 	void postEnable( int flag );
 	void preDisable( int flag );
         string optDescr( );
-	void loadBD();
-	void saveBD();
+	void loadBD( );
+	void saveBD( );
 	
         //Private attributes
 	TElem	blk_el;

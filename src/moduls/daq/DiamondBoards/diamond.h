@@ -1,13 +1,12 @@
 
 //OpenSCADA system module DAQ.DiamondBoards file: diamond.h
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -50,20 +49,23 @@ class TMdContr;
 class TMdPrm : public TParamContr
 {
     public:
+	//Data
 	enum Type { NONE, AI, AO, DI, DO };
     
+	//Methods
     	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );
 	
-	Type type(){ return m_tp; }
-	int  cnl() { return m_cnl; }
-	void type( Type val );
+	Type type( )		{ return m_tp; }
+	int  cnl( ) 		{ return m_cnl; }
+	void setType( Type val );
 
 	void enable( );
 
-	TMdContr &owner()	{ return (TMdContr &)TParamContr::owner(); }
+	TMdContr &owner( )	{ return (TMdContr &)TParamContr::owner(); }
 	
     protected:
+	//Methods
 	bool cfgChange( TCfg &cfg );
 	void vlSet( TVal &val );
         void vlGet( TVal &val );
@@ -73,6 +75,7 @@ class TMdPrm : public TParamContr
 	//void preDisable( int flag );    
 	
     private:
+	//Attributes
 	int 	&m_cnl;
 	Type    m_tp;
 	union
@@ -104,10 +107,10 @@ class TMdContr: public TController
     
 	//Methods
     	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem);
-	~TMdContr();   
+	~TMdContr( );   
 	
-	bool ADIIntMode()	{ return ad_int_mode; }
-	bool dataEmul()		{ return data_emul; }
+	bool ADIIntMode( )	{ return ad_int_mode; }
+	bool dataEmul( )	{ return data_emul; }
 
 	TParamContr *ParamAttach( const string &name, int type );
 
@@ -116,9 +119,10 @@ class TMdContr: public TController
 	void start_( );
 	void stop_( );
 
-	TTpContr &owner()       { return (TTpContr&)TController::owner(); }
+	TTpContr &owner( ) 	{ return (TTpContr&)TController::owner(); }
 
     protected:
+	//Methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	bool cfgChange( TCfg &cfg );
     
@@ -145,6 +149,7 @@ class TMdContr: public TController
 class TTpContr: public TTipDAQ
 {
     public:
+	//Methods
 	TTpContr( string name );
 	~TTpContr();	    
 	
@@ -160,6 +165,7 @@ class TTpContr: public TTipDAQ
 	TElem &elemDO( ) 	{ return elem_do; }
 	
     private:
+	//Attributes
 	bool	m_init;	
 	
 	TElem 	elem_ai;
@@ -175,4 +181,3 @@ extern TTpContr *mod;
 } //End namespace 
 
 #endif //ATHENA_H
-
