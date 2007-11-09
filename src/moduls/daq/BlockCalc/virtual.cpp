@@ -44,7 +44,7 @@
 #define MOD_NAME    "Block based calculator"
 #define MOD_TYPE    "DAQ"
 #define VER_TYPE    VER_CNTR
-#define VERSION     "0.9.2"
+#define VERSION     "1.0.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow block based calculator."
 #define LICENSE     "GPL"

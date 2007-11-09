@@ -49,7 +49,7 @@
 #define MOD_NAME    "System DA"
 #define MOD_TYPE    "DAQ"
 #define VER_TYPE    VER_CNTR
-#define VERSION     "1.2.0"
+#define VERSION     "1.5.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow operation system data acquisition. Support OS Linux data sources: HDDTemp, Sensors, Uptime, Memory, CPU and other."
 #define LICENSE     "GPL"

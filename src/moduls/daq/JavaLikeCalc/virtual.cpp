@@ -1,13 +1,12 @@
 
 //OpenSCADA system module DAQ.JavaLikeCalc file: virtual.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation; version 2 of the License.               *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -32,17 +31,18 @@
 #include "freefunc.h"
 #include "virtual.h"
 
-//============ Modul info! =====================================================
+//*************************************************
+//* Modul info!                                   *
 #define MOD_ID      "JavaLikeCalc"
 #define MOD_NAME    "Java-like based calculator"
 #define MOD_TYPE    "DAQ"
 #define VER_TYPE    VER_SPC
 #define SUB_TYPE    "LIB"
-#define VERSION     "0.9.5"
+#define VERSION     "1.0.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow java-like based calculator and function's libraries engine. User can create and modify function and libraries."
 #define LICENSE     "GPL"
-//==============================================================================
+//*************************************************
 
 JavaLikeCalc::TipContr *JavaLikeCalc::mod;
 
@@ -50,35 +50,24 @@ extern "C"
 {
     TModule::SAt module( int n_mod )
     {
-	TModule::SAt AtMod;
-
-	if(n_mod==0)
-	{
-	    AtMod.id	= MOD_ID;
-	    AtMod.type  = MOD_TYPE;
-	    AtMod.t_ver = VER_TYPE;
-	}
-    	else
-	    AtMod.id	= "";
-
-	return( AtMod );
+	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	return TModule::SAt("");
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	JavaLikeCalc::TipContr *self_addr = NULL;
-
-    	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = JavaLikeCalc::mod = new JavaLikeCalc::TipContr( source );
-
-	return ( self_addr );
+    	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
+	    return new JavaLikeCalc::TipContr( source );
+	return NULL;
     }
 }
 
 using namespace JavaLikeCalc;
 
-//===================== Complex1 functions library =========================
-TipContr::TipContr( string src ) //: lib_dbs(".")
+//*************************************************
+//* TipContr                                      *
+//*************************************************
+TipContr::TipContr( string src )
 {
     mId 	= MOD_ID;
     mName       = MOD_NAME;
@@ -88,6 +77,8 @@ TipContr::TipContr( string src ) //: lib_dbs(".")
     mDescr  	= DESCRIPTION;
     mLicense   	= LICENSE;
     mSource    	= src;
+    
+    mod		= this;
     
     m_lib = grpAdd("lib_");
 }
@@ -101,7 +92,7 @@ void TipContr::postEnable( int flag )
 {
     TModule::postEnable( flag );
     
-    //Controller db structure
+    //- Controller db structure -
     fldAdd( new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30","system") );
     fldAdd( new TFld("FUNC",_("Controller's function"),TFld::String,TFld::NoFlag,"20") );
     fldAdd( new TFld("PERIOD",_("Calc period (ms)"),TFld::Integer,TFld::NoFlag,"7","1000","0;1000000") );
@@ -109,28 +100,28 @@ void TipContr::postEnable( int flag )
     fldAdd( new TFld("PER_DB",_("Sync db period (s)"),TFld::Integer,TCfg::Prevent,"5","0","0;3600") );
     fldAdd( new TFld("ITER",_("Iteration number into calc period"),TFld::Integer,TFld::NoFlag,"2","1","0;99") );
         
-    //Controller value db structure
+    //- Controller value db structure -
     val_el.fldAdd( new TFld("ID",_("IO ID"),TFld::String,TCfg::Key,"10") );
     val_el.fldAdd( new TFld("VAL",_("IO value"),TFld::String,TFld::NoFlag,"20") );
 
-    //Add parameter types
+    //- Add parameter types -
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
     tpPrmAt(t_prm).fldAdd( new TFld("FLD",_("Data fields(Sep - ';')"),TFld::String,TCfg::NoVal,"50") );
 
-    //Lib's db structure
+    //- Lib's db structure -
     lb_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
     lb_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
     lb_el.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::NoFlag,"300") );
     lb_el.fldAdd( new TFld("DB",_("Data base"),TFld::String,TFld::NoFlag,"30") );
 
-    //Function's structure
+    //- Function's structure -
     fnc_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"50") );
     fnc_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
     fnc_el.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::NoFlag,"300") );
     fnc_el.fldAdd( new TFld("MAXCALCTM",_("Maximum calc time"),TFld::Integer,TFld::NoFlag,"3","10","0;999") );
     fnc_el.fldAdd( new TFld("FORMULA",_("Formula"),TFld::String,TFld::NoFlag,"1000") );
 
-    //Function's IO structure
+    //- Function's IO structure -
     fncio_el.fldAdd( new TFld("F_ID",_("Function ID"),TFld::String,TCfg::Key,"50") );
     fncio_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
     fncio_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
@@ -140,7 +131,7 @@ void TipContr::postEnable( int flag )
     fncio_el.fldAdd( new TFld("HIDE",_("Hide"),TFld::Boolean,TFld::NoFlag,"1") );
     fncio_el.fldAdd( new TFld("POS",_("Position"),TFld::Integer,TFld::NoFlag,"3") );
     
-    //Init named constant table
+    //- Init named constant table -
     double rvl;
     rvl = 3.14159265358l; m_const.push_back(NConst(TFld::Real,"pi",string((char*)&rvl,sizeof(rvl))));
     rvl = 2.71828182845l; m_const.push_back(NConst(TFld::Real,"e",string((char*)&rvl,sizeof(rvl))));
@@ -151,7 +142,7 @@ void TipContr::postEnable( int flag )
     
     m_const.push_back(NConst(TFld::String,"EVAL_STR",EVAL_STR));
     
-    //Init buildin functions list
+    //- Init buildin functions list -
     m_bfunc.push_back(BFunc("sin",Reg::FSin,1));
     m_bfunc.push_back(BFunc("cos",Reg::FCos,1));
     m_bfunc.push_back(BFunc("tan",Reg::FTan,1));
@@ -221,7 +212,7 @@ string TipContr::optDescr( )
 
 void TipContr::modLoad( )
 {
-    //========== Load parameters from command line ============
+    //- Load parameters from command line -
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -241,17 +232,17 @@ void TipContr::modLoad( )
 	}
     } while(next_opt != -1);
 
-    //========== Load parameters =============
+    //- Load parameters -
 
-    //=========== Load function's libraries =============
+    //- Load function's libraries -
     try
     {
-	//Search and create new libraries
+	//-- Search and create new libraries --
 	TConfig c_el(&elLib());
 	c_el.cfgViewAll(false);
 	vector<string> tdb_ls, db_ls;	
 	
-	//- Search into DB -
+	//-- Search into DB --
 	SYS->db().at().modList(tdb_ls);
 	for( int i_tp = 0; i_tp < tdb_ls.size(); i_tp++ )
 	{
@@ -269,7 +260,7 @@ void TipContr::modLoad( )
 	    }	
 	}
 	
-	//- Search into config file -
+	//-- Search into config file --
 	int lib_cnt = 0;
 	while(SYS->db().at().dataSeek("",nodePath()+"lib/",lib_cnt++,c_el) )
 	{
@@ -278,7 +269,7 @@ void TipContr::modLoad( )
 	    c_el.cfg("ID").setS("");		
 	}	
 	
-	//- Load present libraries -
+	//-- Load present libraries --
 	lbList(tdb_ls);
         for( int l_id = 0; l_id < tdb_ls.size(); l_id++ )
     	    lbAt(tdb_ls[l_id]).at().load();
@@ -291,9 +282,9 @@ void TipContr::modLoad( )
 
 void TipContr::modSave()
 {   
-    //========== Save parameters =============
+    //- Save parameters -
 
-    //=========== Save function's libraries =============
+    //- Save function's libraries -
     vector<string> ls;
     lbList(ls);
     for( int l_id = 0; l_id < ls.size(); l_id++ )
@@ -303,7 +294,8 @@ void TipContr::modSave()
 void TipContr::modStart( )
 {
     vector<string> lst;
-    //Start functions
+    
+    //- Start functions -
     lbList(lst);
     for(int i_lb=0; i_lb < lst.size(); i_lb++ )
 	lbAt(lst[i_lb]).at().setStart(true);
@@ -313,12 +305,13 @@ void TipContr::modStart( )
 
 void TipContr::modStop( )
 {
-    //Stop and disable all JavaLike-controllers 
+    //- Stop and disable all JavaLike-controllers -
     vector<string> lst;
     list(lst);
     for(int i_l=0; i_l<lst.size(); i_l++)
 	at(lst[i_l]).at().disable( );
-    //Stop functions    
+	
+    //- Stop functions -
     lbList(lst);
     for(int i_lb=0; i_lb < lst.size(); i_lb++ )
 	lbAt(lst[i_lb]).at().setStart(false);
@@ -326,7 +319,7 @@ void TipContr::modStop( )
 
 void TipContr::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
 	TTipDAQ::cntrCmdProc(opt);
@@ -339,7 +332,8 @@ void TipContr::cntrCmdProc( XMLNode *opt )
 	}
         return;
     }
-    //Process command to page
+    
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/libs/lb" )
     {
@@ -372,9 +366,9 @@ BFunc *TipContr::bFuncGet( const char *nm )
 	    return NULL;
 }
 
-//===================================================================
-//================ Controller object ================================
-//===================================================================
+//*************************************************
+//* Contr: Controller object                      *
+//*************************************************
 Contr::Contr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     ::TController(name_c, daq_db, cfgelem), TValFunc(name_c.c_str(),NULL,false), prc_st(false), 
     endrun_req(false), sync_st(false),
@@ -384,7 +378,7 @@ Contr::Contr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     cfg("PRM_BD").setS("JavaLikePrm_"+name_c);
     setDimens(true);
 
-    //Create sync DB timer
+    //- Create sync DB timer -
     struct sigevent sigev;
     sigev.sigev_notify = SIGEV_THREAD;
     sigev.sigev_value.sival_ptr = this;
@@ -404,7 +398,7 @@ void Contr::postDisable(int flag)
     {
         if( flag )
         {
-            //Delete IO value's table
+            //- Delete IO value's table -
 	    string db = DB()+"."+TController::id()+"_val";
 	    SYS->db().at().open(db);
 	    SYS->db().at().close(db,true);
@@ -451,7 +445,7 @@ void Contr::loadFunc( )
     { 
 	((Func *)func())->load();    
 	
-	//Load values
+	//- Load values -
 	TConfig cfg(&mod->elVal());	
 	string bd_tbl = TController::id()+"_val";
 	string bd = DB()+"."+bd_tbl;
@@ -474,7 +468,7 @@ void Contr::save( )
     {
 	((Func *)func())->save();    
 	
-	//Save values
+	//- Save values -
 	TConfig cfg(&mod->elVal());
         string bd_tbl = TController::id()+"_val";
         string val_bd = DB()+"."+bd_tbl;	
@@ -484,7 +478,8 @@ void Contr::save( )
             cfg.cfg("VAL").setS(getS(iio));
 	    SYS->db().at().dataSet(val_bd,mod->nodePath()+bd_tbl,cfg);
 	}
-	//Clear VAL
+	
+	//- Clear VAL -
 	int fld_cnt=0;
         cfg.cfg("ID").setS("");
 	cfg.cfgViewAll(false);
@@ -504,7 +499,7 @@ void Contr::start_( )
 {
     ((Func *)func())->setStart( true );
     
-    //Start the request data task
+    //- Start the request data task -
     if( !prc_st )
     {
         pthread_attr_t pthr_attr;
@@ -522,7 +517,7 @@ void Contr::start_( )
             throw TError(nodePath().c_str(),_("Acquisition task no started!"));
     }
     
-    //Start interval timer for periodic thread creating
+    //- Start interval timer for periodic thread creating -
     struct itimerspec itval;
     itval.it_interval.tv_sec = itval.it_value.tv_sec = m_dbper;
     itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
@@ -531,7 +526,7 @@ void Contr::start_( )
 
 void Contr::stop_( )
 {
-    //Stop the request and calc data task
+    //- Stop the request and calc data task -
     if( prc_st )
     {
         endrun_req = true;
@@ -541,7 +536,7 @@ void Contr::stop_( )
         pthread_join( procPthr, NULL );
     }
     
-    //Stop interval timer for periodic thread creating
+    //- Stop interval timer for periodic thread creating -
     struct itimerspec itval;
     itval.it_interval.tv_sec = itval.it_interval.tv_nsec =
         itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
@@ -569,7 +564,7 @@ void *Contr::Task( void *icntr )
 		mess_err(cntr.nodePath().c_str(),_("Calc controller's function error."));
 	    }
 	
-        //Calc next work time and sleep
+        //- Calc next work time and sleep -
         clock_gettime(CLOCK_REALTIME,&get_tm);
         work_tm = (((long long)get_tm.tv_sec*1000000000+get_tm.tv_nsec)/((long long)cntr.m_per*1000000) + 1)*(long long)cntr.m_per*1000000;
 	if(last_tm == work_tm)  work_tm+=(long long)cntr.m_per*1000000; //Fix early call
@@ -621,7 +616,7 @@ bool Contr::cfgChange( TCfg &cfg )
 
 void Contr::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //- Get page info -
     if( opt->name() == "info" )
     {
         TController::cntrCmdProc(opt);
@@ -641,7 +636,8 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	}
         return;
     }
-    //Process command to page
+    
+    //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/cntr/flst" && ctrChkNode(opt) )
     {
@@ -731,9 +727,9 @@ void Contr::cntrCmdProc( XMLNode *opt )
     else TController::cntrCmdProc(opt);
 }
 
-//======================================================================
-//==== Prm
-//======================================================================
+//*************************************************
+//* Prm                                           *
+//*************************************************
 Prm::Prm( string name, TTipParam *tp_prm ) :
     TParamContr(name,tp_prm), v_el(name)
 {
@@ -755,7 +751,7 @@ void Prm::enable()
 {
     if( enableStat() )  return;
     
-    //Init elements    
+    //- Init elements -
     string dfld;
     for( int fld_off = 0; (dfld=TSYS::strSepParse(cfg("FLD").getS(),0,';',&fld_off)).size(); )
     {
@@ -783,7 +779,7 @@ void Prm::enable()
 	}
     }
     
-    //Check and delete no used fields
+    //- Check and delete no used fields -
     for(int i_fld = 0; i_fld < v_el.fldSize(); i_fld++)
     {
 	string fel;  
@@ -868,4 +864,3 @@ void Prm::vlArchMake( TVal &val )
     val.arch().at().setHardGrid( true );
     val.arch().at().setHighResTm( true );
 }
-																																		    

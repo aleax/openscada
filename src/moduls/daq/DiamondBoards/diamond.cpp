@@ -38,7 +38,7 @@
 #define MOD_NAME    "Diamond DA boards"
 #define MOD_TYPE    "DAQ"
 #define VER_TYPE    VER_CNTR
-#define VERSION     "0.9.1"
+#define VERSION     "1.0.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow access to Diamond systems DA boards. Include support of Athena board."
 #define LICENSE     "GPL"
@@ -82,26 +82,15 @@ TTpContr::TTpContr( string name ) :
     mod		= this;
     
     //- Init DSCAD -
-    //if( dscInit( DSC_VERSION ) != DE_NONE )
-    //	mess_err(mod->nodePath().c_str(),_("dscInit error."));
+    if( dscInit( DSC_VERSION ) != DE_NONE )
+    	mess_err(mod->nodePath().c_str(),_("dscInit error."));
+    else m_init = true;
 }
 
 TTpContr::~TTpContr()
 {   
     //- Free DSCAD - 
-    dscFree();
-}
-
-void TTpContr::drvInit() 
-{ 
-    ResAlloc res(drvRes,true);
-    if( m_init ) return;
-    
-    //- Init DSCAD -
-    if( dscInit( DSC_VERSION ) != DE_NONE )
-    	mess_err(mod->nodePath().c_str(),_("dscInit error."));
-
-    m_init = true;
+    if( drvInitOk( ) )	dscFree();
 }
 
 void TTpContr::postEnable( int flag )
@@ -170,21 +159,17 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) : ad_
     cfg("PRM_BD_D").setS("DiamPrmD_"+name_c);
     
     //- Hide sevral config fields -
-    //cfg("INT").setView(false);
-    //cfg("DIO_CFG").setView(false);
-    //cfg("ADCONVRATE").setView(false);
-    //cfg("ADGAIN").setView(false);
+    cfg("INT").setView(false);
+    cfg("DIO_CFG").setView(false);
+    cfg("ADCONVRATE").setView(false);
+    cfg("ADGAIN").setView(false);
     
-    //- DSC resources -
-    DSC.comm = 0;
-    pthread_mutex_init(&DSC.th_mut,NULL);
-    pthread_cond_init(&DSC.th_cv,NULL);
+    memset(&dscadsettings, 0, sizeof(DSCADSETTINGS));    
 }
 
 TMdContr::~TMdContr()
 {
-    pthread_cond_destroy(&DSC.th_cv);
-    pthread_mutex_destroy(&DSC.th_mut);
+
 }
 
 TParamContr *TMdContr::ParamAttach( const string &name, int type )
@@ -194,7 +179,9 @@ TParamContr *TMdContr::ParamAttach( const string &name, int type )
 
 void TMdContr::load( )
 {
+    cfgViewAll(true);
     TController::load( );
+    cfg("ADMODE").setB(cfg("ADMODE").getB());	//For hiden attributes visible status update
 }
 
 void TMdContr::save( )
@@ -205,27 +192,44 @@ void TMdContr::save( )
 void TMdContr::start_( )
 {
     //- Check inited of Diamond API -
-    //if( !mod->initStat() )
-    //    throw TError(mod->nodePath().c_str(),_("Module no inited!"));
+    if( !mod->drvInitOk() )
+	throw TError(nodePath().c_str(),_("DSC driver not inited!"));
 
-    //-- Create DSC task --
-    pthread_attr_t pthr_attr;
-    pthread_attr_init(&pthr_attr);
-    struct sched_param prior;
-    if( SYS->user() == "root" )
-        pthread_attr_setschedpolicy(&pthr_attr,SCHED_RR);
-    else pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
-    prior.__sched_priority=20;
-    pthread_attr_setschedparam(&pthr_attr,&prior);				    
-	
-    pthread_create(&dsc_pthr,&pthr_attr,DSCTask,this);
-    pthread_attr_destroy(&pthr_attr);
-    if( TSYS::eventWait(dsc_st, true, nodePath()+"dsc_task_start",5) )
-        throw TError(nodePath().c_str(),_("DSC driver task no started!"));    
+    //- DSC strucures init -
+    ERRPARAMS errorParams;
+    DSCADSETTINGS dscadsettings;
+    memset(&dscadsettings, 0, sizeof(DSCADSETTINGS));
+    
+    //- Main DSC code -
+    if(!dataEmul())
+    {
+	//-- Init Board --
+	DSCCB dsccb;
+	dsccb.base_address = m_addr;	    
+	dsccb.int_level = cfg("INT").getI();
+	if(dscInitBoard(cfg("BOARD").getI(), &dsccb, &dscb)!= DE_NONE)
+	{
+	    dscGetLastError(&errorParams);
+	    throw TError(nodePath().c_str(),_("dscInitBoard %d(%xh) error: %s %s"),
+	        cfg("BOARD").getI(),m_addr,dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
+	}
+    	//-- Set DIO config --
+	BYTE cfg_byte = cfg("DIO_CFG").getI()|0x80;
+	if( dscDIOSetConfig(dscb, &cfg_byte) != DE_NONE )
+     	{
+	    dscGetLastError(&errorParams);
+	    throw TError(nodePath().c_str(),_("dscDIOSetConfig error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
+	}
+	//-- Init AD acquisition --
+	dscadsettings.range = cfg("ADRANGE").getI();
+	dscadsettings.polarity = cfg("ADPOLAR").getI();
+	dscadsettings.gain = cfg("ADGAIN").getI();
+	dscadsettings.load_cal = 0;           
+    }
     
     if(ad_int_mode)
     {
-        //-- Create interrupt AD DSC task --
+        //- Create interrupt AD DSC task -
         pthread_attr_t pthr_attr;
         pthread_attr_init(&pthr_attr);
         struct sched_param prior;
@@ -249,20 +253,7 @@ void TMdContr::stop_( )
         pthread_join( ad_dsc_pthr, NULL );
     }
     
-    if( dsc_st )
-    {
-        endrun_req_dsc = true;
-	DSC.gen_res.resRequestW( ); 		//Request access to DSC
-        pthread_mutex_lock(&DSC.th_mut);    	//Request DSC ready
-        DSC.comm = 0;
-        pthread_cond_signal(&DSC.th_cv);
-        pthread_mutex_unlock(&DSC.th_mut);
-        DSC.gen_res.resReleaseW( );
-											    
-        if( TSYS::eventWait(dsc_st,false,nodePath()+"dsc_task_stop",5) )
-            throw TError(nodePath().c_str(),_("DSC task no stoped!"));
-        pthread_join( dsc_pthr, NULL );
-    }
+    if( !dataEmul() )	dscFreeBoard(dscb);    
 } 
 
 bool TMdContr::cfgChange( TCfg &icfg )
@@ -288,134 +279,6 @@ bool TMdContr::cfgChange( TCfg &icfg )
     return true;
 }
 
-void *TMdContr::DSCTask( void *param )
-{    
-    TMdContr &cntr = *(TMdContr *)param;
-    cntr.endrun_req_dsc = false;
-    cntr.dsc_st = true;
-    
-    //- DSC strucures init -
-    BYTE result;
-    DSCB dscb;    
-    ERRPARAMS errorParams;
-    DSCADSETTINGS dscadsettings;
-    memset(&dscadsettings, 0, sizeof(DSCADSETTINGS));
-    
-    //- Main DSC code -
-    try
-    {	
-	if(!cntr.dataEmul())
-	{
-    	    //-- Init DSCAD --
-	    cntr.owner().drvInit();
-	    if( cntr.ad_int_mode && dscInit( DSC_VERSION ) != DE_NONE )	//!!!! Multithread DSCAD bug
-	    {
-    		dscGetLastError(&errorParams);
-    		throw TError(mod->nodePath().c_str(),_("dscInit error: %s %s"),
-		    dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
-	    }
-	    //-- Init Board --
-	    DSCCB dsccb;
-	    dsccb.base_address = cntr.m_addr;	    
-	    dsccb.int_level = cntr.cfg("INT").getI();
-	    if(dscInitBoard(cntr.cfg("BOARD").getI(), &dsccb, &dscb)!= DE_NONE)
-	    {
-		dscGetLastError(&errorParams);
-		throw TError(cntr.nodePath().c_str(),_("dscInitBoard %d(%xh) error: %s %s"),
-		    cntr.cfg("BOARD").getI(),cntr.m_addr,dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
-	    }
-    	    //-- Set DIO config --
-	    BYTE cfg_byte = cntr.cfg("DIO_CFG").getI()|0x80;
-	    if( (result = dscDIOSetConfig(dscb, &cfg_byte)) != DE_NONE)
-     	    {
-		dscGetLastError(&errorParams);
-		throw TError(cntr.nodePath().c_str(),_("dscDIOSetConfig error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
-	    }
-	    //-- Init AD acquisition --
-	    dscadsettings.range = cntr.cfg("ADRANGE").getI();
-	    dscadsettings.polarity = cntr.cfg("ADPOLAR").getI();
-	    dscadsettings.gain = cntr.cfg("ADGAIN").getI();
-	    dscadsettings.load_cal = 0;           
-	}
-    
-	int cond_rez;
-	pthread_mutex_lock(&cntr.DSC.th_mut);
-	while(!cntr.endrun_req_dsc)
-	{
-	    cond_rez = pthread_cond_wait(&cntr.DSC.th_cv,&cntr.DSC.th_mut);
-	    switch(cntr.DSC.comm)
-	    {
-	        case 0:	break;
-	        case 1:	//Get AI
-	        {
-		    if(cntr.ad_int_mode)	break;
-		    if(cntr.dataEmul())	cntr.DSC.prm2 = rand()*10000/RAND_MAX;
-		    else
-		    {
-			dscadsettings.gain = cntr.DSC.prm2;
-			dscadsettings.current_channel = cntr.DSC.prm1;
-			if( (result = dscADSetSettings(dscb,&dscadsettings)) != DE_NONE )
-	    		{
-			    dscGetLastError(&errorParams);
-			    mess_err(cntr.nodePath().c_str(),_("dscADSetSettings error: %s %s"), dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
-			}
-			DSCSAMPLE smpl;
-			if( (result = dscADSample(dscb,&smpl)) != DE_NONE )
-			{
-			    dscGetLastError(&errorParams);
-		    	    mess_err(cntr.nodePath().c_str(),_("dscADSample error: %s %s"), dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
-			}
-			cntr.DSC.prm2 = smpl;
-		    }
-		    break;
-		}
-		case 2:	//Set AO
-		    if(!cntr.dataEmul())
-			if( (result = dscDAConvert(dscb,cntr.DSC.prm1,cntr.DSC.prm2)) != DE_NONE )
-			{
-                    	    dscGetLastError(&errorParams);
-		    	    mess_err(cntr.nodePath().c_str(),_("dscDAConvert error: %s %s"),dscGetErrorString(errorParams.ErrCode),errorParams.errstring );
-	    		}
-		    break;
-		case 3:	//Get DI
-		{
-		    BYTE i_bt;
-		    if( cntr.dataEmul() )	i_bt = !((bool)rand()%3);
-		    else
-			if( (result = dscDIOInputBit(dscb,cntr.DSC.prm1>>4, cntr.DSC.prm1&0x0f, &i_bt)) != DE_NONE )
-			{
-		    	    dscGetLastError(&errorParams);
-		    	    mess_err(cntr.nodePath().c_str(),_("dscDIOInputBit error: %s %s"), dscGetErrorString(errorParams.ErrCode),errorParams.errstring );
-			}
-		    cntr.DSC.prm2 = i_bt;
-		    break;
-		}
-		case 4:	//Set DO
-		    if(!cntr.dataEmul())
-		        if( (result = dscDIOOutputBit(dscb, cntr.DSC.prm1>>4, cntr.DSC.prm1&0x0f, (bool)cntr.DSC.prm2)) != DE_NONE )
-			{
-		    	    dscGetLastError(&errorParams);
-		    	    mess_err(cntr.nodePath().c_str(),_("dscDIOOutputBit error: %s %s"),dscGetErrorString(errorParams.ErrCode),errorParams.errstring );
-	    		}
-		    break;	
-	    }
-    	    cntr.DSC.comm = 0;
-	}
-    }catch( TError err )
-    { 
-	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	mess_err(cntr.nodePath().c_str(),_("DSC task error."));
-    }
-
-    if(!cntr.dataEmul()) dscFreeBoard(dscb);
-
-    cntr.dsc_st = false;
-    
-    pthread_mutex_unlock(&cntr.DSC.th_mut);
-    
-    return NULL;
-}
-
 void *TMdContr::AD_DSCTask( void *param )
 {    
     long long vtm = 0;
@@ -425,7 +288,7 @@ void *TMdContr::AD_DSCTask( void *param )
     
     //- AI interrupt dequisition -
     vector<string> ai_prm;
-    int p_beg = 15, p_end = 0;    
+    int p_beg = 100, p_end = 0;    
 	
     TMdContr &cntr = *(TMdContr *)param;
     cntr.endrun_req_ad_dsc = false;
@@ -433,10 +296,7 @@ void *TMdContr::AD_DSCTask( void *param )
     
     //- DSC strucures init -
     BYTE result;
-    DSCB dscb;    
     ERRPARAMS errorParams;
-    DSCADSETTINGS dscadsettings;
-    memset(&dscadsettings, 0, sizeof(DSCADSETTINGS));
     DSCAIOINT dscaioint;
     memset(&dscaioint, 0, sizeof(DSCAIOINT));
     DSCS dscs;
@@ -444,32 +304,6 @@ void *TMdContr::AD_DSCTask( void *param )
     //- Main DSC code -
     try    
     {
-	if(!cntr.dataEmul())
-	{
-    	    //-- Init DSCAD --
-	    cntr.owner().drvInit();
-	    if( cntr.ad_int_mode && dscInit( DSC_VERSION ) != DE_NONE )	//!!!! Multithread DSCAD bug
-	    {
-    		dscGetLastError(&errorParams);
-    		throw TError(mod->nodePath().c_str(),_("dscInit error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
-	    }  	 
-	    //-- Init Board --
-	    DSCCB dsccb;
-	    dsccb.base_address = cntr.m_addr;
-	    dsccb.int_level = cntr.cfg("INT").getI();		    
-	    if(dscInitBoard(cntr.cfg("BOARD").getI(), &dsccb, &dscb)!= DE_NONE)
-	    {
-		dscGetLastError(&errorParams);
-		throw TError(cntr.nodePath().c_str(),_("dscInit error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
-	    }
-	
-	    //-- Init AD acquisition --
-	    dscadsettings.range = cntr.cfg("ADRANGE").getI();
-	    dscadsettings.polarity = cntr.cfg("ADPOLAR").getI();
-	    dscadsettings.gain = cntr.cfg("ADGAIN").getI();
-	    dscadsettings.load_cal = 0;
-	}
-	    
 	//- Get AI param list and address border -
 	cntr.list(ai_prm);
 	for( int i_p = 0; i_p < ai_prm.size(); i_p++ )
@@ -493,8 +327,8 @@ void *TMdContr::AD_DSCTask( void *param )
 	{    
 	    if(ai_prm.size())
 	    {		
-		dscadsettings.current_channel = p_beg;		
-		if( ( result = dscADSetSettings( dscb, &dscadsettings ) ) != DE_NONE )
+		cntr.dscadsettings.current_channel = p_beg;		
+		if( dscADSetSettings( cntr.dscb, &cntr.dscadsettings ) != DE_NONE )
 		{
     	    	    dscGetLastError(&errorParams);
 	    	    throw TError(cntr.nodePath().c_str(),_("dscADSetSettings error: %s %s"), dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
@@ -519,7 +353,7 @@ void *TMdContr::AD_DSCTask( void *param )
 		    else dscaioint.fifo_depth/=2;
 		}
 		dscaioint.sample_values = (DSCSAMPLE*)malloc( sizeof(DSCSAMPLE) * dscaioint.num_conversions );
-		if( ( result = dscADScanInt( dscb, &dscaioint ) ) != DE_NONE )
+		if( dscADScanInt( cntr.dscb, &dscaioint ) != DE_NONE )
 		{
     	    	    dscGetLastError(&errorParams);
 	    	    throw TError(cntr.nodePath().c_str(),_("dscADScanInt error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
@@ -532,7 +366,7 @@ void *TMdContr::AD_DSCTask( void *param )
     
 	    while(!cntr.endrun_req_ad_dsc)
 	    {
-    		dscGetStatus(dscb, &dscs);
+    		dscGetStatus(cntr.dscb, &dscs);
 		if( prev_trans < 0 ) prev_trans = dscs.transfers;
 		if( dscs.transfers != prev_trans )
 		{
@@ -621,9 +455,8 @@ void *TMdContr::AD_DSCTask( void *param )
     
     if(!cntr.dataEmul())
     {
-	if( dscs.op_type != OP_TYPE_NONE )	dscCancelOp(dscb);
+	if( dscs.op_type != OP_TYPE_NONE )	dscCancelOp(cntr.dscb);
 	free( dscaioint.sample_values );
-	dscFreeBoard(dscb);
     }
     
     return NULL;
@@ -696,21 +529,11 @@ void TMdPrm::postEnable( int flag )
     else if( TParamContr::type().name == "d_prm" )	setType(DI);
 }
 
-/*void TMdPrm::preDisable( int flag )
-{   
-    TParamContr::preDisable(flag); 
-    //type(NONE);
-}*/
-
-void TMdPrm::enable( )
+void TMdPrm::load( )
 {
-    TParamContr::enable();
-    
-    if( type() == AI )
-    {
-	if( owner().ADIIntMode() )	cfg("GAIN").setView(false);
-	else cfg("GAIN").setView(true);    
-    }
+    cfgViewAll(true);
+    TParamContr::load();
+    setType(type());		//For hiden attributes visible status update    
 }
 
 void TMdPrm::setType( TMdPrm::Type vtp )
@@ -730,6 +553,7 @@ void TMdPrm::setType( TMdPrm::Type vtp )
 	case AI:    
 	    cfg("GAIN").setView(true);
 	    m_gain = cfg("GAIN").getI();
+	    cfg("GAIN").setView(!owner().ADIIntMode());
 	    vlElemAtt( &mod->elemAI() );
 	    break;
 	case AO:    
@@ -784,29 +608,30 @@ void TMdPrm::vlSet( TVal &val )
 	    if(val.fld().reserve()==1)		code = (int)(4095.*val.getR(0,true)/100.);
 	    else if(val.fld().reserve()==2)	code = (int)(4095.*val.getR(0,true)/10.);
 
-	    owner().DSC.gen_res.resRequestW( );		//Request access to DSC
-	    pthread_mutex_lock(&owner().DSC.th_mut);	//Request DSC ready
-	    owner().DSC.comm = 2;
-	    owner().DSC.prm1 = m_cnl;
-	    owner().DSC.prm2 = code;
-	    pthread_cond_signal(&owner().DSC.th_cv);
-	    pthread_mutex_unlock(&owner().DSC.th_mut);
-	    while(owner().DSC.comm) pthread_yield();
-	    owner().DSC.gen_res.resReleaseW( );
+	    //- Direct writing -
+	    if( owner().dataEmul() )	break;
+	    owner().ao_res.resRequestW( );
+	    if( dscDAConvert(owner().dscb,m_cnl,code) != DE_NONE )
+	    {
+		ERRPARAMS errorParams;
+                dscGetLastError(&errorParams);
+	        mess_err(nodePath().c_str(),_("dscDAConvert error: %s %s"),dscGetErrorString(errorParams.ErrCode),errorParams.errstring );
+	    }
+	    owner().ao_res.resReleaseW( );
 	    break;
 	}
 	case DO:
 	{
-	    //- Get prev port stat -
-	    owner().DSC.gen_res.resRequestW( );		//Request access to DSC
-    	    pthread_mutex_lock(&owner().DSC.th_mut);	//Request DSC ready
-	    owner().DSC.comm = 4;
-	    owner().DSC.prm1 = m_dio_port;
-	    owner().DSC.prm2 = val.getB(0,true);
-	    pthread_cond_signal(&owner().DSC.th_cv);
-	    pthread_mutex_unlock(&owner().DSC.th_mut);
-	    while(owner().DSC.comm) pthread_yield();
-	    owner().DSC.gen_res.resReleaseW( );
+	    //- Direct writing -	
+	    if( owner().dataEmul() )	break;
+	    owner().dio_res.resRequestW( );	    
+	    if( dscDIOOutputBit(owner().dscb, m_dio_port>>4, m_dio_port&0x0f, val.getB(0,true)) != DE_NONE )
+	    {
+		ERRPARAMS errorParams;
+	        dscGetLastError(&errorParams);
+	        mess_err(nodePath().c_str(),_("dscDIOOutputBit error: %s %s"),dscGetErrorString(errorParams.ErrCode),errorParams.errstring );
+	    }
+	    owner().dio_res.resReleaseW( );
 	}
     }
 }
@@ -831,16 +656,29 @@ void TMdPrm::vlGet( TVal &val )
 	    short gval;
 	    if( enableStat() )
 	    {
-    		owner().DSC.gen_res.resRequestW( );		//Request access to DSC
-		pthread_mutex_lock(&owner().DSC.th_mut);	//Request DSC ready
-		owner().DSC.comm = 1;
-		owner().DSC.prm1 = m_cnl;
-		owner().DSC.prm2 = m_gain;
-		pthread_cond_signal(&owner().DSC.th_cv);
-		pthread_mutex_unlock(&owner().DSC.th_mut);
-		while(owner().DSC.comm) pthread_yield();
-		gval = owner().DSC.prm2;
-		owner().DSC.gen_res.resReleaseW( );
+		//- Direct reading -
+		if(owner().dataEmul())	gval = rand()*10000/RAND_MAX;
+		else
+		{
+		    owner().ai_res.resRequestW( );
+		    owner().dscadsettings.gain = m_gain;
+		    owner().dscadsettings.current_channel = m_cnl;
+		    if( dscADSetSettings(owner().dscb,&owner().dscadsettings) != DE_NONE )
+	    	    {
+			ERRPARAMS errorParams;
+		        dscGetLastError(&errorParams);
+		        mess_err(nodePath().c_str(),_("dscADSetSettings error: %s %s"), dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
+		    }
+		    DSCSAMPLE smpl;
+		    if( dscADSample(owner().dscb,&smpl) != DE_NONE )
+		    {
+			ERRPARAMS errorParams;	    
+			dscGetLastError(&errorParams);
+		    	mess_err(nodePath().c_str(),_("dscADSample error: %s %s"), dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
+		    }
+		    gval = smpl;
+		    owner().ai_res.resReleaseW( );
+		}
 	    }
 	    switch(val.fld().reserve())
 	    {
@@ -855,15 +693,21 @@ void TMdPrm::vlGet( TVal &val )
 	    char gval = EVAL_BOOL;
 	    if( enableStat() )
             {
-                owner().DSC.gen_res.resRequestW( );		//Request access to DSC
-		pthread_mutex_lock(&owner().DSC.th_mut);	//Request DSC ready
-		owner().DSC.comm = 3;
-		owner().DSC.prm1 = m_dio_port;
-		pthread_cond_signal(&owner().DSC.th_cv);
-		pthread_mutex_unlock(&owner().DSC.th_mut);
-		while(owner().DSC.comm) pthread_yield();
-		gval = (bool)owner().DSC.prm2;
-		owner().DSC.gen_res.resReleaseW( );
+		//- Direct reading -	    
+		if( owner().dataEmul() )	gval = !((bool)rand()%3);
+		else
+		{
+		    owner().dio_res.resRequestW( );
+		    BYTE i_bt;
+		    if( dscDIOInputBit(owner().dscb,m_dio_port>>4,m_dio_port&0x0f,&i_bt) != DE_NONE )
+		    {
+			ERRPARAMS errorParams;	    
+		    	dscGetLastError(&errorParams);
+		    	mess_err(nodePath().c_str(),_("dscDIOInputBit error: %s %s"), dscGetErrorString(errorParams.ErrCode),errorParams.errstring );
+		    }
+		    gval = i_bt;
+		    owner().dio_res.resReleaseW( );
+		}
 	    }
 	    val.setB(gval,0,true);
 	    break;

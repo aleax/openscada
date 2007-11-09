@@ -1,3 +1,15 @@
+2007-11-09 Roman
+- !!:/DAQ/LogicLev: Documentation is updated and version 0.9.0 is relised.
+- !!:/DAQ/System: Documentation is updated and version 1.5.0 is relised.
+- !!:/DAQ/DiamondBoards: Documentation is updated and version 1.0.0 is relised.
+- !!:/DAQ/JavaLikeCalc: Documentation is updated and version 1.0.0 is relised.
+- !!:/DAQ/BlockCalc: Documentation is updated and version 1.0.0 is relised.
+- !!:/SYS: Generic OpenSCADA documentation is updated.
+- FIX:/DAQ/DiamondBoards: Thread locking on API and main bugs is fixed (API 5.91).
+- /Protocol/HTTP: Documentation is updated.
+- /Transport/Sockets: Documentation is updated.
+
+
 2007-11-07 Roman
 - !!!:/SYS: Module connection mechanism is made simpler.
 - !!:/UI/VCAEngine: Interface translation to Russian and Ukranian is added.
@@ -18,6 +30,7 @@
     interface translation for Russian and Ukranian is updated.
 - /UI/QTCfg, WebCfg and WebDbg: License update, source clean and
     interface translation for Russian and Ukranian is updated.
+    
 
 2007-10-24 Roman
 - FIX:/DB: Loading DB interupt after broken DB record is fixed.

@@ -84,7 +84,38 @@
 	</node>
 
 	<node id="sub_DAQ">
-	    <node id="mod_OperationSystem">
+            <!--
+            <tbl id="tmplib">
+                <fld ID="test2" NAME="Test 2" DESCR="" DB="tmplib_test2"/>
+            </tbl>
+            <tbl id="tmplib_test2">
+                <fld ID="test2" NAME="Test 2" DESCR="" DB="test2"
+                    PROGRAM="JavaLikeCalc.JavaScript cnt=5*i"/>
+            </tbl>
+            <tbl id="tmplib_test2_io">
+                <fld TMPL_ID="test2" ID="i" NAME="I" TYPE="4" FLAGS="160" VALUE="" POS="0"/>
+                <fld TMPL_ID="test2" ID="cnt" NAME="Cnt" TYPE="4" FLAGS="32" VALUE="" POS="0"/>
+            </tbl>-->
+
+            <node id="mod_LogicLev">
+        	<!--
+        	<tbl id="DAQ">
+            	    <fld
+                	ID="test2"
+                	NAME="Test 2"
+                	DESCR=""
+                	ENABLE="1"
+                	START="1"
+                	PRM_BD="test2prm"
+                	PERIOD="1000"
+                	PRIOR="0"/>
+        	</tbl>
+        	<tbl id="test2prm">
+            	    <fld SHIFR="test2" NAME="Test 2" DESCR="" EN="1" MODE="2" PRM="test2.test2"/>
+        	</tbl>-->
+            </node>
+
+	    <node id="mod_System">
 		<!--
 		<tbl id="DAQ">
 		    <fld
@@ -256,24 +287,25 @@
 
 	<node id="sub_Special">
     	    <node id="mod_SystemTests">
-		<prm id="PARAM" on="0" per="5" name="OperationSystem.AutoDA.CPULoad"/>
-		<prm id="XML" on="0" per="10" file="/etc/oscada.xml"/>
-		<prm id="MESS" on="0" per="10" categ="" arhtor="FSArch.StatErrors"/>
-		<prm id="SOAttDet" on="0" per="20" name="../../lib/openscada/ui_Vision.so" full="1"/>
-		<prm id="Val" on="0" per="1" name="LogicLev.experiment.КШ6close.alrm" arch_len="5" arch_per="1000000"/>
-		<prm id="Val" on="0" per="1" name="OperationSystem.AutoDA.CPULoad.load" arch_len="10" arch_per="1000000"/>
-		<prm id="BD" on="0" per="10" type="MySQL" bd="server.diya.org;roman;123456;oscadaTest" table="test" size="1000"/>
-		<prm id="BD" on="0" per="10" type="DBF" bd="./DATA/DBF" table="test.dbf" size="1000"/>
-		<prm id="BD" on="0" per="10" type="SQLite" bd="./DATA/test.db" table="test" size="1000"/>
-		<prm id="TrOut" on="0" per="1" addr="TCP:127.0.0.1:10001" type="Sockets" req="time"/>
-		<prm id="TrOut" on="0" per="1" addr="UDP:127.0.0.1:10001" type="Sockets" req="time"/>
-		<prm id="TrOut" on="0" per="1" addr="UNIX:./oscada" type="Sockets" req="time"/>
-		<prm id="TrOut" on="0" per="1" addr="UDP:127.0.0.1:daytime" type="Sockets" req="time"/>
-		<prm id="Func" on="0" per="10"/>
-		<prm id="SysContrLang" on="0" per="10" path="/Archive/FSArch/mess_StatErrors/%2fprm%2fst"/>
-		<prm id="ValBuf" on="0" per="5"/>
-		<prm id="Archive" on="0" per="30" arch="test1" period="1000000"/>
-		<prm id="Base64Code" on="0" per="10"/>
+		<prm id="PARAM" on="0" per="5" name="LogicLev.experiment.F3"/>
+                <prm id="XML" on="0" per="10" file="/etc/oscada.xml"/>
+		<prm id="MESS" on="0" per="10" categ="" arhtor="DBArch.test3"/>
+		<prm id="SOAttDet" on="0" per="20" name="../../lib/openscada/daq_LogicLev.so" full="1"/>
+		<prm id="Val" on="0" per="1" name="LogicLev.experiment.F3.var" arch_len="5" arch_per="1000000"/>
+                <prm id="Val" on="0" per="1" name="System.AutoDA.CPULoad.load" arch_len="10" arch_per="1000000"/>
+                <prm id="BD" on="0" per="10" type="MySQL" bd="server.diya.org;roman;123456;oscadaTest" table="test" size="1000"/>
+                <prm id="BD" on="0" per="10" type="DBF" bd="./DATA/DBF" table="test.dbf" size="1000"/>
+                <prm id="BD" on="0" per="10" type="SQLite" bd="./DATA/test.db" table="test" size="1000"/>
+                <prm id="BD" on="0" per="10" type="FireBird" bd="server.diya.org:/var/tmp/test.fdb;roman;123456" table="test" size="1000"/>
+                <prm id="TrOut" on="0" per="1" addr="TCP:127.0.0.1:10001" type="Sockets" req="time"/>
+        	<prm id="TrOut" on="0" per="1" addr="UDP:127.0.0.1:10001" type="Sockets" req="time"/>
+                <prm id="TrOut" on="0" per="1" addr="UNIX:./oscada" type="Sockets" req="time"/>
+                <prm id="TrOut" on="0" per="1" addr="UDP:127.0.0.1:daytime" type="Sockets" req="time"/>
+                <prm id="Func" on="0" per="10"/>
+                <prm id="SysContrLang" on="0" per="10" path="/Archive/BaseArh/mess_StatErrors/%2fprm%2fst"/>
+                <prm id="ValBuf" on="0" per="5"/>
+                <prm id="Archive" on="0" per="30" arch="test1" period="1000000"/>
+                <prm id="Base64Code" on="0" per="10"/>
     	    </node>
 	</node>
   </station>

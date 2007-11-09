@@ -60,7 +60,7 @@ class TMdPrm : public TParamContr
 	int  cnl( ) 		{ return m_cnl; }
 	void setType( Type val );
 
-	void enable( );
+	void load( );
 
 	TMdContr &owner( )	{ return (TMdContr &)TParamContr::owner(); }
 	
@@ -72,7 +72,6 @@ class TMdPrm : public TParamContr
 	void vlArchMake( TVal &val );
 
 	void postEnable( int flag );
-	//void preDisable( int flag );    
 	
     private:
 	//Attributes
@@ -92,19 +91,8 @@ class TTpContr;
 
 class TMdContr: public TController
 {
+    friend class TMdPrm;
     public:
-	//Data
-	//- DSC access struct -
-	struct
-	{
-	    char comm;	// 0-free; 1-get AI; 2-set AO; 3-get DI; 4-set DO
-	    int  prm1;
-	    int  prm2;
-	    Res  gen_res;
-	    pthread_cond_t  th_cv;
-	    pthread_mutex_t th_mut;
-	}DSC;	
-    
 	//Methods
     	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem);
 	~TMdContr( );   
@@ -129,7 +117,6 @@ class TMdContr: public TController
     private:
 	//Methods
 	static void *AD_DSCTask( void *param );
-	static void *DSCTask( void *param );
 	
 	//Attributes
 	int &m_addr;
@@ -137,10 +124,13 @@ class TMdContr: public TController
 	
 	double dataEmulTm;
 	
-	pthread_t dsc_pthr, 
-		  ad_dsc_pthr;
-	bool	ad_dsc_st, endrun_req_ad_dsc,
-		dsc_st, endrun_req_dsc;
+	DSCB 	dscb;
+	DSCADSETTINGS dscadsettings;
+	
+	pthread_t ad_dsc_pthr;
+	bool	ad_dsc_st, endrun_req_ad_dsc;
+	
+	Res	ai_res, ao_res, dio_res;
 };
 
 //*************************************************
@@ -153,10 +143,9 @@ class TTpContr: public TTipDAQ
 	TTpContr( string name );
 	~TTpContr();	    
 	
+	bool drvInitOk( )	{ return m_init; }
 	void postEnable( int flag );
 	
-	void drvInit( );
-    
 	TController *ContrAttach( const string &name, const string &daq_db );
 	
 	TElem &elemAI( )	{ return elem_ai; }
