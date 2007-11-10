@@ -200,6 +200,47 @@
 		</tbl>-->
 	    </node> 
 
+            <node id="mod_CIF">
+                <!--
+                <tbl id="DAQ">
+                    <fld ID="test2" NAME="Test 2" DESCR="" ENABLE="1" START="1" PRM_BD="test2prm"
+                         PERIOD="1000" PRIOR="0" CIF_DEV="0" ADDR="5" ASINC_WR="0"/>
+                </tbl>
+		<tbl id="test2prm">
+		    <fld SHIFR="test2" NAME="Test 2" DESCR="" EN="1" TMPL="S7.ai_man"/>
+		</tbl>-->
+	    </node>
+									 
+	    <node id="mod_SNMP">
+		<!--
+	        <tbl id="DAQ">
+		    <fld ID="test2" NAME="Test 2" DESCR="" ENABLE="1" START="1" PRM_BD="test2prm"
+			 PERIOD="1000" PRIOR="0" ADDR="localhost" COMM="public" PATTR_LIM="20"/>
+		</tbl>
+	        <tbl id="test2prm">
+		    <fld SHIFR="test2" NAME="Test 2" DESCR="" EN="1" OID_LS="system"/>
+		</tbl>-->
+	    </node>
+																																					  
+	    <node id="mod_ModBus">
+		<!--
+		<tbl id="DAQ">
+		    <fld ID="test2" NAME="Test 2" DESCR="" ENABLE="1" START="1" PRM_BD="test2prm"
+			 PERIOD="1000" PRIOR="0" TRANSP="Sockets" ADDR="exlar.diya.org" NODE="1"/>
+		</tbl>
+		<tbl id="test2prm">
+		    <fld SHIFR="test2" NAME="Test 2" DESCR="" EN="1" ATTR_LS="321:0:tst:Test"/>
+		</tbl>-->
+	    </node>
+	    
+            <node id="mod_Transporter">
+	        <!--
+		<tbl id="DAQ">
+		    <fld ID="test2" NAME="Test 2" DESCR="" ENABLE="1" START="1" PRM_BD="test2prm"
+			 PERIOD="1000" PRIOR="0" SYNCPER="60" STATIONS="loop" CNTRPRM="System.AutoDA"/>
+	        </tbl>-->
+	    </node>
+	    
 	</node>
 
 	<node id="sub_Archive">

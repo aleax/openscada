@@ -130,7 +130,7 @@ void TTpContr::postEnable( int flag )
     
     //- Parameter type bd structure -
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
-    tpPrmAt(t_prm).fldAdd( new TFld("ATTR_LS",_("Attributes list (next line separated)"),TFld::String,TFld::FullText,"100","") );
+    tpPrmAt(t_prm).fldAdd( new TFld("ATTR_LS",_("Attributes list (next line separated)"),TFld::String,TFld::FullText|TCfg::NoVal,"100","") );
 }
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db )

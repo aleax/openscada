@@ -179,6 +179,8 @@ AC_ARG_ENABLE(WebCfg,AC_HELP_STRING([--disable-WebCfg], [disable build module UI
 [ if test $enableval = yes; then ModWebCfg=true; else ModWebCfg=false; fi],[ ModWebCfg=true; ])
 AC_ARG_ENABLE(WebDbg,AC_HELP_STRING([--disable-WebDbg], [disable build module UI/WebDbg]),
 [ if test $enableval = yes; then ModWebDbg=true; else ModWebDbg=false; fi],[ ModWebDbg=true; ])
+AC_ARG_ENABLE(WebVision,AC_HELP_STRING([--disable-WebVision], [disable build module UI/WebVision]),
+[ if test $enableval = yes; then ModWebVision=true; else ModWebVision=false; fi],[ ModWebVision=true; ])
 
 
 AC_MSG_RESULT(========== Build modules list =============)
@@ -373,6 +375,11 @@ if test ${ModWebDbg} = true; then
     AC_MSG_RESULT(Build module: UI/WebDbg)
     AC_CONFIG_FILES(src/moduls/ui/WebDbg/Makefile)
     UISub_mod="${UISub_mod}WebDbg "
+fi
+if test ${ModWebVision} = true; then
+    AC_MSG_RESULT(Build module: UI/WebVision)
+    AC_CONFIG_FILES(src/moduls/ui/WebVision/Makefile)
+    UISub_mod="${UISub_mod}WebVision "
 fi
 AC_MSG_RESULT(===========================================)
 

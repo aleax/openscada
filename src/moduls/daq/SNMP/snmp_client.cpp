@@ -143,7 +143,7 @@ void TTpContr::postEnable( int flag )
     
     //- Parameter type bd structure -
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
-    tpPrmAt(t_prm).fldAdd( new TFld("OID_LS",_("OID list (next line separated)"),TFld::String,TFld::FullText,"100","") );
+    tpPrmAt(t_prm).fldAdd( new TFld("OID_LS",_("OID list (next line separated)"),TFld::String,TFld::FullText|TCfg::NoVal,"100","") );
 }
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
@@ -325,9 +325,9 @@ void *TMdContr::Task( void *icntr )
 					    cprm.vlAt(soid).at().setR(*(unsigned long*)vars->val.integer,0,true);
 					    break;
 					default:    
-					    printf("TEST 02: %xh\n",vars->type);
-					    print_objid(vars->name,vars->name_length);
-					    print_value(vars->name,vars->name_length,vars);
+					    //printf("TEST 02: %xh\n",vars->type);
+					    //print_objid(vars->name,vars->name_length);
+					    //print_value(vars->name,vars->name_length,vars);
 					    break;
 				    }
 				    //print_variable(vars->name, vars->name_length, vars);				    
