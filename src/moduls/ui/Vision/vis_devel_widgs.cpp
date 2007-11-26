@@ -20,6 +20,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <math.h>
+
 #include <QApplication>
 #include <QHeaderView>
 #include <QTreeWidget>
@@ -1488,12 +1490,15 @@ void DevelWdgView::saveGeom( const string& item )
 {
     if( item.empty() || item == id() )
     {
-	attrSet("geomX", TSYS::int2str(pos().x()),7);
-	attrSet("geomY", TSYS::int2str(pos().y()),8);
-	attrSet("geomW", TSYS::int2str(size().width()),9);
-	attrSet("geomH", TSYS::int2str(size().height()),10);
+	attrSet("geomX", TSYS::int2str( (wLevel()>0) ? (int)ceil((float)pos().x()/((WdgView*)parentWidget())->xScale(true)-0.5) : pos().x() ),7);
+	attrSet("geomY", TSYS::int2str( (wLevel()>0) ? (int)ceil((float)pos().y()/((WdgView*)parentWidget())->yScale(true)-0.5) : pos().y() ),8);
+	attrSet("geomW", TSYS::int2str((int)ceil((float)size().width()/xScale(true)-0.5)),9);
+	attrSet("geomH", TSYS::int2str((int)ceil((float)size().height()/yScale(true)-0.5)),10);
+	attrSet("geomXsc", TSYS::real2str(x_scale),13);
+	attrSet("geomYsc", TSYS::real2str(y_scale),14);
 	attrSet("geomZ", TSYS::int2str(z_coord),11);
     }
+    
     if( item != id() && wLevel() == 0 )
         for( int i_c = 0; i_c < children().size(); i_c++ )
             if( qobject_cast<DevelWdgView*>(children().at(i_c)) )
@@ -1899,8 +1904,12 @@ bool DevelWdgView::event( QEvent *event )
      	    case QEvent::MouseButtonRelease:
 		if( moveHold && !edit() )
 		{
+	    	    if( cursor().shape() != Qt::ArrowCursor )
+		    {
+			saveGeom(holdChild?"":id().c_str());
+			load("");
+		    }
 	    	    moveHold = false;
-	    	    if( cursor().shape() != Qt::ArrowCursor ) saveGeom(""); 
 	    	    return true;
 		}
      		break;
@@ -1987,10 +1996,16 @@ bool DevelWdgView::event( QEvent *event )
 			{
 			    DevelWdgView *curw = qobject_cast<DevelWdgView*>(children().at(i_c));
 			    if( !curw || !curw->select() ) continue;
+			    bool isScale = QApplication::keyboardModifiers()&Qt::ControlModifier;
 			    QRect  geom = curw->geometry();
 			    switch(cursor().shape())
 			    {
 				case Qt::SizeFDiagCursor:
+				    if( isScale ) 
+				    { 
+				        curw->x_scale *= (float)(geom.width()+((leftTop)?-1:1)*dP.x())/(float)geom.width();
+				        curw->y_scale *= (float)(geom.height()+((leftTop)?-1:1)*dP.y())/(float)geom.height();
+				    }
 				    if( leftTop )
 				    {
 					curw->move(geom.x()+dP.x(), geom.y()+dP.y());
@@ -1999,6 +2014,11 @@ bool DevelWdgView::event( QEvent *event )
 				    else curw->resize(geom.width()+dP.x(), geom.height()+dP.y());
 				    break;
 				case Qt::SizeBDiagCursor:
+				    if( isScale ) 
+				    { 
+				        curw->x_scale *= (float)(geom.width()+((leftTop)?-1:1)*dP.x())/(float)geom.width();
+				        curw->y_scale *= (float)(geom.height()-((leftTop)?-1:1)*dP.y())/(float)geom.height();
+				    }				
 				    if( leftTop )
 					curw->setGeometry(geom.x()+dP.x(),geom.y(),
 							  geom.width()-dP.x(), geom.height()+dP.y());
@@ -2007,12 +2027,16 @@ bool DevelWdgView::event( QEvent *event )
 					                  geom.width()+dP.x(), geom.height()-dP.y());
 				    break;
 				case Qt::SizeVerCursor:
+				    if( isScale ) 
+					curw->y_scale *= (float)(geom.height()+((leftTop)?-1:1)*dP.y())/(float)geom.height();
 				    if( leftTop )
 					curw->setGeometry(geom.x(),geom.y()+dP.y(),
 							  geom.width(), geom.height()-dP.y());
 				    else curw->resize(geom.width(), geom.height()+dP.y());				    
 				    break;				    
 				case Qt::SizeHorCursor:
+				    if( isScale ) 
+					curw->x_scale *= (float)(geom.width()+((leftTop)?-1:1)*dP.x())/(float)geom.width();
 				    if( leftTop )
 					curw->setGeometry(geom.x()+dP.x(),geom.y(),
 							  geom.width()-dP.x(), geom.height());
@@ -2039,19 +2063,27 @@ bool DevelWdgView::event( QEvent *event )
 		    }
 		    else
 		    {
+			bool isScale = QApplication::keyboardModifiers()&Qt::ControlModifier;
 			//- Change widget geometry -
 			switch(cursor().shape())
 			{
 		    	    case Qt::SizeHorCursor:
+				if( isScale )	x_scale *= (float)curp.x()/(float)size().width();
 				resize(curp.x(),size().height());
 				break;
 			    case Qt::SizeVerCursor:
+				if( isScale )	y_scale *= (float)curp.y()/(float)size().height();
 				resize(size().width(),curp.y());
 			        break;
 			    case Qt::SizeFDiagCursor:
+				if( isScale )
+				{
+				    x_scale *= (float)curp.x()/(float)size().width();
+				    y_scale *= (float)curp.y()/(float)size().height();
+				}
 				resize(curp.x(),curp.y());
 				break;	    
-			}			
+			}
 			//-- Set status bar --
 			mainWin()->statusBar()->showMessage(
 			    QString(_("Page: '%1' --- xy(%2:%3) wh[%4:%5]"))
@@ -2088,31 +2120,29 @@ bool DevelWdgView::event( QEvent *event )
 			case Qt::Key_Up:	dP.setY(-1);	break;
 			case Qt::Key_Down:	dP.setY(1);	break;
 		    }
-		    if( !dP.isNull() )
+		    if( dP.isNull() )	break;
+		    dP *= ((QApplication::keyboardModifiers()&Qt::ShiftModifier) ? 1 : 5);
+		    for( int i_c = 0; i_c < children().size(); i_c++ )
 		    {
-			dP *= ((QApplication::keyboardModifiers()&Qt::ShiftModifier) ? 1 : 5);
-			for( int i_c = 0; i_c < children().size(); i_c++ )
-			{
-			    DevelWdgView *curw = qobject_cast<DevelWdgView*>(children().at(i_c));
-			    if( !curw || !curw->select() ) continue;
-			    curw->move(curw->pos()+dP);
-			}
+		        DevelWdgView *curw = qobject_cast<DevelWdgView*>(children().at(i_c));
+		        if( !curw || !curw->select() ) continue;
+		        curw->move(curw->pos()+dP);
 		    }
 		    //-- Set status bar --
 		    QRect srect;
 		    for( int i_c = 0; i_c < children().size(); i_c++ )
-			if( qobject_cast<DevelWdgView*>(children().at(i_c)) && 
-				((DevelWdgView*)children().at(i_c))->select( ) )
+		        if( qobject_cast<DevelWdgView*>(children().at(i_c)) && 
+		    	    ((DevelWdgView*)children().at(i_c))->select( ) )
 			{
 			    srect = srect.united(((DevelWdgView*)children().at(i_c))->geometry());
 			    saveGeom(((DevelWdgView*)children().at(i_c))->id());
 			}
 		    mainWin()->statusBar()->showMessage(
-			QString(_("Elements: '%1' --- xy(%2:%3) wh[%4:%5]"))
-			    .arg(selectChilds().c_str())
+		        QString(_("Elements: '%1' --- xy(%2:%3) wh[%4:%5]"))
+		    	    .arg(selectChilds().c_str())
 			    .arg(srect.x()).arg(srect.y())
 			    .arg(srect.width()).arg(srect.height()), 10000 );
-
+		    return true;
 		}
 		break;
 	    }

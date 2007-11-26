@@ -16,7 +16,7 @@
 
 	<node id="sub_BD">
             <tbl id="DB">
-                <fld ID="GenDB" TYPE="SQLite" NAME="Generic DB" ADDR="./DATA/DemoSt.db" CODEPAGE="KOI8-U"/>
+                <fld ID="GenDB" TYPE="SQLite" NAME="Generic DB" ADDR="./DATA/DemoSt.db" CODEPAGE="KOI8-R"/>
             </tbl>
         </node>
 

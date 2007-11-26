@@ -247,8 +247,8 @@ void TipContr::cntrCmdProc( XMLNode *opt )
 	if( ctrMkNode("area",opt,1,"/copy",_("Copy")) && 
 		ctrMkNode("comm",opt,-1,"/copy/copy",_("Copy controller/block/parameter"),0660) )
 	{
-	    ctrMkNode("fld",opt,-1,"/copy/copy/src",_("Source"),0660,"root","root",3,"tp","str","dest","select","select","/copy/cntrls");
-    	    ctrMkNode("fld",opt,-1,"/copy/copy/dst",_("Destination"),0660,"root","root",3,"tp","str","dest","select","select","/copy/cntrls");
+	    ctrMkNode("fld",opt,-1,"/copy/copy/src",_("Source"),0660,"root","root",3,"tp","str","dest","sel_ed","select","/copy/cntrls");
+    	    ctrMkNode("fld",opt,-1,"/copy/copy/dst",_("Destination"),0660,"root","root",3,"tp","str","dest","sel_ed","select","/copy/cntrls");
 	}		
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
     }

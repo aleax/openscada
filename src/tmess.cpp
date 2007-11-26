@@ -138,6 +138,7 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
 	if( rez == (size_t)(-1) && errno != E2BIG )
 	{
 	    mess_crit("IConv",_("Error input sequence convert: %s"),strerror(errno));
+	    mess_debug("IConv",_("Error converting from %s to %s for message: %s"),fromCH.c_str(),toCH.c_str(),mess.c_str());
 	    buf = mess;
 	    break;
 	}

@@ -105,16 +105,23 @@ void RunWdgView::update( unsigned cnt, int div_max, const string &wpath )
 	XMLNode *req_el;
 	XMLNode req("get");
 	req.setAttr("path",id()+"/%2fserv%2f0")->
-	    setAttr("tm",TSYS::uint2str(reqtm));	
+	    setAttr("tm",TSYS::uint2str(cnt?reqtm:0));	
 	if( !cntrIfCmd(req) )
 	{
+	    if( !cnt )	setAllAttrLoad(true);
     	    for( int i_el = 0; i_el < req.childSize(); i_el++ )
 	    {
 		req_el = req.childGet(i_el);
 		if( attrSet("",req_el->text(),atoi(req_el->attr("pos").c_str())) )
 		    change = true;
 	    }
+	    if( !cnt )
+	    {
+		setAllAttrLoad(false);
+		attrSet("","load",-1);
+	    }
     	    reqtm = strtoul(req.attr("tm").c_str(),0,10);
+	    
 	}
 	//-- Update divider --
 	if( curDiv > 1 && change ) 		curDiv--;
@@ -122,7 +129,7 @@ void RunWdgView::update( unsigned cnt, int div_max, const string &wpath )
     }
     
     //- Call childs for update -
-    if( div_max )
+    if( div_max || !cnt )
 	for( int i_c = 0; i_c < children().size(); i_c++ )
 	    if( qobject_cast<RunWdgView*>(children().at(i_c)) && ((RunWdgView*)children().at(i_c))->isEnabled() )
     		((RunWdgView*)children().at(i_c))->update(cnt,div_max);
@@ -292,6 +299,18 @@ RunPageView::RunPageView( const string &iwid, VisRun *mainWind, QWidget* parent 
 RunPageView::~RunPageView( )
 {
 
+}
+
+float RunPageView::xScale( bool full )
+{
+    if( full ) return mainWin()->xScale()*WdgView::xScale();
+    return WdgView::xScale();
+}
+
+float RunPageView::yScale( bool full )
+{
+    if( full ) return mainWin()->yScale()*WdgView::yScale();
+    return WdgView::yScale();
 }
 
 RunPageView *RunPageView::parent( )

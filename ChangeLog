@@ -1,3 +1,21 @@
+2007-11-26 Roman
+- /UI/Vision, /UI/WebVision: Icons is updated.
+- !:/Archive/Val: An archive trend and list data building dialog is updated.
+- /TMess: Debug message for informing of messaging converting errors.
+- FIX:/DAQ/Template: Store and restore IO position is fixed.
+- FIX:/DAQ/Template: Storing system attributes to DB is disabled.
+- FIX:/DAQ/JavaLikeCalc: Store and restore IO position is fixed.
+- FIX:/SYS: Path parsing function for posible bug is fixed.
+- FIX:/Archive/Val: Long periodic averaging is fixed (hour and more).
+- FIX:/DAQ/BlockCalc: Editable select for function copy of Block scheme elements is fixed.
+- FIX:/Protocol/HTTP: POST mode contain is fixed.
+- !:/UI/VCAEngine, /UI/Vision: Attributes of the primitive "Media" is changed.
+- !!!:/UI/VCAEngine: Attributes for scaling, to main widget, is added.
+- !!!:/UI/Vision: Content scaling support is added.
+- !!!!:/UI/WebVision: Base functional support is added.
+- /SYS: Updated Demo DB.
+
+
 2007-11-10 Roman
 - !!:/DAQ/CIF: Documentation is updated and version 0.9.0 is relised.
 - !!:/DAQ/Transporter: Documentation is updated and version 0.3.0 is relised.

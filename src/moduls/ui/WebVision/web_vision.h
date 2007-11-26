@@ -24,6 +24,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 #include <tuis.h>
 
@@ -32,9 +33,48 @@
 
 using std::string;
 using std::vector;
+using std::map;
 
 namespace WebVision
 {
+
+//*************************************************
+//* SAuth                                         *
+//*************************************************
+class SAuth
+{
+    public:
+	SAuth( ) :	t_auth(0), name("")	{ }
+	SAuth( string inm, time_t it_auth ) : t_auth(it_auth), name(inm)	{ }
+
+	time_t t_auth;
+	string name;
+};
+
+//*************************************************
+//* SSess                                         *
+//*************************************************
+class SSess
+{
+    public:
+        //Methods
+        SSess( const string &iurl, const string &ipage, const string &isender,
+        	vector<string> &ivars, const string &icontent );
+							
+        //Attributes
+        string url;             //request URL
+        string page;
+        string sender;          //request sender
+        string user;            //sesion user
+        string content;         //Contain
+
+        vector<string> vars;    //request vars
+	map< string, string >	cnt;	//Parsed contein
+	map< string, string >	prm;	//URL parameters    
+	
+	vector<string> mess;	//no interrupt messages
+};
+
 
 //************************************************
 //* TWEB                                         *
@@ -42,6 +82,9 @@ namespace WebVision
 class TWEB: public TUI
 {
     public:
+	//Data
+	enum MessLev	{ Info, Warning, Error };
+	
 	//Methods
 	TWEB( string name );
 	~TWEB( );
@@ -52,7 +95,11 @@ class TWEB: public TUI
     private:
 	//Methods
 	void HttpGet( const string &url, string &page, const string &sender, vector<string> &vars );
-	void HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &contein );
+	void getAbout( SSess &ses );
+	void getAuth( SSess &ses );
+	string getCookie( string name, vector<string> &vars );
+	
+	void HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &contein );	
 	    
 	string optDescr( );
 	string modInfo( const string &name );
@@ -60,9 +107,26 @@ class TWEB: public TUI
  
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
-	string http_head( const string &rcode, int cln, const string &cnt_tp = "text/html", const string &addattr = "" );
-	string w_head( );
-	string w_tail( );
+	string httpHead( const string &rcode, int cln = 0, const string &cnt_tp = "text/html", const string &addattr = "" );
+	string pgHead( string head_els = "" );
+	string pgTail( );
+	
+	//- Sesion manipulation function -
+        int sesOpen( string name );
+        void sesCheck( SSess &ses );
+	
+	//- Post message dialog -
+	void messPost( string &page, const string &cat, const string &mess, MessLev type = Info );
+	
+	int cntrIfCmd( XMLNode &node, SSess &ses );
+	
+        //Attributes
+        Res             m_res;
+	map< int, SAuth >	m_auth;
+        int             m_t_auth;               //Time of sesion life (minutes)
+	time_t		lst_ses_chk;		//Last time of sessions check
+	string          m_CSStables;            //CSS tables
+	string		m_VCAjs;		//Main page programm VCA.js
 };    
     
 extern TWEB *mod;

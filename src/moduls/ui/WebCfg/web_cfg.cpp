@@ -133,7 +133,7 @@ string TWEB::optDescr( )
 	"CSSTables    <CSS>	  CSS for creating pages.\n\n"),
  	MOD_TYPE,MOD_ID,nodePath().c_str());
 
-    return(buf);
+    return buf;
 }
 
 void TWEB::modLoad( )

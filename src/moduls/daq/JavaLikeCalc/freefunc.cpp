@@ -98,30 +98,37 @@ void Func::loadIO( )
     TConfig cfg(&mod->elFncIO());
     
     int fld_cnt=0;
-    vector<int>	u_pos;
+    vector<string> u_pos;
     cfg.cfg("F_ID").setS(id());
     while( SYS->db().at().dataSeek(owner().fullDB()+"_io",mod->nodePath()+owner().tbl()+"_io",fld_cnt++,cfg) )
     {	
 	string sid = cfg.cfg("ID").getS();
-	//- Calc insert position -
-	int pos = cfg.cfg("POS").getI();
-	int i_ps;
-	for( i_ps = 0; i_ps < u_pos.size(); i_ps++ )
-	    if( u_pos[i_ps] > pos )	break;
-	u_pos.insert(u_pos.begin()+i_ps,pos);
-	    
+
+        //- Position storing -
+        int pos = cfg.cfg("POS").getI();
+        while( u_pos.size() <= pos )    u_pos.push_back("");
+        u_pos[pos] = sid;
+	
 	if( ioId(sid) < 0 )
-	    ioIns( new IO(sid.c_str(),"",IO::Real,IO::Default), i_ps );
-		
-	int id = ioId(sid);		
+	    ioIns( new IO(sid.c_str(),"",IO::Real,IO::Default), pos );
+
 	//- Set values -
+	int id = ioId(sid);
 	io(id)->setName(cfg.cfg("NAME").getS());
 	io(id)->setType((IO::Type)cfg.cfg("TYPE").getI());
 	io(id)->setFlg(cfg.cfg("MODE").getI());
 	io(id)->setDef(cfg.cfg("DEF").getS());
 	io(id)->setHide(cfg.cfg("HIDE").getB());
 	
-	cfg.cfg("ID").setS("");	
+	cfg.cfg("ID").setS("");
+    }
+    //- Position fixing -
+    for( int i_p = 0; i_p < u_pos.size(); i_p++ )
+    {
+	if( u_pos[i_p].empty() ) continue;
+        int iid = ioId(u_pos[i_p]);
+        if( iid != i_p ) 
+	    try{ ioMove(iid,i_p); } catch(...){ }
     }
 }
 

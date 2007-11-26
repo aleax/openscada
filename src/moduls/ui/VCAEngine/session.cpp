@@ -324,7 +324,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 	    vector<string> &lst = openList();
 	    for( int i_f = 0; i_f < lst.size(); i_f++ )
 	    {
-		XMLNode *pel = opt->childAdd("el");
+		XMLNode *pel = opt->childAdd("pg");
 		pel->setText(lst[i_f]);
 		if( tm )
 		{
@@ -334,7 +334,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 		    	pel->childAdd("el")->setText(updEl[i_e]);
 		}
 	    }
-	    if( tm ) opt->setAttr("tm",TSYS::uint2str(calcClk()));
+	    opt->setAttr("tm",TSYS::uint2str(calcClk()));
 	}
 	return;
     }

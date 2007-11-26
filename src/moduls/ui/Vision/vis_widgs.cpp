@@ -20,6 +20,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <math.h>
+
 #include <QVBoxLayout>
 #include <QIcon>
 #include <QLineEdit>
@@ -578,7 +580,7 @@ void TextEdit::cancelSlot( )
 //****************************************
 WdgView::WdgView( const string &iwid, int ilevel, QMainWindow *mainWind, QWidget *parent ) :
     QWidget(parent), idWidget(iwid), shape(NULL), w_level(ilevel), main_win(mainWind), 
-    z_coord(0), all_attr_load(false)
+    x_scale(1.0), y_scale(1.0), z_coord(0), all_attr_load(false)
 {
 
 }
@@ -586,6 +588,18 @@ WdgView::WdgView( const string &iwid, int ilevel, QMainWindow *mainWind, QWidget
 WdgView::~WdgView( )
 {
     if( shape ) shape->destroy(this);
+}
+
+float WdgView::xScale( bool full )
+{
+    if( full && wLevel( ) > 0 )	return x_scale*((WdgView*)parentWidget())->xScale(full);
+    return x_scale;
+}
+
+float WdgView::yScale( bool full )
+{
+    if( full && wLevel( ) > 0 )	return y_scale*((WdgView*)parentWidget())->yScale(full);
+    return y_scale;
 }
 
 string WdgView::root( )
@@ -613,12 +627,25 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
     switch(uiPrmPos)
     {
 	case 0:	 return false;
-	case 7:	 if(wLevel( )>0) move(atoi(val.c_str()),pos().y());	break;
-	case 8:	 if(wLevel( )>0) move(pos().x(),atoi(val.c_str()));	break;
-	case 9:	 resize(atoi(val.c_str()),size().height());		break;
-	case 10: resize(size().width(),atoi(val.c_str()));		break;
+	case 7:	 
+	    if( wLevel( ) == 0 )break;
+	    move((int)ceil(((WdgView*)parentWidget())->xScale(true)*atoi(val.c_str())-0.5),pos().y());
+	    break;
+	case 8:	 
+	    if( wLevel( ) == 0 )break;
+	    move(pos().x(),(int)ceil(((WdgView*)parentWidget())->yScale(true)*atoi(val.c_str())-0.5));
+	    break;
+	case 9:	resize((int)ceil(xScale(true)*atoi(val.c_str())-0.5),size().height());	break;
+	case 10:resize(size().width(),(int)ceil(yScale(true)*atoi(val.c_str())-0.5));	break;
 	case 11: if(wLevel( )>0) z_coord = atoi(val.c_str());		break;
-	//default: if( shape ) return shape->attrSet(this,uiPrmPos,val);
+	case 13:
+	    resize((int)ceil((atof(val.c_str())/x_scale)*size().width()-0.5),size().height());
+	    x_scale = atof(val.c_str());
+	    break;
+	case 14: 
+	    resize(size().width(),(int)ceil((atof(val.c_str())/y_scale)*size().height()-0.5));
+	    y_scale = atof(val.c_str());
+	    break;
     }
     
     return shape ? shape->attrSet(this,uiPrmPos,val) : true;
@@ -640,15 +667,14 @@ void WdgView::load( const string& item )
 	    for( int i_el = 0; i_el < req.childSize(); i_el++ )
 		attrSet("",req.childGet(i_el)->text(),atoi(req.childGet(i_el)->attr("pos").c_str()));
     }
-    
+
     setAllAttrLoad(false);
     attrSet("","load",-1);
     
-    if( item != id() )
-	for( int i_c = 0; i_c < children().size(); i_c++ )
-	    if( qobject_cast<WdgView*>(children().at(i_c)) )
-		((WdgView*)children().at(i_c))->load(item);
-    
+    for( int i_c = 0; i_c < children().size(); i_c++ )
+        if( qobject_cast<WdgView*>(children().at(i_c)) )
+    	    ((WdgView*)children().at(i_c))->load((item==id())?"":item);
+
     orderUpdate( );
 }
 
@@ -665,6 +691,7 @@ void WdgView::childsUpdate( bool newLoad )
     if( !cntrIfCmd(req) )
 	for( int i_el = 0; i_el < req.childSize(); i_el++ )
 	    lst.push_back(req.childGet(i_el)->attr("id"));
+    
     //- Delete child widgets -
     for( int i_c = 0; i_c < children().size(); i_c++ )
     {
@@ -675,6 +702,7 @@ void WdgView::childsUpdate( bool newLoad )
 		break;
 	if( i_l >= lst.size() ) delete children().at(i_c);
     }
+
     //- Create new child widget -
     for( int i_l = 0; i_l < lst.size(); i_l++ )
     {	

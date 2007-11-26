@@ -53,10 +53,14 @@ class VisRun : public QMainWindow
 	int    period( )	{ return m_period; }
 	string workSess( )	{ return work_sess; }
 	string srcProject( )	{ return src_prj; }	
-        string VCAStation()     { return m_stat; }
+        string VCAStation( )    { return m_stat; }
 	bool   runTimeUpdt( );
+	float  xScale( )	{ return x_scale; }
+	float  yScale( )	{ return y_scale; }
 	
         void setVCAStation( const string& st );
+	void setXScale( float vl )	{ x_scale = vl; }
+	void setYScale( float vl )	{ y_scale = vl; }
 
 	void initSess( const string &prj_it, bool crSessForce = false ); //Init session for project's item path
 	void callPage( const string &ses_it, XMLNode *upw = NULL );	//Call session page
@@ -70,10 +74,13 @@ class VisRun : public QMainWindow
 	bool wAttrSet( const string &path, const string &attr, const string &val );
 
 	int cntrIfCmd( XMLNode &node, bool glob = false );
+	
+	void load( const string& item );
 
     protected:
 	//Protected methods
     	void closeEvent( QCloseEvent* );	//Close runtime window event
+	void resizeEvent( QResizeEvent * );	//Resize window event
 
     private slots:
 	//Private slots	    
@@ -111,6 +118,8 @@ class VisRun : public QMainWindow
 	float		upd_tm;
 	string		m_stat;			//Station
 	unsigned 	reqtm;			//Requested time
+
+	float		x_scale, y_scale;	//RunTime scaling
 	
 	deque<RunWdgView *>  cache_pg;		//Pages cache
 };

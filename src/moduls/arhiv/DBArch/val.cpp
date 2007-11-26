@@ -287,8 +287,6 @@ char ModVArchEl::getB( long long *tm, bool up_ord )
 
 void ModVArchEl::setVal( TValBuf &buf, long long beg, long long end )
 {    
-    long long ctm;
-    
     //- Check border -
     if( !buf.vOK(beg,end) )	return;
     beg = vmax(beg,buf.begin());

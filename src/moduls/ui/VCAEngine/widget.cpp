@@ -60,6 +60,8 @@ void Widget::postEnable(int flag)
 	attrAdd( new TFld("geomY",_("Geometry:y"),TFld::Integer,TFld::NoFlag,"","0","0;10000","",8) );
 	attrAdd( new TFld("geomW",_("Geometry:width"),TFld::Integer,TFld::NoFlag,"","100","0;10000","",9) );
 	attrAdd( new TFld("geomH",_("Geometry:height"),TFld::Integer,TFld::NoFlag,"","100","0;10000","",10) );
+	attrAdd( new TFld("geomXsc",_("Geometry:x scale"),TFld::Real,TFld::NoFlag,"","1","0.1;10","",13) );
+	attrAdd( new TFld("geomYsc",_("Geometry:y scale"),TFld::Real,TFld::NoFlag,"","1","0.1;10","",14) );
 	attrAdd( new TFld("geomZ",_("Geometry:z"),TFld::Integer,TFld::NoFlag,"","0","-1000000;1000000","",11) );
 	attrAdd( new TFld("geomMargin",_("Geometry:margin"),TFld::Integer,TFld::NoFlag,"","0","0;1000","",12) );
     }

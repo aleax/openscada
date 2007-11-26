@@ -41,7 +41,7 @@
 using namespace VISION;
 
 VisRun::VisRun( const string &prj_it, const string &open_user, const string &VCAstat, bool crSessForce ) : 
-    winClose(false), master_pg(NULL), m_period(1000), w_prc_cnt(0), proc_st(false), reqtm(1)
+    winClose(false), master_pg(NULL), m_period(1000), w_prc_cnt(0), proc_st(false), reqtm(1), x_scale(1.0), y_scale(1.0)
 {
     setAttribute(Qt::WA_DeleteOnClose,true);
     mod->regWin( this );
@@ -204,6 +204,21 @@ void VisRun::closeEvent( QCloseEvent* ce )
 {
     winClose = true;
     ce->accept();
+}
+
+void VisRun::resizeEvent( QResizeEvent *ev )
+{
+    if( !ev->oldSize().isEmpty() && master_pg )
+    {	
+	float x_scale_old = x_scale;
+	float y_scale_old = y_scale;
+	if( windowState() == Qt::WindowMaximized || windowState() == Qt::WindowFullScreen )
+	{
+	    x_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().width()/(float)master_pg->size().width();
+	    y_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().height()/(float)master_pg->size().height();
+	}else x_scale = y_scale = 1.0;
+	if( x_scale_old != x_scale || y_scale_old != y_scale )	master_pg->update(0,0);
+    }
 }
 
 void VisRun::endRunChk( )
@@ -376,7 +391,7 @@ void VisRun::callPage( const string& pg_it, XMLNode *upw )
     vector<int> idst;
     string pgGrp, pgSrc, stmp;
 
-    //- Scan and update opened pages -
+    //- Scan and update opened page -
     if( master_pg )
     {
 	RunPageView *pg = master_pg->findOpenPage(pg_it);
@@ -398,7 +413,7 @@ void VisRun::callPage( const string& pg_it, XMLNode *upw )
     if( !master_pg )
     {
 	QScrollArea *scrl = new QScrollArea;
-	scrl->setWidgetResizable(true);
+	//scrl->setWidgetResizable(true);
 	scrl->setFocusPolicy( Qt::NoFocus );    
 
 	//- Create widget view -

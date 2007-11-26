@@ -530,7 +530,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    
 		    if( scrl->verticalScrollBar() ) scrl->verticalScrollBar()->setValue(v_scrl);
 		    
-		    wdg->show();
+		    //wdg->resize(wdg->size());
                     //tabs->showPage(tabs->currentWidget());				    
 				
 		    //---- Mark last drawed tabs ----
@@ -907,7 +907,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		comb = new QComboBox(widget);
 		comb->setMinimumSize(75,0);
 		comb->setObjectName(br_path.c_str());
-		comb->setSizeAdjustPolicy(QComboBox::AdjustToContents);		
+		comb->setSizeAdjustPolicy(QComboBox::AdjustToContentsOnFirstShow);
 		comb->setStatusTip((sel_path+"/"+br_path).c_str());
 		if( t_s.attr("dest") == "sel_ed" )
 		    comb->setEditable(true);

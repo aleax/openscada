@@ -416,6 +416,7 @@ void OrigMedia::postEnable( int flag )
         attrAdd( new TFld("bordColor",_("Border:color"),TFld::String,Attr::Color,"","#000000","","",23) );
         attrAdd( new TFld("src",_("Source"),TFld::String,TFld::NoFlag,"50","","","",24) );	
         attrAdd( new TFld("type",_("Type"),TFld::Integer,TFld::Selected|Attr::Active,"1","0","0;1",_("Image;Movie"),25) );
+    	attrAdd( new TFld("fit",_("Fit to widget size"),TFld::Boolean,TFld::NoFlag,"","","","",26) );	
     }
 }
 
@@ -426,22 +427,14 @@ bool OrigMedia::attrChange( Attr &cfg, void *prev )
 	//- Delete specific attributes -
 	switch(*(int*)prev)
 	{
-	    case 0:	cfg.owner()->attrDel("scale");	break;
-	    case 1:
-		cfg.owner()->attrDel("fit");
-		cfg.owner()->attrDel("speed");		
-		break;
+	    case 1:	cfg.owner()->attrDel("speed");	break;
 	}	
 	
 	//- Create specific attributes -
 	switch(cfg.getI())
 	{
-	    case 0:
-    		cfg.owner()->attrAdd( new TFld("scale",_("Scale ratio (0-10)"),TFld::Real,Attr::Mutable,"2.2","1","0:10","",26) );
-		break;
 	    case 1:	    
 		cfg.owner()->attrAdd( new TFld("speed",_("Play speed"),TFld::Integer,Attr::Mutable,"3","100","1;900","",27) );
-    		cfg.owner()->attrAdd( new TFld("fit",_("Fit to widget size"),TFld::Boolean,Attr::Mutable,"","","","",28) );
 		break;
 	}
     }

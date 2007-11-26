@@ -703,9 +703,16 @@ bool ShapeText::event( WdgView *w, QEvent *event )
 	    
 	    //- Prepare draw area -
 	    int margin = w->dc()["geomMargin"].toInt();
-	    QRect draw_area = w->rect().adjusted(0,0,-2*margin,-2*margin);	    
+	    QRect draw_area(w->rect().x(),w->rect().y(),
+		(int)((float)w->rect().width()/w->xScale(true))-2*margin,
+		(int)((float)w->rect().height()/w->yScale(true))-2*margin);
+	    pnt.setWindow(draw_area);
+	    pnt.setViewport(w->rect().adjusted((int)(w->xScale(true)*margin),(int)(w->yScale(true)*margin),
+		-(int)(w->xScale(true)*margin),-(int)(w->yScale(true)*margin)));
+	    
+	    /*QRect draw_area = w->rect().adjusted(0,0,-2*margin,-2*margin);	    
             pnt.setWindow(draw_area);
-	    pnt.setViewport(w->rect().adjusted(margin,margin,-margin,-margin));
+	    pnt.setViewport(w->rect().adjusted(margin,margin,-margin,-margin));*/
 	    
 	    pnt.translate(draw_area.width()/2,draw_area.height()/2 );
 	    int angle = w->dc()["orient"].toInt();
@@ -838,8 +845,10 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    w->dc()["mediaType"] = atoi(val.c_str()); 
 	    reld_src = true; 
 	    break;
-	case 26:	//scale
-	    w->dc()["mediaScale"] = atof(val.c_str()); reld_src = true; break;
+	case 26:	//fit
+	    w->dc()["mediaFit"] = atoi(val.c_str());
+	    lab->setScaledContents( atoi(val.c_str()) );
+	    break;	    
 	case 27: 	//speed
 	{
 	    int vl = atoi(val.c_str());
@@ -853,11 +862,6 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    }
 	    break;
 	}
-	case 28: 	//fit
-	    w->dc()["mediaFit"] = atoi(val.c_str());
-	    if( !lab->movie() ) break;
-	    lab->setScaledContents( atoi(val.c_str()) );
-	    break;
     }
     
     if( reld_src && !w->allAttrLoad() )
@@ -882,17 +886,12 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 			    lab->clear();
 			}
 			//- Set new image -
-			double scl_rat = w->dc().value("mediaScale",1).toDouble();
-			if( scl_rat < 0.1 ) lab->setScaledContents(true);
-	        	else
-			{
-			    lab->setScaledContents(false);								
-			    if( img.loadFromData((const uchar*)sdata.data(),sdata.size()) )
- 				lab->setPixmap(QPixmap::fromImage(img.scaled(
-					    (int)((double)img.width()*scl_rat),
-					    (int)((double)img.height()*scl_rat),
-					    Qt::KeepAspectRatio,Qt::SmoothTransformation)));
-			}
+			if( img.loadFromData((const uchar*)sdata.data(),sdata.size()) )
+ 			    lab->setPixmap(QPixmap::fromImage(img.scaled(
+				    (int)((float)img.width()*w->xScale(true)),
+				    (int)((float)img.height()*w->yScale(true)),
+				    Qt::KeepAspectRatio,Qt::SmoothTransformation)));			
+			lab->setScaledContents( w->dc()["mediaFit"].toInt() );
 			break;
 		    }
 		    case 1:
@@ -908,7 +907,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 			QBuffer *buf = new QBuffer(w);
 			buf->setData( sdata.data(), sdata.size() );
 			buf->open( QIODevice::ReadOnly );
-			lab->setMovie( new QMovie(buf) );
+			lab->setMovie( new QMovie(buf) );			
 			//- Play speed set -
 			int vl = w->dc()["mediaSpeed"].toInt();
 	        	if( vl <= 1 ) lab->movie()->stop();
@@ -919,6 +918,9 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 			}
 			//- Fit set -
 			lab->setScaledContents( w->dc()["mediaFit"].toInt() );
+			//if( !lab->hasScaledContents() )
+			//    lab->movie()->setScaledSize(QSize((int)((float)lab->movie()->scaledSize().width()*w->xScale(true)), 
+			//				      (int)((float)lab->movie()->scaledSize().height()*w->yScale(true))) );
 			break;
 		    }			
 		}
@@ -2236,13 +2238,13 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    if( !qobject_cast<RunWdgView*>(w) )	{ up = false; break; }
 	    w->dc()["pgOpenSrc"] = val.c_str();
 		
-	    RunWdgView *el_wdg = (RunWdgView *)w->dc()["inclWidget"].value<void*>();	
+	    RunPageView *el_wdg = (RunPageView *)w->dc()["inclWidget"].value<void*>();
 	    //-- Put previous include widget to page cache --
 	    if( !el_wdg || val != el_wdg->id() )
-	    {
+	    {		
 		if( el_wdg ) 
 		{ 
-		    ((RunWdgView*)w)->mainWin()->pgCacheAdd(el_wdg);
+		    ((RunPageView*)w)->mainWin()->pgCacheAdd(el_wdg);
 		    el_wdg->setEnabled(false);
 		    el_wdg->setVisible(false);
 		    el_wdg->setParent(NULL);
@@ -2254,7 +2256,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    QVBoxLayout *lay = (QVBoxLayout *)w->layout();
 		    if( !lay ) lay = new QVBoxLayout(w);
 		
-		    el_wdg = ((RunWdgView*)w)->mainWin()->pgCacheGet(val);
+		    el_wdg = (RunPageView *)(((RunWdgView*)w)->mainWin()->pgCacheGet(val));
 		    if( el_wdg )
 		    {
 			el_wdg->setParent(w);
@@ -2263,7 +2265,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    }
 		    else 
 		    {
-		        el_wdg = new RunWdgView(val,0,(VisRun*)w->mainWin(),w);
+		        el_wdg = new RunPageView(val,(VisRun*)w->mainWin(),w);
 			el_wdg->load("");
 		    }
 		    //el_wdg->resize(w->size());

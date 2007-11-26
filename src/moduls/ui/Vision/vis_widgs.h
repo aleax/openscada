@@ -206,6 +206,8 @@ namespace VISION
 	    int    wLevel( )		{ return w_level; }
 	    string root( );
 	    QMainWindow *mainWin( )	{ return main_win; }
+	    virtual float  xScale( bool full = false );
+	    virtual float  yScale( bool full = false );
 	    int	   z( )			{ return z_coord;  }
 	    virtual string user( )	{ return ""; }
 	    QMap<QString, QVariant> &dc(){ return cache_data; }
@@ -234,6 +236,8 @@ namespace VISION
 	    //- Protected attributes -
 	    bool		all_attr_load;	//All attributes load
 	    int 		w_level;	//Widget level
+	    float		x_scale, 	//Widget x scale
+				y_scale;	//	 y scale
 	    int			z_coord;	//Z coordinate
 	    string		idWidget, 	//Full widget identifier
 				m_root;		//Root widget identifier

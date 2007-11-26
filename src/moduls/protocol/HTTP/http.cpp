@@ -175,6 +175,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	string url      = TSYS::strSepParse(req,1,' ');
 	string protocol = TSYS::strSepParse(req,2,' ');
 	
+	//mess_debug("DEBUG","Content: <%s>!",request.c_str());
 	//- Parse all next records to content -
 	string   bound;
 	int      c_lng=-1;
@@ -185,9 +186,9 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	    pos = req.find(":");
     	    if( pos == string::npos ) break;
     	    string var = req.substr(0,pos++);	    
-    	    if( var == "Content-Type" )
-	    {	
-		if( c_lng < 0 ) c_lng = 0;
+    	    if( var == "Content-Type" && req.find("multipart/form-data;") != string::npos )
+	    {
+	        if( c_lng < 0 ) c_lng = 0;
 		//- Check full post message -
 		pos = req.find("boundary=",pos)+strlen("boundary=");
 		bound = req.substr(pos);
@@ -202,13 +203,8 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	while( request.size() );
 	
 	//- Check content length -
-	if( c_lng >= 0 )
-	{
-	    pos = request.find(bound);		
-	    if( pos == string::npos || c_lng > (request.size()-pos+2) ) m_nofull = true; 	
-	}
-	if( method == "POST" && c_lng < 0 )	m_nofull = true;
-	if( m_nofull ) return m_nofull;
+	if( c_lng >= 0 && c_lng > (request.size()-pos+2) ) m_nofull = true; 		    
+	if( (method == "POST" && c_lng < 0) || m_nofull ) return true;
 	
 	//- Check protocol version -
 	if( protocol != "HTTP/1.0" && protocol != "HTTP/1.1" )

@@ -1584,10 +1584,9 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	}
 	if( run_st && ctrMkNode("area",opt,-1,"/val",_("Values"),0440,"root",grp.c_str()) )
 	{
-            ctrMkNode("fld",opt,-1,"/val/beg",_("Begin"),0660,"root",grp.c_str(),1,"tp","time");
-	    ctrMkNode("fld",opt,-1,"/val/ubeg","",0660,"root",grp.c_str(),4,"tp","dec","len","6","min","0","max","999999");
-            ctrMkNode("fld",opt,-1,"/val/end",_("End"),0660,"root",grp.c_str(),1,"tp","time");
-	    ctrMkNode("fld",opt,-1,"/val/uend","",0660,"root",grp.c_str(),4,"tp","dec","len","6","min","0","max","999999");
+            ctrMkNode("fld",opt,-1,"/val/tm",_("Time"),0660,"root",grp.c_str(),1,"tp","time");
+	    ctrMkNode("fld",opt,-1,"/val/utm","",0660,"root",grp.c_str(),4,"tp","dec","len","6","min","0","max","999999");
+            ctrMkNode("fld",opt,-1,"/val/size",_("Size"),0660,"root",grp.c_str(),1,"tp","real");	    
 	    ctrMkNode("fld",opt,-1,"/val/arch",_("Archivator"),0660,"root",grp.c_str(),1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/val/sw_trend",_("Show trend"),0660,"root",grp.c_str(),1,"tp","bool");
 	    if(!atoi(TBDS::genDBGet(nodePath()+"vShowTrnd","0",opt->attr("user")).c_str()))
@@ -1757,25 +1756,20 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		atoi(opt->text().c_str())?archivatorAttach(opt->attr("key_arch")):archivatorDetach(opt->attr("key_arch"),true);
 	}    	
     }
-    else if( a_path == "/val/beg" )	
+    else if( a_path == "/val/tm" )
     {
-        if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->setText(TBDS::genDBGet(owner().nodePath()+"vaBeg","0",opt->attr("user")));
-        if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	TBDS::genDBSet(owner().nodePath()+"vaBeg",opt->text(),opt->attr("user"));
+        if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->setText(TBDS::genDBGet(owner().nodePath()+"vaTm","0",opt->attr("user")));
+        if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	TBDS::genDBSet(owner().nodePath()+"vaTm",opt->text(),opt->attr("user"));
     }
-    else if( a_path == "/val/end" ) 
+    else if( a_path == "/val/utm" )
     {
-        if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->setText(TBDS::genDBGet(owner().nodePath()+"vaEnd","0",opt->attr("user")));
-        if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	TBDS::genDBSet(owner().nodePath()+"vaEnd",opt->text(),opt->attr("user"));
+        if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->setText(TBDS::genDBGet(owner().nodePath()+"vaTm_u","0",opt->attr("user")));
+        if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	TBDS::genDBSet(owner().nodePath()+"vaTm_u",opt->text(),opt->attr("user"));
     }
-    else if( a_path == "/val/ubeg" )
+    else if( a_path == "/val/size" )
     {
-        if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->setText(TBDS::genDBGet(owner().nodePath()+"vaBeg_u","0",opt->attr("user")));
-        if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	TBDS::genDBSet(owner().nodePath()+"vaBeg_u",opt->text(),opt->attr("user"));
-    }
-    else if( a_path == "/val/uend" )
-    {
-        if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->setText(TBDS::genDBGet(owner().nodePath()+"vaEnd_u","0",opt->attr("user")));
-        if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	TBDS::genDBSet(owner().nodePath()+"vaEnd_u",opt->text(),opt->attr("user"));
+        if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->setText(TBDS::genDBGet(owner().nodePath()+"vaSize","1",opt->attr("user")));
+        if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	TBDS::genDBSet(owner().nodePath()+"vaSize",opt->text(),opt->attr("user"));
     }	    
     else if( a_path == "/val/arch")	
     {
@@ -1789,12 +1783,12 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/val/val" && ctrChkNode(opt,"get",0440,"root",grp.c_str(),SEQ_RD) )
     {
-        TValBuf buf( TFld::String, 0, 0, false, true );	    
-        getVal( buf, (long long)atoi(TBDS::genDBGet(owner().nodePath()+"vaBeg","0",opt->attr("user")).c_str())*1000000+
-		     atoi(TBDS::genDBGet(owner().nodePath()+"vaBeg_u","0",opt->attr("user")).c_str()), 
-		     (long long)atoi(TBDS::genDBGet(owner().nodePath()+"vaEnd","0",opt->attr("user")).c_str())*1000000+
-		     atoi(TBDS::genDBGet(owner().nodePath()+"vaEnd_u","0",opt->attr("user")).c_str()), 
-		     TBDS::genDBGet(nodePath()+"vArch","",opt->attr("user")), 2000 );
+	long long end = (long long)atoi(TBDS::genDBGet(owner().nodePath()+"vaTm","0",opt->attr("user")).c_str())*1000000+
+	                     atoi(TBDS::genDBGet(owner().nodePath()+"vaTm_u","0",opt->attr("user")).c_str());
+	long long beg = end - (long long)(atof(TBDS::genDBGet(owner().nodePath()+"vaSize","1",opt->attr("user")).c_str())*1e6);
+	
+        TValBuf buf( TFld::String, 0, 0, false, true );
+        getVal( buf, beg, end, TBDS::genDBGet(nodePath()+"vArch","",opt->attr("user")), 2000 );
 	    
         XMLNode *n_tm   = ctrMkNode("list",opt,-1,"/val/val/0","",0440);
 	XMLNode *n_val  = ctrMkNode("list",opt,-1,"/val/val/1","",0440);
@@ -1818,17 +1812,18 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/val/trend" && ctrChkNode(opt,"get",0444,"root",grp.c_str(),SEQ_RD) )
     {
-        opt->setText(TSYS::strEncode(makeTrendImg(
-	    (long long)atoi(TBDS::genDBGet(owner().nodePath()+"vaBeg","0",opt->attr("user")).c_str())*1000000+
-	    atoi(TBDS::genDBGet(owner().nodePath()+"vaBeg_u","0",opt->attr("user")).c_str()),
-	    (long long)atoi(TBDS::genDBGet(owner().nodePath()+"vaEnd","0",opt->attr("user")).c_str())*1000000+
-	    atoi(TBDS::genDBGet(owner().nodePath()+"vaEnd_u","0",opt->attr("user")).c_str()),
-	    TBDS::genDBGet(nodePath()+"vArch","",opt->attr("user"))),TSYS::base64));
+	long long end = (long long)atoi(TBDS::genDBGet(owner().nodePath()+"vaTm","0",opt->attr("user")).c_str())*1000000+
+	                     atoi(TBDS::genDBGet(owner().nodePath()+"vaTm_u","0",opt->attr("user")).c_str());
+	long long beg = end - (long long)(atof(TBDS::genDBGet(owner().nodePath()+"vaSize","1",opt->attr("user")).c_str())*1e6);
+	
+        opt->setText(TSYS::strEncode(makeTrendImg(beg,end,TBDS::genDBGet(nodePath()+"vArch","",opt->attr("user"))),TSYS::base64));
         opt->setAttr("tp","png");
     }
 }
 
-//================= TVArchivator =================================
+//*************************************************
+//* TVArchivator                                  *
+//*************************************************
 TVArchivator::TVArchivator( const string &iid, const string &idb, TElem *cf_el ) : run_st(false), prc_st(false), 
     tm_calc(0.0), TConfig(cf_el), m_db(idb), m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()), 
     m_dscr(cfg("DESCR").getSd()), m_addr(cfg("ADDR").getSd()), m_start(cfg("START").getBd()), 
@@ -1836,7 +1831,7 @@ TVArchivator::TVArchivator( const string &iid, const string &idb, TElem *cf_el )
 {
     m_id = iid;
     
-    //Create calc timer
+    //- Create calc timer -
     struct sigevent sigev;
     sigev.sigev_notify = SIGEV_THREAD;
     sigev.sigev_value.sival_ptr = this;
@@ -1864,7 +1859,7 @@ void TVArchivator::setValPeriod( double iper )
 {     
     m_v_per = iper?iper:1.;
     
-    //Call sort for all archives
+    //- Call sort for all archives -
     ResAlloc res(a_res,false);
     for( int i_l = 0; i_l < arch_el.size(); i_l++ )
         arch_el[i_l]->archive().archivatorSort();
@@ -1897,7 +1892,7 @@ string TVArchivator::workId()
 
 void TVArchivator::start()
 { 
-    //Start interval timer for periodic thread creating
+    //- Start interval timer for periodic thread creating -
     struct itimerspec itval;
     itval.it_interval.tv_sec = itval.it_value.tv_sec = m_a_per;
     itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
@@ -1908,14 +1903,14 @@ void TVArchivator::start()
 
 void TVArchivator::stop( bool full_del )
 {
-    //Stop interval timer for periodic thread creating
+    //- Stop interval timer for periodic thread creating -
     struct itimerspec itval;
     itval.it_interval.tv_sec = itval.it_interval.tv_nsec = itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
     timer_settime(tmId, 0, &itval, NULL);
     if( TSYS::eventWait( prc_st, false, nodePath()+"stop",5) )
 	throw TError(nodePath().c_str(),_("Archive thread no stoped!"));
 
-    //Detach from all archives
+    //- Detach from all archives -
     ResAlloc res(a_res,false);
     while(arch_el.size())
     {
@@ -1996,7 +1991,7 @@ void TVArchivator::Task(union sigval obj)
     if( arch->prc_st )  return;
     arch->prc_st = true;
     
-    //Archiving
+    //- Archiving -
     try
     {
 	unsigned long long t_cnt = SYS->shrtCnt();
@@ -2010,7 +2005,7 @@ void TVArchivator::Task(union sigval obj)
 		beg = vmax(arch_el->m_last_get,arch_el->archive().begin());
 		end = arch_el->archive().end();
 		if(!beg || !end || beg > end )	continue;
-		//- Averaging -		
+		//-- Averaging --
 		long long a_per = (long long)(1000000.*arch->valPeriod());
 		if( a_per > arch_el->archive().period() )
 		{
@@ -2043,8 +2038,8 @@ void TVArchivator::Task(union sigval obj)
 				    if( c_val == EVAL_INT ) c_val = v_o;
 				    if( c_val != EVAL_INT && v_o != EVAL_INT )
 				    {
-					int s_k = c_tm-a_per*(c_tm/a_per);
-				        int n_k = arch_el->archive().period();
+					long long s_k = c_tm-a_per*(c_tm/a_per);
+				        long long n_k = arch_el->archive().period();
                     			c_val = ((long long)v_o*s_k+(long long)c_val*n_k)/(s_k+n_k);
 				    }
 				    arch_el->prev_val.assign((char*)&c_val,sizeof(int));
@@ -2070,8 +2065,8 @@ void TVArchivator::Task(union sigval obj)
 				    if( c_val == EVAL_REAL ) c_val = v_o;
 				    if( c_val != EVAL_REAL && v_o != EVAL_REAL )
 				    {
-					int s_k = c_tm-a_per*(c_tm/a_per);
-				        int n_k = arch_el->archive().period();
+					long long s_k = c_tm-a_per*(c_tm/a_per);
+				        long long n_k = arch_el->archive().period();
                     			c_val = (v_o*s_k+c_val*n_k)/(s_k+n_k);
 				    }
 				    arch_el->prev_val.assign((char*)&c_val,sizeof(double));
@@ -2089,7 +2084,7 @@ void TVArchivator::Task(union sigval obj)
 			    }
 			}
 		    }
-		    arch_el->setVal( buf, beg, end );
+		    arch_el->setVal( buf, buf.begin(), end );
 		}
 		else arch_el->setVal( arch_el->archive(), beg, end );
 		

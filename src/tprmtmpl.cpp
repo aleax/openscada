@@ -135,7 +135,7 @@ void TPrmTempl::load( )
     SYS->db().at().dataGet(owner().fullDB(),owner().owner().nodePath()+owner().tbl(),*this);
     
     //- Load IO -
-    vector<int> u_pos;
+    vector<string> u_pos;
     TConfig cfg(&owner().owner().tplIOE());
     cfg.cfg("TMPL_ID").setS(id());
     int io_cnt = 0;    
@@ -144,17 +144,15 @@ void TPrmTempl::load( )
 	string sid = cfg.cfg("ID").getS();
 	cfg.cfg("ID").setS("");
 	
-	//- Calc insert position -
-	int pos = cfg.cfg("POS").getI();
-	int i_ps;
-	for( i_ps = 0; i_ps < u_pos.size(); i_ps++ )
-	    if( u_pos[i_ps] > pos )     break;
-	u_pos.insert(u_pos.begin()+i_ps,pos);
-	
+	//- Position storing -
+	int pos = cfg.cfg("POS").getI();	
+	while( u_pos.size() <= pos )	u_pos.push_back("");
+	u_pos[pos] = sid;	
+
 	int iid = ioId(sid);
 	if(iid < 0)
 	    ioIns( new IO(sid.c_str(),cfg.cfg("NAME").getS().c_str(),(IO::Type)cfg.cfg("TYPE").getI(),cfg.cfg("FLAGS").getI(),
-			cfg.cfg("VALUE").getS().c_str(),false), i_ps );
+			cfg.cfg("VALUE").getS().c_str(),false), pos );
 	else
 	{
 	    io(iid)->setName(cfg.cfg("NAME").getS());
@@ -162,6 +160,14 @@ void TPrmTempl::load( )
 	    io(iid)->setFlg(cfg.cfg("FLAGS").getI());
 	    io(iid)->setDef(cfg.cfg("VALUE").getS());
 	}
+    }
+    //- Position fixing -
+    for( int i_p = 0; i_p < u_pos.size(); i_p++ )
+    {
+	if( u_pos[i_p].empty() ) continue;
+	int iid = ioId(u_pos[i_p]);
+	if( iid != i_p ) 
+	    try{ ioMove(iid,i_p); } catch(...){ }
     }
 }
     
@@ -177,6 +183,8 @@ void TPrmTempl::save( )
     cfg.cfg("TMPL_ID").setS(id());
     for(int i_io = 0; i_io < ioSize(); i_io++)
     {
+	if( io(i_io)->id() == "f_frq" || io(i_io)->id() == "f_start" || 
+		io(i_io)->id() == "f_stop" || io(i_io)->id() == "f_err" ) continue;
 	cfg.cfg("ID").setS(io(i_io)->id());
 	cfg.cfg("NAME").setS(io(i_io)->name());
     	cfg.cfg("TYPE").setI(io(i_io)->type());
@@ -191,14 +199,15 @@ void TPrmTempl::save( )
     cfg.cfgViewAll(false);
     while( SYS->db().at().dataSeek(w_db+"_io",w_cfgpath+"_io",fld_cnt++,cfg ) )
     {
-        if( ioId(cfg.cfg("ID").getS()) < 0 )
+	string sio = cfg.cfg("ID").getS( );
+        if( ioId(sio) < 0 || sio == "f_frq" || sio == "f_start" || 
+		sio == "f_stop" || sio == "f_err" )
         {
             SYS->db().at().dataDel(w_db+"_io",w_cfgpath+"_io",cfg);
             fld_cnt--;
         }
         cfg.cfg("ID").setS("");
     }
-    
 }	
 
 void TPrmTempl::preIOCfgChange()
@@ -301,7 +310,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	    int col = atoi(opt->attr("col").c_str());
 	    if( (col == 0 || col == 1) && !opt->text().size() )
     		throw TError(nodePath().c_str(),_("Empty value no valid."));
-	    if( (io(row)->flg()&TPrmTempl::LockAttr) && (col == 0 || col == 1 || col == 2) )
+	    if( io(row)->flg()&TPrmTempl::LockAttr )
 		throw TError(nodePath().c_str(),_("Change lock atribute in not allow."));
 	    switch(col)
 	    {
@@ -371,7 +380,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
     else if( a_path == "/io/accs_mods" && ctrChkNode(opt) )
     {
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(IO::Default))->setText(_("Constant"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(TPrmTempl::CfgPublConst))->setText(_("Public constant"));	
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(TPrmTempl::CfgPublConst))->setText(_("Public constant"));
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(TPrmTempl::CfgLink))->setText(_("Link"));
     }
     else if( a_path == "/tmpl/cfg/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	load();

@@ -41,7 +41,7 @@ namespace VISION
     	    //- Public methods -
 	    RunWdgView( const string &iwid, int ilevel, VisRun *mainWind, QWidget* parent = 0 );
     	    ~RunWdgView( );
-	    
+
 	    string user( );
 	    VisRun *mainWin( );
 	    
@@ -77,6 +77,9 @@ namespace VISION
     	    //- Public methods -
 	    RunPageView( const string &iwid, VisRun *mainWind, QWidget* parent = 0 );
     	    ~RunPageView( );
+	    
+	    float  xScale( bool full = false );
+            float  yScale( bool full = false );
 	    
 	    RunPageView *findOpenPage( const string &pg );
 	    bool callPage( const string &pg_it, const string &pgGrp, const string &pgSrc );
