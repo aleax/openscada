@@ -142,8 +142,8 @@ void OrigElFigure::postEnable( int flag )
 	attrAdd( new TFld("lineDecor",_("Line:decorate"),TFld::Integer,TFld::Selected,"1","0","0;1",_("No decor;Pipe"),22) );
 	attrAdd( new TFld("bordWdth",_("Border:width"),TFld::Integer,TFld::NoFlag,"2","0","0;99","",23) );
 	attrAdd( new TFld("bordClr",_("Border:color"),TFld::String,Attr::Color,"20","#000000","","",24) );
-	attrAdd( new TFld("backColor",_("Background:color"),TFld::String,Attr::Color,"20","","","",25) );
-	attrAdd( new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"20","","","",26) );
+	attrAdd( new TFld("fillColor",_("Fill:color"),TFld::String,Attr::Color,"20","","","",25) );
+	attrAdd( new TFld("fillImg",_("Fill:image"),TFld::String,Attr::Image,"20","","","",26) );
 	attrAdd( new TFld("elLst",_("Element's list"),TFld::String,TFld::FullText|Attr::Active,"300","","","",27) );
     }
 }
@@ -173,7 +173,7 @@ bool OrigElFigure::attrChange( Attr &cfg, void *prev )
 	    sscanf(sel.c_str(),"line:%d:%d",&p[0],&p[1]) || 
 	    sscanf(sel.c_str(),"arc:%d:%d:%d:%d:%d",&p[0],&p[1],&p[2],&p[3],&p[4]) ||
 	    sscanf(sel.c_str(),"bezier:%d:%d:%d:%d",&p[0],&p[1],&p[2],&p[3]);
-	    for( int i_p = 0; i_p < sizeof(p)/sizeof(int); i_p++ ) 
+	    for( int i_p = 0; i_p < sizeof(p)/sizeof(int); i_p++ )
 		if( p[i_p] >= 0 )
 		{		    
 		    pntls.push_back(p[i_p]);

@@ -2209,6 +2209,11 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	case -1:	//load
 	    up = true;
 	    break;
+	case 6:		//active
+	    if( !qobject_cast<RunWdgView*>(w) ) break;
+	    if( atoi(val.c_str()) ) w->setFocusPolicy( Qt::StrongFocus );
+	    else w->setFocusPolicy( Qt::NoFocus );
+	    break;
 	case 12:	//geomMargin
 	    w->dc()["geomMargin"] = atoi(val.c_str());
 	    if( w->layout() ) w->layout()->setMargin( w->dc()["geomMargin"].toInt() );

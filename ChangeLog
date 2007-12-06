@@ -1,3 +1,8 @@
+2007-12-06 Maxim
+- !!!:/UI/Vision: Fill and scalind is added to primitive "ElFig".
+- FIX:/UI/Vision: A lot of bugs are fixed.
+
+
 2007-12-06 Roman
 - /SYS: Update project's icons.
 - /UI/WebVision: Make translations for Russian and Ukranian languages.

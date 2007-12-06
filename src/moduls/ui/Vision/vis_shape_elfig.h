@@ -2,7 +2,7 @@
 //OpenSCADA system module UI.VISION file: vis_shape_elfig.h
 /***************************************************************************
  *   Copyright (C) 2007 by Lysenko Maxim (mlisenko@ukr.net)
- *   			by Yashina Kseniya (mlisenko@ukr.net)
+ *   			by Yashina Kseniya (sobacurka@ukr.net)
  *                                                                         
  *   This program is free software; you can redistribute it and/or modify  
  *   it under the terms of the GNU General Public License as published by  
@@ -76,6 +76,26 @@ class ShapeItem
 };
 
 //************************************************
+//* InundationItem                                    *
+//************************************************
+class InundationItem
+{
+    public:
+        //Methods
+        InundationItem( )	{ }
+        InundationItem( const QPainterPath &ipath, const QBrush &ibrush, QBrush &ibrush_img, const QVector <int> inumber_shape ) : 
+                        brush(ibrush),brush_img(ibrush_img), path(ipath), number_shape(inumber_shape)
+        { };
+
+        //Attributes
+        QPainterPath   path; 
+        QBrush         brush,brush_img;
+        QVector <int>  number_shape;
+        QString        img_nm;
+};
+
+
+//************************************************
 //* RectItem                                     *
 //************************************************
 class RectItem 
@@ -98,6 +118,8 @@ class ShapeElFigure : public WdgShape
 {    
     Q_OBJECT    
     public:
+        //Data
+        enum FigType { Line, Arc, Besier };
 	//Public methods
 	ShapeElFigure( );
     
@@ -118,11 +140,12 @@ class ShapeElFigure : public WdgShape
 	QString currentFile( ) 		{ return curFile; }
 
 	//Public attributes
-	QList<RectItem> rectItems;		//RectItem's container
+	QVector <RectItem> rectItems;		//RectItem's container
 	QPainterPath 	newPath,		//Null path
 			rectPath,		//Path fo RectItem creation
         		ellipse_startPath, ellipse_endPath,
-        		ellipse_draw_startPath, ellipse_draw_endPath;
+        		ellipse_draw_startPath, ellipse_draw_endPath,
+                        InundationPath;
     
 	bool status; 				//Check fo any primitive paint key pressed
 	int shapeType; 				//Selected figure type
@@ -133,32 +156,38 @@ class ShapeElFigure : public WdgShape
     
     private:
     	//Methods
-        int itemAt( const QPointF &pos, QList<ShapeItem> &shapeItems );			//Check for figure type under cursor
-        void moveItemTo(const QPointF &pos,QList<ShapeItem> &shapeItems, PntMap *pnts);	//Move figure procedure
+        int itemAt( const QPointF &pos, QVector <ShapeItem> &shapeItems,WdgView *w);//Check for figure type under cursor
+        void itemAtRun();
+        void moveItemTo(const QPointF &pos,QVector <ShapeItem> &shapeItems, PntMap *pnts, WdgView *view);	//Move figure procedure
     
 	QGraphicsScene *scene;
 	void populateScene();
 	void setCurrentFile( const QString &fileName );
 	QString strippedName( const QString &fullFileName );
-	QPointF ROTATE( const QPointF &pnt, double alpha );				//Процедура поворота данной точки на данный угол относительно начала координат
-	QPointF UNROTATE( const QPointF &pnt, double alpha, double a, double b );	//Процедура, обратная к ROTATE
-	QPointF ARC( double t, double a, double b);					//Процедура вычисления координат точки дуги с центром в точке [0,0], соответствующей параметру  t
-	double Angle( const QLineF &l, const QLineF &l1 );				//Процедура определения угла между двумя прямыми
-	double Length( const QPointF pt1, const QPointF pt2 );				//Процедура определения расстояния между двумя точками
-        bool Holds( QList<ShapeItem> &shapeItems, PntMap *pnts );			//Процедура определения привязанных к данной фигуре других фигур
-        void Move_UP_DOWN ( QList<ShapeItem> &shapeItems, PntMap *pnts );		//Процедура перемещения фигуры с помощью управляющих клавиш
-        int Real_rect_num( int rect_num_old, QList<ShapeItem> &shapeItems, PntMap *pnts );//Определение истиного номера квадратика
-        void Rect_num_0_1( QList<ShapeItem> &shapeItems, int rect_num_temp, PntMap *pnts);//Что делать если попали по 1,2 квадратику
-        void Rect_num_3_4( QList<ShapeItem> &shapeItems, PntMap *pnts );		//Что делать если попали по 2,4 квадратику дуги
-        void Move_all( QPointF pos, QList<ShapeItem> &shapeItems, PntMap *pnts );	//Одновременное передвижение нескольних фигур(квадратиков)
+	QPointF ROTATE( const QPointF &pnt, double alpha );				
+	QPointF UNROTATE( const QPointF &pnt, double alpha, double a, double b );	
+	QPointF ARC( double t, double a, double b);					
+	double Angle( const QLineF &l, const QLineF &l1 );				
+	double Length( const QPointF pt1, const QPointF pt2 );				
+        bool Holds( QVector <ShapeItem> &shapeItems, PntMap *pnts );			
+        void Move_UP_DOWN ( QVector <ShapeItem> &shapeItems, PntMap *pnts, QVector <InundationItem> &inundationItems, WdgView *view );		
+        int Real_rect_num( int rect_num_old, QVector <ShapeItem> &shapeItems, PntMap *pnts );
+        void Rect_num_0_1( QVector <ShapeItem> &shapeItems, int rect_num_temp, PntMap *pnts, WdgView *view);
+        void Rect_num_3_4( QVector <ShapeItem> &shapeItems, PntMap *pnts );		
+        void Move_all( QPointF pos, QVector <ShapeItem> &shapeItems, PntMap *pnts, QVector <InundationItem> &inundationItems, WdgView *view);	
         QPainterPath painter_path( float el_width, float el_border_width, int el_type, double el_ang, 
 		QPointF el_p1 = QPointF(0,0), QPointF el_p2 = QPointF(0,0), QPointF el_p3 = QPointF(0,0), 
 		QPointF el_p4 = QPointF(0,0), QPointF el_p5 = QPointF(0,0), QPointF el_p6 = QPointF(0,0) );
         QPainterPath painter_path_simple( int el_type, double el_ang, 
 		QPointF el_p1 = QPointF(0,0), QPointF el_p2 = QPointF(0,0), QPointF el_p3 = QPointF(0,0), 
 		QPointF el_p4 = QPointF(0,0), QPointF el_p5 = QPointF(0,0), QPointF el_p6 = QPointF(0,0) ) ;
-        int Append_Point( QPointF &pos, QList<ShapeItem> &shapeItems, PntMap *pnts );
-        void Drop_Point ( int num, int num_shape, QList<ShapeItem> &shapeItems, PntMap *pnts );
+        int Append_Point( QPointF &pos, QVector <ShapeItem> &shapeItems, PntMap *pnts );
+        void Drop_Point ( int num, int num_shape, QVector <ShapeItem> &shapeItems, PntMap *pnts );
+        void step(int s,int f, int p, QVector <int> vect, int N);
+        bool Inundation (QPointF point,QVector <ShapeItem> &shapeItems,  PntMap *pnts, QVector <int> vect, int N, WdgView *view);
+        bool Inundation_1_2(QPointF point, QVector <ShapeItem> &shapeItems, QVector <InundationItem> &inundationItems,  PntMap *pnts, WdgView *view);
+        int Build_Matrix(QVector <ShapeItem> &shapeItems);
+        QPainterPath Create_Inundation_Path (QVector <int> in_fig_num, QVector <ShapeItem> &shapeItems, PntMap *pnts, WdgView *view);
       	
 	//Attributes
 	QPointF StartLine, EndLine,		//Start and end points for paint created figure    
@@ -167,36 +196,42 @@ class ShapeElFigure : public WdgShape
     
 	QString curFile;
 	bool isUntitled;
-        bool status_hold;			//Статус нажатия кнопки привязок
+        bool status_hold;			
     
-	int* index_array;			//Массив, содержащий индексы фигур, которые выделяются с Сtrl
-        
-        int* rect_array;
-      
-      
-        
-        
-	int count_Shapes, count_moveItemTo,	//Количество фигур, выделенных с Сtrl и количество вызовов процедуры moveItemTo для этих фигур соответственно
-	    index, index_temp,			//Индекс фигуры в контейнере
-	    rect_num;				//Номер выделенного квадратика(0..3)
+        QVector <int> index_array;
+        QVector <int> rect_array;
+            
+	int count_Shapes, count_moveItemTo,	
+	    index, index_temp,index_inund,			
+	    rect_num;				
 	bool flag_cursor, flag_key, flag_up, flag_down, flag_left, flag_right, 
-	     flag_ctrl, flag,flag_ctrl_move, flag_m, flag_hold_arc;	//Флаги для вида курсора и 
-					    	//для управляющих клавиш соответственно
+	     flag_ctrl, flag,flag_ctrl_move, flag_m, flag_hold_arc;
+					    	
         bool flag_rect, flag_arc_rect_3_4, flag_arc_release, flag_first_move, Flag;
+        QPointF Start_offset, End_offset, CtrlPos1_offset,CtrlPos2_offset,CtrlPos3_offset,CtrlPos4_offset;
         int count_rects, rect_num_arc, arc_rect;
-        bool flag_holds;			//Вспомогательная переменная для того, чтобы вызывать Holds() только один раз в начале движения
-        bool flag_hold_move;			//Флаг передвижения привязанных фигур
-        double t_start, t_end;			//Начальное и конечное значения параметра для рисования дуги
-	QPointF Mouse_pos, offset_all;		//Текущая позиция мышки
-        int current_ss, current_se, current_ee, current_es;	//Указывает, какую комбинацию из двух точек связывать 
-        int count_holds;			//Количество привязанных фигур
-        int *arc_rect_array;			//Содержит номера квадратиков дуги,связанные с другими фигурами
-        int *fig_rect_array;			//Содержит номера квадратиков фигур,связанных с дугой 
-        int *index_array_all;
-        
+        bool flag_holds;			
+        bool flag_hold_move;			
+        bool flag_inund_break;
+        double t_start, t_end;			
+	QPointF Mouse_pos, offset;		
+        int current_ss, current_se, current_ee, current_es;
+        int count_holds;			
+        QVector <int> arc_rect_array;
+        QVector <int> fig_rect_array;
+        QVector <int> vect;
+        QVector< QVector<int> > map_matrix;
+        QVector< QVector<int> > minroad;
+        QVector< QVector<QPointF> > scale_offset;
+        int counter_start, counter_end;
+        int len,clen;
+        int found;
+        QVector<int> road;
+        QVector <int> incl;
+        QVector <int> Inundation_vector;
         QPointF Prev_pos_1, Prev_pos_2;
-       
         QVector<int> num_vector;       
+        int rect_num_move;
     };
 
 }
