@@ -237,7 +237,10 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
 	    irez = mysql_real_query(&connect,req.c_str(),req.size());
 	}
 	if(irez) 
+	{
+	    //mess_debug(nodePath().c_str(),_("Query <%s> is error."),ireq.c_str());
 	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("Query to DB error %d: %s"),irez,mysql_error(&connect));
+	}
     }
     if( mysql_field_count(&connect) == 0 ) return;
     if( !(res = mysql_store_result(&connect)) )
@@ -366,6 +369,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
     }
 
     //- Request -
+    if( first_sel ) return false;
     req = req + " FROM `"+TSYS::strEncode(owner().bd,TSYS::SQL)+"`.`"+TSYS::strEncode(name(),TSYS::SQL)+"` "+
 		 ((next)?req_where:"") +" LIMIT "+TSYS::int2str(row)+",1";		 
     owner().sqlReq( req, &tbl );

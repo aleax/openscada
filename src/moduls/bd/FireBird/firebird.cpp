@@ -296,7 +296,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
     	    {
 		out_sqlda->sqlvar[i].sqldata = dtBuf+off;
 		off += out_sqlda->sqlvar[i].sqllen;
-		if( ((out_sqlda->sqlvar[i].sqltype & ~1) == SQL_VARYING) ) 
+		if( ((out_sqlda->sqlvar[i].sqltype & ~1) == SQL_VARYING) )
 		    off += sizeof(short);
 		out_sqlda->sqlvar[i].sqlind  = (short*)(dtBuf+off);
 		off += sizeof(short);
@@ -305,7 +305,10 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
 	
     	//-- Get data --
     	if( isc_dsql_execute(status, &trans, &stmt, 1, NULL) )
+	{
+	    mess_debug(_("Execution of message <%s> is error."),ireq.c_str());
     	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("DSQL execute error: %s"),getErr(status).c_str());
+	}
 	if( tbl && out_sqlda->sqld )
 	{
 	    //if( isc_dsql_set_cursor_name(status, &stmt,"dyn_cursor", 0) )
@@ -636,7 +639,7 @@ void MTable::fieldSet( TConfig &cfg )
 	    string val;
 	    switch(u_cfg.fld().type())
 	    {
-		case TFld::String:	val = u_cfg.getS();	break;
+		case TFld::String:	val = u_cfg.getS();			break;
 		case TFld::Integer:	val = SYS->int2str(u_cfg.getI());	break;
 		case TFld::Real:	val = SYS->real2str(u_cfg.getR());	break;
 		case TFld::Boolean:	val = SYS->int2str(u_cfg.getB());	break;

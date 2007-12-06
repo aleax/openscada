@@ -1,0 +1,1399 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#: web_vision.cpp:51 web_vision.cpp:631 web_vision.cpp:719 web_vision.cpp:856
+#: web_vision.cpp:860 web_vision.cpp:942 web_vision.h:47 web_vision.h:110
+#: web_vision.h:111
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenSCADA.UI.WebVision 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-12-03 11:15+0200\n"
+"PO-Revision-Date: 2007-12-03 11:05+0200\n"
+"Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
+"Language-Team: <ru@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+#: web_vision.cpp:33
+msgid "WebVision"
+msgstr ""
+
+#: web_vision.cpp:34
+msgid "Operation user interface (WEB)"
+msgstr "Рабочий пользовательский интерфейс (WEB)"
+
+#: web_vision.cpp:35
+msgid "UI"
+msgstr "Интерфейс пользователя"
+
+#: web_vision.cpp:37
+msgid "WWW"
+msgstr ""
+
+#: web_vision.cpp:38
+msgid "0.2.0"
+msgstr ""
+
+#: web_vision.cpp:39
+msgid "Roman Savochenko"
+msgstr "Роман Савоченко"
+
+#: web_vision.cpp:40
+msgid ""
+"Web operation user interface for visual control area (VCA) projects playing."
+msgstr ""
+"Web рабочий пользовательский интерфейс для исполнения визуальных сред "
+"управления (СВУ)"
+
+#: web_vision.cpp:41
+msgid "GPL"
+msgstr ""
+
+#: web_vision.cpp:46
+msgid "C"
+msgstr ""
+
+#: web_vision.cpp:81
+msgid "void HttpGet(const string&,string&,const string&,vector<string>&);"
+msgstr ""
+
+#: web_vision.cpp:82
+msgid "Process Get comand from http protocol's!"
+msgstr ""
+
+#: web_vision.cpp:83
+msgid ""
+"void HttpPost(const string&,string&,const string&,vector<string>&,const "
+"string&);"
+msgstr ""
+
+#: web_vision.cpp:84
+msgid "Process Set comand from http protocol's!"
+msgstr ""
+
+#: web_vision.cpp:88
+msgid ""
+"hr {width:100%}\n"
+"body {background-color:#818181}\n"
+"h1.head {text-align:center; color:#ffff00 }\n"
+"h2.title {text-align:center; font-style:italic; margin: 0px; padding: 0px; "
+"border-width:0 }\n"
+"table.page_head {background-color:#cccccc; border:3px ridge blue; "
+"width:100% }\n"
+"table.page_head td.tool {text-align:center; border:1px solid blue; "
+"width:120px;  white-space: nowrap }\n"
+"table.page_head td.user {text-align:left; border:1px solid blue; "
+"width:120px; white-space: nowrap }\n"
+"table.page_area {background-color:#9999ff; border:3px ridge #a9a9a9; "
+"width:100%; padding:2px }\n"
+"table.page_area tr.content {background-color:#cccccc; border:5px ridge "
+"#9999ff; padding:5px }\n"
+"table.page_auth {background-color:#9999ff; border:3px ridge #a9a9a9; "
+"padding:2px }\n"
+"table.page_auth tr.content {background-color:#cccccc; border:5px ridge "
+"#9999ff; padding:5px }\n"
+msgstr ""
+
+#: web_vision.cpp:101
+msgid ""
+"/***************************************************\n"
+" * pathLev - Path parsing function.                *\n"
+" ***************************************************/\n"
+"pathLev.off = 0;\n"
+"function pathLev( path, level )\n"
+"{\n"
+"  var an_dir = pathLev.off;\n"
+"  var t_lev = 0;\n"
+"  var t_dir;\n"
+"  while( an_dir<path.length && path.charAt(an_dir)=='/' ) an_dir++;\n"
+"  if( an_dir >= path.length ) return '';\n"
+"  while( true )\n"
+"  {\n"
+"    t_dir = path.indexOf('/',an_dir);\n"
+"    if( t_dir < 0 ) { pathLev.off=path.length; return (t_lev==level)?path."
+"substr(an_dir):''; }\n"
+"    if( t_lev==level ) { pathLev.off=t_dir; return path.substr(an_dir,t_dir-"
+"an_dir); }\n"
+"    an_dir = t_dir;\n"
+"    t_lev++;\n"
+"    while( an_dir<path.length && path.charAt(an_dir)=='/' ) an_dir++;\n"
+"  }\n"
+"}\n"
+"/***************************************************\n"
+" * getXmlHttp - Check and return XMLHttpRequest for*\n"
+" *  various brousers.                              *\n"
+" ***************************************************/\n"
+"function getXmlHttp()\n"
+"{\n"
+"  var xmlhttp;\n"
+"  try { xmlhttp = new ActiveXObject(\"Msxml2.XMLHTTP\"); }\n"
+"  catch (e) {\n"
+"    try { xmlhttp = new ActiveXObject(\"Microsoft.XMLHTTP\"); }\n"
+"    catch (e) { xmlhttp = false; } }\n"
+"    if( !xmlhttp && typeof XMLHttpRequest != 'undefined' )\n"
+"    { xmlhttp = new XMLHttpRequest(); }\n"
+"  return xmlhttp;\n"
+"}\n"
+"/***************************************************\n"
+" * servGet - XML get request to server             *\n"
+" ***************************************************/\n"
+"function servGet( adr, prm, full )\n"
+"{\n"
+"  var req = getXmlHttp();\n"
+"  req.open('GET',encodeURI((full?'':'/"
+msgstr ""
+
+#: web_vision.cpp:143
+msgid ""
+"')+adr+'?'+prm),false);\n"
+"  req.send(null);\n"
+"  if( req.status == 200 && req.responseXML.childNodes.length )\n"
+"    return req.responseXML.childNodes[0];\n"
+"}\n"
+"/***************************************************\n"
+" * servSet - XML set request to server             *\n"
+" ***************************************************/\n"
+"function servSet( adr, prm, body )\n"
+"{\n"
+"  var req = getXmlHttp();\n"
+"  req.open('POST',encodeURI('/"
+msgstr ""
+
+#: web_vision.cpp:154
+msgid ""
+"'+adr+'?'+prm),true);\n"
+"  req.send(body);\n"
+"}\n"
+"/***************************************************\n"
+" * getWAttrs - request page/widget attributes      *\n"
+" ***************************************************/\n"
+"function getWAttrs( wId, tm )\n"
+"{\n"
+"  var rNode = servGet(wId,'com=attrs'+(tm?('&tm='+tm):''))\n"
+"  if( !rNode ) return;\n"
+"  var atrLs = new Object();\n"
+"  for( var i = 0; i < rNode.childNodes.length; i++ )\n"
+"    atrLs[rNode.childNodes[i].getAttribute('id')] = rNode.childNodes[i]."
+"textContent;\n"
+"  return atrLs;\n"
+"}\n"
+"/***************************************************\n"
+" * setWAttrs - set page/widget attributes          *\n"
+" ***************************************************/\n"
+"function setWAttrs( wId, attrs )\n"
+"{\n"
+"  var body = '<set>';\n"
+"  for( var i in attrs ) body+='<el id=\\''+i+'\\'>'+attrs[i]+'</el>';\n"
+"  body+='</set>';\n"
+"  servSet(wId,'com=attrs',body);\n"
+"}\n"
+"/***************************************************\n"
+" * pwDescr - Page/widget descriptor object         *\n"
+" ***************************************************/\n"
+"function callPage( pgId, pgAttrs, upW )\n"
+"{\n"
+"  if( !pgId ) return true;\n"
+"  if( this == masterPage )\n"
+"  {\n"
+"    var opPg = this.findOpenPage(pgId);\n"
+"    if( opPg && upW )\n"
+"      for( var i = 0; i < upW.length; i++ )\n"
+"      {\n"
+"        pathLev.off = 0;\n"
+"        pathLev(upW[i],0);\n"
+"        opPg.makeEl(false,(upW[i].length<=pathLev.off)?'/':upW[i].substr"
+"(pathLev.off));\n"
+"      }\n"
+"    if( opPg ) return true;\n"
+"  }\n"
+"  if( !pgAttrs ) pgAttrs = getWAttrs(pgId);\n"
+"  var pgGrp = pgAttrs['pgGrp'];\n"
+"  var pgOpenSrc = pgAttrs['pgOpenSrc'];\n"
+"  if( !this.addr.length || (this == masterPage && pgGrp == 'main') || pgGrp "
+"== this.attrs['pgGrp'] )\n"
+"  {\n"
+"    this.addr  = pgId;\n"
+"    this.attrs = pgAttrs;\n"
+"    this.place = document.createElement('div');\n"
+"    this.makeEl(true,'');\n"
+"    document.body.appendChild(this.place);\n"
+"    //- Set project's icon and RunTime page title -\n"
+"    document.getElementsByTagName(\"link\")[0].setAttribute(\"href\","
+"location.pathname+'?com=ico');\n"
+"    return true;\n"
+"  }\n"
+"  //- Find for include page creation -\n"
+"  for( var i in this.wdgs )\n"
+"    if( this.wdgs[i].tp == 'Box' && pgGrp == this.wdgs[i].attrs['pgGrp'] && "
+"pgId != this.wdgs[i].attrs['pgOpenSrc'] )\n"
+"    {\n"
+"      this.wdgs[i].attrs['pgOpenSrc'] = pgId;\n"
+"      this.wdgs[i].makeEl(true,'');\n"
+"      return true;\n"
+"    }\n"
+"  //- Put checking to child pages -\n"
+"  for( var i = 0; i < this.pages.length; i++ )\n"
+"    if( this.pages[i].callPage(pgId,pgAttrs,upW) ) return true;\n"
+"  return false;\n"
+"}\n"
+"function findOpenPage( pgId )\n"
+"{\n"
+"  if( pgId == this.addr ) return this;\n"
+"  //- Check from included widgets -\n"
+"  for( var i in this.wdgs )\n"
+"    if( this.wdgs[i].tp == 'Box' && pgId == this.wdgs[i].attrs"
+"['pgOpenSrc'] )\n"
+"      return this.wdgs[i].pages[pgId];\n"
+"  //- Put checking to child pages -\n"
+"  for( var i = 0; i < this.pages.length; i++ )\n"
+"  {\n"
+"    var opPg = this.pages[i].findOpenPage(pgId);\n"
+"    if( opPg ) return opPg;\n"
+"  }\n"
+"}\n"
+"function makeEl( hot, el_addr )\n"
+"{\n"
+"  if( el_addr && el_addr != '/' )\n"
+"  {\n"
+"    pathLev.off = 0;\n"
+"    var pthEl = pathLev(el_addr,0);\n"
+"    this.wdgs[pthEl].makeEl(false,(el_addr.length<=pathLev.off)?'/':el_addr."
+"substr(pathLev.off));\n"
+"    return;\n"
+"  }\n"
+"  var rNode;\n"
+"  if( !el_addr )\n"
+"  {\n"
+"    rNode = servGet(this.addr,'com=root'); if( !rNode ) return;\n"
+"    this.tp = rNode.textContent;\n"
+"  }\n"
+"  if( !hot )\n"
+"  {\n"
+"    var tAttrs = getWAttrs(this.addr,el_addr?tmCnt:0);\n"
+"    for( var i in tAttrs ) this.attrs[i] = tAttrs[i];\n"
+"  }\n"
+"  var elStyle = '';\n"
+"  if( this.pg ) elStyle+='position: absolute; left: 0px; top: 0px; '; \n"
+"  else elStyle+='position: absolute; left: '+this.attrs['geomX']+'px; top: "
+"'+this.attrs['geomY']+'px; ';\n"
+"  elStyle+='width: '+this.attrs['geomW']+'px; height: '+this.attrs['geomH']"
+"+'px; ';\n"
+"  elStyle+='z-index: '+this.attrs['geomZ']+'; margin: '+this.attrs"
+"['geomMargin']+'px; ';\n"
+"  if( this.tp == 'Box' )\n"
+"  {\n"
+"    if( this.attrs['backColor'] ) elStyle+='background-color: '+this.attrs"
+"['backColor']+'; ';\n"
+"    if( this.attrs['backImg'] )   elStyle+='background-image: url(\\'/"
+msgstr ""
+
+#: web_vision.cpp:266
+msgid ""
+"'+this.addr+'?com=res&val='+this.attrs['backImg']+'\\'); ';\n"
+"    elStyle+='border-style: solid; border-width: '+this.attrs['bordWidth']"
+"+'px; ';\n"
+"    if( this.attrs['bordColor'] ) elStyle+='border-color: '+this.attrs"
+"['bordColor']+'; ';\n"
+"    if( this.attrs['pgOpenSrc'] && !this.pages[this.attrs['pgOpenSrc']] )\n"
+"    {\n"
+"      if( this.inclOpen )\n"
+"      {\n"
+"\t var atrs = new Object(); atrs.pgOpen = '0'; setWAttrs(this.inclOpen,"
+"atrs);\n"
+"        pgCache[this.inclOpen] = this.place.removeChild(this.pages[this."
+"inclOpen].place);\n"
+"        delete this.pages[this.inclOpen];\n"
+"      }\n"
+"      this.inclOpen = this.attrs['pgOpenSrc'];\n"
+"      var iPg = new pwDescr(this.inclOpen,true,this);\n"
+"      iPg.place = pgCache[this.inclOpen];\n"
+"      if( true ) { iPg.place = document.createElement('div'); iPg.makeEl"
+"(false,''); }\n"
+"      this.pages[this.inclOpen] = iPg;\n"
+"      this.place.appendChild(iPg.place);\n"
+"    }\n"
+"  }\n"
+"  else if( this.tp == 'Text' )\n"
+"  {\n"
+"    if( this.attrs['backColor'] ) elStyle+='background-color: '+this.attrs"
+"['backColor']+'; ';\n"
+"    if( this.attrs['backImg'] )   elStyle+='background-image: url(\\'/"
+msgstr ""
+
+#: web_vision.cpp:288
+msgid ""
+"'+this.addr+'?com=res&val='+this.attrs['backImg']+'\\'); ';\n"
+"    elStyle+='border-style: solid; border-width: '+this.attrs['bordWidth']"
+"+'px; ';\n"
+"    elStyle+='overflow: hidden; ';\n"
+"    if( this.attrs['bordColor'] ) elStyle+='border-color: '+this.attrs"
+"['bordColor']+'; ';\n"
+"    var txtAlign = parseInt(this.attrs['alignment']);\n"
+"    switch(txtAlign&0x3)\n"
+"    {\n"
+"      case 0: elStyle+='text-align: left; '; break;\n"
+"      case 1: elStyle+='text-align: right; '; break;\n"
+"      case 2: elStyle+='text-align: center; '; break;\n"
+"      case 3: elStyle+='text-align: justify; '; break;\n"
+"    }\n"
+"    switch(txtAlign>>2)\n"
+"    {\n"
+"      case 0: elStyle+='vertical-align: top; '; break;\n"
+"      case 1: elStyle+='vertical-align: bottom; '; break;\n"
+"      case 2: elStyle+='vertical-align: middle; '; break;\n"
+"    }\n"
+"    var allFnt = this.attrs['font'].split(' ');\n"
+"    if( allFnt.length >= 1 ) elStyle+='font-family: '+allFnt[0]+'; ';\n"
+"    else if( this.attrs['fontFamily'] ) elStyle+='font-family: '+this.attrs"
+"['fontFamily']+'; ';\n"
+"    if( allFnt.length >= 2 ) elStyle+='font-size: '+allFnt[1]+'px; ';\n"
+"    else elStyle+='font-size: '+this.attrs['fontSize']+'px; ';\n"
+"    if( this.attrs['fontBold'] == 1 ) elStyle+='font-weight: bold; ';\n"
+"    if( this.attrs['fontItalic'] == 1 ) elStyle+='font-style: italic; ';\n"
+"    elStyle+='color: '+this.attrs['color']+'; ';\n"
+"    var txtVal = this.attrs['text'];\n"
+"    for( var i = 0; i < parseInt(this.attrs['numbArg']); i++ )\n"
+"    {\n"
+"      var argVal;\n"
+"      var argCfg = new Array();\n"
+"      switch(parseInt(this.attrs['arg'+i+'tp']))\n"
+"      {\n"
+"        case 0: case 2:\n"
+"          argCfg[0]=this.attrs['arg'+i+'cfg'];\n"
+"          argVal=this.attrs['arg'+i+'val'];\n"
+"          break;\n"
+"        case 1:\n"
+"          argCfg=this.attrs['arg'+i+'cfg'].split(';');\n"
+"          if( argCfg[1] == 'g' )      argVal=parseFloat(this.attrs['arg'+i"
+"+'val']).toPrecision(argCfg[2]);\n"
+"          else if( argCfg[1] == 'f' ) argVal=parseFloat(this.attrs['arg'+i"
+"+'val']).toFixed(argCfg[2]);\n"
+"          else argVal=this.attrs['arg'+i+'val'];\n"
+"          break;\n"
+"      }\n"
+"      txtVal = txtVal.replace('%'+(i+1),argVal);\n"
+"      if( !argCfg.length ) continue;\n"
+"      var argSize = parseInt(argCfg[0]);\n"
+"      while( txtVal.legth < Math.abs(argSize) )\n"
+"        if( argSize > 0 ) txtVal=' '+txtVal; else txtVal+=' ';\n"
+"    }\n"
+"    var txtNode = this.place.childNodes[0];\n"
+"    if( !txtNode ) this.place.appendChild(document.createTextNode(txtVal));\n"
+"    else txtNode.nodeValue = txtVal;\n"
+"  }\n"
+"  else if( this.tp == 'Media' )\n"
+"  {\n"
+"    if( this.attrs['backColor'] ) elStyle+='background-color: '+this.attrs"
+"['backColor']+'; ';\n"
+"    if( this.attrs['backImg'] )   elStyle+='background-image: url(\\'/"
+msgstr ""
+
+#: web_vision.cpp:345
+msgid ""
+"'+this.addr+'?com=res&val='+this.attrs['backImg']+'\\'); ';\n"
+"    elStyle+='border-style: solid; border-width: '+this.attrs['bordWidth']"
+"+'px; ';\n"
+"    elStyle+='overflow: hidden; ';\n"
+"    if( this.attrs['bordColor'] ) elStyle+='border-color: '+this.attrs"
+"['bordColor']+'; ';\n"
+"    var medObj = this.place.childNodes[0];\n"
+"    if( !medObj )\n"
+"    {\n"
+"      medObj = document.createElement('img');\n"
+"      this.place.appendChild(medObj);\n"
+"    }\n"
+"    medObj.src = '/"
+msgstr ""
+
+#: web_vision.cpp:355
+msgid ""
+"'+this.addr+'?com=res&val='+this.attrs['src'];\n"
+"    if( this.attrs['fit'] == 1 )\n"
+"    {\n"
+"      medObj.width = this.attrs['geomW'];\n"
+"      medObj.height = this.attrs['geomH'];\n"
+"    }\n"
+"  }\n"
+"  else if( this.tp == 'FormEl' )\n"
+"  {\n"
+"    var elTp = parseInt(this.attrs['elType']);\n"
+"    if( this.elTp && this.elTp != elTp )\n"
+"      while(this.place.childNodes.length) this.place.removeChild(this.place."
+"childNodes[0]);\n"
+"    this.elTp = elTp;\n"
+"    switch(elTp)\n"
+"    {\n"
+"      case 0:\n"
+"        var formObj = this.place.childNodes[0];\n"
+"        if( !formObj )\n"
+"        {\n"
+"          formObj = document.createElement('input');\n"
+"          this.place.appendChild(formObj);\n"
+"        }\n"
+"        formObj.setAttribute('style','width: '+this.attrs['geomW']+'px; ');\n"
+"        formObj.type='text'; formObj.value=this.attrs['value'];\n"
+"        break;\n"
+"      case 1:\n"
+"        var formObj = this.place.childNodes[0];\n"
+"        if( !formObj )\n"
+"        {\n"
+"          formObj = document.createElement('textarea');\n"
+"          this.place.appendChild(formObj);\n"
+"        }\n"
+"        formObj.setAttribute('style','width: '+this.attrs['geomW']+'px; "
+"height: '+this.attrs['geomH']+'px; ');\n"
+"        formObj.textContent = this.attrs['value'];\n"
+"        break;\n"
+"      case 2:\n"
+"        var formObj = this.place.childNodes[0];\n"
+"        var textObj = this.place.childNodes[1];\n"
+"        if( !formObj )\n"
+"        {\n"
+"          formObj = document.createElement('input');\n"
+"          this.place.appendChild(formObj);\n"
+"        }\n"
+"        if( !textObj )\n"
+"        {\n"
+"          textObj = document.createTextNode('');\n"
+"          this.place.appendChild(textObj);\n"
+"        }\n"
+"        formObj.type='checkbox'; formObj.checked=parseInt(this.attrs"
+"['value']);\n"
+"        textObj.nodeValue = this.attrs['name'];\n"
+"        break;\n"
+"      case 3:\n"
+"        var formObj = this.place.childNodes[0];\n"
+"        if( !formObj )\n"
+"        {\n"
+"          formObj = document.createElement('button');\n"
+"          this.place.appendChild(formObj);\n"
+"          formObj.wdgLnk = this;\n"
+"        }\n"
+"        else while(formObj.childNodes.length) formObj.removeChild(formObj."
+"childNodes[0]);\n"
+"        formObj.setAttribute('style','width: '+this.attrs['geomW']+'px; ');\n"
+"        formObj.onclick = function()\n"
+"        {\n"
+"          var atrs = new Object();\n"
+"          atrs.event = 'ws_BtPress';\n"
+"          setWAttrs(this.wdgLnk.addr,atrs);\n"
+"        };\n"
+"        if( this.attrs['color'] )\n"
+"          formObj.setAttribute('style',formObj.getAttribute('style')"
+"+'background-color: '+this.attrs['color']+'; ');\n"
+"        if( this.attrs['img'] )\n"
+"        {\n"
+"          var btImg = document.createElement('IMG');\n"
+"          btImg.src = '/"
+msgstr ""
+
+#: web_vision.cpp:427
+msgid ""
+"'+this.addr+'?com=res&val='+this.attrs['img'];\n"
+"          formObj.appendChild(btImg);\n"
+"        }\n"
+"        formObj.appendChild(document.createTextNode(this.attrs['name']));\n"
+"        break;\n"
+"      case 4: case 5:\n"
+"        var formObj = this.place.childNodes[0];\n"
+"        if( !formObj )\n"
+"        {\n"
+"          formObj = document.createElement('select');\n"
+"          this.place.appendChild(formObj);\n"
+"        }\n"
+"        else while(formObj.childNodes.length) formObj.removeChild(formObj."
+"childNodes[0]);\n"
+"        if( elTp == 4 )\n"
+"\t   formObj.setAttribute('style','width: '+this.attrs['geomW']+'px; ');\n"
+"        else\n"
+"        {\n"
+"          formObj.setAttribute('style','width: '+this.attrs['geomW']+'px; "
+"height: '+this.attrs['geomH']+'px; ');\n"
+"          formObj.setAttribute('size',100);\n"
+"        }\n"
+"        var selVal = this.attrs['value'];\n"
+"        var elLst = this.attrs['items'].split('\\n');\n"
+"        var optEl;\n"
+"        var selOk = false;\n"
+"        for( var i = 0; i < elLst.length; i++ )\n"
+"        {\n"
+"          optEl = document.createElement('option');\n"
+"          optEl.textContent = elLst[i];\n"
+"          if( selVal == elLst[i] ) optEl.selected=selOk=true;\n"
+"          formObj.appendChild(optEl);\n"
+"        }\n"
+"        if( !selOk && elTp == 4 )\n"
+"        {\n"
+"          optEl = document.createElement('option');\n"
+"          optEl.textContent = selVal;\n"
+"          optEl.selected = true;\n"
+"          formObj.appendChild(optEl);\n"
+"        }\n"
+"        break;\n"
+"    }\n"
+"  }\n"
+"  this.place.setAttribute('style',elStyle);\n"
+"  if( el_addr ) return;\n"
+"  rNode = servGet(this.addr,'com=chlds'); if( !rNode ) return;\n"
+"  for( var i = 0; i < rNode.childNodes.length; i++ )\n"
+"  {\n"
+"    var chEl = rNode.childNodes[i].getAttribute('id');\n"
+"    var wdgO = new pwDescr(this.addr+'/wdg_'+chEl,false,this);\n"
+"    wdgO.place = document.createElement('div');\n"
+"    wdgO.makeEl(false,'');\n"
+"    this.place.appendChild(wdgO.place);\n"
+"    this.wdgs[chEl] = wdgO;\n"
+"  }\n"
+"}\n"
+"function pwDescr( pgAddr, pg, parent )\n"
+"{\n"
+"  this.addr = pgAddr;\n"
+"  this.pages = new Object();\n"
+"  this.wdgs = new Object();\n"
+"  this.attrs = new Object();\n"
+"  this.pg = pg;\n"
+"  this.tp = null;\n"
+"  this.parent = parent;\n"
+"  this.place = null;\n"
+"  this.callPage = callPage;\n"
+"  this.findOpenPage = findOpenPage;\n"
+"  this.makeEl = makeEl;\n"
+"}\n"
+"/***************************************************\n"
+" * makeUI                                          *\n"
+" ***************************************************/\n"
+"function makeUI()\n"
+"{\n"
+"  //- Get open pages list -\n"
+"  var pgNode = servGet(location.pathname,'com=pgOpen&tm='+tmCnt,true)\n"
+"  if( pgNode )\n"
+"  {\n"
+"    var pags = pgNode.getElementsByTagName('pg');\n"
+"    for( var i = 0; i < pags.length; i++ )\n"
+"    {\n"
+"      var pgnm;\n"
+"      var upW = new Array();\n"
+"      for( var j = 0; j < pags[i].childNodes.length; j++ )\n"
+"        if( pags[i].childNodes[j].nodeName == 'el' ) upW.push(pags[i]."
+"childNodes[j].textContent);\n"
+"        else pgnm = pags[i].childNodes[j].textContent;\n"
+"      masterPage.callPage(pgnm,null,upW);\n"
+"    }\n"
+"    tmCnt = parseInt(pgNode.getAttribute('tm'));\n"
+"  }\n"
+"  setTimeout(makeUI,1000);\n"
+"}\n"
+"/***************************************************\n"
+" * Main start code                                 *\n"
+" ***************************************************/\n"
+"tmCnt = 0;\n"
+"pgCache = new Object();\n"
+"masterPage = new pwDescr('',true);\n"
+"setTimeout(makeUI,10);\n"
+msgstr ""
+
+#: web_vision.cpp:534 web_vision.cpp:541
+msgid "SubType"
+msgstr "Подтип"
+
+#: web_vision.cpp:549
+#, c-format
+msgid ""
+"======================= The module <%s:%s> options =======================\n"
+"---------- Parameters of the module section <%s> in config file ----------\n"
+"\n"
+"SessTimeLife <time>      Time of the sesion life, minutes (default 10).\n"
+"CSSTables    <CSS>       CSS for creating pages.\n"
+"\n"
+msgstr ""
+"======================== Опции модуля <%s:%s> ============================\n"
+"------- Параметры модульной секции <%s> в конфигурационном файле ---------\n"
+"SessTimeLife <время>     Время жизни сессии, минуты (по умолчанию 10).\n"
+"CSSTables    <CSS>       CSS для создаваемых таблиц.\n"
+
+#: web_vision.cpp:562
+msgid "h"
+msgstr ""
+
+#: web_vision.cpp:565
+msgid "help"
+msgstr ""
+
+#: web_vision.cpp:581 web_vision.cpp:587
+msgid "SessTimeLife"
+msgstr ""
+
+#: web_vision.cpp:582 web_vision.cpp:588
+msgid "CSSTables"
+msgstr ""
+
+#: web_vision.cpp:593
+msgid "HTTP/1.0 "
+msgstr ""
+
+#: web_vision.cpp:593
+msgid ""
+"\n"
+"Server: "
+msgstr ""
+
+#: web_vision.cpp:594
+msgid ""
+"\n"
+"Accept-Ranges: bytes\n"
+"Content-Length: "
+msgstr ""
+
+#: web_vision.cpp:596
+msgid ""
+"\n"
+"Connection: close\n"
+"Content-type: "
+msgstr ""
+
+#: web_vision.cpp:598
+msgid ""
+"\n"
+"Charset="
+msgstr ""
+
+#: web_vision.cpp:599 web_vision.cpp:924
+msgid "\n"
+msgstr ""
+
+#: web_vision.cpp:605
+msgid ""
+"<?xml version='1.0' ?>\n"
+"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
+"'DTD/xhtml1-transitional.dtd'>\n"
+"<html xmlns='http://www.w3.org/1999/xhtml'>\n"
+"<head>\n"
+"  <meta http-equiv='Content-Type' content='text/html; charset="
+msgstr ""
+
+#: web_vision.cpp:610
+msgid ""
+"'/>\n"
+"  <link rel='shortcut icon' href='/"
+msgstr ""
+
+#: web_vision.cpp:611
+msgid ""
+"/ico' type='image' />\n"
+"  <title>"
+msgstr ""
+
+#: web_vision.cpp:612 web_vision.cpp:653 web_vision.cpp:667 web_vision.cpp:922
+msgid ". "
+msgstr ""
+
+#: web_vision.cpp:612
+msgid ""
+"</title>\n"
+"  <style type='text/css'>\n"
+msgstr ""
+
+#: web_vision.cpp:613
+msgid "</style>\n"
+msgstr ""
+
+#: web_vision.cpp:615
+msgid ""
+"</head>\n"
+"<body alink='#33ccff' link='#3366ff' text='#000000' vlink='#339999'>\n"
+msgstr ""
+
+#: web_vision.cpp:624
+msgid ""
+"</body>\n"
+"</html>"
+msgstr ""
+
+#: web_vision.cpp:638
+msgid "about"
+msgstr ""
+
+#: web_vision.cpp:640 web_vision.cpp:722
+msgid "ico"
+msgstr ""
+
+#: web_vision.cpp:643
+msgid "UI."
+msgstr ""
+
+#: web_vision.cpp:644 web_vision.cpp:659 web_vision.cpp:728 web_vision.cpp:740
+#: web_vision.cpp:752 web_vision.cpp:765 web_vision.cpp:780 web_vision.cpp:790
+#: web_vision.cpp:809 web_vision.cpp:918 web_vision.cpp:927 web_vision.cpp:935
+#: web_vision.cpp:951
+msgid "200 OK"
+msgstr ""
+
+#: web_vision.cpp:644
+msgid "image/"
+msgstr ""
+
+#: web_vision.cpp:653 web_vision.cpp:667 web_vision.cpp:922
+msgid "<h1 class='head'>"
+msgstr ""
+
+#: web_vision.cpp:653 web_vision.cpp:922
+msgid ""
+"</h1>\n"
+"<hr/><br/>\n"
+msgstr ""
+
+#: web_vision.cpp:657
+msgid "VCA.js"
+msgstr ""
+
+#: web_vision.cpp:659
+msgid "application/x-javascript"
+msgstr ""
+
+#: web_vision.cpp:667
+msgid ""
+"</h1>\n"
+"<hr/><br/>\n"
+"<center><table class='page_auth'>\n"
+msgstr ""
+
+#: web_vision.cpp:670 web_vision.cpp:724 web_vision.cpp:747 web_vision.cpp:761
+#: web_vision.cpp:772 web_vision.cpp:786 web_vision.cpp:1001
+#: web_vision.cpp:1006 web_vision.cpp:1009
+msgid "get"
+msgstr ""
+
+#: web_vision.cpp:671 web_vision.cpp:686 web_vision.cpp:707 web_vision.cpp:725
+#: web_vision.cpp:736 web_vision.cpp:748 web_vision.cpp:762 web_vision.cpp:773
+#: web_vision.cpp:776 web_vision.cpp:787 web_vision.cpp:947 web_vision.cpp:975
+#: web_vision.cpp:998
+msgid "path"
+msgstr ""
+
+#: web_vision.cpp:671
+#, c-format
+msgid "/%2fses%2fses"
+msgstr ""
+
+#: web_vision.cpp:676 web_vision.cpp:691
+msgid "<tr><td><b>"
+msgstr ""
+
+#: web_vision.cpp:676
+msgid "Connect to opened session"
+msgstr "Подключение к открытой сессии"
+
+#: web_vision.cpp:676 web_vision.cpp:691
+msgid ""
+"</b></td></tr>\n"
+"<tr class='content'><td align='center'>\n"
+"<table border='0'>\n"
+msgstr ""
+
+#: web_vision.cpp:680 web_vision.cpp:695
+msgid "<tr><td><a href='/"
+msgstr ""
+
+#: web_vision.cpp:680 web_vision.cpp:711
+msgid "/ses_"
+msgstr ""
+
+#: web_vision.cpp:680 web_vision.cpp:695
+msgid "'>"
+msgstr ""
+
+#: web_vision.cpp:681 web_vision.cpp:696
+msgid "</a></td></tr>"
+msgstr ""
+
+#: web_vision.cpp:682 web_vision.cpp:697
+msgid "</table></td></tr>\n"
+msgstr ""
+
+#: web_vision.cpp:686
+#, c-format
+msgid "/%2fprm%2fcfg%2fprj"
+msgstr ""
+
+#: web_vision.cpp:691
+msgid "Create new session for present project"
+msgstr "Создание новой сессию для доступного проекта"
+
+#: web_vision.cpp:695
+msgid "/prj_"
+msgstr ""
+
+#: web_vision.cpp:695 web_vision.cpp:762
+msgid "id"
+msgstr ""
+
+#: web_vision.cpp:700
+msgid "</table></center>"
+msgstr ""
+
+#: web_vision.cpp:701
+msgid "No one sessions and projects VCA engine present!"
+msgstr "Нет ни одной сессии и проекта движка СВУ!"
+
+#: web_vision.cpp:704
+msgid "prj_"
+msgstr ""
+
+#: web_vision.cpp:706
+msgid "connect"
+msgstr ""
+
+#: web_vision.cpp:707 web_vision.cpp:736 web_vision.cpp:748 web_vision.cpp:947
+#, c-format
+msgid "/%2fserv%2f0"
+msgstr ""
+
+#: web_vision.cpp:707
+msgid "prj"
+msgstr ""
+
+#: web_vision.cpp:709
+msgid "mcat"
+msgstr ""
+
+#: web_vision.cpp:711 web_vision.cpp:917
+msgid "<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/"
+msgstr ""
+
+#: web_vision.cpp:711 web_vision.cpp:712
+msgid "sess"
+msgstr ""
+
+#: web_vision.cpp:711 web_vision.cpp:917 web_vision.cpp:934
+msgid "'/>"
+msgstr ""
+
+#: web_vision.cpp:712
+msgid "<center>Open new session '"
+msgstr ""
+
+#: web_vision.cpp:712
+msgid "' for project: '"
+msgstr ""
+
+#: web_vision.cpp:712 web_vision.cpp:796
+msgid ""
+"'</center>\n"
+"<br/>"
+msgstr ""
+
+#: web_vision.cpp:715
+msgid "ses_"
+msgstr ""
+
+#: web_vision.cpp:718 web_vision.cpp:941
+msgid "com"
+msgstr ""
+
+#: web_vision.cpp:720
+msgid "<SCRIPT type='text/javascript' src='/"
+msgstr ""
+
+#: web_vision.cpp:720
+msgid "/VCA.js'/>"
+msgstr ""
+
+#: web_vision.cpp:725
+#, c-format
+msgid "/%2fico"
+msgstr ""
+
+#: web_vision.cpp:728
+msgid "image/png"
+msgstr ""
+
+#: web_vision.cpp:732
+msgid "pgOpen"
+msgstr ""
+
+#: web_vision.cpp:734 web_vision.cpp:737 web_vision.cpp:746 web_vision.cpp:749
+msgid "tm"
+msgstr ""
+
+#: web_vision.cpp:735
+msgid "openlist"
+msgstr ""
+
+#: web_vision.cpp:737 web_vision.cpp:749
+msgid "0"
+msgstr ""
+
+#: web_vision.cpp:740 web_vision.cpp:752 web_vision.cpp:780 web_vision.cpp:790
+msgid "text/xml"
+msgstr ""
+
+#: web_vision.cpp:744 web_vision.cpp:943
+msgid "attrs"
+msgstr ""
+
+#: web_vision.cpp:756
+msgid "res"
+msgstr ""
+
+#: web_vision.cpp:758
+msgid "val"
+msgstr ""
+
+#: web_vision.cpp:762
+#, c-format
+msgid "/%2fwdg%2fres"
+msgstr ""
+
+#: web_vision.cpp:765
+msgid "mime"
+msgstr ""
+
+#: web_vision.cpp:766 web_vision.cpp:804
+msgid "404 Not Found"
+msgstr "404 Не найдено"
+
+#: web_vision.cpp:770
+msgid "chlds"
+msgstr ""
+
+#: web_vision.cpp:773
+#, c-format
+msgid "/%2fwdg%2fcfg%2fpath"
+msgstr ""
+
+#: web_vision.cpp:773
+msgid "resLink"
+msgstr ""
+
+#: web_vision.cpp:773
+msgid "1"
+msgstr ""
+
+#: web_vision.cpp:776
+#, c-format
+msgid "/%2finclwdg%2fwdg"
+msgstr ""
+
+#: web_vision.cpp:784 web_vision.cpp:988 web_vision.cpp:989 web_vision.cpp:993
+#: web_vision.cpp:1001 web_vision.cpp:1002 web_vision.cpp:1006
+#: web_vision.cpp:1007 web_vision.cpp:1010 web_vision.cpp:1011
+msgid "root"
+msgstr ""
+
+#: web_vision.cpp:787
+#, c-format
+msgid "/%2fwdg%2fcfg%2froot"
+msgstr ""
+
+#: web_vision.cpp:795
+#, c-format
+msgid "Unknown command: %s."
+msgstr "Неизвестная команде: %s."
+
+#: web_vision.cpp:796
+msgid "<center>Call page/widget '"
+msgstr ""
+
+#: web_vision.cpp:796
+msgid "' command: '"
+msgstr ""
+
+#: web_vision.cpp:799
+#, c-format
+msgid "No permit request is received: '%s'"
+msgstr "Получен недопустимый запрос: '%s'"
+
+#: web_vision.cpp:803
+msgid "Page <"
+msgstr ""
+
+#: web_vision.cpp:803
+msgid "> error: "
+msgstr ""
+
+#: web_vision.cpp:814
+msgid ""
+"<center><table class='page_auth'>\n"
+"<TR><TD>"
+msgstr ""
+
+#: web_vision.cpp:815 web_vision.cpp:824
+msgid " "
+msgstr ""
+
+#: web_vision.cpp:815 web_vision.cpp:824
+msgid ""
+"</TD></TR>\n"
+"<TR class='content'><TD>\n"
+"<table border='0'>\n"
+"<TR><TD><font color='Blue'>"
+msgstr ""
+
+#: web_vision.cpp:818 web_vision.cpp:827
+msgid "Name: "
+msgstr "Имя: "
+
+#: web_vision.cpp:818
+msgid ""
+"</font></TD><TD>OpenSCADA</TD></TR>\n"
+"<TR><TD><font color='Blue'>"
+msgstr ""
+
+#: web_vision.cpp:819 web_vision.cpp:829
+msgid "License: "
+msgstr "Лицензия: "
+
+#: web_vision.cpp:819
+msgid ""
+"</font></TD><TD>GPL</TD></TR>\n"
+"<TR><TD><font color='Blue'>"
+msgstr ""
+
+#: web_vision.cpp:820 web_vision.cpp:830
+msgid "Author: "
+msgstr "Автор: "
+
+#: web_vision.cpp:820
+msgid ""
+"</font></TD><TD>Roman Savochenko</TD></TR>\n"
+"</table>\n"
+"</TD></TR></table><br/>\n"
+"<table class='page_auth'>\n"
+"<TR><TD>"
+msgstr ""
+
+#: web_vision.cpp:827 web_vision.cpp:828 web_vision.cpp:829 web_vision.cpp:830
+msgid "</font></TD><TD>"
+msgstr ""
+
+#: web_vision.cpp:827 web_vision.cpp:828 web_vision.cpp:829
+msgid "</TD></TR><TR><TD><font color='Blue'>"
+msgstr ""
+
+#: web_vision.cpp:828
+msgid "Desription: "
+msgstr "Описание: "
+
+#: web_vision.cpp:830
+msgid ""
+"</TD></TR></table>\n"
+"</TD></TR>\n"
+"</table><br/></center>\n"
+msgstr ""
+
+#: web_vision.cpp:837
+msgid "<center><table class='page_auth'><tr><td><b>"
+msgstr ""
+
+#: web_vision.cpp:838
+msgid "Enter to module"
+msgstr "Вход в модуль"
+
+#: web_vision.cpp:838
+msgid ""
+"</b></td></tr>\n"
+"<tr class='content'> <td align='center'>\n"
+"<form method='post' action='/"
+msgstr ""
+
+#: web_vision.cpp:840
+msgid ""
+"' enctype='multipart/form-data'>\n"
+"<table cellpadding='3'>\n"
+"<tr><td><b>"
+msgstr ""
+
+#: web_vision.cpp:842
+msgid "User name"
+msgstr "Имя пользователя"
+
+#: web_vision.cpp:842
+msgid ""
+"</b></td><td><input type='text' name='user' size='20'/></td></tr>\n"
+"<tr><td><b>"
+msgstr ""
+
+#: web_vision.cpp:843
+msgid "Password"
+msgstr "Пароль"
+
+#: web_vision.cpp:843
+msgid ""
+"</b></td><td><input type='password' name='pass' size='20'/></td></tr>\n"
+"<tr><td colspan='2' align='center'><input type='submit' name='auth_enter' "
+"value='"
+msgstr ""
+
+#: web_vision.cpp:844
+msgid "Enter"
+msgstr "Принять"
+
+#: web_vision.cpp:844
+msgid ""
+"'/>\n"
+"<input type='reset' name='clean' value='"
+msgstr ""
+
+#: web_vision.cpp:845
+msgid "Clean"
+msgstr "Очистить"
+
+#: web_vision.cpp:845
+msgid ""
+"'/>\n"
+"</td></tr></table>\n"
+"</form>\n"
+"</td></tr></table></center>\n"
+msgstr ""
+
+#: web_vision.cpp:853 web_vision.cpp:1048
+msgid ":"
+msgstr ""
+
+#: web_vision.cpp:853
+msgid "Cookie"
+msgstr ""
+
+#: web_vision.cpp:855 web_vision.cpp:1031
+msgid "="
+msgstr ""
+
+#: web_vision.cpp:858
+msgid ";"
+msgstr ""
+
+#: web_vision.cpp:896
+msgid "oscd_u_id"
+msgstr ""
+
+#: web_vision.cpp:910
+msgid "auth_enter"
+msgstr ""
+
+#: web_vision.cpp:913 web_vision.cpp:974
+msgid "user"
+msgstr ""
+
+#: web_vision.cpp:914
+msgid "pass"
+msgstr ""
+
+#: web_vision.cpp:917 web_vision.cpp:934
+msgid "/"
+msgstr ""
+
+#: web_vision.cpp:918 web_vision.cpp:927 web_vision.cpp:935 web_vision.cpp:951
+#: web_vision.h:110
+msgid "text/html"
+msgstr ""
+
+#: web_vision.cpp:919
+msgid "Set-Cookie: oscd_u_id="
+msgstr ""
+
+#: web_vision.cpp:919
+msgid "; path=/;\n"
+msgstr ""
+
+#: web_vision.cpp:923
+msgid "Auth wrong! Retry please."
+msgstr "Ошибка авторизации! Повторите пожалуйста."
+
+#: web_vision.cpp:932
+msgid "auth_ch"
+msgstr ""
+
+#: web_vision.cpp:934
+msgid "<META HTTP-EQUIV='Refresh' CONTENT='0; URL="
+msgstr ""
+
+#: web_vision.cpp:936
+msgid "Set-Cookie: oscd_u_id=; path=/;\n"
+msgstr ""
+
+#: web_vision.cpp:945 web_vision.cpp:1002 web_vision.cpp:1007
+#: web_vision.cpp:1010 web_vision.cpp:1011
+msgid "set"
+msgstr ""
+
+#: web_vision.cpp:959
+#, c-format
+msgid "%s"
+msgstr ""
+
+#: web_vision.cpp:962
+#, c-format
+msgid "<table border='2' width='40%' align='center'><tbody>\n"
+msgstr ""
+
+#: web_vision.cpp:964
+msgid "<tr bgcolor='yellow'><td align='center'><b>Warning!</b></td></tr>\n"
+msgstr ""
+
+#: web_vision.cpp:966
+msgid "<tr bgcolor='red'><td align='center'><b>Error!</b></td></tr>\n"
+msgstr ""
+
+#: web_vision.cpp:967
+msgid "<tr bgcolor='#9999ff'><td align='center'><b>Message!</b></td></tr>\n"
+msgstr ""
+
+#: web_vision.cpp:968
+msgid "<tr bgcolor='#cccccc'> <td align='center'>"
+msgstr ""
+
+#: web_vision.cpp:968
+msgid "</td></tr>\n"
+msgstr ""
+
+#: web_vision.cpp:969
+msgid "</tbody></table>\n"
+msgstr ""
+
+#: web_vision.cpp:975
+msgid "/UI/VCAEngine"
+msgstr ""
+
+#: web_vision.cpp:977
+msgid "rez"
+msgstr ""
+
+#: web_vision.cpp:983
+msgid "info"
+msgstr ""
+
+#: web_vision.cpp:986
+msgid "area"
+msgstr ""
+
+#: web_vision.cpp:986
+msgid "/prm/cfg"
+msgstr ""
+
+#: web_vision.cpp:986
+msgid "Module options"
+msgstr "Опции модуля"
+
+#: web_vision.cpp:988 web_vision.cpp:989 web_vision.cpp:993
+msgid "fld"
+msgstr ""
+
+#: web_vision.cpp:988 web_vision.cpp:999
+msgid "/prm/cfg/lf_tm"
+msgstr ""
+
+#: web_vision.cpp:988
+msgid "Life time of auth sesion(min)"
+msgstr "Время жизни сеанса авторизации (мин)"
+
+#: web_vision.cpp:988 web_vision.cpp:989 web_vision.cpp:993
+msgid "tp"
+msgstr ""
+
+#: web_vision.cpp:988
+msgid "dec"
+msgstr ""
+
+#: web_vision.cpp:989 web_vision.cpp:1004
+msgid "/prm/cfg/CSS"
+msgstr ""
+
+#: web_vision.cpp:989
+msgid "CSS"
+msgstr ""
+
+#: web_vision.cpp:989 web_vision.cpp:993
+msgid "str"
+msgstr ""
+
+#: web_vision.cpp:989 web_vision.cpp:993
+msgid "cols"
+msgstr ""
+
+#: web_vision.cpp:989 web_vision.cpp:993
+msgid "90"
+msgstr ""
+
+#: web_vision.cpp:989 web_vision.cpp:993
+msgid "rows"
+msgstr ""
+
+#: web_vision.cpp:989
+msgid "7"
+msgstr ""
+
+#: web_vision.cpp:990 web_vision.cpp:991
+msgid "comm"
+msgstr ""
+
+#: web_vision.cpp:990 web_vision.cpp:1010
+msgid "/prm/cfg/load"
+msgstr ""
+
+#: web_vision.cpp:990
+msgid "Load"
+msgstr "Загрузить"
+
+#: web_vision.cpp:991 web_vision.cpp:1011
+msgid "/prm/cfg/save"
+msgstr ""
+
+#: web_vision.cpp:991
+msgid "Save"
+msgstr "Сохранить"
+
+#: web_vision.cpp:993 web_vision.cpp:1009
+msgid "/help/g_help"
+msgstr ""
+
+#: web_vision.cpp:993
+msgid "Options help"
+msgstr "Помощь по опциям"
+
+#: web_vision.cpp:993
+msgid "5"
+msgstr ""
+
+#: web_vision.cpp:1023
+msgid "?"
+msgstr ""
+
+#: web_vision.cpp:1032
+msgid "true"
+msgstr ""
+
+#: web_vision.cpp:1040
+msgid "boundary="
+msgstr ""
+
+#: web_vision.cpp:1041
+msgid "\r\n"
+msgstr ""
+
+#: web_vision.cpp:1042 web_vision.cpp:1058
+msgid "--"
+msgstr ""
+
+#: web_vision.cpp:1043
+msgid "Content-Disposition: form-data;"
+msgstr ""
+
+#: web_vision.cpp:1044
+msgid "name=\""
+msgstr ""
+
+#: web_vision.cpp:1045
+msgid "filename=\""
+msgstr ""
+
+#: web_vision.cpp:1048
+msgid "Content-Type"
+msgstr ""
+
+#: web_vision.cpp:1065 web_vision.cpp:1078
+msgid "\""
+msgstr ""

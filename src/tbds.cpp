@@ -270,7 +270,7 @@ bool TBDS::dataSet( const string &bdn, const string &path, TConfig &cfg )
 
 bool TBDS::dataDel( const string &bdn, const string &path, TConfig &cfg )
 {
-    AutoHD<TTable> tbl = open(bdn,true);
+    AutoHD<TTable> tbl = open(bdn);
     
     if( !tbl.freeStat() )
     {

@@ -1,4 +1,5 @@
 ## process this file with automake to generate Makefile.in
+
 EXTRA_DIST = *.h qtcfg.qrc images/* po/* doc/*
 
 AM_CXXFLAGS= -I$(QT4_INCL) -I$(QT4_INCL)/QtCore -I$(QT4_INCL)/QtGui -I$(top_srcdir)/src  -fPIC -DPIC -DQT_EDITION=QT_EDITION_DESKTOP \

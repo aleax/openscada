@@ -131,6 +131,7 @@ void Widget::setEnable( bool val )
     		inheritIncl( );
 		//- Register of heritater -
 		parent().at().heritReg(this);
+		
 	    }catch(TError err) 
 	    { 
 		mess_err(err.cat.c_str(),err.mess.c_str());
@@ -175,7 +176,6 @@ void Widget::setEnable( bool val )
 	    try { m_herit[i_h].at().setEnable(val); }
 	    catch(...)
 	    { mess_err(nodePath().c_str(),_("Heritors widget <%s> enable/disable error"),m_herit[i_h].at().id().c_str()); }
-
     m_enable = val;
 }
 

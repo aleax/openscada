@@ -33,11 +33,14 @@ namespace WebCfg
 //*************************************************
 //* SAuth                                         *
 //*************************************************
-struct SAuth
+class SAuth
 {
-    time_t t_auth;
-    string name;
-    int    id_ses;
+    public:
+        SAuth( ) :      t_auth(0), name("")     { }
+        SAuth( string inm, time_t it_auth ) : t_auth(it_auth), name(inm)        { }
+		    
+        time_t t_auth;
+        string name;
 };
 
 //*************************************************
@@ -46,30 +49,26 @@ struct SAuth
 class SSess
 {
     public:
-	//Methods
-        SSess( const string &iurl, const string &ipage, const string &isender, 
-		    vector<string> &ivars, const string &icontent ) :
-		url(iurl), page(ipage), sender(isender), vars(ivars), content(icontent) {  };
-    	
-	//Attributes
-	string url;		//request URL 
-	string page;	
-	string sender;		//request sender 
-	string user;		//sesion user
+        //Methods
+        SSess( const string &iurl, const string &ipage, const string &isender,
+                vector<string> &ivars, const string &icontent );
+			    
+        //Attributes
+        string url;             //request URL
+        string page;
+        string sender;          //request sender
+        string user;            //sesion user
+        string content;         //Contain	
+
+        vector<string> vars;    //request vars
+        map< string, string >   cnt;    //Parsed contain
+        map< string, string >   prm;    //URL parameters
+
+        vector<string> mess;    //no interrupt messages
+	
 	XMLNode pg_info;	//page node
-	XMLNode *root;
-	
-	//- HTTP vars and contein -
-	vector<string> vars;	//request vars
-	string content;		//POST contein
-	
-	//- Parsed contein -
-	vector<string> cnt_names;
-	vector<string> cnt_vals;
-	
-	//- No interrupt messages -
-	vector<string> mess;
-};
+	XMLNode *root;	
+};														    
 
 //*************************************************
 //* TWEB                                          *
@@ -77,6 +76,9 @@ class SSess
 class TWEB: public TUI
 {
     public:
+	//Data
+	enum MessLev    { Info, Warning, Error };
+	
 	//Methods
 	TWEB( string name );
 	~TWEB( );
@@ -89,37 +91,33 @@ class TWEB: public TUI
     
     private:
         //Methods
-	void down_colont( SSess &ses );
+	void colontDown( SSess &ses );
 
-	string http_head( const string &rcode, int cln, const string &cnt_tp = "text/html", const string &addattr = "" );
-	string w_head( );
-	string w_tail( );	    
+	string httpHead( const string &rcode, int cln, const string &cnt_tp = "text/html", const string &addattr = "" );
+	string pgHead( string head_els = "" );
+	string pgTail( );	    
 	
 	void HttpGet( const string &url, string &page, const string &sender, vector<string> &vars );
-	void get_about( SSess &ses );
-	void get_head( SSess &ses );
-	void get_area( SSess &ses, XMLNode &node, string a_path );
-	void get_cmd( SSess &ses, XMLNode &node, string a_path ); 
-	bool get_val( SSess &ses, XMLNode &node, string a_path, bool rd = true );
-	void get_auth( SSess &ses );
-	string get_cookie( string name, vector<string> &vars );
+	void getAbout( SSess &ses );
+	void getHead( SSess &ses );
+	void getArea( SSess &ses, XMLNode &node, string a_path );
+	void getCmd( SSess &ses, XMLNode &node, string a_path ); 
+	bool getVal( SSess &ses, XMLNode &node, string a_path, bool rd = true );
+	void getAuth( SSess &ses );
+	string getCookie( string name, vector<string> &vars );
 	    
-	void HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &contein );
-	int  post_auth( SSess &ses );
-	int  post_area( SSess &ses, XMLNode &node, const string &prs_comm, int level = 0 );
-	int  post_val( SSess &ses, XMLNode &node, string prs_path);
-	bool prepare_val( SSess &ses, XMLNode &node, string prs_path, bool compare );	    
-	int  post_cmd( SSess &ses, XMLNode &node, string prs_path );
-	int  post_list( SSess &ses, XMLNode &node, string prs_path );
-	int  post_table( SSess &ses, XMLNode &node, string prs_path );
+	void HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &contain );
+	int  postArea( SSess &ses, XMLNode &node, const string &prs_comm, int level = 0 );
+	int  postVal( SSess &ses, XMLNode &node, string prs_path);
+	bool valPrepare( SSess &ses, XMLNode &node, string prs_path, bool compare );	    
+	int  postCmd( SSess &ses, XMLNode &node, string prs_path );
+	int  postList( SSess &ses, XMLNode &node, string prs_path );
+	int  postTable( SSess &ses, XMLNode &node, string prs_path );
 	//- Post message dialog -
-	//   type: 1 - message, 2 - warning, 3 - error; 
-	void post_mess( string &page, const string &cat, const string &mess, int type );
-	//- Parse http contein -
-	void cont_frm_data( SSess &ses );
+	void messPost( string &page, const string &cat, const string &mess, MessLev type = Info );
 	//- Sesion manipulation function -
-	int open_ses( string name );
-	void check_ses( SSess &ses );
+	int sesOpen( string name );
+	void sesCheck( SSess &ses );
 
 	//- Get form content for name -
 	string cntGet( SSess &ses, const string &nm );
@@ -135,8 +133,9 @@ class TWEB: public TUI
 	    
 	//Attributes
 	Res             m_res;
-	vector<SAuth *> m_auth;
+	map< int, SAuth >       m_auth;
 	int             m_t_auth;          	//Time of sesion life (minutes)
+	time_t          lst_ses_chk;            //Last time of sessions check
 	string	    	m_CSStables;		//CSS tables
 };
     

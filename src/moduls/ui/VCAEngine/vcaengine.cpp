@@ -268,7 +268,7 @@ void Engine::modLoad( )
 
 	//---- Search into config file ----
         int lib_cnt = 0;
-        while(SYS->db().at().dataSeek("",nodePath()+"lib/",lib_cnt++,c_el) )
+        while(SYS->db().at().dataSeek("",nodePath()+"LIB/",lib_cnt++,c_el) )
         {
             string l_id = c_el.cfg("ID").getS();
     	    c_el.cfg("ID").setS("");	    
@@ -314,7 +314,7 @@ void Engine::modLoad( )
 
 	//---- Search into config file ----
         int el_cnt = 0;
-        while(SYS->db().at().dataSeek("",nodePath()+"prj/",el_cnt++,c_el) )
+        while(SYS->db().at().dataSeek("",nodePath()+"PRJ/",el_cnt++,c_el) )
         {
             string prj_id = c_el.cfg("ID").getS();
     	    c_el.cfg("ID").setS("");	    

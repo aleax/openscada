@@ -65,7 +65,7 @@ void WidgetLib::postDisable( int flag )
     if( flag )
     {
         //- Delete libraries record -
-        SYS->db().at().dataDel(DB()+"."+mod->wlbTable(),mod->nodePath()+"lib/",*this);
+        SYS->db().at().dataDel(DB()+"."+mod->wlbTable(),mod->nodePath()+"LIB/",*this);
 
         //- Delete function's files -
 	//-- Delete widgets table --
@@ -127,7 +127,7 @@ void WidgetLib::load( )
     mess_debug(nodePath().c_str(),_("Load widget library."));
 #endif
 
-    SYS->db().at().dataGet(DB()+"."+mod->wlbTable(),mod->nodePath()+"lib",*this);
+    SYS->db().at().dataGet(DB()+"."+mod->wlbTable(),mod->nodePath()+"LIB/",*this);
 
     //- Create new widgets -
     TConfig c_el(&mod->elWdg());
@@ -153,7 +153,7 @@ void WidgetLib::save( )
     mess_debug(nodePath().c_str(),_("Save widget library."));
 #endif
 
-    SYS->db().at().dataSet(DB()+"."+mod->wlbTable(),mod->nodePath()+"lib",*this);
+    SYS->db().at().dataSet(DB()+"."+mod->wlbTable(),mod->nodePath()+"LIB/",*this);
 
     //- Save widgets -
     vector<string> f_lst;
@@ -506,13 +506,13 @@ void LWidget::postDisable( int flag )
         TConfig c_el(&mod->elWdgIO());
         c_el.cfg("IDW").setS(id());
         c_el.cfg("ID").setS("");
-        SYS->db().at().dataDel(fullDB+"_io",mod->nodePath()+tbl+"_io",*this);
+        SYS->db().at().dataDel(fullDB+"_io",mod->nodePath()+tbl+"_io",c_el);
 	
 	//- Remove widget's user IO from library IO table -
         c_el.setElem(&mod->elWdgUIO());
         c_el.cfg("IDW").setS(id());
         c_el.cfg("ID").setS("");
-        SYS->db().at().dataDel(fullDB+"_uio",mod->nodePath()+tbl+"_uio",*this);	
+        SYS->db().at().dataDel(fullDB+"_uio",mod->nodePath()+tbl+"_uio",c_el);	
     }
 }
 

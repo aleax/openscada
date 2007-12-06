@@ -1777,6 +1777,7 @@ void ShapeProtocol::init( WdgView *w )
     // - Init main widget -
     QVBoxLayout *lay = new QVBoxLayout(w);
     QTableWidget *tw = new QTableWidget(w);
+    tw->setSelectionBehavior(QAbstractItemView::SelectRows);
     //tw->setSortingEnabled(true);
     DevelWdgView *devW = qobject_cast<DevelWdgView*>(w);
     if( devW ) eventFilterSet(w,tw,true);
@@ -1995,11 +1996,13 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	c_cat  = imp->value("cat",-1),
 	c_mess = imp->value("mess",-1);    
 
+    QTableWidgetItem *tit;
     //- Process records -
     if( toUp )
 	for( int i_req = 0; i_req < req.childSize(); i_req++ )
 	{
 	    XMLNode *rcd = req.childGet(i_req);
+	    
 	    //-- Get parameters --
 	    rtm  = strtoul(rcd->attr("time").c_str(),0,10);
 	    rlev = rcd->attr("lev").c_str();
@@ -2026,11 +2029,12 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	    if( c_tm >= 0 )
 	    {
 		dtm.setTime_t(rtm);
-		tw->setItem( 0, c_tm, new QTableWidgetItem(dtm.toString(Qt::ISODate)) );
+		tw->setItem( 0, c_tm, tit=new QTableWidgetItem(dtm.toString(Qt::ISODate)) );
+		tit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
 	    }
-	    if( c_lev >= 0 )	tw->setItem( 0, c_lev, new QTableWidgetItem(rlev) );
-	    if( c_cat >= 0 )	tw->setItem( 0, c_cat, new QTableWidgetItem(rcat) );
-	    if( c_mess >= 0 )	tw->setItem( 0, c_mess, new QTableWidgetItem(rmess) );
+	    if( c_lev >= 0 )	{ tw->setItem( 0, c_lev, tit=new QTableWidgetItem(rlev) ); tit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable); }
+	    if( c_cat >= 0 )	{ tw->setItem( 0, c_cat, tit=new QTableWidgetItem(rcat) ); tit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable); }
+	    if( c_mess >= 0 )	{ tw->setItem( 0, c_mess, tit=new QTableWidgetItem(rmess) ); tit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable); }
 	    tw->item(0,0)->setData(Qt::UserRole,rtm);
 	}
     else    
@@ -2065,11 +2069,12 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	    if( c_tm >= 0 )
 	    {
 		dtm.setTime_t(rtm);
-		tw->setItem( row, c_tm, new QTableWidgetItem(dtm.toString(Qt::ISODate)) );
+		tw->setItem( row, c_tm, tit=new QTableWidgetItem(dtm.toString(Qt::ISODate)) );
+		tit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
 	    }
-	    if( c_lev >= 0 )	tw->setItem( row, c_lev, new QTableWidgetItem(rlev) );
-	    if( c_cat >= 0 )	tw->setItem( row, c_cat, new QTableWidgetItem(rcat) );
-	    if( c_mess >= 0 )	tw->setItem( row, c_mess, new QTableWidgetItem(rmess) );
+	    if( c_lev >= 0 )	{ tw->setItem( row, c_lev, tit=new QTableWidgetItem(rlev) ); tit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable); }
+	    if( c_cat >= 0 )	{ tw->setItem( row, c_cat, tit=new QTableWidgetItem(rcat) ); tit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable); }
+	    if( c_mess >= 0 )	{ tw->setItem( row, c_mess, tit=new QTableWidgetItem(rmess) ); tit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable); }
 	    tw->item(row,0)->setData(Qt::UserRole,rtm);
 	}
     if( newFill )

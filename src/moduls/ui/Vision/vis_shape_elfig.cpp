@@ -449,11 +449,15 @@ bool ShapeElFigure::shapeSave( WdgView *w )
 void ShapeElFigure::editEnter( WdgView *view )
 {
     ((VisDevelop *)view->mainWin())->elFigTool->setVisible(true);
+    
     connect( ((VisDevelop *)view->mainWin())->elFigTool, SIGNAL(actionTriggered(QAction*)),
                this, SLOT(toolAct(QAction*)) );
     //-- Init actions' address --
     for( int i_a = 0; i_a < ((VisDevelop *)view->mainWin())->elFigTool->actions().size(); i_a++ )
+    {
+	((VisDevelop *)view->mainWin())->elFigTool->actions().at(i_a)->setEnabled(true);
         ((VisDevelop *)view->mainWin())->elFigTool->actions().at(i_a)->setIconText(TSYS::addr2str(view).c_str());
+    }
     populateScene();
 }
 					
@@ -464,7 +468,10 @@ void ShapeElFigure::editExit( WdgView *view )
     ((VisDevelop *)view->mainWin())->elFigTool->setVisible(false);
     //-- Clear action;s address --
     for( int i_a = 0; i_a < ((VisDevelop *)view->mainWin())->elFigTool->actions().size(); i_a++ )
+    {
         ((VisDevelop *)view->mainWin())->elFigTool->actions().at(i_a)->setIconText("");
+	((VisDevelop *)view->mainWin())->elFigTool->actions().at(i_a)->setEnabled(false);
+    }
 }
 								
 void ShapeElFigure::toolAct( QAction *act )
@@ -472,22 +479,22 @@ void ShapeElFigure::toolAct( QAction *act )
     bool ptr_line,ptr_arc,ptr_bezier;
     //rectItems.clear();
     WdgView *w= (WdgView*)TSYS::str2addr(act->iconText().toAscii().data());
-    if (act->toolTip()=="Add line to elementary figure")
+    if( act->objectName() == "line" )
     {
         shapeType=1;
         status=true;
     }
-    if (act->toolTip()=="Add arc to elementary figure")
+    if( act->objectName() == "arc" )
     {
         shapeType=2;
         status=true;
     }
-    if (act->toolTip()=="Add Besier curve to elementary figure")
+    if( act->objectName() == "besier" )
     {
         shapeType=3;
         status=true;
     }
-    if (act->toolTip()=="Enable holds")
+    if( act->objectName() == "hold" )
     {
         status_hold=act->isChecked();
         rectItems.clear();

@@ -69,7 +69,7 @@ class SSess
         string content;         //Contain
 
         vector<string> vars;    //request vars
-	map< string, string >	cnt;	//Parsed contein
+	map< string, string >	cnt;	//Parsed contain
 	map< string, string >	prm;	//URL parameters    
 	
 	vector<string> mess;	//no interrupt messages
@@ -99,7 +99,7 @@ class TWEB: public TUI
 	void getAuth( SSess &ses );
 	string getCookie( string name, vector<string> &vars );
 	
-	void HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &contein );	
+	void HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &contain );	
 	    
 	string optDescr( );
 	string modInfo( const string &name );

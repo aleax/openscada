@@ -905,9 +905,9 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    if(wr)
 	    { 	
 		comb = new QComboBox(widget);
-		comb->setMinimumSize(75,0);
+		comb->setMinimumSize(100,0);
 		comb->setObjectName(br_path.c_str());
-		comb->setSizeAdjustPolicy(QComboBox::AdjustToContentsOnFirstShow);
+		comb->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 		comb->setStatusTip((sel_path+"/"+br_path).c_str());
 		if( t_s.attr("dest") == "sel_ed" )
 		    comb->setEditable(true);

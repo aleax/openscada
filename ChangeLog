@@ -1,3 +1,23 @@
+2007-12-06 Roman
+- /SYS: Update project's icons.
+- /UI/WebVision: Make translations for Russian and Ukranian languages.
+- /Archive/Mess: Messages request form is changed.
+- FIX:/DB: Create new empty table on record deletion from this table is fixed.
+- FIX:/UI/VCAEngine: Deletion of item container is fixed.
+- FIX:/UI/VCAEngine: Creation pages into no container or no template is fixed.
+- FIX:/UI/Vision: Primitive "ElFig" panel activation is fixed.
+- FIX:/UI/Vision: Enabling item containers, after creation, is made.
+- FIX:/UI/Vision: Resize widgets priority (box and childs) is fixed.
+- FIX:/UI/Vision: Lost edit focus, on time atributes edit, is fixed.
+- FIX:/UI/Vision: Primitive "Protocol" edit and select ability is fixed.
+- FIX:/UI/WebVision: Some fixes is made.
+- !!!:/WebCfg: Modul most rewrited.
+- !!!:/Protocol/HTTP: The requests process function is made optimal.
+- !!:/UI/QTCfg: Documentation is updated and version 1.5.0 is relised.
+- !!:/UI/QTStarter: Documentation is updated and version 1.5.0 is relised.
+- !!:/UI/WebCfg: Documentation and translation is updated and version 1.5.0 is relised.
+
+
 2007-11-26 Roman
 - /UI/Vision, /UI/WebVision: Icons is updated.
 - !:/Archive/Val: An archive trend and list data building dialog is updated.

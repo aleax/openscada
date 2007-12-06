@@ -166,45 +166,32 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
     if( request.size() > 0 )
     {
 	int    pos = 0;
-	request[request.size()] = '\0';
 	//mess_debug("DEBUG","Content: <%s>!",request.c_str());
 	
-	//- Parse first record -
-	req   = request.substr(0,request.find("\n",0)-1);
+	//- Parse first record -	
+	req = TSYS::strSepParse(request,0,'\n',&pos);
+	if( !req.empty() ) req.resize(req.size()-1);
 	string method   = TSYS::strSepParse(req,0,' ');
 	string url      = TSYS::strSepParse(req,1,' ');
 	string protocol = TSYS::strSepParse(req,2,' ');
-	
-	//mess_debug("DEBUG","Content: <%s>!",request.c_str());
-	//- Parse all next records to content -
-	string   bound;
-	int      c_lng=-1;
-	request = request.substr(request.find("\n",0)+1);	
-	req     = request.substr(0,request.find("\n",0)-1);
-	do
+
+	//- Parse parameters -	
+	int c_lng=-1;
+	while( true )
 	{
-	    pos = req.find(":");
-    	    if( pos == string::npos ) break;
-    	    string var = req.substr(0,pos++);	    
-    	    if( var == "Content-Type" && req.find("multipart/form-data;") != string::npos )
-	    {
-	        if( c_lng < 0 ) c_lng = 0;
-		//- Check full post message -
-		pos = req.find("boundary=",pos)+strlen("boundary=");
-		bound = req.substr(pos);
-	    }
+	    req = TSYS::strSepParse(request,0,'\n',&pos);
+	    if( !req.empty() ) req.resize(req.size()-1);
+	    if( req.empty() )   break;
+	    string var = TSYS::strSepParse(req,0,':');
+	    if( var.empty() )	break;
 	    else if( var == "Content-Length" || var == "Content-length" )
-		c_lng = atoi(req.substr(pos).c_str());
-	    
-	    vars.push_back( req );	        	    
-	    request = request.substr(request.find("\n")+1);	
-    	    req     = request.substr(0,request.find("\n")-1);
+		c_lng = atoi(TSYS::strSepParse(req,1,':').c_str());
+	    vars.push_back( req );
 	}
-	while( request.size() );
 	
 	//- Check content length -
-	if( c_lng >= 0 && c_lng > (request.size()-pos+2) ) m_nofull = true; 		    
-	if( (method == "POST" && c_lng < 0) || m_nofull ) return true;
+	if( (c_lng >= 0 && c_lng > (request.size()-pos)) || (c_lng < 0 && method == "POST") ) m_nofull = true;
+	if( m_nofull ) return m_nofull;
 	
 	//- Check protocol version -
 	if( protocol != "HTTP/1.0" && protocol != "HTTP/1.1" )
@@ -218,9 +205,13 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	    answer = http_head("400 Bad Request",answer.size())+answer;				    
 	    return m_nofull;
 	}
-	if( url[0] != '/' ) url[0] = '/';
-	string name_mod = url.substr(1,url.find("/",1)-1);
 	
+	//- Send request to module -
+	int url_pos = 0;
+	string name_mod = TSYS::pathLev(url,0,false,&url_pos);
+	while( url_pos < url.size() && url[url_pos] == '/' ) url_pos++;
+	url = "/"+url.substr(url_pos);
+	//if( url.empty() )	url = "/";	
         try
 	{ 
 	    AutoHD<TModule> mod = SYS->ui().at().modAt(name_mod);
@@ -228,9 +219,6 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 		throw TError(nodePath().c_str(),"Find no WWW subtype module!");
 	    
     	    //- Check metods -
-    	    int n_dir = url.find("/",1);
-    	    if( n_dir == string::npos ) url = "/";
-    	    else                        url = url.substr(n_dir,url.size()-n_dir);
     	    if( method == "GET" )
     	    {
 		void(TModule::*HttpGet)( const string &url, string &page, const string &sender, vector<string> &vars);
@@ -242,11 +230,11 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	    }
 	    else if( method == "POST" ) 
 	    {
-		void(TModule::*HttpPost)( const string &url, string &page, const string &sender, vector<string> &vars, const string &contein );
+		void(TModule::*HttpPost)( const string &url, string &page, const string &sender, vector<string> &vars, const string &contain );
 	 	mod.at().modFunc("void HttpPost(const string&,string&,const string&,vector<string>&,const string&);",
 		    (void (TModule::**)()) &HttpPost);		
 		    
-		((&mod.at())->*HttpPost)(url,answer,sender,vars,request);
+		((&mod.at())->*HttpPost)(url,answer,sender,vars,request.substr(pos));
 		//mess_debug(nodePath().c_str(),"Post Content: <%s>!",request.c_str());
 	    }
 	    else

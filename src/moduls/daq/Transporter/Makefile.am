@@ -1,3 +1,5 @@
+## process this file with automake to generate Makefile.in
+
 EXTRA_DIST = *.h po/* 
 #doc/*
 

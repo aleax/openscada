@@ -270,6 +270,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) :
     actElFigLine->setToolTip(_("Add line to elementary figure"));
     actElFigLine->setWhatsThis(_("The button for adding line to elementary figure"));
     actElFigLine->setStatusTip(_("Press for add line to elementary figure."));
+    actElFigLine->setEnabled(false);
     //--- Arc creation ---
     if(!ico_t.load(TUIS::icoPath("vision_elfig_arc").c_str())) ico_t.load(":/images/elfig_arc.png");
     actElFigArc = new QAction(QPixmap::fromImage(ico_t),_("Add arc"),this);
@@ -277,6 +278,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) :
     actElFigArc->setToolTip(_("Add arc to elementary figure"));
     actElFigArc->setWhatsThis(_("The button for adding arc to elementary figure"));
     actElFigArc->setStatusTip(_("Press for add arc to elementary figure."));
+    actElFigArc->setEnabled(false);    
     //--- Add Besie curve ---
     if(!ico_t.load(TUIS::icoPath("vision_elfig_besie").c_str())) ico_t.load(":/images/elfig_besie.png");
     actElFigBesie = new QAction(QPixmap::fromImage(ico_t),_("Add besier curve"),this);
@@ -284,6 +286,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) :
     actElFigBesie->setToolTip(_("Add Besier curve to elementary figure"));
     actElFigBesie->setWhatsThis(_("The button for adding Besier curve to elementary figure"));
     actElFigBesie->setStatusTip(_("Press for add Besier curve to elementary figure."));    
+    actElFigBesie->setEnabled(false);    
     //--- Add Hold points check ---
     if(!ico_t.load(TUIS::icoPath("vision_elfig_lock").c_str())) ico_t.load(":/images/elfig_lock.png");
     actElFigCheckAct=new QAction(QPixmap::fromImage(ico_t),_("Holds"),this);
@@ -292,7 +295,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) :
     actElFigCheckAct->setToolTip(_("Enable holds"));
     actElFigCheckAct->setWhatsThis(_("The button for enabling holds"));
     actElFigCheckAct->setStatusTip(_("Press for holds to be anabled"));
-    actElFigCheckAct->setEnabled(true);
+    actElFigCheckAct->setEnabled(false);
     
     //connect(checkAct, SIGNAL(toggled(bool)),this, SLOT(setHold()));
     //-- MDI windows actions --
@@ -868,7 +871,15 @@ void VisDevelop::prjNew( )
 	    setText(dlg.name().toAscii().data());
         if( cntrIfCmd(req) )	    
 	    mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
-	else emit modifiedItem(string("prj_")+dlg.id().toAscii().data());
+	else 
+	{
+	    //-- Set enable for item container --
+	    req.clear()->setName("set")->
+			 setAttr("path",string("/prj_")+dlg.id().toAscii().data()+"/%2fobj%2fst%2fen")->
+			 setText("1");
+    	    cntrIfCmd(req);
+	    emit modifiedItem(string("prj_")+dlg.id().toAscii().data());
+	}
     }
 }
 
@@ -884,7 +895,15 @@ void VisDevelop::libNew( )
 	    setText(dlg.name().toAscii().data());
         if( cntrIfCmd(req) )	    
 	    mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
-	else emit modifiedItem(string("wlb_")+dlg.id().toAscii().data());
+	else 
+	{
+	    //-- Set enable for item container --
+	    req.clear()->setName("set")->
+			 setAttr("path",string("/wlb_")+dlg.id().toAscii().data()+"/%2fobj%2fst%2fen")->
+			 setText("1");
+    	    cntrIfCmd(req);	
+	    emit modifiedItem(string("wlb_")+dlg.id().toAscii().data());
+	}
     }    
 }
 
@@ -945,12 +964,13 @@ void VisDevelop::visualItAdd( QAction *cact, const QPoint &pnt )
 	    req.clear()->setName("set");
 	    if( !par_nm.empty() )
 	    {
-		//-- Set parent widget name --
+		//-- Set parent widget name and enable item --
 	        req.setAttr("path",new_wdg+"/%2fwdg%2fst%2fparent")->setText(par_nm);
 		err = cntrIfCmd(req);
 		req.setAttr("path",new_wdg+"/%2fwdg%2fst%2fen")->setText("1");
 		err = cntrIfCmd(req);
 	    }
+	    //-- Set geometry for include widget --
 	    if( !err && !pnt.isNull() )
 	    {
 		req.setAttr("path",new_wdg+"/%2fattr%2fgeomX")->setText(TSYS::int2str(pnt.x()));

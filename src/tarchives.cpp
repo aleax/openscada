@@ -805,8 +805,8 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/m_arch/per",_("Archiving period (s)"),0664,"root",my_gr.c_str(),1,"tp","dec");
 	    if(ctrMkNode("area",opt,-1,"/m_arch/view",_("View messages"),0444,"root",my_gr.c_str()))
 	    {
-		ctrMkNode("fld",opt,-1,"/m_arch/view/beg",_("Begin"),0664,"root",my_gr.c_str(),1,"tp","time");
-		ctrMkNode("fld",opt,-1,"/m_arch/view/end",_("End"),0664,"root",my_gr.c_str(),1,"tp","time");
+		ctrMkNode("fld",opt,-1,"/m_arch/view/tm",_("Time"),0664,"root",my_gr.c_str(),1,"tp","time");
+		ctrMkNode("fld",opt,-1,"/m_arch/view/size",_("Size"),0664,"root",my_gr.c_str(),1,"tp","dec");
 		ctrMkNode("fld",opt,-1,"/m_arch/view/cat",_("Category"),0664,"root",my_gr.c_str(),1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/m_arch/view/lvl",_("Level"),0664,"root",my_gr.c_str(),3,"tp","dec","min","0","max","7");
 		ctrMkNode("fld",opt,-1,"/m_arch/view/archtor",_("Archivator"),0664,"root",my_gr.c_str(),1,"tp","str");    
@@ -845,15 +845,19 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",0664,"root",my_gr.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str(messBufLen()));
 	if( ctrChkNode(opt,"set",0664,"root",my_gr.c_str(),SEQ_WR) )	messBufLen(atoi(opt->text().c_str()));
     }	
-    else if( a_path == "/m_arch/view/beg" )	
+    else if( a_path == "/m_arch/view/tm" )	
     {
-	if( ctrChkNode(opt,"get",0664,"root",my_gr.c_str(),SEQ_RD) )	opt->setText(TBDS::genDBGet(nodePath()+"messBeg","0",opt->attr("user")));
-	if( ctrChkNode(opt,"set",0664,"root",my_gr.c_str(),SEQ_WR) )	TBDS::genDBSet(nodePath()+"messBeg",opt->text(),opt->attr("user"));
+	if( ctrChkNode(opt,"get",0664,"root",my_gr.c_str(),SEQ_RD) )
+	{
+	    opt->setText(TBDS::genDBGet(nodePath()+"messTm","0",opt->attr("user")));
+	    if( !atoi(opt->text().c_str()) )    opt->setText(TSYS::int2str(time(NULL)));
+	}
+	if( ctrChkNode(opt,"set",0664,"root",my_gr.c_str(),SEQ_WR) )	TBDS::genDBSet(nodePath()+"messTm",opt->text(),opt->attr("user"));
     }
-    else if( a_path == "/m_arch/view/end" )
+    else if( a_path == "/m_arch/view/size" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",my_gr.c_str(),SEQ_RD) )	opt->setText(TBDS::genDBGet(nodePath()+"messEnd","0",opt->attr("user")));
-	if( ctrChkNode(opt,"set",0664,"root",my_gr.c_str(),SEQ_WR) )	TBDS::genDBSet(nodePath()+"messEnd",opt->text(),opt->attr("user"));
+	if( ctrChkNode(opt,"get",0664,"root",my_gr.c_str(),SEQ_RD) )	opt->setText(TBDS::genDBGet(nodePath()+"messSize","60",opt->attr("user")));
+	if( ctrChkNode(opt,"set",0664,"root",my_gr.c_str(),SEQ_WR) )	TBDS::genDBSet(nodePath()+"messSize",opt->text(),opt->attr("user"));
     }
     else if( a_path == "/m_arch/view/cat" )
     {
@@ -873,8 +877,10 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
     else if( a_path == "/m_arch/view/mess" && ctrChkNode(opt,"get",0440) )
     {
 	vector<TMess::SRec> rec;
-	messGet( atoi(TBDS::genDBGet(nodePath()+"messBeg","0",opt->attr("user")).c_str()), 
-		 atoi(TBDS::genDBGet(nodePath()+"messEnd","0",opt->attr("user")).c_str()), rec, 
+	time_t gtm = atoi(TBDS::genDBGet(nodePath()+"messTm","0",opt->attr("user")).c_str());
+	if( !gtm ) gtm = time(NULL);
+	int    gsz = atoi(TBDS::genDBGet(nodePath()+"messSize","60",opt->attr("user")).c_str());
+	messGet( gtm-gsz, gtm, rec, 
 		 TBDS::genDBGet(nodePath()+"messCat","",opt->attr("user")), 
 		 (TMess::Type)atoi(TBDS::genDBGet(nodePath()+"messLev","0",opt->attr("user")).c_str()), 
 		 TBDS::genDBGet(nodePath()+"messArch","",opt->attr("user")) );
@@ -883,7 +889,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
         XMLNode *n_cat  = ctrMkNode("list",opt,-1,"/m_arch/view/mess/1","",0440);
         XMLNode *n_lvl  = ctrMkNode("list",opt,-1,"/m_arch/view/mess/2","",0440);
 	XMLNode *n_mess = ctrMkNode("list",opt,-1,"/m_arch/view/mess/3","",0440);
-	for( int i_rec = 0; i_rec < rec.size(); i_rec++)
+	for( int i_rec = rec.size()-1; i_rec >= 0; i_rec-- )
 	{
 	    if(n_tm)	n_tm->childAdd("el")->setText(TSYS::int2str(rec[i_rec].time));
 	    if(n_cat)	n_cat->childAdd("el")->setText(rec[i_rec].categ);

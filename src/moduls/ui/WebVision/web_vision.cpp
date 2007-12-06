@@ -31,13 +31,13 @@
 //************************************************
 //* Modul info!                                  *
 #define MOD_ID	    "WebVision"
-#define MOD_NAME    "WEB vision"
+#define MOD_NAME    "Operation user interface (WEB)"
 #define MOD_TYPE    "UI"
 #define VER_TYPE    VER_UI
 #define SUB_TYPE    "WWW"
-#define MOD_VERSION "0.1.0"
+#define MOD_VERSION "0.2.0"
 #define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "Web vision for visual control area (VCA) projects playing."
+#define DESCRIPTION "Web operation user interface for visual control area (VCA) projects playing."
 #define LICENSE     "GPL"
 //************************************************
 
@@ -85,10 +85,10 @@ TWEB::TWEB( string name ) : m_t_auth(10), lst_ses_chk(0)
 	
     //- Default CSS init -
     m_CSStables =
-        "hr {width:100%; size:3}\n"
-        "body {background-color:#818181; alink:#33ccff; link:#3366ff; text:#000000; vlink:#339999}\n"
+        "hr {width:100%}\n"
+        "body {background-color:#818181}\n"
         "h1.head {text-align:center; color:#ffff00 }\n"
-        "h2.title {text-align:center; font-style:italic; margin:0; padding:0; border-width:0 }\n"
+        "h2.title {text-align:center; font-style:italic; margin: 0px; padding: 0px; border-width:0 }\n"
         "table.page_head {background-color:#cccccc; border:3px ridge blue; width:100% }\n"
         "table.page_head td.tool {text-align:center; border:1px solid blue; width:120px;  white-space: nowrap }\n"
         "table.page_head td.user {text-align:left; border:1px solid blue; width:120px; white-space: nowrap }\n"
@@ -259,7 +259,7 @@ TWEB::TWEB( string name ) : m_t_auth(10), lst_ses_chk(0)
 	"  if( this.pg ) elStyle+='position: absolute; left: 0px; top: 0px; '; \n"
 	"  else elStyle+='position: absolute; left: '+this.attrs['geomX']+'px; top: '+this.attrs['geomY']+'px; ';\n"
 	"  elStyle+='width: '+this.attrs['geomW']+'px; height: '+this.attrs['geomH']+'px; ';\n"
-	"  elStyle+='z-index: '+this.attrs['geomZ']+'; margin: '+this.attrs['geomMargin']+'; ';\n"	
+	"  elStyle+='z-index: '+this.attrs['geomZ']+'; margin: '+this.attrs['geomMargin']+'px; ';\n"	
 	"  if( this.tp == 'Box' )\n"
 	"  {\n"
 	"    if( this.attrs['backColor'] ) elStyle+='background-color: '+this.attrs['backColor']+'; ';\n"
@@ -547,9 +547,9 @@ string TWEB::optDescr( )
 
     snprintf(buf,sizeof(buf),_(
 	"======================= The module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
+	"---------- Parameters of the module section <%s> in config file ----------\n\n"
         "SessTimeLife <time>      Time of the sesion life, minutes (default 10).\n"
-        "CSSTables    <CSS>       CSS for creating pages.\n\n",
+        "CSSTables    <CSS>       CSS for creating pages.\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 
     return buf;
@@ -613,7 +613,7 @@ string TWEB::pgHead( string head_els )
 	"  <style type='text/css'>\n"+m_CSStables+"</style>\n"+
 	head_els+
         "</head>\n"
-        "<body bgcolor='#818181' text='#000000' link='#3366ff' vlink='#339999' alink='#33ccff'>\n";	
+        "<body alink='#33ccff' link='#3366ff' text='#000000' vlink='#339999'>\n";	
 	
     return shead;
 }
@@ -650,7 +650,7 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 	    //- Auth dialog preparing -	    
             if( !ses.user.size() )
 	    {
-		ses.page = ses.page+"<h1 class='head'>"+PACKAGE_NAME+". "+_(MOD_NAME)+"</h1>\n<hr/><br/>\n";
+		ses.page = ses.page+"<h1 class='head'>"PACKAGE_NAME". "+_(MOD_NAME)+"</h1>\n<hr/><br/>\n";
 		getAuth( ses );
 	    }
 	    //- Main VCA page JavaScript programm text request process -
@@ -893,7 +893,7 @@ void TWEB::sesCheck( SSess &ses )
     }
     
     //- Check for session and close old sessions -
-    authEl = m_auth.find(atoi(getCookie( "oscd_u_id", ses.vars ).c_str()));
+    authEl = m_auth.find(atoi(getCookie( "oscdAuthVisionId", ses.vars ).c_str()));
     if( authEl != m_auth.end() )
     {
 	ses.user = authEl->second.name;
@@ -901,10 +901,10 @@ void TWEB::sesCheck( SSess &ses )
     }
 }
 
-void TWEB::HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &contein )
+void TWEB::HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &contain )
 {
     map< string, string >::iterator cntEl;
-    SSess ses(TSYS::strDecode(url,TSYS::HttpURL),page,sender,vars,contein);
+    SSess ses(TSYS::strDecode(url,TSYS::HttpURL),page,sender,vars,contain);
 
     //- Check for autentification POST requests -
     if( ses.cnt.find("auth_enter") != ses.cnt.end() )
@@ -916,7 +916,7 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	{
 	    ses.page = pgHead("<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/"MOD_ID"/"+url+"'/>")+pgTail();
 	    page=httpHead("200 OK",ses.page.size(),"text/html",
-		"Set-Cookie: oscd_u_id="+TSYS::int2str(sesOpen(ses.user))+"; path=/;\n")+ses.page;
+		"Set-Cookie: oscdAuthVisionId="+TSYS::int2str(sesOpen(ses.user))+"; path=/;\n")+ses.page;
 	    return;
 	}
 	ses.page = pgHead()+"<h1 class='head'>"+PACKAGE_NAME+". "+_(MOD_NAME)+"</h1>\n<hr/><br/>\n";
@@ -933,7 +933,7 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
     {
 	ses.page = pgHead("<META HTTP-EQUIV='Refresh' CONTENT='0; URL="MOD_ID"/"+url+"'/>")+pgTail();
 	page=httpHead("200 OK",ses.page.size(),"text/html",
-	    "Set-Cookie: oscd_u_id=""; path=/;\n")+ses.page;
+	    "Set-Cookie: oscdAuthVisionId=""; path=/;\n")+ses.page;
 	return;
     }
  
@@ -943,7 +943,7 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
     if( wp_com == "attrs" )
     {
 	XMLNode req("set");
-	req.load(contein);
+	req.load(contain);
 	req.setAttr("path",ses.url+"/%2fserv%2f0");
 	cntrIfCmd(req,ses);
     }
@@ -965,7 +965,7 @@ void TWEB::messPost( string &page, const string &cat, const string &mess, MessLe
     else if(type == Error )
         page = page+"<tr bgcolor='red'><td align='center'><b>Error!</b></td></tr>\n";
     else page = page+"<tr bgcolor='#9999ff'><td align='center'><b>Message!</b></td></tr>\n";
-	page = page+"<tr bgcolor='#cccccc'> <td align='center'>"+TSYS::strEncode(mess,TSYS::Html)+"</td></tr>\n";
+    page = page+"<tr bgcolor='#cccccc'> <td align='center'>"+TSYS::strEncode(mess,TSYS::Html)+"</td></tr>\n";
     page = page+"</tbody></table>\n";
 }
 

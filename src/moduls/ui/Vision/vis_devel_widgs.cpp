@@ -1490,10 +1490,10 @@ void DevelWdgView::saveGeom( const string& item )
 {
     if( item.empty() || item == id() )
     {
-	attrSet("geomX", TSYS::int2str( (wLevel()>0) ? (int)ceil((float)pos().x()/((WdgView*)parentWidget())->xScale(true)-0.5) : pos().x() ),7);
-	attrSet("geomY", TSYS::int2str( (wLevel()>0) ? (int)ceil((float)pos().y()/((WdgView*)parentWidget())->yScale(true)-0.5) : pos().y() ),8);
-	attrSet("geomW", TSYS::int2str((int)ceil((float)size().width()/xScale(true)-0.5)),9);
-	attrSet("geomH", TSYS::int2str((int)ceil((float)size().height()/yScale(true)-0.5)),10);
+	attrSet("geomX", TSYS::int2str( (wLevel()>0) ? (int)((float)pos().x()/((WdgView*)parentWidget())->xScale(true)+0.5) : pos().x() ),7);
+	attrSet("geomY", TSYS::int2str( (wLevel()>0) ? (int)((float)pos().y()/((WdgView*)parentWidget())->yScale(true)+0.5) : pos().y() ),8);
+	attrSet("geomW", TSYS::int2str((int)((float)size().width()/xScale(true)+0.5)),9);
+	attrSet("geomH", TSYS::int2str((int)((float)size().height()/yScale(true)+0.5)),10);
 	attrSet("geomXsc", TSYS::real2str(x_scale),13);
 	attrSet("geomYsc", TSYS::real2str(y_scale),14);
 	attrSet("geomZ", TSYS::int2str(z_coord),11);
@@ -1605,14 +1605,29 @@ void DevelWdgView::upMouseCursors( const QPoint &curp )
     if( moveHold ) return;
 
     Qt::CursorShape new_shp = Qt::ArrowCursor;
-    //- Check child's anchor selection and widget's geometry -
+    //- Widget geometry -
+    if( grepAnchor(rect().bottomRight(),curp) )	
+    	new_shp = Qt::SizeFDiagCursor;
+    else if( curp.x()>(rect().width()-4) && curp.x()<(rect().width()+4) )
+    	new_shp = Qt::SizeHorCursor;
+    else if( curp.y()>(rect().height()-4) && curp.y()<(rect().height()+4) )
+	new_shp = Qt::SizeVerCursor;
+    if( new_shp != Qt::ArrowCursor ) 
+    { 
+	holdChild = false;
+    	if( new_shp != cursor().shape() ) setCursor(new_shp);
+	return;
+    }
+
+    //- Childs' selection process -
+    //-- Check child's anchor selection and widget's geometry --
     leftTop = false;
     QRect selRect;
     for( int i_c = 0; i_c < children().size(); i_c++ )
         if( qobject_cast<DevelWdgView*>(children().at(i_c)) &&
                 ((DevelWdgView*)children().at(i_c))->select( ) )
             selRect = selRect.united(((DevelWdgView*)children().at(i_c))->geometry());
-    //- Select childs anchors -
+    //-- Select childs anchors --
     if( !selRect.isNull() )
     {
         if( grepAnchor(selRect.topLeft(),curp) )		
@@ -1634,17 +1649,6 @@ void DevelWdgView::upMouseCursors( const QPoint &curp )
         else if( selRect.contains(curp) )
             new_shp = Qt::PointingHandCursor;
         if( new_shp != Qt::ArrowCursor ) holdChild = true;
-    }
-    //- Widget geometry -
-    if( new_shp == Qt::ArrowCursor )
-    {
-        if( grepAnchor(rect().bottomRight(),curp) )
-    	    new_shp = Qt::SizeFDiagCursor;
-        else if( curp.x()>(rect().width()-4) && curp.x()<(rect().width()+4) )
-    	    new_shp = Qt::SizeHorCursor;
-        else if( curp.y()>(rect().height()-4) && curp.y()<(rect().height()+4) )
-    	    new_shp = Qt::SizeVerCursor;
-        holdChild = false;
     }
     if( new_shp != cursor().shape() ) setCursor(new_shp);
 }
@@ -1956,12 +1960,15 @@ bool DevelWdgView::event( QEvent *event )
 		    setCursor(Qt::ArrowCursor);
 		if( QApplication::focusWidget() != this )
 		{
-		    setSelect(false,false);
-		    //-- Unselect child widgets --
 		    if( !((VisDevelop *)main_win)->attrInsp->hasFocus() )
+		    {
+			setSelect(false,false);
+			//-- Unselect child widgets --
+		    //if( !((VisDevelop *)main_win)->attrInsp->hasFocus() )
 			for( int i_c = 0; i_c < children().size(); i_c++ )
 			    if( qobject_cast<DevelWdgView*>(children().at(i_c)) )
 				((DevelWdgView*)children().at(i_c))->setSelect(false);
+		    }
 		}
 		    //emit selected("");
 		return true;

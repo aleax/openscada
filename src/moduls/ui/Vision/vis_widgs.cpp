@@ -629,21 +629,21 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 	case 0:	 return false;
 	case 7:	 
 	    if( wLevel( ) == 0 )break;
-	    move((int)ceil(((WdgView*)parentWidget())->xScale(true)*atoi(val.c_str())-0.5),pos().y());
+	    move((int)(((WdgView*)parentWidget())->xScale(true)*atoi(val.c_str())+0.5),pos().y());
 	    break;
 	case 8:	 
 	    if( wLevel( ) == 0 )break;
-	    move(pos().x(),(int)ceil(((WdgView*)parentWidget())->yScale(true)*atoi(val.c_str())-0.5));
+	    move(pos().x(),(int)(((WdgView*)parentWidget())->yScale(true)*atoi(val.c_str())+0.5));
 	    break;
-	case 9:	resize((int)ceil(xScale(true)*atoi(val.c_str())-0.5),size().height());	break;
-	case 10:resize(size().width(),(int)ceil(yScale(true)*atoi(val.c_str())-0.5));	break;
+	case 9:	resize((int)(xScale(true)*atoi(val.c_str())+0.5),size().height());	break;
+	case 10:resize(size().width(),(int)(yScale(true)*atoi(val.c_str())+0.5));	break;
 	case 11: if(wLevel( )>0) z_coord = atoi(val.c_str());		break;
 	case 13:
-	    resize((int)ceil((atof(val.c_str())/x_scale)*size().width()-0.5),size().height());
+	    resize((int)((atof(val.c_str())/x_scale)*size().width()+0.5),size().height());
 	    x_scale = atof(val.c_str());
 	    break;
 	case 14: 
-	    resize(size().width(),(int)ceil((atof(val.c_str())/y_scale)*size().height()-0.5));
+	    resize(size().width(),(int)((atof(val.c_str())/y_scale)*size().height()+0.5));
 	    y_scale = atof(val.c_str());
 	    break;
     }

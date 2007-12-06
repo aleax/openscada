@@ -324,6 +324,29 @@
 	    <node id="mod_WebCfg">
 		<prm id="SessTimeLife">20</prm>
 	    </node>
+	    <node id="mod_VCAEngine">
+		<!--
+		<tbl id="LIB">
+		    <fld ID="test2" NAME="Test 2" DESCR="" DB_TBL="wlib_test2" ICO="" USER="root" GRP="UI" PERMIT="436"/>
+		</tbl>
+		<tbl id="wlib_test2">
+		    <fld ID="test2" ICO="" PARENT="/wlb_originals/wdg_Box" PROC="" PROC_PER="-1" USER="root" GRP="UI" PERMIT="436"/>
+		</tbl>
+		<tbl id="wlib_test2_io">
+		    <fld IDW="test2" ID="name" IO_VAL="Test 2" SELF_FLG="" CFG_TMPL="" CFG_VAL=""/>
+		    <fld IDW="test2" ID="dscr" IO_VAL="Test module 2" SELF_FLG="" CFG_TMPL="" CFG_VAL=""/>
+		</tbl>
+		<tbl id="PRJ">
+		    <fld ID="test2" NAME="Test 2" DESCR="" DB_TBL="prj_test2" ICO="" USER="root" GRP="UI" PERMIT="436"/>
+		</tbl>
+		<tbl id="prj_test2">
+		    <fld OWNER="/test2" ID="pg1" ICO="" PARENT="/wlb_originals/wdg_Box" PROC="" PROC_PER="-1" USER="root" GRP="UI" PERMIT="436" FLGS="1"/>
+		    <fld OWNER="/test2/pg1" ID="pg2" ICO="" PARENT="/wlb_originals/wdg_Box" PROC="" PROC_PER="-1" USER="root" GRP="UI" PERMIT="436" FLGS="0"/>
+		</tbl>
+                <tbl id="prj_test2_incl">
+            	    <fld IDW="/prj_test2/pg_pg1" ID="wdg1" PARENT="/wlb_originals/wdg_Box"/>
+		    </tbl>-->
+		</node>
 	</node>
 
 	<node id="sub_Special">
@@ -343,7 +366,7 @@
                 <prm id="TrOut" on="0" per="1" addr="UNIX:./oscada" type="Sockets" req="time"/>
                 <prm id="TrOut" on="0" per="1" addr="UDP:127.0.0.1:daytime" type="Sockets" req="time"/>
                 <prm id="Func" on="0" per="10"/>
-                <prm id="SysContrLang" on="0" per="10" path="/Archive/BaseArh/mess_StatErrors/%2fprm%2fst"/>
+                <prm id="SysContrLang" on="0" per="10" path="/Archive/FSArch/mess_StatErrors/%2fprm%2fst"/>
                 <prm id="ValBuf" on="0" per="5"/>
                 <prm id="Archive" on="0" per="30" arch="test1" period="1000000"/>
                 <prm id="Base64Code" on="0" per="10"/>

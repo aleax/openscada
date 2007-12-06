@@ -610,7 +610,7 @@ void OrigProtocol::postEnable( int flag )
         //attrAdd( new TFld("bordWidth",_("Border:width"),TFld::Integer,TFld::NoFlag,"","0","","",22) );
         //attrAdd( new TFld("bordColor",_("Border:color"),TFld::String,Attr::Color,"","#000000","","",23) );
     	attrAdd( new TFld("time",_("Time, sek"),TFld::Integer,TFld::NoFlag,"","","","",24) );
-        attrAdd( new TFld("tSize",_("Size, sek"),TFld::Integer,TFld::NoFlag,"","3600","","",25) );
+        attrAdd( new TFld("tSize",_("Size, sek"),TFld::Integer,TFld::NoFlag,"","60","","",25) );
         attrAdd( new TFld("trcPer",_("Tracing period (s)"),TFld::Integer,TFld::NoFlag,"","0","0;360","",26) );
         attrAdd( new TFld("arch",_("Archivator"),TFld::String,TFld::NoFlag,"","","","",27) );
         attrAdd( new TFld("tmpl",_("Template"),TFld::String,TFld::NoFlag,"","","","",28) );

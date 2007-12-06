@@ -61,7 +61,7 @@ void Project::postDisable( int flag )
     if( flag )
     {
         //- Delete libraries record -
-        SYS->db().at().dataDel(DB()+"."+mod->prjTable(),mod->nodePath()+"prj/",*this);
+        SYS->db().at().dataDel(DB()+"."+mod->prjTable(),mod->nodePath()+"PRJ/",*this);
 
         //- Delete function's files -
 	//-- Delete widgets table --
@@ -116,7 +116,7 @@ void Project::setFullDB( const string &it )
 
 void Project::load( )
 {
-    SYS->db().at().dataGet(DB()+"."+mod->prjTable(),mod->nodePath()+"prj/",*this);
+    SYS->db().at().dataGet(DB()+"."+mod->prjTable(),mod->nodePath()+"PRJ/",*this);
 
     //- Create new pages -
     TConfig c_el(&mod->elPage());
@@ -139,7 +139,7 @@ void Project::load( )
 
 void Project::save( )
 {
-    SYS->db().at().dataSet(DB()+"."+mod->prjTable(),mod->nodePath()+"prj/",*this);
+    SYS->db().at().dataSet(DB()+"."+mod->prjTable(),mod->nodePath()+"PRJ/",*this);
 
     //- Save widgets -
     vector<string> f_lst;
@@ -377,16 +377,18 @@ void Page::postDisable( int flag )
 
         //- Remove from library table -
         SYS->db().at().dataDel(fullDB,mod->nodePath()+tbl,*this);
+	
 	//- Remove widget's IO from library IO table -
         TConfig c_el(&mod->elWdgIO());
         c_el.cfg("IDW").setS(path());
         c_el.cfg("ID").setS("");
-        SYS->db().at().dataDel(fullDB+"_io",mod->nodePath()+tbl+"_io",*this);
+        SYS->db().at().dataDel(fullDB+"_io",mod->nodePath()+tbl+"_io",c_el);
+	
 	//- Remove widget's user IO from library IO table -
         c_el.setElem(&mod->elWdgUIO());
         c_el.cfg("IDW").setS(path());
         c_el.cfg("ID").setS("");
-        SYS->db().at().dataDel(fullDB+"_uio",mod->nodePath()+tbl+"_uio",*this);	
+        SYS->db().at().dataDel(fullDB+"_uio",mod->nodePath()+tbl+"_uio",c_el);
     }
 }
 
@@ -530,16 +532,18 @@ void Page::load( )
     {
         string f_id = c_el.cfg("ID").getS();
 	c_el.cfg("ID").setS("");
-        if( !pagePresent(f_id) ) pageAdd(f_id,"","");
+        if( !pagePresent(f_id) ) 
+	    try{ pageAdd(f_id,"",""); }
+	    catch(TError err) { mess_err(err.cat.c_str(),err.mess.c_str()); }
     }
     //- Load present pages -
     vector<string> f_lst;
     pageList(f_lst);
     for( int i_ls = 0; i_ls < f_lst.size(); i_ls++ )
         pageAt(f_lst[i_ls]).at().load();
-
+	
     //- Load widget attributes -
-    loadIO();
+    loadIO();	
 }
 
 void Page::loadIO( )
@@ -550,8 +554,8 @@ void Page::loadIO( )
 
     //- Load widget's work attributes -
     string db  = ownerProj()->DB();
-    string tbl = ownerProj()->tbl()+"_io";
-    
+    string tbl = ownerProj()->tbl()+"_io";    
+
     attrList( als );
     TConfig c_el(&mod->elWdgIO());
     c_el.cfg("IDW").setS(path());    
@@ -736,7 +740,9 @@ AutoHD<PageWdg> Page::wdgAt( const string &wdg )
 
 void Page::pageAdd( const string &id, const string &name, const string &orig )
 {
-    if( pagePresent(id) )return;
+    if( pagePresent(id) ) return;
+    if( !(prjFlags()&(Page::Container|Page::Template)) )
+	throw TError(nodePath().c_str(),_("Page no container or template!"));
     chldAdd(m_page,new Page(id,orig));
     pageAt(id).at().setName(name);
 }
@@ -744,6 +750,11 @@ void Page::pageAdd( const string &id, const string &name, const string &orig )
 void Page::pageAdd( Page *iwdg )
 {
     if( pagePresent(iwdg->id()) )	delete iwdg;
+    if( !(prjFlags()&(Page::Container|Page::Template)) )
+    {
+	delete iwdg;
+	throw TError(nodePath().c_str(),_("Page no container or template!"));
+    }
     else chldAdd(m_page,iwdg);
 }
 

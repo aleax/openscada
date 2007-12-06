@@ -1,3 +1,5 @@
+## process this file with automake to generate Makefile.in
+
 EXTRA_DIST = *.h libdscud5.a po/* doc/*
 
 AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC

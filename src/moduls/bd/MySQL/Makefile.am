@@ -1,4 +1,5 @@
 ## process this file with automake to generate Makefile.in
+
 EXTRA_DIST = *.h po/* doc/*
 
 AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC -DUSE_OLD_FUNCTIONS
