@@ -41,7 +41,7 @@
 using namespace VISION;
 
 VisRun::VisRun( const string &prj_it, const string &open_user, const string &VCAstat, bool crSessForce ) : 
-    winClose(false), master_pg(NULL), m_period(1000), w_prc_cnt(0), proc_st(false), reqtm(1), x_scale(1.0), y_scale(1.0)
+    winClose(false), master_pg(NULL), m_period(1000), w_prc_cnt(0), reqtm(1), x_scale(1.0), y_scale(1.0)
 {
     setAttribute(Qt::WA_DeleteOnClose,true);
     mod->regWin( this );
@@ -161,7 +161,6 @@ VisRun::~VisRun()
     winClose = true;
     endRunTimer->stop();
     updateTimer->stop();
-    while(proc_st);
     
     //- Disconnect/delete session -
     XMLNode req("disconnect");
@@ -496,7 +495,6 @@ bool VisRun::wAttrSet( const string &path, const string &attr, const string &val
 void VisRun::updatePage( )
 {
     if( winClose ) return;
-    proc_st = true;
 
     //unsigned long long t_cnt = SYS->shrtCnt();
 
@@ -526,6 +524,4 @@ void VisRun::updatePage( )
     }*/
 
     w_prc_cnt++;
-    
-    proc_st = false;
 }

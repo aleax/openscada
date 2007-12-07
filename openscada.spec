@@ -6,7 +6,7 @@
 Summary: Open SCADA system project
 Name: openscada
 Version: 0.6.0
-Release: emb1
+Release: 1
 Source: %{name}-%{version}.tar.gz
 License: GPL
 Group: Applications/SCADA
@@ -22,17 +22,11 @@ Open SCADA system. For access use account "root" and password "openscada".
 Відкрита SCADA система. Для доступу використовуйте запис "root" та пароль "openscada".
 
 %post
-if [ $1 -ge 2 ]; then
-    /sbin/service oscadad condreload ||:
-else
-    /sbin/chkconfig --add oscadad ||:
-fi
-	
-%preun
-if [ $1 = 0 ]; then
-    /sbin/chkconfig --del oscadad ||:
-fi
+/sbin/chkconfig --add oscadad
+/sbin/chkconfig oscadad off
 
+%preun
+/sbin/chkconfig --del oscadad
 
 %package doc
 Summary: Open SCADA documents.

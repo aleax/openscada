@@ -217,6 +217,7 @@ namespace VISION
 	    void   setAllAttrLoad( bool vl )	{ all_attr_load = vl; }
 	    
 	    bool attrSet( const string &attr, const string &val, int uiPrmPos = 0 );
+	    string resGet( const string &res );
 
 	    virtual int cntrIfCmd( XMLNode &node, bool glob = false )	{ };
 

@@ -108,7 +108,6 @@ class VisRun : public QMainWindow
 	//- Main components -
 	QTimer		*endRunTimer, *updateTimer;
 	bool		winClose;		//Close window flag
-	bool		proc_st;		//Timer process stat
 	UserStBar 	*w_user;		//User status widget
 	QLabel          *w_stat;        	//VCA engine station
 	string 		work_sess, src_prj;	//Work session and source project

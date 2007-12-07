@@ -40,7 +40,7 @@ ShapeElFigure::ShapeElFigure() :
     flag_rect(false), flag_hold_move(false), flag_m(false), flag_hold_arc(false), flag_arc_rect_3_4(false), flag_first_move(false), Flag(false), 
     current_ss(-1), current_se(-1), current_es(-1), current_ee(-1), count_Shapes(0), count_holds(0), count_rects(0), rect_num_arc(-1)
 {
-    newPath.addEllipse(QRect(0, 0, 0, 0));	//Задание нулевого пути;
+    newPath.addEllipse(QRect(0, 0, 0, 0));
 }
 
 void ShapeElFigure::init( WdgView *w )
@@ -63,14 +63,14 @@ void ShapeElFigure::destroy( WdgView *w )
 
 bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 {
-    DevelWdgView *devW = qobject_cast<DevelWdgView*>(w);//Devel
-    RunWdgView   *runW = qobject_cast<RunWdgView*>(w);//Run
-    bool rel_list=false;//change signal
+    DevelWdgView *devW = qobject_cast<DevelWdgView*>(w);
+    RunWdgView   *runW = qobject_cast<RunWdgView*>(w);
+    bool rel_list=false;					//change signal
     bool up=false;
     status=false;
-    QVector <ShapeItem> &shapeItems = *(QVector <ShapeItem> *)w->dc().value("shapeItems",(void*)0).value< void* >();//Контейнер фигур
-    QVector <InundationItem> &inundationItems = *(QVector <InundationItem> *)w->dc().value("inundationItems",(void*)0).value< void* >();//Контейнер заливок
-    PntMap *pnts = (PntMap*)w->dc().value("shapePnts",(void*)0).value< void* >();//Карта координат всех точек
+    QVector <ShapeItem> &shapeItems = *(QVector <ShapeItem> *)w->dc().value("shapeItems",(void*)0).value< void* >();
+    QVector <InundationItem> &inundationItems = *(QVector <InundationItem> *)w->dc().value("inundationItems",(void*)0).value< void* >();
+    PntMap *pnts = (PntMap*)w->dc().value("shapePnts",(void*)0).value< void* >();
     QLineF line1, line2;
     double ang;
     QPointF StartMotionPos;
@@ -124,22 +124,12 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
             break;
         case 26:	//fillImg
         {
-            XMLNode req("get");
-            req.setAttr("path",w->id()+"/%2fwdg%2fres")->setAttr("id",val);
-            if( !w->cntrIfCmd(req) )
-            {
-                QBrush brsh;
-                string backimg = TSYS::strDecode(req.text(),TSYS::base64);
-                if( !backimg.empty() )
-                {
-                    QImage img;
-                    if(img.loadFromData((const uchar*)backimg.c_str(),backimg.size()))	
-                        brsh.setTextureImage(img);
-                }
-                w->dc()["fillImg"] = brsh;
-                up = true;
-            }
-            break;
+	    QImage img;
+	    string backimg = w->resGet(val);
+	    if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
+		w->dc()["fillImg"] = QBrush(img);
+	    else w->dc()["fillImg"] = QBrush();
+	    break;
         }
         case 27:	//elLst
             w->dc()["elLst"] = val.c_str();
@@ -181,7 +171,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
             string el = TSYS::strSepParse(sel,0,':',&el_off);
             if( el == "line" )
             {
-                //Reading anf setting attributes for the current line
+                //-- Reading anf setting attributes for the current line --
                 p[0]  = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
                 p[1]  = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
                 width = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
@@ -192,15 +182,15 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 if (!bord_width) bord_width=w->dc()["bordWdth"].toInt();
                 QColor bord_color(TSYS::strSepParse(sel,0,':',&el_off).c_str());
                 if (!bord_color.isValid())  bord_color=w->dc()["bordClr"].value<QColor>(); 
-                //Reading coordinates for the points of the line
+                //-- Reading coordinates for the points of the line --
                 for( int i_p = 0; i_p < 2; i_p++ )
                     ip[i_p] = QPoint(int((*pnts)[p[i_p]].x()*w->xScale(true)),int((*pnts)[p[i_p]].y()*w->yScale(true)) );
-                //Detecting the rotation angle of the line
+                //-- Detecting the rotation angle of the line --
                 line2=QLineF(ip[0],QPointF(ip[0].x()+10,ip[0].y()));
                 line1=QLineF(ip[0],ip[1]);
                 if( ip[0].y()<=ip[1].y() ) ang=360-line1.angle(line2);
                 else ang=line1.angle(line2);
-                //Building the path of the line and adding it to container
+                //-- Building the path of the line and adding it to container --
                 if (bord_width>0)
                 {
                     circlePath = painter_path(width,bord_width,1, ang, ip[0],ip[1]);
@@ -223,7 +213,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
             }
             if( el == "arc" )
             {
-                //Reading anf setting attributes for the current arc
+                //-- Reading anf setting attributes for the current arc --
                 p[0]  = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
                 p[1]  = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
                 p[2]  = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
@@ -237,11 +227,11 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 if (!bord_width) bord_width=w->dc()["bordWdth"].toInt();
                 QColor bord_color(TSYS::strSepParse(sel,0,':',&el_off).c_str());
                 if (!bord_color.isValid())  bord_color=w->dc()["bordClr"].value<QColor>();
-                    //Reading coordinates for the points of the line
+                //-- Reading coordinates for the points of the line --
                 for( int i_p = 0; i_p < 5; i_p++ )
                     ip[i_p] = QPoint(int((*pnts)[p[i_p]].x()*w->xScale(true)),int((*pnts)[p[i_p]].y()*w->yScale(true)) );
 
-                    //Building the current arc
+                //-- Building the current arc --
                 StartMotionPos=ip[0];
                 EndMotionPos=ip[1];
                 CtrlMotionPos_1=ip[2];
@@ -303,7 +293,8 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 EndMotionPos=QPointF(CtrlMotionPos_1.x()+ROTATE(ARC(t_end,a,b),ang).x(),
                                      CtrlMotionPos_1.y()-ROTATE(ARC(t_end,a,b),ang).y());
                 CtrlMotionPos_4=QPointF(t_start, t_end);
-                    //Building the path of the line and adding it to container
+                
+		//-- Building the path of the line and adding it to container --
                 if (bord_width>0)
                 {
                     circlePath = painter_path(width,bord_width,2, ang, StartMotionPos, EndMotionPos,CtrlMotionPos_1, CtrlMotionPos_2,
@@ -328,7 +319,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
             }
             if( el == "bezier" )
             {
-                //Reading anf setting attributes for the current arc
+                //-- Reading anf setting attributes for the current arc --
                 p[0]  = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
                 p[1]  = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
                 p[2]  = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
@@ -390,19 +381,11 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 QColor color(fl_color.c_str());
                 if( !color.isValid() ) color=w->dc()["fillClr"].value<QColor>();
                 //- Check fill image -
-                QBrush brsh;
-                XMLNode req("get");
-                req.setAttr("path",w->id()+"/%2fwdg%2fres")->setAttr("id",fl_img);
-                if( !w->cntrIfCmd(req) )
-                {
-                    string backimg = TSYS::strDecode(req.text(),TSYS::base64);
-                    if( !backimg.empty() )
-                    {
-                        QImage img;
-                        if(img.loadFromData((const uchar*)backimg.c_str(),backimg.size()))	
-                            brsh.setTextureImage(img);
-                    }
-                }
+		QBrush brsh;
+		QImage img;
+		string backimg = w->resGet(fl_img);
+		if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
+		    brsh.setTextureImage(img);
                 //- Make elements -
                 if(fl_pnts.size()>2)
                 {
@@ -524,7 +507,7 @@ bool ShapeElFigure::shapeSave( WdgView *w )
     QVector <InundationItem> &inundationItems = *(QVector <InundationItem> *)w->dc().value("inundationItems",(void*)0).value< void* >();
     PntMap *pnts = (PntMap*)w->dc().value("shapePnts",(void*)0).value< void* >();
     string elList;
-    //Building attributes for all el_figures and fills
+    //- Building attributes for all el_figures and fills -
     for( int i_s = 0; i_s < shapeItems.size(); i_s++ )
        switch( shapeItems[i_s].type )
 	{
@@ -622,7 +605,7 @@ bool ShapeElFigure::shapeSave( WdgView *w )
         }
         w->attrSet( "elLst", elList );
 
-    //Write shapes points to data model
+    //- Write shapes points to data model -
     for( PntMap::iterator pi = pnts->begin(); pi != pnts->end(); pi++ )
     {
         w->attrSet("p"+TSYS::int2str(pi.key())+"x",TSYS::int2str(pi.value().x()));
@@ -638,7 +621,7 @@ void ShapeElFigure::editEnter( WdgView *view )
     
     connect( ((VisDevelop *)view->mainWin())->elFigTool, SIGNAL(actionTriggered(QAction*)),
                this, SLOT(toolAct(QAction*)) );
-    //-- Init actions' address --
+    //- Init actions' address -
     for( int i_a = 0; i_a < ((VisDevelop *)view->mainWin())->elFigTool->actions().size(); i_a++ )
     {
 	((VisDevelop *)view->mainWin())->elFigTool->actions().at(i_a)->setEnabled(true);
@@ -652,7 +635,7 @@ void ShapeElFigure::editExit( WdgView *view )
     disconnect( ((VisDevelop *)view->mainWin())->elFigTool, SIGNAL(actionTriggered(QAction*)),
                   this, SLOT(toolAct(QAction*)) );
     ((VisDevelop *)view->mainWin())->elFigTool->setVisible(false);
-    //-- Clear action;s address --
+    //- Clear action;s address -
     for( int i_a = 0; i_a < ((VisDevelop *)view->mainWin())->elFigTool->actions().size(); i_a++ )
     {
         ((VisDevelop *)view->mainWin())->elFigTool->actions().at(i_a)->setIconText("");
@@ -694,7 +677,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
     QVector <InundationItem> &inundationItems = *(QVector <InundationItem> *)view->dc().value("inundationItems",(void*)0).value< void* >();
     PntMap *pnts = (PntMap*)view->dc().value("shapePnts",(void*)0).value< void* >();
     bool flag_hold_rect;
-    flag_hold_rect=false;//Дополнительная переменная, служащая флагом для рисования кружочка при привязках
+    flag_hold_rect=false;
     switch(event->type())
     { 
         case QEvent::Paint:
@@ -705,7 +688,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
             QRect draw_area = view->rect().adjusted(0,0,-2*margin,-2*margin);	    
             pnt.setWindow(draw_area);
             pnt.setViewport(view->rect().adjusted(margin,margin,-margin,-margin));
-            //Drawing all fills(inundations)
+            //- Drawing all fills(inundations) -
             for(int i=0; i<inundationItems.size(); i++)
             {
                 pnt.setBrush(inundationItems[i].brush);
@@ -714,7 +697,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                 pnt.setBrush(inundationItems[i].brush_img);
                 pnt.drawPath(inundationItems[i].path);
             }
-            //Drawing all el_figures
+            //- Drawing all el_figures -
             for (int k=0; k<=shapeItems.size() - 1; k++)
             {
                 pnt.setBrush(shapeItems[k].brush);
@@ -724,8 +707,8 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                 pnt.setBrush(Qt::NoBrush);
                 pnt.drawPath(shapeItems[k].pathSimple);
             }
-            //Drawing all rects for choosen el_figures
-           for (int k=0; k<=rectItems.size() - 1; k++)
+            //- Drawing all rects for choosen el_figures -
+            for (int k=0; k<=rectItems.size() - 1; k++)
             {
                 pnt.setBrush(rectItems[k].brush);
                 pnt.setPen(rectItems[k].pen);
@@ -1217,10 +1200,10 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         EndLine=ev->pos();
                         if(EndLine==StartLine) break;
                         QPainterPath circlePath, bigPath;
-                        //if line
+                        //- if line -
                         if (shapeType==1)
                         {
-                            //if orto
+                            //-- if orto --
                             if(flag_key)
                             {
                                 if ((EndLine.y()-StartLine.y())>20 || (StartLine.y()-EndLine.y())>20)
@@ -1259,7 +1242,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                 shapeSave( view );
                                 view->repaint();
                             }
-                            //if !orto
+                            //-- if !orto --
                             else
                             {
                                 line2=QLineF(StartLine,QPointF(StartLine.x()+10,StartLine.y()));
@@ -1293,7 +1276,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                 view->repaint();
                             }
                         }
-                        //if bezier
+                        //- if bezier -
                         if (shapeType==3)
                         {
                             QPointF CtrlPos_1,CtrlPos_2,EndLine_temp;
@@ -1399,8 +1382,8 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
             int temp;
             bool flag_break_move, flag_arc_inund=false;
             QMouseEvent *ev = static_cast<QMouseEvent*>(event); 
-            DevelWdgView *devW = qobject_cast<DevelWdgView*>(view);// devW
-            RunWdgView   *runW = qobject_cast<RunWdgView*>(view);// Run
+            DevelWdgView *devW = qobject_cast<DevelWdgView*>(view);
+            RunWdgView   *runW = qobject_cast<RunWdgView*>(view);
             if (devW)
                {
                 Mouse_pos=ev->pos();
@@ -1847,7 +1830,6 @@ double ShapeElFigure::Angle(const QLineF &l,const QLineF &l1)
     return rad * 180 / M_PI;
 }
 
-
 double ShapeElFigure::Length(const QPointF pt1, const QPointF pt2)
 {
     double x = pt2.x() - pt1.x();
@@ -1855,8 +1837,6 @@ double ShapeElFigure::Length(const QPointF pt1, const QPointF pt2)
     return sqrt(x*x + y*y);
 }
 
-
-//Moving el_figure
 void ShapeElFigure::moveItemTo(const QPointF &pos,QVector <ShapeItem> &shapeItems, PntMap *pnts, WdgView *view)
 {
     ShapeItem temp_shape;
@@ -2931,7 +2911,7 @@ void ShapeElFigure::itemAtRun()
     
 }
 
- QPainterPath ShapeElFigure::painter_path(float el_width, float el_border_width, int el_type, double el_ang, QPointF el_p1, QPointF el_p2, QPointF el_p3, QPointF el_p4, QPointF el_p5, QPointF el_p6)
+QPainterPath ShapeElFigure::painter_path(float el_width, float el_border_width, int el_type, double el_ang, QPointF el_p1, QPointF el_p2, QPointF el_p3, QPointF el_p4, QPointF el_p5, QPointF el_p6)
 {
     double arc_a_small, arc_b_small, t, t_start, t_end;
     QPointF  CtrlMotionPos_1_temp, CtrlMotionPos_2_temp, EndMotionPos_temp;
@@ -3004,7 +2984,7 @@ void ShapeElFigure::itemAtRun()
     return circlePath;
 }
  
- QPainterPath ShapeElFigure::painter_path_simple(int el_type, double el_ang, QPointF el_p1, QPointF el_p2, QPointF el_p3, QPointF el_p4, QPointF el_p5, QPointF el_p6)
+QPainterPath ShapeElFigure::painter_path_simple(int el_type, double el_ang, QPointF el_p1, QPointF el_p2, QPointF el_p3, QPointF el_p4, QPointF el_p5, QPointF el_p6)
 {
     QPainterPath circlePath;
     double t;

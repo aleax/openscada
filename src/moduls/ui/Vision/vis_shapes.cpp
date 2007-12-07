@@ -274,22 +274,13 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		//- Name -
 		((QPushButton*)el_wdg)->setText(w->dc()["name"].toString());
 		//- Img -
-		XMLNode req("get");
-    		req.setAttr("path",w->id()+"/%2fwdg%2fres")->
-		    setAttr("id",w->dc()["img"].toString().toAscii().data());
-    		if( !w->cntrIfCmd(req) )
-    		{
-		    string backimg = TSYS::strDecode(req.text(),TSYS::base64);
-		    if( !backimg.empty() )
-		    {
-			QImage img;
-			if(img.loadFromData((const uchar*)backimg.c_str(),backimg.size()))
-			{
-			    int ic_sz = vmin(w->size().width(), w->size().height()) - w->layout()->margin() - 5;
-			    ((QPushButton*)el_wdg)->setIconSize(QSize(ic_sz,ic_sz));
-			    ((QPushButton*)el_wdg)->setIcon(QPixmap::fromImage(img));
-			}
-		    }
+		QImage img;
+		string backimg = w->resGet(w->dc()["img"].toString().toAscii().data());
+		if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
+		{
+		    int ic_sz = vmin(w->size().width(), w->size().height()) - w->layout()->margin() - 5;
+		    ((QPushButton*)el_wdg)->setIconSize(QSize(ic_sz,ic_sz));
+		    ((QPushButton*)el_wdg)->setIcon(QPixmap::fromImage(img));
 		}
 		//- Color -
 		QColor clr(w->dc()["color"].toString());
@@ -521,21 +512,11 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    w->dc()["backColor"] = QColor(val.c_str());	break;
 	case 21:	//backImg
 	{
-	    XMLNode req("get");
-    	    req.setAttr("path",w->id()+"/%2fwdg%2fres")->
-		setAttr("id",val);
-    	    if( !w->cntrIfCmd(req) )
-    	    {
-		QBrush brsh;
-		string backimg = TSYS::strDecode(req.text(),TSYS::base64);
-		if( !backimg.empty() )
-		{
-		    QImage img;
-		    if(img.loadFromData((const uchar*)backimg.c_str(),backimg.size()))	
-			brsh.setTextureImage(img);
-		}
-		w->dc()["backImg"] = brsh;
-    	    } else up = false;
+	    QImage img;	    
+            string backimg = w->resGet(val);
+	    if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
+		w->dc()["backImg"] = QBrush(img);
+	    else w->dc()["backImg"] = QBrush();
 	    break;
 	}
 	case 22:	//bordWidth
@@ -814,21 +795,11 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    w->dc()["backColor"] = QColor(val.c_str()); break;
 	case 21:	//backImg
 	{
-	    XMLNode req("get");
-    	    req.setAttr("path",w->id()+"/%2fwdg%2fres")->
-		setAttr("id",val);
-    	    if( !w->cntrIfCmd(req) )
-    	    {
-		QBrush brsh;
-		string backimg = TSYS::strDecode(req.text(),TSYS::base64);
-		if( !backimg.empty() )
-		{
-		    QImage img;
-		    if(img.loadFromData((const uchar*)backimg.c_str(),backimg.size()))	
-			brsh.setTextureImage(img);
-		}
-		w->dc()["backImg"] = brsh;
-    	    } else up = false;
+	    QImage img;
+	    string backimg = w->resGet(val);
+	    if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
+		w->dc()["backImg"] = QBrush(img);
+	    else w->dc()["backImg"] = QBrush();	    
 	    break;
 	}
 	case 22:	//bordWidth
@@ -866,65 +837,59 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
     
     if( reld_src && !w->allAttrLoad() )
     {
-	XMLNode req("get");
-        req.setAttr("path",w->id()+"/%2fwdg%2fres")->
-	    setAttr("id",w->dc()["mediaSrc"].toString().toAscii().data());
-        if( !w->cntrIfCmd(req) )
-        {
-	    string sdata = TSYS::strDecode(req.text(),TSYS::base64);	    
-	    if( !sdata.empty() )
-		switch(w->dc()["mediaType"].toInt())
+	string sdata = w->resGet(w->dc()["mediaSrc"].toString().toAscii().data());    
+	if( !sdata.empty() )
+	    switch(w->dc()["mediaType"].toInt())
+	    {
+		case 0:
 		{
-		    case 0:
+		    QImage img;
+		    //- Free movie data, if set -
+		    if( lab->movie() )
 		    {
-			QImage img;
-			//- Free movie data, if set -
-			if( lab->movie() )
-			{
-			    if(lab->movie()->device()) delete lab->movie()->device();
-			    delete lab->movie();
-			    lab->clear();
-			}
-			//- Set new image -
-			if( img.loadFromData((const uchar*)sdata.data(),sdata.size()) )
- 			    lab->setPixmap(QPixmap::fromImage(img.scaled(
-				    (int)((float)img.width()*w->xScale(true)),
-				    (int)((float)img.height()*w->yScale(true)),
-				    Qt::KeepAspectRatio,Qt::SmoothTransformation)));			
-			lab->setScaledContents( w->dc()["mediaFit"].toInt() );
-			break;
+		        if(lab->movie()->device()) delete lab->movie()->device();
+		        delete lab->movie();
+		        lab->clear();
 		    }
-		    case 1:
-		    {
-			//- Clear previous movie data -
-			if( lab->movie() )
-			{
-			    if(lab->movie()->device()) delete lab->movie()->device();
-			    delete lab->movie();
-			    lab->clear();
-			}
-			//- Set new data -
-			QBuffer *buf = new QBuffer(w);
-			buf->setData( sdata.data(), sdata.size() );
-			buf->open( QIODevice::ReadOnly );
-			lab->setMovie( new QMovie(buf) );			
-			//- Play speed set -
-			int vl = w->dc()["mediaSpeed"].toInt();
-	        	if( vl <= 1 ) lab->movie()->stop();
-			else
-			{
-			    lab->movie()->setSpeed(vl);
-			    lab->movie()->start();
-			}
-			//- Fit set -
-			lab->setScaledContents( w->dc()["mediaFit"].toInt() );
-			//if( !lab->hasScaledContents() )
-			//    lab->movie()->setScaledSize(QSize((int)((float)lab->movie()->scaledSize().width()*w->xScale(true)), 
-			//				      (int)((float)lab->movie()->scaledSize().height()*w->yScale(true))) );
-			break;
-		    }			
+		    //- Set new image -
+		    if( img.loadFromData((const uchar*)sdata.data(),sdata.size()) )
+ 		        lab->setPixmap(QPixmap::fromImage(img.scaled(
+		    	    (int)((float)img.width()*w->xScale(true)),
+			    (int)((float)img.height()*w->yScale(true)),
+			    Qt::KeepAspectRatio,Qt::SmoothTransformation)));			
+		    lab->setScaledContents( w->dc()["mediaFit"].toInt() );
+		    break;
 		}
-	}
+		case 1:
+		{
+		    //- Clear previous movie data -
+		    if( lab->movie() )
+		    {
+		        if(lab->movie()->device()) delete lab->movie()->device();
+		        delete lab->movie();
+		        lab->clear();
+		    }
+		    //- Set new data -
+		    QBuffer *buf = new QBuffer(w);
+		    buf->setData( sdata.data(), sdata.size() );
+		    buf->open( QIODevice::ReadOnly );
+		    lab->setMovie( new QMovie(buf) );			
+		    //- Play speed set -
+		    int vl = w->dc()["mediaSpeed"].toInt();
+	    	    if( vl <= 1 ) lab->movie()->stop();
+		    else
+		    {
+		        lab->movie()->setSpeed(vl);
+		        lab->movie()->start();
+		    }
+		    //- Fit set -
+		    lab->setScaledContents( w->dc()["mediaFit"].toInt() );
+		    //if( !lab->hasScaledContents() )
+		    //    lab->movie()->setScaledSize(QSize((int)((float)lab->movie()->scaledSize().width()*w->xScale(true)), 
+		    //				      (int)((float)lab->movie()->scaledSize().height()*w->yScale(true))) );
+		    break;
+		}			
+	    }
     }
 
     if( up && !w->allAttrLoad( ) ) w->update();
@@ -1030,22 +995,11 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    w->dc()["backColor"] = QColor(val.c_str()); make_pct = true; break;
 	case 21:	//backImg
 	{
-	    XMLNode req("get");
-    	    req.setAttr("path",w->id()+"/%2fwdg%2fres")->
-		setAttr("id",val);
-    	    if( !w->cntrIfCmd(req) )
-    	    {
-		QBrush brsh;
-		string backimg = TSYS::strDecode(req.text(),TSYS::base64);
-		if( !backimg.empty() )
-		{
-		    QImage img;
-		    if(img.loadFromData((const uchar*)backimg.c_str(),backimg.size()))	
-			brsh.setTextureImage(img);
-		}
-		w->dc()["backImg"] = brsh;
-	      	up = true;
-    	    } 
+	    QImage img;
+	    string backimg = w->resGet(val);
+	    if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
+		w->dc()["backImg"] = QBrush(img);
+	    else w->dc()["backImg"] = QBrush();
 	    break;
 	}
 	case 22:	//bordWidth
@@ -1830,16 +1784,11 @@ bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	}
 	case 21:	//backImg
 	{
-	    QPalette plt;	
-	    XMLNode req("get");
-    	    req.setAttr("path",w->id()+"/%2fwdg%2fres")->setAttr("id",val);
-    	    if( !w->cntrIfCmd(req) )
-    	    {
-		QImage img;	    
-		string backimg = TSYS::strDecode(req.text(),TSYS::base64);
-		if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
-		    plt.setBrush(QPalette::Base,QBrush(img));
-    	    }
+	    QPalette plt;
+	    QImage img;
+	    string backimg = w->resGet(val);
+	    if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
+		plt.setBrush(QPalette::Base,QBrush(img));
 	    tw->setPalette(plt);
 	    break;
 	}
@@ -2222,21 +2171,11 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    w->dc()["backColor"] = QColor(val.c_str()); break;
 	case 21: 	//backImg
 	{
-	    XMLNode req("get");
-    	    req.setAttr("path",w->id()+"/%2fwdg%2fres")->
-		setAttr("id",val);
-    	    if( !w->cntrIfCmd(req) )
-    	    {
-	        QBrush brsh;
-		string backimg = TSYS::strDecode(req.text(),TSYS::base64);
-		if( !backimg.empty() )
-		{
-		    QImage img;
-		    if(img.loadFromData((const uchar*)backimg.c_str(),backimg.size()))	
-			brsh.setTextureImage(img);
-		}
-		w->dc()["backImg"] = brsh;
-    	    } else up = false;
+	    QImage img;
+	    string backimg = w->resGet(val);
+	    if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
+		w->dc()["backImg"] = QBrush(img);
+	    else w->dc()["backImg"] = QBrush();
 	    break;
 	}
 	case 22:	//bordWidth

@@ -168,7 +168,6 @@ class VisDevelop : public QMainWindow
 
 	//- Main components -
 	bool		winClose;
-	bool            proc_st;        //Timer process stat
 	UserStBar 	*w_user;	//User status widget
 	QLabel		*w_stat;	//VCA engine station
 	QTimer      	*endRunTimer, *work_wdgTimer;

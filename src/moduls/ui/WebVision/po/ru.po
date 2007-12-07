@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 0.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-12-03 11:15+0200\n"
+"POT-Creation-Date: 2007-12-07 12:13+0200\n"
 "PO-Revision-Date: 2007-12-03 11:05+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1167,7 +1167,7 @@ msgid ";"
 msgstr ""
 
 #: web_vision.cpp:896
-msgid "oscd_u_id"
+msgid "oscdAuthVisionId"
 msgstr ""
 
 #: web_vision.cpp:910
@@ -1192,7 +1192,7 @@ msgid "text/html"
 msgstr ""
 
 #: web_vision.cpp:919
-msgid "Set-Cookie: oscd_u_id="
+msgid "Set-Cookie: oscdAuthVisionId="
 msgstr ""
 
 #: web_vision.cpp:919
@@ -1212,7 +1212,7 @@ msgid "<META HTTP-EQUIV='Refresh' CONTENT='0; URL="
 msgstr ""
 
 #: web_vision.cpp:936
-msgid "Set-Cookie: oscd_u_id=; path=/;\n"
+msgid "Set-Cookie: oscdAuthVisionId=; path=/;\n"
 msgstr ""
 
 #: web_vision.cpp:945 web_vision.cpp:1002 web_vision.cpp:1007

@@ -44,7 +44,7 @@
 using namespace VISION;
 
 VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) : 
-    prjLibPropDlg(NULL), visItPropDlg(NULL), winClose(false), proc_st(false)
+    prjLibPropDlg(NULL), visItPropDlg(NULL), winClose(false)
 {
     setAttribute(Qt::WA_DeleteOnClose,true);
 #if QT_VERSION >= 0x040301
@@ -513,7 +513,6 @@ VisDevelop::~VisDevelop()
     winClose = true;
     endRunTimer->stop();
     work_wdgTimer->stop();
-    while(proc_st);
     
     //Save main window state
     QByteArray st = saveState();
@@ -726,7 +725,6 @@ void VisDevelop::selectItem( const string &item )
     
 void VisDevelop::applyWorkWdg( )
 {    
-    proc_st   = true;
     bool isEn = false;
     
     //Set/update attributes inspector
@@ -734,7 +732,7 @@ void VisDevelop::applyWorkWdg( )
     lnkInsp->setWdg(work_wdg_new);
     
     //Update actions
-    if( work_wdg == work_wdg_new ) { proc_st = false; return; }
+    if( work_wdg == work_wdg_new )	return;
     work_wdg = work_wdg_new;
     
     string cur_wdg = TSYS::strSepParse(work_wdg,0,';');	//Get first select element
@@ -759,8 +757,6 @@ void VisDevelop::applyWorkWdg( )
     actVisItDel->setEnabled(isProj || isLib);
     actVisItProp->setEnabled(isProj || isLib);
     actVisItEdit->setEnabled((isProj || isLib) && sel2.size());
-    
-    proc_st = false;
 }
 
 void VisDevelop::updateMenuWindow()

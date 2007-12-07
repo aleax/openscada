@@ -651,6 +651,15 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
     return shape ? shape->attrSet(this,uiPrmPos,val) : true;
 }
 
+string WdgView::resGet( const string &res )
+{
+    XMLNode req("get");
+    req.setAttr("path",id()+"/%2fwdg%2fres")->setAttr("id",res);
+    if( !cntrIfCmd(req) )	return TSYS::strDecode(req.text(),TSYS::base64);
+    
+    return "";
+}
+
 void WdgView::load( const string& item )
 {
     setAllAttrLoad(true);
