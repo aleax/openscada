@@ -120,7 +120,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
             break;
         case 25:	//fillClr
             w->dc()["fillClr"] = QColor(val.c_str());
-            up=true;
+	    rel_list=true;
             break;
         case 26:	//fillImg
         {
@@ -129,6 +129,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
 		w->dc()["fillImg"] = QBrush(img);
 	    else w->dc()["fillImg"] = QBrush();
+	    rel_list=true;
 	    break;
         }
         case 27:	//elLst

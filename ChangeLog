@@ -1,8 +1,11 @@
-2007-12-07 Roman
+2007-12-07 Roman,Maxim,Ksenia OpenSCADA 0.6.0 
 - !!:/SYS: Version 0.6.0 Anounce document is updated.
+- !!:/UI/Vision: Documentation and translation is updated and version 0.5.0 is relised.
 - !!:/UI/VCAEngine: Documentation and translation is updated and version 0.5.0 is relised.
 - !!:/UI/WebVision: Documentation and translation is updated and version 0.2.0 is relised.
 - /UI/Vision: Function to resources request is added. Some fixes and code clear.
+- FIX:/UI/Vision: Development dialogs parameters update is fixed.
+- FIX:/UI/Vision: Color fill updating is fixed. 
 
 
 2007-12-06 Maxim

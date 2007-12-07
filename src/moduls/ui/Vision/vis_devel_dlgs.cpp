@@ -409,7 +409,8 @@ void LibProjProp::showDlg( const string &iit, bool reload )
     raise();
     activateWindow();
 
-    if( !reload ) wdg_tabs->setCurrentIndex(0);
+    if( reload ) tabChanged(wdg_tabs->currentIndex());
+    else wdg_tabs->setCurrentIndex(0);
 
     show_init = false;
 }
@@ -1155,7 +1156,8 @@ void VisItProp::showDlg( const string &iit, bool reload )
     show();
     raise();
     activateWindow();
-    if( !reload ) wdg_tabs->setCurrentIndex(0);
+    if( reload ) tabChanged(wdg_tabs->currentIndex());
+    else wdg_tabs->setCurrentIndex(0);
     
     show_init = false;
 }
