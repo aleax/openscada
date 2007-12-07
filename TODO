@@ -12,34 +12,26 @@ OpenSCADA to do list
  * Develop new the make test mechanism and connecting tests to the system (based at module Special/SystemTests).
    Develop configuration and control testing dialog (based control system interface).
  * The value buffer algorithm optimize for time work. The fast methods search will be used.
- * Child node search optimize for dynamic tree. Hash method will be used.
- * The bind logical parameters mechanism at physical level parameters optimize by time. Direct association will be use at parameter's attributes.
- * Make tests for value and messages archive testing.
- * Add package mechanism for value archiving into module BaseArch.
+ * Checking of project's code is made on help Coverty.
 
 3. System
- * Add resource control: memory, blocking and threads.
- * The system control language (TContrNode) full remake for unification and the deployment OpenSCADA architecture build.
 
 4. Modules
 
 5. БД
- * Add the table structure load mechanism.
  * Add ODBC support.
  * Add PostgresSQL support.
  * Add Oracle support.
 
 6. Logical level parameters
  * The full parameters reserve support (and archives) add to logical level parameters.
- * Move the logical level parameters to module of "DAQ" subsystem.
 
 7. Data acquisition (DAQ)
- * Make module for Siemens S7 PLC support, based at Hilsher CIF50PB communication processor.
+ * Add OPC support.
  * Add KSysGuard support.
- * Add SNMP support.
  * Add CORBA support.
 
-7.1. OperationSystem
+7.1. System
  * Add support data source: ACPI.
  * Add support data source: file system stat (used, free HDD space).
 
@@ -50,8 +42,6 @@ OpenSCADA to do list
 9. Transport's protocols
 
 10. User interfaces
- * Develope generic concept of the visualization area.
- * Make visualization area based at QT (Vision).
  * Make visualization area based at WEB-technology.
 
 10.1. WebCfg
@@ -63,15 +53,16 @@ OpenSCADA to do list
  * Add message «Wait» for long time process. Move long time process to individual thread.
 
 11. Archives
-11.1. BaseArh
- * Develop block based read and write mechanism for the value archivator. Wanted for performance rising of value archivator.
+11.1. FSArch
 
 12. Subsystem «Security»
- * Add password hashing for DB storing (crypt.h).
 
 13. Special
 14. Documents
  * Translate base documents to English.
 
 15. Project site
- * Migrate to TYPO3 engine, make multi language interface, translate interface to English.
+ * Add forums.
+ * Add screen galery.
+ * Add mail delivery.
+ * Add bug tracker. 
