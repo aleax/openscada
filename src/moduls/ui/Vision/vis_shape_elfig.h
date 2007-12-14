@@ -188,6 +188,7 @@ class ShapeElFigure : public WdgShape
         bool Inundation_1_2(QPointF point, QVector <ShapeItem> &shapeItems, QVector <InundationItem> &inundationItems,  PntMap *pnts, WdgView *view);
         int Build_Matrix(QVector <ShapeItem> &shapeItems);
         QPainterPath Create_Inundation_Path (QVector <int> in_fig_num, QVector <ShapeItem> &shapeItems, PntMap *pnts, WdgView *view);
+        QVector <int> Inundation_sort(QPainterPath InundationPath, QVector <int> inundation_fig_num, QVector <ShapeItem> &shapeItems, PntMap *pnts,  WdgView *view);
       	
 	//Attributes
 	QPointF StartLine, EndLine,		//Start and end points for paint created figure    
