@@ -78,6 +78,80 @@ bool WdgShape::event( WdgView *view, QEvent *event )
     return false;
 }
 
+void WdgShape::borderDraw( QPainter &pnt, QRect dA, QPen bpen, int bordStyle )
+{
+    int bordWidth = bpen.width();
+    if( bordStyle && bordWidth )
+    switch(bordStyle)
+    {
+	case 1:	//Dotted
+	    bpen.setStyle(Qt::DotLine);
+	    pnt.setPen(bpen);
+	    pnt.drawRect(dA.adjusted(bordWidth/2,bordWidth/2,-bordWidth/2-bordWidth%2,-bordWidth/2-bordWidth%2));
+	    break;			
+	case 2:	//Dashed
+	    bpen.setStyle(Qt::DashLine);
+	    pnt.setPen(bpen);
+	    pnt.drawRect(dA.adjusted(bordWidth/2,bordWidth/2,-bordWidth/2-bordWidth%2,-bordWidth/2-bordWidth%2));
+	    break;			
+	case 3:	//Solid
+	    bpen.setStyle(Qt::SolidLine);
+	    pnt.setPen(bpen);
+	    pnt.drawRect(dA.adjusted(bordWidth/2,bordWidth/2,-bordWidth/2-bordWidth%2,-bordWidth/2-bordWidth%2));
+	    break;
+	case 4:	//Double
+	    bpen.setStyle(Qt::SolidLine);		    
+	    if( bordWidth/3 )
+	    {
+		int brdLnSpc = bordWidth-2*(bordWidth/3);
+	        bordWidth/=3;
+	        bpen.setWidth(bordWidth);
+	        pnt.setPen(bpen);
+	        pnt.drawRect(dA.adjusted(bordWidth/2,bordWidth/2,-bordWidth/2-bordWidth%2,-bordWidth/2-bordWidth%2));
+	        pnt.drawRect(dA.adjusted(bordWidth+brdLnSpc+bordWidth/2,bordWidth+brdLnSpc+bordWidth/2,
+	    		-bordWidth-brdLnSpc-bordWidth/2-bordWidth%2,-bordWidth-brdLnSpc-bordWidth/2-bordWidth%2));
+	    }
+	    else
+	    {
+	        pnt.setPen(bpen);
+	        pnt.drawRect(dA.adjusted(bordWidth/2,bordWidth/2,-bordWidth/2-bordWidth%2,-bordWidth/2-bordWidth%2));			
+	    }
+	    break;
+	case 5:	//Groove
+	{
+	    QPalette plt;
+	    plt.setColor(QPalette::Light,bpen.color().lighter(150));
+	    plt.setColor(QPalette::Dark,bpen.color().lighter(50));
+	    qDrawShadeRect(&pnt,dA,plt,true,bordWidth/2);
+	    break;
+	}
+	case 6:	//Ridge
+	{
+	    QPalette plt;
+	    plt.setColor(QPalette::Light,bpen.color().lighter(150));
+	    plt.setColor(QPalette::Dark,bpen.color().lighter(50));
+	    qDrawShadeRect(&pnt,dA,plt,false,bordWidth/2);
+	    break;
+	}
+	case 7:	//Inset
+	{
+	    QPalette plt;
+	    plt.setColor(QPalette::Light,bpen.color().lighter(150));
+	    plt.setColor(QPalette::Dark,bpen.color().lighter(50));
+	    qDrawShadePanel(&pnt,dA,plt,true,bordWidth);
+	    break;
+	}
+	case 8:	//Outset
+	{
+	    QPalette plt;
+	    plt.setColor(QPalette::Light,bpen.color().lighter(150));
+	    plt.setColor(QPalette::Dark,bpen.color().lighter(50));
+	    qDrawShadePanel(&pnt,dA,plt,false,bordWidth);
+	    break;
+	}		    
+    }
+}
+
 //============ Support widget's shapes ============
 
 //*************************************************
@@ -500,16 +574,17 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
     switch(uiPrmPos)
     {
 	case -1:	//load
-	    rel_fnt = reform = true;
+	    up = rel_fnt = reform = true;
 	    break;
 	case 5:		//en
 	    if( !qobject_cast<RunWdgView*>(w) )	{ up = false; break; }
 	    w->dc()["en"] = (bool)atoi(val.c_str());
 	    break;
 	case 12: 	//geomMargin
-	    w->dc()["geomMargin"] = atoi(val.c_str());	break;
+	    w->dc()["geomMargin"] = atoi(val.c_str());	up = true;
+	    break;
 	case 20: 	//backColor
-	    w->dc()["backColor"] = QColor(val.c_str());	break;
+	    w->dc()["backColor"] = QColor(val.c_str());	up = true;	break;
 	case 21:	//backImg
 	{
 	    QImage img;	    
@@ -517,17 +592,20 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
 		w->dc()["backImg"] = QBrush(img);
 	    else w->dc()["backImg"] = QBrush();
+	    up = true;
 	    break;
 	}
 	case 22:	//bordWidth
-	    ((QPen*)w->dc()["border"].value<void*>())->setWidth(atoi(val.c_str()));	break;
+	    ((QPen*)w->dc()["border"].value<void*>())->setWidth(atoi(val.c_str()));	up = true;	break;
 	case 23:	//bordColor
-	    ((QPen*)w->dc()["border"].value<void*>())->setColor(QColor(val.c_str()));	break;
+	    ((QPen*)w->dc()["border"].value<void*>())->setColor(QColor(val.c_str()));	up = true;	break;
+	case 19:	//bordStyle
+	    w->dc()["bordStyle"] = atoi(val.c_str()); up = true; break;
 	case 24:	//font
 	    w->dc()["font"] = val.c_str(); rel_fnt = true; break;
 	case 25:	//fontFamily
 	    ((QFont*)w->dc()["QFont"].value<void*>())->setFamily(val.c_str()); 
-	    rel_fnt = true;	
+	    rel_fnt = true;
 	    break;
 	case 26:	//fontSize
 	    ((QFont*)w->dc()["QFont"].value<void*>())->setPointSize(atoi(val.c_str())); 
@@ -622,7 +700,7 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
     		reform = true;
 	    }else up = false;
     }
-
+    
     //- Reload generic font record -
     if( rel_fnt && !w->allAttrLoad() )
     {
@@ -664,8 +742,7 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 		default: text = text.arg(arg->val().toInt(),atoi(arg->cfg().c_str())); break;
 	    }
 	}
-	if( w->dc()["text"].toString() == text ) up = false;
-	else { w->dc()["text"] = text; up = true; }
+	if( w->dc()["text"].toString() != text )	{ w->dc()["text"] = text; up = true; }
     }
     
     if( up && !w->allAttrLoad( ) ) w->update();
@@ -684,52 +761,51 @@ bool ShapeText::event( WdgView *w, QEvent *event )
 	    
 	    //- Prepare draw area -
 	    int margin = w->dc()["geomMargin"].toInt();
-	    QRect draw_area(w->rect().x(),w->rect().y(),
+	    QRect dA(w->rect().x(),w->rect().y(),
 		(int)((float)w->rect().width()/w->xScale(true))-2*margin,
 		(int)((float)w->rect().height()/w->yScale(true))-2*margin);
-	    pnt.setWindow(draw_area);
+	    pnt.setWindow(dA);
 	    pnt.setViewport(w->rect().adjusted((int)(w->xScale(true)*margin),(int)(w->yScale(true)*margin),
 		-(int)(w->xScale(true)*margin),-(int)(w->yScale(true)*margin)));
 	    
-	    /*QRect draw_area = w->rect().adjusted(0,0,-2*margin,-2*margin);	    
-            pnt.setWindow(draw_area);
+	    /*QRect dA = w->rect().adjusted(0,0,-2*margin,-2*margin);	    
+            pnt.setWindow(dA);
 	    pnt.setViewport(w->rect().adjusted(margin,margin,-margin,-margin));*/
 	    
-	    pnt.translate(draw_area.width()/2,draw_area.height()/2 );
+	    pnt.translate(dA.width()/2,dA.height()/2 );
 	    int angle = w->dc()["orient"].toInt();
 	    pnt.rotate(angle);
 	    //- Calc whidth and hight draw rect at rotate -
 	    double rad_angl  = fabs(3.14159*(double)angle/180.);
 	    double rect_rate = 1./(fabs(cos(rad_angl))+fabs(sin(rad_angl)));
-	    int wdth  = (int)(rect_rate*draw_area.size().width()+
-			    sin(rad_angl)*(draw_area.size().height()-draw_area.size().width()));
-	    int heigt = (int)(rect_rate*draw_area.size().height()+
-			    sin(rad_angl)*(draw_area.size().width()-draw_area.size().height()));
+	    int wdth  = (int)(rect_rate*dA.size().width()+
+			    sin(rad_angl)*(dA.size().height()-dA.size().width()));
+	    int heigt = (int)(rect_rate*dA.size().height()+
+			    sin(rad_angl)*(dA.size().width()-dA.size().height()));
 	    
-	    //QRect draw_rect = QRect(QPoint(-draw_area.size().width()/2,-draw_area.size().height()/2),draw_area.size());
-	    QRect draw_rect = QRect(QPoint(-wdth/2,-heigt/2),QSize(wdth,heigt));
-	    //QSize asz(draw_area.size());
+	    //QRect dR = QRect(QPoint(-dA.size().width()/2,-dA.size().height()/2),dA.size());
+	    QRect dR = QRect(QPoint(-wdth/2,-heigt/2),QSize(wdth,heigt));
+	    //QSize asz(dA.size());
 	    
 	    //- Draw decoration -
 	    QColor bkcol = w->dc()["backColor"].value<QColor>();
-	    if(  bkcol.isValid() ) pnt.fillRect(draw_rect,bkcol);
+	    if(  bkcol.isValid() ) pnt.fillRect(dR,bkcol);
 	    QBrush bkbrsh = w->dc()["backImg"].value<QBrush>();
-	    if( bkbrsh.style() != Qt::NoBrush ) pnt.fillRect(draw_rect,bkbrsh);
+	    if( bkbrsh.style() != Qt::NoBrush ) pnt.fillRect(dR,bkbrsh);
 	    
+	    //- Draw border -
 	    QPen *bpen = (QPen*)w->dc()["border"].value<void*>();
-	    if(  bpen->width() )
+	    if( bpen->width() )
 	    {
-		pnt.setPen(*bpen);
-		pnt.drawRect(draw_rect.adjusted(bpen->width()/2,bpen->width()/2,
-			     -bpen->width()/2-bpen->width()%2,-bpen->width()/2-bpen->width()%2));
-		draw_rect.adjust(bpen->width()+1,bpen->width()+1,bpen->width()-1,bpen->width()-1);
+		borderDraw( pnt, dR, *bpen, w->dc()["bordStyle"].toInt() );
+		dR.adjust(bpen->width()+1,bpen->width()+1,bpen->width()-1,bpen->width()-1);
 	    }
 	    
 	    //- Draw text -
 	    pnt.setPen(w->dc()["color"].value<QColor>());
 	    pnt.setFont(*(QFont*)w->dc()["QFont"].value<void*>());
 	    
-	    pnt.drawText(draw_rect,w->dc()["text_flg"].toInt(),w->dc()["text"].toString());
+	    pnt.drawText(dR,w->dc()["text_flg"].toInt(),w->dc()["text"].toString());
 	    
             event->accept();
             return true;
@@ -806,6 +882,8 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    ((QPen*)w->dc()["border"].value<void*>())->setWidth(atoi(val.c_str()));     break;
 	case 23:	//bordColor
 	    ((QPen*)w->dc()["border"].value<void*>())->setColor(QColor(val.c_str()));	break;
+	case 19:	//bordStyle
+	    w->dc()["bordStyle"] = atoi(val.c_str());	break;	    
 	case 24:	//src
 	    if( w->dc()["mediaSrc"].toString() == val.c_str() )	break;
 	    w->dc()["mediaSrc"] = val.c_str();
@@ -906,24 +984,20 @@ bool ShapeMedia::event( WdgView *w, QEvent *event )
 	    
 	//- Prepare draw area -
 	int margin = w->dc()["geomMargin"].toInt();
-	QRect draw_area = w->rect().adjusted(0,0,-2*margin,-2*margin);	    
-        pnt.setWindow(draw_area);
+	QRect dA = w->rect().adjusted(0,0,-2*margin,-2*margin);	    
+        pnt.setWindow(dA);
 	pnt.setViewport(w->rect().adjusted(margin,margin,-margin,-margin));
 	
 	//- Draw decoration -
 	QColor bkcol = w->dc()["backColor"].value<QColor>();
-	if( bkcol.isValid() ) pnt.fillRect(draw_area,bkcol);
+	if( bkcol.isValid() ) pnt.fillRect(dA,bkcol);
 	QBrush bkbrsh = w->dc()["backImg"].value<QBrush>();
-	if( bkbrsh.style() != Qt::NoBrush ) pnt.fillRect(draw_area,bkbrsh);
-	    
-	QPen bpen = w->dc()["bordPen"].value<QPen>();
-	if( bpen.width() )
-	{
-	    pnt.setPen(bpen);
-	    pnt.drawRect(draw_area.adjusted(bpen.width()/2,bpen.width()/2,
-		        -bpen.width()/2-bpen.width()%2,-bpen.width()/2-bpen.width()%2));
-	}
-        return true;
+	if( bkbrsh.style() != Qt::NoBrush ) pnt.fillRect(dA,bkbrsh);
+
+	//- Draw border -
+	borderDraw( pnt, dA, *(QPen*)w->dc()["border"].value<void*>(), w->dc()["bordStyle"].toInt() );
+        
+	return true;
     }
     return false;
 }
@@ -939,6 +1013,7 @@ ShapeDiagram::ShapeDiagram( ) : WdgShape("Diagram")
 void ShapeDiagram::init( WdgView *w )
 {
     w->dc()["tTime"] = 0;
+    w->dc()["tPict"] = 0;
     w->dc()["curTime"] = 0;
     w->dc()["parNum"] = 0;
     w->dc()["tTimeCurent"] = false; 
@@ -1005,8 +1080,10 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	case 22:	//bordWidth
 	    ((QPen*)w->dc()["border"].value<void*>())->setWidth(atoi(val.c_str())); make_pct = true; break;
 	case 23:	//bordColor
-	    ((QPen*)w->dc()["border"].value<void*>())->setColor(QColor(val.c_str())); make_pct = true; break;
-	case 24:	//trcPer
+	    ((QPen*)w->dc()["border"].value<void*>())->setColor(QColor(val.c_str())); up = true; break;
+	case 19:	//bordStyle
+	    w->dc()["bordStyle"] = atoi(val.c_str()); up = true; break;	    
+	case 24:	//trcPer	
 	    w->dc()["trcPer"] = atoi(val.c_str());
 	    if( atoi(val.c_str()) )
 		((QTimer*)w->dc()["trcTimer"].value<void*>())->start(atoi(val.c_str())*1000);
@@ -1131,7 +1208,8 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 
     //-- Make decoration and prepare trends area --
     int margin = w->dc()["geomMargin"].toInt();				//Trends generic margin
-    QRect tAr  = w->rect().adjusted(margin+1,margin+1,-2*(margin+1),-2*(margin+1));	//Curves of trends area rect
+    int brdWdth = ((QPen*)w->dc()["border"].value<void*>())->width();	//Border width
+    QRect tAr  = w->rect().adjusted(1,1,-2*(margin+brdWdth+1),-2*(margin+brdWdth+1));	//Curves of trends area rect
     int sclHor = w->dc()["sclHor"].toInt();				//Horisontal scale mode
     int sclVer = w->dc()["sclVer"].toInt();				//Vertical scale mode
     
@@ -1153,11 +1231,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		if( tAr.height() < 100 ) sclHor &= ~(0x02);
 		else tAr.adjust(0,0,0,-2*mrkHeight);
 	    }
-	    if( sclVer&0x2 )
-	    {
-		if( tAr.width() < 100 ) sclVer &= ~(0x02);
-		else tAr.adjust(pnt.fontMetrics().width("9.999"),0,0,0);
-	    }
+	    if( sclVer&0x2 && tAr.width() < 100 ) sclVer &= ~(0x02);
 	}
     }
     
@@ -1178,6 +1252,11 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	else if( hLen/1000 > 2 )	{ hvLev = 1; hDivBase = hDiv =        1000; }	//Milliseconds
 	while( hLen/hDiv > hmax_ln )	hDiv *= 10; 
 	while( hLen/hDiv < hmax_ln/2 && !((hDiv/2)%hDivBase) )	hDiv/=2;
+	if( hmax_ln >= 4 && w->dc()["trcPer"].toInt() )
+	{
+	    tEnd = hDiv*(tEnd/hDiv+1);
+	    tBeg = tEnd-hLen;
+	}
 
 	//--- Draw horisontal grid and markers ---
 	if( sclHor&0x3 )
@@ -1245,7 +1324,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		    else if( hvLev <= 1 || i_h%1000000 )				//Milliseconds
 			lab_tm = (chLev>=2) ? QString("%1:%2:%3.%4").arg(ttm->tm_hour).arg(ttm->tm_min,2,10,QChar('0')).arg(ttm->tm_sec,2,10,QChar('0')).arg(i_h%1000000) :
 				 (chLev>=1) ? QString("%1.%2s").arg(ttm->tm_sec).arg(i_h%1000000) :
-					      QString("%1ms").arg((double)(i_h%1000000)/1000.,0,'g',4);
+					      QString("%1ms").arg((double)(i_h%1000000)/1000.,0,'g');
 		    int wdth;
 		    pnt.setPen(mrkPen);
 		    if( lab_tm.size() )
@@ -1307,7 +1386,8 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	while(v_len < vmax_ln/10){ vDiv/=10.; v_len*=10.; }
 	vsMin = floor(vsMin/vDiv)*vDiv;
 	vsMax = ceil(vsMax/vDiv)*vDiv;
-	while(((vsMax-vsMin)/vDiv) < vmax_ln/2) vDiv/=2;	
+	while(((vsMax-vsMin)/vDiv) < vmax_ln/2) vDiv/=2;
+
 	//--- Draw vertical grid and markers ---
 	if( sclVer&0x3 )
 	{
@@ -1323,8 +1403,8 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		if( sclVer&0x2 )
 		{
 		    pnt.setPen(mrkPen);
-		    pnt.drawText(tAr.x()-20,v_pos+((i_v==vsMin)?0:(i_v==vsMax)?10:5),
-						QString::number(i_v,'g',4));
+		    pnt.drawText(tAr.x()+2,v_pos-1+((i_v==vsMax)?mrkHeight:0),QString::number(i_v,'g',4));
+		    //pnt.drawText(tAr.x()-20,v_pos+((i_v==vsMin)?0:(i_v==vsMax)?10:5),QString::number(i_v,'g',4));
 		}
 	    }
 	}
@@ -1413,6 +1493,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
     }
     
     (*(QRect*)w->dc()["pictRect"].value<void*>()) = tAr;
+    w->dc()["tPict"] = tEnd;
     
     //- Call repaint -
     w->update();
@@ -1446,8 +1527,9 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
     
     //- Get generic data -
     long long tTime     = w->dc()["tTime"].toLongLong();
-    long long tTimeGrnd = tTime - (int)(w->dc()["tSize"].toDouble()*1000000.);
-    long long curTime	= vmax(vmin(w->dc()["curTime"].toLongLong(),tTime),tTimeGrnd);
+    long long tPict	= w->dc()["tPict"].toLongLong();
+    long long tTimeGrnd = tPict - (int)(w->dc()["tSize"].toDouble()*1000000.);
+    long long curTime	= vmax(vmin(w->dc()["curTime"].toLongLong(),tPict),tTimeGrnd);
     QRect *tAr = (QRect*)w->dc()["pictRect"].value<void*>();    
     
     //- Process event -
@@ -1458,7 +1540,8 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 	    QPainter pnt( w );
 	
 	    //- Decoration draw -
-	    int margin = w->dc()["geomMargin"].toInt();	
+	    int margin = w->dc()["geomMargin"].toInt();
+	    int brdWdth = ((QPen*)w->dc()["border"].value<void*>())->width();
 	    QRect dA = w->rect().adjusted(0,0,-2*margin,-2*margin);	    
 	    pnt.setWindow(dA);
 	    pnt.setViewport(w->rect().adjusted(margin,margin,-margin,-margin));
@@ -1469,24 +1552,19 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 	    QBrush bkbrsh = w->dc()["backImg"].value<QBrush>();
 	    if( bkbrsh.style() != Qt::NoBrush ) pnt.fillRect(dA,bkbrsh);
     
-	    QPen *bpen = (QPen*)w->dc()["border"].value<void*>();
-	    if( bpen->width() )
-	    {
-    		pnt.setPen(*bpen);
-    		pnt.drawRect(dA.adjusted(bpen->width()/2,bpen->width()/2,
-	    	    -bpen->width()/2-bpen->width()%2,-bpen->width()/2-bpen->width()%2));
-	    }
+	    //- Draw border -
+	    borderDraw( pnt, dA, *(QPen*)w->dc()["border"].value<void*>(), w->dc()["bordStyle"].toInt() );    
 	
 	    //- Trend's picture -
-	    pnt.drawPicture(0, 0,*(QPicture*)w->dc()["pictObj"].value<void*>());
+	    pnt.drawPicture(brdWdth,brdWdth,*(QPicture*)w->dc()["pictObj"].value<void*>());
 	
 	    //- Draw focused border -
 	    if( w->hasFocus() )	qDrawShadeRect(&pnt,dA.x(),dA.y(),dA.width(),dA.height(),w->palette());
 	
 	    //- Draw cursor -
-	    if( w->dc().value("active",1).toInt() && (curTime >= tTimeGrnd || curTime <= tTime) )
+	    if( w->dc().value("active",1).toInt() && (curTime >= tTimeGrnd || curTime <= tPict) )
 	    {
-		int curPos = tAr->x()+tAr->width()*(curTime-tTimeGrnd)/(tTime-tTimeGrnd);
+		int curPos = tAr->x()+tAr->width()*(curTime-tTimeGrnd)/(tPict-tTimeGrnd);
 		QPen curpen(QColor(w->dc()["curColor"].toString()));
 		curpen.setWidth(1);
 		pnt.setPen(curpen);
@@ -2182,6 +2260,8 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    ((QPen*)w->dc()["border"].value<void*>())->setWidth(atoi(val.c_str()));	break;
 	case 23:	//bordColor
 	    ((QPen*)w->dc()["border"].value<void*>())->setColor(QColor(val.c_str()));	break;
+	case 19:	//bordStyle
+	    w->dc()["bordStyle"] = atoi(val.c_str());	break;
 	case 26:	//pgOpenSrc
 	{
 	    if( !qobject_cast<RunWdgView*>(w) )	{ up = false; break; }
@@ -2263,15 +2343,10 @@ bool ShapeBox::event( WdgView *w, QEvent *event )
 	    if( bkbrsh.style() != Qt::NoBrush ) pnt.fillRect(dA,bkbrsh);
 	    
 	    //- Draw border -
-	    QPen *bpen = (QPen*)w->dc()["border"].value<void*>();
-	    if( bpen->width() )
-	    {
-		pnt.setPen(*bpen);
-		pnt.drawRect(dA.adjusted(bpen->width()/2,bpen->width()/2,
-					-bpen->width()/2-bpen->width()%2,-bpen->width()/2-bpen->width()%2));
-	    }
+	    borderDraw( pnt, dA, *(QPen*)w->dc()["border"].value<void*>(), w->dc()["bordStyle"].toInt() );
+	    
             //- Draw focused border -
-	    if( w->hasFocus() ) qDrawShadeRect(&pnt,dA.x(),dA.y(),dA.width(),dA.height(),w->palette());
+	    if( w->hasFocus() ) qDrawShadeRect(&pnt,dA,w->palette(),false,1);
 
             event->accept();
             return true;

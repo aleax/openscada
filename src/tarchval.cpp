@@ -1165,7 +1165,7 @@ void TVArchive::archivatorSort()
 
 string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &iarch, int hsz, int vsz )
 {
-    char c_buf[30];
+    char c_buf[30], c_buf1[30];
     time_t tm_t;
     struct tm *ttm, ttm1;
     long long c_tm;
@@ -1184,9 +1184,9 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
     hv_border = 5;    
     h_border_serv = 30;
     v_border_serv = 20;
-    h_w_start = hv_border+h_border_serv;
-    h_w_size  = hsz-h_w_start-h_border_serv-hv_border;
-    v_w_start = hv_border+v_border_serv;
+    h_w_start = hv_border;
+    h_w_size  = hsz-h_w_start-hv_border;
+    v_w_start = hv_border;
     v_w_size  = vsz-v_w_start-v_border_serv-hv_border;
 
     //- Create image -
@@ -1201,49 +1201,109 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
     
     //-- Make horisontal grid and symbols --
     //--- Calc horizontal scale ---
-    long long h_div = 1;
-    long long h_len = iend - ibeg;
-    while(h_len>=10){ h_div*=10; h_len/=10; }
-    long long h_min = (ibeg/h_div)*h_div;
-    long long h_max = (iend/h_div + ((iend%h_div)?1:0))*h_div;
-    while(((h_max-h_min)/h_div)<5) h_div/=2;
-    
-    //--- Select most like archivator ---
-    string rarch = iarch;
-    if(rarch.empty() && !vOK(ibeg,iend))
-    {	
-	double best_a_per = 0;
-	ResAlloc res(a_res,false);
-	for( int i_a = 0; i_a < arch_el.size(); i_a++ )
-	    if( arch_el[i_a]->archivator().valPeriod() > best_a_per && 
-		arch_el[i_a]->archivator().valPeriod() <= (double)(h_max-h_min)/(1e5*hsz) )
-	    {
-		best_a_per = arch_el[i_a]->archivator().valPeriod();
-		rarch = arch_el[i_a]->archivator().workId();
-	    }
-    }
-    
-    getVal(buf,h_min,h_max,rarch,600000);
-    if(!buf.end() || !buf.begin())      return rez;
-	
-    //--- Draw horisontal grid and symbols ---
-    int i_cnt = 1;
-    for(long long i_h = h_min; i_h <= h_max; i_h+=h_div, i_cnt++)
+    long long h_div = 1, hDivBase = 1;
+    long long h_min = ibeg;
+    long long h_max = iend;
+    int hmax_ln = vsz/30;
+    if( hmax_ln >= 2 )
     {
-	int h_pos = h_w_start+h_w_size*(i_h-h_min)/(h_max-h_min);
-	gdImageLine(im,h_pos,v_w_start,h_pos,v_w_start+v_w_size,clr_grid);
-	
-	tm_t = i_h/1000000;
-	ttm = localtime(&tm_t);
-	snprintf(c_buf,sizeof(c_buf),"%d:%02d:%02d.%d",ttm->tm_hour,ttm->tm_min,ttm->tm_sec,i_h%1000000);
-	gdImageString(im,gdFontTiny,h_pos-gdFontTiny->w*strlen(c_buf)/2,v_w_start+v_w_size+3+(i_cnt%2)*gdFontTiny->h,(unsigned char *)c_buf,clr_symb);
-	if(i_cnt==1 || ttm1.tm_mday!=ttm->tm_mday || ttm1.tm_mon!=ttm->tm_mon || ttm1.tm_year!=ttm->tm_year)
-	{	    
-	    snprintf(c_buf,sizeof(c_buf),"%d-%02d-%d",ttm->tm_mday,ttm->tm_mon+1,ttm->tm_year+1900);
-	    gdImageString(im,gdFontTiny,h_pos-gdFontTiny->w*strlen(c_buf)/2,v_w_start+v_w_size+3+(1-i_cnt%2)*gdFontTiny->h,(unsigned char *)c_buf,clr_symb);
-	    memcpy((char*)&ttm1,(char*)ttm,sizeof(tm));
+        int hvLev = 0;
+        long long hLen = iend - ibeg;
+        if( hLen/86400000000ll > 2 )    { hvLev = 5; hDivBase = h_div = 86400000000ll; } //Days
+        else if( hLen/3600000000ll > 2 ){ hvLev = 4; hDivBase = h_div =  3600000000ll; } //Hours
+        else if( hLen/60000000 > 2 )    { hvLev = 3; hDivBase = h_div =    60000000; }   //Minutes
+        else if( hLen/1000000 > 2 )     { hvLev = 2; hDivBase = h_div =     1000000; }   //Seconds
+        else if( hLen/1000 > 2 )        { hvLev = 1; hDivBase = h_div =        1000; }   //Milliseconds
+        while( hLen/h_div > hmax_ln )    h_div *= 10;
+        while( hLen/h_div < hmax_ln/2 && !((h_div/2)%hDivBase) )  h_div/=2;
+    
+	//--- Select most like archivator ---
+	string rarch = iarch;
+	if(rarch.empty() && !vOK(ibeg,iend))
+	{	
+	    double best_a_per = 0;
+	    ResAlloc res(a_res,false);
+	    for( int i_a = 0; i_a < arch_el.size(); i_a++ )
+		if( arch_el[i_a]->archivator().valPeriod() > best_a_per && 
+		    arch_el[i_a]->archivator().valPeriod() <= (double)(h_max-h_min)/(1e5*hsz) )
+		{
+		    best_a_per = arch_el[i_a]->archivator().valPeriod();
+		    rarch = arch_el[i_a]->archivator().workId();
+		}
 	}
-    }
+    
+	getVal(buf,h_min,h_max,rarch,600000);
+	if(!buf.end() || !buf.begin())      return rez;
+	
+	//---- Draw full trend's data and time to the trend end position ----
+	tm_t = iend/1000000;
+	ttm = localtime(&tm_t);
+	snprintf(c_buf,sizeof(c_buf),"%d-%02d-%d",ttm->tm_mday,ttm->tm_mon+1,ttm->tm_year+1900);
+	if( ttm->tm_sec == 0 && iend%1000000 == 0 )
+	    snprintf(c_buf1,sizeof(c_buf1),"%d:%02d",ttm->tm_hour,ttm->tm_min);
+	else if( iend%1000000 == 0 )
+	    snprintf(c_buf1,sizeof(c_buf1),"%d:%02d:%02d",ttm->tm_hour,ttm->tm_min,ttm->tm_sec);
+	else snprintf(c_buf1,sizeof(c_buf1),"%d:%02d:%02d.%d",ttm->tm_hour,ttm->tm_min,ttm->tm_sec,iend%1000000);
+	gdImageString(im,gdFontTiny,h_w_start+h_w_size-gdFontTiny->w*strlen(c_buf),v_w_start+v_w_size+3+gdFontTiny->h,(unsigned char *)c_buf,clr_symb);
+	gdImageString(im,gdFontTiny,h_w_start+h_w_size-gdFontTiny->w*strlen(c_buf1),v_w_start+v_w_size+3,(unsigned char *)c_buf1,clr_symb);
+	int endMarkBrd = vmin(h_w_start+h_w_size-gdFontTiny->w*strlen(c_buf),h_w_start+h_w_size-gdFontTiny->w*strlen(c_buf1));
+    
+	//---- Draw grid and/or markers ----
+	bool first_m = true;
+	for( long long i_h = h_min; true; )
+	{
+	    //---- Draw grid ----
+	    int h_pos = h_w_start+h_w_size*(i_h-h_min)/(h_max-h_min);
+	    gdImageLine(im,h_pos,v_w_start,h_pos,v_w_start+v_w_size,clr_grid);
+
+	    if( !(i_h%h_div) && i_h != iend )
+	    {
+		tm_t = i_h/1000000;
+        	ttm = localtime(&tm_t);
+        	int chLev = 0;
+        	if( !first_m )
+        	{
+            	    if( ttm->tm_mon > ttm1.tm_mon || ttm->tm_year > ttm1.tm_year )  chLev = 5;
+            	    else if( ttm->tm_mday > ttm1.tm_mday )  chLev = 4;
+            	    else if( ttm->tm_hour > ttm1.tm_hour )  chLev = 3;
+            	    else if( ttm->tm_min > ttm1.tm_min )    chLev = 2;
+            	    else if( ttm->tm_sec > ttm1.tm_sec )    chLev = 1;
+        	}
+		c_buf[0] = c_buf1[0] = 0;
+		if( hvLev == 5 || chLev >= 4 )                                      //Date
+	    	    (chLev>=5) ? snprintf(c_buf,sizeof(c_buf),"%d-%02d-%d",ttm->tm_mday,ttm->tm_mon+1,ttm->tm_year+1900) :
+		                 snprintf(c_buf,sizeof(c_buf),"%d",ttm->tm_mday);
+		if( (hvLev == 4 || hvLev == 3 || ttm->tm_min) && !ttm->tm_sec )     //Hours and minuts
+		    snprintf(c_buf1,sizeof(c_buf1),"%d:%02d",ttm->tm_hour,ttm->tm_min);
+		else if( (hvLev == 2 || ttm->tm_sec) && !(i_h%1000000) )            //Seconds
+		    (chLev>=2) ? snprintf(c_buf1,sizeof(c_buf1),"%d:%02d:%02d",ttm->tm_hour,ttm->tm_min,ttm->tm_sec) :
+				 snprintf(c_buf1,sizeof(c_buf1),"%ds",ttm->tm_sec);
+		else if( hvLev <= 1 || i_h%1000000 )                                //Milliseconds
+	    	    (chLev>=2) ? snprintf(c_buf1,sizeof(c_buf1),"%d:%02d:%02d.%d",ttm->tm_hour,ttm->tm_min,ttm->tm_sec,i_h%1000000) :
+		    (chLev>=1) ? snprintf(c_buf1,sizeof(c_buf1),"%d.%ds",ttm->tm_sec,i_h%1000000) :
+				 snprintf(c_buf1,sizeof(c_buf1),"%gms",(double)(i_h%1000000)/1000.);
+		int wdth;
+		if( c_buf[0] && (h_pos+gdFontTiny->w*strlen(c_buf)/2) < endMarkBrd )
+		{
+		    wdth = gdFontTiny->w*strlen(c_buf)/2;
+		    gdImageString(im,gdFontTiny,vmax(h_pos-wdth,hv_border),v_w_start+v_w_size+3+gdFontTiny->h,(unsigned char *)c_buf,clr_symb);
+		}
+		if( c_buf1[0] && (h_pos+gdFontTiny->w*strlen(c_buf1)/2) < endMarkBrd )
+		{
+		    wdth = gdFontTiny->w*strlen(c_buf1)/2;
+		    gdImageString(im,gdFontTiny,vmax(h_pos-wdth,hv_border),v_w_start+v_w_size+3,(unsigned char *)c_buf1,clr_symb);
+		}
+		
+		memcpy((char*)&ttm1,(char*)ttm,sizeof(tm));
+		first_m = false;
+	    }
+	    //---- Next ----
+	    if( i_h >= iend )	break;
+	    i_h = (i_h/h_div)*h_div + h_div;
+            if( i_h > iend )	i_h = iend;
+	}
+    }	
+	
     //-- Make vertical grid and symbols --
     //--- Calc vertical scale ---
     double	c_val,
@@ -1272,7 +1332,7 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
 	gdImageLine(im,h_w_start,v_pos,h_w_start+h_w_size,v_pos,clr_grid);
 	
 	snprintf(c_buf,sizeof(c_buf),"%.*f",fmod(i_v,1)?2:0,i_v);
-	gdImageString(im,gdFontTiny,hv_border,v_pos-gdFontTiny->h,(unsigned char *)c_buf,clr_symb);
+	gdImageString(im,gdFontTiny,hv_border+2,v_pos-((i_v==v_max)?0:gdFontTiny->h),(unsigned char *)c_buf,clr_symb);
     }    
     
     //-- Draw trend --
@@ -1589,15 +1649,20 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
             ctrMkNode("fld",opt,-1,"/val/size",_("Size"),0660,"root",grp.c_str(),1,"tp","real");	    
 	    ctrMkNode("fld",opt,-1,"/val/arch",_("Archivator"),0660,"root",grp.c_str(),1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/val/sw_trend",_("Show trend"),0660,"root",grp.c_str(),1,"tp","bool");
-	    if(!atoi(TBDS::genDBGet(nodePath()+"vShowTrnd","0",opt->attr("user")).c_str()))
-	    {		
+	    if(!atoi(TBDS::genDBGet(owner().nodePath()+"vShowTrnd","0",opt->attr("user")).c_str()))
+	    {
 		if(ctrMkNode("table",opt,-1,"/val/val",_("Values table"),0440,"root",grp.c_str()))
 		{
         	    ctrMkNode("list",opt,-1,"/val/val/0",_("Time"),0440,"root",grp.c_str(),1,"tp","str");
         	    ctrMkNode("list",opt,-1,"/val/val/1",_("Value"),0440,"root",grp.c_str(),1,"tp","str");
 		}
 	    }
-	    else ctrMkNode("img",opt,-1,"/val/trend",_("Values trend"),0440,"root",grp.c_str());
+	    else 
+	    {
+		ctrMkNode("fld",opt,-1,"/val/pct_w",_("Picture size"),0660,"root",grp.c_str(),3,"tp","dec","min","100","max","1024");
+		ctrMkNode("fld",opt,-1,"/val/pct_h","",0660,"root",grp.c_str(),3,"tp","dec","min","50","max","800");	    
+		ctrMkNode("img",opt,-1,"/val/trend",_("Values trend"),0440,"root",grp.c_str());
+	    }
 	}
         return;
     }
@@ -1777,14 +1842,24 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
     }	    
     else if( a_path == "/val/arch")	
     {
-        if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->setText(TBDS::genDBGet(nodePath()+"vArch","",opt->attr("user")));
-        if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	TBDS::genDBSet(nodePath()+"vArch",opt->text(),opt->attr("user"));
+        if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->setText(TBDS::genDBGet(owner().nodePath()+"vArch","",opt->attr("user")));
+        if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	TBDS::genDBSet(owner().nodePath()+"vArch",opt->text(),opt->attr("user"));
     }
     else if( a_path == "/val/sw_trend" )	
     {
-        if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->setText(TBDS::genDBGet(nodePath()+"vShowTrnd","0",opt->attr("user")));
-        if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	TBDS::genDBSet(nodePath()+"vShowTrnd",opt->text(),opt->attr("user"));
+        if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->setText(TBDS::genDBGet(owner().nodePath()+"vShowTrnd","0",opt->attr("user")));
+        if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	TBDS::genDBSet(owner().nodePath()+"vShowTrnd",opt->text(),opt->attr("user"));
     }
+    else if( a_path == "/val/pct_w" )
+    {
+        if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->setText(TBDS::genDBGet(owner().nodePath()+"vPctW","650",opt->attr("user")));
+        if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	TBDS::genDBSet(owner().nodePath()+"vPctW",opt->text(),opt->attr("user"));
+    }
+    else if( a_path == "/val/pct_h" )
+    {
+        if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->setText(TBDS::genDBGet(owner().nodePath()+"vPctH","230",opt->attr("user")));
+        if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	TBDS::genDBSet(owner().nodePath()+"vPctH",opt->text(),opt->attr("user"));
+    }    
     else if( a_path == "/val/val" && ctrChkNode(opt,"get",0440,"root",grp.c_str(),SEQ_RD) )
     {
 	long long end = (long long)atoi(TBDS::genDBGet(owner().nodePath()+"vaTm","0",opt->attr("user")).c_str())*1000000;
@@ -1793,7 +1868,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	long long beg = end - (long long)(atof(TBDS::genDBGet(owner().nodePath()+"vaSize","1",opt->attr("user")).c_str())*1e6);
 	
         TValBuf buf( TFld::String, 0, 0, false, true );
-        getVal( buf, beg, end, TBDS::genDBGet(nodePath()+"vArch","",opt->attr("user")), 2000 );
+        getVal( buf, beg, end, TBDS::genDBGet(owner().nodePath()+"vArch","",opt->attr("user")), 2000 );
 	    
         XMLNode *n_tm   = ctrMkNode("list",opt,-1,"/val/val/0","",0440);
 	XMLNode *n_val  = ctrMkNode("list",opt,-1,"/val/val/1","",0440);
@@ -1817,11 +1892,13 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/val/trend" && ctrChkNode(opt,"get",0444,"root",grp.c_str(),SEQ_RD) )
     {
+	int vPctW = vmin(1024,vmax(100,atoi(TBDS::genDBGet(owner().nodePath()+"vPctW","650",opt->attr("user")).c_str())));
+	int vPctH = vmin(800,vmax(50,atoi(TBDS::genDBGet(owner().nodePath()+"vPctH","230",opt->attr("user")).c_str())));
 	long long end = (long long)atoi(TBDS::genDBGet(owner().nodePath()+"vaTm",TSYS::int2str(time(NULL)),opt->attr("user")).c_str())*1000000+
 	                     atoi(TBDS::genDBGet(owner().nodePath()+"vaTm_u","0",opt->attr("user")).c_str());
 	long long beg = end - (long long)(atof(TBDS::genDBGet(owner().nodePath()+"vaSize","1",opt->attr("user")).c_str())*1e6);
 	
-        opt->setText(TSYS::strEncode(makeTrendImg(beg,end,TBDS::genDBGet(nodePath()+"vArch","",opt->attr("user"))),TSYS::base64));
+        opt->setText(TSYS::strEncode(makeTrendImg(beg,end,TBDS::genDBGet(owner().nodePath()+"vArch","",opt->attr("user")),vPctW,vPctH),TSYS::base64));
         opt->setAttr("tp","png");
     }
 }

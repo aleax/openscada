@@ -853,7 +853,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     {
         struct timespec tmval;
         clock_getres(CLOCK_REALTIME,&tmval);
-        opt->setText(TSYS::real2str((float)tmval.tv_nsec/1000000.,6));
+        opt->setText(TSYS::real2str((float)tmval.tv_nsec/1000000.,4));
     }
     else if( a_path == "/gen/in_charset" && ctrChkNode(opt) )	opt->setText(Mess->charset());
     else if( a_path == "/gen/config" && ctrChkNode(opt) )	opt->setText(m_confFile);

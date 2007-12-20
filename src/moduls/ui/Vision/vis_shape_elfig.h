@@ -130,6 +130,7 @@ class ShapeElFigure : public WdgShape
     
         void editEnter( WdgView *view );
         void editExit( WdgView *view );
+	void wdgPopup( WdgView *view, QMenu &menu );
 	
 	bool attrSet( WdgView *view, int uiPrmPos, const string &val);
         bool shapeSave( WdgView *view );

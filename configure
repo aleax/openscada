@@ -465,7 +465,7 @@ ac_includes_default="\
 #endif"
 
 ac_default_prefix="/usr"
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE RANLIB ac_ct_RANLIB LN_S EGREP ECHO AR ac_ct_AR CPP CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL XGETTEXT MSGMERGE MSGFMT sys_lib LIBOBJS oscd_moduldir oscd_localedir oscd_docdir oscd_modulpref subdir_mod ArchSub_mod DBSub_mod ProtSub_mod SpecSub_mod DAQSub_mod YACC YACC_OK TranspSub_mod UISub_mod QT4_MOC QT4_RCC QT4_INCL LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE RANLIB ac_ct_RANLIB LN_S EGREP ECHO AR ac_ct_AR CPP CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL XGETTEXT MSGMERGE MSGFMT sys_lib LIBOBJS oscd_moduldir oscd_localedir oscd_docdir oscd_modulpref subdir_mod ArchSub_mod DBSub_mod ProtSub_mod SpecSub_mod DAQSub_mod YACC YACC_OK TranspSub_mod UISub_mod QT4_MOC QT4_RCC QT4_INCL QT4_LIB LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -28159,14 +28159,22 @@ done
 test -n "$QT4_RCC" || QT4_RCC="false"
 
     if test ${QT4_MOC} = false || test ${QT4_RCC} = false;
-    then { { echo "$as_me:$LINENO: error: QT4 development utilites no present! Install QT4 library development package." >&5
+    then if test -d /usr/lib/qt4;
+         then
+	   QT4_MOC="/usr/lib/qt4/bin/moc";
+	   QT4_RCC="/usr/lib/qt4/bin/rcc";
+	   QT4_LIB="/usr/lib/qt4/lib";
+         else { { echo "$as_me:$LINENO: error: QT4 development utilites no present! Install QT4 library development package." >&5
 echo "$as_me: error: QT4 development utilites no present! Install QT4 library development package." >&2;}
-   { (exit 1); exit 1; }; } fi
+   { (exit 1); exit 1; }; }; fi;
+    fi
     if test -d "${oldincludedir}/qt4/QtCore"; then QT4_INCL="${oldincludedir}/qt4";
-    elif test -d "${oldincludedir}/QtCore"; then QT4_INCL="${oldincludedir}"; fi
+    elif test -d "${oldincludedir}/QtCore"; then QT4_INCL="${oldincludedir}";
+    elif test -d "/usr/lib/qt4/include/QtCore"; then QT4_INCL="/usr/lib/qt4/include"; fi
     if test -z ${QT4_INCL}; then { { echo "$as_me:$LINENO: error: QT4 development, include files no present! Install QT4 library development package." >&5
 echo "$as_me: error: QT4 development, include files no present! Install QT4 library development package." >&2;}
    { (exit 1); exit 1; }; }; fi
+
 
 #--- Modules checkings ---
 #    AC_CHECK_HEADERS([qt4/QtCore/Qt],[],
@@ -28937,6 +28945,7 @@ s,@UISub_mod@,$UISub_mod,;t t
 s,@QT4_MOC@,$QT4_MOC,;t t
 s,@QT4_RCC@,$QT4_RCC,;t t
 s,@QT4_INCL@,$QT4_INCL,;t t
+s,@QT4_LIB@,$QT4_LIB,;t t
 s,@LTLIBOBJS@,$LTLIBOBJS,;t t
 CEOF
 

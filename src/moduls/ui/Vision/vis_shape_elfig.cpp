@@ -622,8 +622,7 @@ bool ShapeElFigure::shapeSave( WdgView *w )
 }
 
 void ShapeElFigure::editEnter( WdgView *view )
-{
-
+{    
     ((VisDevelop *)view->mainWin())->elFigTool->setVisible(true);
     
     connect( ((VisDevelop *)view->mainWin())->elFigTool, SIGNAL(actionTriggered(QAction*)),
@@ -649,6 +648,16 @@ void ShapeElFigure::editExit( WdgView *view )
 	((VisDevelop *)view->mainWin())->elFigTool->actions().at(i_a)->setEnabled(false);
     }
     rectItems.clear();
+}
+
+void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
+{
+    if( qobject_cast<DevelWdgView*>(w) )
+    {
+	for( int i_a = 0; i_a < ((VisDevelop *)w->mainWin())->elFigTool->actions().size(); i_a++ )
+	    menu.addAction(((VisDevelop *)w->mainWin())->elFigTool->actions().at(i_a));
+	menu.addSeparator();
+    }
 }
 	
 void ShapeElFigure::toolAct( QAction *act )

@@ -29,12 +29,14 @@
 #include <QObject>
 #include <QMap>
 #include <QVariant>
+#include <QMenu>
 
 using std::string;
 using std::deque; 
 
 class QEvent;
 class QAction;
+class QPainter;
 
 namespace VISION
 {
@@ -49,24 +51,31 @@ class WdgShape : public QObject
     Q_OBJECT
 
     public:
+	//Methods
 	WdgShape( const string &iid );
 	
-	string id( )				{ return m_id; }
+	string id( )									{ return m_id; }
     
-        virtual bool isEditable( ) 		{ return false; }
+        virtual bool isEditable( ) 							{ return false; }
 	
-	virtual void init( WdgView *view )	{ }
-	virtual void destroy( WdgView *view )	{ }
+	virtual void init( WdgView *view )						{ }
+	virtual void destroy( WdgView *view )						{ }
 	
-	virtual void editEnter( WdgView *view )	{ }
-	virtual void editExit( WdgView *view )	{ }
+	virtual void editEnter( WdgView *view )						{ }
+	virtual void editExit( WdgView *view )						{ }
+	virtual void wdgPopup( WdgView *view, QMenu &menu )				{ }
 	
 	virtual bool attrSet( WdgView *view, int uiPrmPos, const string &val )		{ return false; }
 	
 	virtual bool event( WdgView *view, QEvent *event );
 	virtual bool eventFilter( WdgView *view, QObject *object, QEvent *event )	{ }
 
+    protected:
+	//Methods
+	void borderDraw( QPainter &pnt, QRect dA, QPen bpen, int bordStyle );    
+
     private:
+	//Attributes
 	string m_id;
 };
 

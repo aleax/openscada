@@ -1101,6 +1101,7 @@ void VisDevelop::visualItEdit( )
 	DevelWdgView *vw = new DevelWdgView(ed_wdg,0,this);
 	vw->load("");
 	connect(vw, SIGNAL(selected(const string&)), this, SLOT(selectItem(const string&)));    
+    	connect(vw, SIGNAL(apply(const string&)), this, SIGNAL(modifiedItem(const string&)));		
 	connect(this, SIGNAL(modifiedItem(const string&)), vw, SLOT(load(const string &)));
     
 	scrl->setWidget( vw );

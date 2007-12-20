@@ -1,5 +1,14 @@
-2007.12.14 Maxim
-- !!:/UI/Vision:Filling of the primitive "ElFig" is fixed.
+2007-12-20 Roman
+- !!:/SYS: Build for Mandriva 2008 support is added.
+- !!:/Archive: A value archive trend building is updated.
+- !!:/UI/VCAEngine, /UI/Vision, /UI/WebVision: A border style support is added to all primitives, which use the border.
+- !!:/UI/Vision: Develop mode widgets popup menu is added to visual editor.
+- FIX:/UI/Vision: Key's events send to edited child widgets, on visual editor, is fixed.
+- FIX:/UI/WebVision: Geometry of blocks specific is fixed. Border width and margin is not included to main block geometry parameters.
+
+
+2007-12-14 Maxim
+- FIX:/UI/Vision:Filling of the primitive "ElFig" is fixed.
 
 
 2007-12-07 Roman,Maxim,Ksenia OpenSCADA 0.6.0 

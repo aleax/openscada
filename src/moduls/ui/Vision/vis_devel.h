@@ -65,7 +65,7 @@ class VisDevelop : public QMainWindow
 	void setVCAStation( const string& st );
 	
 	int cntrIfCmd( XMLNode &node, bool glob = false );
-	
+
     signals:
 	//Public signals
 	void modifiedItem(const string&);
@@ -145,6 +145,16 @@ class VisDevelop : public QMainWindow
 	//- Work space -
         QWorkspace	*work_space; 	//MDI widgets workspace	
 
+	//- Menu root items -
+	QMenu 	*mn_file, 		//Menu "File"
+		*mn_proj, 		//Menu "Project"
+		*mn_widg, 		//Menu "Widget"
+		*mn_widg_fnc,		//Submenu "View functions"
+		*mn_window,		//Menu "Window"
+		*mn_view,		//Menu "View"
+		*mn_help;		//Menu "Help"
+	vector<QMenu*> 	  lb_menu;	//Library menus
+
     protected:
 	//Protected methods
     	void closeEvent( QCloseEvent* );
@@ -156,15 +166,7 @@ class VisDevelop : public QMainWindow
 
     private:
 	//Private attributes
-	//- Menu root items -
-	QMenu 	*mn_file, 		//Menu "File"
-		*mn_proj, 		//Menu "Project"
-		*mn_widg, 		//Menu "Widget"
-		*mn_widg_fnc,		//Submenu "View functions"
-		*mn_window,		//Menu "Window"
-		*mn_view,		//Menu "View"
-		*mn_help;		//Menu "Help"
-	vector<QMenu*> 	  lb_menu;	//Library menus
+
 
 	//- Main components -
 	bool		winClose;

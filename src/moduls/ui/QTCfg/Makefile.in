@@ -126,6 +126,7 @@ PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 ProtSub_mod = @ProtSub_mod@
 QT4_INCL = @QT4_INCL@
+QT4_LIB = @QT4_LIB@
 QT4_MOC = @QT4_MOC@
 QT4_RCC = @QT4_RCC@
 RANLIB = @RANLIB@
@@ -198,7 +199,7 @@ AM_CXXFLAGS = -I$(QT4_INCL) -I$(QT4_INCL)/QtCore -I$(QT4_INCL)/QtGui -I$(top_src
 
 AM_LDFLAGS = -shared -module
 ui_QTCfg_so_SOURCES = tuimod.cpp qrc_qtcfg.cpp qtcfg.cpp selfwidg.cpp moc_qtcfg.cpp moc_selfwidg.cpp
-ui_QTCfg_so_LDADD = -lQtGui
+ui_QTCfg_so_LDADD = -L$(QT4_LIB) -lQtGui
 
 #PO files process and doc install
 fm_name = Mod_UI_QTCfg

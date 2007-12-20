@@ -132,6 +132,7 @@ PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 ProtSub_mod = @ProtSub_mod@
 QT4_INCL = @QT4_INCL@
+QT4_LIB = @QT4_LIB@
 QT4_MOC = @QT4_MOC@
 QT4_RCC = @QT4_RCC@
 RANLIB = @RANLIB@
@@ -207,7 +208,7 @@ ui_Vision_so_SOURCES = tvision.cpp qrc_vision.cpp vis_widgs.cpp moc_vis_widgs.cp
     vis_devel.cpp moc_vis_devel.cpp vis_devel_dlgs.cpp moc_vis_devel_dlgs.cpp vis_devel_widgs.cpp moc_vis_devel_widgs.cpp \
     vis_run.cpp moc_vis_run.cpp vis_run_widgs.cpp moc_vis_run_widgs.cpp vis_shape_elfig.cpp moc_vis_shape_elfig.cpp
 
-ui_Vision_so_LDADD = -lQtGui
+ui_Vision_so_LDADD = -L$(QT4_LIB) -lQtGui
 
 #PO files process and doc install
 fm_name = Mod_UI_Vision

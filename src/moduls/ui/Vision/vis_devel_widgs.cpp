@@ -37,6 +37,7 @@
 #include <QStatusBar>
 #include <QSpinBox>
 #include <QDoubleSpinBox>
+#include <QBuffer>
 
 #include <tsys.h>
 
@@ -948,6 +949,7 @@ WdgTree::WdgTree( VisDevelop * parent ) : QDockWidget(_("Widgets"),(QWidget*)par
     //- Connect to signals -
     connect( treeW, SIGNAL( customContextMenuRequested(const QPoint&) ), this, SLOT( ctrTreePopup() ) );
     connect( treeW, SIGNAL( itemSelectionChanged() ), this, SLOT( selectItem() ) );
+    connect( treeW, SIGNAL( itemDoubleClicked( QTreeWidgetItem*, int ) ), owner()->actVisItProp, SLOT(trigger()) );
     
     setWidget(treeW);
 
@@ -1236,6 +1238,7 @@ ProjTree::ProjTree( VisDevelop * parent ) : QDockWidget(_("Projects"),(QWidget*)
     //- Connect to signals -
     connect( treeW, SIGNAL( customContextMenuRequested(const QPoint&) ), this, SLOT( ctrTreePopup() ) );
     connect( treeW, SIGNAL( itemSelectionChanged() ), this, SLOT( selectItem() ) );
+    connect( treeW, SIGNAL( itemDoubleClicked( QTreeWidgetItem*, int ) ), owner()->actVisItProp, SLOT(trigger()) );
      
     setWidget(treeW);
 
@@ -1445,7 +1448,7 @@ void ProjTree::ctrTreePopup( )
 //****************************************
 DevelWdgView::DevelWdgView( const string &iwid, int ilevel, VisDevelop *mainWind, QWidget* parent ) :
     WdgView(iwid,ilevel,mainWind,parent), m_select(false), m_edit(false), pntView(NULL), 
-    moveHold(false), holdChild(false), leftTop(false)
+    moveHold(false), holdChild(false), leftTop(false), editWdg(NULL)
 {
     setMouseTracking(true);
     if( wLevel() == 0 )	
@@ -1455,6 +1458,8 @@ DevelWdgView::DevelWdgView( const string &iwid, int ilevel, VisDevelop *mainWind
 	setFocusPolicy(Qt::StrongFocus);
 	setCursor(Qt::ArrowCursor);
 	setAcceptDrops(true);
+	setContextMenuPolicy(Qt::CustomContextMenu);
+	connect( this, SIGNAL( customContextMenuRequested(const QPoint&) ), this, SLOT( wdgPopup() ) );	
     } 
 }
 
@@ -1549,9 +1554,10 @@ void DevelWdgView::setSelect( bool vl, bool childs )
 void DevelWdgView::setEdit( bool vl )
 {
     m_edit = vl;
-	
+
     if( vl )
     {
+	editWdg = this;
 	if( shape->isEditable( ) ) shape->editEnter( this );
 	//- Raise top included editable widget -
 	if( wLevel( ) == 0 )
@@ -1559,16 +1565,20 @@ void DevelWdgView::setEdit( bool vl )
 		if( qobject_cast<DevelWdgView*>(children().at(i_c)) && 
 			((DevelWdgView*)children().at(i_c))->edit() )
 		{
-		    ((DevelWdgView*)children().at(i_c))->raise();
-		    pntView->raise();
+		    editWdg = (DevelWdgView*)children().at(i_c);		
+		    editWdg->raise();
+		    pntView->raise();		    
+		    break;
 		}
         //- Disable widget view tools -
         for( int i_a = 0; i_a < mainWin()->wdgToolView->actions().size(); i_a++ )
             mainWin()->wdgToolView->actions().at(i_a)->setEnabled(false);
+
     }
     else 
     {
 	if( shape->isEditable( ) ) shape->editExit( this );
+	editWdg = NULL;
 	//- Update widgets order -
         if( wLevel( ) == 0 )	orderUpdate( );
     }
@@ -1762,6 +1772,74 @@ void DevelWdgView::wdgViewTool( QAction *act )
     }
 }
 
+void DevelWdgView::wdgPopup( )
+{
+    int sel_cnt;
+    QMenu popup;
+    QTreeWidget *lview = (QTreeWidget *)sender();
+	
+    //- Add actions -
+    if( edit() )
+    {
+	//-- Individual primitive menus --
+	if( editWdg && editWdg->shape )	editWdg->shape->wdgPopup( editWdg, popup );
+	//-- Exit from widget edition --
+	QAction *actExitEdit = new QAction(_("Exit from widget editing"),this);
+	actExitEdit->setStatusTip(_("Press for exit from widget editing."));
+	connect(actExitEdit, SIGNAL(activated()), this, SLOT(editExit()));
+	popup.addAction(actExitEdit);
+    }
+    else
+    {
+	//-- Insert item actions --
+	if( !selectChilds(&sel_cnt).empty() )
+	{	    
+	    popup.addAction(mainWin()->actVisItDel);
+	    if( sel_cnt == 1 )
+	    {
+		popup.addAction(mainWin()->actVisItProp);
+		popup.addAction(mainWin()->actVisItEdit);
+	    }
+	    popup.addSeparator();
+	    popup.addAction(mainWin()->actDBLoad);
+	    popup.addAction(mainWin()->actDBSave);
+	    popup.addSeparator();
+	    //-- Insert item actions --
+	    popup.addMenu(mainWin()->mn_widg_fnc);
+	}
+	//-- Make widget icon --
+	popup.addSeparator();
+	QAction *actMakeIco = new QAction(parentWidget()->windowIcon(),_("Make icon from widget"),this);
+	actMakeIco->setStatusTip(_("Press for make icon from widget."));
+	connect(actMakeIco, SIGNAL(activated()), this, SLOT(makeIcon()));
+	popup.addAction(actMakeIco);
+    }
+
+    //- Execute of menu -
+    QAction *rez = popup.exec(QCursor::pos());
+
+    popup.clear();
+}
+
+void DevelWdgView::makeIcon( )
+{
+    QPixmap ico_new = QPixmap::grabWidget(this);
+    ico_new = ico_new.scaled(64,64,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+    parentWidget()->setWindowIcon(ico_new);
+    //- Send to VCA engine -
+    QByteArray ba;
+    QBuffer buffer(&ba);
+    buffer.open(QIODevice::WriteOnly);
+    ico_new.save(&buffer,"PNG");
+		    
+    XMLNode req("set");
+    req.setAttr("path",id()+"/%2fwdg%2fcfg%2fico")->
+	setText(TSYS::strEncode(string(ba.data(),ba.size()),TSYS::base64));
+    if( mainWin()->cntrIfCmd(req) )
+	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+    else emit apply(id());
+}
+
 bool DevelWdgView::event( QEvent *event )
 {
     //- Paint event process -
@@ -1842,6 +1920,7 @@ bool DevelWdgView::event( QEvent *event )
                 if( edit() )    break;
 				
 	        QPoint curp = mapFromGlobal(cursor().pos());
+		
 	        //- Cancel new widget inserting -
 	        QAction *act = mainWin()->actGrpWdgAdd->checkedAction();
 	        if( act && act->isChecked() )
@@ -1855,7 +1934,7 @@ bool DevelWdgView::event( QEvent *event )
                     event->accept();
             	    return true;
         	}
-
+		
  	    	//- Select widget -
 		if( (static_cast<QMouseEvent*>(event))->buttons()&Qt::LeftButton )
 	     	{
@@ -1991,7 +2070,7 @@ bool DevelWdgView::event( QEvent *event )
 		upMouseCursors(curp);
 		
 		//- Move widgets control -
-		if( moveHold && cursor().shape() != Qt::ArrowCursor && 
+		if( moveHold && cursor().shape() != Qt::ArrowCursor && ((QMouseEvent*)event)->buttons()&Qt::LeftButton &&
 		    (((QMouseEvent*)event)->pos()-dragStartPos).manhattanLength() >= QApplication::startDragDistance() )
 		{
 		    dragStartPos = QPoint(-100,-100);
@@ -2157,7 +2236,7 @@ bool DevelWdgView::event( QEvent *event )
     }
     
     //- Self widget view -
-    if( shape && wLevel() <= 1 && edit() && shape->event(this,event) )	return true;
+    if( edit() && editWdg && wLevel() <= 1 && editWdg->shape->event(editWdg,event) )	return true;    
 
     if( WdgView::event(event) )	return true;
     return QWidget::event(event);

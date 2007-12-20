@@ -386,13 +386,21 @@ AC_MSG_RESULT(===========================================)
 #QT4 check
 if test ${QT4use} = true; then
     AC_CHECK_PROGS(QT4_MOC, moc-qt4 moc, false)
-    AC_CHECK_PROGS(QT4_RCC, rcc-qt4 rcc, false)    
+    AC_CHECK_PROGS(QT4_RCC, rcc-qt4 rcc, false)
     if test ${QT4_MOC} = false || test ${QT4_RCC} = false; 
-    then AC_MSG_ERROR([QT4 development utilites no present! Install QT4 library development package.]) fi
+    then if test -d /usr/lib/qt4; 
+         then 
+	   QT4_MOC="/usr/lib/qt4/bin/moc"; 
+	   QT4_RCC="/usr/lib/qt4/bin/rcc";
+	   QT4_LIB="/usr/lib/qt4/lib";
+         else AC_MSG_ERROR([QT4 development utilites no present! Install QT4 library development package.]); fi;
+    fi
     if test -d "${oldincludedir}/qt4/QtCore"; then QT4_INCL="${oldincludedir}/qt4";
-    elif test -d "${oldincludedir}/QtCore"; then QT4_INCL="${oldincludedir}"; fi
+    elif test -d "${oldincludedir}/QtCore"; then QT4_INCL="${oldincludedir}";
+    elif test -d "/usr/lib/qt4/include/QtCore"; then QT4_INCL="/usr/lib/qt4/include"; fi
     if test -z ${QT4_INCL}; then AC_MSG_ERROR([QT4 development, include files no present! Install QT4 library development package.]); fi
     AC_SUBST(QT4_INCL)
+    AC_SUBST(QT4_LIB)
 #--- Modules checkings ---    
 #    AC_CHECK_HEADERS([qt4/QtCore/Qt],[],
 #	[AC_MSG_ERROR(UI/QTCfg: Some QT4 library headers not found. Install or check of QT4 developing package!)])

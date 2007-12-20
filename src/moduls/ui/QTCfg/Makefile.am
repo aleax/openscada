@@ -8,7 +8,7 @@ AM_LDFLAGS= -shared -module
 
 oscd_modul_PROGRAMS = ui_QTCfg.so
 ui_QTCfg_so_SOURCES = tuimod.cpp qrc_qtcfg.cpp qtcfg.cpp selfwidg.cpp moc_qtcfg.cpp moc_selfwidg.cpp
-ui_QTCfg_so_LDADD = -lQtGui
+ui_QTCfg_so_LDADD = -L$(QT4_LIB) -lQtGui
 
 qrc_qtcfg.cpp: qtcfg.qrc
 	$(QT4_RCC) -name QTCfg qtcfg.qrc -o qrc_qtcfg.cpp

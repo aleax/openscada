@@ -319,6 +319,8 @@ void OrigText::postEnable( int flag )
         attrAdd( new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","","","",21) );
         attrAdd( new TFld("bordWidth",_("Border:width"),TFld::Integer,TFld::NoFlag,"","0","","",22) );
         attrAdd( new TFld("bordColor",_("Border:color"),TFld::String,Attr::Color,"","#000000","","",23) );
+        attrAdd( new TFld("bordStyle",_("Border:style"),TFld::Integer,TFld::Selected,"","3","0;1;2;3;4;5;6;7;8",
+						_("None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"),19) );	
 	attrAdd( new TFld("font",_("Font:full"),TFld::String,Attr::Font,"50","Arial 11","","",24) );
 	attrAdd( new TFld("fontFamily",_("Font:family"),TFld::String,TFld::NoFlag,"10","Arial","","",25) );
 	attrAdd( new TFld("fontSize",_("Font:size"),TFld::Integer,TFld::NoFlag,"2","11","","",26) );
@@ -414,6 +416,8 @@ void OrigMedia::postEnable( int flag )
         attrAdd( new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","","","",21) );
         attrAdd( new TFld("bordWidth",_("Border:width"),TFld::Integer,TFld::NoFlag,"","0","","",22) );
         attrAdd( new TFld("bordColor",_("Border:color"),TFld::String,Attr::Color,"","#000000","","",23) );
+        attrAdd( new TFld("bordStyle",_("Border:style"),TFld::Integer,TFld::Selected,"","3","0;1;2;3;4;5;6;7;8",
+						_("None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"),19) );	
         attrAdd( new TFld("src",_("Source"),TFld::String,TFld::NoFlag,"50","","","",24) );	
         attrAdd( new TFld("type",_("Type"),TFld::Integer,TFld::Selected|Attr::Active,"1","0","0;1",_("Image;Movie"),25) );
     	attrAdd( new TFld("fit",_("Fit to widget size"),TFld::Boolean,TFld::NoFlag,"","","","",26) );	
@@ -468,7 +472,9 @@ void OrigDiagram::postEnable( int flag )
         attrAdd( new TFld("backColor",_("Background:color"),TFld::String,Attr::Color,"","black","","",20) );
         attrAdd( new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","","","",21) );
         attrAdd( new TFld("bordWidth",_("Border:width"),TFld::Integer,TFld::NoFlag,"","0","","",22) );
-        attrAdd( new TFld("bordColor",_("Border:color"),TFld::String,Attr::Color,"","#000000","","",23) );	
+        attrAdd( new TFld("bordColor",_("Border:color"),TFld::String,Attr::Color,"","#000000","","",23) );
+        attrAdd( new TFld("bordStyle",_("Border:style"),TFld::Integer,TFld::Selected,"","3","0;1;2;3;4;5;6;7;8",
+						_("None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"),19) );
         attrAdd( new TFld("trcPer",_("Tracing period (s)"),TFld::Integer,TFld::NoFlag,"","0","0;360","",24) );
         attrAdd( new TFld("type",_("Type"),TFld::Integer,TFld::Selected|Attr::Active,"1","0","0",_("Trend"),25) );
     }
@@ -607,8 +613,6 @@ void OrigProtocol::postEnable( int flag )
     { 
         attrAdd( new TFld("backColor",_("Background:color"),TFld::String,Attr::Color,"","","","",20) );
         attrAdd( new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","","","",21) );
-        //attrAdd( new TFld("bordWidth",_("Border:width"),TFld::Integer,TFld::NoFlag,"","0","","",22) );
-        //attrAdd( new TFld("bordColor",_("Border:color"),TFld::String,Attr::Color,"","#000000","","",23) );
     	attrAdd( new TFld("time",_("Time, sek"),TFld::Integer,TFld::NoFlag,"","","","",24) );
         attrAdd( new TFld("tSize",_("Size, sek"),TFld::Integer,TFld::NoFlag,"","60","","",25) );
         attrAdd( new TFld("trcPer",_("Tracing period (s)"),TFld::Integer,TFld::NoFlag,"","0","0;360","",26) );
@@ -731,6 +735,8 @@ void OrigBox::postEnable( int flag )
         attrAdd( new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","","","",21) );
         attrAdd( new TFld("bordWidth",_("Border:width"),TFld::Integer,TFld::NoFlag,"","0","","",22) );
         attrAdd( new TFld("bordColor",_("Border:color"),TFld::String,Attr::Color,"","#000000","","",23) );
+        attrAdd( new TFld("bordStyle",_("Border:style"),TFld::Integer,TFld::Selected,"","3","0;1;2;3;4;5;6;7;8",
+						_("None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"),19) );
 	attrAdd( new TFld("pgOpen",_("Page:open state"),TFld::Boolean,TFld::NoFlag,"","","","",24) );
 	attrAdd( new TFld("pgNoOpenProc",_("Page:no open process"),TFld::Boolean,TFld::NoFlag,"","","","",25) );
         attrAdd( new TFld("pgOpenSrc",_("Page:open source"),TFld::String,TFld::NoFlag,"","","","",26) );

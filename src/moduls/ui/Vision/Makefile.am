@@ -10,7 +10,7 @@ oscd_modul_PROGRAMS = ui_Vision.so
 ui_Vision_so_SOURCES = tvision.cpp qrc_vision.cpp vis_widgs.cpp moc_vis_widgs.cpp vis_shapes.cpp moc_vis_shapes.cpp \
     vis_devel.cpp moc_vis_devel.cpp vis_devel_dlgs.cpp moc_vis_devel_dlgs.cpp vis_devel_widgs.cpp moc_vis_devel_widgs.cpp \
     vis_run.cpp moc_vis_run.cpp vis_run_widgs.cpp moc_vis_run_widgs.cpp vis_shape_elfig.cpp moc_vis_shape_elfig.cpp
-ui_Vision_so_LDADD = -lQtGui
+ui_Vision_so_LDADD = -L$(QT4_LIB) -lQtGui
 
 qrc_vision.cpp: vision.qrc
 	$(QT4_RCC) -name Vision vision.qrc -o qrc_vision.cpp

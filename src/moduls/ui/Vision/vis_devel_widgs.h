@@ -378,10 +378,14 @@ class DevelWdgView: public WdgView
 						
     signals:
         void selected( const string& item );        //Change selection signal
+	void apply( const string & );
     
     public slots:
         void wdgViewTool( QAction* );               //View order and align of included widgets operated
-	void saveGeom( const string& item );	
+	void saveGeom( const string& item );
+	void wdgPopup( );
+	void makeIcon( );
+	void editExit( )	{ setEdit(false); }
 	
     protected:
         //- Protected methods -
@@ -413,6 +417,7 @@ class DevelWdgView: public WdgView
 	bool   leftTop;		//Left top anchors
 	QPoint holdPnt;		//Hold move point
         SizePntWdg *pntView;	//Point view
+	DevelWdgView	*editWdg;
         QPoint dragStartPos;
 };
 

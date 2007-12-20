@@ -7,7 +7,7 @@ AM_LDFLAGS= -shared -module
 
 oscd_modul_PROGRAMS = ui_QTStarter.so
 ui_QTStarter_so_SOURCES = tuimod.cpp moc_tuimod.cpp qrc_qtstarter.cpp
-ui_QTStarter_so_LDADD = -lQtGui
+ui_QTStarter_so_LDADD = -L$(QT4_LIB) -lQtGui
 
 qrc_qtstarter.cpp: qtstarter.qrc
 	$(QT4_RCC) -name QTStarter qtstarter.qrc -o qrc_qtstarter.cpp
