@@ -39,6 +39,7 @@
 #include <QKeyEvent>
 #include <QTableWidget>
 #include <QDateTime>
+#include <QToolTip>
 
 #include <QApplication>
 
@@ -668,7 +669,7 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    int numbArgPrev = w->dc()["numbArg"].toInt();
 	    int numbArg = atoi(val.c_str());
 	    if( numbArgPrev == numbArg ) break;
-	    for( int i_a = 0; i_a < 10; i_a++ )
+	    for( int i_a = 0; i_a < vmax(numbArg,numbArgPrev); i_a++ )
 		if( i_a < numbArgPrev && i_a >= numbArg )
     		    delete (ArgObj*)w->dc()[QString("arg_%1").arg(i_a)].value<void*>();
 		else if( i_a >= numbArgPrev && i_a < numbArg )
@@ -824,11 +825,13 @@ ShapeMedia::ShapeMedia( ) : WdgShape("Media")
 
 void ShapeMedia::init( WdgView *w )
 {
+    w->dc()["numbMAr"] = 0;
     w->dc()["border"].setValue( (void*)new QPen() );
     w->dc()["mediaType"] = -1;
     //- Create label widget -    
     QLabel *lab = new QLabel(w);
     if( qobject_cast<DevelWdgView*>(w) ) lab->setMouseTracking(true);
+    w->setMouseTracking(true);
     lab->setAlignment(Qt::AlignCenter);
     lab->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);    
     w->dc()["labWdg"].setValue( (void*)lab );
@@ -847,6 +850,10 @@ void ShapeMedia::destroy( WdgView *w )
 	delete lab->movie();
 	lab->clear();
     }
+    //- Clear map area's data objects -
+    int numbMAr = w->dc()["numbMAr"].toInt();
+    for( int i_a = 0; i_a < numbMAr; i_a++ )
+        delete (MapArea*)w->dc().value(QString("area_%1").arg(i_a)).value<void*>();    
 }
 
 bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
@@ -862,6 +869,11 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	case 5:		//en
 	    if( !qobject_cast<RunWdgView*>(w) )	{ up = false; break; }
 	    w->dc()["en"] = (bool)atoi(val.c_str()); 
+	    break;
+	case 6:		//active
+	    if( !qobject_cast<RunWdgView*>(w) )	break;
+	    lab->setMouseTracking(atoi(val.c_str()));
+	    w->setMouseTracking(atoi(val.c_str()));
 	    break;
 	case 12:	//geomMargin
 	    w->dc()["geomMargin"] = atoi(val.c_str());
@@ -888,16 +900,16 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    if( w->dc()["mediaSrc"].toString() == val.c_str() )	break;
 	    w->dc()["mediaSrc"] = val.c_str();
 	    reld_src = true;
-	    break;	
+	    break;
+	case 26:	//fit
+	    w->dc()["mediaFit"] = atoi(val.c_str());
+	    lab->setScaledContents( atoi(val.c_str()) );
+	    break;	    	    
 	case 25:	//type
 	    if( w->dc()["mediaType"].toInt() == atoi(val.c_str()) )	break;
 	    w->dc()["mediaType"] = atoi(val.c_str()); 
 	    reld_src = true; 
 	    break;
-	case 26:	//fit
-	    w->dc()["mediaFit"] = atoi(val.c_str());
-	    lab->setScaledContents( atoi(val.c_str()) );
-	    break;	    
 	case 27: 	//speed
 	{
 	    int vl = atoi(val.c_str());
@@ -911,6 +923,42 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    }
 	    break;
 	}
+	case 28:	//areas
+	{
+	    int numbMArPrev = w->dc()["numbMAr"].toInt();
+	    int numbMAr = atoi(val.c_str());
+	    if( numbMArPrev == numbMAr ) break;
+	    for( int i_a = 0; i_a < vmax(numbMAr,numbMArPrev); i_a++ )
+		if( i_a < numbMArPrev && i_a >= numbMAr )
+    		    delete (MapArea*)w->dc()[QString("area_%1").arg(i_a)].value<void*>();
+		else if( i_a >= numbMArPrev && i_a < numbMAr )
+		    w->dc()[QString("area_%1").arg(i_a)].setValue( (void*)new MapArea() );
+	    w->dc()["numbMAr"] = numbMAr;
+	    break;
+	}
+	default: 
+ 	    //- Individual arguments process -
+	    if( uiPrmPos >= 40 )
+	    {
+		int areaN = (uiPrmPos-40)/3;
+		if( areaN >= w->dc()["numbMAr"].toInt() ) break;
+		MapArea *area = (MapArea*)w->dc()[QString("area_%1").arg(areaN)].value<void*>();
+		switch( (uiPrmPos-40)%3 )
+		{
+		    case 0: 	//shape
+			area->shp = atoi(val.c_str());	break;
+		    case 1:	//coordinates
+		    {
+			string stmp;
+			area->pnts.clear();
+			for( int ncrd = 0, pos = 0; (stmp=TSYS::strSepParse(val,0,',',&ncrd)).size(); pos++ )
+			    if( !(pos%2) ) area->pnts.push_back(QPoint(atoi(stmp.c_str()),0));
+			    else           area->pnts[area->pnts.size()-1].setY(atoi(stmp.c_str()));
+		    }
+		    case 2: 	//title
+			area->title = val;	break;
+		}
+	    }	
     }
     
     if( reld_src && !w->allAttrLoad() )
@@ -962,9 +1010,6 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 		    }
 		    //- Fit set -
 		    lab->setScaledContents( w->dc()["mediaFit"].toInt() );
-		    //if( !lab->hasScaledContents() )
-		    //    lab->movie()->setScaledSize(QSize((int)((float)lab->movie()->scaledSize().width()*w->xScale(true)), 
-		    //				      (int)((float)lab->movie()->scaledSize().height()*w->yScale(true))) );
 		    break;
 		}			
 	    }
@@ -978,33 +1023,98 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 bool ShapeMedia::event( WdgView *w, QEvent *event )
 {
     if( !w->dc().value("en",1).toInt() ) return true;
-    if( event->type() == QEvent::Paint )
+    
+    switch( event->type() )
     {
-	QPainter pnt( w );
+	case QEvent::Paint:
+	{
+	    QPainter pnt( w );
 	    
-	//- Prepare draw area -
-	int margin = w->dc()["geomMargin"].toInt();
-	QRect dA = w->rect().adjusted(0,0,-2*margin,-2*margin);	    
-        pnt.setWindow(dA);
-	pnt.setViewport(w->rect().adjusted(margin,margin,-margin,-margin));
+	    //- Prepare draw area -
+	    int margin = w->dc()["geomMargin"].toInt();
+	    QRect dA = w->rect().adjusted(0,0,-2*margin,-2*margin);	    
+    	    pnt.setWindow(dA);
+	    pnt.setViewport(w->rect().adjusted(margin,margin,-margin,-margin));
 	
-	//- Draw decoration -
-	QColor bkcol = w->dc()["backColor"].value<QColor>();
-	if( bkcol.isValid() ) pnt.fillRect(dA,bkcol);
-	QBrush bkbrsh = w->dc()["backImg"].value<QBrush>();
-	if( bkbrsh.style() != Qt::NoBrush ) pnt.fillRect(dA,bkbrsh);
+	    //- Draw decoration -
+	    QColor bkcol = w->dc()["backColor"].value<QColor>();
+	    if( bkcol.isValid() ) pnt.fillRect(dA,bkcol);
+	    QBrush bkbrsh = w->dc()["backImg"].value<QBrush>();
+	    if( bkbrsh.style() != Qt::NoBrush ) pnt.fillRect(dA,bkbrsh);
 
-	//- Draw border -
-	borderDraw( pnt, dA, *(QPen*)w->dc()["border"].value<void*>(), w->dc()["bordStyle"].toInt() );
+	    //- Draw border -
+	    borderDraw( pnt, dA, *(QPen*)w->dc()["border"].value<void*>(), w->dc()["bordStyle"].toInt() );
         
-	return true;
+	    return true;
+	}
+	case QEvent::MouseMove:
+	{
+	    Qt::CursorShape new_shp = Qt::ArrowCursor;
+	    int numbMAr = w->dc()["numbMAr"].toInt();
+	    if( numbMAr )
+	    {
+		for( int i_a = 0; i_a < numbMAr; i_a++ )
+		{
+		    MapArea *area = (MapArea*)w->dc()[QString("area_%1").arg(i_a)].value<void*>();
+		    if( area->containsPoint(w->mapFromGlobal(w->cursor().pos())) )
+		    { 
+			new_shp = Qt::PointingHandCursor; 
+			if( !area->title.empty() ) QToolTip::showText(w->cursor().pos(),area->title.c_str());
+			break;
+		    }
+		}
+	    }
+	    else new_shp = Qt::PointingHandCursor;
+	    
+	    if( new_shp != w->cursor().shape() ) w->setCursor(new_shp);
+	    
+	    return true;
+	}
+	case QEvent::MouseButtonPress:
+	{
+	    string sev;
+	    int numbMAr = w->dc()["numbMAr"].toInt();
+	    if( numbMAr )
+	    {
+		for( int i_a = 0; i_a < numbMAr; i_a++ )
+		    if( ((MapArea*)w->dc()[QString("area_%1").arg(i_a)].value<void*>())->containsPoint(w->mapFromGlobal(w->cursor().pos())) )
+		    { sev="ws_ImgPress"+TSYS::int2str(i_a); break; }
+	    }
+	    else sev="ws_ImgPress";	
+	
+	    if( !sev.empty() )	w->attrSet("event",sev);
+	    
+	    return true;
+	}
+    }
+    
+    return false;
+}
+
+//* Map areas structure                           *
+//*************************************************
+bool ShapeMedia::MapArea::containsPoint( const QPoint & point )
+{
+    switch( shp )
+    {
+    	case 0:		//rect	
+	    if( pnts.size() < 2 ) return false;
+	    return QRect(pnts[0],pnts[1]).contains(point);
+	case 1:		//poly
+	    return QPolygon(pnts).containsPoint(point,Qt::OddEvenFill);
+	case 2: 	//circle
+	{
+	    if( pnts.size() < 2 ) return false;
+	    QPoint work = point-pnts[0];
+	    return (pow(pow((float)work.x(),2)+pow((float)work.y(),2),0.5) < pnts[0].x());
+	}
     }
     return false;
 }
 
-//************************************************
-//* Diagram view shape widget                      *
-//************************************************
+//*************************************************
+//* Diagram view shape widget                     *
+//*************************************************
 ShapeDiagram::ShapeDiagram( ) : WdgShape("Diagram")
 {
 
@@ -1356,10 +1466,10 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
     bool   vsPerc = true;		//Vertical scale percent mode
     if( parNum == 1 )
     {
+    	vsPerc = false;
 	TrendObj *sTr = (TrendObj*)w->dc()["trend_0"].value<void*>();
 	if( sTr->bordU() <= sTr->bordL() )
 	{
-    	    vsPerc = false;
 	    //----- Check trend for valid data -----
 	    aVbeg = vmax(tBeg,sTr->valBeg());
 	    aVend = vmin(tEnd,sTr->valEnd());
@@ -1375,6 +1485,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    }
 	    if( vsMax == -3e300 ) { vsMax = 1; vsMin = 0; }
 	}
+	else { vsMax = sTr->bordU(); vsMin = sTr->bordL(); }
     }
     
     float vmax_ln = tAr.height()/20;

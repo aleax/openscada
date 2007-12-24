@@ -1,3 +1,12 @@
+2007-12-24 Roman
+- !!!:/UI/VCAEngine, /UI/WebVision, /UI/Vision: Image links maping to primitive "Media" is added.
+- !!:/UI/VCAEngine, /UI/Vision: Geometry coordinates is moved to real type.
+- FIX:/UI/Vision: The size hint for text fields of the atributes inspector is fixed.
+- FIX:/UI/Vision: Select disabling on widget close is fixed.
+- FIX:/UI/WebVision: Form elements vertical central align is fixed.
+- FIX:/UI/WebVision: A lot bugs is fixed.
+
+
 2007-12-20 Roman
 - !!:/SYS: Build for Mandriva 2008 support is added.
 - !!:/Archive: A value archive trend building is updated.

@@ -184,8 +184,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	    if( req.empty() )   break;
 	    string var = TSYS::strSepParse(req,0,':');
 	    if( var.empty() )	break;
-	    else if( var == "Content-Length" || var == "Content-length" )
-		c_lng = atoi(TSYS::strSepParse(req,1,':').c_str());
+	    else if( strcasecmp(var.c_str(),"content-length") == 0 )	c_lng = atoi(TSYS::strSepParse(req,1,':').c_str());
 	    vars.push_back( req );
 	}
 	

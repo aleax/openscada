@@ -139,10 +139,10 @@ class ShapeText : public WdgShape
 	{
 	    public:
 		//Methods
-		ArgObj( ){ };
+		ArgObj( )				{ };
 		
-		string &cfg()		{ return m_cfg; }
-		QVariant val()		{ return m_val; }
+		string &cfg( )				{ return m_cfg; }
+		QVariant val( )				{ return m_val; }
 
 		void setCfg( const string &vl )		{ m_cfg = vl; }
 		void setVal( const QVariant &vl )	{ m_val = vl; }
@@ -160,12 +160,30 @@ class ShapeText : public WdgShape
 class ShapeMedia : public WdgShape
 {
     public:
+	//Methods
 	ShapeMedia( );
 	
 	void init( WdgView *view );
 	void destroy( WdgView *view );	
 	bool attrSet( WdgView *view, int uiPrmPos, const string &val);
 	bool event( WdgView *view, QEvent *event );
+
+    private:
+	//Data
+        //- Map areas structure -
+	class MapArea
+	{
+	    public:
+		//Methods
+		MapArea( ) : shp(-1)	{ }
+		
+		bool containsPoint( const QPoint & point );
+		
+		//Attributes
+		int 	shp;		//Area shape
+		string	title;		//Area title
+		QVector<QPoint>	pnts;	//Area points
+	};  
 };
 
 //************************************************

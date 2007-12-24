@@ -172,6 +172,7 @@ class InspAttr: public QTreeView
 	        QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 	        void setEditorData(QWidget *editor, const QModelIndex &index) const;
     		void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
+		QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
 	    private:		
 		//Private methods			
@@ -406,7 +407,7 @@ class DevelWdgView: public WdgView
                 bool m_edit;
         };
 	//- Private methods -
-        bool grepAnchor( const QPoint &apnt, const QPoint &cpnt );
+        bool grepAnchor( const QPointF &apnt, const QPoint &cpnt );
         void upMouseCursors( const QPoint &pnt );
 	
         //- Private attributes -

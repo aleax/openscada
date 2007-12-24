@@ -206,6 +206,9 @@ namespace VISION
 	    int    wLevel( )		{ return w_level; }
 	    string root( );
 	    QMainWindow *mainWin( )	{ return main_win; }
+	    QPointF posF( )		{ return w_pos; }
+	    QSizeF  sizeF( )		{ return w_size; }
+	    QRectF geometryF( )		{ return QRectF(w_pos,w_size); }
 	    virtual float  xScale( bool full = false );
 	    virtual float  yScale( bool full = false );
 	    int	   z( )			{ return z_coord;  }
@@ -213,6 +216,8 @@ namespace VISION
 	    QMap<QString, QVariant> &dc(){ return cache_data; }
 	    bool allAttrLoad( )		{ return all_attr_load; }
 
+	    void   moveF( const QPointF &pos );
+	    void   resizeF( const QSizeF &size );
 	    void   setZ( int val )	{ z_coord = val; }
 	    void   setAllAttrLoad( bool vl )	{ all_attr_load = vl; }
 	    
@@ -237,6 +242,8 @@ namespace VISION
 	    //- Protected attributes -
 	    bool		all_attr_load;	//All attributes load
 	    int 		w_level;	//Widget level
+	    QPointF		w_pos;		//Widget position into real;
+	    QSizeF		w_size;		//Widget size into real;
 	    float		x_scale, 	//Widget x scale
 				y_scale;	//	 y scale
 	    int			z_coord;	//Z coordinate

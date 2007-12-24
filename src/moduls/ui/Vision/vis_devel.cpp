@@ -903,7 +903,7 @@ void VisDevelop::libNew( )
     }    
 }
 
-void VisDevelop::visualItAdd( QAction *cact, const QPoint &pnt )
+void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt )
 {
     //QAction *cact = (QAction *)sender();
     string own_wdg = TSYS::strSepParse(work_wdg,0,';');
@@ -969,9 +969,9 @@ void VisDevelop::visualItAdd( QAction *cact, const QPoint &pnt )
 	    //-- Set geometry for include widget --
 	    if( !err && !pnt.isNull() )
 	    {
-		req.setAttr("path",new_wdg+"/%2fattr%2fgeomX")->setText(TSYS::int2str(pnt.x()));
+		req.setAttr("path",new_wdg+"/%2fattr%2fgeomX")->setText(TSYS::real2str(pnt.x()));
 		err = cntrIfCmd(req);
-		req.setAttr("path",new_wdg+"/%2fattr%2fgeomY")->setText(TSYS::int2str(pnt.y()));
+		req.setAttr("path",new_wdg+"/%2fattr%2fgeomY")->setText(TSYS::real2str(pnt.y()));
 		err = cntrIfCmd(req);
 	    }
 	    if( err ) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);

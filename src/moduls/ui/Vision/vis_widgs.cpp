@@ -608,6 +608,18 @@ string WdgView::root( )
     return "";
 }
 
+void WdgView::moveF( const QPointF &pos )
+{
+    w_pos = pos;
+    move(pos.toPoint() );
+}
+
+void WdgView::resizeF( const QSizeF &size )
+{
+    w_size = size;
+    resize(size.toSize());
+}
+
 WdgView *WdgView::newWdgItem( const string &iwid )
 {
     return new WdgView(iwid,wLevel()+1,mainWin(),this);
@@ -629,21 +641,21 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 	case 0:	 return false;
 	case 7:	 
 	    if( wLevel( ) == 0 )break;
-	    move((int)(((WdgView*)parentWidget())->xScale(true)*atoi(val.c_str())+0.5),pos().y());
+	    moveF(QPointF(((WdgView*)parentWidget())->xScale(true)*atof(val.c_str()),posF().y()));
 	    break;
 	case 8:	 
 	    if( wLevel( ) == 0 )break;
-	    move(pos().x(),(int)(((WdgView*)parentWidget())->yScale(true)*atoi(val.c_str())+0.5));
+	    moveF(QPointF(posF().x(),((WdgView*)parentWidget())->yScale(true)*atof(val.c_str())));
 	    break;
-	case 9:	resize((int)(xScale(true)*atoi(val.c_str())+0.5),size().height());	break;
-	case 10:resize(size().width(),(int)(yScale(true)*atoi(val.c_str())+0.5));	break;
+	case 9:	resizeF(QSizeF(xScale(true)*atof(val.c_str()),sizeF().height()));	break;
+	case 10:resizeF(QSizeF(sizeF().width(),yScale(true)*atof(val.c_str())));	break;
 	case 11: if(wLevel( )>0) z_coord = atoi(val.c_str());		break;
 	case 13:
-	    resize((int)((atof(val.c_str())/x_scale)*size().width()+0.5),size().height());
+	    resizeF(QSizeF((atof(val.c_str())/x_scale)*sizeF().width(),sizeF().height()));
 	    x_scale = atof(val.c_str());
 	    break;
 	case 14: 
-	    resize(size().width(),(int)((atof(val.c_str())/y_scale)*size().height()+0.5));
+	    resizeF(QSizeF(sizeF().width(),(atof(val.c_str())/y_scale)*sizeF().height()));
 	    y_scale = atof(val.c_str());
 	    break;
     }

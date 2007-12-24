@@ -417,29 +417,55 @@ void OrigMedia::postEnable( int flag )
         attrAdd( new TFld("bordWidth",_("Border:width"),TFld::Integer,TFld::NoFlag,"","0","","",22) );
         attrAdd( new TFld("bordColor",_("Border:color"),TFld::String,Attr::Color,"","#000000","","",23) );
         attrAdd( new TFld("bordStyle",_("Border:style"),TFld::Integer,TFld::Selected,"","3","0;1;2;3;4;5;6;7;8",
-						_("None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"),19) );	
-        attrAdd( new TFld("src",_("Source"),TFld::String,TFld::NoFlag,"50","","","",24) );	
+						_("None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"),19) );
+        attrAdd( new TFld("src",_("Source"),TFld::String,TFld::NoFlag,"50","","","",24) );
+    	attrAdd( new TFld("fit",_("Fit to widget size"),TFld::Boolean,TFld::NoFlag,"","","","",26) );
         attrAdd( new TFld("type",_("Type"),TFld::Integer,TFld::Selected|Attr::Active,"1","0","0;1",_("Image;Movie"),25) );
-    	attrAdd( new TFld("fit",_("Fit to widget size"),TFld::Boolean,TFld::NoFlag,"","","","",26) );	
+        attrAdd( new TFld("areas",_("Map areas"),TFld::Integer,Attr::Active,"2","0","0;10","",28) );
     }
 }
 
 bool OrigMedia::attrChange( Attr &cfg, void *prev )
 {
-    if( cfg.flgGlob()&Attr::Active && cfg.id() == "type" )
+    if( cfg.flgGlob()&Attr::Active )
     {
-	//- Delete specific attributes -
-	switch(*(int*)prev)
+        if( cfg.id() == "type" )
 	{
-	    case 1:	cfg.owner()->attrDel("speed");	break;
-	}	
+	    //- Delete specific attributes -
+	    if( *(int*)prev == 1 ) cfg.owner()->attrDel("speed");
 	
-	//- Create specific attributes -
-	switch(cfg.getI())
-	{
-	    case 1:	    
+	    //- Create specific attributes -
+	    if(cfg.getI() == 1 )
 		cfg.owner()->attrAdd( new TFld("speed",_("Play speed"),TFld::Integer,Attr::Mutable,"3","100","1;900","",27) );
-		break;
+	}
+	else if( cfg.id() == "areas" )
+	{
+	    string fid("area"), fnm(_("Area ")), fidp, fnmp;
+	    //- Delete specific unnecessary attributes of map areas -
+	    for( int i_p = 0; true; i_p++ )
+	    {
+		fidp = fid+TSYS::int2str(i_p); 
+		if( !cfg.owner()->attrPresent( fidp+"shp" ) )	break;
+		else if( i_p >= cfg.getI() )
+		{
+		    cfg.owner()->attrDel(fidp+"shp");
+		    cfg.owner()->attrDel(fidp+"coord");
+		    cfg.owner()->attrDel(fidp+"title");
+		}
+	    }
+	    //- Create ullage attributes of map areas -
+	    for( int i_p = 0; i_p < cfg.getI(); i_p++ )
+	    {
+		fidp = fid+TSYS::int2str(i_p);
+		fnmp = fnm+TSYS::int2str(i_p);
+		if( cfg.owner()->attrPresent( fidp+"shp" ) ) continue;
+    		cfg.owner()->attrAdd( new TFld((fidp+"shp").c_str(),(fnmp+_(":shape")).c_str(),
+					       TFld::Integer,TFld::Selected|Attr::Mutable,"1","0","0;1;2","Rect;Poly;Circle",40+3*i_p) );
+    		cfg.owner()->attrAdd( new TFld((fidp+"coord").c_str(),(fnmp+_(":coordinates")).c_str(),
+					       TFld::String,Attr::Mutable,"","","","",41+3*i_p) );
+		cfg.owner()->attrAdd( new TFld((fidp+"title").c_str(),(fnmp+_(":title")).c_str(),
+					       TFld::String,Attr::Mutable,"","","","",42+3*i_p) );
+	    }
 	}
     }
     return true;
