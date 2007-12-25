@@ -34,7 +34,7 @@ Widget::Widget( const string &id, const string &isrcwdg ) :
         m_enable(false), m_lnk(false), m_id(id), m_parent_nm(isrcwdg)
 {
     attrId  = grpAdd("a_");
-    inclWdg = grpAdd("wdg_");    
+    inclWdg = grpAdd("wdg_");
 
     attr_cfg.valAtt(this);
 }
@@ -70,7 +70,7 @@ void Widget::postEnable(int flag)
     attrAt("path").at().setS(path());	attrAt("path").at().setModif(0);
 }
 
-void Widget::preDisable(int flag)
+void Widget::preDisable( int flag )
 {
     if( enable() )  setEnable(false);
 }

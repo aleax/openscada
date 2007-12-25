@@ -322,6 +322,7 @@ Page::Page( const string &id, const string &isrcwdg ) :
     cfg("ID").setS(id);
 
     m_page = grpAdd("pg_");
+    setParentNm(isrcwdg);
 }
 
 Page::~Page( )
@@ -389,6 +390,12 @@ void Page::postDisable( int flag )
         c_el.cfg("IDW").setS(path());
         c_el.cfg("ID").setS("");
         SYS->db().at().dataDel(fullDB+"_uio",mod->nodePath()+tbl+"_uio",c_el);
+	
+        //- Remove widget's included widgets from library include table -
+        c_el.setElem(&mod->elInclWdg());
+        c_el.cfg("IDW").setS(id());
+        c_el.cfg("ID").setS("");
+        SYS->db().at().dataDel(fullDB+"_incl",mod->nodePath()+tbl+"_incl",c_el);						
     }
 }
 
@@ -604,7 +611,6 @@ void Page::loadIO( )
     //- Load cotainer widgets -
     if( !enable() || !isContainer() ) return;
     c_el.setElem(&mod->elInclWdg());
-    c_el.cfgViewAll(false);
     tbl=ownerProj()->tbl()+"_incl";
     c_el.cfg("IDW").setS(path());
     c_el.cfg("ID").setS("");
@@ -613,7 +619,10 @@ void Page::loadIO( )
     {
         string sid  = c_el.cfg("ID").getS();
 	c_el.cfg("ID").setS("");
+	if( wdgPresent(sid) && c_el.cfg("PARENT").getS() == "<deleted>" )
+	{ wdgDel(sid); continue; }
         if( !wdgPresent(sid) ) wdgAdd(sid,"","");
+	
         wdgAt(sid).at().load();
     }
 }
@@ -866,6 +875,7 @@ PageWdg::PageWdg( const string &id, const string &isrcwdg ) :
 {
     cfg("ID").setS(id);
     m_lnk = true;
+    setParentNm(isrcwdg);
 }
 
 PageWdg::~PageWdg( )
@@ -887,6 +897,14 @@ void PageWdg::postEnable( int flag )
     cfg("PARENT").setS(parentNm());
 }
 
+void PageWdg::preDisable( int flag )
+{
+    if( flag && !parent().freeStat() )  wdgIherited = parent().at().isLink();
+    else wdgIherited = false;
+	
+    Widget::preDisable(flag);
+}
+
 void PageWdg::postDisable(int flag)
 {
     if( flag )
@@ -895,7 +913,12 @@ void PageWdg::postDisable(int flag)
         string tbl    = owner().ownerProj()->tbl();
 
         //- Remove from library table -
-        SYS->db().at().dataDel(fullDB+"_incl",mod->nodePath()+tbl+"_incl",*this);
+        if( !wdgIherited )      SYS->db().at().dataDel(fullDB+"_incl",mod->nodePath()+tbl+"_incl",*this);
+        else
+        {
+            cfg("PARENT").setS("<deleted>");
+            SYS->db().at().dataSet(fullDB+"_incl",mod->nodePath()+tbl+"_incl",*this);
+        }
  	//- Remove widget's work IO from library IO table -
         TConfig c_el(&mod->elWdgIO());
 	c_el.cfgViewAll(false);
@@ -994,7 +1017,7 @@ void PageWdg::load( )
     string tbl = owner().ownerProj()->tbl()+"_incl";
     SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,*this);
     setParentNm(cfg("PARENT").getS());
-
+    
     //- Load widget's attributes -
     loadIO();
 }
@@ -1061,9 +1084,12 @@ void PageWdg::loadIO( )
 void PageWdg::save( )
 {
     //- Save generic widget's data -
-    string db  = owner().ownerProj()->DB();
-    string tbl = owner().ownerProj()->tbl()+"_incl";
-    SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,*this);
+    if( !parent().at().isLink() )
+    {    
+	string db  = owner().ownerProj()->DB();
+	string tbl = owner().ownerProj()->tbl()+"_incl";
+	SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,*this);
+    }
 
     //- Save widget's attributes -
     saveIO();

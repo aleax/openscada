@@ -1601,7 +1601,7 @@ void DevelWdgView::setEdit( bool vl )
     }
 }
 							    
-string DevelWdgView::selectChilds( int *cnt )
+string DevelWdgView::selectChilds( int *cnt, vector<DevelWdgView*> *wdgs )
 {
     string sel_chlds;
     
@@ -1611,9 +1611,10 @@ string DevelWdgView::selectChilds( int *cnt )
         DevelWdgView *curw = qobject_cast<DevelWdgView*>(children().at(i_c));
         if( !curw ) continue;
         if( curw->select() )
-        {
+        {	    
             sel_chlds=sel_chlds+curw->id()+";";
-            if( cnt ) (*cnt)++;
+	    if( wdgs )	wdgs->push_back(curw);
+            if( cnt ) 	(*cnt)++;
         }
     }
     return sel_chlds;
@@ -1792,9 +1793,19 @@ void DevelWdgView::wdgViewTool( QAction *act )
 void DevelWdgView::wdgPopup( )
 {
     int sel_cnt;
+    vector<DevelWdgView*> sel_wdgs;
     QMenu popup;
     QTreeWidget *lview = (QTreeWidget *)sender();
-	
+
+    //- Cancel new widget inserting -
+    QAction *act = mainWin()->actGrpWdgAdd->checkedAction();
+    if( act && act->isChecked() )
+    {
+        act->setChecked(false);
+        setCursor(Qt::ArrowCursor);
+        return;
+    }
+    
     //- Add actions -
     if( edit() )
     {
@@ -1809,7 +1820,7 @@ void DevelWdgView::wdgPopup( )
     else
     {
 	//-- Insert item actions --
-	if( !selectChilds(&sel_cnt).empty() )
+	if( !selectChilds(&sel_cnt,&sel_wdgs).empty() )
 	{	    
 	    popup.addAction(mainWin()->actVisItDel);
 	    if( sel_cnt == 1 )
@@ -1824,8 +1835,16 @@ void DevelWdgView::wdgPopup( )
 	    //-- Insert item actions --
 	    popup.addMenu(mainWin()->mn_widg_fnc);
 	}
-	//-- Make widget icon --
+	//-- Make edit enter action --
 	popup.addSeparator();
+	if( (sel_wdgs.size() == 1 && sel_wdgs[0]->shape && sel_wdgs[0]->shape->isEditable()) || (shape && shape->isEditable()) )
+	{
+	    QAction *actEnterEdit = new QAction(_("Enter for widget editing"),this);
+	    actEnterEdit->setStatusTip(_("Press for enter for widget editing."));
+	    connect(actEnterEdit, SIGNAL(activated()), this, SLOT(editEnter()));
+	    popup.addAction(actEnterEdit);
+	}	
+	//-- Make widget icon --
 	QAction *actMakeIco = new QAction(parentWidget()->windowIcon(),_("Make icon from widget"),this);
 	actMakeIco->setStatusTip(_("Press for make icon from widget."));
 	connect(actMakeIco, SIGNAL(activated()), this, SLOT(makeIcon()));
@@ -1855,6 +1874,36 @@ void DevelWdgView::makeIcon( )
     if( mainWin()->cntrIfCmd(req) )
 	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
     else emit apply(id());
+}
+
+void DevelWdgView::editEnter( )
+{
+    if( edit() )	return;	    
+    
+    vector<DevelWdgView*> sel_wdgs;	
+    selectChilds(NULL,&sel_wdgs);
+    if( sel_wdgs.size() == 1 && sel_wdgs[0]->shape && sel_wdgs[0]->shape->isEditable( ) )
+    {
+        sel_wdgs[0]->setEdit(true);
+        setEdit(true);
+	setCursor(Qt::ArrowCursor);
+	update();
+    }
+    else if( sel_wdgs.size() == 0 && shape && shape->isEditable( ) )
+    {
+	setEdit(true);
+	setCursor(Qt::ArrowCursor);
+	update();
+    }
+}
+
+void DevelWdgView::editExit( )
+{
+    for( int i_c = 0; i_c < children().size(); i_c++ )
+	if( qobject_cast<DevelWdgView*>(children().at(i_c)) )
+	    ((DevelWdgView*)children().at(i_c))->setSelect(false);
+    setEdit(false);
+    update(); 
 }
 
 bool DevelWdgView::event( QEvent *event )
@@ -1938,15 +1987,11 @@ bool DevelWdgView::event( QEvent *event )
 				
 	        QPoint curp = mapFromGlobal(cursor().pos());
 		
-	        //- Cancel new widget inserting -
+	        //- New widget inserting -
 	        QAction *act = mainWin()->actGrpWdgAdd->checkedAction();
-	        if( act && act->isChecked() )
-                {
-                    if( ((static_cast<QMouseEvent*>(event))->buttons()&Qt::RightButton) )
-                        act->setChecked(false);
-                    else if( ((static_cast<QMouseEvent*>(event))->buttons()&Qt::LeftButton) )
-                        mainWin()->visualItAdd(act,QPointF((float)curp.x()/x_scale,(float)curp.y()/y_scale));
-
+	        if( act && act->isChecked() && (static_cast<QMouseEvent*>(event))->buttons()&Qt::LeftButton )
+		{
+                    mainWin()->visualItAdd(act,QPointF((float)curp.x()/x_scale,(float)curp.y()/y_scale));
                     setCursor(Qt::ArrowCursor);
                     event->accept();
             	    return true;
@@ -2031,21 +2076,8 @@ bool DevelWdgView::event( QEvent *event )
 		    }
 		    else if( cwdg->select() ) cwdg->setSelect(false);
 		}
-		if( edwdg )
-		{
-		    edwdg->setEdit(true);
-		    setEdit(true);
-		    setCursor(Qt::ArrowCursor);
-		    update();
-		    return true;
-		}
-		else if( shape && shape->isEditable( ) )
-		{
-		    setEdit(true);
-		    setCursor(Qt::ArrowCursor);
-		    update();
-		    return true;
-		}		
+		if( edwdg )	edwdg->setSelect(true);
+		editEnter( );
 		break;        	
 	    }
 	    case QEvent::FocusIn:
@@ -2060,13 +2092,11 @@ bool DevelWdgView::event( QEvent *event )
 		    {
 			setSelect(false,false);
 			//-- Unselect child widgets --
-		    //if( !((VisDevelop *)main_win)->attrInsp->hasFocus() )
 			for( int i_c = 0; i_c < children().size(); i_c++ )
 			    if( qobject_cast<DevelWdgView*>(children().at(i_c)) )
 				((DevelWdgView*)children().at(i_c))->setSelect(false);
 		    }
 		}
-		    //emit selected("");
 		return true;
     	    case QEvent::MouseMove:
 	    {
@@ -2208,20 +2238,8 @@ bool DevelWdgView::event( QEvent *event )
 	    case QEvent::KeyPress:
 	    {
 		QKeyEvent *key = static_cast<QKeyEvent*>(event);	    
-		if( edit() )
-		{
-		    if( key->key() == Qt::Key_Escape )
-		    {	
-			//-- Unselect child widgets --
-			for( int i_c = 0; i_c < children().size(); i_c++ )
-			    if( qobject_cast<DevelWdgView*>(children().at(i_c)) )
-			        ((DevelWdgView*)children().at(i_c))->setSelect(false);
-			setEdit(false);
-			update();			
-			return true;
-		    }
-		}
-		else
+		if( edit() && key->key() == Qt::Key_Escape )	{ editExit(); return true; }
+		if( !edit() )
 		{
 		    QPointF dP(0,0);
 		    switch( key->key() )

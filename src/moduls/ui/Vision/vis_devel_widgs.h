@@ -369,7 +369,7 @@ class DevelWdgView: public WdgView
 	VisDevelop *mainWin( );
 	
         bool select( )		{ return m_select; }	//Select widget state
-        string selectChilds( int *cnt = NULL );     	//Get selected include widgets list
+        string selectChilds( int *cnt = NULL, vector<DevelWdgView*> *wdgs = NULL );     	//Get selected include widgets list
         bool edit( )		{ return m_edit; }     	//Edit mode state
 
         void setSelect( bool vl, bool childs = true );
@@ -386,7 +386,8 @@ class DevelWdgView: public WdgView
 	void saveGeom( const string& item );
 	void wdgPopup( );
 	void makeIcon( );
-	void editExit( )	{ setEdit(false); }
+	void editEnter( );
+	void editExit( );
 	
     protected:
         //- Protected methods -

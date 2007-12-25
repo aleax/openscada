@@ -1,8 +1,17 @@
+2007-12-25 Roman
+- FIX:/UI/VCAEngine: Save and deletion of inherited widgets from container's widgets is fixed.
+- /UI/Vision: Identifier generator is added for new included widgets.
+- /UI/Vision: Context action for widget edition enter is added. 
+- FIX:/UI/Vision: Group widgets deletion is fixed.
+- FIX:/UI/WebVision: Some fixes is made.
+
+
 2007-12-24 Roman
 - !!!:/UI/VCAEngine, /UI/WebVision, /UI/Vision: Image links maping to primitive "Media" is added.
 - !!:/UI/VCAEngine, /UI/Vision: Geometry coordinates is moved to real type.
 - FIX:/UI/Vision: The size hint for text fields of the atributes inspector is fixed.
 - FIX:/UI/Vision: Select disabling on widget close is fixed.
+- FIX:/UI/Vision: Single parameter's scaling for primitive "Diagram" is fixed.
 - FIX:/UI/WebVision: Form elements vertical central align is fixed.
 - FIX:/UI/WebVision: A lot bugs is fixed.
 
