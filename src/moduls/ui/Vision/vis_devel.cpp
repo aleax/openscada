@@ -147,7 +147,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) :
     actVisItAdd->setToolTip(_("Add visual item into library, container widget, project or page"));
     actVisItAdd->setWhatsThis(_("The button for adding visual item into library, container widget, project or page"));
     actVisItAdd->setStatusTip(_("Press for adding visual item into library, container widget, project or page."));
-    actVisItAdd->setShortcut(QKeySequence("Ctrl+A"));
+    actVisItAdd->setShortcut(QKeySequence("Ctrl+I"));
     actVisItAdd->setEnabled(false);
     actVisItAdd->setCheckable(true);
     //--- Visual item delete ---

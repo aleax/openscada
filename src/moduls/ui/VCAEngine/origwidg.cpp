@@ -223,8 +223,8 @@ void OrigFormEl::postEnable( int flag )
     LWidget::postEnable(flag);
     
     if( flag&TCntrNode::NodeConnect )
-	attrAdd( new TFld("elType",_("Element type"),TFld::Integer,TFld::Selected|Attr::Active,"2","0","0;1;2;3;4;5",
-                    	       _("Line edit;Text edit;Chek box;Button;Combo box;List"),20) );
+	attrAdd( new TFld("elType",_("Element type"),TFld::Integer,TFld::Selected|Attr::Active,"2","0","0;1;2;3;4;5;6;7",
+                    	       _("Line edit;Text edit;Chek box;Button;Combo box;List;Slider;Scroll Bar"),20) );
 }
 								  
 bool OrigFormEl::attrChange( Attr &cfg, void *prev )
@@ -254,6 +254,10 @@ bool OrigFormEl::attrChange( Attr &cfg, void *prev )
 		cfg.owner()->attrDel("value");
 		cfg.owner()->attrDel("items");
 		break;
+	    case 6: case 7:
+		cfg.owner()->attrDel("value");
+		cfg.owner()->attrDel("cfg");
+		break;
 	}
 	
 	//- Create specific attributes -
@@ -278,13 +282,13 @@ bool OrigFormEl::attrChange( Attr &cfg, void *prev )
 		cfg.owner()->attrAdd( new TFld("color",_("Color"),TFld::String,Attr::Color|Attr::Mutable,"20","","","",23) );
 		cfg.owner()->attrAdd( new TFld("checkable",_("Checkable"),TFld::Boolean,Attr::Mutable,"","","","",24) );
 		break;
-	    case 4:
+	    case 4: case 5:
 		cfg.owner()->attrAdd( new TFld("value",_("Value"),TFld::String,Attr::Mutable,"200","","","",21) );
 		cfg.owner()->attrAdd( new TFld("items",_("Items"),TFld::String,TFld::FullText|Attr::Mutable,"","","","",22) );
 		break;
-	    case 5:
-		cfg.owner()->attrAdd( new TFld("value",_("Value"),TFld::String,Attr::Mutable,"200","","","",21) );
-		cfg.owner()->attrAdd( new TFld("items",_("Items"),TFld::String,TFld::FullText|Attr::Mutable,"","","","",22) );
+	    case 6: case 7:
+		cfg.owner()->attrAdd( new TFld("value",_("Value"),TFld::Integer,Attr::Mutable,"20","0","","",21) );
+		cfg.owner()->attrAdd( new TFld("cfg",_("Config"),TFld::String,Attr::Mutable,"100","0:0:100:1:10","","",22) );
 		break;
 	}
     }

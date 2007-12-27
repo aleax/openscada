@@ -111,6 +111,8 @@ class ShapeFormEl : public WdgShape
 	void buttonPressed( );
 	void buttonReleased( );
 	void buttonToggled( bool val );
+	//-- Sliders' events --
+	void sliderMoved( int val );
 
     private:
 	//- Private methods -

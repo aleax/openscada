@@ -1,3 +1,16 @@
+2007-12-27 Roman
+- !!!:/UI/VCAEngine, /UI/Vision: Slider and Scroll bar support is added to primitive "FormEl".
+- /UI/VCAEngine: Transplate to Russian and Ukranian is updated.
+- /UI/Vision: Shortcut Ctrl^A change for using to all widgets selection.
+- /UI/Vision: Group selection on drawing mouse rect is made.
+- /UI/Vision: Flag storing, for development widget object, is made unified.
+- FIX:/UI/Vision: The crash into primitive "FormEl", on elements type change, is fixed.
+- FIX:/UI/Vision: Some crash into atributes inspector on time group widgets access is fixed.
+- FIX:/UI/Vision: On every time widget selection all reload is fixed.
+- !!:/UI/Vision: Group widgets resizing is rewrited.
+- /SYS: Updated Demo DB.
+
+
 2007-12-25 Roman
 - FIX:/UI/VCAEngine: Save and deletion of inherited widgets from container's widgets is fixed.
 - /UI/Vision: Identifier generator is added for new included widgets.

@@ -361,16 +361,28 @@ class DevelWdgView: public WdgView
     Q_OBJECT
 		
     public:
-	//- Public methods -
+	//Data
+	enum DevelFlgs
+	{
+	    makeScale 	= 0x01,	//Make visual item scaling
+	    wdgEdit   	= 0x02,	//Widget under edition
+	    wdgSelect 	= 0x04,	//Widget is selected
+	    moveHold  	= 0x08,	//Mouse move hold state
+	    holdChild 	= 0x10,	//Hold child widget in time of moving and resizing
+	    leftTop   	= 0x20,	//Left top anchors
+	    holdSelRect = 0x40	//Hold for select rect
+	};
+    
+	//Public methods
         DevelWdgView( const string &iwid, int ilevel, VisDevelop *mainWind, QWidget* parent = 0 );
 	~DevelWdgView( );
 	
 	string user( );
 	VisDevelop *mainWin( );
 	
-        bool select( )		{ return m_select; }	//Select widget state
+        bool select( )		{ return m_flgs&wdgSelect; }	//Select widget state
         string selectChilds( int *cnt = NULL, vector<DevelWdgView*> *wdgs = NULL );     	//Get selected include widgets list
-        bool edit( )		{ return m_edit; }     	//Edit mode state
+        bool edit( )		{ return m_flgs&wdgEdit; }     	//Edit mode state
 
         void setSelect( bool vl, bool childs = true );
         void setEdit( bool vl );
@@ -390,37 +402,37 @@ class DevelWdgView: public WdgView
 	void editExit( );
 	
     protected:
-        //- Protected methods -
+        //Protected methods
 	bool event( QEvent * event );
 	int cntrIfCmd( XMLNode &node, bool glob = false );
     
     private:
-	//- Private data -
+	//Private data
         class SizePntWdg : public QWidget
         {
             public:
+		//Data
+		enum WView { SizeDots, EditBorder, SelectBorder };
+		//Methods
                 SizePntWdg( QWidget* parent = 0 );
                 
-		void setSelArea( const QRect &geom, bool edit = false );
+		void setSelArea( const QRect &geom, WView view = SizeDots );
                 void paintEvent( QPaintEvent * event );
             
 	    private:
-                bool m_edit;
+		//Attributes
+		WView 	view;
         };
-	//- Private methods -
+	//Private methods
         bool grepAnchor( const QPointF &apnt, const QPoint &cpnt );
         void upMouseCursors( const QPoint &pnt );
 	
-        //- Private attributes -
-	bool   m_select;
-	bool   m_edit;
-        bool   moveHold;	//Mouse move hold state
-	bool   holdChild;	//Hold child widget in time of moving and resizing
-	bool   leftTop;		//Left top anchors
-	QPoint holdPnt;		//Hold move point
-        SizePntWdg *pntView;	//Point view
+        //Private attributes
+	char		m_flgs;		//Developmen flags
+	QPoint 		holdPnt;	//Hold move point
+        SizePntWdg 	*pntView;	//Point view
 	DevelWdgView	*editWdg;
-        QPoint dragStartPos;
+        QPoint 		dragStartPos;
 };
 
 }

@@ -40,6 +40,7 @@
 #include <QTableWidget>
 #include <QDateTime>
 #include <QToolTip>
+#include <QScrollBar>
 
 #include <QApplication>
 
@@ -170,6 +171,7 @@ void ShapeFormEl::init( WdgView *w )
     w->dc()["active"] = true;
     w->dc()["addrWdg"].setValue((void*)NULL);
     w->dc()["elType"] = -1;
+    w->dc()["welType"] = -1;    
 }
 
 bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
@@ -180,7 +182,8 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
     bool rel_cfg = false;	//Reload configuration
 
     w->dc()["evLock"] = true;
-    int     el = w->dc()["elType"].toInt();
+    int     el  = w->dc()["elType"].toInt();
+    int     wel = w->dc()["welType"].toInt();
     QWidget *el_wdg = (QWidget *)w->dc()["addrWdg"].value<void*>();
 
     switch( uiPrmPos )
@@ -190,13 +193,13 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    break;
 	case 2:		//name
 	    w->dc()["name"] = val.c_str();
-	    if( el == 2) 	((QCheckBox*)el_wdg)->setText(val.c_str());
-	    else if( el == 3 )	((QPushButton*)el_wdg)->setText(val.c_str());
+	    if( wel == 2) 	((QCheckBox*)el_wdg)->setText(val.c_str());
+	    else if( wel == 3 )	((QPushButton*)el_wdg)->setText(val.c_str());
 	    break;
 	case 5:		//en
 	    if(!runW)	break;
 	    w->dc()["en"] = (bool)atoi(val.c_str());
-    	    if(el >= 0) el_wdg->setVisible(atoi(val.c_str()));
+    	    if( el >= 0 ) el_wdg->setVisible(atoi(val.c_str()));
 	    break;
 	case 6:		//active
 	    if(!runW)	break;
@@ -207,13 +210,14 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    w->layout()->setMargin(atoi(val.c_str()));	break;
 	case 20:	//elType
 	    if( el == atoi(val.c_str()) ) break;
-	    w->dc()["elType"] = atoi(val.c_str());
+	    w->dc()["elType"]  = atoi(val.c_str());
+	    w->dc()["welType"] = -1;
 	    rel_cfg = true;
 	    break;
 	case 21:	//value
 	    w->dc()["value"] = val.c_str();
 	    if( !el_wdg ) break;
-	    switch(el)
+	    switch( wel )
 	    {
 		case 0: ((LineEdit*)el_wdg)->setValue(val.c_str());	break;
 		case 1:	((TextEdit*)el_wdg)->setText(val.c_str());	break;
@@ -229,9 +233,10 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    if( its.size() ) ((QListWidget*)el_wdg)->setCurrentItem(its[0]);
 		    break;
 		}
+		case 6: case 7:	((QAbstractSlider*)el_wdg)->setValue(atoi(val.c_str()));	break;
 	    }
 	    break;
-	case 22:	//view, wordWrap, img, items
+	case 22:	//view, wordWrap, img, items, cfg
 	    rel_cfg = true;
 	    switch(el)
 	    {
@@ -243,6 +248,8 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    w->dc()["img"] = val.c_str(); 		break;
 		case 4: case 5:	//items
 		    w->dc()["items"] = val.c_str(); 		break;
+		case 6: case 7:	//cfg
+		    w->dc()["cfg"] = val.c_str();             	break;
 		default: rel_cfg = false;
 	    }
 	    break;
@@ -269,7 +276,9 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
     if( rel_cfg && !w->allAttrLoad() )
     {
 	bool mk_new = false;
-	switch(w->dc()["elType"].toInt())
+	int elType = w->dc()["elType"].toInt();
+	Qt::Alignment wAlign = 0;
+	switch( elType )
 	{
 	    case 0:	//Line edit
 	    {
@@ -293,11 +302,6 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    case 6: tp = LineEdit::DateTime;	break;
 		}
 		((LineEdit*)el_wdg)->setType(tp);
-		if(devW) 
-		{
-		    eventFilterSet(w,el_wdg,true);
-		    setFocus(w,el_wdg,false,devW);
-		}
 		//- Cfg -
 		((LineEdit*)el_wdg)->setCfg(w->dc()["cfg"].toString());
 		//- Value -
@@ -401,17 +405,48 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		if( its.size() ) ((QListWidget*)el_wdg)->setCurrentItem(its[0]);		
 		break;
 	    }
+	    case 6:	//Slider
+	    case 7:	//Scroll bar
+	    {
+		if( !el_wdg || (elType==6 && !qobject_cast<QSlider*>(el_wdg)) || (elType==7 && !qobject_cast<QScrollBar*>(el_wdg)) )
+		{
+		    if( el_wdg ) delete el_wdg;
+		    el_wdg = (elType==6 ? (QWidget *)new QSlider(w) : (QWidget *)new QScrollBar(w));
+		    if( runW ) connect( el_wdg, SIGNAL(sliderMoved(int)), this, SLOT(sliderMoved(int)) );
+		    mk_new = true;
+		}
+		string sldCfg = w->dc()["cfg"].toString().toAscii().data();
+		int cfgOff = 0;
+		if( elType == 6 )	((QSlider*)el_wdg)->setTickPosition(QSlider::TicksBothSides);
+		if( atoi(TSYS::strSepParse(sldCfg,0,':',&cfgOff).c_str()) )
+		{
+		    ((QAbstractSlider*)el_wdg)->setOrientation( Qt::Vertical );
+		    wAlign = Qt::AlignHCenter;
+		}		    
+		else 
+		{
+		    ((QAbstractSlider*)el_wdg)->setOrientation( Qt::Horizontal );
+		    wAlign = Qt::AlignVCenter;
+		}
+		((QAbstractSlider*)el_wdg)->setMinimum( atoi(TSYS::strSepParse(sldCfg,0,':',&cfgOff).c_str()) );
+		((QAbstractSlider*)el_wdg)->setMaximum( atoi(TSYS::strSepParse(sldCfg,0,':',&cfgOff).c_str()) );
+		((QAbstractSlider*)el_wdg)->setSingleStep( atoi(TSYS::strSepParse(sldCfg,0,':',&cfgOff).c_str()) );
+		((QAbstractSlider*)el_wdg)->setPageStep( atoi(TSYS::strSepParse(sldCfg,0,':',&cfgOff).c_str()) );
+		break;
+	    }		
 	}
 	if( mk_new )
 	{
 	    //-- Install event's filter and disable focus --	
 	    if( devW ) eventFilterSet(w,el_wdg,true);
-	    setFocus(w,el_wdg,w->dc()["active"].toInt(),devW);
+	    setFocus(w,el_wdg,w->dc()["active"].toInt()&(!devW),devW);
 	    el_wdg->setVisible(w->dc()["en"].toInt());
 	    //-- Fix widget --
 	    ((QVBoxLayout*)w->layout())->addWidget(el_wdg);
 	    w->dc()["addrWdg"].setValue((void*)el_wdg);
 	}
+	if( wAlign ) ((QVBoxLayout*)w->layout())->setAlignment(el_wdg,wAlign);	
+	w->dc()["welType"] = elType;
     }
 
     w->dc()["evLock"] = false;
@@ -507,6 +542,15 @@ void ShapeFormEl::listChange( int row )
     view->attrSet("event","ws_ListChange");
 }
 
+void ShapeFormEl::sliderMoved( int val )
+{
+    QAbstractSlider *el   = (QAbstractSlider*)sender();
+    WdgView     *view = (WdgView *)el->parentWidget();
+    
+    view->attrSet("value",TSYS::int2str(val));
+    view->attrSet("event","ws_SliderChange");
+}
+
 void ShapeFormEl::eventFilterSet( WdgView *view, QWidget *wdg, bool en )
 {
     if( en ) 	wdg->installEventFilter(view);
@@ -523,7 +567,7 @@ void ShapeFormEl::setFocus(WdgView *view, QWidget *wdg, bool en, bool devel )
     //- Set up current widget -
     if( en )
     {
-	if( isFocus )	wdg->setFocusPolicy((Qt::FocusPolicy)isFocus);
+	if( isFocus && !devel )	wdg->setFocusPolicy((Qt::FocusPolicy)isFocus);
     }
     else
     {	
@@ -763,11 +807,11 @@ bool ShapeText::event( WdgView *w, QEvent *event )
 	    //- Prepare draw area -
 	    int margin = w->dc()["geomMargin"].toInt();
 	    QRect dA(w->rect().x(),w->rect().y(),
-		(int)((float)w->rect().width()/w->xScale(true))-2*margin,
-		(int)((float)w->rect().height()/w->yScale(true))-2*margin);
+		(int)((float)w->rect().width()/w->xScale(true)+0.5)-2*margin,
+		(int)((float)w->rect().height()/w->yScale(true)+0.5)-2*margin);
 	    pnt.setWindow(dA);
-	    pnt.setViewport(w->rect().adjusted((int)(w->xScale(true)*margin),(int)(w->yScale(true)*margin),
-		-(int)(w->xScale(true)*margin),-(int)(w->yScale(true)*margin)));
+	    pnt.setViewport(w->rect().adjusted((int)(w->xScale(true)*margin+0.5),(int)(w->yScale(true)*margin+0.5),
+		-(int)(w->xScale(true)*margin+0.5),-(int)(w->yScale(true)*margin+0.5)));
 	    
 	    /*QRect dA = w->rect().adjusted(0,0,-2*margin,-2*margin);	    
             pnt.setWindow(dA);
