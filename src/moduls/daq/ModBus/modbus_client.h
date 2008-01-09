@@ -56,9 +56,13 @@ class TMdPrm : public TParamContr
 	TElem &elem( )		{ return p_el; }
 	TMdContr &owner( )	{ return (TMdContr&)TParamContr::owner(); }
 	
+        //Attributes
+	bool    isErr;		//Error present		
+	
     private:
 	//Methods
         void postEnable( int flag );
+	void vlGet( TVal &val );
 	void vlSet( TVal &val );
 	void vlArchMake( TVal &val );
 	
@@ -89,9 +93,6 @@ class TMdContr: public TController
 	
 	void prmEn( const string &id, bool val );
 	string modBusReq( string &pdu );
-
-	//Attributes
-	bool    isErr;		//Error present
 
     protected:
 	//Methods

@@ -142,7 +142,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //* TMdContr                                           *
 //******************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
-	::TController(name_c,daq_db,cfgelem), prc_st(false), endrun_req(false), tm_gath(0), isErr(false),
+	::TController(name_c,daq_db,cfgelem), prc_st(false), endrun_req(false), tm_gath(0),
 	m_per(cfg("PERIOD").getRd()), m_prior(cfg("PRIOR").getId()), 
 	m_tr(cfg("TRANSP").getSd()), m_addr(cfg("ADDR").getSd()), m_node(cfg("NODE").getId())
 {    
@@ -243,15 +243,16 @@ string TMdContr::modBusReq( string &pdu )
     mbap += (char)0xFF;		//Unit identifier
     try
     {
+	if( !tr.at().startStat() )	tr.at().start();
     	//- Send request -
-    	int resp_len = tr.at().messIO((mbap+pdu).c_str(),mbap.size()+pdu.size(),(char*)buf,sizeof(buf),20);
+    	int resp_len = tr.at().messIO((mbap+pdu).c_str(),mbap.size()+pdu.size(),(char*)buf,sizeof(buf),10);
     	if( resp_len < mbap.size() ) return _("13:Error server respond");
     	int resp_sz = (buf[4]<<8)+buf[5];
     	pdu.assign((char*)buf+mbap.size(),resp_len-mbap.size());
     	//- Wait tail -
     	while( pdu.size() < resp_sz-1 )
     	{
-    	    resp_len = tr.at().messIO(NULL,0,(char*)buf,sizeof(buf),20);
+    	    resp_len = tr.at().messIO(NULL,0,(char*)buf,sizeof(buf),10);
     	    pdu.append((char*)buf,resp_len);
 	}
 	if( pdu[0]&0x80 )
@@ -270,7 +271,11 @@ string TMdContr::modBusReq( string &pdu )
 		    snprintf((char*)buf,sizeof(buf),_("12:Unknown error: %xh."),pdu[1]);
 		    return (char*)buf;
 	    }	    
-    }catch(...){ return _("14:Connection error"); }
+    }catch(...)
+    { 
+	tr.at().stop();
+	return _("14:Connection error"); 
+    }
 
     return "";
 }
@@ -300,24 +305,25 @@ void *TMdContr::Task( void *icntr )
 		cntr.p_hd[i_p].at().elem().fldList(als);
 		for( int i_a = 0; i_a < als.size(); i_a++ )
 		{
+		    if( cntr.endrun_req ) { cntr.prc_st = false; return NULL; }
     		    val = cntr.p_hd[i_p].at().vlAt(als[i_a]);
     		    //- Encode request PDU (Protocol Data Units) --
     		    int reg = val.at().fld().reserve();
-    		    pdu = (char)0x3;	//Function, read multiple registers
+    		    pdu = (char)0x3;		//Function, read multiple registers
     		    pdu += (char)(reg>>8);	//Address MSB
-    		    pdu += (char)reg;	//Address LSB
+    		    pdu += (char)reg;		//Address LSB
     		    pdu += (char)0;		//Number of registers MSB
     		    pdu += (char)1;		//Number of registers LSB
 		    //- Request to remote server -
 	    	    rez = cntr.modBusReq( pdu );
 	    	    if( !rez.empty() )
-		    { 
-			if( !cntr.isErr ) cntr.p_hd[i_p].at().vlAt("err").at().setS(rez); 
-			cntr.isErr = true;
+		    {
+			if( !cntr.p_hd[i_p].at().isErr ) cntr.p_hd[i_p].at().vlAt("err").at().setS(rez,0,true); 
+			cntr.p_hd[i_p].at().isErr = true;
 			break; 
 		    }
-		    else if( cntr.isErr ) 
-		    { cntr.p_hd[i_p].at().vlAt("err").at().setS("0"); cntr.isErr = false; }
+		    else if( cntr.p_hd[i_p].at().isErr )
+		    { cntr.p_hd[i_p].at().vlAt("err").at().setS("0",0,true); cntr.p_hd[i_p].at().isErr = false; }
 	    	    val.at().setI((pdu[2]<<8)+pdu[3],0,true);
 		}
     	    }
@@ -430,7 +436,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //* TMdPrm                                             *
 //******************************************************
 TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : 
-    TParamContr(name,tp_prm), p_el("w_attr"), m_attrLs(cfg("ATTR_LS").getSd())
+    TParamContr(name,tp_prm), p_el("w_attr"), m_attrLs(cfg("ATTR_LS").getSd()), isErr(false)
 {
 
 }
@@ -510,6 +516,16 @@ void TMdPrm::disable()
 	vlAt(ls[i_el]).at().setS(EVAL_STR,0,true);
 }
 
+void TMdPrm::vlGet( TVal &val )
+{
+    if(val.name() == "err" )
+    {
+	if( !enableStat() ) 		val.setS(_("1:Parameter had disabled."),0,true);
+	else if( !owner().startStat() )	val.setS(_("2:Controller is stoped."),0,true);
+	else if( !isErr )		val.setS("0",0,true);
+    }
+}
+
 void TMdPrm::vlSet( TVal &valo )
 {
     if( !enableStat() )	valo.setI(EVAL_INT,0,true);
@@ -526,10 +542,10 @@ void TMdPrm::vlSet( TVal &valo )
     string rez = owner().modBusReq( pdu );
     if( !rez.empty() )
     {
-	if( !owner().isErr ) vlAt("err").at().setS(rez); 
-	owner().isErr = true;
+	if( !isErr ) vlAt("err").at().setS(rez,0,true);
+	isErr = true;
     }
-    else if( owner().isErr ) { vlAt("err").at().setS("0"); owner().isErr = false; }
+    else if( isErr ) { vlAt("err").at().setS("0",0,true); isErr = false; }
 }
 
 void TMdPrm::vlArchMake( TVal &val )

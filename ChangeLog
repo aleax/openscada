@@ -1,3 +1,9 @@
+2008-01-09 Roman
+- /SYS: Translation to Russian and Ukranian is updated
+- FIX:/DAQ/ModBus: Request to remote server errors process is fixed.
+- !!:/UI/WebVision: Support of brouser MS IE is added.
+
+
 2007-12-27 Roman
 - !!!:/UI/VCAEngine, /UI/Vision: Slider and Scroll bar support is added to primitive "FormEl".
 - /UI/VCAEngine: Transplate to Russian and Ukranian is updated.

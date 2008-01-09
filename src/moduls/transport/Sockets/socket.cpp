@@ -593,6 +593,8 @@ void TSocketOut::start()
 	{
 	    if( (sock_fd = socket(PF_INET,SOCK_STREAM,0) )== -1 )
         	throw TError(nodePath().c_str(),_("Error create TCP socket: %s!"),strerror(errno));
+	    int vl = 1;
+	    setsockopt(sock_fd,SOL_SOCKET,SO_REUSEADDR,&vl,sizeof(int));
 	}	
 	else if( type == SOCK_UDP )
 	{
