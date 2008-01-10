@@ -386,6 +386,7 @@ class DevelWdgView: public WdgView
 
         void setSelect( bool vl, bool childs = true );
         void setEdit( bool vl );
+	void wdgsMoveResize( const QPointF &dP );
 	
 	WdgView *newWdgItem( const string &iwid );
 						

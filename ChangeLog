@@ -1,3 +1,7 @@
+2008-01-10 Roman
+- !:/UI/Vision: Resizing from keyboard support is added.
+
+
 2008-01-09 Roman
 - /SYS: Translation to Russian and Ukranian is updated
 - FIX:/DAQ/ModBus: Request to remote server errors process is fixed.
