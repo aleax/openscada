@@ -159,6 +159,7 @@ class TSYS : public TCntrNode
         static string uint2str( unsigned val, IntView view = Dec );	
 	static string ll2str( long long val, IntView view = Dec );
         static string real2str( double val, int prec = 15 );
+	static double realRound( double val, int dig = 0, bool toint = false );
 	
         //Adress convertors
         static string addr2str( void *addr );

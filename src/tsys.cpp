@@ -34,6 +34,7 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <langinfo.h>
+#include <math.h>
 
 #include "../config.h"
 #include "terror.h"
@@ -125,6 +126,13 @@ string TSYS::real2str( double val, int prec )
     snprintf(buf,sizeof(buf),"%.*g",prec,val);
 
     return buf;
+}
+
+double TSYS::realRound( double val, int dig, bool toint )
+{
+    double rez = floor(val*pow(10,dig)+0.5)/pow(10,dig);
+    if( toint ) return floor(rez+0.5);
+    return rez;
 }
 
 string TSYS::addr2str( void *addr )

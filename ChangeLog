@@ -1,3 +1,11 @@
+2008-01-11 Maxim
+- /SYS: The rounding of real values function (realRound) is added.
+- /UI/Vision: Icon of an arrow cursor for primitive ElFig is added.
+- /UI/Vision, /UI/VCAEngine: Rotation option support is added for primitive ElFig.
+- /UI/Vision: Short cut CTRL+A key combination, for elements' selection, support for primitive ElFig is added.
+- !!:/UI/Vision: Scaling option support for primitive ElFig is added.
+
+
 2008-01-10 Roman
 - !:/UI/Vision: Resizing from keyboard support is added.
 

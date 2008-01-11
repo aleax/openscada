@@ -37,7 +37,7 @@
 #include "vis_shapes.h"
 #include "vis_widgs.h"
 
-typedef QMap<int,QPoint> PntMap;
+typedef QMap<int,QPointF> PntMap;
 
 class QGraphicsScene;
 class QLabel;
@@ -153,7 +153,7 @@ class ShapeElFigure : public WdgShape
         int kr;    
     
     private slots:
-	void toolAct( QAction * );
+        void toolAct( QAction * );
     
     private:
     	//Methods
@@ -181,13 +181,15 @@ class ShapeElFigure : public WdgShape
 		QPointF el_p4 = QPointF(0,0), QPointF el_p5 = QPointF(0,0), QPointF el_p6 = QPointF(0,0) );
         QPainterPath painter_path_simple( int el_type, double el_ang, 
 		QPointF el_p1 = QPointF(0,0), QPointF el_p2 = QPointF(0,0), QPointF el_p3 = QPointF(0,0), 
-		QPointF el_p4 = QPointF(0,0), QPointF el_p5 = QPointF(0,0), QPointF el_p6 = QPointF(0,0) ) ;
+                                        QPointF el_p4 = QPointF(0,0), QPointF el_p5 = QPointF(0,0), QPointF el_p6 = QPointF(0,0)) ;
         int Append_Point( QPointF &pos, QVector <ShapeItem> &shapeItems, PntMap *pnts );
         void Drop_Point ( int num, int num_shape, QVector <ShapeItem> &shapeItems, PntMap *pnts );
         void step(int s,int f, int p, QVector <int> vect, int N);
         bool Inundation (QPointF point,QVector <ShapeItem> &shapeItems,  PntMap *pnts, QVector <int> vect, int N, WdgView *view);
         bool Inundation_1_2(QPointF point, QVector <ShapeItem> &shapeItems, QVector <InundationItem> &inundationItems,  PntMap *pnts, WdgView *view);
         int Build_Matrix(QVector <ShapeItem> &shapeItems);
+        QPointF scale_rotate(QPointF point, WdgView *view, bool flag_scale);
+        QPointF unscale_unrotate(QPointF point, WdgView *view, bool flag_scale);
         QPainterPath Create_Inundation_Path (QVector <int> in_fig_num, QVector <ShapeItem> &shapeItems, PntMap *pnts, WdgView *view);
         QVector <int> Inundation_sort(QPainterPath InundationPath, QVector <int> inundation_fig_num, QVector <ShapeItem> &shapeItems, PntMap *pnts,  WdgView *view);
       	
@@ -207,7 +209,7 @@ class ShapeElFigure : public WdgShape
 	    index, index_temp,index_inund,			
 	    rect_num;				
 	bool flag_cursor, flag_key, flag_up, flag_down, flag_left, flag_right, 
-	     flag_ctrl, flag,flag_ctrl_move, flag_m, flag_hold_arc;
+	     flag_ctrl, flag_ctrl_move, flag_m, flag_hold_arc, flag_A, flag_hold_checked;
 					    	
         bool flag_rect, flag_arc_rect_3_4, flag_arc_release, flag_first_move, Flag;
         QPointF Start_offset, End_offset, CtrlPos1_offset,CtrlPos2_offset,CtrlPos3_offset,CtrlPos4_offset;
@@ -224,7 +226,7 @@ class ShapeElFigure : public WdgShape
         QVector <int> vect;
         QVector< QVector<int> > map_matrix;
         QVector< QVector<int> > minroad;
-        QVector< QVector<QPointF> > scale_offset;
+        //QVector< QVector<QPointF> > scale_offset;
         int counter_start, counter_end;
         int len,clen;
         int found;

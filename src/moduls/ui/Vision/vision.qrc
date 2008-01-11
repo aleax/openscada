@@ -32,6 +32,7 @@
     <file>images/elfig_arc.png</file>
     <file>images/elfig_besie.png</file>
     <file>images/elfig_lock.png</file>
+    <file>images/elfig_cursor.png</file>
     <file>images/ok.png</file>
 </qresource>
 </RCC>

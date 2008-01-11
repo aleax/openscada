@@ -263,9 +263,20 @@ VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) :
     actAlignBottom->setEnabled(false);
     
     //-- Elementar figure actions --
+    //--- Unset cursor ---
+    if(!ico_t.load(TUIS::icoPath("vision_elfig_cursor").c_str())) ico_t.load(":/images/elfig_cursor.png");
+    actElFigCursorAct = new QAction(QPixmap::fromImage(ico_t),_("Cursor"),this);
+    actElFigCursorAct->setCheckable(true);
+    actElFigCursorAct->setChecked(true);
+    actElFigCursorAct->setObjectName("cursor");
+    actElFigCursorAct->setToolTip(_("Unset cursor"));
+    actElFigCursorAct->setWhatsThis(_("The button to unset cursor"));
+    actElFigCursorAct->setStatusTip(_("Press for cursor to be unseted"));
+    actElFigCursorAct->setEnabled(false);    
     //--- Line creation ---
     if(!ico_t.load(TUIS::icoPath("vision_elfig_line").c_str())) ico_t.load(":/images/elfig_line.png");
     actElFigLine = new QAction(QPixmap::fromImage(ico_t),_("Add line"),this);
+    //actElFigCursorAct->setCheckable(true);
     actElFigLine->setObjectName("line");
     actElFigLine->setToolTip(_("Add line to elementary figure"));
     actElFigLine->setWhatsThis(_("The button for adding line to elementary figure"));
@@ -274,6 +285,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) :
     //--- Arc creation ---
     if(!ico_t.load(TUIS::icoPath("vision_elfig_arc").c_str())) ico_t.load(":/images/elfig_arc.png");
     actElFigArc = new QAction(QPixmap::fromImage(ico_t),_("Add arc"),this);
+    //actElFigCursorAct->setCheckable(true);
     actElFigArc->setObjectName("arc");
     actElFigArc->setToolTip(_("Add arc to elementary figure"));
     actElFigArc->setWhatsThis(_("The button for adding arc to elementary figure"));
@@ -282,6 +294,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) :
     //--- Add Besie curve ---
     if(!ico_t.load(TUIS::icoPath("vision_elfig_besie").c_str())) ico_t.load(":/images/elfig_besie.png");
     actElFigBesie = new QAction(QPixmap::fromImage(ico_t),_("Add besier curve"),this);
+    //actElFigCursorAct->setCheckable(true);
     actElFigBesie->setObjectName("besier");
     actElFigBesie->setToolTip(_("Add Besier curve to elementary figure"));
     actElFigBesie->setWhatsThis(_("The button for adding Besier curve to elementary figure"));
@@ -290,12 +303,13 @@ VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) :
     //--- Add Hold points check ---
     if(!ico_t.load(TUIS::icoPath("vision_elfig_lock").c_str())) ico_t.load(":/images/elfig_lock.png");
     actElFigCheckAct=new QAction(QPixmap::fromImage(ico_t),_("Holds"),this);
-    actElFigCheckAct->setCheckable(true);
+    //actElFigCheckAct->setCheckable(true);
     actElFigCheckAct->setObjectName("hold");
     actElFigCheckAct->setToolTip(_("Enable holds"));
     actElFigCheckAct->setWhatsThis(_("The button for enabling holds"));
     actElFigCheckAct->setStatusTip(_("Press for holds to be anabled"));
     actElFigCheckAct->setEnabled(false);
+
     
     //connect(checkAct, SIGNAL(toggled(bool)),this, SLOT(setHold()));
     //-- MDI windows actions --
@@ -428,6 +442,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) :
     elFigTool = new QToolBar(_("Elementars figure tools"),this);
     elFigTool->setObjectName("elFigTool");
     addToolBar(elFigTool);
+    elFigTool->addAction(actElFigCursorAct);    
     elFigTool->addAction(actElFigLine);
     elFigTool->addAction(actElFigArc);
     elFigTool->addAction(actElFigBesie);

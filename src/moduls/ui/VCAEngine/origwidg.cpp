@@ -144,6 +144,7 @@ void OrigElFigure::postEnable( int flag )
 	attrAdd( new TFld("bordClr",_("Border:color"),TFld::String,Attr::Color,"20","#000000","","",24) );
 	attrAdd( new TFld("fillColor",_("Fill:color"),TFld::String,Attr::Color,"20","","","",25) );
 	attrAdd( new TFld("fillImg",_("Fill:image"),TFld::String,Attr::Image,"20","","","",26) );
+        attrAdd( new TFld("orient",_("Orientation angle"),TFld::Integer,TFld::NoFlag,"3","0","-180;180","",28) );
 	attrAdd( new TFld("elLst",_("Element's list"),TFld::String,TFld::FullText|Attr::Active,"300","","","",27) );
     }
 }

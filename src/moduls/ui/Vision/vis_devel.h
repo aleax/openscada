@@ -121,7 +121,8 @@ class VisDevelop : public QMainWindow
 		*actElFigLine,		//Create line
 		*actElFigArc,		//Create arc
 		*actElFigBesie,		//Create Besie curve
-                *actElFigCheckAct,
+                *actElFigCheckAct,      //Enable holds
+                *actElFigCursorAct,     //Unset cursor
 	//-- Window manipulation actions --	
 		*actWinClose,		//Close window
 		*actWinCloseAll,	//Close all windows
