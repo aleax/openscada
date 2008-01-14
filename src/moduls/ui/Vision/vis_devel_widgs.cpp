@@ -1455,6 +1455,25 @@ void ProjTree::ctrTreePopup( )
 }			  
 
 
+//*********************************************
+//* Status bar scale indicator                *
+//*********************************************
+WScaleStBar::WScaleStBar( QWidget *parent ) : QLabel(parent)
+{
+    setScale(false);
+}
+		
+void WScaleStBar::setScale( bool val )
+{
+    isScale = val;    
+    setText( (isScale)?_("Scale"):_("Resize") );
+}
+
+void WScaleStBar::mousePressEvent( QMouseEvent * event )
+{
+    setScale(!scale());
+}
+					    
 //****************************************
 //* Shape widget view development mode   *
 //****************************************
@@ -1465,7 +1484,7 @@ DevelWdgView::DevelWdgView( const string &iwid, int ilevel, VisDevelop *mainWind
     if( wLevel() == 0 )	
     {
 	pntView = new SizePntWdg(this);
-	pntView->setSelArea(QRect());
+	pntView->setSelArea(QRectF());
 	setFocusPolicy(Qt::StrongFocus);
 	setCursor(Qt::ArrowCursor);
 	setAcceptDrops(true);
@@ -1512,12 +1531,12 @@ void DevelWdgView::saveGeom( const string& item )
 {
     if( item.empty() || item == id() )
     {
-	attrSet("geomX", TSYS::real2str(0.01*floor(100.*((wLevel()>0) ? posF().x()/((WdgView*)parentWidget())->xScale(true) : posF().x())+0.5) ), 7);
-	attrSet("geomY", TSYS::real2str(0.01*floor(100.*((wLevel()>0) ? posF().y()/((WdgView*)parentWidget())->yScale(true) : posF().y())+0.5) ), 8);
-	attrSet("geomW", TSYS::real2str(0.01*floor(100.*sizeF().width()/xScale(true)+0.5)), 9);
-	attrSet("geomH", TSYS::real2str(0.01*floor(100.*sizeF().height()/yScale(true)+0.5)), 10);
-	attrSet("geomXsc", TSYS::real2str(0.01*floor(100.*x_scale+0.5)),13);
-	attrSet("geomYsc", TSYS::real2str(0.01*floor(100.*y_scale+0.5)),14);
+	attrSet("geomX", TSYS::real2str(TSYS::realRound((wLevel()>0) ? posF().x()/((WdgView*)parentWidget())->xScale(true) : posF().x(),2)), 7);
+	attrSet("geomY", TSYS::real2str(TSYS::realRound((wLevel()>0) ? posF().y()/((WdgView*)parentWidget())->yScale(true) : posF().y(),2)), 8);
+	attrSet("geomW", TSYS::real2str(TSYS::realRound(sizeF().width()/xScale(true),2)), 9);
+	attrSet("geomH", TSYS::real2str(TSYS::realRound(sizeF().height()/yScale(true),2)), 10);
+	attrSet("geomXsc", TSYS::real2str(TSYS::realRound(x_scale,2)), 13);
+	attrSet("geomYsc", TSYS::real2str(TSYS::realRound(y_scale,2)), 14);
 	attrSet("geomZ", TSYS::int2str(z_coord),11);
     }
     
@@ -1910,7 +1929,7 @@ void DevelWdgView::editExit( )
 
 void DevelWdgView::wdgsMoveResize( const QPointF &dP )
 {
-    QRect bsRct = pntView->geometry();
+    QRectF bsRct = pntView->geometryF();
     float xScale = (float)dP.x()/(float)bsRct.width();
     float yScale = (float)dP.y()/(float)bsRct.height();
     //-- Update selected widgets geometry --			
@@ -1918,7 +1937,8 @@ void DevelWdgView::wdgsMoveResize( const QPointF &dP )
     {
 	DevelWdgView *curw = qobject_cast<DevelWdgView*>(children().at(i_c));
 	if( !curw || !curw->select() ) continue;
-	bool isScale = QApplication::keyboardModifiers()&Qt::ControlModifier;			    
+	if( QApplication::keyboardModifiers()&Qt::ControlModifier ) mainWin()->setWdgScale(true);
+	bool isScale = mainWin()->wdgScale( );
 	if( isScale )	m_flgs |= DevelWdgView::makeScale;
 	QRectF  geom = curw->geometryF();
 	switch(cursor().shape())
@@ -1976,8 +1996,8 @@ void DevelWdgView::wdgsMoveResize( const QPointF &dP )
 		    curw->x_scale *= 1+((m_flgs&leftTop)?-1:1)*xScale;
 		if( m_flgs&leftTop )
 		{
-		    curw->moveF(QPointF(geom.x()+xScale*(bsRct.x()+bsRct.width()-geom.x()),geom.y()));	    
-		    curw->resizeF(QSizeF((float)geom.width()*(1.0-xScale), geom.height()));				    
+		    curw->moveF(QPointF(geom.x()+xScale*(bsRct.x()+bsRct.width()-geom.x()),geom.y()));
+		    curw->resizeF(QSizeF((float)geom.width()*(1.0-xScale), geom.height()));
 		}
 		else
 		{
@@ -2033,7 +2053,7 @@ bool DevelWdgView::event( QEvent *event )
         	if( qobject_cast<DevelWdgView*>(children().at(i_c)) &&
                     	    ((DevelWdgView*)children().at(i_c))->select( ) )
                     rsel = rsel.united(((DevelWdgView*)children().at(i_c))->geometryF());
-            pntView->setSelArea(rsel.toRect(),edit() ? SizePntWdg::EditBorder : SizePntWdg::SizeDots);
+            pntView->setSelArea(rsel,edit() ? SizePntWdg::EditBorder : SizePntWdg::SizeDots);
         }
 	pnt.end();
 	
@@ -2162,7 +2182,7 @@ bool DevelWdgView::event( QEvent *event )
 		    }
 		    setSelect(true);
 		    m_flgs &= ~DevelWdgView::holdSelRect;
-		    pntView->setSelArea(QRect());
+		    pntView->setSelArea(QRectF());
 		}
 	    
 		if( m_flgs&DevelWdgView::moveHold && !edit() )
@@ -2207,7 +2227,7 @@ bool DevelWdgView::event( QEvent *event )
 		}
 		if( edwdg && !edwdg->select() )	edwdg->setSelect(true);
 		editEnter( );
-		break;        	
+		return true;
 	    }
 	    case QEvent::FocusIn:
 		if(select()) setSelect(true);
@@ -2266,7 +2286,8 @@ bool DevelWdgView::event( QEvent *event )
 		    }
 		    else
 		    {
-			bool isScale = QApplication::keyboardModifiers()&Qt::ControlModifier;
+			if( QApplication::keyboardModifiers()&Qt::ControlModifier )	mainWin()->setWdgScale(true);
+			bool isScale = mainWin()->wdgScale( );
 			if( isScale )       m_flgs |= DevelWdgView::makeScale;
 			//- Change widget geometry -
 			switch(cursor().shape())
@@ -2335,6 +2356,7 @@ bool DevelWdgView::event( QEvent *event )
 				    saveGeom(((DevelWdgView*)children().at(i_c))->id());
 				    if( m_flgs&DevelWdgView::makeScale ) ((DevelWdgView*)children().at(i_c))->load("");
 				}
+			    m_flgs &= ~DevelWdgView::makeScale;			    
 			    return true;
 			}
 		    }
@@ -2358,9 +2380,11 @@ DevelWdgView::SizePntWdg::SizePntWdg( QWidget* parent ) : QWidget(parent), view(
     setMouseTracking(true);
 }
 			
-void DevelWdgView::SizePntWdg::setSelArea( const QRect &geom, WView iview )
+void DevelWdgView::SizePntWdg::setSelArea( const QRectF &geom, WView iview )
 {
     view = iview;
+    w_pos  = geom.topLeft();
+    w_size = geom.size();    
     
     if( geom.isValid() )
     {	
@@ -2368,7 +2392,7 @@ void DevelWdgView::SizePntWdg::setSelArea( const QRect &geom, WView iview )
 	switch( view )
 	{
 	    case SizeDots:
-		setGeometry(geom.adjusted(-3,-3,3,3));
+		setGeometry(geom.adjusted(-3,-3,3,3).toRect());
 		//- Make widget's mask -
 		for(int i_p = 0; i_p < 9; i_p++)
 		    if( i_p != 4 )
@@ -2376,17 +2400,17 @@ void DevelWdgView::SizePntWdg::setSelArea( const QRect &geom, WView iview )
 		    		   rect().y()+(i_p/3)*((rect().height()-7)/2),7,7));
 		break;
 	    case EditBorder:
-		setGeometry(geom.adjusted(-7,-7,7,7));	    
+		setGeometry(geom.adjusted(-7,-7,7,7).toRect());	    
 		reg = QRegion(rect()).subtracted(QRegion(rect().adjusted(7,7,-7,-7)));
 		break;
 	    case SelectBorder:
-		setGeometry(geom.adjusted(-1,-1,1,1));	    
+		setGeometry(geom.adjusted(-1,-1,1,1).toRect());
 		reg = QRegion(rect()).subtracted(QRegion(rect().adjusted(1,1,-1,-1)));
 		break;	    
 	}
 	setMask(reg);
     }
-    else setGeometry(geom);	
+    else setGeometry(geom.toRect());
 }
 
 void DevelWdgView::SizePntWdg::paintEvent( QPaintEvent *event )

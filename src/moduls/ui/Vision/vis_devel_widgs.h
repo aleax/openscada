@@ -353,6 +353,27 @@ class ProjTree: public QDockWidget
 	QTreeWidget *treeW;	
 };
 
+
+//*********************************************
+//* Status bar scale indicator                *
+//*********************************************
+class WScaleStBar : public QLabel
+{
+    Q_OBJECT
+
+    public:
+	WScaleStBar( QWidget *parent = 0 );
+
+        bool scale()			{ return isScale; }
+        void setScale( bool val );
+						
+    protected:
+	void mousePressEvent( QMouseEvent * event );
+	
+    private:
+        bool isScale;
+};																		    
+
 //****************************************
 //* Shape widget view development mode   *
 //****************************************	
@@ -416,13 +437,20 @@ class DevelWdgView: public WdgView
 		enum WView { SizeDots, EditBorder, SelectBorder };
 		//Methods
                 SizePntWdg( QWidget* parent = 0 );
-                
-		void setSelArea( const QRect &geom, WView view = SizeDots );
+		
+        	QPointF posF( )             { return w_pos; }
+		QSizeF  sizeF( )            { return w_size; }
+		QRectF geometryF( )         { return QRectF(w_pos,w_size); }
+
+		void setSelArea( const QRectF &geom, WView view = SizeDots );
                 void paintEvent( QPaintEvent * event );
             
 	    private:
 		//Attributes
 		WView 	view;
+		QPointF	w_pos;		//Widget position into real;
+		QSizeF	w_size;         //Widget size into real;
+			    
         };
 	//Private methods
         bool grepAnchor( const QPointF &apnt, const QPoint &cpnt );

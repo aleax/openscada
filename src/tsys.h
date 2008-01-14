@@ -37,6 +37,7 @@ typedef unsigned long long ui64;
 #define STR_BUF_LEN     3000 // Len of string buffers (no string class)
 #define STD_WAIT_DELAY  100 // Standart wait dalay (ms)
 
+#include <math.h>
 #include <stdio.h>
 
 #include <string>
@@ -159,7 +160,12 @@ class TSYS : public TCntrNode
         static string uint2str( unsigned val, IntView view = Dec );	
 	static string ll2str( long long val, IntView view = Dec );
         static string real2str( double val, int prec = 15 );
-	static double realRound( double val, int dig = 0, bool toint = false );
+	static double realRound( double val, int dig = 0, bool toint = false )
+	{
+	    double rez = floor(val*pow(10,dig)+0.5)/pow(10,dig);
+	    if( toint ) return floor(rez+0.5);
+	    return rez;
+	}
 	
         //Adress convertors
         static string addr2str( void *addr );

@@ -155,6 +155,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
 
     glay->addWidget(new QLabel(_("Id:"),tab_w),0,0);
     obj_id = new QLabel(this);
+    obj_id->setTextInteractionFlags(Qt::TextSelectableByMouse);
     obj_id->setObjectName("/obj/cfg/id");
     obj_id->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     glay->addWidget(obj_id,0,1);
@@ -787,18 +788,21 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     
     glay->addWidget(new QLabel(_("Id:"),tab_w),0,0);
     obj_id = new QLabel(tab_w);
+    obj_id->setTextInteractionFlags(Qt::TextSelectableByMouse);
     obj_id->setObjectName("/wdg/cfg/id");
     obj_id->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     glay->addWidget(obj_id,0,1);
     
     glay->addWidget(new QLabel(_("Root:"),tab_w),1,0);
     obj_root = new QLabel(tab_w);
+    obj_root->setTextInteractionFlags(Qt::TextSelectableByMouse);
     obj_root->setObjectName("/wdg/cfg/root");
     obj_root->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     glay->addWidget(obj_root,1,1);        
     
     glay->addWidget(new QLabel(_("Path:"),tab_w),2,0);
     obj_path = new QLabel(tab_w);
+    obj_path->setTextInteractionFlags(Qt::TextSelectableByMouse);
     obj_path->setObjectName("/wdg/cfg/path");
     obj_path->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     glay->addWidget(obj_path,2,1);

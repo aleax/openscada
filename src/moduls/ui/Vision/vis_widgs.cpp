@@ -611,13 +611,15 @@ string WdgView::root( )
 void WdgView::moveF( const QPointF &pos )
 {
     w_pos = pos;
-    move(pos.toPoint() );
+    move( pos.toPoint() );
 }
 
 void WdgView::resizeF( const QSizeF &size )
 {
     w_size = size;
-    resize(size.toSize());
+    w_size.setWidth(vmax(w_size.width(),3));
+    w_size.setHeight(vmax(w_size.height(),3));
+    resize( w_size.toSize() );
 }
 
 WdgView *WdgView::newWdgItem( const string &iwid )

@@ -42,6 +42,7 @@ namespace VISION
 {
 
 class UserStBar;
+class WScaleStBar;
 class ProjTree;
 class WdgTree;
 class InspAttrDock;
@@ -60,9 +61,11 @@ class VisDevelop : public QMainWindow
 	~VisDevelop( );
 	
 	string user( );
-	string VCAStation()	{ return m_stat; }
+	string VCAStation( )	{ return m_stat; }
+	bool   wdgScale( );
 	
 	void setVCAStation( const string& st );
+	void setWdgScale( bool val );
 	
 	int cntrIfCmd( XMLNode &node, bool glob = false );
 
@@ -167,12 +170,11 @@ class VisDevelop : public QMainWindow
 
     private:
 	//Private attributes
-
-
 	//- Main components -
 	bool		winClose;
 	UserStBar 	*w_user;	//User status widget
 	QLabel		*w_stat;	//VCA engine station
+	WScaleStBar	*w_scale;	//Scale trigger
 	QTimer      	*endRunTimer, *work_wdgTimer;
 	string		work_wdg, work_wdg_new;	//Work widget
 	QSignalMapper 	*wMapper;	//Internal window mapper

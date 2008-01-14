@@ -1,3 +1,8 @@
+2008-01-14 Roman
+- FIX:/UI/Vision: Group widgets resizing is fixed.
+- /UI/Vision: Scaling flag moved to status bar.
+
+
 2008-01-11 Maxim
 - /SYS: The rounding of real values function (realRound) is added.
 - /UI/Vision: Icon of an arrow cursor for primitive ElFig is added.

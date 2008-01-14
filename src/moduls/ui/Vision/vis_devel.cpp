@@ -459,7 +459,12 @@ VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) :
     w_stat->setWhatsThis(_("This label display used VCA engine station."));
     w_stat->setToolTip(_("Field for display of the used VCA engine station."));
     w_stat->setStatusTip(_("Double click for change VCA engine station."));
-    statusBar()->insertPermanentWidget(0,w_stat);    
+    statusBar()->insertPermanentWidget(0,w_stat);
+    w_scale = new WScaleStBar( this );
+    w_scale->setWhatsThis(_("This label display widgets' scaling mode."));
+    w_scale->setToolTip(_("Field for display of widgets' scaling mode."));
+    w_scale->setStatusTip(_("Click for change widgets' scaling mode."));
+    statusBar()->insertPermanentWidget(0,w_scale);
 
     //- Init dock windows -
     prjTree = new ProjTree(this);
@@ -555,6 +560,16 @@ int VisDevelop::cntrIfCmd( XMLNode &node, bool glob )
 string VisDevelop::user()
 {
     return w_user->user().toAscii().data();
+}
+
+bool VisDevelop::wdgScale( )
+{ 
+    return w_scale->scale();
+}
+
+void VisDevelop::setWdgScale( bool val )
+{ 
+    w_scale->setScale(val);
 }
 
 void VisDevelop::closeEvent( QCloseEvent* ce )
