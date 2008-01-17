@@ -237,27 +237,39 @@ class InspLnk: public QTreeWidget
 	void changeLnk( QTreeWidgetItem*, int );
 	
     private:
-	//Private data
-	//* Link item delegate    *
-	//*************************
-	class ItemDelegate: public QItemDelegate
-	{
-	    public:
-		//Public methods
-	        ItemDelegate(InspLnk *parent = 0);		
-
-	        QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-	        void setEditorData(QWidget *editor, const QModelIndex &index) const;
-    		void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
-		
-		InspLnk *owner( ) const;
-	};
+	//Private methods
+        bool event( QEvent *event );
+    
 	//Private attributes
 	bool show_init;
 	string it_wdg;
 	VisDevelop *main_win;
 };
  
+//*************************
+//* Link item delegate    *
+//*************************
+class LinkItemDelegate: public QItemDelegate
+{
+    Q_OBJECT
+	
+    public:
+	//Public methods
+        LinkItemDelegate(InspLnk *parent = 0);		
+
+        QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+        void setEditorData(QWidget *editor, const QModelIndex &index) const;
+	void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
+		
+	InspLnk *owner( ) const;
+		
+    public slots:
+	void selItem();
+
+    private:
+	bool initVal;
+};
+
 //****************************************
 //* Inspector of links dock widget       *
 //**************************************** 

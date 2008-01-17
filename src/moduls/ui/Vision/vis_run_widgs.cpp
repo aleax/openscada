@@ -291,7 +291,7 @@ bool RunWdgView::event( QEvent *event )
 //* Shape page view runtime mode         *
 //****************************************
 RunPageView::RunPageView( const string &iwid, VisRun *mainWind, QWidget* parent ) :
-    RunWdgView(iwid,0,mainWind,parent)
+    RunWdgView(iwid,0,mainWind,parent), wx_scale(1.0), wy_scale(1.0)
 {
 
 }

@@ -2432,6 +2432,8 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    el_wdg->setEnabled(false);
 		    el_wdg->setVisible(false);
 		    el_wdg->setParent(NULL);
+		    el_wdg->wx_scale = el_wdg->mainWin()->xScale( );
+		    el_wdg->wy_scale = el_wdg->mainWin()->yScale( );
 		    el_wdg = NULL; 
 		}
 		//-- Create new include widget --	
@@ -2446,6 +2448,8 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 			el_wdg->setParent(w);
 			el_wdg->setEnabled(true);
 			el_wdg->setVisible(true);
+			if( el_wdg->wx_scale != el_wdg->mainWin()->xScale() || el_wdg->wy_scale != el_wdg->mainWin()->yScale() )
+			    el_wdg->load("");
 		    }
 		    else 
 		    {

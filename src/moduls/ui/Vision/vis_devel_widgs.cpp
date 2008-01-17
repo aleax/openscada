@@ -696,7 +696,7 @@ InspLnk::InspLnk( QWidget * parent, VisDevelop *mainWind ) : main_win(mainWind),
 {
     //setEditTriggers(QAbstractItemView::AllEditTriggers);
     setAlternatingRowColors(true);
-    setItemDelegate(new ItemDelegate(this));
+    setItemDelegate(new LinkItemDelegate(this));
     
     QStringList headLabels;
     headLabels << _("Name") << _("Value");
@@ -712,6 +712,18 @@ InspLnk::~InspLnk( )
 string InspLnk::user( )
 {
     return mainWin()->user();
+}
+
+bool InspLnk::event( QEvent *event )
+{
+    if( event->type() == QEvent::KeyPress &&
+            static_cast<QKeyEvent *>(event)->key() == Qt::Key_Space && 
+	    currentItem() && currentItem()->flags()&Qt::ItemIsEditable )
+    {
+	editItem(currentItem(),1);
+        return true;
+    }
+    return QTreeWidget::event( event );
 }
     
 void InspLnk::setWdg( const string &iwdg )
@@ -839,30 +851,30 @@ void InspLnk::changeLnk( QTreeWidgetItem *index, int col )
 {
     if( col != 1 || show_init ) return;
     
-    string wdg_it  = it_wdg;// topLevelItem(0)->data(0,Qt::UserRole).toString().toAscii().data();
     string attr_id = index->data(0,Qt::UserRole).toString().toAscii().data();    
     
     XMLNode req("set");
-    req.setAttr("path",wdg_it+"/%2flinks%2flnk%2f"+(index->childCount()?"pr_":"el_")+attr_id)->
+    req.setAttr("path",it_wdg+"/%2flinks%2flnk%2f"+(index->childCount()?"pr_":"el_")+attr_id)->
 	setText(index->text(1).toAscii().data());
     if( mainWin()->cntrIfCmd(req) )
 	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
-    else setWdg(it_wdg);
+    setWdg(it_wdg);
 }
 
+//*******************************
 //* Links item delegate         *
 //*******************************
-InspLnk::ItemDelegate::ItemDelegate( InspLnk *parent ) : QItemDelegate(parent)
+LinkItemDelegate::LinkItemDelegate( InspLnk *parent ) : QItemDelegate(parent), initVal(false)
 {
 
 }
 
-InspLnk *InspLnk::ItemDelegate::owner() const
+InspLnk *LinkItemDelegate::owner() const
 {
     return (InspLnk*)parent();
 }
 
-QWidget *InspLnk::ItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
+QWidget *LinkItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QWidget *w_del;
     if(!index.isValid() || !index.parent().isValid() || index.column() == 0) return 0;
@@ -877,9 +889,11 @@ QWidget *InspLnk::ItemDelegate::createEditor(QWidget *parent, const QStyleOption
     if( !owner()->mainWin()->cntrIfCmd(req) )
     {
 	w_del = new QComboBox(parent);
+
 	((QComboBox*)w_del)->setEditable(true);
 	for( int i_l = 0; i_l < req.childSize(); i_l++ )
 	    ((QComboBox*)w_del)->addItem(req.childGet(i_l)->text().c_str());
+	connect( w_del, SIGNAL( currentIndexChanged(int) ), this, SLOT( selItem() ) );
     }
     else
     {
@@ -890,19 +904,28 @@ QWidget *InspLnk::ItemDelegate::createEditor(QWidget *parent, const QStyleOption
     return w_del;
 }
 
-void InspLnk::ItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
+void LinkItemDelegate::selItem( )
+{
+    if( initVal ) return;
+    emit commitData((QWidget*)sender());
+    emit closeEditor((QWidget*)sender(), QAbstractItemDelegate::SubmitModelCache);
+}
+
+void LinkItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
     if( dynamic_cast<QComboBox*>(editor) )
     {
+	const_cast<LinkItemDelegate*>(this)->initVal = true;
         QComboBox *comb = dynamic_cast<QComboBox*>(editor);
 	QString val = index.data(Qt::DisplayRole).toString();	
 	if( comb->findText(val) < 0 )	comb->addItem(val);
         comb->setCurrentIndex(comb->findText(val));
+	const_cast<LinkItemDelegate*>(this)->initVal = false;
     }
     else QItemDelegate::setEditorData(editor, index);
 }
 
-void InspLnk::ItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
+void LinkItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
     if( dynamic_cast<QComboBox*>(editor) )
         model->setData(index,dynamic_cast<QComboBox*>(editor)->currentText(),Qt::EditRole);
@@ -1881,7 +1904,7 @@ void DevelWdgView::wdgPopup( )
 void DevelWdgView::makeIcon( )
 {
     QPixmap ico_new = QPixmap::grabWidget(this);
-    ico_new = ico_new.scaled(64,64,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+    ico_new = ico_new.scaled(64,64,Qt::KeepAspectRatio,Qt::SmoothTransformation);
     parentWidget()->setWindowIcon(ico_new);
     //- Send to VCA engine -
     QByteArray ba;
@@ -1929,98 +1952,134 @@ void DevelWdgView::editExit( )
 
 void DevelWdgView::wdgsMoveResize( const QPointF &dP )
 {
-    QRectF bsRct = pntView->geometryF();
-    float xScale = (float)dP.x()/(float)bsRct.width();
-    float yScale = (float)dP.y()/(float)bsRct.height();
-    //-- Update selected widgets geometry --			
-    for( int i_c = 0; i_c < children().size(); i_c++ )
+    if( QApplication::keyboardModifiers()&Qt::ControlModifier )	mainWin()->setWdgScale(true);
+    bool isScale = mainWin()->wdgScale( );
+    if( isScale )       m_flgs |= DevelWdgView::makeScale;
+
+    if( m_flgs&DevelWdgView::holdChild )
     {
-	DevelWdgView *curw = qobject_cast<DevelWdgView*>(children().at(i_c));
-	if( !curw || !curw->select() ) continue;
-	if( QApplication::keyboardModifiers()&Qt::ControlModifier ) mainWin()->setWdgScale(true);
-	bool isScale = mainWin()->wdgScale( );
-	if( isScale )	m_flgs |= DevelWdgView::makeScale;
-	QRectF  geom = curw->geometryF();
+	QRectF bsRct = pntView->geometryF();
+	float xScale = (float)dP.x()/(float)bsRct.width();
+	float yScale = (float)dP.y()/(float)bsRct.height();
+	//-- Update selected widgets geometry --			
+	for( int i_c = 0; i_c < children().size(); i_c++ )
+	{
+	    DevelWdgView *curw = qobject_cast<DevelWdgView*>(children().at(i_c));
+	    if( !curw || !curw->select() ) continue;
+	    QRectF  geom = curw->geometryF();
+	    switch(cursor().shape())
+	    {
+		case Qt::SizeFDiagCursor:
+		    if( isScale ) 
+		    { 
+			curw->x_scale *= 1+((m_flgs&leftTop)?-1:1)*xScale;
+			curw->y_scale *= 1+((m_flgs&leftTop)?-1:1)*yScale;
+		    }
+		    if( m_flgs&leftTop )
+		    {
+			curw->moveF(QPointF(geom.x()+xScale*(bsRct.x()+bsRct.width()-geom.x()),geom.y()+yScale*(bsRct.y()+bsRct.height()-geom.y())));
+			curw->resizeF(QSizeF((float)geom.width()*(1.0-xScale), (float)geom.height()*(1.0-yScale)));
+		    }
+		    else 
+		    {
+		        curw->moveF(QPointF(geom.x()+xScale*(geom.x()-bsRct.x()),geom.y()+yScale*(geom.y()-bsRct.y())));
+			curw->resizeF(QSizeF((float)geom.width()*(1.0+xScale), (float)geom.height()*(1.0+yScale)));
+		    }
+		    break;
+		case Qt::SizeBDiagCursor:
+		    if( isScale ) 
+		    { 
+			curw->x_scale *= 1+((m_flgs&leftTop)?-1:1)*xScale;
+			curw->y_scale *= 1-((m_flgs&leftTop)?-1:1)*yScale;
+		    }				
+		    if( m_flgs&leftTop )
+		    { 
+			curw->moveF(QPointF(geom.x()+xScale*(bsRct.x()+bsRct.width()-geom.x()),geom.y()+yScale*(geom.y()-bsRct.y())));	    
+			curw->resizeF(QSizeF((float)geom.width()*(1.0-xScale), (float)geom.height()*(1.0+yScale)));
+		    }
+		    else
+		    {
+			curw->moveF(QPointF(geom.x()+xScale*(geom.x()-bsRct.x()),geom.y()+yScale*(bsRct.y()+bsRct.height()-geom.y())));
+			curw->resizeF(QSizeF((float)geom.width()*(1.0+xScale), (float)geom.height()*(1.0-yScale)));
+		    }
+		    break;
+		case Qt::SizeVerCursor:
+		    if( isScale )
+			curw->y_scale *= 1+((m_flgs&leftTop)?-1:1)*yScale;
+		    if( m_flgs&leftTop )
+		    {
+			curw->moveF( QPointF(geom.x(), geom.y()+yScale*(bsRct.y()+bsRct.height()-geom.y())) );
+			curw->resizeF( QSizeF(geom.width(), (float)geom.height()*(1.0-yScale)) );
+		    }
+		    else 
+		    {
+			curw->moveF( QPointF(geom.x(), geom.y()+yScale*(geom.y()-bsRct.y())) );
+			curw->resizeF( QSizeF(geom.width(), (float)geom.height()*(1.0+yScale)) );				
+		    }
+		    break;				    
+		case Qt::SizeHorCursor:
+		    if( isScale )
+			curw->x_scale *= 1+((m_flgs&leftTop)?-1:1)*xScale;
+		    if( m_flgs&leftTop )
+		    {
+			curw->moveF(QPointF(geom.x()+xScale*(bsRct.x()+bsRct.width()-geom.x()),geom.y()));
+			curw->resizeF(QSizeF((float)geom.width()*(1.0-xScale), geom.height()));
+		    }
+		    else
+		    {
+			curw->moveF(QPointF(geom.x()+xScale*(geom.x()-bsRct.x()),geom.y()));
+			curw->resizeF(QSizeF((float)geom.width()*(1.0+xScale),geom.height()));
+		    }
+		    break;
+		case Qt::PointingHandCursor:
+		    curw->moveF(curw->posF()+dP);
+		    break;
+		default:
+		    if( m_flgs&DevelWdgView::moveHold )	break;
+		    curw->moveF(curw->posF()+dP);
+		    break;
+	    }
+	}			
+	//-- Set status bar --
+	QRectF srect;
+	for( int i_c = 0; i_c < children().size(); i_c++ )
+	    if( qobject_cast<DevelWdgView*>(children().at(i_c)) && 
+		    ((DevelWdgView*)children().at(i_c))->select( ) )
+		srect = srect.united(((DevelWdgView*)children().at(i_c))->geometryF());
+	mainWin()->statusBar()->showMessage(
+	    QString(_("Elements: '%1' --- xy(%2:%3) wh[%4:%5]"))
+		.arg(selectChilds().c_str())
+		.arg(srect.x()/x_scale).arg(srect.y()/y_scale)
+		.arg(srect.width()/x_scale).arg(srect.height()/y_scale),10000);    
+    }
+    else
+    {
+	//- Change widget geometry -
 	switch(cursor().shape())
 	{
-	    case Qt::SizeFDiagCursor:
-		if( isScale ) 
-		{ 
-		    curw->x_scale *= 1+((m_flgs&leftTop)?-1:1)*xScale;
-		    curw->y_scale *= 1+((m_flgs&leftTop)?-1:1)*yScale;
-		}
-		if( m_flgs&leftTop )
-		{
-		    curw->moveF(QPointF(geom.x()+xScale*(bsRct.x()+bsRct.width()-geom.x()),geom.y()+yScale*(bsRct.y()+bsRct.height()-geom.y())));
-		    curw->resizeF(QSizeF((float)geom.width()*(1.0-xScale), (float)geom.height()*(1.0-yScale)));
-		}
-		else 
-		{
-		    curw->moveF(QPointF(geom.x()+xScale*(geom.x()-bsRct.x()),geom.y()+yScale*(geom.y()-bsRct.y())));
-		    curw->resizeF(QSizeF((float)geom.width()*(1.0+xScale), (float)geom.height()*(1.0+yScale)));
-		}
-		break;
-	    case Qt::SizeBDiagCursor:
-		if( isScale ) 
-		{ 
-		    curw->x_scale *= 1+((m_flgs&leftTop)?-1:1)*xScale;
-		    curw->y_scale *= 1-((m_flgs&leftTop)?-1:1)*yScale;
-		}				
-		if( m_flgs&leftTop )
-		{ 
-		    curw->moveF(QPointF(geom.x()+xScale*(bsRct.x()+bsRct.width()-geom.x()),geom.y()+yScale*(geom.y()-bsRct.y())));	    
-		    curw->resizeF(QSizeF((float)geom.width()*(1.0-xScale), (float)geom.height()*(1.0+yScale)));
-		}
-		else
-		{
-		    curw->moveF(QPointF(geom.x()+xScale*(geom.x()-bsRct.x()),geom.y()+yScale*(bsRct.y()+bsRct.height()-geom.y())));
-		    curw->resizeF(QSizeF((float)geom.width()*(1.0+xScale), (float)geom.height()*(1.0-yScale)));
-		}
+    	    case Qt::SizeHorCursor:
+		if( isScale )	x_scale *= 1+dP.x()/sizeF().width();
+		resizeF(QSizeF(sizeF().width()+dP.x(),sizeF().height()));
 		break;
 	    case Qt::SizeVerCursor:
+		if( isScale )	y_scale *= 1+dP.y()/sizeF().height();
+		resizeF(QSizeF(sizeF().width(),sizeF().height()+dP.y()));
+	        break;
+	    case Qt::SizeFDiagCursor:
 		if( isScale )
-		    curw->y_scale *= 1+((m_flgs&leftTop)?-1:1)*yScale;
-		if( m_flgs&leftTop )
 		{
-		    curw->moveF( QPointF(geom.x(), geom.y()+yScale*(bsRct.y()+bsRct.height()-geom.y())) );
-		    curw->resizeF( QSizeF(geom.width(), (float)geom.height()*(1.0-yScale)) );
+		    x_scale *= 1+dP.x()/sizeF().width();
+		    y_scale *= 1+dP.y()/sizeF().height();
 		}
-		else 
-		{
-		    curw->moveF( QPointF(geom.x(), geom.y()+yScale*(geom.y()-bsRct.y())) );
-		    curw->resizeF( QSizeF(geom.width(), (float)geom.height()*(1.0+yScale)) );				
-		}
-		break;				    
-	    case Qt::SizeHorCursor:
-		if( isScale )
-		    curw->x_scale *= 1+((m_flgs&leftTop)?-1:1)*xScale;
-		if( m_flgs&leftTop )
-		{
-		    curw->moveF(QPointF(geom.x()+xScale*(bsRct.x()+bsRct.width()-geom.x()),geom.y()));
-		    curw->resizeF(QSizeF((float)geom.width()*(1.0-xScale), geom.height()));
-		}
-		else
-		{
-		    curw->moveF(QPointF(geom.x()+xScale*(geom.x()-bsRct.x()),geom.y()));
-		    curw->resizeF(QSizeF((float)geom.width()*(1.0+xScale),geom.height()));
-		}
-		break;
-	    case Qt::PointingHandCursor:
-		curw->moveF(curw->posF()+dP);
-		break;
+		resizeF(QSizeF(sizeF().width()+dP.x(),sizeF().height()+dP.y()));
+		break;	    
 	}
-    }			
-    //-- Set status bar --
-    QRectF srect;
-    for( int i_c = 0; i_c < children().size(); i_c++ )
-	if( qobject_cast<DevelWdgView*>(children().at(i_c)) && 
-		((DevelWdgView*)children().at(i_c))->select( ) )
-	    srect = srect.united(((DevelWdgView*)children().at(i_c))->geometryF());
-    mainWin()->statusBar()->showMessage(
-	QString(_("Elements: '%1' --- xy(%2:%3) wh[%4:%5]"))
-	    .arg(selectChilds().c_str())
-	    .arg(srect.x()/x_scale).arg(srect.y()/y_scale)
-	    .arg(srect.width()/x_scale).arg(srect.height()/y_scale),10000);
+	//-- Set status bar --
+	mainWin()->statusBar()->showMessage(
+	    QString(_("Page: '%1' --- xy(%2:%3) wh[%4:%5]"))
+		.arg(id().c_str()).arg(posF().x()/x_scale).arg(posF().y()/y_scale)
+		.arg(sizeF().width()/x_scale).arg(sizeF().height()/y_scale), 10000 );
+    }
 }
 
 bool DevelWdgView::event( QEvent *event )
@@ -2231,13 +2290,14 @@ bool DevelWdgView::event( QEvent *event )
 	    }
 	    case QEvent::FocusIn:
 		if(select()) setSelect(true);
+		mainWin()->setWdgScale(false);
 		return true;
 	    case QEvent::FocusOut:	
 		if( cursor().shape() != Qt::ArrowCursor )
 		    setCursor(Qt::ArrowCursor);
 		if( QApplication::focusWidget() != this )
 		{
-		    if( !((VisDevelop *)main_win)->attrInsp->hasFocus() )
+		    if( !mainWin()->attrInsp->hasFocus() )
 		    {
 			setSelect(false,false);
 			//-- Unselect child widgets --
@@ -2278,43 +2338,9 @@ bool DevelWdgView::event( QEvent *event )
 		    (((QMouseEvent*)event)->pos()-dragStartPos).manhattanLength() >= QApplication::startDragDistance() )
 		{
 		    dragStartPos = QPoint(-100,-100);
-		    if( m_flgs&DevelWdgView::holdChild )
-		    {
-			wdgsMoveResize(curp-holdPnt);
-			holdPnt = curp;
-			update();
-		    }
-		    else
-		    {
-			if( QApplication::keyboardModifiers()&Qt::ControlModifier )	mainWin()->setWdgScale(true);
-			bool isScale = mainWin()->wdgScale( );
-			if( isScale )       m_flgs |= DevelWdgView::makeScale;
-			//- Change widget geometry -
-			switch(cursor().shape())
-			{
-		    	    case Qt::SizeHorCursor:
-				if( isScale )	x_scale *= (float)curp.x()/sizeF().width();
-				resizeF(QSizeF(curp.x(),sizeF().height()));
-				break;
-			    case Qt::SizeVerCursor:
-				if( isScale )	y_scale *= (float)curp.y()/sizeF().height();
-				resizeF(QSizeF(sizeF().width(),curp.y()));
-			        break;
-			    case Qt::SizeFDiagCursor:
-				if( isScale )
-				{
-				    x_scale *= (float)curp.x()/sizeF().width();
-				    y_scale *= (float)curp.y()/sizeF().height();
-				}
-				resizeF(QSizeF(curp.x(),curp.y()));
-				break;	    
-			}
-			//-- Set status bar --
-			mainWin()->statusBar()->showMessage(
-			    QString(_("Page: '%1' --- xy(%2:%3) wh[%4:%5]"))
-				.arg(id().c_str()).arg(posF().x()/x_scale).arg(posF().y()/y_scale)
-				.arg(sizeF().width()/x_scale).arg(sizeF().height()/y_scale), 10000 );
-		    }
+		    wdgsMoveResize(curp-holdPnt);
+		    holdPnt = curp;		    
+		    if( m_flgs&DevelWdgView::holdChild )	update();
 		    return true;
 		}
         	break;
@@ -2347,15 +2373,23 @@ bool DevelWdgView::event( QEvent *event )
 			    if( dP.isNull() )	break;
 			    dP *= ((QApplication::keyboardModifiers()&Qt::ShiftModifier) ? 1 : 5);
 			    wdgsMoveResize(dP);
-			    QCursor::setPos((QCursor::pos()+dP).toPoint());
+			    if( cursor().shape() != Qt::ArrowCursor )
+				QCursor::setPos((QCursor::pos()+dP).toPoint());
 			    //- Save geometry -
+			    bool isSel = false;
 			    for( int i_c = 0; i_c < children().size(); i_c++ )
 				if( qobject_cast<DevelWdgView*>(children().at(i_c)) &&
 			        	((DevelWdgView*)children().at(i_c))->select( ) )
 				{
 				    saveGeom(((DevelWdgView*)children().at(i_c))->id());
 				    if( m_flgs&DevelWdgView::makeScale ) ((DevelWdgView*)children().at(i_c))->load("");
+				    isSel = true;
 				}
+			    if( !isSel )
+			    {
+				saveGeom(id());
+				if( m_flgs&DevelWdgView::makeScale ) load("");
+			    }
 			    m_flgs &= ~DevelWdgView::makeScale;			    
 			    return true;
 			}

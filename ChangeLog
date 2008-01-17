@@ -1,6 +1,11 @@
 2008-01-14 Roman
 - FIX:/UI/Vision: Group widgets resizing is fixed.
 - /UI/Vision: Scaling flag moved to status bar.
+- /UI/Vision: The short cut CTRL+S is added, to wigets saving from keyboard.
+- /UI/Vision: Links configuration is update.
+- FIX:/UI/Vision: Update links on error operation to it is fixed.
+- /UI/Vision: A palete widget's resizing from keyboard is added.
+- FIX:/UI/Vision: Some bugs into widgets resizing is fixed.
 
 
 2008-01-11 Maxim

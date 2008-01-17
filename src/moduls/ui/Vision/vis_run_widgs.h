@@ -87,6 +87,9 @@ namespace VISION
 	    RunPageView *parent( );	    
 	    RunPageView *pgOpen( const string &pg );
 	    
+	    //- Public attributes -
+	    float wx_scale, wy_scale;
+	    
 	protected:
     	    //- Protected methods -
 	    void closeEvent ( QCloseEvent *event );

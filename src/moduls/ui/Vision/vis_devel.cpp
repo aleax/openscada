@@ -117,6 +117,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) :
     actDBSave->setToolTip(_("Save item data to DB"));
     actDBSave->setWhatsThis(_("The button for saving item data to DB"));
     actDBSave->setStatusTip(_("Press for saving item data to DB."));
+    actDBSave->setShortcut(QKeySequence("Ctrl+S"));    
     actDBSave->setEnabled(false);
     connect(actDBSave, SIGNAL(activated()), this, SLOT(itDBSave()));
     //--- Run project execution ---
