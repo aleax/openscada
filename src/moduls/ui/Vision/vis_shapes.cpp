@@ -1709,22 +1709,23 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
     
 	    //- Draw border -
 	    borderDraw( pnt, dA, *(QPen*)w->dc()["border"].value<void*>(), w->dc()["bordStyle"].toInt() );    
-	
+
 	    //- Trend's picture -
 	    pnt.drawPicture(brdWdth,brdWdth,*(QPicture*)w->dc()["pictObj"].value<void*>());
-	
+
 	    //- Draw focused border -
 	    if( w->hasFocus() )	qDrawShadeRect(&pnt,dA.x(),dA.y(),dA.width(),dA.height(),w->palette());
-	
+
 	    //- Draw cursor -
-	    if( w->dc().value("active",1).toInt() && (curTime >= tTimeGrnd || curTime <= tPict) )
+	    if( w->dc().value("active",1).toInt() && curTime && tTimeGrnd && tPict && (curTime >= tTimeGrnd || curTime <= tPict) )
 	    {
 		int curPos = tAr->x()+tAr->width()*(curTime-tTimeGrnd)/(tPict-tTimeGrnd);
 		QPen curpen(QColor(w->dc()["curColor"].toString()));
 		curpen.setWidth(1);
 		pnt.setPen(curpen);
 		pnt.drawLine(curPos,tAr->y(),curPos,tAr->y()+tAr->height());
-	    }	
+	    }
+	    
     	    return true;
 	}
 	case QEvent::KeyPress:

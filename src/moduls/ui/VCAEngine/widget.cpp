@@ -64,6 +64,7 @@ void Widget::postEnable(int flag)
 	attrAdd( new TFld("geomYsc",_("Geometry:y scale"),TFld::Real,TFld::NoFlag,"","1","0.1;10","",14) );
 	attrAdd( new TFld("geomZ",_("Geometry:z"),TFld::Integer,TFld::NoFlag,"","0","-1000000;1000000","",11) );
 	attrAdd( new TFld("geomMargin",_("Geometry:margin"),TFld::Integer,TFld::NoFlag,"","0","0;1000","",12) );
+	attrAdd( new TFld("evProc",_("Events process"),TFld::String,TFld::FullText,"200") );
     }
     
     attrAt("id").at().setS(id());	attrAt("id").at().setModif(0);
@@ -288,19 +289,8 @@ void Widget::attrDel( const string &attr )
 
 bool Widget::attrChange( Attr &cfg, void *prev )
 {
-    //printf("TEST 00: %s.%s = %s\n",path().c_str(),cfg.id().c_str(),cfg.getS().c_str());
     //- Process Active attribute's mode
-    if( cfg.flgGlob()&Attr::Active && prev )
-    {
-	if( !parent().freeStat() ) parent().at().attrChange(cfg,prev);
-	if( cfg.owner() == this && cfg.id() == "active" )
-	{
-	    if( !cfg.getB() )	
-		cfg.owner()->attrDel("evProc");	
-	    if( cfg.getB() )	
-		cfg.owner()->attrAdd( new TFld("evProc",_("Events process"),TFld::String,TFld::FullText|Attr::Mutable,"200") );
-	}
-    }
+    if( cfg.flgGlob()&Attr::Active && prev && !parent().freeStat() )	parent().at().attrChange(cfg,prev);
     if( cfg.owner() != this )	return false;
     
     //- Update heritors attributes -
@@ -810,7 +800,6 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
 	    }
 	    opt->childAdd("el")->setText("prm:");
 	    opt->childAdd("el")->setText("wdg:");
-
 	}
 	//-- Link elements process --
 	else
@@ -952,10 +941,8 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
         vector<string> lst;
         wdgList(lst);
         opt->childAdd("el")->setText(".");	
-        //opt->childAdd("el")->setAttr("id",".")->setText("<Self>");
         for( unsigned i_f=0; i_f < lst.size(); i_f++ )
             opt->childAdd("el")->setText(lst[i_f]);
-            //opt->childAdd("el")->setAttr("id",lst[i_f])->setText(wdgAt(lst[i_f]).at().name());	    
     }    
     else if( a_path == "/proc/attr" )
     {
@@ -1372,26 +1359,41 @@ void Attr::setB( bool val, bool strongPrev )
     }
 }
 
-void Attr::setCfgTempl(const string &vl)
+void Attr::setCfgTempl( const string &vl )
 {
-    if( cfg_tmpl == vl || !owner()->attrChange(*this,NULL) )	return;
+    if( cfg_tmpl == vl ) return;
+    string t_tmpl = cfg_tmpl;
     cfg_tmpl = vl;
-    unsigned imdf = owner()->modifVal(*this);
-    m_modif = imdf ? imdf : m_modif+1;
+    if( !owner()->attrChange(*this,NULL) )	cfg_tmpl = t_tmpl;
+    else
+    {
+	unsigned imdf = owner()->modifVal(*this);
+	m_modif = imdf ? imdf : m_modif+1;
+    }
 }
 
 void Attr::setCfgVal( const string &vl )
 {
-    if( cfg_val == vl || !owner()->attrChange(*this,NULL) )	return;
+    if( cfg_val == vl ) return;
+    string t_val = cfg_val;
     cfg_val = vl;
-    unsigned imdf = owner()->modifVal(*this);
-    m_modif = imdf ? imdf : m_modif+1;
+    if( !owner()->attrChange(*this,NULL) )	cfg_val = t_val;
+    else
+    {
+	unsigned imdf = owner()->modifVal(*this);
+	m_modif = imdf ? imdf : m_modif+1;
+    }
 }
 
 void Attr::setFlgSelf( SelfAttrFlgs flg )
 {
-    if( self_flg == flg || !owner()->attrChange(*this,NULL) )	return;
+    if( self_flg == flg )	return;
+    SelfAttrFlgs t_flg = self_flg;
     self_flg = flg;
-    unsigned imdf = owner()->modifVal(*this);
-    m_modif = imdf ? imdf : m_modif+1;
+    if( !owner()->attrChange(*this,NULL) )	self_flg = t_flg;
+    else
+    {
+	unsigned imdf = owner()->modifVal(*this);
+	m_modif = imdf ? imdf : m_modif+1;
+    }
 }

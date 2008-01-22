@@ -59,7 +59,7 @@ void Session::preDisable( int flag )
 void Session::setEnable( bool val )
 {
     vector<string> pg_ls;
-    
+
     if( val )
     {
 	//- Connect to project -
@@ -98,17 +98,17 @@ void Session::setEnable( bool val )
 void Session::setStart( bool val )
 {
     vector<string> pg_ls;
-    
+
     if( val )
     {
 	//- Enable session if it disabled -
 	if( !enable() )	setEnable(true);
-	
+
 	//- Process all pages is on -
 	list(pg_ls);
 	for( int i_ls = 0; i_ls < pg_ls.size(); i_ls++ )
     	    at(pg_ls[i_ls]).at().setProcess(true);
-	
+
 	//- Start process task -
 	if( !m_start )
 	{
@@ -118,7 +118,7 @@ void Session::setStart( bool val )
 	    pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
 	    prior.__sched_priority=2;
     	    pthread_attr_setschedparam(&pthr_attr,&prior);
-	
+
 	    pthread_create(&calcPthr,&pthr_attr,Session::Task,this);
     	    pthread_attr_destroy(&pthr_attr);
     	    if( TSYS::eventWait(m_start, true, nodePath()+"start",5) )
@@ -594,6 +594,16 @@ SessWdg::~SessWdg( )
     
 }
 
+void SessWdg::postEnable( int flag )
+{
+    Widget::postEnable(flag);
+    
+    if( flag&TCntrNode::NodeConnect )
+    {
+	attrAdd( new TFld("event",_("Events"),TFld::String,TFld::FullText,"200") );
+    }
+}
+
 SessWdg *SessWdg::ownerSessWdg( bool base )
 {
     if( nodePrev(true) ) 
@@ -684,11 +694,14 @@ void SessWdg::setProcess( bool val )
 	}
 	if( attrPresent("event") ) fio.ioAdd( new IO("event",_("Event"),IO::String,IO::Output) );
 	
-	//-- Compile function --	
-	work_prog = SYS->daq().at().at(TSYS::strSepParse(calcLang(),0,'.')).at().
+	//-- Compile function --
+	try
+	{ 
+	    work_prog = SYS->daq().at().at(TSYS::strSepParse(calcLang(),0,'.')).at().
                     compileFunc(TSYS::strSepParse(calcLang(),1,'.'),fio,calcProg());
-	//-- Connect to compiled function --
-	TValFunc::setFunc(&((AutoHD<TFunction>)SYS->nodeAt(work_prog,1)).at());
+	    //-- Connect to compiled function --
+	    TValFunc::setFunc(&((AutoHD<TFunction>)SYS->nodeAt(work_prog,1)).at());
+	}catch( TError err )	{ mess_err(nodePath().c_str(),_("Compile function for widget is error: %s"),err.mess.c_str()); }
     }
     if( !val )	TValFunc::setFunc(NULL);
 
@@ -838,13 +851,13 @@ void SessWdg::calc( bool first, bool last )
     //- Calculate include widgets -
     for(int i_l = 0; i_l < m_wdgChldAct.size(); i_l++ )
         wdgAt(m_wdgChldAct[i_l]).at().calc(first,last);
-	
+
     try
     {    
 	//- Load events to process -
-	string wevent = eventGet(true);
 	if( !((ownerSess()->calcClk())%(vmax(calcPer()/ownerSess()->period(),1))) )
 	{
+	    string wevent = eventGet(true);	
 	    //- Process input links and constants -    
 	    AutoHD<Attr> attr;
 	    inLnkGet = true;
@@ -930,29 +943,38 @@ void SessWdg::calc( bool first, bool last )
 		//-- Save events from calc procedure --
 		if( evId >= 0 ) wevent = getS(evId);
 	    }
-	}
     
-	//-- Process widget's events --
-	if( !wevent.empty() )
-	{
-	    string sevup, sev;
-	    for( int el_off = 0; (sev=TSYS::strSepParse(wevent,0,';',&el_off)).size(); )
+	    //-- Process widget's events --
+	    if( !wevent.empty() )
 	    {
-		//-- Check for process events --
-		string sprc_lst = attrAt("evProc").at().getS(), 
-		       sprc;	
-		bool evProc = false;
-		for( int elp_off = 0; (sprc=TSYS::strSepParse(sprc_lst,0,'\n',&elp_off)).size(); )
-		    if( TSYS::strSepParse(sprc,0,':') == sev )
+		int t_off;
+		string sevup, sev, sev_ev, sev_path, sprc_lst, sprc, sprc_ev, sprc_path;
+		for( int el_off = 0; (sev=TSYS::strSepParse(wevent,0,'\n',&el_off)).size(); )
+		{
+		    //-- Check for process events --
+		    t_off = 0;
+		    sev_ev   = TSYS::strSepParse(sev,0,':',&t_off);
+		    sev_path = TSYS::strSepParse(sev,0,':',&t_off);
+		    sprc_lst = attrAt("evProc").at().getS();
+		    bool evProc = false;
+		    for( int elp_off = 0; (sprc=TSYS::strSepParse(sprc_lst,0,'\n',&elp_off)).size(); )
 		    {
-	    		ownerSess()->uiComm(TSYS::strSepParse(sprc,1,':'),TSYS::strSepParse(sprc,2,':'),path());
-			evProc = true;
+			t_off = 0;
+			sprc_ev   = TSYS::strSepParse(sprc,0,':',&t_off);
+			sprc_path = TSYS::strSepParse(sprc,0,':',&t_off);
+			if( sprc_ev == sev_ev && (sprc_path == "*" || sprc_path == sev_path) )
+			{
+			    sprc_path = TSYS::strSepParse(sprc,0,':',&t_off);
+	    		    ownerSess()->uiComm(sprc_path,TSYS::strSepParse(sprc,0,':',&t_off),path());
+			    evProc = true;
+			}
 		    }
-		if( !evProc ) sevup+=sev+";";
+		    if( !evProc ) sevup+=sev_ev+":/"+id()+sev_path+"\n";
+		}
+		//-- Put left events to parent widget --
+		SessWdg *owner = ownerSessWdg(true);
+		if( owner && !sevup.empty() ) owner->eventAdd(sevup);
 	    }
-	    //-- Put left events to parent widget --
-	    SessWdg *owner = ownerSessWdg(true);
-	    if( owner && !sevup.empty() ) owner->eventAdd(sevup);
 	}	
     }
     catch(TError err)
@@ -966,12 +988,12 @@ void SessWdg::calc( bool first, bool last )
 bool SessWdg::attrChange( Attr &cfg, void *prev )
 {
     Widget::attrChange( cfg, prev );
-    if( cfg.id() == "active" )
+    /*if( cfg.id() == "active" )
     {
         if( cfg.getB() && !attrPresent("event") )
-	    attrAdd( new TFld("event",_("Events"),TFld::String,Attr::Mutable,"200") );
+	    attrAdd( new TFld("event",_("Events"),TFld::String,Attr::Mutable|TFld::FullText,"200") );
 	if( !cfg.getB() && attrPresent("event") ) attrDel("event");
-    }
+    }*/
     //- External link process -
     if( !inLnkGet && cfg.flgSelf()&Attr::CfgLnkOut && !cfg.cfgVal().empty() )
     {
@@ -1023,7 +1045,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	    for( int i_ch = 0; i_ch < opt->childSize(); i_ch++ )
 	    {
 	        string aid = opt->childGet(i_ch)->attr("id");
-	        if( aid == "event" ) eventAdd(opt->childGet(i_ch)->text()+";");
+	        if( aid == "event" ) eventAdd(opt->childGet(i_ch)->text()+"\n");
 	        else attrAt(aid).at().setS(opt->childGet(i_ch)->text());
 	    }
 	return true;
@@ -1063,7 +1085,7 @@ bool SessWdg::cntrCmdGeneric( XMLNode *opt )
 	}
         if( ctrChkNode(opt,"set",(attr.at().fld().flg()&TFld::NoWrite)?(permit()&~0222):permit(),user().c_str(),grp().c_str(),SEQ_WR) )
         {
-	    if( attr.at().id() == "event" )	eventAdd(opt->text()+";");
+	    if( attr.at().id() == "event" )	eventAdd(opt->text()+"\n");
             else if( attr.at().fld().flg()&TFld::Selected )  
 						attr.at().setSEL(opt->text());
             else				attr.at().setS(opt->text());

@@ -1,3 +1,16 @@
+2008-01-22 Roman
+- !:/DAQ/JavaLikeCalc: The special simbols, like '\n', support to string is added.
+- !!:/Special/FLibSYS: The string parse functions, strParse() and strParsePath() is added.
+- FIX:/UI/VCAEngine: Change atributes processing is fixed.
+- !!:/UI/VCAEngine: Widget's attributes for events, event and evProc, made no mutable and allowed for all widgets.
+- FIX:/UI/VCAEngine: Compile widget's functions errors process is fixed.
+- FIX:/UI/VCAEngine: Attributes configs inherits, on modify, is fixed.
+- FIX:/UI/VCAEngine: Event process on calc procedure is fixed.
+- !!:/UI/VCAEngine: Events list format is changed.
+- FIX:/UI/Vision: Crash on no inited cursor attributes, for primitive Diagram, is fixed.
+- /SYS: Updated Demo DB.
+
+
 2008-01-14 Roman
 - FIX:/UI/Vision: Group widgets resizing is fixed.
 - /UI/Vision: Scaling flag moved to status bar.

@@ -516,6 +516,58 @@ class messPut : public TFunction
 	}
 };
 
+//*************************************************
+//* String parsing on separator                   *
+//*************************************************
+class strParse : public TFunction
+{
+    public:
+	strParse( ) : TFunction("strParse")
+	{
+	    ioAdd( new IO("rez",_("Rezult"),IO::String,IO::Return) );
+	    ioAdd( new IO("str",_("String"),IO::String,IO::Default) );
+	    ioAdd( new IO("lev",_("Level"),IO::Integer,IO::Default) );
+	    ioAdd( new IO("sep",_("Separator"),IO::String,IO::Default,".") );
+	    ioAdd( new IO("off",_("Offset"),IO::Integer,IO::Output) );
+	}
+	
+	string name( )	{ return _("String: Parse on separator"); }
+	string descr( )	{ return _("Use for parse string on separator."); }
+
+	void calc( TValFunc *val )
+	{
+	    string sep = val->getS(3);
+	    int off = val->getI(4);
+	    val->setS(0,TSYS::strSepParse(val->getS(1),val->getI(2),sep.size()?sep[0]:' ',&off));
+	    val->setI(4,off);
+	}
+};
+
+//*************************************************
+//* Path parsing                                  *
+//*************************************************
+class strParsePath : public TFunction
+{
+    public:
+	strParsePath( ) : TFunction("strParsePath")
+	{
+	    ioAdd( new IO("rez",_("Rezult"),IO::String,IO::Return) );
+	    ioAdd( new IO("path",_("Path"),IO::String,IO::Default) );
+	    ioAdd( new IO("lev",_("Level"),IO::Integer,IO::Default) );
+	    ioAdd( new IO("off",_("Offset"),IO::Integer,IO::Output) );
+	}
+	
+	string name( )	{ return _("String: Path parse"); }
+	string descr( )	{ return _("Use for parse path on elements."); }
+
+	void calc( TValFunc *val )
+	{
+	    int off = val->getI(3);
+	    val->setS(0,TSYS::pathLev(val->getS(1),val->getI(2),true,&off));
+	    val->setI(3,off);
+	}
+};
+
 }
 
 #endif //SYSFNC_H

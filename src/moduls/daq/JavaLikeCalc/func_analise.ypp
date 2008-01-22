@@ -360,8 +360,22 @@ int yylex( )
     if( c == '"' && (pos+1) < prog.size() )
     {
 	st_pos = ++pos;
+	string rez_str;
 	while( pos < prog.size() && prog[pos] != '"' && prog[pos] != '\n' )
-        { pos++; yylloc.last_column++; }
+        {
+	    if( prog[pos] == '\\' && (pos+1) < prog.size() )
+	    {
+		switch( prog[pos+1] )
+		{
+		    case 'n':	rez_str += '\n';	break;
+		    case 't':	rez_str += '\t';	break;
+		    default:	rez_str += prog[pos+1];
+		}
+		pos++;
+	    }
+	    else rez_str += prog[pos];
+	    pos++; yylloc.last_column++;
+	}
 	if( pos >= prog.size() )
 	{
 	    yyerror(_("Unexpected end programm, expect end string symbol '\"', "));
@@ -374,7 +388,8 @@ int yylex( )
 	}
 	
 	yylval.reg = p_fnc->regTmpNew();
-	*yylval.reg = prog.substr(st_pos,pos-st_pos);
+	*yylval.reg = rez_str;
+	//*yylval.reg = prog.substr(st_pos,pos-st_pos);
 	pos++;
 	return CONST;
     }

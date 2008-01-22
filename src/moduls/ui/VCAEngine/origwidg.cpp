@@ -197,8 +197,8 @@ bool OrigElFigure::attrChange( Attr &cfg, void *prev )
 		cfg.owner()->attrDel("p"+TSYS::int2str(pntls_prev[i_p])+"y");
 	    }
 	}
-    }
-    return true;
+    }    
+    return Widget::attrChange(cfg,prev);
 }
 
 //*************************************************
@@ -293,7 +293,7 @@ bool OrigFormEl::attrChange( Attr &cfg, void *prev )
 		break;
 	}
     }
-    return true;
+    return Widget::attrChange(cfg,prev);
 }
 
 //************************************************
@@ -390,7 +390,7 @@ bool OrigText::attrChange( Attr &cfg, void *prev )
 			Attr::Mutable,"","","","",50+10*narg), apos );
 	}
     }
-    return true;
+    return Widget::attrChange(cfg,prev);
 }
 
 //************************************************
@@ -473,7 +473,7 @@ bool OrigMedia::attrChange( Attr &cfg, void *prev )
 	    }
 	}
     }
-    return true;
+    return Widget::attrChange(cfg,prev);
 }
 
 //************************************************
@@ -615,7 +615,7 @@ bool OrigDiagram::attrChange( Attr &cfg, void *prev )
 	}
     }
     
-    return true;
+    return Widget::attrChange(cfg,prev);
 }
 
 //************************************************
@@ -696,10 +696,9 @@ bool OrigProtocol::attrChange( Attr &cfg, void *prev )
     		cfg.owner()->attrAdd( new TFld((fidp+"blink").c_str(),(fnmp+_(":blink")).c_str(),
 					       TFld::Boolean,Attr::Mutable,"","0","","",54+10*i_p) );
 	    }
-	    return true;
 	}
     }
-    return false;
+    return Widget::attrChange(cfg,prev);    
 }
 
 //************************************************

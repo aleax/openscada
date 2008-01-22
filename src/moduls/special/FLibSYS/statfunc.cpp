@@ -110,6 +110,8 @@ void Lib::postEnable( int flag )
     reg( new tmTime() );
     reg( new tmCtime() );
     reg( new tmStr2Tm() );
+    reg( new strParse() );
+    reg( new strParsePath() );
 }
 
 void Lib::modStart( )
