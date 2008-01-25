@@ -41,12 +41,12 @@ class TSubSYS : public TCntrNode
     public:
 	//Public methods
 	TSubSYS( char *id, char *name, bool mod = false );
-	virtual ~TSubSYS(  );
+	virtual ~TSubSYS( );
 	
-	string subId()		{ return m_id; }
-	string subName();
+	string subId( )		{ return m_id; }
+	string subName( );
 	
-	bool subModule()	{ return m_mod_sys; }	//Module subsystem
+	bool subModule( )	{ return m_mod_sys; }	//Module subsystem
 	
 	virtual int subVer( )	{ return 0; }		//Type/grp module version
 	
@@ -63,7 +63,7 @@ class TSubSYS : public TCntrNode
 	void modDel( const string &name );
         AutoHD<TModule> modAt( const string &name );
 	
-	TSYS &owner()		{ return *(TSYS *)nodePrev(); }
+	TSYS &owner( )		{ return *(TSYS *)nodePrev(); }
 
     protected:
 	//Protected methods
@@ -71,7 +71,7 @@ class TSubSYS : public TCntrNode
 
     private:
 	//Private methods
-	string nodeName()       { return subId(); }
+	string nodeName( )	{ return subId(); }
 	
 	//Private attributes
 	bool	m_mod_sys;

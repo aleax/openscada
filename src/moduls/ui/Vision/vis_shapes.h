@@ -224,16 +224,16 @@ class ShapeDiagram : public WdgShape
 		//Methods
 		TrendObj( WdgView *view );
 		
-		string addr()		{ return m_addr; }
-		double bordL()		{ return m_bord_low; }
-		double bordU()		{ return m_bord_up; }
-		string color()		{ return m_color; }
-		double curVal()		{ return m_curvl; }
-		int    valTp()		{ return val_tp; }
-		long long valBeg();
-		long long valEnd();
+		string addr( )		{ return m_addr; }
+		double bordL( )		{ return m_bord_low; }
+		double bordU( )		{ return m_bord_up; }
+		string color( )		{ return m_color; }
+		double curVal( )	{ return m_curvl; }
+		int    valTp( )		{ return val_tp; }
+		long long valBeg( );
+		long long valEnd( );
 		int val( long long tm );
-		deque<SHg> &val()	{ return vals; }
+		deque<SHg> &val( )	{ return vals; }
 
 		void setAddr( const string &vl );
 		void setBordL( double vl )	{ m_bord_low = vl; }

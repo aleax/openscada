@@ -1,3 +1,11 @@
+2008-01-25 Roman
+- !!!!:/UI/WebVision: The primitive "Diagram" support is added.
+- FIX:/SYS/Archive/Val: No image object destroying is fixed on trend building error.
+- FIX:/UI/VCAEngine: Enabling of inherited of included widget's is fixed.
+- FIX:/UI/VCAEngine: Deletion and load of inherited of included widget's is fixed.
+- FIX:/UI/Vision: Focuse disabling on development mode for primitive "FormEl" and mode "LineEdit" is fixed.
+
+
 2008-01-22 Roman
 - !:/DAQ/JavaLikeCalc: The special simbols, like '\n', support to string is added.
 - !!:/Special/FLibSYS: The string parse functions, strParse() and strParsePath() is added.

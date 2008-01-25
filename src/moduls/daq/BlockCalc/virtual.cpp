@@ -364,7 +364,7 @@ void Contr::disable_( )
 
 void Contr::start_( )
 {   
-    //Make process all bloks
+    //- Make process all bloks -
     vector<string> lst;
     blkList(lst);
     for( int i_l = 0; i_l < lst.size(); i_l++ )
@@ -376,7 +376,7 @@ void Contr::start_( )
 	    mess_warning(nodePath().c_str(),_("Process block <%s> error."),lst[i_l].c_str());
 	}
     
-    //Start the request and calc data task
+    //- Start the request and calc data task -
     if( !prc_st )
     {
 	pthread_attr_t pthr_attr;
@@ -394,7 +394,7 @@ void Contr::start_( )
             throw TError(nodePath().c_str(),_("Acquisition task no started!"));
     }	    
 
-    //Start interval timer for periodic thread creating of DB syncing
+    //- Start interval timer for periodic thread creating of DB syncing -
     struct itimerspec itval;
     itval.it_interval.tv_sec = itval.it_value.tv_sec = m_dbper;
     itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
@@ -403,7 +403,7 @@ void Contr::start_( )
 
 void Contr::stop_( )
 {  
-    //Stop the request and calc data task
+    //- Stop the request and calc data task -
     if( prc_st )
     {
 	endrun_req = true;
@@ -413,7 +413,7 @@ void Contr::stop_( )
         pthread_join( calcPthr, NULL );
     }
 
-    //Stop interval timer for periodic thread creating
+    //- Stop interval timer for periodic thread creating -
     struct itimerspec itval;
     itval.it_interval.tv_sec = itval.it_interval.tv_nsec =
 	itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
@@ -421,7 +421,7 @@ void Contr::stop_( )
     if( TSYS::eventWait( sync_st, false, nodePath()+"sync_stop",5) )
         throw TError(nodePath().c_str(),_("Controller sync DB no stoped!"));
 	
-    //Make deprocess all blocks
+    //- Make deprocess all blocks -
     vector<string> lst;
     blkList(lst);
     for( int i_l = 0; i_l < lst.size(); i_l++ )

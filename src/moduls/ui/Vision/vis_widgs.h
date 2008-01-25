@@ -208,7 +208,7 @@ namespace VISION
 	    QMainWindow *mainWin( )	{ return main_win; }
 	    QPointF posF( )		{ return w_pos; }
 	    QSizeF  sizeF( )		{ return w_size; }
-	    QRectF geometryF( )		{ return QRectF(w_pos,w_size); }
+	    QRectF  geometryF( )	{ return QRectF(w_pos,w_size); }
 	    virtual float  xScale( bool full = false );
 	    virtual float  yScale( bool full = false );
 	    int	   z( )			{ return z_coord;  }

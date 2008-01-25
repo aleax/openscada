@@ -301,7 +301,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    case 5: tp = LineEdit::Date;	break;
 		    case 6: tp = LineEdit::DateTime;	break;
 		}
-		((LineEdit*)el_wdg)->setType(tp);
+		if( ((LineEdit*)el_wdg)->type() != tp )	{ ((LineEdit*)el_wdg)->setType(tp); mk_new = true; }
 		//- Cfg -
 		((LineEdit*)el_wdg)->setCfg(w->dc()["cfg"].toString());
 		//- Value -
@@ -1300,7 +1300,7 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    int parNumPrev = w->dc()["parNum"].toInt();
 	    int parNum = atoi(val.c_str());
 	    if( parNum == parNumPrev )	break;
-	    for( int i_p = 0; i_p < 10; i_p++ )
+	    for( int i_p = vmin(parNumPrev,parNum); i_p < vmax(parNumPrev,parNum); i_p++ )
 		if( i_p < parNumPrev && i_p >= parNum )
 		    delete (TrendObj*)w->dc()[QString("trend_%1").arg(i_p)].value<void*>();
 		else if( i_p >= parNumPrev && i_p < parNum )
@@ -1317,10 +1317,10 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 		TrendObj *trnd = (TrendObj*)w->dc()[QString("trend_%1").arg(trndN)].value<void*>();
 		switch(uiPrmPos%10)
 		{
-		    case 0: trnd->setAddr(val.c_str());		break;		//addr
+		    case 0: trnd->setAddr(val);			break;		//addr
 		    case 1: trnd->setBordL(atof(val.c_str()));	break;		//bordL
 		    case 2: trnd->setBordU(atof(val.c_str()));	break;		//bordU
-		    case 3: trnd->setColor(val.c_str());	break;		//color
+		    case 3: trnd->setColor(val);		break;		//color
 		    case 4: trnd->setCurVal(atof(val.c_str()));	break;		//value
 		}
 		make_pct = true;

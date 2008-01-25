@@ -216,6 +216,8 @@ class PageWdg : public Widget, public TConfig
         string calcProg( );
 	int    calcPer( );
 
+	void setEnable( bool val );
+
         void setParentNm( const string &isw );
 
         //- Storing -

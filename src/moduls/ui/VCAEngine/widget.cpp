@@ -171,12 +171,14 @@ void Widget::setEnable( bool val )
 	    catch(...)
 	    { mess_err(nodePath().c_str(),_("Child widget <%s> enable/disable error"),ls[i_l].c_str()); }
 
-    //- Enable/disable heritors widgets -
-    for( int i_h = 0; i_h < m_herit.size(); i_h++ )
-	if( val != m_herit[i_h].at().enable( ) )
-	    try { m_herit[i_h].at().setEnable(val); }
-	    catch(...)
-	    { mess_err(nodePath().c_str(),_("Heritors widget <%s> enable/disable error"),m_herit[i_h].at().id().c_str()); }
+    //- Disable heritors widgets -
+    if( !val )
+	for( int i_h = 0; i_h < m_herit.size(); i_h++ )
+	    if( m_herit[i_h].at().enable( ) )
+		try { m_herit[i_h].at().setEnable(false); }
+		catch(...)
+		{ mess_err(nodePath().c_str(),_("Heritors widget <%s> disable error"),m_herit[i_h].at().id().c_str()); }
+    
     m_enable = val;
 }
 

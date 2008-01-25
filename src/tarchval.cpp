@@ -1233,7 +1233,7 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
 	}
     
 	getVal(buf,h_min,h_max,rarch,600000);
-	if(!buf.end() || !buf.begin())      return rez;
+	if(!buf.end() || !buf.begin())	{ gdImageDestroy(im); return rez; }
 	
 	//---- Draw full trend's data and time to the trend end position ----
 	tm_t = iend/1000000;
@@ -1316,7 +1316,7 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
 	v_min = vmin(v_min,c_val);
 	v_max = vmax(v_max,c_val);
     }
-    if(v_max==-3e300)	return rez;
+    if(v_max==-3e300)	{ gdImageDestroy(im); return rez; }
     if(v_max==v_min)	{ v_max+=1.; v_min-=1.; }
     double v_div = 1.;
     double v_len = v_max - v_min;

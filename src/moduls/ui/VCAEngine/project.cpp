@@ -619,8 +619,11 @@ void Page::loadIO( )
     {
         string sid  = c_el.cfg("ID").getS();
 	c_el.cfg("ID").setS("");
-	if( wdgPresent(sid) && c_el.cfg("PARENT").getS() == "<deleted>" )
-	{ wdgDel(sid); continue; }
+	if( c_el.cfg("PARENT").getS() == "<deleted>" )
+	{ 
+	    if( wdgPresent(sid) )	wdgDel(sid);
+	    continue;
+	}
         if( !wdgPresent(sid) ) wdgAdd(sid,"","");
 	
         wdgAt(sid).at().load();
@@ -978,6 +981,21 @@ string PageWdg::grp( )
 short PageWdg::permit( )
 {
     return owner().permit( );
+}
+
+void PageWdg::setEnable( bool val )
+{
+    if( enable() == val ) return;
+    
+    Widget::setEnable(val);
+	
+    //- Disable heritors widgets -
+    if( val )
+        for( int i_h = 0; i_h < owner().herit().size(); i_h++ )
+            if( owner().herit()[i_h].at().wdgPresent(id()) && !owner().herit()[i_h].at().wdgAt(id()).at().enable( ) )
+        	try { owner().herit()[i_h].at().wdgAt(id()).at().setEnable(true); }
+		catch(...)
+		{ mess_err(nodePath().c_str(),_("Heritors widget <%s> enable error"),id().c_str()); }
 }
 
 void PageWdg::setParentNm( const string &isw )

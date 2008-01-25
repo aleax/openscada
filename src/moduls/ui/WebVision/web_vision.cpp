@@ -20,7 +20,7 @@
  ***************************************************************************/
  
 #include <getopt.h>
-#include <string>
+#include <signal.h>
 
 #include <config.h>
 #include <tsys.h>
@@ -64,7 +64,7 @@ using namespace WebVision;
 //************************************************
 //* TWEB                                         *
 //************************************************
-TWEB::TWEB( string name ) : m_t_auth(10), lst_ses_chk(0)
+TWEB::TWEB( string name ) : m_t_auth(10), chck_st(false)
 {
     mId		= MOD_ID;
     mName       = MOD_NAME;
@@ -76,12 +76,170 @@ TWEB::TWEB( string name ) : m_t_auth(10), lst_ses_chk(0)
     mSource	= name;
 
     mod		= this;
+    id_vcases	= grpAdd("ses_");
     
     //- Reg export functions -
     modFuncReg( new ExpFunc("void HttpGet(const string&,string&,const string&,vector<string>&);",
         "Process Get comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpGet) );
     modFuncReg( new ExpFunc("void HttpPost(const string&,string&,const string&,vector<string>&,const string&);",
         "Process Set comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpPost) );
+
+    //- Create check sessions timer -
+    struct sigevent sigev;
+    sigev.sigev_notify = SIGEV_THREAD;
+    sigev.sigev_value.sival_ptr = this;
+    sigev.sigev_notify_function = TaskSessCheck;
+    sigev.sigev_notify_attributes = NULL;
+    timer_create(CLOCK_REALTIME,&sigev,&chkSessTm);
+    
+    //- Create named colors' container -
+    colors["aliceblue"] = rgb(240, 248, 255);
+    colors["antiquewhite"] = rgb(250, 235, 215);
+    colors["aqua"] = rgb( 0, 255, 255);
+    colors["aquamarine"] = rgb(127, 255, 212);
+    colors["azure"] = rgb(240, 255, 255);
+    colors["beige"] = rgb(245, 245, 220);
+    colors["bisque"] = rgb(255, 228, 196);
+    colors["black"] = rgb( 0, 0, 0);
+    colors["blanchedalmond"] = rgb(255, 235, 205);
+    colors["blue"] = rgb( 0, 0, 255);
+    colors["blueviolet"] = rgb(138, 43, 226);
+    colors["brown"] = rgb(165, 42, 42);
+    colors["burlywood"] = rgb(222, 184, 135);
+    colors["cadetblue"] = rgb( 95, 158, 160);
+    colors["chartreuse"] = rgb(127, 255, 0);
+    colors["chocolate"] = rgb(210, 105, 30);
+    colors["coral"] = rgb(255, 127, 80);
+    colors["cornflowerblue"] = rgb(100, 149, 237);
+    colors["cornsilk"] = rgb(255, 248, 220);
+    colors["crimson"] = rgb(220, 20, 60);
+    colors["cyan"] = rgb( 0, 255, 255);
+    colors["darkblue"] = rgb( 0, 0, 139);
+    colors["darkcyan"] = rgb( 0, 139, 139);
+    colors["darkgoldenrod"] = rgb(184, 134, 11);
+    colors["darkgray"] = rgb(169, 169, 169);
+    colors["darkgreen"] = rgb( 0, 100, 0);
+    colors["darkgrey"] = rgb(169, 169, 169);
+    colors["darkkhaki"] = rgb(189, 183, 107);
+    colors["darkmagenta"] = rgb(139, 0, 139);
+    colors["darkolivegreen"] = rgb( 85, 107, 47);
+    colors["darkorange"] = rgb(255, 140, 0);
+    colors["darkorchid"] = rgb(153, 50, 204);
+    colors["darkred"] = rgb(139, 0, 0);
+    colors["darksalmon"] = rgb(233, 150, 122);
+    colors["darkseagreen"] = rgb(143, 188, 143);
+    colors["darkslateblue"] = rgb( 72, 61, 139);
+    colors["darkslategray"] = rgb( 47, 79, 79);
+    colors["darkslategrey"] = rgb( 47, 79, 79);
+    colors["darkturquoise"] = rgb( 0, 206, 209);
+    colors["darkviolet"] = rgb(148, 0, 211);
+    colors["deeppink"] = rgb(255, 20, 147);
+    colors["deepskyblue"] = rgb( 0, 191, 255);
+    colors["dimgray"] = rgb(105, 105, 105);
+    colors["dimgrey"] = rgb(105, 105, 105);
+    colors["dodgerblue"] = rgb( 30, 144, 255);
+    colors["firebrick"] = rgb(178, 34, 34);
+    colors["floralwhite"] = rgb(255, 250, 240);
+    colors["forestgreen"] = rgb( 34, 139, 34);
+    colors["fuchsia"] = rgb(255, 0, 255);
+    colors["gainsboro"] = rgb(220, 220, 220);
+    colors["ghostwhite"] = rgb(248, 248, 255);
+    colors["gold"] = rgb(255, 215, 0);
+    colors["goldenrod"] = rgb(218, 165, 32);
+    colors["gray"] = rgb(128, 128, 128);
+    colors["grey"] = rgb(128, 128, 128);
+    colors["green"] = rgb( 0, 128, 0);
+    colors["greenyellow"] = rgb(173, 255, 47);
+    colors["honeydew"] = rgb(240, 255, 240);
+    colors["hotpink"] = rgb(255, 105, 180);
+    colors["indianred"] = rgb(205, 92, 92);
+    colors["indigo"] = rgb( 75, 0, 130);
+    colors["ivory"] = rgb(255, 255, 240);
+    colors["khaki"] = rgb(240, 230, 140);
+    colors["lavender"] = rgb(230, 230, 250);
+    colors["lavenderblush"] = rgb(255, 240, 245);
+    colors["lawngreen"] = rgb(124, 252, 0);
+    colors["lemonchiffon"] = rgb(255, 250, 205);
+    colors["lightblue"] = rgb(173, 216, 230);
+    colors["lightcoral"] = rgb(240, 128, 128);
+    colors["lightcyan"] = rgb(224, 255, 255);
+    colors["lightgoldenrodyellow"] = rgb(250, 250, 210);
+    colors["lightgray"] = rgb(211, 211, 211);
+    colors["lightgreen"] = rgb(144, 238, 144);
+    colors["lightgrey"] = rgb(211, 211, 211);
+    colors["lightpink"] = rgb(255, 182, 193);
+    colors["lightsalmon"] = rgb(255, 160, 122);
+    colors["lightseagreen"] = rgb( 32, 178, 170);
+    colors["lightskyblue"] = rgb(135, 206, 250);
+    colors["lightslategray"] = rgb(119, 136, 153);
+    colors["lightslategrey"] = rgb(119, 136, 153);
+    colors["lightsteelblue"] = rgb(176, 196, 222);
+    colors["lightyellow"] = rgb(255, 255, 224);
+    colors["lime"] = rgb( 0, 255, 0);
+    colors["limegreen"] = rgb( 50, 205, 50);
+    colors["linen"] = rgb(250, 240, 230);
+    colors["magenta"] = rgb(255, 0, 255);
+    colors["maroon"] = rgb(128, 0, 0);
+    colors["mediumaquamarine"] = rgb(102, 205, 170);
+    colors["mediumblue"] = rgb( 0, 0, 205);
+    colors["mediumorchid"] = rgb(186, 85, 211);
+    colors["mediumpurple"] = rgb(147, 112, 219);
+    colors["mediumseagreen"] = rgb( 60, 179, 113);
+    colors["mediumslateblue"] = rgb(123, 104, 238);
+    colors["mediumspringgreen"] = rgb( 0, 250, 154);
+    colors["mediumturquoise"] = rgb( 72, 209, 204);
+    colors["mediumvioletred"] = rgb(199, 21, 133);
+    colors["midnightblue"] = rgb( 25, 25, 112);
+    colors["mintcream"] = rgb(245, 255, 250);
+    colors["mistyrose"] = rgb(255, 228, 225);
+    colors["moccasin"] = rgb(255, 228, 181);
+    colors["navajowhite"] = rgb(255, 222, 173);
+    colors["navy"] = rgb( 0, 0, 128);
+    colors["oldlace"] = rgb(253, 245, 230);
+    colors["olive"] = rgb(128, 128, 0);
+    colors["olivedrab"] = rgb(107, 142, 35);
+    colors["orange"] = rgb(255, 165, 0);
+    colors["orangered"] = rgb(255, 69, 0);
+    colors["orchid"] = rgb(218, 112, 214);
+    colors["palegoldenrod"] = rgb(238, 232, 170);
+    colors["palegreen"] = rgb(152, 251, 152);
+    colors["paleturquoise"] = rgb(175, 238, 238);
+    colors["palevioletred"] = rgb(219, 112, 147);
+    colors["papayawhip"] = rgb(255, 239, 213);
+    colors["peachpuff"] = rgb(255, 218, 185);
+    colors["peru"] = rgb(205, 133, 63);
+    colors["pink"] = rgb(255, 192, 203);
+    colors["plum"] = rgb(221, 160, 221);
+    colors["powderblue"] = rgb(176, 224, 230);
+    colors["purple"] = rgb(128, 0, 128);
+    colors["red"] = rgb(255, 0, 0);
+    colors["rosybrown"] = rgb(188, 143, 143);
+    colors["royalblue"] = rgb( 65, 105, 225);
+    colors["saddlebrown"] = rgb(139, 69, 19);
+    colors["salmon"] = rgb(250, 128, 114);
+    colors["sandybrown"] = rgb(244, 164, 96);
+    colors["seagreen"] = rgb( 46, 139, 87);
+    colors["seashell"] = rgb(255, 245, 238);
+    colors["sienna"] = rgb(160, 82, 45);
+    colors["silver"] = rgb(192, 192, 192);
+    colors["skyblue"] = rgb(135, 206, 235);
+    colors["slateblue"] = rgb(106, 90, 205);
+    colors["slategray"] = rgb(112, 128, 144);
+    colors["slategrey"] = rgb(112, 128, 144);
+    colors["snow"] = rgb(255, 250, 250);
+    colors["springgreen"] = rgb( 0, 255, 127);
+    colors["steelblue"] = rgb( 70, 130, 180);
+    colors["tan"] = rgb(210, 180, 140);
+    colors["teal"] = rgb( 0, 128, 128);
+    colors["thistle"] = rgb(216, 191, 216);
+    colors["tomato"] = rgb(255, 99, 71);
+    colors["turquoise"] = rgb( 64, 224, 208);
+    colors["violet"] = rgb(238, 130, 238);
+    colors["wheat"] = rgb(245, 222, 179);
+    colors["white"] = rgb(255, 255, 255);
+    colors["whitesmoke"] = rgb(245, 245, 245);
+    colors["yellow"] = rgb(255, 255, 0);
+    colors["yellowgreen"] = rgb(154, 205, 50);
 	
     //- Default CSS init -
     m_CSStables =
@@ -99,7 +257,7 @@ TWEB::TWEB( string name ) : m_t_auth(10), lst_ses_chk(0)
 	".vertalign { display: table-cell; text-align: center; vertical-align: middle; }\n"
 	".vertalign * { vertical-align: middle;	}\n";
     
-    m_VCAjs = 
+    VCAjs = 
 	"/***************************************************\n"
 	" * pathLev - Path parsing function.                *\n"
 	" ***************************************************/\n"
@@ -315,6 +473,7 @@ TWEB::TWEB( string name ) : m_t_auth(10), lst_ses_chk(0)
 	"        setWAttrs(this.inclOpen,'pgOpen','0');\n"
 	"        pgCache[this.inclOpen] = this.pages[this.inclOpen]\n"
 	"        this.place.removeChild(this.pages[this.inclOpen].place);\n"
+	"        this.pages[this.inclOpen].perUpdtEn(false);\n"
 	"        delete this.pages[this.inclOpen];\n"
 	"      }\n"
 	"      this.inclOpen = this.attrs['pgOpenSrc'];\n"
@@ -322,6 +481,7 @@ TWEB::TWEB( string name ) : m_t_auth(10), lst_ses_chk(0)
 	"      {\n"
 	"        this.pages[this.inclOpen] = pgCache[this.inclOpen];\n"
 	"        this.place.appendChild(this.pages[this.inclOpen].place);\n"
+	"        this.pages[this.inclOpen].perUpdtEn(true);\n"
 	"        this.pages[this.inclOpen].makeEl(true,'');\n"
 	"      }\n"
 	"      else\n"
@@ -448,13 +608,15 @@ TWEB::TWEB( string name ) : m_t_auth(10), lst_ses_chk(0)
 	"        var tblCell = document.createElement('div');\n"
 	"        var formObj = document.createElement('input');\n"
 	"        tblCell.className = 'vertalign';\n"
-	"        tblCell.style.width = formObj.style.width = geomW+'px'; tblCell.style.height = geomH+'px';\n"
-	"        formObj.type='text'; formObj.value=this.attrs['value'];\n"
+	"        tblCell.style.width = formObj.style.width = (geomW-4)+'px'; tblCell.style.height = geomH+'px';\n"
+	"        formObj.type = 'text'; formObj.value = this.attrs['value'];\n"
+	"        formObj.style.borderStyle = 'ridge'; formObj.style.borderWidth = '2px';\n"
 	"        tblCell.appendChild(formObj); this.place.appendChild(tblCell);\n"
 	"        break;\n"
 	"      case 1:	//Text edit\n"
 	"        var formObj = document.createElement('textarea');\n"
-	"        formObj.style.width = geomW+'px'; formObj.style.height = geomH+'px';\n"
+	"        formObj.style.width = (geomW-4)+'px'; formObj.style.height = (geomH-4)+'px';\n"
+	"        formObj.style.borderStyle = 'ridge'; formObj.style.borderWidth = '2px';\n"	
 	"        formObj.appendChild(document.createTextNode(this.attrs['value']));\n"
 	"        this.place.appendChild(formObj);\n"	
 	"        break;\n"
@@ -476,7 +638,9 @@ TWEB::TWEB( string name ) : m_t_auth(10), lst_ses_chk(0)
 	"        {\n"
 	"          formObj = document.createElement('div');\n"
 	"          formObj.className = 'vertalign';\n"
-	"          elStyle+='border-style: outset; cursor: pointer; border-width: 3px; ';\n"
+	"          elStyle+='border-style: outset; cursor: pointer; border-width: 2px; ';\n"
+	"          if( this.attrs['color'] ) elStyle+='background-color: '+this.attrs['color']+'; ';\n"
+	"          else elStyle+='background-color: snow; ';\n"
 	"          this.place.onmouseup  = function() { this.style.borderStyle='outset'; };\n"
 	"          this.place.onmousedown= function() { this.style.borderStyle='inset';  };\n"
 	"          this.place.onmouseout = function() { this.style.borderStyle='outset'; };\n"
@@ -505,10 +669,11 @@ TWEB::TWEB( string name ) : m_t_auth(10), lst_ses_chk(0)
 	"        var formObj = document.createElement('select');\n"
 	"        tblCell.className = 'vertalign';\n"
 	"        tblCell.style.width = geomW+'px'; tblCell.style.height = geomH+'px';\n"
-	"        formObj.style.width = geomW+'px';\n"
+	"        formObj.style.width = (geomW-4)+'px';\n"
+	"        formObj.style.borderStyle = 'ridge'; formObj.style.borderWidth = '2px';\n"	
 	"        if( elTp == 5 )\n"
 	"        {\n"
-	"          formObj.style.height = geomH+'px';\n"
+	"          formObj.style.height = (geomH-4)+'px';\n"
 	"          formObj.setAttribute('size',100);\n"
 	"        }\n"
 	"        var selVal = this.attrs['value'];\n"
@@ -533,6 +698,23 @@ TWEB::TWEB( string name ) : m_t_auth(10), lst_ses_chk(0)
 	"        break;\n"
 	"    }\n"
 	"  }\n"
+	"  else if( this.tp == 'Diagram' )\n"
+	"  {\n"
+	"    if( this.attrs['backColor'] ) elStyle+='background-color: '+this.attrs['backColor']+'; ';\n"
+	"    if( this.attrs['backImg'] )   elStyle+='background-image: url(\\'/"MOD_ID"'+this.addr+'?com=res&val='+this.attrs['backImg']+'\\'); ';\n"
+	"    elStyle+='border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';\n"
+	"    elStyle+='overflow: hidden; ';\n"
+	"    if( this.attrs['bordColor'] ) elStyle+='border-color: '+this.attrs['bordColor']+'; ';\n"
+	"    var dgrObj = this.place.childNodes[0];\n"
+	"    if( !dgrObj )\n"
+	"    {\n"
+	"      dgrObj = document.createElement('img');\n"
+	"      dgrObj.border = 0;\n"	
+	"      this.place.appendChild(dgrObj);\n"
+	"    }\n"
+	"    dgrObj.src = '/"MOD_ID"'+this.addr+'?com=obj&tm='+tmCnt;\n"
+	"    this.perUpdtEn(parseInt(this.attrs['trcPer']));\n"
+	"  }\n"
 	"  elStyle+='width: '+geomW+'px; height: '+geomH+'px; z-index: '+this.attrs['geomZ']+'; margin: '+elMargin+'px; ';\n"	
 	"  this.place.style.cssText = elStyle;\n"
 	"  if( el_addr && !margBrdUpd ) return;\n"
@@ -551,6 +733,24 @@ TWEB::TWEB( string name ) : m_t_auth(10), lst_ses_chk(0)
 	"    }\n"
 	"  }\n"
 	"}\n"
+	"function perUpdtEn( en )\n"
+	"{\n"
+	"  if( this.tp == 'Diagram' )\n"
+	"  {\n"
+	"     if( en && !perUpdtWdgs[this.addr] && parseInt(this.attrs['trcPer']) ) perUpdtWdgs[this.addr] = this;\n"
+	"     if( !en && perUpdtWdgs[this.addr] ) delete perUpdtWdgs[this.addr];\n"
+	"  }\n"
+	"  for( var i in this.wdgs ) this.wdgs[i].perUpdtEn(en);\n"
+	"}\n"
+	"function perUpdt( )\n"
+	"{\n"
+	"  if( this.tp == 'Diagram' && (this.updCntr % parseInt(this.attrs['trcPer'])) == 0 )\n"
+	"  {\n"
+	"    var dgrObj = this.place.childNodes[0];\n"
+	"    if( dgrObj ) dgrObj.src = '/"MOD_ID"'+this.addr+'?com=obj&tm='+tmCnt;\n"
+	"  }\n"
+	"  this.updCntr++;\n"
+	"}\n"	
 	"function pwDescr( pgAddr, pg, parent )\n"
 	"{\n"
 	"  this.addr = pgAddr;\n"
@@ -564,6 +764,9 @@ TWEB::TWEB( string name ) : m_t_auth(10), lst_ses_chk(0)
 	"  this.callPage = callPage;\n"
 	"  this.findOpenPage = findOpenPage;\n"
 	"  this.makeEl = makeEl;\n"
+	"  this.perUpdtEn = perUpdtEn;\n"
+	"  this.perUpdt = perUpdt;\n"
+	"  this.updCntr = 0;\n"
 	"}\n"
         "/***************************************************\n"
 	" * makeUI                                          *\n"
@@ -585,6 +788,8 @@ TWEB::TWEB( string name ) : m_t_auth(10), lst_ses_chk(0)
 	"    }\n"
 	"    tmCnt = parseInt(pgNode.getAttribute('tm'));\n"
 	"  }\n"
+	"  //- Update some widgets -\n"
+ 	"  for( var i in perUpdtWdgs ) perUpdtWdgs[i].perUpdt();\n"
 	"  setTimeout(makeUI,1000);\n"
 	"}\n"
 	"/***************************************************\n"
@@ -592,6 +797,7 @@ TWEB::TWEB( string name ) : m_t_auth(10), lst_ses_chk(0)
 	" ***************************************************/\n"
 	"tmCnt = 0;\n"
 	"pgCache = new Object();\n"
+	"perUpdtWdgs = new Object();\n"
 	"masterPage = new pwDescr('',true);\n"
 	"setTimeout(makeUI,10);\n";
 }
@@ -611,6 +817,12 @@ void TWEB::modInfo( vector<string> &list )
 {
     TModule::modInfo(list);
     list.push_back("SubType");
+}
+
+void TWEB::vcaSesAdd( const string &name )
+{
+    if( vcaSesPresent(name) )	return;
+    chldAdd( id_vcases, new VCASess(name) );
 }
 
 string TWEB::optDescr( )
@@ -660,6 +872,51 @@ void TWEB::modSave( )
     TBDS::genDBSet(nodePath()+"CSSTables",m_CSStables);
 }
 
+void TWEB::modStart( )
+{
+    //- Start interval timer for periodic thread creating of DB syncing -
+    struct itimerspec itval;
+    itval.it_interval.tv_sec = itval.it_value.tv_sec = 10;
+    itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
+    timer_settime(chkSessTm, 0, &itval, NULL);
+}
+
+void TWEB::modStop( )
+{
+    //- Stop interval timer for periodic thread creating -
+    struct itimerspec itval;
+    itval.it_interval.tv_sec = itval.it_interval.tv_nsec =
+    itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
+    timer_settime(chkSessTm, 0, &itval, NULL);
+    if( TSYS::eventWait( chck_st, false, nodePath()+"chck_stop",5) )
+	throw TError(nodePath().c_str(),_("Checking of session no stoped!"));
+}
+
+void TWEB::TaskSessCheck( union sigval obj )
+{
+    TWEB *web = (TWEB *)obj.sival_ptr;
+    if( web->chck_st )  return;
+    web->chck_st = true;
+
+    time_t cur_tm = time(NULL);
+
+    //- Check for opened sessions timeout close -
+    vector<string> list;
+    web->vcaSesList( list );
+    for( int i_s = 0; i_s < list.size(); i_s++ )
+	if( cur_tm > web->vcaSesAt(list[i_s]).at().lstReq()+web->authTime()*60 )
+	    web->vcaSesDel(list[i_s]);
+
+    //- Check for user auth session timeout -
+    ResAlloc res(web->m_res,false);    
+    for( map< int, SAuth >::iterator authEl = web->m_auth.begin(); authEl != web->m_auth.end(); )
+	if( cur_tm > authEl->second.t_auth+web->authTime()*60 )
+	    web->m_auth.erase(authEl++);
+	else authEl++;
+
+    web->chck_st = false;
+}
+
 string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const string &addattr )
 {
     return  "HTTP/1.0 "+rcode+"\n"
@@ -702,7 +959,6 @@ string TWEB::pgTail( )
 
 void TWEB::HttpGet( const string &url, string &page, const string &sender, vector<string> &vars )
 {
-    map< string, string >::iterator prmEl;
     SSess ses(TSYS::strDecode(url,TSYS::HttpURL),page,sender,vars,"");
     ses.page = pgHead();
 
@@ -728,12 +984,6 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		ses.page = ses.page+"<h1 class='head'>"PACKAGE_NAME". "+_(MOD_NAME)+"</h1>\n<hr/><br/>\n";
 		getAuth( ses );
 	    }
-	    //- Main VCA page JavaScript programm text request process -
-	    else if( zero_lev == "VCA.js" )
-	    {
-        	page = httpHead("200 OK",m_VCAjs.size(),"application/x-javascript")+m_VCAjs;
-        	return;	    
-	    }
 	    //- Session select or new session for project creation -	    
             else if( zero_lev.empty() )
             {
@@ -744,7 +994,7 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		//-- Get present sessions list --
 		XMLNode req("get");
 		req.setAttr("path","/%2fses%2fses");
-		cntrIfCmd(req,ses);
+		cntrIfCmd(req,ses.user);
 		if( req.childSize() )
 		{
 		    ses.page = ses.page+
@@ -759,7 +1009,7 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		}
 		//-- Get present projects list --
 		req.clear()->setAttr("path","/%2fprm%2fcfg%2fprj");
-		cntrIfCmd(req,ses);
+		cntrIfCmd(req,ses.user);
 		if( req.childSize() )
 		{
 		    ses.page = ses.page +
@@ -780,97 +1030,32 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 	    {
 		XMLNode req("connect");
 		req.setAttr("path","/%2fserv%2f0")->setAttr("prj",zero_lev.substr(4));
-		if( cntrIfCmd(req,ses) )
+		if( cntrIfCmd(req,ses.user) )
 		    messPost(ses.page,req.attr("mcat").c_str(),req.text().c_str(),TWEB::Error);
 		else
+		{
 		    ses.page = pgHead("<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/"MOD_ID"/ses_"+req.attr("sess")+"'/>")+
 			"<center>Open new session '"+req.attr("sess")+"' for project: '"+zero_lev.substr(4)+"'</center>\n<br/>";
+		    vcaSesAdd(req.attr("sess"));
+		}
 	    }
 	    //- Main session page data prepare -	    
 	    else if( zero_lev.size() > 4 && zero_lev.substr(0,4) == "ses_" )
 	    {
-		string first_lev = TSYS::pathLev(ses.url,1);
-		prmEl = ses.prm.find("com");
-		string wp_com = (prmEl!=ses.prm.end()) ? prmEl->second : "";
-		if( wp_com.empty() )	ses.page = pgHead()+"<SCRIPT>\n"+m_VCAjs+"\n</SCRIPT>\n";	
-		//if( wp_com.empty() )	ses.page = pgHead("<SCRIPT type='text/javascript' src='/"MOD_ID"/VCA.js'/>");			
-		//-- Session/projects icon --
-		else if( wp_com == "ico" )
-		{
-		    XMLNode req("get");
-	    	    req.setAttr("path",ses.url+"/%2fico");
-		    cntrIfCmd(req,ses);
-		    ses.page = TSYS::strDecode(req.text(),TSYS::base64);
-        	    page = httpHead("200 OK",ses.page.size(),"image/png")+ses.page;
-		    return;
-		}
-	    	//- Get open pages list -		
-		else if( wp_com == "pgOpen" && first_lev.empty() )
-		{
-		    prmEl = ses.prm.find("tm");
-		    XMLNode req("openlist");
-		    req.setAttr("path",ses.url+"/%2fserv%2f0")->
-			setAttr("tm",(prmEl!=ses.prm.end())?prmEl->second:"0");
-	    	    cntrIfCmd(req,ses);
-		    ses.page = req.save();
-        	    page = httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
-		    return;
-		}
-		//- Page and widget attributes request -
-		else if( wp_com == "attrs" )
-		{
-		    prmEl = ses.prm.find("tm");
-		    XMLNode req("get");
-		    req.setAttr("path",ses.url+"/%2fserv%2f0")->
-			setAttr("tm",(prmEl!=ses.prm.end())?prmEl->second:"0");
-		    cntrIfCmd(req,ses);
-		    ses.page = req.save();
-        	    page = httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
-		    return;
-		}
-		//- Resources request (images and other files) -
-		else if( wp_com == "res" )
-		{
-		    prmEl = ses.prm.find("val");
-		    if( prmEl != ses.prm.end() )
+		string sesnm = zero_lev.substr(4);
+		//-- Call to session --
+		try{ vcaSesAt(sesnm).at().getReq(ses); }
+		catch(...) 
+		{ 
+		    if( !vcaSesPresent(sesnm) )
 		    {
-			XMLNode req("get");
-			req.setAttr("path",ses.url+"/%2fwdg%2fres")->setAttr("id",prmEl->second);
-			cntrIfCmd(req,ses);
-			ses.page = TSYS::strDecode(req.text(),TSYS::base64);
-        		page = httpHead("200 OK",ses.page.size(),req.attr("mime"))+ses.page;
-		    } else page = httpHead("404 Not Found");
-		    return;
-		}
-		//- Page or widget child widgets request -
-		else if( wp_com == "chlds" )
-		{
-		    XMLNode req("get");
-		    req.setAttr("path",ses.url+"/%2fwdg%2fcfg%2fpath")->setAttr("resLink","1");
-	    	    if( !cntrIfCmd(req,ses) )
-		    {
-			req.clear()->setAttr("path",req.text()+"/%2finclwdg%2fwdg");
-		        cntrIfCmd(req,ses);
+			vcaSesAdd(sesnm);
+			vcaSesAt(sesnm).at().getReq(ses);
 		    }
-		    ses.page = req.save();
-        	    page = httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
-		    return;
+		    else throw;
 		}
-		//- Widget root element identifier (primitive) -
-		else if( wp_com == "root" )
-		{
-	    	    XMLNode req("get");
-		    req.setAttr("path",ses.url+"/%2fwdg%2fcfg%2froot");
-		    cntrIfCmd(req,ses);
-		    ses.page = req.save();
-        	    page = httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
-		    return;		    
-		}
-		else
-		{
-		    mess_warning(nodePath().c_str(),_("Unknown command: %s."),wp_com.c_str());
-		    ses.page = pgHead()+"<center>Call page/widget '"+ses.url+"' command: '"+wp_com+"'</center>\n<br/>";
-		}
+		page = ses.page;
+		return;
 	    }
 	    else mess_err(nodePath().c_str(),_("No permit request is received: '%s'"),zero_lev.c_str());
         }
@@ -881,7 +1066,7 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
         return;
     }
     
-    ses.page += pgTail();    
+    ses.page += pgTail();
     page = httpHead("200 OK",ses.page.size())+ses.page;
 }
 
@@ -953,27 +1138,12 @@ int TWEB::sesOpen( string name )
 
 void TWEB::sesCheck( SSess &ses )
 {
-    time_t cur_tm = time(NULL);
-    map< int, SAuth >::iterator authEl;
-    
-    ResAlloc res(m_res,false);    
-    
-    //- Check for close old sessions -
-    if( cur_tm > lst_ses_chk+10 )
-    {
-	for( authEl = m_auth.begin(); authEl != m_auth.end(); )
-	    if( cur_tm > authEl->second.t_auth+m_t_auth*60 )
-		m_auth.erase(authEl++);
-	    else authEl++;
-	lst_ses_chk = cur_tm;
-    }
-    
-    //- Check for session and close old sessions -
-    authEl = m_auth.find(atoi(getCookie( "oscdAuthVisionId", ses.vars ).c_str()));
+    ResAlloc res(m_res,false);
+    map< int, SAuth >::iterator authEl = m_auth.find(atoi(getCookie( "oscdAuthVisionId", ses.vars ).c_str()));
     if( authEl != m_auth.end() )
     {
 	ses.user = authEl->second.name;
-	authEl->second.t_auth = cur_tm;
+	authEl->second.t_auth = time(NULL);
     }
 }
 
@@ -1012,19 +1182,19 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	    "Set-Cookie: oscdAuthVisionId=""; path=/;\n")+ses.page;
 	return;
     }
- 
-    //- Commands process -
-    cntEl = ses.prm.find("com");
-    string wp_com = (cntEl!=ses.prm.end()) ? cntEl->second : ""; 
-    if( wp_com == "attrs" )
-    {
-	XMLNode req("set");
-	req.load(contain);
-	req.setAttr("path",ses.url+"/%2fserv%2f0");
-	cntrIfCmd(req,ses);
+
+    //- Post command to session -
+    try
+    { 
+	string sesnm = TSYS::pathLev(ses.url,0);
+	if( sesnm.size() <= 4 || sesnm.substr(0,4) != "ses_" ) page = httpHead("404 Not Found");
+	else
+	{
+	    vcaSesAt(sesnm.substr(4)).at().postReq(ses); 
+	    page = ses.page;
+	}
     }
-    
-    page = httpHead("200 OK",ses.page.size(),"text/html")+ses.page;
+    catch(...) { page = httpHead("404 Not Found"); }
 }
 
 void TWEB::messPost( string &page, const string &cat, const string &mess, MessLev type )
@@ -1045,10 +1215,10 @@ void TWEB::messPost( string &page, const string &cat, const string &mess, MessLe
     page = page+"</tbody></table>\n";
 }
 
-int TWEB::cntrIfCmd( XMLNode &node, SSess &ses )
+int TWEB::cntrIfCmd( XMLNode &node, const string &user, bool VCA )
 {
-    node.setAttr("user",ses.user);
-    node.setAttr("path","/UI/VCAEngine"+node.attr("path"));
+    node.setAttr("user",user);
+    if( VCA )	node.setAttr("path","/UI/VCAEngine"+node.attr("path"));
     SYS->cntrCmd(&node);
     return atoi(node.attr("rez").c_str());
 }
@@ -1087,6 +1257,23 @@ void TWEB::cntrCmdProc( XMLNode *opt )
     else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )  modSave();
     else TUI::cntrCmdProc(opt);
 }		    
+
+int TWEB::colorParse( const string &clr )
+{
+    if( clr.size() >= 4 && clr[0] == '#' )
+    {
+	int el_sz = clr.size()/3;
+	return (strtol(clr.substr(1,el_sz).c_str(),NULL,16)<<16)+
+	       (strtol(clr.substr(1+el_sz,el_sz).c_str(),NULL,16)<<8)+
+		strtol(clr.substr(1+2*el_sz,el_sz).c_str(),NULL,16);
+    }
+    else
+    {    
+	map<string,int>::iterator iclr = colors.find(clr);
+	if( iclr != colors.end() )	return iclr->second;
+    }
+    return 0;
+}
 
 //*************************************************
 //* SSess                                         *
@@ -1155,4 +1342,3 @@ SSess::SSess( const string &iurl, const string &ipage, const string &isender,
         }
     }
 }
-						    

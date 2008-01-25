@@ -79,8 +79,8 @@ class TModule : public TCntrNode
 	TModule( );
 	virtual ~TModule(  );
 	
-        const string &modId()   { return mId; }
-	string modName();		       
+        const string &modId( )		{ return mId; }
+	string modName( );
     
 	virtual void modLoad( ) 	{ }
 	virtual void modSave( ) 	{ }
@@ -100,15 +100,15 @@ class TModule : public TCntrNode
 	const char *I18N( const char *mess );
         string I18Ns( const string &mess );				
     
-	TSubSYS &owner() 	{ return *(TSubSYS *)nodePrev(); }
+	TSubSYS &owner( )		{ return *(TSubSYS *)nodePrev(); }
     
     protected:    
 	//Methods
-	void postEnable(int flag);
+	void postEnable( int flag );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
 	//- Reg export function -
-	void modFuncReg( ExpFunc *func )	{ m_efunc.push_back(func); }
+	void modFuncReg( ExpFunc *func ){ m_efunc.push_back(func); }
 	
 	//Attributes
 	string mId;  	// Identificator
@@ -122,7 +122,7 @@ class TModule : public TCntrNode
 
     private:
 	//Methods
-	string nodeName()       { return modId(); }
+	string nodeName( )       { return modId(); }
 
 	//Attributes
 	string         	lc_id;        // Locale id. For gettext.

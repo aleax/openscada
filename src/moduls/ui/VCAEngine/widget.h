@@ -128,7 +128,7 @@ class Widget : public TCntrNode, public TValElem
     public:
         //Methods
 	Widget( const string &id, const string &isrcwdg = "" );
-	~Widget();
+	~Widget( );
 
 	string id( )               	{ return m_id; }	//Identifier
 	virtual string path( )     	{ return m_id; }	//Curent widget path
@@ -173,6 +173,7 @@ class Widget : public TCntrNode, public TValElem
 	AutoHD<Widget> parentNoLink( );				//Parent no link widget
 	void heritReg( Widget *wdg );				//Register heritator
 	void heritUnreg( Widget *wdg );				//Unregister heritator
+	vector< AutoHD<Widget> > &herit( )		{ return m_herit; }
 	virtual void setParentNm( const string &isw )	{ m_parent_nm = isw; }
         void inheritAttr( const string &attr = "" );		//Inherit parent attributes
         void inheritIncl( const string &wdg = "" );		//Inherit parent include widgets

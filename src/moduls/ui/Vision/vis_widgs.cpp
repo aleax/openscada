@@ -277,8 +277,11 @@ LineEdit::LineEdit( QWidget *parent, LType tp, bool prev_dis ) :
         bt_fld->setIcon(QIcon(":/images/ok.png"));
 	bt_fld->setIconSize(QSize(12,12));
 	bt_fld->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed) );
-        bt_fld->setEnabled(false);
-        bt_fld->setVisible(false);
+	bt_fld->setMaximumWidth(15);
+	//bt_fld->setMinimumSize(15,15);
+	bt_fld->setFlat( true );
+        bt_fld->setEnabled( false );
+        bt_fld->setVisible( false );
         connect( bt_fld, SIGNAL( released() ), this, SLOT( applySlot() ) );
         box->addWidget(bt_fld);
     }

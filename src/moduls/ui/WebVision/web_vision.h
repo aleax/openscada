@@ -28,8 +28,12 @@
 
 #include <tuis.h>
 
+#include "vca_sess.h"
+
 #undef _
 #define _(mess) mod->I18N(mess)
+
+#define rgb(r,g,b) (((r)<<16)+((g)<<8)+(b))
 
 using std::string;
 using std::vector;
@@ -75,7 +79,6 @@ class SSess
 	vector<string> mess;	//no interrupt messages
 };
 
-
 //************************************************
 //* TWEB                                         *
 //************************************************
@@ -89,11 +92,21 @@ class TWEB: public TUI
 	TWEB( string name );
 	~TWEB( );
 
+        time_t authTime( )				{ return m_t_auth; }
+
+        //- VCA sessions -
+        void vcaSesList( vector<string> &list )		{ chldList(id_vcases,list); }
+        bool vcaSesPresent( const string &name )	{ return chldPresent(id_vcases,name); }
+        void vcaSesAdd( const string &name );
+        void vcaSesDel( const string &name )		{ chldDel(id_vcases,name); }
+	AutoHD<VCASess> vcaSesAt( const string &name )	{ return chldAt(id_vcases,name); }
+
 	void modLoad( );
 	void modSave( );
+        void modStart( );
+	void modStop( );			
     
-    private:
-	//Methods
+	//- Web process methods -
 	void HttpGet( const string &url, string &page, const string &sender, vector<string> &vars );
 	void getAbout( SSess &ses );
 	void getAuth( SSess &ses );
@@ -105,11 +118,22 @@ class TWEB: public TUI
 	string modInfo( const string &name );
 	void   modInfo( vector<string> &list );
  
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	void cntrCmdProc( XMLNode *opt );       	//Control interface command process
 	
 	string httpHead( const string &rcode, int cln = 0, const string &cnt_tp = "text/html", const string &addattr = "" );
 	string pgHead( string head_els = "" );
 	string pgTail( );
+	
+	int cntrIfCmd( XMLNode &node, const string &user, bool VCA = true );
+	
+	int colorParse( const string &clr );
+	
+        //Attributes
+	string		VCAjs;				//Main page JavaScript programm VCA.js	
+	
+    private:
+	//Methods
+	static void TaskSessCheck( union sigval obj );	//Sessions check task
 	
 	//- Sesion manipulation function -
         int sesOpen( string name );
@@ -118,16 +142,16 @@ class TWEB: public TUI
 	//- Post message dialog -
 	void messPost( string &page, const string &cat, const string &mess, MessLev type = Info );
 	
-	int cntrIfCmd( XMLNode &node, SSess &ses );
-	
         //Attributes
         Res             m_res;
 	map< int, SAuth >	m_auth;
-        int             m_t_auth;               //Time of sesion life (minutes)
-	time_t		lst_ses_chk;		//Last time of sessions check
-	string          m_CSStables;            //CSS tables
-	string		m_VCAjs;		//Main page programm VCA.js
-};    
+        int             m_t_auth;               	//Time of sesion life (minutes)
+	timer_t 	chkSessTm;        		//Check session's timer
+	bool		chck_st;        		//Check session's status
+	int     	id_vcases;			//VCA session's container identifier
+	string          m_CSStables;            	//CSS tables
+	map<string, int> colors;			//Named colors
+};
     
 extern TWEB *mod;
 }
