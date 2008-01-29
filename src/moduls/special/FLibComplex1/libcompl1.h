@@ -656,6 +656,7 @@ class PID : public TFunction
 	    //- Automatic mode enabled -
 	    if( v->getB(5) )	
 		out = (2.*lag + integ - difer) + k3*in3 + k4*in4;
+	    else v->setB(6,false);
 		
 	    //- Check output limits -
 	    out=vmin(h_up,vmax(h_dwn,out));

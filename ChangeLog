@@ -1,3 +1,11 @@
+2008-01-29 Roman
+- FIX:/Special/FLibComplex1: The cascade mode is disabling on time automate disabling is fixed for PID function.
+- FIX:/UI/VCAEngine: Deleting attributes of inheritable widgets on time deletion atributes of base widgets is fixed.
+- FIX:/UI/Vision: Tracing mode and cursor display is fixed for primitive "Diagram".
+- FIX:/UI/Vision: Apply button size for primitive "FormEl" is fixed.
+- !:/UI/WebVision:The cursor support is added for primitive "Diagram".
+
+
 2008-01-25 Roman
 - !!!!:/UI/WebVision: The primitive "Diagram" support is added.
 - FIX:/SYS/Archive/Val: No image object destroying is fixed on trend building error.

@@ -879,6 +879,8 @@ void TWEB::modStart( )
     itval.it_interval.tv_sec = itval.it_value.tv_sec = 10;
     itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
     timer_settime(chkSessTm, 0, &itval, NULL);
+    
+    run_st = true;
 }
 
 void TWEB::modStop( )
@@ -890,6 +892,8 @@ void TWEB::modStop( )
     timer_settime(chkSessTm, 0, &itval, NULL);
     if( TSYS::eventWait( chck_st, false, nodePath()+"chck_stop",5) )
 	throw TError(nodePath().c_str(),_("Checking of session no stoped!"));
+	
+    run_st = false;
 }
 
 void TWEB::TaskSessCheck( union sigval obj )

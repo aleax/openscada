@@ -75,13 +75,14 @@ class VCADiagram : public VCAObj
 	
 	void getReq( SSess &ses );
 	void postReq( SSess &ses );
-	void setAttrs( XMLNode &node, const string &user );
+	void setAttrs( XMLNode &node, const string &user );	
 
  	//Attributes
 	int		width, height,		//Widget geometry
 			geomMargin,		//Margin
 			bordWidth;		//Border width
-	bool 		tTimeCurent;		//Curent time
+	bool 		active,			//Active diagram
+			tTimeCurent;		//Curent time
 	long long 	tTime, curTime;		//Trend time and trend cursor's time position
 	int		trcPer;			//Tracing period
 	float		tSize;			//Trend size (s)
@@ -147,6 +148,9 @@ class VCADiagram : public VCAObj
 		
 		VCADiagram	*m_owner;	//Owner object
 	};
+
+	//Methods
+	void setCursor( long long tTime, const string& user );
 
 	//Attributes
 	vector<TrendObj> trnds;			//Trends container  

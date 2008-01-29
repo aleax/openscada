@@ -27113,9 +27113,9 @@ fi
 
 done
 
-    echo "$as_me:$LINENO: checking for isc_sqlcode in -lfbclient" >&5
-echo $ECHO_N "checking for isc_sqlcode in -lfbclient... $ECHO_C" >&6
-if test "${ac_cv_lib_fbclient_isc_sqlcode+set}" = set; then
+    echo "$as_me:$LINENO: checking for isc_attach_database in -lfbclient" >&5
+echo $ECHO_N "checking for isc_attach_database in -lfbclient... $ECHO_C" >&6
+if test "${ac_cv_lib_fbclient_isc_attach_database+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   ac_check_lib_save_LIBS=$LIBS
@@ -27133,11 +27133,11 @@ extern "C"
 #endif
 /* We use char because int might match the return type of a gcc2
    builtin and then its argument prototype would still apply.  */
-char isc_sqlcode ();
+char isc_attach_database ();
 int
 main ()
 {
-isc_sqlcode ();
+isc_attach_database ();
   ;
   return 0;
 }
@@ -27164,20 +27164,20 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  ac_cv_lib_fbclient_isc_sqlcode=yes
+  ac_cv_lib_fbclient_isc_attach_database=yes
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-ac_cv_lib_fbclient_isc_sqlcode=no
+ac_cv_lib_fbclient_isc_attach_database=no
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_fbclient_isc_sqlcode" >&5
-echo "${ECHO_T}$ac_cv_lib_fbclient_isc_sqlcode" >&6
-if test $ac_cv_lib_fbclient_isc_sqlcode = yes; then
+echo "$as_me:$LINENO: result: $ac_cv_lib_fbclient_isc_attach_database" >&5
+echo "${ECHO_T}$ac_cv_lib_fbclient_isc_attach_database" >&6
+if test $ac_cv_lib_fbclient_isc_attach_database = yes; then
   { echo "$as_me:$LINENO: Pass global library using" >&5
 echo "$as_me: Pass global library using" >&6;}
 else

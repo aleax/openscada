@@ -230,7 +230,7 @@ if test ${ModFireBird} = true; then
     #--- Modules checkings ---
     AC_CHECK_HEADERS([ibase.h],[],
 	[AC_MSG_ERROR(DB/FireBird: Some FireBird API headers not found. Install or check FireBird installation!)])
-    AC_CHECK_LIB([fbclient],[isc_sqlcode],[AC_MSG_NOTICE(Pass global library using)],
+    AC_CHECK_LIB([fbclient],[isc_attach_database],[AC_MSG_NOTICE(Pass global library using)],
 	[AC_MSG_ERROR(DB/FireBird: FireBird API client library not found. Install or check FireBird installation!)])
 fi
 #-- Transport protocol modules --

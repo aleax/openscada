@@ -1660,19 +1660,21 @@ void ShapeDiagram::tracing( )
     if( !w->isEnabled() ) return;
     
     long long tTime  = w->dc()["tTime"].toLongLong();
-    long long trcPer = w->dc()["trcPer"].toInt();
+    long long trcPer = (long long)w->dc()["trcPer"].toInt()*1000000;
     if( w->dc()["tTimeCurent"].toBool() )
 	w->dc()["tTime"] = (long long)time(NULL)*1000000;
-    else if( tTime )	w->dc()["tTime"] = tTime+trcPer*1000000;
+    else if( tTime )	w->dc()["tTime"] = tTime+trcPer;
     loadTrendsData(w);
     makeTrendsPicture(w);
     
     //- Trace cursors value -
+    tTime  = w->dc()["tTime"].toLongLong();    
     if( w->dc().value("active",1).toInt() )
     {
 	long long tTimeGrnd = tTime - (int)(w->dc()["tSize"].toDouble()*1000000.);
 	long long curTime = w->dc()["curTime"].toLongLong();
-	if( curTime >= tTime || curTime <= tTimeGrnd )	setCursor( w, tTime+trcPer*1000000 );
+	if( curTime >= (tTime-2*trcPer) || curTime <= tTimeGrnd )
+	    setCursor( w, tTime );
     }
 }
 
@@ -1750,7 +1752,7 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 	    if( !w->hasFocus() ) break;
 	    QPoint curp = w->mapFromGlobal(w->cursor().pos());
 	    if( curp.x() < tAr->x() || curp.x() > (tAr->x()+tAr->width()) ) break;
-	    setCursor( w, tTimeGrnd + (tTime-tTimeGrnd)*(curp.x()-tAr->x())/tAr->width() );
+	    setCursor( w, tTimeGrnd + (tPict-tTimeGrnd)*(curp.x()-tAr->x())/tAr->width() );
 	    break;
 	}
     }
@@ -1764,17 +1766,17 @@ void ShapeDiagram::setCursor( WdgView *w, long long itm )
     long long tTimeGrnd = tTime - (int)(w->dc()["tSize"].toDouble()*1000000.);
     long long curTime   = vmax(vmin(itm,tTime),tTimeGrnd);	    
 
-    w->attrSet("curSek",TSYS::int2str(itm/1000000),29);
-    w->attrSet("curUSek",TSYS::int2str(itm%1000000),30);
+    w->attrSet("curSek",TSYS::int2str(curTime/1000000),29);
+    w->attrSet("curUSek",TSYS::int2str(curTime%1000000),30);
 
     //- Update trend's current values -
     int parNum = w->dc()["parNum"].toInt();
     for( int i_p = 0; i_p < parNum; i_p++ )
     {
         TrendObj *sTr = (TrendObj*)w->dc()[QString("trend_%1").arg(i_p)].value<void*>();
-	int vpos = sTr->val(itm);
+	int vpos = sTr->val(curTime);
 	if( vpos >= sTr->val().size() )	continue;
-	if( vpos && sTr->val()[vpos].tm > itm )	vpos--;
+	if( vpos && sTr->val()[vpos].tm > curTime )	vpos--;
 	double val = sTr->val()[vpos].val;
 	if( val != sTr->curVal() ) 
 	    w->attrSet(QString("prm%1val").arg(i_p).toAscii().data(),TSYS::real2str(val,6),54+10*i_p);

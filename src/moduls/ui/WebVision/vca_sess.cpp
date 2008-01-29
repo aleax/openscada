@@ -213,7 +213,17 @@ void VCADiagram::getReq( SSess &ses )
     else if( trcPer && lstTrc < time(NULL) )
     { tTime += (time(NULL)-lstTrc)*1000000; lstTrc = time(NULL); }
     else rld = false;
-    if( rld ) for( int i_p = 0; i_p < trnds.size(); i_p++ ) trnds[i_p].loadData(ses.user);		        
+    if( rld ) 
+    {
+	for( int i_p = 0; i_p < trnds.size(); i_p++ ) trnds[i_p].loadData(ses.user);
+	//- Trace cursors value -
+	if( active )
+	{
+	    long long tTimeGrnd = tTime - (int)(tSize*1000000.);
+	    if( curTime >= (tTime-2*(long long)trcPer*1000000) || curTime <= tTimeGrnd )
+		setCursor(tTime,ses.user);
+        }
+    }
 
     int mrkHeight = 0;
     int clr_grid, clr_mrk;						//Colors
@@ -491,7 +501,16 @@ void VCADiagram::getReq( SSess &ses )
 	    if( !curPos ) break;
 	}
     }   
-    
+
+    //- Draw cursor -
+    if( active && curTime && tBeg && tEnd && (curTime >= tBeg || curTime <= tEnd) )
+    {
+        //--- Set trend's pen ---
+	int clr_cur = gdImageColorAllocate(im,(ui8)(curColor>>16),(ui8)(curColor>>8),(ui8)curColor);    
+        int curPos = tArX+tArW*(curTime-tBeg)/(tEnd-tBeg);
+        gdImageLine(im,curPos,tArY,curPos,tArY+tArH,clr_cur);
+    }
+
     //- Get image and transfer it -
     int img_sz;
     char *img_ptr = (char *)gdImagePngPtr(im, &img_sz);
@@ -518,6 +537,9 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
 	int uiPrmPos = atoi(req_el->attr("pos").c_str());
 	switch( uiPrmPos )
 	{
+	    case 6:	//active
+                active = (bool)atoi(req_el->text().c_str());
+        	break;
             case 9: 	//width
 		width = (int)(atof(req_el->text().c_str())+0.5);
 		break;
@@ -601,6 +623,29 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
     if( reld_tr_dt )
 	for( int i_p = 0; i_p < trnds.size(); i_p++ )
     	    trnds[i_p].loadData(user,reld_tr_dt==2);
+}
+
+void VCADiagram::setCursor( long long itm, const string& user )
+{
+    long long tTimeGrnd = tTime - (int)(tSize*1000000.);
+    curTime = vmax(vmin(itm,tTime),tTimeGrnd);
+
+    XMLNode req("set");
+    req.setAttr("path",id()+"/%2fserv%2f0");
+    req.childAdd("el")->setAttr("id","curSek")->setText(TSYS::int2str(curTime/1000000));
+    req.childAdd("el")->setAttr("id","curUSek")->setText(TSYS::int2str(curTime%1000000));
+			
+    //- Update trend's current values -
+    for( int i_p = 0; i_p < trnds.size(); i_p++ )
+    {
+	int vpos = trnds[i_p].val(curTime);
+	if( vpos >= trnds[i_p].val().size() ) continue;
+        if( vpos && trnds[i_p].val()[vpos].tm > curTime ) vpos--;
+        double val = trnds[i_p].val()[vpos].val;
+        if( val != trnds[i_p].curVal() )
+	    req.childAdd("el")->setAttr("id","prm"+TSYS::int2str(i_p)+"val")->setText(TSYS::real2str(val,6));
+    }
+    mod->cntrIfCmd(req,user);
 }
 
 //* Trend object's class                         *

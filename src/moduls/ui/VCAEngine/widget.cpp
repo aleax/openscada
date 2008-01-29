@@ -286,7 +286,13 @@ void Widget::attrAdd( TFld *attr, int pos )
 void Widget::attrDel( const string &attr )
 {
     if( !attrPresent(attr) )	return;
+    int flg = attrAt(attr).at().flgGlob();
     attr_cfg.fldDel(attr_cfg.fldId(attr));
+    //- Delete from inheritant wigets -
+    if( !(flg&Attr::Mutable) )    
+	for( int i_h = 0; i_h < m_herit.size(); i_h++ )
+	    if( m_herit[i_h].at().enable( ) )
+    		m_herit[i_h].at().attrDel( attr );
 }
 
 bool Widget::attrChange( Attr &cfg, void *prev )
