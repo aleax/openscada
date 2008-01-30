@@ -1,3 +1,9 @@
+2008-01-30 Roman
+- /UI/VCAEngine: Loading mime data form DB or file is made unified.
+- /UI/VCAEngine: Mime data into project's DB storing is added.
+- FIX:/UI/WebVision: Image scaling for primitive button is fixed.
+
+
 2008-01-29 Roman
 - FIX:/Special/FLibComplex1: The cascade mode is disabling on time automate disabling is fixed for PID function.
 - FIX:/UI/VCAEngine: Deleting attributes of inheritable widgets on time deletion atributes of base widgets is fixed.

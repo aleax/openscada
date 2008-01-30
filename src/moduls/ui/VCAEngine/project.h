@@ -78,6 +78,12 @@ class Project : public TCntrNode, public TConfig
         void add( const string &id, const string &name, const string &orig = "" );
 	void add( Page *iwdg );
         void del( const string &id, bool full = false )	{ chldDel(m_page,id,-1,full); }
+	
+        //- Mime data access -
+        void mimeDataList( vector<string> &list );
+        bool mimeDataGet( const string &id, string &mimeType, string *mimeData = NULL );
+        void mimeDataSet( const string &id, const string &mimeType, const string &mimeData );
+        void mimeDataDel( const string &id );
 
     protected:
 	//Methods

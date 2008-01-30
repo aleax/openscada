@@ -648,6 +648,7 @@ TWEB::TWEB( string name ) : m_t_auth(10), chck_st(false)
 	"          this.place.wdgLnk = this;\n"
 	"          var btImg = document.createElement('IMG');\n"
 	"          btImg.src = '/"MOD_ID"'+this.addr+'?com=res&val='+this.attrs['img'];\n"
+	"          btImg.width = btImg.height = Math.min(geomW-8,geomH-8);\n"
 	"          formObj.appendChild(btImg);\n"
 	"          formObj.appendChild(document.createTextNode(this.attrs['name']));\n"
 	"          geomW-=6; geomH-=6;\n"

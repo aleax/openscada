@@ -198,28 +198,13 @@ void WidgetLib::mimeDataList( vector<string> &list )
 
 bool WidgetLib::mimeDataGet( const string &iid, string &mimeType, string *mimeData )
 {
-    if( iid.substr(0,6) == "file:/" )
-    {
-	//- Get resource file from file system -
-	string filepath = iid.substr(6);
-	int len;
-	char buf[STR_BUF_LEN];
-	string rez;		    
-        int hd = open(filepath.c_str(),O_RDONLY);
-	if( hd == -1 )	return false;
-    	
-    	while( len = read(hd,buf,sizeof(buf)) ) rez.append(buf,len);
-        close(hd);
-	
-	mimeType = ((filepath.rfind(".") != string::npos) ? filepath.substr(filepath.rfind(".")+1)+";" : "file/unknown;")+TSYS::int2str(rez.size());
-	if( mimeData )	*mimeData = TSYS::strEncode(rez,TSYS::base64);
-    }
-    else
+    bool is_file = (iid.size()>5 && iid.substr(0,5) == "file:");
+    bool is_res  = (iid.size()>4 && iid.substr(0,4) == "res:");
+    
+    if( !is_file )
     {
 	//- Get resource file from DB -
-	string dbid = iid;
-	if( dbid.substr(0,5) == "res:/" ) dbid = dbid.substr(5);
-	
+	string dbid = is_res ? iid.substr(4) : iid;
 	string wtbl = tbl()+"_mime";
 	TConfig c_el(&mod->elWdgData());
 	if(!mimeData) c_el.cfg("DATA").setView(false);
@@ -231,7 +216,25 @@ bool WidgetLib::mimeDataGet( const string &iid, string &mimeType, string *mimeDa
 	    return true;
 	}
     }
-    return false;    
+    if( !is_res )
+    {
+	//- Get resource file from file system -
+	string filepath = is_file ? iid.substr(5) : iid;
+	int len;
+	char buf[STR_BUF_LEN];
+	string rez;
+        int hd = open(filepath.c_str(),O_RDONLY);
+	if( hd == -1 )	return false;
+    	
+    	while( len = read(hd,buf,sizeof(buf)) ) rez.append(buf,len);
+        close(hd);
+	
+	mimeType = ((filepath.rfind(".") != string::npos) ? filepath.substr(filepath.rfind(".")+1)+";" : "file/unknown;")+TSYS::int2str(rez.size());
+	if( mimeData )	*mimeData = TSYS::strEncode(rez,TSYS::base64);
+	return true;
+    }
+    
+    return false;
 }
 
 void WidgetLib::mimeDataSet( const string &iid, const string &mimeType, const string &mimeData )
@@ -417,7 +420,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 	    if( !idmime.empty() && idcol == "dt" && atoi(opt->attr("data").c_str()) )
 	    {
 		string mimeType, mimeData;
-		if( mimeDataGet( "res:/"+idmime, mimeType, &mimeData ) ) opt->setText( mimeData );
+		if( mimeDataGet( "res:"+idmime, mimeType, &mimeData ) ) opt->setText( mimeData );
 	    }	    
 	    else
 	    {
@@ -429,7 +432,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 		string mimeType;
 		mimeDataList(lst);
         	for(int i_el = 0; i_el < lst.size(); i_el++)
-		    if( mimeDataGet("res:/"+lst[i_el],mimeType) )
+		    if( mimeDataGet("res:"+lst[i_el],mimeType) )
 		    {
 			if( n_id )	n_id->childAdd("el")->setText(lst[i_el]);
             		if( n_tp )	n_tp->childAdd("el")->setText(TSYS::strSepParse(mimeType,0,';'));
@@ -448,7 +451,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 	    {
 		string mimeType, mimeData;
 		//--- Copy mime data to new record ---
-		if( mimeDataGet( "res:/"+idmime, mimeType, &mimeData ) )
+		if( mimeDataGet( "res:"+idmime, mimeType, &mimeData ) )
 		{
 		    mimeDataSet( opt->text(), mimeType, mimeData );
 		    mimeDataDel( idmime );
@@ -458,13 +461,13 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 	    {
 		string mimeType;
 		//--- Copy mime data to new record ---
-		if( mimeDataGet( "res:/"+idmime, mimeType ) )
+		if( mimeDataGet( "res:"+idmime, mimeType ) )
 		    mimeDataSet( idmime, opt->text()+";"+TSYS::strSepParse(mimeType,1,';'), "");
 	    }
 	    else if( idcol == "dt" )
 	    {
 		string mimeType;
-		if( mimeDataGet( "res:/"+idmime, mimeType ) )
+		if( mimeDataGet( "res:"+idmime, mimeType ) )
 		    mimeDataSet( idmime, TSYS::strSepParse(mimeType,0,';')+";"+TSYS::real2str((float)opt->text().size()/1024.,6),opt->text() );
 	    }
 	}

@@ -19,6 +19,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
 #include <tsys.h>
 
 #include "vcaengine.h"
@@ -76,6 +80,10 @@ void Project::postDisable( int flag )
 	//-- Delete include widgets table --
 	SYS->db().at().open(fullDB()+"_incl");
 	SYS->db().at().close(fullDB()+"_incl",true);
+        //-- Delete mime-data table --
+        SYS->db().at().open(fullDB()+"_mime");
+        SYS->db().at().close(fullDB()+"_mime",true);
+				
     }
 }
 
@@ -180,6 +188,79 @@ AutoHD<Page> Project::at( const string &id )
     return chldAt(m_page,id);
 }
 
+void Project::mimeDataList( vector<string> &list )
+{
+    string wtbl = tbl()+"_mime";
+    TConfig c_el(&mod->elWdgData());
+    c_el.cfgViewAll(false);
+	    
+    list.clear();
+    for( int fld_cnt = 0; SYS->db().at().dataSeek(DB()+"."+wtbl,mod->nodePath()+wtbl,fld_cnt,c_el); fld_cnt++ )
+    {
+        list.push_back(c_el.cfg("ID").getS());
+        c_el.cfg("ID").setS("");
+    }
+}
+
+bool Project::mimeDataGet( const string &iid, string &mimeType, string *mimeData )
+{
+    bool is_file = (iid.size()>5 && iid.substr(0,5) == "file:");
+    bool is_res  = (iid.size()>4 && iid.substr(0,4) == "res:");
+	    
+    if( !is_file )
+    {
+        //- Get resource file from DB -
+        string dbid = is_res ? iid.substr(4) : iid;
+        string wtbl = tbl()+"_mime";
+        TConfig c_el(&mod->elWdgData());
+        if(!mimeData) c_el.cfg("DATA").setView(false);
+        c_el.cfg("ID").setS(dbid);
+        if(SYS->db().at().dataGet(DB()+"."+wtbl,mod->nodePath()+wtbl,c_el))
+        {
+            mimeType = c_el.cfg("MIME").getS();
+            if( mimeData )      *mimeData = c_el.cfg("DATA").getS();
+            return true;
+        }
+    }
+    if( !is_res )
+    {
+        //- Get resource file from file system -
+        string filepath = is_file ? iid.substr(5) : iid;
+        int len;
+        char buf[STR_BUF_LEN];
+        string rez;
+        int hd = open(filepath.c_str(),O_RDONLY);
+        if( hd == -1 )  return false;
+
+        while( len = read(hd,buf,sizeof(buf)) ) rez.append(buf,len);
+	close(hd);
+
+	mimeType = ((filepath.rfind(".") != string::npos) ? filepath.substr(filepath.rfind(".")+1)+";" : "file/unknown;")+TSYS::int2str(rez.size());
+    	if( mimeData )  *mimeData = TSYS::strEncode(rez,TSYS::base64);
+        return true;
+    }
+    return false;
+}
+
+void Project::mimeDataSet( const string &iid, const string &mimeType, const string &mimeData )
+{
+    string wtbl = tbl()+"_mime";
+    TConfig c_el(&mod->elWdgData());
+    c_el.cfg("ID").setS(iid);
+    c_el.cfg("MIME").setS(mimeType);
+    if(!mimeData.size()) c_el.cfg("DATA").setView(false);
+    else c_el.cfg("DATA").setS(mimeData);
+    SYS->db().at().dataSet(DB()+"."+wtbl,mod->nodePath()+wtbl,c_el);
+}
+
+void Project::mimeDataDel( const string &iid )
+{
+    string wtbl = tbl()+"_mime";
+    TConfig c_el(&mod->elWdgData());
+    c_el.cfg("ID").setS(iid);
+    SYS->db().at().dataDel(DB()+"."+wtbl,mod->nodePath()+wtbl,c_el);
+}
+
 void Project::cntrCmdProc( XMLNode *opt )
 {
     //- Get page info -
@@ -213,6 +294,14 @@ void Project::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrMkNode("area",opt,-1,"/page",_("Pages")))
     	    ctrMkNode("list",opt,-1,"/page/page",_("Pages"),permit(),user().c_str(),grp().c_str(),4,"tp","br","idm","1","s_com","add,del","br_pref","pg_");
+        if(ctrMkNode("area",opt,-1,"/mime",_("Mime data")))
+    	    if(ctrMkNode("table",opt,-1,"/mime/mime",_("Mime data"),permit(),user().c_str(),grp().c_str(),2,"s_com","add,del","key","id"))
+	    {
+		ctrMkNode("list",opt,-1,"/mime/mime/id",_("Id"),permit(),user().c_str(),grp().c_str(),1,"tp","str");
+		ctrMkNode("list",opt,-1,"/mime/mime/tp",_("Mime type"),permit(),user().c_str(),grp().c_str(),1,"tp","str");
+		ctrMkNode("list",opt,-1,"/mime/mime/dt",_("Data"),permit(),user().c_str(),grp().c_str(),2,"tp","str","dest","data");
+	    }
+												    
         return;
     }
     
@@ -307,6 +396,69 @@ void Project::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("el")->setAttr("id","4")->setText(_("Use(open)"));
 	opt->childAdd("el")->setAttr("id","2")->setText(_("Modify"));
 	opt->childAdd("el")->setAttr("id","6")->setText(_("Full"));
+    }
+    else if( a_path == "/mime/mime" )
+    {
+        //-- Request data --
+        string idmime = opt->attr("key_id");
+        string idcol  = opt->attr("col");
+
+        if( ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) )
+        {
+            if( !idmime.empty() && idcol == "dt" && atoi(opt->attr("data").c_str()) )
+            {
+                string mimeType, mimeData;
+                if( mimeDataGet( "res:"+idmime, mimeType, &mimeData ) ) opt->setText( mimeData );
+            }
+    	    else
+            {
+        	XMLNode *n_id = ctrMkNode("list",opt,-1,"/mime/mime/id","");
+                XMLNode *n_tp = ctrMkNode("list",opt,-1,"/mime/mime/tp","");
+                XMLNode *n_dt = ctrMkNode("list",opt,-1,"/mime/mime/dt","");
+                
+		vector<string> lst;
+                string mimeType;
+                mimeDataList(lst);
+                for(int i_el = 0; i_el < lst.size(); i_el++)
+                    if( mimeDataGet("res:"+lst[i_el],mimeType) )
+                    {
+                	if( n_id )      n_id->childAdd("el")->setText(lst[i_el]);
+                	if( n_tp )      n_tp->childAdd("el")->setText(TSYS::strSepParse(mimeType,0,';'));
+                        if( n_dt )      n_dt->childAdd("el")->setText(TSYS::strSepParse(mimeType,1,';'));
+                    }
+            }
+        }
+	if( ctrChkNode(opt,"add",permit(),user().c_str(),grp().c_str(),SEQ_WR) )
+            mimeDataSet("newMime","image/new;0","");
+        if( ctrChkNode(opt,"del",permit(),user().c_str(),grp().c_str(),SEQ_WR) )
+            mimeDataDel(opt->attr("key_id"));
+        if( ctrChkNode(opt,"set",permit(),user().c_str(),grp().c_str(),SEQ_WR) )
+	{
+            //-- Request data --
+            if( idcol == "id" )
+    	    {
+	        string mimeType, mimeData;
+	        //--- Copy mime data to new record ---
+	        if( mimeDataGet( "res:"+idmime, mimeType, &mimeData ) )
+	        {
+	            mimeDataSet( opt->text(), mimeType, mimeData );
+	            mimeDataDel( idmime );
+	        }
+	    }
+            else if( idcol == "tp" )
+            {
+                string mimeType;
+                //--- Copy mime data to new record ---
+                if( mimeDataGet( "res:"+idmime, mimeType ) )
+                    mimeDataSet( idmime, opt->text()+";"+TSYS::strSepParse(mimeType,1,';'), "");
+            }
+            else if( idcol == "dt" )
+            {
+                string mimeType;
+        	if( mimeDataGet( "res:"+idmime, mimeType ) )
+	            mimeDataSet( idmime, TSYS::strSepParse(mimeType,0,';')+";"+TSYS::real2str((float)opt->text().size()/1024.,6),opt->text() );
+	    }
+        }
     }
 }
 
@@ -777,11 +929,12 @@ AutoHD<Page> Page::pageAt( const string &id )
 
 string Page::resourceGet( const string &id, string *mime )
 {
-    string mimeType;
+    string mimeType, mimeData;
     
-    string mimeData = parent().at().resourceGet( id, &mimeType );
-    if( mime )	*mime = mimeType;
-    
+    if( !ownerProj()->mimeDataGet( id, mimeType, &mimeData ) && !parent().freeStat() )
+        mimeData = parent().at().resourceGet( id, &mimeType );
+    if( mime )  *mime = mimeType;
+		    
     return mimeData;
 }
 
@@ -1178,9 +1331,10 @@ string PageWdg::resourceGet( const string &id, string *mime )
 {
     string mimeType, mimeData;
     
-    mimeData = parent().at().resourceGet( id, &mimeType );    
-    if( mime )	*mime = mimeType;
-    
+    if( (mimeData=owner().resourceGet( id, &mimeType )).empty() && !parent().freeStat() )
+	mimeData = parent().at().resourceGet( id, &mimeType );
+    if( mime )  *mime = mimeType;
+		    
     return mimeData;
 }
 

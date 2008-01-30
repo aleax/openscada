@@ -428,7 +428,7 @@ void LibProjProp::tabChanged( int itb )
 	{
 	    QTableWidgetItem *w_it;            
             XMLNode *id_col = req.childGet(0);
-	    mimeDataTable->setRowCount(id_col->childSize());        	
+	    mimeDataTable->setRowCount(id_col->childSize());
     	    for( int i_l = 0; i_l < id_col->childSize(); i_l++ )
 	    {
 		if( !mimeDataTable->item(i_l,0) ) 	
@@ -451,7 +451,7 @@ void LibProjProp::tabChanged( int itb )
 		}
 		mimeDataTable->item(i_l,2)->setText(req.childGet(2)->childGet(i_l)->text().c_str());
 	    }
-	    mimeDataTable->resizeColumnsToContents();
+	    mimeDataTable->resizeColumnsToContents();	    
 	}
 	show_init = false;
     }
