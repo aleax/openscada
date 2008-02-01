@@ -632,7 +632,6 @@ WdgView *WdgView::newWdgItem( const string &iwid )
 
 bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 {
-    //printf("TEST 00: %s(%d): %s\n",attr.c_str(),uiPrmPos,val.c_str());
     //- Send value to model -
     if( !attr.empty() )
     {
@@ -664,7 +663,6 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 	    y_scale = atof(val.c_str());
 	    break;
     }
-    
     return shape ? shape->attrSet(this,uiPrmPos,val) : true;
 }
 

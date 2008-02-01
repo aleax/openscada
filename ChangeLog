@@ -1,3 +1,10 @@
+2008-02-01 Roman
+- FIX:/UI/VCAEngine: No visual atributes update transfer cause is fixed.
+- FIX:/UI/Vision: Odd picture painting is fixed for primitive "Diagram".
+- FIX:/UI/Vision, /UI/WebVision: Trends display on big periods and big trend's width is fixed.
+- FIX:/UI/WebVision: Widget's overflow is made hidden.
+
+
 2008-01-30 Roman
 - /UI/VCAEngine: Loading mime data form DB or file is made unified.
 - /UI/VCAEngine: Mime data into project's DB storing is added.

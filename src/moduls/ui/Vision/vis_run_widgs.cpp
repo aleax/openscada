@@ -283,7 +283,11 @@ bool RunWdgView::event( QEvent *event )
 	    mod_ev = "key_mouseDblClick";
 	    break;
     }
-    if( !mod_ev.empty() ) { attrSet("event",mod_ev); return true; }
+    if( !mod_ev.empty() ) 
+    { 
+	attrSet("event",mod_ev);	
+	return true; 
+    }
     return QWidget::event(event);
 }
 					    

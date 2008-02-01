@@ -232,6 +232,7 @@ void VCADiagram::getReq( SSess &ses )
     int parNum     = trnds.size();                         		//Parameter's number
     int tSz        = (int)(tSize*1000000.);       			//Trends size (us)
     long long tEnd = tTime;                     			//Trends end point (us)
+    long long tPict = tEnd;
     long long tBeg = tEnd - tSz;                                      	//Trends begin point (us)
     if( !parNum || tSz <= 0 ) return;
 
@@ -281,8 +282,8 @@ void VCADiagram::getReq( SSess &ses )
         while( hLen/hDiv < hmax_ln/2 && !((hDiv/2)%hDivBase) )  hDiv/=2;
         if( hmax_ln >= 4 && trcPer )
         {
-            tEnd = hDiv*(tEnd/hDiv+1);
-            tBeg = tEnd-hLen;
+            tPict = hDiv*(tEnd/hDiv+1);
+            tBeg = tPict-hLen;
         }
 	
         //--- Draw horisontal grid and markers ---
@@ -297,14 +298,14 @@ void VCADiagram::getReq( SSess &ses )
             int endMarkBrd = tArX+tArW;
             if( sclHor&0x2 )
             {
-                tm_t = tEnd/1000000;
+                tm_t = tPict/1000000;
         	ttm = localtime(&tm_t);
 		snprintf(lab_dt,sizeof(lab_dt),"%d-%02d-%d",ttm->tm_mday,ttm->tm_mon+1,ttm->tm_year+1900);
-                if( ttm->tm_sec == 0 && tEnd%1000000 == 0 )
+                if( ttm->tm_sec == 0 && tPict%1000000 == 0 )
 		    snprintf(lab_tm,sizeof(lab_tm),"%d:%02d",ttm->tm_hour,ttm->tm_min);
-                else if( tEnd%1000000 == 0 )
+                else if( tPict%1000000 == 0 )
 		    snprintf(lab_tm,sizeof(lab_tm),"%d:%02d:%02d",ttm->tm_hour,ttm->tm_min,ttm->tm_sec);
-                else snprintf(lab_tm,sizeof(lab_tm),"%d:%02d:%02d.%d",ttm->tm_hour,ttm->tm_min,ttm->tm_sec,tEnd%1000000);
+                else snprintf(lab_tm,sizeof(lab_tm),"%d:%02d:%02d.%d",ttm->tm_hour,ttm->tm_min,ttm->tm_sec,tPict%1000000);
 		gdImageString(im,gdFontTiny,tArX+tArW-gdFontTiny->w*strlen(lab_dt),tArY+tArH+3+gdFontTiny->h,(unsigned char *)lab_dt,clr_mrk);
 		gdImageString(im,gdFontTiny,tArX+tArW-gdFontTiny->w*strlen(lab_tm),tArY+tArH+3,(unsigned char *)lab_tm,clr_mrk);
 		endMarkBrd = vmin(tArX+tArW-gdFontTiny->w*strlen(lab_dt),tArX+tArW-gdFontTiny->w*strlen(lab_tm));
@@ -315,11 +316,11 @@ void VCADiagram::getReq( SSess &ses )
             for( long long i_h = tBeg; true; )
             {
                 //---- Draw grid ----
-                int h_pos = tArX+tArW*(i_h-tBeg)/(tEnd-tBeg);
+                int h_pos = tArX+tArW*(i_h-tBeg)/(tPict-tBeg);
                 if( sclHor&0x1 ) gdImageLine(im,h_pos,tArY,h_pos,tArY+tArH,clr_grid);
                 else gdImageLine(im,h_pos,tArY+tArH-3,h_pos,tArY+tArH+3,clr_grid);
 		//---- Draw markers ----
-                if( sclHor&0x2 && !(i_h%hDiv) && i_h != tEnd )
+                if( sclHor&0x2 && !(i_h%hDiv) && i_h != tPict )
                 {
                     tm_t = i_h/1000000;
             	    ttm = localtime(&tm_t);
@@ -363,9 +364,9 @@ void VCADiagram::getReq( SSess &ses )
 		    first_m = false;
 		}
                 //---- Next ----
-		if( i_h >= tEnd )       break;
+		if( i_h >= tPict )       break;
 		i_h = (i_h/hDiv)*hDiv + hDiv;
-		if( i_h > tEnd )        i_h = tEnd;
+		if( i_h > tPict )        i_h = tPict;
 	    }
 	}
     }
@@ -386,11 +387,19 @@ void VCADiagram::getReq( SSess &ses )
 	    if( aVbeg >= aVend ) return;
             //----- Calc value borders -----
             vsMax = -3e300, vsMin = 3e300;
-    	    for( int ipos = trnds[0].val(aVbeg); ipos < trnds[0].val().size() && trnds[0].val()[ipos].tm <= aVend; ipos++ )
+	    bool end_vl = false;
+	    int ipos = trnds[0].val(aVbeg);
+            if( ipos && trnds[0].val()[ipos].tm > aVbeg ) ipos--;			
+    	    while( true )
 	    {
-	        if( trnds[0].val()[ipos].val == EVAL_REAL ) continue;
-	        vsMin  = vmin(vsMin,trnds[0].val()[ipos].val);
-	        vsMax  = vmax(vsMax,trnds[0].val()[ipos].val);
+		if( ipos >= trnds[0].val().size() || end_vl )	break;
+                if( trnds[0].val()[ipos].tm >= aVend )	end_vl = true;
+	        if( trnds[0].val()[ipos].val != EVAL_REAL )
+		{
+	    	    vsMin  = vmin(vsMin,trnds[0].val()[ipos].val);
+	    	    vsMax  = vmax(vsMax,trnds[0].val()[ipos].val);
+		}
+		ipos++;
 	    }
 	    if( vsMax == -3e300 ) { vsMax = 1; vsMin = 0; }
 	}
@@ -444,11 +453,18 @@ void VCADiagram::getReq( SSess &ses )
 	if( vsPerc && bordL >= bordU )
 	{
 	    bordU = -3e300, bordL = 3e300;
-	    for( int ipos = aPosBeg; ipos < trnds[i_t].val().size() && trnds[i_t].val()[ipos].tm <= aVend; ipos++ )
+	    bool end_vl = false;
+    	    int ipos = aPosBeg;	    
+	    while( true )
 	    {
-	        if( trnds[i_t].val()[ipos].val == EVAL_REAL ) continue;
-	        bordL = vmin(bordL,trnds[i_t].val()[ipos].val);
-	        bordU = vmax(bordU,trnds[i_t].val()[ipos].val);
+		if( ipos >= trnds[i_t].val().size() || end_vl )	break;
+		if( trnds[i_t].val()[ipos].tm >= aVend )	end_vl = true;
+	        if( trnds[i_t].val()[ipos].val != EVAL_REAL )
+		{
+	    	    bordL = vmin(bordL,trnds[i_t].val()[ipos].val);
+	    	    bordU = vmax(bordU,trnds[i_t].val()[ipos].val);
+		}
+		ipos++;
 	    }
             float vMarg = (bordU-bordL)/10;
             bordL-= vMarg;
@@ -456,13 +472,14 @@ void VCADiagram::getReq( SSess &ses )
         }
 	
         //--- Draw trend ---
+	bool end_vl = false;
         double curVl, averVl = EVAL_REAL, prevVl = EVAL_REAL;
         int    curPos, averPos = 0, prevPos = 0;
         long long curTm, averTm = 0, averLstTm = 0;
         for( int a_pos = aPosBeg; true; a_pos++ )
         {
-            curTm = trnds[i_t].val()[a_pos].tm;
-            if( a_pos < trnds[i_t].val().size() && trnds[i_t].val()[a_pos].tm <= aVend )
+            curTm = vmin(aVend,vmax(aVbeg,trnds[i_t].val()[a_pos].tm));
+            if( a_pos < trnds[i_t].val().size() && !end_vl )
             {
                 curVl = trnds[i_t].val()[a_pos].val;
                 if( vsPerc && curVl != EVAL_REAL )
@@ -470,8 +487,9 @@ void VCADiagram::getReq( SSess &ses )
                     curVl = 100.*(curVl-bordL)/(bordU-bordL);
                     curVl = (curVl>100) ? 100 : (curVl<0) ? 0 : curVl;
                 }
-                curPos = tArX+tArW*(curTm-tBeg)/(tEnd-tBeg);
+                curPos = tArX+tArW*(curTm-tBeg)/(tPict-tBeg);
             }else curPos = 0;
+	    if( trnds[i_t].val()[a_pos].tm >= aVend )	end_vl = true;
     	    //Square Average
             if( averPos == curPos )
             {
@@ -503,11 +521,11 @@ void VCADiagram::getReq( SSess &ses )
     }   
 
     //- Draw cursor -
-    if( active && curTime && tBeg && tEnd && (curTime >= tBeg || curTime <= tEnd) )
+    if( active && curTime && tBeg && tPict && (curTime >= tBeg || curTime <= tPict) )
     {
         //--- Set trend's pen ---
 	int clr_cur = gdImageColorAllocate(im,(ui8)(curColor>>16),(ui8)(curColor>>8),(ui8)curColor);    
-        int curPos = tArX+tArW*(curTime-tBeg)/(tEnd-tBeg);
+        int curPos = tArX+tArW*(curTime-tBeg)/(tPict-tBeg);
         gdImageLine(im,curPos,tArY,curPos,tArY+tArH,clr_cur);
     }
 

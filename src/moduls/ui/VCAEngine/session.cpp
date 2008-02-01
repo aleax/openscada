@@ -836,7 +836,7 @@ void SessWdg::getUpdtWdg( const string &path, unsigned int tm, vector<string> &e
 unsigned int SessWdg::modifVal( Attr &cfg )
 { 
     int m_clc = ownerSess()->calcClk( );
-    if( !(cfg.flgGlob()&Attr::IsUser) )	m_mdfClc = m_clc;
+    if( cfg.fld().reserve() )	m_mdfClc = m_clc;
     return m_clc; 
 }
 
@@ -988,12 +988,6 @@ void SessWdg::calc( bool first, bool last )
 bool SessWdg::attrChange( Attr &cfg, void *prev )
 {
     Widget::attrChange( cfg, prev );
-    /*if( cfg.id() == "active" )
-    {
-        if( cfg.getB() && !attrPresent("event") )
-	    attrAdd( new TFld("event",_("Events"),TFld::String,Attr::Mutable|TFld::FullText,"200") );
-	if( !cfg.getB() && attrPresent("event") ) attrDel("event");
-    }*/
     //- External link process -
     if( !inLnkGet && cfg.flgSelf()&Attr::CfgLnkOut && !cfg.cfgVal().empty() )
     {
@@ -1034,7 +1028,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 		for( int i_l = 0; i_l < m_attrUILs.size(); i_l++ )
 		{
 		    attr = attrAt(m_attrUILs[i_l]);
-		    if( !(attr.at().flgGlob()&Attr::IsUser) && attr.at().modif() >= tm )
+		    if( attr.at().modif() >= tm && attr.at().fld().reserve() )
 			opt->childAdd("el")->setAttr("id",m_attrUILs[i_l].c_str())->
 				    	     setAttr("pos",TSYS::int2str(attr.at().fld().reserve()))->
 					     setText(attr.at().getS());
