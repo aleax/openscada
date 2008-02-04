@@ -327,8 +327,9 @@ void LineEdit::setType( LType tp )
 	    ((QComboBox*)ed_fld)->setEditable(true);
 	    connect( (QComboBox*)ed_fld, SIGNAL( editTextChanged(const QString&) ), SLOT( changed() ) );
 	    break;	    
-    }    
+    }
     ((QBoxLayout*)layout())->insertWidget(0,ed_fld);
+    setFocusProxy( ed_fld );
     if( bt_fld ) setTabOrder(ed_fld,bt_fld);
     
     m_tp = tp;

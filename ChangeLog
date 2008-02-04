@@ -1,3 +1,10 @@
+2008-02-04 Roman
+- FIX:/Archive/FSArch: Message archivation is fixed for XML parsing error crash.
+- FIX:/DAQ/JavaLikeCalc: The message "Compile the program language %s is no support." format is fixed.
+- !!:/UI/Vision, /UI/VCAEngine: Focus atribute and events is added. Dynamic page linking support is added.
+- /UI/Vision: Make widget's disabling for no active state.
+
+
 2008-02-01 Roman
 - FIX:/UI/VCAEngine: No visual atributes update transfer cause is fixed.
 - FIX:/UI/Vision: Odd picture painting is fixed for primitive "Diagram".

@@ -100,12 +100,14 @@ void ModMArch::put( vector<TMess::SRec> &mess )
 		if( i_arh == 0 && 
 		    ((m_max_size && arh_s[i_arh]->size() > m_max_size*1024) ||
 		     (mess[i_m].time >= arh_s[i_arh]->begin()+m_time_size*24*60*60)) ) break;
-	      	arh_s[i_arh]->put(mess[i_m]);
+	      	try{ arh_s[i_arh]->put(mess[i_m]); }
+		catch(TError err)
+		{ mess_err(err.cat.c_str(),err.mess.c_str()); continue; }
 		i_arh = -1;
 		break;
 	    }
 	//- If going a new data then create new file -
-	if( i_arh == 0 )
+	if( i_arh >= 0 )
 	{
 	    res.release();
 	    
@@ -450,7 +452,7 @@ void MFileArch::attach( const string &iname, bool full )
 		//-- Read full file to buffer --
 		while( r_cnt = fread(buf,1,sizeof(buf),f) )
 		    s_buf.append(buf,r_cnt);
-		fclose(f);
+		fclose(f); f = NULL;		
 	
 		//-- Parse full file --
     		m_node->load(s_buf);
@@ -522,11 +524,11 @@ void MFileArch::attach( const string &iname, bool full )
     }
     catch( TError err )
     { 
-	mess_err(err.cat.c_str(),"%s",err.mess.c_str()); 
+	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	if( m_node ) delete m_node;
 	m_node = NULL;
 	m_err = true;
-	fclose(f);
+	if( f )	fclose(f);
     }
 }
 
@@ -537,7 +539,11 @@ void MFileArch::put( TMess::SRec mess )
     if( !m_load )
     {
 	attach( m_name ); 
-	if( m_err || !m_load )	throw TError(owner().nodePath().c_str(),_("Archive file isn't attaching!"));
+	if( m_err || !m_load )
+	{
+	    m_err = true;
+	    throw TError(owner().nodePath().c_str(),_("Archive file '%s' isn't attaching!"),m_name.c_str());
+	}
     }
     
     ResAlloc res(m_res,true);

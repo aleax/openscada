@@ -135,6 +135,20 @@ void RunWdgView::update( unsigned cnt, int div_max, const string &wpath )
     		((RunWdgView*)children().at(i_c))->update(cnt,div_max);
 }
 
+bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
+{
+    bool rez = WdgView::attrSet( attr, val, uiPrmPos );
+    
+    switch(uiPrmPos)
+    {
+	case -2:        //focus
+	    if( (bool)atoi(val.c_str()) == hasFocus() )      break;
+	    if( (bool)atoi(val.c_str()) ) setFocus(Qt::OtherFocusReason);
+	    break;
+    }
+    return rez;
+}
+
 bool RunWdgView::event( QEvent *event )
 {
     if( WdgView::event(event) || (shape&&shape->event(this,event)) )	return true;
@@ -279,8 +293,16 @@ bool RunWdgView::event( QEvent *event )
 	    }
 	    break;
 	}
-	case QEvent::MouseButtonDblClick:
+	case QEvent::MouseButtonDblClick:	
 	    mod_ev = "key_mouseDblClick";
+	    break;
+	case QEvent::FocusIn:
+	    attrSet("focus","1");
+	    mod_ev = "ws_FocusIn";
+	    break;
+	case QEvent::FocusOut:
+	    attrSet("focus","0");
+	    mod_ev = "ws_FocusOut";
 	    break;
     }
     if( !mod_ev.empty() ) 

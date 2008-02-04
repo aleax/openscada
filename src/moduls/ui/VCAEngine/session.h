@@ -34,6 +34,7 @@ namespace VCA
 //* Session: VCA session                      	 *
 //************************************************
 class SessPage;
+class SessWdg;
     
 class Session : public TCntrNode
 {
@@ -77,7 +78,7 @@ class Session : public TCntrNode
 	
 	Res &eventRes( )			{ return m_evRes; }
 	
-	void uiComm( const string &com, const string &prm, const string &src );
+	void uiComm( const string &com, const string &prm, SessWdg *src = NULL );
 
     protected:
 	//Methods

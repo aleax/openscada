@@ -54,6 +54,7 @@ namespace VISION
 	    void attrLoad( QMap<QString, QString> &attrs );
 	    
 	    void update( unsigned cnt, int div_max, const string &wpath = "" );
+	    bool attrSet( const string &attr, const string &val, int uiPrmPos = 0 );
 	
 	protected:
 	    //- Protected methods -

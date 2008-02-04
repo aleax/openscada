@@ -204,7 +204,11 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	case 6:		//active
 	    if(!runW)	break;
 	    w->dc()["active"] = (bool)atoi(val.c_str());
-    	    if( el >= 0 ) setFocus(w,el_wdg,atoi(val.c_str()));
+    	    if( el >= 0 ) 
+	    {
+		setFocus(w,el_wdg,atoi(val.c_str()));
+		el_wdg->setEnabled((bool)atoi(val.c_str()));
+	    }
 	    break;
 	case 12:	//geomMargin
 	    w->layout()->setMargin(atoi(val.c_str()));	break;
@@ -438,8 +442,10 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	if( mk_new )
 	{
 	    //-- Install event's filter and disable focus --	
-	    if( devW ) eventFilterSet(w,el_wdg,true);
-	    setFocus(w,el_wdg,w->dc()["active"].toInt()&(!devW),devW);
+	    eventFilterSet(w,el_wdg,true);
+	    w->setFocusProxy(el_wdg);
+	    setFocus(w,el_wdg,w->dc()["active"].toInt()&&(!devW),devW);
+	    if( runW )	el_wdg->setEnabled(w->dc()["active"].toInt());
 	    el_wdg->setVisible(w->dc()["en"].toInt());
 	    //-- Fix widget --
 	    ((QVBoxLayout*)w->layout())->addWidget(el_wdg);
@@ -459,19 +465,31 @@ bool ShapeFormEl::event( WdgView *view, QEvent *event )
     return false;
 }
 
-bool ShapeFormEl::eventFilter( WdgView *view, QObject *object, QEvent *event )
+bool ShapeFormEl::eventFilter( WdgView *w, QObject *object, QEvent *event )
 {
-    switch(event->type())
-    {
-	case QEvent::Enter:
-	case QEvent::Leave:	    
-	    return true;
-	case QEvent::MouseMove:	    
-	case QEvent::MouseButtonPress: 
-	case QEvent::MouseButtonRelease:
-	    QApplication::sendEvent(view,event);
-	return true;
-    }
+    if( qobject_cast<DevelWdgView*>(w) )
+	switch( event->type() )
+	{
+	    case QEvent::Enter:
+	    case QEvent::Leave:	return true;
+	    case QEvent::MouseMove:	    
+	    case QEvent::MouseButtonPress: 
+	    case QEvent::MouseButtonRelease:
+		QApplication::sendEvent(w,event);
+		return true;
+	}
+    else
+	switch( event->type() )
+	{
+	    case QEvent::FocusIn:
+	        w->attrSet("focus","1");
+		w->attrSet("event","ws_FocusIn");
+		break;
+	    case QEvent::FocusOut:
+	        w->attrSet("focus","0");
+		w->attrSet("event","ws_FocusOut");
+		break;
+	}
     
     return false;
 }
@@ -1207,6 +1225,9 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    up = make_pct = true;
 	    reld_tr_dt = 2;
 	    break;
+	case -2:	//focus
+	    if( (bool)atoi(val.c_str()) != w->hasFocus() )	up = true;
+	    break;	    
 	case 5:		//en
 	    if( !qobject_cast<RunWdgView*>(w) )	break;
 	    w->dc()["en"] = (bool)atoi(val.c_str());
@@ -2416,6 +2437,9 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
     {
 	case -1:	//load
 	    up = true;
+	    break;
+	case -2:	//focus
+	    if( (bool)atoi(val.c_str()) != w->hasFocus() )	up = true;
 	    break;
 	case 6:		//active
 	    if( !qobject_cast<RunWdgView*>(w) ) break;

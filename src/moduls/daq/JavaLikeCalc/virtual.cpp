@@ -177,7 +177,7 @@ void TipContr::compileFuncLangs( vector<string> &ls )
 
 string TipContr::compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text )
 {
-    if( lang != "JavaScript" )	throw TError(nodePath().c_str(),_("Compile the program language %s is no support."));
+    if( lang != "JavaScript" )	throw TError(nodePath().c_str(),_("Compile the program language %s is no support."),lang.c_str());
     if(!lbPresent("sys_compile"))	lbReg( new Lib("sys_compile","","") );
     if(!lbAt("sys_compile").at().present(fnc_cfg.id()))
 	lbAt("sys_compile").at().add(fnc_cfg.id().c_str(),"");

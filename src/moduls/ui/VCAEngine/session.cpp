@@ -180,7 +180,7 @@ AutoHD<SessPage> Session::at( const string &id )
     return chldAt(m_page,id);
 }
 
-void Session::uiComm( const string &com, const string &prm, const string &src )
+void Session::uiComm( const string &com, const string &prm, SessWdg *src )
 {
     //- Find of pattern adequancy for opened page -
     string oppg;		//Opened page according of pattern
@@ -254,7 +254,18 @@ void Session::uiComm( const string &com, const string &prm, const string &src )
 	    //-- Close previous page --
 	    if( !oppg.empty() ) 
 		((AutoHD<SessPage>)mod->nodeAt(oppg)).at().attrAt("pgOpen").at().setB(false);
-	    //-- Open new page --
+	    //--- Set interwidget's links for new page ---
+	    string atr_id;	    
+	    vector<string> cAtrLs;
+	    cpg.at().attrList(cAtrLs);	    
+	    for( int i_al = 0; i_al < cAtrLs.size(); i_al++ )
+	    {
+		AutoHD<Attr> attr = cpg.at().attrAt(cAtrLs[i_al]);
+		if( !(attr.at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut) && TSYS::strSepParse(attr.at().cfgTempl(),0,'|') == "<page>" ) ) continue;
+		atr_id = TSYS::strSepParse(attr.at().cfgTempl(),1,'|');
+		if( src->attrPresent(atr_id) ) attr.at().setCfgVal("wdg:"+src->path()+"/a_"+atr_id);
+	    }
+	    //--- Open new page ---
 	    cpg.at().attrAt("pgOpen").at().setB(true);
 	}
     }catch(...){ }
@@ -876,25 +887,37 @@ void SessWdg::calc( bool first, bool last )
 			else switch( attr.at().type() )
 			{
 			    case TFld::Boolean:
-				attr.at().setB(((AutoHD<TVal>)SYS->daq().at().nodeAt(
-				    attr.at().cfgVal(),0,0,obj_tp.size())).at().getB());
+				attr.at().setB(((AutoHD<TVal>)SYS->daq().at().nodeAt(attr.at().cfgVal(),0,0,obj_tp.size())).at().getB());
 				break;
 			    case TFld::Integer:
-				attr.at().setI(((AutoHD<TVal>)SYS->daq().at().nodeAt(
-				    attr.at().cfgVal(),0,0,obj_tp.size())).at().getI());
+				attr.at().setI(((AutoHD<TVal>)SYS->daq().at().nodeAt(attr.at().cfgVal(),0,0,obj_tp.size())).at().getI());
 				break;
 			    case TFld::Real:
-				attr.at().setR(((AutoHD<TVal>)SYS->daq().at().nodeAt(
-				    attr.at().cfgVal(),0,0,obj_tp.size())).at().getR());
+				attr.at().setR(((AutoHD<TVal>)SYS->daq().at().nodeAt(attr.at().cfgVal(),0,0,obj_tp.size())).at().getR());
 				break;
 			    case TFld::String:
-				attr.at().setS(((AutoHD<TVal>)SYS->daq().at().nodeAt(
-				    attr.at().cfgVal(),0,0,obj_tp.size())).at().getS());
+				attr.at().setS(((AutoHD<TVal>)SYS->daq().at().nodeAt(attr.at().cfgVal(),0,0,obj_tp.size())).at().getS());
 				break;
 			}
 		    }
 		    else if( obj_tp == "addr:" )
 			attr.at().setS(attr.at().cfgVal().substr(obj_tp.size()));
+		    else if( obj_tp == "wdg:" )
+			switch( attr.at().type() )
+			{
+			    case TFld::Boolean:
+				attr.at().setB(((AutoHD<Attr>)mod->nodeAt(attr.at().cfgVal(),0,0,obj_tp.size())).at().getB());
+				break;
+			    case TFld::Integer:
+				attr.at().setI(((AutoHD<Attr>)mod->nodeAt(attr.at().cfgVal(),0,0,obj_tp.size())).at().getI());
+				break;
+			    case TFld::Real:
+				attr.at().setR(((AutoHD<Attr>)mod->nodeAt(attr.at().cfgVal(),0,0,obj_tp.size())).at().getR());
+				break;
+			    case TFld::String:
+				attr.at().setS(((AutoHD<Attr>)mod->nodeAt(attr.at().cfgVal(),0,0,obj_tp.size())).at().getS());
+				break;
+			}		    
 		}
 	    }
 	    inLnkGet = false;
@@ -965,7 +988,7 @@ void SessWdg::calc( bool first, bool last )
 			if( sprc_ev == sev_ev && (sprc_path == "*" || sprc_path == sev_path) )
 			{
 			    sprc_path = TSYS::strSepParse(sprc,0,':',&t_off);
-	    		    ownerSess()->uiComm(sprc_path,TSYS::strSepParse(sprc,0,':',&t_off),path());
+	    		    ownerSess()->uiComm(sprc_path,TSYS::strSepParse(sprc,0,':',&t_off),this);
 			    evProc = true;
 			}
 		    }
@@ -988,13 +1011,22 @@ void SessWdg::calc( bool first, bool last )
 bool SessWdg::attrChange( Attr &cfg, void *prev )
 {
     Widget::attrChange( cfg, prev );
+    
+    //- Special session atributes process -
+    if( cfg.id() == "active" )
+    {
+	if( cfg.getB() )	
+	    cfg.owner()->attrAdd( new TFld("focus",_("Focus"),TFld::Boolean,TFld::NoFlag,"1","false","","",-2) );
+	else	cfg.owner()->attrDel("focus");
+    }
+    
     //- External link process -
     if( !inLnkGet && cfg.flgSelf()&Attr::CfgLnkOut && !cfg.cfgVal().empty() )
     {
         string obj_tp = TSYS::strSepParse(cfg.cfgVal(),0,':')+":";
-        if( obj_tp == "prm:" )
-	    try
-	    {
+	try
+	{	
+    	    if( obj_tp == "prm:" )
 	        switch( cfg.type() )
 	        {
 		    case TFld::Boolean:		
@@ -1010,7 +1042,23 @@ bool SessWdg::attrChange( Attr &cfg, void *prev )
 		        ((AutoHD<TVal>)SYS->daq().at().nodeAt(cfg.cfgVal(),0,0,obj_tp.size())).at().setS(cfg.getS());
 		        break;
 		}
-	    }catch(...)	{ }
+	    else if( obj_tp == "wdg:" )
+                switch( cfg.type() )
+		{
+		    case TFld::Boolean:		
+		        ((AutoHD<Attr>)mod->nodeAt(cfg.cfgVal(),0,0,obj_tp.size())).at().setB(cfg.getB());
+		        break;
+		    case TFld::Integer:
+		        ((AutoHD<Attr>)mod->nodeAt(cfg.cfgVal(),0,0,obj_tp.size())).at().setI(cfg.getI());
+		        break;
+		    case TFld::Real:
+		        ((AutoHD<Attr>)mod->nodeAt(cfg.cfgVal(),0,0,obj_tp.size())).at().setR(cfg.getR());
+		        break;
+		    case TFld::String:
+		        ((AutoHD<Attr>)mod->nodeAt(cfg.cfgVal(),0,0,obj_tp.size())).at().setS(cfg.getS());
+		        break;
+		}
+	}catch(...)	{ }
     }    
     return true;
 }
