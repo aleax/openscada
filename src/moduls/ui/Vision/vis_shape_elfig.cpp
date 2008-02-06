@@ -4,7 +4,7 @@
  *   Copyright (C) 2007 by Lysenko Maxim (mlisenko@ukr.net)
  *   			by Yashina Kseniya (sobacurka@ukr.net) 
  *                                                                         
- *   This program is free software; you can redistribute it and/or modify  
+ *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by  
  *   the Free Software Foundation; either version 2 of the License, or     
  *   (at your option) any later version.                                   
@@ -83,6 +83,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
     float MotionWidth;
     QPainterPath circlePath;
 
+    
     switch( uiPrmPos )
     {
 	case -1:	//load
@@ -92,7 +93,9 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
             if(runW)    w->dc()["en"] = (bool)atoi(val.c_str());
             break;
         case 6:		//active
-            if(runW)    w->dc()["active"] = (bool)atoi(val.c_str());
+            if( !runW )	break;    
+	    w->dc()["active"] = (bool)atoi(val.c_str());
+	    w->setFocusPolicy( (bool)atoi(val.c_str())?Qt::StrongFocus:Qt::NoFocus );
             break;
         case 12:	//geomMargin
             w->dc()["geomMargin"] = atoi(val.c_str());
@@ -203,17 +206,17 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                     circlePath = painter_path(width,bord_width,1, ang, ip[0],ip[1]);
                     shapeItems.push_back( ShapeItem(circlePath, newPath, p[0],p[1],-1,-1,-1,QPointF(0,0), 
                                        QBrush(color,Qt::SolidPattern),
-                                       QPen(bord_color,bord_width,Qt::SolidLine,Qt::RoundCap, Qt::RoundJoin),
-                                       QPen(color,width,Qt::NoPen,Qt::RoundCap, Qt::RoundJoin),width,bord_width,1));
+                                       QPen(bord_color,bord_width,Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin),
+                                       QPen(color,width,Qt::NoPen,Qt::FlatCap, Qt::RoundJoin),width,bord_width,1));
                 }
                 if (bord_width==0)
                 {
                     circlePath = painter_path_simple( 1, ang, ip[0],ip[1] );
-                    QPainterPath bigPath = painter_path(width,w->dc()["bordWdth"].toInt(),1, ang, ip[0], ip[1] );
+                    QPainterPath bigPath = painter_path(width,w->dc()["bordWdth"].toInt()+1,1, ang, ip[0], ip[1] );
                     shapeItems.push_back( ShapeItem(bigPath,circlePath,p[0],p[1],-1,-1,-1,QPointF(0,0), 
                                        QBrush(color,Qt::NoBrush),
-                                       QPen(w->dc()["bordClr"].value<QColor>(),w->dc()["bordWdth"].toInt(),Qt::NoPen,Qt::RoundCap, Qt::RoundJoin),
-                                       QPen(color,width, Qt::SolidLine,Qt::RoundCap, Qt::RoundJoin),
+                                       QPen(w->dc()["bordClr"].value<QColor>(),w->dc()["bordWdth"].toInt(),Qt::NoPen,Qt::FlatCap, Qt::RoundJoin),
+                                       QPen(color,width, Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin),
                                        width,w->dc()["bordWdth"].toInt(),1));
                 }
             }
@@ -307,19 +310,19 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                                               CtrlMotionPos_3, CtrlMotionPos_4 );
                     shapeItems.push_back( ShapeItem(circlePath, newPath, p[0],p[1],p[2],p[3],p[4],CtrlMotionPos_4,
                                           QBrush(color,Qt::SolidPattern),
-                                                  QPen(bord_color,bord_width, Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin),
-                                                          QPen(color,width,Qt::NoPen,Qt::RoundCap, Qt::RoundJoin),width,bord_width, 2) );
+                                                  QPen(bord_color,bord_width, Qt::SolidLine,Qt::FlatCap,Qt::RoundJoin),
+                                                          QPen(color,width,Qt::NoPen,Qt::FlatCap, Qt::RoundJoin),width,bord_width, 2) );
                 }
 
                 if (bord_width==0)
                 {
-                    QPainterPath bigPath = painter_path(width,bord_width,2, ang, StartMotionPos, EndMotionPos,CtrlMotionPos_1,
+                    QPainterPath bigPath = painter_path(width+1,bord_width,2, ang, StartMotionPos, EndMotionPos,CtrlMotionPos_1,
                             CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4 );
                     circlePath = painter_path_simple(2, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2,  CtrlMotionPos_3, CtrlMotionPos_4 );
                     shapeItems.push_back( ShapeItem(bigPath,circlePath,p[0],p[1],p[2],p[3], p[4],CtrlMotionPos_4, 
                                           QBrush(color,Qt::NoBrush),
-                                                  QPen(w->dc()["bordClr"].value<QColor>(),bord_width, Qt::NoPen,Qt::RoundCap, Qt::RoundJoin),
-                                                          QPen(color,width, Qt::SolidLine,Qt::RoundCap, Qt::RoundJoin),width,bord_width,2) );  
+                                                  QPen(w->dc()["bordClr"].value<QColor>(),bord_width, Qt::NoPen,Qt::FlatCap, Qt::RoundJoin),
+                                                          QPen(color,width, Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin),width,bord_width,2) );  
                 }
             }
             if( el == "bezier" )
@@ -352,17 +355,17 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                     shapeItems.push_back( ShapeItem(circlePath, newPath, p[0], p[1], p[2], p[3],-1,QPointF(0,0),
                                        QBrush(color,Qt::SolidPattern),
                                        QPen(bord_color,bord_width,Qt::SolidLine,Qt::FlatCap, Qt::MiterJoin),
-                                       QPen(color,width, Qt::NoPen,Qt::RoundCap, Qt::RoundJoin),
+                                       QPen(color,width, Qt::NoPen,Qt::FlatCap, Qt::RoundJoin),
                                        width,bord_width, 3) );
                 }
                 if (bord_width==0)
                 {
-                    QPainterPath bigPath = painter_path(width,bord_width, 3, ang,ip[0],ip[1],ip[2],ip[3]);
+                    QPainterPath bigPath = painter_path(width+1,bord_width, 3, ang,ip[0],ip[1],ip[2],ip[3]);
                     circlePath = painter_path_simple(3, ang, ip[0], ip[1], ip[2], ip[3]);
                     shapeItems.push_back( ShapeItem(bigPath,circlePath, p[0], p[1], p[2], p[3], -1,QPointF(0,0), 
                                        QBrush(color,Qt::NoBrush),
                                        QPen(w->dc()["bordClr"].value<QColor>(),bord_width, Qt::NoPen,Qt::FlatCap,Qt::MiterJoin),
-                                       QPen(color,width, Qt::SolidLine,Qt::RoundCap, Qt::RoundJoin), 
+                                       QPen(color,width, Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin), 
                                        width,bord_width,3) );
                 }
             }
@@ -383,7 +386,9 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 }
                 //- Check fill color -
                 QColor color(fl_color.c_str());
-                if( !color.isValid() ) color=w->dc()["fillClr"].value<QColor>();
+                color.setAlpha(255);
+                if( !color.isValid() ) 
+                    color=w->dc()["fillClr"].value<QColor>();
                 //- Check fill image -
 		QBrush brsh;
 		QImage img;
@@ -702,14 +707,18 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
     { 
         case QEvent::Paint:
         {
+            DevelWdgView *devW = qobject_cast<DevelWdgView*>(view);
+            RunWdgView   *runW = qobject_cast<RunWdgView*>(view);
             QPainter pnt( view );
             //- Prepare draw area -
             int margin = view->dc()["geomMargin"].toInt();
             QRect draw_area = view->rect().adjusted(0,0,-2*margin,-2*margin);	    
             pnt.setWindow(draw_area);
             pnt.setViewport(view->rect().adjusted(margin,margin,-margin,-margin));
+            //if (runW) pnt.setRenderHint(QPainter::Antialiasing, true);
+            //else pnt.setRenderHint(QPainter::Antialiasing, false);
+            
             //- Drawing all fills(inundations) -
-            pnt.setRenderHint(QPainter::Antialiasing, true);
             for(int i=0; i<inundationItems.size(); i++)
             {
                 pnt.setBrush(inundationItems[i].brush);
@@ -725,6 +734,8 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                 pnt.setPen(shapeItems[k].pen);
                 pnt.drawPath(shapeItems[k].path);
                 pnt.setPen(shapeItems[k].penSimple);
+                //printf("K=%i\n", k);
+                //printf("Color=%s\n", shapeItems[k].penSimple.color().name().toAscii().data());
                 pnt.setBrush(Qt::NoBrush);
                 pnt.drawPath(shapeItems[k].pathSimple);
             }
@@ -853,13 +864,25 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     }
                 }
             }
-        if (runW) itemAtRun();
-        return true;
+            if (runW) 
+            {
+                string sev;
+                for(int i=0; i<inundationItems.size(); i++)
+                    if (inundationItems[i].path.contains(ev->pos()))
+                    { sev="ws_Fig"+TSYS::int2str(i); }
+                if( sev.empty() )   ;//????
+                if( !sev.empty() )  
+		{
+		    view->attrSet("event","ws_Fig");
+		    view->attrSet("event",sev); 
+		}
+            }
+            return true;
         }
 
         case QEvent::MouseButtonDblClick:
         {
-            bool flag_arc_inund=false, flag_break_move;
+            bool flag_arc_inund=false, flag_break_move, fl_brk;
             QMouseEvent *ev = static_cast<QMouseEvent*>(event); 
             DevelWdgView *devW = qobject_cast<DevelWdgView*>(view);
             RunWdgView   *runW = qobject_cast<RunWdgView*>(view);
@@ -878,9 +901,19 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         {
                             if(Build_Matrix(shapeItems)!=2)
                             {
+                                fl_brk=false;
                                 Inundation (ev->pos(), shapeItems, pnts, vect, Build_Matrix(shapeItems), view);
                                 if(InundationPath!=newPath)
-                                    inundationItems.push_back(InundationItem(InundationPath,fill_brush,fill_img_brush, Inundation_vector));
+                                {
+                                    for(int i=0; i<inundationItems.size(); i++)
+                                        if (inundationItems[i].path == InundationPath)
+                                        {
+                                            fl_brk=true;
+                                            break;
+                                        }
+                                    if(!fl_brk)
+                                        inundationItems.push_back(InundationItem(InundationPath,fill_brush,fill_img_brush, Inundation_vector));
+                                }
                             }
                             Inundation_vector.clear();
                             vect.clear();
@@ -944,9 +977,10 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     }
                     view->repaint();
                 }
+                shapeSave(view);
             }
-            if (runW) itemAtRun();
-            shapeSave(view);
+           // if (runW) itemAtRun();
+            
             return true;
         }
         case QEvent::MouseButtonRelease:
@@ -1233,17 +1267,17 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                 {
                                     circlePath = painter_path(view->dc()["lineWdth"].toInt(), view->dc()["bordWdth"].toInt(), 1, ang, StartLine,EndLine);
                                     shapeItems.push_back( ShapeItem(circlePath, newPath, -1,-1,-1,-1,-1,QPointF(0,0),QBrush(view->dc()["lineClr"].value<QColor>(),Qt::SolidPattern),
-                                            QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::SolidLine,Qt::RoundCap, Qt::RoundJoin),
-                                                    QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::NoPen,Qt::RoundCap, Qt::RoundJoin),
+                                            QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin),
+                                                    QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::NoPen,Qt::FlatCap, Qt::RoundJoin),
                                                             view->dc()["lineWdth"].toInt(), view->dc()["bordWdth"].toInt(), 1) );
                                 }
                                 else
                                 {
                                     circlePath = painter_path_simple(1, ang, StartLine,EndLine);
-                                    QPainterPath bigPath = painter_path(view->dc()["lineWdth"].toInt(), view->dc()["bordWdth"].toInt(), 1, ang, StartLine,EndLine);
+                                    QPainterPath bigPath = painter_path(view->dc()["lineWdth"].toInt()+1, view->dc()["bordWdth"].toInt(), 1, ang, StartLine,EndLine);
                                     shapeItems.push_back( ShapeItem(bigPath,circlePath,-1,-1,-1,-1,-1,QPointF(0,0), QBrush(view->dc()["lineClr"].value<QColor>(),Qt::NoBrush),
-                                            QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::NoPen,Qt::RoundCap, Qt::RoundJoin),
-                                                    QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::SolidLine,Qt::RoundCap, Qt::RoundJoin),
+                                            QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::NoPen,Qt::FlatCap, Qt::RoundJoin),
+                                                    QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin),
                                                             view->dc()["lineWdth"].toInt(), view->dc()["bordWdth"].toInt(),1) );
                                 }
                                 StartLine=unscale_unrotate(StartLine, view, true);
@@ -1267,18 +1301,17 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                 {
                                     circlePath = painter_path(view->dc()["lineWdth"].toInt(), view->dc()["bordWdth"].toInt(),1, ang, StartLine,EndLine);
                                     shapeItems.push_back( ShapeItem(circlePath, newPath, -1,-1,-1,-1,-1,QPointF(0,0), QBrush(view->dc()["lineClr"].value<QColor>(),Qt::SolidPattern),
-                                            QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::SolidLine,Qt::RoundCap, Qt::RoundJoin),
-                                                    QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::NoPen,Qt::RoundCap, Qt::RoundJoin),
+                                            QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin),
+                                                    QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::NoPen,Qt::FlatCap, Qt::RoundJoin),
                                                             view->dc()["lineWdth"].toInt(), view->dc()["bordWdth"].toInt(), 1) );
                                 }
                                 else
                                 {
-                                    //printf("Path_5\n");
                                     circlePath = painter_path_simple(1, ang, StartLine,EndLine);
-                                    QPainterPath bigPath = painter_path(view->dc()["lineWdth"].toInt(),view->dc()["bordWdth"].toInt(),1, ang, StartLine,EndLine);
+                                    QPainterPath bigPath = painter_path(view->dc()["lineWdth"].toInt()+1,view->dc()["bordWdth"].toInt(),1, ang, StartLine,EndLine);
                                     shapeItems.push_back( ShapeItem(bigPath,circlePath,-1,-1,-1,-1,-1,QPointF(0,0), QBrush(view->dc()["lineClr"].value<QColor>(),Qt::NoBrush),
-                                            QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::NoPen,Qt::RoundCap, Qt::RoundJoin),
-                                                    QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::SolidLine,Qt::RoundCap, Qt::RoundJoin),
+                                            QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::NoPen,Qt::FlatCap, Qt::RoundJoin),
+                                                    QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin),
                                                             view->dc()["lineWdth"].toInt(), view->dc()["bordWdth"].toInt(), 1) );
                                 }
                                 StartLine=unscale_unrotate(StartLine, view, true);
@@ -1307,18 +1340,17 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             {
                                 circlePath = painter_path(view->dc()["lineWdth"].toInt(),view->dc()["bordWdth"].toInt(),3, ang, StartLine,EndLine,CtrlPos_1,CtrlPos_2);
                                 shapeItems.push_back( ShapeItem(circlePath, newPath, -1,-1,-1,-1,-1,QPointF(0,0), QBrush(view->dc()["lineClr"].value<QColor>(),Qt::SolidPattern),
-                                        QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::SolidLine,Qt::RoundCap, Qt::RoundJoin),
-                                              QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::NoPen,Qt::RoundCap, Qt::RoundJoin),
+                                        QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin),
+                                              QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::NoPen,Qt::FlatCap, Qt::RoundJoin),
                                                       view->dc()["lineWdth"].toInt(),view->dc()["bordWdth"].toInt(), 3) );
                             }
                             else
                             {
-                                bigPath = painter_path(view->dc()["lineWdth"].toInt(),view->dc()["bordWdth"].toInt(),3, ang, StartLine,EndLine, CtrlPos_1,CtrlPos_2);
-                                printf("Path_6\n");
+                                bigPath = painter_path(view->dc()["lineWdth"].toInt()+1,view->dc()["bordWdth"].toInt(),3, ang, StartLine,EndLine, CtrlPos_1,CtrlPos_2);
                                 circlePath = painter_path_simple(3, ang, StartLine,EndLine,CtrlPos_1,CtrlPos_2);
                                 shapeItems.push_back( ShapeItem(bigPath,circlePath, -1,-1,-1,-1,-1,QPointF(0,0), QBrush(view->dc()["lineClr"].value<QColor>(),Qt::NoBrush),
-                                        QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::NoPen,Qt::RoundCap, Qt::RoundJoin),
-                                              QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::SolidLine,Qt::RoundCap, Qt::RoundJoin),
+                                        QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::NoPen,Qt::FlatCap, Qt::RoundJoin),
+                                              QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin),
                                                       view->dc()["lineWdth"].toInt(), view->dc()["bordWdth"].toInt(), 3) );
                             }
                             StartLine=unscale_unrotate(StartLine, view, true);
@@ -1356,17 +1388,17 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             {
                                 circlePath = painter_path(view->dc()["lineWdth"].toInt(),view->dc()["bordWdth"].toInt(),2, ang, StartLine, EndLine, CtrlPos_1, CtrlPos_2,  CtrlPos_3, CtrlPos_4);
                                 shapeItems.push_back( ShapeItem(circlePath, newPath, -1,-1,-1,-1, -1,CtrlPos_4,QBrush(view->dc()["lineClr"].value<QColor>(),Qt::SolidPattern),
-                                        QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::SolidLine,Qt::RoundCap, Qt::RoundJoin),
-                                              QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::NoPen,Qt::RoundCap, Qt::RoundJoin),
+                                        QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin),
+                                              QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::NoPen,Qt::FlatCap, Qt::RoundJoin),
                                                       view->dc()["lineWdth"].toInt(), view->dc()["bordWdth"].toInt(), 2) );
                             }
                             else
                             {
-                                QPainterPath bigPath = painter_path( view->dc()["lineWdth"].toInt(),view->dc()["bordWdth"].toInt(), 2, ang, StartLine, EndLine, CtrlPos_1, CtrlPos_2, CtrlPos_3, CtrlPos_4 );
+                                QPainterPath bigPath = painter_path( view->dc()["lineWdth"].toInt()+1,view->dc()["bordWdth"].toInt(), 2, ang, StartLine, EndLine, CtrlPos_1, CtrlPos_2, CtrlPos_3, CtrlPos_4 );
                                 circlePath = painter_path_simple( 2, ang, StartLine, EndLine, CtrlPos_1, CtrlPos_2, CtrlPos_3, CtrlPos_4 );
                                 shapeItems.push_back( ShapeItem(bigPath,circlePath,-1,-1,-1,-1, -1,CtrlPos_4, QBrush(view->dc()["lineClr"].value<QColor>(),Qt::NoBrush),
-                                        QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::NoPen,Qt::RoundCap, Qt::RoundJoin),
-                                              QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::SolidLine,Qt::RoundCap, Qt::RoundJoin),
+                                        QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::NoPen,Qt::FlatCap, Qt::RoundJoin),
+                                              QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin),
                                                       view->dc()["lineWdth"].toInt(), view->dc()["bordWdth"].toInt(), 2) );
                             }
                             StartLine=unscale_unrotate(StartLine, view, true);
@@ -1386,7 +1418,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     }
                 } 
             }
-            if (runW) itemAtRun();
+            //if (runW) itemAtRun();
             return true;
         }
         case QEvent::MouseMove:
@@ -1685,7 +1717,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     }
                 }
            }
-          if (runW) itemAtRun();
             return true;
         }
         case QEvent::KeyPress:
@@ -1755,9 +1786,8 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     Move_UP_DOWN(shapeItems,pnts, inundationItems,view);
                     view->repaint();
                 }
+        	return true;		
             }
-            if (runW) itemAtRun();
-            return true;
         }
         case QEvent::KeyRelease:
         {
@@ -1812,13 +1842,10 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     itemInMotion =0;
                     flag_first_move=true;
                 }
+        	return true;		
             }
-
-       if (runW) itemAtRun();
-            return true;
         }
     }
-
 
     return false;
 } 
@@ -2253,16 +2280,20 @@ void ShapeElFigure::moveItemTo(const QPointF &pos,QVector <ShapeItem> &shapeItem
         line1=QLineF(StartMotionPos,EndMotionPos);
         if (StartMotionPos.y()<=EndMotionPos.y()) ang=360-Angle(line1,line2);
         else ang=Angle(line1,line2);
-        shapeItems.append( ShapeItem(painter_path(MotionWidth,MotionBorderWidth, 1, ang, StartMotionPos, EndMotionPos), painter_path_simple(1, ang, StartMotionPos,EndMotionPos),
-                           MotionNum_1, MotionNum_2, -1, -1, -1, QPointF(0,0), MotionBrush, MotionPen, MotionPenSimple, MotionWidth, MotionBorderWidth, 1) );
+        if(MotionWidth==1 && MotionBorderWidth==0)
+            shapeItems.append( ShapeItem(painter_path(MotionWidth+1,MotionBorderWidth, 1, ang, StartMotionPos, EndMotionPos), painter_path_simple(1, ang, StartMotionPos,EndMotionPos),
+                               MotionNum_1, MotionNum_2, -1, -1, -1, QPointF(0,0), MotionBrush, MotionPen, MotionPenSimple, MotionWidth, MotionBorderWidth, 1) );
+        else
+            shapeItems.append( ShapeItem(painter_path(MotionWidth,MotionBorderWidth, 1, ang, StartMotionPos, EndMotionPos), painter_path_simple(1, ang, StartMotionPos,EndMotionPos),
+                               MotionNum_1, MotionNum_2, -1, -1, -1, QPointF(0,0), MotionBrush, MotionPen, MotionPenSimple, MotionWidth, MotionBorderWidth, 1) );
         rectPath.addRect(QRectF(QPointF(StartMotionPos.x()-4,StartMotionPos.y()-4),QSize(8,8)));
 	
         rectItems.append( RectItem(rectPath ,MotionNum_1, QBrush(QColor(127,127,127,128),Qt::SolidPattern),
-                          QPen(QColor(0, 0, 0),1, Qt::SolidLine,Qt::RoundCap, Qt::RoundJoin)) );
+                          QPen(QColor(0, 0, 0),1, Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin)) );
         rectPath=newPath;
         rectPath.addRect(QRectF(QPointF(EndMotionPos.x()-4,EndMotionPos.y()-4),QSize(8,8)));
         rectItems.append( RectItem(rectPath ,MotionNum_2, QBrush(QColor(127,127,127,128),Qt::SolidPattern),
-                          QPen(QColor(0, 0, 0),1, Qt::SolidLine,Qt::RoundCap, Qt::RoundJoin)) );
+                          QPen(QColor(0, 0, 0),1, Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin)) );
         rectPath=newPath;
         StartMotionPos=unscale_unrotate(StartMotionPos, view, true);
         EndMotionPos=unscale_unrotate(EndMotionPos, view, true);
@@ -2278,24 +2309,29 @@ void ShapeElFigure::moveItemTo(const QPointF &pos,QVector <ShapeItem> &shapeItem
         CtrlMotionPos_4=QPointF(t_start,t_end);
         CtrlMotionPos_3=QPointF(CtrlMotionPos_1.x()+ROTATE(ARC(0,a,b),ang).x(),
                                 CtrlMotionPos_1.y()-ROTATE(ARC(0,a,b),ang).y());
-        shapeItems.append( ShapeItem(painter_path(MotionWidth,MotionBorderWidth, 2, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4),
-                           painter_path_simple(2, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4),
+        if(MotionWidth==1 && MotionBorderWidth==0)
+            shapeItems.append( ShapeItem(painter_path(MotionWidth+1,MotionBorderWidth, 2, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4),
+                               painter_path_simple(2, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4),
+                                       MotionNum_1,MotionNum_2,MotionNum_3,MotionNum_4,MotionNum_5,CtrlMotionPos_4, MotionBrush,MotionPen, MotionPenSimple, MotionWidth, MotionBorderWidth, 2) );
+        else
+            shapeItems.append( ShapeItem(painter_path(MotionWidth,MotionBorderWidth, 2, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4),
+                               painter_path_simple(2, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4),
                                                MotionNum_1,MotionNum_2,MotionNum_3,MotionNum_4,MotionNum_5,CtrlMotionPos_4, MotionBrush,MotionPen, MotionPenSimple, MotionWidth, MotionBorderWidth, 2) );
         rectPath.addRect(QRectF(QPointF(StartMotionPos.x()-4,StartMotionPos.y()-4),QSize(8,8)));
         rectItems.append( RectItem(rectPath,MotionNum_1,QBrush(QColor(127,127,127,128),Qt::SolidPattern),
-                          QPen(QColor(0, 0, 0),1, Qt::SolidLine,Qt::RoundCap, Qt::RoundJoin)) );
+                          QPen(QColor(0, 0, 0),1, Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin)) );
         rectPath=newPath;
         rectPath.addRect(QRectF(QPointF(EndMotionPos.x()-4,EndMotionPos.y()-4),QSize(8,8)));
         rectItems.append( RectItem(rectPath ,MotionNum_2, QBrush(QColor(127,127,127,128),Qt::SolidPattern),
-                          QPen(QColor(0, 0, 0),1, Qt::SolidLine,Qt::RoundCap, Qt::RoundJoin)) );
+                          QPen(QColor(0, 0, 0),1, Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin)) );
         rectPath=newPath;
         rectPath.addRect(QRectF( CtrlMotionPos_1.toPoint(),QSize(8,8)));
         rectItems.append( RectItem(rectPath , MotionNum_3, QBrush(QColor(127,127,127,128),Qt::SolidPattern), 
-                          QPen(QColor(0, 0, 0),1, Qt::SolidLine,Qt::RoundCap, Qt::RoundJoin)) );
+                          QPen(QColor(0, 0, 0),1, Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin)) );
         rectPath=newPath;
         rectPath.addRect(QRectF(QPointF(CtrlMotionPos_2.x()-4,CtrlMotionPos_2.y()-4),QSize(8,8)));
         rectItems.append( RectItem(rectPath,MotionNum_4, QBrush(QColor(127,127,127,128),Qt::SolidPattern), 
-                          QPen(QColor(0, 0, 0),1, Qt::SolidLine,Qt::RoundCap, Qt::RoundJoin)) );
+                          QPen(QColor(0, 0, 0),1, Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin)) );
         rectPath=newPath;
         Temp=QPointF(CtrlMotionPos_3.x()-20,CtrlMotionPos_3.y()-4);
         rectPath.addRect(QRectF(Temp,QSize(8,8)));
@@ -2323,24 +2359,29 @@ void ShapeElFigure::moveItemTo(const QPointF &pos,QVector <ShapeItem> &shapeItem
             ang=360-line1.angle(line2);
         else
             ang=line1.angle(line2);
-        shapeItems.append( ShapeItem(painter_path(MotionWidth,MotionBorderWidth, 3, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2),
-                           painter_path_simple(3, ang,StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2),
+        if(MotionWidth==1 && MotionBorderWidth==0)
+            shapeItems.append( ShapeItem(painter_path(MotionWidth+1,MotionBorderWidth, 3, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2),
+                               painter_path_simple(3, ang,StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2),
+                                       MotionNum_1,MotionNum_2,MotionNum_3, MotionNum_4,-1,QPointF(0,0),MotionBrush,MotionPen,MotionPenSimple,MotionWidth, MotionBorderWidth, 3) );
+        else
+            shapeItems.append( ShapeItem(painter_path(MotionWidth,MotionBorderWidth, 3, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2),
+                               painter_path_simple(3, ang,StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2),
                                                MotionNum_1,MotionNum_2,MotionNum_3, MotionNum_4,-1,QPointF(0,0),MotionBrush,MotionPen,MotionPenSimple,MotionWidth, MotionBorderWidth, 3) );
         rectPath.addRect(QRectF(QPointF(StartMotionPos.x()-4,StartMotionPos.y()-4),QSize(8,8)));
         rectItems.append( RectItem(rectPath ,MotionNum_1, QBrush(QColor(127,127,127,128),Qt::SolidPattern),
-                          QPen(QColor(0, 0, 0),1, Qt::SolidLine,Qt::RoundCap, Qt::RoundJoin)) );
+                          QPen(QColor(0, 0, 0),1, Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin)) );
         rectPath=newPath;
         rectPath.addRect(QRectF(QPointF(EndMotionPos.x()-4,EndMotionPos.y()-4),QSize(8,8)));
         rectItems.append( RectItem(rectPath ,MotionNum_2, QBrush(QColor(127,127,127,128),Qt::SolidPattern),
-                          QPen(QColor(0, 0, 0),1, Qt::SolidLine,Qt::RoundCap, Qt::RoundJoin)) );
+                          QPen(QColor(0, 0, 0),1, Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin)) );
         rectPath=newPath;
         rectPath.addRect(QRectF( CtrlMotionPos_1.toPoint(),QSize(8,8)));
         rectItems.append( RectItem(rectPath, MotionNum_3, QBrush(QColor(127,127,127,128),Qt::SolidPattern),
-                          QPen(QColor(0, 0, 0),1, Qt::SolidLine,Qt::RoundCap, Qt::RoundJoin)) );
+                          QPen(QColor(0, 0, 0),1, Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin)) );
         rectPath=newPath;
         rectPath.addRect(QRectF( CtrlMotionPos_2.toPoint(),QSize(8,8)));
         rectItems.append( RectItem(rectPath,MotionNum_4, QBrush(QColor(127,127,127,128),Qt::SolidPattern),
-                          QPen(QColor(0, 0, 0),1, Qt::SolidLine,Qt::RoundCap, Qt::RoundJoin)) );
+                          QPen(QColor(0, 0, 0),1, Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin)) );
         rectPath=newPath;
         StartMotionPos=unscale_unrotate(StartMotionPos, view, true);
         EndMotionPos=unscale_unrotate(EndMotionPos, view, true);
@@ -2847,10 +2888,10 @@ int ShapeElFigure::itemAt(const QPointF &pos, QVector <ShapeItem> &shapeItems,Wd
    return index;
 }
 
-void ShapeElFigure::itemAtRun()
+/*void ShapeElFigure::itemAtRun()
 {
     
-}
+}*/
 //- Building the path for the current figure -
 QPainterPath ShapeElFigure::painter_path(float el_width, float el_border_width, int el_type, double el_ang, QPointF el_p1, QPointF el_p2, QPointF el_p3, QPointF el_p4, QPointF el_p5, QPointF el_p6)
 {
@@ -2877,8 +2918,9 @@ QPainterPath ShapeElFigure::painter_path(float el_width, float el_border_width, 
     //-- if arc --
     if(el_type==2)
     {
-        arc_a=Length(el_p5,el_p3)+el_width/2+el_border_width;
-        arc_b=Length(el_p3,el_p4)+el_width/2+el_border_width;
+        arc_a=Length(QPointF(TSYS::realRound(el_p5.x(),2,true),TSYS::realRound(el_p5.y(),2,true)),QPointF(TSYS::realRound(el_p3.x(),2,true),TSYS::realRound(el_p3.y(),2,true)))
+                +el_width/2+el_border_width;
+        arc_b=Length(QPointF(TSYS::realRound(el_p3.x(),2,true),TSYS::realRound(el_p3.y(),2,true)),QPointF(TSYS::realRound(el_p4.x(),2,true),TSYS::realRound(el_p4.y(),2,true)))+el_width/2+el_border_width;
         arc_a_small=arc_a-el_width-el_border_width;
         arc_b_small=arc_b-el_width-el_border_width;
         t_start=el_p6.x();
@@ -2942,8 +2984,8 @@ QPainterPath ShapeElFigure::painter_path_simple(int el_type, double el_ang, QPoi
     }
     if(el_type==2)
     {
-        arc_a=Length(el_p5,el_p3);
-        arc_b=Length(el_p3,el_p4);
+        arc_a=Length(QPointF(TSYS::realRound(el_p5.x(),2,true),TSYS::realRound(el_p5.y(),2,true)),QPointF(TSYS::realRound(el_p3.x(),2,true),TSYS::realRound(el_p3.y(),2,true)));
+        arc_b=Length(QPointF(TSYS::realRound(el_p3.x(),2,true),TSYS::realRound(el_p3.y(),2,true)),QPointF(TSYS::realRound(el_p4.x(),2,true),TSYS::realRound(el_p4.y(),2,true)));
         t_start=el_p6.x();
         t_end=el_p6.y();
         circlePath.moveTo(TSYS::realRound(el_p3.x()+ROTATE(ARC(t_start,arc_a,arc_b),el_ang).x(),2,true),
@@ -3271,8 +3313,8 @@ QPainterPath ShapeElFigure::Create_Inundation_Path (QVector <int> in_fig_num, QV
     path=newPath;
     if(shapeItems[in_fig_num[0]].n1<shapeItems[in_fig_num[0]].n2)
     {
-        path.moveTo(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n1], view, true).x()),
-                    TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n1], view, true).y()));
+        path.moveTo(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n1], view, true).x(), 2, true),
+                    TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n1], view, true).y(), 2, true));
         switch(shapeItems[in_fig_num[0]].type)
         {
             case 1:

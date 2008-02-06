@@ -305,6 +305,8 @@ VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) :
     if(!ico_t.load(TUIS::icoPath("vision_elfig_lock").c_str())) ico_t.load(":/images/elfig_lock.png");
     actElFigCheckAct=new QAction(QPixmap::fromImage(ico_t),_("Holds"),this);
     //actElFigCheckAct->setCheckable(true);
+    actElFigCursorAct->setCheckable(true);
+    actElFigCursorAct->setChecked(true);
     actElFigCheckAct->setObjectName("hold");
     actElFigCheckAct->setToolTip(_("Enable holds"));
     actElFigCheckAct->setWhatsThis(_("The button for enabling holds"));

@@ -1940,7 +1940,6 @@ void ShapeDiagram::TrendObj::loadData( bool full )
     string	svl;
     vector<SHg>	buf;
     deque<SHg>::iterator bufEndOff = vals.end();
-    //printf("TEST 00: (%lld - %lld):%d -- (%lld - %lld)\n",tTimeGrnd,tTime,wantPer,valBeg(),valEnd());
     XMLNode req("get");
     m1: req.clear()->
 	    setAttr("arch",arch)->
@@ -1951,13 +1950,11 @@ void ShapeDiagram::TrendObj::loadData( bool full )
 	    setAttr("mode","1")->
 	    setAttr("real_prec","4")->
 	    setAttr("round_perc","1");
-    //printf("TEST 00a: (%lld - %lld):%d\n",tTimeGrnd,tTime,wantPer);
     if( view->cntrIfCmd(req,true) )	return;
     //- Get data buffer parameters -
     bbeg = atoll(req.attr("tm_grnd").c_str());
     bend = atoll(req.attr("tm").c_str());
     bper = atoi(req.attr("per").c_str());
-    //printf("TEST 01: (%lld - %lld):%d\n",bbeg,bend,bper);
 	    
     prevPos = 0;
     prevVal = EVAL_REAL;
@@ -1966,7 +1963,6 @@ void ShapeDiagram::TrendObj::loadData( bool full )
     {
 	sscanf(svl.c_str(),"%d %lf",&curPos,&curVal);
 	if( (val_tp == 0 && curVal == EVAL_BOOL) || (val_tp == 1 && curVal == EVAL_INT) ) curVal = EVAL_REAL;
-	//printf("TEST 02: %d %f\n",curPos,curVal);
 	for( ; prevPos < curPos-1; prevPos++ )	buf.push_back(SHg(bbeg+(prevPos+1)*bper,prevVal));
     	buf.push_back(SHg(bbeg+curPos*bper,curVal));
     	prevPos = curPos; prevVal = curVal;
@@ -2201,7 +2197,6 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
     bool toUp = false;
     if( valEnd && tTime > valEnd )	{ tTimeGrnd = valEnd; toUp = true; }
     else if( valBeg && tTimeGrnd < valBeg )	tTime = valBeg-1; 
-    //printf("TEST 00: %d - %d\n",tTimeGrnd,tTime);
     //- Get values data -
     unsigned int rtm;			//Record's data
     QDateTime    dtm;

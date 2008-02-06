@@ -784,7 +784,6 @@ bool WdgView::event( QEvent *event )
     if( event->type() == QEvent::Paint )
     {
 	//- Self widget view -
-	//printf("TEST 20: Paint %s\n",id().c_str());
 	if( shape )	return shape->event(this,event);
 	return true;
     }

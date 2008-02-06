@@ -704,6 +704,7 @@ void SessWdg::setProcess( bool val )
 	    }
 	}
 	if( attrPresent("event") ) fio.ioAdd( new IO("event",_("Event"),IO::String,IO::Output) );
+	if( attrPresent("focus") ) fio.ioAdd( new IO("focus",_("Focus"),IO::Boolean,IO::Output) );	
 	
 	//-- Compile function --
 	try
@@ -926,7 +927,9 @@ void SessWdg::calc( bool first, bool last )
 	    {    
 		//- Load events to calc procedure -
 		int evId = ioId("event");
+		int evFoc = ioId("focus");
 		if( evId >= 0 )	setS(evId,wevent);
+		if( evFoc >=0 ) setB(evFoc,attrAt("focus").at().getB());
 	
 		//-- Load data to calc area --
     		setR(0,1000./ownerSess()->period());
@@ -960,11 +963,12 @@ void SessWdg::calc( bool first, bool last )
 			case IO::String:	attr.at().setS(getS(i_io));	break;
 			case IO::Integer:	attr.at().setI(getI(i_io));	break;
 			case IO::Real:     	attr.at().setR(getR(i_io));	break;
-			case IO::Boolean:   attr.at().setB(getB(i_io));	break;
+			case IO::Boolean:	attr.at().setB(getB(i_io));	break;
 		    }
 		}
 		//-- Save events from calc procedure --
 		if( evId >= 0 ) wevent = getS(evId);
+		if( evFoc >=0 ) attrAt("focus").at().setB(getB(evFoc));		
 	    }
     
 	    //-- Process widget's events --
@@ -987,6 +991,7 @@ void SessWdg::calc( bool first, bool last )
 			sprc_path = TSYS::strSepParse(sprc,0,':',&t_off);
 			if( sprc_ev == sev_ev && (sprc_path == "*" || sprc_path == sev_path) )
 			{
+			    if( sprc_ev == "ws_FocusIn" ) printf("TEST 01: %s\n",path().c_str());
 			    sprc_path = TSYS::strSepParse(sprc,0,':',&t_off);
 	    		    ownerSess()->uiComm(sprc_path,TSYS::strSepParse(sprc,0,':',&t_off),this);
 			    evProc = true;
@@ -1015,8 +1020,12 @@ bool SessWdg::attrChange( Attr &cfg, void *prev )
     //- Special session atributes process -
     if( cfg.id() == "active" )
     {
-	if( cfg.getB() )	
+	if( cfg.getB() )
+	{
 	    cfg.owner()->attrAdd( new TFld("focus",_("Focus"),TFld::Boolean,TFld::NoFlag,"1","false","","",-2) );
+	    //attrAt("focus").at().setFlgSelf(Attr::ProcAttr);
+	    //prcElListUpdate();
+	}
 	else	cfg.owner()->attrDel("focus");
     }
     
