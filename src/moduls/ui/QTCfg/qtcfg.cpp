@@ -1198,8 +1198,6 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		{
 		    val_r = new QLabel( widget );
 		    val_r->setTextInteractionFlags(Qt::TextSelectableByMouse);
-		    //if( val_r > (void*)0x9000000 )
-		    //	printf("TEST 00: %xh (%s)\n",val_r,(sel_path+"/"+br_path).c_str());
 		    val_r->setStatusTip((sel_path+"/"+br_path).c_str());
 		    QSizePolicy sp(QSizePolicy::Expanding, QSizePolicy::Preferred);
 		    sp.setHorizontalStretch(1);

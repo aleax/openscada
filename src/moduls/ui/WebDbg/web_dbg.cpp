@@ -235,7 +235,6 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
     {
 	AutoHD<TVArchive> arch;
 	int imgn = atoi(ntrnd.c_str());
-	//printf("TEST 10 %s\n",trnd_lst[imgn].c_str());
 	if( dynamic_cast<TVal *>(&SYS->nodeAt(trnd_lst[imgn],0,'.').at()) )
 	    arch = dynamic_cast<TVal&>(SYS->nodeAt(trnd_lst[imgn],0,'.').at()).arch();
 	else if( dynamic_cast<TVArchive *>(&SYS->nodeAt(trnd_lst[imgn],0,'.').at()) )
@@ -246,9 +245,7 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 	    long long v_beg = ((trnd_tm+trnd_len)>time(NULL))?time(NULL)-trnd_len:trnd_tm;
 	    long long v_end = v_beg+trnd_len;
 	
-	    //printf("TEST 11 %s\n",trnd_lst[imgn].c_str());
 	    page = arch.at().makeTrendImg(v_beg*1000000,v_end*1000000,"",h_sz, v_sz );
-	    //printf("TEST 12 %s\n",trnd_lst[imgn].c_str());
 	}
 	page = http_head("200 OK",page.size(),string("image/png"))+page;
     }    

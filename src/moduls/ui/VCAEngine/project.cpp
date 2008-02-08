@@ -545,7 +545,7 @@ void Page::postDisable( int flag )
 	
         //- Remove widget's included widgets from library include table -
         c_el.setElem(&mod->elInclWdg());
-        c_el.cfg("IDW").setS(id());
+        c_el.cfg("IDW").setS(path());
         c_el.cfg("ID").setS("");
         SYS->db().at().dataDel(fullDB+"_incl",mod->nodePath()+tbl+"_incl",c_el);						
     }
@@ -890,7 +890,7 @@ void Page::wdgAdd( const string &wid, const string &name, const string &path )
 
     chldAdd(inclWdg,new PageWdg(wid,path));
     wdgAt(wid).at().setName(name);
-    
+
     //- Call heritors include widgets update -
     for( int i_h = 0; i_h < m_herit.size(); i_h++ )
         if( m_herit[i_h].at().enable( ) )

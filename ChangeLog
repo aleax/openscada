@@ -1,3 +1,11 @@
+2008-02-08 Roman
+- FIX:/UI/VCAEngine: Removing included widgets to page from DB is fixed.
+- !!:/UI/VCAEngine: Adaptive dynamic page linking work is finised.
+- FIX:/UI/VCAEngine: Permission attributes write mode allow for child widgets is fixed.
+- FIX:/UI/Vision: Identifier generator is fixed for project's page manipulation.
+- FIX:/UI/Vision: Line edit widget's apply button is fixed.
+
+
 2008-02-06 Maxim
 - FIX:/UI/VCAEngine: Widget's focus process is fixed.
 - /UI/Vision: Focus support is added for primitive "ElFig".

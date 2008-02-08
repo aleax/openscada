@@ -1982,9 +1982,6 @@ void ShapeDiagram::TrendObj::loadData( bool full )
     }
     //- Check for archive jump -
     if( arch.empty() && (bbeg-tTimeGrnd)/bper )	{ tTime = bbeg-1; goto m1; }
-    //- Test print -
-    //for( int i_el = 0; i_el < vals.size(); i_el++ )
-    //	printf("TEST 03: %lld : %f\n",vals[i_el].tm,vals[i_el].val);
 }
 
 //************************************************

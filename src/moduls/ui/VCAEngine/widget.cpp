@@ -139,7 +139,7 @@ void Widget::setEnable( bool val )
 		m_parent.free(); 
 		throw;
 	    }
-	}
+	}	
 	m_enable = true;
         //- Load self values from DB -
         loadIO();
@@ -402,8 +402,8 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/wdg/st",_("State")))
 	    {
 		ctrMkNode("fld",opt,-1,"/wdg/st/en",_("Enable"),RWRWR_,user().c_str(),grp().c_str(),1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/wdg/st/user",_("User and group"),RWRWR_,"root","UI",3,"tp","str","dest","select","select","/wdg/u_lst");
-		ctrMkNode("fld",opt,-1,"/wdg/st/grp","",RWR_R_,user().c_str(),grp().c_str(),3,"tp","str","dest","select","select","/wdg/g_lst");
+		ctrMkNode("fld",opt,-1,"/wdg/st/user",_("User and group"),(isLink()?R_R_R_:RWRWR_),"root","UI",3,"tp","str","dest","select","select","/wdg/u_lst");
+		ctrMkNode("fld",opt,-1,"/wdg/st/grp","",(isLink()?R_R_R_:RWR_R_),user().c_str(),grp().c_str(),3,"tp","str","dest","select","select","/wdg/g_lst");
 		ctrMkNode("fld",opt,-1,"/wdg/st/parent",_("Parent"),permit(),user().c_str(),grp().c_str(),3,"tp","str","dest","sel_ed","select","/wdg/w_lst");
 		if(!parent().freeStat())
 		    ctrMkNode("comm",opt,-1,"/wdg/st/goparent",_("Go to parent"),permit(),user().c_str(),grp().c_str(),1,"tp","lnk");
@@ -417,9 +417,9 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/wdg/cfg/name",_("Name"),permit(),user().c_str(),grp().c_str(),1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/wdg/cfg/descr",_("Description"),permit(),user().c_str(),grp().c_str(),3,"tp","str","cols","50","rows","3");
                 ctrMkNode("img",opt,-1,"/wdg/cfg/ico",_("Icon"),permit(),user().c_str(),grp().c_str(),2,"v_sz","64","h_sz","64");
-		ctrMkNode("fld",opt,-1,"/wdg/cfg/u_a",_("Access: user-grp-other"),RWR_R_,user().c_str(),grp().c_str(),3,"tp","dec","dest","select","select","/wdg/a_lst");
-		ctrMkNode("fld",opt,-1,"/wdg/cfg/g_a","",RWR_R_,user().c_str(),grp().c_str(),3,"tp","dec","dest","select","select","/wdg/a_lst");
-		ctrMkNode("fld",opt,-1,"/wdg/cfg/o_a","",RWR_R_,user().c_str(),grp().c_str(),3,"tp","dec","dest","select","select","/wdg/a_lst");
+		ctrMkNode("fld",opt,-1,"/wdg/cfg/u_a",_("Access: user-grp-other"),(isLink()?R_R_R_:RWR_R_),user().c_str(),grp().c_str(),3,"tp","dec","dest","select","select","/wdg/a_lst");
+		ctrMkNode("fld",opt,-1,"/wdg/cfg/g_a","",(isLink()?R_R_R_:RWR_R_),user().c_str(),grp().c_str(),3,"tp","dec","dest","select","select","/wdg/a_lst");
+		ctrMkNode("fld",opt,-1,"/wdg/cfg/o_a","",(isLink()?R_R_R_:RWR_R_),user().c_str(),grp().c_str(),3,"tp","dec","dest","select","select","/wdg/a_lst");
 		ctrMkNode("comm",opt,-1,"/wdg/cfg/load",_("Load"),permit(),user().c_str(),grp().c_str());
 		ctrMkNode("comm",opt,-1,"/wdg/cfg/save",_("Save"),permit(),user().c_str(),grp().c_str());
 	    }

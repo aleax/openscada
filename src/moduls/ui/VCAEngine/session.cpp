@@ -255,15 +255,44 @@ void Session::uiComm( const string &com, const string &prm, SessWdg *src )
 	    if( !oppg.empty() ) 
 		((AutoHD<SessPage>)mod->nodeAt(oppg)).at().attrAt("pgOpen").at().setB(false);
 	    //--- Set interwidget's links for new page ---
-	    string atr_id;	    
+	    bool emptyPresnt = false;
+	    string atr_id, prm_lnk;
 	    vector<string> cAtrLs;
-	    cpg.at().attrList(cAtrLs);	    
+	    cpg.at().attrList(cAtrLs);
 	    for( int i_al = 0; i_al < cAtrLs.size(); i_al++ )
 	    {
 		AutoHD<Attr> attr = cpg.at().attrAt(cAtrLs[i_al]);
 		if( !(attr.at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut) && TSYS::strSepParse(attr.at().cfgTempl(),0,'|') == "<page>" ) ) continue;
 		atr_id = TSYS::strSepParse(attr.at().cfgTempl(),1,'|');
-		if( src->attrPresent(atr_id) ) attr.at().setCfgVal("wdg:"+src->path()+"/a_"+atr_id);
+		if( src->attrPresent(atr_id) )
+		{
+		    attr.at().setCfgVal("wdg:"+src->path()+"/a_"+atr_id);
+		    if( prm_lnk.empty() && src->attrAt(atr_id).at().cfgVal().size() > 4 && 
+			    src->attrAt(atr_id).at().cfgVal().substr(0,4) == "prm:" )
+			prm_lnk = src->attrAt(atr_id).at().cfgVal().substr(4);
+		}
+		else 
+		{ 
+		    attr.at().setCfgVal("");
+		    attr.at().setS(EVAL_STR);
+		    emptyPresnt = true; 
+		}
+	    }
+	    //--- Fill parameter's links for other attributes ---
+	    if( emptyPresnt && !prm_lnk.empty() )
+	    {
+		AutoHD<TValue> prm;
+		prm_lnk = "/"+TSYS::pathLev(prm_lnk,0)+"/"+TSYS::pathLev(prm_lnk,1)+"/"+TSYS::pathLev(prm_lnk,2);
+		try{ prm = SYS->daq().at().nodeAt(prm_lnk); } catch(TError err) { }
+		for( int i_al = 0; !prm.freeStat() && i_al < cAtrLs.size(); i_al++ )
+		{
+		    AutoHD<Attr> attr = cpg.at().attrAt(cAtrLs[i_al]);		
+		    if( !(attr.at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut) && 
+			    TSYS::strSepParse(attr.at().cfgTempl(),0,'|') == "<page>" &&
+			    attr.at().cfgVal().empty() ) )	continue;
+		    atr_id = TSYS::strSepParse(attr.at().cfgTempl(),1,'|');
+		    if( prm.at().vlPresent(atr_id) )	attr.at().setCfgVal("prm:"+prm_lnk+"/a_"+atr_id);
+		}
 	    }
 	    //--- Open new page ---
 	    cpg.at().attrAt("pgOpen").at().setB(true);
@@ -715,7 +744,11 @@ void SessWdg::setProcess( bool val )
 	    TValFunc::setFunc(&((AutoHD<TFunction>)SYS->nodeAt(work_prog,1)).at());
 	}catch( TError err )	{ mess_err(nodePath().c_str(),_("Compile function for widget is error: %s"),err.mess.c_str()); }
     }
-    if( !val )	TValFunc::setFunc(NULL);
+    if( !val )
+    {
+	m_proc = false;
+	TValFunc::setFunc(NULL);
+    }
 
     //- Change process for included widgets -
     vector<string> ls;
@@ -869,7 +902,7 @@ void SessWdg::calc( bool first, bool last )
 	//- Load events to process -
 	if( !((ownerSess()->calcClk())%(vmax(calcPer()/ownerSess()->period(),1))) )
 	{
-	    string wevent = eventGet(true);	
+	    string wevent = eventGet(true);
 	    //- Process input links and constants -    
 	    AutoHD<Attr> attr;
 	    inLnkGet = true;
@@ -991,7 +1024,6 @@ void SessWdg::calc( bool first, bool last )
 			sprc_path = TSYS::strSepParse(sprc,0,':',&t_off);
 			if( sprc_ev == sev_ev && (sprc_path == "*" || sprc_path == sev_path) )
 			{
-			    if( sprc_ev == "ws_FocusIn" ) printf("TEST 01: %s\n",path().c_str());
 			    sprc_path = TSYS::strSepParse(sprc,0,':',&t_off);
 	    		    ownerSess()->uiComm(sprc_path,TSYS::strSepParse(sprc,0,':',&t_off),this);
 			    evProc = true;
@@ -1030,11 +1062,11 @@ bool SessWdg::attrChange( Attr &cfg, void *prev )
     }
     
     //- External link process -
-    if( !inLnkGet && cfg.flgSelf()&Attr::CfgLnkOut && !cfg.cfgVal().empty() )
+    if( !inLnkGet && prev && cfg.flgSelf()&Attr::CfgLnkOut && !cfg.cfgVal().empty() )
     {
         string obj_tp = TSYS::strSepParse(cfg.cfgVal(),0,':')+":";
 	try
-	{	
+	{
     	    if( obj_tp == "prm:" )
 	        switch( cfg.type() )
 	        {

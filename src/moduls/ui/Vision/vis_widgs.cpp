@@ -282,7 +282,7 @@ LineEdit::LineEdit( QWidget *parent, LType tp, bool prev_dis ) :
 	//bt_fld->setFlat( true );
         bt_fld->setEnabled( false );
         bt_fld->setVisible( false );
-        connect( bt_fld, SIGNAL( released() ), this, SLOT( applySlot() ) );
+        connect( bt_fld, SIGNAL( pressed() ), this, SLOT( applySlot() ) );
         box->addWidget(bt_fld);
     }
     setType(tp);
@@ -468,7 +468,7 @@ void LineEdit::applySlot( )
 {
     bt_fld->setEnabled(false);
     bt_fld->setVisible(false);
-    
+
     m_val = value();
 	
     emit apply();

@@ -401,7 +401,6 @@ RunPageView *RunPageView::pgOpen( const string &ipg )
     pg->setAttribute(Qt::WA_DeleteOnClose);
     pg->setWindowFlags(Qt::Sheet);
     pg->load("");
-    //printf("TEST 10 (%d:%d)\n",mapToGlobal(pos()).x(),mapToGlobal(pos()).y());
     pg->moveF(QPointF(mapToGlobal(pos()).x()+sizeF().width()/2-pg->sizeF().width()/2,
     	     mapToGlobal(pos()).y()+sizeF().height()/2-pg->sizeF().height()/2));
     pg->show( );
