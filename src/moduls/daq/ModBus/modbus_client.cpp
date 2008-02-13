@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.ModBus file: modbus_client.cpp
 /***************************************************************************
- *   Copyright (C) 2007 by Roman Savochenko                                *
+ *   Copyright (C) 2007-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -21,6 +21,12 @@
 
 #include <getopt.h>
 #include <signal.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <termios.h>
+#include <unistd.h>
+#include <sys/ioctl.h>
 
 #include <tsys.h>
 #include <ttiparam.h>
@@ -33,9 +39,9 @@
 #define MOD_NAME    "ModBus client"
 #define MOD_TYPE    "DAQ"
 #define VER_TYPE    VER_CNTR
-#define VERSION     "0.4.0"
+#define VERSION     "0.7.0"
 #define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "Allow realising of ModBus client service. On time realised only Modbus TCP/IP"
+#define DESCRIPTION "Allow realisation of ModBus client service. Supported Modbus/TCP, Modbus/RTU and Modbus/ASCII protocols."
 #define LICENSE     "GPL"
 //*************************************************
 
@@ -97,36 +103,39 @@ void TTpContr::modLoad( )
 {
     //- Load parameters from command line -
     int next_opt;
-    char *short_opt="h";
+    char *short_opt = "h";
     struct option long_opt[] =
     {
 	{"help"    ,0,NULL,'h'},
 	{NULL      ,0,NULL,0  }
     };
 
-    optind=opterr=0;
+    optind = opterr = 0;
     do
     {
-	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
-	switch(next_opt)
+	next_opt = getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
+	switch( next_opt )
 	{
 	    case 'h': fprintf(stdout,optDescr().c_str()); break;
 	    case -1 : break;
 	}
-    } while(next_opt != -1);
+    } while( next_opt != -1 );
 }
 
 void TTpContr::postEnable( int flag )
 {    
-    TModule::postEnable(flag);
+    TModule::postEnable( flag );
 
     //- Controler's bd structure -
     fldAdd( new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30","") );
     fldAdd( new TFld("PERIOD",_("Gather data period (s)"),TFld::Real,TFld::NoFlag,"6.2","1","0;100") );
     fldAdd( new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
-    fldAdd( new TFld("TRANSP",_("Connection transport"),TFld::String,TFld::NoFlag,"30","Sockets") );
-    fldAdd( new TFld("ADDR",_("Remote host address"),TFld::String,TFld::NoFlag,"30","") );
-    fldAdd( new TFld("NODE",_("Server destination node"),TFld::Integer,TFld::NoFlag,"20","1","0;255") );
+    fldAdd( new TFld("PROT",_("Modbus protocol"),TFld::Integer,TFld::Selected|TCfg::Prevent,"1","0","0;1;2",_("TCP/IP;RTU;ASCII")) );
+    fldAdd( new TFld("DEV",_("Serial port device"),TFld::String,TCfg::Prevent,"30","/dev/ttyS0") );
+    fldAdd( new TFld("SPEED",_("Serial port speed"),TFld::Integer,TFld::Selected,"30","9600",
+	"2400;4800;9600;19200;38400;57600;115200;230400;460800","2400;4800;9600;19.2k;38.4k;57.6k;115.2k;230.4k;460.8k") );
+    fldAdd( new TFld("NODE",_("Destination node"),TFld::Integer,TFld::NoFlag,"20","1","0;255") );    
+    fldAdd( new TFld("ADDR",_("Remote host address"),TFld::String,TFld::NoFlag,"30","devhost.org:502") );
     
     //- Parameter type bd structure -
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
@@ -138,61 +147,302 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
     return new TMdContr(name,daq_db,this);
 }
 
+SSerial &TTpContr::sPortAt( const string &dev )
+{
+    if( m_sdevs.find(dev) == m_sdevs.end() )	m_sdevs[dev] = SSerial(dev);
+    return m_sdevs[dev];
+}
+
+ui8 TTpContr::CRCHi[] = 
+{ 
+    0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 
+    0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 
+    0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 
+    0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 
+    0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 
+    0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 
+    0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 
+    0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 
+    0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 
+    0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 
+    0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 
+    0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 
+    0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 
+    0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 
+    0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41,
+    0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40
+};
+
+ui8 TTpContr::CRCLo[] =
+{
+    0x00, 0xC0, 0xC1, 0x01, 0xC3, 0x03, 0x02, 0xC2, 0xC6, 0x06, 0x07, 0xC7, 0x05, 0xC5, 0xC4, 0x04, 
+    0xCC, 0x0C, 0x0D, 0xCD, 0x0F, 0xCF, 0xCE, 0x0E, 0x0A, 0xCA, 0xCB, 0x0B, 0xC9, 0x09, 0x08, 0xC8, 
+    0xD8, 0x18, 0x19, 0xD9, 0x1B, 0xDB, 0xDA, 0x1A, 0x1E, 0xDE, 0xDF, 0x1F, 0xDD, 0x1D, 0x1C, 0xDC, 
+    0x14, 0xD4, 0xD5, 0x15, 0xD7, 0x17, 0x16, 0xD6, 0xD2, 0x12, 0x13, 0xD3, 0x11, 0xD1, 0xD0, 0x10, 
+    0xF0, 0x30, 0x31, 0xF1, 0x33, 0xF3, 0xF2, 0x32, 0x36, 0xF6, 0xF7, 0x37, 0xF5, 0x35, 0x34, 0xF4, 
+    0x3C, 0xFC, 0xFD, 0x3D, 0xFF, 0x3F, 0x3E, 0xFE, 0xFA, 0x3A, 0x3B, 0xFB, 0x39, 0xF9, 0xF8, 0x38, 
+    0x28, 0xE8, 0xE9, 0x29, 0xEB, 0x2B, 0x2A, 0xEA, 0xEE, 0x2E, 0x2F, 0xEF, 0x2D, 0xED, 0xEC, 0x2C, 
+    0xE4, 0x24, 0x25, 0xE5, 0x27, 0xE7, 0xE6, 0x26, 0x22, 0xE2, 0xE3, 0x23, 0xE1, 0x21, 0x20, 0xE0, 
+    0xA0, 0x60, 0x61, 0xA1, 0x63, 0xA3, 0xA2, 0x62, 0x66, 0xA6, 0xA7, 0x67, 0xA5, 0x65, 0x64, 0xA4, 
+    0x6C, 0xAC, 0xAD, 0x6D, 0xAF, 0x6F, 0x6E, 0xAE, 0xAA, 0x6A, 0x6B, 0xAB, 0x69, 0xA9, 0xA8, 0x68, 
+    0x78, 0xB8, 0xB9, 0x79, 0xBB, 0x7B, 0x7A, 0xBA, 0xBE, 0x7E, 0x7F, 0xBF, 0x7D, 0xBD, 0xBC, 0x7C, 
+    0xB4, 0x74, 0x75, 0xB5, 0x77, 0xB7, 0xB6, 0x76, 0x72, 0xB2, 0xB3, 0x73, 0xB1, 0x71, 0x70, 0xB0, 
+    0x50, 0x90, 0x91, 0x51, 0x93, 0x53, 0x52, 0x92, 0x96, 0x56, 0x57, 0x97, 0x55, 0x95, 0x94, 0x54, 
+    0x9C, 0x5C, 0x5D, 0x9D, 0x5F, 0x9F, 0x9E, 0x5E, 0x5A, 0x9A, 0x9B, 0x5B, 0x99, 0x59, 0x58, 0x98, 
+    0x88, 0x48, 0x49, 0x89, 0x4B, 0x8B, 0x8A, 0x4A, 0x4E, 0x8E, 0x8F, 0x4F, 0x8D, 0x4D, 0x4C, 0x8C,
+    0x44, 0x84, 0x85, 0x45, 0x87, 0x47, 0x46, 0x86, 0x82, 0x42, 0x43, 0x83, 0x41, 0x81, 0x80, 0x40
+};
+
+ui16 TTpContr::CRC16( const string &mbap )
+{
+    ui8	hi = 0xFF;
+    ui8	lo = 0xFF;
+    ui16 index;
+    for( int i_b = 0; i_b < mbap.size(); i_b++ )
+    {
+        index = lo^(ui8)mbap[i_b];
+        lo = hi^CRCHi[index];
+        hi = CRCLo[index];
+    }
+    return hi|(lo<<8);
+}
+
+ui8 TTpContr::LRC( const string &mbap )
+{
+    ui8 ch = 0;
+    for( int i_b = 0; i_b < mbap.size(); i_b++ )
+	ch += (ui8)mbap[i_b];
+    
+    return ch;
+}
+
+string TTpContr::DataToASCII( const string &in )
+{
+    ui8 ch;
+    string rez;
+		    
+    for( int i = 0; i < in.size(); i++ )
+    {
+	ch = (in[i]&0xF0)>>4;
+	rez += (ch + ((ch <= 9)?'0':('A' - 10)));
+        ch = in[i]&0x0F;
+        rez += (ch + ((ch <= 9) ? '0' : ('A' - 10)));
+    }
+    
+    return rez;
+}
+
+string TTpContr::ASCIIToData( const string &in )
+{
+    ui8 ch1, ch2;
+    string rez;    
+
+    for( int i=0; i < (in.size()&(~0x01)); i+=2 )
+    {
+        ch2 = 0;
+        ch1 = in[i];
+        if( ch1 >= '0' && ch1 <= '9' )		ch1 -= '0';
+        else if( ch1 >= 'A' && ch1 <= 'F' )	ch1 -= ('A' + 10);
+	else 					ch1 = 0;
+        ch2 = ch1 << 4;
+        ch1 = in[i+1];
+        if( ch1 >= '0' && ch1 <= '9' )		ch1 -= '0';
+        else if ( ch1 >= 'A' && ch1 <= 'F' )	ch1 -= ('A' + 10);
+        else	                            	ch1 = 0;
+        rez += ch2|ch1;
+    }
+    
+    return rez;
+}
+
+//*************************************************
+//* SSerial                                       *
+//*************************************************
+SSerial::SSerial( const string &iDev ) : 
+    dev(iDev), prot(Free), frTm(3000), charTm(100), tm(3), m_connect(0), fd(-1)
+{
+
+}
+
+void SSerial::connect( int speed, Prot iPrt, ui32 iFrTm, ui32 iCharTm, ui32 iTm )
+{
+    ResAlloc res(m_res,true);
+
+    if( prot != Free && m_connect && (iPrt != prot || iFrTm != frTm || iCharTm != charTm || iTm != tm) )
+	throw TError(mod->nodePath().c_str(),_("Serial port '%s' already connected with other parameters."),dev.c_str());
+    //- Protocol parameters set -
+    if( prot == Free )
+    {
+	prot = iPrt;
+	frTm = iFrTm;
+	charTm = iCharTm;
+	tm = iTm;
+    }
+    //- Serial port open -
+    if( fd < 0 )
+    {
+        if( !(prot == RTU || prot == ASCII) )
+	    throw TError(mod->nodePath().c_str(),_("Connection for unknown ModBus protocol."));
+        fd = open( dev.c_str(), O_RDWR|O_NOCTTY );
+        if( fd < 0 )	throw TError(mod->nodePath().c_str(),_("Serial port '%s' open error."),dev.c_str());
+	//-- Set serial port parameters --
+        struct termios tio;
+	bzero( &tio, sizeof(tio) );
+        tio.c_iflag = 0;
+        tio.c_oflag = 0;
+        tio.c_cflag = B9600|CS8|CREAD|CLOCAL;
+        tio.c_lflag = 0;
+        tio.c_cc[VTIME] = 0;           ///< inter-character timer unused
+        tio.c_cc[VMIN] = 1;            ///< blocking read until 1 character arrives
+	speed_t tspd = B9600;
+	switch( speed )
+	{
+	    case 2400:	tspd = B2400;	break;
+	    case 4800:	tspd = B4800;	break;
+	    case 9600:	tspd = B9600;	break;
+	    case 19200:	tspd = B19200;	break;
+	    case 38400:	tspd = B38400;	break;
+	    case 57600:	tspd = B57600;	break;
+	    case 115200:tspd = B115200;	break;
+	    case 230400:tspd = B230400;	break;
+	    case 460800:tspd = B460800;	break;
+	}
+        cfsetispeed( &tio, tspd );
+        cfsetospeed( &tio, tspd );
+        tcflush( fd, TCIFLUSH );
+        tcsetattr( fd, TCSANOW, &tio );
+    }
+    m_connect++;
+}
+
+void SSerial::disconnect( )
+{
+    ResAlloc res( m_res, true );
+    if( m_connect > 0 ) m_connect--;
+    if( !m_connect && fd > 0 )	{ close(fd); fd = -1; }
+}
+
+string SSerial::req( const string &vl )
+{
+    ResAlloc res( m_res, true );
+    if( fd < 0 || !m_connect )	throw TError(mod->nodePath().c_str(),_("Device '%s' no connected."),dev.c_str());
+
+    //- Write request -
+    if( write( fd, vl.data(), vl.size() ) == -1 )
+	throw TError(mod->nodePath().c_str(),_("Write to device '%s' is error."),dev.c_str());
+
+    //- Read reply -
+    char buf[1000];
+    int  blen;
+    long long tmptm;
+    fd_set fdset;
+
+    //-- Char timeout init --
+    struct timeval tv;
+    tv.tv_sec = 0;
+    tv.tv_usec = charTm*1000;
+    
+    //--- Serial timeout ---
+    tmptm = time( NULL );
+    while( true )
+    {
+	int bytes = 0;
+	ioctl( fd, FIONREAD, &bytes );
+        if( bytes > 2 )	break;
+        if( (time(NULL) - tmptm) > tm )
+	    throw TError(mod->nodePath().c_str(),_("Respond from device '%s' timeouted."),dev.c_str());
+	usleep( 10000 );
+    }
+    fcntl( fd, F_SETFL, 0 );
+    blen = read( fd, buf, sizeof(buf) );
+
+    //--- Frame timeout ---
+    tmptm = TSYS::curTime();
+    FD_ZERO( &fdset );
+    FD_SET( fd, &fdset );
+    while( true )
+    {
+        if( select( fd+1, &fdset, NULL, NULL, &tv) == 0 )	break;
+        blen += read( fd, buf+blen, sizeof(buf)-blen );
+	if( (TSYS::curTime()-tmptm) > frTm )	break;
+    }
+    
+    return string( buf, blen );
+}
+
 //******************************************************
 //* TMdContr                                           *
 //******************************************************
-TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
-	::TController(name_c,daq_db,cfgelem), prc_st(false), endrun_req(false), tm_gath(0),
-	m_per(cfg("PERIOD").getRd()), m_prior(cfg("PRIOR").getId()), 
-	m_tr(cfg("TRANSP").getSd()), m_addr(cfg("ADDR").getSd()), m_node(cfg("NODE").getId())
+TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) :
+	TController( name_c, daq_db, cfgelem ), prc_st(false), endrun_req(false), tm_gath(0),
+	m_per(cfg("PERIOD").getRd()), m_prior(cfg("PRIOR").getId()), m_prt(cfg("PROT").getId()),
+	m_dev(cfg("DEV").getSd()), m_speed(cfg("SPEED").getId()), m_addr(cfg("ADDR").getSd()), m_node(cfg("NODE").getId())
 {    
     cfg("PRM_BD").setS("ModBusPrm_"+name_c);
+
+    //- Hide sevral config fields -
+    cfg("DEV").setView(false);
+    cfg("SPEED").setView(false);
 }
 
 TMdContr::~TMdContr()
 {
-    if( run_st ) stop();
+    if( run_st ) stop();    
 }
 
 TParamContr *TMdContr::ParamAttach( const string &name, int type )
 {
-    return new TMdPrm(name,&owner().tpPrmAt(type));
+    return new TMdPrm( name, &owner().tpPrmAt(type) );
 }
 
 void TMdContr::load( )
 {
+    cfgViewAll(true);
     TController::load( );
+    cfg("PROT").setI(cfg("PROT").getI());	//For hiden attributes visible status update
 }
 
 void TMdContr::save( )
 {
-    TController::save();
+    TController::save( );
 }
 
 void TMdContr::start_( )
 {
     if( !prc_st )
     {
-	//- Establish connection to server -
-	if( !SYS->transport().at().at(m_tr).at().outPresent(mod->modId()+id()) )
-	    SYS->transport().at().at(m_tr).at().outAdd(mod->modId()+id());
-	SYS->transport().at().at(m_tr).at().outAt(mod->modId()+id()).at().setAddr(m_addr);
-	SYS->transport().at().at(m_tr).at().outAt(mod->modId()+id()).at().start();
+	//- Establish connection -
+	switch( m_prt )	    
+	{
+	    case 0:
+	    {
+		if( !SYS->transport().at().at("Sockets").at().outPresent(mod->modId()+id()) )
+		    SYS->transport().at().at("Sockets").at().outAdd(mod->modId()+id());
+		string trAddr = "TCP:"+TSYS::strSepParse(m_addr,0,':')+":"+
+			(TSYS::strSepParse(m_addr,1,':').empty() ? "502" : TSYS::strSepParse(m_addr,1,':'));
+		SYS->transport().at().at("Sockets").at().outAt(mod->modId()+id()).at().setAddr(trAddr);
+		SYS->transport().at().at("Sockets").at().outAt(mod->modId()+id()).at().start();
+		break;
+	    }
+	    case 1: case 2:
+		mod->sPortAt(m_wdev).connect( m_speed, (m_prt==1) ? SSerial::RTU : SSerial::ASCII );
+		break;
+	}
 	
 	//- Start the gathering data task -    
 	pthread_attr_t pthr_attr;
-	pthread_attr_init(&pthr_attr);
+	pthread_attr_init( &pthr_attr );
 	struct sched_param prior;
 	if( m_prior && SYS->user() == "root" )
-	    pthread_attr_setschedpolicy(&pthr_attr,SCHED_RR);
-	else pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
-	prior.__sched_priority=m_prior;
-        pthread_attr_setschedparam(&pthr_attr,&prior);
+	    pthread_attr_setschedpolicy( &pthr_attr, SCHED_RR );
+	else pthread_attr_setschedpolicy( &pthr_attr, SCHED_OTHER );
+	prior.__sched_priority = m_prior;
+        pthread_attr_setschedparam( &pthr_attr, &prior );
 	
-        pthread_create(&procPthr,&pthr_attr,TMdContr::Task,this);
-        pthread_attr_destroy(&pthr_attr);
-        if( TSYS::eventWait(prc_st, true, nodePath()+"start",5) )
-            throw TError(nodePath().c_str(),_("Gathering task no started!"));    
+        pthread_create( &procPthr, &pthr_attr, TMdContr::Task, this );
+        pthread_attr_destroy( &pthr_attr );
+        if( TSYS::eventWait( prc_st, true, nodePath()+"start", 5 ) )
+            throw TError( nodePath().c_str(), _("Gathering task no started!") );
     }
 }
 
@@ -203,22 +453,57 @@ void TMdContr::stop_( )
 	//- Stop the request and calc data task -
         endrun_req = true;
         pthread_kill( procPthr, SIGALRM );
-        if( TSYS::eventWait(prc_st,false,nodePath()+"stop",5) )
-            throw TError(nodePath().c_str(),_("Gathering task no stoped!"));
+        if( TSYS::eventWait( prc_st, false, nodePath()+"stop", 5 ) )
+            throw TError( nodePath().c_str(), _("Gathering task no stoped!") );
         pthread_join( procPthr, NULL );
 
-     	//- Delete output transport -
-	if( !SYS->transport().at().at(m_tr).at().outPresent(mod->modId()+id()) )
-	    SYS->transport().at().at(m_tr).at().outDel(mod->modId()+id());
+     	//- Dissconnection -
+ 	switch( m_prt )	    
+	{
+	    case 0:        
+		if( !SYS->transport().at().at("Sockets").at().outPresent(mod->modId()+id()) )
+	    		SYS->transport().at().at("Sockets").at().outDel(mod->modId()+id());
+		break;
+	    case 1: case 2:
+		mod->sPortAt(m_wdev).disconnect( );
+		break;
+	}
     }
 } 
+
+bool TMdContr::cfgChange( TCfg &icfg )
+{
+    if( icfg.fld().name() == "PROT" )
+    {
+        if( icfg.getI() == 0 )
+	{
+	    cfg("ADDR").setView(true);
+	    cfg("DEV").setView(false);
+	    cfg("SPEED").setView(false);
+        }
+        else
+        {
+	    cfg("ADDR").setView(false);
+            cfg("DEV").setView(true);
+	    cfg("SPEED").setView(true);
+	}
+	if(startStat())	stop();
+    }
+    else if( icfg.fld().name() == "DEV" )
+    {
+	if( startStat() ) stop();
+	m_wdev = m_dev;
+    }
+    
+    return true;
+}
 
 void TMdContr::prmEn( const string &id, bool val )
 {
     int i_prm;
 
-    ResAlloc res(en_res,true);
-    for( i_prm = 0; i_prm < p_hd.size(); i_prm++)
+    ResAlloc res( en_res, true );
+    for( i_prm = 0; i_prm < p_hd.size(); i_prm++ )
         if( p_hd[i_prm].at().id() == id ) break;
     
     if( val && i_prm >= p_hd.size() )	p_hd.push_back(at(id));
@@ -227,56 +512,98 @@ void TMdContr::prmEn( const string &id, bool val )
 
 string TMdContr::modBusReq( string &pdu )
 {    
-    ResAlloc res(req_res,true);
+    ResAlloc res( req_res, true );
 
     string mbap;
     unsigned char buf[1000];
-    AutoHD<TTransportOut> tr = SYS->transport().at().at(m_tr).at().outAt(mod->modId()+id());
-    
-    //- Encode MBAP (Modbus Application Protocol) -
-    mbap  = (char)0x15;		//Transaction ID MSB
-    mbap += (char)0x01;		//Transaction ID LSB
-    mbap += (char)0x00;		//Protocol ID MSB
-    mbap += (char)0x00;		//Protocol ID LSB
-    mbap += (char)(pdu.size()>>8);	//PDU size MSB
-    mbap += (char)pdu.size();	//PDU size LSB
-    mbap += (char)0xFF;		//Unit identifier
+
     try
     {
-	if( !tr.at().startStat() )	tr.at().start();
-    	//- Send request -
-    	int resp_len = tr.at().messIO((mbap+pdu).c_str(),mbap.size()+pdu.size(),(char*)buf,sizeof(buf),10);
-    	if( resp_len < mbap.size() ) return _("13:Error server respond");
-    	int resp_sz = (buf[4]<<8)+buf[5];
-    	pdu.assign((char*)buf+mbap.size(),resp_len-mbap.size());
-    	//- Wait tail -
-    	while( pdu.size() < resp_sz-1 )
-    	{
-    	    resp_len = tr.at().messIO(NULL,0,(char*)buf,sizeof(buf),10);
-    	    pdu.append((char*)buf,resp_len);
+	switch( m_prt )
+	{
+	    case 0:	// Modbus/TCP protocol process
+	    {
+		AutoHD<TTransportOut> tr;
+		try{ tr = SYS->transport().at().at("Sockets").at().outAt(mod->modId()+id()); }
+		catch(...) { tr.at().stop(); throw; }
+    
+		//- Encode MBAP (Modbus Application Protocol) -
+		mbap  = (char)0x15;		//Transaction ID MSB
+		mbap += (char)0x01;		//Transaction ID LSB
+		mbap += (char)0x00;		//Protocol ID MSB
+		mbap += (char)0x00;		//Protocol ID LSB
+		mbap += (char)(pdu.size()>>8);	//PDU size MSB
+		mbap += (char)pdu.size();	//PDU size LSB
+		mbap += (char)m_node;		//Unit identifier
+		
+		if( !tr.at().startStat() )	tr.at().start();
+    		//- Send request -
+    		int resp_len = tr.at().messIO( (mbap+pdu).c_str(), mbap.size()+pdu.size(), (char*)buf, sizeof(buf), 10 );
+    		if( resp_len < mbap.size() ) return _("13:Error server respond");
+    		int resp_sz = (buf[4]<<8)+buf[5];
+    		pdu.assign( (char*)buf+mbap.size(), resp_len-mbap.size() );
+    		//- Wait tail -
+		while( pdu.size() < resp_sz-1 )
+    		{
+    		    resp_len = tr.at().messIO( NULL, 0, (char*)buf, sizeof(buf), 10 );
+    		    pdu.append( (char*)buf, resp_len );
+		}
+		break;
+	    }	
+	    case 1:	// Modbus/RTU protocol process
+	    {
+		mbap = (ui8)m_node;		//Unit identifier
+	        mbap += pdu;
+		ui16 crc = mod->CRC16( mbap );
+		mbap += crc >> 8;
+		mbap += crc;
+		string rez = mod->sPortAt(m_wdev).req(mbap);
+		if( rez.size() < 2 ) return _("13:Error respond. Too short.");
+		if( mod->CRC16(rez.substr(0,rez.size()-2)) != (ui16)((rez[rez.size()-2]<<8)+(ui8)rez[rez.size()-1]) )
+		    return _("13:Error respond. CRC check error.");
+		pdu = rez.substr( 1, rez.size()-3 );
+		break;
+	    }
+	    case 2:	// Modbus/ASCII protocol process
+	    {
+		mbap = (ui8)m_node;	//Unit identifier
+		mbap += pdu;
+		mbap += mod->LRC(mbap);
+		mbap = ":"+mod->DataToASCII(mbap)+"\0x0D\0x0A";
+		string rez = mod->sPortAt(m_wdev).req(mbap);
+		if( rez.size() < 3 || rez[0] != ':' || rez[rez.size()-2] != 0x0D || rez[rez.size()-1] != 0x0A )
+		    return _("13:Error respond. Error format.");
+		rez = mod->ASCIIToData(rez.substr(1,rez.size()-3));
+		if( mod->LRC(rez.substr(0,rez.size()-1)) != rez[rez.size()-1] )
+		    return _("13:Error respond. LRC check error.");
+		pdu = rez.substr(1,rez.size()-2);
+		break;
+	    }
 	}
+	//- Check respond pdu -
+	if( pdu.size() < 2 ) return _("13:Error respond");
 	if( pdu[0]&0x80 )
-	    switch(pdu[1])
+	    switch( pdu[1] )
 	    {
 		case 0x1: 
-		    snprintf((char*)buf,sizeof(buf),_("1:Function %xh no support."),pdu[0]&(~0x80));
+		    snprintf( (char*)buf, sizeof(buf), _("1:Function %xh no support."), pdu[0]&(~0x80) );
 		    return (char*)buf;
 		case 0x2: return _("2:Requested registers length too long or.");
 		case 0x3: return _("3:Illegal data value.");
 		case 0x4: return _("4:Server failure.");
 		case 0x5: return _("5:Request require too long time for execute.");
-		case 0x6: return _("6:Server busy.");
+        	case 0x6: return _("6:Server busy.");
 		case 0xA: case 0xB: return _("10:Gateway problem.");
 		default:  
-		    snprintf((char*)buf,sizeof(buf),_("12:Unknown error: %xh."),pdu[1]);
+		    snprintf( (char*)buf, sizeof(buf), _("12:Unknown error: %xh."), pdu[1] );
 		    return (char*)buf;
-	    }	    
-    }catch(...)
-    { 
-	tr.at().stop();
-	return _("14:Connection error"); 
+	    }
+    }catch( TError err )	
+    {
+	mess_err( err.cat.c_str(), err.mess.c_str() );
+	return _("14:Connection error");
     }
-
+    
     return "";
 }
 
@@ -294,20 +621,20 @@ void *TMdContr::Task( void *icntr )
 
     try
     {    
-    	while(!cntr.endrun_req)
+    	while( !cntr.endrun_req )
 	{	
 	    long long t_cnt = SYS->shrtCnt();	
-	    cntr.en_res.resRequestR( );
 
 	    //- Update controller's data -
-	    for( int i_p=0; i_p < cntr.p_hd.size(); i_p++)
+	    ResAlloc res( cntr.en_res, false );	    
+	    for( int i_p = 0; i_p < cntr.p_hd.size(); i_p++ )
 	    {               
 		cntr.p_hd[i_p].at().elem().fldList(als);
 		for( int i_a = 0; i_a < als.size(); i_a++ )
 		{
 		    if( cntr.endrun_req ) { cntr.prc_st = false; return NULL; }
     		    val = cntr.p_hd[i_p].at().vlAt(als[i_a]);
-    		    //- Encode request PDU (Protocol Data Units) --
+    		    //- Encode request PDU (Protocol Data Units) -
     		    int reg = val.at().fld().reserve();
     		    pdu = (char)0x3;		//Function, read multiple registers
     		    pdu += (char)(reg>>8);	//Address MSB
@@ -318,104 +645,36 @@ void *TMdContr::Task( void *icntr )
 	    	    rez = cntr.modBusReq( pdu );
 	    	    if( !rez.empty() )
 		    {
-			if( !cntr.p_hd[i_p].at().isErr ) cntr.p_hd[i_p].at().vlAt("err").at().setS(rez,0,true); 
+			if( !cntr.p_hd[i_p].at().isErr ) cntr.p_hd[i_p].at().vlAt("err").at().setS( rez, 0, true );
 			cntr.p_hd[i_p].at().isErr = true;
 			break; 
 		    }
 		    else if( cntr.p_hd[i_p].at().isErr )
-		    { cntr.p_hd[i_p].at().vlAt("err").at().setS("0",0,true); cntr.p_hd[i_p].at().isErr = false; }
-	    	    val.at().setI((pdu[2]<<8)+pdu[3],0,true);
+		    { cntr.p_hd[i_p].at().vlAt("err").at().setS( "0", 0, true ); cntr.p_hd[i_p].at().isErr = false; }
+	    	    val.at().setI( (pdu[2]<<8)+pdu[3], 0, true );
 		}
     	    }
+	    res.release();	    
 	    val.free();
 
     	    //- Calc acquisition process time -
-    	    cntr.en_res.resReleaseR( );    
     	    cntr.tm_gath = 1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
     
     	    //- Calc next work time and sleep -
-    	    clock_gettime(CLOCK_REALTIME,&get_tm);
+    	    clock_gettime( CLOCK_REALTIME, &get_tm );
 	    work_tm = (((long long)get_tm.tv_sec*1000000000+get_tm.tv_nsec)/(long long)(cntr.m_per*1000000000) + 1)*(long long)(cntr.m_per*1000000000);
-	    if(last_tm == work_tm)	work_tm+=(long long)(cntr.m_per*1000000000);	//Fix early call
+	    if( last_tm == work_tm )	work_tm += (long long)(cntr.m_per*1000000000);	//Fix early call
     	    last_tm = work_tm;
 	    get_tm.tv_sec = work_tm/1000000000; get_tm.tv_nsec = work_tm%1000000000;
-    	    clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&get_tm,NULL);
+    	    clock_nanosleep( CLOCK_REALTIME, TIMER_ABSTIME, &get_tm, NULL );
     	}
-    }catch(TError err)	{ mess_err(err.cat.c_str(),err.mess.c_str()); }
+    }
+    catch( TError err )	{ mess_err( err.cat.c_str(), err.mess.c_str() ); }
     
     cntr.prc_st = false;
     
     return NULL;
 }
-
-/*char TMdContr::crc_table[] = 
-    { 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0,	//00
-      0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41,	//01
-      0x00, 0xC1, 0x81, 0x40, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0,	//02
-      0x80, 0x41, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40,	//03
-      0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1,	//04
-      0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0, 0x80, 0x41,	//05
-      0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1,	//06
-      0x81, 0x40, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41,	//07
-      0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0,	//08
-      0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x00, 0xC1, 0x81, 0x40,	//09
-      0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1,	//10
-      0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40,	//11
-      0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0,	//12
-      0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x00, 0xC1, 0x81, 0x40,	//13
-      0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0,	//14
-      0x80, 0x41, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40,	//15
-      0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0,	//16
-      0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41,	//17
-      0x00, 0xC1, 0x81, 0x40, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0,	//18
-      0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41,	//19
-      0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0,	//20
-      0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x00, 0xC1, 0x81, 0x40,	//21
-      0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1,	//22
-      0x81, 0x40, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41,	//23
-      0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0,	//24
-      0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x00, 0xC0, 0xC1, 0x01,	//25
-      0xC3, 0x03, 0x02, 0xC2, 0xC6, 0x06, 0x07, 0xC7, 0x05, 0xC5,	//26
-      0xC4, 0x04, 0xCC, 0x0C, 0x0D, 0xCD, 0x0F, 0xCF, 0xCE, 0x0E,	//27
-      0x0A, 0xCA, 0xCB, 0x0B, 0xC9, 0x09, 0x08, 0xC8, 0xD8, 0x18,	//28
-      0x19, 0xD9, 0x1B, 0xDB, 0xDA, 0x1A, 0x1E, 0xDE, 0xDF, 0x1F,	//29
-      0xDD, 0x1D, 0x1C, 0xDC, 0x14, 0xD4, 0xD5, 0x15, 0xD7, 0x17,	//30
-      0x16, 0xD6, 0xD2, 0x12, 0x13, 0xD3, 0x11, 0xD1, 0xD0, 0x10,	//31
-      0xF0, 0x30, 0x31, 0xF1, 0x33, 0xF3, 0xF2, 0x32, 0x36, 0xF6,	//32
-      0xF7, 0x37, 0xF5, 0x35, 0x34, 0xF4, 0x3C, 0xFC, 0xFD, 0x3D,	//33
-      0xFF, 0x3F, 0x3E, 0xFE, 0xFA, 0x3A, 0x3B, 0xFB, 0x39, 0xF9,	//34
-      0xF8, 0x38, 0x28, 0xE8, 0xE9, 0x29, 0xEB, 0x2B, 0x2A, 0xEA,	//35
-      0xEE, 0x2E, 0x2F, 0xEF, 0x2D, 0xED, 0xEC, 0x2C, 0xE4, 0x24,	//36
-      0x25, 0xE5, 0x27, 0xE7, 0xE6, 0x26, 0x22, 0xE2, 0xE3, 0x23,	//37
-      0xE1, 0x21, 0x20, 0xE0, 0xA0, 0x60, 0x61, 0xA1, 0x63, 0xA3,	//38
-      0xA2, 0x62, 0x66, 0xA6, 0xA7, 0x67, 0xA5, 0x65, 0x64, 0xA4,	//39
-      0x6C, 0xAC, 0xAD, 0x6D, 0xAF, 0x6F, 0x6E, 0xAE, 0xAA, 0x6A,	//40
-      0x6B, 0xAB, 0x69, 0xA9, 0xA8, 0x68, 0x78, 0xB8, 0xB9, 0x79,	//41
-      0xBB, 0x7B, 0x7A, 0xBA, 0xBE, 0x7E, 0x7F, 0xBF, 0x7D, 0xBD,	//42
-      0xBC, 0x7C, 0xB4, 0x74, 0x75, 0xB5, 0x77, 0xB7, 0xB6, 0x76,	//43
-      0x72, 0xB2, 0xB3, 0x73, 0xB1, 0x71, 0x70, 0xB0, 0x50, 0x90,	//44
-      0x91, 0x51, 0x93, 0x53, 0x52, 0x92, 0x96, 0x56, 0x57, 0x97,	//45
-      0x55, 0x95, 0x94, 0x54, 0x9C, 0x5C, 0x5D, 0x9D, 0x5F, 0x9F,	//46
-      0x9E, 0x5E, 0x5A, 0x9A, 0x9B, 0x5B, 0x99, 0x59, 0x58, 0x98,	//47
-      0x88, 0x48, 0x49, 0x89, 0x4B, 0x8B, 0x8A, 0x4A, 0x4E, 0x8E,	//48
-      0x8F, 0x4F, 0x8D, 0x4D, 0x4C, 0x8C, 0x44, 0x84, 0x85, 0x45,	//49
-      0x87, 0x47, 0x46, 0x86, 0x82, 0x42, 0x43, 0x83, 0x41, 0x81,	//50
-      0x80, 0x40  };
-
-unsigned int TMdContr::crc16( const string &mframe )
-{
-    int index;
-    unsigned char crc_Low = 0xFF;
-    unsigned char crc_High = 0xFF;
-    
-    for( int i_b = 0; i_b < mframe.size(); i_b++ )
-    {
-	index    = crc_High ^ (unsigned char)mframe[i_b];
-	crc_High = crc_Low ^ crc_table[index];
-	crc_Low  = crc_table[index+256];
-    }
-    return crc_High*256+crc_Low;
-}*/
 
 void TMdContr::cntrCmdProc( XMLNode *opt )
 {
@@ -423,7 +682,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TController::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/cntr/st/gath_tm",_("Gather data time (ms)"),0444,"root","root",1,"tp","real");
+	ctrMkNode( "fld", opt, -1, "/cntr/st/gath_tm", _("Gather data time (ms)"), 0444, "root", "root", 1, "tp", "real" );
 	return;
     }
     //- Process command to page -
@@ -436,20 +695,20 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //* TMdPrm                                             *
 //******************************************************
 TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : 
-    TParamContr(name,tp_prm), p_el("w_attr"), m_attrLs(cfg("ATTR_LS").getSd()), isErr(false)
+    TParamContr( name, tp_prm ), p_el("w_attr"), m_attrLs(cfg("ATTR_LS").getSd()), isErr(false)
 {
 
 }
 
 TMdPrm::~TMdPrm( )
 {
-    nodeDelAll();    
+    nodeDelAll( );    
 }
 
 void TMdPrm::postEnable( int flag )
 {
     TParamContr::postEnable(flag);
-    if(!vlElemPresent(&p_el))   vlElemAtt(&p_el);
+    if( !vlElemPresent(&p_el) )	vlElemAtt(&p_el);
 }
 
 void TMdPrm::enable()
@@ -470,17 +729,17 @@ void TMdPrm::enable()
 	aid = TSYS::strSepParse(sel,2,':');
 	if( aid.empty() ) aid = TSYS::int2str(ai);
 	anm = TSYS::strSepParse(sel,3,':');
-	if( anm.empty() ) anm = TSYS::int2str(ai); 
+	if( anm.empty() ) anm = TSYS::int2str(ai);
         als.push_back(aid+":"+anm+":"+TSYS::int2str(ai)+":"+TSYS::int2str(awr));
     }
 
     //- Make DAQ parameter's attributes -
     for( int i_l = 0; i_l < als.size(); i_l++ )
     {
-	aid = TSYS::strSepParse(als[i_l],0,':');
+	aid = TSYS::strSepParse( als[i_l], 0, ':' );
 	if( vlPresent(aid) && !p_el.fldPresent(aid) )	continue;
 	if( !p_el.fldPresent(aid) )
-	    p_el.fldAdd( new TFld( aid.c_str(),"",TFld::Integer,TFld::NoFlag,"",TSYS::int2str(EVAL_INT).c_str(),"0:65535") );
+	    p_el.fldAdd( new TFld( aid.c_str(), "", TFld::Integer, TFld::NoFlag, "", TSYS::int2str(EVAL_INT).c_str(), "0:65535" ) );
 	int el_id = p_el.fldId(aid);
 	p_el.fldAt(el_id).setDescr( TSYS::strSepParse(als[i_l],1,':') );
 	p_el.fldAt(el_id).setReserve( atoi(TSYS::strSepParse(als[i_l],2,':').c_str()) );
@@ -506,33 +765,33 @@ void TMdPrm::disable()
     if( !enableStat() )  return;
 
     owner().prmEn( id(), false );
-    
+
     TParamContr::disable();
-    
+
     //- Set EVAL to parameter attributes -
     vector<string> ls;
     elem().fldList(ls);
     for(int i_el = 0; i_el < ls.size(); i_el++)
-	vlAt(ls[i_el]).at().setS(EVAL_STR,0,true);
+	vlAt(ls[i_el]).at().setS( EVAL_STR, 0, true );
 }
 
 void TMdPrm::vlGet( TVal &val )
 {
     if(val.name() == "err" )
     {
-	if( !enableStat() ) 		val.setS(_("1:Parameter had disabled."),0,true);
-	else if( !owner().startStat() )	val.setS(_("2:Controller is stoped."),0,true);
-	else if( !isErr )		val.setS("0",0,true);
+	if( !enableStat() ) 		val.setS( _("1:Parameter had disabled."), 0, true );
+	else if( !owner().startStat() )	val.setS( _("2:Controller is stoped."), 0, true );
+	else if( !isErr )		val.setS( "0", 0, true );
     }
 }
 
 void TMdPrm::vlSet( TVal &valo )
 {
-    if( !enableStat() )	valo.setI(EVAL_INT,0,true);
+    if( !enableStat() )	valo.setI( EVAL_INT, 0, true );
     //- Encode request PDU (Protocol Data Units) --
     string pdu;
     int reg = valo.fld().reserve();
-    int val = valo.getI(NULL,true);
+    int val = valo.getI( NULL, true );
     pdu = (char)0x6;		//Function, read multiple registers
     pdu += (char)(reg>>8);	//Address MSB
     pdu += (char)reg;		//Address LSB
@@ -542,17 +801,17 @@ void TMdPrm::vlSet( TVal &valo )
     string rez = owner().modBusReq( pdu );
     if( !rez.empty() )
     {
-	if( !isErr ) vlAt("err").at().setS(rez,0,true);
+	if( !isErr ) vlAt("err").at().setS( rez, 0, true );
 	isErr = true;
     }
-    else if( isErr ) { vlAt("err").at().setS("0",0,true); isErr = false; }
+    else if( isErr ) { vlAt("err").at().setS( "0", 0, true ); isErr = false; }
 }
 
 void TMdPrm::vlArchMake( TVal &val )
 {
     if( val.arch().freeStat() ) return;
-    val.arch().at().setSrcMode(TVArchive::PassiveAttr,val.arch().at().srcData());
-    val.arch().at().setPeriod((long long)(owner().period()*1000000));
+    val.arch().at().setSrcMode( TVArchive::PassiveAttr, val.arch().at().srcData() );
+    val.arch().at().setPeriod( (long long)(owner().period()*1000000) );
     val.arch().at().setHardGrid( true );
     val.arch().at().setHighResTm( true );
 }

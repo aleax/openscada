@@ -107,7 +107,6 @@ void ModInspAttr::setWdg( const string &iwdg )
             delete rootItem;
             rootItem = new Item("wgrp",Item::WdgGrp);
 	    endRemoveRows();
-	    //full_reset = true;
         }
         //- Check for delete widgets from group -
         for( int i_it = 0; i_it < rootItem->childCount(); i_it++ )
@@ -1560,7 +1559,7 @@ void DevelWdgView::saveGeom( const string& item )
 	attrSet("geomH", TSYS::real2str(TSYS::realRound(sizeF().height()/yScale(true),2)), 10);
 	attrSet("geomXsc", TSYS::real2str(TSYS::realRound(x_scale,2)), 13);
 	attrSet("geomYsc", TSYS::real2str(TSYS::realRound(y_scale,2)), 14);
-	attrSet("geomZ", TSYS::int2str(z_coord),11);
+	attrSet("geomZ", TSYS::int2str(parent()->children().indexOf(this)),11);
     }
     
     if( item != id() && wLevel() == 0 )
@@ -1777,59 +1776,50 @@ void DevelWdgView::wdgViewTool( QAction *act )
         string sel_w;
 
         if( is_rise || is_up )
-        for( int w_off=0; (sel_w=TSYS::strSepParse(sel_ws,0,';',&w_off)).size(); )
-        {
-            bool is_move = false;
-            DevelWdgView *cwdg = NULL;
-            DevelWdgView *ewdg = NULL;
-            for( int i_c = 0; i_c < children().size(); i_c++ )
+    	    for( int w_off=0; (sel_w=TSYS::strSepParse(sel_ws,0,';',&w_off)).size(); )
     	    {
-        	if( !qobject_cast<DevelWdgView*>(children().at(i_c)) )   continue;
-                    ewdg = qobject_cast<DevelWdgView*>(children().at(i_c));
-                if( ewdg->id() == sel_w.c_str() )   cwdg = ewdg;
-                else if( is_up && !is_move && cwdg && !ewdg->select() &&
-                     ewdg->geometryF().intersects(cwdg->geometryF()) )
-                {
-            	    cwdg->stackUnder(ewdg);
-                    ewdg->stackUnder(cwdg);
-                    cwdg->setZ(ewdg->z()+1);
-                    is_move = true;
-                }
-                else if( is_move )  ewdg->setZ(ewdg->z()+1);
-            }
-            if(is_rise && cwdg && ewdg && cwdg!=ewdg )
-            {
-        	cwdg->stackUnder(ewdg);
-        	ewdg->stackUnder(cwdg);
-        	cwdg->setZ(ewdg->z()+1);
-            }
-        }
+        	bool is_move = false;
+        	DevelWdgView *cwdg = NULL;
+        	DevelWdgView *ewdg = NULL;
+        	for( int i_c = 0; i_c < children().size(); i_c++ )
+    		{
+        	    if( !qobject_cast<DevelWdgView*>(children().at(i_c)) )   continue;
+            	    ewdg = qobject_cast<DevelWdgView*>(children().at(i_c));
+            	    if( ewdg->id() == sel_w.c_str() )   cwdg = ewdg;
+            	    else if( is_up && !is_move && cwdg && !ewdg->select() &&
+                	    ewdg->geometryF().intersects(cwdg->geometryF()) )
+            	    {
+            		cwdg->stackUnder(ewdg);
+                	ewdg->stackUnder(cwdg);
+                	is_move = true;
+            	    }
+        	}
+        	if(is_rise && cwdg && ewdg && cwdg!=ewdg )
+        	{
+        	    cwdg->stackUnder(ewdg);
+        	    ewdg->stackUnder(cwdg);
+        	}
+    	    }
         if( is_lower || is_down )
-        for( int w_off=0; (sel_w=TSYS::strSepParse(sel_ws,0,';',&w_off)).size(); )
-        {
-            bool is_move = false;
-            DevelWdgView *cwdg = NULL;
-            DevelWdgView *ewdg = NULL;
-            for( int i_c = children().size()-1; i_c >= 0; i_c-- )
-            {
-        	if( !qobject_cast<DevelWdgView*>(children().at(i_c)) )   continue;
-                ewdg = qobject_cast<DevelWdgView*>(children().at(i_c));
-                if( ewdg->id() == sel_w.c_str() )   cwdg = ewdg;
-                else if( is_down && !is_move && cwdg && !ewdg->select() &&
-            	    ewdg->geometryF().intersects(cwdg->geometryF()) )
-                {
-                    cwdg->stackUnder(ewdg);
-                    cwdg->setZ(ewdg->z()-1);
-                    is_move = true;
-                }
-                else if( is_move )  ewdg->setZ(ewdg->z()-1);
-            }
-            if(is_lower && cwdg && ewdg && cwdg!=ewdg )
-            {
-                cwdg->stackUnder(ewdg);
-                cwdg->setZ(ewdg->z()-1);
-            }
-	}
+    	    for( int w_off=0; (sel_w=TSYS::strSepParse(sel_ws,0,';',&w_off)).size(); )
+    	    {
+        	bool is_move = false;
+        	DevelWdgView *cwdg = NULL;
+        	DevelWdgView *ewdg = NULL;
+        	for( int i_c = children().size()-1; i_c >= 0; i_c-- )
+        	{
+        	    if( !qobject_cast<DevelWdgView*>(children().at(i_c)) )   continue;
+            	    ewdg = qobject_cast<DevelWdgView*>(children().at(i_c));
+            	    if( ewdg->id() == sel_w.c_str() )   cwdg = ewdg;
+            	    else if( is_down && !is_move && cwdg && !ewdg->select() &&
+            		    ewdg->geometryF().intersects(cwdg->geometryF()) )
+            	    {
+                	cwdg->stackUnder(ewdg);
+                	is_move = true;
+            	    }
+        	}
+        	if(is_lower && cwdg && ewdg && cwdg!=ewdg )	cwdg->stackUnder(ewdg);
+	    }
         saveGeom("");
     }
 }

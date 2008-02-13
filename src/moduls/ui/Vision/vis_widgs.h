@@ -218,7 +218,6 @@ namespace VISION
 
 	    void   moveF( const QPointF &pos );
 	    void   resizeF( const QSizeF &size );
-	    void   setZ( int val )	{ z_coord = val; }
 	    void   setAllAttrLoad( bool vl )	{ all_attr_load = vl; }
 	    
 	    virtual bool attrSet( const string &attr, const string &val, int uiPrmPos = 0 );

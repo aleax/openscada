@@ -960,7 +960,7 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt )
     {
 	//-- New include item id generator --
 	//--- Present include widgets list request ---
-	if( sid1.substr(0,4) == "prj_" ) req.setAttr("path",own_wdg+"/%2fpage%2fpage");
+	if( sid1.substr(0,4) == "prj_" && pnt.isNull() ) req.setAttr("path",own_wdg+"/%2fpage%2fpage");
 	else req.setAttr("path",own_wdg+"/%2finclwdg%2fwdg");
     	if( cntrIfCmd(req) ) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 	else

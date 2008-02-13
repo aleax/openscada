@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.ModBus file: modbus_client.h
 /***************************************************************************
- *   Copyright (C) 2007 by Roman Savochenko                                *
+ *   Copyright (C) 2007-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -28,12 +28,14 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 #undef _
 #define _(mess) mod->I18N(mess)
 
 using std::string;
 using std::vector;
+using std::map;
 
 namespace ModBusDAQ
 {
@@ -57,8 +59,8 @@ class TMdPrm : public TParamContr
 	TMdContr &owner( )	{ return (TMdContr&)TParamContr::owner(); }
 	
         //Attributes
-	bool    isErr;		//Error present		
-	
+	bool    isErr;		//Error present	flag
+
     private:
 	//Methods
         void postEnable( int flag );
@@ -78,7 +80,7 @@ class TMdContr: public TController
 {
     public:
 	//Methods
-    	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem);
+    	TMdContr( string name_c, const string &daq_db, TElem *cfgelem);
 	~TMdContr( );
 
 	double period( )	{ return m_per; }
@@ -97,50 +99,94 @@ class TMdContr: public TController
     protected:
 	//Methods
     	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	bool cfgChange( TCfg &cfg );
 	
     private:
 	//Methods
 	TParamContr *ParamAttach( const string &name, int type );
 	static void *Task( void *icntr );
 	
-	//unsigned int crc16( const string &modbusframe );
-	
 	//Attributes
-	Res	en_res, req_res;//Resource for enable params and request values
-	double	&m_per;     	//Acquisition task (seconds)
-	int	&m_prior,	//Process task priority
-		&m_node;	//Server node
-	string	&m_tr,		//Used output transport
-		&m_addr;	//Remote host address
+	Res	en_res, req_res;		//Resource for enable params and request values
+	double	&m_per;     			//Acquisition task (seconds)
+	int	&m_prior,			//Process task priority
+		&m_prt,				//Protocol
+		&m_speed,			//Serial speed
+		&m_node;			//Node
+	string	&m_dev,				//Serial device
+		m_wdev,				//Work serial device
+		&m_addr;			//Remote host address
 		
-	bool    prc_st,		//Process task active
-		endrun_req;	//Request to stop of the Process task
+	bool    prc_st,				//Process task active
+		endrun_req;			//Request to stop of the Process task
         vector< AutoHD<TMdPrm> >  p_hd;
 	
-	pthread_t procPthr;     //Process task thread
+	pthread_t procPthr;     		//Process task thread
 	
-	double 	tm_gath;	//Gathering time
-	
-	//static  char crc_table[];	//Crec calc table
+	double 	tm_gath;			//Gathering time
 };
 
-//******************************************************
-//* TTpContr                                           *
-//******************************************************
+//*************************************************
+//* SSerial                                       *
+//*************************************************
+class SSerial
+{
+    public:
+	//Data
+	enum	Prot { Free, ASCII, RTU };
+
+	//Methods
+	SSerial( )	{ }
+	SSerial( const string &dev );
+	
+	void connect( int speed, Prot iPrt = RTU, ui32 iFrTm = 3000, ui32 iCharTm = 100, ui32 iTm = 3 );
+	void disconnect( );
+	
+	string req( const string &vl );
+		
+    private:
+	//Attributes
+	string	dev;				//Serial port device
+	Prot   	prot;   			//ASCII/RTU protocol
+	ui32 	frTm;				//Frame timeout in ms
+	ui32	charTm;				//Char timeout in ms
+	ui32   	tm;				//Request timeout in s
+		
+	Res	m_res;				//Serial port resource
+	int	fd;				//Serial port
+	int	m_connect;			//Serial port connection's counter, from acquisition controllers
+};
+
+//*************************************************
+//* TTpContr                                      *
+//*************************************************
 class TTpContr: public TTipDAQ
 {
     public:
 	//Methods
     	TTpContr( string name );
 	~TTpContr( );
-	
-	void postEnable( int flag );
+
 	void modLoad( );
+
+	SSerial &sPortAt( const string &dev );
+	
+	ui16 CRC16( const string &mbap );
+	ui8  LRC( const string &mbap );
+	string DataToASCII( const string &in );
+	string ASCIIToData( const string &in );
 
     private:
 	//Methods
+	void postEnable( int flag );
 	TController *ContrAttach( const string &name, const string &daq_db );
 	string optDescr( );
+	
+	//Attributes
+	map<string,SSerial>	m_sdevs;
+	
+	static ui8 CRCHi[];
+	static ui8 CRCLo[];
 };
 
 extern TTpContr *mod;

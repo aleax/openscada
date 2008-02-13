@@ -821,7 +821,7 @@ msgstr ""
 
 #: web_vision.cpp:691
 msgid "Create new session for present project"
-msgstr "Создание новой сессию для доступного проекта"
+msgstr "Создание новой сессии для доступного проекта"
 
 #: web_vision.cpp:695
 msgid "/prj_"

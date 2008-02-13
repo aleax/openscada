@@ -105,7 +105,7 @@ void TTpContr::postEnable( int flag )
     fldAdd( new TFld("PRM_BD_D",_("Digital parameters' table"),TFld::String,0,"30","diamond_prm_d") );
     fldAdd( new TFld("DATA_EMUL",_("Data emulation"),TFld::Boolean,TCfg::Prevent,"1","0") );
     fldAdd( new TFld("ADDR",_("Base board address"),TFld::Integer,TFld::HexDec,"3","640") );
-    fldAdd( new TFld("INT",_("Interrupt vector"),TFld::Integer,0,"2","5") );    
+    fldAdd( new TFld("INT",_("Interrupt vector"),TFld::Integer,0,"2","5") );
     fldAdd( new TFld("DIO_CFG",_("Digit IO config byte"),TFld::Integer,TFld::HexDec,"2","0") );
     fldAdd( new TFld("ADMODE",_("A/D interrupt mode"),TFld::Boolean,TCfg::Prevent,"1","0") );
     fldAdd( new TFld("ADRANGE",_("A/D voltage range"),TFld::Integer,TFld::Selected,"1",TSYS::int2str(RANGE_10).c_str(),

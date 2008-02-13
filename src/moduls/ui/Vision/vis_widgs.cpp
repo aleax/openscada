@@ -505,6 +505,7 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
     box->setSpacing(0);
 		    
     ed_fld = new QTextEdit(this);
+    setFocusProxy( ed_fld );
     connect( ed_fld, SIGNAL( textChanged() ), this, SLOT( changed() ) );
     box->addWidget(ed_fld);
 				
@@ -517,12 +518,12 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
         if(!ico_t.load(TUIS::icoPath("button_ok").c_str())) ico_t.load(":/images/button_ok.png");
         but_box->button(QDialogButtonBox::Apply)->setIcon(QPixmap::fromImage(ico_t));
 	but_box->button(QDialogButtonBox::Apply)->setIconSize(QSize(12,12));
-        connect(but_box->button(QDialogButtonBox::Apply), SIGNAL(clicked()), this, SLOT(applySlot()));
+        connect(but_box->button(QDialogButtonBox::Apply), SIGNAL(pressed()), this, SLOT(applySlot()));
         but_box->button(QDialogButtonBox::Cancel)->setText("");
 	if(!ico_t.load(TUIS::icoPath("button_cancel").c_str())) ico_t.load(":/images/button_cancel.png");
         but_box->button(QDialogButtonBox::Cancel)->setIcon(QPixmap::fromImage(ico_t));
 	but_box->button(QDialogButtonBox::Cancel)->setIconSize(QSize(12,12));
-        connect(but_box, SIGNAL(rejected()), this, SLOT(cancelSlot()));
+        connect(but_box->button(QDialogButtonBox::Cancel), SIGNAL(pressed()), this, SLOT(cancelSlot()));
         but_box->setVisible(false);
 	but_box->setEnabled(false);
         box->addWidget(but_box);

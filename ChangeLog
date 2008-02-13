@@ -1,3 +1,13 @@
+2008-02-13 Roman
+- !!!:/DAQ/ModBus: Support Modbus protocols RTU and ASCII is added.
+- FIX:/DAQ/ModBus: Resource dead lock into main acquisition task is fixed.
+- !:/DAQ/ModBus: Update translation to Russian and Ukranian. Version 0.7.0 is released.
+- FIX:/UI/VCAEngine, /UI/Vision, /UI/WebVision: Z - level is fixed.
+- FIX:/UI/Vision: Identifier generator is fixed for project's page and widget manipulation.
+- FIX:/UI/Vision: Proxy focus is fixed for text elements of primitive "ElForm"
+- /SYS: Updated Demo DB.
+
+
 2008-02-08 Roman
 - FIX:/UI/VCAEngine: Removing included widgets to page from DB is fixed.
 - !!:/UI/VCAEngine: Adaptive dynamic page linking work is finised.
