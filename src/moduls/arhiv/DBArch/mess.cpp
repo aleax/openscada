@@ -80,6 +80,13 @@ void ModMArch::load( )
     {
 	m_beg = atoi(cfg.cfg("BEGIN").getS().c_str());
 	m_end = atoi(cfg.cfg("END").getS().c_str());
+	//-- Check for delete archivator table --
+	if( m_end <= (time(NULL)-(time_t)(maxSize()*3600.)) )
+	{
+    	    SYS->db().at().open(addr()+"."+archTbl());
+	    SYS->db().at().close(addr()+"."+archTbl(),true);
+	    m_beg = m_end = 0;
+	}
     }
 }
 
@@ -128,7 +135,7 @@ void ModMArch::put( vector<TMess::SRec> &mess )
     if( (m_end-m_beg) > (time_t)(maxSize()*3600.) )
     {
 	time_t n_end = m_end-(time_t)(maxSize()*3600.);
-	for( time_t t_c = m_beg; t_c < n_end; t_c++ )
+	for( time_t t_c = vmax(m_beg,n_end-3600); t_c < n_end; t_c++ )
 	{
 	    cfg.cfg("TM").setI(t_c);
 	    SYS->db().at().dataDel(addr()+"."+archTbl(),"",cfg);

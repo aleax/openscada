@@ -233,7 +233,7 @@ namespace VISION
 	    //- Protected methods -
 	    void childsUpdate( bool newLoad = true );
 	    void shapeUpdate( );
-	    void orderUpdate( );
+	    virtual void orderUpdate( );
 	    
 	    bool event( QEvent * event );
 	    bool eventFilter( QObject *object, QEvent *event );	    

@@ -1,3 +1,15 @@
+2008-02-17 Roman
+- /SYS/Archive/Value: Control fields for value scale is added to trend builder.
+- FIX:/SYS/Archive/Value: Horizontal value trend overflow is fixed.
+- FIX:/DB: The exception generation on table close is fixed.
+- FIX:/Archive/DBArch: Long time archive's fields clear is fixed, after long downtime.
+- FIX:/DAQ/DiamondBoards: No changed gain for analog inputs is fixed.
+- !:/DAQ/ModBus: Tune serial port atributes support is added. Some performance fixes is made.
+- /UI/Vision: Widgets' tab order control support is added.
+- FIX:/UI/Vision: Mouse selection and events generation is fixed for primitive "ElFigure".
+- /SYS: Updated Demo DB.
+
+
 2008-02-13 Roman
 - !!!:/DAQ/ModBus: Support Modbus protocols RTU and ASCII is added.
 - FIX:/DAQ/ModBus: Resource dead lock into main acquisition task is fixed.

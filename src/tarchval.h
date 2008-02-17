@@ -221,7 +221,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	void archivatorDetach( const string &arch, bool full = false );
 	void archivatorSort();
 	
-	string makeTrendImg( long long beg, long long end, const string &arch, int hsz = 650, int vsz = 230 );
+	string makeTrendImg( long long beg, long long end, const string &arch, int hsz = 650, int vsz = 230, double valmax = 0, double valmin = 0 );
 	
 	TArchiveS &owner();
 

@@ -135,6 +135,21 @@ void RunWdgView::update( unsigned cnt, int div_max, const string &wpath )
     		((RunWdgView*)children().at(i_c))->update(cnt,div_max);
 }
 
+void RunWdgView::orderUpdate( )
+{
+    WdgView::orderUpdate( );
+    
+    //- Update tab order -
+    RunWdgView *prev_aw = NULL;
+    for( int i_c = 0; i_c < children().size(); i_c++ )
+    {
+        RunWdgView *cw = qobject_cast<RunWdgView*>(children().at(i_c));
+        if( !cw || !(mod->getFocusedWdg(cw)->focusPolicy()&Qt::TabFocus) ) continue;
+	if( prev_aw )	QWidget::setTabOrder( mod->getFocusedWdg(prev_aw), mod->getFocusedWdg(cw) );
+	prev_aw = cw;
+    }
+}
+
 bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 {
     bool rez = WdgView::attrSet( attr, val, uiPrmPos );

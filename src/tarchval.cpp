@@ -1163,7 +1163,7 @@ void TVArchive::archivatorSort()
     while(rep_try);	    
 }
 
-string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &iarch, int hsz, int vsz )
+string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &iarch, int hsz, int vsz, double valmax, double valmin )
 {
     char c_buf[30], c_buf1[30];
     time_t tm_t;
@@ -1316,6 +1316,11 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
 	v_min = vmin(v_min,c_val);
 	v_max = vmax(v_max,c_val);
     }
+    if(valmax!=valmin)
+    {
+	v_max = vmax(v_max,valmax);
+	v_min = vmin(v_min,valmin);
+    }
     if(v_max==-3e300)	{ gdImageDestroy(im); return rez; }
     if(v_max==v_min)	{ v_max+=1.; v_min-=1.; }
     double v_div = 1.;
@@ -1342,13 +1347,13 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
     long long aver_lsttm = 0;
     double prev_vl = EVAL_REAL;
     int    prev_pos = 0;
-    for(c_tm = buf.begin();true;c_tm++)
+    for( c_tm = buf.begin(); true; c_tm++ )
     {
 	int c_pos;
 	if(c_tm <= buf.end())
 	{
 	    c_val = buf.getR(&c_tm,true);
-	    c_pos = h_w_start+h_w_size*(c_tm-h_min)/(h_max-h_min);
+	    c_pos = h_w_start+h_w_size*(vmax(vmin(c_tm,h_max),h_min)-h_min)/(h_max-h_min);
 	}else c_pos = 0;
 	//Square Average
 	if( aver_pos == c_pos )
@@ -1385,7 +1390,7 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
     rez.assign(img_ptr,img_sz);
     gdFree(img_ptr);
     gdImageDestroy(im);
-    
+
     return rez;
 }
 
@@ -1660,7 +1665,9 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    else 
 	    {
 		ctrMkNode("fld",opt,-1,"/val/pct_w",_("Picture size"),0660,"root",grp.c_str(),3,"tp","dec","min","100","max","1024");
-		ctrMkNode("fld",opt,-1,"/val/pct_h","",0660,"root",grp.c_str(),3,"tp","dec","min","50","max","800");	    
+		ctrMkNode("fld",opt,-1,"/val/pct_h","",0660,"root",grp.c_str(),3,"tp","dec","min","50","max","800");
+		ctrMkNode("fld",opt,-1,"/val/max",_("Value scale"),0660,"root",grp.c_str(),1,"tp","dec");
+		ctrMkNode("fld",opt,-1,"/val/min","",0660,"root",grp.c_str(),1,"tp","dec");		
 		ctrMkNode("img",opt,-1,"/val/trend",_("Values trend"),0440,"root",grp.c_str());
 	    }
 	}
@@ -1859,11 +1866,21 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
     {
         if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->setText(TBDS::genDBGet(owner().nodePath()+"vPctH","230",opt->attr("user")));
         if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	TBDS::genDBSet(owner().nodePath()+"vPctH",opt->text(),opt->attr("user"));
+    }
+    else if( a_path == "/val/max" )
+    {
+        if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->setText(TBDS::genDBGet(owner().nodePath()+"vMax","0",opt->attr("user")));
+        if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	TBDS::genDBSet(owner().nodePath()+"vMax",opt->text(),opt->attr("user"));
+    }
+    else if( a_path == "/val/min" )
+    {
+        if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->setText(TBDS::genDBGet(owner().nodePath()+"vMin","0",opt->attr("user")));
+        if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	TBDS::genDBSet(owner().nodePath()+"vMin",opt->text(),opt->attr("user"));
     }    
     else if( a_path == "/val/val" && ctrChkNode(opt,"get",0440,"root",grp.c_str(),SEQ_RD) )
     {
 	long long end = (long long)atoi(TBDS::genDBGet(owner().nodePath()+"vaTm","0",opt->attr("user")).c_str())*1000000;
-	if( !end ) end = (long long)time(NULL) * 1000000;
+	if( !(end/1000000) ) end = (long long)time(NULL) * 1000000;
 	end += atoi(TBDS::genDBGet(owner().nodePath()+"vaTm_u","0",opt->attr("user")).c_str());
 	long long beg = end - (long long)(atof(TBDS::genDBGet(owner().nodePath()+"vaSize","1",opt->attr("user")).c_str())*1e6);
 	
@@ -1894,11 +1911,14 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
     {
 	int vPctW = vmin(1024,vmax(100,atoi(TBDS::genDBGet(owner().nodePath()+"vPctW","650",opt->attr("user")).c_str())));
 	int vPctH = vmin(800,vmax(50,atoi(TBDS::genDBGet(owner().nodePath()+"vPctH","230",opt->attr("user")).c_str())));
+	double vMax = atof(TBDS::genDBGet(owner().nodePath()+"vMax","0",opt->attr("user")).c_str());
+	double vMin = atof(TBDS::genDBGet(owner().nodePath()+"vMin","0",opt->attr("user")).c_str());
 	long long end = (long long)atoi(TBDS::genDBGet(owner().nodePath()+"vaTm",TSYS::int2str(time(NULL)),opt->attr("user")).c_str())*1000000+
 	                     atoi(TBDS::genDBGet(owner().nodePath()+"vaTm_u","0",opt->attr("user")).c_str());
+	if( !(end/1000000) )	end = (long long)time(NULL) * 1000000;
 	long long beg = end - (long long)(atof(TBDS::genDBGet(owner().nodePath()+"vaSize","1",opt->attr("user")).c_str())*1e6);
 	
-        opt->setText(TSYS::strEncode(makeTrendImg(beg,end,TBDS::genDBGet(owner().nodePath()+"vArch","",opt->attr("user")),vPctW,vPctH),TSYS::base64));
+        opt->setText(TSYS::strEncode(makeTrendImg(beg,end,TBDS::genDBGet(owner().nodePath()+"vArch","",opt->attr("user")),vPctW,vPctH,vMax,vMin),TSYS::base64));
         opt->setAttr("tp","png");
     }
 }

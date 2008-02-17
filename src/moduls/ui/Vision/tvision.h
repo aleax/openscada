@@ -84,6 +84,8 @@ class TVision : public TUI
 	//- Request to OpenSCADA control interface -
 	int cntrIfCmd( XMLNode &node, const string &user, const string &stat, bool glob = false );
 
+	static QWidget *getFocusedWdg( QWidget *wcntr );
+
     private:
 	//Methods
 	string optDescr( );

@@ -80,6 +80,8 @@ TTpContr::TTpContr( string name )
     mSource    	= name;
     
     mod		= this;
+    
+    m_sdev 	= grpAdd("sdev_");
 }
 
 TTpContr::~TTpContr()
@@ -97,6 +99,44 @@ string TTpContr::optDescr( )
 	MOD_TYPE,MOD_ID,nodePath().c_str());
     
     return buf;
+}
+
+string TTpContr::serDevDB( )
+{
+    return SYS->workDB()+"."+modId()+"_sdevs";
+}
+
+void TTpContr::serDevAdd( const string &dev )
+{
+    if( chldPresent(m_sdev,dev) ) return;
+    chldAdd( m_sdev, new SSerial(dev,this) );
+}
+
+void TTpContr::postEnable( int flag )
+{    
+    TModule::postEnable( flag );
+
+    //- Controler's bd structure -
+    fldAdd( new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30","") );
+    fldAdd( new TFld("PERIOD",_("Gather data period (s)"),TFld::Real,TFld::NoFlag,"6.2","1","0;100") );
+    fldAdd( new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
+    fldAdd( new TFld("PROT",_("Modbus protocol"),TFld::Integer,TFld::Selected|TCfg::Prevent,"1","0","0;1;2",_("TCP/IP;RTU;ASCII")) );
+    fldAdd( new TFld("ADDR",_("Host address"),TFld::String,TFld::NoFlag,"30","devhost.org:502") );    
+    fldAdd( new TFld("NODE",_("Destination node"),TFld::Integer,TFld::NoFlag,"20","1","0;255") );    
+    
+    //- Parameter type bd structure -
+    int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
+    tpPrmAt(t_prm).fldAdd( new TFld("ATTR_LS",_("Attributes list (next line separated)"),TFld::String,TFld::FullText|TCfg::NoVal,"100","") );
+    
+    //- Serial devices DB structure -
+    el_ser_dev.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
+    el_ser_dev.fldAdd( new TFld("SPEED",_("Speed"),TFld::Integer,TFld::NoFlag,"6","9600") );
+    el_ser_dev.fldAdd( new TFld("LEN",_("Length"),TFld::Integer,TFld::NoFlag,"1","8") );
+    el_ser_dev.fldAdd( new TFld("TWOSTOP",_("Two stop bit"),TFld::Boolean,TFld::NoFlag,"1","1") );
+    el_ser_dev.fldAdd( new TFld("PARITY",_("Parity"),TFld::Integer,TFld::NoFlag,"1","0") );
+    el_ser_dev.fldAdd( new TFld("TM_FRM",_("Time frame"),TFld::Integer,TFld::NoFlag,"5","1000") );
+    el_ser_dev.fldAdd( new TFld("TM_CHAR",_("Time char"),TFld::Real,TFld::NoFlag,"5.2","4") );
+    el_ser_dev.fldAdd( new TFld("TM_REQ",_("Time request"),TFld::Integer,TFld::NoFlag,"5","2000") );
 }
 
 void TTpContr::modLoad( )
@@ -120,37 +160,42 @@ void TTpContr::modLoad( )
 	    case -1 : break;
 	}
     } while( next_opt != -1 );
+    
+    //- Load Serial devices configuration -
+    try
+    {
+	TConfig c_el(&serDevE());
+	for( int fld_cnt = 0; SYS->db().at().dataSeek(serDevDB(),nodePath()+"sDevs/",fld_cnt,c_el); fld_cnt++ )
+	{
+	    string id = c_el.cfg("ID").getS();
+	    c_el.cfg("ID").setS("");
+	    try
+	    {
+		if( !serDevPresent(id) )	serDevAdd(id);
+		serDevAt(id).at().load();
+		if( !serDevAt(id).at().hasOpen() )	serDevAt(id).at().setOpen(true);
+	    }catch( TError err ) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+	}
+    }catch( TError err )
+    {
+        mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+        mess_err(nodePath().c_str(),_("Search and load serial devices' DB is error."));
+    }
 }
 
-void TTpContr::postEnable( int flag )
-{    
-    TModule::postEnable( flag );
-
-    //- Controler's bd structure -
-    fldAdd( new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30","") );
-    fldAdd( new TFld("PERIOD",_("Gather data period (s)"),TFld::Real,TFld::NoFlag,"6.2","1","0;100") );
-    fldAdd( new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
-    fldAdd( new TFld("PROT",_("Modbus protocol"),TFld::Integer,TFld::Selected|TCfg::Prevent,"1","0","0;1;2",_("TCP/IP;RTU;ASCII")) );
-    fldAdd( new TFld("DEV",_("Serial port device"),TFld::String,TCfg::Prevent,"30","/dev/ttyS0") );
-    fldAdd( new TFld("SPEED",_("Serial port speed"),TFld::Integer,TFld::Selected,"30","9600",
-	"2400;4800;9600;19200;38400;57600;115200;230400;460800","2400;4800;9600;19.2k;38.4k;57.6k;115.2k;230.4k;460.8k") );
-    fldAdd( new TFld("NODE",_("Destination node"),TFld::Integer,TFld::NoFlag,"20","1","0;255") );    
-    fldAdd( new TFld("ADDR",_("Remote host address"),TFld::String,TFld::NoFlag,"30","devhost.org:502") );
-    
-    //- Parameter type bd structure -
-    int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
-    tpPrmAt(t_prm).fldAdd( new TFld("ATTR_LS",_("Attributes list (next line separated)"),TFld::String,TFld::FullText|TCfg::NoVal,"100","") );
+void TTpContr::modSave()
+{
+    //- Save Serial devices configuration -
+    TConfig cfg(&serDevE());        
+    vector<string> lst;
+    serDevList(lst);
+    for( int i_l = 0; i_l < lst.size(); i_l++ )
+	serDevAt(lst[i_l]).at().save();
 }
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 {
     return new TMdContr(name,daq_db,this);
-}
-
-SSerial &TTpContr::sPortAt( const string &dev )
-{
-    if( m_sdevs.find(dev) == m_sdevs.end() )	m_sdevs[dev] = SSerial(dev);
-    return m_sdevs[dev];
 }
 
 ui8 TTpContr::CRCHi[] = 
@@ -255,36 +300,166 @@ string TTpContr::ASCIIToData( const string &in )
     return rez;
 }
 
+void TTpContr::cntrCmdProc( XMLNode *opt )
+{
+    //- Get page info -
+    if( opt->name() == "info" )
+    {
+	TTipDAQ::cntrCmdProc( opt );
+        if( ctrMkNode("area",opt,0,"/mod",_("ModBus")) )
+	{
+            if( ctrMkNode("table",opt,-1,"/mod/dev",_("Serial devices"),0664,"root","root",2,"s_com","add,del","key","dev") )
+	    {
+                ctrMkNode("list",opt,-1,"/mod/dev/dev",_("Device"),0664,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/mod/dev/speed",_("Speed"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/mod/dev/lsspd");
+                ctrMkNode("list",opt,-1,"/mod/dev/len",_("Char length (bit)"),0664,"root","root",3,"tp","dec","min","5","max","8");
+		ctrMkNode("list",opt,-1,"/mod/dev/stop",_("Stop bits"),0664,"root","root",3,"tp","dec","min","1","max","2");
+                ctrMkNode("list",opt,-1,"/mod/dev/parity",_("Parity"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/mod/dev/lsprt");
+		ctrMkNode("list",opt,-1,"/mod/dev/frTm",_("Time frame"),0664,"root","root",1,"tp","dec");
+                ctrMkNode("list",opt,-1,"/mod/dev/charTm",_("Time char"),0664,"root","root",1,"tp","real");
+                ctrMkNode("list",opt,-1,"/mod/dev/reqTm",_("Time request"),0664,"root","root",1,"tp","dec");
+                ctrMkNode("list",opt,-1,"/mod/dev/open",_("Opened"),0664,"root","root",1,"tp","bool");
+            }
+            ctrMkNode("comm",opt,-1,"/mod/load",_("Load"),0660);
+            ctrMkNode("comm",opt,-1,"/mod/save",_("Save"),0660);
+        }
+        return;
+    }
+    //- Process command to page -
+    string a_path = opt->attr("path");
+    if( a_path == "/mod/dev" )
+    {
+        if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
+        {
+    	    //- Fill Archives table -
+            XMLNode *n_dev  	= ctrMkNode("list",opt,-1,"/mod/dev/dev","");
+	    XMLNode *n_speed 	= ctrMkNode("list",opt,-1,"/mod/dev/speed","");
+            XMLNode *n_len	= ctrMkNode("list",opt,-1,"/mod/dev/len","");
+            XMLNode *n_stop	= ctrMkNode("list",opt,-1,"/mod/dev/stop","");
+            XMLNode *n_parity  	= ctrMkNode("list",opt,-1,"/mod/dev/parity","");
+	    XMLNode *n_frTm  	= ctrMkNode("list",opt,-1,"/mod/dev/frTm","");
+            XMLNode *n_charTm	= ctrMkNode("list",opt,-1,"/mod/dev/charTm","");
+            XMLNode *n_reqTm	= ctrMkNode("list",opt,-1,"/mod/dev/reqTm","");
+            XMLNode *n_open	= ctrMkNode("list",opt,-1,"/mod/dev/open","");
+	    vector<string> lst;
+	    serDevList(lst);
+	    for( int i_s = 0; i_s < lst.size(); i_s++ )
+            {
+		AutoHD<SSerial>	ser = serDevAt(lst[i_s]);
+                if( n_dev )	n_dev->childAdd("el")->setText(lst[i_s]);
+	        if( n_speed )	n_speed->childAdd("el")->setText(TSYS::int2str(ser.at().speed()));
+		if( n_len )    	n_len->childAdd("el")->setText(TSYS::int2str(ser.at().len()));
+		if( n_stop )   	n_stop->childAdd("el")->setText(TSYS::int2str(ser.at().twostop()?2:1));
+		if( n_parity )	n_parity->childAdd("el")->setText(TSYS::int2str(ser.at().parity()));
+		if( n_frTm )	n_frTm->childAdd("el")->setText(TSYS::int2str(ser.at().timeoutFrame()));
+                if( n_charTm )	n_charTm->childAdd("el")->setText(TSYS::real2str(ser.at().timeoutChar()));
+                if( n_reqTm )	n_reqTm->childAdd("el")->setText(TSYS::int2str(ser.at().timeoutReq()));
+                if( n_open )	n_open->childAdd("el")->setText(TSYS::int2str(ser.at().hasOpen()));
+	    }
+        }
+        if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )
+	{
+	    string devNm = "/dev/NewSDev";
+	    if( serDevPresent(devNm) )
+		for( int i_d = 0; true; i_d++ )
+		    if( !serDevPresent(devNm+TSYS::int2str(i_d)) )
+		    { devNm = devNm+TSYS::int2str(i_d); break; }
+	    serDevAdd(devNm);
+	}
+        if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )
+	    serDevDel(opt->attr("key_dev"),true);
+        if( ctrChkNode(opt,"set",0666,"root","root",SEQ_WR) )
+	{
+	    string col	= opt->attr("col");
+	    string dev  = opt->attr("key_dev");
+	    if( col == "dev" )
+            {
+		serDevAdd(opt->text());
+		(TConfig&)serDevAt(opt->text()).at() = (TConfig&)serDevAt(dev).at();
+		serDevAt(opt->text()).at().cfg("ID").setS(opt->text());
+		serDevDel(dev,true);
+            }
+            else if( col == "speed" )	serDevAt(dev).at().setSpeed(atoi(opt->text().c_str()),true);
+	    else if( col == "len" )	serDevAt(dev).at().setLen(atoi(opt->text().c_str()));
+	    else if( col == "stop" )	serDevAt(dev).at().setTwostop(atoi(opt->text().c_str())==2);
+	    else if( col == "parity" )	serDevAt(dev).at().setParity(atoi(opt->text().c_str()));
+	    else if( col == "frTm" )	serDevAt(dev).at().setTimeoutFrame(atoi(opt->text().c_str()));
+	    else if( col == "charTm" )	serDevAt(dev).at().setTimeoutChar(atof(opt->text().c_str()));
+	    else if( col == "reqTm" )	serDevAt(dev).at().setTimeoutReq(atoi(opt->text().c_str()));
+	    else if( col == "open" )	serDevAt(dev).at().setOpen(atoi(opt->text().c_str()));
+        }
+    }
+    else if( a_path == "/mod/dev/lsspd" && ctrChkNode(opt) )
+    {
+	opt->childAdd("el")->setAttr("id","300")->setText("300");
+	opt->childAdd("el")->setAttr("id","600")->setText("600");
+	opt->childAdd("el")->setAttr("id","1200")->setText("1200");
+	opt->childAdd("el")->setAttr("id","2400")->setText("2400");
+	opt->childAdd("el")->setAttr("id","4800")->setText("4800");
+	opt->childAdd("el")->setAttr("id","9600")->setText("9600");
+	opt->childAdd("el")->setAttr("id","19200")->setText("19.2k");
+	opt->childAdd("el")->setAttr("id","38400")->setText("38.4k");
+	opt->childAdd("el")->setAttr("id","57600")->setText("57.6k");
+	opt->childAdd("el")->setAttr("id","115200")->setText("115.2k");
+	opt->childAdd("el")->setAttr("id","230400")->setText("230.4k");
+	opt->childAdd("el")->setAttr("id","460800")->setText("460.8k");
+    }
+    else if( a_path == "/mod/dev/lsprt" && ctrChkNode(opt) )
+    {
+        opt->childAdd("el")->setAttr("id","0")->setText(_("No check"));
+        opt->childAdd("el")->setAttr("id","1")->setText(_("Parity"));
+        opt->childAdd("el")->setAttr("id","2")->setText(_("Odd parity"));
+    }
+    else if( a_path == "/mod/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) ) modLoad();
+    else if( a_path == "/mod/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) ) modSave();
+    else TTipDAQ::cntrCmdProc( opt );
+}
+
 //*************************************************
 //* SSerial                                       *
 //*************************************************
-SSerial::SSerial( const string &iDev ) : 
-    dev(iDev), prot(Free), frTm(3000), charTm(100), tm(3), m_connect(0), fd(-1)
+SSerial::SSerial( const string &iDev, TTpContr *iown ) : 
+    TCntrNode(iown), TConfig( &iown->serDevE() ), fd(-1),
+    m_id(cfg("ID").getSd()), m_speed(cfg("SPEED").getId()), m_len(cfg("LEN").getId()), 
+    m_twostop(cfg("TWOSTOP").getBd()), m_parity(cfg("PARITY").getId()),
+    frTm(cfg("TM_FRM").getId()), charTm(cfg("TM_CHAR").getRd()), reqTm(cfg("TM_REQ").getId()) 
 {
-
+    m_id = iDev;
 }
 
-void SSerial::connect( int speed, Prot iPrt, ui32 iFrTm, ui32 iCharTm, ui32 iTm )
+void SSerial::postDisable( int flag )
 {
+    if( hasOpen() )	setOpen(false);
+    //- Delete serial device from DB -
+    try
+    {
+        if( flag )
+	    SYS->db().at().dataDel(owner().serDevDB(),mod->nodePath()+"sDevs/",*this);
+    }catch(TError err)
+    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+}
+
+void SSerial::load( )
+{
+    SYS->db().at().dataGet(owner().serDevDB(),mod->nodePath()+"sDevs/",*this);
+}
+		
+void SSerial::save( )
+{
+    SYS->db().at().dataSet(owner().serDevDB(),mod->nodePath()+"sDevs/",*this);
+}
+
+void SSerial::setOpen( bool vl )
+{
+    if( vl == hasOpen() )	return;
+    
     ResAlloc res(m_res,true);
 
-    if( prot != Free && m_connect && (iPrt != prot || iFrTm != frTm || iCharTm != charTm || iTm != tm) )
-	throw TError(mod->nodePath().c_str(),_("Serial port '%s' already connected with other parameters."),dev.c_str());
-    //- Protocol parameters set -
-    if( prot == Free )
+    if( vl )
     {
-	prot = iPrt;
-	frTm = iFrTm;
-	charTm = iCharTm;
-	tm = iTm;
-    }
-    //- Serial port open -
-    if( fd < 0 )
-    {
-        if( !(prot == RTU || prot == ASCII) )
-	    throw TError(mod->nodePath().c_str(),_("Connection for unknown ModBus protocol."));
-        fd = open( dev.c_str(), O_RDWR|O_NOCTTY );
-        if( fd < 0 )	throw TError(mod->nodePath().c_str(),_("Serial port '%s' open error."),dev.c_str());
+	//- Serial port open -
+        fd = open( id().c_str(), O_RDWR|O_NOCTTY );
+        if( fd < 0 )	throw TError(mod->nodePath().c_str(),_("Serial port '%s' open error."),id().c_str());
 	//-- Set serial port parameters --
         struct termios tio;
 	bzero( &tio, sizeof(tio) );
@@ -294,9 +469,41 @@ void SSerial::connect( int speed, Prot iPrt, ui32 iFrTm, ui32 iCharTm, ui32 iTm 
         tio.c_lflag = 0;
         tio.c_cc[VTIME] = 0;           ///< inter-character timer unused
         tio.c_cc[VMIN] = 1;            ///< blocking read until 1 character arrives
+        tcflush( fd, TCIFLUSH );
+        tcsetattr( fd, TCSANOW, &tio );	
+	res.release();
+	//-- Set byte length --
+	setLen(len());
+	//-- Set stop bits number --
+	setTwostop(twostop());
+	//-- Set parity --
+	setParity(parity());
+	//-- Set speed --		
+	setSpeed(speed());
+    }
+    else
+    {
+	close(fd);
+	fd = -1;
+    }    
+}
+
+void SSerial::setSpeed( int val, bool tmAdj )
+{
+    m_speed = val;
+    
+    if( hasOpen() )
+    {
+	ResAlloc res( m_res, true );
+    
+	struct termios tio;
+	tcgetattr( fd, &tio );
 	speed_t tspd = B9600;
-	switch( speed )
+	switch( val )
 	{
+	    case 300:	tspd = B300;	break;
+	    case 600:	tspd = B600;	break;
+	    case 1200:	tspd = B1200;	break;
 	    case 2400:	tspd = B2400;	break;
 	    case 4800:	tspd = B4800;	break;
 	    case 9600:	tspd = B9600;	break;
@@ -310,26 +517,94 @@ void SSerial::connect( int speed, Prot iPrt, ui32 iFrTm, ui32 iCharTm, ui32 iTm 
         cfsetispeed( &tio, tspd );
         cfsetospeed( &tio, tspd );
         tcflush( fd, TCIFLUSH );
-        tcsetattr( fd, TCSANOW, &tio );
+        tcsetattr( fd, TCSANOW, &tio );	
     }
-    m_connect++;
+    //- Times adjust -
+    if( tmAdj )
+    {
+	setTimeoutChar(TSYS::realRound((12.*1000.*3.)/(double)val,2));
+	setTimeoutFrame((12*1000*512)/val);
+	setTimeoutReq(timeoutFrame()*2);
+    }
 }
 
-void SSerial::disconnect( )
+void SSerial::setLen( int val )
 {
-    ResAlloc res( m_res, true );
-    if( m_connect > 0 ) m_connect--;
-    if( !m_connect && fd > 0 )	{ close(fd); fd = -1; }
+    m_len = vmin(8,vmax(5,val));
+    
+    if( hasOpen() )
+    {
+	ResAlloc res( m_res, true );
+	
+	struct termios tio;
+	tcgetattr( fd, &tio );
+	tio.c_cflag &= ~CSIZE;
+	switch(m_len)
+	{
+	    case 5:	tio.c_cflag |= CS5;	break;
+	    case 6:	tio.c_cflag |= CS6;	break;
+	    case 7:	tio.c_cflag |= CS7;	break;
+	    case 8:	tio.c_cflag |= CS8;	break;
+	}
+	tcflush( fd, TCIFLUSH );
+        tcsetattr( fd, TCSANOW, &tio );		
+    }
+}
+
+void SSerial::setTwostop( bool val )
+{
+    m_twostop = val;
+    
+    if( hasOpen() )
+    {
+	ResAlloc res( m_res, true );
+	
+	struct termios tio;
+	tcgetattr( fd, &tio );
+	if( val )	tio.c_cflag &= ~CSTOPB;
+	else 		tio.c_cflag |= CSTOPB;
+	tcflush( fd, TCIFLUSH );
+        tcsetattr( fd, TCSANOW, &tio );		
+    }
+}
+
+void SSerial::setParity( int val )
+{
+    m_parity = val;
+    
+    if( hasOpen() )
+    {
+	ResAlloc res( m_res, true );
+	
+	struct termios tio;
+	tcgetattr( fd, &tio );
+	switch(val)
+	{
+	    case 0:
+		tio.c_cflag &= ~PARENB;
+		break;
+	    case 1:
+		tio.c_cflag |= PARENB;
+		tio.c_cflag &= ~PARODD;
+		break;
+	    case 2:
+		tio.c_cflag |= PARENB;
+		tio.c_cflag |= PARODD;
+		break;
+	}
+	tcflush( fd, TCIFLUSH );
+        tcsetattr( fd, TCSANOW, &tio );		
+    }
 }
 
 string SSerial::req( const string &vl )
 {
     ResAlloc res( m_res, true );
-    if( fd < 0 || !m_connect )	throw TError(mod->nodePath().c_str(),_("Device '%s' no connected."),dev.c_str());
+    if( !hasOpen() )	throw TError(mod->nodePath().c_str(),_("Serial port '%s' no opened."),id().c_str());
 
     //- Write request -
     if( write( fd, vl.data(), vl.size() ) == -1 )
-	throw TError(mod->nodePath().c_str(),_("Write to device '%s' is error."),dev.c_str());
+	throw TError(mod->nodePath().c_str(),_("Write to serial port '%s' is error."),id().c_str());
 
     //- Read reply -
     char buf[1000];
@@ -340,18 +615,18 @@ string SSerial::req( const string &vl )
     //-- Char timeout init --
     struct timeval tv;
     tv.tv_sec = 0;
-    tv.tv_usec = charTm*1000;
+    tv.tv_usec = (int)(timeoutChar()*1000.0);
     
     //--- Serial timeout ---
-    tmptm = time( NULL );
+    tmptm = TSYS::curTime();
     while( true )
     {
 	int bytes = 0;
 	ioctl( fd, FIONREAD, &bytes );
         if( bytes > 2 )	break;
-        if( (time(NULL) - tmptm) > tm )
-	    throw TError(mod->nodePath().c_str(),_("Respond from device '%s' timeouted."),dev.c_str());
-	usleep( 10000 );
+        if( (TSYS::curTime() - tmptm) >= timeoutReq()*1000 )
+	    throw TError(mod->nodePath().c_str(),_("Respond from serial port '%s' is timeouted."),id().c_str());
+	usleep( 1000 );
     }
     fcntl( fd, F_SETFL, 0 );
     blen = read( fd, buf, sizeof(buf) );
@@ -362,9 +637,9 @@ string SSerial::req( const string &vl )
     FD_SET( fd, &fdset );
     while( true )
     {
-        if( select( fd+1, &fdset, NULL, NULL, &tv) == 0 )	break;
+        if( select(fd+1,&fdset,NULL,NULL,&tv) == 0 )	break;
         blen += read( fd, buf+blen, sizeof(buf)-blen );
-	if( (TSYS::curTime()-tmptm) > frTm )	break;
+	if( (TSYS::curTime()-tmptm) > timeoutFrame()*1000 )	break;
     }
     
     return string( buf, blen );
@@ -376,13 +651,9 @@ string SSerial::req( const string &vl )
 TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) :
 	TController( name_c, daq_db, cfgelem ), prc_st(false), endrun_req(false), tm_gath(0),
 	m_per(cfg("PERIOD").getRd()), m_prior(cfg("PRIOR").getId()), m_prt(cfg("PROT").getId()),
-	m_dev(cfg("DEV").getSd()), m_speed(cfg("SPEED").getId()), m_addr(cfg("ADDR").getSd()), m_node(cfg("NODE").getId())
+	m_addr(cfg("ADDR").getSd()), m_node(cfg("NODE").getId())
 {    
     cfg("PRM_BD").setS("ModBusPrm_"+name_c);
-
-    //- Hide sevral config fields -
-    cfg("DEV").setView(false);
-    cfg("SPEED").setView(false);
 }
 
 TMdContr::~TMdContr()
@@ -397,9 +668,7 @@ TParamContr *TMdContr::ParamAttach( const string &name, int type )
 
 void TMdContr::load( )
 {
-    cfgViewAll(true);
     TController::load( );
-    cfg("PROT").setI(cfg("PROT").getI());	//For hiden attributes visible status update
 }
 
 void TMdContr::save( )
@@ -412,21 +681,23 @@ void TMdContr::start_( )
     if( !prc_st )
     {
 	//- Establish connection -
-	switch( m_prt )	    
+	switch( m_prt )
 	{
-	    case 0:
+	    case 0:	    
 	    {
 		if( !SYS->transport().at().at("Sockets").at().outPresent(mod->modId()+id()) )
 		    SYS->transport().at().at("Sockets").at().outAdd(mod->modId()+id());
 		string trAddr = "TCP:"+TSYS::strSepParse(m_addr,0,':')+":"+
-			(TSYS::strSepParse(m_addr,1,':').empty() ? "502" : TSYS::strSepParse(m_addr,1,':'));
+		    (TSYS::strSepParse(m_addr,1,':').empty() ? "502" : TSYS::strSepParse(m_addr,1,':'));
 		SYS->transport().at().at("Sockets").at().outAt(mod->modId()+id()).at().setAddr(trAddr);
 		SYS->transport().at().at("Sockets").at().outAt(mod->modId()+id()).at().start();
 		break;
 	    }
 	    case 1: case 2:
-		mod->sPortAt(m_wdev).connect( m_speed, (m_prt==1) ? SSerial::RTU : SSerial::ASCII );
+	    {
+		mod->serDevAt(m_addr);
 		break;
+	    }
 	}
 	
 	//- Start the gathering data task -    
@@ -458,41 +729,26 @@ void TMdContr::stop_( )
         pthread_join( procPthr, NULL );
 
      	//- Dissconnection -
- 	switch( m_prt )	    
-	{
-	    case 0:        
-		if( !SYS->transport().at().at("Sockets").at().outPresent(mod->modId()+id()) )
-	    		SYS->transport().at().at("Sockets").at().outDel(mod->modId()+id());
-		break;
-	    case 1: case 2:
-		mod->sPortAt(m_wdev).disconnect( );
-		break;
-	}
+ 	if( m_prt == 0 && SYS->transport().at().at("Sockets").at().outPresent(mod->modId()+id()) )
+	    SYS->transport().at().at("Sockets").at().outDel(mod->modId()+id());
     }
 } 
 
 bool TMdContr::cfgChange( TCfg &icfg )
 {
     if( icfg.fld().name() == "PROT" )
-    {
-        if( icfg.getI() == 0 )
+    {    
+        if( icfg.getI() == 0 )	
 	{
-	    cfg("ADDR").setView(true);
-	    cfg("DEV").setView(false);
-	    cfg("SPEED").setView(false);
-        }
-        else
-        {
-	    cfg("ADDR").setView(false);
-            cfg("DEV").setView(true);
-	    cfg("SPEED").setView(true);
+	    cfg("ADDR").fld().setDescr(_("Host address"));
+	    //cfg("ADDR").setS("devhost.org:502");
+	}
+	else 
+	{
+	    cfg("ADDR").fld().setDescr(_("Serial port"));
+	    //cfg("ADDR").setS("/dev/ttyS0");
 	}
 	if(startStat())	stop();
-    }
-    else if( icfg.fld().name() == "DEV" )
-    {
-	if( startStat() ) stop();
-	m_wdev = m_dev;
     }
     
     return true;
@@ -557,10 +813,10 @@ string TMdContr::modBusReq( string &pdu )
 		ui16 crc = mod->CRC16( mbap );
 		mbap += crc >> 8;
 		mbap += crc;
-		string rez = mod->sPortAt(m_wdev).req(mbap);
-		if( rez.size() < 2 ) return _("13:Error respond. Too short.");
+		string rez = mod->serDevAt(m_addr).at().req(mbap);
+		if( rez.size() < 2 ) return _("13:Error respond: Too short.");
 		if( mod->CRC16(rez.substr(0,rez.size()-2)) != (ui16)((rez[rez.size()-2]<<8)+(ui8)rez[rez.size()-1]) )
-		    return _("13:Error respond. CRC check error.");
+		    return _("13:Error respond: CRC check error.");
 		pdu = rez.substr( 1, rez.size()-3 );
 		break;
 	    }
@@ -570,12 +826,12 @@ string TMdContr::modBusReq( string &pdu )
 		mbap += pdu;
 		mbap += mod->LRC(mbap);
 		mbap = ":"+mod->DataToASCII(mbap)+"\0x0D\0x0A";
-		string rez = mod->sPortAt(m_wdev).req(mbap);
+		string rez = mod->serDevAt(m_addr).at().req(mbap);
 		if( rez.size() < 3 || rez[0] != ':' || rez[rez.size()-2] != 0x0D || rez[rez.size()-1] != 0x0A )
-		    return _("13:Error respond. Error format.");
+		    return _("13:Error respond: Error format.");
 		rez = mod->ASCIIToData(rez.substr(1,rez.size()-3));
 		if( mod->LRC(rez.substr(0,rez.size()-1)) != rez[rez.size()-1] )
-		    return _("13:Error respond. LRC check error.");
+		    return _("13:Error respond: LRC check error.");
 		pdu = rez.substr(1,rez.size()-2);
 		break;
 	    }
@@ -588,7 +844,7 @@ string TMdContr::modBusReq( string &pdu )
 		case 0x1: 
 		    snprintf( (char*)buf, sizeof(buf), _("1:Function %xh no support."), pdu[0]&(~0x80) );
 		    return (char*)buf;
-		case 0x2: return _("2:Requested registers length too long or.");
+		case 0x2: return _("2:Requested registers length too long.");
 		case 0x3: return _("3:Illegal data value.");
 		case 0x4: return _("4:Server failure.");
 		case 0x5: return _("5:Request require too long time for execute.");
@@ -600,8 +856,8 @@ string TMdContr::modBusReq( string &pdu )
 	    }
     }catch( TError err )	
     {
-	mess_err( err.cat.c_str(), err.mess.c_str() );
-	return _("14:Connection error");
+	//mess_err( err.cat.c_str(), err.mess.c_str() );
+	return _("14:Request is error: ")+err.mess;
     }
     
     return "";
@@ -645,12 +901,13 @@ void *TMdContr::Task( void *icntr )
 	    	    rez = cntr.modBusReq( pdu );
 	    	    if( !rez.empty() )
 		    {
-			if( !cntr.p_hd[i_p].at().isErr ) cntr.p_hd[i_p].at().vlAt("err").at().setS( rez, 0, true );
-			cntr.p_hd[i_p].at().isErr = true;
+			if( cntr.p_hd[i_p].at().isErr != atoi(rez.c_str()) )
+			    cntr.p_hd[i_p].at().vlAt("err").at().setS( rez, 0, true );
+			cntr.p_hd[i_p].at().isErr = atoi(rez.c_str());
 			break; 
 		    }
 		    else if( cntr.p_hd[i_p].at().isErr )
-		    { cntr.p_hd[i_p].at().vlAt("err").at().setS( "0", 0, true ); cntr.p_hd[i_p].at().isErr = false; }
+		    { cntr.p_hd[i_p].at().vlAt("err").at().setS( "0", 0, true ); cntr.p_hd[i_p].at().isErr = 0; }
 	    	    val.at().setI( (pdu[2]<<8)+pdu[3], 0, true );
 		}
     	    }
@@ -695,7 +952,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //* TMdPrm                                             *
 //******************************************************
 TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : 
-    TParamContr( name, tp_prm ), p_el("w_attr"), m_attrLs(cfg("ATTR_LS").getSd()), isErr(false)
+    TParamContr( name, tp_prm ), p_el("w_attr"), m_attrLs(cfg("ATTR_LS").getSd()), isErr(0)
 {
 
 }
@@ -779,8 +1036,8 @@ void TMdPrm::vlGet( TVal &val )
 {
     if(val.name() == "err" )
     {
-	if( !enableStat() ) 		val.setS( _("1:Parameter had disabled."), 0, true );
-	else if( !owner().startStat() )	val.setS( _("2:Controller is stoped."), 0, true );
+	if( !enableStat() ) 		{ val.setS( _("1:Parameter had disabled."), 0, true ); 	isErr = 1; }
+	else if( !owner().startStat() )	{ val.setS( _("2:Acquisition is stoped."), 0, true );	isErr = 2; }
 	else if( !isErr )		val.setS( "0", 0, true );
     }
 }
@@ -801,10 +1058,10 @@ void TMdPrm::vlSet( TVal &valo )
     string rez = owner().modBusReq( pdu );
     if( !rez.empty() )
     {
-	if( !isErr ) vlAt("err").at().setS( rez, 0, true );
-	isErr = true;
+	if( isErr != atoi(rez.c_str()) ) vlAt("err").at().setS( rez, 0, true );
+	isErr = atoi(rez.c_str());
     }
-    else if( isErr ) { vlAt("err").at().setS( "0", 0, true ); isErr = false; }
+    else if( isErr ) { vlAt("err").at().setS( "0", 0, true ); isErr = 0; }
 }
 
 void TMdPrm::vlArchMake( TVal &val )

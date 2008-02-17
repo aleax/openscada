@@ -588,10 +588,12 @@ bool TMdPrm::cfgChange( TCfg &i_cfg )
 	case AI:
 	    if( i_cfg.name() == "GAIN" ) m_gain = i_cfg.getI();
 	    else return false;
+	    break;
 	case DI: case DO:
 	    if( i_cfg.name() == "PORT" ) 	m_dio_port = (i_cfg.getI()<<4)+cfg("CNL").getI();
 	    else if( i_cfg.name() == "CNL" )	m_dio_port = (cfg("PORT").getI()<<4)+i_cfg.getI();
-	    else return false;	        
+	    else return false;
+	    break;
     }
     
     return true;

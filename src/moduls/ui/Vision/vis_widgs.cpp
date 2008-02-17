@@ -330,7 +330,7 @@ void LineEdit::setType( LType tp )
     }
     ((QBoxLayout*)layout())->insertWidget(0,ed_fld);
     setFocusProxy( ed_fld );
-    if( bt_fld ) setTabOrder(ed_fld,bt_fld);
+
     
     m_tp = tp;
 }
@@ -342,6 +342,7 @@ void LineEdit::changed( )
     {
 	bt_fld->setEnabled(true);
         bt_fld->setVisible(true);
+	//QWidget::setTabOrder( mod->getFocusedWdg(ed_fld), mod->getFocusedWdg(bt_fld) );	
     }
     
     emit valChanged(value());
@@ -511,8 +512,7 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
 				
     if( !prev_dis )
     {
-        but_box = new QDialogButtonBox(QDialogButtonBox::Apply|
-        QDialogButtonBox::Cancel,Qt::Horizontal,this);
+        but_box = new QDialogButtonBox(QDialogButtonBox::Apply|QDialogButtonBox::Cancel,Qt::Horizontal,this);
         QImage ico_t;
         but_box->button(QDialogButtonBox::Apply)->setText("");
         if(!ico_t.load(TUIS::icoPath("button_ok").c_str())) ico_t.load(":/images/button_ok.png");
@@ -655,7 +655,7 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 	    break;
 	case 9:	resizeF(QSizeF(xScale(true)*atof(val.c_str()),sizeF().height()));	break;
 	case 10:resizeF(QSizeF(sizeF().width(),yScale(true)*atof(val.c_str())));	break;
-	case 11: if(wLevel( )>0) z_coord = atoi(val.c_str());		break;
+	case 11:if(wLevel( )>0) z_coord = atoi(val.c_str());				break;
 	case 13:
 	    resizeF(QSizeF((atof(val.c_str())/x_scale)*sizeF().width(),sizeF().height()));
 	    x_scale = atof(val.c_str());
@@ -769,13 +769,13 @@ void WdgView::orderUpdate( )
     {
 	WdgView *cw = qobject_cast<WdgView*>(children().at(i_c));
 	if( !cw ) continue;
-	if( !lw || (cw->z() >= lw->z()) ) lw = cw;
-	else
-	{	
+	if( lw && (cw->z() < lw->z()) )
+	{
 	    cw->stackUnder(lw);
 	    i_c = -1;
 	    lw = NULL;
 	}
+	else lw = cw;
     }
 }
 

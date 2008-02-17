@@ -158,7 +158,6 @@ class ShapeElFigure : public WdgShape
     private:
     	//Methods
         int itemAt( const QPointF &pos, QVector <ShapeItem> &shapeItems,WdgView *w);//Check for figure type under cursor
-        void itemAtRun();
         void moveItemTo(const QPointF &pos,QVector <ShapeItem> &shapeItems, PntMap *pnts, WdgView *view);	//Move figure procedure
     
 	QGraphicsScene *scene;

@@ -111,6 +111,13 @@ ModVArchEl::ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator ) :
         m_beg = strtoll(cfg.cfg("BEGIN").getS().c_str(),NULL,10);
         m_end = strtoll(cfg.cfg("END").getS().c_str(),NULL,10);
 	m_per = strtoll(cfg.cfg("PRM1").getS().c_str(),NULL,10);
+	//-- Check for delete archivator table --
+	if( m_end <= (TSYS::curTime()-(long long)(archivator().maxSize()*3600000000.)) )
+	{
+            SYS->db().at().open(archivator().addr()+"."+archTbl());
+	    SYS->db().at().close(archivator().addr()+"."+archTbl(),true);
+	    m_beg = m_end = m_per = 0;
+	}
     }
     if( !m_per ) m_per = (long long)(archivator().valPeriod()*1000000.);
 }
@@ -318,8 +325,8 @@ void ModVArchEl::setVal( TValBuf &buf, long long beg, long long end )
     //- Archive size limit process -
     if( (m_end-m_beg) > (long long)(archivator().maxSize()*3600000000.) )
     {
-        long long n_end = ((m_end-(long long)(archivator().maxSize()*3600000000.))/period())*period();
-        for( long long t_c = m_beg; t_c < n_end; t_c+=period() )
+        long long n_end = ((m_end-(long long)(archivator().maxSize()*3600000000.))/period())*period();	
+        for( long long t_c = vmax(m_beg,n_end-3600ll*period()); t_c < n_end; t_c+=period() )
 	{
 	    cfg.cfg("TM").setI(t_c/1000000);
 	    cfg.cfg("TMU").setI(t_c%1000000);

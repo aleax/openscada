@@ -90,12 +90,14 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    rel_list = true;
 	    break;
         case 5:		//en
-            if(runW)    w->dc()["en"] = (bool)atoi(val.c_str());
+            if( !runW )	break;
+	    w->dc()["en"] = (bool)atoi(val.c_str());
+    	    w->setVisible(atoi(val.c_str()));
             break;
         case 6:		//active
             if( !runW )	break;    
 	    w->dc()["active"] = (bool)atoi(val.c_str());
-	    w->setFocusPolicy( (bool)atoi(val.c_str())?Qt::StrongFocus:Qt::NoFocus );
+	    w->setFocusPolicy( (bool)atoi(val.c_str()) ? Qt::TabFocus : Qt::NoFocus );
             break;
         case 12:	//geomMargin
             w->dc()["geomMargin"] = atoi(val.c_str());
@@ -758,7 +760,24 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
             QMouseEvent *ev = static_cast<QMouseEvent*>(event);
             DevelWdgView *devW = qobject_cast<DevelWdgView*>(view);
             RunWdgView   *runW = qobject_cast<RunWdgView*>(view);
-            if (devW)
+            if( runW && runW->dc()["active"].toBool() ) 
+            {
+                string sev, suff;
+                for(int i=0; i<inundationItems.size(); i++)
+                    if (inundationItems[i].path.contains(ev->pos()))
+                    { sev="ws_Fig"+TSYS::int2str(i); }
+                if( !sev.empty() )
+		{
+		    if( !runW->hasFocus() ) runW->setFocus(Qt::MouseFocusReason);
+		    if( ev->buttons() & Qt::LeftButton )	suff+="Left";
+		    if( ev->buttons() & Qt::RightButton ) 	suff+="Right";
+		    if( ev->buttons() & Qt::MidButton )      	suff+="Mid";
+		    view->attrSet("event","ws_Fig");
+		    view->attrSet("event","ws_Fig"+suff);		    
+		    view->attrSet("event",sev+suff);
+		}
+            }	    
+            else if (devW)
             {
                 if (flag_down==0 && flag_up==0 && flag_left==0 && flag_right==0)
                 {
@@ -864,22 +883,8 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     }
                 }
             }
-            if (runW) 
-            {
-                string sev;
-                for(int i=0; i<inundationItems.size(); i++)
-                    if (inundationItems[i].path.contains(ev->pos()))
-                    { sev="ws_Fig"+TSYS::int2str(i); }
-                if( sev.empty() )   ;//????
-                if( !sev.empty() )  
-		{
-		    view->attrSet("event","ws_Fig");
-		    view->attrSet("event",sev); 
-		}
-            }
             return true;
         }
-
         case QEvent::MouseButtonDblClick:
         {
             bool flag_arc_inund=false, flag_break_move, fl_brk;
@@ -979,7 +984,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                 }
                 shapeSave(view);
             }
-           // if (runW) itemAtRun();
             
             return true;
         }
@@ -1418,7 +1422,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     }
                 } 
             }
-            //if (runW) itemAtRun();
             return true;
         }
         case QEvent::MouseMove:
@@ -1716,8 +1719,8 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             view->setCursor(Qt::CrossCursor);
                     }
                 }
-           }
-            return true;
+            }
+    	    return true;
         }
         case QEvent::KeyPress:
         {
@@ -1788,6 +1791,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                 }
         	return true;		
             }
+	    break;
         }
         case QEvent::KeyRelease:
         {
@@ -1845,6 +1849,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
         	return true;		
             }
         }
+	break;
     }
 
     return false;
@@ -2888,10 +2893,6 @@ int ShapeElFigure::itemAt(const QPointF &pos, QVector <ShapeItem> &shapeItems,Wd
    return index;
 }
 
-/*void ShapeElFigure::itemAtRun()
-{
-    
-}*/
 //- Building the path for the current figure -
 QPainterPath ShapeElFigure::painter_path(float el_width, float el_border_width, int el_type, double el_ang, QPointF el_p1, QPointF el_p2, QPointF el_p3, QPointF el_p4, QPointF el_p5, QPointF el_p6)
 {

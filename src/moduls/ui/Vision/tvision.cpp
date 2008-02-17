@@ -415,3 +415,9 @@ int TVision::cntrIfCmd( XMLNode &node, const string &user, const string &stat, b
     node.load(tr.at().messProtIO(host.user+"\n"+host.pass+"\n"+node.save(),"SelfSystem"));
     return atoi(node.attr("rez").c_str());    
 }
+
+QWidget *TVision::getFocusedWdg( QWidget *wcntr )
+{
+    while( wcntr->focusProxy() ) wcntr = wcntr->focusProxy();
+    return wcntr;
+}

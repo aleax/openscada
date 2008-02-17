@@ -59,7 +59,7 @@ class TMdPrm : public TParamContr
 	TMdContr &owner( )	{ return (TMdContr&)TParamContr::owner(); }
 	
         //Attributes
-	bool    isErr;		//Error present	flag
+	int    isErr;		//Error cod
 
     private:
 	//Methods
@@ -111,11 +111,8 @@ class TMdContr: public TController
 	double	&m_per;     			//Acquisition task (seconds)
 	int	&m_prior,			//Process task priority
 		&m_prt,				//Protocol
-		&m_speed,			//Serial speed
 		&m_node;			//Node
-	string	&m_dev,				//Serial device
-		m_wdev,				//Work serial device
-		&m_addr;			//Remote host address
+	string	&m_addr;			//Transport device address
 		
 	bool    prc_st,				//Process task active
 		endrun_req;			//Request to stop of the Process task
@@ -129,32 +126,62 @@ class TMdContr: public TController
 //*************************************************
 //* SSerial                                       *
 //*************************************************
-class SSerial
+class TTpContr;
+
+class SSerial : public TCntrNode, public TConfig
 {
     public:
 	//Data
-	enum	Prot { Free, ASCII, RTU };
+	enum	Prot 	{ Free, ASCII, RTU };
 
 	//Methods
-	SSerial( )	{ }
-	SSerial( const string &dev );
-	
-	void connect( int speed, Prot iPrt = RTU, ui32 iFrTm = 3000, ui32 iCharTm = 100, ui32 iTm = 3 );
-	void disconnect( );
+	SSerial( const string &dev, TTpContr *iown );	
+
+	string 	id( )		{ return m_id; }
+	int 	speed( )	{ return m_speed; }
+	int	len( )		{ return m_len; }
+	bool	twostop( )	{ return m_twostop; }
+	int	parity( )	{ return m_parity; }
+	int	timeoutFrame( )	{ return frTm; }
+	double	timeoutChar( )	{ return charTm; }
+	int	timeoutReq( )	{ return reqTm; }
+	bool	hasOpen( )	{ return (fd>0); }
+
+	void 	setSpeed( int val, bool tmAdj = false );
+	void	setLen( int val );
+	void	setTwostop( bool val );
+	void	setParity( int val );
+	void 	setTimeoutFrame( int val )	{ frTm = val; }
+	void	setTimeoutChar( double val )	{ charTm = val; }
+	void	setTimeoutReq( int val )	{ reqTm = val; }
+	void	setOpen( bool vl );
+
+	//- DB commands -
+	void load( );
+	void save( );
 	
 	string req( const string &vl );
-		
+
+	TTpContr &owner( )	{ return *(TTpContr *)nodePrev(); }
+
+    protected:
+        //Methods
+        string nodeName( )	{ return id(); }
+	void postDisable( int flag );
+
     private:
 	//Attributes
-	string	dev;				//Serial port device
-	Prot   	prot;   			//ASCII/RTU protocol
-	ui32 	frTm;				//Frame timeout in ms
-	ui32	charTm;				//Char timeout in ms
-	ui32   	tm;				//Request timeout in s
+	string	&m_id;				//Serial port device
+	int	&m_speed;			//Speed
+	int	&m_len;				//Length
+	bool	&m_twostop;			//Two stop bits
+	int	&m_parity;			//Parity check
+	int 	&frTm;				//Frame timeout in ms
+	double	&charTm;			//Char timeout in ms
+	int	&reqTm;				//Request timeout in ms
 		
 	Res	m_res;				//Serial port resource
 	int	fd;				//Serial port
-	int	m_connect;			//Serial port connection's counter, from acquisition controllers
 };
 
 //*************************************************
@@ -168,13 +195,27 @@ class TTpContr: public TTipDAQ
 	~TTpContr( );
 
 	void modLoad( );
+        void modSave( );
 
-	SSerial &sPortAt( const string &dev );
+	TElem &serDevE( )	{ return el_ser_dev; }
+
+	//- Serial devices -
+	string serDevDB( );
+        void serDevList( vector<string> &list )		{ chldList(m_sdev,list); }
+	void serDevAdd( const string &dev );
+        void serDevDel( const string &dev, bool full = false )		{ chldDel(m_sdev,dev,-1,full); }
+        bool serDevPresent( const string &dev )		{ return chldPresent(m_sdev,dev); }
+	AutoHD<SSerial> serDevAt( const string &dev )	{ return chldAt(m_sdev,dev); }
 	
+	//- Special modbus protocol's -
 	ui16 CRC16( const string &mbap );
 	ui8  LRC( const string &mbap );
 	string DataToASCII( const string &in );
 	string ASCIIToData( const string &in );
+
+    protected:
+	//Methods
+        void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
     private:
 	//Methods
@@ -183,8 +224,10 @@ class TTpContr: public TTipDAQ
 	string optDescr( );
 	
 	//Attributes
-	map<string,SSerial>	m_sdevs;
+	TElem   		el_ser_dev;
+	int             	m_sdev;	
 	
+	//- Special modbus protocol's -
 	static ui8 CRCHi[];
 	static ui8 CRCLo[];
 };

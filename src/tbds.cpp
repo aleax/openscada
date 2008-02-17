@@ -236,7 +236,8 @@ bool TBDS::dataSet( const string &bdn, const string &path, TConfig &cfg )
         try{ tbl.at().fieldSet(cfg); }
 	catch(TError err) { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); db_true = false; }
 	tbl.free();
-        close(bdn);		
+        try{ close(bdn); } 
+	catch(TError err) { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 	return db_true;
     }
     //Load from Config file if tbl no present

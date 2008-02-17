@@ -60,11 +60,12 @@ namespace VISION
 	    //- Protected methods -
 	    bool event( QEvent * event );
 	    int cntrIfCmd( XMLNode &node, bool glob = false );
+	    void orderUpdate( );
 	    
 	private:
 	    //- Attributes -
-	    unsigned reqtm;	//Request values time
-	    int	     curDiv;	//Current divider
+	    unsigned 	reqtm;		//Request values time
+	    int	     	curDiv;		//Current divider
     };
     
     //****************************************
