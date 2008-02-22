@@ -303,9 +303,11 @@ void ModVArchEl::setVal( TValBuf &buf, long long beg, long long end )
     TConfig cfg( (archive().valType()==TFld::Real) ? (&mod->vlRealEl()) : 
 		 (archive().valType()==TFld::String) ? (&mod->vlStrEl()) : &mod->vlIntEl() );    
 
+    AutoHD<TTable> tbl = SYS->db().at().open(archivator().addr()+"."+archTbl(),true);
+    if( tbl.freeStat() ) return;
     //- Write data to table -
     for( long long ctm; beg <= end; beg++ )
-    {	    
+    {	
 	switch( archive().valType() )
 	{
     	    case TFld::Boolean:	cfg.cfg("VAL").setI(buf.getB(&beg,true));	break;
@@ -316,7 +318,7 @@ void ModVArchEl::setVal( TValBuf &buf, long long beg, long long end )
 	ctm = (beg/period())*period();
 	cfg.cfg("TM").setI(ctm/1000000);
 	cfg.cfg("TMU").setI(ctm%1000000);
-	SYS->db().at().dataSet(archivator().addr()+"."+archTbl(),"",cfg);
+	tbl.at().fieldSet(cfg);
         //- Archive time border update -
         m_beg=m_beg?vmin(m_beg,ctm):ctm;
         m_end=m_end?vmax(m_end,ctm):ctm;
@@ -330,10 +332,12 @@ void ModVArchEl::setVal( TValBuf &buf, long long beg, long long end )
 	{
 	    cfg.cfg("TM").setI(t_c/1000000);
 	    cfg.cfg("TMU").setI(t_c%1000000);
-            SYS->db().at().dataDel(archivator().addr()+"."+archTbl(),"",cfg);
+	    tbl.at().fieldDel(cfg);
         }
 	m_beg=n_end;
     }
+    tbl.free();
+    SYS->db().at().close(archivator().addr()+"."+archTbl());
  
     //- Update archive info -
     cfg.setElem(&mod->archEl());

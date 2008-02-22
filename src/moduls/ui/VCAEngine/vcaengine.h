@@ -56,6 +56,8 @@ class Engine : public TUI
 	string wlbTable( )	{ return "VCALibs"; }
 	string prjTable( )	{ return "VCAPrjs"; }
 	
+	void copy( const string &cp_sel, const string &cp_del );
+	
 	//- Widget's libraries -
         void wlbList( vector<string> &ls )			{ chldList(id_wlb,ls); }
         bool wlbPresent( const string &id )			{ return chldPresent(id_wlb,id); }
@@ -106,6 +108,7 @@ class Engine : public TUI
 		inclwdg_el,	//The table structure of container including widgets
 		prj_el,		//The generic table structure of project
 		page_el;	//The table structure of project's pages
+	string	cp_sel, cp_del;	//Copy source and destination elements
 };
     
 extern  Engine *mod;

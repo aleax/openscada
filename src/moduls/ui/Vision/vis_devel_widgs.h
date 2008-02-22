@@ -263,8 +263,8 @@ class LinkItemDelegate: public QItemDelegate
 		
 	InspLnk *owner( ) const;
 		
-    public slots:
-	void selItem();
+    //public slots:
+    //	void selItem( int val );
 
     private:
 	bool initVal;

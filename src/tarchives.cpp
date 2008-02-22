@@ -852,7 +852,8 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	    opt->setText(TBDS::genDBGet(nodePath()+"messTm","0",opt->attr("user")));
 	    if( !atoi(opt->text().c_str()) )    opt->setText(TSYS::int2str(time(NULL)));
 	}
-	if( ctrChkNode(opt,"set",0664,"root",my_gr.c_str(),SEQ_WR) )	TBDS::genDBSet(nodePath()+"messTm",opt->text(),opt->attr("user"));
+	if( ctrChkNode(opt,"set",0664,"root",my_gr.c_str(),SEQ_WR) )	
+	    TBDS::genDBSet(nodePath()+"messTm",(atoi(opt->text().c_str())>=time(NULL))?"0":opt->text(),opt->attr("user"));
     }
     else if( a_path == "/m_arch/view/size" )
     {

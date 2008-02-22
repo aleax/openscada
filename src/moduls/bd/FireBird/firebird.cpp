@@ -208,6 +208,7 @@ void MBD::disable( )
     ResAlloc res(conn_res,true);
     ISC_STATUS_ARRAY status;
     isc_detach_database( status, &hdb );
+    hdb = NULL;
 }	
 
 void MBD::allowList( vector<string> &list )
@@ -256,13 +257,13 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
     out_sqlda->sqln = 10;
     char    *dtBuf = NULL;
     int      dtBufLen = 0;
+    isc_stmt_handle stmt = NULL;
+    isc_tr_handle trans = NULL;
+    ISC_STATUS_ARRAY status;       
 
     try
     {
     	//- Prepare statement -
-    	ISC_STATUS_ARRAY status;
-    	isc_stmt_handle stmt = NULL;
-    	isc_tr_handle trans = NULL;
     	if( isc_dsql_allocate_statement(status, &hdb, &stmt) )
     	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("Allocate statement error: %s"),getErr(status).c_str());
     	if( isc_start_transaction(status, &trans, 1, &hdb, 0, NULL) )
@@ -305,10 +306,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
 	
     	//-- Get data --
     	if( isc_dsql_execute(status, &trans, &stmt, 1, NULL) )
-	{
-	    mess_debug(_("Execution of message <%s> is error."),ireq.c_str());
     	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("DSQL execute error: %s"),getErr(status).c_str());
-	}
 	if( tbl && out_sqlda->sqld )
 	{
 	    //if( isc_dsql_set_cursor_name(status, &stmt,"dyn_cursor", 0) )
@@ -383,11 +381,19 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
 	    }	    
 	}
     	if( isc_dsql_free_statement(status, &stmt, DSQL_drop) )
+	{
+	    stmt = NULL;
     	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("DSQL free statement error: %s"),getErr(status).c_str());
+	}
     	if( isc_commit_transaction(status, &trans) )
+	{
+	    stmt = trans = NULL;
     	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("DSQL close transaction error: %s"),getErr(status).c_str());
+	}
     }catch(...)
     {
+	if( stmt ) 	isc_dsql_free_statement(status, &stmt, DSQL_drop);
+	if( trans )	isc_commit_transaction(status, &trans);
 	free(out_sqlda);
 	if(dtBuf) free(dtBuf);
 	throw;
@@ -615,50 +621,45 @@ void MTable::fieldSet( TConfig &cfg )
     }    
     
     //- Prepare query -
-    string req = "SELECT 1 FROM \""+mod->sqlReqCode(name(),'"')+"\" "+req_where;
-    try{ owner().sqlReq( req, &tbl ); }
-    catch(TError err)	{ fieldFix(cfg); owner().sqlReq( req ); }
-    if( tbl.size() < 2 )
+    //-- Add new record --
+    string reqi = "INSERT INTO \""+mod->sqlReqCode(name(),'"')+"\" ";
+    string ins_name, ins_value;
+    next = false;
+    for( int i_el = 0; i_el < cf_el.size(); i_el++ )
     {
-	//-- Add new record --
-	req = "INSERT INTO \""+mod->sqlReqCode(name(),'"')+"\" ";
-	string ins_name, ins_value;
-	next = false;
-        for( int i_el = 0; i_el < cf_el.size(); i_el++ )
-        {
-            TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
-	    if(	!(u_cfg.fld().flg()&TCfg::Key) && !u_cfg.view() ) continue;
+	TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
+	if( !(u_cfg.fld().flg()&TCfg::Key) && !u_cfg.view() ) continue;
 
-	    if( !next ) next = true; 
-	    else 
-	    {
-		ins_name=ins_name+",";
-		ins_value=ins_value+",";
-	    }
-	    ins_name=ins_name+"\""+mod->sqlReqCode(cf_el[i_el],'"')+"\" ";		    
-	    string val;
-	    switch(u_cfg.fld().type())
-	    {
-		case TFld::String:	val = u_cfg.getS();			break;
-		case TFld::Integer:	val = SYS->int2str(u_cfg.getI());	break;
-		case TFld::Real:	val = SYS->real2str(u_cfg.getR());	break;
-		case TFld::Boolean:	val = SYS->int2str(u_cfg.getB());	break;
-	    }
-	    ins_value=ins_value+"'"+mod->sqlReqCode(val)+"' ";
+	if( !next ) next = true; 
+	else 
+	{
+	    ins_name=ins_name+",";
+	    ins_value=ins_value+",";
 	}
-      	req = req + "("+ins_name+") VALUES ("+ins_value+")";
+	ins_name=ins_name+"\""+mod->sqlReqCode(cf_el[i_el],'"')+"\" ";		    
+	string val;
+	switch(u_cfg.fld().type())
+	{
+	    case TFld::String:	val = u_cfg.getS();			break;
+	    case TFld::Integer:	val = SYS->int2str(u_cfg.getI());	break;
+	    case TFld::Real:	val = SYS->real2str(u_cfg.getR());	break;
+	    case TFld::Boolean:	val = SYS->int2str(u_cfg.getB());	break;
+	}
+	ins_value=ins_value+"'"+mod->sqlReqCode(val)+"' ";
     }
-    else
+    reqi = reqi + "("+ins_name+") VALUES ("+ins_value+")";
+    try{ owner().sqlReq( reqi ); }
+    catch(TError err)
     {
 	//-- Update present record --
-	req = "UPDATE \""+mod->sqlReqCode(name(),'"')+"\" SET ";
+	string requ = "UPDATE \""+mod->sqlReqCode(name(),'"')+"\" SET ";
 	next = false;
 	for( int i_el = 0; i_el < cf_el.size(); i_el++ )
         {
             TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
 	    if( u_cfg.fld().flg()&TCfg::Key || !u_cfg.view() ) continue;
 			     
-	    if( !next ) next = true; else req=req+",";
+	    if( !next ) next = true; else requ=requ+",";
 	    string val;
 	    switch(u_cfg.fld().type())
 	    {
@@ -667,16 +668,17 @@ void MTable::fieldSet( TConfig &cfg )
 		case TFld::Real:	val = SYS->real2str(u_cfg.getR());	break;
 		case TFld::Boolean:	val = SYS->int2str(u_cfg.getB());	break;
 	    }
-	    req=req+"\""+mod->sqlReqCode(cf_el[i_el],'"')+"\"='"+mod->sqlReqCode(val)+"' ";
+	    requ=requ+"\""+mod->sqlReqCode(cf_el[i_el],'"')+"\"='"+mod->sqlReqCode(val)+"' ";
 	}
-    	req = req + req_where;
+    	requ = requ + req_where;
+    	try{ owner().sqlReq( requ ); }
+    	catch( TError err )	
+	{ 
+	    fieldFix(cfg);
+	    try{ owner().sqlReq( reqi ); }
+	    catch(TError err)	{ owner().sqlReq( requ ); }
+	}
     }
-    
-    //- Query -
-    //printf("TEST 02: query: <%s>\n",req.c_str());
-    try{ owner().sqlReq( req ); }
-    catch(TError err)	{ fieldFix(cfg); owner().sqlReq( req ); }
-    //printf("TEST 01b: End from set\n");
 }
 
 void MTable::fieldDel( TConfig &cfg )

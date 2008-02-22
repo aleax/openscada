@@ -50,6 +50,40 @@ WidgetLib::~WidgetLib( )
 
 }
 
+WidgetLib &WidgetLib::operator=( WidgetLib &wdg )
+{
+    vector<string> pls;
+    if( !wdg.enable() ) return *this;
+    //- Copy generic configuration -
+    string tid = m_id;
+    *(TConfig *)this = (TConfig&)wdg;
+    m_id  = tid;
+    m_dbt = string("wlb_")+tid;
+    work_lib_db = wdg.work_lib_db;
+    
+    //- Enable destination project -
+    if( !enable() ) setEnable(true);
+
+    //- Mime data copy -
+    wdg.mimeDataList(pls);
+    string mimeType, mimeData;
+    for( int i_m = 0; i_m < pls.size(); i_m++ )
+    {
+	wdg.mimeDataGet( pls[i_m], mimeType, &mimeData );
+        mimeDataSet( pls[i_m], mimeType, mimeData );
+    }			   
+
+    //- Copy include pages -
+    wdg.list(pls);
+    for( int i_p = 0; i_p < pls.size(); i_p++ )
+    {
+	if( !present(pls[i_p]) ) add(pls[i_p],"");
+	((AutoHD<Widget>)at(pls[i_p])).at() = ((AutoHD<Widget>)wdg.at(pls[i_p])).at();
+    }
+    
+    return *this;
+}
+
 void WidgetLib::postEnable( int flag )
 {
     if( flag&TCntrNode::NodeRestore )	setEnable(true);
@@ -164,6 +198,8 @@ void WidgetLib::save( )
 
 void WidgetLib::setEnable( bool val )
 {
+    if( val == enable() )       return;
+
 #if OSC_DEBUG
     mess_debug(nodePath().c_str(),val ? _("Enable widget library.") : _("Disable widget library."));
 #endif

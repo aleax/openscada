@@ -30,8 +30,6 @@
 #undef _
 #define _(mess) mod->I18N(mess)
 
-#define COM_MAX_CNT 100
-
 using std::string;
 using std::vector;
 
@@ -94,10 +92,11 @@ class MBD : public TBD
 	TTable *openTable( const string &name, bool create );
 	
 	//Private attributes
-	string      cd_pg;
-	sqlite3     *m_db;	    
-	int        	commCnt;
-	Res		conn_res;
+	string	cd_pg;
+	sqlite3	*m_db;	    
+	int	commCnt;
+	Res	conn_res;
+	int 	trans_reqs;
 };
 
 

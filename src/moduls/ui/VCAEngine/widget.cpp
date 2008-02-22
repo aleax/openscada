@@ -40,8 +40,68 @@ Widget::Widget( const string &id, const string &isrcwdg ) :
 }
 
 Widget::~Widget()
-{
+{    
     attr_cfg.valDet(this);
+}
+
+Widget &Widget::operator=( Widget &wdg )
+{
+    if( !wdg.enable() ) return *this;
+
+    //- Parent link copy -
+    if( parentNm() != wdg.parentNm() && enable() ) setEnable(false);
+    setParentNm(wdg.parentNm());
+    if( !enable() ) setEnable(true);
+
+    //- Copy generic configuration -
+    if( wdg.parent().freeStat() || wdg.name() != wdg.parent().at().name() )	setName(wdg.name());
+    if( wdg.parent().freeStat() || wdg.descr() != wdg.parent().at().descr() )	setDescr(wdg.descr());
+    if( wdg.parent().freeStat() || wdg.ico() != wdg.parent().at().ico() )	setIco(wdg.ico());
+    setUser(wdg.user());
+    setGrp(wdg.grp());
+    setPermit(wdg.permit());
+    if( wdg.parent().freeStat() || wdg.calcLang() != wdg.parent().at().calcLang() )	setCalcLang(wdg.calcLang());
+    if( wdg.parent().freeStat() || wdg.calcProg() != wdg.parent().at().calcProg() )	setCalcProg(wdg.calcProg());
+    if( wdg.parent().freeStat() || wdg.calcPer() != wdg.parent().at().calcPer() )	setCalcPer(wdg.calcPer());
+
+    //- Copy attributes -
+    vector<string> els;
+    wdg.attrList(els);
+    AutoHD<Attr> attr, pattr;
+    for( int i_a = 0; i_a < els.size(); i_a++ )
+    {
+  	if( !attrPresent(els[i_a]) )
+	{
+	    attrAdd( new TFld(wdg.attrAt(els[i_a]).at().fld()) );
+	    attrAt(els[i_a]).at().setModif(1);
+	}
+	if( els[i_a]=="id" || els[i_a]=="path" ) continue;
+       	attr  = attrAt(els[i_a]);
+	pattr = wdg.attrAt(els[i_a]);
+	attr.at().setFlgSelf(pattr.at().flgSelf());
+    	switch(attr.at().type())
+	{
+	    case TFld::Boolean:	attr.at().setB(pattr.at().getB());	break;
+	    case TFld::Integer:	attr.at().setI(pattr.at().getI());	break;
+	    case TFld::Real:	attr.at().setR(pattr.at().getR());	break;
+	    case TFld::String:	attr.at().setS(pattr.at().getS());	break;
+	}
+	attr.at().setCfgTempl(pattr.at().cfgTempl());
+	attr.at().setCfgVal(pattr.at().cfgVal());
+    }
+
+    //- Include widgets copy -
+    if( !isLink( ) && wdg.isContainer() )
+    {
+    	wdg.wdgList(els);
+      	for( int i_w = 0; i_w < els.size(); i_w++ )
+	{
+	    if( !wdgPresent(els[i_w]) )	wdgAdd(els[i_w],"","");
+	    wdgAt(els[i_w]).at() = wdg.wdgAt(els[i_w]).at();
+	}
+    }
+    
+    return *this;
 }
 
 void Widget::postEnable(int flag)
@@ -142,7 +202,7 @@ void Widget::setEnable( bool val )
 	}	
 	m_enable = true;
         //- Load self values from DB -
-        loadIO();
+        loadIO();	
     }
     if(!val)
     {
@@ -150,7 +210,7 @@ void Widget::setEnable( bool val )
         vector<string>  ls;
         attrList(ls);
         for(int i_l = 0; i_l < ls.size(); i_l++)
-            if(attrAt(ls[i_l]).at().flgGlob()&Attr::IsInher)
+            //if(attrAt(ls[i_l]).at().flgGlob()&Attr::IsInher)
                 attrDel( ls[i_l] );
 
 	if(!m_parent.freeStat()) 
@@ -233,25 +293,23 @@ void Widget::inheritAttr( const string &iattr )
             fel->setFlg(fel->flg()|Attr::IsInher);
             attrAdd(fel);
         }
-	if( ls[i_l]!="id" && ls[i_l]!="path" && !attrAt(ls[i_l]).at().modif() )
+	if( ls[i_l]=="id" || ls[i_l]=="path" || attrAt(ls[i_l]).at().modif() )	continue;
+	attr  = attrAt(ls[i_l]);
+	pattr = parent().at().attrAt(ls[i_l]);
+	attr.at().setFlgSelf(pattr.at().flgSelf());
+	switch(attr.at().type())
 	{
-	    attr  = attrAt(ls[i_l]);
-	    pattr = parent().at().attrAt(ls[i_l]);
-	    attr.at().setFlgSelf(pattr.at().flgSelf());
-	    switch(attr.at().type())
-	    {
-		case TFld::Boolean:	attr.at().setB(pattr.at().getB(),true);	break;
-		case TFld::Integer:	attr.at().setI(pattr.at().getI(),true);	break;
-		case TFld::Real:	attr.at().setR(pattr.at().getR(),true);	break;
-		case TFld::String:	attr.at().setS(pattr.at().getS(),true);	break;
-	    }	    
-	    //-- No inherit calc flag for links --
-	    if( isLink() && !parent().at().isLink() )
-		attr.at().setFlgSelf((Attr::SelfAttrFlgs)(attr.at().flgSelf()&(~Attr::ProcAttr)));
-	    attr.at().setCfgTempl(pattr.at().cfgTempl());
-	    attr.at().setCfgVal(pattr.at().cfgVal());
-	    attr.at().setModif(0);
-	}
+	    case TFld::Boolean:	attr.at().setB(pattr.at().getB(),true);	break;
+	    case TFld::Integer:	attr.at().setI(pattr.at().getI(),true);	break;
+	    case TFld::Real:	attr.at().setR(pattr.at().getR(),true);	break;
+	    case TFld::String:	attr.at().setS(pattr.at().getS(),true);	break;
+	}	    
+	//-- No inherit calc flag for links --
+	if( isLink() && !parent().at().isLink() )
+	    attr.at().setFlgSelf((Attr::SelfAttrFlgs)(attr.at().flgSelf()&(~Attr::ProcAttr)));
+	attr.at().setCfgTempl(pattr.at().cfgTempl());
+	attr.at().setCfgVal(pattr.at().cfgVal());
+	attr.at().setModif(0);
     }
 }
 
@@ -276,7 +334,7 @@ void Widget::attrAdd( TFld *attr, int pos )
 {
     string anm = attr->name();
     if(attrPresent(anm))
-    {
+    {	
 	delete attr;
         throw TError(nodePath().c_str(),_("Attribut %s already present."),anm.c_str());
     }

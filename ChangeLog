@@ -1,3 +1,20 @@
+2008-02-22 Roman
+- /Archive: Current time tracing is added for archive data access.
+- FIX:/Archive: Archivators start is fixed. Terminate starting if one archivator error.
+- /DAQ/Controller: Parameter's number and enabled counter fields is added.
+- FIX:/ModShedul: No freeing shared libraries control object is fixed.
+- FIX:/SYS: Float point exception(signal SIGFPE) process is added.
+- FIX:/Archive/DBArch: Open table once for archive frame flushing is made.
+- FIX:/DB/FireBird: FielSet() command is rewrited for made SQL INSERT optimize.
+- /DB/SQLite: Set up requests counter into transaction, into address field, is made (/var/tmp/arch.dp:20).
+- FIX:/DAQ/DiamondBoards: Commands to atributes process is disadled on time controller stop.
+- FIX:/DAQ/ModBus: Zero period crush is fixed. Timeout's ranges is hold.
+- FIX:/DAQ/SNMP, /DAQ/Transporter: Zero period crush is fixed.
+- /UI/QTCfg: Changed atributes storing on page update is made.
+- !!:/UI/VCAEngine: Element's copy function is added.
+- FIX:/UI/Vision: ComboBox event process crash on value setup and item event change is fixed.
+
+
 2008-02-17 Roman
 - /SYS/Archive/Value: Control fields for value scale is added to trend builder.
 - FIX:/SYS/Archive/Value: Horizontal value trend overflow is fixed.

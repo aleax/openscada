@@ -50,6 +50,40 @@ Project::~Project( )
 
 }
 
+Project &Project::operator=( Project &wdg )
+{
+    vector<string> pls;
+    if( !wdg.enable() )	return *this;
+    //- Copy generic configuration -
+    string tid = m_id;
+    *(TConfig *)this = (TConfig&)wdg;
+    m_id  = tid;
+    m_dbt = string("prj_")+tid;
+    work_prj_db = wdg.work_prj_db;
+    
+    //- Enable destination project -
+    if( !enable() ) setEnable(true);
+
+    //- Mime data copy -    
+    wdg.mimeDataList(pls);
+    string mimeType, mimeData;
+    for( int i_m = 0; i_m < pls.size(); i_m++ )
+    {
+        wdg.mimeDataGet( pls[i_m], mimeType, &mimeData );
+        mimeDataSet( pls[i_m], mimeType, mimeData );
+    }
+
+    //- Copy include pages -
+    wdg.list(pls);
+    for( int i_p = 0; i_p < pls.size(); i_p++ )
+    {
+	if( !present(pls[i_p]) ) add(pls[i_p],"");
+	((AutoHD<Widget>)at(pls[i_p])).at() = ((AutoHD<Widget>)wdg.at(pls[i_p])).at();
+    }
+    
+    return *this;
+}
+
 void Project::postEnable( int flag )
 {
     if( flag&TCntrNode::NodeRestore )	setEnable(true);
@@ -158,6 +192,7 @@ void Project::save( )
 
 void Project::setEnable( bool val )
 {
+    if( val == enable() )       return;
 #if OSC_DEBUG
     mess_debug(nodePath().c_str(),val ? _("Enable project.") : _("Disable project."));
 #endif    
@@ -480,6 +515,31 @@ Page::Page( const string &id, const string &isrcwdg ) :
 Page::~Page( )
 {
 
+}
+
+Widget &Page::operator=( Widget &wdg )
+{
+    Page *spg = dynamic_cast<Page*>(&wdg);
+    if( !spg )	return Widget::operator=(wdg);
+
+    if( !spg->enable() ) return *this;
+    
+    //- Copy generic configuration -
+    setPrjFlags( spg->prjFlags() );
+    
+    //- Widget copy -
+    Widget::operator=(wdg);
+    
+    //- Include widgets copy -
+    vector<string> els;
+    spg->pageList(els);
+    for( int i_p = 0; i_p < els.size(); i_p++ )
+    {
+        if( !pagePresent(els[i_p]) ) pageAdd(els[i_p],"");
+        ((AutoHD<Widget>)pageAt(els[i_p])).at() = ((AutoHD<Widget>)spg->pageAt(els[i_p])).at();
+    }
+    
+    return *this;									    
 }
 
 Page *Page::ownerPage( )

@@ -58,6 +58,8 @@ void Session::preDisable( int flag )
 
 void Session::setEnable( bool val )
 {
+    if( val == enable() )	return;
+    
     vector<string> pg_ls;
 
     if( val )

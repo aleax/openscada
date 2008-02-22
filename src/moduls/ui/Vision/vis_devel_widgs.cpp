@@ -728,7 +728,7 @@ bool InspLnk::event( QEvent *event )
 void InspLnk::setWdg( const string &iwdg )
 {
     string lnid, lngrp, lnwdg, lnatr;
-    
+
     if( it_wdg != TSYS::strSepParse(iwdg,0,';') )
     { 
 	clear();
@@ -856,7 +856,7 @@ void InspLnk::changeLnk( QTreeWidgetItem *index, int col )
     req.setAttr("path",it_wdg+"/%2flinks%2flnk%2f"+(index->childCount()?"pr_":"el_")+attr_id)->
 	setText(index->text(1).toAscii().data());
     if( mainWin()->cntrIfCmd(req) )
-	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+    	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,mainWin());
     setWdg(it_wdg);
 }
 
@@ -892,7 +892,7 @@ QWidget *LinkItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 	((QComboBox*)w_del)->setEditable(true);
 	for( int i_l = 0; i_l < req.childSize(); i_l++ )
 	    ((QComboBox*)w_del)->addItem(req.childGet(i_l)->text().c_str());
-	connect( w_del, SIGNAL( currentIndexChanged(int) ), this, SLOT( selItem() ) );
+	//connect( w_del, SIGNAL( currentIndexChanged(int) ), this, SLOT( selItem(int) ) );
     }
     else
     {
@@ -903,12 +903,12 @@ QWidget *LinkItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
     return w_del;
 }
 
-void LinkItemDelegate::selItem( )
+/*void LinkItemDelegate::selItem( int pos )
 {
     if( initVal ) return;
     emit commitData((QWidget*)sender());
-    emit closeEditor((QWidget*)sender(), QAbstractItemDelegate::SubmitModelCache);
-}
+    //emit closeEditor((QWidget*)sender(), QAbstractItemDelegate::SubmitModelCache);
+}*/
 
 void LinkItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {

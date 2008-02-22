@@ -114,6 +114,9 @@ void ModMArch::put( vector<TMess::SRec> &mess )
 {
     if(!run_st) throw TError(nodePath().c_str(),_("Archive no started!"));
     
+    AutoHD<TTable> tbl = SYS->db().at().open(addr()+"."+archTbl(),true);
+    if( tbl.freeStat() ) return;	    
+    
     TConfig cfg(&mod->messEl());
     unsigned long long t_cnt = SYS->shrtCnt();
     for( unsigned i_m = 0; i_m < mess.size(); i_m++)
@@ -125,7 +128,7 @@ void ModMArch::put( vector<TMess::SRec> &mess )
 	cfg.cfg("CATEG").setS(mess[i_m].categ);
 	cfg.cfg("MESS").setS(mess[i_m].mess);
 	cfg.cfg("LEV").setI(mess[i_m].level);
-	SYS->db().at().dataSet(addr()+"."+archTbl(),"",cfg);
+	tbl.at().fieldSet(cfg);
 	//- Archive time border update -
 	m_beg=m_beg?vmin(m_beg,mess[i_m].time):mess[i_m].time;
 	m_end=m_end?vmax(m_end,mess[i_m].time):mess[i_m].time;
@@ -138,10 +141,12 @@ void ModMArch::put( vector<TMess::SRec> &mess )
 	for( time_t t_c = vmax(m_beg,n_end-3600); t_c < n_end; t_c++ )
 	{
 	    cfg.cfg("TM").setI(t_c);
-	    SYS->db().at().dataDel(addr()+"."+archTbl(),"",cfg);
+	    tbl.at().fieldDel(cfg);
 	}
 	m_beg=n_end;
     }
+    tbl.free();
+    SYS->db().at().close(addr()+"."+archTbl());
     
     //- Update archive info -
     cfg.setElem(&mod->archEl());

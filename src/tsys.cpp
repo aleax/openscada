@@ -67,6 +67,7 @@ TSYS::TSYS( int argi, char ** argb, char **env ) :
     //signal(SIGCHLD,sighandler);
     signal(SIGALRM,sighandler);
     signal(SIGPIPE,sighandler);
+    signal(SIGFPE,sighandler);    
     //signal(SIGSEGV,sighandler);
     signal(SIGABRT,sighandler);
 }
@@ -409,6 +410,9 @@ void TSYS::sighandler( int signal )
 	case SIGTERM:
 	    mess_warning(SYS->nodePath().c_str(),_("Have get a Terminate signal. Server been stoped!"));
 	    SYS->stop_signal=signal;
+	    break;
+	case SIGFPE:
+	    mess_warning(SYS->nodePath().c_str(),_("Float point exeption catch!"));
 	    break;
 	case SIGCHLD:
 	{

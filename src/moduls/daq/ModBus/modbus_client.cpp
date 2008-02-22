@@ -451,9 +451,8 @@ void SSerial::save( )
 
 void SSerial::setOpen( bool vl )
 {
-    if( vl == hasOpen() )	return;
-    
     ResAlloc res(m_res,true);
+    if( vl == hasOpen() )	return;    
 
     if( vl )
     {
@@ -608,14 +607,14 @@ string SSerial::req( const string &vl )
 
     //- Read reply -
     char buf[1000];
-    int  blen;
+    int  blen = 0;
     long long tmptm;
     fd_set fdset;
 
     //-- Char timeout init --
     struct timeval tv;
     tv.tv_sec = 0;
-    tv.tv_usec = (int)(timeoutChar()*1000.0);
+    tv.tv_usec = vmax((int)(timeoutChar()*1000.0),1);
     
     //--- Serial timeout ---
     tmptm = TSYS::curTime();
@@ -624,7 +623,7 @@ string SSerial::req( const string &vl )
 	int bytes = 0;
 	ioctl( fd, FIONREAD, &bytes );
         if( bytes > 2 )	break;
-        if( (TSYS::curTime() - tmptm) >= timeoutReq()*1000 )
+        if( (TSYS::curTime() - tmptm) >= vmin(timeoutReq()*1000,10000000) )
 	    throw TError(mod->nodePath().c_str(),_("Respond from serial port '%s' is timeouted."),id().c_str());
 	usleep( 1000 );
     }
@@ -637,9 +636,9 @@ string SSerial::req( const string &vl )
     FD_SET( fd, &fdset );
     while( true )
     {
-        if( select(fd+1,&fdset,NULL,NULL,&tv) == 0 )	break;
+        if( select(fd+1,&fdset,NULL,NULL,&tv) <= 0 )	break;
         blen += read( fd, buf+blen, sizeof(buf)-blen );
-	if( (TSYS::curTime()-tmptm) > timeoutFrame()*1000 )	break;
+	if( (TSYS::curTime()-tmptm) > vmin(timeoutFrame()*1000,10000000) )	break;
     }
     
     return string( buf, blen );
@@ -904,11 +903,14 @@ void *TMdContr::Task( void *icntr )
 			if( cntr.p_hd[i_p].at().isErr != atoi(rez.c_str()) )
 			    cntr.p_hd[i_p].at().vlAt("err").at().setS( rez, 0, true );
 			cntr.p_hd[i_p].at().isErr = atoi(rez.c_str());
-			break; 
+			val.at().setI( EVAL_INT, 0, true );
 		    }
-		    else if( cntr.p_hd[i_p].at().isErr )
-		    { cntr.p_hd[i_p].at().vlAt("err").at().setS( "0", 0, true ); cntr.p_hd[i_p].at().isErr = 0; }
-	    	    val.at().setI( (pdu[2]<<8)+pdu[3], 0, true );
+		    else 
+		    {
+			if( cntr.p_hd[i_p].at().isErr )
+			{ cntr.p_hd[i_p].at().vlAt("err").at().setS( "0", 0, true ); cntr.p_hd[i_p].at().isErr = 0; }
+	    		val.at().setI( (pdu[2]<<8)+pdu[3], 0, true );
+		    }
 		}
     	    }
 	    res.release();	    
@@ -919,8 +921,8 @@ void *TMdContr::Task( void *icntr )
     
     	    //- Calc next work time and sleep -
     	    clock_gettime( CLOCK_REALTIME, &get_tm );
-	    work_tm = (((long long)get_tm.tv_sec*1000000000+get_tm.tv_nsec)/(long long)(cntr.m_per*1000000000) + 1)*(long long)(cntr.m_per*1000000000);
-	    if( last_tm == work_tm )	work_tm += (long long)(cntr.m_per*1000000000);	//Fix early call
+	    work_tm = (((long long)get_tm.tv_sec*1000000000+get_tm.tv_nsec)/(long long)(cntr.period()*1000000000) + 1)*(long long)(cntr.period()*1000000000);
+	    if( last_tm == work_tm )	work_tm += (long long)(cntr.period()*1000000000);	//Fix early call
     	    last_tm = work_tm;
 	    get_tm.tv_sec = work_tm/1000000000; get_tm.tv_nsec = work_tm%1000000000;
     	    clock_nanosleep( CLOCK_REALTIME, TIMER_ABSTIME, &get_tm, NULL );
@@ -1036,7 +1038,7 @@ void TMdPrm::vlGet( TVal &val )
 {
     if(val.name() == "err" )
     {
-	if( !enableStat() ) 		{ val.setS( _("1:Parameter had disabled."), 0, true ); 	isErr = 1; }
+	if( !enableStat() )		{ val.setS( _("1:Parameter had disabled."), 0, true ); isErr = 1; }
 	else if( !owner().startStat() )	{ val.setS( _("2:Acquisition is stoped."), 0, true );	isErr = 2; }
 	else if( !isErr )		val.setS( "0", 0, true );
     }

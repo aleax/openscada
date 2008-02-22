@@ -918,7 +918,9 @@ void TVArchive::start( )
     //- Attach to archivators -
     string arch;
     for( int i_off = 0; (arch = TSYS::strSepParse(m_archs,0,';',&i_off)).size();  )
-	if(!archivatorPresent(arch)) archivatorAttach(arch);
+	if(!archivatorPresent(arch)) 
+	    try{ archivatorAttach(arch); }
+	    catch(TError err)	{ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 void TVArchive::stop( bool full_del )
@@ -1835,7 +1837,8 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    opt->setText(TBDS::genDBGet(owner().nodePath()+"vaTm","0",opt->attr("user")));
 	    if( !atoi(opt->text().c_str()) )	opt->setText(TSYS::int2str(time(NULL)));
 	}
-        if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	TBDS::genDBSet(owner().nodePath()+"vaTm",opt->text(),opt->attr("user"));
+        if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )
+	    TBDS::genDBSet(owner().nodePath()+"vaTm",(atoi(opt->text().c_str())>=time(NULL))?"0":opt->text(),opt->attr("user"));
     }
     else if( a_path == "/val/utm" )
     {

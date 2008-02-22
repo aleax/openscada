@@ -121,6 +121,12 @@ LineEdit::LineEdit( QWidget *parent, bool prev_dis ) :
     }
 }
 
+bool LineEdit::isChanged( )
+{
+    if( ed_fld && bt_fld->isEnabled() )	return true;
+    return false;
+}
+
 bool LineEdit::hasFocus( ) const
 {
     return ed_fld->hasFocus( );
@@ -144,7 +150,7 @@ void LineEdit::setText(const QString &txt)
     {
 	bt_fld->setEnabled(false);
 	bt_fld->setVisible(false);
-    }	 
+    }
 }
 
 QString LineEdit::text() const
@@ -154,6 +160,8 @@ QString LineEdit::text() const
 
 void LineEdit::applySlot( )
 {
+    emit textChanged(text());
+    
     bt_fld->setEnabled(false);
     bt_fld->setVisible(false);
     
@@ -172,6 +180,8 @@ bool LineEdit::event( QEvent * e )
 	}
 	else if(keyEvent->key() == Qt::Key_Escape )
 	{
+	    bt_fld->setEnabled(false);
+	    bt_fld->setVisible(false);
 	    emit cancel();
 	    return true;	
 	}
@@ -202,15 +212,21 @@ TextEdit::TextEdit( QWidget *parent, const char *name, bool prev_dis ) :
         but_box->button(QDialogButtonBox::Apply)->setText(_("Apply"));
         if(!ico_t.load(TUIS::icoPath("button_ok").c_str())) ico_t.load(":/images/button_ok.png");
         but_box->button(QDialogButtonBox::Apply)->setIcon(QPixmap::fromImage(ico_t));
-        connect(but_box->button(QDialogButtonBox::Apply), SIGNAL(clicked()), this, SIGNAL(apply()));
+        connect(but_box->button(QDialogButtonBox::Apply), SIGNAL(clicked()), this, SLOT(btApply()));
         but_box->button(QDialogButtonBox::Cancel)->setText(_("Cancel"));
         if(!ico_t.load(TUIS::icoPath("button_cancel").c_str())) ico_t.load(":/images/button_cancel.png");
         but_box->button(QDialogButtonBox::Cancel)->setIcon(QPixmap::fromImage(ico_t));
-        connect(but_box, SIGNAL(rejected()), this, SIGNAL(cancel()));
+        connect(but_box, SIGNAL(rejected()), this, SLOT(btCancel()));	
 	but_box->setVisible(false);
 	box->addWidget(but_box);
     }
     
+}
+
+bool TextEdit::isChanged( )
+{
+    if( but_box && but_box->isVisible() ) return true;
+    return false;
 }
 
 QString TextEdit::text()
@@ -239,6 +255,20 @@ void TextEdit::changed()
     emit textChanged(text());
 }
 
+void TextEdit::btApply( )
+{
+    emit textChanged(text());    
+    but_box->setVisible(false);
+    emit apply();
+}
+
+void TextEdit::btCancel( )
+{
+    but_box->setVisible(false);
+    emit cancel();
+}
+	
+
 //*************************************************
 //* DateTimeEdit: Data and time edit widget.      *
 //*************************************************
@@ -264,6 +294,12 @@ DateTimeEdit::DateTimeEdit( QWidget *parent, bool prev_dis ) :
 	connect( bt_fld, SIGNAL( released() ), this, SLOT( applySlot() ) );
 	box->addWidget(bt_fld);
     }
+}
+
+bool DateTimeEdit::isChanged( )
+{
+    if( ed_fld && bt_fld->isEnabled() ) return true;
+    return false;
 }
 
 bool DateTimeEdit::hasFocus( ) const
@@ -298,6 +334,7 @@ QDateTime DateTimeEdit::dateTime() const
 
 void DateTimeEdit::applySlot( )
 {
+    emit valueChanged(dateTime());
     bt_fld->setEnabled(false);
     bt_fld->setVisible(false);
     emit apply();    
@@ -315,6 +352,8 @@ bool DateTimeEdit::event( QEvent * e )
 	}
 	else if(keyEvent->key() == Qt::Key_Escape )
 	{
+	    bt_fld->setEnabled(false);
+	    bt_fld->setVisible(false);	
 	    emit cancel();
 	    return true;	
 	}

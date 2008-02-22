@@ -86,7 +86,7 @@ class TMdContr: public TController
     	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem );
 	~TMdContr( );   
 
-	double period( )	{ return m_per; }
+	double period( )	{ return vmax(m_per,0.1); }
         int    prior( )		{ return m_prior; }
 	int    pAttrLimit( )	{ return m_pattr_lim; }
 

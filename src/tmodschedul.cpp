@@ -51,6 +51,10 @@ TModSchedul::TModSchedul( ) :
 TModSchedul::~TModSchedul(  )
 {
     timer_delete(tmId);
+    
+    //- Clear share libraries header container -
+    for( int i_s = 0; i_s < SchHD.size(); i_s++ ) delete SchHD[i_s];
+    SchHD.clear();
 }
 
 void TModSchedul::preDisable(int flag)
@@ -396,7 +400,7 @@ void TModSchedul::libDet( const string &iname )
 		}		
 		SchHD[i_sh]->use.erase(SchHD[i_sh]->use.begin());
 	    }	    
-	    dlclose(SchHD[i_sh]->hd);
+	    dlclose(SchHD[i_sh]->hd);	    
 	    SchHD[i_sh]->hd = NULL;
 	    return;
 	}

@@ -59,6 +59,7 @@ class LineEdit : public QWidget
 	
 	QString text( ) const;	
 	bool hasFocus( ) const;
+	bool isChanged( );
 
 	void setText( const QString & );
 
@@ -98,6 +99,7 @@ class DateTimeEdit : public QWidget
 	    
 	QDateTime dateTime( ) const;
 	bool hasFocus( ) const;
+	bool isChanged( );
 
 	void setDateTime( const QDateTime & dt );
 
@@ -137,6 +139,7 @@ class TextEdit : public QWidget
 
 	QString text( );
 	bool hasFocus( ) const;
+	bool isChanged( );
 
 	void setText( const QString & );
 
@@ -151,6 +154,8 @@ class TextEdit : public QWidget
     private slots:
 	//Private slots
 	void changed( );
+	void btApply( );
+	void btCancel( );
 	    
     private:
 	//Private attributes

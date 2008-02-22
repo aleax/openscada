@@ -601,7 +601,8 @@ bool TMdPrm::cfgChange( TCfg &i_cfg )
 
 void TMdPrm::vlSet( TVal &val )
 {    
-    if( !enableStat() )	return;
+    if( !owner().startStat() || !enableStat() )	return;
+    
     switch(type())
     {
 	case AO:
@@ -648,7 +649,8 @@ void TMdPrm::vlGet( TVal &val )
             val.setS(_("1:Parameter disabled"),0,true);
 	else val.setS("0",0,true);
 	return;
-    }						
+    }
+    if( !owner().startStat() || !enableStat() )	{ val.setS(EVAL_STR,0,true); return; }
 
     switch(type())
     {

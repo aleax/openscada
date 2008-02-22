@@ -1337,6 +1337,7 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    if( uiPrmPos >= 50 && uiPrmPos < 150 )
 	    {
 		int trndN = (uiPrmPos/10)-5;
+		if( trndN >= w->dc()["parNum"].toInt() ) break;
 		TrendObj *trnd = (TrendObj*)w->dc()[QString("trend_%1").arg(trndN)].value<void*>();
 		make_pct = true;		
 		switch(uiPrmPos%10)
@@ -1357,7 +1358,7 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	if( make_pct )		{ makeTrendsPicture(w); up = true; }
 	if( up )		w->update();
     }
-    
+
     return (reld_tr_dt|make_pct|up);
 }
 
@@ -1752,7 +1753,7 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 	    if( bkbrsh.style() != Qt::NoBrush ) pnt.fillRect(dA,bkbrsh);
     
 	    //- Draw border -
-	    borderDraw( pnt, dA, *(QPen*)w->dc()["border"].value<void*>(), w->dc()["bordStyle"].toInt() );    
+	    borderDraw( pnt, dA, *(QPen*)w->dc()["border"].value<void*>(), w->dc()["bordStyle"].toInt() );
 
 	    //- Trend's picture -
 	    pnt.drawPicture(brdWdth,brdWdth,*(QPicture*)w->dc()["pictObj"].value<void*>());

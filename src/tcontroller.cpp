@@ -283,14 +283,30 @@ void TController::cntrCmdProc( XMLNode *opt )
 		if( owner().tpPrmSize() > 1 )
 		    ctrMkNode("fld",opt,-1,"/prm/t_prm",_("To add parameters"),0660,"root","root",3,"tp","str","dest","select","select","/prm/t_lst");
 		ctrMkNode("list",opt,-1,"/prm/prm",_("Parameters"),0660,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","prm_");
+		ctrMkNode("fld",opt,-1,"/prm/nmb",_("Number"),0444,"root","root",1,"tp","dec");
+		ctrMkNode("fld",opt,-1,"/prm/en",_("Enabled"),0444,"root","root",1,"tp","dec");	
 	    }
 	}
         return;
     }
     
     //- Process command to page -
+    vector<string> c_list;    
     string a_path = opt->attr("path");
-    if( a_path == "/prm/t_prm" && owner().tpPrmSize() )
+    if( a_path == "/prm/nmb" && ctrChkNode(opt) )
+    {
+	list(c_list);
+	opt->setText(TSYS::int2str(c_list.size()));
+    }
+    else if( a_path == "/prm/en" && ctrChkNode(opt) )
+    {
+	list(c_list);
+	int e_c = 0;
+    	for( int i_a = 0; i_a < c_list.size(); i_a++ )
+	    if( at(c_list[i_a]).at().enableStat( ) )	e_c++;
+	opt->setText(TSYS::int2str(e_c));
+    }
+    else if( a_path == "/prm/t_prm" && owner().tpPrmSize() )
     {
 	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	
 	    opt->setText(TBDS::genDBGet(owner().nodePath()+"addType",owner().tpPrmAt(0).name,opt->attr("user")));
@@ -301,7 +317,6 @@ void TController::cntrCmdProc( XMLNode *opt )
     {
 	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )
 	{
-	    vector<string> c_list;
     	    list(c_list);
     	    for( unsigned i_a=0; i_a < c_list.size(); i_a++ )
         	opt->childAdd("el")->setAttr("id",c_list[i_a])->setText(at(c_list[i_a]).at().name());

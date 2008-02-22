@@ -302,7 +302,7 @@ void *TMdContr::Task( void *icntr )
 		//-- Update parameter's values --
 		cntr.p_hd[i_p].at().update();
 		//-- Check sync moment and sync parameter's structure --
-		unsigned int div = (unsigned int)(cntr.m_sync/cntr.m_per);
+		unsigned int div = (unsigned int)(cntr.m_sync/cntr.period());
 		if( div && (it_cnt+i_p)%div == 0 )
 		{ 
 		    cntr.p_hd[i_p].at().load();
@@ -325,8 +325,8 @@ void *TMdContr::Task( void *icntr )
     
     	    //- Calc next work time and sleep -
     	    clock_gettime(CLOCK_REALTIME,&get_tm);
-	    work_tm = (((long long)get_tm.tv_sec*1000000000+get_tm.tv_nsec)/(long long)(cntr.m_per*1000000000) + 1)*(long long)(cntr.m_per*1000000000);
-	    if(last_tm == work_tm)	work_tm+=(long long)(cntr.m_per*1000000000);	//Fix early call
+	    work_tm = (((long long)get_tm.tv_sec*1000000000+get_tm.tv_nsec)/(long long)(cntr.period()*1000000000) + 1)*(long long)(cntr.period()*1000000000);
+	    if(last_tm == work_tm)	work_tm+=(long long)(cntr.period()*1000000000);	//Fix early call
     	    last_tm = work_tm;
 	    get_tm.tv_sec = work_tm/1000000000; get_tm.tv_nsec = work_tm%1000000000;
     	    clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&get_tm,NULL);

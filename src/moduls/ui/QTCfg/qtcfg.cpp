@@ -1109,7 +1109,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    }
 	    //-- Fill Edit --
 	    if( lab )	lab->setText((t_s.attr("dscr")+":").c_str());
-	    if( edit ) 	edit->setText(data_req.text().c_str());
+	    if( edit && !edit->isChanged() ) 	edit->setText(data_req.text().c_str());
 	}
         //- View Data-Time fields -
 	else if( t_s.attr("tp") == "time" )
@@ -1183,7 +1183,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
             //-- Fill data --
  	    if( lab ) 	lab->setText((t_s.attr("dscr")+":").c_str());
 	    if( val_r )	val_r->setText( "<b>"+dtm.toString("dd.MM.yyyy hh:mm:ss")+"</b>" );
-	    if( val_w )	val_w->setDateTime( dtm );
+	    if( val_w && !val_w->isChanged() )	val_w->setDateTime( dtm );
 	}
 	//- View other string and numberic fields -
 	else
@@ -1278,7 +1278,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
             //-- Fill line --
  	    if( lab ) 	lab->setText((t_s.attr("dscr")+":").c_str());
 	    if( val_r )	val_r->setText((string("<b>")+TSYS::strEncode(data_req.text(),TSYS::Html)+"</b>").c_str());
-	    if( val_w )	val_w->setText(data_req.text().c_str());
+	    if( val_w && !val_w->isChanged() )	val_w->setText(data_req.text().c_str());
 	}
     }
 }

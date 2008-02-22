@@ -136,7 +136,7 @@ string BDMod::sqlReqCode( const string &req, char symb )
 //************************************************
 //* BDSQLite::MBD                                *
 //************************************************
-MBD::MBD( const string &iid, TElem *cf_el ) : TBD(iid,cf_el), commCnt(0)
+MBD::MBD( const string &iid, TElem *cf_el ) : TBD(iid,cf_el), commCnt(0), trans_reqs(1)
 {
 
 }
@@ -152,7 +152,7 @@ void MBD::postDisable(int flag)
     
     if( flag && owner().fullDeleteDB() )
     {
-	if(remove(addr().c_str()) != 0)
+	if( remove(TSYS::strSepParse(addr(),0,':').c_str()) != 0 )
     	    throw TError(TSYS::DBClose,nodePath().c_str(),_("Delete bd error: %s"),strerror(errno));
     }
 }
@@ -162,15 +162,16 @@ void MBD::enable( )
     if( enableStat() )  return;
     
     cd_pg = codePage().size()?codePage():Mess->charset();    
-    int rc = sqlite3_open(addr().c_str(),&m_db); 
+    int rc = sqlite3_open(TSYS::strSepParse(addr(),0,':').c_str(),&m_db);
     if( rc )
     { 
 	string err = sqlite3_errmsg(m_db);
 	sqlite3_close(m_db);
 	throw TError(TSYS::DBOpen,nodePath().c_str(),_("Open DB file error: %s"),err.c_str());
     }
+    trans_reqs = vmax(1,vmin(100,atoi(TSYS::strSepParse(addr(),1,':').c_str())));
     
-    TBD::enable( );    
+    TBD::enable( );
 }
 
 void MBD::disable( )
@@ -178,7 +179,7 @@ void MBD::disable( )
     if( !enableStat() )  return;
 
     //- Last commit -
-    if(commCnt) { commCnt = COM_MAX_CNT; sqlReq(""); }
+    if(commCnt) { commCnt = trans_reqs; sqlReq(""); }
     
     TBD::disable( );
 
@@ -219,20 +220,21 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
     string req = ireq;
     
     ResAlloc res(conn_res,true);
-    
-    if(!commCnt) req=string("BEGIN;")+ireq;
-    if((++commCnt) > COM_MAX_CNT )
+    if( trans_reqs > 1 )
     {
-	req=ireq+"COMMIT;";
-	commCnt=0;
+	if(!commCnt) req=string("BEGIN;")+req;
+	if((++commCnt) >= trans_reqs )
+	{
+	    req+="COMMIT;";
+	    commCnt=0;
+	}
     }
-    
     //- Put request -
     rc = sqlite3_get_table(m_db,Mess->codeConvOut(cd_pg.c_str(),req).c_str(),&result, &nrow, &ncol, &zErrMsg );
     if( rc != SQLITE_OK ) 
     {
 	//-- Fix transaction --
-	if((commCnt-1) < 0) commCnt=COM_MAX_CNT;
+	if( trans_reqs>1 && (commCnt-1)<0 )	commCnt=trans_reqs;
 	throw TError(TSYS::DBRequest,nodePath().c_str(),_("Get table error: %s"),zErrMsg);
     }
     if( tbl && ncol > 0 )
@@ -251,7 +253,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
     	    tbl->push_back(row);
 	}    
     }
-    sqlite3_free_table(result);
+    sqlite3_free_table(result);    
 }
 
 void MBD::cntrCmdProc( XMLNode *opt )
@@ -267,7 +269,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
     //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/prm/st/end_tr" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) && commCnt )
-    { commCnt = COM_MAX_CNT; sqlReq(""); }
+    { commCnt = trans_reqs; sqlReq(""); }
     else TBD::cntrCmdProc(opt);			
 }
 

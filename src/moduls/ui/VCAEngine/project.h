@@ -41,6 +41,8 @@ class Project : public TCntrNode, public TConfig
 	//Methods
         Project( const string &id, const string &name, const string &lib_db = "*.*" );
 	~Project( );
+	
+        Project &operator=( Project &wdg );
 
         const string &id( )	{ return m_id; }		//Identifier
         string name( );						//Name
@@ -130,6 +132,8 @@ class Page : public Widget, public TConfig
 	//Methods
         Page( const string &id, const string &isrcwdg = "" );
         ~Page( );
+
+	Widget &operator=( Widget &wdg );
 
 	string path( );
         string ico( );

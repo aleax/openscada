@@ -254,8 +254,8 @@ void TipContr::cntrCmdProc( XMLNode *opt )
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/copy/copy" && ctrChkNode(opt,"set",0440) )
-	copy(ctrId(opt,"src")->text(),ctrId(opt,"dst")->text());
+    if( a_path == "/copy/copy" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )
+	copy( ctrId(opt,"src")->text(), ctrId(opt,"dst")->text() );
     else if( a_path == "/copy/cntrls" && ctrChkNode(opt) )
     {
 	vector<string> lst;
