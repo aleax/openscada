@@ -108,7 +108,7 @@ void RunWdgView::update( unsigned cnt, int div_max, const string &wpath )
 	    setAttr("tm",TSYS::uint2str(cnt?reqtm:0));	
 	if( !cntrIfCmd(req) )
 	{
-	    if( !cnt )	setAllAttrLoad(true);
+	    if( !cnt )	setAllAttrLoad(true);	    
     	    for( int i_el = 0; i_el < req.childSize(); i_el++ )
 	    {
 		req_el = req.childGet(i_el);
@@ -365,10 +365,15 @@ RunPageView *RunPageView::findOpenPage( const string &ipg )
     if( id() == ipg ) return this;
     //- Check to included widgets -
     for( int i_ch = 0; i_ch < children().size(); i_ch++ )
-        if( !qobject_cast<RunPageView*>(children().at(i_ch)) &&
+        if( qobject_cast<RunWdgView*>(children().at(i_ch)) &&
         	((RunWdgView*)children().at(i_ch))->root() == "Box" &&
-        	((RunWdgView*)children().at(i_ch))->pgOpenSrc() == ipg.c_str() )    
-    	    return (RunPageView*)children().at(i_ch);
+        	((RunWdgView*)children().at(i_ch))->pgOpenSrc() == ipg.c_str() )
+    {
+	for( int i_w = 0; i_w < ((RunWdgView*)children().at(i_ch))->children().size(); i_w++ )
+	    if( qobject_cast<RunPageView*>(((RunWdgView*)children().at(i_ch))->children().at(i_w)) )
+		return ((RunPageView*)((RunWdgView*)children().at(i_ch))->children().at(i_w));
+	return NULL;
+    }
     //- Put checking to childs -
     for( int i_ch = 0; i_ch < children().size(); i_ch++ )
 	if( qobject_cast<RunPageView*>(children().at(i_ch)) )

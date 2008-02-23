@@ -1328,7 +1328,7 @@ void Attr::setS( const string &val, bool strongPrev )
 	    if( !strongPrev && *(m_val.s_val) == val )	break;	    
             string t_str = *(m_val.s_val);
     	    *(m_val.s_val) = val;
-            if( !owner()->attrChange(*this,&t_str) )
+            if( !owner()->attrChange(*this,&t_str) )	    
                 *(m_val.s_val) = t_str;
 	    else 
 	    {	
