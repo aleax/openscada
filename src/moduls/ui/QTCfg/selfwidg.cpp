@@ -123,7 +123,7 @@ LineEdit::LineEdit( QWidget *parent, bool prev_dis ) :
 
 bool LineEdit::isChanged( )
 {
-    if( ed_fld && bt_fld->isEnabled() )	return true;
+    if( bt_fld && bt_fld->isEnabled() )	return true;
     return false;
 }
 
@@ -298,7 +298,7 @@ DateTimeEdit::DateTimeEdit( QWidget *parent, bool prev_dis ) :
 
 bool DateTimeEdit::isChanged( )
 {
-    if( ed_fld && bt_fld->isEnabled() ) return true;
+    if( bt_fld && bt_fld->isEnabled() ) return true;
     return false;
 }
 
