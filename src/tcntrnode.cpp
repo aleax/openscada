@@ -198,7 +198,8 @@ void TCntrNode::nodeDis(long tm, int flag)
 	nodeEn(NodeRestore|(flag<<8));
 	throw;
     }   
-    postDisable(flag);     
+    try{ postDisable(flag); } 
+    catch(TError err)	{ mess_warning(err.cat.c_str(),err.mess.c_str()); }
 };
 
 void TCntrNode::nodeList(vector<string> &list, const string& gid)

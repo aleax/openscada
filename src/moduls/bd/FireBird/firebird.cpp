@@ -243,7 +243,33 @@ string MBD::getErr( ISC_STATUS_ARRAY status )
     return err;
 }
 
+void MBD::transOpen( isc_tr_handle *trans )
+{
+    ISC_STATUS_ARRAY status;
+    
+    ResAlloc res(conn_res,true);
+    if( !trans || *trans )	return;
+    if( isc_start_transaction(status, trans, 1, &hdb, 0, NULL) )
+        throw TError(TSYS::DBRequest,nodePath().c_str(),_("Start trasaction error: %s"),getErr(status).c_str());
+}
+
+void MBD::transCommit( isc_tr_handle *trans )
+{
+    ISC_STATUS_ARRAY status;
+    
+    ResAlloc res(conn_res,true);
+    if( !trans || !(*trans) )	return;
+    if( isc_commit_transaction(status, trans) )
+	throw TError(TSYS::DBRequest,nodePath().c_str(),_("DSQL close transaction error: %s"),getErr(status).c_str());
+    *trans = NULL;
+}
+
 void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
+{
+    sqlReq(NULL,ireq,tbl);
+}
+
+void MBD::sqlReq( isc_tr_handle *itrans, const string &ireq, vector< vector<string> > *tbl )
 {    
     if( tbl ) tbl->clear();
     if(!enableStat())	return; 
@@ -258,7 +284,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
     char    *dtBuf = NULL;
     int      dtBufLen = 0;
     isc_stmt_handle stmt = NULL;
-    isc_tr_handle trans = NULL;
+    isc_tr_handle trans = (itrans && *itrans) ? (*itrans) : NULL;
     ISC_STATUS_ARRAY status;       
 
     try
@@ -266,7 +292,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
     	//- Prepare statement -
     	if( isc_dsql_allocate_statement(status, &hdb, &stmt) )
     	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("Allocate statement error: %s"),getErr(status).c_str());
-    	if( isc_start_transaction(status, &trans, 1, &hdb, 0, NULL) )
+    	if( !trans && isc_start_transaction(status, &trans, 1, &hdb, 0, NULL) )
     	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("Start trasaction error: %s"),getErr(status).c_str());
     	//- Prepare output data structure -
     	if( isc_dsql_prepare(status, &trans, &stmt, 0, Mess->codeConvOut(cd_pg.c_str(),ireq).c_str(), 3, NULL) )
@@ -385,15 +411,15 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
 	    stmt = NULL;
     	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("DSQL free statement error: %s"),getErr(status).c_str());
 	}
-    	if( isc_commit_transaction(status, &trans) )
+    	if( (!itrans || !(*itrans)) && isc_commit_transaction(status, &trans) )
 	{
 	    stmt = trans = NULL;
     	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("DSQL close transaction error: %s"),getErr(status).c_str());
 	}
     }catch(...)
     {
-	if( stmt ) 	isc_dsql_free_statement(status, &stmt, DSQL_drop);
-	if( trans )	isc_commit_transaction(status, &trans);
+	if( stmt ) isc_dsql_free_statement(status, &stmt, DSQL_drop);
+	if( trans && (!itrans || !(*itrans)) )	isc_commit_transaction(status, &trans);
 	free(out_sqlda);
 	if(dtBuf) free(dtBuf);
 	throw;
@@ -413,7 +439,7 @@ string MBD::clrEndSpace( const string &vl )
 //************************************************
 //* FireBird::Table                              *
 //************************************************
-MTable::MTable(string inm, MBD *iown, bool create ) : TTable(inm)
+MTable::MTable(string inm, MBD *iown, bool create ) : TTable(inm), trans(NULL)
 {
     setNodePrev(iown);    
     
@@ -437,10 +463,12 @@ MTable::~MTable(  )
 }
 
 void MTable::postDisable(int flag)
-{
+{    
+    owner().transCommit(&trans);
     if( flag )
     {	
-	try{ owner().sqlReq("DROP TABLE \""+mod->sqlReqCode(name(),'"')+"\""); }
+	try
+	{ owner().sqlReq("DROP TABLE \""+mod->sqlReqCode(name(),'"')+"\""); }
 	catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
     }
 }
@@ -448,6 +476,7 @@ void MTable::postDisable(int flag)
 void MTable::getStructDB( vector< vector<string> > &tblStrct )
 {
     //- Get generic data structure -
+    owner().transCommit(&trans);
     owner().sqlReq("SELECT R.RDB$FIELD_NAME, F.RDB$FIELD_TYPE, F.RDB$FIELD_LENGTH "
 	"FROM RDB$FIELDS F, RDB$RELATION_FIELDS R where F.RDB$FIELD_NAME = R.RDB$FIELD_SOURCE and "
 	"R.RDB$SYSTEM_FLAG = 0 and R.RDB$RELATION_NAME = '"+mod->sqlReqCode(name())+"'",&tblStrct);
@@ -455,7 +484,7 @@ void MTable::getStructDB( vector< vector<string> > &tblStrct )
     {
 	//- Get keys -
 	vector< vector<string> > keyLst;
-	owner().sqlReq("SELECT I.RDB$FIELD_NAME, C.RDB$CONSTRAINT_TYPE "
+	owner().sqlReq(&trans,"SELECT I.RDB$FIELD_NAME, C.RDB$CONSTRAINT_TYPE "
 	    "FROM RDB$RELATION_CONSTRAINTS C, RDB$INDEX_SEGMENTS I "
 	    "WHERE C.RDB$INDEX_NAME = I.RDB$INDEX_NAME AND C.RDB$RELATION_NAME = '"+
 	    mod->sqlReqCode(name())+"'",&keyLst);
@@ -498,7 +527,8 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
     vector< vector<string> > tbl;
     
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty."));
-    
+
+    owner().transCommit(&trans);
     //- Make WHERE -
     string req = "SELECT FIRST 1 SKIP "+TSYS::int2str(row)+" ";
     string req_where = "WHERE ";
@@ -552,6 +582,7 @@ void MTable::fieldGet( TConfig &cfg )
     
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty."));
 
+    owner().transCommit(&trans);
     //- Prepare request -
     string req = "SELECT ";
     string req_where;
@@ -602,7 +633,8 @@ void MTable::fieldSet( TConfig &cfg )
     vector< vector<string> > tbl;
         
     if( tblStrct.empty() ) fieldFix(cfg);
-    
+
+    owner().transOpen(&trans);
     //- Get config fields list -
     vector<string> cf_el;
     cfg.cfgList(cf_el);    
@@ -648,7 +680,7 @@ void MTable::fieldSet( TConfig &cfg )
 	ins_value=ins_value+"'"+mod->sqlReqCode(val)+"' ";
     }
     reqi = reqi + "("+ins_name+") VALUES ("+ins_value+")";
-    try{ owner().sqlReq( reqi ); }
+    try{ owner().sqlReq( &trans, reqi ); }
     catch(TError err)
     {
 	//-- Update present record --
@@ -671,12 +703,12 @@ void MTable::fieldSet( TConfig &cfg )
 	    requ=requ+"\""+mod->sqlReqCode(cf_el[i_el],'"')+"\"='"+mod->sqlReqCode(val)+"' ";
 	}
     	requ = requ + req_where;
-    	try{ owner().sqlReq( requ ); }
+    	try{ owner().sqlReq( &trans, requ ); }
     	catch( TError err )	
 	{ 
 	    fieldFix(cfg);
-	    try{ owner().sqlReq( reqi ); }
-	    catch(TError err)	{ owner().sqlReq( requ ); }
+	    try{ owner().sqlReq( &trans, reqi ); }
+	    catch(TError err)	{ owner().sqlReq( &trans, requ ); }
 	}
     }
 }
@@ -685,6 +717,7 @@ void MTable::fieldDel( TConfig &cfg )
 {
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty."));
 
+    owner().transOpen(&trans);
     //- Get config fields list -
     vector<string> cf_el;
     cfg.cfgList(cf_el);    
@@ -703,12 +736,14 @@ void MTable::fieldDel( TConfig &cfg )
 		         mod->sqlReqCode(u_cfg.getS())+"' ";
 	}
     }
-    owner().sqlReq( req );
+    owner().sqlReq( &trans, req );
 }
 
 void MTable::fieldFix( TConfig &cfg )
 {
     bool next = false, next_key = false;
+
+    owner().transCommit(&trans);	
     
     //- Get config fields list -
     vector<string> cf_el;
@@ -786,4 +821,6 @@ void MTable::fieldFix( TConfig &cfg )
         owner().sqlReq( req );
 	getStructDB( tblStrct );
     }
+
+    owner().transOpen(&trans);
 }    

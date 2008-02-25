@@ -3,16 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: arch.cpp:60 mess.cpp:59 mess.cpp:79 mess.cpp:121 mess.cpp:134 mess.cpp:145
-#: mess.cpp:163 mess.cpp:183 val.cpp:109 val.cpp:133 val.cpp:162 val.cpp:178
-#: val.cpp:191 val.cpp:215 val.cpp:237 val.cpp:259 val.cpp:281 val.cpp:314
-#: val.cpp:328 val.cpp:340 mess.h:48
+#: arch.cpp:52 mess.cpp:59 mess.cpp:79 mess.cpp:157 mess.cpp:175 mess.cpp:195
+#: val.cpp:109 val.cpp:140 val.cpp:169 val.cpp:185 val.cpp:198 val.cpp:222
+#: val.cpp:244 val.cpp:266 val.cpp:288 val.cpp:349 mess.h:48
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.DBArch 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-21 22:40+0300\n"
+"POT-Creation-Date: 2008-02-25 10:47+0200\n"
 "PO-Revision-Date: 2007-10-21 22:40+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -32,7 +31,7 @@ msgid "Archive"
 msgstr "Архив"
 
 #: arch.cpp:39
-msgid "0.1.0"
+msgid "0.5.0"
 msgstr ""
 
 #: arch.cpp:40
@@ -43,8 +42,8 @@ msgstr "Роман Савоченко"
 msgid ""
 "The Archive module. Allow functions for messages and values arhiving to DB."
 msgstr ""
-"Модуль архива. Предоставляет функции архивирования сообщений и "
-"значений на БД."
+"Модуль архива. Предоставляет функции архивирования сообщений и значений на "
+"БД."
 
 #: arch.cpp:42
 msgid "GPL"
@@ -54,154 +53,154 @@ msgstr ""
 msgid "C"
 msgstr ""
 
-#: arch.cpp:98 arch.cpp:101 mess.cpp:39 mess.cpp:197 val.cpp:40 val.cpp:86
+#: arch.cpp:89 arch.cpp:92 mess.cpp:39 mess.cpp:209 val.cpp:40 val.cpp:86
 msgid "DBArchSize"
 msgstr ""
 
-#: arch.cpp:98 arch.cpp:101
+#: arch.cpp:89 arch.cpp:92
 msgid "Archive size (hours)"
 msgstr "Размер архива (часов)"
 
-#: arch.cpp:98 arch.cpp:101
-msgid "9999.5"
+#: arch.cpp:89 arch.cpp:92
+msgid "20.5"
 msgstr ""
 
-#: arch.cpp:98 arch.cpp:101
+#: arch.cpp:89 arch.cpp:92
 msgid "24"
 msgstr ""
 
-#: arch.cpp:104 mess.cpp:58 mess.cpp:78 mess.cpp:142 val.cpp:108 val.cpp:132
-#: val.cpp:336
+#: arch.cpp:95 mess.cpp:58 mess.cpp:78 mess.cpp:154 val.cpp:108 val.cpp:139
+#: val.cpp:345
 msgid "TBL"
 msgstr ""
 
-#: arch.cpp:104
+#: arch.cpp:95
 msgid "Table"
 msgstr "Таблица"
 
-#: arch.cpp:104
+#: arch.cpp:95
 msgid "50"
 msgstr ""
 
-#: arch.cpp:105 mess.cpp:81 mess.cpp:143 val.cpp:111 val.cpp:337
+#: arch.cpp:96 mess.cpp:81 mess.cpp:155 val.cpp:111 val.cpp:346
 msgid "BEGIN"
 msgstr ""
 
-#: arch.cpp:105
+#: arch.cpp:96
 msgid "Begin"
 msgstr "Начало"
 
-#: arch.cpp:105 arch.cpp:106 arch.cpp:107 arch.cpp:108 arch.cpp:109
+#: arch.cpp:96 arch.cpp:97 arch.cpp:98 arch.cpp:99 arch.cpp:100
 msgid "20"
 msgstr ""
 
-#: arch.cpp:106 mess.cpp:82 mess.cpp:144 val.cpp:112 val.cpp:338
+#: arch.cpp:97 mess.cpp:82 mess.cpp:156 val.cpp:112 val.cpp:347
 msgid "END"
 msgstr ""
 
-#: arch.cpp:106
+#: arch.cpp:97
 msgid "End"
 msgstr "Конец"
 
-#: arch.cpp:107 val.cpp:113 val.cpp:339
+#: arch.cpp:98 val.cpp:113 val.cpp:348
 msgid "PRM1"
 msgstr ""
 
-#: arch.cpp:107
+#: arch.cpp:98
 msgid "Parameter 1"
 msgstr "Параметр 1"
 
-#: arch.cpp:108
+#: arch.cpp:99
 msgid "PRM2"
 msgstr ""
 
-#: arch.cpp:108
+#: arch.cpp:99
 msgid "Parameter 2"
 msgstr "Параметр 2"
 
-#: arch.cpp:109
+#: arch.cpp:100
 msgid "PRM3"
 msgstr ""
 
-#: arch.cpp:109
+#: arch.cpp:100
 msgid "Parameter 3"
 msgstr "Параметр 3"
 
-#: arch.cpp:112 arch.cpp:118 arch.cpp:123 arch.cpp:128 mess.cpp:117
-#: mess.cpp:133 mess.cpp:162 val.cpp:160 val.cpp:176 val.cpp:189 val.cpp:213
-#: val.cpp:235 val.cpp:257 val.cpp:279 val.cpp:312 val.cpp:326
+#: arch.cpp:103 arch.cpp:109 arch.cpp:114 arch.cpp:119 mess.cpp:127
+#: mess.cpp:143 mess.cpp:174 val.cpp:167 val.cpp:183 val.cpp:196 val.cpp:220
+#: val.cpp:242 val.cpp:264 val.cpp:286 val.cpp:319 val.cpp:333
 msgid "TM"
 msgstr ""
 
-#: arch.cpp:112 arch.cpp:118 arch.cpp:123 arch.cpp:128
+#: arch.cpp:103 arch.cpp:109 arch.cpp:114 arch.cpp:119
 msgid "Time (c)"
 msgstr "Время (с)"
 
-#: arch.cpp:112 arch.cpp:118 arch.cpp:119 arch.cpp:120 arch.cpp:123
-#: arch.cpp:124 arch.cpp:128 arch.cpp:129
+#: arch.cpp:103 arch.cpp:109 arch.cpp:110 arch.cpp:111 arch.cpp:114
+#: arch.cpp:115 arch.cpp:119 arch.cpp:120
 msgid "10"
 msgstr ""
 
-#: arch.cpp:113 mess.cpp:118 mess.cpp:165 mess.cpp:183
+#: arch.cpp:104 mess.cpp:128 mess.cpp:177 mess.cpp:195
 msgid "CATEG"
 msgstr ""
 
-#: arch.cpp:113
+#: arch.cpp:104
 msgid "Category"
 msgstr "Категория"
 
-#: arch.cpp:113
+#: arch.cpp:104
 msgid "100"
 msgstr ""
 
-#: arch.cpp:114 mess.cpp:119 mess.cpp:165 mess.cpp:183
+#: arch.cpp:105 mess.cpp:129 mess.cpp:177 mess.cpp:195
 msgid "MESS"
 msgstr ""
 
-#: arch.cpp:114
+#: arch.cpp:105
 msgid "Message"
 msgstr "Сообщение"
 
-#: arch.cpp:114 arch.cpp:130
+#: arch.cpp:105 arch.cpp:121
 msgid "255"
 msgstr ""
 
-#: arch.cpp:115 mess.cpp:120 mess.cpp:165
+#: arch.cpp:106 mess.cpp:130 mess.cpp:177
 msgid "LEV"
 msgstr ""
 
-#: arch.cpp:115
+#: arch.cpp:106
 msgid "Level"
 msgstr "Уровень"
 
-#: arch.cpp:115
+#: arch.cpp:106
 msgid "1"
 msgstr ""
 
-#: arch.cpp:119 arch.cpp:124 arch.cpp:129 val.cpp:161 val.cpp:177 val.cpp:190
-#: val.cpp:214 val.cpp:236 val.cpp:258 val.cpp:280 val.cpp:313 val.cpp:327
+#: arch.cpp:110 arch.cpp:115 arch.cpp:120 val.cpp:168 val.cpp:184 val.cpp:197
+#: val.cpp:221 val.cpp:243 val.cpp:265 val.cpp:287 val.cpp:320 val.cpp:334
 msgid "TMU"
 msgstr ""
 
-#: arch.cpp:119 arch.cpp:124 arch.cpp:129
+#: arch.cpp:110 arch.cpp:115 arch.cpp:120
 msgid "Time (uc)"
 msgstr "Время (мкс)"
 
-#: arch.cpp:120 arch.cpp:125 arch.cpp:130 val.cpp:164 val.cpp:165 val.cpp:179
-#: val.cpp:192 val.cpp:216 val.cpp:238 val.cpp:260 val.cpp:282 val.cpp:306
-#: val.cpp:307 val.cpp:308 val.cpp:309
+#: arch.cpp:111 arch.cpp:116 arch.cpp:121 val.cpp:171 val.cpp:172 val.cpp:186
+#: val.cpp:199 val.cpp:223 val.cpp:245 val.cpp:267 val.cpp:289 val.cpp:313
+#: val.cpp:314 val.cpp:315 val.cpp:316
 msgid "VAL"
 msgstr ""
 
-#: arch.cpp:120 arch.cpp:125 arch.cpp:130
+#: arch.cpp:111 arch.cpp:116 arch.cpp:121
 msgid "Value"
 msgstr "Значение"
 
-#: arch.cpp:125
+#: arch.cpp:116
 msgid "30.15"
 msgstr ""
 
-#: arch.cpp:144
+#: arch.cpp:135
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
@@ -212,64 +211,64 @@ msgstr ""
 "-------- Параметры модульной секции <%s> в конфигурационном файле --------\n"
 "\n"
 
-#: arch.cpp:155
+#: arch.cpp:146
 msgid "h"
 msgstr ""
 
-#: arch.cpp:158
+#: arch.cpp:149
 msgid "help"
 msgstr ""
 
-#: arch.cpp:198 mess.cpp:192 val.cpp:82
+#: arch.cpp:189 mess.cpp:204 val.cpp:82
 msgid "info"
 msgstr ""
 
-#: arch.cpp:201 mess.cpp:195 mess.cpp:197 val.cpp:86
+#: arch.cpp:192 mess.cpp:207 mess.cpp:209 val.cpp:86
 msgid "fld"
 msgstr ""
 
-#: arch.cpp:201 arch.cpp:207
+#: arch.cpp:192 arch.cpp:198
 msgid "/help/g_help"
 msgstr ""
 
-#: arch.cpp:201
+#: arch.cpp:192
 msgid "Options help"
 msgstr "Помощь по опциям"
 
-#: arch.cpp:201 mess.cpp:195 mess.cpp:196 mess.cpp:197 mess.cpp:206
-#: mess.cpp:207 val.cpp:85 val.cpp:86 val.cpp:94 val.cpp:95
+#: arch.cpp:192 mess.cpp:207 mess.cpp:208 mess.cpp:209 mess.cpp:218
+#: mess.cpp:219 val.cpp:85 val.cpp:86 val.cpp:94 val.cpp:95
 msgid "root"
 msgstr ""
 
-#: arch.cpp:201 mess.cpp:195 mess.cpp:197 val.cpp:86
+#: arch.cpp:192 mess.cpp:207 mess.cpp:209 val.cpp:86
 msgid "tp"
 msgstr ""
 
-#: arch.cpp:201
+#: arch.cpp:192
 msgid "str"
 msgstr ""
 
-#: arch.cpp:201
+#: arch.cpp:192
 msgid "cols"
 msgstr ""
 
-#: arch.cpp:201
+#: arch.cpp:192
 msgid "90"
 msgstr ""
 
-#: arch.cpp:201
+#: arch.cpp:192
 msgid "rows"
 msgstr ""
 
-#: arch.cpp:201
+#: arch.cpp:192
 msgid "5"
 msgstr ""
 
-#: arch.cpp:206 mess.cpp:202 val.cpp:91
+#: arch.cpp:197 mess.cpp:214 val.cpp:91
 msgid "path"
 msgstr ""
 
-#: arch.cpp:207 mess.cpp:206 val.cpp:94
+#: arch.cpp:198 mess.cpp:218 val.cpp:94
 msgid "get"
 msgstr ""
 
@@ -277,10 +276,11 @@ msgstr ""
 msgid "*.*"
 msgstr ""
 
-#: mess.cpp:59 mess.cpp:62 mess.cpp:63 mess.cpp:79 mess.cpp:121 mess.cpp:134
-#: mess.cpp:145 mess.cpp:163 val.cpp:109 val.cpp:133 val.cpp:136 val.cpp:137
-#: val.cpp:162 val.cpp:178 val.cpp:191 val.cpp:215 val.cpp:237 val.cpp:259
-#: val.cpp:281 val.cpp:314 val.cpp:328 val.cpp:340
+#: mess.cpp:59 mess.cpp:62 mess.cpp:63 mess.cpp:79 mess.cpp:86 mess.cpp:87
+#: mess.cpp:117 mess.cpp:149 mess.cpp:157 mess.cpp:175 val.cpp:109 val.cpp:117
+#: val.cpp:118 val.cpp:140 val.cpp:143 val.cpp:144 val.cpp:169 val.cpp:185
+#: val.cpp:198 val.cpp:222 val.cpp:244 val.cpp:266 val.cpp:288 val.cpp:306
+#: val.cpp:340 val.cpp:349
 msgid "."
 msgstr ""
 
@@ -289,47 +289,47 @@ msgstr ""
 msgid "%s"
 msgstr ""
 
-#: mess.cpp:108 mess.cpp:152
+#: mess.cpp:115 mess.cpp:164
 msgid "Archive no started!"
 msgstr "Архив не запущен!"
 
-#: mess.cpp:195 mess.cpp:203
+#: mess.cpp:207 mess.cpp:215
 msgid "/prm/st/tarch"
 msgstr ""
 
-#: mess.cpp:195
+#: mess.cpp:207
 msgid "Archiving time (msek)"
 msgstr "Время архивирования (мс)"
 
-#: mess.cpp:195 mess.cpp:197 val.cpp:86
+#: mess.cpp:207 mess.cpp:209 val.cpp:86
 msgid "real"
 msgstr ""
 
-#: mess.cpp:196 val.cpp:85
+#: mess.cpp:208 val.cpp:85
 msgid "area"
 msgstr ""
 
-#: mess.cpp:196 val.cpp:85
+#: mess.cpp:208 val.cpp:85
 msgid "/bs"
 msgstr ""
 
-#: mess.cpp:196 val.cpp:85
+#: mess.cpp:208 val.cpp:85
 msgid "Additional options"
 msgstr "Дополнительные опции"
 
-#: mess.cpp:197 mess.cpp:204 val.cpp:86 val.cpp:92
+#: mess.cpp:209 mess.cpp:216 val.cpp:86 val.cpp:92
 msgid "/bs/sz"
 msgstr ""
 
-#: mess.cpp:207 val.cpp:95
+#: mess.cpp:219 val.cpp:95
 msgid "set"
 msgstr ""
 
-#: val.cpp:125
+#: val.cpp:132
 msgid "DBAVl_"
 msgstr ""
 
-#: val.cpp:125
+#: val.cpp:132
 msgid "_"
 msgstr ""
 

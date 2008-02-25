@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.LogicLev 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-29 09:45+0200\n"
+"POT-Creation-Date: 2008-02-25 11:35+0200\n"
 "PO-Revision-Date: 2007-10-29 09:45+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -31,7 +31,7 @@ msgid "DAQ"
 msgstr ""
 
 #: logiclev.cpp:43
-msgid "0.5.0"
+msgid "0.9.0"
 msgstr ""
 
 #: logiclev.cpp:44
@@ -434,4 +434,3 @@ msgstr "Параметр не имеет ни одного атрибута!"
 #, c-format
 msgid "Parameter have not atributes: %s !"
 msgstr "Параметр не имеет атрибутов: %s !"
-

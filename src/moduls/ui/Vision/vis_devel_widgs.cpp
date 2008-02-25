@@ -1235,6 +1235,9 @@ void WdgTree::ctrTreePopup( )
     popup.addAction(owner()->actVisItProp);
     popup.addAction(owner()->actVisItEdit);
     popup.addSeparator();
+    popup.addAction(owner()->actVisItCopy);
+    popup.addAction(owner()->actVisItPaste);
+    popup.addSeparator();    
     popup.addAction(owner()->actDBLoad);
     popup.addAction(owner()->actDBSave);
     popup.addSeparator();
@@ -1457,7 +1460,10 @@ void ProjTree::ctrTreePopup( )
     popup.addAction(owner()->actVisItAdd);
     popup.addAction(owner()->actVisItDel);
     popup.addAction(owner()->actVisItProp);
-    popup.addAction(owner()->actVisItEdit);    
+    popup.addAction(owner()->actVisItEdit);
+    popup.addSeparator();    
+    popup.addAction(owner()->actVisItCopy);
+    popup.addAction(owner()->actVisItPaste);
     popup.addSeparator();
     popup.addAction(owner()->actDBLoad);
     popup.addAction(owner()->actDBSave);
@@ -1870,7 +1876,7 @@ void DevelWdgView::wdgPopup( )
 	    popup.addMenu(mainWin()->mn_widg_fnc);
 	}
 	//-- Make edit enter action --
-	popup.addSeparator();
+	popup.addSeparator();	
 	if( (sel_wdgs.size() == 1 && sel_wdgs[0]->shape && sel_wdgs[0]->shape->isEditable()) || (shape && shape->isEditable()) )
 	{
 	    QAction *actEnterEdit = new QAction(_("Enter for widget editing"),this);
@@ -1883,6 +1889,9 @@ void DevelWdgView::wdgPopup( )
 	actMakeIco->setStatusTip(_("Press for make icon from widget."));
 	connect(actMakeIco, SIGNAL(activated()), this, SLOT(makeIcon()));
 	popup.addAction(actMakeIco);
+	popup.addSeparator();		
+	popup.addAction(mainWin()->actVisItCopy);
+    	popup.addAction(mainWin()->actVisItPaste);
     }
 
     //- Execute of menu -
@@ -2240,19 +2249,23 @@ bool DevelWdgView::event( QEvent *event )
 		    {
 			vector<DevelWdgView*> lswdgs;
 			selectChilds(NULL,&lswdgs);
-			if( !lswdgs.size() )	
+			if( m_flgs&DevelWdgView::moveHoldMove )
 			{
-			    saveGeom(id().c_str());
-			    if( m_flgs&DevelWdgView::makeScale ) load("");
+			    if( !lswdgs.size() )	
+			    {
+				saveGeom(id().c_str());
+				if( m_flgs&DevelWdgView::makeScale ) load("");
+			    }
+			    else for( int i_w = 0; i_w < lswdgs.size(); i_w++ )
+			    {
+				saveGeom(lswdgs[i_w]->id());
+				if( m_flgs&DevelWdgView::makeScale ) lswdgs[i_w]->load("");
+			    }
 			}
-			else for( int i_w = 0; i_w < lswdgs.size(); i_w++ )
-			{
-			    saveGeom(lswdgs[i_w]->id());
-			    if( m_flgs&DevelWdgView::makeScale ) lswdgs[i_w]->load("");
-			}			
 			m_flgs &= ~DevelWdgView::makeScale;
-		    }
+		    }		    
 		    m_flgs &= ~DevelWdgView::moveHold;
+		    m_flgs &= ~DevelWdgView::moveHoldMove;
 	    	    return true;
 		}
      		break;
@@ -2331,6 +2344,7 @@ bool DevelWdgView::event( QEvent *event )
 		    wdgsMoveResize(curp-holdPnt);
 		    holdPnt = curp;		    
 		    if( m_flgs&DevelWdgView::holdChild )	update();
+		    m_flgs |= DevelWdgView::moveHoldMove;
 		    return true;
 		}
         	break;

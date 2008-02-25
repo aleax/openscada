@@ -403,7 +403,8 @@ class DevelWdgView: public WdgView
 	    moveHold  	= 0x08,	//Mouse move hold state
 	    holdChild 	= 0x10,	//Hold child widget in time of moving and resizing
 	    leftTop   	= 0x20,	//Left top anchors
-	    holdSelRect = 0x40	//Hold for select rect
+	    holdSelRect = 0x40,	//Hold for select rect
+	    moveHoldMove= 0x80	//Mouse move on hold
 	};
     
 	//Public methods

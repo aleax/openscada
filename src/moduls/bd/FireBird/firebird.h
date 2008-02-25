@@ -64,6 +64,7 @@ class MTable : public TTable
 	    
 	//Private attributes
 	vector< vector<string> > tblStrct;
+	isc_tr_handle 		trans;
 };
 
 //************************************************
@@ -82,7 +83,11 @@ class MBD : public TBD
 
 	void allowList( vector<string> &list );
 	void sqlReq( const string &req, vector< vector<string> > *tbl = NULL );
+	void sqlReq( isc_tr_handle *trans, const string &req, vector< vector<string> > *tbl = NULL );
 	string clrEndSpace( const string &vl );
+	
+	void transOpen( isc_tr_handle *trans );
+	void transCommit( isc_tr_handle *trans );
 	
     private:
 	//Private methods

@@ -76,7 +76,8 @@ class VisDevelop : public QMainWindow
     public slots:
 	//Public slots
 	void selectItem( const string &item );	//Update enabled actions state
-	void updateLibToolbar();		//Update lib's toolbars
+	void updateLibToolbar( );		//Update lib's toolbars
+	void editToolUpdate( );			//Edit tools visible update
 
         void quitSt( );		//Full quit OpenSCADA
 
@@ -95,6 +96,8 @@ class VisDevelop : public QMainWindow
 	void visualItDel( );	//Delete selected visual items
 	void visualItProp( );	//Visual item (widget, library, project or page) properties
         void visualItEdit( );	//Visual item graphical edit
+	void visualItCopy( );	//Visual item copy
+	void visualItPaste( );	//Visual item paste
 
     public:
 	//Public attributes
@@ -109,6 +112,8 @@ class VisDevelop : public QMainWindow
 		*actVisItDel,		//Delete visual item (library, widget, project or page)
 		*actVisItProp,		//Visual item (library, widget, project or page) properties
 		*actVisItEdit,		//Graphical edit of visual item (widget or page)
+		*actVisItCopy,		//Copy visual item
+		*actVisItPaste,		//Paste visual item
 	//-- Widget's ordering actions --
 		*actLevUp,		//Up widget level
 		*actLevDown,		//Down widget level
@@ -151,6 +156,7 @@ class VisDevelop : public QMainWindow
 
 	//- Menu root items -
 	QMenu 	*mn_file, 		//Menu "File"
+		*mn_edit,		//Menu "Edit"
 		*mn_proj, 		//Menu "Project"
 		*mn_widg, 		//Menu "Widget"
 		*mn_widg_fnc,		//Submenu "View functions"
@@ -176,7 +182,8 @@ class VisDevelop : public QMainWindow
 	QLabel		*w_stat;	//VCA engine station
 	WScaleStBar	*w_scale;	//Scale trigger
 	QTimer      	*endRunTimer, *work_wdgTimer;
-	string		work_wdg, work_wdg_new;	//Work widget
+	string		work_wdg, work_wdg_new,	//Work widget
+			copy_buf;	//Copy buffer
 	QSignalMapper 	*wMapper;	//Internal window mapper
 	string		m_stat;		//Station
 

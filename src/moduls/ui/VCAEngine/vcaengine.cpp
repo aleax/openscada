@@ -435,16 +435,10 @@ void Engine::copy( const string &cp_sel, const string &cp_del )
     string s_elp, d_elp, s_el, d_el, t_el;
     int n_sel = 0;
     int n_del = 0;
-    for( int off = 0; !(t_el=TSYS::strSepParse(cp_sel,0,'.',&off)).empty(); n_sel++ )
-    {
-	s_elp = (s_elp.size() ? (s_elp+"."+s_el) : s_el);    
-	s_el = t_el;
-    }
-    for( int off = 0; !(t_el=TSYS::strSepParse(cp_del,0,'.',&off)).empty(); n_del++ )
-    {
-	d_elp = (d_elp.size() ? (d_elp+"."+d_el) : d_el);
-	d_el = t_el;
-    }
+    for( int off = 0; !(t_el=TSYS::pathLev(cp_sel,0,true,&off)).empty(); n_sel++ )
+    { s_elp += ("/"+s_el); s_el = t_el; }
+    for( int off = 0; !(t_el=TSYS::pathLev(cp_del,0,true,&off)).empty(); n_del++ )
+    { d_elp += ("/"+d_el); d_el = t_el; }
     
     if( !n_sel || !n_del ) throw TError(nodePath().c_str(),_("Destination or source path empty!"));
     //- Project to project copy -
@@ -462,15 +456,15 @@ void Engine::copy( const string &cp_sel, const string &cp_del )
     //- Visual items copy -
     else if( (s_el.substr(0,3) == "pg_" && d_el.substr(0,3) == "pg_") || d_el.substr(0,4) == "wdg_" )
     {
-        if( n_del == 2 && d_el.substr(0,3) == "pg_" && !prjAt(cp_del.substr(4)).at().present(d_el.substr(3)) )
-	    prjAt(cp_del.substr(4)).at().add(d_el.substr(3),"");
-        if( n_del > 2 && d_el.substr(0,3) == "pg_" && !((AutoHD<Page>)nodeAt(d_elp,0,'.')).at().pagePresent(d_el.substr(3)) )
-	    ((AutoHD<Page>)nodeAt(d_elp,0,'.')).at().pageAdd(d_el.substr(3),"");
-	if( n_del == 2 && d_el.substr(0,4) == "wdg_" && !wlbAt(d_elp.substr(4)).at().present(d_el.substr(4)) )
-	    wlbAt(d_elp.substr(4)).at().add(d_el.substr(4),"");
-	if( n_del > 2 && d_el.substr(0,4) == "wdg_" && !((AutoHD<Widget>)nodeAt(d_elp,0,'.')).at().wdgPresent(d_el.substr(4)) )
-    	    ((AutoHD<Widget>)nodeAt(d_elp,0,'.')).at().wdgAdd(d_el.substr(4),"","");
-	((AutoHD<Widget>)nodeAt(cp_del,0,'.')).at() = ((AutoHD<Widget>)nodeAt(cp_sel,0,'.')).at();
+        if( n_del == 2 && d_el.substr(0,3) == "pg_" && !prjAt(TSYS::pathLev(d_elp,0).substr(4)).at().present(d_el.substr(3)) )
+	    prjAt(TSYS::pathLev(d_elp,0).substr(4)).at().add(d_el.substr(3),"");
+        if( n_del > 2 && d_el.substr(0,3) == "pg_" && !((AutoHD<Page>)nodeAt(d_elp)).at().pagePresent(d_el.substr(3)) )
+	    ((AutoHD<Page>)nodeAt(d_elp)).at().pageAdd(d_el.substr(3),"");
+	if( n_del == 2 && d_el.substr(0,4) == "wdg_" && !wlbAt(TSYS::pathLev(d_elp,0).substr(4)).at().present(d_el.substr(4)) )
+	    wlbAt(TSYS::pathLev(d_elp,0).substr(4)).at().add(d_el.substr(4),"");
+	if( n_del > 2 && d_el.substr(0,4) == "wdg_" && !((AutoHD<Widget>)nodeAt(d_elp)).at().wdgPresent(d_el.substr(4)) )
+    	    ((AutoHD<Widget>)nodeAt(d_elp)).at().wdgAdd(d_el.substr(4),"","");
+	((AutoHD<Widget>)nodeAt(cp_del)).at() = ((AutoHD<Widget>)nodeAt(cp_sel)).at();
     }
     else throw TError(nodePath().c_str(),_("Impossible for copy '%s' to '%s'."),cp_sel.c_str(),cp_del.c_str());
 }
@@ -591,25 +585,25 @@ void Engine::cntrCmdProc( XMLNode *opt )
         vector<string> list;
         int c_lv = 0;
         string c_path = "", c_el;
-        for( int c_off = 0; (c_el=TSYS::strSepParse((a_path=="/prm/cfg/cp/sells")?cp_sel:cp_del,0,'.',&c_off)).size(); c_lv++ )
+        for( int c_off = 0; (c_el=TSYS::pathLev((a_path=="/prm/cfg/cp/sells")?cp_sel:cp_del,0,true,&c_off)).size(); c_lv++ )
         {
             opt->childAdd("el")->setText(c_path);
-            c_path += c_lv ? "."+c_el : c_el;
+            c_path += ("/"+c_el);
         }
         opt->childAdd("el")->setText(c_path);
-        if( c_lv != 0 ) c_path += ".";
-	string cnt_tp = TSYS::strSepParse(c_path,0,'.').substr(0,3);
+	string cnt_tp = TSYS::pathLev(c_path,0).substr(0,3);
 	if( !(c_lv >= 3 && (cnt_tp == "wlb" || 
-			   (cnt_tp == "prj" && TSYS::strSepParse(c_path,c_lv-1,'.').substr(0,3) == "wdg" && 
-					      TSYS::strSepParse(c_path,c_lv-1,'.').substr(0,2) == "pg")) ) )
+			   (cnt_tp == "prj" && TSYS::pathLev(c_path,c_lv-1).substr(0,3) == "wdg" && 
+					       TSYS::pathLev(c_path,c_lv-1).substr(0,2) == "pg")) ) )
 	{
-    	    try{ nodeAt(c_path,0,'.').at().nodeList(list); } catch(...) { }
+    	    try{ nodeAt(c_path).at().nodeList(list); } catch(...) { }
 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
 		if( list[i_a].substr(0,2) != "a_" )
-    		    opt->childAdd("el")->setText(c_path+list[i_a]);
+    		    opt->childAdd("el")->setText(c_path+"/"+list[i_a]);
 	}
     }
-    else if( a_path == "/prm/cfg/cp/cp" && ctrChkNode(opt,"set",0660,"root","UI",SEQ_WR) )	copy( cp_sel, cp_del );
+    else if( a_path == "/prm/cfg/cp/cp" && ctrChkNode(opt,"set",0660,"root","UI",SEQ_WR) )
+	copy( opt->attr("src").empty() ? cp_sel : opt->attr("src"), opt->attr("dst").empty() ? cp_del : opt->attr("dst") );
     else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0660,"root","UI",SEQ_WR) )	modLoad();
     else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0660,"root","UI",SEQ_WR) )	modSave();
     else if( a_path == "/ses/ses" )

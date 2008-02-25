@@ -1,3 +1,16 @@
+2008-02-25 Roman
+- !!:/SYS: The source tree version changed to 0.6.1.
+- FIX:/SYS/ControlNode: Exception process on call function TCntrNode::postDisable() is added.
+- FIX:/ModSched: Control modules libraries object SHD storing is rewrited.
+- !!:/SYS and all modules: Translation to Russian and Ukranian is updated.
+- !!:/DB/FireBird: Transaction control is added. Rise performance of group modify operations.
+- !!:/DAQ/ModBus: Block mode acquisition support is added.
+- /UI/VCAEngine: Copy source and destination path changed to view: /prj_Proj/pg_Pg/pg_Pg1.
+- !!/UI/Vision: Visual items copy support is added.
+- FIX:/UI/Vision: Save widget on simple it select, on developming, is fixed.
+- FIX:/UI/Vision: Self context menu disabled for primitive "FormEl" on development mode.
+
+
 2008-02-22 Roman
 - /Archive: Current time tracing is added for archive data access.
 - FIX:/Archive: Archivators start is fixed. Terminate starting if one archivator error.

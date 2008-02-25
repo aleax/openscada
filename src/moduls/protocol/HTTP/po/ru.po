@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: http.cpp:58 http.cpp:175 http.h:53
+#: http.cpp:50 http.cpp:165 http.h:53
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.HTTP 1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-23 18:02+0300\n"
+"POT-Creation-Date: 2008-02-25 11:58+0200\n"
 "PO-Revision-Date: 2007-10-23 18:02+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -49,7 +49,7 @@ msgstr ""
 msgid "C"
 msgstr ""
 
-#: http.cpp:99
+#: http.cpp:89
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
@@ -60,32 +60,32 @@ msgstr ""
 "------- Параметры модульной секции <%s> в конфигурационном файле ---------\n"
 "\n"
 
-#: http.cpp:110
+#: http.cpp:100
 msgid "h"
 msgstr ""
 
-#: http.cpp:113
+#: http.cpp:103
 msgid "help"
 msgstr ""
 
-#: http.cpp:151
+#: http.cpp:141
 msgid "HTTP/1.0 "
 msgstr ""
 
-#: http.cpp:151
+#: http.cpp:141
 msgid ""
 "\n"
 "Server: "
 msgstr ""
 
-#: http.cpp:152
+#: http.cpp:142
 msgid ""
 "\n"
 "Accept-Ranges: bytes\n"
 "Content-Length: "
 msgstr ""
 
-#: http.cpp:154
+#: http.cpp:144
 msgid ""
 "\n"
 "Connection: close\n"
@@ -93,44 +93,27 @@ msgid ""
 "Charset="
 msgstr ""
 
-#: http.cpp:157 http.cpp:183 http.cpp:191 http.cpp:192 http.cpp:209
-#: http.cpp:210
+#: http.cpp:147
 msgid "\n"
 msgstr ""
 
-#: http.cpp:195
-msgid ":"
+#: http.cpp:187
+msgid "content-length"
 msgstr ""
 
-#: http.cpp:198
-msgid "Content-Type"
-msgstr ""
-
-#: http.cpp:202
-msgid "boundary="
-msgstr ""
-
-#: http.cpp:205
-msgid "Content-Length"
-msgstr ""
-
-#: http.cpp:205
-msgid "Content-length"
-msgstr ""
-
-#: http.cpp:220 http.cpp:257
+#: http.cpp:192 http.cpp:230
 msgid "POST"
 msgstr ""
 
-#: http.cpp:224
+#: http.cpp:196
 msgid "HTTP/1.0"
 msgstr ""
 
-#: http.cpp:224
+#: http.cpp:196
 msgid "HTTP/1.1"
 msgstr ""
 
-#: http.cpp:226
+#: http.cpp:198
 msgid ""
 "<html>\n"
 " <body>\n"
@@ -140,41 +123,41 @@ msgid ""
 "</html>\n"
 msgstr ""
 
-#: http.cpp:232
+#: http.cpp:204
 msgid "400 Bad Request"
 msgstr "400 Плохой запрос"
 
-#: http.cpp:236 http.cpp:245 http.cpp:246
+#: http.cpp:212
 msgid "/"
 msgstr ""
 
-#: http.cpp:241 http.cpp:317
+#: http.cpp:217 http.cpp:290
 msgid "SubType"
 msgstr ""
 
-#: http.cpp:241 http.cpp:317
+#: http.cpp:217 http.cpp:290
 msgid "WWW"
 msgstr ""
 
-#: http.cpp:242
+#: http.cpp:218
 msgid "Find no WWW subtype module!"
 msgstr "Не найдено модулей с подтипом WWW"
 
-#: http.cpp:248
+#: http.cpp:221
 msgid "GET"
 msgstr ""
 
-#: http.cpp:251
+#: http.cpp:224
 msgid "void HttpGet(const string&,string&,const string&,vector<string>&);"
 msgstr ""
 
-#: http.cpp:260
+#: http.cpp:233
 msgid ""
 "void HttpPost(const string&,string&,const string&,vector<string>&,const "
 "string&);"
 msgstr ""
 
-#: http.cpp:268
+#: http.cpp:241
 msgid ""
 "<html>\n"
 " <body>\n"
@@ -182,18 +165,18 @@ msgid ""
 "  <p>The method "
 msgstr ""
 
-#: http.cpp:271
+#: http.cpp:244
 msgid ""
 " is not implemented by this server.</p>\n"
 " </body>\n"
 "</html>\n"
 msgstr ""
 
-#: http.cpp:274
+#: http.cpp:247
 msgid "501 Method Not Implemented"
 msgstr "501 Метод не реализован"
 
-#: http.cpp:286
+#: http.cpp:259
 msgid ""
 "<?xml version='1.0' ?>\n"
 "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
@@ -203,17 +186,17 @@ msgid ""
 "<meta http-equiv='Content-Type' content='text/html; charset="
 msgstr ""
 
-#: http.cpp:290
+#: http.cpp:263
 msgid ""
 "'/>\n"
 "<title>"
 msgstr ""
 
-#: http.cpp:291
+#: http.cpp:264
 msgid "!"
 msgstr ""
 
-#: http.cpp:291
+#: http.cpp:264
 msgid ""
 "</title>\n"
 "</head>\n"
@@ -222,7 +205,7 @@ msgid ""
 "<h1 align='center'><font color='#ffff00'>"
 msgstr ""
 
-#: http.cpp:294
+#: http.cpp:267
 #, c-format
 msgid ""
 "!</font></h1>\n"
@@ -230,7 +213,7 @@ msgid ""
 "<br/><br/>\n"
 msgstr ""
 
-#: http.cpp:301
+#: http.cpp:274
 #, c-format
 msgid ""
 "<hr width='100%' size='2'/>\n"
@@ -238,42 +221,42 @@ msgid ""
 "</html>\n"
 msgstr ""
 
-#: http.cpp:309
+#: http.cpp:282
 msgid ""
 "<table border='2' align='center' width='40%' bgcolor='#A9A9A9'>\n"
 "<tr bgcolor='#9999ff'><td><b>"
 msgstr ""
 
-#: http.cpp:310
+#: http.cpp:283
 msgid "Present web modules"
 msgstr "Доступные web-модули"
 
-#: http.cpp:310
+#: http.cpp:283
 msgid ""
 "</b></td></tr>\n"
 "<tr bgcolor='#cccccc'><td><ul>\n"
 msgstr ""
 
-#: http.cpp:318
+#: http.cpp:291
 msgid "<li><a href='"
 msgstr ""
 
-#: http.cpp:318
+#: http.cpp:291
 msgid "'>"
 msgstr ""
 
-#: http.cpp:318
+#: http.cpp:291
 msgid "Name"
 msgstr "Имя"
 
-#: http.cpp:318
+#: http.cpp:291
 msgid "</a></li>\n"
 msgstr ""
 
-#: http.cpp:320
+#: http.cpp:293
 msgid "</ul></td></tr></table>\n"
 msgstr ""
 
-#: http.cpp:321
+#: http.cpp:294
 msgid "200 OK"
 msgstr ""

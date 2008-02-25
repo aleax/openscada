@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.FLibSYS 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-24 18:37+0300\n"
+"POT-Creation-Date: 2008-02-25 12:02+0200\n"
 "PO-Revision-Date: 2007-10-24 18:37+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -47,78 +47,78 @@ msgid "LIB"
 msgstr ""
 
 #: statfunc.cpp:39
-msgid "0.3.0"
+msgid "0.5.0"
 msgstr ""
 
 #: statfunc.cpp:44
 msgid "C"
 msgstr ""
 
-#: statfunc.cpp:79 statfunc.cpp:245
+#: statfunc.cpp:79 statfunc.cpp:247
 msgid "fnc_"
 msgstr ""
 
-#: statfunc.cpp:241
+#: statfunc.cpp:243
 msgid "info"
 msgstr ""
 
-#: statfunc.cpp:244
+#: statfunc.cpp:246
 msgid "grp"
 msgstr ""
 
-#: statfunc.cpp:244
+#: statfunc.cpp:246
 msgid "/br/fnc_"
 msgstr ""
 
-#: statfunc.cpp:244
+#: statfunc.cpp:246
 msgid "Function"
 msgstr "Функція"
 
-#: statfunc.cpp:244 statfunc.cpp:245
+#: statfunc.cpp:246 statfunc.cpp:247
 msgid "root"
 msgstr ""
 
-#: statfunc.cpp:244 statfunc.cpp:245
+#: statfunc.cpp:246 statfunc.cpp:247
 msgid "list"
 msgstr ""
 
-#: statfunc.cpp:244 statfunc.cpp:245 statfunc.cpp:250
+#: statfunc.cpp:246 statfunc.cpp:247 statfunc.cpp:252
 msgid "/prm/func"
 msgstr ""
 
-#: statfunc.cpp:245
+#: statfunc.cpp:247
 msgid "Functions"
 msgstr "Функції"
 
-#: statfunc.cpp:245 sysfnc.h:217
+#: statfunc.cpp:247 sysfnc.h:217
 msgid "tp"
 msgstr ""
 
-#: statfunc.cpp:245
+#: statfunc.cpp:247
 msgid "br"
 msgstr ""
 
-#: statfunc.cpp:245
+#: statfunc.cpp:247
 msgid "idm"
 msgstr ""
 
-#: statfunc.cpp:245 sysfnc.h:217
+#: statfunc.cpp:247 sysfnc.h:217
 msgid "1"
 msgstr ""
 
-#: statfunc.cpp:245
+#: statfunc.cpp:247
 msgid "br_pref"
 msgstr ""
 
-#: statfunc.cpp:249
+#: statfunc.cpp:251 sysfnc.h:555
 msgid "path"
 msgstr ""
 
-#: statfunc.cpp:255
+#: statfunc.cpp:257
 msgid "el"
 msgstr ""
 
-#: statfunc.cpp:255 sysfnc.h:45 sysfnc.h:66 sysfnc.h:86 sysfnc.h:120
+#: statfunc.cpp:257 sysfnc.h:45 sysfnc.h:66 sysfnc.h:86 sysfnc.h:120
 #: sysfnc.h:216 sysfnc.h:242 sysfnc.h:277 sysfnc.h:312 sysfnc.h:347
 #: sysfnc.h:381 sysfnc.h:412 sysfnc.h:443 sysfnc.h:474
 msgid "id"
@@ -481,11 +481,11 @@ msgstr ""
 msgid "Category"
 msgstr "Категорія"
 
-#: sysfnc.h:506
+#: sysfnc.h:506 sysfnc.h:529 sysfnc.h:556
 msgid "lev"
 msgstr ""
 
-#: sysfnc.h:506
+#: sysfnc.h:506 sysfnc.h:529 sysfnc.h:556
 msgid "Level"
 msgstr "Рівень"
 
@@ -509,6 +509,70 @@ msgstr "Розмістити повідомлення у систему"
 #, c-format
 msgid "%s"
 msgstr ""
+
+#: sysfnc.h:525
+msgid "strParse"
+msgstr ""
+
+#: sysfnc.h:527 sysfnc.h:554
+msgid "rez"
+msgstr ""
+
+#: sysfnc.h:527 sysfnc.h:554
+msgid "Rezult"
+msgstr "Результат"
+
+#: sysfnc.h:528 timefnc.h:124
+msgid "str"
+msgstr ""
+
+#: sysfnc.h:528
+msgid "String"
+msgstr "Строка"
+
+#: sysfnc.h:530
+msgid "sep"
+msgstr ""
+
+#: sysfnc.h:530
+msgid "Separator"
+msgstr "Розділювач"
+
+#: sysfnc.h:530
+msgid "."
+msgstr ""
+
+#: sysfnc.h:531 sysfnc.h:557
+msgid "off"
+msgstr ""
+
+#: sysfnc.h:531 sysfnc.h:557
+msgid "Offset"
+msgstr "Зміщення"
+
+#: sysfnc.h:534
+msgid "String: Parse on separator"
+msgstr "Строка: Розбір за розділювачем"
+
+#: sysfnc.h:535
+msgid "Use for parse string on separator."
+msgstr "Використовується для розбору за розділювачем."
+
+#: sysfnc.h:552
+msgid "strParsePath"
+msgstr ""
+
+#: sysfnc.h:555
+msgid "Path"
+msgstr "Шлях"
+
+#: sysfnc.h:560
+msgid "String: Path parse"
+msgstr "Строка: Розбір строки"
+
+#: sysfnc.h:561
+msgid "Use for parse path on elements."
+msgstr "Використовується для розбору шляху на елементи."
 
 #: timefnc.h:39
 msgid "tmDate"
@@ -624,10 +688,6 @@ msgstr "Строка повного часу."
 
 #: timefnc.h:121
 msgid "tmStrPTime"
-msgstr ""
-
-#: timefnc.h:124
-msgid "str"
 msgstr ""
 
 #: timefnc.h:124

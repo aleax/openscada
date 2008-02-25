@@ -33,6 +33,8 @@
 #undef _
 #define _(mess) mod->I18N(mess)
 
+#define MaxLenReq 200
+
 using std::string;
 using std::vector;
 using std::map;
@@ -57,9 +59,6 @@ class TMdPrm : public TParamContr
 
 	TElem &elem( )		{ return p_el; }
 	TMdContr &owner( )	{ return (TMdContr&)TParamContr::owner(); }
-	
-        //Attributes
-	int    isErr;		//Error cod
 
     private:
 	//Methods
@@ -71,6 +70,7 @@ class TMdPrm : public TParamContr
         //Attributes
 	string  &m_attrLs;
         TElem   p_el;           //Work atribute elements
+	string  acq_err;
 };
 
 //******************************************************
@@ -83,7 +83,7 @@ class TMdContr: public TController
     	TMdContr( string name_c, const string &daq_db, TElem *cfgelem);
 	~TMdContr( );
 
-	double period( )	{ return vmax(m_per,0.1); }
+	double period( )	{ return vmax(m_per,0.01); }
 	int    prior( )		{ return m_prior; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
@@ -94,6 +94,9 @@ class TMdContr: public TController
 	void stop_( );
 	
 	void prmEn( const string &id, bool val );
+	void regVal( int reg );    			//Register value for acquisition
+	int  getVal( int reg, string &err );		//Get register value
+	void setVal( int val, int reg, string &err );	//Set value
 	string modBusReq( string &pdu );
 
     protected:
@@ -102,6 +105,18 @@ class TMdContr: public TController
 	bool cfgChange( TCfg &cfg );
 	
     private:
+        //Data
+        class SDataRec
+        {
+            public:
+                SDataRec( int ioff, int v_rez ) : off(ioff)
+                { val.assign(v_rez,0); err="11:Value not gathered."; }
+									   
+                int off;        //Data block start offset
+                string val;     //Data block values kadr
+                string err;     //Acquisition error text
+        };
+	
 	//Methods
 	TParamContr *ParamAttach( const string &name, int type );
 	static void *Task( void *icntr );
@@ -113,10 +128,12 @@ class TMdContr: public TController
 		&m_prt,				//Protocol
 		&m_node;			//Node
 	string	&m_addr;			//Transport device address
+	bool	&m_merge;			//Fragments of register merge
 		
 	bool    prc_st,				//Process task active
 		endrun_req;			//Request to stop of the Process task
         vector< AutoHD<TMdPrm> >  p_hd;
+	vector< SDataRec > 	acqBlks;     	//Acquisition data blocks
 	
 	pthread_t procPthr;     		//Process task thread
 	

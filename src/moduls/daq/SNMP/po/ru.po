@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.SNMP 0.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-29 11:14+0200\n"
+"POT-Creation-Date: 2008-02-25 11:55+0200\n"
 "PO-Revision-Date: 2007-10-29 11:14+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -208,11 +208,6 @@ msgstr ""
 #: snmp_client.cpp:252
 msgid "Error SNMP session open."
 msgstr "Ошибка открытия SNMP сессии."
-
-#: snmp_client.cpp:328
-#, c-format
-msgid "TEST 02: %xh\n"
-msgstr ""
 
 #: snmp_client.cpp:346
 #, c-format

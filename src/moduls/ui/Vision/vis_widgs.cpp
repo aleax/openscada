@@ -114,7 +114,7 @@ InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess,
     connect(but_box, SIGNAL(rejected()), this, SLOT(reject()));
     dlg_lay->addWidget( but_box );
     
-    resize(250,120+(40*with_nm)+(40*with_id));
+    resize(400,120+(40*with_nm)+(40*with_id));
 }
 
 QString InputDlg::id()

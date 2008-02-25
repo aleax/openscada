@@ -33,12 +33,18 @@ class TModSchedul : public TSubSYS
 {
     public:
 	//Data
-	struct SHD
+	class SHD
 	{
-    	    void                *hd;         // NULL - share lib present but no attached
-	    vector<string>      use;         // if share lib attached to show who modules used    
-	    time_t              m_tm;        // data modify of share lib for automatic update
-	    string              name;        // share lib path
+	    public:
+		//Methods
+		SHD( ) : hd(NULL), m_tm(0)	{ }
+		SHD( void *ihd, time_t itm, const string &iname ) : hd(ihd), m_tm(itm), name(iname)	{ }
+		
+		//Attributes
+    		void		*hd;         // NULL - share lib present but no attached
+		vector<string>	use;         // if share lib attached to show who modules used    
+		time_t		m_tm;        // data modify of share lib for automatic update
+		string		name;        // share lib path
 	};
 	    
 	//Methods
@@ -83,7 +89,7 @@ class TModSchedul : public TSubSYS
    
 	Res     	hd_res;   
 	int		m_per;	//Check to new modules period
-	vector<SHD *> 	SchHD;
+	vector<SHD> 	SchHD;
 	timer_t 	tmId;   //Thread timer
 	bool         	prc_st;
 };

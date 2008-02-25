@@ -51,10 +51,6 @@ TModSchedul::TModSchedul( ) :
 TModSchedul::~TModSchedul(  )
 {
     timer_delete(tmId);
-    
-    //- Clear share libraries header container -
-    for( int i_s = 0; i_s < SchHD.size(); i_s++ ) delete SchHD[i_s];
-    SchHD.clear();
 }
 
 void TModSchedul::preDisable(int flag)
@@ -62,18 +58,16 @@ void TModSchedul::preDisable(int flag)
     //- Detach all share libs -
     ResAlloc res(hd_res,true);
     for( unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++ )
-        if( SchHD[i_sh]->hd )
+        if( SchHD[i_sh].hd )
         {
-            while( SchHD[i_sh]->use.size() )
+            while( SchHD[i_sh].use.size() )
             {
-                owner().at(TSYS::strSepParse(SchHD[i_sh]->use[0],0,'.')).at().
-			modDel(TSYS::strSepParse(SchHD[i_sh]->use[0],1,'.'));
-                SchHD[i_sh]->use.erase(SchHD[i_sh]->use.begin());
+                owner().at(TSYS::strSepParse(SchHD[i_sh].use[0],0,'.')).at().
+			modDel(TSYS::strSepParse(SchHD[i_sh].use[0],1,'.'));
+                SchHD[i_sh].use.erase(SchHD[i_sh].use.begin());
     	    }
-            dlclose(SchHD[i_sh]->hd);
-	    delete SchHD[i_sh];
+            dlclose(SchHD[i_sh].hd);
 	}
-    SchHD.clear();	
     res.release();
 }
 
@@ -248,8 +242,8 @@ bool TModSchedul::CheckFile( const string &iname )
     else dlclose(h_lib);        
 
     for(unsigned i_sh=0; i_sh < SchHD.size(); i_sh++)
-        if(SchHD[i_sh]->name == iname )
-	    if(file_stat.st_mtime > SchHD[i_sh]->m_tm) return true;
+        if(SchHD[i_sh].name == iname )
+	    if(file_stat.st_mtime > SchHD[i_sh].m_tm) return true;
 	    else return false;
 
     return true;
@@ -263,16 +257,9 @@ int TModSchedul::libReg( const string &name )
     stat(name.c_str(),&file_stat);
     unsigned i_sh;
     for( i_sh = 0; i_sh < SchHD.size(); i_sh++ )
-       	if( SchHD[i_sh]->name == name ) break;
-    if( i_sh == SchHD.size() )
-    {
-	SHD *so_t = new SHD();
-	so_t->hd = NULL;
-	so_t->m_tm = file_stat.st_mtime;
-	so_t->name = name;
-	SchHD.push_back( so_t );
-    }
-    else SchHD[i_sh]->m_tm = file_stat.st_mtime;
+       	if( SchHD[i_sh].name == name ) break;
+    if( i_sh == SchHD.size() )	SchHD.push_back( SHD(NULL,file_stat.st_mtime,name) );
+    else SchHD[i_sh].m_tm = file_stat.st_mtime;
     
     return i_sh;    
 }
@@ -281,10 +268,9 @@ void TModSchedul::libUnreg( const string &iname )
 {
     ResAlloc res(hd_res,true);
     for(unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++)
-       	if( SchHD[i_sh]->name == iname ) 
+       	if( SchHD[i_sh].name == iname ) 
 	{
-	    if( SchHD[i_sh]->hd ) libDet( iname );
-	    delete SchHD[i_sh];
+	    if( SchHD[i_sh].hd ) libDet( iname );
 	    SchHD.erase(SchHD.begin()+i_sh);
 	    return;
 	}
@@ -295,9 +281,9 @@ void TModSchedul::libAtt( const string &iname, bool full )
 {
     ResAlloc res(hd_res,true);
     for(unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++)
-       	if( SchHD[i_sh]->name == iname ) 
+       	if( SchHD[i_sh].name == iname ) 
 	{
-	    if( SchHD[i_sh]->hd ) 
+	    if( SchHD[i_sh].hd ) 
 		throw TError(nodePath().c_str(),_("SO <%s> already attached!"),iname.c_str());	    
 	    
 	    void *h_lib = dlopen(iname.c_str(),RTLD_LAZY|RTLD_GLOBAL);
@@ -357,7 +343,7 @@ void TModSchedul::libAtt( const string &iname, bool full )
 			    }
 			    //-- Add atached module --
 			    owner().at(list[i_sub]).at().modAdd(LdMod);
-			    SchHD[i_sh]->use.push_back( list[i_sub]+"."+LdMod->modId() );
+			    SchHD[i_sh].use.push_back( list[i_sub]+"."+LdMod->modId() );
 			    if(full)
 			    {
 				owner().at(list[i_sub]).at().subLoad();
@@ -370,7 +356,7 @@ void TModSchedul::libAtt( const string &iname, bool full )
 		}
 	    }
 	    if(add_mod == 0) dlclose(h_lib);	    
-	    else SchHD[i_sh]->hd = h_lib;
+	    else SchHD[i_sh].hd = h_lib;
 	    return;
 	}
     throw TError(nodePath().c_str(),_("SO <%s> no present!"),iname.c_str());
@@ -381,27 +367,27 @@ void TModSchedul::libDet( const string &iname )
     ResAlloc res(hd_res,true);
     for(unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++)
     {
-       	if( SchHD[i_sh]->name == iname && SchHD[i_sh]->hd )
+       	if( SchHD[i_sh].name == iname && SchHD[i_sh].hd )
 	{
-    	    while( SchHD[i_sh]->use.size() )
+    	    while( SchHD[i_sh].use.size() )
 	    {
 		try
 		{
-		    owner().at(TSYS::strSepParse(SchHD[i_sh]->use[0],0,'.')).at().
-			    modAt(TSYS::strSepParse(SchHD[i_sh]->use[0],1,'.')).at().modStop();
-		    owner().at(TSYS::strSepParse(SchHD[i_sh]->use[0],0,'.')).at().
-			    modDel(TSYS::strSepParse(SchHD[i_sh]->use[0],1,'.'));
+		    owner().at(TSYS::strSepParse(SchHD[i_sh].use[0],0,'.')).at().
+			    modAt(TSYS::strSepParse(SchHD[i_sh].use[0],1,'.')).at().modStop();
+		    owner().at(TSYS::strSepParse(SchHD[i_sh].use[0],0,'.')).at().
+			    modDel(TSYS::strSepParse(SchHD[i_sh].use[0],1,'.'));
 		}catch(TError err)
 		{   
 		    //owner().at(SchHD[i_sh]->use[0].mod_sub).at().modAt(SchHD[i_sh]->use[0].n_mod).at().modLoad();
-		    owner().at(TSYS::strSepParse(SchHD[i_sh]->use[0],0,'.')).at().
-			    modAt(TSYS::strSepParse(SchHD[i_sh]->use[0],1,'.')).at().modStart();
+		    owner().at(TSYS::strSepParse(SchHD[i_sh].use[0],0,'.')).at().
+			    modAt(TSYS::strSepParse(SchHD[i_sh].use[0],1,'.')).at().modStart();
 		    throw;
 		}		
-		SchHD[i_sh]->use.erase(SchHD[i_sh]->use.begin());
+		SchHD[i_sh].use.erase(SchHD[i_sh].use.begin());
 	    }	    
-	    dlclose(SchHD[i_sh]->hd);	    
-	    SchHD[i_sh]->hd = NULL;
+	    dlclose(SchHD[i_sh].hd);	    
+	    SchHD[i_sh].hd = NULL;
 	    return;
 	}
     }
@@ -423,7 +409,7 @@ void TModSchedul::libList( vector<string> &list )
     ResAlloc res(hd_res,false);
     list.clear();
     for(unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++)
-       	list.push_back( SchHD[i_sh]->name );
+       	list.push_back( SchHD[i_sh].name );
 }
 
 TModSchedul::SHD &TModSchedul::lib( const string &iname )
@@ -431,8 +417,8 @@ TModSchedul::SHD &TModSchedul::lib( const string &iname )
     ResAlloc res(hd_res,false);
     //string nm_t = SYS->fNameFix(name);
     for(unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++)
-       	if( SchHD[i_sh]->name == iname ) 
-	    return *SchHD[i_sh];
+       	if( SchHD[i_sh].name == iname ) 
+	    return SchHD[i_sh];
     throw TError(nodePath().c_str(),_("SO <%s> no present!"),iname.c_str());
 }
 
@@ -446,7 +432,7 @@ void TModSchedul::libLoad( const string &iname, bool full)
 	unsigned i_sh;
 	bool st_auto = CheckAuto(files[i_f]);
     	for( i_sh = 0; i_sh < SchHD.size(); i_sh++ )
-	    if( SchHD[i_sh]->name == files[i_f] ) break;
+	    if( SchHD[i_sh].name == files[i_f] ) break;
 	if(i_sh < SchHD.size())
 	{
 	    try { if(st_auto) libDet(files[i_f]); }
