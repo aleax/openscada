@@ -658,13 +658,13 @@ void MTable::fieldPrmSet( TCfg &cfg, const string &last, string &req )
 	    else req=req+"mediumtext NOT NULL DEFAULT '"+cfg.fld().def()+"' ";
 	    break;
 	case TFld::Integer:
-	    req=req+"int("+SYS->int2str(cfg.fld().len())+") NOT NULL DEFAULT '"+cfg.fld().def()+"' ";
+	    req=req+"int("+SYS->int2str(cfg.fld().len())+") NOT NULL DEFAULT '"+TSYS::int2str(atoi(cfg.fld().def().c_str()))+"' ";
 	    break;
 	case TFld::Real:
-	    req=req+"double("+SYS->int2str(cfg.fld().len())+","+SYS->int2str(cfg.fld().dec())+") NOT NULL DEFAULT '"+cfg.fld().def()+"' ";
+	    req=req+"double("+SYS->int2str(cfg.fld().len())+","+SYS->int2str(cfg.fld().dec())+") NOT NULL DEFAULT '"+TSYS::real2str(atof(cfg.fld().def().c_str()))+"' ";
 	    break;
 	case TFld::Boolean:
-	    req=req+"tinyint(1) NOT NULL DEFAULT '"+cfg.fld().def()+"' ";
+	    req=req+"tinyint(1) NOT NULL DEFAULT '"+TSYS::int2str(atoi(cfg.fld().def().c_str()))+"' ";
 	    break;
     }
     //- Position param -
