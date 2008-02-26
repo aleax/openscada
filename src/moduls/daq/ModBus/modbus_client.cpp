@@ -676,6 +676,17 @@ void TMdContr::save( )
     TController::save( );
 }
 
+void TMdContr::enable_( )
+{
+
+}
+
+void TMdContr::disable_( )
+{
+    //- Clear acquisition data block -
+    acqBlks.clear();
+}	    
+
 void TMdContr::start_( )
 {
     if( !prc_st )
@@ -939,12 +950,10 @@ string TMdContr::modBusReq( string &pdu )
 
 void *TMdContr::Task( void *icntr )
 {
-    string pdu, rez;
+    string pdu;
     long long work_tm, last_tm = 0;
-    vector<string> als;
     struct timespec get_tm;
     TMdContr &cntr = *(TMdContr *)icntr;
-    AutoHD<TVal> val;
 
     cntr.endrun_req = false;
     cntr.prc_st = true;
@@ -972,7 +981,6 @@ void *TMdContr::Task( void *icntr )
 			cntr.acqBlks[i_b].val.replace(0,cntr.acqBlks[i_b].val.size(),pdu.substr(2).c_str(),cntr.acqBlks[i_b].val.size());
 		}
 	    res.release();	    
-	    val.free();
 
     	    //- Calc acquisition process time -
     	    cntr.tm_gath = 1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());

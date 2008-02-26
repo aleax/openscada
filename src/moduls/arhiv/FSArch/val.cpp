@@ -247,7 +247,7 @@ void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const stri
 	    SYS->archive().at().valAt(arch_nm).at().getVal(buf,c_tm,end_tm,workId());
 	
 	    //-- Check scale --
-	    for(;c_tm <= buf.end();c_tm++)
+	    for( ; c_tm <= buf.end(); c_tm+=buf_per )
 	    {
 		c_val = buf.getR(&c_tm,true);
 		if(c_val == EVAL_REAL)	continue;
@@ -267,7 +267,7 @@ void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const stri
 	    end_tm = vmin(end_tm,(long long)end*1000000);
 	    SYS->archive().at().valAt(arch_nm).at().getVal(buf,c_tm,end_tm,workId());	
 	
-	    for(;c_tm <= buf.end();c_tm++, val_cnt++)
+	    for( ; c_tm <= buf.end(); c_tm+=buf_per, val_cnt++ )
 	    {
 		c_val = buf.getR(&c_tm,true);
 		if(c_val == EVAL_REAL)	c_val = v_over;
@@ -295,9 +295,8 @@ void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const stri
 	{
 	    long long end_tm = c_tm+buf_sz*buf_per;
 	    end_tm = vmin(end_tm,(long long)end*1000000);
-	    SYS->archive().at().valAt(arch_nm).at().getVal(buf,c_tm,end_tm,workId());	
-	
-    	    for(; c_tm <= buf.end(); c_tm++ )
+	    SYS->archive().at().valAt(arch_nm).at().getVal(buf,c_tm,end_tm,workId());
+    	    for(; c_tm <= buf.end(); c_tm+=buf_per )
 	    {
 		sprintf(c_val,"%g\n",buf.getR(&c_tm,true));
 		write(hd,c_val,strlen(c_val));

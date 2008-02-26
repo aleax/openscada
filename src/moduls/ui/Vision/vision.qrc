@@ -35,6 +35,7 @@
     <file>images/elfig_cursor.png</file>
     <file>images/ok.png</file>
     <file>images/editcopy.png</file>
-    <file>images/editpaste.png</file>    
+    <file>images/editcut.png</file>
+    <file>images/editpaste.png</file>
 </qresource>
 </RCC>

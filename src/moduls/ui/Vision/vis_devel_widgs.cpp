@@ -1235,6 +1235,7 @@ void WdgTree::ctrTreePopup( )
     popup.addAction(owner()->actVisItProp);
     popup.addAction(owner()->actVisItEdit);
     popup.addSeparator();
+    popup.addAction(owner()->actVisItCut);
     popup.addAction(owner()->actVisItCopy);
     popup.addAction(owner()->actVisItPaste);
     popup.addSeparator();    
@@ -1461,7 +1462,8 @@ void ProjTree::ctrTreePopup( )
     popup.addAction(owner()->actVisItDel);
     popup.addAction(owner()->actVisItProp);
     popup.addAction(owner()->actVisItEdit);
-    popup.addSeparator();    
+    popup.addSeparator();
+    popup.addAction(owner()->actVisItCut);
     popup.addAction(owner()->actVisItCopy);
     popup.addAction(owner()->actVisItPaste);
     popup.addSeparator();
@@ -1889,7 +1891,8 @@ void DevelWdgView::wdgPopup( )
 	actMakeIco->setStatusTip(_("Press for make icon from widget."));
 	connect(actMakeIco, SIGNAL(activated()), this, SLOT(makeIcon()));
 	popup.addAction(actMakeIco);
-	popup.addSeparator();		
+	popup.addSeparator();
+	popup.addAction(mainWin()->actVisItCut);
 	popup.addAction(mainWin()->actVisItCopy);
     	popup.addAction(mainWin()->actVisItPaste);
     }

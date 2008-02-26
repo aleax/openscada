@@ -90,6 +90,8 @@ class TMdContr: public TController
 
 	void load( );
 	void save( );
+        void enable_( );
+        void disable_( );
 	void start_( );
 	void stop_( );
 	

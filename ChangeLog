@@ -1,3 +1,10 @@
+2008-02-26 Roman
+- FIX:/Archive/FSArch: Export values for archives with period more 1 second is fixed.
+- FIX:/DB/FireBird: Init headers change to "0" from "NULL".
+- FIX:/DAQ/ModBus: Data acquisition block clear is added to disable controller's function.
+- !:/UI/Vision: Cut for visual items support is added.
+
+
 2008-02-25 Roman
 - !!:/SYS: The source tree version changed to 0.6.1.
 - FIX:/SYS/ControlNode: Exception process on call function TCntrNode::postDisable() is added.

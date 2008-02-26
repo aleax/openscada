@@ -136,7 +136,7 @@ string BDMod::sqlReqCode( const string &req, char symb )
 //************************************************
 //* FireBird::MBD                                *
 //************************************************
-MBD::MBD( const string &iid, TElem *cf_el ) : TBD(iid,cf_el), hdb(NULL)//, commCnt(0)
+MBD::MBD( const string &iid, TElem *cf_el ) : TBD(iid,cf_el), hdb(0)
 {
 
 }
@@ -160,7 +160,7 @@ void MBD::postDisable(int flag)
 	isc_modify_dpb(&dpb, &dpb_length, isc_dpb_password, pass.c_str(),pass.size());    
 	
 	ISC_STATUS_ARRAY status;
-	isc_tr_handle	trans = NULL;	
+	isc_tr_handle	trans = 0;	
 	if( isc_attach_database( status, 0, fdb.c_str(), &hdb, dpb_length, dpb) ) return;
 	if( isc_drop_database(status, &hdb) ) 
 	    throw TError(TSYS::DBOpen,nodePath().c_str(),_("Drop DB '%s' error: %s"),fdb.c_str(),getErr(status).c_str());
@@ -190,7 +190,7 @@ void MBD::enable( )
 	if( !create() ) 
 	    throw TError(TSYS::DBOpen,nodePath().c_str(),_("Open DB '%s' error: %s"),fdb.c_str(),getErr(status).c_str());
 	//--- Make try for create DB ---
-	isc_tr_handle	trans = NULL;
+	isc_tr_handle	trans = 0;
 	if( isc_dsql_execute_immediate(status, &hdb, &trans, 0, 
 		    ("CREATE DATABASE '"+fdb+"' USER '"+user+"' PASSWORD '"+pass+"'").c_str(), 3, NULL) )
 	    throw TError(TSYS::DBOpen,nodePath().c_str(),_("Create DB '%s' error: %s"),fdb.c_str(),getErr(status).c_str());
@@ -208,7 +208,7 @@ void MBD::disable( )
     ResAlloc res(conn_res,true);
     ISC_STATUS_ARRAY status;
     isc_detach_database( status, &hdb );
-    hdb = NULL;
+    hdb = 0;
 }	
 
 void MBD::allowList( vector<string> &list )
@@ -261,7 +261,7 @@ void MBD::transCommit( isc_tr_handle *trans )
     if( !trans || !(*trans) )	return;
     if( isc_commit_transaction(status, trans) )
 	throw TError(TSYS::DBRequest,nodePath().c_str(),_("DSQL close transaction error: %s"),getErr(status).c_str());
-    *trans = NULL;
+    *trans = 0;
 }
 
 void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
@@ -283,7 +283,7 @@ void MBD::sqlReq( isc_tr_handle *itrans, const string &ireq, vector< vector<stri
     out_sqlda->sqln = 10;
     char    *dtBuf = NULL;
     int      dtBufLen = 0;
-    isc_stmt_handle stmt = NULL;
+    isc_stmt_handle stmt = 0;
     isc_tr_handle trans = (itrans && *itrans) ? (*itrans) : NULL;
     ISC_STATUS_ARRAY status;       
 
