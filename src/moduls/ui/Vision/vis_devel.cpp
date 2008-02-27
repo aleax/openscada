@@ -507,11 +507,11 @@ VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) :
     //- Init dock windows -
     prjTree = new ProjTree(this);
     connect(this,SIGNAL(modifiedItem(const string&)),prjTree,SLOT(updateTree(const string&)));    
-    connect(prjTree,SIGNAL(selectItem(const string&)),this,SLOT(selectItem(const string&)));
+    connect(prjTree,SIGNAL(selectItem(const string&,bool)),this,SLOT(selectItem(const string&,bool)));
     prjTree->setWhatsThis(_("Dock window for projects management."));
     wdgTree = new WdgTree(this);
     connect(this,SIGNAL(modifiedItem(const string&)),wdgTree,SLOT(updateTree(const string&)));
-    connect(wdgTree,SIGNAL(selectItem(const string&)),this,SLOT(selectItem(const string&)));
+    connect(wdgTree,SIGNAL(selectItem(const string&,bool)),this,SLOT(selectItem(const string&,bool)));
     wdgTree->setWhatsThis(_("Dock window for widgets and this libraries management."));
     addDockWidget(Qt::LeftDockWidgetArea,prjTree);
     addDockWidget(Qt::LeftDockWidgetArea,wdgTree);
@@ -782,12 +782,13 @@ void VisDevelop::updateLibToolbar()
     }
 }
 
-void VisDevelop::selectItem( const string &item )
+void VisDevelop::selectItem( const string &item, bool force )
 {
     if( winClose )	return;
     
     work_wdg_new = item;
-    work_wdgTimer->start();
+    if( force )	applyWorkWdg( );    
+    else work_wdgTimer->start( );
 }    
     
 void VisDevelop::applyWorkWdg( )
@@ -1131,6 +1132,7 @@ void VisDevelop::visualItDel( const string &itms )
 
 void VisDevelop::visualItProp( )
 {
+    //if( work_wdg.empty() )	return;
     string prop_wdg=TSYS::strSepParse(work_wdg,0,';');
     
     string sel1 = TSYS::pathLev(prop_wdg,0);

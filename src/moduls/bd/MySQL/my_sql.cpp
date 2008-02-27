@@ -177,13 +177,8 @@ void MBD::enable( )
 
     TBD::enable( );
 
-    if( create() )
-    {
-        string req = "CREATE DATABASE IF NOT EXISTS `"+TSYS::strEncode(bd,TSYS::SQL)+"`";
-	sqlReq(req);	
-    }
-    
-    //sqlReq("USE `"+TSYS::strEncode(bd,TSYS::SQL)+"`");
+    string req = "CREATE DATABASE IF NOT EXISTS `"+TSYS::strEncode(bd,TSYS::SQL)+"`";
+    sqlReq(req);	
 }
 
 void MBD::disable( )

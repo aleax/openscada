@@ -157,7 +157,7 @@ void MBD::enable( )
     char   buf[STR_BUF_LEN];
     
     char *rez = getcwd(buf,sizeof(buf));
-    if(chdir(addr().c_str()) != 0 && (!create() || mkdir(addr().c_str(),S_IRWXU|S_IRGRP|S_IROTH) != 0))
+    if( chdir(addr().c_str()) != 0 && mkdir(addr().c_str(),S_IRWXU|S_IRGRP|S_IROTH) != 0 )
         throw TError(TSYS::DBInit,nodePath().c_str(),_("Error create DB directory <%s>!"),addr().c_str());
     if( rez && chdir(buf) ) throw TError(TSYS::DBInit,nodePath().c_str(),_("Restore previous directory as curent is error."));
 

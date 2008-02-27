@@ -94,7 +94,6 @@ class TBD : public TCntrNode, public TConfig
 	const string &dscr( )   	{ return m_dscr; }
 	const string &addr( )   	{ return m_addr; }
 	const string &codePage( )	{ return m_codepage; } 
-	bool         create( )		{ return m_creat; }
 	
 	bool enableStat( )       	{ return m_en; }
 	bool toEnable( )        	{ return m_toen; }
@@ -103,7 +102,6 @@ class TBD : public TCntrNode, public TConfig
 	void setDscr( const string &idscr )	{ m_dscr = idscr; }
 	void setAddr( const string &iaddr )	{ m_addr = iaddr; }
 	void setCodePage( const string &icp )	{ m_codepage = icp; }
-	void setCreate( bool ivl )		{ m_creat= ivl; }
 	void setToEnable( bool ivl )		{ m_toen = ivl; }
 	
 	virtual void enable( );
@@ -150,7 +148,7 @@ class TBD : public TCntrNode, public TConfig
 		&m_codepage;	//DB codepage
 	bool	&m_toen;
 	
-	bool    m_en, m_creat;
+	bool    m_en;
 	//- Special options -
 	int	m_tbl;
 };

@@ -408,7 +408,6 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	
 	bd.at().open(n_bd);
 	bd.at().at(n_bd).at().setAddr(bd_addr);
-	bd.at().at(n_bd).at().setCreate(true);
 	bd.at().at(n_bd).at().enable();
 			    
 	mess_info(test_cat,"Open Table: <%s>",n_tbl.c_str());

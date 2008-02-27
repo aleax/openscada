@@ -309,7 +309,7 @@ class WdgTree: public QDockWidget
 	bool hasFocus( );
 
     signals:
-        void selectItem( const string &vca_it );
+        void selectItem( const string &vca_it, bool force = false );
 
     public slots:	
 	void updateTree( const string &vca_it = "" );
@@ -321,7 +321,8 @@ class WdgTree: public QDockWidget
     private slots:
 	//Private slots
 	void ctrTreePopup( );
-	void selectItem( );
+	void dblClick( );
+	void selectItem( bool force = false );
 	
     private:
 	//Private attributes
@@ -346,7 +347,7 @@ class ProjTree: public QDockWidget
 	VisDevelop *owner( );	
 
     signals:
-        void selectItem( const string &idwdg );
+        void selectItem( const string &idwdg, bool force = false );
 
     public slots:	
 	void updateTree( const string &vca_it = "", QTreeWidgetItem *it = NULL );
@@ -358,7 +359,8 @@ class ProjTree: public QDockWidget
     private slots:
 	//Private slots
 	void ctrTreePopup( );
-	void selectItem( );	
+	void dblClick( );
+	void selectItem( bool force = false );
 	
     private:
 	//Private attributes

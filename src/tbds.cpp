@@ -649,8 +649,7 @@ void TTipBD::cntrCmdProc( XMLNode *opt )
 //************************************************
 TBD::TBD( const string &iid, TElem *cf_el ) : TConfig( cf_el ),
     m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()), m_dscr(cfg("DESCR").getSd()), 
-    m_addr(cfg("ADDR").getSd()), m_codepage(cfg("CODEPAGE").getSd()), m_toen(cfg("EN").getBd()), 
-    m_creat(false), m_en(false)
+    m_addr(cfg("ADDR").getSd()), m_codepage(cfg("CODEPAGE").getSd()), m_toen(cfg("EN").getBd()), m_en(false)
 {
     m_id = iid;
     m_tbl = grpAdd("tbl_");
@@ -735,7 +734,6 @@ void TBD::cntrCmdProc( XMLNode *opt )
     	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))
 	    {
     		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Enable"),0664,"root",grp.c_str(),1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/prm/st/mk",_("Create new DB"),0664,"root",grp.c_str(),1,"tp","bool");
 		ctrMkNode("list",opt,-1,"/prm/st/allow_tbls",_("Allow tables"),0444,"root",grp.c_str(),1,"tp","str");
 	    }
     	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Config")))
@@ -761,11 +759,6 @@ void TBD::cntrCmdProc( XMLNode *opt )
     {
     	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(enableStat()?"1":"0");
 	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	atoi(opt->text().c_str())?enable():disable();
-    }
-    else if( a_path == "/prm/st/mk" )
-    {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) ) opt->setText(create()?"1":"0");
-	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) ) setCreate(atoi(opt->text().c_str()));
     }
     else if( a_path == "/prm/st/allow_tbls" && ctrChkNode(opt) )
     {

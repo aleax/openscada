@@ -75,7 +75,7 @@ class VisDevelop : public QMainWindow
 
     public slots:
 	//Public slots
-	void selectItem( const string &item );	//Update enabled actions state
+	void selectItem( const string &item, bool force = false );	//Update enabled actions state
 	void updateLibToolbar( );		//Update lib's toolbars
 	void editToolUpdate( );			//Edit tools visible update
 

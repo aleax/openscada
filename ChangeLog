@@ -1,3 +1,10 @@
+2008-02-27 Roman
+- !:/DB: Create table flag is removed.
+- /DAQ/ModBus: Early endrun termination is added.
+- !:/UI/Vision: Force item select suport is added for mouse double item click properties call.
+- FIX:/UI/Vision: Visual item crash on broken visual item is fixed.
+
+
 2008-02-26 Roman
 - FIX:/Archive/FSArch: Export values for archives with period more 1 second is fixed.
 - FIX:/DB/FireBird: Init headers change to "0" from "NULL".

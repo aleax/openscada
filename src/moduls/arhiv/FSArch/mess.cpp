@@ -23,6 +23,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <dirent.h>
+#include <errno.h>
 
 #include <tsys.h>
 #include "base.h"
@@ -353,7 +354,8 @@ MFileArch::MFileArch( const string &iname, time_t ibeg, ModMArch *iowner, const 
 	m_node->setAttr("Begin",TSYS::int2str(m_beg,TSYS::Hex));
 	m_node->setAttr("End",TSYS::int2str(m_end,TSYS::Hex));
 	string x_cf = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" + m_node->save(XMLNode::BrOpenPrev);
-	write(hd,x_cf.c_str(),x_cf.size());
+	if( write(hd,x_cf.c_str(),x_cf.size()) < 0 )
+	    throw TError(owner().nodePath().c_str(),_("Write to file error: %s"),strerror(errno));
     }
     else
     {
@@ -361,7 +363,8 @@ MFileArch::MFileArch( const string &iname, time_t ibeg, ModMArch *iowner, const 
 	char s_buf[STR_BUF_LEN];
 	snprintf(s_buf,sizeof(s_buf),"%s %s %8s %8x %8x\n",
 	    mod->modId().c_str(),mod->modInfo("Version").c_str(),m_chars.c_str(),m_beg,m_end);
-	write(hd,s_buf,strlen(s_buf));
+	if( write(hd,s_buf,strlen(s_buf)) < 0 )
+	    throw TError(owner().nodePath().c_str(),_("Write to file error: %s"),strerror(errno));
     }
     close(hd);    
     m_load = true;
@@ -592,7 +595,7 @@ void MFileArch::put( TMess::SRec mess )
 	    	Mess->codeConvOut(m_chars,TSYS::strEncode(mess.categ,TSYS::Custom," \n\t%")).c_str(),
 		Mess->codeConvOut(m_chars,TSYS::strEncode(mess.mess,TSYS::Custom," \n\t%")).c_str());
 	    fseek(f,0,SEEK_END);
-	    fwrite(buf,strlen(buf),1,f);	    
+	    fwrite(buf,strlen(buf),1,f);
 	}
 	else
 	{

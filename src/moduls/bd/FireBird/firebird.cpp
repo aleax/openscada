@@ -187,8 +187,6 @@ void MBD::enable( )
     ISC_STATUS_ARRAY status;
     if( isc_attach_database( status, 0, fdb.c_str(), &hdb, dpb_length, dpb) )
     {
-	if( !create() ) 
-	    throw TError(TSYS::DBOpen,nodePath().c_str(),_("Open DB '%s' error: %s"),fdb.c_str(),getErr(status).c_str());
 	//--- Make try for create DB ---
 	isc_tr_handle	trans = 0;
 	if( isc_dsql_execute_immediate(status, &hdb, &trans, 0, 
@@ -284,7 +282,7 @@ void MBD::sqlReq( isc_tr_handle *itrans, const string &ireq, vector< vector<stri
     char    *dtBuf = NULL;
     int      dtBufLen = 0;
     isc_stmt_handle stmt = 0;
-    isc_tr_handle trans = (itrans && *itrans) ? (*itrans) : NULL;
+    isc_tr_handle trans = (itrans && *itrans) ? (*itrans) : 0;
     ISC_STATUS_ARRAY status;       
 
     try
@@ -384,7 +382,7 @@ void MBD::sqlReq( isc_tr_handle *itrans, const string &ireq, vector< vector<stri
 			    //- Read blob data -
 			    ISC_QUAD blob_id = *((ISC_QUAD*)var.sqldata);
 			    ISC_STATUS blob_stat;
-			    isc_blob_handle blob_handle = NULL;
+			    isc_blob_handle blob_handle = 0;
 			    char blob_segment[STR_BUF_LEN];
 			    unsigned short actual_seg_len;			    
 			    string bval;
@@ -408,12 +406,12 @@ void MBD::sqlReq( isc_tr_handle *itrans, const string &ireq, vector< vector<stri
 	}
     	if( isc_dsql_free_statement(status, &stmt, DSQL_drop) )
 	{
-	    stmt = NULL;
+	    stmt = 0;
     	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("DSQL free statement error: %s"),getErr(status).c_str());
 	}
     	if( (!itrans || !(*itrans)) && isc_commit_transaction(status, &trans) )
 	{
-	    stmt = trans = NULL;
+	    stmt = trans = 0;
     	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("DSQL close transaction error: %s"),getErr(status).c_str());
 	}
     }catch(...)
@@ -439,7 +437,7 @@ string MBD::clrEndSpace( const string &vl )
 //************************************************
 //* FireBird::Table                              *
 //************************************************
-MTable::MTable(string inm, MBD *iown, bool create ) : TTable(inm), trans(NULL)
+MTable::MTable(string inm, MBD *iown, bool create ) : TTable(inm), trans(0)
 {
     setNodePrev(iown);    
     

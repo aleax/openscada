@@ -962,7 +962,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
     //- Update elements present, visible and values -
     //-----------------------------------------------
     XMLNode req("get");
-    
+
     XMLNode info_req("info");
     info_req.setAttr("path",ed_it);
     if( owner()->cntrIfCmd(info_req) )
@@ -1167,7 +1167,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
 }
 
 void VisItProp::tabChanged( int itb )
-{    
+{
     switch(itb)
     {
 	case 1:	obj_attr->setWdg(ed_it);	break;
@@ -1186,11 +1186,9 @@ void VisItProp::tabChanged( int itb )
 			QString(_("Get node '%1' information error.")).arg(ed_it.c_str()),TVision::Error, this );
 		return;
 	    }
-    
 	    string sval;
 	    XMLNode *root, *gnd;    
 	    root = info_req.childGet(0);     
-
 	    //-- Get widgets list --
 	    vector<string>	wlst;
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/proc/w_lst",TSYS::PathEl));
@@ -1198,7 +1196,6 @@ void VisItProp::tabChanged( int itb )
 		for( int i_w = 0; i_w < req.childSize(); i_w++ )
 		    wlst.push_back(req.childGet(i_w)->text());
 		    //wlst.push_back(req.childGet(i_w)->attr("id"));
-	
 	    //--- Fill table ---
 	    //--- Delete no present root items ---
 	    for( int i_r = 0; i_r < obj_attr_cfg->topLevelItemCount(); i_r++ )
@@ -1208,7 +1205,6 @@ void VisItProp::tabChanged( int itb )
 		    if( obj_attr_cfg->topLevelItem(i_r)->text(0) == wlst[i_w].c_str() ) break;
 		if( i_w >= wlst.size() )	delete obj_attr_cfg->topLevelItem(i_r--);
 	    }
-	
 	    //--- Add root items ---
 	    for( int i_w = 0; i_w < wlst.size(); i_w++ )
 	    {
@@ -1264,14 +1260,16 @@ void VisItProp::tabChanged( int itb )
 	    if( !owner()->cntrIfCmd(req) )
 		for( int i_el = 0; i_el < req.childSize(); i_el++ )
 		    atypes.push_back( (req.childGet(i_el)->text()+"|"+req.childGet(i_el)->attr("id")).c_str() );
-	    obj_attr_cfg->topLevelItem(0)->setData(0,Qt::UserRole,atypes);
+	    if( obj_attr_cfg->topLevelItemCount() )
+		obj_attr_cfg->topLevelItem(0)->setData(0,Qt::UserRole,atypes);
 	    atypes.clear();
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/proc/lnk_ls",TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) )
 		for( int i_el = 0; i_el < req.childSize(); i_el++ )
 		    atypes.push_back( (req.childGet(i_el)->text()+"|"+req.childGet(i_el)->attr("id")).c_str() );
-	    obj_attr_cfg->topLevelItem(0)->setData(0,Qt::UserRole+1,atypes);
-
+	    if( obj_attr_cfg->topLevelItemCount() )
+		obj_attr_cfg->topLevelItem(0)->setData(0,Qt::UserRole+1,atypes);
+	    
 	    //--- Calc period ---
 	    gnd = TCntrNode::ctrId(root,proc_per->objectName().toAscii().data(),true);
 	    proc_per->setEnabled(gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR);

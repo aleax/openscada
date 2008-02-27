@@ -969,6 +969,7 @@ void *TMdContr::Task( void *icntr )
 	    for( int i_p = 0; i_p < cntr.p_hd.size(); i_p++ )
 		for( int i_b = 0; i_b < cntr.acqBlks.size(); i_b++ )
 		{
+		    if( cntr.endrun_req ) break;
     		    //- Encode request PDU (Protocol Data Units) -
     		    pdu = (char)0x3;					//Function, read multiple registers
     		    pdu += (char)((cntr.acqBlks[i_b].off/2)>>8);	//Address MSB

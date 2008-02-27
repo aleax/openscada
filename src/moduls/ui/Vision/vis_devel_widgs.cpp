@@ -984,7 +984,7 @@ WdgTree::WdgTree( VisDevelop * parent ) : QDockWidget(_("Widgets"),(QWidget*)par
     //- Connect to signals -
     connect( treeW, SIGNAL( customContextMenuRequested(const QPoint&) ), this, SLOT( ctrTreePopup() ) );
     connect( treeW, SIGNAL( itemSelectionChanged() ), this, SLOT( selectItem() ) );
-    connect( treeW, SIGNAL( itemDoubleClicked( QTreeWidgetItem*, int ) ), owner()->actVisItProp, SLOT(trigger()) );
+    connect( treeW, SIGNAL( itemDoubleClicked( QTreeWidgetItem*, int ) ), this, SLOT( dblClick() ) );
     
     setWidget(treeW);
 
@@ -1056,7 +1056,13 @@ bool WdgTree::eventFilter( QObject *target, QEvent *event )
     return QDockWidget::eventFilter( target, event );
 }
 
-void WdgTree::selectItem( )
+void WdgTree::dblClick( )
+{
+    selectItem(true);
+    owner()->actVisItProp->trigger();
+}
+
+void WdgTree::selectItem( bool force )
 {
     //Get select list
     QList<QTreeWidgetItem *> sel_ls = treeW->selectedItems();
@@ -1071,7 +1077,7 @@ void WdgTree::selectItem( )
 	cur_el=cur_el->parent();
     }
     
-    emit selectItem(work_wdg);
+    emit selectItem(work_wdg,force);
 }
 
 void WdgTree::updateTree( const string &vca_it )
@@ -1276,7 +1282,7 @@ ProjTree::ProjTree( VisDevelop * parent ) : QDockWidget(_("Projects"),(QWidget*)
     //- Connect to signals -
     connect( treeW, SIGNAL( customContextMenuRequested(const QPoint&) ), this, SLOT( ctrTreePopup() ) );
     connect( treeW, SIGNAL( itemSelectionChanged() ), this, SLOT( selectItem() ) );
-    connect( treeW, SIGNAL( itemDoubleClicked( QTreeWidgetItem*, int ) ), owner()->actVisItProp, SLOT(trigger()) );
+    connect( treeW, SIGNAL( itemDoubleClicked( QTreeWidgetItem*, int ) ), this, SLOT(dblClick()) );
      
     setWidget(treeW);
 
@@ -1309,7 +1315,13 @@ bool ProjTree::eventFilter( QObject *target, QEvent *event )
     return QDockWidget::eventFilter( target, event );
 }
 
-void ProjTree::selectItem( )
+void ProjTree::dblClick( )
+{
+    selectItem(true);
+    owner()->actVisItProp->trigger();
+}
+
+void ProjTree::selectItem( bool force )
 {
     //Get select list
     QList<QTreeWidgetItem *> sel_ls = treeW->selectedItems();
@@ -1325,7 +1337,7 @@ void ProjTree::selectItem( )
 	cur_el=cur_el->parent();
     }
     
-    emit selectItem(work_wdg);
+    emit selectItem(work_wdg,force);
 }
 
 void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it )
