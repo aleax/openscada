@@ -526,7 +526,7 @@ bool OrigDiagram::attrChange( Attr &cfg, void *prev )
 	    }
 	    else
 	    {
-    	        cfg.owner()->attrAdd( new TFld("curSek",_("Cursor:sek"),TFld::Integer,Attr::Mutable,"","","","",29) );
+    	        cfg.owner()->attrAdd( new TFld("curSek",_("Cursor:sek"),TFld::Integer,Attr::DataTime|Attr::Mutable,"","","","",29) );
     	        cfg.owner()->attrAdd( new TFld("curUSek",_("Cursor:usek"),TFld::Integer,Attr::Mutable,"","","","",30) );
     		cfg.owner()->attrAdd( new TFld("curColor",_("Cursor:color"),TFld::String,Attr::Color|Attr::Mutable,"","white","","",36) );
 	    }
@@ -557,12 +557,12 @@ bool OrigDiagram::attrChange( Attr &cfg, void *prev )
 	    switch(cfg.getI())
 	    {
 		case 0:
-    		    cfg.owner()->attrAdd( new TFld("tSek",_("Time:sek"),TFld::Integer,Attr::Mutable,"","","","",26) );
+    		    cfg.owner()->attrAdd( new TFld("tSek",_("Time:sek"),TFld::Integer,Attr::DataTime|Attr::Mutable,"","","","",26) );
     		    cfg.owner()->attrAdd( new TFld("tUSek",_("Time:usek"),TFld::Integer,Attr::Mutable,"","","","",27) );
     		    cfg.owner()->attrAdd( new TFld("tSize",_("Size, sek"),TFld::Real,Attr::Mutable,"","60","","",28) );
 		    if( cfg.owner()->attrAt("active").at().getB() )
 		    {
-    			cfg.owner()->attrAdd( new TFld("curSek",_("Cursor:sek"),TFld::Integer,Attr::Mutable,"","","","",29) );
+    			cfg.owner()->attrAdd( new TFld("curSek",_("Cursor:sek"),TFld::Integer,Attr::DataTime|Attr::Mutable,"","","","",29) );
     			cfg.owner()->attrAdd( new TFld("curUSek",_("Cursor:usek"),TFld::Integer,Attr::Mutable,"","","","",30) );
     			cfg.owner()->attrAdd( new TFld("curColor",_("Cursor:color"),TFld::String,Attr::Color|Attr::Mutable,"","white","","",36) );
 		    }
@@ -644,7 +644,7 @@ void OrigProtocol::postEnable( int flag )
     { 
         attrAdd( new TFld("backColor",_("Background:color"),TFld::String,Attr::Color,"","","","",20) );
         attrAdd( new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","","","",21) );
-    	attrAdd( new TFld("time",_("Time, sek"),TFld::Integer,TFld::NoFlag,"","","","",24) );
+    	attrAdd( new TFld("time",_("Time, sek"),TFld::Integer,Attr::DataTime,"","","","",24) );
         attrAdd( new TFld("tSize",_("Size, sek"),TFld::Integer,TFld::NoFlag,"","60","","",25) );
         attrAdd( new TFld("trcPer",_("Tracing period (s)"),TFld::Integer,TFld::NoFlag,"","0","0;360","",26) );
         attrAdd( new TFld("arch",_("Archivator"),TFld::String,TFld::NoFlag,"","","","",27) );

@@ -7,14 +7,14 @@
 #: modbus_client.cpp:172 modbus_client.cpp:336 modbus_client.cpp:337
 #: modbus_client.cpp:338 modbus_client.cpp:339 modbus_client.cpp:340
 #: modbus_client.cpp:341 modbus_client.cpp:342 modbus_client.cpp:343
-#: modbus_client.cpp:344 modbus_client.cpp:902 modbus_client.cpp:937
-#: modbus_client.cpp:1059
+#: modbus_client.cpp:344 modbus_client.cpp:913 modbus_client.cpp:948
+#: modbus_client.cpp:1068
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.ModBus 0.4.0\n"
+"Project-Id-Version: OpenSCADA.DAQ.ModBus 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-25 11:51+0200\n"
+"POT-Creation-Date: 2008-02-28 14:16+0200\n"
 "PO-Revision-Date: 2007-10-29 10:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -128,7 +128,7 @@ msgid "2"
 msgstr ""
 
 #: modbus_client.cpp:122 modbus_client.cpp:123 modbus_client.cpp:126
-#: modbus_client.cpp:137 modbus_client.cpp:410 modbus_client.cpp:1112
+#: modbus_client.cpp:137 modbus_client.cpp:410 modbus_client.cpp:1121
 msgid "0"
 msgstr ""
 
@@ -136,7 +136,7 @@ msgstr ""
 msgid "0;100"
 msgstr ""
 
-#: modbus_client.cpp:123 modbus_client.cpp:653 modbus_client.cpp:739
+#: modbus_client.cpp:123 modbus_client.cpp:653 modbus_client.cpp:750
 msgid "PROT"
 msgstr ""
 
@@ -152,12 +152,12 @@ msgstr ""
 msgid "TCP/IP;RTU;ASCII"
 msgstr ""
 
-#: modbus_client.cpp:124 modbus_client.cpp:654 modbus_client.cpp:743
-#: modbus_client.cpp:748
+#: modbus_client.cpp:124 modbus_client.cpp:654 modbus_client.cpp:754
+#: modbus_client.cpp:759
 msgid "ADDR"
 msgstr ""
 
-#: modbus_client.cpp:124 modbus_client.cpp:743
+#: modbus_client.cpp:124 modbus_client.cpp:754
 msgid "Host address"
 msgstr "Адреса хосту"
 
@@ -197,7 +197,7 @@ msgstr ""
 msgid "Standard"
 msgstr "Стандарт"
 
-#: modbus_client.cpp:130 modbus_client.cpp:1015
+#: modbus_client.cpp:130 modbus_client.cpp:1024
 msgid "ATTR_LS"
 msgstr ""
 
@@ -324,7 +324,7 @@ msgstr ""
 msgid "Search and load serial devices' DB is error."
 msgstr "Помилка пошуку та завантаження БД послідовних пристроїв."
 
-#: modbus_client.cpp:307 modbus_client.cpp:999
+#: modbus_client.cpp:307 modbus_client.cpp:1008
 msgid "info"
 msgstr ""
 
@@ -353,7 +353,7 @@ msgstr "Послідовні пристрої"
 #: modbus_client.cpp:319 modbus_client.cpp:320 modbus_client.cpp:321
 #: modbus_client.cpp:322 modbus_client.cpp:333 modbus_client.cpp:361
 #: modbus_client.cpp:370 modbus_client.cpp:372 modbus_client.cpp:414
-#: modbus_client.cpp:415 modbus_client.cpp:707 modbus_client.cpp:1002
+#: modbus_client.cpp:415 modbus_client.cpp:718 modbus_client.cpp:1011
 msgid "root"
 msgstr ""
 
@@ -393,7 +393,7 @@ msgstr "Пристрій"
 #: modbus_client.cpp:314 modbus_client.cpp:315 modbus_client.cpp:316
 #: modbus_client.cpp:317 modbus_client.cpp:318 modbus_client.cpp:319
 #: modbus_client.cpp:320 modbus_client.cpp:321 modbus_client.cpp:322
-#: modbus_client.cpp:1002
+#: modbus_client.cpp:1011
 msgid "tp"
 msgstr ""
 
@@ -466,7 +466,7 @@ msgstr ""
 msgid "/mod/dev/charTm"
 msgstr ""
 
-#: modbus_client.cpp:320 modbus_client.cpp:1002
+#: modbus_client.cpp:320 modbus_client.cpp:1011
 msgid "real"
 msgstr ""
 
@@ -506,7 +506,7 @@ msgstr ""
 msgid "Save"
 msgstr "Зберегти"
 
-#: modbus_client.cpp:330 modbus_client.cpp:1006
+#: modbus_client.cpp:330 modbus_client.cpp:1015
 msgid "path"
 msgstr ""
 
@@ -557,7 +557,7 @@ msgstr ""
 msgid "len"
 msgstr ""
 
-#: modbus_client.cpp:385 modbus_client.cpp:727
+#: modbus_client.cpp:385 modbus_client.cpp:738
 msgid "stop"
 msgstr ""
 
@@ -689,134 +689,134 @@ msgstr "Вичерпано час відповіді з послідовного
 msgid "ModBusPrm_"
 msgstr ""
 
-#: modbus_client.cpp:688 modbus_client.cpp:689 modbus_client.cpp:692
-#: modbus_client.cpp:693 modbus_client.cpp:732 modbus_client.cpp:733
-#: modbus_client.cpp:857
+#: modbus_client.cpp:699 modbus_client.cpp:700 modbus_client.cpp:703
+#: modbus_client.cpp:704 modbus_client.cpp:743 modbus_client.cpp:744
+#: modbus_client.cpp:868
 msgid "Sockets"
 msgstr "Сокети"
 
-#: modbus_client.cpp:690
+#: modbus_client.cpp:701
 msgid "TCP:"
 msgstr ""
 
-#: modbus_client.cpp:690 modbus_client.cpp:902 modbus_client.cpp:1050
+#: modbus_client.cpp:701 modbus_client.cpp:913 modbus_client.cpp:1059
 msgid ":"
 msgstr ""
 
-#: modbus_client.cpp:691
+#: modbus_client.cpp:702
 msgid "502"
 msgstr ""
 
-#: modbus_client.cpp:715
+#: modbus_client.cpp:726
 msgid "start"
 msgstr ""
 
-#: modbus_client.cpp:716
+#: modbus_client.cpp:727
 msgid "Gathering task no started!"
 msgstr "Задачу збору даних не запущено!"
 
-#: modbus_client.cpp:728
+#: modbus_client.cpp:739
 msgid "Gathering task no stoped!"
 msgstr "Задачу збору даних не зупинено!"
 
-#: modbus_client.cpp:748
+#: modbus_client.cpp:759
 msgid "Serial port"
 msgstr "Послідовний порт"
 
-#: modbus_client.cpp:872
+#: modbus_client.cpp:883
 msgid "13:Error server respond"
 msgstr "13:Помилка відповіді серверу"
 
-#: modbus_client.cpp:891
+#: modbus_client.cpp:902
 msgid "13:Error respond: Too short."
 msgstr "13:Помилка відповіді: Дуже коротка."
 
-#: modbus_client.cpp:893
+#: modbus_client.cpp:904
 msgid "13:Error respond: CRC check error."
 msgstr "13:Помилка відповіді: Помилка перевірки CRC."
 
-#: modbus_client.cpp:905
+#: modbus_client.cpp:916
 msgid "13:Error respond: Error format."
 msgstr "13:Помилка відповіді: Помилка формату."
 
-#: modbus_client.cpp:908
+#: modbus_client.cpp:919
 msgid "13:Error respond: LRC check error."
 msgstr "13:Помилка відповіді: Помилка перевірки LRC."
 
-#: modbus_client.cpp:914
+#: modbus_client.cpp:925
 msgid "13:Error respond"
 msgstr "13:Помилка відповіді"
 
-#: modbus_client.cpp:919
+#: modbus_client.cpp:930
 #, c-format
 msgid "1:Function %xh no support."
 msgstr "1:Функція %xh не підтримується."
 
-#: modbus_client.cpp:921
+#: modbus_client.cpp:932
 msgid "2:Requested registers length too long."
 msgstr "2:Довжина запитаних регістрів дуже велика."
 
-#: modbus_client.cpp:922
+#: modbus_client.cpp:933
 msgid "3:Illegal data value."
 msgstr "3:Нелегальне значення даних."
 
-#: modbus_client.cpp:923
+#: modbus_client.cpp:934
 msgid "4:Server failure."
 msgstr "4:Збій серверу"
 
-#: modbus_client.cpp:924
+#: modbus_client.cpp:935
 msgid "5:Request require too long time for execute."
 msgstr "5:Запит вимагає дуже багато часу для виконання."
 
-#: modbus_client.cpp:925
+#: modbus_client.cpp:936
 msgid "6:Server busy."
 msgstr "6:Сервер зайнятий."
 
-#: modbus_client.cpp:926
+#: modbus_client.cpp:937
 msgid "10:Gateway problem."
 msgstr "10:Помилка у шлюзі."
 
-#: modbus_client.cpp:928
+#: modbus_client.cpp:939
 #, c-format
 msgid "12:Unknown error: %xh."
 msgstr "12:Невідома помилка: %xh."
 
-#: modbus_client.cpp:934
+#: modbus_client.cpp:945
 msgid "14:Request is error: "
 msgstr "14:Помилка запиту: "
 
-#: modbus_client.cpp:1002
+#: modbus_client.cpp:1011
 msgid "fld"
 msgstr ""
 
-#: modbus_client.cpp:1002 modbus_client.cpp:1007
+#: modbus_client.cpp:1011 modbus_client.cpp:1016
 msgid "/cntr/st/gath_tm"
 msgstr ""
 
-#: modbus_client.cpp:1002
+#: modbus_client.cpp:1011
 msgid "Gather data time (ms)"
 msgstr "Час збору даних (мс)"
 
-#: modbus_client.cpp:1015
+#: modbus_client.cpp:1024
 msgid "w_attr"
 msgstr ""
 
-#: modbus_client.cpp:1059
+#: modbus_client.cpp:1068
 msgid "0:65535"
 msgstr ""
 
-#: modbus_client.cpp:1100 modbus_client.cpp:1110
+#: modbus_client.cpp:1109 modbus_client.cpp:1119
 msgid "err"
 msgstr ""
 
-#: modbus_client.cpp:1102
+#: modbus_client.cpp:1111
 msgid "1:Parameter had disabled."
 msgstr "1:Параметр вимкнено."
 
-#: modbus_client.cpp:1103
+#: modbus_client.cpp:1112
 msgid "2:Acquisition is stoped."
 msgstr "2:Збір зупинено."
 
-#: modbus_client.h:113
+#: modbus_client.h:115
 msgid "11:Value not gathered."
 msgstr "11:Значення не отримано."

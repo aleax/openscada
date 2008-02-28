@@ -42,6 +42,7 @@ class Attr : public TCntrNode
         {
 	    Active  = 0x0100,	//Active attribute for primitives process
             Image   = 0x0200,	//Store image link to DB or to file
+	    DataTime= 0x0200,	//Store data and time into integer attribute
             Color   = 0x0400,	//Store color
             Font    = 0x0800,	//Store font
 	    Address = 0x1000,	//Store address to a parameter or an attribute

@@ -8,9 +8,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.DiamondBoards 0.9.1\n"
+"Project-Id-Version: OpenSCADA.DAQ.DiamondBoards 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-25 11:26+0200\n"
+"POT-Creation-Date: 2008-02-28 09:52+0200\n"
 "PO-Revision-Date: 2007-10-28 09:43+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: LANGUAGE <uk@li.org>\n"
@@ -30,7 +30,7 @@ msgid "DAQ"
 msgstr ""
 
 #: diamond.cpp:41
-msgid "1.0.0"
+msgid "1.0.1"
 msgstr ""
 
 #: diamond.cpp:42

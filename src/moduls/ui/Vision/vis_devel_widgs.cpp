@@ -38,6 +38,7 @@
 #include <QSpinBox>
 #include <QDoubleSpinBox>
 #include <QBuffer>
+#include <QDateTimeEdit>
 
 #include <tsys.h>
 
@@ -541,6 +542,10 @@ QWidget *InspAttr::ItemDelegate::createEditor(QWidget *parent, const QStyleOptio
 	((QTextEdit*)w_del)->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	((QTextEdit*)w_del)->resize(50,50);
     }
+    /*else if( value.type() == QVariant::Int && flag&ModInspAttr::Item::DataTime )
+    {
+	w_del = new QDateTimeEdit(parent);	
+    }*/
     else if( value.type() == QVariant::Int )
     {
 	w_del = new QSpinBox(parent);
@@ -580,6 +585,11 @@ void InspAttr::ItemDelegate::setEditorData(QWidget *editor, const QModelIndex &i
 	QTextEdit *ted = dynamic_cast<QTextEdit*>(editor);
 	ted->setPlainText(value.toString());
     }
+    /*else if( value.type() == QVariant::Int && flag&ModInspAttr::Item::DataTime )
+    {	
+	QDateTimeEdit *dted = dynamic_cast<QDateTimeEdit*>(editor);
+	dted->setDateTime(QDateTime::fromTime_t(value.toInt()));
+    }*/
     else QItemDelegate::setEditorData(editor, index);
 }
 
@@ -598,6 +608,11 @@ void InspAttr::ItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *m
 	QTextEdit *ted = dynamic_cast<QTextEdit*>(editor);
 	model->setData(index,ted->toPlainText(),Qt::EditRole);
     }
+    /*else if( value.type() == QVariant::Int && flag&ModInspAttr::Item::DataTime )
+    {
+	QDateTimeEdit *dted = dynamic_cast<QDateTimeEdit*>(editor);
+	model->setData(index,dted->dateTime().toTime_t(),Qt::EditRole);
+    }*/
     else QItemDelegate::setModelData(editor, model, index);
 }
 

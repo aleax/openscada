@@ -36,7 +36,7 @@
 #define MOD_NAME    "File system archivator"
 #define MOD_TYPE    "Archive"
 #define VER_TYPE    VER_ARH
-#define VERSION     "0.9.5"
+#define VERSION     "0.9.6"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "The Archive module. Allow functions for messages and values arhiving to file system."
 #define LICENSE     "GPL"

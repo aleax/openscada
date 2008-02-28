@@ -7,9 +7,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Special.FLibComplex1 0.9.0\n"
+"Project-Id-Version: OpenSCADA.Special.FLibComplex1 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-25 11:59+0200\n"
+"POT-Creation-Date: 2008-02-28 16:39+0200\n"
 "PO-Revision-Date: 2007-10-24 16:47+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -33,7 +33,7 @@ msgid "LIB"
 msgstr ""
 
 #: statfunc.cpp:35
-msgid "1.0.0"
+msgid "1.0.1"
 msgstr ""
 
 #: statfunc.cpp:40

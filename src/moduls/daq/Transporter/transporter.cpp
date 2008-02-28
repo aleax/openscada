@@ -33,7 +33,7 @@
 #define MOD_NAME    "Data sources transporter"
 #define MOD_TYPE    "DAQ"
 #define VER_TYPE    VER_CNTR
-#define VERSION     "0.3.0"
+#define VERSION     "0.3.1"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow to make transport data sources of remote OpenSCADA station to local OpenSCADA station."
 #define LICENSE     "GPL"

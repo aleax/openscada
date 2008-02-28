@@ -99,7 +99,7 @@ class TMdContr: public TController
 	void regVal( int reg );    			//Register value for acquisition
 	int  getVal( int reg, string &err );		//Get register value
 	void setVal( int val, int reg, string &err );	//Set value
-	string modBusReq( string &pdu );
+	string modBusReq( string &pdu );	
 
     protected:
 	//Methods

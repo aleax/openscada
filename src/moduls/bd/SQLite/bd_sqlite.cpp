@@ -33,7 +33,7 @@
 #define MOD_NAME    "DB SQLite"
 #define MOD_TYPE    "BD"
 #define VER_TYPE    VER_BD
-#define VERSION     "1.3.0"
+#define VERSION     "1.3.1"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "BD modul. Allow support of the BD SQLite."
 #define LICENSE     "GPL"

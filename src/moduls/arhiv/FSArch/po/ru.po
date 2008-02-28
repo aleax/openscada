@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: base.cpp:52 base.cpp:268 val.cpp:374 val.cpp:375 val.cpp:376 val.cpp:377
+#: base.cpp:52 base.cpp:268 val.cpp:373 val.cpp:374 val.cpp:375 val.cpp:376
 #: mess.h:115
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Archive.FSArch 0.9.5\n"
+"Project-Id-Version: OpenSCADA.Archive.FSArch 0.9.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-25 11:12+0200\n"
+"POT-Creation-Date: 2008-02-27 18:24+0200\n"
 "PO-Revision-Date: 2007-10-21 22:21+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -25,12 +25,12 @@ msgstr ""
 msgid "File system archivator"
 msgstr "Архиватор на файловую систему"
 
-#: base.cpp:37 val.cpp:336
+#: base.cpp:37 val.cpp:335
 msgid "Archive"
 msgstr "Архив"
 
 #: base.cpp:39
-msgid "0.9.5"
+msgid "0.9.6"
 msgstr ""
 
 #: base.cpp:40
@@ -53,7 +53,7 @@ msgstr ""
 msgid "C"
 msgstr ""
 
-#: base.cpp:97 mess.cpp:39 mess.cpp:276
+#: base.cpp:97 mess.cpp:40 mess.cpp:277
 msgid "FSArchXML"
 msgstr ""
 
@@ -61,7 +61,7 @@ msgstr ""
 msgid "XML archive files"
 msgstr "XML архивные файлы"
 
-#: base.cpp:97 mess.cpp:293
+#: base.cpp:97 mess.cpp:294
 msgid "1"
 msgstr ""
 
@@ -69,7 +69,7 @@ msgstr ""
 msgid "false"
 msgstr ""
 
-#: base.cpp:98 mess.cpp:39 mess.cpp:277
+#: base.cpp:98 mess.cpp:40 mess.cpp:278
 msgid "FSArchMSize"
 msgstr ""
 
@@ -85,7 +85,7 @@ msgstr ""
 msgid "300"
 msgstr ""
 
-#: base.cpp:99 base.cpp:106 mess.cpp:40 mess.cpp:278 val.cpp:40 val.cpp:327
+#: base.cpp:99 base.cpp:106 mess.cpp:41 mess.cpp:279 val.cpp:40 val.cpp:326
 msgid "FSArchNFiles"
 msgstr ""
 
@@ -101,7 +101,7 @@ msgstr ""
 msgid "10"
 msgstr ""
 
-#: base.cpp:100 base.cpp:105 mess.cpp:40 mess.cpp:279 val.cpp:40 val.cpp:326
+#: base.cpp:100 base.cpp:105 mess.cpp:41 mess.cpp:280 val.cpp:40 val.cpp:325
 msgid "FSArchTmSize"
 msgstr ""
 
@@ -113,7 +113,7 @@ msgstr "Размер файла (дней)"
 msgid "30"
 msgstr ""
 
-#: base.cpp:101 base.cpp:108 mess.cpp:41 mess.cpp:280 val.cpp:42 val.cpp:329
+#: base.cpp:101 base.cpp:108 mess.cpp:42 mess.cpp:281 val.cpp:42 val.cpp:328
 msgid "FSArchPackTm"
 msgstr ""
 
@@ -125,7 +125,7 @@ msgstr "Таймаут упаковки файлов (мин)"
 msgid "2"
 msgstr ""
 
-#: base.cpp:102 base.cpp:109 mess.cpp:41 mess.cpp:281 val.cpp:41 val.cpp:330
+#: base.cpp:102 base.cpp:109 mess.cpp:42 mess.cpp:282 val.cpp:41 val.cpp:329
 msgid "FSArchTm"
 msgstr ""
 
@@ -149,7 +149,7 @@ msgstr ""
 msgid "800"
 msgstr ""
 
-#: base.cpp:107 val.cpp:41 val.cpp:328
+#: base.cpp:107 val.cpp:41 val.cpp:327
 msgid "FSArchRound"
 msgstr ""
 
@@ -169,8 +169,8 @@ msgstr ""
 msgid "0;50"
 msgstr ""
 
-#: base.cpp:112 base.cpp:263 base.cpp:268 mess.cpp:393 mess.cpp:788 val.cpp:82
-#: val.cpp:116 val.cpp:943
+#: base.cpp:112 base.cpp:263 base.cpp:268 mess.cpp:396 mess.cpp:791 val.cpp:82
+#: val.cpp:116 val.cpp:942
 msgid "FILE"
 msgstr ""
 
@@ -182,11 +182,11 @@ msgstr ""
 msgid "100"
 msgstr ""
 
-#: base.cpp:113 mess.cpp:396 mess.cpp:789 val.cpp:85 val.cpp:117 val.cpp:944
+#: base.cpp:113 mess.cpp:399 mess.cpp:792 val.cpp:85 val.cpp:117 val.cpp:943
 msgid "BEGIN"
 msgstr ""
 
-#: base.cpp:113 mess.cpp:353 mess.cpp:469 mess.cpp:512 val.cpp:337
+#: base.cpp:113 mess.cpp:354 mess.cpp:472 mess.cpp:515 val.cpp:336
 msgid "Begin"
 msgstr "Начало"
 
@@ -194,16 +194,16 @@ msgstr "Начало"
 msgid "20"
 msgstr ""
 
-#: base.cpp:114 mess.cpp:397 mess.cpp:790 val.cpp:86 val.cpp:118 val.cpp:945
+#: base.cpp:114 mess.cpp:400 mess.cpp:793 val.cpp:86 val.cpp:118 val.cpp:944
 msgid "END"
 msgstr ""
 
-#: base.cpp:114 mess.cpp:354 mess.cpp:470 mess.cpp:513 mess.cpp:567
-#: val.cpp:338
+#: base.cpp:114 mess.cpp:355 mess.cpp:473 mess.cpp:516 mess.cpp:570
+#: val.cpp:337
 msgid "End"
 msgstr "Конец"
 
-#: base.cpp:115 mess.cpp:398 mess.cpp:791 val.cpp:87 val.cpp:119 val.cpp:946
+#: base.cpp:115 mess.cpp:401 mess.cpp:794 val.cpp:87 val.cpp:119 val.cpp:945
 msgid "PRM1"
 msgstr ""
 
@@ -211,7 +211,7 @@ msgstr ""
 msgid "Parameter 1"
 msgstr "Параметр 1"
 
-#: base.cpp:116 mess.cpp:399 mess.cpp:792 val.cpp:88 val.cpp:120 val.cpp:947
+#: base.cpp:116 mess.cpp:402 mess.cpp:795 val.cpp:88 val.cpp:120 val.cpp:946
 msgid "PRM2"
 msgstr ""
 
@@ -219,7 +219,7 @@ msgstr ""
 msgid "Parameter 2"
 msgstr "Параметр 2"
 
-#: base.cpp:117 val.cpp:89 val.cpp:121 val.cpp:948
+#: base.cpp:117 val.cpp:89 val.cpp:121 val.cpp:947
 msgid "PRM3"
 msgstr ""
 
@@ -227,7 +227,7 @@ msgstr ""
 msgid "Parameter 3"
 msgstr "Параметр 3"
 
-#: base.cpp:130 mess.cpp:171 val.cpp:148 val.cpp:229 val.cpp:290 val.cpp:475
+#: base.cpp:130 mess.cpp:172 val.cpp:148 val.cpp:229 val.cpp:290 val.cpp:474
 msgid "."
 msgstr ""
 
@@ -290,7 +290,7 @@ msgstr ""
 msgid "Check archives thread no stoped!"
 msgstr "Поток проверки архивов не остановлен!"
 
-#: base.cpp:242 base.cpp:252 mess.cpp:527 val.cpp:925
+#: base.cpp:242 base.cpp:252 mess.cpp:530 val.cpp:924
 #, c-format
 msgid "%s"
 msgstr ""
@@ -305,19 +305,19 @@ msgstr "Ошибка проверки архиватора сообщений <%
 msgid "Check value archivator <%s> error."
 msgstr "Ошибка проверки архиватора значений <%s>."
 
-#: base.cpp:260 base.cpp:265 mess.cpp:394 mess.cpp:793 val.cpp:83 val.cpp:122
-#: val.cpp:949
+#: base.cpp:260 base.cpp:265 mess.cpp:397 mess.cpp:796 val.cpp:83 val.cpp:122
+#: val.cpp:948
 msgid "Pack/"
 msgstr ""
 
-#: base.cpp:288 mess.cpp:269 val.cpp:321
+#: base.cpp:288 mess.cpp:270 val.cpp:320
 msgid "info"
 msgstr ""
 
-#: base.cpp:291 mess.cpp:272 mess.cpp:273 mess.cpp:276 mess.cpp:277
-#: mess.cpp:278 mess.cpp:279 mess.cpp:280 mess.cpp:281 val.cpp:326 val.cpp:327
-#: val.cpp:328 val.cpp:329 val.cpp:330 val.cpp:336 val.cpp:337 val.cpp:338
-#: val.cpp:339 val.cpp:340
+#: base.cpp:291 mess.cpp:273 mess.cpp:274 mess.cpp:277 mess.cpp:278
+#: mess.cpp:279 mess.cpp:280 mess.cpp:281 mess.cpp:282 val.cpp:325 val.cpp:326
+#: val.cpp:327 val.cpp:328 val.cpp:329 val.cpp:335 val.cpp:336 val.cpp:337
+#: val.cpp:338 val.cpp:339
 msgid "fld"
 msgstr ""
 
@@ -329,26 +329,26 @@ msgstr ""
 msgid "Options help"
 msgstr "Помощь по опциям"
 
-#: base.cpp:291 mess.cpp:272 mess.cpp:273 mess.cpp:274 mess.cpp:276
-#: mess.cpp:277 mess.cpp:278 mess.cpp:279 mess.cpp:280 mess.cpp:281
-#: mess.cpp:282 mess.cpp:293 mess.cpp:294 mess.cpp:298 mess.cpp:299
-#: mess.cpp:303 mess.cpp:304 mess.cpp:308 mess.cpp:309 mess.cpp:313
-#: mess.cpp:314 mess.cpp:318 mess.cpp:319 mess.cpp:321 val.cpp:324 val.cpp:326
-#: val.cpp:327 val.cpp:328 val.cpp:329 val.cpp:330 val.cpp:331 val.cpp:333
-#: val.cpp:336 val.cpp:337 val.cpp:338 val.cpp:339 val.cpp:340 val.cpp:348
-#: val.cpp:349 val.cpp:353 val.cpp:354 val.cpp:358 val.cpp:359 val.cpp:363
-#: val.cpp:364 val.cpp:368 val.cpp:369 val.cpp:400 val.cpp:401
+#: base.cpp:291 mess.cpp:273 mess.cpp:274 mess.cpp:275 mess.cpp:277
+#: mess.cpp:278 mess.cpp:279 mess.cpp:280 mess.cpp:281 mess.cpp:282
+#: mess.cpp:283 mess.cpp:294 mess.cpp:295 mess.cpp:299 mess.cpp:300
+#: mess.cpp:304 mess.cpp:305 mess.cpp:309 mess.cpp:310 mess.cpp:314
+#: mess.cpp:315 mess.cpp:319 mess.cpp:320 mess.cpp:322 val.cpp:323 val.cpp:325
+#: val.cpp:326 val.cpp:327 val.cpp:328 val.cpp:329 val.cpp:330 val.cpp:332
+#: val.cpp:335 val.cpp:336 val.cpp:337 val.cpp:338 val.cpp:339 val.cpp:347
+#: val.cpp:348 val.cpp:352 val.cpp:353 val.cpp:357 val.cpp:358 val.cpp:362
+#: val.cpp:363 val.cpp:367 val.cpp:368 val.cpp:399 val.cpp:400
 msgid "root"
 msgstr ""
 
-#: base.cpp:291 mess.cpp:272 mess.cpp:273 mess.cpp:276 mess.cpp:277
-#: mess.cpp:278 mess.cpp:279 mess.cpp:280 mess.cpp:281 val.cpp:326 val.cpp:327
-#: val.cpp:328 val.cpp:329 val.cpp:330 val.cpp:333 val.cpp:336 val.cpp:337
-#: val.cpp:338 val.cpp:339 val.cpp:340
+#: base.cpp:291 mess.cpp:273 mess.cpp:274 mess.cpp:277 mess.cpp:278
+#: mess.cpp:279 mess.cpp:280 mess.cpp:281 mess.cpp:282 val.cpp:325 val.cpp:326
+#: val.cpp:327 val.cpp:328 val.cpp:329 val.cpp:332 val.cpp:335 val.cpp:336
+#: val.cpp:337 val.cpp:338 val.cpp:339
 msgid "tp"
 msgstr ""
 
-#: base.cpp:291 val.cpp:336 val.cpp:339 val.cpp:340
+#: base.cpp:291 val.cpp:335 val.cpp:338 val.cpp:339
 msgid "str"
 msgstr ""
 
@@ -368,243 +368,248 @@ msgstr ""
 msgid "5"
 msgstr ""
 
-#: base.cpp:295 mess.cpp:288 val.cpp:345
+#: base.cpp:295 mess.cpp:289 val.cpp:344
 msgid "path"
 msgstr ""
 
-#: base.cpp:296 mess.cpp:293 mess.cpp:298 mess.cpp:303 mess.cpp:308
-#: mess.cpp:313 mess.cpp:318 val.cpp:348 val.cpp:353 val.cpp:358 val.cpp:363
-#: val.cpp:368
+#: base.cpp:296 mess.cpp:294 mess.cpp:299 mess.cpp:304 mess.cpp:309
+#: mess.cpp:314 mess.cpp:319 val.cpp:347 val.cpp:352 val.cpp:357 val.cpp:362
+#: val.cpp:367
 msgid "get"
 msgstr ""
 
-#: mess.cpp:91 mess.cpp:137
+#: mess.cpp:92 mess.cpp:138
 msgid "Archive no started!"
 msgstr "Архив не запущен!"
 
-#: mess.cpp:118
+#: mess.cpp:119
 msgid "/%F %T.msg"
 msgstr ""
 
-#: mess.cpp:122
+#: mess.cpp:123
 #, c-format
 msgid "Error create new archive file <%s>!"
 msgstr "Не мой архивный файл <%s>"
 
-#: mess.cpp:160 val.cpp:141
+#: mess.cpp:161 val.cpp:141
 #, c-format
 msgid "Can not create dir <%s>."
 msgstr "Немогу создать директорию <%s>."
 
-#: mess.cpp:171 val.cpp:148 val.cpp:475
+#: mess.cpp:172 val.cpp:148 val.cpp:474
 msgid ".."
 msgstr ""
 
-#: mess.cpp:172 val.cpp:152 val.cpp:478 val.cpp:665 val.cpp:692
+#: mess.cpp:173 val.cpp:152 val.cpp:477 val.cpp:664 val.cpp:691
 msgid "/"
 msgstr ""
 
-#: mess.cpp:272 mess.cpp:289
+#: mess.cpp:273 mess.cpp:290
 msgid "/prm/st/fsz"
 msgstr ""
 
-#: mess.cpp:272
+#: mess.cpp:273
 msgid "Archive files size (kB)"
 msgstr "Размер файла архива (кБ)"
 
-#: mess.cpp:272 mess.cpp:273 val.cpp:326 val.cpp:328 val.cpp:333
+#: mess.cpp:273 mess.cpp:274 val.cpp:325 val.cpp:327 val.cpp:332
 msgid "real"
 msgstr ""
 
-#: mess.cpp:273 mess.cpp:290
+#: mess.cpp:274 mess.cpp:291
 msgid "/prm/st/tarch"
 msgstr ""
 
-#: mess.cpp:273
+#: mess.cpp:274
 msgid "Archiving time (msek)"
 msgstr "Время архивирования (мс)"
 
-#: mess.cpp:274 val.cpp:324
+#: mess.cpp:275 val.cpp:323
 msgid "area"
 msgstr ""
 
-#: mess.cpp:274 val.cpp:324
+#: mess.cpp:275 val.cpp:323
 msgid "/bs"
 msgstr ""
 
-#: mess.cpp:274 val.cpp:324
+#: mess.cpp:275 val.cpp:323
 msgid "Additional options"
 msgstr "Дополнительные опции"
 
-#: mess.cpp:276 mess.cpp:291
+#: mess.cpp:277 mess.cpp:292
 msgid "/bs/xml"
 msgstr ""
 
-#: mess.cpp:276
+#: mess.cpp:277
 msgid "bool"
 msgstr ""
 
-#: mess.cpp:277 mess.cpp:296
+#: mess.cpp:278 mess.cpp:297
 msgid "/bs/sz"
 msgstr ""
 
-#: mess.cpp:277 mess.cpp:278 mess.cpp:279 mess.cpp:280 mess.cpp:281
-#: val.cpp:327 val.cpp:329 val.cpp:330
+#: mess.cpp:278 mess.cpp:279 mess.cpp:280 mess.cpp:281 mess.cpp:282
+#: val.cpp:326 val.cpp:328 val.cpp:329
 msgid "dec"
 msgstr ""
 
-#: mess.cpp:278 mess.cpp:301
+#: mess.cpp:279 mess.cpp:302
 msgid "/bs/fl"
 msgstr ""
 
-#: mess.cpp:279 mess.cpp:306
+#: mess.cpp:280 mess.cpp:307
 msgid "/bs/len"
 msgstr ""
 
-#: mess.cpp:280 mess.cpp:311 val.cpp:329 val.cpp:361
+#: mess.cpp:281 mess.cpp:312 val.cpp:328 val.cpp:360
 msgid "/bs/pcktm"
 msgstr ""
 
-#: mess.cpp:281 mess.cpp:316 val.cpp:326 val.cpp:346
+#: mess.cpp:282 mess.cpp:317 val.cpp:325 val.cpp:345
 msgid "/bs/tm"
 msgstr ""
 
-#: mess.cpp:282 val.cpp:331 val.cpp:334
+#: mess.cpp:283 val.cpp:330 val.cpp:333
 msgid "comm"
 msgstr ""
 
-#: mess.cpp:282 mess.cpp:321 val.cpp:331 val.cpp:400
+#: mess.cpp:283 mess.cpp:322 val.cpp:330 val.cpp:399
 msgid "/bs/chk_nw"
 msgstr ""
 
-#: mess.cpp:282 val.cpp:331
+#: mess.cpp:283 val.cpp:330
 msgid "Check archivator directory now"
 msgstr "Проверить директорию архиватора сейчас"
 
-#: mess.cpp:293
+#: mess.cpp:294
 msgid "0"
 msgstr ""
 
-#: mess.cpp:294 mess.cpp:299 mess.cpp:304 mess.cpp:309 mess.cpp:314
-#: mess.cpp:319 mess.cpp:321 val.cpp:349 val.cpp:354 val.cpp:359 val.cpp:364
-#: val.cpp:369 val.cpp:400 val.cpp:401
+#: mess.cpp:295 mess.cpp:300 mess.cpp:305 mess.cpp:310 mess.cpp:315
+#: mess.cpp:320 mess.cpp:322 val.cpp:348 val.cpp:353 val.cpp:358 val.cpp:363
+#: val.cpp:368 val.cpp:399 val.cpp:400
 msgid "set"
 msgstr ""
 
-#: mess.cpp:330 mess.cpp:347 mess.cpp:468 mess.h:45
+#: mess.cpp:331 mess.cpp:348 mess.cpp:471 mess.h:45
 msgid "UTF-8"
 msgstr ""
 
-#: mess.cpp:342 val.cpp:729
+#: mess.cpp:343 val.cpp:728
 #, c-format
 msgid "Can not create file: <%s>!"
 msgstr "Немогу создать файл: <%s>!"
 
-#: mess.cpp:352 mess.cpp:363 mess.cpp:587
+#: mess.cpp:353 mess.cpp:365 mess.cpp:590
 msgid "Version"
 msgstr "Версия"
 
-#: mess.cpp:355 mess.cpp:760
+#: mess.cpp:356 mess.cpp:763
 msgid "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"
 msgstr ""
 
-#: mess.cpp:362 mess.cpp:586
+#: mess.cpp:358 mess.cpp:367
+#, c-format
+msgid "Write to file error: %s"
+msgstr "Ошибка записи в файл: %s"
+
+#: mess.cpp:364 mess.cpp:589
 #, c-format
 msgid "%s %s %8s %8x %8x\n"
 msgstr ""
 
-#: mess.cpp:417 mess.cpp:703
+#: mess.cpp:420 mess.cpp:706
 msgid "r"
 msgstr ""
 
-#: mess.cpp:425
+#: mess.cpp:428
 #, c-format
 msgid "File %s header error!"
 msgstr "Ошибка в заголовке файла <%s>!"
 
-#: mess.cpp:426
+#: mess.cpp:429
 #, c-format
 msgid "%*s %8s %x %x"
 msgstr ""
 
-#: mess.cpp:461
+#: mess.cpp:464
 #, c-format
 msgid "No my Archive file: <%s>"
 msgstr "Не мой архивный файл <%s>"
 
-#: mess.cpp:486 mess.cpp:495
+#: mess.cpp:489 mess.cpp:498
 #, c-format
 msgid "Archive <%s> file error."
 msgstr "Ошибка в файле архива <%s>."
 
-#: mess.cpp:537
+#: mess.cpp:540
 msgid "Put message to error Archive file!"
 msgstr "Вставка сообщения в архивный файл с ошибкой!"
 
-#: mess.cpp:545
+#: mess.cpp:548
 #, c-format
 msgid "Archive file '%s' isn't attaching!"
 msgstr "Файл архива '%s' не подключен!"
 
-#: mess.cpp:556 mess.cpp:560 mess.cpp:678
+#: mess.cpp:559 mess.cpp:563 mess.cpp:681
 msgid "tm"
 msgstr ""
 
-#: mess.cpp:559
+#: mess.cpp:562
 msgid "m"
 msgstr ""
 
-#: mess.cpp:561 mess.cpp:680
+#: mess.cpp:564 mess.cpp:683
 msgid "lv"
 msgstr ""
 
-#: mess.cpp:562 mess.cpp:679
+#: mess.cpp:565 mess.cpp:682
 msgid "cat"
 msgstr ""
 
-#: mess.cpp:575 mess.cpp:576 val.cpp:1291
+#: mess.cpp:578 mess.cpp:579 val.cpp:1290
 msgid " "
 msgstr ""
 
-#: mess.cpp:578
+#: mess.cpp:581
 msgid "r+"
 msgstr ""
 
-#: mess.cpp:591 mess.cpp:616
+#: mess.cpp:594 mess.cpp:619
 #, c-format
 msgid "%8x %d %s %s\n"
 msgstr ""
 
-#: mess.cpp:592 mess.cpp:593 mess.cpp:617 mess.cpp:618
+#: mess.cpp:595 mess.cpp:596 mess.cpp:620 mess.cpp:621
 msgid ""
 " \n"
 "\t%"
 msgstr ""
 
-#: mess.cpp:611
+#: mess.cpp:614
 #, c-format
 msgid "%x %*d"
 msgstr ""
 
-#: mess.cpp:662
+#: mess.cpp:665
 msgid "Get messages from error Archive file!"
 msgstr "Получение сообщений из архивного файла с ошибкой!"
 
-#: mess.cpp:667
+#: mess.cpp:670
 msgid "Archive file isn't attaching!"
 msgstr "Файл архива не подключен!"
 
-#: mess.cpp:716
+#: mess.cpp:719
 #, c-format
 msgid "%x %d"
 msgstr ""
 
-#: mess.cpp:722
+#: mess.cpp:725
 #, c-format
 msgid "%*x %*d %1000s %1000s"
 msgstr ""
 
-#: val.cpp:193 val.cpp:398
+#: val.cpp:193 val.cpp:397
 msgid "wav"
 msgstr ""
 
@@ -624,160 +629,160 @@ msgstr ""
 msgid "data"
 msgstr ""
 
-#: val.cpp:302
+#: val.cpp:301
 #, c-format
 msgid "%g\n"
 msgstr ""
 
-#: val.cpp:327 val.cpp:351
+#: val.cpp:326 val.cpp:350
 msgid "/bs/fn"
 msgstr ""
 
-#: val.cpp:328 val.cpp:356
+#: val.cpp:327 val.cpp:355
 msgid "/bs/round"
 msgstr ""
 
-#: val.cpp:330 val.cpp:366
+#: val.cpp:329 val.cpp:365
 msgid "/bs/tmout"
 msgstr ""
 
-#: val.cpp:333 val.cpp:374 val.cpp:375 val.cpp:376 val.cpp:377
+#: val.cpp:332 val.cpp:373 val.cpp:374 val.cpp:375 val.cpp:376
 msgid "list"
 msgstr ""
 
-#: val.cpp:333 val.cpp:377
+#: val.cpp:332 val.cpp:376
 msgid "/arch/arch/3"
 msgstr ""
 
-#: val.cpp:333
+#: val.cpp:332
 msgid "Files size (Mb)"
 msgstr "Размер файлов (Мб)"
 
-#: val.cpp:334 val.cpp:401
+#: val.cpp:333 val.cpp:400
 msgid "/arch/exp"
 msgstr ""
 
-#: val.cpp:334
+#: val.cpp:333
 msgid "Export"
 msgstr "Экспорт"
 
-#: val.cpp:336
+#: val.cpp:335
 msgid "/arch/exp/arch"
 msgstr ""
 
-#: val.cpp:336 val.cpp:339
+#: val.cpp:335 val.cpp:338
 msgid "dest"
 msgstr ""
 
-#: val.cpp:336 val.cpp:339
+#: val.cpp:335 val.cpp:338
 msgid "select"
 msgstr ""
 
-#: val.cpp:336 val.cpp:388
+#: val.cpp:335 val.cpp:387
 msgid "/arch/lst"
 msgstr ""
 
-#: val.cpp:337
+#: val.cpp:336
 msgid "/arch/exp/beg"
 msgstr ""
 
-#: val.cpp:337 val.cpp:338
+#: val.cpp:336 val.cpp:337
 msgid "time"
 msgstr ""
 
-#: val.cpp:338
+#: val.cpp:337
 msgid "/arch/exp/end"
 msgstr ""
 
-#: val.cpp:339
+#: val.cpp:338
 msgid "/arch/exp/tfl"
 msgstr ""
 
-#: val.cpp:339
+#: val.cpp:338
 msgid "Type"
 msgstr "Тип"
 
-#: val.cpp:339 val.cpp:395
+#: val.cpp:338 val.cpp:394
 msgid "/arch/tpflst"
 msgstr ""
 
-#: val.cpp:340
+#: val.cpp:339
 msgid "/arch/exp/file"
 msgstr ""
 
-#: val.cpp:340
+#: val.cpp:339
 msgid "To file"
 msgstr "В файл"
 
-#: val.cpp:371
+#: val.cpp:370
 msgid "/arch/arch"
 msgstr ""
 
-#: val.cpp:374
+#: val.cpp:373
 msgid "/arch/arch/0"
 msgstr ""
 
-#: val.cpp:375
+#: val.cpp:374
 msgid "/arch/arch/1"
 msgstr ""
 
-#: val.cpp:376
+#: val.cpp:375
 msgid "/arch/arch/2"
 msgstr ""
 
-#: val.cpp:382 val.cpp:383 val.cpp:384 val.cpp:385 val.cpp:393 val.cpp:397
-#: val.cpp:398
+#: val.cpp:381 val.cpp:382 val.cpp:383 val.cpp:384 val.cpp:392 val.cpp:396
+#: val.cpp:397
 msgid "el"
 msgstr ""
 
-#: val.cpp:397
+#: val.cpp:396
 msgid "ascii"
 msgstr ""
 
-#: val.cpp:402
+#: val.cpp:401
 msgid "arch"
 msgstr ""
 
-#: val.cpp:403
+#: val.cpp:402
 msgid "beg"
 msgstr ""
 
-#: val.cpp:404
+#: val.cpp:403
 msgid "end"
 msgstr ""
 
-#: val.cpp:405
+#: val.cpp:404
 msgid "tfl"
 msgstr ""
 
-#: val.cpp:406
+#: val.cpp:405
 msgid "file"
 msgstr ""
 
-#: val.cpp:664 val.cpp:691
+#: val.cpp:663 val.cpp:690
 msgid " %F %T.val"
 msgstr ""
 
-#: val.cpp:705
+#: val.cpp:704
 msgid "OpenSCADA Val Arch."
 msgstr ""
 
-#: val.cpp:897
+#: val.cpp:896
 #, c-format
 msgid "Archive file <%s> no openned!"
 msgstr "Файл архива <%s> не открыт!"
 
-#: val.cpp:926
+#: val.cpp:925
 #, c-format
 msgid "Attach file <%s> error."
 msgstr "Ошибка подключения файла <%s>."
 
-#: val.cpp:967 val.cpp:1092 val.cpp:1126 val.cpp:1158 val.cpp:1190
-#: val.cpp:1225
+#: val.cpp:966 val.cpp:1091 val.cpp:1125 val.cpp:1157 val.cpp:1189
+#: val.cpp:1224
 msgid "Archive file error!"
 msgstr "Ошибка в файле архива!"
 
-#: val.cpp:1641
+#: val.cpp:1640
 #, c-format
 msgid "Error archive file structure: <%s>. Margin = %d byte. Will try fix it!"
 msgstr ""

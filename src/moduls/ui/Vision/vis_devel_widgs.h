@@ -63,9 +63,10 @@ class ModInspAttr: public QAbstractTableModel
 		enum Type { WdgGrp, Wdg, AttrGrp, Attr };
 		enum Flag 
 		{ 
-		    Select = 0x01, 
+		    Select   = 0x01, 
 		    FullText = 0x08,
-		    Active = 0x0100
+		    Active   = 0x0100,
+		    DataTime = 0x0200
 		};
 
 		//Public attributes

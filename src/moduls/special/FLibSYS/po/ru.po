@@ -7,9 +7,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Special.FLibSYS 0.5.0\n"
+"Project-Id-Version: OpenSCADA.Special.FLibSYS 0.6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-25 12:02+0200\n"
+"POT-Creation-Date: 2008-02-28 17:48+0200\n"
 "PO-Revision-Date: 2007-10-24 18:37+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -47,78 +47,78 @@ msgid "LIB"
 msgstr ""
 
 #: statfunc.cpp:39
-msgid "0.5.0"
+msgid "0.6.0"
 msgstr ""
 
 #: statfunc.cpp:44
 msgid "C"
 msgstr ""
 
-#: statfunc.cpp:79 statfunc.cpp:247
+#: statfunc.cpp:79 statfunc.cpp:251
 msgid "fnc_"
 msgstr ""
 
-#: statfunc.cpp:243
+#: statfunc.cpp:247
 msgid "info"
 msgstr ""
 
-#: statfunc.cpp:246
+#: statfunc.cpp:250
 msgid "grp"
 msgstr ""
 
-#: statfunc.cpp:246
+#: statfunc.cpp:250
 msgid "/br/fnc_"
 msgstr ""
 
-#: statfunc.cpp:246
+#: statfunc.cpp:250
 msgid "Function"
 msgstr "Функция"
 
-#: statfunc.cpp:246 statfunc.cpp:247
+#: statfunc.cpp:250 statfunc.cpp:251
 msgid "root"
 msgstr ""
 
-#: statfunc.cpp:246 statfunc.cpp:247
+#: statfunc.cpp:250 statfunc.cpp:251
 msgid "list"
 msgstr ""
 
-#: statfunc.cpp:246 statfunc.cpp:247 statfunc.cpp:252
+#: statfunc.cpp:250 statfunc.cpp:251 statfunc.cpp:256
 msgid "/prm/func"
 msgstr ""
 
-#: statfunc.cpp:247
+#: statfunc.cpp:251
 msgid "Functions"
 msgstr "Функции"
 
-#: statfunc.cpp:247 sysfnc.h:217
+#: statfunc.cpp:251 sysfnc.h:217
 msgid "tp"
 msgstr ""
 
-#: statfunc.cpp:247
+#: statfunc.cpp:251
 msgid "br"
 msgstr ""
 
-#: statfunc.cpp:247
+#: statfunc.cpp:251
 msgid "idm"
 msgstr ""
 
-#: statfunc.cpp:247 sysfnc.h:217
+#: statfunc.cpp:251 sysfnc.h:217
 msgid "1"
 msgstr ""
 
-#: statfunc.cpp:247
+#: statfunc.cpp:251
 msgid "br_pref"
 msgstr ""
 
-#: statfunc.cpp:251 sysfnc.h:555
+#: statfunc.cpp:255 sysfnc.h:662
 msgid "path"
 msgstr ""
 
-#: statfunc.cpp:257
+#: statfunc.cpp:261
 msgid "el"
 msgstr ""
 
-#: statfunc.cpp:257 sysfnc.h:45 sysfnc.h:66 sysfnc.h:86 sysfnc.h:120
+#: statfunc.cpp:261 sysfnc.h:45 sysfnc.h:66 sysfnc.h:86 sysfnc.h:120
 #: sysfnc.h:216 sysfnc.h:242 sysfnc.h:277 sysfnc.h:312 sysfnc.h:347
 #: sysfnc.h:381 sysfnc.h:412 sysfnc.h:443 sysfnc.h:474
 msgid "id"
@@ -314,9 +314,10 @@ msgid "Hard grid"
 msgstr "Жесткая сетка"
 
 #: sysfnc.h:220 sysfnc.h:221 sysfnc.h:245 sysfnc.h:280 sysfnc.h:315
-#: sysfnc.h:350 timefnc.h:41 timefnc.h:42 timefnc.h:43 timefnc.h:44
-#: timefnc.h:45 timefnc.h:46 timefnc.h:47 timefnc.h:48 timefnc.h:49
-#: timefnc.h:50 timefnc.h:81 timefnc.h:102 timefnc.h:123
+#: sysfnc.h:350 sysfnc.h:553 sysfnc.h:581 sysfnc.h:606 timefnc.h:41
+#: timefnc.h:42 timefnc.h:43 timefnc.h:44 timefnc.h:45 timefnc.h:46
+#: timefnc.h:47 timefnc.h:48 timefnc.h:49 timefnc.h:50 timefnc.h:81
+#: timefnc.h:102 timefnc.h:123
 msgid "0"
 msgstr ""
 
@@ -326,7 +327,7 @@ msgstr ""
 
 #: sysfnc.h:221
 msgid "High resolution"
-msgstr "Восокое разрешение"
+msgstr "Высокое разрешение"
 
 #: sysfnc.h:224
 msgid "Varch: Buffer open"
@@ -481,11 +482,11 @@ msgstr ""
 msgid "Category"
 msgstr "Категория"
 
-#: sysfnc.h:506 sysfnc.h:529 sysfnc.h:556
+#: sysfnc.h:506 sysfnc.h:636 sysfnc.h:663
 msgid "lev"
 msgstr ""
 
-#: sysfnc.h:506 sysfnc.h:529 sysfnc.h:556
+#: sysfnc.h:506 sysfnc.h:636 sysfnc.h:663
 msgid "Level"
 msgstr "Уровень"
 
@@ -510,67 +511,152 @@ msgstr "Поместить сообщение в систему."
 msgid "%s"
 msgstr ""
 
-#: sysfnc.h:525
-msgid "strParse"
+#: sysfnc.h:528
+msgid "strSize"
 msgstr ""
 
-#: sysfnc.h:527 sysfnc.h:554
+#: sysfnc.h:530 sysfnc.h:551 sysfnc.h:634 sysfnc.h:661
 msgid "rez"
 msgstr ""
 
-#: sysfnc.h:527 sysfnc.h:554
+#: sysfnc.h:530 sysfnc.h:551 sysfnc.h:634 sysfnc.h:661
 msgid "Rezult"
 msgstr "Результат"
 
-#: sysfnc.h:528 timefnc.h:124
+#: sysfnc.h:531 sysfnc.h:552 sysfnc.h:580 sysfnc.h:605 sysfnc.h:635
+#: timefnc.h:124
 msgid "str"
 msgstr ""
 
-#: sysfnc.h:528
+#: sysfnc.h:531 sysfnc.h:552 sysfnc.h:580 sysfnc.h:605 sysfnc.h:635
 msgid "String"
 msgstr "Строка"
 
-#: sysfnc.h:530
+#: sysfnc.h:534
+msgid "String: Get size"
+msgstr "Строка: Получение размера"
+
+#: sysfnc.h:535
+msgid "Use for string size getting."
+msgstr "Используется для получения размера строки."
+
+#: sysfnc.h:549
+msgid "strSubstr"
+msgstr ""
+
+#: sysfnc.h:553 sysfnc.h:581 sysfnc.h:606
+msgid "pos"
+msgstr ""
+
+#: sysfnc.h:553 sysfnc.h:581 sysfnc.h:606
+msgid "Position"
+msgstr "Позиция"
+
+#: sysfnc.h:554 sysfnc.h:607
+msgid "n"
+msgstr ""
+
+#: sysfnc.h:554 sysfnc.h:607
+msgid "Number"
+msgstr "Количество"
+
+#: sysfnc.h:554 sysfnc.h:607
+msgid "-1"
+msgstr ""
+
+#: sysfnc.h:557
+msgid "String: Get substring"
+msgstr "Строка: Получить подстроку"
+
+#: sysfnc.h:558
+msgid "Use for substring getting."
+msgstr "Используется для выделения подстроки."
+
+#: sysfnc.h:578
+msgid "strInsert"
+msgstr ""
+
+#: sysfnc.h:582
+msgid "ins"
+msgstr ""
+
+#: sysfnc.h:582
+msgid "Insert string"
+msgstr "Вставляемая строка"
+
+#: sysfnc.h:585
+msgid "String: Insert string to other string"
+msgstr "Строка: Вставка строки в другую строку"
+
+#: sysfnc.h:586
+msgid "Use for insertion string to other string."
+msgstr "Используется для вставки строки в другую строку."
+
+#: sysfnc.h:603
+msgid "strReplace"
+msgstr ""
+
+#: sysfnc.h:608
+msgid "repl"
+msgstr ""
+
+#: sysfnc.h:608
+msgid "Replace string"
+msgstr "Заменяющая строка"
+
+#: sysfnc.h:611
+msgid "String: Replace part string on other string"
+msgstr "Строка: Замена части строки другой строкой"
+
+#: sysfnc.h:612
+msgid "Use for replacing part string on other string."
+msgstr "Используется для замены части строки другой строкой."
+
+#: sysfnc.h:632
+msgid "strParse"
+msgstr ""
+
+#: sysfnc.h:637
 msgid "sep"
 msgstr ""
 
-#: sysfnc.h:530
+#: sysfnc.h:637
 msgid "Separator"
 msgstr "Разделитель"
 
-#: sysfnc.h:530
+#: sysfnc.h:637
 msgid "."
 msgstr ""
 
-#: sysfnc.h:531 sysfnc.h:557
+#: sysfnc.h:638 sysfnc.h:664
 msgid "off"
 msgstr ""
 
-#: sysfnc.h:531 sysfnc.h:557
+#: sysfnc.h:638 sysfnc.h:664
 msgid "Offset"
 msgstr "Смещение"
 
-#: sysfnc.h:534
+#: sysfnc.h:641
 msgid "String: Parse on separator"
 msgstr "Строка: Разбор по разделителю"
 
-#: sysfnc.h:535
+#: sysfnc.h:642
 msgid "Use for parse string on separator."
 msgstr "Используется для разбора строки по разделителю."
 
-#: sysfnc.h:552
+#: sysfnc.h:659
 msgid "strParsePath"
 msgstr ""
 
-#: sysfnc.h:555
+#: sysfnc.h:662
 msgid "Path"
 msgstr "Путь"
 
-#: sysfnc.h:560
+#: sysfnc.h:667
 msgid "String: Path parse"
 msgstr "Строка: Разбор пути"
 
-#: sysfnc.h:561
+#: sysfnc.h:668
 msgid "Use for parse path on elements."
 msgstr "Используется для разбора пути на элементы."
 

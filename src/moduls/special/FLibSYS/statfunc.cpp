@@ -36,7 +36,7 @@
 #define MOD_LICENSE	"GPL"
 #define VER_TYPE    	VER_SPC
 #define SUB_TYPE    	"LIB"
-#define VERSION     	"0.5.0"
+#define VERSION     	"0.6.0"
 //*************************************************
 
 FLibSYS::Lib *FLibSYS::mod;
@@ -110,6 +110,10 @@ void Lib::postEnable( int flag )
     reg( new tmTime() );
     reg( new tmCtime() );
     reg( new tmStr2Tm() );
+    reg( new strSize() );
+    reg( new strSubstr() );
+    reg( new strInsert() );
+    reg( new strReplace() );
     reg( new strParse() );
     reg( new strParsePath() );
 }

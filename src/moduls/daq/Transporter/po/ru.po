@@ -7,9 +7,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.Transporter 0.3.0\n"
+"Project-Id-Version: OpenSCADA.DAQ.Transporter 0.3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-29 12:40+0200\n"
+"POT-Creation-Date: 2008-02-28 16:11+0200\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -29,7 +29,7 @@ msgid "DAQ"
 msgstr ""
 
 #: transporter.cpp:36
-msgid "0.3.0"
+msgid "0.3.1"
 msgstr ""
 
 #: transporter.cpp:37
@@ -40,7 +40,9 @@ msgstr "Роман Савоченко"
 msgid ""
 "Allow to make transport data sources of remote OpenSCADA station to local "
 "OpenSCADA station."
-msgstr "Позволяет выполнять транпортировку источников данных удалённых OpenSCADA станций на локальные."
+msgstr ""
+"Позволяет выполнять транпортировку источников данных удалённых OpenSCADA "
+"станций на локальные."
 
 #: transporter.cpp:39
 msgid "GPL"
