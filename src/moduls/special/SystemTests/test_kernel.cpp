@@ -421,7 +421,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	bd_cfg.elem().fldAdd( new TFld("descr","Description fields",TFld::String,0,"50") );
 	bd_cfg.elem().fldAdd( new TFld("val","Field value",TFld::Real,0,"10.2","5") );
 	bd_cfg.elem().fldAdd( new TFld("id","Field id",TFld::Integer,0,"7","34") );
-	bd_cfg.elem().fldAdd( new TFld("stat","Field stat",TFld::Boolean,0,"","1") );
+	bd_cfg.elem().fldAdd( new TFld("stat","Field stat",TFld::Boolean,0,"1","1") );
 	
 	//Test of The create fields
 	mess_info(test_cat,"Create fields!");

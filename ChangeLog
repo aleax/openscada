@@ -1,3 +1,7 @@
+2008-02-29 Roman
+- FIX:/DB/MySQL: Zero fields depth is fixed.
+
+
 2008-02-28 Roman
 - !!:/Archive/DBArch: Documentation and translation is updated and version 0.6.0 is relised.
 - !!:/Archive/FSArch: Documentation and translation is updated and version 0.9.6 is relised.
