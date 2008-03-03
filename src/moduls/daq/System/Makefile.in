@@ -55,7 +55,7 @@ am_daq_System_so_OBJECTS = os_contr.$(OBJEXT) da_cpu.$(OBJEXT) \
 	da_sensors.$(OBJEXT) da_smart.$(OBJEXT) da_hddstat.$(OBJEXT) \
 	da_netstat.$(OBJEXT)
 daq_System_so_OBJECTS = $(am_daq_System_so_OBJECTS)
-daq_System_so_LDADD = $(LDADD)
+daq_System_so_DEPENDENCIES =
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -198,6 +198,7 @@ EXTRA_DIST = *.h po/* doc/*
 AM_CXXFLAGS = -I$(top_srcdir)/src -fPIC -DPIC
 AM_LDFLAGS = -shared -module
 daq_System_so_SOURCES = os_contr.cpp da_cpu.cpp da_mem.cpp da_uptime.cpp da_hddtemp.cpp da_sensors.cpp da_smart.cpp da_hddstat.cpp da_netstat.cpp
+daq_System_so_LDADD = -lsensors
 
 #PO files process and doc install
 fm_name = Mod_DAQ_System

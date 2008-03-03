@@ -42,7 +42,6 @@ class NetStat: public DA
 		    
         void init( TMdPrm *prm );
         void getVal( TMdPrm *prm );
-	void setEVAL( TMdPrm *prm );
 	
 	void makeActiveDA( TMdContr *a_cntr );
 	

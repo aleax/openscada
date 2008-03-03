@@ -88,18 +88,6 @@ void Mem::getVal( TMdPrm *prm )
     prm->vlAt("sw_use").at().setI(sw_total-sw_free,0,true);			
 }
 
-void Mem::setEVAL( TMdPrm *prm )
-{
-    prm->vlAt("free").at().setI(EVAL_INT,0,true);
-    prm->vlAt("total").at().setI(EVAL_INT,0,true);
-    prm->vlAt("use").at().setI(EVAL_INT,0,true);
-    prm->vlAt("buff").at().setI(EVAL_INT,0,true);
-    prm->vlAt("cache").at().setI(EVAL_INT,0,true);
-    prm->vlAt("sw_free").at().setI(EVAL_INT,0,true);
-    prm->vlAt("sw_total").at().setI(EVAL_INT,0,true);
-    prm->vlAt("sw_use").at().setI(EVAL_INT,0,true);
-}
-
 void Mem::makeActiveDA( TMdContr *a_cntr )
 {
     string ap_nm = "MemInfo";

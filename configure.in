@@ -273,6 +273,11 @@ if test ${ModSystem} = true; then
     AC_MSG_RESULT(Build module: DAQ/System)
     AC_CONFIG_FILES(src/moduls/daq/System/Makefile)
     DAQSub_mod="${DAQSub_mod}System "
+    #--- Modules checkings ---    
+    AC_CHECK_HEADERS([sensors/sensors.h],[],
+	[AC_MSG_ERROR(DAQ/System: Libsensors headers not found. Install or check of libsensors developing package!)])
+    AC_CHECK_LIB([sensors],[sensors_init],[AC_MSG_NOTICE(Pass global library using)],
+	[AC_MSG_ERROR(Libsensors library not found. Install or check libsensors library package!)])    
 fi
 if test ${ModBlockCalc} = true; then
     AC_MSG_RESULT(Build module: DAQ/BlockCalc)

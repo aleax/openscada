@@ -65,6 +65,7 @@ class TMdPrm : public TParamContr
 	void setType( const string &da_id );
 	//- Get new value -
 	void getVal( );
+	void setEval( );
 	
 	TMdContr &owner( )       { return (TMdContr&)TParamContr::owner(); }
 	

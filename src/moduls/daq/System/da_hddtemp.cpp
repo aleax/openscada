@@ -96,13 +96,6 @@ void Hddtemp::getVal( TMdPrm *prm )
     catch( TError err ) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
-void Hddtemp::setEVAL( TMdPrm *prm )
-{
-    prm->vlAt("disk").at().setS(EVAL_STR,0,true);
-    prm->vlAt("t").at().setI(EVAL_INT,0,true);
-    prm->vlAt("ed").at().setS(EVAL_STR,0,true);
-}
-
 string Hddtemp::getHDDTemp( )
 {
     string val;

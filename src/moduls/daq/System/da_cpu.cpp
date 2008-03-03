@@ -149,14 +149,6 @@ void CPU::getVal( TMdPrm *prm )
     fclose(f);    
 }
 
-void CPU::setEVAL( TMdPrm *prm )
-{
-    prm->vlAt("load").at().setR(EVAL_REAL,0,true);
-    prm->vlAt("sys").at().setR(EVAL_REAL,0,true);
-    prm->vlAt("user").at().setR(EVAL_REAL,0,true);
-    prm->vlAt("idle").at().setR(EVAL_REAL,0,true);
-}
-
 void CPU::makeActiveDA( TMdContr *a_cntr )
 {
     char buf[256];    

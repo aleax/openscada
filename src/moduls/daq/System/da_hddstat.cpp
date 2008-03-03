@@ -130,12 +130,6 @@ void HddStat::getVal( TMdPrm *prm )
     }	
 }
 
-void HddStat::setEVAL( TMdPrm *prm )
-{
-    prm->vlAt("rd").at().setR(EVAL_REAL,0,true);
-    prm->vlAt("wr").at().setR(EVAL_REAL,0,true);
-}
-
 void HddStat::makeActiveDA( TMdContr *a_cntr )
 {
     string ap_nm = "Statistic_";

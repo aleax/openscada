@@ -49,7 +49,7 @@
 #define MOD_NAME    "System DA"
 #define MOD_TYPE    "DAQ"
 #define VER_TYPE    VER_CNTR
-#define VERSION     "1.5.0"
+#define VERSION     "1.6.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow operation system data acquisition. Support OS Linux data sources: HDDTemp, Sensors, Uptime, Memory, CPU and other."
 #define LICENSE     "GPL"
@@ -94,7 +94,8 @@ TTpContr::TTpContr( string name )
 
 TTpContr::~TTpContr()
 {    
-
+    for(int i_da = 0; i_da < m_da.size(); i_da++ )	delete m_da[i_da];
+    m_da.clear();
 }
 
 string TTpContr::optDescr( )
@@ -266,6 +267,10 @@ void TMdContr::stop_( )
             throw TError(nodePath().c_str(),_("Acquisition task no stoped!"));
         pthread_join( procPthr, NULL );
     }
+    //- Set Eval for parameters -
+    ResAlloc res(en_res,true);
+    for( int i_prm = 0; i_prm < p_hd.size(); i_prm++ )
+        p_hd[i_prm].at().setEval();    
 } 
 
 void TMdContr::prmEn( const string &id, bool val )
@@ -372,7 +377,7 @@ void TMdPrm::disable( )
 {
     if( !enableStat() )  return;
     ((TMdContr&)owner()).prmEn( id(), false );      //Remove from process 
-    if( m_da )	m_da->setEVAL(this);
+    setEval( );
     //setType("");
     TParamContr::disable();
 }
@@ -400,6 +405,17 @@ void TMdPrm::vlGet( TVal &val )
 void TMdPrm::getVal( )
 {
     if( m_da )	m_da->getVal(this);
+}
+
+void TMdPrm::setEval( )
+{
+    if( !m_da )	return;
+    
+    vector<string> als;
+    m_da->fldList(als);
+    for( int i_a = 0; i_a < als.size(); i_a++ )
+        if( vlPresent(als[i_a]) )
+    	    vlAt(als[i_a]).at().setS(EVAL_STR,0,true);
 }
 
 void TMdPrm::vlArchMake( TVal &val )
@@ -449,5 +465,3 @@ bool TMdPrm::cfgChange( TCfg &i_cfg )
     }    
     return false;
 }
-
-

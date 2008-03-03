@@ -113,12 +113,6 @@ void NetStat::getVal( TMdPrm *prm )
     }
 }
 
-void NetStat::setEVAL( TMdPrm *prm )
-{
-    prm->vlAt("rcv").at().setI(EVAL_INT,0,true);
-    prm->vlAt("trns").at().setI(EVAL_INT,0,true);
-}
-
 void NetStat::makeActiveDA( TMdContr *a_cntr )
 {
     string ap_nm = "Interface_";

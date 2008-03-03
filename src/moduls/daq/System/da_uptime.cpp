@@ -81,15 +81,6 @@ void UpTime::getVal( TMdPrm *prm )
     prm->vlAt("sec").at().setI(((val%86400)%3600)%60,0,true);
 }														    
 
-void UpTime::setEVAL( TMdPrm *prm )
-{
-    prm->vlAt("full").at().setI(EVAL_INT,0,true);
-    prm->vlAt("day").at().setI(EVAL_INT,0,true);
-    prm->vlAt("hour").at().setI(EVAL_INT,0,true);
-    prm->vlAt("min").at().setI(EVAL_INT,0,true);
-    prm->vlAt("sec").at().setI(EVAL_INT,0,true);
-}
-
 void UpTime::makeActiveDA( TMdContr *a_cntr )
 {
     string ap_nm = "UpTimeSystem";    

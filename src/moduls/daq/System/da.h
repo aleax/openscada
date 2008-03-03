@@ -45,7 +45,6 @@ class DA: public ::TElem
         virtual void init( TMdPrm *prm ) 	{ }
 	virtual void deInit( TMdPrm *prm )	{ }
         virtual void getVal( TMdPrm *prm )	{ }
-	virtual void setEVAL( TMdPrm *prm )	{ }
 	
 	virtual void makeActiveDA( TMdContr *a_cntr )	{ }
 };

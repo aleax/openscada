@@ -1027,11 +1027,8 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	    XMLNode *n_cfg     = ctrMkNode("list",opt,-1,"/proc/attr/cfg","");
 	    XMLNode *n_cfgtmpl = ctrMkNode("list",opt,-1,"/proc/attr/cfgtmpl","");
 
-	    AutoHD<Widget> wdg;
+	    AutoHD<Widget> wdg = (wattr==".")?AutoHD<Widget>(this):wdgAt(wattr);
 	    vector<string> lst;	    
-	    if( wattr == "." )	wdg = AutoHD<Widget>(this);
-	    else wdg = wdgAt(wattr);
-
 	    wdg.at().attrList(lst);
 	    for(int i_el = 0; i_el < lst.size(); i_el++)
 	    {
@@ -1046,18 +1043,20 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		if( n_cfgtmpl )	n_cfgtmpl->childAdd("el")->setText(wdg.at().attrAt(lst[i_el]).at().cfgTempl());
 	    }
 	}
-        if( wattr == "." && ctrChkNode(opt,"add",permit(),user().c_str(),grp().c_str(),SEQ_WR) )
+        if( ctrChkNode(opt,"add",permit(),user().c_str(),grp().c_str(),SEQ_WR) )
         {
-            attrAdd(new TFld("newAttr",_("New attribute"),TFld::String,Attr::IsUser));
-            attrAt("newAttr").at().setModif(1);
+	    AutoHD<Widget> wdg = (wattr==".")?AutoHD<Widget>(this):wdgAt(wattr);
+            wdg.at().attrAdd( new TFld("newAttr",_("New attribute"),TFld::String,Attr::IsUser) );
+            wdg.at().attrAt("newAttr").at().setModif(1);
         }
-        if( wattr == "." && ctrChkNode(opt,"del",permit(),user().c_str(),grp().c_str(),SEQ_WR) )
+        if( ctrChkNode(opt,"del",permit(),user().c_str(),grp().c_str(),SEQ_WR) )
         {
-            if(!attrPresent(opt->attr("key_id")))
+	    AutoHD<Widget> wdg = (wattr==".")?AutoHD<Widget>(this):wdgAt(wattr);
+            if( !wdg.at().attrPresent(opt->attr("key_id")) )
                 throw TError(nodePath().c_str(),_("Delete a include widget's element is error."));
-            if( !(attrAt(opt->attr("key_id")).at().fld().flg()&Attr::IsInher) && 
-		    attrAt(opt->attr("key_id")).at().fld().flg()&Attr::IsUser )
-		attrDel(opt->attr("key_id"));
+            if( !(wdg.at().attrAt(opt->attr("key_id")).at().fld().flg()&Attr::IsInher) && 
+		    wdg.at().attrAt(opt->attr("key_id")).at().fld().flg()&Attr::IsUser )
+		wdg.at().attrDel(opt->attr("key_id"));
             else throw TError(nodePath().c_str(),_("Delete a not user element is error."));
         }
 	if( ctrChkNode(opt,"set",permit(),user().c_str(),grp().c_str(),SEQ_WR) )
@@ -1065,63 +1064,58 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
             //-- Request data --
             string idattr = opt->attr("key_id");
             string idcol  = opt->attr("col");
+	    AutoHD<Widget> wdg = (wattr==".")?AutoHD<Widget>(this):wdgAt(wattr);
 
-	    if( wattr == "." && (idcol == "id" || idcol == "name" || idcol == "type" || idcol == "wa") )
+	    if( idcol == "id" || idcol == "name" || idcol == "type" || idcol == "wa" )
 	    {
-                string          tnm     = attrAt(idattr).at().name();
-                TFld::Type      ttp     = attrAt(idattr).at().fld().type();
-                unsigned        tflg    = attrAt(idattr).at().fld().flg();
+                string          tnm     = wdg.at().attrAt(idattr).at().name();
+                TFld::Type      ttp     = wdg.at().attrAt(idattr).at().fld().type();
+                unsigned        tflg    = wdg.at().attrAt(idattr).at().fld().flg();
 
-                if( !attrPresent(idattr) || 
-			!(!(attrAt(idattr).at().fld().flg()&Attr::IsInher) && 
-			    attrAt(idattr).at().fld().flg()&Attr::IsUser) )
+                if( !(!(tflg&Attr::IsInher) && tflg&Attr::IsUser) )
             	    throw TError(nodePath().c_str(),_("Change a no user attribute is no permit"));
                 if( idcol == "id" )
                 {
-                    attrAdd( new TFld(opt->text().c_str(),tnm.c_str(),ttp,tflg|Attr::IsUser) );
-            	    attrAt(opt->text().c_str()).at().setModif(1);
-                    attrDel(idattr);
+                    wdg.at().attrAdd( new TFld(opt->text().c_str(),tnm.c_str(),ttp,tflg|Attr::IsUser) );
+            	    wdg.at().attrAt(opt->text().c_str()).at().setModif(1);
+                    wdg.at().attrDel(idattr);
             	}
-            	else if( idcol == "name" )      attrAt(idattr).at().fld().setDescr(opt->text().c_str());
+            	else if( idcol == "name" )      wdg.at().attrAt(idattr).at().fld().setDescr(opt->text().c_str());
                 else if( idcol == "type" )
                 {
                     TFld::Type  tp  = (TFld::Type)(atoi(opt->text().c_str())&0x0f);
             	    unsigned    flg = (atoi(opt->text().c_str())>>4)|Attr::IsUser;
-	            if(tp!=ttp || (tflg^flg)&TFld::Selected )
+	            if( tp!=ttp || (tflg^flg)&TFld::Selected )
 	            {
-	                attrDel(idattr);
-	                attrAdd( new TFld(idattr.c_str(),tnm.c_str(),tp,tflg^((tflg^flg)&(TFld::Selected|Attr::Color|Attr::Image|Attr::Font|Attr::Address|Attr::IsUser))) );
-	                attrAt(idattr.c_str()).at().setModif(1);
+	                wdg.at().attrDel(idattr);
+	                wdg.at().attrAdd( new TFld(idattr.c_str(),tnm.c_str(),tp,tflg^((tflg^flg)&(TFld::Selected|Attr::Color|Attr::Image|Attr::Font|Attr::Address|Attr::IsUser))) );
+	                wdg.at().attrAt(idattr.c_str()).at().setModif(1);
 	            }
 	            else if( (tflg^flg)&(Attr::Color|Attr::Image|Attr::Font|Attr::Address) )
-	                attrAt(idattr).at().fld().setFlg(tflg^((tflg^flg)&(Attr::Color|Attr::Image|Attr::Font|Attr::Address)));
+	                wdg.at().attrAt(idattr).at().fld().setFlg(tflg^((tflg^flg)&(Attr::Color|Attr::Image|Attr::Font|Attr::Address)));
 	        }
 		else if( idcol == "wa" )
 		{
-		    attrAt(idattr).at().fld().setValues(TSYS::strSepParse(opt->text(),0,'|'));
-		    attrAt(idattr).at().fld().setSelNames(TSYS::strSepParse(opt->text(),1,'|'));
+		    wdg.at().attrAt(idattr).at().fld().setValues(TSYS::strSepParse(opt->text(),0,'|'));
+		    wdg.at().attrAt(idattr).at().fld().setSelNames(TSYS::strSepParse(opt->text(),1,'|'));
 		}
 	    }
 	    else
 	    {
-		AutoHD<Attr> attr;
-		if( wattr == "." ) attr = attrAt(idattr);
-		else attr = wdgAt(wattr).at().attrAt(idattr);
-
-		Attr::SelfAttrFlgs sflg = attr.at().flgSelf();
-
 		if( idcol == "proc" )
 		{
+		    Attr::SelfAttrFlgs sflg =  wdg.at().attrAt(idattr).at().flgSelf();
 		    Attr::SelfAttrFlgs stflg = atoi(opt->text().c_str())?Attr::ProcAttr:(Attr::SelfAttrFlgs)0;
-		    attr.at().setFlgSelf( (Attr::SelfAttrFlgs)(sflg^((sflg^stflg)&Attr::ProcAttr)) );
+		    wdg.at().attrAt(idattr).at().setFlgSelf( (Attr::SelfAttrFlgs)(sflg^((sflg^stflg)&Attr::ProcAttr)) );
 		}
 		else if( idcol == "cfg" )
         	{
+		    Attr::SelfAttrFlgs sflg =  wdg.at().attrAt(idattr).at().flgSelf();		
 		    Attr::SelfAttrFlgs stflg = (Attr::SelfAttrFlgs)atoi(opt->text().c_str());
 		    if( (sflg^stflg)&(Attr::CfgLnkIn|Attr::CfgLnkOut|Attr::CfgConst) )
-			attr.at().setFlgSelf( (Attr::SelfAttrFlgs)(sflg^((sflg^stflg)&(Attr::CfgLnkIn|Attr::CfgLnkOut|Attr::CfgConst))) );
+			wdg.at().attrAt(idattr).at().setFlgSelf( (Attr::SelfAttrFlgs)(sflg^((sflg^stflg)&(Attr::CfgLnkIn|Attr::CfgLnkOut|Attr::CfgConst))) );
 		}
-		else if( idcol == "cfgtmpl" )	attr.at().setCfgTempl(opt->text());
+		else if( idcol == "cfgtmpl" )	wdg.at().attrAt(idattr).at().setCfgTempl(opt->text());
 	    }
 	}
     }

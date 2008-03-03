@@ -84,7 +84,7 @@ void HddSmart::dList( vector<string> &list, bool part )
 	//if( strncmp(name,"hd",2) )	continue;
 	if( !part && minor != 0 ) 	continue;
 
-	string cmd = string(smartval_cmd)+name;	
+	string cmd = string(smartval_cmd)+name+((name[0]=='s')?" -d ata":"");
 	FILE *fp = popen(cmd.c_str(),"r");
     	if( fp ) 
 	{	
@@ -131,7 +131,7 @@ void HddSmart::getVal( TMdPrm *prm )
     }*/   
     
     //- SMART atributes -
-    string cmd = string(smartval_cmd)+dev;	
+    string cmd = string(smartval_cmd)+dev+((dev.size()&&dev[0]=='s')?" -d ata":"");	
     FILE *fp = popen(cmd.c_str(),"r");
     if( fp ) 
     {	
@@ -144,22 +144,6 @@ void HddSmart::getVal( TMdPrm *prm )
 	    prm->vlAt(s_id).at().setI(val,0,true);		
 	}	    
 	fclose(fp);
-    }
-}
-
-void HddSmart::setEVAL( TMdPrm *prm )
-{
-    int id;	
-    char buf[256];
-
-    string cmd = string(smartval_cmd)+prm->cfg("SUBT").getS();
-    FILE *fp = popen(cmd.c_str(),"r");
-    if( fp )
-    {
-        while( fgets(buf,sizeof(buf),fp) != NULL )
-    	    if( sscanf(buf,"%d %*s %*x %*d %*d %*d %*s %*s %*s %*lu\n",&id) == 1 && prm->vlPresent(TSYS::int2str(id)) )
-        	prm->vlAt(TSYS::int2str(id)).at().setI(EVAL_INT,0,true);
-        fclose(fp);
     }
 }
 

@@ -1,3 +1,13 @@
+2008-03-03 Roman
+- !!:/DAQ/System: Documentation and translation is updated and version 1.6.0 is relised.
+- !!:/DAQ/System: Libsensors library for sensors support is added.
+- !!!!:/SYS: Add new files of generic documentations: FAQ.pdf, AboutOpenSCADA.pdf, release_0.6.0_uk.pdf, release_0.6.0.pdf and FAQ_uk.pdf.
+- /SYS: Update documentations: release_0.6.0_ru.pdf and FAQ_ru.pdf.
+- FIX:/DAQ/Value: EVAL_REAL values display is fixed.
+- !:/UI/VCAEngine: Support user atributes into included widget's is added.
+- !:/UI/Vision: Usable date attributes edit is added.
+
+
 2008-02-29 Roman
 - FIX:/DB/MySQL: Zero fields depth is fixed.
 
