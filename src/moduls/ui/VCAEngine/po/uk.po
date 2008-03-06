@@ -2427,7 +2427,7 @@ msgstr "Фокус"
 #: session.cpp:747
 #, c-format
 msgid "Compile function for widget is error: %s"
-msgstr "Помилка компіляції функції дл віджета: %s"
+msgstr "Помилка компіляції функції для віджета: %s"
 
 #: session.cpp:917 session.cpp:1069 widget.cpp:771 widget.cpp:803
 #: widget.cpp:859

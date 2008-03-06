@@ -1,3 +1,21 @@
+2008-03-06 Roman
+- !!!!:/SYS, /DAQ/JavaLikeCalc, /UI/VCAEngine, /UI/Vision: Error value (EVAL) support is added to: Function process frame, JavaLikeCalc interpreter 
+    and VCA components.
+- !!:/DAQ/LogicLev: No resolved and errors links' values is inited by EVAL.
+- FIX:/Special/FLibSYS: The result type of function varhGetB() is fixed.
+- FIX:/UI/VCAEngine: User's attributes load, for container widgets, is fixed.
+- FIX:/UI/VCAEngine: Preparing IO for widget's calc function is fixed. Focus attribute include from all active included widgets.
+- FIX:/UI/VCAEngine: Included containers order is changed to: included widgets, attributes, pages.
+- /UI/VCAEngine: New created attributes is made inited by EVAL. After attribute's identifier or type changing is made value copy.
+- FIX:/UI/Vision: The master page open procedure is rewrited.
+- !:/UI/Vision: No standard key codes event generation is added, by view "key_#0ABh".
+- /UI/Vision: A edit line update, for primitive "FormEl" is disabled on time it user edition.
+- FIX:/UI/Vision: Active and enable attribute's action is fixed for all primitives.
+- FIX:/UI/Vision: Left and bottom one pixels border's line hiding is fixed for primitive "Text".
+- FIX:/UI/Vision: Average equalent time values is fixed on primitive "Diagram".
+- /SYS: Demo DB is updated.
+
+
 2008-03-03 Roman
 - !!:/DAQ/System: Documentation and translation is updated and version 1.6.0 is relised.
 - !!:/DAQ/System: Libsensors library for sensors support is added.

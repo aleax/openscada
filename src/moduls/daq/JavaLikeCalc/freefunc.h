@@ -162,7 +162,7 @@ class Reg
 	
 	union El
         {
-	    bool	b_el;	//Boolean for constant and local variable
+	    char	b_el;	//Boolean for constant and local variable
             int         i_el;   //Integer for constant and local variable
 	    double      r_el;   //Real for constant and local variable
 	    string	*s_el;  //String for constant and local variable
@@ -180,7 +180,7 @@ class Reg
 	}
 
 	Reg &operator=( Reg &irg );
-	void operator=( bool ivar )		{ setType(Bool);	el.b_el = ivar; }
+	void operator=( char ivar )		{ setType(Bool);	el.b_el = ivar; }
 	void operator=( int ivar )		{ setType(Int); 	el.i_el = ivar; }
 	void operator=( double ivar )		{ setType(Real); 	el.r_el = ivar; }
 	void operator=( const string &ivar )	{ setType(String);	*el.s_el = ivar;}
@@ -229,7 +229,7 @@ class RegW
 	RegW( ) : m_tp(Reg::Free) {  }
 	~RegW( ) { setType(Reg::Free); }
 
-	void operator=( bool ivar )		{ setType(Reg::Bool);	el.b_el = ivar; }
+	void operator=( char ivar )		{ setType(Reg::Bool);	el.b_el = ivar; }
 	void operator=( int ivar )		{ setType(Reg::Int); 	el.i_el = ivar; }
 	void operator=( double ivar )		{ setType(Reg::Real); 	el.r_el = ivar; }
 	void operator=( const string &ivar )	{ setType(Reg::String);	*el.s_el = ivar;}
@@ -320,14 +320,15 @@ class Func : public TConfig, public TFunction
 	Reg *cdExtFnc( int f_id, int p_cnt, bool proc = false );
 
 	//- Variable access -
-	bool getValB( TValFunc *io, RegW &rg );
-	int getValI( TValFunc *io, RegW &rg );
-	double getValR( TValFunc *io, RegW &rg );
-	string getValS( TValFunc *io, RegW &rg );
-	void setValB( TValFunc *io, RegW &rg, bool val );
+	string 	getValS( TValFunc *io, RegW &rg );
+	int 	getValI( TValFunc *io, RegW &rg );
+	char 	getValB( TValFunc *io, RegW &rg );
+	double 	getValR( TValFunc *io, RegW &rg );
+
+	void setValS( TValFunc *io, RegW &rg, const string &val );
 	void setValI( TValFunc *io, RegW &rg, int val );
 	void setValR( TValFunc *io, RegW &rg, double val );
-	void setValS( TValFunc *io, RegW &rg, const string &val );
+	void setValB( TValFunc *io, RegW &rg, char val );
 	
 	//- IO operations -
 	void ioAdd( IO *io )		{ TFunction::ioAdd(io); }

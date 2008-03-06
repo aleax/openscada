@@ -33,8 +33,8 @@ using namespace VCA;
 Widget::Widget( const string &id, const string &isrcwdg ) :
         m_enable(false), m_lnk(false), m_id(id), m_parent_nm(isrcwdg)
 {
-    attrId  = grpAdd("a_");
     inclWdg = grpAdd("wdg_");
+    attrId  = grpAdd("a_");
 
     attr_cfg.valAtt(this);
 }
@@ -1047,6 +1047,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
         {
 	    AutoHD<Widget> wdg = (wattr==".")?AutoHD<Widget>(this):wdgAt(wattr);
             wdg.at().attrAdd( new TFld("newAttr",_("New attribute"),TFld::String,Attr::IsUser) );
+	    wdg.at().attrAt("newAttr").at().setS(EVAL_STR);
             wdg.at().attrAt("newAttr").at().setModif(1);
         }
         if( ctrChkNode(opt,"del",permit(),user().c_str(),grp().c_str(),SEQ_WR) )
@@ -1077,7 +1078,8 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
                 if( idcol == "id" )
                 {
                     wdg.at().attrAdd( new TFld(opt->text().c_str(),tnm.c_str(),ttp,tflg|Attr::IsUser) );
-            	    wdg.at().attrAt(opt->text().c_str()).at().setModif(1);
+            	    wdg.at().attrAt(opt->text()).at().setModif(1);
+		    wdg.at().attrAt(opt->text()).at().setS(wdg.at().attrAt(idattr).at().getS());
                     wdg.at().attrDel(idattr);
             	}
             	else if( idcol == "name" )      wdg.at().attrAt(idattr).at().fld().setDescr(opt->text().c_str());
@@ -1085,11 +1087,14 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
                 {
                     TFld::Type  tp  = (TFld::Type)(atoi(opt->text().c_str())&0x0f);
             	    unsigned    flg = (atoi(opt->text().c_str())>>4)|Attr::IsUser;
+
 	            if( tp!=ttp || (tflg^flg)&TFld::Selected )
 	            {
+			string tvl = wdg.at().attrAt(idattr).at().getS();
 	                wdg.at().attrDel(idattr);
 	                wdg.at().attrAdd( new TFld(idattr.c_str(),tnm.c_str(),tp,tflg^((tflg^flg)&(TFld::Selected|Attr::Color|Attr::Image|Attr::Font|Attr::Address|Attr::IsUser))) );
-	                wdg.at().attrAt(idattr.c_str()).at().setModif(1);
+			wdg.at().attrAt(idattr).at().setS(tvl);
+	                wdg.at().attrAt(idattr).at().setModif(1);
 	            }
 	            else if( (tflg^flg)&(Attr::Color|Attr::Image|Attr::Font|Attr::Address) )
 	                wdg.at().attrAt(idattr).at().fld().setFlg(tflg^((tflg^flg)&(Attr::Color|Attr::Image|Attr::Font|Attr::Address)));
@@ -1172,6 +1177,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::String+(Attr::Color<<4)))->setText(_("Color"));
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::String+(Attr::Image<<4)))->setText(_("Image"));
         opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::String+(Attr::Font<<4)))->setText(_("Font"));
+        opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::Integer+(Attr::DataTime<<4)))->setText(_("DataTime"));
         opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::String+(Attr::Address<<4)))->setText(_("Address"));
     }
     else if( a_path == "/proc/lnk_ls" && ctrChkNode(opt) )
@@ -1260,21 +1266,10 @@ string Attr::getS( )
 {
     switch(fld().type())
     {
+        case TFld::Integer:	return (m_val.i_val!=EVAL_INT) ? TSYS::int2str(m_val.i_val) : EVAL_STR;
+        case TFld::Real:        return (m_val.r_val!=EVAL_REAL) ? TSYS::real2str(m_val.r_val) : EVAL_STR;
+        case TFld::Boolean:	return (m_val.b_val!=EVAL_BOOL) ? TSYS::int2str((bool)m_val.b_val) : EVAL_STR;
 	case TFld::String:      return *m_val.s_val;
-        case TFld::Integer:	return TSYS::int2str(m_val.i_val);
-        case TFld::Real:        return TSYS::real2str(m_val.r_val);
-        case TFld::Boolean:	return TSYS::int2str(m_val.b_val);
-    }
-}
-
-double Attr::getR( )
-{
-    switch(fld().type())
-    {
-        case TFld::String:      return atof(m_val.s_val->c_str());
-        case TFld::Integer:	return m_val.i_val;
-        case TFld::Real:        return m_val.r_val;
-        case TFld::Boolean:	return m_val.b_val;
     }
 }
 
@@ -1282,20 +1277,31 @@ int Attr::getI( )
 {
     switch(fld().type())
     {
-	case TFld::String:      return atoi(m_val.s_val->c_str());
+	case TFld::String:      return ((*m_val.s_val)!=EVAL_STR) ? atoi(m_val.s_val->c_str()) : EVAL_INT;
+        case TFld::Real:        return (m_val.r_val!=EVAL_REAL) ? (int)m_val.r_val : EVAL_INT;
+        case TFld::Boolean:	return (m_val.b_val!=EVAL_BOOL) ? (bool)m_val.b_val : EVAL_INT;
         case TFld::Integer:	return m_val.i_val;
-        case TFld::Real:        return (int)m_val.r_val;
-        case TFld::Boolean:	return m_val.b_val;
     }
 }
 
-bool Attr::getB( )
+double Attr::getR( )
 {
     switch(fld().type())
     {
-        case TFld::String:      return atoi(m_val.s_val->c_str());
-        case TFld::Integer:	return m_val.i_val;
-        case TFld::Real:        return (int)m_val.r_val;
+        case TFld::String:      return ((*m_val.s_val)!=EVAL_STR) ? atof(m_val.s_val->c_str()) : EVAL_REAL;
+        case TFld::Integer:	return (m_val.i_val!=EVAL_INT) ? m_val.i_val : EVAL_REAL;
+        case TFld::Boolean:	return (m_val.b_val!=EVAL_BOOL) ? (bool)m_val.b_val : EVAL_REAL;
+        case TFld::Real:        return m_val.r_val;
+    }
+}
+
+char Attr::getB( )
+{
+    switch(fld().type())
+    {
+        case TFld::String:      return ((*m_val.s_val)!=EVAL_STR) ? (bool)atoi(m_val.s_val->c_str()) : EVAL_BOOL;
+        case TFld::Integer:	return (m_val.i_val!=EVAL_INT) ? (bool)m_val.i_val : EVAL_BOOL;
+        case TFld::Real:        return (m_val.r_val!=EVAL_REAL) ? (bool)m_val.r_val : EVAL_BOOL;
         case TFld::Boolean:	return m_val.b_val;
     }
 }
@@ -1317,6 +1323,9 @@ void Attr::setS( const string &val, bool strongPrev )
 {
     switch( fld().type() )
     {
+        case TFld::Integer:	setI( (val!=EVAL_STR) ? atoi(val.c_str()) : EVAL_INT, strongPrev );	break;
+	case TFld::Real:	setR( (val!=EVAL_STR) ? atof(val.c_str()) : EVAL_REAL, strongPrev );	break;
+        case TFld::Boolean:	setB( (val!=EVAL_STR) ? (bool)atoi(val.c_str()) : EVAL_BOOL, strongPrev );	break;    
 	case TFld::String:
 	{
 	    if( !strongPrev && *(m_val.s_val) == val )	break;	    
@@ -1331,38 +1340,6 @@ void Attr::setS( const string &val, bool strongPrev )
 	    }
             break;
 	}
-        case TFld::Integer:	setI( atoi(val.c_str()), strongPrev );	break;
-	case TFld::Real:	setR( atof(val.c_str()), strongPrev );	break;
-        case TFld::Boolean:	setB( atoi(val.c_str()), strongPrev );	break;
-    }
-}
-
-void Attr::setR( double val, bool strongPrev )
-{
-    switch( fld().type() )
-    {
-        case TFld::String:      setS( TSYS::real2str(val), strongPrev );	break;
-        case TFld::Integer:	setI( (int)val, strongPrev );	break;
-        case TFld::Real:
-	{
-    	    if( !(fld().flg()&TFld::Selected) && fld().selValR()[0] < fld().selValR()[1] )
-    	    {
-                val = vmax(val,fld().selValR()[0]);
-                val = vmin(val,fld().selValR()[1]);
-            }
-	    if( !strongPrev && m_val.r_val == val )	break;
-            double t_val = m_val.r_val;
-            m_val.r_val = val;
-            if( !owner()->attrChange(*this,&t_val) )
-                m_val.r_val = t_val;
-	    else
-	    {
-		unsigned imdf = owner()->modifVal(*this);
-		m_modif = imdf ? imdf : m_modif+1;
-	    }
-            break;
-	}
-	case TFld::Boolean:	setB( val, strongPrev );    break;
     }
 }
 
@@ -1370,7 +1347,9 @@ void Attr::setI( int val, bool strongPrev )
 {
     switch( fld().type() )
     {
-        case TFld::String:      setS( TSYS::int2str(val), strongPrev );	break;
+        case TFld::String:      setS( (val!=EVAL_INT) ? TSYS::int2str(val) : EVAL_STR, strongPrev );	break;
+        case TFld::Real:        setR( (val!=EVAL_INT) ? val : EVAL_REAL, strongPrev );    break;
+        case TFld::Boolean:	setB( (val!=EVAL_INT) ? (bool)val : EVAL_BOOL, strongPrev );    break;
         case TFld::Integer:
 	{
             if( !(fld().flg()&TFld::Selected) && fld().selValI()[0] < fld().selValI()[1] )
@@ -1390,18 +1369,45 @@ void Attr::setI( int val, bool strongPrev )
 	    }
             break;
 	}
-        case TFld::Real:        setR( val, strongPrev );    break;
-        case TFld::Boolean:	setB( val, strongPrev );    break;
     }
 }
 
-void Attr::setB( bool val, bool strongPrev )
+void Attr::setR( double val, bool strongPrev )
 {
     switch( fld().type() )
     {
-        case TFld::String:      setS( TSYS::int2str(val), strongPrev );	break;
-        case TFld::Integer:    	setI( val, strongPrev );    break;
-        case TFld::Real:        setR( val, strongPrev );    break;
+        case TFld::String:      setS( (val!=EVAL_REAL) ? TSYS::real2str(val) : EVAL_STR, strongPrev );	break;
+        case TFld::Integer:	setI( (val!=EVAL_REAL) ? (int)val : EVAL_INT, strongPrev );	break;
+	case TFld::Boolean:	setB( (val!=EVAL_REAL) ? (bool)val : EVAL_BOOL, strongPrev );    break;
+        case TFld::Real:
+	{
+    	    if( !(fld().flg()&TFld::Selected) && fld().selValR()[0] < fld().selValR()[1] )
+    	    {
+                val = vmax(val,fld().selValR()[0]);
+                val = vmin(val,fld().selValR()[1]);
+            }
+	    if( !strongPrev && m_val.r_val == val )	break;
+            double t_val = m_val.r_val;
+            m_val.r_val = val;
+            if( !owner()->attrChange(*this,&t_val) )
+                m_val.r_val = t_val;
+	    else
+	    {
+		unsigned imdf = owner()->modifVal(*this);
+		m_modif = imdf ? imdf : m_modif+1;
+	    }
+            break;
+	}
+    }
+}
+
+void Attr::setB( char val, bool strongPrev )
+{
+    switch( fld().type() )
+    {
+        case TFld::String:      setS( (val!=EVAL_BOOL) ? TSYS::int2str((bool)val) : EVAL_STR, strongPrev );	break;
+        case TFld::Integer:    	setI( (val!=EVAL_BOOL) ? (bool)val : EVAL_INT, strongPrev );	break;
+        case TFld::Real:        setR( (val!=EVAL_BOOL) ? (bool)val : EVAL_REAL, strongPrev );	break;
         case TFld::Boolean:
 	{
 	    if( !strongPrev && m_val.b_val == val )	break;

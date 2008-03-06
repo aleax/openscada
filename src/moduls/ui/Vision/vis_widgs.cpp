@@ -288,6 +288,12 @@ LineEdit::LineEdit( QWidget *parent, LType tp, bool prev_dis ) :
     setType(tp);
 }											
 
+bool LineEdit::isEdited( )
+{
+    if( bt_fld && bt_fld->isVisible() )	return true;
+    return false;
+}
+
 void LineEdit::setType( LType tp )
 {
     if( tp == m_tp ) return;

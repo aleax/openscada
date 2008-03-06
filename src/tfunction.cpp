@@ -477,10 +477,10 @@ string TValFunc::getS( unsigned id )
     if( id >= m_val.size() )    throw TError("ValFnc",_("Id or IO %d error!"),id);
     switch(m_val[id].tp)
     {
+	case IO::Integer:	return (m_val[id].val.i!=EVAL_INT) ? TSYS::int2str(m_val[id].val.i) : EVAL_STR;
+	case IO::Real:		return (m_val[id].val.r!=EVAL_REAL) ? TSYS::real2str(m_val[id].val.r) : EVAL_STR;
+	case IO::Boolean:	return (m_val[id].val.b!=EVAL_BOOL) ? TSYS::int2str((bool)m_val[id].val.b) : EVAL_STR;
 	case IO::String:	return *(m_val[id].val.s);
-	case IO::Integer:	return TSYS::int2str(m_val[id].val.i);
-	case IO::Real:		return TSYS::real2str(m_val[id].val.r);
-	case IO::Boolean:	return TSYS::int2str(m_val[id].val.b);
     }
     return "";
 }	    
@@ -490,10 +490,10 @@ int TValFunc::getI( unsigned id )
     if( id >= m_val.size() )    throw TError("ValFnc",_("Id or IO %d error!"),id);
     switch(m_val[id].tp)
     {
-	case IO::String:	return atoi(m_val[id].val.s->c_str());
+	case IO::String:	return ((*m_val[id].val.s)!=EVAL_STR) ? atoi(m_val[id].val.s->c_str()) : EVAL_INT;
+	case IO::Real:		return (m_val[id].val.r!=EVAL_REAL) ? (int)m_val[id].val.r : EVAL_INT;
+	case IO::Boolean:	return (m_val[id].val.b!=EVAL_BOOL) ? (bool)m_val[id].val.b : EVAL_INT;
 	case IO::Integer:	return m_val[id].val.i;
-	case IO::Real:		return (int)m_val[id].val.r;
-	case IO::Boolean:	return m_val[id].val.b;
     }
     return 0;
 }	
@@ -503,22 +503,22 @@ double TValFunc::getR( unsigned id )
     if( id >= m_val.size() )    throw TError("ValFnc",_("Id or IO %d error!"),id);
     switch(m_val[id].tp)
     {
-	case IO::String:	return atof(m_val[id].val.s->c_str());
-	case IO::Integer:	return m_val[id].val.i;
+	case IO::String:	return ((*m_val[id].val.s)!=EVAL_STR) ? atof(m_val[id].val.s->c_str()) : EVAL_REAL;
+	case IO::Integer:	return (m_val[id].val.i!=EVAL_INT) ? m_val[id].val.i : EVAL_REAL;
+	case IO::Boolean:	return (m_val[id].val.b!=EVAL_BOOL) ? (bool)m_val[id].val.b : EVAL_REAL;
 	case IO::Real:		return m_val[id].val.r;
-	case IO::Boolean:	return m_val[id].val.b;
     }
     return 0.0;
 }
 	
-bool TValFunc::getB( unsigned id )
+char TValFunc::getB( unsigned id )
 {
     if( id >= m_val.size() )    throw TError("ValFnc",_("Id or IO %d error!"),id);
     switch(m_val[id].tp)
     {
-	case IO::String:	return atoi(m_val[id].val.s->c_str());
-	case IO::Integer:	return m_val[id].val.i;
-	case IO::Real:		return m_val[id].val.r;
+	case IO::String:	return ((*m_val[id].val.s)!=EVAL_STR) ? (bool)atoi(m_val[id].val.s->c_str()) : EVAL_BOOL;
+	case IO::Integer:	return (m_val[id].val.i!=EVAL_INT) ? (bool)m_val[id].val.i : EVAL_BOOL;
+	case IO::Real:		return (m_val[id].val.r!=EVAL_REAL) ? (bool)m_val[id].val.r : EVAL_BOOL;
 	case IO::Boolean:	return m_val[id].val.b;
     }
     return false;
@@ -529,10 +529,10 @@ void TValFunc::setS( unsigned id, const string &val )
     if( id >= m_val.size() )    throw TError("ValFnc",_("Id or IO %d error!"),id);
     switch(m_val[id].tp)
     {
-	case IO::String:	*(m_val[id].val.s) = val;	break;					
-	case IO::Integer:	m_val[id].val.i = atoi(val.c_str());	break;
-	case IO::Real:		m_val[id].val.r = atof(val.c_str());	break;
-	case IO::Boolean:	m_val[id].val.b = atoi(val.c_str());	break;
+	case IO::Integer:	m_val[id].val.i = (val!=EVAL_STR) ? atoi(val.c_str()) : EVAL_INT;	break;
+	case IO::Real:		m_val[id].val.r = (val!=EVAL_STR) ? atof(val.c_str()) : EVAL_REAL;	break;
+	case IO::Boolean:	m_val[id].val.b = (val!=EVAL_STR) ? (bool)atoi(val.c_str()) : EVAL_BOOL;	break;
+	case IO::String:	*(m_val[id].val.s) = val;	break;
     }
 }
 	
@@ -541,10 +541,10 @@ void TValFunc::setI( unsigned id, int val )
     if( id >= m_val.size() )    throw TError("ValFnc",_("Id or IO %d error!"),id);
     switch(m_val[id].tp)
     {
-	case IO::String:	*(m_val[id].val.s) = TSYS::int2str(val);	break;
+	case IO::String:	*(m_val[id].val.s) = (val!=EVAL_INT) ? TSYS::int2str(val) : EVAL_STR;	break;
+	case IO::Real:		m_val[id].val.r = (val!=EVAL_INT) ? val : EVAL_REAL;		break;
+	case IO::Boolean:	m_val[id].val.b = (val!=EVAL_INT) ? (bool)val : EVAL_BOOL;	break;
 	case IO::Integer:	m_val[id].val.i = val;	break;
-	case IO::Real:		m_val[id].val.r = val;	break;
-	case IO::Boolean:	m_val[id].val.b = val;	break;
     }
 }
 	
@@ -554,21 +554,21 @@ void TValFunc::setR( unsigned id, double val )
     if( isnan(val) ) val = 0.;	//Check for 'Not a Number'
     switch(m_val[id].tp)
     {
-	case IO::String:	*(m_val[id].val.s) = TSYS::real2str(val);	break;
-	case IO::Integer:	m_val[id].val.i = (int)val;	break;
-	case IO::Real:		m_val[id].val.r = val;		break;
-	case IO::Boolean:	m_val[id].val.b = val;		break;
+	case IO::String:	*(m_val[id].val.s) = (val!=EVAL_REAL) ? TSYS::real2str(val) : EVAL_STR;	break;
+	case IO::Integer:	m_val[id].val.i = (val!=EVAL_REAL) ? (int)val : EVAL_INT;	break;
+	case IO::Boolean:	m_val[id].val.b = (val!=EVAL_REAL) ? (bool)val : EVAL_BOOL;	break;
+	case IO::Real:		m_val[id].val.r = val;	break;
     }
 }	
 	
-void TValFunc::setB( unsigned id, bool val )
+void TValFunc::setB( unsigned id, char val )
 {
     if( id >= m_val.size() )    throw TError("ValFnc",_("Id or IO %d error!"),id);
     switch(m_val[id].tp)
     {
-	case IO::String:	*(m_val[id].val.s) = TSYS::int2str(val);	break;
-	case IO::Integer:	m_val[id].val.i = val;	break;
-	case IO::Real:		m_val[id].val.r = val;	break;
+	case IO::String:	*(m_val[id].val.s) = (val!=EVAL_BOOL) ? TSYS::int2str((bool)val) : EVAL_STR;	break;
+	case IO::Integer:	m_val[id].val.i = (val!=EVAL_BOOL) ? (bool)val : EVAL_INT;	break;
+	case IO::Real:		m_val[id].val.r = (val!=EVAL_BOOL) ? (bool)val : EVAL_REAL;	break;
 	case IO::Boolean:	m_val[id].val.b = val;	break;
     }
 }

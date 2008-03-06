@@ -130,6 +130,7 @@ namespace VISION
 	    
 	    LType type( ) 	{ return m_tp; }
             QString value();
+	    bool  isEdited( );
 
 	    void setType( LType tp );
             void setValue(const QString &);

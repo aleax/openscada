@@ -176,16 +176,16 @@ class TValFunc
 	}
 	
 	//- get IO value -
-	string getS( unsigned id );
-	int getI( unsigned id );
-	double getR( unsigned id );
-	bool getB( unsigned id );
+	string 	getS( unsigned id );
+	int 	getI( unsigned id );
+	double 	getR( unsigned id );
+	char 	getB( unsigned id );
 	
 	//- set IO value -
 	void setS( unsigned id, const string &val );
 	void setI( unsigned id, int val );
 	void setR( unsigned id, double val );
-	void setB( unsigned id, bool val );
+	void setB( unsigned id, char val );
 
 	//- Blocked values screen -
 	bool	blk( )			{ return m_blk; }
@@ -217,7 +217,7 @@ class TValFunc
 	        string *s;
 	        double r;
 	        int    i;
-	        bool   b;
+	        char   b;
 	    }val;										    
 	};
 	

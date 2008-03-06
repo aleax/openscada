@@ -84,14 +84,14 @@ class Attr : public TCntrNode
 	string getS( );
 	double getR( );
 	int    getI( );
-	bool   getB( );
+	char   getB( );
 
 	//- Set value -
 	void setSEL( const string &val, bool strongPrev = false );
 	void setS( const string &val, bool strongPrev = false );
 	void setR( double val, bool strongPrev = false );
 	void setI( int val, bool strongPrev = false );
-	void setB( bool val, bool strongPrev = false );
+	void setB( char val, bool strongPrev = false );
 
 	TFld &fld()  			{ return *m_fld; }
 	
@@ -109,7 +109,7 @@ class Attr : public TCntrNode
             string *s_val;		//String
             double r_val;		//Real
             int    i_val;		//Integer
-            bool   b_val;		//Boolean
+            char   b_val;		//Boolean
         }m_val;
         //- Attributes -
         TFld	*m_fld;			//Base field

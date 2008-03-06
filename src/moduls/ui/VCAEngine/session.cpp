@@ -705,19 +705,36 @@ void SessWdg::setProcess( bool val )
 	fio.ioIns( new IO("f_start",_("Function start flag"),IO::Boolean,IO::Default,"0",false),1);
 	fio.ioIns( new IO("f_stop",_("Function stop flag"),IO::Boolean,IO::Default,"0",false),2);
 	//--- Add calc widget's attributes ---
-	AutoHD<Widget> fulw = parentNoLink();
 	vector<string> iwls, als;
-	fulw.at().wdgList(iwls);
-	for( int i_w = -1; i_w < (int)iwls.size(); i_w++ )
+	//--- Self attributes check ---
+	attrList(als);
+	AutoHD<Widget> fulw = parentNoLink();	
+	for( int i_a = 0; i_a < als.size(); i_a++ )
+	{
+	    AutoHD<Attr> cattr = attrAt(als[i_a]);
+	    if( (fulw.at().attrPresent(als[i_a])&&fulw.at().attrAt(als[i_a]).at().flgSelf()&Attr::ProcAttr) || als[i_a] == "focus" )
+	    {
+		IO::Type tp = IO::String;
+		switch( cattr.at().type() )
+		{
+		    case TFld::Boolean: tp = IO::Boolean;	break;
+		    case TFld::Integer: tp = IO::Integer;	break;
+		    case TFld::Real:    tp = IO::Real;	break;
+		    case TFld::String:  tp = IO::String;	break;
+		}
+		fio.ioAdd( new IO(als[i_a].c_str(),cattr.at().name().c_str(),tp,IO::Output,"",false,("./"+als[i_a]).c_str()) );
+	    }
+	}
+	//--- Include attributes check ---
+	wdgList(iwls);
+	for( int i_w = 0; i_w < iwls.size(); i_w++ )
 	{	
-	    AutoHD<Widget> curw = fulw;
-	    if( i_w >= 0 ) curw = fulw.at().wdgAt(iwls[i_w]);
-	
+	    AutoHD<Widget> curw = wdgAt(iwls[i_w]);
 	    curw.at().attrList(als);
 	    for( int i_a = 0; i_a < als.size(); i_a++ )
 	    {
 		AutoHD<Attr> cattr = curw.at().attrAt(als[i_a]);
-		if( cattr.at().flgSelf()&Attr::ProcAttr )
+		if( cattr.at().flgSelf()&Attr::ProcAttr || als[i_a] == "focus" )
 		{
 		    IO::Type tp = IO::String;
 		    switch( cattr.at().type() )
@@ -727,15 +744,11 @@ void SessWdg::setProcess( bool val )
 			case TFld::Real:    tp = IO::Real;	break;
 			case TFld::String:  tp = IO::String;	break;
 		    }
-		    fio.ioAdd( new IO((((i_w<0)?"":iwls[i_w]+"_")+als[i_a]).c_str(),
-				      (((i_w<0)?"":curw.at().name()+".")+cattr.at().name()).c_str(),
-				      tp,IO::Output,"",false,
-				      (((i_w<0)?"./":iwls[i_w]+"/")+als[i_a]).c_str()) );
+		    fio.ioAdd( new IO((iwls[i_w]+"_"+als[i_a]).c_str(),(curw.at().name()+"."+cattr.at().name()).c_str(),tp,IO::Output,"",false,(iwls[i_w]+"/"+als[i_a]).c_str()) );
 		}
 	    }
 	}
 	if( attrPresent("event") ) fio.ioAdd( new IO("event",_("Event"),IO::String,IO::Output) );
-	if( attrPresent("focus") ) fio.ioAdd( new IO("focus",_("Focus"),IO::Boolean,IO::Output) );	
 	
 	//-- Compile function --
 	try
@@ -869,6 +882,8 @@ void SessWdg::prcElListUpdate( )
 	if( attr.at().flgSelf()&(Attr::CfgConst|Attr::CfgLnkIn|Attr::CfgLnkOut) && !attr.at().cfgVal().empty() )
 	    m_attrLnkLs.push_back(ls[i_a]);
 	if( !(attr.at().flgGlob()&Attr::IsUser) ) m_attrUILs.push_back(ls[i_a]);
+	if( attr.at().flgSelf()&Attr::CfgLnkIn && attr.at().cfgVal().empty() )
+	    attr.at().setS(EVAL_STR);
     }
 }
 
@@ -955,6 +970,7 @@ void SessWdg::calc( bool first, bool last )
 				break;
 			}		    
 		}
+		else if( attr.at().flgSelf()&Attr::CfgLnkIn )	attr.at().setS(EVAL_STR);
 	    }
 	    inLnkGet = false;
 
@@ -962,9 +978,7 @@ void SessWdg::calc( bool first, bool last )
 	    {    
 		//- Load events to calc procedure -
 		int evId = ioId("event");
-		int evFoc = ioId("focus");
 		if( evId >= 0 )	setS(evId,wevent);
-		if( evFoc >=0 ) setB(evFoc,attrAt("focus").at().getB());
 	
 		//-- Load data to calc area --
     		setR(0,1000./ownerSess()->period());
@@ -1003,7 +1017,6 @@ void SessWdg::calc( bool first, bool last )
 		}
 		//-- Save events from calc procedure --
 		if( evId >= 0 ) wevent = getS(evId);
-		if( evFoc >=0 ) attrAt("focus").at().setB(getB(evFoc));		
 	    }
     
 	    //-- Process widget's events --
@@ -1027,7 +1040,8 @@ void SessWdg::calc( bool first, bool last )
 			if( sprc_ev == sev_ev && (sprc_path == "*" || sprc_path == sev_path) )
 			{
 			    sprc_path = TSYS::strSepParse(sprc,0,':',&t_off);
-	    		    ownerSess()->uiComm(sprc_path,TSYS::strSepParse(sprc,0,':',&t_off),this);
+	    		    ownerSess()->uiComm(sprc_path,TSYS::strSepParse(sprc,0,':',&t_off),
+				sev_path.empty() ? this : &((AutoHD<SessWdg>)nodeAt(sev_path)).at());			    
 			    evProc = true;
 			}
 		    }

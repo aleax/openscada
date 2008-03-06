@@ -223,7 +223,9 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    if( !el_wdg ) break;
 	    switch( wel )
 	    {
-		case 0: ((LineEdit*)el_wdg)->setValue(val.c_str());	break;
+		case 0: 
+		    if( !((LineEdit*)el_wdg)->isEdited( ) ) ((LineEdit*)el_wdg)->setValue(val.c_str());	
+		    break;
 		case 1:	((TextEdit*)el_wdg)->setText(val.c_str());	break;
 		case 2:	((QCheckBox*)el_wdg)->setChecked(atoi(val.c_str()));	break;
 		case 3:	((QPushButton*)el_wdg)->setChecked(atoi(val.c_str()));	break;
@@ -643,7 +645,13 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	case 5:		//en
 	    if( !qobject_cast<RunWdgView*>(w) )	{ up = false; break; }
 	    w->dc()["en"] = (bool)atoi(val.c_str());
+    	    w->setVisible(atoi(val.c_str()));
 	    break;
+        case 6:         //active
+    	    if( !qobject_cast<RunWdgView*>(w) ) break;
+            w->dc()["active"] = (bool)atoi(val.c_str());
+            w->setFocusPolicy( (bool)atoi(val.c_str()) ? Qt::StrongFocus : Qt::NoFocus );
+            break;
 	case 12: 	//geomMargin
 	    w->dc()["geomMargin"] = atoi(val.c_str());	up = true;
 	    break;
@@ -816,7 +824,7 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 
 bool ShapeText::event( WdgView *w, QEvent *event )
 {
-    if( !w->dc().value("en",1).toInt() ) return true;
+    if( !w->dc().value("en",1).toInt() ) return false;
     switch(event->type())
     {
         case QEvent::Paint:
@@ -826,19 +834,17 @@ bool ShapeText::event( WdgView *w, QEvent *event )
 	    //- Prepare draw area -
 	    int margin = w->dc()["geomMargin"].toInt();
 	    QRect dA(w->rect().x(),w->rect().y(),
-		(int)((float)w->rect().width()/w->xScale(true)+0.5)-2*margin,
-		(int)((float)w->rect().height()/w->yScale(true)+0.5)-2*margin);
+		(int)TSYS::realRound(w->sizeF().width()/w->xScale(true),2,true)-2*margin,
+		(int)TSYS::realRound(w->sizeF().height()/w->yScale(true),2,true)-2*margin);
 	    pnt.setWindow(dA);
-	    pnt.setViewport(w->rect().adjusted((int)(w->xScale(true)*margin+0.5),(int)(w->yScale(true)*margin+0.5),
-		-(int)(w->xScale(true)*margin+0.5),-(int)(w->yScale(true)*margin+0.5)));
+	    pnt.setViewport(w->rect().adjusted((int)TSYS::realRound(w->xScale(true)*margin,2,true),(int)TSYS::realRound(w->yScale(true)*margin,2,true),
+		-(int)TSYS::realRound(w->xScale(true)*margin,2,true),-(int)TSYS::realRound(w->yScale(true)*margin,2,true)));
 	    
-	    /*QRect dA = w->rect().adjusted(0,0,-2*margin,-2*margin);	    
-            pnt.setWindow(dA);
-	    pnt.setViewport(w->rect().adjusted(margin,margin,-margin,-margin));*/
-	    
-	    pnt.translate(dA.width()/2,dA.height()/2 );
+	    int scale = (pnt.window()!=pnt.viewport()) ? 1 : 0;
+	    pnt.translate( dA.width()/2+scale,dA.height()/2+scale );
 	    int angle = w->dc()["orient"].toInt();
 	    pnt.rotate(angle);
+	    
 	    //- Calc whidth and hight draw rect at rotate -
 	    double rad_angl  = fabs(3.14159*(double)angle/180.);
 	    double rect_rate = 1./(fabs(cos(rad_angl))+fabs(sin(rad_angl)));
@@ -847,9 +853,7 @@ bool ShapeText::event( WdgView *w, QEvent *event )
 	    int heigt = (int)(rect_rate*dA.size().height()+
 			    sin(rad_angl)*(dA.size().width()-dA.size().height()));
 	    
-	    //QRect dR = QRect(QPoint(-dA.size().width()/2,-dA.size().height()/2),dA.size());
 	    QRect dR = QRect(QPoint(-wdth/2,-heigt/2),QSize(wdth,heigt));
-	    //QSize asz(dA.size());
 	    
 	    //- Draw decoration -
 	    QColor bkcol = w->dc()["backColor"].value<QColor>();
@@ -932,6 +936,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	case 5:		//en
 	    if( !qobject_cast<RunWdgView*>(w) )	{ up = false; break; }
 	    w->dc()["en"] = (bool)atoi(val.c_str()); 
+    	    w->setVisible(atoi(val.c_str()));
 	    break;
 	case 6:		//active
 	    if( !qobject_cast<RunWdgView*>(w) )	break;
@@ -1085,7 +1090,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 
 bool ShapeMedia::event( WdgView *w, QEvent *event )
 {
-    if( !w->dc().value("en",1).toInt() ) return true;
+    if( !w->dc().value("en",1).toInt() ) return false;
     
     switch( event->type() )
     {
@@ -1232,6 +1237,7 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	case 5:		//en
 	    if( !qobject_cast<RunWdgView*>(w) )	break;
 	    w->dc()["en"] = (bool)atoi(val.c_str());
+    	    w->setVisible(atoi(val.c_str()));	    
 	    up = true; 
 	    break;
 	case 6:		//active
@@ -1665,7 +1671,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
     	    //Square Average
 	    if( averPos == curPos )
             {
-                if( averVl == EVAL_REAL )  averVl = curVl;
+                if( averVl == EVAL_REAL || !(2*curTm-averTm-averLstTm) ) averVl = curVl;
         	else if( curVl != EVAL_REAL )
                     averVl = (averVl*(double)(curTm-averTm)+curVl*(double)(curTm-averLstTm))/
                               ((double)(2*curTm-averTm-averLstTm));
@@ -1676,7 +1682,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
     	    //Write point and line
 	    if( averVl != EVAL_REAL )
 	    {
-	    	int c_vpos = tAr.y()+tAr.height()-(int)((double)tAr.height()*(averVl-vsMin)/(vsMax-vsMin));	    
+	    	int c_vpos = tAr.y()+tAr.height()-(int)((double)tAr.height()*(averVl-vsMin)/(vsMax-vsMin));
 		if( prevVl == EVAL_REAL ) pnt.drawPoint(averPos,c_vpos);
 		else
 	        {
@@ -1724,7 +1730,7 @@ void ShapeDiagram::tracing( )
 
 bool ShapeDiagram::event( WdgView *w, QEvent *event )
 {
-    if( !w->dc().value("en",1).toInt() ) return true;
+    if( !w->dc().value("en",1).toInt() ) return false;
     
     //- Get generic data -
     long long tTime     = w->dc()["tTime"].toLongLong();
@@ -1784,10 +1790,12 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 		case Qt::Key_Left:
 		    if( curTime <= tTimeGrnd ) break;
 		    setCursor( w, curTime-(tTime-tTimeGrnd)/tAr->width() );
+		    w->update();
 		    return true;
 		case Qt::Key_Right:
 		    if( curTime >= tTime ) break;
 		    setCursor( w, curTime+(tTime-tTimeGrnd)/tAr->width() );
+		    w->update();
 		    return true;
 	    }
 	    break;
@@ -1798,6 +1806,7 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 	    QPoint curp = w->mapFromGlobal(w->cursor().pos());
 	    if( curp.x() < tAr->x() || curp.x() > (tAr->x()+tAr->width()) ) break;
 	    setCursor( w, tTimeGrnd + (tPict-tTimeGrnd)*(curp.x()-tAr->x())/tAr->width() );
+	    w->update();
 	    break;
 	}
     }
@@ -2040,7 +2049,7 @@ bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	case 5:		//en
 	    if( !qobject_cast<RunWdgView*>(w) )	break;
 	    w->dc()["en"] = (bool)atoi(val.c_str());
-	    tw->setVisible(atoi(val.c_str()));
+	    w->setVisible(atoi(val.c_str()));
 	    break;
 	case 6:		//active
 	    if( !qobject_cast<RunWdgView*>(w) ) break;
@@ -2433,7 +2442,12 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    up = true;
 	    break;
 	case -2:	//focus
-	    if( (bool)atoi(val.c_str()) != w->hasFocus() )	up = true;
+	    if( (bool)atoi(val.c_str()) == w->hasFocus() )	up = false;
+	    break;
+        case 5:         //en
+    	    if( !qobject_cast<RunWdgView*>(w) )	{ up = false; break; }
+	    w->dc()["en"] = (bool)atoi(val.c_str());
+    	    w->setVisible(atoi(val.c_str()));
 	    break;
 	case 6:		//active
 	    if( !qobject_cast<RunWdgView*>(w) ) break;
@@ -2526,6 +2540,8 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 
 bool ShapeBox::event( WdgView *w, QEvent *event )
 {
+    if( !w->dc().value("en",1).toInt() ) return false;
+    
     switch(event->type())
     {
         case QEvent::Paint:

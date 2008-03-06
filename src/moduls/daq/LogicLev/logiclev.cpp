@@ -750,22 +750,22 @@ void TMdPrm::calc( bool first, bool last )
 	
         //- Get input links -
         for( int i_l = 0; i_l < lnkSize(); i_l++ )
-            if( !lnk(i_l).aprm.freeStat() )
-		switch(tmpl->val.ioType(lnk(i_l).io_id))
-		{
-		    case IO::String:
-			tmpl->val.setS(lnk(i_l).io_id,lnk(i_l).aprm.at().getS());
-			break;
-		    case IO::Integer:
-			tmpl->val.setI(lnk(i_l).io_id,lnk(i_l).aprm.at().getI());
-			break;
-		    case IO::Real:
-			tmpl->val.setR(lnk(i_l).io_id,lnk(i_l).aprm.at().getR());
-			break;
-		    case IO::Boolean:
-			tmpl->val.setB(lnk(i_l).io_id,lnk(i_l).aprm.at().getB());
-			break;
-		}
+            if( lnk(i_l).aprm.freeStat() )	tmpl->val.setS(lnk(i_l).io_id,EVAL_STR);
+	    else switch(tmpl->val.ioType(lnk(i_l).io_id))
+	    {
+	        case IO::String:
+	    	    tmpl->val.setS(lnk(i_l).io_id,lnk(i_l).aprm.at().getS());
+		    break;
+		case IO::Integer:
+		    tmpl->val.setI(lnk(i_l).io_id,lnk(i_l).aprm.at().getI());
+		    break;
+		case IO::Real:
+		    tmpl->val.setR(lnk(i_l).io_id,lnk(i_l).aprm.at().getR());
+		    break;
+		case IO::Boolean:
+		    tmpl->val.setB(lnk(i_l).io_id,lnk(i_l).aprm.at().getB());
+		    break;
+	    }
 	
 	//- Calc template -
         tmpl->val.calc();

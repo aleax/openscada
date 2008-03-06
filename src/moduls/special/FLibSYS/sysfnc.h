@@ -308,7 +308,7 @@ class varhGetB : public TFunction
     public:
 	varhGetB( ) : TFunction("varhGetB")
 	{
-	    ioAdd( new IO("val",_("Return value"),IO::Integer,IO::Return) );
+	    ioAdd( new IO("val",_("Return value"),IO::Boolean,IO::Return) );
 	    ioAdd( new IO("id",_("Buffer id"),IO::Integer,IO::Default) );
 	    ioAdd( new IO("sec",_("Seconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("usec",_("Microseconds"),IO::Integer,IO::Output) );

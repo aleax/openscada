@@ -371,11 +371,11 @@ string TVal::getS( long long *tm, bool sys )
     switch( fld().type() )
     {
 	case TFld::Integer:
-	{ int vl = getI(tm,sys); return (vl==EVAL_INT)?EVAL_STR:TSYS::int2str(vl); }
+	{ int vl = getI(tm,sys); 	return (vl!=EVAL_INT)  ? TSYS::int2str(vl) : EVAL_STR; }
 	case TFld::Real:	
-	{ double vl = getR(tm,sys); return (vl==EVAL_REAL)?EVAL_STR:TSYS::real2str(vl); }
+	{ double vl = getR(tm,sys); 	return (vl!=EVAL_REAL) ? TSYS::real2str(vl) : EVAL_STR; }
 	case TFld::Boolean:	
-	{ char vl = getB(tm,sys); return (vl==EVAL_BOOL)?EVAL_STR:TSYS::int2str((bool)vl); }
+	{ char vl = getB(tm,sys); 	return (vl!=EVAL_BOOL) ? TSYS::int2str((bool)vl) : EVAL_STR; }
 	case TFld::String:
 	    //- Get from archive -
 	    if( tm && (*tm) && !m_arch.freeStat() && *tm/m_arch.at().period() < time/m_arch.at().period() ) 
@@ -393,43 +393,16 @@ string TVal::getS( long long *tm, bool sys )
     }
 }
 
-double TVal::getR( long long *tm, bool sys )
-{
-    switch( fld().type() )
-    {
-	case TFld::String:      
-	{ string vl = getS(tm,sys); return (vl==EVAL_STR)?EVAL_REAL:atof(vl.c_str()); }
-	case TFld::Integer:
-	{ int vl = getI(tm,sys); return (vl==EVAL_INT)?EVAL_REAL:vl; }
-	case TFld::Boolean:	
-	{ char vl = getB(tm,sys); return (vl==EVAL_BOOL)?EVAL_REAL:(bool)vl; }
-	case TFld::Real:		
-	    //- Get from archive -
-	    if( tm && (*tm) && !m_arch.freeStat() && *tm/m_arch.at().period() < time/m_arch.at().period() ) 
-		return m_arch.at().getR(tm);
-	    //- Get value from config -
-	    if( m_cfg )
-	    {
-		if(tm) *tm = TSYS::curTime();
-		return src.cfg->getR( );
-	    }
-	    //- Get current value -
-	    if( fld().flg()&TVal::DirRead && !sys )	vlGet( );
-	    if( tm ) *tm = time;
-	    return val.val_r;
-    }
-}
-
 int TVal::getI( long long *tm, bool sys )
 {
     switch( fld().type() )
     {
 	case TFld::String:
-	{ string vl = getS(tm,sys); return (vl==EVAL_STR)?EVAL_INT:atoi(vl.c_str()); }
+	{ string vl = getS(tm,sys);	return (vl!=EVAL_STR) ? atoi(vl.c_str()) : EVAL_INT; }
 	case TFld::Real:
-	{ double vl = getR(tm,sys); return (vl==EVAL_REAL)?EVAL_INT:(int)vl; }
+	{ double vl = getR(tm,sys); 	return (vl!=EVAL_REAL) ? (int)vl : EVAL_INT; }
 	case TFld::Boolean:
-	{ char vl = getB(tm,sys); return (vl==EVAL_BOOL)?EVAL_INT:(bool)vl; }
+	{ char vl = getB(tm,sys); 	return (vl!=EVAL_BOOL) ? (bool)vl : EVAL_INT; }
 	case TFld::Integer:
 	    //- Get from archive -
 	    if( tm && (*tm) && !m_arch.freeStat() && *tm/m_arch.at().period() < time/m_arch.at().period() ) 
@@ -447,16 +420,43 @@ int TVal::getI( long long *tm, bool sys )
     }
 }
 
+double TVal::getR( long long *tm, bool sys )
+{
+    switch( fld().type() )
+    {
+	case TFld::String:      
+	{ string vl = getS(tm,sys); 	return (vl!=EVAL_STR) ? atof(vl.c_str()) : EVAL_REAL; }
+	case TFld::Integer:
+	{ int vl = getI(tm,sys); 	return (vl!=EVAL_INT) ? vl : EVAL_REAL; }
+	case TFld::Boolean:	
+	{ char vl = getB(tm,sys);	return (vl!=EVAL_BOOL) ? (bool)vl : EVAL_REAL; }
+	case TFld::Real:		
+	    //- Get from archive -
+	    if( tm && (*tm) && !m_arch.freeStat() && *tm/m_arch.at().period() < time/m_arch.at().period() ) 
+		return m_arch.at().getR(tm);
+	    //- Get value from config -
+	    if( m_cfg )
+	    {
+		if(tm) *tm = TSYS::curTime();
+		return src.cfg->getR( );
+	    }
+	    //- Get current value -
+	    if( fld().flg()&TVal::DirRead && !sys )	vlGet( );
+	    if( tm ) *tm = time;
+	    return val.val_r;
+    }
+}
+
 char TVal::getB( long long *tm, bool sys )
 {
     switch( fld().type() )
     {
 	case TFld::String:      
-	{ string vl = getS(tm,sys); return (vl==EVAL_STR)?EVAL_BOOL:(bool)atoi(vl.c_str()); }
+	{ string vl = getS(tm,sys); 	return (vl!=EVAL_STR) ? (bool)atoi(vl.c_str()) : EVAL_BOOL; }
 	case TFld::Integer:
-	{ int vl = getI(tm,sys); return (vl==EVAL_INT)?EVAL_BOOL:(bool)vl; }
+	{ int vl = getI(tm,sys); 	return (vl!=EVAL_INT) ? (bool)vl : EVAL_BOOL; }
 	case TFld::Real:	
-	{ double vl = getR(tm,sys); return (vl==EVAL_REAL)?EVAL_BOOL:(bool)vl; }
+	{ double vl = getR(tm,sys); 	return (vl!=EVAL_REAL) ? (bool)vl : EVAL_BOOL; }
 	case TFld::Boolean:
 	    //- Get from archive -
 	    if( tm && (*tm) && !m_arch.freeStat() && *tm/m_arch.at().period() < time/m_arch.at().period() ) 
@@ -491,11 +491,11 @@ void TVal::setS( const string &value, long long tm, bool sys )
     switch( fld().type() )
     {
 	case TFld::Integer:
-	    setI((value==EVAL_STR)?EVAL_INT:atoi(value.c_str()),tm,sys);	break;
+	    setI( (value!=EVAL_STR) ? atoi(value.c_str()) : EVAL_INT, tm, sys );	break;
 	case TFld::Real:
-	    setR((value==EVAL_STR)?EVAL_REAL:atof(value.c_str()),tm,sys);	break;
+	    setR( (value!=EVAL_STR) ? atof(value.c_str()) : EVAL_REAL, tm, sys );	break;
 	case TFld::Boolean:
-	    setB((value==EVAL_STR)?EVAL_BOOL:(bool)atoi(value.c_str()),tm,sys);	break;
+	    setB( (value!=EVAL_STR) ? (bool)atoi(value.c_str()) : EVAL_BOOL, tm, sys );	break;
 	case TFld::String:
 	    //- Set value to config -
 	    if( m_cfg )	{ src.cfg->setS( value ); return; }
@@ -512,47 +512,16 @@ void TVal::setS( const string &value, long long tm, bool sys )
     }        
 }
 
-void TVal::setR( double value, long long tm, bool sys )
-{    
-    switch( fld().type() )
-    {
-	case TFld::String:	
-	    setS((value==EVAL_REAL)?EVAL_STR:TSYS::real2str(value),tm,sys);	break;
-	case TFld::Integer:
-	    setI((value==EVAL_REAL)?EVAL_INT:(int)value,tm,sys);	break;
-	case TFld::Boolean:
-	    setB((value==EVAL_REAL)?EVAL_BOOL:(bool)value,tm,sys);	break;
-	case TFld::Real:
-	    //- Set value to config -
-	    if( m_cfg )	{ src.cfg->setR( value ); return; }
-	    //- Check to write -
-	    if( !sys && fld().flg()&TFld::NoWrite )	throw TError("Val","No write access!");
-	    //- Set current value and time -
-	    if( !(fld().flg()&TFld::Selected) && fld().selValR()[1] > fld().selValR()[0] && value != EVAL_REAL )
-	    {
-        	if( value > fld().selValR()[1] )value = fld().selValR()[1];
-		if( value < fld().selValR()[0] )value = fld().selValR()[0];
-	    }
-	    val.val_r = value;
-	    time = tm;
-	    if(!time) time = TSYS::curTime();
-	    if(fld().flg()&TVal::DirWrite && !sys) vlSet( );
-	    //- Set to archive -
-	    if( !m_arch.freeStat() && m_arch.at().srcMode() == TVArchive::PassiveAttr )
-		m_arch.at().setR(value,time);
-    }        
-}
-
 void TVal::setI( int value, long long tm, bool sys )
 {        
     switch( fld().type() )
     {
 	case TFld::String:
-	    setS((value==EVAL_INT)?EVAL_STR:TSYS::int2str(value),tm,sys);	break;
+	    setS( (value!=EVAL_INT) ? TSYS::int2str(value) : EVAL_STR, tm, sys );	break;
 	case TFld::Real:
-	    setR((value==EVAL_INT)?EVAL_REAL:value,tm,sys);	break;
+	    setR( (value!=EVAL_INT) ? value : EVAL_REAL, tm, sys );		break;
 	case TFld::Boolean:
-	    setB((value==EVAL_INT)?EVAL_BOOL:(bool)value,tm,sys);	break;
+	    setB( (value!=EVAL_INT) ? (bool)value : EVAL_BOOL, tm, sys );	break;
 	case TFld::Integer:
 	    //- Set value to config -
 	    if( m_cfg )	{ src.cfg->setI( value ); return; }
@@ -574,16 +543,47 @@ void TVal::setI( int value, long long tm, bool sys )
     }        
 }
 
+void TVal::setR( double value, long long tm, bool sys )
+{    
+    switch( fld().type() )
+    {
+	case TFld::String:	
+	    setS( (value!=EVAL_REAL) ? TSYS::real2str(value) : EVAL_STR, tm, sys );	break;
+	case TFld::Integer:
+	    setI( (value!=EVAL_REAL) ? (int)value : EVAL_INT, tm, sys );		break;
+	case TFld::Boolean:
+	    setB( (value!=EVAL_REAL) ? (bool)value : EVAL_BOOL, tm, sys );		break;
+	case TFld::Real:
+	    //- Set value to config -
+	    if( m_cfg )	{ src.cfg->setR( value ); return; }
+	    //- Check to write -
+	    if( !sys && fld().flg()&TFld::NoWrite )	throw TError("Val","No write access!");
+	    //- Set current value and time -
+	    if( !(fld().flg()&TFld::Selected) && fld().selValR()[1] > fld().selValR()[0] && value != EVAL_REAL )
+	    {
+        	if( value > fld().selValR()[1] )value = fld().selValR()[1];
+		if( value < fld().selValR()[0] )value = fld().selValR()[0];
+	    }
+	    val.val_r = value;
+	    time = tm;
+	    if(!time) time = TSYS::curTime();
+	    if(fld().flg()&TVal::DirWrite && !sys) vlSet( );
+	    //- Set to archive -
+	    if( !m_arch.freeStat() && m_arch.at().srcMode() == TVArchive::PassiveAttr )
+		m_arch.at().setR(value,time);
+    }        
+}
+
 void TVal::setB( char value, long long tm, bool sys )
 {
     switch( fld().type() )
     {
 	case TFld::String:	
-	    setS((value==EVAL_BOOL)?EVAL_STR:TSYS::int2str((bool)value),tm,sys);	break;
+	    setS( (value!=EVAL_BOOL) ? TSYS::int2str((bool)value) : EVAL_STR, tm, sys );	break;
 	case TFld::Integer:
-	    setI((value==EVAL_BOOL)?EVAL_INT:(bool)value,tm,sys);	break;
+	    setI( (value!=EVAL_BOOL) ? (bool)value : EVAL_INT, tm, sys );	break;
 	case TFld::Real:	
-	    setR((value==EVAL_BOOL)?EVAL_REAL:(bool)value,tm,sys);	break;
+	    setR( (value!=EVAL_BOOL) ? (bool)value : EVAL_REAL, tm, sys);	break;
 	case TFld::Boolean:
 	    //- Set value to config -
 	    if( m_cfg )	{ src.cfg->setB( value ); return; }

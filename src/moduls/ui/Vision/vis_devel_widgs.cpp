@@ -2136,7 +2136,7 @@ bool DevelWdgView::event( QEvent *event )
     	if( !shape )
     	{
             pnt.drawImage(rect(),QImage(":/images/attention.png"));
-            setToolTip(QString(_("Widget shape no support!")));
+            setToolTip(QString(_("Widget no enabled or shape no support!")));
         }
 	    
 	//- Update select widget data -

@@ -288,9 +288,9 @@ bool RunWdgView::event( QEvent *event )
 		case Qt::Key_Backslash:	mod_ev+="BackSlash";	break;
 		case Qt::Key_BracketRight: 	mod_ev+="BracketRight";	break;
 		case Qt::Key_QuoteLeft:	mod_ev+="QuoteLeft";	break;		
-		default:		mod_ev="";		break;		    
-		//    printf("TEST 30: Key %d\n",key->key());
-		//    break;
+		default:		mod_ev+="#"+TSYS::int2str(key->key(),TSYS::Hex)+"h";	break;		    
+		    //printf("TEST 30: Key %xh\n",key->key());
+		    //break;
 	    }
 	    break;
 	}

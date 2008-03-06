@@ -134,6 +134,11 @@ VisRun::VisRun( const string &prj_it, const string &open_user, const string &VCA
     w_stat->setToolTip(_("Field for display of the used VCA engine station."));
     statusBar()->insertPermanentWidget(0,w_stat);
 
+    //- Init scroller -
+    QScrollArea *scrl = new QScrollArea;
+    scrl->setFocusPolicy( Qt::NoFocus );
+    setCentralWidget( scrl );
+
     //- Create timers -
     //-- End run timer --
     endRunTimer   = new QTimer( this );
@@ -408,45 +413,27 @@ void VisRun::callPage( const string& pg_it, XMLNode *upw )
     pgGrp = wAttrGet(pg_it,"pgGrp");
     pgSrc = wAttrGet(pg_it,"pgOpenSrc");
     
-    //- First master page creation -    
-    if( !master_pg )
+    //- Check for master page replace -
+    if( !master_pg || pgGrp == "main" || master_pg->pgGrp() == pgGrp )
     {
-	QScrollArea *scrl = new QScrollArea;
-	//scrl->setWidgetResizable(true);
-	scrl->setFocusPolicy( Qt::NoFocus );    
-
-	//- Create widget view -
-	master_pg = new RunPageView(pg_it,this,this);
-	master_pg->load("");
-	master_pg->setFocusPolicy( Qt::StrongFocus );
-	scrl->setWidget( master_pg );
-	setCentralWidget( scrl );
-	actFullScr->setChecked(master_pg->dc().value("pgFullScr",false).toBool());
-	//if( master_pg->dc().value("pgFullScr",false).toBool() )	setWindowState(Qt::WindowFullScreen);
-	//else	setWindowState(Qt::WindowNoState);
-	return;
-    }
-    else
-    {
-	//- Check for master page replace -
-	if( pgGrp == "main" || master_pg->pgGrp() == pgGrp )
-	{
-	    //-- Send close command --
-	    wAttrSet(master_pg->id(),"pgOpen","0");
+        //-- Send close command --
+        if( master_pg ) wAttrSet(master_pg->id(),"pgOpen","0");
 	    
-	    //-- Create widget view --
-	    master_pg = new RunPageView(pg_it,this,this);
-	    master_pg->load("");
-	    master_pg->setFocusPolicy( Qt::StrongFocus );
-	    ((QScrollArea *)centralWidget())->setWidget( master_pg );
-	    return;
+        //-- Create widget view --
+        master_pg = new RunPageView(pg_it,this,this);
+        master_pg->load("");
+        master_pg->setFocusPolicy( Qt::StrongFocus );
+        ((QScrollArea *)centralWidget())->setWidget( master_pg );
+	if( master_pg->dc().value("pgFullScr",false).toBool() )
+    	    actFullScr->setChecked(true);
+	else
+	{
+	    actFullScr->setChecked(false);
+	    resize( master_pg->size().width()+10, master_pg->size().height()+55 );
 	}
-	//- Put to check for include -
-	master_pg->callPage(pg_it,pgGrp,pgSrc);
     }
-    
-    //adjustSize();
-    //setGeometry(0,0,master_pg->width(),master_pg->height());
+    //- Put to check for include -
+    else master_pg->callPage(pg_it,pgGrp,pgSrc);
 }
 
 void VisRun::pgCacheAdd( RunWdgView *wdg )

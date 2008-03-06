@@ -1094,16 +1094,11 @@ void CWidget::loadIO( )
 
         if( !attrPresent(sid) )
             attrAdd( new TFld(sid.c_str(),c_el.cfg("NAME").getS().c_str(),(TFld::Type)(flg&0x0f),flg>>4) );
-
 	AutoHD<Attr> attr = attrAt(sid);
         if( !(!(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser) ) continue;
-	if( attr.at().flgGlob()&TFld::Selected )
-	{
-	    attr.at().setS(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),0,'|'));
-	    attr.at().fld().setValues(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),1,'|'));
-	    attr.at().fld().setSelNames(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),2,'|'));
-	}
-	else attr.at().setS(c_el.cfg("IO_VAL").getS());
+	attr.at().setS(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),0,'|'));
+	attr.at().fld().setValues(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),1,'|'));
+	attr.at().fld().setSelNames(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),2,'|'));
 	attr.at().setFlgSelf((Attr::SelfAttrFlgs)c_el.cfg("SELF_FLG").getI());
 	attr.at().setCfgTempl(c_el.cfg("CFG_TMPL").getS());
 	attr.at().setCfgVal(c_el.cfg("CFG_VAL").getS());
