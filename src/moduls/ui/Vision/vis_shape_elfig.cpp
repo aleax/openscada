@@ -762,19 +762,18 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
             RunWdgView   *runW = qobject_cast<RunWdgView*>(view);
             if( runW && runW->dc()["active"].toBool() ) 
             {
-                string sev, suff;
+                string sev;
                 for(int i=0; i<inundationItems.size(); i++)
                     if (inundationItems[i].path.contains(ev->pos()))
                     { sev="ws_Fig"+TSYS::int2str(i); }
                 if( !sev.empty() )
 		{
 		    if( !runW->hasFocus() ) runW->setFocus(Qt::MouseFocusReason);
-		    if( ev->buttons() & Qt::LeftButton )	suff+="Left";
-		    if( ev->buttons() & Qt::RightButton ) 	suff+="Right";
-		    if( ev->buttons() & Qt::MidButton )      	suff+="Mid";
-		    view->attrSet("event","ws_Fig");
-		    view->attrSet("event","ws_Fig"+suff);		    
-		    view->attrSet("event",sev+suff);
+		    if( ev->buttons() & Qt::LeftButton )	sev += "Left";
+		    if( ev->buttons() & Qt::RightButton ) 	sev += "Right";
+		    if( ev->buttons() & Qt::MidButton )      	sev += "Midle";
+		    view->attrSet("event",sev);
+		    return true;
 		}
             }	    
             else if (devW)
@@ -882,8 +881,9 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         view->repaint();
                     }
                 }
+        	return true;		
             }
-            return true;
+	    break;
         }
         case QEvent::MouseButtonDblClick:
         {

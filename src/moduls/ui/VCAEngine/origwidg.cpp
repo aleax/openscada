@@ -265,8 +265,8 @@ bool OrigFormEl::attrChange( Attr &cfg, void *prev )
 	switch(cfg.getI())
 	{
 	    case 0:
-		cfg.owner()->attrAdd( new TFld("value",_("Value"),TFld::String,Attr::Mutable,"200","","","",21) );		
-		cfg.owner()->attrAdd( new TFld("view",_("View"),TFld::Integer,TFld::Selected|Attr::Mutable,
+		cfg.owner()->attrAdd( new TFld("value",_("Value"),TFld::String,Attr::Mutable,"200","","","",21) );
+		cfg.owner()->attrAdd( new TFld("view",_("View"),TFld::Integer,TFld::Selected|Attr::Mutable|Attr::Active,
 		    "1","0","0;1;2;3;4;5;6",_("Text;Combo;Integer;Real;Time;Data;Data and time"),22) );
 		cfg.owner()->attrAdd( new TFld("cfg",_("Config"),TFld::String,TFld::FullText|Attr::Mutable,"","","","",23) );
 		break;
@@ -293,6 +293,21 @@ bool OrigFormEl::attrChange( Attr &cfg, void *prev )
 		break;
 	}
     }
+    else if( cfg.flgGlob()&Attr::Active && cfg.id() == "view" )
+    {
+	TFld::Type	ntp = TFld::String;
+	int 		flg = Attr::Mutable;
+	switch(cfg.getI())
+	{
+	    case 2: case 4:	ntp = TFld::Integer;	break;
+	    case 3:		ntp = TFld::Real;	break;
+	    case 5: case 6:	ntp = TFld::Integer; flg|=Attr::DataTime;	break;
+	}
+	int apos = cfg.owner()->attrPos("value");
+	cfg.owner()->attrDel("value");
+	cfg.owner()->attrAdd( new TFld("value",_("Value"),ntp,flg,"200","","","",21), apos );
+    }
+    
     return Widget::attrChange(cfg,prev);
 }
 

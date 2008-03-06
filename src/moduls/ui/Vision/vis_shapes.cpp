@@ -519,7 +519,7 @@ void ShapeFormEl::checkChange(int st)
 {
     WdgView *view = (WdgView *)((QCheckBox*)sender())->parentWidget();
     view->attrSet("value",TSYS::int2str(st));
-    view->attrSet("event",st ? "ws_ChkOn" : "ws_ChkOff");
+    view->attrSet("event","ws_ChkChange");
 }
 
 void ShapeFormEl::buttonPressed( )
@@ -539,7 +539,7 @@ void ShapeFormEl::buttonToggled( bool val )
     WdgView *view = (WdgView *)((QPushButton*)sender())->parentWidget();
     if( view->dc()["evLock"].toBool() )	return;
     
-    view->attrSet("event",string("ws_BtToggle")+(val?"On":"Off"));
+    view->attrSet("event","ws_BtToggleChange");
     view->attrSet("value",TSYS::int2str(val));
 }
 
@@ -1142,17 +1142,21 @@ bool ShapeMedia::event( WdgView *w, QEvent *event )
 	{
 	    string sev;
 	    int numbMAr = w->dc()["numbMAr"].toInt();
-	    if( numbMAr )
+	    for( int i_a = 0; i_a < numbMAr; i_a++ )
+	        if( ((MapArea*)w->dc()[QString("area_%1").arg(i_a)].value<void*>())->containsPoint(w->mapFromGlobal(w->cursor().pos())) )
+	        { sev="ws_MapAct"+TSYS::int2str(i_a); break; }	
+	    if( !sev.empty() )
 	    {
-		for( int i_a = 0; i_a < numbMAr; i_a++ )
-		    if( ((MapArea*)w->dc()[QString("area_%1").arg(i_a)].value<void*>())->containsPoint(w->mapFromGlobal(w->cursor().pos())) )
-		    { sev="ws_ImgPress"+TSYS::int2str(i_a); break; }
+        	switch(((QMouseEvent*)event)->button())
+	        {
+		    case Qt::LeftButton:	sev+="Left";	break;
+		    case Qt::RightButton:   	sev+="Right";	break;
+		    case Qt::MidButton:     	sev+="Midle";	break;
+		}
+	    	w->attrSet("event",sev);	    
+		return true;
 	    }
-	    else sev="ws_ImgPress";	
-	
-	    if( !sev.empty() )	w->attrSet("event",sev);
-	    
-	    return true;
+	    break;
 	}
     }
     

@@ -7,9 +7,12 @@
 - FIX:/UI/VCAEngine: Preparing IO for widget's calc function is fixed. Focus attribute include from all active included widgets.
 - FIX:/UI/VCAEngine: Included containers order is changed to: included widgets, attributes, pages.
 - /UI/VCAEngine: New created attributes is made inited by EVAL. After attribute's identifier or type changing is made value copy.
+- !!:/UI/VCAEngine: Individual value types sypport is added to Element "Text" of primitive "FormEl" for various view.
 - FIX:/UI/Vision: The master page open procedure is rewrited.
 - !:/UI/Vision: No standard key codes event generation is added, by view "key_#0ABh".
 - /UI/Vision: A edit line update, for primitive "FormEl" is disabled on time it user edition.
+- /UI/Vision: Scan codes for key events support is added.
+- /UI/Vision: All events is unified.
 - FIX:/UI/Vision: Active and enable attribute's action is fixed for all primitives.
 - FIX:/UI/Vision: Left and bottom one pixels border's line hiding is fixed for primitive "Text".
 - FIX:/UI/Vision: Average equalent time values is fixed on primitive "Diagram".

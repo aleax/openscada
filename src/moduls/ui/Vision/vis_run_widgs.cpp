@@ -175,15 +175,15 @@ bool RunWdgView::event( QEvent *event )
 	case QEvent::KeyPress:
 	    mod_ev = "key_pres";
 	case QEvent::KeyRelease:
-     	{
 	    //printf("TEST 00: %s: %d\n",id().c_str(),event->type());	
-	    QKeyEvent *key = (QKeyEvent*)event;
-	    if( key->key() == Qt::Key_Tab ) { mod_ev = ""; break; }
+	    if( ((QKeyEvent*)event)->key() == Qt::Key_Tab ) { mod_ev = ""; break; }
 	    if( mod_ev.empty() ) mod_ev = "key_rels";
 	    if( QApplication::keyboardModifiers()&Qt::ControlModifier )	mod_ev+="Ctrl";	    
 	    if( QApplication::keyboardModifiers()&Qt::AltModifier )	mod_ev+="Alt";	    	    
 	    if( QApplication::keyboardModifiers()&Qt::ShiftModifier )	mod_ev+="Shift";
-	    switch(key->key())
+	    if( ((QKeyEvent*)event)->nativeScanCode() )	
+		attrSet("event",mod_ev+"SC#"+TSYS::int2str(((QKeyEvent*)event)->nativeScanCode(),TSYS::Hex));
+	    switch(((QKeyEvent*)event)->key())
 	    {
 		case Qt::Key_Escape:	mod_ev+="Esc";		break;
 		case Qt::Key_Backspace:	mod_ev+="BackSpace";  	break;
@@ -288,42 +288,27 @@ bool RunWdgView::event( QEvent *event )
 		case Qt::Key_Backslash:	mod_ev+="BackSlash";	break;
 		case Qt::Key_BracketRight: 	mod_ev+="BracketRight";	break;
 		case Qt::Key_QuoteLeft:	mod_ev+="QuoteLeft";	break;		
-		default:		mod_ev+="#"+TSYS::int2str(key->key(),TSYS::Hex)+"h";	break;		    
-		    //printf("TEST 30: Key %xh\n",key->key());
-		    //break;
+		default:		
+		    mod_ev+="#"+TSYS::int2str(((QKeyEvent*)event)->key(),TSYS::Hex);
+		    break;
 	    }
-	    break;
-	}
+	    attrSet("event",mod_ev);
+	    return true;
 	case QEvent::MouseButtonPress:
 	    mod_ev = "key_mousePres";
 	case QEvent::MouseButtonRelease:
-	{
 	    if( mod_ev.empty() ) mod_ev = "key_mouseRels";
-	    QMouseEvent *mouse = (QMouseEvent*)event;
-	    switch(mouse->button())
+	    switch(((QMouseEvent*)event)->button())
 	    {
 		case Qt::LeftButton: 	mod_ev+="Left";	break;
 		case Qt::RightButton:	mod_ev+="Right";break;
 		case Qt::MidButton:	mod_ev+="Midle";break;
 	    }
-	    break;
-	}
-	case QEvent::MouseButtonDblClick:	
-	    mod_ev = "key_mouseDblClick";
-	    break;
-	case QEvent::FocusIn:
-	    attrSet("focus","1");
-	    mod_ev = "ws_FocusIn";
-	    break;
-	case QEvent::FocusOut:
-	    attrSet("focus","0");
-	    mod_ev = "ws_FocusOut";
-	    break;
-    }
-    if( !mod_ev.empty() ) 
-    { 
-	attrSet("event",mod_ev);	
-	return true; 
+	    attrSet("event",mod_ev);
+	    return true;
+	case QEvent::MouseButtonDblClick:	attrSet("event","key_mouseDblClick");	return true;
+	case QEvent::FocusIn:	attrSet("focus","1");	attrSet("event","ws_FocusIn");	return true;
+	case QEvent::FocusOut:	attrSet("focus","0");	attrSet("event","ws_FocusOut");	return true;
     }
     return QWidget::event(event);
 }
