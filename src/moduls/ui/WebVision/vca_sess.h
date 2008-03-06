@@ -22,11 +22,30 @@
 #ifndef VCA_SESS_H
 #define VCA_SESS_H
 
+#include <gd.h>
+#include <gdfonts.h>
+#include <gdfontt.h>
+
+
 #include <string>
 #include <vector>
 #include <map>
+#include <math.h>
 
 #include <tcntrnode.h>
+
+
+class Point
+{
+    public:
+        Point () {};
+        Point( double ix, double iy) : x(ix), y(iy)
+        {};
+        double x; 
+        double y;
+};
+
+typedef map<int,Point> PntMap;
 
 using std::string;
 using std::vector;
@@ -63,6 +82,88 @@ class VCAObj : public TCntrNode
 	//Attributes
 	string 	m_id;
 };
+
+//*************************************************
+//* ElFigure                                      *
+//*************************************************
+class ShapeItem 
+{
+    public:
+        ShapeItem( )	{ }
+        ShapeItem(const int num_1,const int num_2, const int num_3, const int num_4,const int num_5,
+		  const Point &ctrlpos_4, const double iang, const int color, const int bcolor, const int iwidth, const int bwidth, const int itype ) : 
+            ctrlPos4(ctrlpos_4), ang(iang), n1(num_1), n2(num_2), n3(num_3), n4(num_4), n5(num_5), lineColor(color),borderColor(bcolor),
+                     width(iwidth), border_width(bwidth), type(itype)
+                     { };								
+
+                    
+                     Point		ctrlPos4;
+                     double ang;
+                     int 		n1, n2, n3, n4, n5,
+                     width,
+                     border_width,
+                     lineColor,
+                     borderColor,
+                     type;
+}; 	        		
+
+
+class InundationItem 
+{
+    public:
+        InundationItem( )	{ }
+        InundationItem(Point center, int color) : P_center(center), P_color(color)
+                     { };								
+
+                    
+                     Point		P_center;
+                     int		P_color;
+
+}; 			
+
+class VCAElFigure : public VCAObj
+{
+    public:
+	//Methods
+	VCAElFigure( const string &iid );
+	
+	void getReq( SSess &ses );
+	void postReq( SSess &ses );
+	void setAttrs( XMLNode &node, const string &user );
+        
+        double Angle(const Point p1,const Point p2,const Point p3,const Point p4);
+        double Length(const Point pt1, const Point pt2);
+        Point ARC(double t,double a,double b);
+        Point UNROTATE(const Point pnt, double alpha, double a, double b);
+        Point ROTATE(const Point pnt, double alpha);
+        Point Bezier(double t,Point p1,Point p2, Point p3, Point p4);
+        double Bezier_DeltaT(Point p1,Point p2, Point p3, Point p4);
+        double ABS(double var);
+        void Paint_Figure( gdImage* im,ShapeItem item );
+        void Paint_Fill( gdImage* im, InundationItem in_item );
+ 	//Attributes
+        int		width, //Widget geometry
+                        height,		
+                        geomMargin,//Margin
+                        lineClr,
+                        lineDecor,
+                        bordWdth,
+                        bordClr,
+                        lineWdth,
+                        fillClr;
+        string          elLst;	
+        double          orient;	
+        bool 		active,//Active diagram	
+                        rel_list;
+                        
+       PntMap pnts;
+       vector <ShapeItem> shapeItems;
+       vector <InundationItem> inundationItems;
+};
+
+
+
+
 
 //*************************************************
 //* VCADiagram                                    *

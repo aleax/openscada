@@ -58,9 +58,9 @@ class ShapeItem
     public:
 	ShapeItem( )	{ }
 	ShapeItem( const QPainterPath &ipath, const QPainterPath &path_simple, const int num_1,const int num_2, const int num_3, const int num_4,const int num_5,
-		    const QPointF &ctrlpos_4, const QBrush &brush, const QPen &ipen, const QPen &pen_simple, const float iwidth, const float bwidth, const int itype ) : 
+		    const QPointF &ctrlpos_4, const QBrush &brush, const QPen &ipen, const QPen &pen_simple, const float iwidth, const float bwidth, const int itype, const double iAngle_temp ) : 
     	    ctrlPos4(ctrlpos_4), n1(num_1), n2(num_2), n3(num_3), n4(num_4), n5(num_5), brush(brush),
-	    pen(ipen), penSimple(pen_simple), width(iwidth), border_width(bwidth), type(itype), path(ipath), pathSimple(path_simple)
+	    pen(ipen), penSimple(pen_simple), width(iwidth), border_width(bwidth), type(itype), path(ipath), pathSimple(path_simple), Angle_temp(iAngle_temp)
 	{ };								
 
 	QPainterPath 	path, 
@@ -73,6 +73,7 @@ class ShapeItem
 	float 		width;
         float           border_width;
 	int 		type;
+        double Angle_temp;
 };
 
 //************************************************
@@ -83,8 +84,8 @@ class InundationItem
     public:
         //Methods
         InundationItem( )	{ }
-        InundationItem( const QPainterPath &ipath, const QBrush &ibrush, QBrush &ibrush_img, const QVector <int> inumber_shape ) : 
-                        brush(ibrush),brush_img(ibrush_img), path(ipath), number_shape(inumber_shape)
+        InundationItem( const QPainterPath &ipath, const QBrush &ibrush, QBrush &ibrush_img, const QVector <int> inumber_shape, int inumber_pnt ) : 
+                        brush(ibrush),brush_img(ibrush_img), path(ipath), number_shape(inumber_shape), number_pnt(inumber_pnt)
         { };
 
         //Attributes
@@ -92,6 +93,7 @@ class InundationItem
         QBrush         brush,brush_img;
         QVector <int>  number_shape;
         QString        img_nm;
+        int            number_pnt;
 };
 
 
@@ -185,7 +187,7 @@ class ShapeElFigure : public WdgShape
         void Drop_Point ( int num, int num_shape, QVector <ShapeItem> &shapeItems, PntMap *pnts );
         void step(int s,int f, int p, QVector <int> vect, int N);
         bool Inundation (QPointF point,QVector <ShapeItem> &shapeItems,  PntMap *pnts, QVector <int> vect, int N, WdgView *view);
-        bool Inundation_1_2(QPointF point, QVector <ShapeItem> &shapeItems, QVector <InundationItem> &inundationItems,  PntMap *pnts, WdgView *view);
+        bool Inundation_1_2(QPointF point, QVector <ShapeItem> &shapeItems, QVector <InundationItem> &inundationItems,  PntMap *pnts, WdgView *view, int number);
         int Build_Matrix(QVector <ShapeItem> &shapeItems);
         QPointF scale_rotate(QPointF point, WdgView *view, bool flag_scale);
         QPointF unscale_unrotate(QPointF point, WdgView *view, bool flag_scale);
@@ -216,6 +218,7 @@ class ShapeElFigure : public WdgShape
         bool flag_holds;			
         bool flag_hold_move;			
         bool flag_inund_break;
+        bool flag_scale_rotate;
         double t_start, t_end;			
 	QPointF Mouse_pos, offset;		
         int current_ss, current_se, current_ee, current_es;
@@ -225,7 +228,6 @@ class ShapeElFigure : public WdgShape
         QVector <int> vect;
         QVector< QVector<int> > map_matrix;
         QVector< QVector<int> > minroad;
-        //QVector< QVector<QPointF> > scale_offset;
         int counter_start, counter_end;
         int len,clen;
         int found;
@@ -235,6 +237,8 @@ class ShapeElFigure : public WdgShape
         QPointF Prev_pos_1, Prev_pos_2;
         QVector<int> num_vector;       
         int rect_num_move;
+        double Angle_temp;
+        bool flag_Angle_temp;
     };
 
 }

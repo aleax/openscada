@@ -1,3 +1,9 @@
+2008-03-06 Maxim
+- /UI/VCAEngine: Double point's attributes is made for primitive "ElFigure".
+- !!!:/UI/VCAEngine, UI/Vision, UI/WebVision: Fill mechanizm is changed, for Web and QT unification.
+- !!!:/UI/WebVision: First support of primirive "ElFigure" is added.
+
+
 2008-03-06 Roman
 - !!!!:/SYS, /DAQ/JavaLikeCalc, /UI/VCAEngine, /UI/Vision: Error value (EVAL) support is added to: Function process frame, JavaLikeCalc interpreter 
     and VCA components.

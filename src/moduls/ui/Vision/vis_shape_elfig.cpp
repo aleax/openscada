@@ -37,7 +37,7 @@ using namespace VISION;
 
 ShapeElFigure::ShapeElFigure() : 
     WdgShape("ElFigure"), itemInMotion(0), flag_down(false), flag_up(false), flag_left(false), flag_right(false), flag_A(false), flag_ctrl(false),status_hold(false), 
-             flag_rect(false), flag_hold_move(false), flag_m(false), flag_hold_arc(false), flag_arc_rect_3_4(false), flag_first_move(false), flag_hold_checked(false), 
+             flag_rect(false), flag_hold_move(false), flag_m(false), flag_scale_rotate(true), flag_hold_arc(false), flag_Angle_temp(false), flag_arc_rect_3_4(false), flag_first_move(false), flag_hold_checked(false), 
     current_ss(-1), current_se(-1), current_es(-1), current_ee(-1), count_Shapes(0), count_holds(0), count_rects(0), rect_num_arc(-1), rect_num(-1)
 {
     newPath.addEllipse(QRect(0, 0, 0, 0));
@@ -152,7 +152,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
             {
                 int pnt  = (uiPrmPos-30)/2;
                 int patr = (uiPrmPos-30)%2;
-                int pval  = atoi(val.c_str());
+                double pval  = atof(val.c_str());
                 QPointF pnt_ = (*pnts)[pnt];
                 if( patr == 0 ) pnt_.setX(pval);
                 else pnt_.setY(pval);
@@ -195,31 +195,37 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 QColor bord_color(TSYS::strSepParse(sel,0,':',&el_off).c_str());
                 if (!bord_color.isValid())  bord_color=w->dc()["bordClr"].value<QColor>(); 
                 //-- Reading coordinates for the points of the line --
+               
                 for( int i_p = 0; i_p < 2; i_p++ )
-                    ip[i_p] = scale_rotate((*pnts)[p[i_p]], w, true);//*w->xScale(true),(*pnts)[p[i_p]].y()*w->yScale(true) );
+                {
+                    ip[i_p] = scale_rotate((*pnts)[p[i_p]], w, flag_scale_rotate);//*w->xScale(true),(*pnts)[p[i_p]].y()*w->yScale(true) );
+                }
                 //-- Detecting the rotation angle of the line --
                 line2=QLineF(ip[0],QPointF(ip[0].x()+10,ip[0].y()));
                 line1=QLineF(ip[0],ip[1]);
-                if( ip[0].y()<=ip[1].y() ) ang=360-line1.angle(line2);
-                else ang=line1.angle(line2);
+                if( ip[0].y()<=ip[1].y() ) ang=360-Angle(line1,line2);//ang=360-line1.angle(line2);
+                else ang=Angle(line1,line2);//ang=line1.angle(line2);
                 //-- Building the path of the line and adding it to container --
                 if (bord_width>0)
                 {
                     circlePath = painter_path(width,bord_width,1, ang, ip[0],ip[1]);
-                    shapeItems.push_back( ShapeItem(circlePath, newPath, p[0],p[1],-1,-1,-1,QPointF(0,0), 
-                                       QBrush(color,Qt::SolidPattern),
-                                       QPen(bord_color,bord_width,Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin),
-                                       QPen(color,width,Qt::NoPen,Qt::FlatCap, Qt::RoundJoin),width,bord_width,1));
+                    ShapeItem item_temp(circlePath, newPath, p[0],p[1],-1,-1,-1,QPointF(0,0), 
+                                        QBrush(color,Qt::SolidPattern),
+                                        QPen(bord_color,bord_width,Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin),
+                                        QPen(color,width,Qt::NoPen,Qt::FlatCap, Qt::RoundJoin),width,bord_width,1, Angle_temp);
+                    item_temp.brush.setColor(color);
+                    shapeItems.push_back( item_temp );
                 }
                 if (bord_width==0)
                 {
                     circlePath = painter_path_simple( 1, ang, ip[0],ip[1] );
                     QPainterPath bigPath = painter_path(width,w->dc()["bordWdth"].toInt()+1,1, ang, ip[0], ip[1] );
-                    shapeItems.push_back( ShapeItem(bigPath,circlePath,p[0],p[1],-1,-1,-1,QPointF(0,0), 
-                                       QBrush(color,Qt::NoBrush),
-                                       QPen(w->dc()["bordClr"].value<QColor>(),w->dc()["bordWdth"].toInt(),Qt::NoPen,Qt::FlatCap, Qt::RoundJoin),
-                                       QPen(color,width, Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin),
-                                       width,w->dc()["bordWdth"].toInt(),1));
+                    ShapeItem item_temp(bigPath,circlePath,p[0],p[1],-1,-1,-1,QPointF(0,0), 
+                                        QBrush(color,Qt::NoBrush),
+                                        QPen(w->dc()["bordClr"].value<QColor>(),w->dc()["bordWdth"].toInt(),Qt::NoPen,Qt::FlatCap, Qt::RoundJoin),
+                                             QPen(color,width, Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin),width,w->dc()["bordWdth"].toInt(),1,Angle_temp);
+                    item_temp.brush.setColor(color);
+                    shapeItems.push_back( item_temp );
                 }
             }
             if( el == "arc" )
@@ -240,7 +246,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 if (!bord_color.isValid())  bord_color=w->dc()["bordClr"].value<QColor>();
                 //-- Reading coordinates for the points of the line --
                 for( int i_p = 0; i_p < 5; i_p++ )
-                    ip[i_p] = scale_rotate((*pnts)[p[i_p]], w, true);
+                    ip[i_p] = (*pnts)[p[i_p]];
 
                 //-- Building the current arc --
                 StartMotionPos=ip[0];
@@ -249,18 +255,19 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 CtrlMotionPos_2=ip[3];
                 CtrlMotionPos_3=ip[4];
                 MotionWidth=width;
-                line2=QLineF(CtrlMotionPos_1 ,QPointF(CtrlMotionPos_1.x()+10,CtrlMotionPos_1.y()));
-                line1=QLineF( CtrlMotionPos_1,CtrlMotionPos_3);
+                line2=QLineF(QPointF(CtrlMotionPos_1.x(),CtrlMotionPos_1.y()),
+                QPointF(CtrlMotionPos_1.x()+10,CtrlMotionPos_1.y()));
+                line1=QLineF(CtrlMotionPos_1,CtrlMotionPos_3);
                 if (CtrlMotionPos_3.y()<=CtrlMotionPos_1.y()) ang=line1.angle(line2);
                 else ang=360-line1.angle(line2);
-
                 a=Length(CtrlMotionPos_3, CtrlMotionPos_1);
                 b=Length(CtrlMotionPos_2, CtrlMotionPos_1);
 
                 CtrlMotionPos_2=QPointF(CtrlMotionPos_1.x()+ROTATE(ARC(0.25,a,b),ang).x(),
                                         CtrlMotionPos_1.y()-ROTATE(ARC(0.25,a,b),ang).y());
+                CtrlMotionPos_3=QPointF(CtrlMotionPos_1.x()+ROTATE(ARC(0,a,b),ang).x(),
+                                        CtrlMotionPos_1.y()-ROTATE(ARC(0,a,b),ang).y());
                 StartMotionPos=UNROTATE(StartMotionPos,ang,CtrlMotionPos_1.x(),CtrlMotionPos_1.y());
-                QPoint StartMotionPos_i=StartMotionPos.toPoint();
                 if (StartMotionPos.x()>=a)
                 {
                     StartMotionPos.setY((StartMotionPos.y()/StartMotionPos.x())*a);
@@ -299,21 +306,26 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                     t_start-=1;
                     t_end-=1;
                 }
-                StartMotionPos=QPointF(CtrlMotionPos_1.x()+ROTATE(ARC(t_start,a,b),ang).x(),
-                                       CtrlMotionPos_1.y()-ROTATE(ARC(t_start,a,b),ang).y());
-                EndMotionPos=QPointF(CtrlMotionPos_1.x()+ROTATE(ARC(t_end,a,b),ang).x(),
-                                     CtrlMotionPos_1.y()-ROTATE(ARC(t_end,a,b),ang).y());
+                StartMotionPos=scale_rotate(QPointF(CtrlMotionPos_1.x()+ROTATE(ARC(t_start,a,b),ang).x(),
+                                       CtrlMotionPos_1.y()-ROTATE(ARC(t_start,a,b),ang).y()),w, flag_scale_rotate);
+                EndMotionPos=scale_rotate(QPointF(CtrlMotionPos_1.x()+ROTATE(ARC(t_end,a,b),ang).x(),
+                                     CtrlMotionPos_1.y()-ROTATE(ARC(t_end,a,b),ang).y()),w,flag_scale_rotate);
+                CtrlMotionPos_1=scale_rotate(CtrlMotionPos_1,w,flag_scale_rotate);
+                CtrlMotionPos_2=scale_rotate(CtrlMotionPos_2,w,flag_scale_rotate);
+                CtrlMotionPos_3=scale_rotate(CtrlMotionPos_3,w,flag_scale_rotate);
                 CtrlMotionPos_4=QPointF(t_start, t_end);
-                
+               
 		//-- Building the path of the line and adding it to container --
                 if (bord_width>0)
                 {
                     circlePath = painter_path(width,bord_width,2, ang, StartMotionPos, EndMotionPos,CtrlMotionPos_1, CtrlMotionPos_2,
                                               CtrlMotionPos_3, CtrlMotionPos_4 );
-                    shapeItems.push_back( ShapeItem(circlePath, newPath, p[0],p[1],p[2],p[3],p[4],CtrlMotionPos_4,
-                                          QBrush(color,Qt::SolidPattern),
-                                                  QPen(bord_color,bord_width, Qt::SolidLine,Qt::FlatCap,Qt::RoundJoin),
-                                                          QPen(color,width,Qt::NoPen,Qt::FlatCap, Qt::RoundJoin),width,bord_width, 2) );
+                    ShapeItem item_temp(circlePath, newPath, p[0],p[1],p[2],p[3],p[4],CtrlMotionPos_4,
+                                        QBrush(color,Qt::SolidPattern),
+                                        QPen(bord_color,bord_width, Qt::SolidLine,Qt::FlatCap,Qt::RoundJoin),
+                                             QPen(color,width,Qt::NoPen,Qt::FlatCap, Qt::RoundJoin),width,bord_width, 2,Angle_temp);
+                    item_temp.brush.setColor(color);
+                    shapeItems.push_back( item_temp );
                 }
 
                 if (bord_width==0)
@@ -321,10 +333,12 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                     QPainterPath bigPath = painter_path(width+1,bord_width,2, ang, StartMotionPos, EndMotionPos,CtrlMotionPos_1,
                             CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4 );
                     circlePath = painter_path_simple(2, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2,  CtrlMotionPos_3, CtrlMotionPos_4 );
-                    shapeItems.push_back( ShapeItem(bigPath,circlePath,p[0],p[1],p[2],p[3], p[4],CtrlMotionPos_4, 
-                                          QBrush(color,Qt::NoBrush),
-                                                  QPen(w->dc()["bordClr"].value<QColor>(),bord_width, Qt::NoPen,Qt::FlatCap, Qt::RoundJoin),
-                                                          QPen(color,width, Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin),width,bord_width,2) );  
+                    ShapeItem item_temp(bigPath,circlePath,p[0],p[1],p[2],p[3], p[4],CtrlMotionPos_4, 
+                                        QBrush(color,Qt::NoBrush),
+                                        QPen(w->dc()["bordClr"].value<QColor>(),bord_width, Qt::NoPen,Qt::FlatCap, Qt::RoundJoin),
+                                             QPen(color,width, Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin),width,bord_width,2,Angle_temp);
+                    item_temp.brush.setColor(color);
+                    shapeItems.push_back( item_temp );  
                 }
             }
             if( el == "bezier" )
@@ -343,7 +357,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 QColor bord_color(TSYS::strSepParse(sel,0,':',&el_off).c_str());
                 if (!bord_color.isValid())  bord_color=w->dc()["bordClr"].value<QColor>();  
                 for( int i_p = 0; i_p < 4; i_p++ )
-                    ip[i_p] = scale_rotate((*pnts)[p[i_p]],w, true);
+                    ip[i_p] = scale_rotate((*pnts)[p[i_p]],w, flag_scale_rotate);
                 line2=QLineF(ip[0],QPointF(ip[0].x()+10,ip[0].y()));
                 line1=QLineF(ip[0],ip[1]);
                 if (ip[0].y()<=ip[1].y())
@@ -354,38 +368,32 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 if (bord_width>0)
                 {
                     circlePath = painter_path(width,bord_width,3, ang, ip[0], ip[1], ip[2], ip[3] );
-                    shapeItems.push_back( ShapeItem(circlePath, newPath, p[0], p[1], p[2], p[3],-1,QPointF(0,0),
-                                       QBrush(color,Qt::SolidPattern),
-                                       QPen(bord_color,bord_width,Qt::SolidLine,Qt::FlatCap, Qt::MiterJoin),
-                                       QPen(color,width, Qt::NoPen,Qt::FlatCap, Qt::RoundJoin),
-                                       width,bord_width, 3) );
+                    ShapeItem item_temp(circlePath, newPath, p[0], p[1], p[2], p[3],-1,QPointF(0,0),
+                                        QBrush(color,Qt::SolidPattern),
+                                        QPen(bord_color,bord_width,Qt::SolidLine,Qt::FlatCap, Qt::MiterJoin),
+                                             QPen(color,width, Qt::NoPen,Qt::FlatCap, Qt::RoundJoin), width,bord_width, 3,Angle_temp);
+                    item_temp.brush.setColor(color);
+                    shapeItems.push_back( item_temp );
                 }
                 if (bord_width==0)
                 {
                     QPainterPath bigPath = painter_path(width+1,bord_width, 3, ang,ip[0],ip[1],ip[2],ip[3]);
                     circlePath = painter_path_simple(3, ang, ip[0], ip[1], ip[2], ip[3]);
-                    shapeItems.push_back( ShapeItem(bigPath,circlePath, p[0], p[1], p[2], p[3], -1,QPointF(0,0), 
-                                       QBrush(color,Qt::NoBrush),
-                                       QPen(w->dc()["bordClr"].value<QColor>(),bord_width, Qt::NoPen,Qt::FlatCap,Qt::MiterJoin),
-                                       QPen(color,width, Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin), 
-                                       width,bord_width,3) );
+                    ShapeItem item_temp(bigPath,circlePath, p[0], p[1], p[2], p[3], -1,QPointF(0,0), 
+                                        QBrush(color,Qt::NoBrush),
+                                        QPen(w->dc()["bordClr"].value<QColor>(),bord_width, Qt::NoPen,Qt::FlatCap,Qt::MiterJoin),
+                                             QPen(color,width, Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin), width,bord_width,3,Angle_temp);
+                    item_temp.brush.setColor(color);
+                    shapeItems.push_back( item_temp );
                 }
             }
             
             if( el == "fill" )
             {
-                int zero_pnts = 0;
-                QVector<int> fl_pnts;
-                string fl_color, fl_img;
-                while( true )
-                {
-                    string svl = TSYS::strSepParse(sel,0,':',&el_off);
-                    int vl = atoi(svl.c_str());
-                    if( vl ) fl_pnts.push_back(vl);
-                    else if( zero_pnts == 0 ) { fl_color = svl; zero_pnts++; }
-                    else if( zero_pnts == 1 ) { fl_img = svl; zero_pnts++; }
-                    else break;
-                }
+                QVector <int> fl_pnts;
+                int fl_pnt=atoi(TSYS::strSepParse(sel,1,':').c_str());
+                string fl_color=TSYS::strSepParse(sel,2,':');
+                string fl_img=TSYS::strSepParse(sel,3,':');
                 //- Check fill color -
                 QColor color(fl_color.c_str());
                 color.setAlpha(255);
@@ -398,8 +406,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
 		    brsh.setTextureImage(img);
                 //- Make elements -
-                if(fl_pnts.size()>=2)
-                    inundationItems.push_back(InundationItem(newPath,color,brsh, fl_pnts));
+                    inundationItems.push_back(InundationItem(newPath,color,brsh, fl_pnts, fl_pnt));
             }
         }
         for (int i=0; i<shapeItems_temp.size(); i++)
@@ -417,7 +424,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
     {
         //-Repainting all shapes by calling moveItemTo to each shape
         QVector<int> inundation_fig_num;
-        bool flag_push_back;
+        bool flag_push_back, fl_brk;
         for (int i=0; i<shapeItems.size(); i++)
         {
             if (shapeItems[i].type==2)
@@ -447,72 +454,59 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
             }
         }
         if(shapeItems.size())
-            for(int i=0; i<inundationItems.size(); i++)
+        {
+        for(int k=0; k<inundationItems.size(); k++)
             {
-                if(inundationItems[i].number_shape.size()>2)
+                flag_scale_rotate=false;
+                if(Inundation_1_2(scale_rotate((*pnts)[inundationItems[k].number_pnt],w,flag_scale_rotate), shapeItems, inundationItems, pnts, w, k))
                 {
-                    for(int k=0; k<inundationItems[i].number_shape.size()-1; k++)
-                        for(int j=0; j<shapeItems.size(); j++)
-                            if((shapeItems[j].n1==inundationItems[i].number_shape[k] && shapeItems[j].n2==inundationItems[i].number_shape[k+1]) ||
-                                (shapeItems[j].n1==inundationItems[i].number_shape[k+1] && shapeItems[j].n2==inundationItems[i].number_shape[k]) )
+                    fl_brk=false;
+                    if(InundationPath!=newPath)
+                        for(int i=0; i<inundationItems.size(); i++)
+                            if (inundationItems[i].path == InundationPath)
                             {
-                                flag_push_back=true;
-                                for(int p=0; p<inundation_fig_num.size(); p++)
-                                    if((shapeItems[inundation_fig_num[p]].n1==shapeItems[j].n1 && shapeItems[inundation_fig_num[p]].n2==shapeItems[j].n2) ||
-                                        (shapeItems[inundation_fig_num[p]].n1==shapeItems[j].n2 && shapeItems[inundation_fig_num[p]].n2==shapeItems[j].n1))
-                                    {
-                                        flag_push_back=false;
-                                        if((shapeItems[inundation_fig_num[p]].type==2 && shapeItems[j].type==1) && (inundation_fig_num[p]!=j))
-                                            inundation_fig_num[p]=j;
-                                        if((shapeItems[inundation_fig_num[p]].type==3 && shapeItems[j].type==1) && (inundation_fig_num[p]!=j))
-                                            inundation_fig_num[p]=j;
-                                        if((shapeItems[inundation_fig_num[p]].type==2 && shapeItems[j].type==3) && (inundation_fig_num[p]!=j))
-                                            inundation_fig_num[p]=j;
-                                    }
-                                if (flag_push_back)
-                                inundation_fig_num.push_back(j);
+                                fl_brk=true;
+                                break;
                             }
-                        for(int j=0; j<shapeItems.size(); j++)
-                            if((shapeItems[j].n1==inundationItems[i].number_shape[inundationItems[i].number_shape.size()-1] && shapeItems[j].n2==inundationItems[i].number_shape[0]) ||
-                                (shapeItems[j].n1==inundationItems[i].number_shape[0] && shapeItems[j].n2==inundationItems[i].number_shape[inundationItems[i].number_shape.size()-1]) )
-                            {
-                                flag_push_back=true;
-                                for(int p=0; p<inundation_fig_num.size(); p++)
-                                    if((shapeItems[inundation_fig_num[p]].n1==shapeItems[j].n1 && shapeItems[inundation_fig_num[p]].n2==shapeItems[j].n2) ||
-                                        (shapeItems[inundation_fig_num[p]].n1==shapeItems[j].n2 && shapeItems[inundation_fig_num[p]].n2==shapeItems[j].n1))
-                                    {
-                                        flag_push_back=false;
-                                        if((shapeItems[inundation_fig_num[p]].type==2 && shapeItems[j].type==1) && (inundation_fig_num[p]!=j))
-                                            inundation_fig_num[p]=j;
-                                        if((shapeItems[inundation_fig_num[p]].type==3 && shapeItems[j].type==1) && (inundation_fig_num[p]!=j))
-                                            inundation_fig_num[p]=j;
-                                        if((shapeItems[inundation_fig_num[p]].type==2 && shapeItems[j].type==3) && (inundation_fig_num[p]!=j))
-                                            inundation_fig_num[p]=j;
-                                    }
-                                if (flag_push_back)
-                                    inundation_fig_num.push_back(j);
-                            }
-                    QPainterPath temp_path=Create_Inundation_Path(inundation_fig_num, shapeItems, pnts,w);
-                    inundation_fig_num=Inundation_sort(temp_path, inundation_fig_num, shapeItems, pnts, w);
-                    inundationItems[i].path=Create_Inundation_Path(inundation_fig_num, shapeItems, pnts,w);
-                    inundationItems[i].number_shape=inundation_fig_num;
-                    if(inundation_fig_num.size()>inundationItems[inundationItems.size()-1].number_shape.size()) 
-                        inundationItems[inundationItems.size()-1].path=newPath;
-                }
-                if(inundationItems[i].number_shape.size()==2)
-                {
-                    for(int j=0; j<shapeItems.size(); j++)
+                    if(!fl_brk)
                     {
-                        if((shapeItems[j].n1 == inundationItems[i].number_shape[0] && shapeItems[j].n2 == inundationItems[i].number_shape[1]) ||
-                            (shapeItems[j].n1 == inundationItems[i].number_shape[1] && shapeItems[j].n2 == inundationItems[i].number_shape[0]))
-                            inundation_fig_num.push_back(j);
-                        if (inundation_fig_num.size()==2) break;
+                        inundationItems[k].path=InundationPath;
+                        inundationItems[k].number_shape=Inundation_vector;
                     }
-                    inundationItems[i].path=Create_Inundation_Path(inundation_fig_num, shapeItems, pnts,w);
-                    inundationItems[i].number_shape=inundation_fig_num;
                 }
-                inundation_fig_num.clear();
+                else
+                {
+                    if(Build_Matrix(shapeItems)!=2)
+                    {
+                        fl_brk=false;
+                        Inundation (scale_rotate((*pnts)[inundationItems[k].number_pnt],w,flag_scale_rotate), shapeItems, pnts, vect, Build_Matrix(shapeItems), w);
+                        if(InundationPath!=newPath)
+                        {
+                            for(int i=0; i<inundationItems.size(); i++)
+                                if (inundationItems[i].path == InundationPath)
+                                {
+                                    fl_brk=true;
+                                    break;
+                                }
+                                if(!fl_brk)
+                            {
+                                inundationItems[k].path=InundationPath;
+                                inundationItems[k].number_shape=Inundation_vector;
+                            }
+                        }
+                    }
+                    if(Inundation_vector.size())
+                        Inundation_vector.clear();
+                    if(vect.size())
+                        vect.clear();
+                    if(map_matrix.size())
+                        map_matrix.clear();
+                }
+                flag_scale_rotate=true;
+                if(inundationItems[k].number_shape.size())
+                    inundationItems[k].path=Create_Inundation_Path (inundationItems[k].number_shape, shapeItems, pnts,w );
             }
+        }
         itemInMotion=0;
         index=-1;
         if(rectItems.size())
@@ -533,6 +527,7 @@ bool ShapeElFigure::shapeSave( WdgView *w )
     //- Building attributes for all el_figures and fills -
     //--for el_figures--
     for( int i_s = 0; i_s < shapeItems.size(); i_s++ )
+    {
        switch( shapeItems[i_s].type )
 	{
              case 1:
@@ -563,42 +558,221 @@ bool ShapeElFigure::shapeSave( WdgView *w )
 
 		break;
 	}
+    }
         //--for fills--
-        for(int i=0; i<inundationItems.size(); i++)
+    for(int i=0; i<inundationItems.size(); i++)
+    {
+        bool flag_n1=false;
+        bool flag_n2=false;
+        bool fl_br=false;
+        bool exist_fill=false;
+        QVector <int> temp;
+        int index_element=-1;
+        bool flag_for_break=false;
+        for(int j=0; j<inundationItems[i].number_shape.size(); j++)
         {
-            bool flag_n1=false;
-            bool flag_n2=false;
-            elList+="fill:";
-            for(int k=0; k<inundationItems[i].number_shape.size()-1; k++)
+            if(flag_for_break)
+                break;
+            if(inundationItems[i].number_shape.size()==1)
             {
-                if(inundationItems[i].number_shape.size()>2)
-                    if(k==0)
-                    {
-                        elList+=TSYS::int2str(shapeItems[inundationItems[i].number_shape[k]].n1)+":";
-                        elList+=TSYS::int2str(shapeItems[inundationItems[i].number_shape[k]].n2)+":";
-                    }
-                    else
-                        if(shapeItems[inundationItems[i].number_shape[k]].n1==shapeItems[inundationItems[i].number_shape[k-1]].n2)
-                            elList+=TSYS::int2str(shapeItems[inundationItems[i].number_shape[k]].n2)+":";
+                (*pnts)[inundationItems[i].number_pnt]=(*pnts)[shapeItems[inundationItems[i].number_shape[0]].n3];
+                exist_fill=true;
+            }
+            double ang;
+            QPointF pt;
+            bool cnt_pnt=false;
+            QLineF line2=QLineF(scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[j]].n1],w,flag_scale_rotate),QPointF(scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[j]].n1],w,flag_scale_rotate).x()+10,scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[j]].n1],w,flag_scale_rotate).y()));
+            QLineF line1=QLineF(scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[j]].n1],w,flag_scale_rotate),scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[j]].n2],w,flag_scale_rotate));
+            if( scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[j]].n1],w,flag_scale_rotate).y()<=scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[j]].n2],w,flag_scale_rotate).y() ) ang=360-Angle(line1,line2);
+            else ang=Angle(line1,line2);
+            double t=0.1;
+            do
+            {
+                if (shapeItems[inundationItems[i].number_shape[j]].type==1)
+                    pt=painter_path_simple(1, ang, scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[j]].n1],w,flag_scale_rotate), scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[j]].n2],w,flag_scale_rotate)).pointAtPercent(t);
+                if (shapeItems[inundationItems[i].number_shape[j]].type==3)
+                    pt=painter_path_simple(3, ang, scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[j]].n1],w,flag_scale_rotate), scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[j]].n2],w,flag_scale_rotate),
+                                           scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[j]].n3],w,flag_scale_rotate),scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[j]].n4],w,flag_scale_rotate)).pointAtPercent(t);
+                pt=UNROTATE(pt,ang,
+                            scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[j]].n1],w,flag_scale_rotate).x(),
+                            scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[j]].n1],w,flag_scale_rotate).y());
+                QPointF pt1=QPointF(scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[j]].n1],w,flag_scale_rotate).x()+ROTATE(QPointF(pt.x(),pt.y()+2+
+                        shapeItems[inundationItems[i].number_shape[j]].width/2+shapeItems[inundationItems[i].number_shape[j]].border_width),ang).x(),
+                        scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[j]].n1],w,flag_scale_rotate).y()-ROTATE(QPointF(pt.x(),pt.y()+2+
+                                shapeItems[inundationItems[i].number_shape[j]].width/2+shapeItems[inundationItems[i].number_shape[j]].border_width),ang).y());
+                for(int z=0; z<inundationItems[i].number_shape.size(); z++)
+                {
+                    if (z!=j)
+                    {   
+                        QPainterPath path_rect=newPath;
+                        double ang_1;
+                        int k=inundationItems[i].number_shape[z];
+                        if(shapeItems[k].type==2)
+                        {
+                            QLineF line2=QLineF(scale_rotate((*pnts)[shapeItems[k].n3],w,flag_scale_rotate) ,QPointF(scale_rotate((*pnts)[shapeItems[k].n3],w,flag_scale_rotate).x()+10,scale_rotate((*pnts)[shapeItems[k].n3],w,flag_scale_rotate).y()));
+                            QLineF line1=QLineF( scale_rotate((*pnts)[shapeItems[k].n3],w, flag_scale_rotate),scale_rotate((*pnts)[shapeItems[k].n5],w,flag_scale_rotate));
+                            if (scale_rotate((*pnts)[shapeItems[k].n5],w,flag_scale_rotate).y()<=scale_rotate((*pnts)[shapeItems[k].n3],w,flag_scale_rotate).y()) ang_1=Angle(line1,line2);
+                            else ang_1=360-Angle(line1,line2);
+                        }
                         else
-                            elList+=TSYS::int2str(shapeItems[inundationItems[i].number_shape[k]].n1)+":";
+                        {
+                            QLineF line2=QLineF(scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate),QPointF(scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).x()+10,scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y()));
+                            QLineF line1=QLineF(scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate),scale_rotate((*pnts)[shapeItems[k].n2],w,flag_scale_rotate));
+                            if( scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y()<=scale_rotate((*pnts)[shapeItems[k].n2],w,flag_scale_rotate).y() ) ang_1=360-Angle(line1,line2);
+                            else ang_1=Angle(line1,line2);
+                        }
+                        if(shapeItems[k].type==1)
+                        {
+                            QPointF point_1, point_2;
+                            point_1=UNROTATE(scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate),ang_1,
+                                             scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).x(),
+                                             scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y());
+                            point_2=UNROTATE(scale_rotate((*pnts)[shapeItems[k].n2],w,flag_scale_rotate),ang_1,
+                                             scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).x(),
+                                             scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y());
+                            point_1.setX(point_1.x()-shapeItems[k].border_width);
+                            point_2.setX(point_2.x()+shapeItems[k].border_width);
+                            point_1=QPointF(scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).x() + ROTATE(point_1, ang_1).x(),
+                                            scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y() - ROTATE(point_1, ang_1).y());
+                            point_2=QPointF(scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).x()+ ROTATE(point_2, ang_1).x(), 
+                                            scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y() -ROTATE(point_2, ang_1).y());
+                            path_rect=painter_path(shapeItems[k].width+shapeItems[k].border_width*2,1.0,1, ang_1, point_1, point_2 );
+                        }
+                        else if(shapeItems[k].type==3)
+                        {
+                            QPointF point_1, point_2;
+                            point_1=UNROTATE(scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate),ang_1,
+                                             scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).x(),
+                                             scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y());
+                            point_2=UNROTATE(scale_rotate((*pnts)[shapeItems[k].n2],w,flag_scale_rotate),ang_1,
+                                             scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).x(),
+                                             scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y());
+                            point_1.setX(point_1.x()-shapeItems[k].border_width);
+                            point_2.setX(point_2.x()+shapeItems[k].border_width);
+                            point_1=QPointF(scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).x() + ROTATE(point_1, ang_1).x(),
+                                            scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y() - ROTATE(point_1, ang_1).y());
+                            point_2=QPointF(scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).x()+ ROTATE(point_2, ang_1).x(), 
+                                            scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y() -ROTATE(point_2, ang_1).y());
+                            path_rect=painter_path(shapeItems[k].width+shapeItems[k].border_width*2,1.0,3, ang_1, point_1, point_2, (*pnts)[shapeItems[k].n3], (*pnts)[shapeItems[k].n4] );
+                        }
+                        else if(shapeItems[k].type==2)
+                        {
+                            path_rect=painter_path(shapeItems[k].width+shapeItems[k].border_width*2,1.0,2, ang_1,
+                                    scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate),
+                                    scale_rotate((*pnts)[shapeItems[k].n2],w,flag_scale_rotate),
+                                    scale_rotate((*pnts)[shapeItems[k].n3],w,flag_scale_rotate), 
+                                    scale_rotate((*pnts)[shapeItems[k].n4],w,flag_scale_rotate), 
+                                    scale_rotate((*pnts)[shapeItems[k].n5],w,flag_scale_rotate),shapeItems[k].ctrlPos4);
+                        }
+                        if(path_rect.contains(pt1) || shapeItems[k].path.contains(pt1))
+                            cnt_pnt=true;
+                    }
+                }
+                if (inundationItems[i].path.contains(pt1) && !cnt_pnt) 
+                {
+                    (*pnts)[inundationItems[i].number_pnt]=unscale_unrotate(pt1,w,flag_scale_rotate);
+                    exist_fill=true;
+                    flag_for_break=true;
+                    break;
+                }
+                else
+                {
+                    cnt_pnt=false;
+                    pt1=QPointF(scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[0]].n1],w,flag_scale_rotate).x()+ROTATE(QPointF(pt.x(),pt.y()-2-
+                            shapeItems[inundationItems[i].number_shape[0]].width/2-shapeItems[inundationItems[i].number_shape[0]].border_width),ang).x(),
+                            scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[0]].n1],w,flag_scale_rotate).y()-ROTATE(QPointF(pt.x(),pt.y()-2-
+                                    shapeItems[inundationItems[i].number_shape[0]].width/2-shapeItems[inundationItems[i].number_shape[0]].border_width),ang).y());
+                    for(int z=0; z<inundationItems[i].number_shape.size(); z++)
+                    {
+                        if (z!=j)
+                        {
+                            QPainterPath path_rect=newPath;
+                            double ang_1;
+                            int k=inundationItems[i].number_shape[z];
+                            QLineF line2=QLineF(scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate),
+                                                QPointF(scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).x()+10,scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y()));
+                            QLineF line1=QLineF(scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate),scale_rotate((*pnts)[shapeItems[k].n2],w,flag_scale_rotate));
+                            if( scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y()<=scale_rotate((*pnts)[shapeItems[k].n2],w,flag_scale_rotate).y() ) ang_1=360-Angle(line1,line2);
+                            else ang_1=Angle(line1,line2);
+                            if(shapeItems[k].type==1)
+                            {
+                                QPointF point_1, point_2;
+                                point_1=UNROTATE(scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate),ang_1,
+                                                scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).x(),
+                                                scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y());
+                                point_2=UNROTATE(scale_rotate((*pnts)[shapeItems[k].n2],w,flag_scale_rotate),ang_1,
+                                                scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).x(),
+                                                scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y());
+                                point_1.setX(point_1.x()-shapeItems[k].border_width);
+                                point_2.setX(point_2.x()+shapeItems[k].border_width);
+                                point_1=QPointF(scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).x() + ROTATE(point_1, ang_1).x(),
+                                                scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y() - ROTATE(point_1, ang_1).y());
+                                point_2=QPointF(scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).x()+ ROTATE(point_2, ang_1).x(), 
+                                                scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y() -ROTATE(point_2, ang_1).y());
+                                path_rect=painter_path(shapeItems[k].width+shapeItems[k].border_width*2,1.0,1, ang_1, point_1, point_2 );
+                            }
+                            else if(shapeItems[k].type==3)
+                            {
+                                QPointF point_1, point_2;
+                                point_1=UNROTATE(scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate),ang_1,
+                                                scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).x(),
+                                                scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y());
+                                point_2=UNROTATE(scale_rotate((*pnts)[shapeItems[k].n2],w,flag_scale_rotate),ang_1,
+                                                scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).x(),
+                                                scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y());
+                                point_1.setX(point_1.x()-shapeItems[k].border_width);
+                                point_2.setX(point_2.x()+shapeItems[k].border_width);
+                                point_1=QPointF(scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).x() + ROTATE(point_1, ang_1).x(),
+                                                scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y() - ROTATE(point_1, ang_1).y());
+                                point_2=QPointF(scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).x()+ ROTATE(point_2, ang_1).x(), 
+                                                scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y() -ROTATE(point_2, ang_1).y());
+                                path_rect=painter_path(shapeItems[k].width+shapeItems[k].border_width*2,1.0,3, ang_1, point_1, point_2, 
+                                                       scale_rotate((*pnts)[shapeItems[k].n3],w,flag_scale_rotate), scale_rotate((*pnts)[shapeItems[k].n4],w,flag_scale_rotate) );
+                            }
+                            else if(shapeItems[k].type==2)
+                            {
+                                path_rect=painter_path(shapeItems[k].width+shapeItems[k].border_width*2,1.0,2, ang_1,
+                                        scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate),
+                                        scale_rotate((*pnts)[shapeItems[k].n2],w,flag_scale_rotate), 
+                                        scale_rotate((*pnts)[shapeItems[k].n3],w,flag_scale_rotate), 
+                                        scale_rotate((*pnts)[shapeItems[k].n4],w,flag_scale_rotate),
+                                        scale_rotate((*pnts)[shapeItems[k].n5],w,flag_scale_rotate),shapeItems[k].ctrlPos4);
+                            }
+                            if(path_rect.contains(pt1) || shapeItems[k].path.contains(pt1))
+                                cnt_pnt=true;
+                        }
+                    }
+                    if (inundationItems[i].path.contains(pt1) && !cnt_pnt) 
+                    {
+                        (*pnts)[inundationItems[i].number_pnt]=unscale_unrotate(pt1,w,flag_scale_rotate);
+                        exist_fill=true;
+                        flag_for_break=true;
+                        break;
+                    }
+
+                }
+                t+=0.05;
             }
-            if(inundationItems[i].number_shape.size()<=2)
-            {
-                elList+=TSYS::int2str(shapeItems[inundationItems[i].number_shape[0]].n1)+":";
-                elList+=TSYS::int2str(shapeItems[inundationItems[i].number_shape[0]].n2)+":";
-            }
+            while(t<1);
+        }
+        if(!exist_fill)
+            inundationItems.remove(i);
+        else
+        {
+            elList+="fill:";
+            elList+=TSYS::int2str(inundationItems[i].number_pnt)+":";
             elList+=((inundationItems[i].brush.color().name() == w->dc()["fillClr"].value<QColor>().name())?"":inundationItems[i].brush.color().name().toAscii().data());
             elList+="\n";
-
         }
+
+    }
         w->attrSet( "elLst", elList );
 
     //- Write shapes points to data model -
     for( PntMap::iterator pi = pnts->begin(); pi != pnts->end(); pi++ )
     {
-        w->attrSet("p"+TSYS::int2str(pi.key())+"x",TSYS::int2str((int)pi.value().x()));
-        w->attrSet("p"+TSYS::int2str(pi.key())+"y",TSYS::int2str((int)pi.value().y()));
+        w->attrSet("p"+TSYS::int2str(pi.key())+"x",TSYS::real2str(TSYS::realRound(pi.value().x(),2)));
+        w->attrSet("p"+TSYS::int2str(pi.key())+"y",TSYS::real2str(TSYS::realRound(pi.value().y(),2)));
     }
     devW->setSelect(true);
 }
@@ -717,8 +891,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
             QRect draw_area = view->rect().adjusted(0,0,-2*margin,-2*margin);	    
             pnt.setWindow(draw_area);
             pnt.setViewport(view->rect().adjusted(margin,margin,-margin,-margin));
-            //if (runW) pnt.setRenderHint(QPainter::Antialiasing, true);
-            //else pnt.setRenderHint(QPainter::Antialiasing, false);
             
             //- Drawing all fills(inundations) -
             for(int i=0; i<inundationItems.size(); i++)
@@ -736,8 +908,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                 pnt.setPen(shapeItems[k].pen);
                 pnt.drawPath(shapeItems[k].path);
                 pnt.setPen(shapeItems[k].penSimple);
-                //printf("K=%i\n", k);
-                //printf("Color=%s\n", shapeItems[k].penSimple.color().name().toAscii().data());
                 pnt.setBrush(Qt::NoBrush);
                 pnt.drawPath(shapeItems[k].pathSimple);
             }
@@ -753,7 +923,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
             pnt.drawPath(ellipse_draw_startPath);
             pnt.drawPath(ellipse_draw_endPath);
             return true;
-            
         }
         case QEvent::MouseButtonPress:
         {
@@ -830,8 +999,8 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                             Rect_num_0_1(shapeItems,rect_num_temp,pnts, view);
                                         if ((rect_num==3 ||rect_num==4) && shapeItems[index].type==2)
                                         {
-                                            Prev_pos_1=scale_rotate((*pnts)[shapeItems[index].n1], view, true);
-                                            Prev_pos_2=scale_rotate((*pnts)[shapeItems[index].n2], view, true);
+                                            Prev_pos_1=scale_rotate((*pnts)[shapeItems[index].n1], view, flag_scale_rotate);
+                                            Prev_pos_2=scale_rotate((*pnts)[shapeItems[index].n2], view, flag_scale_rotate);
                                             Rect_num_3_4(shapeItems,pnts);
                                         }
                                     }
@@ -891,6 +1060,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
             QMouseEvent *ev = static_cast<QMouseEvent*>(event); 
             DevelWdgView *devW = qobject_cast<DevelWdgView*>(view);
             RunWdgView   *runW = qobject_cast<RunWdgView*>(view);
+            QPointF db_point=ev->pos();
             if (devW)
             {
                 if (!flag_down && !flag_up && !flag_left && !flag_right)
@@ -899,10 +1069,11 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     // - getting fill by double click -
                     if( ev->button() == Qt::LeftButton && shapeItems.size() && index==-1 && status_hold )
                     {
+                        flag_Angle_temp=true;
                         QBrush fill_brush(QColor(0,0,0,0),Qt::SolidPattern), fill_img_brush;
                         fill_brush.setColor(view->dc()["fillClr"].value<QColor>());
                         fill_img_brush=view->dc()["fillImg"].value<QBrush>();
-                        if(!Inundation_1_2(ev->pos(), shapeItems, inundationItems, pnts, view))
+                        if(!Inundation_1_2(ev->pos(), shapeItems, inundationItems, pnts, view, -1))
                         {
                             if(Build_Matrix(shapeItems)!=2)
                             {
@@ -917,13 +1088,15 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                             break;
                                         }
                                     if(!fl_brk)
-                                        inundationItems.push_back(InundationItem(InundationPath,fill_brush,fill_img_brush, Inundation_vector));
+                                        inundationItems.push_back(InundationItem(InundationPath,fill_brush,fill_img_brush, Inundation_vector,
+                                                                Append_Point( db_point, shapeItems, pnts )));
                                 }
                             }
                             Inundation_vector.clear();
                             vect.clear();
                             map_matrix.clear();
                         }
+                        flag_Angle_temp=false;
                     }
                     // - deleting the figure -
                     if( ev->button() == Qt::LeftButton && shapeItems.size() && index!=-1 )
@@ -953,10 +1126,10 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         for (int i=0; i<inundationItems.size(); i++)
                             if (shapeItems[index].type==2 && inundationItems[i].number_shape.size()==1 &&
                                 inundationItems[i].number_shape[0]==index)
-                        {
-                            inundationItems.remove(i);
-                            flag_arc_inund=true;
-                        }
+                            {
+                                inundationItems.remove(i);
+                                flag_arc_inund=true;
+                            }
                         if(!flag_arc_inund)
                         {
                             for(int i=0; i<inundationItems.size(); i++)
@@ -977,7 +1150,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                 if(inundationItems[i].number_shape[j]>index)
                                     inundationItems[i].number_shape[j]-=1;
                         shapeItems.remove(index);
-                        shapeSave(view);
                         rectItems.clear();
                     }
                     view->repaint();
@@ -1273,19 +1445,20 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                     shapeItems.push_back( ShapeItem(circlePath, newPath, -1,-1,-1,-1,-1,QPointF(0,0),QBrush(view->dc()["lineClr"].value<QColor>(),Qt::SolidPattern),
                                             QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin),
                                                     QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::NoPen,Qt::FlatCap, Qt::RoundJoin),
-                                                            view->dc()["lineWdth"].toInt(), view->dc()["bordWdth"].toInt(), 1) );
+                                                            view->dc()["lineWdth"].toInt(), view->dc()["bordWdth"].toInt(), 1,Angle_temp) );
                                 }
                                 else
                                 {
                                     circlePath = painter_path_simple(1, ang, StartLine,EndLine);
+                                   
                                     QPainterPath bigPath = painter_path(view->dc()["lineWdth"].toInt()+1, view->dc()["bordWdth"].toInt(), 1, ang, StartLine,EndLine);
                                     shapeItems.push_back( ShapeItem(bigPath,circlePath,-1,-1,-1,-1,-1,QPointF(0,0), QBrush(view->dc()["lineClr"].value<QColor>(),Qt::NoBrush),
                                             QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::NoPen,Qt::FlatCap, Qt::RoundJoin),
                                                     QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin),
-                                                            view->dc()["lineWdth"].toInt(), view->dc()["bordWdth"].toInt(),1) );
+                                                            view->dc()["lineWdth"].toInt(), view->dc()["bordWdth"].toInt(),1,Angle_temp) );
                                 }
-                                StartLine=unscale_unrotate(StartLine, view, true);
-                                EndLine=unscale_unrotate(EndLine, view, true);
+                                StartLine=unscale_unrotate(StartLine, view, flag_scale_rotate);
+                                EndLine=unscale_unrotate(EndLine, view, flag_scale_rotate);
                                 shapeItems[shapeItems.size()-1].n1 = Append_Point(StartLine,shapeItems,pnts);
                                 shapeItems[shapeItems.size()-1].n2 = Append_Point(EndLine,shapeItems, pnts);
                                 shapeSave( view );
@@ -1307,7 +1480,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                     shapeItems.push_back( ShapeItem(circlePath, newPath, -1,-1,-1,-1,-1,QPointF(0,0), QBrush(view->dc()["lineClr"].value<QColor>(),Qt::SolidPattern),
                                             QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin),
                                                     QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::NoPen,Qt::FlatCap, Qt::RoundJoin),
-                                                            view->dc()["lineWdth"].toInt(), view->dc()["bordWdth"].toInt(), 1) );
+                                                            view->dc()["lineWdth"].toInt(), view->dc()["bordWdth"].toInt(), 1,Angle_temp) );
                                 }
                                 else
                                 {
@@ -1316,10 +1489,10 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                     shapeItems.push_back( ShapeItem(bigPath,circlePath,-1,-1,-1,-1,-1,QPointF(0,0), QBrush(view->dc()["lineClr"].value<QColor>(),Qt::NoBrush),
                                             QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::NoPen,Qt::FlatCap, Qt::RoundJoin),
                                                     QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin),
-                                                            view->dc()["lineWdth"].toInt(), view->dc()["bordWdth"].toInt(), 1) );
+                                                            view->dc()["lineWdth"].toInt(), view->dc()["bordWdth"].toInt(), 1,Angle_temp) );
                                 }
-                                StartLine=unscale_unrotate(StartLine, view, true);
-                                EndLine=unscale_unrotate(EndLine, view, true);
+                                StartLine=unscale_unrotate(StartLine, view, flag_scale_rotate);
+                                EndLine=unscale_unrotate(EndLine, view, flag_scale_rotate);
                                 shapeItems[shapeItems.size()-1].n1 = Append_Point(StartLine,shapeItems,pnts);
                                 shapeItems[shapeItems.size()-1].n2 = Append_Point(EndLine,shapeItems, pnts);
                                 shapeSave( view );
@@ -1346,7 +1519,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                 shapeItems.push_back( ShapeItem(circlePath, newPath, -1,-1,-1,-1,-1,QPointF(0,0), QBrush(view->dc()["lineClr"].value<QColor>(),Qt::SolidPattern),
                                         QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin),
                                               QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::NoPen,Qt::FlatCap, Qt::RoundJoin),
-                                                      view->dc()["lineWdth"].toInt(),view->dc()["bordWdth"].toInt(), 3) );
+                                                      view->dc()["lineWdth"].toInt(),view->dc()["bordWdth"].toInt(), 3,Angle_temp) );
                             }
                             else
                             {
@@ -1355,12 +1528,12 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                 shapeItems.push_back( ShapeItem(bigPath,circlePath, -1,-1,-1,-1,-1,QPointF(0,0), QBrush(view->dc()["lineClr"].value<QColor>(),Qt::NoBrush),
                                         QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::NoPen,Qt::FlatCap, Qt::RoundJoin),
                                               QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin),
-                                                      view->dc()["lineWdth"].toInt(), view->dc()["bordWdth"].toInt(), 3) );
+                                                      view->dc()["lineWdth"].toInt(), view->dc()["bordWdth"].toInt(), 3,Angle_temp) );
                             }
-                            StartLine=unscale_unrotate(StartLine, view, true);
-                            EndLine=unscale_unrotate(EndLine, view, true);
-                            CtrlPos_1=unscale_unrotate(CtrlPos_1, view, true);
-                            CtrlPos_2=unscale_unrotate(CtrlPos_2, view, true);
+                            StartLine=unscale_unrotate(StartLine, view, flag_scale_rotate);
+                            EndLine=unscale_unrotate(EndLine, view, flag_scale_rotate);
+                            CtrlPos_1=unscale_unrotate(CtrlPos_1, view, flag_scale_rotate);
+                            CtrlPos_2=unscale_unrotate(CtrlPos_2, view, flag_scale_rotate);
                             
                             shapeItems[shapeItems.size()-1].n1 = Append_Point(StartLine,shapeItems,pnts);
                             shapeItems[shapeItems.size()-1].n2 = Append_Point(EndLine,shapeItems, pnts);
@@ -1394,7 +1567,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                 shapeItems.push_back( ShapeItem(circlePath, newPath, -1,-1,-1,-1, -1,CtrlPos_4,QBrush(view->dc()["lineClr"].value<QColor>(),Qt::SolidPattern),
                                         QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin),
                                               QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::NoPen,Qt::FlatCap, Qt::RoundJoin),
-                                                      view->dc()["lineWdth"].toInt(), view->dc()["bordWdth"].toInt(), 2) );
+                                                      view->dc()["lineWdth"].toInt(), view->dc()["bordWdth"].toInt(), 2,Angle_temp) );
                             }
                             else
                             {
@@ -1403,13 +1576,13 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                 shapeItems.push_back( ShapeItem(bigPath,circlePath,-1,-1,-1,-1, -1,CtrlPos_4, QBrush(view->dc()["lineClr"].value<QColor>(),Qt::NoBrush),
                                         QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::NoPen,Qt::FlatCap, Qt::RoundJoin),
                                               QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin),
-                                                      view->dc()["lineWdth"].toInt(), view->dc()["bordWdth"].toInt(), 2) );
+                                                      view->dc()["lineWdth"].toInt(), view->dc()["bordWdth"].toInt(), 2,Angle_temp) );
                             }
-                            StartLine=unscale_unrotate(StartLine, view, true);
-                            EndLine=unscale_unrotate(EndLine, view, true);
-                            CtrlPos_1=unscale_unrotate(CtrlPos_1, view, true);
-                            CtrlPos_2=unscale_unrotate(CtrlPos_2, view, true);
-                            CtrlPos_3=unscale_unrotate(CtrlPos_3, view, true);
+                            StartLine=unscale_unrotate(StartLine, view, flag_scale_rotate);
+                            EndLine=unscale_unrotate(EndLine, view, flag_scale_rotate);
+                            CtrlPos_1=unscale_unrotate(CtrlPos_1, view, flag_scale_rotate);
+                            CtrlPos_2=unscale_unrotate(CtrlPos_2, view, flag_scale_rotate);
+                            CtrlPos_3=unscale_unrotate(CtrlPos_3, view, flag_scale_rotate);
                             shapeItems[shapeItems.size()-1].n1 = Append_Point(StartLine,shapeItems,pnts);
                             shapeItems[shapeItems.size()-1].n2 = Append_Point(EndLine,shapeItems, pnts);
                             shapeItems[shapeItems.size()-1].n3 = Append_Point(CtrlPos_1,shapeItems, pnts);
@@ -1627,41 +1800,41 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                 ellipse_endPath=newPath;
                                 if (i!=index)
                                 {
-                                    ellipse_startPath.addEllipse(scale_rotate((*pnts)[shapeItems[i].n1], view, true).x()-8, scale_rotate((*pnts)[shapeItems[i].n1], view, true).y()-8,16,16);
-                                    if( ellipse_startPath.contains(scale_rotate((*pnts)[shapeItems[index].n1], view, true)))
+                                    ellipse_startPath.addEllipse(scale_rotate((*pnts)[shapeItems[i].n1], view, flag_scale_rotate).x()-8, scale_rotate((*pnts)[shapeItems[i].n1], view, flag_scale_rotate).y()-8,16,16);
+                                    if( ellipse_startPath.contains(scale_rotate((*pnts)[shapeItems[index].n1], view, flag_scale_rotate)))
                                     { 
                                         if (temp==0 || rect_num==-1)
                                         {
                                             if(itemInMotion->type==2 && shapeItems[i].type==2) break;
-                                            ellipse_draw_startPath.addEllipse(scale_rotate((*pnts)[shapeItems[i].n1], view, true).x()-8,scale_rotate((*pnts)[shapeItems[i].n1], view, true).y()-8,16,16);
+                                            ellipse_draw_startPath.addEllipse(scale_rotate((*pnts)[shapeItems[i].n1], view, flag_scale_rotate).x()-8,scale_rotate((*pnts)[shapeItems[i].n1], view, flag_scale_rotate).y()-8,16,16);
                                             current_ss=i;
                                         }
                                     }
-                                    if( ellipse_startPath.contains(scale_rotate((*pnts)[shapeItems[index].n2], view, true)))
+                                    if( ellipse_startPath.contains(scale_rotate((*pnts)[shapeItems[index].n2], view, flag_scale_rotate)))
                                     {
                                         if (temp==1 || rect_num==-1)
                                         {
                                             if(itemInMotion->type==2 && shapeItems[i].type==2) break;
-                                            ellipse_draw_startPath.addEllipse(scale_rotate((*pnts)[shapeItems[i].n1], view, true).x()-8,scale_rotate((*pnts)[shapeItems[i].n1], view, true).y()-8,16,16);
+                                            ellipse_draw_startPath.addEllipse(scale_rotate((*pnts)[shapeItems[i].n1], view, flag_scale_rotate).x()-8,scale_rotate((*pnts)[shapeItems[i].n1], view, flag_scale_rotate).y()-8,16,16);
                                             current_se=i;
                                         }
                                     }
-                                    ellipse_endPath.addEllipse(scale_rotate((*pnts)[shapeItems[i].n2], view, true).x()-8, scale_rotate((*pnts)[shapeItems[i].n2], view, true).y()-8,16,16);
-                                    if( ellipse_endPath.contains(scale_rotate((*pnts)[shapeItems[index].n2], view, true)) )
+                                    ellipse_endPath.addEllipse(scale_rotate((*pnts)[shapeItems[i].n2], view, flag_scale_rotate).x()-8, scale_rotate((*pnts)[shapeItems[i].n2], view, flag_scale_rotate).y()-8,16,16);
+                                    if( ellipse_endPath.contains(scale_rotate((*pnts)[shapeItems[index].n2], view, flag_scale_rotate)) )
                                     {
                                         if (temp==1 || rect_num==-1)
                                         {
                                             if(itemInMotion->type==2 && shapeItems[i].type==2) break;
-                                            ellipse_draw_endPath.addEllipse(scale_rotate((*pnts)[shapeItems[i].n2], view, true).x()-8,scale_rotate((*pnts)[shapeItems[i].n2], view, true).y()-8,16,16);
+                                            ellipse_draw_endPath.addEllipse(scale_rotate((*pnts)[shapeItems[i].n2], view, flag_scale_rotate).x()-8,scale_rotate((*pnts)[shapeItems[i].n2], view, flag_scale_rotate).y()-8,16,16);
                                             current_ee=i;
                                         }
                                     }
-                                    if( ellipse_endPath.contains(scale_rotate((*pnts)[shapeItems[index].n1], view, true)) )
+                                    if( ellipse_endPath.contains(scale_rotate((*pnts)[shapeItems[index].n1], view, flag_scale_rotate)) )
                                     {
                                         if (temp==0 || rect_num==-1)
                                         {
                                             if(itemInMotion->type==2 && shapeItems[i].type==2) break;
-                                            ellipse_draw_endPath.addEllipse(scale_rotate((*pnts)[shapeItems[i].n2], view, true).x()-8,scale_rotate((*pnts)[shapeItems[i].n2], view, true).y()-8,16,16);
+                                            ellipse_draw_endPath.addEllipse(scale_rotate((*pnts)[shapeItems[i].n2], view, flag_scale_rotate).x()-8,scale_rotate((*pnts)[shapeItems[i].n2], view, flag_scale_rotate).y()-8,16,16);
                                             current_es=i;
                                         }
                                     }
@@ -1950,62 +2123,63 @@ void ShapeElFigure::moveItemTo(const QPointF &pos,QVector <ShapeItem> &shapeItem
         {
             if (!flag_MotionNum_1 )// moving this point in the first time
             {
-                StartMotionPos=scale_rotate((*pnts)[itemInMotion->n1], view, true);
+                StartMotionPos=scale_rotate((*pnts)[itemInMotion->n1], view, flag_scale_rotate);
                 StartMotionPos+=offset;
                 num_vector.append(MotionNum_1);//adding this point in the vector of common points
             }
-            else StartMotionPos=scale_rotate((*pnts)[itemInMotion->n1], view, true);// don't change point's coordinates
+            else StartMotionPos=scale_rotate((*pnts)[itemInMotion->n1], view, flag_scale_rotate);// don't change point's coordinates
             if (!flag_MotionNum_2)
             {
-                EndMotionPos=scale_rotate((*pnts)[itemInMotion->n2], view, true);
+                EndMotionPos=scale_rotate((*pnts)[itemInMotion->n2], view, flag_scale_rotate);
                 EndMotionPos+=offset;
                 num_vector.append(MotionNum_2);
             }
-            else EndMotionPos=scale_rotate((*pnts)[itemInMotion->n2], view, true);
+            else EndMotionPos=scale_rotate((*pnts)[itemInMotion->n2], view, flag_scale_rotate);
             if (!flag_MotionNum_3)
             {
-                CtrlMotionPos_1=scale_rotate((*pnts)[itemInMotion->n3], view, true);
+                CtrlMotionPos_1=scale_rotate((*pnts)[itemInMotion->n3], view, flag_scale_rotate);
                 CtrlMotionPos_1+=offset;
                 num_vector.append(MotionNum_1);
             }
-            else    CtrlMotionPos_1=scale_rotate((*pnts)[itemInMotion->n3], view, true);
+            else    CtrlMotionPos_1=scale_rotate((*pnts)[itemInMotion->n3], view, flag_scale_rotate);
             if (!flag_MotionNum_4)
             {
-                CtrlMotionPos_2=scale_rotate((*pnts)[itemInMotion->n4], view, true);
+                CtrlMotionPos_2=scale_rotate((*pnts)[itemInMotion->n4], view, flag_scale_rotate);
                 CtrlMotionPos_2+=offset;
                 num_vector.append(MotionNum_2);
             }
-            else   CtrlMotionPos_2=scale_rotate((*pnts)[itemInMotion->n4], view, true);
+            else   CtrlMotionPos_2=scale_rotate((*pnts)[itemInMotion->n4], view, flag_scale_rotate);
             if (!flag_MotionNum_5)
             {
-                CtrlMotionPos_3=scale_rotate((*pnts)[itemInMotion->n5], view, true);
+                CtrlMotionPos_3=scale_rotate((*pnts)[itemInMotion->n5], view, flag_scale_rotate);
                 CtrlMotionPos_3+=offset;
                 num_vector.append(MotionNum_2);
             }
-            else   CtrlMotionPos_3=scale_rotate((*pnts)[itemInMotion->n5], view, true);
+            else   CtrlMotionPos_3=scale_rotate((*pnts)[itemInMotion->n5], view, flag_scale_rotate);
         }
         else
         {
-            StartMotionPos=scale_rotate((*pnts)[itemInMotion->n1], view, true);
-            EndMotionPos=scale_rotate((*pnts)[itemInMotion->n2], view, true);
+            StartMotionPos=scale_rotate((*pnts)[itemInMotion->n1], view, flag_scale_rotate);
+            EndMotionPos=scale_rotate((*pnts)[itemInMotion->n2], view, flag_scale_rotate);
             StartMotionPos+=offset;
             EndMotionPos+=offset; 
-            CtrlMotionPos_1=scale_rotate((*pnts)[itemInMotion->n3], view, true);
+            CtrlMotionPos_1=scale_rotate((*pnts)[itemInMotion->n3], view, flag_scale_rotate);
             CtrlMotionPos_1+=offset;
-            CtrlMotionPos_2=scale_rotate((*pnts)[itemInMotion->n4], view, true);
+            CtrlMotionPos_2=scale_rotate((*pnts)[itemInMotion->n4], view, flag_scale_rotate);
             CtrlMotionPos_2+=offset;
         }  
         if (shapeType==2)
         {
             CtrlMotionPos_4=QPointF(itemInMotion->ctrlPos4.x(),itemInMotion->ctrlPos4.y());
-            CtrlMotionPos_3=scale_rotate((*pnts)[itemInMotion->n5], view, true);
+            CtrlMotionPos_3=scale_rotate((*pnts)[itemInMotion->n5], view, flag_scale_rotate);
             CtrlMotionPos_3+=offset;
             a=Length(CtrlMotionPos_3,CtrlMotionPos_1);
-            b=Length(CtrlMotionPos_1,CtrlMotionPos_2);
+            b=Length(CtrlMotionPos_2,CtrlMotionPos_1);
             line2=QLineF(CtrlMotionPos_1,QPointF(CtrlMotionPos_1.x()+10,CtrlMotionPos_1.y()));
             line1=QLineF(CtrlMotionPos_1,CtrlMotionPos_3);
             if (CtrlMotionPos_3.y()<=CtrlMotionPos_1.y()) ang=Angle(line1,line2);
             else ang=360-Angle(line1,line2);
+            Angle_temp=ang;
             t_start=CtrlMotionPos_4.x();
             t_end=CtrlMotionPos_4.y();
             StartMotionPos=QPointF(CtrlMotionPos_1.x()+ROTATE(ARC(t_start,a,b),ang).x(),
@@ -2017,24 +2191,25 @@ void ShapeElFigure::moveItemTo(const QPointF &pos,QVector <ShapeItem> &shapeItem
     //- moving the start point of the figure -
     if (rect_num==0)
     {
-        EndMotionPos=scale_rotate((*pnts)[itemInMotion->n2], view, true);
+        EndMotionPos=scale_rotate((*pnts)[itemInMotion->n2], view, flag_scale_rotate);
 
         if (shapeType==2)
         {
             StartMotionPos=Mouse_pos;
             if (flag_up || flag_down || flag_right || flag_left)
                 StartMotionPos=(*pnts)[itemInMotion->n1]+offset;
-            CtrlMotionPos_1=scale_rotate((*pnts)[itemInMotion->n3], view, true);
-            CtrlMotionPos_2=scale_rotate((*pnts)[itemInMotion->n4], view, true);
-            CtrlMotionPos_3=scale_rotate((*pnts)[itemInMotion->n5], view, true);
+            CtrlMotionPos_1=scale_rotate((*pnts)[itemInMotion->n3], view, flag_scale_rotate);
+            CtrlMotionPos_2=scale_rotate((*pnts)[itemInMotion->n4], view, flag_scale_rotate);
+            CtrlMotionPos_3=scale_rotate((*pnts)[itemInMotion->n5], view, flag_scale_rotate);
             CtrlMotionPos_4=QPointF(itemInMotion->ctrlPos4.x(),itemInMotion->ctrlPos4.y());
             a=Length(CtrlMotionPos_3,CtrlMotionPos_1);
             b=Length(CtrlMotionPos_2,CtrlMotionPos_1);
             t_end=CtrlMotionPos_4.y();
-            line2=QLineF(CtrlMotionPos_1,QPointF(CtrlMotionPos_1.x()+100,CtrlMotionPos_1.y()));
+            line2=QLineF(CtrlMotionPos_1,QPointF(CtrlMotionPos_1.x()+10,CtrlMotionPos_1.y()));
             line1=QLineF(CtrlMotionPos_1,CtrlMotionPos_3);
             if (CtrlMotionPos_3.y()<=CtrlMotionPos_1.y()) ang=Angle(line1,line2);
             else ang=360-Angle(line1,line2);
+            Angle_temp=ang;
             StartMotionPos=UNROTATE(StartMotionPos,ang,CtrlMotionPos_1.x(),CtrlMotionPos_1.y());
             if (StartMotionPos.x()>=a)
             {
@@ -2071,32 +2246,32 @@ void ShapeElFigure::moveItemTo(const QPointF &pos,QVector <ShapeItem> &shapeItem
                 if (status_hold && count_holds && flag_rect)
                     if (!flag_MotionNum_1)
                     {
-                        StartMotionPos=scale_rotate((*pnts)[itemInMotion->n1], view, true);
+                        StartMotionPos=scale_rotate((*pnts)[itemInMotion->n1], view, flag_scale_rotate);
                         StartMotionPos+=offset;
                         num_vector.append(MotionNum_1);
                     }
-                    else  StartMotionPos=scale_rotate((*pnts)[itemInMotion->n1], view, true);
+                    else  StartMotionPos=scale_rotate((*pnts)[itemInMotion->n1], view, flag_scale_rotate);
                 else 
                 {
-                    StartMotionPos=scale_rotate((*pnts)[itemInMotion->n1], view, true);
+                    StartMotionPos=scale_rotate((*pnts)[itemInMotion->n1], view, flag_scale_rotate);
                     StartMotionPos+=offset;
                 }
-                CtrlMotionPos_1=scale_rotate((*pnts)[itemInMotion->n3], view, true);
-                CtrlMotionPos_2=scale_rotate((*pnts)[itemInMotion->n4], view, true);
+                CtrlMotionPos_1=scale_rotate((*pnts)[itemInMotion->n3], view, flag_scale_rotate);
+                CtrlMotionPos_2=scale_rotate((*pnts)[itemInMotion->n4], view, flag_scale_rotate);
             }
             if (flag_hold_arc || flag_arc_rect_3_4)// if the figure is connected to the arc
             {
                 if (arc_rect==0)
                 {
-                    StartMotionPos=scale_rotate((*pnts)[shapeItems[index_array[0]].n1], view, true);
-                    CtrlMotionPos_1=scale_rotate((*pnts)[itemInMotion->n3], view, true);
-                    CtrlMotionPos_2=scale_rotate((*pnts)[itemInMotion->n4], view, true);
+                    StartMotionPos=scale_rotate((*pnts)[shapeItems[index_array[0]].n1], view, flag_scale_rotate);
+                    CtrlMotionPos_1=scale_rotate((*pnts)[itemInMotion->n3], view, flag_scale_rotate);
+                    CtrlMotionPos_2=scale_rotate((*pnts)[itemInMotion->n4], view, flag_scale_rotate);
                 }
                 if (arc_rect==1)
                 {
-                    StartMotionPos=scale_rotate((*pnts)[shapeItems[index_array[0]].n2], view, true);
-                    CtrlMotionPos_1=scale_rotate((*pnts)[itemInMotion->n3], view, true);
-                    CtrlMotionPos_2=scale_rotate((*pnts)[itemInMotion->n4], view, true);
+                    StartMotionPos=scale_rotate((*pnts)[shapeItems[index_array[0]].n2], view, flag_scale_rotate);
+                    CtrlMotionPos_1=scale_rotate((*pnts)[itemInMotion->n3], view, flag_scale_rotate);
+                    CtrlMotionPos_2=scale_rotate((*pnts)[itemInMotion->n4], view, flag_scale_rotate);
                 }
             }
         }
@@ -2104,18 +2279,18 @@ void ShapeElFigure::moveItemTo(const QPointF &pos,QVector <ShapeItem> &shapeItem
     //- moving the end point of the figure -
     if (rect_num==1)
     {
-        StartMotionPos=scale_rotate((*pnts)[itemInMotion->n1], view, true);
+        StartMotionPos=scale_rotate((*pnts)[itemInMotion->n1], view, flag_scale_rotate);
         if (shapeType==2)
         {
             EndMotionPos=Mouse_pos;
             if (flag_up || flag_down || flag_right || flag_left)
             {
-                EndMotionPos=scale_rotate((*pnts)[itemInMotion->n2], view, true);
+                EndMotionPos=scale_rotate((*pnts)[itemInMotion->n2], view, flag_scale_rotate);
                 EndMotionPos+=offset;
             }
-            CtrlMotionPos_1=scale_rotate((*pnts)[itemInMotion->n3], view, true);
-            CtrlMotionPos_2=scale_rotate((*pnts)[itemInMotion->n4], view, true);
-            CtrlMotionPos_3=scale_rotate((*pnts)[itemInMotion->n5], view, true);
+            CtrlMotionPos_1=scale_rotate((*pnts)[itemInMotion->n3], view, flag_scale_rotate);
+            CtrlMotionPos_2=scale_rotate((*pnts)[itemInMotion->n4], view, flag_scale_rotate);
+            CtrlMotionPos_3=scale_rotate((*pnts)[itemInMotion->n5], view, flag_scale_rotate);
             CtrlMotionPos_4=QPointF(itemInMotion->ctrlPos4.x(),itemInMotion->ctrlPos4.y());
             b=Length(CtrlMotionPos_2,CtrlMotionPos_1);
             a=Length(CtrlMotionPos_3,CtrlMotionPos_1);
@@ -2123,6 +2298,7 @@ void ShapeElFigure::moveItemTo(const QPointF &pos,QVector <ShapeItem> &shapeItem
             line1=QLineF(CtrlMotionPos_1,CtrlMotionPos_3);
             if (CtrlMotionPos_3.y()<=CtrlMotionPos_1.y()) ang=Angle(line1,line2);
             else ang=360-Angle(line1,line2);
+            Angle_temp=ang;
             EndMotionPos=UNROTATE(EndMotionPos,ang,CtrlMotionPos_1.x(),CtrlMotionPos_1.y());
             if (EndMotionPos.x()<=-a)
             {
@@ -2156,32 +2332,32 @@ void ShapeElFigure::moveItemTo(const QPointF &pos,QVector <ShapeItem> &shapeItem
                 if (status_hold && count_holds && flag_rect)
                     if (!flag_MotionNum_2)
                     {
-                        EndMotionPos=scale_rotate((*pnts)[itemInMotion->n2], view, true);
+                        EndMotionPos=scale_rotate((*pnts)[itemInMotion->n2], view, flag_scale_rotate);
                         EndMotionPos+=offset;
                         num_vector.append(MotionNum_2);
                     }
-                    else EndMotionPos=scale_rotate((*pnts)[itemInMotion->n2], view, true);
+                    else EndMotionPos=scale_rotate((*pnts)[itemInMotion->n2], view, flag_scale_rotate);
                 else
                 {
-                    EndMotionPos=scale_rotate((*pnts)[itemInMotion->n2], view, true);
+                    EndMotionPos=scale_rotate((*pnts)[itemInMotion->n2], view, flag_scale_rotate);
                     EndMotionPos+=offset;
                 }
-                CtrlMotionPos_1=scale_rotate((*pnts)[itemInMotion->n3], view, true);
-                CtrlMotionPos_2=scale_rotate((*pnts)[itemInMotion->n4], view, true);
+                CtrlMotionPos_1=scale_rotate((*pnts)[itemInMotion->n3], view, flag_scale_rotate);
+                CtrlMotionPos_2=scale_rotate((*pnts)[itemInMotion->n4], view, flag_scale_rotate);
             }
             if (flag_hold_arc || flag_arc_rect_3_4)
             {
                 if (arc_rect==0)
                 {
-                    EndMotionPos=scale_rotate((*pnts)[shapeItems[index_array[0]].n1], view, true);
-                    CtrlMotionPos_1=scale_rotate((*pnts)[itemInMotion->n3], view, true);
-                    CtrlMotionPos_2=scale_rotate((*pnts)[itemInMotion->n4], view, true);
+                    EndMotionPos=scale_rotate((*pnts)[shapeItems[index_array[0]].n1], view, flag_scale_rotate);
+                    CtrlMotionPos_1=scale_rotate((*pnts)[itemInMotion->n3], view, flag_scale_rotate);
+                    CtrlMotionPos_2=scale_rotate((*pnts)[itemInMotion->n4], view, flag_scale_rotate);
                 }
                 if (arc_rect==1)
                 {
-                    EndMotionPos=scale_rotate((*pnts)[shapeItems[index_array[0]].n2], view, true);
-                    CtrlMotionPos_1=scale_rotate((*pnts)[itemInMotion->n3], view, true);
-                    CtrlMotionPos_2=scale_rotate((*pnts)[itemInMotion->n4], view, true);
+                    EndMotionPos=scale_rotate((*pnts)[shapeItems[index_array[0]].n2], view, flag_scale_rotate);
+                    CtrlMotionPos_1=scale_rotate((*pnts)[itemInMotion->n3], view, flag_scale_rotate);
+                    CtrlMotionPos_2=scale_rotate((*pnts)[itemInMotion->n4], view, flag_scale_rotate);
                 }
             }
 
@@ -2190,13 +2366,13 @@ void ShapeElFigure::moveItemTo(const QPointF &pos,QVector <ShapeItem> &shapeItem
     //- moving the first control point of the figure -
     if (rect_num==2)
     {
-        StartMotionPos=scale_rotate((*pnts)[itemInMotion->n1], view, true);
-        EndMotionPos=scale_rotate((*pnts)[itemInMotion->n2], view, true);
+        StartMotionPos=scale_rotate((*pnts)[itemInMotion->n1], view, flag_scale_rotate);
+        EndMotionPos=scale_rotate((*pnts)[itemInMotion->n2], view, flag_scale_rotate);
         if (shapeType==2)
         {
-            CtrlMotionPos_1=scale_rotate((*pnts)[itemInMotion->n3], view, true);
-            CtrlMotionPos_2=scale_rotate((*pnts)[itemInMotion->n4], view, true);
-            CtrlMotionPos_3=scale_rotate((*pnts)[itemInMotion->n5], view, true);
+            CtrlMotionPos_1=scale_rotate((*pnts)[itemInMotion->n3], view, flag_scale_rotate);
+            CtrlMotionPos_2=scale_rotate((*pnts)[itemInMotion->n4], view, flag_scale_rotate);
+            CtrlMotionPos_3=scale_rotate((*pnts)[itemInMotion->n5], view, flag_scale_rotate);
             CtrlMotionPos_4=QPointF(itemInMotion->ctrlPos4.x(),itemInMotion->ctrlPos4.y());
             b=Length(CtrlMotionPos_2,CtrlMotionPos_1);
             a=Length(CtrlMotionPos_3,CtrlMotionPos_1);
@@ -2204,29 +2380,30 @@ void ShapeElFigure::moveItemTo(const QPointF &pos,QVector <ShapeItem> &shapeItem
             line1=QLineF(CtrlMotionPos_1,CtrlMotionPos_3);
             if (CtrlMotionPos_3.y()<=CtrlMotionPos_1.y()) ang=Angle(line1,line2);
             else ang=360-Angle(line1,line2);
+            Angle_temp=ang;
             t_start=CtrlMotionPos_4.x();
             t_end=CtrlMotionPos_4.y();
         }
         else
         {
-            CtrlMotionPos_1=scale_rotate((*pnts)[itemInMotion->n3], view, true);
-            CtrlMotionPos_2=scale_rotate((*pnts)[itemInMotion->n4], view, true);
+            CtrlMotionPos_1=scale_rotate((*pnts)[itemInMotion->n3], view, flag_scale_rotate);
+            CtrlMotionPos_2=scale_rotate((*pnts)[itemInMotion->n4], view, flag_scale_rotate);
             CtrlMotionPos_1+=offset;
         }
     }
     //- moving the second control point of the figure -
     if (rect_num==3)
     {
-        StartMotionPos=scale_rotate((*pnts)[itemInMotion->n1], view, true);
-        EndMotionPos=scale_rotate((*pnts)[itemInMotion->n2], view, true);
+        StartMotionPos=scale_rotate((*pnts)[itemInMotion->n1], view, flag_scale_rotate);
+        EndMotionPos=scale_rotate((*pnts)[itemInMotion->n2], view, flag_scale_rotate);
         if (shapeType==2)
         {
-            CtrlMotionPos_1=scale_rotate((*pnts)[itemInMotion->n3], view, true);
-            CtrlMotionPos_2=scale_rotate((*pnts)[itemInMotion->n4], view, true);
+            CtrlMotionPos_1=scale_rotate((*pnts)[itemInMotion->n3], view, flag_scale_rotate);
+            CtrlMotionPos_2=scale_rotate((*pnts)[itemInMotion->n4], view, flag_scale_rotate);
             CtrlMotionPos_2+=offset;
-            CtrlMotionPos_3=scale_rotate((*pnts)[itemInMotion->n5], view, true);
+            CtrlMotionPos_3=scale_rotate((*pnts)[itemInMotion->n5], view, flag_scale_rotate);
             CtrlMotionPos_4=QPointF(itemInMotion->ctrlPos4.x(),itemInMotion->ctrlPos4.y());
-            EndMotionPos=scale_rotate((*pnts)[itemInMotion->n2], view, true);
+            EndMotionPos=scale_rotate((*pnts)[itemInMotion->n2], view, flag_scale_rotate);
             a=Length(CtrlMotionPos_3,CtrlMotionPos_1);
             b=Length(CtrlMotionPos_2,CtrlMotionPos_1);
             t_start=CtrlMotionPos_4.x();
@@ -2235,6 +2412,7 @@ void ShapeElFigure::moveItemTo(const QPointF &pos,QVector <ShapeItem> &shapeItem
             line1=QLineF( CtrlMotionPos_1,CtrlMotionPos_3);
             if (CtrlMotionPos_3.y()<=CtrlMotionPos_1.y()) ang=Angle(line1,line2); 
             else ang=360-Angle(line1,line2);
+            Angle_temp=ang;
             CtrlMotionPos_3=UNROTATE(CtrlMotionPos_3,ang,CtrlMotionPos_1.x(),CtrlMotionPos_1.y());
             CtrlMotionPos_2=UNROTATE(CtrlMotionPos_2,ang,CtrlMotionPos_1.x(),CtrlMotionPos_1.y());
             line2=QLineF(QPointF(0,0),QPointF(-100,0));
@@ -2248,20 +2426,20 @@ void ShapeElFigure::moveItemTo(const QPointF &pos,QVector <ShapeItem> &shapeItem
         }
         else
         {
-            CtrlMotionPos_1=scale_rotate((*pnts)[itemInMotion->n3], view, true);
-            CtrlMotionPos_2=scale_rotate((*pnts)[itemInMotion->n4], view, true);
+            CtrlMotionPos_1=scale_rotate((*pnts)[itemInMotion->n3], view, flag_scale_rotate);
+            CtrlMotionPos_2=scale_rotate((*pnts)[itemInMotion->n4], view, flag_scale_rotate);
             CtrlMotionPos_2+=offset;
         }
     }
     //- moving the third control point of the figure -
     if (rect_num==4)
     {
-        CtrlMotionPos_1=scale_rotate((*pnts)[itemInMotion->n3], view, true);
-        CtrlMotionPos_2=scale_rotate((*pnts)[itemInMotion->n4], view, true);
-        CtrlMotionPos_3=scale_rotate((*pnts)[itemInMotion->n5], view, true);
+        CtrlMotionPos_1=scale_rotate((*pnts)[itemInMotion->n3], view, flag_scale_rotate);
+        CtrlMotionPos_2=scale_rotate((*pnts)[itemInMotion->n4], view, flag_scale_rotate);
+        CtrlMotionPos_3=scale_rotate((*pnts)[itemInMotion->n5], view, flag_scale_rotate);
         CtrlMotionPos_3+=offset;
         CtrlMotionPos_4=QPointF(itemInMotion->ctrlPos4.x(),itemInMotion->ctrlPos4.y());
-        EndMotionPos=scale_rotate((*pnts)[itemInMotion->n2], view, true);
+        EndMotionPos=scale_rotate((*pnts)[itemInMotion->n2], view, flag_scale_rotate);
         a=Length(CtrlMotionPos_3,CtrlMotionPos_1);
         b=Length(CtrlMotionPos_2,CtrlMotionPos_1);
         t_start=CtrlMotionPos_4.x();
@@ -2270,6 +2448,7 @@ void ShapeElFigure::moveItemTo(const QPointF &pos,QVector <ShapeItem> &shapeItem
         line1=QLineF(CtrlMotionPos_1,CtrlMotionPos_3);
         if (CtrlMotionPos_3.y()<=CtrlMotionPos_1.y()) ang=Angle(line1,line2);
         else ang=360-Angle(line1,line2);
+        Angle_temp=ang;
         StartMotionPos=QPointF(CtrlMotionPos_1.x()+ROTATE(ARC(t_start,a,b),ang).x(),
                                CtrlMotionPos_1.y()-ROTATE(ARC(t_start,a,b),ang).y());
         EndMotionPos=QPointF(CtrlMotionPos_1.x()+ROTATE(ARC(t_end,a,b),ang).x(),
@@ -2287,10 +2466,10 @@ void ShapeElFigure::moveItemTo(const QPointF &pos,QVector <ShapeItem> &shapeItem
         else ang=Angle(line1,line2);
         if(MotionWidth==1 && MotionBorderWidth==0)
             shapeItems.append( ShapeItem(painter_path(MotionWidth+1,MotionBorderWidth, 1, ang, StartMotionPos, EndMotionPos), painter_path_simple(1, ang, StartMotionPos,EndMotionPos),
-                               MotionNum_1, MotionNum_2, -1, -1, -1, QPointF(0,0), MotionBrush, MotionPen, MotionPenSimple, MotionWidth, MotionBorderWidth, 1) );
+                               MotionNum_1, MotionNum_2, -1, -1, -1, QPointF(0,0), MotionBrush, MotionPen, MotionPenSimple, MotionWidth, MotionBorderWidth, 1,Angle_temp) );
         else
             shapeItems.append( ShapeItem(painter_path(MotionWidth,MotionBorderWidth, 1, ang, StartMotionPos, EndMotionPos), painter_path_simple(1, ang, StartMotionPos,EndMotionPos),
-                               MotionNum_1, MotionNum_2, -1, -1, -1, QPointF(0,0), MotionBrush, MotionPen, MotionPenSimple, MotionWidth, MotionBorderWidth, 1) );
+                               MotionNum_1, MotionNum_2, -1, -1, -1, QPointF(0,0), MotionBrush, MotionPen, MotionPenSimple, MotionWidth, MotionBorderWidth, 1,Angle_temp) );
         rectPath.addRect(QRectF(QPointF(StartMotionPos.x()-4,StartMotionPos.y()-4),QSize(8,8)));
 	
         rectItems.append( RectItem(rectPath ,MotionNum_1, QBrush(QColor(127,127,127,128),Qt::SolidPattern),
@@ -2300,8 +2479,8 @@ void ShapeElFigure::moveItemTo(const QPointF &pos,QVector <ShapeItem> &shapeItem
         rectItems.append( RectItem(rectPath ,MotionNum_2, QBrush(QColor(127,127,127,128),Qt::SolidPattern),
                           QPen(QColor(0, 0, 0),1, Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin)) );
         rectPath=newPath;
-        StartMotionPos=unscale_unrotate(StartMotionPos, view, true);
-        EndMotionPos=unscale_unrotate(EndMotionPos, view, true);
+        StartMotionPos=unscale_unrotate(StartMotionPos, view, flag_scale_rotate);
+        EndMotionPos=unscale_unrotate(EndMotionPos, view, flag_scale_rotate);
         (*pnts).insert(MotionNum_1,StartMotionPos);
         (*pnts).insert(MotionNum_2,EndMotionPos);
     }
@@ -2317,11 +2496,11 @@ void ShapeElFigure::moveItemTo(const QPointF &pos,QVector <ShapeItem> &shapeItem
         if(MotionWidth==1 && MotionBorderWidth==0)
             shapeItems.append( ShapeItem(painter_path(MotionWidth+1,MotionBorderWidth, 2, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4),
                                painter_path_simple(2, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4),
-                                       MotionNum_1,MotionNum_2,MotionNum_3,MotionNum_4,MotionNum_5,CtrlMotionPos_4, MotionBrush,MotionPen, MotionPenSimple, MotionWidth, MotionBorderWidth, 2) );
+                                       MotionNum_1,MotionNum_2,MotionNum_3,MotionNum_4,MotionNum_5,CtrlMotionPos_4, MotionBrush,MotionPen, MotionPenSimple, MotionWidth, MotionBorderWidth, 2,Angle_temp) );
         else
             shapeItems.append( ShapeItem(painter_path(MotionWidth,MotionBorderWidth, 2, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4),
                                painter_path_simple(2, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4),
-                                               MotionNum_1,MotionNum_2,MotionNum_3,MotionNum_4,MotionNum_5,CtrlMotionPos_4, MotionBrush,MotionPen, MotionPenSimple, MotionWidth, MotionBorderWidth, 2) );
+                                       MotionNum_1,MotionNum_2,MotionNum_3,MotionNum_4,MotionNum_5,CtrlMotionPos_4, MotionBrush,MotionPen, MotionPenSimple, MotionWidth, MotionBorderWidth, 2,Angle_temp) );
         rectPath.addRect(QRectF(QPointF(StartMotionPos.x()-4,StartMotionPos.y()-4),QSize(8,8)));
         rectItems.append( RectItem(rectPath,MotionNum_1,QBrush(QColor(127,127,127,128),Qt::SolidPattern),
                           QPen(QColor(0, 0, 0),1, Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin)) );
@@ -2344,11 +2523,11 @@ void ShapeElFigure::moveItemTo(const QPointF &pos,QVector <ShapeItem> &shapeItem
                           QPen(QColor(0, 0, 0),1, Qt::SolidLine,Qt::FlatCap, Qt::MiterJoin)) );
         rectPath=newPath;
         
-        StartMotionPos=unscale_unrotate(StartMotionPos, view, true);
-        EndMotionPos=unscale_unrotate(EndMotionPos, view, true);
-        CtrlMotionPos_1=unscale_unrotate(CtrlMotionPos_1, view, true);
-        CtrlMotionPos_2=unscale_unrotate(CtrlMotionPos_2, view, true);
-        CtrlMotionPos_3=unscale_unrotate(CtrlMotionPos_3, view, true);
+        StartMotionPos=unscale_unrotate(StartMotionPos, view, flag_scale_rotate);
+        EndMotionPos=unscale_unrotate(EndMotionPos, view, flag_scale_rotate);
+        CtrlMotionPos_1=unscale_unrotate(CtrlMotionPos_1, view, flag_scale_rotate);
+        CtrlMotionPos_2=unscale_unrotate(CtrlMotionPos_2, view, flag_scale_rotate);
+        CtrlMotionPos_3=unscale_unrotate(CtrlMotionPos_3, view, flag_scale_rotate);
         (*pnts).insert(MotionNum_1,StartMotionPos);
         (*pnts).insert(MotionNum_2,EndMotionPos);
         (*pnts).insert(MotionNum_3,CtrlMotionPos_1);
@@ -2367,11 +2546,11 @@ void ShapeElFigure::moveItemTo(const QPointF &pos,QVector <ShapeItem> &shapeItem
         if(MotionWidth==1 && MotionBorderWidth==0)
             shapeItems.append( ShapeItem(painter_path(MotionWidth+1,MotionBorderWidth, 3, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2),
                                painter_path_simple(3, ang,StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2),
-                                       MotionNum_1,MotionNum_2,MotionNum_3, MotionNum_4,-1,QPointF(0,0),MotionBrush,MotionPen,MotionPenSimple,MotionWidth, MotionBorderWidth, 3) );
+                                       MotionNum_1,MotionNum_2,MotionNum_3, MotionNum_4,-1,QPointF(0,0),MotionBrush,MotionPen,MotionPenSimple,MotionWidth, MotionBorderWidth, 3,Angle_temp) );
         else
             shapeItems.append( ShapeItem(painter_path(MotionWidth,MotionBorderWidth, 3, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2),
                                painter_path_simple(3, ang,StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2),
-                                               MotionNum_1,MotionNum_2,MotionNum_3, MotionNum_4,-1,QPointF(0,0),MotionBrush,MotionPen,MotionPenSimple,MotionWidth, MotionBorderWidth, 3) );
+                                       MotionNum_1,MotionNum_2,MotionNum_3, MotionNum_4,-1,QPointF(0,0),MotionBrush,MotionPen,MotionPenSimple,MotionWidth, MotionBorderWidth, 3,Angle_temp) );
         rectPath.addRect(QRectF(QPointF(StartMotionPos.x()-4,StartMotionPos.y()-4),QSize(8,8)));
         rectItems.append( RectItem(rectPath ,MotionNum_1, QBrush(QColor(127,127,127,128),Qt::SolidPattern),
                           QPen(QColor(0, 0, 0),1, Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin)) );
@@ -2388,10 +2567,10 @@ void ShapeElFigure::moveItemTo(const QPointF &pos,QVector <ShapeItem> &shapeItem
         rectItems.append( RectItem(rectPath,MotionNum_4, QBrush(QColor(127,127,127,128),Qt::SolidPattern),
                           QPen(QColor(0, 0, 0),1, Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin)) );
         rectPath=newPath;
-        StartMotionPos=unscale_unrotate(StartMotionPos, view, true);
-        EndMotionPos=unscale_unrotate(EndMotionPos, view, true);
-        CtrlMotionPos_1=unscale_unrotate(CtrlMotionPos_1, view, true);
-        CtrlMotionPos_2=unscale_unrotate(CtrlMotionPos_2, view, true);
+        StartMotionPos=unscale_unrotate(StartMotionPos, view, flag_scale_rotate);
+        EndMotionPos=unscale_unrotate(EndMotionPos, view, flag_scale_rotate);
+        CtrlMotionPos_1=unscale_unrotate(CtrlMotionPos_1, view, flag_scale_rotate);
+        CtrlMotionPos_2=unscale_unrotate(CtrlMotionPos_2, view, flag_scale_rotate);
         (*pnts).insert(MotionNum_1,StartMotionPos);
         (*pnts).insert(MotionNum_2,EndMotionPos);
         (*pnts).insert(MotionNum_3,CtrlMotionPos_1);
@@ -2788,9 +2967,9 @@ void ShapeElFigure::Move_all(QPointF pos,QVector <ShapeItem> &shapeItems,PntMap 
             if (i==0 && !flag_down && !flag_up && !flag_right && !flag_left) offset=pos-previousPosition_all;
             if (i>0)
                 if (arc_rect_array[i]==0) 
-                    offset=scale_rotate((*pnts)[shapeItems[index_array[0]].n1], view, true)-Prev_pos_1;
+                    offset=scale_rotate((*pnts)[shapeItems[index_array[0]].n1], view, flag_scale_rotate)-Prev_pos_1;
                 else 
-                    offset=scale_rotate((*pnts)[shapeItems[index_array[0]].n2], view, true)-Prev_pos_2;
+                    offset=scale_rotate((*pnts)[shapeItems[index_array[0]].n2], view, flag_scale_rotate)-Prev_pos_2;
             rect_num=fig_rect_array[i];
             arc_rect=arc_rect_array[i];
         }
@@ -2798,8 +2977,8 @@ void ShapeElFigure::Move_all(QPointF pos,QVector <ShapeItem> &shapeItems,PntMap 
         moveItemTo(pos,shapeItems,pnts,view);
         if (i==0 && flag_arc_rect_3_4)
         {
-            Prev_pos_1=scale_rotate((*pnts)[shapeItems[index_array[0]].n1], view, true);
-            Prev_pos_2=scale_rotate((*pnts)[shapeItems[index_array[0]].n2], view, true);
+            Prev_pos_1=scale_rotate((*pnts)[shapeItems[index_array[0]].n1], view, flag_scale_rotate);
+            Prev_pos_2=scale_rotate((*pnts)[shapeItems[index_array[0]].n2], view, flag_scale_rotate);
         }
     }
     if(inundationItems.size())
@@ -2919,9 +3098,11 @@ QPainterPath ShapeElFigure::painter_path(float el_width, float el_border_width, 
     //-- if arc --
     if(el_type==2)
     {
+     
         arc_a=Length(QPointF(TSYS::realRound(el_p5.x(),2,true),TSYS::realRound(el_p5.y(),2,true)),QPointF(TSYS::realRound(el_p3.x(),2,true),TSYS::realRound(el_p3.y(),2,true)))
-                +el_width/2+el_border_width;
-        arc_b=Length(QPointF(TSYS::realRound(el_p3.x(),2,true),TSYS::realRound(el_p3.y(),2,true)),QPointF(TSYS::realRound(el_p4.x(),2,true),TSYS::realRound(el_p4.y(),2,true)))+el_width/2+el_border_width;
+                +el_width/2+el_border_width/2;
+        arc_b=Length(QPointF(TSYS::realRound(el_p3.x(),2,true),TSYS::realRound(el_p3.y(),2,true)),QPointF(TSYS::realRound(el_p4.x(),2,true),TSYS::realRound(el_p4.y(),2,true)))+el_width/2+el_border_width/2;
+        
         arc_a_small=arc_a-el_width-el_border_width;
         arc_b_small=arc_b-el_width-el_border_width;
         t_start=el_p6.x();
@@ -3198,7 +3379,8 @@ bool ShapeElFigure::Inundation (QPointF point, QVector <ShapeItem> &shapeItems, 
     {
         InundationPath=Create_Inundation_Path(inundation_fig_num, shapeItems, pnts,view);
         inundation_fig_num=Inundation_sort(InundationPath, inundation_fig_num, shapeItems, pnts, view);
-        InundationPath=Create_Inundation_Path(inundation_fig_num, shapeItems, pnts,view);
+        if(flag_scale_rotate)
+            InundationPath=Create_Inundation_Path(inundation_fig_num, shapeItems, pnts,view);
         for(int i=0; i<inundation_fig_num.size(); i++)
             Inundation_vector.push_back(0);
         Inundation_vector=inundation_fig_num;
@@ -3214,30 +3396,31 @@ QVector <int> ShapeElFigure::Inundation_sort(QPainterPath InundationPath, QVecto
                 (shapeItems[inundation_fig_num[p]].n1==shapeItems[j].n2 && shapeItems[inundation_fig_num[p]].n2==shapeItems[j].n1))
             {
                 if(shapeItems[j].type==2  && p!=j)
-                    if(InundationPath.contains(scale_rotate((*pnts)[shapeItems[j].n4], view, true)))
+                    if(InundationPath.contains(scale_rotate((*pnts)[shapeItems[j].n4], view, flag_scale_rotate)))
                         inundation_fig_num[p]=j;
                 if(shapeItems[j].type==3 && p!=j && shapeItems[inundation_fig_num[p]].type!=2)
-                    if(InundationPath.contains(scale_rotate((*pnts)[shapeItems[j].n4], view, true)) && 
-                        InundationPath.contains(scale_rotate((*pnts)[shapeItems[j].n3], view, true)))
+                    if(InundationPath.contains(scale_rotate((*pnts)[shapeItems[j].n4], view, flag_scale_rotate)) && 
+                       InundationPath.contains(scale_rotate((*pnts)[shapeItems[j].n3], view, flag_scale_rotate)))
                         inundation_fig_num[p]=j;
             }
     return inundation_fig_num;
 }
 
 //- detecting the figures, which count <=2 for fill -
-bool ShapeElFigure::Inundation_1_2(QPointF point, QVector <ShapeItem> &shapeItems, QVector <InundationItem> &inundationItems,  PntMap *pnts, WdgView *view)
+bool ShapeElFigure::Inundation_1_2(QPointF point, QVector <ShapeItem> &shapeItems, QVector <InundationItem> &inundationItems,  PntMap *pnts, WdgView *view, int number)
 {
     QPainterPath InundationPath_1_2;
     QVector <int> in_fig_num;
-    bool flag_break;
+    bool flag_break, fl_brk;
     flag_break=false;
+    fl_brk=false;
     QBrush fill_brush(QColor(0,0,0,0),Qt::SolidPattern), fill_img_brush;
     fill_brush.setColor(view->dc()["fillClr"].value<QColor>());
     fill_img_brush=view->dc()["fillImg"].value<QBrush>();
     for(int i=0; i<shapeItems.size(); i++)
     {
         if(shapeItems[i].type==2 )
-            if(scale_rotate((*pnts)[shapeItems[i].n1], view, true).toPoint()==scale_rotate((*pnts)[shapeItems[i].n2], view, true).toPoint())
+            if(scale_rotate((*pnts)[shapeItems[i].n1], view, flag_scale_rotate).toPoint()==scale_rotate((*pnts)[shapeItems[i].n2], view, flag_scale_rotate).toPoint())
         {
             if(in_fig_num.size())
                 in_fig_num.clear();
@@ -3246,8 +3429,32 @@ bool ShapeElFigure::Inundation_1_2(QPointF point, QVector <ShapeItem> &shapeItem
             InundationPath_1_2=Create_Inundation_Path(in_fig_num, shapeItems, pnts,view);
             if(InundationPath_1_2.contains(point))
             {
-                inundationItems.push_back(InundationItem(InundationPath_1_2,fill_brush,fill_img_brush, in_fig_num));
-                flag_break=true;
+                for(int i=0; i<inundationItems.size(); i++)
+                    if (inundationItems[i].path == InundationPath_1_2)
+                    {
+                        fl_brk=true;
+                        break;
+                    }
+                if(!fl_brk)
+                {
+                    if(number==-1)
+                        inundationItems.push_back(InundationItem(InundationPath_1_2, fill_brush, fill_img_brush, in_fig_num,Append_Point( point, shapeItems, pnts )));
+                    else
+                    {
+                        if(!flag_scale_rotate)
+                        {
+                            Inundation_vector=in_fig_num;
+                            InundationPath=InundationPath_1_2;
+                        }
+                        else
+                        {
+                            inundationItems[number].path=InundationPath_1_2;
+                            inundationItems[number].number_shape=in_fig_num;
+                        }
+                    }
+                        
+                    flag_break=true;
+                }
             }
         }
         if(flag_break)
@@ -3268,8 +3475,32 @@ bool ShapeElFigure::Inundation_1_2(QPointF point, QVector <ShapeItem> &shapeItem
                     InundationPath_1_2=Create_Inundation_Path(in_fig_num, shapeItems, pnts,view);
                     if(InundationPath_1_2.contains(point))
                     {
-                        inundationItems.push_back(InundationItem(InundationPath_1_2,fill_brush,fill_img_brush, in_fig_num));
-                        flag_break=true;
+                        for(int i=0; i<inundationItems.size(); i++)
+                            if (inundationItems[i].path == InundationPath_1_2)
+                        {
+                            fl_brk=true;
+                            break;
+                        }
+                        if(!fl_brk)
+                        {
+                            if(number==-1)
+                                inundationItems.push_back(InundationItem(InundationPath_1_2, fill_brush, fill_img_brush, in_fig_num,Append_Point( point, shapeItems, pnts )));
+                            else
+                            {
+                                if(!flag_scale_rotate)
+                                {
+                                    Inundation_vector=in_fig_num;
+                                    InundationPath=InundationPath_1_2;
+                                }
+                                else
+                                {
+                                    inundationItems[number].path=InundationPath_1_2;
+                                    inundationItems[number].number_shape=in_fig_num;
+                                }
+                            }
+                        
+                            flag_break=true;
+                        }
                     }
                 }
                 if(flag_break)
@@ -3280,25 +3511,29 @@ bool ShapeElFigure::Inundation_1_2(QPointF point, QVector <ShapeItem> &shapeItem
     return false;
 }
 
- QPointF ShapeElFigure::scale_rotate(QPointF point, WdgView *view, bool flag_scale)
+QPointF ShapeElFigure::scale_rotate(QPointF point, WdgView *view, bool flag_scale)
 {
-    QPointF center= QPointF((view->sizeF().width())/(2*view->xScale(true)), (view->sizeF().height())/(2*view->yScale(true))).toPoint();
-    point=point-center;
-    point=ROTATE(point, view->dc()["orient"].toDouble());
-    point=point+center;
     if(flag_scale)
+    {
+        QPointF center= QPointF((view->sizeF().width())/(2*view->xScale(true)), (view->sizeF().height())/(2*view->yScale(true))).toPoint();
+        point=point-center;
+        point=ROTATE(point, view->dc()["orient"].toDouble());
+        point=point+center;
         point=QPointF(point.x()*view->xScale(true), point.y()*view->yScale(true));
+    }
     return point;
 }
 
 QPointF ShapeElFigure::unscale_unrotate(QPointF point, WdgView *view, bool flag_scale)
 {
-    QPointF center= QPointF((view->sizeF().width())/(2*view->xScale(true)), (view->sizeF().height())/(2*view->yScale(true))).toPoint();
     if(flag_scale)
+    {
+        QPointF center= QPointF((view->sizeF().width())/(2*view->xScale(true)), (view->sizeF().height())/(2*view->yScale(true))).toPoint();
         point=QPointF(point.x()/view->xScale(true), point.y()/view->yScale(true));
-    point=point-center;
-    point=ROTATE(point, 360-view->dc()["orient"].toDouble());
-    point=point+center;
+        point=point-center;
+        point=ROTATE(point, 360-view->dc()["orient"].toDouble());
+        point=point+center;
+    }
     return point;
 }
 
@@ -3314,47 +3549,62 @@ QPainterPath ShapeElFigure::Create_Inundation_Path (QVector <int> in_fig_num, QV
     path=newPath;
     if(shapeItems[in_fig_num[0]].n1<shapeItems[in_fig_num[0]].n2)
     {
-        path.moveTo(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n1], view, true).x(), 2, true),
-                    TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n1], view, true).y(), 2, true));
+        path.moveTo(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n1], view, flag_scale_rotate).x(), 2, true),
+                    TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n1], view, flag_scale_rotate).y(), 2, true));
         switch(shapeItems[in_fig_num[0]].type)
         {
             case 1:
-                path.lineTo(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n2], view, true).x()),
-                            TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n2], view, true).y()));
+                path.lineTo(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n2], view, flag_scale_rotate).x()),
+                            TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n2], view, flag_scale_rotate).y(),2,true));
                 break;
             case 2:
-                line2=QLineF(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n5], view, true).x(), 2, true),
-                             TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n5], view, true).y(), 2, true),
-                             TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n5], view, true).x(), 2, true) + 10, 
-                             TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n5], view, true).y(), 2, true));
-                line1=QLineF( TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, true).x(), 2, true),
-                              TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, true).y(), 2, true),
-                              TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n5], view, true).x(), 2, true),
-                              TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n5], view, true).y(), 2, true));
-                if (TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n5], view, true).y(), 2, true)<=TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, true).y(), 2, true)) 
-                    ang=line1.angle(line2);
-                else ang=360-line1.angle(line2);
-                arc_a=Length(QPointF(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, true).x(), 2, true),
-                                     TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, true).y(), 2, true)),
-                             QPointF(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n5], view, true).x(), 2, true),
-                                     TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n5], view, true).y(), 2, true)));
-                arc_b=Length(QPointF(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, true).x(), 2, true),
-                                     TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, true).y(), 2, true)),
-                             QPointF(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n4], view, true).x(), 2, true),
-                                     TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n4], view, true).y(), 2, true)));
+                if(flag_Angle_temp || !flag_scale_rotate )
+                {
+                    line2=QLineF((*pnts)[shapeItems[in_fig_num[0]].n3].x(),
+                                   (*pnts)[shapeItems[in_fig_num[0]].n3].y(),
+                                     (*pnts)[shapeItems[in_fig_num[0]].n3].x()+10,  
+                                       (*pnts)[shapeItems[in_fig_num[0]].n3].y());
+                    line1=QLineF((*pnts)[shapeItems[in_fig_num[0]].n3].x(),
+                                   (*pnts)[shapeItems[in_fig_num[0]].n3].y(),
+                                     (*pnts)[shapeItems[in_fig_num[0]].n5].x(),
+                                       (*pnts)[shapeItems[in_fig_num[0]].n5].y());
+                    if ((*pnts)[shapeItems[in_fig_num[0]].n5].y()<=(*pnts)[shapeItems[in_fig_num[0]].n3].y()) 
+                        ang=line1.angle(line2);
+                    else ang=360-line1.angle(line2);
+                }
+                else
+                    ang=shapeItems[in_fig_num[0]].Angle_temp;
+                
+                if(!flag_scale_rotate)
+                {
+                    arc_a=Length((*pnts)[shapeItems[in_fig_num[0]].n3],(*pnts)[shapeItems[in_fig_num[0]].n5]);
+                    arc_b=Length((*pnts)[shapeItems[in_fig_num[0]].n3],QPointF(TSYS::realRound((*pnts)[shapeItems[in_fig_num[0]].n4].x(),2),
+                                   TSYS::realRound((*pnts)[shapeItems[in_fig_num[0]].n4].y(),2)));
+                }
+                else
+                {
+                    arc_a=Length(QPointF(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, flag_scale_rotate).x(), 2, true),
+                                 TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, flag_scale_rotate).y(), 2, true)),
+                            QPointF(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n5], view, flag_scale_rotate).x(), 2, true),
+                                    TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n5], view, flag_scale_rotate).y(), 2, true)));
+                    arc_b=Length(QPointF(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, flag_scale_rotate).x(), 2, true),
+                                 TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, flag_scale_rotate).y(), 2, true)),
+                            QPointF(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n4], view, flag_scale_rotate).x(), 2, true),
+                                    TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n4], view, flag_scale_rotate).y(), 2, true)));
+                }
                 t_start=shapeItems[in_fig_num[0]].ctrlPos4.x();
                 t_end=shapeItems[in_fig_num[0]].ctrlPos4.y();
                 for (t=t_start; t<t_end+0.00277777777778; t+=0.00277777777778) 
-                    path.lineTo(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, true).x()+ROTATE(ARC(t,arc_a,arc_b),ang).x(), 2, true),
-                                TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, true).y()-ROTATE(ARC(t,arc_a,arc_b),ang).y(), 2, true)); 
+                    path.lineTo(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, flag_scale_rotate).x()+ROTATE(ARC(t,arc_a,arc_b),ang).x(), 2, true),
+                                TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, flag_scale_rotate).y()-ROTATE(ARC(t,arc_a,arc_b),ang).y(), 2, true)); 
                 break;
             case 3:
-                path.cubicTo(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, true).x(), 2, true),
-                             TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, true).y(), 2, true),
-                             TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n4], view, true).x(), 2, true),
-                             TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n4], view, true).y(), 2, true),
-                             TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n2], view, true).x(), 2, true),
-                             TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n2], view, true).y(), 2, true));
+                path.cubicTo(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, flag_scale_rotate).x(), 2, true),
+                             TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, flag_scale_rotate).y(), 2, true),
+                                             TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n4], view, flag_scale_rotate).x(), 2, true),
+                                                     TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n4], view, flag_scale_rotate).y(), 2, true),
+                                                             TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n2], view, flag_scale_rotate).x(), 2, true),
+                                                                     TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n2], view, flag_scale_rotate).y(), 2, true));
     
                 break;
         }
@@ -3363,47 +3613,62 @@ QPainterPath ShapeElFigure::Create_Inundation_Path (QVector <int> in_fig_num, QV
     }
     else
     {
-        path.moveTo(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n2], view, true).x(), 2, true),
-                    TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n2], view, true).y(), 2, true));
+        path.moveTo(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n2], view, flag_scale_rotate).x(), 2, true),
+                    TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n2], view, flag_scale_rotate).y(), 2, true));
         switch(shapeItems[in_fig_num[0]].type)
         {
             case 1:
-                path.lineTo(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n1], view, true).x(), 2, true),
-                            TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n1], view, true).y(), 2, true));
+                path.lineTo(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n1], view, flag_scale_rotate).x(), 2, true),
+                            TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n1], view, flag_scale_rotate).y(), 2, true));
                 break;
             case 2:    
-                line2=QLineF( TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n5], view, true).x(), 2, true),
-                              TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n5], view, true).y(), 2, true),
-                              TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n5], view, true).x(), 2, true) + 10, 
-                              TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n5], view, true).y(), 2, true) );
-                line1=QLineF( TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, true).x(), 2, true),
-                              TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, true).y(), 2, true),
-                              TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n5], view, true).x(), 2, true),
-                              TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n5], view, true).y(), 2, true) ) ;
-                if (TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n5], view, true).y(), 2, true)<=TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, true).y(), 2, true)) 
-                    ang=line1.angle(line2);
-                else ang=360-line1.angle(line2);
-                arc_a=Length(QPointF(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, true).x(), 2, true),
-                                     TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, true).y(), 2, true)),
-                             QPointF(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n5], view, true).x(), 2, true),
-                                     TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n5], view, true).y(), 2, true)));
-                arc_b=Length(QPointF(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, true).x(), 2, true),
-                                     TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, true).y(), 2, true)),
-                             QPointF(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n4], view, true).x(), 2, true),
-                                     TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n4], view, true).y(), 2, true)));
+                if(flag_Angle_temp || !flag_scale_rotate )
+                {
+                    line2=QLineF((*pnts)[shapeItems[in_fig_num[0]].n3].x(),
+                                   (*pnts)[shapeItems[in_fig_num[0]].n3].y(),
+                                     (*pnts)[shapeItems[in_fig_num[0]].n3].x()+10,  
+                                       (*pnts)[shapeItems[in_fig_num[0]].n3].y());
+                    line1=QLineF((*pnts)[shapeItems[in_fig_num[0]].n3].x(),
+                                   (*pnts)[shapeItems[in_fig_num[0]].n3].y(),
+                                     (*pnts)[shapeItems[in_fig_num[0]].n5].x(),
+                                       (*pnts)[shapeItems[in_fig_num[0]].n5].y());
+                    if ((*pnts)[shapeItems[in_fig_num[0]].n5].y()<=(*pnts)[shapeItems[in_fig_num[0]].n3].y()) 
+                        ang=line1.angle(line2);
+                    else ang=360-line1.angle(line2);
+                }
+                else
+                    ang=shapeItems[in_fig_num[0]].Angle_temp;
+                if(!flag_scale_rotate)
+                {
+                    arc_a=Length((*pnts)[shapeItems[in_fig_num[0]].n3],(*pnts)[shapeItems[in_fig_num[0]].n5]);
+                    arc_b=Length((*pnts)[shapeItems[in_fig_num[0]].n3],QPointF(TSYS::realRound((*pnts)[shapeItems[in_fig_num[0]].n4].x(),2),
+                                   TSYS::realRound((*pnts)[shapeItems[in_fig_num[0]].n4].y(),2)));
+                }
+                else
+                {
+                    arc_a=Length(QPointF(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, flag_scale_rotate).x(), 2, true),
+                                 TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, flag_scale_rotate).y(), 2, true)),
+                            QPointF(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n5], view, flag_scale_rotate).x(), 2, true),
+                                    TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n5], view, flag_scale_rotate).y(), 2, true)));
+                    arc_b=Length(QPointF(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, flag_scale_rotate).x(), 2, true),
+                                 TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, flag_scale_rotate).y(), 2, true)),
+                            QPointF(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n4], view, flag_scale_rotate).x(), 2, true),
+                                    TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n4], view, flag_scale_rotate).y(), 2, true)));
+                }
+
                 t_start=shapeItems[in_fig_num[0]].ctrlPos4.x();
                 t_end=shapeItems[in_fig_num[0]].ctrlPos4.y();
                 for (t=t_end; t>t_start+0.00277777777778; t-=0.00277777777778) 
-                    path.lineTo(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, true).x()+ROTATE(ARC(t,arc_a,arc_b),ang).x(), 2, true),
-                                TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, true).y()-ROTATE(ARC(t,arc_a,arc_b),ang).y(), 2, true)); 
+                    path.lineTo(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, flag_scale_rotate).x()+ROTATE(ARC(t,arc_a,arc_b),ang).x(), 2, true),
+                                TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, flag_scale_rotate).y()-ROTATE(ARC(t,arc_a,arc_b),ang).y(), 2, true)); 
                 break;
             case 3:
-                path.cubicTo(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n4], view, true).x(), 2, true),
-                             TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n4], view, true).y(), 2, true),
-                             TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, true).x(), 2, true),
-                             TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, true).y(), 2, true),
-                             TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n1], view, true).x(), 2, true),
-                             TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n1], view, true).y(), 2, true));
+                path.cubicTo(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n4], view, flag_scale_rotate).x(), 2, true),
+                             TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n4], view, flag_scale_rotate).y(), 2, true),
+                                             TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, flag_scale_rotate).x(), 2, true),
+                                                     TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, flag_scale_rotate).y(), 2, true),
+                                                             TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n1], view, flag_scale_rotate).x(), 2, true),
+                                                                     TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n1], view, flag_scale_rotate).y(), 2, true));
                 break;
         }
         flag_n2=false;
@@ -3464,44 +3729,58 @@ QPainterPath ShapeElFigure::Create_Inundation_Path (QVector <int> in_fig_num, QV
                 switch(shapeItems[in_index].type)
                 {
                     case 1:
-                        path.lineTo(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n2], view, true).x(), 2, true),
-                                    TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n2], view, true).y(), 2, true));
+                        path.lineTo(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n2], view, flag_scale_rotate).x(), 2, true),
+                                    TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n2], view, flag_scale_rotate).y(), 2, true));
                         break;
                     case 2:
-                        line2=QLineF(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n5], view, true).x(), 2, true),
-                                     TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n5], view, true).y(), 2, true),
-                                     TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n5], view, true).x(), 2, true)+10,
-                                     TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n5], view, true).y(), 2, true) );
-                        line1=QLineF( TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n3], view, true).x(), 2, true),
-                                      TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n3], view, true).y(), 2, true), 
-                                      TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n5], view, true).x(), 2, true),
-                                      TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n5], view, true).y(), 2, true) );
-                        if (TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n5], view, true).y(), 2, true)<=
-                            TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n3], view, true).y(), 2, true)) 
-                            ang=line1.angle(line2);
-                        else ang=360-line1.angle(line2);
-                        arc_a=Length(QPointF(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n3], view, true).x(), 2, true),
-                                             TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n3], view, true).y(), 2, true)),
-                                     QPointF(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n5], view, true).x(), 2, true),
-                                             TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n5], view, true).y(), 2, true)));
-                        arc_b=Length(QPointF(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n3], view, true).x(), 2, true),
-                                             TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n3], view, true).y(), 2, true)),
-                                     QPointF(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n4], view, true).x(), 2, true),
-                                             TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n4], view, true).y(), 2, true)));
+                        if(flag_Angle_temp || !flag_scale_rotate )
+                        {
+                            line2=QLineF((*pnts)[shapeItems[in_fig_num[0]].n3].x(),
+                                           (*pnts)[shapeItems[in_fig_num[0]].n3].y(),
+                                             (*pnts)[shapeItems[in_fig_num[0]].n3].x()+10,  
+                                               (*pnts)[shapeItems[in_fig_num[0]].n3].y());
+                            line1=QLineF((*pnts)[shapeItems[in_fig_num[0]].n3].x(),
+                                           (*pnts)[shapeItems[in_fig_num[0]].n3].y(),
+                                             (*pnts)[shapeItems[in_fig_num[0]].n5].x(),
+                                               (*pnts)[shapeItems[in_fig_num[0]].n5].y());
+                            if ((*pnts)[shapeItems[in_fig_num[0]].n5].y()<=(*pnts)[shapeItems[in_fig_num[0]].n3].y()) 
+                                ang=line1.angle(line2);
+                            else ang=360-line1.angle(line2);
+                        }
+                        else
+                            ang=shapeItems[in_fig_num[0]].Angle_temp;
+                        if(!flag_scale_rotate)
+                        {
+                            arc_a=Length((*pnts)[shapeItems[in_fig_num[0]].n3],(*pnts)[shapeItems[in_fig_num[0]].n5]);
+                            arc_b=Length((*pnts)[shapeItems[in_fig_num[0]].n3],QPointF(TSYS::realRound((*pnts)[shapeItems[in_fig_num[0]].n4].x(),2),
+                                           TSYS::realRound((*pnts)[shapeItems[in_fig_num[0]].n4].y(),2)));
+                        }
+                        else
+                        {
+                            arc_a=Length(QPointF(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, flag_scale_rotate).x(), 2, true),
+                                         TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, flag_scale_rotate).y(), 2, true)),
+                                    QPointF(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n5], view, flag_scale_rotate).x(), 2, true),
+                                            TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n5], view, flag_scale_rotate).y(), 2, true)));
+                            arc_b=Length(QPointF(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, flag_scale_rotate).x(), 2, true),
+                                         TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, flag_scale_rotate).y(), 2, true)),
+                                    QPointF(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n4], view, flag_scale_rotate).x(), 2, true),
+                                            TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n4], view, flag_scale_rotate).y(), 2, true)));
+                        }
+
                         t_start=shapeItems[in_index].ctrlPos4.x();
                         t_end=shapeItems[in_index].ctrlPos4.y();
                         for (t=t_start; t<t_end+0.00277777777778; t+=0.00277777777778) 
-                            path.lineTo(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n3], view, true).x()+ROTATE(ARC(t,arc_a,arc_b),ang).x(), 2, true),
-                                        TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n3], view, true).y()-ROTATE(ARC(t,arc_a,arc_b),ang).y(), 2, true)); 
+                            path.lineTo(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n3], view, flag_scale_rotate).x()+ROTATE(ARC(t,arc_a,arc_b),ang).x(), 2, true),
+                                        TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n3], view, flag_scale_rotate).y()-ROTATE(ARC(t,arc_a,arc_b),ang).y(), 2, true)); 
                         break;
                 
                     case 3:
-                        path.cubicTo(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n3], view, true).x(), 2, true),
-                                     TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n3], view, true).y(), 2, true),
-                                     TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n4], view, true).x(), 2, true),
-                                     TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n4], view, true).y(), 2, true),
-                                     TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n2], view, true).x(), 2, true),
-                                     TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n2], view, true).y(), 2, true));
+                        path.cubicTo(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n3], view, flag_scale_rotate).x(), 2, true),
+                                     TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n3], view, flag_scale_rotate).y(), 2, true),
+                                             TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n4], view, flag_scale_rotate).x(), 2, true),
+                                                     TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n4], view, flag_scale_rotate).y(), 2, true),
+                                                             TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n2], view, flag_scale_rotate).x(), 2, true),
+                                                                     TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n2], view, flag_scale_rotate).y(), 2, true));
                         break;
                 }
                 flag_n2=true;
@@ -3511,43 +3790,57 @@ QPainterPath ShapeElFigure::Create_Inundation_Path (QVector <int> in_fig_num, QV
                 switch(shapeItems[in_index].type)
                 {
                     case 1:
-                        path.lineTo(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n1], view, true).x(), 2, true),
-                                    TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n1], view, true).y(), 2, true));
+                        path.lineTo(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n1], view, flag_scale_rotate).x(), 2, true),
+                                    TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n1], view, flag_scale_rotate).y(), 2, true));
                         break;
                     case 2:
-                        line2=QLineF(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n5], view, true).x(), 2, true),
-                                     TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n5], view, true).y(), 2, true),
-                                     TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n5], view, true).x(), 2, true)+10,
-                                     TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n5], view, true).y(), 2, true) );
-                        line1=QLineF( TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n3], view, true).x(), 2, true),
-                                      TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n3], view, true).y(), 2, true), 
-                                      TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n5], view, true).x(), 2, true),
-                                      TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n5], view, true).y(), 2, true) );
-                        if (TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n5], view, true).y(), 2, true)<=
-                            TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n3], view, true).y(), 2, true)) 
-                            ang=line1.angle(line2);
-                        else ang=360-line1.angle(line2);
-                        arc_a=Length(QPointF(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n3], view, true).x(), 2, true),
-                                             TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n3], view, true).y(), 2, true)),
-                                     QPointF(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n5], view, true).x(), 2, true),
-                                             TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n5], view, true).y(), 2, true)));
-                        arc_b=Length(QPointF(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n3], view, true).x(), 2, true),
-                                             TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n3], view, true).y(), 2, true)),
-                                     QPointF(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n4], view, true).x(), 2, true),
-                                             TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n4], view, true).y(), 2, true)));
+                        if(flag_Angle_temp || !flag_scale_rotate )
+                        {
+                            line2=QLineF((*pnts)[shapeItems[in_fig_num[0]].n3].x(),
+                                           (*pnts)[shapeItems[in_fig_num[0]].n3].y(),
+                                             (*pnts)[shapeItems[in_fig_num[0]].n3].x()+10,  
+                                               (*pnts)[shapeItems[in_fig_num[0]].n3].y());
+                            line1=QLineF((*pnts)[shapeItems[in_fig_num[0]].n3].x(),
+                                           (*pnts)[shapeItems[in_fig_num[0]].n3].y(),
+                                             (*pnts)[shapeItems[in_fig_num[0]].n5].x(),
+                                               (*pnts)[shapeItems[in_fig_num[0]].n5].y());
+                            if ((*pnts)[shapeItems[in_fig_num[0]].n5].y()<=(*pnts)[shapeItems[in_fig_num[0]].n3].y()) 
+                                ang=line1.angle(line2);
+                            else ang=360-line1.angle(line2);
+                        }
+                        else
+                            ang=shapeItems[in_fig_num[0]].Angle_temp;
+                        if(!flag_scale_rotate)
+                        {
+                            arc_a=Length((*pnts)[shapeItems[in_fig_num[0]].n3],(*pnts)[shapeItems[in_fig_num[0]].n5]);
+                            arc_b=Length((*pnts)[shapeItems[in_fig_num[0]].n3],QPointF(TSYS::realRound((*pnts)[shapeItems[in_fig_num[0]].n4].x(),2),
+                                           TSYS::realRound((*pnts)[shapeItems[in_fig_num[0]].n4].y(),2)));
+                        }
+                        else
+                        {
+                            arc_a=Length(QPointF(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, flag_scale_rotate).x(), 2, true),
+                                         TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, flag_scale_rotate).y(), 2, true)),
+                                    QPointF(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n5], view, flag_scale_rotate).x(), 2, true),
+                                            TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n5], view, flag_scale_rotate).y(), 2, true)));
+                            arc_b=Length(QPointF(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, flag_scale_rotate).x(), 2, true),
+                                         TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n3], view, flag_scale_rotate).y(), 2, true)),
+                                    QPointF(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n4], view, flag_scale_rotate).x(), 2, true),
+                                            TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_fig_num[0]].n4], view, flag_scale_rotate).y(), 2, true)));
+                        }
+
                         t_start=shapeItems[in_index].ctrlPos4.x();
                         t_end=shapeItems[in_index].ctrlPos4.y();
                         for (t=t_end; t>t_start+0.00277777777778; t-=0.00277777777778) 
-                            path.lineTo(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n3], view, true).x()+ROTATE(ARC(t,arc_a,arc_b),ang).x(), 2, true),
-                                        TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n3], view, true).y()-ROTATE(ARC(t,arc_a,arc_b),ang).y(), 2, true)); 
+                            path.lineTo(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n3], view, flag_scale_rotate).x()+ROTATE(ARC(t,arc_a,arc_b),ang).x(), 2, true),
+                                        TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n3], view, flag_scale_rotate).y()-ROTATE(ARC(t,arc_a,arc_b),ang).y(), 2, true)); 
                         break;
                     case 3:
-                        path.cubicTo(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n4], view, true).x(), 2, true),
-                                     TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n4], view, true).y(), 2, true),
-                                     TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n3], view, true).x(), 2, true),
-                                     TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n3], view, true).y(), 2, true),
-                                     TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n1], view, true).x(), 2, true),
-                                     TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n1], view, true).y(), 2, true));
+                        path.cubicTo(TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n4], view, flag_scale_rotate).x(), 2, true),
+                                     TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n4], view, flag_scale_rotate).y(), 2, true),
+                                             TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n3], view, flag_scale_rotate).x(), 2, true),
+                                                     TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n3], view, flag_scale_rotate).y(), 2, true),
+                                                             TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n1], view, flag_scale_rotate).x(), 2, true),
+                                                                     TSYS::realRound(scale_rotate((*pnts)[shapeItems[in_index].n1], view, flag_scale_rotate).y(), 2, true));
 
                         break;
                 }
