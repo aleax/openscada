@@ -395,7 +395,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    int ic_sz = vmin(w->size().width(), w->size().height()) - w->layout()->margin() - 5;
 		    ((QPushButton*)el_wdg)->setIconSize(QSize(ic_sz,ic_sz));
 		    ((QPushButton*)el_wdg)->setIcon(QPixmap::fromImage(img));
-		}
+		} else ((QPushButton*)el_wdg)->setIcon(QPixmap());
 		//- Color -
 		QColor clr(w->dc()["color"].toString());
 		((QPushButton*)el_wdg)->setPalette( clr.isValid() ? QPalette(clr) : QPalette() );
@@ -2455,7 +2455,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    up = true;
 	    break;
 	case -2:	//focus
-	    if( (bool)atoi(val.c_str()) == w->hasFocus() )	up = false;
+	    //if( (bool)atoi(val.c_str()) == w->hasFocus() )	up = false;
 	    break;
         case 5:         //en
     	    if( !qobject_cast<RunWdgView*>(w) )	{ up = false; break; }
@@ -2546,7 +2546,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	default: up = false;
     }
     
-    if( up && !w->allAttrLoad( ) ) w->update();
+    if( up && !w->allAttrLoad( ) )	w->update();
     
     return up;
 }
@@ -2570,7 +2570,7 @@ bool ShapeBox::event( WdgView *w, QEvent *event )
 
 	    //- Draw background -
 	    QColor bkcol = w->dc()["backColor"].value<QColor>();
-	    if(  bkcol.isValid() ) pnt.fillRect(dA,bkcol);
+	    if( bkcol.isValid() ) pnt.fillRect(dA,bkcol);
 	    QBrush bkbrsh = w->dc()["backImg"].value<QBrush>();
 	    if( bkbrsh.style() != Qt::NoBrush ) pnt.fillRect(dA,bkbrsh);
 	    
@@ -2578,9 +2578,8 @@ bool ShapeBox::event( WdgView *w, QEvent *event )
 	    borderDraw( pnt, dA, *(QPen*)w->dc()["border"].value<void*>(), w->dc()["bordStyle"].toInt() );
 	    
             //- Draw focused border -
-	    if( w->hasFocus() ) qDrawShadeRect(&pnt,dA,w->palette(),false,1);
+	    if( w->hasFocus() )	qDrawShadeRect(&pnt,dA,w->palette(),false,1);
 
-            event->accept();
             return true;
         }
     }

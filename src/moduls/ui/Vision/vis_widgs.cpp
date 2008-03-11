@@ -683,31 +683,45 @@ string WdgView::resGet( const string &res )
     return "";
 }
 
-void WdgView::load( const string& item )
-{
-    setAllAttrLoad(true);
-    
-    if( item.empty() || item == id() )
+void WdgView::load( const string& item, bool load, bool init )
+{   
+    //- Load from data model - 
+    if( load )
     {
-	childsUpdate( item==id() );
-	shapeUpdate( );
+	setAllAttrLoad(true);    
+	if( item.empty() || item == id() )
+	{
+	    childsUpdate( item==id() );
+	    shapeUpdate( );
 	
-	//- Request to widget for last attributes -
-	XMLNode req("get");	
-	req.setAttr("path",id()+"/%2fserv%2f0");
-	if( !cntrIfCmd(req) )
-	    for( int i_el = 0; i_el < req.childSize(); i_el++ )
-		attrSet("",req.childGet(i_el)->text(),atoi(req.childGet(i_el)->attr("pos").c_str()));
+	    //-- Request to widget for last attributes --
+	    XMLNode req("get");	
+	    req.setAttr("path",id()+"/%2fserv%2f0");
+	    if( !cntrIfCmd(req) )
+		for( int i_el = 0; i_el < req.childSize(); i_el++ )
+		    attrSet("",req.childGet(i_el)->text(),atoi(req.childGet(i_el)->attr("pos").c_str()));
+	}
+	setAllAttrLoad(false);
     }
-
-    setAllAttrLoad(false);
-    attrSet("","load",-1);
+    //- Init loaded data -     
+    if( (item.empty() || item == id()) && init && wLevel()>0 )	attrSet("","load",-1);
     
+    //- Going to children load and/or init -
     for( int i_c = 0; i_c < children().size(); i_c++ )
         if( qobject_cast<WdgView*>(children().at(i_c)) )
-    	    ((WdgView*)children().at(i_c))->load((item==id())?"":item);
+    	    ((WdgView*)children().at(i_c))->load((item==id())?"":item,load,(wLevel()>0)?init:false);
 
-    orderUpdate( );
+    //- Children widgets order update -
+    if( load ) orderUpdate( );
+
+    //- Post load init for root widget -
+    if( wLevel() == 0 )
+    {
+	attrSet("","load",-1);
+	for( int i_c = 0; i_c < children().size(); i_c++ )
+    	    if( qobject_cast<WdgView*>(children().at(i_c)) )
+    		((WdgView*)children().at(i_c))->load((item==id())?"":item,false,true);
+    }
 }
 
 void WdgView::childsUpdate( bool newLoad )

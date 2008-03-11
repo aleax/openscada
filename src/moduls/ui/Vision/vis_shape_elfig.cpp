@@ -82,7 +82,6 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
     double t_start, t_end, a, b, ang_t;
     float MotionWidth;
     QPainterPath circlePath;
-
     
     switch( uiPrmPos )
     {

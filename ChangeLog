@@ -7,7 +7,12 @@
 - /UI/VCAEngine, /UI/Vision, /UI/WebVision: Remove individual font attributes from primitives "Text".
 - FIX:/UI/Vision: Not full value attribute copy is fixed in process of element view change of primitive "FormEl" of type "Line edit".
 - FIX:/UI/VCAEngine: Page's self attributes load is fixed.
+- FIX:/UI/VCAEngine: Process not full links to parameter's attributes is fixed.
 - FIX:/UI/Vision: Dublicates of values into buffer process is fixed for primitive "Diagram".
+- FIX:/UI/Vision: Master page's init parent widget is fixed.
+- FIX:/UI/Vision: Clear button image for primitive "FormEl" is fixed.
+- FIX:/UI/Vision: Update widget on time of geting focus is fixed for primitive "Box".
+- !:/Vision: Separated load from data model and init data is made.
 - FIX:/UI/WebVision: Dublicates of values into buffer process is fixed for primitive "Diagram".
 - FIX:/UI/WebVision: Trend begin is fixed for primitive "Diagram".
 - FIX:/UI/WebVision: More line text visible and arguments padding is fixed for primitive "Text".

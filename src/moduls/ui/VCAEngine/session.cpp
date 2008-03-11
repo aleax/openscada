@@ -921,7 +921,8 @@ void SessWdg::calc( bool first, bool last )
 	{
 	    string wevent = eventGet(true);
 	    //- Process input links and constants -    
-	    AutoHD<Attr> attr;
+	    AutoHD<Attr> attr, attr1;
+	    AutoHD<TVal> vl;
 	    inLnkGet = true;
 	    for( int i_a = 0; i_a < m_attrLnkLs.size(); i_a++ )
 	    {
@@ -933,42 +934,34 @@ void SessWdg::calc( bool first, bool last )
 		    if( obj_tp == "val:" )	attr.at().setS(attr.at().cfgVal().substr(obj_tp.size()));
 		    else if( obj_tp == "prm:" )
 		    {			
+			try{ vl = SYS->daq().at().nodeAt(attr.at().cfgVal(),0,0,obj_tp.size()); }
+			catch(TError err) { attr.at().setS(EVAL_STR); continue; }
+			
 			if( attr.at().flgGlob()&Attr::Address )	
 		    	    attr.at().setS("/DAQ"+attr.at().cfgVal().substr(obj_tp.size()));
 			else switch( attr.at().type() )
 			{
-			    case TFld::Boolean:
-				attr.at().setB(((AutoHD<TVal>)SYS->daq().at().nodeAt(attr.at().cfgVal(),0,0,obj_tp.size())).at().getB());
-				break;
-			    case TFld::Integer:
-				attr.at().setI(((AutoHD<TVal>)SYS->daq().at().nodeAt(attr.at().cfgVal(),0,0,obj_tp.size())).at().getI());
-				break;
-			    case TFld::Real:
-				attr.at().setR(((AutoHD<TVal>)SYS->daq().at().nodeAt(attr.at().cfgVal(),0,0,obj_tp.size())).at().getR());
-				break;
-			    case TFld::String:
-				attr.at().setS(((AutoHD<TVal>)SYS->daq().at().nodeAt(attr.at().cfgVal(),0,0,obj_tp.size())).at().getS());
-				break;
+			    case TFld::Boolean:	attr.at().setB(vl.at().getB());	break;
+			    case TFld::Integer: attr.at().setI(vl.at().getI());	break;
+			    case TFld::Real:	attr.at().setR(vl.at().getR());	break;
+			    case TFld::String:	attr.at().setS(vl.at().getS());	break;
 			}
 		    }
 		    else if( obj_tp == "addr:" )
 			attr.at().setS(attr.at().cfgVal().substr(obj_tp.size()));
 		    else if( obj_tp == "wdg:" )
+		    {
+			try{ attr1 = mod->nodeAt(attr.at().cfgVal(),0,0,obj_tp.size()); }
+			catch(TError err) { attr.at().setS(EVAL_STR); continue; }
+			
 			switch( attr.at().type() )
 			{
-			    case TFld::Boolean:
-				attr.at().setB(((AutoHD<Attr>)mod->nodeAt(attr.at().cfgVal(),0,0,obj_tp.size())).at().getB());
-				break;
-			    case TFld::Integer:
-				attr.at().setI(((AutoHD<Attr>)mod->nodeAt(attr.at().cfgVal(),0,0,obj_tp.size())).at().getI());
-				break;
-			    case TFld::Real:
-				attr.at().setR(((AutoHD<Attr>)mod->nodeAt(attr.at().cfgVal(),0,0,obj_tp.size())).at().getR());
-				break;
-			    case TFld::String:
-				attr.at().setS(((AutoHD<Attr>)mod->nodeAt(attr.at().cfgVal(),0,0,obj_tp.size())).at().getS());
-				break;
-			}		    
+			    case TFld::Boolean:	attr.at().setB(attr1.at().getB()); break;
+			    case TFld::Integer:	attr.at().setI(attr1.at().getI()); break;
+			    case TFld::Real:	attr.at().setR(attr1.at().getR()); break;
+			    case TFld::String:	attr.at().setS(attr1.at().getS()); break;
+			}
+		    }
 		}
 		else if( attr.at().flgSelf()&Attr::CfgLnkIn )	attr.at().setS(EVAL_STR);
 	    }

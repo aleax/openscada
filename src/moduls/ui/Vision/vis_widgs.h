@@ -228,7 +228,7 @@ namespace VISION
 
 	public slots:
 	    virtual WdgView *newWdgItem( const string &iwid );
-	    virtual void load( const string& item );
+	    virtual void load( const string& item, bool load = true, bool init = true );
 	    
 	protected:
 	    //- Protected methods -

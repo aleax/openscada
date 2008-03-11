@@ -420,7 +420,7 @@ void VisRun::callPage( const string& pg_it, XMLNode *upw )
         if( master_pg ) wAttrSet(master_pg->id(),"pgOpen","0");
 	    
         //-- Create widget view --
-        master_pg = new RunPageView(pg_it,this,this);
+        master_pg = new RunPageView(pg_it,this,centralWidget());
         master_pg->load("");
         master_pg->setFocusPolicy( Qt::StrongFocus );
         ((QScrollArea *)centralWidget())->setWidget( master_pg );
