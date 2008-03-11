@@ -60,7 +60,7 @@ class TFld
 	TFld( TFld &ifld );
 	TFld( const char *name, const char *descr, Type type, unsigned flg,
 	    const char *valLen = "", const char *valDef = "", 
-	    const char *vals = "", const char *nSel = "", int res = 0 );
+	    const char *vals = "", const char *nSel = "", const char *res = "" );
 	~TFld( );
 	
 	TFld &operator=( TFld &fld );
@@ -75,7 +75,7 @@ class TFld
 	const string &def( )  	{ return m_def; }	//Default value
 	string values( );				//Values range or values list
 	string selNames( );				//Select names list
-	int reserve( )		{ return m_res; }	//Reserve field
+	const string &reserve( ){ return m_res; }	//Reserve field
 	
 	void setDescr( const string &idscr )	{ m_descr = idscr; }
 	void setLen( int ivl )			{ m_len = ivl; }
@@ -84,7 +84,7 @@ class TFld
 	void setFlg( unsigned iflg );
 	void setValues( const string &vls );
 	void setSelNames( const string &slnms );
-	void setReserve( int ires )		{ m_res = ires; }	
+	void setReserve( const string &ires )	{ m_res = ires; }
 	
 	//- Selected -
 	const vector<string> &selValS();
@@ -117,7 +117,7 @@ class TFld
 	Type		m_type;		// Type (Dec, Hex, Oct, ...)
 	unsigned	m_flg;		// element flags (Selected, SelfFld ...);
 	string          m_def;		// default value;
-	int		m_res;
+	string		m_res;		// reserve attribut
 	
 	union           
 	{

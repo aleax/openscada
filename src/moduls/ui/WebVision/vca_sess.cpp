@@ -819,14 +819,22 @@ void VCADiagram::getReq( SSess &ses )
     long long tBeg = tEnd - tSz;                                      	//Trends begin point (us)
     if( !parNum || tSz <= 0 ) return;
 
+    //-- Get scale --
+    map< string, string >::iterator prmEl = ses.prm.find("xSc");
+    double xSc = (prmEl!=ses.prm.end()) ? atof(prmEl->second.c_str()) : 1.0;
+    prmEl = ses.prm.find("ySc");
+    double ySc = (prmEl!=ses.prm.end()) ? atof(prmEl->second.c_str()) : 1.0;
+    int imW = (int)TSYS::realRound((double)width*xSc,2,true);
+    int imH = (int)TSYS::realRound((double)height*ySc,2,true);
+
     //- Prepare picture -
-    gdImagePtr im = gdImageCreate(width,height);
-    gdImageFilledRectangle(im,0,0,width-1,height-1,gdImageColorAllocateAlpha(im,0,0,0,127));
+    gdImagePtr im = gdImageCreate(imW,imH);
+    gdImageFilledRectangle(im,0,0,imW-1,imH-1,gdImageColorAllocateAlpha(im,0,0,0,127));
 
     //-- Make decoration and prepare trends area --
     int tArX = 1, tArY = 1, 				//Curves of trends area rect
-	tArW = width-2*(geomMargin+bordWidth+1),
-	tArH = height-2*(geomMargin+bordWidth+1);
+	tArW = imW-2*(geomMargin+bordWidth+1),
+	tArH = imH-2*(geomMargin+bordWidth+1);
 
     if( sclHor&0x3 || sclVer&0x3 )
     {
@@ -1029,6 +1037,7 @@ void VCADiagram::getReq( SSess &ses )
         aVend = vmin(tEnd,trnds[i_t].valEnd());
         if( aVbeg >= aVend ) continue;
         int aPosBeg = trnds[i_t].val(aVbeg);;
+        if( aPosBeg && trnds[i_t].val()[aPosBeg].tm > aVbeg ) aPosBeg--;
 
         //--- Prepare border for percent trend ---
         float bordL = trnds[i_t].bordL();
@@ -1076,6 +1085,7 @@ void VCADiagram::getReq( SSess &ses )
     	    //Square Average
             if( averPos == curPos )
             {
+		if( !(2*curTm-averTm-averLstTm) ) continue;
                 if( averVl == EVAL_REAL )  averVl = curVl;
                 else if( curVl != EVAL_REAL )
             	    averVl = (averVl*(double)(curTm-averTm)+curVl*(double)(curTm-averLstTm))/

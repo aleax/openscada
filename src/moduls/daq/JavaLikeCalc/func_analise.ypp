@@ -369,6 +369,9 @@ int yylex( )
 		{
 		    case 'n':	rez_str += '\n';	break;
 		    case 't':	rez_str += '\t';	break;
+		    case 'b':	rez_str += '\b';        break;
+		    case 'f':	rez_str += '\f';        break;
+		    case 'r':	rez_str += '\r';        break;
 		    default:	rez_str += prog[pos+1];
 		}
 		pos++;

@@ -131,16 +131,16 @@ void TTpContr::postEnable( int flag )
 
     //- Init value elements -
     //-- Analog input --
-    elem_ai.fldAdd( new TFld("value",_("Value %"),TFld::Real,TFld::NoWrite|TVal::DirRead,"",TSYS::real2str(EVAL_REAL).c_str(),"0;100","",1) );
-    elem_ai.fldAdd( new TFld("voltage",_("Voltage V"),TFld::Real,TFld::NoWrite|TVal::DirRead,"",TSYS::real2str(EVAL_REAL).c_str(),"-10;10","",2) );
-    elem_ai.fldAdd( new TFld("code",_("A/D code"),TFld::Integer,TFld::NoWrite|TVal::DirRead,"",TSYS::int2str(EVAL_INT).c_str(),"","",3) );
+    elem_ai.fldAdd( new TFld("value",_("Value %"),TFld::Real,TFld::NoWrite|TVal::DirRead,"",TSYS::real2str(EVAL_REAL).c_str(),"0;100","","1") );
+    elem_ai.fldAdd( new TFld("voltage",_("Voltage V"),TFld::Real,TFld::NoWrite|TVal::DirRead,"",TSYS::real2str(EVAL_REAL).c_str(),"-10;10","","2") );
+    elem_ai.fldAdd( new TFld("code",_("A/D code"),TFld::Integer,TFld::NoWrite|TVal::DirRead,"",TSYS::int2str(EVAL_INT).c_str(),"","","3") );
     //-- Analog output --
-    elem_ao.fldAdd( new TFld("value",_("Value %"),TFld::Real,TVal::DirWrite,"",TSYS::real2str(EVAL_REAL).c_str(),"0;100","",1) );
-    elem_ao.fldAdd( new TFld("voltage",_("Voltage V"),TFld::Real,TVal::DirWrite,"",TSYS::real2str(EVAL_REAL).c_str(),"-10;10","",2) );
+    elem_ao.fldAdd( new TFld("value",_("Value %"),TFld::Real,TVal::DirWrite,"",TSYS::real2str(EVAL_REAL).c_str(),"0;100","","1") );
+    elem_ao.fldAdd( new TFld("voltage",_("Voltage V"),TFld::Real,TVal::DirWrite,"",TSYS::real2str(EVAL_REAL).c_str(),"-10;10","","2") );
     //-- Digit input --
-    elem_di.fldAdd( new TFld("value",_("Value"),TFld::Boolean,TFld::NoWrite|TVal::DirRead,"",TSYS::int2str(EVAL_BOOL).c_str(),"","",1) );
+    elem_di.fldAdd( new TFld("value",_("Value"),TFld::Boolean,TFld::NoWrite|TVal::DirRead,"",TSYS::int2str(EVAL_BOOL).c_str(),"","","1") );
     //-- Digit output --
-    elem_do.fldAdd( new TFld("value",_("Value"),TFld::Boolean,TVal::DirWrite,"",TSYS::int2str(EVAL_BOOL).c_str(),"","",1) );
+    elem_do.fldAdd( new TFld("value",_("Value"),TFld::Boolean,TVal::DirWrite,"",TSYS::int2str(EVAL_BOOL).c_str(),"","","1") );
 }
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
@@ -608,8 +608,11 @@ void TMdPrm::vlSet( TVal &val )
 	case AO:
 	{
 	    int code;
-	    if(val.fld().reserve()==1)		code = (int)(4095.*val.getR(0,true)/100.);
-	    else if(val.fld().reserve()==2)	code = (int)(4095.*val.getR(0,true)/10.);
+	    switch( atoi(val.fld().reserve().c_str()) )
+	    {
+	    	case 1:	code = (int)(4095.*val.getR(0,true)/100.);	break;
+		case 2:	code = (int)(4095.*val.getR(0,true)/10.);	break;
+	    }
 
 	    //- Direct writing -
 	    if( owner().dataEmul() )	break;
@@ -641,7 +644,8 @@ void TMdPrm::vlSet( TVal &val )
 
 void TMdPrm::vlGet( TVal &val )
 {
-    if( val.fld().reserve() == 0 )
+    int aid = atoi(val.fld().reserve().c_str());
+    if( aid == 0 )
     {
         if( !owner().startStat() )
             val.setS(_("2:Controller stoped"),0,true);
@@ -684,7 +688,7 @@ void TMdPrm::vlGet( TVal &val )
 		    owner().ai_res.resReleaseW( );
 		}
 	    }
-	    switch(val.fld().reserve())
+	    switch( aid )
 	    {
 		case 1: val.setR(enableStat()?(100.*((double)gval/32768.)):EVAL_REAL,0,true); break;
 		case 2: val.setR(enableStat()?(10.*((double)gval/32768.)):EVAL_REAL,0,true);  break;

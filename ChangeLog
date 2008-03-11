@@ -1,3 +1,19 @@
+2008-03-11 Roman
+- !:/Value: The reserve field type is changed to string.
+- !!:/DAQ/BlockCalc: Documentation and translation is updated and version 1.0.1 is relised.
+- !!:/DAQ/BlockCalc: A parameter addressation to blocks IO is changed to direct block's IO list. It's allow for control attributes id and name.
+- /DAQ/JavaLikeCalc: Special simbols \r, \f, \b is added. The documents is updated.
+- !!:/UI/VCAEngine, /UI/Vision, /UI/WebVision: Font selection support is added for primitive's "FormEl" elements.
+- /UI/VCAEngine, /UI/Vision, /UI/WebVision: Remove individual font attributes from primitives "Text".
+- FIX:/UI/Vision: Not full value attribute copy is fixed in process of element view change of primitive "FormEl" of type "Line edit".
+- FIX:/UI/VCAEngine: Page's self attributes load is fixed.
+- FIX:/UI/Vision: Dublicates of values into buffer process is fixed for primitive "Diagram".
+- FIX:/UI/WebVision: Dublicates of values into buffer process is fixed for primitive "Diagram".
+- FIX:/UI/WebVision: Trend begin is fixed for primitive "Diagram".
+- FIX:/UI/WebVision: More line text visible and arguments padding is fixed for primitive "Text".
+- !!:/UI/WebVision: Content scaling support is added.
+
+
 2008-03-06 Maxim
 - /UI/VCAEngine: Double point's attributes is made for primitive "ElFigure".
 - !!!:/UI/VCAEngine, UI/Vision, UI/WebVision: Fill mechanizm is changed, for Web and QT unification.

@@ -44,7 +44,7 @@
 #define MOD_NAME    "Block based calculator"
 #define MOD_TYPE    "DAQ"
 #define VER_TYPE    VER_CNTR
-#define VERSION     "1.0.0"
+#define VERSION     "1.0.1"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow block based calculator."
 #define LICENSE     "GPL"
@@ -142,8 +142,7 @@ void TipContr::postEnable( int flag )
     
     //Add parameter types
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
-    tpPrmAt(t_prm).fldAdd( new TFld("BLK",_("Block"),TFld::String,TCfg::NoVal,"10") );
-    tpPrmAt(t_prm).fldAdd( new TFld("IO",_("IOs(Sep - ';')"),TFld::String,TCfg::NoVal,"50") );
+    tpPrmAt(t_prm).fldAdd( new TFld("IO",_("Blocks' IOs"),TFld::String,TFld::FullText|TCfg::NoVal,"200") );
     
     //Blok's db structure
     blk_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"10") );
@@ -647,47 +646,46 @@ void Prm::enable()
 {
     if( enableStat() )  return;
     
-    m_blck = cfg("BLK").getS();
-    
-    if( !((Contr &)owner()).blkPresent(m_blck) )
-        throw TError(nodePath().c_str(),_("Block not connected."));
-    
-    //Init elements
-    string mio;
-    for( int io_off = 0; (mio=TSYS::strSepParse(cfg("IO").getS(),0,';',&io_off)).size(); )
+    //- Init elements -
+    AutoHD<Block> blk;
+    int io;
+    string mio, ioaddr, ioblk, ioid, aid, anm;
+    for( int io_off = 0; (mio=TSYS::strSepParse(cfg("IO").getS(),0,'\n',&io_off)).size(); )
     {
-        unsigned flg = TVal::DirWrite|TVal::DirRead;
-        TFld::Type    tp  = TFld::String;
-        int           io_id = ((Contr &)owner()).blkAt(m_blck).at().ioId(mio);
-        if(io_id >= 0)
+	ioaddr = TSYS::strSepParse(mio,0,':');
+	ioblk  = TSYS::strSepParse(ioaddr,0,'.');
+	ioid   = TSYS::strSepParse(ioaddr,1,'.');
+	aid    = TSYS::strSepParse(mio,1,':');
+	anm    = TSYS::strSepParse(mio,2,':');
+	if( aid.empty() ) aid = ioblk+"_"+ioid;
+	if( !((Contr&)owner()).blkPresent(ioblk) ) continue;
+	blk = ((Contr&)owner()).blkAt(ioblk);
+	if( (io=blk.at().ioId(ioid)) < 0 )	continue;
+	
+        unsigned 	flg    = TVal::DirWrite|TVal::DirRead;
+        TFld::Type	tp     = TFld::String;
+	switch( blk.at().ioType(io) )
 	{
-	    //if( ((Contr &)owner()).blkAt(m_blck).at().ioMode(io_id) != IO::Input )
-	    //	flg |= Fld::NoWrite;
-	    switch( ((Contr &)owner()).blkAt(m_blck).at().ioType(io_id) )
-	    {
-		case IO::String: 	tp = TFld::String; 	break;
-		case IO::Integer:	tp = TFld::Integer;	break;
-		case IO::Real:		tp = TFld::Real;	break;
-		case IO::Boolean:	tp = TFld::Boolean;	break;
-	    }
-	    if( !v_el.fldPresent(mio) || 
-		v_el.fldAt(v_el.fldId(mio)).type() != tp || 
-		v_el.fldAt(v_el.fldId(mio)).flg() != flg )
-	    {
-		if(v_el.fldPresent(mio)) v_el.fldDel(v_el.fldId(mio));
-		v_el.fldAdd( new TFld(mio.c_str(),((Contr &)owner()).blkAt(m_blck).at().func()->io(io_id)->name().c_str(),tp,flg) );
-    	    }
+	    case IO::String: 	tp = TFld::String; 	break;
+	    case IO::Integer:	tp = TFld::Integer;	break;
+	    case IO::Real:	tp = TFld::Real;	break;
+	    case IO::Boolean:	tp = TFld::Boolean;	break;
 	}
+	if( !v_el.fldPresent(aid) || v_el.fldAt(v_el.fldId(aid)).type() != tp || v_el.fldAt(v_el.fldId(aid)).flg() != flg )
+	{
+	    if(v_el.fldPresent(aid)) v_el.fldDel(v_el.fldId(aid));
+	    v_el.fldAdd( new TFld(aid.c_str(),anm.empty() ? blk.at().func()->io(io)->name().c_str() : anm.c_str(),tp,flg,"","","","",ioaddr.c_str()) );
+    	}
     }
     
-    //Check and delete no used fields
+    //- Check and delete no used fields -
     for(int i_fld = 0; i_fld < v_el.fldSize(); i_fld++)
     {
         string fel;
-        for( int io_off = 0; (fel=TSYS::strSepParse(cfg("IO").getS(),0,';',&io_off)).size(); )
-    	    if( fel == v_el.fldAt(i_fld).name() ) break;
-        if( fel.empty() )
-        {
+        for( int io_off = 0; (fel=TSYS::strSepParse(cfg("IO").getS(),0,'\n',&io_off)).size(); )
+    	    if( TSYS::strSepParse(fel,0,':') == v_el.fldAt(i_fld).reserve() ) break;
+        if( fel.empty() )	
+	{
             v_el.fldDel(i_fld);
             i_fld--;
 	}
@@ -707,27 +705,18 @@ void Prm::vlSet( TVal &val )
 {
     if( !enableStat() )	return;
     try
-    {
-        int io_id = ((Contr &)owner()).blkAt(m_blck).at().ioId(val.name());
+    {	
+    	AutoHD<Block> blk = ((Contr &)owner()).blkAt(TSYS::strSepParse(val.fld().reserve(),0,'.'));
+        int io_id = blk.at().ioId(TSYS::strSepParse(val.fld().reserve(),1,'.'));
 	if( io_id < 0 ) disable();
 	else
-	{
 	    switch(val.fld().type())
 	    {
-		case TFld::String: 		    
-		    ((Contr &)owner()).blkAt(m_blck).at().setS(io_id,val.getS(0,true));
-		    break;
-		case TFld::Integer:
-		    ((Contr &)owner()).blkAt(m_blck).at().setI(io_id,val.getI(0,true));
-		    break;
-		case TFld::Real:
-		    ((Contr &)owner()).blkAt(m_blck).at().setR(io_id,val.getR(0,true));
-		    break;
-		case TFld::Boolean:
-		    ((Contr &)owner()).blkAt(m_blck).at().setB(io_id,val.getB(0,true));
-		    break;
+		case TFld::String:	blk.at().setS(io_id,val.getS(0,true));	break;
+		case TFld::Integer:	blk.at().setI(io_id,val.getI(0,true));	break;
+		case TFld::Real:	blk.at().setR(io_id,val.getR(0,true));	break;
+		case TFld::Boolean:	blk.at().setB(io_id,val.getB(0,true));	break;
 	    }
-	}
     }catch(TError err) { disable(); }
 }
 
@@ -739,32 +728,23 @@ void Prm::vlGet( TVal &val )
 	    val.setS(_("2:Controller stoped"),0,true);
 	else if( !enableStat() )   		   
 	    val.setS(_("1:Parameter disabled"),0,true);
-	else if( !owner().blkPresent(m_blck) ) 
-	    val.setS(_("3:Block no present"),0,true);
-	else if( !owner().blkAt(m_blck).at().enable() )
-    	    val.setS(_("4:Block disabled"),0,true);
-	else if( !owner().blkAt(m_blck).at().process() )
-    	    val.setS(_("5:Block no process"),0,true);
 	else val.setS("0",0,true);	
 	return;
     }
 
     try
     {
-	if( !enableStat() ) return;
-	int io_id = owner().blkAt(m_blck).at().ioId(val.name());
+	if( !enableStat() ) return;	
+     	AutoHD<Block> blk = ((Contr &)owner()).blkAt(TSYS::strSepParse(val.fld().reserve(),0,'.'));
+        int io_id = blk.at().ioId(TSYS::strSepParse(val.fld().reserve(),1,'.'));        
 	if( io_id < 0 )	disable();
 	else
 	    switch(val.fld().type())
 	    {
-		case TFld::String: 
-		    val.setS(enableStat()?owner().blkAt(m_blck).at().getS(io_id):EVAL_STR,0,true); break;
-		case TFld::Integer:
-		    val.setI(enableStat()?owner().blkAt(m_blck).at().getI(io_id):EVAL_INT,0,true); break;
-		case TFld::Real:
-		    val.setR(enableStat()?owner().blkAt(m_blck).at().getR(io_id):EVAL_REAL,0,true);break;
-		case TFld::Boolean:
-		    val.setB(enableStat()?owner().blkAt(m_blck).at().getB(io_id):EVAL_BOOL,0,true);break;
+		case TFld::String: 	val.setS( enableStat() ? blk.at().getS(io_id) : EVAL_STR, 0, true );	break;
+		case TFld::Integer:	val.setI( enableStat() ? blk.at().getI(io_id) : EVAL_INT, 0, true ); 	break;
+		case TFld::Real:	val.setR( enableStat() ? blk.at().getR(io_id) : EVAL_REAL, 0, true );	break;
+		case TFld::Boolean:	val.setB( enableStat() ? blk.at().getB(io_id) : EVAL_BOOL, 0, true );	break;
 	    }
     }catch(TError err) { disable(); }
 }
@@ -776,28 +756,4 @@ void Prm::vlArchMake( TVal &val )
     val.arch().at().setPeriod(1000000);
     val.arch().at().setHardGrid( true );
     val.arch().at().setHighResTm( false );
-}
-
-void Prm::cntrCmdProc( XMLNode *opt )
-{
-    //- Service commands process -
-    string a_path = opt->attr("path");
-    if( a_path.substr(0,6) == "/serv/" )  { TParamContr::cntrCmdProc(opt); return; }
-
-    //- Get page info -
-    if( opt->name() == "info" )
-    {
-	TParamContr::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/BLK",cfg("BLK").fld().descr(),0660,"root","root",3,"tp","str","dest","select","select","/prm/cfg/BLK_list");
-	return;
-    }
-    //- Process command to page -
-    if( a_path == "/prm/cfg/BLK_list" && ctrChkNode(opt) )
-    {
-        vector<string> list;
-        ((Contr &)owner()).blkList(list);
-        for( unsigned i_f=0; i_f < list.size(); i_f++ )
-    	    opt->childAdd("el")->setAttr("id",list[i_f])->setText(owner().blkAt(list[i_f]).at().name());
-    }
-    else TParamContr::cntrCmdProc(opt);
 }

@@ -1068,7 +1068,7 @@ void TMdPrm::enable()
 	    p_el.fldAdd( new TFld( aid.c_str(), "", TFld::Integer, TFld::NoFlag, "", TSYS::int2str(EVAL_INT).c_str(), "0:65535" ) );
 	int el_id = p_el.fldId(aid);
 	p_el.fldAt(el_id).setDescr( TSYS::strSepParse(als[i_l],1,':') );
-	p_el.fldAt(el_id).setReserve( atoi(TSYS::strSepParse(als[i_l],2,':').c_str()) );
+	p_el.fldAt(el_id).setReserve( TSYS::strSepParse(als[i_l],2,':') );
 	p_el.fldAt(el_id).setFlg( atoi(TSYS::strSepParse(als[i_l],3,':').c_str()) ? (int)(TVal::DirWrite|TVal::DirRead) : (int)(TFld::NoWrite|TVal::DirRead) );
 	owner().regVal(atoi(TSYS::strSepParse(als[i_l],2,':').c_str()));
     }
@@ -1114,8 +1114,8 @@ void TMdPrm::vlGet( TVal &val )
 	else val.setS(EVAL_STR,0,true);
 	return;
     }
-    if( val.fld().reserve() )
-	val.setI(owner().getVal(val.fld().reserve(),acq_err),0,true);
+    int aid = atoi(val.fld().reserve().c_str());
+    if( aid )	val.setI(owner().getVal(aid,acq_err),0,true);
     else if( val.name() == "err" )
     {
         if( acq_err.empty() )	val.setS("0",0,true);
@@ -1126,7 +1126,7 @@ void TMdPrm::vlGet( TVal &val )
 void TMdPrm::vlSet( TVal &valo )
 {
     if( !enableStat() )	valo.setI( EVAL_INT, 0, true );    
-    owner().setVal(valo.getI(NULL,true),valo.fld().reserve(),acq_err);
+    owner().setVal(valo.getI(NULL,true),atoi(valo.fld().reserve().c_str()),acq_err);
 }
 
 void TMdPrm::vlArchMake( TVal &val )

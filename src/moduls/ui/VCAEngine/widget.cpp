@@ -110,20 +110,20 @@ void Widget::postEnable(int flag)
     if( flag&TCntrNode::NodeConnect )
     {
 	//- Add main attributes -
-	attrAdd( new TFld("id",_("Id"),TFld::String,TFld::NoWrite,"","","","",1) );
-        attrAdd( new TFld("name",_("Name"),TFld::String,TFld::NoFlag,"","","","",2) );
-	attrAdd( new TFld("dscr",_("Description"),TFld::String,TFld::FullText,"","","","",3) );
-        attrAdd( new TFld("path",_("Path"),TFld::String,TFld::NoWrite,"","","","",4) );
-	attrAdd( new TFld("en",_("Enabled"),TFld::Boolean,TFld::NoFlag,"","1","","",5) );
-	attrAdd( new TFld("active",_("Active"),TFld::Boolean,Attr::Active,"","0","","",6) );
-	attrAdd( new TFld("geomX",_("Geometry:x"),TFld::Real,TFld::NoFlag,"","0","0;10000","",7) );
-	attrAdd( new TFld("geomY",_("Geometry:y"),TFld::Real,TFld::NoFlag,"","0","0;10000","",8) );
-	attrAdd( new TFld("geomW",_("Geometry:width"),TFld::Real,TFld::NoFlag,"","100","0;10000","",9) );
-	attrAdd( new TFld("geomH",_("Geometry:height"),TFld::Real,TFld::NoFlag,"","100","0;10000","",10) );
-	attrAdd( new TFld("geomXsc",_("Geometry:x scale"),TFld::Real,TFld::NoFlag,"","1","0.1;10","",13) );
-	attrAdd( new TFld("geomYsc",_("Geometry:y scale"),TFld::Real,TFld::NoFlag,"","1","0.1;10","",14) );
-	attrAdd( new TFld("geomZ",_("Geometry:z"),TFld::Integer,TFld::NoFlag,"","0","0;1000000","",11) );
-	attrAdd( new TFld("geomMargin",_("Geometry:margin"),TFld::Integer,TFld::NoFlag,"","0","0;1000","",12) );
+	attrAdd( new TFld("id",_("Id"),TFld::String,TFld::NoWrite,"","","","","1") );
+        attrAdd( new TFld("name",_("Name"),TFld::String,TFld::NoFlag,"","","","","2") );
+	attrAdd( new TFld("dscr",_("Description"),TFld::String,TFld::FullText,"","","","","3") );
+        attrAdd( new TFld("path",_("Path"),TFld::String,TFld::NoWrite,"","","","","4") );
+	attrAdd( new TFld("en",_("Enabled"),TFld::Boolean,TFld::NoFlag,"","1","","","5") );
+	attrAdd( new TFld("active",_("Active"),TFld::Boolean,Attr::Active,"","0","","","6") );
+	attrAdd( new TFld("geomX",_("Geometry:x"),TFld::Real,TFld::NoFlag,"","0","0;10000","","7") );
+	attrAdd( new TFld("geomY",_("Geometry:y"),TFld::Real,TFld::NoFlag,"","0","0;10000","","8") );
+	attrAdd( new TFld("geomW",_("Geometry:width"),TFld::Real,TFld::NoFlag,"","100","0;10000","","9") );
+	attrAdd( new TFld("geomH",_("Geometry:height"),TFld::Real,TFld::NoFlag,"","100","0;10000","","10") );
+	attrAdd( new TFld("geomXsc",_("Geometry:x scale"),TFld::Real,TFld::NoFlag,"","1","0.1;10","","13") );
+	attrAdd( new TFld("geomYsc",_("Geometry:y scale"),TFld::Real,TFld::NoFlag,"","1","0.1;10","","14") );
+	attrAdd( new TFld("geomZ",_("Geometry:z"),TFld::Integer,TFld::NoFlag,"","0","0;1000000","","11") );
+	attrAdd( new TFld("geomMargin",_("Geometry:margin"),TFld::Integer,TFld::NoFlag,"","0","0;1000","","12") );
 	attrAdd( new TFld("evProc",_("Events process"),TFld::String,TFld::FullText,"200") );
     }
     
@@ -437,7 +437,7 @@ bool Widget::cntrCmdServ( XMLNode *opt )
 	    {
 		attr = attrAt(ls[i_l]);
         	opt->childAdd("el")->setAttr("id",ls[i_l].c_str())->
-			    	     setAttr("pos",TSYS::int2str(attr.at().fld().reserve()))->
+			    	     setAttr("pos",attr.at().fld().reserve())->
 				     setText(attr.at().getS());
 	    }
 	}

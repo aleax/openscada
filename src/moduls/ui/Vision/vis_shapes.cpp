@@ -172,6 +172,12 @@ void ShapeFormEl::init( WdgView *w )
     w->dc()["addrWdg"].setValue((void*)NULL);
     w->dc()["elType"] = -1;
     w->dc()["welType"] = -1;    
+    w->dc()["QFont"].setValue( (void*)new QFont() );
+}
+
+void ShapeFormEl::destroy( WdgView *w )
+{
+    delete (QFont*)w->dc()["QFont"].value<void*>();
 }
 
 bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
@@ -278,6 +284,23 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    w->dc()["checkable"] = atoi(val.c_str());	
 	    rel_cfg = true; 
 	    break;
+	case 25:	//font
+	{
+	    w->dc()["font"] = val.c_str();
+    	    QFont *fnt = (QFont*)w->dc()["QFont"].value<void*>();
+	    char family[101];
+	    int size, bold, italic, underline, strike;        
+	    int pcnt = sscanf(w->dc().value("font",0).toString().toAscii().data(),
+		    "%100s %d %d %d %d %d",family,&size,&bold,&italic,&underline,&strike);
+	    if( pcnt >= 1 )	fnt->setFamily(string(family,100).c_str());
+	    if( pcnt >= 2 )	fnt->setPointSize(size);
+	    if( pcnt >= 3 )	fnt->setBold(bold);
+	    if( pcnt >= 4 )	fnt->setItalic(italic);
+	    if( pcnt >= 5 )	fnt->setUnderline(underline);
+	    if( pcnt >= 6 )	fnt->setStrikeOut(strike);
+	    rel_cfg = true;	    
+	    break;
+	}	    	    
     }
     if( rel_cfg && !w->allAttrLoad() )
     {
@@ -311,7 +334,9 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		//- Cfg -
 		((LineEdit*)el_wdg)->setCfg(w->dc()["cfg"].toString());
 		//- Value -
-		((LineEdit*)el_wdg)->setValue(w->dc()["value"].toString());		
+		((LineEdit*)el_wdg)->setValue(w->dc()["value"].toString());
+		//- Font -
+		el_wdg->setFont(*(QFont*)w->dc()["QFont"].value<void*>());
 		break;
 	    }
 	    case 1:	//Text edit
@@ -327,6 +352,8 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		//- WordWrap -
 		((TextEdit*)el_wdg)->workWdg()->setLineWrapMode( 
 			w->dc().value("wordWrap",1).toInt() ? QTextEdit::WidgetWidth : QTextEdit::NoWrap );
+		//- Font -
+		el_wdg->setFont(*(QFont*)w->dc()["QFont"].value<void*>());
 		break;
 	    case 2:	//Chek box
 		if( !el_wdg || !qobject_cast<QCheckBox*>(el_wdg) )
@@ -340,6 +367,8 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		((QCheckBox*)el_wdg)->setText(w->dc()["name"].toString());
 		//- Value -
 		((QCheckBox*)el_wdg)->setChecked(w->dc()["value"].toInt());
+		//- Font -
+		el_wdg->setFont(*(QFont*)w->dc()["QFont"].value<void*>());		
 		break;
 	    case 3:	//Button
 	    {
@@ -373,7 +402,9 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		//- Checkable -
 		((QPushButton*)el_wdg)->setCheckable(w->dc()["checkable"].toInt());
 		//- Value -
-		((QPushButton*)el_wdg)->setChecked(w->dc()["value"].toInt());		
+		((QPushButton*)el_wdg)->setChecked(w->dc()["value"].toInt());
+		//- Font -
+		el_wdg->setFont(*(QFont*)w->dc()["QFont"].value<void*>());		
 		break;
 	    }
 	    case 4:	//Combo box
@@ -392,6 +423,8 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		QString vl = w->dc()["value"].toString();
 		if( ((QComboBox*)el_wdg)->findText(vl) < 0 ) ((QComboBox*)el_wdg)->addItem(vl);
 		((QComboBox*)el_wdg)->setCurrentIndex(((QComboBox*)el_wdg)->findText(vl));
+		//- Font -
+		el_wdg->setFont(*(QFont*)w->dc()["QFont"].value<void*>());		
 		break;
 	    }
 	    case 5: 	//List
@@ -408,7 +441,9 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 ((QListWidget*)el_wdg)->addItems(w->dc()["items"].toString().split("\n"));
 		//- Value -
 		QList<QListWidgetItem *> its = ((QListWidget*)el_wdg)->findItems(w->dc()["value"].toString(),Qt::MatchExactly);
-		if( its.size() ) ((QListWidget*)el_wdg)->setCurrentItem(its[0]);		
+		if( its.size() ) ((QListWidget*)el_wdg)->setCurrentItem(its[0]);
+		//- Font -
+		el_wdg->setFont(*(QFont*)w->dc()["QFont"].value<void*>());
 		break;
 	    }
 	    case 6:	//Slider
@@ -634,13 +669,12 @@ void ShapeText::destroy( WdgView *w )
 bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 {    
     bool up = true, 		//Update view checking
-	 rel_fnt = false,	//Reload font checking
 	 reform = false;	//Text reformation
 
     switch(uiPrmPos)
     {
 	case -1:	//load
-	    up = rel_fnt = reform = true;
+	    up = reform = true;
 	    break;
 	case 5:		//en
 	    if( !qobject_cast<RunWdgView*>(w) )	{ up = false; break; }
@@ -674,42 +708,33 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	case 19:	//bordStyle
 	    w->dc()["bordStyle"] = atoi(val.c_str()); up = true; break;
 	case 24:	//font
-	    w->dc()["font"] = val.c_str(); rel_fnt = true; break;
-	case 25:	//fontFamily
-	    ((QFont*)w->dc()["QFont"].value<void*>())->setFamily(val.c_str()); 
-	    rel_fnt = true;
+	{
+	    w->dc()["font"] = val.c_str();
+    	    QFont *fnt = (QFont*)w->dc()["QFont"].value<void*>();
+	    char family[101];
+	    int size, bold, italic, underline, strike;        
+	    int pcnt = sscanf(w->dc().value("font",0).toString().toAscii().data(),
+		    "%100s %d %d %d %d %d",family,&size,&bold,&italic,&underline,&strike);
+	    if( pcnt >= 1 )	fnt->setFamily(string(family,100).c_str());
+	    if( pcnt >= 2 )	fnt->setPointSize(size);
+	    if( pcnt >= 3 )	fnt->setBold(bold);
+	    if( pcnt >= 4 )	fnt->setItalic(italic);
+	    if( pcnt >= 5 )	fnt->setUnderline(underline);
+	    if( pcnt >= 6 )	fnt->setStrikeOut(strike);
+	    up = true;
 	    break;
-	case 26:	//fontSize
-	    ((QFont*)w->dc()["QFont"].value<void*>())->setPointSize(atoi(val.c_str())); 
-	    rel_fnt = true;	
-	    break;
-	case 27: 	//fontBold
-	    ((QFont*)w->dc()["QFont"].value<void*>())->setBold(atoi(val.c_str()));
-	    rel_fnt = true;
-	    break;
-	case 28:	//fontItalic
-	    ((QFont*)w->dc()["QFont"].value<void*>())->setItalic(atoi(val.c_str()));
-	    rel_fnt = true;
-	    break;
-	case 29: 	//fontUnderline
-	    ((QFont*)w->dc()["QFont"].value<void*>())->setUnderline(atoi(val.c_str()));
-	    rel_fnt = true;	    
-	    break;
-	case 30:	//fontStrikeout	    
-	    ((QFont*)w->dc()["QFont"].value<void*>())->setStrikeOut(atoi(val.c_str()));
-	    rel_fnt = true;
-	    break;
-	case 31:	//color
+	}	    
+	case 25:	//color
 	    w->dc()["color"] = QColor(val.c_str()); break;
-	case 32:	//orient
+	case 26:	//orient
 	    w->dc()["orient"] = atoi(val.c_str()); break;
-	case 33:	//wordWrap
+	case 27:	//wordWrap
 	{    
 	    int txtflg = w->dc().value("text_flg",0).toInt();    
 	    w->dc()["text_flg"] = atoi(val.c_str()) ? (txtflg|Qt::TextWordWrap) : (txtflg&(~Qt::TextWordWrap)); 
 	    break;
 	}
-	case 34:	//alignment
+	case 28:	//alignment
 	{   
 	    int txtflg = w->dc().value("text_flg",0).toInt();
 	    txtflg &= ~(Qt::AlignLeft|Qt::AlignRight|Qt::AlignHCenter|Qt::AlignTop|Qt::AlignBottom|Qt::AlignVCenter);
@@ -728,14 +753,14 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    w->dc()["text_flg"] = txtflg;
 	    break;
 	}
-	case 35:	//text
+	case 29:	//text
 	{ 
 	    if( w->dc()["text_tmpl"] == val.c_str() )	break;
 	    w->dc()["text_tmpl"] = val.c_str();
 	    reform = true;
 	    break; 
 	}
-	case 36:	//numbArg
+	case 30:	//numbArg
 	{
 	    int numbArgPrev = w->dc()["numbArg"].toInt();
 	    int numbArg = atoi(val.c_str());
@@ -773,23 +798,6 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    }else up = false;
     }
     
-    //- Reload generic font record -
-    if( rel_fnt && !w->allAttrLoad() )
-    {
-        QFont *fnt = (QFont*)w->dc()["QFont"].value<void*>();
-	char family[101];
-	int size, bold, italic, underline, strike;        
-	int pcnt = sscanf(w->dc().value("font",0).toString().toAscii().data(),
-		    "%100s %d %d %d %d %d",family,&size,&bold,&italic,&underline,&strike);
-	if( pcnt >= 1 )	fnt->setFamily(string(family,100).c_str());
-	if( pcnt >= 2 )	fnt->setPointSize(size);
-	if( pcnt >= 3 )	fnt->setBold(bold);
-	if( pcnt >= 4 )	fnt->setItalic(italic);
-	if( pcnt >= 5 )	fnt->setUnderline(underline);
-	if( pcnt >= 6 )	fnt->setStrikeOut(strike);
-	up = true;
-    }
-
     //- Text reformation -
     if( reform && !w->allAttrLoad() )
     {
@@ -1675,7 +1683,8 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
     	    //Square Average
 	    if( averPos == curPos )
             {
-                if( averVl == EVAL_REAL || !(2*curTm-averTm-averLstTm) ) averVl = curVl;
+		if( !(2*curTm-averTm-averLstTm) ) continue;
+                if( averVl == EVAL_REAL ) averVl = curVl;
         	else if( curVl != EVAL_REAL )
                     averVl = (averVl*(double)(curTm-averTm)+curVl*(double)(curTm-averLstTm))/
                               ((double)(2*curTm-averTm-averLstTm));

@@ -898,7 +898,7 @@ void SessWdg::getUpdtWdg( const string &path, unsigned int tm, vector<string> &e
 unsigned int SessWdg::modifVal( Attr &cfg )
 { 
     int m_clc = ownerSess()->calcClk( );
-    if( cfg.fld().reserve() )	m_mdfClc = m_clc;
+    if( atoi(cfg.fld().reserve().c_str()) )	m_mdfClc = m_clc;
     return m_clc; 
 }
 
@@ -1070,7 +1070,7 @@ bool SessWdg::attrChange( Attr &cfg, void *prev )
     {
 	if( cfg.getB() )
 	{
-	    cfg.owner()->attrAdd( new TFld("focus",_("Focus"),TFld::Boolean,TFld::NoFlag,"1","false","","",-2) );
+	    cfg.owner()->attrAdd( new TFld("focus",_("Focus"),TFld::Boolean,TFld::NoFlag,"1","false","","","-2") );
 	    //attrAt("focus").at().setFlgSelf(Attr::ProcAttr);
 	    //prcElListUpdate();
 	}
@@ -1133,9 +1133,9 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 		for( int i_l = 0; i_l < m_attrUILs.size(); i_l++ )
 		{
 		    attr = attrAt(m_attrUILs[i_l]);
-		    if( attr.at().modif() >= tm && attr.at().fld().reserve() )
+		    if( attr.at().modif() >= tm && atoi(attr.at().fld().reserve().c_str()) )
 			opt->childAdd("el")->setAttr("id",m_attrUILs[i_l].c_str())->
-				    	     setAttr("pos",TSYS::int2str(attr.at().fld().reserve()))->
+				    	     setAttr("pos",attr.at().fld().reserve())->
 					     setText(attr.at().getS());
 		}
 	    opt->setAttr("tm",TSYS::uint2str(ownerSess()->calcClk( )));

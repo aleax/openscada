@@ -134,7 +134,7 @@ TFld::TFld( TFld &ifld ) : m_type(TFld::Integer), m_len(0), m_dec(0), m_flg(0)
 }
 
 TFld::TFld( const char *name, const char *descr, TFld::Type itype, unsigned iflg,
-            const char *valLen, const char *valDef, const char *val_s, const char *n_Sel, int ires ) : 
+            const char *valLen, const char *valDef, const char *val_s, const char *n_Sel, const char *ires ) : 
     m_type(TFld::Integer), m_len(0), m_dec(0), m_flg(0)
 {
     int st_pos, cur_pos;    
