@@ -146,7 +146,7 @@ void VCASess::getReq( SSess &ses )
 		objAt(ses.url).at().setAttrs(req,ses.user);
 	    }
 	}
-	if( objPresent(ses.url) )	objAt(ses.url).at().getReq(ses);
+	if( objPresent(ses.url) ) objAt(ses.url).at().getReq(ses);
     }
     else
     {
@@ -817,7 +817,11 @@ void VCADiagram::getReq( SSess &ses )
     long long tEnd = tTime;                     			//Trends end point (us)
     long long tPict = tEnd;
     long long tBeg = tEnd - tSz;                                      	//Trends begin point (us)
-    if( !parNum || tSz <= 0 ) return;
+    if( !parNum || tSz <= 0 ) 
+    {
+	ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page;
+	return;
+    }
 
     //-- Get scale --
     map< string, string >::iterator prmEl = ses.prm.find("xSc");
@@ -858,20 +862,20 @@ void VCADiagram::getReq( SSess &ses )
     long long aVend;                    //Corrected for allow data the trend end point
     long long aVbeg;                    //Corrected for allow data the trend begin point
     long long hDiv = 1, hDivBase = 1;   //Horisontal scale divisor
-		    
-    int hmax_ln = tArW/30;
+
+    int hmax_ln = tArW/((sclHor&0x2)?40:15);
     if( hmax_ln >= 2 )
     {
         int hvLev = 0;
         long long hLen = tEnd - tBeg;
-        if( hLen/86400000000ll > 2 )    { hvLev = 5; hDivBase = hDiv = 86400000000ll; } //Days
-        else if( hLen/3600000000ll > 2 ){ hvLev = 4; hDivBase = hDiv =  3600000000ll; } //Hours
-        else if( hLen/60000000 > 2 )    { hvLev = 3; hDivBase = hDiv =    60000000; }   //Minutes
-        else if( hLen/1000000 > 2 )     { hvLev = 2; hDivBase = hDiv =     1000000; }   //Seconds
-        else if( hLen/1000 > 2 )        { hvLev = 1; hDivBase = hDiv =        1000; }   //Milliseconds
-        while( hLen/hDiv > hmax_ln )    hDiv *= 10;
-        while( hLen/hDiv < hmax_ln/2 && !((hDiv/2)%hDivBase) )  hDiv/=2;
-        if( hmax_ln >= 4 && trcPer )
+        if( hLen/86400000000ll >= 2 )    { hvLev = 5; hDivBase = hDiv = 86400000000ll; } //Days
+        else if( hLen/3600000000ll >= 2 ){ hvLev = 4; hDivBase = hDiv =  3600000000ll; } //Hours
+        else if( hLen/60000000 >= 2 )    { hvLev = 3; hDivBase = hDiv =    60000000; }   //Minutes
+        else if( hLen/1000000 >= 2 )     { hvLev = 2; hDivBase = hDiv =     1000000; }   //Seconds
+        else if( hLen/1000 >= 2 )        { hvLev = 1; hDivBase = hDiv =        1000; }   //Milliseconds
+        while( hLen/hDiv > hmax_ln )     hDiv *= 10;
+        while( hLen/hDiv < hmax_ln/2 )   hDiv /= 2;
+        if( hLen/hDiv >= 5 && trcPer )
         {
             tPict = hDiv*(tEnd/hDiv+1);
             tBeg = tPict-hLen;
@@ -886,6 +890,7 @@ void VCADiagram::getReq( SSess &ses )
             //---- Draw generic grid line ----
 	    gdImageLine(im,tArX,tArY+tArH,tArX+tArW,tArY+tArH,clr_grid);
             //---- Draw full trend's data and time to the trend end position ----
+	    int begMarkBrd = -1;
             int endMarkBrd = tArX+tArW;
             if( sclHor&0x2 )
             {
@@ -896,7 +901,7 @@ void VCADiagram::getReq( SSess &ses )
 		    snprintf(lab_tm,sizeof(lab_tm),"%d:%02d",ttm->tm_hour,ttm->tm_min);
                 else if( tPict%1000000 == 0 )
 		    snprintf(lab_tm,sizeof(lab_tm),"%d:%02d:%02d",ttm->tm_hour,ttm->tm_min,ttm->tm_sec);
-                else snprintf(lab_tm,sizeof(lab_tm),"%d:%02d:%02d.%d",ttm->tm_hour,ttm->tm_min,ttm->tm_sec,tPict%1000000);
+                else snprintf(lab_tm,sizeof(lab_tm),"%d:%02d:%g",ttm->tm_hour,ttm->tm_min,(float)ttm->tm_sec+(float)(tPict%1000000)/1e6);
 		gdImageString(im,gdFontTiny,tArX+tArW-gdFontTiny->w*strlen(lab_dt),tArY+tArH+3+gdFontTiny->h,(unsigned char *)lab_dt,clr_mrk);
 		gdImageString(im,gdFontTiny,tArX+tArW-gdFontTiny->w*strlen(lab_tm),tArY+tArH+3,(unsigned char *)lab_tm,clr_mrk);
 		endMarkBrd = vmin(tArX+tArW-gdFontTiny->w*strlen(lab_dt),tArX+tArW-gdFontTiny->w*strlen(lab_tm));
@@ -915,7 +920,7 @@ void VCADiagram::getReq( SSess &ses )
                 {
                     tm_t = i_h/1000000;
             	    ttm = localtime(&tm_t);
-                    int chLev = 0;
+                    int chLev = -1;
                     if( !first_m )
                     {
                         if( ttm->tm_mon > ttm1.tm_mon || ttm->tm_year > ttm1.tm_year )  chLev = 5;
@@ -927,30 +932,39 @@ void VCADiagram::getReq( SSess &ses )
 		    //Check for data present
                     lab_dt[0] = lab_tm[0] = 0;
                     if( hvLev == 5 || chLev >= 4 )                                      //Date
-                	(chLev>=5) ? snprintf(lab_dt,sizeof(lab_dt),"%d-%02d-%d",ttm->tm_mday,ttm->tm_mon+1,ttm->tm_year+1900) :
+                	(chLev>=5 || chLev==-1) ? snprintf(lab_dt,sizeof(lab_dt),"%d-%02d-%d",ttm->tm_mday,ttm->tm_mon+1,ttm->tm_year+1900) :
 				     snprintf(lab_dt,sizeof(lab_dt),"%d",ttm->tm_mday);
                     if( (hvLev == 4 || hvLev == 3 || ttm->tm_min) && !ttm->tm_sec )     //Hours and minuts
 			snprintf(lab_tm,sizeof(lab_tm),"%d:%02d",ttm->tm_hour,ttm->tm_min);
                     else if( (hvLev == 2 || ttm->tm_sec) && !(i_h%1000000) )            //Seconds
-                	(chLev>=2) ? snprintf(lab_tm,sizeof(lab_tm),"%d:%02d:%02d",ttm->tm_hour,ttm->tm_min,ttm->tm_sec) :
+                	(chLev>=2 || chLev==-1) ? snprintf(lab_tm,sizeof(lab_tm),"%d:%02d:%02d",ttm->tm_hour,ttm->tm_min,ttm->tm_sec) :
 				     snprintf(lab_tm,sizeof(lab_tm),"%ds",ttm->tm_sec);
                     else if( hvLev <= 1 || i_h%1000000 )                                //Milliseconds
-                        (chLev>=2) ? snprintf(lab_tm,sizeof(lab_tm),"%d:%02d:%02d.%d",ttm->tm_hour,ttm->tm_min,ttm->tm_sec,i_h%1000000) :
-		        (chLev>=1) ? snprintf(lab_tm,sizeof(lab_tm),"%d.%ds",ttm->tm_sec,i_h%1000000) :
+                        (chLev>=2 || chLev==-1) ? snprintf(lab_tm,sizeof(lab_tm),"%d:%02d:%g",ttm->tm_hour,ttm->tm_min,(float)ttm->tm_sec+(float)(i_h%1000000)/1e6) :
+		        (chLev>=1) ? snprintf(lab_tm,sizeof(lab_tm),"%gs",(float)ttm->tm_sec+(float)(i_h%1000000)/1e6) :
 				     snprintf(lab_tm,sizeof(lab_tm),"%gms",(double)(i_h%1000000)/1000.);
-                    int wdth;
+                    int wdth, tpos, endPosTm = 0, endPosDt = 0;
                     if( lab_tm[0] )
                     {
-			wdth = gdFontTiny->w*strlen(lab_tm)/2;
-			if( (h_pos+wdth) < endMarkBrd )
-			    gdImageString(im,gdFontTiny,vmax(h_pos-wdth,0),tArY+tArH+3,(unsigned char *)lab_tm,clr_mrk);
+			wdth = gdFontTiny->w*strlen(lab_tm);
+			tpos = vmax(h_pos-wdth/2,0);
+			if( (tpos+wdth) < endMarkBrd && tpos > begMarkBrd )
+			{
+			    gdImageString(im,gdFontTiny,tpos,tArY+tArH+3,(unsigned char *)lab_tm,clr_mrk);
+			    endPosTm = tpos+wdth;
+			}
 		    }
 		    if( lab_dt[0] )
 		    {
-			wdth = gdFontTiny->w*strlen(lab_dt)/2;
-			if( (h_pos+wdth) < endMarkBrd )
-			    gdImageString(im,gdFontTiny,vmax(h_pos-wdth,0),tArY+tArH+3+gdFontTiny->h,(unsigned char *)lab_dt,clr_mrk);
+			wdth = gdFontTiny->w*strlen(lab_dt);
+			tpos = vmax(h_pos-wdth/2,0);
+			if( (tpos+wdth) < endMarkBrd && tpos > begMarkBrd )
+			{
+			    gdImageString(im,gdFontTiny,tpos,tArY+tArH+3+gdFontTiny->h,(unsigned char *)lab_dt,clr_mrk);
+			    endPosDt = tpos+wdth;
+			}
 		    }
+		    begMarkBrd = vmax(begMarkBrd,vmax(endPosTm,endPosDt));
 		    memcpy((char*)&ttm1,(char*)ttm,sizeof(tm));
 		    first_m = false;
 		}
@@ -975,7 +989,12 @@ void VCADiagram::getReq( SSess &ses )
 	    aVbeg = vmax(tBeg,trnds[0].valBeg());
 	    aVend = vmin(tEnd,trnds[0].valEnd());
 
-	    if( aVbeg >= aVend ) return;
+	    if( aVbeg >= aVend )
+	    {
+		gdImageDestroy(im);
+		ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page;
+		return;
+	    }
             //----- Calc value borders -----
             vsMax = -3e300, vsMin = 3e300;
 	    bool end_vl = false;
@@ -992,7 +1011,8 @@ void VCADiagram::getReq( SSess &ses )
 		}
 		ipos++;
 	    }
-	    if( vsMax == -3e300 ) { vsMax = 1; vsMin = 0; }
+	    if( vsMax == -3e300 ) 	{ vsMax = 1.0; vsMin = 0.0; }
+	    else if( vsMax == vsMin )   { vsMax += 1.0; vsMin -= 1.0; }
 	}
         else { vsMax = trnds[0].bordU(); vsMin = trnds[0].bordL(); }
     }
@@ -1321,7 +1341,7 @@ void VCADiagram::TrendObj::loadData( const string &user, bool full )
         XMLNode req("info");
         req.setAttr("arch",arch)->setAttr("path",addr()+"/%2fserv%2f0");
         if( mod->cntrIfCmd(req,user,false) || atoi(req.attr("vtp").c_str()) == 5 )
-    	    arh_per = arh_beg = arh_end = 0;
+    	{ arh_per = arh_beg = arh_end = 0; return; }
         else
         {
     	    val_tp  = atoi(req.attr("vtp").c_str());
@@ -1416,5 +1436,5 @@ void VCADiagram::TrendObj::loadData( const string &user, bool full )
         while( vals.size() > 2000 )     vals.pop_back();
     }
     //- Check for archive jump -
-    if( arch.empty() && (bbeg-tTimeGrnd)/bper ) { tTime = bbeg-1; goto m1; }
+    if( arch.empty() && (bbeg-tTimeGrnd)/bper ) { tTime = bbeg-bper; goto m1; }
 }

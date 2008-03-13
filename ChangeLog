@@ -1,3 +1,10 @@
+2008-03-13 Roman
+- FIX:/Archive/Value: Value's trend paint is fixed and updated.
+- FIX:/UI/Vision: Trends painter and data loader of primitive 'Diagram' is fixed.
+- FIX:/UI/WebVision: Trends painter and data loader of primitive 'Diagram' is fixed.
+- FIX:/UI/WebVision: Disabled trends updating is fixed.
+
+
 2008-03-11 Roman
 - !:/Value: The reserve field type is changed to string.
 - !!:/DAQ/BlockCalc: Documentation and translation is updated and version 1.0.1 is relised.

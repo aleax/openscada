@@ -395,7 +395,7 @@ bool RunPageView::callPage( const string &pg_it, const string &pgGrp, const stri
 		((RunPageView *)children().at(i_ch))->callPage(pg_it,pgGrp,pgSrc)) 
 	    return true;
     //- Unknown and empty source pages open as master page child windows -
-    if( !parent() )	{ pgOpen( pg_it ); return true; }
+    if( !parent() )		{ pgOpen( pg_it ); return true; }
     
     return false;
 }
@@ -408,7 +408,7 @@ RunPageView *RunPageView::pgOpen( const string &ipg )
     pg->load("");
     pg->moveF(QPointF(mapToGlobal(pos()).x()+sizeF().width()/2-pg->sizeF().width()/2,
     	     mapToGlobal(pos()).y()+sizeF().height()/2-pg->sizeF().height()/2));
-    
+
     return pg;
 }
 

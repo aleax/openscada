@@ -703,9 +703,10 @@ void WdgView::load( const string& item, bool load, bool init )
 	}
 	setAllAttrLoad(false);
     }
+
     //- Init loaded data -     
     if( (item.empty() || item == id()) && init && wLevel()>0 )	attrSet("","load",-1);
-    
+
     //- Going to children load and/or init -
     for( int i_c = 0; i_c < children().size(); i_c++ )
         if( qobject_cast<WdgView*>(children().at(i_c)) )

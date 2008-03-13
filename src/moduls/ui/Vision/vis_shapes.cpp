@@ -1367,7 +1367,6 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 		    case 3: trnd->setColor(val);		break;		//color
 		    case 4: trnd->setCurVal(atof(val.c_str())); make_pct = false;	break;		//value
 		}
-
 	    }
     }
     
@@ -1439,19 +1438,20 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
     long long aVbeg;			//Corrected for allow data the trend begin point
     long long hDiv = 1, hDivBase = 1;	//Horisontal scale divisor
     
-    int hmax_ln = tAr.width()/30;
+    int hmax_ln = tAr.width()/((sclHor&0x2)?40:15);
     if( hmax_ln >= 2 )
     {
 	int hvLev = 0;
 	long long hLen = tEnd - tBeg;
-	if( hLen/86400000000ll > 2 )	{ hvLev = 5; hDivBase = hDiv = 86400000000ll; }	//Days
-	else if( hLen/3600000000ll > 2 ){ hvLev = 4; hDivBase = hDiv =  3600000000ll; }	//Hours
-	else if( hLen/60000000 > 2 )	{ hvLev = 3; hDivBase = hDiv =    60000000; }	//Minutes
-	else if( hLen/1000000 > 2 )	{ hvLev = 2; hDivBase = hDiv =     1000000; }	//Seconds
-	else if( hLen/1000 > 2 )	{ hvLev = 1; hDivBase = hDiv =        1000; }	//Milliseconds
-	while( hLen/hDiv > hmax_ln )	hDiv *= 10; 
-	while( hLen/hDiv < hmax_ln/2 && !((hDiv/2)%hDivBase) )	hDiv/=2;
-	if( hmax_ln >= 4 && w->dc()["trcPer"].toInt() )
+	if( hLen/86400000000ll >= 2 )	{ hvLev = 5; hDivBase = hDiv = 86400000000ll; }	//Days
+	else if( hLen/3600000000ll >= 2 ){ hvLev = 4; hDivBase = hDiv =  3600000000ll; }	//Hours
+	else if( hLen/60000000 >= 2 )	{ hvLev = 3; hDivBase = hDiv =    60000000; }	//Minutes
+	else if( hLen/1000000 >= 2 )	{ hvLev = 2; hDivBase = hDiv =     1000000; }	//Seconds
+	else if( hLen/1000 >= 2 )	{ hvLev = 1; hDivBase = hDiv =        1000; }	//Milliseconds
+	while( hLen/hDiv > hmax_ln )	hDiv *= 10;
+	while( hLen/hDiv < hmax_ln/2 )	hDiv/=2;
+	
+	if( (hLen/hDiv) >= 5 && w->dc()["trcPer"].toInt() )
 	{
 	    tPict = hDiv*(tEnd/hDiv+1);
 	    tBeg = tPict-hLen;
@@ -1467,6 +1467,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    pnt.setPen(grdPen);
 	    pnt.drawLine(tAr.x(),tAr.y()+tAr.height(),tAr.x()+tAr.width(),tAr.y()+tAr.height());
 	    //---- Draw full trend's data and time to the trend end position ----
+	    int begMarkBrd = -1;
 	    int endMarkBrd = tAr.x()+tAr.width();
 	    if( sclHor&0x2 )
 	    {
@@ -1478,7 +1479,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		    lab_tm = QString("%1:%2").arg(ttm->tm_hour).arg(ttm->tm_min,2,10,QChar('0'));
 		else if( tPict%1000000 == 0 )
 		    lab_tm = QString("%1:%2:%3").arg(ttm->tm_hour).arg(ttm->tm_min,2,10,QChar('0')).arg(ttm->tm_sec,2,10,QChar('0'));
-		else lab_tm = QString("%1:%2:%3.%4").arg(ttm->tm_hour).arg(ttm->tm_min,2,10,QChar('0')).arg(ttm->tm_sec,2,10,QChar('0')).arg(tPict%1000000);
+		else lab_tm = QString("%1:%2:%3").arg(ttm->tm_hour).arg(ttm->tm_min,2,10,QChar('0')).arg((float)ttm->tm_sec+(float)(tPict%1000000)/1e6);
 		int markBrd = tAr.x()+tAr.width()-pnt.fontMetrics().boundingRect(lab_tm).width();
 		endMarkBrd = vmin(endMarkBrd,markBrd);
 		pnt.drawText(markBrd,tAr.y()+tAr.height()+mrkHeight,lab_tm);
@@ -1500,7 +1501,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		{		    
 		    tm_t = i_h/1000000;
 		    ttm = localtime(&tm_t);
-		    int chLev = 0;
+		    int chLev = -1;
 		    if( !first_m )
 		    {
 			if( ttm->tm_mon > ttm1.tm_mon || ttm->tm_year > ttm1.tm_year )	chLev = 5;
@@ -1513,31 +1514,40 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		    //Check for data present
 		    lab_dt.clear(), lab_tm.clear();
 		    if( hvLev == 5 || chLev >= 4 ) 					//Date
-			lab_dt = (chLev>=5) ? QString("%1-%2-%3").arg(ttm->tm_mday).arg(ttm->tm_mon+1,2,10,QChar('0')).arg(ttm->tm_year+1900) :
+			lab_dt = (chLev>=5 || chLev==-1) ? QString("%1-%2-%3").arg(ttm->tm_mday).arg(ttm->tm_mon+1,2,10,QChar('0')).arg(ttm->tm_year+1900) :
 					      QString::number(ttm->tm_mday);
 		    if( (hvLev == 4 || hvLev == 3 || ttm->tm_min) && !ttm->tm_sec )	//Hours and minuts
 			lab_tm =  QString("%1:%2").arg(ttm->tm_hour).arg(ttm->tm_min,2,10,QChar('0'));
 		    else if( (hvLev == 2 || ttm->tm_sec) && !(i_h%1000000) )		//Seconds
-			lab_tm = (chLev>=2) ? QString("%1:%2:%3").arg(ttm->tm_hour).arg(ttm->tm_min,2,10,QChar('0')).arg(ttm->tm_sec,2,10,QChar('0')) :
+			lab_tm = (chLev>=2 || chLev==-1) ? QString("%1:%2:%3").arg(ttm->tm_hour).arg(ttm->tm_min,2,10,QChar('0')).arg(ttm->tm_sec,2,10,QChar('0')) :
 					      QString("%1s").arg(ttm->tm_sec);
 		    else if( hvLev <= 1 || i_h%1000000 )				//Milliseconds
-			lab_tm = (chLev>=2) ? QString("%1:%2:%3.%4").arg(ttm->tm_hour).arg(ttm->tm_min,2,10,QChar('0')).arg(ttm->tm_sec,2,10,QChar('0')).arg(i_h%1000000) :
-				 (chLev>=1) ? QString("%1.%2s").arg(ttm->tm_sec).arg(i_h%1000000) :
+			lab_tm = (chLev>=2 || chLev==-1) ? QString("%1:%2:%3").arg(ttm->tm_hour).arg(ttm->tm_min,2,10,QChar('0')).arg((float)ttm->tm_sec+(float)(i_h%1000000)/1e6) :
+				 (chLev>=1) ? QString("%1s").arg((float)ttm->tm_sec+(float)(i_h%1000000)/1e6) :
 					      QString("%1ms").arg((double)(i_h%1000000)/1000.,0,'g');
-		    int wdth;
+		    int wdth, tpos, endPosTm = 0, endPosDt = 0;
 		    pnt.setPen(mrkPen);
 		    if( lab_tm.size() )
 		    {
 			wdth = pnt.fontMetrics().boundingRect(lab_tm).width();
-			if( (h_pos+wdth/2) < endMarkBrd )
-			    pnt.drawText( vmax(h_pos-wdth/2,0), tAr.y()+tAr.height()+mrkHeight, lab_tm );
+			tpos = vmax(h_pos-wdth/2,0);
+			if( (tpos+wdth) < endMarkBrd && tpos > begMarkBrd )
+			{
+			    pnt.drawText( tpos, tAr.y()+tAr.height()+mrkHeight, lab_tm );
+			    endPosTm = tpos+wdth;
+			}
 		    }
 		    if( lab_dt.size() )
 		    {
 			wdth = pnt.fontMetrics().boundingRect(lab_dt).width();
-			if( (h_pos+wdth/2) < endMarkBrd )
-			    pnt.drawText( vmax(h_pos-wdth/2,0), tAr.y()+tAr.height()+2*mrkHeight, lab_dt );
+			tpos = vmax(h_pos-wdth/2,0);
+			if( (tpos+wdth) < endMarkBrd && tpos > begMarkBrd )
+			{
+			    pnt.drawText( tpos, tAr.y()+tAr.height()+2*mrkHeight, lab_dt );
+			    endPosDt = tpos+wdth;
+			}
 		    }
+		    begMarkBrd = vmax(begMarkBrd,vmax(endPosTm,endPosDt));
 		    memcpy((char*)&ttm1,(char*)ttm,sizeof(tm));
 		    first_m = false;
 		}
@@ -1548,7 +1558,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    }
 	}
     }
-    
+
     //--- Calc vertical scale ---
     //---- Check for scale mode ----
     double vsMax = 100, vsMin = 0;	//Trend's vertical scale border
@@ -1580,7 +1590,8 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		}
 		ipos++;
 	    }
-	    if( vsMax == -3e300 ) { vsMax = 1; vsMin = 0; }
+	    if( vsMax == -3e300 ) 	{ vsMax = 1.0; vsMin = 0.0; }
+	    else if( vsMax == vsMin )	{ vsMax += 1.0; vsMin -= 1.0; }
 	}
 	else { vsMax = sTr->bordU(); vsMin = sTr->bordL(); }
     }
@@ -1711,7 +1722,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
     	    if( !curPos ) break;
 	}
     }
-    
+
     (*(QRect*)w->dc()["pictRect"].value<void*>()) = tAr;
     w->dc()["tPict"] = tPict;
 }
@@ -1910,7 +1921,7 @@ void ShapeDiagram::TrendObj::loadData( bool full )
 	XMLNode req("info");
 	req.setAttr("arch",arch)->setAttr("path",addr()+"/%2fserv%2f0");
 	if( view->cntrIfCmd(req,true) || atoi(req.attr("vtp").c_str()) == 5 )
-	    arh_per = arh_beg = arh_end = 0;
+	{ arh_per = arh_beg = arh_end = 0; return; }
 	else
 	{
 	    val_tp  = atoi(req.attr("vtp").c_str());
@@ -1941,7 +1952,7 @@ void ShapeDiagram::TrendObj::loadData( bool full )
 	}
 	return;
     }
-    
+
     if( !arh_per )	return;
     //- Correct request to archive border -
     wantPer   = (vmax(wantPer,arh_per)/arh_per)*arh_per;
@@ -1979,7 +1990,7 @@ void ShapeDiagram::TrendObj::loadData( bool full )
     bbeg = atoll(req.attr("tm_grnd").c_str());
     bend = atoll(req.attr("tm").c_str());
     bper = atoi(req.attr("per").c_str());
-	    
+
     prevPos = 0;
     prevVal = EVAL_REAL;
     buf.clear();
@@ -2005,7 +2016,7 @@ void ShapeDiagram::TrendObj::loadData( bool full )
         while( vals.size() > 2000 )	vals.pop_back();
     }
     //- Check for archive jump -
-    if( arch.empty() && (bbeg-tTimeGrnd)/bper )	{ tTime = bbeg-1; goto m1; }
+    if( arch.empty() && (bbeg-tTimeGrnd)/bper )	{ tTime = bbeg-bper; goto m1; }
 }
 
 //************************************************
