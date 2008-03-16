@@ -40,7 +40,8 @@ Widget::Widget( const string &id, const string &isrcwdg ) :
 }
 
 Widget::~Widget()
-{    
+{
+    nodeDelAll( );
     attr_cfg.valDet(this);
 }
 
@@ -133,6 +134,10 @@ void Widget::postEnable(int flag)
 
 void Widget::preDisable( int flag )
 {
+    //- Delete heritors widgets -
+    while( herit().size() )	mod->nodeDel(herit()[0].at().path(),0,flag);
+    
+    //- Disable widget -
     if( enable() )  setEnable(false);
 }
 
@@ -206,11 +211,18 @@ void Widget::setEnable( bool val )
     }
     if(!val)
     {
-        //- Free inherit attributes -
+	//- Disable heritors widgets -
+	for( int i_h = 0; i_h < m_herit.size(); i_h++ )
+	    if( m_herit[i_h].at().enable( ) )
+		try { m_herit[i_h].at().setEnable(false); }
+		catch(...)
+		{ mess_err(nodePath().c_str(),_("Heritors widget <%s> disable error"),m_herit[i_h].at().id().c_str()); }    
+        
+	//- Free inherit attributes -
         vector<string>  ls;
         attrList(ls);
         for(int i_l = 0; i_l < ls.size(); i_l++)
-            //if(attrAt(ls[i_l]).at().flgGlob()&Attr::IsInher)
+            if( attrAt(ls[i_l]).at().flgGlob()&Attr::IsInher )
                 attrDel( ls[i_l] );
 
 	if(!m_parent.freeStat()) 
@@ -231,14 +243,6 @@ void Widget::setEnable( bool val )
 	    catch(...)
 	    { mess_err(nodePath().c_str(),_("Child widget <%s> enable/disable error"),ls[i_l].c_str()); }
 
-    //- Disable heritors widgets -
-    if( !val )
-	for( int i_h = 0; i_h < m_herit.size(); i_h++ )
-	    if( m_herit[i_h].at().enable( ) )
-		try { m_herit[i_h].at().setEnable(false); }
-		catch(...)
-		{ mess_err(nodePath().c_str(),_("Heritors widget <%s> disable error"),m_herit[i_h].at().id().c_str()); }
-    
     m_enable = val;
 }
 

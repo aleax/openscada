@@ -111,7 +111,7 @@ class TCntrNode
 	
 	void nodeList( vector<string> &list, const string& gid = "" );				//Full node list
 	AutoHD<TCntrNode> nodeAt( const string &path, int lev = 0, char sep = 0, int off = 0 );	//Get node for full path
-	//void nodeDel( const string &path, char sep = 0, int flag = 0 );			//Delete node at full path
+	void nodeDel( const string &path, char sep = 0, int flag = 0 );				//Delete node at full path
 	
 	TCntrNode *nodePrev( bool noex = false );
         Mode nodeMode()			{ return m_mod; }
@@ -129,18 +129,17 @@ class TCntrNode
 	void nodeDelAll( );	//For hard link objects
 	
 	void setNodePrev( TCntrNode *node )	{ prev.node = node; }
-	
-	//- Conteiners -
-        unsigned grpSize()	{ return chGrp.size(); }
-        unsigned grpAdd( const string &id, bool ordered = false );
-	
+
 	//- Childs -
+        AutoHD<TCntrNode> chldAt( unsigned igr, const string &name, const string &user = "" );
 	void chldList( unsigned igr, vector<string> &list );
 	bool chldPresent( unsigned igr, const string &name );
 	void chldAdd( unsigned igr, TCntrNode *node, int pos = -1 );
 	void chldDel( unsigned igr, const string &name, long tm = -1, int flag = 0 );
-
-        AutoHD<TCntrNode> chldAt( unsigned igr, const string &name, const string &user = "" );
+	
+	//- Conteiners -
+        unsigned grpSize()	{ return chGrp.size(); }
+        unsigned grpAdd( const string &id, bool ordered = false );
 	
 	virtual void preEnable( int flag )	{ }
 	virtual void postEnable( int flag )	{ }

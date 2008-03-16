@@ -919,7 +919,7 @@ void CWidget::preDisable( int flag )
 {
     if( flag && !parent().freeStat() )	wdgIherited = parent().at().isLink();
     else wdgIherited = false;
-    
+
     Widget::preDisable(flag);
 }
 

@@ -1,4 +1,5 @@
-#Relaxed mode for diamond board liraries build
+#Relaxed mode for diamond board liraries build and for modules simbols into OpenSCADA kernel resolving check
+%set_verify_elf_method relaxed
 #set_verify_elf_method textrel=relaxed
 #define _initdir /etc/init.d
 
@@ -81,9 +82,13 @@ install -m 755 -d $RPM_BUILD_ROOT/%{_includedir}/%{name}/
 install -m 644 *.h $RPM_BUILD_ROOT/%{_includedir}/%{name}
 install -m 644 src/*.h $RPM_BUILD_ROOT/%{_includedir}/%{name}
 install -m 644 -pD data/oscada.xml $RPM_BUILD_ROOT/%{_sysconfdir}/oscada.xml
+install -m 644 -pD data/openscada.desktop $RPM_BUILD_ROOT/%{_desktopdir}/openscada.desktop
+install -m 644 -pD data/openscada.png $RPM_BUILD_ROOT/%{_iconsdir}/openscada.png
 install -m 755 -pD data/oscada.init $RPM_BUILD_ROOT/%{_initdir}/oscadad
-install -m 644 demo/oscada_demo.xml $RPM_BUILD_ROOT/%{_sysconfdir}
-install -m 755 demo/openscada_demo $RPM_BUILD_ROOT/%{_bindir}
+install -m 644 -pD demo/oscada_demo.xml $RPM_BUILD_ROOT/%{_sysconfdir}/oscada_demo.xml
+install -m 755 -pD demo/openscada_demo $RPM_BUILD_ROOT/%{_bindir}/openscada_demo
+install -m 644 -pD demo/openscada_demo.desktop $RPM_BUILD_ROOT/%{_desktopdir}/openscada_demo.desktop
+install -m 644 -pD demo/openscada_demo.png $RPM_BUILD_ROOT/%{_iconsdir}/openscada_demo.png
 install -m 777 -d $RPM_BUILD_ROOT/var/spool/%{name}/DATA
 install -m 755 -d $RPM_BUILD_ROOT/var/spool/%{name}/icons
 echo "Open SCADA data dir" > $RPM_BUILD_ROOT/var/spool/%{name}/DATA/.data
@@ -100,6 +105,8 @@ install -m 777 -d $RPM_BUILD_ROOT/var/spool/%{name}/ARCHIVES/VAL
 %config(noreplace) %{_sysconfdir}/oscada.xml
 %config %{_initdir}/oscadad
 %{_bindir}/%{name}
+%{_desktopdir}/openscada.desktop
+%{_iconsdir}/openscada.png
 %{_libdir}/*.so*
 %{_libdir}/%{name}/*.so
 %{_datadir}/locale/*/LC_MESSAGES/*
@@ -123,6 +130,8 @@ install -m 777 -d $RPM_BUILD_ROOT/var/spool/%{name}/ARCHIVES/VAL
 %defattr(-,root,root)
 %config(noreplace) %{_sysconfdir}/oscada_demo.xml
 %{_bindir}/openscada_demo
+%{_desktopdir}/openscada_demo.desktop
+%{_iconsdir}/openscada_demo.png
 /var/spool/%{name}/DATA/
 
 %changelog

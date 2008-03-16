@@ -233,14 +233,14 @@ AutoHD<TCntrNode> TCntrNode::nodeAt( const string &path, int lev, char sep, int 
     if( chGrp.size() )	return chldAt(0,s_br).at().nodeAt(path,0,sep,off);
 }
 
-/*void TCntrNode::nodeDel( const string &path, char sep, int flag )
+void TCntrNode::nodeDel( const string &path, char sep, int flag )
 {
     AutoHD<TCntrNode> del_n = nodeAt(path,0,sep);
-    n_grp = del_n.at().prev.grp;
-    n_id  = del_n.at().nodeName();
+    int n_grp = del_n.at().prev.grp;
+    string n_id  = del_n.at().nodeName();
     del_n = AutoHD<TCntrNode>(del_n.at().prev.node);
     del_n.at().chldDel(n_grp,n_id,-1,flag);
-}*/
+}
 
 unsigned TCntrNode::grpAdd( const string &iid, bool iordered )
 {

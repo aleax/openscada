@@ -293,7 +293,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    int pcnt = sscanf(w->dc().value("font",0).toString().toAscii().data(),
 		    "%100s %d %d %d %d %d",family,&size,&bold,&italic,&underline,&strike);
 	    if( pcnt >= 1 )	fnt->setFamily(string(family,100).c_str());
-	    if( pcnt >= 2 )	fnt->setPointSize(size);
+	    if( pcnt >= 2 )	fnt->setPixelSize(size);
 	    if( pcnt >= 3 )	fnt->setBold(bold);
 	    if( pcnt >= 4 )	fnt->setItalic(italic);
 	    if( pcnt >= 5 )	fnt->setUnderline(underline);
@@ -716,7 +716,7 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    int pcnt = sscanf(w->dc().value("font",0).toString().toAscii().data(),
 		    "%100s %d %d %d %d %d",family,&size,&bold,&italic,&underline,&strike);
 	    if( pcnt >= 1 )	fnt->setFamily(string(family,100).c_str());
-	    if( pcnt >= 2 )	fnt->setPointSize(size);
+	    if( pcnt >= 2 )	fnt->setPixelSize(size);
 	    if( pcnt >= 3 )	fnt->setBold(bold);
 	    if( pcnt >= 4 )	fnt->setItalic(italic);
 	    if( pcnt >= 5 )	fnt->setUnderline(underline);
@@ -1325,7 +1325,7 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    int size, bold, italic, underline, strike;        
 	    int pcnt = sscanf(val.c_str(),"%100s %d %d %d %d %d",family,&size,&bold,&italic,&underline,&strike);
 	    if( pcnt >= 1 )	fnt->setFamily(string(family,100).c_str());
-	    if( pcnt >= 2 )	fnt->setPointSize(size);
+	    if( pcnt >= 2 )	fnt->setPixelSize(size);
 	    if( pcnt >= 3 )	fnt->setBold(bold);
 	    if( pcnt >= 4 )	fnt->setItalic(italic);
 	    if( pcnt >= 5 )	fnt->setUnderline(underline);

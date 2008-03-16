@@ -1,0 +1,15 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=OpenSCADA
+Categories=Application;Development;Graphics;
+Type=Application
+Exec=openscada_demo
+Icon=openscada_demo
+Terminal=false
+Name=OpenSCADA demo
+GenericName=Demo of open SCADA system
+Comment=Demo of open supervisory control and data acquisition system
+GenericName[ru]=Демонстрация открытой SCADA системы
+Comment[ru]=Демонстрация открытой системы визуального контроля и сбора данных
+GenericName[uk]=Демонстрація відкритої SCADA системи
+Comment[uk]=Демонстрація відкритої системи візуального контроля та збору даних

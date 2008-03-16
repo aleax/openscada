@@ -420,12 +420,14 @@ class DevelWdgView: public WdgView
         bool select( )		{ return m_flgs&wdgSelect; }	//Select widget state
         string selectChilds( int *cnt = NULL, vector<DevelWdgView*> *wdgs = NULL );     	//Get selected include widgets list
         bool edit( )		{ return m_flgs&wdgEdit; }     	//Edit mode state
-
+	
         void setSelect( bool vl, bool childs = true );
         void setEdit( bool vl );
 	void wdgsMoveResize( const QPointF &dP );
 	
 	WdgView *newWdgItem( const string &iwid );
+
+	void load( const string& item, bool load = true, bool init = true );
 						
     signals:
         void selected( const string& item );        //Change selection signal

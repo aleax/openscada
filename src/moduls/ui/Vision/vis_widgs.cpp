@@ -67,7 +67,7 @@ InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess,
     icon_lab->setPixmap(icon.pixmap(48));
     intr_lay->addWidget(icon_lab);
     
-    QLabel *inp_lab = new QLabel(mess,this);
+    inp_lab = new QLabel(mess,this);
     //inp_lab->setAlignment(Qt::AlignHCenter);
     inp_lab->setWordWrap(true);
     intr_lay->addWidget(inp_lab);
@@ -129,6 +129,11 @@ QString InputDlg::name()
     return "";
 }
 
+QString InputDlg::mess( )
+{
+    return inp_lab->text();
+}
+
 void InputDlg::setId(const QString &val)
 {
     if( m_id )	m_id->setText(val);
@@ -137,6 +142,11 @@ void InputDlg::setId(const QString &val)
 void InputDlg::setName(const QString &val)
 {
     if( m_name )m_name->setText(val);
+}
+
+void InputDlg::setMess( const QString &val )
+{
+    inp_lab->setText( val );
 }
 
 //*************************************************
@@ -685,13 +695,18 @@ string WdgView::resGet( const string &res )
 
 void WdgView::load( const string& item, bool load, bool init )
 {   
+    //printf("TEST 00: Load: %s (%d:%d)\n",item.c_str(),load,init);
+    
+    //unsigned long long t_cnt;
+    //if( wLevel() == 0 ) t_cnt = SYS->shrtCnt();
+    
     //- Load from data model - 
     if( load )
     {
-	setAllAttrLoad(true);    
+        childsUpdate( false );    
+	setAllAttrLoad( true );    
 	if( item.empty() || item == id() )
 	{
-	    childsUpdate( item==id() );
 	    shapeUpdate( );
 	
 	    //-- Request to widget for last attributes --
@@ -701,16 +716,19 @@ void WdgView::load( const string& item, bool load, bool init )
 		for( int i_el = 0; i_el < req.childSize(); i_el++ )
 		    attrSet("",req.childGet(i_el)->text(),atoi(req.childGet(i_el)->attr("pos").c_str()));
 	}
-	setAllAttrLoad(false);
+	setAllAttrLoad( false );
     }
 
     //- Init loaded data -     
-    if( (item.empty() || item == id()) && init && wLevel()>0 )	attrSet("","load",-1);
+    if( init && (item.empty() || item == id()) && wLevel()>0 )	attrSet("","load",-1);
 
     //- Going to children load and/or init -
     for( int i_c = 0; i_c < children().size(); i_c++ )
-        if( qobject_cast<WdgView*>(children().at(i_c)) )
-    	    ((WdgView*)children().at(i_c))->load((item==id())?"":item,load,(wLevel()>0)?init:false);
+    {
+	WdgView *wdg = qobject_cast<WdgView*>(children().at(i_c));
+        if( wdg && (item.empty() || item == id() || wdg->id() == item.substr(0,wdg->id().size())) )
+    	    wdg->load((item==id())?"":item,load,(wLevel()>0)?init:false);
+    }
 
     //- Children widgets order update -
     if( load ) orderUpdate( );
@@ -718,10 +736,18 @@ void WdgView::load( const string& item, bool load, bool init )
     //- Post load init for root widget -
     if( wLevel() == 0 )
     {
+	//printf("TEST 01: Load '%s' time %fms\n",item.c_str(),1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk()));
+	//t_cnt = SYS->shrtCnt();    
+    
 	attrSet("","load",-1);
 	for( int i_c = 0; i_c < children().size(); i_c++ )
-    	    if( qobject_cast<WdgView*>(children().at(i_c)) )
-    		((WdgView*)children().at(i_c))->load((item==id())?"":item,false,true);
+	{
+	    WdgView *wdg = qobject_cast<WdgView*>(children().at(i_c));
+    	    if( wdg && (item.empty() || item == id() || wdg->id() == item.substr(0,wdg->id().size())) )
+    		wdg->load((item==id())?"":item,false,true);
+	}
+
+	//printf("TEST 02: Init '%s' time %fms\n",item.c_str(),1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk()));
     }
 }
 

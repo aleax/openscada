@@ -1,3 +1,15 @@
+2008-03-16 Roman
+- !!:/SYS: Resource files (icons and menu links) for menu OpenSCADA execution is added.
+- /SYS: RPM spec file is updated for new resources file support.
+- !!:/SYS/Node: TCntrNode::nodeDel() finction is added.
+- FIX:/UI/VCAEngine: Self widget attributes deletion on object destroy is fixed.
+- FIX:/UI/VCAEngine: No deletion inheritor widgets on time of parent widget deletion is fixed
+- /UI/Vision: Widget's level icons is changed.
+- !!!:/UI/Vision: Development widget update on time included widgets insert/delete is made performance optimal.
+- !:/UI/Vision: Inserted widgets into development widget selection is added.
+- !!!:/UI/VCAEngine, /UI/Vision, /UI/WebVision: Font size dimension changed from punct to pixels.
+
+
 2008-03-13 Roman
 - FIX:/Archive/Value: Value's trend paint is fixed and updated.
 - FIX:/UI/Vision: Trends painter and data loader of primitive 'Diagram' is fixed.

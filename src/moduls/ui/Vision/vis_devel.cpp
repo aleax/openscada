@@ -1067,7 +1067,7 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt )
 		err = cntrIfCmd(req);
 	    }
 	    if( err ) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
-	    else emit modifiedItem(own_wdg);
+	    else emit modifiedItem(new_wdg);
 	}
     }
     cact->setChecked(false);    
@@ -1126,7 +1126,7 @@ void VisDevelop::visualItDel( const string &itms )
 	}
     	if( cntrIfCmd(req) )	    
 	    mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
-	else emit modifiedItem(it_own);
+	else emit modifiedItem(del_wdg);
     }	
 }
 
@@ -1223,7 +1223,9 @@ void VisDevelop::visualItPaste( )
 {
     string copy_buf_el;
     string work_wdg_work = work_wdg;
+    vector<string> copy_els, del_els;    
     
+    InputDlg dlg(this,actVisItPaste->icon(),"",_("Visual items move or copy"),true,true);    
     for( int w_off = 0; (copy_buf_el=TSYS::strSepParse(copy_buf.substr(1),0,';',&w_off)).size(); )
     {   
 	string s_elp, d_elp, s_el, d_el, t_el, t1_el;     
@@ -1300,8 +1302,8 @@ void VisDevelop::visualItPaste( )
 		else i_w++;
 	    t1_el += TSYS::int2str(i_c);
 	}	
-	//-- Make request dialog --    
-	InputDlg dlg(this,actVisItPaste->icon(),t_el.c_str(),_("Visual items move or copy"),true,true);
+	//-- Make request dialog --
+	dlg.setMess(t_el.c_str());
 	dlg.setId(t1_el.c_str());
 	if( dlg.exec() == QDialog::Accepted )
 	{
@@ -1324,13 +1326,22 @@ void VisDevelop::visualItPaste( )
 		    else req.setAttr("path",d_elp+"/"+d_el+"/%2fwdg%2fcfg%2fname");
 		    cntrIfCmd(req);
 		}
-		emit modifiedItem( (d_el.substr(0,4)=="prj_" || d_el.substr(0,4)=="wlb_") ? d_el : d_elp );
+		copy_els.push_back(d_elp+"/"+d_el);
+		del_els.push_back(copy_buf_el);
 	    }
-	    //- Remove source widget -
-	    if( copy_buf[0] == '1' )	visualItDel(copy_buf_el);
 	}
     }
-    if( copy_buf[0] == '1' )	copy_buf = "0";
+    
+    //- Send created widgets events-     
+    for( int i_e = 0; i_e < copy_els.size(); i_e++ )
+	emit modifiedItem(copy_els[i_e]);
+    //- Remove source widget -
+    if( copy_buf[0] == '1' )
+    {
+	for( int i_e = 0; i_e < del_els.size(); i_e++ )
+	    visualItDel(del_els[i_e]);
+	copy_buf = "0";
+    }
 }
 
 void VisDevelop::editToolUpdate( )

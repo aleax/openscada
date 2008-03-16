@@ -1590,6 +1590,22 @@ int DevelWdgView::cntrIfCmd( XMLNode &node, bool glob )
     return mainWin()->cntrIfCmd(node,glob);
 }
 
+void DevelWdgView::load( const string& item, bool load, bool init )
+{
+    WdgView::load( item, load, init );
+    
+    //- Select items -
+    if( wLevel() == 0 && !item.empty() )
+    {
+        for( int i_c = 0; i_c < children().size(); i_c++ )
+	{
+    	    DevelWdgView *wdg = qobject_cast<DevelWdgView*>(children().at(i_c));
+	    if( wdg && wdg->id() == item )	wdg->setSelect(true);
+        }
+	setSelect(true);
+    }								    
+}
+
 void DevelWdgView::saveGeom( const string& item )
 {
     if( item.empty() || item == id() )

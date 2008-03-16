@@ -53,13 +53,16 @@ namespace VISION
 	    InputDlg( QWidget *parent, const QIcon &icon, const QString &mess, 
 		    const QString &ndlg = "Vision dialog", bool with_id = false, bool with_nm = true );
 
-	    QString id();
-	    QString name();
+	    QString id( );
+	    QString name( );
+	    QString mess( );
 
 	    void setId( const QString &val );
 	    void setName( const QString &val );
+	    void setMess( const QString &val );
 
 	private:
+	    QLabel 	*inp_lab;
 	    QLineEdit 	*m_id, *m_name;
     };    
 

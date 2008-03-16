@@ -96,7 +96,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     connect(obj_enable, SIGNAL(stateChanged(int)), this, SLOT(isModify()));
     glay->addWidget(obj_enable,0,2,1,2);
 
-    lab = new QLabel(_("Library DB:"),tab_w);
+    lab = new QLabel(_("Container DB:"),tab_w);
     lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred) );    
     glay->addWidget(lab,1,1);
     obj_db = new LineEdit(tab_w);
