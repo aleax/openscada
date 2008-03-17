@@ -1106,10 +1106,14 @@ void WdgTree::updateTree( const string &vca_it )
     int i_l, i_w, i_cw, i_top, i_topwl, i_topcwl;
     QTreeWidgetItem *nit, *nit_w, *nit_cw;
     vector<string> list_wl;
-    string simg;
+    string t_el, simg;
     QImage img;    
 
-    if( !vca_it.empty() && TSYS::pathLev(vca_it,0).substr(0,4) != "wlb_" )return;
+    //- Get elements number into VCA item -
+    int vca_lev = 0;
+    for( int off = 0; !(t_el=TSYS::pathLev(vca_it,0,true,&off)).empty(); )  vca_lev++;
+		
+    if( (vca_lev && TSYS::pathLev(vca_it,0).substr(0,4) != "wlb_") || vca_lev == 3 )	return;	
 
     XMLNode req("get");
 
@@ -1365,14 +1369,19 @@ void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it )
 {
     vector<string> list_pr, list_pg;
     QTreeWidgetItem *nit, *nit_pg;    
-    string simg;
-    QImage img;    
+    string t_el, simg;
+    QImage img;
 
     XMLNode req("get");
 
     if( !it )
     {
-	if( !vca_it.empty() && TSYS::pathLev(vca_it,0).substr(0,4) != "prj_" )	return;
+	//- Get elements number into VCA item -
+	int vca_lev = 0;
+        for( int off = 0; !(t_el=TSYS::pathLev(vca_it,0,true,&off)).empty(); )	vca_lev++;
+				
+	if( (vca_lev && TSYS::pathLev(vca_it,0).substr(0,4) != "prj_") || 
+	    (vca_lev > 2 && TSYS::pathLev(vca_it,vca_lev-1).substr(0,4) == "wdg_") )	return;
 	//- Process top level items and project's list -
 	//-- Get widget's libraries list --
 	XMLNode prj_req("get");    
@@ -2170,11 +2179,10 @@ bool DevelWdgView::event( QEvent *event )
 	if( WdgView::event(event) )	return true;
 	return QWidget::event(event);
     }
-    
-    //- Other events process -
+
+    //- Other events process -    
     if( wLevel() == 0 )
-    {
-	switch(event->type())
+	switch( event->type() )
 	{
 	    case QEvent::DragEnter:
 	    {
@@ -2315,7 +2323,7 @@ bool DevelWdgView::event( QEvent *event )
 			    }
 			}
 			m_flgs &= ~DevelWdgView::makeScale;
-		    }		    
+		    }
 		    m_flgs &= ~DevelWdgView::moveHold;
 		    m_flgs &= ~DevelWdgView::moveHoldMove;
 	    	    return true;
@@ -2385,7 +2393,7 @@ bool DevelWdgView::event( QEvent *event )
 		}
 		
 		//- Update move cursors
-		upMouseCursors(curp);
+		upMouseCursors(curp);		
 		
 		//- Move widgets control -
 		if( m_flgs&DevelWdgView::moveHold && cursor().shape() != Qt::ArrowCursor && 
@@ -2453,7 +2461,6 @@ bool DevelWdgView::event( QEvent *event )
 		}
 	    }
     	}
-    }
     
     //- Self widget view -
     if( edit() && editWdg && wLevel() <= 1 && editWdg->shape->event(editWdg,event) )	return true;    
@@ -2469,7 +2476,7 @@ DevelWdgView::SizePntWdg::SizePntWdg( QWidget* parent ) : QWidget(parent), view(
     //setAttribute(Qt::WA_NoSystemBackground);
     setMouseTracking(true);
 }
-			
+
 void DevelWdgView::SizePntWdg::setSelArea( const QRectF &geom, WView iview )
 {
     view = iview;
@@ -2503,39 +2510,50 @@ void DevelWdgView::SizePntWdg::setSelArea( const QRectF &geom, WView iview )
     else setGeometry(geom.toRect());
 }
 
-void DevelWdgView::SizePntWdg::paintEvent( QPaintEvent *event )
+bool DevelWdgView::SizePntWdg::event( QEvent *ev )
 {
-    if( rect().isValid() )
+    switch( ev->type() )
     {
-	QPainter pnt( this );
-	pnt.setWindow( rect() );
+	case QEvent::Paint:
+	    if( rect().isValid() )
+	    {
+		QPainter pnt( this );
+		pnt.setWindow( rect() );
 
-	switch( view )
-	{
-	    case SizeDots:	    
-		pnt.setPen(QColor("black"));
-		pnt.setBrush(QBrush(QColor("lightgreen")));
-		for(int i_p = 0; i_p < 9; i_p++)
+		switch( view )
 		{
-		    if( i_p == 4 ) continue;
-		    QRect anch(rect().x()+(i_p%3)*((rect().width()-7)/2),
-		        rect().y()+(i_p/3)*((rect().height()-7)/2),6,6);
-		    pnt.drawRect(anch);
+		    case SizeDots:	    
+			pnt.setPen(QColor("black"));
+			pnt.setBrush(QBrush(QColor("lightgreen")));
+			for(int i_p = 0; i_p < 9; i_p++)
+			{
+			    if( i_p == 4 ) continue;
+			    QRect anch(rect().x()+(i_p%3)*((rect().width()-7)/2),
+		    		rect().y()+(i_p/3)*((rect().height()-7)/2),6,6);
+			    pnt.drawRect(anch);
+			}
+			break;
+		    case EditBorder:
+			pnt.fillRect(rect(),QBrush(Qt::black,Qt::Dense4Pattern));
+			pnt.setPen(QColor("black"));
+			pnt.drawRect(rect().adjusted(6,6,-7,-7));
+			break;
+		    case SelectBorder:
+			pnt.setPen("white");
+			pnt.drawRect(rect().adjusted(0,0,-1,-1));
+			QPen pen(QColor("black"));
+			pen.setStyle(Qt::DashDotLine);
+			pnt.setPen(pen);
+			pnt.drawRect(rect().adjusted(0,0,-1,-1));		
+		    break;
 		}
-		break;
-	    case EditBorder:
-		pnt.fillRect(rect(),QBrush(Qt::black,Qt::Dense4Pattern));
-		pnt.setPen(QColor("black"));
-		pnt.drawRect(rect().adjusted(6,6,-7,-7));
-		break;
-	    case SelectBorder:
-		pnt.setPen("white");
-		pnt.drawRect(rect().adjusted(0,0,-1,-1));
-		QPen pen(QColor("black"));
-		pen.setStyle(Qt::DashDotLine);
-		pnt.setPen(pen);
-		pnt.drawRect(rect().adjusted(0,0,-1,-1));		
+		return true;
+	    }
 	    break;
-	}
+        case QEvent::MouseButtonPress:
+     	case QEvent::MouseButtonRelease:
+	    return QApplication::sendEvent(parent(),ev);
     }
-} 
+    
+    return QWidget::event(ev);
+}

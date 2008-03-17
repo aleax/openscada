@@ -159,7 +159,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 rel_list = true;
             }
     }
-
+    
     if( rel_list && !w->allAttrLoad( ) )
     {
         QVector<ShapeItem> shapeItems_temp;

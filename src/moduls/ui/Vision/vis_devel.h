@@ -76,7 +76,7 @@ class VisDevelop : public QMainWindow
     public slots:
 	//Public slots
 	void selectItem( const string &item, bool force = false );	//Update enabled actions state
-	void updateLibToolbar( );		//Update lib's toolbars
+	void updateLibToolbar( const string &vca_it = "" );		//Update lib's toolbars for item change
 	void editToolUpdate( );			//Edit tools visible update
 
         void quitSt( );		//Full quit OpenSCADA

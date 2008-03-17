@@ -461,7 +461,7 @@ class DevelWdgView: public WdgView
 		QRectF geometryF( )         { return QRectF(w_pos,w_size); }
 
 		void setSelArea( const QRectF &geom, WView view = SizeDots );
-                void paintEvent( QPaintEvent * event );
+		bool event( QEvent *event );
             
 	    private:
 		//Attributes

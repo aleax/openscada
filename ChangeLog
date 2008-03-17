@@ -1,3 +1,9 @@
+2008-03-17 Roman
+- !:/UI/VCAEngine: Child widget remove is made optimal. Remove full check IO table.
+- /UI/Vision: Remove Project and Widget libraries updating on time child widgets changing.
+- !!:/UI/Vision: Documentation and translation is updated and version 0.6.0 is relised.
+
+
 2008-03-16 Roman
 - !!:/SYS: Resource files (icons and menu links) for menu OpenSCADA execution is added.
 - /SYS: RPM spec file is updated for new resources file support.

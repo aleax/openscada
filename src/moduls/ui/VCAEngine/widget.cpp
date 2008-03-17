@@ -397,11 +397,6 @@ void Widget::wdgAdd( const string &wid, const string &name, const string &path )
 
 void Widget::wdgDel( const string &wid, bool full )
 {
-    //- Delete from heritors first -
-    for( int i_h = 0; i_h < m_herit.size(); i_h++ )
-    	m_herit[i_h].at().wdgDel(wid,full);
-
-    //- Self delete -
     if( wdgPresent(wid) ) chldDel(inclWdg,wid,-1,full);
 }
 

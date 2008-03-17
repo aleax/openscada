@@ -917,14 +917,11 @@ void CWidget::postEnable( int flag )
 
 void CWidget::preDisable( int flag )
 {
+    vector<string> list;
+
     if( flag && !parent().freeStat() )	wdgIherited = parent().at().isLink();
     else wdgIherited = false;
 
-    Widget::preDisable(flag);
-}
-
-void CWidget::postDisable(int flag)
-{
     if( flag )
     {
         string fullDB = owner().owner().fullDB();
@@ -938,39 +935,31 @@ void CWidget::postDisable(int flag)
 	    SYS->db().at().dataSet(fullDB+"_incl",mod->nodePath()+tbl+"_incl",*this);
 	}
  	
-	//- Remove widget's work IO from library IO table -
+	//- Remove changed widget's work and users IO from library IO table -
         TConfig c_el(&mod->elWdgIO());
-	c_el.cfgViewAll(false);
+        TConfig c_uel(&mod->elWdgIO());	
         c_el.cfg("IDW").setS(owner().id());
-        c_el.cfg("ID").setS(""); 
-        int fld_cnt=0;
-        while( SYS->db().at().dataSeek(fullDB+"_io",mod->nodePath()+tbl+"_io",fld_cnt++,c_el) )
-        {
-	    string sid = c_el.cfg("ID").getS();
-            if( TSYS::pathLev(sid,0) == id() && TSYS::pathLev(sid,1).size() )
-            {
-                SYS->db().at().dataDel(fullDB+"_io",mod->nodePath()+tbl+"_io",c_el);
-                fld_cnt--;
-            }
-            c_el.cfg("ID").setS("");
-        }        
-	//- Remove widget's user IO from library IO table -
-        c_el.setElem(&mod->elWdgUIO());
-	c_el.cfgViewAll(false);
-        c_el.cfg("IDW").setS(owner().id());
-        c_el.cfg("ID").setS(""); 
-        fld_cnt=0;
-        while( SYS->db().at().dataSeek(fullDB+"_uio",mod->nodePath()+tbl+"_uio",fld_cnt++,c_el) )
-        {
-	    string sid = c_el.cfg("ID").getS();
-            if( TSYS::pathLev(sid,0) == id() && TSYS::pathLev(sid,1).size() )
-            {
-                SYS->db().at().dataDel(fullDB+"_uio",mod->nodePath()+tbl+"_uio",c_el);
-                fld_cnt--;
-            }
-            c_el.cfg("ID").setS("");
-        }
+        c_uel.cfg("IDW").setS(owner().id());
+	attrList( list );
+	AutoHD<Attr> attr;
+	for( int i_a = 0; i_a < list.size(); i_a++ )
+	{
+	    attr = attrAt(list[i_a]);
+	    if( !attr.at().modif() ) continue;
+	    if( attr.at().flgGlob()&Attr::IsUser && !(attr.at().flgGlob()&Attr::IsInher) )
+	    {
+		c_uel.cfg("ID").setS(id()+"/"+list[i_a]);
+		SYS->db().at().dataDel(fullDB+"_uio",mod->nodePath()+tbl+"_uio",c_uel);
+	    }
+	    else
+	    {
+		c_el.cfg("ID").setS(id()+"/"+list[i_a]);
+		SYS->db().at().dataDel(fullDB+"_io",mod->nodePath()+tbl+"_io",c_el);
+	    }
+	}
     }
+
+    Widget::preDisable(flag);
 }
 
 string CWidget::ico( )

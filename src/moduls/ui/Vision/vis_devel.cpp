@@ -549,7 +549,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) :
 
     setVCAStation(VCAstat);
 
-    connect(this, SIGNAL(modifiedItem(const string&)), this, SLOT(updateLibToolbar()));
+    connect(this, SIGNAL(modifiedItem(const string&)), this, SLOT(updateLibToolbar(const string&)));
     updateLibToolbar();
     wdgTree->updateTree();
     prjTree->updateTree();
@@ -646,16 +646,22 @@ void VisDevelop::enterWhatsThis()
     QWhatsThis::enterWhatsThisMode();
 }
 
-void VisDevelop::updateLibToolbar()
+void VisDevelop::updateLibToolbar( const string &vca_it )
 {
     bool is_create, root_allow;
     int i_lb, i_t, i_m, i_a, i_w;
     vector<string> lbls;
     QImage ico_t;
-    string simg;
+    string t_el, simg;
 
     XMLNode req("get");
+
+    //- Get elements number into VCA item -
+    int vca_lev = 0;
+    for( int off = 0; !(t_el=TSYS::pathLev(vca_it,0,true,&off)).empty(); )  vca_lev++;
     
+    if( vca_lev == 3 )	return;
+
     //- Update library toolbars list -
     XMLNode lb_req("get");    
     lb_req.setAttr("path","/%2fprm%2fcfg%2fwlb");
@@ -1124,10 +1130,10 @@ void VisDevelop::visualItDel( const string &itms )
 	        req.setAttr("path",it_own+"/%2fpage%2fpage")->setAttr("id",it_id.substr(3));
 	    else req.setAttr("path",it_own+"/%2finclwdg%2fwdg")->setAttr("id",it_id.substr(4));
 	}
-    	if( cntrIfCmd(req) )	    
-	    mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+    	if( cntrIfCmd(req) )
+	    mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);	
 	else emit modifiedItem(del_wdg);
-    }	
+    }
 }
 
 void VisDevelop::visualItProp( )
