@@ -477,7 +477,7 @@ Reg *Func::cdMove( Reg *rez, Reg *op )
 Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 {
     //- Check allowing type operations -
-    switch(op1->vType(this))
+    /*switch(op1->vType(this))
     {
 	case Reg::String:
 	    switch(cod)
@@ -497,7 +497,7 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 		case Reg::GEI:
 		    throw TError(nodePath().c_str(),_("Operation %d no support string type"),cod);
 	    }    
-    }
+    }*/
     
     //- Check allow the buildin calc and calc -
     if( op1->pos() < 0 && op2->pos() < 0 )

@@ -35,8 +35,9 @@
 #define MOD_TYPE    "UI"
 #define VER_TYPE    VER_UI
 #define SUB_TYPE    "WWW"
-#define MOD_VERSION "0.2.0"
+#define MOD_VERSION "0.3.0"
 #define AUTORS      "Roman Savochenko"
+#define DEVELOPERS  "Roman Savochenko, Lysenko Maxim, Yashina Kseniya"
 #define DESCRIPTION "Web operation user interface for visual control area (VCA) projects playing."
 #define LICENSE     "GPL"
 //************************************************
@@ -868,7 +869,8 @@ TWEB::~TWEB()
 
 string TWEB::modInfo( const string &name )
 {
-    if( name == "SubType" ) return SUB_TYPE;
+    if( name == "SubType" ) 		return SUB_TYPE;
+    else if( name == _("Developers") )  return DEVELOPERS;
     else return TModule::modInfo(name);
 }
 
@@ -876,6 +878,7 @@ void TWEB::modInfo( vector<string> &list )
 {
     TModule::modInfo(list);
     list.push_back("SubType");
+    list.push_back(_("Developers"));
 }
 
 void TWEB::vcaSesAdd( const string &name )

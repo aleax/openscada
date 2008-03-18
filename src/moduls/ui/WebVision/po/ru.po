@@ -3,318 +3,348 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: vca_sess.cpp:59 vca_sess.cpp:169 web_vision.cpp:51 web_vision.cpp:965
-#: web_vision.cpp:1120 web_vision.cpp:1124 web_vision.h:51 web_vision.h:123
+#: vca_sess.cpp:56 vca_sess.cpp:163 web_vision.cpp:51 web_vision.cpp:1027
+#: web_vision.cpp:1182 web_vision.cpp:1186 web_vision.h:51 web_vision.h:123
 #: web_vision.h:124
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.UI.WebVision 0.2.0\n"
+"Project-Id-Version: OpenSCADA.UI.WebVision 0.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-25 13:24+0200\n"
+"POT-Creation-Date: 2008-03-18 10:46+0200\n"
 "PO-Revision-Date: 2007-12-03 11:05+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: vca_sess.cpp:39
+#: vca_sess.cpp:36
 msgid "obj_"
 msgstr ""
 
-#: vca_sess.cpp:47
+#: vca_sess.cpp:44
 msgid "disconnect"
 msgstr ""
 
-#: vca_sess.cpp:48 vca_sess.cpp:69 vca_sess.cpp:79 vca_sess.cpp:90
-#: vca_sess.cpp:104 vca_sess.cpp:114 vca_sess.cpp:117 vca_sess.cpp:127
-#: vca_sess.cpp:140 vca_sess.cpp:150 vca_sess.cpp:174 vca_sess.cpp:652
-#: vca_sess.cpp:729 vca_sess.cpp:746 vca_sess.cpp:788 web_vision.cpp:999
-#: web_vision.cpp:1014 web_vision.cpp:1035 web_vision.cpp:1224
-#: web_vision.cpp:1247
+#: vca_sess.cpp:45 vca_sess.cpp:66 vca_sess.cpp:76 vca_sess.cpp:87
+#: vca_sess.cpp:101 vca_sess.cpp:111 vca_sess.cpp:114 vca_sess.cpp:124
+#: vca_sess.cpp:137 vca_sess.cpp:144 vca_sess.cpp:168 vca_sess.cpp:1265
+#: vca_sess.cpp:1342 vca_sess.cpp:1359 vca_sess.cpp:1401 web_vision.cpp:1061
+#: web_vision.cpp:1076 web_vision.cpp:1097 web_vision.cpp:1286
+#: web_vision.cpp:1309
 msgid "path"
 msgstr ""
 
-#: vca_sess.cpp:48 vca_sess.cpp:79 vca_sess.cpp:90 vca_sess.cpp:150
-#: vca_sess.cpp:174 vca_sess.cpp:652 vca_sess.cpp:729 vca_sess.cpp:746
-#: vca_sess.cpp:788 web_vision.cpp:1035
+#: vca_sess.cpp:45 vca_sess.cpp:76 vca_sess.cpp:87 vca_sess.cpp:144
+#: vca_sess.cpp:168 vca_sess.cpp:1265 vca_sess.cpp:1342 vca_sess.cpp:1359
+#: vca_sess.cpp:1401 web_vision.cpp:1097
 #, c-format
 msgid "/%2fserv%2f0"
 msgstr ""
 
-#: vca_sess.cpp:48 web_vision.cpp:1040 web_vision.cpp:1041 web_vision.cpp:1042
+#: vca_sess.cpp:45 web_vision.cpp:1102 web_vision.cpp:1103 web_vision.cpp:1104
 msgid "sess"
 msgstr ""
 
-#: vca_sess.cpp:49 vca_sess.cpp:124 vca_sess.cpp:674 vca_sess.cpp:706
-#: web_vision.cpp:1237 web_vision.cpp:1238 web_vision.cpp:1242
-#: web_vision.cpp:1250 web_vision.cpp:1251 web_vision.cpp:1255
-#: web_vision.cpp:1256 web_vision.cpp:1259 web_vision.cpp:1260
+#: vca_sess.cpp:46 vca_sess.cpp:121 vca_sess.cpp:1287 vca_sess.cpp:1319
+#: web_vision.cpp:1299 web_vision.cpp:1300 web_vision.cpp:1304
+#: web_vision.cpp:1312 web_vision.cpp:1313 web_vision.cpp:1317
+#: web_vision.cpp:1318 web_vision.cpp:1321 web_vision.cpp:1322
 msgid "root"
 msgstr ""
 
-#: vca_sess.cpp:57 vca_sess.cpp:168
+#: vca_sess.cpp:54 vca_sess.cpp:162
 msgid "com"
 msgstr ""
 
-#: vca_sess.cpp:62
+#: vca_sess.cpp:59
 msgid "<SCRIPT>\n"
 msgstr ""
 
-#: vca_sess.cpp:62
+#: vca_sess.cpp:59
 msgid ""
 "\n"
 "</SCRIPT>\n"
 msgstr ""
 
-#: vca_sess.cpp:63 vca_sess.cpp:72 vca_sess.cpp:83 vca_sess.cpp:95
-#: vca_sess.cpp:107 vca_sess.cpp:121 vca_sess.cpp:130 vca_sess.cpp:161
-#: vca_sess.cpp:177 vca_sess.cpp:536 web_vision.cpp:978 web_vision.cpp:1073
-#: web_vision.cpp:1167 web_vision.cpp:1176 web_vision.cpp:1184
+#: vca_sess.cpp:60 vca_sess.cpp:69 vca_sess.cpp:80 vca_sess.cpp:92
+#: vca_sess.cpp:104 vca_sess.cpp:118 vca_sess.cpp:127 vca_sess.cpp:155
+#: vca_sess.cpp:171 vca_sess.cpp:539 vca_sess.cpp:822 vca_sess.cpp:995
+#: vca_sess.cpp:1149 web_vision.cpp:1040 web_vision.cpp:1135
+#: web_vision.cpp:1229 web_vision.cpp:1238 web_vision.cpp:1246
 msgid "200 OK"
 msgstr ""
 
-#: vca_sess.cpp:66 web_vision.cpp:974
+#: vca_sess.cpp:63 web_vision.cpp:1036
 msgid "ico"
 msgstr ""
 
-#: vca_sess.cpp:68 vca_sess.cpp:89 vca_sess.cpp:103 vca_sess.cpp:113
-#: vca_sess.cpp:126 vca_sess.cpp:139 vca_sess.cpp:745 vca_sess.cpp:785
-#: web_vision.cpp:998 web_vision.cpp:1250 web_vision.cpp:1255
-#: web_vision.cpp:1258
+#: vca_sess.cpp:65 vca_sess.cpp:86 vca_sess.cpp:100 vca_sess.cpp:110
+#: vca_sess.cpp:123 vca_sess.cpp:136 vca_sess.cpp:1358 vca_sess.cpp:1398
+#: web_vision.cpp:1060 web_vision.cpp:1312 web_vision.cpp:1317
+#: web_vision.cpp:1320
 msgid "get"
 msgstr ""
 
-#: vca_sess.cpp:69
+#: vca_sess.cpp:66
 #, c-format
 msgid "/%2fico"
 msgstr ""
 
-#: vca_sess.cpp:72 vca_sess.cpp:536
+#: vca_sess.cpp:69 vca_sess.cpp:539 vca_sess.cpp:822 vca_sess.cpp:995
+#: vca_sess.cpp:1149
 msgid "image/png"
 msgstr ""
 
-#: vca_sess.cpp:75
+#: vca_sess.cpp:72
 msgid "pgOpen"
 msgstr ""
 
-#: vca_sess.cpp:77 vca_sess.cpp:80 vca_sess.cpp:88 vca_sess.cpp:91
-#: vca_sess.cpp:747 vca_sess.cpp:751 vca_sess.cpp:789 vca_sess.cpp:798
+#: vca_sess.cpp:74 vca_sess.cpp:77 vca_sess.cpp:85 vca_sess.cpp:88
+#: vca_sess.cpp:1360 vca_sess.cpp:1364 vca_sess.cpp:1402 vca_sess.cpp:1411
 msgid "tm"
 msgstr ""
 
-#: vca_sess.cpp:78
+#: vca_sess.cpp:75
 msgid "openlist"
 msgstr ""
 
-#: vca_sess.cpp:80 vca_sess.cpp:91 vca_sess.cpp:748
+#: vca_sess.cpp:77 vca_sess.cpp:88 vca_sess.cpp:1361
 msgid "0"
 msgstr ""
 
-#: vca_sess.cpp:83 vca_sess.cpp:95 vca_sess.cpp:121 vca_sess.cpp:130
+#: vca_sess.cpp:80 vca_sess.cpp:92 vca_sess.cpp:118 vca_sess.cpp:127
 msgid "text/xml"
 msgstr ""
 
-#: vca_sess.cpp:86 vca_sess.cpp:170
+#: vca_sess.cpp:83 vca_sess.cpp:164
 msgid "attrs"
 msgstr ""
 
-#: vca_sess.cpp:98
+#: vca_sess.cpp:95
 msgid "res"
 msgstr ""
 
-#: vca_sess.cpp:100 vca_sess.cpp:664
+#: vca_sess.cpp:97 vca_sess.cpp:1277
 msgid "val"
 msgstr ""
 
-#: vca_sess.cpp:104
+#: vca_sess.cpp:101
 #, c-format
 msgid "/%2fwdg%2fres"
 msgstr ""
 
-#: vca_sess.cpp:104 vca_sess.cpp:653 vca_sess.cpp:654 vca_sess.cpp:664
-#: web_vision.cpp:1023
+#: vca_sess.cpp:101 vca_sess.cpp:1266 vca_sess.cpp:1267 vca_sess.cpp:1277
+#: web_vision.cpp:1085
 msgid "id"
 msgstr ""
 
-#: vca_sess.cpp:107
+#: vca_sess.cpp:104
 msgid "mime"
 msgstr ""
 
-#: vca_sess.cpp:108 web_vision.cpp:1068 web_vision.cpp:1193
-#: web_vision.cpp:1200
+#: vca_sess.cpp:105 web_vision.cpp:1130 web_vision.cpp:1255
+#: web_vision.cpp:1262
 msgid "404 Not Found"
 msgstr "404 Не найдено"
 
-#: vca_sess.cpp:111
+#: vca_sess.cpp:108
 msgid "chlds"
 msgstr ""
 
-#: vca_sess.cpp:114
+#: vca_sess.cpp:111
 #, c-format
 msgid "/%2fwdg%2fcfg%2fpath"
 msgstr ""
 
-#: vca_sess.cpp:114
+#: vca_sess.cpp:111
 msgid "resLink"
 msgstr ""
 
-#: vca_sess.cpp:114 vca_sess.cpp:792 vca_sess.cpp:794
+#: vca_sess.cpp:111 vca_sess.cpp:1405 vca_sess.cpp:1407
 msgid "1"
 msgstr ""
 
-#: vca_sess.cpp:117
+#: vca_sess.cpp:114
 #, c-format
 msgid "/%2finclwdg%2fwdg"
 msgstr ""
 
-#: vca_sess.cpp:127 vca_sess.cpp:140
+#: vca_sess.cpp:124 vca_sess.cpp:137
 #, c-format
 msgid "/%2fwdg%2fcfg%2froot"
 msgstr ""
 
-#: vca_sess.cpp:133
+#: vca_sess.cpp:130
 msgid "obj"
 msgstr ""
 
-#: vca_sess.cpp:142
+#: vca_sess.cpp:139
+msgid "ElFigure"
+msgstr ""
+
+#: vca_sess.cpp:140
 msgid "Diagram"
 msgstr ""
 
-#: vca_sess.cpp:159
+#: vca_sess.cpp:153
 #, c-format
 msgid "Unknown command: %s."
 msgstr "Неизвестная команде: %s."
 
-#: vca_sess.cpp:160
+#: vca_sess.cpp:154
 msgid "<center>Call page/widget '"
 msgstr ""
 
-#: vca_sess.cpp:160
+#: vca_sess.cpp:154
 msgid "' command: '"
 msgstr ""
 
-#: vca_sess.cpp:160 web_vision.cpp:1041
+#: vca_sess.cpp:154 web_vision.cpp:1103
 msgid ""
 "'</center>\n"
 "<br/>"
 msgstr ""
 
-#: vca_sess.cpp:172 vca_sess.cpp:651 web_vision.cpp:1251 web_vision.cpp:1256
-#: web_vision.cpp:1259 web_vision.cpp:1260
+#: vca_sess.cpp:166 vca_sess.cpp:1264 web_vision.cpp:1313 web_vision.cpp:1318
+#: web_vision.cpp:1321 web_vision.cpp:1322
 msgid "set"
 msgstr ""
 
-#: vca_sess.cpp:177 web_vision.cpp:1167 web_vision.cpp:1176
-#: web_vision.cpp:1184 web_vision.h:123
+#: vca_sess.cpp:171 web_vision.cpp:1229 web_vision.cpp:1238
+#: web_vision.cpp:1246 web_vision.h:123
 msgid "text/html"
 msgstr ""
 
-#: vca_sess.cpp:303 vca_sess.cpp:339
+#: vca_sess.cpp:566 vca_sess.cpp:1168
+msgid "pos"
+msgstr ""
+
+#: vca_sess.cpp:646
+msgid "line"
+msgstr ""
+
+#: vca_sess.cpp:669
+msgid "arc"
+msgstr ""
+
+#: vca_sess.cpp:747
+msgid "bezier"
+msgstr ""
+
+#: vca_sess.cpp:769
+msgid "fill"
+msgstr ""
+
+#: vca_sess.cpp:827
+msgid "xSc"
+msgstr ""
+
+#: vca_sess.cpp:829
+msgid "ySc"
+msgstr ""
+
+#: vca_sess.cpp:899 vca_sess.cpp:935
 #, c-format
 msgid "%d-%02d-%d"
 msgstr ""
 
-#: vca_sess.cpp:305 vca_sess.cpp:342
+#: vca_sess.cpp:901 vca_sess.cpp:938
 #, c-format
 msgid "%d:%02d"
 msgstr ""
 
-#: vca_sess.cpp:307 vca_sess.cpp:344
+#: vca_sess.cpp:903 vca_sess.cpp:940
 #, c-format
 msgid "%d:%02d:%02d"
 msgstr ""
 
-#: vca_sess.cpp:308 vca_sess.cpp:347
+#: vca_sess.cpp:904 vca_sess.cpp:943
 #, c-format
-msgid "%d:%02d:%02d.%d"
+msgid "%d:%02d:%g"
 msgstr ""
 
-#: vca_sess.cpp:340
+#: vca_sess.cpp:936
 #, c-format
 msgid "%d"
 msgstr ""
 
-#: vca_sess.cpp:345
+#: vca_sess.cpp:941
 #, c-format
 msgid "%ds"
 msgstr ""
 
-#: vca_sess.cpp:348
+#: vca_sess.cpp:944
 #, c-format
-msgid "%d.%ds"
+msgid "%gs"
 msgstr ""
 
-#: vca_sess.cpp:349
+#: vca_sess.cpp:945
 #, c-format
 msgid "%gms"
 msgstr ""
 
-#: vca_sess.cpp:555
-msgid "pos"
-msgstr ""
-
-#: vca_sess.cpp:653 vca_sess.cpp:654 vca_sess.cpp:664
+#: vca_sess.cpp:1266 vca_sess.cpp:1267 vca_sess.cpp:1277
 msgid "el"
 msgstr ""
 
-#: vca_sess.cpp:653
+#: vca_sess.cpp:1266
 msgid "curSek"
 msgstr ""
 
-#: vca_sess.cpp:654
+#: vca_sess.cpp:1267
 msgid "curUSek"
 msgstr ""
 
-#: vca_sess.cpp:664
+#: vca_sess.cpp:1277
 msgid "prm"
 msgstr ""
 
-#: vca_sess.cpp:728 web_vision.cpp:1232
+#: vca_sess.cpp:1341 web_vision.cpp:1294
 msgid "info"
 msgstr ""
 
-#: vca_sess.cpp:729 vca_sess.cpp:787
+#: vca_sess.cpp:1342 vca_sess.cpp:1400
 msgid "arch"
 msgstr ""
 
-#: vca_sess.cpp:730 vca_sess.cpp:734
+#: vca_sess.cpp:1343 vca_sess.cpp:1347
 msgid "vtp"
 msgstr ""
 
-#: vca_sess.cpp:735
+#: vca_sess.cpp:1348
 msgid "beg"
 msgstr ""
 
-#: vca_sess.cpp:736
+#: vca_sess.cpp:1349
 msgid "end"
 msgstr ""
 
-#: vca_sess.cpp:737 vca_sess.cpp:791 vca_sess.cpp:799
+#: vca_sess.cpp:1350 vca_sess.cpp:1404 vca_sess.cpp:1412
 msgid "per"
 msgstr ""
 
-#: vca_sess.cpp:748 vca_sess.cpp:790 vca_sess.cpp:797
+#: vca_sess.cpp:1361 vca_sess.cpp:1403 vca_sess.cpp:1410
 msgid "tm_grnd"
 msgstr ""
 
-#: vca_sess.cpp:792
+#: vca_sess.cpp:1405
 msgid "mode"
 msgstr ""
 
-#: vca_sess.cpp:793
+#: vca_sess.cpp:1406
 msgid "real_prec"
 msgstr ""
 
-#: vca_sess.cpp:793
+#: vca_sess.cpp:1406
 msgid "4"
 msgstr ""
 
-#: vca_sess.cpp:794
+#: vca_sess.cpp:1407
 msgid "round_perc"
 msgstr ""
 
-#: vca_sess.cpp:806
+#: vca_sess.cpp:1419
 #, c-format
 msgid "%d %lf"
 msgstr ""
@@ -336,7 +366,7 @@ msgid "WWW"
 msgstr ""
 
 #: web_vision.cpp:38
-msgid "0.2.0"
+msgid "0.3.0"
 msgstr ""
 
 #: web_vision.cpp:39
@@ -358,7 +388,7 @@ msgstr ""
 msgid "C"
 msgstr ""
 
-#: web_vision.cpp:79 web_vision.cpp:1046 web_vision.cpp:1193
+#: web_vision.cpp:79 web_vision.cpp:1108 web_vision.cpp:1255
 msgid "ses_"
 msgstr ""
 
@@ -717,9 +747,8 @@ msgid "limegreen"
 msgstr ""
 
 #: web_vision.cpp:180
-#, fuzzy
 msgid "linen"
-msgstr "Очистить"
+msgstr ""
 
 #: web_vision.cpp:181
 msgid "magenta"
@@ -1196,9 +1225,11 @@ msgid ""
 "  if( this.attrs['bordWidth'] ) elBorder=parseInt(this.attrs['bordWidth']);\n"
 "  var elStyle = 'overflow: hidden; ';\n"
 "  if( !parseInt(this.attrs['en']) )\t elStyle+='visibility : hidden; ';\n"
-"  var geomX = parseInt(this.attrs['geomX']);\n"
-"  var geomY = parseInt(this.attrs['geomY']);\n"
+"  var geomX = parseFloat(this.attrs['geomX']);\n"
+"  var geomY = parseFloat(this.attrs['geomY']);\n"
 "  if( this.pg ) geomX = geomY = 0;\n"
+"  else{ geomX *= this.parent.xScale(true); geomY *= this.parent.yScale"
+"(true); }\n"
 "  if( this.parent && !(this.pg && this.parent.pg) )\n"
 "  {\n"
 "    geomX -= parseInt(this.parent.attrs['geomMargin'])+parseInt(this.parent."
@@ -1206,21 +1237,51 @@ msgid ""
 "    geomY -= parseInt(this.parent.attrs['geomMargin'])+parseInt(this.parent."
 "attrs['bordWidth']);\n"
 "  }\n"
-"  elStyle+='position: absolute; left: '+geomX+'px; top: '+geomY+'px; ';\n"
-"  var geomW = parseInt(this.attrs['geomW'])-2*(elMargin+elBorder);\n"
-"  var geomH = parseInt(this.attrs['geomH'])-2*(elMargin+elBorder);\n"
+"  elStyle+='position: absolute; left: '+geomX.toFixed(0)+'px; top: '+geomY."
+"toFixed(0)+'px; ';\n"
+"  var geomW = parseFloat(this.attrs['geomW'])-2*(elMargin+elBorder);\n"
+"  var geomH = parseFloat(this.attrs['geomH'])-2*(elMargin+elBorder);\n"
 "  if( this.pg && this.parent && this.parent.inclOpen && this.parent.inclOpen "
 "== this.addr )\n"
-"  { geomW = parseInt(this.parent.attrs['geomW'])-2*(elMargin+elBorder); "
-"geomH = parseInt(this.parent.attrs['geomH'])-2*(elMargin+elBorder); }\n"
-"  if( this.tp == 'Box' )\n"
+"  { geomW = parseFloat(this.parent.attrs['geomW'])-2*(elMargin+elBorder); "
+"geomH = parseFloat(this.parent.attrs['geomH'])-2*(elMargin+elBorder); }\n"
+"  var xSc = this.xScale(true);\n"
+"  var ySc = this.yScale(true);\n"
+"  geomW = (geomW*xSc).toFixed(0); geomH = (geomH*ySc).toFixed(0);\n"
+"  if( this.tp == 'ElFigure' )\n"
+"  {\n"
+"    if( this.attrs['backColor'] ) elStyle+='background-color: '+this.attrs"
+"['backColor']+'; ';\n"
+"    if( this.attrs['backImg'] )\n"
+"      elStyle+='background-image: url(\\'/"
+msgstr ""
+
+#: web_vision.cpp:460
+msgid ""
+"'+this.addr+'?com=res&val='+this.attrs['backImg']+'\\'); ';\n"
+"    var figObj = this.place.childNodes[0];\n"
+"    if( !figObj )\n"
+"    {\n"
+"      figObj = document.createElement('img');\n"
+"      figObj.border = 0;\n"
+"      this.place.appendChild(figObj);\n"
+"    }\n"
+"    figObj.src = '/"
+msgstr ""
+
+#: web_vision.cpp:468
+msgid ""
+"'+this.addr+'?com=obj&tm='+tmCnt+'&xSc='+xSc.toFixed(2)+'&ySc='+ySc.toFixed"
+"(2);\n"
+"  }\n"
+"  else if( this.tp == 'Box' )\n"
 "  {\n"
 "    if( this.attrs['backColor'] ) elStyle+='background-color: '+this.attrs"
 "['backColor']+'; ';\n"
 "    if( this.attrs['backImg'] )   elStyle+='background-image: url(\\'/"
 msgstr ""
 
-#: web_vision.cpp:455
+#: web_vision.cpp:473
 msgid ""
 "'+this.addr+'?com=res&val='+this.attrs['backImg']+'\\'); ';\n"
 "    elStyle+='border-style: solid; border-width: '+this.attrs['bordWidth']"
@@ -1273,7 +1334,7 @@ msgid ""
 "    if( this.attrs['backImg'] )   elStyle+='background-image: url(\\'/"
 msgstr ""
 
-#: web_vision.cpp:500
+#: web_vision.cpp:518
 msgid ""
 "'+this.addr+'?com=res&val='+this.attrs['backImg']+'\\'); ';\n"
 "    elStyle+='border-style: solid; border-width: '+this.attrs['bordWidth']"
@@ -1296,12 +1357,12 @@ msgid ""
 "    }\n"
 "    var allFnt = this.attrs['font'].split(' ');\n"
 "    if( allFnt.length >= 1 ) elStyle+='font-family: '+allFnt[0]+'; ';\n"
-"    else if( this.attrs['fontFamily'] ) elStyle+='font-family: '+this.attrs"
-"['fontFamily']+'; ';\n"
-"    if( allFnt.length >= 2 ) elStyle+='font-size: '+allFnt[1]+'px; ';\n"
-"    else elStyle+='font-size: '+this.attrs['fontSize']+'px; ';\n"
-"    if( this.attrs['fontBold'] == 1 ) elStyle+='font-weight: bold; ';\n"
-"    if( this.attrs['fontItalic'] == 1 ) elStyle+='font-style: italic; ';\n"
+"    if( allFnt.length >= 2 ) elStyle+='font-size: '+(parseInt(allFnt[1])"
+"*Math.min(xSc,ySc)).toFixed(0)+'px; ';\n"
+"    if( allFnt.length >= 3 ) elStyle+='font-weight: '+(parseInt(allFnt"
+"[2])?'bold':'normal')+'; ';\n"
+"    if( allFnt.length >= 4 ) elStyle+='font-style: '+(parseInt(allFnt"
+"[3])?'italic':'normal')+'; ';\n"
 "    elStyle+='color: '+this.attrs['color']+'; ';\n"
 "    var txtVal = this.attrs['text'];\n"
 "    for( var i = 0; i < parseInt(this.attrs['numbArg']); i++ )\n"
@@ -1323,24 +1384,29 @@ msgid ""
 "          else argVal=this.attrs['arg'+i+'val'];\n"
 "          break;\n"
 "      }\n"
-"      txtVal = txtVal.replace('%'+(i+1),argVal);\n"
-"      if( !argCfg.length ) continue;\n"
 "      var argSize = parseInt(argCfg[0]);\n"
-"      while( txtVal.legth < Math.abs(argSize) )\n"
-"        if( argSize > 0 ) txtVal=' '+txtVal; else txtVal+=' ';\n"
+"      var argPad = '';\n"
+"      for( var j = argVal.length; j < Math.abs(argSize); j++ ) argPad"
+"+='&nbsp;';\n"
+"      if( argSize > 0 ) argVal=argPad+argVal; else argVal+=argPad;\n"
+"      txtVal = txtVal.replace('%'+(i+1),argVal);\n"
 "    }\n"
-"    var txtNode = this.place.childNodes[0];\n"
-"    if( !txtNode ) this.place.appendChild(document.createTextNode(txtVal));\n"
-"    else txtNode.nodeValue = txtVal;\n"
+"    var txtVal1 = '';\n"
+"    for( var j = 0; j < txtVal.length; j++ )\n"
+"      if( txtVal[j] == '\\n' ) txtVal1+='<br />'; else txtVal1+=txtVal[j];\n"
+"    while(this.place.childNodes.length) this.place.removeChild(this.place."
+"childNodes[0]);\n"
+"    this.place.innerHTML = txtVal1;\n"
 "  }\n"
 "  else if( this.tp == 'Media' )\n"
 "  {\n"
 "    if( this.attrs['backColor'] ) elStyle+='background-color: '+this.attrs"
 "['backColor']+'; ';\n"
-"    if( this.attrs['backImg'] )   elStyle+='background-image: url(\\'/"
+"    if( this.attrs['backImg'] )\n"
+"      elStyle+='background-image: url(\\'/"
 msgstr ""
 
-#: web_vision.cpp:556
+#: web_vision.cpp:576
 msgid ""
 "'+this.addr+'?com=res&val='+this.attrs['backImg']+'\\'); ';\n"
 "    elStyle+='border-style: solid; border-width: '+this.attrs['bordWidth']"
@@ -1353,7 +1419,7 @@ msgid ""
 "    medObj.src = '/"
 msgstr ""
 
-#: web_vision.cpp:561
+#: web_vision.cpp:581
 msgid ""
 "'+this.addr+'?com=res&val='+this.attrs['src'];\n"
 "    medObj.border = 0;\n"
@@ -1401,6 +1467,16 @@ msgid ""
 "    var elTp = parseInt(this.attrs['elType']);\n"
 "    while(this.place.childNodes.length) this.place.removeChild(this.place."
 "childNodes[0]);\n"
+"    var fontCfg = '';\n"
+"    if( this.attrs['font'] )\n"
+"    {\n"
+"      var allFnt = this.attrs['font'].split(' ');\n"
+"      if( allFnt.length >= 3 && parseInt(allFnt[2]) ) fontCfg += 'bold ';\n"
+"      if( allFnt.length >= 4 && parseInt(allFnt[3]) ) fontCfg += 'italic ';\n"
+"      if( allFnt.length >= 2 ) fontCfg += (parseInt(allFnt[1])*Math.min(xSc,"
+"ySc)).toFixed(0)+'px ';\n"
+"      if( allFnt.length >= 1 ) fontCfg += allFnt[0]+' ';\n"
+"    }\n"
 "    switch(elTp)\n"
 "    {\n"
 "      case 0:\t//Line edit\n"
@@ -1412,6 +1488,7 @@ msgid ""
 "        formObj.type = 'text'; formObj.value = this.attrs['value'];\n"
 "        formObj.style.borderStyle = 'ridge'; formObj.style.borderWidth = "
 "'2px';\n"
+"        formObj.style.font = fontCfg;\n"
 "        tblCell.appendChild(formObj); this.place.appendChild(tblCell);\n"
 "        break;\n"
 "      case 1:\t//Text edit\n"
@@ -1420,6 +1497,7 @@ msgid ""
 "4)+'px';\n"
 "        formObj.style.borderStyle = 'ridge'; formObj.style.borderWidth = "
 "'2px';\n"
+"        formObj.style.font = fontCfg;\n"
 "        formObj.appendChild(document.createTextNode(this.attrs['value']));\n"
 "        this.place.appendChild(formObj);\n"
 "        break;\n"
@@ -1431,6 +1509,7 @@ msgid ""
 "        tblCell.style.width = geomW+'px'; tblCell.style.height = geomH"
 "+'px';\n"
 "        tblCell.style.textAlign = 'left';\n"
+"        tblCell.style.font = fontCfg;\n"
 "        formObj.type='checkbox'; formObj.checked=parseInt(this.attrs"
 "['value']);\n"
 "        textObj.nodeValue = this.attrs['name'];\n"
@@ -1444,6 +1523,7 @@ msgid ""
 "        {\n"
 "          formObj = document.createElement('div');\n"
 "          formObj.className = 'vertalign';\n"
+"          formObj.style.font = fontCfg;\n"
 "          elStyle+='border-style: outset; cursor: pointer; border-width: "
 "2px; ';\n"
 "          if( this.attrs['color'] ) elStyle+='background-color: '+this.attrs"
@@ -1462,18 +1542,20 @@ msgid ""
 "          btImg.src = '/"
 msgstr ""
 
-#: web_vision.cpp:648
+#: web_vision.cpp:681
 msgid ""
 "'+this.addr+'?com=res&val='+this.attrs['img'];\n"
 "          btImg.width = btImg.height = Math.min(geomW-8,geomH-8);\n"
 "          btImg.float = 'left';\n"
 "          formObj.appendChild(btImg);\n"
-"          formObj.appendChild(document.createTextNode(this.attrs['name']));\n"
+"          if( this.attrs['name'].length ) formObj.appendChild(document."
+"createTextNode(this.attrs['name']));\n"
 "          geomW-=6; geomH-=6;\n"
 "        }\n"
 "        else\n"
 "        {\n"
 "          formObj = document.createElement('input');\n"
+"          formObj.style.font = fontCfg;\n"
 "          formObj.type='button';\n"
 "          formObj.value=this.attrs['name'];\n"
 "          formObj.onclick = function() { setWAttrs(this.wdgLnk."
@@ -1494,6 +1576,7 @@ msgid ""
 "        formObj.style.width = (geomW-4)+'px';\n"
 "        formObj.style.borderStyle = 'ridge'; formObj.style.borderWidth = "
 "'2px';\n"
+"        formObj.style.font = fontCfg;\n"
 "        if( elTp == 5 )\n"
 "        {\n"
 "          formObj.style.height = (geomH-4)+'px';\n"
@@ -1529,7 +1612,7 @@ msgid ""
 "    if( this.attrs['backImg'] )   elStyle+='background-image: url(\\'/"
 msgstr ""
 
-#: web_vision.cpp:704
+#: web_vision.cpp:739
 msgid ""
 "'+this.addr+'?com=res&val='+this.attrs['backImg']+'\\'); ';\n"
 "    elStyle+='border-style: solid; border-width: '+this.attrs['bordWidth']"
@@ -1546,11 +1629,12 @@ msgid ""
 "    dgrObj.src = '/"
 msgstr ""
 
-#: web_vision.cpp:714
+#: web_vision.cpp:749
 #, c-format
 msgid ""
-"'+this.addr+'?com=obj&tm='+tmCnt;\n"
-"    this.perUpdtEn(parseInt(this.attrs['trcPer']));\n"
+"'+this.addr+'?com=obj&tm='+tmCnt+'&xSc='+xSc.toFixed(2)+'&ySc='+ySc.toFixed"
+"(2);\n"
+"    this.perUpdtEn( this.isEnabled() && parseInt(this.attrs['trcPer']) );\n"
 "  }\n"
 "  elStyle+='width: '+geomW+'px; height: '+geomH+'px; z-index: '+this.attrs"
 "['geomZ']+'; margin: '+elMargin+'px; ';\n"
@@ -1575,8 +1659,8 @@ msgid ""
 "{\n"
 "  if( this.tp == 'Diagram' )\n"
 "  {\n"
-"     if( en && !perUpdtWdgs[this.addr] && parseInt(this.attrs['trcPer']) ) "
-"perUpdtWdgs[this.addr] = this;\n"
+"     if( en && this.isEnabled() && !perUpdtWdgs[this.addr] && parseInt(this."
+"attrs['trcPer']) ) perUpdtWdgs[this.addr] = this;\n"
 "     if( !en && perUpdtWdgs[this.addr] ) delete perUpdtWdgs[this.addr];\n"
 "  }\n"
 "  for( var i in this.wdgs ) this.wdgs[i].perUpdtEn(en);\n"
@@ -1590,11 +1674,34 @@ msgid ""
 "    if( dgrObj ) dgrObj.src = '/"
 msgstr ""
 
-#: web_vision.cpp:749
+#: web_vision.cpp:784
 msgid ""
-"'+this.addr+'?com=obj&tm='+tmCnt;\n"
+"'+this.addr+'?com=obj&tm='+tmCnt+'&xSc='+this.xScale(true).toFixed(2)"
+"+'&ySc='+this.yScale(true).toFixed(2);\n"
 "  }\n"
 "  this.updCntr++;\n"
+"}\n"
+"function xScale( full )\n"
+"{\n"
+"  var rez = parseFloat(this.attrs['geomXsc'])\n"
+"  if( !full ) return rez;\n"
+"  if( !this.pg ) return rez*this.parent.xScale(full);\n"
+"  if( this != masterPage ) return masterPage.xScale()*rez;\n"
+"  return rez;\n"
+"}\n"
+"function yScale( full )\n"
+"{\n"
+"  var rez = parseFloat(this.attrs['geomYsc'])\n"
+"  if( !full ) return rez;\n"
+"  if( !this.pg ) return rez*this.parent.yScale(full);\n"
+"  if( this != masterPage ) return masterPage.yScale()*rez;\n"
+"  return rez;\n"
+"}\n"
+"function isEnabled( )\n"
+"{\n"
+"  var rez = parseInt(this.attrs['en']);\n"
+"  if( !rez || this.pg ) return rez;\n"
+"  return this.parent.isEnabled();\n"
 "}\n"
 "function pwDescr( pgAddr, pg, parent )\n"
 "{\n"
@@ -1611,6 +1718,9 @@ msgid ""
 "  this.makeEl = makeEl;\n"
 "  this.perUpdtEn = perUpdtEn;\n"
 "  this.perUpdt = perUpdt;\n"
+"  this.xScale = xScale;\n"
+"  this.yScale = yScale;\n"
+"  this.isEnabled = isEnabled;\n"
 "  this.updCntr = 0;\n"
 "}\n"
 "/***************************************************\n"
@@ -1648,11 +1758,15 @@ msgid ""
 "setTimeout(makeUI,10);\n"
 msgstr ""
 
-#: web_vision.cpp:811 web_vision.cpp:818
+#: web_vision.cpp:871 web_vision.cpp:879
 msgid "SubType"
 msgstr "Подтип"
 
-#: web_vision.cpp:832
+#: web_vision.cpp:872 web_vision.cpp:880
+msgid "Developers"
+msgstr "Разработчики"
+
+#: web_vision.cpp:894
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
@@ -1667,65 +1781,65 @@ msgstr ""
 "SessTimeLife <время>     Время жизни сессии, минуты (по умолчанию 10).\n"
 "CSSTables    <CSS>       CSS для создаваемых таблиц.\n"
 
-#: web_vision.cpp:845
+#: web_vision.cpp:907
 msgid "h"
 msgstr ""
 
-#: web_vision.cpp:848
+#: web_vision.cpp:910
 msgid "help"
 msgstr ""
 
-#: web_vision.cpp:864 web_vision.cpp:870
+#: web_vision.cpp:926 web_vision.cpp:932
 msgid "SessTimeLife"
 msgstr ""
 
-#: web_vision.cpp:865 web_vision.cpp:871
+#: web_vision.cpp:927 web_vision.cpp:933
 msgid "CSSTables"
 msgstr ""
 
-#: web_vision.cpp:892
+#: web_vision.cpp:954
 msgid "chck_stop"
 msgstr ""
 
-#: web_vision.cpp:893
+#: web_vision.cpp:955
 msgid "Checking of session no stoped!"
 msgstr ""
 
-#: web_vision.cpp:925
+#: web_vision.cpp:987
 msgid "HTTP/1.0 "
 msgstr ""
 
-#: web_vision.cpp:925
+#: web_vision.cpp:987
 msgid ""
 "\n"
 "Server: "
 msgstr ""
 
-#: web_vision.cpp:926
+#: web_vision.cpp:988
 msgid ""
 "\n"
 "Accept-Ranges: bytes\n"
 "Content-Length: "
 msgstr ""
 
-#: web_vision.cpp:928
+#: web_vision.cpp:990
 msgid ""
 "\n"
 "Connection: close\n"
 "Content-type: "
 msgstr ""
 
-#: web_vision.cpp:930
+#: web_vision.cpp:992
 msgid ""
 "\n"
 "Charset="
 msgstr ""
 
-#: web_vision.cpp:931 web_vision.cpp:1173
+#: web_vision.cpp:993 web_vision.cpp:1235
 msgid "\n"
 msgstr ""
 
-#: web_vision.cpp:937
+#: web_vision.cpp:999
 msgid ""
 "<?xml version='1.0' ?>\n"
 "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
@@ -1735,7 +1849,7 @@ msgid ""
 "  <meta http-equiv='Content-Type' content='text/html; charset="
 msgstr ""
 
-#: web_vision.cpp:942
+#: web_vision.cpp:1004
 msgid ""
 "'/>\n"
 "  <meta http-equiv='Cache-Control' content='no-store, no-cache, must-"
@@ -1745,185 +1859,185 @@ msgid ""
 "  <link rel='shortcut icon' href='/"
 msgstr ""
 
-#: web_vision.cpp:946
+#: web_vision.cpp:1008
 msgid ""
 "/ico' type='image' />\n"
 "  <title>"
 msgstr ""
 
-#: web_vision.cpp:947 web_vision.cpp:987 web_vision.cpp:995
-#: web_vision.cpp:1171
+#: web_vision.cpp:1009 web_vision.cpp:1049 web_vision.cpp:1057
+#: web_vision.cpp:1233
 msgid ". "
 msgstr ""
 
-#: web_vision.cpp:947
+#: web_vision.cpp:1009
 msgid ""
 "</title>\n"
 "  <style type='text/css'>\n"
 msgstr ""
 
-#: web_vision.cpp:948
+#: web_vision.cpp:1010
 msgid "</style>\n"
 msgstr ""
 
-#: web_vision.cpp:950
+#: web_vision.cpp:1012
 msgid ""
 "</head>\n"
 "<body alink='#33ccff' link='#3366ff' text='#000000' vlink='#339999'>\n"
 msgstr ""
 
-#: web_vision.cpp:959
+#: web_vision.cpp:1021
 msgid ""
 "</body>\n"
 "</html>"
 msgstr ""
 
-#: web_vision.cpp:972
+#: web_vision.cpp:1034
 msgid "about"
 msgstr ""
 
-#: web_vision.cpp:977
+#: web_vision.cpp:1039
 msgid "UI."
 msgstr ""
 
-#: web_vision.cpp:978
+#: web_vision.cpp:1040
 msgid "image/"
 msgstr ""
 
-#: web_vision.cpp:987 web_vision.cpp:995 web_vision.cpp:1171
+#: web_vision.cpp:1049 web_vision.cpp:1057 web_vision.cpp:1233
 msgid "<h1 class='head'>"
 msgstr ""
 
-#: web_vision.cpp:987 web_vision.cpp:1171
+#: web_vision.cpp:1049 web_vision.cpp:1233
 msgid ""
 "</h1>\n"
 "<hr/><br/>\n"
 msgstr ""
 
-#: web_vision.cpp:995
+#: web_vision.cpp:1057
 msgid ""
 "</h1>\n"
 "<hr/><br/>\n"
 "<center><table class='page_auth'>\n"
 msgstr ""
 
-#: web_vision.cpp:999
+#: web_vision.cpp:1061
 #, c-format
 msgid "/%2fses%2fses"
 msgstr ""
 
-#: web_vision.cpp:1004 web_vision.cpp:1019
+#: web_vision.cpp:1066 web_vision.cpp:1081
 msgid "<tr><td><b>"
 msgstr ""
 
-#: web_vision.cpp:1004
+#: web_vision.cpp:1066
 msgid "Connect to opened session"
 msgstr "Подключение к открытой сессии"
 
-#: web_vision.cpp:1004 web_vision.cpp:1019
+#: web_vision.cpp:1066 web_vision.cpp:1081
 msgid ""
 "</b></td></tr>\n"
 "<tr class='content'><td align='center'>\n"
 "<table border='0'>\n"
 msgstr ""
 
-#: web_vision.cpp:1008 web_vision.cpp:1023
+#: web_vision.cpp:1070 web_vision.cpp:1085
 msgid "<tr><td><a href='/"
 msgstr ""
 
-#: web_vision.cpp:1008 web_vision.cpp:1040
+#: web_vision.cpp:1070 web_vision.cpp:1102
 msgid "/ses_"
 msgstr ""
 
-#: web_vision.cpp:1008 web_vision.cpp:1023
+#: web_vision.cpp:1070 web_vision.cpp:1085
 msgid "'>"
 msgstr ""
 
-#: web_vision.cpp:1009 web_vision.cpp:1024
+#: web_vision.cpp:1071 web_vision.cpp:1086
 msgid "</a></td></tr>"
 msgstr ""
 
-#: web_vision.cpp:1010 web_vision.cpp:1025
+#: web_vision.cpp:1072 web_vision.cpp:1087
 msgid "</table></td></tr>\n"
 msgstr ""
 
-#: web_vision.cpp:1014
+#: web_vision.cpp:1076
 #, c-format
 msgid "/%2fprm%2fcfg%2fprj"
 msgstr ""
 
-#: web_vision.cpp:1019
+#: web_vision.cpp:1081
 msgid "Create new session for present project"
 msgstr "Создание новой сессии для доступного проекта"
 
-#: web_vision.cpp:1023
+#: web_vision.cpp:1085
 msgid "/prj_"
 msgstr ""
 
-#: web_vision.cpp:1028
+#: web_vision.cpp:1090
 msgid "</table></center>"
 msgstr ""
 
-#: web_vision.cpp:1029
+#: web_vision.cpp:1091
 msgid "No one sessions and projects VCA engine present!"
 msgstr "Нет ни одной сессии и проекта движка СВУ!"
 
-#: web_vision.cpp:1032
+#: web_vision.cpp:1094
 msgid "prj_"
 msgstr ""
 
-#: web_vision.cpp:1034
+#: web_vision.cpp:1096
 msgid "connect"
 msgstr ""
 
-#: web_vision.cpp:1035
+#: web_vision.cpp:1097
 msgid "prj"
 msgstr ""
 
-#: web_vision.cpp:1037
+#: web_vision.cpp:1099
 msgid "mcat"
 msgstr ""
 
-#: web_vision.cpp:1040 web_vision.cpp:1166
+#: web_vision.cpp:1102 web_vision.cpp:1228
 msgid "<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/"
 msgstr ""
 
-#: web_vision.cpp:1040 web_vision.cpp:1166 web_vision.cpp:1183
+#: web_vision.cpp:1102 web_vision.cpp:1228 web_vision.cpp:1245
 msgid "'/>"
 msgstr ""
 
-#: web_vision.cpp:1041
+#: web_vision.cpp:1103
 msgid "<center>Open new session '"
 msgstr ""
 
-#: web_vision.cpp:1041
+#: web_vision.cpp:1103
 msgid "' for project: '"
 msgstr ""
 
-#: web_vision.cpp:1063
+#: web_vision.cpp:1125
 #, c-format
 msgid "No permit request is received: '%s'"
 msgstr "Получен недопустимый запрос: '%s'"
 
-#: web_vision.cpp:1067
+#: web_vision.cpp:1129
 msgid "Page <"
 msgstr ""
 
-#: web_vision.cpp:1067
+#: web_vision.cpp:1129
 msgid "> error: "
 msgstr ""
 
-#: web_vision.cpp:1078
+#: web_vision.cpp:1140
 msgid ""
 "<center><table class='page_auth'>\n"
 "<TR><TD>"
 msgstr ""
 
-#: web_vision.cpp:1079 web_vision.cpp:1088
+#: web_vision.cpp:1141 web_vision.cpp:1150
 msgid " "
 msgstr ""
 
-#: web_vision.cpp:1079 web_vision.cpp:1088
+#: web_vision.cpp:1141 web_vision.cpp:1150
 msgid ""
 "</TD></TR>\n"
 "<TR class='content'><TD>\n"
@@ -1931,31 +2045,31 @@ msgid ""
 "<TR><TD><font color='Blue'>"
 msgstr ""
 
-#: web_vision.cpp:1082 web_vision.cpp:1091
+#: web_vision.cpp:1144 web_vision.cpp:1153
 msgid "Name: "
 msgstr "Имя: "
 
-#: web_vision.cpp:1082
+#: web_vision.cpp:1144
 msgid ""
 "</font></TD><TD>OpenSCADA</TD></TR>\n"
 "<TR><TD><font color='Blue'>"
 msgstr ""
 
-#: web_vision.cpp:1083 web_vision.cpp:1093
+#: web_vision.cpp:1145 web_vision.cpp:1155
 msgid "License: "
 msgstr "Лицензия: "
 
-#: web_vision.cpp:1083
+#: web_vision.cpp:1145
 msgid ""
 "</font></TD><TD>GPL</TD></TR>\n"
 "<TR><TD><font color='Blue'>"
 msgstr ""
 
-#: web_vision.cpp:1084 web_vision.cpp:1094
+#: web_vision.cpp:1146 web_vision.cpp:1156
 msgid "Author: "
 msgstr "Автор: "
 
-#: web_vision.cpp:1084
+#: web_vision.cpp:1146
 msgid ""
 "</font></TD><TD>Roman Savochenko</TD></TR>\n"
 "</table>\n"
@@ -1964,84 +2078,84 @@ msgid ""
 "<TR><TD>"
 msgstr ""
 
-#: web_vision.cpp:1091 web_vision.cpp:1092 web_vision.cpp:1093
-#: web_vision.cpp:1094
+#: web_vision.cpp:1153 web_vision.cpp:1154 web_vision.cpp:1155
+#: web_vision.cpp:1156
 msgid "</font></TD><TD>"
 msgstr ""
 
-#: web_vision.cpp:1091 web_vision.cpp:1092 web_vision.cpp:1093
+#: web_vision.cpp:1153 web_vision.cpp:1154 web_vision.cpp:1155
 msgid "</TD></TR><TR><TD><font color='Blue'>"
 msgstr ""
 
-#: web_vision.cpp:1092
+#: web_vision.cpp:1154
 msgid "Desription: "
 msgstr "Описание: "
 
-#: web_vision.cpp:1094
+#: web_vision.cpp:1156
 msgid ""
 "</TD></TR></table>\n"
 "</TD></TR>\n"
 "</table><br/></center>\n"
 msgstr ""
 
-#: web_vision.cpp:1101
+#: web_vision.cpp:1163
 msgid "<center><table class='page_auth'><tr><td><b>"
 msgstr ""
 
-#: web_vision.cpp:1102
+#: web_vision.cpp:1164
 msgid "Enter to module"
 msgstr "Вход в модуль"
 
-#: web_vision.cpp:1102
+#: web_vision.cpp:1164
 msgid ""
 "</b></td></tr>\n"
 "<tr class='content'> <td align='center'>\n"
 "<form method='post' action='/"
 msgstr ""
 
-#: web_vision.cpp:1104
+#: web_vision.cpp:1166
 msgid ""
 "' enctype='multipart/form-data'>\n"
 "<table cellpadding='3'>\n"
 "<tr><td><b>"
 msgstr ""
 
-#: web_vision.cpp:1106
+#: web_vision.cpp:1168
 msgid "User name"
 msgstr "Имя пользователя"
 
-#: web_vision.cpp:1106
+#: web_vision.cpp:1168
 msgid ""
 "</b></td><td><input type='text' name='user' size='20'/></td></tr>\n"
 "<tr><td><b>"
 msgstr ""
 
-#: web_vision.cpp:1107
+#: web_vision.cpp:1169
 msgid "Password"
 msgstr "Пароль"
 
-#: web_vision.cpp:1107
+#: web_vision.cpp:1169
 msgid ""
 "</b></td><td><input type='password' name='pass' size='20'/></td></tr>\n"
 "<tr><td colspan='2' align='center'><input type='submit' name='auth_enter' "
 "value='"
 msgstr ""
 
-#: web_vision.cpp:1108
+#: web_vision.cpp:1170
 msgid "Enter"
 msgstr "Принять"
 
-#: web_vision.cpp:1108
+#: web_vision.cpp:1170
 msgid ""
 "'/>\n"
 "<input type='reset' name='clean' value='"
 msgstr ""
 
-#: web_vision.cpp:1109
+#: web_vision.cpp:1171
 msgid "Clean"
 msgstr "Очистить"
 
-#: web_vision.cpp:1109
+#: web_vision.cpp:1171
 msgid ""
 "'/>\n"
 "</td></tr></table>\n"
@@ -2049,236 +2163,236 @@ msgid ""
 "</td></tr></table></center>\n"
 msgstr ""
 
-#: web_vision.cpp:1117 web_vision.cpp:1314
+#: web_vision.cpp:1179 web_vision.cpp:1376
 msgid ":"
 msgstr ""
 
-#: web_vision.cpp:1117
+#: web_vision.cpp:1179
 msgid "Cookie"
 msgstr ""
 
-#: web_vision.cpp:1119 web_vision.cpp:1297
+#: web_vision.cpp:1181 web_vision.cpp:1359
 msgid "="
 msgstr ""
 
-#: web_vision.cpp:1122
+#: web_vision.cpp:1184
 msgid ";"
 msgstr ""
 
-#: web_vision.cpp:1145
+#: web_vision.cpp:1207
 msgid "oscdAuthVisionId"
 msgstr ""
 
-#: web_vision.cpp:1159
+#: web_vision.cpp:1221
 msgid "auth_enter"
 msgstr ""
 
-#: web_vision.cpp:1162 web_vision.cpp:1223
+#: web_vision.cpp:1224 web_vision.cpp:1285
 msgid "user"
 msgstr ""
 
-#: web_vision.cpp:1163
+#: web_vision.cpp:1225
 msgid "pass"
 msgstr ""
 
-#: web_vision.cpp:1166 web_vision.cpp:1183
+#: web_vision.cpp:1228 web_vision.cpp:1245
 msgid "/"
 msgstr ""
 
-#: web_vision.cpp:1168
+#: web_vision.cpp:1230
 msgid "Set-Cookie: oscdAuthVisionId="
 msgstr ""
 
-#: web_vision.cpp:1168
+#: web_vision.cpp:1230
 msgid "; path=/;\n"
 msgstr ""
 
-#: web_vision.cpp:1172
+#: web_vision.cpp:1234
 msgid "Auth wrong! Retry please."
 msgstr "Ошибка авторизации! Повторите пожалуйста."
 
-#: web_vision.cpp:1181
+#: web_vision.cpp:1243
 msgid "auth_ch"
 msgstr ""
 
-#: web_vision.cpp:1183
+#: web_vision.cpp:1245
 msgid "<META HTTP-EQUIV='Refresh' CONTENT='0; URL="
 msgstr ""
 
-#: web_vision.cpp:1185
+#: web_vision.cpp:1247
 msgid "Set-Cookie: oscdAuthVisionId=; path=/;\n"
 msgstr ""
 
-#: web_vision.cpp:1208
+#: web_vision.cpp:1270
 #, c-format
 msgid "%s"
 msgstr ""
 
-#: web_vision.cpp:1211
+#: web_vision.cpp:1273
 #, c-format
 msgid "<table border='2' width='40%' align='center'><tbody>\n"
 msgstr ""
 
-#: web_vision.cpp:1213
+#: web_vision.cpp:1275
 msgid "<tr bgcolor='yellow'><td align='center'><b>Warning!</b></td></tr>\n"
 msgstr ""
 
-#: web_vision.cpp:1215
+#: web_vision.cpp:1277
 msgid "<tr bgcolor='red'><td align='center'><b>Error!</b></td></tr>\n"
 msgstr ""
 
-#: web_vision.cpp:1216
+#: web_vision.cpp:1278
 msgid "<tr bgcolor='#9999ff'><td align='center'><b>Message!</b></td></tr>\n"
 msgstr ""
 
-#: web_vision.cpp:1217
+#: web_vision.cpp:1279
 msgid "<tr bgcolor='#cccccc'> <td align='center'>"
 msgstr ""
 
-#: web_vision.cpp:1217
+#: web_vision.cpp:1279
 msgid "</td></tr>\n"
 msgstr ""
 
-#: web_vision.cpp:1218
+#: web_vision.cpp:1280
 msgid "</tbody></table>\n"
 msgstr ""
 
-#: web_vision.cpp:1224
+#: web_vision.cpp:1286
 msgid "/UI/VCAEngine"
 msgstr ""
 
-#: web_vision.cpp:1226
+#: web_vision.cpp:1288
 msgid "rez"
 msgstr ""
 
-#: web_vision.cpp:1235
+#: web_vision.cpp:1297
 msgid "area"
 msgstr ""
 
-#: web_vision.cpp:1235
+#: web_vision.cpp:1297
 msgid "/prm/cfg"
 msgstr ""
 
-#: web_vision.cpp:1235
+#: web_vision.cpp:1297
 msgid "Module options"
 msgstr "Опции модуля"
 
-#: web_vision.cpp:1237 web_vision.cpp:1238 web_vision.cpp:1242
+#: web_vision.cpp:1299 web_vision.cpp:1300 web_vision.cpp:1304
 msgid "fld"
 msgstr ""
 
-#: web_vision.cpp:1237 web_vision.cpp:1248
+#: web_vision.cpp:1299 web_vision.cpp:1310
 msgid "/prm/cfg/lf_tm"
 msgstr ""
 
-#: web_vision.cpp:1237
+#: web_vision.cpp:1299
 msgid "Life time of auth sesion(min)"
 msgstr "Время жизни сеанса авторизации (мин)"
 
-#: web_vision.cpp:1237 web_vision.cpp:1238 web_vision.cpp:1242
+#: web_vision.cpp:1299 web_vision.cpp:1300 web_vision.cpp:1304
 msgid "tp"
 msgstr ""
 
-#: web_vision.cpp:1237
+#: web_vision.cpp:1299
 msgid "dec"
 msgstr ""
 
-#: web_vision.cpp:1238 web_vision.cpp:1253
+#: web_vision.cpp:1300 web_vision.cpp:1315
 msgid "/prm/cfg/CSS"
 msgstr ""
 
-#: web_vision.cpp:1238
+#: web_vision.cpp:1300
 msgid "CSS"
 msgstr ""
 
-#: web_vision.cpp:1238 web_vision.cpp:1242
+#: web_vision.cpp:1300 web_vision.cpp:1304
 msgid "str"
 msgstr ""
 
-#: web_vision.cpp:1238 web_vision.cpp:1242
+#: web_vision.cpp:1300 web_vision.cpp:1304
 msgid "cols"
 msgstr ""
 
-#: web_vision.cpp:1238 web_vision.cpp:1242
+#: web_vision.cpp:1300 web_vision.cpp:1304
 msgid "90"
 msgstr ""
 
-#: web_vision.cpp:1238 web_vision.cpp:1242
+#: web_vision.cpp:1300 web_vision.cpp:1304
 msgid "rows"
 msgstr ""
 
-#: web_vision.cpp:1238
+#: web_vision.cpp:1300
 msgid "7"
 msgstr ""
 
-#: web_vision.cpp:1239 web_vision.cpp:1240
+#: web_vision.cpp:1301 web_vision.cpp:1302
 msgid "comm"
 msgstr ""
 
-#: web_vision.cpp:1239 web_vision.cpp:1259
+#: web_vision.cpp:1301 web_vision.cpp:1321
 msgid "/prm/cfg/load"
 msgstr ""
 
-#: web_vision.cpp:1239
+#: web_vision.cpp:1301
 msgid "Load"
 msgstr "Загрузить"
 
-#: web_vision.cpp:1240 web_vision.cpp:1260
+#: web_vision.cpp:1302 web_vision.cpp:1322
 msgid "/prm/cfg/save"
 msgstr ""
 
-#: web_vision.cpp:1240
+#: web_vision.cpp:1302
 msgid "Save"
 msgstr "Сохранить"
 
-#: web_vision.cpp:1242 web_vision.cpp:1258
+#: web_vision.cpp:1304 web_vision.cpp:1320
 msgid "/help/g_help"
 msgstr ""
 
-#: web_vision.cpp:1242
+#: web_vision.cpp:1304
 msgid "Options help"
 msgstr "Помощь по опциям"
 
-#: web_vision.cpp:1242
+#: web_vision.cpp:1304
 msgid "5"
 msgstr ""
 
-#: web_vision.cpp:1289
+#: web_vision.cpp:1351
 msgid "?"
 msgstr ""
 
-#: web_vision.cpp:1298
+#: web_vision.cpp:1360
 msgid "true"
 msgstr ""
 
-#: web_vision.cpp:1306
+#: web_vision.cpp:1368
 msgid "boundary="
 msgstr ""
 
-#: web_vision.cpp:1307
+#: web_vision.cpp:1369
 msgid "\r\n"
 msgstr ""
 
-#: web_vision.cpp:1308 web_vision.cpp:1324
+#: web_vision.cpp:1370 web_vision.cpp:1386
 msgid "--"
 msgstr ""
 
-#: web_vision.cpp:1309
+#: web_vision.cpp:1371
 msgid "Content-Disposition: form-data;"
 msgstr ""
 
-#: web_vision.cpp:1310
+#: web_vision.cpp:1372
 msgid "name=\""
 msgstr ""
 
-#: web_vision.cpp:1311
+#: web_vision.cpp:1373
 msgid "filename=\""
 msgstr ""
 
-#: web_vision.cpp:1314
+#: web_vision.cpp:1376
 msgid "Content-Type"
 msgstr ""
 
-#: web_vision.cpp:1331 web_vision.cpp:1344
+#: web_vision.cpp:1393 web_vision.cpp:1406
 msgid "\""
 msgstr ""

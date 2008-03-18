@@ -1,3 +1,8 @@
+2008-03-18 Roman
+- /DAQ/JavaLikeCalc: Logical operation on string blocking is disabled.
+- FIX:/UI/Vision: Size points first appearance time wait is added (500ms). For mouse release event lost prevention.
+
+
 2008-03-17 Roman
 - !:/UI/VCAEngine: Child widget remove is made optimal. Remove full check IO table.
 - /UI/Vision: Remove Project and Widget libraries updating on time child widgets changing.

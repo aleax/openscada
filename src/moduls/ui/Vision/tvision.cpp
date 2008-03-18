@@ -47,6 +47,7 @@
 #define SUB_TYPE    "QT"
 #define VERSION     "0.6.0"
 #define AUTORS      "Roman Savochenko"
+#define DEVELOPERS  "Roman Savochenko, Lysenko Maxim, Yashina Kseniya"
 #define DESCRIPTION "Visual operation user interface."
 #define LICENSE     "GPL"
 //*************************************************
@@ -116,11 +117,13 @@ void TVision::modInfo( vector<string> &list )
 {
     TModule::modInfo(list);
     list.push_back("SubType");
+    list.push_back(_("Developers"));    
 }
 
 string TVision::modInfo( const string &name )
 {
-    if( name == "SubType" ) return SUB_TYPE;
+    if( name == "SubType" ) 		return SUB_TYPE;
+    else if( name == _("Developers") )	return DEVELOPERS;
     else return TModule::modInfo( name);
 }
 

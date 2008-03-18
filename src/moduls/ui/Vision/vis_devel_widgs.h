@@ -389,9 +389,39 @@ class WScaleStBar : public QLabel
         bool isScale;
 };																		    
 
-//****************************************
-//* Shape widget view development mode   *
-//****************************************	
+//*************************************************
+//* Size points widget                            *
+//*************************************************
+class SizePntWdg : public QWidget
+{
+    Q_OBJECT
+
+    public:
+        //Data
+        enum WView { SizeDots, EditBorder, SelectBorder };
+        //Methods
+        SizePntWdg( QWidget* parent = 0 );
+
+        QPointF posF( )             { return w_pos; }
+        QSizeF  sizeF( )            { return w_size; }
+        QRectF geometryF( )         { return QRectF(w_pos,w_size); }
+        
+	void setSelArea( const QRectF &geom, WView view = SizeDots, bool force = false );
+        bool event( QEvent *event );
+
+    public slots:
+	void apply( );
+    
+    private:
+        //Attributes
+        WView   view;
+        QPointF w_pos;          //Widget position into real;
+        QSizeF  w_size;         //Widget size into real;
+};
+
+//*************************************************
+//* Shape widget view development mode            *
+//*************************************************
 class DevelWdgView: public WdgView
 {
     Q_OBJECT
@@ -447,29 +477,6 @@ class DevelWdgView: public WdgView
 	int cntrIfCmd( XMLNode &node, bool glob = false );
     
     private:
-	//Private data
-        class SizePntWdg : public QWidget
-        {
-            public:
-		//Data
-		enum WView { SizeDots, EditBorder, SelectBorder };
-		//Methods
-                SizePntWdg( QWidget* parent = 0 );
-		
-        	QPointF posF( )             { return w_pos; }
-		QSizeF  sizeF( )            { return w_size; }
-		QRectF geometryF( )         { return QRectF(w_pos,w_size); }
-
-		void setSelArea( const QRectF &geom, WView view = SizeDots );
-		bool event( QEvent *event );
-            
-	    private:
-		//Attributes
-		WView 	view;
-		QPointF	w_pos;		//Widget position into real;
-		QSizeF	w_size;         //Widget size into real;
-			    
-        };
 	//Private methods
         bool grepAnchor( const QPointF &apnt, const QPoint &cpnt );
         void upMouseCursors( const QPoint &pnt );

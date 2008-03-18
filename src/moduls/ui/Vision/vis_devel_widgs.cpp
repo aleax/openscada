@@ -39,6 +39,7 @@
 #include <QDoubleSpinBox>
 #include <QBuffer>
 #include <QDateTimeEdit>
+#include <QTimer>
 
 #include <tsys.h>
 
@@ -2172,7 +2173,7 @@ bool DevelWdgView::event( QEvent *event )
         	if( qobject_cast<DevelWdgView*>(children().at(i_c)) &&
                     	    ((DevelWdgView*)children().at(i_c))->select( ) )
                     rsel = rsel.united(((DevelWdgView*)children().at(i_c))->geometryF());
-            pntView->setSelArea(rsel,edit() ? SizePntWdg::EditBorder : SizePntWdg::SizeDots);
+            pntView->setSelArea( rsel, edit() ? SizePntWdg::EditBorder : SizePntWdg::SizeDots );
         }
 	pnt.end();
 	
@@ -2300,7 +2301,7 @@ bool DevelWdgView::event( QEvent *event )
 		    }
 		    setSelect(true);
 		    m_flgs &= ~DevelWdgView::holdSelRect;
-		    pntView->setSelArea(QRectF());
+		    //pntView->setSelArea(QRectF());
 		}
 	    
 		if( m_flgs&DevelWdgView::moveHold && !edit() )
@@ -2379,7 +2380,7 @@ bool DevelWdgView::event( QEvent *event )
 		//- Select board draw -
 		if( m_flgs&DevelWdgView::holdSelRect )
 		{
-		    pntView->setSelArea(QRect(holdPnt,curp).normalized(),SizePntWdg::SelectBorder);
+		    pntView->setSelArea(QRect(holdPnt,curp).normalized(),SizePntWdg::SelectBorder,true);
 		    return true;
 		}
 		
@@ -2469,48 +2470,65 @@ bool DevelWdgView::event( QEvent *event )
     return QWidget::event(event);
 }
 
-//* Size points view widget              *
-//****************************************
-DevelWdgView::SizePntWdg::SizePntWdg( QWidget* parent ) : QWidget(parent), view(SizeDots)
+//************************************************
+//* Size points view widget                      *
+//************************************************
+SizePntWdg::SizePntWdg( QWidget* parent ) : QWidget(parent), view(SizeDots)
 {
     //setAttribute(Qt::WA_NoSystemBackground);
     setMouseTracking(true);
 }
 
-void DevelWdgView::SizePntWdg::setSelArea( const QRectF &geom, WView iview )
+void SizePntWdg::setSelArea( const QRectF &geom, WView iview, bool force )
 {
-    view = iview;
+    if( view == iview && w_pos == geom.topLeft() && w_size == geom.size() ) return;
+    view   = iview;
     w_pos  = geom.topLeft();
-    w_size = geom.size();    
-    
-    if( geom.isValid() )
-    {	
+    w_size = geom.size();
+    if( force || isVisible() )	
+    apply();
+    else QTimer::singleShot(500, this, SLOT(apply()));
+}
+
+void SizePntWdg::apply( )
+{
+    if( w_size.width() > 2 && w_size.height() > 2 )
+    {
 	QRegion reg;
+	QRect   wrect, irect;
 	switch( view )
 	{
 	    case SizeDots:
-		setGeometry(geom.adjusted(-3,-3,3,3).toRect());
+		wrect = QRectF(w_pos,w_size).adjusted(-3,-3,3,3).toRect();
+		irect = QRect(0,0,wrect.width(),wrect.height());
 		//- Make widget's mask -
 		for(int i_p = 0; i_p < 9; i_p++)
 		    if( i_p != 4 )
-			reg+=QRegion(QRect(rect().x()+(i_p%3)*((rect().width()-7)/2),
-		    		   rect().y()+(i_p/3)*((rect().height()-7)/2),7,7));
+			reg+=QRegion(QRect(irect.x()+(i_p%3)*((irect.width()-7)/2),
+		    		   irect.y()+(i_p/3)*((irect.height()-7)/2),7,7));
 		break;
 	    case EditBorder:
-		setGeometry(geom.adjusted(-7,-7,7,7).toRect());	    
-		reg = QRegion(rect()).subtracted(QRegion(rect().adjusted(7,7,-7,-7)));
+		wrect = QRectF(w_pos,w_size).adjusted(-7,-7,7,7).toRect();
+		irect = QRect(0,0,wrect.width(),wrect.height());		
+		reg = QRegion(irect).subtracted(QRegion(irect.adjusted(7,7,-7,-7)));
 		break;
 	    case SelectBorder:
-		setGeometry(geom.adjusted(-1,-1,1,1).toRect());
-		reg = QRegion(rect()).subtracted(QRegion(rect().adjusted(1,1,-1,-1)));
+		wrect = QRectF(w_pos,w_size).adjusted(-1,-1,1,1).toRect();
+		irect = QRect(0,0,wrect.width(),wrect.height());		
+		reg = QRegion(irect).subtracted(QRegion(irect.adjusted(1,1,-1,-1)));
 		break;	    
+	}	
+	if( geometry() != wrect )
+	{
+	    setGeometry(wrect);
+	    setMask(reg);
 	}
-	setMask(reg);
+	if( !isVisible() ) show();
     }
-    else setGeometry(geom.toRect());
+    else hide();
 }
 
-bool DevelWdgView::SizePntWdg::event( QEvent *ev )
+bool SizePntWdg::event( QEvent *ev )
 {
     switch( ev->type() )
     {
