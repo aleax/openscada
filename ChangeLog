@@ -2,6 +2,7 @@
 - FIX:/DAQ/JavaLikeCalc: Logical operation return to boolean is fixed.
 - FIX:/UI/Vision: Size points first appearance time wait is added (500ms). For mouse release event lost prevention.
 - !!:/UI/WebVision: Documentation and translation is updated and version 0.3.0 is relised.
+- FIX:/UI/Vision, /UI/WebVision: No clearing images into primitives "Media" is fixed.
 
 
 2008-03-17 Roman
@@ -111,7 +112,7 @@
 
 
 2008-02-27 Roman
-- !:/DB: Create table flag is removed.
+- !:/DB: The create table flag is removed.
 - /DAQ/ModBus: Early endrun termination is added.
 - !:/UI/Vision: Force item select suport is added for mouse double item click properties call.
 - FIX:/UI/Vision: Visual item crash on broken visual item is fixed.

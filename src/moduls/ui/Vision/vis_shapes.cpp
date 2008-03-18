@@ -936,7 +936,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
     bool up = true, reld_src = false;
     QLabel *lab = (QLabel*)w->dc()["labWdg"].value< void* >();
 
-    switch(uiPrmPos)
+    switch( uiPrmPos )
     {
 	case -1:	//load
 	    reld_src = true;
@@ -1039,56 +1039,59 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
     
     if( reld_src && !w->allAttrLoad() )
     {
-	string sdata = w->resGet(w->dc()["mediaSrc"].toString().toAscii().data());    
-	if( !sdata.empty() )
-	    switch(w->dc()["mediaType"].toInt())
+	string sdata = w->dc()["mediaSrc"].toString().size() ? w->resGet(w->dc()["mediaSrc"].toString().toAscii().data()) : "";
+	switch(w->dc()["mediaType"].toInt())
+	{
+	    case 0:
 	    {
-		case 0:
+		QImage img;
+		//- Free movie data, if set -
+		if( lab->movie() )
 		{
-		    QImage img;
-		    //- Free movie data, if set -
-		    if( lab->movie() )
-		    {
-		        if(lab->movie()->device()) delete lab->movie()->device();
-		        delete lab->movie();
-		        lab->clear();
-		    }
-		    //- Set new image -
-		    if( img.loadFromData((const uchar*)sdata.data(),sdata.size()) )
- 		        lab->setPixmap(QPixmap::fromImage(img.scaled(
-		    	    (int)((float)img.width()*w->xScale(true)),
-			    (int)((float)img.height()*w->yScale(true)),
-			    Qt::KeepAspectRatio,Qt::SmoothTransformation)));			
-		    lab->setScaledContents( w->dc()["mediaFit"].toInt() );
-		    break;
+		    if(lab->movie()->device()) delete lab->movie()->device();
+		    delete lab->movie();
+		    lab->clear();
 		}
-		case 1:
-		{
-		    //- Clear previous movie data -
-		    if( lab->movie() )
-		    {
-		        if(lab->movie()->device()) delete lab->movie()->device();
-		        delete lab->movie();
-		        lab->clear();
-		    }
-		    //- Set new data -
-		    QBuffer *buf = new QBuffer(w);
-		    buf->setData( sdata.data(), sdata.size() );
-		    buf->open( QIODevice::ReadOnly );
-		    lab->setMovie( new QMovie(buf) );			
-		    //- Play speed set -
-		    int vl = w->dc()["mediaSpeed"].toInt();
-	    	    if( vl <= 1 ) lab->movie()->stop();
-		    else
-		    {
-		        lab->movie()->setSpeed(vl);
-		        lab->movie()->start();
-		    }
-		    //- Fit set -
-		    lab->setScaledContents( w->dc()["mediaFit"].toInt() );
-		    break;
-		}			
+		//- Set new image -
+		if( !sdata.empty() && img.loadFromData((const uchar*)sdata.data(),sdata.size()) )
+ 		    lab->setPixmap(QPixmap::fromImage(img.scaled(
+		        (int)((float)img.width()*w->xScale(true)),
+		        (int)((float)img.height()*w->yScale(true)),
+			Qt::KeepAspectRatio,Qt::SmoothTransformation)));
+		else lab->setPixmap(QPixmap());    
+		lab->setScaledContents( w->dc()["mediaFit"].toInt() );
+		break;
 	    }
+	    case 1:
+	    {
+	        //- Clear previous movie data -
+	        if( lab->movie() )
+	        {
+	            if(lab->movie()->device()) delete lab->movie()->device();
+	            delete lab->movie();
+	            lab->clear();
+	        }
+	        //- Set new data -
+		if( sdata.size() )
+		{
+	    	    QBuffer *buf = new QBuffer(w);
+	    	    buf->setData( sdata.data(), sdata.size() );
+	    	    buf->open( QIODevice::ReadOnly );
+	    	    lab->setMovie( new QMovie(buf) );
+		}else lab->setMovie( new QMovie() );
+	        //- Play speed set -
+	        int vl = w->dc()["mediaSpeed"].toInt();
+		if( vl <= 1 ) lab->movie()->stop();
+		else
+		{
+		    lab->movie()->setSpeed(vl);
+		    lab->movie()->start();
+		}
+		//- Fit set -
+		lab->setScaledContents( w->dc()["mediaFit"].toInt() );
+		break;
+	    }
+	}
     }
 
     if( up && !w->allAttrLoad( ) ) w->update();
