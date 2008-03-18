@@ -1,6 +1,7 @@
 2008-03-18 Roman
-- /DAQ/JavaLikeCalc: Logical operation on string blocking is disabled.
+- FIX:/DAQ/JavaLikeCalc: Logical operation return to boolean is fixed.
 - FIX:/UI/Vision: Size points first appearance time wait is added (500ms). For mouse release event lost prevention.
+- !!:/UI/WebVision: Documentation and translation is updated and version 0.3.0 is relised.
 
 
 2008-03-17 Roman

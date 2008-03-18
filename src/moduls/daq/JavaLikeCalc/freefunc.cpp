@@ -477,7 +477,7 @@ Reg *Func::cdMove( Reg *rez, Reg *op )
 Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 {
     //- Check allowing type operations -
-    /*switch(op1->vType(this))
+    switch(op1->vType(this))
     {
 	case Reg::String:
 	    switch(cod)
@@ -497,7 +497,7 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 		case Reg::GEI:
 		    throw TError(nodePath().c_str(),_("Operation %d no support string type"),cod);
 	    }    
-    }*/
+    }
     
     //- Check allow the buildin calc and calc -
     if( op1->pos() < 0 && op2->pos() < 0 )
@@ -570,8 +570,8 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 		switch(cod)
 		{
 		    case Reg::AddI: *op1->val().s_el += *op2->val().s_el;	break;
-                    case Reg::EQI:  *op1 = *op1->val().s_el == *op2->val().s_el;	break;		    
-                    case Reg::NEI:  *op1 = *op1->val().s_el != *op2->val().s_el;	break;		    
+                    case Reg::EQI:  *op1 = (char)(*op1->val().s_el == *op2->val().s_el);	break;		    
+                    case Reg::NEI:  *op1 = (char)(*op1->val().s_el != *op2->val().s_el);	break;
 		}
 		break;    
 	}    
@@ -606,14 +606,14 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 		case Reg::BitOr: prg+=(BYTE)Reg::BitOr;	break;
 		case Reg::BitAnd: prg+=(BYTE)Reg::BitAnd; break;
 		case Reg::BitXor: prg+=(BYTE)Reg::BitXor; break;
-                case Reg::LOr:  prg+=(BYTE)Reg::LOr;    break;
-		case Reg::LAnd: prg+=(BYTE)Reg::LAnd;   break;
-                case Reg::LTI: 	prg+=(BYTE)Reg::LTI;	break;
-                case Reg::GTI: 	prg+=(BYTE)Reg::GTI;	break;
-                case Reg::LEI: 	prg+=(BYTE)Reg::LEI;	break;
-                case Reg::GEI: 	prg+=(BYTE)Reg::GEI;	break;
-                case Reg::EQI: 	prg+=(BYTE)Reg::EQI;	break;
-                case Reg::NEI: 	prg+=(BYTE)Reg::NEI;	break;
+                case Reg::LOr:  prg+=(BYTE)Reg::LOr;    rez->setType(Reg::Bool); break;
+		case Reg::LAnd: prg+=(BYTE)Reg::LAnd;   rez->setType(Reg::Bool); break;
+                case Reg::LTI: 	prg+=(BYTE)Reg::LTI;	rez->setType(Reg::Bool); break;
+                case Reg::GTI: 	prg+=(BYTE)Reg::GTI;	rez->setType(Reg::Bool); break;
+                case Reg::LEI: 	prg+=(BYTE)Reg::LEI;	rez->setType(Reg::Bool); break;
+                case Reg::GEI: 	prg+=(BYTE)Reg::GEI;	rez->setType(Reg::Bool); break;
+                case Reg::EQI: 	prg+=(BYTE)Reg::EQI;	rez->setType(Reg::Bool); break;
+                case Reg::NEI: 	prg+=(BYTE)Reg::NEI;	rez->setType(Reg::Bool); break;
 	    }
             break;
 	case Reg::Real:
@@ -626,22 +626,22 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 		case Reg::BitOr: prg+=(BYTE)Reg::BitOr; break;
                 case Reg::BitAnd: prg+=(BYTE)Reg::BitAnd;       break;
 		case Reg::BitXor: prg+=(BYTE)Reg::BitXor; break;
-                case Reg::LOr:  prg+=(BYTE)Reg::LOr;    break;
-		case Reg::LAnd: prg+=(BYTE)Reg::LAnd;   break;
-                case Reg::LTI: 	prg+=(BYTE)Reg::LTR;	break;
-                case Reg::GTI: 	prg+=(BYTE)Reg::GTR;	break;
-                case Reg::LEI: 	prg+=(BYTE)Reg::LER;	break;
-                case Reg::GEI: 	prg+=(BYTE)Reg::GER;	break;
-                case Reg::EQI: 	prg+=(BYTE)Reg::EQR;	break;
-                case Reg::NEI: 	prg+=(BYTE)Reg::NER;	break;
+                case Reg::LOr:  prg+=(BYTE)Reg::LOr;    rez->setType(Reg::Bool); break;
+		case Reg::LAnd: prg+=(BYTE)Reg::LAnd;   rez->setType(Reg::Bool); break;
+                case Reg::LTI: 	prg+=(BYTE)Reg::LTR;	rez->setType(Reg::Bool); break;
+                case Reg::GTI: 	prg+=(BYTE)Reg::GTR;	rez->setType(Reg::Bool); break;
+                case Reg::LEI: 	prg+=(BYTE)Reg::LER;	rez->setType(Reg::Bool); break;
+                case Reg::GEI: 	prg+=(BYTE)Reg::GER;	rez->setType(Reg::Bool); break;
+                case Reg::EQI: 	prg+=(BYTE)Reg::EQR;	rez->setType(Reg::Bool); break;
+                case Reg::NEI: 	prg+=(BYTE)Reg::NER;	rez->setType(Reg::Bool); break;
 	    }
             break;
 	case Reg::String:
 	    switch(cod)
 	    {
-		case Reg::AddI:	prg+=(BYTE)Reg::AddS;   break;
-                case Reg::EQI: 	prg+=(BYTE)Reg::EQS;	break;
-                case Reg::NEI: 	prg+=(BYTE)Reg::NES;	break;
+		case Reg::AddI:	prg+=(BYTE)Reg::AddS;	break;
+                case Reg::EQI: 	prg+=(BYTE)Reg::EQS;	rez->setType(Reg::Bool); break;
+                case Reg::NEI: 	prg+=(BYTE)Reg::NES;	rez->setType(Reg::Bool); break;
 	    }
             break;
     }     
