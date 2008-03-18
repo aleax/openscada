@@ -1054,12 +1054,14 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 		}
 		//- Set new image -
 		if( !sdata.empty() && img.loadFromData((const uchar*)sdata.data(),sdata.size()) )
+		{
  		    lab->setPixmap(QPixmap::fromImage(img.scaled(
 		        (int)((float)img.width()*w->xScale(true)),
 		        (int)((float)img.height()*w->yScale(true)),
 			Qt::KeepAspectRatio,Qt::SmoothTransformation)));
-		else lab->setPixmap(QPixmap());    
-		lab->setScaledContents( w->dc()["mediaFit"].toInt() );
+		    lab->setScaledContents( w->dc()["mediaFit"].toInt()  );
+		}
+		else lab->setText("");
 		break;
 	    }
 	    case 1:
@@ -1078,17 +1080,18 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    	    buf->setData( sdata.data(), sdata.size() );
 	    	    buf->open( QIODevice::ReadOnly );
 	    	    lab->setMovie( new QMovie(buf) );
-		}else lab->setMovie( new QMovie() );
-	        //- Play speed set -
-	        int vl = w->dc()["mediaSpeed"].toInt();
-		if( vl <= 1 ) lab->movie()->stop();
-		else
-		{
-		    lab->movie()->setSpeed(vl);
-		    lab->movie()->start();
-		}
-		//- Fit set -
-		lab->setScaledContents( w->dc()["mediaFit"].toInt() );
+	    	    //- Play speed set -
+	    	    int vl = w->dc()["mediaSpeed"].toInt();
+		    if( vl <= 1 ) lab->movie()->stop();
+		    else
+		    {
+			lab->movie()->setSpeed(vl);
+			lab->movie()->start();
+		    }
+		    //- Fit set -
+		    lab->setScaledContents( w->dc()["mediaFit"].toInt() );		    
+		}else lab->setText("");
+
 		break;
 	    }
 	}

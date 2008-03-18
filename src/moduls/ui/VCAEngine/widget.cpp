@@ -1079,6 +1079,9 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
                     wdg.at().attrAdd( new TFld(opt->text().c_str(),tnm.c_str(),ttp,tflg|Attr::IsUser) );
             	    wdg.at().attrAt(opt->text()).at().setModif(1);
 		    wdg.at().attrAt(opt->text()).at().setS(wdg.at().attrAt(idattr).at().getS());
+		    wdg.at().attrAt(opt->text()).at().setFlgSelf(wdg.at().attrAt(idattr).at().flgSelf());
+		    wdg.at().attrAt(opt->text()).at().setCfgTempl(wdg.at().attrAt(idattr).at().cfgTempl());
+		    wdg.at().attrAt(opt->text()).at().setCfgVal(wdg.at().attrAt(idattr).at().cfgVal());
                     wdg.at().attrDel(idattr);
             	}
             	else if( idcol == "name" )      wdg.at().attrAt(idattr).at().fld().setDescr(opt->text().c_str());
@@ -1089,10 +1092,16 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 
 	            if( tp!=ttp || (tflg^flg)&TFld::Selected )
 	            {
-			string tvl = wdg.at().attrAt(idattr).at().getS();
+			string tvl  	= wdg.at().attrAt(idattr).at().getS();
+			Attr::SelfAttrFlgs sflgs = wdg.at().attrAt(idattr).at().flgSelf();
+			string tmpl   	= wdg.at().attrAt(idattr).at().cfgTempl();
+			string cfgval 	= wdg.at().attrAt(idattr).at().cfgVal();
 	                wdg.at().attrDel(idattr);
 	                wdg.at().attrAdd( new TFld(idattr.c_str(),tnm.c_str(),tp,tflg^((tflg^flg)&(TFld::Selected|Attr::Color|Attr::Image|Attr::Font|Attr::Address|Attr::IsUser))) );
 			wdg.at().attrAt(idattr).at().setS(tvl);
+			wdg.at().attrAt(idattr).at().setFlgSelf(sflgs);
+			wdg.at().attrAt(idattr).at().setCfgVal(cfgval);
+			wdg.at().attrAt(idattr).at().setCfgTempl(tmpl);			
 	                wdg.at().attrAt(idattr).at().setModif(1);
 	            }
 	            else if( (tflg^flg)&(Attr::Color|Attr::Image|Attr::Font|Attr::Address) )
