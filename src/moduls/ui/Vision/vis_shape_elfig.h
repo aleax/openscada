@@ -207,7 +207,7 @@ class ShapeElFigure : public WdgShape
         QVector <int> rect_array;
             
 	int count_Shapes, count_moveItemTo,	
-	    index, index_temp,index_inund,			
+	    index, index_temp, index_del,index_inund,			
 	    rect_num;				
 	bool flag_cursor, flag_key, flag_up, flag_down, flag_left, flag_right, 
 	     flag_ctrl, flag_ctrl_move, flag_m, flag_hold_arc, flag_A, flag_hold_checked;

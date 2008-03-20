@@ -463,6 +463,7 @@ TWEB::TWEB( string name ) : m_t_auth(10), chck_st(false)
 	"    if( !figObj )\n"
 	"    {\n"
 	"      figObj = document.createElement('img');\n"
+        "      figObj.width = geomW; figObj.height = geomH;\n"
 	"      figObj.border = 0;\n"	
 	"      this.place.appendChild(figObj);\n"
 	"    }\n"

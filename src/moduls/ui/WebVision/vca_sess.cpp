@@ -266,8 +266,8 @@ double VCAElFigure::Angle(const Point p1,const Point p2,const Point p3,const Poi
     double dy1=(p2.y-p1.y);
     double dy2=(p4.y-p3.y);
     double cos_line = (dx1*dx2 + dy1*dy2) / (Length(p1,p2)*Length(p3,p4));
-    double rad = 0;
-    if (cos_line >= -1.0 && cos_line <= 1.0) rad = acos( cos_line );
+    double rad;
+    rad = acos( cos_line );
     return rad * 180 / M_PI;
 }
 
@@ -278,101 +278,140 @@ double VCAElFigure::Length(const Point pt1, const Point pt2)
     return sqrt(x*x + y*y);
 }
 
-void VCAElFigure::Paint_Fill( gdImage* im, InundationItem in_item )
+Point VCAElFigure::scale_rotate(Point point, double xScale, double yScale,  bool flag_scale)
+{
+    if(flag_scale)
+    {
+        Point center= Point(TSYS::realRound(width/2), TSYS::realRound(height/2));
+        point.x=point.x-center.x;
+        point.y=point.y-center.y;
+        point=ROTATE(point, orient);
+        point.x=point.x+center.x;
+        point.y=point.y+center.y;
+        point=Point(point.x*xScale, point.y*yScale);
+    }
+    return point;
+}
+
+void VCAElFigure::Paint_Fill( gdImage* im, InundationItem in_item, double xScale, double yScale )
 {
     int fill_clr=gdImageColorAllocate(im,(ui8)(in_item.P_color>>16),(ui8)(in_item.P_color>>8),(ui8)in_item.P_color);
-    int white = gdImageColorAllocate(im, 255, 255, 255);  
+    int white = gdImageColorAllocate(im, 255, 255, 255); 
     if(in_item.P_center.x!=0 && in_item.P_center.y!=0)
     {
-        gdImageFill(im, (int) (in_item.P_center.x+0.5), (int) (in_item.P_center.y+0.5), fill_clr);
-        gdImageSetPixel(im, (int) (in_item.P_center.x+0.5), (int) (in_item.P_center.y+0.5), white);
+        gdImageFill(im, (int) TSYS::realRound(scale_rotate(in_item.P_center,xScale,yScale,true).x), 
+                        (int) TSYS::realRound(scale_rotate(in_item.P_center,xScale,yScale,true).y), fill_clr);
     }
 }
 
 
-void VCAElFigure::Paint_Figure( gdImage* im, ShapeItem item )
+void VCAElFigure::Paint_Figure( gdImage* im, ShapeItem item, double xScale, double yScale )
 {
     int clr_el, clr_el_line;
     double t;
-    double arc_a, arc_b, t_start, t_end,arc_a_small,arc_b_small;
+    double arc_a, arc_b, t_start, t_end,arc_a_small,arc_b_small, ang;
+    int white = gdImageColorAllocate(im, 255, 255, 255);  
     if (item.type==2)
         if(item.border_width==0)
     {
+        arc_a=Length(Point(TSYS::realRound((pnts)[item.n5].x,2,true),
+                     TSYS::realRound((pnts)[item.n5].y,2,true)),
+                                      Point(TSYS::realRound((pnts)[item.n3].x,2,true),
+                                            TSYS::realRound((pnts)[item.n3].y,2,true)));
+        arc_b=Length(Point(TSYS::realRound((pnts)[item.n3].x,2,true),
+                     TSYS::realRound((pnts)[item.n3].y,2,true)),
+                                      Point(TSYS::realRound((pnts)[item.n4].x,2,true),
+                                            TSYS::realRound((pnts)[item.n4].y,2,true)));
+        
+        Point el_p1 = scale_rotate((pnts)[item.n1],xScale,yScale,true);
+        Point el_p2 = scale_rotate((pnts)[item.n2],xScale,yScale,true);
+        Point el_p3 = scale_rotate((pnts)[item.n3],xScale,yScale,true);
+        Point el_p4 = scale_rotate((pnts)[item.n4],xScale,yScale,true);
+        Point el_p5 = scale_rotate((pnts)[item.n5],xScale,yScale,true);
+        if (el_p5.y<=el_p3.y) 
+            ang=Angle(el_p3, el_p5, el_p3, Point(el_p3.x+10,el_p3.y));
+        else ang=360-Angle(el_p3, el_p5, el_p3, Point(el_p3.x+10,el_p3.y));
+        
         clr_el = gdImageColorAllocate(im,(ui8)(item.lineColor>>16),(ui8)(item.lineColor>>8),(ui8)item.lineColor);
-        arc_a=Length(Point(TSYS::realRound((pnts)[item.n5].x,2,true),TSYS::realRound((pnts)[item.n5].y,2,true)),Point(TSYS::realRound((pnts)[item.n3].x,2,true),TSYS::realRound((pnts)[item.n3].y,2,true)));
-        arc_b=Length(Point(TSYS::realRound((pnts)[item.n3].x,2,true),TSYS::realRound((pnts)[item.n3].y,2,true)),Point(TSYS::realRound((pnts)[item.n4].x,2,true),TSYS::realRound((pnts)[item.n4].y,2,true)));
+        arc_a=Length(el_p5,el_p3);
+        arc_b=Length(el_p3,el_p4);
         t_start=item.ctrlPos4.x;
         t_end=item.ctrlPos4.y;
         gdImageSetThickness(im, item.width);
         t=t_start;
-            do
-            {
-                gdImageLine(im,   (int)TSYS::realRound((pnts)[item.n3].x+ROTATE(ARC(t,arc_a,arc_b),item.ang).x,2,true),
-                                (int)TSYS::realRound((pnts)[item.n3].y-ROTATE(ARC(t,arc_a,arc_b),item.ang).y,2,true),
-                               (int)TSYS::realRound((pnts)[item.n3].x+ROTATE(ARC(t+0.00277777777778,arc_a,arc_b),item.ang).x,2,true),
-                                (int)TSYS::realRound((pnts)[item.n3].y-ROTATE(ARC(t+0.00277777777778,arc_a,arc_b),item.ang).y,2,true),clr_el);
-                t+=0.00277777777778;
-            }
-            while (t<t_end);
+        do
+        {
+            gdImageLine(im,   (int)TSYS::realRound(el_p3.x+ROTATE(ARC(t,arc_a,arc_b),ang).x,2,true),
+                        (int)TSYS::realRound(el_p3.y-ROTATE(ARC(t,arc_a,arc_b),ang).y,2,true),
+                         (int)TSYS::realRound(el_p3.x+ROTATE(ARC(t+0.00277777777778,arc_a,arc_b),ang).x,2,true),
+                          (int)TSYS::realRound(el_p3.y-ROTATE(ARC(t+0.00277777777778,arc_a,arc_b),ang).y,2,true),clr_el);
+        t+=0.00277777777778;
+    }
+        while (t<t_end);
     }
     else
     {
-        Point el_p1=(pnts)[item.n1];
-        Point el_p2=(pnts)[item.n2];
-        Point el_p3=(pnts)[item.n3];
-        Point el_p4=(pnts)[item.n4];
-        Point el_p5=(pnts)[item.n5];
+        Point el_p1 = scale_rotate((pnts)[item.n1],xScale,yScale,true);
+        Point el_p2 = scale_rotate((pnts)[item.n2],xScale,yScale,true);
+        Point el_p3 = scale_rotate((pnts)[item.n3],xScale,yScale,true);
+        Point el_p4 = scale_rotate((pnts)[item.n4],xScale,yScale,true);
+        Point el_p5 = scale_rotate((pnts)[item.n5],xScale,yScale,true);
         Point el_p6=item.ctrlPos4;
         double el_width=item.width;
-        double el_ang=item.ang;
+        double el_ang;
         double el_border_width=item.border_width;
         gdImageSetThickness(im, item.border_width);
         clr_el = gdImageColorAllocate(im,(ui8)(item.borderColor>>16),(ui8)(item.borderColor>>8),(ui8)item.borderColor);
         clr_el_line = gdImageColorAllocate(im,(ui8)(item.lineColor>>16),(ui8)(item.lineColor>>8),(ui8)item.lineColor);
-        arc_a=Length(Point(TSYS::realRound(el_p5.x,2,true),TSYS::realRound(el_p5.y,2,true)),Point(TSYS::realRound(el_p3.x,2,true),TSYS::realRound(el_p3.y,2,true)))
-                +el_width/2+el_border_width;
-        arc_b=Length(Point(TSYS::realRound(el_p3.x,2,true),TSYS::realRound(el_p3.y,2,true)),Point(TSYS::realRound(el_p4.x,2,true),TSYS::realRound(el_p4.y,2,true)))+el_width/2+el_border_width;
+        arc_a=Length(el_p5,el_p3) +el_width/2+el_border_width;
+        arc_b=Length(el_p3,el_p4) +el_width/2+el_border_width;
         arc_a_small=arc_a-el_width-el_border_width;
         arc_b_small=arc_b-el_width-el_border_width;
+        if (el_p5.y<=el_p3.y) 
+            el_ang=Angle(el_p3, el_p5, el_p3, Point(el_p3.x+10,el_p3.y));
+        else el_ang=360-Angle(el_p3, el_p5, el_p3, Point(el_p3.x+10,el_p3.y));
         t_start=el_p6.x;
         t_end=el_p6.y;
         t=t_start;
         do
         {
             gdImageLine(im, (int)TSYS::realRound(el_p3.x+ROTATE(ARC(t,arc_a,arc_b),el_ang).x, 2, true),
-                               (int)TSYS::realRound(el_p3.y-ROTATE(ARC(t,arc_a,arc_b),el_ang).y, 2, true),
-                                (int)TSYS::realRound(el_p3.x+ROTATE(ARC(t+0.00277777777778,arc_a,arc_b),el_ang).x, 2, true),
-                                 (int)TSYS::realRound(el_p3.y-ROTATE(ARC(t+0.00277777777778,arc_a,arc_b),el_ang).y, 2, true),clr_el);
+                            (int)TSYS::realRound(el_p3.y-ROTATE(ARC(t,arc_a,arc_b),el_ang).y, 2, true),
+                            (int)TSYS::realRound(el_p3.x+ROTATE(ARC(t+0.00277777777778,arc_a,arc_b),el_ang).x, 2, true),
+                            (int)TSYS::realRound(el_p3.y-ROTATE(ARC(t+0.00277777777778,arc_a,arc_b),el_ang).y, 2, true),clr_el);
             t+=0.00277777777778;
         }
         while (t<t_end);
         gdImageLine(im, (int)TSYS::realRound(el_p3.x+ROTATE(ARC(t_end,arc_a,arc_b),el_ang).x, 2, true),
-                           (int)TSYS::realRound(el_p3.y-ROTATE(ARC(t_end,arc_a,arc_b),el_ang).y, 2, true),
-                          (int)TSYS::realRound(el_p3.x+ROTATE(ARC(t_end,arc_a_small,arc_b_small),el_ang).x, 2, true),
-                           (int)TSYS::realRound(el_p3.y-ROTATE(ARC(t_end,arc_a_small,arc_b_small),el_ang).y, 2, true),clr_el);
+                        (int)TSYS::realRound(el_p3.y-ROTATE(ARC(t_end,arc_a,arc_b),el_ang).y, 2, true),
+                        (int)TSYS::realRound(el_p3.x+ROTATE(ARC(t_end,arc_a_small,arc_b_small),el_ang).x, 2, true),
+                        (int)TSYS::realRound(el_p3.y-ROTATE(ARC(t_end,arc_a_small,arc_b_small),el_ang).y, 2, true),clr_el);
         t=t_start;
         
         do
         {
             gdImageLine(im, (int)TSYS::realRound(el_p3.x+ROTATE(ARC(t,arc_a_small,arc_b_small),el_ang).x, 2, true),
-                               (int)TSYS::realRound(el_p3.y-ROTATE(ARC(t,arc_a_small,arc_b_small),el_ang).y, 2, true),
-                                (int)TSYS::realRound(el_p3.x+ROTATE(ARC(t+0.00277777777778,arc_a_small,arc_b_small),el_ang).x, 2, true),
-                                 (int)TSYS::realRound(el_p3.y-ROTATE(ARC(t+0.00277777777778,arc_a_small,arc_b_small),el_ang).y, 2, true),clr_el);
+                            (int)TSYS::realRound(el_p3.y-ROTATE(ARC(t,arc_a_small,arc_b_small),el_ang).y, 2, true),
+                            (int)TSYS::realRound(el_p3.x+ROTATE(ARC(t+0.00277777777778,arc_a_small,arc_b_small),el_ang).x, 2, true),
+                            (int)TSYS::realRound(el_p3.y-ROTATE(ARC(t+0.00277777777778,arc_a_small,arc_b_small),el_ang).y, 2, true),clr_el);
             t+=0.00277777777778;
         }
         while (t<t_end);
         gdImageLine(im, (int)TSYS::realRound(el_p3.x+ROTATE(ARC(t_start,arc_a,arc_b),el_ang).x, 2, true),
-                           (int)TSYS::realRound(el_p3.y-ROTATE(ARC(t_start,arc_a,arc_b),el_ang).y, 2, true),
-                            (int)TSYS::realRound(el_p3.x+ROTATE(ARC(t_start,arc_a_small,arc_b_small),el_ang).x, 2, true),
-                             (int)TSYS::realRound(el_p3.y-ROTATE(ARC(t_start,arc_a_small,arc_b_small),el_ang).y, 2, true),clr_el);
-        Point p_center=Point (TSYS::realRound(el_p3.x+ROTATE(ARC((t_end+t_start)/2,arc_a-el_width/2,arc_b-el_width/2),el_ang).x, 2, true),
-                        TSYS::realRound(el_p3.y-ROTATE(ARC((t_end+t_start)/2,arc_a-el_width/2,arc_b-el_width/2),el_ang).y, 2, true));
-        gdImageFill(im, (int) (p_center.x+0.5), (int) (p_center.y+0.5), clr_el_line);
+                        (int)TSYS::realRound(el_p3.y-ROTATE(ARC(t_start,arc_a,arc_b),el_ang).y, 2, true),
+                        (int)TSYS::realRound(el_p3.x+ROTATE(ARC(t_start,arc_a_small,arc_b_small),el_ang).x, 2, true),
+                        (int)TSYS::realRound(el_p3.y-ROTATE(ARC(t_start,arc_a_small,arc_b_small),el_ang).y, 2, true),clr_el);
+        Point p_center=Point (TSYS::realRound(el_p3.x+
+                              ROTATE(ARC((t_end+t_start)/2,arc_a-el_width/2-1, arc_b-el_width/2-1),el_ang).x, 2, true),
+                              TSYS::realRound(el_p3.y-
+                              ROTATE(ARC(0.25,arc_a-el_width/2-1, arc_b-el_width/2-1),el_ang).y, 2, true));
+        gdImageFill(im, (int) TSYS::realRound( p_center.x), (int) TSYS::realRound( p_center.y), clr_el_line);
     }
     if (item.type==3)
         if(item.border_width==0)
         {
-            double delta=Bezier_DeltaT((pnts)[item.n1],(pnts)[item.n3],(pnts)[item.n4],(pnts)[item.n2]);
+            double delta=Bezier_DeltaT(scale_rotate((pnts)[item.n1],xScale,yScale,true),scale_rotate((pnts)[item.n3],xScale,yScale,true),
+                                       scale_rotate((pnts)[item.n4],xScale,yScale,true),scale_rotate((pnts)[item.n2],xScale,yScale,true));
             clr_el = gdImageColorAllocate(im,(ui8)(item.lineColor>>16),(ui8)(item.lineColor>>8),(ui8)item.lineColor);
             t_start=0;
             t_end=1;
@@ -380,10 +419,23 @@ void VCAElFigure::Paint_Figure( gdImage* im, ShapeItem item )
             t=t_start;
             do
             {
-                gdImageLine(im,   (int)TSYS::realRound(Bezier(t,(pnts)[item.n1],(pnts)[item.n3],(pnts)[item.n4],(pnts)[item.n2]).x,2,true),
-                        (int)TSYS::realRound(Bezier(t,(pnts)[item.n1],(pnts)[item.n3],(pnts)[item.n4],(pnts)[item.n2]).y,2,true),
-                         (int)TSYS::realRound(Bezier(t+delta,(pnts)[item.n1],(pnts)[item.n3],(pnts)[item.n4],(pnts)[item.n2]).x,2,true),
-                          (int)TSYS::realRound(Bezier(t+delta,(pnts)[item.n1],(pnts)[item.n3],(pnts)[item.n4],(pnts)[item.n2]).y,2,true),clr_el);
+                gdImageLine(im,(int)TSYS::realRound(Bezier(t,scale_rotate((pnts)[item.n1],xScale,yScale,true),
+                                                             scale_rotate((pnts)[item.n3],xScale,yScale,true),
+                                                             scale_rotate((pnts)[item.n4],xScale,yScale,true),
+                                                             scale_rotate((pnts)[item.n2],xScale,yScale,true)).x,2,true),
+                               (int)TSYS::realRound(Bezier(t,scale_rotate((pnts)[item.n1],xScale,yScale,true),
+                                                             scale_rotate((pnts)[item.n3],xScale,yScale,true),
+                                                             scale_rotate((pnts)[item.n4],xScale,yScale,true),
+                                                             scale_rotate((pnts)[item.n2],xScale,yScale,true)).y,2,true),
+                               (int)TSYS::realRound(Bezier(t+delta,scale_rotate((pnts)[item.n1],xScale,yScale,true),
+                                                                   scale_rotate((pnts)[item.n3],xScale,yScale,true),
+                                                                   scale_rotate((pnts)[item.n4],xScale,yScale,true),
+                                                                   scale_rotate((pnts)[item.n2],xScale,yScale,true)).x,2,true),
+                               (int)TSYS::realRound(Bezier(t+delta,scale_rotate((pnts)[item.n1],xScale,yScale,true),
+                                                                   scale_rotate((pnts)[item.n3],xScale,yScale,true),
+                                                                   scale_rotate((pnts)[item.n4],xScale,yScale,true),
+                                                                   scale_rotate((pnts)[item.n2],xScale,yScale,true)).y,2,true),
+                            clr_el);
                 t+=delta;
             }
             while (t<t_end);
@@ -392,6 +444,15 @@ void VCAElFigure::Paint_Figure( gdImage* im, ShapeItem item )
         {
             double el_width=item.width;
             double el_border_width=item.border_width;
+            double el_ang;
+            Point el_p1 = scale_rotate((pnts)[item.n1],xScale,yScale,true);
+            Point el_p2 = scale_rotate((pnts)[item.n2],xScale,yScale,true);
+            if( el_p1.y<=el_p2.y )
+                el_ang=360-Angle(el_p1, el_p2, el_p1, Point(el_p1.x+10,el_p1.y));
+            else
+                el_ang=Angle(el_p1, el_p2, el_p1, Point(el_p1.x+10,el_p1.y));
+            
+            
             clr_el = gdImageColorAllocate(im,(ui8)(item.borderColor>>16),(ui8)(item.borderColor>>8),(ui8)item.borderColor);
             clr_el_line = gdImageColorAllocate(im,(ui8)(item.lineColor>>16),(ui8)(item.lineColor>>8),(ui8)item.lineColor);
             Point p1=UNROTATE((pnts)[item.n1], item.ang, (pnts)[item.n1].x, (pnts)[item.n1].y);
@@ -400,82 +461,82 @@ void VCAElFigure::Paint_Figure( gdImage* im, ShapeItem item )
             Point p4=UNROTATE((pnts)[item.n2], item.ang, (pnts)[item.n1].x, (pnts)[item.n1].y);
             double delta=Bezier_DeltaT((pnts)[item.n1],(pnts)[item.n3],(pnts)[item.n4],(pnts)[item.n2]);
             gdImageSetThickness(im, item.border_width);
-
+            
             t_start=0;
             t_end=1;
             t=t_start;
             do
             {
-                gdImageLine(im,(int)TSYS::realRound((pnts)[item.n1].x+ROTATE(Bezier(t,
+                gdImageLine(im,(int)TSYS::realRound(scale_rotate((pnts)[item.n1],xScale,yScale,true).x+ROTATE(Bezier(t,
                             Point(p1.x,p1.y+el_width/2+el_border_width/2),
                             Point(p2.x,p2.y+(el_width/2+el_border_width/2)),
                             Point (p3.x,p3.y+(el_width/2+el_border_width/2)),
-                            Point (p4.x, p4.y+(el_width/2+el_border_width/2))),item.ang).x,2,true),
-                            (int)TSYS::realRound((pnts)[item.n1].y-ROTATE(Bezier(t,
+                            Point (p4.x, p4.y+(el_width/2+el_border_width/2))),el_ang).x,2,true),
+                            (int)TSYS::realRound(scale_rotate((pnts)[item.n1],xScale,yScale,true).y-ROTATE(Bezier(t,
                             Point(p1.x,p1.y+el_width/2+el_border_width/2),
                             Point(p2.x,p2.y+(el_width/2+el_border_width/2)),
                             Point (p3.x,p3.y+(el_width/2+el_border_width/2)),
-                            Point (p4.x, p4.y+(el_width/2+el_border_width/2))),item.ang).y,2,true),
-                            (int)TSYS::realRound((pnts)[item.n1].x+ROTATE(Bezier(t+delta,
+                            Point (p4.x, p4.y+(el_width/2+el_border_width/2))),el_ang).y,2,true),
+                            (int)TSYS::realRound(scale_rotate((pnts)[item.n1],xScale,yScale,true).x+ROTATE(Bezier(t+delta,
                             Point(p1.x,p1.y+el_width/2+el_border_width/2),
                             Point(p2.x,p2.y+(el_width/2+el_border_width/2)),
                             Point (p3.x,p3.y+(el_width/2+el_border_width/2)),
-                            Point (p4.x, p4.y+(el_width/2+el_border_width/2))),item.ang).x,2,true),
-                            (int)TSYS::realRound((pnts)[item.n1].y-ROTATE(Bezier(t+delta,
+                            Point (p4.x, p4.y+(el_width/2+el_border_width/2))),el_ang).x,2,true),
+                            (int)TSYS::realRound(scale_rotate((pnts)[item.n1],xScale,yScale,true).y-ROTATE(Bezier(t+delta,
                             Point(p1.x,p1.y+el_width/2+el_border_width/2),
                             Point(p2.x,p2.y+(el_width/2+el_border_width/2)),
                             Point (p3.x,p3.y+(el_width/2+el_border_width/2)),
-                            Point (p4.x, p4.y+(el_width/2+el_border_width/2))),item.ang).y,2,true),clr_el);
+                            Point (p4.x, p4.y+(el_width/2+el_border_width/2))),el_ang).y,2,true),clr_el);
                 t+=delta;
             }
             while (t<t_end);
             t=t_start;
             do
             {
-                gdImageLine(im,(int)TSYS::realRound((pnts)[item.n1].x+ROTATE(Bezier(t,
+                gdImageLine(im,(int)TSYS::realRound(scale_rotate((pnts)[item.n1],xScale,yScale,true).x+ROTATE(Bezier(t,
                             Point(p1.x,p1.y-(el_width/2+el_border_width/2)),
                             Point(p2.x,p2.y-(el_width/2+el_border_width/2)),
                             Point (p3.x,p3.y-(el_width/2+el_border_width/2)),
-                            Point (p4.x, p4.y-(el_width/2+el_border_width/2))),item.ang).x,2,true),
-                            (int)TSYS::realRound((pnts)[item.n1].y-ROTATE(Bezier(t,
+                            Point (p4.x, p4.y-(el_width/2+el_border_width/2))),el_ang).x,2,true),
+                            (int)TSYS::realRound(scale_rotate((pnts)[item.n1],xScale,yScale,true).y-ROTATE(Bezier(t,
                             Point(p1.x,p1.y-(el_width/2+el_border_width/2)),
                             Point(p2.x,p2.y-(el_width/2+el_border_width/2)),
                             Point (p3.x,p3.y-(el_width/2+el_border_width/2)),
-                            Point (p4.x, p4.y-(el_width/2+el_border_width/2))),item.ang).y,2,true),
-                            (int)TSYS::realRound((pnts)[item.n1].x+ROTATE(Bezier(t+delta,
+                            Point (p4.x, p4.y-(el_width/2+el_border_width/2))),el_ang).y,2,true),
+                            (int)TSYS::realRound(scale_rotate((pnts)[item.n1],xScale,yScale,true).x+ROTATE(Bezier(t+delta,
                             Point(p1.x,p1.y-(el_width/2+el_border_width/2)),
                             Point(p2.x,p2.y-(el_width/2+el_border_width/2)),
                             Point (p3.x,p3.y-(el_width/2+el_border_width/2)),
-                            Point (p4.x, p4.y-(el_width/2+el_border_width/2))),item.ang).x,2,true),
-                            (int)TSYS::realRound((pnts)[item.n1].y-ROTATE(Bezier(t+delta,
+                            Point (p4.x, p4.y-(el_width/2+el_border_width/2))),el_ang).x,2,true),
+                            (int)TSYS::realRound(scale_rotate((pnts)[item.n1],xScale,yScale,true).y-ROTATE(Bezier(t+delta,
                             Point(p1.x,p1.y-(el_width/2+el_border_width/2)),
                             Point(p2.x,p2.y-(el_width/2+el_border_width/2)),
                             Point (p3.x,p3.y-(el_width/2+el_border_width/2)),
-                            Point (p4.x, p4.y-(el_width/2+el_border_width/2))),item.ang).y,2,true),clr_el);
+                            Point (p4.x, p4.y-(el_width/2+el_border_width/2))),el_ang).y,2,true),clr_el);
                 t+=delta;
             }
             while (t<t_end);
-            gdImageLine(im,(int)TSYS::realRound((pnts)[item.n1].x+
-                            ROTATE(Point(p1.x,p1.y+el_width/2+el_border_width/2),item.ang).x,2,true),
-                           (int)TSYS::realRound((pnts)[item.n1].y-
-                            ROTATE(Point(p1.x,p1.y+el_width/2+el_border_width/2),item.ang).y,2,true),
-                            (int)TSYS::realRound((pnts)[item.n1].x+
-                            ROTATE(Point(p1.x,p1.y-(el_width/2+el_border_width/2)),item.ang).x,2,true),
-                            (int)TSYS::realRound((pnts)[item.n1].y-
-                            ROTATE(Point(p1.x,p1.y-(el_width/2+el_border_width/2)),item.ang).y,2,true),clr_el);
+            gdImageLine(im,(int)TSYS::realRound(scale_rotate((pnts)[item.n1],xScale,yScale,true).x+
+                            ROTATE(Point(p1.x,p1.y+el_width/2+el_border_width/2),el_ang).x,2,true),
+                            (int)TSYS::realRound(scale_rotate((pnts)[item.n1],xScale,yScale,true).y-
+                            ROTATE(Point(p1.x,p1.y+el_width/2+el_border_width/2),el_ang).y,2,true),
+                            (int)TSYS::realRound(scale_rotate((pnts)[item.n1],xScale,yScale,true).x+
+                            ROTATE(Point(p1.x,p1.y-(el_width/2+el_border_width/2)),el_ang).x,2,true),
+                            (int)TSYS::realRound(scale_rotate((pnts)[item.n1],xScale,yScale,true).y-
+                            ROTATE(Point(p1.x,p1.y-(el_width/2+el_border_width/2)),el_ang).y,2,true),clr_el);
 
-            gdImageLine(im,(int)TSYS::realRound((pnts)[item.n1].x+
-                           ROTATE(Point(p4.x,p4.y+el_width/2+el_border_width/2),item.ang).x,2,true),
-                           (int)TSYS::realRound((pnts)[item.n1].y-
-                           ROTATE(Point(p4.x,p4.y+el_width/2+el_border_width/2),item.ang).y,2,true),
-                           (int)TSYS::realRound((pnts)[item.n1].x+
-                           ROTATE(Point(p4.x,p4.y-(el_width/2+el_border_width/2)),item.ang).x,2,true),
-                           (int)TSYS::realRound((pnts)[item.n1].y-
-                           ROTATE(Point(p4.x,p4.y-(el_width/2+el_border_width/2)),item.ang).y,2,true),clr_el);
+            gdImageLine(im,(int)TSYS::realRound(scale_rotate((pnts)[item.n1],xScale,yScale,true).x+
+                            ROTATE(Point(p4.x,p4.y+el_width/2+el_border_width/2),el_ang).x,2,true),
+                            (int)TSYS::realRound(scale_rotate((pnts)[item.n1],xScale,yScale,true).y-
+                            ROTATE(Point(p4.x,p4.y+el_width/2+el_border_width/2),el_ang).y,2,true),
+                            (int)TSYS::realRound(scale_rotate((pnts)[item.n1],xScale,yScale,true).x+
+                            ROTATE(Point(p4.x,p4.y-(el_width/2+el_border_width/2)),el_ang).x,2,true),
+                            (int)TSYS::realRound(scale_rotate((pnts)[item.n1],xScale,yScale,true).y-
+                            ROTATE(Point(p4.x,p4.y-(el_width/2+el_border_width/2)),el_ang).y,2,true),clr_el);
             
             
-            Point p_center=Point ((int)TSYS::realRound((pnts)[item.n1].x+ROTATE(Bezier(0.5,p1,p2,p3,p4),item.ang).x,2,true),
-                            (int)TSYS::realRound((pnts)[item.n1].y-ROTATE(Bezier(0.5,p1,p2,p3,p4),item.ang).y,2,true));
+            Point p_center=Point ((int)TSYS::realRound(scale_rotate((pnts)[item.n1],xScale,yScale,true).x+ROTATE(Bezier(0.5,p1,p2,p3,p4),el_ang).x,2,true),
+                                   (int)TSYS::realRound(scale_rotate((pnts)[item.n1],xScale,yScale,true).y-1-ROTATE(Bezier(0.5,p1,p2,p3,p4),el_ang).y,2,true));
             gdImageFill(im, (int) (p_center.x+0.5), (int) (p_center.y+0.5), clr_el_line);
         }
     if (item.type==1)
@@ -483,19 +544,25 @@ void VCAElFigure::Paint_Figure( gdImage* im, ShapeItem item )
         {
             clr_el = gdImageColorAllocate(im,(ui8)(item.lineColor>>16),(ui8)(item.lineColor>>8),(ui8)item.lineColor);
             gdImageSetThickness(im, item.width);
-            gdImageLine(im,(int)TSYS::realRound((pnts)[item.n1].x,2,true),(int)TSYS::realRound((pnts)[item.n1].y,2,true),
-                        (int)TSYS::realRound((pnts)[item.n2].x,2,true),(int)TSYS::realRound((pnts)[item.n2].y,2,true),clr_el);
+            gdImageLine(im,(int)TSYS::realRound(scale_rotate((pnts)[item.n1],xScale,yScale,true).x,2,true),
+                        (int)TSYS::realRound(scale_rotate((pnts)[item.n1],xScale,yScale,true).y,2,true),
+                         (int)TSYS::realRound(scale_rotate((pnts)[item.n2],xScale,yScale,true).x,2,true),
+                          (int)TSYS::realRound(scale_rotate((pnts)[item.n2],xScale,yScale,true).y,2,true),clr_el);
         }
         else
         {
             clr_el = gdImageColorAllocate(im,(ui8)(item.borderColor>>16),(ui8)(item.borderColor>>8),(ui8)item.borderColor);
             clr_el_line = gdImageColorAllocate(im,(ui8)(item.lineColor>>16),(ui8)(item.lineColor>>8),(ui8)item.lineColor);
             gdImageSetThickness(im, item.border_width);
-            Point el_p1=(pnts)[item.n1];
-            Point el_p2=(pnts)[item.n2];
+            Point el_p1=scale_rotate((pnts)[item.n1],xScale,yScale,true);
+            Point el_p2=scale_rotate((pnts)[item.n2],xScale,yScale,true);
             double el_border_width=(double)item.border_width/2;
             double el_width=item.width;
-            double el_ang=item.ang;
+            double el_ang;
+            if( el_p1.y<=el_p2.y )
+                el_ang=360-Angle(el_p1, el_p2, el_p1, Point(el_p1.x+10,el_p1.y));
+            else
+                el_ang=Angle(el_p1, el_p2, el_p1, Point(el_p1.x+10,el_p1.y));
             gdImageLine(im,(int)TSYS::realRound(el_p1.x + ROTATE(Point(-el_border_width,-(el_width/2+el_border_width)),el_ang).x, 2, true),
                         (int)TSYS::realRound(el_p1.y-ROTATE(Point(-el_border_width,-(el_width/2+el_border_width)),el_ang).y, 2, true),
                          (int)TSYS::realRound(el_p1.x+ROTATE(Point(Length(el_p2,el_p1)+el_border_width,-(el_width/2+el_border_width)),el_ang).x, 2, true),
@@ -516,8 +583,8 @@ void VCAElFigure::Paint_Figure( gdImage* im, ShapeItem item )
                           (int)TSYS::realRound(el_p1.y-ROTATE(Point(-el_border_width,(el_width/2+el_border_width)),el_ang).y, 2, true),
                            (int)TSYS::realRound(el_p1.x + ROTATE(Point(-el_border_width,-(el_width/2+el_border_width)),el_ang).x, 2, true),
                             (int)TSYS::realRound(el_p1.y-ROTATE(Point(-el_border_width,-(el_width/2+el_border_width)),el_ang).y, 2, true),clr_el);
-            double x_center=((pnts)[item.n1].x+(pnts)[item.n2].x)/2;
-            double y_center=((pnts)[item.n1].y+(pnts)[item.n2].y)/2;
+            double x_center=(scale_rotate((pnts)[item.n1],xScale,yScale,true).x+scale_rotate((pnts)[item.n2],xScale,yScale,true).x)/2;
+            double y_center=(scale_rotate((pnts)[item.n1],xScale,yScale,true).y+scale_rotate((pnts)[item.n2],xScale,yScale,true).y)/2;
             gdImageFill(im, (int) (x_center+0.5), (int) (y_center+0.5), clr_el_line);
         }
 }
@@ -525,12 +592,15 @@ void VCAElFigure::Paint_Figure( gdImage* im, ShapeItem item )
 void VCAElFigure::getReq( SSess &ses )
 {
     //- Prepare picture -
-    gdImagePtr im = gdImageCreate(width,height);
-    gdImageFilledRectangle(im,0,0,width-1,height-1,gdImageColorAllocateAlpha(im,0,0,0,127));
+   
+    map< string, string >::iterator prmEl = ses.prm.find("xSc");
+    double xSc = (prmEl!=ses.prm.end()) ? atof(prmEl->second.c_str()) : 1.0;
+    prmEl = ses.prm.find("ySc");
+    double ySc = (prmEl!=ses.prm.end()) ? atof(prmEl->second.c_str()) : 1.0;
+    gdImagePtr im = gdImageCreate((int)TSYS::realRound(width*xSc), (int)TSYS::realRound(height*ySc));
+    gdImageFilledRectangle(im,0,0,(int)TSYS::realRound(width*xSc-1),(int)TSYS::realRound(height*ySc-1),gdImageColorAllocateAlpha(im,0,0,0,127));
     for (int i=0; i<shapeItems.size(); i++)
-        Paint_Figure(im, shapeItems[i]);
-    for (int i=0; i<inundationItems.size(); i++)
-        Paint_Fill(im, inundationItems[i]);
+        Paint_Figure(im, shapeItems[i], xSc, ySc);
     
     //- Get image and transfer it -
     int img_sz;
@@ -540,6 +610,7 @@ void VCAElFigure::getReq( SSess &ses )
     
     gdFree(img_ptr);
     gdImageDestroy(im);
+ //   gdImageDestroy(im_out);
 }
 
 void VCAElFigure::postReq( SSess &ses )
@@ -565,17 +636,16 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
 	req_el = node.childGet(i_a);
 	int uiPrmPos = atoi(req_el->attr("pos").c_str());
         
-        //printf("PrmPos=%i\n",uiPrmPos);
 	switch( uiPrmPos )
 	{
 	    case 6:	//active
                 active = (bool)atoi(req_el->text().c_str());
         	break;
             case 9: 	//width
-		width = (int)(atof(req_el->text().c_str())+0.5);
+		width = atof(req_el->text().c_str());
 		break;
             case 10:	//height
-		height = (int)(atof(req_el->text().c_str())+0.5);
+		height = atof(req_el->text().c_str());
 		break;
     	    case 12:	//geomMargin
         	geomMargin = atoi(req_el->text().c_str());
@@ -619,7 +689,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                 {
                     int pnt  = (uiPrmPos-30)/2;
                     int patr = (uiPrmPos-30)%2;
-                    int pval  = atoi(req_el->text().c_str());
+                    double pval  = atof(req_el->text().c_str());
                     Point pnt_ = (pnts)[pnt];
                     if( patr == 0 ) pnt_.x=pval;
                     else pnt_.y=pval;
@@ -631,7 +701,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
     {
         string sel;
         int  p[5];
-        int width;
+        int lnwidth;
         int bord_width;
         int color;
         int bord_color;
@@ -648,8 +718,8 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                 //-- Reading anf setting attributes for the current line --
                 p[0]  = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
                 p[1]  = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
-                width = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
-                if( !width ) width=lineWdth;
+                lnwidth = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
+                if( !lnwidth ) lnwidth=lineWdth;
                 color = mod->colorParse(TSYS::strSepParse(sel,0,':',&el_off));
                 if( !color) color=lineClr;
                 bord_width=atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
@@ -664,7 +734,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                 else
                     ang=Angle(ip[0], ip[1], ip[0], Point(ip[0].x+10,ip[0].y));
                 shapeItems.push_back( ShapeItem(p[0],p[1],-1,-1,-1,Point(0,0), ang,
-                                      color,bord_color,width,bord_width,1));
+                                      color,bord_color,lnwidth,bord_width,1));
             }
             if( el == "arc" )
             {
@@ -674,8 +744,8 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                 p[2]  = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
                 p[3]  = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
                 p[4]  = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
-                width = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
-                if( !width ) width=lineWdth;
+                lnwidth = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
+                if( !lnwidth ) lnwidth=lineWdth;
                 color =  mod->colorParse(TSYS::strSepParse(sel,0,':',&el_off));
                 if( !color ) color=lineClr;
                 bord_width=atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
@@ -685,12 +755,13 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                   //-- Reading coordinates for the points of the line --
                 for( int i_p = 0; i_p < 5; i_p++ )
                     ip[i_p] = (pnts)[p[i_p]];
+                
                 StartMotionPos=ip[0];
                 EndMotionPos=ip[1];
                 CtrlMotionPos_1=ip[2];
                 CtrlMotionPos_2=ip[3];
                 CtrlMotionPos_3=ip[4];
-                MotionWidth=width;
+                MotionWidth=lnwidth;
                 if (CtrlMotionPos_3.y<=CtrlMotionPos_1.y) 
                     ang=Angle(CtrlMotionPos_1, CtrlMotionPos_3, CtrlMotionPos_1, Point(CtrlMotionPos_1.x+10,CtrlMotionPos_1.y));
                 else ang=360-Angle(CtrlMotionPos_1, CtrlMotionPos_3, CtrlMotionPos_1, Point(CtrlMotionPos_1.x+10,CtrlMotionPos_1.y));
@@ -742,7 +813,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                 CtrlMotionPos_4=Point(t_start, t_end);
 
 
-                shapeItems.push_back(ShapeItem(p[0],p[1],p[2],p[3],p[4],CtrlMotionPos_4,ang,color,bord_color,width,bord_width,2));
+                shapeItems.push_back(ShapeItem(p[0],p[1],p[2],p[3],p[4],CtrlMotionPos_4,ang,color,bord_color,lnwidth,bord_width,2));
             }
             if( el == "bezier" )
             {
@@ -751,8 +822,8 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                 p[1]  = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
                 p[2]  = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
                 p[3]  = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
-                width = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
-                if( !width ) width=lineWdth;
+                lnwidth = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
+                if( !lnwidth ) lnwidth=lineWdth;
                 color =  mod->colorParse(TSYS::strSepParse(sel,0,':',&el_off));
                 if( !color) color=lineClr;
                 bord_width=atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
@@ -763,7 +834,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                     ip[i_p] = (pnts)[p[i_p]];
                 if( ip[0].y<=ip[1].y ) ang=360-Angle(ip[0], ip[1], ip[0], Point(ip[0].x+10,ip[0].y));
                 else ang=Angle(ip[0], ip[1], ip[0], Point(ip[0].x+10,ip[0].y));
-                shapeItems.push_back( ShapeItem(p[0], p[1], p[2], p[3],-1,Point(0,0),ang,color,bord_color,width,bord_width,3));
+                shapeItems.push_back( ShapeItem(p[0], p[1], p[2], p[3],-1,Point(0,0),ang,color,bord_color,lnwidth,bord_width,3));
             }
             
             if( el == "fill" )

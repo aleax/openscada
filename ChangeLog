@@ -1,3 +1,11 @@
+2008-03-20 Maxim
+- /UI/Vision: Deleting the primitive by pressing "Del" support is added.
+- /UI/Vision: Deleting the fill by doubleclicking the left mouse button on itself support is added.
+- FIX:/UI/Vision: Angle function is fixed.
+- FIX:/UI/Vision: Building of the filling path is fixed.
+- /UI/WebVision: Scaling and roteting of primitives support is added.
+
+
 2008-03-18 Roman
 - FIX:/DAQ/JavaLikeCalc: Logical operation return to boolean is fixed.
 - FIX:/UI/Vision: Size points first appearance time wait is added (500ms). For mouse release event lost prevention.

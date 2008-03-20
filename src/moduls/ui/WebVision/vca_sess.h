@@ -91,12 +91,14 @@ class ShapeItem
     public:
         ShapeItem( )	{ }
         ShapeItem(const int num_1,const int num_2, const int num_3, const int num_4,const int num_5,
-		  const Point &ctrlpos_4, const double iang, const int color, const int bcolor, const int iwidth, const int bwidth, const int itype ) : 
+		  const Point &ctrlpos_4, const double iang, const int color, const int bcolor, const int iwidth,
+                  const int bwidth, const int itype ) : 
             ctrlPos4(ctrlpos_4), ang(iang), n1(num_1), n2(num_2), n3(num_3), n4(num_4), n5(num_5), lineColor(color),borderColor(bcolor),
                      width(iwidth), border_width(bwidth), type(itype)
                      { };								
 
                     
+                     //double orient,Wwidth,Wheight;
                      Point		ctrlPos4;
                      double ang;
                      int 		n1, n2, n3, n4, n5,
@@ -139,12 +141,14 @@ class VCAElFigure : public VCAObj
         Point Bezier(double t,Point p1,Point p2, Point p3, Point p4);
         double Bezier_DeltaT(Point p1,Point p2, Point p3, Point p4);
         double ABS(double var);
-        void Paint_Figure( gdImage* im,ShapeItem item );
-        void Paint_Fill( gdImage* im, InundationItem in_item );
+        void Paint_Figure( gdImage* im,ShapeItem item, double xScale, double yScale );
+        void Paint_Fill( gdImage* im, InundationItem in_item, double xScale, double yScale );
+        Point unscale_unrotate(Point point, double xScale, double yScale, bool flag_scale);
+        Point scale_rotate(Point point, double xScale, double yScale, bool flag_scale);
  	//Attributes
-        int		width, //Widget geometry
-                        height,		
-                        geomMargin,//Margin
+        double		width, //Widget geometry
+                        height;		
+        int             geomMargin,//Margin
                         lineClr,
                         lineDecor,
                         bordWdth,

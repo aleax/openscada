@@ -737,7 +737,7 @@ void WdgView::load( const string& item, bool load, bool init )
     if( wLevel() == 0 )
     {
 	//printf("TEST 01: Load '%s' time %fms\n",item.c_str(),1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk()));
-	//t_cnt = SYS->shrtCnt();    
+	//t_cnt = SYS->shrtCnt();
     
 	attrSet("","load",-1);
 	for( int i_c = 0; i_c < children().size(); i_c++ )
