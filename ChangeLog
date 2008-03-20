@@ -1,4 +1,8 @@
 2008-03-20 Maxim
+- FIX:/UI/WebVision: Bezier curve with borders scaling and rotating is fixed.
+
+
+2008-03-20 Maxim
 - /UI/Vision: Deleting the primitive by pressing "Del" support is added.
 - /UI/Vision: Deleting the fill by doubleclicking the left mouse button on itself support is added.
 - FIX:/UI/Vision: Angle function is fixed.

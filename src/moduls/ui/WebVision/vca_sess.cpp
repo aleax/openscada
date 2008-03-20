@@ -451,17 +451,19 @@ void VCAElFigure::Paint_Figure( gdImage* im, ShapeItem item, double xScale, doub
                 el_ang=360-Angle(el_p1, el_p2, el_p1, Point(el_p1.x+10,el_p1.y));
             else
                 el_ang=Angle(el_p1, el_p2, el_p1, Point(el_p1.x+10,el_p1.y));
-            
-            
             clr_el = gdImageColorAllocate(im,(ui8)(item.borderColor>>16),(ui8)(item.borderColor>>8),(ui8)item.borderColor);
             clr_el_line = gdImageColorAllocate(im,(ui8)(item.lineColor>>16),(ui8)(item.lineColor>>8),(ui8)item.lineColor);
-            Point p1=UNROTATE((pnts)[item.n1], item.ang, (pnts)[item.n1].x, (pnts)[item.n1].y);
-            Point p2=UNROTATE((pnts)[item.n3], item.ang, (pnts)[item.n1].x, (pnts)[item.n1].y);
-            Point p3=UNROTATE((pnts)[item.n4], item.ang, (pnts)[item.n1].x, (pnts)[item.n1].y);
-            Point p4=UNROTATE((pnts)[item.n2], item.ang, (pnts)[item.n1].x, (pnts)[item.n1].y);
+            Point p1=UNROTATE(scale_rotate((pnts)[item.n1],xScale,yScale,true), el_ang, 
+                              scale_rotate((pnts)[item.n1],xScale,yScale,true).x, scale_rotate((pnts)[item.n1],xScale,yScale,true).y);
+            Point p2=UNROTATE(scale_rotate((pnts)[item.n3],xScale,yScale,true), el_ang, 
+                              scale_rotate((pnts)[item.n1],xScale,yScale,true).x, scale_rotate((pnts)[item.n1],xScale,yScale,true).y);
+            Point p3=UNROTATE(scale_rotate((pnts)[item.n4],xScale,yScale,true), el_ang,
+                              scale_rotate((pnts)[item.n1],xScale,yScale,true).x, scale_rotate((pnts)[item.n1],xScale,yScale,true).y);
+            Point p4=UNROTATE(scale_rotate((pnts)[item.n2],xScale,yScale,true), el_ang, 
+                              scale_rotate((pnts)[item.n1],xScale,yScale,true).x, scale_rotate((pnts)[item.n1],xScale,yScale,true).y);
             double delta=Bezier_DeltaT((pnts)[item.n1],(pnts)[item.n3],(pnts)[item.n4],(pnts)[item.n2]);
             gdImageSetThickness(im, item.border_width);
-            
+
             t_start=0;
             t_end=1;
             t=t_start;
@@ -601,6 +603,8 @@ void VCAElFigure::getReq( SSess &ses )
     gdImageFilledRectangle(im,0,0,(int)TSYS::realRound(width*xSc-1),(int)TSYS::realRound(height*ySc-1),gdImageColorAllocateAlpha(im,0,0,0,127));
     for (int i=0; i<shapeItems.size(); i++)
         Paint_Figure(im, shapeItems[i], xSc, ySc);
+    //for (int i=0; i<inundationItems.size(); i++)
+        //Paint_Fill(im, inundationItems[i], shapeItems[0], xSc, ySc);
     
     //- Get image and transfer it -
     int img_sz;
@@ -610,7 +614,6 @@ void VCAElFigure::getReq( SSess &ses )
     
     gdFree(img_ptr);
     gdImageDestroy(im);
- //   gdImageDestroy(im_out);
 }
 
 void VCAElFigure::postReq( SSess &ses )
