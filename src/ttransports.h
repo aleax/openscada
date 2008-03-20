@@ -61,24 +61,24 @@ class TTransportIn : public TCntrNode, public TConfig
 	
 	void load( );
 	void save( );	
-	virtual void start()	{ };
-	virtual void stop()	{ };
+	virtual void start( )	{ };
+	virtual void stop( )	{ };
 		
-	TTipTransport &owner()	{ return *(TTipTransport*)nodePrev(); }
+	TTipTransport &owner( )	{ return *(TTipTransport*)nodePrev(); }
 	
     protected:
 	//Methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
-	void preEnable(int flag);
-	void postDisable(int flag);     //Delete all DB if flag 1
+	void preEnable( int flag );
+	void postDisable( int flag );     	//Delete all DB if flag 1
 	
 	//Attributes
 	bool    run_st;
 	
     private:
 	//Methods
-        string nodeName()       { return m_id; }
+        string nodeName( )	{ return m_id; }
 	
 	//Attributes
 	string  &m_id;
@@ -98,7 +98,7 @@ class TTransportOut : public TCntrNode, public TConfig
     public:
 	//Methods
 	TTransportOut( const string &id, const string &db, TElem *el );
-	virtual ~TTransportOut();	
+	virtual ~TTransportOut( );
 	
 	const string &id( )	{ return m_id; }
 	string name( );
@@ -130,7 +130,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	
 	string messProtIO( const string &in, const string &prot );
 	
-	TTipTransport &owner() 	{ return *(TTipTransport*)nodePrev(); }
+	TTipTransport &owner( )	{ return *(TTipTransport*)nodePrev(); }
 	
     protected:
 	//Methods
@@ -144,7 +144,7 @@ class TTransportOut : public TCntrNode, public TConfig
 
     private:
 	//Methods
-        string nodeName()       { return m_id; }
+        string nodeName( )	{ return m_id; }
 	
 	//Attributes	
 	string  &m_id;
@@ -168,7 +168,7 @@ class TTipTransport: public TModule
     public:
 	//Methods
     	TTipTransport( );
-	virtual ~TTipTransport();
+	virtual ~TTipTransport( );
 
 	//- Input transports -
 	void inList( vector<string> &list )			{ chldList(m_in,list); }
@@ -184,7 +184,7 @@ class TTipTransport: public TModule
 	void outDel( const string &name, bool complete = false ){ chldDel(m_out,name,-1,complete); }
 	AutoHD<TTransportOut> outAt( const string &name )	{ return chldAt(m_out,name); }
 	
-	TTransportS &owner()	{ return (TTransportS&)TModule::owner(); }
+	TTransportS &owner( )					{ return (TTransportS&)TModule::owner(); }
 	
     protected:
 	//Methods
@@ -211,8 +211,8 @@ class TTransportS : public TSubSYS
 	{
 	    public:
         	//Methods
-		ExtHost(const string &iuser_open, const string &iid, const string &iname, 
-			    const string &itransp, const string &iaddr, const string &iuser, const string &ipass) :
+		ExtHost( const string &iuser_open, const string &iid, const string &iname, 
+			    const string &itransp, const string &iaddr, const string &iuser, const string &ipass ) :
 	            user_open(iuser_open), id(iid), name(iname), transp(itransp), addr(iaddr),
 	            user(iuser), pass(ipass), link_ok(false) { }
 								    
@@ -249,8 +249,8 @@ class TTransportS : public TSubSYS
 	void subStart( );
 	void subStop( );
 	
-	TElem &inEl()	{ return el_in; }
-	TElem &outEl() 	{ return el_out; }
+	TElem &inEl( )			{ return el_in; }
+	TElem &outEl( ) 		{ return el_out; }
 	
         AutoHD<TTipTransport> at( const string &iid )	{ return modAt(iid); }
 	

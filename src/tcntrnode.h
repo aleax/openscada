@@ -114,11 +114,11 @@ class TCntrNode
 	void nodeDel( const string &path, char sep = 0, int flag = 0 );				//Delete node at full path
 	
 	TCntrNode *nodePrev( bool noex = false );
-        Mode nodeMode()			{ return m_mod; }
+        Mode nodeMode( )		{ return m_mod; }
 	unsigned nodeUse( );
 
-	void AHDConnect();
-	void AHDDisConnect();
+	void AHDConnect( );
+	void AHDDisConnect( );
     
     protected:
 	//Methods

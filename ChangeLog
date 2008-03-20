@@ -1,3 +1,11 @@
+2008-03-20 Roman
+- !!!:/SYS: The release 0.6.1 overview is added. The release overview made on English, Russian and Ukrainian languages.
+- !!:/SYS: OpenSCADA API documentation is updated.
+- FIX:/Archive/Value, /UI/Vision, /UI/WebVision: Miliseconds trends display is fixed.
+- FIX:/UI/Vision: In time first deveopment widget open the size point display is fixed.
+- FIX:/UI/WebVision: Image map areas' events generation is fixed.
+
+
 2008-03-20 Maxim
 - FIX:/UI/WebVision: Bezier curve with borders scaling and rotating is fixed.
 
@@ -322,7 +330,7 @@
 
 
 2007-12-14 Maxim
-- FIX:/UI/Vision:Filling of the primitive "ElFig" is fixed.
+- FIX:/UI/Vision:Filling of the primitive "ElFigure" is fixed.
 
 
 2007-12-07 Roman,Maxim,Ksenia OpenSCADA 0.6.0 

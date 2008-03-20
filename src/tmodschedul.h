@@ -58,7 +58,7 @@ class TModSchedul : public TSubSYS
 	void subStart( );	
 	void subStop( );
 	
-	void loadLibS(  );      			// Load/Init/Start all share libs and registry moduls into TSubSYS	
+	void loadLibS( );      				// Load/Init/Start all share libs and registry moduls into TSubSYS	
 	
         SHD &lib( const string &name );			// Get stat share lib <name>
     	void libList( vector<string> &list );		// List present share libs
@@ -81,7 +81,7 @@ class TModSchedul : public TSubSYS
 	
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
-    	static void SchedTask(union sigval obj);    
+    	static void SchedTask( union sigval obj );
 	
 	//Attributes
 	string         	m_mod_path;

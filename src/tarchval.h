@@ -95,11 +95,11 @@ class TValBuf
 	    public:
 		//Public methods
 		TBuf( TpVal eval, int &isz, long long &ipr, bool &ihgrd, bool &ihres, long long& iend, long long& ibeg );
-		~TBuf();
+		~TBuf( );
 		
-		void clear();
+		void clear( );
 		
-		int realSize();
+		int realSize( );
 
 		TpVal get( long long *tm = NULL, bool up_ord = false );
 		void  set( TpVal value, long long tm = 0 );
@@ -212,28 +212,28 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	void setVal( TValBuf &buf, long long beg, long long end, const string &arch );
     	
 	//- Active get data from atribute -
-	void getActiveData();
+	void getActiveData( );
 	
 	//- Phisical archivator's functions -
 	void archivatorList( vector<string> &ls );
 	bool archivatorPresent( const string &arch );
 	void archivatorAttach( const string &arch );
 	void archivatorDetach( const string &arch, bool full = false );
-	void archivatorSort();
+	void archivatorSort( );
 	
 	string makeTrendImg( long long beg, long long end, const string &arch, int hsz = 650, int vsz = 230, double valmax = 0, double valmin = 0 );
 	
-	TArchiveS &owner();
+	TArchiveS &owner( );
 
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
     private:
 	//Private methods
-	void preDisable(int flag);
-	void postDisable(int flag);
+	void preDisable( int flag );
+	void postDisable( int flag );
     
-	void setUpBuf();
-	string nodeName()	{ return m_id; }
+	void setUpBuf( );
+	string nodeName( )	{ return m_id; }
     
 	//Private attributes
 	Res     a_res;
@@ -305,7 +305,7 @@ class TVArchivator : public TCntrNode, public TConfig
 	void archiveList( vector<string> &ls );
 	bool archivePresent( const string &iid );
 	
-	TTipArchivator &owner();
+	TTipArchivator &owner( );
 
     protected:
 	//Protected methods
@@ -318,7 +318,7 @@ class TVArchivator : public TCntrNode, public TConfig
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process    
 	void postEnable( int flag );
 	void preDisable( int flag );
-	void postDisable( int flag );     //Delete all DB if flag 1	
+	void postDisable( int flag );     	//Delete all DB if flag 1	
 	
 	//Protected attributes
 	Res	a_res;
@@ -328,8 +328,8 @@ class TVArchivator : public TCntrNode, public TConfig
 
     private:
 	//Private methods
-        string nodeName()       { return m_id; }
-	static void Task(union sigval obj);     //Process task
+        string nodeName( )	{ return m_id; }
+	static void Task( union sigval obj );	//Process task
 
 	//Private attributes
 	string	&m_id,		//Var arch id
@@ -376,7 +376,7 @@ class TVArchEl
 	TVArchivator &archivator( );
 	
 	//Public atributes
-        // - Previous averaging value -
+        //- Previous averaging value -
         long long prev_tm;
         string prev_val;
 	

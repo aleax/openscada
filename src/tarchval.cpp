@@ -945,26 +945,26 @@ void TVArchive::setSrcMode( SrcMode vl, const string &isrc )
     {
 	owner().setActValArch( id(), false );
 	pattr_src.free();
-	dynamic_cast<TVal&>(SYS->nodeAt(m_dsourc,0,'.').at()).arch(AutoHD<TVArchive>());
+	dynamic_cast<TVal&>(SYS->nodeAt(m_dsourc,0,'.').at()).setArch(AutoHD<TVArchive>());
     }
     
     try
     {
 	if( (!run_st || vl != PassiveAttr || isrc != m_dsourc) && 
 		dynamic_cast<TVal *>(&SYS->nodeAt(m_dsourc,0,'.').at()) )
-    	    dynamic_cast<TVal&>(SYS->nodeAt(m_dsourc,0,'.').at()).arch(AutoHD<TVArchive>());
+    	    dynamic_cast<TVal&>(SYS->nodeAt(m_dsourc,0,'.').at()).setArch(AutoHD<TVArchive>());
     }catch(...){  }
 	
     //- Set all links -
     if( run_st && vl == ActiveAttr && dynamic_cast<TVal *>(&SYS->nodeAt(isrc,0,'.').at()) )
     {
-	dynamic_cast<TVal&>(SYS->nodeAt(isrc,0,'.').at()).arch(AutoHD<TVArchive>(this));
+	dynamic_cast<TVal&>(SYS->nodeAt(isrc,0,'.').at()).setArch(AutoHD<TVArchive>(this));
 	pattr_src = SYS->nodeAt(isrc,0,'.');
 	owner().setActValArch( id(), true );
     }
     
     if( run_st && vl == PassiveAttr && dynamic_cast<TVal *>(&SYS->nodeAt(isrc,0,'.').at()) )
-	dynamic_cast<TVal&>(SYS->nodeAt(isrc,0,'.').at()).arch(AutoHD<TVArchive>(this));
+	dynamic_cast<TVal&>(SYS->nodeAt(isrc,0,'.').at()).setArch(AutoHD<TVArchive>(this));
 
     m_srcmode = vl;
     m_dsourc = isrc;
@@ -1271,6 +1271,7 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
             	    else if( ttm->tm_hour > ttm1.tm_hour )  chLev = 3;
             	    else if( ttm->tm_min > ttm1.tm_min )    chLev = 2;
             	    else if( ttm->tm_sec > ttm1.tm_sec )    chLev = 1;
+		    else chLev = 0;
         	}
 		c_buf[0] = c_buf1[0] = 0;
 		if( hvLev == 5 || chLev >= 4 )                                      //Date
@@ -1282,7 +1283,7 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
 		    (chLev>=2 || chLev==-1) ? snprintf(c_buf1,sizeof(c_buf1),"%d:%02d:%02d",ttm->tm_hour,ttm->tm_min,ttm->tm_sec) :
 				 snprintf(c_buf1,sizeof(c_buf1),"%ds",ttm->tm_sec);
 		else if( hvLev <= 1 || i_h%1000000 )                                //Milliseconds
-	    	    (chLev>=2  || chLev==-1) ? snprintf(c_buf1,sizeof(c_buf1),"%d:%02d:%g",ttm->tm_hour,ttm->tm_min,(float)ttm->tm_sec+(float)(i_h%1000000)/1e6) :
+	    	    (chLev>=2 || chLev==-1) ? snprintf(c_buf1,sizeof(c_buf1),"%d:%02d:%g",ttm->tm_hour,ttm->tm_min,(float)ttm->tm_sec+(float)(i_h%1000000)/1e6) :
 		    (chLev>=1) ? snprintf(c_buf1,sizeof(c_buf1),"%gs",(float)ttm->tm_sec+(float)(i_h%1000000)/1e6) :
 				 snprintf(c_buf1,sizeof(c_buf1),"%gms",(double)(i_h%1000000)/1000.);
 		int wdth, tpos, endPosTm = 0, endPosDt = 0;

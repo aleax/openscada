@@ -98,9 +98,9 @@ class TSYS : public TCntrNode
 	int stopSignal( )	{ return stop_signal; }
 	
         //- Programms options -
-	string id()	{ return m_id; }	
-	string name()	{ return m_name; }
-	string user()	{ return m_user; }               //Run user name 
+	string id( )		{ return m_id; }	
+	string name( )		{ return m_name; }
+	string user( )		{ return m_user; }               //Run user name 
 
 	void list( vector<string> &list )	{ chldList(m_subst,list); }
         bool present( const string &name )	{ return chldPresent(m_subst,name); }
@@ -108,26 +108,26 @@ class TSYS : public TCntrNode
         void del( const string &name )      	{ chldDel(m_subst,name); }
         AutoHD<TSubSYS> at( const string &name ){ return chldAt(m_subst,name); }
 
-	AutoHD<TUIS> 		ui()     	{ return at("UI"); }
-	AutoHD<TArchiveS>	archive()	{ return at("Archive"); } 
-	AutoHD<TBDS>		db()     	{ return at("BD"); }
-	AutoHD<TDAQS> 		daq()		{ return at("DAQ"); }
-	AutoHD<TProtocolS> 	protocol()   	{ return at("Protocol"); }
-	AutoHD<TTransportS>	transport()  	{ return at("Transport"); }
-	AutoHD<TSpecialS>    	special()    	{ return at("Special"); }
-	AutoHD<TModSchedul>  	modSchedul() 	{ return at("ModSched"); }
-	AutoHD<TSecurity>	security()  	{ return at("Security"); }
+	AutoHD<TUIS> 		ui( )     	{ return at("UI"); }
+	AutoHD<TArchiveS>	archive( )	{ return at("Archive"); } 
+	AutoHD<TBDS>		db( )     	{ return at("BD"); }
+	AutoHD<TDAQS> 		daq( )		{ return at("DAQ"); }
+	AutoHD<TProtocolS> 	protocol( )   	{ return at("Protocol"); }
+	AutoHD<TTransportS>	transport( )  	{ return at("Transport"); }
+	AutoHD<TSpecialS>    	special( )    	{ return at("Special"); }
+	AutoHD<TModSchedul>  	modSchedul( ) 	{ return at("ModSched"); }
+	AutoHD<TSecurity>	security( )  	{ return at("Security"); }
 	
 	//- Config file functions -
-	string cfgFile() 	{ return m_confFile; }
-	XMLNode &cfgRoot()	{ return root_n; }
+	string cfgFile( ) 	{ return m_confFile; }
+	XMLNode &cfgRoot( )	{ return root_n; }
 
 	//- Default DB -
-	string workDB()		{ return mWorkDB; }
-	bool saveAtExit()	{ return mSaveAtExit; }
+	string workDB( )	{ return mWorkDB; }
+	bool saveAtExit( )	{ return mSaveAtExit; }
 	
 	//- Get system options from DB -
-	bool sysOptCfg()	{ return m_sysOptCfg; }
+	bool sysOptCfg( )	{ return m_sysOptCfg; }
 	
 	string optDescr( );	//print comand line options
 
@@ -147,11 +147,11 @@ class TSYS : public TCntrNode
     	    asm volatile("rdtsc; movl %%eax,%0; movl %%edx,%1;":"=r"(cntl),"=r"(cnth)::"%eax","%edx");
 	    return ((unsigned long long)cnth<<32)+cntl;	
         }
-	static long HZ();
+	static long HZ( );
 	
 	//Public system static methods
 	//- Current system time (usec) -
-	static long long curTime();
+	static long long curTime( );
 	
 	//- Wait event with timeout support -
 	static bool eventWait( bool &m_mess_r_stat, bool exempl, const string &loc, time_t time = 0 );

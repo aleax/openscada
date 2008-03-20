@@ -39,7 +39,7 @@ class TProtocolIn : public TCntrNode
 {
     public:
 	TProtocolIn( const string &name );
-	virtual ~TProtocolIn();
+	virtual ~TProtocolIn( );
 	
 	string &name( )		{ return m_name; }
 	

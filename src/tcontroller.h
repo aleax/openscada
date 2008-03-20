@@ -42,9 +42,9 @@ class TController : public TCntrNode, public TConfig
      	TController( const string &name_c, const string &daq_db, TElem *cfgelem );
 	virtual ~TController(  );
 	
-	const string &id() 	{ return m_id; }
-	string name();
-	string descr()		{ return m_descr; }
+	const string &id( ) 	{ return m_id; }
+	string name( );
+	string descr( )		{ return m_descr; }
 	
         string DB( )            { return m_db; }
         string tbl( );
@@ -53,10 +53,10 @@ class TController : public TCntrNode, public TConfig
 	void setName( const string &nm ) 	{ m_name = nm; }
 	void setDescr( const string &dscr )	{ m_descr = dscr; }	
 	
-    	bool toEnable()		{ return m_aen; }
-    	bool toStart() 		{ return m_astart; }
-	bool enableStat()	{ return en_st; }
-	bool startStat()      	{ return run_st; }
+    	bool toEnable( )	{ return m_aen; }
+    	bool toStart( ) 	{ return m_astart; }
+	bool enableStat( )	{ return en_st; }
+	bool startStat( )      	{ return run_st; }
 
 	virtual void load( );
 	virtual void save( );
@@ -73,7 +73,7 @@ class TController : public TCntrNode, public TConfig
         AutoHD<TParamContr> at( const string &name, const string &who = "th_contr" )
 	{ return chldAt(m_prm,name); }
 	
-	TTipDAQ &owner()	{ return *(TTipDAQ *)nodePrev(); }
+	TTipDAQ &owner( )	{ return *(TTipDAQ *)nodePrev(); }
 	
     protected:    
 	//Protected attributes
@@ -91,12 +91,12 @@ class TController : public TCntrNode, public TConfig
     
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
-	void preDisable(int flag);	//Disable if delete
-	void postDisable(int flag);     //Delete all DB if flag 1
+	void preDisable( int flag );		//Disable if delete
+	void postDisable( int flag );     	//Delete all DB if flag 1
 	
     private:
 	//Private methods
-	string nodeName()       { return m_id; }
+	string nodeName( )       { return m_id; }
     
 	void LoadParmCfg(  );
 	void SaveParmCfg(  );

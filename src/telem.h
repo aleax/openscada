@@ -140,12 +140,12 @@ class TElem
     public:
 	//Methods
 	TElem( const string &name = "" );
-	~TElem();
+	~TElem( );
 	
 	string &elName( )			{ return m_name; }
 	
 	void fldList( vector<string> &list );
-	unsigned fldSize()			{ return elem.size(); }
+	unsigned fldSize( )			{ return elem.size(); }
 	unsigned fldId( const string &name );	
 	bool fldPresent( const string &name );
 	int fldAdd( TFld *fld, int id = -1 );

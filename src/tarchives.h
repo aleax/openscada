@@ -50,12 +50,12 @@ class TMArchivator : public TCntrNode, public TConfig
 {
     public:
 	//Public methods
-	TMArchivator(const string &id, const string &db, TElem *cf_el );
+	TMArchivator( const string &id, const string &db, TElem *cf_el );
 
         const string &id( )	{ return m_id; }
 	string workId( );
         string name( );
-        string dscr( )		{ return m_dscr; }
+        string dscr( )		{ return m_dscr; }	
 	bool toStart( ) 	{ return m_start; }
 	bool startStat( )	{ return run_st; }
         string &addr( )		{ return m_addr; }
@@ -81,7 +81,7 @@ class TMArchivator : public TCntrNode, public TConfig
 	virtual void put( vector<TMess::SRec> &mess ){ };
         virtual void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0 ) { };
 
-	TTipArchivator &owner()	{ return *(TTipArchivator *)nodePrev(); }
+	TTipArchivator &owner( ){ return *(TTipArchivator *)nodePrev(); }
 
     protected:
 	//Protected methods
@@ -98,7 +98,7 @@ class TMArchivator : public TCntrNode, public TConfig
 
     private:
 	//Private methods
-        string nodeName()       { return m_id; }
+        string nodeName( )	{ return m_id; }
 
 	//Private attributes
 	string	&m_id,		//Mess arch id
@@ -125,7 +125,7 @@ class TTipArchivator: public TModule
     public:
 	//Public methods
     	TTipArchivator( );
-	virtual ~TTipArchivator();
+	virtual ~TTipArchivator( );
 
 	//- Messages -
 	void messList( vector<string> &list )	{ chldList(m_mess,list); }
@@ -141,15 +141,15 @@ class TTipArchivator: public TModule
         void valDel( const string &iid, bool full = false )	{ chldDel(m_val,iid,-1,full); }
 	AutoHD<TVArchivator> valAt( const string &iid ) 	{ return chldAt(m_val,iid); }
 
-	TArchiveS &owner();
+	TArchiveS &owner( );
 
     protected:
 	//Protected methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
-	virtual TMArchivator *AMess(const string &id, const string &db )
+	virtual TMArchivator *AMess( const string &id, const string &db )
 	{ throw TError(nodePath().c_str(),"Message arhiv no support!"); }
-	virtual TVArchivator *AVal(const string &id, const string &db )
+	virtual TVArchivator *AVal( const string &id, const string &db )
 	{ throw TError(nodePath().c_str(),"Value arhiv no support!"); }	
 
     private:
@@ -165,7 +165,7 @@ class TArchiveS : public TSubSYS
     public:
 	//Public methods
 	TArchiveS( );
-	~TArchiveS(  );
+	~TArchiveS( );
 
 	int subVer( )		{ return VER_ARH; }
 	
@@ -209,7 +209,7 @@ class TArchiveS : public TSubSYS
 
     private:
 	//Private methods
-	string optDescr(  );
+	string optDescr( );
 
 	static void ArhMessTask( union sigval obj );
 	static void *ArhValTask( void *param );
@@ -217,7 +217,7 @@ class TArchiveS : public TSubSYS
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
 	int messBufLen( )	{ return m_buf.size(); }
-	void messBufLen(int len);
+	void messBufLen( int len );
 
 	//Private attributes
 	TElem  		el_mess, 	//Message archivator's DB elements

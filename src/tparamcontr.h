@@ -39,7 +39,7 @@ class TParamContr : public TConfig, public TValue
 {
     public:
 	TParamContr( const string &name, TTipParam *tpprm ); 
-	virtual ~TParamContr();
+	virtual ~TParamContr( );
 	
     	const string &id( )	{ return m_id; }
     	string name( );
@@ -51,19 +51,19 @@ class TParamContr : public TConfig, public TValue
 	void setDescr( const string &idsc )	{ m_descr = idsc; }
 	void setToEnable( bool vl )		{ m_aen = vl; }
 	
-	TTipParam &type()	{ return *tipparm; }
+	TTipParam &type( )	{ return *tipparm; }
 	
-    	virtual void enable( );	// Enable parameter and open access to value	
-    	virtual void disable( );// Disable parameter and close access to value
-	virtual void load( );	// Load parameter DB
-	virtual void save( );	// Save parameter DB
+    	virtual void enable( );		// Enable parameter and open access to value	
+    	virtual void disable( );	// Disable parameter and close access to value
+	virtual void load( );		// Load parameter DB
+	virtual void save( );		// Save parameter DB
 	
     	bool operator==( TParamContr & PrmCntr )
 	{ if( id() == PrmCntr.id() ) return true; return false; };
 	
     	TParamContr &operator=( TParamContr & PrmCntr );
 
-	TController &owner() 	{ return *(TController *)nodePrev(); }
+	TController &owner( ) 	{ return *(TController *)nodePrev(); }
 	
     protected:
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
@@ -76,7 +76,7 @@ class TParamContr : public TConfig, public TValue
 	
     private:
 	//Methods
-	string nodeName()       { return m_id; }	
+	string nodeName( ) 	{ return m_id; }	
 	
 	//Attributes
         string	&m_id, &m_name,	&m_descr;

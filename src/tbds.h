@@ -48,9 +48,9 @@ class TTable : public TCntrNode
     public:
 	//Public methods
 	TTable( const string &name );
-	virtual ~TTable();
+	virtual ~TTable( );
 
-	string &name()		{ return m_name; }
+	string &name( )		{ return m_name; }
 
 	virtual void fieldStruct( TConfig &cfg )
         { throw TError(nodePath().c_str(),_("Function <%s> no support!"),"fieldStruct"); }
@@ -71,7 +71,7 @@ class TTable : public TCntrNode
     
     private:
 	//Private methods
-	string nodeName()	{ return m_name; }
+	string nodeName( )	{ return m_name; }
 
 	//Private attributes
 	string m_name;
@@ -226,7 +226,7 @@ class TBDS : public TSubSYS, public TElem
 	
 	TElem &openDB_E( )	{ return el_db; }
 	
-	AutoHD<TTipBD> at(const string &iid)	{ return modAt(iid); }
+	AutoHD<TTipBD> at( const string &iid )	{ return modAt(iid); }
 
 	string optDescr( );
 

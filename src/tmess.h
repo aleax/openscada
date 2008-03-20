@@ -66,11 +66,11 @@ class TMess
 	};
     
 	//Methods
-	TMess(  );
-	~TMess(  );
+	TMess( );
+	~TMess( );
 	
-	void load();
-	void save();
+	void load( );
+	void save( );
 
 	string codeConv( const string &fromCH, const string &toCH, const string &mess);
 	string codeConvIn( const string &fromCH, const string &mess)
@@ -90,8 +90,8 @@ class TMess
 	int messLevel( )	{ return m_mess_level; }
 	
 	void setLang( const string &lang );
-	void setLogDirect(int dir)     	{ log_dir   = dir; }
-	void setMessLevel(int level)	{ m_mess_level = level; }
+	void setLogDirect( int dir )   	{ log_dir   = dir; }
+	void setMessLevel( int level )	{ m_mess_level = level; }
 	
 	void put( const char *categ, Type level, const char *fmt,  ... );
         void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const string &category = "", Type level = Debug );

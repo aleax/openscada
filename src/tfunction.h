@@ -120,14 +120,14 @@ class TFunction : public TCntrNode
 	void valAtt( TValFunc *vfnc );
         void valDet( TValFunc *vfnc );		
 	
-	virtual void preIOCfgChange();
-        virtual void postIOCfgChange();
+	virtual void preIOCfgChange( );
+        virtual void postIOCfgChange( );
 	
     protected:
 	//Methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
-	void preDisable(int flag);
+	void preDisable( int flag );
 	
 	//Attributes
 	string          m_id;

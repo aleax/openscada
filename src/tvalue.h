@@ -55,13 +55,13 @@ class TVal : public TCntrNode
 	};
     
 	//Methods
-	TVal(TFld &fld, TValue *owner);
-	TVal(TCfg &cfg, TValue *owner);
-	~TVal();
+	TVal( TFld &fld, TValue *owner );
+	TVal( TCfg &cfg, TValue *owner );
+	~TVal( );
 	
-	const string &name();
+	const string &name( );
 
-	TFld &fld();
+	TFld &fld( );
 	
 	//- Read curent value (direct) -
 	string getSEL( long long *tm = NULL, bool sys = false );
@@ -77,17 +77,17 @@ class TVal : public TCntrNode
 	void setI( int value, long long tm = 0, bool sys = false );
 	void setB( char value, long long tm = 0, bool sys = false );    
 	
-	AutoHD<TVArchive> arch();
-	void arch(const AutoHD<TVArchive> &vl);	
+	AutoHD<TVArchive> arch( );
+	void setArch( const AutoHD<TVArchive> &vl );
 	
     protected:
 	void cntrCmdProc( XMLNode *opt );
-	void vlSet(  );
-	void vlGet(  );
+	void vlSet( );
+	void vlGet( );
 	
     private:
         //Methods
-	string nodeName(){ return name(); }
+	string nodeName( )	{ return name(); }
 	
 	//Attributes
 	union
@@ -128,8 +128,9 @@ class TValue: public TCntrNode, public TValElem
 
     protected:
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	
 	//- Manipulation for config element -
-	TConfig *vlCfg()  			{ return m_cfg; }
+	TConfig *vlCfg( )  			{ return m_cfg; }
 	void setVlCfg( TConfig *cfg );		//Set configs. NULL - clear configs.
     
 	//- Manipulation for elements of value -

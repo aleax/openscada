@@ -50,7 +50,7 @@ class TCfg
     
 	//Methods
 	TCfg( TFld &fld, TConfig &owner );
-	~TCfg();
+	~TCfg( );
 	
 	const string &name( );
 	

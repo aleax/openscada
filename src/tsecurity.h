@@ -38,11 +38,11 @@ class TUser : public TCntrNode, public TConfig
     public:
 	//Methods
 	TUser( const string &name, const string &db, TElem *el );
-	~TUser(  );
+	~TUser( );
 	
-	const string	&name() 	{ return m_name; }
-	const string	&lName()	{ return m_lname; }
-	const string	&picture()	{ return m_pict; }	
+	const string	&name( ) 	{ return m_name; }
+	const string	&lName( )	{ return m_lname; }
+	const string	&picture( )	{ return m_pict; }	
 	bool sysItem( )			{ return m_sysIt; }	
 
 	bool auth( const string &pass );
@@ -60,11 +60,11 @@ class TUser : public TCntrNode, public TConfig
 	void load( );
 	void save( );
 	
-	TSecurity &owner()	{ return *(TSecurity*)nodePrev(); }
+	TSecurity &owner( )	{ return *(TSecurity*)nodePrev(); }
 	
     private:	
 	//Methods    
-	string nodeName()	{ return m_name; }
+	string nodeName( )	{ return m_name; }
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	void postDisable( int flag );     	//Delete all DB if flag 1
 
@@ -85,11 +85,11 @@ class TGroup : public TCntrNode, public TConfig
     public:
 	//Methods
 	TGroup( const string &name, const string &db, TElem *el );
-	~TGroup(  );
+	~TGroup( );
 
-	const string &name()  	{ return m_name; }
-	const string &lName() 	{ return m_lname; }
-	bool sysItem()		{ return m_sysIt; }
+	const string &name( )  	{ return m_name; }
+	const string &lName( ) 	{ return m_lname; }
+	bool sysItem( )		{ return m_sysIt; }
 	
 	string DB( )            { return m_db; }
         string tbl( );
@@ -106,13 +106,13 @@ class TGroup : public TCntrNode, public TConfig
 	void load( );
 	void save( );
 	
-	TSecurity &owner()	{ return *(TSecurity*)nodePrev(); }
+	TSecurity &owner( )	{ return *(TSecurity*)nodePrev(); }
 	
     private:	 
 	//Methods   
-	string nodeName(){ return m_name; }
+	string nodeName( )	{ return m_name; }
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-	void postDisable(int flag);     //Delete all DB if flag 1
+	void postDisable( int flag );     	//Delete all DB if flag 1
 	
 	//Attributes
 	string	&m_name;
@@ -157,7 +157,7 @@ class TSecurity : public TSubSYS
 	string optDescr( );	
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
-	void postEnable(int flag);
+	void postEnable( int flag );
 	
 	//Attributes
 	int	m_usr, m_grp;

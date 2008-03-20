@@ -1515,6 +1515,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 			else if( ttm->tm_hour > ttm1.tm_hour )	chLev = 3;
 			else if( ttm->tm_min > ttm1.tm_min )	chLev = 2;
 			else if( ttm->tm_sec > ttm1.tm_sec )	chLev = 1;
+			else chLev = 0;
 		    }
 		
 		    //Check for data present

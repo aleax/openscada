@@ -48,7 +48,7 @@ class XMLNode
 	//Methods
     	XMLNode( const string &name = "" ) : m_name(name), m_text(""), current_node(NULL) 
 						{  }
-	~XMLNode() 				{ clear(); }
+	~XMLNode( ) 				{ clear(); }
 
 	XMLNode &operator=( XMLNode &prm );
 

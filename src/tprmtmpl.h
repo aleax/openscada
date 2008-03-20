@@ -69,12 +69,12 @@ class TPrmTempl: public TFunction, public TConfig
 	void load( );
         void save( );
 
-	AutoHD<TFunction>	func( );			//Programming language attached function
+	AutoHD<TFunction>	func( );	//Programming language attached function
 	
 	TPrmTmplLib &owner( )	{ return *(TPrmTmplLib*)nodePrev(); }
 
     protected:
-	void preIOCfgChange();
+	void preIOCfgChange( );
 	
     private:
 	//Methods
@@ -123,12 +123,12 @@ class TPrmTmplLib : public TCntrNode, public TConfig
     protected:
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 				    
-        void preDisable(int flag);
-        void postDisable(int flag);
+        void preDisable( int flag );
+        void postDisable( int flag );
 					    
     private:
 	//Methods
-        string nodeName()       { return m_id; }
+        string nodeName( )	{ return m_id; }
 	
 	//Attributes
         bool    run_st;

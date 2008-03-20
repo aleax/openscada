@@ -349,7 +349,7 @@ AutoHD<TVArchive> TVal::arch()
     return m_arch; 
 }
 
-void TVal::arch(const AutoHD<TVArchive> &vl)
+void TVal::setArch(const AutoHD<TVArchive> &vl)
 { 
     m_arch = vl; 
 }

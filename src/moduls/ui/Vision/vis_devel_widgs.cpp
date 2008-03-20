@@ -1558,6 +1558,7 @@ DevelWdgView::DevelWdgView( const string &iwid, int ilevel, VisDevelop *mainWind
     {
 	pntView = new SizePntWdg(this);
 	pntView->setSelArea(QRectF());
+	pntView->hide();
 	setFocusPolicy(Qt::StrongFocus);
 	setCursor(Qt::ArrowCursor);
 	setAcceptDrops(true);
