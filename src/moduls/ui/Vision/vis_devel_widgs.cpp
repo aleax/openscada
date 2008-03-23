@@ -2381,7 +2381,7 @@ bool DevelWdgView::event( QEvent *event )
 		//- Select board draw -
 		if( m_flgs&DevelWdgView::holdSelRect )
 		{
-		    pntView->setSelArea(QRect(holdPnt,curp).normalized(),SizePntWdg::SelectBorder,true);
+		    pntView->setSelArea(QRect(holdPnt,curp).normalized(),SizePntWdg::SelectBorder);
 		    return true;
 		}
 		
@@ -2409,6 +2409,9 @@ bool DevelWdgView::event( QEvent *event )
 		    m_flgs |= DevelWdgView::moveHoldMove;
 		    return true;
 		}
+		if( m_flgs&DevelWdgView::moveHold && !(((QMouseEvent*)event)->buttons()&Qt::LeftButton) )
+		    m_flgs &= ~DevelWdgView::moveHold;
+		
         	break;
 	    }
 	    case QEvent::KeyPress:
@@ -2480,15 +2483,13 @@ SizePntWdg::SizePntWdg( QWidget* parent ) : QWidget(parent), view(SizeDots)
     setMouseTracking(true);
 }
 
-void SizePntWdg::setSelArea( const QRectF &geom, WView iview, bool force )
+void SizePntWdg::setSelArea( const QRectF &geom, WView iview )
 {
     if( view == iview && w_pos == geom.topLeft() && w_size == geom.size() ) return;
     view   = iview;
     w_pos  = geom.topLeft();
     w_size = geom.size();
-    if( force || isVisible() )	
     apply();
-    else QTimer::singleShot(500, this, SLOT(apply()));
 }
 
 void SizePntWdg::apply( )

@@ -147,6 +147,7 @@ class Page : public Widget, public TConfig
 	int    calcPer( );
 	string ownerFullId( bool contr = false );
 	int    prjFlags( )   	{ return m_flgs; }
+	string parentNm( )      { return m_parent; }
 
         void setIco( const string &iico )      { m_ico = iico; }
         void setUser( const string &iuser );
@@ -155,7 +156,7 @@ class Page : public Widget, public TConfig
         void setCalcLang( const string &ilng );
         void setCalcProg( const string &iprg );
 	void setCalcPer( int vl );
-        void setParentNm( const string &isw );
+	void setParentNm( const string &isw );
 	void setPrjFlags( int val );
 
         //- Storing -
@@ -198,7 +199,9 @@ class Page : public Widget, public TConfig
         string  &m_ico,         //Widget icon
                 &m_user,        //Widget user
                 &m_grp,         //Widget group
-                &m_proc;        //Widget procedure
+                &m_proc,        //Widget procedure
+		&m_parent,	//Widget parent
+		&m_attrs;	//Changed attributes list
 	int 	&m_permit,      //Widget permission
 		&m_flgs,	//Project's flags
 		&m_proc_per;	//Process period
@@ -225,10 +228,11 @@ class PageWdg : public Widget, public TConfig
         string calcLang( );
         string calcProg( );
 	int    calcPer( );
+	string parentNm( )	{ return m_parent; }
 
 	void setEnable( bool val );
 
-        void setParentNm( const string &isw );
+        void setParentNm( const string &isw )	{ m_parent = isw; }
 
         //- Storing -
         void load( );
@@ -250,6 +254,7 @@ class PageWdg : public Widget, public TConfig
 	
 	//Attributes
 	bool wdgIherited;
+	string	&m_parent, &m_attrs;
 };
 
 }

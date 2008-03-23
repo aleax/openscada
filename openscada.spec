@@ -1,6 +1,5 @@
 #Relaxed mode for diamond board liraries build and for modules simbols into OpenSCADA kernel resolving check
-%set_verify_elf_method relaxed
-#set_verify_elf_method textrel=relaxed
+#set_verify_elf_method relaxed
 #define _initdir /etc/init.d
 
 #===== Generic Info ======
@@ -117,7 +116,7 @@ install -m 777 -d $RPM_BUILD_ROOT/var/spool/%{name}/ARCHIVES/VAL
 %files doc
 %defattr(-,root,root)
 %{_datadir}/doc
-#doc README README_ru COPYING INSTALL TODO ChangeLog doc/*
+#doc README README_ru COPYING INSTALL TODO TODO_ru TODO_uk ChangeLog doc/*
 
 %files devel
 %defattr(-,root,root)
@@ -135,6 +134,9 @@ install -m 777 -d $RPM_BUILD_ROOT/var/spool/%{name}/ARCHIVES/VAL
 /var/spool/%{name}/DATA/
 
 %changelog
+* Sat Mar 23 2008 Roman Savochenko <rom_as@diyaorg.dp.ua>
+- menu files included
+
 * Fri Sep 02 2005 Roman Savochenko <rom_as@fromru.com>
 - replace testdate whith demo package
 - rename xinetd script from openscada to oscadad

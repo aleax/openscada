@@ -138,7 +138,8 @@ class TFunction : public TCntrNode
 	//Methods
 	string nodeName()       { return id(); }
     
-	//Attributes	
+	//Attributes
+	Res             f_res;
 	vector<IO*>	m_io;
 	vector<TValFunc*>	used;
 };

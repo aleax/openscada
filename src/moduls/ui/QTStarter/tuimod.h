@@ -43,7 +43,7 @@ class WinControl: public QObject
     Q_OBJECT
     public:
 	//Methods
-	WinControl( bool &end_run );
+	WinControl( );
  
 	bool callQTModule( const string &nm );
         void startDialog( );
@@ -57,7 +57,6 @@ class WinControl: public QObject
     private:
 	//Attributes
 	QTimer 	*tm;
-	bool 	&end_run;
 };
 
 //*************************************************
@@ -70,24 +69,24 @@ class TUIMod: public TUI
 	TUIMod( string name );
 	~TUIMod( );
 	
- 	bool endRun( )	{ return end_run; }
+ 	bool endRun( )		{ return end_run; }
+	bool startCom( )	{ return start_com; }
 
 	void modLoad( );
 	void modSave( );
 	void modStart( );
 	void modStop( );
 
-	void postEnable( int flag );
-	
     private:
 	//Methods
         static void *Task( void * );	
 	string optDescr( );	
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	void postEnable( int flag );
+	void postDisable( int flag );
 	
 	//Attributes
-	bool	demon_mode;
-	bool	end_run;
+	bool	demon_mode, end_run, start_com;
         pthread_t pthr_tsk;
 	string	start_mod;
 	

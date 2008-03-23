@@ -406,7 +406,7 @@ class SizePntWdg : public QWidget
         QSizeF  sizeF( )            { return w_size; }
         QRectF geometryF( )         { return QRectF(w_pos,w_size); }
         
-	void setSelArea( const QRectF &geom, WView view = SizeDots, bool force = false );
+	void setSelArea( const QRectF &geom, WView view = SizeDots );
         bool event( QEvent *event );
 
     public slots:

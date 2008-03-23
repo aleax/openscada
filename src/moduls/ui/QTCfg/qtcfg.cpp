@@ -733,7 +733,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 				    }
 				if( sel_n < 0 )
 				{
-				    elms.insert(elms.begin(),"");
+				    elms.insert(elms.begin(),t_linf->childGet(i_el)->text().c_str());
 				    sel_n = 0;
 				}
 			    
@@ -988,7 +988,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
     		{
 		    if(comb)
 		    {
-        		comb->insertItem(c_el,"");
+        		comb->insertItem(c_el,data_req.text().c_str());
     			comb->setCurrentIndex(c_el);
 		    }
 		    if(lab_r)	lab_r->setText("");
@@ -1468,7 +1468,7 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, int level )
 	    string simg = TSYS::strDecode(dt_req.text(),TSYS::base64);
 	    QImage img;
 	    if( img.loadFromData((const uchar*)simg.c_str(),simg.size()) )
-    		i->setIcon(0,QPixmap::fromImage(img));//.smoothScale(16,16)));
+    		i->setIcon(0,QPixmap::fromImage(img).scaled(16,16,Qt::KeepAspectRatio,Qt::SmoothTransformation));
 	}
     }
     

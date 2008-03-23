@@ -32,6 +32,7 @@
 #include <QVBoxLayout>
 #include <QTextCodec>
 #include <QTimer>
+#include <QSplashScreen>
 
 #include <tsys.h>
 #include <tmess.h>
@@ -72,7 +73,7 @@ using namespace QTStarter;
 //*************************************************
 //* TUIMod                                        *
 //*************************************************
-TUIMod::TUIMod( string name ) : end_run(false), demon_mode(false)
+TUIMod::TUIMod( string name ) : end_run(false), demon_mode(false), start_com(false)
 {
     mId		= MOD_ID;
     mName       = MOD_NAME;
@@ -89,6 +90,65 @@ TUIMod::TUIMod( string name ) : end_run(false), demon_mode(false)
 TUIMod::~TUIMod()
 {
     if( run_st ) modStop();
+}
+
+void TUIMod::postEnable( int flag )
+{
+    TModule::postEnable(flag);
+    
+    if( flag&TCntrNode::NodeConnect )
+    {	
+	//- Set QT environments -
+	QTextCodec::setCodecForCStrings( QTextCodec::codecForLocale () ); //codepage for QT across QString recode!    
+    
+	//- Check command line for options no help and no daemon -
+	bool isHelp = false;
+	int next_opt;
+	char *short_opt="h";
+	struct option long_opt[] =
+	{
+    	    {"help"    ,0,NULL,'h'},
+	    {"demon"   ,0,NULL,'d'},
+    	    {NULL      ,0,NULL,0  }
+	};
+
+	optind=opterr=0;
+        do
+	{
+    	    next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
+    	    switch( next_opt )
+    	    {
+        	case 'h': isHelp = true; break;
+		case 'd': demon_mode = true; break;
+        	case -1 : break;
+    	    }
+	} while(next_opt != -1);
+
+	//- Start main QT thread if no help and no daemon -
+	if( !(run_st || demon_mode || isHelp) )
+	{
+	    end_run = false;
+    
+	    pthread_attr_t pthr_attr;    
+	    pthread_attr_init(&pthr_attr);
+	    pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
+	    pthread_create(&pthr_tsk,&pthr_attr,Task,this);
+	    pthread_attr_destroy(&pthr_attr);
+	    if( TSYS::eventWait( run_st, true, nodePath()+"start",5) )
+       		throw TError(nodePath().c_str(),_("QT main thread no started!"));   
+	}
+    }
+}
+
+void TUIMod::postDisable( int flag )
+{
+    if( run_st )
+    {
+	end_run = true;
+	if( TSYS::eventWait( run_st, false, nodePath()+"stop",5) )
+	    throw TError(nodePath().c_str(),_("QT main thread no stoped!"));
+	pthread_join(pthr_tsk,NULL);
+    }	
 }
 
 void TUIMod::modLoad( )
@@ -132,21 +192,15 @@ void TUIMod::modSave( )
     TBDS::genDBSet(nodePath()+"StartMod",start_mod);
 }
 
-void TUIMod::postEnable( int flag )
-{
-    TModule::postEnable(flag);
-    
-    //- Set QT environments -
-    QTextCodec::setCodecForCStrings( QTextCodec::codecForLocale () ); //codepage for QT across QString recode!
-}
-
 void TUIMod::modStart()
 {
 #if OSC_DEBUG
     mess_debug(nodePath().c_str(),_("Start module."));
 #endif
 
-    if( run_st || demon_mode ) return;
+    start_com = true;
+
+    /*if( run_st || demon_mode ) return;
     end_run = false;
     
     pthread_attr_t pthr_attr;    
@@ -155,7 +209,7 @@ void TUIMod::modStart()
     pthread_create(&pthr_tsk,&pthr_attr,Task,this);
     pthread_attr_destroy(&pthr_attr);
     if( TSYS::eventWait( run_st, true, nodePath()+"start",5) )
-       	throw TError(nodePath().c_str(),_("QT starter no started!"));   
+       	throw TError(nodePath().c_str(),_("QT starter no started!"));*/
 }
 
 void TUIMod::modStop()
@@ -164,13 +218,15 @@ void TUIMod::modStop()
     mess_debug(nodePath().c_str(),_("Stop module."));
 #endif
 
-    if( run_st )
+    start_com = false;
+
+    /*if( run_st )
     {
 	end_run = true;
 	if( TSYS::eventWait( run_st, false, nodePath()+"stop",5) )
 	    throw TError(nodePath().c_str(),_("QT starter no stoped!"));
 	pthread_join(pthr_tsk,NULL);
-    }	
+    }*/	
 }
 
 string TUIMod::optDescr( )
@@ -190,18 +246,38 @@ void *TUIMod::Task( void * )
 {
     vector<string> list;
     bool first_ent = true;
+    QImage ico_t;
+    time_t st_time = time(NULL);
+    vector<TMess::SRec> recs;
 
 //#if OSC_DEBUG
 //    mess_debug(mod->nodePath().c_str(),_("Thread <%d> started!"),gettid());
 //#endif        
 
+    //- QT application object init - 
     QApplication *QtApp = new QApplication( (int&)SYS->argc,(char **)SYS->argv );
     QtApp->setQuitOnLastWindowClosed(false);
-    WinControl *winCntr = new WinControl(mod->end_run);
     mod->run_st = true;
+
+    //- Start splash create -
+    if( !ico_t.load(TUIS::icoPath("splash").c_str()) )	ico_t.load(":/images/splash.png");
+    QSplashScreen *splash = new QSplashScreen(QPixmap::fromImage(ico_t));
+    splash->show();
+    while( !mod->startCom( ) && !mod->endRun( ) )
+    {
+	SYS->archive().at().messGet( st_time, time(NULL), recs, "", TMess::Debug, BUF_ARCH_NM );
+	QString mess;
+	for( int i_m = recs.size()-1; i_m >= 0 && i_m > (recs.size()-7); i_m-- )
+	    mess+=QString("\n%1: %2").arg(recs[i_m].categ.c_str()).arg(recs[i_m].mess.c_str());
+	splash->showMessage(mess,Qt::AlignBottom|Qt::AlignLeft);
+        QtApp->processEvents();
+	usleep(STD_WAIT_DELAY*1000);
+    }
+    delete splash;    
     
-    int op_wnd = 0;
     //- Start external modules -
+    WinControl *winCntr = new WinControl( );
+    int op_wnd = 0;
     mod->owner().modList(list);
     for( unsigned i_l = 0; i_l < list.size(); i_l++ )
 	if( mod->owner().modAt(list[i_l]).at().modInfo("SubType") == "QT" &&
@@ -222,6 +298,25 @@ void *TUIMod::Task( void * )
     QObject::connect( QtApp, SIGNAL(lastWindowClosed()), winCntr, SLOT(lastWinClose()) );
     QtApp->exec();
     delete winCntr;
+    
+    //- Stop splash create -
+    if( !ico_t.load(TUIS::icoPath("splash_exit").c_str()) )	ico_t.load(":/images/splash.png");
+    splash = new QSplashScreen(QPixmap::fromImage(ico_t));
+    splash->show();
+    st_time = time(NULL);
+    while( !mod->endRun( ) )
+    {	
+	SYS->archive().at().messGet( st_time, time(NULL), recs, "", TMess::Debug, BUF_ARCH_NM );
+	QString mess;
+	for( int i_m = recs.size()-1; i_m >= 0 && i_m > (recs.size()-7); i_m-- )
+	    mess+=QString("\n%1: %2").arg(recs[i_m].categ.c_str()).arg(recs[i_m].mess.c_str());
+	splash->showMessage(mess,Qt::AlignBottom|Qt::AlignLeft);    
+	QtApp->processEvents();
+	usleep(STD_WAIT_DELAY*1000);
+    }
+    delete splash;
+    
+    //- QT application object free -
     delete QtApp;
     first_ent = false;	
     
@@ -262,7 +357,7 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* WinControl: Windows control                   *
 //*************************************************
-WinControl::WinControl( bool &iend_run ) : end_run(iend_run)
+WinControl::WinControl( )
 {
     tm = new QTimer(this);
     tm->setSingleShot(false);
@@ -272,7 +367,7 @@ WinControl::WinControl( bool &iend_run ) : end_run(iend_run)
 
 void WinControl::checkForEnd( )
 {
-    if( !end_run ) return;
+    if( !mod->endRun() && mod->startCom() ) return;
     tm->stop();
     qApp->closeAllWindows();
 }
@@ -290,7 +385,7 @@ void WinControl::callQTModule( )
 
 void WinControl::lastWinClose( )
 {
-    if(mod->endRun() || SYS->stopSignal( ))
+    if( !mod->startCom() || mod->endRun() || SYS->stopSignal() )
 	qApp->quit();
     else startDialog( );
 }

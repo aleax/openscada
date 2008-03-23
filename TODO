@@ -1,68 +1,88 @@
-OpenSCADA to do list
+To do tasks of the project OpenSCADA
 
-1. Learn questions
- * Acquaintance at speech synthesizer http://neospeech.com, http://www.linuxshop.ru/unix4all.
- * Acquaintance at XUL: MozNGW, R2D2.
- * Multitier acquaintance -> CORBA.
- * Acquaintance at http://www.opennet.ru/opennews/art.shtml?num=2475.
- * See EiffelStudio: http://www.eiffel.com/products/studio52.
- * See: http://www.wl.unn.ru/~ragozin/compiler/compil/g2.htm.
+1. Questions for study
+  * Study speech synthesizer on http://neospeech.com/. 
+  * Study synthesizer http://www.linuxshop.ru/unix4all. 
+  * Study multitier -> CORBA. 
+  * Study http://www.opennet.ru/opennews/art.shtml?num=2475. 
+  * Study EiffelStudio: http://www.eiffel.com/products/studio52. 
+  * Study http://www.wl.unn.ru/~ragozin/compiler/compil/g2.htm.
 
-2. System testing and optimization
- * Develop new the make test mechanism and connecting tests to the system (based at module Special/SystemTests).
-   Develop configuration and control testing dialog (based control system interface).
- * The value buffer algorithm optimize for time work. The fast methods search will be used.
- * Checking of project's code is made on help Coverty.
+2. System's testing/optimization
+  * Make optimal operations to value buffer, more for buffer reading into mode soft time grid (slower of writing to 40 times). 
+  * Develope new mechanism of testing and it connection (based on present modules Special/SystemTests). Creation configuration and control dialog (by help of control interface of system). 
+  * Make checking of system code by help of program and other programs.
 
 3. System
 
 4. Modules
 
-5. БД
- * Add ODBC support.
- * Add PostgresSQL support.
- * Add Oracle support.
+5. Subsystem DB
+  * Make DB module for ODBC support. 
+  * Make DB module for DBMS PostgresSQL support. 
+  * Make DB module for DBMS Oracle support.
 
-6. Logical level parameters
- * The full parameters reserve support (and archives) add to logical level parameters.
+6. Subsystem “Data acquisition” (DAQ)
+  * Make data acquisition module for gathering data from conrollers of firm Siemens series S7 by help of library Libnodave. 
+  * Make data acquisition module for gathering data from OPC-servers (for it should use OPC-server through Ethernet, based on drive Unidrive SP1202).
 
-7. Data acquisition (DAQ)
- * Add OPC support.
- * Add KSysGuard support.
- * Add CORBA support.
+6.1. Logic level parameters (RU)
+  * Make full parameters standby (include archives) on logical level parameters.
 
-7.1. System
- * Add support data source: ACPI.
- * Add support data source: file system stat (used, free HDD space).
+6.2. System (RU)
+  * Data source support is added: file system stat (busy, free of disk area).
 
-8. Transports
-8.1. socket
- * Add SSL encoding support into transport/protocol.
+7. Subsystem “Transports”
+  * Make realisation of SNMP protocol's agent.
 
-9. Transport's protocols
+7.1. Sockets (RU)
+  * SSL codifying support adding to transport/protocol.
 
-10. User interfaces
- * Make visualization area based at WEB-technology.
+8. Subsystem “Protocols of transports”
+  * Make access protocol to OpenSCADA through ModBUS/TCP and ModBUS/RTU.
 
-10.1. WebCfg
- * Add user seance closing.
- * Add the page navigator.
- * Add CSS support and JavaScript using.
+9. Subsystem “User interfaces”
 
-10.2. QTCfg
- * Add message «Wait» for long time process. Move long time process to individual thread.
+9.1. WebCfg (RU)
+  * Rewrite with using JavaScript, CSS и AJAX.
 
-11. Archives
-11.1. FSArch
+9.2. WebVision (RU)
+  * Update of view of elements of primitive «ElForm". 
+  * Process situation of server link lost adding. 
+  * Implementation of permissions share to VCA.
 
-12. Subsystem «Security»
+9.3. QTCfg RU)
+  * Add tabulators. 
+  * Add direct actions to navigation tree. 
+  * Make asynchronous call to OpenSCADA controll interface.
 
-13. Special
-14. Documents
- * Translate base documents to English.
+9.4. VCAEngine (RU)
+  * Develope the operator messaging and alarm interface. 
+  * Develope and making the “Document” primitive. 
+  * Develope and making the “Function” primitive. 
+  * Develope and making the “Link” primitive.
 
-15. Project site
- * Add forums.
- * Add screen galery.
- * Add mail delivery.
- * Add bug tracker. 
+9.5. Vision (RU)
+  * Develope the operator messaging and alarm interface to module VCAEngine and visualisators which based on it. 
+  * Implementation of permissions share to VCA. 
+  * Develope and making the “Document” primitive. 
+  * Develope and making the “Function” primitive. 
+  * Develope and making the “Link” primitive.
+
+10. Subsystem “Archives”
+
+10.1. FSArch (RU)
+
+11. Subsystem “Security”
+
+12. Subsystem “Special”
+
+13. Documentation
+  * Translate the documentations to English and Ukrainian languages: 
+  * API of system; 
+  * Modules documentation.
+
+14. Project site
+  * Add user authorising on site. 
+  * Add forum. 
+  * Add changes tracker and continued works at project tracker.

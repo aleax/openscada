@@ -645,7 +645,20 @@ void Prm::postEnable( int flag )
 void Prm::enable()
 {
     if( enableStat() )  return;
-    
+
+    //- Check and delete no used fields -
+    for(int i_fld = 0; i_fld < v_el.fldSize(); i_fld++)
+    {
+        string fel;
+        for( int io_off = 0; (fel=TSYS::strSepParse(cfg("IO").getS(),0,'\n',&io_off)).size(); )
+    	    if( TSYS::strSepParse(fel,0,':') == v_el.fldAt(i_fld).reserve() ) break;
+        if( fel.empty() )	
+	{
+            v_el.fldDel(i_fld);
+            i_fld--;
+	}
+    }	
+
     //- Init elements -
     AutoHD<Block> blk;
     int io;
@@ -677,19 +690,6 @@ void Prm::enable()
 	    v_el.fldAdd( new TFld(aid.c_str(),anm.empty() ? blk.at().func()->io(io)->name().c_str() : anm.c_str(),tp,flg,"","","","",ioaddr.c_str()) );
     	}
     }
-    
-    //- Check and delete no used fields -
-    for(int i_fld = 0; i_fld < v_el.fldSize(); i_fld++)
-    {
-        string fel;
-        for( int io_off = 0; (fel=TSYS::strSepParse(cfg("IO").getS(),0,'\n',&io_off)).size(); )
-    	    if( TSYS::strSepParse(fel,0,':') == v_el.fldAt(i_fld).reserve() ) break;
-        if( fel.empty() )	
-	{
-            v_el.fldDel(i_fld);
-            i_fld--;
-	}
-    }	
     
     TParamContr::enable();
 }

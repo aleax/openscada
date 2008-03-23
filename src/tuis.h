@@ -39,6 +39,8 @@ class TUI : public TModule
     public:
      	TUI( );
 
+	bool startStat( )	{ return run_st; }
+
     protected:
 	//Methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process

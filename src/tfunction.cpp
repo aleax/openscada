@@ -157,6 +157,7 @@ void TFunction::postIOCfgChange()
 
 void TFunction::valAtt( TValFunc *vfnc )
 {
+    ResAlloc res(f_res,true);
     for(unsigned i=0; i < used.size() ;i++)
 	if(used[i] == vfnc) 
 	    throw TError(nodePath().c_str(),_("Value <%s> already attached!"),vfnc->vfName().c_str());
@@ -165,12 +166,14 @@ void TFunction::valAtt( TValFunc *vfnc )
 
 void TFunction::valDet( TValFunc *vfnc )
 {
+    f_res.resRequestW();
     for(unsigned i=0; i < used.size() ;i++)
 	if(used[i] == vfnc)
         {
             used.erase(used.begin()+i);
     	    break;
         }
+    f_res.resReleaseW();
 }
 
 void TFunction::cntrCmdProc( XMLNode *opt )
@@ -420,7 +423,7 @@ void TValFunc::setFunc( TFunction *ifunc, bool att_det )
     if( ifunc ) 
     {
 	m_func = ifunc;
-	if(att_det)
+	if( att_det )
 	{
 	    m_func->AHDConnect();
 	    m_func->valAtt(this);

@@ -501,14 +501,15 @@ void Project::cntrCmdProc( XMLNode *opt )
 //* Page: Project's page                         *
 //************************************************
 Page::Page( const string &id, const string &isrcwdg ) :
-        Widget(id,isrcwdg), TConfig(&mod->elPage()),
+        Widget(id), TConfig(&mod->elPage()),
         m_ico(cfg("ICO").getSd()), m_proc(cfg("PROC").getSd()), m_proc_per(cfg("PROC_PER").getId()),
 	m_flgs(cfg("FLGS").getId()), m_user(cfg("USER").getSd()), m_grp(cfg("GRP").getSd()), 
-	m_permit(cfg("PERMIT").getId())
+	m_permit(cfg("PERMIT").getId()), m_parent(cfg("PARENT").getSd()), m_attrs(cfg("ATTRS").getSd())
 {
     cfg("ID").setS(id);
 
     m_page = grpAdd("pg_");
+
     setParentNm(isrcwdg);
 }
 
@@ -644,12 +645,8 @@ string Page::grp( )
 
 void Page::setParentNm( const string &isw )
 {
-    string parAddr = isw;
-    if( ownerPage() && ownerPage()->prjFlags()&Page::Template && !(ownerPage()->prjFlags()&Page::Container) )
-    	parAddr = "..";
-    
-    cfg("PARENT").setS(parAddr);
-    Widget::setParentNm(parAddr);
+    m_parent = isw;
+    if( ownerPage() && ownerPage()->prjFlags()&Page::Template && !(ownerPage()->prjFlags()&Page::Container) )	m_parent = "..";
 }
 
 string Page::calcId( )
@@ -740,7 +737,7 @@ void Page::load( )
     string db  = ownerProj()->DB();
     string tbl = ownerProj()->tbl();
     SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,*this);
-    setParentNm(cfg("PARENT").getS());
+    setParentNm(m_parent);
     
     //- Create new pages -
     TConfig c_el(&mod->elPage());
@@ -767,6 +764,7 @@ void Page::load( )
 
 void Page::loadIO( )
 {
+    string tstr;
     vector<string> als;
 
     if( !enable() ) return;
@@ -775,7 +773,11 @@ void Page::loadIO( )
     string db  = ownerProj()->DB();
     string tbl = ownerProj()->tbl()+"_io";    
 
-    attrList( als );
+    //-- Saved attributes list load --
+    if( m_attrs == "*" )	attrList( als );
+    else for( int off = 0; !(tstr = TSYS::strSepParse(m_attrs,0,';',&off)).empty(); )
+	als.push_back(tstr);
+    //-- Same attributes load --
     TConfig c_el(&mod->elWdgIO());
     c_el.cfg("IDW").setS(path());    
     for( int i_a = 0; i_a < als.size(); i_a++ )
@@ -845,6 +847,16 @@ void Page::save( )
     //- Save generic widget's data -
     string db  = ownerProj()->DB();
     string tbl = ownerProj()->tbl();
+    
+    m_attrs="";
+    vector<string> als;
+    attrList( als );
+    for( int i_a = 0; i_a < als.size(); i_a++ )
+    {
+        AutoHD<Attr> attr = attrAt(als[i_a]);
+        if( attr.at().modif() && !(!(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser) )
+        m_attrs+=als[i_a]+";";
+    }
     SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,*this);
 
     //- Save include pages -
@@ -929,7 +941,7 @@ void Page::saveIO( )
 void Page::setEnable( bool val )
 {
     if( enable() == val ) return;
-    
+
     Widget::setEnable(val);
 
     //- Enable/disable included pages -
@@ -1083,7 +1095,7 @@ void Page::cntrCmdProc( XMLNode *opt )
 //* PageWdg: Container stored widget             *
 //************************************************
 PageWdg::PageWdg( const string &id, const string &isrcwdg ) :
-        Widget(id,isrcwdg), TConfig(&mod->elInclWdg())
+        Widget(id), TConfig(&mod->elInclWdg()), m_parent(cfg("PARENT").getSd()), m_attrs(cfg("ATTRS").getSd())
 {
     cfg("ID").setS(id);
     m_lnk = true;
@@ -1106,7 +1118,6 @@ void PageWdg::postEnable( int flag )
     Widget::postEnable(flag);
     //- Set parent page for this widget -
     cfg("IDW").setS(owner().path());
-    cfg("PARENT").setS(parentNm());
 }
 
 void PageWdg::preDisable( int flag )
@@ -1122,10 +1133,10 @@ void PageWdg::preDisable( int flag )
         string tbl    = owner().ownerProj()->tbl();
 
         //- Remove from library table -
-        if( !wdgIherited )      SYS->db().at().dataDel(fullDB+"_incl",mod->nodePath()+tbl+"_incl",*this);
+        if( !wdgIherited || flag&0x10 )      SYS->db().at().dataDel(fullDB+"_incl",mod->nodePath()+tbl+"_incl",*this);
         else
         {
-            cfg("PARENT").setS("<deleted>");
+            m_parent = "<deleted>";
             SYS->db().at().dataSet(fullDB+"_incl",mod->nodePath()+tbl+"_incl",*this);
         }
 
@@ -1197,12 +1208,6 @@ void PageWdg::setEnable( bool val )
 		{ mess_err(nodePath().c_str(),_("Heritors widget <%s> enable error"),id().c_str()); }
 }
 
-void PageWdg::setParentNm( const string &isw )
-{
-    cfg("PARENT").setS(isw);
-    Widget::setParentNm(isw);
-}
-
 string PageWdg::calcId( )
 {
     if( !parent().freeStat() )	return parent().at().calcId();
@@ -1233,7 +1238,6 @@ void PageWdg::load( )
     string db  = owner().ownerProj()->DB();
     string tbl = owner().ownerProj()->tbl()+"_incl";
     SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,*this);
-    setParentNm(cfg("PARENT").getS());
     
     //- Load widget's attributes -
     loadIO();
@@ -1241,20 +1245,25 @@ void PageWdg::load( )
 
 void PageWdg::loadIO( )
 {
+    string         tstr;
     vector<string> als;
     
     if( !enable() ) return;
-    
+
     //- Load widget's work attributes -
     string db  = owner().ownerProj()->DB();
     string tbl = owner().ownerProj()->tbl()+"_io";
-    
-    attrList( als );
+
+    //-- Saved attributes list load --
+    if( m_attrs == "*" ) attrList( als );
+    else for( int off = 0; !(tstr = TSYS::strSepParse(m_attrs,0,';',&off)).empty(); )
+	als.push_back(tstr);
+    //-- Same load --
     TConfig c_el(&mod->elWdgIO());
     c_el.cfg("IDW").setS(owner().path());
     for( int i_a = 0; i_a < als.size(); i_a++ )
     { 
- 	AutoHD<Attr> attr = attrAt(als[i_a]);
+ 	AutoHD<Attr> attr = attrAt(als[i_a]);	
 	if( !(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser ) continue;
 	c_el.cfg("ID").setS(id()+"/"+als[i_a]);
 	if( !SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el) ) continue;
@@ -1263,7 +1272,8 @@ void PageWdg::loadIO( )
 	attr.at().setFlgSelf((Attr::SelfAttrFlgs)c_el.cfg("SELF_FLG").getI());
 	attr.at().setCfgTempl(c_el.cfg("CFG_TMPL").getS());
 	attr.at().setCfgVal(c_el.cfg("CFG_VAL").getS());
-    } 
+    }
+    
     //- Load widget's user attributes -
     tbl = owner().ownerProj()->tbl()+"_uio";
     c_el.setElem(&mod->elWdgUIO());
@@ -1296,12 +1306,19 @@ void PageWdg::loadIO( )
 void PageWdg::save( )
 {
     //- Save generic widget's data -
-    if( !parent().at().isLink() )
-    {    
-	string db  = owner().ownerProj()->DB();
-	string tbl = owner().ownerProj()->tbl()+"_incl";
-	SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,*this);
+    string db  = owner().ownerProj()->DB();
+    string tbl = owner().ownerProj()->tbl()+"_incl";
+	
+    m_attrs="";
+    vector<string> als;
+    attrList( als );
+    for( int i_a = 0; i_a < als.size(); i_a++ )
+    {
+ 	AutoHD<Attr> attr = attrAt(als[i_a]);	
+	if( attr.at().modif() && !(!(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser) )
+	m_attrs+=als[i_a]+";";
     }
+    SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,*this);
 
     //- Save widget's attributes -
     saveIO();

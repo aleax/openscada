@@ -931,10 +931,16 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    int c_lvl = 0;
             for( int c_off = 0; TSYS::strSepParse(p_vl,0,'.',&c_off).size(); c_lvl++ );
 	    AutoHD<TValue> prm;
-	    if(c_lvl==3) 
+	    if(c_lvl==3)
+	    {
+		if( TSYS::strSepParse(p_vl,0,'.') == owner().owner().modId() && 
+			TSYS::strSepParse(p_vl,1,'.') == owner().id() && 
+			TSYS::strSepParse(p_vl,2,'.') == id() )
+		    throw TError(nodePath().c_str(),_("Self to self linking is error."));
 		prm = SYS->daq().at().at(TSYS::strSepParse(p_vl,0,'.')).at().
 				      at(TSYS::strSepParse(p_vl,1,'.')).at().
 				      at(TSYS::strSepParse(p_vl,2,'.'));
+	    }
             for( int i_l = 0; i_l < lnkSize(); i_l++ )
                 if( p_nm == TSYS::strSepParse(tmpl->val.func()->io(lnk(i_l).io_id)->def(),0,'|') )
         	{
@@ -1012,6 +1018,10 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     	    int i_io = atoi(a_path.substr(12).c_str());
     	    if( tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink )
             {
+		if( TSYS::strSepParse(opt->text(),0,'.') == owner().owner().modId() && 
+			TSYS::strSepParse(opt->text(),1,'.') == owner().id() && 
+			TSYS::strSepParse(opt->text(),2,'.') == id() )
+		    throw TError(nodePath().c_str(),_("Self to self linking is error."));
                 lnk(lnkId(i_io)).prm_attr = opt->text();
                 mode( (TMdPrm::Mode)m_mode, m_prm );
             }

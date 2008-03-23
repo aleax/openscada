@@ -94,6 +94,7 @@ TTpContr::TTpContr( string name )
 
 TTpContr::~TTpContr()
 {    
+    nodeDelAll();
     for(int i_da = 0; i_da < m_da.size(); i_da++ )	delete m_da[i_da];
     m_da.clear();
 }

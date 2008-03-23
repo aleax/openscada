@@ -323,7 +323,12 @@ void *Session::Task( void *icontr )
 
 	//- Calc session pages and all other items at recursion -
 	for( int i_l = 0; i_l < pls.size(); i_l++ )
-	    ses.at(pls[i_l]).at().calc(is_start,is_stop);
+	    try{ ses.at(pls[i_l]).at().calc(is_start,is_stop); }
+	    catch( TError err )	
+	    { 
+		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+		mess_err(ses.nodePath().c_str(),_("Session '%s' calc error."),pls[i_l].c_str());
+	    }
 
 	if( (ses.m_calcClk++) == 0 ) ses.m_calcClk = 1;
 
@@ -912,7 +917,8 @@ void SessWdg::calc( bool first, bool last )
 
     //- Calculate include widgets -
     for(int i_l = 0; i_l < m_wdgChldAct.size(); i_l++ )
-        wdgAt(m_wdgChldAct[i_l]).at().calc(first,last);
+	if( wdgPresent(m_wdgChldAct[i_l]) )
+    	    wdgAt(m_wdgChldAct[i_l]).at().calc(first,last);
 
     try
     {    

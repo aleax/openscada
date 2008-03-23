@@ -135,7 +135,7 @@ void Widget::postEnable(int flag)
 void Widget::preDisable( int flag )
 {
     //- Delete heritors widgets -
-    while( herit().size() )	mod->nodeDel(herit()[0].at().path(),0,flag);
+    while( herit().size() )	mod->nodeDel(herit()[0].at().path(),0,flag|0x10);
     
     //- Disable widget -
     if( enable() )  setEnable(false);
@@ -207,7 +207,7 @@ void Widget::setEnable( bool val )
 	}	
 	m_enable = true;
         //- Load self values from DB -
-        loadIO();	
+        loadIO();
     }
     if(!val)
     {
@@ -683,6 +683,8 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/links/showAttr",_("Atributes show"),permit(),user().c_str(),grp().c_str(),1,"tp","bool");
 	    if(ctrMkNode("area",opt,-1,"/links/lnk",_("Links")))
 	    {
+		bool shwAttr = atoi(opt->attr("showAttr").c_str()) ||
+			       atoi(TBDS::genDBGet(mod->nodePath()+"showAttr","0",opt->attr("user")).c_str());
 		vector<string> incllist, alist, list;
 		wdgList(incllist);
 		for( int i_w = -1; i_w < (int)incllist.size(); i_w++ )
@@ -692,20 +694,19 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
 		    else wdg = wdgAt(incllist[i_w]);
 		    wdg.at().attrList(alist);
 		    for( int i_a = 0; i_a < alist.size(); i_a++ )
-            	    {
+            	    {		    
 			string grpprm;
 		        string idprm = alist[i_a];
-			string nprm  = wdg.at().attrAt(alist[i_a]).at().name();
+			string nprm  = wdg.at().attrAt(alist[i_a]).at().id();
 			if( i_w >= 0 )
 			{
 			    idprm.insert(0,incllist[i_w]+".");
-			    nprm.insert(0,wdg.at().name()+".");
+			    nprm.insert(0,wdg.at().id()+".");
 			}
 			
-			if( !(wdg.at().attrAt(alist[i_a]).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut|Attr::CfgConst)) ) continue;
+			if( !(wdg.at().attrAt(alist[i_a]).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut|Attr::CfgConst)) ||
+			    (!shwAttr && wdg.at().attrAt(alist[i_a]).at().flgSelf()&Attr::CfgConst) ) continue;
 			//-- Get attributes --
-			bool shwAttr = atoi(opt->attr("showAttr").c_str()) || 
-				       atoi(TBDS::genDBGet(mod->nodePath()+"showAttr","0",opt->attr("user")).c_str());
 			bool shwTmpl = wdg.at().attrAt(alist[i_a]).at().cfgTempl().size();
 			if( shwTmpl )	grpprm = TSYS::strSepParse(wdg.at().attrAt(alist[i_a]).at().cfgTempl(),0,'|');
 			
@@ -713,7 +714,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
                 	if( shwTmpl && !shwAttr )
                 	{
                     	    nprm = grpprm;
-			    if( i_w >= 0 ) nprm.insert(0,wdg.at().name()+".");
+			    if( i_w >= 0 ) nprm.insert(0,wdg.at().id()+".");
 			    
 	            	    //-- Check already to present parameters --
 	            	    bool f_ok = false;
@@ -783,7 +784,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
 	    srcwdg.at().attrList(a_ls);
 	    rez += ": ";
 	    for( int i_a = 0; i_a < a_ls.size(); i_a++ )
-	        if( p_nm == TSYS::strSepParse(srcwdg.at().attrAt(a_ls[i_a]).at().cfgTempl(),0,'|') )
+	        if( p_nm == TSYS::strSepParse(srcwdg.at().attrAt(a_ls[i_a]).at().cfgTempl(),0,'|') && !(srcwdg.at().attrAt(a_ls[i_a]).at().flgSelf()&Attr::CfgConst) )
 	        {
 	    	    sel = srcwdg.at().attrAt(a_ls[i_a]).at().cfgVal();
 		    if( !custom && sel.find(cfg_val) != 0 ) custom = true;
@@ -817,7 +818,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
 
 	    srcwdg.at().attrList(a_ls);
 	    for( int i_a = 0; i_a < a_ls.size(); i_a++ )
-		if( p_nm == TSYS::strSepParse(srcwdg.at().attrAt(a_ls[i_a]).at().cfgTempl(),0,'|') )
+		if( p_nm == TSYS::strSepParse(srcwdg.at().attrAt(a_ls[i_a]).at().cfgTempl(),0,'|') && !(srcwdg.at().attrAt(a_ls[i_a]).at().flgSelf()&Attr::CfgConst) )
 		{
 		    srcwdg.at().attrAt(a_ls[i_a]).at().setCfgVal(cfg_val);
 		    string p_attr = TSYS::strSepParse(srcwdg.at().attrAt(a_ls[i_a]).at().cfgTempl(),1,'|');
@@ -847,12 +848,22 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
 	string nattr = TSYS::strSepParse(a_path.substr(14),1,'.');
 	if( nattr.size() ) srcwdg = wdgAt(nwdg);
 	else nattr = nwdg;
-	
+
+	bool is_pl = (a_path.substr(0,14) == "/links/lnk/pl_");	
 	if( !(srcwdg.at().attrAt(nattr).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut)) )
-	    throw TError(nodePath().c_str(),_("Variable is not link"));
+	{
+	    if( !is_pl ) throw TError(nodePath().c_str(),_("Variable is not link"));
+	    vector<string> a_ls;
+	    string p_nm = TSYS::strSepParse(srcwdg.at().attrAt(nattr).at().cfgTempl(),0,'|');
+	    srcwdg.at().attrList(a_ls);	
+	    int i_a;
+	    for( i_a = 0; i_a < a_ls.size(); i_a++ )
+	        if( p_nm == TSYS::strSepParse(srcwdg.at().attrAt(a_ls[i_a]).at().cfgTempl(),0,'|') && !(srcwdg.at().attrAt(a_ls[i_a]).at().flgSelf()&Attr::CfgConst) )		    
+	        { nattr = a_ls[i_a]; break; }
+	    if( i_a >= a_ls.size() ) throw TError(nodePath().c_str(),_("Variable is not link"));
+	}
+
 	string m_prm = srcwdg.at().attrAt(nattr).at().cfgVal();
-	
-	bool is_pl = (a_path.substr(0,14) == "/links/lnk/pl_");
 	//-- Link interface process --
         int c_lv = 0;
 	string obj_tp = TSYS::strSepParse(m_prm,0,':')+":";
@@ -937,16 +948,12 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
 	else nattr = nwdg;
 	
         if( ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) )
-	{
-	    if( srcwdg.at().attrAt(nattr).at().flgSelf()&Attr::CfgConst )
-		opt->setText(srcwdg.at().attrAt(nattr).at().getS());
-	    else opt->setText(srcwdg.at().attrAt(nattr).at().cfgVal());
-	}
+	    opt->setText(srcwdg.at().attrAt(nattr).at().cfgVal());
         if( ctrChkNode(opt,"set",permit(),user().c_str(),grp().c_str(),SEQ_WR) )
 	{
+	    srcwdg.at().attrAt(nattr).at().setCfgVal(opt->text());	
 	    if( srcwdg.at().attrAt(nattr).at().flgSelf()&Attr::CfgConst )
 		srcwdg.at().attrAt(nattr).at().setS(opt->text());
-	    else srcwdg.at().attrAt(nattr).at().setCfgVal(opt->text());
 	}
     }
     else return false;

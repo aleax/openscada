@@ -2,5 +2,6 @@
 <qresource>
     <file>images/exit.png</file>
     <file>images/oscada_qt.png</file>
+    <file>images/splash.png</file>
 </qresource>
 </RCC>

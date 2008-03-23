@@ -142,11 +142,13 @@ void Engine::postEnable( int flag )
     wdg_el.fldAdd( new TFld("USER",_("User"),TFld::String,TFld::NoFlag,"20","root") );
     wdg_el.fldAdd( new TFld("GRP",_("Group"),TFld::String,TFld::NoFlag,"20","UI") );
     wdg_el.fldAdd( new TFld("PERMIT",_("Permision"),TFld::Integer,TFld::OctDec,"3","436") );
+    wdg_el.fldAdd( new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*") );
 
     //- Make include widgets DB structure -
     inclwdg_el.fldAdd( new TFld("IDW",_("IDW"),TFld::String,TCfg::Key,"100") );
     inclwdg_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
     inclwdg_el.fldAdd( new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200") );
+    inclwdg_el.fldAdd( new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*") );
 
     //- Make widget's IO DB structure -
     wdgio_el.fldAdd( new TFld("IDW",_("Widget ID"),TFld::String,TCfg::Key,"100") );
@@ -187,6 +189,7 @@ void Engine::postEnable( int flag )
     page_el.fldAdd( new TFld("GRP",_("Group"),TFld::String,TFld::NoFlag,"20","UI") );
     page_el.fldAdd( new TFld("PERMIT",_("Permision"),TFld::Integer,TFld::OctDec,"3","436") );
     page_el.fldAdd( new TFld("FLGS",_("Flags"),TFld::Integer,TFld::NoFlag,"1","0") );
+    page_el.fldAdd( new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*") );
 
     //- Init original widgets library -
     wlbAdd("originals",_("Original widget's library"));
@@ -329,7 +332,18 @@ void Engine::modLoad( )
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
         mess_err(nodePath().c_str(),_("Load projects error."));
-    }    
+    }
+    
+    //- Libraries enable -
+    vector<string> ls;
+    wlbList(ls);
+    for( int l_id = 0; l_id < ls.size(); l_id++ )
+	wlbAt(ls[l_id]).at().setEnable(true);
+	
+    //- Projects enable -
+    prjList(ls);
+    for( int l_id = 0; l_id < ls.size(); l_id++ )
+	prjAt(ls[l_id]).at().setEnable(true);    
 }
 
 void Engine::modSave( )
@@ -356,13 +370,13 @@ void Engine::modStart()
     mess_debug(nodePath().c_str(),_("Start module."));
 #endif
 
-    //- Libraries start -
+    //- Libraries enable -
     vector<string> ls;
     wlbList(ls);
     for( int l_id = 0; l_id < ls.size(); l_id++ )
 	wlbAt(ls[l_id]).at().setEnable(true);
 	
-    //- Projects start -
+    //- Projects enable -
     prjList(ls);
     for( int l_id = 0; l_id < ls.size(); l_id++ )
 	prjAt(ls[l_id]).at().setEnable(true);

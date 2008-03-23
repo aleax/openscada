@@ -200,6 +200,7 @@ TCfg::TCfg( TFld &fld, TConfig &owner ) : m_view(true), m_owner(owner)
 	case TFld::Real: 	m_val.r_val = atof(m_fld->def().c_str());	break;
 	case TFld::Boolean:	m_val.b_val = atoi(m_fld->def().c_str());	break;
     }
+    if( fld.flg()&TCfg::Hide )	m_view = false;
 }
 
 TCfg::~TCfg(  )

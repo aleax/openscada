@@ -1,3 +1,24 @@
+2009-03-23 Roman OpenSCADA 0.6.1
+- /SYS: TODO files translation to Russian and Ukranian is added (TODO_ru and TODO_uk)
+- /UI: Start module control function is added TUI::startStat().
+- FIX:/DAQ: Parameter's templates load on brocken some templates is fixed.
+- FIX:/Function: Resource on function cadrs registration is added.
+- /Elements: The hide configure element flag on a element initialisation is added.
+- FIX:/DAQ/BlockCalc: Check to attributes of parameters move to up, before new attributes adding.
+- FIX:/DAQ/JavaLikeCalc: Check for start state before function calc is added.
+- FIX:/DAQ/LogicLev: Self attributes linking from template, loop linking, is blocked.
+- FIX:/DAQ/System: Late controllers deletion is fixed.
+- FIX:/UI/QTCfg: Combobox no listed value display is fixed.
+- !!:/UI/QTStarter: Start splash is added.
+- !!!!:/UI/VCAEngine: No stored attributes is exclude from loading. Load performance rise.
+- !!!!:/UI/VCAEngine: Enabling visual elements moved to load step. Load performance rise.
+- FIX:/UI/VCAEngine: Inheritor delete included widget marker placed on time deletion parent include widget is fixed.
+- FIX:/UI/VCAEngine: Crashing on time widget deletion from parent widgets when it progect's page process is fixed.
+- FIX:/UI/VCAEngine: Links building for mixed configuraton is fixed.
+- FIX:/UI/Vision: Size points widget's lost release mouse event is final fixed.
+- /SYS: Demo DB is updated. Template cadrs and first full mnemo is added.
+
+
 2008-03-20 Roman
 - !!!:/SYS: The release 0.6.1 overview is added. The release overview made on English, Russian and Ukrainian languages.
 - !!:/SYS: OpenSCADA API documentation is updated.

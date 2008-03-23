@@ -996,6 +996,7 @@ void Func::setValB( TValFunc *io, RegW &rg, char val )
 void Func::calc( TValFunc *val )
 { 
     calc_res.resRequestR( );
+    if( !startStat( ) )	return;
     
     //- Init list of registers -
     RegW reg[m_regs.size()];
@@ -1459,7 +1460,7 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
 	    case Reg::CProc:
 	    case Reg::CFunc:
 		{
-		    TValFunc vfnc("",&funcAt(*(BYTE *)(cprg+1))->func().at());
+		    TValFunc vfnc("JavaLikeFuncCalc",&funcAt(*(BYTE *)(cprg+1))->func().at());
 #if DEBUG_VM		    
 		    printf("CODE: Call function/procedure %d = %s(%d).\n",*(BYTE *)(cprg+3),vfnc.func()->id().c_str(),*(BYTE *)(cprg+2));
 #endif		    
