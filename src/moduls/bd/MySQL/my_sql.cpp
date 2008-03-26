@@ -591,8 +591,8 @@ void MTable::fieldFix( TConfig &cfg )
 	    string f_tp;
 	    switch(u_cfg.fld().type())
 	    {
-		    if( u_cfg.fld().len() < 256 )
-			f_tp = "varchar("+TSYS::int2str(vmax(1,u_cfg.fld().len()))+")";
+		    if( u_cfg.fld().len() < 256 || u_cfg.fld().flg()&TCfg::Key )
+			f_tp = "varchar("+TSYS::int2str(vmax(1,vmin((u_cfg.fld().flg()&TCfg::Key)?150:255,u_cfg.fld().len())))+")";
 		    else if( u_cfg.fld().len() < 65536 )
 			f_tp = "text";
 		    else f_tp = "mediumtext";
@@ -645,8 +645,8 @@ void MTable::fieldPrmSet( TCfg &cfg, const string &last, string &req )
     switch(cfg.fld().type())
     {
 	case TFld::String:
-	    if( cfg.fld().len() < 256 )
-		req=req+"varchar("+SYS->int2str(vmax(1,cfg.fld().len()))+") NOT NULL DEFAULT '"+cfg.fld().def()+"' ";
+	    if( cfg.fld().len() < 256 || cfg.fld().flg()&TCfg::Key )
+		req=req+"varchar("+SYS->int2str(vmax(1,vmin((cfg.fld().flg()&TCfg::Key)?150:255,cfg.fld().len())))+") NOT NULL DEFAULT '"+cfg.fld().def()+"' ";
 	    else if( cfg.fld().len() < 65536 ) 
 		req=req+"text NOT NULL ";// DEFAULT '"+cfg.fld().def()+"' ";
 	    else req=req+"mediumtext NOT NULL ";// DEFAULT '"+cfg.fld().def()+"' ";

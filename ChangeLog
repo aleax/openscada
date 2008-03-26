@@ -2,6 +2,7 @@
 - !!:/SYS: RPM build spec file reviewed for support x86_64, several distribution tools and some bugs fixing into build system.
 - !!:/SYS: Some key variables shielding is fixed.
 - FIX:/DB/MySQL: Default value for text fields present is fixed.
+- FIX:/DB/MySQL: Key limit of MySQL to 500 is apply.
 
 
 2008-03-23 Roman OpenSCADA 0.6.1
