@@ -1,18 +1,25 @@
-#Relaxed mode for diamond board liraries build and for modules simbols into OpenSCADA kernel resolving check
-#set_verify_elf_method relaxed
-#define _initdir /etc/init.d
-
 #===== Generic Info ======
 Summary: Open SCADA system project
 Name: openscada
 Version: 0.6.1
 Release: 1
-Source: %{name}-%{version}.tar.gz
+Source: %name-%version.tar.gz
 License: GPL
 Group: Applications/SCADA
 Packager: Roman Savochenko <rom_as@fromru.com>
-URL: http://diyaorg.dp.ua/oscada
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
+URL: http://oscada.diyaorg.dp.ua
+
+#= Individual distributives seting =
+%if %_vendor == "alt"
+%set_verify_elf_method no
+%else %if %_vendor == "suse"
+%define _initdir /etc/init.d
+%define _desktopdir %_datadir/applications
+BuildRoot: %_tmppath/%name-%version-root
+%else
+%define _initdir /etc/init.d
+%define _desktopdir %_datadir/applications
+%endif
 
 %description
 Open SCADA system. For access use account "root" and password "openscada".
@@ -22,40 +29,41 @@ Open SCADA system. For access use account "root" and password "openscada".
 Відкрита SCADA система. Для доступу використовуйте запис "root" та пароль "openscada".
 
 %post
+test -e /usr/lib/%name || ln -s %_libdir/%name /usr/lib/%name
 /sbin/chkconfig --add oscadad
 /sbin/chkconfig oscadad off
 
 %preun
+test -h /usr/lib/%name && rm -f /usr/lib/%name 
 /sbin/chkconfig --del oscadad
 
 %package doc
 Summary: Open SCADA documents.
 Group: Applications/SCADA
-#Requires: %{name}
 %description doc
-The %{name}-doc package include documents files.
+The %name-doc package include documents files.
 %description doc -l ru_RU.UTF8
-Пакет %{name}-doc включает файлы документации.
+Пакет %name-doc включает файлы документации.
 %description doc -l uk_UA.UTF8
-Пакет %{name}-doc включає файли документації.
+Пакет %name-doc включає файли документації.
 
 
 %package devel
 Summary: Open SCADA development.
 Group: Development/Libraries
-#Requires: %{name}
+#Requires: %name
 %description devel
-The %{name}-devel package includes library archives and include files.
+The %name-devel package includes library archives and include files.
 %description devel -l ru_RU.UTF8
-Пакет %{name}-devel включает архив библиотек и включаемые файлы.
+Пакет %name-devel включает архив библиотек и включаемые файлы.
 %description devel -l uk_UA.UTF8
-Пакет %{name}-devel включає архів бібліотек та включаємі файли.
+Пакет %name-devel включає архів бібліотек та включаємі файли.
 
 
 %package demo
 Summary: Open SCADA demo data bases and config.
 Group: Applications/SCADA
-Requires: %{name}
+Requires: %name
 %description demo
 The %{name}-demo package includes demo data bases and configs. For start use command <openscada_demo>. For access use account "root" and password "openscada" or account "user" without password.
 %description demo -l ru_RU.UTF8
@@ -65,75 +73,72 @@ The %{name}-demo package includes demo data bases and configs. For start use com
 
 
 %prep
-#rm -rf $RPM_BUILD_ROOT
 %setup
 
 %build
-export CFLAGS=$RPM_OPT_FLAGS
-export CXXFLAGS=$RPM_OPT_FLAGS
-./configure --prefix=%{_prefix}
-%{__make}
+%configure
+%__make
 
 %install
-#rm -rf $RPM_BUILD_ROOT
 %makeinstall
-install -m 755 -d $RPM_BUILD_ROOT/%{_includedir}/%{name}/
-install -m 644 *.h $RPM_BUILD_ROOT/%{_includedir}/%{name}
-install -m 644 src/*.h $RPM_BUILD_ROOT/%{_includedir}/%{name}
-install -m 644 -pD data/oscada.xml $RPM_BUILD_ROOT/%{_sysconfdir}/oscada.xml
-install -m 644 -pD data/openscada.desktop $RPM_BUILD_ROOT/%{_desktopdir}/openscada.desktop
-install -m 644 -pD data/openscada.png $RPM_BUILD_ROOT/%{_iconsdir}/openscada.png
-install -m 755 -pD data/oscada.init $RPM_BUILD_ROOT/%{_initdir}/oscadad
-install -m 644 -pD demo/oscada_demo.xml $RPM_BUILD_ROOT/%{_sysconfdir}/oscada_demo.xml
-install -m 755 -pD demo/openscada_demo $RPM_BUILD_ROOT/%{_bindir}/openscada_demo
-install -m 644 -pD demo/openscada_demo.desktop $RPM_BUILD_ROOT/%{_desktopdir}/openscada_demo.desktop
-install -m 644 -pD demo/openscada_demo.png $RPM_BUILD_ROOT/%{_iconsdir}/openscada_demo.png
-install -m 777 -d $RPM_BUILD_ROOT/var/spool/%{name}/DATA
-install -m 755 -d $RPM_BUILD_ROOT/var/spool/%{name}/icons
-echo "Open SCADA data dir" > $RPM_BUILD_ROOT/var/spool/%{name}/DATA/.data
-install -m 666 demo/*.db $RPM_BUILD_ROOT/var/spool/%{name}/DATA
-install -m 644 data/icons/* $RPM_BUILD_ROOT/var/spool/%{name}/icons
-install -m 777 -d $RPM_BUILD_ROOT/var/spool/%{name}/ARCHIVES/MESS
-install -m 777 -d $RPM_BUILD_ROOT/var/spool/%{name}/ARCHIVES/VAL
+install -m 755 -d %buildroot/%_includedir/%name/
+install -m 644 *.h %buildroot/%_includedir/%name
+install -m 644 src/*.h %buildroot/%_includedir/%name
+install -m 644 -pD data/oscada.xml %buildroot/%_sysconfdir/oscada.xml
+install -m 644 -pD data/openscada.desktop %buildroot/%_desktopdir/openscada.desktop
+install -m 644 -pD data/openscada.png %buildroot/%_iconsdir/openscada.png
+install -m 755 -pD data/oscada.init %buildroot/%_initdir/oscadad
+install -m 644 -pD demo/oscada_demo.xml %buildroot/%_sysconfdir/oscada_demo.xml
+install -m 755 -pD demo/openscada_demo %buildroot/%_bindir/openscada_demo
+install -m 644 -pD demo/openscada_demo.desktop %buildroot/%_desktopdir/openscada_demo.desktop
+install -m 644 -pD demo/openscada_demo.png %buildroot/%_iconsdir/openscada_demo.png
+install -m 777 -d %buildroot/var/spool/%name/DATA
+install -m 755 -d %buildroot/var/spool/%name/icons
+echo "Open SCADA data dir" > %buildroot/var/spool/%name/DATA/.data
+install -m 666 demo/*.db %buildroot/var/spool/%name/DATA
+install -m 644 data/icons/* %buildroot/var/spool/%name/icons
+install -m 777 -d %buildroot/var/spool/%name/ARCHIVES/MESS
+install -m 777 -d %buildroot/var/spool/%name/ARCHIVES/VAL
 
 %clean
-#rm -rf $RPM_BUILD_ROOT $RPM_BUILD_DIR/%{name}-%{version}
+#rm -rf %buildroot %buildroot/%name-%version
 
 %files
 %defattr(-,root,root)
-%config(noreplace) %{_sysconfdir}/oscada.xml
-%config %{_initdir}/oscadad
-%{_bindir}/%{name}
-%{_desktopdir}/openscada.desktop
-%{_iconsdir}/openscada.png
-%{_libdir}/*.so*
-%{_libdir}/%{name}/*.so
-%{_datadir}/locale/*/LC_MESSAGES/*
-/var/spool/%{name}/DATA/.data
-/var/spool/%{name}/icons/*
-/var/spool/%{name}/ARCHIVES/
+%config(noreplace) %_sysconfdir/oscada.xml
+%config %_initdir/oscadad
+%_bindir/%name
+%_desktopdir/openscada.desktop
+%_iconsdir/openscada.png
+%_libdir/*.so*
+%_libdir/%name/*.so
+%_datadir/locale/*/LC_MESSAGES/*
+/var/spool/%name/DATA/.data
+/var/spool/%name/icons/*
+/var/spool/%name/ARCHIVES/
 
 %files doc
 %defattr(-,root,root)
-%{_datadir}/doc
+%_datadir/doc
 #doc README README_ru COPYING INSTALL TODO TODO_ru TODO_uk ChangeLog doc/*
 
 %files devel
 %defattr(-,root,root)
-%{_libdir}/*.*
-#%{_libdir}/*.la
-#%{_libdir}/*.so*
-%{_includedir}/%{name}/*
+%_libdir/*.*
+%_includedir/%name/*
 
 %files demo
 %defattr(-,root,root)
-%config(noreplace) %{_sysconfdir}/oscada_demo.xml
-%{_bindir}/openscada_demo
-%{_desktopdir}/openscada_demo.desktop
-%{_iconsdir}/openscada_demo.png
-/var/spool/%{name}/DATA/
+%config(noreplace) %_sysconfdir/oscada_demo.xml
+%_bindir/openscada_demo
+%_desktopdir/openscada_demo.desktop
+%_iconsdir/openscada_demo.png
+/var/spool/%name/DATA/
 
 %changelog
+* Wed Mar 26 2008 Roman Savochenko <rom_as@diyaorg.dp.ua>
+- Rebuilded for support x86_64 several distributives and some build system bugs is fixed.
+
 * Sat Mar 23 2008 Roman Savochenko <rom_as@diyaorg.dp.ua>
 - menu files included
 

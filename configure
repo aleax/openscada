@@ -26224,11 +26224,11 @@ fi
 
 
 
-oscd_moduldir="${libdir}/${PACKAGE}"
+oscd_moduldir="\${libdir}/${PACKAGE}"
 
-oscd_localedir="\${DESTDIR}${datadir}/locale"
+oscd_localedir="\${DESTDIR}\${datadir}/locale"
 
-oscd_docdir="\${DESTDIR}${datadir}/doc/${PACKAGE_TARNAME}-${PACKAGE_VERSION}"
+oscd_docdir="\${DESTDIR}\${datadir}/doc/${PACKAGE_TARNAME}-${PACKAGE_VERSION}"
 
 oscd_modulpref="oscd_"
 

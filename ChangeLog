@@ -1,4 +1,10 @@
-2009-03-23 Roman OpenSCADA 0.6.1
+2008-03-26 Roman
+- !!:/SYS: RPM build spec file reviewed for support x86_64, several distribution tools and some bugs fixing into build system.
+- !!:/SYS: Some key variables shielding is fixed.
+- FIX:/DB/MySQL: Default value for text fields present is fixed.
+
+
+2008-03-23 Roman OpenSCADA 0.6.1
 - /SYS: TODO files translation to Russian and Ukranian is added (TODO_ru and TODO_uk)
 - /UI: Start module control function is added TUI::startStat().
 - FIX:/DAQ: Parameter's templates load on brocken some templates is fixed.

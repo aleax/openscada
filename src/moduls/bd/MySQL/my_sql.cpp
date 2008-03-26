@@ -648,8 +648,8 @@ void MTable::fieldPrmSet( TCfg &cfg, const string &last, string &req )
 	    if( cfg.fld().len() < 256 )
 		req=req+"varchar("+SYS->int2str(vmax(1,cfg.fld().len()))+") NOT NULL DEFAULT '"+cfg.fld().def()+"' ";
 	    else if( cfg.fld().len() < 65536 ) 
-		req=req+"text NOT NULL DEFAULT '"+cfg.fld().def()+"' ";
-	    else req=req+"mediumtext NOT NULL DEFAULT '"+cfg.fld().def()+"' ";
+		req=req+"text NOT NULL ";// DEFAULT '"+cfg.fld().def()+"' ";
+	    else req=req+"mediumtext NOT NULL ";// DEFAULT '"+cfg.fld().def()+"' ";
 	    break;
 	case TFld::Integer:
 	    req=req+"int("+SYS->int2str(vmax(1,cfg.fld().len()))+") NOT NULL DEFAULT '"+TSYS::int2str(atoi(cfg.fld().def().c_str()))+"' ";
