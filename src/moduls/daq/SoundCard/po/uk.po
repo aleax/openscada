@@ -1,0 +1,134 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#: sound.cpp:54 sound.cpp:99 sound.cpp:204
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenSCADA.DAQ.SoundCard 0.0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-03-27 18:49+0200\n"
+"PO-Revision-Date: 2008-03-27 18:49+0200\n"
+"Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
+"Language-Team: LANGUAGE <uk@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+#: sound.cpp:37
+msgid "SoundCard"
+msgstr ""
+
+#: sound.cpp:38
+msgid "Sound card"
+msgstr "Звукова карта"
+
+#: sound.cpp:39
+msgid "DAQ"
+msgstr ""
+
+#: sound.cpp:41
+msgid "0.0.1"
+msgstr ""
+
+#: sound.cpp:42
+msgid "??"
+msgstr ""
+
+#: sound.cpp:43
+msgid "Allow access to sound card data."
+msgstr "Надає доступ до даних звукової карти."
+
+#: sound.cpp:44
+msgid "GPL"
+msgstr ""
+
+#: sound.cpp:49
+msgid "C"
+msgstr ""
+
+#: sound.cpp:94 sound.cpp:98 sound.cpp:113
+msgid "PRM_BD"
+msgstr ""
+
+#: sound.cpp:94
+msgid "Parameters' table"
+msgstr "Таблиця параметрів"
+
+#: sound.cpp:94
+msgid "30"
+msgstr ""
+
+#: sound.cpp:95 sound.cpp:111
+msgid "CARD"
+msgstr ""
+
+#: sound.cpp:95
+msgid "Card device"
+msgstr "Пристрій карти"
+
+#: sound.cpp:95 sound.cpp:99
+msgid "20"
+msgstr ""
+
+#: sound.cpp:95
+msgid "/dev/"
+msgstr ""
+
+#: sound.cpp:98
+msgid "std"
+msgstr ""
+
+#: sound.cpp:98
+msgid "Standard"
+msgstr ""
+
+#: sound.cpp:99 sound.cpp:188
+msgid "INPUT"
+msgstr ""
+
+#: sound.cpp:99
+msgid "Input"
+msgstr "Вхід"
+
+#: sound.cpp:113
+msgid "SoundCard_"
+msgstr ""
+
+#: sound.cpp:145
+msgid "task_start"
+msgstr ""
+
+#: sound.cpp:146
+msgid "Sound input task no started!"
+msgstr "Задачу звукового входу не запущено!"
+
+#: sound.cpp:156
+msgid "task_stop"
+msgstr ""
+
+#: sound.cpp:157
+msgid "Sound input task no stoped!"
+msgstr "Задачу звукового входу не зупинено!"
+
+#: sound.cpp:174
+#, c-format
+msgid "TEST 00\n"
+msgstr ""
+
+#: sound.cpp:188
+msgid "w_attr"
+msgstr ""
+
+#: sound.cpp:204
+msgid "val"
+msgstr ""
+
+#: sound.cpp:204
+msgid "Value"
+msgstr "Значення"
+
+#: sound.cpp:204
+msgid "-1:1"
+msgstr ""

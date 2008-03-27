@@ -24,6 +24,7 @@
 #include <QEvent>
 #include <QPainter>
 #include <QVBoxLayout>
+#include <QStackedLayout>
 #include <QPushButton>
 #include <QLineEdit>
 #include <QTextEdit>
@@ -825,7 +826,7 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	if( w->dc()["text"].toString() != text )	{ w->dc()["text"] = text; up = true; }
     }
     
-    if( up && !w->allAttrLoad( ) ) w->update();
+    if( up && !w->allAttrLoad( ) && uiPrmPos >= 0 ) w->update();
     
     return up;
 }
@@ -1097,7 +1098,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	}
     }
 
-    if( up && !w->allAttrLoad( ) ) w->update();
+    if( up && !w->allAttrLoad( ) && uiPrmPos >= 0 ) w->update();
     
     return up;
 }
@@ -1380,7 +1381,7 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
     {
 	if( reld_tr_dt )	{ loadTrendsData(w,reld_tr_dt==2); make_pct = true; }
 	if( make_pct )		{ makeTrendsPicture(w); up = true; }
-	if( up )		w->update();
+	if( up && uiPrmPos >= 0 )	w->update();
     }
 
     return (reld_tr_dt|make_pct|up);
@@ -2490,7 +2491,8 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    if( w->layout() ) w->layout()->setMargin( w->dc()["geomMargin"].toInt() );
 	    break;
 	case 20: 	//backColor
-	    w->dc()["backColor"] = QColor(val.c_str()); break;
+	    w->dc()["backColor"] = QColor(val.c_str());
+	    break;
 	case 21: 	//backImg
 	{
 	    QImage img;
@@ -2528,13 +2530,20 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		//-- Create new include widget --	
 		if( val.size() )
 		{
-		    QVBoxLayout *lay = (QVBoxLayout *)w->layout();
-		    if( !lay ) lay = new QVBoxLayout(w);
+		    QStackedLayout *lay = (QStackedLayout*)w->layout();
+		    if( !lay ) lay = new QStackedLayout(w);
+		    
+		    QLabel *lab = new QLabel(QString("Load page: '%1'.").arg(val.c_str()),w);
+		    lab->setAlignment(Qt::AlignCenter);
+		    lay->addWidget(lab);
+		    lay->setCurrentWidget(lab);
+		    qApp->processEvents();
 		
 		    el_wdg = (RunPageView *)(((RunWdgView*)w)->mainWin()->pgCacheGet(val));
 		    if( el_wdg )
 		    {
 			el_wdg->setParent(w);
+			lay->addWidget(el_wdg);
 			el_wdg->setEnabled(true);
 			el_wdg->setVisible(true);
 			if( el_wdg->wx_scale != el_wdg->mainWin()->xScale() || el_wdg->wy_scale != el_wdg->mainWin()->yScale() )
@@ -2542,11 +2551,15 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    }
 		    else 
 		    {
-		        el_wdg = new RunPageView(val,(VisRun*)w->mainWin(),w);
+		        el_wdg = new RunPageView(val,(VisRun*)w->mainWin(),w,Qt::SubWindow);
+			lay->addWidget(el_wdg);
 			el_wdg->load("");
 		    }
+		    
+		    delete lab;
 		    //el_wdg->resize(w->size());
-		    lay->addWidget(el_wdg);
+		    //lay->addWidget(el_wdg);
+		    lay->setCurrentWidget(el_wdg);
 		    lay->setMargin(w->dc()["geomMargin"].toInt());
 		}
 		w->dc()["inclWidget"].setValue((void*)el_wdg);
@@ -2564,7 +2577,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	default: up = false;
     }
     
-    if( up && !w->allAttrLoad( ) )	w->update();
+    if( up && !w->allAttrLoad( ) && uiPrmPos >= 0 )	w->update();
     
     return up;
 }

@@ -429,7 +429,28 @@ void TArchiveS::subStop( )
     mess_info(nodePath().c_str(),_("Stop subsystem."));
 
     vector<string> t_lst, o_lst;
-    
+
+    //printf("TEST 50\n");
+
+    //- Stop interval timer for periodic thread creating -
+    struct itimerspec itval;
+    itval.it_interval.tv_sec = itval.it_interval.tv_nsec =
+	itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
+    timer_settime(tmIdMess, 0, &itval, NULL);
+    if( TSYS::eventWait( prc_st_mess, false, nodePath()+"mess_stop",5) )
+        throw TError(nodePath().c_str(),_("Archive messages thread no stoped!"));
+    //- Values acquisition task stop -
+    if( prc_st_val ) 
+    { 
+	endrun_req_val = true; 
+	pthread_kill( m_val_pthr, SIGALRM );
+        if( TSYS::eventWait(prc_st_val,false,nodePath()+"val_task_stop",5) )
+	    throw TError(nodePath().c_str(),_("Archive values task no stoped!"));
+        pthread_join( m_val_pthr, NULL );
+    }
+
+    //printf("TEST 51\n");
+
     //- Value archives stop -
     valList(o_lst);
     for( int i_o = 0; i_o < o_lst.size(); i_o++ )
@@ -443,6 +464,8 @@ void TArchiveS::subStop( )
 		mess_err(nodePath().c_str(),_("Value archive <%s> stop error."),o_lst[i_o].c_str());
 	    }
     }    
+    
+    //printf("TEST 52\n");
     
     //- Archivators stop -
     modList(t_lst);
@@ -476,24 +499,9 @@ void TArchiveS::subStop( )
 		}
 	}
     }
-
-    //- Stop interval timer for periodic thread creating -
-    struct itimerspec itval;
-    itval.it_interval.tv_sec = itval.it_interval.tv_nsec =
-	itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
-    timer_settime(tmIdMess, 0, &itval, NULL);
-    if( TSYS::eventWait( prc_st_mess, false, nodePath()+"mess_stop",5) )
-        throw TError(nodePath().c_str(),_("Archive messages thread no stoped!"));
-    //- Values acquisition task stop -
-    if( prc_st_val ) 
-    { 
-	endrun_req_val = true; 
-	pthread_kill( m_val_pthr, SIGALRM );
-        if( TSYS::eventWait(prc_st_val,false,nodePath()+"val_task_stop",5) )
-	    throw TError(nodePath().c_str(),_("Archive values task no stoped!"));
-        pthread_join( m_val_pthr, NULL );
-    }
-	
+    
+    //printf("TEST 53\n");    
+    
     TSubSYS::subStop( );	
 }
  
@@ -1124,10 +1132,10 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 	}
 	if( run_st && ctrMkNode("area",opt,-1,"/mess",_("Messages"),0440,"root",grp.c_str()) )
 	{
-	    ctrMkNode("fld",opt,-1,"/mess/v_beg",_("Begin"),0660,"root",grp.c_str(),1,"tp","time");
-	    ctrMkNode("fld",opt,-1,"/mess/v_end",_("End"),0660,"root",grp.c_str(),1,"tp","time");
-	    ctrMkNode("fld",opt,-1,"/mess/v_cat",_("Category pattern"),0660,"root",grp.c_str(),1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/mess/v_lvl",_("Level"),0660,"root",grp.c_str(),3,"tp","dec","min","0","max","7");
+            ctrMkNode("fld",opt,-1,"/mess/tm",_("Time"),0660,"root",grp.c_str(),1,"tp","time");
+            ctrMkNode("fld",opt,-1,"/mess/size",_("Size"),0660,"root",grp.c_str(),1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/mess/cat",_("Category pattern"),0660,"root",grp.c_str(),1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/mess/lvl",_("Level"),0660,"root",grp.c_str(),3,"tp","dec","min","0","max","7");
 	    ctrMkNode("table",opt,-1,"/mess/mess",_("Messages"),0440,"root",grp.c_str());
 	    ctrMkNode("list",opt,-1,"/mess/mess/0",_("Time"),0440,"root",grp.c_str(),1,"tp","time");
 	    ctrMkNode("list",opt,-1,"/mess/mess/1",_("Category"),0440,"root",grp.c_str(),1,"tp","str");
@@ -1180,23 +1188,28 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
     {
 	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(m_cat_o);
 	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	m_cat_o = opt->text();
+    }
+    else if( a_path == "/mess/tm" )
+    {
+        if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )
+	{
+	    opt->setText(TBDS::genDBGet(nodePath()+"messTm","0",opt->attr("user")));
+	    if( !atoi(opt->text().c_str()) )    opt->setText(TSYS::int2str(time(NULL)));
+        }
+	if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )
+	    TBDS::genDBSet(nodePath()+"messTm",(atoi(opt->text().c_str())>=time(NULL))?"0":opt->text(),opt->attr("user"));
+    }
+    else if( a_path == "/mess/size" )
+    {
+	if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->setText(TBDS::genDBGet(nodePath()+"messSize","10",opt->attr("user")));
+	if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	TBDS::genDBSet(nodePath()+"messSize",opt->text(),opt->attr("user"));
     }    
-    else if( a_path == "/mess/v_beg" )
-    {
-	if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->setText(TBDS::genDBGet(nodePath()+"messBeg","0",opt->attr("user")));
-	if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	TBDS::genDBSet(nodePath()+"messBeg",opt->text(),opt->attr("user"));
-    }
-    else if( a_path == "/mess/v_end" )
-    {
-	if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->setText(TBDS::genDBGet(nodePath()+"messEnd","0",opt->attr("user")));
-	if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	TBDS::genDBSet(nodePath()+"messEnd",opt->text(),opt->attr("user"));
-    }
-    else if( a_path == "/mess/v_cat" )
+    else if( a_path == "/mess/cat" )
     {
 	if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->setText(TBDS::genDBGet(nodePath()+"messCat","",opt->attr("user")));
 	if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) ) 	TBDS::genDBSet(nodePath()+"messCat",opt->text(),opt->attr("user"));
     }
-    else if( a_path == "/mess/v_lvl" )
+    else if( a_path == "/mess/lvl" )
     {	
 	if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->setText(TBDS::genDBGet(nodePath()+"messLev","0",opt->attr("user")));
 	if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	TBDS::genDBSet(nodePath()+"messLev",opt->text(),opt->attr("user"));
@@ -1204,16 +1217,19 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
     else if( a_path == "/mess/mess" && run_st && ctrChkNode(opt,"get",0440,"root",grp.c_str()) )
     {
 	vector<TMess::SRec> rec;
-	get( atoi(TBDS::genDBGet(nodePath()+"messBeg","0",opt->attr("user")).c_str()), 
-	     atoi(TBDS::genDBGet(nodePath()+"messEnd","0",opt->attr("user")).c_str()), rec, 
-	     TBDS::genDBGet(nodePath()+"messCat","",opt->attr("user")), 
-	     atoi(TBDS::genDBGet(nodePath()+"messLev","0",opt->attr("user")).c_str()) );
+        time_t end = atoi(TBDS::genDBGet(nodePath()+"messTm","0",opt->attr("user")).c_str());
+	if( !end ) end = time(NULL);
+	time_t beg = end - atoi(TBDS::genDBGet(nodePath()+"messSize","10",opt->attr("user")).c_str());
+	string cat = TBDS::genDBGet(nodePath()+"messCat","",opt->attr("user"));
+	char   lev = atoi(TBDS::genDBGet(nodePath()+"messLev","0",opt->attr("user")).c_str());
+	
+	get( beg, end, rec, cat, lev );
 
 	XMLNode *n_tm   = ctrMkNode("list",opt,-1,"/mess/mess/0","",0440,"root",grp.c_str());
 	XMLNode *n_cat  = ctrMkNode("list",opt,-1,"/mess/mess/1","",0440,"root",grp.c_str());
 	XMLNode *n_lvl  = ctrMkNode("list",opt,-1,"/mess/mess/2","",0440,"root",grp.c_str());
 	XMLNode *n_mess = ctrMkNode("list",opt,-1,"/mess/mess/3","",0440,"root",grp.c_str());
-	for( int i_rec = 0; i_rec < rec.size(); i_rec++)
+	for( int i_rec = rec.size()-1; i_rec >= 0; i_rec-- )
 	{
 	    if(n_tm)	n_tm->childAdd("el")->setText(TSYS::int2str(rec[i_rec].time));
 	    if(n_cat)	n_cat->childAdd("el")->setText(rec[i_rec].categ);

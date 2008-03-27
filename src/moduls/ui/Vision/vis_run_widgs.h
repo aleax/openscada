@@ -39,7 +39,7 @@ namespace VISION
     
         public:
     	    //- Public methods -
-	    RunWdgView( const string &iwid, int ilevel, VisRun *mainWind, QWidget* parent = 0 );
+	    RunWdgView( const string &iwid, int ilevel, VisRun *mainWind, QWidget* parent = 0, Qt::WindowFlags f = 0 );
     	    ~RunWdgView( );
 
 	    string user( );
@@ -77,7 +77,7 @@ namespace VISION
     
         public:
     	    //- Public methods -
-	    RunPageView( const string &iwid, VisRun *mainWind, QWidget* parent = 0 );
+	    RunPageView( const string &iwid, VisRun *mainWind, QWidget* parent = 0, Qt::WindowFlags f = 0 );
     	    ~RunPageView( );
 	    
 	    float  xScale( bool full = false );

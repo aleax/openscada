@@ -36,8 +36,8 @@ using namespace VISION;
 //****************************************
 //* Shape widget view runtime mode       *
 //****************************************
-RunWdgView::RunWdgView( const string &iwid, int ilevel, VisRun *mainWind, QWidget* parent ) :
-    WdgView(iwid,ilevel,(QMainWindow*)mainWind,parent), reqtm(1)
+RunWdgView::RunWdgView( const string &iwid, int ilevel, VisRun *mainWind, QWidget* parent, Qt::WindowFlags f ) :
+    WdgView(iwid,ilevel,(QMainWindow*)mainWind,parent,f), reqtm(1)
 {
     int endElSt = iwid.rfind("/");
     if( endElSt == string::npos ) return;
@@ -172,6 +172,7 @@ bool RunWdgView::event( QEvent *event )
     string mod_ev;
     switch( event->type() )
     {
+	case QEvent::Paint:	return true;
 	case QEvent::KeyPress:
 	    mod_ev = "key_pres";
 	case QEvent::KeyRelease:
@@ -316,8 +317,8 @@ bool RunWdgView::event( QEvent *event )
 //****************************************
 //* Shape page view runtime mode         *
 //****************************************
-RunPageView::RunPageView( const string &iwid, VisRun *mainWind, QWidget* parent ) :
-    RunWdgView(iwid,0,mainWind,parent), wx_scale(1.0), wy_scale(1.0)
+RunPageView::RunPageView( const string &iwid, VisRun *mainWind, QWidget* parent, Qt::WindowFlags f ) :
+    RunWdgView(iwid,0,mainWind,parent,f), wx_scale(1.0), wy_scale(1.0)
 {
 
 }

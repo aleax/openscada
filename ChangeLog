@@ -1,3 +1,10 @@
+2008-03-27 Roman
+- !!:/DAQ/SoundCard: New module source tree is added. It's only module template, no one target functions is released now.
+- FIX:/Archive: Archive task made stop first and next archives archivators stop.
+- !!:/Archive: Message archivator's values access form is updated.
+- !!:/UI/Vision: Hide pages on time it loading and initing is made. On time loading is displayed messages about page loading.
+
+
 2008-03-26 Roman
 - !!:/SYS: RPM build spec file reviewed for support x86_64, several distribution tools and some bugs fixing into build system.
 - !!:/SYS: Some key variables shielding is fixed.

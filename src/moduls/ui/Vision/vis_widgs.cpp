@@ -599,11 +599,11 @@ void TextEdit::cancelSlot( )
 //****************************************
 //* Shape widget view                    *
 //****************************************
-WdgView::WdgView( const string &iwid, int ilevel, QMainWindow *mainWind, QWidget *parent ) :
-    QWidget(parent), idWidget(iwid), shape(NULL), w_level(ilevel), main_win(mainWind), 
+WdgView::WdgView( const string &iwid, int ilevel, QMainWindow *mainWind, QWidget *parent, Qt::WindowFlags f ) :
+    QWidget(parent,f), idWidget(iwid), shape(NULL), w_level(ilevel), main_win(mainWind), 
     x_scale(1.0), y_scale(1.0), z_coord(0), all_attr_load(false)
 {
-
+    //setAttribute(Qt::WA_OpaquePaintEvent,true);
 }
 
 WdgView::~WdgView( )
@@ -746,6 +746,7 @@ void WdgView::load( const string& item, bool load, bool init )
     	    if( wdg && (item.empty() || item == id() || wdg->id() == item.substr(0,wdg->id().size())) )
     		wdg->load((item==id())?"":item,false,true);
 	}
+	update();
 
 	//printf("TEST 02: Init '%s' time %fms\n",item.c_str(),1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk()));
     }
