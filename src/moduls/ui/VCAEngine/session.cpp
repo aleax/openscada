@@ -62,25 +62,32 @@ void Session::setEnable( bool val )
     
     vector<string> pg_ls;
 
+    printf("TEST 00: %s\n",id().c_str());
+
     if( val )
     {
-	//- Connect to project -
-	m_parent = mod->prjAt(m_prjnm);
+	try
+	{
+	    //- Connect to project -
+	    m_parent = mod->prjAt(m_prjnm);
 	
-	//- Create root pages -	
-	parent().at().list(pg_ls);
-	for( int i_p = 0; i_p < pg_ls.size(); i_p++ )
-	    if( !present(pg_ls[i_p]) )
-		add(pg_ls[i_p],parent().at().at(pg_ls[i_p]).at().path());
+	    //- Create root pages -	
+	    parent().at().list(pg_ls);
+	    for( int i_p = 0; i_p < pg_ls.size(); i_p++ )
+		if( !present(pg_ls[i_p]) )
+		    add(pg_ls[i_p],parent().at().at(pg_ls[i_p]).at().path());
     
-	//- Pages enable -
-	list(pg_ls);
-	for( int i_ls = 0; i_ls < pg_ls.size(); i_ls++ )
-    	    at(pg_ls[i_ls]).at().setEnable(true);
+	    //- Pages enable -
+	    list(pg_ls);
+	    for( int i_ls = 0; i_ls < pg_ls.size(); i_ls++ )
+    		at(pg_ls[i_ls]).at().setEnable(true);
+	}
+	catch(...){ m_parent.free(); }
     }
     else
     {
 	if( start() )	setStart(false);
+	
 	//- Pages disable -
 	list(pg_ls);
 	for( int i_ls = 0; i_ls < pg_ls.size(); i_ls++ )
@@ -89,7 +96,7 @@ void Session::setEnable( bool val )
 	//- Delete pages -
 	for( int i_ls = 0; i_ls < pg_ls.size(); i_ls++ )
     	    del(pg_ls[i_ls]);
-	    
+	
 	//- Disconnect from project -
 	m_parent.free();
     }
@@ -488,9 +495,9 @@ void SessPage::setEnable( bool val )
 
     if( !val )
     {
-	vector<string> pg_ls;        
+	vector<string> pg_ls;
 	//- Unregister opened page -
-	if( !(parent().at().prjFlags( )&Page::Empty) && attrAt("pgOpen").at().getB() ) 
+	if( !(parent().at().prjFlags( )&Page::Empty) && attrPresent("pgOpen") && attrAt("pgOpen").at().getB() ) 
 	    ownerSess()->openUnreg(path());
 	//- Disable include pages -
 	pageList(pg_ls);
