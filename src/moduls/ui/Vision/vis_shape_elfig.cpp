@@ -51,6 +51,8 @@ void ShapeElFigure::init( WdgView *w )
     w->dc()["inundationItems"].setValue( (void*)inundationItems );
     PntMap *pnts = new PntMap;
     w->dc()["shapePnts"].setValue( (void*)pnts );
+    
+    if( w->parentWidget() )	w->setPalette(w->parentWidget()->palette());
 }
 
 void ShapeElFigure::destroy( WdgView *w )

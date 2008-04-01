@@ -1,3 +1,9 @@
+2008-04-01 Roman
+- FIX:/SYS: RPM build spec file distributions conditions is fixed.
+- FIX:/Vision: Widgets palette is add for flicker reduce.
+- FIX:/Vision: Elements form crashed is fixed for views "ComboBox" and "QListWidget".
+
+
 2008-03-30 Roman
 - FIX:/DAQ/LogicLev: The configuration mirroring of parameters of controller its module to transport controller is fixed.
 - FIX:/UI/Vision: The session resource to project is made disable if enable error is appear.

@@ -410,7 +410,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    }
 	    case 4:	//Combo box
 	    {
-		if( !el_wdg || !qobject_cast<QPushButton*>(el_wdg) )
+		if( !el_wdg || !qobject_cast<QComboBox*>(el_wdg) )
 		{
 		    if( el_wdg ) delete el_wdg;
 		    el_wdg = new QComboBox(w);
@@ -430,7 +430,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    }
 	    case 5: 	//List
 	    {
-		if( !el_wdg || !qobject_cast<QPushButton*>(el_wdg) )
+		if( !el_wdg || !qobject_cast<QListWidget*>(el_wdg) )
 		{
 		    if( el_wdg ) delete el_wdg;
 		    el_wdg = new QListWidget(w);
@@ -691,7 +691,14 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    w->dc()["geomMargin"] = atoi(val.c_str());	up = true;
 	    break;
 	case 20: 	//backColor
-	    w->dc()["backColor"] = QColor(val.c_str());	up = true;	break;
+	{
+	    w->dc()["backColor"] = QColor(val.c_str());
+	    QPalette p(w->palette());
+	    p.setColor(QPalette::Background,w->dc()["backColor"].value<QColor>());
+	    w->setPalette(p);	    
+	    up = true;	    
+	    break;
+	}
 	case 21:	//backImg
 	{
 	    QImage img;	    
@@ -699,6 +706,9 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
 		w->dc()["backImg"] = QBrush(img);
 	    else w->dc()["backImg"] = QBrush();
+            QPalette p(w->palette());
+            p.setBrush(QPalette::Background,w->dc()["backImg"].value<QBrush>());
+            w->setPalette(p);
 	    up = true;
 	    break;
 	}
@@ -957,14 +967,23 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    w->layout()->setMargin( atoi(val.c_str()) );
 	    break;
 	case 20: 	//backColor
-	    w->dc()["backColor"] = QColor(val.c_str()); break;
+	{
+	    w->dc()["backColor"] = QColor(val.c_str());
+	    QPalette p(w->palette());
+	    p.setColor(QPalette::Background,w->dc()["backColor"].value<QColor>());
+	    w->setPalette(p);
+	    break;
+	}
 	case 21:	//backImg
 	{
 	    QImage img;
 	    string backimg = w->resGet(val);
 	    if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
 		w->dc()["backImg"] = QBrush(img);
-	    else w->dc()["backImg"] = QBrush();	    
+	    else w->dc()["backImg"] = QBrush();
+	    QPalette p(w->palette());
+	    p.setBrush(QPalette::Background,w->dc()["backImg"].value<QBrush>());
+	    w->setPalette(p);
 	    break;
 	}
 	case 22:	//bordWidth
@@ -1268,7 +1287,14 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	case 12:	//geomMargin
 	    w->dc()["geomMargin"] = atoi(val.c_str()); make_pct = true; break;
 	case 20:	//backColor
-	    w->dc()["backColor"] = QColor(val.c_str()); make_pct = true; break;
+	{
+	    w->dc()["backColor"] = QColor(val.c_str());
+	    QPalette p(w->palette());
+	    p.setColor(QPalette::Background,w->dc()["backColor"].value<QColor>());
+	    w->setPalette(p);
+	    make_pct = true;	    
+	    break;
+	}
 	case 21:	//backImg
 	{
 	    QImage img;
@@ -1276,6 +1302,9 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
 		w->dc()["backImg"] = QBrush(img);
 	    else w->dc()["backImg"] = QBrush();
+            QPalette p(w->palette());
+            p.setBrush(QPalette::Background,w->dc()["backImg"].value<QBrush>());
+            w->setPalette(p);
 	    break;
 	}
 	case 22:	//bordWidth
@@ -2491,8 +2520,13 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    if( w->layout() ) w->layout()->setMargin( w->dc()["geomMargin"].toInt() );
 	    break;
 	case 20: 	//backColor
+	{
 	    w->dc()["backColor"] = QColor(val.c_str());
+	    QPalette p(w->palette());
+	    p.setColor(QPalette::Background,w->dc()["backColor"].value<QColor>());
+	    w->setPalette(p);
 	    break;
+	}
 	case 21: 	//backImg
 	{
 	    QImage img;
@@ -2500,6 +2534,9 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
 		w->dc()["backImg"] = QBrush(img);
 	    else w->dc()["backImg"] = QBrush();
+	    QPalette p(w->palette());
+	    p.setBrush(QPalette::Background,w->dc()["backImg"].value<QBrush>());
+	    w->setPalette(p);
 	    break;
 	}
 	case 22:	//bordWidth

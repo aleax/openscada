@@ -12,13 +12,12 @@ URL: http://oscada.diyaorg.dp.ua
 #= Individual distributives seting =
 %if %_vendor == "alt"
 %set_verify_elf_method no
-%else %if %_vendor == "suse"
-%define _initdir /etc/init.d
-%define _desktopdir %_datadir/applications
-BuildRoot: %_tmppath/%name-%version-root
 %else
 %define _initdir /etc/init.d
 %define _desktopdir %_datadir/applications
+%endif
+%if %_vendor == "suse"
+BuildRoot: %_tmppath/%name-%version-root
 %endif
 
 %description

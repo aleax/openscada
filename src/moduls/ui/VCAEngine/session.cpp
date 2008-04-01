@@ -62,8 +62,6 @@ void Session::setEnable( bool val )
     
     vector<string> pg_ls;
 
-    printf("TEST 00: %s\n",id().c_str());
-
     if( val )
     {
 	try
