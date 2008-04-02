@@ -1,3 +1,8 @@
+2008-04-02 Roman
+- FIX:/DAQ/JavaLikeCalc: Translation to Ukrainian is fixed.
+- FIX:/DAQ/Vision: Configuration's attributes of attribute "value" of primitive "FormEl" copy is fixed on type changing.
+
+
 2008-04-01 Roman
 - FIX:/SYS: RPM build spec file distributions conditions is fixed.
 - FIX:/Vision: Widgets palette is add for flicker reduce.

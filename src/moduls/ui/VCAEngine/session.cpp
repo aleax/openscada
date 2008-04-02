@@ -944,7 +944,7 @@ void SessWdg::calc( bool first, bool last )
 		    obj_tp = TSYS::strSepParse(attr.at().cfgVal(),0,':')+":";
 		    if( obj_tp == "val:" )	attr.at().setS(attr.at().cfgVal().substr(obj_tp.size()));
 		    else if( obj_tp == "prm:" )
-		    {			
+		    {	
 			try{ vl = SYS->daq().at().nodeAt(attr.at().cfgVal(),0,0,obj_tp.size()); }
 			catch(TError err) { attr.at().setS(EVAL_STR); continue; }
 			

@@ -2057,7 +2057,7 @@ msgstr ""
 
 #: virtual.cpp:833
 msgid "2:Controller stoped"
-msgstr "2:Контролер не зупинено!"
+msgstr "2:Контролер зупинено!"
 
 #: virtual.cpp:834
 msgid "1:Parameter disabled"

@@ -313,6 +313,8 @@ bool OrigFormEl::attrChange( Attr &cfg, void *prev )
 	int 		flg = Attr::Mutable;
 	VCA::Attr::SelfAttrFlgs	sflg = cfg.owner()->attrAt("value").at().flgSelf();
 	string 		val = cfg.owner()->attrAt("value").at().getS();
+	string		cfgTmpl = cfg.owner()->attrAt("value").at().cfgTempl( );
+	string		cfgVal = cfg.owner()->attrAt("value").at().cfgVal( );
 	switch(cfg.getI())
 	{
 	    case 2: case 4:	ntp = TFld::Integer;	break;
@@ -324,6 +326,8 @@ bool OrigFormEl::attrChange( Attr &cfg, void *prev )
 	cfg.owner()->attrAdd( new TFld("value",_("Value"),ntp,flg,"200","","","","21"), apos );
 	cfg.owner()->attrAt("value").at().setFlgSelf(sflg);
 	cfg.owner()->attrAt("value").at().setS(val);
+	cfg.owner()->attrAt("value").at().setCfgTempl(cfgTmpl);
+	cfg.owner()->attrAt("value").at().setCfgVal(cfgVal);
     }
     
     return Widget::attrChange(cfg,prev);
