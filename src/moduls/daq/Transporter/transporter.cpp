@@ -191,6 +191,8 @@ void TMdContr::enable_( )
     vector<string> prm_ls;
     XMLNode req("list");
     
+    bool en_err = false;
+    
     //- Remote station scaning -
     for( int st_off = 0; (statv=TSYS::strSepParse(m_stations,0,'\n',&st_off)).size(); )
 	//- Controllers and parameters scaning -
@@ -209,9 +211,9 @@ void TMdContr::enable_( )
 		{
 		    //-- Get attributes list --
     		    req.clear()->setName("get")->setAttr("path",cntrpath+"%2fprm%2fprm");
-		    if( !mod->cntrIfCmd(req) )
-			for( int i_ch = 0; i_ch < req.childSize(); i_ch++ )
-			    prm_ls.push_back(req.childGet(i_ch)->attr("id"));
+		    if( mod->cntrIfCmd(req) || req.childSize() == 0 )	en_err = true;
+		    else for( int i_ch = 0; i_ch < req.childSize(); i_ch++ )
+			prm_ls.push_back(req.childGet(i_ch)->attr("id"));
 		}
 		else prm_ls.push_back(prmnm);
 		
@@ -222,7 +224,7 @@ void TMdContr::enable_( )
 		    {		    
 			//--- Parameter name request and make new parameter object ---
 			req.clear()->setName("get")->setAttr("path",cntrpath+prm_ls[i_p]+"/%2fprm%2fcfg%2fNAME");
-			if( mod->cntrIfCmd(req) )	continue;
+			if( mod->cntrIfCmd(req) ) { en_err = true; continue; }
 			add(prm_ls[i_p],owner().tpPrmToId("std"));
 			at(prm_ls[i_p]).at().setName(req.text());
 		    }
@@ -232,6 +234,8 @@ void TMdContr::enable_( )
 		    at(prm_ls[i_p]).at().load();
 		}
 	    }catch(TError err){ }
+
+    if( en_err ) throw TError(nodePath().c_str(),_("Some enable errors is present"));
 }
 
 void TMdContr::start_( )

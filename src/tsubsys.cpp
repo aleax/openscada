@@ -89,7 +89,12 @@ void TSubSYS::subLoad( )
     vector<string> list;
     modList(list);
     for(unsigned i_m=0; i_m < list.size(); i_m++)
-        modAt(list[i_m]).at().modLoad( ); 
+	try{ modAt(list[i_m]).at().modLoad( ); }
+	catch(TError err) 
+	{ 
+	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+	    mess_err(nodePath().c_str(),_("Load module '%s' is error."),list[i_m].c_str());
+	}
 }
 
 void TSubSYS::subSave( )
@@ -98,7 +103,12 @@ void TSubSYS::subSave( )
     vector<string> list;
     modList(list);
     for(unsigned i_m=0; i_m < list.size(); i_m++)
-	modAt(list[i_m]).at().modSave( );
+	try{ modAt(list[i_m]).at().modSave( ); }
+	catch(TError err) 
+	{ 
+	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+	    mess_err(nodePath().c_str(),_("Save module '%s' is error."),list[i_m].c_str());
+	}	
 }
 
 void TSubSYS::subStart( ) 
@@ -117,7 +127,10 @@ void TSubSYS::subStart( )
     for(unsigned i_m=0; i_m < list.size(); i_m++)
 	try{ modAt(list[i_m]).at().modStart( ); }
 	catch(TError err)
-        { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+        { 
+	    mess_err(err.cat.c_str(),"%s",err.mess.c_str()); 
+	    mess_err(nodePath().c_str(),_("Start module '%s' is error."),list[i_m].c_str());	    
+	}
 }
 
 void TSubSYS::subStop( ) 
@@ -126,7 +139,12 @@ void TSubSYS::subStop( )
     vector<string> list;
     modList(list);
     for(unsigned i_m=0; i_m < list.size(); i_m++)
-        modAt(list[i_m]).at().modStop( );
+	try{ modAt(list[i_m]).at().modStop( ); }
+	catch(TError err)
+        { 
+	    mess_err(err.cat.c_str(),"%s",err.mess.c_str()); 
+	    mess_err(nodePath().c_str(),_("Stop module '%s' is error."),list[i_m].c_str());
+	}	
 }		
 
 void TSubSYS::cntrCmdProc( XMLNode *opt )

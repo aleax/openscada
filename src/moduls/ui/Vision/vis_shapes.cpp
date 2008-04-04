@@ -1659,8 +1659,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		if( sclVer&0x2 )
 		{
 		    pnt.setPen(mrkPen);
-		    pnt.drawText(tAr.x()+2,v_pos-1+((i_v==vsMax)?mrkHeight:0),QString::number(i_v,'g',4));
-		    //pnt.drawText(tAr.x()-20,v_pos+((i_v==vsMin)?0:(i_v==vsMax)?10:5),QString::number(i_v,'g',4));
+		    pnt.drawText(tAr.x()+2,v_pos-1+((i_v==vsMax)?mrkHeight:0),QString::number(i_v,'g',4)+((vsPerc&&i_v==vsMax)?" %":""));
 		}
 	    }
 	}

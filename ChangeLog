@@ -1,3 +1,9 @@
+2008-04-04 Roman
+- FIX:/SubSYS: Breake the loading, saving, enabling modules if one module error make is fixed.
+- FIX:/DAQ/Transport: Zero remote controllers is get error. For loop controllers init on start.
+- /UI/Vision, /UI/WebVision: Symbol '%' is added to trend's percents scale.
+
+
 2008-04-02 Roman
 - FIX:/DAQ/JavaLikeCalc: Translation to Ukrainian is fixed.
 - FIX:/DAQ/Vision: Configuration's attributes of attribute "value" of primitive "FormEl" copy is fixed on type changing.

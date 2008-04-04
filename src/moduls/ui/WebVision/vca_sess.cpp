@@ -1116,7 +1116,7 @@ void VCADiagram::getReq( SSess &ses )
                 else gdImageLine(im,tArX-3,v_pos,tArX+3,v_pos,clr_grid);
                 //---- Draw markers ----
 		if( sclVer&0x2 )
-		    gdImageString(im,gdFontTiny,tArX+2,v_pos-((i_v==vsMax)?0:gdFontTiny->h),(unsigned char *)TSYS::real2str(i_v).c_str(),clr_mrk);
+		    gdImageString(im,gdFontTiny,tArX+2,v_pos-((i_v==vsMax)?0:gdFontTiny->h),(unsigned char *)(TSYS::real2str(i_v)+((vsPerc&&i_v==vsMax)?" %":"")).c_str(),clr_mrk);
             }
 	}
     }
