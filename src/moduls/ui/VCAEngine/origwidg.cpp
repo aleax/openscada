@@ -164,7 +164,6 @@ bool OrigElFigure::attrChange( Attr &cfg, void *prev )
 	    sscanf(sel.c_str(),"line:%d:%d",&p[0],&p[1]) || 
 	    sscanf(sel.c_str(),"arc:%d:%d:%d:%d:%d",&p[0],&p[1],&p[2],&p[3],&p[4]) ||
 	    sscanf(sel.c_str(),"bezier:%d:%d:%d:%d",&p[0],&p[1],&p[2],&p[3]);
-            sscanf(sel.c_str(),"fill:%d",&p[0]);
 	    for( int i_p = 0; i_p < sizeof(p)/sizeof(int); i_p++ ) 
 		if( p[i_p]>=0 ) pntls_prev.push_back(p[i_p]);
 	}
@@ -175,7 +174,6 @@ bool OrigElFigure::attrChange( Attr &cfg, void *prev )
 	    sscanf(sel.c_str(),"line:%d:%d",&p[0],&p[1]) || 
 	    sscanf(sel.c_str(),"arc:%d:%d:%d:%d:%d",&p[0],&p[1],&p[2],&p[3],&p[4]) ||
 	    sscanf(sel.c_str(),"bezier:%d:%d:%d:%d",&p[0],&p[1],&p[2],&p[3]);
-            sscanf(sel.c_str(),"fill:%d",&p[0]);
 	    for( int i_p = 0; i_p < sizeof(p)/sizeof(int); i_p++ )
 		if( p[i_p] >= 0 )
 		{		    

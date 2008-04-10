@@ -114,11 +114,12 @@ class InundationItem
 {
     public:
         InundationItem( )	{ }
-        InundationItem(Point center, int color) : P_center(center), P_color(color)
+        InundationItem(vector <int> inumber_point, int color) : number_point(inumber_point), P_color(color)
                      { };								
 
                     
-                     Point		P_center;
+                     //Point		P_center;
+                     vector <int>  number_point;
                      int		P_color;
 
 }; 			
@@ -133,6 +134,9 @@ class VCAElFigure : public VCAObj
 	void postReq( SSess &ses );
 	void setAttrs( XMLNode &node, const string &user );
         
+        bool line_intersect(double x1, double y1, double x2, double y2,
+                                         double x3, double y3, double x4, double y4);
+        Point line_intersect_point(Point pt1, Point pt2, Point pt3, Point pt4);
         double Angle(const Point p1,const Point p2,const Point p3,const Point p4);
         double Length(const Point pt1, const Point pt2);
         Point ARC(double t,double a,double b);
@@ -142,7 +146,7 @@ class VCAElFigure : public VCAObj
         double Bezier_DeltaT(Point p1,Point p2, Point p3, Point p4);
         double ABS(double var);
         void Paint_Figure( gdImage* im,ShapeItem item, double xScale, double yScale );
-        void Paint_Fill( gdImage* im, InundationItem in_item, double xScale, double yScale );
+        void Paint_Fill( gdImage* im, Point pnt, InundationItem in_item );
         Point unscale_unrotate(Point point, double xScale, double yScale, bool flag_scale);
         Point scale_rotate(Point point, double xScale, double yScale, bool flag_scale);
  	//Attributes

@@ -84,8 +84,8 @@ class InundationItem
     public:
         //Methods
         InundationItem( )	{ }
-        InundationItem( const QPainterPath &ipath, const QBrush &ibrush, QBrush &ibrush_img, const QVector <int> inumber_shape, int inumber_pnt ) : 
-                        brush(ibrush),brush_img(ibrush_img), path(ipath), number_shape(inumber_shape), number_pnt(inumber_pnt)
+        InundationItem( const QPainterPath &ipath, const QBrush &ibrush, QBrush &ibrush_img, const QVector <int> inumber_shape/*, int inumber_pnt*/ ) : 
+                        brush(ibrush),brush_img(ibrush_img), path(ipath), number_shape(inumber_shape)//, number_pnt(inumber_pnt)
         { };
 
         //Attributes
@@ -93,7 +93,7 @@ class InundationItem
         QBrush         brush,brush_img;
         QVector <int>  number_shape;
         QString        img_nm;
-        int            number_pnt;
+        //int            number_pnt;
 };
 
 

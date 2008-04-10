@@ -389,10 +389,18 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
             
             if( el == "fill" )
             {
+                int zero_pnts = 0;
+                string fl_color, fl_img;
                 QVector <int> fl_pnts;
-                int fl_pnt=atoi(TSYS::strSepParse(sel,1,':').c_str());
-                string fl_color=TSYS::strSepParse(sel,2,':');
-                string fl_img=TSYS::strSepParse(sel,3,':');
+                while( true )
+                {
+                    string svl = TSYS::strSepParse(sel,0,':',&el_off);
+                    int vl = atoi(svl.c_str());
+                    if( vl ) fl_pnts.push_back(vl);
+                    else if( zero_pnts == 0 ) { fl_color = svl; zero_pnts++; }
+                    else if( zero_pnts == 1 ) { fl_img = svl; zero_pnts++; }
+                    else break;
+                }
                 //- Check fill color -
                 QColor color(fl_color.c_str());
                 color.setAlpha(255);
@@ -405,7 +413,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
 		    brsh.setTextureImage(img);
                 //- Make elements -
-                inundationItems.push_back(InundationItem(newPath,color,brsh, fl_pnts, fl_pnt));
+                inundationItems.push_back(InundationItem(newPath,color,brsh, fl_pnts/*, fl_pnt*/));
             }
         }
         for (int i=0; i<shapeItems_temp.size(); i++)
@@ -455,58 +463,71 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
         //-Building fills-
         if(shapeItems.size())
         {
-            //-Building fills in unscaled and unrotated style-
-            for(int k=0; k<inundationItems.size(); k++)
+            for(int i=0; i<inundationItems.size(); i++)
             {
-                flag_scale_rotate=false;
-                if(Inundation_1_2(scale_rotate((*pnts)[inundationItems[k].number_pnt],w,flag_scale_rotate), shapeItems, inundationItems, pnts, w, k))
+                if(inundationItems[i].number_shape.size()>2)
                 {
-                    fl_brk=false;
-                    if(InundationPath!=newPath)
-                        for(int i=0; i<inundationItems.size(); i++)
-                            if (inundationItems[i].path == InundationPath)
-                    {
-                        fl_brk=true;
-                        break;
-                    }
-                    if(!fl_brk)
-                    {
-                        inundationItems[k].path=InundationPath;
-                        inundationItems[k].number_shape=Inundation_vector;
-                    }
-                }
-                else
-                {
-                    if(Build_Matrix(shapeItems)!=2)
-                    {
-                        fl_brk=false;
-                        Inundation (scale_rotate((*pnts)[inundationItems[k].number_pnt],w,flag_scale_rotate), shapeItems, pnts, vect, Build_Matrix(shapeItems), w);
-                        if(InundationPath!=newPath)
+                    for(int k=0; k<inundationItems[i].number_shape.size()-1; k++)
+                        for(int j=0; j<shapeItems.size(); j++)
+                            if((shapeItems[j].n1==inundationItems[i].number_shape[k] && shapeItems[j].n2==inundationItems[i].number_shape[k+1]) ||
+                                (shapeItems[j].n1==inundationItems[i].number_shape[k+1] && shapeItems[j].n2==inundationItems[i].number_shape[k]) )
+                            {
+                                flag_push_back=true;
+                                for(int p=0; p<inundation_fig_num.size(); p++)
+                                    if((shapeItems[inundation_fig_num[p]].n1==shapeItems[j].n1 && shapeItems[inundation_fig_num[p]].n2==shapeItems[j].n2) ||
+                                        (shapeItems[inundation_fig_num[p]].n1==shapeItems[j].n2 && shapeItems[inundation_fig_num[p]].n2==shapeItems[j].n1))
+                                    {
+                                        flag_push_back=false;
+                                        if((shapeItems[inundation_fig_num[p]].type==2 && shapeItems[j].type==1) && (inundation_fig_num[p]!=j))
+                                            inundation_fig_num[p]=j;
+                                        if((shapeItems[inundation_fig_num[p]].type==3 && shapeItems[j].type==1) && (inundation_fig_num[p]!=j))
+                                            inundation_fig_num[p]=j;
+                                        if((shapeItems[inundation_fig_num[p]].type==2 && shapeItems[j].type==3) && (inundation_fig_num[p]!=j))
+                                        inundation_fig_num[p]=j;
+                                    }
+                                if (flag_push_back)
+                                    inundation_fig_num.push_back(j);
+                            }
+                    for(int j=0; j<shapeItems.size(); j++)
+                        if((shapeItems[j].n1==inundationItems[i].number_shape[inundationItems[i].number_shape.size()-1] && shapeItems[j].n2==inundationItems[i].number_shape[0]) ||
+                            (shapeItems[j].n1==inundationItems[i].number_shape[0] && shapeItems[j].n2==inundationItems[i].number_shape[inundationItems[i].number_shape.size()-1]) )
                         {
-                            for(int i=0; i<inundationItems.size(); i++)
-                                if (inundationItems[i].path == InundationPath)
-                            {
-                                fl_brk=true;
-                                break;
-                            }
-                            if(!fl_brk)
-                            {
-                                inundationItems[k].path=InundationPath;
-                                inundationItems[k].number_shape=Inundation_vector;
-                            }
+                            flag_push_back=true;
+                            for(int p=0; p<inundation_fig_num.size(); p++)
+                                if((shapeItems[inundation_fig_num[p]].n1==shapeItems[j].n1 && shapeItems[inundation_fig_num[p]].n2==shapeItems[j].n2) ||
+                                (shapeItems[inundation_fig_num[p]].n1==shapeItems[j].n2 && shapeItems[inundation_fig_num[p]].n2==shapeItems[j].n1))
+                                {
+                                    flag_push_back=false;
+                                    if((shapeItems[inundation_fig_num[p]].type==2 && shapeItems[j].type==1) && (inundation_fig_num[p]!=j))
+                                        inundation_fig_num[p]=j;
+                                    if((shapeItems[inundation_fig_num[p]].type==3 && shapeItems[j].type==1) && (inundation_fig_num[p]!=j))
+                                        inundation_fig_num[p]=j;
+                                    if((shapeItems[inundation_fig_num[p]].type==2 && shapeItems[j].type==3) && (inundation_fig_num[p]!=j))
+                                        inundation_fig_num[p]=j;
+                                }
+                                if (flag_push_back)
+                                    inundation_fig_num.push_back(j);
                         }
-                    }
-                    if(Inundation_vector.size())
-                        Inundation_vector.clear();
-                    if(vect.size())
-                        vect.clear();
-                    if(map_matrix.size())
-                        map_matrix.clear();
+                    QPainterPath temp_path=Create_Inundation_Path(inundation_fig_num, shapeItems, pnts,w);
+                    inundation_fig_num=Inundation_sort(temp_path, inundation_fig_num, shapeItems, pnts, w);
+                    inundationItems[i].path=Create_Inundation_Path(inundation_fig_num, shapeItems, pnts,w);
+                    inundationItems[i].number_shape=inundation_fig_num;
+                    if(inundation_fig_num.size()>inundationItems[inundationItems.size()-1].number_shape.size()) 
+                        inundationItems[inundationItems.size()-1].path=newPath;
                 }
-                flag_scale_rotate=true;
-                //-Changing the path for each fill to the scaled and rotated one-
-                if(inundationItems[k].number_shape.size())
-                    inundationItems[k].path=Create_Inundation_Path (inundationItems[k].number_shape, shapeItems, pnts,w );
+                if(inundationItems[i].number_shape.size()==2)
+                {
+                    for(int j=0; j<shapeItems.size(); j++)
+                    {
+                        if((shapeItems[j].n1 == inundationItems[i].number_shape[0] && shapeItems[j].n2 == inundationItems[i].number_shape[1]) ||
+                            (shapeItems[j].n1 == inundationItems[i].number_shape[1] && shapeItems[j].n2 == inundationItems[i].number_shape[0]))
+                            inundation_fig_num.push_back(j);
+                        if (inundation_fig_num.size()==2) break;
+                    }
+                    inundationItems[i].path=Create_Inundation_Path(inundation_fig_num, shapeItems, pnts,w);
+                    inundationItems[i].number_shape=inundation_fig_num;
+                }
+                inundation_fig_num.clear();
             }
         }
         itemInMotion=0;
@@ -571,201 +592,63 @@ bool ShapeElFigure::shapeSave( WdgView *w )
         QVector <int> temp;
         int index_element=-1;
         bool flag_for_break=false;
-        for(int j=0; j<inundationItems[i].number_shape.size(); j++)
-        {
-            if(flag_for_break)
-                break;
-            if(inundationItems[i].number_shape.size()==1)
+            elList+="fill:";
+            
+            for(int k=0; k<inundationItems[i].number_shape.size()-1; k++)
             {
-                (*pnts)[inundationItems[i].number_pnt]=(*pnts)[shapeItems[inundationItems[i].number_shape[0]].n3];
-                exist_fill=true;
-            }
-            double ang;
-            QPointF pt;
-            bool cnt_pnt=false;
-            QLineF line2=QLineF(scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[j]].n1],w,flag_scale_rotate),QPointF(scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[j]].n1],w,flag_scale_rotate).x()+10,scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[j]].n1],w,flag_scale_rotate).y()));
-            QLineF line1=QLineF(scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[j]].n1],w,flag_scale_rotate),scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[j]].n2],w,flag_scale_rotate));
-            if( scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[j]].n1],w,flag_scale_rotate).y()<=scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[j]].n2],w,flag_scale_rotate).y() ) ang=360-Angle(line1,line2);
-            else ang=Angle(line1,line2);
-            double t=0.1;
-            do
-            {
-                if (shapeItems[inundationItems[i].number_shape[j]].type==1)
-                    pt=painter_path_simple(1, ang, scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[j]].n1],w,flag_scale_rotate), scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[j]].n2],w,flag_scale_rotate)).pointAtPercent(t);
-                if (shapeItems[inundationItems[i].number_shape[j]].type==3)
-                    pt=painter_path_simple(3, ang, scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[j]].n1],w,flag_scale_rotate), scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[j]].n2],w,flag_scale_rotate),
-                                           scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[j]].n3],w,flag_scale_rotate),scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[j]].n4],w,flag_scale_rotate)).pointAtPercent(t);
-                pt=UNROTATE(pt,ang,
-                            scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[j]].n1],w,flag_scale_rotate).x(),
-                            scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[j]].n1],w,flag_scale_rotate).y());
-                QPointF pt1=QPointF(scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[j]].n1],w,flag_scale_rotate).x()+ROTATE(QPointF(pt.x(),pt.y()+2+
-                        shapeItems[inundationItems[i].number_shape[j]].width/2+shapeItems[inundationItems[i].number_shape[j]].border_width),ang).x(),
-                        scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[j]].n1],w,flag_scale_rotate).y()-ROTATE(QPointF(pt.x(),pt.y()+2+
-                                shapeItems[inundationItems[i].number_shape[j]].width/2+shapeItems[inundationItems[i].number_shape[j]].border_width),ang).y());
-                for(int z=0; z<inundationItems[i].number_shape.size(); z++)
-                {
-                    if (z!=j)
-                    {   
-                        QPainterPath path_rect=newPath;
-                        double ang_1;
-                        int k=inundationItems[i].number_shape[z];
-                        if(shapeItems[k].type==2)
+                if(inundationItems[i].number_shape.size()>2)
+                    if(k==0)
+                    {
+                        if(shapeItems[inundationItems[i].number_shape[k]].n1==shapeItems[inundationItems[i].number_shape[k+1]].n1)
                         {
-                            QLineF line2=QLineF(scale_rotate((*pnts)[shapeItems[k].n3],w,flag_scale_rotate) ,QPointF(scale_rotate((*pnts)[shapeItems[k].n3],w,flag_scale_rotate).x()+10,scale_rotate((*pnts)[shapeItems[k].n3],w,flag_scale_rotate).y()));
-                            QLineF line1=QLineF( scale_rotate((*pnts)[shapeItems[k].n3],w, flag_scale_rotate),scale_rotate((*pnts)[shapeItems[k].n5],w,flag_scale_rotate));
-                            if (scale_rotate((*pnts)[shapeItems[k].n5],w,flag_scale_rotate).y()<=scale_rotate((*pnts)[shapeItems[k].n3],w,flag_scale_rotate).y()) ang_1=Angle(line1,line2);
-                            else ang_1=360-Angle(line1,line2);
+                            elList+=TSYS::int2str(shapeItems[inundationItems[i].number_shape[k]].n2)+":";
+                            elList+=TSYS::int2str(shapeItems[inundationItems[i].number_shape[k]].n1)+":";
                         }
                         else
                         {
-                            QLineF line2=QLineF(scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate),QPointF(scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).x()+10,scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y()));
-                            QLineF line1=QLineF(scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate),scale_rotate((*pnts)[shapeItems[k].n2],w,flag_scale_rotate));
-                            if( scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y()<=scale_rotate((*pnts)[shapeItems[k].n2],w,flag_scale_rotate).y() ) ang_1=360-Angle(line1,line2);
-                            else ang_1=Angle(line1,line2);
+                            elList+=TSYS::int2str(shapeItems[inundationItems[i].number_shape[k]].n1)+":";
+                            elList+=TSYS::int2str(shapeItems[inundationItems[i].number_shape[k]].n2)+":";
                         }
-                        if(shapeItems[k].type==1)
-                        {
-                            QPointF point_1, point_2;
-                            point_1=UNROTATE(scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate),ang_1,
-                                             scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).x(),
-                                             scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y());
-                            point_2=UNROTATE(scale_rotate((*pnts)[shapeItems[k].n2],w,flag_scale_rotate),ang_1,
-                                             scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).x(),
-                                             scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y());
-                            point_1.setX(point_1.x()-shapeItems[k].border_width);
-                            point_2.setX(point_2.x()+shapeItems[k].border_width);
-                            point_1=QPointF(scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).x() + ROTATE(point_1, ang_1).x(),
-                                            scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y() - ROTATE(point_1, ang_1).y());
-                            point_2=QPointF(scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).x()+ ROTATE(point_2, ang_1).x(), 
-                                            scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y() -ROTATE(point_2, ang_1).y());
-                            path_rect=painter_path(shapeItems[k].width+shapeItems[k].border_width*2,1.0,1, ang_1, point_1, point_2 );
-                        }
-                        else if(shapeItems[k].type==3)
-                        {
-                            QPointF point_1, point_2;
-                            point_1=UNROTATE(scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate),ang_1,
-                                             scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).x(),
-                                             scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y());
-                            point_2=UNROTATE(scale_rotate((*pnts)[shapeItems[k].n2],w,flag_scale_rotate),ang_1,
-                                             scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).x(),
-                                             scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y());
-                            point_1.setX(point_1.x()-shapeItems[k].border_width);
-                            point_2.setX(point_2.x()+shapeItems[k].border_width);
-                            point_1=QPointF(scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).x() + ROTATE(point_1, ang_1).x(),
-                                            scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y() - ROTATE(point_1, ang_1).y());
-                            point_2=QPointF(scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).x()+ ROTATE(point_2, ang_1).x(), 
-                                            scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y() -ROTATE(point_2, ang_1).y());
-                            path_rect=painter_path(shapeItems[k].width+shapeItems[k].border_width*2,1.0,3, ang_1, point_1, point_2, (*pnts)[shapeItems[k].n3], (*pnts)[shapeItems[k].n4] );
-                        }
-                        else if(shapeItems[k].type==2)
-                        {
-                            path_rect=painter_path(shapeItems[k].width+shapeItems[k].border_width*2,1.0,2, ang_1,
-                                    scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate),
-                                    scale_rotate((*pnts)[shapeItems[k].n2],w,flag_scale_rotate),
-                                    scale_rotate((*pnts)[shapeItems[k].n3],w,flag_scale_rotate), 
-                                    scale_rotate((*pnts)[shapeItems[k].n4],w,flag_scale_rotate), 
-                                    scale_rotate((*pnts)[shapeItems[k].n5],w,flag_scale_rotate),shapeItems[k].ctrlPos4);
-                        }
-                        if(path_rect.contains(pt1) || shapeItems[k].path.contains(pt1))
-                            cnt_pnt=true;
+                        temp.push_back(shapeItems[inundationItems[i].number_shape[k]].n1);
+                        temp.push_back(shapeItems[inundationItems[i].number_shape[k]].n2);
                     }
-                }
-                if (inundationItems[i].path.contains(pt1) && !cnt_pnt) 
-                {
-                    (*pnts)[inundationItems[i].number_pnt]=unscale_unrotate(pt1,w,flag_scale_rotate);
-                    exist_fill=true;
-                    flag_for_break=true;
-                    break;
-                }
-                else
-                {
-                    cnt_pnt=false;
-                    pt1=QPointF(scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[0]].n1],w,flag_scale_rotate).x()+ROTATE(QPointF(pt.x(),pt.y()-2-
-                            shapeItems[inundationItems[i].number_shape[0]].width/2-shapeItems[inundationItems[i].number_shape[0]].border_width),ang).x(),
-                            scale_rotate((*pnts)[shapeItems[inundationItems[i].number_shape[0]].n1],w,flag_scale_rotate).y()-ROTATE(QPointF(pt.x(),pt.y()-2-
-                                    shapeItems[inundationItems[i].number_shape[0]].width/2-shapeItems[inundationItems[i].number_shape[0]].border_width),ang).y());
-                    for(int z=0; z<inundationItems[i].number_shape.size(); z++)
+                    else
                     {
-                        if (z!=j)
+                        for(int p=0; p<temp.size(); p++)
                         {
-                            QPainterPath path_rect=newPath;
-                            double ang_1;
-                            int k=inundationItems[i].number_shape[z];
-                            QLineF line2=QLineF(scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate),
-                                                QPointF(scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).x()+10,scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y()));
-                            QLineF line1=QLineF(scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate),scale_rotate((*pnts)[shapeItems[k].n2],w,flag_scale_rotate));
-                            if( scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y()<=scale_rotate((*pnts)[shapeItems[k].n2],w,flag_scale_rotate).y() ) ang_1=360-Angle(line1,line2);
-                            else ang_1=Angle(line1,line2);
-                            if(shapeItems[k].type==1)
+                            if(shapeItems[inundationItems[i].number_shape[k]].n1==temp[p])
                             {
-                                QPointF point_1, point_2;
-                                point_1=UNROTATE(scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate),ang_1,
-                                                scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).x(),
-                                                scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y());
-                                point_2=UNROTATE(scale_rotate((*pnts)[shapeItems[k].n2],w,flag_scale_rotate),ang_1,
-                                                scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).x(),
-                                                scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y());
-                                point_1.setX(point_1.x()-shapeItems[k].border_width);
-                                point_2.setX(point_2.x()+shapeItems[k].border_width);
-                                point_1=QPointF(scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).x() + ROTATE(point_1, ang_1).x(),
-                                                scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y() - ROTATE(point_1, ang_1).y());
-                                point_2=QPointF(scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).x()+ ROTATE(point_2, ang_1).x(), 
-                                                scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y() -ROTATE(point_2, ang_1).y());
-                                path_rect=painter_path(shapeItems[k].width+shapeItems[k].border_width*2,1.0,1, ang_1, point_1, point_2 );
+                                flag_n1=true;
+                                flag_n2=false;
+                                break;
                             }
-                            else if(shapeItems[k].type==3)
+                            else
                             {
-                                QPointF point_1, point_2;
-                                point_1=UNROTATE(scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate),ang_1,
-                                                scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).x(),
-                                                scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y());
-                                point_2=UNROTATE(scale_rotate((*pnts)[shapeItems[k].n2],w,flag_scale_rotate),ang_1,
-                                                scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).x(),
-                                                scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y());
-                                point_1.setX(point_1.x()-shapeItems[k].border_width);
-                                point_2.setX(point_2.x()+shapeItems[k].border_width);
-                                point_1=QPointF(scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).x() + ROTATE(point_1, ang_1).x(),
-                                                scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y() - ROTATE(point_1, ang_1).y());
-                                point_2=QPointF(scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).x()+ ROTATE(point_2, ang_1).x(), 
-                                                scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate).y() -ROTATE(point_2, ang_1).y());
-                                path_rect=painter_path(shapeItems[k].width+shapeItems[k].border_width*2,1.0,3, ang_1, point_1, point_2, 
-                                                       scale_rotate((*pnts)[shapeItems[k].n3],w,flag_scale_rotate), scale_rotate((*pnts)[shapeItems[k].n4],w,flag_scale_rotate) );
+                                flag_n2=true;
+                                flag_n1=false;
                             }
-                            else if(shapeItems[k].type==2)
-                            {
-                                path_rect=painter_path(shapeItems[k].width+shapeItems[k].border_width*2,1.0,2, ang_1,
-                                        scale_rotate((*pnts)[shapeItems[k].n1],w,flag_scale_rotate),
-                                        scale_rotate((*pnts)[shapeItems[k].n2],w,flag_scale_rotate), 
-                                        scale_rotate((*pnts)[shapeItems[k].n3],w,flag_scale_rotate), 
-                                        scale_rotate((*pnts)[shapeItems[k].n4],w,flag_scale_rotate),
-                                        scale_rotate((*pnts)[shapeItems[k].n5],w,flag_scale_rotate),shapeItems[k].ctrlPos4);
-                            }
-                            if(path_rect.contains(pt1) || shapeItems[k].path.contains(pt1))
-                                cnt_pnt=true;
+                        }
+                            
+                        if(flag_n1 && temp.size()<inundationItems[i].number_shape.size())
+                        {
+                            elList+=TSYS::int2str(shapeItems[inundationItems[i].number_shape[k]].n2)+":";
+                            temp.push_back(shapeItems[inundationItems[i].number_shape[k]].n2);
+                        }
+                        if(flag_n2 && temp.size()<inundationItems[i].number_shape.size())
+                        {
+                            elList+=TSYS::int2str(shapeItems[inundationItems[i].number_shape[k]].n1)+":";
+                            temp.push_back(shapeItems[inundationItems[i].number_shape[k]].n1);
                         }
                     }
-                    if (inundationItems[i].path.contains(pt1) && !cnt_pnt) 
-                    {
-                        (*pnts)[inundationItems[i].number_pnt]=unscale_unrotate(pt1,w,flag_scale_rotate);
-                        exist_fill=true;
-                        flag_for_break=true;
-                        break;
-                    }
-
-                }
-                t+=0.05;
             }
-            while(t<1);
-        }
-        if(!exist_fill)
-            inundationItems.remove(i);
-        else
-        {
-            elList+="fill:";
-            elList+=TSYS::int2str(inundationItems[i].number_pnt)+":";
+            if(inundationItems[i].number_shape.size()<=2)
+            {
+                elList+=TSYS::int2str(shapeItems[inundationItems[i].number_shape[0]].n1)+":";
+                elList+=TSYS::int2str(shapeItems[inundationItems[i].number_shape[0]].n2)+":";
+            }
             elList+=((inundationItems[i].brush.color().name() == w->dc()["fillClr"].value<QColor>().name())?"":inundationItems[i].brush.color().name().toAscii().data());
             elList+="\n";
-        }
+        
 
     }
         w->attrSet( "elLst", elList );
@@ -1066,7 +949,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
             QMouseEvent *ev = static_cast<QMouseEvent*>(event); 
             DevelWdgView *devW = qobject_cast<DevelWdgView*>(view);
             RunWdgView   *runW = qobject_cast<RunWdgView*>(view);
-            QPointF db_point=ev->pos();
+            //QPointF db_point=ev->pos();
             if (devW)
             {
                 if (!flag_down && !flag_up && !flag_left && !flag_right)
@@ -1095,8 +978,8 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                             break;
                                         }
                                     if(!fl_brk)
-                                        inundationItems.push_back(InundationItem(InundationPath,fill_brush,fill_img_brush, Inundation_vector,
-                                                                Append_Point( db_point, shapeItems, pnts )));
+                                        inundationItems.push_back(InundationItem(InundationPath,fill_brush,fill_img_brush, Inundation_vector
+                                                                /*Append_Point( db_point, shapeItems, pnts )*/));
                                 }
                             }
                             Inundation_vector.clear();
@@ -3159,8 +3042,10 @@ QPainterPath ShapeElFigure::painter_path(float el_width, float el_border_width, 
     //-- if arc --
     if(el_type==2)
     {
-        arc_a=Length(el_p5,el_p3);
-        arc_b=Length(el_p3,el_p4);
+        arc_a=Length(el_p5,el_p3)+el_width/2+el_border_width/2;
+        arc_b=Length(el_p3,el_p4)+el_width/2+el_border_width/2;
+        
+        //-el_width-el_border_width;
         
         arc_a_small=arc_a-el_width-el_border_width;
         arc_b_small=arc_b-el_width-el_border_width;
@@ -3463,7 +3348,7 @@ QVector <int> ShapeElFigure::Inundation_sort(QPainterPath InundationPath, QVecto
     return inundation_fig_num;
 }
 
-//- detecting the figures, which count <=2 for fill -
+//- detecting the figures, which count <=2, for filling -
 bool ShapeElFigure::Inundation_1_2(QPointF point, QVector <ShapeItem> &shapeItems, QVector <InundationItem> &inundationItems,  PntMap *pnts, WdgView *view, int number)
 {
     QPainterPath InundationPath_1_2;
@@ -3496,7 +3381,7 @@ bool ShapeElFigure::Inundation_1_2(QPointF point, QVector <ShapeItem> &shapeItem
                 if(!fl_brk)
                 {
                     if(number==-1)
-                        inundationItems.push_back(InundationItem(InundationPath_1_2, fill_brush, fill_img_brush, in_fig_num,Append_Point( point, shapeItems, pnts )));
+                        inundationItems.push_back(InundationItem(InundationPath_1_2, fill_brush, fill_img_brush, in_fig_num/*,Append_Point( point, shapeItems, pnts )*/));
                     else
                     {
                         if(!flag_scale_rotate)
@@ -3510,7 +3395,6 @@ bool ShapeElFigure::Inundation_1_2(QPointF point, QVector <ShapeItem> &shapeItem
                             inundationItems[number].number_shape=in_fig_num;
                         }
                     }
-                        
                     flag_break=true;
                 }
             }
@@ -3527,40 +3411,40 @@ bool ShapeElFigure::Inundation_1_2(QPointF point, QVector <ShapeItem> &shapeItem
                 if(i!=j)
                     if((shapeItems[i].n1 == shapeItems[j].n1 && shapeItems[i].n2 == shapeItems[j].n2) ||
                         (shapeItems[i].n1 == shapeItems[j].n2 && shapeItems[i].n2 == shapeItems[j].n1))
-                {
-                    in_fig_num.push_back(i);
-                    in_fig_num.push_back(j);
-                    InundationPath_1_2=Create_Inundation_Path(in_fig_num, shapeItems, pnts,view);
-                    if(InundationPath_1_2.contains(point))
                     {
-                        for(int i=0; i<inundationItems.size(); i++)
-                            if (inundationItems[i].path == InundationPath_1_2)
+                        in_fig_num.push_back(i);
+                        in_fig_num.push_back(j);
+                        InundationPath_1_2=Create_Inundation_Path(in_fig_num, shapeItems, pnts,view);
+                        if(InundationPath_1_2.contains(point))
                         {
-                            inundationItems.remove(i);
-                            fl_brk=true;
-                            break;
-                        }
-                        if(!fl_brk)
-                        {
-                            if(number==-1)
-                                inundationItems.push_back(InundationItem(InundationPath_1_2, fill_brush, fill_img_brush, in_fig_num,Append_Point( point, shapeItems, pnts )));
-                            else
-                            {
-                                if(!flag_scale_rotate)
+                            for(int i=0; i<inundationItems.size(); i++)
+                                if (inundationItems[i].path == InundationPath_1_2)
                                 {
-                                    Inundation_vector=in_fig_num;
-                                    InundationPath=InundationPath_1_2;
+                                    inundationItems.remove(i);
+                                    fl_brk=true;
+                                    break;
                                 }
+                            if(!fl_brk)
+                            {
+                                if(number==-1)
+                                    inundationItems.push_back(InundationItem(InundationPath_1_2, fill_brush, fill_img_brush, in_fig_num/*,Append_Point( point, shapeItems, pnts )*/));
                                 else
                                 {
-                                    inundationItems[number].path=InundationPath_1_2;
-                                    inundationItems[number].number_shape=in_fig_num;
+                                    if(!flag_scale_rotate)
+                                    {
+                                        Inundation_vector=in_fig_num;
+                                        InundationPath=InundationPath_1_2;
+                                    }
+                                    else
+                                    {
+                                        inundationItems[number].path=InundationPath_1_2;
+                                        inundationItems[number].number_shape=in_fig_num;
+                                    }
                                 }
+                                flag_break=true;
                             }
-                            flag_break=true;
                         }
                     }
-                }
                 if(flag_break)
                     return true;
             }

@@ -697,8 +697,8 @@ void WdgView::load( const string& item, bool load, bool init )
 {   
     //printf("TEST 00: Load: %s (%d:%d)\n",id().c_str(),load,init);
     
-    //unsigned long long t_cnt;
-    //if( wLevel() == 0 ) t_cnt = SYS->shrtCnt();
+    unsigned long long t_cnt;
+    if( wLevel() == 0 ) t_cnt = SYS->shrtCnt();
     
     //- Load from data model - 
     if( load )

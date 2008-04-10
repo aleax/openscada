@@ -1,3 +1,10 @@
+2008-04-10
+- FIX:/UI/Vision: Arc with borders painting mechanism is fixed.
+- !:/UI/Vision: Filling mechanism for primitive ElFigure is changed for synchronization with Web. 
+- !:/UI/WebVision: First support of Fill for primitive ElFigure is added.
+
+
+
 2008-04-04 Roman
 - FIX:/SubSYS: Breake the loading, saving, enabling modules if one module error make is fixed.
 - FIX:/DAQ/Transport: Zero remote controllers is get error. For loop controllers init on start.
@@ -72,7 +79,7 @@
 - /UI/Vision: Deleting the fill by doubleclicking the left mouse button on itself support is added.
 - FIX:/UI/Vision: Angle function is fixed.
 - FIX:/UI/Vision: Building of the filling path is fixed.
-- /UI/WebVision: Scaling and roteting of primitives support is added.
+- /UI/WebVision: Scaling and rotating of primitives support is added.
 
 
 2008-03-18 Roman
