@@ -2077,11 +2077,11 @@ void ConfApp::listBoxPopup( )
 	    if( rez == actAdd || rez == actIns || rez == actEd )
 	    {
 		InputDlg dlg(this,this->windowIcon(),"",_("Item name set"),ind_m,true);
-		if( rez == actAdd )	dlg.setMess(_("Add new ellement."));
-		else if( rez == actIns )dlg.setMess(_("Insert new ellement."));
+		if( rez == actAdd )	dlg.setMess(_("Add new element."));
+		else if( rez == actIns )dlg.setMess(_("Insert new element."));
 		if( rez == actEd )
 		{
-		    dlg.setMess(_("Rename ellement."));
+		    dlg.setMess(_("Rename element."));
 		    dlg.setId(p_id.c_str());
 		    dlg.setName(p_text.c_str());
 		}

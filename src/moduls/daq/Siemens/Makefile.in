@@ -50,7 +50,7 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(oscd_moduldir)"
 oscd_modulPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(oscd_modul_PROGRAMS)
-am_daq_Siemens_so_OBJECTS = mod_cif.$(OBJEXT) cif_api.$(OBJEXT) \
+am_daq_Siemens_so_OBJECTS = siemens.$(OBJEXT) cif_api.$(OBJEXT) \
 	nodave.$(OBJEXT) openSocket.$(OBJEXT) setport.$(OBJEXT)
 daq_Siemens_so_OBJECTS = $(am_daq_Siemens_so_OBJECTS)
 daq_Siemens_so_LDADD = $(LDADD)
@@ -204,7 +204,7 @@ EXTRA_DIST = *.h po/* doc/*
 AM_CFLAGS = -I$(top_srcdir)/src -fPIC -DPIC -DLINUX -DDAVE_LITTLE_ENDIAN
 AM_CXXFLAGS = -I$(top_srcdir)/src -fPIC -DPIC -DLINUX -DDAVE_LITTLE_ENDIAN
 AM_LDFLAGS = -shared -module
-daq_Siemens_so_SOURCES = mod_cif.cpp cif_api.c nodave.c openSocket.c setport.c
+daq_Siemens_so_SOURCES = siemens.cpp cif_api.c nodave.c openSocket.c setport.c
 
 #PO files process and doc install
 fm_name = Mod_DAQ_Siemens
@@ -281,10 +281,10 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cif_api.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mod_cif.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nodave.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/openSocket.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/setport.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/siemens.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	if $(COMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \

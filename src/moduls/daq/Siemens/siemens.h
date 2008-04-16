@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.Siemens file: mod_cif.h
+//OpenSCADA system module DAQ.Siemens file: siemens.h
 /***************************************************************************
  *   Copyright (C) 2006-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
@@ -19,8 +19,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
  
-#ifndef MOD_CIF_H
-#define MOD_CIF_H
+#ifndef SIEMENS_H
+#define SIEMENS_H
 
 #include <tmodule.h>
 #include <tcontroller.h>
@@ -300,5 +300,5 @@ extern TTpContr *mod;
 
 } //End namespace 
 
-#endif //CIF_H
+#endif //SIEMENS_H
 

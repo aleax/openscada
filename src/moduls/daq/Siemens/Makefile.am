@@ -7,7 +7,7 @@ AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC -DLINUX -DDAVE_LITTLE_ENDIAN
 AM_LDFLAGS= -shared -module
 
 oscd_modul_PROGRAMS = daq_Siemens.so
-daq_Siemens_so_SOURCES = mod_cif.cpp cif_api.c nodave.c openSocket.c setport.c
+daq_Siemens_so_SOURCES = siemens.cpp cif_api.c nodave.c openSocket.c setport.c
 
 
 #PO files process and doc install

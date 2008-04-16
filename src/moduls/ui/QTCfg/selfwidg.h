@@ -198,7 +198,7 @@ class InputDlg : public QDialog
     public:
 	//Methods
 	InputDlg( QWidget *parent, const QIcon &icon, const QString &mess, 
-		const QString &ndlg = "Vision dialog", bool with_id = false, bool with_nm = true );
+		const QString &ndlg = "QTCfg dialog", bool with_id = false, bool with_nm = true );
 	    
 	QString id( );
 	QString name( );

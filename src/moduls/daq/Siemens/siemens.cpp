@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.Siemens file: mod_cif.cpp
+//OpenSCADA system module DAQ.Siemens file: siemens.cpp
 /***************************************************************************
  *   Copyright (C) 2006-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
@@ -34,7 +34,7 @@
 
 #include "openSocket.h"
 
-#include "mod_cif.h"
+#include "siemens.h"
 
 //************************************************
 //* Modul info!                                  *
@@ -116,7 +116,7 @@ void TTpContr::postEnable( int flag )
     fldAdd( new TFld("TYPE",_("Connection type"),TFld::Integer,TFld::Selected|TCfg::Prevent,"1","0",
 	(TSYS::int2str(TMdContr::CIF_PB)+";"+TSYS::int2str(TMdContr::ISO_TCP)).c_str(),"CIF_PB;ISO_TCP") );
     fldAdd( new TFld("ADDR",_("Remote controller address"),TFld::String,TFld::NoFlag,"40","10") );
-    fldAdd( new TFld("SLOT",_("CP slot"),TFld::Integer,TFld::NoFlag,"2","2","0;30") );
+    fldAdd( new TFld("SLOT",_("Slot CPU"),TFld::Integer,TFld::NoFlag,"2","2","0;30") );
     fldAdd( new TFld("CIF_DEV",_("CIF board"),TFld::Integer,TFld::NoFlag,"1","0","0;3") );    
     //-- Parameter type DB structure --
     int t_prm = tpParmAdd("logic","PRM_BD",_("Logical"));
@@ -185,7 +185,7 @@ void TTpContr::modSave()
 {
     //- Save CIF devices configuration -
     TConfig cfg(&CIFDevE());
-    string bd_tbl = modId()+"_devs";
+    string bd_tbl = modId()+"_CIFdevs";
     for( int i_b = 0; i_b < MAX_DEV_BOARDS; i_b++ )
     {
         cfg.cfg("ID").setI(i_b);
