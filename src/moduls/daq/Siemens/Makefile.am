@@ -6,13 +6,13 @@ AM_CFLAGS= -I$(top_srcdir)/src -fPIC -DPIC -DLINUX -DDAVE_LITTLE_ENDIAN
 AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC -DLINUX -DDAVE_LITTLE_ENDIAN
 AM_LDFLAGS= -shared -module
 
-oscd_modul_PROGRAMS = daq_CIF.so
-daq_CIF_so_SOURCES = mod_cif.cpp cif_api.c nodave.c openSocket.c setport.c
+oscd_modul_PROGRAMS = daq_Siemens.so
+daq_Siemens_so_SOURCES = mod_cif.cpp cif_api.c nodave.c openSocket.c setport.c
 
 
 #PO files process and doc install
-fm_name = Mod_DAQ_CIF
-m_name = $(oscd_modulpref)CIF
+fm_name = Mod_DAQ_Siemens
+m_name = $(oscd_modulpref)Siemens
 
 messages:
 	@catalogs=`find ./po -name \*.po` ; \

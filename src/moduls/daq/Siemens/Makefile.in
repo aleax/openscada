@@ -37,8 +37,8 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
-oscd_modul_PROGRAMS = daq_CIF.so$(EXEEXT)
-subdir = src/moduls/daq/CIF
+oscd_modul_PROGRAMS = daq_Siemens.so$(EXEEXT)
+subdir = src/moduls/daq/Siemens
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.in
@@ -50,10 +50,10 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(oscd_moduldir)"
 oscd_modulPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(oscd_modul_PROGRAMS)
-am_daq_CIF_so_OBJECTS = mod_cif.$(OBJEXT) cif_api.$(OBJEXT) \
+am_daq_Siemens_so_OBJECTS = mod_cif.$(OBJEXT) cif_api.$(OBJEXT) \
 	nodave.$(OBJEXT) openSocket.$(OBJEXT) setport.$(OBJEXT)
-daq_CIF_so_OBJECTS = $(am_daq_CIF_so_OBJECTS)
-daq_CIF_so_LDADD = $(LDADD)
+daq_Siemens_so_OBJECTS = $(am_daq_Siemens_so_OBJECTS)
+daq_Siemens_so_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -73,8 +73,8 @@ LTCXXCOMPILE = $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) \
 	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(daq_CIF_so_SOURCES)
-DIST_SOURCES = $(daq_CIF_so_SOURCES)
+SOURCES = $(daq_Siemens_so_SOURCES)
+DIST_SOURCES = $(daq_Siemens_so_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -204,11 +204,11 @@ EXTRA_DIST = *.h po/* doc/*
 AM_CFLAGS = -I$(top_srcdir)/src -fPIC -DPIC -DLINUX -DDAVE_LITTLE_ENDIAN
 AM_CXXFLAGS = -I$(top_srcdir)/src -fPIC -DPIC -DLINUX -DDAVE_LITTLE_ENDIAN
 AM_LDFLAGS = -shared -module
-daq_CIF_so_SOURCES = mod_cif.cpp cif_api.c nodave.c openSocket.c setport.c
+daq_Siemens_so_SOURCES = mod_cif.cpp cif_api.c nodave.c openSocket.c setport.c
 
 #PO files process and doc install
-fm_name = Mod_DAQ_CIF
-m_name = $(oscd_modulpref)CIF
+fm_name = Mod_DAQ_Siemens
+m_name = $(oscd_modulpref)Siemens
 all: all-am
 
 .SUFFIXES:
@@ -222,9 +222,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/moduls/daq/CIF/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/moduls/daq/Siemens/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  src/moduls/daq/CIF/Makefile
+	  $(AUTOMAKE) --gnu  src/moduls/daq/Siemens/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -270,9 +270,9 @@ clean-oscd_modulPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-daq_CIF.so$(EXEEXT): $(daq_CIF_so_OBJECTS) $(daq_CIF_so_DEPENDENCIES) 
-	@rm -f daq_CIF.so$(EXEEXT)
-	$(CXXLINK) $(daq_CIF_so_LDFLAGS) $(daq_CIF_so_OBJECTS) $(daq_CIF_so_LDADD) $(LIBS)
+daq_Siemens.so$(EXEEXT): $(daq_Siemens_so_OBJECTS) $(daq_Siemens_so_DEPENDENCIES) 
+	@rm -f daq_Siemens.so$(EXEEXT)
+	$(CXXLINK) $(daq_Siemens_so_LDFLAGS) $(daq_Siemens_so_OBJECTS) $(daq_Siemens_so_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)

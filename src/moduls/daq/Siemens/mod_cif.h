@@ -1,7 +1,7 @@
 
-//OpenSCADA system module DAQ.LogicLev file: logiclev.h
+//OpenSCADA system module DAQ.Siemens file: mod_cif.h
 /***************************************************************************
- *   Copyright (C) 2006-2007 by Roman Savochenko                           *
+ *   Copyright (C) 2006-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -40,7 +40,7 @@
 using std::string;
 using std::vector;
 
-namespace CIF
+namespace Siemens
 {
 
 //************************************************

@@ -1055,7 +1055,7 @@ Optional Features:
   --disable-DiamondBoards disable build module DAQ/DiamondBoards
   --disable-LogicLev      disable build module DAQ/LogicLev
   --disable-SNMP          disable build module DAQ/SNMP
-  --disable-CIF           disable build module DAQ/CIF
+  --disable-Siemens       disable build module DAQ/Siemens
   --disable-ModBus        disable build module DAQ/ModBus
   --disable-DAQTransporter
                           disable build module DAQ/Transporter
@@ -26374,12 +26374,12 @@ if test "${enable_SNMP+set}" = set; then
 else
    ModSNMP=true;
 fi;
-# Check whether --enable-CIF or --disable-CIF was given.
-if test "${enable_CIF+set}" = set; then
-  enableval="$enable_CIF"
-   if test $enableval = yes; then ModCIF=true; else ModCIF=false; fi
+# Check whether --enable-Siemens or --disable-Siemens was given.
+if test "${enable_Siemens+set}" = set; then
+  enableval="$enable_Siemens"
+   if test $enableval = yes; then ModSiemens=true; else ModSiemens=false; fi
 else
-   ModCIF=true;
+   ModSiemens=true;
 fi;
 # Check whether --enable-ModBus or --disable-ModBus was given.
 if test "${enable_ModBus+set}" = set; then
@@ -27754,12 +27754,12 @@ done
 #	[AC_MSG_ERROR(DAQ/SNMP: Net SNMP API library not found. Install or check Net SNMP library package!)],
 #	[crypto])
 fi
-if test ${ModCIF} = true; then
-    echo "$as_me:$LINENO: result: Build module: DAQ/CIF" >&5
-echo "${ECHO_T}Build module: DAQ/CIF" >&6
-              ac_config_files="$ac_config_files src/moduls/daq/CIF/Makefile"
+if test ${ModSiemens} = true; then
+    echo "$as_me:$LINENO: result: Build module: DAQ/Siemens" >&5
+echo "${ECHO_T}Build module: DAQ/Siemens" >&6
+              ac_config_files="$ac_config_files src/moduls/daq/Siemens/Makefile"
 
-    DAQSub_mod="${DAQSub_mod}CIF "
+    DAQSub_mod="${DAQSub_mod}Siemens "
     #--- Modules checkings ---
 
 for ac_header in ctype.h
@@ -27908,8 +27908,8 @@ if test `eval echo '${'$as_ac_Header'}'` = yes; then
 _ACEOF
 
 else
-  { { echo "$as_me:$LINENO: error: DAQ/CIF: Some GLibC network headers not found. Install or check GLibC developing package!" >&5
-echo "$as_me: error: DAQ/CIF: Some GLibC network headers not found. Install or check GLibC developing package!" >&2;}
+  { { echo "$as_me:$LINENO: error: DAQ/Siemens: Some GLibC network headers not found. Install or check GLibC developing package!" >&5
+echo "$as_me: error: DAQ/Siemens: Some GLibC network headers not found. Install or check GLibC developing package!" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
@@ -28062,8 +28062,8 @@ if test `eval echo '${'$as_ac_Header'}'` = yes; then
 _ACEOF
 
 else
-  { { echo "$as_me:$LINENO: error: DAQ/CIF: Linux kernel headers not found. Install or check Linux kernel headers package!" >&5
-echo "$as_me: error: DAQ/CIF: Linux kernel headers not found. Install or check Linux kernel headers package!" >&2;}
+  { { echo "$as_me:$LINENO: error: DAQ/Siemens: Linux kernel headers not found. Install or check Linux kernel headers package!" >&5
+echo "$as_me: error: DAQ/Siemens: Linux kernel headers not found. Install or check Linux kernel headers package!" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
@@ -29010,7 +29010,7 @@ do
   "src/moduls/daq/DiamondBoards/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/daq/DiamondBoards/Makefile" ;;
   "src/moduls/daq/LogicLev/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/daq/LogicLev/Makefile" ;;
   "src/moduls/daq/SNMP/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/daq/SNMP/Makefile" ;;
-  "src/moduls/daq/CIF/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/daq/CIF/Makefile" ;;
+  "src/moduls/daq/Siemens/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/daq/Siemens/Makefile" ;;
   "src/moduls/daq/ModBus/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/daq/ModBus/Makefile" ;;
   "src/moduls/daq/Transporter/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/daq/Transporter/Makefile" ;;
   "src/moduls/daq/SoundCard/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/daq/SoundCard/Makefile" ;;

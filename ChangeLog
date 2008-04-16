@@ -1,7 +1,7 @@
 2008-04-16 Roman
 - !!!:/SYS: Groups of branches control mechanism is changed to direct modification control.
 - !!!:/DAQ/CIF: Data acquisition of Siemens PLC through ISO_TSAP protocol by library Libnodave is added. The library Libnodave full included to module CIF. 
-    It allow to make support other acquisition methods in future. The module will be renamed to "siemens" in future.
+    It allow to make support other acquisition methods in future. The module is renamed to "siemens".
 - FIX:/DAQ/Template: Template library's fail elements start error make up is added.
 - !:/DAQ/JavaLikeCalc: Build in functions max() and min() is added.
 - !:/DAQ/JavaLikeCalc: Symbol '(' for functions control to lexical analisator is added.

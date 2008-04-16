@@ -1,7 +1,7 @@
 
-//OpenSCADA system module DAQ.CIF file: cif.cpp
+//OpenSCADA system module DAQ.Siemens file: mod_cif.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2007 by Roman Savochenko                           *
+ *   Copyright (C) 2006-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -38,17 +38,17 @@
 
 //************************************************
 //* Modul info!                                  *
-#define MOD_ID      "CIF"
-#define MOD_NAME    "Hilscher CIF CP"
+#define MOD_ID      "Siemens"
+#define MOD_NAME    "Siemens DAQ"
 #define MOD_TYPE    "DAQ"
 #define VER_TYPE    VER_CNTR
-#define VERSION     "0.9.0"
+#define VERSION     "1.0.0"
 #define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "Allow data source, goes data from Hilscher CIF cards use MPI protocol. Support Siemens controllers S7 series."
+#define DESCRIPTION "Allow data source Siemens PLC by CP of Hilscher CIF cards use MPI protocol and library Libnodave for other."
 #define LICENSE     "GPL"
 //************************************************
 
-CIF::TTpContr *CIF::mod;  //Pointer for direct access to module
+Siemens::TTpContr *Siemens::mod;  //Pointer for direct access to module
 
 extern "C"
 {
@@ -61,12 +61,12 @@ extern "C"
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
     	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
-	    return new CIF::TTpContr( source );
+	    return new Siemens::TTpContr( source );
 	return NULL;
     }
 }
 
-using namespace CIF;
+using namespace Siemens;
 
 //************************************************
 //* TTpContr                                     * 
@@ -168,7 +168,7 @@ void TTpContr::modLoad( )
     
     //-- Load CIF devices configuration --
     TConfig cfg(&CIFDevE());
-    string bd_tbl = modId()+"_devs";
+    string bd_tbl = modId()+"_CIFdevs";
     for( int i_b = 0; i_b < MAX_DEV_BOARDS; i_b++ )
     {
 	cfg.cfg("ID").setI(i_b);
@@ -407,7 +407,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 	{
 	    if(ctrMkNode("area",opt,-1,"/mod/st",_("Status")))
 		ctrMkNode("fld",opt,-1,"/mod/st/drv",_("CIF driver"),0444,"root","root",1,"tp","bool");
-	    if( (owner().cif_devs[0].present || owner().cif_devs[1].present || owner().cif_devs[2].present || owner().cif_devs[3].present) && 
+	    if( (cif_devs[0].present || cif_devs[1].present || cif_devs[2].present || cif_devs[3].present) && 
 		    ctrMkNode("table",opt,-1,"/mod/dev",_("CIF devices"),0664,"root","root"))
 	    {
 		ctrMkNode("list",opt,-1,"/mod/dev/brd",_("Board"),0444,"root","root",1,"tp","str");
