@@ -314,7 +314,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
         ctrMkNode("oscada_cntr",opt,-1,"/",_("Widget's library: ")+id());
 	if(ico().size()) ctrMkNode("img",opt,-1,"/ico","",R_R_R_);
         if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
-	    ctrMkNode("grp",opt,-1,"/br/wdg_",_("Widget"),permit(),user().c_str(),grp().c_str(),1,"s_com","add,del");
+	    ctrMkNode("grp",opt,-1,"/br/wdg_",_("Widget"),permit(),user().c_str(),grp().c_str());
         if(ctrMkNode("area",opt,-1,"/obj",_("Library")))
 	{
     	    if(ctrMkNode("area",opt,-1,"/obj/st",_("State")))

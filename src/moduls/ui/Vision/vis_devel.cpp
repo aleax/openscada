@@ -569,15 +569,23 @@ VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) :
 VisDevelop::~VisDevelop()
 {
     winClose = true;
+
+    //- Save main window state -
+    QByteArray st = saveState();
+    TBDS::genDBSet(mod->nodePath()+"devWinState",TSYS::strEncode(string(st.data(),st.size()),TSYS::base64),user());
+
+    //- Generic content manual delete -
+    delete work_space;
+    delete prjTree;
+    delete wdgTree;
+    delete attrInsp;
+    delete lnkInsp;
+
+    //- Timers stop -
     endRunTimer->stop();
     work_wdgTimer->stop();
     
-    //Save main window state
-    QByteArray st = saveState();
-    TBDS::genDBSet(mod->nodePath()+"devWinState",
-	    TSYS::strEncode(string(st.data(),st.size()),TSYS::base64),user());
-    
-    //Other data clean
+    //- Other data clean -
     if( prjLibPropDlg )	delete prjLibPropDlg;
     if( visItPropDlg )	delete visItPropDlg;
 
@@ -798,7 +806,8 @@ void VisDevelop::selectItem( const string &item, bool force )
 }    
     
 void VisDevelop::applyWorkWdg( )
-{    
+{
+    if( winClose )      return;
     bool isEn = false;
     
     //Set/update attributes inspector

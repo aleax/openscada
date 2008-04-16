@@ -284,8 +284,8 @@ void TSecurity::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TSubSYS::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/usr_",_("User"),0664,"root",subId().c_str(),1,"s_com","add,del");
-	ctrMkNode("grp",opt,-1,"/br/grp_",_("Group"),0664,"root",subId().c_str(),1,"s_com","add,del");	
+	ctrMkNode("grp",opt,-1,"/br/usr_",_("User"),0664,"root",subId().c_str());
+	ctrMkNode("grp",opt,-1,"/br/grp_",_("Group"),0664,"root",subId().c_str());	
         if(ctrMkNode("area",opt,0,"/sub",_("Subsystem"),0440,"root",subId().c_str()))
 	{
     	    ctrMkNode("comm",opt,-1,"/sub/load_db",_("Load"),0660,"root",subId().c_str());

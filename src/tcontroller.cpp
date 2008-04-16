@@ -277,7 +277,7 @@ void TController::cntrCmdProc( XMLNode *opt )
 	}
     	if( owner().tpPrmSize() )
 	{
-	    ctrMkNode("grp",opt,-1,"/br/prm_",_("Parameter"),0660,"root","root",1,"s_com","add,del");
+	    ctrMkNode("grp",opt,-1,"/br/prm_",_("Parameter"),0660);
      	    if(ctrMkNode("area",opt,-1,"/prm",_("Parameters")))
 	    {
 		if( owner().tpPrmSize() > 1 )

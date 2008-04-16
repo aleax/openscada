@@ -609,7 +609,7 @@ void TTipBD::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TModule::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/db_",_("Opened DB"),0664,"root",grp.c_str(),1,"s_com","add,del");
+	ctrMkNode("grp",opt,-1,"/br/db_",_("Opened DB"),0664,"root",grp.c_str());
 	if(ctrMkNode("area",opt,0,"/db",_("DB"),0444))
 	{
 	    ctrMkNode("fld",opt,-1,"/db/ful_db_del",_("Full DB delete"),0660,"root",grp.c_str(),1,"tp","bool");
@@ -728,7 +728,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
     {
         ctrMkNode("oscada_cntr",opt,-1,"/",_("Data base: ")+name());
 	ctrMkNode("branches",opt,-1,"/br","",0444);
-	ctrMkNode("grp",opt,-1,"/br/tbl_",_("Opened table"),0664,"root",grp.c_str(),1,"s_com","add,del");
+	ctrMkNode("grp",opt,-1,"/br/tbl_",_("Opened table"),0664,"root",grp.c_str());
         if(ctrMkNode("area",opt,0,"/prm",_("Data base")))
 	{
     	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))

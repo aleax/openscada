@@ -530,9 +530,9 @@ void Engine::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TUI::cntrCmdProc(opt);
-        ctrMkNode("grp",opt,-1,"/br/prj_",_("Project"),0664,"root","UI",1,"s_com","add,del");	
-        ctrMkNode("grp",opt,-1,"/br/wlb_",_("Widget's library"),0664,"root","UI",1,"s_com","add,del");
-        ctrMkNode("grp",opt,-1,"/br/ses_",_("Session"),0664,"root","UI",1,"s_com","add,del");	
+        ctrMkNode("grp",opt,-1,"/br/prj_",_("Project"),0664,"root","UI");	
+        ctrMkNode("grp",opt,-1,"/br/wlb_",_("Widget's library"),0664,"root","UI");
+        ctrMkNode("grp",opt,-1,"/br/ses_",_("Session"),0664,"root","UI");	
 	if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"),0444,"root","UI"))
 	{
     	    ctrMkNode("list",opt,-1,"/prm/cfg/prj",_("Project"),0664,"root","UI",4,"tp","br","idm","1","s_com","add,del","br_pref","prj_");

@@ -304,7 +304,7 @@ void Project::cntrCmdProc( XMLNode *opt )
         ctrMkNode("oscada_cntr",opt,-1,"/",_("Project: ")+id());
 	if(ico().size()) ctrMkNode("img",opt,-1,"/ico","",R_R_R_);
         if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
-	    ctrMkNode("grp",opt,-1,"/br/pg_",_("Page"),permit(),user().c_str(),grp().c_str(),1,"s_com","add,del");
+	    ctrMkNode("grp",opt,-1,"/br/pg_",_("Page"),permit(),user().c_str(),grp().c_str());
         if(ctrMkNode("area",opt,-1,"/obj",_("Project")))
 	{
     	    if(ctrMkNode("area",opt,-1,"/obj/st",_("State")))
@@ -1024,7 +1024,7 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 	    if(ctrMkNode("area",opt,1,"/page",_("Pages")))
     		ctrMkNode("list",opt,-1,"/page/page",_("Pages"),permit(),user().c_str(),grp().c_str(),4,"tp","br","idm","1","s_com","add,del","br_pref","pg_");
 	    if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
-		ctrMkNode("grp",opt,-1,"/br/pg_",_("Page"),permit(),user().c_str(),grp().c_str(),1,"s_com","add,del");
+		ctrMkNode("grp",opt,-1,"/br/pg_",_("Page"),permit(),user().c_str(),grp().c_str());
 	}
 	return true;
     }

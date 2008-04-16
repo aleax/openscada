@@ -545,8 +545,8 @@ void TTipTransport::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TModule::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/in_",_("Input transport"),0664,"root","root",1,"s_com","add,del");
-	ctrMkNode("grp",opt,-1,"/br/out_",_("Output transport"),0664,"root","root",1,"s_com","add,del");
+	ctrMkNode("grp",opt,-1,"/br/in_",_("Input transport"),0664);
+	ctrMkNode("grp",opt,-1,"/br/out_",_("Output transport"),0664);
 	if(ctrMkNode("area",opt,0,"/tr",_("Transports")))
 	{
 	    ctrMkNode("list",opt,-1,"/tr/in",_("Input"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","in_");

@@ -156,8 +156,7 @@ void Lib::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {	
     	ctrMkNode("oscada_cntr",opt,-1,"/",_("Function's library: ")+id());
-	if(ctrMkNode("branches",opt,-1,"/br","",0444))
-	    ctrMkNode("grp",opt,-1,"/br/fnc_",_("Function"),0664,"root","root",1,"s_com","add,del");
+	if(ctrMkNode("branches",opt,-1,"/br","",0444))	ctrMkNode("grp",opt,-1,"/br/fnc_",_("Function"),0664);
 	if(ctrMkNode("area",opt,-1,"/lib",_("Library")))
 	{
 	    if(ctrMkNode("area",opt,-1,"/lib/st",_("State")))

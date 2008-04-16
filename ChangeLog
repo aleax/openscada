@@ -14,6 +14,7 @@
 - !!:/UI/Vision: Font, Image and Color preview to attributes inspector is added.
 - !!:/UI/Vision: Font and Color configure dialog to attribute inspector is added.
 - /UI/Vision: Translation to Russian and Ukranian is updated.
+- FIX:/UI/Vision: Some crashing on time workspace deletion after inspector attributes modify and edited widget opened is fixed.
 - FIX:/UI/Vision, /UI/WebVision: Font name coding and loading is fixed.
 - FIX:/UI/Vision, /UI/WebVision: Trend length of view "Trend" of primitive "Diagram" limit of 2300 seconds is fixed.
 

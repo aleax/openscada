@@ -69,7 +69,9 @@ ModInspAttr::ModInspAttr( const string &iwdg, VisDevelop *mainWind ) : main_win(
 ModInspAttr::~ModInspAttr( )
 {
     //Delete root item
+    beginRemoveRows(QModelIndex(),0,rootItem->childCount());
     delete rootItem;
+    endRemoveRows();
 }
 
 string ModInspAttr::user( )
@@ -603,7 +605,7 @@ QWidget *InspAttr::ItemDelegate::createEditor(QWidget *parent, const QStyleOptio
 	((QTextEdit*)w_del)->resize(50,50);
     }
     else if( value.type() == QVariant::String && flag&ModInspAttr::Item::Font )
-	w_del = new LineEditProp(parent,LineEditProp::Font);
+    	w_del = new LineEditProp(parent,LineEditProp::Font);
     else if( value.type() == QVariant::String && flag&ModInspAttr::Item::Color )
 	w_del = new LineEditProp(parent,LineEditProp::Color);
     else if( value.type() == QVariant::Int && flag&ModInspAttr::Item::DataTime )
@@ -1594,8 +1596,8 @@ LineEditProp::LineEditProp( QWidget *parent, DType tp ) : QWidget( parent ), m_t
     bt_fld->setIconSize(QSize(12,12));
     bt_fld->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed) );
     bt_fld->setMaximumWidth(15);
-    connect( bt_fld, SIGNAL( pressed() ), this, SLOT( callDlg() ) );
     box->addWidget(bt_fld);
+    connect( bt_fld, SIGNAL( pressed() ), this, SLOT( callDlg() ) );    
 }
 
 QString LineEditProp::value( )
@@ -1621,6 +1623,7 @@ void LineEditProp::callDlg( )
 	clr = QColorDialog::getColor(clr,this);
 	if( clr.isValid() ) setValue(clr.name());
     }
+    QApplication::postEvent(this,new QKeyEvent(QEvent::KeyPress,Qt::Key_Return,Qt::NoModifier));
 }
 
 //*********************************************

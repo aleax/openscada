@@ -395,7 +395,7 @@ void ConfApp::itAdd( )
 
     //- Load branches list -
     for( int i_b = 0; i_b < branch->childSize(); i_b++ )
-	if( atoi(branch->childGet(i_b)->attr("acs").c_str())&SEQ_WR && branch->childGet(i_b)->attr("s_com").find("add") != string::npos )
+	if( atoi(branch->childGet(i_b)->attr("acs").c_str())&SEQ_WR )
 	    nCont->addItem( branch->childGet(i_b)->attr("dscr").c_str(), branch->childGet(i_b)->attr("id").c_str() );
     if( !nCont->count() )
     {
@@ -436,8 +436,7 @@ void ConfApp::itDel( )
             XMLNode *branch = br_req.childGet(0);
             for( int i_b = 0; i_b < branch->childSize(); i_b++ )
                 if( branch->childGet(i_b)->attr("id") == sel_el.substr(0,branch->childGet(i_b)->attr("id").size()) &&
-                    atoi(branch->childGet(i_b)->attr("acs").c_str())&SEQ_WR &&
-                    branch->childGet(i_b)->attr("s_com").find("del") != string::npos )
+                    atoi(branch->childGet(i_b)->attr("acs").c_str())&SEQ_WR )
             	    { 
 			br_req.clear()->setName("del")->
 					setAttr("path",sel_own+"/%2fbr%2f"+branch->childGet(i_b)->attr("id"))->
@@ -1462,7 +1461,7 @@ void ConfApp::pageDisplay( const string &path )
     {
 	XMLNode *branch = root->childGet("id","br");
 	for( int i_b = 0; i_b < branch->childSize(); i_b++ )
-	    if( atoi(branch->childGet(i_b)->attr("acs").c_str())&SEQ_WR && branch->childGet(i_b)->attr("s_com").find("add") != string::npos )
+	    if( atoi(branch->childGet(i_b)->attr("acs").c_str())&SEQ_WR )
 	    { actItAdd->setEnabled(true); break; }
     }
     actItDel->setEnabled(false);
@@ -1480,8 +1479,7 @@ void ConfApp::pageDisplay( const string &path )
 	    XMLNode *branch = br_req.childGet(0);
 	    for( int i_b = 0; i_b < branch->childSize(); i_b++ )
 		if( branch->childGet(i_b)->attr("id") == sel_el.substr(0,branch->childGet(i_b)->attr("id").size()) &&
-		    atoi(branch->childGet(i_b)->attr("acs").c_str())&SEQ_WR && 
-		    branch->childGet(i_b)->attr("s_com").find("del") != string::npos )
+		    atoi(branch->childGet(i_b)->attr("acs").c_str())&SEQ_WR )
 		{ actItDel->setEnabled(true); break; }
 	}
     }
@@ -1647,7 +1645,8 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, int level )
 	    fnt.setItalic(true);
 	    it->setFont(0,fnt);
 	    //--- Next node for next level ---
-            if( level-1 > 0 || (level < 0 && it->isExpanded()) )	viewChildRecArea(it,level-1);
+            if( level-1 > 0 )		viewChildRecArea(it,level-1);
+	    else if( level == -1 )	viewChildRecArea(it,it->isExpanded()?-1:-2);
 	    continue;
     	}
 	
@@ -1681,7 +1680,8 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, int level )
 	    ch_it->setText(2,(path+"/"+br_path).c_str());
 			    			    
 	    //--- Next node for next level ---
-	    if( level-1 > 0 || (level < 0 && ch_it->isExpanded()) )	viewChildRecArea(ch_it,level-1);
+	    if( level-1 > 0 )		viewChildRecArea(ch_it,level-1);
+	    else if( level == -1 ) 	viewChildRecArea(ch_it,ch_it->isExpanded()?-1:-2);
 	}
     }
     
