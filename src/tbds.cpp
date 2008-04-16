@@ -609,7 +609,7 @@ void TTipBD::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TModule::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/db_",_("Opened DB"),0444,"root","root",1,"list","/db/odb");
+	ctrMkNode("grp",opt,-1,"/br/db_",_("Opened DB"),0664,"root",grp.c_str(),1,"s_com","add,del");
 	if(ctrMkNode("area",opt,0,"/db",_("DB"),0444))
 	{
 	    ctrMkNode("fld",opt,-1,"/db/ful_db_del",_("Full DB delete"),0660,"root",grp.c_str(),1,"tp","bool");
@@ -625,7 +625,7 @@ void TTipBD::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->setText(full_db_del?"1":"0");
 	if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	full_db_del = atoi(opt->text().c_str());
     }	
-    else if( a_path == "/db/odb" )
+    else if( a_path == "/br/db_" || a_path == "/db/odb" )
     {
 	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )
 	{
@@ -728,7 +728,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
     {
         ctrMkNode("oscada_cntr",opt,-1,"/",_("Data base: ")+name());
 	ctrMkNode("branches",opt,-1,"/br","",0444);
-	ctrMkNode("grp",opt,-1,"/br/tbl_",_("Opened table"),0444,"root","root",1,"list","/tbls/otbl");
+	ctrMkNode("grp",opt,-1,"/br/tbl_",_("Opened table"),0664,"root",grp.c_str(),1,"s_com","add,del");
         if(ctrMkNode("area",opt,0,"/prm",_("Data base")))
 	{
     	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))
@@ -795,7 +795,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	load();
     else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )    	save();
-    else if( a_path == "/tbls/otbl" )
+    else if( a_path == "/br/tbl_" || a_path == "/tbls/otbl" )
     {
 	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )
 	{

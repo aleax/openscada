@@ -138,14 +138,14 @@ void TTipDAQ::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TModule::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/cntr_",_("Controller"),0444,"root","root",1,"list","/tctr/ctr");
+	ctrMkNode("grp",opt,-1,"/br/cntr_",_("Controller"),0664,"root","root",1,"s_com","add,del");
 	if(ctrMkNode("area",opt,0,"/tctr",_("Controllers")))
 	    ctrMkNode("list",opt,-1,"/tctr/ctr",_("Controllers"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","cntr_");
 	return;
     }
     //- Process command to page -
     string a_path = opt->attr("path");
-    if( a_path == "/tctr/ctr" )
+    if( a_path == "/br/cntr_" || a_path == "/tctr/ctr" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
 	{

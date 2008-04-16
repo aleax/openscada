@@ -151,6 +151,8 @@ class Reg
 	    FLn,	//[CRR]: Function natural logarithm.
 	    FExp,	//[CRR]: Function exponent.
 	    FPow,	//[CRRR]: Function power.
+	    FMin,	//[CRRR]: Function minimum.
+	    FMax,	//[CRRR]: Function maximum.
 	    FSqrt,	//[CRR]: Function sqrt.
 	    FAbs,	//[CRR]: Function absolute.
 	    FSign,	//[CRR]: Function sign.

@@ -157,7 +157,7 @@ void Lib::cntrCmdProc( XMLNode *opt )
     {	
     	ctrMkNode("oscada_cntr",opt,-1,"/",_("Function's library: ")+id());
 	if(ctrMkNode("branches",opt,-1,"/br","",0444))
-	    ctrMkNode("grp",opt,-1,"/br/fnc_",_("Function"),0444,"root","root",1,"list","/func/func");
+	    ctrMkNode("grp",opt,-1,"/br/fnc_",_("Function"),0664,"root","root",1,"s_com","add,del");
 	if(ctrMkNode("area",opt,-1,"/lib",_("Library")))
 	{
 	    if(ctrMkNode("area",opt,-1,"/lib/st",_("State")))
@@ -216,7 +216,7 @@ void Lib::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(descr());
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_descr = opt->text();
     }	
-    else if( a_path == "/func/func" )
+    else if( a_path == "/br/fnc_" || a_path == "/func/func" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
         {

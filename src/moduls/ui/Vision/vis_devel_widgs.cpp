@@ -40,6 +40,11 @@
 #include <QBuffer>
 #include <QDateTimeEdit>
 #include <QTimer>
+#include <QHBoxLayout>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QFontDialog>
+#include <QColorDialog>
 
 #include <tsys.h>
 
@@ -251,7 +256,7 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it ) // Item *it)
             //-- Check attribute item --
             int ga_id = cur_it->childGet(a_id);
             if( ga_id < 0 ) ga_id = cur_it->childInsert(a_id,-1,Item::Attr);
-            cur_it->child(ga_id)->setName(a_nm);	    
+            cur_it->child(ga_id)->setName(a_nm);
 	    cur_it->child(ga_id)->setEdited(atoi(gnd->attr("acs").c_str())&SEQ_WR);
 	    cur_it->child(ga_id)->setFlag( atoi(gnd->attr("wdgFlg").c_str()) );	    
             //-- Get Value --
@@ -361,8 +366,58 @@ QVariant ModInspAttr::data( const QModelIndex &index, int role ) const
 		    if( val.type() == QVariant::Int && it->flag()&ModInspAttr::Item::DataTime )
 			val = QDateTime::fromTime_t(val.toInt()?val.toInt():time(NULL)).toString("dd.MM.yyyy hh:mm:ss");
 		    break;
-                case Qt::EditRole:      val = it->dataEdit();   break;
-		case Qt::UserRole:	val = it->flag();	break;
+                case Qt::EditRole:      	val = it->dataEdit();   break;
+		case Qt::UserRole:		val = it->flag();	break;
+		case Qt::DecorationRole:	
+		    if( it->flag()&ModInspAttr::Item::Color )
+		    {	
+			QPixmap pct(16,16);
+			QPainter painter(&pct);
+			painter.fillRect(pct.rect(),QBrush(QColor(it->data().toString())));
+                        painter.drawRect(pct.rect().adjusted(0,0,-1,-1));
+			painter.end();
+                	val = pct;
+		    }
+		    else if( it->flag()&ModInspAttr::Item::Font )
+		    {
+			QPixmap pct(24,24);
+			QPainter painter(&pct);
+			painter.fillRect(pct.rect(),QBrush(QColor("white")));			
+			painter.drawRect(pct.rect().adjusted(0,0,-1,-1));
+			QFont fnt;
+			char family[101]; strcpy(family,"Arial");
+			int size = 10, bold = 0, italic = 0, underline = 0, strike = 0;
+			sscanf(it->data().toString().toAscii().data(),"%100s %d %d %d %d %d",family,&size,&bold,&italic,&underline,&strike);
+			fnt.setStrikeOut(strike);
+			fnt.setUnderline(underline);
+			fnt.setItalic(italic);
+			fnt.setBold(bold);
+			fnt.setPixelSize(size);
+			fnt.setFamily(string(family,100).c_str());
+			painter.setFont(fnt);
+			painter.drawText(pct.rect(),Qt::AlignCenter,"Aa");
+			painter.end();
+			val = pct;
+		    }
+		    else if( it->flag()&ModInspAttr::Item::Image )
+		    {
+			Item *tit = it;
+			while( tit && tit->type() != ModInspAttr::Item::Wdg )	tit = tit->parent();
+			if( tit && tit->type() == ModInspAttr::Item::Wdg )
+			{
+			    XMLNode req("get");
+			    req.setAttr("path",tit->id()+"/%2fwdg%2fres")->setAttr("id",it->data().toString().toAscii().data());
+			    req.setText(TSYS::strDecode(req.text(),TSYS::base64));
+			    QImage img;
+			    if( !const_cast<ModInspAttr*>(this)->mainWin()->cntrIfCmd(req) )
+			    {
+				req.setText(TSYS::strDecode(req.text(),TSYS::base64));
+				if( !req.text().empty() && img.loadFromData((const uchar*)req.text().c_str(),req.text().size()) )
+				    val = QPixmap::fromImage(img).scaled(32,32,Qt::KeepAspectRatio,Qt::SmoothTransformation);
+			    }
+			}
+		    }
+		    break;
             }
     }
     return val;
@@ -547,6 +602,10 @@ QWidget *InspAttr::ItemDelegate::createEditor(QWidget *parent, const QStyleOptio
 	((QTextEdit*)w_del)->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	((QTextEdit*)w_del)->resize(50,50);
     }
+    else if( value.type() == QVariant::String && flag&ModInspAttr::Item::Font )
+	w_del = new LineEditProp(parent,LineEditProp::Font);
+    else if( value.type() == QVariant::String && flag&ModInspAttr::Item::Color )
+	w_del = new LineEditProp(parent,LineEditProp::Color);
     else if( value.type() == QVariant::Int && flag&ModInspAttr::Item::DataTime )
     {
 	w_del = new QDateTimeEdit(parent);	
@@ -580,22 +639,18 @@ void InspAttr::ItemDelegate::setEditorData(QWidget *editor, const QModelIndex &i
     QVariant value = index.data(Qt::EditRole);
     int flag = index.data(Qt::UserRole).toInt();    
 
-    if( flag&ModInspAttr::Item::Select )
+    if( flag&ModInspAttr::Item::Select && dynamic_cast<QComboBox*>(editor) )
     {
-        QComboBox *comb = dynamic_cast<QComboBox*>(editor);
+        QComboBox *comb = (QComboBox*)editor;
         comb->addItems(value.toStringList());
         comb->setCurrentIndex(comb->findText(index.data(Qt::DisplayRole).toString()));
     }
-    else if( value.type()==QVariant::String && flag&ModInspAttr::Item::FullText )
-    {
-	QTextEdit *ted = dynamic_cast<QTextEdit*>(editor);
-	ted->setPlainText(value.toString());
-    }
-    else if( value.type() == QVariant::Int && flag&ModInspAttr::Item::DataTime )
-    {	
-	QDateTimeEdit *dted = dynamic_cast<QDateTimeEdit*>(editor);
-	dted->setDateTime(QDateTime::fromTime_t(value.toInt()?value.toInt():time(NULL)));
-    }
+    else if( value.type()==QVariant::String && flag&ModInspAttr::Item::FullText && dynamic_cast<QTextEdit*>(editor) )
+	((QTextEdit*)editor)->setPlainText(value.toString());
+    else if( value.type() == QVariant::String && (flag&ModInspAttr::Item::Font || flag&ModInspAttr::Item::Color) && dynamic_cast<LineEditProp*>(editor) )
+	((LineEditProp*)editor)->setValue(value.toString());
+    else if( value.type() == QVariant::Int && flag&ModInspAttr::Item::DataTime && dynamic_cast<QDateTimeEdit*>(editor) )
+	((QDateTimeEdit*)editor)->setDateTime(QDateTime::fromTime_t(value.toInt()?value.toInt():time(NULL)));
     else QItemDelegate::setEditorData(editor, index);
 }
 
@@ -604,20 +659,15 @@ void InspAttr::ItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *m
     QVariant value = index.data(Qt::EditRole);
     int flag = index.data(Qt::UserRole).toInt();
     
-    if( flag&ModInspAttr::Item::Select )
+    if( flag&ModInspAttr::Item::Select && dynamic_cast<QComboBox*>(editor) )
+        model->setData(index,((QComboBox*)editor)->currentText(),Qt::EditRole);
+    else if( value.type()==QVariant::String && flag&ModInspAttr::Item::FullText && dynamic_cast<QTextEdit*>(editor) )
+	model->setData(index,((QTextEdit*)editor)->toPlainText(),Qt::EditRole);
+    else if( value.type() == QVariant::String && (flag&ModInspAttr::Item::Font || flag&ModInspAttr::Item::Color) && dynamic_cast<LineEditProp*>(editor) )
+	model->setData(index,((LineEditProp*)editor)->value());
+    else if( value.type() == QVariant::Int && flag&ModInspAttr::Item::DataTime && dynamic_cast<QDateTimeEdit*>(editor) )
     {
-        QComboBox *comb = dynamic_cast<QComboBox*>(editor);
-        model->setData(index,comb->currentText(),Qt::EditRole);
-    }
-    else if( value.type()==QVariant::String && flag&ModInspAttr::Item::FullText )
-    {
-	QTextEdit *ted = dynamic_cast<QTextEdit*>(editor);
-	model->setData(index,ted->toPlainText(),Qt::EditRole);
-    }
-    else if( value.type() == QVariant::Int && flag&ModInspAttr::Item::DataTime )
-    {
-	QDateTimeEdit *dted = dynamic_cast<QDateTimeEdit*>(editor);
-	int tm = dted->dateTime().toTime_t();
+	int tm = ((QDateTimeEdit*)editor)->dateTime().toTime_t();
 	model->setData(index,(tm>(time(NULL)+3600))?0:tm,Qt::EditRole);
     }
     else QItemDelegate::setModelData(editor, model, index);
@@ -1527,6 +1577,51 @@ void ProjTree::ctrTreePopup( )
     popup.clear();
 }			  
 
+//**********************************************************************************************
+//* Text edit line widget with detail dialog edit button. Support: Font and Color edit dialogs.*
+//**********************************************************************************************
+LineEditProp::LineEditProp( QWidget *parent, DType tp ) : QWidget( parent ), m_tp(tp)
+{
+    QHBoxLayout *box = new QHBoxLayout(this);
+    box->setMargin(0);
+    box->setSpacing(0);
+
+    ed_fld = new QLineEdit(this);
+    box->addWidget(ed_fld);
+
+    QPushButton *bt_fld = new QPushButton(this);
+    bt_fld->setIcon(QIcon(":/images/edit.png"));
+    bt_fld->setIconSize(QSize(12,12));
+    bt_fld->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed) );
+    bt_fld->setMaximumWidth(15);
+    connect( bt_fld, SIGNAL( pressed() ), this, SLOT( callDlg() ) );
+    box->addWidget(bt_fld);
+}
+
+QString LineEditProp::value( )
+{
+    return ed_fld->text();
+}
+	
+void LineEditProp::setValue( const QString &val )
+{
+    ed_fld->setText(val);
+}
+
+void LineEditProp::callDlg( )
+{
+    if( type() == LineEditProp::Font )
+    {
+	FontDlg fnt_dlg(this,value().toAscii().data());
+	if( fnt_dlg.exec() )	setValue(fnt_dlg.font());
+    }
+    else if( type() == LineEditProp::Color )
+    {
+	QColor clr(value());
+	clr = QColorDialog::getColor(clr,this);
+	if( clr.isValid() ) setValue(clr.name());
+    }
+}
 
 //*********************************************
 //* Status bar scale indicator                *
@@ -1546,7 +1641,7 @@ void WScaleStBar::mousePressEvent( QMouseEvent * event )
 {
     setScale(!scale());
 }
-					    
+
 //****************************************
 //* Shape widget view development mode   *
 //****************************************
@@ -2456,6 +2551,7 @@ bool DevelWdgView::event( QEvent *event )
 				}
 			    if( !isSel )
 			    {
+				if( cursor().shape() == Qt::ArrowCursor )	return false;
 				saveGeom(id());
 				if( m_flgs&DevelWdgView::makeScale ) load("");
 			    }

@@ -119,7 +119,7 @@ void Engine::postEnable( int flag )
     if( !(flag&TCntrNode::NodeConnect) ) return;
     
     //- Make lib's DB structure -
-    lbwdg_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
+    lbwdg_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
     lbwdg_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
     lbwdg_el.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::NoFlag,"300") );
     lbwdg_el.fldAdd( new TFld("DB_TBL",_("Data base"),TFld::String,TFld::NoFlag,"30") );
@@ -134,7 +134,7 @@ void Engine::postEnable( int flag )
     wdgdata_el.fldAdd( new TFld("DATA",_("Mime data"),TFld::String,TFld::NoFlag,"500000") );
     
     //- Make widgets DB structure -
-    wdg_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
+    wdg_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
     wdg_el.fldAdd( new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000") );
     wdg_el.fldAdd( new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200") );
     wdg_el.fldAdd( new TFld("PROC",_("Procedure text and language"),TFld::String,TFld::NoFlag,"10000") );
@@ -146,13 +146,13 @@ void Engine::postEnable( int flag )
 
     //- Make include widgets DB structure -
     inclwdg_el.fldAdd( new TFld("IDW",_("IDW"),TFld::String,TCfg::Key,"100") );
-    inclwdg_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
+    inclwdg_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
     inclwdg_el.fldAdd( new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200") );
     inclwdg_el.fldAdd( new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*") );
 
     //- Make widget's IO DB structure -
     wdgio_el.fldAdd( new TFld("IDW",_("Widget ID"),TFld::String,TCfg::Key,"100") );
-    wdgio_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"40") );
+    wdgio_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"61") );
     wdgio_el.fldAdd( new TFld("IO_VAL",_("Attribute value"),TFld::String,TFld::NoFlag,"100000") );
     wdgio_el.fldAdd( new TFld("SELF_FLG",_("Attribute self flags"),TFld::Integer,TFld::NoFlag,"5") );
     wdgio_el.fldAdd( new TFld("CFG_TMPL",_("Configuration template"),TFld::String,TFld::NoFlag,"30") );
@@ -160,7 +160,7 @@ void Engine::postEnable( int flag )
     
     //- Make widget's user IO DB structure -
     wdguio_el.fldAdd( new TFld("IDW",_("Widget ID"),TFld::String,TCfg::Key,"100") );
-    wdguio_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"40") );
+    wdguio_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"61") );
     wdguio_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
     wdguio_el.fldAdd( new TFld("IO_TYPE",_("Attribute generic flags and type"),TFld::Integer,TFld::NoFlag,"10") );
     wdguio_el.fldAdd( new TFld("IO_VAL",_("Attribute value"),TFld::String,TFld::NoFlag,"100000") );
@@ -169,7 +169,7 @@ void Engine::postEnable( int flag )
     wdguio_el.fldAdd( new TFld("CFG_VAL",_("Configuration value"),TFld::String,TFld::NoFlag,"1000") );    
 
     //- Make project's DB structure -
-    prj_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
+    prj_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
     prj_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
     prj_el.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::NoFlag,"300") );
     prj_el.fldAdd( new TFld("DB_TBL",_("Data base"),TFld::String,TFld::NoFlag,"30") );
@@ -180,7 +180,7 @@ void Engine::postEnable( int flag )
 
     //- Make pages DB structure -
     page_el.fldAdd( new TFld("OWNER",_("Owner"),TFld::String,TCfg::Key,"100") );
-    page_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
+    page_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
     page_el.fldAdd( new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000") );
     page_el.fldAdd( new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200") );
     page_el.fldAdd( new TFld("PROC",_("Procedure text and language"),TFld::String,TFld::NoFlag,"10000") );
@@ -530,9 +530,9 @@ void Engine::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TUI::cntrCmdProc(opt);
-        ctrMkNode("grp",opt,-1,"/br/prj_",_("Project"),0444,"root","UI",1,"list","/prm/cfg/prj");	
-        ctrMkNode("grp",opt,-1,"/br/wlb_",_("Widget's library"),0444,"root","UI",1,"list","/prm/cfg/wlb");
-        ctrMkNode("grp",opt,-1,"/br/ses_",_("Session"),0444,"root","UI",1,"list","/ses/ses");	
+        ctrMkNode("grp",opt,-1,"/br/prj_",_("Project"),0664,"root","UI",1,"s_com","add,del");	
+        ctrMkNode("grp",opt,-1,"/br/wlb_",_("Widget's library"),0664,"root","UI",1,"s_com","add,del");
+        ctrMkNode("grp",opt,-1,"/br/ses_",_("Session"),0664,"root","UI",1,"s_com","add,del");	
 	if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"),0444,"root","UI"))
 	{
     	    ctrMkNode("list",opt,-1,"/prm/cfg/prj",_("Project"),0664,"root","UI",4,"tp","br","idm","1","s_com","add,del","br_pref","prj_");
@@ -552,7 +552,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
     }
     
     //- Process command for page -
-    if( a_path == "/prm/cfg/prj" )
+    if( a_path == "/br/prj_" || a_path == "/prm/cfg/prj" )
     {
         if( ctrChkNode(opt,"get",0664,"root","UI",SEQ_RD) )
         {
@@ -568,7 +568,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	}
         if( ctrChkNode(opt,"del",0664,"root","UI",SEQ_WR) )   prjDel(opt->attr("id"),true);
     }    
-    else if( a_path == "/prm/cfg/wlb" )
+    else if( a_path == "/br/wlb_" || a_path == "/prm/cfg/wlb" )
     {
         if( ctrChkNode(opt,"get",0664,"root","UI",SEQ_RD) )
         {
@@ -620,7 +620,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	copy( opt->attr("src").empty() ? cp_sel : opt->attr("src"), opt->attr("dst").empty() ? cp_del : opt->attr("dst") );
     else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0660,"root","UI",SEQ_WR) )	modLoad();
     else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0660,"root","UI",SEQ_WR) )	modSave();
-    else if( a_path == "/ses/ses" )
+    else if( a_path == "/br/ses_" || a_path == "/ses/ses" )
     {
         if( ctrChkNode(opt,"get",0664,"root","UI",SEQ_RD) )
         {

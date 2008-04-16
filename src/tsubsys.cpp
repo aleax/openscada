@@ -157,7 +157,7 @@ void TSubSYS::cntrCmdProc( XMLNode *opt )
 	if(TUIS::icoPresent(subId()))	ctrMkNode("img",opt,-1,"/ico","",0444);
 	if( subModule() )
 	{
-	    ctrMkNode("grp",opt,-1,"/br/mod_",_("Module"),0444,"root","root",1,"list","/mod/br");
+	    ctrMkNode("grp",opt,-1,"/br/mod_",_("Module"),0444);
 	    if(ctrMkNode("area",opt,-1,"/mod",_("Modules"),0444,"root","root"))
 		ctrMkNode("list",opt,-1,"/mod/br",_("Modules"),0444,"root","root",3,"tp","br","idm","1","br_pref","mod_");
 	}
@@ -174,7 +174,7 @@ void TSubSYS::cntrCmdProc( XMLNode *opt )
     }
     else if( subModule() )
     { 
-	if( a_path == "/mod/br" && ctrChkNode(opt,"get",0444,"root","root",SEQ_RD) )
+	if( (a_path == "/br/mod_" || a_path == "/mod/br") && ctrChkNode(opt,"get",0444,"root","root",SEQ_RD) )
 	{
 	    vector<string> list;
 	    modList(list);

@@ -494,4 +494,3 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Node: ")+nodeName());
 }
-

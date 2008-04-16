@@ -436,8 +436,9 @@ int yylex( )
 	    }
     	    return CONST;
 	}
+
 	//Find buildin function
-	if( mod->bFuncGet( smb_nm.c_str() ) != NULL )
+	if( c == '(' && mod->bFuncGet( smb_nm.c_str() ) != NULL )
 	{
 	    yylval.id = mod->bFuncGet(smb_nm.c_str())->code;
 	    switch( mod->bFuncGet(smb_nm.c_str())->prm )
@@ -452,18 +453,18 @@ int yylex( )
 	}
 	
 	//Find external functions
-        if( p_fnc->funcGet( smb_nm ) >= 0 )
+        if( c == '(' && p_fnc->funcGet( smb_nm ) >= 0 )
 	{
     	    yylval.id = p_fnc->funcGet( smb_nm );
 	    return FUNC;
     	}
-	
+
 	//Check allow registers
 	if( p_fnc->regGet(smb_nm.c_str()) >= 0 )
 	{
 	    yylval.reg = p_fnc->regAt(p_fnc->regGet(smb_nm.c_str()));
 	    return VAR;
-	}
+	}	
 			
 	//Only function and global atributes can have dots.
 	if( is_dot )

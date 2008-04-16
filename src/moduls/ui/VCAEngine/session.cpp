@@ -396,8 +396,7 @@ void Session::cntrCmdProc( XMLNode *opt )
     {
         ctrMkNode("oscada_cntr",opt,-1,"/",_("Session: ")+id());
 	if(ico().size()) ctrMkNode("img",opt,-1,"/ico","",R_R_R_);
-        if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
-	    ctrMkNode("grp",opt,-1,"/br/pg_",_("Page"),R_R_R_,"root","UI",1,"list","/page/page");
+        if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_)) ctrMkNode("grp",opt,-1,"/br/pg_",_("Page"),R_R_R_);
         if(ctrMkNode("area",opt,-1,"/obj",_("Session")))
 	{
     	    if(ctrMkNode("area",opt,-1,"/obj/st",_("State")))
@@ -460,7 +459,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 	for( unsigned i_f=0; i_f < lst.size(); i_f++ )
 	    opt->childAdd("el")->setText(lst[i_f]);
     }    
-    else if( a_path == "/page/page" && ctrChkNode(opt) )
+    else if( (a_path == "/br/pg_" || a_path == "/page/page") && ctrChkNode(opt) )
     {
 	vector<string> lst;
 	list(lst);
@@ -605,7 +604,7 @@ bool SessPage::cntrCmdGeneric( XMLNode *opt )
 	    if(ctrMkNode("area",opt,1,"/page",_("Pages")))
 	        ctrMkNode("list",opt,-1,"/page/page",_("Pages"),R_R_R_,"root","UI",3,"tp","br","idm","1","br_pref","pg_");
 	    if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
-	        ctrMkNode("grp",opt,-1,"/br/pg_",_("Page"),R_R_R_,"root","UI",1,"list","/page/page");
+	        ctrMkNode("grp",opt,-1,"/br/pg_",_("Page"),R_R_R_,"root","UI");
 	}
         return true;
     }
@@ -619,7 +618,7 @@ bool SessPage::cntrCmdGeneric( XMLNode *opt )
 	if( ctrChkNode(opt,"set",RWRWR_,user().c_str(),grp().c_str(),SEQ_WR) ) 
 	    attrAt("pgOpen").at().setB(atoi(opt->text().c_str()));
     }        
-    else if( a_path == "/page/page" && ctrChkNode(opt) )
+    else if( (a_path == "/br/pg_" || a_path == "/page/page") && ctrChkNode(opt) )
     {
 	vector<string> lst;
 	pageList(lst);

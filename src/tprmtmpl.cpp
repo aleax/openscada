@@ -462,6 +462,7 @@ void TPrmTmplLib::save( )
 			    
 void TPrmTmplLib::start( bool val )
 {
+    bool isErr = false;
     vector<string> lst;
     list(lst);
     for( int i_f = 0; i_f < lst.size(); i_f++ )
@@ -470,9 +471,12 @@ void TPrmTmplLib::start( bool val )
 	{
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	    mess_err(nodePath().c_str(),_("Template '%s' start is error."),lst[i_f].c_str());
+	    isErr = true;
 	}
 						
     run_st = val;
+    
+    if( isErr )	throw TError(nodePath().c_str(),_("Some templates start is error."));
 }
 
 void TPrmTmplLib::add( const char *id, const char *name )
@@ -487,7 +491,7 @@ void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
     {
         ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter templates library: ")+id());
 	if(ctrMkNode("branches",opt,-1,"/br","",0444))
-	    ctrMkNode("grp",opt,-1,"/br/tmpl_",_("Opened DB"),0444,"root","root",1,"list","/tmpl/tmpl");
+	    ctrMkNode("grp",opt,-1,"/br/tmpl_",_("Opened DB"),0664,"root","root",1,"s_com","add,del");
         if(ctrMkNode("area",opt,-1,"/lib",_("Library")))
 	{
     	    if(ctrMkNode("area",opt,-1,"/lib/st",_("State")))
@@ -535,7 +539,7 @@ void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(descr());
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_descr = opt->text();
     }
-    else if( a_path == "/tmpl/tmpl" )
+    else if( a_path == "/br/tmpl_" || a_path == "/tmpl/tmpl" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
 	{

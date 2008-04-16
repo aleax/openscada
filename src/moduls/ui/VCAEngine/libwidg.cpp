@@ -314,7 +314,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
         ctrMkNode("oscada_cntr",opt,-1,"/",_("Widget's library: ")+id());
 	if(ico().size()) ctrMkNode("img",opt,-1,"/ico","",R_R_R_);
         if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
-	    ctrMkNode("grp",opt,-1,"/br/wdg_",_("Widget"),R_R_R_,"root","UI",1,"list","/wdg/wdg");
+	    ctrMkNode("grp",opt,-1,"/br/wdg_",_("Widget"),permit(),user().c_str(),grp().c_str(),1,"s_com","add,del");
         if(ctrMkNode("area",opt,-1,"/obj",_("Library")))
 	{
     	    if(ctrMkNode("area",opt,-1,"/obj/st",_("State")))
@@ -404,7 +404,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/obj/cfg/load" && ctrChkNode(opt,"set",permit(),user().c_str(),grp().c_str(),SEQ_WR) )  load();
     else if( a_path == "/obj/cfg/save" && ctrChkNode(opt,"set",permit(),user().c_str(),grp().c_str(),SEQ_WR) )  save();
-    else if( a_path == "/wdg/wdg" )
+    else if( a_path == "/br/wdg_" || a_path == "/wdg/wdg" )
     {
         if( ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) )
         {
@@ -509,13 +509,13 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* LWidget: Library stored widget               *
 //************************************************
-LWidget::LWidget( const string &id, const string &isrcwdg ) :
-        Widget(id), TConfig(&mod->elWdg()),
+LWidget::LWidget( const string &iid, const string &isrcwdg ) :
+        Widget(iid), TConfig(&mod->elWdg()),
         m_ico(cfg("ICO").getSd()), m_proc(cfg("PROC").getSd()), m_proc_per(cfg("PROC_PER").getId()),
 	m_user(cfg("USER").getSd()), m_grp(cfg("GRP").getSd()), m_permit(cfg("PERMIT").getId()), 
 	m_parent(cfg("PARENT").getSd()), m_attrs(cfg("ATTRS").getSd())
 {
-    cfg("ID").setS(id);
+    cfg("ID").setS(id());
     
     setParentNm(isrcwdg);
 }
@@ -890,10 +890,10 @@ void LWidget::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* CWidget: Container stored widget             *
 //************************************************
-CWidget::CWidget( const string &id, const string &isrcwdg ) :
-        Widget(id), TConfig(&mod->elInclWdg()), m_parent(cfg("PARENT").getSd()), m_attrs(cfg("ATTRS").getSd())
+CWidget::CWidget( const string &iid, const string &isrcwdg ) :
+        Widget(iid), TConfig(&mod->elInclWdg()), m_parent(cfg("PARENT").getSd()), m_attrs(cfg("ATTRS").getSd())
 {
-    cfg("ID").setS(id);
+    cfg("ID").setS(id());
     m_lnk = true;
     setParentNm(isrcwdg);
 }

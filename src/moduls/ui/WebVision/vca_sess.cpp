@@ -2137,7 +2137,7 @@ void VCADiagram::getReq( SSess &ses )
 	//- Trace cursors value -
 	if( active )
 	{
-	    long long tTimeGrnd = tTime - (int)(tSize*1000000.);
+	    long long tTimeGrnd = tTime - (long long)(tSize*1000000.);
 	    if( curTime >= (tTime-2*(long long)trcPer*1000000) || curTime <= tTimeGrnd )
 		setCursor(tTime,ses.user);
         }
@@ -2148,7 +2148,7 @@ void VCADiagram::getReq( SSess &ses )
 
     //-- Get generic parameters --
     int parNum     = trnds.size();                         		//Parameter's number
-    int tSz        = (int)(tSize*1000000.);       			//Trends size (us)
+    long long tSz  = (long long)(tSize*1000000.);       			//Trends size (us)
     long long tEnd = tTime;                     			//Trends end point (us)
     long long tPict = tEnd;
     long long tBeg = tEnd - tSz;                                      	//Trends begin point (us)
@@ -2594,7 +2594,7 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
 
 void VCADiagram::setCursor( long long itm, const string& user )
 {
-    long long tTimeGrnd = tTime - (int)(tSize*1000000.);
+    long long tTimeGrnd = tTime - (long long)(tSize*1000000.);
     curTime = vmax(vmin(itm,tTime),tTimeGrnd);
 
     XMLNode req("set");
@@ -2657,10 +2657,10 @@ void VCADiagram::TrendObj::setAddr( const string &vl )
 						    
 void VCADiagram::TrendObj::loadData( const string &user, bool full )
 {
-    int tSize   = (int)(owner().tSize*1000000.);
+    long long tSize     = (long long)(owner().tSize*1000000.);
     long long tTime     = owner().tTime;
     long long tTimeGrnd = tTime - tSize;
-    int wantPer = tSize/(int)(owner().width+0.5);
+    long long wantPer   = tSize/(int)(owner().width+0.5);
     string arch = owner().valArch;
 		    
     //- Clear trend for empty address and the full reload data -

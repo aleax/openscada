@@ -33,6 +33,9 @@
 #include <QTimeEdit>
 #include <QKeyEvent>
 #include <QTextEdit>
+#include <QFontComboBox>
+#include <QGroupBox>
+#include <QCheckBox>
 
 #include <tsys.h>
 
@@ -227,6 +230,116 @@ void DlgUser::finish( int result )
 	else setResult(SelErr);
     }
     else setResult(SelCancel);
+}
+
+//*********************************************
+//* Font select dialog                        *
+//*********************************************
+FontDlg::FontDlg( QWidget *parent, const QString &ifnt )
+{
+    setWindowTitle(_("Font select"));
+    
+    QGridLayout *dlg_lay = new QGridLayout(this);
+    dlg_lay->setMargin(10);
+    dlg_lay->setSpacing(6);    
+    
+    QLabel *lab = new QLabel(_("Font:"),this);
+    lab->setSizePolicy( QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed) );
+    dlg_lay->addWidget(lab,0,0,1,2);    
+    fntSel = new QFontComboBox(this);
+    connect(fntSel, SIGNAL(currentFontChanged(const QFont&)), this, SLOT(cfgChange()));
+    dlg_lay->addWidget(fntSel,1,0,1,2);
+    
+    QVBoxLayout *sz_lay = new QVBoxLayout;
+    sz_lay->setSpacing(6);
+    lab = new QLabel(_("Size:"),this);
+    lab->setSizePolicy( QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed) );
+    sz_lay->addWidget(lab);
+    spBox = new QSpinBox(this);
+    spBox->setValue(10);
+    connect(spBox, SIGNAL(valueChanged(int)), this, SLOT(cfgChange()));
+    sz_lay->addWidget(spBox);
+    QGroupBox *grpBox = new QGroupBox(_("Style:"),this);
+    QVBoxLayout *grpLay = new QVBoxLayout;
+    grpLay->setMargin(5);
+    chBold = new QCheckBox(_("Bold"), this);		grpLay->addWidget(chBold);
+    connect(chBold, SIGNAL(stateChanged(int)), this, SLOT(cfgChange()));
+    chItalic = new QCheckBox(_("Italic"), this);	grpLay->addWidget(chItalic);
+    connect(chItalic, SIGNAL(stateChanged(int)), this, SLOT(cfgChange()));
+    chStrike = new QCheckBox(_("Strikeout"), this);	grpLay->addWidget(chStrike);
+    connect(chStrike, SIGNAL(stateChanged(int)), this, SLOT(cfgChange()));
+    chUnder = new QCheckBox(_("Underline"), this);	grpLay->addWidget(chUnder);
+    connect(chUnder, SIGNAL(stateChanged(int)), this, SLOT(cfgChange()));
+    grpBox->setLayout(grpLay);
+    sz_lay->addWidget(grpBox);
+    dlg_lay->addItem(sz_lay,2,0);
+    
+    grpBox = new QGroupBox(_("Sample:"),this);
+    grpLay = new QVBoxLayout;
+    grpLay->setMargin(5);
+    sampleText = new QLineEdit(_("AaBbCcDdEeFf"),this);
+    sampleText->setSizePolicy( QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred) );
+    sampleText->setAlignment(Qt::AlignCenter);
+    grpLay->addWidget(sampleText);
+    grpBox->setLayout(grpLay);
+    dlg_lay->addWidget(grpBox,2,1);
+    
+    dlg_lay->addItem( new QSpacerItem( 20, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ), 3, 0, 1, 2 );
+
+    QFrame *sep = new QFrame(this);
+    sep->setFrameShape( QFrame::HLine );
+    sep->setFrameShadow( QFrame::Raised );
+    dlg_lay->addWidget( sep, 4, 0, 1, 2 );
+
+    QDialogButtonBox *but_box = new QDialogButtonBox(QDialogButtonBox::Ok|
+                                    		     QDialogButtonBox::Cancel,Qt::Horizontal,this);
+    QImage ico_t;    
+    but_box->button(QDialogButtonBox::Ok)->setText(_("Ok"));
+    if(!ico_t.load(TUIS::icoPath("button_ok").c_str())) ico_t.load(":/images/button_ok.png");
+    but_box->button(QDialogButtonBox::Ok)->setIcon(QPixmap::fromImage(ico_t));
+    connect(but_box, SIGNAL(accepted()), this, SLOT(accept()));
+    but_box->button(QDialogButtonBox::Cancel)->setText(_("Cancel"));
+    if(!ico_t.load(TUIS::icoPath("button_cancel").c_str())) ico_t.load(":/images/button_cancel.png");
+    but_box->button(QDialogButtonBox::Cancel)->setIcon(QPixmap::fromImage(ico_t));
+    connect(but_box, SIGNAL(rejected()), this, SLOT(reject()));
+    dlg_lay->addWidget( but_box, 5, 0, 1, 2 );
+    
+    setFont(ifnt);
+}
+
+QString	FontDlg::font( )
+{
+    return QString("%1 %2 %3 %4 %5 %6").arg(fntSel->currentFont().family().replace(QRegExp(" "),"_")).
+					arg(spBox->value()).
+                			arg(chBold->checkState()?"1":"0").
+					arg(chItalic->checkState()?"1":"0").
+					arg(chUnder->checkState()?"1":"0").
+					arg(chStrike->checkState()?"1":"0");
+}
+					
+void FontDlg::setFont( const QString &fnt )
+{
+    char family[101]; strcpy(family,"Arial");
+    int size = 10, bold = 0, italic = 0, underline = 0, strike = 0;
+    sscanf(fnt.toAscii().data(),"%100s %d %d %d %d %d",family,&size,&bold,&italic,&underline,&strike);
+    fntSel->setCurrentFont(QFont(QString(family).replace(QRegExp("_")," ")));
+    spBox->setValue(size);
+    chBold->setCheckState(bold?Qt::Checked:Qt::Unchecked);
+    chItalic->setCheckState(italic?Qt::Checked:Qt::Unchecked);
+    chStrike->setCheckState(strike?Qt::Checked:Qt::Unchecked);
+    chUnder->setCheckState(underline?Qt::Checked:Qt::Unchecked);
+}
+
+void FontDlg::cfgChange()
+{
+    QFont fnt;
+    fnt.setFamily(fntSel->currentFont().family());
+    fnt.setPixelSize(spBox->value());
+    fnt.setBold(chBold->checkState());
+    fnt.setItalic(chItalic->checkState());
+    fnt.setUnderline(chUnder->checkState());
+    fnt.setStrikeOut(chStrike->checkState());
+    sampleText->setFont(fnt);
 }
 
 //*********************************************

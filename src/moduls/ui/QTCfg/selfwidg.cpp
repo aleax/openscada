@@ -364,37 +364,65 @@ bool DateTimeEdit::event( QEvent * e )
 //*************************************************
 //* InputDlg: Id and name input dialog.           *
 //*************************************************
-InputDlg::InputDlg( bool with_id ) : m_id(NULL), m_name(NULL)
+InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess,
+        const QString &ndlg, bool with_id, bool with_nm ) :
+    		QDialog(parent), m_id(NULL), m_name(NULL)
 {
-    setWindowTitle(_("Enter name"));
-    
+    setWindowTitle(ndlg);
+    setMinimumSize( QSize( 120, 150 ) );
+    setWindowIcon(icon);
+    setSizeGripEnabled(true);
+		
     QVBoxLayout *dlg_lay = new QVBoxLayout(this);
     dlg_lay->setMargin(10);
     dlg_lay->setSpacing(6);
-
-    QGridLayout *ed_lay = new QGridLayout;
-    ed_lay->setSpacing(6);
-    if( with_id )
+			    
+    //- Icon label and text message -
+    QHBoxLayout *intr_lay = new QHBoxLayout;
+    intr_lay->setSpacing(6);
+					
+    QLabel *icon_lab = new QLabel(this);
+    icon_lab->setSizePolicy( QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum) );
+    icon_lab->setPixmap(icon.pixmap(48));
+    intr_lay->addWidget(icon_lab);
+		
+    inp_lab = new QLabel(mess,this);
+    //inp_lab->setAlignment(Qt::AlignHCenter);
+    inp_lab->setWordWrap(true);
+    intr_lay->addWidget(inp_lab);
+    dlg_lay->addItem(intr_lay);
+				    
+    //- Id and name fields -
+    ed_lay = new QGridLayout;
+    if( with_nm || with_id )
     {
-        ed_lay->addWidget( new QLabel(_("ID:"),this), 0, 0 );
-        m_id = new QLineEdit(this);
-        ed_lay->addWidget( m_id, 0, 1 );
+        ed_lay->setSpacing(6);
+        if( with_id )
+        {
+            ed_lay->addWidget( new QLabel(_("ID:"),this), 3, 0 );
+            m_id = new QLineEdit(this);
+            ed_lay->addWidget( m_id, 3, 1 );
+        }
+        if( with_nm )
+        {
+            ed_lay->addWidget( new QLabel(_("Name:"),this), 4, 0 );
+            m_name = new QLineEdit(this);
+            ed_lay->addWidget( m_name, 4, 1 );
+        }
+
     }
-    ed_lay->addWidget( new QLabel(_("Name:"),this), 1, 0 );
-    m_name = new QLineEdit(this);
-    ed_lay->addWidget( m_name, 1, 1 );
     dlg_lay->addItem(ed_lay);
 
-    dlg_lay->addItem( new QSpacerItem( 20, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
+    //- Qk and Cancel buttons -
+    dlg_lay->addItem( new QSpacerItem( 10, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 
     QFrame *sep = new QFrame(this);
     sep->setFrameShape( QFrame::HLine );
     sep->setFrameShadow( QFrame::Raised );
-
     dlg_lay->addWidget( sep );
-
+			
     QDialogButtonBox *but_box = new QDialogButtonBox(QDialogButtonBox::Ok|
-	                                             QDialogButtonBox::Cancel,Qt::Horizontal,this);
+                                		     QDialogButtonBox::Cancel,Qt::Horizontal,this);
     QImage ico_t;
     but_box->button(QDialogButtonBox::Ok)->setText(_("Ok"));
     if(!ico_t.load(TUIS::icoPath("button_ok").c_str())) ico_t.load(":/images/button_ok.png");
@@ -405,30 +433,42 @@ InputDlg::InputDlg( bool with_id ) : m_id(NULL), m_name(NULL)
     but_box->button(QDialogButtonBox::Cancel)->setIcon(QPixmap::fromImage(ico_t));
     connect(but_box, SIGNAL(rejected()), this, SLOT(reject()));
     dlg_lay->addWidget( but_box );
+
+    resize(400,120+(40*with_nm)+(40*with_id));
 }
 
 QString InputDlg::id()
 {
-    if( m_id )	return m_id->text();
+    if( m_id )  return m_id->text();
     return "";
 }
-	    
+	
 QString InputDlg::name()
 {
     if( m_name )return m_name->text();
     return "";
 }
-	    
-void InputDlg::setId(const QString &val)
+		
+QString InputDlg::mess( )
 {
-    if( m_id )	m_id->setText(val);
+    return inp_lab->text();
 }
 
+void InputDlg::setId(const QString &val)
+{
+    if( m_id )  m_id->setText(val);
+}
+    
 void InputDlg::setName(const QString &val)
 {
     if( m_name )m_name->setText(val);
 }
-
+	
+void InputDlg::setMess( const QString &val )
+{
+    inp_lab->setText( val );
+}
+		    
 //*************************************************
 //* DlgUser: User select dialog                   *
 //*************************************************

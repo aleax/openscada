@@ -31,7 +31,7 @@ using namespace VCA;
 //* Widget                                       *
 //************************************************
 Widget::Widget( const string &id, const string &isrcwdg ) :
-        m_enable(false), m_lnk(false), m_id(id), m_parent_nm(isrcwdg)
+        m_enable(false), m_lnk(false), m_id(id.substr(0,30)), m_parent_nm(isrcwdg)
 {
     inclWdg = grpAdd("wdg_");
     attrId  = grpAdd("a_");
@@ -484,7 +484,7 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
         if(isContainer() && (!isLink()) && ctrMkNode("area",opt,-1,"/inclwdg",_("Include widgets")))
 	    ctrMkNode("list",opt,-1,"/inclwdg/wdg",_("Widgets"),permit(),user().c_str(),grp().c_str(),4,"tp","br","idm","1","s_com","add,del","br_pref","wdg_");
 	if(isContainer() && (!isLink()) && ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
-            ctrMkNode("grp",opt,-1,"/br/wdg_",_("Widget"),R_R_R_,"root","root",1,"list","/inclwdg/wdg");
+            ctrMkNode("grp",opt,-1,"/br/wdg_",_("Widget"),permit(),user().c_str(),grp().c_str(),1,"s_com","add,del");
 	if(ico().size()) ctrMkNode("img",opt,-1,"/ico","",0444);	    
 	return true;
     }
@@ -602,7 +602,7 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
         for(int i_l = 0; i_l < ls.size(); i_l++)
             opt->childAdd("el")->setText(c_path+"/"+ls[i_l]);
     }    
-    else if( a_path == "/inclwdg/wdg" )
+    else if( a_path == "/br/wdg_" || a_path == "/inclwdg/wdg" )
     {
         if( ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) )
         {

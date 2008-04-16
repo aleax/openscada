@@ -591,7 +591,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TController::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/blk_",_("Block"),0440,"root","root",1,"list","/scheme/sch");
+	ctrMkNode("grp",opt,-1,"/br/blk_",_("Block"),0664,"root","root",1,"s_com","add,del");
 	if(ctrMkNode("area",opt,-1,"/scheme",_("Blocks scheme")))
 	{
 	    ctrMkNode("fld",opt,-1,"/scheme/ctm",_("Calk time (usek)"),0444,"root","root",1,"tp","real");
@@ -602,7 +602,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
     //Process command to page
     string a_path = opt->attr("path");
     if( a_path == "/scheme/ctm" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(tm_calc,6));
-    else if( a_path == "/scheme/sch" )
+    else if( a_path == "/br/blk_" || a_path == "/scheme/sch" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
 	{

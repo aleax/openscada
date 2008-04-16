@@ -706,7 +706,7 @@ msgstr "11:Значення не отримані."
 
 #: mod_cif.cpp:854 mod_cif.cpp:882 mod_cif.cpp:908 mod_cif.cpp:929
 msgid "10:CIF device error."
-msgstr "10:Помилка США пристрою."
+msgstr "10:Помилка CIF пристрою."
 
 #: mod_cif.cpp:1046
 msgid "Value type is error."

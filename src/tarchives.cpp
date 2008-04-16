@@ -383,7 +383,7 @@ void TArchiveS::subStart( )
 		}
         }
     }    
-    
+
     //- Value archives start -
     valList(o_lst);
     for( int i_o = 0; i_o < o_lst.size(); i_o++ )
@@ -397,7 +397,7 @@ void TArchiveS::subStart( )
 		mess_err(nodePath().c_str(),_("Value archive <%s> start error."),o_lst[i_o].c_str());
 	    }
     }    
-        
+
     //- Start messages interval timer -
     struct itimerspec itval;
     itval.it_interval.tv_sec = itval.it_value.tv_sec = m_mess_per;
@@ -430,8 +430,6 @@ void TArchiveS::subStop( )
 
     vector<string> t_lst, o_lst;
 
-    //printf("TEST 50\n");
-
     //- Stop interval timer for periodic thread creating -
     struct itimerspec itval;
     itval.it_interval.tv_sec = itval.it_interval.tv_nsec =
@@ -449,8 +447,6 @@ void TArchiveS::subStop( )
         pthread_join( m_val_pthr, NULL );
     }
 
-    //printf("TEST 51\n");
-
     //- Value archives stop -
     valList(o_lst);
     for( int i_o = 0; i_o < o_lst.size(); i_o++ )
@@ -464,8 +460,6 @@ void TArchiveS::subStop( )
 		mess_err(nodePath().c_str(),_("Value archive <%s> stop error."),o_lst[i_o].c_str());
 	    }
     }    
-    
-    //printf("TEST 52\n");
     
     //- Archivators stop -
     modList(t_lst);
@@ -499,8 +493,6 @@ void TArchiveS::subStop( )
 		}
 	}
     }
-    
-    //printf("TEST 53\n");    
     
     TSubSYS::subStop( );	
 }
@@ -800,7 +792,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TSubSYS::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/va_",_("Value archive"),0444,"root","root",1,"list","/v_arch/archs");	
+	ctrMkNode("grp",opt,-1,"/br/va_",_("Value archive"),0664,"root",my_gr.c_str(),1,"s_com","add,del");	
 	if(ctrMkNode("area",opt,0,"/sub",_("Subsystem"),0444,"root",my_gr.c_str()))
 	{
 	    ctrMkNode("fld",opt,-1,"/sub/max_am_req",_("Maximum requested messages"),0664,"root",my_gr.c_str(),1,"tp","dec");
@@ -916,7 +908,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",0664,"root",my_gr.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str(m_val_prior));
 	if( ctrChkNode(opt,"set",0664,"root",my_gr.c_str(),SEQ_WR) )	m_val_prior = atoi(opt->text().c_str());
     }
-    else if( a_path == "/v_arch/archs" )
+    else if( a_path == "/br/va_" || a_path == "/v_arch/archs" )
     {
 	if( ctrChkNode(opt,"get",0664,"root",my_gr.c_str(),SEQ_RD) )
 	{
@@ -977,15 +969,15 @@ void TTipArchivator::cntrCmdProc( XMLNode *opt )
     {
         TModule::cntrCmdProc(opt);
 	ctrMkNode("area",opt,0,"/arch",_("Archivators"));
-	ctrMkNode("grp",opt,-1,"/br/mess_",_("Message archivator"),0444,"root","root",1,"list","/arch/mess");
-	ctrMkNode("grp",opt,-1,"/br/val_",_("Value archivator"),0444,"root","root",1,"list","/arch/val");
+	ctrMkNode("grp",opt,-1,"/br/mess_",_("Message archivator"),0664,"root",grp.c_str(),1,"s_com","add,del");
+	ctrMkNode("grp",opt,-1,"/br/val_",_("Value archivator"),0664,"root",grp.c_str(),1,"s_com","add,del");
 	ctrMkNode("list",opt,-1,"/arch/mess",_("Message archivators"),0664,"root",grp.c_str(),4,"tp","br","idm","1","s_com","add,del","br_pref","mess_");
 	ctrMkNode("list",opt,-1,"/arch/val",_("Value archivators"),0664,"root",grp.c_str(),4,"tp","br","idm","1","s_com","add,del","br_pref","val_");
         return;
     }
     //- Process command to page -
     string a_path = opt->attr("path");
-    if( a_path == "/arch/mess" )
+    if( a_path == "/br/mess_" || a_path == "/arch/mess" )
     {
 	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )
 	{
@@ -1001,7 +993,7 @@ void TTipArchivator::cntrCmdProc( XMLNode *opt )
 	}
 	if( ctrChkNode(opt,"del",0664,"root",grp.c_str(),SEQ_WR) )	 messDel(opt->attr("id"),true);
     }
-    else if( a_path == "/arch/val" )
+    else if( a_path == "/br/val_" || a_path == "/arch/val" )
     {
 	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )
 	{

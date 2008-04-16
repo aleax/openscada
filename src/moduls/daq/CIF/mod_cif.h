@@ -30,6 +30,8 @@
 #include <string>
 #include <vector>
 
+#include "nodave.h"
+
 #undef _
 #define _(mess) mod->I18N(mess)
 
@@ -145,6 +147,9 @@ class TMdContr: public TController
 {
     friend class TMdPrm;
     public:
+	//Data
+	enum Type { CIF_PB, ISO_TCP };
+	
 	//Methods
     	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem );
 	~TMdContr( );
@@ -160,11 +165,17 @@ class TMdContr: public TController
 	void disable_( );	
 	void start_( );
 	void stop_( );
+
+	void connectRemotePLC( );
+	void disconnectRemotePLC( );
+	void getDB( unsigned n_db, long offset, string &buffer );
+	void putDB( unsigned n_db, long offset, const string &buffer );
 	
 	TTpContr &owner( )	{ return *(TTpContr *)nodePrev(); }
 	
     protected:
-	//Methods	
+	//Methods
+	bool cfgChange( TCfg &cfg );
 	void prmEn( const string &id, bool val );		//Enable parameter to process list	
 	void regVal( SValData ival, IO::Type itp, bool wr );	//Register value for acquisition
 	//- Values process -
@@ -211,8 +222,10 @@ class TMdContr: public TController
 	Res	en_res;         // Resource for enable params
 	int	&m_per,     	// ms
 		&m_prior,	// Process task priority
-		&m_dev,		// CIF device number
-		&m_addr;	// Remote host address
+		&m_type,	// Connection type
+		&m_slot,
+		&m_dev;		// CIF device number		
+	string	&m_addr;	// Remote host address
 	bool	&m_assinc_wr;	// Asynchronous write mode
 		
 	bool    prc_st,		// Process task active
@@ -222,6 +235,9 @@ class TMdContr: public TController
 	vector< SDataRec > writeBlks;	// Data block for write to a data source, for asynchronous write mode
 	
 	pthread_t procPthr;     // Process task thread
+	
+	daveInterface 	*di;
+	daveConnection 	*dc;
 	
 	double 	tm_calc;	// Template functions calc time
 };
@@ -247,14 +263,8 @@ class TTpContr: public TTipDAQ
 	TElem   &prmIOE( )	{ return el_prm_io; }
 	TElem   &CIFDevE( )	{ return el_cif_dev; }
 
-	//- Remote stations requests -
-	void getDBCIF( unsigned board, unsigned n_st, 
-		        unsigned n_db, long offset, string &buffer );
-	void putDBCIF( unsigned board, unsigned n_st, 
-	                unsigned n_db, long offset, const string &buffer );
-
-	//- Life list of bus stations -
-	void getLifeListCIF( unsigned board, string &buffer );
+	//- Life list of PB stations -
+	void getLifeListPB( unsigned board, string &buffer );
 	
     protected:
 	//Methods

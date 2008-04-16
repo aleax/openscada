@@ -793,8 +793,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     {
 	snprintf(buf,sizeof(buf),_("%s station: \"%s\""),PACKAGE_NAME,name().c_str());
 	ctrMkNode("oscada_cntr",opt,-1,"/",buf,0444);
-	if(ctrMkNode("branches",opt,-1,"/br","",0444))
-	    ctrMkNode("grp",opt,-1,"/br/sub_",_("Subsystem"),0444,"root","root",1,"list","/subs/br");	
+	if(ctrMkNode("branches",opt,-1,"/br","",0444))	ctrMkNode("grp",opt,-1,"/br/sub_",_("Subsystem"),0444);	
 	if(TUIS::icoPresent(id())) ctrMkNode("img",opt,-1,"/ico","",0444);
 	if(ctrMkNode("area",opt,-1,"/gen",_("Station"),0444))
 	{
@@ -906,7 +905,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText((Mess->logDirect()&0x08)?"1":"0");
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	Mess->setLogDirect( atoi(opt->text().c_str())?Mess->logDirect()|0x08:Mess->logDirect()&(~0x08) );
     }
-    else if( a_path == "/subs/br" && ctrChkNode(opt,"get",0444,"root","root",SEQ_RD) )
+    else if( (a_path == "/br/sub_" || a_path == "/subs/br") && ctrChkNode(opt,"get",0444,"root","root",SEQ_RD) )
     {
         vector<string> lst;
         list(lst);

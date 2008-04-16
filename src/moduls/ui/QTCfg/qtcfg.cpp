@@ -194,6 +194,22 @@ ConfApp::ConfApp( string open_user ) :
     actNext->setStatusTip(_("Press for going to next page"));
     actNext->setEnabled(false);
     connect(actNext, SIGNAL(activated()), this, SLOT(pageNext()));    
+    //-- Item add --
+    if(!ico_t.load(TUIS::icoPath("it_add").c_str())) ico_t.load(":/images/it_add.png");
+    actItAdd = new QAction(QPixmap::fromImage(ico_t),_("&Add"),this);
+    actItAdd->setToolTip(_("Add item"));
+    actItAdd->setWhatsThis(_("The button for adding new item"));
+    actItAdd->setStatusTip(_("Press for adding new item."));
+    actItAdd->setEnabled(false);
+    connect(actItAdd, SIGNAL(activated()), this, SLOT(itAdd()));
+    //-- Item delete --
+    if(!ico_t.load(TUIS::icoPath("it_del").c_str())) ico_t.load(":/images/it_del.png");
+    actItDel = new QAction(QPixmap::fromImage(ico_t),_("&Delete"),this);
+    actItDel->setToolTip(_("Delete item"));
+    actItDel->setWhatsThis(_("The button for deleting item"));
+    actItDel->setStatusTip(_("Press for deleting item."));
+    actItDel->setEnabled(false);
+    connect(actItDel, SIGNAL(activated()), this, SLOT(itDel()));
     //-- Update --
     if(!ico_t.load(TUIS::icoPath("reload").c_str())) ico_t.load(":/images/reload.png");
     QAction *actUpdate = new QAction(QPixmap::fromImage(ico_t),_("&Refresh"),this);
@@ -246,6 +262,10 @@ ConfApp::ConfApp( string open_user ) :
     QMenu *mn_file = menuBar()->addMenu(_("&File"));
     mn_file->addAction(actClose);
     mn_file->addAction(actQuit);
+    //-- Create menu "edit" --
+    QMenu *mn_edit = menuBar()->addMenu(_("&Edit"));    
+    mn_edit->addAction(actItAdd);
+    mn_edit->addAction(actItDel);
     //-- Create menu "view" --
     QMenu *mn_view = menuBar()->addMenu(_("&View"));    
     mn_view->addAction(actUpdate);
@@ -270,6 +290,9 @@ ConfApp::ConfApp( string open_user ) :
     toolBar->addAction(actUp);
     toolBar->addAction(actPrev);
     toolBar->addAction(actNext);
+    toolBar->addSeparator();
+    toolBar->addAction(actItAdd);
+    toolBar->addAction(actItDel);
     toolBar->addSeparator();
     toolBar->addAction(actUpdate);
     toolBar->addAction(actStartUpd);
@@ -356,6 +379,89 @@ void ConfApp::pageNext()
     next.erase(next.begin()); 
     
     try{ pageDisplay( path ); } catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); } 
+}
+
+void ConfApp::itAdd( )
+{
+    if( sel_path.empty() || !root->childGet("id","br",true) )	return;
+    XMLNode *branch = root->childGet("id","br");
+
+    InputDlg dlg(this,actItAdd->icon(),
+            QString(_("Add item to node: '%1'.")).arg(sel_path.c_str()),
+	    _("Add node"),true,true);
+    dlg.ed_lay->addWidget( new QLabel(_("Item type:"),&dlg), 0, 0 );
+    QComboBox *nCont = new QComboBox(&dlg);
+    dlg.ed_lay->addWidget( nCont, 0, 1 );
+
+    //- Load branches list -
+    for( int i_b = 0; i_b < branch->childSize(); i_b++ )
+	if( atoi(branch->childGet(i_b)->attr("acs").c_str())&SEQ_WR && branch->childGet(i_b)->attr("s_com").find("add") != string::npos )
+	    nCont->addItem( branch->childGet(i_b)->attr("dscr").c_str(), branch->childGet(i_b)->attr("id").c_str() );
+    if( !nCont->count() )
+    {
+	mod->postMess(mod->nodePath().c_str(),_("No one editable container present."),TUIMod::Info,this);
+	return;
+    }
+    
+    if( dlg.exec() != QDialog::Accepted )   return;
+    
+    //- Send create request -
+    XMLNode br_req("add");
+    br_req.setAttr("path",sel_path+"/%2fbr%2f"+nCont->itemData(nCont->currentIndex()).toString().toAscii().data())->
+    	   setAttr("id",dlg.id().toAscii().data())->
+	   setText(dlg.name().toAscii().data());
+    if( cntrIfCmd(br_req) )	mod->postMess(br_req.attr("mcat").c_str(),br_req.text().c_str(),TUIMod::Info,this);
+    else treeUpdate();
+}
+
+void ConfApp::itDel( )
+{
+    if( sel_path.empty() )	return;
+
+    InputDlg dlg(this,actItDel->icon(),
+            QString(_("You sure for delete node: '%1'?")).arg(sel_path.c_str()),
+	    _("Delete node"),false,false);
+    if( dlg.exec() != QDialog::Accepted )   return;
+    
+    string t_el, sel_own, sel_el;
+    int n_obj = 0;
+    for( int off = 0; !(t_el=TSYS::pathLev(sel_path,0,true,&off)).empty(); n_obj++ )
+    { if( n_obj ) sel_own += ("/"+sel_el); sel_el = t_el; }
+    if( n_obj > 2 )
+    {
+        XMLNode br_req("info");
+        br_req.setAttr("path",sel_own+"/%2fbr");
+        if( !cntrIfCmd(br_req) && br_req.childGet(0,true) )
+        {
+            XMLNode *branch = br_req.childGet(0);
+            for( int i_b = 0; i_b < branch->childSize(); i_b++ )
+                if( branch->childGet(i_b)->attr("id") == sel_el.substr(0,branch->childGet(i_b)->attr("id").size()) &&
+                    atoi(branch->childGet(i_b)->attr("acs").c_str())&SEQ_WR &&
+                    branch->childGet(i_b)->attr("s_com").find("del") != string::npos )
+            	    { 
+			br_req.clear()->setName("del")->
+					setAttr("path",sel_own+"/%2fbr%2f"+branch->childGet(i_b)->attr("id"))->
+					setAttr("id",sel_el.substr(branch->childGet(i_b)->attr("id").size()));
+			if( cntrIfCmd(br_req) )
+			    mod->postMess(br_req.attr("mcat").c_str(),br_req.text().c_str(),TUIMod::Info,this);
+			else
+			    try
+			    { 
+				pageDisplay(mod->startPath());
+				treeUpdate();
+			    }
+			    catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
+			break; 
+		    }
+        }
+    }
+}
+
+void ConfApp::treeUpdate( )
+{
+    for( int i_t = 0; i_t < CtrTree->topLevelItemCount(); i_t++ )
+        if( CtrTree->topLevelItem(i_t)->isExpanded() )
+            viewChildRecArea(CtrTree->topLevelItem(i_t),-1);
 }
 
 void ConfApp::userSel()
@@ -1312,7 +1418,7 @@ void ConfApp::pageDisplay( const string &path )
     else		actNext->setEnabled(false);
     
     //- Delete all tabs for new node -
-    if( path != pg_info.attr("path") ) //sel_path )
+    if( path != pg_info.attr("path") )
     {
 	//-- Stop refresh --
 	pageCyclRefrStop();
@@ -1348,6 +1454,37 @@ void ConfApp::pageDisplay( const string &path )
 	upStruct(*root,*n_node.childGet(0));
     }	
     selectChildRecArea(*root,"/");
+    
+    //- Add and delete access allow check -
+    //-- Add process --
+    actItAdd->setEnabled(false);
+    if( root->childGet("id","br",true) )
+    {
+	XMLNode *branch = root->childGet("id","br");
+	for( int i_b = 0; i_b < branch->childSize(); i_b++ )
+	    if( atoi(branch->childGet(i_b)->attr("acs").c_str())&SEQ_WR && branch->childGet(i_b)->attr("s_com").find("add") != string::npos )
+	    { actItAdd->setEnabled(true); break; }
+    }
+    actItDel->setEnabled(false);
+    //-- Delete process --
+    string t_el, sel_own, sel_el;
+    int n_obj = 0;
+    for( int off = 0; !(t_el=TSYS::pathLev(sel_path,0,true,&off)).empty(); n_obj++ )
+    { if( n_obj ) sel_own += ("/"+sel_el); sel_el = t_el; }
+    if( n_obj > 2 )
+    {
+	XMLNode br_req("info");
+	br_req.setAttr("path",sel_own+"/%2fbr");
+	if( !cntrIfCmd(br_req) && br_req.childGet(0,true) )
+	{
+	    XMLNode *branch = br_req.childGet(0);
+	    for( int i_b = 0; i_b < branch->childSize(); i_b++ )
+		if( branch->childGet(i_b)->attr("id") == sel_el.substr(0,branch->childGet(i_b)->attr("id").size()) &&
+		    atoi(branch->childGet(i_b)->attr("acs").c_str())&SEQ_WR && 
+		    branch->childGet(i_b)->attr("s_com").find("del") != string::npos )
+		{ actItDel->setEnabled(true); break; }
+	}
+    }
 }
 
 bool ConfApp::upStruct(XMLNode &w_nd, const XMLNode &n_nd)
@@ -1437,6 +1574,11 @@ void ConfApp::ctrTreePopup( )
 
     try
     {
+	//- Add and delete item action add -
+	popup.addAction(actItAdd);
+	popup.addAction(actItDel);
+	popup.addSeparator();
+	//- Main action add -
 	QAction *actRemHostUp = new QAction(_("Update remote hosts list"),this);
 	popup.addAction(actRemHostUp);
         QAction *rez = popup.exec(QCursor::pos());
@@ -1490,7 +1632,13 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, int level )
 	}
 	else if( brs->childSize() > 1 )
 	{
-	    it = new QTreeWidgetItem(i);
+	    it = NULL;
+	    //- Search no present item -
+	    if( level < 0 )
+		for( int i_it = 0; i_it < i->childCount(); i_it++ )
+		    if( i->child(i_it)->text(2) == (string("*")+br->attr("id")).c_str() )
+		    { it = i->child(i_it); break; }
+	    if( !it )	it = new QTreeWidgetItem(i);
 	    it->setText(0,(br->attr("dscr")+":").c_str());
 	    it->setText(1,br->attr("dscr").c_str());
 	    it->setText(2,(string("*")+br->attr("id")).c_str());
@@ -1498,11 +1646,15 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, int level )
 	    QFont fnt = it->font(0);
 	    fnt.setItalic(true);
 	    it->setFont(0,fnt);
+	    //--- Next node for next level ---
+            if( level-1 > 0 || (level < 0 && it->isExpanded()) )	viewChildRecArea(it,level-1);
+	    continue;
     	}
 	
 	//-- Get branches --
 	XMLNode req("get");
-	req.setAttr("path",path+"/"+TSYS::strEncode(br->attr("list"),TSYS::PathEl));
+	if( br->attr("list").empty() )	req.setAttr("path",path+"/%2fbr%2f"+br->attr("id"));
+	else req.setAttr("path",path+"/"+TSYS::strEncode(br->attr("list"),TSYS::PathEl));
 	if( cntrIfCmd(req) ) 
 	{ 
 	    mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this); 
@@ -1517,16 +1669,70 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, int level )
 	    if( br_el->attr("id").size() )	br_path.append(br_el->attr("id"));
 	    else				br_path.append(br_el->text());
 	    br_path = TSYS::strEncode(br_path,TSYS::PathEl);
-		    
-	    QTreeWidgetItem *ch_it = new QTreeWidgetItem(it);
+	
+	    QTreeWidgetItem *ch_it = NULL;
+	    if( level < 0 )
+		for( int i_it = 0; i_it < it->childCount(); i_it++ )
+		    if( it->child(i_it)->text(2) == (path+"/"+br_path).c_str() )
+		    { ch_it = it->child(i_it); break; }
+	    if( !ch_it ) ch_it = new QTreeWidgetItem(it);
 	    ch_it->setText(0,br_el->text().c_str());
 	    ch_it->setText(1,br->attr("dscr").c_str());
 	    ch_it->setText(2,(path+"/"+br_path).c_str());
 			    			    
 	    //--- Next node for next level ---
-	    if( level-1 > 0 )	viewChildRecArea(ch_it,level-1);
+	    if( level-1 > 0 || (level < 0 && ch_it->isExpanded()) )	viewChildRecArea(ch_it,level-1);
 	}
-    }    
+    }
+    
+    //- Remove no present node's items -
+    if( level < 0 && brs->childSize() )
+    {
+	if( i->text(2)[0] == '*' || brs->childSize() == 1 )
+	{
+	    for( int ibr = 0; ibr < brs->childSize(); ibr++ )
+		if( brs->childSize() == 1 || i->text(2) == (string("*")+brs->childGet(ibr)->attr("id")).c_str() )
+		{
+		    XMLNode *br = brs->childGet(ibr);
+		    XMLNode req("get");
+		    if( br->attr("list").empty() )  req.setAttr("path",path+"/%2fbr%2f"+br->attr("id"));
+		    else req.setAttr("path",path+"/"+TSYS::strEncode(br->attr("list"),TSYS::PathEl));
+		    if( !cntrIfCmd(req) )
+			for( int i_it = 0; i_it < i->childCount(); i_it++ )
+			{
+			    int i_lel;
+			    for( i_lel = 0; i_lel < req.childSize(); i_lel++ )
+			    {
+				XMLNode *br_el = req.childGet(i_lel);
+				string br_path = br->attr("id");
+				if( br_el->attr("id").size() )      br_path.append(br_el->attr("id"));
+				else                                br_path.append(br_el->text());
+				br_path = TSYS::strEncode(br_path,TSYS::PathEl);
+				if( i->child(i_it)->text(2) == (path+"/"+br_path).c_str() ) break;
+			    }
+			    if( i_lel >= req.childSize() ) 
+			    { 
+				delete i->takeChild(i_it); 
+				i_it--; 
+			    }
+			}		    
+		    break;
+		}
+	}
+	else
+	    for( int i_it = 0; i_it < i->childCount(); i_it++ )
+	    {
+		int ibr;
+		for( ibr = 0; ibr < brs->childSize(); ibr++ )
+		    if( i->child(i_it)->text(2) == (string("*")+brs->childGet(ibr)->attr("id")).c_str() )
+			break;
+		if( ibr >= brs->childSize() )
+		{
+		    delete i->takeChild(i_it);
+		    i_it--;
+		}
+	    }
+    }
 }
 
 int ConfApp::cntrIfCmd( XMLNode &node )
@@ -1870,9 +2076,12 @@ void ConfApp::listBoxPopup( )
 	    if(!rez)	{ popup.clear(); return; }
 	    if( rez == actAdd || rez == actIns || rez == actEd )
 	    {
-		InputDlg dlg(ind_m);
+		InputDlg dlg(this,this->windowIcon(),"",_("Item name set"),ind_m,true);
+		if( rez == actAdd )	dlg.setMess(_("Add new ellement."));
+		else if( rez == actIns )dlg.setMess(_("Insert new ellement."));
 		if( rez == actEd )
 		{
+		    dlg.setMess(_("Rename ellement."));
 		    dlg.setId(p_id.c_str());
 		    dlg.setName(p_text.c_str());
 		}
@@ -1945,6 +2154,9 @@ void ConfApp::listBoxPopup( )
 	    
 	    autoUpdTimer->setSingleShot(true);
 	    autoUpdTimer->start(CH_REFR_TM);      //Redraw
+	    
+	    if( n_el->attr("tp") == "br" && (rez == actAdd || rez == actIns || rez == actEd || rez == actDel) )
+		treeUpdate();
 	    
 	    popup.clear();
 	}

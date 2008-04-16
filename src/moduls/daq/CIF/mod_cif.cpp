@@ -32,6 +32,8 @@
 #include "rcs_user.h"
 #include "cif_user.h"
 
+#include "openSocket.h"
+
 #include "mod_cif.h"
 
 //************************************************
@@ -110,9 +112,12 @@ void TTpContr::postEnable( int flag )
     fldAdd( new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30","") );
     fldAdd( new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","0;10000") );
     fldAdd( new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
-    fldAdd( new TFld("CIF_DEV",_("CIF board"),TFld::Integer,TFld::NoFlag,"1","0","0;3") );
-    fldAdd( new TFld("ADDR",_("Remote controller address"),TFld::Integer,TFld::NoFlag,"3","10","0;126") );    
     fldAdd( new TFld("ASINC_WR",_("Asynchronous write mode"),TFld::Boolean,TFld::NoFlag,"1","0") );
+    fldAdd( new TFld("TYPE",_("Connection type"),TFld::Integer,TFld::Selected|TCfg::Prevent,"1","0",
+	(TSYS::int2str(TMdContr::CIF_PB)+";"+TSYS::int2str(TMdContr::ISO_TCP)).c_str(),"CIF_PB;ISO_TCP") );
+    fldAdd( new TFld("ADDR",_("Remote controller address"),TFld::String,TFld::NoFlag,"40","10") );
+    fldAdd( new TFld("SLOT",_("CP slot"),TFld::Integer,TFld::NoFlag,"2","2","0;30") );
+    fldAdd( new TFld("CIF_DEV",_("CIF board"),TFld::Integer,TFld::NoFlag,"1","0","0;3") );    
     //-- Parameter type DB structure --
     int t_prm = tpParmAdd("logic","PRM_BD",_("Logical"));
     tpPrmAt(t_prm).fldAdd( new TFld("TMPL",_("Parameter template"),TFld::String,TCfg::NoVal,"50","") );
@@ -354,144 +359,7 @@ void TTpContr::initCIF( int dev )
     while(tTaskState.bDPM_state!=OPERATE);
 }
 
-void TTpContr::getDBCIF( unsigned board, unsigned n_st, 
-                    	unsigned n_db, long offset, string &buffer )
-{
-    RCS_MESSAGE tMsg;
-    int res, e_try = 4;
-
-    if( buffer.size() > 240 )		
-	throw TError(nodePath().c_str(),_("14:Request block too big."));
-    if( !cif_devs[board].present )
-	throw TError(nodePath().c_str(),_("15:Board %d no present."),board);
-	
-    ResAlloc resource(cif_devs[board].res,true);
-    
-    do
-    {
-	e_try--;
-	//- Clear all previous data -
-	while(!DevGetMessage(board,sizeof(RCS_MESSAGE),(MSG_STRUC *)&tMsg,0L))	sleep(0);
-
-	//- Prepare put request -
-	tMsg.rx = 3;
-	tMsg.tx = 16;
-	tMsg.ln = 8;
-	tMsg.nr = 0;
-	tMsg.a  = 0;
-	tMsg.f  = 0;
-	tMsg.b  = MPI_Read_Write_DB;
-	tMsg.e  = 0;
-	tMsg.d[0] = n_st;
-	tMsg.d[1] = (unsigned char)(offset>>8);
-	tMsg.d[2] = (unsigned char)n_db;
-	tMsg.d[3] = (unsigned char)(n_db>>8);
-	tMsg.d[4] = (unsigned char)offset;
-	tMsg.d[5] = (unsigned char)buffer.size();
-	tMsg.d[6] = TASK_TDT_UINT8;
-	tMsg.d[7] = TASK_TFC_READ;
-	
-	//- Put message to remote host -
-	res = DevPutMessage(board,(MSG_STRUC *)&tMsg, 200L);
-    	if( res == DRV_DEV_PUT_TIMEOUT )
-	    throw TError(nodePath().c_str(),_("12:Put request is timeouted."));
-	//- Get remote host's response -
-    	if( res == DRV_NO_ERROR )
-           res = DevGetMessage(board,sizeof(RCS_MESSAGE),(MSG_STRUC *)&tMsg,200L);
-    }
-    while( (res == DRV_NO_ERROR) && (tMsg.f == 0x02 || tMsg.f == 0x39) && e_try > 0 );
-        
-    //- Process errors -
-    if( res != DRV_NO_ERROR )
-	throw TError(nodePath().c_str(),_("19:Request to DB error %d."),res);
-    if( res == DRV_DEV_GET_TIMEOUT )
-	throw TError(nodePath().c_str(),_("13:Get request is timeouted."));
-    if( tMsg.f == 17 )	throw TError(nodePath().c_str(),_("17:No response of the remote station."));
-    if( tMsg.f == 18 )	throw TError(nodePath().c_str(),_("18:Master not into the logical token ring."));
-    if( tMsg.f == 0x85 )throw TError(nodePath().c_str(),_("20:Specified offset address or DB error."));
-
-    //printf("Get DB %d:%d DB%d.%d(%d) -- %d\n",board,n_st,n_db,offset,buffer.size(),tMsg.f);
-
-    //- Close connection -
-    /*tMsg.rx = 3;
-    tMsg.tx = 16;
-    tMsg.ln = 0;
-    tMsg.nr = 0;
-    tMsg.a  = 0;
-    tMsg.f  = 0;
-    tMsg.b  = MPI_Disconnect;
-    tMsg.e  = 0;
-    if( (res=DevPutMessage(board,(MSG_STRUC *)&tMsg, 200L)) != DRV_NO_ERROR )
-	throw TError(nodePath().c_str(),_("12:Put request is error %d."),res);
-    if( (res=DevGetMessage(board,sizeof(RCS_MESSAGE),(MSG_STRUC *)&tMsg,200L)) != DRV_NO_ERROR )
-	throw TError(nodePath().c_str(),_("12:Get request is error %d."),res);*/
-
-    //- Put result -
-    buffer.replace(0,buffer.size(),(char *)tMsg.d+8,buffer.size());
-}
-
-void TTpContr::putDBCIF( unsigned board, unsigned n_st, 
-                	unsigned n_db, long offset, const string &buffer )
-{
-    RCS_MESSAGE tMsg;
-    int res, e_try = 4;
-
-    if( buffer.size() > 240 )		
-	throw TError(nodePath().c_str(),_("16:Transmit block too big."));
-    if( !cif_devs[board].present )
-	throw TError(nodePath().c_str(),_("15:Board %d no present."),board); 
-
-    ResAlloc resource(cif_devs[board].res,true);
-    
-    do
-    {
-	e_try--;
-
-	//- Clear all previous data -
-	while(!DevGetMessage(board,sizeof(RCS_MESSAGE),(MSG_STRUC *)&tMsg,0L))	sleep(0);
-
-	//- Prepare put request -
-	tMsg.rx = 3;
-	tMsg.tx = 16;
-	tMsg.ln = buffer.size()+8;
-	tMsg.nr = 0;
-	tMsg.a  = 0;
-	tMsg.f  = 0;
-	tMsg.b  = MPI_Read_Write_DB;
-	tMsg.e  = 0;
-	tMsg.d[0] = n_st;
-	tMsg.d[1] = (unsigned char)(offset>>8);
-	tMsg.d[2] = (unsigned char)n_db;
-    	tMsg.d[3] = (unsigned char)(n_db>>8);
-	tMsg.d[4] = (unsigned char)offset;
-	tMsg.d[5] = (unsigned char)buffer.size();
-	tMsg.d[6] = TASK_TDT_UINT8;
-	tMsg.d[7] = TASK_TFC_WRITE;
-	memcpy(tMsg.d+8,buffer.c_str(),buffer.size());
-	
-	//- Put message to remote host -	
-	res = DevPutMessage(board,(MSG_STRUC *)&tMsg,200L);
-	if( res == DRV_DEV_PUT_TIMEOUT )
-	    throw TError(nodePath().c_str(),_("12:Put request is timeouted."));
-	//- Get remote host's response -	    
-	if( res == DRV_NO_ERROR) 
-	    res = DevGetMessage(board,sizeof(RCS_MESSAGE),(MSG_STRUC *)&tMsg, 200L);
-    }
-    while( (res == DRV_NO_ERROR) && (tMsg.f == 0x02 || tMsg.f == 0x39) && e_try > 0 );
-    
-    //printf("Put DB %d:%d DB%d.%d(%d) -- %d \n",board,n_st,n_db,offset,buffer.size(),tMsg.f);
-    
-    //- Process errors -
-    if( res != DRV_NO_ERROR )
-	throw TError(nodePath().c_str(),_("19:Request to DB error %d."),res);    
-    if( res == DRV_DEV_GET_TIMEOUT )
-	throw TError(nodePath().c_str(),_("13:Get request is timeouted."));
-    if( tMsg.f == 17 )	throw TError(nodePath().c_str(),_("17:No response of the remote station."));
-    if( tMsg.f == 18 )	throw TError(nodePath().c_str(),_("18:Master not into the logical token ring."));
-    if( tMsg.f == 0x85 )throw TError(nodePath().c_str(),_("20:Specified offset address or DB error."));   
-}
-
-void TTpContr::getLifeListCIF( unsigned board, string &buffer )
+void TTpContr::getLifeListPB( unsigned board, string &buffer )
 {
     RCS_MESSAGE tMsg;
     RCS_TELEGRAMHEADER_10  *ptRcsTelegramheader10;
@@ -539,7 +407,8 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 	{
 	    if(ctrMkNode("area",opt,-1,"/mod/st",_("Status")))
 		ctrMkNode("fld",opt,-1,"/mod/st/drv",_("CIF driver"),0444,"root","root",1,"tp","bool");
-	    if(ctrMkNode("table",opt,-1,"/mod/dev",_("CIF devices"),0664,"root","root"))
+	    if( (owner().cif_devs[0].present || owner().cif_devs[1].present || owner().cif_devs[2].present || owner().cif_devs[3].present) && 
+		    ctrMkNode("table",opt,-1,"/mod/dev",_("CIF devices"),0664,"root","root"))
 	    {
 		ctrMkNode("list",opt,-1,"/mod/dev/brd",_("Board"),0444,"root","root",1,"tp","str");
 	        ctrMkNode("list",opt,-1,"/mod/dev/fwnm",_("Firmware name"),0444,"root","root",1,"tp","real");
@@ -627,7 +496,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 	string lifeLst;
 	try 
 	{ 
-	    getLifeListCIF(board, lifeLst);
+	    getLifeListPB(board, lifeLst);
 	    for( int i_st = 0; i_st < lifeLst.size(); i_st++ )
 		switch((unsigned char)lifeLst[i_st])
 		{
@@ -645,9 +514,9 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 //* TMdContr                                     *
 //************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
-	::TController(name_c,daq_db,cfgelem), prc_st(false), endrun_req(false), tm_calc(0),
-	m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId()), 
-	m_dev(cfg("CIF_DEV").getId()), m_addr(cfg("ADDR").getId()), m_assinc_wr(cfg("ASINC_WR").getBd())
+	::TController(name_c,daq_db,cfgelem), prc_st(false), endrun_req(false), tm_calc(0), di(NULL), dc(NULL),		
+	m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId()), m_type(cfg("TYPE").getId()), m_assinc_wr(cfg("ASINC_WR").getBd()),
+	m_slot(cfg("SLOT").getId()), m_dev(cfg("CIF_DEV").getId()), m_addr(cfg("ADDR").getSd())
 {    
     cfg("PRM_BD").setS("CIFPrm_"+name_c);
 }
@@ -681,7 +550,9 @@ TParamContr *TMdContr::ParamAttach( const string &name, int type )
 
 void TMdContr::load( )
 {
+    cfgViewAll(true);
     TController::load( );
+    cfg("TYPE").setI(m_type);
 }
 
 void TMdContr::save( )
@@ -698,15 +569,13 @@ void TMdContr::disable_( )
 {
     //- Clear acquisition data blocks and asynchronous write mode data blocks -
     acqBlks.clear();
-    writeBlks.clear();
+    writeBlks.clear();    
 }
 
 void TMdContr::start_( )
-{   
-    if( !(owner().cif_devs[0].present||owner().cif_devs[1].present||
-	  owner().cif_devs[2].present||owner().cif_devs[3].present) )
-	throw TError(nodePath().c_str(),_("Driver or one boards no present."));
-	
+{
+    connectRemotePLC( );
+
     //- Former proccess parameters list -
     vector<string> list_p;
     list(list_p);
@@ -745,7 +614,20 @@ void TMdContr::stop_( )
         pthread_join( procPthr, NULL );
     }
     //- Clear proccess parameters list -
-    p_hd.clear();
+    p_hd.clear();    
+
+    disconnectRemotePLC( );
+}
+
+bool TMdContr::cfgChange( TCfg &icfg )
+{
+    if( icfg.fld().name() == "TYPE" )
+    {
+	cfg("CIF_DEV").setView(icfg.getI()==0);
+        if( startStat() )	stop();
+    }
+
+    return true;
 }
 
 void TMdContr::prmEn( const string &id, bool val )
@@ -764,8 +646,7 @@ void TMdContr::prmEn( const string &id, bool val )
 
 void TMdContr::regVal( SValData ival, IO::Type itp, bool wr )
 {
-    if( ival.db < 0 || ival.off < 0 || !owner().cif_devs[m_dev].present )
-	return;
+    if( ival.db < 0 || ival.off < 0 )	return;
     
     int iv_sz = valSize(itp,ival.sz); //Get real value's size
     
@@ -837,96 +718,406 @@ void TMdContr::regVal( SValData ival, IO::Type itp, bool wr )
     }
 }
 
-char TMdContr::getValB( SValData ival, string &err )
+void TMdContr::connectRemotePLC( )
 {
-    if( owner().cif_devs[m_dev].present )
+    switch( m_type )
     {
-	for(int i_b = 0; i_b < acqBlks.size(); i_b++)
-	    if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off && 
-		    (ival.off+1) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
+	case CIF_PB:
+	    if( !(owner().cif_devs[0].present||owner().cif_devs[1].present||owner().cif_devs[2].present||owner().cif_devs[3].present) )
+		throw TError(nodePath().c_str(),_("Driver or no one boards no present."));
+	    break;
+	case ISO_TCP:
+	{
+	    //- Full Libnodave API -
+	    _daveOSserialType fds;
+	    fds.wfd = fds.rfd = openSocket(102,m_addr.c_str());
+	    if( fds.rfd <= 0 ) throw TError(nodePath().c_str(),_("Open socket of remote PLC is error."));	    
+	    di = daveNewInterface(fds,(char*)(string("IF")+id()).c_str(),0,daveProtoISOTCP,daveSpeed187k);
+    	    daveSetTimeout(di,5000000);
+            dc = daveNewConnection(di,2,0,m_slot);
+            if( daveConnectPLC(dc) )
+            {
+                close(fds.wfd);
+		delete dc;
+		delete di;
+                throw TError(nodePath().c_str(),_("Connection to PLC is error."));
+            }	
+	
+	    //- Self OpenSCADA API -
+	    //- Output transport open -
+	    /*if( !SYS->transport().at().at("Sockets").at().outPresent(mod->modId()+id()) )
+                SYS->transport().at().at("Sockets").at().outAdd(mod->modId()+id());
+	    AutoHD<TTransportOut> tr = SYS->transport().at().at("Sockets").at().outAt(mod->modId()+id());
+            string trAddr = "TCP:"+TSYS::strSepParse(m_addr,0,':')+":"+
+			        (TSYS::strSepParse(m_addr,1,':').empty() ? "102" : TSYS::strSepParse(m_addr,1,':'));
+	    tr.at().setAddr(trAddr);
+	    tr.at().start();
+	    
+	    //- Connect to remote PLC on ISO-TSAP protocol -
+	    string pdu, mbap;
+	    pdu = pdu + (char)0x11 + (char)0xE0 + (char)0x00 +
+			(char)0x00 + (char)0x00 + (char)0x01 + (char)0x00 +
+			(char)0xC1 + (char)0x02 + (char)0x01 + (char)0x00 +
+			(char)0xC2 + (char)0x02 + (char)0x01 + (char)m_slot +
+			(char)0xC0 + (char)0x01 + (char)0x09;
+	    
+	    mbap = mbap + (char)0x03 + (char)0x00 +
+			  (char)((pdu.size()+4)>>8) + (char)(pdu.size()+4) +
+			  pdu;
+
+	    unsigned char buf[1000];
+	    int resp_len = tr.at().messIO( mbap.data(), mbap.size(), (char*)buf, sizeof(buf), 10 );
+	    if( resp_len < 4 )	throw TError(nodePath().c_str(),_("PLC respond is zero or too short."));
+	    int lenPDU = (buf[2]<<8)+buf[3];
+	    if( lenPDU != 22 )	throw TError(nodePath().c_str(),_("Connection respond is broken."));
+	    
+	    //- Neg PDU length request -
+	    //_daveNegPDUlengthRequest(
+	    mbap = pdu = "";
+	    pdu = pdu+(char)0x02+(char)0xf0+(char)0x80;
+	    //-- Start real PDU header --
+	    pdu = pdu + (char)0x32 +			//P
+			(char)0x01 +			//Type
+			(char)0x00 +			//a
+			(char)0x00 +			//b
+			(char)0xFF + (char)0xFF +	//number
+			(char)0x00 + (char)0x08 +	//plen
+			(char)0x00 + (char)0x00;  	//dlen
+	    //-- Parameters --
+	    pdu = pdu + (char)0xF0 + (char)0x00 + (char)0x00 + (char)0x01 + (char)0x00 + (char)0x01 + (char)0x03 + (char)0xC0;
+			
+	    mbap = mbap+(char)0x03 + (char)0x00 +
+			(char)((pdu.size()+4)>>8) + (char)(pdu.size()+4) +
+			pdu;
+
+	    resp_len = tr.at().messIO( mbap.data(), mbap.size(), (char*)buf, sizeof(buf), 10 );*/
+	    //daveSetDebug(daveDebugAll);
+
+	    break;
+	}
+	default: throw TError(nodePath().c_str(),_("Connection type '%d' no supported."),m_type);
+    }
+}
+
+void TMdContr::disconnectRemotePLC( )
+{
+    switch( m_type )
+    {
+        case ISO_TCP:
+	    daveDisconnectPLC(dc);
+	    close(di->fd.rfd);
+	    delete dc;
+	    delete di;
+	    break;
+    }
+}
+
+void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
+{
+    switch( m_type )
+    {
+        case CIF_PB:
+	{
+	    RCS_MESSAGE tMsg;
+	    int res, e_try = 4;
+
+	    if( buffer.size() > 240 )			throw TError(nodePath().c_str(),_("14:Request block too big."));
+	    if( !owner().cif_devs[m_dev].present )	throw TError(nodePath().c_str(),_("15:Board %d no present."),m_dev);
+	
+	    ResAlloc resource(owner().cif_devs[m_dev].res,true);
+    
+	    do
 	    {
-		if(!acqBlks[i_b].err.size())
-		    return (bool)(acqBlks[i_b].val[ival.off-acqBlks[i_b].off]&(0x01<<ival.sz));
-		else err = acqBlks[i_b].err;
-		break;
+		e_try--;
+		//- Clear all previous data -
+		while(!DevGetMessage(m_dev,sizeof(RCS_MESSAGE),(MSG_STRUC *)&tMsg,0L))	sleep(0);
+
+		//- Prepare put request -
+		tMsg.rx = 3;
+		tMsg.tx = 16;
+		tMsg.ln = 8;
+		tMsg.nr = 0;
+		tMsg.a  = 0;
+		tMsg.f  = 0;
+		tMsg.b  = MPI_Read_Write_DB;
+		tMsg.e  = 0;
+		tMsg.d[0] = vmax(0,vmin(126,atoi(m_addr.c_str())));
+		tMsg.d[1] = (unsigned char)(offset>>8);
+		tMsg.d[2] = (unsigned char)n_db;
+		tMsg.d[3] = (unsigned char)(n_db>>8);
+		tMsg.d[4] = (unsigned char)offset;
+		tMsg.d[5] = (unsigned char)buffer.size();
+		tMsg.d[6] = TASK_TDT_UINT8;
+		tMsg.d[7] = TASK_TFC_READ;
+	
+		//- Put message to remote host -
+		res = DevPutMessage(m_dev,(MSG_STRUC *)&tMsg, 200L);
+		if( res == DRV_DEV_PUT_TIMEOUT )
+		    throw TError(nodePath().c_str(),_("12:Put request is timeouted."));
+		//- Get remote host's response -
+		if( res == DRV_NO_ERROR )
+    		    res = DevGetMessage(m_dev,sizeof(RCS_MESSAGE),(MSG_STRUC *)&tMsg,200L);
 	    }
-	err = err.size()?err:_("11:Value not gathered.");
-    } else err = err.size()?err:_("10:CIF device error.");
+	    while( (res == DRV_NO_ERROR) && (tMsg.f == 0x02 || tMsg.f == 0x39) && e_try > 0 );
+        
+	    //- Process errors -
+	    if( res != DRV_NO_ERROR )		throw TError(nodePath().c_str(),_("19:Request to DB error %d."),res);
+	    if( res == DRV_DEV_GET_TIMEOUT )	throw TError(nodePath().c_str(),_("13:Get request is timeouted."));
+	    if( tMsg.f == 17 )	throw TError(nodePath().c_str(),_("17:No response of the remote station."));
+	    if( tMsg.f == 18 )	throw TError(nodePath().c_str(),_("18:Master not into the logical token ring."));
+	    if( tMsg.f == 0x85 )throw TError(nodePath().c_str(),_("20:Specified offset address or DB error."));
+
+	    //printf("Get DB %d:%d DB%d.%d(%d) -- %d\n",m_dev,vmax(0,vmin(126,atoi(m_addr.c_str()))),n_db,offset,buffer.size(),tMsg.f);
+
+	    //- Close connection -
+	    /*tMsg.rx = 3;
+	    tMsg.tx = 16;
+	    tMsg.ln = 0;
+	    tMsg.nr = 0;
+	    tMsg.a  = 0;
+	    tMsg.f  = 0;
+	    tMsg.b  = MPI_Disconnect;
+	    tMsg.e  = 0;
+	    if( (res=DevPutMessage(m_dev,(MSG_STRUC *)&tMsg, 200L)) != DRV_NO_ERROR )
+		throw TError(nodePath().c_str(),_("12:Put request is error %d."),res);
+	    if( (res=DevGetMessage(m_dev,sizeof(RCS_MESSAGE),(MSG_STRUC *)&tMsg,200L)) != DRV_NO_ERROR )
+		throw TError(nodePath().c_str(),_("12:Get request is error %d."),res);*/
+
+	    //- Put result -
+	    buffer.replace(0,buffer.size(),(char *)tMsg.d+8,buffer.size());
+	    break;
+	}
+    	case ISO_TCP:
+	{
+	    //- Full libnodave API -
+	    if( daveReadBytes(dc,daveDB,n_db,offset,buffer.size(),NULL) )
+		throw TError(nodePath().c_str(),_("Read DB from controller error."));
+	    buffer.assign((char*)dc->resultPointer,buffer.size());
+	
+	    //- Self OpenSCADA API -
+	    /*string pdu, mbap;
+	    pdu = pdu+(char)0x02+(char)0xf0+(char)0x80;
+	    //- Start real PDU header -
+	    pdu = pdu + (char)0x32 +			//P
+			(char)0x01 +			//Type
+			(char)0x00 +			//a
+			(char)0x00 +			//b
+			(char)0x00 + (char)0x01 +	//number
+			(char)0x00 + (char)0x0e +	//plen
+			(char)0x00 + (char)0x00;  	//dlen
+	    //- Parameters -
+	    pdu = pdu + (char)0x04 +						// FuncRead
+			(char)0x01 +						// Parameters counter
+			(char)0x12 + (char)0x0A + (char)0x10 +
+			(char)0x02 +						// 1=single bit, 2=byte, 4=word
+	    		(char)(buffer.size()>>8) + (char)buffer.size() +	// length in bytes
+		        (char)(n_db>>8) + (char)n_db +				// DB number
+			(char)0x84 +						// DB area
+			(char)((offset*8)>>16) + (char)((offset*8)>>8) + (char)(offset*8);	// start address in bits
+			
+	    mbap = mbap+(char)0x03 + (char)0x00 +
+			(char)((pdu.size()+4)>>8) + (char)(pdu.size()+4) +
+			pdu;
+ 	    
+            AutoHD<TTransportOut> tr;
+	    try{ tr = SYS->transport().at().at("Sockets").at().outAt(mod->modId()+id()); }
+	    catch(...) { tr.at().stop(); throw; }
+
+	    if( !tr.at().startStat() ){ stop(); start(); }
+	    
+	    unsigned char buf[1000];
+	    int resp_len = tr.at().messIO( mbap.data(), mbap.size(), (char*)buf, sizeof(buf), 10 );	    
+	    if( resp_len < 16 )	throw TError(nodePath().c_str(),_("PLC respond is zero or too short."));
+	    
+	    int pheader = 7;
+	    int phlen = 10;
+	    if( buf[pheader+1] == 2 || buf[pheader+1] == 3 ) phlen = 12;
+	    int pparam = pheader+phlen;	//19
+	    int plen  = (buf[pheader+6]<<8) + buf[pheader+7];	//2
+	    int pdata = pparam+plen;	//21
+	    int pdlen = (buf[pheader+8]<<8) + buf[pheader+9];	//6
+	    buffer.replace(0,buffer.size(),(char*)buf+pdata,buffer.size());*/	    
+
+	    break;
+	}
+    }
+}
+
+void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
+{
+    switch( m_type )
+    {
+	case CIF_PB:
+	{
+	    RCS_MESSAGE tMsg;
+	    int res, e_try = 4;
+
+	    if( buffer.size() > 240 )			throw TError(nodePath().c_str(),_("16:Transmit block too big."));
+	    if( !owner().cif_devs[m_dev].present )	throw TError(nodePath().c_str(),_("15:Board %d no present."),m_dev);
+
+	    ResAlloc resource(owner().cif_devs[m_dev].res,true);
+    
+	    do
+	    {
+		e_try--;
+
+		//- Clear all previous data -
+		while(!DevGetMessage(m_dev,sizeof(RCS_MESSAGE),(MSG_STRUC *)&tMsg,0L))	sleep(0);
+
+		//- Prepare put request -
+		tMsg.rx = 3;
+		tMsg.tx = 16;
+		tMsg.ln = buffer.size()+8;
+		tMsg.nr = 0;
+		tMsg.a  = 0;
+		tMsg.f  = 0;
+		tMsg.b  = MPI_Read_Write_DB;
+		tMsg.e  = 0;
+		tMsg.d[0] = vmax(0,vmin(126,atoi(m_addr.c_str())));
+		tMsg.d[1] = (unsigned char)(offset>>8);
+		tMsg.d[2] = (unsigned char)n_db;
+		tMsg.d[3] = (unsigned char)(n_db>>8);
+		tMsg.d[4] = (unsigned char)offset;
+		tMsg.d[5] = (unsigned char)buffer.size();
+		tMsg.d[6] = TASK_TDT_UINT8;
+		tMsg.d[7] = TASK_TFC_WRITE;
+		memcpy(tMsg.d+8,buffer.c_str(),buffer.size());
+	
+		//- Put message to remote host -	
+		res = DevPutMessage(m_dev,(MSG_STRUC *)&tMsg,200L);
+		if( res == DRV_DEV_PUT_TIMEOUT )
+		    throw TError(nodePath().c_str(),_("12:Put request is timeouted."));
+		//- Get remote host's response -	    
+		if( res == DRV_NO_ERROR) 
+		    res = DevGetMessage(m_dev,sizeof(RCS_MESSAGE),(MSG_STRUC *)&tMsg, 200L);
+	    }
+	    while( (res == DRV_NO_ERROR) && (tMsg.f == 0x02 || tMsg.f == 0x39) && e_try > 0 );
+    
+	    //printf("Put DB %d:%d DB%d.%d(%d) -- %d \n",m_dev,vmax(0,vmin(126,atoi(m_addr.c_str()))),n_db,offset,buffer.size(),tMsg.f);
+    
+	    //- Process errors -
+	    if( res != DRV_NO_ERROR )		throw TError(nodePath().c_str(),_("19:Request to DB error %d."),res);    
+	    if( res == DRV_DEV_GET_TIMEOUT )	throw TError(nodePath().c_str(),_("13:Get request is timeouted."));
+	    if( tMsg.f == 17 )	throw TError(nodePath().c_str(),_("17:No response of the remote station."));
+	    if( tMsg.f == 18 )	throw TError(nodePath().c_str(),_("18:Master not into the logical token ring."));
+	    if( tMsg.f == 0x85 )throw TError(nodePath().c_str(),_("20:Specified offset address or DB error."));
+	    break;
+	} 
+	case ISO_TCP:
+	    //- Full Libnodave API -
+    	    if( daveWriteBytes(dc,daveDB,n_db,offset,buffer.size(),(char*)buffer.c_str()) )
+	    	throw TError(nodePath().c_str(),_("Write DB to controller error.")); 	
+	
+	    //- Self OpenSCADA API -
+	    /*string pdu, mbap;
+	    pdu = pdu+(char)0x02+(char)0xf0+(char)0x80;
+	    //- Start real PDU header -
+	    pdu = pdu + (char)0x32 +			//P
+			(char)0x01 +			//Type
+			(char)0x00 +			//a
+			(char)0x00 +			//b
+			(char)0x00 + (char)0x00 +	//number
+			(char)0x00 + (char)0x0e +	//plen
+			(char)((buffer.size()+4)>>8) + (char)(buffer.size()+4);  	//dlen
+	    //- Parameters -
+	    pdu = pdu + (char)0x05 +						// FuncWrite
+			(char)0x01 +						// Parameters counter
+			(char)0x12 + (char)0x0A + (char)0x10 +
+			(char)0x02 +						// 1=single bit, 2=byte, 4=word
+	    		(char)(buffer.size()>>8) + (char)buffer.size() +	// length in bytes
+		        (char)(n_db>>8) + (char)n_db +				// DB number
+			(char)0x84 +						// DB area
+			(char)((offset*8)>>16) + (char)((offset*8)>>8) + (char)(offset*8);	// start address in bits
+	    //- Data -
+	    pdu = pdu + (char)0x00 + (char)0x04 + (char)0x00 + (char)0x00+
+			buffer;
+			
+	    mbap = mbap+(char)0x03 + (char)0x00 +
+			(char)((pdu.size()+4)>>8) + (char)(pdu.size()+4) +
+			pdu;	
+
+	    for( int j=0; j < mbap.size(); j++ )
+	    {
+	        if( (j&0xf)==0 )	printf("\n%x :",j);
+	        printf("0x%02X ",mbap[j]);
+	    }*/	
+
+	    break;
+    }
+}
+
+char TMdContr::getValB( SValData ival, string &err )
+{    
+    for(int i_b = 0; i_b < acqBlks.size(); i_b++)
+	if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off && 
+	    (ival.off+1) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
+	{
+	    if(!acqBlks[i_b].err.size())
+	        return (bool)(acqBlks[i_b].val[ival.off-acqBlks[i_b].off]&(0x01<<ival.sz));
+	    else err = acqBlks[i_b].err;
+	    break;
+	}
+    err = err.size()?err:_("11:Value not gathered.");
     
     return EVAL_BOOL;
 }
 
 int TMdContr::getValI( SValData ival, string &err )
 {
-    if( owner().cif_devs[m_dev].present )
-    {
-	int iv_sz = valSize( IO::Integer, ival.sz );
-	for(int i_b = 0; i_b < acqBlks.size(); i_b++)
-	    if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off && 
-		    (ival.off+iv_sz) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
-	    {
-		if(!acqBlks[i_b].err.size())
-		    switch(iv_sz)
-		    {
-			case 1:			    
-			    return acqBlks[i_b].val[ival.off-acqBlks[i_b].off];
-			case 2:
-			    return *(si16*)revers(acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz)).c_str();
-			case 4:
-			    return *(si32*)revers(acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz)).c_str();
-		    }
-		else err = acqBlks[i_b].err;
-		break;
-	    }
-	err = err.size()?err:_("11:Value not gathered.");
-    } else err = err.size()?err:_("10:CIF device error.");
+    int iv_sz = valSize( IO::Integer, ival.sz );
+    for(int i_b = 0; i_b < acqBlks.size(); i_b++)
+        if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off && 
+    	    (ival.off+iv_sz) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
+        {
+    	    if(!acqBlks[i_b].err.size())
+	        switch(iv_sz)
+	        {
+	    	    case 1:	return acqBlks[i_b].val[ival.off-acqBlks[i_b].off];
+		    case 2:	return *(si16*)revers(acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz)).c_str();
+		    case 4:	return *(si32*)revers(acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz)).c_str();
+		}
+	    else err = acqBlks[i_b].err;
+	    break;
+	}
+    err = err.size()?err:_("11:Value not gathered.");
     
     return EVAL_INT;
 }
 
 double TMdContr::getValR( SValData ival, string &err )
 {
-    if( owner().cif_devs[m_dev].present )
-    {    
-	int iv_sz = valSize( IO::Real, ival.sz );
-	for(int i_b = 0; i_b < acqBlks.size(); i_b++)
-	    if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off && 
-		    (ival.off+iv_sz) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
-	    {
-		if(!acqBlks[i_b].err.size())
-		    switch(iv_sz)
-		    {
-			case 4:
-			    return *(float*)revers(acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz)).c_str();
-			case 8:
-			    return *(double*)revers(acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz)).c_str();
-		    }
-		else err = acqBlks[i_b].err;
-		break;
-	    }
-	err = err.size()?err:_("11:Value not gathered.");
-    } else err = err.size()?err:_("10:CIF device error.");
+    int iv_sz = valSize( IO::Real, ival.sz );
+    for(int i_b = 0; i_b < acqBlks.size(); i_b++)
+	if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off && 
+	    (ival.off+iv_sz) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
+	{
+	    if(!acqBlks[i_b].err.size())
+	        switch(iv_sz)
+	        {
+		    case 4:	return *(float*)revers(acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz)).c_str();
+		    case 8:	return *(double*)revers(acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz)).c_str();
+		}
+	    else err = acqBlks[i_b].err;
+	    break;
+	}
+    err = err.size()?err:_("11:Value not gathered.");
     
     return EVAL_REAL;
 }
 
 string TMdContr::getValS( SValData ival, string &err )
 {
-    if( owner().cif_devs[m_dev].present )
-    {
-	int iv_sz = valSize( IO::String, ival.sz );
-	char buf[iv_sz];
-	for(int i_b = 0; i_b < acqBlks.size(); i_b++)
-	    if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off && 
-		    (ival.off+iv_sz) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
-	    {
-		if(!acqBlks[i_b].err.size())
-		    return acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz);
-		else err = acqBlks[i_b].err;
-		break;
-	    }
-	err = err.size()?err:_("11:Value not gathered.");
-    } else err = err.size()?err:_("10:CIF device error.");
+    int iv_sz = valSize( IO::String, ival.sz );
+    char buf[iv_sz];
+    for(int i_b = 0; i_b < acqBlks.size(); i_b++)
+        if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off && 
+    	    (ival.off+iv_sz) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
+        {
+    	    if( !acqBlks[i_b].err.size() )	return acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz);
+	    else err = acqBlks[i_b].err;
+	    break;
+	}
+    err = err.size()?err:_("11:Value not gathered.");
     
     return EVAL_STR;
 }
@@ -939,7 +1130,7 @@ void TMdContr::setValB( bool ivl, SValData ival, string &err )
     val^=(0x01<<ival.sz);
     try
     { 
-	if( !assincWrite( ) )	mod->putDBCIF(m_dev,m_addr,ival.db,ival.off,string((char*)&val,1)); 
+	if( !assincWrite( ) )	putDB(ival.db,ival.off,string((char*)&val,1));
 	else 
 	    for(int i_b = 0; i_b < writeBlks.size(); i_b++)
 		if( writeBlks[i_b].db == ival.db && ival.off >= writeBlks[i_b].off && 
@@ -955,7 +1146,7 @@ void TMdContr::setValB( bool ivl, SValData ival, string &err )
 }
 
 void TMdContr::setValI( int ivl, SValData ival, string &err )
-{    
+{
     int val = getValI(ival,err);
     if(val==EVAL_INT || val == ivl) return;
     //- Write data to controller or write data block -
@@ -963,7 +1154,7 @@ void TMdContr::setValI( int ivl, SValData ival, string &err )
     int iv_sz = valSize( IO::Integer, ival.sz );
     try
     { 
-	if( !assincWrite( ) ) mod->putDBCIF(m_dev,m_addr,ival.db,ival.off,revers(string((char *)&val,iv_sz)));
+	if( !assincWrite( ) )	putDB(ival.db,ival.off,revers(string((char *)&val,iv_sz)));
 	else
      	    for(int i_b = 0; i_b < writeBlks.size(); i_b++)
 		if( writeBlks[i_b].db == ival.db && ival.off >= writeBlks[i_b].off && 
@@ -988,7 +1179,7 @@ void TMdContr::setValR( double ivl, SValData ival, string &err )
     int iv_sz = valSize( IO::Real, ival.sz );
     try
     { 
-       	if( !assincWrite( ) )	mod->putDBCIF(m_dev,m_addr,ival.db,ival.off,revers(string((char *)&val,iv_sz)));
+       	if( !assincWrite( ) )	putDB(ival.db,ival.off,revers(string((char *)&val,iv_sz)));
 	else
      	    for(int i_b = 0; i_b < writeBlks.size(); i_b++)
     		if(writeBlks[i_b].db == ival.db && ival.off >= writeBlks[i_b].off && 
@@ -1019,7 +1210,7 @@ void TMdContr::setValS( const string &ivl, SValData ival, string &err )
     //- Write data to controller or write data block -
     try
     { 
-       	if( !assincWrite( ) )	mod->putDBCIF(m_dev,m_addr,ival.db,ival.off,vali);
+       	if( !assincWrite( ) )	putDB(ival.db,ival.off,vali);
 	else
     	    for(int i_b = 0; i_b < writeBlks.size(); i_b++)
     		if(writeBlks[i_b].db == ival.db && ival.off >= writeBlks[i_b].off && 
@@ -1071,8 +1262,7 @@ void *TMdContr::Task( void *icntr )
     		{ 
 		    //printf("TEST 00: Put %d: (%d:%d)\n",
 		    //	cntr.writeBlks[i_b].db, cntr.writeBlks[i_b].off, cntr.writeBlks[i_b].val.size() );
-		    mod->putDBCIF( cntr.m_dev, cntr.m_addr, cntr.writeBlks[i_b].db,
-			    cntr.writeBlks[i_b].off,cntr.writeBlks[i_b].val);		    
+		    cntr.putDB( cntr.writeBlks[i_b].db,cntr.writeBlks[i_b].off,cntr.writeBlks[i_b].val );
 		    cntr.writeBlks[i_b].err="";
 		}
 		catch(TError err) { cntr.writeBlks[i_b].err=err.mess; }	
@@ -1082,8 +1272,7 @@ void *TMdContr::Task( void *icntr )
 	    { 
 		//printf("TEST 00: Get %d: (%d:%d)\n",
 		//    cntr.acqBlks[i_b].db, cntr.acqBlks[i_b].off, cntr.acqBlks[i_b].val.size() );
-		mod->getDBCIF(cntr.m_dev, cntr.m_addr, cntr.acqBlks[i_b].db, 
-			      cntr.acqBlks[i_b].off, cntr.acqBlks[i_b].val);
+		cntr.getDB(cntr.acqBlks[i_b].db, cntr.acqBlks[i_b].off, cntr.acqBlks[i_b].val);
 		cntr.acqBlks[i_b].err="";
 	    }
 	    catch(TError err) { cntr.acqBlks[i_b].err=err.mess; }	
@@ -1428,13 +1617,13 @@ void TMdPrm::initLnks()
     //- Init links -
     for( int i_l = 0; i_l < lnkSize(); i_l++ )
     {
-	if(ioType(lnk(i_l).io_id)==IO::Boolean)
+	if( ioType(lnk(i_l).io_id) == IO::Boolean )
 	{
 	    sscanf(lnk(i_l).db_addr.c_str(),"DB%d.%d.%d",&lnk(i_l).val.db,&lnk(i_l).val.off,&lnk(i_l).val.sz);
 	    lnk(i_l).val.sz=(lnk(i_l).val.sz>7)?7:(lnk(i_l).val.sz<0)?0:lnk(i_l).val.sz;
 	}
 	else sscanf(lnk(i_l).db_addr.c_str(),"DB%d.%d",&lnk(i_l).val.db,&lnk(i_l).val.off);
-	if(lnk(i_l).val.db < 0 || lnk(i_l).val.off < 0)	lnk(i_l).val.db = lnk(i_l).val.off = -1;
+	if( lnk(i_l).val.db < 0 || lnk(i_l).val.off < 0 ) lnk(i_l).val.db = lnk(i_l).val.off = -1;
 	else owner().regVal(lnk(i_l).val,ioType(lnk(i_l).io_id),ioFlg(lnk(i_l).io_id)&(IO::Output|IO::Return) );
     }
 }

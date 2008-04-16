@@ -277,7 +277,7 @@ void TController::cntrCmdProc( XMLNode *opt )
 	}
     	if( owner().tpPrmSize() )
 	{
-	    ctrMkNode("grp",opt,-1,"/br/prm_",_("Parameter"),0440,"root","root",1,"list","/prm/prm");
+	    ctrMkNode("grp",opt,-1,"/br/prm_",_("Parameter"),0660,"root","root",1,"s_com","add,del");
      	    if(ctrMkNode("area",opt,-1,"/prm",_("Parameters")))
 	    {
 		if( owner().tpPrmSize() > 1 )
@@ -313,7 +313,7 @@ void TController::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	
 	    TBDS::genDBSet(owner().nodePath()+"addType",opt->text(),opt->attr("user"));
     }
-    else if( a_path == "/prm/prm" && owner().tpPrmSize() )
+    else if( (a_path == "/br/prm_" || a_path == "/prm/prm") && owner().tpPrmSize() )
     {
 	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )
 	{

@@ -289,16 +289,16 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	{
 	    w->dc()["font"] = val.c_str();
     	    QFont *fnt = (QFont*)w->dc()["QFont"].value<void*>();
-	    char family[101];
-	    int size, bold, italic, underline, strike;        
-	    int pcnt = sscanf(w->dc().value("font",0).toString().toAscii().data(),
+	    char family[101]; strcpy(family,"Arial");
+	    int size = 10, bold = 0, italic = 0, underline = 0, strike = 0;        
+	    sscanf(w->dc().value("font",0).toString().toAscii().data(),
 		    "%100s %d %d %d %d %d",family,&size,&bold,&italic,&underline,&strike);
-	    if( pcnt >= 1 )	fnt->setFamily(string(family,100).c_str());
-	    if( pcnt >= 2 )	fnt->setPixelSize(size);
-	    if( pcnt >= 3 )	fnt->setBold(bold);
-	    if( pcnt >= 4 )	fnt->setItalic(italic);
-	    if( pcnt >= 5 )	fnt->setUnderline(underline);
-	    if( pcnt >= 6 )	fnt->setStrikeOut(strike);
+	    fnt->setFamily(QString(family).replace(QRegExp("_")," "));
+	    fnt->setPixelSize(size);
+	    fnt->setBold(bold);
+	    fnt->setItalic(italic);
+	    fnt->setUnderline(underline);
+	    fnt->setStrikeOut(strike);
 	    rel_cfg = true;	    
 	    break;
 	}	    	    
@@ -722,16 +722,16 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	{
 	    w->dc()["font"] = val.c_str();
     	    QFont *fnt = (QFont*)w->dc()["QFont"].value<void*>();
-	    char family[101];
-	    int size, bold, italic, underline, strike;        
-	    int pcnt = sscanf(w->dc().value("font",0).toString().toAscii().data(),
+	    char family[101]; strcpy(family,"Arial");
+	    int size = 10, bold = 0, italic = 0, underline = 0, strike = 0;        
+	    sscanf(w->dc().value("font",0).toString().toAscii().data(),
 		    "%100s %d %d %d %d %d",family,&size,&bold,&italic,&underline,&strike);
-	    if( pcnt >= 1 )	fnt->setFamily(string(family,100).c_str());
-	    if( pcnt >= 2 )	fnt->setPixelSize(size);
-	    if( pcnt >= 3 )	fnt->setBold(bold);
-	    if( pcnt >= 4 )	fnt->setItalic(italic);
-	    if( pcnt >= 5 )	fnt->setUnderline(underline);
-	    if( pcnt >= 6 )	fnt->setStrikeOut(strike);
+	    fnt->setFamily(QString(family).replace(QRegExp("_")," "));
+	    fnt->setPixelSize(size);
+	    fnt->setBold(bold);
+	    fnt->setItalic(italic);
+	    fnt->setUnderline(underline);
+	    fnt->setStrikeOut(strike);
 	    up = true;
 	    break;
 	}	    
@@ -1357,15 +1357,15 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	case 38:	//sclMarkFont
 	{
 	    QFont *fnt = (QFont*)w->dc()["sclMarkFont"].value<void*>();
-	    char family[101];
-	    int size, bold, italic, underline, strike;        
-	    int pcnt = sscanf(val.c_str(),"%100s %d %d %d %d %d",family,&size,&bold,&italic,&underline,&strike);
-	    if( pcnt >= 1 )	fnt->setFamily(string(family,100).c_str());
-	    if( pcnt >= 2 )	fnt->setPixelSize(size);
-	    if( pcnt >= 3 )	fnt->setBold(bold);
-	    if( pcnt >= 4 )	fnt->setItalic(italic);
-	    if( pcnt >= 5 )	fnt->setUnderline(underline);
-	    if( pcnt >= 6 )	fnt->setStrikeOut(strike);
+	    char family[101]; strcpy(family,"Arial");
+	    int size = 10, bold = 0, italic = 0, underline = 0, strike = 0;        
+	    sscanf(val.c_str(),"%100s %d %d %d %d %d",family,&size,&bold,&italic,&underline,&strike);
+	    fnt->setFamily(QString(family).replace(QRegExp("_")," "));
+	    fnt->setPixelSize(size);
+	    fnt->setBold(bold);
+	    fnt->setItalic(italic);
+	    fnt->setUnderline(underline);
+	    fnt->setStrikeOut(strike);
 	    make_pct = true;
 	    break;	    
 	}    
@@ -1433,11 +1433,11 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
     QPainter pnt((QPicture*)w->dc()["pictObj"].value<void*>());
 
     //-- Get generic parameters --
-    int parNum     = w->dc()["parNum"].toInt();				//Parameter's number
-    int tSize      = (int)(w->dc()["tSize"].toDouble()*1000000.);	//Trends size (us)
-    long long tEnd = w->dc()["tTime"].toLongLong();			//Trends end point (us)
+    int parNum      = w->dc()["parNum"].toInt();			//Parameter's number
+    long long tSize = (long long)(w->dc()["tSize"].toDouble()*1000000.);//Trends size (us)
+    long long tEnd  = w->dc()["tTime"].toLongLong();			//Trends end point (us)
     long long tPict = tEnd;
-    long long tBeg = tEnd - tSize;					//Trends begin point (us)
+    long long tBeg  = tEnd - tSize;					//Trends begin point (us)
     if( !parNum || tSize <= 0 ) return;
 
     //-- Make decoration and prepare trends area --
@@ -1780,7 +1780,7 @@ void ShapeDiagram::tracing( )
     tTime  = w->dc()["tTime"].toLongLong();
     if( w->dc().value("active",1).toInt() )
     {
-	long long tTimeGrnd = tTime - (int)(w->dc()["tSize"].toDouble()*1000000.);
+	long long tTimeGrnd = tTime - (long long)(w->dc()["tSize"].toDouble()*1000000.);
 	long long curTime = w->dc()["curTime"].toLongLong();
 	if( curTime >= (tTime-2*trcPer) || curTime <= tTimeGrnd )
 	    setCursor( w, tTime );
@@ -1877,7 +1877,7 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 void ShapeDiagram::setCursor( WdgView *w, long long itm )
 {
     long long tTime     = w->dc()["tTime"].toLongLong();
-    long long tTimeGrnd = tTime - (int)(w->dc()["tSize"].toDouble()*1000000.);
+    long long tTimeGrnd = tTime - (long long)(w->dc()["tSize"].toDouble()*1000000.);
     long long curTime   = vmax(vmin(itm,tTime),tTimeGrnd);	    
 
     w->setAllAttrLoad(true);
@@ -1937,10 +1937,10 @@ void ShapeDiagram::TrendObj::setAddr( const string &vl )
 
 void ShapeDiagram::TrendObj::loadData( bool full )
 {
-    int tSize   = (int)(view->dc()["tSize"].toDouble()*1000000.);
+    long long tSize     = (long long)(view->dc()["tSize"].toDouble()*1000000.);
     long long tTime     = view->dc()["tTime"].toLongLong();
     long long tTimeGrnd = tTime - tSize;
-    int wantPer = tSize/view->size().width();
+    long long wantPer = tSize/view->size().width();
     string arch = view->dc()["valArch"].toString().toAscii().data();
 
     //- Clear trend for empty address and the full reload data -

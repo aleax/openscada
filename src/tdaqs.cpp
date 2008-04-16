@@ -377,7 +377,7 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TSubSYS::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/tmplb_",_("Template library"),0444,"root","root",1,"list","/tpllibs/lb");
+	ctrMkNode("grp",opt,-1,"/br/tmplb_",_("Template library"),0664,"root","root",1,"s_com","add,del");
 	if(ctrMkNode("area",opt,0,"/sub",_("Subsystem"),0440))
 	{
 	    ctrMkNode("comm",opt,-1,"/sub/load_db",_("Load"),0660);
@@ -391,7 +391,7 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
     
     //- Process command to page -
     string a_path = opt->attr("path");
-    if( a_path == "/tpllibs/lb" )
+    if( a_path == "/br/tmplb_" || a_path == "/tpllibs/lb" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
         {

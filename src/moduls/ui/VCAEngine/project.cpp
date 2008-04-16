@@ -304,7 +304,7 @@ void Project::cntrCmdProc( XMLNode *opt )
         ctrMkNode("oscada_cntr",opt,-1,"/",_("Project: ")+id());
 	if(ico().size()) ctrMkNode("img",opt,-1,"/ico","",R_R_R_);
         if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
-	    ctrMkNode("grp",opt,-1,"/br/pg_",_("Page"),R_R_R_,"root","UI",1,"list","/page/page");
+	    ctrMkNode("grp",opt,-1,"/br/pg_",_("Page"),permit(),user().c_str(),grp().c_str(),1,"s_com","add,del");
         if(ctrMkNode("area",opt,-1,"/obj",_("Project")))
 	{
     	    if(ctrMkNode("area",opt,-1,"/obj/st",_("State")))
@@ -395,7 +395,7 @@ void Project::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/obj/cfg/load" && ctrChkNode(opt,"set",permit(),user().c_str(),grp().c_str(),SEQ_WR) )  load();
     else if( a_path == "/obj/cfg/save" && ctrChkNode(opt,"set",permit(),user().c_str(),grp().c_str(),SEQ_WR) )  save();
-    else if( a_path == "/page/page" )
+    else if( a_path == "/br/pg_" || a_path == "/page/page" )
     {
         if( ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) )
         {
@@ -500,13 +500,13 @@ void Project::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* Page: Project's page                         *
 //************************************************
-Page::Page( const string &id, const string &isrcwdg ) :
-        Widget(id), TConfig(&mod->elPage()),
+Page::Page( const string &iid, const string &isrcwdg ) :
+        Widget(iid), TConfig(&mod->elPage()),
         m_ico(cfg("ICO").getSd()), m_proc(cfg("PROC").getSd()), m_proc_per(cfg("PROC_PER").getId()),
 	m_flgs(cfg("FLGS").getId()), m_user(cfg("USER").getSd()), m_grp(cfg("GRP").getSd()), 
 	m_permit(cfg("PERMIT").getId()), m_parent(cfg("PARENT").getSd()), m_attrs(cfg("ATTRS").getSd())
 {
-    cfg("ID").setS(id);
+    cfg("ID").setS(id());
 
     m_page = grpAdd("pg_");
 
@@ -1024,7 +1024,7 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 	    if(ctrMkNode("area",opt,1,"/page",_("Pages")))
     		ctrMkNode("list",opt,-1,"/page/page",_("Pages"),permit(),user().c_str(),grp().c_str(),4,"tp","br","idm","1","s_com","add,del","br_pref","pg_");
 	    if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
-		ctrMkNode("grp",opt,-1,"/br/pg_",_("Page"),R_R_R_,"root","UI",1,"list","/page/page");
+		ctrMkNode("grp",opt,-1,"/br/pg_",_("Page"),permit(),user().c_str(),grp().c_str(),1,"s_com","add,del");
 	}
 	return true;
     }
@@ -1048,7 +1048,7 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(Page::Template))->setText(_("Template"));
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(Page::Container|Page::Template))->setText(_("Container and template"));
     }
-    else if( a_path == "/page/page" )
+    else if( a_path == "/br/pg_" || a_path == "/page/page" )
     {
         if( ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) )
         {
@@ -1094,10 +1094,10 @@ void Page::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* PageWdg: Container stored widget             *
 //************************************************
-PageWdg::PageWdg( const string &id, const string &isrcwdg ) :
-        Widget(id), TConfig(&mod->elInclWdg()), m_parent(cfg("PARENT").getSd()), m_attrs(cfg("ATTRS").getSd())
+PageWdg::PageWdg( const string &iid, const string &isrcwdg ) :
+        Widget(iid), TConfig(&mod->elInclWdg()), m_parent(cfg("PARENT").getSd()), m_attrs(cfg("ATTRS").getSd())
 {
-    cfg("ID").setS(id);
+    cfg("ID").setS(id());
     m_lnk = true;
     setParentNm(isrcwdg);
 }

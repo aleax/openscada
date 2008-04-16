@@ -41,6 +41,9 @@ class QComboBox;
 class QLineEdit;
 class QTextEdit;
 class QDialogButtonBox;
+class QFontComboBox;
+class QSpinBox;
+class QCheckBox;
 
 namespace VISION
 {
@@ -64,7 +67,7 @@ namespace VISION
 	private:
 	    QLabel 	*inp_lab;
 	    QLineEdit 	*m_id, *m_name;
-    };    
+    };
 
     //*********************************************
     //* User select dialog                        *
@@ -89,6 +92,33 @@ namespace VISION
 	private:
 	    QComboBox 	*users;
 	    QLineEdit 	*passwd;
+    };
+
+    //*********************************************
+    //* Font select dialog                        *
+    //*********************************************
+    class FontDlg : public QDialog
+    {
+	Q_OBJECT
+    
+	public:
+	    FontDlg( QWidget *parent, const QString &ifnt );
+
+	    QString font( );
+
+	    void setFont( const QString &fnt );
+
+	private slots:
+	    void cfgChange();
+
+	private:
+	    QFontComboBox 	*fntSel;
+	    QSpinBox 		*spBox;
+	    QCheckBox 		*chBold,
+				*chItalic,
+				*chStrike,
+				*chUnder;
+	    QLineEdit 		*sampleText;
     };
     
     //*********************************************
@@ -132,19 +162,19 @@ namespace VISION
             LineEdit( QWidget *parent, LType tp = Text, bool prev_dis = false );
 	    
 	    LType type( ) 	{ return m_tp; }
-            QString value();
+            QString value( );
 	    bool  isEdited( );
 
 	    void setType( LType tp );
-            void setValue(const QString &);
-	    void setCfg(const QString &);
+            void setValue( const QString& );
+	    void setCfg( const QString& );
 	    
-	    QWidget *workWdg()	{ return ed_fld; }
+	    QWidget *workWdg( )	{ return ed_fld; }
         
 	signals:
             void apply( );
             void cancel( );
-	    void valChanged(const QString&);
+	    void valChanged( const QString& );
 	
 	protected:
             bool event( QEvent * e );
@@ -158,7 +188,7 @@ namespace VISION
 	    QString     m_val;
             QWidget	*ed_fld;
     	    QPushButton *bt_fld;
-    };    
+    };
 
     //*********************************************
     //* Text edit widget                          *

@@ -157,6 +157,8 @@ void TipContr::postEnable( int flag )
     m_bfunc.push_back(BFunc("ln",Reg::FLn,1));
     m_bfunc.push_back(BFunc("exp",Reg::FExp,1));
     m_bfunc.push_back(BFunc("pow",Reg::FPow,2));
+    m_bfunc.push_back(BFunc("min",Reg::FMin,2));
+    m_bfunc.push_back(BFunc("max",Reg::FMax,2));
     m_bfunc.push_back(BFunc("sqrt",Reg::FSqrt,1));
     m_bfunc.push_back(BFunc("abs",Reg::FAbs,1));
     m_bfunc.push_back(BFunc("sign",Reg::FSign,1));
@@ -323,7 +325,7 @@ void TipContr::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TTipDAQ::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/lib_",_("Library"),0440,"root","root",1,"list","/libs/lb");
+	ctrMkNode("grp",opt,-1,"/br/lib_",_("Library"),0664,"root","root",1,"s_com","add,del");
 	if(ctrMkNode("area",opt,1,"/libs",_("Functions' Libraries")))
 	{
 	    ctrMkNode("list",opt,-1,"/libs/lb",_("Libraries"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","lib_");
@@ -335,7 +337,7 @@ void TipContr::cntrCmdProc( XMLNode *opt )
     
     //- Process command to page -
     string a_path = opt->attr("path");
-    if( a_path == "/libs/lb" )
+    if( a_path == "/br/lib_" || a_path == "/libs/lb" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
 	{

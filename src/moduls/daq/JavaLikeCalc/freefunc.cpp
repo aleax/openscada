@@ -1426,7 +1426,19 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
                 printf("CODE: Function %d=pow(%d,%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
 #endif		
 	     	reg[*(BYTE *)(cprg+1)] = pow(getValR(val,reg[*(BYTE *)(cprg+2)]),getValR(val,reg[*(BYTE *)(cprg+3)]));
-                cprg+=4; break;	    
+                cprg+=4; break;
+	    case Reg::FMin:
+#if DEBUG_VM	    
+                printf("CODE: Function %d=min(%d,%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
+#endif		
+	     	reg[*(BYTE *)(cprg+1)] = vmin(getValR(val,reg[*(BYTE *)(cprg+2)]),getValR(val,reg[*(BYTE *)(cprg+3)]));
+                cprg+=4; break;
+	    case Reg::FMax:
+#if DEBUG_VM	    
+                printf("CODE: Function %d=max(%d,%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
+#endif		
+	     	reg[*(BYTE *)(cprg+1)] = vmax(getValR(val,reg[*(BYTE *)(cprg+2)]),getValR(val,reg[*(BYTE *)(cprg+3)]));
+                cprg+=4; break;
 	    case Reg::FSqrt:
 #if DEBUG_VM	    
                 printf("CODE: Function %d=sqrt(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));

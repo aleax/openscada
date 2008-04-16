@@ -71,43 +71,46 @@ class ConfApp: public QMainWindow
     private slots:
 	//Slots
 	void quitSt( );
-	    
+
 	void pageUp( );
 	void pagePrev( );
 	void pageNext( );
+	void itAdd( );
+	void itDel( );
 	void pageRefresh( );
 	void pageCyclRefrStart( );
 	void pageCyclRefrStop( );
 
 	void userSel( );
-	    
+
 	void about( );
 	void aboutQt( );
 	void enterWhatsThis( );
-	    
+
 	void endRunChk( );      			//End run flag check
 
 	//- QListView -
 	void selectItem( );				//Processing of select item signal
-	void viewChild( QTreeWidgetItem * i );	//Processing of view item signal 
+	void viewChild( QTreeWidgetItem * i );		//Processing of view item signal 
 	void onItem( QTreeWidgetItem * i );		//View item path
 	void ctrTreePopup( );
-	    
+	void treeUpdate( );				//Update expanded content of tree
+
 	//- QTabWidget -
-	void tabSelect( QWidget *wdg );		//Change curent widget
+	void tabSelect( QWidget *wdg );			//Change curent widget
 
 	//- Self widget's slots -
 	void checkBoxStChange( int stat ); 		//QCheckBox	    
-	void buttonClicked( );			//Button
-	void combBoxActivate( const QString& );	//QComboBox
+	void buttonClicked( );				//Button
+	void combBoxActivate( const QString& );		//QComboBox
 	void listBoxGo( QListWidgetItem* );		//QListBox go for banch	    
-	void listBoxPopup();			//QListBox popup menu
-	void tablePopup( const QPoint &pos );	//QTable popup menu
+	void listBoxPopup();				//QListBox popup menu
+	void tablePopup( const QPoint &pos );		//QTable popup menu
 	void tableSet( int row, int col );		//QTable set
 	void dataTimeChange( const QDateTime & );	//Change data-time
 	void editChange( const QString& );		//Change Edit (LineEdit and TextEdit)
-	void applyButton( );			//Apply button
-	void cancelButton( );			//Cancel button
+	void applyButton( );				//Apply button
+	void cancelButton( );				//Cancel button
 	void imgPopup( const QPoint &pos );		//Image popup
 	    
     private:
@@ -138,12 +141,10 @@ class ConfApp: public QMainWindow
 	QTabWidget  	*tabs;
 	UserStBar	*w_user;
 	    
-	QAction 	*actUp;
-	QAction 	*actPrev;
-	QAction 	*actNext;	    
-	QAction 	*actUser;	    
-	QAction 	*actStartUpd;
-	QAction 	*actStopUpd;
+	QAction 	*actUp,	*actPrev, *actNext,
+			*actUser,
+			*actStartUpd, *actStopUpd,
+			*actItAdd, *actItDel;
 
 	XMLNode		pg_info;
 	XMLNode 	*root;    

@@ -545,8 +545,8 @@ void TTipTransport::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TModule::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/in_",_("Input transport"),0444,"root","root",1,"list","/tr/in");
-	ctrMkNode("grp",opt,-1,"/br/out_",_("Output transport"),0444,"root","root",1,"list","/tr/out");
+	ctrMkNode("grp",opt,-1,"/br/in_",_("Input transport"),0664,"root","root",1,"s_com","add,del");
+	ctrMkNode("grp",opt,-1,"/br/out_",_("Output transport"),0664,"root","root",1,"s_com","add,del");
 	if(ctrMkNode("area",opt,0,"/tr",_("Transports")))
 	{
 	    ctrMkNode("list",opt,-1,"/tr/in",_("Input"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","in_");
@@ -556,7 +556,7 @@ void TTipTransport::cntrCmdProc( XMLNode *opt )
     }
     //- Process command to page -
     string a_path = opt->attr("path");
-    if( a_path == "/tr/in" )
+    if( a_path == "/br/in_" || a_path == "/tr/in" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
 	{
@@ -571,7 +571,7 @@ void TTipTransport::cntrCmdProc( XMLNode *opt )
 	}
 	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	inDel(opt->attr("id"),true);
     }
-    else if( a_path == "/tr/out" )
+    else if( a_path == "/br/out_" || a_path == "/tr/out" )
     {
     	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
 	{

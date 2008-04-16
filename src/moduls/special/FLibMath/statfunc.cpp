@@ -132,14 +132,14 @@ void Lib::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TSpecial::cntrCmdProc(opt);
-        ctrMkNode("grp",opt,-1,"/br/fnc_",_("Function"),0444,"root","root",1,"list","/prm/func");
+        ctrMkNode("grp",opt,-1,"/br/fnc_",_("Function"),0444);
         ctrMkNode("list",opt,-1,"/prm/func",_("Functions"),0444,"root","root",3,"tp","br","idm","1","br_pref","fnc_");
         return;
     }
     
     //- Process command to page -
     string a_path = opt->attr("path");
-    if( a_path == "/prm/func" && ctrChkNode(opt) )
+    if( (a_path == "/br/fnc_" || a_path == "/prm/func") && ctrChkNode(opt) )
     {
         vector<string> lst;
         list(lst);

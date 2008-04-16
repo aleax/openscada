@@ -2,12 +2,12 @@
 
 EXTRA_DIST = *.h po/* doc/*
 
-AM_CFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
-AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
+AM_CFLAGS= -I$(top_srcdir)/src -fPIC -DPIC -DLINUX -DDAVE_LITTLE_ENDIAN
+AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC -DLINUX -DDAVE_LITTLE_ENDIAN
 AM_LDFLAGS= -shared -module
 
 oscd_modul_PROGRAMS = daq_CIF.so
-daq_CIF_so_SOURCES = mod_cif.cpp cif_api.c
+daq_CIF_so_SOURCES = mod_cif.cpp cif_api.c nodave.c openSocket.c setport.c
 
 
 #PO files process and doc install

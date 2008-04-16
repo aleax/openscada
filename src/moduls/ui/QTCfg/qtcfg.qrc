@@ -15,5 +15,7 @@
     <file>images/start.png</file>
     <file>images/stop.png</file>
     <file>images/up.png</file>
+    <file>images/it_add.png</file>
+    <file>images/it_del.png</file>    
 </qresource>
 </RCC>

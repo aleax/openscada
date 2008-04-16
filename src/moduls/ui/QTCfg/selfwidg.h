@@ -42,6 +42,7 @@ class QLineEdit;
 class QHBoxLayout;
 class QTextEdit;
 class QDialogButtonBox;
+class QGridLayout;
 
 namespace QTCFG
 {
@@ -196,17 +197,24 @@ class InputDlg : public QDialog
 {
     public:
 	//Methods
-	InputDlg( bool with_id = false );
+	InputDlg( QWidget *parent, const QIcon &icon, const QString &mess, 
+		const QString &ndlg = "Vision dialog", bool with_id = false, bool with_nm = true );
 	    
 	QString id( );
 	QString name( );
+	QString mess( );
 
 	void setId( const QString &val );
 	void setName( const QString &val );
+	void setMess( const QString &val );
+
+	//Attributes
+	QGridLayout 	*ed_lay;
 
     private:
 	//Attributes
-	QLineEdit *m_id, *m_name;
+	QLabel      	*inp_lab;
+	QLineEdit	*m_id, *m_name;
 };    
 
 //************************************************

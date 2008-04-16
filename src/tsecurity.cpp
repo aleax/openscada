@@ -284,8 +284,8 @@ void TSecurity::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TSubSYS::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/usr_",_("User"),0444,"root","root",1,"list","/usgr/users");
-	ctrMkNode("grp",opt,-1,"/br/grp_",_("Group"),0444,"root","root",1,"list","/usgr/grps");	
+	ctrMkNode("grp",opt,-1,"/br/usr_",_("User"),0664,"root",subId().c_str(),1,"s_com","add,del");
+	ctrMkNode("grp",opt,-1,"/br/grp_",_("Group"),0664,"root",subId().c_str(),1,"s_com","add,del");	
         if(ctrMkNode("area",opt,0,"/sub",_("Subsystem"),0440,"root",subId().c_str()))
 	{
     	    ctrMkNode("comm",opt,-1,"/sub/load_db",_("Load"),0660,"root",subId().c_str());
@@ -303,7 +303,7 @@ void TSecurity::cntrCmdProc( XMLNode *opt )
     //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440,"root",subId().c_str()) )	opt->setText(optDescr());
-    else if( a_path == "/usgr/users" )
+    else if( a_path == "/br/usr_" || a_path == "/usgr/users" )
     {
 	if( ctrChkNode(opt,"get",0664,"root",subId().c_str(),SEQ_RD) )
 	{
@@ -315,7 +315,7 @@ void TSecurity::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"add",0664,"root",subId().c_str(),SEQ_WR) )	usrAdd(opt->text());
 	if( ctrChkNode(opt,"del",0664,"root",subId().c_str(),SEQ_WR) )	usrDel(opt->text(),true);
     }
-    else if( a_path == "/usgr/grps" )
+    else if( a_path == "/br/grp_" || a_path == "/usgr/grps" )
     {
 	if( ctrChkNode(opt,"get",0664,"root",subId().c_str(),SEQ_RD) )
 	{

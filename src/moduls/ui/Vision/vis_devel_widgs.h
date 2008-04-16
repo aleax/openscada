@@ -66,6 +66,9 @@ class ModInspAttr: public QAbstractTableModel
 		    Select   = 0x01, 
 		    FullText = 0x08,
 		    Active   = 0x0100,
+		    Image    = 0x0200,
+		    Color    = 0x0400,
+		    Font     = 0x0800,
 		    DataTime = 0x0200
 		};
 
@@ -368,6 +371,33 @@ class ProjTree: public QDockWidget
 	QTreeWidget *treeW;	
 };
 
+//**********************************************************************************************
+//* Text edit line widget with detail dialog edit button. Support: Font and Color edit dialogs.*
+//**********************************************************************************************
+class LineEditProp : public QWidget
+{
+    Q_OBJECT
+
+    public:
+        //- Data -
+        enum DType { Font, Color };
+
+        //- Methods -
+        LineEditProp( QWidget *parent, DType tp = Font );
+
+        DType type( )       { return m_tp; }
+        QString value( );
+
+        void setType( DType tp )	{ m_tp = tp; }
+        void setValue( const QString& );
+
+    private slots:
+	void callDlg( );
+
+    private:
+        DType       m_tp;
+	QLineEdit   *ed_fld;
+};
 
 //*********************************************
 //* Status bar scale indicator                *
@@ -387,7 +417,7 @@ class WScaleStBar : public QLabel
 	
     private:
         bool isScale;
-};																		    
+};
 
 //*************************************************
 //* Size points widget                            *
