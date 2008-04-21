@@ -97,8 +97,6 @@ class ShapeItem
                      width(iwidth), border_width(bwidth), type(itype)
                      { };								
 
-                    
-                     //double orient,Wwidth,Wheight;
                      Point		ctrlPos4;
                      double ang;
                      int 		n1, n2, n3, n4, n5,
@@ -117,8 +115,6 @@ class InundationItem
         InundationItem(vector <int> inumber_point, int color) : number_point(inumber_point), P_color(color)
                      { };								
 
-                    
-                     //Point		P_center;
                      vector <int>  number_point;
                      int		P_color;
 
@@ -145,8 +141,9 @@ class VCAElFigure : public VCAObj
         Point Bezier(double t,Point p1,Point p2, Point p3, Point p4);
         double Bezier_DeltaT(Point p1,Point p2, Point p3, Point p4);
         double ABS(double var);
-        void Paint_Figure( gdImage* im,ShapeItem item, double xScale, double yScale );
-        void Paint_Fill( gdImage* im, Point pnt, InundationItem in_item );
+        bool IsPaintable(ShapeItem item, double xScale, double yScale);
+        void Paint_Figure( gdImagePtr im,ShapeItem item, double xScale, double yScale, bool flag_allocate );
+        void Paint_Fill( gdImagePtr im, Point pnt, InundationItem in_item, int color );
         Point unscale_unrotate(Point point, double xScale, double yScale, bool flag_scale);
         Point scale_rotate(Point point, double xScale, double yScale, bool flag_scale);
  	//Attributes

@@ -1,3 +1,14 @@
+2008-04-16 Maxim
+- /UI/Vision: Coordinates' printing while moving a point of the primitive ElFigure in status bar is added.
+- /UI/Vision: Deleting of all chosen primitives ElFigure by pressing "Del" support is added.
+- FIX:/UI/Vision: cursor set/unset is fixed.
+- /UI/WebVision: In function "colorParse" now "-1" instead "0" is returned if no color is found.  
+- /UI/WebVision: Blocking of the painting of primitives ElFigure which point(s) are abroad the borders of the image or Fills, consist of such primitives support is added.
+- /UI/Vision: Deleting the primitive ElFigure by doubleclicking the left button of the mouse on it removed. 
+- !!!/UI/WebVision: Fill support for primitive ElFigure is added.
+- FIX:/UI/Vision: Fill parsing is fixed.
+
+
 2008-04-16 Roman
 - !!!:/SYS: Groups of branches control mechanism is changed to direct modification control.
 - /SYS: Translation to Russian and Ukranian is updated.

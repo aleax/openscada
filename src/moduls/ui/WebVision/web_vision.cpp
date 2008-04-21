@@ -1333,7 +1333,7 @@ int TWEB::colorParse( const string &clr )
 	map<string,int>::iterator iclr = colors.find(clr);
 	if( iclr != colors.end() )	return iclr->second;
     }
-    return 0;
+    return -1;
 }
 
 //*************************************************
