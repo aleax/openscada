@@ -1,3 +1,7 @@
+2008-04-22 Maxim
+- FIX:/UI/WebVision: Filling mechanisms in primitive ElFigure are fixed.
+
+
 2008-04-22 Roman
 - !!!!:/SYS/: Global dynamic nodes copy mechanism is added.
 - !!!!:/UI/QTCfg: Global dynamic nodes copy mechanism support is added.

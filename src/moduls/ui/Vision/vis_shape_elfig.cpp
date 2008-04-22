@@ -220,7 +220,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                     ShapeItem item_temp(bigPath,circlePath,p[0],p[1],-1,-1,-1,QPointF(0,0), 
                                         QBrush(color,Qt::NoBrush),
                                         QPen(w->dc()["bordClr"].value<QColor>(),w->dc()["bordWdth"].toInt(),Qt::NoPen,Qt::FlatCap, Qt::RoundJoin),
-                                             QPen(color,width, Qt::SolidLine,Qt::FlatCap, Qt::RoundJoin),width,w->dc()["bordWdth"].toInt(),1,Angle_temp);
+                                             QPen(color,width,Qt::SolidLine,Qt::FlatCap,Qt::RoundJoin),width,w->dc()["bordWdth"].toInt(),1,Angle_temp);
                     item_temp.brush.setColor(color);
                     shapeItems.push_back( item_temp );
                 }
