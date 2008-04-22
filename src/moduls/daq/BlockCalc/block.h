@@ -58,8 +58,8 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	//Attributes
 	Block( const string &iid, Contr *iown );
 	~Block( );
-	
-	Block &operator=( Block &blk );
+
+	TCntrNode &operator=( TCntrNode &node );
 
 	//- Block's parameters -
         const string &id( )	{ return m_id; }

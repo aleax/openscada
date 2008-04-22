@@ -46,6 +46,30 @@ Lib::~Lib( )
     
 }
 
+TCntrNode &Lib::operator=( TCntrNode &node )
+{
+    Lib *src_n = dynamic_cast<Lib*>(&node);
+    if( !src_n ) return *this;
+	
+    //- Configuration copy -
+    string tid = id();
+    *(TConfig*)this = *(TConfig*)src_n;
+    m_id = tid;
+    work_lib_db = src_n->work_lib_db;
+			    
+    //- Functions copy -
+    vector<string> ls;    
+    src_n->list(ls);
+    for( int i_p = 0; i_p < ls.size(); i_p++ )
+    {
+        if( !present(ls[i_p]) ) add(ls[i_p].c_str());
+        (TCntrNode&)at(ls[i_p]).at() = (TCntrNode&)src_n->at(ls[i_p]).at();
+    }
+    if( src_n->startStat() && !startStat() )	setStart(true);
+
+    return *this;
+}
+
 void Lib::preDisable( int flag )
 {
     setStart(false);
@@ -155,8 +179,9 @@ void Lib::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {	
-    	ctrMkNode("oscada_cntr",opt,-1,"/",_("Function's library: ")+id());
-	if(ctrMkNode("branches",opt,-1,"/br","",0444))	ctrMkNode("grp",opt,-1,"/br/fnc_",_("Function"),0664);
+    	ctrMkNode("oscada_cntr",opt,-1,"/",_("Function's library: ")+id(),0664,"root","root");
+	if(ctrMkNode("branches",opt,-1,"/br","",0444))	
+	    ctrMkNode("grp",opt,-1,"/br/fnc_",_("Function"),0664,"root","root",1,"idm","1");
 	if(ctrMkNode("area",opt,-1,"/lib",_("Library")))
 	{
 	    if(ctrMkNode("area",opt,-1,"/lib/st",_("State")))

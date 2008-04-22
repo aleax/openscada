@@ -792,7 +792,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TSubSYS::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/va_",_("Value archive"),0664,"root",my_gr.c_str());	
+	ctrMkNode("grp",opt,-1,"/br/va_",_("Value archive"),0664,"root",my_gr.c_str(),1,"idm","1");	
 	if(ctrMkNode("area",opt,0,"/sub",_("Subsystem"),0444,"root",my_gr.c_str()))
 	{
 	    ctrMkNode("fld",opt,-1,"/sub/max_am_req",_("Maximum requested messages"),0664,"root",my_gr.c_str(),1,"tp","dec");
@@ -969,8 +969,8 @@ void TTipArchivator::cntrCmdProc( XMLNode *opt )
     {
         TModule::cntrCmdProc(opt);
 	ctrMkNode("area",opt,0,"/arch",_("Archivators"));
-	ctrMkNode("grp",opt,-1,"/br/mess_",_("Message archivator"),0664,"root",grp.c_str());
-	ctrMkNode("grp",opt,-1,"/br/val_",_("Value archivator"),0664,"root",grp.c_str());
+	ctrMkNode("grp",opt,-1,"/br/mess_",_("Message archivator"),0664,"root",grp.c_str(),1,"idm","1");
+	ctrMkNode("grp",opt,-1,"/br/val_",_("Value archivator"),0664,"root",grp.c_str(),1,"idm","1");
 	ctrMkNode("list",opt,-1,"/arch/mess",_("Message archivators"),0664,"root",grp.c_str(),4,"tp","br","idm","1","s_com","add,del","br_pref","mess_");
 	ctrMkNode("list",opt,-1,"/arch/val",_("Value archivators"),0664,"root",grp.c_str(),4,"tp","br","idm","1","s_com","add,del","br_pref","val_");
         return;
@@ -1025,6 +1025,23 @@ TMArchivator::TMArchivator(const string &iid, const string &idb, TElem *cf_el) :
     m_cat_o(cfg("CATEG").getSd()), m_level(cfg("LEVEL").getId()) ,m_start(cfg("START").getBd())
 {    
     m_id = iid;
+}
+
+TCntrNode &TMArchivator::operator=( TCntrNode &node )
+{
+    TMArchivator *src_n = dynamic_cast<TMArchivator*>(&node);
+    if( !src_n ) return *this;
+    
+    //- Configuration copy -
+    string tid = id();
+    *(TConfig*)this = *(TConfig*)src_n;
+    m_id = tid;
+    m_db = src_n->m_db;
+
+    if( src_n->startStat() && toStart() && !startStat() )
+        start( );
+
+    return *this;
 }
 
 void TMArchivator::postEnable( int flag )
@@ -1099,7 +1116,7 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Message archivator: ")+name());
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Message archivator: ")+name(),0664,"root",grp.c_str());
 	if(ctrMkNode("area",opt,-1,"/prm",_("Archivator")))
 	{
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))

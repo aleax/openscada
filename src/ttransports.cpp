@@ -545,8 +545,8 @@ void TTipTransport::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TModule::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/in_",_("Input transport"),0664);
-	ctrMkNode("grp",opt,-1,"/br/out_",_("Output transport"),0664);
+	ctrMkNode("grp",opt,-1,"/br/in_",_("Input transport"),0664,"root","root",1,"idm","1");
+	ctrMkNode("grp",opt,-1,"/br/out_",_("Output transport"),0664,"root","root",1,"idm","1");
 	if(ctrMkNode("area",opt,0,"/tr",_("Transports")))
 	{
 	    ctrMkNode("list",opt,-1,"/tr/in",_("Input"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","in_");
@@ -605,6 +605,19 @@ TTransportIn::~TTransportIn()
     
 }
 
+TCntrNode &TTransportIn::operator=( TCntrNode &node )
+{
+    TTransportIn *src_n = dynamic_cast<TTransportIn*>(&node);
+    if( !src_n ) return *this;
+	
+    string tid = id();
+    *(TConfig*)this = *(TConfig*)src_n;
+    m_id = tid;
+    m_db = src_n->m_db;
+			
+    return *this;
+}
+
 string TTransportIn::name()
 {
     return (m_name.size())?m_name:m_id;
@@ -645,7 +658,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
-	ctrMkNode("oscada_cntr",opt,-1,"/",(_("Input transport: ")+name()).c_str());
+	ctrMkNode("oscada_cntr",opt,-1,"/",(_("Input transport: ")+name()).c_str(),0664,"root","root");
 	if(ctrMkNode("area",opt,-1,"/prm",_("Transport")))
 	{
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))
@@ -732,6 +745,19 @@ TTransportOut::~TTransportOut()
     
 }
 
+TCntrNode &TTransportOut::operator=( TCntrNode &node )
+{
+    TTransportOut *src_n = dynamic_cast<TTransportOut*>(&node);
+    if( !src_n ) return *this;
+	
+    string tid = id();
+    *(TConfig*)this = *(TConfig*)src_n;
+    m_id = tid;
+    m_db = src_n->m_db;
+
+    return *this;
+}
+
 string TTransportOut::name()
 {
     return (m_name.size())?m_name:m_id;
@@ -779,7 +805,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
-	ctrMkNode("oscada_cntr",opt,-1,"/",(_("Output transport: ")+name()).c_str());
+	ctrMkNode("oscada_cntr",opt,-1,"/",(_("Output transport: ")+name()).c_str(),0664,"root","root");
 	if(ctrMkNode("area",opt,-1,"/prm",_("Transport")))
 	{
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))

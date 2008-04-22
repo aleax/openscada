@@ -162,6 +162,8 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	//Public methods
 	TVArchive( const string &id, const string &db, TElem *cf_el );
 	~TVArchive( );
+
+	TCntrNode &operator=( TCntrNode &node );
 	
 	//- Base functions -
 	const string &id( )	{ return m_id; }
@@ -274,6 +276,8 @@ class TVArchivator : public TCntrNode, public TConfig
 	//Public methods
 	TVArchivator( const string &id, const string &db, TElem *cf_el );
 	~TVArchivator( );
+
+	TCntrNode &operator=( TCntrNode &node );
 
 	const string &id( ) 	{ return m_id; }
 	string workId( );

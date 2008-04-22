@@ -3,31 +3,37 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: qtcfg.cpp:469 qtcfg.cpp:804 qtcfg.cpp:816 qtcfg.cpp:989 qtcfg.cpp:998
-#: qtcfg.cpp:1100 qtcfg.cpp:1549 qtcfg.cpp:1550 qtcfg.cpp:2079 qtcfg.cpp:2327
-#: selfwidg.cpp:443 selfwidg.cpp:449 tuimod.cpp:55 tuimod.cpp:275
+#: qtcfg.cpp:542 qtcfg.cpp:606 qtcfg.cpp:941 qtcfg.cpp:953 qtcfg.cpp:1126
+#: qtcfg.cpp:1135 qtcfg.cpp:1237 qtcfg.cpp:1688 qtcfg.cpp:1689 qtcfg.cpp:2224
+#: qtcfg.cpp:2472 selfwidg.cpp:443 selfwidg.cpp:449 tuimod.cpp:55
+#: tuimod.cpp:275 qtcfg.h:79
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-16 13:33+0300\n"
+"POT-Creation-Date: 2008-04-22 12:26+0300\n"
 "PO-Revision-Date: 2007-10-29 19:12+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: qtcfg.cpp:77 qtcfg.cpp:432 qtcfg.cpp:1447 qtcfg.cpp:1476 qtcfg.cpp:1618
+#: qtcfg.cpp:77 qtcfg.cpp:477 qtcfg.cpp:1584 qtcfg.cpp:1613 qtcfg.cpp:1761
 #: tuimod.cpp:236
 msgid "info"
+msgstr ""
+
+#: qtcfg.cpp:77 qtcfg.cpp:434 qtcfg.cpp:508 qtcfg.cpp:569 qtcfg.cpp:728
+#: qtcfg.cpp:750 qtcfg.cpp:1673 qtcfg.cpp:1977 qtcfg.cpp:2523
+msgid "0"
 msgstr ""
 
 #: qtcfg.cpp:84
 msgid "QT Configurator of OpenSCADA"
 msgstr "QT OpenSCADA конфігуратор"
 
-#: qtcfg.cpp:100 qtcfg.cpp:505 qtcfg.cpp:512
+#: qtcfg.cpp:100 qtcfg.cpp:642 qtcfg.cpp:649
 msgid "Name"
 msgstr "Ім'я"
 
@@ -219,301 +225,439 @@ msgstr "Кнопка для видалення елементу"
 msgid "Press for deleting item."
 msgstr "Натиснути для видалення елементу."
 
-#: qtcfg.cpp:214
-msgid "reload"
-msgstr ""
-
-#: qtcfg.cpp:214
-msgid ":/images/reload.png"
+#: qtcfg.cpp:211
+msgid "Ctrl+D"
 msgstr ""
 
 #: qtcfg.cpp:215
+msgid "editcut"
+msgstr ""
+
+#: qtcfg.cpp:215
+msgid ":/images/editcut.png"
+msgstr ""
+
+#: qtcfg.cpp:216
+msgid "Item cut"
+msgstr "Вирізати елемент"
+
+#: qtcfg.cpp:217
+msgid "Goes item cut"
+msgstr "Виконати вирізання елементу"
+
+#: qtcfg.cpp:218
+msgid "The button for goes to item cut"
+msgstr "Кнопка для виконання вирізання елементу"
+
+#: qtcfg.cpp:219
+msgid "Press for goes to item cut."
+msgstr "Натиснути для виконання вирізання елементу."
+
+#: qtcfg.cpp:220
+msgid "Ctrl+X"
+msgstr ""
+
+#: qtcfg.cpp:224
+msgid "editcopy"
+msgstr ""
+
+#: qtcfg.cpp:224
+msgid ":/images/editcopy.png"
+msgstr ""
+
+#: qtcfg.cpp:225
+msgid "Item copy"
+msgstr "Копіювати елемент"
+
+#: qtcfg.cpp:226
+msgid "Goes item copy"
+msgstr "Виконання копіювання елементу"
+
+#: qtcfg.cpp:227
+msgid "The button for goes to item copy"
+msgstr "Кнопка для виконання копіювання елементу"
+
+#: qtcfg.cpp:228
+msgid "Press for goes to item copy."
+msgstr "Натиснути для виконання копіювання елементу."
+
+#: qtcfg.cpp:229
+msgid "Ctrl+C"
+msgstr ""
+
+#: qtcfg.cpp:233
+msgid "editpaste"
+msgstr ""
+
+#: qtcfg.cpp:233
+msgid ":/images/editpaste.png"
+msgstr ""
+
+#: qtcfg.cpp:234
+msgid "Item paste"
+msgstr "Вставити елемент"
+
+#: qtcfg.cpp:235
+msgid "Goes item paste"
+msgstr "Виконати вставку елементу"
+
+#: qtcfg.cpp:236
+msgid "The button for goes to item paste"
+msgstr "Кнопка для виконання вставки елементу"
+
+#: qtcfg.cpp:237
+msgid "Press for goes to item paste."
+msgstr "Натиснути для виконання вставки елементу."
+
+#: qtcfg.cpp:238
+msgid "Ctrl+V"
+msgstr ""
+
+#: qtcfg.cpp:242
+msgid "reload"
+msgstr ""
+
+#: qtcfg.cpp:242
+msgid ":/images/reload.png"
+msgstr ""
+
+#: qtcfg.cpp:243
 msgid "&Refresh"
 msgstr "П&оновити"
 
-#: qtcfg.cpp:217
+#: qtcfg.cpp:245
 msgid "Refresh current page"
 msgstr "Поновити поточну сторінку"
 
-#: qtcfg.cpp:218
+#: qtcfg.cpp:246
 msgid "The button for refreshing a content of the current page."
 msgstr "Кнопка для поновлення вмісту поточної сторінки."
 
-#: qtcfg.cpp:219
+#: qtcfg.cpp:247
 msgid "Press for refreshing a content of the current page."
 msgstr "Натиснути для поновлення вмісту поточної сторінки."
 
-#: qtcfg.cpp:222
+#: qtcfg.cpp:250
 msgid "start"
 msgstr ""
 
-#: qtcfg.cpp:222
+#: qtcfg.cpp:250
 msgid ":/images/start.png"
 msgstr ""
 
-#: qtcfg.cpp:223
+#: qtcfg.cpp:251
 msgid "&Start"
 msgstr "За&пустити"
 
-#: qtcfg.cpp:225
+#: qtcfg.cpp:253
 msgid "Start cycled refresh"
 msgstr "Запустити періодичне поновлення"
 
-#: qtcfg.cpp:226
+#: qtcfg.cpp:254
 msgid "The button for start of cycled refresh content of the current page."
 msgstr "Кнопка для запуску періодичного поновлення вмісту поточної сторінки."
 
-#: qtcfg.cpp:227
+#: qtcfg.cpp:255
 msgid "Press for start of cycled refresh content of the current page."
 msgstr ""
 "Натиснути для запуску періодичного поновлення вмісту поточної сторінки."
 
-#: qtcfg.cpp:230
+#: qtcfg.cpp:258
 msgid "stop"
 msgstr ""
 
-#: qtcfg.cpp:230
+#: qtcfg.cpp:258
 msgid ":/images/stop.png"
 msgstr ""
 
-#: qtcfg.cpp:231
+#: qtcfg.cpp:259
 msgid "&Stop"
 msgstr "&Зупинити"
 
-#: qtcfg.cpp:233
+#: qtcfg.cpp:261
 msgid "Stop cycled refresh"
 msgstr "Зупинити періодичне поновлення"
 
-#: qtcfg.cpp:234
+#: qtcfg.cpp:262
 msgid "The button for stop of cycled refresh content of the current page."
 msgstr "Кнопка для зупинки періодичного поновлення вмісту поточної сторінки."
 
-#: qtcfg.cpp:235
+#: qtcfg.cpp:263
 msgid "Press for stop of cycled refresh content of the current page."
 msgstr ""
 "Натиснути для зупинки періодичного поновлення вмісту поточної сторінки."
 
-#: qtcfg.cpp:239 tuimod.cpp:131
+#: qtcfg.cpp:267 tuimod.cpp:131
 msgid "help"
 msgstr ""
 
-#: qtcfg.cpp:239
+#: qtcfg.cpp:267
 msgid ":/images/help.png"
 msgstr ""
 
-#: qtcfg.cpp:240
+#: qtcfg.cpp:268
 msgid "&About"
 msgstr "&Про ..."
 
-#: qtcfg.cpp:242
+#: qtcfg.cpp:270
 msgid "Programm and OpenSCADA information"
 msgstr "Інформація про програму та OpenSCADA"
 
-#: qtcfg.cpp:243
+#: qtcfg.cpp:271
 msgid "The button for display programm and OpenSCADA information"
 msgstr "Кнопка для відображення інформації про програму та OpenSCADA"
 
-#: qtcfg.cpp:244
+#: qtcfg.cpp:272
 msgid "Press for display programm and OpenSCADA information"
 msgstr "Натиснути для відображення інформації про програму та OpenSCADA"
 
-#: qtcfg.cpp:247
+#: qtcfg.cpp:275
 msgid "About &Qt"
 msgstr "Про &QT"
 
-#: qtcfg.cpp:248
+#: qtcfg.cpp:276
 msgid "Qt information"
 msgstr "Qt інформація"
 
-#: qtcfg.cpp:249
+#: qtcfg.cpp:277
 msgid "The button for using QT information"
 msgstr "Кнопка для отримання інформації про використання QT"
 
-#: qtcfg.cpp:250
+#: qtcfg.cpp:278
 msgid "Press for using QT information"
 msgstr "Натиснути для отримання інформації про використання QT"
 
-#: qtcfg.cpp:253
+#: qtcfg.cpp:281
 msgid "contexthelp"
 msgstr ""
 
-#: qtcfg.cpp:253
+#: qtcfg.cpp:281
 msgid ":/images/contexthelp.png"
 msgstr ""
 
-#: qtcfg.cpp:254
+#: qtcfg.cpp:282
 msgid "What's &This"
 msgstr "Що &це"
 
-#: qtcfg.cpp:255
+#: qtcfg.cpp:283
 msgid "Question about GUI elements"
 msgstr "Питання про GUI елементи"
 
-#: qtcfg.cpp:256
+#: qtcfg.cpp:284
 msgid "The button for respond about user interface elements"
 msgstr "Кнопка для запиту інформації про елементи інтерфейсу користувача"
 
-#: qtcfg.cpp:257
+#: qtcfg.cpp:285
 msgid "Press for responding about user interface elements"
 msgstr "Натисніть для запиту інформації про елементи інтерфейсу користувача"
 
-#: qtcfg.cpp:262
+#: qtcfg.cpp:290
 msgid "&File"
 msgstr "&Файл"
 
-#: qtcfg.cpp:266
+#: qtcfg.cpp:294
 msgid "&Edit"
 msgstr "Редагування"
 
-#: qtcfg.cpp:270
+#: qtcfg.cpp:302
 msgid "&View"
 msgstr "&Вигляд"
 
-#: qtcfg.cpp:275
+#: qtcfg.cpp:307
 msgid "&Go"
 msgstr "Пе&рейти"
 
-#: qtcfg.cpp:280
+#: qtcfg.cpp:312
 msgid "&Help"
 msgstr "&Допомога"
 
-#: qtcfg.cpp:288
+#: qtcfg.cpp:320
 msgid "OpenSCADA toolbar"
 msgstr "OpenSCADA тулбар"
 
-#: qtcfg.cpp:303
+#: qtcfg.cpp:339
 msgid "This label display curent user."
 msgstr "Ця мітка відображає поточного користувача."
 
-#: qtcfg.cpp:304
+#: qtcfg.cpp:340
 msgid "Field for display of the current user."
 msgstr "Поле для відображення поточного користувача."
 
-#: qtcfg.cpp:305
+#: qtcfg.cpp:341
 msgid "Double click for change user."
 msgstr "Подвійно клацніть для зміни користувача."
 
-#: qtcfg.cpp:309
+#: qtcfg.cpp:345
 msgid "Ready"
 msgstr "Готовий"
 
-#: qtcfg.cpp:350 qtcfg.cpp:429 qtcfg.cpp:558 qtcfg.cpp:564 qtcfg.cpp:691
-#: qtcfg.cpp:726 qtcfg.cpp:746 qtcfg.cpp:770 qtcfg.cpp:830 qtcfg.cpp:889
-#: qtcfg.cpp:921 qtcfg.cpp:943 qtcfg.cpp:994 qtcfg.cpp:1017 qtcfg.cpp:1028
-#: qtcfg.cpp:1073 qtcfg.cpp:1120 qtcfg.cpp:1128 qtcfg.cpp:1184 qtcfg.cpp:1239
-#: qtcfg.cpp:1250 qtcfg.cpp:1307 qtcfg.cpp:1320 qtcfg.cpp:1409 qtcfg.cpp:1456
-#: qtcfg.cpp:1473 qtcfg.cpp:1657 qtcfg.cpp:1676 qtcfg.cpp:1681 qtcfg.cpp:1699
-#: qtcfg.cpp:1711 qtcfg.cpp:1790 qtcfg.cpp:1814 qtcfg.cpp:1843 qtcfg.cpp:1852
-#: qtcfg.cpp:1878 qtcfg.cpp:1885 qtcfg.cpp:1899 qtcfg.cpp:1905 qtcfg.cpp:1942
-#: qtcfg.cpp:1968 qtcfg.cpp:1977 qtcfg.cpp:1998 qtcfg.cpp:2176 qtcfg.cpp:2294
-#: qtcfg.cpp:2373 qtcfg.cpp:2384 qtcfg.cpp:2456 qtcfg.cpp:2467 qtcfg.cpp:2469
-#: qtcfg.cpp:2540 qtcfg.cpp:2543 tuimod.cpp:71
+#: qtcfg.cpp:386 qtcfg.cpp:474 qtcfg.cpp:520 qtcfg.cpp:559 qtcfg.cpp:563
+#: qtcfg.cpp:587 qtcfg.cpp:695 qtcfg.cpp:701 qtcfg.cpp:828 qtcfg.cpp:863
+#: qtcfg.cpp:883 qtcfg.cpp:907 qtcfg.cpp:967 qtcfg.cpp:1026 qtcfg.cpp:1058
+#: qtcfg.cpp:1080 qtcfg.cpp:1131 qtcfg.cpp:1154 qtcfg.cpp:1165 qtcfg.cpp:1210
+#: qtcfg.cpp:1257 qtcfg.cpp:1265 qtcfg.cpp:1321 qtcfg.cpp:1376 qtcfg.cpp:1387
+#: qtcfg.cpp:1444 qtcfg.cpp:1457 qtcfg.cpp:1546 qtcfg.cpp:1593 qtcfg.cpp:1610
+#: qtcfg.cpp:1801 qtcfg.cpp:1820 qtcfg.cpp:1825 qtcfg.cpp:1844 qtcfg.cpp:1856
+#: qtcfg.cpp:1935 qtcfg.cpp:1959 qtcfg.cpp:1988 qtcfg.cpp:1997 qtcfg.cpp:2023
+#: qtcfg.cpp:2030 qtcfg.cpp:2044 qtcfg.cpp:2050 qtcfg.cpp:2087 qtcfg.cpp:2113
+#: qtcfg.cpp:2122 qtcfg.cpp:2143 qtcfg.cpp:2321 qtcfg.cpp:2439 qtcfg.cpp:2518
+#: qtcfg.cpp:2529 qtcfg.cpp:2601 qtcfg.cpp:2612 qtcfg.cpp:2614 qtcfg.cpp:2685
+#: qtcfg.cpp:2688 tuimod.cpp:71
 msgid "/"
 msgstr ""
 
-#: qtcfg.cpp:386 qtcfg.cpp:387 qtcfg.cpp:399 qtcfg.cpp:411 qtcfg.cpp:438
-#: qtcfg.cpp:443 qtcfg.cpp:444 qtcfg.cpp:561 qtcfg.cpp:632 qtcfg.cpp:645
-#: qtcfg.cpp:678 qtcfg.cpp:683 qtcfg.cpp:736 qtcfg.cpp:778 qtcfg.cpp:836
-#: qtcfg.cpp:880 qtcfg.cpp:930 qtcfg.cpp:977 qtcfg.cpp:989 qtcfg.cpp:1083
-#: qtcfg.cpp:1084 qtcfg.cpp:1461 qtcfg.cpp:1463 qtcfg.cpp:1482 qtcfg.cpp:1503
-#: qtcfg.cpp:1518 qtcfg.cpp:1631 qtcfg.cpp:1639 qtcfg.cpp:1644 qtcfg.cpp:1656
-#: qtcfg.cpp:1668 qtcfg.cpp:1669 qtcfg.cpp:1694 qtcfg.cpp:1698 qtcfg.cpp:1707
-#: qtcfg.cpp:1708 qtcfg.cpp:1727 qtcfg.cpp:1952 qtcfg.cpp:1953 qtcfg.cpp:2070
-#: qtcfg.cpp:2105 qtcfg.cpp:2115 qtcfg.cpp:2125 qtcfg.cpp:2134 qtcfg.cpp:2137
-#: qtcfg.cpp:2251 qtcfg.cpp:2395 qtcfg.cpp:2408 qtcfg.cpp:2422 qtcfg.cpp:2466
-#: qtcfg.cpp:2467
+#: qtcfg.cpp:422 qtcfg.cpp:423 qtcfg.cpp:434 qtcfg.cpp:452 qtcfg.cpp:483
+#: qtcfg.cpp:486 qtcfg.cpp:489 qtcfg.cpp:528 qtcfg.cpp:533 qtcfg.cpp:534
+#: qtcfg.cpp:537 qtcfg.cpp:589 qtcfg.cpp:698 qtcfg.cpp:769 qtcfg.cpp:782
+#: qtcfg.cpp:815 qtcfg.cpp:820 qtcfg.cpp:873 qtcfg.cpp:915 qtcfg.cpp:973
+#: qtcfg.cpp:1017 qtcfg.cpp:1067 qtcfg.cpp:1114 qtcfg.cpp:1126 qtcfg.cpp:1220
+#: qtcfg.cpp:1221 qtcfg.cpp:1598 qtcfg.cpp:1600 qtcfg.cpp:1619 qtcfg.cpp:1642
+#: qtcfg.cpp:1657 qtcfg.cpp:1774 qtcfg.cpp:1782 qtcfg.cpp:1787 qtcfg.cpp:1800
+#: qtcfg.cpp:1812 qtcfg.cpp:1813 qtcfg.cpp:1839 qtcfg.cpp:1843 qtcfg.cpp:1852
+#: qtcfg.cpp:1853 qtcfg.cpp:1872 qtcfg.cpp:2097 qtcfg.cpp:2098 qtcfg.cpp:2215
+#: qtcfg.cpp:2250 qtcfg.cpp:2260 qtcfg.cpp:2270 qtcfg.cpp:2279 qtcfg.cpp:2282
+#: qtcfg.cpp:2396 qtcfg.cpp:2540 qtcfg.cpp:2553 qtcfg.cpp:2567 qtcfg.cpp:2611
+#: qtcfg.cpp:2612
 msgid "id"
 msgstr ""
 
-#: qtcfg.cpp:386 qtcfg.cpp:387 qtcfg.cpp:699 qtcfg.cpp:1461 qtcfg.cpp:1463
-#: qtcfg.cpp:2007 qtcfg.cpp:2158
+#: qtcfg.cpp:422 qtcfg.cpp:423 qtcfg.cpp:528 qtcfg.cpp:589 qtcfg.cpp:836
+#: qtcfg.cpp:1598 qtcfg.cpp:1600 qtcfg.cpp:2152 qtcfg.cpp:2303
 msgid "br"
 msgstr ""
 
-#: qtcfg.cpp:390
-msgid "Add item to node: '%1'."
-msgstr "Додання елементу у вузол: '%1'."
-
-#: qtcfg.cpp:391
-msgid "Add node"
-msgstr "Додання елементу"
-
-#: qtcfg.cpp:392
-msgid "Item type:"
-msgstr "Тип елементу:"
-
-#: qtcfg.cpp:398 qtcfg.cpp:439 qtcfg.cpp:661 qtcfg.cpp:799 qtcfg.cpp:1465
-#: qtcfg.cpp:1483 qtcfg.cpp:1495 qtcfg.cpp:2013 qtcfg.cpp:2187 qtcfg.cpp:2307
+#: qtcfg.cpp:430 qtcfg.cpp:484 qtcfg.cpp:526 qtcfg.cpp:531 qtcfg.cpp:592
+#: qtcfg.cpp:594 qtcfg.cpp:798 qtcfg.cpp:936 qtcfg.cpp:1602 qtcfg.cpp:1620
+#: qtcfg.cpp:1634 qtcfg.cpp:2158 qtcfg.cpp:2332 qtcfg.cpp:2452
 msgid "acs"
 msgstr ""
 
-#: qtcfg.cpp:398 qtcfg.cpp:440 qtcfg.cpp:1465 qtcfg.cpp:1484 qtcfg.cpp:2013
-#: qtcfg.cpp:2015 qtcfg.cpp:2020 qtcfg.cpp:2025 qtcfg.cpp:2030 qtcfg.cpp:2036
-#: qtcfg.cpp:2187 qtcfg.cpp:2189 qtcfg.cpp:2194 qtcfg.cpp:2199 qtcfg.cpp:2204
-msgid "s_com"
+#: qtcfg.cpp:432 qtcfg.cpp:434 qtcfg.cpp:487 qtcfg.cpp:964 qtcfg.cpp:2196
+#: qtcfg.cpp:2539
+msgid "idm"
 msgstr ""
 
-#: qtcfg.cpp:398 qtcfg.cpp:409 qtcfg.cpp:1465 qtcfg.cpp:2015 qtcfg.cpp:2104
-#: qtcfg.cpp:2189 qtcfg.cpp:2225
-msgid "add"
-msgstr ""
-
-#: qtcfg.cpp:399 qtcfg.cpp:577 qtcfg.cpp:585 qtcfg.cpp:607 qtcfg.cpp:612
-#: qtcfg.cpp:669 qtcfg.cpp:724 qtcfg.cpp:757 qtcfg.cpp:807 qtcfg.cpp:918
-#: qtcfg.cpp:951 qtcfg.cpp:981 qtcfg.cpp:1031 qtcfg.cpp:1068 qtcfg.cpp:1131
-#: qtcfg.cpp:1168 qtcfg.cpp:1180 qtcfg.cpp:1217 qtcfg.cpp:1257 qtcfg.cpp:1290
-#: qtcfg.cpp:1344 qtcfg.cpp:1385 qtcfg.cpp:1541 qtcfg.cpp:1642 qtcfg.cpp:1643
-#: qtcfg.cpp:1680 qtcfg.cpp:2407
+#: qtcfg.cpp:433 qtcfg.cpp:533 qtcfg.cpp:714 qtcfg.cpp:722 qtcfg.cpp:744
+#: qtcfg.cpp:749 qtcfg.cpp:806 qtcfg.cpp:861 qtcfg.cpp:894 qtcfg.cpp:944
+#: qtcfg.cpp:1055 qtcfg.cpp:1088 qtcfg.cpp:1118 qtcfg.cpp:1168 qtcfg.cpp:1205
+#: qtcfg.cpp:1268 qtcfg.cpp:1305 qtcfg.cpp:1317 qtcfg.cpp:1354 qtcfg.cpp:1394
+#: qtcfg.cpp:1427 qtcfg.cpp:1481 qtcfg.cpp:1522 qtcfg.cpp:1680 qtcfg.cpp:1785
+#: qtcfg.cpp:1786 qtcfg.cpp:1824 qtcfg.cpp:2552
 msgid "dscr"
 msgstr ""
 
-#: qtcfg.cpp:402
+#: qtcfg.cpp:434 qtcfg.cpp:502 qtcfg.cpp:780 qtcfg.cpp:1977 qtcfg.cpp:2523
+msgid "1"
+msgstr ""
+
+#: qtcfg.cpp:437
 msgid "No one editable container present."
 msgstr "Жодного радагованого контейнеру не присутньо."
 
-#: qtcfg.cpp:410 qtcfg.cpp:433 qtcfg.cpp:443 qtcfg.cpp:469 qtcfg.cpp:564
-#: qtcfg.cpp:726 qtcfg.cpp:770 qtcfg.cpp:830 qtcfg.cpp:921 qtcfg.cpp:994
-#: qtcfg.cpp:1073 qtcfg.cpp:1421 qtcfg.cpp:1436 qtcfg.cpp:1448 qtcfg.cpp:1477
-#: qtcfg.cpp:1607 qtcfg.cpp:1619 qtcfg.cpp:1656 qtcfg.cpp:1657 qtcfg.cpp:1698
-#: qtcfg.cpp:1699 qtcfg.cpp:1741 qtcfg.cpp:1744 qtcfg.cpp:1751 qtcfg.cpp:1760
-#: qtcfg.cpp:1843 qtcfg.cpp:1878 qtcfg.cpp:1899 qtcfg.cpp:1942 qtcfg.cpp:1968
-#: qtcfg.cpp:2058 qtcfg.cpp:2096 qtcfg.cpp:2222 qtcfg.cpp:2346 qtcfg.cpp:2384
-#: qtcfg.cpp:2404 qtcfg.cpp:2456 qtcfg.cpp:2543 tuimod.cpp:252
+#: qtcfg.cpp:440
+msgid "Add item to node: '%1'."
+msgstr "Додання елементу у вузол: '%1'."
+
+#: qtcfg.cpp:441
+msgid "Add node"
+msgstr "Додання елементу"
+
+#: qtcfg.cpp:442
+msgid "Item type:"
+msgstr "Тип елементу:"
+
+#: qtcfg.cpp:449 qtcfg.cpp:2160 qtcfg.cpp:2249 qtcfg.cpp:2334 qtcfg.cpp:2370
+msgid "add"
+msgstr ""
+
+#: qtcfg.cpp:450 qtcfg.cpp:478 qtcfg.cpp:488 qtcfg.cpp:563 qtcfg.cpp:606
+#: qtcfg.cpp:701 qtcfg.cpp:863 qtcfg.cpp:907 qtcfg.cpp:967 qtcfg.cpp:1058
+#: qtcfg.cpp:1131 qtcfg.cpp:1210 qtcfg.cpp:1558 qtcfg.cpp:1573 qtcfg.cpp:1585
+#: qtcfg.cpp:1614 qtcfg.cpp:1750 qtcfg.cpp:1762 qtcfg.cpp:1800 qtcfg.cpp:1801
+#: qtcfg.cpp:1843 qtcfg.cpp:1844 qtcfg.cpp:1886 qtcfg.cpp:1889 qtcfg.cpp:1896
+#: qtcfg.cpp:1905 qtcfg.cpp:1988 qtcfg.cpp:2023 qtcfg.cpp:2044 qtcfg.cpp:2087
+#: qtcfg.cpp:2113 qtcfg.cpp:2203 qtcfg.cpp:2241 qtcfg.cpp:2367 qtcfg.cpp:2491
+#: qtcfg.cpp:2529 qtcfg.cpp:2549 qtcfg.cpp:2601 qtcfg.cpp:2688 tuimod.cpp:252
 msgid "path"
 msgstr ""
 
-#: qtcfg.cpp:410 qtcfg.cpp:443 qtcfg.cpp:1656 qtcfg.cpp:1698
+#: qtcfg.cpp:450 qtcfg.cpp:488 qtcfg.cpp:1800 qtcfg.cpp:1843
 #, c-format
 msgid "/%2fbr%2f"
 msgstr ""
 
-#: qtcfg.cpp:413 qtcfg.cpp:446 qtcfg.cpp:565 qtcfg.cpp:727 qtcfg.cpp:771
-#: qtcfg.cpp:831 qtcfg.cpp:922 qtcfg.cpp:997 qtcfg.cpp:1074 qtcfg.cpp:1439
-#: qtcfg.cpp:1451 qtcfg.cpp:1660 qtcfg.cpp:1846 qtcfg.cpp:1855 qtcfg.cpp:1881
-#: qtcfg.cpp:1908 qtcfg.cpp:1945 qtcfg.cpp:1971 qtcfg.cpp:1982 qtcfg.cpp:2151
-#: qtcfg.cpp:2272 qtcfg.cpp:2351 qtcfg.cpp:2387 qtcfg.cpp:2433 qtcfg.cpp:2546
+#: qtcfg.cpp:454 qtcfg.cpp:492 qtcfg.cpp:565 qtcfg.cpp:702 qtcfg.cpp:864
+#: qtcfg.cpp:908 qtcfg.cpp:968 qtcfg.cpp:1059 qtcfg.cpp:1134 qtcfg.cpp:1211
+#: qtcfg.cpp:1576 qtcfg.cpp:1588 qtcfg.cpp:1804 qtcfg.cpp:1991 qtcfg.cpp:2000
+#: qtcfg.cpp:2026 qtcfg.cpp:2053 qtcfg.cpp:2090 qtcfg.cpp:2116 qtcfg.cpp:2127
+#: qtcfg.cpp:2296 qtcfg.cpp:2417 qtcfg.cpp:2496 qtcfg.cpp:2532 qtcfg.cpp:2578
+#: qtcfg.cpp:2691
 msgid "mcat"
 msgstr ""
 
-#: qtcfg.cpp:422
+#: qtcfg.cpp:466
 msgid "You sure for delete node: '%1'?"
 msgstr "Ви дійсно бажаєте видалити елемент: '%1'?"
 
-#: qtcfg.cpp:423
+#: qtcfg.cpp:467
 msgid "Delete node"
 msgstr "Видалення елементу"
 
-#: qtcfg.cpp:433 qtcfg.cpp:1477 qtcfg.cpp:1619
+#: qtcfg.cpp:478 qtcfg.cpp:1614 qtcfg.cpp:1762
 #, c-format
 msgid "/%2fbr"
 msgstr ""
 
-#: qtcfg.cpp:440 qtcfg.cpp:442 qtcfg.cpp:1484 qtcfg.cpp:2030 qtcfg.cpp:2132
-#: qtcfg.cpp:2199 qtcfg.cpp:2238
+#: qtcfg.cpp:488 qtcfg.cpp:2175 qtcfg.cpp:2277 qtcfg.cpp:2344 qtcfg.cpp:2383
 msgid "del"
 msgstr ""
 
-#: qtcfg.cpp:502
+#: qtcfg.cpp:523
+msgid "Copy is imposible."
+msgstr "Копіювання неможливе."
+
+#: qtcfg.cpp:526
+msgid "Selected"
+msgstr "Вибраний"
+
+#: qtcfg.cpp:542
+msgid "Move or copy node"
+msgstr "Переміщення або копіювання вузлу"
+
+#: qtcfg.cpp:544
+msgid "Target:"
+msgstr "Мета:"
+
+#: qtcfg.cpp:547
+msgid "Move node '%1' to '%2'.\n"
+msgstr "Переміщення вузлу '%1' у '%2'.\n"
+
+#: qtcfg.cpp:547
+msgid "Copy node '%1' to '%2'.\n"
+msgstr "Скопіювати вузол '%1' до '%2'.\n"
+
+#: qtcfg.cpp:548
+msgid "Enter new node identifier."
+msgstr "Вкажіть новий ідентифікатор."
+
+#: qtcfg.cpp:562
+msgid "copy"
+msgstr ""
+
+#: qtcfg.cpp:563
+#, c-format
+msgid "/%2fobj"
+msgstr ""
+
+#: qtcfg.cpp:563
+msgid "src"
+msgstr ""
+
+#: qtcfg.cpp:563
+msgid "dst"
+msgstr ""
+
+#: qtcfg.cpp:639
 #, c-format
 msgid ""
 "%s v%s.\n"
@@ -524,545 +668,539 @@ msgstr ""
 "Автор: %s\n"
 "Ліцензія: %s\n"
 
-#: qtcfg.cpp:505
+#: qtcfg.cpp:642
 msgid "Version"
 msgstr "Версія"
 
-#: qtcfg.cpp:505
+#: qtcfg.cpp:642
 msgid "Author"
 msgstr "Автор"
 
-#: qtcfg.cpp:505
+#: qtcfg.cpp:642
 msgid "License"
 msgstr "Ліцензія"
 
-#: qtcfg.cpp:561 qtcfg.cpp:564
+#: qtcfg.cpp:698 qtcfg.cpp:701
 msgid "ico"
 msgstr ""
 
-#: qtcfg.cpp:563 qtcfg.cpp:725 qtcfg.cpp:769 qtcfg.cpp:829 qtcfg.cpp:920
-#: qtcfg.cpp:991 qtcfg.cpp:1072 qtcfg.cpp:1606 qtcfg.cpp:1655 qtcfg.cpp:1697
-#: qtcfg.cpp:1842 qtcfg.cpp:1877 qtcfg.cpp:1941 qtcfg.cpp:1967 qtcfg.cpp:2057
-#: qtcfg.cpp:2383 qtcfg.cpp:2455 tuimod.cpp:255 tuimod.cpp:260 tuimod.cpp:263
+#: qtcfg.cpp:700 qtcfg.cpp:862 qtcfg.cpp:906 qtcfg.cpp:966 qtcfg.cpp:1057
+#: qtcfg.cpp:1128 qtcfg.cpp:1209 qtcfg.cpp:1749 qtcfg.cpp:1799 qtcfg.cpp:1842
+#: qtcfg.cpp:1987 qtcfg.cpp:2022 qtcfg.cpp:2086 qtcfg.cpp:2112 qtcfg.cpp:2202
+#: qtcfg.cpp:2528 qtcfg.cpp:2600 tuimod.cpp:255 tuimod.cpp:260 tuimod.cpp:263
 #: tuimod.cpp:268
 msgid "get"
 msgstr ""
 
-#: qtcfg.cpp:577
+#: qtcfg.cpp:714
 msgid "<p align='center'><i><b>"
 msgstr ""
 
-#: qtcfg.cpp:577
+#: qtcfg.cpp:714
 msgid "</b></i></p>"
 msgstr ""
 
-#: qtcfg.cpp:584 qtcfg.cpp:603 qtcfg.cpp:664 tuimod.cpp:239
+#: qtcfg.cpp:721 qtcfg.cpp:740 qtcfg.cpp:801 tuimod.cpp:239
 msgid "area"
 msgstr ""
 
-#: qtcfg.cpp:591 qtcfg.cpp:613 qtcfg.cpp:619 qtcfg.cpp:643 qtcfg.cpp:1534
+#: qtcfg.cpp:728 qtcfg.cpp:750 qtcfg.cpp:756 qtcfg.cpp:780 qtcfg.cpp:1673
 msgid "qview"
 msgstr ""
 
-#: qtcfg.cpp:591 qtcfg.cpp:613 qtcfg.cpp:1534 qtcfg.cpp:1832 qtcfg.cpp:2378
-msgid "0"
-msgstr ""
-
-#: qtcfg.cpp:643 qtcfg.cpp:1832 qtcfg.cpp:2378
-msgid "1"
-msgstr ""
-
-#: qtcfg.cpp:681 qtcfg.cpp:1508 qtcfg.cpp:1656 qtcfg.cpp:1657 qtcfg.cpp:1698
-#: qtcfg.cpp:1699
+#: qtcfg.cpp:818 qtcfg.cpp:1647 qtcfg.cpp:1800 qtcfg.cpp:1801 qtcfg.cpp:1843
+#: qtcfg.cpp:1844
 msgid "list"
 msgstr ""
 
-#: qtcfg.cpp:699 qtcfg.cpp:821 qtcfg.cpp:849 qtcfg.cpp:1108 qtcfg.cpp:1173
-#: qtcfg.cpp:1221 qtcfg.cpp:1332 qtcfg.cpp:1547 qtcfg.cpp:1550 qtcfg.cpp:1875
-#: qtcfg.cpp:2007 qtcfg.cpp:2158 qtcfg.cpp:2378 tuimod.cpp:241 tuimod.cpp:242
+#: qtcfg.cpp:836 qtcfg.cpp:958 qtcfg.cpp:986 qtcfg.cpp:1245 qtcfg.cpp:1310
+#: qtcfg.cpp:1358 qtcfg.cpp:1469 qtcfg.cpp:1686 qtcfg.cpp:1689 qtcfg.cpp:2020
+#: qtcfg.cpp:2152 qtcfg.cpp:2303 qtcfg.cpp:2523 tuimod.cpp:241 tuimod.cpp:242
 #: tuimod.cpp:243 tuimod.cpp:247
 msgid "tp"
 msgstr ""
 
-#: qtcfg.cpp:714 qtcfg.cpp:719 qtcfg.cpp:908 qtcfg.cpp:913 qtcfg.cpp:1056
-#: qtcfg.cpp:1062 qtcfg.cpp:1156 qtcfg.cpp:1162 qtcfg.cpp:1208 qtcfg.cpp:1213
-#: qtcfg.cpp:1278 qtcfg.cpp:1284 qtcfg.cpp:1374 qtcfg.cpp:1380
+#: qtcfg.cpp:851 qtcfg.cpp:856 qtcfg.cpp:1045 qtcfg.cpp:1050 qtcfg.cpp:1193
+#: qtcfg.cpp:1199 qtcfg.cpp:1293 qtcfg.cpp:1299 qtcfg.cpp:1345 qtcfg.cpp:1350
+#: qtcfg.cpp:1415 qtcfg.cpp:1421 qtcfg.cpp:1511 qtcfg.cpp:1517
 msgid "addr_lab"
 msgstr ""
 
-#: qtcfg.cpp:715 qtcfg.cpp:720 qtcfg.cpp:909 qtcfg.cpp:914
+#: qtcfg.cpp:852 qtcfg.cpp:857 qtcfg.cpp:1046 qtcfg.cpp:1051
 msgid "addr_el"
 msgstr ""
 
-#: qtcfg.cpp:724 qtcfg.cpp:757 qtcfg.cpp:918 qtcfg.cpp:1068 qtcfg.cpp:1168
-#: qtcfg.cpp:1217 qtcfg.cpp:1290 qtcfg.cpp:1385 qtcfg.cpp:1642
+#: qtcfg.cpp:861 qtcfg.cpp:894 qtcfg.cpp:1055 qtcfg.cpp:1205 qtcfg.cpp:1305
+#: qtcfg.cpp:1354 qtcfg.cpp:1427 qtcfg.cpp:1522 qtcfg.cpp:1785
 msgid ":"
 msgstr ""
 
-#: qtcfg.cpp:730 qtcfg.cpp:1080 qtcfg.cpp:1950 qtcfg.cpp:2464 tuimod.cpp:275
+#: qtcfg.cpp:867 qtcfg.cpp:1217 qtcfg.cpp:2095 qtcfg.cpp:2609 tuimod.cpp:275
 #: tuimod.cpp:277
 msgid "el"
 msgstr ""
 
-#: qtcfg.cpp:734 qtcfg.cpp:1508
+#: qtcfg.cpp:871 qtcfg.cpp:1647
 msgid "table"
 msgstr ""
 
-#: qtcfg.cpp:761 qtcfg.cpp:766
+#: qtcfg.cpp:898 qtcfg.cpp:903
 msgid "addr_tbl"
 msgstr ""
 
-#: qtcfg.cpp:821 qtcfg.cpp:1108 qtcfg.cpp:2378
+#: qtcfg.cpp:958 qtcfg.cpp:1245 qtcfg.cpp:2523
 msgid "bool"
 msgstr ""
 
-#: qtcfg.cpp:823 qtcfg.cpp:1003 qtcfg.cpp:1018 qtcfg.cpp:1546 qtcfg.cpp:1549
-#: qtcfg.cpp:1938 qtcfg.cpp:2379 tuimod.cpp:242
+#: qtcfg.cpp:960 qtcfg.cpp:1140 qtcfg.cpp:1155 qtcfg.cpp:1685 qtcfg.cpp:1688
+#: qtcfg.cpp:2083 qtcfg.cpp:2524 tuimod.cpp:242
 msgid "dest"
 msgstr ""
 
-#: qtcfg.cpp:823 qtcfg.cpp:830 qtcfg.cpp:1003 qtcfg.cpp:1073 qtcfg.cpp:1938
-#: qtcfg.cpp:1942 qtcfg.cpp:2379 qtcfg.cpp:2384 tuimod.cpp:242
+#: qtcfg.cpp:960 qtcfg.cpp:967 qtcfg.cpp:1140 qtcfg.cpp:1210 qtcfg.cpp:2083
+#: qtcfg.cpp:2087 qtcfg.cpp:2524 qtcfg.cpp:2529 tuimod.cpp:242
 msgid "select"
 msgstr ""
 
-#: qtcfg.cpp:823 qtcfg.cpp:1003 qtcfg.cpp:1018
+#: qtcfg.cpp:960 qtcfg.cpp:1140 qtcfg.cpp:1155
 msgid "sel_ed"
 msgstr ""
 
-#: qtcfg.cpp:827 qtcfg.cpp:2051 qtcfg.cpp:2394
-msgid "idm"
-msgstr ""
-
-#: qtcfg.cpp:849 qtcfg.cpp:1221
+#: qtcfg.cpp:986 qtcfg.cpp:1358
 msgid "time"
 msgstr ""
 
-#: qtcfg.cpp:878
+#: qtcfg.cpp:1015
 msgid "img"
 msgstr ""
 
-#: qtcfg.cpp:887
+#: qtcfg.cpp:1024
 msgid "h_sz"
 msgstr ""
 
-#: qtcfg.cpp:887 qtcfg.cpp:895
+#: qtcfg.cpp:1024 qtcfg.cpp:1032
 msgid "v_sz"
 msgstr ""
 
-#: qtcfg.cpp:926 qtcfg.cpp:976 qtcfg.cpp:1545 tuimod.cpp:241 tuimod.cpp:242
+#: qtcfg.cpp:1063 qtcfg.cpp:1113 qtcfg.cpp:1684 tuimod.cpp:241 tuimod.cpp:242
 #: tuimod.cpp:247
 msgid "fld"
 msgstr ""
 
-#: qtcfg.cpp:928 tuimod.cpp:243 tuimod.cpp:244 tuimod.cpp:245
+#: qtcfg.cpp:1065 tuimod.cpp:243 tuimod.cpp:244 tuimod.cpp:245
 msgid "comm"
 msgstr ""
 
-#: qtcfg.cpp:967 qtcfg.cpp:970
+#: qtcfg.cpp:1104 qtcfg.cpp:1107
 msgid "addr_butt"
 msgstr ""
 
-#: qtcfg.cpp:989
+#: qtcfg.cpp:1126
 msgid "b"
 msgstr ""
 
-#: qtcfg.cpp:1057 qtcfg.cpp:1064
+#: qtcfg.cpp:1194 qtcfg.cpp:1201
 msgid "addr_comb"
 msgstr ""
 
-#: qtcfg.cpp:1058 qtcfg.cpp:1063 qtcfg.cpp:1158 qtcfg.cpp:1164
+#: qtcfg.cpp:1195 qtcfg.cpp:1200 qtcfg.cpp:1295 qtcfg.cpp:1301
 msgid "addr_lab_r"
 msgstr ""
 
-#: qtcfg.cpp:1089 qtcfg.cpp:1170 qtcfg.cpp:1291 qtcfg.cpp:1386
+#: qtcfg.cpp:1226 qtcfg.cpp:1307 qtcfg.cpp:1428 qtcfg.cpp:1523
 msgid "<b>"
 msgstr ""
 
-#: qtcfg.cpp:1089 qtcfg.cpp:1170 qtcfg.cpp:1291 qtcfg.cpp:1386
+#: qtcfg.cpp:1226 qtcfg.cpp:1307 qtcfg.cpp:1428 qtcfg.cpp:1523
 msgid "</b>"
 msgstr ""
 
-#: qtcfg.cpp:1157 qtcfg.cpp:1163
+#: qtcfg.cpp:1294 qtcfg.cpp:1300
 msgid "addr_chb"
 msgstr ""
 
-#: qtcfg.cpp:1170
+#: qtcfg.cpp:1307
 msgid "On"
 msgstr ""
 
-#: qtcfg.cpp:1170
+#: qtcfg.cpp:1307
 msgid "Off"
 msgstr ""
 
-#: qtcfg.cpp:1173 tuimod.cpp:241 tuimod.cpp:242 tuimod.cpp:247
+#: qtcfg.cpp:1310 tuimod.cpp:241 tuimod.cpp:242 tuimod.cpp:247
 msgid "str"
 msgstr ""
 
-#: qtcfg.cpp:1173 qtcfg.cpp:1185 qtcfg.cpp:1188 qtcfg.cpp:1195 tuimod.cpp:247
+#: qtcfg.cpp:1310 qtcfg.cpp:1322 qtcfg.cpp:1325 qtcfg.cpp:1332 tuimod.cpp:247
 msgid "rows"
 msgstr ""
 
-#: qtcfg.cpp:1173 tuimod.cpp:247
+#: qtcfg.cpp:1310 tuimod.cpp:247
 msgid "cols"
 msgstr ""
 
-#: qtcfg.cpp:1209 qtcfg.cpp:1214
+#: qtcfg.cpp:1346 qtcfg.cpp:1351
 msgid "addr_edit"
 msgstr ""
 
-#: qtcfg.cpp:1279 qtcfg.cpp:1286
+#: qtcfg.cpp:1416 qtcfg.cpp:1423
 msgid "addr_dtw"
 msgstr ""
 
-#: qtcfg.cpp:1280 qtcfg.cpp:1285
+#: qtcfg.cpp:1417 qtcfg.cpp:1422
 msgid "addr_dtr"
 msgstr ""
 
-#: qtcfg.cpp:1291 selfwidg.cpp:283
+#: qtcfg.cpp:1428 selfwidg.cpp:283
 msgid "dd.MM.yyyy hh:mm:ss"
 msgstr ""
 
-#: qtcfg.cpp:1329
+#: qtcfg.cpp:1466
 msgid "len"
 msgstr ""
 
-#: qtcfg.cpp:1333 qtcfg.cpp:1336
+#: qtcfg.cpp:1470 qtcfg.cpp:1473
 msgid "dec"
 msgstr ""
 
-#: qtcfg.cpp:1333 qtcfg.cpp:1337
+#: qtcfg.cpp:1470 qtcfg.cpp:1474
 msgid "hex"
 msgstr ""
 
-#: qtcfg.cpp:1333 qtcfg.cpp:1338
+#: qtcfg.cpp:1470 qtcfg.cpp:1475
 msgid "oct"
 msgstr ""
 
-#: qtcfg.cpp:1333 qtcfg.cpp:1339
+#: qtcfg.cpp:1470 qtcfg.cpp:1476
 msgid "real"
 msgstr ""
 
-#: qtcfg.cpp:1375 qtcfg.cpp:1382
+#: qtcfg.cpp:1512 qtcfg.cpp:1519
 msgid "addr_lew"
 msgstr ""
 
-#: qtcfg.cpp:1376 qtcfg.cpp:1381
+#: qtcfg.cpp:1513 qtcfg.cpp:1518
 msgid "addr_ler"
 msgstr ""
 
-#: qtcfg.cpp:1532
+#: qtcfg.cpp:1671
 msgid "oscada_cntr"
 msgstr ""
 
-#: qtcfg.cpp:1582
+#: qtcfg.cpp:1725
 msgid "Update remote hosts list"
 msgstr "Поновити перелік віддалених користувачів"
 
-#: qtcfg.cpp:1607
+#: qtcfg.cpp:1750
 #, c-format
 msgid "/%2fico"
 msgstr ""
 
-#: qtcfg.cpp:1639 qtcfg.cpp:1644 qtcfg.cpp:1694 qtcfg.cpp:1727
+#: qtcfg.cpp:1782 qtcfg.cpp:1787 qtcfg.cpp:1839 qtcfg.cpp:1872
 msgid "*"
 msgstr ""
 
-#: qtcfg.cpp:1749
+#: qtcfg.cpp:1894
 msgid "user"
 msgstr ""
 
-#: qtcfg.cpp:1752 qtcfg.cpp:1761
+#: qtcfg.cpp:1897 qtcfg.cpp:1906
 msgid "rez"
 msgstr ""
 
-#: qtcfg.cpp:1757
+#: qtcfg.cpp:1902
 msgid "TrCntr"
 msgstr ""
 
-#: qtcfg.cpp:1759
+#: qtcfg.cpp:1904
 msgid "\n"
 msgstr ""
 
-#: qtcfg.cpp:1759
+#: qtcfg.cpp:1904
 msgid "SelfSystem"
 msgstr ""
 
-#: qtcfg.cpp:1789
+#: qtcfg.cpp:1934
 msgid "Local station"
 msgstr "Локальна станція"
 
-#: qtcfg.cpp:1813
+#: qtcfg.cpp:1958
 msgid "Remote station"
 msgstr "Віддалена станція"
 
-#: qtcfg.cpp:1851
+#: qtcfg.cpp:1996
 #, c-format
 msgid "%s| Set <%s> to <%s>!"
 msgstr "%s| Встановлено <%s> у <%s>!"
 
-#: qtcfg.cpp:1854 qtcfg.cpp:1898 qtcfg.cpp:1979 qtcfg.cpp:2345 qtcfg.cpp:2403
-#: qtcfg.cpp:2542 tuimod.cpp:256 tuimod.cpp:261 tuimod.cpp:269 tuimod.cpp:270
+#: qtcfg.cpp:1999 qtcfg.cpp:2043 qtcfg.cpp:2124 qtcfg.cpp:2490 qtcfg.cpp:2548
+#: qtcfg.cpp:2687 tuimod.cpp:256 tuimod.cpp:261 tuimod.cpp:269 tuimod.cpp:270
 msgid "set"
 msgstr ""
 
-#: qtcfg.cpp:1875 tuimod.cpp:243
+#: qtcfg.cpp:2020 tuimod.cpp:243
 msgid "lnk"
 msgstr ""
 
-#: qtcfg.cpp:1887
+#: qtcfg.cpp:2032
 #, c-format
 msgid "%s| Go to link <%s>!"
 msgstr "%s| Перехід за посиланням <%s>!"
 
-#: qtcfg.cpp:1904
+#: qtcfg.cpp:2049
 #, c-format
 msgid "%s| Press <%s>!"
 msgstr "%s| Натиснуто <%s>!"
 
-#: qtcfg.cpp:1958
+#: qtcfg.cpp:2103
 msgid "Value no valid: "
 msgstr "Значення помилкове: "
 
-#: qtcfg.cpp:1976
+#: qtcfg.cpp:2121
 #, c-format
 msgid "%s| Change <%s> from <%s> to <%s>!"
 msgstr "%s| Змінено <%s> з <%s> у <%s>!"
 
-#: qtcfg.cpp:2009
+#: qtcfg.cpp:2154
 msgid "Go"
 msgstr "Перейти"
 
-#: qtcfg.cpp:2017
+#: qtcfg.cpp:2158 qtcfg.cpp:2160 qtcfg.cpp:2165 qtcfg.cpp:2170 qtcfg.cpp:2175
+#: qtcfg.cpp:2181 qtcfg.cpp:2332 qtcfg.cpp:2334 qtcfg.cpp:2339 qtcfg.cpp:2344
+#: qtcfg.cpp:2349
+msgid "s_com"
+msgstr ""
+
+#: qtcfg.cpp:2162
 msgid "Add"
 msgstr "Додати"
 
-#: qtcfg.cpp:2020 qtcfg.cpp:2112 qtcfg.cpp:2194 qtcfg.cpp:2231
+#: qtcfg.cpp:2165 qtcfg.cpp:2257 qtcfg.cpp:2339 qtcfg.cpp:2376
 msgid "ins"
 msgstr ""
 
-#: qtcfg.cpp:2022
+#: qtcfg.cpp:2167
 msgid "Insert"
 msgstr "Вставити"
 
-#: qtcfg.cpp:2025 qtcfg.cpp:2122
+#: qtcfg.cpp:2170 qtcfg.cpp:2267
 msgid "edit"
 msgstr ""
 
-#: qtcfg.cpp:2027
+#: qtcfg.cpp:2172
 msgid "Edit"
 msgstr "Редагувати"
 
-#: qtcfg.cpp:2033
+#: qtcfg.cpp:2178
 msgid "Delete"
 msgstr "Видалити"
 
-#: qtcfg.cpp:2036 qtcfg.cpp:2143 qtcfg.cpp:2204 qtcfg.cpp:2265
+#: qtcfg.cpp:2181 qtcfg.cpp:2288 qtcfg.cpp:2349 qtcfg.cpp:2410
 msgid "move"
 msgstr ""
 
-#: qtcfg.cpp:2039
+#: qtcfg.cpp:2184
 msgid "Up"
 msgstr "Вверх"
 
-#: qtcfg.cpp:2041
+#: qtcfg.cpp:2186
 msgid "Down"
 msgstr "Донизу"
 
-#: qtcfg.cpp:2061
+#: qtcfg.cpp:2206
 msgid "x_lst"
 msgstr ""
 
-#: qtcfg.cpp:2079
+#: qtcfg.cpp:2224
 msgid "Item name set"
 msgstr "Встановлення імені елементу"
 
-#: qtcfg.cpp:2080
+#: qtcfg.cpp:2225
 msgid "Add new element."
 msgstr "Додання нового елементу."
 
-#: qtcfg.cpp:2081
+#: qtcfg.cpp:2226
 msgid "Insert new element."
 msgstr "Вставлення нового елементу."
 
-#: qtcfg.cpp:2084
+#: qtcfg.cpp:2229
 msgid "Rename element."
 msgstr "Перейменування елементу."
 
-#: qtcfg.cpp:2107
+#: qtcfg.cpp:2252
 #, c-format
 msgid "%s| Add <%s> element <%s:%s>!"
 msgstr "%s| Додано <%s> елемент <%s:%s>!"
 
-#: qtcfg.cpp:2113 qtcfg.cpp:2123 qtcfg.cpp:2133 qtcfg.cpp:2144
+#: qtcfg.cpp:2258 qtcfg.cpp:2268 qtcfg.cpp:2278 qtcfg.cpp:2289
 msgid "pos"
 msgstr ""
 
-#: qtcfg.cpp:2114 qtcfg.cpp:2124
+#: qtcfg.cpp:2259 qtcfg.cpp:2269
 msgid "p_id"
 msgstr ""
 
-#: qtcfg.cpp:2117
+#: qtcfg.cpp:2262
 #, c-format
 msgid "%s| Insert <%s> element <%s:%s> to %d!"
 msgstr "%s| Вставлено <%s> елемент <%s:%s> до %d!"
 
-#: qtcfg.cpp:2127
+#: qtcfg.cpp:2272
 #, c-format
 msgid "%s| Set <%s> element %d to <%s:%s>!"
 msgstr "%s| Встановлено <%s> елемент %d у <%s:%s>!"
 
-#: qtcfg.cpp:2136
+#: qtcfg.cpp:2281
 #, c-format
 msgid "%s| Delete <%s> element <%s:%s>!"
 msgstr "%s| Видалення <%s> елементу <%s:%s>!"
 
-#: qtcfg.cpp:2145 qtcfg.cpp:2266
+#: qtcfg.cpp:2290 qtcfg.cpp:2411
 msgid "to"
 msgstr ""
 
-#: qtcfg.cpp:2146
+#: qtcfg.cpp:2291
 #, c-format
 msgid "%s| Move <%s> from %d to %d!"
 msgstr "%s| Пересунення <%s> з %d до %d!"
 
-#: qtcfg.cpp:2191
+#: qtcfg.cpp:2336
 msgid "Add record"
 msgstr "Додати запис"
 
-#: qtcfg.cpp:2196
+#: qtcfg.cpp:2341
 msgid "Insert record"
 msgstr "Вставити запис"
 
-#: qtcfg.cpp:2201
+#: qtcfg.cpp:2346
 msgid "Delete record"
 msgstr "Видалити запис"
 
-#: qtcfg.cpp:2207
+#: qtcfg.cpp:2352
 msgid "Move Up"
 msgstr "Пересунути вгору"
 
-#: qtcfg.cpp:2209
+#: qtcfg.cpp:2354
 msgid "Move Down"
 msgstr "Пересунути донизу"
 
-#: qtcfg.cpp:2226
+#: qtcfg.cpp:2371
 #, c-format
 msgid "%s| Add <%s> record."
 msgstr "%s| Додано <%s> запис."
 
-#: qtcfg.cpp:2232 qtcfg.cpp:2243 qtcfg.cpp:2266 qtcfg.cpp:2414
+#: qtcfg.cpp:2377 qtcfg.cpp:2388 qtcfg.cpp:2411 qtcfg.cpp:2559
 msgid "row"
 msgstr ""
 
-#: qtcfg.cpp:2233
+#: qtcfg.cpp:2378
 #, c-format
 msgid "%s| Insert <%s> record %d."
 msgstr "%s| Вставлення <%s> запису %d."
 
-#: qtcfg.cpp:2240 qtcfg.cpp:2249 qtcfg.cpp:2411 qtcfg.cpp:2420
+#: qtcfg.cpp:2385 qtcfg.cpp:2394 qtcfg.cpp:2556 qtcfg.cpp:2565
 msgid "key"
 msgstr ""
 
-#: qtcfg.cpp:2253 qtcfg.cpp:2254 qtcfg.cpp:2424 qtcfg.cpp:2425
+#: qtcfg.cpp:2398 qtcfg.cpp:2399 qtcfg.cpp:2569 qtcfg.cpp:2570
 msgid "key_"
 msgstr ""
 
-#: qtcfg.cpp:2254 qtcfg.cpp:2425
+#: qtcfg.cpp:2399 qtcfg.cpp:2570
 msgid "="
 msgstr ""
 
-#: qtcfg.cpp:2254 qtcfg.cpp:2425
+#: qtcfg.cpp:2399 qtcfg.cpp:2570
 msgid ","
 msgstr ""
 
-#: qtcfg.cpp:2258
+#: qtcfg.cpp:2403
 #, c-format
 msgid "%s| Delete <%s> record <%s>."
 msgstr "%s| Видалення <%s> запису <%s>."
 
-#: qtcfg.cpp:2267
+#: qtcfg.cpp:2412
 #, c-format
 msgid "%s| Move <%s> record from %d to %d."
 msgstr "%s| Пересунення <%s> запису з %d до %d."
 
-#: qtcfg.cpp:2304
+#: qtcfg.cpp:2449
 msgid "Save image"
 msgstr "Зберегти зображення"
 
-#: qtcfg.cpp:2309
+#: qtcfg.cpp:2454
 msgid "Load image"
 msgstr "Завантажити зображення"
 
-#: qtcfg.cpp:2319
+#: qtcfg.cpp:2464
 msgid "Save picture"
 msgstr "Збереження картинки"
 
-#: qtcfg.cpp:2320
+#: qtcfg.cpp:2465
 msgid "img.png"
 msgstr ""
 
-#: qtcfg.cpp:2320
+#: qtcfg.cpp:2465
 msgid "Images (*.png *.xpm *.jpg)"
 msgstr "Зображення (*.png *.xpm *.jpg)"
 
-#: qtcfg.cpp:2322
+#: qtcfg.cpp:2467
 #, c-format
 msgid "Save to file %s is error\n"
 msgstr "Помилка збереження до файлу %s\n"
 
-#: qtcfg.cpp:2327
+#: qtcfg.cpp:2472
 msgid "Load picture"
 msgstr "Завантаження картинки"
 
-#: qtcfg.cpp:2327
+#: qtcfg.cpp:2472
 msgid "Images (*.png *.jpg)"
 msgstr "Зображення (*.png *.jpg)"
 
-#: qtcfg.cpp:2334
+#: qtcfg.cpp:2479
 #, c-format
 msgid "Open file %s is error\n"
 msgstr "Помилка відкриття файлу %s\n"
 
-#: qtcfg.cpp:2342
+#: qtcfg.cpp:2487
 #, c-format
 msgid "Image file %s is error\n"
 msgstr "Помилковий файл зображення %s\n"
 
-#: qtcfg.cpp:2347
+#: qtcfg.cpp:2492
 #, c-format
 msgid "%s| Upload picture <%s> to: %s."
 msgstr "%s| Завантаження картинки <%s> до: %s."
 
-#: qtcfg.cpp:2398
+#: qtcfg.cpp:2543
 #, c-format
 msgid "Value <%s> no valid!"
 msgstr "Значення <%s> помилкове!"
 
-#: qtcfg.cpp:2408 qtcfg.cpp:2432
+#: qtcfg.cpp:2553 qtcfg.cpp:2577
 msgid "col"
 msgstr ""
 
-#: qtcfg.cpp:2431
+#: qtcfg.cpp:2576
 #, c-format
 msgid "%s| Set <%s> cell (<%s>:%s) to: %s."
 msgstr "%s| Встановлено <%s> чарунку (<%s>:%s) у: %s."
 
-#: qtcfg.cpp:2457 tuimod.cpp:287
+#: qtcfg.cpp:2602 tuimod.cpp:287
 #, c-format
 msgid "%s"
 msgstr ""
 
-#: qtcfg.cpp:2459
+#: qtcfg.cpp:2604
 msgid "br_pref"
 msgstr ""
 
-#: qtcfg.cpp:2472
+#: qtcfg.cpp:2617
 #, c-format
 msgid "Select element <%s> no present!"
 msgstr "Вибірковий елемент <%s> відсутній!"
 
-#: qtcfg.cpp:2539
+#: qtcfg.cpp:2684
 #, c-format
 msgid "%s| Change <%s> to: <%s>!"
 msgstr "%s| Змінено <%s> у: <%s>!"

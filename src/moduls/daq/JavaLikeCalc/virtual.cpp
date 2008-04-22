@@ -325,7 +325,7 @@ void TipContr::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TTipDAQ::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/lib_",_("Library"),0664);
+	ctrMkNode("grp",opt,-1,"/br/lib_",_("Library"),0664,"root","root",1,"idm","1");
 	if(ctrMkNode("area",opt,1,"/libs",_("Functions' Libraries")))
 	{
 	    ctrMkNode("list",opt,-1,"/libs/lb",_("Libraries"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","lib_");

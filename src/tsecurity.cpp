@@ -120,7 +120,6 @@ char TSecurity::access( const string &user, char mode, const string &owner, cons
 {
     char rez = 0;
 
-    AutoHD<TUser> r_usr = usrAt(user);
     //- Check owner permision -
     if( user == "root" || user == owner )	
 	rez = ((access&0700)>>6)&mode;
@@ -285,7 +284,7 @@ void TSecurity::cntrCmdProc( XMLNode *opt )
     {
         TSubSYS::cntrCmdProc(opt);
 	ctrMkNode("grp",opt,-1,"/br/usr_",_("User"),0664,"root",subId().c_str());
-	ctrMkNode("grp",opt,-1,"/br/grp_",_("Group"),0664,"root",subId().c_str());	
+	ctrMkNode("grp",opt,-1,"/br/grp_",_("Group"),0664,"root",subId().c_str());
         if(ctrMkNode("area",opt,0,"/sub",_("Subsystem"),0440,"root",subId().c_str()))
 	{
     	    ctrMkNode("comm",opt,-1,"/sub/load_db",_("Load"),0660,"root",subId().c_str());
@@ -297,6 +296,7 @@ void TSecurity::cntrCmdProc( XMLNode *opt )
     	    ctrMkNode("list",opt,-1,"/usgr/grps",_("Groups"),0664,"root",subId().c_str(),3,"tp","br","s_com","add,del","br_pref","grp_");
 	}
     	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root",subId().c_str(),3,"tp","str","cols","90","rows","10");
+
 	return;
     }
     
@@ -347,6 +347,19 @@ TUser::~TUser(  )
 
 }
 
+TCntrNode &TUser::operator=( TCntrNode &node )
+{
+    TUser *src_n = dynamic_cast<TUser*>(&node);
+    if( !src_n ) return *this;
+    
+    string nm = name();
+    *(TConfig*)this = *(TConfig*)src_n;
+    m_name = nm;
+    m_db = src_n->m_db;
+    
+    return *this;
+}
+
 void TUser::setPass( const string &n_pass )
 { 
     m_pass = crypt(n_pass.c_str(),name().c_str()); 
@@ -393,7 +406,7 @@ void TUser::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("User ")+name());
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("User ")+name(),0664,name().c_str(),grp.c_str());
 	if(picture().size()) ctrMkNode("img",opt,-1,"/ico","",0444);
 	if(ctrMkNode("area",opt,-1,"/prm",_("User")))
 	{
@@ -476,6 +489,19 @@ TGroup::~TGroup(  )
 
 }
 
+TCntrNode &TGroup::operator=( TCntrNode &node )
+{
+    TGroup *src_n = dynamic_cast<TGroup*>(&node);
+    if( !src_n ) return *this;
+	
+    string nm = name();
+    *(TConfig*)this = *(TConfig*)src_n;
+    m_name = nm;
+    m_db = src_n->m_db;
+			
+    return *this;
+}
+
 void TGroup::postDisable(int flag)
 {
     try
@@ -528,7 +554,7 @@ void TGroup::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Group ")+name());	
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Group ")+name(),0664,"root",owner().subId().c_str());	
 	ctrMkNode("area",opt,-1,"/prm",_("Group"));
 	ctrMkNode("fld",opt,-1,"/prm/name",cfg("NAME").fld().descr(),0444,"root",owner().subId().c_str(),1,"tp","str");
 	ctrMkNode("fld",opt,-1,"/prm/dscr",cfg("DESCR").fld().descr(),0664,"root",owner().subId().c_str(),1,"tp","str");

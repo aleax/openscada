@@ -179,7 +179,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) :
     actVisItEdit->setEnabled(false);
     connect(actVisItEdit, SIGNAL(activated()), this, SLOT(visualItEdit()));
     //--- Cut visual item ---
-    if(!ico_t.load(TUIS::icoPath("vision_editcut").c_str())) ico_t.load(":/images/editcut.png");
+    if(!ico_t.load(TUIS::icoPath("editcut").c_str())) ico_t.load(":/images/editcut.png");
     actVisItCut = new QAction(QPixmap::fromImage(ico_t),_("Visual item cut"),this);
     actVisItCut->setToolTip(_("Goes visual item cut"));
     actVisItCut->setWhatsThis(_("The button for goes to visual item cut"));
@@ -188,7 +188,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) :
     actVisItCut->setEnabled(false);
     connect(actVisItCut, SIGNAL(activated()), this, SLOT(visualItCut()));
     //--- Copy visual item ---
-    if(!ico_t.load(TUIS::icoPath("vision_editcopy").c_str())) ico_t.load(":/images/editcopy.png");
+    if(!ico_t.load(TUIS::icoPath("editcopy").c_str())) ico_t.load(":/images/editcopy.png");
     actVisItCopy = new QAction(QPixmap::fromImage(ico_t),_("Visual item copy"),this);
     actVisItCopy->setToolTip(_("Goes visual item copy"));
     actVisItCopy->setWhatsThis(_("The button for goes to visual item copy"));
@@ -197,7 +197,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) :
     actVisItCopy->setEnabled(false);
     connect(actVisItCopy, SIGNAL(activated()), this, SLOT(visualItCopy()));
     //--- Paste visual item ---
-    if(!ico_t.load(TUIS::icoPath("vision_editpaste").c_str())) ico_t.load(":/images/editpaste.png");
+    if(!ico_t.load(TUIS::icoPath("editpaste").c_str())) ico_t.load(":/images/editpaste.png");
     actVisItPaste = new QAction(QPixmap::fromImage(ico_t),_("Visual item paste"),this);
     actVisItPaste->setToolTip(_("Goes visual item paste"));
     actVisItPaste->setWhatsThis(_("The button for goes to visual item paste"));

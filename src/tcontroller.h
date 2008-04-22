@@ -41,6 +41,8 @@ class TController : public TCntrNode, public TConfig
 	//Public methods
      	TController( const string &name_c, const string &daq_db, TElem *cfgelem );
 	virtual ~TController(  );
+
+	TCntrNode &operator=( TCntrNode &node );
 	
 	const string &id( ) 	{ return m_id; }
 	string name( );

@@ -80,6 +80,8 @@ class TCntrNode
 	TCntrNode( TCntrNode *prev = NULL );
 	virtual ~TCntrNode( );
 
+	virtual TCntrNode &operator=( TCntrNode &node );
+
 	void cntrCmd( XMLNode *opt, int lev = 0, const string &path = "", int off = 0 );
 	
 	//- Static functions -
@@ -112,6 +114,7 @@ class TCntrNode
 	void nodeList( vector<string> &list, const string& gid = "" );				//Full node list
 	AutoHD<TCntrNode> nodeAt( const string &path, int lev = 0, char sep = 0, int off = 0 );	//Get node for full path
 	void nodeDel( const string &path, char sep = 0, int flag = 0 );				//Delete node at full path
+	static void nodeCopy( const string &src, const string &dst, const string &user = "root" );
 	
 	TCntrNode *nodePrev( bool noex = false );
         Mode nodeMode( )		{ return m_mod; }
@@ -121,6 +124,15 @@ class TCntrNode
 	void AHDDisConnect( );
     
     protected:
+	//Data
+	struct GrpEl
+	{
+	    string 	id;
+	    bool	ordered;
+	    TMap 	elem;
+	    //vector<TCntrNode*>	el;
+	};
+
 	//Methods
 	//- Commands -
 	void nodeEn( int flag = 0 );
@@ -138,9 +150,11 @@ class TCntrNode
 	void chldDel( unsigned igr, const string &name, long tm = -1, int flag = 0 );
 	
 	//- Conteiners -
-        unsigned grpSize()	{ return chGrp.size(); }
+        unsigned grpSize( )	{ return chGrp.size(); }
+	int 	 grpId( const string &sid );
+	GrpEl	&grpAt( int id );
         unsigned grpAdd( const string &id, bool ordered = false );
-	
+
 	virtual void preEnable( int flag )	{ }
 	virtual void postEnable( int flag )	{ }
 	
@@ -148,28 +162,24 @@ class TCntrNode
 	virtual void postDisable( int flag )	{ }
 
     private:
+	//Data
+ 	struct
+	{
+	    TCntrNode	*node;
+	    int		grp;
+	} prev;
+    
 	//Attributes
 	//- Childs -	
 	Res 	hd_res,			//Resource HD
 		conn_res;		//Connect resource
-	struct GrpEl
-	{
-	    string 	id;
-	    bool	ordered;
-	    TMap 	elem;
-	    //vector<TCntrNode*>	el;
-	};
+
 	vector<GrpEl>	chGrp;		//Child groups
 	
 	//- Curent node -
 	unsigned char		m_use;	//Use counter
 	unsigned short int	m_oi;	//Order index
-	struct
-	{
-	    TCntrNode	*node;
-	    int		grp;
-	} prev;
-	
+
 	Mode	m_mod;
 };
 

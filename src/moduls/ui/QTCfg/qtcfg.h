@@ -76,7 +76,10 @@ class ConfApp: public QMainWindow
 	void pagePrev( );
 	void pageNext( );
 	void itAdd( );
-	void itDel( );
+	void itDel( const string &it = "" );
+	void itCut( );
+	void itCopy( );
+	void itPaste( );
 	void pageRefresh( );
 	void pageCyclRefrStart( );
 	void pageCyclRefrStop( );
@@ -87,6 +90,7 @@ class ConfApp: public QMainWindow
 	void aboutQt( );
 	void enterWhatsThis( );
 
+	void editToolUpdate( );				//Edit tools visible update
 	void endRunChk( );      			//End run flag check
 
 	//- QListView -
@@ -144,11 +148,13 @@ class ConfApp: public QMainWindow
 	QAction 	*actUp,	*actPrev, *actNext,
 			*actUser,
 			*actStartUpd, *actStopUpd,
-			*actItAdd, *actItDel;
+			*actItAdd, *actItDel,
+			*actItCut, *actItCopy, *actItPaste;
 
 	XMLNode		pg_info;
 	XMLNode 	*root;    
-	string		sel_path;
+	string		sel_path,
+			copy_buf;       //Copy buffer
 
 	int		que_sz;
 	vector<string>	prev;

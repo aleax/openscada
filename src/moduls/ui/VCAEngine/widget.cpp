@@ -45,40 +45,43 @@ Widget::~Widget()
     attr_cfg.valDet(this);
 }
 
-Widget &Widget::operator=( Widget &wdg )
+TCntrNode &Widget::operator=( TCntrNode &node )
 {
-    if( !wdg.enable() ) return *this;
+    Widget *src_n = dynamic_cast<Widget*>(&node);
+    if( !src_n ) return *this;
+
+    if( !src_n->enable() ) return *this;
 
     //- Parent link copy -
-    if( parentNm() != wdg.parentNm() && enable() ) setEnable(false);
-    setParentNm(wdg.parentNm());
+    if( parentNm() != src_n->parentNm() && enable() ) setEnable(false);
+    setParentNm(src_n->parentNm());
     if( !enable() ) setEnable(true);
 
     //- Copy generic configuration -
-    if( wdg.parent().freeStat() || wdg.name() != wdg.parent().at().name() )	setName(wdg.name());
-    if( wdg.parent().freeStat() || wdg.descr() != wdg.parent().at().descr() )	setDescr(wdg.descr());
-    if( wdg.parent().freeStat() || wdg.ico() != wdg.parent().at().ico() )	setIco(wdg.ico());
-    setUser(wdg.user());
-    setGrp(wdg.grp());
-    setPermit(wdg.permit());
-    if( wdg.parent().freeStat() || wdg.calcLang() != wdg.parent().at().calcLang() )	setCalcLang(wdg.calcLang());
-    if( wdg.parent().freeStat() || wdg.calcProg() != wdg.parent().at().calcProg() )	setCalcProg(wdg.calcProg());
-    if( wdg.parent().freeStat() || wdg.calcPer() != wdg.parent().at().calcPer() )	setCalcPer(wdg.calcPer());
+    if( src_n->parent().freeStat() || src_n->name() != src_n->parent().at().name() )	setName(src_n->name());
+    if( src_n->parent().freeStat() || src_n->descr() != src_n->parent().at().descr() )	setDescr(src_n->descr());
+    if( src_n->parent().freeStat() || src_n->ico() != src_n->parent().at().ico() )	setIco(src_n->ico());
+    setUser(src_n->user());
+    setGrp(src_n->grp());
+    setPermit(src_n->permit());
+    if( src_n->parent().freeStat() || src_n->calcLang() != src_n->parent().at().calcLang() )	setCalcLang(src_n->calcLang());
+    if( src_n->parent().freeStat() || src_n->calcProg() != src_n->parent().at().calcProg() )	setCalcProg(src_n->calcProg());
+    if( src_n->parent().freeStat() || src_n->calcPer() != src_n->parent().at().calcPer() )	setCalcPer(src_n->calcPer());
 
     //- Copy attributes -
     vector<string> els;
-    wdg.attrList(els);
+    src_n->attrList(els);
     AutoHD<Attr> attr, pattr;
     for( int i_a = 0; i_a < els.size(); i_a++ )
     {
   	if( !attrPresent(els[i_a]) )
 	{
-	    attrAdd( new TFld(wdg.attrAt(els[i_a]).at().fld()) );
+	    attrAdd( new TFld(src_n->attrAt(els[i_a]).at().fld()) );
 	    attrAt(els[i_a]).at().setModif(1);
 	}
 	if( els[i_a]=="id" || els[i_a]=="path" ) continue;
        	attr  = attrAt(els[i_a]);
-	pattr = wdg.attrAt(els[i_a]);
+	pattr = src_n->attrAt(els[i_a]);
 	attr.at().setFlgSelf(pattr.at().flgSelf());
     	switch(attr.at().type())
 	{
@@ -92,13 +95,13 @@ Widget &Widget::operator=( Widget &wdg )
     }
 
     //- Include widgets copy -
-    if( !isLink( ) && wdg.isContainer() )
+    if( !isLink( ) && src_n->isContainer() )
     {
-    	wdg.wdgList(els);
+    	src_n->wdgList(els);
       	for( int i_w = 0; i_w < els.size(); i_w++ )
 	{
 	    if( !wdgPresent(els[i_w]) )	wdgAdd(els[i_w],"","");
-	    wdgAt(els[i_w]).at() = wdg.wdgAt(els[i_w]).at();
+	    (TCntrNode&)wdgAt(els[i_w]).at() = (TCntrNode&)src_n->wdgAt(els[i_w]).at();
 	}
     }
     
@@ -453,7 +456,7 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Widget: ")+id());
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Widget: ")+id(),permit(),user().c_str(),grp().c_str());
         if(ctrMkNode("area",opt,-1,"/wdg",_("Widget")))
 	{
 	    if(ctrMkNode("area",opt,-1,"/wdg/st",_("State")))
@@ -484,7 +487,7 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
         if(isContainer() && (!isLink()) && ctrMkNode("area",opt,-1,"/inclwdg",_("Include widgets")))
 	    ctrMkNode("list",opt,-1,"/inclwdg/wdg",_("Widgets"),permit(),user().c_str(),grp().c_str(),4,"tp","br","idm","1","s_com","add,del","br_pref","wdg_");
 	if(isContainer() && (!isLink()) && ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
-            ctrMkNode("grp",opt,-1,"/br/wdg_",_("Widget"),permit(),user().c_str(),grp().c_str());
+            ctrMkNode("grp",opt,-1,"/br/wdg_",_("Widget"),permit(),user().c_str(),grp().c_str(),1,"idm","1");
 	if(ico().size()) ctrMkNode("img",opt,-1,"/ico","",0444);	    
 	return true;
     }

@@ -50,35 +50,37 @@ WidgetLib::~WidgetLib( )
 
 }
 
-WidgetLib &WidgetLib::operator=( WidgetLib &wdg )
+TCntrNode &WidgetLib::operator=( TCntrNode &node )
 {
-    vector<string> pls;
-    if( !wdg.enable() ) return *this;
+    WidgetLib *src_n = dynamic_cast<WidgetLib*>(&node);
+    if( !src_n ) return *this;
+
     //- Copy generic configuration -
     string tid = m_id;
-    *(TConfig *)this = (TConfig&)wdg;
+    *(TConfig*)this = *(TConfig*)src_n;
     m_id  = tid;
     m_dbt = string("wlb_")+tid;
-    work_lib_db = wdg.work_lib_db;
-    
-    //- Enable destination project -
+    work_lib_db = src_n->work_lib_db;
+
+    if( !src_n->enable() ) return *this;
     if( !enable() ) setEnable(true);
 
+    vector<string> pls;
     //- Mime data copy -
-    wdg.mimeDataList(pls);
+    src_n->mimeDataList(pls);
     string mimeType, mimeData;
     for( int i_m = 0; i_m < pls.size(); i_m++ )
     {
-	wdg.mimeDataGet( pls[i_m], mimeType, &mimeData );
+	src_n->mimeDataGet( pls[i_m], mimeType, &mimeData );
         mimeDataSet( pls[i_m], mimeType, mimeData );
-    }			   
+    }
 
     //- Copy include pages -
-    wdg.list(pls);
+    src_n->list(pls);
     for( int i_p = 0; i_p < pls.size(); i_p++ )
     {
 	if( !present(pls[i_p]) ) add(pls[i_p],"");
-	((AutoHD<Widget>)at(pls[i_p])).at() = ((AutoHD<Widget>)wdg.at(pls[i_p])).at();
+	(TCntrNode&)at(pls[i_p]).at() = (TCntrNode&)src_n->at(pls[i_p]).at();
     }
     
     return *this;
@@ -311,10 +313,10 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
-        ctrMkNode("oscada_cntr",opt,-1,"/",_("Widget's library: ")+id());
+        ctrMkNode("oscada_cntr",opt,-1,"/",_("Widget's library: ")+id(),permit(),user().c_str(),grp().c_str());
 	if(ico().size()) ctrMkNode("img",opt,-1,"/ico","",R_R_R_);
         if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
-	    ctrMkNode("grp",opt,-1,"/br/wdg_",_("Widget"),permit(),user().c_str(),grp().c_str());
+	    ctrMkNode("grp",opt,-1,"/br/wdg_",_("Widget"),permit(),user().c_str(),grp().c_str(),1,"idm","1");
         if(ctrMkNode("area",opt,-1,"/obj",_("Library")))
 	{
     	    if(ctrMkNode("area",opt,-1,"/obj/st",_("State")))
@@ -1197,7 +1199,7 @@ void CWidget::cntrCmdProc( XMLNode *opt )
     {
 	cntrCmdGeneric(opt);
 	cntrCmdAttributes(opt);
-        ctrMkNode("oscada_cntr",opt,-1,"/",_("Link to widget: ")+id());
+        ctrMkNode("oscada_cntr",opt,-1,"/",_("Link to widget: ")+id(),permit(),user().c_str(),grp().c_str());
 	return;
     }
     cntrCmdGeneric(opt) || cntrCmdAttributes(opt);

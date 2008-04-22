@@ -41,8 +41,8 @@ class WidgetLib : public TCntrNode, public TConfig
 	//Methods
         WidgetLib( const string &id, const string &name, const string &lib_db = "*.*" );
 	~WidgetLib( );
-	
-        WidgetLib &operator=( WidgetLib &wdg );
+
+	TCntrNode &operator=( TCntrNode &node );
 
         const string &id( )	{ return m_id; }		//Identifier
         string name( );						//Name

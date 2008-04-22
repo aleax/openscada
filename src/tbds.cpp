@@ -508,12 +508,6 @@ void TBDS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("comm",opt,-1,"/sub/load_db",_("Load"),0660,"root",subId().c_str());
     	    ctrMkNode("comm",opt,-1,"/sub/upd_db",_("Save"),0660,"root",subId().c_str());
 	}
-	if(ctrMkNode("area",opt,2,"/db_serv",_("DB service"),0440,"root",subId().c_str()))
-	    if(ctrMkNode("comm",opt,-1,"/db_serv/copy",_("Copy DB/Table"),0660,"root",subId().c_str()))
-            {
-                ctrMkNode("fld",opt,-1,"/db_serv/copy/src",_("Source"),0660,"root",subId().c_str(),3,"tp","str","dest","sel_ed","select","/db_serv/dblst");
-	        ctrMkNode("fld",opt,-1,"/db_serv/copy/dst",_("Destination"),0660,"root",subId().c_str(),3,"tp","str","dest","sel_ed","select","/db_serv/dblst");
-    	    }
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root",subId().c_str(),3,"tp","str","cols","90","rows","10");
 	return;
     }
@@ -522,64 +516,6 @@ void TBDS::cntrCmdProc( XMLNode *opt )
     if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440,"root",subId().c_str(),SEQ_RD) ) 		opt->setText(optDescr());
     else if( a_path == "/sub/load_db" && ctrChkNode(opt,"set",0660,"root",subId().c_str(),SEQ_WR) )	subLoad();
     else if( a_path == "/sub/upd_db" && ctrChkNode(opt,"set",0660,"root",subId().c_str(),SEQ_WR) )	subSave();
-    else if( a_path == "/db_serv/copy" && ctrChkNode(opt,"set",0660,"root",subId().c_str(),SEQ_WR) )
-    {
-	//- Get parameters -
-	string dbsrc  = ctrId(opt,"src")->text();
-	string dbdest = ctrId(opt,"dst")->text();
-	string dbstbl = TSYS::strSepParse(dbsrc,2,'.');
-	string dbdtbl = TSYS::strSepParse(dbdest,2,'.');
-	vector<string>	tbl_ls;
-	
-	//- Check parameters -
-	if( !dbstbl.empty() && dbdtbl.empty() ) dbdtbl = dbstbl;
-	if( dbstbl.empty() && !dbdtbl.empty() )
-	    throw TError(nodePath().c_str(),_("Copy full DB to one table no allow."));
-	
-	//- Connect to source and destination DB -
-	AutoHD<TBD> sdb = at(TSYS::strSepParse(dbsrc,0,'.')).at().at(TSYS::strSepParse(dbsrc,1,'.'));
-	AutoHD<TBD> ddb = at(TSYS::strSepParse(dbdest,0,'.')).at().at(TSYS::strSepParse(dbdest,1,'.'));
-	
-	//- Tables process -
-	if( !dbstbl.empty() )	tbl_ls.push_back(dbstbl);
-	else sdb.at().allowList(tbl_ls);	
-	for( int i_l = 0; i_l < tbl_ls.size(); i_l++ )
-	{
-	    //-- Open source and destination tables --
-	    sdb.at().open(tbl_ls[i_l], false);
-	    ddb.at().open(dbdtbl.empty() ? tbl_ls[i_l] : dbdtbl, true);
-	    AutoHD<TTable> stbl = sdb.at().at(tbl_ls[i_l]);
-	    AutoHD<TTable> dtbl = ddb.at().at(dbdtbl.empty() ? tbl_ls[i_l] : dbdtbl);
-	    TConfig req;
-	    stbl.at().fieldStruct(req);
-	    //-- Scan source table and write to destination table
-	    for( int row = 0; stbl.at().fieldSeek(row,req); row++ )
-	    {
-		dtbl.at().fieldSet(req);
-		//--- Clear key fields ---
-		for( int i_e = 0; i_e < req.elem().fldSize(); i_e++ )
-		    if( req.elem().fldAt(i_e).flg()&TCfg::Key )
-			req.cfg(req.elem().fldAt(i_e).name()).setS("");
-	    }
-		
-	    //-- Close source and destination tables --
-	    stbl.free();
-	    dtbl.free();
-	    sdb.at().close(tbl_ls[i_l]);
-	    ddb.at().close(dbdtbl.empty() ? tbl_ls[i_l] : dbdtbl);
-	}
-    }
-    else if( a_path == "/db_serv/dblst" && ctrChkNode(opt) )
-    {
-	vector<string> mls, dbls;
-	modList(mls);
-	for( int i_m = 0; i_m < mls.size(); i_m++ )
-	{
-	    at(mls[i_m]).at().list(dbls);
-	    for( int i_db = 0; i_db < dbls.size(); i_db++ )
-		opt->childAdd("el")->setText(mls[i_m]+"."+dbls[i_db]);
-	}
-    }
     else TSubSYS::cntrCmdProc(opt);
 }
 
@@ -609,7 +545,7 @@ void TTipBD::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TModule::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/db_",_("Opened DB"),0664,"root",grp.c_str());
+	ctrMkNode("grp",opt,-1,"/br/db_",_("Opened DB"),0664,"root",grp.c_str(),1,"idm","1");
 	if(ctrMkNode("area",opt,0,"/db",_("DB"),0444))
 	{
 	    ctrMkNode("fld",opt,-1,"/db/ful_db_del",_("Full DB delete"),0660,"root",grp.c_str(),1,"tp","bool");
@@ -655,14 +591,46 @@ TBD::TBD( const string &iid, TElem *cf_el ) : TConfig( cf_el ),
     m_tbl = grpAdd("tbl_");
 }
 
-void TBD::postEnable( int flag )
+TCntrNode &TBD::operator=( TCntrNode &node )
 {
-    cfg("TYPE").setS(owner().modId());
+    TBD *src_n = dynamic_cast<TBD*>(&node);
+    if( !src_n ) return *this;
+	
+    if( !enableStat() )
+    {
+	string tid = id();
+	*(TConfig*)this = *(TConfig*)src_n;
+	m_id = tid;
+    }
+
+    if( src_n->enableStat() && enableStat() )
+    {
+	vector<string>	tbl_ls;    
+	src_n->allowList(tbl_ls);
+	for( int i_l = 0; i_l < tbl_ls.size(); i_l++ )
+	{
+	    //-- Open source and destination tables --
+	    src_n->open(tbl_ls[i_l], false);
+	    open(tbl_ls[i_l], true);
+	    //-- Copy table --
+	    (TCntrNode&)at(tbl_ls[i_l]).at() = (TCntrNode&)src_n->at(tbl_ls[i_l]).at();
+	    //-- Close source and destination tables --
+	    src_n->close(tbl_ls[i_l]);
+	    close(tbl_ls[i_l]);
+	}    
+    }
+			
+    return *this;
 }
 
 TBD::~TBD()
 {
 
+}
+
+void TBD::postEnable( int flag )
+{
+    cfg("TYPE").setS(owner().modId());
 }
 
 void TBD::preDisable(int flag)
@@ -726,7 +694,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
     //Get page info
     if( opt->name() == "info" )
     {
-        ctrMkNode("oscada_cntr",opt,-1,"/",_("Data base: ")+name());
+        ctrMkNode("oscada_cntr",opt,-1,"/",_("Data base: ")+name(),0664,"root",grp.c_str());
 	ctrMkNode("branches",opt,-1,"/br","",0444);
 	ctrMkNode("grp",opt,-1,"/br/tbl_",_("Opened table"),0664,"root",grp.c_str());
         if(ctrMkNode("area",opt,0,"/prm",_("Data base")))
@@ -734,7 +702,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
     	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))
 	    {
     		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Enable"),0664,"root",grp.c_str(),1,"tp","bool");
-		ctrMkNode("list",opt,-1,"/prm/st/allow_tbls",_("Allow tables"),0444,"root",grp.c_str(),1,"tp","str");
+		ctrMkNode("list",opt,-1,"/prm/st/allow_tbls",_("Allow tables"),0664,"root",grp.c_str(),2,"tp","str","s_com","del");
 	    }
     	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Config")))
 	    {
@@ -760,12 +728,20 @@ void TBD::cntrCmdProc( XMLNode *opt )
     	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(enableStat()?"1":"0");
 	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	atoi(opt->text().c_str())?enable():disable();
     }
-    else if( a_path == "/prm/st/allow_tbls" && ctrChkNode(opt) )
+    else if( a_path == "/prm/st/allow_tbls" )
     {
-	vector<string> lst;
-	allowList(lst);
-	for( int i_l=0; i_l < lst.size(); i_l++)
-	    opt->childAdd("el")->setText(lst[i_l]);
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )
+	{
+	    vector<string> lst;
+	    allowList(lst);
+	    for( int i_l=0; i_l < lst.size(); i_l++)
+		opt->childAdd("el")->setText(lst[i_l]);
+	}
+	if( ctrChkNode(opt,"del",0664,"root",grp.c_str(),SEQ_WR) )
+	{
+	    open( opt->text(), false );
+	    close( opt->text(), true );
+	}
     }
     else if( a_path == "/prm/cfg/id" && ctrChkNode(opt) )	opt->setText(id());
     else if( a_path == "/prm/cfg/nm" )
@@ -822,13 +798,34 @@ TTable::~TTable()
 
 }
 
+TCntrNode &TTable::operator=( TCntrNode &node )
+{
+    TTable *src_n = dynamic_cast<TTable*>(&node);
+    if( !src_n || !src_n->owner().enableStat() || !owner().enableStat() ) return *this;
+
+    //- Table content copy -
+    TConfig req;
+    src_n->fieldStruct(req);
+    //-- Scan source table and write to destination table
+    for( int row = 0; src_n->fieldSeek(row,req); row++ )
+    {
+        fieldSet(req);
+        //--- Clear key fields ---
+        for( int i_e = 0; i_e < req.elem().fldSize(); i_e++ )
+            if( req.elem().fldAt(i_e).flg()&TCfg::Key )
+                req.cfg(req.elem().fldAt(i_e).name()).setS("");
+    }
+
+    return *this;
+}
+
 void TTable::cntrCmdProc( XMLNode *opt )
 {
     string grp = owner().owner().owner().subId();
     //Get page info
     if( opt->name() == "info" )
     {
-        ctrMkNode("oscada_cntr",opt,-1,"/",_("Table: ")+name());
+        ctrMkNode("oscada_cntr",opt,-1,"/",_("Table: ")+name(),0664,"root",grp.c_str());
         if(ctrMkNode("area",opt,0,"/prm",_("Table")))
 	{
     	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Config")))
@@ -837,7 +834,7 @@ void TTable::cntrCmdProc( XMLNode *opt )
 	    if( tbl=ctrMkNode("table",opt,-1,"/prm/tbl",_("Data"),0664,"root",grp.c_str(),1,"s_com","add,del") )
 	    {
 		TConfig req;
-		fieldStruct(req);
+		try{ fieldStruct(req); } catch(...) { }
 		for( int i_f = 0; i_f < req.elem().fldSize(); i_f++ )
 		{
 		    string     eid = req.elem().fldAt(i_f).name();

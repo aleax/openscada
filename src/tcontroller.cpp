@@ -41,6 +41,35 @@ TController::~TController(  )
     nodeDelAll();
 }
 
+TCntrNode &TController::operator=( TCntrNode &node )
+{
+    TController *src_n = dynamic_cast<TController*>(&node);
+    if( !src_n ) return *this;
+
+    //- Configuration copy -
+    string tid = id();
+    *(TConfig*)this = *(TConfig*)src_n;
+    m_id = tid;
+    m_db = src_n->m_db;
+
+    //- Parameters copy -
+    if( src_n->enableStat( ) )
+    {
+	if( !enableStat( ) )	enable();
+	vector<string> prm_ls;
+	src_n->list(prm_ls);
+	for( int i_p = 0; i_p < prm_ls.size(); i_p++ )
+	{
+	    if( !owner().tpPrmPresent(src_n->at(prm_ls[i_p]).at().type().name) ) continue;
+	    if( !present(prm_ls[i_p]) )	add( prm_ls[i_p], owner().tpPrmToId(src_n->at(prm_ls[i_p]).at().type().name) );
+	    (TCntrNode&)at(prm_ls[i_p]).at() = (TCntrNode&)src_n->at(prm_ls[i_p]).at();
+	    if( toEnable( ) && !enableStat( ) )	enable();
+	}
+    }
+
+    return *this;
+}
+
 void TController::preDisable(int flag)
 {
     if( startStat() ) 	stop( );
@@ -258,7 +287,7 @@ void TController::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
-    	ctrMkNode("oscada_cntr",opt,-1,"/",_("Controller: ")+name());
+    	ctrMkNode("oscada_cntr",opt,-1,"/",_("Controller: ")+name(),0664,"root","root");
 	ctrMkNode("branches",opt,-1,"/br","",0444);	
 	if(ctrMkNode("area",opt,-1,"/cntr",_("Controller")))
 	{
@@ -277,7 +306,7 @@ void TController::cntrCmdProc( XMLNode *opt )
 	}
     	if( owner().tpPrmSize() )
 	{
-	    ctrMkNode("grp",opt,-1,"/br/prm_",_("Parameter"),0660);
+	    ctrMkNode("grp",opt,-1,"/br/prm_",_("Parameter"),0660,"root","root",1,"idm","1");
      	    if(ctrMkNode("area",opt,-1,"/prm",_("Parameters")))
 	    {
 		if( owner().tpPrmSize() > 1 )

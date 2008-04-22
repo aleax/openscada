@@ -74,7 +74,7 @@ using namespace QTCFG;
 //* ConfApp                                       *
 //*************************************************
 ConfApp::ConfApp( string open_user ) : 
-    que_sz(20), block_tabs(false), pg_info("info"), root(&pg_info), tbl_init(false)
+    que_sz(20), block_tabs(false), pg_info("info"), root(&pg_info), tbl_init(false), copy_buf("0")
 {   
     //- Main window settings -
     setAttribute(Qt::WA_DeleteOnClose,true);
@@ -208,8 +208,36 @@ ConfApp::ConfApp( string open_user ) :
     actItDel->setToolTip(_("Delete item"));
     actItDel->setWhatsThis(_("The button for deleting item"));
     actItDel->setStatusTip(_("Press for deleting item."));
+    actItDel->setShortcut(QKeySequence("Ctrl+D"));
     actItDel->setEnabled(false);
     connect(actItDel, SIGNAL(activated()), this, SLOT(itDel()));
+    //--- Cut item ---
+    if(!ico_t.load(TUIS::icoPath("editcut").c_str())) ico_t.load(":/images/editcut.png");
+    actItCut = new QAction(QPixmap::fromImage(ico_t),_("Item cut"),this);
+    actItCut->setToolTip(_("Goes item cut"));
+    actItCut->setWhatsThis(_("The button for goes to item cut"));
+    actItCut->setStatusTip(_("Press for goes to item cut."));
+    actItCut->setShortcut(QKeySequence("Ctrl+X"));
+    actItCut->setEnabled(false);
+    connect(actItCut, SIGNAL(activated()), this, SLOT(itCut()));
+    //--- Copy item ---
+    if(!ico_t.load(TUIS::icoPath("editcopy").c_str())) ico_t.load(":/images/editcopy.png");
+    actItCopy = new QAction(QPixmap::fromImage(ico_t),_("Item copy"),this);
+    actItCopy->setToolTip(_("Goes item copy"));
+    actItCopy->setWhatsThis(_("The button for goes to item copy"));
+    actItCopy->setStatusTip(_("Press for goes to item copy."));
+    actItCopy->setShortcut(QKeySequence("Ctrl+C"));
+    actItCopy->setEnabled(false);
+    connect(actItCopy, SIGNAL(activated()), this, SLOT(itCopy()));
+    //--- Paste item ---
+    if(!ico_t.load(TUIS::icoPath("editpaste").c_str())) ico_t.load(":/images/editpaste.png");
+    actItPaste = new QAction(QPixmap::fromImage(ico_t),_("Item paste"),this);
+    actItPaste->setToolTip(_("Goes item paste"));
+    actItPaste->setWhatsThis(_("The button for goes to item paste"));
+    actItPaste->setStatusTip(_("Press for goes to item paste."));
+    actItPaste->setShortcut(QKeySequence("Ctrl+V"));
+    actItPaste->setEnabled(false);
+    connect(actItPaste, SIGNAL(activated()), this, SLOT(itPaste()));
     //-- Update --
     if(!ico_t.load(TUIS::icoPath("reload").c_str())) ico_t.load(":/images/reload.png");
     QAction *actUpdate = new QAction(QPixmap::fromImage(ico_t),_("&Refresh"),this);
@@ -266,6 +294,10 @@ ConfApp::ConfApp( string open_user ) :
     QMenu *mn_edit = menuBar()->addMenu(_("&Edit"));    
     mn_edit->addAction(actItAdd);
     mn_edit->addAction(actItDel);
+    mn_edit->addSeparator( );
+    mn_edit->addAction(actItCopy);
+    mn_edit->addAction(actItCut);
+    mn_edit->addAction(actItPaste);
     //-- Create menu "view" --
     QMenu *mn_view = menuBar()->addMenu(_("&View"));    
     mn_view->addAction(actUpdate);
@@ -280,7 +312,7 @@ ConfApp::ConfApp( string open_user ) :
     QMenu *help = menuBar()->addMenu(_("&Help"));
     help->addAction(actAbout);
     help->addAction(actQtAbout);
-    help->addSeparator();
+    help->addSeparator( );
     help->addAction(actWhatIs);
 
     //- Create tool bars -    
@@ -293,6 +325,10 @@ ConfApp::ConfApp( string open_user ) :
     toolBar->addSeparator();
     toolBar->addAction(actItAdd);
     toolBar->addAction(actItDel);
+    toolBar->addSeparator();
+    toolBar->addAction(actItCopy);
+    toolBar->addAction(actItCut);
+    toolBar->addAction(actItPaste);
     toolBar->addSeparator();
     toolBar->addAction(actUpdate);
     toolBar->addAction(actStartUpd);
@@ -386,46 +422,55 @@ void ConfApp::itAdd( )
     if( sel_path.empty() || !root->childGet("id","br",true) )	return;
     XMLNode *branch = root->childGet("id","br");
 
-    InputDlg dlg(this,actItAdd->icon(),
-            QString(_("Add item to node: '%1'.")).arg(sel_path.c_str()),
-	    _("Add node"),true,true);
-    dlg.ed_lay->addWidget( new QLabel(_("Item type:"),&dlg), 0, 0 );
-    QComboBox *nCont = new QComboBox(&dlg);
-    dlg.ed_lay->addWidget( nCont, 0, 1 );
+    QComboBox *nCont = new QComboBox(NULL);
 
     //- Load branches list -
+    bool idm = false;
     for( int i_b = 0; i_b < branch->childSize(); i_b++ )
 	if( atoi(branch->childGet(i_b)->attr("acs").c_str())&SEQ_WR )
-	    nCont->addItem( branch->childGet(i_b)->attr("dscr").c_str(), branch->childGet(i_b)->attr("id").c_str() );
+	{
+	    idm |= (bool)atoi(branch->childGet(i_b)->attr("idm").c_str());
+	    nCont->addItem( branch->childGet(i_b)->attr("dscr").c_str(), 
+			    (string(atoi(branch->childGet(i_b)->attr("idm").c_str())?"1":"0")+branch->childGet(i_b)->attr("id")).c_str() );
+	}
     if( !nCont->count() )
-    {
-	mod->postMess(mod->nodePath().c_str(),_("No one editable container present."),TUIMod::Info,this);
-	return;
-    }
-    
+    { mod->postMess(mod->nodePath().c_str(),_("No one editable container present."),TUIMod::Info,this); return; }
+
+    InputDlg dlg(this,actItAdd->icon(),
+            QString(_("Add item to node: '%1'.")).arg(sel_path.c_str()),
+	    _("Add node"),true,idm);
+    dlg.ed_lay->addWidget( new QLabel(_("Item type:"),&dlg), 0, 0 );
+    nCont->setParent(&dlg);
+    dlg.ed_lay->addWidget( nCont, 0, 1 ); 
+
     if( dlg.exec() != QDialog::Accepted )   return;
     
     //- Send create request -
     XMLNode br_req("add");
-    br_req.setAttr("path",sel_path+"/%2fbr%2f"+nCont->itemData(nCont->currentIndex()).toString().toAscii().data())->
-    	   setAttr("id",dlg.id().toAscii().data())->
-	   setText(dlg.name().toAscii().data());
+    br_req.setAttr("path",sel_path+"/%2fbr%2f"+string(nCont->itemData(nCont->currentIndex()).toString().toAscii().data()+1));
+    if( nCont->itemData(nCont->currentIndex()).toString()[0] == '1' )
+	br_req.setAttr("id",dlg.id().toAscii().data())->setText(dlg.name().toAscii().data());
+    else br_req.setText(dlg.id().toAscii().data());
     if( cntrIfCmd(br_req) )	mod->postMess(br_req.attr("mcat").c_str(),br_req.text().c_str(),TUIMod::Info,this);
-    else treeUpdate();
+    else { treeUpdate(); pageRefresh(); }
 }
 
-void ConfApp::itDel( )
+void ConfApp::itDel( const string &iit )
 {
-    if( sel_path.empty() )	return;
+    string rmit = iit.empty() ? sel_path : iit;
+    if( rmit.empty() )	return;
 
-    InputDlg dlg(this,actItDel->icon(),
-            QString(_("You sure for delete node: '%1'?")).arg(sel_path.c_str()),
-	    _("Delete node"),false,false);
-    if( dlg.exec() != QDialog::Accepted )   return;
+    if( iit.empty() )
+    {
+	InputDlg dlg(this,actItDel->icon(),
+        	QString(_("You sure for delete node: '%1'?")).arg(rmit.c_str()),
+		_("Delete node"),false,false);
+	if( dlg.exec() != QDialog::Accepted )   return;
+    }    
     
     string t_el, sel_own, sel_el;
     int n_obj = 0;
-    for( int off = 0; !(t_el=TSYS::pathLev(sel_path,0,true,&off)).empty(); n_obj++ )
+    for( int off = 0; !(t_el=TSYS::pathLev(rmit,0,true,&off)).empty(); n_obj++ )
     { if( n_obj ) sel_own += ("/"+sel_el); sel_el = t_el; }
     if( n_obj > 2 )
     {
@@ -437,23 +482,116 @@ void ConfApp::itDel( )
             for( int i_b = 0; i_b < branch->childSize(); i_b++ )
                 if( branch->childGet(i_b)->attr("id") == sel_el.substr(0,branch->childGet(i_b)->attr("id").size()) &&
                     atoi(branch->childGet(i_b)->attr("acs").c_str())&SEQ_WR )
-            	    { 
-			br_req.clear()->setName("del")->
-					setAttr("path",sel_own+"/%2fbr%2f"+branch->childGet(i_b)->attr("id"))->
-					setAttr("id",sel_el.substr(branch->childGet(i_b)->attr("id").size()));
-			if( cntrIfCmd(br_req) )
-			    mod->postMess(br_req.attr("mcat").c_str(),br_req.text().c_str(),TUIMod::Info,this);
-			else
-			    try
-			    { 
-				pageDisplay(mod->startPath());
-				treeUpdate();
-			    }
-			    catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
-			break; 
-		    }
+            	{
+		    string b_id = branch->childGet(i_b)->attr("id");
+		    bool idm = atoi(branch->childGet(i_b)->attr("idm").c_str());
+		    br_req.clear()->setName("del")->setAttr("path",sel_own+"/%2fbr%2f"+b_id);
+		    if( idm )	br_req.setAttr("id",sel_el.substr(b_id.size()));
+		    else 	br_req.setText(sel_el.substr(b_id.size()));
+		    if( cntrIfCmd(br_req) )
+		        mod->postMess(br_req.attr("mcat").c_str(),br_req.text().c_str(),TUIMod::Info,this);
+		    else treeUpdate();
+		    break; 
+		}
         }
     }
+}
+
+void ConfApp::itCut( )
+{
+    copy_buf = "1"+sel_path;
+    editToolUpdate();
+}
+
+void ConfApp::itCopy( )
+{
+    copy_buf = "0"+sel_path;
+    editToolUpdate();
+}
+
+void ConfApp::itPaste( )
+{
+    int off;
+    string s_el, s_elp, t_el, b_grp;
+
+    //- Src elements calc -
+    int n_sel = 0;
+    for( off = 0; !(t_el=TSYS::pathLev(copy_buf.substr(1),0,true,&off)).empty(); n_sel++ )
+    { if( n_sel ) s_elp += ("/"+s_el); s_el = t_el; }
+
+    if( TSYS::pathLev(copy_buf.substr(1),0) != TSYS::pathLev(sel_path,0) ) 
+    { mod->postMess( mod->nodePath().c_str(), _("Copy is imposible."), TUIMod::Error, this ); return; }
+
+    QComboBox *nCont = new QComboBox(NULL);
+    if( atoi(root->attr("acs").c_str())&SEQ_WR ) nCont->addItem( _("Selected") );
+    
+    XMLNode *branch = root->childGet("id","br",true);
+    if( branch )
+	for( int i_b = 0; i_b < branch->childSize(); i_b++ )
+    	    if( atoi(branch->childGet(i_b)->attr("acs").c_str())&SEQ_WR )
+    	    {
+		nCont->addItem( branch->childGet(i_b)->attr("dscr").c_str(), branch->childGet(i_b)->attr("id").c_str() );	    	    
+		if( s_el.substr(0,branch->childGet(i_b)->attr("id").size()) == branch->childGet(i_b)->attr("id") )
+		{
+		    nCont->setCurrentIndex(nCont->count()-1);
+		    b_grp = branch->childGet(i_b)->attr("id");
+		}
+	    }
+
+    //-- Make request dialog --
+    InputDlg dlg(this,actItPaste->icon(),"",_("Move or copy node"),true,false);
+
+    dlg.ed_lay->addWidget( new QLabel(_("Target:"),&dlg), 0, 0 );
+    nCont->setParent(&dlg);
+    dlg.ed_lay->addWidget( nCont, 0, 1 );
+    dlg.setMess( (QString((copy_buf[0] == '1') ? _("Move node '%1' to '%2'.\n") : _("Copy node '%1' to '%2'.\n"))+
+            _("Enter new node identifier.")).arg(copy_buf.substr(1).c_str()).arg(sel_path.c_str()) );
+    dlg.setId( s_el.substr(b_grp.size()).c_str() );
+    if( dlg.exec() != QDialog::Accepted ) return;    
+    
+    off = 0; 
+    string stat_nm = TSYS::pathLev(copy_buf.substr(1),0,true,&off);
+    string src_nm  = copy_buf.substr(off+1);
+    off = 0;
+    stat_nm = TSYS::pathLev(sel_path,0,true,&off);
+    string dst_nm  = sel_path.substr(off);
+    if( !nCont->itemData(nCont->currentIndex()).toString().isEmpty() )
+	dst_nm = dst_nm + "/" + nCont->itemData(nCont->currentIndex()).toString().toAscii().data() + dlg.id().toAscii().data();
+
+    //- Copy visual item -
+    XMLNode req("copy");
+    req.setAttr("path","/"+stat_nm+"/%2fobj")->setAttr("src",src_nm)->setAttr("dst",dst_nm);
+    if( cntrIfCmd(req) ) 
+    { mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Error,this); return; }
+    
+    //- Remove source widget -
+    if( copy_buf[0] == '1' )
+    { itDel(copy_buf.substr(1)); copy_buf = "0"; }
+    
+    treeUpdate( );
+    pageRefresh( );
+}
+
+void ConfApp::editToolUpdate( )
+{
+    actItCut->setEnabled( !sel_path.empty() );
+    actItCopy->setEnabled( !sel_path.empty() );
+    actItPaste->setEnabled( false );
+        
+    //- Src and destination elements calc -
+    if( copy_buf.size() <= 1 || copy_buf.substr(1) == sel_path ||
+	    TSYS::pathLev(copy_buf.substr(1),0) != TSYS::pathLev(sel_path,0) )
+	return;
+    string s_elp, s_el, t_el;
+    for( int off = 0; !(t_el=TSYS::pathLev(copy_buf.substr(1),0,true,&off)).empty(); )
+    { s_elp += ("/"+s_el); s_el = t_el; }
+    
+    XMLNode *branch = root->childGet("id","br",true);
+    if( branch )
+	for( int i_b = 0; i_b < branch->childSize(); i_b++ )
+    	    if( atoi(branch->childGet(i_b)->attr("acs").c_str())&SEQ_WR )
+    	    { actItPaste->setEnabled(true); break; }
+    if( atoi(root->attr("acs").c_str())&SEQ_WR ) actItPaste->setEnabled(true);
 }
 
 void ConfApp::treeUpdate( )
@@ -470,13 +608,13 @@ void ConfApp::userSel()
     initHosts();
 }
 
-void ConfApp::pageRefresh()
+void ConfApp::pageRefresh( )
 {
     try{ pageDisplay(sel_path); }
     catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 }
 
-void ConfApp::pageCyclRefrStart()
+void ConfApp::pageCyclRefrStart( )
 {
     actStartUpd->setEnabled(false);
     actStopUpd->setEnabled(true);
@@ -485,7 +623,7 @@ void ConfApp::pageCyclRefrStart()
     autoUpdTimer->start(1000);
 }
 
-void ConfApp::pageCyclRefrStop()
+void ConfApp::pageCyclRefrStop( )
 {
     actStopUpd->setEnabled(false);
     actStartUpd->setEnabled(true);
@@ -493,7 +631,7 @@ void ConfApp::pageCyclRefrStop()
     autoUpdTimer->stop();
 }
 
-void ConfApp::about()
+void ConfApp::about( )
 {
     char buf[STR_BUF_LEN];
     
@@ -1483,6 +1621,9 @@ void ConfApp::pageDisplay( const string &path )
 		{ actItDel->setEnabled(true); break; }
 	}
     }
+    
+    //- Edit tools update -
+    editToolUpdate( );
 }
 
 bool ConfApp::upStruct(XMLNode &w_nd, const XMLNode &n_nd)
@@ -1575,6 +1716,10 @@ void ConfApp::ctrTreePopup( )
 	//- Add and delete item action add -
 	popup.addAction(actItAdd);
 	popup.addAction(actItDel);
+	popup.addSeparator();
+	popup.addAction(actItCut);
+	popup.addAction(actItCopy);
+	popup.addAction(actItPaste);
 	popup.addSeparator();
 	//- Main action add -
 	QAction *actRemHostUp = new QAction(_("Update remote hosts list"),this);

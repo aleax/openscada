@@ -56,8 +56,6 @@ class Engine : public TUI
 	string wlbTable( )	{ return "VCALibs"; }
 	string prjTable( )	{ return "VCAPrjs"; }
 	
-	void copy( const string &cp_sel, const string &cp_del );
-	
 	//- Widget's libraries -
         void wlbList( vector<string> &ls )			{ chldList(id_wlb,ls); }
         bool wlbPresent( const string &id )			{ return chldPresent(id_wlb,id); }

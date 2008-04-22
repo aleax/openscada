@@ -50,6 +50,8 @@ class TTable : public TCntrNode
 	TTable( const string &name );
 	virtual ~TTable( );
 
+	TCntrNode &operator=( TCntrNode &node );
+
 	string &name( )		{ return m_name; }
 
 	virtual void fieldStruct( TConfig &cfg )
@@ -88,6 +90,8 @@ class TBD : public TCntrNode, public TConfig
 	//Public methods
 	TBD( const string &iid, TElem *cf_el );
 	virtual ~TBD( );
+
+	TCntrNode &operator=( TCntrNode &node );
 	
 	const string &id( )		{ return m_id; }
 	string       name( );

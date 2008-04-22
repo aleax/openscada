@@ -138,7 +138,7 @@ void TTipDAQ::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TModule::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/cntr_",_("Controller"),0664);
+	ctrMkNode("grp",opt,-1,"/br/cntr_",_("Controller"),0664,"root","root",1,"idm","1");
 	if(ctrMkNode("area",opt,0,"/tctr",_("Controllers")))
 	    ctrMkNode("list",opt,-1,"/tctr/ctr",_("Controllers"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","cntr_");
 	return;

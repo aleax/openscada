@@ -46,19 +46,24 @@ Block::~Block( )
     if( enable() ) setEnable(false);
 }
 
-Block &Block::operator=( Block &blk )
+TCntrNode &Block::operator=( TCntrNode &node )
 {
+    Block *src_n = dynamic_cast<Block*>(&node);
+    if( !src_n ) return *this;
+
     //- Copy parameters -
     string prev_id = m_id;
-    *(TConfig *)this = (TConfig&)blk;
-    if( !prev_id.empty() ) m_id = prev_id;
+    *(TConfig *)this = *(TConfig*)src_n;
+    m_id = prev_id;
     
     //- Copy IO and links -
-    if( blk.enable() )
+    if( src_n->enable() )
     {
 	setEnable(true);
-	loadIO(blk.owner().DB()+"."+blk.owner().cfg("BLOCK_SH").getS(),blk.id());    
-    }    
+	loadIO(src_n->owner().DB()+"."+src_n->owner().cfg("BLOCK_SH").getS(),src_n->id());    
+    }
+    
+    return *this;
 }
 
 void Block::preDisable( int flag )
@@ -424,7 +429,7 @@ void Block::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Block: ")+id());
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Block: ")+id(),0664,"root","root");
 	if(ctrMkNode("area",opt,-1,"/blck",_("Block")))
 	{
 	    if(ctrMkNode("area",opt,-1,"/blck/st",_("State")))

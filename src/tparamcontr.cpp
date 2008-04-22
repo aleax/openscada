@@ -32,7 +32,7 @@
 //* TParamContr                                   *
 //*************************************************
 TParamContr::TParamContr( const string &name, TTipParam *tpprm ) : 
-    TConfig(tpprm), tipparm(tpprm), m_en(false), m_export(false),
+    TConfig(tpprm), tipparm(tpprm), m_en(false),
     m_id(cfg("SHIFR").getSd()), m_name(cfg("NAME").getSd()), m_descr(cfg("DESCR").getSd()), m_aen(cfg("EN").getBd())
 {
     m_id = m_name = name;
@@ -41,6 +41,21 @@ TParamContr::TParamContr( const string &name, TTipParam *tpprm ) :
 TParamContr::~TParamContr( )
 {
     nodeDelAll();
+}
+
+TCntrNode &TParamContr::operator=( TCntrNode &node )
+{
+    TParamContr *src_n = dynamic_cast<TParamContr*>(&node);
+    if( !src_n ) return *this;
+	
+    //- Configuration copy -
+    string tid = id();
+    *(TConfig*)this = *(TConfig*)src_n;
+    m_id = tid;
+
+    if( src_n->enableStat() && toEnable( ) && !enableStat() )	enable();
+			    
+    return *this;
 }
 
 string TParamContr::name()
@@ -144,7 +159,7 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TValue::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter: ")+name());
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter: ")+name(),0664,"root","root");
 	if(ctrMkNode("area",opt,0,"/prm",_("Parameter")))
 	{
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))

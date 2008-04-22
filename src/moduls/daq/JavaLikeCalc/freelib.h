@@ -45,6 +45,8 @@ class Lib : public TCntrNode, public TConfig
 	Lib( const char *id, const char *name, const string &lib_db );
 	~Lib( );
 
+	TCntrNode &operator=( TCntrNode &node );
+
 	const string &id( )	{ return m_id; }
 	string name( );
         string descr( )	 	{ return m_descr; }

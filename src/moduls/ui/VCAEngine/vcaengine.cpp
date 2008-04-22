@@ -443,46 +443,6 @@ AutoHD<Session> Engine::sesAt( const string &id )
     return chldAt(id_ses,id);
 }
 
-void Engine::copy( const string &cp_sel, const string &cp_del )
-{
-    //- Src and destination elements calc -
-    string s_elp, d_elp, s_el, d_el, t_el;
-    int n_sel = 0;
-    int n_del = 0;
-    for( int off = 0; !(t_el=TSYS::pathLev(cp_sel,0,true,&off)).empty(); n_sel++ )
-    { s_elp += ("/"+s_el); s_el = t_el; }
-    for( int off = 0; !(t_el=TSYS::pathLev(cp_del,0,true,&off)).empty(); n_del++ )
-    { d_elp += ("/"+d_el); d_el = t_el; }
-    
-    if( !n_sel || !n_del ) throw TError(nodePath().c_str(),_("Destination or source path empty!"));
-    //- Project to project copy -
-    if( s_el.substr(0,4) == "prj_" && d_el.substr(0,4) == "prj_" )
-    {
-	if( !prjPresent(d_el.substr(4))	)	prjAdd(d_el.substr(4));
-	prjAt(d_el.substr(4)).at() = prjAt(s_el.substr(4)).at();
-    }
-    //- Widget library to widget library copy -
-    else if( s_el.substr(0,4) == "wlb_" && d_el.substr(0,4) == "wlb_" )
-    {
-	if( !wlbPresent(d_el.substr(4)) )	wlbAdd(d_el.substr(4));
-	wlbAt(d_el.substr(4)).at() = wlbAt(s_el.substr(4)).at();
-    }
-    //- Visual items copy -
-    else if( (s_el.substr(0,3) == "pg_" && d_el.substr(0,3) == "pg_") || d_el.substr(0,4) == "wdg_" )
-    {
-        if( n_del == 2 && d_el.substr(0,3) == "pg_" && !prjAt(TSYS::pathLev(d_elp,0).substr(4)).at().present(d_el.substr(3)) )
-	    prjAt(TSYS::pathLev(d_elp,0).substr(4)).at().add(d_el.substr(3),"");
-        if( n_del > 2 && d_el.substr(0,3) == "pg_" && !((AutoHD<Page>)nodeAt(d_elp)).at().pagePresent(d_el.substr(3)) )
-	    ((AutoHD<Page>)nodeAt(d_elp)).at().pageAdd(d_el.substr(3),"");
-	if( n_del == 2 && d_el.substr(0,4) == "wdg_" && !wlbAt(TSYS::pathLev(d_elp,0).substr(4)).at().present(d_el.substr(4)) )
-	    wlbAt(TSYS::pathLev(d_elp,0).substr(4)).at().add(d_el.substr(4),"");
-	if( n_del > 2 && d_el.substr(0,4) == "wdg_" && !((AutoHD<Widget>)nodeAt(d_elp)).at().wdgPresent(d_el.substr(4)) )
-    	    ((AutoHD<Widget>)nodeAt(d_elp)).at().wdgAdd(d_el.substr(4),"","");
-	((AutoHD<Widget>)nodeAt(cp_del)).at() = ((AutoHD<Widget>)nodeAt(cp_sel)).at();
-    }
-    else throw TError(nodePath().c_str(),_("Impossible for copy '%s' to '%s'."),cp_sel.c_str(),cp_del.c_str());
-}
-
 void Engine::cntrCmdProc( XMLNode *opt )
 {
     string a_path = opt->attr("path");
@@ -530,19 +490,13 @@ void Engine::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TUI::cntrCmdProc(opt);
-        ctrMkNode("grp",opt,-1,"/br/prj_",_("Project"),0664,"root","UI");	
-        ctrMkNode("grp",opt,-1,"/br/wlb_",_("Widget's library"),0664,"root","UI");
-        ctrMkNode("grp",opt,-1,"/br/ses_",_("Session"),0664,"root","UI");	
+        ctrMkNode("grp",opt,-1,"/br/prj_",_("Project"),0664,"root","UI",1,"idm","1");	
+        ctrMkNode("grp",opt,-1,"/br/wlb_",_("Widget's library"),0664,"root","UI",1,"idm","1");
+        ctrMkNode("grp",opt,-1,"/br/ses_",_("Session"),0664,"root","UI",1,"idm","1");	
 	if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"),0444,"root","UI"))
 	{
     	    ctrMkNode("list",opt,-1,"/prm/cfg/prj",_("Project"),0664,"root","UI",4,"tp","br","idm","1","s_com","add,del","br_pref","prj_");
     	    ctrMkNode("list",opt,-1,"/prm/cfg/wlb",_("Widget's libraries"),0664,"root","UI",4,"tp","br","idm","1","s_com","add,del","br_pref","wlb_");
-	    if(ctrMkNode("area",opt,-1,"/prm/cfg/cp",_("Elements copy"),0440,"root","UI"))
-	    {	    
-		ctrMkNode("fld",opt,-1,"/prm/cfg/cp/src",_("Source"),0660,"root","UI",3,"tp","str","dest","sel_ed","select","/prm/cfg/cp/sells");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/cp/dst",_("Destination"),0660,"root","UI",3,"tp","str","dest","sel_ed","select","/prm/cfg/cp/dells");
-		ctrMkNode("comm",opt,-1,"/prm/cfg/cp/cp",_("Copy"),0660,"root","UI");
-	    }
 	    ctrMkNode("comm",opt,-1,"/prm/cfg/load",_("Load"),0660,"root","UI");
     	    ctrMkNode("comm",opt,-1,"/prm/cfg/save",_("Save"),0660,"root","UI");
 	}
@@ -584,40 +538,8 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	}
         if( ctrChkNode(opt,"del",0664,"root","UI",SEQ_WR) )   wlbDel(opt->attr("id"),true);
     }
-    else if( a_path == "/prm/cfg/cp/src" )
-    {
-	if( ctrChkNode(opt,"get",0660,"root","UI",SEQ_RD) )	opt->setText(cp_sel);
-	if( ctrChkNode(opt,"set",0660,"root","UI",SEQ_WR) )     cp_sel = opt->text();
-    }
-    else if( a_path == "/prm/cfg/cp/dst" )
-    {
-	if( ctrChkNode(opt,"get",0660,"root","UI",SEQ_RD) )	opt->setText(cp_del);
-	if( ctrChkNode(opt,"set",0660,"root","UI",SEQ_WR) )     cp_del = opt->text();
-    }
-    else if( (a_path == "/prm/cfg/cp/sells" || a_path == "/prm/cfg/cp/dells") && ctrChkNode(opt) )
-    {
-        vector<string> list;
-        int c_lv = 0;
-        string c_path = "", c_el;
-        for( int c_off = 0; (c_el=TSYS::pathLev((a_path=="/prm/cfg/cp/sells")?cp_sel:cp_del,0,true,&c_off)).size(); c_lv++ )
-        {
-            opt->childAdd("el")->setText(c_path);
-            c_path += ("/"+c_el);
-        }
-        opt->childAdd("el")->setText(c_path);
-	string cnt_tp = TSYS::pathLev(c_path,0).substr(0,3);
-	if( !(c_lv >= 3 && (cnt_tp == "wlb" || 
-			   (cnt_tp == "prj" && TSYS::pathLev(c_path,c_lv-1).substr(0,3) == "wdg" && 
-					       TSYS::pathLev(c_path,c_lv-1).substr(0,2) == "pg")) ) )
-	{
-    	    try{ nodeAt(c_path).at().nodeList(list); } catch(...) { }
-	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-		if( list[i_a].substr(0,2) != "a_" )
-    		    opt->childAdd("el")->setText(c_path+"/"+list[i_a]);
-	}
-    }
     else if( a_path == "/prm/cfg/cp/cp" && ctrChkNode(opt,"set",0660,"root","UI",SEQ_WR) )
-	copy( opt->attr("src").empty() ? cp_sel : opt->attr("src"), opt->attr("dst").empty() ? cp_del : opt->attr("dst") );
+	nodeCopy( nodePath(0,true)+opt->attr("src"), nodePath(0,true)+opt->attr("dst"), opt->attr("user") );
     else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0660,"root","UI",SEQ_WR) )	modLoad();
     else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0660,"root","UI",SEQ_WR) )	modSave();
     else if( a_path == "/br/ses_" || a_path == "/ses/ses" )

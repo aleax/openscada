@@ -187,86 +187,18 @@ void TipContr::saveBD()
 
 }
 
-void TipContr::copy( const string &src, const string &dst )
-{
-    string s_el = TSYS::strSepParse(src,1,'.');
-    string d_el = TSYS::strSepParse(dst,1,'.');
-    string t_el;
-    vector<string>  el_ls, tmp_ls;
-    //- Check parameters -
-    //if( !s_el.empty() && d_el.empty() ) d_el = s_el;
-    if( !s_el.empty() && !d_el.empty() && ( s_el.size() <= 4 || d_el.size() <= 4 ||
-	    (s_el.substr(0,4) != "prm_" && s_el.substr(0,4) != "blk_") || 
-	    s_el.substr(0,4) != d_el.substr(0,4) ) )
-        throw TError(nodePath().c_str(),_("Parameters record error."));	
-
-    //- Connect to source and destination DB -
-    AutoHD<Contr> s_cntr = at(TSYS::strSepParse(src,0,'.'));
-    AutoHD<Contr> d_cntr = at(TSYS::strSepParse(dst,0,'.'));
-    //- Controllers list prepare -
-    if( s_el.empty() || s_el == "blk_*" )
-    {
-	s_cntr.at().blkList(tmp_ls);
-	for( int i_el = 0; i_el < tmp_ls.size(); i_el++ )
-	    el_ls.push_back("blk_"+tmp_ls[i_el]);
-    }
-    if( s_el.empty() || s_el == "prm_*" )
-    {
-	s_cntr.at().list(tmp_ls);
-	for( int i_el = 0; i_el < tmp_ls.size(); i_el++ )
-	    el_ls.push_back("prm_"+tmp_ls[i_el]);
-    }
-    if( el_ls.empty() ) el_ls.push_back(s_el);
-    if( el_ls.size() > 1 && !d_el.empty() )
-        throw TError(nodePath().c_str(),_("Copy several elements to one element not allow."));
-    //- Controllers list process -
-    for( int i_l = 0; i_l < el_ls.size(); i_l++ )
-    {
-	s_el = el_ls[i_l].substr(4);
-	t_el = d_el.empty()?s_el:d_el.substr(4);
-	if( el_ls[i_l].substr(0,4) == "blk_" )
-	{
-	    if( !d_cntr.at().blkPresent(t_el) )	d_cntr.at().blkAdd(t_el);
-	    d_cntr.at().blkAt(t_el).at() = s_cntr.at().blkAt(s_el).at();
-	}
-	else if( el_ls[i_l].substr(0,4) == "prm_" )
-	{
-	    if( !d_cntr.at().present(t_el) )	d_cntr.at().add(t_el,tpPrmToId("std"));
-	    d_cntr.at().at(t_el).at() = s_cntr.at().at(s_el).at();
-	}
-    }
-} 
-
 void TipContr::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
     if( opt->name() == "info" )
     {
         TTipDAQ::cntrCmdProc(opt);
-	if( ctrMkNode("area",opt,1,"/copy",_("Copy")) && 
-		ctrMkNode("comm",opt,-1,"/copy/copy",_("Copy controller/block/parameter"),0660) )
-	{
-	    ctrMkNode("fld",opt,-1,"/copy/copy/src",_("Source"),0660,"root","root",3,"tp","str","dest","sel_ed","select","/copy/cntrls");
-    	    ctrMkNode("fld",opt,-1,"/copy/copy/dst",_("Destination"),0660,"root","root",3,"tp","str","dest","sel_ed","select","/copy/cntrls");
-	}		
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
     }
+    
     //Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/copy/copy" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )
-	copy( ctrId(opt,"src")->text(), ctrId(opt,"dst")->text() );
-    else if( a_path == "/copy/cntrls" && ctrChkNode(opt) )
-    {
-	vector<string> lst;
-        list(lst);
-    	for( unsigned i_a=0; i_a < lst.size(); i_a++ )
-	{
-            opt->childAdd("el")->setText(lst[i_a]);
-            opt->childAdd("el")->setText(lst[i_a]+".prm_*");
-            opt->childAdd("el")->setText(lst[i_a]+".blk_*");
-	}
-    }    
-    else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) ) opt->setText(optDescr());
+    if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) ) opt->setText(optDescr());
     else TTipDAQ::cntrCmdProc(opt);
 }
 
@@ -293,6 +225,31 @@ Contr::Contr( string name_c, const string &daq_db, ::TElem *cfgelem) :
 Contr::~Contr()
 {
     timer_delete(sncDBTm);
+}
+
+TCntrNode &Contr::operator=( TCntrNode &node )
+{
+    TController::operator=(node);
+
+    Contr *src_n = dynamic_cast<Contr*>(&node);
+    if( !src_n ) return *this;
+
+    //- Blocks copy -
+    if( src_n->enableStat( ) )
+    {
+        if( !enableStat( ) )    enable();
+    
+	//-- Blocks copy --
+	vector<string> ls;
+	src_n->blkList(ls);    
+	for( int i_l = 0; i_l < ls.size(); i_l++ )
+	{
+	    if( !blkPresent(ls[i_l]) ) blkAdd(ls[i_l]);
+    	    (TCntrNode&)blkAt(ls[i_l]).at() = (TCntrNode&)src_n->blkAt(ls[i_l]).at();
+	}        
+    }
+    
+    return *this;
 }
 
 void Contr::postDisable(int flag)
@@ -591,7 +548,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TController::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/blk_",_("Block"),0664);
+	ctrMkNode("grp",opt,-1,"/br/blk_",_("Block"),0664,"root","root",1,"idm","1");
 	if(ctrMkNode("area",opt,-1,"/scheme",_("Blocks scheme")))
 	{
 	    ctrMkNode("fld",opt,-1,"/scheme/ctm",_("Calk time (usek)"),0444,"root","root",1,"tp","real");

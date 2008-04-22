@@ -75,6 +75,20 @@ string Func::name( )
     return m_name.size()?m_name:id();
 }
 
+TCntrNode &Func::operator=( TCntrNode &node )
+{
+    Func *src_n = dynamic_cast<Func*>(&node);
+    if( !src_n ) return *this;
+    
+    *(TConfig *)this = *(TConfig*)src_n;
+    *(TFunction *)this = *(TFunction*)src_n;
+    
+    //- Set to DB -
+    cfg("ID").setS(m_id);
+    
+    if( src_n->startStat( ) && !startStat( ) )	setStart( true );
+}
+
 Func &Func::operator=(Func &func)
 {
     *(TConfig *)this = (TConfig&)func;

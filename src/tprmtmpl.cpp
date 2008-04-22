@@ -39,6 +39,19 @@ TPrmTempl::~TPrmTempl(  )
 
 }
 
+TCntrNode &TPrmTempl::operator=( TCntrNode &node )
+{
+    TPrmTempl *src_n = dynamic_cast<TPrmTempl*>(&node);
+    if( !src_n ) return *this;
+
+    string tid = id();
+    *(TConfig *)this = *(TConfig*)src_n;
+    *(TFunction *)this = *(TFunction*)src_n;
+    m_id = tid;
+    		
+    if( src_n->startStat( ) && !startStat( ) )  setStart( true );
+}
+
 void TPrmTempl::postEnable( int flag )
 {
     //- Create default IOs -
@@ -220,7 +233,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
-        ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter template: ")+name());
+        ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter template: ")+name(),0664,"root","root");
 	if(ctrMkNode("area",opt,-1,"/tmpl",_("Template")))
 	{
  	    if(ctrMkNode("area",opt,-1,"/tmpl/st",_("State")))
@@ -404,7 +417,31 @@ TPrmTmplLib::~TPrmTmplLib()
 {
 
 }
-			
+
+TCntrNode &TPrmTmplLib::operator=( TCntrNode &node )
+{
+    TPrmTmplLib *src_n = dynamic_cast<TPrmTmplLib*>(&node);
+    if( !src_n ) return *this;
+	
+    //- Configuration copy -
+    string tid = id();
+    *(TConfig*)this = *(TConfig*)src_n;
+    m_id = tid;
+    work_lib_db = src_n->work_lib_db;
+
+    //- Templates copy -
+    vector<string> ls;
+    src_n->list(ls);
+    for( int i_p = 0; i_p < ls.size(); i_p++ )
+    {
+        if( !present(ls[i_p]) ) add(ls[i_p].c_str());
+        (TCntrNode&)at(ls[i_p]).at() = (TCntrNode&)src_n->at(ls[i_p]).at();
+    }
+    if( src_n->startStat() && !startStat() )    start(true);
+    
+    return *this;
+}
+
 void TPrmTmplLib::preDisable(int flag)
 {
     start(false);
@@ -489,8 +526,9 @@ void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
-        ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter templates library: ")+id());
-	if(ctrMkNode("branches",opt,-1,"/br","",0444))	ctrMkNode("grp",opt,-1,"/br/tmpl_",_("Opened DB"),0664);
+        ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter templates library: ")+id(),0664,"root","root");
+	if(ctrMkNode("branches",opt,-1,"/br","",0444))	
+	    ctrMkNode("grp",opt,-1,"/br/tmpl_",_("Template"),0664,"root","root",1,"idm","1");
         if(ctrMkNode("area",opt,-1,"/lib",_("Library")))
 	{
     	    if(ctrMkNode("area",opt,-1,"/lib/st",_("State")))

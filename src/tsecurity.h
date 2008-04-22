@@ -39,7 +39,9 @@ class TUser : public TCntrNode, public TConfig
 	//Methods
 	TUser( const string &name, const string &db, TElem *el );
 	~TUser( );
-	
+
+	TCntrNode &operator=( TCntrNode &node );
+
 	const string	&name( ) 	{ return m_name; }
 	const string	&lName( )	{ return m_lname; }
 	const string	&picture( )	{ return m_pict; }	
@@ -86,6 +88,8 @@ class TGroup : public TCntrNode, public TConfig
 	//Methods
 	TGroup( const string &name, const string &db, TElem *el );
 	~TGroup( );
+
+	TCntrNode &operator=( TCntrNode &node );
 
 	const string &name( )  	{ return m_name; }
 	const string &lName( ) 	{ return m_lname; }

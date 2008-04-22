@@ -53,6 +53,8 @@ class TPrmTempl: public TFunction, public TConfig
 	//Methods
 	TPrmTempl( const char *id, const char *name = "" );
 	~TPrmTempl( );
+
+	TCntrNode &operator=( TCntrNode &node );
 	
 	const string &id( )	{ return m_id; }
         string name( );
@@ -97,6 +99,8 @@ class TPrmTmplLib : public TCntrNode, public TConfig
     public:
         TPrmTmplLib( const char *id, const char *name, const string &lib_db );
 	~TPrmTmplLib( );
+	
+	TCntrNode &operator=( TCntrNode &node );
 	
         const string &id( )	{ return m_id; }
         string name( );

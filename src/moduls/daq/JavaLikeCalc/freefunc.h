@@ -270,6 +270,8 @@ class Func : public TConfig, public TFunction
 	//Attributes
         Func( const char *, const char *name = "" );
         ~Func( );	
+
+	TCntrNode &operator=( TCntrNode &node );
 	
 	Func &operator=( Func &func );
 	    

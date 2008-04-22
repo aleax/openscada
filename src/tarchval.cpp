@@ -781,6 +781,23 @@ TVArchive::~TVArchive( )
 
 }
 
+TCntrNode &TVArchive::operator=( TCntrNode &node )
+{
+    TVArchive *src_n = dynamic_cast<TVArchive*>(&node);
+    if( !src_n ) return *this;
+	
+    //- Configuration copy -
+    string tid = id();
+    *(TConfig*)this = *(TConfig*)src_n;
+    m_id = tid;
+    m_db = src_n->m_db;
+
+    if( src_n->startStat() && toStart() && !startStat() )
+	start( );
+    
+    return *this;
+}
+
 void TVArchive::preDisable(int flag)
 {
     stop(flag);
@@ -1623,7 +1640,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
     string grp = owner().subId();
     if( opt->name() == "info" )
     {
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Value archive: ")+name());
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Value archive: ")+name(),0664,"root",grp.c_str());
 	if(ctrMkNode("area",opt,-1,"/prm",_("Archive")))
 	{
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))
@@ -1957,6 +1974,23 @@ TVArchivator::TVArchivator( const string &iid, const string &idb, TElem *cf_el )
     timer_create(CLOCK_REALTIME,&sigev,&tmId);                        
 }
 
+TCntrNode &TVArchivator::operator=( TCntrNode &node )
+{
+    TVArchivator *src_n = dynamic_cast<TVArchivator*>(&node);
+    if( !src_n ) return *this;
+
+    //- Configuration copy -
+    string tid = id();
+    *(TConfig*)this = *(TConfig*)src_n;
+    m_id = tid;
+    m_db = src_n->m_db;
+
+    if( src_n->startStat() && toStart() && !startStat() )
+        start( );
+
+    return *this;
+}					    
+
 TVArchivator::~TVArchivator()
 {
     timer_delete(tmId);
@@ -2233,7 +2267,7 @@ void TVArchivator::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Value archivator: ")+name());
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Value archivator: ")+name(),0664,"root",grp.c_str());
 	if(ctrMkNode("area",opt,-1,"/prm",_("Archivator")))
 	{
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))

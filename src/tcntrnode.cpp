@@ -49,6 +49,11 @@ TCntrNode::~TCntrNode()
     nodeDelAll();
 }
 
+TCntrNode &TCntrNode::operator=( TCntrNode &node )
+{
+    return *this;
+}
+
 void TCntrNode::nodeDelAll( )
 {
     if( nodeMode() != Disable )     nodeDis();
@@ -242,6 +247,57 @@ void TCntrNode::nodeDel( const string &path, char sep, int flag )
     del_n.at().chldDel(n_grp,n_id,-1,flag);
 }
 
+void TCntrNode::nodeCopy( const string &src, const string &dst, const string &user )
+{
+    if( src == dst )	return;
+
+    //- Attach to source node -
+    AutoHD<TCntrNode> src_n = SYS->nodeAt(src);
+
+    //- Parse destination node path -
+    string d_elp, d_el, t_el;
+    int n_del = 0;
+    for( int off = 0; !(t_el=TSYS::pathLev(dst,0,true,&off)).empty(); n_del++ )
+    { if( n_del ) d_elp += ("/"+d_el); d_el = t_el; }
+    if( !n_del ) throw TError(SYS->nodePath().c_str(),_("Copy from '%s' to '%s' impossible"),src.c_str(),dst.c_str());
+
+    //- Connect to destination containers node -
+    AutoHD<TCntrNode> dst_n = SYS->nodeAt(d_elp);
+
+    //- Get allow branches' containers and find want group -
+    XMLNode br_req("info");
+    br_req.setAttr("user",user)->setAttr("path","/%2fbr");
+    dst_n.at().cntrCmd(&br_req);
+    if( atoi(br_req.attr("rez").c_str()) || !br_req.childGet(0,true) )
+        throw TError(SYS->nodePath().c_str(),_("Destination node not have branches."));
+    XMLNode *branch = br_req.childGet(0);
+    int i_b;
+    for( i_b = 0; i_b < branch->childSize(); i_b++ )
+	if( branch->childGet(i_b)->attr("id") == d_el.substr(0,branch->childGet(i_b)->attr("id").size()) && 
+		atoi(branch->childGet(i_b)->attr("acs").c_str())&SEQ_WR )
+	    break;
+    if( i_b >= branch->childSize() )
+        throw TError(SYS->nodePath().c_str(),_("Destination node not have want branche."));
+    bool idm = atoi(branch->childGet(i_b)->attr("idm").c_str());
+    string n_grp = branch->childGet(i_b)->attr("id");
+    d_el = d_el.substr(n_grp.size());    
+    i_b = dst_n.at().grpId(n_grp);
+    if( i_b < 0 ) throw TError(SYS->nodePath().c_str(),_("Destination node not have want branche."));
+
+    //- Connect or create new destination node -
+    if( !dst_n.at().chldPresent( i_b, d_el ) )
+    {
+        br_req.clear()->setName("add")->setAttr("user",user)->setAttr("path","/%2fbr%2f"+n_grp);
+	if( idm ) br_req.setAttr("id",d_el);
+	else br_req.setText(d_el);
+	dst_n.at().cntrCmd(&br_req);
+        if( atoi(br_req.attr("rez").c_str()) )	throw TError(br_req.attr("mcat").c_str(),br_req.text().c_str());
+    }
+    
+    //- Same copy call -    
+    dst_n.at().chldAt( i_b, d_el ).at() = src_n.at();
+}
+
 unsigned TCntrNode::grpAdd( const string &iid, bool iordered )
 {
     int g_id;
@@ -252,6 +308,20 @@ unsigned TCntrNode::grpAdd( const string &iid, bool iordered )
     chGrp[g_id].ordered = iordered;
 
     return g_id;
+}
+
+int TCntrNode::grpId( const string &sid )
+{
+    for( int g_id = 0; g_id < chGrp.size(); g_id++ )
+	if( chGrp[g_id].id == sid )	return g_id;
+    
+    return -1;
+}
+
+TCntrNode::GrpEl &TCntrNode::grpAt( int iid )
+{
+    if( iid < 0 || iid >= grpSize( ) )	throw TError(nodePath().c_str(),_("Branche group '%d' error."),iid);
+    return chGrp[iid];
 }
 
 void TCntrNode::chldList( unsigned igr, vector<string> &list )
@@ -455,10 +525,7 @@ XMLNode *TCntrNode::ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const cha
 	    throw TError("ContrItfc",_("Some tags on path <%s> missed!"),req.c_str());
 	obj = obj->childIns(pos);
     }
-    obj->setName(n_nd);
-    obj->setAttr("id",reqt1);
-    obj->setAttr("dscr",dscr);
-    obj->setAttr("acs",TSYS::int2str(n_acs));
+    obj->setName(n_nd)->setAttr("id",reqt1)->setAttr("dscr",dscr)->setAttr("acs",TSYS::int2str(n_acs));
     
     //- Get addon attributes -
     if( n_attr )
@@ -492,5 +559,5 @@ bool TCntrNode::ctrChkNode( XMLNode *nd, const char *cmd, int perm, const char *
 void TCntrNode::cntrCmdProc( XMLNode *opt )
 {
     if( opt->name() == "info" )
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Node: ")+nodeName());
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Node: ")+nodeName(),0444,"root","root");
 }

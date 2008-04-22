@@ -120,7 +120,7 @@ void TModule::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Module: ")+modId());
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Module: ")+modId(),0444);
 	ctrMkNode("branches",opt,-1,"/br","",0444);
 	if(TUIS::icoPresent(owner().subId()+"."+modId())) ctrMkNode("img",opt,-1,"/ico","",0444);
 	if(ctrMkNode("area",opt,-1,"/help",_("Help")))

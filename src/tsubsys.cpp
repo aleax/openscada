@@ -152,12 +152,12 @@ void TSubSYS::cntrCmdProc( XMLNode *opt )
     //Get page info
     if( opt->name() == "info" )
     {
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Subsystem: ")+subName());
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Subsystem: ")+subName(),0444);
 	ctrMkNode("branches",opt,-1,"/br","",0444);
 	if(TUIS::icoPresent(subId()))	ctrMkNode("img",opt,-1,"/ico","",0444);
 	if( subModule() )
 	{
-	    ctrMkNode("grp",opt,-1,"/br/mod_",_("Module"),0444);
+	    ctrMkNode("grp",opt,-1,"/br/mod_",_("Module"),0444,"root","root",1,"idm","1");
 	    if(ctrMkNode("area",opt,-1,"/mod",_("Modules"),0444,"root","root"))
 		ctrMkNode("list",opt,-1,"/mod/br",_("Modules"),0444,"root","root",3,"tp","br","idm","1","br_pref","mod_");
 	}

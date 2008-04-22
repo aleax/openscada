@@ -1,3 +1,12 @@
+2008-04-22 Roman
+- !!!!:/SYS/: Global dynamic nodes copy mechanism is added.
+- !!!!:/UI/QTCfg: Global dynamic nodes copy mechanism support is added.
+- !!!!:/DB: Remove individual copy mechanism and use new dynamic nodes copy mechanism.
+- !!!!:/DAQ/BlockCalc: Remove individual copy mechanism and use new dynamic nodes copy mechanism.
+- !!!!:/UI/VCAEngine: Remove individual copy mechanism and use new dynamic nodes copy mechanism.
+- /UI/Vision: Use global copy icons.
+
+
 2008-04-16 Maxim
 - /UI/Vision: Coordinates' printing while moving a point of the primitive ElFigure in status bar is added.
 - /UI/Vision: Deleting of all chosen primitives ElFigure by pressing "Del" support is added.

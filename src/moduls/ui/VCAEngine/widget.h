@@ -131,7 +131,7 @@ class Widget : public TCntrNode, public TValElem
 	Widget( const string &id, const string &isrcwdg = "" );
 	~Widget( );
 
-	virtual Widget &operator=( Widget &wdg );
+	TCntrNode &operator=( TCntrNode &node );
 
 	string id( )               	{ return m_id; }	//Identifier
 	virtual string path( )     	{ return m_id; }	//Curent widget path

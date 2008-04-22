@@ -42,6 +42,8 @@ class TTransportIn : public TCntrNode, public TConfig
 	TTransportIn( const string &id, const string &db, TElem *el );
 	virtual ~TTransportIn( );
 
+	TCntrNode &operator=( TCntrNode &node );
+
 	const string &id( )	{ return m_id; }
 	string name( );
         string dscr( )		{ return m_dscr; }
@@ -99,6 +101,8 @@ class TTransportOut : public TCntrNode, public TConfig
 	//Methods
 	TTransportOut( const string &id, const string &db, TElem *el );
 	virtual ~TTransportOut( );
+
+	TCntrNode &operator=( TCntrNode &node );
 	
 	const string &id( )	{ return m_id; }
 	string name( );

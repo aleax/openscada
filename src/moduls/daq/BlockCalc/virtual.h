@@ -83,6 +83,8 @@ class Contr: public TController
 	Contr( string name_c, const string &daq_db, ::TElem *cfgelem );
 	~Contr( );
 
+	TCntrNode &operator=( TCntrNode &node );
+
 	void load( );
 	void save( );
 	void enable_( );

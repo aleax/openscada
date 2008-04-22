@@ -793,7 +793,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     {
 	snprintf(buf,sizeof(buf),_("%s station: \"%s\""),PACKAGE_NAME,name().c_str());
 	ctrMkNode("oscada_cntr",opt,-1,"/",buf,0444);
-	if(ctrMkNode("branches",opt,-1,"/br","",0444))	ctrMkNode("grp",opt,-1,"/br/sub_",_("Subsystem"),0444);	
+	if(ctrMkNode("branches",opt,-1,"/br","",0444))	
+	    ctrMkNode("grp",opt,-1,"/br/sub_",_("Subsystem"),0444,"root","root",1,"idm","1");	
 	if(TUIS::icoPresent(id())) ctrMkNode("img",opt,-1,"/ico","",0444);
 	if(ctrMkNode("area",opt,-1,"/gen",_("Station"),0444))
 	{
@@ -823,7 +824,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("comm",opt,-1,"/gen/save",_("Save system"),0660);
 	}
 	if(ctrMkNode("area",opt,-1,"/subs",_("Subsystems")))
-	    ctrMkNode("list",opt,-1,"/subs/br",_("Subsystems"),0444,"root","root",2,"tp","br","br_pref","sub_");
+	    ctrMkNode("list",opt,-1,"/subs/br",_("Subsystems"),0444,"root","root",3,"idm","1","tp","br","br_pref","sub_");
 	if(ctrMkNode("area",opt,-1,"/hlp",_("Help")))
 	    ctrMkNode("fld",opt,-1,"/hlp/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","10");
 	return;
@@ -831,13 +832,15 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     
     //Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/ico" && ctrChkNode(opt) )
+    if( a_path == "/obj" && ctrChkNode(opt,"copy",RWRWRW,"root","root",SEQ_WR) )	
+	nodeCopy(opt->attr("src"),opt->attr("dst"),opt->attr("user"));
+    else if( a_path == "/ico" && ctrChkNode(opt) )
     {
 	string itp;
         opt->setText(TSYS::strEncode(TUIS::icoGet(id(),&itp),TSYS::base64));
         opt->setAttr("tp",itp);	
     }	
-    else if(  a_path == "/gen/host" && ctrChkNode(opt) )	
+    else if( a_path == "/gen/host" && ctrChkNode(opt) )	
     {
 	utsname ubuf; uname(&ubuf);
 	opt->setText(ubuf.nodename);

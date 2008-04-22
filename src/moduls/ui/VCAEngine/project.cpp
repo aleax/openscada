@@ -50,35 +50,37 @@ Project::~Project( )
 
 }
 
-Project &Project::operator=( Project &wdg )
+TCntrNode &Project::operator=( TCntrNode &node )
 {
-    vector<string> pls;
-    if( !wdg.enable() )	return *this;
+    Project *src_n = dynamic_cast<Project*>(&node);
+    if( !src_n ) return *this;
+
     //- Copy generic configuration -
     string tid = m_id;
-    *(TConfig *)this = (TConfig&)wdg;
+    *(TConfig *)this = *(TConfig*)src_n;
     m_id  = tid;
     m_dbt = string("prj_")+tid;
-    work_prj_db = wdg.work_prj_db;
-    
-    //- Enable destination project -
+    work_prj_db = src_n->work_prj_db;
+
+    if( !src_n->enable() ) return *this;
     if( !enable() ) setEnable(true);
 
-    //- Mime data copy -    
-    wdg.mimeDataList(pls);
+    //- Mime data copy -
+    vector<string> pls;
+    src_n->mimeDataList(pls);
     string mimeType, mimeData;
     for( int i_m = 0; i_m < pls.size(); i_m++ )
     {
-        wdg.mimeDataGet( pls[i_m], mimeType, &mimeData );
+        src_n->mimeDataGet( pls[i_m], mimeType, &mimeData );
         mimeDataSet( pls[i_m], mimeType, mimeData );
     }
 
     //- Copy include pages -
-    wdg.list(pls);
+    src_n->list(pls);
     for( int i_p = 0; i_p < pls.size(); i_p++ )
     {
 	if( !present(pls[i_p]) ) add(pls[i_p],"");
-	((AutoHD<Widget>)at(pls[i_p])).at() = ((AutoHD<Widget>)wdg.at(pls[i_p])).at();
+	(TCntrNode&)at(pls[i_p]).at() = (TCntrNode&)src_n->at(pls[i_p]).at();
     }
     
     return *this;
@@ -301,10 +303,10 @@ void Project::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
-        ctrMkNode("oscada_cntr",opt,-1,"/",_("Project: ")+id());
+        ctrMkNode("oscada_cntr",opt,-1,"/",_("Project: ")+id(),permit(),user().c_str(),grp().c_str());
 	if(ico().size()) ctrMkNode("img",opt,-1,"/ico","",R_R_R_);
         if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
-	    ctrMkNode("grp",opt,-1,"/br/pg_",_("Page"),permit(),user().c_str(),grp().c_str());
+	    ctrMkNode("grp",opt,-1,"/br/pg_",_("Page"),permit(),user().c_str(),grp().c_str(),1,"idm","1");
         if(ctrMkNode("area",opt,-1,"/obj",_("Project")))
 	{
     	    if(ctrMkNode("area",opt,-1,"/obj/st",_("State")))
@@ -518,26 +520,26 @@ Page::~Page( )
 
 }
 
-Widget &Page::operator=( Widget &wdg )
+TCntrNode &Page::operator=( TCntrNode &node )
 {
-    Page *spg = dynamic_cast<Page*>(&wdg);
-    if( !spg )	return Widget::operator=(wdg);
-
-    if( !spg->enable() ) return *this;
+    Page *src_n = dynamic_cast<Page*>(&node);
+    if( !src_n ) return Widget::operator=(node);
+	
+    if( !src_n->enable() ) return *this;
     
     //- Copy generic configuration -
-    setPrjFlags( spg->prjFlags() );
+    setPrjFlags( src_n->prjFlags() );
     
     //- Widget copy -
-    Widget::operator=(wdg);
+    Widget::operator=(node);
     
     //- Include widgets copy -
     vector<string> els;
-    spg->pageList(els);
+    src_n->pageList(els);
     for( int i_p = 0; i_p < els.size(); i_p++ )
     {
         if( !pagePresent(els[i_p]) ) pageAdd(els[i_p],"");
-        ((AutoHD<Widget>)pageAt(els[i_p])).at() = ((AutoHD<Widget>)spg->pageAt(els[i_p])).at();
+        (TCntrNode&)pageAt(els[i_p]).at() = (TCntrNode&)src_n->pageAt(els[i_p]).at();
     }
     
     return *this;									    
@@ -1012,7 +1014,7 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
     if( opt->name() == "info" )
     {
         Widget::cntrCmdGeneric(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Project page: ")+path());
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Project page: ")+path(),permit(),user().c_str(),grp().c_str());
 	if(ctrMkNode("area",opt,-1,"/wdg",_("Widget")) && ctrMkNode("area",opt,-1,"/wdg/cfg",_("Config")))
         {
 	    if( prjFlags()&Page::Empty || (ownerPage() && ownerPage()->prjFlags()&(Page::Template) && !(ownerPage()->prjFlags()&Page::Container)) )
@@ -1024,7 +1026,7 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 	    if(ctrMkNode("area",opt,1,"/page",_("Pages")))
     		ctrMkNode("list",opt,-1,"/page/page",_("Pages"),permit(),user().c_str(),grp().c_str(),4,"tp","br","idm","1","s_com","add,del","br_pref","pg_");
 	    if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
-		ctrMkNode("grp",opt,-1,"/br/pg_",_("Page"),permit(),user().c_str(),grp().c_str());
+		ctrMkNode("grp",opt,-1,"/br/pg_",_("Page"),permit(),user().c_str(),grp().c_str(),1,"idm","1");
 	}
 	return true;
     }
@@ -1404,7 +1406,7 @@ void PageWdg::cntrCmdProc( XMLNode *opt )
     {
         cntrCmdGeneric(opt);
         cntrCmdAttributes(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Widget link: ")+id());
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Widget link: ")+id(),permit(),user().c_str(),grp().c_str());
         return;
     }
     cntrCmdGeneric(opt) || cntrCmdAttributes(opt);

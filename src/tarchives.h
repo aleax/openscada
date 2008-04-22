@@ -52,6 +52,8 @@ class TMArchivator : public TCntrNode, public TConfig
 	//Public methods
 	TMArchivator( const string &id, const string &db, TElem *cf_el );
 
+	TCntrNode &operator=( TCntrNode &node );
+
         const string &id( )	{ return m_id; }
 	string workId( );
         string name( );

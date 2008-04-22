@@ -394,9 +394,10 @@ void Session::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
-        ctrMkNode("oscada_cntr",opt,-1,"/",_("Session: ")+id());
+        ctrMkNode("oscada_cntr",opt,-1,"/",_("Session: ")+id(),RWRWR_,user().c_str(),"UI");
 	if(ico().size()) ctrMkNode("img",opt,-1,"/ico","",R_R_R_);
-        if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_)) ctrMkNode("grp",opt,-1,"/br/pg_",_("Page"),R_R_R_);
+        if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_)) 
+	    ctrMkNode("grp",opt,-1,"/br/pg_",_("Page"),R_R_R_,"root","root",1,"idm","1");
         if(ctrMkNode("area",opt,-1,"/obj",_("Session")))
 	{
     	    if(ctrMkNode("area",opt,-1,"/obj/st",_("State")))
@@ -604,7 +605,7 @@ bool SessPage::cntrCmdGeneric( XMLNode *opt )
 	    if(ctrMkNode("area",opt,1,"/page",_("Pages")))
 	        ctrMkNode("list",opt,-1,"/page/page",_("Pages"),R_R_R_,"root","UI",3,"tp","br","idm","1","br_pref","pg_");
 	    if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
-	        ctrMkNode("grp",opt,-1,"/br/pg_",_("Page"),R_R_R_,"root","UI");
+	        ctrMkNode("grp",opt,-1,"/br/pg_",_("Page"),R_R_R_,"root","UI",1,"idm","1");
 	}
         return true;
     }

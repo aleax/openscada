@@ -40,6 +40,8 @@ class TParamContr : public TConfig, public TValue
     public:
 	TParamContr( const string &name, TTipParam *tpprm ); 
 	virtual ~TParamContr( );
+
+	TCntrNode &operator=( TCntrNode &node );
 	
     	const string &id( )	{ return m_id; }
     	string name( );
@@ -80,7 +82,7 @@ class TParamContr : public TConfig, public TValue
 	
 	//Attributes
         string	&m_id, &m_name,	&m_descr;
-	bool	&m_aen, m_en, m_export;
+	bool	&m_aen, m_en;
 	TElem	el_err;		//Error atributes
 	
 	TTipParam   *tipparm;
