@@ -444,6 +444,18 @@ void ConfApp::itAdd( )
     dlg.ed_lay->addWidget( nCont, 0, 1 ); 
 
     if( dlg.exec() != QDialog::Accepted )   return;
+
+    //- Check for already present node -
+    XMLNode req("get");
+    req.setAttr("path",sel_path+"/%2fbr%2f"+string(nCont->itemData(nCont->currentIndex()).toString().toAscii().data()+1));
+    if( !cntrIfCmd(req) )
+        for( int i_lel = 0; i_lel < req.childSize(); i_lel++ )
+    	    if( (req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->attr("id") == dlg.id().toAscii().data()) ||
+	        (!req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->text() == dlg.id().toAscii().data()) )
+	    {
+		mod->postMess(mod->nodePath().c_str(),QString(_("Node '%1' already present.?")).arg(dlg.id()).toAscii().data(),TUIMod::Info,this);
+		return;
+	    }
     
     //- Send create request -
     XMLNode br_req("add");
@@ -556,7 +568,20 @@ void ConfApp::itPaste( )
     stat_nm = TSYS::pathLev(sel_path,0,true,&off);
     string dst_nm  = sel_path.substr(off);
     if( !nCont->itemData(nCont->currentIndex()).toString().isEmpty() )
+    {
 	dst_nm = dst_nm + "/" + nCont->itemData(nCont->currentIndex()).toString().toAscii().data() + dlg.id().toAscii().data();
+	//- Check for already present node -
+	XMLNode req("get");
+	req.setAttr("path",sel_path+"/%2fbr%2f"+nCont->itemData(nCont->currentIndex()).toString().toAscii().data());
+	if( !cntrIfCmd(req) )
+	    for( int i_lel = 0; i_lel < req.childSize(); i_lel++)
+		if( (req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->attr("id") == dlg.id().toAscii().data()) ||
+		    (!req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->text() == dlg.id().toAscii().data()) )
+		{
+		    InputDlg dlg1(this,actItPaste->icon(),QString(_("Node '%1' already present. Continue?")).arg(dst_nm.c_str()).toAscii().data(),_("Move or copy node"),false,false);
+		    if( dlg1.exec() != QDialog::Accepted ) return;
+		}
+    }
 
     //- Copy visual item -
     XMLNode req("copy");
@@ -1713,14 +1738,17 @@ void ConfApp::ctrTreePopup( )
 
     try
     {
-	//- Add and delete item action add -
-	popup.addAction(actItAdd);
-	popup.addAction(actItDel);
-	popup.addSeparator();
-	popup.addAction(actItCut);
-	popup.addAction(actItCopy);
-	popup.addAction(actItPaste);
-	popup.addSeparator();
+	if( lview && lview->currentItem() && lview->currentItem()->text(2)[0] != '*' )
+	{
+	    //- Add and delete item action add -
+	    popup.addAction(actItAdd);
+	    popup.addAction(actItDel);
+	    popup.addSeparator();
+	    popup.addAction(actItCut);
+	    popup.addAction(actItCopy);
+	    popup.addAction(actItPaste);
+	    popup.addSeparator();
+	}
 	//- Main action add -
 	QAction *actRemHostUp = new QAction(_("Update remote hosts list"),this);
 	popup.addAction(actRemHostUp);

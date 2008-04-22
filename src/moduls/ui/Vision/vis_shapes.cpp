@@ -2020,7 +2020,7 @@ void ShapeDiagram::TrendObj::loadData( bool full )
 	    setAttr("per",TSYS::ll2str(wantPer))->
 	    setAttr("mode","1")->
 	    setAttr("real_prec","4")->
-	    setAttr("round_perc","1");
+	    setAttr("round_perc",TSYS::real2str(100.0/(float)view->size().height()));
     if( view->cntrIfCmd(req,true) )	return;
     //- Get data buffer parameters -
     bbeg = atoll(req.attr("tm_grnd").c_str());

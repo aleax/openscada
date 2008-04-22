@@ -5,6 +5,9 @@
 - !!!!:/DAQ/BlockCalc: Remove individual copy mechanism and use new dynamic nodes copy mechanism.
 - !!!!:/UI/VCAEngine: Remove individual copy mechanism and use new dynamic nodes copy mechanism.
 - /UI/Vision: Use global copy icons.
+- /UI/QTCfg: Check for already present node warning is added to functions itAdd and itPaste.
+- /UI/QTCfg: Context menu is disabled for virtual containers.
+- FIX:/UI/Vision, /UI/WebVision: Fixed values request round made flow to height for primitive "Diagram".
 
 
 2008-04-16 Maxim
