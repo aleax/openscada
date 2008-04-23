@@ -1741,28 +1741,16 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     {
                         fl = itemAt(ev->pos(),shapeItems,view);
                         if ((fl!= -1)&&(rect_num ==-1)&&(status==false))
-                        {
-                            cur.setShape(Qt::SizeAllCursor);
-                            view->setCursor(cur.shape());
-                        }
+                            view->setCursor(Qt::SizeAllCursor);
                         else if ((status==false)&&(rect_num!=-1))
-                        {
-                            cur.setShape(Qt::SizeHorCursor);
-                            view->setCursor(cur.shape());
-                        }
+                            view->setCursor(Qt::SizeHorCursor);
                         else if ((status==true))
                         {
-                            if( cur.shape() != Qt::CrossCursor )
-                            {
-                                cur.setShape(Qt::CrossCursor);
-                                view->setCursor(cur.shape());
-                            }
+                            if( view->cursor().shape() != Qt::CrossCursor )
+                                view->setCursor(Qt::CrossCursor);
                         }
-                        else if( cur.shape() != Qt::ArrowCursor )
-                        {
-                            cur.setShape(Qt::ArrowCursor);
+                        else if( view->cursor().shape() != Qt::ArrowCursor )
                             view->unsetCursor();
-                        }
                     }
                 }
             }

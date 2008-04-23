@@ -1,3 +1,10 @@
+2008-04-23 Roman
+- FIX:/Archive/FSArch: Late archives task stoping is fixed.
+- /UI/QTCfg: For no modify nodes operations "Cut" and "Delete" is disabled.
+- FIX:/UI/Vision: Final work place windows close is fixed.
+- FIX:/UI/Vision: QCursor error free is fixed on shape ElFigure.
+
+
 2008-04-22 Maxim
 - FIX:/UI/WebVision: Filling mechanisms in primitive ElFigure are fixed.
 

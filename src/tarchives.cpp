@@ -428,6 +428,8 @@ void TArchiveS::subStop( )
 {
     mess_info(nodePath().c_str(),_("Stop subsystem."));
 
+    TSubSYS::subStop( );
+
     vector<string> t_lst, o_lst;
 
     //- Stop interval timer for periodic thread creating -
@@ -437,6 +439,7 @@ void TArchiveS::subStop( )
     timer_settime(tmIdMess, 0, &itval, NULL);
     if( TSYS::eventWait( prc_st_mess, false, nodePath()+"mess_stop",5) )
         throw TError(nodePath().c_str(),_("Archive messages thread no stoped!"));
+
     //- Values acquisition task stop -
     if( prc_st_val ) 
     { 
@@ -493,8 +496,6 @@ void TArchiveS::subStop( )
 		}
 	}
     }
-    
-    TSubSYS::subStop( );	
 }
  
 void TArchiveS::messPut( time_t tm, const string &categ, TMess::Type level, const string &mess )

@@ -239,7 +239,6 @@ class ShapeElFigure : public WdgShape
         int rect_num_move;
         double Angle_temp;
         bool flag_Angle_temp;
-        QCursor cur;
     };
 
 }

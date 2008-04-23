@@ -599,7 +599,7 @@ void ConfApp::itPaste( )
 
 void ConfApp::editToolUpdate( )
 {
-    actItCut->setEnabled( !sel_path.empty() );
+    actItCut->setEnabled( (!sel_path.empty()&&root&&atoi(root->attr("acs").c_str())&SEQ_WR) ? true : false );
     actItCopy->setEnabled( !sel_path.empty() );
     actItPaste->setEnabled( false );
         
@@ -1627,25 +1627,8 @@ void ConfApp::pageDisplay( const string &path )
 	    if( atoi(branch->childGet(i_b)->attr("acs").c_str())&SEQ_WR )
 	    { actItAdd->setEnabled(true); break; }
     }
-    actItDel->setEnabled(false);
-    //-- Delete process --
-    string t_el, sel_own, sel_el;
-    int n_obj = 0;
-    for( int off = 0; !(t_el=TSYS::pathLev(sel_path,0,true,&off)).empty(); n_obj++ )
-    { if( n_obj ) sel_own += ("/"+sel_el); sel_el = t_el; }
-    if( n_obj > 2 )
-    {
-	XMLNode br_req("info");
-	br_req.setAttr("path",sel_own+"/%2fbr");
-	if( !cntrIfCmd(br_req) && br_req.childGet(0,true) )
-	{
-	    XMLNode *branch = br_req.childGet(0);
-	    for( int i_b = 0; i_b < branch->childSize(); i_b++ )
-		if( branch->childGet(i_b)->attr("id") == sel_el.substr(0,branch->childGet(i_b)->attr("id").size()) &&
-		    atoi(branch->childGet(i_b)->attr("acs").c_str())&SEQ_WR )
-		{ actItDel->setEnabled(true); break; }
-	}
-    }
+    //-- Delete process --    
+    actItDel->setEnabled( (root&&atoi(root->attr("acs").c_str())&SEQ_WR) ? true : false );
     
     //- Edit tools update -
     editToolUpdate( );

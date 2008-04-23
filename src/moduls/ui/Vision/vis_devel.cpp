@@ -20,6 +20,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <QApplication>
 #include <QWorkspace>
 #include <QMenu>
 #include <QMenuBar>
@@ -574,13 +575,6 @@ VisDevelop::~VisDevelop()
     QByteArray st = saveState();
     TBDS::genDBSet(mod->nodePath()+"devWinState",TSYS::strEncode(string(st.data(),st.size()),TSYS::base64),user());
 
-    //- Generic content manual delete -
-    delete work_space;
-    delete prjTree;
-    delete wdgTree;
-    delete attrInsp;
-    delete lnkInsp;
-
     //- Timers stop -
     endRunTimer->stop();
     work_wdgTimer->stop();
@@ -621,6 +615,9 @@ void VisDevelop::setWdgScale( bool val )
 void VisDevelop::closeEvent( QCloseEvent* ce )
 {
     winClose = true;
+    
+    work_space->closeAllWindows();
+    
     ce->accept();
 }
 
