@@ -3,6 +3,7 @@
 - /UI/QTCfg: For no modify nodes operations "Cut" and "Delete" is disabled.
 - FIX:/UI/Vision: Final work place windows close is fixed.
 - FIX:/UI/Vision: QCursor error free is fixed on shape ElFigure.
+- /UI/Vision: The shape "ElFigure" code is clear.
 
 
 2008-04-22 Maxim
