@@ -154,9 +154,9 @@ class ShapeElFigure : public WdgShape
 	double length( const QPointF &pt1, const QPointF &pt2 );				
         bool holds( const QVector<ShapeItem> &shapeItems, PntMap *pnts );
         void moveUpDown( QVector<ShapeItem> &shapeItems, PntMap *pnts, QVector<inundationItem> &inundationItems, WdgView *w );
-        int  realRectNum( int rect_num_old, const QVector<ShapeItem> &shapeItems, PntMap *pnts );
+        int  realRectNum( int rect_num_old, const QVector<ShapeItem> &shapeItems );
         void rectNum0_1( const QVector<ShapeItem> &shapeItems, int rect_num_temp, PntMap *pnts, WdgView *w );
-        void rectNum3_4( const QVector<ShapeItem> &shapeItems, PntMap *pnts );
+        void rectNum3_4( const QVector<ShapeItem> &shapeItems);
         void moveAll( const QPointF &pos, QVector<ShapeItem> &shapeItems, PntMap *pnts, QVector<inundationItem> &inundationItems, WdgView *w );
         QPainterPath painterPath( float el_width, float el_border_width, int el_type, double el_ang,
 		QPointF el_p1 = QPointF(0,0), QPointF el_p2 = QPointF(0,0), QPointF el_p3 = QPointF(0,0), 

@@ -130,22 +130,22 @@ class VCAElFigure : public VCAObj
 	void postReq( SSess &ses );
 	void setAttrs( XMLNode &node, const string &user );
         
-        bool line_intersect(double x1, double y1, double x2, double y2,
-                                         double x3, double y3, double x4, double y4);
-        Point line_intersect_point(Point pt1, Point pt2, Point pt3, Point pt4);
-        double Angle(const Point p1,const Point p2,const Point p3,const Point p4);
-        double Length(const Point pt1, const Point pt2);
-        Point ARC(double t,double a,double b);
-        Point UNROTATE(const Point pnt, double alpha, double a, double b);
-        Point ROTATE(const Point pnt, double alpha);
-        Point Bezier(double t,Point p1,Point p2, Point p3, Point p4);
-        double Bezier_DeltaT(Point p1,Point p2, Point p3, Point p4);
+        bool lineIntersect( double x1, double y1, double x2, double y2,
+                             double x3, double y3, double x4, double y4 );
+        //Point line_intersect_point( Point pt1, Point pt2, Point pt3, Point pt4 );
+        double angle( const Point p1, const Point p2, const Point p3, const Point p4 );
+        double length( const Point pt1, const Point pt2 );
+        Point arc( double t, double a, double b );
+        Point unrotate(const Point pnt, double alpha, double a, double b);
+        Point rotate( const Point pnt, double alpha );
+        Point bezier( double t, Point p1, Point p2, Point p3, Point p4 );
+        double bezierDeltaT( Point p1, Point p2, Point p3, Point p4 );
         double ABS(double var);
-        bool IsPaintable(ShapeItem item, double xScale, double yScale);
-        void Paint_Figure( gdImagePtr im,ShapeItem item, double xScale, double yScale, bool flag_allocate );
-        void Paint_Fill( gdImagePtr im, Point pnt, InundationItem in_item, int color );
-        Point unscale_unrotate(Point point, double xScale, double yScale, bool flag_scale);
-        Point scale_rotate(Point point, double xScale, double yScale, bool flag_scale);
+        bool isPaintable( ShapeItem item, double xScale, double yScale );
+        void paintFigure( gdImagePtr im, ShapeItem item, double xScale, double yScale, bool flag_allocate );
+        void paintFill( gdImagePtr im, Point pnt, InundationItem in_item, int color );
+        Point unscaleUnrotate( Point point, double xScale, double yScale, bool flag_scale );
+        Point scaleRotate( Point point, double xScale, double yScale, bool flag_scale );
  	//Attributes
         double		width, //Widget geometry
                         height;		

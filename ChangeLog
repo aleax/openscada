@@ -1,3 +1,7 @@
+2008-04-25 Maxim
+- FIX:/UI/WebVision, /UI/Vision: names of functions are modified.
+
+
 2008-04-23 Roman
 - FIX:/Archive/FSArch: Late archives task stoping is fixed.
 - /UI/QTCfg: For no modify nodes operations "Cut" and "Delete" is disabled.
