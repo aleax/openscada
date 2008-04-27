@@ -109,11 +109,13 @@ class BDMod: public TTipBD
 	//Public methods
 	BDMod( string name );
 	~BDMod();
-	
-	void modLoad( );
 	    
 	static string sqlReqCode( const string &req, char symb = '\'' );
-	    
+
+    protected:
+	//Methods
+	void load_( );	
+
     private:
 	//Private methods
 	TBD *openBD( const string &iid );

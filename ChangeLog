@@ -1,3 +1,9 @@
+2008-04-27 Roman
+- !!!!:/SYS: Global control for node modifications is added.
+- !!!!:/UI/QTCfg, /UI/Vision: Global modifications control support is added.
+- FIX:/SYS: Some bugs are fixed.
+ 
+
 2008-04-25 Maxim
 - FIX:/UI/WebVision, /UI/Vision: names of functions are modified.
 

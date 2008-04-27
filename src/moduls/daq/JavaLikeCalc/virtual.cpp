@@ -97,7 +97,6 @@ void TipContr::postEnable( int flag )
     fldAdd( new TFld("FUNC",_("Controller's function"),TFld::String,TFld::NoFlag,"20") );
     fldAdd( new TFld("PERIOD",_("Calc period (ms)"),TFld::Integer,TFld::NoFlag,"7","1000","0;1000000") );
     fldAdd( new TFld("PRIOR",_("Calc task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
-    fldAdd( new TFld("PER_DB",_("Sync db period (s)"),TFld::Integer,TCfg::Prevent,"5","0","0;3600") );
     fldAdd( new TFld("ITER",_("Iteration number into calc period"),TFld::Integer,TFld::NoFlag,"2","1","0;99") );
         
     //- Controller value db structure -
@@ -212,7 +211,7 @@ string TipContr::optDescr( )
     return buf;
 }
 
-void TipContr::modLoad( )
+void TipContr::load_( )
 {
     //- Load parameters from command line -
     int next_opt;
@@ -270,28 +269,12 @@ void TipContr::modLoad( )
 	    if(!lbPresent(l_id)) lbReg(new Lib(l_id.c_str(),"","*.*"));		
 	    c_el.cfg("ID").setS("");		
 	}	
-	
-	//-- Load present libraries --
-	lbList(tdb_ls);
-        for( int l_id = 0; l_id < tdb_ls.size(); l_id++ )
-    	    lbAt(tdb_ls[l_id]).at().load();
     }catch( TError err )
     { 
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Load function's libraries error.")); 
     }
 }
-
-void TipContr::modSave()
-{   
-    //- Save parameters -
-
-    //- Save function's libraries -
-    vector<string> ls;
-    lbList(ls);
-    for( int l_id = 0; l_id < ls.size(); l_id++ )
-	lbAt(ls[l_id]).at().save();
-}  
 
 void TipContr::modStart( )
 {
@@ -327,11 +310,7 @@ void TipContr::cntrCmdProc( XMLNode *opt )
 	TTipDAQ::cntrCmdProc(opt);
 	ctrMkNode("grp",opt,-1,"/br/lib_",_("Library"),0664,"root","root",1,"idm","1");
 	if(ctrMkNode("area",opt,1,"/libs",_("Functions' Libraries")))
-	{
 	    ctrMkNode("list",opt,-1,"/libs/lb",_("Libraries"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","lib_");
-	    ctrMkNode("comm",opt,-1,"/libs/load",_("Load"),0660);
-    	    ctrMkNode("comm",opt,-1,"/libs/save",_("Save"),0660);
-	}
         return;
     }
     
@@ -349,8 +328,6 @@ void TipContr::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )	lbReg(new Lib(opt->attr("id").c_str(),opt->text().c_str(),"*.*"));
 	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	lbUnreg(opt->attr("id"),1);
     }
-    else if( a_path == "/libs/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	modLoad();
-    else if( a_path == "/libs/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	modSave();
     else TTipDAQ::cntrCmdProc(opt);
 }
 
@@ -373,25 +350,17 @@ BFunc *TipContr::bFuncGet( const char *nm )
 //*************************************************
 Contr::Contr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     ::TController(name_c, daq_db, cfgelem), TValFunc(name_c.c_str(),NULL,false), prc_st(false), 
-    endrun_req(false), sync_st(false),
-    m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId()), m_dbper(cfg("PER_DB").getId()), 
+    endrun_req(false),
+    m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId()),  
     m_iter(cfg("ITER").getId()), m_fnc(cfg("FUNC").getSd())
 {
     cfg("PRM_BD").setS("JavaLikePrm_"+name_c);
     setDimens(true);
-
-    //- Create sync DB timer -
-    struct sigevent sigev;
-    sigev.sigev_notify = SIGEV_THREAD;
-    sigev.sigev_value.sival_ptr = this;
-    sigev.sigev_notify_function = TaskDBSync;
-    sigev.sigev_notify_attributes = NULL;
-    timer_create(CLOCK_REALTIME,&sigev,&sncDBTm);
 }
 		
 Contr::~Contr()
 {
-    timer_delete(sncDBTm);
+
 }
 
 void Contr::postDisable(int flag)
@@ -434,9 +403,9 @@ void Contr::disable_( )
     setFunc(NULL);
 }
 
-void Contr::load( )
+void Contr::load_( )
 {
-    TController::load( );
+    TController::load_( );
     
     loadFunc( );
 }
@@ -462,9 +431,9 @@ void Contr::loadFunc( )
     }
 }
 
-void Contr::save( )
+void Contr::save_( )
 {
-    TController::save();
+    TController::save_();
     
     if( func() != NULL )
     {
@@ -518,12 +487,6 @@ void Contr::start_( )
 	if( TSYS::eventWait(prc_st, true, nodePath()+"start",5) )
             throw TError(nodePath().c_str(),_("Acquisition task no started!"));
     }
-    
-    //- Start interval timer for periodic thread creating -
-    struct itimerspec itval;
-    itval.it_interval.tv_sec = itval.it_value.tv_sec = m_dbper;
-    itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
-    timer_settime(sncDBTm, 0, &itval, NULL);
 }
 
 void Contr::stop_( )
@@ -537,14 +500,6 @@ void Contr::stop_( )
             throw TError(nodePath().c_str(),_("Acquisition task no stoped!"));
         pthread_join( procPthr, NULL );
     }
-    
-    //- Stop interval timer for periodic thread creating -
-    struct itimerspec itval;
-    itval.it_interval.tv_sec = itval.it_interval.tv_nsec =
-        itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
-    timer_settime(sncDBTm, 0, &itval, NULL);
-    if( TSYS::eventWait( sync_st, false, nodePath()+"sync_stop",5) )
-        throw TError(nodePath().c_str(),_("Controller sync DB no stoped!"));
 }
 
 void *Contr::Task( void *icntr )
@@ -559,7 +514,11 @@ void *Contr::Task( void *icntr )
     while(!cntr.endrun_req)
     {	
 	for( int i_it = 0; i_it < cntr.m_iter; i_it++ )
-	    try{ cntr.calc(); } 
+	    try
+	    { 
+		cntr.calc();
+		cntr.modif();
+	    } 
 	    catch(TError err) 
 	    { 
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str() ); 
@@ -580,40 +539,9 @@ void *Contr::Task( void *icntr )
     return NULL;    
 }
 
-void Contr::TaskDBSync(union sigval obj)
-{
-    Contr *cntr = (Contr *)obj.sival_ptr;
-    if( cntr->sync_st )  return;
-    cntr->sync_st = true;
-	    
-    try{ cntr->save( ); }
-    catch(TError err) 
-    { 
-	mess_err(err.cat.c_str(),"%s",err.mess.c_str() );
-	mess_err(cntr->nodePath().c_str(),_("Save controller error."));
-    }
-    
-    cntr->sync_st = false;
-}
-
 TParamContr *Contr::ParamAttach( const string &name, int type )
 {
     return new Prm(name,&owner().tpPrmAt(type));
-}
-
-bool Contr::cfgChange( TCfg &cfg )
-{
-    if( startStat() )
-    {
-        struct itimerspec itval;
-        if( cfg.fld().name() == "PER_DB" )
-        {
-            itval.it_interval.tv_sec = itval.it_value.tv_sec = m_dbper;
-            itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
-            timer_settime(sncDBTm, 0, &itval, NULL);
-	}
-    }
-    return true;
 }
 
 void Contr::cntrCmdProc( XMLNode *opt )
@@ -684,10 +612,14 @@ void Contr::cntrCmdProc( XMLNode *opt )
 		if(n_val)	n_val->childAdd("el")->setText(getS(id));
 	    }	    	    	
 	}
-        if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )	((Func *)func())->ioAdd( new IO("new","New IO",IO::Real,IO::Default) );
-        if( ctrChkNode(opt,"ins",0664,"root","root",SEQ_WR) )	((Func *)func())->ioIns( new IO("new","New IO",IO::Real,IO::Default), atoi(opt->attr("row").c_str()) );
-        if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	((Func *)func())->ioDel( atoi(opt->attr("row").c_str()) );
-        if( ctrChkNode(opt,"move",0664,"root","root",SEQ_WR) )	((Func *)func())->ioMove( atoi(opt->attr("row").c_str()), atoi(opt->attr("to").c_str()) );
+        if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )	
+	{ ((Func *)func())->ioAdd( new IO("new","New IO",IO::Real,IO::Default) ); modif(); }
+        if( ctrChkNode(opt,"ins",0664,"root","root",SEQ_WR) )	
+	{ ((Func *)func())->ioIns( new IO("new","New IO",IO::Real,IO::Default), atoi(opt->attr("row").c_str()) ); modif(); }
+        if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	
+	{ ((Func *)func())->ioDel( atoi(opt->attr("row").c_str()) ); modif(); }
+        if( ctrChkNode(opt,"move",0664,"root","root",SEQ_WR) )	
+	{ ((Func *)func())->ioMove( atoi(opt->attr("row").c_str()), atoi(opt->attr("to").c_str()) ); modif(); }
         if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
 	{
             int row = atoi(opt->attr("row").c_str());
@@ -702,6 +634,8 @@ void Contr::cntrCmdProc( XMLNode *opt )
 		case 3:	func()->io(row)->setFlg( func()->io(row)->flg()^((atoi(opt->text().c_str())^func()->io(row)->flg())&(IO::Output|IO::Return)) );	break;
 		case 4:	setS(row,opt->text());	break;
 	    }
+	    modif();
+	    if( !((Func *)func())->owner().DB().empty() ) ((Func *)func())->modif();
 	}
     }	
     else if( a_path == "/fnc/tp" && ctrChkNode(opt) )
@@ -724,6 +658,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	{
 	    ((Func *)func())->setProg(opt->text().c_str());
 	    ((Func *)func())->progCompile();
+	    modif();
 	}
     }
     else TController::cntrCmdProc(opt);

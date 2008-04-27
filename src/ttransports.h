@@ -57,12 +57,14 @@ class TTransportIn : public TCntrNode, public TConfig
         string tbl( );
         string fullDB( )        { return DB()+'.'+tbl(); }
 	
-	void setName( const string &inm )  	{ m_name = inm; }
-        void setDscr( const string &idscr )	{ m_dscr = idscr; }
-        void setAddr( const string &addr ) 	{ m_addr = addr; }			
+	void setName( const string &inm )  	{ m_name = inm; modif(); }
+        void setDscr( const string &idscr )	{ m_dscr = idscr; modif(); }
+        void setAddr( const string &addr ) 	{ m_addr = addr; modif(); }
+	void setProtocol( const string &prt )	{ m_prot = prt; modif(); }
+	void setToStart( bool val )             { m_start = val; modif(); }
 	
-	void load( );
-	void save( );	
+	void setDB( const string &vl )          { m_db = vl; modifG(); }
+
 	virtual void start( )	{ };
 	virtual void stop( )	{ };
 		
@@ -74,7 +76,10 @@ class TTransportIn : public TCntrNode, public TConfig
 	
 	void preEnable( int flag );
 	void postDisable( int flag );     	//Delete all DB if flag 1
-	
+
+	void load_( );
+	void save_( );	
+
 	//Attributes
 	bool    run_st;
 	
@@ -117,15 +122,15 @@ class TTransportOut : public TCntrNode, public TConfig
         string tbl( );
         string fullDB( )        { return DB()+'.'+tbl(); }				
 	
-	void setName( const string &inm )	{ m_name = inm; }
-	void setDscr( const string &idscr )	{ m_dscr = idscr; }
-	void setAddr( const string &addr )	{ m_addr = addr; }
+	void setName( const string &inm )	{ m_name = inm; modif(); }
+	void setDscr( const string &idscr )	{ m_dscr = idscr; modif(); }
+	void setAddr( const string &addr )	{ m_addr = addr; modif(); }
 	void setPrm1( int vl )			{ m_prm1 = vl; }
 	void setPrm2( int vl )                  { m_prm2 = vl; }	
-	void setToStart( bool val )        	{ m_start = val; }
+	void setToStart( bool val )        	{ m_start = val; modif(); }
 
-	void load( );
-	void save( );	
+	void setDB( const string &vl )          { m_db = vl; modifG(); }
+
 	virtual void start( )			{ };
 	virtual void stop( )			{ };
 	
@@ -142,6 +147,9 @@ class TTransportOut : public TCntrNode, public TConfig
 
 	void preEnable( int flag );
 	void postDisable( int flag );     	//Delete all DB if flag 1
+
+	void load_( );
+	void save_( );	
 
 	//Attributes
 	bool    run_st;
@@ -248,8 +256,6 @@ class TTransportS : public TSubSYS
 	void extHostSet( const ExtHost &host );
 	void extHostDel( const string &user, const string &id );
 	
-	void subLoad( );
-	void subSave( );
 	void subStart( );
 	void subStop( );
 	
@@ -257,7 +263,11 @@ class TTransportS : public TSubSYS
 	TElem &outEl( ) 		{ return el_out; }
 	
         AutoHD<TTipTransport> at( const string &iid )	{ return modAt(iid); }
-	
+
+    protected:
+	void load_( );
+	void save_( );		
+
     private:
 	//Methods
 	string optDescr( );	

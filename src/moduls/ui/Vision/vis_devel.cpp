@@ -105,7 +105,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) :
     
     //-- Page, project, widget and this library actions --
     //--- Load item from db ---
-    if(!ico_t.load(TUIS::icoPath("vision_db_load").c_str())) ico_t.load(":/images/db_load.png");
+    if(!ico_t.load(TUIS::icoPath("load").c_str())) ico_t.load(":/images/load.png");
     actDBLoad = new QAction(QPixmap::fromImage(ico_t),_("Load from DB"),this);
     actDBLoad->setToolTip(_("Load item data from DB"));
     actDBLoad->setWhatsThis(_("The button for loading item data from DB"));
@@ -113,7 +113,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) :
     actDBLoad->setEnabled(false);
     connect(actDBLoad, SIGNAL(activated()), this, SLOT(itDBLoad()));
     //--- Save item to db ---
-    if(!ico_t.load(TUIS::icoPath("vision_db_save").c_str())) ico_t.load(":/images/db_save.png");
+    if(!ico_t.load(TUIS::icoPath("save").c_str())) ico_t.load(":/images/save.png");
     actDBSave = new QAction(QPixmap::fromImage(ico_t),_("Save to DB"),this);
     actDBSave->setToolTip(_("Save item data to DB"));
     actDBSave->setWhatsThis(_("The button for saving item data to DB"));
@@ -340,7 +340,6 @@ VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) :
     actElFigCheckAct->setWhatsThis(_("The button for enabling holds"));
     actElFigCheckAct->setStatusTip(_("Press for holds to be anabled"));
     actElFigCheckAct->setEnabled(false);
-
     
     //connect(checkAct, SIGNAL(toggled(bool)),this, SLOT(setHold()));
     //-- MDI windows actions --
@@ -504,6 +503,10 @@ VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) :
     w_scale->setToolTip(_("Field for display of widgets' scaling mode."));
     w_scale->setStatusTip(_("Click for change widgets' scaling mode."));
     statusBar()->insertPermanentWidget(0,w_scale);
+    mStModify = new QLabel(" ",this);
+    mStModify->setWhatsThis(_("This label display modifying."));
+    mStModify->setToolTip(_("Field for display of modifying."));
+    statusBar()->insertPermanentWidget(0,mStModify);
 
     //- Init dock windows -
     prjTree = new ProjTree(this);
@@ -523,6 +526,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) :
     
     attrInsp = new InspAttrDock(this);
     connect(attrInsp, SIGNAL(modified(const string &)), this, SIGNAL(modifiedItem(const string &)));
+    connect(attrInsp, SIGNAL(modified(const string &)), this, SLOT(modifyToolUpdate(const string &)));
     attrInsp->setWhatsThis(_("Dock window for widget's attributes inspection."));
     lnkInsp  = new InspLnkDock(this);
     lnkInsp->setWhatsThis(_("Dock window for widget's links inspection."));
@@ -617,8 +621,35 @@ void VisDevelop::closeEvent( QCloseEvent* ce )
     winClose = true;
     
     work_space->closeAllWindows();
+
+    if( !SYS->stopSignal() )	exitModifChk( );
     
     ce->accept();
+}
+
+void VisDevelop::exitModifChk( )
+{
+    XMLNode req("modify");
+    req.setAttr("path","/%2fobj");
+    if( !cntrIfCmd(req) && atoi(req.text().c_str()) )
+    {
+        bool saveExit = false;
+        req.clear()->setName("get")->setAttr("path","/%2fgen%2fsaveExit");
+        if( !cntrIfCmd(req,true) )   saveExit |= atoi(req.text().c_str());
+        req.setAttr("path","/%2fgen%2fsavePeriod");
+	if( !cntrIfCmd(req,true) )   saveExit |= atoi(req.text().c_str());
+        if( !saveExit )
+        {
+            InputDlg dlg(this,actDBSave->icon(),
+                    _("Some visual items is changed. Save changing to DB on exit?"),
+                    _("Visual items save"),false,false);
+            if( dlg.exec() == QDialog::Accepted )
+            {
+                req.clear()->setName("save")->setAttr("path","/%2fobj");
+                cntrIfCmd(req);
+            }
+        }
+    }
 }
 
 void VisDevelop::endRunChk( )
@@ -628,7 +659,9 @@ void VisDevelop::endRunChk( )
 
 void VisDevelop::quitSt()
 {
-    SYS->stop();
+    exitModifChk( );
+
+    SYS->stop( );
 }
 
 void VisDevelop::about()
@@ -806,6 +839,8 @@ void VisDevelop::applyWorkWdg( )
 {
     if( winClose )      return;
     bool isEn = false;
+
+    modifyToolUpdate(work_wdg_new);
     
     //Set/update attributes inspector
     attrInsp->setWdg(work_wdg_new);
@@ -825,8 +860,6 @@ void VisDevelop::applyWorkWdg( )
 
     //- Process main actions -
     actPrjRun->setEnabled(isProj);
-    actDBLoad->setEnabled(sel1.size());
-    actDBSave->setEnabled(sel1.size());
     
     //- Set visual item's actions -
     actVisItAdd->setEnabled(isProj || (isLib&&sel3.empty()));    
@@ -841,7 +874,31 @@ void VisDevelop::applyWorkWdg( )
     editToolUpdate( );
 }
 
-void VisDevelop::updateMenuWindow()
+void VisDevelop::modifyToolUpdate( const string &wdgs )
+{
+    actDBLoad->setEnabled(false); actDBSave->setEnabled(false);
+
+    //- Request modify flag for select widgets -
+    string cur_wdg;
+    XMLNode req("modify");
+    for( int i_off = 0; (cur_wdg=TSYS::strSepParse(wdgs,0,';',&i_off)).size(); )
+    {
+	req.setAttr("path",cur_wdg+"/%2fobj");
+	if( !cntrIfCmd(req) && atoi(req.text().c_str()) )
+	{
+	    actDBLoad->setEnabled(true);
+	    actDBSave->setEnabled(true);
+	}
+    }
+
+    //- Request global VCA modify -
+    mStModify->setText(" ");
+    req.setAttr("path","/%2fobj");
+    if( !cntrIfCmd(req) && atoi(req.text().c_str()) )
+	mStModify->setText("*");
+}
+
+void VisDevelop::updateMenuWindow( )
 {
     mn_window->clear();
     //- Add actions to menu -
@@ -891,13 +948,11 @@ void VisDevelop::itDBLoad( )
 	for( int i_off = 0; (cur_wdg=TSYS::strSepParse(own_wdg,0,';',&i_off)).size(); )
 	{
 	    //-- Send load request --
-	    string sel2 = TSYS::pathLev(cur_wdg,1);
-	    
-	    XMLNode req("set");
-	    req.setAttr("path",cur_wdg+"/"+TSYS::strEncode(sel2.empty()?"/obj/cfg/load":"/wdg/cfg/load",TSYS::PathEl));
-        
+	    XMLNode req("load");
+	    req.setAttr("path",cur_wdg+"/%2fobj");        
 	    if( cntrIfCmd(req) )
 		mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+	    else emit modifiedItem(cur_wdg);
 	}
     }
 }
@@ -916,11 +971,8 @@ void VisDevelop::itDBSave( )
 	for( int i_off = 0; (cur_wdg=TSYS::strSepParse(own_wdg,0,';',&i_off)).size(); )
 	{
 	    //-- Send load request --
-	    string sel2 = TSYS::pathLev(cur_wdg,1);
-	    
-	    XMLNode req("set");
-	    req.setAttr("path",cur_wdg+"/"+TSYS::strEncode(sel2.empty()?"/obj/cfg/save":"/wdg/cfg/save",TSYS::PathEl));
-        
+	    XMLNode req("save");
+	    req.setAttr("path",cur_wdg+"/%2fobj");
 	    if( cntrIfCmd(req) )
 		mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 	}

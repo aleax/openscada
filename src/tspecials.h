@@ -55,7 +55,9 @@ class TSpecialS : public TSubSYS
 	TSpecialS( );
 
 	int subVer( ) 		{ return VER_SPC; }
-	void subLoad( );
+
+    protected:
+	void load_( );
 
     private:
 	string optDescr( );    

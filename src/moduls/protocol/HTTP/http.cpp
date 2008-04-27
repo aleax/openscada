@@ -93,7 +93,7 @@ string TProt::optDescr( )
     return(buf);
 }
 
-void TProt::modLoad( )
+void TProt::load_( )
 {
     //- Load parameters from command line -
     int next_opt;

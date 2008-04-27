@@ -57,8 +57,6 @@ class TParamContr : public TConfig, public TValue
 	
     	virtual void enable( );		// Enable parameter and open access to value	
     	virtual void disable( );	// Disable parameter and close access to value
-	virtual void load( );		// Load parameter DB
-	virtual void save( );		// Save parameter DB
 	
     	bool operator==( TParamContr & PrmCntr )
 	{ if( id() == PrmCntr.id() ) return true; return false; };
@@ -68,11 +66,16 @@ class TParamContr : public TConfig, public TValue
 	TController &owner( ) 	{ return *(TController *)nodePrev(); }
 	
     protected:
+	//Methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-	
+
+	void load_( );
+	void save_( );
 	void postEnable( int flag );
 	void preDisable( int flag );
         void postDisable( int flag );
+
+	bool cfgChange( TCfg &cfg );
 	
 	void vlGet( TVal &val );
 	

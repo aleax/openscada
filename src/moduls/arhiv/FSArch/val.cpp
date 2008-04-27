@@ -344,28 +344,28 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/bs/tm" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::real2str(time_size,6));
-	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	time_size = atof(opt->text().c_str());
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::real2str( fileTimeSize(), 6 ));
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	setFileTimeSize( atof(opt->text().c_str()) );
     }	
     else if( a_path == "/bs/fn" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str(numb_files));
-	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	numb_files = atoi(opt->text().c_str());
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str( fileNumber() ));
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	setFileNumber( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/bs/round" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::real2str(round_proc,6));
-	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	round_proc = atof(opt->text().c_str());
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::real2str( roundProc(), 6 ));
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	setRoundProc( atof(opt->text().c_str()) );
     }
     else if( a_path == "/bs/pcktm" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str(m_pack_tm));
-	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	m_pack_tm = atoi(opt->text().c_str());
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str( packTm() ));
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	setPackTm( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/bs/tmout" )	
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str(m_chk_tm));
-	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	m_chk_tm = atoi(opt->text().c_str());
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str( checkTm() ));
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	setCheckTm( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/arch/arch" && ctrChkNode(opt) )
     {

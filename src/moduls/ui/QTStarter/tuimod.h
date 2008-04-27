@@ -72,18 +72,21 @@ class TUIMod: public TUI
  	bool endRun( )		{ return end_run; }
 	bool startCom( )	{ return start_com; }
 
-	void modLoad( );
-	void modSave( );
 	void modStart( );
 	void modStop( );
+
+    protected:
+	//Methods
+	void load_( );
+	void save_( );	
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	void postEnable( int flag );
+	void postDisable( int flag );	
 
     private:
 	//Methods
         static void *Task( void * );	
 	string optDescr( );	
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-	void postEnable( int flag );
-	void postDisable( int flag );
 	
 	//Attributes
 	bool	demon_mode, end_run, start_com;

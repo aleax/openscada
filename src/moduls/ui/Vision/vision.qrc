@@ -14,8 +14,8 @@
     <file>images/it_del.png</file>
     <file>images/it_prop.png</file>        
     <file>images/it_edit.png</file>
-    <file>images/db_load.png</file>
-    <file>images/db_save.png</file>
+    <file>images/load.png</file>
+    <file>images/save.png</file>
     <file>images/reload.png</file>    
     <file>images/attention.png</file>
     <file>images/align_left.png</file>

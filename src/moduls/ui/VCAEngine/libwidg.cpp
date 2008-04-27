@@ -149,15 +149,17 @@ void WidgetLib::setUser( const string &it )
 	SYS->security().at().usrGrpList(user(),gls);
 	setGrp(gls.size()?gls[0]:"UI");
     }
+    modif();
 }
 
 void WidgetLib::setFullDB( const string &it )
 {
     work_lib_db = TSYS::strSepParse(it,0,'.')+"."+TSYS::strSepParse(it,1,'.');
     m_dbt = TSYS::strSepParse(it,2,'.');
+    modifG();
 }
 
-void WidgetLib::load( )
+void WidgetLib::load_( )
 {
 #if OSC_DEBUG
     mess_debug(nodePath().c_str(),_("Load widget library."));
@@ -177,13 +179,13 @@ void WidgetLib::load( )
     }
     
     //- Load present widgets -
-    vector<string> f_lst;
-    list(f_lst);
-    for( int i_ls = 0; i_ls < f_lst.size(); i_ls++ )
-        at(f_lst[i_ls]).at().load();    
+    //vector<string> f_lst;
+    //list(f_lst);
+    //for( int i_ls = 0; i_ls < f_lst.size(); i_ls++ )
+    //    at(f_lst[i_ls]).at().load();    
 }
 
-void WidgetLib::save( )
+void WidgetLib::save_( )
 {
 #if OSC_DEBUG
     mess_debug(nodePath().c_str(),_("Save widget library."));
@@ -192,10 +194,10 @@ void WidgetLib::save( )
     SYS->db().at().dataSet(DB()+"."+mod->wlbTable(),mod->nodePath()+"LIB/",*this);
 
     //- Save widgets -
-    vector<string> f_lst;
-    list(f_lst);
-    for( int i_ls = 0; i_ls < f_lst.size(); i_ls++ )
-        at(f_lst[i_ls]).at().save();
+    //vector<string> f_lst;
+    //list(f_lst);
+    //for( int i_ls = 0; i_ls < f_lst.size(); i_ls++ )
+    //    at(f_lst[i_ls]).at().save();
 }
 
 void WidgetLib::setEnable( bool val )
@@ -335,8 +337,6 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/obj/cfg/u_a",_("Access: user-grp-other"),RWR_R_,user().c_str(),grp().c_str(),3,"tp","dec","dest","select","select","/obj/a_lst");
 		ctrMkNode("fld",opt,-1,"/obj/cfg/g_a","",RWR_R_,user().c_str(),grp().c_str(),3,"tp","dec","dest","select","select","/obj/a_lst");
 		ctrMkNode("fld",opt,-1,"/obj/cfg/o_a","",RWR_R_,user().c_str(),grp().c_str(),3,"tp","dec","dest","select","select","/obj/a_lst");
-    		ctrMkNode("comm",opt,-1,"/obj/cfg/load",_("Load"),permit(),user().c_str(),grp().c_str());
-    		ctrMkNode("comm",opt,-1,"/obj/cfg/save",_("Save"),permit(),user().c_str(),grp().c_str());
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/wdg",_("Widgets")))
@@ -355,57 +355,55 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/obj/st/en" )
     {
-        if( ctrChkNode(opt,"get",RWRWR_,user().c_str(),grp().c_str(),SEQ_RD) ) opt->setText(TSYS::int2str(enable()));
-        if( ctrChkNode(opt,"set",RWRWR_,user().c_str(),grp().c_str(),SEQ_WR) ) setEnable(atoi(opt->text().c_str()));
+        if( ctrChkNode(opt,"get",RWRWR_,user().c_str(),grp().c_str(),SEQ_RD) ) opt->setText( TSYS::int2str(enable()) );
+        if( ctrChkNode(opt,"set",RWRWR_,user().c_str(),grp().c_str(),SEQ_WR) ) setEnable( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/obj/st/db" )
     {
-	if( ctrChkNode(opt,"get",RWR_R_,user().c_str(),grp().c_str(),SEQ_RD) )	opt->setText(fullDB());
-        if( ctrChkNode(opt,"set",RWR_R_,user().c_str(),grp().c_str(),SEQ_WR) )	setFullDB(opt->text());
+	if( ctrChkNode(opt,"get",RWR_R_,user().c_str(),grp().c_str(),SEQ_RD) )	opt->setText( fullDB() );
+        if( ctrChkNode(opt,"set",RWR_R_,user().c_str(),grp().c_str(),SEQ_WR) )	setFullDB( opt->text() );
     }
     else if( a_path == "/obj/st/user" )
     {
-        if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText(user());
-        if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEQ_WR) )	setUser(opt->text());
+        if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText( user() );
+        if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEQ_WR) )	setUser( opt->text() );
     }
     else if( a_path == "/obj/st/grp" )
     {
-        if( ctrChkNode(opt,"get",RWR_R_,user().c_str(),grp().c_str(),SEQ_RD) )	opt->setText(grp());
-        if( ctrChkNode(opt,"set",RWR_R_,user().c_str(),grp().c_str(),SEQ_WR) )	setGrp(opt->text());
+        if( ctrChkNode(opt,"get",RWR_R_,user().c_str(),grp().c_str(),SEQ_RD) )	opt->setText( grp() );
+        if( ctrChkNode(opt,"set",RWR_R_,user().c_str(),grp().c_str(),SEQ_WR) )	setGrp( opt->text() );
     }
     else if( a_path == "/obj/cfg/u_a" || a_path == "/obj/cfg/g_a" || a_path == "/obj/cfg/o_a" )
     {
 	if( ctrChkNode(opt,"get",RWR_R_,user().c_str(),grp().c_str(),SEQ_RD) )
 	{
-	    if( a_path == "/obj/cfg/u_a" )	opt->setText(TSYS::int2str((m_permit>>6)&0x7));
-	    if( a_path == "/obj/cfg/g_a" )	opt->setText(TSYS::int2str((m_permit>>3)&0x7));
-	    if( a_path == "/obj/cfg/o_a" )	opt->setText(TSYS::int2str(m_permit&0x7));
+	    if( a_path == "/obj/cfg/u_a" )	opt->setText( TSYS::int2str((permit()>>6)&0x7) );
+	    if( a_path == "/obj/cfg/g_a" )	opt->setText( TSYS::int2str((permit()>>3)&0x7) );
+	    if( a_path == "/obj/cfg/o_a" )	opt->setText( TSYS::int2str(permit()&0x7) );
 	}
 	if( ctrChkNode(opt,"set",RWR_R_,user().c_str(),grp().c_str(),SEQ_WR) )
 	{
-	    if( a_path == "/obj/cfg/u_a" )	m_permit=(m_permit&(~(0x07<<6)))|(atoi(opt->text().c_str())<<6);
-	    if( a_path == "/obj/cfg/g_a" )	m_permit=(m_permit&(~(0x07<<3)))|(atoi(opt->text().c_str())<<3);
-	    if( a_path == "/obj/cfg/o_a" )	m_permit=(m_permit&(~0x07))|atoi(opt->text().c_str());
+	    if( a_path == "/obj/cfg/u_a" )	setPermit( (permit()&(~(0x07<<6)))|(atoi(opt->text().c_str())<<6) );
+	    if( a_path == "/obj/cfg/g_a" )	setPermit( (permit()&(~(0x07<<3)))|(atoi(opt->text().c_str())<<3) );
+	    if( a_path == "/obj/cfg/o_a" )	setPermit( (permit()&(~0x07))|atoi(opt->text().c_str()) );
 	}
     }
     else if( a_path == "/obj/cfg/ico" || a_path == "/ico" )
     {
-	if( ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) )   opt->setText(ico());
-	if( ctrChkNode(opt,"set",permit(),user().c_str(),grp().c_str(),SEQ_WR) )   setIco(opt->text());
+	if( ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) )   opt->setText( ico() );
+	if( ctrChkNode(opt,"set",permit(),user().c_str(),grp().c_str(),SEQ_WR) )   setIco( opt->text() );
     }
     else if( a_path == "/obj/cfg/id" && ctrChkNode(opt,"get",R_R_R_,user().c_str(),grp().c_str()) ) opt->setText(id());
     else if( a_path == "/obj/cfg/name" )
     {
-	if( ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) )   opt->setText(name());
-        if( ctrChkNode(opt,"set",permit(),user().c_str(),grp().c_str(),SEQ_WR) )   setName(opt->text());
+	if( ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) )   opt->setText( name() );
+        if( ctrChkNode(opt,"set",permit(),user().c_str(),grp().c_str(),SEQ_WR) )   setName( opt->text() );
     }
     else if( a_path == "/obj/cfg/descr" )
     {
-        if( ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) )   opt->setText(descr());
-        if( ctrChkNode(opt,"set",permit(),user().c_str(),grp().c_str(),SEQ_WR) )   setDescr(opt->text());
+        if( ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) )   opt->setText( descr() );
+        if( ctrChkNode(opt,"set",permit(),user().c_str(),grp().c_str(),SEQ_WR) )   setDescr( opt->text() );
     }
-    else if( a_path == "/obj/cfg/load" && ctrChkNode(opt,"set",permit(),user().c_str(),grp().c_str(),SEQ_WR) )  load();
-    else if( a_path == "/obj/cfg/save" && ctrChkNode(opt,"set",permit(),user().c_str(),grp().c_str(),SEQ_WR) )  save();
     else if( a_path == "/br/wdg_" || a_path == "/wdg/wdg" )
     {
         if( ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) )
@@ -506,6 +504,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 	    }
 	}
     }
+    else TCntrNode::cntrCmdProc(opt);
 }
 
 //************************************************
@@ -591,6 +590,7 @@ void LWidget::setUser( const string &iuser )
         SYS->security().at().usrGrpList(user(),gls);
         setGrp(gls.size()?gls[0]:Widget::grp());
     }
+    modif();
 }
 
 string LWidget::grp( )
@@ -644,6 +644,7 @@ int LWidget::calcPer( )
 void LWidget::setCalcLang( const string &ilng )
 {
     m_proc = m_proc.replace(0,m_proc.find("\n"),ilng);
+    modif();
 }
 
 void LWidget::setCalcProg( const string &iprg )
@@ -656,14 +657,16 @@ void LWidget::setCalcProg( const string &iprg )
         lng_end=tmp_prg.find("\n");
     }
     m_proc = tmp_prg.replace(lng_end+1,string::npos,iprg);
+    modif();
 }
 
 void LWidget::setCalcPer( int vl )
 {
     m_proc_per = vl;
+    modif();
 }
 
-void LWidget::load( )
+void LWidget::load_( )
 {    
     //- Load generic widget's data -
     string db  = owner().DB();
@@ -751,7 +754,7 @@ void LWidget::loadIO( )
     }    
 }
 
-void LWidget::save( )
+void LWidget::save_( )
 {
     //- Save generic widget's data -
     string db  = owner().DB();
@@ -772,13 +775,13 @@ void LWidget::save( )
     saveIO();
 
     //- Save cotainer widgets -
-    if(isContainer())
+    /*if(isContainer())
     {
 	vector<string> ls;
 	wdgList(ls);
 	for( int i_l = 0; i_l < ls.size(); i_l++ )
 	    wdgAt(ls[i_l]).at().save();
-    }
+    }*/
 }
 
 void LWidget::saveIO( )
@@ -886,7 +889,8 @@ void LWidget::cntrCmdProc( XMLNode *opt )
         ctrMkNode("oscada_cntr",opt,-1,"/",_("Library widget: ")+id());
 	return;
     }
-    cntrCmdGeneric(opt) || cntrCmdAttributes(opt) || cntrCmdLinks(opt) || cntrCmdProcess(opt);
+    if( !(cntrCmdGeneric(opt) || cntrCmdAttributes(opt) || cntrCmdLinks(opt) || cntrCmdProcess(opt)) )
+	TCntrNode::cntrCmdProc(opt);
 }
 
 //************************************************
@@ -1030,7 +1034,7 @@ int CWidget::calcPer( )
     return 0;
 }
 
-void CWidget::load( )
+void CWidget::load_( )
 {
     //- Load generic widget's data -
     string db  = owner().owner().DB();
@@ -1100,7 +1104,7 @@ void CWidget::loadIO( )
     }
 }
 
-void CWidget::save( )
+void CWidget::save_( )
 {
     //- Save generic widget's data -
     string db  = owner().owner().DB();
@@ -1202,5 +1206,6 @@ void CWidget::cntrCmdProc( XMLNode *opt )
         ctrMkNode("oscada_cntr",opt,-1,"/",_("Link to widget: ")+id(),permit(),user().c_str(),grp().c_str());
 	return;
     }
-    cntrCmdGeneric(opt) || cntrCmdAttributes(opt);
+    if( !(cntrCmdGeneric(opt) || cntrCmdAttributes(opt)) )
+	TCntrNode::cntrCmdProc(opt);
 }

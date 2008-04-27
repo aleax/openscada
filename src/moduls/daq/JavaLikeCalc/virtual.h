@@ -113,38 +113,35 @@ class Contr: public TController, public TValFunc
 			
         int period( )  	{ return m_per; }
         int iterate( ) 	{ return m_iter; }
-	
-    private:
+
+    protected:
 	//Methods
-	bool cfgChange( TCfg &cfg );
 	void postDisable( int flag );
 	
-	void load( );
-	void loadFunc( );
-        void save( );
+	void load_( );
+        void save_( );
         void enable_( );
         void disable_( );
         void start_( );
         void stop_( );
+	void loadFunc( );	
 	
 	TParamContr *ParamAttach( const string &name, int type );
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process	
 	
+    private:
+	//Methods
 	static void *Task( void *icntr );
-	static void TaskDBSync( union sigval obj );
 	
 	//Attributes
         bool    prc_st,		// Process task active
-		endrun_req,     // Request to stop of the Process task
-		sync_st;        // Sync DB status
+		endrun_req;     // Request to stop of the Process task
         int     &m_per,		// Calc period (ms)
 		&m_prior,	// Calc task priority
-		&m_dbper,	// DB sync period (s)
     		&m_iter;	// iteration number
 	string	&m_fnc;		// Work function
 	
 	pthread_t procPthr;     // Process task thread
-	timer_t sncDBTm;	// Sync DB timer
 };
 
 //*************************************************
@@ -157,8 +154,6 @@ class TipContr : public TTipDAQ
 	TipContr( string src );
 	~TipContr( );
 
-	void modLoad( );
-	void modSave( );
 	void modStart( );
 	void modStop( );
 
@@ -189,6 +184,7 @@ class TipContr : public TTipDAQ
     protected:
 	//Methods
 	void postEnable( int flag );
+	void load_( );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
 	TController *ContrAttach( const string &name, const string &daq_db );

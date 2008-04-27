@@ -98,11 +98,13 @@ class TProtocolS : public TSubSYS
 	~TProtocolS( );
     
 	int subVer( ) 		{ return(VER_PROT); }
-	void subLoad( );
 
 	AutoHD<TProtocol> at( const string &iid )	{ return modAt(iid); }
 
 	string optDescr( );
+
+    protected:
+	void load_();
 
     private:
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process

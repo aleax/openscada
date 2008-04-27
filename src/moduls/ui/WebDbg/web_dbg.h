@@ -46,8 +46,10 @@ class TWEB: public TUI
 	TWEB( string name );
 	~TWEB( );
 
-	void modLoad( );
-	void modSave( );
+    protected:
+	//Methods
+	void load_( );
+	void save_( );
     
     private:
 	//Methods

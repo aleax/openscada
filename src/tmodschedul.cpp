@@ -94,7 +94,7 @@ void TModSchedul::subStart(  )
 
     //- Start interval timer for periodic thread creating -
     struct itimerspec itval;
-    itval.it_interval.tv_sec = itval.it_value.tv_sec = m_per;
+    itval.it_interval.tv_sec = itval.it_value.tv_sec = chkPer();
     itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
     timer_settime(tmId, 0, &itval, NULL);
 }
@@ -118,13 +118,14 @@ void TModSchedul::subStop(  )
 #endif    
 }
 
-void TModSchedul::chkPer( int per )
+void TModSchedul::setChkPer( int per )
 {
     m_per = per;
     struct itimerspec itval;
-    itval.it_interval.tv_sec = itval.it_value.tv_sec = m_per;
+    itval.it_interval.tv_sec = itval.it_value.tv_sec = chkPer();
     itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
     timer_settime(tmId, 0, &itval, NULL);
+    modif();
 }
 
 void TModSchedul::SchedTask(union sigval obj)
@@ -135,7 +136,7 @@ void TModSchedul::SchedTask(union sigval obj)
     
     try
     {
-	shed->libLoad(shed->m_mod_path,true);
+	shed->libLoad(shed->modPath(),true);
     } catch(TError err){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     shed->prc_st = false;
@@ -143,10 +144,10 @@ void TModSchedul::SchedTask(union sigval obj)
 
 void TModSchedul::loadLibS(  )
 {
-    libLoad(m_mod_path,false);
+    libLoad(modPath(),false);
 }
 
-void TModSchedul::subLoad( )
+void TModSchedul::load_( )
 {
     //- Load parameters from command line -
     int next_opt;
@@ -165,16 +166,15 @@ void TModSchedul::subLoad( )
 	switch(next_opt)
 	{
 	    case 'h': fprintf(stdout,optDescr().c_str()); break;
-	    case 'm': m_mod_path = optarg; break;
+	    case 'm': setModPath(optarg); break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);
     
     //- Load parameters from command line -
-    m_per = atoi(TBDS::genDBGet(nodePath()+"ChkPer",TSYS::int2str(m_per)).c_str());
-    m_mod_path = TBDS::genDBGet(nodePath()+"ModPath",m_mod_path);
+    setChkPer( atoi(TBDS::genDBGet(nodePath()+"ChkPer",TSYS::int2str(m_per)).c_str()) );
+    setModPath( TBDS::genDBGet(nodePath()+"ModPath",m_mod_path) );
     
-
     string opt = TBDS::genDBGet(nodePath()+"ModAuto");
     string ovl;    
     m_am_list.clear();    
@@ -182,16 +182,15 @@ void TModSchedul::subLoad( )
         m_am_list.push_back(ovl);
 }
 
-void TModSchedul::subSave( )
+void TModSchedul::save_( )
 {
-    TBDS::genDBSet(nodePath()+"ChkPer",TSYS::int2str(m_per));
-    TBDS::genDBSet(nodePath()+"ModPath",m_mod_path);
+    TBDS::genDBSet(nodePath()+"ChkPer",TSYS::int2str(chkPer()));
+    TBDS::genDBSet(nodePath()+"ModPath",modPath());
     string m_auto;
     for(int i_a = 0; i_a < m_am_list.size(); i_a++ )
 	m_auto+=m_am_list[i_a]+";";
     TBDS::genDBSet(nodePath()+"ModAuto",m_auto);
 }
-
 
 void TModSchedul::ScanDir( const string &Paths, vector<string> &files )
 {
@@ -346,7 +345,7 @@ void TModSchedul::libAtt( const string &iname, bool full )
 			    SchHD[i_sh].use.push_back( list[i_sub]+"."+LdMod->modId() );
 			    if(full)
 			    {
-				owner().at(list[i_sub]).at().subLoad();
+				owner().at(list[i_sub]).at().load();
 				owner().at(list[i_sub]).at().subStart();
 			    }
 			    add_mod++;
@@ -379,7 +378,7 @@ void TModSchedul::libDet( const string &iname )
 			    modDel(TSYS::strSepParse(SchHD[i_sh].use[0],1,'.'));
 		}catch(TError err)
 		{   
-		    //owner().at(SchHD[i_sh]->use[0].mod_sub).at().modAt(SchHD[i_sh]->use[0].n_mod).at().modLoad();
+		    //owner().at(SchHD[i_sh]->use[0].mod_sub).at().modAt(SchHD[i_sh]->use[0].n_mod).at().load();
 		    owner().at(TSYS::strSepParse(SchHD[i_sh].use[0],0,'.')).at().
 			    modAt(TSYS::strSepParse(SchHD[i_sh].use[0],1,'.')).at().modStart();
 		    throw;
@@ -399,9 +398,9 @@ bool TModSchedul::CheckAuto( const string &name ) const
     if( m_am_list.size() == 1 && m_am_list[0] == "*") return(true);
     else 
 	for( unsigned i_au = 0; i_au < m_am_list.size(); i_au++)
-	    if( name == m_am_list[i_au] ) return(true);
-	    //if( name == SYS->fNameFix( m_am_list[i_au] ) ) return(true);
-    return(false);
+	    if( name == m_am_list[i_au] ) return true;
+    
+    return false;
 }
 
 void TModSchedul::libList( vector<string> &list )
@@ -464,8 +463,6 @@ void TModSchedul::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("comm",opt,-1,"/ms/chk_now",_("Check modules now."),0660,"root","root");
 	    ctrMkNode("fld",opt,-1,"/ms/mod_path",_("Path to shared libs(modules)"),0664,"root","root",1,"tp","str");
 	    ctrMkNode("list",opt,-1,"/ms/mod_auto",_("List of auto conected shared libs(modules)"),0664,"root","root",2,"tp","str","s_com","add,ins,edit,del");
-	    ctrMkNode("comm",opt,-1,"/ms/load",_("Load"),0660,"root","root");
-    	    ctrMkNode("comm",opt,-1,"/ms/save",_("Save"),0660,"root","root");
 	}
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","10");
         return;
@@ -475,27 +472,25 @@ void TModSchedul::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/ms/chk_per" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(TSYS::int2str(m_per));
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	chkPer(atoi(opt->text().c_str()));
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(TSYS::int2str(chkPer()));
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setChkPer(atoi(opt->text().c_str()));
     }
     else if( a_path == "/ms/mod_path" )	
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(m_mod_path);
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_mod_path = opt->text();
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( modPath() );
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setModPath( opt->text() );
     }
     else if( a_path == "/ms/mod_auto" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
 	    for( unsigned i_a=0; i_a < m_am_list.size(); i_a++ )
     		opt->childAdd("el")->setText(m_am_list[i_a]);
-	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )	m_am_list.push_back(opt->text());
-	if( ctrChkNode(opt,"ins",0664,"root","root",SEQ_WR) )	m_am_list.insert(m_am_list.begin()+atoi(opt->attr("pos").c_str()),opt->text());
-	if( ctrChkNode(opt,"edit",0664,"root","root",SEQ_WR) )	m_am_list[atoi(opt->attr("pos").c_str())] = opt->text();
-	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	m_am_list.erase(m_am_list.begin()+atoi(opt->attr("pos").c_str()));
+	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )	{ m_am_list.push_back(opt->text()); modif(); }
+	if( ctrChkNode(opt,"ins",0664,"root","root",SEQ_WR) )	{ m_am_list.insert(m_am_list.begin()+atoi(opt->attr("pos").c_str()),opt->text()); modif(); }
+	if( ctrChkNode(opt,"edit",0664,"root","root",SEQ_WR) )	{ m_am_list[atoi(opt->attr("pos").c_str())] = opt->text(); modif(); }
+	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	{ m_am_list.erase(m_am_list.begin()+atoi(opt->attr("pos").c_str())); modif(); }
     }		
     else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440,"root","root",SEQ_RD) )	opt->setText(optDescr());
-    else if( a_path == "/ms/chk_now" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	libLoad(m_mod_path,true);
-    else if( a_path == "/ms/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )		subLoad( );
-    else if( a_path == "/ms/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )		subSave( );           
+    else if( a_path == "/ms/chk_now" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	libLoad(modPath(),true);
     else TSubSYS::cntrCmdProc(opt);
 }

@@ -75,14 +75,15 @@ class TProt: public TProtocol
 	
 	int authTime()	{ return m_t_auth; }
 	
-	void modLoad( );
-	void modSave( );
-	
 	int ses_open(const char *user,const char *pass);
 	void ses_close(int id_ses);
 	SAuth ses_get(int id_ses);
 
 	string outMess( const string &in, TTransportOut &tro );
+
+    protected:
+	void load_( );
+	void save_( );	
 
     private:
 	//Methods

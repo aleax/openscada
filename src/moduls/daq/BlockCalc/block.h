@@ -69,12 +69,16 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	bool   enable( )	{ return m_enable; }	
 	bool   process( )	{ return m_process; }
 	bool   toEnable( )	{ return m_to_en; }
-	bool   toProcess( )	{ return m_to_prc; }	
+	bool   toProcess( )	{ return m_to_prc; }
+	string wFunc( )		{ return m_func; }
 	
-        void setName( const string &name )	{ m_name = name; }
-        void setDescr( const string &dscr )	{ m_descr = dscr; }
+        void setName( const string &name )	{ m_name = name; modif(); }
+        void setDescr( const string &dscr )	{ m_descr = dscr; modif(); }
 	void setEnable( bool val );
 	void setProcess( bool val );
+	void setToEnable( bool val )		{ m_to_en = val; modif(); }
+	void setToProcess( bool val )		{ m_to_prc = val; modif(); }
+	void setWFunc( const string &vl )	{ m_func = vl; modif(); }
 	
 	//- Link IO -
 	LnkT link( unsigned id );
@@ -84,14 +88,13 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	//- Calc block -
 	void calc( bool first, bool last );
 
-	//- DB commands -
-	void load( );
-        void save( );	
-
 	Contr &owner( )		{ return *(Contr *)nodePrev(); }
 		
     protected:
 	//Attributes
+	void load_( );
+        void save_( );		
+	
 	void loadIO( const string &blk_db = "", const string &blk_id = "" );
 	void saveIO( );
 	    

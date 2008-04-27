@@ -62,28 +62,29 @@ class TPrmTempl: public TFunction, public TConfig
 	string progLang( );
 	string prog( );
 	
-	void setName( const string &inm )  	{ m_name = inm; }
-        void setDescr( const string &idsc )	{ m_descr = idsc; }
+	void setName( const string &inm )  	{ m_name = inm; modif(); }
+        void setDescr( const string &idsc )	{ m_descr = idsc; modif(); }
 	void setProgLang( const string &ilng );
 	void setProg( const string &iprg );
 	void setStart( bool val );		
-
-	void load( );
-        void save( );
 
 	AutoHD<TFunction>	func( );	//Programming language attached function
 	
 	TPrmTmplLib &owner( )	{ return *(TPrmTmplLib*)nodePrev(); }
 
     protected:
+	//Methods
 	void preIOCfgChange( );
+	void load_( );
+        void save_( );
+
+	void postEnable( int flag );
+	void postDisable( int flag );
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
     private:
 	//Methods
 	string nodeName( )	{ return m_id; }
-	void postEnable( int flag );
-	void postDisable( int flag );
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
 	//Attributes
 	string 	&m_id, &m_name, &m_descr, &m_prog, work_prog;
@@ -112,10 +113,11 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 					
         bool startStat( )       { return run_st; }
         void start( bool val );
+
+	void setName( const string &vl )	{ m_name = vl; modif(); }
+	void setDescr( const string &vl )	{ m_descr = vl; modif(); }
+	void setFullDB( const string &vl );
 							
-        void load( );
-        void save( );
-								
         void list( vector<string> &ls ) 	{ chldList(m_ptmpl,ls); }
         bool present( const string &id )	{ return chldPresent(m_ptmpl,id); }
         AutoHD<TPrmTempl> at( const string &id ){ return chldAt(m_ptmpl,id); }
@@ -125,11 +127,15 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 	TDAQS &owner( )    			{ return *(TDAQS*)nodePrev(); }
 		
     protected:
+	//Methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 				    
         void preDisable( int flag );
         void postDisable( int flag );
-					    
+
+        void load_( );
+        void save_( );
+
     private:
 	//Methods
         string nodeName( )	{ return m_id; }

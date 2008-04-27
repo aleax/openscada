@@ -83,34 +83,6 @@ AutoHD<TModule> TSubSYS::modAt( const string &name )
     return chldAt(m_mod,name); 
 }
 
-void TSubSYS::subLoad( ) 
-{
-    if( !subModule() )	return;
-    vector<string> list;
-    modList(list);
-    for(unsigned i_m=0; i_m < list.size(); i_m++)
-	try{ modAt(list[i_m]).at().modLoad( ); }
-	catch(TError err) 
-	{ 
-	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	    mess_err(nodePath().c_str(),_("Load module '%s' is error."),list[i_m].c_str());
-	}
-}
-
-void TSubSYS::subSave( )
-{
-    if( !subModule() )  return;
-    vector<string> list;
-    modList(list);
-    for(unsigned i_m=0; i_m < list.size(); i_m++)
-	try{ modAt(list[i_m]).at().modSave( ); }
-	catch(TError err) 
-	{ 
-	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	    mess_err(nodePath().c_str(),_("Save module '%s' is error."),list[i_m].c_str());
-	}	
-}
-
 void TSubSYS::subStart( ) 
 {
     if( !SYS->security().at().grpPresent(subId()) )
@@ -172,14 +144,12 @@ void TSubSYS::cntrCmdProc( XMLNode *opt )
         opt->setText(TSYS::strEncode(TUIS::icoGet(subId(),&itp),TSYS::base64));
         opt->setAttr("tp",itp);	
     }
-    else if( subModule() )
-    { 
-	if( (a_path == "/br/mod_" || a_path == "/mod/br") && ctrChkNode(opt,"get",0444,"root","root",SEQ_RD) )
-	{
-	    vector<string> list;
-	    modList(list);
-	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-		opt->childAdd("el")->setAttr("id",list[i_a])->setText(modAt(list[i_a]).at().modName());
-	}
+    else if( subModule() && (a_path == "/br/mod_" || a_path == "/mod/br") && ctrChkNode(opt,"get",0444,"root","root",SEQ_RD) )
+    {
+        vector<string> list;
+        modList(list);
+        for( unsigned i_a=0; i_a < list.size(); i_a++ )
+	    opt->childAdd("el")->setAttr("id",list[i_a])->setText(modAt(list[i_a]).at().modName());
     }
+    else TCntrNode::cntrCmdProc(opt);
 }

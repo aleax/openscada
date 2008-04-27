@@ -467,6 +467,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 	for( unsigned i_f=0; i_f < lst.size(); i_f++ )
 	    opt->childAdd("el")->setAttr("id",lst[i_f])->setText(at(lst[i_f]).at().name());
     }
+    else TCntrNode::cntrCmdProc(opt);
 }
 
 //************************************************
@@ -1214,5 +1215,6 @@ void SessWdg::cntrCmdProc( XMLNode *opt )
         cntrCmdAttributes(opt);
         return;
     }
-    cntrCmdGeneric(opt) || cntrCmdAttributes(opt);
+    if( !(cntrCmdGeneric(opt) || cntrCmdAttributes(opt)) )
+	TCntrNode::cntrCmdProc(opt);
 }

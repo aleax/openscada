@@ -191,6 +191,12 @@ class ModVArch: public TVArchivator
 	double roundProc()	{ return round_proc; }
 	int    checkTm()  	{ return m_chk_tm; }
 	int    packTm()       	{ return m_pack_tm; }
+
+	void setFileTimeSize( double vl )	{ time_size = vl; modif(); }
+	void setFileNumber( int vl )		{ numb_files = vl; modif(); }
+	void setRoundProc( double vl )		{ round_proc = vl; modif(); }
+	void setCheckTm( int vl )		{ m_chk_tm = vl; modif(); }
+	void setPackTm( int vl )		{ m_pack_tm = vl; modif(); }
 	    
 	void start();
 	void stop();

@@ -118,12 +118,19 @@ class ModMArch: public TMArchivator
 	    
 	int  size();
 
-	bool useXML()		{ return m_use_xml; }
-	int  maxSize()		{ return m_max_size; }
-	int  numbFiles()	{ return m_numb_files; }
-	int  timeSize()		{ return m_time_size; }
-	int  checkTm()		{ return m_chk_tm; }
-	int  packTm()		{ return m_pack_tm; }
+	bool useXML( )		{ return m_use_xml; }
+	int  maxSize( )		{ return m_max_size; }
+	int  numbFiles( )	{ return m_numb_files; }
+	int  timeSize( )	{ return m_time_size; }
+	int  checkTm( )		{ return m_chk_tm; }
+	int  packTm( )		{ return m_pack_tm; }
+
+	void setUseXML( bool vl )	{ m_use_xml = vl; modif(); }
+	void setMaxSize( int vl )	{ m_max_size = vl; modif(); }
+	void setNumbFiles( int vl )	{ m_numb_files = vl; modif(); }
+	void setTimeSize( int vl )	{ m_time_size = vl; modif(); }
+	void setCheckTm( int vl )	{ m_chk_tm = vl; modif(); }
+	void setPackTm( int vl )	{ m_pack_tm = vl; modif(); }
 	    
 	void checkArchivator( bool now = false );
 	    

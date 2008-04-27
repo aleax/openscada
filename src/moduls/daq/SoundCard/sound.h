@@ -51,7 +51,7 @@ class TMdPrm : public TParamContr
     	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );
 	
-	void load( );
+	void load_( );
 
 	TMdContr &owner( )	{ return (TMdContr &)TParamContr::owner(); }
 	
@@ -82,8 +82,8 @@ class TMdContr: public TController
 	
 	TParamContr *ParamAttach( const string &name, int type );
 
-	void load( );
-	void save( );
+	void load_( );
+	void save_( );
 	void start_( );
 	void stop_( );
 

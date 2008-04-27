@@ -42,20 +42,25 @@ class ModMArch: public TMArchivator
 	string archTbl( )	{ return "DBAMsg_"+id(); }
 	double maxSize( )	{ return m_max_size; }
 
+	void setMaxSize( double vl )	{ m_max_size = vl; modif(); }
+
 	time_t begin( );
 	time_t end( );
+	
 	void put( vector<TMess::SRec> &mess );
 	void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0 );
 	
-	void load( );
 	void start( );
 	void stop( );
 
-    private:
+    protected:
 	//Methods
+	void load_( );
+	
 	void postDisable( int flag );     //Delete all DB if flag 1
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process	
 
+    private:
 	//Attributes
 	double  tm_calc;        		//Archiving time
 	time_t  m_beg, m_end;

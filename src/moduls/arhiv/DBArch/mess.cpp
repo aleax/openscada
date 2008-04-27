@@ -66,9 +66,9 @@ void ModMArch::postDisable( int flag )
     catch(TError err)	{ mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
-void ModMArch::load( )
+void ModMArch::load_( )
 {
-    TMArchivator::load();
+    TMArchivator::load_();
 
     //- Init address to DB -
     if( addr().empty() ) setAddr("*.*");
@@ -215,8 +215,8 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
     if( a_path == "/prm/st/tarch" && ctrChkNode(opt) ) 	opt->setText(TSYS::real2str(tm_calc,6));
     else if( a_path == "/bs/sz" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) ) opt->setText(TSYS::real2str(m_max_size));
-	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) ) m_max_size = atof(opt->text().c_str());
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) ) opt->setText(TSYS::real2str( maxSize() ));
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) ) setMaxSize( atof(opt->text().c_str()) );
     }
     else TMArchivator::cntrCmdProc(opt);
 }

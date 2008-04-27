@@ -320,17 +320,14 @@ void TCfg::setS( const string &val, bool forcView )
 {
     switch( m_fld->type() )
     {
-	case TFld::String:      
-	    if( m_fld->flg()&TCfg::Prevent )
-	    {
-		string t_str = *(m_val.s_val);
-		*(m_val.s_val) = val;    
-		if( !m_owner.cfgChange(*this) ) 
-		    *(m_val.s_val) = t_str;
-	    }	    
-	    else *(m_val.s_val) = val;
+	case TFld::String:
+	{
+	    string t_str = *(m_val.s_val);
+	    *(m_val.s_val) = val;    
+	    if( !m_owner.cfgChange(*this) )	*(m_val.s_val) = t_str;
 	    if( forcView ) setView(true);
 	    break;
+	}
 	case TFld::Integer:	setI( atoi(val.c_str()),forcView );	break;
 	case TFld::Real:	setR( atof(val.c_str()),forcView );	break;
 	case TFld::Boolean:	setB( atoi(val.c_str()),forcView );	break;
@@ -344,21 +341,18 @@ void TCfg::setR( double val, bool forcView )
 	case TFld::String:	setS( TSYS::real2str(val),forcView );	break;
 	case TFld::Integer:	setI( (int)val, forcView );	break;
 	case TFld::Real:
+	{
 	    if( !(m_fld->flg()&TFld::Selected) && m_fld->selValR()[0] < m_fld->selValR()[1] )
 	    {
 		if( val < m_fld->selValR()[0] )	val = m_fld->selValR()[0];
 		if( val > m_fld->selValR()[1] )	val = m_fld->selValR()[1];
 	    }
-	    if( m_fld->flg()&TCfg::Prevent )
-	    {
-		double t_val = m_val.r_val;
-		m_val.r_val = val;
-		if( !m_owner.cfgChange(*this) ) 
-		    m_val.r_val = t_val;
-	    }
-	    else m_val.r_val = val;
+	    double t_val = m_val.r_val;
+	    m_val.r_val = val;
+	    if( !m_owner.cfgChange(*this) )	m_val.r_val = t_val;
 	    if( forcView ) setView(true);
 	    break;
+	}
 	case TFld::Boolean:	setB( val, forcView );	break;
     }
 }
@@ -369,21 +363,18 @@ void TCfg::setI( int val, bool forcView )
     {
 	case TFld::String:	setS( TSYS::int2str(val),forcView );	break;
 	case TFld::Integer:
+	{
 	    if( !(m_fld->flg()&TFld::Selected) && m_fld->selValI()[0] < m_fld->selValI()[1] )
 	    {        
 		if( val < m_fld->selValI()[0] )	val = m_fld->selValI()[0];
 		if( val > m_fld->selValI()[1] )	val = m_fld->selValI()[1];
 	    }
-	    if( m_fld->flg()&TCfg::Prevent )
-	    {
-		int t_val = m_val.i_val;
-		m_val.i_val = val;
-		if( !m_owner.cfgChange(*this) ) 
-		    m_val.i_val = t_val;
-	    }
-	    else m_val.i_val = val;
+	    int t_val = m_val.i_val;
+	    m_val.i_val = val;
+	    if( !m_owner.cfgChange(*this) ) 	m_val.i_val = t_val;
 	    if( forcView ) setView(true);
 	    break;
+	}
 	case TFld::Real:	setR( val,forcView );	break;
 	case TFld::Boolean:	setB( val,forcView );	break;
     }
@@ -397,16 +388,13 @@ void TCfg::setB( bool val, bool forcView )
 	case TFld::Integer:	setI( val,forcView );	break;
 	case TFld::Real:	setR( val,forcView );	break;
 	case TFld::Boolean:
-	    if( m_fld->flg()&TCfg::Prevent )
-	    {
-		bool t_val = m_val.b_val;
-		m_val.b_val = val;
-		if( !m_owner.cfgChange(*this) ) 
-		    m_val.b_val = t_val;
-	    }
-	    else m_val.b_val = val;
+	{
+	    bool t_val = m_val.b_val;
+	    m_val.b_val = val;
+	    if( !m_owner.cfgChange(*this) ) 	m_val.b_val = t_val;
 	    if( forcView ) setView(true);
 	    break;
+	}
     }
 }
 
@@ -441,4 +429,3 @@ TCfg &TCfg::operator=(TCfg & cfg)
     }
     return *this;
 }
-

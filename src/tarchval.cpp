@@ -869,25 +869,29 @@ long long TVArchive::begin( const string &arch )
 void TVArchive::setValType( TFld::Type vl )
 { 
     m_vtype = vl; 
-    setUpBuf(); 
+    setUpBuf();
+    modif();
 }
 
 void TVArchive::setHardGrid( bool vl ) 	
 { 
     m_bhgrd = vl; 
-    setUpBuf(); 
+    setUpBuf();
+    modif();
 }
 
 void TVArchive::setHighResTm( bool vl )	
 { 
     m_bhres = vl; 
     setUpBuf(); 
+    modif();
 }
 
 void TVArchive::setSize( int vl ) 		
 {     
     m_bsize = vmax(10,vmin(10000000,vl));
     setUpBuf();
+    modif();
 }
 
 void TVArchive::setPeriod( long long vl ) 	
@@ -896,6 +900,7 @@ void TVArchive::setPeriod( long long vl )
     m_bper = (double)vl/1000000.;
     m_bsize = vmax(10,(int)vmin(1e7,100.0/m_bper));    
     setUpBuf();
+    modif();
 }
 
 void TVArchive::setUpBuf()
@@ -903,13 +908,13 @@ void TVArchive::setUpBuf()
     makeBuf((TFld::Type)m_vtype, m_bsize, (long long)(m_bper*1000000.), m_bhgrd, m_bhres );
 }
 
-void TVArchive::load( )
+void TVArchive::load_( )
 {
     SYS->db().at().dataGet(fullDB(),owner().nodePath()+tbl(),*this);
     setUpBuf();
 }
 
-void TVArchive::save( )
+void TVArchive::save_( )
 {
     //- Update Archivators list -
     if( startStat() )
@@ -918,7 +923,7 @@ void TVArchive::save( )
 	archivatorList(arch_ls);
 	m_archs = "";
 	for( int i_l = 0; i_l < arch_ls.size(); i_l++ )
-	    m_archs+=arch_ls[i_l]+";";
+	    m_archs += arch_ls[i_l]+";";
     }
 
     SYS->db().at().dataSet(fullDB(),owner().nodePath()+tbl(),*this);
@@ -983,6 +988,8 @@ void TVArchive::setSrcMode( SrcMode vl, const string &isrc )
     if( run_st && vl == PassiveAttr && dynamic_cast<TVal *>(&SYS->nodeAt(isrc,0,'.').at()) )
 	dynamic_cast<TVal&>(SYS->nodeAt(isrc,0,'.').at()).setArch(AutoHD<TVArchive>(this));
 
+    if( m_srcmode != vl || m_dsourc != isrc )	modif();
+    
     m_srcmode = vl;
     m_dsourc = isrc;
 }
@@ -1143,7 +1150,7 @@ void TVArchive::archivatorAttach( const string &arch )
 	    arch_el.insert(arch_el.begin()+i_l,archivat.at().archivePlace(*this));
 	    return;
 	}
-    arch_el.push_back(archivat.at().archivePlace(*this));	
+    arch_el.push_back(archivat.at().archivePlace(*this));
 }
 
 void TVArchive::archivatorDetach( const string &arch, bool full )
@@ -1662,8 +1669,6 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/cfg/b_size",cfg("BSIZE").fld().descr(),0664,"root",grp.c_str(),1,"tp","dec");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/b_hgrd",cfg("BHGRD").fld().descr(),0664,"root",grp.c_str(),1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/b_hres",cfg("BHRES").fld().descr(),0664,"root",grp.c_str(),1,"tp","bool");
-		ctrMkNode("comm",opt,-1,"/prm/cfg/load",_("Load"),0660,"root",grp.c_str());
-		ctrMkNode("comm",opt,-1,"/prm/cfg/save",_("Save"),0660,"root",grp.c_str());
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/arch",_("Archivators"),0444,"root",grp.c_str()))
@@ -1707,29 +1712,29 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
     //-- Process command to page --
     if( a_path == "/prm/st/st" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(run_st?"1":"0");
-	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	atoi(opt->text().c_str())?start():stop();
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText( startStat() ? "1" : "0" );
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	atoi(opt->text().c_str()) ? start() : stop();
     }	
     else if( a_path == "/prm/st/db" )
     {
-	if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->setText(m_db);
-	if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	m_db = opt->text();
+	if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->setText( DB() );
+	if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	setDB( opt->text() );
     }	
     else if( a_path == "/prm/cfg/id" && ctrChkNode(opt) )	opt->setText(id());
     else if( a_path == "/prm/cfg/nm" )	
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(name());
-	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	m_name = opt->text();
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText( name() );
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	setName( opt->text() );
     }
     else if( a_path == "/prm/cfg/dscr" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(dscr());
-	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	m_dscr = opt->text();
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText( dscr() );
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	setDscr( opt->text() );
     }
     else if( a_path == "/prm/cfg/start" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(m_start?"1":"0");
-	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	m_start = atoi(opt->text().c_str());
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText( toStart() ? "1" : "0" );
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	setToStart( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/prm/cfg/vtp" )
     {
@@ -1766,8 +1771,6 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) ) opt->setText(m_bhres?"1":"0");
 	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) ) setHighResTm(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) ) load();
-    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) ) save();
     else if( a_path == "/cfg/vtp_ls" && ctrChkNode(opt) )
     {
     	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::Boolean))->setText(_("Boolean"));
@@ -1856,7 +1859,11 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )
         {
 	    if( opt->attr("col") == "proc" )
-		atoi(opt->text().c_str())?archivatorAttach(opt->attr("key_arch")):archivatorDetach(opt->attr("key_arch"),true);
+	    {
+		atoi(opt->text().c_str()) ? archivatorAttach( opt->attr("key_arch") ) : 
+					    archivatorDetach( opt->attr("key_arch"), true );
+		modif();
+	    }
 	}    	
     }
     else if( a_path == "/val/tm" )
@@ -1953,6 +1960,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
         opt->setText(TSYS::strEncode(makeTrendImg(beg,end,TBDS::genDBGet(owner().nodePath()+"vArch","",opt->attr("user")),vPctW,vPctH,vMax,vMin),TSYS::base64));
         opt->setAttr("tp","png");
     }
+    else TCntrNode::cntrCmdProc(opt);
 }
 
 //*************************************************
@@ -2008,12 +2016,14 @@ string TVArchivator::tbl( )
 
 void TVArchivator::setValPeriod( double iper )
 {     
-    m_v_per = iper?iper:1.;
+    m_v_per = iper ? iper : 1.;
     
     //- Call sort for all archives -
     ResAlloc res(a_res,false);
     for( int i_l = 0; i_l < arch_el.size(); i_l++ )
         arch_el[i_l]->archive().archivatorSort();
+    
+    modif();
 }
 
 void TVArchivator::postEnable(int flag)
@@ -2126,12 +2136,12 @@ TTipArchivator &TVArchivator::owner()
     return *(TTipArchivator *)nodePrev(); 
 }
 
-void TVArchivator::load( )
+void TVArchivator::load_( )
 {
     SYS->db().at().dataGet(fullDB(),SYS->archive().at().nodePath()+tbl(),*this);
 }
 
-void TVArchivator::save( )
+void TVArchivator::save_( )
 {
     SYS->db().at().dataSet(fullDB(),SYS->archive().at().nodePath()+tbl(),*this);
 }
@@ -2251,7 +2261,7 @@ void TVArchivator::Task(union sigval obj)
 
 void TVArchivator::setArchPeriod( int iper )
 {    
-    m_a_per = iper?iper:1;
+    m_a_per = iper ? iper : 1;
     if( startStat() )
     {
 	struct itimerspec itval;
@@ -2259,6 +2269,8 @@ void TVArchivator::setArchPeriod( int iper )
 	itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
 	timer_settime(tmId, 0, &itval, NULL);
     }
+    
+    modif();
 }
 
 void TVArchivator::cntrCmdProc( XMLNode *opt )
@@ -2285,8 +2297,6 @@ void TVArchivator::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/cfg/aper",cfg("A_PER").fld().descr(),0664,"root",grp.c_str(),1,"tp","dec");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root",grp.c_str(),1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/start",_("To start"),0664,"root",grp.c_str(),1,"tp","bool");
-		ctrMkNode("comm",opt,-1,"/prm/cfg/load",_("Load"),0660,"root",grp.c_str());
-		ctrMkNode("comm",opt,-1,"/prm/cfg/save",_("Save"),0660,"root",grp.c_str());
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/arch",_("Archives")))
@@ -2303,35 +2313,35 @@ void TVArchivator::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/prm/st/st" )
     {
-        if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )      opt->setText(run_st?"1":"0");
-        if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )      atoi(opt->text().c_str())?start():stop();
+        if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )      opt->setText( startStat() ? "1" : "0" );
+        if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )      atoi(opt->text().c_str()) ? start() : stop();
     }
     else if( a_path == "/prm/st/tarch" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(tm_calc,6));
     else if( a_path == "/prm/st/db" )
     {
-	if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )      opt->setText(m_db);
-        if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )      m_db = opt->text();
+	if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )      opt->setText( DB() );
+        if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )      setDB( opt->text() );
     }
     else if( a_path == "/prm/cfg/id" && ctrChkNode(opt) )       opt->setText(id());
     else if( a_path == "/prm/cfg/nm" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )      opt->setText(name());
-        if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )      m_name = opt->text();
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )      opt->setText( name() );
+        if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )      setName( opt->text() );
     }
     else if( a_path == "/prm/cfg/dscr" )
     {
-        if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )      opt->setText(dscr());
-        if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )      m_dscr = opt->text();
+        if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )      opt->setText( dscr() );
+        if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )      setDscr( opt->text() );
     }
     else if( a_path == "/prm/cfg/addr" )
     {
-        if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )      opt->setText(m_addr);
-        if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )      m_addr = opt->text();
+        if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )      opt->setText( addr() );
+        if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )      setAddr( opt->text() );
     }    
     else if( a_path == "/prm/cfg/start" )
     {
-        if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )      opt->setText(m_start?"1":"0");
-        if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )      m_start = atoi(opt->text().c_str());
+        if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )      opt->setText( toStart() ? "1" : "0" );
+        if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )      setToStart( atoi(opt->text().c_str()) );
     }																					    
     else if( a_path == "/prm/cfg/vper" )	
     {
@@ -2340,8 +2350,8 @@ void TVArchivator::cntrCmdProc( XMLNode *opt )
     }	
     else if( a_path == "/prm/cfg/aper" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) ) opt->setText(TSYS::int2str(archPeriod()));
-	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) ) setArchPeriod(atoi(opt->text().c_str()));
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) ) 	opt->setText(TSYS::int2str(archPeriod()));
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) ) 	setArchPeriod(atoi(opt->text().c_str()));
     }
     else if( a_path == "/arch/arch" && ctrChkNode(opt) )
     {
@@ -2358,8 +2368,7 @@ void TVArchivator::cntrCmdProc( XMLNode *opt )
 	    if(n_size)	n_size->childAdd("el")->setText(TSYS::int2str(arch_el[i_l]->archive().size()));
 	}
     }
-    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_RD) )       load();
-    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_RD) )       save();
+    else TCntrNode::cntrCmdProc(opt);
 }
 
 //*************************************************

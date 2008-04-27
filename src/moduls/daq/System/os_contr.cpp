@@ -111,7 +111,7 @@ string TTpContr::optDescr( )
     return(buf);
 }
 
-void TTpContr::modLoad( )
+void TTpContr::load_( )
 {
     //- Load parameters from command line -
     int next_opt;
@@ -166,7 +166,7 @@ void TTpContr::postEnable( int flag )
 	el_name=el_name+_(daGet(list[i_ls])->name().c_str())+";";
     }   
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
-    tpPrmAt(t_prm).fldAdd( new TFld("TYPE",_("System part"),TFld::String,TFld::Selected|TCfg::NoVal|TCfg::Prevent,"10",el_def.c_str(),el_id.c_str(),el_name.c_str()) );
+    tpPrmAt(t_prm).fldAdd( new TFld("TYPE",_("System part"),TFld::String,TFld::Selected|TCfg::NoVal,"10",el_def.c_str(),el_id.c_str(),el_name.c_str()) );
     tpPrmAt(t_prm).fldAdd( new TFld("SUBT" ,"",TFld::String,TFld::Selected|TCfg::NoVal|TFld::SelfFld,"10") );
 }
 
@@ -224,16 +224,6 @@ void TMdContr::enable_(  )
 	for( int i_l = 0; i_l < list.size(); i_l++ )
 	    mod->daGet(list[i_l])->makeActiveDA(this);	    
     }
-}
-
-void TMdContr::load( )
-{
-    TController::load( );
-}
-
-void TMdContr::save( )
-{
-    TController::save();
 }
 
 void TMdContr::start_( )
@@ -369,7 +359,7 @@ TMdPrm::~TMdPrm( )
 void TMdPrm::enable( )
 {
     if( enableStat() )	return;    
-    cfgChange(cfg("TYPE"));
+    cfg("TYPE").setS(cfg("TYPE").getS());
     TParamContr::enable();
     ((TMdContr&)owner()).prmEn( id(), true );	//Put to process
 }
@@ -383,14 +373,14 @@ void TMdPrm::disable( )
     TParamContr::disable();
 }
 
-void TMdPrm::load( )
+void TMdPrm::load_( )
 {
-    if(!m_auto)	TParamContr::load();
+    if(!m_auto)	TParamContr::load_();
 }
 
-void TMdPrm::save( )
+void TMdPrm::save_( )
 {
-    if(!m_auto) TParamContr::save();
+    if(!m_auto) TParamContr::save_();
 }
 
 void TMdPrm::vlGet( TVal &val )
@@ -457,12 +447,13 @@ void TMdPrm::setType( const string &da_id )
 }
 
 bool TMdPrm::cfgChange( TCfg &i_cfg )
-{   
+{ 
     //- Change TYPE parameter -
     if( i_cfg.name() == "TYPE" )
     {
 	setType(i_cfg.getS());
        	return true;       
-    }    
-    return false;
+    }
+    if( !autoC( ) ) modif();
+    return true;
 }

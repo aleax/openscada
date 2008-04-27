@@ -151,7 +151,7 @@ void TUIMod::postDisable( int flag )
     }	
 }
 
-void TUIMod::modLoad( )
+void TUIMod::load_( )
 {
 #if OSC_DEBUG
     mess_debug(nodePath().c_str(),_("Load module."));
@@ -183,7 +183,7 @@ void TUIMod::modLoad( )
     start_mod = TBDS::genDBGet(nodePath()+"StartMod",start_mod);
 }
 
-void TUIMod::modSave( )
+void TUIMod::save_( )
 {
 #if OSC_DEBUG
     mess_debug(nodePath().c_str(),_("Save module."));
@@ -332,11 +332,7 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     {
         TUI::cntrCmdProc(opt);
         if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
-	{
     	    ctrMkNode("fld",opt,-1,"/prm/cfg/st_mod",_("Start QT modules (sep - ';')"),0660,"root","root",1,"tp","str");
-    	    ctrMkNode("comm",opt,-1,"/prm/cfg/load",_("Load"),0660);
-    	    ctrMkNode("comm",opt,-1,"/prm/cfg/save",_("Save"),0660);
-	}
         ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
 	return;
     }
@@ -349,8 +345,6 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	start_mod = opt->text();
     }
     else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )	opt->setText(optDescr());
-    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	modLoad();
-    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	modSave();
     else TUI::cntrCmdProc(opt);
 }		    
 

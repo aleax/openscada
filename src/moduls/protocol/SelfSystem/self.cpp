@@ -143,7 +143,7 @@ string TProt::optDescr( )
     return(buf);
 }			
 
-void TProt::modLoad( )
+void TProt::load_( )
 {
     //- Load parameters from command line -
     int next_opt;
@@ -169,7 +169,7 @@ void TProt::modLoad( )
     m_t_auth = atoi( TBDS::genDBGet(nodePath()+"SessTimeLife",TSYS::int2str(m_t_auth)).c_str() );
 }
 
-void TProt::modSave( )
+void TProt::save_( )
 {
     TBDS::genDBSet(nodePath()+"SessTimeLife",TSYS::int2str(m_t_auth));
 }
@@ -243,11 +243,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
         TProtocol::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/prm",_("Parameters")))
     	    if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
-	    {
     		ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of auth sesion(min)"),0660,"root","root",1,"tp","dec");
-    		ctrMkNode("comm",opt,-1,"/prm/cfg/load",_("Load"),0660);
-    		ctrMkNode("comm",opt,-1,"/prm/cfg/save",_("Save"),0660);
-	    }
         ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
         return;
     }
@@ -260,8 +256,6 @@ void TProt::cntrCmdProc( XMLNode *opt )
         if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )   m_t_auth = atoi(opt->text().c_str());
     }
     else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )   opt->setText(optDescr());
-    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )  modLoad();
-    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )  modSave();
     else TProtocol::cntrCmdProc(opt);
 }
 

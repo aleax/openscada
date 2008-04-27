@@ -76,19 +76,23 @@ class ModVArch: public TVArchivator
 	ModVArch( const string &iid, const string &idb, TElem *cf_el );
 	~ModVArch( );
 
-	double maxSize( )	{ return m_max_size; }
+	double maxSize( )		{ return m_max_size; }
 
+	void setMaxSize( double vl )	{ m_max_size = vl; modif(); }
 	void setValPeriod( double iper );
 
-	void load( );	    
 	void start( );
 	void stop( );
-	    
-    private:
+
+    protected:
 	//Methods
-	TVArchEl *getArchEl( TVArchive &arch );
-	void cntrCmdProc( XMLNode *opt );
+	void load_( );
 	
+	void cntrCmdProc( XMLNode *opt );	
+	
+	TVArchEl *getArchEl( TVArchive &arch );
+
+    private:
 	//Attributes
 	double  &m_max_size;                    //Maximum archive size (hours)
 };

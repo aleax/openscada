@@ -100,12 +100,22 @@ class TCntrNode
     //* Resource section *
     public:
 	//Data
-	enum Mode { MkDisable, Disable, MkEnable, Enable };
-	enum Flag 
+	enum Flag
+	{
+	    //- Modes -
+	    MkDisable  = 0x00,	//Node make disable
+	    Disable    = 0x01,	//Node disabled
+	    MkEnable   = 0x02,	//Node make enable
+	    Enable     = 0x03,	//Node enabled
+	    //- Flags -
+	    SelfModify = 0x04,	//Self modify
+	};
+	enum EnFlag
 	{ 
 	    NodeConnect = 0x01,	//Connect node to control tree
 	    NodeRestore = 0x02	//Restore node enabling after broken disabling. 
 	};
+	enum ModifFlag	{ Self = 0x01, Child = 0x02, All = 0x03 };
 	
 	//Methods
        	virtual string nodeName( )	{ return "NO Named!"; }
@@ -117,8 +127,17 @@ class TCntrNode
 	static void nodeCopy( const string &src, const string &dst, const string &user = "root" );
 	
 	TCntrNode *nodePrev( bool noex = false );
-        Mode nodeMode( )		{ return m_mod; }
+	char	 nodeFlg( )		{ return m_flg; }
+        char 	 nodeMode( )		{ return m_flg&0x3; }
 	unsigned nodeUse( );
+
+	//- Modify process methods -
+	int  isModify( int mflg = TCntrNode::All );		//Check for modify want
+	void modif( )	{ m_flg |= SelfModify; }		//Set local modify
+	void modifG( );						//Set group modify
+	void modifClr( ){ m_flg &= ~(SelfModify); }		//Clear modify
+	void load( );						//Load node, if modified 
+	void save( );						//Save node, if modified
 
 	void AHDConnect( );
 	void AHDDisConnect( );
@@ -130,7 +149,6 @@ class TCntrNode
 	    string 	id;
 	    bool	ordered;
 	    TMap 	elem;
-	    //vector<TCntrNode*>	el;
 	};
 
 	//Methods
@@ -141,18 +159,19 @@ class TCntrNode
 	void nodeDelAll( );	//For hard link objects
 	
 	void setNodePrev( TCntrNode *node )	{ prev.node = node; }
+	void setNodeMode( char mode )		{ m_flg = (m_flg&(~0x03))|(mode&0x03); }
 
 	//- Childs -
-        AutoHD<TCntrNode> chldAt( unsigned igr, const string &name, const string &user = "" );
-	void chldList( unsigned igr, vector<string> &list );
-	bool chldPresent( unsigned igr, const string &name );
-	void chldAdd( unsigned igr, TCntrNode *node, int pos = -1 );
-	void chldDel( unsigned igr, const string &name, long tm = -1, int flag = 0 );
+        AutoHD<TCntrNode> chldAt( char igr, const string &name, const string &user = "" );
+	void chldList( char igr, vector<string> &list );
+	bool chldPresent( char igr, const string &name );
+	void chldAdd( char igr, TCntrNode *node, int pos = -1 );
+	void chldDel( char igr, const string &name, long tm = -1, int flag = 0 );
 	
 	//- Conteiners -
-        unsigned grpSize( )	{ return chGrp.size(); }
-	int 	 grpId( const string &sid );
-	GrpEl	&grpAt( int id );
+        char     grpSize( )	{ return chGrp.size(); }
+	char 	 grpId( const string &sid );
+	GrpEl	&grpAt( char id );
         unsigned grpAdd( const string &id, bool ordered = false );
 
 	virtual void preEnable( int flag )	{ }
@@ -161,12 +180,15 @@ class TCntrNode
 	virtual void preDisable( int flag )	{ }
 	virtual void postDisable( int flag )	{ }
 
+	virtual void load_( )			{ }
+	virtual void save_( )			{ }
+
     private:
 	//Data
  	struct
 	{
 	    TCntrNode	*node;
-	    int		grp;
+	    char	grp;
 	} prev;
     
 	//Attributes
@@ -180,7 +202,7 @@ class TCntrNode
 	unsigned char		m_use;	//Use counter
 	unsigned short int	m_oi;	//Order index
 
-	Mode	m_mod;
+	char	m_flg;
 };
 
 #endif //TCNTRNODE_H

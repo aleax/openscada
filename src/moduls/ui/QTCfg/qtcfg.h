@@ -69,12 +69,15 @@ class ConfApp: public QMainWindow
 	void closeEvent( QCloseEvent* );
 
     private slots:
-	//Slots
+	//Slots	
 	void quitSt( );
+	void exitModifChk( );
 
 	void pageUp( );
 	void pagePrev( );
 	void pageNext( );
+	void itDBLoad( );
+	void itDBSave( );
 	void itAdd( );
 	void itDel( const string &it = "" );
 	void itCut( );
@@ -142,12 +145,14 @@ class ConfApp: public QMainWindow
 	QTreeWidget	*CtrTree;
 	QLabel		*titleIco;
 	QLabel		*titleLab;
+	QLabel		*mStModify;
 	QTabWidget  	*tabs;
 	UserStBar	*w_user;
 	    
 	QAction 	*actUp,	*actPrev, *actNext,
 			*actUser,
 			*actStartUpd, *actStopUpd,
+			*actDBLoad, *actDBSave,
 			*actItAdd, *actItDel,
 			*actItCut, *actItCopy, *actItPaste;
 

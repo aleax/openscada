@@ -103,13 +103,13 @@ void TParamContr::postDisable(int flag)
     }
 }
 
-void TParamContr::load( )
+void TParamContr::load_( )
 {
     SYS->db().at().dataGet(owner().DB()+"."+owner().cfg(type().db).getS(),
 	    		   owner().owner().nodePath()+owner().cfg(type().db).getS(),*this);
 }
 
-void TParamContr::save( )
+void TParamContr::save_( )
 {
     SYS->db().at().dataSet(owner().DB()+"."+owner().cfg(type().db).getS(),
 	    		   owner().owner().nodePath()+owner().cfg(type().db).getS(),*this);
@@ -120,6 +120,13 @@ void TParamContr::save( )
     for(int i_a = 0; i_a < a_ls.size(); i_a++)
         if( !vlAt(a_ls[i_a]).at().arch().freeStat() )
             vlAt(a_ls[i_a]).at().arch().at().save();				    
+}
+
+bool TParamContr::cfgChange( TCfg &cfg )
+{
+    modif( );
+    
+    return true;
 }
 
 TParamContr & TParamContr::operator=( TParamContr & PrmCntr )
@@ -169,11 +176,7 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 		    ctrMkNode("fld",opt,-1,"/prm/st/en",_("Enable"),0664,"root","root",1,"tp","bool");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Config")))
-	    {
-		ctrMkNode("comm",opt,-1,"/prm/cfg/load",_("Load"),0660);
-		ctrMkNode("comm",opt,-1,"/prm/cfg/save",_("Save"),0660);
 		TConfig::cntrCmdMake(opt,"/prm/cfg",0,"root","root",0664);
-	    }
 	}
         return;
     }
@@ -188,8 +191,6 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 	    else atoi(opt->text().c_str())?enable():disable();
 	}
     }
-    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) ) 	load();
-    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) ) 	save();    
     else if( a_path.substr(0,8) == "/prm/cfg" ) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root","root",0664);
     else TValue::cntrCmdProc(opt);
 }                                                                                             

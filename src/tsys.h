@@ -88,10 +88,8 @@ class TSYS : public TCntrNode
 	
 	//Public methods    
 	TSYS( int argi, char ** argb, char **env );
-	~TSYS(  );
+	~TSYS( );
 
-	void load( );
-	void save( );
 	int  start( );
 	void stop( );
 	
@@ -118,13 +116,20 @@ class TSYS : public TCntrNode
 	AutoHD<TModSchedul>  	modSchedul( ) 	{ return at("ModSched"); }
 	AutoHD<TSecurity>	security( )  	{ return at("Security"); }
 	
+	string workDir( );
+	string setWorkDir( const string &wdir );
+	
 	//- Config file functions -
 	string cfgFile( ) 	{ return m_confFile; }
 	XMLNode &cfgRoot( )	{ return root_n; }
 
 	//- Default DB -
 	string workDB( )	{ return mWorkDB; }
+	void setWorkDB( const string &wdb )	{ mWorkDB = wdb; modifG(); }
 	bool saveAtExit( )	{ return mSaveAtExit; }
+	int  savePeriod( )	{ return mSavePeriod; }
+	void setSaveAtExit( bool vl )		{ mSaveAtExit = vl; modif(); }
+	void setSavePeriod( int vl )		{ mSavePeriod = vl; modif(); }
 	
 	//- Get system options from DB -
 	bool sysOptCfg( )	{ return m_sysOptCfg; }
@@ -188,6 +193,11 @@ class TSYS : public TCntrNode
 	const char **argv;	//Comand line seting buffer.
 	const char **envp;	//System environment.
 
+    protected:
+	//Protected methods
+	void load_( );
+	void save_( );
+
     private:
 	//Private methods
 	string nodeName()	{ return id(); }
@@ -208,6 +218,7 @@ class TSYS : public TCntrNode
 
 	string	mWorkDB;	// Work DB
 	bool	mSaveAtExit;	// Save at exit
+	int	mSavePeriod;	// Save period (s) for periodic system saving to DB
 	
 	XMLNode root_n;		// Root of the config file tree
 	

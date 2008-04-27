@@ -56,10 +56,13 @@ class TMdPrm : public TParamContr
 
 	void enable( );
 	void disable( );
-	void load( );
-		
+
 	TMdContr &owner( )	{ return (TMdContr&)TParamContr::owner(); }
-	
+
+    protected:
+	//Methods
+	void load_( );
+
     private:
 	//Methods
         void postEnable( int flag );
@@ -91,15 +94,12 @@ class TMdContr: public TController
 	int    pAttrLimit( )	{ return m_pattr_lim; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
-
-	void load( );
-	void save( );
-	void start_( );
-	void stop_( );
 	
     protected:
 	//Methods
 	void prmEn( const string &id, bool val );
+	void start_( );
+	void stop_( );	
     	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
     private:
@@ -135,9 +135,11 @@ class TTpContr: public TTipDAQ
 	//Methods
     	TTpContr( string name );
 	~TTpContr( );
-	
+
+    protected:
+	//Methods	
 	void postEnable( int flag );
-	void modLoad( );
+	void load_( );
 
     private:
 	//Methods

@@ -58,7 +58,6 @@ class TUIS : public TSubSYS
 	TUIS( );
 
 	int subVer( ) 		{ return VER_UI; }
-	void subLoad( );
         void subStart( );
         void subStop( );
 	
@@ -68,6 +67,9 @@ class TUIS : public TSubSYS
 	static bool icoPresent( const string &inm, string *tp = NULL );
 	static string icoGet( const string &inm, string *tp = NULL );
 	static string icoPath( const string &ico );
+
+    protected:
+	void load_( );
 
     private:
 	string optDescr( );    

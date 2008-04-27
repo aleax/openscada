@@ -319,6 +319,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	}
         m_tval->setCalcTm(c_rez);
     }
+    else TCntrNode::cntrCmdProc(opt);
 }		
 
 

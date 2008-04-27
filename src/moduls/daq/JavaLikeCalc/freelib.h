@@ -55,11 +55,12 @@ class Lib : public TCntrNode, public TConfig
 	string DB( )            { return work_lib_db; }
         string tbl( )           { return m_db; }
         string fullDB( )        { return DB()+'.'+tbl(); }
-        void setStart( bool val );
+        
+	void setName( const string &inm )	{ m_name = inm; modif(); }
+	void setDescr( const string &idscr )	{ m_descr = idscr; modif(); }
+	void setStart( bool val );
+	void setFullDB( const string &idb );
 
-	void load( );
-        void save( );
-	
 	void list( vector<string> &ls )		{ chldList(m_fnc,ls); }
 	bool present( const string &id )	{ return chldPresent(m_fnc,id); }
 	AutoHD<Func> at( const string &id )	{ return chldAt(m_fnc,id); }	
@@ -71,6 +72,9 @@ class Lib : public TCntrNode, public TConfig
     protected:
 	string nodeName( )	{ return m_id; }
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+
+	void load_( );
+        void save_( );
 	
 	void preDisable( int flag );
 	void postDisable( int flag );

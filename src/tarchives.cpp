@@ -79,7 +79,7 @@ TArchiveS::TArchiveS( ) :
     el_aval.fldAdd( new TFld("BHRES",_("Buffer high time resolution"),TFld::Boolean,0,"1","0") );
     el_aval.fldAdd( new TFld("ArchS",_("Process into archivators"),TFld::String,0,"500") );
     
-    messBufLen( BUF_SIZE_DEF );
+    setMessBufLen( BUF_SIZE_DEF );
     
     //- Create message archive timer -
     struct sigevent sigev;
@@ -107,7 +107,7 @@ TArchiveS::~TArchiveS(  )
     nodeDelAll();
 }
 
-void TArchiveS::subLoad( )
+void TArchiveS::load_( )
 {
     //- Load parameters from command line -
     int next_opt;
@@ -130,10 +130,10 @@ void TArchiveS::subLoad( )
     } while(next_opt != -1);
 
     //- Load parameters -
-    messBufLen( atoi(TBDS::genDBGet(nodePath()+"MessBufSize",TSYS::int2str(messBufLen())).c_str()) );
-    m_mess_per = atoi(TBDS::genDBGet(nodePath()+"MessPeriod",TSYS::int2str(m_mess_per)).c_str());
-    m_val_per = atoi(TBDS::genDBGet(nodePath()+"ValPeriod",TSYS::int2str(m_val_per)).c_str());
-    m_val_prior = atoi(TBDS::genDBGet(nodePath()+"ValPriority",TSYS::int2str(m_val_prior)).c_str());
+    setMessBufLen( atoi(TBDS::genDBGet(nodePath()+"MessBufSize",TSYS::int2str(messBufLen())).c_str()) );
+    setMessPeriod( atoi(TBDS::genDBGet(nodePath()+"MessPeriod",TSYS::int2str(m_mess_per)).c_str()) );
+    setValPeriod( atoi(TBDS::genDBGet(nodePath()+"ValPeriod",TSYS::int2str(m_val_per)).c_str()) );
+    setValPrior( atoi(TBDS::genDBGet(nodePath()+"ValPriority",TSYS::int2str(m_val_prior)).c_str()) );
     max_req_mess = atoi(TBDS::genDBGet(nodePath()+"MaxReqMess",TSYS::int2str(max_req_mess)).c_str());
 
     //- LidDB -
@@ -176,15 +176,6 @@ void TArchiveS::subLoad( )
 	    c_el.cfg("ID").setS("");
 	    c_el.cfg("MODUL").setS("");
 	}
-	
-	//-- Load present archivators --
-	modList(tdb_ls);
-	for( int i_m = 0; i_m < tdb_ls.size(); i_m++ )
-	{
-	    at(tdb_ls[i_m]).at().messList(db_ls);
-	    for( int i_a = 0; i_a < db_ls.size(); i_a++ ) 
-		at(tdb_ls[i_m]).at().messAt(db_ls[i_a]).at().load();
-	}    	    
     }catch( TError err )
     { 
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
@@ -229,15 +220,6 @@ void TArchiveS::subLoad( )
 	    c_el.cfg("ID").setS("");
 	    c_el.cfg("MODUL").setS("");
 	}	
-	
-	//-- Load present archivators --
-	modList(tdb_ls);
-	for( int i_m = 0; i_m < tdb_ls.size(); i_m++ )
-	{
-	    at(tdb_ls[i_m]).at().valList(db_ls);
-	    for( int i_a = 0; i_a < db_ls.size(); i_a++ ) 
-		at(tdb_ls[i_m]).at().valAt(db_ls[i_a]).at().load();
-	}	
     }catch( TError err )
     { 
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str()); 
@@ -276,51 +258,23 @@ void TArchiveS::subLoad( )
 	    if( !valPresent(id) ) valAdd(id,"*.*");	    
 	    c_el.cfg("ID").setS("");
 	}	
-		
-	//-- Load present archives --
-	valList(tdb_ls);
-	for( int i_a = 0; i_a < tdb_ls.size(); i_a++ )
-	    valAt(tdb_ls[i_a]).at().load();
     }catch( TError err )
     { 
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Value archives load error."));
     }
-    
-    //- Load modules -
-    TSubSYS::subLoad( );
 }
 
-void TArchiveS::subSave( )
+void TArchiveS::save_( )
 {
     vector<string> t_lst, o_lst;
 
     //- Save parameters -
     TBDS::genDBSet(nodePath()+"MessBufSize",TSYS::int2str(messBufLen()));
-    TBDS::genDBSet(nodePath()+"MessPeriod",TSYS::int2str(m_mess_per));
-    TBDS::genDBSet(nodePath()+"ValPeriod",TSYS::int2str(m_val_per));
-    TBDS::genDBSet(nodePath()+"ValPriority",TSYS::int2str(m_val_prior));
+    TBDS::genDBSet(nodePath()+"MessPeriod",TSYS::int2str(messPeriod()));
+    TBDS::genDBSet(nodePath()+"ValPeriod",TSYS::int2str(valPeriod()));
+    TBDS::genDBSet(nodePath()+"ValPriority",TSYS::int2str(valPrior()));
     TBDS::genDBSet(nodePath()+"MaxReqMess",TSYS::int2str(max_req_mess));
-
-    //-- Value archives save to DB --
-    valList(o_lst);
-    for( int i_o = 0; i_o < o_lst.size(); i_o++ )
-	valAt(o_lst[i_o]).at().save();
-    
-    //-- Messages and values archivators save to DB --
-    modList(t_lst);
-    for( int i_t = 0; i_t < t_lst.size(); i_t++ )
-    {
-	AutoHD<TTipArchivator> mod = modAt(t_lst[i_t]);
-	//Messages save
-	mod.at().messList(o_lst);
-	for( int i_o = 0; i_o < o_lst.size(); i_o++ )
-	    mod.at().messAt(o_lst[i_o]).at().save();
-	//Values save
-	mod.at().valList(o_lst);
-	for( int i_o = 0; i_o < o_lst.size(); i_o++ )
-	    mod.at().valAt(o_lst[i_o]).at().save();
-    }
 }
 
 void TArchiveS::valAdd( const string &iid, const string &idb )
@@ -400,7 +354,7 @@ void TArchiveS::subStart( )
 
     //- Start messages interval timer -
     struct itimerspec itval;
-    itval.it_interval.tv_sec = itval.it_value.tv_sec = m_mess_per;
+    itval.it_interval.tv_sec = itval.it_value.tv_sec = messPeriod();
     itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
     timer_settime(tmIdMess, 0, &itval, NULL);
     //- Start values acquisition task -
@@ -409,10 +363,10 @@ void TArchiveS::subStart( )
 	pthread_attr_t pthr_attr; 
 	pthread_attr_init(&pthr_attr); 
 	struct sched_param prior;
-	if( m_val_prior && SYS->user() == "root" )
+	if( valPrior() && SYS->user() == "root" )
 	    pthread_attr_setschedpolicy(&pthr_attr,SCHED_RR);
 	else pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
-	prior.__sched_priority=m_val_prior;
+	prior.__sched_priority = valPrior();
 	pthread_attr_setschedparam(&pthr_attr,&prior);
 	
         pthread_create(&m_val_pthr,&pthr_attr,TArchiveS::ArhValTask,this);
@@ -638,7 +592,7 @@ time_t TArchiveS::messEnd( const string &arch )
     return rez;
 }
  
-void TArchiveS::messBufLen(int len)
+void TArchiveS::setMessBufLen(int len)
 {
     ResAlloc res(m_res,true);
     len=(len<BUF_SIZE_DEF)?BUF_SIZE_DEF:(len>BUF_SIZE_MAX)?BUF_SIZE_MAX:len;
@@ -650,6 +604,7 @@ void TArchiveS::messBufLen(int len)
     }
     while( m_buf.size() < len )
 	m_buf.insert( m_buf.begin() + head_buf, TMess::SRec() );
+    modif();
 } 
 
 void TArchiveS::setActValArch( const string &id, bool val )
@@ -673,6 +628,7 @@ void TArchiveS::setMessPeriod( int ivl )
     itval.it_interval.tv_sec = itval.it_value.tv_sec = m_mess_per;
     itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
     timer_settime(tmIdMess, 0, &itval, NULL);
+    modif();
 }
 
 void TArchiveS::ArhMessTask(union sigval obj)
@@ -745,8 +701,8 @@ void *TArchiveS::ArhValTask( void *param )
     
 	//-- Calc next work time and sleep --
 	clock_gettime(CLOCK_REALTIME,&get_tm);
-	work_tm = (((long long)get_tm.tv_sec*1000000000+get_tm.tv_nsec)/(arh.m_val_per*1000000) + 1)*arh.m_val_per*1000000;
-	if(last_tm == work_tm)	work_tm+=arh.m_val_per*1000000;	//Fix early call
+	work_tm = (((long long)get_tm.tv_sec*1000000000+get_tm.tv_nsec)/(arh.valPeriod()*1000000) + 1)*arh.valPeriod()*1000000;
+	if(last_tm == work_tm)	work_tm+=arh.valPeriod()*1000000;	//Fix early call
 	last_tm = work_tm;
 	get_tm.tv_sec = work_tm/1000000000; get_tm.tv_nsec = work_tm%1000000000;
 	clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&get_tm,NULL);
@@ -794,14 +750,9 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
     {
         TSubSYS::cntrCmdProc(opt);
 	ctrMkNode("grp",opt,-1,"/br/va_",_("Value archive"),0664,"root",my_gr.c_str(),1,"idm","1");	
-	if(ctrMkNode("area",opt,0,"/sub",_("Subsystem"),0444,"root",my_gr.c_str()))
-	{
-	    ctrMkNode("fld",opt,-1,"/sub/max_am_req",_("Maximum requested messages"),0664,"root",my_gr.c_str(),1,"tp","dec");
-	    ctrMkNode("comm",opt,-1,"/sub/load_db",_("Load"),0660,"root",my_gr.c_str());
-	    ctrMkNode("comm",opt,-1,"/sub/upd_db",_("Save"),0660,"root",my_gr.c_str());
-	}
 	if(ctrMkNode("area",opt,1,"/m_arch",_("Messages archive"),0444,"root",my_gr.c_str()))
 	{
+	    ctrMkNode("fld",opt,-1,"/m_arch/max_am_req",_("Maximum requested messages"),0664,"root",my_gr.c_str(),1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/m_arch/size",_("Messages buffer size"),0664,"root",my_gr.c_str(),2,"tp","dec","min",TSYS::int2str(BUF_SIZE_DEF).c_str());
 	    ctrMkNode("fld",opt,-1,"/m_arch/per",_("Archiving period (s)"),0664,"root",my_gr.c_str(),1,"tp","dec");
 	    if(ctrMkNode("area",opt,-1,"/m_arch/view",_("View messages"),0444,"root",my_gr.c_str()))
@@ -831,20 +782,20 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
     }
     
     //- Process command to page -
-    if( a_path == "/sub/max_am_req" )
+    if( a_path == "/m_arch/max_am_req" )
     {
 	if( ctrChkNode(opt,"get",0664,"root",my_gr.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str(max_req_mess));
-	if( ctrChkNode(opt,"set",0664,"root",my_gr.c_str(),SEQ_WR) )	max_req_mess = atoi(opt->text().c_str());
+	if( ctrChkNode(opt,"set",0664,"root",my_gr.c_str(),SEQ_WR) )	{ max_req_mess = atoi(opt->text().c_str()); modif(); }
     }
     else if( a_path == "/m_arch/per" )
     {	
-	if( ctrChkNode(opt,"get",0664,"root",my_gr.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str(m_mess_per));
+	if( ctrChkNode(opt,"get",0664,"root",my_gr.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str(messPeriod()));
 	if( ctrChkNode(opt,"set",0664,"root",my_gr.c_str(),SEQ_WR) )	setMessPeriod(atoi(opt->text().c_str()));
     }	
     else if( a_path == "/m_arch/size" )
     {
 	if( ctrChkNode(opt,"get",0664,"root",my_gr.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str(messBufLen()));
-	if( ctrChkNode(opt,"set",0664,"root",my_gr.c_str(),SEQ_WR) )	messBufLen(atoi(opt->text().c_str()));
+	if( ctrChkNode(opt,"set",0664,"root",my_gr.c_str(),SEQ_WR) )	setMessBufLen(atoi(opt->text().c_str()));
     }	
     else if( a_path == "/m_arch/view/tm" )	
     {
@@ -901,13 +852,13 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/v_arch/per" )	
     {
-	if( ctrChkNode(opt,"get",0664,"root",my_gr.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str(m_val_per));
-	if( ctrChkNode(opt,"set",0664,"root",my_gr.c_str(),SEQ_WR) )	m_val_per = atoi(opt->text().c_str());
+	if( ctrChkNode(opt,"get",0664,"root",my_gr.c_str(),SEQ_RD) )	opt->setText( TSYS::int2str(valPeriod()) );
+	if( ctrChkNode(opt,"set",0664,"root",my_gr.c_str(),SEQ_WR) )	setValPeriod( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/v_arch/prior" )	
     {
-	if( ctrChkNode(opt,"get",0664,"root",my_gr.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str(m_val_prior));
-	if( ctrChkNode(opt,"set",0664,"root",my_gr.c_str(),SEQ_WR) )	m_val_prior = atoi(opt->text().c_str());
+	if( ctrChkNode(opt,"get",0664,"root",my_gr.c_str(),SEQ_RD) )	opt->setText( TSYS::int2str(valPrior()) );
+	if( ctrChkNode(opt,"set",0664,"root",my_gr.c_str(),SEQ_WR) )	setValPrior( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/br/va_" || a_path == "/v_arch/archs" )
     {
@@ -926,8 +877,6 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
         if( ctrChkNode(opt,"del",0664,"root",my_gr.c_str(),SEQ_WR) )	chldDel(m_aval,opt->attr("id"),-1,1);
     }
     else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )	opt->setText(optDescr());
-    else if( a_path == "/sub/load_db" && ctrChkNode(opt,"set",0660,"root",my_gr.c_str(),SEQ_WR) )	subLoad();
-    else if( a_path == "/sub/upd_db" && ctrChkNode(opt,"set",0660,"root",my_gr.c_str(),SEQ_WR) )   	subSave();
     else TSubSYS::cntrCmdProc(opt);
 }
 
@@ -1080,12 +1029,12 @@ string TMArchivator::tbl( )
     return owner().owner().subId()+"_mess_proc";
 }
 
-void TMArchivator::load( )
+void TMArchivator::load_( )
 {
     SYS->db().at().dataGet(fullDB(),SYS->archive().at().nodePath()+tbl(),*this);
 }
 
-void TMArchivator::save( )
+void TMArchivator::save_( )
 {
     SYS->db().at().dataSet(fullDB(),SYS->archive().at().nodePath()+tbl(),*this);
 }
@@ -1136,8 +1085,6 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/cfg/lvl",cfg("LEVEL").fld().descr(),0664,"root",grp.c_str(),1,"tp","dec");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/cats",cfg("CATEG").fld().descr(),0664,"root",grp.c_str(),1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/start",_("To start"),0664,"root",grp.c_str(),1,"tp","bool");	
-		ctrMkNode("comm",opt,-1,"/prm/cfg/load",_("Load"),0660,"root",grp.c_str());
-		ctrMkNode("comm",opt,-1,"/prm/cfg/save",_("Save"),0660,"root",grp.c_str());
 	    }
 	}
 	if( run_st && ctrMkNode("area",opt,-1,"/mess",_("Messages"),0440,"root",grp.c_str()) )
@@ -1158,46 +1105,46 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/prm/st/st" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(run_st?"1":"0");
-	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	atoi(opt->text().c_str())?start():stop();
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText( startStat() ? "1" : "0" );
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	atoi(opt->text().c_str()) ? start() : stop();
     }	
     else if( a_path == "/prm/st/db" )
     {
-	if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->setText(m_db);
-	if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	m_db = opt->text();
+	if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->setText( DB() );
+	if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	setDB( opt->text() );
     }
     else if( a_path == "/prm/st/beg" && ctrChkNode(opt) )	opt->setText(TSYS::int2str(begin()));
     else if( a_path == "/prm/st/end" && ctrChkNode(opt) )	opt->setText(TSYS::int2str(end()));
     else if( a_path == "/prm/cfg/id" && ctrChkNode(opt) )	opt->setText(id());
     else if( a_path == "/prm/cfg/nm" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(name());
-	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	m_name = opt->text();
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText( name() );
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	setName( opt->text() );
     }
     else if( a_path == "/prm/cfg/dscr" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(dscr());
-	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	m_dscr = opt->text();
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText( dscr() );
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	setDscr( opt->text() );
     }
     else if( a_path == "/prm/cfg/addr" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(m_addr);
-	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	m_addr = opt->text();
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText( addr() );
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	setAddr( opt->text() );
     }
     else if( a_path == "/prm/cfg/lvl" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str(m_level));
-	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	m_level = atoi(opt->text().c_str());
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str(level()));
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	setLevel( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/prm/cfg/start" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(m_start?"1":"0");
-	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	m_start = atoi(opt->text().c_str());
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText( toStart() ? "1" : "0" );
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	setToStart( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/prm/cfg/cats" )
     {
 	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(m_cat_o);
-	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	m_cat_o = opt->text();
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	{ m_cat_o = opt->text(); modif(); }
     }
     else if( a_path == "/mess/tm" )
     {
@@ -1247,6 +1194,5 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 	    if(n_mess)	n_mess->childAdd("el")->setText(rec[i_rec].mess);
 	}
     }
-    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	load();
-    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	save();
+    else TCntrNode::cntrCmdProc(opt);
 }

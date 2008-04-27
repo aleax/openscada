@@ -59,11 +59,14 @@ class TMdPrm : public TParamContr
 	
 	void enable( );
 	void disable( );
-	void load( );
-	void save( );
 	
 	void calc( bool first, bool last );	//Calc template's algoritmes
-	
+
+    protected:
+	//Methods
+	void load_( );
+	void save_( );	
+
 	TMdContr &owner( )	{ return (TMdContr&)TParamContr::owner(); }
 	
     private:
@@ -136,16 +139,15 @@ class TMdContr: public TController
 	int period( )	{ return m_per; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
-
-	void load( );
-	void save( );	
-	void start_( );
-	void stop_( );    
 	
     protected:
 	//Methods
 	void prmEn( const string &id, bool val );
 	void postDisable( int flag );     	//Delete all DB if flag 1
+	
+	void start_( );
+	void stop_( );    
+
     	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
     private:
@@ -176,12 +178,14 @@ class TTpContr: public TTipDAQ
 	//Methods
     	TTpContr( string name );
 	~TTpContr( );
-	
-	void postEnable( int flag );
-	void modLoad( );
 
 	TElem   &prmIOE( )	{ return el_prm_io; }
-	
+
+    protected:
+	//Methods
+	void postEnable( int flag );
+	void load_( );	
+
     private:
 	//Methods
 	TController *ContrAttach( const string &name, const string &daq_db );

@@ -93,7 +93,7 @@ string TTpContr::optDescr( )
     return buf;
 }
 
-void TTpContr::modLoad( )
+void TTpContr::load_( )
 {
     //- Load parameters from command line -
     int next_opt;
@@ -173,16 +173,6 @@ TMdContr::~TMdContr( )
 TParamContr *TMdContr::ParamAttach( const string &name, int type )
 {
     return new TMdPrm(name,&owner().tpPrmAt(type));
-}
-
-void TMdContr::load( )
-{
-    TController::load( );
-}
-
-void TMdContr::save( )
-{
-    TController::save();
 }
 
 void TMdContr::enable_( )
@@ -309,6 +299,7 @@ void *TMdContr::Task( void *icntr )
 		unsigned int div = (unsigned int)(cntr.m_sync/cntr.period());
 		if( div && (it_cnt+i_p)%div == 0 )
 		{ 
+		    cntr.p_hd[i_p].at().modifG();
 		    cntr.p_hd[i_p].at().load();
 		    //-- Check for delete parameter --
 		    if( cntr.p_hd[i_p].at().isDel() )
@@ -417,7 +408,7 @@ void TMdPrm::setCntrAdr( const string &vl )
     m_cntr_adr+=vl+";";
 }
 
-void TMdPrm::load( )
+void TMdPrm::load_( )
 {
     string scntr;
     XMLNode req("get");

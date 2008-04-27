@@ -144,6 +144,7 @@ void TModule::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path.substr(0,11) == "/help/m_inf" && ctrChkNode(opt) )	
 	opt->setText(modInfo(TSYS::pathLev(a_path,2)));
+    else TCntrNode::cntrCmdProc(opt);
 }
 
 const char *TModule::I18N( const char *mess )   

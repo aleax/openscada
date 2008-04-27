@@ -53,14 +53,17 @@ class TUser : public TCntrNode, public TConfig
         string tbl( );
         string fullDB( )        { return DB()+'.'+tbl(); }
 	
-	void setName( const string &nm )	{ m_name = nm; }
-	void setLName( const string &nm )	{ m_lname = nm; }
-	void setPicture( const string &pct )	{ m_pict = pct; }
+	void setLName( const string &nm )	{ m_lname = nm; modif(); }
+	void setPicture( const string &pct )	{ m_pict = pct; modif(); }
 	void setPass( const string &n_pass );
 	void setSysItem( bool vl )		{ m_sysIt = vl; }
+	
+	void setDB( const string &vl )		{ m_db = vl; modifG(); }
 
-	void load( );
-	void save( );
+    protected:
+	//Methods
+	void load_( );
+	void save_( );
 	
 	TSecurity &owner( )	{ return *(TSecurity*)nodePrev(); }
 	
@@ -99,16 +102,19 @@ class TGroup : public TCntrNode, public TConfig
         string tbl( );
         string fullDB( )        { return DB()+'.'+tbl(); }
 	
-	void setName( const string &nm )	{ m_name = nm; }
-	void setLName( const string &nm )	{ m_lname = nm; }
+	void setLName( const string &nm )	{ m_lname = nm; modif(); }
 	void setSysItem( bool vl )		{ m_sysIt = vl; }
+	
+	void setDB( const string &vl )          { m_db = vl; modifG(); }
 		
 	bool user( const string &name );
 	void userAdd( const string &name );
 	void userDel( const string &name );
 
-	void load( );
-	void save( );
+    protected:
+	//Methods
+	void load_( );
+	void save_( );
 	
 	TSecurity &owner( )	{ return *(TSecurity*)nodePrev(); }
 	
@@ -136,9 +142,6 @@ class TSecurity : public TSubSYS
 	TSecurity( );    
 	~TSecurity( );
 
-	void subLoad( );
-	void subSave( );
-
 	char access( const string &user, char mode, const string &owner, const string &group, int access );
 	
 	//- Users -
@@ -155,7 +158,11 @@ class TSecurity : public TSubSYS
 	void grpAdd( const string &name, const string &db = "*.*" );
 	void grpDel( const string &name, bool complete = false );
 	AutoHD<TGroup> grpAt( const string &name )	{ return chldAt(m_grp,name); }
-	
+
+    protected:
+	//Methods
+	void load_( );
+
     private:
 	//Methods
 	string optDescr( );	

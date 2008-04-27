@@ -82,12 +82,14 @@ class TWEB: public TUI
 	//Methods
 	TWEB( string name );
 	~TWEB( );
-	    
-	void modLoad( );
-	void modSave( );
-	    
+
 	void modStart( );
         void modStop( );
+
+    protected:
+	//Methods
+	void load_( );
+	void save_( );	
     
     private:
         //Methods

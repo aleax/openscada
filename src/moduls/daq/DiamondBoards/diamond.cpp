@@ -103,11 +103,11 @@ void TTpContr::postEnable( int flag )
 	"DMM16;ATHENA;DMM32XAT") );
     fldAdd( new TFld("PRM_BD_A",_("Analog parameters' table"),TFld::String,0,"30","diamond_prm_a") );
     fldAdd( new TFld("PRM_BD_D",_("Digital parameters' table"),TFld::String,0,"30","diamond_prm_d") );
-    fldAdd( new TFld("DATA_EMUL",_("Data emulation"),TFld::Boolean,TCfg::Prevent,"1","0") );
+    fldAdd( new TFld("DATA_EMUL",_("Data emulation"),TFld::Boolean,TFld::NoFlag,"1","0") );
     fldAdd( new TFld("ADDR",_("Base board address"),TFld::Integer,TFld::HexDec,"3","640") );
     fldAdd( new TFld("INT",_("Interrupt vector"),TFld::Integer,0,"2","5") );
     fldAdd( new TFld("DIO_CFG",_("Digit IO config byte"),TFld::Integer,TFld::HexDec,"2","0") );
-    fldAdd( new TFld("ADMODE",_("A/D interrupt mode"),TFld::Boolean,TCfg::Prevent,"1","0") );
+    fldAdd( new TFld("ADMODE",_("A/D interrupt mode"),TFld::Boolean,TFld::NoFlag,"1","0") );
     fldAdd( new TFld("ADRANGE",_("A/D voltage range"),TFld::Integer,TFld::Selected,"1",TSYS::int2str(RANGE_10).c_str(),
         (TSYS::int2str(RANGE_5)+";"+TSYS::int2str(RANGE_10)).c_str(),_("5v;10v")) );
     fldAdd( new TFld("ADPOLAR",_("A/D polarity"),TFld::Integer,TFld::Selected,"1",TSYS::int2str(BIPOLAR).c_str(),
@@ -119,15 +119,15 @@ void TTpContr::postEnable( int flag )
     //- Parameter type bd structure -
     //-- Analog --
     int t_prm = tpParmAdd("a_prm","PRM_BD_A",_("Analog parameter"));
-    tpPrmAt(t_prm).fldAdd( new TFld("TYPE",_("Analog parameter type"),TFld::Integer,TFld::Selected|TCfg::NoVal|TCfg::Prevent,"1","0","0;1",_("Input;Output")) );
+    tpPrmAt(t_prm).fldAdd( new TFld("TYPE",_("Analog parameter type"),TFld::Integer,TFld::Selected|TCfg::NoVal,"1","0","0;1",_("Input;Output")) );
     tpPrmAt(t_prm).fldAdd( new TFld("CNL",_("Channel"),TFld::Integer,TCfg::NoVal,"2","0") );
-    tpPrmAt(t_prm).fldAdd( new TFld("GAIN",_("A/D converter gain"),TFld::Integer,TFld::Selected|TCfg::NoVal|TCfg::Prevent,"1",TSYS::int2str(GAIN_1).c_str(),
+    tpPrmAt(t_prm).fldAdd( new TFld("GAIN",_("A/D converter gain"),TFld::Integer,TFld::Selected|TCfg::NoVal,"1",TSYS::int2str(GAIN_1).c_str(),
 	(TSYS::int2str(GAIN_1)+";"+TSYS::int2str(GAIN_2)+";"+TSYS::int2str(GAIN_4)+";"+TSYS::int2str(GAIN_8)).c_str(),"x1;x2;x4;x8") );
     //-- Digit --
     t_prm = tpParmAdd("d_prm","PRM_BD_D",_("Digital parameter"));
-    tpPrmAt(t_prm).fldAdd( new TFld("TYPE",_("Digital parameter type"),TFld::Integer,TFld::Selected|TCfg::NoVal|TCfg::Prevent,"1","0","0;1",_("Input;Output")) );
-    tpPrmAt(t_prm).fldAdd( new TFld("PORT",_("Port"),TFld::Integer,TFld::Selected|TCfg::NoVal|TCfg::Prevent,"2","0","0;1;2","A;B;C") );
-    tpPrmAt(t_prm).fldAdd( new TFld("CNL",_("Channel"),TFld::Integer,TCfg::NoVal|TCfg::Prevent,"1") );
+    tpPrmAt(t_prm).fldAdd( new TFld("TYPE",_("Digital parameter type"),TFld::Integer,TFld::Selected|TCfg::NoVal,"1","0","0;1",_("Input;Output")) );
+    tpPrmAt(t_prm).fldAdd( new TFld("PORT",_("Port"),TFld::Integer,TFld::Selected|TCfg::NoVal,"2","0","0;1;2","A;B;C") );
+    tpPrmAt(t_prm).fldAdd( new TFld("CNL",_("Channel"),TFld::Integer,TCfg::NoVal,"1") );
 
     //- Init value elements -
     //-- Analog input --
@@ -177,16 +177,11 @@ TParamContr *TMdContr::ParamAttach( const string &name, int type )
     return new TMdPrm(name,&owner().tpPrmAt(type));
 }
 
-void TMdContr::load( )
+void TMdContr::load_( )
 {
     cfgViewAll(true);
-    TController::load( );
+    TController::load_( );
     cfg("ADMODE").setB(cfg("ADMODE").getB());	//For hiden attributes visible status update
-}
-
-void TMdContr::save( )
-{
-    TController::save();
 }
 
 void TMdContr::start_( )
@@ -258,6 +253,8 @@ void TMdContr::stop_( )
 
 bool TMdContr::cfgChange( TCfg &icfg )
 {
+    TController::cfgChange(icfg);
+
     if(icfg.fld().name() == "ADMODE")
     {
 	if(icfg.getB()) 
@@ -529,10 +526,10 @@ void TMdPrm::postEnable( int flag )
     else if( TParamContr::type().name == "d_prm" )	setType(DI);
 }
 
-void TMdPrm::load( )
+void TMdPrm::load_( )
 {
     cfgViewAll(true);
-    TParamContr::load();
+    TParamContr::load_();
     setType(type());		//For hiden attributes visible status update    
 }
 
@@ -573,6 +570,8 @@ void TMdPrm::setType( TMdPrm::Type vtp )
 
 bool TMdPrm::cfgChange( TCfg &i_cfg )
 {
+    TParamContr::cfgChange(i_cfg);
+
     //- Change TYPE parameter -
     if( i_cfg.name() == "TYPE" )
     {

@@ -19,13 +19,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-//#include <sys/time.h>
-//#include <getopt.h>
-//#include <unistd.h>
-//#include <dirent.h>
-//#include <fcntl.h>
 #include <signal.h>
-//#include <errno.h>
 
 #include <tsys.h>
 #include <ttiparam.h>
@@ -123,14 +117,14 @@ TParamContr *TMdContr::ParamAttach( const string &name, int type )
     return new TMdPrm(name,&owner().tpPrmAt(type));
 }
 
-void TMdContr::load( )
+void TMdContr::load_( )
 {
-    TController::load( );
+    TController::load_( );
 }
 
-void TMdContr::save( )
+void TMdContr::save_( )
 {
-    TController::save();
+    TController::save_();
 }
 
 void TMdContr::start_( )
@@ -204,9 +198,9 @@ void TMdPrm::postEnable( int flag )
     p_el.fldAdd( new TFld( "val", _("Value"), TFld::Real, TFld::NoWrite, "", TSYS::real2str(EVAL_REAL).c_str(), "-1:1" ) );
 }
 
-void TMdPrm::load( )
+void TMdPrm::load_( )
 {
-    TParamContr::load();
+    TParamContr::load_();
 }
 
 void TMdPrm::vlArchMake( TVal &val )

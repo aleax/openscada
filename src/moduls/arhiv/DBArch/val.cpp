@@ -52,9 +52,10 @@ void ModVArch::setValPeriod( double iper )
     TVArchivator::setValPeriod(iper);
 }
 
-void ModVArch::load( )
+void ModVArch::load_( )
 {
-    TVArchivator::load();
+    TVArchivator::load_();
+    
     if( addr().empty() ) setAddr("*.*");
 }
 
@@ -91,8 +92,8 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/bs/sz" )
     {
-        if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) ) opt->setText(TSYS::real2str(m_max_size));
-        if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) ) m_max_size = atof(opt->text().c_str());
+        if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) ) opt->setText(TSYS::real2str( maxSize() ));
+        if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) ) setMaxSize( atof(opt->text().c_str()) );
     }
     else TVArchivator::cntrCmdProc(opt);
 }

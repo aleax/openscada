@@ -66,12 +66,7 @@ TDAQS::~TDAQS( )
     nodeDelAll();
 }
 
-/*void TDAQS::preDisable(int flag)
-{
-    subStop();
-}*/
-
-void TDAQS::subLoad( )
+void TDAQS::load_( )
 {
     //- Load parameters from command line -
     int next_opt;
@@ -127,11 +122,6 @@ void TDAQS::subLoad( )
             if(!tmplLibPresent(l_id)) tmplLibReg(new TPrmTmplLib(l_id.c_str(),"","*.*"));
             c_el.cfg("ID").setS("");
         }
-			    
-        //--- Load present libraries ---
-        tmplLibList(tdb_ls);
-        for( int l_id = 0; l_id < tdb_ls.size(); l_id++ )
-            tmplLibAt(tdb_ls[l_id]).at().load();
     }catch( TError err )
     {
         mess_err(err.cat.c_str(),"%s",err.mess.c_str());
@@ -192,47 +182,8 @@ void TDAQS::subLoad( )
 		}
             	g_cfg.cfg("ID").setS("");
 	    }	    
-	    
-	    //-- Load present controllers --
-	    wmod.at().list(tdb_ls);
-	    for( int i_c = 0; i_c < tdb_ls.size(); i_c++ )
-		wmod.at().at(tdb_ls[i_c]).at().load();
 	}
     }catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-	
-    //- Load modules -
-    TSubSYS::subLoad( );
-}
-
-void TDAQS::subSave(  )
-{	
-    //- Save parameters -
-
-    //-- Save all controllers --
-    vector<string> m_l, c_l;
-    modList(m_l);
-    for( unsigned i_m = 0; i_m < m_l.size(); i_m++)
-    {
-	at(m_l[i_m]).at().list(c_l);
-	for( unsigned i_c = 0; i_c < c_l.size(); i_c++)
-	{
-	    try{ at(m_l[i_m]).at().at(c_l[i_c]).at().save( ); }
-	    catch(TError err) 
-	    { 
-		mess_err(err.cat.c_str(),"%s",err.mess.c_str()); 
-		mess_err(nodePath().c_str(),_("Save controller <%s> error."),(m_l[i_m]+"."+c_l[i_c]).c_str());
-	    }
-	}
-    }
-    
-    //- Save template's libraries -
-    vector<string> ls;
-    tmplLibList(ls);
-    for( int l_id = 0; l_id < ls.size(); l_id++ )
-        tmplLibAt(ls[l_id]).at().save();
-    
-    //- Save modules -
-    TSubSYS::subSave( );					    
 }
 
 void TDAQS::subStart(  )         
@@ -378,11 +329,6 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
     {
         TSubSYS::cntrCmdProc(opt);
 	ctrMkNode("grp",opt,-1,"/br/tmplb_",_("Template library"),0664,"root","root",1,"idm","1");
-	if(ctrMkNode("area",opt,0,"/sub",_("Subsystem"),0440))
-	{
-	    ctrMkNode("comm",opt,-1,"/sub/load_db",_("Load"),0660);
-	    ctrMkNode("comm",opt,-1,"/sub/upd_db",_("Save"),0660);
-	}
 	if(ctrMkNode("area",opt,1,"/tpllibs",_("Template libraries")))
 	    ctrMkNode("list",opt,-1,"/tpllibs/lb",_("Template libraries"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","tmplb_");
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","10");
@@ -406,7 +352,5 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 	    tmplLibUnreg(opt->attr("id"),1);
     }
     else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )	opt->setText(optDescr());
-    else if( a_path == "/sub/load_db" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	subLoad();
-    else if( a_path == "/sub/upd_db" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	subSave();
     else TSubSYS::cntrCmdProc(opt);
 }

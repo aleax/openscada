@@ -46,8 +46,6 @@ class TDAQS : public TSubSYS
 	~TDAQS( );
 	
 	int subVer( )	{ return VER_CNTR; }
-	void subLoad( );
-	void subSave( );
 	void subStart(  );
 	void subStop( );
 	
@@ -66,7 +64,10 @@ class TDAQS : public TSubSYS
         TElem &tplIOE( ){ return el_tmpl_io; }
 	
 	TElem &errE( )	{ return el_err; }	//Error atributes structure
-	
+
+    protected:
+	void load_( );
+
     private:
 	//Private methods
 	string optDescr( );

@@ -39,6 +39,7 @@ Lib::Lib( const char *id, const char *name, const string &lib_db ) :
     m_name = name;
     m_db = string("flb_")+id;
     m_fnc = grpAdd("fnc_");
+    if( DB().empty() )	modifClr();
 }
 
 Lib::~Lib( )
@@ -96,9 +97,16 @@ string Lib::name( )
     return (m_name.size())?m_name:m_id;
 }
 
-void Lib::load( )
+void Lib::setFullDB( const string &idb )
 {
-    if( !DB().size() )	return;
+    work_lib_db = TSYS::strSepParse(idb,0,'.')+"."+TSYS::strSepParse(idb,1,'.');
+    m_db = TSYS::strSepParse(idb,2,'.');
+    modifG( );
+}
+
+void Lib::load_( )
+{
+    if( DB().empty() )	return;
     
     SYS->db().at().dataGet(work_lib_db+"."+mod->libTable(),mod->nodePath()+"lib/",*this);
 
@@ -117,17 +125,11 @@ void Lib::load( )
     }
 }
 
-void Lib::save( )
+void Lib::save_( )
 {   
-    if( !DB().size() )    return;
+    if( DB().empty() )    return;
  
     SYS->db().at().dataSet(work_lib_db+"."+mod->libTable(),mod->nodePath()+"lib/",*this);
-
-    //- Save functions -
-    vector<string> f_lst;
-    list(f_lst);
-    for( int i_ls = 0; i_ls < f_lst.size(); i_ls++ )
-	at(f_lst[i_ls]).at().save();
 }
 
 void Lib::setStart( bool val )
@@ -138,30 +140,6 @@ void Lib::setStart( bool val )
         at(lst[i_f]).at().setStart(val);
 	    
     run_st = val;
-}
-
-void Lib::copyFunc( const string &f_id, const string &l_id, const string &to_id, const string &to_name )
-{
-    string lib = l_id;
-    string toid = to_id;
-    string toname = to_name;
-    
-    if( !present(f_id) )
-	throw TError(nodePath().c_str(),_("Function <%s> no present."),f_id.c_str());
-	
-    if( !lib.size() )	lib    = id();
-    if( !toid.size() )	toid   = at(f_id).at().id();
-    if( !toname.size() )toname = at(f_id).at().name();
-    
-    if( !mod->lbPresent(lib) )
-	throw TError(nodePath().c_str(),_("Library <%s> no present."),lib.c_str());
-    if( mod->lbAt(lib).at().present(toid) )
-	throw TError(nodePath().c_str(),_("Function <%s:%s> already present."),lib.c_str(),toid.c_str());
-
-    //- Make new function -
-    mod->lbAt(lib).at().add(toid.c_str());
-    mod->lbAt(lib).at().at(toid).at() = at(f_id).at();
-    mod->lbAt(lib).at().at(toid).at().setName(to_name.c_str());
 }
 
 void Lib::add( const char *id, const char *name )
@@ -193,23 +171,12 @@ void Lib::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/lib/cfg",_("Config")))
 	    {
 		ctrMkNode("fld",opt,-1,"/lib/cfg/id",_("Id"),0444,"root","root",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/lib/cfg/name",_("Name"),0664,"root","root",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/lib/cfg/descr",_("Description"),0664,"root","root",3,"tp","str","cols","50","rows","3");
-		ctrMkNode("comm",opt,-1,"/lib/cfg/load",_("Load"),0660);
-    		ctrMkNode("comm",opt,-1,"/lib/cfg/save",_("Save"),0660);
+		ctrMkNode("fld",opt,-1,"/lib/cfg/name",_("Name"),DB().empty()?0444:0664,"root","root",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/lib/cfg/descr",_("Description"),DB().empty()?0444:0664,"root","root",3,"tp","str","cols","50","rows","3");
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/func",_("Functions")))
-	{
 	    ctrMkNode("list",opt,-1,"/func/func",_("Functions"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","fnc_");
-	    if(ctrMkNode("comm",opt,-1,"/func/copy",_("Copy function"),0660))
-	    {
-		ctrMkNode("fld",opt,-1,"/func/copy/fnc",_("Function"),0660,"root","root",4,"tp","str","idm","1","dest","select","select","/func/func");
-		ctrMkNode("fld",opt,-1,"/func/copy/lib",_("To library"),0660,"root","root",4,"tp","str","idm","1","dest","select","select","/func/ls_lib");
-		ctrMkNode("fld",opt,-1,"/func/copy/id",_("Name as"),0660,"root","root",2,"tp","str","len","10");
-		ctrMkNode("fld",opt,-1,"/func/copy/nm","",0660,"root","root",1,"tp","str");
-	    }
-	}
         return;
     }
 
@@ -217,28 +184,24 @@ void Lib::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/lib/st/st" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(run_st?"1":"0");
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setStart(atoi(opt->text().c_str()));
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( startStat() ? "1" : "0" );
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setStart( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/lib/st/db" && DB().size() )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText(work_lib_db+"."+m_db);
-	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )
-	{
-	    work_lib_db = TSYS::strSepParse(opt->text(),0,'.')+"."+TSYS::strSepParse(opt->text(),1,'.');
-            m_db = TSYS::strSepParse(opt->text(),2,'.');
-	}
+	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText( fullDB() );
+	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	setFullDB( opt->text() );
     }
     else if( a_path == "/lib/cfg/id" && ctrChkNode(opt) )	opt->setText(id());
     else if( a_path == "/lib/cfg/name" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(name());
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_name = opt->text();
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( name() );
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setName( opt->text() );
     }
     else if( a_path == "/lib/cfg/descr" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(descr());
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_descr = opt->text();
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( descr() );
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setDescr( opt->text() );
     }	
     else if( a_path == "/br/fnc_" || a_path == "/func/func" )
     {
@@ -260,8 +223,5 @@ void Lib::cntrCmdProc( XMLNode *opt )
 	for( unsigned i_a=0; i_a < lst.size(); i_a++ )
 	    opt->childAdd("el")->setAttr("id",lst[i_a])->setText(mod->lbAt(lst[i_a]).at().name());
     }
-    else if( a_path == "/func/copy" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	
-	copyFunc(ctrId(opt,"fnc")->text(),ctrId(opt,"lib")->text(), ctrId(opt,"id")->text(), ctrId(opt,"nm")->text());
-    else if( a_path == "/lib/cfg/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	load();
-    else if( a_path == "/lib/cfg/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	save();
+    else TCntrNode::cntrCmdProc(opt);
 }

@@ -71,14 +71,16 @@ class VisDevelop : public QMainWindow
 
     signals:
 	//Public signals
-	void modifiedItem(const string&);
+	void modifiedItem( const string& );
 
     public slots:
 	//Public slots
 	void selectItem( const string &item, bool force = false );	//Update enabled actions state
 	void updateLibToolbar( const string &vca_it = "" );		//Update lib's toolbars for item change
-	void editToolUpdate( );			//Edit tools visible update
-
+	void editToolUpdate( );						//Edit tools visible update
+	void modifyToolUpdate( const string& );
+	void exitModifChk( );
+	
         void quitSt( );		//Full quit OpenSCADA
 
 	void about( );		//About at programm
@@ -182,6 +184,7 @@ class VisDevelop : public QMainWindow
 	bool		winClose;
 	UserStBar 	*w_user;	//User status widget
 	QLabel		*w_stat;	//VCA engine station
+	QLabel		*mStModify;	//VCA station modified
 	WScaleStBar	*w_scale;	//Scale trigger
 	QTimer      	*endRunTimer, *work_wdgTimer;
 	string		work_wdg, work_wdg_new,	//Work widget

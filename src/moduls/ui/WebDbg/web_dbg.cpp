@@ -113,7 +113,7 @@ string TWEB::optDescr( )
     return buf;
 }
 
-void TWEB::modLoad( )
+void TWEB::load_( )
 {
     //- Load parameters from command line -
     int next_opt;
@@ -147,7 +147,7 @@ void TWEB::modLoad( )
     trnd_tm  = atoi(TBDS::genDBGet(nodePath()+"trnd_tm",TSYS::int2str(trnd_tm)).c_str());
 }
 
-void TWEB::modSave( )
+void TWEB::save_( )
 {
     //- Save parameters to config file -
     string trnds;
@@ -270,8 +270,6 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/vsize",_("Vertical trend size (pixel)"),0664,"root","root",1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/trnd_tm",_("Trend start time (sec)"),0664,"root","root",1,"tp","time");
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/trnd_len",_("Trend length (sec)"),0664,"root","root",1,"tp","dec");	
-    	    ctrMkNode("comm",opt,-1,"/prm/cfg/load",_("Load"),0666);
-    	    ctrMkNode("comm",opt,-1,"/prm/cfg/save",_("Save"),0666);
 	}
         ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
         return;
@@ -319,7 +317,5 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	trnd_len = atoi(opt->text().c_str());
     }		
     else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )	opt->setText(optDescr());
-    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0666,"root","root",SEQ_WR) )  modLoad();
-    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0666,"root","root",SEQ_WR) )  modSave();
     else TUI::cntrCmdProc(opt);
 }		    

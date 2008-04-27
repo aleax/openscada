@@ -291,33 +291,33 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
     else if( a_path == "/prm/st/tarch" && ctrChkNode(opt) ) 	opt->setText(TSYS::real2str(tm_calc,6));
     else if( a_path == "/bs/xml" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(m_use_xml?"1":"0");
-	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	m_use_xml = atoi(opt->text().c_str());
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText( useXML() ? "1" : "0" );
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	setUseXML( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/bs/sz" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str(m_max_size));
-	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	m_max_size = atoi(opt->text().c_str());
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str( maxSize() ));
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	setMaxSize( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/bs/fl" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str(m_numb_files));
-	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	m_numb_files = atoi(opt->text().c_str());
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str( numbFiles() ));
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	setNumbFiles( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/bs/len" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str(m_time_size));
-	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	m_time_size = atoi(opt->text().c_str());
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str( timeSize() ));
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	setTimeSize( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/bs/pcktm" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str(m_pack_tm));
-	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	m_pack_tm = atoi(opt->text().c_str());
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str( packTm() ));
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	setPackTm( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/bs/tm" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str(m_chk_tm));
-	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	m_chk_tm = atoi(opt->text().c_str());
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str( checkTm() ));
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	setCheckTm( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/bs/chk_nw" && ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	checkArchivator(true);
     else TMArchivator::cntrCmdProc(opt);

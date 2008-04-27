@@ -117,7 +117,7 @@ string TUIMod::optDescr( )
     return buf;
 }
 
-void TUIMod::modLoad( )
+void TUIMod::load_( )
 {
 #if OSC_DEBUG
     mess_debug(nodePath().c_str(),_("Load module."));
@@ -148,7 +148,7 @@ void TUIMod::modLoad( )
     start_user = TBDS::genDBGet(nodePath()+"StartUser",start_user);
 }
 
-void TUIMod::modSave( )
+void TUIMod::save_( )
 {
 #if OSC_DEBUG
     mess_debug(nodePath().c_str(),_("Save module."));
@@ -241,8 +241,6 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/start_path",_("Configurator start path"),0664,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/start_user",_("Configurator start user"),0664,"root","root",3,"tp","str","dest","select","select","/prm/cfg/u_lst");
 	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to remote stations list configuration"),0660,"root","root",1,"tp","lnk");
-    	    ctrMkNode("comm",opt,-1,"/prm/cfg/load",_("Load"),0660);
-    	    ctrMkNode("comm",opt,-1,"/prm/cfg/save",_("Save"),0660);	
 	}
         ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
         return;
@@ -266,8 +264,6 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
         opt->setText("/Transport");
     }
     else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )   opt->setText(optDescr());
-    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )  modLoad();
-    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )  modSave();
     else if( a_path == "/prm/cfg/u_lst" && ctrChkNode(opt) )
     {
 	vector<string> ls;

@@ -55,10 +55,6 @@ class TUIMod: public TUI
 
 	void modStart( );
 	void modStop( );
-
-	void postEnable( int flag );
-	void modLoad( );
-	void modSave( );
 	
 	//- Module info attributes -    
         string modInfo( const string &name );
@@ -72,6 +68,12 @@ class TUIMod: public TUI
 	
 	//- Put message -
         void postMess( const string &cat, const string &mess, MessLev type = Info, QWidget *parent = 0 );
+    
+    protected:
+	//Methods
+	void postEnable( int flag );
+	void load_( );
+	void save_( );
     
     private:
 	//Methods

@@ -102,17 +102,15 @@ class TBD : public TCntrNode, public TConfig
 	bool enableStat( )       	{ return m_en; }
 	bool toEnable( )        	{ return m_toen; }
 	
-	void setName( const string &inm )  	{ m_name = inm; }
-	void setDscr( const string &idscr )	{ m_dscr = idscr; }
-	void setAddr( const string &iaddr )	{ m_addr = iaddr; }
-	void setCodePage( const string &icp )	{ m_codepage = icp; }
-	void setToEnable( bool ivl )		{ m_toen = ivl; }
+	void setName( const string &inm )  	{ m_name = inm; modif(); }
+	void setDscr( const string &idscr )	{ m_dscr = idscr; modif(); }
+	void setAddr( const string &iaddr )	{ m_addr = iaddr; modif(); }
+	void setCodePage( const string &icp )	{ m_codepage = icp; modif(); }
+	void setToEnable( bool ivl )		{ m_toen = ivl; modif(); }
 	
 	virtual void enable( );
         virtual void disable( );
-        virtual void load( );
-        virtual void save( );
-	
+
 	//- Opened DB tables -
 	virtual void allowList( vector<string> &list )
         { throw TError(nodePath().c_str(),_("Function <%s> no support!"),"allowList"); }
@@ -136,8 +134,11 @@ class TBD : public TCntrNode, public TConfig
 	void preDisable( int flag );
         void postDisable( int flag );
 	
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+        void load_( );
+        void save_( );	
 	
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+
     private:
 	//Private methods
 	void postEnable( int flag );
@@ -205,8 +206,6 @@ class TBDS : public TSubSYS, public TElem
        	~TBDS( );
 
 	int subVer( ) 		{ return VER_BD; }
-	void subLoad( );
-	void subSave( );
 
 	static string realDBName( const string &bdn );
 	
@@ -233,6 +232,9 @@ class TBDS : public TSubSYS, public TElem
 	AutoHD<TTipBD> at( const string &iid )	{ return modAt(iid); }
 
 	string optDescr( );
+
+    protected:
+	void load_( );
 
     private:
 	//Private methods

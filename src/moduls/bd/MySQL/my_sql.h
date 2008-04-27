@@ -106,8 +106,10 @@ class BDMod: public TTipBD
 	//Public methods
 	BDMod( string name );
 	~BDMod();
-	    
-	void modLoad( );
+
+    protected:
+	//Protected methods
+	void load_( );
 	    
     private:
 	//Private methods

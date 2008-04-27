@@ -56,18 +56,15 @@ class Project : public TCntrNode, public TConfig
         string tbl( )    	{ return m_dbt; }		//Table of storing library data
 	string fullDB( )	{ return DB()+'.'+tbl(); }	//Full address to library data storage ( DB()+"."+tbl() )
 
-	void setName( const string &it )	{ m_name = it; }
-	void setDescr( const string &it )	{ m_descr = it; }
-	void setIco( const string &it )		{ m_ico = it; }
+	void setName( const string &it )	{ m_name = it; modif(); }
+	void setDescr( const string &it )	{ m_descr = it; modif(); }
+	void setIco( const string &it )		{ m_ico = it; modif(); }
 	void setUser( const string &it );
-	void setGrp( const string &it )		{ m_grp = it; }
-	void setPermit( short it )		{ m_permit = it; }
-	
+	void setGrp( const string &it )		{ m_grp = it; modif(); }
+	void setPermit( short it )		{ m_permit = it; modif(); }
+
 	void setTbl( const string &it )		{ m_dbt = it; }	
 	void setFullDB( const string &it );
-
-        void load( );
-        void save( );
 
 	//- Enable stat -
 	bool enable( )			{ return m_enable; }
@@ -91,6 +88,9 @@ class Project : public TCntrNode, public TConfig
 	//Methods
         string nodeName( )	{ return m_id; }
         void cntrCmdProc( XMLNode *opt );       //Control interface command process
+
+        void load_( );
+        void save_( );
 
 	void postEnable( int flag );
 	void preDisable( int flag );
@@ -149,10 +149,10 @@ class Page : public Widget, public TConfig
 	int    prjFlags( )   	{ return m_flgs; }
 	string parentNm( )      { return m_parent; }
 
-        void setIco( const string &iico )      { m_ico = iico; }
+        void setIco( const string &iico )      { m_ico = iico; modif(); }
         void setUser( const string &iuser );
-        void setGrp( const string &igrp )      { m_grp = igrp; }
-        void setPermit( short iperm )          { m_permit = iperm; }
+        void setGrp( const string &igrp )      { m_grp = igrp; modif(); }
+        void setPermit( short iperm )          { m_permit = iperm; modif(); }
         void setCalcLang( const string &ilng );
         void setCalcProg( const string &iprg );
 	void setCalcPer( int vl );
@@ -160,9 +160,7 @@ class Page : public Widget, public TConfig
 	void setPrjFlags( int val );
 
         //- Storing -
-        void load( );
 	void loadIO( );
-        void save( );
 	void saveIO( );
 	
 	void setEnable( bool val );
@@ -189,6 +187,12 @@ class Page : public Widget, public TConfig
 	//Methods
 	void postEnable( int flag );
         void postDisable( int flag );
+
+        //- Storing -
+        void load_( );
+        void save_( );
+
+	unsigned int modifVal( Attr &cfg )      { modif(); return 0; }
 	
 	bool cntrCmdGeneric( XMLNode *opt );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
@@ -232,12 +236,10 @@ class PageWdg : public Widget, public TConfig
 
 	void setEnable( bool val );
 
-        void setParentNm( const string &isw )	{ m_parent = isw; }
+        void setParentNm( const string &isw )	{ m_parent = isw; modif(); }
 
         //- Storing -
-        void load( );
 	void loadIO( );
-        void save( );
 	void saveIO( );
 
 	//- Data access -
@@ -249,6 +251,12 @@ class PageWdg : public Widget, public TConfig
 	//Methods
         void postEnable( int flag );
 	void preDisable( int flag );
+
+        //- Storing -
+        void load_( );
+        void save_( );
+
+	unsigned int modifVal( Attr &cfg )      { modif(); return 0; }
 	
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	

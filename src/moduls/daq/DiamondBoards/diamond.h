@@ -60,12 +60,13 @@ class TMdPrm : public TParamContr
 	int  cnl( ) 		{ return m_cnl; }
 	void setType( Type val );
 
-	void load( );
+
 
 	TMdContr &owner( )	{ return (TMdContr &)TParamContr::owner(); }
 	
     protected:
 	//Methods
+	void load_( );
 	bool cfgChange( TCfg &cfg );
 	void vlSet( TVal &val );
         void vlGet( TVal &val );
@@ -102,15 +103,13 @@ class TMdContr: public TController
 
 	TParamContr *ParamAttach( const string &name, int type );
 
-	void load( );
-	void save( );
-	void start_( );
-	void stop_( );
-
 	TTpContr &owner( ) 	{ return (TTpContr&)TController::owner(); }
 
     protected:
 	//Methods
+	void load_( );
+	void start_( );
+	void stop_( );	
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	bool cfgChange( TCfg &cfg );
     

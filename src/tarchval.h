@@ -186,10 +186,12 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	int size( )		{ return TValBuf::size(); }
         long long period( )	{ return TValBuf::period(); }
 	
-	void setName( const string &inm )	{ m_name = inm; }
-        void setDscr( const string &idscr )	{ m_dscr = idscr; }
+	void setName( const string &inm )	{ m_name = inm; modif(); }
+        void setDscr( const string &idscr )	{ m_dscr = idscr; modif(); }
 	void setSrcMode( SrcMode vl, const string &isrc = "" );
-	void setToStart( bool vl )		{ m_start = vl; }
+	void setToStart( bool vl )		{ m_start = vl; modif(); }
+	
+	void setDB( const string &idb )		{ m_db = idb; modifG(); }
 	
 	void setValType( TFld::Type vl );
         void setHardGrid( bool vl );
@@ -198,8 +200,6 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
         void setPeriod( long long vl );
 	
 	//- Service -
-	void load( );
-        void save( );
 	void start( );
 	void stop( bool full_del = false );
 	
@@ -228,12 +228,17 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	TArchiveS &owner( );
 
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+
+    protected:
+	//Protected methods
+	void preDisable( int flag );
+	void postDisable( int flag );	
 	
+	void load_( );
+        void save_( );
+
     private:
 	//Private methods
-	void preDisable( int flag );
-	void postDisable( int flag );
-    
 	void setUpBuf( );
 	string nodeName( )	{ return m_id; }
     
@@ -294,14 +299,15 @@ class TVArchivator : public TCntrNode, public TConfig
 	string tbl( );
 	string fullDB( )        { return DB()+'.'+tbl(); }			
 	
-	void setName( const string &inm )	{ m_name = inm; }
-        void setDscr( const string &idscr )	{ m_dscr = idscr; }
-	void setAddr( const string &vl )	{ m_addr = vl; }
+	void setName( const string &inm )	{ m_name = inm; modif(); }
+        void setDscr( const string &idscr )	{ m_dscr = idscr; modif(); }
+	void setAddr( const string &vl )	{ m_addr = vl; modif(); }
 	virtual void setValPeriod( double per );
 	virtual void setArchPeriod( int per );
-	
-	virtual void load( );
-	virtual void save( );
+	void setToStart( bool vl )		{ m_start = vl; modif(); }
+
+	void setDB( const string &idb )		{ m_db = idb; modif(); }
+
 	virtual void start( );
 	virtual void stop( bool full_del = false );
 	
@@ -323,6 +329,9 @@ class TVArchivator : public TCntrNode, public TConfig
 	void postEnable( int flag );
 	void preDisable( int flag );
 	void postDisable( int flag );     	//Delete all DB if flag 1	
+
+	void load_( );
+	void save_( );
 	
 	//Protected attributes
 	Res	a_res;

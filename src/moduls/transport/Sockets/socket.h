@@ -155,13 +155,14 @@ class TTransSock: public TTipTransport
 {
     public:
 	TTransSock( string name );
-	~TTransSock();
-	    
-	void modLoad( );
+	~TTransSock( );
 	    
 	TTransportIn  *In( const string &name, const string &idb );
-	TTransportOut *Out( const string &name, const string &idb );	    
-	    
+	TTransportOut *Out( const string &name, const string &idb );
+	
+    protected:
+	void load_( );
+
     private:	
 	//Methods
 	string optDescr( );

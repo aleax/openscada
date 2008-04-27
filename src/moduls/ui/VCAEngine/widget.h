@@ -160,9 +160,7 @@ class Widget : public TCntrNode, public TValElem
 	virtual void setCalcPer( int vl )		{ };
 
 	//- Storing -
-        virtual void load( )    { }     //Load widget
 	virtual void loadIO( )  { }     //Load widget's IO
-        virtual void save( )    { }     //Save widget
 	virtual void saveIO( )  { }     //Save widget's IO
 
 	//- Enable stat -

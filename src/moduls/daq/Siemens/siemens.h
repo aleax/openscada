@@ -98,9 +98,7 @@ class TMdPrm : public TParamContr, public TValFunc
 	
 	void enable( );
 	void disable( );
-	void load( );
-	void save( );
-	
+
 	void calc( bool first, bool last );	//Calc template's algoritmes
 	
 	//- Template link operations -
@@ -110,7 +108,12 @@ class TMdPrm : public TParamContr, public TValFunc
         SLnk &lnk( int num );
 	
 	TMdContr &owner( )	{ return (TMdContr&)TParamContr::owner(); }
-	
+
+    protected:
+	//Methods
+	void load_( );
+	void save_( );
+
     private:    
 	//Methods
         void postEnable( int flag );
@@ -159,13 +162,6 @@ class TMdContr: public TController
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
-	void load( );
-	void save( );
-	void enable_( );
-	void disable_( );	
-	void start_( );
-	void stop_( );
-
 	void connectRemotePLC( );
 	void disconnectRemotePLC( );
 	void getDB( unsigned n_db, long offset, string &buffer );
@@ -175,6 +171,13 @@ class TMdContr: public TController
 	
     protected:
 	//Methods
+	void load_( );
+	void save_( );
+	void enable_( );
+	void disable_( );	
+	void start_( );
+	void stop_( );	
+	
 	bool cfgChange( TCfg &cfg );
 	void prmEn( const string &id, bool val );		//Enable parameter to process list	
 	void regVal( SValData ival, IO::Type itp, bool wr );	//Register value for acquisition
@@ -252,9 +255,6 @@ class TTpContr: public TTipDAQ
 	//Methods
     	TTpContr( string name );
 	~TTpContr( );
-	
-	void modLoad( );
-	void modSave( );
 
 	//- Devices -
 	bool drvCIFOK( );	
@@ -270,6 +270,8 @@ class TTpContr: public TTipDAQ
 	//Methods
 	void postEnable( int flag );
 	void cntrCmdProc( XMLNode *opt );
+	void load_( );
+	void save_( );
 	
     private:
 	//Methods

@@ -88,13 +88,6 @@ class TMdContr: public TController
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
-	void load( );
-	void save( );
-        void enable_( );
-        void disable_( );
-	void start_( );
-	void stop_( );
-	
 	void prmEn( const string &id, bool val );
 	void regVal( int reg );    			//Register value for acquisition
 	int  getVal( int reg, string &err );		//Get register value
@@ -103,6 +96,9 @@ class TMdContr: public TController
 
     protected:
 	//Methods
+        void disable_( );
+	void start_( );
+	void stop_( );	
     	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	bool cfgChange( TCfg &cfg );
 	
@@ -170,14 +166,10 @@ class SSerial : public TCntrNode, public TConfig
 	void	setLen( int val );
 	void	setTwostop( bool val );
 	void	setParity( int val );
-	void 	setTimeoutFrame( int val )	{ frTm = val; }
-	void	setTimeoutChar( double val )	{ charTm = val; }
-	void	setTimeoutReq( int val )	{ reqTm = val; }
+	void 	setTimeoutFrame( int val )	{ frTm = val; modif(); }
+	void	setTimeoutChar( double val )	{ charTm = val; modif(); }
+	void	setTimeoutReq( int val )	{ reqTm = val; modif(); }
 	void	setOpen( bool vl );
-
-	//- DB commands -
-	void load( );
-	void save( );
 	
 	string req( const string &vl );
 
@@ -187,6 +179,10 @@ class SSerial : public TCntrNode, public TConfig
         //Methods
         string nodeName( )	{ return id(); }
 	void postDisable( int flag );
+
+	//- DB commands -
+	void load_( );
+	void save_( );
 
     private:
 	//Attributes
@@ -213,9 +209,6 @@ class TTpContr: public TTipDAQ
     	TTpContr( string name );
 	~TTpContr( );
 
-	void modLoad( );
-        void modSave( );
-
 	TElem &serDevE( )	{ return el_ser_dev; }
 
 	//- Serial devices -
@@ -235,6 +228,8 @@ class TTpContr: public TTipDAQ
     protected:
 	//Methods
         void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	void load_( );
+        void save_( );
 
     private:
 	//Methods

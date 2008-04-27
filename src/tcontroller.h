@@ -54,14 +54,13 @@ class TController : public TCntrNode, public TConfig
 	
 	void setName( const string &nm ) 	{ m_name = nm; }
 	void setDescr( const string &dscr )	{ m_descr = dscr; }	
+	void setDB( const string &idb )		{ m_db = idb; modifG(); }
 	
     	bool toEnable( )	{ return m_aen; }
     	bool toStart( ) 	{ return m_astart; }
 	bool enableStat( )	{ return en_st; }
 	bool startStat( )      	{ return run_st; }
 
-	virtual void load( );
-	virtual void save( );
 	void start( );
 	void stop( );
 	void enable( );
@@ -84,6 +83,8 @@ class TController : public TCntrNode, public TConfig
 	
 	//Methods
 	//- User methods -
+	void load_( );
+	void save_( );	
 	virtual void enable_(  ) 	{ }
         virtual void disable_(  )	{ }
 	virtual void start_( )	 	{ }
@@ -93,6 +94,8 @@ class TController : public TCntrNode, public TConfig
     
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
+	bool cfgChange( TCfg &cfg );
+	
 	void preDisable( int flag );		//Disable if delete
 	void postDisable( int flag );     	//Delete all DB if flag 1
 	
@@ -101,8 +104,6 @@ class TController : public TCntrNode, public TConfig
 	string nodeName( )       { return m_id; }
     
 	void LoadParmCfg(  );
-	void SaveParmCfg(  );
-	void FreeParmCfg(  );
 	
 	//Private attributes
 	string  &m_id;

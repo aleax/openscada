@@ -144,7 +144,7 @@ string TVision::optDescr( )
     return buf;
 }
 
-void TVision::modLoad( )
+void TVision::load_( )
 {
 #if OSC_DEBUG
     mess_debug(nodePath().c_str(),_("Load module."));
@@ -177,7 +177,7 @@ void TVision::modLoad( )
     setRunTimeUpdt(atoi(TBDS::genDBGet(nodePath()+"RunTimeUpdt",TSYS::int2str(runTimeUpdt())).c_str()));
 }
 
-void TVision::modSave( )
+void TVision::save_( )
 {
 #if OSC_DEBUG
     mess_debug(nodePath().c_str(),_("Save module."));
@@ -316,8 +316,6 @@ void TVision::cntrCmdProc( XMLNode *opt )
             ctrMkNode("fld",opt,-1,"/prm/cfg/runModUpd",_("RunTime update mode"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/prm/cfg/rt_upd_lst");
             ctrMkNode("fld",opt,-1,"/prm/cfg/stationVCA",_("VCA engine station"),0664,"root","root",4,"tp","str","idm","1","dest","select","select","/prm/cfg/vca_lst");
 	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to remote stations list configuration"),0660,"root","root",1,"tp","lnk");
-            ctrMkNode("comm",opt,-1,"/prm/cfg/load",_("Load"),0660);
-            ctrMkNode("comm",opt,-1,"/prm/cfg/save",_("Save"),0660);
         }
         ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
 	return;
@@ -352,8 +350,6 @@ void TVision::cntrCmdProc( XMLNode *opt )
         opt->setText("/Transport");
     }
     else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )   opt->setText(optDescr());
-    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )  modLoad();
-    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )  modSave();
     else if( a_path == "/prm/cfg/u_lst" && ctrChkNode(opt) )
     {
         vector<string> ls;

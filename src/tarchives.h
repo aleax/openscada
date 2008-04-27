@@ -60,21 +60,22 @@ class TMArchivator : public TCntrNode, public TConfig
         string dscr( )		{ return m_dscr; }	
 	bool toStart( ) 	{ return m_start; }
 	bool startStat( )	{ return run_st; }
-        string &addr( )		{ return m_addr; }
-        int    &level( )	{ return m_level; }
+        string addr( )		{ return m_addr; }
+        int    level( )		{ return m_level; }
         void   categ( vector<string> &list );	
 
 	string DB( )            { return m_db; }
         string tbl( );
         string fullDB( )        { return DB()+'.'+tbl(); }
 
-	void setName( const string &vl )  	{ m_name = vl; }
-        void setDscr( const string &vl )  	{ m_dscr = vl; }
-	void setToStart( bool vl )		{ m_start = vl; }
-	void setAddr( const string &vl )	{ m_addr = vl; }
+	void setName( const string &vl )  	{ m_name = vl; modif(); }
+        void setDscr( const string &vl )  	{ m_dscr = vl; modif(); }
+	void setToStart( bool vl )		{ m_start = vl; modif(); }
+	void setAddr( const string &vl )	{ m_addr = vl; modif(); }
+	void setLevel( int lev )		{ m_level = lev; modif(); }
 
-        virtual void load( );
-        virtual void save( );
+	void setDB( const string &idb )		{ m_db = idb; modifG(); }
+
         virtual void start( )	{ };
         virtual void stop( )	{ };
 
@@ -91,6 +92,9 @@ class TMArchivator : public TCntrNode, public TConfig
 	void postEnable( int flag );
 	void preDisable( int flag );
 	void postDisable( int flag );     //Delete all DB if flag 1
+
+        void load_( );
+        void save_( );
 
 	//- Check messages criteries -
 	bool chkMessOK( const string &icateg, TMess::Type ilvl );
@@ -173,12 +177,12 @@ class TArchiveS : public TSubSYS
 	
 	int messPeriod( )	{ return m_mess_per; }
 	int valPeriod( )	{ return m_val_per; }
+	int valPrior( )		{ return m_val_prior; }
 	
 	void setMessPeriod( int ivl );
-	void setValPeriod( int ivl )	{ m_val_per = ivl; }
+	void setValPeriod( int ivl )	{ m_val_per = ivl; modif(); }
+	void setValPrior( int ivl )	{ m_val_prior = ivl; modif(); }
 	
-	void subLoad( );
-	void subSave( );
 	void subStart( );
 	void subStop( );
 
@@ -209,6 +213,11 @@ class TArchiveS : public TSubSYS
 	//Public attributes
         static int max_req_mess;
 
+    protected:
+	//Protected methods
+	void load_( );
+	void save_( );
+
     private:
 	//Private methods
 	string optDescr( );
@@ -219,7 +228,7 @@ class TArchiveS : public TSubSYS
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
 	int messBufLen( )	{ return m_buf.size(); }
-	void messBufLen( int len );
+	void setMessBufLen( int len );
 
 	//Private attributes
 	TElem  		el_mess, 	//Message archivator's DB elements

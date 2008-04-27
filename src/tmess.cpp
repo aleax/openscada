@@ -51,10 +51,21 @@ TMess::TMess(  ) : IOCharSet("UTF8"), m_mess_level(0), log_dir(0x2)
     textdomain(PACKAGE);
 }
 
-
 TMess::~TMess(  )
 {
     closelog();
+}
+
+void TMess::setMessLevel( int level )  
+{ 
+    m_mess_level = level;
+    SYS->modif();
+}
+
+void TMess::setLogDirect( int dir )
+{ 
+    log_dir = dir;
+    SYS->modif();
 }
 
 void TMess::put( const char *categ, Type level, const char *fmt,  ... )

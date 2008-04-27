@@ -62,10 +62,6 @@ class TVision : public TUI
 	
 	void modStart();
 	void modStop();
-
-	void postEnable( int flag );
-	void modLoad( );
-	void modSave( );
 	
 	string modInfo( const string &name );
 	void   modInfo( vector<string> &list );
@@ -80,11 +76,17 @@ class TVision : public TUI
 	//- Put message -
         void postMess( const QString &cat, const QString &mess, 
 		MessLev type = Info, QWidget *parent = NULL );
-	
-	//- Request to OpenSCADA control interface -
-	int cntrIfCmd( XMLNode &node, const string &user, const string &stat, bool glob = false );
 
 	static QWidget *getFocusedWdg( QWidget *wcntr );
+
+	//- Request to OpenSCADA control interface -
+	int cntrIfCmd( XMLNode &node, const string &user, const string &stat, bool glob = false );	 
+
+    protected:
+	//Methods
+	void postEnable( int flag );
+	void load_( );
+	void save_( );
 
     private:
 	//Methods

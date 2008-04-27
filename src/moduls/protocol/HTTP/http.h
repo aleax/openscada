@@ -67,9 +67,11 @@ class TProt: public TProtocol
     public:
 	//Methods
 	TProt( string name );
-	~TProt();
-	
-	void modLoad( );
+	~TProt( );
+
+    protected:
+	//Methods	
+	void load_( );
 
     private:
 	//Methods

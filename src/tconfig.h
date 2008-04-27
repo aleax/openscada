@@ -43,7 +43,6 @@ class TCfg
 	//Data
 	enum AttrFlg
 	{
-	    Prevent = 0x100,	//Prevent owner for change
 	    NoVal   = 0x200,	//No value mirrored
 	    Key     = 0x400,	//Primary key
 	    Hide    = 0x800	//Attribute hide

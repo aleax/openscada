@@ -82,8 +82,6 @@ class TModule : public TCntrNode
         const string &modId( )		{ return mId; }
 	string modName( );
     
-	virtual void modLoad( ) 	{ }
-	virtual void modSave( ) 	{ }
         virtual void modStart( ) 	{ }
         virtual void modStop( ) 	{ }
     

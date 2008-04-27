@@ -336,18 +336,19 @@ string TBDS::genDBGet(const string &path, const string &oval, const string &user
     bool bd_ok=false;
     string rez = oval;
     
-    if(SYS->present("BD"))
+    if( SYS->present("BD") )
     {	
 	AutoHD<TBDS> dbs = SYS->db();
-	//Get from cache
+
+	//- Get from cache -
 	ResAlloc res(dbs.at().genDBCacheRes,false);
 	for( int i_cel = 0; i_cel < dbs.at().genDBCache.size(); i_cel++ )
 	    if( dbs.at().genDBCache[i_cel]->cfg("user").getS() == user && 
-		    dbs.at().genDBCache[i_cel]->cfg("id").getS() == path )
-		return dbs.at().genDBCache[i_cel]->cfg("val").getS();
+			dbs.at().genDBCache[i_cel]->cfg("id").getS() == path )
+	        return dbs.at().genDBCache[i_cel]->cfg("val").getS();
 	res.release();
-    
-	//Get from generic DB
+
+	//- Get from generic DB -
 	if(!onlyCfg)
 	{
 	    AutoHD<TTable> tbl = dbs.at().open(SYS->db().at().fullDBSYS());
@@ -369,13 +370,13 @@ string TBDS::genDBGet(const string &path, const string &oval, const string &user
 	    }      
 	}
     }
-    //Get from config file
+    //- Get from config file -
     if(!bd_ok)	
 	try{ rez = SYS->ctrId(&SYS->cfgRoot(),path)->text(); }
 	catch(...){ }
 
     //Put to cache    
-    if(SYS->present("BD"))
+    if( SYS->present("BD") )
     {    
 	AutoHD<TBDS> dbs = SYS->db();
 	ResAlloc res(dbs.at().genDBCacheRes,true);
@@ -405,7 +406,7 @@ string TBDS::optDescr(  )
     return(buf);
 }
 
-void TBDS::subLoad( )
+void TBDS::load_( )
 {
     //- Load parameters from command line -
     int next_opt;
@@ -461,40 +462,6 @@ void TBDS::subLoad( )
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Search and open new DB error."));
     }    
-    
-    //- Load and enable DB -
-    vector<string> t_lst, o_lst;
-    modList(t_lst);
-    for( int i_t = 0; i_t < t_lst.size(); i_t++ )
-    {
-        AutoHD<TTipBD> mod = at(t_lst[i_t]);
-        mod.at().list(o_lst);
-        for( int i_o = 0; i_o < o_lst.size(); i_o++ )
-	    try
-	    {	
-		mod.at().at(o_lst[i_o]).at().load();
-		if( !mod.at().at(o_lst[i_o]).at().enableStat() && mod.at().at(o_lst[i_o]).at().toEnable() )
-        	    mod.at().at(o_lst[i_o]).at().enable(); 
-	    } catch(...){ }	
-    }
-
-    //- Load modules -
-    TSubSYS::subLoad();
-}
-
-void TBDS::subSave( )
-{
-    vector<string> t_lst, o_lst;
-    
-    //Opened DB save to DB
-    modList(t_lst);
-    for( int i_t = 0; i_t < t_lst.size(); i_t++ )
-    {
-        AutoHD<TTipBD> mod = at(t_lst[i_t]);
-        mod.at().list(o_lst);
-        for( int i_o = 0; i_o < o_lst.size(); i_o++ )
-            mod.at().at(o_lst[i_o]).at().save();
-    }
 }
 
 void TBDS::cntrCmdProc( XMLNode *opt )
@@ -503,19 +470,12 @@ void TBDS::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TSubSYS::cntrCmdProc(opt);
-	if(ctrMkNode("area",opt,0,"/sub",_("Subsystem"),0444,"root",subId().c_str()))
-	{
-	    ctrMkNode("comm",opt,-1,"/sub/load_db",_("Load"),0660,"root",subId().c_str());
-    	    ctrMkNode("comm",opt,-1,"/sub/upd_db",_("Save"),0660,"root",subId().c_str());
-	}
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root",subId().c_str(),3,"tp","str","cols","90","rows","10");
 	return;
     }
     //Process command to page
     string a_path = opt->attr("path");
     if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440,"root",subId().c_str(),SEQ_RD) ) 		opt->setText(optDescr());
-    else if( a_path == "/sub/load_db" && ctrChkNode(opt,"set",0660,"root",subId().c_str(),SEQ_WR) )	subLoad();
-    else if( a_path == "/sub/upd_db" && ctrChkNode(opt,"set",0660,"root",subId().c_str(),SEQ_WR) )	subSave();
     else TSubSYS::cntrCmdProc(opt);
 }
 
@@ -545,11 +505,11 @@ void TTipBD::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TModule::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/db_",_("Opened DB"),0664,"root",grp.c_str(),1,"idm","1");
+	ctrMkNode("grp",opt,-1,"/br/db_",_("DB"),0664,"root",grp.c_str(),1,"idm","1");
 	if(ctrMkNode("area",opt,0,"/db",_("DB"),0444))
 	{
 	    ctrMkNode("fld",opt,-1,"/db/ful_db_del",_("Full DB delete"),0660,"root",grp.c_str(),1,"tp","bool");
-	    ctrMkNode("list",opt,-1,"/db/odb",_("Opened DB"),0664,"root",grp.c_str(),4,"tp","br","idm","1","s_com","add,del","br_pref","db_");
+	    ctrMkNode("list",opt,-1,"/db/odb",_("DB"),0664,"root",grp.c_str(),4,"tp","br","idm","1","s_com","add,del","br_pref","db_");
 	}
 	return;
     }
@@ -678,12 +638,13 @@ void TBD::open( const string &table, bool create )
     chldAdd(m_tbl,openTable(table, create)); 
 }
 
-void TBD::load( )
+void TBD::load_( )
 {
     SYS->db().at().dataGet(owner().owner().fullDB(),SYS->db().at().nodePath()+"DB/",*this);
+    if( !enableStat() && toEnable() )	enable();
 }
 
-void TBD::save( )
+void TBD::save_( )
 {
     SYS->db().at().dataSet(owner().owner().fullDB(),SYS->db().at().nodePath()+"DB/",*this);
 }
@@ -712,8 +673,6 @@ void TBD::cntrCmdProc( XMLNode *opt )
     		ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root",grp.c_str(),1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/codep",cfg("CODEPAGE").fld().descr(),0664,"root",grp.c_str(),1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/toen",cfg("EN").fld().descr(),0664,"root",grp.c_str(),1,"tp","bool");
-    		ctrMkNode("comm",opt,-1,"/prm/cfg/load",_("Load"),0660,"root",grp.c_str());
-    		ctrMkNode("comm",opt,-1,"/prm/cfg/save",_("Save"),0660,"root",grp.c_str());
 	    }	    
 	}
 	if(ctrMkNode("area",opt,1,"/tbls",_("Tables"),0444))
@@ -769,8 +728,6 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) ) opt->setText(toEnable()?"1":"0");
 	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) ) setToEnable( atoi(opt->text().c_str()) );
     }
-    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	load();
-    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )    	save();
     else if( a_path == "/br/tbl_" || a_path == "/tbls/otbl" )
     {
 	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )
@@ -783,6 +740,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"add",0664,"root",grp.c_str(),SEQ_WR) )	open(opt->text(),true);
         if( ctrChkNode(opt,"del",0664,"root",grp.c_str(),SEQ_WR) )	close(opt->text());
     }
+    else TCntrNode::cntrCmdProc(opt);
 }
 
 //************************************************
@@ -790,7 +748,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
 //************************************************
 TTable::TTable( const string &name ) :  m_name(name)
 {
-
+    modifClr();
 }
 
 TTable::~TTable()
@@ -910,4 +868,5 @@ void TTable::cntrCmdProc( XMLNode *opt )
 	    fieldSet(req);
 	}	
     }
+    else TCntrNode::cntrCmdProc(opt);
 }    

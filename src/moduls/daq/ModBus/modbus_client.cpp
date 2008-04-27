@@ -120,7 +120,7 @@ void TTpContr::postEnable( int flag )
     fldAdd( new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30","") );
     fldAdd( new TFld("PERIOD",_("Gather data period (s)"),TFld::Real,TFld::NoFlag,"6.2","1","0.01;100") );
     fldAdd( new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
-    fldAdd( new TFld("PROT",_("Modbus protocol"),TFld::Integer,TFld::Selected|TCfg::Prevent,"1","0","0;1;2",_("TCP/IP;RTU;ASCII")) );
+    fldAdd( new TFld("PROT",_("Modbus protocol"),TFld::Integer,TFld::Selected,"1","0","0;1;2",_("TCP/IP;RTU;ASCII")) );
     fldAdd( new TFld("ADDR",_("Host address"),TFld::String,TFld::NoFlag,"30","devhost.org:502") );
     fldAdd( new TFld("NODE",_("Destination node"),TFld::Integer,TFld::NoFlag,"20","1","0;255") );
     fldAdd( new TFld("FRAG_MERGE",_("Register's fragment merge"),TFld::Boolean,TFld::NoFlag,"1","0") );
@@ -140,7 +140,7 @@ void TTpContr::postEnable( int flag )
     el_ser_dev.fldAdd( new TFld("TM_REQ",_("Time request"),TFld::Integer,TFld::NoFlag,"5","2000") );
 }
 
-void TTpContr::modLoad( )
+void TTpContr::load_( )
 {
     //- Load parameters from command line -
     int next_opt;
@@ -184,7 +184,7 @@ void TTpContr::modLoad( )
     }
 }
 
-void TTpContr::modSave()
+void TTpContr::save_()
 {
     //- Save Serial devices configuration -
     TConfig cfg(&serDevE());        
@@ -321,8 +321,6 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
                 ctrMkNode("list",opt,-1,"/mod/dev/reqTm",_("Time request"),0664,"root","root",1,"tp","dec");
                 ctrMkNode("list",opt,-1,"/mod/dev/open",_("Opened"),0664,"root","root",1,"tp","bool");
             }
-            ctrMkNode("comm",opt,-1,"/mod/load",_("Load"),0660);
-            ctrMkNode("comm",opt,-1,"/mod/save",_("Save"),0660);
         }
         return;
     }
@@ -411,8 +409,6 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
         opt->childAdd("el")->setAttr("id","1")->setText(_("Parity"));
         opt->childAdd("el")->setAttr("id","2")->setText(_("Odd parity"));
     }
-    else if( a_path == "/mod/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) ) modLoad();
-    else if( a_path == "/mod/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) ) modSave();
     else TTipDAQ::cntrCmdProc( opt );
 }
 
@@ -440,12 +436,12 @@ void SSerial::postDisable( int flag )
     { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
-void SSerial::load( )
+void SSerial::load_( )
 {
     SYS->db().at().dataGet(owner().serDevDB(),mod->nodePath()+"sDevs/",*this);
 }
 		
-void SSerial::save( )
+void SSerial::save_( )
 {
     SYS->db().at().dataSet(owner().serDevDB(),mod->nodePath()+"sDevs/",*this);
 }
@@ -526,6 +522,7 @@ void SSerial::setSpeed( int val, bool tmAdj )
 	setTimeoutFrame((12*1000*512)/val);
 	setTimeoutReq(timeoutFrame()*2);
     }
+    modif();
 }
 
 void SSerial::setLen( int val )
@@ -549,6 +546,7 @@ void SSerial::setLen( int val )
 	tcflush( fd, TCIFLUSH );
         tcsetattr( fd, TCSANOW, &tio );		
     }
+    modif();
 }
 
 void SSerial::setTwostop( bool val )
@@ -566,6 +564,7 @@ void SSerial::setTwostop( bool val )
 	tcflush( fd, TCIFLUSH );
         tcsetattr( fd, TCSANOW, &tio );		
     }
+    modif();
 }
 
 void SSerial::setParity( int val )
@@ -595,6 +594,7 @@ void SSerial::setParity( int val )
 	tcflush( fd, TCIFLUSH );
         tcsetattr( fd, TCSANOW, &tio );		
     }
+    modif();
 }
 
 string SSerial::req( const string &vl )
@@ -666,21 +666,6 @@ TParamContr *TMdContr::ParamAttach( const string &name, int type )
     return new TMdPrm( name, &owner().tpPrmAt(type) );
 }
 
-void TMdContr::load( )
-{
-    TController::load( );
-}
-
-void TMdContr::save( )
-{
-    TController::save( );
-}
-
-void TMdContr::enable_( )
-{
-
-}
-
 void TMdContr::disable_( )
 {
     //- Clear acquisition data block -
@@ -747,6 +732,8 @@ void TMdContr::stop_( )
 
 bool TMdContr::cfgChange( TCfg &icfg )
 {
+    TController::cfgChange(icfg);    
+
     if( icfg.fld().name() == "PROT" )
     {    
         if( icfg.getI() == 0 )	

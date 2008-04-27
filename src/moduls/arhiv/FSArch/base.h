@@ -44,9 +44,8 @@ class ModArch: public TTipArchivator
 {
     public:
 	ModArch( const string &name );
-	~ModArch();
+	~ModArch( );
 	    
-	void modLoad( );
 	void modStart( );
 	void modStop( );
 
@@ -58,21 +57,22 @@ class ModArch: public TTipArchivator
 	string packArch( const string &anm, bool replace = true );
 	string unPackArch( const string &anm, bool replace = true );
 							    
-	string filesDB();
-	TElem &packFE()  { return el_packfl; }	    
-	    
+	string filesDB( );
+	TElem &packFE( )	{ return el_packfl; }	    
+
+    protected:
+	//Methods
+	void load_( );
+	void postEnable( int flag );	
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process	
+	
+	TMArchivator *AMess( const string &iid, const string &idb );
+	TVArchivator *AVal( const string &iid, const string &idb );	
+
     private:
 	//Methods
-	void postEnable( int flag );
-	    
 	static void Task(union sigval obj);		//Checking archives task	    
-
-	TMArchivator *AMess( const string &iid, const string &idb );
-	TVArchivator *AVal( const string &iid, const string &idb );
-	    
 	string optDescr( );
-	    
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	    
 	//Attributes
 	bool 	prc_st;

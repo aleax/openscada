@@ -55,8 +55,6 @@ class TMdPrm : public TParamContr
 	
 	void enable( );
 	void disable( );
-	void load( );
-	void save( );
 	
 	void autoC( bool val )	{ m_auto = val; }
 	bool autoC( )		{ return m_auto; }
@@ -71,6 +69,9 @@ class TMdPrm : public TParamContr
 	
     protected:
 	//Methods
+	void load_( );
+	void save_( );	
+	
         bool cfgChange( TCfg &cfg );	//config change
 		       
 	void vlGet( TVal &val );
@@ -100,15 +101,12 @@ class TMdContr: public TController
 
 	AutoHD<TMdPrm> at( const string &nm )
         { return TController::at(nm); }
-
-	void load( );
-	void save( );
-	void enable_( );
-	void start_( );
-	void stop_( );    
 	
     protected:
 	//Methods
+	void enable_( );
+	void start_( );
+	void stop_( );    	
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	void prmEn( const string &id, bool val );
     	
@@ -139,13 +137,15 @@ class TTpContr: public TTipDAQ
 	//Methods
     	TTpContr( string name );
 	~TTpContr( );
-	
-	void postEnable( int flag );
-	void modLoad( );
 
 	void daList( vector<string> &da );
 	void daReg( DA *da );
 	DA  *daGet( const string &da );	
+    
+    protected:
+	//Methods
+	void postEnable( int flag );
+	void load_( );	
     
     private:
 	//Methods

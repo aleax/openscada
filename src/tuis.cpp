@@ -41,7 +41,7 @@ string TUIS::optDescr( )
     	"===================== Subsystem \"User interfaces\" options ===============\n\n"));
 }
 
-void TUIS::subLoad( )
+void TUIS::load_( )
 {
     //- Load parameters from command line -
     int next_opt;
@@ -65,8 +65,6 @@ void TUIS::subLoad( )
     
     //- Load parameters from config file -
 
-    //- Load modules -
-    TSubSYS::subLoad();
 }
 
 void TUIS::subStart(  )

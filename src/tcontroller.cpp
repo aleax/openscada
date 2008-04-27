@@ -50,7 +50,7 @@ TCntrNode &TController::operator=( TCntrNode &node )
     string tid = id();
     *(TConfig*)this = *(TConfig*)src_n;
     m_id = tid;
-    m_db = src_n->m_db;
+    setDB(src_n->m_db);
 
     //- Parameters copy -
     if( src_n->enableStat( ) )
@@ -107,7 +107,7 @@ string TController::tbl( )
     return owner().owner().subId()+"_"+owner().modId();
 }
 
-void TController::load( )
+void TController::load_( )
 {
     mess_info(nodePath().c_str(),_("Load controller's configs!"));
 
@@ -117,15 +117,19 @@ void TController::load( )
     if( en_st )	LoadParmCfg( );
 }
 
-void TController::save( )
+void TController::save_( )
 {
     mess_info(nodePath().c_str(),_("Save controller's configs!"));
 
     //- Update type controller bd record -
     SYS->db().at().dataSet(fullDB(),owner().nodePath()+"DAQ",*this);
+}
 
-    //- Save parameters if enabled -
-    if( en_st ) SaveParmCfg( );
+bool TController::cfgChange( TCfg &cfg )
+{
+    modif( );
+    
+    return true;
 }
 
 void TController::start( )
@@ -206,9 +210,6 @@ void TController::disable( )
     //- Disable for children -
     disable_();
 
-    //- Free all parameters -
-    //FreeParmCfg();
-
     //- Clear enable flag -
     en_st = false;
 }
@@ -247,28 +248,14 @@ void TController::LoadParmCfg(  )
 	}
     }
     
-    //- Load present parameters -
+    //- Force load present parameters -
     vector<string> prm_ls;
     list(prm_ls);
     for( int i_p = 0; i_p < prm_ls.size(); i_p++ )
-	at(prm_ls[i_p]).at().load( );	
-}
-
-void TController::SaveParmCfg(  )
-{
-    vector<string> c_list;
-
-    list(c_list);
-    for( unsigned i_ls = 0, i_bd=0; i_ls < c_list.size(); i_ls++)
-        at(c_list[i_ls]).at().save();
-}
-
-void TController::FreeParmCfg(  )
-{
-    vector<string> c_list;
-    list(c_list);
-    for( unsigned i_ls = 0; i_ls < c_list.size(); i_ls++)
-        del( c_list[i_ls] );
+    {	
+	at(prm_ls[i_p]).at().modifG();
+	at(prm_ls[i_p]).at().load( );
+    }	
 }
 
 void TController::add( const string &name, unsigned type )
@@ -298,11 +285,7 @@ void TController::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/cntr/st/db",_("Controller DB (module.db)"),0660,"root","root",1,"tp","str");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/cntr/cfg",_("Config")))
-	    {
-		ctrMkNode("comm",opt,-1,"/cntr/cfg/load",_("Load"),0660);
-		ctrMkNode("comm",opt,-1,"/cntr/cfg/save",_("Save"),0660);
 		TConfig::cntrCmdMake(opt,"/cntr/cfg",0,"root","root",0664);
-	    }
 	}
     	if( owner().tpPrmSize() )
 	{
@@ -364,8 +347,8 @@ void TController::cntrCmdProc( XMLNode *opt )
     }	
     else if( a_path == "/cntr/st/db" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText(m_db);
-	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	m_db = opt->text();
+	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText(DB());
+	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	setDB(opt->text());
     }
     else if( a_path == "/cntr/st/en_st" )
     {
@@ -377,7 +360,6 @@ void TController::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(run_st?"1":"0");
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	atoi(opt->text().c_str())?start():stop();
     }
-    else if( a_path == "/cntr/cfg/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	load();
-    else if( a_path == "/cntr/cfg/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	save();
     else if( a_path.substr(0,9) == "/cntr/cfg" )	TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root","root",0664);
+    else TCntrNode::cntrCmdProc(opt);
 }

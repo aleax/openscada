@@ -216,7 +216,7 @@ void Engine::preDisable( int flag )
     TModule::preDisable( flag );
 }
 
-void Engine::modLoad( )
+void Engine::load_( )
 {
 #if OSC_DEBUG
     mess_debug(nodePath().c_str(),_("Load module."));
@@ -346,7 +346,7 @@ void Engine::modLoad( )
 	prjAt(ls[l_id]).at().setEnable(true);    
 }
 
-void Engine::modSave( )
+/*void Engine::save_( )
 {
 #if OSC_DEBUG
     mess_debug(nodePath().c_str(),_("Save module."));
@@ -362,7 +362,7 @@ void Engine::modSave( )
     prjList(ls);
     for( int p_id = 0; p_id < ls.size(); p_id++ )
 	prjAt(ls[p_id]).at().save();
-}
+}*/
 
 void Engine::modStart()
 {
@@ -497,8 +497,6 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	{
     	    ctrMkNode("list",opt,-1,"/prm/cfg/prj",_("Project"),0664,"root","UI",4,"tp","br","idm","1","s_com","add,del","br_pref","prj_");
     	    ctrMkNode("list",opt,-1,"/prm/cfg/wlb",_("Widget's libraries"),0664,"root","UI",4,"tp","br","idm","1","s_com","add,del","br_pref","wlb_");
-	    ctrMkNode("comm",opt,-1,"/prm/cfg/load",_("Load"),0660,"root","UI");
-    	    ctrMkNode("comm",opt,-1,"/prm/cfg/save",_("Save"),0660,"root","UI");
 	}
 	if(ctrMkNode("area",opt,1,"/ses",_("Sessions"),0444,"root","UI"))
     	    ctrMkNode("list",opt,-1,"/ses/ses",_("Sessions"),0664,"root","UI",3,"tp","br","s_com","add,del","br_pref","ses_");
@@ -540,8 +538,6 @@ void Engine::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/prm/cfg/cp/cp" && ctrChkNode(opt,"set",0660,"root","UI",SEQ_WR) )
 	nodeCopy( nodePath(0,true)+opt->attr("src"), nodePath(0,true)+opt->attr("dst"), opt->attr("user") );
-    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0660,"root","UI",SEQ_WR) )	modLoad();
-    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0660,"root","UI",SEQ_WR) )	modSave();
     else if( a_path == "/br/ses_" || a_path == "/ses/ses" )
     {
         if( ctrChkNode(opt,"get",0664,"root","UI",SEQ_RD) )

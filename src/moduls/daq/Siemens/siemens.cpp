@@ -113,7 +113,7 @@ void TTpContr::postEnable( int flag )
     fldAdd( new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","0;10000") );
     fldAdd( new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
     fldAdd( new TFld("ASINC_WR",_("Asynchronous write mode"),TFld::Boolean,TFld::NoFlag,"1","0") );
-    fldAdd( new TFld("TYPE",_("Connection type"),TFld::Integer,TFld::Selected|TCfg::Prevent,"1","0",
+    fldAdd( new TFld("TYPE",_("Connection type"),TFld::Integer,TFld::Selected,"1","0",
 	(TSYS::int2str(TMdContr::CIF_PB)+";"+TSYS::int2str(TMdContr::ISO_TCP)).c_str(),"CIF_PB;ISO_TCP") );
     fldAdd( new TFld("ADDR",_("Remote controller address"),TFld::String,TFld::NoFlag,"40","10") );
     fldAdd( new TFld("SLOT",_("Slot CPU"),TFld::Integer,TFld::NoFlag,"2","2","0;30") );
@@ -144,7 +144,7 @@ void TTpContr::postEnable( int flag )
     }
 }
 
-void TTpContr::modLoad( )
+void TTpContr::load_( )
 {
     //- Load parameters from command line -
     int next_opt;
@@ -181,7 +181,7 @@ void TTpContr::modLoad( )
     }	
 }
 
-void TTpContr::modSave()
+void TTpContr::save_()
 {
     //- Save CIF devices configuration -
     TConfig cfg(&CIFDevE());
@@ -403,12 +403,11 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TTipDAQ::cntrCmdProc(opt);
-	if(ctrMkNode("area",opt,0,"/mod",_("CIF")))
+	if(ctrMkNode("area",opt,1,"/mod",_("CIF")))
 	{
 	    if(ctrMkNode("area",opt,-1,"/mod/st",_("Status")))
 		ctrMkNode("fld",opt,-1,"/mod/st/drv",_("CIF driver"),0444,"root","root",1,"tp","bool");
-	    if( (cif_devs[0].present || cif_devs[1].present || cif_devs[2].present || cif_devs[3].present) && 
-		    ctrMkNode("table",opt,-1,"/mod/dev",_("CIF devices"),0664,"root","root"))
+	    if( ctrMkNode("table",opt,-1,"/mod/dev",_("CIF devices"),0664,"root","root"))
 	    {
 		ctrMkNode("list",opt,-1,"/mod/dev/brd",_("Board"),0444,"root","root",1,"tp","str");
 	        ctrMkNode("list",opt,-1,"/mod/dev/fwnm",_("Firmware name"),0444,"root","root",1,"tp","real");
@@ -418,8 +417,6 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/mod/dev/addr",_("PB address"),0664,"root","root",1,"tp","dec");
 		ctrMkNode("list",opt,-1,"/mod/dev/speed",_("PB speed"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/mod/dev/lsspd");
 	    }
-	    ctrMkNode("comm",opt,-1,"/mod/load",_("Load"),0660);
-	    ctrMkNode("comm",opt,-1,"/mod/save",_("Save"),0660);
 	}
 	if(ctrMkNode("area",opt,1,"/PB",_("Profibus")))
 	{
@@ -467,6 +464,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 	    }
 	    else if( col == "speed" )	cif_devs[brd].pbspeed = atoi(opt->text().c_str());
 	    if( col == "addr" || col == "speed" ) initCIF(brd);
+	    modif();
 	}
     }
     else if( a_path == "/mod/dev/lsspd" && ctrChkNode(opt) )
@@ -481,8 +479,6 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("el")->setAttr("id","8")->setText("6MBaud");
 	opt->childAdd("el")->setAttr("id","9")->setText("12MBaud");
     }
-    else if( a_path == "/mod/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	modLoad();
-    else if( a_path == "/mod/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	modSave();
     else if( a_path == "/PB/dev" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	
@@ -548,16 +544,16 @@ TParamContr *TMdContr::ParamAttach( const string &name, int type )
     return new TMdPrm(name,&owner().tpPrmAt(type));
 }
 
-void TMdContr::load( )
+void TMdContr::load_( )
 {
     cfgViewAll(true);
-    TController::load( );
+    TController::load_( );
     cfg("TYPE").setI(m_type);
 }
 
-void TMdContr::save( )
+void TMdContr::save_( )
 {
-    TController::save();
+    TController::save_();
 }
 
 void TMdContr::enable_( )
@@ -621,6 +617,8 @@ void TMdContr::stop_( )
 
 bool TMdContr::cfgChange( TCfg &icfg )
 {
+    TController::cfgChange(icfg);
+    
     if( icfg.fld().name() == "TYPE" )
     {
 	cfg("CIF_DEV").setView(icfg.getI()==0);
@@ -1446,9 +1444,9 @@ void TMdPrm::disable()
     TParamContr::disable();
 }
 
-void TMdPrm::load( )
+void TMdPrm::load_( )
 {
-    TParamContr::load();
+    TParamContr::load_();
     loadIO();
 }
 
@@ -1473,9 +1471,9 @@ void TMdPrm::loadIO()
     initLnks();
 }
 
-void TMdPrm::save( )
+void TMdPrm::save_( )
 {
-    TParamContr::save();
+    TParamContr::save_();
     saveIO();
 }
 
@@ -1673,6 +1671,7 @@ void TMdPrm::calc( bool first, bool last )
                 }
         //- Calc template -	
         TValFunc::calc();
+	modif();
 	
 	//- Put output links -
         for( int i_l = 0; i_l < lnkSize(); i_l++ )
@@ -1821,6 +1820,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		    if(ioType(lnk(i_l).io_id)==IO::Boolean)
 			lnk(i_l).db_addr = lnk(i_l).db_addr+"."+TSYS::int2str(cbit);
 		    lnk(i_l).val.sz = csz;
+		    modif();
 		}
 	    }
 	    initLnks();
@@ -1846,6 +1846,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
             }
             else if( func()->io(i_io)->flg()&TPrmTempl::CfgPublConst )
 		setS(i_io,opt->text());
+	    modif();
         }
     }
     else TParamContr::cntrCmdProc(opt);

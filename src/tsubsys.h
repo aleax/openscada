@@ -51,8 +51,6 @@ class TSubSYS : public TCntrNode
 	virtual int subVer( )	{ return 0; }		//Type/grp module version
 	
 	//- Start procedures -
-	virtual void subLoad( );
-	virtual void subSave( );
 	virtual void subStart( );
 	virtual void subStop( );
     

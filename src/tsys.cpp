@@ -48,7 +48,7 @@ bool TSYS::finalKill = false;
 TSYS::TSYS( int argi, char ** argb, char **env ) : 
     m_confFile("/etc/oscada.xml"), m_id("EmptySt"), m_name("Empty Station"),
     m_user("root"),argc(argi), envp((const char **)env), argv((const char **)argb), stop_signal(0), 
-    m_sysOptCfg(false), mWorkDB(""), mSaveAtExit(false)
+    m_sysOptCfg(false), mWorkDB(""), mSaveAtExit(false), mSavePeriod(0)
 {
     finalKill = false;
     SYS = this;		//Init global access value
@@ -88,6 +88,18 @@ TSYS::~TSYS(  )
     del("BD");
     
     delete Mess;
+}
+
+string TSYS::workDir( )
+{
+    char buf[STR_BUF_LEN];
+    return getcwd(buf,sizeof(buf));
+}
+
+string TSYS::setWorkDir( const string &wdir )
+{
+    chdir( wdir.c_str() );
+    modif( );
 }
 
 string TSYS::int2str( int val, TSYS::IntView view )
@@ -185,6 +197,7 @@ string TSYS::optDescr( )
 	"SysLang    <lang>	Internal language.\n"
     	"WorkDB     <Type.Name> Work DB (type and name).\n"
 	"SaveAtExit <true>      Save system at exit.\n"
+	"SavePeriod <sec>	Save system period.\n"
 	"SYSOptCfg  <true>      Get system options from DB.\n\n"),
 	PACKAGE_NAME,VERSION,buf.sysname,buf.release,nodePath().c_str());
 		
@@ -274,59 +287,60 @@ void TSYS::cfgPrmLoad()
     chdir(TBDS::genDBGet(nodePath()+"Workdir","","root",sysOptCfg()).c_str());
     
     mWorkDB = TBDS::genDBGet(nodePath()+"WorkDB","*.*","root",sysOptCfg());
-    mSaveAtExit = atoi(TBDS::genDBGet(nodePath()+"SaveAtExit","0","root",sysOptCfg()).c_str());
+    setSaveAtExit( atoi(TBDS::genDBGet(nodePath()+"SaveAtExit","0","root").c_str()) );
+    setSavePeriod( atoi(TBDS::genDBGet(nodePath()+"SavePeriod","0","root").c_str()) );
 }
 
-void TSYS::load()
+void TSYS::load_()
 {
     static bool first_load = true;    
-    
-    if(first_load)
-    {
-	add(new TBDS());
-	add(new TSecurity());
-	add(new TTransportS());
-	add(new TProtocolS());
-	add(new TDAQS());
-	add(new TArchiveS());
-	add(new TSpecialS());
-	add(new TUIS());
-	add(new TModSchedul());
-    }
     
     bool cmd_help = cfgFileLoad();
     mess_info(nodePath().c_str(),_("Load!"));
     cfgPrmLoad();
-    Mess->load();	//Messages load
+    Mess->load();	//Messages load    
     
-    if(first_load)
+    if( first_load )
     {
-    	//Load modules
-    	modSchedul().at().subLoad();
-    	modSchedul().at().loadLibS();
-	//Second load for load from generic DB	
-	cfgPrmLoad();
+	//- Create subsystems -
+	add( new TBDS() );
+	add( new TSecurity() );
+	add( new TTransportS() );
+	add( new TProtocolS() );
+	add( new TDAQS() );
+	add( new TArchiveS() );
+	add( new TSpecialS() );
+	add( new TUIS() );
+	add( new TModSchedul() );
+	
+	//- Load modules -        
+	modSchedul().at().load(); 
+	modSchedul().at().loadLibS();
+	
+	//- First DB subsystem load -
+	db().at().load();
+	
+	//- Second load for load from generic DB -
+	cfgPrmLoad(); 
 	Mess->load();
     }
 
-    //================== Load subsystems and modules ============
+    //- Direct load subsystems and modules -
     vector<string> lst;
     list(lst);
     for( unsigned i_a=0; i_a < lst.size(); i_a++ )
-        try{ at(lst[i_a]).at().subLoad(); }
+        try{ at(lst[i_a]).at().load(); }
         catch(TError err) 
         { 
     	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	    mess_err(nodePath().c_str(),_("Error load subsystem <%s>."),lst[i_a].c_str());
 	}
-    
-    mess_debug(nodePath().c_str(),_("Load OK!"));
-    
-    if( cmd_help ) throw TError(nodePath().c_str(),"Command line help call.");
+
+    if( cmd_help ) stop();
     first_load = false;
 }
 
-void TSYS::save( )
+void TSYS::save_( )
 {
     char buf[STR_BUF_LEN];
     
@@ -336,21 +350,10 @@ void TSYS::save( )
     getcwd(buf,sizeof(buf));
     TBDS::genDBSet(nodePath()+"Workdir",buf);
     TBDS::genDBSet(nodePath()+"WorkDB",mWorkDB);
-    TBDS::genDBSet(nodePath()+"SaveAtExit",TSYS::int2str(mSaveAtExit));
+    TBDS::genDBSet(nodePath()+"SaveAtExit",TSYS::int2str(saveAtExit()));
+    TBDS::genDBSet(nodePath()+"SavePeriod",TSYS::int2str(savePeriod()));    
     
     Mess->save();       //Messages load
-    
-    vector<string> lst;
-    list(lst);
-    for( unsigned i_a=0; i_a < lst.size(); i_a++ )
-        try{ at(lst[i_a]).at().subSave(); }
-        catch(TError err) 
-	{ 
-	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	    mess_err(nodePath().c_str(),_("Error save subsystem <%s>."),lst[i_a].c_str());
-	}
-    
-    mess_debug(nodePath().c_str(),_("Save OK!"));
 }
 
 int TSYS::start(  )
@@ -366,23 +369,25 @@ int TSYS::start(  )
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str()); 
 	    mess_err(nodePath().c_str(),_("Error start subsystem <%s>."),lst[i_a].c_str()); 
 	}	    
-    mess_debug(nodePath().c_str(),_("Start OK!"));
     
     cfgFileScan( true );
-    int i_cnt = 0;    
-    while(!stop_signal)	
+    unsigned int i_cnt = 1;    
+    while( !stop_signal )	
     {
-	if( ++i_cnt > 10*1000/STD_WAIT_DELAY )  //10 second
-	{
-	    i_cnt = 0;
-	    clkCalc( );
-    	    cfgFileScan( );	
-	}
-       	usleep( STD_WAIT_DELAY*1000 ); 
+	//- CPU frequency calc
+	if( !(i_cnt%(10*1000/STD_WAIT_DELAY)) )	clkCalc( );
+	//- Config file change periodic check -
+	if( !(i_cnt%(10*1000/STD_WAIT_DELAY)) )	cfgFileScan( );	
+	//- Periodic changes saving to DB -
+	if( savePeriod() && !(i_cnt%(savePeriod()*1000/STD_WAIT_DELAY)) )
+	    save();
+	    
+       	usleep( STD_WAIT_DELAY*1000 );
+	i_cnt++;
     }
     
     mess_info(nodePath().c_str(),_("Stop!"));  
-    if(saveAtExit())	save();
+    if( saveAtExit() || savePeriod() )	save();
     for( int i_a=lst.size()-1; i_a >= 0; i_a-- )
 	try { at(lst[i_a]).at().subStop(); }
 	catch(TError err) 
@@ -390,7 +395,6 @@ int TSYS::start(  )
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	    mess_err(nodePath().c_str(),_("Error stop subsystem <%s>."),lst[i_a].c_str());
 	}
-    mess_debug(nodePath().c_str(),_("Stop OK!"));
 
     return stop_signal;       
 }
@@ -445,7 +449,7 @@ void TSYS::cfgFileScan( bool first )
     struct stat f_stat_t;
     bool   up = false;
 
-    if(cfg_fl == cfgFile())
+    if( cfg_fl == cfgFile() )
     {
 	stat(cfg_fl.c_str(),&f_stat_t);
 	if( f_stat.st_mtime != f_stat_t.st_mtime ) up = true;
@@ -453,16 +457,8 @@ void TSYS::cfgFileScan( bool first )
     else up = true;
     cfg_fl = cfgFile();
     stat(cfg_fl.c_str(),&f_stat);
-    if(up == true && !first )
-    {
-	load();
-	Mess->load();
-	
-	vector<string> lst;
-	list( lst );
-	for( unsigned i_sub = 0; i_sub < lst.size(); i_sub++)
-    	    at(lst[i_sub]).at().subLoad();
-    }    
+    
+    if( up && !first )	{ modifG(); load(); }
 }
 
 long long TSYS::curTime()
@@ -811,6 +807,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/gen/workdir",_("Work directory"),0664,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/wrk_db",_("Work DB (module.bd)"),0660,"root",db().at().subId().c_str(),1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/saveExit",_("Save system at exit"),0664,"root","root",1,"tp","bool");
+	    ctrMkNode("fld",opt,-1,"/gen/savePeriod",_("Save system period"),0664,"root","root",1,"tp","dec");	    
 	    ctrMkNode("fld",opt,-1,"/gen/lang",_("Language"),0664,"root","root",1,"tp","str");
 	    if(ctrMkNode("area",opt,-1,"/gen/mess",_("Messages"),0444))
 	    {
@@ -820,8 +817,6 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/gen/mess/log_stde",_("To stderr"),0664,"root","root",1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/gen/mess/log_arch",_("To archive"),0664,"root","root",1,"tp","bool");
 	    }
-	    ctrMkNode("comm",opt,-1,"/gen/load",_("Load system"),0660);
-	    ctrMkNode("comm",opt,-1,"/gen/save",_("Save system"),0660);
 	}
 	if(ctrMkNode("area",opt,-1,"/subs",_("Subsystems")))
 	    ctrMkNode("list",opt,-1,"/subs/br",_("Subsystems"),0444,"root","root",3,"idm","1","tp","br","br_pref","sub_");
@@ -832,9 +827,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     
     //Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/obj" && ctrChkNode(opt,"copy",RWRWRW,"root","root",SEQ_WR) )	
-	nodeCopy(opt->attr("src"),opt->attr("dst"),opt->attr("user"));
-    else if( a_path == "/ico" && ctrChkNode(opt) )
+    if( a_path == "/ico" && ctrChkNode(opt) )
     {
 	string itp;
         opt->setText(TSYS::strEncode(TUIS::icoGet(id(),&itp),TSYS::base64));
@@ -866,17 +859,22 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     else if( a_path == "/gen/wrk_db" )
     { 
 	if( ctrChkNode(opt,"get",0660,"root",db().at().subId().c_str(),SEQ_RD) ) opt->setText(mWorkDB); 
-	if( ctrChkNode(opt,"set",0660,"root",db().at().subId().c_str(),SEQ_WR) ) mWorkDB = opt->text();
+	if( ctrChkNode(opt,"set",0660,"root",db().at().subId().c_str(),SEQ_WR) ) setWorkDB(opt->text());
     }
     else if( a_path == "/gen/saveExit" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",db().at().subId().c_str(),SEQ_RD) ) opt->setText(int2str(mSaveAtExit)); 
-	if( ctrChkNode(opt,"set",0664,"root",db().at().subId().c_str(),SEQ_WR) ) mSaveAtExit = atoi(opt->text().c_str());
+	if( ctrChkNode(opt,"get",0664,"root",db().at().subId().c_str(),SEQ_RD) ) opt->setText( int2str(saveAtExit()) ); 
+	if( ctrChkNode(opt,"set",0664,"root",db().at().subId().c_str(),SEQ_WR) ) setSaveAtExit( atoi(opt->text().c_str()) );
     }
-    else if( a_path == "/gen/workdir" ) 
+    else if( a_path == "/gen/savePeriod" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(getcwd(buf,sizeof(buf)));
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	chdir(opt->text().c_str());
+	if( ctrChkNode(opt,"get",0664,"root",db().at().subId().c_str(),SEQ_RD) ) opt->setText( int2str(savePeriod()) ); 
+	if( ctrChkNode(opt,"set",0664,"root",db().at().subId().c_str(),SEQ_WR) ) setSavePeriod( atoi(opt->text().c_str()) );
+    }    
+    else if( a_path == "/gen/workdir" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(workDir());
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setWorkDir(opt->text().c_str());
     }
     else if( a_path == "/gen/lang" )
     {
@@ -916,6 +914,5 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    opt->childAdd("el")->setAttr("id",lst[i_a])->setText(at(lst[i_a]).at().subName());
     }
     else if( a_path == "/hlp/g_help" && ctrChkNode(opt,"get",0440,"root","root",SEQ_RD) ) opt->setText(optDescr());
-    else if( a_path == "/gen/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	load();
-    else if( a_path == "/gen/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	save();
+    else TCntrNode::cntrCmdProc(opt);
 }

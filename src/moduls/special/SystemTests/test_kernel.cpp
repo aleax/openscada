@@ -147,7 +147,7 @@ string TTest::optDescr( )
     return(buf);
 }			
 
-void TTest::modLoad( )
+void TTest::load_( )
 {
     //- Load parameters from command line -
     int next_opt;

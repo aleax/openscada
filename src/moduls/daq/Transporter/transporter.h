@@ -58,8 +58,7 @@ class TMdPrm : public TParamContr
 	void enable( );
 	void disable( );
 	
-	void load( );		//Synchronize parameter
-        void save( )		{ }
+
 	void update( );		//Update parameter
 
 	TElem &elem( )		{ return p_el; }
@@ -67,6 +66,7 @@ class TMdPrm : public TParamContr
 
     protected:
 	//Methods
+	void load_( );		//Synchronize parameter
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
     private:
@@ -96,17 +96,14 @@ class TMdContr: public TController
 	double syncPer( )	{ return m_sync; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
-
-	void load( );
-	void save( );
-	void enable_( );
-	void start_( );
-	void stop_( );
 	
 	void prmEn( const string &id, bool val );
 
     protected:
 	//Methods
+	void enable_( );
+	void start_( );
+	void stop_( );	
     	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
     private:
@@ -161,12 +158,14 @@ class TTpContr: public TTipDAQ
 	//Methods
     	TTpContr( string name );
 	~TTpContr( );
-
-	void postEnable( int flag );
-	void modLoad( );
-
+ 	
 	//- Request to OpenSCADA control interface -	
-        int cntrIfCmd( XMLNode &node );
+        int cntrIfCmd( XMLNode &node ); 
+
+    protected:
+	//Methods
+	void postEnable( int flag );
+	void load_( );
 
     private:
 	//Methods

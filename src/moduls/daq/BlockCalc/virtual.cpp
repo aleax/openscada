@@ -103,7 +103,7 @@ string TipContr::optDescr( )
     return(buf);
 }
 
-void TipContr::modLoad()
+void TipContr::load_()
 {
     //========== Load parameters from command line ============
     int next_opt;
@@ -137,7 +137,6 @@ void TipContr::postEnable( int flag )
     fldAdd( new TFld("BLOCK_SH",_("Block's table"),TFld::String,TFld::NoFlag,"30","block") );	
     fldAdd( new TFld("PERIOD",_("Calc period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","0;10000") );
     fldAdd( new TFld("PRIOR",_("Calc task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
-    fldAdd( new TFld("PER_DB",_("Sync db period (s)"),TFld::Integer,TCfg::Prevent,"5","0","0;3600") );
     fldAdd( new TFld("ITER",_("Iteration number into calc period"),TFld::Integer,TFld::NoFlag,"2","1","0;99") );
     
     //Add parameter types
@@ -177,16 +176,6 @@ TController *TipContr::ContrAttach( const string &name, const string &daq_db )
     return new Contr(name,daq_db,this);
 }
 
-void TipContr::loadBD()
-{
-    
-}
-
-void TipContr::saveBD()
-{
-
-}
-
 void TipContr::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
@@ -207,24 +196,16 @@ void TipContr::cntrCmdProc( XMLNode *opt )
 //************************************************ 
 Contr::Contr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     ::TController(name_c, daq_db, cfgelem), prc_st(false), endrun_req(false), sync_st(false), tm_calc(0.0),
-    m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId()), m_iter(cfg("ITER").getId()), m_dbper(cfg("PER_DB").getId())
+    m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId()), m_iter(cfg("ITER").getId())
 {
     cfg("PRM_BD").setS("BlckCalcPrm_"+name_c);
     cfg("BLOCK_SH").setS("BlckCalcBlcks_"+name_c);
     m_bl = grpAdd("blk_");
-    
-    //Create sync DB timer
-    struct sigevent sigev;
-    sigev.sigev_notify = SIGEV_THREAD;
-    sigev.sigev_value.sival_ptr = this;
-    sigev.sigev_notify_function = TaskDBSync;
-    sigev.sigev_notify_attributes = NULL;
-    timer_create(CLOCK_REALTIME,&sigev,&sncDBTm);			    
 }
 
 Contr::~Contr()
 {
-    timer_delete(sncDBTm);
+
 }
 
 TCntrNode &Contr::operator=( TCntrNode &node )
@@ -274,18 +255,27 @@ void Contr::postDisable(int flag)
     TController::postDisable(flag);
 }
 
-void Contr::load( )
+void Contr::load_( )
 {
-    TController::load( );
+    TController::load_( );
+
+    //- Load block's configuration -
+    TConfig c_el(&mod->blockE());
+    c_el.cfgViewAll(false);	    
+    string bd = DB()+"."+cfg("BLOCK_SH").getS();
     
-    loadV();
-}
-
-void Contr::save( )
-{
-    TController::save();
-
-    saveV();
+    int fld_cnt = 0;
+    while( SYS->db().at().dataSeek(bd,mod->nodePath()+cfg("BLOCK_SH").getS(),fld_cnt++,c_el) )
+    {
+        string id = c_el.cfg("ID").getS();
+        if( !chldPresent(m_bl,id) )
+        {
+            blkAdd(id);
+            ((TConfig &)blkAt(id).at()) = c_el;
+        }
+	blkAt(id).at().load();
+	c_el.cfg("ID").setS("");
+    }
 }
 
 void Contr::enable_( )
@@ -349,12 +339,6 @@ void Contr::start_( )
         if( TSYS::eventWait(prc_st, true, nodePath()+"start",5) )
             throw TError(nodePath().c_str(),_("Acquisition task no started!"));
     }	    
-
-    //- Start interval timer for periodic thread creating of DB syncing -
-    struct itimerspec itval;
-    itval.it_interval.tv_sec = itval.it_value.tv_sec = m_dbper;
-    itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
-    timer_settime(sncDBTm, 0, &itval, NULL);
 }
 
 void Contr::stop_( )
@@ -369,14 +353,6 @@ void Contr::stop_( )
         pthread_join( calcPthr, NULL );
     }
 
-    //- Stop interval timer for periodic thread creating -
-    struct itimerspec itval;
-    itval.it_interval.tv_sec = itval.it_interval.tv_nsec =
-	itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
-    timer_settime(sncDBTm, 0, &itval, NULL);
-    if( TSYS::eventWait( sync_st, false, nodePath()+"sync_stop",5) )
-        throw TError(nodePath().c_str(),_("Controller sync DB no stoped!"));
-	
     //- Make deprocess all blocks -
     vector<string> lst;
     blkList(lst);
@@ -384,50 +360,6 @@ void Contr::stop_( )
         if( blkAt(lst[i_l]).at().process() )
     	    blkAt(lst[i_l]).at().setProcess(false);
 } 
-
-void Contr::loadV( )
-{
-    TConfig c_el(&mod->blockE());
-    c_el.cfgViewAll(false);	    
-    string bd = DB()+"."+cfg("BLOCK_SH").getS();
-    
-    int fld_cnt = 0;
-    while( SYS->db().at().dataSeek(bd,mod->nodePath()+cfg("BLOCK_SH").getS(),fld_cnt++,c_el) )
-    {
-        string id = c_el.cfg("ID").getS();
-        if( !chldPresent(m_bl,id) )
-        {
-            blkAdd(id);
-            ((TConfig &)blkAt(id).at()) = c_el;
-            //if( blkAt(id).at().toEnable() ) blkAt(id).at().enable(true);
-        }
-	blkAt(id).at().load();
-	c_el.cfg("ID").setS("");
-    }
-}
-
-void Contr::saveV( )
-{
-    vector<string> lst;
-	
-    // Save messages bd
-    blkList(lst);
-    for( int i_l = 0; i_l < lst.size(); i_l++ )
-        blkAt(lst[i_l]).at().save();
-}
-
-void Contr::freeV( )
-{
-    vector<string> lst;
-	
-    // Save messages bd
-    blkList(lst);
-    for( int i_l = 0; i_l < lst.size(); i_l++ )    
-    {
-	try{ blkDel(lst[i_l]); }
-	catch(TError){ throw TError(nodePath().c_str(),_("Can't delete block <%s>."),lst[i_l].c_str()); }
-    }
-}
 
 void *Contr::Task( void *icontr )
 {
@@ -486,22 +418,6 @@ void *Contr::Task( void *icontr )
     return NULL;
 }
 
-void Contr::TaskDBSync(union sigval obj)
-{
-    Contr *cntr = (Contr *)obj.sival_ptr;
-    if( cntr->sync_st )  return;
-    cntr->sync_st = true;
-    
-    try{ cntr->saveV( ); }
-    catch(TError err) 
-    { 
-	mess_err(err.cat.c_str(),"%s",err.mess.c_str() ); 
-	mess_err(cntr->nodePath().c_str(),_("Block save error."));
-    }
-    
-    cntr->sync_st = false;
-}
-
 TParamContr *Contr::ParamAttach( const string &name, int type )
 {
     return new Prm(name,&owner().tpPrmAt(type));
@@ -526,21 +442,6 @@ void Contr::blkProc( const string & id, bool val )
     if( !val && i_blk < clc_blks.size()	)
 	clc_blks.erase(clc_blks.begin()+i_blk);
 }	
-
-bool Contr::cfgChange( TCfg &cfg )
-{
-    if( startStat() )
-    {
-	struct itimerspec itval;
-	if( cfg.fld().name() == "PER_DB" )
-	{
-	    itval.it_interval.tv_sec = itval.it_value.tv_sec = m_dbper;
-    	    itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
-	    timer_settime(sncDBTm, 0, &itval, NULL);
-	}
-    }
-    return true;
-}
 
 void Contr::cntrCmdProc( XMLNode *opt )
 {

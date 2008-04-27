@@ -270,15 +270,19 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	    {
 		string a_id = vlAt(attr).at().arch().at().id();
 		SYS->archive().at().valDel(a_id,true);
+		modif();
 	    }
 	    //--- Change archivator status ---
 	    if( col != "prc" && !vlAt(attr).at().arch().freeStat() )
 	    {
 		if( v_get )	vlAt(attr).at().arch().at().archivatorAttach(col);
 		else 		vlAt(attr).at().arch().at().archivatorDetach(col,true);
+		modif();
+		vlAt(attr).at().arch().at().modif();
 	    }	
 	}
     }
+    else TCntrNode::cntrCmdProc(opt);
 }    				    
 
 //*************************************************
@@ -287,7 +291,8 @@ void TValue::cntrCmdProc( XMLNode *opt )
 TVal::TVal( TFld &fld, TValue *owner ) : 
     TCntrNode(owner), m_cfg(false)
 {
-    time = 0;	    
+    time = 0;
+    modifClr();
     
     //- Chek for self field for dinamic elements -
     if( fld.flg()&TFld::SelfFld )

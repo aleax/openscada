@@ -208,23 +208,10 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
 
     //- Add button box -
     //------------------ 
-    butbox = new QDialogButtonBox(QDialogButtonBox::Apply|
-				  QDialogButtonBox::Cancel|
-				  QDialogButtonBox::Close, Qt::Horizontal,this);
-    //-- Init Apply button --
-    butbox->button(QDialogButtonBox::Apply)->setText(_("Save to DB"));
-    if(!ico_t.load(TUIS::icoPath("vision_db_save").c_str())) ico_t.load(":/images/db_save.png");
-    butbox->button(QDialogButtonBox::Apply)->setIcon(QPixmap::fromImage(ico_t));
-    connect(butbox->button(QDialogButtonBox::Apply), SIGNAL(clicked()), this, SLOT(pressApply()));    
-    //-- Init Cancel button --
-    butbox->button(QDialogButtonBox::Cancel)->setText(_("Load from DB"));
-    if(!ico_t.load(TUIS::icoPath("vision_db_load").c_str())) ico_t.load(":/images/db_load.png");
-    butbox->button(QDialogButtonBox::Cancel)->setIcon(QPixmap::fromImage(ico_t));
-    //butbox->button(QDialogButtonBox::Cancel)->setShortcut(QKeySequence("Esc"));
-    connect(butbox->button(QDialogButtonBox::Cancel), SIGNAL(clicked()), this, SLOT(pressCancel()));
+    butbox = new QDialogButtonBox( QDialogButtonBox::Close, Qt::Horizontal, this );
     //-- Init close button --
     butbox->button(QDialogButtonBox::Close)->setText(_("Close"));    
-    connect(butbox->button(QDialogButtonBox::Close), SIGNAL(clicked()), this, SLOT(pressClose()));
+    connect(butbox->button(QDialogButtonBox::Close), SIGNAL(clicked()), this, SLOT(close()));
 
     tab_lay->addWidget(butbox);
 
@@ -527,41 +514,14 @@ void LibProjProp::isModify( )
     is_modif = true;
 }
 
-void LibProjProp::pressApply( )
-{    
-    XMLNode req("set");
-    req.setAttr("path",ed_it+"/"+TSYS::strEncode("/obj/cfg/save",TSYS::PathEl));
-        
-    if( owner()->cntrIfCmd(req) )
-	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
-
-    is_modif = false; 
-    
-    emit apply(ed_it);
-}
-
-void LibProjProp::pressCancel( )
-{    
-    XMLNode req("set");
-    req.setAttr("path",ed_it+"/"+TSYS::strEncode("/obj/cfg/load",TSYS::PathEl));
-        
-    if( owner()->cntrIfCmd(req) )
-	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
-    else showDlg(ed_it,true);
-}
-
-void LibProjProp::pressClose( )
+void LibProjProp::closeEvent( QCloseEvent *ce )
 {
-    if( is_modif )
-    {
-	InputDlg dlg(this,obj_ico->icon(),
-             _("Some attributes is changed. You sure to close window?"),_("Close window"),false,false);
-	if( dlg.exec() != QDialog::Accepted )	return;
-    }			    
-
+    if( is_modif )  emit apply(ed_it);
+    
     is_modif = false;
     ed_it = "";
-    hide();
+	    
+    ce->accept();
 }
 
 void LibProjProp::addMimeData( )
@@ -916,22 +876,8 @@ VisItProp::VisItProp( VisDevelop *parent ) :
 
     //- Add button box -
     //------------------
-    butbox = new QDialogButtonBox(QDialogButtonBox::Apply|
-				  QDialogButtonBox::Cancel|
-				  QDialogButtonBox::Close, Qt::Horizontal,this);
-    //-- Init Apply button --
-    butbox->button(QDialogButtonBox::Apply)->setText(_("Save to DB"));
-    if(!ico_t.load(TUIS::icoPath("vision_db_save").c_str())) ico_t.load(":/images/db_save.png");
-    butbox->button(QDialogButtonBox::Apply)->setIcon(QPixmap::fromImage(ico_t));
-    connect(butbox->button(QDialogButtonBox::Apply), SIGNAL(clicked()), this, SLOT(pressApply()));    
-    //-- Init Cancel button --
-    butbox->button(QDialogButtonBox::Cancel)->setText(_("Load from DB"));
-    if(!ico_t.load(TUIS::icoPath("vision_db_load").c_str())) ico_t.load(":/images/db_load.png");
-    butbox->button(QDialogButtonBox::Cancel)->setIcon(QPixmap::fromImage(ico_t));
-    //butbox->button(QDialogButtonBox::Cancel)->setShortcut(QKeySequence("Esc"));
-    connect(butbox->button(QDialogButtonBox::Cancel), SIGNAL(clicked()), this, SLOT(pressCancel()));
-    //-- Init close button --
-    connect(butbox->button(QDialogButtonBox::Close), SIGNAL(clicked()), this, SLOT(pressClose()));
+    butbox = new QDialogButtonBox( QDialogButtonBox::Close, Qt::Horizontal, this );
+    connect(butbox->button(QDialogButtonBox::Close), SIGNAL(clicked()), this, SLOT(close()));
 
     tab_lay->addWidget(butbox);
 
@@ -1416,41 +1362,14 @@ void VisItProp::isModify( )
     is_modif = true;
 }
 
-void VisItProp::pressApply( )
-{    
-    XMLNode req("set");
-    req.setAttr("path",ed_it+"/"+TSYS::strEncode("/wdg/cfg/save",TSYS::PathEl));
-        
-    if( owner()->cntrIfCmd(req) )
-	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this); 
-
-    emit apply(ed_it);
-    
-    is_modif = false;
-}
-
-void VisItProp::pressCancel( )
-{  
-    XMLNode req("set");
-    req.setAttr("path",ed_it+"/"+TSYS::strEncode("/wdg/cfg/load",TSYS::PathEl));
-        
-    if( owner()->cntrIfCmd(req) )
-	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
-    else showDlg(ed_it,true);     
-}
-
-void VisItProp::pressClose( )
+void VisItProp::closeEvent( QCloseEvent *ce )
 {
-    if( is_modif )
-    {
-	InputDlg dlg(this,obj_ico->icon(),
-             _("Some attributes is changed. You sure to close window?"),_("Close window"),false,false);
-	if( dlg.exec() != QDialog::Accepted )	return;
-    }			    
+    if( is_modif )  emit apply(ed_it);
 
     is_modif = false;
     ed_it = "";
-    hide();
+    
+    ce->accept();
 }
 
 void VisItProp::addAttr( )

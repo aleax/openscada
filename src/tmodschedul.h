@@ -51,10 +51,12 @@ class TModSchedul : public TSubSYS
 	TModSchedul( );    
 	~TModSchedul( );
 	
-	void chkPer( int per );
+	int chkPer( )		{ return m_per; }
+	string modPath( )	{ return m_mod_path; }
 
-	void subLoad( );
-	void subSave( );
+	void setChkPer( int per );
+	void setModPath( const string &vl )	{ m_mod_path = vl; modif(); }
+
 	void subStart( );	
 	void subStop( );
 	
@@ -68,6 +70,8 @@ class TModSchedul : public TSubSYS
 
     protected:
 	//Methods
+	void load_( );
+        void save_( );
 	void preDisable( int flag );
 	
     private:

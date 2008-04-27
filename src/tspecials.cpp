@@ -39,7 +39,7 @@ string TSpecialS::optDescr( )
     	"======================= Subsystem \"Special\" options =====================\n\n"));
 }
 
-void TSpecialS::subLoad( )
+void TSpecialS::load_( )
 {
     //- Load parameters from command line -
     int next_opt;
@@ -63,8 +63,6 @@ void TSpecialS::subLoad( )
     
     //- Load parameters from config file -
 
-    //- Load modules -
-    TSubSYS::subLoad();
 }
 
 void TSpecialS::cntrCmdProc( XMLNode *opt )

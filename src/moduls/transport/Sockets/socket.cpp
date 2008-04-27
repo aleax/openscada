@@ -117,7 +117,7 @@ string TTransSock::optDescr( )
     return(buf);
 }
 
-void TTransSock::modLoad( )
+void TTransSock::load_( )
 {
     //- Load parameters from command line -
     int next_opt;

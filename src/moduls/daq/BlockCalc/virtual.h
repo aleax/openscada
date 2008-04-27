@@ -84,13 +84,6 @@ class Contr: public TController
 	~Contr( );
 
 	TCntrNode &operator=( TCntrNode &node );
-
-	void load( );
-	void save( );
-	void enable_( );
-	void disable_( );	
-	void start_( );
-	void stop_( );
     
 	TParamContr *ParamAttach( const string &name, int type );
 	int period( )  				{ return m_per; }
@@ -109,12 +102,12 @@ class Contr: public TController
     
     protected:
 	//Protected methods
-	bool cfgChange( TCfg &cfg );
+	void load_( );
+	void enable_( );
+	void disable_( );		
+	void start_( );
+	void stop_( );		
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-	
-	void loadV( );
-	void saveV( );
-	void freeV( );
 	
         //- Process stat -
         void blkProc( const string & id, bool val );
@@ -124,7 +117,6 @@ class Contr: public TController
     private:
 	//Private methods
 	static void *Task( void *contr );
-	static void TaskDBSync(union sigval obj);
 	
 	//Private attributes
 	bool	prc_st,      	// Calc status
@@ -132,11 +124,9 @@ class Contr: public TController
 		sync_st;	// Sync DB status
 	int	&m_per,  	// Clock period (ms)
 		&m_prior,	// Process data task priority
-		&m_iter,    	// Iteration into clock
-		&m_dbper;	// DB period sync (s)
+		&m_iter;    	// Iteration into clock
 	
 	pthread_t calcPthr;	// Calc pthread
-	timer_t	sncDBTm;	// Sync DB timer
 	
 	int	m_bl;
 	vector< AutoHD<Block> >	clc_blks;	// Calc blocks HD
@@ -155,8 +145,6 @@ class TipContr: public TTipDAQ
 	TipContr( string name );
 	~TipContr( );
 	
-	void modLoad( );
-	
 	TController *ContrAttach( const string &name, const string &daq_db );
 	
 	TElem &blockE( )	{ return blk_el; }
@@ -169,14 +157,13 @@ class TipContr: public TTipDAQ
     protected:
 	//Protected methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	void load_( );
     
     private:
 	//Private methods
 	void postEnable( int flag );
 	void preDisable( int flag );
         string optDescr( );
-	void loadBD( );
-	void saveBD( );
 	
         //Private attributes
 	TElem	blk_el;

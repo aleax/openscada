@@ -139,7 +139,7 @@ string ModArch::optDescr( )
     return buf;
 }
 
-void ModArch::modLoad()
+void ModArch::load_()
 {
     //- Load parameters from command line -
     int next_opt;

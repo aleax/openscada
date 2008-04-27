@@ -100,7 +100,7 @@ string TTpContr::optDescr( )
     return buf;
 }
 
-void TTpContr::modLoad( )
+void TTpContr::load_( )
 {
     //- Load parameters from command line -
     int next_opt;
@@ -183,16 +183,6 @@ void TMdContr::postDisable(int flag)
 TParamContr *TMdContr::ParamAttach( const string &name, int type )
 {
     return new TMdPrm(name,&owner().tpPrmAt(type));
-}
-
-void TMdContr::load( )
-{
-    TController::load( );
-}
-
-void TMdContr::save( )
-{
-    TController::save();
 }
 
 void TMdContr::start_( )
@@ -386,9 +376,9 @@ void TMdPrm::disable()
     TParamContr::disable();
 }
 
-void TMdPrm::load( )
+void TMdPrm::load_( )
 {
-    TParamContr::load();
+    TParamContr::load_();
     try
     {
 	mode(mode(),m_prm);
@@ -418,9 +408,9 @@ void TMdPrm::loadIO()
     }
 }
 
-void TMdPrm::save( )
+void TMdPrm::save_( )
 {
-    TParamContr::save();
+    TParamContr::save_();
     saveIO();
 }
 
@@ -769,6 +759,7 @@ void TMdPrm::calc( bool first, bool last )
 	
 	//- Calc template -
         tmpl->val.calc();
+	modif();
 	
         //- Put output links -
         for( int i_l = 0; i_l < lnkSize(); i_l++ )
@@ -951,6 +942,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 			if( prm.at().vlPresent(p_attr) )
 			{ 
 			    lnk(i_l).prm_attr= p_vl+"."+p_attr; 
+			    modif( );
 			    noonly_no_set = false; 
 			}
 			else no_set+=p_attr+",";
@@ -1027,6 +1019,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
             }
             else if( tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgPublConst )
 		tmpl->val.setS(i_io,opt->text());
+	    modif();
         }
     }
     else TParamContr::cntrCmdProc(opt);

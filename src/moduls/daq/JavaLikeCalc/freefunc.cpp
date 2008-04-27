@@ -49,6 +49,11 @@ Func::~Func( )
 
 }
 
+void Func::postEnable( int flag )
+{
+    if( owner().DB().empty() )	modifClr();
+}
+
 void Func::preDisable( int flag )
 {
     if( m_tval ) { delete m_tval; m_tval = NULL; }
@@ -57,7 +62,7 @@ void Func::preDisable( int flag )
 void Func::postDisable( int flag )
 {
     setStart(false);
-    if( flag && owner().DB().size() )
+    if( flag && !owner().DB().empty() )
     {
 	try{ del( ); }
 	catch(TError err)
@@ -98,9 +103,33 @@ Func &Func::operator=(Func &func)
     cfg("ID").setS(m_id);
 }
 
-void Func::load( )
+void Func::setName( const string &nm )          
+{ 
+    m_name = nm; 
+    if(!owner().DB().empty()) modif(); 
+}
+
+void Func::setDescr( const string &dscr )       
+{ 
+    m_descr = dscr; 
+    if(!owner().DB().empty()) modif(); 
+}
+
+void Func::setMaxCalcTm( int vl )             
+{ 
+    max_calc_tm = vl; 
+    if(!owner().DB().empty()) modif(); 
+}
+
+void Func::setProg( const string &prg )         
+{ 
+    prg_src = prg; 
+    if(!owner().DB().empty()) modif(); 
+}
+
+void Func::load_( )
 {
-    if( !owner().DB().size() )	return;
+    if( owner().DB().empty() )	return;
     
     SYS->db().at().dataGet(owner().fullDB(),mod->nodePath()+owner().tbl(),*this);
     
@@ -146,9 +175,9 @@ void Func::loadIO( )
     }
 }
 
-void Func::save( )
+void Func::save_( )
 {
-    if( !owner().DB().size() )  return;
+    if( owner().DB().empty() )  return;
 
     SYS->db().at().dataSet(owner().fullDB(),mod->nodePath()+owner().tbl(),*this);
 
@@ -245,6 +274,30 @@ void Func::setStart( bool val )
         funcClear();
 	run_st = false;
     }
+}
+
+void Func::ioAdd( IO *io )            
+{ 
+    TFunction::ioAdd(io); 
+    if(!owner().DB().empty()) modif(); 
+}
+
+void Func::ioIns( IO *io, int pos )   
+{ 
+    TFunction::ioIns(io,pos); 
+    if(!owner().DB().empty()) modif(); 
+}
+
+void Func::ioDel( int pos )           
+{ 
+    TFunction::ioDel(pos); 
+    if(!owner().DB().empty()) modif(); 
+}
+
+void Func::ioMove( int pos, int to )  
+{ 
+    TFunction::ioMove(pos,to); 
+    if(!owner().DB().empty()) modif(); 
 }
 
 void Func::progCompile()
@@ -1547,11 +1600,9 @@ void Func::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TFunction::cntrCmdProc(opt);
-        ctrMkNode("fld",opt,-1,"/func/cfg/name",_("Name"),0664,"root","root",1,"tp","str");
-        ctrMkNode("fld",opt,-1,"/func/cfg/descr",_("Description"),0664,"root","root",3,"tp","str","cols","90","rows","3");
+        ctrMkNode("fld",opt,-1,"/func/cfg/name",_("Name"),owner().DB().empty()?0444:0664,"root","root",1,"tp","str");
+        ctrMkNode("fld",opt,-1,"/func/cfg/descr",_("Description"),owner().DB().empty()?0444:0664,"root","root",3,"tp","str","cols","90","rows","3");
 	ctrMkNode("fld",opt,-1,"/func/cfg/m_calc_tm",_("Maximum calc time (sec)"),0664,"root","root",1,"tp","dec");
-	ctrMkNode("comm",opt,-1,"/func/cfg/load",_("Load"),0660);
-        ctrMkNode("comm",opt,-1,"/func/cfg/save",_("Save"),0660);
 	if(ctrMkNode("area",opt,-1,"/io",_("Programm")))
 	{
 	    if(ctrMkNode("table",opt,-1,"/io/io",_("IO"),0664,"root","root",1,"s_com","add,del,ins,move"))
@@ -1570,12 +1621,12 @@ void Func::cntrCmdProc( XMLNode *opt )
     
     //- Process command to page -
     string a_path = opt->attr("path");
-    if( a_path == "/func/cfg/name" && ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )		m_name 	= opt->text();
-    else if( a_path == "/func/cfg/descr" && ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_descr = opt->text();
+    if( a_path == "/func/cfg/name" && ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )		setName( opt->text() );
+    else if( a_path == "/func/cfg/descr" && ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setDescr( opt->text() );
     else if( a_path == "/func/cfg/m_calc_tm" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(TSYS::int2str(max_calc_tm));
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	max_calc_tm = atoi(opt->text().c_str());
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(maxCalcTm()) );
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setMaxCalcTm( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/io/io" )
     {
@@ -1613,6 +1664,7 @@ void Func::cntrCmdProc( XMLNode *opt )
 	    else if( col == 3 )	io(row)->setFlg(io(row)->flg()^((io(row)->flg()^atoi(opt->text().c_str()))&(IO::Output|IO::Return)));
 	    else if( col == 4 )	io(row)->setHide(atoi(opt->text().c_str()));
 	    else if( col == 5 )	io(row)->setDef(opt->text());
+	    if(!owner().DB().empty()) modif();
 	}
     }
     else if( a_path == "/io/tp" && ctrChkNode(opt) )
@@ -1630,11 +1682,9 @@ void Func::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/io/prog" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(prg_src);
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	{ prg_src = opt->text(); progCompile();	}
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( prog() );
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	{ setProg( opt->text() ); progCompile();	}
     }
-    else if( a_path == "/func/cfg/load" &&  ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	load();
-    else if( a_path == "/func/cfg/save" &&  ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	save();
     else TFunction::cntrCmdProc(opt);
 }
 

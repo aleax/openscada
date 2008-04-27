@@ -101,8 +101,6 @@ class TWEB: public TUI
         void vcaSesDel( const string &name )		{ chldDel(id_vcases,name); }
 	AutoHD<VCASess> vcaSesAt( const string &name )	{ return chldAt(id_vcases,name); }
 
-	void modLoad( );
-	void modSave( );
         void modStart( );
 	void modStop( );			
     
@@ -117,8 +115,6 @@ class TWEB: public TUI
 	string optDescr( );
 	string modInfo( const string &name );
 	void   modInfo( vector<string> &list );
- 
-	void cntrCmdProc( XMLNode *opt );       	//Control interface command process
 	
 	string httpHead( const string &rcode, int cln = 0, const string &cnt_tp = "text/html", const string &addattr = "" );
 	string pgHead( string head_els = "" );
@@ -130,6 +126,12 @@ class TWEB: public TUI
 	
         //Attributes
 	string		VCAjs;				//Main page JavaScript programm VCA.js	
+
+    protected:
+	//Methods
+	void load_( );
+	void save_( );
+	void cntrCmdProc( XMLNode *opt );       	//Control interface command process	
 	
     private:
 	//Methods

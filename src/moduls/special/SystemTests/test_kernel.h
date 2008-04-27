@@ -37,11 +37,13 @@ class TTest: public TSpecial
 {
     public:
 	TTest( string name );
-	~TTest();
+	~TTest( );
 
-	void modLoad( );
 	void modStart( );
-	void modStop();
+	void modStop( );
+
+    protected:
+	void load_( );	
 
     private:
 	//Methods

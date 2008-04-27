@@ -104,7 +104,7 @@ string BDMod::optDescr( )
     return buf;
 }
 
-void BDMod::modLoad( )
+void BDMod::load_( )
 {
     //- Load parameters from command line -
     int next_opt;

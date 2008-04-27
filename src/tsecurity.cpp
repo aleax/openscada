@@ -101,7 +101,7 @@ void TSecurity::usrAdd( const string &name, const string &idb )
 void TSecurity::usrDel( const string &name, bool complete )       
 {
     if(usrAt(name).at().sysItem())	throw TError(nodePath().c_str(),_("Removal of system user is inadmissible."));
-    chldDel(m_usr,name,-1,complete); 
+    chldDel(m_usr,name,-1,complete);
 }
 
 void TSecurity::grpAdd( const string &name, const string &idb )
@@ -134,7 +134,7 @@ char TSecurity::access( const string &user, char mode, const string &owner, cons
     return rez;
 }
 
-void TSecurity::subLoad( )
+void TSecurity::load_( )
 {
     //- Load commandline data -
     int next_opt;
@@ -238,32 +238,6 @@ void TSecurity::subLoad( )
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Search and create new user's groups error."));
     }
-    
-    //-- Load present user and groups --
-    vector<string> list;
-    usrList(list);
-    for( int i_l = 0; i_l < list.size(); i_l++ )
-        usrAt(list[i_l]).at().load();
-    grpList(list);
-    for( int i_l = 0; i_l < list.size(); i_l++ )
-        grpAt(list[i_l]).at().load();	
-}
-
-void TSecurity::subSave( )
-{
-    vector<string> list;
-    
-    //- Save parametrs -
-    
-    //-- Save users to bd --
-    usrList(list);
-    for( int i_l = 0; i_l < list.size(); i_l++ )
-	usrAt(list[i_l]).at().save();
-    
-    //-- Save groups to bd --
-    grpList(list);
-    for( int i_l = 0; i_l < list.size(); i_l++ )
-	grpAt(list[i_l]).at().save();
 }
 
 string TSecurity::optDescr( )
@@ -285,11 +259,6 @@ void TSecurity::cntrCmdProc( XMLNode *opt )
         TSubSYS::cntrCmdProc(opt);
 	ctrMkNode("grp",opt,-1,"/br/usr_",_("User"),0664,"root",subId().c_str());
 	ctrMkNode("grp",opt,-1,"/br/grp_",_("Group"),0664,"root",subId().c_str());
-        if(ctrMkNode("area",opt,0,"/sub",_("Subsystem"),0440,"root",subId().c_str()))
-	{
-    	    ctrMkNode("comm",opt,-1,"/sub/load_db",_("Load"),0660,"root",subId().c_str());
-    	    ctrMkNode("comm",opt,-1,"/sub/upd_db",_("Save"),0660,"root",subId().c_str());
-	}
     	if(ctrMkNode("area",opt,1,"/usgr",_("Users and groups")))
 	{
     	    ctrMkNode("list",opt,-1,"/usgr/users",_("Users"),0664,"root",subId().c_str(),3,"tp","br","s_com","add,del","br_pref","usr_");
@@ -327,8 +296,6 @@ void TSecurity::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"add",0664,"root",subId().c_str(),SEQ_WR) )	grpAdd(opt->text());
 	if( ctrChkNode(opt,"del",0664,"root",subId().c_str(),SEQ_WR) )	grpDel(opt->text(),true);	
     }
-    else if( a_path == "/sub/load_db" && ctrChkNode(opt,"set",0660,"root",subId().c_str(),SEQ_WR) )	subLoad();
-    else if( a_path == "/sub/upd_db" && ctrChkNode(opt,"set",0660,"root",subId().c_str(),SEQ_WR) )     	subSave();
     else TSubSYS::cntrCmdProc(opt);
 }
 
@@ -355,14 +322,15 @@ TCntrNode &TUser::operator=( TCntrNode &node )
     string nm = name();
     *(TConfig*)this = *(TConfig*)src_n;
     m_name = nm;
-    m_db = src_n->m_db;
+    setDB(src_n->m_db);
     
     return *this;
 }
 
 void TUser::setPass( const string &n_pass )
 { 
-    m_pass = crypt(n_pass.c_str(),name().c_str()); 
+    m_pass = crypt(n_pass.c_str(),name().c_str());
+    modif();
 }
 
 bool TUser::auth( const string &ipass )
@@ -390,12 +358,12 @@ string TUser::tbl( )
     return owner().subId()+"_user";
 }
 
-void TUser::load( )
+void TUser::load_( )
 {
     SYS->db().at().dataGet(fullDB(),owner().nodePath()+tbl(),*this);
 }
 
-void TUser::save( )
+void TUser::save_( )
 {
     SYS->db().at().dataSet(fullDB(),owner().nodePath()+tbl(),*this);
 }
@@ -418,8 +386,6 @@ void TUser::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("table",opt,-1,"/prm/grps",_("Groups"),0444,"root",grp.c_str(),1,"key","grp");
 	    ctrMkNode("list",opt,-1,"/prm/grps/grp",_("Group"),0444,"root",grp.c_str(),1,"tp","str");
     	    ctrMkNode("list",opt,-1,"/prm/grps/vl",_("Include"),0444,"root",grp.c_str(),1,"tp","bool");
-	    ctrMkNode("comm",opt,-1,"/prm/load",_("Load"),0660,name().c_str(),grp.c_str());
-	    ctrMkNode("comm",opt,-1,"/prm/save",_("Save"),0660,name().c_str(),grp.c_str());
 	}
         return;
     }
@@ -427,8 +393,8 @@ void TUser::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/prm/db" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",SYS->db().at().subId().c_str(),SEQ_RD) )	opt->setText(m_db);
-	if( ctrChkNode(opt,"set",0664,"root",SYS->db().at().subId().c_str(),SEQ_WR) )	m_db = opt->text();
+	if( ctrChkNode(opt,"get",0664,"root",SYS->db().at().subId().c_str(),SEQ_RD) )	opt->setText(DB());
+	if( ctrChkNode(opt,"set",0664,"root",SYS->db().at().subId().c_str(),SEQ_WR) )	setDB(opt->text());
     }
     else if( a_path == "/prm/name" && ctrChkNode(opt) )	opt->setText(name());
     else if( a_path == "/prm/pct" || a_path == "/ico" )
@@ -468,10 +434,7 @@ void TUser::cntrCmdProc( XMLNode *opt )
 	    else owner().grpAt(opt->attr("key_grp")).at().userDel(name());
 	}*/   
     }
-    else if( a_path == "/prm/load" && ctrChkNode(opt,"set",0660,name().c_str(),owner().subId().c_str(),SEQ_WR) ) 
-	load();
-    else if( a_path == "/prm/save" && ctrChkNode(opt,"set",0660,name().c_str(),owner().subId().c_str(),SEQ_WR) ) 
-	save();
+    else TCntrNode::cntrCmdProc(opt);
 }	    
 
 //*************************************************
@@ -497,7 +460,7 @@ TCntrNode &TGroup::operator=( TCntrNode &node )
     string nm = name();
     *(TConfig*)this = *(TConfig*)src_n;
     m_name = nm;
-    m_db = src_n->m_db;
+    setDB(src_n->m_db);
 			
     return *this;
 }
@@ -517,12 +480,12 @@ string TGroup::tbl( )
     return owner().subId()+"_grp";
 }
 
-void TGroup::load( )
+void TGroup::load_( )
 {
     SYS->db().at().dataGet(fullDB(),owner().nodePath()+tbl(),*this);
 }
 
-void TGroup::save( )
+void TGroup::save_( )
 {
     SYS->db().at().dataSet(fullDB(),owner().nodePath()+tbl(),*this);
 }
@@ -541,12 +504,17 @@ bool TGroup::user( const string &inm )
 void TGroup::userAdd( const string &name )
 {
     if(!user(name)) m_usrs+=name+";";
+    modif();
 }
 
 void TGroup::userDel( const string &name )
 {
     int pos = m_usrs.find(name+";",0);
-    if(pos != string::npos) m_usrs.erase(pos,name.size()+1);
+    if(pos != string::npos) 
+    {
+	m_usrs.erase(pos,name.size()+1);
+	modif();
+    }
 }
 
 void TGroup::cntrCmdProc( XMLNode *opt )
@@ -560,8 +528,6 @@ void TGroup::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/prm/dscr",cfg("DESCR").fld().descr(),0664,"root",owner().subId().c_str(),1,"tp","str");
 	ctrMkNode("fld",opt,-1,"/prm/db",_("User group DB (module.db)"),0660,"root",SYS->db().at().subId().c_str(),1,"tp","str");
 	ctrMkNode("list",opt,-1,"/prm/users",cfg("USERS").fld().descr(),0664,"root",owner().subId().c_str(),2,"tp","str","s_com","add,del");
-	ctrMkNode("comm",opt,-1,"/prm/load",_("Load"),0660,"root",owner().subId().c_str());
-	ctrMkNode("comm",opt,-1,"/prm/save",_("Save"),0660,"root",owner().subId().c_str());
         return;
     }
     
@@ -569,8 +535,8 @@ void TGroup::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/prm/db" )
     {
-	if( ctrChkNode(opt,"get",0660,"root",SYS->db().at().subId().c_str(),SEQ_RD) )	opt->setText(m_db);
-	if( ctrChkNode(opt,"set",0660,"root",SYS->db().at().subId().c_str(),SEQ_WR) )	m_db = opt->text();
+	if( ctrChkNode(opt,"get",0660,"root",SYS->db().at().subId().c_str(),SEQ_RD) )	opt->setText(DB());
+	if( ctrChkNode(opt,"set",0660,"root",SYS->db().at().subId().c_str(),SEQ_WR) )	setDB(opt->text());
     }	
     else if( a_path == "/prm/name" && ctrChkNode(opt,"get",0444,"root",owner().subId().c_str(),SEQ_RD) )	
 	opt->setText(name());
@@ -590,7 +556,5 @@ void TGroup::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"add",0664,"root",owner().subId().c_str(),SEQ_WR) )	userAdd(opt->text());
 	if( ctrChkNode(opt,"del",0664,"root",owner().subId().c_str(),SEQ_WR) )	userDel(opt->text());
     }	
-    else if( a_path == "/prm/load" && ctrChkNode(opt,"set",0660,"root",owner().subId().c_str(),SEQ_WR) ) load();
-    else if( a_path == "/prm/save" && ctrChkNode(opt,"set",0660,"root",owner().subId().c_str(),SEQ_WR) ) save();
+    else TCntrNode::cntrCmdProc(opt);
 }
-

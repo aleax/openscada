@@ -28,6 +28,7 @@
 
 #include <QDialog>
 #include <QItemDelegate>
+#include <QCloseEvent>
 
 #include "vis_devel_widgs.h"
 
@@ -64,6 +65,10 @@ class LibProjProp: public QDialog
 
 	VisDevelop *owner();
 
+    protected:
+        //Protected methods
+        void closeEvent( QCloseEvent* );
+
     signals:
         void apply(const string &);
 
@@ -71,9 +76,6 @@ class LibProjProp: public QDialog
 	//Private slots
 	void selectIco( );
 	void isModify( );
-	void pressApply( );
-	void pressCancel( );
-	void pressClose( );
 	
 	void addMimeData( );
 	void delMimeData( );
@@ -124,19 +126,20 @@ class VisItProp : public QDialog
 	
 	void showDlg( const string &iit, bool reload = false );
 
-	VisDevelop *owner();
+	VisDevelop *owner();    
 	
     signals:
 	void apply(const string &);
+	
+    protected:
+	//Protected methods
+	void closeEvent( QCloseEvent* );
 
     private slots:
 	//Private slots
 	void selectIco( );
 	void selectParent( );
 	void isModify( );
-	void pressApply( );
-	void pressCancel( );
-	void pressClose( );
 	
         void addAttr( );
         void delAttr( );

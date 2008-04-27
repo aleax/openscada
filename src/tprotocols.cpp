@@ -44,7 +44,7 @@ string TProtocolS::optDescr(  )
     	"=============== Subsystem \"Transport protocols\" options =================\n\n"));
 }
 
-void TProtocolS::subLoad()
+void TProtocolS::load_()
 {
     //- Load parameters from command line -
     int next_opt;
@@ -68,8 +68,6 @@ void TProtocolS::subLoad()
     
     //- Load parameters from config file -
 
-    //- Load modules -
-    TSubSYS::subLoad();
 }
 
 void TProtocolS::cntrCmdProc( XMLNode *opt )

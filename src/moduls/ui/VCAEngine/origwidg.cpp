@@ -104,7 +104,8 @@ void PrWidget::cntrCmdProc( XMLNode *opt )
     }
     
     //- Process command to page -
-    cntrCmdGeneric(opt) || cntrCmdAttributes(opt);
+    if( !(cntrCmdGeneric(opt) || cntrCmdAttributes(opt)) )
+	TCntrNode::cntrCmdProc(opt);
 }
 
 

@@ -59,6 +59,7 @@ int main(int argc, char *argv[], char *envp[] )
 	SYS = new TSYS(argc,argv,envp);	
 	
 	SYS->load();
+	if( rez=SYS->stopSignal() ) return rez;
 	rez = SYS->start();
 	
 	delete SYS;

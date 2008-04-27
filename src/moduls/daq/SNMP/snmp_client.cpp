@@ -106,7 +106,7 @@ string TTpContr::optDescr( )
     return buf;
 }
 
-void TTpContr::modLoad( )
+void TTpContr::load_( )
 {
     //- Load parameters from command line -
     int next_opt;
@@ -170,16 +170,6 @@ TMdContr::~TMdContr( )
 TParamContr *TMdContr::ParamAttach( const string &name, int type )
 {
     return new TMdPrm(name,&owner().tpPrmAt(type));
-}
-
-void TMdContr::load( )
-{
-    TController::load( );
-}
-
-void TMdContr::save( )
-{
-    TController::save();
 }
 
 void TMdContr::start_( )
@@ -439,9 +429,10 @@ void TMdPrm::disable()
 	vlAt(ls[i_el]).at().setS(EVAL_STR,0,true);
 }
 
-void TMdPrm::load( )
+void TMdPrm::load_( )
 {
-    TParamContr::load();
+    TParamContr::load_();
+    
     parseOIDList(m_oid);
 }
 

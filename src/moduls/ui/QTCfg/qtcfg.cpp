@@ -185,7 +185,7 @@ ConfApp::ConfApp( string open_user ) :
     actPrev->setStatusTip(_("Press for going to previos page"));
     actPrev->setEnabled(false);
     connect(actPrev, SIGNAL(activated()), this, SLOT(pagePrev()));    
-    //-- Previos page --
+    //-- Next page --
     if(!ico_t.load(TUIS::icoPath("next").c_str())) ico_t.load(":/images/next.png");
     actNext = new QAction(QPixmap::fromImage(ico_t),_("&Next"),this);
     actNext->setShortcut(Qt::ALT+Qt::Key_Right);
@@ -194,6 +194,23 @@ ConfApp::ConfApp( string open_user ) :
     actNext->setStatusTip(_("Press for going to next page"));
     actNext->setEnabled(false);
     connect(actNext, SIGNAL(activated()), this, SLOT(pageNext()));    
+    //--- Load item from db ---
+    if(!ico_t.load(TUIS::icoPath("load").c_str())) ico_t.load(":/images/load.png");
+    actDBLoad = new QAction(QPixmap::fromImage(ico_t),_("Load from DB"),this);
+    actDBLoad->setToolTip(_("Load item data from DB"));
+    actDBLoad->setWhatsThis(_("The button for loading item data from DB"));
+    actDBLoad->setStatusTip(_("Press for loading item data from DB."));
+    actDBLoad->setEnabled(false);
+    connect(actDBLoad, SIGNAL(activated()), this, SLOT(itDBLoad()));
+    //--- Save item to db ---
+    if(!ico_t.load(TUIS::icoPath("save").c_str())) ico_t.load(":/images/save.png");
+    actDBSave = new QAction(QPixmap::fromImage(ico_t),_("Save to DB"),this);
+    actDBSave->setToolTip(_("Save item data to DB"));
+    actDBSave->setWhatsThis(_("The button for saving item data to DB"));
+    actDBSave->setStatusTip(_("Press for saving item data to DB."));
+    actDBSave->setShortcut(QKeySequence("Ctrl+S"));
+    actDBSave->setEnabled(false);
+    connect(actDBSave, SIGNAL(activated()), this, SLOT(itDBSave()));    
     //-- Item add --
     if(!ico_t.load(TUIS::icoPath("it_add").c_str())) ico_t.load(":/images/it_add.png");
     actItAdd = new QAction(QPixmap::fromImage(ico_t),_("&Add"),this);
@@ -288,6 +305,9 @@ ConfApp::ConfApp( string open_user ) :
     //- Create menu -
     //-- Create menu "file" --
     QMenu *mn_file = menuBar()->addMenu(_("&File"));
+    mn_file->addAction(actDBLoad);
+    mn_file->addAction(actDBSave);
+    mn_file->addSeparator( );
     mn_file->addAction(actClose);
     mn_file->addAction(actQuit);
     //-- Create menu "edit" --
@@ -319,6 +339,9 @@ ConfApp::ConfApp( string open_user ) :
     //-- Main tool bar --
     QToolBar *toolBar = new QToolBar(_("OpenSCADA toolbar"),this);
     addToolBar(toolBar);
+    toolBar->addAction(actDBLoad);
+    toolBar->addAction(actDBSave);
+    toolBar->addSeparator();    
     toolBar->addAction(actUp);
     toolBar->addAction(actPrev);
     toolBar->addAction(actNext);
@@ -341,6 +364,11 @@ ConfApp::ConfApp( string open_user ) :
     w_user->setStatusTip(_("Double click for change user."));
     statusBar()->insertPermanentWidget(0,w_user);
     connect(w_user, SIGNAL(userChanged()), this, SLOT(userSel()));
+
+    mStModify = new QLabel(" ",this);
+    mStModify->setWhatsThis(_("This label display the local station modifying."));
+    mStModify->setToolTip(_("Field for display of the local station modifying."));
+    statusBar()->insertPermanentWidget(0,mStModify);
 
     statusBar()->showMessage(_("Ready"), 2000 );
     
@@ -370,7 +398,35 @@ ConfApp::~ConfApp()
 
 void ConfApp::quitSt()
 {
+    exitModifChk( );
+
     SYS->stop();
+}
+
+void ConfApp::exitModifChk( )
+{
+    //- Check for no saved local station -
+    XMLNode req("modify");
+    req.setAttr("path","/"+SYS->id()+"/%2fobj");
+    if( !cntrIfCmd(req) && atoi(req.text().c_str()) )
+    {
+	bool saveExit = false;
+	req.clear()->setName("get")->setAttr("path","/"+SYS->id()+"/%2fgen%2fsaveExit");
+	if( !cntrIfCmd(req) )	saveExit |= atoi(req.text().c_str());
+	req.setAttr("path","/"+SYS->id()+"/%2fgen%2fsavePeriod");
+	if( !cntrIfCmd(req) )	saveExit |= atoi(req.text().c_str());
+	if( !saveExit )
+	{
+	    InputDlg dlg(this,actDBSave->icon(),
+		    _("Some nodes of local station is changed. Save changing to DB on exit?"),
+		    _("Station save"),false,false);
+	    if( dlg.exec() == QDialog::Accepted )
+	    {
+		req.clear()->setName("save")->setAttr("path","/"+SYS->id()+"/%2fobj");
+		cntrIfCmd(req);
+	    }
+	}
+    }     
 }
 
 void ConfApp::endRunChk( )
@@ -417,6 +473,24 @@ void ConfApp::pageNext()
     try{ pageDisplay( path ); } catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); } 
 }
 
+void ConfApp::itDBLoad( )
+{
+    //- Create request -
+    XMLNode req("load");
+    req.setAttr("path",sel_path+"/%2fobj");
+    if( cntrIfCmd(req) )	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Info,this);
+    else pageRefresh(); 
+}
+
+void ConfApp::itDBSave( )
+{
+    //- Create request -
+    XMLNode req("save");
+    req.setAttr("path",sel_path+"/%2fobj");
+    if( cntrIfCmd(req) )	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Info,this);
+    else pageRefresh(); 
+}		
+
 void ConfApp::itAdd( )
 {
     if( sel_path.empty() || !root->childGet("id","br",true) )	return;
@@ -453,17 +527,18 @@ void ConfApp::itAdd( )
     	    if( (req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->attr("id") == dlg.id().toAscii().data()) ||
 	        (!req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->text() == dlg.id().toAscii().data()) )
 	    {
-		mod->postMess(mod->nodePath().c_str(),QString(_("Node '%1' already present.?")).arg(dlg.id()).toAscii().data(),TUIMod::Info,this);
+		mod->postMess(mod->nodePath().c_str(),QString(_("Node '%1' already present.")).arg(dlg.id()).toAscii().data(),TUIMod::Info,this);
 		return;
 	    }
     
     //- Send create request -
-    XMLNode br_req("add");
-    br_req.setAttr("path",sel_path+"/%2fbr%2f"+string(nCont->itemData(nCont->currentIndex()).toString().toAscii().data()+1));
+    req.clear()->
+	setName("add")->
+	setAttr("path",sel_path+"/%2fbr%2f"+string(nCont->itemData(nCont->currentIndex()).toString().toAscii().data()+1));
     if( nCont->itemData(nCont->currentIndex()).toString()[0] == '1' )
-	br_req.setAttr("id",dlg.id().toAscii().data())->setText(dlg.name().toAscii().data());
-    else br_req.setText(dlg.id().toAscii().data());
-    if( cntrIfCmd(br_req) )	mod->postMess(br_req.attr("mcat").c_str(),br_req.text().c_str(),TUIMod::Info,this);
+	req.setAttr("id",dlg.id().toAscii().data())->setText(dlg.name().toAscii().data());
+    else req.setText(dlg.id().toAscii().data());
+    if( cntrIfCmd(req) )	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Info,this);
     else { treeUpdate(); pageRefresh(); }
 }
 
@@ -486,22 +561,22 @@ void ConfApp::itDel( const string &iit )
     { if( n_obj ) sel_own += ("/"+sel_el); sel_el = t_el; }
     if( n_obj > 2 )
     {
-        XMLNode br_req("info");
-        br_req.setAttr("path",sel_own+"/%2fbr");
-        if( !cntrIfCmd(br_req) && br_req.childGet(0,true) )
+        XMLNode req("info");
+        req.setAttr("path",sel_own+"/%2fbr");
+        if( !cntrIfCmd(req) && req.childGet(0,true) )
         {
-            XMLNode *branch = br_req.childGet(0);
+            XMLNode *branch = req.childGet(0);
             for( int i_b = 0; i_b < branch->childSize(); i_b++ )
                 if( branch->childGet(i_b)->attr("id") == sel_el.substr(0,branch->childGet(i_b)->attr("id").size()) &&
                     atoi(branch->childGet(i_b)->attr("acs").c_str())&SEQ_WR )
             	{
 		    string b_id = branch->childGet(i_b)->attr("id");
 		    bool idm = atoi(branch->childGet(i_b)->attr("idm").c_str());
-		    br_req.clear()->setName("del")->setAttr("path",sel_own+"/%2fbr%2f"+b_id);
-		    if( idm )	br_req.setAttr("id",sel_el.substr(b_id.size()));
-		    else 	br_req.setText(sel_el.substr(b_id.size()));
-		    if( cntrIfCmd(br_req) )
-		        mod->postMess(br_req.attr("mcat").c_str(),br_req.text().c_str(),TUIMod::Info,this);
+		    req.clear()->setName("del")->setAttr("path",sel_own+"/%2fbr%2f"+b_id);
+		    if( idm )	req.setAttr("id",sel_el.substr(b_id.size()));
+		    else 	req.setText(sel_el.substr(b_id.size()));
+		    if( cntrIfCmd(req) )
+		        mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Info,this);
 		    else treeUpdate();
 		    break; 
 		}
@@ -681,6 +756,8 @@ void ConfApp::enterWhatsThis()
 
 void ConfApp::closeEvent( QCloseEvent* ce )
 {
+    if( !SYS->stopSignal() )    exitModifChk( );
+
     ce->accept();
 }
 
@@ -1630,6 +1707,19 @@ void ConfApp::pageDisplay( const string &path )
     //-- Delete process --    
     actItDel->setEnabled( (root&&atoi(root->attr("acs").c_str())&SEQ_WR) ? true : false );
     
+    //- Load and Save allow check -
+    actDBLoad->setEnabled(false); actDBSave->setEnabled(false);
+    XMLNode req("modify");
+    req.setAttr("path",sel_path+"/%2fobj");
+    if( cntrIfCmd(req) ) mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this); 
+    else if( atoi(req.text().c_str()) )
+    { actDBLoad->setEnabled(true); actDBSave->setEnabled(true); }
+    
+    //- Local station modifying check -
+    mStModify->setText(" ");
+    req.setAttr("path","/"+SYS->id()+"/%2fobj");
+    if( !cntrIfCmd(req) && atoi(req.text().c_str()) )	mStModify->setText("*"); 
+    
     //- Edit tools update -
     editToolUpdate( );
 }
@@ -1723,6 +1813,10 @@ void ConfApp::ctrTreePopup( )
     {
 	if( lview && lview->currentItem() && lview->currentItem()->text(2)[0] != '*' )
 	{
+	    //- Load and Save actions -
+	    popup.addAction(actDBLoad);
+	    popup.addAction(actDBSave);
+	    popup.addSeparator();
 	    //- Add and delete item action add -
 	    popup.addAction(actItAdd);
 	    popup.addAction(actItDel);

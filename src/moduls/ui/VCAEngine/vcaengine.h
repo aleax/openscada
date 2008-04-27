@@ -47,9 +47,6 @@ class Engine : public TUI
         string modInfo( const string &name );
         void   modInfo( vector<string> &list );
 
-        void modLoad( );
-        void modSave( );
-
         void modStart( );
 	void modStop( );
 	
@@ -89,6 +86,8 @@ class Engine : public TUI
 
     protected:
 	//Methods
+        void load_( );
+        //void save_( );	
 	void postEnable( int flag );
 	void preDisable( int flag );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process	

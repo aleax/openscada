@@ -276,16 +276,16 @@ class Func : public TConfig, public TFunction
 	Func &operator=( Func &func );
 	    
         string name( );
-        string descr( )			{ return m_descr; }	
+        string descr( )			{ return m_descr; }
+	int maxCalcTm( )		{ return max_calc_tm; }
 	const string &prog( )		{ return prg_src; }
 	
-	void setName( const char *nm )	{ m_name = nm; }
-	void setDescr( const char *dscr )	{ m_descr = dscr; }
-	void setProg( const char *prg )	{ prg_src = prg; }	
+	void setName( const string &nm );
+	void setDescr( const string &dscr );
+	void setMaxCalcTm( int vl );
+	void setProg( const string &prg );
 	void setStart( bool val );
-	
-	void load( );
-        void save( );
+
 	void del( );
 	
         void calc( TValFunc *val );
@@ -335,10 +335,10 @@ class Func : public TConfig, public TFunction
 	void setValB( TValFunc *io, RegW &rg, char val );
 	
 	//- IO operations -
-	void ioAdd( IO *io )		{ TFunction::ioAdd(io); }
-        void ioIns( IO *io, int pos )	{ TFunction::ioIns(io,pos); }
-        void ioDel( int pos )		{ TFunction::ioDel(pos); }
-        void ioMove( int pos, int to )	{ TFunction::ioMove(pos,to); }
+	void ioAdd( IO *io );
+        void ioIns( IO *io, int pos );
+        void ioDel( int pos );
+        void ioMove( int pos, int to );
 
 	Lib &owner( );
 	
@@ -354,9 +354,13 @@ class Func : public TConfig, public TFunction
 	};
 	
 	//Methods
-	void preDisable(int flag);
-	void postDisable(int flag);
+	void postEnable( int flag );
+	void preDisable( int flag );
+	void postDisable( int flag );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+
+	void load_( );
+        void save_( );
 	
 	void loadIO( );
 	void saveIO( );
