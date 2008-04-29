@@ -176,22 +176,27 @@ void Project::load_( )
         if( !present(f_id) )	add(f_id,"","");
     }
     
-    //- Load present pages -
-    /*vector<string> f_lst;
-    list(f_lst);
-    for( int i_ls = 0; i_ls < f_lst.size(); i_ls++ )
-        at(f_lst[i_ls]).at().load();*/
+    mOldDB = TBDS::realDBName(DB());
 }
 
 void Project::save_( )
 {
     SYS->db().at().dataSet(DB()+"."+mod->prjTable(),mod->nodePath()+"PRJ/",*this);
-
-    //- Save widgets -
-    /*vector<string> f_lst;
-    list(f_lst);
-    for( int i_ls = 0; i_ls < f_lst.size(); i_ls++ )
-        at(f_lst[i_ls]).at().save();*/
+    
+    //- Check for need copy mime data to other DB and same copy -
+    if( !mOldDB.empty() && mOldDB != TBDS::realDBName(DB()) )
+    {
+        vector<string> pls;
+        mimeDataList(pls,mOldDB);
+        string mimeType, mimeData;
+        for( int i_m = 0; i_m < pls.size(); i_m++ )
+        {
+            mimeDataGet( pls[i_m], mimeType, &mimeData, mOldDB );
+            mimeDataSet( pls[i_m], mimeType, mimeData, DB() );
+        }
+    }
+    
+    mOldDB = TBDS::realDBName(DB());
 }
 
 void Project::setEnable( bool val )
@@ -227,21 +232,22 @@ AutoHD<Page> Project::at( const string &id )
     return chldAt(m_page,id);
 }
 
-void Project::mimeDataList( vector<string> &list )
+void Project::mimeDataList( vector<string> &list, const string &idb )
 {
     string wtbl = tbl()+"_mime";
+    string wdb  = idb.empty() ? DB() : idb;
     TConfig c_el(&mod->elWdgData());
     c_el.cfgViewAll(false);
 	    
     list.clear();
-    for( int fld_cnt = 0; SYS->db().at().dataSeek(DB()+"."+wtbl,mod->nodePath()+wtbl,fld_cnt,c_el); fld_cnt++ )
+    for( int fld_cnt = 0; SYS->db().at().dataSeek(wdb+"."+wtbl,mod->nodePath()+wtbl,fld_cnt,c_el); fld_cnt++ )
     {
         list.push_back(c_el.cfg("ID").getS());
         c_el.cfg("ID").setS("");
     }
 }
 
-bool Project::mimeDataGet( const string &iid, string &mimeType, string *mimeData )
+bool Project::mimeDataGet( const string &iid, string &mimeType, string *mimeData, const string &idb )
 {
     bool is_file = (iid.size()>5 && iid.substr(0,5) == "file:");
     bool is_res  = (iid.size()>4 && iid.substr(0,4) == "res:");
@@ -251,10 +257,11 @@ bool Project::mimeDataGet( const string &iid, string &mimeType, string *mimeData
         //- Get resource file from DB -
         string dbid = is_res ? iid.substr(4) : iid;
         string wtbl = tbl()+"_mime";
-        TConfig c_el(&mod->elWdgData());
-        if(!mimeData) c_el.cfg("DATA").setView(false);
-        c_el.cfg("ID").setS(dbid);
-        if(SYS->db().at().dataGet(DB()+"."+wtbl,mod->nodePath()+wtbl,c_el))
+	string wdb  = idb.empty() ? DB() : idb;
+        TConfig c_el( &mod->elWdgData() );
+        if( !mimeData ) c_el.cfg("DATA").setView(false);
+        c_el.cfg("ID").setS( dbid );
+        if(SYS->db().at().dataGet( wdb+"."+wtbl, mod->nodePath()+wtbl, c_el ))
         {
             mimeType = c_el.cfg("MIME").getS();
             if( mimeData )      *mimeData = c_el.cfg("DATA").getS();
@@ -281,23 +288,25 @@ bool Project::mimeDataGet( const string &iid, string &mimeType, string *mimeData
     return false;
 }
 
-void Project::mimeDataSet( const string &iid, const string &mimeType, const string &mimeData )
+void Project::mimeDataSet( const string &iid, const string &mimeType, const string &mimeData, const string &idb )
 {
     string wtbl = tbl()+"_mime";
-    TConfig c_el(&mod->elWdgData());
+    string wdb  = idb.empty() ? DB() : idb;
+    TConfig c_el( &mod->elWdgData() );
     c_el.cfg("ID").setS(iid);
     c_el.cfg("MIME").setS(mimeType);
-    if(!mimeData.size()) c_el.cfg("DATA").setView(false);
+    if( !mimeData.size() ) c_el.cfg("DATA").setView(false);
     else c_el.cfg("DATA").setS(mimeData);
-    SYS->db().at().dataSet(DB()+"."+wtbl,mod->nodePath()+wtbl,c_el);
+    SYS->db().at().dataSet(wdb+"."+wtbl,mod->nodePath()+wtbl,c_el);
 }
 
-void Project::mimeDataDel( const string &iid )
+void Project::mimeDataDel( const string &iid, const string &idb )
 {
     string wtbl = tbl()+"_mime";
+    string wdb  = idb.empty() ? DB() : idb;
     TConfig c_el(&mod->elWdgData());
     c_el.cfg("ID").setS(iid);
-    SYS->db().at().dataDel(DB()+"."+wtbl,mod->nodePath()+wtbl,c_el);
+    SYS->db().at().dataDel(wdb+"."+wtbl,mod->nodePath()+wtbl,c_el);
 }
 
 void Project::cntrCmdProc( XMLNode *opt )
@@ -781,21 +790,34 @@ void Page::loadIO( )
     string db  = ownerProj()->DB();
     string tbl = ownerProj()->tbl()+"_io";    
 
-    //-- Saved attributes list load --
-    if( m_attrs == "*" )	attrList( als );
-    else for( int off = 0; !(tstr = TSYS::strSepParse(m_attrs,0,';',&off)).empty(); )
-	als.push_back(tstr);
+    //- Inherit modify attributes -
+    /*attrList( als );
+    for( int i_a = 0; i_a < als.size(); i_a++ )
+    {
+        AutoHD<Attr> attr = attrAt(als[i_a]);
+        if( attr.at().flgGlob()&Attr::IsInher && attr.at().modif() && m_attrs.find(als[i_a]) == string::npos )
+        {
+            attr.at().setModif(0);
+            inheritAttr(als[i_a]);
+	}
+    }
+									    
+    als.clear();*/
+    if( m_attrs != "*" )
+	for( int off = 0; !(tstr = TSYS::strSepParse(m_attrs,0,';',&off)).empty(); )
+    	    als.push_back(tstr);
+		
     //-- Same attributes load --
     TConfig c_el(&mod->elWdgIO());
     c_el.cfg("IDW").setS(path());    
     for( int i_a = 0; i_a < als.size(); i_a++ )
     {
-	AutoHD<Attr> attr = attrAt(als[i_a]);
+	if( !attrPresent(als[i_a]) )    continue;
+	AutoHD<Attr> attr = attrAt(als[i_a]);	
 	if( !(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser ) continue;
 	c_el.cfg("ID").setS(als[i_a]);
 	if( !SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el) ) continue;
 	attr.at().setS(c_el.cfg("IO_VAL").getS());
-	if( attr.at().flgGlob()&Attr::Active )	attrList( als );
 	attr.at().setFlgSelf((Attr::SelfAttrFlgs)c_el.cfg("SELF_FLG").getI());
 	attr.at().setCfgTempl(c_el.cfg("CFG_TMPL").getS());
 	attr.at().setCfgVal(c_el.cfg("CFG_VAL").getS());
@@ -867,21 +889,8 @@ void Page::save_( )
     }
     SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,*this);
 
-    //- Save include pages -
-    //pageList(ls);
-    //for( int i_l = 0; i_l < ls.size(); i_l++ )
-    //	pageAt(ls[i_l]).at().save();
-
     //- Save widget's attributes -
     saveIO();
-
-    //- Save cotainer widgets -
-    //if(isContainer())
-    //{
-    //	wdgList(ls);
-    //	for( int i_l = 0; i_l < ls.size(); i_l++ )
-    //	    wdgAt(ls[i_l]).at().save();
-    //}
 }
 
 void Page::saveIO( )
@@ -1013,6 +1022,13 @@ string Page::resourceGet( const string &id, string *mime )
 		    
     return mimeData;
 }
+
+void Page::inheritAttr( const string &attr )
+{
+    bool mdf = isModify();
+    Widget::inheritAttr( attr );
+    if( !mdf )  modifClr( );
+}	    
 
 bool Page::cntrCmdGeneric( XMLNode *opt )
 {   
@@ -1264,21 +1280,34 @@ void PageWdg::loadIO( )
     string db  = owner().ownerProj()->DB();
     string tbl = owner().ownerProj()->tbl()+"_io";
 
-    //-- Saved attributes list load --
-    if( m_attrs == "*" ) attrList( als );
-    else for( int off = 0; !(tstr = TSYS::strSepParse(m_attrs,0,';',&off)).empty(); )
-	als.push_back(tstr);
+    //- Inherit modify attributes -
+    /*attrList( als );
+    for( int i_a = 0; i_a < als.size(); i_a++ )
+    {
+        AutoHD<Attr> attr = attrAt(als[i_a]);
+        if( attr.at().flgGlob()&Attr::IsInher && attr.at().modif() && m_attrs.find(als[i_a]) == string::npos )
+        {
+            attr.at().setModif(0);
+    	    inheritAttr(als[i_a]);
+        }
+    }
+    
+    als.clear();*/
+    if( m_attrs != "*" )
+	for( int off = 0; !(tstr = TSYS::strSepParse(m_attrs,0,';',&off)).empty(); )
+    	    als.push_back(tstr);
+	
     //-- Same load --
     TConfig c_el(&mod->elWdgIO());
     c_el.cfg("IDW").setS(owner().path());
     for( int i_a = 0; i_a < als.size(); i_a++ )
     { 
+	if( !attrPresent(als[i_a]) )	continue;
  	AutoHD<Attr> attr = attrAt(als[i_a]);	
 	if( !(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser ) continue;
 	c_el.cfg("ID").setS(id()+"/"+als[i_a]);
 	if( !SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el) ) continue;
 	attr.at().setS(c_el.cfg("IO_VAL").getS());
-	if( attr.at().flgGlob()&Attr::Active )	attrList( als );
 	attr.at().setFlgSelf((Attr::SelfAttrFlgs)c_el.cfg("SELF_FLG").getI());
 	attr.at().setCfgTempl(c_el.cfg("CFG_TMPL").getS());
 	attr.at().setCfgVal(c_el.cfg("CFG_VAL").getS());
@@ -1393,6 +1422,13 @@ void PageWdg::saveIO( )
         }
 	c_elu.cfg("ID").setS("");
     }
+}
+
+void PageWdg::inheritAttr( const string &attr )
+{
+    bool mdf = isModify();
+    Widget::inheritAttr( attr );
+    if( !mdf )  modifClr( );
 }
 
 string PageWdg::resourceGet( const string &id, string *mime )

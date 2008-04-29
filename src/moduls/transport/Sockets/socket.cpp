@@ -526,18 +526,18 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/bs/q_ln" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText(TSYS::int2str(max_queue));
-	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	max_queue = atoi(opt->text().c_str());
+	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(maxQueue()) );
+	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	setMaxQueue( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/bs/cl_n" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText(TSYS::int2str(max_fork));
-	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	max_fork = atoi(opt->text().c_str());
+	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(maxFork()) );
+	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	setMaxFork( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/bs/bf_ln" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) ) 	opt->setText(TSYS::int2str(buf_len));
-	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	buf_len = atoi(opt->text().c_str());
+	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) ) 	opt->setText( TSYS::int2str(bufLen()) );
+	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	setBufLen( atoi(opt->text().c_str()) );
     }
     else TTransportIn::cntrCmdProc(opt);
 }

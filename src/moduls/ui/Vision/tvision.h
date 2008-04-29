@@ -55,10 +55,10 @@ class TVision : public TUI
 	string VCAStation( )			{ return vca_station; }
 	int    runTimeUpdt( )			{ return run_tm_upd; }
 	
-	void setStartUser( const string &user )	{ start_user = user; }
-	void setRunPrjs( const string &prj )	{ run_prjs = prj; }
-	void setVCAStation( const string &stat ){ vca_station = stat; }
-	void setRunTimeUpdt( int mod )		{ run_tm_upd = mod; }
+	void setStartUser( const string &user )	{ start_user = user; modif(); }
+	void setRunPrjs( const string &prj )	{ run_prjs = prj; modif(); }
+	void setVCAStation( const string &stat ){ vca_station = stat; modif(); }
+	void setRunTimeUpdt( int mod )		{ run_tm_upd = mod; modif(); }
 	
 	void modStart();
 	void modStop();

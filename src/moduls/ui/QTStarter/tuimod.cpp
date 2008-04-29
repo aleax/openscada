@@ -199,17 +199,6 @@ void TUIMod::modStart()
 #endif
 
     start_com = true;
-
-    /*if( run_st || demon_mode ) return;
-    end_run = false;
-    
-    pthread_attr_t pthr_attr;    
-    pthread_attr_init(&pthr_attr);
-    pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
-    pthread_create(&pthr_tsk,&pthr_attr,Task,this);
-    pthread_attr_destroy(&pthr_attr);
-    if( TSYS::eventWait( run_st, true, nodePath()+"start",5) )
-       	throw TError(nodePath().c_str(),_("QT starter no started!"));*/
 }
 
 void TUIMod::modStop()
@@ -219,14 +208,6 @@ void TUIMod::modStop()
 #endif
 
     start_com = false;
-
-    /*if( run_st )
-    {
-	end_run = true;
-	if( TSYS::eventWait( run_st, false, nodePath()+"stop",5) )
-	    throw TError(nodePath().c_str(),_("QT starter no stoped!"));
-	pthread_join(pthr_tsk,NULL);
-    }*/	
 }
 
 string TUIMod::optDescr( )
@@ -341,8 +322,8 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/prm/cfg/st_mod" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText(start_mod);
-	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	start_mod = opt->text();
+	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText( startMod() );
+	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	setStartMod( opt->text() );
     }
     else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )	opt->setText(optDescr());
     else TUI::cntrCmdProc(opt);

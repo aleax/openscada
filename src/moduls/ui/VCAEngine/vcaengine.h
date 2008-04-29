@@ -87,7 +87,6 @@ class Engine : public TUI
     protected:
 	//Methods
         void load_( );
-        //void save_( );	
 	void postEnable( int flag );
 	void preDisable( int flag );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process	

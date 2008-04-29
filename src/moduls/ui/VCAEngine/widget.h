@@ -176,7 +176,7 @@ class Widget : public TCntrNode, public TValElem
 	void heritUnreg( Widget *wdg );				//Unregister heritator
 	vector< AutoHD<Widget> > &herit( )		{ return m_herit; }
 	virtual void setParentNm( const string &isw )	{ m_parent_nm = isw; }
-        void inheritAttr( const string &attr = "" );		//Inherit parent attributes
+        virtual void inheritAttr( const string &attr = "" );	//Inherit parent attributes
         void inheritIncl( const string &wdg = "" );		//Inherit parent include widgets
 
         //- Widget's attributes -

@@ -250,13 +250,13 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");    
     if( a_path == "/prm/cfg/start_path" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(start_path);
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	start_path = opt->text();
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( startPath() );
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setStartPath( opt->text() );
     }
     else if( a_path == "/prm/cfg/start_user" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(start_user);
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	start_user = opt->text();
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( startUser() );
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setStartUser( opt->text() );
     }
     else if( a_path == "/prm/cfg/host_lnk" && ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )
     {

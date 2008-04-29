@@ -93,6 +93,10 @@ class TWEB: public TUI
 	~TWEB( );
 
         time_t authTime( )				{ return m_t_auth; }
+	string CSStables( )				{ return m_CSStables; }
+	
+	void setAuthTime( time_t vl )			{ m_t_auth = vl; modif(); }
+	void setCSStables( const string &vl )		{ m_CSStables = vl; modif(); }
 
         //- VCA sessions -
         void vcaSesList( vector<string> &list )		{ chldList(id_vcases,list); }

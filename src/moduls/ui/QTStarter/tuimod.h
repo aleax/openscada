@@ -71,7 +71,10 @@ class TUIMod: public TUI
 	
  	bool endRun( )		{ return end_run; }
 	bool startCom( )	{ return start_com; }
-
+	string startMod( )	{ return start_mod; }
+ 
+	void setStartMod( const string &vl )	{ start_mod = vl; modif(); }
+ 
 	void modStart( );
 	void modStop( );
 

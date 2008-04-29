@@ -1218,3 +1218,5 @@ void SessWdg::cntrCmdProc( XMLNode *opt )
     if( !(cntrCmdGeneric(opt) || cntrCmdAttributes(opt)) )
 	TCntrNode::cntrCmdProc(opt);
 }
+
+

@@ -71,10 +71,10 @@ class WidgetLib : public TCntrNode, public TConfig
         void setEnable( bool val );
 
         //- Mime data access -
-	void mimeDataList( vector<string> &list );
-        bool mimeDataGet( const string &id, string &mimeType, string *mimeData = NULL );
-        void mimeDataSet( const string &id, const string &mimeType, const string &mimeData );
-	void mimeDataDel( const string &id );
+	void mimeDataList( vector<string> &list, const string &idb = "" );
+        bool mimeDataGet( const string &id, string &mimeType, string *mimeData = NULL, const string &idb = "" );
+        void mimeDataSet( const string &id, const string &mimeType, const string &mimeData, const string &idb = "" );
+	void mimeDataDel( const string &id, const string &idb = "" );
 
 	//- Widgets -
         void list( vector<string> &ls ) 	{ chldList(m_wdg,ls); }
@@ -101,7 +101,7 @@ class WidgetLib : public TCntrNode, public TConfig
 
     private:
 	//Attributes
-        string  &m_id, &m_name, &m_descr, &m_dbt, &m_user, &m_grp, &m_ico, work_lib_db;
+        string  &m_id, &m_name, &m_descr, &m_dbt, &m_user, &m_grp, &m_ico, work_lib_db, mOldDB;
 	int	&m_permit;
 	bool    m_enable;
 };
@@ -149,6 +149,8 @@ class LWidget : public Widget, public TConfig
 
 	//- Data access -
         string resourceGet( const string &id, string *mime = NULL );
+
+	void inheritAttr( const string &attr = "" );
 
         WidgetLib &owner( );
 
@@ -208,6 +210,8 @@ class CWidget : public Widget, public TConfig
 
 	//- Data access -
         string resourceGet( const string &id, string *mime = NULL );
+
+	void inheritAttr( const string &attr = "" );
 
         LWidget &owner( );
 

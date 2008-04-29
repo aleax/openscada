@@ -83,6 +83,12 @@ class TWEB: public TUI
 	TWEB( string name );
 	~TWEB( );
 
+	int authTime( )                              	{ return m_t_auth; }
+        string CSStables( )                             { return m_CSStables; }
+		
+        void setAuthTime( int vl )                   	{ m_t_auth = vl; modif(); }
+        void setCSStables( const string &vl )           { m_CSStables = vl; modif(); }
+
 	void modStart( );
         void modStop( );
 

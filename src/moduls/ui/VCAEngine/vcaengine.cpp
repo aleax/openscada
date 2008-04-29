@@ -346,24 +346,6 @@ void Engine::load_( )
 	prjAt(ls[l_id]).at().setEnable(true);    
 }
 
-/*void Engine::save_( )
-{
-#if OSC_DEBUG
-    mess_debug(nodePath().c_str(),_("Save module."));
-#endif
-
-    //- Save parameters -
-    //-- Save widget's libraries --
-    vector<string> ls;
-    wlbList(ls);
-    for( int l_id = 0; l_id < ls.size(); l_id++ )
-	wlbAt(ls[l_id]).at().save();
-    //-- Save projects --
-    prjList(ls);
-    for( int p_id = 0; p_id < ls.size(); p_id++ )
-	prjAt(ls[p_id]).at().save();
-}*/
-
 void Engine::modStart()
 {
 #if OSC_DEBUG

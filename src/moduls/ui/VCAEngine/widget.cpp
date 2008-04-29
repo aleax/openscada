@@ -210,7 +210,7 @@ void Widget::setEnable( bool val )
 	}	
 	m_enable = true;
         //- Load self values from DB -
-        loadIO();
+        loadIO( );
     }
     if(!val)
     {
@@ -285,9 +285,12 @@ void Widget::inheritAttr( const string &iattr )
 
     //- Create no present attributes -
     vector<string>  ls;
-    if( !iattr.empty() && parent().at().attrPresent(iattr) )
-	ls.push_back(iattr);
-    else parent().at().attrList(ls);
+    if( iattr.empty() )	parent().at().attrList(ls);
+    else
+    {
+	if( parent().at().attrPresent(iattr) )	ls.push_back(iattr);
+	else return;
+    }
 
     AutoHD<Attr> attr, pattr;
     for(int i_l = 0; i_l < ls.size(); i_l++)
@@ -304,12 +307,13 @@ void Widget::inheritAttr( const string &iattr )
 	attr  = attrAt(ls[i_l]);
 	pattr = parent().at().attrAt(ls[i_l]);
 	attr.at().setFlgSelf(pattr.at().flgSelf());
-	switch(attr.at().type())
+	bool active = attr.at().flgGlob()&Attr::Active;	
+	switch( attr.at().type() )
 	{
-	    case TFld::Boolean:	attr.at().setB(pattr.at().getB(),true);	break;
-	    case TFld::Integer:	attr.at().setI(pattr.at().getI(),true);	break;
-	    case TFld::Real:	attr.at().setR(pattr.at().getR(),true);	break;
-	    case TFld::String:	attr.at().setS(pattr.at().getS(),true);	break;
+	    case TFld::Boolean:	attr.at().setB( pattr.at().getB(), active );	break;
+	    case TFld::Integer:	attr.at().setI( pattr.at().getI(), active );	break;
+	    case TFld::Real:	attr.at().setR( pattr.at().getR(), active );	break;
+	    case TFld::String:	attr.at().setS( pattr.at().getS(), active );	break;
 	}	    
 	//-- No inherit calc flag for links --
 	if( isLink() && !parent().at().isLink() )

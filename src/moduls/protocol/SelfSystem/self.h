@@ -73,11 +73,12 @@ class TProt: public TProtocol
 	TProt( string name );
 	~TProt();
 	
-	int authTime()	{ return m_t_auth; }
+	int authTime( )			{ return m_t_auth; }
+	void setAuthTime( int vl )	{ m_t_auth = vl; modif(); }
 	
-	int ses_open(const char *user,const char *pass);
-	void ses_close(int id_ses);
-	SAuth ses_get(int id_ses);
+	int sesOpen( const char *user, const char *pass );
+	void sesClose( int id_ses );
+	SAuth sesGet( int id_ses );
 
 	string outMess( const string &in, TTransportOut &tro );
 

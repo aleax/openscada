@@ -1597,7 +1597,9 @@ LineEditProp::LineEditProp( QWidget *parent, DType tp ) : QWidget( parent ), m_t
     bt_fld->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed) );
     bt_fld->setMaximumWidth(15);
     box->addWidget(bt_fld);
-    connect( bt_fld, SIGNAL( pressed() ), this, SLOT( callDlg() ) );    
+    connect( bt_fld, SIGNAL( pressed() ), this, SLOT( callDlg() ) );
+    
+    setFocusProxy(ed_fld);
 }
 
 QString LineEditProp::value( )
@@ -2053,6 +2055,9 @@ void DevelWdgView::wdgPopup( )
 	popup.addAction(mainWin()->actVisItCut);
 	popup.addAction(mainWin()->actVisItCopy);
     	popup.addAction(mainWin()->actVisItPaste);
+	popup.addSeparator();
+	popup.addAction(mainWin()->actDBLoad);
+	popup.addAction(mainWin()->actDBSave);
     }
 
     //- Execute of menu -

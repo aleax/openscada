@@ -83,7 +83,7 @@ TProt::~TProt( )
     res.release();
 }
 
-int TProt::ses_open( const char *user,const char *pass )
+int TProt::sesOpen( const char *user,const char *pass )
 {
     if( !SYS->security().at().usrPresent(user) || !SYS->security().at().usrAt(user).at().auth(pass) )
 	return -1;
@@ -103,9 +103,9 @@ int TProt::ses_open( const char *user,const char *pass )
     return id_ses;
 }
 
-void TProt::ses_close(int id_ses)
+void TProt::sesClose( int id_ses )
 {
-    ResAlloc res(ses_res,true);
+    ResAlloc res( ses_res, true );
     int i_s = 0;
     while( i_s < auth_lst.size() )
 	if( time(NULL) > (auth_lst[i_s].t_auth+10*authTime()) || auth_lst[i_s].id_ses == id_ses )
@@ -113,7 +113,7 @@ void TProt::ses_close(int id_ses)
     	else i_s++;
 }
 
-TProt::SAuth TProt::ses_get(int id_ses)
+TProt::SAuth TProt::sesGet(int id_ses)
 {
     ResAlloc res(ses_res,true);
     time_t cur_tm = time(NULL);
@@ -252,8 +252,8 @@ void TProt::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/prm/cfg/lf_tm" )
     {
-        if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )   opt->setText(TSYS::int2str(m_t_auth));
-        if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )   m_t_auth = atoi(opt->text().c_str());
+        if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )   opt->setText( TSYS::int2str(authTime()) );
+        if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )   setAuthTime( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )   opt->setText(optDescr());
     else TProtocol::cntrCmdProc(opt);
@@ -292,20 +292,20 @@ bool TProtIn::mess( const string &request, string &answer, const string &sender 
 	char user[256] = "", 
 	     pass[256] = "";
 	sscanf(req.c_str(),"SES_OPEN %255s %255s",user,pass);
-	ses_id = mod->ses_open(user,pass);
+	ses_id = mod->sesOpen( user, pass );
 	if(ses_id < 0)	answer = "REZ 1 Auth error. User or password error.\n";
 	else answer = "REZ 0 "+TSYS::int2str(ses_id)+"\n";
     }
     else if( req.substr(0,9) == "SES_CLOSE" )
     {
 	sscanf(req.c_str(),"SES_CLOSE %d",&ses_id);
-	mod->ses_close(ses_id);
+	mod->sesClose(ses_id);
 	answer = "REZ 0\n";
     }
     else if( req.substr(0,3) == "REQ" )
     {
 	sscanf(req.c_str(),"REQ %d %d",&ses_id,&req_sz);
-	TProt::SAuth auth = mod->ses_get(ses_id);
+	TProt::SAuth auth = mod->sesGet(ses_id);
 	if( !auth.t_auth ) answer = "REZ 1 Auth error. Session no valid.\n";
 	else
 	{

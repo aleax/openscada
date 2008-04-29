@@ -79,10 +79,18 @@ class TSocketIn: public TTransportIn
 	 *   UNIX - UNIX socket with "UNIX:<path>"
 	 */
 	TSocketIn(string name,const string &idb,TElem *el);
-	~TSocketIn();
-	    
-	void start();
-	void stop();
+	~TSocketIn( );
+	
+	int maxQueue( )		{ return max_queue; }
+	int maxFork( )		{ return max_fork; }
+	int bufLen( )		{ return buf_len; }
+	
+	void setMaxQueue( int vl )	{ max_queue = vl; modif(); }
+	void setMaxFork( int vl )	{ max_fork = vl; modif(); }
+	void setBufLen( int vl )	{ buf_len = vl; modif(); }
+	
+	void start( );
+	void stop( );
 	    
     private:
 	//Methods

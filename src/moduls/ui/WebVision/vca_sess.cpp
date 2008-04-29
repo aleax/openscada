@@ -2482,6 +2482,12 @@ void VCADiagram::getReq( SSess &ses )
 	    }
 	    if( vsMax == -3e300 ) 	{ vsMax = 1.0; vsMin = 0.0; }
 	    else if( vsMax == vsMin )   { vsMax += 1.0; vsMin -= 1.0; }
+            else if( (vsMax-vsMin) / fabs(vsMin+(vsMax-vsMin)/2) < 0.001 )
+            {
+                double wnt_dp = 0.001*fabs(vsMin+(vsMax-vsMin)/2)-(vsMax-vsMin);
+                vsMin -= wnt_dp/2;
+                vsMax += wnt_dp/2;
+            }
 	}
         else { vsMax = trnds[0].bordU(); vsMin = trnds[0].bordL(); }
     }
@@ -2872,8 +2878,8 @@ void VCADiagram::TrendObj::loadData( const string &user, bool full )
             setAttr("tm_grnd",TSYS::ll2str(tTimeGrnd))->
             setAttr("per",TSYS::ll2str(wantPer))->
             setAttr("mode","1")->
-            setAttr("real_prec","4")->
-            setAttr("round_perc",TSYS::real2str(100.0/(float)owner().height));
+            setAttr("real_prec","6")->
+            setAttr("round_perc","0");//TSYS::real2str(100.0/(float)owner().height));
     if( mod->cntrIfCmd(req,user,false) )     return;
     //- Get data buffer parameters -
     bbeg = atoll(req.attr("tm_grnd").c_str());

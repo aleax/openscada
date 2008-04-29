@@ -46,6 +46,18 @@ class TWEB: public TUI
 	TWEB( string name );
 	~TWEB( );
 
+	int nCol( )			{ return n_col; }
+	int hSize( )			{ return h_sz; }
+	int vSize( )			{ return v_sz; }
+	int trndLen( )			{ return trnd_len; }
+	int trndTm( )			{ return trnd_tm; }
+	
+	void setNCol( int vl )		{ n_col = vl; modif(); }
+	void setHSize( int vl )		{ h_sz = vl; modif(); }
+	void setVSize( int vl )		{ v_sz = vl; modif(); }
+	void setTrndLen( int vl )	{ trnd_len = vl; modif(); }
+	void setTrndTm( int vl )	{ trnd_tm = vl; modif(); }
+
     protected:
 	//Methods
 	void load_( );

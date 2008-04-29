@@ -79,10 +79,10 @@ class Project : public TCntrNode, public TConfig
         void del( const string &id, bool full = false )	{ chldDel(m_page,id,-1,full); }
 	
         //- Mime data access -
-        void mimeDataList( vector<string> &list );
-        bool mimeDataGet( const string &id, string &mimeType, string *mimeData = NULL );
-        void mimeDataSet( const string &id, const string &mimeType, const string &mimeData );
-        void mimeDataDel( const string &id );
+        void mimeDataList( vector<string> &list, const string &idb = "" );
+        bool mimeDataGet( const string &id, string &mimeType, string *mimeData = NULL, const string &idb = "" );
+        void mimeDataSet( const string &id, const string &mimeType, const string &mimeData, const string &idb = "" );
+        void mimeDataDel( const string &id, const string &idb = "" );
 
     protected:
 	//Methods
@@ -108,7 +108,8 @@ class Project : public TCntrNode, public TConfig
 		&m_user, 	//Access user		
 		&m_grp, 	//Access group
 		&m_ico, 	//Individual icon
-		work_prj_db;	//Work DB
+		work_prj_db,	//Work DB
+		mOldDB;
 	int	&m_permit;	//Access permition
 	bool    m_enable;	//Enable state
 };
@@ -180,6 +181,8 @@ class Page : public Widget, public TConfig
 	//- Data access -
         string resourceGet( const string &id, string *mime = NULL );
 
+	void inheritAttr( const string &attr = "" );
+
 	Page 	*ownerPage( );
         Project *ownerProj( );
 
@@ -244,6 +247,8 @@ class PageWdg : public Widget, public TConfig
 
 	//- Data access -
         string resourceGet( const string &id, string *mime = NULL );
+
+	void inheritAttr( const string &attr = "" );
 
         Page &owner( );
 

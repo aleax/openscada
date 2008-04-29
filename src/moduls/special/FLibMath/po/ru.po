@@ -86,7 +86,7 @@ msgstr ""
 
 #: statfunc.cpp:136
 msgid "Functions"
-msgstr "©©©©©©©"
+msgstr "Функции"
 
 #: statfunc.cpp:136
 msgid "tp"

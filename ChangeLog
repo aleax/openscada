@@ -1,3 +1,21 @@
+2008-04-29 Roman
+- !!:/SYS: Demo DB is updated.
+- /Protocol/SelfSystem: Session's functions is renamed.
+- FIX:/Special/FLibMath: Russian translation is fixed.
+- FIX:/Transport/Sockets: Modify control is fixed.
+- FIX:/UI/QTCfg: Modify control is fixed.
+- FIX:/UI/QTStarter: Modify control is fixed.
+- FIX:/UI/VCAEngine: Mime data storing is fixed after container DB changing.
+- FIX:/UI/VCAEngine: Modify control is fixed.
+- FIX:/UI/VCAEngine: Loading widgets from changed attributes list is fixed.
+- FIX:/UI/Vision: Modify control is fixed.
+- FIX:/UI/Vision: Load widgets is fixed.
+- FIX:/UI/Vision: Float values precision is fixed for primitive "Diagram".
+- FIX:/UI/WebCfg: Modify control is fixed.
+- FIX:/UI/WebDbg: Modify control is fixed.
+- FIX:/UI/WebVision: Float values precision is fixed for primitive "Diagram".
+
+
 2008-04-27 Roman
 - !!!!:/SYS: Global control for node modifications is added.
 - !!!!:/UI/QTCfg, /UI/Vision: Global modifications control support is added.

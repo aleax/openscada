@@ -502,7 +502,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
         index        = -1;
         if( rectItems.size() )	rectItems.clear();
         flag_ctrl    = false;
-        if( uiPrmPos >= 0 ) w->update();
+        if( uiPrmPos != -1 ) w->update();
     }    
     return up;
 }

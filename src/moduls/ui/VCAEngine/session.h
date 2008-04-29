@@ -150,7 +150,7 @@ class SessWdg : public Widget, public TValFunc
 	
 	//- Access to mime resource -
         string resourceGet( const string &id, string *mime = NULL );
-
+	
         SessWdg  *ownerSessWdg( bool base = false );
 	SessPage *ownerPage();
         Session	 *ownerSess()	{ return m_sess; }
@@ -204,7 +204,7 @@ class SessPage : public SessWdg
         AutoHD<SessPage> pageAt( const string &id );
         void pageAdd( const string &id, const string &parent = "" );
         void pageDel( const string &id, bool full = false )	{ chldDel(m_page,id,-1,full); }
-	
+
     protected:
 	//Methods
 	bool cntrCmdGeneric( XMLNode *opt );

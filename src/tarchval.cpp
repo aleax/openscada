@@ -1569,7 +1569,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		{
 		    float round_perc = atof(opt->attr("round_perc").c_str());
 		    int   real_prec  = atoi(opt->attr("real_prec").c_str());
-		    if( !real_prec ) real_prec = 6;
+		    if( !real_prec ) real_prec = 10;
 		    double tval_pr = EVAL_REAL, tval_pr1;
 		    while( ibeg <= iend )
 		    {

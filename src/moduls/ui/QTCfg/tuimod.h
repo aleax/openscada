@@ -52,6 +52,9 @@ class TUIMod: public TUI
 	
 	string startPath( )	{ return start_path; }
 	string startUser( )	{ return start_user; }
+	
+	void setStartPath( const string &vl )	{ start_path = vl; modif(); }
+	void setStartUser( const string &vl )	{ start_user = vl; modif(); }
 
 	void modStart( );
 	void modStop( );
