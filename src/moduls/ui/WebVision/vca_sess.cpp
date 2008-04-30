@@ -320,7 +320,7 @@ double VCAElFigure::angle( const Point p1, const Point p2, const Point p3, const
     double dx2 = ( p4.x - p3.x );
     double dy1 = ( p2.y - p1.y );
     double dy2 = ( p4.y - p3.y );
-    double cos_line = ( dx1*dx2 + dy1*dy2 ) / ( length(p1,p2)*length(p3,p4) );
+    double cos_line = vmax( -1, vmin(1, (( dx1*dx2 + dy1*dy2 ) / ( length(p1,p2)*length(p3,p4)))) );
     double rad;
     rad = acos( cos_line );
     return rad * 180 / M_PI;

@@ -1,3 +1,7 @@
+2008-04-30 Maxim
+- FIX:/UI/WebVision, /UI/Vision: function "angle" for primitive ElFigure is modified.
+
+
 2008-04-29 Roman
 - !!:/SYS: Demo DB is updated.
 - /Protocol/SelfSystem: Session's functions is renamed.

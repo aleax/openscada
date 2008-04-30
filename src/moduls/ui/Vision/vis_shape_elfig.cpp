@@ -1885,7 +1885,7 @@ double ShapeElFigure::angle( const QLineF &l, const QLineF &l1 )
 {
     if( l.isNull() || l1.isNull() ) return 0;
 
-    return acos((l.dx()*l1.dx() + l.dy()*l1.dy()) / (l.length()*l1.length())) * 180 / M_PI;
+    return acos( vmax( -1, vmin( 1, (l.dx()*l1.dx() + l.dy()*l1.dy()) / (l.length()*l1.length()))) ) * 180 / M_PI;
 }
 
 //- detecting the length between two points -
