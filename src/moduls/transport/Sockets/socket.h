@@ -140,11 +140,11 @@ class TSocketOut: public TTransportOut
 	 *   UDP  - UDP socket with  "TCP:<host>:<port>"
 	 *   UNIX - UNIX socket with "UNIX:<path>"
 	 */
-	TSocketOut(string name,const string &idb,TElem *el);
-	~TSocketOut();
+	TSocketOut( string name, const string &idb, TElem *el );
+	~TSocketOut( );
 
-	void start();
-	void stop();
+	void start( );
+	void stop( );
 
 	int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0 );
 
@@ -154,6 +154,7 @@ class TSocketOut: public TTransportOut
 	int	type;        // socket's types 
 	struct sockaddr_in  name_in;
 	struct sockaddr_un  name_un;
+	Res  	wres;
 };
 
 //************************************************

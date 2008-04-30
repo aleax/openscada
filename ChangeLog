@@ -1,3 +1,11 @@
+2008-04-30 Roman
+- !!:/DOC: OpenSCADA system API document is updated.
+- !!:/DAQ/Siemens: Main documentation is updated.
+- FIX:/Protocol/SelfSystem: Resource for output protocol is added.
+- FIX:/Transport/Socket: Resource for output transport is added.
+- /UI/QTCfg: Many errors process is added.
+
+
 2008-04-30 Maxim
 - FIX:/UI/WebVision, /UI/Vision: function "angle" for primitive ElFigure is modified.
 

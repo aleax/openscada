@@ -127,8 +127,8 @@ class TSYS : public TCntrNode
 	string workDB( )	{ return mWorkDB; }
 	void setWorkDB( const string &wdb )	{ mWorkDB = wdb; modifG(); }
 	bool saveAtExit( )	{ return mSaveAtExit; }
+	void setSaveAtExit( bool vl )		{ mSaveAtExit = vl; modif(); }	
 	int  savePeriod( )	{ return mSavePeriod; }
-	void setSaveAtExit( bool vl )		{ mSaveAtExit = vl; modif(); }
 	void setSavePeriod( int vl )		{ mSavePeriod = vl; modif(); }
 	
 	//- Get system options from DB -

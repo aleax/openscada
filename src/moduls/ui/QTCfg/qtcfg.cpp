@@ -1685,7 +1685,7 @@ void ConfApp::pageDisplay( const string &path )
 	//-- Check the new node structure and the old node --
 	XMLNode n_node("info");
 	n_node.setAttr("path",sel_path);
-	if(cntrIfCmd(n_node)) 
+	if( cntrIfCmd(n_node) )
 	{ 
 	    mod->postMess(n_node.attr("mcat"),n_node.text(),TUIMod::Error,this); 
 	    return; 
@@ -1993,21 +1993,25 @@ int ConfApp::cntrIfCmd( XMLNode &node )
     if( station.empty() ) station = sel_path = SYS->id();
     else node.setAttr("path",path.substr(path_off));
     
-    //- Check local station request -    
-    if( station == SYS->id() )
+    try
     {
-	node.setAttr("user",w_user->user().toAscii().data());
-        SYS->cntrCmd(&node);
-	node.setAttr("path",path);
-	return atoi(node.attr("rez").c_str());
-    }
+	//- Check local station request -    
+	if( station == SYS->id() )
+	{
+	    node.setAttr("user",w_user->user().toAscii().data());
+    	    SYS->cntrCmd(&node);
+	    node.setAttr("path",path);
+	    return atoi(node.attr("rez").c_str());
+	}
     
-    //- Request to remote host -
-    TTransportS::ExtHost host = SYS->transport().at().extHostGet(w_user->user().toAscii().data(),station);
-    AutoHD<TTransportOut> tr = SYS->transport().at().extHost(host,"TrCntr");    
-    if(!tr.at().startStat())	tr.at().start();
-    node.load(tr.at().messProtIO(host.user+"\n"+host.pass+"\n"+node.save(),"SelfSystem"));
-    node.setAttr("path",path);
+	//- Request to remote host -
+	TTransportS::ExtHost host = SYS->transport().at().extHostGet(w_user->user().toAscii().data(),station);
+	AutoHD<TTransportOut> tr = SYS->transport().at().extHost(host,"TrCntr");    
+	if(!tr.at().startStat())	tr.at().start();
+	node.load(tr.at().messProtIO(host.user+"\n"+host.pass+"\n"+node.save(),"SelfSystem"));
+	node.setAttr("path",path);
+    }catch( TError err )
+    { node.setAttr("mcat",err.cat)->setAttr("rez","3")->setText(err.mess); }
     return atoi(node.attr("rez").c_str());
 }                          
 

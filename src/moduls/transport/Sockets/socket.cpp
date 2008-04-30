@@ -558,6 +558,8 @@ TSocketOut::~TSocketOut()
 
 void TSocketOut::start()
 {
+    ResAlloc res( wres, true ); 
+    
     if( run_st ) return;
 
     string s_type = TSYS::strSepParse(addr(),0,':');
@@ -632,6 +634,8 @@ void TSocketOut::start()
 
 void TSocketOut::stop()
 {
+    ResAlloc res( wres, true ); 
+
     if( !run_st ) return;
     
     if( sock_fd >= 0 )
@@ -645,6 +649,9 @@ void TSocketOut::stop()
 int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int time )
 {
     int kz;
+    
+    ResAlloc res( wres, true ); 
+    
     if( !run_st ) throw TError(nodePath().c_str(),_("Transport no started!"));    
     
     //- Write request -

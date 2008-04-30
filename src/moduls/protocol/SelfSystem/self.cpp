@@ -185,6 +185,8 @@ string TProt::outMess( const string &in, TTransportOut &tro )
     string req, resp;
     int rez, resp_len;
 
+    ResAlloc res( ores, true );
+
     int in_off = 0;
     string user = TSYS::strSepParse(in,0,'\n',&in_off);
     string pass = TSYS::strSepParse(in,0,'\n',&in_off);
@@ -215,14 +217,14 @@ string TProt::outMess( const string &in, TTransportOut &tro )
             buf1[0] = 0;
             if(sscanf(resp.c_str(),"REZ %d %255s\n",&rez,buf1)<=0)
         	throw TError(nodePath().c_str(),_("Station respond <%s> error!"),tro.id().c_str());
-            if(rez == 1)        { tro.setPrm1(-1); continue; }
-            if(rez > 0) throw TError(nodePath().c_str(),_("Station <%s> error: %d:%s!"),tro.id().c_str(),rez,buf1);
+            if( rez == 1 )	{ tro.setPrm1(-1); continue; }
+            if( rez > 0 )	throw TError(nodePath().c_str(),_("Station <%s> error: %d:%s!"),tro.id().c_str(),rez,buf1);
             int head_end = resp.find("\n",0);
-            if(head_end == string::npos)
+            if( head_end == string::npos )
         	throw TError(nodePath().c_str(),_("Station <%s> error: Respond broken!"),tro.id().c_str());
             int resp_size = atoi(buf1);
             //-- Wait tail --
-            while(resp.size() < resp_size+head_end+sizeof('\n'))
+            while( resp.size() < resp_size+head_end+sizeof('\n') )
             {
         	resp_len = tro.messIO(NULL,0,buf,sizeof(buf),20);
         	resp.append(buf,resp_len);
