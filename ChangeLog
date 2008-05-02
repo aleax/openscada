@@ -1,3 +1,9 @@
+2008-05-01 Roman
+- /DATA: The OpenSCADA version to start splash is added.
+- /UI/QTCfg: Menu "Go" and "View" is merged.
+- /SYS: Parameter --with-qt4-dir=DIR to configure script is added, for flexibly QT4 installation control.
+
+
 2008-04-30 Roman
 - !!:/DOC: OpenSCADA system API document is updated.
 - !!:/DAQ/Siemens: Main documentation is updated.
@@ -51,7 +57,7 @@
 
 
 2008-04-22 Roman
-- !!!!:/SYS/: Global dynamic nodes copy mechanism is added.
+- !!!!:/SYS: Global dynamic nodes copy mechanism is added.
 - !!!!:/UI/QTCfg: Global dynamic nodes copy mechanism support is added.
 - !!!!:/DB: Remove individual copy mechanism and use new dynamic nodes copy mechanism.
 - !!!!:/DAQ/BlockCalc: Remove individual copy mechanism and use new dynamic nodes copy mechanism.
@@ -139,7 +145,7 @@
 2008-03-23 Roman OpenSCADA 0.6.1
 - /SYS: TODO files translation to Russian and Ukranian is added (TODO_ru and TODO_uk)
 - /UI: Start module control function is added TUI::startStat().
-- FIX:/DAQ: Parameter's templates load on brocken some templates is fixed.
+- FIX:/DAQ: Parameter's templates load on broken some templates is fixed.
 - FIX:/Function: Resource on function cadrs registration is added.
 - /Elements: The hide configure element flag on a element initialisation is added.
 - FIX:/DAQ/BlockCalc: Check to attributes of parameters move to up, before new attributes adding.
@@ -161,7 +167,7 @@
 - !!!:/SYS: The release 0.6.1 overview is added. The release overview made on English, Russian and Ukrainian languages.
 - !!:/SYS: OpenSCADA API documentation is updated.
 - FIX:/Archive/Value, /UI/Vision, /UI/WebVision: Miliseconds trends display is fixed.
-- FIX:/UI/Vision: In time first deveopment widget open the size point display is fixed.
+- FIX:/UI/Vision: In time first development widget open the size point display is fixed.
 - FIX:/UI/WebVision: Image map areas' events generation is fixed.
 
 

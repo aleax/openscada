@@ -320,14 +320,13 @@ ConfApp::ConfApp( string open_user ) :
     mn_edit->addAction(actItPaste);
     //-- Create menu "view" --
     QMenu *mn_view = menuBar()->addMenu(_("&View"));    
+    mn_view->addAction(actUp);
+    mn_view->addAction(actPrev);
+    mn_view->addAction(actNext);
+    mn_view->addSeparator( );
     mn_view->addAction(actUpdate);
     mn_view->addAction(actStartUpd);
     mn_view->addAction(actStopUpd);
-    //-- Create menu "go" --
-    QMenu *mn_go = menuBar()->addMenu(_("&Go"));    
-    mn_go->addAction(actUp);
-    mn_go->addAction(actPrev);
-    mn_go->addAction(actNext);
     //-- Create menu "help" --
     QMenu *help = menuBar()->addMenu(_("&Help"));
     help->addAction(actAbout);

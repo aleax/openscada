@@ -397,20 +397,21 @@ AC_MSG_RESULT(===========================================)
 
 #QT4 check
 if test ${QT4use} = true; then
+    AC_ARG_WITH(qt4-dir,[  --with-qt4-dir=DIR      Path to directory where QT4 instaled (/usr/lib/qt4 - default) ], [QT4_DIR="$withval"], [QT4_DIR="/usr/lib/qt4"])
     AC_CHECK_PROGS(QT4_MOC, moc-qt4 moc, false)
     AC_CHECK_PROGS(QT4_RCC, rcc-qt4 rcc, false)
     if test ${QT4_MOC} = false || test ${QT4_RCC} = false; 
-    then if test -d /usr/lib/qt4; 
+    then if test -d ${QT4_DIR}; 
          then 
-	   QT4_MOC="/usr/lib/qt4/bin/moc"; 
-	   QT4_RCC="/usr/lib/qt4/bin/rcc";
-	   QT4_LIB="/usr/lib/qt4/lib";
-         else AC_MSG_ERROR([QT4 development utilites no present! Install QT4 library development package.]); fi;
-    fi
+	   QT4_MOC="${QT4_DIR}/bin/moc"; 
+	   QT4_RCC="${QT4_DIR}/bin/rcc";
+	   QT4_LIB="${QT4_DIR}/lib";
+         else AC_MSG_ERROR([QT4 development utilites no present (into directory ${QT4_DIR})! Install QT4 library development package.]); fi;
+    fi;
     if test -d "${oldincludedir}/qt4/QtCore"; then QT4_INCL="${oldincludedir}/qt4";
     elif test -d "${oldincludedir}/QtCore"; then QT4_INCL="${oldincludedir}";
-    elif test -d "/usr/lib/qt4/include/QtCore"; then QT4_INCL="/usr/lib/qt4/include"; fi
-    if test -z ${QT4_INCL}; then AC_MSG_ERROR([QT4 development, include files no present! Install QT4 library development package.]); fi
+    elif test -d "${QT4_DIR}/include/QtCore"; then QT4_INCL="${QT4_DIR}/include"; fi
+    if test -z ${QT4_INCL}; then AC_MSG_ERROR([QT4 development, include files no present (into directory ${QT4_DIR})! Install QT4 library development package.]); fi
     AC_SUBST(QT4_INCL)
     AC_SUBST(QT4_LIB)
 #--- Modules checkings ---    

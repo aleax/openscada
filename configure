@@ -1077,6 +1077,7 @@ Optional Packages:
                           both]
   --with-tags[=TAGS]
                           include additional configurations [automatic]
+  --with-qt4-dir=DIR      Path to directory where QT4 instaled (/usr/lib/qt4 - default)
 
 Some influential environment variables:
   CC          C compiler command
@@ -4402,7 +4403,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 4405 "configure"' > conftest.$ac_ext
+  echo '#line 4406 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -5796,7 +5797,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:5799:" \
+echo "$as_me:5800:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -6859,11 +6860,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6862: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6863: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:6866: \$? = $ac_status" >&5
+   echo "$as_me:6867: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7127,11 +7128,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7130: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7131: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7134: \$? = $ac_status" >&5
+   echo "$as_me:7135: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7231,11 +7232,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7234: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7235: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:7238: \$? = $ac_status" >&5
+   echo "$as_me:7239: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -8701,7 +8702,7 @@ linux*)
   libsuff=
   case "$host_cpu" in
   x86_64*|s390x*|powerpc64*)
-    echo '#line 8704 "configure"' > conftest.$ac_ext
+    echo '#line 8705 "configure"' > conftest.$ac_ext
     if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -9708,7 +9709,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 9711 "configure"
+#line 9712 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -9808,7 +9809,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 9811 "configure"
+#line 9812 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -12151,11 +12152,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:12154: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:12155: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:12158: \$? = $ac_status" >&5
+   echo "$as_me:12159: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -12255,11 +12256,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:12258: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:12259: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:12262: \$? = $ac_status" >&5
+   echo "$as_me:12263: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -12794,7 +12795,7 @@ linux*)
   libsuff=
   case "$host_cpu" in
   x86_64*|s390x*|powerpc64*)
-    echo '#line 12797 "configure"' > conftest.$ac_ext
+    echo '#line 12798 "configure"' > conftest.$ac_ext
     if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -15137,11 +15138,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15140: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15141: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15144: \$? = $ac_status" >&5
+   echo "$as_me:15145: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -15241,11 +15242,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15244: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15245: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:15248: \$? = $ac_status" >&5
+   echo "$as_me:15249: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -15780,7 +15781,7 @@ linux*)
   libsuff=
   case "$host_cpu" in
   x86_64*|s390x*|powerpc64*)
-    echo '#line 15783 "configure"' > conftest.$ac_ext
+    echo '#line 15784 "configure"' > conftest.$ac_ext
     if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -16834,11 +16835,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16837: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16838: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16841: \$? = $ac_status" >&5
+   echo "$as_me:16842: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16938,11 +16939,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16941: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16942: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:16945: \$? = $ac_status" >&5
+   echo "$as_me:16946: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -18388,7 +18389,7 @@ linux*)
   libsuff=
   case "$host_cpu" in
   x86_64*|s390x*|powerpc64*)
-    echo '#line 18391 "configure"' > conftest.$ac_ext
+    echo '#line 18392 "configure"' > conftest.$ac_ext
     if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -19163,11 +19164,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:19166: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:19167: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:19170: \$? = $ac_status" >&5
+   echo "$as_me:19171: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -19431,11 +19432,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:19434: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:19435: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:19438: \$? = $ac_status" >&5
+   echo "$as_me:19439: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -19535,11 +19536,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:19538: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:19539: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:19542: \$? = $ac_status" >&5
+   echo "$as_me:19543: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -21005,7 +21006,7 @@ linux*)
   libsuff=
   case "$host_cpu" in
   x86_64*|s390x*|powerpc64*)
-    echo '#line 21008 "configure"' > conftest.$ac_ext
+    echo '#line 21009 "configure"' > conftest.$ac_ext
     if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -28319,6 +28320,14 @@ echo "${ECHO_T}===========================================" >&6
 
 #QT4 check
 if test ${QT4use} = true; then
+
+# Check whether --with-qt4-dir or --without-qt4-dir was given.
+if test "${with_qt4_dir+set}" = set; then
+  withval="$with_qt4_dir"
+  QT4_DIR="$withval"
+else
+  QT4_DIR="/usr/lib/qt4"
+fi;
     for ac_prog in moc-qt4 moc
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
@@ -28402,20 +28411,20 @@ done
 test -n "$QT4_RCC" || QT4_RCC="false"
 
     if test ${QT4_MOC} = false || test ${QT4_RCC} = false;
-    then if test -d /usr/lib/qt4;
+    then if test -d ${QT4_DIR};
          then
-	   QT4_MOC="/usr/lib/qt4/bin/moc";
-	   QT4_RCC="/usr/lib/qt4/bin/rcc";
-	   QT4_LIB="/usr/lib/qt4/lib";
-         else { { echo "$as_me:$LINENO: error: QT4 development utilites no present! Install QT4 library development package." >&5
-echo "$as_me: error: QT4 development utilites no present! Install QT4 library development package." >&2;}
+	   QT4_MOC="${QT4_DIR}/bin/moc";
+	   QT4_RCC="${QT4_DIR}/bin/rcc";
+	   QT4_LIB="${QT4_DIR}/lib";
+         else { { echo "$as_me:$LINENO: error: QT4 development utilites no present (into directory ${QT4_DIR})! Install QT4 library development package." >&5
+echo "$as_me: error: QT4 development utilites no present (into directory ${QT4_DIR})! Install QT4 library development package." >&2;}
    { (exit 1); exit 1; }; }; fi;
-    fi
+    fi;
     if test -d "${oldincludedir}/qt4/QtCore"; then QT4_INCL="${oldincludedir}/qt4";
     elif test -d "${oldincludedir}/QtCore"; then QT4_INCL="${oldincludedir}";
-    elif test -d "/usr/lib/qt4/include/QtCore"; then QT4_INCL="/usr/lib/qt4/include"; fi
-    if test -z ${QT4_INCL}; then { { echo "$as_me:$LINENO: error: QT4 development, include files no present! Install QT4 library development package." >&5
-echo "$as_me: error: QT4 development, include files no present! Install QT4 library development package." >&2;}
+    elif test -d "${QT4_DIR}/include/QtCore"; then QT4_INCL="${QT4_DIR}/include"; fi
+    if test -z ${QT4_INCL}; then { { echo "$as_me:$LINENO: error: QT4 development, include files no present (into directory ${QT4_DIR})! Install QT4 library development package." >&5
+echo "$as_me: error: QT4 development, include files no present (into directory ${QT4_DIR})! Install QT4 library development package." >&2;}
    { (exit 1); exit 1; }; }; fi
 
 
