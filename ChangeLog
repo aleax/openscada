@@ -1,3 +1,7 @@
+2008-05-06 Maxim
+- FIX:/UI/Vision: "CapStyle" of "Pen" for all types of primitive ElFigure is changed to "SquareCap".
+
+
 2008-05-01 Roman
 - /DATA: The OpenSCADA version to start splash is added.
 - /UI/QTCfg: Menu "Go" and "View" is merged.
