@@ -2571,13 +2571,14 @@ void ConfApp::imgPopup( const QPoint &pos )
             {
 		QString fileName = QFileDialog::getSaveFileName(this,_("Save picture"),
 			"img.png", _("Images (*.png *.xpm *.jpg)"));
-		if(!fileName.isEmpty() && !img->image().save(fileName)) 
+		if( !fileName.isEmpty() && !img->image().save(fileName) )
 		    throw TError(mod->nodePath().c_str(),_("Save to file %s is error\n"),fileName.toAscii().data());
 	    }
 	    else if( rez == load_img )
 	    {
 		//- Get path to image file -
 		QString fileName = QFileDialog::getOpenFileName(this,_("Load picture"),"",_("Images (*.png *.jpg)"));
+		if( fileName.isNull( ) ) return;
 		int len;
 		char buf[STR_BUF_LEN];
 		string rez;
@@ -2592,7 +2593,8 @@ void ConfApp::imgPopup( const QPoint &pos )
 		}
 		
 		//- Set image to widget -
-		if(!img->setImage(rez))	throw TError(mod->nodePath().c_str(),_("Image file %s is error\n"),fileName.toAscii().data());
+		if( !img->setImage(rez) )
+		    throw TError(mod->nodePath().c_str(),_("Image file %s is error\n"),fileName.toAscii().data());
 		
 		//- Send image to system -
 		XMLNode n_el1("set");

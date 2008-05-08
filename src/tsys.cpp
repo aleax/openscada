@@ -804,7 +804,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/gen/clk_res",_("Realtime clock resolution (msec)"),0444,"root","root",1,"tp","real");
 	    ctrMkNode("fld",opt,-1,"/gen/in_charset",_("Internal charset"),0440,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/config",_("Config file"),0440,"root","root",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/gen/workdir",_("Work directory"),0664,"root","root",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/gen/workdir",_("Work directory"),0440,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/wrk_db",_("Work DB (module.bd)"),0660,"root",db().at().subId().c_str(),1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/saveExit",_("Save system at exit"),0664,"root","root",1,"tp","bool");
 	    ctrMkNode("fld",opt,-1,"/gen/savePeriod",_("Save system period"),0664,"root","root",1,"tp","dec");	    
@@ -873,8 +873,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     }    
     else if( a_path == "/gen/workdir" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(workDir());
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setWorkDir(opt->text().c_str());
+	if( ctrChkNode(opt,"get",0440,"root","root",SEQ_RD) )	opt->setText(workDir());
+	if( ctrChkNode(opt,"set",0440,"root","root",SEQ_WR) )	setWorkDir(opt->text().c_str());
     }
     else if( a_path == "/gen/lang" )
     {

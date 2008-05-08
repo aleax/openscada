@@ -1,3 +1,10 @@
+2008-05008 Roman
+- /SYS: Redhat vendor control is added to RPM build spec file.
+- /SYS: Work directory change allow is excluded.
+- FIX:/UI/QTCfg: No check for loading image dialog cancel is fixed.
+- FIX:/UI/Vision: No update widgets tree on three level widget's add/delete is fixed.
+
+
 2008-05-06 Maxim
 - FIX:/UI/Vision: "CapStyle" of "Pen" for all types of primitive ElFigure is changed to "SquareCap".
 

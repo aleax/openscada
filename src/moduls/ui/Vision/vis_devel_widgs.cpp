@@ -1166,7 +1166,10 @@ void WdgTree::updateTree( const string &vca_it )
     int vca_lev = 0;
     for( int off = 0; !(t_el=TSYS::pathLev(vca_it,0,true,&off)).empty(); )  vca_lev++;
 		
-    if( (vca_lev && TSYS::pathLev(vca_it,0).substr(0,4) != "wlb_") || vca_lev == 3 )	return;	
+    if( (vca_lev && TSYS::pathLev(vca_it,0).substr(0,4) != "wlb_") )	return;
+    string upd_lb   = (vca_lev>=1) ? TSYS::pathLev(vca_it,0).substr(4) : "";
+    string upd_wdg  = (vca_lev>=2) ? TSYS::pathLev(vca_it,1).substr(4) : "";
+    string upd_wdgi = (vca_lev>=3) ? TSYS::pathLev(vca_it,2).substr(4) : "";
 
     XMLNode req("get");
 
@@ -1194,6 +1197,7 @@ void WdgTree::updateTree( const string &vca_it )
     //- Add new libraries -
     for( i_l = 0; i_l < list_wl.size(); i_l++ )
     {
+	if( !upd_lb.empty() && upd_lb != list_wl[i_l] )	continue;
 	for( i_top = 0; i_top < treeW->topLevelItemCount(); i_top++ )
     	    if( list_wl[i_l] == treeW->topLevelItem(i_top)->text(2).toAscii().data() )
 		break;
@@ -1212,7 +1216,6 @@ void WdgTree::updateTree( const string &vca_it )
 	nit->setText(0,lb_req.childGet(i_l)->text().c_str());
 	nit->setText(1,_("Library"));
 	nit->setText(2,list_wl[i_l].c_str());
-
 	
 	//-- Update librarie's widgets --
 	//--- Get librarie's widgets list ---
@@ -1240,6 +1243,7 @@ void WdgTree::updateTree( const string &vca_it )
 	//--- Add new widgets ---
 	for( i_w = 0; i_w < list_w.size(); i_w++ )
 	{
+	    if( !upd_wdg.empty() && upd_wdg != list_w[i_w] )	continue;
 	    for( i_topwl = 0; i_topwl < nit->childCount(); i_topwl++ )
     		if(list_w[i_w] == nit->child(i_topwl)->text(2).toAscii().data())
 		    break;
@@ -1285,6 +1289,7 @@ void WdgTree::updateTree( const string &vca_it )
 	    //---- Add new widgets ----
 	    for( i_cw = 0; i_cw < list_wc.size(); i_cw++ )
 	    {
+		if( !upd_wdgi.empty() && upd_wdgi != list_wc[i_cw] )	continue;	    
 		for( i_topcwl = 0; i_topcwl < nit_w->childCount(); i_topcwl++ )
     		    if(list_wc[i_cw] == nit_w->child(i_topcwl)->text(2).toAscii().data())
 			break;
