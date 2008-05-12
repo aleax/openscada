@@ -54,23 +54,23 @@ TCntrNode &Widget::operator=( TCntrNode &node )
 
     //- Parent link copy -
     if( parentNm() != src_n->parentNm() && enable() ) setEnable(false);
-    setParentNm(src_n->parentNm());
+    setParentNm( src_n->parentNm() );
     if( !enable() ) setEnable(true);
 
     //- Copy generic configuration -
     if( src_n->parent().freeStat() || src_n->name() != src_n->parent().at().name() )	setName(src_n->name());
     if( src_n->parent().freeStat() || src_n->descr() != src_n->parent().at().descr() )	setDescr(src_n->descr());
     if( src_n->parent().freeStat() || src_n->ico() != src_n->parent().at().ico() )	setIco(src_n->ico());
-    setUser(src_n->user());
-    setGrp(src_n->grp());
-    setPermit(src_n->permit());
+    setUser( src_n->user() );
+    setGrp( src_n->grp() );
+    setPermit( src_n->permit() );
     if( src_n->parent().freeStat() || src_n->calcLang() != src_n->parent().at().calcLang() )	setCalcLang(src_n->calcLang());
     if( src_n->parent().freeStat() || src_n->calcProg() != src_n->parent().at().calcProg() )	setCalcProg(src_n->calcProg());
     if( src_n->parent().freeStat() || src_n->calcPer() != src_n->parent().at().calcPer() )	setCalcPer(src_n->calcPer());
 
     //- Copy attributes -
     vector<string> els;
-    src_n->attrList(els);
+    src_n->attrList( els );
     AutoHD<Attr> attr, pattr;
     for( int i_a = 0; i_a < els.size(); i_a++ )
     {
@@ -90,8 +90,8 @@ TCntrNode &Widget::operator=( TCntrNode &node )
 	    case TFld::Real:	attr.at().setR(pattr.at().getR());	break;
 	    case TFld::String:	attr.at().setS(pattr.at().getS());	break;
 	}
-	attr.at().setCfgTempl(pattr.at().cfgTempl());
-	attr.at().setCfgVal(pattr.at().cfgVal());
+	attr.at().setCfgTempl( pattr.at().cfgTempl() );
+	attr.at().setCfgVal( pattr.at().cfgVal() );
     }
 
     //- Include widgets copy -
@@ -108,7 +108,7 @@ TCntrNode &Widget::operator=( TCntrNode &node )
     return *this;
 }
 
-void Widget::postEnable(int flag)
+void Widget::postEnable( int flag )
 {
     if( flag&TCntrNode::NodeRestore )	setEnable(true);
     if( flag&TCntrNode::NodeConnect )
@@ -138,7 +138,7 @@ void Widget::postEnable(int flag)
 void Widget::preDisable( int flag )
 {
     //- Delete heritors widgets -
-    while( herit().size() )	mod->nodeDel(herit()[0].at().path(),0,flag|0x10);
+    while( herit().size() )	mod->nodeDel( herit()[0].at().path(), 0, 0x10, true );
     
     //- Disable widget -
     if( enable() )  setEnable(false);
@@ -152,7 +152,7 @@ string Widget::rootId( )
 
 string Widget::name( )
 {
-    return (attrAt("name").at().getS().size())?attrAt("name").at().getS():m_id;
+    return (attrAt("name").at().getS().size()) ? attrAt("name").at().getS() : m_id;
 }
     
 void Widget::setName( const string &inm )
@@ -215,18 +215,18 @@ void Widget::setEnable( bool val )
     if(!val)
     {
 	//- Disable heritors widgets -
-	for( int i_h = 0; i_h < m_herit.size(); i_h++ )
-	    if( m_herit[i_h].at().enable( ) )
-		try { m_herit[i_h].at().setEnable(false); }
+	for( int i_h = 0; i_h < herit().size(); i_h++ )
+	    if( herit()[i_h].at().enable( ) )
+		try { herit()[i_h].at().setEnable(false); }
 		catch(...)
-		{ mess_err(nodePath().c_str(),_("Heritors widget <%s> disable error"),m_herit[i_h].at().id().c_str()); }    
+		{ mess_err(nodePath().c_str(),_("Heritors widget <%s> disable error"),herit()[i_h].at().id().c_str()); }    
         
-	//- Free inherit attributes -
+	//- Free no base attributes -
         vector<string>  ls;
         attrList(ls);
         for(int i_l = 0; i_l < ls.size(); i_l++)
-            if( attrAt(ls[i_l]).at().flgGlob()&Attr::IsInher )
-                attrDel( ls[i_l] );
+	    if( atoi(attrAt(ls[i_l]).at().fld().reserve().c_str()) > 15 )
+                attrDel( ls[i_l] );	    
 
 	if(!m_parent.freeStat()) 
 	{
@@ -380,12 +380,12 @@ bool Widget::attrChange( Attr &cfg, void *prev )
 
 void Widget::wdgList( vector<string> &list )
 {
-    chldList(inclWdg,list);
+    chldList( inclWdg, list );
 }
 
 bool Widget::wdgPresent( const string &wdg )
 {
-    return chldPresent(inclWdg,wdg);
+    return chldPresent( inclWdg, wdg );
 }
 
 void Widget::wdgAdd( const string &wid, const string &name, const string &path )
@@ -393,7 +393,7 @@ void Widget::wdgAdd( const string &wid, const string &name, const string &path )
     if( !isContainer() )  throw TError(nodePath().c_str(),_("No container widget!"));
     if( wdgPresent(wid) ) return;
 
-    chldAdd(inclWdg,new Widget(wid,path));
+    chldAdd( inclWdg, new Widget(wid,path) );
     wdgAt(wid).at().setName(name);
     
     //- Call heritors include widgets update -
@@ -404,23 +404,23 @@ void Widget::wdgAdd( const string &wid, const string &name, const string &path )
 
 void Widget::wdgDel( const string &wid, bool full )
 {
-    if( wdgPresent(wid) ) chldDel(inclWdg,wid,-1,full);
+    if( wdgPresent(wid) ) chldDel( inclWdg, wid, -1, full, true );
 }
 
 AutoHD<Widget> Widget::wdgAt( const string &wdg )
 {
-    return chldAt(inclWdg,wdg);
+    return chldAt( inclWdg, wdg );
 }
 
 void Widget::addFld( TElem *el, unsigned iid )
 {
-    chldAdd(attrId,new Attr(el->fldAt(iid)));
+    chldAdd( attrId, new Attr(el->fldAt(iid)) );
 }
 
 void Widget::delFld( TElem *el, unsigned iid )
 {
     if( nodeMode() == TCntrNode::Enable && chldPresent(attrId,el->fldAt(iid).name()) )
-        chldDel(attrId,el->fldAt(iid).name());
+        chldDel( attrId, el->fldAt(iid).name() );
 }
 
 void Widget::detElem( TElem *el )

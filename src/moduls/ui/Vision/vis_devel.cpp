@@ -697,8 +697,9 @@ void VisDevelop::updateLibToolbar( const string &vca_it )
     //- Get elements number into VCA item -
     int vca_lev = 0;
     for( int off = 0; !(t_el=TSYS::pathLev(vca_it,0,true,&off)).empty(); )  vca_lev++;
-    
     if( vca_lev == 3 )	return;
+    string upd_lb   = (vca_lev>=1) ? TSYS::pathLev(vca_it,0).substr(4) : "";
+    string upd_wdg  = (vca_lev>=2) ? TSYS::pathLev(vca_it,1).substr(4) : "";
 
     //- Update library toolbars list -
     XMLNode lb_req("get");    
@@ -735,6 +736,7 @@ void VisDevelop::updateLibToolbar( const string &vca_it )
     //- Add libraries and check widget's actions at present -
     for( i_lb = 0; i_lb < lbls.size(); i_lb++ )
     {
+	if( !upd_lb.empty() && upd_lb != lbls[i_lb] ) continue;
 	is_create = false;
 	root_allow = false;
 	//-- Add toolbars and menus --
@@ -785,7 +787,8 @@ void VisDevelop::updateLibToolbar( const string &vca_it )
 	//-- Add widget's actions --
 	use_act = lb_toolbar[i_t]->actions();	
 	for(i_w = 0; i_w < wdgls.size(); i_w++)
-	{	    
+	{
+	    if( !upd_wdg.empty() && upd_wdg != wdgls[i_w] ) continue;
 	    QAction *cur_act;
 	    //--- Get parent name ---
 	    string wipath = "/wlb_"+lbls[i_lb]+"/wdg_"+wdgls[i_w];

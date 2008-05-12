@@ -54,24 +54,24 @@ class Engine : public TUI
 	string prjTable( )	{ return "VCAPrjs"; }
 	
 	//- Widget's libraries -
-        void wlbList( vector<string> &ls )			{ chldList(id_wlb,ls); }
-        bool wlbPresent( const string &id )			{ return chldPresent(id_wlb,id); }
+        void wlbList( vector<string> &ls )			{ chldList( id_wlb, ls ); }
+        bool wlbPresent( const string &id )			{ return chldPresent( id_wlb, id ); }
 	void wlbAdd( const string &iid, const string &inm = "", const string &idb = "*.*" );
-        void wlbDel( const string &iid, bool full = false )	{ chldDel(id_wlb,iid,-1,full); }	
+        void wlbDel( const string &iid, bool full = false )	{ chldDel( id_wlb, iid, -1, full ); }	
         AutoHD<WidgetLib> wlbAt( const string &id );
 	
 	//- Projects -
-        void prjList( vector<string> &ls )			{ chldList(id_prj,ls); }
-        bool prjPresent( const string &id )			{ return chldPresent(id_prj,id); }
+        void prjList( vector<string> &ls )			{ chldList( id_prj, ls ); }
+        bool prjPresent( const string &id )			{ return chldPresent( id_prj, id ); }
 	void prjAdd( const string &iid, const string &inm = "", const string &idb = "*.*" );
-        void prjDel( const string &iid, bool full = false )	{ chldDel(id_prj,iid,-1,full); }	
+        void prjDel( const string &iid, bool full = false )	{ chldDel( id_prj, iid, -1, full ); }
         AutoHD<Project> prjAt( const string &id );
 	
 	//- Sessions -
-        void sesList( vector<string> &ls )			{ chldList(id_ses,ls); }
-        bool sesPresent( const string &id )			{ return chldPresent(id_ses,id); }
+        void sesList( vector<string> &ls )			{ chldList( id_ses, ls ); }
+        bool sesPresent( const string &id )			{ return chldPresent( id_ses, id ); }
 	void sesAdd( const string &id, const string &proj = "" );
-        void sesDel( const string &iid, bool full = false )	{ chldDel(id_ses,iid,-1,full); }	
+        void sesDel( const string &iid, bool full = false )	{ chldDel( id_ses, iid, -1, full ); }
         AutoHD<Session> sesAt( const string &id );
 
 	//- DB structures -

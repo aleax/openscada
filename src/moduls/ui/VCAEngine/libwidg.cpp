@@ -192,16 +192,16 @@ void WidgetLib::save_( )
     //- Check for need copy mime data to other DB and same copy -
     if( !mOldDB.empty() && mOldDB != TBDS::realDBName(DB()) )
     {
-	vector<string> pls;
-	mimeDataList(pls,mOldDB);
-	string mimeType, mimeData;
-	for( int i_m = 0; i_m < pls.size(); i_m++ )
-	{
-	    mimeDataGet( pls[i_m], mimeType, &mimeData, mOldDB );
+        vector<string> pls;
+        mimeDataList(pls,mOldDB);
+        string mimeType, mimeData;
+        for( int i_m = 0; i_m < pls.size(); i_m++ )
+        {
+    	    mimeDataGet( pls[i_m], mimeType, &mimeData, mOldDB );
     	    mimeDataSet( pls[i_m], mimeType, mimeData, DB() );
 	}	
     }
-    
+
     mOldDB = TBDS::realDBName(DB());
 }
 
@@ -542,7 +542,7 @@ WidgetLib &LWidget::owner( )
 
 void LWidget::postDisable( int flag )
 {
-    if( flag )
+    /*if( flag )
     {
         string fullDB = owner().fullDB();
         string tbl = owner().tbl();
@@ -551,23 +551,23 @@ void LWidget::postDisable( int flag )
         SYS->db().at().dataDel(fullDB,mod->nodePath()+tbl,*this);
 	
 	//- Remove widget's IO from library IO table -
-        TConfig c_el(&mod->elWdgIO());
-        c_el.cfg("IDW").setS(id());
-        c_el.cfg("ID").setS("");
-        SYS->db().at().dataDel(fullDB+"_io",mod->nodePath()+tbl+"_io",c_el);
+        TConfig c_el( &mod->elWdgIO() );
+        c_el.cfg("IDW").setS( id() );
+        c_el.cfg("ID").setS( "" );
+        SYS->db().at().dataDel( fullDB+"_io", mod->nodePath()+tbl+"_io", c_el );
 	
 	//- Remove widget's user IO from library IO table -
-        c_el.setElem(&mod->elWdgUIO());
-        c_el.cfg("IDW").setS(id());
-        c_el.cfg("ID").setS("");
-        SYS->db().at().dataDel(fullDB+"_uio",mod->nodePath()+tbl+"_uio",c_el);	
+        c_el.setElem( &mod->elWdgUIO() );
+        c_el.cfg("IDW").setS( id() );
+        c_el.cfg("ID").setS( "" );
+        SYS->db().at().dataDel( fullDB+"_uio", mod->nodePath()+tbl+"_uio", c_el );	
 	
 	//- Remove widget's included widgets from library include table -
-        c_el.setElem(&mod->elInclWdg());
-        c_el.cfg("IDW").setS(id());
-        c_el.cfg("ID").setS("");
-        SYS->db().at().dataDel(fullDB+"_incl",mod->nodePath()+tbl+"_incl",c_el);		
-    }
+        c_el.setElem( &mod->elInclWdg() );
+        c_el.cfg("IDW").setS( id() );
+        c_el.cfg("ID").setS( "" );
+        SYS->db().at().dataDel( fullDB+"_incl", mod->nodePath()+tbl+"_incl", c_el );		
+    }*/
 }
 
 string LWidget::path( )
@@ -680,7 +680,7 @@ void LWidget::load_( )
     //- Load generic widget's data -
     string db  = owner().DB();
     string tbl = owner().tbl();
-    SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,*this);
+    SYS->db().at().dataGet( db+"."+tbl, mod->nodePath()+tbl, *this );
     
     loadIO();
 }
@@ -778,23 +778,51 @@ void LWidget::loadIO( )
 
 void LWidget::save_( )
 {
-    //- Save generic widget's data -
     string db  = owner().DB();
     string tbl = owner().tbl();
-    
-    m_attrs="";
-    vector<string> als;
-    attrList( als );
-    for( int i_a = 0; i_a < als.size(); i_a++ )
-    {
-	AutoHD<Attr> attr = attrAt(als[i_a]);
-	if( attr.at().modif() && !(!(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser) )
-	m_attrs+=als[i_a]+";";
-    }
-    SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,*this);
 
-    //- Save widget's attributes -
-    saveIO();
+    //- Remove from DB -
+    if( nodeMode() == TCntrNode::Disable )
+    {
+        //-- Remove from library table --
+        SYS->db().at().dataDel( db+"."+tbl, mod->nodePath()+tbl, *this );
+	
+	//-- Remove widget's IO from library IO table --
+        TConfig c_el( &mod->elWdgIO() );
+        c_el.cfg("IDW").setS( id() );
+        c_el.cfg("ID").setS( "" );
+        SYS->db().at().dataDel( db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", c_el );
+	
+	//-- Remove widget's user IO from library IO table --
+        c_el.setElem( &mod->elWdgUIO() );
+        c_el.cfg("IDW").setS( id() );
+        c_el.cfg("ID").setS( "" );
+        SYS->db().at().dataDel( db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", c_el );	
+	
+	//-- Remove widget's included widgets from library include table --
+        c_el.setElem( &mod->elInclWdg() );
+        c_el.cfg("IDW").setS( id() );
+        c_el.cfg("ID").setS( "" );
+        SYS->db().at().dataDel( db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", c_el );		    
+    }
+    //- Save widget's data -
+    else
+    {    
+	//-- Save generic widget's data --
+	m_attrs="";
+	vector<string> als;
+	attrList( als );
+	for( int i_a = 0; i_a < als.size(); i_a++ )
+	{
+	    AutoHD<Attr> attr = attrAt(als[i_a]);
+	    if( attr.at().modif() && !(!(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser) )
+		m_attrs+=als[i_a]+";";
+	}
+	SYS->db().at().dataSet( db+"."+tbl, mod->nodePath()+tbl, *this );
+
+	//-- Save widget's attributes --
+	saveIO();
+    }
 }
 
 void LWidget::saveIO( )
@@ -917,7 +945,7 @@ void LWidget::cntrCmdProc( XMLNode *opt )
 //* CWidget: Container stored widget             *
 //************************************************
 CWidget::CWidget( const string &iid, const string &isrcwdg ) :
-        Widget(iid), TConfig(&mod->elInclWdg()), m_parent(cfg("PARENT").getSd()), m_attrs(cfg("ATTRS").getSd())
+        Widget(iid), TConfig(&mod->elInclWdg()), m_parent(cfg("PARENT").getSd()), m_attrs(cfg("ATTRS").getSd()), delMark(false)
 {
     cfg("ID").setS(id());
     m_lnk = true;
@@ -949,10 +977,9 @@ void CWidget::postEnable( int flag )
 
 void CWidget::preDisable( int flag )
 {
-    vector<string> list;
+    if( flag )	delMark = !((flag>>8)&0x10) && !parent().freeStat() && parent().at().isLink();
 
-    if( flag && !parent().freeStat() )	wdgIherited = parent().at().isLink();
-    else wdgIherited = false;
+    /*vector<string> list;
 
     if( flag )
     {
@@ -960,18 +987,18 @@ void CWidget::preDisable( int flag )
         string tbl = owner().owner().tbl();
 
         //- Remove from library table -
-	if( !wdgIherited || flag&0x10 )	SYS->db().at().dataDel(fullDB+"_incl",mod->nodePath()+tbl+"_incl",*this);
-	else
-	{ 
+	if( !parent().freeStat() && parent().at().isLink() )
+	{
 	    m_parent = "<deleted>";
-	    SYS->db().at().dataSet(fullDB+"_incl",mod->nodePath()+tbl+"_incl",*this);
+	    SYS->db().at().dataSet( fullDB+"_incl", mod->nodePath()+tbl+"_incl", *this );
 	}
+	else SYS->db().at().dataDel( fullDB+"_incl", mod->nodePath()+tbl+"_incl", *this );	
  	
 	//- Remove changed widget's work and users IO from library IO table -
-        TConfig c_el(&mod->elWdgIO());
-        TConfig c_uel(&mod->elWdgIO());	
-        c_el.cfg("IDW").setS(owner().id());
-        c_uel.cfg("IDW").setS(owner().id());
+        TConfig c_el( &mod->elWdgIO() );
+        TConfig c_uel( &mod->elWdgUIO() );	
+        c_el.cfg("IDW").setS( owner().id() );
+        c_uel.cfg("IDW").setS( owner().id() );
 	attrList( list );
 	AutoHD<Attr> attr;
 	for( int i_a = 0; i_a < list.size(); i_a++ )
@@ -980,18 +1007,18 @@ void CWidget::preDisable( int flag )
 	    if( !attr.at().modif() ) continue;
 	    if( attr.at().flgGlob()&Attr::IsUser && !(attr.at().flgGlob()&Attr::IsInher) )
 	    {
-		c_uel.cfg("ID").setS(id()+"/"+list[i_a]);
-		SYS->db().at().dataDel(fullDB+"_uio",mod->nodePath()+tbl+"_uio",c_uel);
+		c_uel.cfg("ID").setS( id()+"/"+list[i_a] );
+		SYS->db().at().dataDel( fullDB+"_uio", mod->nodePath()+tbl+"_uio", c_uel );
 	    }
 	    else
 	    {
-		c_el.cfg("ID").setS(id()+"/"+list[i_a]);
-		SYS->db().at().dataDel(fullDB+"_io",mod->nodePath()+tbl+"_io",c_el);
+		c_el.cfg("ID").setS( id()+"/"+list[i_a] );
+		SYS->db().at().dataDel( fullDB+"_io", mod->nodePath()+tbl+"_io", c_el );
 	    }
 	}
-    }
+    }*/
 
-    Widget::preDisable(flag);
+    Widget::preDisable( flag );
 }
 
 string CWidget::ico( )
@@ -1138,23 +1165,58 @@ void CWidget::loadIO( )
 
 void CWidget::save_( )
 {
-    //- Save generic widget's data -
     string db  = owner().owner().DB();
-    string tbl = owner().owner().tbl()+"_incl";
-        
-    m_attrs="";
-    vector<string> als;
-    attrList( als );
-    for( int i_a = 0; i_a < als.size(); i_a++ )
+    string tbl = owner().owner().tbl();
+    
+    //- Delete from DB -
+    if( nodeMode() == TCntrNode::Disable )
     {
-        AutoHD<Attr> attr = attrAt(als[i_a]);
-        if( attr.at().modif() && !(!(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser) )
-        m_attrs+=als[i_a]+";";
+        //-- Remove from library table --
+	if( delMark )
+	{
+	    m_parent = "<deleted>";
+	    SYS->db().at().dataSet( db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this );
+	}
+	else SYS->db().at().dataDel( db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this );	
+ 	
+	//-- Remove widget's work and users IO from library IO table --
+        TConfig c_el( &mod->elWdgIO() );
+	c_el.cfg("IDW").setS( owner().id() );
+	int io_cnt = 0;
+        while( SYS->db().at().dataSeek( db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", io_cnt++, c_el ) )
+	{
+	    if( c_el.cfg("ID").getS().find(id()+"/") == 0 )
+	    { SYS->db().at().dataDel( db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", c_el ); io_cnt--; }
+	    c_el.cfg("ID").setS("");
+	}
+	c_el.setElem(&mod->elWdgUIO());
+	c_el.cfg("IDW").setS( owner().id() );
+	io_cnt = 0;
+        while( SYS->db().at().dataSeek( db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", io_cnt++, c_el ) )
+	{
+	    if( c_el.cfg("ID").getS().find(id()+"/") == 0 )
+	    { SYS->db().at().dataDel( db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", c_el ); io_cnt--; }
+	    c_el.cfg("ID").setS("");
+	}	
     }
-    SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,*this);
+    //- Save widget's data -
+    else
+    {
+	//-- Save generic widget's data --
+	m_attrs="";
+	vector<string> als;
+	attrList( als );
+	for( int i_a = 0; i_a < als.size(); i_a++ )
+	{
+    	    AutoHD<Attr> attr = attrAt(als[i_a]);
+    	    if( attr.at().modif() && !(!(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser) )
+    		m_attrs+=als[i_a]+";";
+	}
+	SYS->db().at().dataSet(db+"."+tbl+"_incl",mod->nodePath()+tbl+"_incl",*this);
 
-    //- Save widget's attributes -
-    saveIO();
+	//-- Save widget's attributes --
+	saveIO();
+    }
 }
 
 void CWidget::saveIO( )

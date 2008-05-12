@@ -1440,6 +1440,7 @@ void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it )
 				
 	if( (vca_lev && TSYS::pathLev(vca_it,0).substr(0,4) != "prj_") || 
 	    (vca_lev > 2 && TSYS::pathLev(vca_it,vca_lev-1).substr(0,4) == "wdg_") )	return;
+	string upd_prj = (vca_lev>=1) ? TSYS::pathLev(vca_it,0).substr(4) : "";
 	//- Process top level items and project's list -
 	//-- Get widget's libraries list --
 	XMLNode prj_req("get");    
@@ -1462,9 +1463,10 @@ void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it )
 	    delete treeW->takeTopLevelItem(i_top);
 	    i_top--;
 	}
-	//-- Add new libraries --
+	//-- Add new projects --
 	for( int i_l = 0; i_l < list_pr.size(); i_l++ )
 	{
+	    if( !upd_prj.empty() && upd_prj != list_pr[i_l] ) continue;
 	    int i_top;
 	    for( i_top = 0; i_top < treeW->topLevelItemCount(); i_top++ )
     		if( list_pr[i_l] == treeW->topLevelItem(i_top)->text(2).toAscii().data() )
@@ -1473,7 +1475,7 @@ void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it )
 		nit = new QTreeWidgetItem(treeW);
 	    else nit = treeW->topLevelItem(i_top);
 
-	    //-- Update libraries data --
+	    //-- Update projects data --
 	    req.clear()->setAttr("path","/prj_"+list_pr[i_l]+"/%2fico");
 	    if( !owner()->cntrIfCmd(req) )
 	    {
@@ -1494,12 +1496,15 @@ void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it )
     nit = it;
     string work_wdg;
     QTreeWidgetItem *cur_el = nit;
-    while(cur_el)
+    int vca_lev = 0;
+    while( cur_el )
     {
 	work_wdg.insert(0,string(cur_el->parent()?"/pg_":"/prj_")+cur_el->text(2).toAscii().data());
-	cur_el=cur_el->parent();
+	cur_el = cur_el->parent();
+	vca_lev++;
     }
-    bool is_prj = TSYS::pathLev(work_wdg,1).empty();
+    string upd_pg = TSYS::pathLev(vca_it,vca_lev-1);
+    upd_pg = (upd_pg.size()>3) ? upd_pg.substr(3) : "";
     //-- Update include pages --
     //--- Get page's list ---
     XMLNode pg_req("get");
@@ -1525,6 +1530,7 @@ void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it )
     //--- Add new pages ---
     for( int i_p = 0; i_p < list_pg.size(); i_p++ )
     {
+	//if( !upd_pg.empty() && upd_pg != list_pg[i_p] ) continue;
 	int i_pit;
 	for( i_pit = 0; i_pit < nit->childCount(); i_pit++ )
     	    if( list_pg[i_p] == nit->child(i_pit)->text(2).toAscii().data() )

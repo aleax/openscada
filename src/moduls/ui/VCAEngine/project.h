@@ -76,7 +76,8 @@ class Project : public TCntrNode, public TConfig
         AutoHD<Page> at( const string &id );
         void add( const string &id, const string &name, const string &orig = "" );
 	void add( Page *iwdg );
-        void del( const string &id, bool full = false )	{ chldDel(m_page,id,-1,full); }
+        void del( const string &id, bool full = false )	
+	{ chldDel( m_page, id, -1, full, true ); }
 	
         //- Mime data access -
         void mimeDataList( vector<string> &list, const string &idb = "" );
@@ -176,7 +177,8 @@ class Page : public Widget, public TConfig
         AutoHD<Page> pageAt( const string &id );
         void pageAdd( const string &id, const string &name, const string &orig = "" );
 	void pageAdd( Page *iwdg );
-        void pageDel( const string &id, bool full = false )	{ chldDel(m_page,id,-1,full); }
+        void pageDel( const string &id, bool full = false )	
+	{ chldDel( m_page, id, -1, full, true ); }
 	
 	//- Data access -
         string resourceGet( const string &id, string *mime = NULL );
@@ -266,7 +268,7 @@ class PageWdg : public Widget, public TConfig
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
 	//Attributes
-	bool wdgIherited;
+	bool    delMark;
 	string	&m_parent, &m_attrs;
 };
 

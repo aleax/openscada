@@ -373,12 +373,12 @@ void Engine::modStop()
 #endif
 
     vector<string> ls;
-    
+
     //- Stop sessions -
     sesList(ls);
     for( int l_id = 0; l_id < ls.size(); l_id++ )
 	sesAt(ls[l_id]).at().setEnable(false);
-	
+
     //- Libraries stop -
     wlbList(ls);
     for( int l_id = 0; l_id < ls.size(); l_id++ )

@@ -112,8 +112,9 @@ class TCntrNode
 	};
 	enum EnFlag
 	{ 
-	    NodeConnect = 0x01,	//Connect node to control tree
-	    NodeRestore = 0x02	//Restore node enabling after broken disabling. 
+	    NodeConnect  = 0x01,	//Connect node to control tree
+	    NodeRestore  = 0x02,	//Restore node enabling after broken disabling. 
+	    NodeShiftDel = 0x04
 	};
 	enum ModifFlag	{ Self = 0x01, Child = 0x02, All = 0x03 };
 	
@@ -123,7 +124,7 @@ class TCntrNode
 	
 	void nodeList( vector<string> &list, const string& gid = "" );				//Full node list
 	AutoHD<TCntrNode> nodeAt( const string &path, int lev = 0, char sep = 0, int off = 0 );	//Get node for full path
-	void nodeDel( const string &path, char sep = 0, int flag = 0 );				//Delete node at full path
+	void nodeDel( const string &path, char sep = 0, int flag = 0, bool shDel = false );	//Delete node at full path
 	static void nodeCopy( const string &src, const string &dst, const string &user = "root" );
 	
 	TCntrNode *nodePrev( bool noex = false );
@@ -166,7 +167,7 @@ class TCntrNode
 	void chldList( char igr, vector<string> &list );
 	bool chldPresent( char igr, const string &name );
 	void chldAdd( char igr, TCntrNode *node, int pos = -1 );
-	void chldDel( char igr, const string &name, long tm = -1, int flag = 0 );
+	void chldDel( char igr, const string &name, long tm = -1, int flag = 0, bool shDel = false );
 	
 	//- Conteiners -
         char     grpSize( )	{ return chGrp.size(); }

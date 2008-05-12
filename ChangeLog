@@ -1,4 +1,12 @@
-2008-05008 Roman
+2008-05-12 Roman
+- !!!!:/SYS: Shift deletion nodes support of dynamic nodes tree is added.
+- FIX:/SYS/ControlNode: Exeptions into function TCntrNode::postEnable() process global added.
+- FIX:/SYS/ControlNode: chldDel() function's logical bug is fixed.
+- !!!!:/UI/VCAEngine: Shift deletion made for visual items (widgets).
+- /UI/Vision: Selected widgets tree and projects tree update is made. Rise performance.
+
+
+2008-05-08 Roman
 - /SYS: Redhat vendor control is added to RPM build spec file.
 - /SYS: Work directory change allow is excluded.
 - FIX:/UI/QTCfg: No check for loading image dialog cancel is fixed.

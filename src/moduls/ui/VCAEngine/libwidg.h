@@ -82,7 +82,8 @@ class WidgetLib : public TCntrNode, public TConfig
         AutoHD<LWidget> at( const string &id );
         void add( const string &id, const string &name, const string &orig = "" );
 	void add( LWidget *iwdg );
-        void del( const string &id, bool full = false )	{ chldDel(m_wdg,id,-1,full); }
+        void del( const string &id, bool full = false )	
+	{ chldDel( m_wdg, id, -1, full, true ); }
 
     protected:
 	//Methods
@@ -229,7 +230,7 @@ class CWidget : public Widget, public TConfig
         void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
 	//Attributes
-	bool wdgIherited;
+	bool    delMark;
 	string  &m_parent, &m_attrs;
 };
 

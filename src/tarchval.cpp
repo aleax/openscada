@@ -798,9 +798,9 @@ TCntrNode &TVArchive::operator=( TCntrNode &node )
     return *this;
 }
 
-void TVArchive::preDisable(int flag)
+void TVArchive::preDisable( int flag )
 {
-    stop(flag);
+    stop( flag );
 }
 
 void TVArchive::postDisable(int flag)
@@ -2031,12 +2031,12 @@ void TVArchivator::postEnable(int flag)
     cfg("MODUL").setS(owner().modId());
 }
 
-void TVArchivator::preDisable(int flag)
+void TVArchivator::preDisable( int flag )
 {
-    if(startStat())     stop(flag);
+    if( startStat() )	stop( flag );
 }
 
-void TVArchivator::postDisable(int flag)
+void TVArchivator::postDisable( int flag )
 {
     try
     {
