@@ -1073,8 +1073,8 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 	    {
 		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Runing"),0664,"root",grp.c_str(),1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Archivator DB (module.db)"),0660,"root","root",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/st/end",_("End"),0444,"root","root",1,"tp","time");		
 		ctrMkNode("fld",opt,-1,"/prm/st/beg",_("Begin"),0444,"root","root",1,"tp","time");
-		ctrMkNode("fld",opt,-1,"/prm/st/end",_("End"),0444,"root","root",1,"tp","time");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Config")))
 	    {
@@ -1113,9 +1113,9 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->setText( DB() );
 	if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	setDB( opt->text() );
     }
-    else if( a_path == "/prm/st/beg" && ctrChkNode(opt) )	opt->setText(TSYS::int2str(begin()));
-    else if( a_path == "/prm/st/end" && ctrChkNode(opt) )	opt->setText(TSYS::int2str(end()));
-    else if( a_path == "/prm/cfg/id" && ctrChkNode(opt) )	opt->setText(id());
+    else if( a_path == "/prm/st/end" && ctrChkNode(opt) )		opt->setText( TSYS::int2str(end()) );    
+    else if( a_path == "/prm/st/beg" && ctrChkNode(opt) )		opt->setText( TSYS::int2str(begin()) );
+    else if( a_path == "/prm/cfg/id" && ctrChkNode(opt) )		opt->setText( id() );
     else if( a_path == "/prm/cfg/nm" )
     {
 	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText( name() );

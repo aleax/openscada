@@ -43,7 +43,7 @@ class MFileArch
 	//Methods
 	MFileArch( ModMArch *owner );
 	MFileArch( const string &name, time_t beg, ModMArch *owner, const string &charset = "UTF-8", bool ixml = true);
-	~MFileArch();
+	~MFileArch( );
 
 	void attach( const string &name, bool full = true );
 	void put( TMess::SRec mess );
@@ -52,15 +52,15 @@ class MFileArch
 	//  free - surely free used memory
 	void check( bool free = false );
 
-	string &name() 		{ return m_name; }
-	bool   xmlM()		{ return m_xml; }
-	int    size()		{ return m_size; }
-	time_t begin()		{ return m_beg; }
-	time_t end()  		{ return m_end; }
-	string charset()	{ return m_chars; }
-	bool   err()  		{ return m_err; }
+	string &name( ) 	{ return m_name; }
+	bool   xmlM( )		{ return m_xml; }
+	int    size( )		{ return m_size; }
+	time_t begin( )		{ return m_beg; }
+	time_t end( )  		{ return m_end; }
+	string charset( )	{ return m_chars; }
+	bool   err( )  		{ return m_err; }
 
-	ModMArch &owner() 	{ return *m_owner; }
+	ModMArch &owner( ) 	{ return *m_owner; }
 	    
 	//Attributes
 	bool    scan;    	// Archive scaned (for check deleted files). Use from ModMArch

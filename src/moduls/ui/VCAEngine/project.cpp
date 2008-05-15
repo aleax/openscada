@@ -802,10 +802,12 @@ void Page::loadIO( )
     }
 									    
     als.clear();*/
-    if( m_attrs != "*" )
+    bool full_ls = false;
+    if( m_attrs == "*" )	{ attrList( als ); full_ls = true; }
+    else
 	for( int off = 0; !(tstr = TSYS::strSepParse(m_attrs,0,';',&off)).empty(); )
-    	    als.push_back(tstr);
-		
+	    als.push_back(tstr);
+
     //-- Same attributes load --
     TConfig c_el(&mod->elWdgIO());
     c_el.cfg("IDW").setS(path());    
@@ -820,6 +822,7 @@ void Page::loadIO( )
 	attr.at().setFlgSelf((Attr::SelfAttrFlgs)c_el.cfg("SELF_FLG").getI());
 	attr.at().setCfgTempl(c_el.cfg("CFG_TMPL").getS());
 	attr.at().setCfgVal(c_el.cfg("CFG_VAL").getS());
+	if( full_ls && attr.at().flgGlob()&Attr::Active ) attrList( als );
     }
 
     //- Load widget's user attributes -
@@ -1319,10 +1322,12 @@ void PageWdg::loadIO( )
     }
     
     als.clear();*/
-    if( m_attrs != "*" )
+    bool full_ls = false;
+    if( m_attrs == "*" )	{ attrList( als ); full_ls = true; }
+    else
 	for( int off = 0; !(tstr = TSYS::strSepParse(m_attrs,0,';',&off)).empty(); )
     	    als.push_back(tstr);
-	
+
     //-- Same load --
     TConfig c_el(&mod->elWdgIO());
     c_el.cfg("IDW").setS(owner().path());
@@ -1337,6 +1342,7 @@ void PageWdg::loadIO( )
 	attr.at().setFlgSelf((Attr::SelfAttrFlgs)c_el.cfg("SELF_FLG").getI());
 	attr.at().setCfgTempl(c_el.cfg("CFG_TMPL").getS());
 	attr.at().setCfgVal(c_el.cfg("CFG_VAL").getS());
+	if( full_ls && attr.at().flgGlob()&Attr::Active ) attrList( als );
     }
     
     //- Load widget's user attributes -

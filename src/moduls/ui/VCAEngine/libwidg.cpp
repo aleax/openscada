@@ -709,7 +709,9 @@ void LWidget::loadIO( )
         }
     }    
     als.clear();*/
-    if( m_attrs != "*" )
+    bool full_ls = false;
+    if( m_attrs == "*" )	{ attrList( als ); full_ls = true; }
+    else
 	for( int off = 0; !(tstr = TSYS::strSepParse(m_attrs,0,';',&off)).empty(); )
 	    als.push_back(tstr);
     
@@ -727,6 +729,7 @@ void LWidget::loadIO( )
 	attr.at().setFlgSelf((Attr::SelfAttrFlgs)c_el.cfg("SELF_FLG").getI());
 	attr.at().setCfgTempl(c_el.cfg("CFG_TMPL").getS());
 	attr.at().setCfgVal(c_el.cfg("CFG_VAL").getS());
+	if( full_ls && attr.at().flgGlob()&Attr::Active ) attrList( als );
     }
 
     //- Load widget's user attributes -
@@ -1115,7 +1118,9 @@ void CWidget::loadIO( )
 	}
     }    
     als.clear();*/
-    if( m_attrs != "*" ) 
+    bool full_ls = false;
+    if( m_attrs == "*" )	{ attrList( als ); full_ls = true; }
+    else 
 	for( int off = 0; !(tstr = TSYS::strSepParse(m_attrs,0,';',&off)).empty(); )
 	    als.push_back(tstr);
     
@@ -1126,13 +1131,14 @@ void CWidget::loadIO( )
     { 
 	if( !attrPresent(als[i_a]) )    continue;
  	AutoHD<Attr> attr = attrAt(als[i_a]);
-	if( !(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser ) continue;	
+	if( !(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser ) continue;
 	c_el.cfg("ID").setS(id()+"/"+als[i_a]);
 	if( !SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el) ) continue;
 	attr.at().setS(c_el.cfg("IO_VAL").getS());
 	attr.at().setFlgSelf((Attr::SelfAttrFlgs)c_el.cfg("SELF_FLG").getI());
 	attr.at().setCfgTempl(c_el.cfg("CFG_TMPL").getS());
 	attr.at().setCfgVal(c_el.cfg("CFG_VAL").getS());
+	if( full_ls && attr.at().flgGlob()&Attr::Active ) attrList( als );
     } 
     //- Load widget's user attributes -
     tbl = owner().owner().tbl()+"_uio";

@@ -71,16 +71,20 @@ void ModMArch::stop()
 
 time_t ModMArch::begin()
 {
-    ResAlloc res(m_res,false);
-    for( int i_arh = 0; i_arh < arh_s.size(); i_arh++ )
+    ResAlloc res( m_res, false );
+    for( int i_arh = arh_s.size()-1; i_arh >= 0; i_arh-- ) 
 	if( !arh_s[i_arh]->err() ) return arh_s[i_arh]->begin();
+	
+    return 0;
 }
 
 time_t ModMArch::end()
 {
-    ResAlloc res(m_res,false);
-    for( int i_arh = arh_s.size()-1; i_arh >= 0; i_arh-- ) 
+    ResAlloc res( m_res, false );
+    for( int i_arh = 0; i_arh < arh_s.size(); i_arh++ )
 	if( !arh_s[i_arh]->err() ) return arh_s[i_arh]->end();
+
+    return 0;	
 }
 
 void ModMArch::put( vector<TMess::SRec> &mess )
@@ -575,8 +579,8 @@ void MFileArch::put( TMess::SRec mess )
     {
 	char buf[STR_BUF_LEN];
 	//- Check to empty category and message
-	if(!mess.categ.size())	mess.categ = " ";
-	if(!mess.mess.size())	mess.mess = " ";
+	if( !mess.categ.size() )	mess.categ = " ";
+	if( !mess.mess.size() )		mess.mess = " ";
 	//- Open file -
 	FILE *f = fopen(m_name.c_str(),"r+");
 	if( f == NULL ) { m_err = true; return; }

@@ -380,14 +380,14 @@ void TCntrNode::chldAdd( char igr, TCntrNode *node, int pos )
     if( TSYS::strEmpty(node->nodeName()) )
     {
 	delete node;
-        throw TError(nodePath().c_str(),"Add child id is empty or already present!");
-    }    
+        throw TError(nodePath().c_str(),"Add child id is empty!");
+    }
     if( (p=chGrp[igr].elem.find(node->nodeName())) != chGrp[igr].elem.end() )
     {
 	delete node;
 	if( p->second->nodeMode() == Disable )	p->second->nodeEn( TCntrNode::NodeRestore );
 	return;
-    }    
+    }
         
     res.request(true);
     node->prev.node = this;

@@ -1,3 +1,8 @@
+2008-05-15 Roman
+- FIX:/Archive/FSArch: Message archivator end() and begin() functions is fixed.
+- FIX:/UI/VCAEngine: Empty or old DB attributed load is fixed.
+
+
 2008-05-12 Roman
 - !!!!:/SYS: Shift deletion nodes support of dynamic nodes tree is added.
 - FIX:/SYS/ControlNode: Exeptions into function TCntrNode::postEnable() process global added.
