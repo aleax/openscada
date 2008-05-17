@@ -360,19 +360,19 @@ int TSYS::start(  )
 {
     vector<string> lst;
     list(lst);
-    
+
     mess_info(nodePath().c_str(),_("Start!"));
     for( unsigned i_a=0; i_a < lst.size(); i_a++ )
 	try{ at(lst[i_a]).at().subStart(); }
 	catch(TError err) 
-	{ 
+	{
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str()); 
 	    mess_err(nodePath().c_str(),_("Error start subsystem <%s>."),lst[i_a].c_str()); 
-	}	    
-    
+	}
+
     cfgFileScan( true );
-    unsigned int i_cnt = 1;    
-    while( !stop_signal )	
+    unsigned int i_cnt = 1;
+    while( !stop_signal )
     {
 	//- CPU frequency calc
 	if( !(i_cnt%(10*1000/STD_WAIT_DELAY)) )	clkCalc( );
@@ -381,11 +381,11 @@ int TSYS::start(  )
 	//- Periodic changes saving to DB -
 	if( savePeriod() && !(i_cnt%(savePeriod()*1000/STD_WAIT_DELAY)) )
 	    save();
-	    
-       	usleep( STD_WAIT_DELAY*1000 );
+
+	usleep( STD_WAIT_DELAY*1000 );
 	i_cnt++;
     }
-    
+
     mess_info(nodePath().c_str(),_("Stop!"));  
     if( saveAtExit() || savePeriod() )	save();
     for( int i_a=lst.size()-1; i_a >= 0; i_a-- )
@@ -396,10 +396,10 @@ int TSYS::start(  )
 	    mess_err(nodePath().c_str(),_("Error stop subsystem <%s>."),lst[i_a].c_str());
 	}
 
-    return stop_signal;       
+    return stop_signal;
 }
 
-void TSYS::stop( )    
+void TSYS::stop( )
 { 
     stop_signal = SIGINT;
 }
@@ -789,8 +789,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     {
 	snprintf(buf,sizeof(buf),_("%s station: \"%s\""),PACKAGE_NAME,name().c_str());
 	ctrMkNode("oscada_cntr",opt,-1,"/",buf,0444);
-	if(ctrMkNode("branches",opt,-1,"/br","",0444))	
-	    ctrMkNode("grp",opt,-1,"/br/sub_",_("Subsystem"),0444,"root","root",1,"idm","1");	
+	if(ctrMkNode("branches",opt,-1,"/br","",0444))
+	    ctrMkNode("grp",opt,-1,"/br/sub_",_("Subsystem"),0444,"root","root",1,"idm","1");
 	if(TUIS::icoPresent(id())) ctrMkNode("img",opt,-1,"/ico","",0444);
 	if(ctrMkNode("area",opt,-1,"/gen",_("Station"),0444))
 	{

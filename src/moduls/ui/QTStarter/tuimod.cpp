@@ -20,7 +20,7 @@
  ***************************************************************************/
 #include <getopt.h>
 #include <sys/types.h>
-#include <unistd.h>       
+#include <unistd.h>
 
 #include <QMainWindow>
 #include <QToolBar>
@@ -65,7 +65,7 @@ extern "C"
 	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
 	    return new QTStarter::TUIMod( source );
 	return NULL;
-    }    
+    }
 }
 
 using namespace QTStarter;
@@ -83,7 +83,7 @@ TUIMod::TUIMod( string name ) : end_run(false), demon_mode(false), start_com(fal
     mDescr  	= DESCRIPTION;
     mLicense   	= LICENSE;
     mSource    	= name;
-    
+
     mod		= this;
 }
 
@@ -95,47 +95,47 @@ TUIMod::~TUIMod()
 void TUIMod::postEnable( int flag )
 {
     TModule::postEnable(flag);
-    
+
     if( flag&TCntrNode::NodeConnect )
-    {	
+    {
 	//- Set QT environments -
 	QTextCodec::setCodecForCStrings( QTextCodec::codecForLocale () ); //codepage for QT across QString recode!    
-    
+
 	//- Check command line for options no help and no daemon -
 	bool isHelp = false;
 	int next_opt;
 	char *short_opt="h";
 	struct option long_opt[] =
 	{
-    	    {"help"    ,0,NULL,'h'},
+	    {"help"    ,0,NULL,'h'},
 	    {"demon"   ,0,NULL,'d'},
-    	    {NULL      ,0,NULL,0  }
+	    {NULL      ,0,NULL,0  }
 	};
 
 	optind=opterr=0;
         do
 	{
-    	    next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
-    	    switch( next_opt )
-    	    {
-        	case 'h': isHelp = true; break;
+	    next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
+	    switch( next_opt )
+	    {
+		case 'h': isHelp = true; break;
 		case 'd': demon_mode = true; break;
-        	case -1 : break;
-    	    }
+		case -1 : break;
+	    }
 	} while(next_opt != -1);
 
 	//- Start main QT thread if no help and no daemon -
 	if( !(run_st || demon_mode || isHelp) )
 	{
 	    end_run = false;
-    
+
 	    pthread_attr_t pthr_attr;    
 	    pthread_attr_init(&pthr_attr);
 	    pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
 	    pthread_create(&pthr_tsk,&pthr_attr,Task,this);
 	    pthread_attr_destroy(&pthr_attr);
 	    if( TSYS::eventWait( run_st, true, nodePath()+"start",5) )
-       		throw TError(nodePath().c_str(),_("QT main thread no started!"));   
+		throw TError(nodePath().c_str(),_("QT main thread no started!"));   
 	}
     }
 }
@@ -148,7 +148,7 @@ void TUIMod::postDisable( int flag )
 	if( TSYS::eventWait( run_st, false, nodePath()+"stop",5) )
 	    throw TError(nodePath().c_str(),_("QT main thread no stoped!"));
 	pthread_join(pthr_tsk,NULL);
-    }	
+    }
 }
 
 void TUIMod::load_( )
@@ -178,7 +178,7 @@ void TUIMod::load_( )
             case -1 : break;
         }
     } while(next_opt != -1);
-    
+
     //- Load parameters from config file -
     start_mod = TBDS::genDBGet(nodePath()+"StartMod",start_mod);
 }
@@ -213,13 +213,13 @@ void TUIMod::modStop()
 string TUIMod::optDescr( )
 {
     char buf[STR_BUF_LEN];
-    
+
     snprintf(buf,sizeof(buf),_(
         "======================= The module <%s:%s> options =======================\n"
         "---------- Parameters of the module section <%s> in config file ----------\n"
         "StartMod  <moduls>    Start modules list (sep - ';').\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
-	
+
     return buf;
 }
 
@@ -233,10 +233,11 @@ void *TUIMod::Task( void * )
 
 //#if OSC_DEBUG
 //    mess_debug(mod->nodePath().c_str(),_("Thread <%d> started!"),gettid());
-//#endif        
+//#endif
 
-    //- QT application object init - 
+    //- QT application object init -
     QApplication *QtApp = new QApplication( (int&)SYS->argc,(char **)SYS->argv );
+    setlocale(LC_NUMERIC,"C");		//Standart numeric separator restore
     QtApp->setQuitOnLastWindowClosed(false);
     mod->run_st = true;
 
@@ -251,13 +252,14 @@ void *TUIMod::Task( void * )
 	for( int i_m = recs.size()-1; i_m >= 0 && i_m > (recs.size()-7); i_m-- )
 	    mess+=QString("\n%1: %2").arg(recs[i_m].categ.c_str()).arg(recs[i_m].mess.c_str());
 	splash->showMessage(mess,Qt::AlignBottom|Qt::AlignLeft);
-        QtApp->processEvents();
+	QtApp->processEvents();
 	usleep(STD_WAIT_DELAY*1000);
     }
-    delete splash;    
-    
+    delete splash;
+
     //- Start external modules -
     WinControl *winCntr = new WinControl( );
+
     int op_wnd = 0;
     mod->owner().modList(list);
     for( unsigned i_l = 0; i_l < list.size(); i_l++ )
@@ -269,24 +271,24 @@ void *TUIMod::Task( void * )
 	    string s_el;
 	    while( (s_el=TSYS::strSepParse(mod->start_mod,0,';',&i_off)).size() )
 		if( s_el == list[i_l] )	break;
-	    if( !s_el.empty() || !i_off ) 
-		if(winCntr->callQTModule(list[i_l])) op_wnd++;
+	    if( !s_el.empty() || !i_off )
+		if( winCntr->callQTModule(list[i_l]) ) op_wnd++;
 	}
-    
+
     //- Start call dialog -
     if(!op_wnd) winCntr->startDialog( );
-	
+
     QObject::connect( QtApp, SIGNAL(lastWindowClosed()), winCntr, SLOT(lastWinClose()) );
     QtApp->exec();
     delete winCntr;
-    
+
     //- Stop splash create -
     if( !ico_t.load(TUIS::icoPath("splash_exit").c_str()) )	ico_t.load(":/images/splash.png");
     splash = new QSplashScreen(QPixmap::fromImage(ico_t));
     splash->show();
     st_time = time(NULL);
     while( !mod->endRun( ) )
-    {	
+    {
 	SYS->archive().at().messGet( st_time, time(NULL), recs, "", TMess::Debug, BUF_ARCH_NM );
 	QString mess;
 	for( int i_m = recs.size()-1; i_m >= 0 && i_m > (recs.size()-7); i_m-- )
@@ -296,13 +298,13 @@ void *TUIMod::Task( void * )
 	usleep(STD_WAIT_DELAY*1000);
     }
     delete splash;
-    
+
     //- QT application object free -
     delete QtApp;
-    first_ent = false;	
-    
+    first_ent = false;
+
     mod->run_st = false;
-    
+
     return NULL;
 }
 
@@ -313,11 +315,11 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     {
         TUI::cntrCmdProc(opt);
         if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
-    	    ctrMkNode("fld",opt,-1,"/prm/cfg/st_mod",_("Start QT modules (sep - ';')"),0660,"root","root",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/st_mod",_("Start QT modules (sep - ';')"),0660,"root","root",1,"tp","str");
         ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
 	return;
     }
-    
+
     //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/prm/cfg/st_mod" )
@@ -327,7 +329,7 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )	opt->setText(optDescr());
     else TUI::cntrCmdProc(opt);
-}		    
+}
 
 //*************************************************
 //* WinControl: Windows control                   *
@@ -351,7 +353,7 @@ void WinControl::callQTModule( )
 {
     QObject *obj = (QObject *)sender();
     if( string("*exit*") == obj->objectName().toAscii().data() ) SYS->stop();
-    else 
+    else
     {
 	try{ callQTModule(obj->objectName().toAscii().data()); }
 	catch(TError err) {  }
@@ -368,18 +370,18 @@ void WinControl::lastWinClose( )
 bool WinControl::callQTModule( const string &nm )
 {
     vector<string> list;
-    
+
     AutoHD<TModule> qt_mod = mod->owner().modAt(nm);
     QMainWindow *(TModule::*openWindow)( );
     qt_mod.at().modFunc("QMainWindow *openWindow();",(void (TModule::**)()) &openWindow);
     QMainWindow *new_wnd = ((&qt_mod.at())->*openWindow)( );
-    if(!new_wnd) return false;
+    if( !new_wnd ) return false;
 
     //- Make QT starter toolbar -
     QToolBar *toolBar = new QToolBar(_("QTStarter toolbar"), new_wnd);
     toolBar->setObjectName("QTStarterTool");
     new_wnd->addToolBar(toolBar);
-    //, Qt::DockTop );    
+    //, Qt::DockTop );
     mod->owner().modList(list);
     for( unsigned i_l = 0; i_l < list.size(); i_l++ )
         if( mod->owner().modAt(list[i_l]).at().modInfo("SubType") == "QT" &&
@@ -392,7 +394,7 @@ bool WinControl::callQTModule( const string &nm )
 	{
 	    QIcon(TModule::*iconGet)();
 	    mod->owner().modAt(list[i_l]).at().modFunc("QIcon icon();",(void (TModule::**)()) &iconGet);
-    	    icon = ((&mod->owner().modAt(list[i_l]).at())->*iconGet)( );
+	    icon = ((&mod->owner().modAt(list[i_l]).at())->*iconGet)( );
 	}
 	else icon = QIcon(":/images/oscada_qt.png");
 	QAction *act_1 = new QAction(icon,qt_mod.at().modName().c_str(),new_wnd);
@@ -404,7 +406,7 @@ bool WinControl::callQTModule( const string &nm )
 	
 	toolBar->addAction(act_1);
     }
-    
+
     new_wnd->show();
 
     return true;
@@ -417,12 +419,12 @@ void WinControl::startDialog( )
     QMainWindow *new_wnd = new QMainWindow( );
     new_wnd->setWindowTitle(_("OpenSCADA system QT-starter"));
     new_wnd->setWindowIcon(QIcon(":/images/oscada_qt.png"));
-					
+
     new_wnd->setCentralWidget( new QWidget(new_wnd) );
     QVBoxLayout *new_wnd_lay = new QVBoxLayout(new_wnd->centralWidget());
     new_wnd_lay->setMargin(6);
     new_wnd_lay->setSpacing(4);
-    
+
     mod->owner().modList(list);
     for( unsigned i_l = 0; i_l < list.size(); i_l++ )
         if( mod->owner().modAt(list[i_l]).at().modInfo("SubType") == "QT" &&
@@ -436,25 +438,25 @@ void WinControl::startDialog( )
             icon = ((&mod->owner().modAt(list[i_l]).at())->*iconGet)( );
         }
         else icon = QIcon(":/images/oscada_qt.png");
-    
+
 	AutoHD<TModule> qt_mod = mod->owner().modAt(list[i_l]);	
 	QPushButton *butt = new QPushButton(icon,qt_mod.at().modName().c_str(),new_wnd->centralWidget());
 	butt->setObjectName(list[i_l].c_str());
 	QObject::connect(butt, SIGNAL(clicked(bool)), this, SLOT(callQTModule()));
 	new_wnd_lay->addWidget( butt, 0, 0 );
     }
-    
+
     new_wnd_lay->addItem( new QSpacerItem( 20, 10, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
-    
+
     QFrame *gFrame = new QFrame( new_wnd->centralWidget() );
     gFrame->setFrameShape(QFrame::HLine);
     gFrame->setFrameShadow(QFrame::Raised);
     new_wnd_lay->addWidget(gFrame,0,0);
-    
+
     QPushButton *butt = new QPushButton(QIcon(":/images/exit.png"),_("Exit from system"), new_wnd->centralWidget());
     butt->setObjectName("*exit*");
     QObject::connect(butt, SIGNAL(clicked(bool)), this, SLOT(callQTModule()));
     new_wnd_lay->addWidget( butt, 0, 0 );
-    
+
     new_wnd->show();
 }

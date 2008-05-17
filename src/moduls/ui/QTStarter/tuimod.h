@@ -33,7 +33,7 @@
 class QTimer;
 
 namespace QTStarter
-{    
+{
 
 //*************************************************
 //* WinControl                                    *
@@ -44,10 +44,10 @@ class WinControl: public QObject
     public:
 	//Methods
 	WinControl( );
- 
+
 	bool callQTModule( const string &nm );
-        void startDialog( );
-	
+	void startDialog( );
+
     private slots:
 	//Methods
 	void checkForEnd( );
@@ -68,37 +68,37 @@ class TUIMod: public TUI
 	//Methods
 	TUIMod( string name );
 	~TUIMod( );
-	
- 	bool endRun( )		{ return end_run; }
+
+	bool endRun( )		{ return end_run; }
 	bool startCom( )	{ return start_com; }
 	string startMod( )	{ return start_mod; }
- 
+
 	void setStartMod( const string &vl )	{ start_mod = vl; modif(); }
- 
+
 	void modStart( );
 	void modStop( );
 
     protected:
 	//Methods
 	void load_( );
-	void save_( );	
+	void save_( );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	void postEnable( int flag );
-	void postDisable( int flag );	
+	void postDisable( int flag );
 
     private:
 	//Methods
-        static void *Task( void * );	
-	string optDescr( );	
-	
+        static void *Task( void * );
+	string optDescr( );
+
 	//Attributes
 	bool	demon_mode, end_run, start_com;
         pthread_t pthr_tsk;
 	string	start_mod;
-	
+
 	QApplication *QtApp;
 };
-    
+
 extern TUIMod *mod;
 }
 

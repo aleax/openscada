@@ -549,16 +549,16 @@ void Block::cntrCmdProc( XMLNode *opt )
     else if( a_path == "/blck/cfg/fncs" && ctrChkNode(opt) )
     {
 	vector<string> list;
-        int c_lv = 0;
-        string c_path = "", c_el;
-        for( int c_off = 0; (c_el=TSYS::strSepParse(wFunc(),0,'.',&c_off)).size(); c_lv++ )
-        {
-            opt->childAdd("el")->setText(c_path);
-            c_path += c_lv ? "."+c_el : c_el;
-        }
-        opt->childAdd("el")->setText(c_path);
-        if( c_lv != 0 ) c_path += ".";
-    	SYS->nodeAt(c_path,0,'.').at().nodeList(list);
+	int c_lv = 0;
+	string c_path = "", c_el;
+	for( int c_off = 0; (c_el=TSYS::strSepParse(wFunc(),0,'.',&c_off)).size(); c_lv++ )
+	{
+	    opt->childAdd("el")->setText(c_path);
+	    c_path += c_lv ? "."+c_el : c_el;
+	}
+	opt->childAdd("el")->setText(c_path);
+	if( c_lv != 0 ) c_path += ".";
+	try{ SYS->nodeAt(c_path,0,'.').at().nodeList(list); }	catch(...){ }
 	for( unsigned i_a=0; i_a < list.size(); i_a++ )
 	    opt->childAdd("el")->setText(c_path+list[i_a]);
     }

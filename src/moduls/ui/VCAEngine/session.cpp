@@ -575,15 +575,16 @@ void SessPage::calc( bool first, bool last )
 
 bool SessPage::attrChange( Attr &cfg, void *prev )
 {
-    if( cfg.id() == "pgOpen" && enable() )
+    //- Page open process -
+    if( enable() && prev && cfg.id() == "pgOpen" )
     {
-	if( cfg.getB() && !process() ) 
-	{
-	    setProcess(true);
+        if( cfg.getB() && !process() ) 
+        {
+    	    setProcess(true);
 	    ownerSess()->openReg(path());
 	}
 	if( !cfg.getB() && process() )
-	{ 
+	{
 	    ownerSess()->openUnreg(path());
 	    if( !attrAt("pgNoOpenProc").at().getB() )	setProcess(false);
 	}
@@ -653,7 +654,9 @@ void SessWdg::postEnable( int flag )
     
     if( flag&TCntrNode::NodeConnect )
     {
-	attrAdd( new TFld("event",_("Events"),TFld::String,TFld::FullText,"200") );
+	attrAdd( new TFld("event",_("Events"),TFld::String,TFld::FullText) );
+	attrAdd( new TFld("alarm",_("Alarm"),TFld::String,TFld::NoFlag,"200","","","","-3") );
+	attrAdd( new TFld("alarmSt",_("Alarm status"),TFld::Integer,TFld::NoFlag,"5","0","","","-4") );
     }
 }
 
@@ -759,7 +762,9 @@ void SessWdg::setProcess( bool val )
 		}
 	    }
 	}
-	if( attrPresent("event") ) fio.ioAdd( new IO("event",_("Event"),IO::String,IO::Output) );
+	fio.ioAdd( new IO("event",_("Event"),IO::String,IO::Output) );
+	fio.ioAdd( new IO("alarm",_("Alarm"),IO::String,IO::Output,"",false,"./alarm") );
+	fio.ioAdd( new IO("alarmSt",_("Alarm status"),IO::Integer,IO::Output,"",false,"./alarmSt") );
 	
 	//-- Compile function --
 	try
@@ -834,10 +839,10 @@ int SessWdg::calcPer( )
 string SessWdg::resourceGet( const string &id, string *mime )
 {
     string mimeType, mimeData;
-    
-    mimeData = parent().at().resourceGet( id, &mimeType );    
+
+    mimeData = parent().at().resourceGet( id, &mimeType );
     if( mime )	*mime = mimeType;
-    
+
     return mimeData;
 }
 
@@ -867,8 +872,8 @@ string SessWdg::eventGet( bool clear )
 {
     if( !attrPresent("event") )	return "";
     Res &res = ownerSess()->eventRes();
-    
-    res.resRequestW( );    
+
+    res.resRequestW( );
     string rez = attrAt("event").at().getS();
     if( clear )	attrAt("event").at().setS("");
     res.resReleaseW( );
@@ -876,12 +881,33 @@ string SessWdg::eventGet( bool clear )
     return rez;
 }
 
+void SessWdg::alarmSet( bool isSet )
+{
+    int acur = attrAt("alarmSt").at().getI( );
+    int alev = atoi(TSYS::strSepParse(attrAt("alarm").at().getS(),0,'|').c_str()) & 0xFF;
+    int atp  = (acur>>8) & 0xFF;
+    if( isSet )	atp |= atoi(TSYS::strSepParse(attrAt("alarm").at().getS(),3,'|').c_str()) & 0xFF;
+
+    vector<string> wlst;
+    wdgList( wlst );
+    for( int i_w = 0; i_w < wlst.size(); i_w++ )
+    {
+	int iacur = wdgAt( wlst[i_w] ).at().attrAt("alarmSt").at().getI( );
+	alev = vmax( alev, iacur&0xFF );
+	atp  |= (iacur>>8) & 0xFF;
+    }
+
+    attrAt("alarmSt").at().setI( (atp<<8)|alev );
+
+    if( ownerSessWdg(true) )	ownerSessWdg(true)->alarmSet();
+}
+
 void SessWdg::prcElListUpdate( )
 {
     vector<string> ls;
     wdgList(ls);
     m_wdgChldAct.clear();
-    for(int i_l = 0; i_l < ls.size(); i_l++ )
+    for( int i_l = 0; i_l < ls.size(); i_l++ )
 	if( wdgAt(ls[i_l]).at().process() )
 	    m_wdgChldAct.push_back(ls[i_l]);
     attrList(ls);
@@ -907,7 +933,7 @@ void SessWdg::getUpdtWdg( const string &path, unsigned int tm, vector<string> &e
 }
 
 unsigned int SessWdg::modifVal( Attr &cfg )
-{ 
+{
     int m_clc = ownerSess()->calcClk( );
     if( atoi(cfg.fld().reserve().c_str()) )	m_mdfClc = m_clc;
     return m_clc; 
@@ -924,10 +950,10 @@ void SessWdg::calc( bool first, bool last )
     //- Calculate include widgets -
     for(int i_l = 0; i_l < m_wdgChldAct.size(); i_l++ )
 	if( wdgPresent(m_wdgChldAct[i_l]) )
-    	    wdgAt(m_wdgChldAct[i_l]).at().calc(first,last);
+	    wdgAt(m_wdgChldAct[i_l]).at().calc(first,last);
 
     try
-    {    
+    {
 	//- Load events to process -
 	if( !((ownerSess()->calcClk())%(vmax(calcPer()/ownerSess()->period(),1))) )
 	{
@@ -945,7 +971,7 @@ void SessWdg::calc( bool first, bool last )
 		    obj_tp = TSYS::strSepParse(attr.at().cfgVal(),0,':')+":";
 		    if( obj_tp == "val:" )	attr.at().setS(attr.at().cfgVal().substr(obj_tp.size()));
 		    else if( obj_tp == "prm:" )
-		    {	
+		    {
 			try{ vl = SYS->daq().at().nodeAt(attr.at().cfgVal(),0,0,obj_tp.size()); }
 			catch(TError err) { attr.at().setS(EVAL_STR); continue; }
 			
@@ -980,19 +1006,19 @@ void SessWdg::calc( bool first, bool last )
 	    inLnkGet = false;
 
 	    if( TValFunc::func() )
-	    {    
+	    {
 		//- Load events to calc procedure -
 		int evId = ioId("event");
 		if( evId >= 0 )	setS(evId,wevent);
 	
 		//-- Load data to calc area --
-    		setR(0,1000./ownerSess()->period());
-    		setB(1,first);
-    		setB(2,last);
+		setR(0,1000./ownerSess()->period());
+		setB(1,first);
+		setB(2,last);
 		for( int i_io = 3; i_io < ioSize( ); i_io++ )
-	    	{
+		{
 		    if( func()->io(i_io)->rez().empty() ) continue;
-		    sw_attr = TSYS::pathLev(func()->io(i_io)->rez(),0);	
+		    sw_attr = TSYS::pathLev(func()->io(i_io)->rez(),0);
 		    s_attr  = TSYS::pathLev(func()->io(i_io)->rez(),1);
 		    attr = (sw_attr==".")?attrAt(s_attr):wdgAt(sw_attr).at().attrAt(s_attr);
 		    switch(ioType(i_io))
@@ -1069,29 +1095,38 @@ void SessWdg::calc( bool first, bool last )
 bool SessWdg::attrChange( Attr &cfg, void *prev )
 {
     Widget::attrChange( cfg, prev );
-    
+
     //- Special session atributes process -
+    //-- Focus attribute process for active active --
     if( cfg.id() == "active" )
     {
 	if( cfg.getB() )
-	{
 	    cfg.owner()->attrAdd( new TFld("focus",_("Focus"),TFld::Boolean,TFld::NoFlag,"1","false","","","-2") );
-	    //attrAt("focus").at().setFlgSelf(Attr::ProcAttr);
-	    //prcElListUpdate();
-	}
 	else	cfg.owner()->attrDel("focus");
     }
-    
+    //- Alarm event for widget process -
+    else if( cfg.id() == "alarm" && enable() && prev )	alarmSet( true );
+    //- Alarm status process -
+    else if( cfg.id() == "alarmSt" )
+    {
+	int salrm = cfg.getI();
+	//-- Quitation --
+	if(  !(salrm&0x0F) )
+	{
+
+	}
+    }
+
     //- External link process -
     if( !inLnkGet && prev && cfg.flgSelf()&Attr::CfgLnkOut && !cfg.cfgVal().empty() )
     {
         string obj_tp = TSYS::strSepParse(cfg.cfgVal(),0,':')+":";
 	try
 	{
-    	    if( obj_tp == "prm:" )
+	    if( obj_tp == "prm:" )
 	        switch( cfg.type() )
 	        {
-		    case TFld::Boolean:		
+		    case TFld::Boolean:
 		        ((AutoHD<TVal>)SYS->daq().at().nodeAt(cfg.cfgVal(),0,0,obj_tp.size())).at().setB(cfg.getB());
 		        break;
 		    case TFld::Integer:

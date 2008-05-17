@@ -80,7 +80,7 @@ class VisDevelop : public QMainWindow
 	void editToolUpdate( );						//Edit tools visible update
 	void modifyToolUpdate( const string& );
 	void exitModifChk( );
-	
+
         void quitSt( );		//Full quit OpenSCADA
 
 	void about( );		//About at programm

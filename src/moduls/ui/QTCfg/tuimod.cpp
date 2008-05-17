@@ -176,7 +176,7 @@ QMainWindow *TUIMod::openWindow( )
     string user_open = startUser();
     if(!SYS->security().at().usrPresent(user_open))
 	while(true)
-	{ 
+	{
 	    DlgUser d_usr;
 	    int rez = d_usr.exec();
 	    if( rez == DlgUser::SelCancel )     return NULL;

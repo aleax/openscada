@@ -107,10 +107,10 @@ class ConfApp: public QMainWindow
 	void tabSelect( QWidget *wdg );			//Change curent widget
 
 	//- Self widget's slots -
-	void checkBoxStChange( int stat ); 		//QCheckBox	    
+	void checkBoxStChange( int stat ); 		//QCheckBox
 	void buttonClicked( );				//Button
 	void combBoxActivate( const QString& );		//QComboBox
-	void listBoxGo( QListWidgetItem* );		//QListBox go for banch	    
+	void listBoxGo( QListWidgetItem* );		//QListBox go for banch
 	void listBoxPopup();				//QListBox popup menu
 	void tablePopup( const QPoint &pos );		//QTable popup menu
 	void tableSet( int row, int col );		//QTable set
@@ -119,18 +119,18 @@ class ConfApp: public QMainWindow
 	void applyButton( );				//Apply button
 	void cancelButton( );				//Cancel button
 	void imgPopup( const QPoint &pos );		//Image popup
-	    
+
     private:
 	//Methods
 	//- Page display -
 	void pageDisplay( const string &path );
-	
+
 	//- View ListItem with recursive processing of the ControllArea -
 	void viewChildRecArea( QTreeWidgetItem *i, int level );
-	    
+
 	//- Update structure and put service labels -
 	bool upStruct(XMLNode &w_nd, const XMLNode &n_nd);
-	    
+
 	//- Select ListItem with recursive processing of the ControllArea -
 	void selectChildRecArea( const XMLNode &node, const string &a_path, QWidget *widget = NULL, bool refr = false );
 	void basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, bool wr, QHBoxLayout **l_hbox, int &l_pos, bool refr, bool comm = false );
@@ -138,17 +138,17 @@ class ConfApp: public QMainWindow
 	//- Controll system requests -
 	void initHosts();
 	int cntrIfCmd( XMLNode &node );
-	    
+
 	//Attributes
 	QTimer	*endRunTimer, *autoUpdTimer;
-	    
+
 	QTreeWidget	*CtrTree;
 	QLabel		*titleIco;
 	QLabel		*titleLab;
 	QLabel		*mStModify;
 	QTabWidget  	*tabs;
 	UserStBar	*w_user;
-	    
+
 	QAction 	*actUp,	*actPrev, *actNext,
 			*actUser,
 			*actStartUpd, *actStopUpd,
@@ -157,17 +157,16 @@ class ConfApp: public QMainWindow
 			*actItCut, *actItCopy, *actItPaste;
 
 	XMLNode		pg_info;
-	XMLNode 	*root;    
+	XMLNode 	*root;
 	string		sel_path,
 			copy_buf;       //Copy buffer
 
 	int		que_sz;
 	vector<string>	prev;
 	vector<string>	next;
-	
-	Res 		hd_res;
+
 	bool		block_tabs;
-	    
+
 	bool 		tbl_init;
     };
 

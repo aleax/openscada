@@ -1,3 +1,11 @@
+2008-05-17 Roman
+- FIX:/DAQ/BlockCalc: Broken link to block's function process is fixed.
+- FIX:/UI/QTCfg: Deadlock on QT 4.4 is fixed.
+- /UI/QTCfg: Refresh items tree popup menu item is added.
+- FIX:/UI/QTStarter: QT 4.4 locale init is fixed. setlocale(LC_NUMERIC,"C") call after QT init is added.
+- /UI/VCAEngine: First alarm code is added.
+
+
 2008-05-15 Roman
 - FIX:/Archive/FSArch: Message archivator end() and begin() functions is fixed.
 - FIX:/UI/VCAEngine: Empty or old DB attributed load is fixed.
