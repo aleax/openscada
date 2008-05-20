@@ -1,4 +1,3 @@
-
 //OpenSCADA system module UI.VISION file: vis_shape_elfig.cpp
 /***************************************************************************
  *   Copyright (C) 2007 by Lysenko Maxim (mlisenko@ukr.net)
@@ -149,6 +148,10 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
             w->dc()["elLst"] = val.c_str();
             rel_list = true;
             break;
+        case 29:
+            w->dc()["lineStyle"] = val.c_str();
+            rel_list = true;
+            break;
         default:
             if( uiPrmPos >= 30 )
             {
@@ -174,7 +177,8 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
         if( inundationItems.size() )	inundationItems.clear();
         
 	//- Parse last attributes list and make point list -
-        string sel;
+        string sel, ln_st;
+        Qt::PenStyle style;
         int p[5];
         int width;
         int bord_width;
@@ -196,6 +200,12 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 if( !bord_width ) bord_width = w->dc()["bordWdth"].toInt();
                 QColor bord_color(TSYS::strSepParse(sel,0,':',&el_off).c_str());
                 if( !bord_color.isValid() )  bord_color = w->dc()["bordClr"].value<QColor>();
+                ln_st = TSYS::strSepParse(sel,0,':',&el_off);
+                if( !ln_st.size() ) ln_st = w->dc()["lineStyle"].toString().toAscii().data();
+                if( ln_st == "solid" ) style = Qt::SolidLine;
+                else if( ln_st == "dashed" ) style = Qt::DashLine;
+                else if( ln_st == "dotted" ) style = Qt::DotLine;
+                else style = Qt::SolidLine;
 
                 //-- Reading coordinates for the points of the line --
                 for( int i_p = 0; i_p < 2; i_p++ )
@@ -205,27 +215,34 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 line2 = QLineF( ip[0], QPointF(ip[0].x()+10,ip[0].y()) );
                 line1 = QLineF( ip[0], ip[1] );
                 if( ip[0].y() <= ip[1].y() ) ang = 360 - angle( line1, line2 );
-                else ang = angle( line1, line2 );				
-                
+                else ang = angle( line1, line2 );
+               
 		//-- Building the path of the line and adding it to container --
                 if( bord_width > 0 )
                 {
-                    circlePath = painterPath( width, bord_width, 1, ang, ip[0], ip[1] );
+                    circlePath = newPath;
                     ShapeItem item_temp( circlePath, newPath, p[0], p[1], -1, -1, -1, QPointF(0,0),
                                         QBrush( color, Qt::SolidPattern ),
-                                        QPen( bord_color, bord_width, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin ),
-                                        QPen( color, width, Qt::NoPen, Qt::FlatCap, Qt::RoundJoin ), width, bord_width, 1, angle_temp );
+                                        QPen( bord_color, bord_width, style, Qt::FlatCap, Qt::MiterJoin ),
+                                        QPen( color, width, Qt::NoPen, Qt::FlatCap, Qt::MiterJoin ), width, bord_width, 1, angle_temp );
                     item_temp.brush.setColor( color );
                     shapeItems.push_back( item_temp );
                 }
                 if( bord_width == 0 )
                 {
-                    circlePath = painterPathSimple( 1, ang, ip[0], ip[1] );
-                    QPainterPath bigPath = painterPath( width, w->dc()["bordWdth"].toInt()+1, 1, ang, ip[0], ip[1] );
-                    ShapeItem item_temp( bigPath, circlePath, p[0], p[1], -1, -1, -1, QPointF(0,0),
+                    circlePath = newPath;
+                    QPainterPath bigPath = newPath;
+                    ShapeItem item_temp;
+                    if( width < 3 )
+                        item_temp = ShapeItem( bigPath, circlePath, p[0], p[1], -1, -1, -1, QPointF(0,0),
                                         QBrush( color, Qt::NoBrush ),
                                         QPen( w->dc()["bordClr"].value<QColor>(), w->dc()["bordWdth"].toInt(), Qt::NoPen, Qt::SquareCap, Qt::RoundJoin ),
-                                        QPen( color, width, Qt::SolidLine, Qt::SquareCap, Qt::RoundJoin ), width, w->dc()["bordWdth"].toInt(), 1, angle_temp );
+                                        QPen( color, width, style, Qt::SquareCap, Qt::RoundJoin ), width, w->dc()["bordWdth"].toInt(), 1, angle_temp );
+                    else
+                        item_temp = ShapeItem( bigPath, circlePath, p[0], p[1], -1, -1, -1, QPointF(0,0),
+                                        QBrush( color, Qt::NoBrush ),
+                                        QPen( w->dc()["bordClr"].value<QColor>(), w->dc()["bordWdth"].toInt(), Qt::NoPen, Qt::FlatCap, Qt::RoundJoin ),
+                                        QPen( color, width, style, Qt::FlatCap, Qt::RoundJoin ), width, w->dc()["bordWdth"].toInt(), 1, angle_temp );
                     item_temp.brush.setColor( color );
                     shapeItems.push_back( item_temp );
                 }
@@ -246,6 +263,12 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 if( !bord_width ) bord_width = w->dc()["bordWdth"].toInt();
                 QColor bord_color( TSYS::strSepParse(sel,0,':',&el_off).c_str() );
                 if( !bord_color.isValid() ) bord_color = w->dc()["bordClr"].value<QColor>();
+                ln_st=TSYS::strSepParse(sel,0,':',&el_off).c_str();
+                if( ln_st.size() == 0 ) ln_st=w->dc()["lineStyle"].toString().toAscii().data();
+                if( ln_st == "solid" ) style = Qt::SolidLine;
+                else if( ln_st == "dashed" ) style = Qt::DashLine;
+                else if( ln_st == "dotted" ) style = Qt::DotLine;
+                else style = Qt::SolidLine;
                 
 		//-- Reading coordinates for the points of the line --
                 for( int i_p = 0; i_p < 5; i_p++ )
@@ -296,25 +319,31 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		//-- Building the path of the line and adding it to container --
                 if( bord_width > 0 )
                 {
-                    circlePath = painterPath( width, bord_width, 2, ang, StartMotionPos, EndMotionPos,CtrlMotionPos_1, CtrlMotionPos_2,
-                                              CtrlMotionPos_3, CtrlMotionPos_4 );
+                    circlePath = newPath;
                     ShapeItem item_temp( circlePath, newPath, p[0], p[1], p[2], p[3], p[4], CtrlMotionPos_4,
                                          QBrush( color, Qt::SolidPattern ),
-                                         QPen( bord_color, bord_width, Qt::SolidLine, Qt::SquareCap, Qt::RoundJoin ),
-		    			 QPen( color, width, Qt::NoPen, Qt::SquareCap, Qt::RoundJoin ), width, bord_width, 2, angle_temp );
+                                         QPen( bord_color, bord_width, style, Qt::FlatCap, Qt::RoundJoin ),
+		    			 QPen( color, width, Qt::NoPen, Qt::FlatCap, Qt::RoundJoin ), width, bord_width, 2, angle_temp );
                     item_temp.brush.setColor( color );
                     shapeItems.push_back( item_temp );
                 }
 
                 if( bord_width == 0 )
                 {
-                    QPainterPath bigPath = painterPath( width+1, bord_width, 2, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1,
-                            CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4 );
-                    circlePath = painterPathSimple( 2, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2,  CtrlMotionPos_3, CtrlMotionPos_4 );
-                    ShapeItem item_temp( bigPath, circlePath, p[0], p[1], p[2], p[3], p[4], CtrlMotionPos_4, 
+                    
+                    QPainterPath bigPath = newPath;
+                    circlePath = newPath;
+                    ShapeItem item_temp;
+                    if( width < 3 )
+                        item_temp = ShapeItem ( bigPath, circlePath, p[0], p[1], p[2], p[3], p[4], CtrlMotionPos_4, 
+                                            QBrush( color,Qt::NoBrush ),
+                                            QPen( w->dc()["bordClr"].value<QColor>(), bord_width, Qt::NoPen, Qt::SquareCap, Qt::RoundJoin ),
+                                            QPen( color, width, style, Qt::SquareCap, Qt::RoundJoin ), width, bord_width, 2, angle_temp );
+                    else
+                        item_temp = ShapeItem ( bigPath, circlePath, p[0], p[1], p[2], p[3], p[4], CtrlMotionPos_4, 
                                          QBrush( color,Qt::NoBrush ),
-                                         QPen( w->dc()["bordClr"].value<QColor>(), bord_width, Qt::NoPen, Qt::SquareCap, Qt::RoundJoin ),
-                                         QPen( color, width, Qt::SolidLine, Qt::SquareCap, Qt::RoundJoin ), width, bord_width, 2, angle_temp );
+                                         QPen( w->dc()["bordClr"].value<QColor>(), bord_width, Qt::NoPen, Qt::FlatCap, Qt::RoundJoin ),
+                                         QPen( color, width, style, Qt::FlatCap, Qt::RoundJoin ), width, bord_width, 2, angle_temp );
                     item_temp.brush.setColor( color );
                     shapeItems.push_back( item_temp );  
                 }
@@ -334,6 +363,12 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 if( !bord_width ) bord_width = w->dc()["bordWdth"].toInt();
                 QColor bord_color( TSYS::strSepParse(sel,0,':',&el_off).c_str() );
                 if( !bord_color.isValid() ) bord_color = w->dc()["bordClr"].value<QColor>();
+                ln_st=TSYS::strSepParse(sel,0,':',&el_off).c_str();
+                if( ln_st.size() == 0 ) ln_st=w->dc()["lineStyle"].toString().toAscii().data();
+                if( ln_st == "solid" ) style = Qt::SolidLine;
+                else if( ln_st == "dashed" ) style = Qt::DashLine;
+                else if( ln_st == "dotted" ) style = Qt::DotLine;
+                else style = Qt::SolidLine;
                 for( int i_p = 0; i_p < 4; i_p++ )
                     ip[i_p] = scaleRotate( (*pnts)[p[i_p]], w, flag_scaleRotate );
                 line2 = QLineF( ip[0], QPointF(ip[0].x()+10,ip[0].y()) );
@@ -343,22 +378,29 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 
                 if( bord_width > 0 )
                 {
-                    circlePath = painterPath( width, bord_width, 3, ang, ip[0], ip[1], ip[2], ip[3] );
+                    circlePath = newPath;
                     ShapeItem item_temp( circlePath, newPath, p[0], p[1], p[2], p[3], -1, QPointF(0,0),
                                          QBrush( color, Qt::SolidPattern ),
-                                         QPen( bord_color, bord_width, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin ),
-                                         QPen( color, width, Qt::NoPen, Qt::SquareCap, Qt::RoundJoin), width, bord_width, 3, angle_temp );
+                                         QPen( bord_color, bord_width, style, Qt::FlatCap, Qt::MiterJoin ),
+                                         QPen( color, width, Qt::NoPen, Qt::FlatCap, Qt::RoundJoin), width, bord_width, 3, angle_temp );
                     item_temp.brush.setColor( color );
                     shapeItems.push_back( item_temp );
                 }
                 if( bord_width==0 )
                 {
-                    QPainterPath bigPath = painterPath( width+1, bord_width, 3, ang, ip[0], ip[1], ip[2], ip[3] );
-                    circlePath = painterPathSimple( 3, ang, ip[0], ip[1], ip[2], ip[3] );
-                    ShapeItem item_temp( bigPath, circlePath, p[0], p[1], p[2], p[3], -1, QPointF(0,0), 
-                                         QBrush( color, Qt::NoBrush ),
-                                         QPen( w->dc()["bordClr"].value<QColor>(), bord_width, Qt::NoPen, Qt::SquareCap, Qt::MiterJoin ),
-                                         QPen( color, width, Qt::SolidLine, Qt::SquareCap, Qt::RoundJoin), width, bord_width, 3, angle_temp );
+                    QPainterPath bigPath = newPath;
+                    circlePath = newPath;
+                    ShapeItem item_temp;
+                    if( width < 3 )
+                        item_temp = ShapeItem( bigPath, circlePath, p[0], p[1], p[2], p[3], -1, QPointF(0,0), 
+                                        QBrush( color, Qt::NoBrush ),
+                                        QPen( w->dc()["bordClr"].value<QColor>(), bord_width, Qt::NoPen, Qt::SquareCap, Qt::MiterJoin ),
+                                        QPen( color, width, style, Qt::SquareCap, Qt::RoundJoin), width, bord_width, 3, angle_temp );
+                    else
+                        item_temp = ShapeItem( bigPath, circlePath, p[0], p[1], p[2], p[3], -1, QPointF(0,0), 
+                                        QBrush( color, Qt::NoBrush ),
+                                        QPen( w->dc()["bordClr"].value<QColor>(), bord_width, Qt::NoPen, Qt::FlatCap, Qt::MiterJoin ),
+                                        QPen( color, width, style, Qt::FlatCap, Qt::RoundJoin), width, bord_width, 3, angle_temp );
                     item_temp.brush.setColor( color );
                     shapeItems.push_back( item_temp );
                 }
@@ -514,7 +556,8 @@ bool ShapeElFigure::shapeSave( WdgView *w )
     QVector<ShapeItem> &shapeItems = *(QVector<ShapeItem> *)w->dc().value("shapeItems",(void*)0).value< void* >();
     QVector<inundationItem> &inundationItems = *(QVector<inundationItem> *)w->dc().value("inundationItems",(void*)0).value< void* >();
     PntMap *pnts = (PntMap*)w->dc().value("shapePnts",(void*)0).value< void* >();
-    string elList;
+    string elList, ln_st;
+    Qt::PenStyle style;
 
     //- Building attributes for all el_figures and fills -
     //--for el_figures--
@@ -522,15 +565,27 @@ bool ShapeElFigure::shapeSave( WdgView *w )
 	switch( shapeItems[i_s].type )
 	{
 	    case 1:
+                if( shapeItems[i_s].border_width > 0 ) style = shapeItems[i_s].pen.style();
+                else
+                    style = shapeItems[i_s].penSimple.style();
+                if( style == Qt::SolidLine ) ln_st = "solid";
+                else if( style == Qt::DashLine ) ln_st = "dashed";
+                else if( style == Qt::DotLine ) ln_st = "dotted";
 	      	elList+="line:"+TSYS::int2str(shapeItems[i_s].n1)+":"+
 		     TSYS::int2str(shapeItems[i_s].n2)+":"+
 		     ((shapeItems[i_s].width == w->dc()["lineWdth"].toInt()) ? "" : TSYS::int2str((int)shapeItems[i_s].width))+":"+
 		     ((shapeItems[i_s].brush.color().name() == w->dc()["lineClr"].toString()) ? "" : shapeItems[i_s].brush.color().name().toAscii().data())+":"+
 		     ((shapeItems[i_s].border_width == w->dc()["bordWdth"].toInt()) ? "" : TSYS::int2str((int)shapeItems[i_s].border_width))+":"+
-		     ((shapeItems[i_s].pen.color().name() == w->dc()["bordClr"]) ? "" : shapeItems[i_s].pen.color().name().toAscii().data())+"\n";
+		     ((shapeItems[i_s].pen.color().name() == w->dc()["bordClr"]) ? "" : shapeItems[i_s].pen.color().name().toAscii().data())+":"+
+                     ((ln_st == w->dc()["lineStyle"].toString().toAscii().data()) ? "" : ln_st)+"\n";
 
 		break;
 	    case 2:
+                if( shapeItems[i_s].border_width > 0 ) style = shapeItems[i_s].pen.style();
+                else style = shapeItems[i_s].penSimple.style();
+                if( style == Qt::SolidLine ) ln_st = "solid";
+                else if( style == Qt::DashLine ) ln_st = "dashed";
+                else if( style == Qt::DotLine ) ln_st = "dotted";
 		elList+="arc:"+TSYS::int2str(shapeItems[i_s].n1)+":"+
 		    TSYS::int2str(shapeItems[i_s].n2)+":"+
 	     	    TSYS::int2str(shapeItems[i_s].n3)+":"+
@@ -539,18 +594,25 @@ bool ShapeElFigure::shapeSave( WdgView *w )
 		    ((shapeItems[i_s].width == w->dc()["lineWdth"].toInt()) ? "" : TSYS::int2str((int)shapeItems[i_s].width))+":"+
 		    ((shapeItems[i_s].brush.color().name() == w->dc()["lineClr"].toString()) ? "" : shapeItems[i_s].brush.color().name().toAscii().data())+":"+
 		    ((shapeItems[i_s].border_width == w->dc()["bordWdth"].toInt()) ? "" : TSYS::int2str((int)shapeItems[i_s].border_width))+":"+
-		    ((shapeItems[i_s].pen.color().name() == w->dc()["bordClr"]) ? "" : shapeItems[i_s].pen.color().name().toAscii().data())+"\n";
+                    ((shapeItems[i_s].pen.color().name() == w->dc()["bordClr"]) ? "" : shapeItems[i_s].pen.color().name().toAscii().data())+":"+
+                    ((ln_st == w->dc()["lineStyle"].toString().toAscii().data()) ? "" : ln_st)+"\n";
 
 		break;
 	    case 3:
-                 elList+="bezier:"+TSYS::int2str(shapeItems[i_s].n1)+":"+
+                if( shapeItems[i_s].border_width > 0 ) style = shapeItems[i_s].pen.style();
+                else style = shapeItems[i_s].penSimple.style();
+                if( style == Qt::SolidLine ) ln_st = "solid";
+                else if( style == Qt::DashLine ) ln_st = "dashed";
+                else if( style == Qt::DotLine ) ln_st = "dotted";
+                elList+="bezier:"+TSYS::int2str(shapeItems[i_s].n1)+":"+
 		    TSYS::int2str(shapeItems[i_s].n2)+":"+
 		    TSYS::int2str(shapeItems[i_s].n3)+":"+
 		    TSYS::int2str(shapeItems[i_s].n4)+":"+
 		    ((shapeItems[i_s].width == w->dc()["lineWdth"].toInt()) ? "" : TSYS::int2str((int)shapeItems[i_s].width))+":"+
 		    ((shapeItems[i_s].brush.color().name() == w->dc()["lineClr"].toString()) ? "" : shapeItems[i_s].brush.color().name().toAscii().data())+":"+
 		    ((shapeItems[i_s].border_width == w->dc()["bordWdth"].toInt()) ? "" : TSYS::int2str((int)shapeItems[i_s].border_width))+":"+
-		    ((shapeItems[i_s].pen.color().name() == w->dc()["bordClr"]) ? "" : shapeItems[i_s].pen.color().name().toAscii().data())+"\n";
+                    ((shapeItems[i_s].pen.color().name() == w->dc()["bordClr"]) ? "" : shapeItems[i_s].pen.color().name().toAscii().data())+":"+
+                    ((ln_st == w->dc()["lineStyle"].toString().toAscii().data()) ? "" : ln_st)+"\n";
 
 		break;
 	}
@@ -756,6 +818,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
             //- Drawing all el_figures -
             for( int k=0; k < shapeItems.size(); k++ )
             {
+                
                 pnt.setBrush( shapeItems[k].brush );
                 pnt.setPen( shapeItems[k].pen );
                 pnt.drawPath( shapeItems[k].path );
@@ -1211,9 +1274,15 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         EndLine = ev->pos();
                         if( EndLine == StartLine ) break;
                         QPainterPath circlePath, bigPath;
+                        Qt::PenStyle style;
+                        string ln_st;
                         //-- if line --
                         if( shapeType == 1 )
                         {
+                            ln_st=view->dc()["lineStyle"].toString().toAscii().data();
+                            if( ln_st == "solid" ) style = Qt::SolidLine;
+                            else if( ln_st == "dashed" ) style = Qt::DashLine;
+                            else if( ln_st == "dotted" ) style = Qt::DotLine;
                             //--- if orto ---
                             if( flag_key )
                             {
@@ -1233,9 +1302,10 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                 {
                                     circlePath = painterPath( view->dc()["lineWdth"].toInt(), view->dc()["bordWdth"].toInt(), 1, ang, StartLine,EndLine );
                                     shapeItems.push_back( ShapeItem(circlePath, newPath,-1,-1,-1,-1,-1,QPointF(0,0), QBrush(view->dc()["lineClr"].value<QColor>(), Qt::SolidPattern),
-   					    QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::SolidLine, Qt::SquareCap, Qt::RoundJoin),
-					    QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::NoPen, Qt::SquareCap, Qt::RoundJoin),
+                                            QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), style, Qt::FlatCap, Qt::RoundJoin),
+					    QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::NoPen, Qt::FlatCap, Qt::RoundJoin),
 					    view->dc()["lineWdth"].toInt(), view->dc()["bordWdth"].toInt(), 1, angle_temp) );
+                                    //shapeItems[shapeItems.size()-1].brush.setColor( view->dc()["lineClr"].value<QColor>() );
                                 }
                                 else
                                 {
@@ -1243,9 +1313,10 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                    
                                     QPainterPath bigPath = painterPath( view->dc()["lineWdth"].toInt()+1, view->dc()["bordWdth"].toInt(), 1, ang, StartLine, EndLine);
                                     shapeItems.push_back( ShapeItem(bigPath,circlePath,-1,-1,-1,-1,-1,QPointF(0,0), QBrush(view->dc()["lineClr"].value<QColor>(),Qt::NoBrush),
-					    QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::NoPen, Qt::SquareCap, Qt::RoundJoin),
-					    QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::SolidLine, Qt::SquareCap, Qt::RoundJoin),
+					    QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::NoPen, Qt::FlatCap, Qt::RoundJoin),
+                                            QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), style, Qt::FlatCap, Qt::RoundJoin),
 					    view->dc()["lineWdth"].toInt(), view->dc()["bordWdth"].toInt(), 1, angle_temp) );
+                                    shapeItems[shapeItems.size()-1].brush.setColor( view->dc()["lineClr"].value<QColor>() );
                                 }
                                 StartLine = unScaleRotate( StartLine, view, flag_scaleRotate );
                                 EndLine = unScaleRotate( EndLine, view, flag_scaleRotate );
@@ -1266,8 +1337,8 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                 {
                                     circlePath = painterPath( view->dc()["lineWdth"].toInt(), view->dc()["bordWdth"].toInt(),1, ang, StartLine, EndLine );
                                     shapeItems.push_back( ShapeItem(circlePath, newPath,-1,-1,-1,-1,-1,QPointF(0,0), QBrush(view->dc()["lineClr"].value<QColor>(), Qt::SolidPattern),
-					    QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::SolidLine, Qt::SquareCap, Qt::RoundJoin),
-				       	    QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::NoPen, Qt::SquareCap, Qt::RoundJoin),
+                                            QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), style, Qt::FlatCap, Qt::RoundJoin),
+				       	    QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::NoPen, Qt::FlatCap, Qt::RoundJoin),
 					    view->dc()["lineWdth"].toInt(), view->dc()["bordWdth"].toInt(), 1, angle_temp) );
                                 }
                                 else
@@ -1275,9 +1346,10 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                     circlePath = painterPathSimple( 1, ang, StartLine, EndLine );
                                     QPainterPath bigPath = painterPath( view->dc()["lineWdth"].toInt()+1, view->dc()["bordWdth"].toInt(), 1, ang, StartLine, EndLine );
                                     shapeItems.push_back( ShapeItem(bigPath,circlePath,-1,-1,-1,-1,-1,QPointF(0,0), QBrush(view->dc()["lineClr"].value<QColor>(),Qt::NoBrush),
-					    QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::NoPen, Qt::SquareCap, Qt::RoundJoin),
-					    QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::SolidLine, Qt::SquareCap, Qt::RoundJoin),
+					    QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::NoPen, Qt::FlatCap, Qt::RoundJoin),
+                                            QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), style, Qt::FlatCap, Qt::RoundJoin),
 					    view->dc()["lineWdth"].toInt(), view->dc()["bordWdth"].toInt(), 1, angle_temp) );
+                                    shapeItems[shapeItems.size()-1].brush.setColor( view->dc()["lineClr"].value<QColor>() );
                                 }
                                 StartLine = unScaleRotate( StartLine, view, flag_scaleRotate );
                                 EndLine = unScaleRotate( EndLine, view, flag_scaleRotate );
@@ -1290,7 +1362,12 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         //-- if bezier --
                         if( shapeType==3 )
                         {
+                            
                             QPointF CtrlPos_1, CtrlPos_2, EndLine_temp;
+                            ln_st=view->dc()["lineStyle"].toString().toAscii().data();
+                            if( ln_st == "solid" ) style = Qt::SolidLine;
+                            else if( ln_st == "dashed" ) style = Qt::DashLine;
+                            else if( ln_st == "dotted" ) style = Qt::DotLine;
                             CtrlPos_1 = QPointF( length(EndLine,StartLine)/3, 0 );
                             CtrlPos_2 = QPointF( 2*length(EndLine,StartLine)/3, 0 );
                             line2 = QLineF( StartLine, QPointF(StartLine.x()+10,StartLine.y()) );
@@ -1303,8 +1380,8 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             {
                                 circlePath = painterPath(view->dc()["lineWdth"].toInt(), view->dc()["bordWdth"].toInt(), 3, ang, StartLine, EndLine, CtrlPos_1, CtrlPos_2 );
                                 shapeItems.push_back( ShapeItem(circlePath, newPath,-1,-1,-1,-1,-1,QPointF(0,0), QBrush(view->dc()["lineClr"].value<QColor>(),Qt::SolidPattern),
-                                        QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::SolidLine, Qt::SquareCap, Qt::RoundJoin),
-				 	QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::NoPen, Qt::SquareCap, Qt::RoundJoin),
+                                        QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), style, Qt::FlatCap, Qt::RoundJoin),
+				 	QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::NoPen, Qt::FlatCap, Qt::RoundJoin),
 					view->dc()["lineWdth"].toInt(),view->dc()["bordWdth"].toInt(), 3, angle_temp) );
                             }
                             else
@@ -1312,9 +1389,10 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                 bigPath = painterPath( view->dc()["lineWdth"].toInt()+1, view->dc()["bordWdth"].toInt(),3, ang, StartLine, EndLine, CtrlPos_1, CtrlPos_2 );
                                 circlePath = painterPathSimple( 3, ang, StartLine, EndLine, CtrlPos_1, CtrlPos_2 );
                                 shapeItems.push_back( ShapeItem(bigPath,circlePath,-1,-1,-1,-1,-1,QPointF(0,0), QBrush(view->dc()["lineClr"].value<QColor>(),Qt::NoBrush),
-                                        QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::NoPen, Qt::SquareCap, Qt::RoundJoin),
-                                        QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::SolidLine, Qt::SquareCap, Qt::RoundJoin),
+                                        QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::NoPen, Qt::FlatCap, Qt::RoundJoin),
+                                        QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), style, Qt::FlatCap, Qt::RoundJoin),
 					view->dc()["lineWdth"].toInt(), view->dc()["bordWdth"].toInt(), 3, angle_temp) );
+                                shapeItems[shapeItems.size()-1].brush.setColor( view->dc()["lineClr"].value<QColor>() );
                             }
                             StartLine = unScaleRotate( StartLine, view, flag_scaleRotate );
                             EndLine = unScaleRotate( EndLine, view, flag_scaleRotate );
@@ -1334,6 +1412,10 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             QPointF CtrlPos_1, CtrlPos_2, CtrlPos_3, CtrlPos_4, Temp, StartLine_small, EndLine_small, pnt;
                             double a, a_small, b, b_small;
                             double t;
+                            ln_st=view->dc()["lineStyle"].toString().toAscii().data();
+                            if( ln_st == "solid" ) style = Qt::SolidLine;
+                            else if( ln_st == "dashed" ) style = Qt::DashLine;
+                            else if( ln_st == "dotted" ) style = Qt::DotLine;
                             CtrlPos_1 = QPointF( StartLine.x()+(EndLine.x()-StartLine.x())/2,
                                                  StartLine.y()+(EndLine.y()-StartLine.y())/2 );
                             a = length(EndLine,StartLine)/2;
@@ -1351,8 +1433,8 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             {
                                 circlePath = painterPath( view->dc()["lineWdth"].toInt(),view->dc()["bordWdth"].toInt(),2, ang, StartLine, EndLine, CtrlPos_1, CtrlPos_2,  CtrlPos_3, CtrlPos_4 );
                                 shapeItems.push_back( ShapeItem(circlePath, newPath, -1,-1,-1,-1, -1,CtrlPos_4,QBrush(view->dc()["lineClr"].value<QColor>(),Qt::SolidPattern),
-                                        QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::SolidLine, Qt::SquareCap, Qt::RoundJoin),
-					QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::NoPen, Qt::SquareCap, Qt::RoundJoin),
+                                        QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), style, Qt::FlatCap, Qt::RoundJoin),
+					QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::NoPen, Qt::FlatCap, Qt::RoundJoin),
 					view->dc()["lineWdth"].toInt(), view->dc()["bordWdth"].toInt(), 2, angle_temp) );
                             }
                             else
@@ -1360,9 +1442,10 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                 QPainterPath bigPath = painterPath( view->dc()["lineWdth"].toInt()+1, view->dc()["bordWdth"].toInt(), 2, ang, StartLine, EndLine, CtrlPos_1, CtrlPos_2, CtrlPos_3, CtrlPos_4 );
                                 circlePath = painterPathSimple( 2, ang, StartLine, EndLine, CtrlPos_1, CtrlPos_2, CtrlPos_3, CtrlPos_4 );
                                 shapeItems.push_back( ShapeItem(bigPath,circlePath,-1,-1,-1,-1, -1,CtrlPos_4, QBrush(view->dc()["lineClr"].value<QColor>(),Qt::NoBrush),
-                                        QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::NoPen, Qt::SquareCap, Qt::RoundJoin),
-					QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), Qt::SolidLine, Qt::SquareCap, Qt::RoundJoin),
+                                        QPen( view->dc()["bordClr"].value<QColor>(), view->dc()["bordWdth"].toInt(), Qt::NoPen, Qt::FlatCap, Qt::RoundJoin),
+                                        QPen( view->dc()["lineClr"].value<QColor>(), view->dc()["lineWdth"].toInt(), style, Qt::FlatCap, Qt::RoundJoin),
 					view->dc()["lineWdth"].toInt(), view->dc()["bordWdth"].toInt(), 2, angle_temp) );
+                                shapeItems[shapeItems.size()-1].brush.setColor( view->dc()["lineClr"].value<QColor>() );
                             }
                             StartLine = unScaleRotate( StartLine, view, flag_scaleRotate );
                             EndLine = unScaleRotate( EndLine, view, flag_scaleRotate );
@@ -1972,6 +2055,16 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
         }
         else
         {
+            StartMotionPos = (*pnts)[itemInMotion->n1];
+            EndMotionPos = (*pnts)[itemInMotion->n2];
+            /*line2 = QLineF( StartMotionPos, QPointF( StartMotionPos.x() + 10, StartMotionPos.y() ) );
+            line1 = QLineF( StartMotionPos, EndMotionPos );
+            if ( StartMotionPos.y() <= EndMotionPos.y() ) ang = 360 - angle( line1, line2 );
+            else ang = angle( line1, line2 );
+            EndMotionPos = unRotate( EndMotionPos, ang, StartMotionPos.x(), StartMotionPos.y() );
+            EndMotionPos.setX( EndMotionPos.x() + 1 );
+            EndMotionPos = QPointF( StartMotionPos.x() + rotate(EndMotionPos, ang).x(), StartMotionPos.y() - rotate(EndMotionPos, ang).y() );*/
+            
             StartMotionPos = scaleRotate( (*pnts)[itemInMotion->n1], view, flag_scaleRotate );
             EndMotionPos = scaleRotate( (*pnts)[itemInMotion->n2], view, flag_scaleRotate );
             StartMotionPos += offset;
@@ -2272,6 +2365,12 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
         line1 = QLineF( StartMotionPos, EndMotionPos );
         if ( StartMotionPos.y() <= EndMotionPos.y() ) ang = 360 - angle( line1, line2 );
         else ang = angle( line1, line2 );
+        
+       
+       /* EndMotionPos = unRotate( EndMotionPos, ang, StartMotionPos.x(), StartMotionPos.y() );
+        EndMotionPos.setX( EndMotionPos.x() + 1 );
+        EndMotionPos = QPointF( StartMotionPos.x() + rotate(EndMotionPos, ang).x(), StartMotionPos.y() - rotate(EndMotionPos, ang).y() );*/
+        
         if( MotionWidth == 1 && MotionBorderWidth == 0 )
             shapeItems.append( ShapeItem( painterPath( MotionWidth+1,MotionBorderWidth, 1, ang, StartMotionPos, EndMotionPos ), painterPathSimple( 1, ang, StartMotionPos,EndMotionPos ),
                                MotionNum_1, MotionNum_2, -1, -1, -1, QPointF(0,0), MotionBrush, MotionPen, MotionPenSimple, MotionWidth, MotionBorderWidth, 1,angle_temp ) );
@@ -2281,11 +2380,11 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
         rectPath.addRect( QRectF( QPointF( StartMotionPos.x()-4, StartMotionPos.y()-4 ), QSize(8,8) ) );
 	
         rectItems.append( RectItem( rectPath, MotionNum_1, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ),
-                          QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::SquareCap, Qt::RoundJoin) ) );
+                          QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin) ) );
         rectPath = newPath;
         rectPath.addRect( QRectF( QPointF( EndMotionPos.x()-4, EndMotionPos.y()-4 ), QSize(8,8)) );
         rectItems.append( RectItem( rectPath, MotionNum_2, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ),
-                          QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::SquareCap, Qt::RoundJoin ) ) );
+                          QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin ) ) );
         rectPath = newPath;
         StartMotionPos = unScaleRotate( StartMotionPos, view, flag_scaleRotate );
         EndMotionPos = unScaleRotate( EndMotionPos, view, flag_scaleRotate );
@@ -2311,24 +2410,24 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
                                        MotionNum_1, MotionNum_2, MotionNum_3, MotionNum_4, MotionNum_5, CtrlMotionPos_4, MotionBrush,MotionPen, MotionPenSimple, MotionWidth, MotionBorderWidth, 2, angle_temp ) );
         rectPath.addRect( QRectF( QPointF( StartMotionPos.x() - 4, StartMotionPos.y() - 4 ),QSize(8,8) ) );
         rectItems.append( RectItem( rectPath, MotionNum_1, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ),
-                          QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::SquareCap, Qt::RoundJoin ) ) );
+                          QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin ) ) );
         rectPath = newPath;
         rectPath.addRect( QRectF( QPointF( EndMotionPos.x() - 4, EndMotionPos.y() - 4 ), QSize(8,8) ) );
         rectItems.append( RectItem( rectPath, MotionNum_2, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ),
-                          QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::SquareCap, Qt::RoundJoin) ) );
+                          QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin) ) );
         rectPath = newPath;
         rectPath.addRect( QRectF( CtrlMotionPos_1.toPoint(), QSize(8,8) ) );
         rectItems.append( RectItem( rectPath, MotionNum_3, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ), 
-                          QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::SquareCap, Qt::RoundJoin ) ) );
+                          QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin ) ) );
         rectPath = newPath;
         rectPath.addRect( QRectF( QPointF( CtrlMotionPos_2.x() - 4, CtrlMotionPos_2.y() - 4), QSize(8,8) ) );
         rectItems.append( RectItem( rectPath, MotionNum_4, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ), 
-                          QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::SquareCap, Qt::RoundJoin) ) );
+                          QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin) ) );
         rectPath = newPath;
         Temp = QPointF( CtrlMotionPos_3.x() - 20, CtrlMotionPos_3.y() - 4);
         rectPath.addRect( QRectF( Temp, QSize(8,8) ) );
         rectItems.append( RectItem( rectPath, MotionNum_5, QBrush( QColor( 0, 0, 0, 255) ,Qt::SolidPattern ), 
-                          QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin ) ) );
+                          QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin ) ) );
         rectPath = newPath;
         
         StartMotionPos = unScaleRotate( StartMotionPos, view, flag_scaleRotate );
@@ -2361,19 +2460,19 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
                                        MotionNum_1, MotionNum_2, MotionNum_3, MotionNum_4, -1, QPointF(0,0), MotionBrush, MotionPen, MotionPenSimple, MotionWidth, MotionBorderWidth, 3, angle_temp ) );
         rectPath.addRect( QRectF( QPointF( StartMotionPos.x() - 4, StartMotionPos.y() - 4), QSize(8,8) ) );
         rectItems.append( RectItem( rectPath, MotionNum_1, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ),
-                          QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::SquareCap, Qt::RoundJoin ) ) );
+                          QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin ) ) );
         rectPath = newPath;
         rectPath.addRect( QRectF( QPointF( EndMotionPos.x() - 4, EndMotionPos.y() - 4 ), QSize(8,8) ) );
         rectItems.append( RectItem( rectPath, MotionNum_2, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ),
-                          QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::SquareCap, Qt::RoundJoin ) ) );
+                          QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin ) ) );
         rectPath = newPath;
         rectPath.addRect( QRectF( CtrlMotionPos_1.toPoint(), QSize(8,8) ) );
         rectItems.append( RectItem( rectPath, MotionNum_3, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ),
-                          QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::SquareCap, Qt::RoundJoin ) ) );
+                          QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin ) ) );
         rectPath = newPath;
         rectPath.addRect( QRectF( CtrlMotionPos_2.toPoint(), QSize(8,8) ) );
         rectItems.append( RectItem( rectPath, MotionNum_4, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ),
-                          QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::SquareCap, Qt::RoundJoin ) ) );
+                          QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin ) ) );
         rectPath = newPath;
         StartMotionPos = unScaleRotate( StartMotionPos, view, flag_scaleRotate );
         EndMotionPos = unScaleRotate( EndMotionPos, view, flag_scaleRotate );

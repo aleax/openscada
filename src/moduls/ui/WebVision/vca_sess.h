@@ -92,19 +92,21 @@ class ShapeItem
         ShapeItem( )	{ }
         ShapeItem(const int num_1,const int num_2, const int num_3, const int num_4,const int num_5,
 		  const Point &ctrlpos_4, const double iang, const int color, const int bcolor, const int iwidth,
-                  const int bwidth, const int itype ) : 
+                  const int bwidth, const int itype, const int istyle, const bool iflag_brd ) : 
             ctrlPos4(ctrlpos_4), ang(iang), n1(num_1), n2(num_2), n3(num_3), n4(num_4), n5(num_5), lineColor(color),borderColor(bcolor),
-                     width(iwidth), border_width(bwidth), type(itype)
+                     width(iwidth), border_width(bwidth), type(itype), style(istyle), flag_brd(iflag_brd)
                      { };								
 
                      Point		ctrlPos4;
                      double ang;
-                     int 		n1, n2, n3, n4, n5,
+                     int 		n1, n2, n3, n4, n5, 
+                     style,
                      width,
                      border_width,
                      lineColor,
                      borderColor,
                      type;
+                     bool flag_brd;
 }; 	        		
 
 
@@ -142,7 +144,10 @@ class VCAElFigure : public VCAObj
         double bezierDeltaT( Point p1, Point p2, Point p3, Point p4 );
         double ABS(double var);
         bool isPaintable( ShapeItem item, double xScale, double yScale );
-        void paintFigure( gdImagePtr im, ShapeItem item, double xScale, double yScale, bool flag_allocate );
+        void paintFigure( gdImagePtr im, ShapeItem item, double xScale, double yScale, bool flag_allocate, bool flag_style, bool flag_clr_ln );
+        void paintFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3, Point el_p4, Point el_p5, Point el_p6, int  clr_el, int clr_el_line, double el_width, double el_border_width, int type );
+        void dashDot( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3, Point el_p4, Point el_p5, Point el_p6, int  clr_el, double el_width, int type, int style  );
+        void dashDotFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3, Point el_p4, Point el_p5, Point el_p6, int  clr_el, int clr_el_line, double el_width, double el_border_width, int type, double wdt, double wdt_1  );
         void paintFill( gdImagePtr im, Point pnt, InundationItem in_item, int color );
         Point unscaleUnrotate( Point point, double xScale, double yScale, bool flag_scale );
         Point scaleRotate( Point point, double xScale, double yScale, bool flag_scale );
@@ -156,7 +161,7 @@ class VCAElFigure : public VCAObj
                         bordClr,
                         lineWdth,
                         fillClr;
-        string          elLst;	
+        string          elLst, lineStyle;	
         double          orient;	
         bool 		active,//Active diagram	
                         rel_list;

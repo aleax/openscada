@@ -1,3 +1,10 @@
+2008-05-20 Maxim
+ - /UI/Vision: attrSet function is modified for faster painting of the primitive ElFigure.
+ - /UI/Vision: dashed and dotted drawing of primitives ElFigure support is added.
+ - !!!/UI/WebVision: painting of the thick primitives ElFigure is modified for synchronization with QT.
+ - /UI/WebVision: dashed and dotted drawing of primitives ElFigure support is added.
+ 
+
 2008-05-17 Roman
 - FIX:/DAQ/BlockCalc: Broken link to block's function process is fixed.
 - FIX:/UI/QTCfg: Deadlock on QT 4.4 is fixed.

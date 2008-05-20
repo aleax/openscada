@@ -141,6 +141,7 @@ void OrigElFigure::postEnable( int flag )
 	attrAdd( new TFld("lineWdth",_("Line:width"),TFld::Integer,TFld::NoFlag,"2","1","0;99","","20") );
 	attrAdd( new TFld("lineClr",_("Line:color"),TFld::String,Attr::Color,"20","#000000","","","21") );
 	attrAdd( new TFld("lineDecor",_("Line:decorate"),TFld::Integer,TFld::Selected,"1","0","0;1",_("No decor;Pipe"),"22") );
+        attrAdd( new TFld("lineStyle",_("Line:style"),TFld::String,TFld::Selected,"10","solid","solid;dashed;dotted",_("Solid;Dashed;Dotted"),"29") );
 	attrAdd( new TFld("bordWdth",_("Border:width"),TFld::Integer,TFld::NoFlag,"2","0","0;99","","23") );
 	attrAdd( new TFld("bordClr",_("Border:color"),TFld::String,Attr::Color,"20","#000000","","","24") );
 	attrAdd( new TFld("fillColor",_("Fill:color"),TFld::String,Attr::Color,"20","","","","25") );
