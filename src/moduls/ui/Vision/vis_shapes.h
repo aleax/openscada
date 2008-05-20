@@ -24,7 +24,7 @@
 #define VIS_SHAPES_H
 
 #include <string>
-#include <deque> 
+#include <deque>
 
 #include <QObject>
 #include <QMap>
@@ -32,7 +32,7 @@
 #include <QMenu>
 
 using std::string;
-using std::deque; 
+using std::deque;
 
 class QEvent;
 class QAction;
@@ -53,26 +53,26 @@ class WdgShape : public QObject
     public:
 	//Methods
 	WdgShape( const string &iid );
-	
+
 	string id( )									{ return m_id; }
-    
-        virtual bool isEditable( ) 							{ return false; }
-	
+
+	virtual bool isEditable( )							{ return false; }
+
 	virtual void init( WdgView *view )						{ }
 	virtual void destroy( WdgView *view )						{ }
-	
+
 	virtual void editEnter( WdgView *view )						{ }
 	virtual void editExit( WdgView *view )						{ }
 	virtual void wdgPopup( WdgView *view, QMenu &menu )				{ }
-	
+
 	virtual bool attrSet( WdgView *view, int uiPrmPos, const string &val )		{ return false; }
-	
+
 	virtual bool event( WdgView *view, QEvent *event );
 	virtual bool eventFilter( WdgView *view, QObject *object, QEvent *event )	{ }
 
     protected:
 	//Methods
-	void borderDraw( QPainter &pnt, QRect dA, QPen bpen, int bordStyle );    
+	void borderDraw( QPainter &pnt, QRect dA, QPen bpen, int bordStyle );
 
     private:
 	//Attributes
@@ -90,24 +90,24 @@ class ShapeFormEl : public WdgShape
 
     public:
 	ShapeFormEl( );
-	
+
 	void init( WdgView *view );
-	void destroy( WdgView *view );	
+	void destroy( WdgView *view );
 	bool attrSet( WdgView *view, int uiPrmPos, const string &val);
-	bool event( WdgView *view, QEvent *event );	
+	bool event( WdgView *view, QEvent *event );
 	bool eventFilter( WdgView *view, QObject *object, QEvent *event );
-    
+
     public slots:
 	//-- Edit line events --
 	void lineAccept( );
-	//-- Edit text events --	
+	//-- Edit text events --
 	void textAccept( );
 	//-- Check box events --
 	void checkChange(int);
 	//-- Combo box and list events --
 	void comboChange(const QString&);
 	//-- List events --
-	void listChange(int);	
+	void listChange(int);
 	//-- Button's events --
 	void buttonPressed( );
 	void buttonReleased( );
@@ -117,7 +117,7 @@ class ShapeFormEl : public WdgShape
 
     private:
 	//- Private methods -
-	//Recursively widgets process for disable focusable and events filter set    
+	//Recursively widgets process for disable focusable and events filter set
 	void eventFilterSet( WdgView *view, QWidget *wdg, bool en );
 	void setFocus(WdgView *view, QWidget *wdg, bool en = false, bool devel = false );
 };
@@ -136,26 +136,26 @@ class ShapeText : public WdgShape
 	bool event( WdgView *view, QEvent *event );
 
     private:
- 	//Data
+	//Data
 	//- Argument object's class -
 	class ArgObj
 	{
 	    public:
 		//Methods
 		ArgObj( )				{ };
-		
+
 		string &cfg( )				{ return m_cfg; }
 		QVariant val( )				{ return m_val; }
 
 		void setCfg( const string &vl )		{ m_cfg = vl; }
 		void setVal( const QVariant &vl )	{ m_val = vl; }
 		
-	    private:		
+	    private:
 		//Attributes
 		QVariant	m_val;
 		string		m_cfg;
-	};        
-}; 
+	};
+};
 
 //************************************************
 //* Media view shape widget                      *
@@ -165,28 +165,28 @@ class ShapeMedia : public WdgShape
     public:
 	//Methods
 	ShapeMedia( );
-	
+
 	void init( WdgView *view );
-	void destroy( WdgView *view );	
+	void destroy( WdgView *view );
 	bool attrSet( WdgView *view, int uiPrmPos, const string &val);
 	bool event( WdgView *view, QEvent *event );
 
     private:
 	//Data
-        //- Map areas structure -
+	//- Map areas structure -
 	class MapArea
 	{
 	    public:
 		//Methods
 		MapArea( ) : shp(-1)	{ }
-		
+
 		bool containsPoint( const QPoint & point );
-		
+
 		//Attributes
 		int 	shp;		//Area shape
 		string	title;		//Area title
 		QVector<QPoint>	pnts;	//Area points
-	};  
+	};
 };
 
 //************************************************
@@ -199,12 +199,12 @@ class ShapeDiagram : public WdgShape
     public:
 	//Methods
 	ShapeDiagram( );
-	
+
 	void init( WdgView *view );
 	void destroy( WdgView *view );
 	bool attrSet( WdgView *view, int uiPrmPos, const string &val);
 	bool event( WdgView *view, QEvent *event );
-	
+
     private slots:
 	void tracing( );	//Trends tracing
 
@@ -215,16 +215,16 @@ class ShapeDiagram : public WdgShape
 	{
 	    public:
 		//Data
-		class SHg  
-		{ 
+		class SHg
+		{
 		    public:
 			SHg( long long itm, double ival ) : tm(itm), val(ival) { }
-			long long tm; 
+			long long tm;
 			double val;
 		};
 		//Methods
 		TrendObj( WdgView *view );
-		
+
 		string addr( )		{ return m_addr; }
 		double bordL( )		{ return m_bord_low; }
 		double bordU( )		{ return m_bord_up; }
@@ -243,15 +243,15 @@ class ShapeDiagram : public WdgShape
 		void setCurVal( double vl )	{ m_curvl = vl; }
 
 		void loadData( bool full = false );
-		
-	    private:		
+
+	    private:
 		//Attributes
 		string 		m_addr;		//A parameter or an archive item address
 		double m_bord_low, m_bord_up;	//Borders
 		double		m_curvl;	//Curent value
 		string 		m_color;	//Values line color
                 //- Archive -		
-        	int		arh_per;	//Archive period
+		int		arh_per;	//Archive period
 		long long       arh_beg;        //Archive begin time
 		long long       arh_end;        //Archive end time
 		//- Values -
@@ -260,18 +260,18 @@ class ShapeDiagram : public WdgShape
 		
 		WdgView 	*view;
 	};
-	
+
 	//Methods
 	void makeTrendsPicture( WdgView *view );
 	void loadTrendsData( WdgView *view, bool full = false );
 	void setCursor( WdgView *view, long long itm );
-};    
+};
 
 //************************************************
 //* Protocol view shape widget                   *
 //************************************************
 class ShapeProtocol : public WdgShape
-{    
+{
     Q_OBJECT
 
     public:
@@ -287,11 +287,11 @@ class ShapeProtocol : public WdgShape
 	void tracing( );	//Trends tracing
 
     private:
- 	//Private methods
+	//Private methods
 	void loadData( WdgView *view, bool full = false );
 	//- Recursively widgets process for disable focusable and events filter set -
-	void eventFilterSet( WdgView *view, QWidget *wdg, bool en );    
-	void setFocus(WdgView *view, QWidget *wdg, bool en = false, bool devel = false );	
+	void eventFilterSet( WdgView *view, QWidget *wdg, bool en );
+	void setFocus(WdgView *view, QWidget *wdg, bool en = false, bool devel = false );
 };
 
 //************************************************

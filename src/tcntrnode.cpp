@@ -375,7 +375,7 @@ void TCntrNode::chldAdd( char igr, TCntrNode *node, int pos )
     ResAlloc res(hd_res,false);
     if( igr >= chGrp.size() )	throw TError(nodePath().c_str(),"Group of childs %d error!",igr);
     if( nodeMode() != Enable ) 	throw TError(nodePath().c_str(),"Node is not enabled!");
-    
+
     TMap::iterator p;
     if( TSYS::strEmpty(node->nodeName()) )
     {
@@ -388,7 +388,7 @@ void TCntrNode::chldAdd( char igr, TCntrNode *node, int pos )
 	if( p->second->nodeMode() == Disable )	p->second->nodeEn( TCntrNode::NodeRestore );
 	return;
     }
-        
+
     res.request(true);
     node->prev.node = this;
     node->prev.grp = igr;
@@ -401,7 +401,7 @@ void TCntrNode::chldAdd( char igr, TCntrNode *node, int pos )
     }
     chGrp[igr].elem.insert(std::pair<string,TCntrNode*>(node->nodeName(),node));
     res.release();
-    
+
     if( node->nodeMode() == Disable )	node->nodeEn( TCntrNode::NodeConnect );
 }
 

@@ -1562,47 +1562,45 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    connect( val_w, SIGNAL( textChanged(const QString&) ), this, SLOT( editChange(const QString&) ) );
 		    connect( val_w, SIGNAL( apply() ), this, SLOT( applyButton() ) );
 		    connect( val_w, SIGNAL( cancel() ), this, SLOT( cancelButton() ) );
-		    
+
 		    //--- addon parameters ---
-		    int val_n = atoi(t_s.attr("len").c_str());
-		    if( val_n > 0 )	val_w->edit()->setMaxLength( val_n );
-		
 		    string tp = t_s.attr("tp");
+		    int val_n = atoi(t_s.attr("len").c_str());
+		    if( val_n > 0 )	val_w->edit()->setMaxLength( (tp=="hex")?val_n+2:((tp=="oct")?val_n+1:val_n) );
+
 		    if( tp == "dec" || tp == "hex" || tp == "oct" || tp == "real" )
 		    {
 			val_w->setFixedWidth( 5*15+30 );
 			if( tp == "dec" )	val_w->edit()->setValidator( new QIntValidator(val_w->edit()) );
-			else if( tp == "hex" ) 	val_w->edit()->setValidator( new QIntValidator(val_w->edit()) );
-			else if( tp == "oct" )	val_w->edit()->setValidator( new QIntValidator(val_w->edit()) );
 			else if( tp == "real" )	val_w->edit()->setValidator( new QDoubleValidator(val_w->edit()) );
 		    }
 		    else val_w->setMinimumWidth( 7*15+30 );
-    		}
-    		//-- Check use label --
-    		if(t_s.attr("dscr").size()) 
-    		{
-    		    *l_hbox = new QHBoxLayout; l_pos = 0;
+		}
+		//-- Check use label --
+		if(t_s.attr("dscr").size()) 
+		{
+		    *l_hbox = new QHBoxLayout; l_pos = 0;
 		    (*l_hbox)->setSpacing(6);
-    		    lab = new QLabel(widget);
+		    lab = new QLabel(widget);
 		    (*l_hbox)->insertWidget( l_pos++, lab );
 		    if( val_w )	(*l_hbox)->insertWidget( l_pos++, val_w );
 		    if( val_r )
-		    { 
+		    {
 			(*l_hbox)->insertWidget( l_pos++, val_r );
 			lab->setAlignment( Qt::AlignTop );
 		    }
-			
+
 		    (*l_hbox)->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ) );
 		    widget->layout()->addItem(*l_hbox);
 		}
 		else
 		{
-		    if( *l_hbox ) 
+		    if( *l_hbox )
 		    {
-			if( val_w ) 	(*l_hbox)->insertWidget( l_pos++, val_w );
-			if( val_r ) 	(*l_hbox)->insertWidget( l_pos++, val_r );
+			if( val_w )	(*l_hbox)->insertWidget( l_pos++, val_w );
+			if( val_r )	(*l_hbox)->insertWidget( l_pos++, val_r );
 		    }
-		    else 
+		    else
 		    {
 			if( val_w ) { delete val_w; val_w = NULL; }
 			if( val_r ) { delete val_r; val_r = NULL; }
@@ -1618,11 +1616,16 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		lab  = (QLabel *)TSYS::str2addr(t_s.attr("addr_lab"));
 		val_r = (QLabel *)TSYS::str2addr(t_s.attr("addr_ler"));
 		val_w = (LineEdit *)TSYS::str2addr(t_s.attr("addr_lew"));
-	    }	    
-            //-- Fill line --
- 	    if( lab ) 	lab->setText((t_s.attr("dscr")+":").c_str());
+	    }
+	    //-- Fill line --
+	    if( lab )	lab->setText((t_s.attr("dscr")+":").c_str());
 	    if( val_r )	val_r->setText((string("<b>")+TSYS::strEncode(data_req.text(),TSYS::Html)+"</b>").c_str());
-	    if( val_w && !val_w->isChanged() )	val_w->setText(data_req.text().c_str());
+	    if( val_w && !val_w->isChanged() )
+	    {
+		if( t_s.attr("tp") == "hex" )		val_w->setText(QString("0x")+QString::number(atoi(data_req.text().c_str()),16));
+		else if( t_s.attr("tp") == "oct" )	val_w->setText(QString("0")+QString::number(atoi(data_req.text().c_str()),8));
+		else val_w->setText(data_req.text().c_str());
+	    }
 	}
     }
 }
@@ -2767,20 +2770,20 @@ void ConfApp::dataTimeChange( const QDateTime & qtm )
 	tm_tm.tm_sec = qtm.time().second();
 	tm_tm.tm_isdst = -1;
 	string val = TSYS::int2str(mktime(&tm_tm));
-	
+
 	//- Check block element -
 	if(path[0] == 'b') path.erase(0,1);
 	n_el = SYS->ctrId(root,TSYS::strDecode(path,TSYS::PathEl) );    
-    	n_el->setText(val);
+	n_el->setText(val);
     }catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 }
 
 void ConfApp::editChange( const QString& txt )
 {
     QWidget *wed = (QWidget *)sender();
-    
+
     try
-    {   
+    {
 	string path = wed->objectName().toAscii().data();
 	//- Check block element -
 	if(path[0] == 'b') path.erase(0,1);
@@ -2791,25 +2794,28 @@ void ConfApp::editChange( const QString& txt )
 void ConfApp::applyButton( )
 {
     QWidget *bwidg = (QWidget *)sender();
-    
+
     string path = bwidg->objectName().toAscii().data();
 
     try
-    {   
-	string sval = SYS->ctrId(root,TSYS::strDecode(path,TSYS::PathEl))->text();
-	
-	mess_info(mod->nodePath().c_str(),_("%s| Change <%s> to: <%s>!"), 
+    {
+	XMLNode *el = SYS->ctrId(root,TSYS::strDecode(path,TSYS::PathEl));
+	string sval = el->text();
+	if( el->attr("tp") == "hex" )		sval = TSYS::int2str(QString(sval.c_str()).toUInt(0,16));
+	else if( el->attr("tp") == "oct" )	sval = TSYS::int2str(QString(sval.c_str()).toUInt(0,8));
+
+	mess_info(mod->nodePath().c_str(),_("%s| Change <%s> to: <%s>!"),
 		w_user->user().toAscii().data(), (sel_path+"/"+path).c_str(), sval.c_str() );
-	
+
 	XMLNode n_el("set");
 	n_el.setAttr("path",sel_path+"/"+path)->setText(sval);
-	if( cntrIfCmd(n_el) ) 
-	{ 
+	if( cntrIfCmd(n_el) )
+	{
 	    mod->postMess(n_el.attr("mcat"),n_el.text(),TUIMod::Error,this);
-	    return; 
+	    return;
 	}
     }catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
-    
+
     //- Redraw -
     autoUpdTimer->setSingleShot(true);
     autoUpdTimer->start(CH_REFR_TM);

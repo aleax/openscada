@@ -695,13 +695,13 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    w->dc()["backColor"] = QColor(val.c_str());
 	    QPalette p(w->palette());
 	    p.setColor(QPalette::Background,w->dc()["backColor"].value<QColor>());
-	    w->setPalette(p);	    
-	    up = true;	    
+	    w->setPalette(p);
+	    up = true;
 	    break;
 	}
 	case 21:	//backImg
 	{
-	    QImage img;	    
+	    QImage img;
             string backimg = w->resGet(val);
 	    if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
 		w->dc()["backImg"] = QBrush(img);
@@ -847,9 +847,9 @@ bool ShapeText::event( WdgView *w, QEvent *event )
     switch(event->type())
     {
         case QEvent::Paint:
-        {    	    
+        {
 	    QPainter pnt( w );
-	    
+
 	    //- Prepare draw area -
 	    int margin = w->dc()["geomMargin"].toInt();
 	    QRect dA(w->rect().x(),w->rect().y(),
@@ -858,12 +858,15 @@ bool ShapeText::event( WdgView *w, QEvent *event )
 	    pnt.setWindow(dA);
 	    pnt.setViewport(w->rect().adjusted((int)TSYS::realRound(w->xScale(true)*margin,2,true),(int)TSYS::realRound(w->yScale(true)*margin,2,true),
 		-(int)TSYS::realRound(w->xScale(true)*margin,2,true),-(int)TSYS::realRound(w->yScale(true)*margin,2,true)));
-	    
-	    int scale = (pnt.window()!=pnt.viewport()) ? 1 : 0;
+
+	    int scale = 0;
+#if QT_VERSION < 0x040400
+	    if( pnt.window()!=pnt.viewport() )	scale = 1;
+#endif
 	    pnt.translate( dA.width()/2+scale,dA.height()/2+scale );
 	    int angle = w->dc()["orient"].toInt();
 	    pnt.rotate(angle);
-	    
+
 	    //- Calc whidth and hight draw rect at rotate -
 	    double rad_angl  = fabs(3.14159*(double)angle/180.);
 	    double rect_rate = 1./(fabs(cos(rad_angl))+fabs(sin(rad_angl)));
@@ -871,15 +874,15 @@ bool ShapeText::event( WdgView *w, QEvent *event )
 			    sin(rad_angl)*(dA.size().height()-dA.size().width()));
 	    int heigt = (int)(rect_rate*dA.size().height()+
 			    sin(rad_angl)*(dA.size().width()-dA.size().height()));
-	    
+
 	    QRect dR = QRect(QPoint(-wdth/2,-heigt/2),QSize(wdth,heigt));
-	    
+
 	    //- Draw decoration -
 	    QColor bkcol = w->dc()["backColor"].value<QColor>();
 	    if(  bkcol.isValid() ) pnt.fillRect(dR,bkcol);
 	    QBrush bkbrsh = w->dc()["backImg"].value<QBrush>();
 	    if( bkbrsh.style() != Qt::NoBrush ) pnt.fillRect(dR,bkbrsh);
-	    
+
 	    //- Draw border -
 	    QPen *bpen = (QPen*)w->dc()["border"].value<void*>();
 	    if( bpen->width() )
@@ -1756,12 +1759,12 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		    pnt.drawLine(prevPos,c_vpos_prv,averPos,c_vpos);
 	        }
 	    }
-    	    prevVl  = averVl;
-    	    prevPos = averPos;
-    	    averVl  = curVl;
-    	    averPos = curPos;
-    	    averTm  = averLstTm = curTm;
-    	    if( !curPos ) break;
+	    prevVl  = averVl;
+	    prevPos = averPos;
+	    averVl  = curVl;
+	    averPos = curPos;
+	    averTm  = averLstTm = curTm;
+	    if( !curPos ) break;
 	}
     }
 
@@ -1773,7 +1776,7 @@ void ShapeDiagram::tracing( )
 {
     WdgView *w = (WdgView *)((QTimer*)sender())->parent();
     if( !w->isEnabled() ) return;
-    
+
     long long tTime  = w->dc()["tTime"].toLongLong();
     long long trcPer = (long long)w->dc()["trcPer"].toInt()*1000000;
     if( w->dc()["tTimeCurent"].toBool() )
@@ -1781,7 +1784,7 @@ void ShapeDiagram::tracing( )
     else if( tTime )	w->dc()["tTime"] = tTime+trcPer;
     loadTrendsData(w);    
     makeTrendsPicture(w);
-    
+
     //- Trace cursors value -
     tTime  = w->dc()["tTime"].toLongLong();
     if( w->dc().value("active",1).toInt() )
@@ -1797,14 +1800,14 @@ void ShapeDiagram::tracing( )
 bool ShapeDiagram::event( WdgView *w, QEvent *event )
 {
     if( !w->dc().value("en",1).toInt() ) return false;
-    
+
     //- Get generic data -
     long long tTime     = w->dc()["tTime"].toLongLong();
     long long tPict	= w->dc()["tPict"].toLongLong();
     long long tTimeGrnd = tPict - (long long)(w->dc()["tSize"].toDouble()*1000000.);
     long long curTime	= vmax(vmin(w->dc()["curTime"].toLongLong(),tPict),tTimeGrnd);
     QRect *tAr = (QRect*)w->dc()["pictRect"].value<void*>();    
-    
+
     //- Process event -
     switch( event->type() )
     {
@@ -1824,7 +1827,7 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 	    if( bkcol.isValid() ) pnt.fillRect(dA,bkcol);
 	    QBrush bkbrsh = w->dc()["backImg"].value<QBrush>();
 	    if( bkbrsh.style() != Qt::NoBrush ) pnt.fillRect(dA,bkbrsh);
-    
+
 	    //- Draw border -
 	    borderDraw( pnt, dA, *(QPen*)w->dc()["border"].value<void*>(), w->dc()["bordStyle"].toInt() );
 
@@ -1844,12 +1847,12 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 		pnt.setPen(curpen);
 		pnt.drawLine(curPos,tAr->y(),curPos,tAr->y()+tAr->height());
 	    }
-	    
-    	    return true;
+
+	    return true;
 	}
 	case QEvent::KeyPress:
 	{
-    	    QKeyEvent *key = static_cast<QKeyEvent*>(event);
+	    QKeyEvent *key = static_cast<QKeyEvent*>(event);
 
 	    switch(key->key())
 	    {
@@ -1876,7 +1879,7 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 	    break;
 	}
     }
-    
+
     return false;
 }
 
@@ -1894,7 +1897,7 @@ void ShapeDiagram::setCursor( WdgView *w, long long itm )
     int parNum = w->dc()["parNum"].toInt();
     for( int i_p = 0; i_p < parNum; i_p++ )
     {
-        TrendObj *sTr = (TrendObj*)w->dc()[QString("trend_%1").arg(i_p)].value<void*>();
+	TrendObj *sTr = (TrendObj*)w->dc()[QString("trend_%1").arg(i_p)].value<void*>();
 	int vpos = sTr->val(curTime);
 	if( vpos >= sTr->val().size() )	continue;
 	if( vpos && sTr->val()[vpos].tm > curTime )	vpos--;
@@ -1928,7 +1931,7 @@ int ShapeDiagram::TrendObj::val( long long tm )
 {
     int i_p = 0;
     for( int d_win = vals.size()/2; d_win > 10; d_win/=2 )
-    	if( tm < vals[i_p+d_win].tm )	i_p+=d_win;
+	if( tm < vals[i_p+d_win].tm )	i_p+=d_win;
     for( int i_p = 0; i_p < vals.size(); i_p++ )
 	if( vals[i_p].tm >= tm ) return i_p;
     return vals.size();
@@ -1951,7 +1954,7 @@ void ShapeDiagram::TrendObj::loadData( bool full )
 
     //- Clear trend for empty address and the full reload data -
     if( full || addr().empty() )
-    { 
+    {
 	arh_per = arh_beg = arh_end = 0;
 	val_tp = 0;
 	vals.clear();
@@ -1979,11 +1982,11 @@ void ShapeDiagram::TrendObj::loadData( bool full )
     {
 	XMLNode req("get");
 	req.setAttr("path",addr()+"/%2fserv%2f0")->
-    	    setAttr("tm",TSYS::ll2str(tTime))->
-      	    setAttr("tm_grnd","0");
-    	if( view->cntrIfCmd(req,true) )	return;
+	    setAttr("tm",TSYS::ll2str(tTime))->
+	    setAttr("tm_grnd","0");
+	if( view->cntrIfCmd(req,true) )	return;
 	
-    	long long lst_tm = atoll(req.attr("tm").c_str());
+	long long lst_tm = atoll(req.attr("tm").c_str());
 	if( lst_tm > valEnd() )
 	{
 	    double curVal = atof(req.text().c_str());
@@ -2018,11 +2021,12 @@ void ShapeDiagram::TrendObj::loadData( bool full )
     vector<SHg>	buf;
     deque<SHg>::iterator bufEndOff = vals.end();
     XMLNode req("get");
+    bool toEnd = (tTimeGrnd >= valEnd());
     m1: req.clear()->
 	    setAttr("arch",arch)->
 	    setAttr("path",addr()+"/%2fserv%2f0")->
-    	    setAttr("tm",TSYS::ll2str(tTime))->
-      	    setAttr("tm_grnd",TSYS::ll2str(tTimeGrnd))->
+	    setAttr("tm",TSYS::ll2str(tTime))->
+	    setAttr("tm_grnd",TSYS::ll2str(tTimeGrnd))->
 	    setAttr("per",TSYS::ll2str(wantPer))->
 	    setAttr("mode","1")->
 	    setAttr("real_prec","6")->
@@ -2041,20 +2045,20 @@ void ShapeDiagram::TrendObj::loadData( bool full )
 	sscanf(svl.c_str(),"%d %lf",&curPos,&curVal);
 	if( (val_tp == 0 && curVal == EVAL_BOOL) || (val_tp == 1 && curVal == EVAL_INT) ) curVal = EVAL_REAL;
 	for( ; prevPos < curPos-1; prevPos++ )	buf.push_back(SHg(bbeg+(prevPos+1)*bper,prevVal));
-    	buf.push_back(SHg(bbeg+curPos*bper,curVal));
-    	prevPos = curPos; prevVal = curVal;
+	buf.push_back(SHg(bbeg+curPos*bper,curVal));
+	prevPos = curPos; prevVal = curVal;
     }
     for( ; prevPos < (bend-bbeg)/bper; prevPos++ ) buf.push_back(SHg(bbeg+(prevPos+1)*bper,prevVal));
     //- Append buffer to values deque -
-    if( bbeg >= valEnd() )
+    if( toEnd )
     {
 	vals.insert(bufEndOff,buf.begin(),buf.end());
 	while( vals.size() > 2000 )	vals.pop_front();
 	bufEndOff = vals.end()-buf.size();
     }
-    else if( bend <= valBeg() )
+    else
     {
- 	vals.insert(vals.begin(),buf.begin(),buf.end());
+	vals.insert(vals.begin(),buf.begin(),buf.end());
         while( vals.size() > 2000 )	vals.pop_back();
     }
     //- Check for archive jump -
@@ -2068,14 +2072,14 @@ ShapeProtocol::ShapeProtocol( ) : WdgShape("Protocol")
 {
 
 }
- 
+
 void ShapeProtocol::init( WdgView *w )
 {
     w->dc()["en"] = true;
-    w->dc()["active"] = true; 
+    w->dc()["active"] = true;
     w->dc()["time"] = 0;
     w->dc()["tSize"] = 60;
-    w->dc()["tTimeCurent"] = false; 
+    w->dc()["tTimeCurent"] = false;
     w->dc()["arhBeg"] = 0;
     w->dc()["arhEnd"] = 0;
     // - Init main widget -
@@ -2086,7 +2090,7 @@ void ShapeProtocol::init( WdgView *w )
     DevelWdgView *devW = qobject_cast<DevelWdgView*>(w);
     if( devW ) eventFilterSet(w,tw,true);
     setFocus(w,tw,w->dc()["active"].toInt(),devW);
-    lay->addWidget(tw);    
+    lay->addWidget(tw);
     w->dc()["addrWdg"].setValue((void*)tw);
     //- Init tracing timer -
     QTimer *tmr = new QTimer(w);
@@ -2095,7 +2099,7 @@ void ShapeProtocol::init( WdgView *w )
     //- Init index map -
     QMap<QString,int> *imp = new QMap<QString,int>();
     w->dc()["indMap"].setValue( (void*)imp );
-} 
+}
 
 void ShapeProtocol::destroy( WdgView *w )
 {
@@ -2144,7 +2148,7 @@ bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	}
 	case 24:	//time
 	{
-            unsigned int tm = strtoul(val.c_str(),0,10);
+	    unsigned int tm = strtoul(val.c_str(),0,10);
 	    //if( w->dc()["time"].toUInt() == tm ) break;
 	    w->dc()["timeCurent"] = false;
 	    if( tm == 0 )
@@ -2204,15 +2208,15 @@ bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val)
 
     if( reld_dt && !w->allAttrLoad( ) ) 
 	loadData(w,reld_dt==2);
-    
+
     return true;
-} 
+}
 
 void ShapeProtocol::loadData( WdgView *w, bool full )
-{     
+{
     QTableWidget *tw = (QTableWidget *)w->dc()["addrWdg"].value<void*>();
     QMap<QString,int> *imp = (QMap<QString,int> *)w->dc()["indMap"].value<void*>();
-    
+
     //- Check for border of present data -
     unsigned int tTime     = w->dc()["time"].toUInt();
     unsigned int tTimeGrnd = tTime - w->dc()["tSize"].toUInt();
@@ -2245,7 +2249,7 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
     //- Get archive parameters -
     if( !arhBeg || !arhEnd || tTime > arhEnd )
     {
- 	XMLNode req("info");
+	XMLNode req("info");
 	req.setAttr("arch",arch)->setAttr("path","/Archive/%2fserv%2f0");
 	if( w->cntrIfCmd(req,true) )	arhBeg = arhEnd = 0;
 	else
@@ -2263,7 +2267,7 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
     unsigned int valBeg = (tw->rowCount() && tw->columnCount()) ? tw->item(tw->rowCount()-1,0)->data(Qt::UserRole).toUInt() : 0;    
     if( tTime <= tTimeGrnd || (tTime < valEnd && tTimeGrnd > valBeg) )
     {
-        tw->setRowCount(0);
+	tw->setRowCount(0);
 	valEnd = valBeg = 0;
 	return;
     }
@@ -2275,11 +2279,11 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
     unsigned int rtm;			//Record's data
     QDateTime    dtm;
     QString   rlev, rcat, rmess;	//Record's level category and message
-    
+
     XMLNode req("get");
     req.clear()->
 	setAttr("arch",arch)->
-    	setAttr("path","/Archive/%2fserv%2f0")->
+	setAttr("path","/Archive/%2fserv%2f0")->
 	setAttr("tm",TSYS::ll2str(tTime))->
 	setAttr("tm_grnd",TSYS::ll2str(tTimeGrnd))->
 	setAttr("cat",w->dc()["tmpl"].toString().toAscii().data())->
@@ -2287,12 +2291,12 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
     if( w->cntrIfCmd(req,true) )	return;
     //int row = toUp ? 0 : tw->rowCount();
     bool newFill = (tw->rowCount()==0);
-    
+
     //- Get collumns indexes -
     int c_tm   = imp->value("tm",-1),
 	c_lev  = imp->value("lev",-1),
 	c_cat  = imp->value("cat",-1),
-	c_mess = imp->value("mess",-1);    
+	c_mess = imp->value("mess",-1);
 
     QTableWidgetItem *tit;
     //- Process records -
@@ -2300,7 +2304,7 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	for( int i_req = 0; i_req < req.childSize(); i_req++ )
 	{
 	    XMLNode *rcd = req.childGet(i_req);
-	    
+
 	    //-- Get parameters --
 	    rtm  = strtoul(rcd->attr("time").c_str(),0,10);
 	    rlev = rcd->attr("lev").c_str();
@@ -2316,12 +2320,12 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 		if( (c_lev<0 || tw->item(i_p,c_lev)->text() == rlev) &&
 		    (c_cat<0 || tw->item(i_p,c_cat)->text() == rcat)  &&
 		    (c_mess<0 || tw->item(i_p,c_mess)->text() == rmess ) )
-		{ 
+		{
 		    is_dbl = true;
 		    break;
-		}	    
+		}
 	    }
-	    if( is_dbl ) continue;	
+	    if( is_dbl ) continue;
 	    //--- Insert new row ---
 	    tw->insertRow(0);
 	    if( c_tm >= 0 )
@@ -2335,7 +2339,7 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	    if( c_mess >= 0 )	{ tw->setItem( 0, c_mess, tit=new QTableWidgetItem(rmess) ); tit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable); }
 	    tw->item(0,0)->setData(Qt::UserRole,rtm);
 	}
-    else    
+    else
 	for( int i_req = req.childSize()-1; i_req >= 0; i_req-- )
 	{
 	    XMLNode *rcd = req.childGet(i_req);
@@ -2354,10 +2358,10 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 		if( (c_lev<0 || tw->item(i_p,c_lev)->text() == rlev) &&
 		    (c_cat<0 || tw->item(i_p,c_cat)->text() == rcat)  &&
 		    (c_mess<0 || tw->item(i_p,c_mess)->text() == rmess ) )
-		{ 
+		{
 		    is_dbl = true;
 		    break;
-		}	    	
+		}
 	    }
 	    if( is_dbl ) continue;
 	
@@ -2389,45 +2393,45 @@ void ShapeProtocol::tracing( )
 {
     WdgView *w = (WdgView *)((QTimer*)sender())->parent();
     if( !w->isEnabled() ) return;
-    
+
     unsigned int tm     = w->dc()["time"].toUInt();
     unsigned int trcPer = w->dc()["trcPer"].toUInt();
     if( w->dc()["timeCurent"].toBool() ) w->dc()["time"] = (unsigned int)time(NULL);
     else if( tm )	w->dc()["time"] = tm+trcPer;
     loadData(w);
-} 
+}
 
 bool ShapeProtocol::event( WdgView *w, QEvent *event )
 {
     return false;
 }
- 
+
 bool ShapeProtocol::eventFilter( WdgView *view, QObject *object, QEvent *event )
 {
     switch(event->type())
     {
 	case QEvent::Enter:
-	case QEvent::Leave:	    
+	case QEvent::Leave:
 	    return true;
-	case QEvent::MouseMove:	    
-	case QEvent::MouseButtonPress: 
+	case QEvent::MouseMove:
+	case QEvent::MouseButtonPress:
 	case QEvent::MouseButtonRelease:
 	    QApplication::sendEvent(view,event);
 	return true;
     }
-    
+
     return false;
-} 
- 
+}
+
 void ShapeProtocol::eventFilterSet( WdgView *view, QWidget *wdg, bool en )
 {
-    if( en ) 	wdg->installEventFilter(view);
-    else 	wdg->removeEventFilter(view);
+    if( en )	wdg->installEventFilter(view);
+    else	wdg->removeEventFilter(view);
     //- Process childs -
     for( int i_c = 0; i_c < wdg->children().size(); i_c++ )
 	if( qobject_cast<QWidget*>(wdg->children().at(i_c)) )
 	    eventFilterSet(view,(QWidget*)wdg->children().at(i_c),en);
-} 
+}
 
 void ShapeProtocol::setFocus(WdgView *view, QWidget *wdg, bool en, bool devel )
 {
@@ -2438,7 +2442,7 @@ void ShapeProtocol::setFocus(WdgView *view, QWidget *wdg, bool en, bool devel )
 	if( isFocus )	wdg->setFocusPolicy((Qt::FocusPolicy)isFocus);
     }
     else
-    {	
+    {
 	if( wdg->focusPolicy() != Qt::NoFocus )
 	{
 	    wdg->setWindowIconText(QString::number((int)wdg->focusPolicy()));	    
@@ -2446,7 +2450,7 @@ void ShapeProtocol::setFocus(WdgView *view, QWidget *wdg, bool en, bool devel )
 	}
 	if( devel ) wdg->setMouseTracking(true);
     }
-    
+
     //- Process childs -
     for( int i_c = 0; i_c < wdg->children().size(); i_c++ )
 	if( qobject_cast<QWidget*>(wdg->children().at(i_c)) )
@@ -2511,9 +2515,9 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    //if( (bool)atoi(val.c_str()) == w->hasFocus() )	up = false;
 	    break;
         case 5:         //en
-    	    if( !qobject_cast<RunWdgView*>(w) )	{ up = false; break; }
+	    if( !qobject_cast<RunWdgView*>(w) )	{ up = false; break; }
 	    w->dc()["en"] = (bool)atoi(val.c_str());
-    	    w->setVisible(atoi(val.c_str()));
+	    w->setVisible(atoi(val.c_str()));
 	    break;
 	case 6:		//active
 	    if( !qobject_cast<RunWdgView*>(w) ) break;
@@ -2618,27 +2622,27 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    break;
 	default: up = false;
     }
-    
+
     if( up && !w->allAttrLoad( ) && uiPrmPos != -1 )	w->update();
-    
+
     return up;
 }
 
 bool ShapeBox::event( WdgView *w, QEvent *event )
 {
     if( !w->dc().value("en",1).toInt() ) return false;
-    
+
     switch(event->type())
     {
-        case QEvent::Paint:
-        {
+	case QEvent::Paint:
+	{
 	    if( w->dc()["inclWidget"].value<void*>() ) return false;
-    	    QPainter pnt( w );
+	    QPainter pnt( w );
 
 	    //- Apply margin -
 	    int margin = w->dc()["geomMargin"].toInt();
 	    QRect dA = w->rect().adjusted(0,0,-2*margin,-2*margin);	    
-            pnt.setWindow(dA);
+	    pnt.setWindow(dA);
 	    pnt.setViewport(w->rect().adjusted(margin,margin,-margin,-margin));
 
 	    //- Draw background -
@@ -2646,15 +2650,15 @@ bool ShapeBox::event( WdgView *w, QEvent *event )
 	    if( bkcol.isValid() ) pnt.fillRect(dA,bkcol);
 	    QBrush bkbrsh = w->dc()["backImg"].value<QBrush>();
 	    if( bkbrsh.style() != Qt::NoBrush ) pnt.fillRect(dA,bkbrsh);
-	    
+
 	    //- Draw border -
 	    borderDraw( pnt, dA, *(QPen*)w->dc()["border"].value<void*>(), w->dc()["bordStyle"].toInt() );
-	    
-            //- Draw focused border -
+
+	    //- Draw focused border -
 	    if( w->hasFocus() )	qDrawShadeRect(&pnt,dA,w->palette(),false,1);
 
-            return true;
-        }
+	    return true;
+	}
     }
     return false;
 }

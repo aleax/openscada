@@ -3735,7 +3735,7 @@ void VCADiagram::TrendObj::loadData( const string &user, bool full )
     {
         XMLNode req("get");
         req.setAttr("path",addr()+"/%2fserv%2f0")->
-    	    setAttr("tm",TSYS::ll2str(tTime))->
+	    setAttr("tm",TSYS::ll2str(tTime))->
             setAttr("tm_grnd","0");
         if( mod->cntrIfCmd(req,user,false) ) return;
         
@@ -3773,6 +3773,7 @@ void VCADiagram::TrendObj::loadData( const string &user, bool full )
     string      svl;
     vector<SHg> buf;
     deque<SHg>::iterator bufEndOff = vals.end();
+    bool toEnd = (tTimeGrnd >= valEnd());
     XMLNode req("get");
     m1: req.clear()->
 	    setAttr("arch",arch)->
@@ -3802,13 +3803,13 @@ void VCADiagram::TrendObj::loadData( const string &user, bool full )
     }
     for( ; prevPos < (bend-bbeg)/bper; prevPos++ ) buf.push_back(SHg(bbeg+(prevPos+1)*bper,prevVal));
     //- Append buffer to values deque -
-    if( bbeg >= valEnd() )
+    if( toEnd )
     {
         vals.insert(bufEndOff,buf.begin(),buf.end());
 	while( vals.size() > 2000 )     vals.pop_front();
         bufEndOff = vals.end()-buf.size();
     }
-    else if( bend <= valBeg() )
+    else
     {
         vals.insert(vals.begin(),buf.begin(),buf.end());
         while( vals.size() > 2000 )     vals.pop_back();

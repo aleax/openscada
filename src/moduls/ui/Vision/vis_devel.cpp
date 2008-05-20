@@ -59,7 +59,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) :
     //- Init workspace -
     work_space = new QWorkspace(this);
     work_space->setScrollBarsEnabled(true);
-    work_space->setBackground(QBrush(QColor(156,179,196)));
+    work_space->setBackground(QBrush(QColor(156,179,196),Qt::Dense2Pattern));
     setCentralWidget(work_space);
 
     //- Create actions -
@@ -667,7 +667,7 @@ void VisDevelop::quitSt()
 void VisDevelop::about()
 {
     QMessageBox::about(this,windowTitle(),
-    	    QString(_("%1 v%2.\nAutor: %3\nLicense: %4\n")).
+	    QString(_("%1 v%2.\nAutor: %3\nLicense: %4\n")).
 	        arg(mod->modInfo("Name").c_str()).
 	        arg(mod->modInfo("Version").c_str()).
 	        arg(mod->modInfo("Author").c_str()).
@@ -1246,31 +1246,36 @@ void VisDevelop::visualItEdit( )
 	if( i_w < ws_wdg.size() ) continue;
 
 	QScrollArea *scrl = new QScrollArea;
-	//scrl->setAlignment(Qt::AlignCenter);
-	scrl->setBackgroundRole(QPalette::Dark);
+#if QT_VERSION >= 0x040400
+	scrl->setAlignment(Qt::AlignCenter);
+#endif
+	QPalette plt = scrl->palette();
+	plt.setBrush(QPalette::Window,QBrush("grey",Qt::Dense2Pattern));
+	scrl->setPalette(plt);
+	//scrl->setBackgroundRole(QPalette::Dark);
 	scrl->setAttribute(Qt::WA_DeleteOnClose);
 	scrl->setWindowTitle(w_title);
 	//- Set window icon -
 	XMLNode req("get");
 	req.setAttr("path",ed_wdg+"/%2fico");
-        if( !cntrIfCmd(req) )
-        {
-    	    QImage ico_t;	
-            string simg = TSYS::strDecode(req.text(),TSYS::base64);
-    	    if( ico_t.loadFromData((const uchar*)simg.c_str(),simg.size()) )
-        	scrl->setWindowIcon(QPixmap::fromImage(ico_t));
-        }	
+	if( !cntrIfCmd(req) )
+	{
+	    QImage ico_t;
+	    string simg = TSYS::strDecode(req.text(),TSYS::base64);
+	    if( ico_t.loadFromData((const uchar*)simg.c_str(),simg.size()) )
+		scrl->setWindowIcon(QPixmap::fromImage(ico_t));
+	}
 	//- Make and place view widget -
 	DevelWdgView *vw = new DevelWdgView(ed_wdg,0,this);
 	vw->load("");
-	connect(vw, SIGNAL(selected(const string&)), this, SLOT(selectItem(const string&)));    
-    	connect(vw, SIGNAL(apply(const string&)), this, SIGNAL(modifiedItem(const string&)));		
+	connect(vw, SIGNAL(selected(const string&)), this, SLOT(selectItem(const string&)));
+	connect(vw, SIGNAL(apply(const string&)), this, SIGNAL(modifiedItem(const string&)));
 	connect(this, SIGNAL(modifiedItem(const string&)), vw, SLOT(load(const string &)));
-    
+
 	scrl->setWidget( vw );
 	scrl->resize(vmax(300,vmin(650,vw->size().width()+10)),vmax(200,vmin(550,vw->size().height()+10)));
-	work_space->addWindow(scrl);	
-	scrl->show();	
+	work_space->addWindow(scrl);
+	scrl->show();
     }
 }
 

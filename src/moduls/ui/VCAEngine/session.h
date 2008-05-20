@@ -80,34 +80,60 @@ class Session : public TCntrNode
 
 	void uiComm( const string &com, const string &prm, SessWdg *src = NULL );
 
+	//- Alarms process -
+	void alarmSet( const string &wpath, const string &alrm );	//Alarm set
+	void alarmQvit( const string &wpath, ui8 qvit_tmpl );		//Alarm qvit send
+
     protected:
 	//Methods
-        string nodeName( )	{ return m_id; }
-        void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	string nodeName( )	{ return m_id; }
+	void cntrCmdProc( XMLNode *opt );				//Control interface command process
 
 	void postEnable( int flag );
 	void preDisable( int flag );
 
     private:
+	//Data
+	class Alarm
+	{
+	    public:
+		//Methods
+		Alarm( const string &ipath, ui8 ilev, ui8 itp, const string &icat, const string &imess, const string &itpArg = "" ) :
+		    path(ipath), lev(ilev), tp(itp), cat(icat), mess(imess), tpArg(itpArg)	{ }
+		Alarm( const string &path, const string &alrm );
+		Alarm( ) : lev(0), tp(0)	{ }
+
+		//Attributes
+		ui8 	lev,	//Level
+			tp;	//Type
+		string	path,	//Widget path
+			cat,	//Categoty
+			mess,	//Message
+			tpArg;	//Type argument
+	};
+
 	//Methods
 	static void *Task( void *contr );
 
 	//Attributes
-	int     m_page;
-	string  m_id, m_prjnm, m_user;
+	int	m_page;
+	string	m_id, m_prjnm, m_user;
 	int	m_per;
-	bool    m_enable, m_start, endrun_req;	//Enabled, Started and endrun stats
+	bool	m_enable, m_start, endrun_req;	//Enabled, Started and endrun stats
 	bool	m_backgrnd;			//Backgrounded execution of a session
 	int	m_connects;			//Connections counter
 
-	pthread_t calcPthr;     		//Calc pthread
-	unsigned  m_calcClk;			//Calc clock
-	float     tm_calc;			//Scheme's calc time
-	float	  rez_calc;	
-	AutoHD<Project> m_parent;
-	Res 	  m_evRes;			//Event access resource
+	pthread_t	calcPthr;		//Calc pthread
+	unsigned	m_calcClk;		//Calc clock
+	float		tm_calc;		//Scheme's calc time
+	float		rez_calc;
+	AutoHD<Project>	m_parent;
+	Res		m_evRes;		//Event access resource
 
 	vector<string>	m_open;
+
+	Res		mAlrmRes;		//Alarms resource
+	vector<Alarm>	mAlrm;			//Alarms queue
 };
 
 //************************************************
@@ -123,7 +149,7 @@ class SessWdg : public Widget, public TValFunc
 	//- Main parameters -
 	string path( );
 	string ownerFullId( bool contr = false );
-	string type( )          { return "SessWidget"; }
+	string type( )		{ return "SessWidget"; }
 	string ico( );
 	string user( );
 	string grp( );
@@ -131,7 +157,7 @@ class SessWdg : public Widget, public TValFunc
 	string calcLang( );
 	string calcProg( );
 	int    calcPer( );
-	bool   process( )	{ return m_proc; }		//Process stat	
+	bool   process( )	{ return m_proc; }		//Process stat
 
 	void setEnable( bool val );
 	virtual void setProcess( bool val );
@@ -149,7 +175,8 @@ class SessWdg : public Widget, public TValFunc
 	string eventGet( bool clear = false );
 
 	//- Alarms process -
-	void alarmSet( bool curSet = false );
+	void alarmSet( bool isSet = false );
+	void alarmQvit( ui8 qvit_tmpl, bool isSet = false );
 
 	//- Access to mime resource -
 	string resourceGet( const string &id, string *mime = NULL );
@@ -164,7 +191,7 @@ class SessWdg : public Widget, public TValFunc
 
 	bool cntrCmdServ( XMLNode *opt );
 	bool cntrCmdGeneric( XMLNode *opt );
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	void cntrCmdProc( XMLNode *opt );			//Control interface command process
 	bool attrChange( Attr &cfg, void *prev );
 	unsigned int modifVal( Attr &cfg );
 
@@ -178,7 +205,7 @@ class SessWdg : public Widget, public TValFunc
 			m_attrUILs, 	//UI attributes list
 			m_attrLnkLs;	//Linked attributes list
 
-	Session 	*m_sess;
+	Session		*m_sess;
 };
 
 //************************************************
@@ -202,8 +229,8 @@ class SessPage : public SessWdg
 	AutoHD<Page> parent( );
 
 	//- Pages -
-	void pageList( vector<string> &ls ) 	{ chldList(m_page,ls); }
-	bool pagePresent( const string &id )	{ return chldPresent(m_page,id); }
+	void pageList( vector<string> &ls )			{ chldList(m_page,ls); }
+	bool pagePresent( const string &id )			{ return chldPresent(m_page,id); }
 	AutoHD<SessPage> pageAt( const string &id );
 	void pageAdd( const string &id, const string &parent = "" );
 	void pageDel( const string &id, bool full = false )	{ chldDel(m_page,id,-1,full); }
@@ -216,7 +243,7 @@ class SessPage : public SessWdg
 
     private:
 	//Attributes
-	int     m_page;		//Pages container identifier
+	int	m_page;		//Pages container identifier
 };
 
 }

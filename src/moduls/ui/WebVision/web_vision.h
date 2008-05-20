@@ -48,7 +48,7 @@ namespace WebVision
 class SAuth
 {
     public:
-	SAuth( ) :	t_auth(0), name("")	{ }
+	SAuth( ) : t_auth(0), name("")	{ }
 	SAuth( string inm, time_t it_auth ) : t_auth(it_auth), name(inm)	{ }
 
 	time_t t_auth;
@@ -61,20 +61,20 @@ class SAuth
 class SSess
 {
     public:
-        //Methods
-        SSess( const string &iurl, const string &ipage, const string &isender,
-        	vector<string> &ivars, const string &icontent );
-							
-        //Attributes
-        string url;             //request URL
-        string page;
-        string sender;          //request sender
-        string user;            //sesion user
-        string content;         //Contain
+	//Methods
+	SSess( const string &iurl, const string &ipage, const string &isender,
+		vector<string> &ivars, const string &icontent );
 
-        vector<string> vars;    //request vars
-	map< string, string >	cnt;	//Parsed contain
-	map< string, string >	prm;	//URL parameters    
+	//Attributes
+	string url;		//request URL
+	string page;
+	string sender;		//request sender
+	string user;		//sesion user
+	string content;		//Contain
+
+	vector<string> 		vars;	//request vars
+	map<string,string>	cnt;	//Parsed contain
+	map<string,string>	prm;	//URL parameters    
 	
 	vector<string> mess;	//no interrupt messages
 };
@@ -87,78 +87,78 @@ class TWEB: public TUI
     public:
 	//Data
 	enum MessLev	{ Info, Warning, Error };
-	
+
 	//Methods
 	TWEB( string name );
 	~TWEB( );
 
-        time_t authTime( )				{ return m_t_auth; }
+	time_t authTime( )				{ return m_t_auth; }
 	string CSStables( )				{ return m_CSStables; }
-	
+
 	void setAuthTime( time_t vl )			{ m_t_auth = vl; modif(); }
 	void setCSStables( const string &vl )		{ m_CSStables = vl; modif(); }
 
-        //- VCA sessions -
-        void vcaSesList( vector<string> &list )		{ chldList(id_vcases,list); }
-        bool vcaSesPresent( const string &name )	{ return chldPresent(id_vcases,name); }
-        void vcaSesAdd( const string &name );
-        void vcaSesDel( const string &name )		{ chldDel(id_vcases,name); }
+	//- VCA sessions -
+	void vcaSesList( vector<string> &list )		{ chldList(id_vcases,list); }
+	bool vcaSesPresent( const string &name )	{ return chldPresent(id_vcases,name); }
+	void vcaSesAdd( const string &name );
+	void vcaSesDel( const string &name )		{ chldDel(id_vcases,name); }
 	AutoHD<VCASess> vcaSesAt( const string &name )	{ return chldAt(id_vcases,name); }
 
-        void modStart( );
-	void modStop( );			
-    
+	void modStart( );
+	void modStop( );
+
 	//- Web process methods -
 	void HttpGet( const string &url, string &page, const string &sender, vector<string> &vars );
 	void getAbout( SSess &ses );
 	void getAuth( SSess &ses );
 	string getCookie( string name, vector<string> &vars );
-	
-	void HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &contain );	
-	    
+
+	void HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &contain );
+
 	string optDescr( );
 	string modInfo( const string &name );
 	void   modInfo( vector<string> &list );
-	
+
 	string httpHead( const string &rcode, int cln = 0, const string &cnt_tp = "text/html", const string &addattr = "" );
 	string pgHead( string head_els = "" );
 	string pgTail( );
-	
+
 	int cntrIfCmd( XMLNode &node, const string &user, bool VCA = true );
-	
+
 	int colorParse( const string &clr );
-	
+
         //Attributes
-	string		VCAjs;				//Main page JavaScript programm VCA.js	
+	string		VCAjs;				//Main page JavaScript programm VCA.js
 
     protected:
 	//Methods
 	void load_( );
 	void save_( );
-	void cntrCmdProc( XMLNode *opt );       	//Control interface command process	
-	
+	void cntrCmdProc( XMLNode *opt );		//Control interface command process
+
     private:
 	//Methods
 	static void TaskSessCheck( union sigval obj );	//Sessions check task
-	
+
 	//- Sesion manipulation function -
-        int sesOpen( string name );
-        void sesCheck( SSess &ses );
-	
+	int sesOpen( string name );
+	void sesCheck( SSess &ses );
+
 	//- Post message dialog -
 	void messPost( string &page, const string &cat, const string &mess, MessLev type = Info );
-	
-        //Attributes
-        Res             m_res;
-	map< int, SAuth >	m_auth;
-        int             m_t_auth;               	//Time of sesion life (minutes)
-	timer_t 	chkSessTm;        		//Check session's timer
-	bool		chck_st;        		//Check session's status
-	int     	id_vcases;			//VCA session's container identifier
-	string          m_CSStables;            	//CSS tables
+
+	//Attributes
+	Res		m_res;
+	map<int,SAuth>	m_auth;
+	int		m_t_auth;			//Time of sesion life (minutes)
+	timer_t 	chkSessTm;			//Check session's timer
+	bool		chck_st;			//Check session's status
+	int		id_vcases;			//VCA session's container identifier
+	string		m_CSStables;			//CSS tables
 	map<string, int> colors;			//Named colors
 };
-    
+
 extern TWEB *mod;
 }
-#endif //WEB_VISION_H 
+#endif //WEB_VISION_H
