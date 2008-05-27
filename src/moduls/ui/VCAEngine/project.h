@@ -34,7 +34,7 @@ namespace VCA
 //* Project: VCA project                     	 *
 //************************************************
 class Page;
-    
+
 class Project : public TCntrNode, public TConfig
 {
     public:
@@ -42,7 +42,7 @@ class Project : public TCntrNode, public TConfig
         Project( const string &id, const string &name, const string &lib_db = "*.*" );
 	~Project( );
 
-	TCntrNode &operator=( TCntrNode &node );	
+	TCntrNode &operator=( TCntrNode &node );
 
         const string &id( )	{ return m_id; }		//Identifier
         string name( );						//Name
@@ -225,6 +225,8 @@ class PageWdg : public Widget, public TConfig
     	//Methods
         PageWdg( const string &id, const string &isrcwdg = "" );
         ~PageWdg( );
+
+	TCntrNode &operator=( TCntrNode &node );
 
 	//- Main parameters -
 	string path( );

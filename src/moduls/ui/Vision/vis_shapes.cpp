@@ -59,21 +59,21 @@ using namespace VISION;
 //* Widget shape abstract object                  *
 //*************************************************
 WdgShape::WdgShape( const string &iid ) : m_id(iid)
-{ 
-    
+{
+
 }
-    
+
 bool WdgShape::event( WdgView *view, QEvent *event )
 {
     switch(event->type())
     {
         case QEvent::Paint:
 	    if( qobject_cast<DevelWdgView*>(view) )
-    	    {
-    		QPainter pnt( view );	    
-        	pnt.setWindow(view->rect());
+	    {
+		QPainter pnt( view );
+		pnt.setWindow(view->rect());
 		pnt.drawImage(view->rect(),QImage(":/images/attention.png"));
-        	event->accept();
+		event->accept();
 		view->setToolTip(QString(_("Widget's shape '%1' no implement yet!")).arg(id().c_str()));
 	    }
             return true;
@@ -91,33 +91,33 @@ void WdgShape::borderDraw( QPainter &pnt, QRect dA, QPen bpen, int bordStyle )
 	    bpen.setStyle(Qt::DotLine);
 	    pnt.setPen(bpen);
 	    pnt.drawRect(dA.adjusted(bordWidth/2,bordWidth/2,-bordWidth/2-bordWidth%2,-bordWidth/2-bordWidth%2));
-	    break;			
+	    break;
 	case 2:	//Dashed
 	    bpen.setStyle(Qt::DashLine);
 	    pnt.setPen(bpen);
 	    pnt.drawRect(dA.adjusted(bordWidth/2,bordWidth/2,-bordWidth/2-bordWidth%2,-bordWidth/2-bordWidth%2));
-	    break;			
+	    break;
 	case 3:	//Solid
 	    bpen.setStyle(Qt::SolidLine);
 	    pnt.setPen(bpen);
 	    pnt.drawRect(dA.adjusted(bordWidth/2,bordWidth/2,-bordWidth/2-bordWidth%2,-bordWidth/2-bordWidth%2));
 	    break;
 	case 4:	//Double
-	    bpen.setStyle(Qt::SolidLine);		    
+	    bpen.setStyle(Qt::SolidLine);
 	    if( bordWidth/3 )
 	    {
 		int brdLnSpc = bordWidth-2*(bordWidth/3);
-	        bordWidth/=3;
-	        bpen.setWidth(bordWidth);
-	        pnt.setPen(bpen);
-	        pnt.drawRect(dA.adjusted(bordWidth/2,bordWidth/2,-bordWidth/2-bordWidth%2,-bordWidth/2-bordWidth%2));
-	        pnt.drawRect(dA.adjusted(bordWidth+brdLnSpc+bordWidth/2,bordWidth+brdLnSpc+bordWidth/2,
-	    		-bordWidth-brdLnSpc-bordWidth/2-bordWidth%2,-bordWidth-brdLnSpc-bordWidth/2-bordWidth%2));
+		bordWidth/=3;
+		bpen.setWidth(bordWidth);
+		pnt.setPen(bpen);
+		pnt.drawRect(dA.adjusted(bordWidth/2,bordWidth/2,-bordWidth/2-bordWidth%2,-bordWidth/2-bordWidth%2));
+		pnt.drawRect(dA.adjusted(bordWidth+brdLnSpc+bordWidth/2,bordWidth+brdLnSpc+bordWidth/2,
+			-bordWidth-brdLnSpc-bordWidth/2-bordWidth%2,-bordWidth-brdLnSpc-bordWidth/2-bordWidth%2));
 	    }
 	    else
 	    {
 	        pnt.setPen(bpen);
-	        pnt.drawRect(dA.adjusted(bordWidth/2,bordWidth/2,-bordWidth/2-bordWidth%2,-bordWidth/2-bordWidth%2));			
+	        pnt.drawRect(dA.adjusted(bordWidth/2,bordWidth/2,-bordWidth/2-bordWidth%2,-bordWidth/2-bordWidth%2));
 	    }
 	    break;
 	case 5:	//Groove
@@ -151,7 +151,7 @@ void WdgShape::borderDraw( QPainter &pnt, QRect dA, QPen bpen, int bordStyle )
 	    plt.setColor(QPalette::Dark,bpen.color().lighter(50));
 	    qDrawShadePanel(&pnt,dA,plt,false,bordWidth);
 	    break;
-	}		    
+	}
     }
 }
 
@@ -172,7 +172,7 @@ void ShapeFormEl::init( WdgView *w )
     w->dc()["active"] = true;
     w->dc()["addrWdg"].setValue((void*)NULL);
     w->dc()["elType"] = -1;
-    w->dc()["welType"] = -1;    
+    w->dc()["welType"] = -1;
     w->dc()["QFont"].setValue( (void*)new QFont() );
 }
 
@@ -206,12 +206,12 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	case 5:		//en
 	    if(!runW)	break;
 	    w->dc()["en"] = (bool)atoi(val.c_str());
-    	    if( el >= 0 ) el_wdg->setVisible(atoi(val.c_str()));
+	    if( el >= 0 ) el_wdg->setVisible(atoi(val.c_str()));
 	    break;
 	case 6:		//active
 	    if(!runW)	break;
 	    w->dc()["active"] = (bool)atoi(val.c_str());
-    	    if( el >= 0 ) 
+	    if( el >= 0 )
 	    {
 		setFocus(w,el_wdg,atoi(val.c_str()));
 		el_wdg->setEnabled((bool)atoi(val.c_str()));
@@ -269,8 +269,8 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	case 23:	//cfg, color
 	    rel_cfg = true;
 	    switch(el)
-	    {	
-		case 0:	//cfg    
+	    {
+		case 0:	//cfg
 		    w->dc()["cfg"] = val.c_str();
 		    //((LineEdit*)el_wdg)->setCfg(val.c_str());
 		    break;
@@ -282,15 +282,15 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    }
 	    break;
 	case 24:	//checkable
-	    w->dc()["checkable"] = atoi(val.c_str());	
+	    w->dc()["checkable"] = atoi(val.c_str());
 	    rel_cfg = true; 
 	    break;
 	case 25:	//font
 	{
 	    w->dc()["font"] = val.c_str();
-    	    QFont *fnt = (QFont*)w->dc()["QFont"].value<void*>();
+	    QFont *fnt = (QFont*)w->dc()["QFont"].value<void*>();
 	    char family[101]; strcpy(family,"Arial");
-	    int size = 10, bold = 0, italic = 0, underline = 0, strike = 0;        
+	    int size = 10, bold = 0, italic = 0, underline = 0, strike = 0;
 	    sscanf(w->dc().value("font",0).toString().toAscii().data(),
 		    "%100s %d %d %d %d %d",family,&size,&bold,&italic,&underline,&strike);
 	    fnt->setFamily(QString(family).replace(QRegExp("_")," "));
@@ -299,9 +299,9 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    fnt->setItalic(italic);
 	    fnt->setUnderline(underline);
 	    fnt->setStrikeOut(strike);
-	    rel_cfg = true;	    
+	    rel_cfg = true;
 	    break;
-	}	    	    
+	}
     }
     if( rel_cfg && !w->allAttrLoad() )
     {
@@ -324,7 +324,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		switch(w->dc()["view"].toInt())
 		{
 		    case 0: tp = LineEdit::Text; 	break;
-		    case 1: tp = LineEdit::Combo;	break;		    
+		    case 1: tp = LineEdit::Combo;	break;
 		    case 2: tp = LineEdit::Integer;	break;
 		    case 3: tp = LineEdit::Real;	break;
 		    case 4: tp = LineEdit::Time;	break;
@@ -343,7 +343,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    case 1:	//Text edit
 		if( !el_wdg || !qobject_cast<TextEdit*>(el_wdg) )
 		{
-		    if( el_wdg ) delete el_wdg;		
+		    if( el_wdg ) delete el_wdg;
 		    el_wdg = new TextEdit(w);
 		    if( runW ) connect( el_wdg, SIGNAL(apply()), this, SLOT(textAccept()) );
 		    mk_new = true;
@@ -358,8 +358,8 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		break;
 	    case 2:	//Chek box
 		if( !el_wdg || !qobject_cast<QCheckBox*>(el_wdg) )
-                {
-            	    if( el_wdg ) delete el_wdg;
+		{
+		    if( el_wdg ) delete el_wdg;
 		    el_wdg = new QCheckBox("test",w);
 		    if( runW ) connect( el_wdg, SIGNAL(stateChanged(int)), this, SLOT(checkChange(int)) );
 		    mk_new = true;
@@ -369,16 +369,16 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		//- Value -
 		((QCheckBox*)el_wdg)->setChecked(w->dc()["value"].toInt());
 		//- Font -
-		el_wdg->setFont(*(QFont*)w->dc()["QFont"].value<void*>());		
+		el_wdg->setFont(*(QFont*)w->dc()["QFont"].value<void*>());
 		break;
 	    case 3:	//Button
 	    {
 		if( !el_wdg || !qobject_cast<QPushButton*>(el_wdg) )
 		{
 		    if( el_wdg ) delete el_wdg;
-	    	    el_wdg = new QPushButton("test",w);
+		    el_wdg = new QPushButton("test",w);
 		    el_wdg->setSizePolicy( QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum) );
-		    if( runW ) 
+		    if( runW )
 		    {
 			connect( el_wdg, SIGNAL(pressed()), this, SLOT(buttonPressed()) );
 			connect( el_wdg, SIGNAL(released()), this, SLOT(buttonReleased()) );
@@ -405,7 +405,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		//- Value -
 		((QPushButton*)el_wdg)->setChecked(w->dc()["value"].toInt());
 		//- Font -
-		el_wdg->setFont(*(QFont*)w->dc()["QFont"].value<void*>());		
+		el_wdg->setFont(*(QFont*)w->dc()["QFont"].value<void*>());
 		break;
 	    }
 	    case 4:	//Combo box
@@ -425,7 +425,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		if( ((QComboBox*)el_wdg)->findText(vl) < 0 ) ((QComboBox*)el_wdg)->addItem(vl);
 		((QComboBox*)el_wdg)->setCurrentIndex(((QComboBox*)el_wdg)->findText(vl));
 		//- Font -
-		el_wdg->setFont(*(QFont*)w->dc()["QFont"].value<void*>());		
+		el_wdg->setFont(*(QFont*)w->dc()["QFont"].value<void*>());
 		break;
 	    }
 	    case 5: 	//List
@@ -464,8 +464,8 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		{
 		    ((QAbstractSlider*)el_wdg)->setOrientation( Qt::Vertical );
 		    wAlign = Qt::AlignHCenter;
-		}		    
-		else 
+		}
+		else
 		{
 		    ((QAbstractSlider*)el_wdg)->setOrientation( Qt::Horizontal );
 		    wAlign = Qt::AlignVCenter;
@@ -475,11 +475,11 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		((QAbstractSlider*)el_wdg)->setSingleStep( atoi(TSYS::strSepParse(sldCfg,0,':',&cfgOff).c_str()) );
 		((QAbstractSlider*)el_wdg)->setPageStep( atoi(TSYS::strSepParse(sldCfg,0,':',&cfgOff).c_str()) );
 		break;
-	    }		
+	    }
 	}
 	if( mk_new )
 	{
-	    //-- Install event's filter and disable focus --	
+	    //-- Install event's filter and disable focus --
 	    eventFilterSet(w,el_wdg,true);
 	    w->setFocusProxy(el_wdg);
 	    setFocus(w,el_wdg,w->dc()["active"].toInt()&&(!devW),devW);
@@ -489,12 +489,12 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    ((QVBoxLayout*)w->layout())->addWidget(el_wdg);
 	    w->dc()["addrWdg"].setValue((void*)el_wdg);
 	}
-	if( wAlign ) ((QVBoxLayout*)w->layout())->setAlignment(el_wdg,wAlign);	
+	if( wAlign ) ((QVBoxLayout*)w->layout())->setAlignment(el_wdg,wAlign);
 	w->dc()["welType"] = elType;
     }
 
     w->dc()["evLock"] = false;
-    
+
     return true;
 }
 
@@ -509,13 +509,13 @@ bool ShapeFormEl::eventFilter( WdgView *w, QObject *object, QEvent *event )
 	switch( event->type() )
 	{
 	    case QEvent::Enter:
-	    case QEvent::Leave:	return true;
-	    case QEvent::MouseMove:	    
-	    case QEvent::MouseButtonPress: 
+	    case QEvent::Leave:		return true;
+	    case QEvent::MouseMove:
+	    case QEvent::MouseButtonPress:
 	    case QEvent::MouseButtonRelease:
 	    case QEvent::ContextMenu:
 		QApplication::sendEvent(w,event);
-		return true;
+		return false;
 	}
     else
 	switch( event->type() )
@@ -529,7 +529,7 @@ bool ShapeFormEl::eventFilter( WdgView *w, QObject *object, QEvent *event )
 		w->attrSet("event","ws_FocusOut");
 		break;
 	}
-    
+
     return false;
 }
 
@@ -537,7 +537,7 @@ void ShapeFormEl::lineAccept( )
 {
     LineEdit *el   = (LineEdit*)sender();
     WdgView  *view = (WdgView *)el->parentWidget();
-    
+
     view->attrSet("value",el->value().toAscii().data());
     view->attrSet("event","ws_LnAccept");
 }
@@ -546,7 +546,7 @@ void ShapeFormEl::textAccept( )
 {
     TextEdit *el   = (TextEdit*)sender();
     WdgView  *view = (WdgView *)el->parentWidget();
-    
+
     view->attrSet("value",el->text().toAscii().data());
     view->attrSet("event","ws_TxtAccept");
 }
@@ -574,7 +574,7 @@ void ShapeFormEl::buttonToggled( bool val )
 {
     WdgView *view = (WdgView *)((QPushButton*)sender())->parentWidget();
     if( view->dc()["evLock"].toBool() )	return;
-    
+
     view->attrSet("event","ws_BtToggleChange");
     view->attrSet("value",TSYS::int2str(val));
 }
@@ -592,9 +592,9 @@ void ShapeFormEl::listChange( int row )
 {
     QListWidget *el   = (QListWidget*)sender();
     WdgView     *view = (WdgView *)el->parentWidget();
-    
+
     if( row < 0 || view->dc()["evLock"].toBool() ) return;
-    
+
     view->attrSet("value",el->item(row)->text().toAscii().data());
     view->attrSet("event","ws_ListChange");
 }
@@ -603,15 +603,15 @@ void ShapeFormEl::sliderMoved( int val )
 {
     QAbstractSlider *el   = (QAbstractSlider*)sender();
     WdgView     *view = (WdgView *)el->parentWidget();
-    
+
     view->attrSet("value",TSYS::int2str(val));
     view->attrSet("event","ws_SliderChange");
 }
 
 void ShapeFormEl::eventFilterSet( WdgView *view, QWidget *wdg, bool en )
 {
-    if( en ) 	wdg->installEventFilter(view);
-    else 	wdg->removeEventFilter(view);
+    if( en )	wdg->installEventFilter(view);
+    else	wdg->removeEventFilter(view);
     //- Process childs -
     for( int i_c = 0; i_c < wdg->children().size(); i_c++ )
 	if( qobject_cast<QWidget*>(wdg->children().at(i_c)) )
@@ -627,7 +627,7 @@ void ShapeFormEl::setFocus(WdgView *view, QWidget *wdg, bool en, bool devel )
 	if( isFocus && !devel )	wdg->setFocusPolicy((Qt::FocusPolicy)isFocus);
     }
     else
-    {	
+    {
 	if( wdg->focusPolicy() != Qt::NoFocus )
 	{
 	    wdg->setWindowIconText(QString::number((int)wdg->focusPolicy()));	    
@@ -635,7 +635,7 @@ void ShapeFormEl::setFocus(WdgView *view, QWidget *wdg, bool en, bool devel )
 	}
 	if( devel ) wdg->setMouseTracking(true);
     }
-    
+
     //- Process childs -
     for( int i_c = 0; i_c < wdg->children().size(); i_c++ )
 	if( qobject_cast<QWidget*>(wdg->children().at(i_c)) )

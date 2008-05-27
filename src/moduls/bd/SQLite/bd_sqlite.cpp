@@ -258,10 +258,18 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
 
 void MBD::cntrCmdProc( XMLNode *opt )
 {
+    string grp = owner().owner().subId();
+
     //- Get page info -
     if( opt->name() == "info" )
     {
         TBD::cntrCmdProc(opt);
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root",grp.c_str(),2,
+	            "tp","str","help",
+		    _("SQLite DB address writet as: [<FileDBPath>:<nTransReq>].\n"
+		      "Where:\n"
+		      "  FileDBPath - full path to DB file (./oscada/Main.db);\n"
+		      "  nTransReq - number requests into transaction (default 1)."));
 	if( commCnt )
 	    ctrMkNode("comm",opt,-1,"/prm/st/end_tr",_("Close openned transaction"),0660);
 	return;

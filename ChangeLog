@@ -1,3 +1,15 @@
+2008-05-27 Roman
+- !!:/SYS: More odd spaces from sources is removed.
+- /DB: Some fields tooltips is added, into modules too.
+- FIX:/DAQ/JavaLikeCalc: Imposible libraries functions deletion is fixed.
+- !!:/SYS,/UI/QTCfg: Tooltips for fields support is added.
+- FIX:/UI/VCAEngine: Deleted include widgets loading is fixed.
+- FIX:/UI/VCAEngine: Copy included widgets for template pages at project is fixed.
+- FIX:/UI/VCAEngine: Break next pages loading if one page load terminated is fixed.
+- /UI/VCAEngine: Alarm code is improved.
+- FIX:/UI/Vision: Link inspector update is fixed on group renaming.
+
+
 2008-05-20 Roman
 - FIX:/UI/Vision, /UI/WebVision: Buffers and archive data merging into service function is fixed.
 - /UI/QTCfg: Hex and Oct integer data view is made.

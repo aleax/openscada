@@ -83,7 +83,11 @@ class MBD : public TBD
 
 	void allowList( vector<string> &list );
 	void sqlReq( const string &req, vector< vector<string> > *tbl = NULL );	    
-	    
+
+    protected:
+        //Protected methods
+        void cntrCmdProc( XMLNode *opt );       //Control interface command process
+
     private:
 	//Private methods	    
 	void postDisable(int flag);

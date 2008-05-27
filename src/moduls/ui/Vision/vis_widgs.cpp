@@ -56,46 +56,46 @@ InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess,
     setMinimumSize( QSize( 120, 150 ) );
     setWindowIcon(icon);
     setSizeGripEnabled(true);
-    
+
     QVBoxLayout *dlg_lay = new QVBoxLayout(this);
     dlg_lay->setMargin(10);
     dlg_lay->setSpacing(6);
-    
+
     //Icon label and text message
     QHBoxLayout *intr_lay = new QHBoxLayout;
-    intr_lay->setSpacing(6);    
-    
+    intr_lay->setSpacing(6);
+
     QLabel *icon_lab = new QLabel(this);
     icon_lab->setSizePolicy( QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum) );
     icon_lab->setPixmap(icon.pixmap(48));
     intr_lay->addWidget(icon_lab);
-    
+
     inp_lab = new QLabel(mess,this);
     //inp_lab->setAlignment(Qt::AlignHCenter);
     inp_lab->setWordWrap(true);
     intr_lay->addWidget(inp_lab);
     dlg_lay->addItem(intr_lay);
-    
+
     //Id and name fields
     if( with_nm || with_id )
     {
 	QGridLayout *ed_lay = new QGridLayout;
 	ed_lay->setSpacing(6);
-	if( with_id ) 
+	if( with_id )
 	{
 	    ed_lay->addWidget( new QLabel(_("ID:"),this), 0, 0 );
 	    m_id = new QLineEdit(this);
 	    ed_lay->addWidget( m_id, 0, 1 );
-	}	    
+	}
 	if( with_nm )
 	{
 	    ed_lay->addWidget( new QLabel(_("Name:"),this), 1, 0 );
 	    m_name = new QLineEdit(this);
 	    ed_lay->addWidget( m_name, 1, 1 );
 	}
-	dlg_lay->addItem(ed_lay);	
+	dlg_lay->addItem(ed_lay);
     }
-    
+
     //Qk and Cancel buttons
     dlg_lay->addItem( new QSpacerItem( 10, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 
@@ -158,21 +158,21 @@ void InputDlg::setMess( const QString &val )
 DlgUser::DlgUser( QWidget *parent ) : QDialog(parent)
 {
     setWindowTitle(_("Select user"));
-    
+
     QVBoxLayout *dlg_lay = new QVBoxLayout(this);
     dlg_lay->setMargin(10);
     dlg_lay->setSpacing(6);
 
     QGridLayout *ed_lay = new QGridLayout;
-    ed_lay->setSpacing(6);    
-    ed_lay->addWidget( new QLabel(_("User:"),this), 0, 0 );    
+    ed_lay->setSpacing(6);
+    ed_lay->addWidget( new QLabel(_("User:"),this), 0, 0 );
     users = new QComboBox(this);
     ed_lay->addWidget( users, 0, 1 );
-    ed_lay->addWidget( new QLabel(_("Password:"),this), 1, 0 );    
+    ed_lay->addWidget( new QLabel(_("Password:"),this), 1, 0 );
     passwd = new QLineEdit(this);
     passwd->setEchoMode( QLineEdit::Password );
     ed_lay->addWidget( passwd, 1, 1 );
-    dlg_lay->addItem(ed_lay);            
+    dlg_lay->addItem(ed_lay);
 
     dlg_lay->addItem( new QSpacerItem( 20, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 
@@ -273,7 +273,7 @@ FontDlg::FontDlg( QWidget *parent, const QString &ifnt )
     grpBox->setLayout(grpLay);
     sz_lay->addWidget(grpBox);
     dlg_lay->addItem(sz_lay,2,0);
-    
+
     grpBox = new QGroupBox(_("Sample:"),this);
     grpLay = new QVBoxLayout;
     grpLay->setMargin(5);
@@ -283,7 +283,7 @@ FontDlg::FontDlg( QWidget *parent, const QString &ifnt )
     grpLay->addWidget(sampleText);
     grpBox->setLayout(grpLay);
     dlg_lay->addWidget(grpBox,2,1);
-    
+
     dlg_lay->addItem( new QSpacerItem( 20, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ), 3, 0, 1, 2 );
 
     QFrame *sep = new QFrame(this);
@@ -303,7 +303,7 @@ FontDlg::FontDlg( QWidget *parent, const QString &ifnt )
     but_box->button(QDialogButtonBox::Cancel)->setIcon(QPixmap::fromImage(ico_t));
     connect(but_box, SIGNAL(rejected()), this, SLOT(reject()));
     dlg_lay->addWidget( but_box, 5, 0, 1, 2 );
-    
+
     setFont(ifnt);
 }
 
@@ -379,7 +379,7 @@ bool UserStBar::userSel()
     }
     else if( rez == DlgUser::SelErr )
 	mod->postMess(mod->nodePath().c_str(),_("Auth wrong!!!"),TVision::Warning,this);
-    
+
     return false;
 }
 
@@ -393,23 +393,28 @@ LineEdit::LineEdit( QWidget *parent, LType tp, bool prev_dis ) :
     QHBoxLayout *box = new QHBoxLayout(this);
     box->setMargin(0);
     box->setSpacing(0);
-		
+
     if( !prev_dis )
     {
-        bt_fld = new QPushButton(this);
-        bt_fld->setIcon(QIcon(":/images/ok.png"));
+	bt_fld = new QPushButton(this);
+	bt_fld->setIcon(QIcon(":/images/ok.png"));
 	bt_fld->setIconSize(QSize(12,12));
 	bt_fld->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed) );
 	bt_fld->setMaximumWidth(15);
 	//bt_fld->setMinimumSize(15,15);
 	//bt_fld->setFlat( true );
-        bt_fld->setEnabled( false );
-        bt_fld->setVisible( false );
-        connect( bt_fld, SIGNAL( pressed() ), this, SLOT( applySlot() ) );
-        box->addWidget(bt_fld);
+	bt_fld->setEnabled( false );
+	bt_fld->setVisible( false );
+	connect( bt_fld, SIGNAL( pressed() ), this, SLOT( applySlot() ) );
+	box->addWidget(bt_fld);
     }
     setType(tp);
-}											
+}
+
+LineEdit::~LineEdit( )
+{
+    //printf("TEST 00: %d\n",d_ptr->inEventHandler);
+}
 
 bool LineEdit::isEdited( )
 {
@@ -420,18 +425,18 @@ bool LineEdit::isEdited( )
 void LineEdit::setType( LType tp )
 {
     if( tp == m_tp ) return;
-    
+
     //- Delete previous -
     if( tp >= 0 && ed_fld ) delete ed_fld;
-    
+
     //- Create new widget -
     switch( tp )
     {
-	case Text:	
+	case Text:
 	    ed_fld = new QLineEdit(this);
 	    connect( (QLineEdit*)ed_fld, SIGNAL( textEdited(const QString&) ), SLOT( changed() ) );
 	    break;
-	case Integer:	
+	case Integer:
 	    ed_fld = new QSpinBox(this);
 	    connect( (QSpinBox*)ed_fld, SIGNAL( valueChanged(int) ), SLOT( changed() ) );
 	    break;
@@ -439,15 +444,15 @@ void LineEdit::setType( LType tp )
 	    ed_fld = new QDoubleSpinBox(this);
 	    connect( (QDoubleSpinBox*)ed_fld, SIGNAL( valueChanged(double) ), SLOT( changed() ) );
 	    break;
-	case Time:	
+	case Time:
 	    ed_fld = new QTimeEdit(this);
 	    connect( (QTimeEdit*)ed_fld, SIGNAL( timeChanged(const QTime&) ), SLOT( changed() ) );
 	    break;
-	case Date:	
+	case Date:
 	    ed_fld = new QDateEdit(this);
 	    connect( (QDateEdit*)ed_fld, SIGNAL( dateChanged(const QDate&) ), SLOT( changed() ) );
 	    break;
-	case DateTime:	
+	case DateTime:
 	    ed_fld = new QDateTimeEdit(this);
 	    connect( (QDateTimeEdit*)ed_fld, SIGNAL( dateTimeChanged(const QDateTime&) ), SLOT( changed() ) );
 	    break;
@@ -455,7 +460,7 @@ void LineEdit::setType( LType tp )
 	    ed_fld = new QComboBox(this);
 	    ((QComboBox*)ed_fld)->setEditable(true);
 	    connect( (QComboBox*)ed_fld, SIGNAL( editTextChanged(const QString&) ), SLOT( changed() ) );
-	    break;	    
+	    break;
     }
     ((QBoxLayout*)layout())->insertWidget(0,ed_fld);
     setFocusProxy( ed_fld );
@@ -773,12 +778,12 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
     }
     switch(uiPrmPos)
     {
-	case 0:	 return false;
-	case 7:	 
+	case 0:	return false;
+	case 7:
 	    if( wLevel( ) == 0 )break;
 	    moveF(QPointF(((WdgView*)parentWidget())->xScale(true)*atof(val.c_str()),posF().y()));
 	    break;
-	case 8:	 
+	case 8:
 	    if( wLevel( ) == 0 )break;
 	    moveF(QPointF(posF().x(),((WdgView*)parentWidget())->yScale(true)*atof(val.c_str())));
 	    break;
@@ -789,7 +794,7 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 	    resizeF(QSizeF((atof(val.c_str())/x_scale)*sizeF().width(),sizeF().height()));
 	    x_scale = atof(val.c_str());
 	    break;
-	case 14: 
+	case 14:
 	    resizeF(QSizeF(sizeF().width(),(atof(val.c_str())/y_scale)*sizeF().height()));
 	    y_scale = atof(val.c_str());
 	    break;
@@ -802,28 +807,28 @@ string WdgView::resGet( const string &res )
     XMLNode req("get");
     req.setAttr("path",id()+"/%2fwdg%2fres")->setAttr("id",res);
     if( !cntrIfCmd(req) )	return TSYS::strDecode(req.text(),TSYS::base64);
-    
+
     return "";
 }
 
 void WdgView::load( const string& item, bool load, bool init )
-{   
+{
     //printf("TEST 00: Load: %s (%d:%d)\n",id().c_str(),load,init);
-    
+
     unsigned long long t_cnt;
     if( wLevel() == 0 ) t_cnt = SYS->shrtCnt();
-    
-    //- Load from data model - 
+
+    //- Load from data model -
     if( load )
     {
-        childsUpdate( false );    
-	setAllAttrLoad( true );    
+	childsUpdate( false );
+	setAllAttrLoad( true );
 	if( item.empty() || item == id() )
 	{
 	    shapeUpdate( );
 	
 	    //-- Request to widget for last attributes --
-	    XMLNode req("get");	
+	    XMLNode req("get");
 	    req.setAttr("path",id()+"/%2fserv%2f0");
 	    if( !cntrIfCmd(req) )
 		for( int i_el = 0; i_el < req.childSize(); i_el++ )
@@ -832,15 +837,15 @@ void WdgView::load( const string& item, bool load, bool init )
 	setAllAttrLoad( false );
     }
 
-    //- Init loaded data -     
+    //- Init loaded data -
     if( init && (item.empty() || item == id()) && wLevel()>0 )	attrSet("","load",-1);
 
     //- Going to children load and/or init -
     for( int i_c = 0; i_c < children().size(); i_c++ )
     {
 	WdgView *wdg = qobject_cast<WdgView*>(children().at(i_c));
-        if( wdg && (item.empty() || item == id() || wdg->id() == item.substr(0,wdg->id().size())) )
-    	    wdg->load((item==id())?"":item,load,(wLevel()>0)?init:false);
+	if( wdg && (item.empty() || item == id() || wdg->id() == item.substr(0,wdg->id().size())) )
+	    wdg->load((item==id())?"":item,load,(wLevel()>0)?init:false);
     }
 
     //- Children widgets order update -
@@ -851,13 +856,13 @@ void WdgView::load( const string& item, bool load, bool init )
     {
 	//printf("TEST 01: Load '%s' time %fms\n",item.c_str(),1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk()));
 	//t_cnt = SYS->shrtCnt();
-    
+
 	attrSet("","load",-1);
 	for( int i_c = 0; i_c < children().size(); i_c++ )
 	{
 	    WdgView *wdg = qobject_cast<WdgView*>(children().at(i_c));
-    	    if( wdg && (item.empty() || item == id() || wdg->id() == item.substr(0,wdg->id().size())) )
-    		wdg->load((item==id())?"":item,false,true);
+	    if( wdg && (item.empty() || item == id() || wdg->id() == item.substr(0,wdg->id().size())) )
+		wdg->load((item==id())?"":item,false,true);
 	}
 	update();
 
@@ -868,23 +873,23 @@ void WdgView::load( const string& item, bool load, bool init )
 void WdgView::childsUpdate( bool newLoad )
 {
     XMLNode req("get");
-    
+
     string b_nm = id();
     req.setAttr("path",id()+"/%2fwdg%2fcfg%2fpath")->setAttr("resLink","1");
     if( !cntrIfCmd(req) ) b_nm = req.text();
-	    
+
     vector<string> lst;
     req.clear()->setAttr("path",b_nm+"/%2finclwdg%2fwdg");
     if( !cntrIfCmd(req) )
 	for( int i_el = 0; i_el < req.childSize(); i_el++ )
 	    lst.push_back(req.childGet(i_el)->attr("id"));
-    
+
     //- Delete child widgets -
     for( int i_c = 0; i_c < children().size(); i_c++ )
     {
 	if( !qobject_cast<WdgView*>(children().at(i_c)) ) continue;
 	int i_l;
-	for( i_l = 0; i_l < lst.size(); i_l++ )		
+	for( i_l = 0; i_l < lst.size(); i_l++ )
 	    if( qobject_cast<WdgView*>(children().at(i_c))->id() == (b_nm+"/wdg_"+lst[i_l]) )
 		break;
 	if( i_l >= lst.size() ) delete children().at(i_c);
@@ -892,7 +897,7 @@ void WdgView::childsUpdate( bool newLoad )
 
     //- Create new child widget -
     for( int i_l = 0; i_l < lst.size(); i_l++ )
-    {	
+    {
 	int i_c;
 	for( i_c = 0; i_c < children().size(); i_c++ )
 	    if( qobject_cast<WdgView*>(children().at(i_c)) && 

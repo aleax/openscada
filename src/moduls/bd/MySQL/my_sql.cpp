@@ -264,6 +264,31 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
     mysql_free_result(res);
 }
 
+void MBD::cntrCmdProc( XMLNode *opt )
+{
+    string grp = owner().owner().subId();
+    
+    //Get page info
+    if( opt->name() == "info" )
+    {
+        TBD::cntrCmdProc(opt);
+        ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root",grp.c_str(),2,
+            "tp","str","help",
+	    _("MySQL DB address writed in form: [<host>;<user>;<pass>;<db>;<port>;<u_sock>].\n"
+	      "Where:\n"
+	      "  host - MySQL server hostname;\n"
+	      "  user - DB user name;\n"
+	      "  pass - user's password for DB access;\n"
+	      "  db - DB name;\n"
+	      "  port - DB server port (default 3306);\n"
+	      "  u_sock - UNIX-socket name, for local access to DB (/var/lib/mysql/mysql.sock).\n"
+	      "For local DB: [;roman;123456;OpenSCADA;;/var/lib/mysql/mysql.sock].\n"
+	      "For remote DB: [server.nm.org;roman;123456;OpenSCADA;3306]."));
+        return;
+    }
+    TBD::cntrCmdProc(opt);
+}
+
 //************************************************
 //* MBDMySQL::Table                              *
 //************************************************

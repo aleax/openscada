@@ -364,7 +364,7 @@ QVariant ModInspAttr::data( const QModelIndex &index, int role ) const
             switch(role)
             {
                 case Qt::DisplayRole:
-		    val = it->data();		
+		    val = it->data();
 		    if( val.type() == QVariant::Int && it->flag()&ModInspAttr::Item::DataTime )
 			val = QDateTime::fromTime_t(val.toInt()?val.toInt():time(NULL)).toString("dd.MM.yyyy hh:mm:ss");
 		    break;
@@ -770,7 +770,7 @@ InspLnk::InspLnk( QWidget * parent, VisDevelop *mainWind ) : main_win(mainWind),
     //setEditTriggers(QAbstractItemView::AllEditTriggers);
     setAlternatingRowColors(true);
     setItemDelegate(new LinkItemDelegate(this));
-    
+
     QStringList headLabels;
     headLabels << _("Name") << _("Value");
     setHeaderLabels(headLabels);
@@ -798,7 +798,7 @@ bool InspLnk::event( QEvent *event )
     }
     return QTreeWidget::event( event );
 }
-    
+
 void InspLnk::setWdg( const string &iwdg )
 {
     string lnid, lngrp, lnwdg, lnatr;
@@ -812,7 +812,7 @@ void InspLnk::setWdg( const string &iwdg )
     show_init = true;
     //Update tree
     XMLNode req("get");
-    
+
     //- Get links info -
     XMLNode info_req("info");
     info_req.setAttr("path",it_wdg+"/%2flinks%2flnk")->setAttr("showAttr","1");
@@ -834,7 +834,7 @@ void InspLnk::setWdg( const string &iwdg )
 	    if( lnwdg == topLevelItem(i_it)->text(0).toAscii().data() )
 		break;
 	if( i_it < topLevelItemCount() ) wdg_it = topLevelItem(i_it);
-	else 
+	else
 	{
 	    wdg_it = new QTreeWidgetItem(this);
 	    wdg_it->setText(0,lnwdg.c_str());
@@ -845,10 +845,10 @@ void InspLnk::setWdg( const string &iwdg )
 	    //-- Search group --
 	    for( i_it = 0; i_it < wdg_it->childCount(); i_it++ )
 		if( lngrp == wdg_it->child(i_it)->text(0).toAscii().data() )
-            	    break;
+		    break;
 	    if( i_it < wdg_it->childCount() ) wdg_it = wdg_it->child(i_it);
 	    else
-	    { 
+	    {
 		wdg_it = new QTreeWidgetItem(wdg_it);
 		wdg_it->setFlags(Qt::ItemIsEnabled|Qt::ItemIsEditable|Qt::ItemIsSelectable);
 		wdg_it->setText(0,lngrp.c_str());
@@ -863,14 +863,14 @@ void InspLnk::setWdg( const string &iwdg )
 	QTreeWidgetItem *prm_it;
 	for( i_it = 0; i_it < wdg_it->childCount(); i_it++ )
 	    if( lnatr == wdg_it->child(i_it)->text(0).toAscii().data() )
-                break;
+		break;
 	if( i_it < wdg_it->childCount() ) prm_it = wdg_it->child(i_it);
 	else
-	{	
+	{
 	    prm_it = new QTreeWidgetItem(wdg_it);
 	    prm_it->setFlags(Qt::ItemIsEnabled|Qt::ItemIsEditable|Qt::ItemIsSelectable);
-	    prm_it->setText(0,lnatr.c_str());	
-    	    prm_it->setData(0,Qt::UserRole,QString(lnid.substr(3).c_str()));
+	    prm_it->setText(0,lnatr.c_str());
+	    prm_it->setData(0,Qt::UserRole,QString(lnid.substr(3).c_str()));
 	}
 	//--- Get parameter's value ---
 	req.clear()->setAttr("path",it_wdg+"/%2flinks%2flnk%2f"+lnid);
@@ -888,14 +888,15 @@ void InspLnk::setWdg( const string &iwdg )
 	    int i_l;
 	    for( i_l = 0; i_l < rootel->childSize(); i_l++ )
 		if( rootel->childGet(i_l)->attr("id") == ("el_"+wdg_it->data(0,Qt::UserRole).toString()).toAscii().data() &&
-			((bool)rootel->childGet(i_l)->attr("elGrp").size()^(wdg_g==wdg_it)) )
+			(wdg_g==wdg_it || (wdg_g!=wdg_it && rootel->childGet(i_l)->attr("elGrp") == wdg_g->text(0).toAscii().data())) )
+			//((bool)rootel->childGet(i_l)->attr("elGrp").size()^(wdg_g==wdg_it)) )
 		    break;
-	    if( i_l >= rootel->childSize() ) 
+	    if( i_l >= rootel->childSize() )
 	    {
 		delete wdg_it;
 		if( wdg_g != wdg_it && !wdg_g->childCount() )
 		{
-	    	    delete wdg_g; i_a = 0;
+		    delete wdg_g; i_a = 0;
 		    if( topLevelItem(i_it)->childCount() )	continue;
 		    delete topLevelItem(i_it); i_it--;
 		    break;
@@ -903,20 +904,20 @@ void InspLnk::setWdg( const string &iwdg )
 		if( wdg_g == wdg_it && !topLevelItem(i_it)->childCount() )
 		{
 		    delete topLevelItem(i_it); i_it--;
-		    break;		
+		    break;
 		}
 	    }
 	    else
 	    {
-		if( wdg_g == wdg_it ) i_g++; 
+		if( wdg_g == wdg_it ) i_g++;
 		else i_a++;
 	    }
 	    if( wdg_g != wdg_it && i_a >= wdg_g->childCount() )	{ i_a = 0; i_g++; }
 	}
-    
+
     //- Set widget's path -
     if( topLevelItemCount() )	topLevelItem(0)->setData(0,Qt::UserRole,QString(it_wdg.c_str()));
-    
+
     show_init = false;
 }
 
@@ -1575,8 +1576,8 @@ void ProjTree::ctrTreePopup( )
     popup.addSeparator();
     popup.addAction(owner()->actDBLoad);
     popup.addAction(owner()->actDBSave);
-    popup.addSeparator();    
-    
+    popup.addSeparator();
+
     //- Reload action -
     QImage ico_t;
     if(!ico_t.load(TUIS::icoPath("reload").c_str())) ico_t.load(":/images/reload.png");
@@ -1586,9 +1587,9 @@ void ProjTree::ctrTreePopup( )
     popup.addAction(actRefresh);
 
     QAction *rez = popup.exec(QCursor::pos());
-    
+
     popup.clear();
-}			  
+}
 
 //**********************************************************************************************
 //* Text edit line widget with detail dialog edit button. Support: Font and Color edit dialogs.*

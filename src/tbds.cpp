@@ -663,7 +663,8 @@ void TBD::cntrCmdProc( XMLNode *opt )
     	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))
 	    {
     		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Enable"),0664,"root",grp.c_str(),1,"tp","bool");
-		ctrMkNode("list",opt,-1,"/prm/st/allow_tbls",_("Allow tables"),0664,"root",grp.c_str(),2,"tp","str","s_com","del");
+		ctrMkNode("list",opt,-1,"/prm/st/allow_tbls",_("Allow tables"),0664,"root",grp.c_str(),3,
+		    "tp","str","s_com","del","help",_("Tables contained into DB, no opened tables."));
 	    }
     	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Config")))
 	    {
@@ -671,12 +672,14 @@ void TBD::cntrCmdProc( XMLNode *opt )
     		ctrMkNode("fld",opt,-1,"/prm/cfg/nm",cfg("NAME").fld().descr(),0664,"root",grp.c_str(),1,"tp","str");
     		ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCR").fld().descr(),0664,"root",grp.c_str(),3,"tp","str","cols","50","rows","3");
     		ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root",grp.c_str(),1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/codep",cfg("CODEPAGE").fld().descr(),0664,"root",grp.c_str(),1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/codep",cfg("CODEPAGE").fld().descr(),0664,"root",grp.c_str(),2,
+		    "tp","str","help",_("Codepage of data into DB. For example: UTF-8, KOI8-R, KOI8-U ... ."));
 		ctrMkNode("fld",opt,-1,"/prm/cfg/toen",cfg("EN").fld().descr(),0664,"root",grp.c_str(),1,"tp","bool");
 	    }	    
 	}
 	if(ctrMkNode("area",opt,1,"/tbls",_("Tables"),0444))
-	    ctrMkNode("list",opt,-1,"/tbls/otbl",_("Opened tables"),0664,"root",grp.c_str(),3,"tp","br","s_com","add,del","br_pref","tbl_");
+	    ctrMkNode("list",opt,-1,"/tbls/otbl",_("Opened tables"),0664,"root",grp.c_str(),4,
+		"tp","br","s_com","add,del","br_pref","tbl_","help",_("Opened table list.\nAdd and delete table operations is real open and close tables operations."));
         return;
     }
 

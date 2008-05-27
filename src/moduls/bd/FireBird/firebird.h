@@ -88,7 +88,11 @@ class MBD : public TBD
 	
 	void transOpen( isc_tr_handle *trans );
 	void transCommit( isc_tr_handle *trans );
-	
+
+    protected:
+        //Protected methods
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+
     private:
 	//Private methods
 	void postDisable(int flag);    

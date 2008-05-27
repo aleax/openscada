@@ -97,6 +97,10 @@ class MBD : public TBD
 	    
 	void enable( );
 	void allowList( vector<string> &list );
+
+    protected:
+	//Protected methods
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	    
     private:
 	//Private methods

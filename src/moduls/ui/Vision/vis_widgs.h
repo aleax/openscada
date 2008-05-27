@@ -65,8 +65,8 @@ namespace VISION
 	    void setMess( const QString &val );
 
 	private:
-	    QLabel 	*inp_lab;
-	    QLineEdit 	*m_id, *m_name;
+	    QLabel	*inp_lab;
+	    QLineEdit	*m_id, *m_name;
     };
 
     //*********************************************
@@ -90,8 +90,8 @@ namespace VISION
 	    void finish( int result );
 
 	private:
-	    QComboBox 	*users;
-	    QLineEdit 	*passwd;
+	    QComboBox	*users;
+	    QLineEdit	*passwd;
     };
 
     //*********************************************
@@ -112,22 +112,22 @@ namespace VISION
 	    void cfgChange();
 
 	private:
-	    QFontComboBox 	*fntSel;
-	    QSpinBox 		*spBox;
-	    QCheckBox 		*chBold,
+	    QFontComboBox	*fntSel;
+	    QSpinBox		*spBox;
+	    QCheckBox		*chBold,
 				*chItalic,
 				*chStrike,
 				*chUnder;
-	    QLineEdit 		*sampleText;
+	    QLineEdit		*sampleText;
     };
-    
+
     //*********************************************
     //* Status bar user widget                    *
     //*********************************************
     class UserStBar : public QLabel
     {
 	Q_OBJECT
-    
+
 	public:
 	    UserStBar( const QString &iuser, QWidget * parent = 0 );
 
@@ -137,15 +137,15 @@ namespace VISION
 	    bool userSel( );
 
 	signals:
-            void userChanged();
+	    void userChanged();
 
 	protected:
 	    bool event( QEvent *event );
 
 	private:
 	    QString	user_txt;
-    };    
-    
+    };
+
     //*********************************************************************************************
     //* Universal edit line widget. Contain support of: QLineEdit, QSpinBox, QDoubleSpinBox,      *
     //* QTimeEdit, QDateEdit and QDateTimeEdit.                                                   *
@@ -153,41 +153,42 @@ namespace VISION
     class LineEdit : public QWidget
     {
         Q_OBJECT
-		
+
         public:
 	    //- Data -
 	    enum LType { Text, Integer, Real, Time, Date, DateTime, Combo };
-	    
+
 	    //- Methods -
-            LineEdit( QWidget *parent, LType tp = Text, bool prev_dis = false );
-	    
-	    LType type( ) 	{ return m_tp; }
-            QString value( );
+	    LineEdit( QWidget *parent, LType tp = Text, bool prev_dis = false );
+	    ~LineEdit( );
+
+	    LType type( )	{ return m_tp; }
+	    QString value( );
 	    bool  isEdited( );
 
 	    void setType( LType tp );
-            void setValue( const QString& );
+	    void setValue( const QString& );
 	    void setCfg( const QString& );
-	    
+
 	    QWidget *workWdg( )	{ return ed_fld; }
-        
+
 	signals:
-            void apply( );
-            void cancel( );
+	    void apply( );
+	    void cancel( );
 	    void valChanged( const QString& );
-	
+
 	protected:
-            bool event( QEvent * e );
-        
+	    bool event( QEvent * e );
+
 	private slots:
-            void changed( );
-            void applySlot( );
-        
+	    void changed( );
+	    void applySlot( );
+
 	private:
-	    LType       m_tp;
-	    QString     m_val;
-            QWidget	*ed_fld;
-    	    QPushButton *bt_fld;
+	    LType	m_tp;
+	    QString	m_val;
+	    QWidget	*ed_fld;
+	    QPushButton	*bt_fld;
     };
 
     //*********************************************

@@ -20,7 +20,7 @@
  ***************************************************************************/
 #include <getopt.h>
 #include <sys/types.h>
-#include <unistd.h>       
+#include <unistd.h>
 
 #include <QMessageBox>
 #include <QErrorMessage>
@@ -60,7 +60,7 @@ extern "C"
 	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
 	    return new QTCFG::TUIMod( source );
 	return NULL;
-    }    
+    }
 }
 
 using namespace QTCFG;
@@ -71,16 +71,16 @@ using namespace QTCFG;
 TUIMod::TUIMod( string name ) : start_path(string("/")+SYS->id()), end_run(false)
 {
     mId		= MOD_ID;
-    mName       = MOD_NAME;
-    mType  	= MOD_TYPE;
-    mVers      	= VERSION;
-    mAutor    	= AUTORS;
-    mDescr  	= DESCRIPTION;
-    mLicense   	= LICENSE;
-    mSource    	= name;
-    
+    mName	= MOD_NAME;
+    mType	= MOD_TYPE;
+    mVers	= VERSION;
+    mAutor	= AUTORS;
+    mDescr	= DESCRIPTION;
+    mLicense	= LICENSE;
+    mSource	= name;
+
     mod		= this;
-    
+
     //Public export functions
     modFuncReg( new ExpFunc("QIcon icon();","Module QT-icon",(void(TModule::*)( )) &TUIMod::icon) );
     modFuncReg( new ExpFunc("QMainWindow *openWindow();","Start QT GUI.",(void(TModule::*)( )) &TUIMod::openWindow) );
@@ -144,8 +144,8 @@ void TUIMod::load_( )
     } while(next_opt != -1);
 
     //- Load parameters from config file and DB -
-    start_path = TBDS::genDBGet(nodePath()+"StartPath",start_path);
-    start_user = TBDS::genDBGet(nodePath()+"StartUser",start_user);
+    setStartPath( TBDS::genDBGet(nodePath()+"StartPath",startPath()) );
+    setStartUser( TBDS::genDBGet(nodePath()+"StartUser",startUser()) );
 }
 
 void TUIMod::save_( )
@@ -155,8 +155,8 @@ void TUIMod::save_( )
 #endif
 
     //- Save parameters to DB -
-    TBDS::genDBSet(nodePath()+"StartPath",start_path);
-    TBDS::genDBSet(nodePath()+"StartUser",start_user);
+    TBDS::genDBSet( nodePath()+"StartPath", startPath() );
+    TBDS::genDBSet( nodePath()+"StartUser", startUser() );
 }
 
 void TUIMod::postEnable( int flag )
@@ -181,10 +181,10 @@ QMainWindow *TUIMod::openWindow( )
 	    int rez = d_usr.exec();
 	    if( rez == DlgUser::SelCancel )     return NULL;
 	    if( rez == DlgUser::SelErr )
-            {
-                postMess(nodePath().c_str(),_("Auth wrong!!!"));
-                continue;
-            }
+	    {
+		postMess(nodePath().c_str(),_("Auth wrong!!!"));
+		continue;
+	    }
 	    user_open = d_usr.user().toAscii().data();
 	    break;
 	}
@@ -202,16 +202,16 @@ void TUIMod::modStart( )
 }
 
 void TUIMod::modStop( )
-{   
+{
 #if OSC_DEBUG
     mess_debug(nodePath().c_str(),_("Stop module."));
 #endif
 
     end_run = true;
-    
+
     for( int i_w = 0; i_w < cfapp.size(); i_w++ )
 	while(cfapp[i_w]) usleep(STD_WAIT_DELAY*1000);
-    
+
     run_st = false;
 }
 
@@ -219,8 +219,8 @@ void TUIMod::regWin( QMainWindow *win )
 {
     int i_w;
     for( i_w = 0; i_w < cfapp.size(); i_w++ )
-        if( cfapp[i_w] == NULL ) break;
-    if( i_w == cfapp.size() )	cfapp.push_back(NULL);	
+	if( cfapp[i_w] == NULL ) break;
+    if( i_w == cfapp.size() )	cfapp.push_back(NULL);
     cfapp[i_w] = win;
 }
 
@@ -235,19 +235,19 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
-        TUI::cntrCmdProc(opt);
-        if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
+	TUI::cntrCmdProc(opt);
+	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
 	{
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/start_path",_("Configurator start path"),0664,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/start_user",_("Configurator start user"),0664,"root","root",3,"tp","str","dest","select","select","/prm/cfg/u_lst");
 	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to remote stations list configuration"),0660,"root","root",1,"tp","lnk");
 	}
-        ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
-        return;
+	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
+	return;
     }
-    
+
     //- Process command to page -
-    string a_path = opt->attr("path");    
+    string a_path = opt->attr("path");
     if( a_path == "/prm/cfg/start_path" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( startPath() );
@@ -285,13 +285,13 @@ void TUIMod::postMess( const string &cat, const string &mess, TUIMod::MessLev ty
     //- QT message -
     switch(type)
     {
-        case TUIMod::Info:
-            QMessageBox::information(parent,_(MOD_NAME),mess.c_str());    break;
+	case TUIMod::Info:
+	    QMessageBox::information(parent,_(MOD_NAME),mess.c_str());	break;
 	case TUIMod::Warning:
-            QMessageBox::warning(parent,_(MOD_NAME),mess.c_str());        break;
-        case TUIMod::Error:
-            QMessageBox::critical(parent,_(MOD_NAME),mess.c_str());       break;
-        case TUIMod::Crit:
-    	    QErrorMessage::qtHandler()->showMessage(mess.c_str());      break;
+	    QMessageBox::warning(parent,_(MOD_NAME),mess.c_str());	break;
+	case TUIMod::Error:
+	    QMessageBox::critical(parent,_(MOD_NAME),mess.c_str());	break;
+	case TUIMod::Crit:
+	    QErrorMessage::qtHandler()->showMessage(mess.c_str());	break;
     }
 }

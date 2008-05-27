@@ -69,7 +69,7 @@ class ConfApp: public QMainWindow
 	void closeEvent( QCloseEvent* );
 
     private slots:
-	//Slots	
+	//Slots
 	void quitSt( );
 	void exitModifChk( );
 
@@ -94,11 +94,11 @@ class ConfApp: public QMainWindow
 	void enterWhatsThis( );
 
 	void editToolUpdate( );				//Edit tools visible update
-	void endRunChk( );      			//End run flag check
+	void endRunChk( );				//End run flag check
 
 	//- QListView -
 	void selectItem( );				//Processing of select item signal
-	void viewChild( QTreeWidgetItem * i );		//Processing of view item signal 
+	void viewChild( QTreeWidgetItem * i );		//Processing of view item signal
 	void onItem( QTreeWidgetItem * i );		//View item path
 	void ctrTreePopup( );
 	void treeUpdate( );				//Update expanded content of tree
@@ -107,7 +107,7 @@ class ConfApp: public QMainWindow
 	void tabSelect( QWidget *wdg );			//Change curent widget
 
 	//- Self widget's slots -
-	void checkBoxStChange( int stat ); 		//QCheckBox
+	void checkBoxStChange( int stat );		//QCheckBox
 	void buttonClicked( );				//Button
 	void combBoxActivate( const QString& );		//QComboBox
 	void listBoxGo( QListWidgetItem* );		//QListBox go for banch
@@ -140,16 +140,16 @@ class ConfApp: public QMainWindow
 	int cntrIfCmd( XMLNode &node );
 
 	//Attributes
-	QTimer	*endRunTimer, *autoUpdTimer;
+	QTimer		*endRunTimer, *autoUpdTimer;
 
 	QTreeWidget	*CtrTree;
 	QLabel		*titleIco;
 	QLabel		*titleLab;
 	QLabel		*mStModify;
-	QTabWidget  	*tabs;
+	QTabWidget	*tabs;
 	UserStBar	*w_user;
 
-	QAction 	*actUp,	*actPrev, *actNext,
+	QAction		*actUp, *actPrev, *actNext,
 			*actUser,
 			*actStartUpd, *actStopUpd,
 			*actDBLoad, *actDBSave,

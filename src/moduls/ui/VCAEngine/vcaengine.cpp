@@ -68,14 +68,14 @@ using namespace VCA;
 Engine::Engine( string name )
 {
     mId		= MOD_ID;
-    mName       = MOD_NAME;
-    mType  	= MOD_TYPE;
-    mVers      	= VERSION;
-    mAutor    	= AUTORS;
-    mDescr  	= DESCRIPTION;
-    mLicense   	= LICENSE;
-    mSource    	= name;
-    
+    mName	= MOD_NAME;
+    mType	= MOD_TYPE;
+    mVers	= VERSION;
+    mAutor	= AUTORS;
+    mDescr	= DESCRIPTION;
+    mLicense	= LICENSE;
+    mSource	= name;
+
     mod		= this;
 
     id_wlb = grpAdd("wlb_");
@@ -105,9 +105,9 @@ string Engine::optDescr( )
     char buf[STR_BUF_LEN];
 
     snprintf(buf,sizeof(buf),_(
-        "======================= The module <%s:%s> options =======================\n"
-        "---------- Parameters of the module section <%s> in config file ----------\n\n"),
-    	    MOD_TYPE,MOD_ID,nodePath().c_str());
+	"======================= The module <%s:%s> options =======================\n"
+	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
+	    MOD_TYPE,MOD_ID,nodePath().c_str());
 
     return buf;
 }
@@ -115,9 +115,9 @@ string Engine::optDescr( )
 void Engine::postEnable( int flag )
 {
     TModule::postEnable( flag );
-    
+
     if( !(flag&TCntrNode::NodeConnect) ) return;
-    
+
     //- Make lib's DB structure -
     lbwdg_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
     lbwdg_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
@@ -128,11 +128,11 @@ void Engine::postEnable( int flag )
     lbwdg_el.fldAdd( new TFld("GRP",_("Group"),TFld::String,TFld::NoFlag,"20","UI") );
     lbwdg_el.fldAdd( new TFld("PERMIT",_("Permision"),TFld::Integer,TFld::OctDec,"3","436") );
 
-    //- Make library widgets data container -    
+    //- Make library widgets data container -
     wdgdata_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
     wdgdata_el.fldAdd( new TFld("MIME",_("Mime type"),TFld::String,TFld::NoFlag,"30") );
     wdgdata_el.fldAdd( new TFld("DATA",_("Mime data"),TFld::String,TFld::NoFlag,"500000") );
-    
+
     //- Make widgets DB structure -
     wdg_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
     wdg_el.fldAdd( new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000") );
@@ -157,7 +157,7 @@ void Engine::postEnable( int flag )
     wdgio_el.fldAdd( new TFld("SELF_FLG",_("Attribute self flags"),TFld::Integer,TFld::NoFlag,"5") );
     wdgio_el.fldAdd( new TFld("CFG_TMPL",_("Configuration template"),TFld::String,TFld::NoFlag,"30") );
     wdgio_el.fldAdd( new TFld("CFG_VAL",_("Configuration value"),TFld::String,TFld::NoFlag,"1000") );
-    
+
     //- Make widget's user IO DB structure -
     wdguio_el.fldAdd( new TFld("IDW",_("Widget ID"),TFld::String,TCfg::Key,"100") );
     wdguio_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"61") );
@@ -220,130 +220,146 @@ void Engine::load_( )
 {
 #if OSC_DEBUG
     mess_debug(nodePath().c_str(),_("Load module."));
-#endif    
+#endif
 
     //- Load parameters from command line -
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
     {
-        {"help"    ,0,NULL,'h'},
-        {NULL      ,0,NULL,0  }
+	{"help"    ,0,NULL,'h'},
+	{NULL      ,0,NULL,0  }
     };
 
     optind=opterr=0;
     do
     {
-        next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
-        switch(next_opt)
-        {
-    	    case 'h': fprintf(stdout,optDescr().c_str()); break;
-            case -1 : break;
-        }
+	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
+	switch(next_opt)
+	{
+	    case 'h': fprintf(stdout,optDescr().c_str()); break;
+	    case -1 : break;
+	}
     } while(next_opt != -1);
 
     //- Load parameters from config file and DB -
+    setSynthCom( TBDS::genDBGet(nodePath()+"SynthCom",synthCom()) );
+    setSynthRes( TBDS::genDBGet(nodePath()+"SynthRes",synthRes()) );
+    setSynthCode( TBDS::genDBGet(nodePath()+"SynthCode",synthCode()) );
+
     //-- Load widget's libraries --
     try
     {
-        //--- Search and create new libraries ---
-        TConfig c_el(&elWdgLib());
+	//--- Search and create new libraries ---
+	TConfig c_el(&elWdgLib());
 	c_el.cfgViewAll(false);
-        vector<string> tdb_ls, db_ls;
+	vector<string> tdb_ls, db_ls;
 
 	//---- Search into DB ----
 	SYS->db().at().modList(tdb_ls);
-        for( int i_tp = 0; i_tp < tdb_ls.size(); i_tp++ )
-        {
-            SYS->db().at().at(tdb_ls[i_tp]).at().list(db_ls);
-            for( int i_db = 0; i_db < db_ls.size(); i_db++ )
-            {
-                string wbd=tdb_ls[i_tp]+"."+db_ls[i_db];
-                int lib_cnt = 0;
-                while(SYS->db().at().dataSeek(wbd+"."+wlbTable(),"",lib_cnt++,c_el) )
-                {
-                    string l_id = c_el.cfg("ID").getS();
-        	    c_el.cfg("ID").setS("");		    
-                    if(!wlbPresent(l_id)) wlbAdd(l_id,"",(wbd==SYS->workDB())?"*.*":wbd);
-                }
-            }
-        }
+	for( int i_tp = 0; i_tp < tdb_ls.size(); i_tp++ )
+	{
+	    SYS->db().at().at(tdb_ls[i_tp]).at().list(db_ls);
+	    for( int i_db = 0; i_db < db_ls.size(); i_db++ )
+	    {
+		string wbd=tdb_ls[i_tp]+"."+db_ls[i_db];
+		int lib_cnt = 0;
+		while(SYS->db().at().dataSeek(wbd+"."+wlbTable(),"",lib_cnt++,c_el) )
+		{
+		    string l_id = c_el.cfg("ID").getS();
+		    c_el.cfg("ID").setS("");
+		    if(!wlbPresent(l_id)) wlbAdd(l_id,"",(wbd==SYS->workDB())?"*.*":wbd);
+		}
+	    }
+	}
 
 	//---- Search into config file ----
-        int lib_cnt = 0;
-        while(SYS->db().at().dataSeek("",nodePath()+"LIB/",lib_cnt++,c_el) )
-        {
-            string l_id = c_el.cfg("ID").getS();
-    	    c_el.cfg("ID").setS("");	    
-            if( !wlbPresent(l_id) )	wlbAdd(l_id,"","*.*");
+	int lib_cnt = 0;
+	while(SYS->db().at().dataSeek("",nodePath()+"LIB/",lib_cnt++,c_el) )
+	{
+	    string l_id = c_el.cfg("ID").getS();
+	    c_el.cfg("ID").setS("");
+	    if( !wlbPresent(l_id) )	wlbAdd(l_id,"","*.*");
 	}
 
 	//--- Load present libraries ---
-        wlbList(tdb_ls);
-        for( int l_id = 0; l_id < tdb_ls.size(); l_id++ )
-    	    wlbAt(tdb_ls[l_id]).at().load();
+	wlbList(tdb_ls);
+	for( int l_id = 0; l_id < tdb_ls.size(); l_id++ )
+	    wlbAt(tdb_ls[l_id]).at().load();
     }catch( TError err )
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-        mess_err(nodePath().c_str(),_("Load widget's libraries error."));
+	mess_err(nodePath().c_str(),_("Load widget's libraries error."));
     }
-    
+
     //-- Load projects --
     try
     {
-        //--- Search and create new projects ---
-        TConfig c_el(&elProject());
+	//--- Search and create new projects ---
+	TConfig c_el(&elProject());
 	c_el.cfgViewAll(false);
-        vector<string> tdb_ls, db_ls;
+	vector<string> tdb_ls, db_ls;
 
 	//---- Search into DB ----
 	SYS->db().at().modList(tdb_ls);
-        for( int i_tp = 0; i_tp < tdb_ls.size(); i_tp++ )
-        {
-            SYS->db().at().at(tdb_ls[i_tp]).at().list(db_ls);
-            for( int i_db = 0; i_db < db_ls.size(); i_db++ )
-            {
-                string wbd=tdb_ls[i_tp]+"."+db_ls[i_db];
-                int lib_cnt = 0;
-                while(SYS->db().at().dataSeek(wbd+"."+prjTable(),"",lib_cnt++,c_el) )
-                {
-                    string prj_id = c_el.cfg("ID").getS();
-        	    c_el.cfg("ID").setS("");		    
-                    if( !prjPresent(prj_id) )
+	for( int i_tp = 0; i_tp < tdb_ls.size(); i_tp++ )
+	{
+	    SYS->db().at().at(tdb_ls[i_tp]).at().list(db_ls);
+	    for( int i_db = 0; i_db < db_ls.size(); i_db++ )
+	    {
+		string wbd=tdb_ls[i_tp]+"."+db_ls[i_db];
+		int lib_cnt = 0;
+		while(SYS->db().at().dataSeek(wbd+"."+prjTable(),"",lib_cnt++,c_el) )
+		{
+		    string prj_id = c_el.cfg("ID").getS();
+		    c_el.cfg("ID").setS("");
+		    if( !prjPresent(prj_id) )
 			prjAdd(prj_id,"",(wbd==SYS->workDB())?"*.*":wbd);
-                }
-            }
-        }
+		}
+	    }
+	}
 
 	//---- Search into config file ----
-        int el_cnt = 0;
-        while(SYS->db().at().dataSeek("",nodePath()+"PRJ/",el_cnt++,c_el) )
-        {
-            string prj_id = c_el.cfg("ID").getS();
-    	    c_el.cfg("ID").setS("");	    
-            if( !prjPresent(prj_id) )	prjAdd(prj_id,"","*.*");
+	int el_cnt = 0;
+	while(SYS->db().at().dataSeek("",nodePath()+"PRJ/",el_cnt++,c_el) )
+	{
+	    string prj_id = c_el.cfg("ID").getS();
+	    c_el.cfg("ID").setS("");
+	    if( !prjPresent(prj_id) )	prjAdd(prj_id,"","*.*");
 	}
 
 	//--- Load present projects ---
-        prjList(tdb_ls);
-        for( int el_id = 0; el_id < tdb_ls.size(); el_id++ )
-    	    prjAt(tdb_ls[el_id]).at().load();
+	prjList(tdb_ls);
+	for( int el_id = 0; el_id < tdb_ls.size(); el_id++ )
+	    prjAt(tdb_ls[el_id]).at().load();
     }catch( TError err )
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-        mess_err(nodePath().c_str(),_("Load projects error."));
+	mess_err(nodePath().c_str(),_("Load projects error."));
     }
-    
+
     //- Libraries enable -
     vector<string> ls;
     wlbList(ls);
     for( int l_id = 0; l_id < ls.size(); l_id++ )
 	wlbAt(ls[l_id]).at().setEnable(true);
-	
+
     //- Projects enable -
     prjList(ls);
     for( int l_id = 0; l_id < ls.size(); l_id++ )
-	prjAt(ls[l_id]).at().setEnable(true);    
+	prjAt(ls[l_id]).at().setEnable(true);
+}
+
+void Engine::save_( )
+{
+#if OSC_DEBUG
+    mess_debug(nodePath().c_str(),_("Save module."));
+#endif
+
+    //- Save parameters to DB -
+    TBDS::genDBSet( nodePath()+"SynthCom", synthCom() );
+    TBDS::genDBSet( nodePath()+"SynthRes", synthRes() );
+    TBDS::genDBSet( nodePath()+"SynthCode", synthCode() );
 }
 
 void Engine::modStart()
@@ -357,7 +373,7 @@ void Engine::modStart()
     wlbList(ls);
     for( int l_id = 0; l_id < ls.size(); l_id++ )
 	wlbAt(ls[l_id]).at().setEnable(true);
-	
+
     //- Projects enable -
     prjList(ls);
     for( int l_id = 0; l_id < ls.size(); l_id++ )
@@ -431,16 +447,16 @@ void Engine::cntrCmdProc( XMLNode *opt )
     //- Service commands process -
     if( a_path == "/serv/0" )	//Session operation
     {
-    	if( ctrChkNode(opt,"list",RWRWRW,"root","root",SEQ_RD) ) //List session for some project
-        {
+	if( ctrChkNode(opt,"list",RWRWRW,"root","root",SEQ_RD) ) //List session for some project
+	{
 	    string prj = opt->attr("prj");
-    	    vector<string> ls;
-    	    sesList(ls);
-    	    for( int i_l = 0; i_l < ls.size(); i_l++ )
-		if( prj.empty() || sesAt(ls[i_l]).at().projNm() == prj )			    
-                    opt->childAdd("el")->setText(ls[i_l]);
+	    vector<string> ls;
+	    sesList(ls);
+	    for( int i_l = 0; i_l < ls.size(); i_l++ )
+		if( prj.empty() || sesAt(ls[i_l]).at().projNm() == prj )
+		    opt->childAdd("el")->setText(ls[i_l]);
 	}
-        else if( ctrChkNode(opt,"connect",RWRWRW,"root","root",SEQ_WR) )
+	else if( ctrChkNode(opt,"connect",RWRWRW,"root","root",SEQ_WR) )
 	{
 	    string sess = opt->attr("sess");
 	    string prj  = opt->attr("prj");
@@ -450,7 +466,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 		//- Prepare session name -
 		sess = prj;
 		for( int p_cnt = 0; sesPresent(sess); p_cnt++ )
-                    sess = prj+TSYS::int2str(p_cnt);
+		    sess = prj+TSYS::int2str(p_cnt);
 		sesAdd( sess, prj );
 		sesAt(sess).at().setUser(opt->attr("user"));
 		sesAt(sess).at().setStart(true);
@@ -467,75 +483,105 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	}
 	return;
     }
-		
+
     //- Get page info -
     if( opt->name() == "info" )
     {
-        TUI::cntrCmdProc(opt);
-        ctrMkNode("grp",opt,-1,"/br/prj_",_("Project"),0664,"root","UI",1,"idm","1");	
-        ctrMkNode("grp",opt,-1,"/br/wlb_",_("Widget's library"),0664,"root","UI",1,"idm","1");
-        ctrMkNode("grp",opt,-1,"/br/ses_",_("Session"),0664,"root","UI",1,"idm","1");	
+	TUI::cntrCmdProc(opt);
+	ctrMkNode("grp",opt,-1,"/br/prj_",_("Project"),0664,"root","UI",1,"idm","1");
+	ctrMkNode("grp",opt,-1,"/br/wlb_",_("Widget's library"),0664,"root","UI",1,"idm","1");
+	ctrMkNode("grp",opt,-1,"/br/ses_",_("Session"),0664,"root","UI",1,"idm","1");
 	if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"),0444,"root","UI"))
 	{
-    	    ctrMkNode("list",opt,-1,"/prm/cfg/prj",_("Project"),0664,"root","UI",4,"tp","br","idm","1","s_com","add,del","br_pref","prj_");
-    	    ctrMkNode("list",opt,-1,"/prm/cfg/wlb",_("Widget's libraries"),0664,"root","UI",4,"tp","br","idm","1","s_com","add,del","br_pref","wlb_");
+	    ctrMkNode("list",opt,-1,"/prm/cfg/prj",_("Project"),0664,"root","UI",4,"tp","br","idm","1","s_com","add,del","br_pref","prj_");
+	    ctrMkNode("list",opt,-1,"/prm/cfg/wlb",_("Widget's libraries"),0664,"root","UI",4,"tp","br","idm","1","s_com","add,del","br_pref","wlb_");
 	}
 	if(ctrMkNode("area",opt,1,"/ses",_("Sessions"),0444,"root","UI"))
-    	    ctrMkNode("list",opt,-1,"/ses/ses",_("Sessions"),0664,"root","UI",3,"tp","br","s_com","add,del","br_pref","ses_");
-        return;
+	    ctrMkNode("list",opt,-1,"/ses/ses",_("Sessions"),0664,"root","UI",3,"tp","br","s_com","add,del","br_pref","ses_");
+	if(ctrMkNode("area",opt,2,"/tts",_("Text synthesis"),0444,"root","UI"))
+	{
+	    ctrMkNode("fld",opt,-1,"/tts/comm",_("Command"),0664,"root","UI",4,"tp","str","dest","sel_ed","select","/tts/comm_ls","help",
+		_("Command line for call text synthesis engine.\n"
+		  "Use next words for replace:\n"
+		  "  %t - synthesis text;\n"
+		  "  %f - result file name."
+		  "If result file name not used then result readed from pipe.\nIf used result file name and not used %t then synthesis text sending to pipe."));
+	    ctrMkNode("fld",opt,-1,"/tts/file",_("Result file"),0664,"root","UI",2,"tp","str","help",_("Result file of work TTS engine. If file no set use pipe for get result."));
+	    ctrMkNode("fld",opt,-1,"/tts/code",_("Text code"),0664,"root","UI",2,"tp","str","help",_("Engine text codepage for text encode to it."));
+	}
+	return;
     }
-    
+
     //- Process command for page -
     if( a_path == "/br/prj_" || a_path == "/prm/cfg/prj" )
     {
-        if( ctrChkNode(opt,"get",0664,"root","UI",SEQ_RD) )
-        {
-            vector<string> lst;
-            prjList(lst);
-            for( unsigned i_a=0; i_a < lst.size(); i_a++ )
-                opt->childAdd("el")->setAttr("id",lst[i_a])->setText(prjAt(lst[i_a]).at().name());
-        }
-        if( ctrChkNode(opt,"add",0664,"root","UI",SEQ_WR) )
+	if( ctrChkNode(opt,"get",0664,"root","UI",SEQ_RD) )
+	{
+	    vector<string> lst;
+	    prjList(lst);
+	    for( unsigned i_a=0; i_a < lst.size(); i_a++ )
+		opt->childAdd("el")->setAttr("id",lst[i_a])->setText(prjAt(lst[i_a]).at().name());
+	}
+	if( ctrChkNode(opt,"add",0664,"root","UI",SEQ_WR) )
 	{
 	    prjAdd(opt->attr("id"),opt->text());
 	    prjAt(opt->attr("id")).at().setUser(opt->attr("user"));
 	}
-        if( ctrChkNode(opt,"del",0664,"root","UI",SEQ_WR) )   prjDel(opt->attr("id"),true);
-    }    
+	if( ctrChkNode(opt,"del",0664,"root","UI",SEQ_WR) )   prjDel(opt->attr("id"),true);
+    }
     else if( a_path == "/br/wlb_" || a_path == "/prm/cfg/wlb" )
     {
-        if( ctrChkNode(opt,"get",0664,"root","UI",SEQ_RD) )
-        {
-            vector<string> lst;
-            wlbList(lst);
-            for( unsigned i_a=0; i_a < lst.size(); i_a++ )
-                opt->childAdd("el")->setAttr("id",lst[i_a])->setText(wlbAt(lst[i_a]).at().name());
-        }
-        if( ctrChkNode(opt,"add",0664,"root","UI",SEQ_WR) )
+	if( ctrChkNode(opt,"get",0664,"root","UI",SEQ_RD) )
+	{
+	    vector<string> lst;
+	    wlbList(lst);
+	    for( unsigned i_a=0; i_a < lst.size(); i_a++ )
+		opt->childAdd("el")->setAttr("id",lst[i_a])->setText(wlbAt(lst[i_a]).at().name());
+	}
+	if( ctrChkNode(opt,"add",0664,"root","UI",SEQ_WR) )
 	{
 	    wlbAdd(opt->attr("id"),opt->text());
 	    wlbAt(opt->attr("id")).at().setUser(opt->attr("user"));
 	}
-        if( ctrChkNode(opt,"del",0664,"root","UI",SEQ_WR) )   wlbDel(opt->attr("id"),true);
+	if( ctrChkNode(opt,"del",0664,"root","UI",SEQ_WR) )   wlbDel(opt->attr("id"),true);
     }
     else if( a_path == "/prm/cfg/cp/cp" && ctrChkNode(opt,"set",0660,"root","UI",SEQ_WR) )
 	nodeCopy( nodePath(0,true)+opt->attr("src"), nodePath(0,true)+opt->attr("dst"), opt->attr("user") );
     else if( a_path == "/br/ses_" || a_path == "/ses/ses" )
     {
-        if( ctrChkNode(opt,"get",0664,"root","UI",SEQ_RD) )
-        {
-            vector<string> lst;
-            sesList(lst);
-            for( unsigned i_a=0; i_a < lst.size(); i_a++ )
-                opt->childAdd("el")->setText(lst[i_a]);
-        }
-        if( ctrChkNode(opt,"add",0664,"root","UI",SEQ_WR) )
+	if( ctrChkNode(opt,"get",0664,"root","UI",SEQ_RD) )
+	{
+	    vector<string> lst;
+	    sesList(lst);
+	    for( unsigned i_a=0; i_a < lst.size(); i_a++ )
+		opt->childAdd("el")->setText(lst[i_a]);
+	}
+	if( ctrChkNode(opt,"add",0664,"root","UI",SEQ_WR) )
 	{
 	    sesAdd(opt->text());
 	    sesAt(opt->text()).at().setUser(opt->attr("user"));
 	    sesAt(opt->text()).at().setBackgrnd(true);
 	}
-        if( ctrChkNode(opt,"del",0664,"root","UI",SEQ_WR) )   sesDel(opt->text(),true);
-    }        
+	if( ctrChkNode(opt,"del",0664,"root","UI",SEQ_WR) )   sesDel(opt->text(),true);
+    }
+    else if( a_path == "/tts/code" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","UI",SEQ_RD) )	opt->setText(synthCode());
+	if( ctrChkNode(opt,"set",0664,"root","UI",SEQ_WR) )	setSynthCode(opt->text());
+    }
+    else if( a_path == "/tts/comm" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","UI",SEQ_RD) )	opt->setText(synthCom());
+	if( ctrChkNode(opt,"set",0664,"root","UI",SEQ_WR) )	setSynthCom(opt->text());
+    }
+    else if( a_path == "/tts/file" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","UI",SEQ_RD) )	opt->setText(synthRes());
+	if( ctrChkNode(opt,"set",0664,"root","UI",SEQ_WR) )	setSynthRes(opt->text());
+    }
+    else if( a_path == "/tts/comm_ls" && ctrChkNode(opt) )
+    {
+	opt->childAdd("el")->setText("echo \"%t\" | ru_tts | sox -t raw -s -b -r 10000 -c 1 -v 0.8 - -");
+    }
     else TUI::cntrCmdProc(opt);
 }

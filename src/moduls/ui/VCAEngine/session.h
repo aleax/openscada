@@ -82,7 +82,7 @@ class Session : public TCntrNode
 
 	//- Alarms process -
 	void alarmSet( const string &wpath, const string &alrm );	//Alarm set
-	void alarmQvit( const string &wpath, ui8 qvit_tmpl );		//Alarm qvit send
+	void alarmQuittance( const string &wpath, ui8 quit_tmpl );	//Alarm quittance send
 
     protected:
 	//Methods
@@ -98,18 +98,19 @@ class Session : public TCntrNode
 	{
 	    public:
 		//Methods
-		Alarm( const string &ipath, ui8 ilev, ui8 itp, const string &icat, const string &imess, const string &itpArg = "" ) :
-		    path(ipath), lev(ilev), tp(itp), cat(icat), mess(imess), tpArg(itpArg)	{ }
-		Alarm( const string &path, const string &alrm );
+		Alarm( const string &ipath, ui8 ilev, ui8 itp, const string &icat, const string &imess, const string &itpArg = "", unsigned iclc = 0 ) :
+		    path(ipath), lev(ilev), tp(itp), cat(icat), mess(imess), tpArg(itpArg), clc(iclc)	{ }
+		Alarm( const string &path, const string &alrm, unsigned clc );
 		Alarm( ) : lev(0), tp(0)	{ }
 
 		//Attributes
-		ui8 	lev,	//Level
-			tp;	//Type
-		string	path,	//Widget path
-			cat,	//Categoty
-			mess,	//Message
-			tpArg;	//Type argument
+		ui8	    lev,	//Level
+			    tp;		//Type
+		string	    path,	//Widget path
+			    cat,	//Categoty
+			    mess,	//Message
+			    tpArg;	//Type argument
+		unsigned    clc;	//Clock
 	};
 
 	//Methods
@@ -176,7 +177,7 @@ class SessWdg : public Widget, public TValFunc
 
 	//- Alarms process -
 	void alarmSet( bool isSet = false );
-	void alarmQvit( ui8 qvit_tmpl, bool isSet = false );
+	void alarmQuittance( ui8 quit_tmpl, bool isSet = false );
 
 	//- Access to mime resource -
 	string resourceGet( const string &id, string *mime = NULL );

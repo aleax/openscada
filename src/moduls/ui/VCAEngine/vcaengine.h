@@ -42,37 +42,45 @@ class Engine : public TUI
     public:
 	//Methods
 	Engine( string name );
-	~Engine( );	
+	~Engine( );
 
-        string modInfo( const string &name );
-        void   modInfo( vector<string> &list );
+	string modInfo( const string &name );
+	void   modInfo( vector<string> &list );
 
-        void modStart( );
+	void modStart( );
 	void modStop( );
-	
+
+	string synthCom( )	{ return mSynthCom; }
+	string synthRes( )	{ return mSynthRes; }
+	string synthCode( )	{ return mSynthCode; }
+
 	string wlbTable( )	{ return "VCALibs"; }
 	string prjTable( )	{ return "VCAPrjs"; }
-	
+
+	void setSynthCom( const string &vl )	{ mSynthCom = vl; modif(); }
+	void setSynthRes( const string &vl )	{ mSynthRes = vl; modif(); }
+	void setSynthCode( const string &vl )	{ mSynthCode = vl; modif(); }
+
 	//- Widget's libraries -
-        void wlbList( vector<string> &ls )			{ chldList( id_wlb, ls ); }
-        bool wlbPresent( const string &id )			{ return chldPresent( id_wlb, id ); }
+	void wlbList( vector<string> &ls )			{ chldList( id_wlb, ls ); }
+	bool wlbPresent( const string &id )			{ return chldPresent( id_wlb, id ); }
 	void wlbAdd( const string &iid, const string &inm = "", const string &idb = "*.*" );
-        void wlbDel( const string &iid, bool full = false )	{ chldDel( id_wlb, iid, -1, full ); }	
-        AutoHD<WidgetLib> wlbAt( const string &id );
-	
+	void wlbDel( const string &iid, bool full = false )	{ chldDel( id_wlb, iid, -1, full ); }
+	AutoHD<WidgetLib> wlbAt( const string &id );
+
 	//- Projects -
-        void prjList( vector<string> &ls )			{ chldList( id_prj, ls ); }
-        bool prjPresent( const string &id )			{ return chldPresent( id_prj, id ); }
+	void prjList( vector<string> &ls )			{ chldList( id_prj, ls ); }
+	bool prjPresent( const string &id )			{ return chldPresent( id_prj, id ); }
 	void prjAdd( const string &iid, const string &inm = "", const string &idb = "*.*" );
-        void prjDel( const string &iid, bool full = false )	{ chldDel( id_prj, iid, -1, full ); }
-        AutoHD<Project> prjAt( const string &id );
-	
+	void prjDel( const string &iid, bool full = false )	{ chldDel( id_prj, iid, -1, full ); }
+	AutoHD<Project> prjAt( const string &id );
+
 	//- Sessions -
-        void sesList( vector<string> &ls )			{ chldList( id_ses, ls ); }
-        bool sesPresent( const string &id )			{ return chldPresent( id_ses, id ); }
+	void sesList( vector<string> &ls )			{ chldList( id_ses, ls ); }
+	bool sesPresent( const string &id )			{ return chldPresent( id_ses, id ); }
 	void sesAdd( const string &id, const string &proj = "" );
-        void sesDel( const string &iid, bool full = false )	{ chldDel( id_ses, iid, -1, full ); }
-        AutoHD<Session> sesAt( const string &id );
+	void sesDel( const string &iid, bool full = false )	{ chldDel( id_ses, iid, -1, full ); }
+	AutoHD<Session> sesAt( const string &id );
 
 	//- DB structures -
 	TElem &elWdgLib( )	{ return lbwdg_el; }
@@ -86,13 +94,14 @@ class Engine : public TUI
 
     protected:
 	//Methods
-        void load_( );
+	void load_( );
+	void save_( );
 	void postEnable( int flag );
 	void preDisable( int flag );
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process	
-	
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+
 	string optDescr( );
-	
+
     private:
 	//Attributes
 	int	id_wlb, id_prj, id_ses;
@@ -104,9 +113,9 @@ class Engine : public TUI
 		inclwdg_el,	//The table structure of container including widgets
 		prj_el,		//The generic table structure of project
 		page_el;	//The table structure of project's pages
-	string	cp_sel, cp_del;	//Copy source and destination elements
+	string	mSynthCom, mSynthRes, mSynthCode;	//Synth parameters
 };
-    
+
 extern  Engine *mod;
 }
 

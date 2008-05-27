@@ -150,19 +150,19 @@ class ModInspAttr: public QAbstractTableModel
 class InspAttr: public QTreeView
 {
     Q_OBJECT
-    
+
     public:
 	//Public methods
 	InspAttr( QWidget * parent, VisDevelop *mainWind );
 	~InspAttr( );
-		
+
 	bool hasFocus( );
-		
+
 	void setWdg( const string &iwdg );
 
-    signals:	
+    signals:
 	void modified( const string &idwdg );
-	
+
     private:
 	//Private data
 	//* Attributes item delegate    *
@@ -203,20 +203,20 @@ class InspAttrDock: public QDockWidget
 	//Public methods
 	InspAttrDock( VisDevelop * parent );
 	~InspAttrDock( );
-	
+
 	VisDevelop *owner( );
-	
+
 	bool hasFocus( );
 
     signals:
 	void modified( const string &idwdg );
-	
+
     public slots:
-	void setWdg( const string &iwdg );	
+	void setWdg( const string &iwdg );
 
     private:
-        //Private attributes
-        InspAttr *ainsp_w;
+	//Private attributes
+	InspAttr *ainsp_w;
 };
 
 //****************************************
@@ -225,25 +225,25 @@ class InspAttrDock: public QDockWidget
 class InspLnk: public QTreeWidget
 {
     Q_OBJECT
-    
+
     public:
 	//Public methods
 	InspLnk( QWidget * parent, VisDevelop *mainWind );
 	~InspLnk( );
-	
+
 	string user( );
-	
+
 	void setWdg( const string &iwdg );
 
 	VisDevelop *mainWin( )     { return main_win; }
-	
+
     public slots:
 	void changeLnk( QTreeWidgetItem*, int );
-	
+
     private:
 	//Private methods
         bool event( QEvent *event );
-    
+
 	//Private attributes
 	bool show_init;
 	string it_wdg;
