@@ -1,3 +1,8 @@
+2008-05-27 Maxim
+- FIX:/UI/VCAEngine: Break next pages loading if one page load terminated is fixed.
+- FIX:/UI/VCAEngine: Empty procedure compile try is fixed.
+
+
 2008-05-27 Roman
 - !!:/SYS: More odd spaces from sources is removed.
 - /DB: Some fields tooltips is added, into modules too.

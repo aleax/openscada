@@ -174,7 +174,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
             shapeItems_temp = shapeItems;
             shapeItems.clear();
         }
-        if( inundationItems.size() )	inundationItems.clear();
+        if( inundationItems.size() ) inundationItems.clear();
         
 	//- Parse last attributes list and make point list -
         string sel, ln_st;
@@ -3489,13 +3489,13 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
                 else
                 {
                     arc_a = length( QPointF( scaleRotate( (*pnts)[shapeItems[in_fig_num[0]].n3], view, flag_scaleRotate ).x(),
-                                         scaleRotate( (*pnts)[shapeItems[in_fig_num[0]].n3], view, flag_scaleRotate ).y() ),
-                                 QPointF( scaleRotate( (*pnts)[shapeItems[in_fig_num[0]].n5], view, flag_scaleRotate ).x(),
-                                         scaleRotate( (*pnts)[shapeItems[in_fig_num[0]].n5], view, flag_scaleRotate ).y() ) );
+                                             scaleRotate( (*pnts)[shapeItems[in_fig_num[0]].n3], view, flag_scaleRotate ).y() ),
+                                    QPointF( scaleRotate( (*pnts)[shapeItems[in_fig_num[0]].n5], view, flag_scaleRotate ).x(),
+                                             scaleRotate( (*pnts)[shapeItems[in_fig_num[0]].n5], view, flag_scaleRotate ).y() ) );
                     arc_b = length( QPointF( scaleRotate( (*pnts)[shapeItems[in_fig_num[0]].n3], view, flag_scaleRotate ).x(),
-                                         scaleRotate( (*pnts)[shapeItems[in_fig_num[0]].n3], view, flag_scaleRotate ).y() ),
-                                 QPointF( scaleRotate( (*pnts)[shapeItems[in_fig_num[0]].n4], view, flag_scaleRotate ).x(),
-                                         scaleRotate( (*pnts)[shapeItems[in_fig_num[0]].n4], view, flag_scaleRotate ).y() ) );
+                                             scaleRotate( (*pnts)[shapeItems[in_fig_num[0]].n3], view, flag_scaleRotate ).y() ),
+                                    QPointF( scaleRotate( (*pnts)[shapeItems[in_fig_num[0]].n4], view, flag_scaleRotate ).x(),
+                                             scaleRotate( (*pnts)[shapeItems[in_fig_num[0]].n4], view, flag_scaleRotate ).y() ) );
                 }
                 t_start = shapeItems[in_fig_num[0]].ctrlPos4.x();
                 t_end = shapeItems[in_fig_num[0]].ctrlPos4.y();
@@ -3552,13 +3552,13 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
                 else
                 {
                     arc_a = length( QPointF( scaleRotate( (*pnts)[shapeItems[in_fig_num[0]].n3], view, flag_scaleRotate ).x(),
-                                        scaleRotate( (*pnts)[shapeItems[in_fig_num[0]].n3], view, flag_scaleRotate ).y() ),
+                                             scaleRotate( (*pnts)[shapeItems[in_fig_num[0]].n3], view, flag_scaleRotate ).y() ),
                                     QPointF( scaleRotate( (*pnts)[shapeItems[in_fig_num[0]].n5], view, flag_scaleRotate ).x(),
-                                        scaleRotate( (*pnts)[shapeItems[in_fig_num[0]].n5], view, flag_scaleRotate ).y() ) );
+                                             scaleRotate( (*pnts)[shapeItems[in_fig_num[0]].n5], view, flag_scaleRotate ).y() ) );
                     arc_b = length( QPointF( scaleRotate( (*pnts)[shapeItems[in_fig_num[0]].n3], view, flag_scaleRotate ).x(),
-                                         scaleRotate( (*pnts)[shapeItems[in_fig_num[0]].n3], view, flag_scaleRotate ).y() ),
+                                             scaleRotate( (*pnts)[shapeItems[in_fig_num[0]].n3], view, flag_scaleRotate ).y() ),
                                     QPointF( scaleRotate( (*pnts)[shapeItems[in_fig_num[0]].n4], view, flag_scaleRotate ).x(),
-                                         scaleRotate( (*pnts)[shapeItems[in_fig_num[0]].n4], view, flag_scaleRotate ).y() ) );
+                                             scaleRotate( (*pnts)[shapeItems[in_fig_num[0]].n4], view, flag_scaleRotate ).y() ) );
                 }
 
                 t_start = shapeItems[in_fig_num[0]].ctrlPos4.x();
@@ -3663,13 +3663,13 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
                         else
                         {
                             arc_a = length( QPointF( scaleRotate( (*pnts)[shapeItems[in_index].n3], view, flag_scaleRotate ).x(),
-                                                 scaleRotate( (*pnts)[shapeItems[in_index].n3], view, flag_scaleRotate ).y() ),
+                                                     scaleRotate( (*pnts)[shapeItems[in_index].n3], view, flag_scaleRotate ).y() ),
                                             QPointF( scaleRotate( (*pnts)[shapeItems[in_index].n5], view, flag_scaleRotate ).x(),
-                                                 scaleRotate( (*pnts)[shapeItems[in_index].n5], view, flag_scaleRotate ).y() ) );
-                            arc_b = length( QPointF(scaleRotate( (*pnts)[shapeItems[in_index].n3], view, flag_scaleRotate ).x(),
-                                                 scaleRotate( (*pnts)[shapeItems[in_index].n3], view, flag_scaleRotate ).y() ),
+                                                     scaleRotate( (*pnts)[shapeItems[in_index].n5], view, flag_scaleRotate ).y() ) );
+                            arc_b = length( QPointF( scaleRotate( (*pnts)[shapeItems[in_index].n3], view, flag_scaleRotate ).x(),
+                                                     scaleRotate( (*pnts)[shapeItems[in_index].n3], view, flag_scaleRotate ).y() ),
                                             QPointF( scaleRotate( (*pnts)[shapeItems[in_index].n4], view, flag_scaleRotate ).x(),
-                                                 scaleRotate( (*pnts)[shapeItems[in_index].n4], view, flag_scaleRotate ).y() ) );
+                                                     scaleRotate( (*pnts)[shapeItems[in_index].n4], view, flag_scaleRotate ).y() ) );
                         }
 
                         t_start = shapeItems[in_index].ctrlPos4.x();
@@ -3724,13 +3724,13 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
                         else
                         {
                             arc_a = length( QPointF( scaleRotate( (*pnts)[shapeItems[in_index].n3], view, flag_scaleRotate).x(),
-                                                 scaleRotate( (*pnts)[shapeItems[in_index].n3], view, flag_scaleRotate ).y() ),
+                                                     scaleRotate( (*pnts)[shapeItems[in_index].n3], view, flag_scaleRotate ).y() ),
                                             QPointF( scaleRotate( (*pnts)[shapeItems[in_index].n5], view, flag_scaleRotate ).x(),
-                                                 scaleRotate( (*pnts)[shapeItems[in_index].n5], view, flag_scaleRotate).y() ) );
+                                                     scaleRotate( (*pnts)[shapeItems[in_index].n5], view, flag_scaleRotate).y() ) );
                             arc_b = length( QPointF( scaleRotate( (*pnts)[shapeItems[in_index].n3], view, flag_scaleRotate ).x(),
-                                                 scaleRotate( (*pnts)[shapeItems[in_index].n3], view, flag_scaleRotate ).y() ),
+                                                     scaleRotate( (*pnts)[shapeItems[in_index].n3], view, flag_scaleRotate ).y() ),
                                             QPointF( scaleRotate( (*pnts)[shapeItems[in_index].n4], view, flag_scaleRotate ).x(),
-                                                 scaleRotate( (*pnts)[shapeItems[in_index].n4], view, flag_scaleRotate ).y() ) );
+                                                     scaleRotate( (*pnts)[shapeItems[in_index].n4], view, flag_scaleRotate ).y() ) );
                         }
 
                         t_start = shapeItems[in_index].ctrlPos4.x();

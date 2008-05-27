@@ -840,7 +840,7 @@ void SessWdg::setProcess( bool val )
 {
     if( val && !enable() ) setEnable(true);
     //- Prepare process function value level -
-    if( val && calcProg().size() )
+    if( val && !TSYS::strEmpty(calcProg()) )
     {
 	//-- Prepare function io structure --
 	TFunction fio(parent().at().calcId());
@@ -1394,5 +1394,3 @@ void SessWdg::cntrCmdProc( XMLNode *opt )
     if( !(cntrCmdGeneric(opt) || cntrCmdAttributes(opt)) )
 	TCntrNode::cntrCmdProc(opt);
 }
-
-

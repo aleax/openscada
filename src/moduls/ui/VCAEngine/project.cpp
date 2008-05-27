@@ -208,7 +208,8 @@ void Project::setEnable( bool val )
     vector<string> f_lst;
     list(f_lst);
     for( int i_ls = 0; i_ls < f_lst.size(); i_ls++ )
-        at(f_lst[i_ls]).at().setEnable(val);
+	try{ at(f_lst[i_ls]).at().setEnable(val); }
+	catch( TError err )	{ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     m_enable = val;
 }
@@ -968,7 +969,8 @@ void Page::setEnable( bool val )
     vector<string>      ls;
     pageList(ls);
     for(int i_l = 0; i_l < ls.size(); i_l++ )
-	pageAt(ls[i_l]).at().setEnable(val);
+        try{ pageAt(ls[i_l]).at().setEnable(val); }
+	catch( TError err )     { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 void Page::wdgAdd( const string &wid, const string &name, const string &ipath )
