@@ -297,7 +297,7 @@ void Session::uiComm( const string &com, const string &prm, SessWdg *src )
 		    AutoHD<Attr> attr = cpg.at().attrAt(cAtrLs[i_al]);
 		    if( !(attr.at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut) &&
 			    TSYS::strSepParse(attr.at().cfgTempl(),0,'|') == "<page>" &&
-			    attr.at().cfgVal().empty() ) )	continue;
+			    (attr.at().cfgVal().empty() || attr.at().flgGlob()&Attr::Address) ) )	continue;
 		    atr_id = TSYS::strSepParse(attr.at().cfgTempl(),1,'|');
 		    if( prm.at().vlPresent(atr_id) )	attr.at().setCfgVal("prm:"+prm_lnk+"/a_"+atr_id);
 		}

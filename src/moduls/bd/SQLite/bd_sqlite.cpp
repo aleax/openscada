@@ -152,7 +152,7 @@ void MBD::postDisable(int flag)
     
     if( flag && owner().fullDeleteDB() )
     {
-	if( remove(TSYS::strSepParse(addr(),0,':').c_str()) != 0 )
+	if( remove(TSYS::strSepParse(addr(),0,';').c_str()) != 0 )
     	    throw TError(TSYS::DBClose,nodePath().c_str(),_("Delete bd error: %s"),strerror(errno));
     }
 }
@@ -162,14 +162,14 @@ void MBD::enable( )
     if( enableStat() )  return;
     
     cd_pg = codePage().size()?codePage():Mess->charset();    
-    int rc = sqlite3_open(TSYS::strSepParse(addr(),0,':').c_str(),&m_db);
+    int rc = sqlite3_open(TSYS::strSepParse(addr(),0,';').c_str(),&m_db);
     if( rc )
     { 
 	string err = sqlite3_errmsg(m_db);
 	sqlite3_close(m_db);
 	throw TError(TSYS::DBOpen,nodePath().c_str(),_("Open DB file error: %s"),err.c_str());
     }
-    trans_reqs = vmax(1,vmin(100,atoi(TSYS::strSepParse(addr(),1,':').c_str())));
+    trans_reqs = vmax(1,vmin(100,atoi(TSYS::strSepParse(addr(),1,';').c_str())));
     
     TBD::enable( );
 }
@@ -266,7 +266,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
         TBD::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root",grp.c_str(),2,
 	            "tp","str","help",
-		    _("SQLite DB address writet as: [<FileDBPath>:<nTransReq>].\n"
+		    _("SQLite DB address writet as: [<FileDBPath>;<nTransReq>].\n"
 		      "Where:\n"
 		      "  FileDBPath - full path to DB file (./oscada/Main.db);\n"
 		      "  nTransReq - number requests into transaction (default 1)."));

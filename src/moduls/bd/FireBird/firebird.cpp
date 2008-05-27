@@ -133,25 +133,7 @@ string BDMod::sqlReqCode( const string &req, char symb )
     return sout; 	
 }
 
-void MBD::cntrCmdProc( XMLNode *opt )
-{
-    string grp = owner().owner().subId();
-    
-    //Get page info
-    if( opt->name() == "info" )
-    {
-        TBD::cntrCmdProc(opt);
-        ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root",grp.c_str(),2,
-            "tp","str","help",
-	    _("FireBird address to DB writed as: [<file>;<user>;<pass>].\n"
-	      "Where:\n"
-	      "  file - full DB file;\n"
-	      "  user - DB user;\n"
-	      "  pass - password of DB user."));
-        return;
-    }
-    TBD::cntrCmdProc(opt);
-}
+
 
 //************************************************
 //* FireBird::MBD                                *
@@ -452,6 +434,26 @@ string MBD::clrEndSpace( const string &vl )
     int i = vl.size()-1;
     while( i >= 0 && (vl[i]==' ' || vl[i]=='\t' || vl[i]=='\n') ) i--;
     return vl.substr(0,i+1);
+}
+
+void MBD::cntrCmdProc( XMLNode *opt )
+{
+    string grp = owner().owner().subId();
+    
+    //Get page info
+    if( opt->name() == "info" )
+    {
+        TBD::cntrCmdProc(opt);
+        ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root",grp.c_str(),2,
+            "tp","str","help",
+	    _("FireBird address to DB writed as: [<file>;<user>;<pass>].\n"
+	      "Where:\n"
+	      "  file - full DB file;\n"
+	      "  user - DB user;\n"
+	      "  pass - password of DB user."));
+        return;
+    }
+    TBD::cntrCmdProc(opt);
 }
 
 //************************************************

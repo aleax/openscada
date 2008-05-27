@@ -11,6 +11,7 @@
 - FIX:/UI/VCAEngine: Deleted include widgets loading is fixed.
 - FIX:/UI/VCAEngine: Copy included widgets for template pages at project is fixed.
 - FIX:/UI/VCAEngine: Break next pages loading if one page load terminated is fixed.
+- FIX:/UI/VCAEngine: Dynamic pages link for address is fixed.
 - /UI/VCAEngine: Alarm code is improved.
 - FIX:/UI/Vision: Link inspector update is fixed on group renaming.
 
