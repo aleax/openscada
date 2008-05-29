@@ -53,8 +53,11 @@ TCntrNode &Widget::operator=( TCntrNode &node )
     if( !src_n->enable() ) return *this;
 
     //- Parent link copy -
-    if( parentNm() != src_n->parentNm() && enable() ) setEnable(false);
-    setParentNm( src_n->parentNm() );
+    if( src_n->parentNm() != path() )
+    {
+	if( parentNm() != src_n->parentNm() && enable() ) setEnable(false);
+    	setParentNm( src_n->parentNm() );
+    }
     if( !enable() ) setEnable(true);
 
     //- Copy generic configuration -

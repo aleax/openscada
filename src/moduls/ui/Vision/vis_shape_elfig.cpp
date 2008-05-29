@@ -165,7 +165,6 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 rel_list = true;
             }
     }
-    
     if( rel_list && !w->allAttrLoad( ) )
     {
         QVector<ShapeItem> shapeItems_temp;
@@ -973,7 +972,20 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
             QMouseEvent *ev = static_cast<QMouseEvent*>(event); 
             DevelWdgView *devW = qobject_cast<DevelWdgView*>(view);
             RunWdgView   *runW = qobject_cast<RunWdgView*>(view);
-            if( devW )
+            
+	    if( runW && runW->dc()["active"].toBool() ) 
+            {
+                string sev;
+                for( int i=0; i < inundationItems.size(); i++ )
+                    if( inundationItems[i].path.contains(ev->pos()) )
+                    	sev="ws_Fig"+TSYS::int2str(i);		
+                if( !sev.empty() )	
+		{
+		    view->attrSet( "event", sev+"DblClick" );
+		    return true;
+		}
+            }	    
+            else if( devW )
             {
                 if( !flag_down && !flag_up && !flag_left && !flag_right )
                 {
@@ -1015,9 +1027,10 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     view->repaint();
                 }
                 shapeSave(view);
+		
+		return true;
             }
-            
-            return true;
+    	    break;    
         }
         case QEvent::MouseButtonRelease:
         {

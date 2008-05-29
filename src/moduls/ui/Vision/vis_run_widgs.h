@@ -47,8 +47,10 @@ namespace VISION
 	    
 	    string pgGrp( );
 	    string pgOpenSrc( );
+	    unsigned reqTm( )	{ return reqtm; }
 	    
 	    void setPgOpenSrc( const string &vl );
+	    unsigned setReqTm( unsigned vl )	{ reqtm = vl; }
 	    
 	    WdgView *newWdgItem( const string &iwid );
 	    void attrLoad( QMap<QString, QString> &attrs );

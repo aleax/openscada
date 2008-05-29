@@ -2565,6 +2565,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    {		
 		if( el_wdg ) 
 		{ 
+		    el_wdg->setReqTm(el_wdg->mainWin()->reqTm());
 		    ((RunPageView*)w)->mainWin()->pgCacheAdd(el_wdg);
 		    el_wdg->setEnabled(false);
 		    el_wdg->setVisible(false);

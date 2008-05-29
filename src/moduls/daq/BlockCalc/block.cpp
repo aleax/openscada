@@ -182,8 +182,10 @@ void Block::setEnable( bool val )
     //- Enable -
     if( val && !m_enable )
     {
-	if( !func() && dynamic_cast<TFunction *>(&SYS->nodeAt(wFunc(),0,'.').at()) )
+	if( !func() )
 	{
+	    if( !dynamic_cast<TFunction *>(&SYS->nodeAt(wFunc(),0,'.').at()) )
+		throw TError(nodePath().c_str(),_("Node '%s' is not function."),wFunc().c_str());
 	    setFunc( (TFunction *)&SYS->nodeAt(wFunc(),0,'.').at() );
 	    //-- Init system attributes identifiers --
             id_freq  = func()->ioId("f_frq");

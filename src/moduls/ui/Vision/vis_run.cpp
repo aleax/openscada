@@ -434,6 +434,27 @@ void VisRun::callPage( const string& pg_it, XMLNode *upw )
     }
     //- Put to check for include -
     else master_pg->callPage(pg_it,pgGrp,pgSrc);
+    
+    //- Update widgets of now opened page -
+    if( upw && master_pg )
+    {
+	RunPageView *pg = master_pg->findOpenPage(pg_it);
+	if( !pg || pg->reqTm() == reqtm ) return;
+	XMLNode req("openlist");
+	req.setAttr("tm",TSYS::uint2str(pg->reqTm()))->setAttr("path","/ses_"+work_sess+"/%2fserv%2f0");
+        if( !cntrIfCmd(req) )
+            for( int i_ch = 0; i_ch < req.childSize(); i_ch++ )
+        	if( req.childGet(i_ch)->text() == pg_it )
+		{
+		    for( int i_p = 0, off = 0; i_p < req.childGet(i_ch)->childSize(); i_p++, off = 0 )
+		    {
+			stmp = req.childGet(i_ch)->childGet(i_p)->text();
+			TSYS::pathLev(stmp,0,true,&off);
+			pg->update(1,0,stmp.substr(off));
+		    }
+		    break;
+		}
+    }
 }
 
 void VisRun::pgCacheAdd( RunWdgView *wdg )

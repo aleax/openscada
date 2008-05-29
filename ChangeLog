@@ -1,3 +1,10 @@
+2008-05-29 Maxim
+- FIX:/DAQ/BlockCalc: Uncorrect block's enabling on node no function is fixed.
+- FIX:/UI/VCAEngine: Project's page copy to inheritant library widget is fixed.
+- FIX:/UI/Vision: Cached pages, runtime mode, update data on open is fixed.
+- !:/UI/Vision: Double mouse click event generation is added into primitive "ElFigure".
+
+
 2008-05-27 Maxim
 - FIX:/UI/VCAEngine: Break next pages loading if one page load terminated is fixed.
 - FIX:/UI/VCAEngine: Empty procedure compile try is fixed.

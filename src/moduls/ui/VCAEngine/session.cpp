@@ -289,17 +289,17 @@ void Session::uiComm( const string &com, const string &prm, SessWdg *src )
 	    //--- Fill parameter's links for other attributes ---
 	    if( emptyPresnt && !prm_lnk.empty() )
 	    {
-		AutoHD<TValue> prm;
+		AutoHD<TValue> prml;
 		prm_lnk = "/"+TSYS::pathLev(prm_lnk,0)+"/"+TSYS::pathLev(prm_lnk,1)+"/"+TSYS::pathLev(prm_lnk,2);
-		try{ prm = SYS->daq().at().nodeAt(prm_lnk); } catch(TError err) { }
-		for( int i_al = 0; !prm.freeStat() && i_al < cAtrLs.size(); i_al++ )
+		try{ prml = SYS->daq().at().nodeAt(prm_lnk); } catch(TError err) { }
+		for( int i_al = 0; !prml.freeStat() && i_al < cAtrLs.size(); i_al++ )
 		{
 		    AutoHD<Attr> attr = cpg.at().attrAt(cAtrLs[i_al]);
 		    if( !(attr.at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut) &&
 			    TSYS::strSepParse(attr.at().cfgTempl(),0,'|') == "<page>" &&
 			    (attr.at().cfgVal().empty() || attr.at().flgGlob()&Attr::Address) ) )	continue;
 		    atr_id = TSYS::strSepParse(attr.at().cfgTempl(),1,'|');
-		    if( prm.at().vlPresent(atr_id) )	attr.at().setCfgVal("prm:"+prm_lnk+"/a_"+atr_id);
+		    if( prml.at().vlPresent(atr_id) )	attr.at().setCfgVal("prm:"+prm_lnk+"/a_"+atr_id);
 		}
 	    }
 	    //--- Open new page ---
@@ -1084,7 +1084,7 @@ void SessWdg::getUpdtWdg( const string &path, unsigned int tm, vector<string> &e
 unsigned int SessWdg::modifVal( Attr &cfg )
 {
     int m_clc = ownerSess()->calcClk( );
-    if( atoi(cfg.fld().reserve().c_str()) )	m_mdfClc = m_clc;
+    if( atoi(cfg.fld().reserve().c_str()) ) m_mdfClc = m_clc;
     return m_clc; 
 }
 
@@ -1206,6 +1206,7 @@ void SessWdg::calc( bool first, bool last )
 		string sevup, sev, sev_ev, sev_path, sprc_lst, sprc, sprc_ev, sprc_path;
 		for( int el_off = 0; (sev=TSYS::strSepParse(wevent,0,'\n',&el_off)).size(); )
 		{
+		    //printf("TEST 00: %s\n",sev.c_str());
 		    //-- Check for process events --
 		    t_off = 0;
 		    sev_ev   = TSYS::strSepParse(sev,0,':',&t_off);

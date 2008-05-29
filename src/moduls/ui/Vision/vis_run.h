@@ -57,6 +57,7 @@ class VisRun : public QMainWindow
 	bool   runTimeUpdt( );
 	float  xScale( )	{ return x_scale; }
 	float  yScale( )	{ return y_scale; }
+	unsigned reqTm( )   	{ return reqtm; }
 	
         void setVCAStation( const string& st );
 	void setXScale( float vl )	{ x_scale = vl; }
