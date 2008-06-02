@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.DBF 1.8.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-25 11:15+0200\n"
+"POT-Creation-Date: 2008-06-02 11:07+0300\n"
 "PO-Revision-Date: 2007-10-23 11:43+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -71,7 +71,7 @@ msgstr ""
 msgid "h"
 msgstr ""
 
-#: dbf_mod.cpp:114
+#: dbf_mod.cpp:114 dbf_mod.cpp:204
 msgid "help"
 msgstr ""
 
@@ -96,12 +96,12 @@ msgstr ""
 msgid "."
 msgstr ""
 
-#: dbf_mod.cpp:180 dbf_mod.cpp:205 dbf_mod.cpp:206 dbf_mod.cpp:232
-#: dbf_mod.cpp:233
+#: dbf_mod.cpp:180 dbf_mod.cpp:222 dbf_mod.cpp:223 dbf_mod.cpp:249
+#: dbf_mod.cpp:250
 msgid ".dbf"
 msgstr ""
 
-#: dbf_mod.cpp:181 dbf_mod.cpp:235
+#: dbf_mod.cpp:181 dbf_mod.cpp:252
 msgid "/"
 msgstr ""
 
@@ -110,49 +110,85 @@ msgstr ""
 msgid "Error open table <%s>. DB disabled."
 msgstr "Ошибка открытия таблицы <%s>. БД отключена."
 
-#: dbf_mod.cpp:215
+#: dbf_mod.cpp:200
+msgid "info"
+msgstr ""
+
+#: dbf_mod.cpp:203
+msgid "fld"
+msgstr ""
+
+#: dbf_mod.cpp:203
+msgid "/prm/cfg/addr"
+msgstr ""
+
+#: dbf_mod.cpp:203
+msgid "ADDR"
+msgstr ""
+
+#: dbf_mod.cpp:203
+msgid "root"
+msgstr ""
+
+#: dbf_mod.cpp:204
+msgid "tp"
+msgstr ""
+
+#: dbf_mod.cpp:204
+msgid "str"
+msgstr ""
+
+#: dbf_mod.cpp:205
+msgid ""
+"For DBF address DB is directory which contain files of tables (*.dbf).\n"
+"For example: /opt/dbf ."
+msgstr ""
+"Для DBF адрес БД это директория, которая содержит файлы таблиц (*.dbf).\n"
+"Для примера: /opt/dbf ."
+
+#: dbf_mod.cpp:232
 msgid "Open table error!"
 msgstr "Ошибка открытия таблицы!"
 
-#: dbf_mod.cpp:236
+#: dbf_mod.cpp:253
 #, c-format
 msgid "%s"
 msgstr ""
 
-#: dbf_mod.cpp:267 dbf_mod.cpp:320 dbf_mod.cpp:441 dbf_mod.cpp:500
+#: dbf_mod.cpp:284 dbf_mod.cpp:337 dbf_mod.cpp:458 dbf_mod.cpp:517
 msgid "Cell error!"
 msgstr "Ошибка ячейки!"
 
-#: dbf_mod.cpp:300 dbf_mod.cpp:463
+#: dbf_mod.cpp:317 dbf_mod.cpp:480
 msgid "Field no present!"
 msgstr "Поле отсутствует!"
 
-#: dbf_mod.cpp:369 dbf_mod.cpp:395
+#: dbf_mod.cpp:386 dbf_mod.cpp:412
 msgid "Column error!"
 msgstr "Ошибка колонки!"
 
-#: dbf_mod.cpp:407
+#: dbf_mod.cpp:424
 msgid "Delete field error!"
 msgstr "Ошибка удаления поля!"
 
-#: dbf_mod.cpp:432
+#: dbf_mod.cpp:449
 #, c-format
 msgid "%*.*f"
 msgstr ""
 
-#: dbf_mod.cpp:436
+#: dbf_mod.cpp:453
 msgid "T"
 msgstr ""
 
-#: dbf_mod.cpp:436
+#: dbf_mod.cpp:453
 msgid "F"
 msgstr ""
 
-#: dbf_mod.cpp:458
+#: dbf_mod.cpp:475
 msgid "Line error!"
 msgstr "Ошибка линии!"
 
-#: dbf_mod.cpp:496
+#: dbf_mod.cpp:513
 #, c-format
 msgid "Key column <%s> no present!"
 msgstr "Ключевая колонка <%s> отсутствует!"

@@ -310,7 +310,8 @@ void Session::uiComm( const string &com, const string &prm, SessWdg *src )
 
 void Session::alarmSet( const string &wpath, const string &alrm )
 {
-    if( wpath.empty() )	return;
+    if( wpath.empty() ) return;
+
     //- Alarms queue process -
     ResAlloc res( mAlrmRes, true );
 
@@ -334,16 +335,39 @@ void Session::alarmSet( const string &wpath, const string &alrm )
     }
 }
 
+int Session::alarmStat( )
+{
+    ui8 alev = 0, atp = 0, aqtp = 0;
+    vector<string> ls;
+    list( ls );
+    for( int i_p = 0; i_p < ls.size(); i_p++ )
+    {
+	int ast = at(ls[i_p]).at().attrAt("alarmSt").at().getI();
+	alev = vmax(alev,ast&0xFF);
+	atp |= (ast>>8)&0xFF;
+	aqtp |= (ast>>16)&0xFF;
+    }
+
+    return (aqtp<<16)|(atp<<8)|alev;
+}
+
 void Session::alarmQuittance( const string &wpath, ui8 quit_tmpl )
 {
-    ((AutoHD<SessWdg>)mod->nodeAt(wpath)).at().alarmQuittance( quit_tmpl, true );
+    if( !wpath.empty() ) ((AutoHD<SessWdg>)mod->nodeAt(wpath)).at().alarmQuittance( quit_tmpl, true );
+    else
+    {
+	vector<string> ls;
+	list( ls );
+	for( int i_p = 0; i_p < ls.size(); i_p++ )
+	    at(ls[i_p]).at().alarmQuittance( quit_tmpl, true );
+    }
 
     //- Queue alarms quittance -
     ResAlloc res( mAlrmRes, false );
 
     for( int i_q = 0; i_q < mAlrm.size(); i_q++ )
 	if( mAlrm[i_q].path.substr(0,wpath.size()) == wpath )
-	    mAlrm[i_q].tp &= quit_tmpl;
+	    mAlrm[i_q].qtp &= quit_tmpl;
 }
 
 void *Session::Task( void *icontr )
@@ -433,47 +457,38 @@ void Session::cntrCmdProc( XMLNode *opt )
     {
 	if( ctrChkNode(opt,"get",R_R_R_,"root","root",SEQ_RD) )
 	{
-	    unsigned a_tm  = strtoul(opt->attr("tm").c_str(),NULL,10);
-	    opt->setAttr("tm",TSYS::uint2str(calcClk()));
-
 	    //- Get alarm status -
-	    ui8	alev = 0, atp = 0;
-	    vector<string> ls;
-	    list( ls );
-	    for( int i_p = 0; i_p < ls.size(); i_p++ )
-	    {
-		int ast = at(ls[i_p]).at().attrAt("alarmSt").at().getI();
-		atp |= (ast>>8)&0xFF;
-		alev = vmax(alev,ast&0xFF);
-	    }
-	    opt->setAttr("alarmSt",TSYS::int2str((atp<<8)|alev));
+	    opt->setAttr("alarmSt",TSYS::int2str(alarmStat()));
 
-	    //- Find event, return it and alarm resource -
-	    ResAlloc res( mAlrmRes, false );
-	    string wdg = opt->attr("wdg");
-	    int i_q, i_first = -1, i_next = -1;
-	    for( i_q = mAlrm.size(); i_q >= 0; i_q-- )
+	    //- Get alarm from sound queue -
+	    if( opt->attr("mode") == "sound" )
 	    {
-		if( !(mAlrm[i_q].tp&0x40) )	continue;
-		if( wdg.empty() || mAlrm[i_q].clc >= a_tm || i_next > 0 )	break;	//First, new and next alarms break
-		if( i_first < 0 ) i_first = i_q;
-		if( wdg == mAlrm[i_q].path )	i_next = i_q;
-	    }
-	    if( i_q < 0 && i_first > 0 ) i_q = i_first;
-	    if( i_q >= 0 )
-	    {
-		opt->setAttr( "wdg", mAlrm[i_q].path );
-		if( !mAlrm[i_q].tpArg.empty() )
-		    opt->setText( ((AutoHD<SessWdg>)mod->nodeAt(mAlrm[i_q].path)).at().resourceGet(mAlrm[i_q].tpArg) );
-		else
+		unsigned a_tm  = strtoul(opt->attr("tm").c_str(),NULL,10);
+		opt->setAttr("tm",TSYS::uint2str(calcClk()));
+
+		//- Find event, return it and alarm resource -
+		ResAlloc res( mAlrmRes, false );
+		string wdg = opt->attr("wdg");
+		int i_q, i_first = -1, i_next = -1;
+		for( i_q = mAlrm.size()-1; i_q >= 0; i_q-- )
 		{
-		    //Call synth
-		    //????
+		    if( !(mAlrm[i_q].qtp & Engine::Sound) ) continue;
+		    if( wdg.empty() || mAlrm[i_q].clc >= a_tm || i_next > 0 )	break;	//First, new and next alarms break
+		    if( i_first < 0 ) i_first = i_q;
+		    if( wdg == mAlrm[i_q].path ) i_next = i_q;
+		}
+		if( i_q < 0 && i_first >= 0 ) i_q = i_first;
+		if( i_q >= 0 )
+		{
+		    opt->setAttr( "wdg", mAlrm[i_q].path );
+		    if( !mAlrm[i_q].tpArg.empty() )
+			opt->setText( ((AutoHD<SessWdg>)mod->nodeAt(mAlrm[i_q].path)).at().resourceGet(mAlrm[i_q].tpArg) );
+		    else opt->setText( mod->callSynth(mAlrm[i_q].mess) );
 		}
 	    }
 	}
 	if( ctrChkNode(opt,"quittance",RWRWRW,"root","root",SEQ_WR) )
-	    alarmQuittance(opt->attr("wdg"),atoi(opt->attr("tmpl").c_str()));
+	    alarmQuittance(opt->attr("wdg"),~atoi(opt->attr("tmpl").c_str()));
 	return;
     }
 
@@ -509,7 +524,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 	    {
 		ctrMkNode("list",opt,-1,"/alarm/alarm/wdg",_("Widget"),R_R_R_,"root","root",1,"tp","str");
 		ctrMkNode("list",opt,-1,"/alarm/alarm/lev",_("Level"),R_R_R_,"root","root",1,"tp","dec");
-		ctrMkNode("list",opt,-1,"/alarm/alarm/cat",_("Categoty"),R_R_R_,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/alarm/alarm/cat",_("Category"),R_R_R_,"root","root",1,"tp","str");
 		ctrMkNode("list",opt,-1,"/alarm/alarm/mess",_("Messages"),R_R_R_,"root","root",1,"tp","str");
 		ctrMkNode("list",opt,-1,"/alarm/alarm/tp",_("Type"),R_R_R_,"root","root",1,"tp","hex");
 		ctrMkNode("list",opt,-1,"/alarm/alarm/tpArg",_("Type argument"),R_R_R_,"root","root",1,"tp","str");
@@ -595,7 +610,7 @@ Session::Alarm::Alarm( const string &ipath, const string &alrm, unsigned iclc ) 
     lev   = atoi( TSYS::strSepParse(alrm,0,'|',&a_off).c_str() );
     cat   = TSYS::strSepParse(alrm,0,'|',&a_off);
     mess  = TSYS::strSepParse(alrm,0,'|',&a_off);
-    tp    = atoi( TSYS::strSepParse(alrm,0,'|',&a_off).c_str() );
+    qtp   = tp = atoi( TSYS::strSepParse(alrm,0,'|',&a_off).c_str() );
     tpArg = TSYS::strSepParse(alrm,0,'|',&a_off);
 }
 
@@ -723,6 +738,62 @@ bool SessPage::attrChange( Attr &cfg, void *prev )
     return SessWdg::attrChange( cfg, prev );
 }
 
+void SessPage::alarmSet( bool isSet )
+{
+    int aStCur  = attrAt("alarmSt").at().getI( );
+    string aCur = attrAt("alarm").at().getS( );
+    int alev = atoi(TSYS::strSepParse(aCur,0,'|').c_str()) & 0xFF;
+    int atp  = atoi(TSYS::strSepParse(aCur,3,'|').c_str()) & 0xFF;
+    int aqtp = (aStCur>>16) & 0xFF & atp;
+    if( isSet ) aqtp |= atp;
+
+    vector<string> lst;
+    //- Included pages process -
+    pageList( lst );
+    for( int i_p = 0; i_p < lst.size(); i_p++ )
+    {
+	int iacur = pageAt( lst[i_p] ).at().attrAt("alarmSt").at().getI( );
+	alev = vmax( alev, iacur&0xFF );
+	atp |= (iacur>>8) & 0xFF;
+	aqtp |= (iacur>>16) & 0xFF;
+    }
+    //- Included widgets process -
+    wdgList( lst );
+    for( int i_w = 0; i_w < lst.size(); i_w++ )
+    {
+	int iacur = wdgAt( lst[i_w] ).at().attrAt("alarmSt").at().getI( );
+	alev = vmax( alev, iacur&0xFF );
+	atp |= (iacur>>8) & 0xFF;
+	aqtp |= (iacur>>16) & 0xFF;
+    }
+
+    attrAt("alarmSt").at().setI( (alev && atp) ? (aqtp<<16)|(atp<<8)|alev : 0 );
+
+    if( ownerSessWdg(true) )	ownerSessWdg(true)->alarmSet();
+    if( isSet )	ownerSess( )->alarmSet( path(), aCur );
+}
+
+void SessPage::alarmQuittance( ui8 quit_tmpl, bool isSet )
+{
+    int alarmSt = attrAt("alarmSt").at().getI();
+    if( !((((alarmSt>>16)&0xFF)^quit_tmpl)&((alarmSt>>16)&0xFF)) ) return;
+
+    //- Self quittance -
+    attrAt("alarmSt").at().setI( alarmSt & (quit_tmpl<<16|0xFFFF) );
+
+    vector<string> lst;
+    //- Included pages quitance -
+    pageList( lst );
+    for( int i_p = 0; i_p < lst.size(); i_p++ )
+	pageAt( lst[i_p] ).at().alarmQuittance(quit_tmpl);
+    //- Include widgets quittance -
+    wdgList( lst );
+    for( int i_w = 0; i_w < lst.size(); i_w++ )
+	wdgAt( lst[i_w] ).at().alarmQuittance(quit_tmpl);
+
+    if( isSet && ownerSessWdg(true) )	ownerSessWdg(true)->alarmSet();
+}
+
 bool SessPage::cntrCmdGeneric( XMLNode *opt )
 {
     //- Get page info -
@@ -785,8 +856,8 @@ void SessWdg::postEnable( int flag )
     if( flag&TCntrNode::NodeConnect )
     {
 	attrAdd( new TFld("event",_("Events"),TFld::String,TFld::FullText) );
-	attrAdd( new TFld("alarm",_("Alarm"),TFld::String,TFld::NoFlag,"200","","","","-3") );
-	attrAdd( new TFld("alarmSt",_("Alarm status"),TFld::Integer,TFld::HexDec,"5","0","","","-4") );
+	attrAdd( new TFld("alarmSt",_("Alarm status"),TFld::Integer,TFld::HexDec,"5","0") );
+	attrAdd( new TFld("alarm",_("Alarm"),TFld::String,TFld::NoFlag,"200") );
     }
 }
 
@@ -829,7 +900,7 @@ void SessWdg::setEnable( bool val )
     if( !val )
     {
 	//- Delete included widgets -
-	vector<string> ls;	
+	vector<string> ls;
 	wdgList(ls);
 	for(int i_l = 0; i_l < ls.size(); i_l++ )
 	    wdgDel(ls[i_l]);
@@ -852,7 +923,7 @@ void SessWdg::setProcess( bool val )
 	vector<string> iwls, als;
 	//--- Self attributes check ---
 	attrList(als);
-	AutoHD<Widget> fulw = parentNoLink();	
+	AutoHD<Widget> fulw = parentNoLink();
 	for( int i_a = 0; i_a < als.size(); i_a++ )
 	{
 	    AutoHD<Attr> cattr = attrAt(als[i_a]);
@@ -872,7 +943,7 @@ void SessWdg::setProcess( bool val )
 	//--- Include attributes check ---
 	wdgList(iwls);
 	for( int i_w = 0; i_w < iwls.size(); i_w++ )
-	{	
+	{
 	    AutoHD<Widget> curw = wdgAt(iwls[i_w]);
 	    curw.at().attrList(als);
 	    for( int i_a = 0; i_a < als.size(); i_a++ )
@@ -893,14 +964,14 @@ void SessWdg::setProcess( bool val )
 	    }
 	}
 	fio.ioAdd( new IO("event",_("Event"),IO::String,IO::Output) );
-	fio.ioAdd( new IO("alarm",_("Alarm"),IO::String,IO::Output,"",false,"./alarm") );
 	fio.ioAdd( new IO("alarmSt",_("Alarm status"),IO::Integer,IO::Output,"",false,"./alarmSt") );
-	
+	fio.ioAdd( new IO("alarm",_("Alarm"),IO::String,IO::Output,"",false,"./alarm") );
+
 	//-- Compile function --
 	try
-	{ 
+	{
 	    work_prog = SYS->daq().at().at(TSYS::strSepParse(calcLang(),0,'.')).at().
-                    compileFunc(TSYS::strSepParse(calcLang(),1,'.'),fio,calcProg());
+		compileFunc(TSYS::strSepParse(calcLang(),1,'.'),fio,calcProg());
 	    //-- Connect to compiled function --
 	    TValFunc::setFunc(&((AutoHD<TFunction>)SYS->nodeAt(work_prog,1)).at());
 	}catch( TError err )	{ mess_err(nodePath().c_str(),_("Compile function for widget is error: %s"),err.mess.c_str()); }
@@ -915,7 +986,7 @@ void SessWdg::setProcess( bool val )
     vector<string> ls;
     wdgList(ls);
     for(int i_l = 0; i_l < ls.size(); i_l++ )
-        wdgAt(ls[i_l]).at().setProcess(val);
+	wdgAt(ls[i_l]).at().setProcess(val);
 
     //-- Make process element's lists --
     if( val ) prcElListUpdate( );
@@ -1016,19 +1087,22 @@ void SessWdg::alarmSet( bool isSet )
     int aStCur  = attrAt("alarmSt").at().getI( );
     string aCur = attrAt("alarm").at().getS( );
     int alev = atoi(TSYS::strSepParse(aCur,0,'|').c_str()) & 0xFF;
-    int atp  = (aStCur>>8) & 0xFF;
-    if( isSet )	atp |= atoi(TSYS::strSepParse(aCur,3,'|').c_str()) & 0xFF;
+    int atp  = atoi(TSYS::strSepParse(aCur,3,'|').c_str()) & 0xFF;
+    int aqtp = (aStCur>>16) & 0xFF;
+    if( isSet )	aqtp |= atp;
 
-    vector<string> wlst;
-    wdgList( wlst );
-    for( int i_w = 0; i_w < wlst.size(); i_w++ )
+    vector<string> lst;
+    //- Included widgets process -
+    wdgList( lst );
+    for( int i_w = 0; i_w < lst.size(); i_w++ )
     {
-	int iacur = wdgAt( wlst[i_w] ).at().attrAt("alarmSt").at().getI( );
+	int iacur = wdgAt( lst[i_w] ).at().attrAt("alarmSt").at().getI( );
 	alev = vmax( alev, iacur&0xFF );
 	atp |= (iacur>>8) & 0xFF;
+	aqtp |= (iacur>>16) & 0xFF;
     }
 
-    attrAt("alarmSt").at().setI( alev ? (atp<<8)|alev : 0 );
+    attrAt("alarmSt").at().setI( (alev && atp) ? (aqtp<<16)|(atp<<8)|alev : 0 );
 
     if( ownerSessWdg(true) )	ownerSessWdg(true)->alarmSet();
     if( isSet )	ownerSess( )->alarmSet( path(), aCur );
@@ -1037,16 +1111,16 @@ void SessWdg::alarmSet( bool isSet )
 void SessWdg::alarmQuittance( ui8 quit_tmpl, bool isSet )
 {
     int alarmSt = attrAt("alarmSt").at().getI();
-    if( !((((alarmSt>>8)&0xFF)^quit_tmpl)&((alarmSt>>8)&0xFF)) ) return;
+    if( !((((alarmSt>>16)&0xFF)^quit_tmpl)&((alarmSt>>16)&0xFF)) ) return;
 
     //- Self quittance -
-    attrAt("alarmSt").at().setI( alarmSt & (quit_tmpl<<8|0xFF) );
+    attrAt("alarmSt").at().setI( alarmSt & (quit_tmpl<<16|0xFFFF) );
 
-    //- Include quittance -
-    vector<string> wlst;
-    wdgList( wlst );
-    for( int i_w = 0; i_w < wlst.size(); i_w++ )
-	wdgAt( wlst[i_w] ).at().alarmQuittance(quit_tmpl);
+    vector<string> lst;
+    //- Include widgets quittance -
+    wdgList( lst );
+    for( int i_w = 0; i_w < lst.size(); i_w++ )
+	wdgAt( lst[i_w] ).at().alarmQuittance(quit_tmpl);
 
     if( isSet && ownerSessWdg(true) )	ownerSessWdg(true)->alarmSet();
 }
@@ -1191,7 +1265,7 @@ void SessWdg::calc( bool first, bool last )
 		    {
 			case IO::String:	attr.at().setS(getS(i_io));	break;
 			case IO::Integer:	attr.at().setI(getI(i_io));	break;
-			case IO::Real:     	attr.at().setR(getR(i_io));	break;
+			case IO::Real:		attr.at().setR(getR(i_io));	break;
 			case IO::Boolean:	attr.at().setB(getB(i_io));	break;
 		    }
 		}
@@ -1236,9 +1310,9 @@ void SessWdg::calc( bool first, bool last )
     }
     catch(TError err)
     {
-        mess_err(err.cat.c_str(),err.mess.c_str());
-        mess_err(nodePath().c_str(),_("Widget '%s' calc is error. Process disabled."),path().c_str());
-        setProcess(false);
+	mess_err(err.cat.c_str(),err.mess.c_str());
+	mess_err(nodePath().c_str(),_("Widget '%s' calc is error. Process disabled."),path().c_str());
+	setProcess(false);
     }
 }
 
@@ -1257,12 +1331,12 @@ bool SessWdg::attrChange( Attr &cfg, void *prev )
     //- Alarm event for widget process -
     else if( cfg.id() == "alarm" && enable() && prev )		alarmSet( true );
     //- Alarm status process -
-    else if( cfg.id() == "alarmSt" && cfg.getI()&0x100 )	ownerSess( )->alarmQuittance( path(), (cfg.getI()>>8)&0xFF );
+    else if( cfg.id() == "alarmSt" && cfg.getI()&0x10000 )	ownerSess( )->alarmQuittance( path(), (cfg.getI()>>16)&0xFF );
 
     //- External link process -
     if( !inLnkGet && prev && cfg.flgSelf()&Attr::CfgLnkOut && !cfg.cfgVal().empty() )
     {
-        string obj_tp = TSYS::strSepParse(cfg.cfgVal(),0,':')+":";
+	string obj_tp = TSYS::strSepParse(cfg.cfgVal(),0,':')+":";
 	try
 	{
 	    if( obj_tp == "prm:" )
@@ -1282,9 +1356,9 @@ bool SessWdg::attrChange( Attr &cfg, void *prev )
 		        break;
 		}
 	    else if( obj_tp == "wdg:" )
-                switch( cfg.type() )
+		switch( cfg.type() )
 		{
-		    case TFld::Boolean:		
+		    case TFld::Boolean:
 		        ((AutoHD<Attr>)mod->nodeAt(cfg.cfgVal(),0,0,obj_tp.size())).at().setB(cfg.getB());
 		        break;
 		    case TFld::Integer:
@@ -1317,7 +1391,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 		    attr = attrAt(m_attrUILs[i_l]);
 		    if( attr.at().modif() >= tm && atoi(attr.at().fld().reserve().c_str()) )
 			opt->childAdd("el")->setAttr("id",m_attrUILs[i_l].c_str())->
-				    	     setAttr("pos",attr.at().fld().reserve())->
+					     setAttr("pos",attr.at().fld().reserve())->
 					     setText(attr.at().getS());
 		}
 	    opt->setAttr("tm",TSYS::uint2str(ownerSess()->calcClk( )));
@@ -1331,7 +1405,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	    }
 	return true;
     }else return Widget::cntrCmdServ(opt);
-    
+
     return false;
 }
 
@@ -1340,37 +1414,37 @@ bool SessWdg::cntrCmdGeneric( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
-        Widget::cntrCmdGeneric(opt);
+	Widget::cntrCmdGeneric(opt);
 	ctrMkNode("fld",opt,1,"/wdg/st/proc",_("Process"),RWRWR_,user().c_str(),grp().c_str(),1,"tp","bool");
-        return true;
+	return true;
     }
-    
+
     //- Process command to page -
-    string a_path = opt->attr("path");    
+    string a_path = opt->attr("path");
     if( a_path.substr(0,5) == "/attr" &&
-            TSYS::pathLev(a_path,1).size() > 4 &&
-            TSYS::pathLev(a_path,1).substr(0,4) == "sel_" && TCntrNode::ctrChkNode(opt) )
+	    TSYS::pathLev(a_path,1).size() > 4 &&
+	    TSYS::pathLev(a_path,1).substr(0,4) == "sel_" && TCntrNode::ctrChkNode(opt) )
     {
-        AutoHD<Attr> attr = attrAt(TSYS::pathLev(a_path,1).substr(4));
+	AutoHD<Attr> attr = attrAt(TSYS::pathLev(a_path,1).substr(4));
 	for( int i_a=0; i_a < attr.at().fld().selNm().size(); i_a++ )
-            opt->childAdd("el")->setText(attr.at().fld().selNm()[i_a]);
+	    opt->childAdd("el")->setText(attr.at().fld().selNm()[i_a]);
     }
     else if( a_path.substr(0,6) == "/attr/" )
     {
-	//unsigned tm = ownerSess()->calcClk( );//time(NULL);    
-        AutoHD<Attr> attr = attrAt(TSYS::pathLev(a_path,1));
+	//unsigned tm = ownerSess()->calcClk( );//time(NULL);
+	AutoHD<Attr> attr = attrAt(TSYS::pathLev(a_path,1));
 	if( ctrChkNode(opt,"get",(attr.at().fld().flg()&TFld::NoWrite)?(permit()&~0222):permit(),user().c_str(),grp().c_str(),SEQ_RD) )
-        {
-            if( attr.at().fld().flg()&TFld::Selected )  opt->setText(attr.at().getSEL());
-            else                                        opt->setText(attr.at().getS());
+	{
+	    if( attr.at().fld().flg()&TFld::Selected )  opt->setText(attr.at().getSEL());
+	    else                                        opt->setText(attr.at().getS());
 	}
-        if( ctrChkNode(opt,"set",(attr.at().fld().flg()&TFld::NoWrite)?(permit()&~0222):permit(),user().c_str(),grp().c_str(),SEQ_WR) )
-        {
+	if( ctrChkNode(opt,"set",(attr.at().fld().flg()&TFld::NoWrite)?(permit()&~0222):permit(),user().c_str(),grp().c_str(),SEQ_WR) )
+	{
 	    if( attr.at().id() == "event" )	eventAdd(opt->text()+"\n");
-            else if( attr.at().fld().flg()&TFld::Selected )  
+	    else if( attr.at().fld().flg()&TFld::Selected )
 						attr.at().setSEL(opt->text());
-            else				attr.at().setS(opt->text());
-        }
+	    else				attr.at().setS(opt->text());
+	}
     }
     else if( a_path == "/wdg/st/proc" )
     {
@@ -1388,9 +1462,9 @@ void SessWdg::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
-        cntrCmdGeneric(opt);
-        cntrCmdAttributes(opt);
-        return;
+	cntrCmdGeneric(opt);
+	cntrCmdAttributes(opt);
+	return;
     }
     if( !(cntrCmdGeneric(opt) || cntrCmdAttributes(opt)) )
 	TCntrNode::cntrCmdProc(opt);

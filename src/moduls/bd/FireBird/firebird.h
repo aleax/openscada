@@ -37,8 +37,8 @@ namespace FireBird
 {
 
 //************************************************
-//* FireBird::Table                              *
-//************************************************ 
+//* FireBird::Table				 *
+//************************************************
 class MBD;
 class MTable : public TTable
 {
@@ -53,61 +53,61 @@ class MTable : public TTable
 	void fieldGet( TConfig &cfg );
 	void fieldSet( TConfig &cfg );
 	void fieldDel( TConfig &cfg );
-	    
+
 	MBD &owner()	{ return (MBD&)TTable::owner(); }
-	    
+
     private:
 	//Private methods
 	void postDisable( int flag );
 	void fieldFix( TConfig &cfg );
 	void getStructDB( vector< vector<string> > &tblStrct );
-	    
+
 	//Private attributes
 	vector< vector<string> > tblStrct;
-	isc_tr_handle 		trans;
+	isc_tr_handle		trans;
 };
 
 //************************************************
-//* FireBird::MBD                                *
-//************************************************ 
+//* FireBird::MBD				 *
+//************************************************
 class MBD : public TBD
 {
     friend class MTable;
     public:
-    	//Public methods
+	//Public methods
 	MBD( const string &iid, TElem *cf_el );
 	~MBD(  );
-	    
+
 	void enable( );
-	void disable( );			
+	void disable( );
 
 	void allowList( vector<string> &list );
 	void sqlReq( const string &req, vector< vector<string> > *tbl = NULL );
 	void sqlReq( isc_tr_handle *trans, const string &req, vector< vector<string> > *tbl = NULL );
 	string clrEndSpace( const string &vl );
-	
+
 	void transOpen( isc_tr_handle *trans );
 	void transCommit( isc_tr_handle *trans );
 
     protected:
-        //Protected methods
+	//Protected methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
     private:
 	//Private methods
-	void postDisable(int flag);    
+	void postDisable(int flag);
 	TTable *openTable( const string &name, bool create );
-	
+
 	string getErr( ISC_STATUS_ARRAY status );
-	
+
 	//Private attributes
-	string	user, pass, fdb, cd_pg;
+	string		user, pass, fdb, cd_pg;
 	isc_db_handle	hdb;
-	Res	conn_res;
+	Res		conn_res;
 };
 
 //*************************************************
-//* FireBird::BDMod                               *
+//* FireBird::BDMod				  *
 //*************************************************
 class BDMod: public TTipBD
 {
@@ -115,12 +115,12 @@ class BDMod: public TTipBD
 	//Public methods
 	BDMod( string name );
 	~BDMod();
-	    
+
 	static string sqlReqCode( const string &req, char symb = '\'' );
 
     protected:
 	//Protected methods
-	void load_( );	
+	void load_( );
 
     private:
 	//Private methods

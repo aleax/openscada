@@ -47,13 +47,13 @@ class NConst
 {
     public:
 	//Methods
-        NConst( TFld::Type itp, const string &inm, const string &ival ) : 
+	NConst( TFld::Type itp, const string &inm, const string &ival ) :
 	    tp(itp), name(inm), val(ival) { }
-	
+
 	//Attributes
-	TFld::Type tp;
-        string name;
-        string val;
+	TFld::Type	tp;
+	string		name;
+	string		val;
 };
 
 //*************************************************
@@ -62,14 +62,14 @@ class NConst
 class BFunc
 {
     public:
-	//Methods    
-	BFunc( const char *inm, Reg::Code icd, int iprm ) : 
-	    name(inm), code(icd), prm(iprm) { }	
+	//Methods
+	BFunc( const char *inm, Reg::Code icd, int iprm ) :
+	    name(inm), code(icd), prm(iprm) { }
 
-	//Attributes    
-	string 	name;
-	Reg::Code code;
-	int prm;
+	//Attributes
+	string		name;
+	Reg::Code	code;
+	int		prm;
 };
 
 //*************************************************
@@ -81,25 +81,25 @@ class Prm : public TParamContr
 {
     public:
 	//Methods
-        Prm( string name, TTipParam *tp_prm );
+	Prm( string name, TTipParam *tp_prm );
 	~Prm( );
 
 	void enable( );
 	void disable( );
-	
+
 	Contr &owner( )	{ return (Contr&)TParamContr::owner(); }
-			    
+
     private:
 	//Methods
 	void postEnable( int flag );
-		
-        void vlSet( TVal &val );
-        void vlGet( TVal &val );
+
+	void vlSet( TVal &val );
+	void vlGet( TVal &val );
 	void vlArchMake( TVal &val );
-	
+
 	//Attributes
 	TElem  v_el;   //Values elem
-};						
+};
 
 //*************************************************
 //* Contr: Controller object                      *
@@ -108,40 +108,40 @@ class Contr: public TController, public TValFunc
 {
     public:
 	//Methods
-        Contr( string name_c, const string &daq_db, ::TElem *cfgelem );
-        ~Contr( );
-			
-        int period( )  	{ return m_per; }
-        int iterate( ) 	{ return m_iter; }
+	Contr( string name_c, const string &daq_db, ::TElem *cfgelem );
+	~Contr( );
+
+	int period( )	{ return m_per; }
+	int iterate( )	{ return m_iter; }
 
     protected:
 	//Methods
 	void postDisable( int flag );
-	
+
 	void load_( );
-        void save_( );
-        void enable_( );
-        void disable_( );
-        void start_( );
-        void stop_( );
-	void loadFunc( );	
-	
+	void save_( );
+	void enable_( );
+	void disable_( );
+	void start_( );
+	void stop_( );
+	void loadFunc( );
+
 	TParamContr *ParamAttach( const string &name, int type );
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process	
-	
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+
     private:
 	//Methods
 	static void *Task( void *icntr );
-	
+
 	//Attributes
-        bool    prc_st,		// Process task active
-		endrun_req;     // Request to stop of the Process task
-        int     &m_per,		// Calc period (ms)
+	bool	prc_st,		// Process task active
+		endrun_req;	// Request to stop of the Process task
+	int	&m_per,		// Calc period (ms)
 		&m_prior,	// Calc task priority
-    		&m_iter;	// iteration number
+		&m_iter;	// iteration number
 	string	&m_fnc;		// Work function
-	
-	pthread_t procPthr;     // Process task thread
+
+	pthread_t procPthr;	// Process task thread
 };
 
 //*************************************************
@@ -158,28 +158,28 @@ class TipContr : public TTipDAQ
 	void modStop( );
 
 	string libTable( )	{ return "UserFuncLibs"; }
-	
+
 	TElem &elVal( )		{ return val_el; }
 	TElem &elLib( )		{ return lb_el; }
 	TElem &elFnc( )		{ return fnc_el; }
 	TElem &elFncIO( )	{ return fncio_el; }
-	
+
 	void lbList( vector<string> &ls ) 	{ chldList(m_lib,ls); }
 	bool lbPresent( const string &id )	{ return chldPresent(m_lib,id); }
 	void lbReg( Lib *lib )       		{ chldAdd(m_lib,lib); }
 	void lbUnreg( const string &id, int flg = 0 )	{ chldDel(m_lib,id,-1,flg); }
 	AutoHD<Lib> lbAt( const string &id )	{ return chldAt(m_lib,id); }
-	
+
 	Res &parseRes( )			{ return parse_res; }
-	
-        //- Named constant -
-        NConst *constGet( const char *nm );
-	
+
+	//- Named constant -
+	NConst *constGet( const char *nm );
+
 	//- BuildIn functions -
-	BFunc *bFuncGet( const char *nm );	
+	BFunc *bFuncGet( const char *nm );
 
 	void compileFuncLangs( vector<string> &ls );
-        string compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text );
+	string compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text );
 
     protected:
 	//Methods
@@ -193,11 +193,11 @@ class TipContr : public TTipDAQ
     private:
 	//Attributes
 	int		m_lib;		//Function libraries
-	TElem   	val_el, lb_el, fnc_el, fncio_el;
-	
+	TElem		val_el, lb_el, fnc_el, fncio_el;
+
 	//- General parse data -
-	Res     	parse_res;	//Syntax analisator
-	vector<NConst>  m_const;        //Name constant table
+	Res		parse_res;	//Syntax analisator
+	vector<NConst>	m_const;	//Name constant table
 	vector<BFunc>	m_bfunc;	//Buildin functions
 };
 

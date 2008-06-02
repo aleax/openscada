@@ -82,6 +82,7 @@ class Session : public TCntrNode
 
 	//- Alarms process -
 	void alarmSet( const string &wpath, const string &alrm );	//Alarm set
+	int  alarmStat( );						//Alarm status
 	void alarmQuittance( const string &wpath, ui8 quit_tmpl );	//Alarm quittance send
 
     protected:
@@ -101,13 +102,14 @@ class Session : public TCntrNode
 		Alarm( const string &ipath, ui8 ilev, ui8 itp, const string &icat, const string &imess, const string &itpArg = "", unsigned iclc = 0 ) :
 		    path(ipath), lev(ilev), tp(itp), cat(icat), mess(imess), tpArg(itpArg), clc(iclc)	{ }
 		Alarm( const string &path, const string &alrm, unsigned clc );
-		Alarm( ) : lev(0), tp(0)	{ }
+		Alarm( ) : lev(0), tp(0), qtp(0)	{ }
 
 		//Attributes
 		ui8	    lev,	//Level
-			    tp;		//Type
+			    tp,		//Type
+			    qtp;	//Quitance type
 		string	    path,	//Widget path
-			    cat,	//Categoty
+			    cat,	//Category
 			    mess,	//Message
 			    tpArg;	//Type argument
 		unsigned    clc;	//Clock
@@ -176,8 +178,8 @@ class SessWdg : public Widget, public TValFunc
 	string eventGet( bool clear = false );
 
 	//- Alarms process -
-	void alarmSet( bool isSet = false );
-	void alarmQuittance( ui8 quit_tmpl, bool isSet = false );
+	virtual void alarmSet( bool isSet = false );
+	virtual void alarmQuittance( ui8 quit_tmpl, bool isSet = false );
 
 	//- Access to mime resource -
 	string resourceGet( const string &id, string *mime = NULL );
@@ -202,8 +204,8 @@ class SessWdg : public Widget, public TValFunc
 	string	work_prog;
 	unsigned int m_mdfClc;
 
-	vector<string> 	m_wdgChldAct,	//Active childs widget's list
-			m_attrUILs, 	//UI attributes list
+	vector<string>	m_wdgChldAct,	//Active childs widget's list
+			m_attrUILs,	//UI attributes list
 			m_attrLnkLs;	//Linked attributes list
 
 	Session		*m_sess;
@@ -235,6 +237,10 @@ class SessPage : public SessWdg
 	AutoHD<SessPage> pageAt( const string &id );
 	void pageAdd( const string &id, const string &parent = "" );
 	void pageDel( const string &id, bool full = false )	{ chldDel(m_page,id,-1,full); }
+
+	//- Alarms process -
+	void alarmSet( bool isSet = false );
+	void alarmQuittance( ui8 quit_tmpl, bool isSet = false );
 
     protected:
 	//Methods

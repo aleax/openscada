@@ -207,7 +207,7 @@ string TipContr::optDescr( )
 	"======================= The module <%s:%s> options =======================\n"
 	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
-				
+
     return buf;
 }
 
@@ -221,7 +221,7 @@ void TipContr::load_( )
         {"help"    ,0,NULL,'h'},
         {NULL      ,0,NULL,0  }
     };
-		   
+
     optind=opterr=0;
     do
     {
@@ -241,8 +241,8 @@ void TipContr::load_( )
 	//-- Search and create new libraries --
 	TConfig c_el(&elLib());
 	c_el.cfgViewAll(false);
-	vector<string> tdb_ls, db_ls;	
-	
+	vector<string> tdb_ls, db_ls;
+
 	//-- Search into DB --
 	SYS->db().at().modList(tdb_ls);
 	for( int i_tp = 0; i_tp < tdb_ls.size(); i_tp++ )
@@ -253,24 +253,24 @@ void TipContr::load_( )
 		string wbd=tdb_ls[i_tp]+"."+db_ls[i_db];
 		int lib_cnt = 0;
 		while(SYS->db().at().dataSeek(wbd+"."+libTable(),"",lib_cnt++,c_el) )
-	        {
-		    string l_id = c_el.cfg("ID").getS();		    
-		    if(!lbPresent(l_id)) lbReg(new Lib(l_id.c_str(),"",(wbd==SYS->workDB())?"*.*":wbd));		
-		    c_el.cfg("ID").setS("");		
+		{
+		    string l_id = c_el.cfg("ID").getS();
+		    if(!lbPresent(l_id)) lbReg(new Lib(l_id.c_str(),"",(wbd==SYS->workDB())?"*.*":wbd));
+		    c_el.cfg("ID").setS("");
 		}
-	    }	
+	    }
 	}
 	
 	//-- Search into config file --
 	int lib_cnt = 0;
 	while(SYS->db().at().dataSeek("",nodePath()+"lib/",lib_cnt++,c_el) )
 	{
-	    string l_id = c_el.cfg("ID").getS();		    
-	    if(!lbPresent(l_id)) lbReg(new Lib(l_id.c_str(),"","*.*"));		
-	    c_el.cfg("ID").setS("");		
-	}	
+	    string l_id = c_el.cfg("ID").getS();
+	    if(!lbPresent(l_id)) lbReg(new Lib(l_id.c_str(),"","*.*"));
+	    c_el.cfg("ID").setS("");
+	}
     }catch( TError err )
-    { 
+    {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Load function's libraries error.")); 
     }
@@ -279,13 +279,13 @@ void TipContr::load_( )
 void TipContr::modStart( )
 {
     vector<string> lst;
-    
+
     //- Start functions -
     lbList(lst);
     for(int i_lb=0; i_lb < lst.size(); i_lb++ )
 	lbAt(lst[i_lb]).at().setStart(true);
 
-    TTipDAQ::modStart( );	
+    TTipDAQ::modStart( );
 }
 
 void TipContr::modStop( )

@@ -2658,14 +2658,14 @@ bool SizePntWdg::event( QEvent *ev )
 
 		switch( view )
 		{
-		    case SizeDots:	    
+		    case SizeDots:
 			pnt.setPen(QColor("black"));
 			pnt.setBrush(QBrush(QColor("lightgreen")));
 			for(int i_p = 0; i_p < 9; i_p++)
 			{
 			    if( i_p == 4 ) continue;
 			    QRect anch(rect().x()+(i_p%3)*((rect().width()-7)/2),
-		    		rect().y()+(i_p/3)*((rect().height()-7)/2),6,6);
+				rect().y()+(i_p/3)*((rect().height()-7)/2),6,6);
 			    pnt.drawRect(anch);
 			}
 			break;
@@ -2680,16 +2680,16 @@ bool SizePntWdg::event( QEvent *ev )
 			QPen pen(QColor("black"));
 			pen.setStyle(Qt::DashDotLine);
 			pnt.setPen(pen);
-			pnt.drawRect(rect().adjusted(0,0,-1,-1));		
+			pnt.drawRect(rect().adjusted(0,0,-1,-1));
 		    break;
 		}
 		return true;
 	    }
 	    break;
-        case QEvent::MouseButtonPress:
-     	case QEvent::MouseButtonRelease:
+	case QEvent::MouseButtonPress:
+ 	case QEvent::MouseButtonRelease:
 	    return QApplication::sendEvent(parent(),ev);
     }
-    
+
     return QWidget::event(ev);
 }

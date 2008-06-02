@@ -52,13 +52,13 @@ class UFunc
     public:
 	//Methods
 	UFunc( const string &path ) : m_path(path)
-	{ 	    
+	{
 	    if( dynamic_cast<TFunction *>(&SYS->nodeAt(path,0,'.').at()) )
 		m_func = SYS->nodeAt(path,0,'.');
-	}	
+	}
 	const string &path( )		{ return m_path; }
 	AutoHD<TFunction> &func( )	{ return m_func; }
-	
+
     private:
 	//Attributes
 	string 		m_path;
@@ -74,45 +74,47 @@ class Reg
 {
     public:
 	//Data
-	enum Type 
-	{ 
+	enum Type
+	{
 	    Free,	//Free
 	    Bool,	//Boolean
 	    Int,	//Integer
 	    Real,	//Real
 	    String,	//String
-	    Var, 	//IO variable
+	    Var,	//IO variable
 	    PrmAttr	//Parameter attribute
 	};
-	    
-	enum Code       //Byte codes
+
+	enum Code	//Byte codes
 	{
-	    End,        //[E]: End programm.
+	    End,	//[E]: End programm.
 	    MviB,	//[CRB]: Load boolean <B> to register <R>.
-            MviI,     	//[CR____]: Load integer <____> to register <R>.
-	    MviR,    	//[CR______]: Load real <______> to register <R>.
+	    MviI,	//[CR____]: Load integer <____> to register <R>.
+	    MviR,	//[CR______]: Load real <______> to register <R>.
 	    MviS,	//[CRn_____]: Load string len <n> to to register <R>.
-	    AssB,       //[CRR]: Assign bool from register to register.
+	    AssB,	//[CRR]: Assign bool from register to register.
 	    AssI,	//[CRR]: Assign integer from register to register.
 	    AssR,	//[CRR]: Assign real from register to register.
 	    AssS,	//[CRR]: Assign string from register to register.
-	    MovB,       //[CRR]: Move bool from register to register.
-            MovI,       //[CRR]: Move integer from register to register.
-            MovR,       //[CRR]: Move real from register to register.
-            MovS,       //[CRR]: Move string from register to register.						
+	    MovB,	//[CRR]: Move bool from register to register.
+	    MovI,	//[CRR]: Move integer from register to register.
+	    MovR,	//[CRR]: Move real from register to register.
+	    MovS,	//[CRR]: Move string from register to register.
 	    AddI,	//[CRRR]: Integer add.
-	    AddR,       //[CRRR]: Real add.
+	    AddR,	//[CRRR]: Real add.
 	    AddS,	//[CRRR]: String add.
-	    SubI,       //[CRRR]: Integer subtract.
-            SubR,       //[CRRR]: Real subtract.
+	    SubI,	//[CRRR]: Integer subtract.
+	    SubR,	//[CRRR]: Real subtract.
 	    MulI,	//[CRRR]: Integer multiply.
 	    MulR,	//[CRRR]: Real multiply.
 	    DivI,	//[CRRR]: Integer divide.
-	    DivR,       //[CRRR]: Real divide.
+	    DivR,	//[CRRR]: Real divide.
 	    RstI,	//[CRRR]: Integer divide rest.
 	    BitOr,	//[CRRR]: Integer bit or.
 	    BitAnd,	//[CRRR]: Integer bit and.
 	    BitXor,	//[CRRR]: Integer bit xor.
+	    BitShLeft,	//[CRRR]: Integer bit shift left.
+	    BitShRight,	//[CRRR]: Integer bit shift right.
 	    LOr,	//[CRRR]: Boolean OR.
 	    LAnd,	//[CRRR]: Boolean AND.
 	    LTI,	//[CRRR]: Integer least.
@@ -124,7 +126,7 @@ class Reg
 	    GEI,	//[CRRR]: Integer great equal.
 	    GER,	//[CRRR]: Real great equal.
 	    EQI,	//[CRRR]: Integer equal.
-	    EQR,	//[CRRR]: Real equal.	    
+	    EQR,	//[CRRR]: Real equal.
 	    EQS,	//[CRRR]: String equal.
 	    NEI,	//[CRRR]: Integer no equal.
 	    NER,	//[CRRR]: Real no equal.
@@ -132,7 +134,7 @@ class Reg
 	    Not,	//[CRR]: Boolean not.
 	    BitNot,	//[CRR]: Integer bit not.
 	    NegI,	//[CRR]: Negate integer.
-	    NegR,       //[CRR]: Negate real.
+	    NegR,	//[CRR]: Negate real.
 	    If,		//[CR00nn]: Construction [if(R)  else <00>; <nn>]
 	    Cycle,	//[CRbbaann]: Cycles construction [for(<first_init>;R=<cond>;aa)<bb>;<nn>] [while(R=<cond>)<bb>;<nn>]
 	    Break,	//[C]: Break for cycles
@@ -144,10 +146,10 @@ class Reg
 	    FCosh,	//[CRR]: Function cosine hyperbolic.
 	    FTanh,	//[CRR]: Function tangent hyperbolic.
 	    FAsin,	//[CRR]: Function arcsine.
-	    FAcos,      //[CRR]: Function arccosine.
-	    FAtan,      //[CRR]: Function arctangent.
-	    FRand,      //[CRR]: Function randomize.
-	    FLg,        //[CRR]: Function decimal logarithm.
+	    FAcos,	//[CRR]: Function arccosine.
+	    FAtan,	//[CRR]: Function arctangent.
+	    FRand,	//[CRR]: Function randomize.
+	    FLg,	//[CRR]: Function decimal logarithm.
 	    FLn,	//[CRR]: Function natural logarithm.
 	    FExp,	//[CRR]: Function exponent.
 	    FPow,	//[CRRR]: Function power.
@@ -161,65 +163,65 @@ class Reg
 	    CProc,	//[CFnR____]: Procedure (R - don't used).
 	    CFunc	//[CFnR____]: Function.
 	};
-	
+
 	union El
-        {
+	{
 	    char	b_el;	//Boolean for constant and local variable
-            int         i_el;   //Integer for constant and local variable
-	    double      r_el;   //Real for constant and local variable
-	    string	*s_el;  //String for constant and local variable
-	    int         io;    	//IO id for IO variable
+	    int		i_el;	//Integer for constant and local variable
+	    double	r_el;	//Real for constant and local variable
+	    string	*s_el;	//String for constant and local variable
+	    int		io;	//IO id for IO variable
 	    AutoHD<TVal>*p_attr;//Parameter attribute
-	};	
-	
-	//Methods	
+	};
+
+	//Methods
 	Reg( ) : m_tp(Free), m_lock(false), m_nm(NULL), m_pos(-1) {  }
 	Reg( int ipos ) : m_tp(Free), m_lock(false), m_nm(NULL), m_pos(ipos) {  }
-	~Reg( )	
-	{ 
-	    setType(Free); 
-	    if(m_nm) delete m_nm; 
+	~Reg( )
+	{
+	    setType(Free);
+	    if(m_nm) delete m_nm;
 	}
 
 	Reg &operator=( Reg &irg );
 	void operator=( char ivar )		{ setType(Bool);	el.b_el = ivar; }
-	void operator=( int ivar )		{ setType(Int); 	el.i_el = ivar; }
-	void operator=( double ivar )		{ setType(Real); 	el.r_el = ivar; }
+	void operator=( int ivar )		{ setType(Int);		el.i_el = ivar; }
+	void operator=( double ivar )		{ setType(Real);	el.r_el = ivar; }
 	void operator=( const string &ivar )	{ setType(String);	*el.s_el = ivar;}
 
 	string name( ) const;
 	Type type( ) const			{ return m_tp; }
-	Type vType( Func *fnc );	
+	Type vType( Func *fnc );
 	int pos( )				{ return m_pos; }
-	bool lock( )				{ return m_lock; }	
-	
+	bool lock( )				{ return m_lock; }
+
 	void setName( const char *nm );
 	void setType( Type tp )
 	{
 	    if( m_tp == tp )    return;
-    	    //Free old type
-	    if( m_tp == String ) 		delete el.s_el;
+	    //Free old type
+	    if( m_tp == String )		delete el.s_el;
 	    else if( m_tp == Reg::PrmAttr )     delete el.p_attr;
 	    //Set new type
-	    if( tp == String )  		el.s_el = new string;
-	    else if( tp == Reg::PrmAttr )     	el.p_attr = new AutoHD<TVal>;
-	    m_tp = tp;	
+	    if( tp == String )			el.s_el = new string;
+	    else if( tp == Reg::PrmAttr )	el.p_attr = new AutoHD<TVal>;
+	    m_tp = tp;
 	}
 	void setLock( bool vl )			{ m_lock = vl; }
 	void setVar( int ivar )			{ setType(Var);	el.io = ivar; }
-	void setPAttr( const AutoHD<TVal> &ivattr )	{ setType(PrmAttr); *el.p_attr = ivattr; }	
+	void setPAttr( const AutoHD<TVal> &ivattr )	{ setType(PrmAttr); *el.p_attr = ivattr; }
 
 	void free( );
 
-	El &val( ) 				{ return el; }
+	El &val( )				{ return el; }
 
     private:
 	//Attributes
 	int	m_pos;
 	string	*m_nm;
-	bool	m_lock;	//Locked register 
-	Type 	m_tp;
-	El 	el;
+	bool	m_lock;	//Locked register
+	Type	m_tp;
+	El	el;
 };
 
 //*************************************************
@@ -235,25 +237,25 @@ class RegW
 	void operator=( int ivar )		{ setType(Reg::Int); 	el.i_el = ivar; }
 	void operator=( double ivar )		{ setType(Reg::Real); 	el.r_el = ivar; }
 	void operator=( const string &ivar )	{ setType(Reg::String);	*el.s_el = ivar;}
-	
+
 	Reg::Type type( ) const			{ return m_tp; }
 	void setType( Reg::Type tp )
 	{
 	    if( m_tp == tp )    return;
-    	    //Free old type
-	    if( m_tp == Reg::String ) 		delete el.s_el;
+	    //Free old type
+	    if( m_tp == Reg::String )		delete el.s_el;
 	    else if( m_tp == Reg::PrmAttr )	delete el.p_attr;
 	    //Set new type
-	    if( tp == Reg::String )  		el.s_el = new string;
-	    else if( tp == Reg::PrmAttr )     	el.p_attr = new AutoHD<TVal>;
+	    if( tp == Reg::String )		el.s_el = new string;
+	    else if( tp == Reg::PrmAttr )	el.p_attr = new AutoHD<TVal>;
 	    m_tp = tp;	
 	}
 	
-	Reg::El &val( ) 			{ return el; }	
-	
-    private:	
-	Reg::Type 	m_tp;
-	Reg::El 	el;
+	Reg::El &val( )				{ return el; }
+
+    private:
+	Reg::Type	m_tp;
+	Reg::El		el;
 };
 
 //*************************************************
@@ -266,20 +268,20 @@ class Func : public TConfig, public TFunction
     friend int yylex( );
     friend int yyparse( );
     friend void yyerror(const char*);
-    public:    
+    public:
 	//Attributes
-        Func( const char *, const char *name = "" );
-        ~Func( );	
+	Func( const char *, const char *name = "" );
+	~Func( );
 
 	TCntrNode &operator=( TCntrNode &node );
-	
+
 	Func &operator=( Func &func );
-	    
-        string name( );
-        string descr( )			{ return m_descr; }
+
+	string name( );
+	string descr( )			{ return m_descr; }
 	int maxCalcTm( )		{ return max_calc_tm; }
 	const string &prog( )		{ return prg_src; }
-	
+
 	void setName( const string &nm );
 	void setDescr( const string &dscr );
 	void setMaxCalcTm( int vl );
@@ -287,23 +289,23 @@ class Func : public TConfig, public TFunction
 	void setStart( bool val );
 
 	void del( );
-	
-        void calc( TValFunc *val );
+
+	void calc( TValFunc *val );
 
 	void preIOCfgChange( );
-        void postIOCfgChange( );		
+	void postIOCfgChange( );
 
 	//- Functins` list functions -
 	int funcGet( const string &path );
 	UFunc *funcAt( int id )	{ return m_fncs.at(id); }
-        void funcClear( );
-	
+	void funcClear( );
+
 	//- Registers` list functions -
 	int regNew( bool var = false );
 	int regGet( const char *nm );
-	Reg *regAt( int id )	{ return m_regs.at(id); }	
-        void regClear( );	
-	
+	Reg *regAt( int id )	{ return m_regs.at(id); }
+	void regClear( );
+
 	//- Temporary registers` list functions -
 	Reg *regTmpNew( );
 	void regTmpClean( );
@@ -324,35 +326,35 @@ class Func : public TConfig, public TFunction
 	Reg *cdExtFnc( int f_id, int p_cnt, bool proc = false );
 
 	//- Variable access -
-	string 	getValS( TValFunc *io, RegW &rg );
-	int 	getValI( TValFunc *io, RegW &rg );
-	char 	getValB( TValFunc *io, RegW &rg );
-	double 	getValR( TValFunc *io, RegW &rg );
+	string	getValS( TValFunc *io, RegW &rg );
+	int	getValI( TValFunc *io, RegW &rg );
+	char	getValB( TValFunc *io, RegW &rg );
+	double	getValR( TValFunc *io, RegW &rg );
 
 	void setValS( TValFunc *io, RegW &rg, const string &val );
 	void setValI( TValFunc *io, RegW &rg, int val );
 	void setValR( TValFunc *io, RegW &rg, double val );
 	void setValB( TValFunc *io, RegW &rg, char val );
-	
+
 	//- IO operations -
 	void ioAdd( IO *io );
-        void ioIns( IO *io, int pos );
-        void ioDel( int pos );
-        void ioMove( int pos, int to );
+	void ioIns( IO *io, int pos );
+	void ioDel( int pos );
+	void ioMove( int pos, int to );
 
 	Lib &owner( );
-	
+
     protected:
- 	//Data
+	//Data
 	struct ExecData
 	{
-	    unsigned	com_cnt;	//Command counter; 
-	    time_t 	start_tm;	//Start time
+	    unsigned	com_cnt;	//Command counter;
+	    time_t	start_tm;	//Start time
 	    unsigned char flg;		//0x01 - recursive exit stat;
 					//0x02 - break operator flag;
 					//0x04 - continue operator flag;
 	};
-	
+
 	//Methods
 	void postEnable( int flag );
 	void preDisable( int flag );
@@ -360,34 +362,34 @@ class Func : public TConfig, public TFunction
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
 	void load_( );
-        void save_( );
-	
+	void save_( );
+
 	void loadIO( );
 	void saveIO( );
 	void delIO( );
-	
+
 	void exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt );
 
-    private:    
+    private:
 	//Attributes
-	string 	&m_name;
-	string 	&m_descr;
+	string	&m_name;
+	string	&m_descr;
 	int	&max_calc_tm;
 	string	&prg_src;
 
 	bool	be_start;		//Change structure check
 	Res	calc_res;
-	
+
 	//- Parser's data -
-	string  prg;                    //Build prog
-        int     la_pos;                 //LA position
-        string  p_err;                  //Parse error
-        vector<UFunc*>  m_fncs;         //Work functions list
-        vector<Reg*>    m_regs;         //Work registers list
-	vector<Reg*>    m_tmpregs;	//Constant temporary list
+	string		prg;		//Build prog
+	int		la_pos;		//LA position
+	string		p_err;		//Parse error
+	vector<UFunc*>	m_fncs;		//Work functions list
+	vector<Reg*>	m_regs;		//Work registers list
+	vector<Reg*>	m_tmpregs;	//Constant temporary list
 	deque<Reg*>	f_prmst;	//Function's parameters stack
-	Res	&parse_res;
-};				    
+	Res		&parse_res;
+};
 
 extern Func *p_fnc;
 

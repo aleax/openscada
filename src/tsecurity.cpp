@@ -27,13 +27,13 @@
 #include "tsecurity.h"
 
 //*************************************************
-//* TSecurity                                     *
+//* TSecurity					  *
 //*************************************************
 TSecurity::TSecurity( ) : TSubSYS("Security","Security",false)
 {
     m_usr = TCntrNode::grpAdd("usr_");
     m_grp = TCntrNode::grpAdd("grp_");
-    
+
     //- User BD structure -
     user_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::Key,"20") );
     user_el.fldAdd( new TFld("DESCR",_("Full name"),TFld::String,0,"50") );
@@ -54,7 +54,7 @@ void TSecurity::postEnable(int flag)
 	usrAdd("root");
 	usrAt("root").at().setLName(_("Administrator (superuser)!!!"));
 	usrAt("root").at().setSysItem(true);
-        usrAt("root").at().setPass("openscada");
+	usrAt("root").at().setPass("openscada");
 	//-- Simple user --
 	usrAdd("user");
 	usrAt("user").at().setLName(_("Simple user."));
@@ -64,15 +64,15 @@ void TSecurity::postEnable(int flag)
 	grpAdd("root");
 	grpAt("root").at().setLName(_("Administrators group."));
 	grpAt("root").at().setSysItem(true);
-        grpAt("root").at().userAdd("root");
+	grpAt("root").at().userAdd("root");
 	//-- Simple users group --
-        grpAdd("users");
-        grpAt("users").at().setLName(_("Users group."));
-        grpAt("users").at().setSysItem(true);
-        grpAt("users").at().userAdd("user");
-        grpAt("users").at().userAdd("root");
+	grpAdd("users");
+	grpAt("users").at().setLName(_("Users group."));
+	grpAt("users").at().setSysItem(true);
+	grpAt("users").at().userAdd("user");
+	grpAt("users").at().userAdd("root");
     }
-    
+
     TSubSYS::postEnable(flag);
 }
 
@@ -87,18 +87,18 @@ void TSecurity::usrGrpList( const string &name, vector<string> &list )
     list.clear();
     grpList(gls);
     for(int i_g = 0; i_g < gls.size(); i_g++)
-	if( grpAt(gls[i_g]).at().user(name) )	
+	if( grpAt(gls[i_g]).at().user(name) )
 	    list.push_back(gls[i_g]);
 }
 
 void TSecurity::usrAdd( const string &name, const string &idb )
-{    
+{
     if( chldPresent(m_usr,name) )	return;
     chldAdd(m_usr,new TUser(name,idb,&user_el));
     if(grpPresent("users")) grpAt("users").at().userAdd(name);
 }
 
-void TSecurity::usrDel( const string &name, bool complete )       
+void TSecurity::usrDel( const string &name, bool complete )
 {
     if(usrAt(name).at().sysItem())	throw TError(nodePath().c_str(),_("Removal of system user is inadmissible."));
     chldDel(m_usr,name,-1,complete);
@@ -121,12 +121,12 @@ char TSecurity::access( const string &user, char mode, const string &owner, cons
     char rez = 0;
 
     //- Check owner permision -
-    if( user == "root" || user == owner )	
+    if( user == "root" || user == owner )
 	rez = ((access&0700)>>6)&mode;
     //- Check other permision -
     if( rez == mode )	return rez;
     rez|=(access&07)&mode;
-    if( rez == mode )   return rez;
+    if( rez == mode )	return rez;
     //- Check groupe permision -
     if( grpAt(group).at().user(user) || grpAt("root").at().user(user) )
 	rez|=((access&070)>>3)&mode;
@@ -145,7 +145,7 @@ void TSecurity::load_( )
 	{NULL       ,0,NULL,0  }
     };
 
-    optind=opterr=0;	 
+    optind=opterr=0;
     do
     {
 	next_opt=getopt_long(SYS->argc,( char *const * ) SYS->argv,short_opt,long_opt,NULL);
@@ -155,28 +155,28 @@ void TSecurity::load_( )
 	    case -1 : break;
 	}
     } while(next_opt != -1);
-    
+
     //- Load parametrs -
 
     //- Load DB -
-    string 	name;
-    
+    string	name;
+
     //-- Search and create new users --
     try
     {
 	TConfig g_cfg(&user_el);
 	g_cfg.cfgViewAll(false);
 	vector<string> tdb_ls, db_ls;
-	
+
 	//--- Search into DB ---
-        SYS->db().at().modList(tdb_ls);
-        for( int i_tp = 0; i_tp < tdb_ls.size(); i_tp++ )
-        {
-    	    SYS->db().at().at(tdb_ls[i_tp]).at().list(db_ls);
-            for( int i_db = 0; i_db < db_ls.size(); i_db++ )
-            {
+	SYS->db().at().modList(tdb_ls);
+	for( int i_tp = 0; i_tp < tdb_ls.size(); i_tp++ )
+	{
+	    SYS->db().at().at(tdb_ls[i_tp]).at().list(db_ls);
+	    for( int i_db = 0; i_db < db_ls.size(); i_db++ )
+	    {
 		string wbd = tdb_ls[i_tp]+"."+db_ls[i_db];
-                int fld_cnt=0;
+		int fld_cnt=0;
 		while( SYS->db().at().dataSeek(wbd+"."+subId()+"_user","",fld_cnt++,g_cfg) )
 		{
 		    name = g_cfg.cfg("NAME").getS();
@@ -185,9 +185,9 @@ void TSecurity::load_( )
 		}
 	    }
 	}
-	
+
 	//--- Search into config file ---
-	int fld_cnt=0;	
+	int fld_cnt=0;
 	while( SYS->db().at().dataSeek("",nodePath()+subId()+"_user",fld_cnt++,g_cfg) )
 	{
 	    name = g_cfg.cfg("NAME").getS();
@@ -195,46 +195,46 @@ void TSecurity::load_( )
 	    g_cfg.cfg("NAME").setS("");
 	}
     }catch(TError err)
-    { 
+    {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Search and create new users error."));
     }
-    
+
     //-- Search and create new user groups --
     try
     {
 	TConfig g_cfg(&grp_el);
 	g_cfg.cfgViewAll(false);
 	vector<string> tdb_ls, db_ls;
-	
+
 	//--- Search into DB ---
-        SYS->db().at().modList(tdb_ls);
-        for( int i_tp = 0; i_tp < tdb_ls.size(); i_tp++ )
-        {
-    	    SYS->db().at().at(tdb_ls[i_tp]).at().list(db_ls);
-            for( int i_db = 0; i_db < db_ls.size(); i_db++ )
-            {
+	SYS->db().at().modList(tdb_ls);
+	for( int i_tp = 0; i_tp < tdb_ls.size(); i_tp++ )
+	{
+	    SYS->db().at().at(tdb_ls[i_tp]).at().list(db_ls);
+	    for( int i_db = 0; i_db < db_ls.size(); i_db++ )
+	    {
 		string wbd = tdb_ls[i_tp]+"."+db_ls[i_db];
-                int fld_cnt=0;		
+		int fld_cnt=0;
 		while( SYS->db().at().dataSeek(wbd+"."+subId()+"_grp","",fld_cnt++,g_cfg) )
 		{
 		    name = g_cfg.cfg("NAME").getS();
 		    if( !grpPresent(name) )	grpAdd(name,(wbd==SYS->workDB())?"*.*":wbd);
-		    g_cfg.cfg("NAME").setS("");	
+		    g_cfg.cfg("NAME").setS("");
 		}
 	    }
 	}
-	
+
 	//--- Search into config file ---
-        int fld_cnt=0;		
+	int fld_cnt=0;
 	while( SYS->db().at().dataSeek("",nodePath()+subId()+"_grp",fld_cnt++,g_cfg) )
 	{
 	    name = g_cfg.cfg("NAME").getS();
 	    if( !grpPresent(name) )	grpAdd(name,"*.*");
-	    g_cfg.cfg("NAME").setS("");	
+	    g_cfg.cfg("NAME").setS("");
 	}
     }catch(TError err)
-    { 
+    {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Search and create new user's groups error."));
     }
@@ -247,7 +247,7 @@ string TSecurity::optDescr( )
 	"======================= Subsystem \"Security\" options ====================\n"
 	"------------ Parameters of section <%s> in config file -----------\n\n"
 	),nodePath().c_str());
-    
+
     return buf;
 }
 
@@ -256,19 +256,19 @@ void TSecurity::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
-        TSubSYS::cntrCmdProc(opt);
+	TSubSYS::cntrCmdProc(opt);
 	ctrMkNode("grp",opt,-1,"/br/usr_",_("User"),0664,"root",subId().c_str());
 	ctrMkNode("grp",opt,-1,"/br/grp_",_("Group"),0664,"root",subId().c_str());
-    	if(ctrMkNode("area",opt,1,"/usgr",_("Users and groups")))
+	if(ctrMkNode("area",opt,1,"/usgr",_("Users and groups")))
 	{
-    	    ctrMkNode("list",opt,-1,"/usgr/users",_("Users"),0664,"root",subId().c_str(),3,"tp","br","s_com","add,del","br_pref","usr_");
-    	    ctrMkNode("list",opt,-1,"/usgr/grps",_("Groups"),0664,"root",subId().c_str(),3,"tp","br","s_com","add,del","br_pref","grp_");
+	    ctrMkNode("list",opt,-1,"/usgr/users",_("Users"),0664,"root",subId().c_str(),3,"tp","br","s_com","add,del","br_pref","usr_");
+	    ctrMkNode("list",opt,-1,"/usgr/grps",_("Groups"),0664,"root",subId().c_str(),3,"tp","br","s_com","add,del","br_pref","grp_");
 	}
-    	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root",subId().c_str(),3,"tp","str","cols","90","rows","10");
+	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root",subId().c_str(),3,"tp","str","cols","90","rows","10");
 
 	return;
     }
-    
+
     //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440,"root",subId().c_str()) )	opt->setText(optDescr());
@@ -276,11 +276,11 @@ void TSecurity::cntrCmdProc( XMLNode *opt )
     {
 	if( ctrChkNode(opt,"get",0664,"root",subId().c_str(),SEQ_RD) )
 	{
-	    vector<string> list;   
-    	    usrList(list);
-    	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-    	        opt->childAdd("el")->setText(list[i_a]);
-    	}
+	    vector<string> list;
+	    usrList(list);
+	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
+	        opt->childAdd("el")->setText(list[i_a]);
+	}
 	if( ctrChkNode(opt,"add",0664,"root",subId().c_str(),SEQ_WR) )	usrAdd(opt->text());
 	if( ctrChkNode(opt,"del",0664,"root",subId().c_str(),SEQ_WR) )	usrDel(opt->text(),true);
     }
@@ -288,22 +288,22 @@ void TSecurity::cntrCmdProc( XMLNode *opt )
     {
 	if( ctrChkNode(opt,"get",0664,"root",subId().c_str(),SEQ_RD) )
 	{
-	    vector<string> list;   
-    	    grpList(list);
-    	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-    	        opt->childAdd("el")->setText(list[i_a]);
-    	}
+	    vector<string> list;
+	    grpList(list);
+	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
+	        opt->childAdd("el")->setText(list[i_a]);
+	}
 	if( ctrChkNode(opt,"add",0664,"root",subId().c_str(),SEQ_WR) )	grpAdd(opt->text());
-	if( ctrChkNode(opt,"del",0664,"root",subId().c_str(),SEQ_WR) )	grpDel(opt->text(),true);	
+	if( ctrChkNode(opt,"del",0664,"root",subId().c_str(),SEQ_WR) )	grpDel(opt->text(),true);
     }
     else TSubSYS::cntrCmdProc(opt);
 }
 
 //*************************************************
 //* TUser                                         *
-//*************************************************    
-TUser::TUser( const string &nm, const string &idb, TElem *el ) : 
-    TConfig(el), m_db(idb), m_lname(cfg("DESCR").getSd()), m_pass(cfg("PASS").getSd()), 
+//*************************************************
+TUser::TUser( const string &nm, const string &idb, TElem *el ) :
+    TConfig(el), m_db(idb), m_lname(cfg("DESCR").getSd()), m_pass(cfg("PASS").getSd()),
     m_name(cfg("NAME").getSd()), m_pict(cfg("PICTURE").getSd()), m_sysIt(false)
 {
     m_name = nm;
@@ -318,37 +318,37 @@ TCntrNode &TUser::operator=( TCntrNode &node )
 {
     TUser *src_n = dynamic_cast<TUser*>(&node);
     if( !src_n ) return *this;
-    
+
     string nm = name();
     *(TConfig*)this = *(TConfig*)src_n;
     m_name = nm;
     setDB(src_n->m_db);
-    
+
     return *this;
 }
 
 void TUser::setPass( const string &n_pass )
-{ 
+{
     m_pass = crypt(n_pass.c_str(),name().c_str());
     modif();
 }
 
 bool TUser::auth( const string &ipass )
-{ 
-    return (m_pass == crypt(ipass.c_str(),name().c_str()))?true:false; 
+{
+    return (m_pass == crypt(ipass.c_str(),name().c_str()))?true:false;
 }
 
 void TUser::postDisable(int flag)
 {
     try
     {
-        if( flag )
+	if( flag )
 	    SYS->db().at().dataDel(fullDB(),owner().nodePath()+tbl(),*this);
 	//- Remove user from groups -
 	vector<string> gls;
 	owner().usrGrpList(name(),gls);
 	for(int i_g = 0; i_g < gls.size(); i_g++)
-	    owner().grpAt(gls[i_g]).at().userDel(name());    
+	    owner().grpAt(gls[i_g]).at().userDel(name());
     }catch(TError err)
     { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
@@ -381,13 +381,14 @@ void TUser::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/prm/name",cfg("NAME").fld().descr(),0444,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/prm/dscr",cfg("DESCR").fld().descr(),0664,name().c_str(),grp.c_str(),1,"tp","str");
 	    ctrMkNode("img",opt,-1,"/prm/pct",cfg("PICTURE").fld().descr(),0664,name().c_str(),grp.c_str(),1,"v_sz","100");
-	    ctrMkNode("fld",opt,-1,"/prm/db",_("User DB (module.db)"),0664,"root",SYS->db().at().subId().c_str(),1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/prm/db",_("User DB"),0664,"root",SYS->db().at().subId().c_str(),2,
+		"tp","str","help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set symbol '*'."));
 	    ctrMkNode("fld",opt,-1,"/prm/pass",cfg("PASS").fld().descr(),0660,name().c_str(),grp.c_str(),1,"tp","str");
 	    ctrMkNode("table",opt,-1,"/prm/grps",_("Groups"),0444,"root",grp.c_str(),1,"key","grp");
 	    ctrMkNode("list",opt,-1,"/prm/grps/grp",_("Group"),0444,"root",grp.c_str(),1,"tp","str");
-    	    ctrMkNode("list",opt,-1,"/prm/grps/vl",_("Include"),0444,"root",grp.c_str(),1,"tp","bool");
+	    ctrMkNode("list",opt,-1,"/prm/grps/vl",_("Include"),0444,"root",grp.c_str(),1,"tp","bool");
 	}
-        return;
+	return;
     }
     //- Process command to page -
     string a_path = opt->attr("path");
@@ -425,22 +426,22 @@ void TUser::cntrCmdProc( XMLNode *opt )
 	    {
 		if(grp)	grp->childAdd("el")->setText(ls[i_g]);
 		if(vl)	vl->childAdd("el")->setText(TSYS::int2str(owner().grpAt(ls[i_g]).at().user(name())));
-	    }	    
+	    }
 	}
 	/*if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )
 	{
 	    if(atoi(opt->text().c_str()))
 		owner().grpAt(opt->attr("key_grp")).at().userAdd(name());
 	    else owner().grpAt(opt->attr("key_grp")).at().userDel(name());
-	}*/   
+	}*/
     }
     else TCntrNode::cntrCmdProc(opt);
-}	    
+}
 
 //*************************************************
-//* TGroup                                        *
+//* TGroup					  *
 //*************************************************
-TGroup::TGroup( const string &nm, const string &idb, TElem *el ) : 
+TGroup::TGroup( const string &nm, const string &idb, TElem *el ) :
     TConfig(el), m_db(idb), m_lname(cfg("DESCR").getSd()), m_usrs(cfg("USERS").getSd()), 
     m_name(cfg("NAME").getSd()), m_sysIt(false)
 {
@@ -456,12 +457,12 @@ TCntrNode &TGroup::operator=( TCntrNode &node )
 {
     TGroup *src_n = dynamic_cast<TGroup*>(&node);
     if( !src_n ) return *this;
-	
+
     string nm = name();
     *(TConfig*)this = *(TConfig*)src_n;
     m_name = nm;
     setDB(src_n->m_db);
-			
+
     return *this;
 }
 
@@ -469,11 +470,11 @@ void TGroup::postDisable(int flag)
 {
     try
     {
-        if( flag )
+	if( flag )
 	    SYS->db().at().dataDel(fullDB(),owner().nodePath()+tbl(),*this);
     }catch(TError err)
     { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-}									    
+}
 
 string TGroup::tbl( )
 {
@@ -522,23 +523,24 @@ void TGroup::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Group ")+name(),0664,"root",owner().subId().c_str());	
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Group ")+name(),0664,"root",owner().subId().c_str());
 	ctrMkNode("area",opt,-1,"/prm",_("Group"));
 	ctrMkNode("fld",opt,-1,"/prm/name",cfg("NAME").fld().descr(),0444,"root",owner().subId().c_str(),1,"tp","str");
 	ctrMkNode("fld",opt,-1,"/prm/dscr",cfg("DESCR").fld().descr(),0664,"root",owner().subId().c_str(),1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/prm/db",_("User group DB (module.db)"),0660,"root",SYS->db().at().subId().c_str(),1,"tp","str");
+	ctrMkNode("fld",opt,-1,"/prm/db",_("User group DB"),0660,"root",SYS->db().at().subId().c_str(),2,
+	    "tp","str","help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set symbol '*'."));
 	ctrMkNode("list",opt,-1,"/prm/users",cfg("USERS").fld().descr(),0664,"root",owner().subId().c_str(),2,"tp","str","s_com","add,del");
-        return;
+	return;
     }
-    
+
     //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/prm/db" )
     {
 	if( ctrChkNode(opt,"get",0660,"root",SYS->db().at().subId().c_str(),SEQ_RD) )	opt->setText(DB());
 	if( ctrChkNode(opt,"set",0660,"root",SYS->db().at().subId().c_str(),SEQ_WR) )	setDB(opt->text());
-    }	
-    else if( a_path == "/prm/name" && ctrChkNode(opt,"get",0444,"root",owner().subId().c_str(),SEQ_RD) )	
+    }
+    else if( a_path == "/prm/name" && ctrChkNode(opt,"get",0444,"root",owner().subId().c_str(),SEQ_RD) )
 	opt->setText(name());
     else if( a_path == "/prm/dscr" )
     {
@@ -555,6 +557,6 @@ void TGroup::cntrCmdProc( XMLNode *opt )
 	}
 	if( ctrChkNode(opt,"add",0664,"root",owner().subId().c_str(),SEQ_WR) )	userAdd(opt->text());
 	if( ctrChkNode(opt,"del",0664,"root",owner().subId().c_str(),SEQ_WR) )	userDel(opt->text());
-    }	
+    }
     else TCntrNode::cntrCmdProc(opt);
 }

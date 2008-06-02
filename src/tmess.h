@@ -51,11 +51,11 @@ class TMess
     public:
 	//Data
 	enum Type { Debug, Info, Notice, Warning, Error, Crit, Alert, Emerg };
-    
+
 	class SRec
 	{
 	    public:
-		SRec() : time(0), categ(""), level(TMess::Debug), mess("") { }		    
+		SRec() : time(0), categ(""), level(TMess::Debug), mess("") { }
 		SRec(time_t itm, const string &icat, Type ilev, const string &imess) :
 		    time(itm), categ(icat), level(ilev), mess(imess) { }
 		
@@ -64,7 +64,7 @@ class TMess
 		Type   level;
 		string mess;
 	};
-    
+
 	//Methods
 	TMess( );
 	~TMess( );

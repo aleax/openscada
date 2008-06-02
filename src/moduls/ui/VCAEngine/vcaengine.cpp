@@ -65,7 +65,7 @@ using namespace VCA;
 //************************************************
 //* Engine                                       *
 //************************************************
-Engine::Engine( string name )
+Engine::Engine( string name ) : mSynthCom("echo \"%t\" | ru_tts | sox -t raw -s -b -r 10000 -c 1 -v 0.8 - -t ogg -")
 {
     mId		= MOD_ID;
     mName	= MOD_NAME;
@@ -166,7 +166,7 @@ void Engine::postEnable( int flag )
     wdguio_el.fldAdd( new TFld("IO_VAL",_("Attribute value"),TFld::String,TFld::NoFlag,"100000") );
     wdguio_el.fldAdd( new TFld("SELF_FLG",_("Attribute self flags"),TFld::Integer,TFld::NoFlag,"5") );
     wdguio_el.fldAdd( new TFld("CFG_TMPL",_("Configuration template"),TFld::String,TFld::NoFlag,"30") );
-    wdguio_el.fldAdd( new TFld("CFG_VAL",_("Configuration value"),TFld::String,TFld::NoFlag,"1000") );    
+    wdguio_el.fldAdd( new TFld("CFG_VAL",_("Configuration value"),TFld::String,TFld::NoFlag,"1000") );
 
     //- Make project's DB structure -
     prj_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
@@ -244,7 +244,6 @@ void Engine::load_( )
 
     //- Load parameters from config file and DB -
     setSynthCom( TBDS::genDBGet(nodePath()+"SynthCom",synthCom()) );
-    setSynthRes( TBDS::genDBGet(nodePath()+"SynthRes",synthRes()) );
     setSynthCode( TBDS::genDBGet(nodePath()+"SynthCode",synthCode()) );
 
     //-- Load widget's libraries --
@@ -358,7 +357,6 @@ void Engine::save_( )
 
     //- Save parameters to DB -
     TBDS::genDBSet( nodePath()+"SynthCom", synthCom() );
-    TBDS::genDBSet( nodePath()+"SynthRes", synthRes() );
     TBDS::genDBSet( nodePath()+"SynthCode", synthCode() );
 }
 
@@ -441,6 +439,56 @@ AutoHD<Session> Engine::sesAt( const string &id )
     return chldAt(id_ses,id);
 }
 
+string Engine::callSynth( const string &itxt )
+{
+    int		comPos = 0;
+    char	buf[STR_BUF_LEN];
+    string	rez;
+    char	*synthRez = "/var/tmp/oscadaSynthTmp";
+    string	txt = Mess->codeConvOut(synthCode(),itxt);
+
+    ResAlloc res( mSynthRes, true );
+
+    string com = synthCom( );
+
+    //- Put text to command -
+    bool textToPipe = false;
+    if( (comPos=com.find("%t")) != string::npos )
+	com.replace( comPos, 2, txt );
+    else textToPipe = true;
+
+    //- Put result file name to command -
+    bool rezFromPipe = false;
+    if( (comPos=com.find("%f")) != string::npos )
+	com.replace( comPos, 2, synthRez );
+    else rezFromPipe = true;
+
+    if( rezFromPipe && textToPipe )	return "";
+
+    //- Open pipe -
+    FILE *fp = popen( com.c_str(), textToPipe?"w":"r" );
+    if( !fp )	return "";
+    //- Write text to pipe -
+    if( textToPipe )	fwrite( txt.c_str(), txt.size(), 1, fp );
+    //- Read result from pipe -
+    if( rezFromPipe )
+	while( comPos = fread( buf, 1, sizeof(buf), fp ) )
+	    rez.append(buf,comPos);
+    pclose(fp);
+    //- Read result from result file -
+    if( !rezFromPipe )
+    {
+	FILE *fp = fopen( synthRez, "r" );
+	if( !fp ) return "";
+	while( comPos = fread( buf, 1, sizeof(buf), fp ) )
+	    rez.append(buf,comPos);
+	fclose(fp);
+	remove( synthRez );
+    }
+
+    return TSYS::strEncode( rez, TSYS::base64 );
+}
+
 void Engine::cntrCmdProc( XMLNode *opt )
 {
     string a_path = opt->attr("path");
@@ -498,15 +546,15 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrMkNode("area",opt,1,"/ses",_("Sessions"),0444,"root","UI"))
 	    ctrMkNode("list",opt,-1,"/ses/ses",_("Sessions"),0664,"root","UI",3,"tp","br","s_com","add,del","br_pref","ses_");
-	if(ctrMkNode("area",opt,2,"/tts",_("Text synthesis"),0444,"root","UI"))
+	if(ctrMkNode("area",opt,2,"/tts",_("Speech text synthesis"),0444,"root","UI"))
 	{
 	    ctrMkNode("fld",opt,-1,"/tts/comm",_("Command"),0664,"root","UI",4,"tp","str","dest","sel_ed","select","/tts/comm_ls","help",
-		_("Command line for call text synthesis engine.\n"
+		_("Command line for call speech text synthesis engine.\n"
 		  "Use next words for replace:\n"
 		  "  %t - synthesis text;\n"
-		  "  %f - result file name."
-		  "If result file name not used then result readed from pipe.\nIf used result file name and not used %t then synthesis text sending to pipe."));
-	    ctrMkNode("fld",opt,-1,"/tts/file",_("Result file"),0664,"root","UI",2,"tp","str","help",_("Result file of work TTS engine. If file no set use pipe for get result."));
+		  "  %f - result file name.\n"
+		  "If result file name not used then result readed from pipe.\n"
+		  "If used result file name and not used %t then synthesis text sending to pipe."));
 	    ctrMkNode("fld",opt,-1,"/tts/code",_("Text code"),0664,"root","UI",2,"tp","str","help",_("Engine text codepage for text encode to it."));
 	}
 	return;
@@ -574,14 +622,9 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",0664,"root","UI",SEQ_RD) )	opt->setText(synthCom());
 	if( ctrChkNode(opt,"set",0664,"root","UI",SEQ_WR) )	setSynthCom(opt->text());
     }
-    else if( a_path == "/tts/file" )
-    {
-	if( ctrChkNode(opt,"get",0664,"root","UI",SEQ_RD) )	opt->setText(synthRes());
-	if( ctrChkNode(opt,"set",0664,"root","UI",SEQ_WR) )	setSynthRes(opt->text());
-    }
     else if( a_path == "/tts/comm_ls" && ctrChkNode(opt) )
     {
-	opt->childAdd("el")->setText("echo \"%t\" | ru_tts | sox -t raw -s -b -r 10000 -c 1 -v 0.8 - -");
+	opt->childAdd("el")->setText("echo \"%t\" | ru_tts | sox -t raw -s -b -r 10000 -c 1 -v 0.8 - -t ogg -");
     }
     else TUI::cntrCmdProc(opt);
 }

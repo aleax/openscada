@@ -3,33 +3,36 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: tvision.cpp:70 tvision.cpp:357 vis_devel.cpp:563 vis_devel.cpp:1161
-#: vis_devel.cpp:1262 vis_devel.cpp:1292 vis_devel_dlgs.cpp:453
-#: vis_devel_dlgs.cpp:522 vis_devel_dlgs.cpp:564 vis_devel_dlgs.cpp:622
-#: vis_devel_dlgs.cpp:1287 vis_devel_dlgs.cpp:1370 vis_devel_widgs.cpp:95
-#: vis_devel_widgs.cpp:544 vis_devel_widgs.cpp:1087 vis_devel_widgs.cpp:1391
-#: vis_devel_widgs.cpp:1763 vis_devel_widgs.cpp:1933 vis_devel_widgs.cpp:1989
-#: vis_devel_widgs.cpp:2417 vis_devel_widgs.cpp:2422 vis_devel_widgs.cpp:2552
-#: vis_devel_widgs.cpp:2559 vis_run.cpp:270 vis_run.cpp:424 vis_run.cpp:470
+#: tvision.cpp:70 tvision.cpp:354 vis_devel.cpp:563 vis_devel.cpp:701
+#: vis_devel.cpp:702 vis_devel.cpp:1164 vis_devel.cpp:1270 vis_devel.cpp:1300
+#: vis_devel_dlgs.cpp:453 vis_devel_dlgs.cpp:522 vis_devel_dlgs.cpp:564
+#: vis_devel_dlgs.cpp:622 vis_devel_dlgs.cpp:1287 vis_devel_dlgs.cpp:1370
+#: vis_devel_widgs.cpp:95 vis_devel_widgs.cpp:544 vis_devel_widgs.cpp:1088
+#: vis_devel_widgs.cpp:1171 vis_devel_widgs.cpp:1172 vis_devel_widgs.cpp:1173
+#: vis_devel_widgs.cpp:1397 vis_devel_widgs.cpp:1444 vis_devel_widgs.cpp:1508
+#: vis_devel_widgs.cpp:1777 vis_devel_widgs.cpp:1947 vis_devel_widgs.cpp:2003
+#: vis_devel_widgs.cpp:2434 vis_devel_widgs.cpp:2439 vis_devel_widgs.cpp:2569
+#: vis_devel_widgs.cpp:2576 vis_run.cpp:341 vis_run.cpp:494 vis_run.cpp:561
 #: vis_run_widgs.cpp:115 vis_run_widgs.cpp:121 vis_run_widgs.cpp:180
-#: vis_run_widgs.cpp:409 vis_shape_elfig.cpp:527 vis_shape_elfig.cpp:528
-#: vis_shape_elfig.cpp:529 vis_shape_elfig.cpp:530 vis_shape_elfig.cpp:539
-#: vis_shape_elfig.cpp:540 vis_shape_elfig.cpp:541 vis_shape_elfig.cpp:542
-#: vis_shape_elfig.cpp:550 vis_shape_elfig.cpp:551 vis_shape_elfig.cpp:552
-#: vis_shape_elfig.cpp:553 vis_shape_elfig.cpp:606 vis_shape_elfig.cpp:639
-#: vis_shapes.cpp:1062 vis_shapes.cpp:1084 vis_shapes.cpp:1113
-#: vis_shapes.cpp:1662 vis_shapes.cpp:2586 vis_shapes.cpp:2592
-#: vis_widgs.cpp:126 vis_widgs.cpp:132 vis_widgs.cpp:594 vis_widgs.cpp:646
-#: vis_widgs.cpp:651 vis_widgs.cpp:742 vis_widgs.cpp:806 vis_widgs.cpp:830
-#: vis_widgs.cpp:836 vis_widgs.cpp:843 vis_widgs.cpp:855 vis_widgs.cpp:860
-#: vis_widgs.cpp:907 vis_devel.h:79 vis_devel.h:98 vis_devel_widgs.h:319
-#: vis_devel_widgs.h:357 vis_run_widgs.h:56 vis_widgs.h:249
+#: vis_run_widgs.cpp:409 vis_shape_elfig.cpp:575 vis_shape_elfig.cpp:576
+#: vis_shape_elfig.cpp:577 vis_shape_elfig.cpp:578 vis_shape_elfig.cpp:579
+#: vis_shape_elfig.cpp:593 vis_shape_elfig.cpp:594 vis_shape_elfig.cpp:595
+#: vis_shape_elfig.cpp:596 vis_shape_elfig.cpp:597 vis_shape_elfig.cpp:610
+#: vis_shape_elfig.cpp:611 vis_shape_elfig.cpp:612 vis_shape_elfig.cpp:613
+#: vis_shape_elfig.cpp:614 vis_shape_elfig.cpp:667 vis_shape_elfig.cpp:700
+#: vis_shapes.cpp:1065 vis_shapes.cpp:1087 vis_shapes.cpp:1116
+#: vis_shapes.cpp:1671 vis_shapes.cpp:2597 vis_shapes.cpp:2603
+#: vis_widgs.cpp:126 vis_widgs.cpp:132 vis_widgs.cpp:598 vis_widgs.cpp:650
+#: vis_widgs.cpp:655 vis_widgs.cpp:746 vis_widgs.cpp:810 vis_widgs.cpp:834
+#: vis_widgs.cpp:840 vis_widgs.cpp:847 vis_widgs.cpp:859 vis_widgs.cpp:864
+#: vis_widgs.cpp:911 vis_devel.h:79 vis_devel.h:98 vis_devel_widgs.h:319
+#: vis_devel_widgs.h:357 vis_run_widgs.h:60 vis_widgs.h:250
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 0.6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-27 22:04+0300\n"
+"POT-Creation-Date: 2008-06-02 19:11+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -76,9 +79,14 @@ msgstr ""
 msgid "C"
 msgstr ""
 
-#: tvision.cpp:91 tvision.cpp:368 tvision.cpp:404 vis_devel.cpp:595
-#: vis_devel.cpp:600 vis_devel_widgs.cpp:828 vis_run.cpp:193 vis_run.cpp:203
+#: tvision.cpp:91 tvision.cpp:360 tvision.cpp:405 vis_devel.cpp:595
+#: vis_devel.cpp:600 vis_devel_widgs.cpp:828 vis_run.cpp:246 vis_run.cpp:251
 msgid "."
+msgstr ""
+
+#: tvision.cpp:91
+#, c-format
+msgid "play -q %f"
 msgstr ""
 
 #: tvision.cpp:104
@@ -134,7 +142,7 @@ msgstr "Загрузка модуля."
 msgid "h"
 msgstr ""
 
-#: tvision.cpp:158 vis_devel.cpp:85 vis_run.cpp:89
+#: tvision.cpp:158 tvision.cpp:320 vis_devel.cpp:85 vis_run.cpp:89
 msgid "help"
 msgstr ""
 
@@ -151,7 +159,7 @@ msgid "VCAstation"
 msgstr ""
 
 #: tvision.cpp:177 tvision.cpp:189
-msgid "RunTimeUpdt"
+msgid "PlayCom"
 msgstr ""
 
 #: tvision.cpp:183
@@ -170,8 +178,8 @@ msgstr ""
 msgid "Auth wrong!!!"
 msgstr "Ошибка аутентификации!!!"
 
-#: tvision.cpp:248 vis_devel.cpp:1008 vis_devel_widgs.cpp:1414
-#: vis_devel_widgs.cpp:1472 vis_devel_widgs.cpp:1494
+#: tvision.cpp:248 vis_devel.cpp:1011 vis_devel_widgs.cpp:1420
+#: vis_devel_widgs.cpp:1480 vis_devel_widgs.cpp:1503
 msgid "/prj_"
 msgstr ""
 
@@ -185,11 +193,11 @@ msgstr "Останов модуля."
 
 #: tvision.cpp:309 vis_devel_dlgs.cpp:246 vis_devel_dlgs.cpp:912
 #: vis_devel_dlgs.cpp:1127 vis_devel_widgs.cpp:160 vis_devel_widgs.cpp:817
-#: vis_shapes.cpp:1957 vis_shapes.cpp:2242
+#: vis_shapes.cpp:1966 vis_shapes.cpp:2252
 msgid "info"
 msgstr ""
 
-#: tvision.cpp:312
+#: tvision.cpp:312 tvision.cpp:319
 msgid "area"
 msgstr ""
 
@@ -201,12 +209,12 @@ msgstr ""
 msgid "Module options"
 msgstr "Опции модуля"
 
-#: tvision.cpp:314 tvision.cpp:315 tvision.cpp:316 tvision.cpp:317
-#: tvision.cpp:320
+#: tvision.cpp:314 tvision.cpp:315 tvision.cpp:316 tvision.cpp:320
+#: tvision.cpp:323
 msgid "fld"
 msgstr ""
 
-#: tvision.cpp:314 tvision.cpp:326
+#: tvision.cpp:314 tvision.cpp:329
 msgid "/prm/cfg/start_user"
 msgstr ""
 
@@ -215,38 +223,38 @@ msgid "Start user"
 msgstr "Стартовый пользователь"
 
 #: tvision.cpp:314 tvision.cpp:315 tvision.cpp:316 tvision.cpp:317
-#: tvision.cpp:318 tvision.cpp:320 tvision.cpp:328 tvision.cpp:329
-#: tvision.cpp:333 tvision.cpp:334 tvision.cpp:338 tvision.cpp:339
-#: tvision.cpp:344 tvision.cpp:345 tvision.cpp:347 vis_devel.cpp:794
-#: vis_widgs.cpp:360
+#: tvision.cpp:319 tvision.cpp:320 tvision.cpp:323 tvision.cpp:331
+#: tvision.cpp:332 tvision.cpp:336 tvision.cpp:337 tvision.cpp:341
+#: tvision.cpp:342 tvision.cpp:344 tvision.cpp:369 tvision.cpp:370
+#: vis_devel.cpp:797 vis_widgs.cpp:360
 msgid "root"
 msgstr ""
 
 #: tvision.cpp:314 tvision.cpp:315 tvision.cpp:316 tvision.cpp:317
-#: tvision.cpp:318 tvision.cpp:320 vis_devel_dlgs.cpp:622
+#: tvision.cpp:320 tvision.cpp:323 vis_devel_dlgs.cpp:622
 #: vis_devel_widgs.cpp:268
 msgid "tp"
 msgstr ""
 
-#: tvision.cpp:314 tvision.cpp:315 tvision.cpp:317 tvision.cpp:320
-#: vis_devel_widgs.cpp:273
+#: tvision.cpp:314 tvision.cpp:315 tvision.cpp:316 tvision.cpp:320
+#: tvision.cpp:323 vis_devel_widgs.cpp:273
 msgid "str"
 msgstr ""
 
-#: tvision.cpp:314 tvision.cpp:316 tvision.cpp:317 vis_devel_widgs.cpp:275
+#: tvision.cpp:314 tvision.cpp:316 tvision.cpp:320 vis_devel_widgs.cpp:275
 msgid "dest"
 msgstr ""
 
-#: tvision.cpp:314 tvision.cpp:316 tvision.cpp:317 vis_devel_dlgs.cpp:1082
+#: tvision.cpp:314 tvision.cpp:316 tvision.cpp:320 vis_devel_dlgs.cpp:1082
 #: vis_devel_dlgs.cpp:1236 vis_devel_widgs.cpp:275 vis_devel_widgs.cpp:277
 msgid "select"
 msgstr ""
 
-#: tvision.cpp:314 tvision.cpp:353
+#: tvision.cpp:314 tvision.cpp:350
 msgid "/prm/cfg/u_lst"
 msgstr ""
 
-#: tvision.cpp:315 tvision.cpp:331
+#: tvision.cpp:315 tvision.cpp:334
 msgid "/prm/cfg/run_prj"
 msgstr ""
 
@@ -254,99 +262,118 @@ msgstr ""
 msgid "Run projects list (';' - sep)"
 msgstr "Перечень запускаемых проектов (';' - раздел.)"
 
-#: tvision.cpp:316 tvision.cpp:336
-msgid "/prm/cfg/runModUpd"
-msgstr ""
-
-#: tvision.cpp:316
-msgid "RunTime update mode"
-msgstr "Режим обновления в RunTime"
-
-#: tvision.cpp:316 vis_devel_widgs.cpp:270
-msgid "dec"
-msgstr ""
-
-#: tvision.cpp:316 tvision.cpp:317
-msgid "idm"
-msgstr ""
-
-#: tvision.cpp:316 tvision.cpp:317 tvision.cpp:364 vis_devel.cpp:1009
-#: vis_devel.cpp:1033 vis_devel.cpp:1122 vis_devel.cpp:1276
-#: vis_devel_dlgs.cpp:602 vis_devel_widgs.cpp:451 vis_devel_widgs.cpp:818
-#: vis_run.cpp:384 vis_run_widgs.cpp:251 vis_run_widgs.cpp:311
-#: vis_shapes.cpp:524 vis_shapes.cpp:2021 vis_widgs.cpp:314 vis_widgs.cpp:315
-#: vis_widgs.cpp:316 vis_widgs.cpp:317 vis_widgs.cpp:873
-msgid "1"
-msgstr ""
-
-#: tvision.cpp:316 tvision.cpp:361
-msgid "/prm/cfg/rt_upd_lst"
-msgstr ""
-
-#: tvision.cpp:317 tvision.cpp:342
+#: tvision.cpp:316 tvision.cpp:339
 msgid "/prm/cfg/stationVCA"
 msgstr ""
 
-#: tvision.cpp:317
+#: tvision.cpp:316
 msgid "VCA engine station"
 msgstr "Станция движка СВУ"
 
-#: tvision.cpp:317 tvision.cpp:366
+#: tvision.cpp:316
+msgid "idm"
+msgstr ""
+
+#: tvision.cpp:316 vis_devel.cpp:1012 vis_devel.cpp:1036 vis_devel.cpp:1125
+#: vis_devel.cpp:1284 vis_devel_dlgs.cpp:602 vis_devel_widgs.cpp:451
+#: vis_devel_widgs.cpp:818 vis_run.cpp:454 vis_run_widgs.cpp:251
+#: vis_run_widgs.cpp:311 vis_shapes.cpp:524 vis_shapes.cpp:2031
+#: vis_widgs.cpp:314 vis_widgs.cpp:315 vis_widgs.cpp:316 vis_widgs.cpp:317
+#: vis_widgs.cpp:877
+msgid "1"
+msgstr ""
+
+#: tvision.cpp:316 tvision.cpp:358
 msgid "/prm/cfg/vca_lst"
 msgstr ""
 
-#: tvision.cpp:318
+#: tvision.cpp:317
 msgid "comm"
 msgstr ""
 
-#: tvision.cpp:318 tvision.cpp:347
+#: tvision.cpp:317 tvision.cpp:344
 msgid "/prm/cfg/host_lnk"
 msgstr ""
 
-#: tvision.cpp:318
+#: tvision.cpp:317
 msgid "Go to remote stations list configuration"
 msgstr "Переход к конфигурации перечня удалённых станций"
 
-#: tvision.cpp:318
+#: tvision.cpp:317
 msgid "lnk"
 msgstr ""
 
-#: tvision.cpp:320 tvision.cpp:352
+#: tvision.cpp:319
+msgid "/alarm"
+msgstr ""
+
+#: tvision.cpp:319
+msgid "Alarms"
+msgstr "Нарушения"
+
+#: tvision.cpp:320 tvision.cpp:367
+msgid "/alarm/plComm"
+msgstr ""
+
+#: tvision.cpp:320
+msgid "Play command"
+msgstr "Команда проигрывания"
+
+#: tvision.cpp:320
+msgid "sel_ed"
+msgstr ""
+
+#: tvision.cpp:320 tvision.cpp:372
+msgid "/alarm/plComLs"
+msgstr ""
+
+#: tvision.cpp:321
+#, c-format
+msgid ""
+"Command line for call sounds play.\n"
+"Use %f for source file name insert. If source file not used then play sample "
+"send to pipe."
+msgstr ""
+"Командная строка для вызова проигрывания звука.\n"
+"Используйте %f для вставки имени файла источника. Если файл источника не "
+"указан то данные направляются в канал."
+
+#: tvision.cpp:323 tvision.cpp:349
 msgid "/help/g_help"
 msgstr ""
 
-#: tvision.cpp:320
+#: tvision.cpp:323
 msgid "Options help"
 msgstr "Помощь по опциям"
 
-#: tvision.cpp:320
+#: tvision.cpp:323
 msgid "cols"
 msgstr ""
 
-#: tvision.cpp:320
+#: tvision.cpp:323
 msgid "90"
 msgstr ""
 
-#: tvision.cpp:320
+#: tvision.cpp:323
 msgid "rows"
 msgstr ""
 
-#: tvision.cpp:320 vis_run_widgs.cpp:255
+#: tvision.cpp:323 vis_run_widgs.cpp:255
 msgid "5"
 msgstr ""
 
-#: tvision.cpp:325 tvision.cpp:401 vis_devel.cpp:633 vis_devel.cpp:637
-#: vis_devel.cpp:639 vis_devel.cpp:648 vis_devel.cpp:705 vis_devel.cpp:762
-#: vis_devel.cpp:771 vis_devel.cpp:792 vis_devel.cpp:817 vis_devel.cpp:886
-#: vis_devel.cpp:896 vis_devel.cpp:952 vis_devel.cpp:975 vis_devel.cpp:999
-#: vis_devel.cpp:1008 vis_devel.cpp:1023 vis_devel.cpp:1032 vis_devel.cpp:1064
-#: vis_devel.cpp:1065 vis_devel.cpp:1093 vis_devel.cpp:1094 vis_devel.cpp:1101
-#: vis_devel.cpp:1106 vis_devel.cpp:1120 vis_devel.cpp:1122 vis_devel.cpp:1128
-#: vis_devel.cpp:1130 vis_devel.cpp:1173 vis_devel.cpp:1175 vis_devel.cpp:1180
-#: vis_devel.cpp:1181 vis_devel.cpp:1186 vis_devel.cpp:1188 vis_devel.cpp:1189
-#: vis_devel.cpp:1252 vis_devel.cpp:1312 vis_devel.cpp:1321 vis_devel.cpp:1330
-#: vis_devel.cpp:1331 vis_devel.cpp:1341 vis_devel.cpp:1342 vis_devel.cpp:1378
-#: vis_devel.cpp:1389 vis_devel.cpp:1390 vis_devel_dlgs.cpp:247
+#: tvision.cpp:328 tvision.cpp:402 vis_devel.cpp:633 vis_devel.cpp:637
+#: vis_devel.cpp:639 vis_devel.cpp:648 vis_devel.cpp:706 vis_devel.cpp:764
+#: vis_devel.cpp:773 vis_devel.cpp:795 vis_devel.cpp:820 vis_devel.cpp:889
+#: vis_devel.cpp:899 vis_devel.cpp:955 vis_devel.cpp:978 vis_devel.cpp:1002
+#: vis_devel.cpp:1011 vis_devel.cpp:1026 vis_devel.cpp:1035 vis_devel.cpp:1067
+#: vis_devel.cpp:1068 vis_devel.cpp:1096 vis_devel.cpp:1097 vis_devel.cpp:1104
+#: vis_devel.cpp:1109 vis_devel.cpp:1123 vis_devel.cpp:1125 vis_devel.cpp:1131
+#: vis_devel.cpp:1133 vis_devel.cpp:1176 vis_devel.cpp:1178 vis_devel.cpp:1183
+#: vis_devel.cpp:1184 vis_devel.cpp:1189 vis_devel.cpp:1191 vis_devel.cpp:1192
+#: vis_devel.cpp:1260 vis_devel.cpp:1320 vis_devel.cpp:1329 vis_devel.cpp:1338
+#: vis_devel.cpp:1339 vis_devel.cpp:1349 vis_devel.cpp:1350 vis_devel.cpp:1386
+#: vis_devel.cpp:1397 vis_devel.cpp:1398 vis_devel_dlgs.cpp:247
 #: vis_devel_dlgs.cpp:270 vis_devel_dlgs.cpp:278 vis_devel_dlgs.cpp:286
 #: vis_devel_dlgs.cpp:289 vis_devel_dlgs.cpp:303 vis_devel_dlgs.cpp:306
 #: vis_devel_dlgs.cpp:320 vis_devel_dlgs.cpp:332 vis_devel_dlgs.cpp:339
@@ -368,141 +395,139 @@ msgstr ""
 #: vis_devel_dlgs.cpp:1414 vis_devel_dlgs.cpp:1451 vis_devel_widgs.cpp:164
 #: vis_devel_widgs.cpp:167 vis_devel_widgs.cpp:266 vis_devel_widgs.cpp:277
 #: vis_devel_widgs.cpp:411 vis_devel_widgs.cpp:449 vis_devel_widgs.cpp:818
-#: vis_devel_widgs.cpp:858 vis_devel_widgs.cpp:876 vis_devel_widgs.cpp:930
-#: vis_devel_widgs.cpp:961 vis_devel_widgs.cpp:1175 vis_devel_widgs.cpp:1205
-#: vis_devel_widgs.cpp:1220 vis_devel_widgs.cpp:1251 vis_devel_widgs.cpp:1265
-#: vis_devel_widgs.cpp:1295 vis_devel_widgs.cpp:1441 vis_devel_widgs.cpp:1472
-#: vis_devel_widgs.cpp:1501 vis_devel_widgs.cpp:1532 vis_devel_widgs.cpp:2076
-#: vis_run.cpp:172 vis_run.cpp:274 vis_run.cpp:340 vis_run.cpp:353
-#: vis_run.cpp:364 vis_run.cpp:368 vis_run.cpp:468 vis_run.cpp:477
-#: vis_run.cpp:491 vis_run.cpp:499 vis_run_widgs.cpp:107 vis_shapes.cpp:1958
-#: vis_shapes.cpp:1975 vis_shapes.cpp:2017 vis_shapes.cpp:2243
-#: vis_shapes.cpp:2276 vis_widgs.cpp:770 vis_widgs.cpp:803 vis_widgs.cpp:827
-#: vis_widgs.cpp:873 vis_widgs.cpp:877 vis_widgs.cpp:917
+#: vis_devel_widgs.cpp:858 vis_devel_widgs.cpp:876 vis_devel_widgs.cpp:931
+#: vis_devel_widgs.cpp:962 vis_devel_widgs.cpp:1179 vis_devel_widgs.cpp:1210
+#: vis_devel_widgs.cpp:1224 vis_devel_widgs.cpp:1256 vis_devel_widgs.cpp:1270
+#: vis_devel_widgs.cpp:1301 vis_devel_widgs.cpp:1448 vis_devel_widgs.cpp:1480
+#: vis_devel_widgs.cpp:1512 vis_devel_widgs.cpp:1544 vis_devel_widgs.cpp:2093
+#: vis_run.cpp:225 vis_run.cpp:329 vis_run.cpp:345 vis_run.cpp:410
+#: vis_run.cpp:423 vis_run.cpp:434 vis_run.cpp:438 vis_run.cpp:514
+#: vis_run.cpp:559 vis_run.cpp:568 vis_run.cpp:650 vis_run.cpp:664
+#: vis_run.cpp:673 vis_run_widgs.cpp:107 vis_shapes.cpp:1967
+#: vis_shapes.cpp:1984 vis_shapes.cpp:2027 vis_shapes.cpp:2253
+#: vis_shapes.cpp:2286 vis_widgs.cpp:774 vis_widgs.cpp:807 vis_widgs.cpp:831
+#: vis_widgs.cpp:877 vis_widgs.cpp:881 vis_widgs.cpp:921
 msgid "path"
 msgstr ""
 
-#: tvision.cpp:328 tvision.cpp:333 tvision.cpp:338 tvision.cpp:344
-#: tvision.cpp:347 tvision.cpp:352 vis_devel.cpp:637 vis_devel.cpp:695
-#: vis_devel.cpp:704 vis_devel.cpp:1042 vis_devel.cpp:1251 vis_devel.cpp:1306
+#: tvision.cpp:331 tvision.cpp:336 tvision.cpp:341 tvision.cpp:344
+#: tvision.cpp:349 tvision.cpp:369 vis_devel.cpp:637 vis_devel.cpp:695
+#: vis_devel.cpp:705 vis_devel.cpp:1045 vis_devel.cpp:1259 vis_devel.cpp:1314
 #: vis_devel_dlgs.cpp:244 vis_devel_dlgs.cpp:412 vis_devel_dlgs.cpp:600
 #: vis_devel_dlgs.cpp:910 vis_devel_dlgs.cpp:1124 vis_devel_dlgs.cpp:1262
 #: vis_devel_widgs.cpp:161 vis_devel_widgs.cpp:410 vis_devel_widgs.cpp:814
-#: vis_devel_widgs.cpp:960 vis_devel_widgs.cpp:1171 vis_devel_widgs.cpp:1174
-#: vis_devel_widgs.cpp:1219 vis_devel_widgs.cpp:1264 vis_devel_widgs.cpp:1428
-#: vis_devel_widgs.cpp:1440 vis_devel_widgs.cpp:1500 vis_run.cpp:353
-#: vis_run.cpp:467 vis_run_widgs.cpp:106 vis_shapes.cpp:1974
-#: vis_shapes.cpp:2014 vis_shapes.cpp:2273 vis_widgs.cpp:802 vis_widgs.cpp:826
-#: vis_widgs.cpp:870 vis_widgs.cpp:916
+#: vis_devel_widgs.cpp:961 vis_devel_widgs.cpp:1175 vis_devel_widgs.cpp:1178
+#: vis_devel_widgs.cpp:1223 vis_devel_widgs.cpp:1269 vis_devel_widgs.cpp:1434
+#: vis_devel_widgs.cpp:1447 vis_devel_widgs.cpp:1511 vis_run.cpp:423
+#: vis_run.cpp:558 vis_run.cpp:662 vis_run.cpp:671 vis_run_widgs.cpp:106
+#: vis_shapes.cpp:1983 vis_shapes.cpp:2023 vis_shapes.cpp:2283
+#: vis_widgs.cpp:806 vis_widgs.cpp:830 vis_widgs.cpp:874 vis_widgs.cpp:920
 msgid "get"
 msgstr ""
 
-#: tvision.cpp:329 tvision.cpp:334 tvision.cpp:339 tvision.cpp:345
-#: vis_devel.cpp:1007 vis_devel.cpp:1031 vis_devel.cpp:1116 vis_devel.cpp:1377
-#: vis_devel.cpp:1387 vis_devel_dlgs.cpp:470 vis_devel_dlgs.cpp:486
+#: tvision.cpp:332 tvision.cpp:337 tvision.cpp:342 tvision.cpp:370
+#: vis_devel.cpp:1010 vis_devel.cpp:1034 vis_devel.cpp:1119 vis_devel.cpp:1385
+#: vis_devel.cpp:1395 vis_devel_dlgs.cpp:470 vis_devel_dlgs.cpp:486
 #: vis_devel_dlgs.cpp:572 vis_devel_dlgs.cpp:620 vis_devel_dlgs.cpp:1304
 #: vis_devel_dlgs.cpp:1321 vis_devel_dlgs.cpp:1450 vis_devel_widgs.cpp:448
-#: vis_devel_widgs.cpp:929 vis_devel_widgs.cpp:2075 vis_run.cpp:476
-#: vis_widgs.cpp:769
+#: vis_devel_widgs.cpp:930 vis_devel_widgs.cpp:2092 vis_run.cpp:567
+#: vis_widgs.cpp:773
 msgid "set"
 msgstr ""
 
-#: tvision.cpp:350
+#: tvision.cpp:347
 msgid "/Transport"
 msgstr ""
 
-#: tvision.cpp:357 tvision.cpp:359 tvision.cpp:363 tvision.cpp:364
-#: tvision.cpp:368 tvision.cpp:372 vis_run.cpp:478 vis_widgs.cpp:771
+#: tvision.cpp:354 tvision.cpp:356 tvision.cpp:360 tvision.cpp:364
+#: tvision.cpp:374 vis_run.cpp:569 vis_widgs.cpp:775
 msgid "el"
 msgstr ""
 
-#: tvision.cpp:363 tvision.cpp:364 tvision.cpp:368 tvision.cpp:372
-#: vis_devel.cpp:708 vis_devel.cpp:774 vis_devel.cpp:1000 vis_devel.cpp:1024
-#: vis_devel.cpp:1074 vis_devel.cpp:1093 vis_devel.cpp:1094 vis_devel.cpp:1101
-#: vis_devel.cpp:1106 vis_devel.cpp:1173 vis_devel.cpp:1175 vis_devel.cpp:1180
-#: vis_devel.cpp:1181 vis_devel.cpp:1186 vis_devel.cpp:1188 vis_devel.cpp:1189
-#: vis_devel.cpp:1365 vis_devel_dlgs.cpp:356 vis_devel_dlgs.cpp:622
-#: vis_devel_dlgs.cpp:1021 vis_devel_dlgs.cpp:1085 vis_devel_dlgs.cpp:1177
-#: vis_devel_dlgs.cpp:1188 vis_devel_dlgs.cpp:1193 vis_devel_dlgs.cpp:1195
-#: vis_devel_dlgs.cpp:1196 vis_devel_dlgs.cpp:1197 vis_devel_dlgs.cpp:1198
-#: vis_devel_dlgs.cpp:1199 vis_devel_dlgs.cpp:1200 vis_devel_dlgs.cpp:1208
-#: vis_devel_dlgs.cpp:1215 vis_devel_dlgs.cpp:1440 vis_devel_dlgs.cpp:1458
-#: vis_devel_dlgs.cpp:1468 vis_devel_widgs.cpp:187 vis_devel_widgs.cpp:237
-#: vis_devel_widgs.cpp:411 vis_devel_widgs.cpp:824 vis_devel_widgs.cpp:890
-#: vis_devel_widgs.cpp:1182 vis_devel_widgs.cpp:1228 vis_devel_widgs.cpp:1273
-#: vis_devel_widgs.cpp:1448 vis_devel_widgs.cpp:1508 vis_run.cpp:478
-#: vis_widgs.cpp:771 vis_widgs.cpp:803 vis_widgs.cpp:880
+#: tvision.cpp:360 tvision.cpp:364 vis_devel.cpp:709 vis_devel.cpp:776
+#: vis_devel.cpp:1003 vis_devel.cpp:1027 vis_devel.cpp:1077 vis_devel.cpp:1096
+#: vis_devel.cpp:1097 vis_devel.cpp:1104 vis_devel.cpp:1109 vis_devel.cpp:1176
+#: vis_devel.cpp:1178 vis_devel.cpp:1183 vis_devel.cpp:1184 vis_devel.cpp:1189
+#: vis_devel.cpp:1191 vis_devel.cpp:1192 vis_devel.cpp:1373
+#: vis_devel_dlgs.cpp:356 vis_devel_dlgs.cpp:622 vis_devel_dlgs.cpp:1021
+#: vis_devel_dlgs.cpp:1085 vis_devel_dlgs.cpp:1177 vis_devel_dlgs.cpp:1188
+#: vis_devel_dlgs.cpp:1193 vis_devel_dlgs.cpp:1195 vis_devel_dlgs.cpp:1196
+#: vis_devel_dlgs.cpp:1197 vis_devel_dlgs.cpp:1198 vis_devel_dlgs.cpp:1199
+#: vis_devel_dlgs.cpp:1200 vis_devel_dlgs.cpp:1208 vis_devel_dlgs.cpp:1215
+#: vis_devel_dlgs.cpp:1440 vis_devel_dlgs.cpp:1458 vis_devel_dlgs.cpp:1468
+#: vis_devel_widgs.cpp:187 vis_devel_widgs.cpp:237 vis_devel_widgs.cpp:411
+#: vis_devel_widgs.cpp:824 vis_devel_widgs.cpp:890 vis_devel_widgs.cpp:1186
+#: vis_devel_widgs.cpp:1232 vis_devel_widgs.cpp:1278 vis_devel_widgs.cpp:1455
+#: vis_devel_widgs.cpp:1519 vis_run.cpp:569 vis_widgs.cpp:775
+#: vis_widgs.cpp:807 vis_widgs.cpp:884
 msgid "id"
 msgstr ""
 
-#: tvision.cpp:363 vis_devel.cpp:48 vis_devel.cpp:1282 vis_devel.cpp:1407
-#: vis_devel_widgs.cpp:451 vis_run.cpp:420 vis_run_widgs.cpp:250
-#: vis_run_widgs.cpp:312 vis_run_widgs.cpp:386 vis_run_widgs.cpp:419
-#: vis_shapes.cpp:528 vis_shapes.cpp:1977 vis_widgs.cpp:314 vis_widgs.cpp:315
-#: vis_widgs.cpp:316 vis_widgs.cpp:317
-msgid "0"
-msgstr ""
-
-#: tvision.cpp:363
-msgid "All widgets periodic adaptive update"
-msgstr "Адаптивное периодическое обновление всех виджетов"
-
-#: tvision.cpp:364 vis_run.cpp:80
-msgid "Update only changed widgets"
-msgstr "Обновление только изменённых виджетов"
-
-#: tvision.cpp:368
+#: tvision.cpp:360
 msgid "Local"
 msgstr "Локальная"
 
-#: tvision.cpp:370 tvision.cpp:373 vis_devel.cpp:600 vis_run.cpp:203
+#: tvision.cpp:362 tvision.cpp:365 vis_devel.cpp:600 vis_run.cpp:251
 msgid "user"
 msgstr ""
 
-#: tvision.cpp:383
+#: tvision.cpp:374
+#, c-format
+msgid "play %f"
+msgstr ""
+
+#: tvision.cpp:384
 #, c-format
 msgid "%s"
 msgstr ""
 
-#: tvision.cpp:401
+#: tvision.cpp:402
 msgid "/UI/VCAEngine"
 msgstr ""
 
-#: tvision.cpp:407 tvision.cpp:415
+#: tvision.cpp:408 tvision.cpp:416
 msgid "rez"
 msgstr ""
 
-#: tvision.cpp:412
+#: tvision.cpp:413
 msgid "VCAStat"
 msgstr ""
 
-#: tvision.cpp:414 vis_shape_elfig.cpp:530 vis_shape_elfig.cpp:542
-#: vis_shape_elfig.cpp:553 vis_shape_elfig.cpp:606 vis_shapes.cpp:422
-#: vis_shapes.cpp:442 vis_widgs.cpp:566
+#: tvision.cpp:415 vis_shape_elfig.cpp:579 vis_shape_elfig.cpp:597
+#: vis_shape_elfig.cpp:614 vis_shape_elfig.cpp:667 vis_shapes.cpp:422
+#: vis_shapes.cpp:442 vis_widgs.cpp:570
 msgid "\n"
 msgstr ""
 
-#: tvision.cpp:414
+#: tvision.cpp:415
 msgid "SelfSystem"
+msgstr ""
+
+#: vis_devel.cpp:48 vis_devel.cpp:1290 vis_devel.cpp:1415
+#: vis_devel_widgs.cpp:451 vis_run.cpp:490 vis_run_widgs.cpp:250
+#: vis_run_widgs.cpp:312 vis_run_widgs.cpp:386 vis_run_widgs.cpp:419
+#: vis_shapes.cpp:528 vis_shapes.cpp:1986 vis_shapes.cpp:2033
+#: vis_widgs.cpp:314 vis_widgs.cpp:315 vis_widgs.cpp:316 vis_widgs.cpp:317
+msgid "0"
 msgstr ""
 
 #: vis_devel.cpp:56
 msgid "Vision developing"
 msgstr "Vision-разработка"
 
-#: vis_devel.cpp:69 vis_run.cpp:56
+#: vis_devel.cpp:69 vis_run.cpp:63
 msgid "close"
 msgstr ""
 
-#: vis_devel.cpp:69 vis_run.cpp:56
+#: vis_devel.cpp:69 vis_run.cpp:63
 msgid ":/images/close.png"
 msgstr ""
 
-#: vis_devel.cpp:70 vis_run.cpp:57
+#: vis_devel.cpp:70 vis_run.cpp:64
 msgid "&Close"
 msgstr "&Закрыть"
 
-#: vis_devel.cpp:72 vis_run.cpp:59
+#: vis_devel.cpp:72 vis_run.cpp:66
 msgid "Close Vision window"
 msgstr "Закрытие окна Vision"
 
@@ -514,27 +539,27 @@ msgstr "Кнопка для закрытия окна разработки Visio
 msgid "Press for close of current Vision developing window."
 msgstr "Нажать для закрытия окна разработки Vision"
 
-#: vis_devel.cpp:77 vis_run.cpp:64
+#: vis_devel.cpp:77 vis_run.cpp:71
 msgid "exit"
 msgstr ""
 
-#: vis_devel.cpp:77 vis_run.cpp:64
+#: vis_devel.cpp:77 vis_run.cpp:71
 msgid ":/images/exit.png"
 msgstr ""
 
-#: vis_devel.cpp:78 vis_run.cpp:65
+#: vis_devel.cpp:78 vis_run.cpp:72
 msgid "&Quit"
 msgstr "&Выход"
 
-#: vis_devel.cpp:80 vis_run.cpp:67
+#: vis_devel.cpp:80 vis_run.cpp:74
 msgid "Quit from OpenSCADA"
 msgstr "Выход из OpenSCADA"
 
-#: vis_devel.cpp:81 vis_run.cpp:68
+#: vis_devel.cpp:81 vis_run.cpp:75
 msgid "The button for full quit from OpenSCADA"
 msgstr "Кнопка для полного выхода из OpenSCADA"
 
-#: vis_devel.cpp:82 vis_run.cpp:69
+#: vis_devel.cpp:82 vis_run.cpp:76
 msgid "Press for full quit from OpenSCADA system."
 msgstr "Нажать для полного выхода из OpenSCADA"
 
@@ -598,8 +623,8 @@ msgstr "Запрос информации о GUI элементах"
 msgid "Press for respond about user interface elements."
 msgstr "Нажать для запроса информации о GUI элементах."
 
-#: vis_devel.cpp:108 vis_devel.cpp:951 vis_run_widgs.cpp:121 vis_widgs.cpp:836
-#: vis_widgs.cpp:855
+#: vis_devel.cpp:108 vis_devel.cpp:954 vis_run_widgs.cpp:121 vis_widgs.cpp:840
+#: vis_widgs.cpp:859
 msgid "load"
 msgstr ""
 
@@ -623,7 +648,7 @@ msgstr "Кнопка для загрузки данных элемента из 
 msgid "Press for loading item data from DB."
 msgstr "Нажать для загрузки данных элемента из БД."
 
-#: vis_devel.cpp:116 vis_devel.cpp:648 vis_devel.cpp:974
+#: vis_devel.cpp:116 vis_devel.cpp:648 vis_devel.cpp:977
 msgid "save"
 msgstr ""
 
@@ -651,11 +676,11 @@ msgstr "Нажать для сохранения данных элемента �
 msgid "Ctrl+S"
 msgstr ""
 
-#: vis_devel.cpp:125 vis_run.cpp:279
+#: vis_devel.cpp:125 vis_run.cpp:350
 msgid "vision_prj_run"
 msgstr ""
 
-#: vis_devel.cpp:125 vis_run.cpp:279
+#: vis_devel.cpp:125 vis_run.cpp:350
 msgid ":/images/prj_run.png"
 msgstr ""
 
@@ -683,7 +708,7 @@ msgstr ""
 msgid ":/images/prj_new.png"
 msgstr ""
 
-#: vis_devel.cpp:134 vis_devel.cpp:995
+#: vis_devel.cpp:134 vis_devel.cpp:998
 msgid "New project"
 msgstr "Новый проект"
 
@@ -1229,7 +1254,7 @@ msgstr ""
 msgid "Cursor"
 msgstr "Курсор"
 
-#: vis_devel.cpp:300 vis_shape_elfig.cpp:651 vis_shape_elfig.cpp:718
+#: vis_devel.cpp:300 vis_shape_elfig.cpp:712 vis_shape_elfig.cpp:779
 msgid "cursor"
 msgstr ""
 
@@ -1257,8 +1282,8 @@ msgstr ""
 msgid "Add line"
 msgstr "Добавить линию"
 
-#: vis_devel.cpp:309 vis_shape_elfig.cpp:186 vis_shape_elfig.cpp:646
-#: vis_shape_elfig.cpp:683
+#: vis_devel.cpp:309 vis_shape_elfig.cpp:189 vis_shape_elfig.cpp:707
+#: vis_shape_elfig.cpp:744
 msgid "line"
 msgstr ""
 
@@ -1286,8 +1311,8 @@ msgstr ""
 msgid "Add arc"
 msgstr "Добавить дугу"
 
-#: vis_devel.cpp:318 vis_shape_elfig.cpp:233 vis_shape_elfig.cpp:644
-#: vis_shape_elfig.cpp:689
+#: vis_devel.cpp:318 vis_shape_elfig.cpp:249 vis_shape_elfig.cpp:705
+#: vis_shape_elfig.cpp:750
 msgid "arc"
 msgstr ""
 
@@ -1315,7 +1340,7 @@ msgstr ""
 msgid "Add besier curve"
 msgstr "Добавить кривую безье"
 
-#: vis_devel.cpp:327 vis_shape_elfig.cpp:648 vis_shape_elfig.cpp:695
+#: vis_devel.cpp:327 vis_shape_elfig.cpp:709 vis_shape_elfig.cpp:756
 msgid "besier"
 msgstr ""
 
@@ -1343,8 +1368,8 @@ msgstr ""
 msgid "Holds"
 msgstr "Привязки"
 
-#: vis_devel.cpp:338 vis_shape_elfig.cpp:676 vis_shape_elfig.cpp:680
-#: vis_shape_elfig.cpp:701
+#: vis_devel.cpp:338 vis_shape_elfig.cpp:737 vis_shape_elfig.cpp:741
+#: vis_shape_elfig.cpp:762
 msgid "hold"
 msgstr ""
 
@@ -1456,7 +1481,7 @@ msgstr "Кнопка для активации предыдущего окна"
 msgid "Press for activate previous window."
 msgstr "Нажать для активации предыдущего окна."
 
-#: vis_devel.cpp:391 vis_run.cpp:111
+#: vis_devel.cpp:391 vis_run.cpp:144
 msgid "&File"
 msgstr "&Файл"
 
@@ -1472,7 +1497,7 @@ msgstr "&Проект"
 msgid "&Widget"
 msgstr "&Виджет"
 
-#: vis_devel.cpp:416 vis_devel.cpp:434 vis_run.cpp:114
+#: vis_devel.cpp:416 vis_devel.cpp:434 vis_run.cpp:152
 msgid "&View"
 msgstr "В&ид"
 
@@ -1480,7 +1505,7 @@ msgstr "В&ид"
 msgid "&Window"
 msgstr "&Окно"
 
-#: vis_devel.cpp:435 vis_run.cpp:117
+#: vis_devel.cpp:435 vis_run.cpp:154
 msgid "&Help"
 msgstr "&Помощь"
 
@@ -1508,23 +1533,23 @@ msgstr "Панель элементарных фигур"
 msgid "elFigTool"
 msgstr ""
 
-#: vis_devel.cpp:492 vis_run.cpp:128
+#: vis_devel.cpp:492 vis_run.cpp:172
 msgid "This label display curent user."
 msgstr "Эта метка показывает текущего пользователя."
 
-#: vis_devel.cpp:493 vis_run.cpp:129
+#: vis_devel.cpp:493 vis_run.cpp:173
 msgid "Field for display of the current user."
 msgstr "Поле для отображения текущего пользователя."
 
-#: vis_devel.cpp:494 vis_run.cpp:130
+#: vis_devel.cpp:494 vis_run.cpp:174
 msgid "Double click for change user."
 msgstr "Дважды кликнуть для смены пользователя."
 
-#: vis_devel.cpp:497 vis_run.cpp:133
+#: vis_devel.cpp:497 vis_run.cpp:177
 msgid "This label display used VCA engine station."
 msgstr "Эта метка показывает используемую станцию движка СВУ."
 
-#: vis_devel.cpp:498 vis_run.cpp:134
+#: vis_devel.cpp:498 vis_run.cpp:178
 msgid "Field for display of the used VCA engine station."
 msgstr "Поле для отображения используемой станции движка СВУ."
 
@@ -1544,8 +1569,8 @@ msgstr "Поле для отображения текущего режима м�
 msgid "Click for change widgets' scaling mode."
 msgstr "Нажать для смены режима масштабирования виджетов."
 
-#: vis_devel.cpp:506 vis_devel.cpp:895 vis_shapes.cpp:296 vis_shapes.cpp:729
-#: vis_shapes.cpp:1363 vis_widgs.cpp:312 vis_widgs.cpp:325
+#: vis_devel.cpp:506 vis_devel.cpp:898 vis_shapes.cpp:296 vis_shapes.cpp:729
+#: vis_shapes.cpp:1366 vis_widgs.cpp:312 vis_widgs.cpp:325
 msgid " "
 msgstr ""
 
@@ -1577,16 +1602,16 @@ msgstr "Плавающее окно для инспектора ссылок в�
 msgid "devWinState"
 msgstr ""
 
-#: vis_devel.cpp:571 vis_run.cpp:161
+#: vis_devel.cpp:571 vis_run.cpp:208
 msgid "Ready"
 msgstr "Готов"
 
-#: vis_devel.cpp:632 vis_devel.cpp:883
+#: vis_devel.cpp:632 vis_devel.cpp:886
 msgid "modify"
 msgstr ""
 
-#: vis_devel.cpp:633 vis_devel.cpp:648 vis_devel.cpp:886 vis_devel.cpp:896
-#: vis_devel.cpp:952 vis_devel.cpp:975
+#: vis_devel.cpp:633 vis_devel.cpp:648 vis_devel.cpp:889 vis_devel.cpp:899
+#: vis_devel.cpp:955 vis_devel.cpp:978
 #, c-format
 msgid "/%2fobj"
 msgstr ""
@@ -1603,13 +1628,15 @@ msgstr ""
 
 #: vis_devel.cpp:644
 msgid "Some visual items is changed. Save changing to DB on exit?"
-msgstr "Некоторые визуальные элементы были изменены. Сохранить изменения в БД при выходе?"
+msgstr ""
+"Некоторые визуальные элементы были изменены. Сохранить изменения в БД при "
+"выходе?"
 
 #: vis_devel.cpp:645
 msgid "Visual items save"
 msgstr "Сохранение визуальных элементов"
 
-#: vis_devel.cpp:670 vis_run.cpp:241
+#: vis_devel.cpp:670 vis_run.cpp:289
 msgid ""
 "%1 v%2.\n"
 "Autor: %3\n"
@@ -1620,217 +1647,217 @@ msgstr ""
 "Лицензия: %4\n"
 
 #: vis_devel.cpp:671 vis_devel.cpp:679 vis_devel_dlgs.cpp:822
-#: vis_devel_widgs.cpp:775 vis_devel_widgs.cpp:1051 vis_devel_widgs.cpp:1354
-#: vis_run.cpp:242 vis_run.cpp:250
+#: vis_devel_widgs.cpp:775 vis_devel_widgs.cpp:1052 vis_devel_widgs.cpp:1360
+#: vis_run.cpp:290 vis_run.cpp:298
 msgid "Name"
 msgstr "Имя"
 
-#: vis_devel.cpp:672 vis_run.cpp:243
+#: vis_devel.cpp:672 vis_run.cpp:291
 msgid "Version"
 msgstr "Версия"
 
-#: vis_devel.cpp:673 vis_run.cpp:244
+#: vis_devel.cpp:673 vis_run.cpp:292
 msgid "Author"
 msgstr "Автор"
 
-#: vis_devel.cpp:674 vis_run.cpp:245
+#: vis_devel.cpp:674 vis_run.cpp:293
 msgid "License"
 msgstr "Лицензия"
 
-#: vis_devel.cpp:705 vis_devel.cpp:1023 vis_devel.cpp:1173 vis_devel.cpp:1321
-#: vis_devel_widgs.cpp:1175
+#: vis_devel.cpp:706 vis_devel.cpp:1026 vis_devel.cpp:1176 vis_devel.cpp:1329
+#: vis_devel_widgs.cpp:1179
 #, c-format
 msgid "/%2fprm%2fcfg%2fwlb"
 msgstr ""
 
-#: vis_devel.cpp:746 vis_devel.cpp:757
+#: vis_devel.cpp:748 vis_devel.cpp:759
 msgid "Library: %1"
 msgstr "Библиотека: %1"
 
-#: vis_devel.cpp:762 vis_devel.cpp:771 vis_devel.cpp:781 vis_devel.cpp:791
-#: vis_devel.cpp:1032 vis_devel_widgs.cpp:1103 vis_devel_widgs.cpp:1150
-#: vis_devel_widgs.cpp:1205 vis_devel_widgs.cpp:1220 vis_devel_widgs.cpp:1251
-#: vis_devel_widgs.cpp:1265 vis_devel_widgs.cpp:1295
+#: vis_devel.cpp:764 vis_devel.cpp:773 vis_devel.cpp:783 vis_devel.cpp:794
+#: vis_devel.cpp:1035 vis_devel_widgs.cpp:1104 vis_devel_widgs.cpp:1151
+#: vis_devel_widgs.cpp:1210 vis_devel_widgs.cpp:1224 vis_devel_widgs.cpp:1256
+#: vis_devel_widgs.cpp:1270 vis_devel_widgs.cpp:1301
 msgid "/wlb_"
 msgstr ""
 
-#: vis_devel.cpp:762 vis_devel.cpp:817 vis_devel.cpp:1252
-#: vis_devel_widgs.cpp:1205 vis_devel_widgs.cpp:1251 vis_devel_widgs.cpp:1295
-#: vis_devel_widgs.cpp:1472 vis_devel_widgs.cpp:1532 vis_run.cpp:353
+#: vis_devel.cpp:764 vis_devel.cpp:820 vis_devel.cpp:1260
+#: vis_devel_widgs.cpp:1210 vis_devel_widgs.cpp:1256 vis_devel_widgs.cpp:1301
+#: vis_devel_widgs.cpp:1480 vis_devel_widgs.cpp:1544 vis_run.cpp:423
 #, c-format
 msgid "/%2fico"
 msgstr ""
 
-#: vis_devel.cpp:771 vis_devel.cpp:1093 vis_devel.cpp:1180 vis_devel.cpp:1330
-#: vis_devel.cpp:1341 vis_devel_widgs.cpp:1220
+#: vis_devel.cpp:773 vis_devel.cpp:1096 vis_devel.cpp:1183 vis_devel.cpp:1338
+#: vis_devel.cpp:1349 vis_devel_widgs.cpp:1224
 #, c-format
 msgid "/%2fwdg%2fwdg"
 msgstr ""
 
-#: vis_devel.cpp:781 vis_devel.cpp:791 vis_devel.cpp:1095 vis_devel.cpp:1107
-#: vis_devel_widgs.cpp:1103 vis_devel_widgs.cpp:1150 vis_devel_widgs.cpp:1251
-#: vis_devel_widgs.cpp:1265 vis_devel_widgs.cpp:1295 vis_widgs.cpp:888
-#: vis_widgs.cpp:899 vis_widgs.cpp:903
+#: vis_devel.cpp:783 vis_devel.cpp:794 vis_devel.cpp:1098 vis_devel.cpp:1110
+#: vis_devel_widgs.cpp:1104 vis_devel_widgs.cpp:1151 vis_devel_widgs.cpp:1256
+#: vis_devel_widgs.cpp:1270 vis_devel_widgs.cpp:1301 vis_widgs.cpp:892
+#: vis_widgs.cpp:903 vis_widgs.cpp:907
 msgid "/wdg_"
 msgstr ""
 
-#: vis_devel.cpp:792 vis_devel.cpp:1120
+#: vis_devel.cpp:795 vis_devel.cpp:1123
 #, c-format
 msgid "/%2fwdg%2fst%2fparent"
 msgstr ""
 
-#: vis_devel.cpp:806
+#: vis_devel.cpp:809
 msgid "Add widget based at '%1'"
 msgstr "Добавление виджета основанного от '%1'"
 
-#: vis_devel.cpp:807
+#: vis_devel.cpp:810
 msgid "The button for add widget based at '%1'"
 msgstr "Кнопка для добавления виджета основанного от '%1'"
 
-#: vis_devel.cpp:808
+#: vis_devel.cpp:811
 msgid "Press for add widget based at '%1'."
 msgstr "Нажать для добавления виджета основанного от '%1'"
 
-#: vis_devel.cpp:858 vis_devel.cpp:1011 vis_devel.cpp:1064 vis_devel.cpp:1097
-#: vis_devel.cpp:1174 vis_devel.cpp:1183 vis_devel.cpp:1308 vis_devel.cpp:1313
-#: vis_devel.cpp:1326 vis_devel.cpp:1388 vis_devel.cpp:1423 vis_devel.cpp:1424
-#: vis_devel_widgs.cpp:1436
+#: vis_devel.cpp:861 vis_devel.cpp:1014 vis_devel.cpp:1067 vis_devel.cpp:1100
+#: vis_devel.cpp:1177 vis_devel.cpp:1186 vis_devel.cpp:1316 vis_devel.cpp:1321
+#: vis_devel.cpp:1334 vis_devel.cpp:1396 vis_devel.cpp:1431 vis_devel.cpp:1432
+#: vis_devel_widgs.cpp:1442
 msgid "prj_"
 msgstr ""
 
-#: vis_devel.cpp:859 vis_devel.cpp:1035 vis_devel.cpp:1090 vis_devel.cpp:1172
-#: vis_devel.cpp:1177 vis_devel.cpp:1317 vis_devel.cpp:1322 vis_devel.cpp:1326
-#: vis_devel.cpp:1330 vis_devel.cpp:1333 vis_devel.cpp:1337 vis_devel.cpp:1341
-#: vis_devel.cpp:1388 vis_devel.cpp:1423 vis_devel.cpp:1424 vis_devel.cpp:1425
-#: vis_devel_widgs.cpp:1169
+#: vis_devel.cpp:862 vis_devel.cpp:1038 vis_devel.cpp:1093 vis_devel.cpp:1175
+#: vis_devel.cpp:1180 vis_devel.cpp:1325 vis_devel.cpp:1330 vis_devel.cpp:1334
+#: vis_devel.cpp:1338 vis_devel.cpp:1341 vis_devel.cpp:1345 vis_devel.cpp:1349
+#: vis_devel.cpp:1396 vis_devel.cpp:1431 vis_devel.cpp:1432 vis_devel.cpp:1433
+#: vis_devel_widgs.cpp:1170
 msgid "wlb_"
 msgstr ""
 
-#: vis_devel.cpp:898
+#: vis_devel.cpp:901
 msgid "*"
 msgstr ""
 
-#: vis_devel.cpp:929
+#: vis_devel.cpp:932
 msgid "&%1 %2"
 msgstr ""
 
-#: vis_devel.cpp:929
+#: vis_devel.cpp:932
 msgid "%1 %2"
 msgstr ""
 
-#: vis_devel.cpp:943
+#: vis_devel.cpp:946
 msgid "You sure for load visual items '%1' from DB?"
 msgstr "Вы действительно желаете загрузить визуальные элементы '%1' из БД?"
 
-#: vis_devel.cpp:944
+#: vis_devel.cpp:947
 msgid "Load visual item's data from DB"
 msgstr "Загрузка данных визуального элемента из БД"
 
-#: vis_devel.cpp:954 vis_devel.cpp:977 vis_devel.cpp:1003 vis_devel.cpp:1027
-#: vis_devel.cpp:1066 vis_devel.cpp:1112 vis_devel.cpp:1133 vis_devel.cpp:1192
-#: vis_devel.cpp:1360 vis_devel.cpp:1382 vis_devel_dlgs.cpp:474
+#: vis_devel.cpp:957 vis_devel.cpp:980 vis_devel.cpp:1006 vis_devel.cpp:1030
+#: vis_devel.cpp:1069 vis_devel.cpp:1115 vis_devel.cpp:1136 vis_devel.cpp:1195
+#: vis_devel.cpp:1368 vis_devel.cpp:1390 vis_devel_dlgs.cpp:474
 #: vis_devel_dlgs.cpp:511 vis_devel_dlgs.cpp:532 vis_devel_dlgs.cpp:550
 #: vis_devel_dlgs.cpp:578 vis_devel_dlgs.cpp:606 vis_devel_dlgs.cpp:626
 #: vis_devel_dlgs.cpp:1308 vis_devel_dlgs.cpp:1354 vis_devel_dlgs.cpp:1395
-#: vis_devel_dlgs.cpp:1418 vis_devel_dlgs.cpp:1457 vis_devel_widgs.cpp:933
-#: vis_devel_widgs.cpp:1178 vis_devel_widgs.cpp:1223 vis_devel_widgs.cpp:1268
-#: vis_devel_widgs.cpp:1444 vis_devel_widgs.cpp:1504 vis_devel_widgs.cpp:2079
-#: vis_run.cpp:345
+#: vis_devel_dlgs.cpp:1418 vis_devel_dlgs.cpp:1457 vis_devel_widgs.cpp:934
+#: vis_devel_widgs.cpp:1182 vis_devel_widgs.cpp:1227 vis_devel_widgs.cpp:1273
+#: vis_devel_widgs.cpp:1451 vis_devel_widgs.cpp:1515 vis_devel_widgs.cpp:2096
+#: vis_run.cpp:415
 msgid "mcat"
 msgstr ""
 
-#: vis_devel.cpp:966
+#: vis_devel.cpp:969
 msgid "You sure for save visual items '%1' to DB?"
 msgstr "Вы действительно желаете сохранить визуальные элементы '%1' в БД?"
 
-#: vis_devel.cpp:967
+#: vis_devel.cpp:970
 msgid "Save visual item's data to DB"
 msgstr "Сохранение данных визуального элемента в БД"
 
-#: vis_devel.cpp:995 vis_devel.cpp:1311
+#: vis_devel.cpp:998 vis_devel.cpp:1319
 msgid "Enter new project's identifier and name."
 msgstr "Введите идентификатор и имя нового проекта."
 
-#: vis_devel.cpp:998 vis_devel.cpp:1022 vis_devel.cpp:1088
+#: vis_devel.cpp:1001 vis_devel.cpp:1025 vis_devel.cpp:1091
 #: vis_devel_dlgs.cpp:529 vis_devel_dlgs.cpp:1391
 msgid "add"
 msgstr ""
 
-#: vis_devel.cpp:999 vis_devel.cpp:1175 vis_devel.cpp:1312
-#: vis_devel_widgs.cpp:1441
+#: vis_devel.cpp:1002 vis_devel.cpp:1178 vis_devel.cpp:1320
+#: vis_devel_widgs.cpp:1448
 #, c-format
 msgid "/%2fprm%2fcfg%2fprj"
 msgstr ""
 
-#: vis_devel.cpp:1008 vis_devel.cpp:1032
+#: vis_devel.cpp:1011 vis_devel.cpp:1035
 #, c-format
 msgid "/%2fobj%2fst%2fen"
 msgstr ""
 
-#: vis_devel.cpp:1019 vis_devel.cpp:1320
+#: vis_devel.cpp:1022 vis_devel.cpp:1328
 msgid "Enter new widget's library identifier and name."
 msgstr "Введите идентификатор и имя новой библиотеки виджетов."
 
-#: vis_devel.cpp:1019
+#: vis_devel.cpp:1022
 msgid "New widget's library"
 msgstr "Новая библиотека виджетов"
 
-#: vis_devel.cpp:1058 vis_devel.cpp:1329
+#: vis_devel.cpp:1061 vis_devel.cpp:1337
 msgid "Enter new widget/page identifier and name."
 msgstr "Введите идентификатор и имя нового виджета/страницы."
 
-#: vis_devel.cpp:1058
+#: vis_devel.cpp:1061
 msgid "Create widget/page"
 msgstr "Создать виджет/страницу"
 
-#: vis_devel.cpp:1064 vis_devel.cpp:1101 vis_devel.cpp:1186 vis_devel.cpp:1188
-#: vis_devel.cpp:1331 vis_devel_widgs.cpp:1501
+#: vis_devel.cpp:1067 vis_devel.cpp:1104 vis_devel.cpp:1189 vis_devel.cpp:1191
+#: vis_devel.cpp:1339 vis_devel_widgs.cpp:1512
 #, c-format
 msgid "/%2fpage%2fpage"
 msgstr ""
 
-#: vis_devel.cpp:1065 vis_devel.cpp:1094 vis_devel.cpp:1106 vis_devel.cpp:1181
-#: vis_devel.cpp:1189 vis_devel.cpp:1342 vis_devel_widgs.cpp:1265
-#: vis_widgs.cpp:877
+#: vis_devel.cpp:1068 vis_devel.cpp:1097 vis_devel.cpp:1109 vis_devel.cpp:1184
+#: vis_devel.cpp:1192 vis_devel.cpp:1350 vis_devel_widgs.cpp:1270
+#: vis_widgs.cpp:881
 #, c-format
 msgid "/%2finclwdg%2fwdg"
 msgstr ""
 
-#: vis_devel.cpp:1070
+#: vis_devel.cpp:1073
 msgid "item"
 msgstr ""
 
-#: vis_devel.cpp:1102 vis_devel_widgs.cpp:1414 vis_devel_widgs.cpp:1494
-#: vis_devel_widgs.cpp:1532
+#: vis_devel.cpp:1105 vis_devel_widgs.cpp:1420 vis_devel_widgs.cpp:1503
+#: vis_devel_widgs.cpp:1544
 msgid "/pg_"
 msgstr ""
 
-#: vis_devel.cpp:1122
+#: vis_devel.cpp:1125
 #, c-format
 msgid "/%2fwdg%2fst%2fen"
 msgstr ""
 
-#: vis_devel.cpp:1128
+#: vis_devel.cpp:1131
 #, c-format
 msgid "/%2fattr%2fgeomX"
 msgstr ""
 
-#: vis_devel.cpp:1130
+#: vis_devel.cpp:1133
 #, c-format
 msgid "/%2fattr%2fgeomY"
 msgstr ""
 
-#: vis_devel.cpp:1149
+#: vis_devel.cpp:1152
 msgid "You sure for delete visual items: '%1'?"
 msgstr "Вы действительно желаете удалить визуальные элементы '%1'?"
 
-#: vis_devel.cpp:1150
+#: vis_devel.cpp:1153
 msgid "Delete visual items"
 msgstr "Удаление визуальных элементов"
 
-#: vis_devel.cpp:1161 vis_devel.cpp:1299 vis_devel.cpp:1303 vis_devel.cpp:1332
-#: vis_devel.cpp:1343 vis_devel.cpp:1379 vis_devel.cpp:1380 vis_devel.cpp:1389
-#: vis_devel.cpp:1390 vis_devel.cpp:1393 vis_devel.cpp:1420 vis_devel.cpp:1422
+#: vis_devel.cpp:1164 vis_devel.cpp:1307 vis_devel.cpp:1311 vis_devel.cpp:1340
+#: vis_devel.cpp:1351 vis_devel.cpp:1387 vis_devel.cpp:1388 vis_devel.cpp:1397
+#: vis_devel.cpp:1398 vis_devel.cpp:1401 vis_devel.cpp:1428 vis_devel.cpp:1430
 #: vis_devel_dlgs.cpp:270 vis_devel_dlgs.cpp:278 vis_devel_dlgs.cpp:286
 #: vis_devel_dlgs.cpp:289 vis_devel_dlgs.cpp:303 vis_devel_dlgs.cpp:306
 #: vis_devel_dlgs.cpp:320 vis_devel_dlgs.cpp:332 vis_devel_dlgs.cpp:339
@@ -1849,96 +1876,100 @@ msgstr "Удаление визуальных элементов"
 #: vis_devel_dlgs.cpp:1236 vis_devel_dlgs.cpp:1249 vis_devel_dlgs.cpp:1263
 #: vis_devel_dlgs.cpp:1269 vis_devel_dlgs.cpp:1305 vis_devel_dlgs.cpp:1322
 #: vis_devel_dlgs.cpp:1392 vis_devel_dlgs.cpp:1414 vis_devel_dlgs.cpp:1451
-#: vis_devel_widgs.cpp:164 vis_devel_widgs.cpp:277 vis_run.cpp:381
+#: vis_devel_widgs.cpp:164 vis_devel_widgs.cpp:277 vis_run.cpp:451
 #: vis_run_widgs.cpp:42
 msgid "/"
 msgstr ""
 
-#: vis_devel.cpp:1167 vis_devel_dlgs.cpp:546 vis_devel_dlgs.cpp:1413
+#: vis_devel.cpp:1170 vis_devel_dlgs.cpp:546 vis_devel_dlgs.cpp:1413
 msgid "del"
 msgstr ""
 
-#: vis_devel.cpp:1187 vis_devel.cpp:1326 vis_devel.cpp:1333 vis_devel.cpp:1337
-#: vis_devel.cpp:1424 vis_devel.cpp:1425 vis_run_widgs.cpp:46
+#: vis_devel.cpp:1190 vis_devel.cpp:1334 vis_devel.cpp:1341 vis_devel.cpp:1345
+#: vis_devel.cpp:1432 vis_devel.cpp:1433 vis_run_widgs.cpp:46
 msgid "pg_"
 msgstr ""
 
-#: vis_devel.cpp:1230
+#: vis_devel.cpp:1233
 msgid "Widget: %1"
 msgstr "Виджет: %1"
 
-#: vis_devel.cpp:1238
+#: vis_devel.cpp:1241
 msgid "Widget's '%1' edit window already opened."
 msgstr "Окно редактирования виджета '%1' уже открыто."
 
-#: vis_devel.cpp:1292
+#: vis_devel.cpp:1253
+msgid "grey"
+msgstr ""
+
+#: vis_devel.cpp:1300
 msgid "Visual items move or copy"
 msgstr "Копирование или перемещение визуальных элементов"
 
-#: vis_devel.cpp:1310
+#: vis_devel.cpp:1318
 msgid "Project '%1' move.\n"
 msgstr "Перемещение проекта '%1'.\n"
 
-#: vis_devel.cpp:1310
+#: vis_devel.cpp:1318
 msgid "Project '%1' copy.\n"
 msgstr "Копирование проекта '%1'.\n"
 
-#: vis_devel.cpp:1319
+#: vis_devel.cpp:1327
 msgid "Widget's library '%1' move.\n"
 msgstr "Перемещение библиотеки виджетов '%1'.\n"
 
-#: vis_devel.cpp:1319
+#: vis_devel.cpp:1327
 msgid "Widget's library '%1' copy.\n"
 msgstr "Копирование библиотеки виджетов '%1'.\n"
 
-#: vis_devel.cpp:1328
+#: vis_devel.cpp:1336
 msgid "Move page '%1' to '%2'.\n"
 msgstr "Перемещение страницы '%1' в '%2'.\n"
 
-#: vis_devel.cpp:1328
+#: vis_devel.cpp:1336
 msgid "Copy page '%1' to '%2'.\n"
 msgstr "Копирование страницы '%1' в '%2'.\n"
 
-#: vis_devel.cpp:1333 vis_devel.cpp:1337 vis_devel.cpp:1344 vis_devel.cpp:1425
-#: vis_devel_widgs.cpp:1437 vis_run_widgs.cpp:45
+#: vis_devel.cpp:1341 vis_devel.cpp:1345 vis_devel.cpp:1352 vis_devel.cpp:1433
+#: vis_devel_widgs.cpp:1443 vis_run_widgs.cpp:45
 msgid "wdg_"
 msgstr ""
 
-#: vis_devel.cpp:1339
+#: vis_devel.cpp:1347
 msgid "Move widget '%1' to '%2'.\n"
 msgstr "Перемещение виджета '%1' в '%2'.\n"
 
-#: vis_devel.cpp:1339
+#: vis_devel.cpp:1347
 msgid "Copy widget '%1' to '%2'.\n"
 msgstr "Копирование виджета '%1' в '%2'.\n"
 
-#: vis_devel.cpp:1340
+#: vis_devel.cpp:1348
 msgid "Enter new widget identifier and name."
 msgstr "Введите идентификатор и имя нового виджета."
 
-#: vis_devel.cpp:1350
+#: vis_devel.cpp:1358
 msgid "Copy/move scheme from '%1' to '%2' no support."
 msgstr "Схема копирования/перемещения из '%1' в '%2' не поддерживается."
 
-#: vis_devel.cpp:1378
+#: vis_devel.cpp:1386
 #, c-format
 msgid "/%2fprm%2fcfg%2fcp%2fcp"
 msgstr ""
 
-#: vis_devel.cpp:1379
+#: vis_devel.cpp:1387
 msgid "src"
 msgstr ""
 
-#: vis_devel.cpp:1380
+#: vis_devel.cpp:1388
 msgid "dst"
 msgstr ""
 
-#: vis_devel.cpp:1389
+#: vis_devel.cpp:1397
 #, c-format
 msgid "/%2fobj%2fcfg%2fname"
 msgstr ""
 
-#: vis_devel.cpp:1390
+#: vis_devel.cpp:1398
 #, c-format
 msgid "/%2fwdg%2fcfg%2fname"
 msgstr ""
@@ -2047,8 +2078,8 @@ msgstr ""
 msgid "Mime data"
 msgstr "Mime данные"
 
-#: vis_devel_dlgs.cpp:192 vis_devel_dlgs.cpp:822 vis_devel_widgs.cpp:1051
-#: vis_devel_widgs.cpp:1354
+#: vis_devel_dlgs.cpp:192 vis_devel_dlgs.cpp:822 vis_devel_widgs.cpp:1052
+#: vis_devel_widgs.cpp:1360
 msgid "Id"
 msgstr ""
 
@@ -2139,7 +2170,7 @@ msgstr "Изображения (*.png *.jpg)"
 msgid "Loaded icon image '%1' error."
 msgstr "Ошибка загрузки изображения иконки '%1'."
 
-#: vis_devel_dlgs.cpp:468 vis_devel_dlgs.cpp:1302 vis_devel_widgs.cpp:2073
+#: vis_devel_dlgs.cpp:468 vis_devel_dlgs.cpp:1302 vis_devel_widgs.cpp:2090
 msgid "PNG"
 msgstr ""
 
@@ -2161,8 +2192,8 @@ msgid "Open file '%1' is fail: %2"
 msgstr "Ошибка открытия файла '%1': %2"
 
 #: vis_devel_dlgs.cpp:574 vis_devel_dlgs.cpp:603 vis_devel_dlgs.cpp:622
-#: vis_devel_dlgs.cpp:1454 vis_shapes.cpp:2188 vis_shapes.cpp:2189
-#: vis_shapes.cpp:2223
+#: vis_devel_dlgs.cpp:1454 vis_shapes.cpp:2198 vis_shapes.cpp:2199
+#: vis_shapes.cpp:2233
 msgid "col"
 msgstr ""
 
@@ -2186,7 +2217,7 @@ msgstr "Ошибка записи данных в файл '%1': %2"
 msgid "Widget properties"
 msgstr "Свойства виджета"
 
-#: vis_devel_dlgs.cpp:654 vis_devel_widgs.cpp:1259
+#: vis_devel_dlgs.cpp:654 vis_devel_widgs.cpp:1264
 msgid "Widget"
 msgstr "Виджет"
 
@@ -2311,8 +2342,8 @@ msgid "/proc/calc/progLng"
 msgstr ""
 
 #: vis_devel_dlgs.cpp:851
-msgid "Procedure calc period:"
-msgstr "Периодичность вычисления процедуры:"
+msgid "Procedure calc (ms):"
+msgstr "Вычисления процедуры (мс):"
 
 #: vis_devel_dlgs.cpp:855
 msgid "/proc/calc/per"
@@ -2322,7 +2353,7 @@ msgstr ""
 msgid "/proc/calc/prog"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:865 vis_devel_widgs.cpp:1012
+#: vis_devel_dlgs.cpp:865 vis_devel_widgs.cpp:1013
 msgid "Links"
 msgstr "Связи"
 
@@ -2359,7 +2390,7 @@ msgid "/proc/w_lst"
 msgstr ""
 
 #: vis_devel_dlgs.cpp:1165 vis_devel_dlgs.cpp:1393 vis_devel_dlgs.cpp:1415
-#: vis_devel_dlgs.cpp:1452
+#: vis_devel_dlgs.cpp:1452 vis_run.cpp:331 vis_run.cpp:675 vis_run.cpp:679
 msgid "wdg"
 msgstr ""
 
@@ -2434,13 +2465,17 @@ msgstr ""
 msgid "wdgFlg"
 msgstr ""
 
-#: vis_devel_widgs.cpp:266 vis_devel_widgs.cpp:449 vis_run.cpp:468
+#: vis_devel_widgs.cpp:266 vis_devel_widgs.cpp:449 vis_run.cpp:559
 #, c-format
 msgid "/%2fattr%2f"
 msgstr ""
 
 #: vis_devel_widgs.cpp:269
 msgid "bool"
+msgstr ""
+
+#: vis_devel_widgs.cpp:270
+msgid "dec"
 msgstr ""
 
 #: vis_devel_widgs.cpp:270
@@ -2467,17 +2502,17 @@ msgstr "Значение"
 msgid "dd.MM.yyyy hh:mm:ss"
 msgstr ""
 
-#: vis_devel_widgs.cpp:387 vis_devel_widgs.cpp:2257 vis_devel_widgs.cpp:2661
+#: vis_devel_widgs.cpp:387 vis_devel_widgs.cpp:2274 vis_devel_widgs.cpp:2678
 msgid "white"
 msgstr ""
 
 #: vis_devel_widgs.cpp:390 vis_shapes.cpp:292 vis_shapes.cpp:725
-#: vis_shapes.cpp:1360 vis_widgs.cpp:322
+#: vis_shapes.cpp:1363 vis_widgs.cpp:322
 msgid "Arial"
 msgstr ""
 
 #: vis_devel_widgs.cpp:392 vis_shapes.cpp:295 vis_shapes.cpp:728
-#: vis_shapes.cpp:1362 vis_widgs.cpp:324
+#: vis_shapes.cpp:1365 vis_widgs.cpp:324
 #, c-format
 msgid "%100s %d %d %d %d %d"
 msgstr ""
@@ -2486,7 +2521,7 @@ msgstr ""
 msgid "Aa"
 msgstr ""
 
-#: vis_devel_widgs.cpp:411 vis_widgs.cpp:803
+#: vis_devel_widgs.cpp:411 vis_widgs.cpp:807
 #, c-format
 msgid "/%2fwdg%2fres"
 msgstr ""
@@ -2521,315 +2556,418 @@ msgstr ""
 msgid "/%2flinks%2flnk%2fpr_"
 msgstr ""
 
-#: vis_devel_widgs.cpp:876 vis_devel_widgs.cpp:930 vis_devel_widgs.cpp:961
+#: vis_devel_widgs.cpp:876 vis_devel_widgs.cpp:931 vis_devel_widgs.cpp:962
 #, c-format
 msgid "/%2flinks%2flnk%2f"
 msgstr ""
 
-#: vis_devel_widgs.cpp:890 vis_devel_widgs.cpp:930
+#: vis_devel_widgs.cpp:890 vis_devel_widgs.cpp:931
 msgid "el_"
 msgstr ""
 
-#: vis_devel_widgs.cpp:930
+#: vis_devel_widgs.cpp:931
 msgid "pr_"
 msgstr ""
 
-#: vis_devel_widgs.cpp:961
+#: vis_devel_widgs.cpp:962
 msgid "pl_"
 msgstr ""
 
-#: vis_devel_widgs.cpp:961
+#: vis_devel_widgs.cpp:962
 msgid "ls_"
 msgstr ""
 
-#: vis_devel_widgs.cpp:1014
+#: vis_devel_widgs.cpp:1015
 msgid "InspLnkDock"
 msgstr ""
 
-#: vis_devel_widgs.cpp:1041
+#: vis_devel_widgs.cpp:1042
 msgid "Widgets"
 msgstr "Виджет"
 
-#: vis_devel_widgs.cpp:1043
+#: vis_devel_widgs.cpp:1044
 msgid "WdgTree"
 msgstr ""
 
-#: vis_devel_widgs.cpp:1051 vis_devel_widgs.cpp:1354
+#: vis_devel_widgs.cpp:1052 vis_devel_widgs.cpp:1360
 msgid "Type"
 msgstr "Тип"
 
-#: vis_devel_widgs.cpp:1117 vis_devel_widgs.cpp:2290 vis_devel_widgs.cpp:2301
-#: vis_devel_widgs.cpp:2303
+#: vis_devel_widgs.cpp:1118 vis_devel_widgs.cpp:2307 vis_devel_widgs.cpp:2318
+#: vis_devel_widgs.cpp:2320
 msgid "application/OpenSCADA-libwdg"
 msgstr ""
 
-#: vis_devel_widgs.cpp:1213
+#: vis_devel_widgs.cpp:1218
 msgid "Library"
 msgstr "Библиотека"
 
-#: vis_devel_widgs.cpp:1303
+#: vis_devel_widgs.cpp:1309
 msgid "Container widget"
 msgstr "Виджет-контейнер"
 
-#: vis_devel_widgs.cpp:1331 vis_devel_widgs.cpp:1571
+#: vis_devel_widgs.cpp:1337 vis_devel_widgs.cpp:1583
 msgid "reload"
 msgstr ""
 
-#: vis_devel_widgs.cpp:1331 vis_devel_widgs.cpp:1571
+#: vis_devel_widgs.cpp:1337 vis_devel_widgs.cpp:1583
 msgid ":/images/reload.png"
 msgstr ""
 
-#: vis_devel_widgs.cpp:1332
+#: vis_devel_widgs.cpp:1338
 msgid "Refresh libraries"
 msgstr "Обновить библиотеки"
 
-#: vis_devel_widgs.cpp:1333
+#: vis_devel_widgs.cpp:1339
 msgid "Press for refresh present libraries."
 msgstr "Нажать для обновления доступных библиотек."
 
-#: vis_devel_widgs.cpp:1345
+#: vis_devel_widgs.cpp:1351
 msgid "Projects"
 msgstr "Проекты"
 
-#: vis_devel_widgs.cpp:1347
+#: vis_devel_widgs.cpp:1353
 msgid "ProjTree"
 msgstr ""
 
-#: vis_devel_widgs.cpp:1480
+#: vis_devel_widgs.cpp:1488
 msgid "Project"
 msgstr "Проект"
 
-#: vis_devel_widgs.cpp:1540
+#: vis_devel_widgs.cpp:1552
 msgid "Page"
 msgstr "Страница"
 
-#: vis_devel_widgs.cpp:1572
+#: vis_devel_widgs.cpp:1584
 msgid "Refresh projects"
 msgstr "Обновить проекты"
 
-#: vis_devel_widgs.cpp:1573
+#: vis_devel_widgs.cpp:1585
 msgid "Press for refresh present projects."
 msgstr "Нажать для обновления доступных проектов."
 
-#: vis_devel_widgs.cpp:1595
+#: vis_devel_widgs.cpp:1607
 msgid ":/images/edit.png"
 msgstr ""
 
-#: vis_devel_widgs.cpp:1640
+#: vis_devel_widgs.cpp:1654
 msgid "Scale"
 msgstr "Масштаб"
 
-#: vis_devel_widgs.cpp:1640
+#: vis_devel_widgs.cpp:1654
 msgid "Resize"
 msgstr "Изм. размера"
 
-#: vis_devel_widgs.cpp:1722
+#: vis_devel_widgs.cpp:1736
 msgid "geomX"
 msgstr ""
 
-#: vis_devel_widgs.cpp:1723
+#: vis_devel_widgs.cpp:1737
 msgid "geomY"
 msgstr ""
 
-#: vis_devel_widgs.cpp:1724
+#: vis_devel_widgs.cpp:1738
 msgid "geomW"
 msgstr ""
 
-#: vis_devel_widgs.cpp:1725
+#: vis_devel_widgs.cpp:1739
 msgid "geomH"
 msgstr ""
 
-#: vis_devel_widgs.cpp:1726
+#: vis_devel_widgs.cpp:1740
 msgid "geomXsc"
 msgstr ""
 
-#: vis_devel_widgs.cpp:1727
+#: vis_devel_widgs.cpp:1741
 msgid "geomYsc"
 msgstr ""
 
-#: vis_devel_widgs.cpp:1728
+#: vis_devel_widgs.cpp:1742
 msgid "geomZ"
 msgstr ""
 
-#: vis_devel_widgs.cpp:1824
+#: vis_devel_widgs.cpp:1838
 msgid ";"
 msgstr ""
 
-#: vis_devel_widgs.cpp:1896
+#: vis_devel_widgs.cpp:1910
 msgid "align"
 msgstr ""
 
-#: vis_devel_widgs.cpp:1919
+#: vis_devel_widgs.cpp:1933
 msgid "left"
 msgstr ""
 
-#: vis_devel_widgs.cpp:1921
+#: vis_devel_widgs.cpp:1935
 msgid "right"
 msgstr ""
 
-#: vis_devel_widgs.cpp:1923
+#: vis_devel_widgs.cpp:1937
 msgid "vcenter"
 msgstr ""
 
-#: vis_devel_widgs.cpp:1925
+#: vis_devel_widgs.cpp:1939
 msgid "top"
 msgstr ""
 
-#: vis_devel_widgs.cpp:1927
+#: vis_devel_widgs.cpp:1941
 msgid "bottom"
 msgstr ""
 
-#: vis_devel_widgs.cpp:1929
+#: vis_devel_widgs.cpp:1943
 msgid "hcenter"
 msgstr ""
 
-#: vis_devel_widgs.cpp:1935
+#: vis_devel_widgs.cpp:1949
 msgid "level"
 msgstr ""
 
-#: vis_devel_widgs.cpp:1937
+#: vis_devel_widgs.cpp:1951
 msgid "rise"
 msgstr ""
 
-#: vis_devel_widgs.cpp:1938
+#: vis_devel_widgs.cpp:1952
 msgid "up"
 msgstr ""
 
-#: vis_devel_widgs.cpp:1939
+#: vis_devel_widgs.cpp:1953
 msgid "lower"
 msgstr ""
 
-#: vis_devel_widgs.cpp:1940
+#: vis_devel_widgs.cpp:1954
 msgid "down"
 msgstr ""
 
-#: vis_devel_widgs.cpp:2015
+#: vis_devel_widgs.cpp:2029
 msgid "Exit from widget editing"
 msgstr "Выход из редактирования виджета"
 
-#: vis_devel_widgs.cpp:2016
+#: vis_devel_widgs.cpp:2030
 msgid "Press for exit from widget editing."
 msgstr "Нажать для выхода из редактирования виджета."
 
-#: vis_devel_widgs.cpp:2042
+#: vis_devel_widgs.cpp:2056
 msgid "Enter for widget editing"
 msgstr "Вход в редактирование виджета"
 
-#: vis_devel_widgs.cpp:2043
+#: vis_devel_widgs.cpp:2057
 msgid "Press for enter for widget editing."
 msgstr "Нажать для входа в редактирование виджета."
 
-#: vis_devel_widgs.cpp:2048
+#: vis_devel_widgs.cpp:2062
 msgid "Make icon from widget"
 msgstr "Создать иконку из виджета"
 
-#: vis_devel_widgs.cpp:2049
+#: vis_devel_widgs.cpp:2063
 msgid "Press for make icon from widget."
 msgstr "Нажать для создания иконки из виджета."
 
-#: vis_devel_widgs.cpp:2076
+#: vis_devel_widgs.cpp:2093
 #, c-format
 msgid "/%2fwdg%2fcfg%2fico"
 msgstr ""
 
-#: vis_devel_widgs.cpp:2210
+#: vis_devel_widgs.cpp:2227
 msgid "Elements: '%1' --- xy(%2:%3) wh[%4:%5]"
 msgstr "Элементы: '%1' --- xy(%2:%3) шв[%4:%5]"
 
-#: vis_devel_widgs.cpp:2239
+#: vis_devel_widgs.cpp:2256
 msgid "Page: '%1' --- xy(%2:%3) wh[%4:%5]"
 msgstr "Страница: '%1' --- xy(%2:%3) шв[%4:%5]"
 
-#: vis_devel_widgs.cpp:2256 vis_devel_widgs.cpp:2645 vis_devel_widgs.cpp:2657
-#: vis_devel_widgs.cpp:2663
+#: vis_devel_widgs.cpp:2273 vis_devel_widgs.cpp:2662 vis_devel_widgs.cpp:2674
+#: vis_devel_widgs.cpp:2680
 msgid "black"
 msgstr ""
 
-#: vis_devel_widgs.cpp:2263 vis_shapes.cpp:75
+#: vis_devel_widgs.cpp:2280 vis_shapes.cpp:75
 msgid ":/images/attention.png"
 msgstr ""
 
-#: vis_devel_widgs.cpp:2264
+#: vis_devel_widgs.cpp:2281
 msgid "Widget no enabled or shape no support!"
 msgstr "Виджет отключен или образ виджета не поддерживается!"
 
-#: vis_devel_widgs.cpp:2372
+#: vis_devel_widgs.cpp:2389
 msgid "Select elements: '%1'"
 msgstr "Выбраны элементы: '%1'"
 
-#: vis_devel_widgs.cpp:2646
+#: vis_devel_widgs.cpp:2663
 msgid "lightgreen"
 msgstr ""
 
-#: vis_run.cpp:49
+#: vis_run.cpp:56
 msgid "Vision runtime"
 msgstr "Vision-исполнение"
 
-#: vis_run.cpp:60
+#: vis_run.cpp:67
 msgid "The button for closing Vision runtime window"
 msgstr "Кнопка для закрытия окна исполнения Vision"
 
-#: vis_run.cpp:61
+#: vis_run.cpp:68
 msgid "Press for close of current Vision runtime window."
 msgstr "Нажать для закрытия текущего окна исполнения Vision."
 
-#: vis_run.cpp:73
+#: vis_run.cpp:80
 msgid "Full screen"
 msgstr "Весь экран"
 
-#: vis_run.cpp:75
+#: vis_run.cpp:82
 msgid "Full screen toggle"
 msgstr "Переключатель режима \"На весь экран\""
 
-#: vis_run.cpp:76
+#: vis_run.cpp:83
 msgid "The button for full screen toggle"
 msgstr "Кнопка для переключения режима \"На весь экран\""
 
-#: vis_run.cpp:77
+#: vis_run.cpp:84
 msgid "Press for toggle full screen."
 msgstr "Нажать для переключения режима \"На весь экран\"."
 
-#: vis_run.cpp:82
-msgid "Update only changed widgets toggle"
-msgstr "Переключатель обновления только изменённых виджетов"
+#: vis_run.cpp:112 vis_run.cpp:114 vis_run.cpp:318
+msgid "alarmLev"
+msgstr ""
 
-#: vis_run.cpp:83
-msgid "The button for toggle to update only changed widgets"
-msgstr "Кнопка для переключения обновления только изменённых виджетов"
+#: vis_run.cpp:112 vis_run.cpp:607
+msgid ":/images/alarmLev.png"
+msgstr ""
 
-#: vis_run.cpp:84
-msgid "Press for toggle to update only changed widgets."
-msgstr "Нажать для переключения обновления только изменённых виджетов."
+#: vis_run.cpp:113 vis_run.cpp:115
+msgid "Alarm level"
+msgstr "Уровень нарушения"
 
-#: vis_run.cpp:171
+#: vis_run.cpp:116
+msgid "The button for all alarms quitance"
+msgstr "Кнопка для квитации всех нарушений"
+
+#: vis_run.cpp:117
+msgid "Press for all alarms quitance."
+msgstr "Нажать для квитации всех нарушений."
+
+#: vis_run.cpp:119 vis_run.cpp:121 vis_run.cpp:319
+msgid "alarmLight"
+msgstr ""
+
+#: vis_run.cpp:119
+msgid ":/images/alarmLight.png"
+msgstr ""
+
+#: vis_run.cpp:120 vis_run.cpp:122
+msgid "Light alarm"
+msgstr "Световое предупреждение"
+
+#: vis_run.cpp:123
+msgid "The button for all light alarms quitance"
+msgstr "Кнопка для квитации всех световых предупреждений"
+
+#: vis_run.cpp:124
+msgid "Press for all light alarms quitance."
+msgstr "Нажать для квитации всех световых предупреждений."
+
+#: vis_run.cpp:127 vis_run.cpp:129 vis_run.cpp:320
+msgid "alarmAlarm"
+msgstr ""
+
+#: vis_run.cpp:127
+msgid ":/images/alarmAlarm.png"
+msgstr ""
+
+#: vis_run.cpp:128
+msgid "Speaker alarm"
+msgstr "Предупреждение гудком"
+
+#: vis_run.cpp:130
+msgid "PC speaker alarm"
+msgstr "Предупреждение гудком"
+
+#: vis_run.cpp:131
+msgid "The button for all PC speaker alarms quitance"
+msgstr "Кнопка для квитации всех предупреждений гудком"
+
+#: vis_run.cpp:132
+msgid "Press for all PC speaker alarms quitance."
+msgstr "Нажать для квитации всех предупреждений гудком."
+
+#: vis_run.cpp:135 vis_run.cpp:137 vis_run.cpp:321
+msgid "alarmSound"
+msgstr ""
+
+#: vis_run.cpp:135
+msgid ":/images/alarmSound.png"
+msgstr ""
+
+#: vis_run.cpp:136
+msgid "Sound/speech alarm"
+msgstr "Звуковое/речевое предупреждение"
+
+#: vis_run.cpp:138
+msgid "Sound or speech alarm"
+msgstr "Звуковое или речавое предупреждение"
+
+#: vis_run.cpp:139
+msgid "The button for all sound or speech alarms quitance"
+msgstr "Кнопка для квитации всех звуковых или речевых предупреждений"
+
+#: vis_run.cpp:140
+msgid "Press for all sound or speech alarms quitance."
+msgstr "Нажать для квитации всех звуковых или речевых предупрежде."
+
+#: vis_run.cpp:147
+msgid "&Alarm"
+msgstr "Н&арушение"
+
+#: vis_run.cpp:162
+msgid "Alarms (status)"
+msgstr "Нарушение (статус)"
+
+#: vis_run.cpp:224
 msgid "disconnect"
 msgstr ""
 
-#: vis_run.cpp:172 vis_run.cpp:274 vis_run.cpp:340 vis_run.cpp:368
-#: vis_run.cpp:477 vis_run.cpp:491 vis_run.cpp:499 vis_run_widgs.cpp:107
-#: vis_shapes.cpp:1958 vis_shapes.cpp:1975 vis_shapes.cpp:2017
-#: vis_widgs.cpp:770 vis_widgs.cpp:827
+#: vis_run.cpp:225 vis_run.cpp:345 vis_run.cpp:410 vis_run.cpp:438
+#: vis_run.cpp:514 vis_run.cpp:568 vis_run.cpp:650 vis_run_widgs.cpp:107
+#: vis_shapes.cpp:1967 vis_shapes.cpp:1984 vis_shapes.cpp:2027
+#: vis_widgs.cpp:774 vis_widgs.cpp:831
 #, c-format
 msgid "/%2fserv%2f0"
 msgstr ""
 
-#: vis_run.cpp:172 vis_run.cpp:342 vis_run.cpp:349
+#: vis_run.cpp:225 vis_run.cpp:412 vis_run.cpp:419
 msgid "sess"
 msgstr ""
 
-#: vis_run.cpp:273
+#: vis_run.cpp:328
+msgid "quittance"
+msgstr ""
+
+#: vis_run.cpp:329 vis_run.cpp:423 vis_run.cpp:434 vis_run.cpp:438
+#: vis_run.cpp:448 vis_run.cpp:514 vis_run.cpp:650 vis_run.cpp:664
+#: vis_run.cpp:673
+msgid "/ses_"
+msgstr ""
+
+#: vis_run.cpp:329 vis_run.cpp:664 vis_run.cpp:673
+#, c-format
+msgid "/%2fserv%2falarm"
+msgstr ""
+
+#: vis_run.cpp:330 vis_shapes.cpp:2183 vis_shapes.cpp:2184 vis_shapes.cpp:2289
+msgid "tmpl"
+msgstr ""
+
+#: vis_run.cpp:344
 msgid "list"
 msgstr ""
 
-#: vis_run.cpp:274 vis_run.cpp:341
+#: vis_run.cpp:345 vis_run.cpp:411
 msgid "prj"
 msgstr ""
 
-#: vis_run.cpp:281
+#: vis_run.cpp:352
 msgid "Select session for connection"
 msgstr "Выбор сеанса для подключения"
 
-#: vis_run.cpp:298
+#: vis_run.cpp:369
 msgid ""
 "Already opened several sessions on page %1. You may create new session or "
 "connect to present session. Please, select need session and press 'Connect' "
@@ -2840,65 +2978,90 @@ msgstr ""
 "нажмите 'Подключиться' или нажмите 'Создать' для создания нового, "
 "индивидуального, сеанса."
 
-#: vis_run.cpp:323
+#: vis_run.cpp:393
 msgid "Connect"
 msgstr "Подключиться"
 
-#: vis_run.cpp:324
+#: vis_run.cpp:394
 msgid "Create"
 msgstr "Создать"
 
-#: vis_run.cpp:340
+#: vis_run.cpp:410
 msgid "connect"
 msgstr ""
 
-#: vis_run.cpp:351
+#: vis_run.cpp:421
 msgid "Runing project: %1"
 msgstr "Исполнение проекта: %1"
 
-#: vis_run.cpp:353 vis_run.cpp:364 vis_run.cpp:368 vis_run.cpp:378
-#: vis_run.cpp:491 vis_run.cpp:499
-msgid "/ses_"
-msgstr ""
-
-#: vis_run.cpp:364
+#: vis_run.cpp:434
 #, c-format
 msgid "/%2fobj%2fcfg%2fper"
 msgstr ""
 
-#: vis_run.cpp:368 vis_run.cpp:488
+#: vis_run.cpp:438 vis_run.cpp:513 vis_run.cpp:648
 msgid "openlist"
 msgstr ""
 
-#: vis_run.cpp:384 vis_run.cpp:420 vis_run_widgs.cpp:386 vis_run_widgs.cpp:419
+#: vis_run.cpp:454 vis_run.cpp:490 vis_run_widgs.cpp:386 vis_run_widgs.cpp:419
 msgid "pgOpen"
 msgstr ""
 
-#: vis_run.cpp:413 vis_run_widgs.cpp:67 vis_shapes.cpp:2607
+#: vis_run.cpp:483 vis_run_widgs.cpp:67 vis_shapes.cpp:2618
 msgid "pgGrp"
 msgstr ""
 
-#: vis_run.cpp:414 vis_run_widgs.cpp:72 vis_run_widgs.cpp:77
-#: vis_run_widgs.cpp:78 vis_shapes.cpp:2550
+#: vis_run.cpp:484 vis_run_widgs.cpp:72 vis_run_widgs.cpp:77
+#: vis_run_widgs.cpp:78 vis_shapes.cpp:2560
 msgid "pgOpenSrc"
 msgstr ""
 
-#: vis_run.cpp:417
+#: vis_run.cpp:487
 msgid "main"
 msgstr ""
 
-#: vis_run.cpp:427 vis_shapes.cpp:2610
+#: vis_run.cpp:497 vis_shapes.cpp:2621
 msgid "pgFullScr"
 msgstr ""
 
-#: vis_run.cpp:491 vis_run.cpp:495 vis_run_widgs.cpp:108 vis_run_widgs.cpp:123
-#: vis_shapes.cpp:1976 vis_shapes.cpp:1980 vis_shapes.cpp:2018
-#: vis_shapes.cpp:2027 vis_shapes.cpp:2224 vis_shapes.cpp:2229
-#: vis_shapes.cpp:2277 vis_shapes.cpp:2286
+#: vis_run.cpp:514 vis_run.cpp:649 vis_run.cpp:654 vis_run.cpp:674
+#: vis_run.cpp:678 vis_run_widgs.cpp:108 vis_run_widgs.cpp:123
+#: vis_shapes.cpp:1985 vis_shapes.cpp:1989 vis_shapes.cpp:2028
+#: vis_shapes.cpp:2037 vis_shapes.cpp:2234 vis_shapes.cpp:2239
+#: vis_shapes.cpp:2287 vis_shapes.cpp:2296
 msgid "tm"
 msgstr ""
 
-#: vis_run_widgs.cpp:115 vis_widgs.cpp:830
+#: vis_run.cpp:582
+msgid "/dev/input/by-path/platform-pcspkr-event-spkr"
+msgstr ""
+
+#: vis_run.cpp:584
+#, c-format
+msgid "Error open: %s"
+msgstr "Ошибка открытия: %s"
+
+#: vis_run.cpp:605
+msgid "Alarm level: %1"
+msgstr "Уровень нарушения: %1"
+
+#: vis_run.cpp:663 vis_run.cpp:672 vis_shapes.cpp:2031
+msgid "mode"
+msgstr ""
+
+#: vis_run.cpp:663
+msgid "stat"
+msgstr ""
+
+#: vis_run.cpp:665
+msgid "alarmSt"
+msgstr ""
+
+#: vis_run.cpp:672
+msgid "sound"
+msgstr ""
+
+#: vis_run_widgs.cpp:115 vis_widgs.cpp:834
 msgid "pos"
 msgstr ""
 
@@ -2924,10 +3087,10 @@ msgstr ""
 
 #: vis_run_widgs.cpp:186 vis_run_widgs.cpp:296 vis_run_widgs.cpp:308
 #: vis_run_widgs.cpp:310 vis_run_widgs.cpp:311 vis_run_widgs.cpp:312
-#: vis_shape_elfig.cpp:799 vis_shapes.cpp:525 vis_shapes.cpp:529
-#: vis_shapes.cpp:542 vis_shapes.cpp:551 vis_shapes.cpp:558 vis_shapes.cpp:564
-#: vis_shapes.cpp:570 vis_shapes.cpp:578 vis_shapes.cpp:588 vis_shapes.cpp:599
-#: vis_shapes.cpp:608 vis_shapes.cpp:1190
+#: vis_shape_elfig.cpp:861 vis_shape_elfig.cpp:984 vis_shapes.cpp:525
+#: vis_shapes.cpp:529 vis_shapes.cpp:542 vis_shapes.cpp:551 vis_shapes.cpp:558
+#: vis_shapes.cpp:564 vis_shapes.cpp:570 vis_shapes.cpp:578 vis_shapes.cpp:588
+#: vis_shapes.cpp:599 vis_shapes.cpp:608 vis_shapes.cpp:1193
 msgid "event"
 msgstr ""
 
@@ -2975,8 +3138,8 @@ msgstr ""
 msgid "End"
 msgstr ""
 
-#: vis_run_widgs.cpp:201 vis_run_widgs.cpp:304 vis_shape_elfig.cpp:796
-#: vis_shapes.cpp:1186
+#: vis_run_widgs.cpp:201 vis_run_widgs.cpp:304 vis_shape_elfig.cpp:858
+#: vis_shapes.cpp:1189
 msgid "Left"
 msgstr ""
 
@@ -2984,8 +3147,8 @@ msgstr ""
 msgid "Up"
 msgstr ""
 
-#: vis_run_widgs.cpp:203 vis_run_widgs.cpp:305 vis_shape_elfig.cpp:797
-#: vis_shapes.cpp:1187
+#: vis_run_widgs.cpp:203 vis_run_widgs.cpp:305 vis_shape_elfig.cpp:859
+#: vis_shapes.cpp:1190
 msgid "Right"
 msgstr ""
 
@@ -3181,11 +3344,11 @@ msgstr ""
 msgid "3"
 msgstr ""
 
-#: vis_run_widgs.cpp:254 vis_shapes.cpp:2022
+#: vis_run_widgs.cpp:254
 msgid "4"
 msgstr ""
 
-#: vis_run_widgs.cpp:256
+#: vis_run_widgs.cpp:256 vis_shapes.cpp:2032
 msgid "6"
 msgstr ""
 
@@ -3337,7 +3500,7 @@ msgstr ""
 msgid "key_mouseRels"
 msgstr ""
 
-#: vis_run_widgs.cpp:306 vis_shape_elfig.cpp:798 vis_shapes.cpp:1188
+#: vis_run_widgs.cpp:306 vis_shape_elfig.cpp:860 vis_shapes.cpp:1191
 msgid "Midle"
 msgstr ""
 
@@ -3358,183 +3521,228 @@ msgstr ""
 msgid "ws_FocusOut"
 msgstr ""
 
-#: vis_run_widgs.cpp:355 vis_run_widgs.cpp:380 vis_shapes.cpp:2479
+#: vis_run_widgs.cpp:355 vis_run_widgs.cpp:380 vis_shapes.cpp:2489
 msgid "Box"
 msgstr ""
 
-#: vis_shape_elfig.cpp:46
+#: vis_run_widgs.cpp:436
+msgid "/var/tmp/oscadaPlayTmp"
+msgstr ""
+
+#: vis_run_widgs.cpp:440
+#, c-format
+msgid "%f"
+msgstr ""
+
+#: vis_run_widgs.cpp:447 vis_run_widgs.cpp:454
+msgid "w"
+msgstr ""
+
+#: vis_shape_elfig.cpp:45
 msgid "ElFigure"
 msgstr ""
 
-#: vis_shape_elfig.cpp:57 vis_shape_elfig.cpp:66 vis_shape_elfig.cpp:79
-#: vis_shape_elfig.cpp:514 vis_shape_elfig.cpp:729
+#: vis_shape_elfig.cpp:56 vis_shape_elfig.cpp:65 vis_shape_elfig.cpp:78
+#: vis_shape_elfig.cpp:555 vis_shape_elfig.cpp:790
 msgid "shapeItems"
 msgstr ""
 
-#: vis_shape_elfig.cpp:59 vis_shape_elfig.cpp:68 vis_shape_elfig.cpp:80
-#: vis_shape_elfig.cpp:515 vis_shape_elfig.cpp:730
+#: vis_shape_elfig.cpp:58 vis_shape_elfig.cpp:67 vis_shape_elfig.cpp:79
+#: vis_shape_elfig.cpp:556 vis_shape_elfig.cpp:791
 msgid "inundationItems"
 msgstr ""
 
-#: vis_shape_elfig.cpp:61 vis_shape_elfig.cpp:67 vis_shape_elfig.cpp:81
-#: vis_shape_elfig.cpp:516 vis_shape_elfig.cpp:731
+#: vis_shape_elfig.cpp:60 vis_shape_elfig.cpp:66 vis_shape_elfig.cpp:80
+#: vis_shape_elfig.cpp:557 vis_shape_elfig.cpp:792
 msgid "shapePnts"
 msgstr ""
 
-#: vis_shape_elfig.cpp:96 vis_shapes.cpp:171 vis_shapes.cpp:208
-#: vis_shapes.cpp:487 vis_shapes.cpp:682 vis_shapes.cpp:846 vis_shapes.cpp:957
-#: vis_shapes.cpp:1127 vis_shapes.cpp:1277 vis_shapes.cpp:1430
-#: vis_shapes.cpp:1793 vis_shapes.cpp:2068 vis_shapes.cpp:2111
-#: vis_shapes.cpp:2509 vis_shapes.cpp:2623
+#: vis_shape_elfig.cpp:95 vis_shapes.cpp:171 vis_shapes.cpp:208
+#: vis_shapes.cpp:487 vis_shapes.cpp:682 vis_shapes.cpp:846 vis_shapes.cpp:960
+#: vis_shapes.cpp:1130 vis_shapes.cpp:1280 vis_shapes.cpp:1433
+#: vis_shapes.cpp:1802 vis_shapes.cpp:2078 vis_shapes.cpp:2121
+#: vis_shapes.cpp:2519 vis_shapes.cpp:2634
 msgid "en"
 msgstr ""
 
-#: vis_shape_elfig.cpp:101 vis_shape_elfig.cpp:787 vis_shapes.cpp:172
-#: vis_shapes.cpp:213 vis_shapes.cpp:485 vis_shapes.cpp:486 vis_shapes.cpp:687
-#: vis_shapes.cpp:1282 vis_shapes.cpp:1283 vis_shapes.cpp:1781
-#: vis_shapes.cpp:1833 vis_shapes.cpp:2069 vis_shapes.cpp:2082
-#: vis_shapes.cpp:2116
+#: vis_shape_elfig.cpp:100 vis_shape_elfig.cpp:849 vis_shape_elfig.cpp:976
+#: vis_shapes.cpp:172 vis_shapes.cpp:213 vis_shapes.cpp:485 vis_shapes.cpp:486
+#: vis_shapes.cpp:687 vis_shapes.cpp:1285 vis_shapes.cpp:1286
+#: vis_shapes.cpp:1790 vis_shapes.cpp:1842 vis_shapes.cpp:2079
+#: vis_shapes.cpp:2092 vis_shapes.cpp:2126
 msgid "active"
 msgstr ""
 
-#: vis_shape_elfig.cpp:105 vis_shape_elfig.cpp:742 vis_shapes.cpp:691
-#: vis_shapes.cpp:854 vis_shapes.cpp:966 vis_shapes.cpp:1136
-#: vis_shapes.cpp:1288 vis_shapes.cpp:1444 vis_shapes.cpp:1810
-#: vis_shapes.cpp:2518 vis_shapes.cpp:2519 vis_shapes.cpp:2599
-#: vis_shapes.cpp:2633
+#: vis_shape_elfig.cpp:104 vis_shape_elfig.cpp:803 vis_shapes.cpp:691
+#: vis_shapes.cpp:854 vis_shapes.cpp:969 vis_shapes.cpp:1139
+#: vis_shapes.cpp:1291 vis_shapes.cpp:1447 vis_shapes.cpp:1819
+#: vis_shapes.cpp:2528 vis_shapes.cpp:2529 vis_shapes.cpp:2610
+#: vis_shapes.cpp:2644
 msgid "geomMargin"
 msgstr ""
 
-#: vis_shape_elfig.cpp:109 vis_shape_elfig.cpp:192 vis_shape_elfig.cpp:242
-#: vis_shape_elfig.cpp:330 vis_shape_elfig.cpp:527 vis_shape_elfig.cpp:539
-#: vis_shape_elfig.cpp:550 vis_shape_elfig.cpp:1234 vis_shape_elfig.cpp:1237
-#: vis_shape_elfig.cpp:1238 vis_shape_elfig.cpp:1244 vis_shape_elfig.cpp:1247
-#: vis_shape_elfig.cpp:1248 vis_shape_elfig.cpp:1267 vis_shape_elfig.cpp:1270
-#: vis_shape_elfig.cpp:1271 vis_shape_elfig.cpp:1276 vis_shape_elfig.cpp:1279
-#: vis_shape_elfig.cpp:1280 vis_shape_elfig.cpp:1304 vis_shape_elfig.cpp:1307
-#: vis_shape_elfig.cpp:1308 vis_shape_elfig.cpp:1312 vis_shape_elfig.cpp:1316
-#: vis_shape_elfig.cpp:1317 vis_shape_elfig.cpp:1352 vis_shape_elfig.cpp:1355
-#: vis_shape_elfig.cpp:1356 vis_shape_elfig.cpp:1360 vis_shape_elfig.cpp:1364
-#: vis_shape_elfig.cpp:1365
+#: vis_shape_elfig.cpp:108 vis_shape_elfig.cpp:195 vis_shape_elfig.cpp:258
+#: vis_shape_elfig.cpp:358 vis_shape_elfig.cpp:575 vis_shape_elfig.cpp:593
+#: vis_shape_elfig.cpp:610 vis_shape_elfig.cpp:1316 vis_shape_elfig.cpp:1319
+#: vis_shape_elfig.cpp:1320 vis_shape_elfig.cpp:1327 vis_shape_elfig.cpp:1330
+#: vis_shape_elfig.cpp:1331 vis_shape_elfig.cpp:1351 vis_shape_elfig.cpp:1354
+#: vis_shape_elfig.cpp:1355 vis_shape_elfig.cpp:1360 vis_shape_elfig.cpp:1363
+#: vis_shape_elfig.cpp:1364 vis_shape_elfig.cpp:1394 vis_shape_elfig.cpp:1397
+#: vis_shape_elfig.cpp:1398 vis_shape_elfig.cpp:1402 vis_shape_elfig.cpp:1406
+#: vis_shape_elfig.cpp:1407 vis_shape_elfig.cpp:1447 vis_shape_elfig.cpp:1450
+#: vis_shape_elfig.cpp:1451 vis_shape_elfig.cpp:1455 vis_shape_elfig.cpp:1459
+#: vis_shape_elfig.cpp:1460
 msgid "lineWdth"
 msgstr ""
 
-#: vis_shape_elfig.cpp:113 vis_shape_elfig.cpp:194 vis_shape_elfig.cpp:244
-#: vis_shape_elfig.cpp:332 vis_shape_elfig.cpp:528 vis_shape_elfig.cpp:540
-#: vis_shape_elfig.cpp:551 vis_shape_elfig.cpp:1235 vis_shape_elfig.cpp:1237
-#: vis_shape_elfig.cpp:1245 vis_shape_elfig.cpp:1247 vis_shape_elfig.cpp:1268
-#: vis_shape_elfig.cpp:1270 vis_shape_elfig.cpp:1277 vis_shape_elfig.cpp:1279
-#: vis_shape_elfig.cpp:1305 vis_shape_elfig.cpp:1307 vis_shape_elfig.cpp:1314
-#: vis_shape_elfig.cpp:1316 vis_shape_elfig.cpp:1353 vis_shape_elfig.cpp:1355
-#: vis_shape_elfig.cpp:1362 vis_shape_elfig.cpp:1364
+#: vis_shape_elfig.cpp:112 vis_shape_elfig.cpp:197 vis_shape_elfig.cpp:260
+#: vis_shape_elfig.cpp:360 vis_shape_elfig.cpp:576 vis_shape_elfig.cpp:594
+#: vis_shape_elfig.cpp:611 vis_shape_elfig.cpp:1317 vis_shape_elfig.cpp:1319
+#: vis_shape_elfig.cpp:1328 vis_shape_elfig.cpp:1330 vis_shape_elfig.cpp:1332
+#: vis_shape_elfig.cpp:1352 vis_shape_elfig.cpp:1354 vis_shape_elfig.cpp:1361
+#: vis_shape_elfig.cpp:1363 vis_shape_elfig.cpp:1365 vis_shape_elfig.cpp:1395
+#: vis_shape_elfig.cpp:1397 vis_shape_elfig.cpp:1404 vis_shape_elfig.cpp:1406
+#: vis_shape_elfig.cpp:1408 vis_shape_elfig.cpp:1448 vis_shape_elfig.cpp:1450
+#: vis_shape_elfig.cpp:1457 vis_shape_elfig.cpp:1459 vis_shape_elfig.cpp:1461
 msgid "lineClr"
 msgstr ""
 
-#: vis_shape_elfig.cpp:117
+#: vis_shape_elfig.cpp:116
 msgid "lineDecor"
 msgstr ""
 
-#: vis_shape_elfig.cpp:121 vis_shape_elfig.cpp:196 vis_shape_elfig.cpp:224
-#: vis_shape_elfig.cpp:227 vis_shape_elfig.cpp:228 vis_shape_elfig.cpp:246
-#: vis_shape_elfig.cpp:334 vis_shape_elfig.cpp:529 vis_shape_elfig.cpp:541
-#: vis_shape_elfig.cpp:552 vis_shape_elfig.cpp:1232 vis_shape_elfig.cpp:1234
-#: vis_shape_elfig.cpp:1236 vis_shape_elfig.cpp:1238 vis_shape_elfig.cpp:1244
-#: vis_shape_elfig.cpp:1246 vis_shape_elfig.cpp:1248 vis_shape_elfig.cpp:1265
-#: vis_shape_elfig.cpp:1267 vis_shape_elfig.cpp:1269 vis_shape_elfig.cpp:1271
-#: vis_shape_elfig.cpp:1276 vis_shape_elfig.cpp:1278 vis_shape_elfig.cpp:1280
-#: vis_shape_elfig.cpp:1302 vis_shape_elfig.cpp:1304 vis_shape_elfig.cpp:1306
-#: vis_shape_elfig.cpp:1308 vis_shape_elfig.cpp:1312 vis_shape_elfig.cpp:1315
-#: vis_shape_elfig.cpp:1317 vis_shape_elfig.cpp:1350 vis_shape_elfig.cpp:1352
-#: vis_shape_elfig.cpp:1354 vis_shape_elfig.cpp:1356 vis_shape_elfig.cpp:1360
-#: vis_shape_elfig.cpp:1363 vis_shape_elfig.cpp:1365
+#: vis_shape_elfig.cpp:120 vis_shape_elfig.cpp:199 vis_shape_elfig.cpp:238
+#: vis_shape_elfig.cpp:239 vis_shape_elfig.cpp:243 vis_shape_elfig.cpp:244
+#: vis_shape_elfig.cpp:262 vis_shape_elfig.cpp:362 vis_shape_elfig.cpp:577
+#: vis_shape_elfig.cpp:595 vis_shape_elfig.cpp:612 vis_shape_elfig.cpp:1314
+#: vis_shape_elfig.cpp:1316 vis_shape_elfig.cpp:1318 vis_shape_elfig.cpp:1320
+#: vis_shape_elfig.cpp:1327 vis_shape_elfig.cpp:1329 vis_shape_elfig.cpp:1331
+#: vis_shape_elfig.cpp:1349 vis_shape_elfig.cpp:1351 vis_shape_elfig.cpp:1353
+#: vis_shape_elfig.cpp:1355 vis_shape_elfig.cpp:1360 vis_shape_elfig.cpp:1362
+#: vis_shape_elfig.cpp:1364 vis_shape_elfig.cpp:1392 vis_shape_elfig.cpp:1394
+#: vis_shape_elfig.cpp:1396 vis_shape_elfig.cpp:1398 vis_shape_elfig.cpp:1402
+#: vis_shape_elfig.cpp:1405 vis_shape_elfig.cpp:1407 vis_shape_elfig.cpp:1445
+#: vis_shape_elfig.cpp:1447 vis_shape_elfig.cpp:1449 vis_shape_elfig.cpp:1451
+#: vis_shape_elfig.cpp:1455 vis_shape_elfig.cpp:1458 vis_shape_elfig.cpp:1460
 msgid "bordWdth"
 msgstr ""
 
-#: vis_shape_elfig.cpp:125 vis_shape_elfig.cpp:198 vis_shape_elfig.cpp:227
-#: vis_shape_elfig.cpp:248 vis_shape_elfig.cpp:316 vis_shape_elfig.cpp:336
-#: vis_shape_elfig.cpp:360 vis_shape_elfig.cpp:530 vis_shape_elfig.cpp:542
-#: vis_shape_elfig.cpp:553 vis_shape_elfig.cpp:1236 vis_shape_elfig.cpp:1246
-#: vis_shape_elfig.cpp:1269 vis_shape_elfig.cpp:1278 vis_shape_elfig.cpp:1306
-#: vis_shape_elfig.cpp:1315 vis_shape_elfig.cpp:1354 vis_shape_elfig.cpp:1363
+#: vis_shape_elfig.cpp:124 vis_shape_elfig.cpp:201 vis_shape_elfig.cpp:238
+#: vis_shape_elfig.cpp:243 vis_shape_elfig.cpp:264 vis_shape_elfig.cpp:339
+#: vis_shape_elfig.cpp:344 vis_shape_elfig.cpp:364 vis_shape_elfig.cpp:396
+#: vis_shape_elfig.cpp:401 vis_shape_elfig.cpp:578 vis_shape_elfig.cpp:596
+#: vis_shape_elfig.cpp:613 vis_shape_elfig.cpp:1318 vis_shape_elfig.cpp:1329
+#: vis_shape_elfig.cpp:1353 vis_shape_elfig.cpp:1362 vis_shape_elfig.cpp:1396
+#: vis_shape_elfig.cpp:1405 vis_shape_elfig.cpp:1449 vis_shape_elfig.cpp:1458
 msgid "bordClr"
 msgstr ""
 
-#: vis_shape_elfig.cpp:129 vis_shape_elfig.cpp:384 vis_shape_elfig.cpp:606
-#: vis_shape_elfig.cpp:925 vis_shape_elfig.cpp:3222
+#: vis_shape_elfig.cpp:128 vis_shape_elfig.cpp:425 vis_shape_elfig.cpp:667
+#: vis_shape_elfig.cpp:1000 vis_shape_elfig.cpp:3334
 msgid "fillClr"
 msgstr ""
 
-#: vis_shape_elfig.cpp:137 vis_shape_elfig.cpp:138 vis_shape_elfig.cpp:926
-#: vis_shape_elfig.cpp:3223
+#: vis_shape_elfig.cpp:136 vis_shape_elfig.cpp:137 vis_shape_elfig.cpp:1001
+#: vis_shape_elfig.cpp:3335
 msgid "fillImg"
 msgstr ""
 
-#: vis_shape_elfig.cpp:144 vis_shape_elfig.cpp:3325 vis_shape_elfig.cpp:3340
-#: vis_shapes.cpp:741 vis_shapes.cpp:864
+#: vis_shape_elfig.cpp:143 vis_shape_elfig.cpp:3437 vis_shape_elfig.cpp:3452
+#: vis_shapes.cpp:741 vis_shapes.cpp:867
 msgid "orient"
 msgstr ""
 
-#: vis_shape_elfig.cpp:149 vis_shape_elfig.cpp:182 vis_shape_elfig.cpp:608
+#: vis_shape_elfig.cpp:148 vis_shape_elfig.cpp:185 vis_shape_elfig.cpp:669
 msgid "elLst"
 msgstr ""
 
-#: vis_shape_elfig.cpp:322
+#: vis_shape_elfig.cpp:152 vis_shape_elfig.cpp:203 vis_shape_elfig.cpp:266
+#: vis_shape_elfig.cpp:366 vis_shape_elfig.cpp:579 vis_shape_elfig.cpp:597
+#: vis_shape_elfig.cpp:614 vis_shape_elfig.cpp:1295 vis_shape_elfig.cpp:1380
+#: vis_shape_elfig.cpp:1428
+msgid "lineStyle"
+msgstr ""
+
+#: vis_shape_elfig.cpp:204 vis_shape_elfig.cpp:267 vis_shape_elfig.cpp:367
+#: vis_shape_elfig.cpp:570 vis_shape_elfig.cpp:585 vis_shape_elfig.cpp:603
+#: vis_shape_elfig.cpp:1296 vis_shape_elfig.cpp:1381 vis_shape_elfig.cpp:1429
+msgid "solid"
+msgstr ""
+
+#: vis_shape_elfig.cpp:205 vis_shape_elfig.cpp:268 vis_shape_elfig.cpp:368
+#: vis_shape_elfig.cpp:571 vis_shape_elfig.cpp:586 vis_shape_elfig.cpp:604
+#: vis_shape_elfig.cpp:1297 vis_shape_elfig.cpp:1382 vis_shape_elfig.cpp:1430
+msgid "dashed"
+msgstr ""
+
+#: vis_shape_elfig.cpp:206 vis_shape_elfig.cpp:269 vis_shape_elfig.cpp:369
+#: vis_shape_elfig.cpp:572 vis_shape_elfig.cpp:587 vis_shape_elfig.cpp:605
+#: vis_shape_elfig.cpp:1298 vis_shape_elfig.cpp:1383 vis_shape_elfig.cpp:1431
+msgid "dotted"
+msgstr ""
+
+#: vis_shape_elfig.cpp:350
 msgid "bezier"
 msgstr ""
 
-#: vis_shape_elfig.cpp:367
+#: vis_shape_elfig.cpp:408
 msgid "fill"
 msgstr ""
 
-#: vis_shape_elfig.cpp:525
+#: vis_shape_elfig.cpp:573
 msgid "line:"
 msgstr ""
 
-#: vis_shape_elfig.cpp:525 vis_shape_elfig.cpp:526 vis_shape_elfig.cpp:527
-#: vis_shape_elfig.cpp:528 vis_shape_elfig.cpp:529 vis_shape_elfig.cpp:534
-#: vis_shape_elfig.cpp:535 vis_shape_elfig.cpp:536 vis_shape_elfig.cpp:537
-#: vis_shape_elfig.cpp:538 vis_shape_elfig.cpp:539 vis_shape_elfig.cpp:540
-#: vis_shape_elfig.cpp:541 vis_shape_elfig.cpp:546 vis_shape_elfig.cpp:547
-#: vis_shape_elfig.cpp:548 vis_shape_elfig.cpp:549 vis_shape_elfig.cpp:550
-#: vis_shape_elfig.cpp:551 vis_shape_elfig.cpp:552 vis_shape_elfig.cpp:575
-#: vis_shape_elfig.cpp:576 vis_shape_elfig.cpp:578 vis_shape_elfig.cpp:579
-#: vis_shape_elfig.cpp:593 vis_shape_elfig.cpp:598 vis_shape_elfig.cpp:604
-#: vis_shape_elfig.cpp:605
+#: vis_shape_elfig.cpp:573 vis_shape_elfig.cpp:574 vis_shape_elfig.cpp:575
+#: vis_shape_elfig.cpp:576 vis_shape_elfig.cpp:577 vis_shape_elfig.cpp:578
+#: vis_shape_elfig.cpp:588 vis_shape_elfig.cpp:589 vis_shape_elfig.cpp:590
+#: vis_shape_elfig.cpp:591 vis_shape_elfig.cpp:592 vis_shape_elfig.cpp:593
+#: vis_shape_elfig.cpp:594 vis_shape_elfig.cpp:595 vis_shape_elfig.cpp:596
+#: vis_shape_elfig.cpp:606 vis_shape_elfig.cpp:607 vis_shape_elfig.cpp:608
+#: vis_shape_elfig.cpp:609 vis_shape_elfig.cpp:610 vis_shape_elfig.cpp:611
+#: vis_shape_elfig.cpp:612 vis_shape_elfig.cpp:613 vis_shape_elfig.cpp:636
+#: vis_shape_elfig.cpp:637 vis_shape_elfig.cpp:639 vis_shape_elfig.cpp:640
+#: vis_shape_elfig.cpp:654 vis_shape_elfig.cpp:659 vis_shape_elfig.cpp:665
+#: vis_shape_elfig.cpp:666
 msgid ":"
 msgstr ""
 
-#: vis_shape_elfig.cpp:534
+#: vis_shape_elfig.cpp:588
 msgid "arc:"
 msgstr ""
 
-#: vis_shape_elfig.cpp:546
+#: vis_shape_elfig.cpp:606
 msgid "bezier:"
 msgstr ""
 
-#: vis_shape_elfig.cpp:567
+#: vis_shape_elfig.cpp:628
 msgid "fill:"
 msgstr ""
 
-#: vis_shape_elfig.cpp:613 vis_shape_elfig.cpp:614
+#: vis_shape_elfig.cpp:674 vis_shape_elfig.cpp:675
 msgid "p"
 msgstr ""
 
-#: vis_shape_elfig.cpp:613
+#: vis_shape_elfig.cpp:674
 msgid "x"
 msgstr ""
 
-#: vis_shape_elfig.cpp:614
+#: vis_shape_elfig.cpp:675
 msgid "y"
 msgstr ""
 
-#: vis_shape_elfig.cpp:792
+#: vis_shape_elfig.cpp:854 vis_shape_elfig.cpp:981
 msgid "ws_Fig"
 msgstr ""
 
-#: vis_shape_elfig.cpp:2007 vis_shape_elfig.cpp:2082 vis_shape_elfig.cpp:2171
-#: vis_shape_elfig.cpp:2201 vis_shape_elfig.cpp:2243
-msgid "Coordinates(x,y): (%1, %2)"
+#: vis_shape_elfig.cpp:984
+msgid "DblClick"
 msgstr ""
+
+#: vis_shape_elfig.cpp:2113 vis_shape_elfig.cpp:2188 vis_shape_elfig.cpp:2277
+#: vis_shape_elfig.cpp:2307 vis_shape_elfig.cpp:2349
+msgid "Coordinates(x,y): (%1, %2)"
+msgstr "Координаты(x,y): (%1, %2)"
 
 #: vis_shapes.cpp:77
 msgid "Widget's shape '%1' no implement yet!"
@@ -3545,7 +3753,7 @@ msgid "FormEl"
 msgstr ""
 
 #: vis_shapes.cpp:173 vis_shapes.cpp:194 vis_shapes.cpp:490
-#: vis_shapes.cpp:2084 vis_shapes.cpp:2102 vis_shapes.cpp:2207
+#: vis_shapes.cpp:2094 vis_shapes.cpp:2112 vis_shapes.cpp:2217
 msgid "addrWdg"
 msgstr ""
 
@@ -3560,7 +3768,7 @@ msgstr ""
 #: vis_shapes.cpp:176 vis_shapes.cpp:181 vis_shapes.cpp:291 vis_shapes.cpp:340
 #: vis_shapes.cpp:357 vis_shapes.cpp:372 vis_shapes.cpp:408 vis_shapes.cpp:428
 #: vis_shapes.cpp:447 vis_shapes.cpp:656 vis_shapes.cpp:662 vis_shapes.cpp:724
-#: vis_shapes.cpp:893
+#: vis_shapes.cpp:896
 msgid "QFont"
 msgstr ""
 
@@ -3592,7 +3800,7 @@ msgstr ""
 msgid "items"
 msgstr ""
 
-#: vis_shapes.cpp:278 vis_shapes.cpp:401 vis_shapes.cpp:739 vis_shapes.cpp:892
+#: vis_shapes.cpp:278 vis_shapes.cpp:401 vis_shapes.cpp:739 vis_shapes.cpp:895
 msgid "color"
 msgstr ""
 
@@ -3604,7 +3812,7 @@ msgstr ""
 msgid "font"
 msgstr ""
 
-#: vis_shapes.cpp:296 vis_shapes.cpp:729 vis_shapes.cpp:1363 vis_widgs.cpp:312
+#: vis_shapes.cpp:296 vis_shapes.cpp:729 vis_shapes.cpp:1366 vis_widgs.cpp:312
 #: vis_widgs.cpp:325
 msgid "_"
 msgstr ""
@@ -3659,12 +3867,12 @@ msgid "numbArg"
 msgstr ""
 
 #: vis_shapes.cpp:657 vis_shapes.cpp:663 vis_shapes.cpp:716 vis_shapes.cpp:718
-#: vis_shapes.cpp:884 vis_shapes.cpp:915 vis_shapes.cpp:930 vis_shapes.cpp:990
-#: vis_shapes.cpp:992 vis_shapes.cpp:1148 vis_shapes.cpp:1237
-#: vis_shapes.cpp:1249 vis_shapes.cpp:1311 vis_shapes.cpp:1313
-#: vis_shapes.cpp:1445 vis_shapes.cpp:1811 vis_shapes.cpp:1823
-#: vis_shapes.cpp:2487 vis_shapes.cpp:2492 vis_shapes.cpp:2542
-#: vis_shapes.cpp:2544 vis_shapes.cpp:2645
+#: vis_shapes.cpp:887 vis_shapes.cpp:918 vis_shapes.cpp:933 vis_shapes.cpp:993
+#: vis_shapes.cpp:995 vis_shapes.cpp:1151 vis_shapes.cpp:1240
+#: vis_shapes.cpp:1252 vis_shapes.cpp:1314 vis_shapes.cpp:1316
+#: vis_shapes.cpp:1448 vis_shapes.cpp:1820 vis_shapes.cpp:1832
+#: vis_shapes.cpp:2497 vis_shapes.cpp:2502 vis_shapes.cpp:2552
+#: vis_shapes.cpp:2554 vis_shapes.cpp:2656
 msgid "border"
 msgstr ""
 
@@ -3673,29 +3881,29 @@ msgstr ""
 msgid "arg_%1"
 msgstr ""
 
-#: vis_shapes.cpp:695 vis_shapes.cpp:697 vis_shapes.cpp:878 vis_shapes.cpp:971
-#: vis_shapes.cpp:973 vis_shapes.cpp:1142 vis_shapes.cpp:1291
-#: vis_shapes.cpp:1293 vis_shapes.cpp:1817 vis_shapes.cpp:2523
-#: vis_shapes.cpp:2525 vis_shapes.cpp:2639
+#: vis_shapes.cpp:695 vis_shapes.cpp:697 vis_shapes.cpp:881 vis_shapes.cpp:974
+#: vis_shapes.cpp:976 vis_shapes.cpp:1145 vis_shapes.cpp:1294
+#: vis_shapes.cpp:1296 vis_shapes.cpp:1826 vis_shapes.cpp:2533
+#: vis_shapes.cpp:2535 vis_shapes.cpp:2650
 msgid "backColor"
 msgstr ""
 
-#: vis_shapes.cpp:707 vis_shapes.cpp:708 vis_shapes.cpp:710 vis_shapes.cpp:880
-#: vis_shapes.cpp:982 vis_shapes.cpp:983 vis_shapes.cpp:985
-#: vis_shapes.cpp:1144 vis_shapes.cpp:1303 vis_shapes.cpp:1304
-#: vis_shapes.cpp:1306 vis_shapes.cpp:1819 vis_shapes.cpp:2534
-#: vis_shapes.cpp:2535 vis_shapes.cpp:2537 vis_shapes.cpp:2641
+#: vis_shapes.cpp:707 vis_shapes.cpp:708 vis_shapes.cpp:710 vis_shapes.cpp:883
+#: vis_shapes.cpp:985 vis_shapes.cpp:986 vis_shapes.cpp:988
+#: vis_shapes.cpp:1147 vis_shapes.cpp:1306 vis_shapes.cpp:1307
+#: vis_shapes.cpp:1309 vis_shapes.cpp:1828 vis_shapes.cpp:2544
+#: vis_shapes.cpp:2545 vis_shapes.cpp:2547 vis_shapes.cpp:2652
 msgid "backImg"
 msgstr ""
 
-#: vis_shapes.cpp:720 vis_shapes.cpp:887 vis_shapes.cpp:994
-#: vis_shapes.cpp:1148 vis_shapes.cpp:1315 vis_shapes.cpp:1823
-#: vis_shapes.cpp:2546 vis_shapes.cpp:2645
+#: vis_shapes.cpp:720 vis_shapes.cpp:890 vis_shapes.cpp:997
+#: vis_shapes.cpp:1151 vis_shapes.cpp:1318 vis_shapes.cpp:1832
+#: vis_shapes.cpp:2556 vis_shapes.cpp:2656
 msgid "bordStyle"
 msgstr ""
 
 #: vis_shapes.cpp:744 vis_shapes.cpp:745 vis_shapes.cpp:750 vis_shapes.cpp:764
-#: vis_shapes.cpp:895
+#: vis_shapes.cpp:898
 msgid "text_flg"
 msgstr ""
 
@@ -3703,325 +3911,317 @@ msgstr ""
 msgid "text_tmpl"
 msgstr ""
 
-#: vis_shapes.cpp:836 vis_shapes.cpp:895
+#: vis_shapes.cpp:836 vis_shapes.cpp:898
 msgid "text"
 msgstr ""
 
-#: vis_shapes.cpp:907
+#: vis_shapes.cpp:910
 msgid "Media"
 msgstr ""
 
-#: vis_shapes.cpp:914 vis_shapes.cpp:940 vis_shapes.cpp:1024
-#: vis_shapes.cpp:1032 vis_shapes.cpp:1040 vis_shapes.cpp:1155
-#: vis_shapes.cpp:1178
+#: vis_shapes.cpp:917 vis_shapes.cpp:943 vis_shapes.cpp:1027
+#: vis_shapes.cpp:1035 vis_shapes.cpp:1043 vis_shapes.cpp:1158
+#: vis_shapes.cpp:1181
 msgid "numbMAr"
 msgstr ""
 
-#: vis_shapes.cpp:916 vis_shapes.cpp:1005 vis_shapes.cpp:1006
-#: vis_shapes.cpp:1063
+#: vis_shapes.cpp:919 vis_shapes.cpp:1008 vis_shapes.cpp:1009
+#: vis_shapes.cpp:1066
 msgid "mediaType"
 msgstr ""
 
-#: vis_shapes.cpp:923 vis_shapes.cpp:932 vis_shapes.cpp:948
+#: vis_shapes.cpp:926 vis_shapes.cpp:935 vis_shapes.cpp:951
 msgid "labWdg"
 msgstr ""
 
-#: vis_shapes.cpp:942 vis_shapes.cpp:1029 vis_shapes.cpp:1031
-#: vis_shapes.cpp:1041 vis_shapes.cpp:1160 vis_shapes.cpp:1180
+#: vis_shapes.cpp:945 vis_shapes.cpp:1032 vis_shapes.cpp:1034
+#: vis_shapes.cpp:1044 vis_shapes.cpp:1163 vis_shapes.cpp:1183
 msgid "area_%1"
 msgstr ""
 
-#: vis_shapes.cpp:996 vis_shapes.cpp:997 vis_shapes.cpp:1062
+#: vis_shapes.cpp:999 vis_shapes.cpp:1000 vis_shapes.cpp:1065
 msgid "mediaSrc"
 msgstr ""
 
-#: vis_shapes.cpp:1001 vis_shapes.cpp:1082 vis_shapes.cpp:1112
+#: vis_shapes.cpp:1004 vis_shapes.cpp:1085 vis_shapes.cpp:1115
 msgid "mediaFit"
 msgstr ""
 
-#: vis_shapes.cpp:1012 vis_shapes.cpp:1104
+#: vis_shapes.cpp:1015 vis_shapes.cpp:1107
 msgid "mediaSpeed"
 msgstr ""
 
-#: vis_shapes.cpp:1181
+#: vis_shapes.cpp:1184
 msgid "ws_MapAct"
 msgstr ""
 
-#: vis_shapes.cpp:1224
+#: vis_shapes.cpp:1227
 msgid "Diagram"
 msgstr ""
 
-#: vis_shapes.cpp:1231 vis_shapes.cpp:1328 vis_shapes.cpp:1330
-#: vis_shapes.cpp:1333 vis_shapes.cpp:1438 vis_shapes.cpp:1771
-#: vis_shapes.cpp:1774 vis_shapes.cpp:1775 vis_shapes.cpp:1780
-#: vis_shapes.cpp:1796 vis_shapes.cpp:1879 vis_shapes.cpp:1941
+#: vis_shapes.cpp:1234 vis_shapes.cpp:1331 vis_shapes.cpp:1333
+#: vis_shapes.cpp:1336 vis_shapes.cpp:1441 vis_shapes.cpp:1780
+#: vis_shapes.cpp:1783 vis_shapes.cpp:1784 vis_shapes.cpp:1789
+#: vis_shapes.cpp:1805 vis_shapes.cpp:1888 vis_shapes.cpp:1950
 msgid "tTime"
 msgstr ""
 
-#: vis_shapes.cpp:1232 vis_shapes.cpp:1763 vis_shapes.cpp:1797
+#: vis_shapes.cpp:1235 vis_shapes.cpp:1772 vis_shapes.cpp:1806
 msgid "tPict"
 msgstr ""
 
-#: vis_shapes.cpp:1233 vis_shapes.cpp:1339 vis_shapes.cpp:1340
-#: vis_shapes.cpp:1343 vis_shapes.cpp:1344 vis_shapes.cpp:1784
-#: vis_shapes.cpp:1799
+#: vis_shapes.cpp:1236 vis_shapes.cpp:1342 vis_shapes.cpp:1343
+#: vis_shapes.cpp:1346 vis_shapes.cpp:1347 vis_shapes.cpp:1793
+#: vis_shapes.cpp:1808
 msgid "curTime"
 msgstr ""
 
-#: vis_shapes.cpp:1234 vis_shapes.cpp:1255 vis_shapes.cpp:1378
-#: vis_shapes.cpp:1386 vis_shapes.cpp:1395 vis_shapes.cpp:1421
-#: vis_shapes.cpp:1436 vis_shapes.cpp:1888
+#: vis_shapes.cpp:1237 vis_shapes.cpp:1258 vis_shapes.cpp:1381
+#: vis_shapes.cpp:1389 vis_shapes.cpp:1398 vis_shapes.cpp:1424
+#: vis_shapes.cpp:1439 vis_shapes.cpp:1897
 msgid "parNum"
 msgstr ""
 
-#: vis_shapes.cpp:1235 vis_shapes.cpp:1325 vis_shapes.cpp:1329
-#: vis_shapes.cpp:1773 vis_shapes.cpp:1971 vis_shapes.cpp:2072
+#: vis_shapes.cpp:1238 vis_shapes.cpp:1328 vis_shapes.cpp:1332
+#: vis_shapes.cpp:1782 vis_shapes.cpp:1980 vis_shapes.cpp:2082
 msgid "tTimeCurent"
 msgstr ""
 
-#: vis_shapes.cpp:1236 vis_shapes.cpp:1317 vis_shapes.cpp:1490
-#: vis_shapes.cpp:1772 vis_shapes.cpp:1970 vis_shapes.cpp:2160
-#: vis_shapes.cpp:2161 vis_shapes.cpp:2388
+#: vis_shapes.cpp:1239 vis_shapes.cpp:1320 vis_shapes.cpp:1493
+#: vis_shapes.cpp:1781 vis_shapes.cpp:1979 vis_shapes.cpp:2170
+#: vis_shapes.cpp:2171 vis_shapes.cpp:2398
 msgid "trcPer"
 msgstr ""
 
-#: vis_shapes.cpp:1238 vis_shapes.cpp:1250 vis_shapes.cpp:1433
-#: vis_shapes.cpp:1826
+#: vis_shapes.cpp:1241 vis_shapes.cpp:1253 vis_shapes.cpp:1436
+#: vis_shapes.cpp:1835
 msgid "pictObj"
 msgstr ""
 
-#: vis_shapes.cpp:1239 vis_shapes.cpp:1251 vis_shapes.cpp:1762
-#: vis_shapes.cpp:1800
+#: vis_shapes.cpp:1242 vis_shapes.cpp:1254 vis_shapes.cpp:1771
+#: vis_shapes.cpp:1809
 msgid "pictRect"
 msgstr ""
 
-#: vis_shapes.cpp:1240 vis_shapes.cpp:1252 vis_shapes.cpp:1359
-#: vis_shapes.cpp:1460
+#: vis_shapes.cpp:1243 vis_shapes.cpp:1255 vis_shapes.cpp:1362
+#: vis_shapes.cpp:1463
 msgid "sclMarkFont"
 msgstr ""
 
-#: vis_shapes.cpp:1243 vis_shapes.cpp:1253 vis_shapes.cpp:1319
-#: vis_shapes.cpp:1320 vis_shapes.cpp:2087 vis_shapes.cpp:2096
-#: vis_shapes.cpp:2163 vis_shapes.cpp:2164
+#: vis_shapes.cpp:1246 vis_shapes.cpp:1256 vis_shapes.cpp:1322
+#: vis_shapes.cpp:1323 vis_shapes.cpp:2097 vis_shapes.cpp:2106
+#: vis_shapes.cpp:2173 vis_shapes.cpp:2174
 msgid "trcTimer"
 msgstr ""
 
-#: vis_shapes.cpp:1257 vis_shapes.cpp:1383 vis_shapes.cpp:1385
-#: vis_shapes.cpp:1396 vis_shapes.cpp:1423 vis_shapes.cpp:1671
-#: vis_shapes.cpp:1891
+#: vis_shapes.cpp:1260 vis_shapes.cpp:1386 vis_shapes.cpp:1388
+#: vis_shapes.cpp:1399 vis_shapes.cpp:1426 vis_shapes.cpp:1680
+#: vis_shapes.cpp:1900
 msgid "trend_%1"
 msgstr ""
 
-#: vis_shapes.cpp:1336 vis_shapes.cpp:1437 vis_shapes.cpp:1783
-#: vis_shapes.cpp:1798 vis_shapes.cpp:1880 vis_shapes.cpp:1940
-#: vis_shapes.cpp:2071 vis_shapes.cpp:2153 vis_shapes.cpp:2154
-#: vis_shapes.cpp:2212
+#: vis_shapes.cpp:1339 vis_shapes.cpp:1440 vis_shapes.cpp:1792
+#: vis_shapes.cpp:1807 vis_shapes.cpp:1889 vis_shapes.cpp:1949
+#: vis_shapes.cpp:2081 vis_shapes.cpp:2163 vis_shapes.cpp:2164
+#: vis_shapes.cpp:2222
 msgid "tSize"
 msgstr ""
 
-#: vis_shapes.cpp:1347 vis_shapes.cpp:1836
+#: vis_shapes.cpp:1350 vis_shapes.cpp:1845
 msgid "curColor"
 msgstr ""
 
-#: vis_shapes.cpp:1350 vis_shapes.cpp:1453
+#: vis_shapes.cpp:1353 vis_shapes.cpp:1456
 msgid "sclColor"
 msgstr ""
 
-#: vis_shapes.cpp:1352 vis_shapes.cpp:1447
+#: vis_shapes.cpp:1355 vis_shapes.cpp:1450
 msgid "sclHor"
 msgstr ""
 
-#: vis_shapes.cpp:1354 vis_shapes.cpp:1448
+#: vis_shapes.cpp:1357 vis_shapes.cpp:1451
 msgid "sclVer"
 msgstr ""
 
-#: vis_shapes.cpp:1356 vis_shapes.cpp:1459
+#: vis_shapes.cpp:1359 vis_shapes.cpp:1462
 msgid "sclMarkColor"
 msgstr ""
 
-#: vis_shapes.cpp:1373 vis_shapes.cpp:1374 vis_shapes.cpp:1944
+#: vis_shapes.cpp:1376 vis_shapes.cpp:1377 vis_shapes.cpp:1953
 msgid "valArch"
 msgstr ""
 
-#: vis_shapes.cpp:1513 vis_shapes.cpp:1554
+#: vis_shapes.cpp:1516 vis_shapes.cpp:1557
 msgid "%1-%2-%3"
 msgstr ""
 
-#: vis_shapes.cpp:1515 vis_shapes.cpp:1557
+#: vis_shapes.cpp:1518 vis_shapes.cpp:1560
 msgid "%1:%2"
 msgstr ""
 
-#: vis_shapes.cpp:1517 vis_shapes.cpp:1518 vis_shapes.cpp:1559
-#: vis_shapes.cpp:1562
+#: vis_shapes.cpp:1520 vis_shapes.cpp:1521 vis_shapes.cpp:1562
+#: vis_shapes.cpp:1565
 msgid "%1:%2:%3"
 msgstr ""
 
-#: vis_shapes.cpp:1560 vis_shapes.cpp:1563
+#: vis_shapes.cpp:1563 vis_shapes.cpp:1566
 #, c-format
 msgid "%1s"
 msgstr ""
 
-#: vis_shapes.cpp:1564
+#: vis_shapes.cpp:1567
 #, c-format
 msgid "%1ms"
 msgstr ""
 
-#: vis_shapes.cpp:1606
+#: vis_shapes.cpp:1609
 msgid "trend_0"
 msgstr ""
 
-#: vis_shapes.cpp:1662
+#: vis_shapes.cpp:1671
 msgid " %"
 msgstr ""
 
-#: vis_shapes.cpp:1884
+#: vis_shapes.cpp:1893
 msgid "curSek"
 msgstr ""
 
-#: vis_shapes.cpp:1885
+#: vis_shapes.cpp:1894
 msgid "curUSek"
 msgstr ""
 
-#: vis_shapes.cpp:1897
+#: vis_shapes.cpp:1906
 msgid "prm%1val"
 msgstr ""
 
-#: vis_shapes.cpp:1958 vis_shapes.cpp:2016 vis_shapes.cpp:2168
-#: vis_shapes.cpp:2169 vis_shapes.cpp:2213 vis_shapes.cpp:2243
-#: vis_shapes.cpp:2275
+#: vis_shapes.cpp:1967 vis_shapes.cpp:2026 vis_shapes.cpp:2178
+#: vis_shapes.cpp:2179 vis_shapes.cpp:2223 vis_shapes.cpp:2253
+#: vis_shapes.cpp:2285
 msgid "arch"
 msgstr ""
 
-#: vis_shapes.cpp:1959 vis_shapes.cpp:1963
+#: vis_shapes.cpp:1968 vis_shapes.cpp:1972
 msgid "vtp"
 msgstr ""
 
-#: vis_shapes.cpp:1964 vis_shapes.cpp:2247
+#: vis_shapes.cpp:1973 vis_shapes.cpp:2257
 msgid "beg"
 msgstr ""
 
-#: vis_shapes.cpp:1965 vis_shapes.cpp:2248
+#: vis_shapes.cpp:1974 vis_shapes.cpp:2258
 msgid "end"
 msgstr ""
 
-#: vis_shapes.cpp:1966 vis_shapes.cpp:2020 vis_shapes.cpp:2028
+#: vis_shapes.cpp:1975 vis_shapes.cpp:2030 vis_shapes.cpp:2038
 msgid "per"
 msgstr ""
 
-#: vis_shapes.cpp:1977 vis_shapes.cpp:2019 vis_shapes.cpp:2026
-#: vis_shapes.cpp:2278
+#: vis_shapes.cpp:1986 vis_shapes.cpp:2029 vis_shapes.cpp:2036
+#: vis_shapes.cpp:2288
 msgid "tm_grnd"
 msgstr ""
 
-#: vis_shapes.cpp:2021
-msgid "mode"
-msgstr ""
-
-#: vis_shapes.cpp:2022
+#: vis_shapes.cpp:2032
 msgid "real_prec"
 msgstr ""
 
-#: vis_shapes.cpp:2023
+#: vis_shapes.cpp:2033
 msgid "round_perc"
 msgstr ""
 
-#: vis_shapes.cpp:2035
+#: vis_shapes.cpp:2045
 #, c-format
 msgid "%d %lf"
 msgstr ""
 
-#: vis_shapes.cpp:2061
+#: vis_shapes.cpp:2071
 msgid "Protocol"
 msgstr ""
 
-#: vis_shapes.cpp:2070 vis_shapes.cpp:2146 vis_shapes.cpp:2148
-#: vis_shapes.cpp:2211 vis_shapes.cpp:2299 vis_shapes.cpp:2337
-#: vis_shapes.cpp:2387 vis_shapes.cpp:2389 vis_shapes.cpp:2390
+#: vis_shapes.cpp:2080 vis_shapes.cpp:2156 vis_shapes.cpp:2158
+#: vis_shapes.cpp:2221 vis_shapes.cpp:2309 vis_shapes.cpp:2347
+#: vis_shapes.cpp:2397 vis_shapes.cpp:2399 vis_shapes.cpp:2400
 msgid "time"
 msgstr ""
 
-#: vis_shapes.cpp:2073 vis_shapes.cpp:2214
+#: vis_shapes.cpp:2083 vis_shapes.cpp:2224
 msgid "arhBeg"
 msgstr ""
 
-#: vis_shapes.cpp:2074 vis_shapes.cpp:2215
+#: vis_shapes.cpp:2084 vis_shapes.cpp:2225
 msgid "arhEnd"
 msgstr ""
 
-#: vis_shapes.cpp:2091 vis_shapes.cpp:2208
+#: vis_shapes.cpp:2101 vis_shapes.cpp:2218
 msgid "indMap"
 msgstr ""
 
-#: vis_shapes.cpp:2143 vis_shapes.cpp:2147 vis_shapes.cpp:2389
+#: vis_shapes.cpp:2153 vis_shapes.cpp:2157 vis_shapes.cpp:2399
 msgid "timeCurent"
 msgstr ""
 
-#: vis_shapes.cpp:2173 vis_shapes.cpp:2174 vis_shapes.cpp:2279
-msgid "tmpl"
-msgstr ""
-
-#: vis_shapes.cpp:2178 vis_shapes.cpp:2179 vis_shapes.cpp:2224
-#: vis_shapes.cpp:2230 vis_shapes.cpp:2280 vis_shapes.cpp:2287
-#: vis_shapes.cpp:2300 vis_shapes.cpp:2338
+#: vis_shapes.cpp:2188 vis_shapes.cpp:2189 vis_shapes.cpp:2234
+#: vis_shapes.cpp:2240 vis_shapes.cpp:2290 vis_shapes.cpp:2297
+#: vis_shapes.cpp:2310 vis_shapes.cpp:2348
 msgid "lev"
 msgstr ""
 
-#: vis_shapes.cpp:2183 vis_shapes.cpp:2184
+#: vis_shapes.cpp:2193 vis_shapes.cpp:2194
 msgid "viewOrd"
 msgstr ""
 
-#: vis_shapes.cpp:2193 vis_shapes.cpp:2194
+#: vis_shapes.cpp:2203 vis_shapes.cpp:2204
 msgid "itProp"
 msgstr ""
 
-#: vis_shapes.cpp:2224 vis_shapes.cpp:2231 vis_shapes.cpp:2279
-#: vis_shapes.cpp:2288 vis_shapes.cpp:2301 vis_shapes.cpp:2339
+#: vis_shapes.cpp:2234 vis_shapes.cpp:2241 vis_shapes.cpp:2289
+#: vis_shapes.cpp:2298 vis_shapes.cpp:2311 vis_shapes.cpp:2349
 msgid "cat"
 msgstr ""
 
-#: vis_shapes.cpp:2224 vis_shapes.cpp:2232 vis_shapes.cpp:2289
+#: vis_shapes.cpp:2234 vis_shapes.cpp:2242 vis_shapes.cpp:2299
 msgid "mess"
 msgstr ""
 
-#: vis_shapes.cpp:2229
+#: vis_shapes.cpp:2239
 msgid "Time"
 msgstr "Время"
 
-#: vis_shapes.cpp:2230
+#: vis_shapes.cpp:2240
 msgid "Level"
 msgstr "Уровень"
 
-#: vis_shapes.cpp:2231
+#: vis_shapes.cpp:2241
 msgid "Category"
 msgstr "Категория"
 
-#: vis_shapes.cpp:2232
+#: vis_shapes.cpp:2242
 msgid "Message"
 msgstr "Сообщение"
 
-#: vis_shapes.cpp:2243 vis_shapes.cpp:2276
+#: vis_shapes.cpp:2253 vis_shapes.cpp:2286
 #, c-format
 msgid "/Archive/%2fserv%2f0"
 msgstr ""
 
-#: vis_shapes.cpp:2453
+#: vis_shapes.cpp:2463
 msgid "Document"
 msgstr "Документ"
 
-#: vis_shapes.cpp:2466
+#: vis_shapes.cpp:2476
 msgid "Function"
 msgstr "Функция"
 
-#: vis_shapes.cpp:2486 vis_shapes.cpp:2552 vis_shapes.cpp:2601
-#: vis_shapes.cpp:2629
+#: vis_shapes.cpp:2496 vis_shapes.cpp:2562 vis_shapes.cpp:2612
+#: vis_shapes.cpp:2640
 msgid "inclWidget"
 msgstr ""
 
-#: vis_shapes.cpp:2572
+#: vis_shapes.cpp:2583
 msgid "Load page: '%1'."
 msgstr "Загрузка страницы: '%1'."
 
-#: vis_shapes.cpp:2659
+#: vis_shapes.cpp:2670
 msgid "Link"
 msgstr "Связь"
 
@@ -4033,11 +4233,11 @@ msgstr ""
 msgid "Ok"
 msgstr "Принять"
 
-#: vis_widgs.cpp:111 vis_widgs.cpp:188 vis_widgs.cpp:298 vis_widgs.cpp:647
+#: vis_widgs.cpp:111 vis_widgs.cpp:188 vis_widgs.cpp:298 vis_widgs.cpp:651
 msgid "button_ok"
 msgstr ""
 
-#: vis_widgs.cpp:111 vis_widgs.cpp:188 vis_widgs.cpp:298 vis_widgs.cpp:647
+#: vis_widgs.cpp:111 vis_widgs.cpp:188 vis_widgs.cpp:298 vis_widgs.cpp:651
 msgid ":/images/button_ok.png"
 msgstr ""
 
@@ -4045,11 +4245,11 @@ msgstr ""
 msgid "Cancel"
 msgstr "Отмена"
 
-#: vis_widgs.cpp:115 vis_widgs.cpp:192 vis_widgs.cpp:302 vis_widgs.cpp:652
+#: vis_widgs.cpp:115 vis_widgs.cpp:192 vis_widgs.cpp:302 vis_widgs.cpp:656
 msgid "button_cancel"
 msgstr ""
 
-#: vis_widgs.cpp:115 vis_widgs.cpp:192 vis_widgs.cpp:302 vis_widgs.cpp:652
+#: vis_widgs.cpp:115 vis_widgs.cpp:192 vis_widgs.cpp:302 vis_widgs.cpp:656
 msgid ":/images/button_cancel.png"
 msgstr ""
 
@@ -4117,16 +4317,16 @@ msgstr ""
 msgid "green"
 msgstr ""
 
-#: vis_widgs.cpp:873
+#: vis_widgs.cpp:877
 #, c-format
 msgid "/%2fwdg%2fcfg%2fpath"
 msgstr ""
 
-#: vis_widgs.cpp:873
+#: vis_widgs.cpp:877
 msgid "resLink"
 msgstr ""
 
-#: vis_widgs.cpp:917
+#: vis_widgs.cpp:921
 #, c-format
 msgid "/%2fwdg%2fcfg%2froot"
 msgstr ""
@@ -4134,3 +4334,9 @@ msgstr ""
 #: vis_widgs.h:57
 msgid "Vision dialog"
 msgstr "Vision диалог"
+
+#~ msgid "All widgets periodic adaptive update"
+#~ msgstr "Адаптивное периодическое обновление всех виджетов"
+
+#~ msgid "Update only changed widgets"
+#~ msgstr "Обновление только изменённых виджетов"

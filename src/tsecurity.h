@@ -29,7 +29,7 @@
 #define SEQ_RD 0x04
 
 //*************************************************
-//* TUser                                         *
+//* TUser					  *
 //*************************************************
 class TSecurity;
 
@@ -42,38 +42,38 @@ class TUser : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string	&name( ) 	{ return m_name; }
+	const string	&name( )	{ return m_name; }
 	const string	&lName( )	{ return m_lname; }
-	const string	&picture( )	{ return m_pict; }	
-	bool sysItem( )			{ return m_sysIt; }	
+	const string	&picture( )	{ return m_pict; }
+	bool sysItem( )			{ return m_sysIt; }
 
 	bool auth( const string &pass );
-	
-	string DB( )            { return m_db; }
-        string tbl( );
-        string fullDB( )        { return DB()+'.'+tbl(); }
-	
+
+	string DB( )			{ return m_db; }
+	string tbl( );
+	string fullDB( )		{ return DB()+'.'+tbl(); }
+
 	void setLName( const string &nm )	{ m_lname = nm; modif(); }
 	void setPicture( const string &pct )	{ m_pict = pct; modif(); }
 	void setPass( const string &n_pass );
 	void setSysItem( bool vl )		{ m_sysIt = vl; }
-	
+
 	void setDB( const string &vl )		{ m_db = vl; modifG(); }
 
     protected:
 	//Methods
 	void load_( );
 	void save_( );
-	
-	TSecurity &owner( )	{ return *(TSecurity*)nodePrev(); }
-	
-    private:	
-	//Methods    
-	string nodeName( )	{ return m_name; }
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-	void postDisable( int flag );     	//Delete all DB if flag 1
 
-	//Attributes	
+	TSecurity &owner( )		{ return *(TSecurity*)nodePrev(); }
+
+    private:
+	//Methods
+	string nodeName( )	{ return m_name; }
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+	void postDisable( int flag );		//Delete all DB if flag 1
+
+	//Attributes
 	string	&m_name;
 	string	&m_lname;
 	string	&m_pass;
@@ -83,7 +83,7 @@ class TUser : public TCntrNode, public TConfig
 };
 
 //*************************************************
-//* TGroup                                        *
+//* TGroup					  *
 //*************************************************
 class TGroup : public TCntrNode, public TConfig
 {
@@ -94,19 +94,19 @@ class TGroup : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &name( )  	{ return m_name; }
-	const string &lName( ) 	{ return m_lname; }
+	const string &name( )	{ return m_name; }
+	const string &lName( )	{ return m_lname; }
 	bool sysItem( )		{ return m_sysIt; }
-	
-	string DB( )            { return m_db; }
-        string tbl( );
-        string fullDB( )        { return DB()+'.'+tbl(); }
-	
+
+	string DB( )		{ return m_db; }
+	string tbl( );
+	string fullDB( )	{ return DB()+'.'+tbl(); }
+
 	void setLName( const string &nm )	{ m_lname = nm; modif(); }
 	void setSysItem( bool vl )		{ m_sysIt = vl; }
-	
-	void setDB( const string &vl )          { m_db = vl; modifG(); }
-		
+
+	void setDB( const string &vl )		{ m_db = vl; modifG(); }
+
 	bool user( const string &name );
 	void userAdd( const string &name );
 	void userDel( const string &name );
@@ -115,45 +115,45 @@ class TGroup : public TCntrNode, public TConfig
 	//Methods
 	void load_( );
 	void save_( );
-	
+
 	TSecurity &owner( )	{ return *(TSecurity*)nodePrev(); }
-	
-    private:	 
-	//Methods   
+
+    private:
+	//Methods
 	string nodeName( )	{ return m_name; }
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-	void postDisable( int flag );     	//Delete all DB if flag 1
-	
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+	void postDisable( int flag );		//Delete all DB if flag 1
+
 	//Attributes
 	string	&m_name;
 	string	&m_lname;
 	string	&m_usrs;
-	string  m_db;
-	bool    m_sysIt;
+	string	m_db;
+	bool	m_sysIt;
 };
 
 //*************************************************
-//* TSecurity                                     *
+//* TSecurity					  *
 //*************************************************
 class TSecurity : public TSubSYS
 {
     public:
 	//Methods
-	TSecurity( );    
+	TSecurity( );
 	~TSecurity( );
 
 	char access( const string &user, char mode, const string &owner, const string &group, int access );
-	
+
 	//- Users -
 	void usrList( vector<string> &list )		{ chldList(m_usr,list); }
 	void usrGrpList( const string &name, vector<string> &list );
-	bool usrPresent( const string &name ) 		{ return chldPresent(m_usr,name); }
+	bool usrPresent( const string &name )		{ return chldPresent(m_usr,name); }
 	void usrAdd( const string &name, const string &db = "*.*" );
 	void usrDel( const string &name, bool complete = false );
 	AutoHD<TUser> usrAt( const string &name )	{ return chldAt(m_usr,name); }
-	
+
 	//- Groups -
-	void grpList( vector<string> &list ) 		{ chldList(m_grp,list); }
+	void grpList( vector<string> &list )		{ chldList(m_grp,list); }
 	bool grpPresent( const string &name )		{ return chldPresent(m_grp,name); }
 	void grpAdd( const string &name, const string &db = "*.*" );
 	void grpDel( const string &name, bool complete = false );
@@ -165,18 +165,18 @@ class TSecurity : public TSubSYS
 
     private:
 	//Methods
-	string optDescr( );	
+	string optDescr( );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-	
+
 	void postEnable( int flag );
-	
+
 	//Attributes
 	int	m_usr, m_grp;
-	
+
 	TElem	user_el;
 	TElem	grp_el;
 
-	unsigned	hd_res;   
+	unsigned	hd_res;
 };
 
 #endif // TSECURITY_H

@@ -9,14 +9,14 @@
     <file>images/vision.png</file>
     <file>images/prj_run.png</file>
     <file>images/prj_new.png</file>
-    <file>images/lib_new.png</file>    
+    <file>images/lib_new.png</file>
     <file>images/it_add.png</file>
     <file>images/it_del.png</file>
-    <file>images/it_prop.png</file>        
+    <file>images/it_prop.png</file>
     <file>images/it_edit.png</file>
     <file>images/load.png</file>
     <file>images/save.png</file>
-    <file>images/reload.png</file>    
+    <file>images/reload.png</file>
     <file>images/attention.png</file>
     <file>images/align_left.png</file>
     <file>images/align_right.png</file>
@@ -38,5 +38,9 @@
     <file>images/editcopy.png</file>
     <file>images/editcut.png</file>
     <file>images/editpaste.png</file>
+    <file>images/alarmLev.png</file>
+    <file>images/alarmLight.png</file>
+    <file>images/alarmAlarm.png</file>
+    <file>images/alarmSound.png</file>
 </qresource>
 </RCC>

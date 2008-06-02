@@ -46,7 +46,7 @@ namespace VISION
 
 //****************************************
 //* Inspector of attributes model        *
-//**************************************** 
+//****************************************
 class VisDevelop;
 
 class ModInspAttr: public QAbstractTableModel
@@ -54,16 +54,16 @@ class ModInspAttr: public QAbstractTableModel
     Q_OBJECT
 
     public:
-        //Public data
- 	//* Item of the inspector of attributes model   *
+	//Public data
+	//* Item of the inspector of attributes model   *
 	class Item
 	{
 	    public:
 		//Public data
 		enum Type { WdgGrp, Wdg, AttrGrp, Attr };
-		enum Flag 
-		{ 
-		    Select   = 0x01, 
+		enum Flag
+		{
+		    Select   = 0x01,
 		    FullText = 0x08,
 		    Active   = 0x0100,
 		    Image    = 0x0200,
@@ -73,70 +73,70 @@ class ModInspAttr: public QAbstractTableModel
 		};
 
 		//Public attributes
-                Item( const string &iid, Type tp, Item *parent = NULL );
+		Item( const string &iid, Type tp, Item *parent = NULL );
 		~Item();
 
-                string id( )        	{ return idItem; }
-                string name( );
-                Type   type( )		{ return typeItem; }
-		bool   edited()		{ return edit_access; }
-		int    flag()		{ return flag_item; }
-                QVariant data( );
-                QVariant dataEdit( );
+		string	id( )		{ return idItem; }
+		string	name( );
+		Type	type( )		{ return typeItem; }
+		bool	edited()	{ return edit_access; }
+		int	flag()		{ return flag_item; }
+		QVariant data( );
+		QVariant dataEdit( );
 
-                void setName( const string &nit )       { nameItem = nit; }
+		void setName( const string &nit )	{ nameItem = nit; }
 		void setEdited( bool ied )		{ edit_access = ied; }
 		void setFlag( int iflg )		{ flag_item = iflg; }
-                void setData( const QVariant &idt )     { dataItem = idt; }
-                void setDataEdit( const QVariant &idt ) { dataEditItem = idt; }		
+		void setData( const QVariant &idt )	{ dataItem = idt; }
+		void setDataEdit( const QVariant &idt )	{ dataEditItem = idt; }
 
-                void clean( );
+		void clean( );
 
-                Item *child(int row) const;
-                int  childGet( const string &id ) const;
+		Item *child(int row) const;
+		int  childGet( const string &id ) const;
 		int  childCount() const;
-                int  childInsert( const string &id, int row, Type tp );
-                void childDel( int row );
-		
-		Item *parent()	{ return parentItem; }
-		
+		int  childInsert( const string &id, int row, Type tp );
+		void childDel( int row );
+
+		Item *parent()		{ return parentItem; }
+
 	    private:
-                string  idItem, nameItem;
-                Type    typeItem;
-                QVariant dataItem, dataEditItem;
+		string	idItem, nameItem;
+		Type	typeItem;
+		QVariant	dataItem, dataEditItem;
 		bool	edit_access;
 		int	flag_item;
 
-		QList<Item*> childItems;
-		Item *parentItem;
-	};                
+		QList<Item*>	childItems;
+		Item	*parentItem;
+	};
 
 	//Public methods
 	ModInspAttr( const string &wdg, VisDevelop *mainWind );
 	~ModInspAttr( );
-	
+
 	string user( );
-	
+
 	void setWdg( const string &iwdg );
-	
+
 	Qt::ItemFlags flags( const QModelIndex &index ) const;
 	QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
-        QModelIndex index( int row, int column, const QModelIndex &parent = QModelIndex() ) const;
-        QModelIndex parent(const QModelIndex &index) const;
-	
+	QModelIndex index( int row, int column, const QModelIndex &parent = QModelIndex() ) const;
+	QModelIndex parent(const QModelIndex &index) const;
+
 	int rowCount( const QModelIndex &parent = QModelIndex() ) const;
 	int columnCount( const QModelIndex &parent = QModelIndex() ) const;
 	QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const;
-        bool setData ( const QModelIndex &index, const QVariant &value, int role = Qt::EditRole );
-	
-	VisDevelop *mainWin( )     { return main_win; }
+	bool setData ( const QModelIndex &index, const QVariant &value, int role = Qt::EditRole );
+
+	VisDevelop *mainWin( )		{ return main_win; }
 
     signals:
 	void modified( const string &idwdg );
 
     private:
-        //Private methods
-        void wdgAttrUpdate( const QModelIndex &mod_it );// Item *it);
+	//Private methods
+	void wdgAttrUpdate( const QModelIndex &mod_it );// Item *it);
 
 	//Private attributes
 	string cur_wdg;
@@ -171,29 +171,29 @@ class InspAttr: public QTreeView
 	{
 	    public:
 		//Public methods
-	        ItemDelegate(QObject *parent = 0);
+		ItemDelegate(QObject *parent = 0);
 
-	        QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-	        void setEditorData(QWidget *editor, const QModelIndex &index) const;
-    		void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
+		QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+		void setEditorData(QWidget *editor, const QModelIndex &index) const;
+		void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
 		QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
-	    private:		
-		//Private methods			
-	        bool eventFilter(QObject *object, QEvent *event);
+	    private:
+		//Private methods
+		bool eventFilter(QObject *object, QEvent *event);
 	};
-	
+
 	//Private methods
 	bool event( QEvent *event );
-	
+
 	//Private attributes
 	ModInspAttr modelData;
 };
 
 //****************************************
 //* Inspector of attributes dock widget  *
-//**************************************** 
-class VisDevelop; 
+//****************************************
+class VisDevelop;
 
 class InspAttrDock: public QDockWidget
 {

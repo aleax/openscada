@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-28 16:17+0200\n"
+"POT-Creation-Date: 2008-06-02 15:44+0300\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -103,15 +103,16 @@ msgstr ""
 msgid "h"
 msgstr ""
 
-#: socket.cpp:127
+#: socket.cpp:127 socket.cpp:517 socket.cpp:721
 msgid "help"
 msgstr ""
 
-#: socket.cpp:156 socket.cpp:514
+#: socket.cpp:156 socket.cpp:514 socket.cpp:718
 msgid "info"
 msgstr ""
 
-#: socket.cpp:159 socket.cpp:519 socket.cpp:520 socket.cpp:521
+#: socket.cpp:159 socket.cpp:517 socket.cpp:531 socket.cpp:532 socket.cpp:533
+#: socket.cpp:721
 msgid "fld"
 msgstr ""
 
@@ -123,16 +124,18 @@ msgstr ""
 msgid "Options help"
 msgstr "Допомога по опціям"
 
-#: socket.cpp:159 socket.cpp:519 socket.cpp:520 socket.cpp:521 socket.cpp:529
-#: socket.cpp:530 socket.cpp:534 socket.cpp:535 socket.cpp:539 socket.cpp:540
+#: socket.cpp:159 socket.cpp:517 socket.cpp:531 socket.cpp:532 socket.cpp:533
+#: socket.cpp:541 socket.cpp:542 socket.cpp:546 socket.cpp:547 socket.cpp:551
+#: socket.cpp:552 socket.cpp:721
 msgid "root"
 msgstr ""
 
-#: socket.cpp:159 socket.cpp:519 socket.cpp:520 socket.cpp:521
+#: socket.cpp:159 socket.cpp:517 socket.cpp:531 socket.cpp:532 socket.cpp:533
+#: socket.cpp:721
 msgid "tp"
 msgstr ""
 
-#: socket.cpp:159
+#: socket.cpp:159 socket.cpp:517 socket.cpp:721
 msgid "str"
 msgstr ""
 
@@ -148,11 +151,11 @@ msgstr ""
 msgid "rows"
 msgstr ""
 
-#: socket.cpp:164 socket.cpp:526
+#: socket.cpp:164 socket.cpp:538
 msgid "path"
 msgstr ""
 
-#: socket.cpp:165 socket.cpp:529 socket.cpp:534 socket.cpp:539
+#: socket.cpp:165 socket.cpp:541 socket.cpp:546 socket.cpp:551
 msgid "get"
 msgstr ""
 
@@ -170,12 +173,12 @@ msgstr "Помилка створення %s сокету!"
 msgid "Socket type <%s> error!"
 msgstr "Помилка у типу <%s> сокету!"
 
-#: socket.cpp:227 socket.cpp:581
+#: socket.cpp:227 socket.cpp:595
 #, c-format
 msgid "Socket name <%s> error!"
 msgstr "Помилка у імені <%s> сокету!"
 
-#: socket.cpp:235 socket.cpp:586
+#: socket.cpp:235 socket.cpp:600
 msgid "tcp"
 msgstr ""
 
@@ -184,7 +187,7 @@ msgstr ""
 msgid "TCP socket no bind to <%s>!"
 msgstr "TCP сокет не під'єднався до <%s>!"
 
-#: socket.cpp:251 socket.cpp:586
+#: socket.cpp:251 socket.cpp:600
 msgid "udp"
 msgstr ""
 
@@ -193,7 +196,7 @@ msgstr ""
 msgid "UDP socket no bind to <%s>!"
 msgstr "UDP сокет не під'єднався до <%s>!"
 
-#: socket.cpp:268 socket.cpp:615
+#: socket.cpp:268 socket.cpp:629
 msgid "/tmp/oscada"
 msgstr ""
 
@@ -235,96 +238,152 @@ msgstr ""
 msgid "Error request into protocol."
 msgstr "Помилка запиту до протоколу."
 
-#: socket.cpp:517
+#: socket.cpp:517 socket.cpp:721
+msgid "/prm/cfg/addr"
+msgstr ""
+
+#: socket.cpp:517 socket.cpp:721
+msgid "ADDR"
+msgstr ""
+
+#: socket.cpp:518
+msgid ""
+"Socket's input transport have address format:\n"
+"  TCP:[addr]:[port]:[mode] - TCP socket:\n"
+"    addr - address for socket open, empty address open for all interfaces;\n"
+"    port - network port (/etc/services);\n"
+"    mode - work mode (0 - break connection; 1 - keep alive).\n"
+"  UDP:[addr]:[port] - UDP socket:\n"
+"    addr - address for socket open, empty address open for all interfaces;\n"
+"    port - network port (/etc/services).\n"
+"  UNIX:[name]:[mode] - UNIX socket:\n"
+"    name - UNIX-socket's file name;\n"
+"    mode - work mode (0 - break connection; 1 - keep alive)."
+msgstr ""
+"Вхідний транспорт Socket має формат адреси:\n"
+"  TCP:[addr]:[port]:[mode] - TCP сокет:\n"
+"    addr - адреса відкриття сокету, порожня адреса відкриває сокет на всіх інтерфейсах;\n"
+"    port - мережевий порт (/etc/services);\n"
+"    mode - режим роботи (0 - розривати з'єднання; 1 - зберігати з'єднання).\n"
+"  UDP:[addr]:[port] - UDP сокет:\n"
+"    addr - адреса відкриття сокету, порожня адреса відкриває сокет на всіх інтерфейсах;\n"
+"    port - мережевий порт (/etc/services);\n"
+"  UNIX:[name]:[mode] - UNIX сокет:\n"
+"    name - Ім'я файлу UNIX-сокета;\n"
+"    mode - режим роботи (0 - розривати з'єднання; 1 - зберігати з'єднання)."
+
+#: socket.cpp:529
 msgid "area"
 msgstr ""
 
-#: socket.cpp:517
+#: socket.cpp:529
 msgid "/bs"
 msgstr ""
 
-#: socket.cpp:519 socket.cpp:527
+#: socket.cpp:531 socket.cpp:539
 msgid "/bs/q_ln"
 msgstr ""
 
-#: socket.cpp:519
+#: socket.cpp:531
 msgid "Queue length for TCP and UNIX sockets"
 msgstr "Довжина черги TCP та UNIX сокетів"
 
-#: socket.cpp:519 socket.cpp:520 socket.cpp:521
+#: socket.cpp:531 socket.cpp:532 socket.cpp:533
 msgid "dec"
 msgstr ""
 
-#: socket.cpp:520 socket.cpp:532
+#: socket.cpp:532 socket.cpp:544
 msgid "/bs/cl_n"
 msgstr ""
 
-#: socket.cpp:520
+#: socket.cpp:532
 msgid "Maximum number opened client TCP and UNIX sockets"
 msgstr "Максимальна кількість відкритих клієнтських TCP та UNIX сокетів"
 
-#: socket.cpp:521 socket.cpp:537
+#: socket.cpp:533 socket.cpp:549
 msgid "/bs/bf_ln"
 msgstr ""
 
-#: socket.cpp:521
+#: socket.cpp:533
 msgid "Input buffer length (kbyte)"
 msgstr "Довжина вхідного буферу (кбайт)"
 
-#: socket.cpp:530 socket.cpp:535 socket.cpp:540
+#: socket.cpp:542 socket.cpp:547 socket.cpp:552
 msgid "set"
 msgstr ""
 
-#: socket.cpp:551
+#: socket.cpp:563
 msgid "TCP:localhost:10002"
 msgstr ""
 
-#: socket.cpp:568
+#: socket.cpp:582
 #, c-format
 msgid "Type socket <%s> error!"
 msgstr "Помилка у типу <%s> сокету!"
 
-#: socket.cpp:595
+#: socket.cpp:609
 #, c-format
 msgid "Error create TCP socket: %s!"
 msgstr "Помилка створення TCP сокету: %s!"
 
-#: socket.cpp:602
+#: socket.cpp:616
 #, c-format
 msgid "Error create UDP socket: %s!"
 msgstr "Помилка створення UDP сокету: %s!"
 
-#: socket.cpp:609
+#: socket.cpp:623
 #, c-format
 msgid "Connect to Internet socket error: %s!"
 msgstr "Помилка підключення до Internet сокету: %s!"
 
-#: socket.cpp:622
+#: socket.cpp:636
 #, c-format
 msgid "Error create UNIX socket: %s!"
 msgstr "Помилка створення UNIX сокету: %s!"
 
-#: socket.cpp:627
+#: socket.cpp:641
 #, c-format
 msgid "Connect to UNIX error: %s!"
 msgstr "Помилка підключення до UNIX сокету: %s!"
 
-#: socket.cpp:648
+#: socket.cpp:667
 msgid "Transport no started!"
 msgstr "Транспорт не запущено!"
 
-#: socket.cpp:675
+#: socket.cpp:694
 msgid "Socket error!"
 msgstr "Помилка сокету!"
 
-#: socket.cpp:684
+#: socket.cpp:702
 #, c-format
 msgid "Read reply error: %s"
 msgstr "Помилка читання відповіді: %s"
 
-#: socket.cpp:690
+#: socket.cpp:708
 msgid "Timeouted!"
 msgstr "Перевищено час очікування!"
+
+#: socket.cpp:722
+msgid ""
+"Socket's output transport have address format:\n"
+"  TCP:[addr]:[port] - TCP socket:\n"
+"    addr - address for remote socket open;\n"
+"    port - network port (/etc/services);\n"
+"  UDP:[addr]:[port] - UDP socket:\n"
+"    addr - address for remote socket open;\n"
+"    port - network port (/etc/services).\n"
+"  UNIX:[name] - UNIX socket:\n"
+"    name - UNIX-socket's file name."
+msgstr ""
+"Вихідний транспорт Socket має формат адреси:\n"
+"  TCP:[addr]:[port] - TCP сокет:\n"
+"    addr - адреса для відкриття віддаленого сокету;\n"
+"    port - мережевий порт (/etc/services);\n"
+"  UDP:[addr]:[port] - UDP сокет:\n"
+"    addr - адреса для відкриття віддаленого сокету;\n"
+"    port - мережевий порт (/etc/services);\n"
+"  UNIX:[name] - UNIX сокет:\n"
+"    name - Ім'я файлу UNIX-сокету."
 
 #: socket.h:32
 msgid "TCP"

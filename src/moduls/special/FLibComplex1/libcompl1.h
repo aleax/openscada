@@ -304,10 +304,10 @@ class Cond1 : public TFunction
 	    for( int i_c = 1; i_c <= 4; i_c++ )
 		ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),(_("Input 4.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	}
-	
+
 	string name( )	{ return _("Condition '<'"); }
-	string descr( )	
-        {     
+	string descr( )
+	{
 	    return _("Condition '<' per formula:\n"
 		"out=if( in1<(in2_1*in2_2*in2_3*in2_4) ) then in3_1*in3_2*in3_3*in3_4;\n"
 		"    else in4_1*in4_2*in4_3*in4_4;");
@@ -316,8 +316,8 @@ class Cond1 : public TFunction
 	void calc( TValFunc *v )
 	{
 	    double tmp1=v->getR(2)*v->getR(3)*v->getR(4)*v->getR(5);
-	    if( v->getR(1)<tmp1 ) 	v->setR(0,v->getR(6)*v->getR(7)*v->getR(8)*v->getR(9));
-	    else 			v->setR(0,v->getR(10)*v->getR(11)*v->getR(12)*v->getR(13));
+	    if( v->getR(1)<tmp1 )	v->setR(0,v->getR(6)*v->getR(7)*v->getR(8)*v->getR(9));
+	    else			v->setR(0,v->getR(10)*v->getR(11)*v->getR(12)*v->getR(13));
 	}
 };
 
@@ -341,7 +341,7 @@ class Cond2 : public TFunction
 	    for( int i_c = 1; i_c <= 4; i_c++ )
 		ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),(_("Input 4.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	}
-	
+
 	string name( )	{ return _("Condition '>'"); }
 	string descr( )
 	{
@@ -353,8 +353,8 @@ class Cond2 : public TFunction
 	void calc( TValFunc *v )
 	{
 	    double tmp1=v->getR(2)*v->getR(3)*v->getR(4)*v->getR(5);
-	    if( v->getR(1)>tmp1 ) 	v->setR(0,v->getR(6)*v->getR(7)*v->getR(8)*v->getR(9));
-	    else 			v->setR(0,v->getR(10)*v->getR(11)*v->getR(12)*v->getR(13));
+	    if( v->getR(1)>tmp1 )	v->setR(0,v->getR(6)*v->getR(7)*v->getR(8)*v->getR(9));
+	    else			v->setR(0,v->getR(10)*v->getR(11)*v->getR(12)*v->getR(13));
 	}
 };
 
@@ -380,14 +380,14 @@ class Cond3 : public TFunction
 	    for( int i_c = 1; i_c <= 4; i_c++ )
 		ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),(_("Input 4.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 4; i_c++ )
-		ioAdd( new IO(("in5_"+TSYS::int2str(i_c)).c_str(),(_("Input 5.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );	
+		ioAdd( new IO(("in5_"+TSYS::int2str(i_c)).c_str(),(_("Input 5.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 4; i_c++ )
 		ioAdd( new IO(("in6_"+TSYS::int2str(i_c)).c_str(),(_("Input 6.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	}
-	
+
 	string name( )	{ return _("Full condition"); }
-	string descr( )	
-	{     
+	string descr( )
+	{
 	    return _("Full condition per formula:\n"
 		"out = if( in1<(in2_1*in2_2*in2_3*in2_4) )    then in3_1*in3_2*in3_3*in3_4;\n"
 		"      else if( in1>(in4_1*in4_2*in4_3*in4_4) then in5_1*in5_2*in5_3*in5_4;\n"
@@ -401,7 +401,7 @@ class Cond3 : public TFunction
 	    double tmp3=v->getR(6)*v->getR(7)*v->getR(8)*v->getR(9);
 	    double tmp4=v->getR(18)*v->getR(19)*v->getR(20)*v->getR(21);
 	    double tmp5=v->getR(14)*v->getR(15)*v->getR(16)*v->getR(17);
-	    if(v->getR(1)<tmp1) 	v->setR(0,tmp3);
+	    if(v->getR(1)<tmp1)		v->setR(0,tmp3);
 	    else if( v->getR(1)>tmp2)	v->setR(0,tmp5);
 	    else			v->setR(0,tmp4);
 	}
@@ -471,7 +471,7 @@ class Increm : public TFunction
 	    ioAdd( new IO("k+",_("Positive koef"),IO::Real,IO::Default,"0.1") );
 	    ioAdd( new IO("k-",_("Negative koef"),IO::Real,IO::Default,"0.1") );
 	}
-	
+
 	string name( )	{ return _("Incrementator"); }
 	string descr( )
 	{
@@ -489,8 +489,8 @@ class Increm : public TFunction
 
 //*********************************************************************
 //* Divider                                                           *
-//* Formula: out = (in1_1*in1_2*in1_3*in1_4*in1_5 + in2_1*in2_2*in2_3*in2_4*in2_5 + in3) / 
-//* 		   (in4_1*in4_2*in4_3*in4_4*in4_5 + in5_1*in5_2*in5_3*in5_4*in5_5 + in6);
+//* Formula: out = (in1_1*in1_2*in1_3*in1_4*in1_5 + in2_1*in2_2*in2_3*in2_4*in2_5 + in3) /
+//*		   (in4_1*in4_2*in4_3*in4_4*in4_5 + in5_1*in5_2*in5_3*in5_4*in5_5 + in6);
 //*********************************************************************
 class Divider : public TFunction
 {
@@ -503,14 +503,14 @@ class Divider : public TFunction
 		ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),(_("Input 1.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 5; i_c++ )
 		ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),(_("Input 2.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
-	    ioAdd( new IO("in3",_("Input 3"),IO::Real,IO::Default,"1") );	
+	    ioAdd( new IO("in3",_("Input 3"),IO::Real,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 5; i_c++ )
 		ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),(_("Input 4.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 5; i_c++ )
 		ioAdd( new IO(("in5_"+TSYS::int2str(i_c)).c_str(),(_("Input 5.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	    ioAdd( new IO("in6",_("Input 6"),IO::Real,IO::Default,"1") );
 	}
-	
+
 	string name( )	{ return _("Divider"); }
 	string descr( )
 	{
@@ -523,7 +523,7 @@ class Divider : public TFunction
 	{
 	    double t1 =	v->getR(1)*v->getR(2)*v->getR(3)*v->getR(4)*v->getR(5) + 
 			v->getR(6)*v->getR(7)*v->getR(8)*v->getR(9)*v->getR(10) + v->getR(11);
-	    double t2 = v->getR(12)*v->getR(13)*v->getR(14)*v->getR(15)*v->getR(16) +
+	    double t2 =	v->getR(12)*v->getR(13)*v->getR(14)*v->getR(15)*v->getR(16) +
 			v->getR(17)*v->getR(18)*v->getR(19)*v->getR(20)*v->getR(21) + v->getR(22);
 	    v->setR(0,t1/t2);
 	}
@@ -570,17 +570,17 @@ class PID : public TFunction
 	    ioAdd( new IO("sp",_("Setpoint"),IO::Real,IO::Default,"0") );
 	    ioAdd( new IO("max",_("Max scale"),IO::Real,IO::Default,"100") );
 	    ioAdd( new IO("min",_("Min scale"),IO::Real,IO::Default,"0") );
-	    ioAdd( new IO("out",_("Output (%)"),IO::Real,IO::Return,"0") );    
+	    ioAdd( new IO("out",_("Output (%)"),IO::Real,IO::Return,"0") );
 	    ioAdd( new IO("auto",_("Auto mode"),IO::Boolean,IO::Default,"0") );
 	    ioAdd( new IO("casc",_("Cascade mode"),IO::Boolean,IO::Default,"0") );
 	    ioAdd( new IO("Kp",_("Kp"),IO::Real,IO::Default,"1") );
 	    ioAdd( new IO("Ti",_("Ti (ms)"),IO::Integer,IO::Default,"1000") );
 	    ioAdd( new IO("Td",_("Td (ms)"),IO::Integer,IO::Default,"0") );
 	    ioAdd( new IO("Tf",_("Tf-lag (ms)"),IO::Integer,IO::Default,"0") );
-            ioAdd( new IO("Hup",_("Out up limit (%)"),IO::Real,IO::Default,"100") );
+	    ioAdd( new IO("Hup",_("Out up limit (%)"),IO::Real,IO::Default,"100") );
 	    ioAdd( new IO("Hdwn",_("Out down limit (%)"),IO::Real,IO::Default,"0") );
-	    ioAdd( new IO("Zi",_("Insensibility (%)"),IO::Real,IO::Default,"1") );					       
-	    
+	    ioAdd( new IO("Zi",_("Insensibility (%)"),IO::Real,IO::Default,"1") );
+
 	    ioAdd( new IO("K1",_("K input 1"),IO::Real,IO::Default,"0") );
 	    ioAdd( new IO("in1",_("Input 1"),IO::Real,IO::Default,"0") );
 	    ioAdd( new IO("K2",_("K input 2"),IO::Real,IO::Default,"0") );
@@ -589,43 +589,43 @@ class PID : public TFunction
 	    ioAdd( new IO("in3",_("Input 3"),IO::Real,IO::Default,"0") );
 	    ioAdd( new IO("K4",_("K input 4"),IO::Real,IO::Default,"0") );
 	    ioAdd( new IO("in4",_("Input 4"),IO::Real,IO::Default,"0") );
-    
+
 	    ioAdd( new IO("cycle",_("Calc cycle (ms)"),IO::Integer,IO::Default,"1000") );
-    
+
 	    //Internal data:
 	    ioAdd( new IO("int",_("Integral value"),IO::Real,IO::Output,"0",true) );
 	    ioAdd( new IO("dif",_("Differencial value"),IO::Real,IO::Output,"0",true) );
 	    ioAdd( new IO("lag",_("Lag value"),IO::Real,IO::Output,"0",true) );
 	}
-	
+
 	string name( )	{ return _("PID regulator"); }
-	string descr( )	{ return _("PID regulator"); }	
+	string descr( )	{ return _("PID regulator"); }
 
 	void calc( TValFunc *v )
 	{
 	    double	val	= v->getR(0),
 			sp	= v->getR(1),
-			max 	= v->getR(2),
+			max	= v->getR(2),
 			min	= v->getR(3),
 			out	= v->getR(4),
-			kp      = v->getR(7),
+			kp	= v->getR(7),
 			h_up	= v->getR(11),
 			h_dwn	= v->getR(12),
 			zi	= v->getR(13),
-			k1      = v->getR(14),
-			in1     = v->getR(15),
-			k2      = v->getR(16),
-                        in2     = v->getR(17),
-			k3      = v->getR(18),
-                        in3     = v->getR(19),
-			k4      = v->getR(20),
-                        in4     = v->getR(21),												
-			cycle   = v->getI(22),
-			integ   = v->getR(23),
+			k1	= v->getR(14),
+			in1	= v->getR(15),
+			k2	= v->getR(16),
+			in2	= v->getR(17),
+			k3	= v->getR(18),
+			in3	= v->getR(19),
+			k4	= v->getR(20),
+			in4	= v->getR(21),
+			cycle	= v->getI(22),
+			integ	= v->getR(23),
 			difer	= v->getR(24),
-			lag     = v->getR(25);
-    
-	    double    	Kf	= (v->getI(10)>cycle)?cycle/v->getI(10):1.;
+			lag	= v->getR(25);
+
+	    double	Kf	= (v->getI(10)>cycle)?cycle/v->getI(10):1.;
 	    double	Kint	= (v->getI(8)>cycle)?cycle/v->getI(8):1.;
 	    double	Kdif	= (v->getI(9)>cycle)?cycle/v->getI(9):1.;
 
@@ -637,33 +637,33 @@ class PID : public TFunction
 	    val = 100.*(val+min)/(max-min);
 	    val += k1*in1 + k2*in2;
 	    val=vmin(100.,vmax(-100.,val));
-    
+
 	    //- Error -
 	    double err = sp - val;
-    
+
 	    //- Insensibility -
 	    err = (fabs(err)<zi)?0:((err>0)?err-zi:err+zi);
-	    
+
 	    //- Gain -
 	    err*=kp;
 	    err=vmin(100.,vmax(-100.,err));
-    
+
 	    //- Input filter lag -
 	    lag+=Kf*(err-lag);
 	    integ+=Kint*lag;		//Integral
 	    difer-=Kdif*(difer-lag);	//Differecial lag
-	
+
 	    //- Automatic mode enabled -
-	    if( v->getB(5) )	
+	    if( v->getB(5) )
 		out = (2.*lag + integ - difer) + k3*in3 + k4*in4;
 	    else v->setB(6,false);
-		
+
 	    //- Check output limits -
 	    out=vmin(h_up,vmax(h_dwn,out));
-	    
+
 	    //- Fix integral for manual and limits -
 	    integ = out - 2.*lag + difer - k3*in3 + k4*in4;
-	
+
 	    //- Write outputs -
 	    v->setR(4,out);
 	    v->setR(23,integ);
@@ -686,7 +686,7 @@ class Alarm : public TFunction
 	    ioAdd( new IO("max",_("Maximum"),IO::Real,IO::Default,"100") );
 	    ioAdd( new IO("min",_("Minimum"),IO::Real,IO::Default,"0") );
 	}
-	
+
 	string name( )	{ return _("Alarm"); }
 	string descr( )
 	{
@@ -699,7 +699,7 @@ class Alarm : public TFunction
 	    double max = v->getR(2),
 		min = v->getR(3),
 		val = v->getR(1);
-       
+
 	    if( max != min && ( val < min || val > max ) )
 		v->setB(0,true);
 	    else v->setB(0,false);
@@ -722,9 +722,9 @@ class Flow : public TFunction
 	    ioAdd( new IO("K3",_("K3"),IO::Real,IO::Default,"0") );
 	    ioAdd( new IO("K4",_("K4"),IO::Real,IO::Default,"1") );
 	}
-	
+
 	string name( )	{ return _("Flow"); }
-	string descr( )	
+	string descr( )
 	{
 	    return _("Flow calc per formule:\n"
 		"f = K1*((K3+K4*x)^K2);");
@@ -749,7 +749,7 @@ class SumMult : public TFunction
 	SumMult( ) : TFunction("sum_mult")
 	{
 	    ioAdd( new IO("out",_("Output"),IO::Real,IO::Return,"0") );
-    
+
 	    for( int i_c = 1; i_c <= 5; i_c++ )
 		ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),(_("Input 1.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 5; i_c++ )
@@ -759,7 +759,7 @@ class SumMult : public TFunction
 	    for( int i_c = 1; i_c <= 5; i_c++ )
 		ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),(_("Input 4.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	}
-	
+
 	string name( )	{ return _("Sum and mult"); }
 	string descr( )
 	{
@@ -770,11 +770,11 @@ class SumMult : public TFunction
 
 	void calc( TValFunc *v )
 	{
-	    double t1 =	v->getR(1)*v->getR(2)*(v->getR(3)*v->getR(4)+v->getR(5));
-	    double t2 =	v->getR(6)*v->getR(7)*(v->getR(8)*v->getR(9)+v->getR(10));
-	    double t3 =	v->getR(11)*v->getR(12)*(v->getR(13)*v->getR(14)+v->getR(15));
-	    double t4 =	v->getR(16)*v->getR(17)*(v->getR(18)*v->getR(19)+v->getR(20));
-    
+	    double t1 = v->getR(1)*v->getR(2)*(v->getR(3)*v->getR(4)+v->getR(5));
+	    double t2 = v->getR(6)*v->getR(7)*(v->getR(8)*v->getR(9)+v->getR(10));
+	    double t3 = v->getR(11)*v->getR(12)*(v->getR(13)*v->getR(14)+v->getR(15));
+	    double t4 = v->getR(16)*v->getR(17)*(v->getR(18)*v->getR(19)+v->getR(20));
+
 	    v->setR(0,t1+t2+t3+t4);
 	}
 };
@@ -802,9 +802,9 @@ class SumDiv : public TFunction
 	    for( int i_c = 1; i_c <= 5; i_c++ )
 		ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),(_("Input 4.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	}
-	
+
 	string name( )	{ return _("Sum and divide"); }
-	string descr( )	
+	string descr( )
 	{
 	    return _("Sum and divide per formule:\n"
 		"out = in1_1*in1_2*(in1_3+in1_4/in1_5) + in2_1*in2_2*(in2_3+in2_4/in2_5) +\n"
@@ -817,7 +817,7 @@ class SumDiv : public TFunction
 	    double t2 =	v->getR(6)*v->getR(7)*(v->getR(8)+v->getR(9)/v->getR(10));
 	    double t3 =	v->getR(11)*v->getR(12)*(v->getR(13)+v->getR(14)/v->getR(15));
 	    double t4 =	v->getR(16)*v->getR(17)*(v->getR(18)+v->getR(19)/v->getR(20));
-    
+
 	    v->setR(0,t1+t2+t3+t4);
 	}
 };
@@ -835,9 +835,9 @@ class Lag : public TFunction
 	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
 	    ioAdd( new IO("Klag",_("Klag"),IO::Real,IO::Default,"0.1") );
 	}
-	
+
 	string name( )	{ return _("Lag"); }
-	string descr( )	
+	string descr( )
 	{
 	    return _("Lag per formule:\n"
 		"y = y - Klag*( y - x );");

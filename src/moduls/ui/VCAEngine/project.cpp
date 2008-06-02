@@ -323,7 +323,8 @@ void Project::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/obj/st",_("State")))
 	    {
 		ctrMkNode("fld",opt,-1,"/obj/st/en",_("Enable"),RWRWR_,user().c_str(),grp().c_str(),1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/obj/st/db",_("Project DB (module.db.table)"),RWR_R_,user().c_str(),grp().c_str(),1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/obj/st/db",_("Project DB"),RWR_R_,user().c_str(),grp().c_str(),2,
+		    "tp","str","help",_("DB address in format [<DB module>.<DB name>.<Table name>].\nFor use main work DB set symbol '*'."));
 		ctrMkNode("fld",opt,-1,"/obj/st/user",_("User and group"),RWRWR_,"root","root",3,"tp","str","dest","select","select","/obj/u_lst");
 		ctrMkNode("fld",opt,-1,"/obj/st/grp","",RWR_R_,user().c_str(),grp().c_str(),3,"tp","str","dest","select","select","/obj/g_lst");
 	    }

@@ -1,3 +1,14 @@
+2008-06-02 Roman
+- !!!!:/UI/VCAEngine, /UI/Vision: Full realisation of alarms is added.
+    For speech synthesis from text use 'ru_tts' engine. For play use sox alias 'play'.
+    And translation to Russian and Ukranian is updated.
+- !!:/SYS/CntrNode: For many key fields help attribute is added. And translation to Russian and Ukranian is updated.
+- !:/DAQ/JavaLikeCalc: Bit shift to left (<<) and to right (>>) integer operations is added.
+- !!:/SYS: More odd spaces from sources is removing continued.
+- FIX:/UI/WebVision: Closing no created session is fixed.
+- !!:/SYS: Demo DB is updated.
+
+
 2008-05-29 Maxim
 - FIX:/DAQ/BlockCalc: Uncorrect block's enabling on node no function is fixed.
 - FIX:/UI/VCAEngine: Project's page copy to inheritant library widget is fixed.

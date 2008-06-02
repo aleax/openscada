@@ -48,7 +48,7 @@ using namespace VISION;
 //****************************************
 //* Library properties dialog            *
 //****************************************
-LibProjProp::LibProjProp( VisDevelop *parent ) : 
+LibProjProp::LibProjProp( VisDevelop *parent ) :
     QDialog((QWidget*)parent), show_init(false), is_modif(false), ico_modif(false)
 {
     QLabel *lab;
@@ -64,16 +64,16 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     wdg_tabs = new QTabWidget(this);
     tab_lay->addWidget(wdg_tabs);
     connect(wdg_tabs, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
-    
+
     //- Add tab 'Widget' -
     //--------------------
-    wdg_tabs->addTab(new QWidget,_("Widgets library"));    
-    QWidget *tab_w = wdg_tabs->widget(0);     
-    
+    wdg_tabs->addTab(new QWidget,_("Widgets library"));
+    QWidget *tab_w = wdg_tabs->widget(0);
+
     dlg_lay = new QGridLayout(tab_w);
     dlg_lay->setMargin(9);
     dlg_lay->setSpacing(6);
-    
+
     //- State parameters -
     grp = new QGroupBox(_("State"),tab_w);
     glay = new QGridLayout;
@@ -115,40 +115,40 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     obj_grp->setObjectName("/obj/st/grp");
     connect(obj_grp, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
     glay->addWidget(obj_grp,2,3);
-    grp->setLayout(glay);    
+    grp->setLayout(glay);
     dlg_lay->addWidget(grp,0,0);
-    
+
     //- Access parameters -
     grp = new QGroupBox(_("Access"),tab_w);
     glay = new QGridLayout;
     glay->setMargin(4);
-    glay->setSpacing(6);    
+    glay->setSpacing(6);
     lab = new QLabel(_("User:"),tab_w);
     lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred) );
     glay->addWidget(lab,0,0);
     obj_accuser = new QComboBox(tab_w);
     obj_accuser->setObjectName("/obj/cfg/u_a");
     connect(obj_accuser, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
-    glay->addWidget(obj_accuser,0,1);    
+    glay->addWidget(obj_accuser,0,1);
     lab = new QLabel(_("Group:"),tab_w);
     lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred) );
-    glay->addWidget(lab,1,0);    
+    glay->addWidget(lab,1,0);
     obj_accgrp  = new QComboBox(tab_w);
     obj_accgrp->setObjectName("/obj/cfg/g_a");
     connect(obj_accgrp, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
-    glay->addWidget(obj_accgrp,1,1);    
+    glay->addWidget(obj_accgrp,1,1);
     lab = new QLabel(_("Other:"),tab_w);
     lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred) );
     glay->addWidget(lab,2,0);
     obj_accother= new QComboBox(tab_w);
-    obj_accother->setObjectName("/obj/cfg/o_a");    
+    obj_accother->setObjectName("/obj/cfg/o_a");
     connect(obj_accother, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
     glay->addWidget(obj_accother,2,1);
-    grp->setLayout(glay);    
-    dlg_lay->addWidget(grp,0,1);    
-    
+    grp->setLayout(glay);
+    dlg_lay->addWidget(grp,0,1);
+
     //- Config parameters -
-    grp = new QGroupBox(_("Configuration"),tab_w);    
+    grp = new QGroupBox(_("Configuration"),tab_w);
     glay = new QGridLayout;
     glay->setMargin(4);
     glay->setSpacing(6);
@@ -171,9 +171,9 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     obj_descr->setObjectName("/obj/cfg/descr");
     connect(obj_descr, SIGNAL(apply()), this, SLOT(isModify()));
     glay->addWidget(obj_descr,3,0,1,2);
-  
+
     grp->setLayout(glay);
-    dlg_lay->addWidget(grp,1,0,1,2);     
+    dlg_lay->addWidget(grp,1,0,1,2);
 
 
     //- Add tab 'Mime data' -
@@ -184,40 +184,40 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     dlg_lay = new QGridLayout(tab_w);
     dlg_lay->setMargin(9);
     dlg_lay->setSpacing(6);
-    
-    mimeDataTable = new QTableWidget(0,3,tab_w);     
+
+    mimeDataTable = new QTableWidget(0,3,tab_w);
     mimeDataTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     connect(mimeDataTable, SIGNAL(cellChanged(int,int)), this, SLOT(mimeDataChange(int,int)));
     QStringList headLabels;
     headLabels << _("Id") << _("Mime type") << _("Data size");
-    mimeDataTable->setHorizontalHeaderLabels(headLabels);    
+    mimeDataTable->setHorizontalHeaderLabels(headLabels);
     dlg_lay->addWidget(mimeDataTable,0,0,1,4);
-    
+
     buttDataAdd = new QPushButton(_("Add record"),tab_w);
     connect(buttDataAdd, SIGNAL(clicked()), this, SLOT(addMimeData()));
     dlg_lay->addWidget(buttDataAdd,1,0);
     buttDataDel = new QPushButton(_("Delete record"),tab_w);
     connect(buttDataDel, SIGNAL(clicked()), this, SLOT(delMimeData()));
-    dlg_lay->addWidget(buttDataDel,1,1);    
+    dlg_lay->addWidget(buttDataDel,1,1);
     buttDataLoad = new QPushButton(_("Load data"),tab_w);
-    connect(buttDataLoad, SIGNAL(clicked()), this, SLOT(loadMimeData()));    
+    connect(buttDataLoad, SIGNAL(clicked()), this, SLOT(loadMimeData()));
     dlg_lay->addWidget(buttDataLoad,1,2);
     buttDataUnload = new QPushButton(_("Unload data"),tab_w);
     connect(buttDataUnload, SIGNAL(clicked()), this, SLOT(unloadMimeData()));
     dlg_lay->addWidget(buttDataUnload,1,3);
 
     //- Add button box -
-    //------------------ 
+    //------------------
     butbox = new QDialogButtonBox( QDialogButtonBox::Close, Qt::Horizontal, this );
     //-- Init close button --
-    butbox->button(QDialogButtonBox::Close)->setText(_("Close"));    
+    butbox->button(QDialogButtonBox::Close)->setText(_("Close"));
     connect(butbox->button(QDialogButtonBox::Close), SIGNAL(clicked()), this, SLOT(close()));
 
     tab_lay->addWidget(butbox);
 
     //- End resize -
-    //-------------- 
-    resize(500,400);    
+    //--------------
+    resize(500,400);
 }
 
 LibProjProp::~LibProjProp( )
@@ -235,52 +235,52 @@ void LibProjProp::showDlg( const string &iit, bool reload )
     vector<string> ls;
     string sval;
     QImage ico_t;
-    ed_it = iit;    
+    ed_it = iit;
 
     show_init = true;
 
     //- Update elements present, visible and values -
     //-----------------------------------------------
     XMLNode req("get");
-    
+
     XMLNode info_req("info");
     info_req.setAttr("path",ed_it);
     if( owner()->cntrIfCmd(info_req) )
     {
 	mod->postMess( mod->nodePath().c_str(),
-        	QString(_("Get node '%1' information error.")).arg(ed_it.c_str()),TVision::Error, this );
+		QString(_("Get node '%1' information error.")).arg(ed_it.c_str()),TVision::Error, this );
 	return;
     }
-    XMLNode *root, *gnd;    
+    XMLNode *root, *gnd;
     root = info_req.childGet(0);
 
     setWindowTitle( root->attr("dscr").c_str() );
 
-    //- Generic dialog's page -    
+    //- Generic dialog's page -
     gnd=TCntrNode::ctrId(root,"/obj",true);
     wdg_tabs->setTabEnabled(0,gnd);
     if( gnd )
     {
-    	wdg_tabs->setTabText(0,gnd->attr("dscr").c_str());
- 	//-- Enable stat --
+	wdg_tabs->setTabText(0,gnd->attr("dscr").c_str());
+	//-- Enable stat --
 	gnd=TCntrNode::ctrId(root,obj_enable->objectName().toAscii().data(),true);
-	obj_enable->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );        
+	obj_enable->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
 	if( gnd )
 	{
 	    req.setAttr("path",ed_it+"/"+TSYS::strEncode(obj_enable->objectName().toAscii().data(),TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) ) obj_enable->setChecked(atoi(req.text().c_str()));
 	}
 	//-- DB value --
-       	gnd=TCntrNode::ctrId(root,obj_db->objectName().toAscii().data(),true);
-	obj_db->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );        
+	gnd=TCntrNode::ctrId(root,obj_db->objectName().toAscii().data(),true);
+	obj_db->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
 	if( gnd )
 	{
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_db->objectName().toAscii().data(),TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) ) obj_db->setValue(req.text().c_str());
 	}
- 	//-- User --
+	//-- User --
 	gnd=TCntrNode::ctrId(root,obj_user->objectName().toAscii().data(),true);
-	obj_user->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );        
+	obj_user->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
 	if( gnd )
 	{
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_user->objectName().toAscii().data(),TSYS::PathEl));
@@ -288,64 +288,64 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/obj/u_lst",TSYS::PathEl));
 	    obj_user->clear();
-       	    if( !owner()->cntrIfCmd(req) )
+	    if( !owner()->cntrIfCmd(req) )
 		for(int i_l = 0; i_l < req.childSize(); i_l++)
 		{
 		    obj_user->addItem(req.childGet(i_l)->text().c_str());
 		    if( sval == req.childGet(i_l)->text() )	obj_user->setCurrentIndex(i_l);
 		}
 	}
- 	//-- Group --
+	//-- Group --
 	gnd=TCntrNode::ctrId(root,obj_grp->objectName().toAscii().data(),true);
-	obj_grp->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );            
+	obj_grp->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
 	if( gnd )
 	{
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_grp->objectName().toAscii().data(),TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) ) sval = req.text();
 	
-   	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/obj/g_lst",TSYS::PathEl));
-    	    obj_grp->clear();
+	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/obj/g_lst",TSYS::PathEl));
+	    obj_grp->clear();
 	    if( !owner()->cntrIfCmd(req) )
 		for(int i_l = 0; i_l < req.childSize(); i_l++)
 		{
 		    obj_grp->addItem(req.childGet(i_l)->text().c_str());
 		    if( sval == req.childGet(i_l)->text() )	obj_grp->setCurrentIndex(i_l);
 		}
-	}                                          
- 	//-- Icon --
-	gnd=TCntrNode::ctrId(root,obj_ico->objectName().toAscii().data(),true);    
-	ico_modif = gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR;        
+	}
+	//-- Icon --
+	gnd=TCntrNode::ctrId(root,obj_ico->objectName().toAscii().data(),true);
+	ico_modif = gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR;
 	if( gnd )
 	{
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_ico->objectName().toAscii().data(),TSYS::PathEl));
-    	    if( !owner()->cntrIfCmd(req) && (sval = TSYS::strDecode(req.text(),TSYS::base64)).size() && 
+	    if( !owner()->cntrIfCmd(req) && (sval = TSYS::strDecode(req.text(),TSYS::base64)).size() &&
 		    ico_t.loadFromData((const uchar*)sval.c_str(),sval.size()) )
 		obj_ico->setIcon(QPixmap::fromImage(ico_t));
 	    else obj_ico->setIcon(QIcon());
-	} 
- 	//-- Permition --
-	int luser_acc, lgrp_acc, loth_acc;        
+	}
+	//-- Permition --
+	int luser_acc, lgrp_acc, loth_acc;
 	gnd=TCntrNode::ctrId(root,obj_accuser->objectName().toAscii().data(),true);
-	obj_accuser->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );        
+	obj_accuser->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
 	if( gnd )
 	{
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_accuser->objectName().toAscii().data(),TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) ) luser_acc = atoi(req.text().c_str());
-	}    
-     	gnd=TCntrNode::ctrId(root,obj_accgrp->objectName().toAscii().data(),true);    
-	obj_accgrp->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );        
+	}
+	gnd=TCntrNode::ctrId(root,obj_accgrp->objectName().toAscii().data(),true);
+	obj_accgrp->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
 	if( gnd )
 	{
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_accgrp->objectName().toAscii().data(),TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) ) lgrp_acc = atoi(req.text().c_str());
-	}	
-	gnd=TCntrNode::ctrId(root,obj_accother->objectName().toAscii().data(),true);	    
-	obj_accother->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );        
+	}
+	gnd=TCntrNode::ctrId(root,obj_accother->objectName().toAscii().data(),true);
+	obj_accother->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
 	if( gnd )
 	{
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_accother->objectName().toAscii().data(),TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) ) loth_acc = atoi(req.text().c_str());
-	}	
+	}
 	req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/obj/a_lst",TSYS::PathEl));
 	obj_accuser->clear( );
 	obj_accgrp->clear( );
@@ -354,36 +354,36 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    for(int i_l = 0; i_l < req.childSize(); i_l++)
 	    {
 		int vl = atoi(req.childGet(i_l)->attr("id").c_str());
-		obj_accuser->addItem(req.childGet(i_l)->text().c_str(),vl);	    
+		obj_accuser->addItem(req.childGet(i_l)->text().c_str(),vl);
 		if( luser_acc == vl )	obj_accuser->setCurrentIndex(i_l);
 		obj_accgrp->addItem(req.childGet(i_l)->text().c_str(),vl);
 		if( lgrp_acc == vl )	obj_accgrp->setCurrentIndex(i_l);
 		obj_accother->addItem(req.childGet(i_l)->text().c_str(),vl);
 		if( loth_acc == vl )	obj_accother->setCurrentIndex(i_l);
 	    }
- 	//-- Id --
-	gnd=TCntrNode::ctrId(root,obj_id->objectName().toAscii().data(),true);    
+	//-- Id --
+	gnd=TCntrNode::ctrId(root,obj_id->objectName().toAscii().data(),true);
 	if( gnd )
-	{   
+	{
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_id->objectName().toAscii().data(),TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) ) obj_id->setText(req.text().c_str());
-	} 
- 	//-- Name --
-	gnd=TCntrNode::ctrId(root,obj_name->objectName().toAscii().data(),true);    
-	obj_name->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );        
+	}
+	//-- Name --
+	gnd=TCntrNode::ctrId(root,obj_name->objectName().toAscii().data(),true);
+	obj_name->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
 	if( gnd )
 	{
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_name->objectName().toAscii().data(),TSYS::PathEl));
-	    if( !owner()->cntrIfCmd(req) ) obj_name->setValue(req.text().c_str()); 
-	} 
+	    if( !owner()->cntrIfCmd(req) ) obj_name->setValue(req.text().c_str());
+	}
  	//-- Description --
-	gnd=TCntrNode::ctrId(root,obj_descr->objectName().toAscii().data(),true);	
-	obj_descr->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );         
+	gnd=TCntrNode::ctrId(root,obj_descr->objectName().toAscii().data(),true);
+	obj_descr->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
 	if( gnd )
 	{
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_descr->objectName().toAscii().data(),TSYS::PathEl));
-	    if( !owner()->cntrIfCmd(req) ) obj_descr->setText(req.text().c_str()); 
-	} 
+	    if( !owner()->cntrIfCmd(req) ) obj_descr->setText(req.text().c_str());
+	}
     }
     //- Mime data page -
     gnd=TCntrNode::ctrId(root,"/mime",true);
@@ -848,7 +848,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     proc_lang->setObjectName("/proc/calc/progLng");
     connect(proc_lang, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
     glay->addWidget(proc_lang,1,1);
-    lab = new QLabel(_("Procedure calc period:"),wdg_proc_fr);
+    lab = new QLabel(_("Procedure calc (ms):"),wdg_proc_fr);
     lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred) );
     glay->addWidget(lab,1,2);
     proc_per = new LineEdit(wdg_proc_fr);
@@ -903,7 +903,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
     QImage ico_t;
     ed_it = iit;
 
-    show_init = true; 
+    show_init = true;
 
     //- Update elements present, visible and values -
     //-----------------------------------------------
@@ -914,32 +914,32 @@ void VisItProp::showDlg( const string &iit, bool reload )
     if( owner()->cntrIfCmd(info_req) )
     {
 	mod->postMess( mod->nodePath().c_str(),
-        	QString(_("Get node '%1' information error.")).arg(ed_it.c_str()),TVision::Error, this );
+		QString(_("Get node '%1' information error.")).arg(ed_it.c_str()),TVision::Error, this );
 	return;
     }
-    
-    XMLNode *root, *gnd;    
-    root = info_req.childGet(0);    
+
+    XMLNode *root, *gnd;
+    root = info_req.childGet(0);
 
     setWindowTitle( root->attr("dscr").c_str() );
 
-    //- Generic dialog's page -    
+    //- Generic dialog's page -
     gnd=TCntrNode::ctrId(root,"/wdg",true);
     wdg_tabs->setTabEnabled(0,gnd);
     if( gnd )
     {
-    	wdg_tabs->setTabText(0,gnd->attr("dscr").c_str());
-    
+	wdg_tabs->setTabText(0,gnd->attr("dscr").c_str());
+
 	//-- Enable stat --
 	gnd=TCntrNode::ctrId(root,obj_enable->objectName().toAscii().data(),true);
-	obj_enable->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );        
+	obj_enable->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
 	if( gnd )
 	{
 	    req.setAttr("path",ed_it+"/"+TSYS::strEncode(obj_enable->objectName().toAscii().data(),TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) ) obj_enable->setChecked(atoi(req.text().c_str()));
 	}
 	//-- Parent widget --
-	gnd=TCntrNode::ctrId(root,obj_parent->objectName().toAscii().data(),true);	
+	gnd=TCntrNode::ctrId(root,obj_parent->objectName().toAscii().data(),true);
 	obj_parent->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
 	if( gnd ) selectParent( );
 	
@@ -952,7 +952,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	    if( !owner()->cntrIfCmd(req) ) sval = req.text();
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/wdg/u_lst",TSYS::PathEl));
 	    obj_user->clear();
-       	    if( !owner()->cntrIfCmd(req) )
+	    if( !owner()->cntrIfCmd(req) )
 		for(int i_l = 0; i_l < req.childSize(); i_l++)
 		{
 		    obj_user->addItem(req.childGet(i_l)->text().c_str());
@@ -960,14 +960,14 @@ void VisItProp::showDlg( const string &iit, bool reload )
 		}
 	}
 	//-- Group --
-	gnd=TCntrNode::ctrId(root,obj_grp->objectName().toAscii().data(),true);	
-	obj_grp->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );    
+	gnd=TCntrNode::ctrId(root,obj_grp->objectName().toAscii().data(),true);
+	obj_grp->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
 	if( gnd )
 	{
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_grp->objectName().toAscii().data(),TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) ) sval = req.text();
-   	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/wdg/g_lst",TSYS::PathEl));
-    	    obj_grp->clear();
+	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/wdg/g_lst",TSYS::PathEl));
+	    obj_grp->clear();
 	    if( !owner()->cntrIfCmd(req) )
 		for(int i_l = 0; i_l < req.childSize(); i_l++)
 		{
@@ -980,21 +980,21 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	gnd=TCntrNode::ctrId(root,obj_ico->objectName().toAscii().data(),true);
 	ico_modif = gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR;
 	if( gnd )
-	{   
+	{
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_ico->objectName().toAscii().data(),TSYS::PathEl));
-    	    if( !owner()->cntrIfCmd(req) && (sval = TSYS::strDecode(req.text(),TSYS::base64)).size() &&
+	    if( !owner()->cntrIfCmd(req) && (sval = TSYS::strDecode(req.text(),TSYS::base64)).size() &&
 		    ico_t.loadFromData((const uchar*)sval.c_str(),sval.size()) )
 		obj_ico->setIcon(QPixmap::fromImage(ico_t));
 	    else obj_ico->setIcon(QIcon());
 	}
 	//-- Permition --
 	int luser_acc, lgrp_acc, loth_acc;
-	gnd=TCntrNode::ctrId(root,obj_accuser->objectName().toAscii().data(),true);	
+	gnd=TCntrNode::ctrId(root,obj_accuser->objectName().toAscii().data(),true);
 	obj_accuser->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
 	if( gnd )
 	{
 	    req.clear();
-    	    req.setAttr("path",ed_it+"/"+TSYS::strEncode(obj_accuser->objectName().toAscii().data(),TSYS::PathEl));
+	    req.setAttr("path",ed_it+"/"+TSYS::strEncode(obj_accuser->objectName().toAscii().data(),TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) ) luser_acc = atoi(req.text().c_str());
 	}    
        	gnd=TCntrNode::ctrId(root,obj_accgrp->objectName().toAscii().data(),true);    

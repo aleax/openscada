@@ -36,8 +36,8 @@ namespace BDMySQL
 {
 
 //************************************************
-//* MBDMySQL::Table                              *
-//************************************************ 
+//* MBDMySQL::Table				 *
+//************************************************
 class MBD;
 class MTable : public TTable
 {
@@ -45,7 +45,7 @@ class MTable : public TTable
 	//Public methods
 	MTable(string name, MBD *iown, bool create);
 	~MTable(  );
-	    
+
 	//- Field's functions -
 	void fieldStruct( TConfig &cfg );
 	bool fieldSeek( int row, TConfig &cfg );
@@ -54,53 +54,53 @@ class MTable : public TTable
 	void fieldDel( TConfig &cfg );
 
 	MBD &owner()	{ return (MBD&)TTable::owner(); }
-	    
+
     private:
 	//Private methods
 	void postDisable(int flag);
 	void fieldFix( TConfig &cfg );
 	void fieldPrmSet( TCfg &cfg, const string &last, string &req );
-	    
+
 	//Private attributes
 	vector< vector<string> > tblStrct;
 };
 
 //************************************************
-//* BDMySQL::MBD                                 *
-//************************************************ 
+//* BDMySQL::MBD				 *
+//************************************************
 class BDMod;
 class MBD : public TBD
 {
-    friend class MTable;	
-    
+    friend class MTable;
+
     public:
-    	//Public methods
+	//Public methods
 	MBD( string iid, TElem *cf_el );
-	~MBD(  );	    
+	~MBD(  );
 
 	void enable( );
 	void disable( );
 
 	void allowList( vector<string> &list );
-	void sqlReq( const string &req, vector< vector<string> > *tbl = NULL );	    
+	void sqlReq( const string &req, vector< vector<string> > *tbl = NULL );
 
     protected:
-        //Protected methods
-        void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	//Protected methods
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
     private:
-	//Private methods	    
+	//Private methods
 	void postDisable(int flag);
 	TTable *openTable( const string &name, bool create );
-	
+
 	//Private attributes
 	string host, user, pass, bd, u_sock, cd_pg;
 	int    port;
-	    
+
 	MYSQL  connect;
 	Res    conn_res;
 };
- 
+
 //************************************************
 //* BDMySQL::BDMod                               *
 //************************************************ 
@@ -114,7 +114,7 @@ class BDMod: public TTipBD
     protected:
 	//Protected methods
 	void load_( );
-	    
+
     private:
 	//Private methods
 	TBD *openBD( const string &iid );

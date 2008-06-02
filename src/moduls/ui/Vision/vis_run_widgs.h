@@ -24,79 +24,111 @@
 #define VIS_RUN_WIDGS_H
 
 #include <QString>
+#include <QThread>
 
 #include "vis_widgs.h"
 
 namespace VISION
 {
     class VisRun;
-    //****************************************
-    //* Shape widget view runtime mode       *
-    //****************************************
+    //*********************************************
+    //* Shape widget view runtime mode            *
+    //*********************************************
     class RunWdgView: public WdgView
     {
 	Q_OBJECT
-    
-        public:
-    	    //- Public methods -
+
+	public:
+	    //- Public methods -
 	    RunWdgView( const string &iwid, int ilevel, VisRun *mainWind, QWidget* parent = 0, Qt::WindowFlags f = 0 );
-    	    ~RunWdgView( );
+	    ~RunWdgView( );
 
 	    string user( );
 	    VisRun *mainWin( );
-	    
+
 	    string pgGrp( );
 	    string pgOpenSrc( );
+
 	    unsigned reqTm( )	{ return reqtm; }
-	    
+
 	    void setPgOpenSrc( const string &vl );
 	    unsigned setReqTm( unsigned vl )	{ reqtm = vl; }
-	    
+
 	    WdgView *newWdgItem( const string &iwid );
 	    void attrLoad( QMap<QString, QString> &attrs );
-	    
+
 	    void update( unsigned cnt, int div_max, const string &wpath = "" );
 	    bool attrSet( const string &attr, const string &val, int uiPrmPos = 0 );
-	
+
 	protected:
 	    //- Protected methods -
 	    bool event( QEvent * event );
 	    int cntrIfCmd( XMLNode &node, bool glob = false );
 	    void orderUpdate( );
-	    
+
 	private:
 	    //- Attributes -
-	    unsigned 	reqtm;		//Request values time
-	    int	     	curDiv;		//Current divider
+	    unsigned	reqtm;		//Request values time
+	    int		curDiv;		//Current divider
     };
-    
-    //****************************************
-    //* Shape page view runtime mode         *
-    //****************************************    
+
+    //*********************************************
+    //* Shape page view runtime mode              *
+    //*********************************************
     class RunPageView: public RunWdgView
     {
 	Q_OBJECT
-    
+
         public:
-    	    //- Public methods -
+	    //- Public methods -
 	    RunPageView( const string &iwid, VisRun *mainWind, QWidget* parent = 0, Qt::WindowFlags f = 0 );
-    	    ~RunPageView( );
-	    
+	    ~RunPageView( );
+
 	    float  xScale( bool full = false );
-            float  yScale( bool full = false );
-	    
+	    float  yScale( bool full = false );
+
 	    RunPageView *findOpenPage( const string &pg );
 	    bool callPage( const string &pg_it, const string &pgGrp, const string &pgSrc );
-	    
-	    RunPageView *parent( );	    
+
+	    RunPageView *parent( );
 	    RunPageView *pgOpen( const string &pg );
-	    
+
 	    //- Public attributes -
 	    float wx_scale, wy_scale;
-	    
+
 	protected:
-    	    //- Protected methods -
+	    //- Protected methods -
 	    void closeEvent ( QCloseEvent *event );
+    };
+
+    //*********************************************
+    //* Play sound thread for RunTime session     *
+    //*********************************************
+    class SndPlay: public QThread
+    {
+	public:
+	    //- Public methods -
+	    SndPlay( QObject * parent = 0 );
+
+	    unsigned time( )	{ return mTm; }
+	    string widget( )	{ return mWdg; }
+	    string playData( )	{ return mPlayData; }
+
+	    void setTime( unsigned vl )	{ mTm = vl; }
+	    void setWidget( string vl )	{ mWdg = vl; }
+	    void setData( string vl )	{ mPlayData = vl; }
+
+	    VisRun *mainWin( );
+
+	protected:
+	    //- Protected methods -
+	    void run( );
+
+	private:
+	    //- Private attributes -
+	    unsigned	mTm;		//Request last sound time
+	    string	mWdg;		//Play widget
+	    string	mPlayData;	//Play data
     };
 }
 

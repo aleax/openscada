@@ -219,7 +219,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) :
     //--- Level down for widget ---
     if(!ico_t.load(TUIS::icoPath("vision_level_down").c_str())) ico_t.load(":/images/level_down.png");
     actLevDown = new QAction(QPixmap::fromImage(ico_t),_("Down widget"),this);
-    actLevDown->setObjectName("level_down");    
+    actLevDown->setObjectName("level_down");
     actLevDown->setToolTip(_("Down selected widget"));
     actLevDown->setWhatsThis(_("The button for make down selected widget"));
     actLevDown->setStatusTip(_("Press for make down selected widget."));
@@ -395,7 +395,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) :
     mn_file->addAction(actClose);
     mn_file->addAction(actQuit);
     mn_edit = menuBar()->addMenu(_("&Edit"));
-    mn_edit->addAction(actVisItCut);    
+    mn_edit->addAction(actVisItCut);
     mn_edit->addAction(actVisItCopy);
     mn_edit->addAction(actVisItPaste);
     mn_proj = menuBar()->addMenu(_("&Project"));
@@ -405,7 +405,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) :
     mn_proj->addAction(actVisItAdd);
     mn_proj->addAction(actVisItDel);
     mn_proj->addAction(actVisItProp);
-    mn_proj->addAction(actVisItEdit);    
+    mn_proj->addAction(actVisItEdit);
     mn_widg = menuBar()->addMenu(_("&Widget"));
     mn_widg->addAction(actLibNew);
     mn_widg->addAction(actVisItAdd);
@@ -542,7 +542,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) :
     work_wdgTimer = new QTimer( this );
     work_wdgTimer->setSingleShot(true);
     work_wdgTimer->setInterval(200);
-    connect(work_wdgTimer, SIGNAL(timeout()), this, SLOT(applyWorkWdg()));    
+    connect(work_wdgTimer, SIGNAL(timeout()), this, SLOT(applyWorkWdg()));
     //-- End run timer --
     endRunTimer   = new QTimer( this );
     endRunTimer->setSingleShot(false);
@@ -607,12 +607,12 @@ string VisDevelop::user()
 }
 
 bool VisDevelop::wdgScale( )
-{ 
+{
     return w_scale->scale();
 }
 
 void VisDevelop::setWdgScale( bool val )
-{ 
+{
     w_scale->setScale(val);
 }
 

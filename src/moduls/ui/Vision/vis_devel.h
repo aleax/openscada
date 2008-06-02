@@ -53,20 +53,20 @@ class ShapeElFigure;
 
 class VisDevelop : public QMainWindow
 {
-    Q_OBJECT    
+    Q_OBJECT
 
     public:
 	//Public methods
 	VisDevelop( const string &open_user, const string &VCAstat );
 	~VisDevelop( );
-	
+
 	string user( );
 	string VCAStation( )	{ return m_stat; }
 	bool   wdgScale( );
-	
+
 	void setVCAStation( const string& st );
 	void setWdgScale( bool val );
-	
+
 	int cntrIfCmd( XMLNode &node, bool glob = false );
 
     signals:
@@ -81,23 +81,23 @@ class VisDevelop : public QMainWindow
 	void modifyToolUpdate( const string& );
 	void exitModifChk( );
 
-        void quitSt( );		//Full quit OpenSCADA
+	void quitSt( );		//Full quit OpenSCADA
 
 	void about( );		//About at programm
-        void aboutQt( );	//About at QT library
+	void aboutQt( );	//About at QT library
 	void enterWhatsThis( );	//What is GUI components
 	void updateMenuWindow();//Generate menu "Windows"
 
 	void itDBLoad( );	//Load item data from DB
 	void itDBSave( );	//Save item data to DB
-	
+
 	void prjRun( );		//Run project execution
-	void prjNew( );		//New project create	
+	void prjNew( );		//New project create
 	void libNew( );		//New widgets library creating
- 	void visualItAdd( QAction*, const QPointF &pnt = QPointF() );//Add visual item (widget or page)	
+	void visualItAdd( QAction*, const QPointF &pnt = QPointF() );//Add visual item (widget or page)
 	void visualItDel( const string &itms = "" );	//Delete selected visual items
 	void visualItProp( );	//Visual item (widget, library, project or page) properties
-        void visualItEdit( );	//Visual item graphical edit
+	void visualItEdit( );	//Visual item graphical edit
 	void visualItCut( );	//Visual item cut
 	void visualItCopy( );	//Visual item copy
 	void visualItPaste( );	//Visual item paste
@@ -109,7 +109,7 @@ class VisDevelop : public QMainWindow
 	QAction *actDBLoad,		//Load item from DB
 		*actDBSave,		//Save item to DB
 		*actPrjRun,		//Run project execution from selected project item
-		*actPrjNew,		//New project create		
+		*actPrjNew,		//New project create
 		*actLibNew,		//New widgets library create
 		*actVisItAdd, 		//Add visual item to library, container widget, project or page
 		*actVisItDel,		//Delete visual item (library, widget, project or page)
@@ -124,7 +124,7 @@ class VisDevelop : public QMainWindow
 		*actLevRise,		//Rise widget level
 		*actLevLower,		//Lower widget level
 		*actAlignLeft,		//Align left
-		*actAlignVCenter,	//Align vertical center 
+		*actAlignVCenter,	//Align vertical center
 		*actAlignRight,		//Align right
 		*actAlignTop,		//Align top
 		*actAlignHCenter,	//Align horizontal center
@@ -133,45 +133,45 @@ class VisDevelop : public QMainWindow
 		*actElFigLine,		//Create line
 		*actElFigArc,		//Create arc
 		*actElFigBesie,		//Create Besie curve
-                *actElFigCheckAct,      //Enable holds
-                *actElFigCursorAct,     //Unset cursor
-	//-- Window manipulation actions --	
+		*actElFigCheckAct,	//Enable holds
+		*actElFigCursorAct,	//Unset cursor
+	//-- Window manipulation actions --
 		*actWinClose,		//Close window
 		*actWinCloseAll,	//Close all windows
 		*actWinTile,		//Tile windows
 		*actWinCascade,		//Cascade windows
-		*actWinNext,		//Select next window	
+		*actWinNext,		//Select next window
 		*actWinPrevious;	//Select previous window
 	QActionGroup	*actGrpWdgAdd;	//Add widgets action group
 
 	//- Toolbars -
 	QToolBar *wdgToolView;		//Widget's view functions
 	QToolBar *elFigTool;		//Elementar figure base widget tools
-	vector<QToolBar*> lb_toolbar;	//Library toolbars			
-	
+	vector<QToolBar*> lb_toolbar;	//Library toolbars
+
 	//- Dock widgets -
-	WdgTree        	*wdgTree;	//Widgets tree	
-	ProjTree 	*prjTree;	//Progects tree
+	WdgTree		*wdgTree;	//Widgets tree
+	ProjTree	*prjTree;	//Progects tree
 	InspAttrDock	*attrInsp;	//Docked attributes inspector
-	InspLnkDock 	*lnkInsp;	//Docked links inspector
-	
+	InspLnkDock	*lnkInsp;	//Docked links inspector
+
 	//- Work space -
-        QWorkspace	*work_space; 	//MDI widgets workspace	
+	QWorkspace	*work_space;	//MDI widgets workspace
 
 	//- Menu root items -
-	QMenu 	*mn_file, 		//Menu "File"
+	QMenu	*mn_file,		//Menu "File"
 		*mn_edit,		//Menu "Edit"
-		*mn_proj, 		//Menu "Project"
-		*mn_widg, 		//Menu "Widget"
+		*mn_proj,		//Menu "Project"
+		*mn_widg,		//Menu "Widget"
 		*mn_widg_fnc,		//Submenu "View functions"
 		*mn_window,		//Menu "Window"
 		*mn_view,		//Menu "View"
 		*mn_help;		//Menu "Help"
-	vector<QMenu*> 	  lb_menu;	//Library menus
+	vector<QMenu*>	lb_menu;	//Library menus
 
     protected:
 	//Protected methods
-    	void closeEvent( QCloseEvent* );
+	void closeEvent( QCloseEvent* );
 
     private slots:
 	//Private slots
@@ -182,19 +182,19 @@ class VisDevelop : public QMainWindow
 	//Private attributes
 	//- Main components -
 	bool		winClose;
-	UserStBar 	*w_user;	//User status widget
+	UserStBar	*w_user;	//User status widget
 	QLabel		*w_stat;	//VCA engine station
 	QLabel		*mStModify;	//VCA station modified
 	WScaleStBar	*w_scale;	//Scale trigger
-	QTimer      	*endRunTimer, *work_wdgTimer;
+	QTimer		*endRunTimer, *work_wdgTimer;
 	string		work_wdg, work_wdg_new,	//Work widget
 			copy_buf;	//Copy buffer
 	QSignalMapper 	*wMapper;	//Internal window mapper
 	string		m_stat;		//Station
 
 	//- Main dialogs -
-	LibProjProp 	*prjLibPropDlg;	//Widget's library and project properties dialog
-	VisItProp    	*visItPropDlg;	//Visual item properties properties dialog
+	LibProjProp	*prjLibPropDlg;	//Widget's library and project properties dialog
+	VisItProp	*visItPropDlg;	//Visual item properties properties dialog
 };
 
 }

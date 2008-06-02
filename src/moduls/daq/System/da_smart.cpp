@@ -61,41 +61,41 @@ void HddSmart::init( TMdPrm *prm )
 	dls=dls+list[i_l]+";";
     c_subt.fld().setValues(dls);
     c_subt.fld().setSelNames(dls);
-    
+
     try{ c_subt.getSEL(); }
     catch(...)
     {
-	if( list.size() ) c_subt.setS(list[0]);    
+	if( list.size() ) c_subt.setS(list[0]);
     }
 }
 
 void HddSmart::dList( vector<string> &list, bool part )
-{    
+{
     int major, minor;
     char name[11];
     char buf[256];
-    
+
     FILE *f = fopen("/proc/partitions","r");
     if( f == NULL ) return;
-	
+
     while( fgets(buf,sizeof(buf),f) != NULL )
     {
 	if( sscanf(buf,"%d %d %*d %10s",&major,&minor,name) != 3 ) continue;
 	//if( strncmp(name,"hd",2) )	continue;
-	if( !part && minor != 0 ) 	continue;
+	if( !part && minor != 0 )	continue;
 
 	string cmd = string(smartval_cmd)+name+((name[0]=='s')?" -d ata":"");
 	FILE *fp = popen(cmd.c_str(),"r");
-    	if( fp ) 
-	{	
+	if( fp )
+	{
 	    int val;
-	    bool access_true = false;    
+	    bool access_true = false;
 	    while( fgets(buf,sizeof(buf),fp) != NULL )
-    	    {
+	    {
 		if( sscanf(buf,"%*d %*s %*x %*d %*d %*d %*s %*s %*s %d\n",&val) != 1 ) continue;
 		access_true = true;
 		break;
-	    }	    
+	    }
 	    fclose(fp);
 	    if( access_true )	list.push_back(name);
 	}
@@ -104,17 +104,17 @@ void HddSmart::dList( vector<string> &list, bool part )
 }
 
 void HddSmart::getVal( TMdPrm *prm )
-{    
+{
     int id;
     unsigned long val;
     char buf[256];
     char name[31];
     char info[51];
-    
+
     string dev = prm->cfg("SUBT").getS();
-    
+
     //- SMART Hdd info -
-    /*string cmd = "/usr/sbin/smartctl -i /dev/"+dev;	
+    /*string cmd = "/usr/sbin/smartctl -i /dev/"+dev;
     FILE *fp = popen(cmd.c_str(),"r");
     if( fp )
     {

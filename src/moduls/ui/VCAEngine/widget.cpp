@@ -341,14 +341,14 @@ void Widget::inheritIncl( const string &iwdg )
     else parw.at().wdgList(ls);
     for( int i_w = 0; i_w < ls.size(); i_w++ )
 	if( !wdgPresent(ls[i_w]) )
-    	    wdgAdd(ls[i_w],"",parw.at().wdgAt(ls[i_w]).at().path());
+	    wdgAdd(ls[i_w],"",parw.at().wdgAt(ls[i_w]).at().path());
 }
 
 void Widget::attrAdd( TFld *attr, int pos )
 {
     string anm = attr->name();
     if(attrPresent(anm))
-    {	
+    {
 	delete attr;
         throw TError(nodePath().c_str(),_("Attribut %s already present."),anm.c_str());
     }
@@ -361,10 +361,10 @@ void Widget::attrDel( const string &attr )
     int flg = attrAt(attr).at().flgGlob();
     attr_cfg.fldDel(attr_cfg.fldId(attr));
     //- Delete from inheritant wigets -
-    if( !(flg&Attr::Mutable) )    
+    if( !(flg&Attr::Mutable) )
 	for( int i_h = 0; i_h < m_herit.size(); i_h++ )
 	    if( m_herit[i_h].at().enable( ) )
-    		m_herit[i_h].at().attrDel( attr );
+		m_herit[i_h].at().attrDel( attr );
 }
 
 bool Widget::attrChange( Attr &cfg, void *prev )
@@ -398,11 +398,11 @@ void Widget::wdgAdd( const string &wid, const string &name, const string &path )
 
     chldAdd( inclWdg, new Widget(wid,path) );
     wdgAt(wid).at().setName(name);
-    
+
     //- Call heritors include widgets update -
     for( int i_h = 0; i_h < m_herit.size(); i_h++ )
 	if( m_herit[i_h].at().enable( ) )
-    	    m_herit[i_h].at().inheritIncl(wid);
+	    m_herit[i_h].at().inheritIncl(wid);
 }
 
 void Widget::wdgDel( const string &wid, bool full )
@@ -850,7 +850,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
 	    && ctrChkNode(opt) )
     {
 	AutoHD<Widget> srcwdg(this);
-    	string nwdg = TSYS::strSepParse(a_path.substr(14),0,'.');
+	string nwdg = TSYS::strSepParse(a_path.substr(14),0,'.');
 	string nattr = TSYS::strSepParse(a_path.substr(14),1,'.');
 	if( nattr.size() ) srcwdg = wdgAt(nwdg);
 	else nattr = nwdg;
@@ -970,22 +970,22 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
 bool Widget::cntrCmdProcess( XMLNode *opt )
 {
     string wattr;
-    
+
     if( isLink() ) return false;
-    
+
     //- Get page info -
     if( opt->name() == "info" )
-    { 
- 	if(ctrMkNode("area",opt,-1,"/proc",_("Process")))
+    {
+	if(ctrMkNode("area",opt,-1,"/proc",_("Process")))
 	{
 	    ctrMkNode("fld",opt,-1,"/proc/wdg",_("Widget"),permit(),user().c_str(),grp().c_str(),3,"tp","str","dest","select","select","/proc/w_lst");
 	    wattr = TBDS::genDBGet(mod->nodePath()+"wdgAttr",".",opt->attr("user"));
 	    if( !wdgPresent(wattr) )	wattr = ".";
-            if(ctrMkNode("table",opt,-1,"/proc/attr",_("Attributes"),permit(),user().c_str(),grp().c_str(),2,"s_com",((wattr==".")?"add,del":""),"key","id"))
-            {
-        	ctrMkNode("list",opt,-1,"/proc/attr/id",_("Id"),permit(),user().c_str(),grp().c_str(),1,"tp","str");
-	        ctrMkNode("list",opt,-1,"/proc/attr/name",_("Name"),permit(),user().c_str(),grp().c_str(),1,"tp","str");
-        	ctrMkNode("list",opt,-1,"/proc/attr/type",_("Type"),permit(),user().c_str(),grp().c_str(),4,"tp","dec","idm","1","dest","select","select","/proc/tp_ls");
+	    if(ctrMkNode("table",opt,-1,"/proc/attr",_("Attributes"),permit(),user().c_str(),grp().c_str(),2,"s_com",((wattr==".")?"add,del":""),"key","id"))
+	    {
+		ctrMkNode("list",opt,-1,"/proc/attr/id",_("Id"),permit(),user().c_str(),grp().c_str(),1,"tp","str");
+		ctrMkNode("list",opt,-1,"/proc/attr/name",_("Name"),permit(),user().c_str(),grp().c_str(),1,"tp","str");
+		ctrMkNode("list",opt,-1,"/proc/attr/type",_("Type"),permit(),user().c_str(),grp().c_str(),4,"tp","dec","idm","1","dest","select","select","/proc/tp_ls");
 		ctrMkNode("list",opt,-1,"/proc/attr/wa",_("Work area"),permit(),user().c_str(),grp().c_str(),1,"tp","str");
 		ctrMkNode("list",opt,-1,"/proc/attr/proc",_("Process"),permit(),user().c_str(),grp().c_str(),1,"tp","bool");
 		ctrMkNode("list",opt,-1,"/proc/attr/cfg",_("Config"),permit(),user().c_str(),grp().c_str(),4,"tp","dec","idm","1","dest","select","select","/proc/lnk_ls");
@@ -994,13 +994,13 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/proc/calc",_("Calculate")))
 	    {
 		ctrMkNode("fld",opt,-1,"/proc/calc/progLng",_("Programm language"),permit(),user().c_str(),grp().c_str(),3,"tp","str","dest","sel_ed","select","/proc/calc/plangLs");
-		ctrMkNode("fld",opt,-1,"/proc/calc/per",_("Programm calc period (ms)"),permit(),user().c_str(),grp().c_str(),1,"tp","dec");
+		ctrMkNode("fld",opt,-1,"/proc/calc/per",_("Calc period (ms)"),permit(),user().c_str(),grp().c_str(),1,"tp","dec");
 		ctrMkNode("fld",opt,-1,"/proc/calc/prog",_("Programm"),permit(),user().c_str(),grp().c_str(),3,"tp","str","cols","90","rows","8");
 	    }
 	}
 	return true;
     }
-    
+
     //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/proc/wdg" )
@@ -1011,27 +1011,27 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	    if( wattr != "." && !wdgPresent(wattr) )	wattr = ".";
 	    opt->setText(wattr);
 	}
-        if( ctrChkNode(opt,"set",permit(),user().c_str(),grp().c_str(),SEQ_WR) ) 
+	if( ctrChkNode(opt,"set",permit(),user().c_str(),grp().c_str(),SEQ_WR) ) 
 	    TBDS::genDBSet(mod->nodePath()+"wdgAttr",opt->text(),opt->attr("user"));
-    }    
+    }
     else if( a_path == "/proc/w_lst" && ctrChkNode(opt) )
     {
         vector<string> lst;
         wdgList(lst);
-        opt->childAdd("el")->setText(".");	
+        opt->childAdd("el")->setText(".");
         for( unsigned i_f=0; i_f < lst.size(); i_f++ )
             opt->childAdd("el")->setText(lst[i_f]);
-    }    
+    }
     else if( a_path == "/proc/attr" )
     {
 	wattr = opt->attr("wdg");
 	if( wattr.empty() )
-    	    wattr = TBDS::genDBGet(mod->nodePath()+"wdgAttr",".",opt->attr("user"));
+	    wattr = TBDS::genDBGet(mod->nodePath()+"wdgAttr",".",opt->attr("user"));
 	if( wattr != "." && !wdgPresent(wattr) )	wattr = ".";
 	
 	if( ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) )
 	{
-    	    XMLNode *n_id      = ctrMkNode("list",opt,-1,"/proc/attr/id","");
+	    XMLNode *n_id      = ctrMkNode("list",opt,-1,"/proc/attr/id","");
 	    XMLNode *n_name    = ctrMkNode("list",opt,-1,"/proc/attr/name","");
 	    XMLNode *n_type    = ctrMkNode("list",opt,-1,"/proc/attr/type","");
 	    XMLNode *n_wa      = ctrMkNode("list",opt,-1,"/proc/attr/wa","");

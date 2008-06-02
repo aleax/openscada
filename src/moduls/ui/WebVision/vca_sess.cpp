@@ -26,11 +26,11 @@
 #include "vca_sess.h"
 
 using namespace WebVision;
-						    
+
 //*************************************************
 //* VCASess                                       *
 //*************************************************
-VCASess::VCASess( const string &iid ) : m_id(iid)
+VCASess::VCASess( const string &iid, bool isCreate ) : m_id(iid), mIsCreate(isCreate)
 {
     lst_ses_req = time(NULL);
     id_objs	= grpAdd("obj_");
@@ -41,9 +41,12 @@ void VCASess::postDisable( int flag )
     TCntrNode::postDisable(flag);
 
     //- Disconnect/delete session -
-    XMLNode req("disconnect");
-    req.setAttr("path","/%2fserv%2f0")->setAttr("sess",id());
-    mod->cntrIfCmd(req,"root");
+    if( mIsCreate )
+    {
+	XMLNode req("disconnect");
+	req.setAttr("path","/%2fserv%2f0")->setAttr("sess",id());
+	mod->cntrIfCmd(req,"root");
+    }
 }
 
 void VCASess::getReq( SSess &ses )

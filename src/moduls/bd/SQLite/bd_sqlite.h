@@ -37,8 +37,8 @@ namespace BDSQLite
 {
 
 //************************************************
-//* MBDMySQL::Table                              *
-//************************************************ 
+//* MBDMySQL::Table				 *
+//************************************************
 class MBD;
 class MTable : public TTable
 {
@@ -53,55 +53,55 @@ class MTable : public TTable
 	void fieldGet( TConfig &cfg );
 	void fieldSet( TConfig &cfg );
 	void fieldDel( TConfig &cfg );
-	    
+
 	MBD &owner()	{ return (MBD&)TTable::owner(); }
-	    
+
     private:
 	//Private methods
 	void postDisable(int flag);
 	void fieldFix( TConfig &cfg );
-	    
+
 	//Private attributes
 	vector< vector<string> > tblStrct;
 };
 
 //************************************************
-//* BDSQLite::MBD                                *
-//************************************************ 
+//* BDSQLite::MBD				 *
+//************************************************
 class MBD : public TBD
 {
     friend class MTable;
     public:
-    	//Public methods
+	//Public methods
 	MBD( const string &iid, TElem *cf_el );
 	~MBD(  );
-	    
+
 	void enable( );
-	void disable( );			
+	void disable( );
 
 	void allowList( vector<string> &list );
 	void sqlReq( const string &req, vector< vector<string> > *tbl = NULL );
-	
+
     protected:
 	//Protected methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-			
+
     private:
 	//Private methods
-	void postDisable(int flag);    
+	void postDisable(int flag);
 	TTable *openTable( const string &name, bool create );
-	
+
 	//Private attributes
 	string	cd_pg;
-	sqlite3	*m_db;	    
+	sqlite3	*m_db;
 	int	commCnt;
 	Res	conn_res;
-	int 	trans_reqs;
+	int	trans_reqs;
 };
 
 
 //*************************************************
-//* BDSQLite::BDMod                               *
+//* BDSQLite::BDMod				  *
 //*************************************************
 class BDMod: public TTipBD
 {
@@ -109,12 +109,12 @@ class BDMod: public TTipBD
 	//Public methods
 	BDMod( string name );
 	~BDMod();
-	    
+
 	static string sqlReqCode( const string &req, char symb = '\'' );
 
     protected:
 	//Methods
-	void load_( );	
+	void load_( );
 
     private:
 	//Private methods

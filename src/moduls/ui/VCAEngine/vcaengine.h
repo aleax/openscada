@@ -40,6 +40,9 @@ namespace VCA
 class Engine : public TUI
 {
     public:
+	//Data
+	enum Alarm	{ Light = 0x01, Alarm = 0x02, Sound = 0x04 };
+
 	//Methods
 	Engine( string name );
 	~Engine( );
@@ -51,15 +54,15 @@ class Engine : public TUI
 	void modStop( );
 
 	string synthCom( )	{ return mSynthCom; }
-	string synthRes( )	{ return mSynthRes; }
 	string synthCode( )	{ return mSynthCode; }
 
 	string wlbTable( )	{ return "VCALibs"; }
 	string prjTable( )	{ return "VCAPrjs"; }
 
 	void setSynthCom( const string &vl )	{ mSynthCom = vl; modif(); }
-	void setSynthRes( const string &vl )	{ mSynthRes = vl; modif(); }
 	void setSynthCode( const string &vl )	{ mSynthCode = vl; modif(); }
+
+	string callSynth( const string &txt );
 
 	//- Widget's libraries -
 	void wlbList( vector<string> &ls )			{ chldList( id_wlb, ls ); }
@@ -105,15 +108,17 @@ class Engine : public TUI
     private:
 	//Attributes
 	int	id_wlb, id_prj, id_ses;
-	TElem	lbwdg_el, 	//The generic table structure of libraries
+	TElem	lbwdg_el,	//The generic table structure of libraries
 		wdgdata_el,	//Media and other data what use by widgets and stored into DB
-		wdg_el, 	//The table structure of library widgets
-		wdgio_el, 	//The table structure of library widget's atributes
+		wdg_el,		//The table structure of library widgets
+		wdgio_el,	//The table structure of library widget's atributes
 		wdguio_el,	//The table structure of library widget's user atributes
 		inclwdg_el,	//The table structure of container including widgets
 		prj_el,		//The generic table structure of project
 		page_el;	//The table structure of project's pages
-	string	mSynthCom, mSynthRes, mSynthCode;	//Synth parameters
+	string	mSynthCom, mSynthCode;	//Synth parameters
+
+	Res	mSynthRes;	//Synth resource
 };
 
 extern  Engine *mod;

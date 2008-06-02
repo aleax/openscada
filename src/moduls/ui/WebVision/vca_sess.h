@@ -270,7 +270,7 @@ class VCASess : public TCntrNode
 {
     public:
 	//Methods
-	VCASess( const string &iid );
+	VCASess( const string &iid, bool isCreate );
 
 	const string &id( )		{ return m_id; }
 	time_t lstReq( )		{ return lst_ses_req; }
@@ -294,6 +294,7 @@ class VCASess : public TCntrNode
 	string	m_id;
 	int	id_objs;		//Primitive object's container identifier
 	time_t	lst_ses_req;
+	bool	mIsCreate;
 };
 
 }

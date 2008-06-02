@@ -18,7 +18,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
- 
+
 #include <getopt.h>
 #include <signal.h>
 
@@ -876,10 +876,10 @@ void TWEB::modInfo( vector<string> &list )
     list.push_back(_("Developers"));
 }
 
-void TWEB::vcaSesAdd( const string &name )
+void TWEB::vcaSesAdd( const string &name, bool isCreate )
 {
     if( vcaSesPresent(name) )	return;
-    chldAdd( id_vcases, new VCASess(name) );
+    chldAdd( id_vcases, new VCASess(name,isCreate) );
 }
 
 string TWEB::optDescr( )
@@ -917,7 +917,7 @@ void TWEB::load_( )
 	    case -1 : break;
 	}
     } while(next_opt != -1);
-    
+
     //- Load parameters from config file -
     m_t_auth = atoi( TBDS::genDBGet(nodePath()+"SessTimeLife",TSYS::int2str(m_t_auth)).c_str() );
     m_CSStables = TBDS::genDBGet(nodePath()+"CSSTables",m_CSStables);
@@ -986,13 +986,13 @@ string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const
         "Content-Length: "+TSYS::int2str(cln)+"\n"
         "Connection: close\n"
         "Content-type: "+cnt_tp+"\n"
-        "Charset="+Mess->charset()+"\n"+addattr+"\n";										
+        "Charset="+Mess->charset()+"\n"+addattr+"\n";
 }
 
 string TWEB::pgHead( string head_els )
 {
     string shead =
-    	"<?xml version='1.0' ?>\n"
+	"<?xml version='1.0' ?>\n"
 	"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
 	"'DTD/xhtml1-transitional.dtd'>\n"
 	"<html xmlns='http://www.w3.org/1999/xhtml'>\n"
@@ -1028,7 +1028,7 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
         string zero_lev = TSYS::pathLev(ses.url,0);
 	//- Get about module page -
 	if( zero_lev == "about" )       getAbout(ses);
-	//- Get module icon -	
+	//- Get module icon -
 	else if( zero_lev == "ico" )
 	{
             string itp;
@@ -1036,18 +1036,18 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
             page = httpHead("200 OK",ses.page.size(),string("image/")+itp)+ses.page;
             return;
 	}
-        else
-        {
-            sesCheck(ses);
-	    //- Auth dialog preparing -	    
-            if( !ses.user.size() )
+	else
+	{
+	    sesCheck(ses);
+	    //- Auth dialog preparing -
+	    if( !ses.user.size() )
 	    {
 		ses.page = ses.page+"<h1 class='head'>"PACKAGE_NAME". "+_(MOD_NAME)+"</h1>\n<hr/><br/>\n";
 		getAuth( ses );
 	    }
-	    //- Session select or new session for project creation -	    
-            else if( zero_lev.empty() )
-            {
+	    //- Session select or new session for project creation -
+	    else if( zero_lev.empty() )
+	    {
 		bool sesPrjOk = false;
 		ses.page = ses.page+
 		    "<h1 class='head'>"+PACKAGE_NAME+". "+_(MOD_NAME)+"</h1>\n<hr/><br/>\n"
@@ -1060,12 +1060,12 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		{
 		    ses.page = ses.page+
 			"<tr><td><b>"+_("Connect to opened session")+"</b></td></tr>\n"
-	        	"<tr class='content'><td align='center'>\n"
+			"<tr class='content'><td align='center'>\n"
 			"<table border='0'>\n";
 		    for( int i_ch = 0; i_ch < req.childSize(); i_ch++ )
 			ses.page += "<tr><td><a href='/"MOD_ID"/ses_"+req.childGet(i_ch)->text()+"'>"+
 			    req.childGet(i_ch)->text()+"</a></td></tr>";
-    		    ses.page += "</table></td></tr>\n";
+		    ses.page += "</table></td></tr>\n";
 		    sesPrjOk = true;
 		}
 		//-- Get present projects list --
@@ -1075,18 +1075,18 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		{
 		    ses.page = ses.page +
 			"<tr><td><b>"+_("Create new session for present project")+"</b></td></tr>\n"
-                	"<tr class='content'><td align='center'>\n"
-	        	"<table border='0'>\n";
+			"<tr class='content'><td align='center'>\n"
+			"<table border='0'>\n";
 		    for( int i_ch = 0; i_ch < req.childSize(); i_ch++ )
 			ses.page += "<tr><td><a href='/"MOD_ID"/prj_"+req.childGet(i_ch)->attr("id")+"'>"+
 			    req.childGet(i_ch)->text()+"</a></td></tr>";
 		    ses.page += "</table></td></tr>\n";
 		    sesPrjOk = true;
 		}
-		ses.page += "</table></center>";		
+		ses.page += "</table></center>";
 		if( !sesPrjOk )	messPost(ses.page,nodePath(),_("No one sessions and projects VCA engine present!"),TWEB::Warning);
-    	    }
-	    //- New session creation -	    
+	    }
+	    //- New session creation -
 	    else if( zero_lev.size() > 4 && zero_lev.substr(0,4) == "prj_" )
 	    {
 		XMLNode req("connect");
@@ -1097,20 +1097,20 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		{
 		    ses.page = pgHead("<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/"MOD_ID"/ses_"+req.attr("sess")+"'/>")+
 			"<center>Open new session '"+req.attr("sess")+"' for project: '"+zero_lev.substr(4)+"'</center>\n<br/>";
-		    vcaSesAdd(req.attr("sess"));
+		    vcaSesAdd(req.attr("sess"),true);
 		}
 	    }
-	    //- Main session page data prepare -	    
+	    //- Main session page data prepare -
 	    else if( zero_lev.size() > 4 && zero_lev.substr(0,4) == "ses_" )
 	    {
 		string sesnm = zero_lev.substr(4);
 		//-- Call to session --
 		try{ vcaSesAt(sesnm).at().getReq(ses); }
-		catch(...) 
-		{ 
+		catch(...)
+		{
 		    if( !vcaSesPresent(sesnm) )
 		    {
-			vcaSesAdd(sesnm);
+			vcaSesAdd(sesnm,false);
 			vcaSesAt(sesnm).at().getReq(ses);
 		    }
 		    else throw;
@@ -1119,14 +1119,14 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		return;
 	    }
 	    else mess_err(nodePath().c_str(),_("No permit request is received: '%s'"),zero_lev.c_str());
-        }
+	}
     }catch(TError err)
     {
-        ses.page = "Page <"+ses.url+"> error: "+err.mess;
-        page = httpHead("404 Not Found",ses.page.size())+ses.page;
-        return;
+	ses.page = "Page <"+ses.url+"> error: "+err.mess;
+	page = httpHead("404 Not Found",ses.page.size())+ses.page;
+	return;
     }
-    
+
     ses.page += pgTail();
     page = httpHead("200 OK",ses.page.size())+ses.page;
 }
@@ -1168,7 +1168,7 @@ void TWEB::getAuth( SSess &ses )
         "</td></tr></table>\n</form>\n"
         "</td></tr></table></center>\n";
 }
-																			  
+
 string TWEB::getCookie( string name, vector<string> &vars )
 {
     for( unsigned i_var = 0; i_var < vars.size(); i_var++)
@@ -1227,12 +1227,12 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	    return;
 	}
 	ses.page = pgHead()+"<h1 class='head'>"+PACKAGE_NAME+". "+_(MOD_NAME)+"</h1>\n<hr/><br/>\n";
-    	messPost(ses.page,nodePath(),_("Auth wrong! Retry please."),TWEB::Error);
-        ses.page += "\n";
-        getAuth( ses );
-	ses.page += pgTail();	
-	page = httpHead("200 OK",ses.page.size(),"text/html")+ses.page;		
-        return;
+	messPost(ses.page,nodePath(),_("Auth wrong! Retry please."),TWEB::Error);
+	ses.page += "\n";
+	getAuth( ses );
+	ses.page += pgTail();
+	page = httpHead("200 OK",ses.page.size(),"text/html")+ses.page;
+	return;
     }
     //- Session check -
     sesCheck( ses );    
@@ -1313,7 +1313,7 @@ void TWEB::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )   opt->setText(optDescr());
     else TUI::cntrCmdProc(opt);
-}		    
+}
 
 int TWEB::colorParse( const string &clr )
 {
@@ -1379,7 +1379,7 @@ SSess::SSess( const string &iurl, const string &ipage, const string &isender,
         pos += boundary.size()+strlen(c_term);
         string c_head = content.substr(pos, content.find(c_term,pos)-pos);
         if( c_head.find(c_fd,0) == string::npos ) continue;
-						
+
         //-- Get name --
         i_bnd = c_head.find(c_name,0)+strlen(c_name);
         string c_name = c_head.substr(i_bnd,c_head.find("\"",i_bnd)-i_bnd);

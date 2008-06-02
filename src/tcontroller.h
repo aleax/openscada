@@ -39,27 +39,27 @@ class TController : public TCntrNode, public TConfig
 {
     public:
 	//Public methods
-     	TController( const string &name_c, const string &daq_db, TElem *cfgelem );
+	TController( const string &name_c, const string &daq_db, TElem *cfgelem );
 	virtual ~TController(  );
 
 	TCntrNode &operator=( TCntrNode &node );
-	
-	const string &id( ) 	{ return m_id; }
+
+	const string &id( )	{ return m_id; }
 	string name( );
 	string descr( )		{ return m_descr; }
-	
-        string DB( )            { return m_db; }
-        string tbl( );
-        string fullDB( )        { return DB()+'.'+tbl(); }
-	
-	void setName( const string &nm ) 	{ m_name = nm; }
-	void setDescr( const string &dscr )	{ m_descr = dscr; }	
+
+	string DB( )		{ return m_db; }
+	string tbl( );
+	string fullDB( )	{ return DB()+'.'+tbl(); }
+
+	void setName( const string &nm )	{ m_name = nm; }
+	void setDescr( const string &dscr )	{ m_descr = dscr; }
 	void setDB( const string &idb )		{ m_db = idb; modifG(); }
-	
-    	bool toEnable( )	{ return m_aen; }
-    	bool toStart( ) 	{ return m_astart; }
+
+	bool toEnable( )	{ return m_aen; }
+	bool toStart( )		{ return m_astart; }
 	bool enableStat( )	{ return en_st; }
-	bool startStat( )      	{ return run_st; }
+	bool startStat( )	{ return run_st; }
 
 	void start( );
 	void stop( );
@@ -68,50 +68,50 @@ class TController : public TCntrNode, public TConfig
 
 	//- Parameters -
 	void list( vector<string> &list )	{ chldList(m_prm,list); }
-        bool present( const string &name )	{ return chldPresent(m_prm,name); }
+	bool present( const string &name )	{ return chldPresent(m_prm,name); }
 	void add( const string &name, unsigned type );
 	void del( const string &name, bool full = false )	{ chldDel(m_prm,name,-1,full); }
-        AutoHD<TParamContr> at( const string &name, const string &who = "th_contr" )
+	AutoHD<TParamContr> at( const string &name, const string &who = "th_contr" )
 	{ return chldAt(m_prm,name); }
-	
+
 	TTipDAQ &owner( )	{ return *(TTipDAQ *)nodePrev(); }
-	
-    protected:    
+
+    protected:
 	//Protected attributes
-	bool    en_st;    
-	bool    run_st;
-	
+	bool	en_st;
+	bool	run_st;
+
 	//Methods
 	//- User methods -
 	void load_( );
-	void save_( );	
-	virtual void enable_(  ) 	{ }
-        virtual void disable_(  )	{ }
-	virtual void start_( )	 	{ }
-        virtual void stop_( )		{ }
-    
-	virtual TParamContr *ParamAttach( const string &name, int type );    
-    
+	void save_( );
+	virtual void enable_( )		{ }
+	virtual void disable_( )	{ }
+	virtual void start_( )		{ }
+	virtual void stop_( )		{ }
+
+	virtual TParamContr *ParamAttach( const string &name, int type );
+
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-	
+
 	bool cfgChange( TCfg &cfg );
-	
+
 	void preDisable( int flag );		//Disable if delete
-	void postDisable( int flag );     	//Delete all DB if flag 1
-	
+	void postDisable( int flag );		//Delete all DB if flag 1
+
     private:
 	//Private methods
 	string nodeName( )       { return m_id; }
-    
+
 	void LoadParmCfg(  );
-	
+
 	//Private attributes
-	string  &m_id;
-        string  &m_name;
-        string  &m_descr;
-        bool    &m_aen;
-        bool    &m_astart;
-	
+	string	&m_id;
+	string	&m_name;
+	string	&m_descr;
+	bool	&m_aen;
+	bool	&m_astart;
+
 	string	m_db;
 	int	m_prm;
 };

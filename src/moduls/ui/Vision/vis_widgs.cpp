@@ -465,7 +465,6 @@ void LineEdit::setType( LType tp )
     ((QBoxLayout*)layout())->insertWidget(0,ed_fld);
     setFocusProxy( ed_fld );
 
-    
     m_tp = tp;
 }
 
@@ -475,10 +474,10 @@ void LineEdit::changed( )
     if( bt_fld && !bt_fld->isEnabled() )
     {
 	bt_fld->setEnabled(true);
-        bt_fld->setVisible(true);
-	//QWidget::setTabOrder( mod->getFocusedWdg(ed_fld), mod->getFocusedWdg(bt_fld) );	
+	bt_fld->setVisible(true);
+	//QWidget::setTabOrder( mod->getFocusedWdg(ed_fld), mod->getFocusedWdg(bt_fld) );
     }
-    
+
     emit valChanged(value());
 }
 
@@ -581,9 +580,9 @@ void LineEdit::setCfg(const QString &cfg)
     {
         bt_fld->setEnabled(false);
         bt_fld->setVisible(false);
-    }        
+    }
 }
-				    
+
 QString LineEdit::value()
 {
     switch(type())
@@ -592,7 +591,7 @@ QString LineEdit::value()
 	case Integer:	return QString::number(((QSpinBox*)ed_fld)->value());
 	case Real:	return QString::number(((QDoubleSpinBox*)ed_fld)->value());
 	case Time:	return QString::number(QTime().secsTo(((QTimeEdit*)ed_fld)->time()));
-	case Date: case DateTime: 	
+	case Date: case DateTime:
 			return QString::number(((QDateTimeEdit*)ed_fld)->dateTime().toTime_t());
 	case Combo:	return ((QComboBox*)ed_fld)->currentText();
     }
