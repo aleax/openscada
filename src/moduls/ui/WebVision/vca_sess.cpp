@@ -919,6 +919,13 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                 Point el_p4 = scaleRotate( (pnts)[item.n4], xScale, yScale, true );
                 Point el_p5 = scaleRotate( (pnts)[item.n5], xScale, yScale, true );
                 Point el_p6 = item.ctrlPos4;
+                if ( el_p5.y <= el_p3.y ) 
+                    ang = angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
+                else ang = 360 - angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
+                arc_a = length( el_p5, el_p3 );
+                arc_b = length( el_p3, el_p4 );
+                t_start = item.ctrlPos4.x;
+                t_end = item.ctrlPos4.y;
                 if( flag_allocate )
                     clr_el = gdImageColorResolve( im, (ui8)(item.lineColor>>16), (ui8)(item.lineColor>>8), (ui8)item.lineColor );
                 else clr_el = item.lineColor;
@@ -926,13 +933,6 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                     dashDot( im, el_p1, el_p2, el_p3, el_p4, el_p5, el_p6, clr_el, item.width, 2, item.style );
                 else//---- Drawing the solid arc with borders' width == 0 ----
                 {
-                    if ( el_p5.y <= el_p3.y ) 
-                        ang = angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
-                    else ang = 360 - angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
-                    arc_a = length( el_p5, el_p3 );
-                    arc_b = length( el_p3, el_p4 );
-                    t_start = item.ctrlPos4.x;
-                    t_end = item.ctrlPos4.y;
                     gdImageSetThickness( im, item.width );
 
                     t = t_start;
@@ -1176,15 +1176,30 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                                             TSYS::realRound( el_p3.y -
                                             rotate( arc( (t_end + t_start)/2, arc_a, arc_b ), ang ).y, 2, true ) );
                     gdImageFillToBorder( im, (int)TSYS::realRound( p_center.x ), (int)TSYS::realRound( p_center.y ), clr_el, clr_el_line );
-                    (pnts)[item.n1] = unscaleUnrotate( Point( el_p3.x + rotate( arc( t_start, arc_a, arc_b ), ang ).x,
-                        el_p3.y - rotate( arc( t_start, arc_a, arc_b ), ang ).y ), xScale, yScale, true );
-                    (pnts)[item.n2] = unscaleUnrotate( Point( el_p3.x + rotate( arc( t_end, arc_a, arc_b ), ang ).x,
-                        el_p3.y - rotate( arc( t_end, arc_a, arc_b ), ang ).y ), xScale, yScale, true );
-                    (pnts)[item.n4] = unscaleUnrotate( Point( el_p3.x + rotate( arc( 0.25, arc_a, arc_b ), ang ).x,
-                        el_p3.y - rotate( arc( 0.25, arc_a, arc_b ), ang ).y ), xScale, yScale, true );
-                    (pnts)[item.n5] = unscaleUnrotate( Point( el_p3.x + rotate( arc( 0, arc_a, arc_b ), ang ).x,
-                        el_p3.y - rotate( arc( 0, arc_a, arc_b ), ang ).y ), xScale, yScale, true );
+                    
                 }
+                // Recalculating the points of the arc to make them really belonging to the arc
+                el_p1 = scaleRotate( (pnts)[item.n1], xScale, yScale, true );
+                el_p2 = scaleRotate( (pnts)[item.n2], xScale, yScale, true );
+                el_p3 = scaleRotate( (pnts)[item.n3], xScale, yScale, true );
+                el_p4 = scaleRotate( (pnts)[item.n4], xScale, yScale, true );
+                el_p5 = scaleRotate( (pnts)[item.n5], xScale, yScale, true );
+                el_p6 = item.ctrlPos4;
+                if ( el_p5.y <= el_p3.y ) 
+                    ang = angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
+                else ang = 360 - angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
+                arc_a = length( el_p5, el_p3 );
+                arc_b = length( el_p3, el_p4 );
+                t_start = item.ctrlPos4.x;
+                t_end = item.ctrlPos4.y;
+                (pnts)[item.n1] = unscaleUnrotate( Point( el_p3.x + rotate( arc( t_start, arc_a, arc_b ), ang ).x,
+                 el_p3.y - rotate( arc( t_start, arc_a, arc_b ), ang ).y ), xScale, yScale, true );
+                (pnts)[item.n2] = unscaleUnrotate( Point( el_p3.x + rotate( arc( t_end, arc_a, arc_b ), ang ).x,
+                 el_p3.y - rotate( arc( t_end, arc_a, arc_b ), ang ).y ), xScale, yScale, true );
+                (pnts)[item.n4] = unscaleUnrotate( Point( el_p3.x + rotate( arc( 0.25, arc_a, arc_b ), ang ).x,
+                 el_p3.y - rotate( arc( 0.25, arc_a, arc_b ), ang ).y ), xScale, yScale, true );
+                (pnts)[item.n5] = unscaleUnrotate( Point( el_p3.x + rotate( arc( 0, arc_a, arc_b ), ang ).x,
+                 el_p3.y - rotate( arc( 0, arc_a, arc_b ), ang ).y ), xScale, yScale, true );
             }
     //-- bezier curve --
     if ( item.type == 3)
@@ -1658,12 +1673,21 @@ void VCAElFigure::getReq( SSess &ses )
         if( flag_fill )
         {
         for( int j = 0; j < shape_temp.size(); j++ )
-        {
-            shapeItems[shape_temp[j]].width = 1;
-            shapeItems[shape_temp[j]].border_width = 0;
-            shapeItems[shape_temp[j]].lineColor = tmp_clr;
-            paintFigure( im, shapeItems[shape_temp[j]], xSc, ySc, false, false, false );
-        }
+            if( shapeItems[shape_temp[j]].type == 2 )
+            {
+                shapeItems[shape_temp[j]].width = 1;
+                shapeItems[shape_temp[j]].border_width = 0;
+                shapeItems[shape_temp[j]].lineColor = tmp_clr;
+                paintFigure( im, shapeItems[shape_temp[j]], xSc, ySc, false, false, false );
+            }
+        for( int j = 0; j < shape_temp.size(); j++ )
+            if( shapeItems[shape_temp[j]].type != 2 )
+            {
+                shapeItems[shape_temp[j]].width = 1;
+                shapeItems[shape_temp[j]].border_width = 0;
+                shapeItems[shape_temp[j]].lineColor = tmp_clr;
+                paintFigure( im, shapeItems[shape_temp[j]], xSc, ySc, false, false, false );
+            }
         // - Detecting the base point(the end or start point of the figure) for each fill -
         count_min_x = 0;
         count_min_y = 0;
@@ -1755,7 +1779,7 @@ void VCAElFigure::getReq( SSess &ses )
                 else
                     ang1 = angle( scaleRotate( (pnts)[num_pnt], xSc, ySc, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true ), scaleRotate( (pnts)[num_pnt], xSc, ySc, true ), 
                               Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true ).x+10, scaleRotate( (pnts)[num_pnt], xSc, ySc, true ).y ) );
-                //--- if there is ane width(of figure itself or of its borders) ---
+                //--- if there is any width(of figure itself or of its borders) ---
                 if( (shapeItems[fig[0]].width > 1 || shapeItems[fig[0]].border_width > 0) || (shapeItems[fig[1]].width > 1 || shapeItems[fig[1]].border_width > 0) )
                 {
                     if( shapeItems[fig[0]].width == 1 && shapeItems[fig[0]].border_width == 0 ) W1 = 0;
@@ -1876,14 +1900,22 @@ void VCAElFigure::getReq( SSess &ses )
                     dP2 = scaleRotate( (pnts)[point_num[1]], xSc, ySc, true );
                     num_pnt_new = scaleRotate( (pnts)[num_pnt], xSc, ySc, true );
                 }
-                delta_point_1 = unrotate( dP1, ang, num_pnt_new.x, num_pnt_new.y );
-                delta_point_1.x = delta_point_1.x * (delta);
-                delta_point_1 = Point( num_pnt_new.x + rotate( delta_point_1, ang ).x,
-                                    num_pnt_new.y - rotate( delta_point_1, ang ).y );
-                delta_point_2 = unrotate( dP2, ang1, num_pnt_new.x, num_pnt_new.y );
-                delta_point_2.x = delta_point_2.x * (delta);
-                delta_point_2 = Point( num_pnt_new.x + rotate( delta_point_2, ang1 ).x,
-                                    num_pnt_new.y - rotate( delta_point_2, ang1 ).y );
+                if( (length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true ), scaleRotate( (pnts)[point_num[0]], xSc, ySc, true ) ) ) > 4 )
+                {
+                    delta_point_1 = unrotate( dP1, ang, num_pnt_new.x, num_pnt_new.y );
+                    delta_point_1.x = delta_point_1.x * (delta);
+                    delta_point_1 = Point( num_pnt_new.x + rotate( delta_point_1, ang ).x,
+                                           num_pnt_new.y - rotate( delta_point_1, ang ).y );
+                }
+                else delta_point_1 = dP1;
+                if( (length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true ) ) ) > 4 )
+                {
+                    delta_point_2 = unrotate( dP2, ang1, num_pnt_new.x, num_pnt_new.y );
+                    delta_point_2.x = delta_point_2.x * (delta);
+                    delta_point_2 = Point( num_pnt_new.x + rotate( delta_point_2, ang1 ).x,
+                                           num_pnt_new.y - rotate( delta_point_2, ang1 ).y );
+                }
+                else delta_point_2 = dP2;
             }
             //-- Arc and line --
             else if( (shapeItems[fig[0]].type == 2 && shapeItems[fig[1]].type == 1) || (shapeItems[fig[1]].type == 2 && shapeItems[fig[0]].type == 1) )
@@ -2872,6 +2904,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
     Point CtrlMotionPos_4;
     double t_start, t_end, a, b, ang_t, ang;
     int MotionWidth;
+    pnts.clear();
     //shapeItems.clear();
     rel_list=false;
     for( int i_a = 0; i_a < node.childSize(); i_a++ )

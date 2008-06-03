@@ -1,3 +1,8 @@
+2008-06-03 Maxim
+- FIX:/UI/WebVision: Filling of the primitive "ElFigure" with length of the line < 4 is fixed.
+- FIX:/UI/WebVision: Recalculating of the points of the arc is fixed.
+
+
 2008-06-02 Roman
 - !!!!:/UI/VCAEngine, /UI/Vision: Full realisation of alarms is added.
     For speech synthesis from text use 'ru_tts' engine. For play use sox alias 'play'.
