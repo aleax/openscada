@@ -38,7 +38,7 @@ using std::vector;
 
 class QPaintEvent;
 class QComboBox;
-class QLineEdit;    
+class QLineEdit;
 class QHBoxLayout;
 class QTextEdit;
 class QDialogButtonBox;
@@ -53,12 +53,12 @@ namespace QTCFG
 class LineEdit : public QWidget
 {
     Q_OBJECT
-	
+
     public:
 	//Methods
 	LineEdit( QWidget *parent, bool prev_dis = false );
-	
-	QString text( ) const;	
+
+	QString text( ) const;
 	bool hasFocus( ) const;
 	bool isChanged( );
 
@@ -71,7 +71,7 @@ class LineEdit : public QWidget
 	void apply( );
 	void cancel( );
 	void textChanged(const QString&);
-	    
+
     protected:
 	//Methods
 	bool event( QEvent * e );
@@ -80,24 +80,24 @@ class LineEdit : public QWidget
 	//Private slots
 	void changed( const QString& );
 	void applySlot( );
-	    
+
     private:
 	//Attributes
 	QLineEdit	*ed_fld;
 	QPushButton	*bt_fld;
-}; 
-    
+};
+
 //*************************************************
 //* DateTimeEdit: Date and time edit widget       *
 //*************************************************
 class DateTimeEdit : public QWidget
 {
     Q_OBJECT
-    
+
     public:
 	//Methods
 	DateTimeEdit( QWidget *parent, bool prev_dis = false );
-	    
+
 	QDateTime dateTime( ) const;
 	bool hasFocus( ) const;
 	bool isChanged( );
@@ -111,19 +111,19 @@ class DateTimeEdit : public QWidget
 	void apply( );
 	void cancel( );
 	void valueChanged( const QDateTime& );
-	    
+
     protected:
 	//Methods
-	bool event( QEvent * e );	    
-		
+	bool event( QEvent * e );
+
     private slots:
 	//Private slots
 	void changed( const QDateTime & );
 	void applySlot( );
-	    
+
     private:
 	//Attributes
-	QDateTimeEdit 	*ed_fld;
+	QDateTimeEdit	*ed_fld;
 	QPushButton	*bt_fld;
 };
 
@@ -133,7 +133,7 @@ class DateTimeEdit : public QWidget
 class TextEdit : public QWidget
 {
     Q_OBJECT
-    
+
     public:
 	//Methods
 	TextEdit( QWidget *parent, const char * name = 0, bool prev_dis = false );
@@ -151,20 +151,20 @@ class TextEdit : public QWidget
 	void apply( );
 	void cancel( );
 	void textChanged( const QString& );
-	    
+
     private slots:
 	//Private slots
 	void changed( );
 	void btApply( );
 	void btCancel( );
-	    
+
     private:
 	//Private attributes
 	bool	isInit;
 	QTextEdit	*ed_fld;
 	QDialogButtonBox *but_box;
 };
-    
+
 //************************************************
 //* ImgView: Image view widget                   *
 //************************************************
@@ -175,15 +175,15 @@ class ImgView : public QWidget
 	//Methods
 	ImgView( QWidget * parent = 0, Qt::WindowFlags f = 0, int ih_sz = 0, int iv_sz = 0 );
 	~ImgView( );
-	    
+
 	QImage &image( )	{ return m_img; }
-	
+
 	bool setImage( const string &imgdata );
 
     protected:
 	//Methods
 	void paintEvent( QPaintEvent * );
-	
+
     private:
 	//Attributes
 	QImage m_img;
@@ -197,9 +197,9 @@ class InputDlg : public QDialog
 {
     public:
 	//Methods
-	InputDlg( QWidget *parent, const QIcon &icon, const QString &mess, 
+	InputDlg( QWidget *parent, const QIcon &icon, const QString &mess,
 		const QString &ndlg = "QTCfg dialog", bool with_id = false, bool with_nm = true );
-	    
+
 	QString id( );
 	QString name( );
 	QString mess( );
@@ -209,13 +209,13 @@ class InputDlg : public QDialog
 	void setMess( const QString &val );
 
 	//Attributes
-	QGridLayout 	*ed_lay;
+	QGridLayout	*ed_lay;
 
     private:
 	//Attributes
-	QLabel      	*inp_lab;
+	QLabel		*inp_lab;
 	QLineEdit	*m_id, *m_name;
-};    
+};
 
 //************************************************
 //* DlgUser: User select dialog                  *
@@ -227,23 +227,23 @@ class DlgUser : public QDialog
     public:
 	//Data
 	enum Results { SelCancel, SelOK, SelErr };
-	
+
 	//Methods
 	DlgUser( QWidget * parent = 0 );
-            
+
 	QString user( );
 	QString password( );
-        
+
     private slots:
 	//Private slots
 	void finish( int result );
-        
+
     private:
 	//Attributes
-	QComboBox   *users;
-	QLineEdit   *passwd;
+	QComboBox	*users;
+	QLineEdit	*passwd;
 };
-    
+
 //************************************************
 //* UserStBar: Status bar user widget            *
 //************************************************
@@ -254,20 +254,20 @@ class UserStBar : public QLabel
     public:
 	//Methods
 	UserStBar( const QString &iuser, QWidget * parent = 0 );
-			    
+
 	QString user( );
-	bool userSel( );	
-	
+	bool userSel( );
+
 	void setUser( const QString &val );
-	
+
     signals:
 	//Signals
 	void userChanged( );
-	
+
     protected:
 	//Methods
 	bool event( QEvent *event );
-					    
+
     private:
 	//Attributes
 	QString     user_txt;
@@ -281,20 +281,20 @@ class UserStBar : public QLabel
 class TableDelegate : public QItemDelegate
 {
     Q_OBJECT
-	
+
     public:
 	//- Public attributes -
 	TableDelegate( QObject *parent = 0 );
-	    
+
 	void paint( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
-	
+
 	QWidget *createEditor( QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
-					  
-    	void setEditorData( QWidget *editor, const QModelIndex &index ) const;
-        void setModelData( QWidget *editor, QAbstractItemModel *model, const QModelIndex &index ) const;
-									
+
+	void setEditorData( QWidget *editor, const QModelIndex &index ) const;
+	void setModelData( QWidget *editor, QAbstractItemModel *model, const QModelIndex &index ) const;
+
 	void updateEditorGeometry( QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
-    
+
     private:
 	//- Private attributes -
 	bool eventFilter( QObject *object, QEvent *event );

@@ -36,7 +36,7 @@
 
 namespace FSArch
 {
- 
+
 //*************************************************
 //* FSArch::ModArch                               *
 //*************************************************
@@ -45,39 +45,39 @@ class ModArch: public TTipArchivator
     public:
 	ModArch( const string &name );
 	~ModArch( );
-	    
+
 	void modStart( );
 	void modStop( );
 
 	AutoHD<ModMArch> messAt( const string &iid )	{ return TTipArchivator::messAt(iid); }
 	AutoHD<ModVArch> valAt( const string &iid )	{ return TTipArchivator::valAt(iid); }
-	    
+
 	//- Packing archives -
 	bool filePack( const string &anm );
 	string packArch( const string &anm, bool replace = true );
 	string unPackArch( const string &anm, bool replace = true );
-							    
+
 	string filesDB( );
-	TElem &packFE( )	{ return el_packfl; }	    
+	TElem &packFE( )	{ return el_packfl; }
 
     protected:
 	//Methods
 	void load_( );
-	void postEnable( int flag );	
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process	
-	
+	void postEnable( int flag );
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+
 	TMArchivator *AMess( const string &iid, const string &idb );
-	TVArchivator *AVal( const string &iid, const string &idb );	
+	TVArchivator *AVal( const string &iid, const string &idb );
 
     private:
 	//Methods
-	static void Task(union sigval obj);		//Checking archives task	    
+	static void Task(union sigval obj);		//Checking archives task
 	string optDescr( );
-	    
+
 	//Attributes
-	bool 	prc_st;
-	timer_t     tmId;   	//Thread timer
-	TElem       el_packfl;	//Arch files elements
+	bool	prc_st;
+	timer_t	tmId;		//Thread timer
+	TElem	el_packfl;	//Arch files elements
 };
 
 extern ModArch *mod;

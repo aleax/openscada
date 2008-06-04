@@ -36,7 +36,7 @@ namespace FSArch
 //* FSArch::MFileArch - Messages archivator file  *
 //*************************************************
 class ModMArch;
-    
+
 class MFileArch
 {
     public:
@@ -52,40 +52,40 @@ class MFileArch
 	//  free - surely free used memory
 	void check( bool free = false );
 
-	string &name( ) 	{ return m_name; }
-	bool   xmlM( )		{ return m_xml; }
-	int    size( )		{ return m_size; }
-	time_t begin( )		{ return m_beg; }
-	time_t end( )  		{ return m_end; }
-	string charset( )	{ return m_chars; }
-	bool   err( )  		{ return m_err; }
+	string	&name( )	{ return m_name; }
+	bool	xmlM( )		{ return m_xml; }
+	int	size( )		{ return m_size; }
+	time_t	begin( )	{ return m_beg; }
+	time_t	end( )		{ return m_end; }
+	string	charset( )	{ return m_chars; }
+	bool	err( )		{ return m_err; }
 
-	ModMArch &owner( ) 	{ return *m_owner; }
-	    
+	ModMArch &owner( )	{ return *m_owner; }
+
 	//Attributes
-	bool    scan;    	// Archive scaned (for check deleted files). Use from ModMArch
-	
+	bool	scan;		// Archive scaned (for check deleted files). Use from ModMArch
+
     private:
 	//- Cache methods -
-	long    cacheGet( time_t tm );
-	void    cacheSet( time_t tm, long off, bool last = false );
-	void    cacheUpdate( time_t tm, long v_add );
-	    
+	long	cacheGet( time_t tm );
+	void	cacheSet( time_t tm, long off, bool last = false );
+	void	cacheUpdate( time_t tm, long v_add );
+
 	//- Base parameters -
-	string  m_name;    	// name Archive file;
-	bool    m_xml;		// XML mode file
-	int    	m_size;  	// Arhive size
-	string  m_chars;   	// Archive charset;
+	string	m_name;		// name Archive file;
+	bool	m_xml;		// XML mode file
+	int	m_size;		// Arhive size
+	string	m_chars;	// Archive charset;
 	//- State parameters -
-	bool    m_err;     	// Archive err
-	bool    m_write;   	// Archive had changed but no writed to file
-	bool    m_load;    	// Archive load to m_node
-	bool    m_pack;	// Archive packed
-	time_t  m_acces;   	// last of time acces to Archive file
-	time_t  m_beg;     	// begin Archive file;
-	time_t  m_end;     	// end Archive file;
+	bool	m_err;		// Archive err
+	bool	m_write;	// Archive had changed but no writed to file
+	bool	m_load;		// Archive load to m_node
+	bool	m_pack;		// Archive packed
+	time_t	m_acces;	// last of time acces to Archive file
+	time_t	m_beg;		// begin Archive file;
+	time_t	m_end;		// end Archive file;
 	//- XML-mode parametrs -
-	XMLNode *m_node;    // XML-file tree
+	XMLNode	*m_node;	// XML-file tree
 	//- Cache parameters -
 	struct CacheEl
 	{
@@ -95,7 +95,7 @@ class MFileArch
 	vector<CacheEl> cache;
 	CacheEl cach_pr;
 	//- Specific parameters -
-	Res	 m_res;     	// resource to access;	    
+	Res	m_res;		// resource to access;
 	ModMArch *m_owner;
     };
 
@@ -115,7 +115,7 @@ class ModMArch: public TMArchivator
 	void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0 );
 	void start();
 	void stop();
-	    
+
 	int  size();
 
 	bool useXML( )		{ return m_use_xml; }
@@ -131,13 +131,13 @@ class ModMArch: public TMArchivator
 	void setTimeSize( int vl )	{ m_time_size = vl; modif(); }
 	void setCheckTm( int vl )	{ m_chk_tm = vl; modif(); }
 	void setPackTm( int vl )	{ m_pack_tm = vl; modif(); }
-	    
+
 	void checkArchivator( bool now = false );
-	    
-    private:	
+
+    private:
 	//Methods
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-	   
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+
 	//Attributes
 	bool	&m_use_xml;	// use XML for archive files
 	int	&m_max_size;	// maximum size kb of Archives file
@@ -145,15 +145,14 @@ class ModMArch: public TMArchivator
 	int	&m_time_size;	// number days to one file
 	int	&m_chk_tm;	// period of check archive files directory;
 	int	&m_pack_tm;	// pack the archive files timeout
-	
-	Res    	m_res;     	// resource to access;	
-	double 	tm_calc;        // Archiving time
-	time_t 	m_lst_check;	// Last check directory time
-	    
+
+	Res	m_res;		// resource to access;
+	double	tm_calc;	// Archiving time
+	time_t	m_lst_check;	// Last check directory time
+
 	deque<MFileArch *>  arh_s;
 };
 
 }
 
 #endif //FS_MESS_H
-

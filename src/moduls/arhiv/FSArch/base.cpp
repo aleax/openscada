@@ -18,7 +18,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
- 
+
 #include <sys/stat.h>
 #include <signal.h>
 #include <getopt.h>
@@ -32,32 +32,32 @@
 
 //*************************************************
 //* Modul info!                                   *
-#define MOD_ID      "FSArch"
-#define MOD_NAME    "File system archivator"
-#define MOD_TYPE    "Archive"
-#define VER_TYPE    VER_ARH
-#define VERSION     "0.9.6"
-#define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "The Archive module. Allow functions for messages and values arhiving to file system."
-#define LICENSE     "GPL"
+#define MOD_ID		"FSArch"
+#define MOD_NAME	"File system archivator"
+#define MOD_TYPE	"Archive"
+#define VER_TYPE	VER_ARH
+#define VERSION		"0.9.6"
+#define AUTORS		"Roman Savochenko"
+#define DESCRIPTION	"The Archive module. Allow functions for messages and values arhiving to file system."
+#define LICENSE		"GPL"
 //*************************************************
 
 FSArch::ModArch *FSArch::mod;
 
 extern "C"
-{ 
+{
     TModule::SAt module( int n_mod )
     {
-	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
-	return TModule::SAt("");    
+	if( n_mod==0 ) return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	return TModule::SAt("");
     }
-    
+
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
 	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) ) 
 	    return new FSArch::ModArch( source );
 	return NULL;
-    }    
+    }
 }
 
 using namespace FSArch;
@@ -67,17 +67,17 @@ using namespace FSArch;
 //*************************************************
 ModArch::ModArch( const string &name) : prc_st(false)
 {
-    mId 	= MOD_ID;
+    mId		= MOD_ID;
     mName	= MOD_NAME;
-    mType  	= MOD_TYPE;
-    mVers      	= VERSION;
-    mAutor    	= AUTORS;
-    mDescr  	= DESCRIPTION;
-    mLicense   	= LICENSE;
-    mSource    	= name;
-    
-    mod 	= this;
-    
+    mType	= MOD_TYPE;
+    mVers	= VERSION;
+    mAutor	= AUTORS;
+    mDescr	= DESCRIPTION;
+    mLicense	= LICENSE;
+    mSource	= name;
+
+    mod		= this;
+
     //- Create checking archivators timer -
     struct sigevent sigev;
     sigev.sigev_notify = SIGEV_THREAD;
@@ -90,7 +90,7 @@ ModArch::ModArch( const string &name) : prc_st(false)
 void ModArch::postEnable( int flag )
 {
     TModule::postEnable( flag );
-    
+
     if( flag&TCntrNode::NodeConnect )
     {
 	//- Add self DB-fields for messages archive -
@@ -100,14 +100,14 @@ void ModArch::postEnable( int flag )
 	owner().messE().fldAdd( new TFld("FSArchTmSize",_("File's time size (days)"),TFld::Integer,TFld::NoFlag,"3","30") );
 	owner().messE().fldAdd( new TFld("FSArchPackTm",_("Pack files timeout (min)"),TFld::Integer,TFld::NoFlag,"2","10") );
 	owner().messE().fldAdd( new TFld("FSArchTm",_("Check archives period (min)"),TFld::Integer,TFld::NoFlag,"2","60") );
-	
+
 	//- Add self DB-fields for value archive -
 	owner().valE().fldAdd( new TFld("FSArchTmSize",_("File's time size (hours)"),TFld::Real,TFld::NoFlag,"4.2","800") );
-    	owner().valE().fldAdd( new TFld("FSArchNFiles",_("Maximum files number"),TFld::Integer,TFld::NoFlag,"3","10") );
+	owner().valE().fldAdd( new TFld("FSArchNFiles",_("Maximum files number"),TFld::Integer,TFld::NoFlag,"3","10") );
 	owner().valE().fldAdd( new TFld("FSArchRound",_("Numberic values rounding (%)"),TFld::Real,TFld::NoFlag,"2.2","0.1","0;50") );
-	owner().valE().fldAdd( new TFld("FSArchPackTm",_("Pack files timeout (min)"),TFld::Integer,TFld::NoFlag,"2","10") );    	
+	owner().valE().fldAdd( new TFld("FSArchPackTm",_("Pack files timeout (min)"),TFld::Integer,TFld::NoFlag,"2","10") );
 	owner().valE().fldAdd( new TFld("FSArchTm",_("Check archives period (min)"),TFld::Integer,TFld::NoFlag,"2","60") );
-	
+
 	//- Pack files DB structure -
 	el_packfl.fldAdd( new TFld("FILE",_("File"),TFld::String,TCfg::Key,"100") );
 	el_packfl.fldAdd( new TFld("BEGIN",_("Begin"),TFld::String,TFld::NoFlag,"20") );
@@ -121,7 +121,7 @@ void ModArch::postEnable( int flag )
 ModArch::~ModArch()
 {
     try{ modStop(); }catch(...){}
-    
+
     timer_delete(tmId);
 }
 
@@ -136,38 +136,38 @@ bool ModArch::filePack( const string &anm )
     return true;
     return false;
 }
-		
+
 string ModArch::packArch( const string &anm, bool replace )
 {
     string rez_nm = anm+".gz";
-    
+
     //sighandler_t prevs = signal(SIGCHLD,SIG_DFL);
     int sysres = system((string("gzip -c \"")+anm+"\" > \""+rez_nm+"\"").c_str());
-    //signal(SIGCHLD,prevs);    
+    //signal(SIGCHLD,prevs);
     if( sysres )
     {
 	remove(rez_nm.c_str());
-    	throw TError(nodePath().c_str(),_("Compress error!"));
+	throw TError(nodePath().c_str(),_("Compress error!"));
     }
     if( replace ) remove(anm.c_str());
-	    
+
     return rez_nm;
 }
-					
+
 string ModArch::unPackArch( const string &anm, bool replace )
 {
     string rez_nm = anm.substr(0,anm.size()-3);
-    
+
     //sighandler_t prevs = signal(SIGCHLD,SIG_DFL);
     int sysres = system((string("gzip -cd \"")+anm+"\" > \""+rez_nm+"\"").c_str());
-    //signal(SIGCHLD,prevs);    
+    //signal(SIGCHLD,prevs);
     if( sysres )
     {
 	remove(rez_nm.c_str());
-        throw TError(nodePath().c_str(),_("Decompress error!"));
+	throw TError(nodePath().c_str(),_("Decompress error!"));
     }
     if( replace ) remove(anm.c_str());
-							    
+
     return rez_nm;
 }
 
@@ -223,10 +223,10 @@ void ModArch::modStop( )
 	itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
     timer_settime(tmId, 0, &itval, NULL);
     if( TSYS::eventWait( prc_st, false, nodePath()+"stop",5) )
-        throw TError(nodePath().c_str(),_("Check archives thread no stoped!"));
+	throw TError(nodePath().c_str(),_("Check archives thread no stoped!"));
 }
 
-void ModArch::Task(union sigval obj)
+void ModArch::Task( union sigval obj )
 {
     ModArch *arh = (ModArch *)obj.sival_ptr;
     if( arh->prc_st )  return;
@@ -238,19 +238,19 @@ void ModArch::Task(union sigval obj)
     for( int i_a = 0; i_a < a_list.size(); i_a++ )
 	try{ arh->messAt(a_list[i_a]).at().checkArchivator(); }
 	catch(TError err)
-	{ 
+	{
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	    mess_err(arh->nodePath().c_str(),_("Check message archivator <%s> error."),a_list[i_a].c_str());
 	}
-	
+
     //- Check value archivators -
     arh->valList(a_list);
     for( int i_a = 0; i_a < a_list.size(); i_a++ )
 	try{ arh->valAt(a_list[i_a]).at().checkArchivator(); }
 	catch(TError err)
-	{ 
+	{
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	    mess_err(arh->nodePath().c_str(),_("Check value archivator <%s> error."),a_list[i_a].c_str()); 
+	    mess_err(arh->nodePath().c_str(),_("Check value archivator <%s> error."),a_list[i_a].c_str());
 	}
 
     //- Check to nopresent archive files -
@@ -259,13 +259,13 @@ void ModArch::Task(union sigval obj)
     int fld_cnt=0;
     while( SYS->db().at().dataSeek(mod->filesDB(),mod->nodePath()+"Pack/",fld_cnt++,c_el) )
     {
-        struct stat file_stat;
-        if( stat(c_el.cfg("FILE").getS().c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG )
-        {	
-    	    SYS->db().at().dataDel(mod->filesDB(),mod->nodePath()+"Pack/",c_el);
+	struct stat file_stat;
+	if( stat(c_el.cfg("FILE").getS().c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG )
+	{
+	    SYS->db().at().dataDel(mod->filesDB(),mod->nodePath()+"Pack/",c_el);
 	    fld_cnt--;
-	}	
-	c_el.cfg("FILE").setS("");	
+	}
+	c_el.cfg("FILE").setS("");
     }
 
     arh->prc_st = false;
@@ -287,7 +287,7 @@ void ModArch::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
-        TTipArchivator::cntrCmdProc(opt);
+	TTipArchivator::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
 	return;
     }

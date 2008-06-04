@@ -53,7 +53,7 @@ namespace VISION
     class InputDlg : public QDialog
     {
 	public:
-	    InputDlg( QWidget *parent, const QIcon &icon, const QString &mess, 
+	    InputDlg( QWidget *parent, const QIcon &icon, const QString &mess,
 		    const QString &ndlg = "Vision dialog", bool with_id = false, bool with_nm = true );
 
 	    QString id( );
@@ -75,7 +75,7 @@ namespace VISION
     class DlgUser : public QDialog
     {
 	Q_OBJECT
-    
+
 	public:
 	    //Data
 	    enum Results { SelCancel, SelOK, SelErr };
@@ -100,7 +100,7 @@ namespace VISION
     class FontDlg : public QDialog
     {
 	Q_OBJECT
-    
+
 	public:
 	    FontDlg( QWidget *parent, const QString &ifnt );
 
@@ -152,9 +152,9 @@ namespace VISION
     //*********************************************************************************************
     class LineEdit : public QWidget
     {
-        Q_OBJECT
+	Q_OBJECT
 
-        public:
+	public:
 	    //- Data -
 	    enum LType { Text, Integer, Real, Time, Date, DateTime, Combo };
 
@@ -164,7 +164,7 @@ namespace VISION
 
 	    LType type( )	{ return m_tp; }
 	    QString value( );
-	    bool  isEdited( );
+	    bool isEdited( );
 
 	    void setType( LType tp );
 	    void setValue( const QString& );
@@ -196,65 +196,65 @@ namespace VISION
     //*********************************************
     class TextEdit : public QWidget
     {
-        Q_OBJECT
-	    
-        public:
-            TextEdit( QWidget *parent, bool prev_dis = false );
-						
-            QString text();
-            void setText(const QString &);
-						    
-            QTextEdit *workWdg() { return ed_fld; }
-	    
-        signals:
-            void apply( );
-            void cancel( );
-            void textChanged(const QString&);
-        
+	Q_OBJECT
+
+	public:
+	    TextEdit( QWidget *parent, bool prev_dis = false );
+
+	    QString text( );
+	    void setText( const QString & );
+
+	    QTextEdit *workWdg( )	{ return ed_fld; }
+
+	signals:
+	    void apply( );
+	    void cancel( );
+	    void textChanged( const QString& );
+
 	private slots:
-            void changed();
-            void applySlot( );
-            void cancelSlot( );
-        
+	    void changed( );
+	    void applySlot( );
+	    void cancelSlot( );
+
 	private:
-    	    bool isInit;
-	    QString     m_text;
-            QTextEdit   *ed_fld;
-            QDialogButtonBox *but_box;
+	    bool		isInit;
+	    QString		m_text;
+	    QTextEdit		*ed_fld;
+	    QDialogButtonBox	*but_box;
     };
 
     //****************************************
     //* Shape widget view                    *
     //****************************************
     class WdgShape;
-    
+
     class WdgView: public QWidget
     {
 	Q_OBJECT
-    
-        public:
-    	    //- Public methods -
+
+	public:
+	    //- Public methods -
 	    WdgView( const string &iwid, int ilevel, QMainWindow *mainWind, QWidget* parent = 0, Qt::WindowFlags f = 0 );
 	    ~WdgView( );
 
-	    string id( )    		{ return idWidget; }
-	    int    wLevel( )		{ return w_level; }
-	    string root( );
-	    QMainWindow *mainWin( )	{ return main_win; }
-	    QPointF posF( )		{ return w_pos; }
-	    QSizeF  sizeF( )		{ return w_size; }
-	    QRectF  geometryF( )	{ return QRectF(w_pos,w_size); }
-	    virtual float  xScale( bool full = false );
-	    virtual float  yScale( bool full = false );
-	    int	   z( )			{ return z_coord;  }
+	    string	id( )		{ return idWidget; }
+	    int		wLevel( )	{ return w_level; }
+	    string	root( );
+	    QMainWindow	*mainWin( )	{ return main_win; }
+	    QPointF	posF( )		{ return w_pos; }
+	    QSizeF	sizeF( )	{ return w_size; }
+	    QRectF	geometryF( )	{ return QRectF(w_pos,w_size); }
+	    virtual float xScale( bool full = false );
+	    virtual float yScale( bool full = false );
+	    int		z( )		{ return z_coord;  }
 	    virtual string user( )	{ return ""; }
 	    QMap<QString, QVariant> &dc(){ return cache_data; }
-	    bool allAttrLoad( )		{ return all_attr_load; }
+	    bool	allAttrLoad( )	{ return all_attr_load; }
 
-	    void   moveF( const QPointF &pos );
-	    void   resizeF( const QSizeF &size );
-	    void   setAllAttrLoad( bool vl )	{ all_attr_load = vl; }
-	    
+	    void	moveF( const QPointF &pos );
+	    void	resizeF( const QSizeF &size );
+	    void	setAllAttrLoad( bool vl )	{ all_attr_load = vl; }
+
 	    virtual bool attrSet( const string &attr, const string &val, int uiPrmPos = 0 );
 	    string resGet( const string &res );
 
@@ -263,25 +263,25 @@ namespace VISION
 	public slots:
 	    virtual WdgView *newWdgItem( const string &iwid );
 	    virtual void load( const string& item, bool load = true, bool init = true );
-	    
+
 	protected:
 	    //- Protected methods -
 	    void childsUpdate( bool newLoad = true );
 	    void shapeUpdate( );
 	    virtual void orderUpdate( );
-	    
+
 	    bool event( QEvent * event );
-	    bool eventFilter( QObject *object, QEvent *event );	    
-	    
+	    bool eventFilter( QObject *object, QEvent *event );
+
 	    //- Protected attributes -
 	    bool		all_attr_load;	//All attributes load
-	    int 		w_level;	//Widget level
+	    int			w_level;	//Widget level
 	    QPointF		w_pos;		//Widget position into real;
 	    QSizeF		w_size;		//Widget size into real;
 	    float		x_scale, 	//Widget x scale
 				y_scale;	//	 y scale
 	    int			z_coord;	//Z coordinate
-	    string		idWidget, 	//Full widget identifier
+	    string		idWidget,	//Full widget identifier
 				m_root;		//Root widget identifier
 	    WdgShape		*shape;		//Link to root widget shape
 	    QMap<QString, QVariant> cache_data;	//Internal data cache
@@ -290,4 +290,3 @@ namespace VISION
 }
 
 #endif //VIS_WIDGS_H
-
