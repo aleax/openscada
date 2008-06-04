@@ -599,7 +599,7 @@ void VisRun::alarmSet( unsigned alarm )
 
     //- Alarm action indicators update
     //-- Alarm level icon update --
-    if( ch_tp & 0xFF || (alarm>>16)&(TVision::Light|TVision::Alarm|TVision::Sound) )
+    if( ch_tp&0xFF || (alarm>>16)&(TVision::Light|TVision::Alarm|TVision::Sound) || !alrLevSet )
     {
 	int alarmLev = alarm&0xFF;
 	actAlrmLev->setToolTip(QString(_("Alarm level: %1")).arg(alarmLev));
