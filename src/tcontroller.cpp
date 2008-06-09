@@ -282,8 +282,8 @@ void TController::cntrCmdProc( XMLNode *opt )
 	    {
 		ctrMkNode("fld",opt,-1,"/cntr/st/en_st",_("Enable"),0664,"root","root",1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/cntr/st/run_st",_("Run"),0664,"root","root",1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/cntr/st/db",_("Controller DB (module.db)"),0660,"root","root",2,
-		    "tp","str","help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set symbol '*'."));
+		ctrMkNode("fld",opt,-1,"/cntr/st/db",_("Controller DB"),0664,"root","root",4,"tp","str","dest","select","select","/db/list",
+		    "help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
 	    }
 	    if(ctrMkNode("area",opt,-1,"/cntr/cfg",_("Config")))
 		TConfig::cntrCmdMake(opt,"/cntr/cfg",0,"root","root",0664);
@@ -348,8 +348,8 @@ void TController::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/cntr/st/db" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText(DB());
-	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	setDB(opt->text());
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(DB());
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setDB(opt->text());
     }
     else if( a_path == "/cntr/st/en_st" )
     {

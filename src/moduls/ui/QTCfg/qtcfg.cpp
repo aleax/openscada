@@ -52,7 +52,6 @@
 #include <QDateTime>
 #include <QLineEdit>
 #include <QErrorMessage>
-#include <QDateTimeEdit>
 #include <QScrollArea>
 #include <QCloseEvent>
 #include <QFileDialog>
@@ -579,7 +578,7 @@ void ConfApp::itDel( const string &iit )
 		    else treeUpdate();
 		    break;
 		}
-        }
+	}
     }
 }
 
@@ -660,7 +659,7 @@ void ConfApp::itPaste( )
     //- Copy visual item -
     XMLNode req("copy");
     req.setAttr("path","/"+stat_nm+"/%2fobj")->setAttr("src",src_nm)->setAttr("dst",dst_nm);
-    if( cntrIfCmd(req) ) 
+    if( cntrIfCmd(req) )
     { mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Error,this); return; }
 
     //- Remove source widget -
@@ -735,10 +734,10 @@ void ConfApp::about( )
     char buf[STR_BUF_LEN];
 
     snprintf(buf,sizeof(buf),_(
-        "%s v%s.\n"
+	"%s v%s.\n"
 	"Autor: %s\n"
 	"License: %s\n"),
-        mod->modInfo("Name").c_str(), mod->modInfo("Version").c_str(), mod->modInfo("Author").c_str(), mod->modInfo("License").c_str() );
+	mod->modInfo("Name").c_str(), mod->modInfo("Version").c_str(), mod->modInfo("Author").c_str(), mod->modInfo("License").c_str() );
 
     QMessageBox::about(this,windowTitle(),buf);
 }
@@ -847,13 +846,13 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	    if( i_tbs >= tabs->count() )
 	    {
 		QScrollArea *scrl = new QScrollArea();
-                tabs->insertTab(i_area, scrl, t_s.attr("dscr").c_str() );
+		tabs->insertTab(i_area, scrl, t_s.attr("dscr").c_str() );
 		t_s.setAttr("qview","0");
 	    }
 
 	    //--- Find and prepare curent tabs ---
 	    if( tabs->currentIndex() == i_area )
-            {
+	    {
 		bool refresh = atoi(t_s.attr("qview").c_str());
 		QScrollArea *scrl = (QScrollArea *)tabs->widget(i_area);
 		QWidget *wdg = scrl->widget();
@@ -881,7 +880,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    t_s.setAttr("qview","1");
 		}
 		else selectChildRecArea(t_s,a_path+t_s.attr("id")+'/',wdg,refresh);
-            }
+	    }
 	    //else t_s.attr("qview","0");	//Mark no view tabs
 	    i_area++;
 	}
@@ -1032,14 +1031,14 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    if( tbl->columnCount() != n_col )	tbl->setColumnCount(n_col);
 		    if( tbl->rowCount() != n_row )	tbl->setRowCount(n_row);
 
-		    for( unsigned i_lst = 0; i_lst < t_s.childSize(); i_lst++ )	    
+		    for( unsigned i_lst = 0; i_lst < t_s.childSize(); i_lst++ )
 		    {
 			XMLNode *t_linf = t_s.childGet(i_lst);
 			if(!t_linf) continue;
 			bool c_wr = wr && (atoi(t_linf->attr("acs").c_str())&SEQ_WR);
 
 			QTableWidgetItem *thd_it = tbl->horizontalHeaderItem(i_lst);
-			if( !thd_it ) 
+			if( !thd_it )
 			{
 			    thd_it = new QTableWidgetItem("");
 			    tbl->setHorizontalHeaderItem(i_lst,thd_it);
@@ -1066,17 +1065,31 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 				int sel_n = -1;
 				bool u_ind = atoi(t_linf->attr("idm").c_str());
 
-				XMLNode x_lst("get");
-				x_lst.setAttr("path",sel_path+"/"+TSYS::strEncode( t_linf->attr("select"),TSYS::PathEl));
-				if(cntrIfCmd(x_lst)) mod->postMess(x_lst.attr("mcat"),x_lst.text(),TUIMod::Error,this);
-				else
-				    for( int i_ls = 0; i_ls < x_lst.childSize(); i_ls++ )
+				if( t_linf->attr("select").empty() )
+				{
+				    string s_nm;
+				    for( int ls_off = 0, id_off = 0, i_ls = 0; !(s_nm=TSYS::strSepParse(t_linf->attr("sel_list"),0,';',&ls_off)).empty(); i_ls++ )
 				    {
-					elms+=x_lst.childGet(i_ls)->text().c_str();
-					if( (u_ind && x_lst.childGet(i_ls)->attr("id") == t_linf->childGet(i_el)->text()) ||
-						(!u_ind && x_lst.childGet(i_ls)->text() == t_linf->childGet(i_el)->text()) )
+					elms+=s_nm.c_str();
+					if( (u_ind && TSYS::strSepParse(t_linf->attr("sel_id"),0,';',&id_off) == t_linf->childGet(i_el)->text()) ||
+						(!u_ind && s_nm == t_linf->childGet(i_el)->text()) )
 					    sel_n = i_ls;
 				    }
+				}
+				else
+				{
+				    XMLNode x_lst("get");
+				    x_lst.setAttr("path",sel_path+"/"+TSYS::strEncode( t_linf->attr("select"),TSYS::PathEl));
+				    if(cntrIfCmd(x_lst)) mod->postMess(x_lst.attr("mcat"),x_lst.text(),TUIMod::Error,this);
+				    else
+					for( int i_ls = 0; i_ls < x_lst.childSize(); i_ls++ )
+					{
+					    elms+=x_lst.childGet(i_ls)->text().c_str();
+					    if( (u_ind && x_lst.childGet(i_ls)->attr("id") == t_linf->childGet(i_el)->text()) ||
+						    (!u_ind && x_lst.childGet(i_ls)->text() == t_linf->childGet(i_el)->text()) )
+						sel_n = i_ls;
+					}
+				}
 				if( sel_n < 0 )
 				{
 				    elms.insert(elms.begin(),t_linf->childGet(i_el)->text().c_str());
@@ -1242,7 +1255,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
     }
 
     //- View select fields -
-    if( (t_s.attr("dest") == "select" || t_s.attr("dest") == "sel_ed") )
+    if( t_s.attr("dest") == "select" )
     {
 	QLabel *lab	= NULL;
 	QLabel *lab_r	= NULL;
@@ -1257,8 +1270,6 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		comb->setObjectName(br_path.c_str());
 		comb->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 		comb->setStatusTip((sel_path+"/"+br_path).c_str());
-		if( t_s.attr("dest") == "sel_ed" )
-		    comb->setEditable(true);
 		comb->setSizePolicy( QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed) );
 		connect( comb, SIGNAL( activated(const QString&) ), this, SLOT( combBoxActivate( const QString& ) ) );
 	    }
@@ -1276,7 +1287,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		lab = new QLabel(widget);
 		(*l_hbox)->insertWidget( l_pos++, lab );
 		if(comb)	(*l_hbox)->insertWidget( l_pos++, comb );
-		if(lab_r) 	(*l_hbox)->insertWidget( l_pos++, lab_r );
+		if(lab_r)	(*l_hbox)->insertWidget( l_pos++, lab_r );
 		(*l_hbox)->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ) );
 		widget->layout()->addItem( *l_hbox );
 	    }
@@ -1290,7 +1301,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		if(lab_r)
 		{
 		    if( *l_hbox ) (*l_hbox)->insertWidget( l_pos++, lab_r );
-                    else { delete lab_r; lab_r = NULL; }
+		    else { delete lab_r; lab_r = NULL; }
 		}
 	    }
 
@@ -1311,36 +1322,53 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	{
 	    (comb ? (QWidget*)comb : (QWidget*)lab_r)->setToolTip(t_s.attr("help").c_str());
 	    if(comb) comb->clear();
-	    XMLNode x_lst("get");
-	    x_lst.setAttr("path",sel_path+"/"+TSYS::strEncode( t_s.attr("select"),TSYS::PathEl));
-	    if(cntrIfCmd(x_lst)) mod->postMess(x_lst.attr("mcat"),x_lst.text(),TUIMod::Error,this);
+
+	    bool sel_ok = false;
+	    unsigned c_el = 0;
+	    if( t_s.attr("select").empty() )
+	    {
+		string s_nm;
+		bool ind_ok = t_s.attr("sel_id").size();	//Index present
+		for( int ls_off = 0, id_off = 0; !(s_nm=TSYS::strSepParse(t_s.attr("sel_list"),0,';',&ls_off)).empty(); c_el++ )
+		{
+		    if( comb )	comb->insertItem( c_el, s_nm.c_str() );
+		    if( (ind_ok && TSYS::strSepParse(t_s.attr("sel_id"),0,';',&id_off) == data_req.text()) ||
+			(!ind_ok && s_nm == data_req.text()) )
+		    {
+			sel_ok = true;
+			if( comb )	comb->setCurrentIndex( c_el );
+			if( lab_r )	lab_r->setText((string("<b>")+s_nm+"</b>").c_str());
+		    }
+		}
+	    }
 	    else
 	    {
-		bool sel_ok = false;
-		unsigned i_el,c_el;
-		for( i_el = 0, c_el = 0; i_el < x_lst.childSize(); i_el++ )
-		    if( x_lst.childGet(i_el)->name() == "el")
-		    {
-			if(comb)	comb->insertItem(c_el++, x_lst.childGet(i_el)->text().c_str() );
-			bool ind_ok = x_lst.childGet(i_el)->attr("id").size();	//Index present
-			if( (ind_ok && x_lst.childGet(i_el)->attr("id") == data_req.text()) ||
-				(!ind_ok && x_lst.childGet(i_el)->text() == data_req.text()) )
+		XMLNode x_lst("get");
+		x_lst.setAttr("path",sel_path+"/"+TSYS::strEncode( t_s.attr("select"),TSYS::PathEl));
+		if( !cntrIfCmd(x_lst) )
+		    for( unsigned i_el = 0; i_el < x_lst.childSize(); i_el++ )
+			if( x_lst.childGet(i_el)->name() == "el")
 			{
-			    sel_ok = true;
-			    if(comb)	comb->setCurrentIndex( c_el-1 );
-			    if(lab_r)	lab_r->setText((string("<b>")+x_lst.childGet(i_el)->text()+"</b>").c_str());
+			    if( comb )	comb->insertItem(c_el++, x_lst.childGet(i_el)->text().c_str() );
+			    bool ind_ok = x_lst.childGet(i_el)->attr("id").size();	//Index present
+			    if( (ind_ok && x_lst.childGet(i_el)->attr("id") == data_req.text()) ||
+				(!ind_ok && x_lst.childGet(i_el)->text() == data_req.text()) )
+			    {
+				sel_ok = true;
+				if( comb )	comb->setCurrentIndex( c_el-1 );
+				if( lab_r )	lab_r->setText((string("<b>")+x_lst.childGet(i_el)->text()+"</b>").c_str());
+			    }
 			}
-		    }
-		//--- Insert empty field if none selected ---
-		if( !sel_ok )
+	    }
+	    //--- Insert empty field if none selected ---
+	    if( !sel_ok )
+	    {
+		if(comb)
 		{
-		    if(comb)
-		    {
-			comb->insertItem(c_el,data_req.text().c_str());
-			comb->setCurrentIndex(c_el);
-		    }
-		    if(lab_r)	lab_r->setText("");
+		    comb->insertItem(c_el,data_req.text().c_str());
+		    comb->setCurrentIndex(c_el);
 		}
+		if(lab_r)	lab_r->setText((string("<b>")+data_req.text()+"</b>").c_str());
 	    }
 	}
     }
@@ -1476,13 +1504,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	{
 	    QLabel	*lab   = NULL;
 	    QLabel	*val_r = NULL;
-	    DateTimeEdit *val_w = NULL;
-
-	    time_t tm_t;
-	    if( data_req.text().size() ) tm_t = atoi(data_req.text().c_str());
-	    else tm_t = time(NULL);
-	    QDateTime dtm;
-	    dtm.setTime_t(tm_t);
+	    LineEdit	*val_w = NULL;
 
 	    if( !refr )
 	    {
@@ -1499,10 +1521,11 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		}
 		else
 		{
-		    val_w = new DateTimeEdit( widget, comm );
+		    val_w = new LineEdit( widget, LineEdit::DateTime, comm );
 		    val_w->setObjectName(br_path.c_str());
 		    val_w->setStatusTip((sel_path+"/"+br_path).c_str());
-		    connect( val_w, SIGNAL( valueChanged(const QDateTime &) ), this, SLOT( dataTimeChange(const QDateTime&) ) );
+		    val_w->setCfg("dd.MM.yyyy hh:mm:ss");
+		    connect( val_w, SIGNAL( valChanged(const QString&) ), this, SLOT( editChange(const QString&) ) );
 		    connect( val_w, SIGNAL( apply() ), this, SLOT( applyButton() ) );
 		    connect( val_w, SIGNAL( cancel() ), this, SLOT( cancelButton() ) );
 		}
@@ -1537,20 +1560,25 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    {
 		lab  = (QLabel *)TSYS::str2addr(t_s.attr("addr_lab"));
 		val_r = (QLabel *)TSYS::str2addr(t_s.attr("addr_dtr"));
-		val_w = (DateTimeEdit *)TSYS::str2addr(t_s.attr("addr_dtw"));
+		val_w = (LineEdit *)TSYS::str2addr(t_s.attr("addr_dtw"));
 	    }
 
 	    //-- Fill data --
 	    if( lab )	lab->setText((t_s.attr("dscr")+":").c_str());
 	    if( val_r )
 	    {
+		time_t tm_t;
+		if( data_req.text().size() ) tm_t = atoi(data_req.text().c_str());
+		else tm_t = time(NULL);
+		QDateTime dtm;
+		dtm.setTime_t(tm_t);
 		val_r->setToolTip(t_s.attr("help").c_str());
 		val_r->setText( "<b>"+dtm.toString("dd.MM.yyyy hh:mm:ss")+"</b>" );
 	    }
-	    if( val_w && !val_w->isChanged() )
+	    if( val_w && !val_w->isEdited() )
 	    {
 		val_w->setToolTip(t_s.attr("help").c_str());
-		val_w->setDateTime( dtm );
+		val_w->setValue(data_req.text().c_str());
 	    }
 	}
 	//- View other string and numberic fields -
@@ -1577,31 +1605,44 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		//-- View edit --
 		else
 		{
-		    val_w = new LineEdit( widget, comm );
+		    val_w = new LineEdit( widget, LineEdit::Text, comm );
 		    val_w->setObjectName( br_path.c_str() );
 		    val_w->setStatusTip((sel_path+"/"+br_path).c_str());
 		    QSizePolicy sp(QSizePolicy::Preferred, QSizePolicy::Fixed);
 		    sp.setHorizontalStretch(1);
 		    val_w->setSizePolicy( sp );
-		    connect( val_w, SIGNAL( textChanged(const QString&) ), this, SLOT( editChange(const QString&) ) );
+		    connect( val_w, SIGNAL( valChanged(const QString&) ), this, SLOT( editChange(const QString&) ) );
 		    connect( val_w, SIGNAL( apply() ), this, SLOT( applyButton() ) );
 		    connect( val_w, SIGNAL( cancel() ), this, SLOT( cancelButton() ) );
 
 		    //--- addon parameters ---
 		    string tp = t_s.attr("tp");
-		    int val_n = atoi(t_s.attr("len").c_str());
-		    if( val_n > 0 )	val_w->edit()->setMaxLength( (tp=="hex")?val_n+2:((tp=="oct")?val_n+1:val_n) );
-
-		    if( tp == "dec" || tp == "hex" || tp == "oct" || tp == "real" )
+		    if( t_s.attr("dest") == "sel_ed" )
+		    {
+			val_w->setMinimumSize(100,0);
+			val_w->setType( LineEdit::Combo );
+		    }
+		    else if( tp == "dec" )
 		    {
 			val_w->setFixedWidth( 5*15+30 );
-			if( tp == "dec" )	val_w->edit()->setValidator( new QIntValidator(val_w->edit()) );
-			else if( tp == "real" )	val_w->edit()->setValidator( new QDoubleValidator(val_w->edit()) );
+			val_w->setType( LineEdit::Integer );
+			QString	max = t_s.attr("max").empty() ? "9999999999" : t_s.attr("max").c_str();
+			QString	min = t_s.attr("min").empty() ? "-9999999999" : t_s.attr("min").c_str();
+			val_w->setCfg(min+":"+max+":1");
 		    }
-		    else val_w->setMinimumWidth( 7*15+30 );
+		    else if( tp == "hex" || tp == "oct" )	val_w->setFixedWidth( 5*15+30 );
+		    else if( tp == "real" )
+		    {
+			val_w->setFixedWidth( 5*15+30 );
+			val_w->setType(LineEdit::Real);
+			QString	max = t_s.attr("max").empty() ? "9999999999" : t_s.attr("max").c_str();
+			QString	min = t_s.attr("min").empty() ? "-9999999999" : t_s.attr("min").c_str();
+			val_w->setCfg(min+":"+max+":1:::4");
+		    }
+		    else	val_w->setMinimumWidth( 7*15+30 );
 		}
 		//-- Check use label --
-		if(t_s.attr("dscr").size()) 
+		if(t_s.attr("dscr").size())
 		{
 		    *l_hbox = new QHBoxLayout; l_pos = 0;
 		    (*l_hbox)->setSpacing(6);
@@ -1648,12 +1689,34 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		val_r->setToolTip(t_s.attr("help").c_str());
 		val_r->setText((string("<b>")+TSYS::strEncode(data_req.text(),TSYS::Html)+"</b>").c_str());
 	    }
-	    if( val_w && !val_w->isChanged() )
+	    if( val_w && !val_w->isEdited() )
 	    {
 		val_w->setToolTip(t_s.attr("help").c_str());
-		if( t_s.attr("tp") == "hex" )		val_w->setText(QString("0x")+QString::number(atoi(data_req.text().c_str()),16));
-		else if( t_s.attr("tp") == "oct" )	val_w->setText(QString("0")+QString::number(atoi(data_req.text().c_str()),8));
-		else val_w->setText(data_req.text().c_str());
+		if( t_s.attr("tp") == "hex" )		val_w->setValue(QString("0x")+QString::number(atoi(data_req.text().c_str()),16));
+		else if( t_s.attr("tp") == "oct" )	val_w->setValue(QString("0")+QString::number(atoi(data_req.text().c_str()),8));
+		else val_w->setValue(data_req.text().c_str());
+
+		//-- Fill combo --
+		if( t_s.attr("dest") == "sel_ed" )
+		{
+		    string cfg_vls;
+		    if( t_s.attr("select").empty() )
+		    {
+			string s_nm;
+			for( int ls_off = 0; !(s_nm=TSYS::strSepParse(t_s.attr("sel_list"),0,';',&ls_off)).empty(); )
+			    cfg_vls += s_nm+"\n";
+		    }
+		    else
+		    {
+			XMLNode x_lst("get");
+			x_lst.setAttr("path",sel_path+"/"+TSYS::strEncode( t_s.attr("select"),TSYS::PathEl));
+			if( !cntrIfCmd(x_lst) )
+			    for( int i_el = 0; i_el < x_lst.childSize(); i_el++ )
+				if( x_lst.childGet(i_el)->name() == "el")
+				    cfg_vls += x_lst.childGet(i_el)->text()+"\n";
+		    }
+		    val_w->setCfg(cfg_vls.c_str());
+		}
 	    }
 	}
     }
@@ -1702,24 +1765,24 @@ void ConfApp::pageDisplay( const string &path )
 	sel_path = path;
 
 	pg_info.clear()->setAttr("path",sel_path);
-	if(cntrIfCmd(pg_info)) 
-	{ 
-	    mod->postMess(pg_info.attr("mcat"),pg_info.text(),TUIMod::Error,this); 
-	    return; 
+	if(cntrIfCmd(pg_info))
+	{
+	    mod->postMess(pg_info.attr("mcat"),pg_info.text(),TUIMod::Error,this);
+	    return;
 	}
 	root = pg_info.childGet(0);
     }
     else
-    {    
+    {
 	//-- Check the new node structure and the old node --
 	XMLNode n_node("info");
 	n_node.setAttr("path",sel_path);
 	if( cntrIfCmd(n_node) )
-	{ 
+	{
 	    mod->postMess(n_node.attr("mcat"),n_node.text(),TUIMod::Error,this); 
-	    return; 
+	    return;
 	}
-	upStruct(*root,*n_node.childGet(0));
+	upStruct( *root, *n_node.childGet(0) );
     }
 
     block_tabs = true;
@@ -1813,7 +1876,8 @@ bool ConfApp::upStruct(XMLNode &w_nd, const XMLNode &n_nd)
 	//- Check base fields destination change -
 	if( w_nd.childGet(i_w)->name() == "fld" && 
 	    (w_nd.childGet(i_w)->attr("dest") != n_nd.childGet(i_n)->attr("dest") ||
-	     w_nd.childGet(i_w)->attr("tp") != n_nd.childGet(i_n)->attr("tp")) )
+	     w_nd.childGet(i_w)->attr("tp") != n_nd.childGet(i_n)->attr("tp") ||
+	     w_nd.childGet(i_w)->attr("dest") != n_nd.childGet(i_n)->attr("dest")) )
 	{
 	    w_nd.childGet(i_w)->setAttr("dest","");
 	    w_nd.childGet(i_w)->setAttr("tp","");
@@ -2223,27 +2287,41 @@ void ConfApp::combBoxActivate( const QString& ival )
 	    block = true;
 	    path = path.substr(1);
 	}
-	
+
 	n_el = SYS->ctrId(root,TSYS::strDecode(path,TSYS::PathEl) );
-	
-        //- Get list for index list check! -
+
+	//- Get list for index list check! -
 	if( n_el->attr("dest") == "select" )
 	{
 	    bool find_ok = false;
-	    XMLNode x_lst("get");
-	    x_lst.setAttr("path",sel_path+"/"+TSYS::strEncode( n_el->attr("select"),TSYS::PathEl));
-	    if( cntrIfCmd(x_lst) ) 
+	    if( n_el->attr("select").empty() )
 	    {
-		mod->postMess(x_lst.attr("mcat"),x_lst.text(),TUIMod::Error,this); 
-		return;
+		bool ind_ok = n_el->attr("sel_id").size();
+		string s_nm;
+		for( int ls_off = 0, c_el = 0; !(s_nm=TSYS::strSepParse(n_el->attr("sel_list"),0,';',&ls_off)).empty(); c_el++ )
+		    if( s_nm == val )
+		    {
+			if( ind_ok )	val = TSYS::strSepParse(n_el->attr("sel_id"),c_el,';');
+			find_ok = true;
+		    }
 	    }
-
-	    for( int i_el = 0; i_el < x_lst.childSize(); i_el++ )
-	    if( x_lst.childGet(i_el)->name() == "el" && x_lst.childGet(i_el)->text() == val )
+	    else
 	    {
-		if( x_lst.childGet(i_el)->attr("id").size() )
-		    val = x_lst.childGet(i_el)->attr("id");
-		find_ok = true;
+		XMLNode x_lst("get");
+		x_lst.setAttr("path",sel_path+"/"+TSYS::strEncode( n_el->attr("select"),TSYS::PathEl));
+		if( cntrIfCmd(x_lst) )
+		{
+		    mod->postMess(x_lst.attr("mcat"),x_lst.text(),TUIMod::Error,this); 
+		    return;
+		}
+
+		for( int i_el = 0; i_el < x_lst.childSize(); i_el++ )
+		    if( x_lst.childGet(i_el)->name() == "el" && x_lst.childGet(i_el)->text() == val )
+		    {
+			if( x_lst.childGet(i_el)->attr("id").size() )
+			    val = x_lst.childGet(i_el)->attr("id");
+			find_ok = true;
+		    }
 	    }
 	    if( !find_ok )
 	    {
@@ -2251,7 +2329,7 @@ void ConfApp::combBoxActivate( const QString& ival )
 		return;
 	    }
 	}
-	
+
 	//- Check block element. Command box! -
 	if( block ) { n_el->setText(val); return; }
 	else
@@ -2674,21 +2752,35 @@ void ConfApp::tableSet( int row, int col )
 	{
 	    value = val.toString().toAscii().data();
 	    bool find_ok = false;
-	    XMLNode x_lst("get");
-	    x_lst.setAttr("path",sel_path+"/"+TSYS::strEncode(n_el->childGet(col)->attr("select"),TSYS::PathEl));
-	    if( cntrIfCmd(x_lst) )
+	    if( n_el->childGet(col)->attr("select").empty() )
 	    {
-		mod->postMess(x_lst.attr("mcat"),x_lst.text(),TUIMod::Error,this);
-		return;
+		bool ind_ok = n_el->childGet(col)->attr("sel_id").size();
+		string s_nm;
+		for( int ls_off = 0, c_el = 0; !(s_nm=TSYS::strSepParse(n_el->childGet(col)->attr("sel_list"),0,';',&ls_off)).empty(); c_el++ )
+		    if( s_nm == value )
+		    {
+			if( ind_ok )	value = TSYS::strSepParse(n_el->childGet(col)->attr("sel_id"),c_el,';');
+			find_ok = true;
+		    }
 	    }
-
-	    for( int i_el = 0; i_el < x_lst.childSize(); i_el++ )
-		if( x_lst.childGet(i_el)->text() == value )
+	    else
+	    {
+		XMLNode x_lst("get");
+		x_lst.setAttr("path",sel_path+"/"+TSYS::strEncode(n_el->childGet(col)->attr("select"),TSYS::PathEl));
+		if( cntrIfCmd(x_lst) )
 		{
-		    if( atoi(n_el->childGet(col)->attr("idm").c_str()) )
-			value = x_lst.childGet(i_el)->attr("id");
-		    find_ok = true;
+		    mod->postMess(x_lst.attr("mcat"),x_lst.text(),TUIMod::Error,this);
+		    return;
 		}
+
+		for( int i_el = 0; i_el < x_lst.childSize(); i_el++ )
+		    if( x_lst.childGet(i_el)->text() == value )
+		    {
+			if( atoi(n_el->childGet(col)->attr("idm").c_str()) )
+			    value = x_lst.childGet(i_el)->attr("id");
+			find_ok = true;
+		    }
+	    }
 	    if( !find_ok ) throw TError(mod->nodePath().c_str(),_("Value <%s> no valid!"),value.c_str());
 	}
 	else value = val.toString().toAscii().data();
@@ -2776,35 +2868,6 @@ void ConfApp::listBoxGo( QListWidgetItem* item )
 	autoUpdTimer->start(CH_REFR_TM);
     }
     catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
-}
-
-void ConfApp::dataTimeChange( const QDateTime & qtm )
-{
-    XMLNode *n_el;
-    QDateTimeEdit *datat = (QDateTimeEdit *)sender();
-
-    try
-    {
-	//time_t c_tm = time(NULL);
-	string path = datat->objectName().toAscii().data();
-
-	struct tm tm_tm;
-	//tm_tm = *localtime(&c_tm);
-	//tm_tm.tm_isdst = 1;
-	tm_tm.tm_year = qtm.date().year()-1900;
-	tm_tm.tm_mon = qtm.date().month()-1;
-	tm_tm.tm_mday = qtm.date().day();
-	tm_tm.tm_hour = qtm.time().hour();
-	tm_tm.tm_min = qtm.time().minute();
-	tm_tm.tm_sec = qtm.time().second();
-	tm_tm.tm_isdst = -1;
-	string val = TSYS::int2str(mktime(&tm_tm));
-
-	//- Check block element -
-	if(path[0] == 'b') path.erase(0,1);
-	n_el = SYS->ctrId(root,TSYS::strDecode(path,TSYS::PathEl) );
-	n_el->setText(val);
-    }catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 }
 
 void ConfApp::editChange( const QString& txt )

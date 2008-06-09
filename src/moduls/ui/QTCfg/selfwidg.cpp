@@ -31,6 +31,7 @@
 #include <QTextEdit>
 #include <QItemEditorFactory>
 #include <QMetaProperty>
+#include <QSpinBox>
 
 #include <tsys.h>
 
@@ -94,58 +95,192 @@ void ImgView::paintEvent( QPaintEvent * )
     }
 }
 
-//*************************************************
-//* LineEdit: Line edit widget.                   *
-//*************************************************
-LineEdit::LineEdit( QWidget *parent, bool prev_dis ) :
-    QWidget( parent ), bt_fld(NULL)
+//*********************************************************************************************
+//* Universal edit line widget. Contain support of: QLineEdit, QSpinBox, QDoubleSpinBox,      *
+//* QTimeEdit, QDateEdit and QDateTimeEdit.                                                   *
+//*********************************************************************************************
+LineEdit::LineEdit( QWidget *parent, LType tp, bool prev_dis ) :
+    QWidget( parent ), m_tp((LineEdit::LType)-1), bt_fld(NULL), ed_fld(NULL)
 {
     QHBoxLayout *box = new QHBoxLayout(this);
-    box->setMargin(0);
-    box->setSpacing(0);
-
-    ed_fld = new QLineEdit(this);
-    connect( ed_fld, SIGNAL( textEdited(const QString&) ), SLOT( changed(const QString&) ) );
-    box->addWidget(ed_fld);
+    box->setMargin( 0 );
+    box->setSpacing( 0 );
 
     if( !prev_dis )
     {
 	bt_fld = new QPushButton(this);
-	bt_fld->setIcon(QIcon(":/images/ok.png"));
-	bt_fld->setIconSize(QSize(12,12));
+	bt_fld->setIcon( QIcon(":/images/ok.png") );
+	bt_fld->setIconSize( QSize(12,12) );
 	bt_fld->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed) );
-	bt_fld->setEnabled(false);
-	bt_fld->setVisible(false);
-	connect( bt_fld, SIGNAL( released() ), this, SLOT( applySlot() ) );
-	box->addWidget(bt_fld);
+	//bt_fld->setMaximumWidth( 15 );
+	bt_fld->setEnabled( false );
+	bt_fld->setVisible( false );
+	connect( bt_fld, SIGNAL( pressed() ), this, SLOT( applySlot() ) );
+	box->addWidget( bt_fld );
     }
+    setType( tp );
 }
 
-bool LineEdit::isChanged( )
+bool LineEdit::isEdited( )
 {
-    if( bt_fld && bt_fld->isEnabled() )	return true;
+    if( bt_fld && bt_fld->isVisible() )	return true;
     return false;
 }
 
-bool LineEdit::hasFocus( ) const
+void LineEdit::setType( LType tp )
 {
-    return ed_fld->hasFocus( );
+    if( tp == m_tp ) return;
+
+    //- Delete previous -
+    if( tp >= 0 && ed_fld ) delete ed_fld;
+
+    //- Create new widget -
+    switch( tp )
+    {
+	case Text:
+	    ed_fld = new QLineEdit(this);
+	    connect( (QLineEdit*)ed_fld, SIGNAL( textEdited(const QString&) ), SLOT( changed() ) );
+	    break;
+	case Integer:
+	    ed_fld = new QSpinBox(this);
+	    connect( (QSpinBox*)ed_fld, SIGNAL( valueChanged(int) ), SLOT( changed() ) );
+	    break;
+	case Real:
+	    ed_fld = new QDoubleSpinBox(this);
+	    connect( (QDoubleSpinBox*)ed_fld, SIGNAL( valueChanged(double) ), SLOT( changed() ) );
+	    break;
+	case Time:
+	    ed_fld = new QTimeEdit(this);
+	    connect( (QTimeEdit*)ed_fld, SIGNAL( timeChanged(const QTime&) ), SLOT( changed() ) );
+	    break;
+	case Date:
+	    ed_fld = new QDateEdit(this);
+	    connect( (QDateEdit*)ed_fld, SIGNAL( dateChanged(const QDate&) ), SLOT( changed() ) );
+	    break;
+	case DateTime:
+	    ed_fld = new QDateTimeEdit(this);
+	    connect( (QDateTimeEdit*)ed_fld, SIGNAL( dateTimeChanged(const QDateTime&) ), SLOT( changed() ) );
+	    break;
+	case Combo:
+	    ed_fld = new QComboBox(this);
+	    ((QComboBox*)ed_fld)->setEditable(true);
+	    connect( (QComboBox*)ed_fld, SIGNAL( editTextChanged(const QString&) ), SLOT( changed() ) );
+	    break;
+    }
+    ((QBoxLayout*)layout())->insertWidget(0,ed_fld);
+    setFocusProxy( ed_fld );
+
+    m_tp = tp;
 }
 
-void LineEdit::changed( const QString& str )
+void LineEdit::changed( )
 {
+    //- Enable apply
     if( bt_fld && !bt_fld->isEnabled() )
     {
 	bt_fld->setEnabled(true);
 	bt_fld->setVisible(true);
+	//QWidget::setTabOrder( mod->getFocusedWdg(ed_fld), mod->getFocusedWdg(bt_fld) );
     }
-    emit textChanged(str);
+
+    emit valChanged(value());
 }
 
-void LineEdit::setText(const QString &txt)
+void LineEdit::setValue(const QString &txt)
 {
-    ed_fld->setText(txt);
-    ed_fld->setCursorPosition(0);
+    switch(type())
+    {
+	case Text:
+	    ((QLineEdit*)ed_fld)->setText(txt);
+	    ((QLineEdit*)ed_fld)->setCursorPosition(0);
+	    break;
+	case Integer:
+	    ((QSpinBox*)ed_fld)->setValue(txt.toInt());
+	    break;
+	case Real:
+	    ((QDoubleSpinBox*)ed_fld)->setValue(txt.toDouble());
+	    break;
+	case Time:
+	    ((QTimeEdit*)ed_fld)->setTime(QTime().addSecs(txt.toInt()));
+	    break;
+	case Date: case DateTime:
+	    ((QDateTimeEdit*)ed_fld)->setDateTime(QDateTime::fromTime_t(txt.toInt()));
+	    break;
+	case Combo:
+	    if( ((QComboBox*)ed_fld)->findText(txt) < 0 ) ((QComboBox*)ed_fld)->addItem(txt);
+	    ((QComboBox*)ed_fld)->setEditText(txt);
+	    break;
+    }
+
+    m_val = txt;
+
+    if( bt_fld && bt_fld->isEnabled() )
+    {
+        bt_fld->setEnabled(false);
+        bt_fld->setVisible(false);
+    }
+}
+
+void LineEdit::setCfg(const QString &cfg)
+{
+    switch(type())
+    {
+	case Text:	((QLineEdit*)ed_fld)->setInputMask(cfg);	break;
+	case Integer:
+	{
+	    int		minv = 0, maxv = 100, sstep = 1;
+	    string	pref, suff;
+	    if( !cfg.isEmpty() )
+	    {
+		minv  = atoi(TSYS::strSepParse(cfg.toAscii().data(),0,':').c_str());
+		maxv  = atoi(TSYS::strSepParse(cfg.toAscii().data(),1,':').c_str());
+		sstep = atoi(TSYS::strSepParse(cfg.toAscii().data(),2,':').c_str());
+		pref  = TSYS::strSepParse(cfg.toAscii().data(),3,':');
+		suff  = TSYS::strSepParse(cfg.toAscii().data(),4,':');
+	    }
+	    ((QSpinBox*)ed_fld)->setRange(minv,maxv);
+	    ((QSpinBox*)ed_fld)->setSingleStep(sstep);
+	    ((QSpinBox*)ed_fld)->setPrefix(pref.c_str());
+	    ((QSpinBox*)ed_fld)->setSuffix(suff.c_str());
+	    break;
+	}
+	case Real:
+	{
+	    double minv = 0, maxv = 100, sstep = 1;
+	    string pref, suff;
+	    int    dec = 2;
+	    if( !cfg.isEmpty() )
+	    {
+		minv  = atof(TSYS::strSepParse(cfg.toAscii().data(),0,':').c_str());
+		maxv  = atof(TSYS::strSepParse(cfg.toAscii().data(),1,':').c_str());
+		sstep = atof(TSYS::strSepParse(cfg.toAscii().data(),2,':').c_str());
+		pref  = TSYS::strSepParse(cfg.toAscii().data(),3,':');
+		suff  = TSYS::strSepParse(cfg.toAscii().data(),4,':');
+		dec   = atoi(TSYS::strSepParse(cfg.toAscii().data(),5,':').c_str());
+	    }
+	    ((QDoubleSpinBox*)ed_fld)->setRange(minv,maxv);
+	    ((QDoubleSpinBox*)ed_fld)->setSingleStep(sstep);
+	    ((QDoubleSpinBox*)ed_fld)->setPrefix(pref.c_str());
+	    ((QDoubleSpinBox*)ed_fld)->setSuffix(suff.c_str());
+	    ((QDoubleSpinBox*)ed_fld)->setDecimals(dec);
+	    break;
+	}
+	case Time: case Date: case DateTime:
+	    ((QDateTimeEdit*)ed_fld)->setDisplayFormat(cfg);
+	    break;
+	case Combo:
+	{
+	    QString ctext = ((QComboBox*)ed_fld)->currentText();
+	    ((QComboBox*)ed_fld)->clear();
+	    ((QComboBox*)ed_fld)->addItems(cfg.split("\n"));
+	    if( !ctext.isEmpty() )
+	    {
+		if( ((QComboBox*)ed_fld)->findText(ctext) < 0 ) ((QComboBox*)ed_fld)->addItem(ctext);
+		((QComboBox*)ed_fld)->setEditText(ctext);
+	    }
+	    break;
+	}
+    }
     if( bt_fld && bt_fld->isEnabled() )
     {
 	bt_fld->setEnabled(false);
@@ -153,17 +288,29 @@ void LineEdit::setText(const QString &txt)
     }
 }
 
-QString LineEdit::text() const
+QString LineEdit::value()
 {
-    return ed_fld->text();
+    switch(type())
+    {
+	case Text:	return ((QLineEdit*)ed_fld)->text();
+	case Integer:	return QString::number(((QSpinBox*)ed_fld)->value());
+	case Real:	return QString::number(((QDoubleSpinBox*)ed_fld)->value());
+	case Time:	return QString::number(QTime().secsTo(((QTimeEdit*)ed_fld)->time()));
+	case Date: case DateTime:
+	    return QString::number(((QDateTimeEdit*)ed_fld)->dateTime().toTime_t());
+	case Combo:	return ((QComboBox*)ed_fld)->currentText();
+    }
+    return "";
 }
 
 void LineEdit::applySlot( )
 {
-    emit textChanged(text());
+    emit valChanged(value());
 
     bt_fld->setEnabled(false);
     bt_fld->setVisible(false);
+
+    m_val = value();
 
     emit apply();
 }
@@ -173,16 +320,15 @@ bool LineEdit::event( QEvent * e )
     if( e->type() == QEvent::KeyRelease && bt_fld && bt_fld->isEnabled() )
     {
 	QKeyEvent *keyEvent = (QKeyEvent *)e;
-	if(keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return)
+	if( keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return )
 	{
 	    bt_fld->animateClick( );
 	    return true;
 	}
 	else if(keyEvent->key() == Qt::Key_Escape )
 	{
-	    bt_fld->setEnabled(false);
-	    bt_fld->setVisible(false);
 	    emit cancel();
+	    setValue(m_val);
 	    return true;
 	}
     }
@@ -265,99 +411,6 @@ void TextEdit::btCancel( )
 {
     but_box->setVisible(false);
     emit cancel();
-}
-
-
-//*************************************************
-//* DateTimeEdit: Data and time edit widget.      *
-//*************************************************
-DateTimeEdit::DateTimeEdit( QWidget *parent, bool prev_dis ) : 
-    QWidget( parent ), bt_fld(NULL)
-{
-    QHBoxLayout *box = new QHBoxLayout(this);
-    box->setMargin(0);
-    box->setSpacing(0);
-
-    ed_fld = new QDateTimeEdit(this);
-    ed_fld->setDisplayFormat("dd.MM.yyyy hh:mm:ss");
-    connect( ed_fld, SIGNAL( dateTimeChanged(const QDateTime&) ), this, SLOT( changed(const QDateTime&) ) );
-    box->addWidget(ed_fld);
-    if( !prev_dis )
-    {
-	bt_fld = new QPushButton(this);
-	bt_fld->setIcon(QIcon(":/images/ok.png"));
-	bt_fld->setIconSize(QSize(12,12));
-	bt_fld->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed) );
-	bt_fld->setEnabled(false);
-	bt_fld->setVisible(false);
-	connect( bt_fld, SIGNAL( released() ), this, SLOT( applySlot() ) );
-	box->addWidget(bt_fld);
-    }
-}
-
-bool DateTimeEdit::isChanged( )
-{
-    if( bt_fld && bt_fld->isEnabled() ) return true;
-    return false;
-}
-
-bool DateTimeEdit::hasFocus( ) const
-{
-    return ed_fld->hasFocus( );
-}
-
-void DateTimeEdit::changed( const QDateTime& dt )
-{
-    if( bt_fld && !bt_fld->isEnabled() )
-    {
-	bt_fld->setEnabled(true);
-	bt_fld->setVisible(true);
-    }
-    emit valueChanged(dt);
-}
-
-void DateTimeEdit::setDateTime ( const QDateTime & dt )
-{
-    ed_fld->setDateTime(dt);
-    if( bt_fld && bt_fld->isEnabled() )
-    {
-	bt_fld->setEnabled(false);
-	bt_fld->setVisible(false);
-    }
-}
-
-QDateTime DateTimeEdit::dateTime() const
-{
-    return ed_fld->dateTime();
-}
-
-void DateTimeEdit::applySlot( )
-{
-    emit valueChanged(dateTime());
-    bt_fld->setEnabled(false);
-    bt_fld->setVisible(false);
-    emit apply();
-}
-
-bool DateTimeEdit::event( QEvent * e )
-{
-    if(e->type() == QEvent::KeyRelease && bt_fld && bt_fld->isEnabled())
-    {
-	QKeyEvent *keyEvent = (QKeyEvent *)e;
-	if( keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return )
-	{
-	    bt_fld->animateClick( );
-	    return true;
-	}
-	else if(keyEvent->key() == Qt::Key_Escape )
-	{
-	    bt_fld->setEnabled(false);
-	    bt_fld->setVisible(false);
-	    emit cancel();
-	    return true;
-	}
-    }
-    return QWidget::event(e);
 }
 
 //*************************************************

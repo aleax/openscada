@@ -381,8 +381,8 @@ void TUser::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/prm/name",cfg("NAME").fld().descr(),0444,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/prm/dscr",cfg("DESCR").fld().descr(),0664,name().c_str(),grp.c_str(),1,"tp","str");
 	    ctrMkNode("img",opt,-1,"/prm/pct",cfg("PICTURE").fld().descr(),0664,name().c_str(),grp.c_str(),1,"v_sz","100");
-	    ctrMkNode("fld",opt,-1,"/prm/db",_("User DB"),0664,"root",SYS->db().at().subId().c_str(),2,
-		"tp","str","help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set symbol '*'."));
+	    ctrMkNode("fld",opt,-1,"/prm/db",_("User DB"),0664,"root",SYS->db().at().subId().c_str(),4,"tp","str","dest","select","select","/db/list",
+		"help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
 	    ctrMkNode("fld",opt,-1,"/prm/pass",cfg("PASS").fld().descr(),0660,name().c_str(),grp.c_str(),1,"tp","str");
 	    ctrMkNode("table",opt,-1,"/prm/grps",_("Groups"),0444,"root",grp.c_str(),1,"key","grp");
 	    ctrMkNode("list",opt,-1,"/prm/grps/grp",_("Group"),0444,"root",grp.c_str(),1,"tp","str");
@@ -511,7 +511,7 @@ void TGroup::userAdd( const string &name )
 void TGroup::userDel( const string &name )
 {
     int pos = m_usrs.find(name+";",0);
-    if(pos != string::npos) 
+    if(pos != string::npos)
     {
 	m_usrs.erase(pos,name.size()+1);
 	modif();
@@ -527,8 +527,8 @@ void TGroup::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("area",opt,-1,"/prm",_("Group"));
 	ctrMkNode("fld",opt,-1,"/prm/name",cfg("NAME").fld().descr(),0444,"root",owner().subId().c_str(),1,"tp","str");
 	ctrMkNode("fld",opt,-1,"/prm/dscr",cfg("DESCR").fld().descr(),0664,"root",owner().subId().c_str(),1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/prm/db",_("User group DB"),0660,"root",SYS->db().at().subId().c_str(),2,
-	    "tp","str","help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set symbol '*'."));
+	ctrMkNode("fld",opt,-1,"/prm/db",_("User group DB"),0664,"root",SYS->db().at().subId().c_str(),4,"tp","str","dest","select","select","/db/list"
+	    "help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
 	ctrMkNode("list",opt,-1,"/prm/users",cfg("USERS").fld().descr(),0664,"root",owner().subId().c_str(),2,"tp","str","s_com","add,del");
 	return;
     }
@@ -537,8 +537,8 @@ void TGroup::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/prm/db" )
     {
-	if( ctrChkNode(opt,"get",0660,"root",SYS->db().at().subId().c_str(),SEQ_RD) )	opt->setText(DB());
-	if( ctrChkNode(opt,"set",0660,"root",SYS->db().at().subId().c_str(),SEQ_WR) )	setDB(opt->text());
+	if( ctrChkNode(opt,"get",0664,"root",SYS->db().at().subId().c_str(),SEQ_RD) )	opt->setText(DB());
+	if( ctrChkNode(opt,"set",0664,"root",SYS->db().at().subId().c_str(),SEQ_WR) )	setDB(opt->text());
     }
     else if( a_path == "/prm/name" && ctrChkNode(opt,"get",0444,"root",owner().subId().c_str(),SEQ_RD) )
 	opt->setText(name());

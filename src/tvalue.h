@@ -53,58 +53,58 @@ class TVal : public TCntrNode
 	    DirRead  = 0x100,
 	    DirWrite = 0x200
 	};
-    
+
 	//Methods
 	TVal( TFld &fld, TValue *owner );
 	TVal( TCfg &cfg, TValue *owner );
 	~TVal( );
-	
+
 	const string &name( );
 
 	TFld &fld( );
-	
+
 	//- Read curent value (direct) -
-	string getSEL( long long *tm = NULL, bool sys = false );
-	string getS( long long *tm = NULL, bool sys = false );
-	double getR( long long *tm = NULL, bool sys = false );
-	int    getI( long long *tm = NULL, bool sys = false );
-	char   getB( long long *tm = NULL, bool sys = false );
-	
+	string	getSEL( long long *tm = NULL, bool sys = false );
+	string	getS( long long *tm = NULL, bool sys = false );
+	double	getR( long long *tm = NULL, bool sys = false );
+	int	getI( long long *tm = NULL, bool sys = false );
+	char	getB( long long *tm = NULL, bool sys = false );
+
 	//- Set curent value -
 	void setSEL( const string &value, long long tm = 0, bool sys = false );
 	void setS( const string &value, long long tm = 0, bool sys = false );
 	void setR( double value, long long tm = 0, bool sys = false );
 	void setI( int value, long long tm = 0, bool sys = false );
-	void setB( char value, long long tm = 0, bool sys = false );    
-	
+	void setB( char value, long long tm = 0, bool sys = false );
+
 	AutoHD<TVArchive> arch( );
 	void setArch( const AutoHD<TVArchive> &vl );
-	
+
     protected:
 	void cntrCmdProc( XMLNode *opt );
 	void vlSet( );
 	void vlGet( );
-	
+
     private:
-        //Methods
+	//Methods
 	string nodeName( )	{ return name(); }
-	
+
 	//Attributes
 	union
-	{ 
-	    string *val_s;   //string value
-	    double val_r;    //real value
-	    int    val_i;    //integer value	
-	    char   val_b;    //boolean value
+	{
+	    string	*val_s;		//string value
+	    double	val_r;		//real value
+	    int		val_i;		//integer value
+	    char	val_b;		//boolean value
 	} val;
-	
-	bool     m_cfg;    //Config id
-        union
+
+	bool     m_cfg;		//Config id
+	union
 	{
 	    TFld *fld;
 	    TCfg *cfg;
 	} src;
-	long long time;	//Last value's time (usec)
+	long long time;		//Last value's time (usec)
 	AutoHD<TVArchive>	m_arch;
 };
 
@@ -127,22 +127,22 @@ class TValue: public TCntrNode, public TValElem
 	AutoHD<TVal> vlAt( const string &name )	{ return chldAt(m_vl,name); }
 
     protected:
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-	
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+
 	//- Manipulation for config element -
-	TConfig *vlCfg( )  			{ return m_cfg; }
+	TConfig *vlCfg( )			{ return m_cfg; }
 	void setVlCfg( TConfig *cfg );		//Set configs. NULL - clear configs.
-    
+
 	//- Manipulation for elements of value -
 	bool vlElemPresent( TElem *ValEl );
 	void vlElemAtt( TElem *ValEl );
 	void vlElemDet( TElem *ValEl );
 	TElem &vlElem( const string &name );
-	
+
 	virtual void vlSet( TVal &val )		{ };
 	virtual void vlGet( TVal &val )		{ };
 	virtual void vlArchMake( TVal &val )	{ };
-	
+
     private:
 	//Methods
 	//- Set value direct into controller param's -
@@ -151,17 +151,17 @@ class TValue: public TCntrNode, public TValElem
 	//- Get value direct from controller param's -
 	virtual void vlGet( int id_elem )
 	{ throw TError(nodePath().c_str(),_("Direct access to read value no admit.")); }
-	
+
 	//- TElem commands -
 	void detElem( TElem *el );
 	void addFld( TElem *el, unsigned id_val); 
 	void delFld( TElem *el, unsigned id_val); 
-	
+
 	//Attributes
 	int		m_vl;
 	vector<TElem*>	elem;   // Elements (dinamic parts)
 
-	int	     	l_cfg;  // Config len
+	int		l_cfg;  // Config len
 	TConfig*	m_cfg;  // Configs (static parts)
 };
 

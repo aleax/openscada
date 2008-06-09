@@ -98,7 +98,7 @@ class Prm : public TParamContr
 	void vlArchMake( TVal &val );
 
 	//Attributes
-	TElem  v_el;   //Values elem
+	TElem	v_el;	//Values elem
 };
 
 //*************************************************
@@ -111,7 +111,7 @@ class Contr: public TController, public TValFunc
 	Contr( string name_c, const string &daq_db, ::TElem *cfgelem );
 	~Contr( );
 
-	int period( )	{ return m_per; }
+	int period( )	{ return vmax(m_per,1); }
 	int iterate( )	{ return m_iter; }
 
     protected:
@@ -127,7 +127,7 @@ class Contr: public TController, public TValFunc
 	void loadFunc( );
 
 	TParamContr *ParamAttach( const string &name, int type );
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
     private:
 	//Methods
@@ -206,4 +206,3 @@ extern TipContr *mod;
 } //End namespace StatFunc
 
 #endif //FREEFUNCLIBS_H
-

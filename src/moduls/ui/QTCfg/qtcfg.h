@@ -114,7 +114,6 @@ class ConfApp: public QMainWindow
 	void listBoxPopup();				//QListBox popup menu
 	void tablePopup( const QPoint &pos );		//QTable popup menu
 	void tableSet( int row, int col );		//QTable set
-	void dataTimeChange( const QDateTime & );	//Change data-time
 	void editChange( const QString& );		//Change Edit (LineEdit and TextEdit)
 	void applyButton( );				//Apply button
 	void cancelButton( );				//Cancel button
@@ -129,7 +128,7 @@ class ConfApp: public QMainWindow
 	void viewChildRecArea( QTreeWidgetItem *i, int level );
 
 	//- Update structure and put service labels -
-	bool upStruct(XMLNode &w_nd, const XMLNode &n_nd);
+	bool upStruct( XMLNode &w_nd, const XMLNode &n_nd );
 
 	//- Select ListItem with recursive processing of the ControllArea -
 	void selectChildRecArea( const XMLNode &node, const string &a_path, QWidget *widget = NULL, bool refr = false );

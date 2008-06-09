@@ -36,14 +36,14 @@
 
 //*************************************************
 //* Modul info!                                   *
-#define MOD_ID      "LogicLev"
-#define MOD_NAME    "Logic level"
-#define MOD_TYPE    "DAQ"
-#define VER_TYPE    VER_CNTR
-#define VERSION     "0.9.0"
-#define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "Allow logic level paramers."
-#define LICENSE     "GPL"
+#define MOD_ID		"LogicLev"
+#define MOD_NAME	"Logic level"
+#define MOD_TYPE	"DAQ"
+#define VER_TYPE	VER_CNTR
+#define VERSION		"0.9.0"
+#define AUTORS		"Roman Savochenko"
+#define DESCRIPTION	"Allow logic level paramers."
+#define LICENSE		"GPL"
 //*************************************************
 
 LogicLev::TTpContr *LogicLev::mod;  //Pointer for direct access to module
@@ -791,7 +791,7 @@ void TMdPrm::calc( bool first, bool last )
 void TMdPrm::cntrCmdProc( XMLNode *opt )
 {
     //- Service commands process -
-    string a_path = opt->attr("path");    
+    string a_path = opt->attr("path");
     if( a_path.substr(0,6) == "/serv/" )  { TParamContr::cntrCmdProc(opt); return; }
 
     vector<string> list;

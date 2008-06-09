@@ -47,84 +47,48 @@ class QGridLayout;
 namespace QTCFG
 {
 
-//*************************************************
-//* LineEdit: Line edit widget                    *
-//*************************************************
+//*********************************************************************************************
+//* Universal edit line widget. Contain support of: QLineEdit, QSpinBox, QDoubleSpinBox,      *
+//* QTimeEdit, QDateEdit and QDateTimeEdit.                                                   *
+//*********************************************************************************************
 class LineEdit : public QWidget
 {
     Q_OBJECT
 
     public:
-	//Methods
-	LineEdit( QWidget *parent, bool prev_dis = false );
+        //- Data -
+        enum LType { Text, Integer, Real, Time, Date, DateTime, Combo };
 
-	QString text( ) const;
-	bool hasFocus( ) const;
-	bool isChanged( );
+        //- Methods -
+        LineEdit( QWidget *parent, LType tp = Text, bool prev_dis = false );
 
-	void setText( const QString & );
+        LType type( )		{ return m_tp; }
+        QString value( );
+        bool isEdited( );
 
-	QLineEdit *edit( )	{ return ed_fld; }
+        void setType( LType tp );
+        void setValue( const QString& );
+        void setCfg( const QString& );
 
-    signals:
-	//Signals
-	void apply( );
-	void cancel( );
-	void textChanged(const QString&);
-
-    protected:
-	//Methods
-	bool event( QEvent * e );
-
-    private slots:
-	//Private slots
-	void changed( const QString& );
-	void applySlot( );
-
-    private:
-	//Attributes
-	QLineEdit	*ed_fld;
-	QPushButton	*bt_fld;
-};
-
-//*************************************************
-//* DateTimeEdit: Date and time edit widget       *
-//*************************************************
-class DateTimeEdit : public QWidget
-{
-    Q_OBJECT
-
-    public:
-	//Methods
-	DateTimeEdit( QWidget *parent, bool prev_dis = false );
-
-	QDateTime dateTime( ) const;
-	bool hasFocus( ) const;
-	bool isChanged( );
-
-	void setDateTime( const QDateTime & dt );
-
-	QDateTimeEdit *dtEdit( ) { return ed_fld; }
+        QWidget *workWdg( )	{ return ed_fld; }
 
     signals:
-	//Signals
-	void apply( );
-	void cancel( );
-	void valueChanged( const QDateTime& );
+        void apply( );
+        void cancel( );
+        void valChanged( const QString& );
 
     protected:
-	//Methods
-	bool event( QEvent * e );
+        bool event( QEvent * e );
 
     private slots:
-	//Private slots
-	void changed( const QDateTime & );
-	void applySlot( );
+        void changed( );
+        void applySlot( );
 
     private:
-	//Attributes
-	QDateTimeEdit	*ed_fld;
-	QPushButton	*bt_fld;
+        LType		m_tp;
+        QString		m_val;
+        QWidget		*ed_fld;
+        QPushButton	*bt_fld;
 };
 
 //*************************************************

@@ -35,48 +35,48 @@ class XMLNode;
 
 class TFld
 {
-    public:    
+    public:
 	//Data
-	enum Type 	//Field's types
-	{ 
-	    Boolean = 0, 
-	    Integer = 1, 
-	    Real    = 4, 
-	    String  = 5 
+	enum Type	//Field's types
+	{
+	    Boolean	= 0,
+	    Integer	= 1,
+	    Real	= 4,
+	    String	= 5
 	};
 	enum AttrFlg	//Base field's flags
-        {
-	    NoFlag   = 0x00,	//No flag
-	    Selected = 0x01,	//Connnect to simple elements
-	    SelfFld  = 0x02,	//Create self field
-	    NoWrite  = 0x04,	//No writeable
-	    HexDec   = 0x08,	//Hexodecimal view prefer for decimal value type
-	    OctDec   = 0x10,	//Octal view prefer for decimal value type
-	    FullText = 0x08	//Full, multiline text for string type
+	{
+	    NoFlag	= 0x00,		//No flag
+	    Selected	= 0x01,		//Connnect to simple elements
+	    SelfFld	= 0x02,		//Create self field
+	    NoWrite	= 0x04,		//No writeable
+	    HexDec	= 0x08,		//Hexodecimal view prefer for decimal value type
+	    OctDec	= 0x10,		//Octal view prefer for decimal value type
+	    FullText	= 0x08		//Full, multiline text for string type
 	};
-	
+
 	//Methods
 	TFld( );
 	TFld( TFld &ifld );
 	TFld( const char *name, const char *descr, Type type, unsigned flg,
-	    const char *valLen = "", const char *valDef = "", 
+	    const char *valLen = "", const char *valDef = "",
 	    const char *vals = "", const char *nSel = "", const char *res = "" );
 	~TFld( );
-	
+
 	TFld &operator=( TFld &fld );
 
 	//- Base -
-	const string &name( ) 	{ return m_name; }	//Name
-	const string &descr( ) 	{ return m_descr; }	//Description
-	int len( )     		{ return m_len; }	//Length
-	int dec( )     		{ return m_dec; }	//Float dec
+	const string &name( )	{ return m_name; }	//Name
+	const string &descr( )	{ return m_descr; }	//Description
+	int len( )		{ return m_len; }	//Length
+	int dec( )		{ return m_dec; }	//Float dec
 	Type type( )		{ return m_type; }	//Value type
 	unsigned flg( )		{ return m_flg; }	//Flags
-	const string &def( )  	{ return m_def; }	//Default value
+	const string &def( )	{ return m_def; }	//Default value
 	string values( );				//Values range or values list
 	string selNames( );				//Select names list
 	const string &reserve( ){ return m_res; }	//Reserve field
-	
+
 	void setDescr( const string &idscr )	{ m_descr = idscr; }
 	void setLen( int ivl )			{ m_len = ivl; }
 	void setDec( int ivl )			{ m_dec = ivl; }
@@ -85,49 +85,49 @@ class TFld
 	void setValues( const string &vls );
 	void setSelNames( const string &slnms );
 	void setReserve( const string &ires )	{ m_res = ires; }
-	
+
 	//- Selected -
-	const vector<string> &selValS();
-	const vector<int>    &selValI();
-	const vector<double> &selValR();
-	const vector<bool>   &selValB();
-       	//- selectable element's name -
+	const vector<string>	&selValS();
+	const vector<int>	&selValI();
+	const vector<double>	&selValR();
+	const vector<bool>	&selValB();
+	//- selectable element's name -
 	const vector<string> &selNm();
 
 	string selVl2Nm( const string &val );
 	string selVl2Nm( int val );
 	string selVl2Nm( double val );
 	string selVl2Nm( bool val );
-	
-	string selNm2VlS( const string &name );	
-	int    selNm2VlI( const string &name );	
-	double selNm2VlR( const string &name );	
-	bool   selNm2VlB( const string &name );	
+
+	string	selNm2VlS( const string &name );
+	int	selNm2VlI( const string &name );
+	double	selNm2VlR( const string &name );
+	bool	selNm2VlB( const string &name );
 
 	//- Addition -
-	XMLNode *cntrCmdMake( XMLNode *opt, const string &path, int pos, 
+	XMLNode *cntrCmdMake( XMLNode *opt, const string &path, int pos,
 				const string &user = "root", const string &grp = "root", int perm = 0664 );
-	
-    private:    
+
+    private:
 	//Attributes
-	string          m_name;  	// Name of element (name column into BD);
-	string          m_descr; 	// Description of element;
+	string		m_name;		// Name of element (name column into BD);
+	string		m_descr;	// Description of element;
 	int		m_len;		// field len
 	int		m_dec;		// field dec (for real)
 	Type		m_type;		// Type (Dec, Hex, Oct, ...)
 	unsigned	m_flg;		// element flags (Selected, SelfFld ...);
-	string          m_def;		// default value;
+	string		m_def;		// default value;
 	string		m_res;		// reserve attribut
-	
-	union           
+
+	union
 	{
-	    vector<string> *v_s;
-	    vector<double> *v_r;
-	    vector<int>    *v_i;
-	    vector<bool>   *v_b;
+	    vector<string>	*v_s;
+	    vector<double>	*v_r;
+	    vector<int>		*v_i;
+	    vector<bool>	*v_b;
 	}m_val;
-	vector<string>     *m_sel;  
-}; 
+	vector<string>     *m_sel;
+};
 
 
 //*************************************************
@@ -141,25 +141,25 @@ class TElem
 	//Methods
 	TElem( const string &name = "" );
 	~TElem( );
-	
+
 	string &elName( )			{ return m_name; }
-	
+
 	void fldList( vector<string> &list );
 	unsigned fldSize( )			{ return elem.size(); }
-	unsigned fldId( const string &name );	
+	unsigned fldId( const string &name );
 	bool fldPresent( const string &name );
 	int fldAdd( TFld *fld, int id = -1 );
 	void fldDel( unsigned int id );
 	TFld &fldAt( unsigned int id );
 
-        void valAtt( TValElem *cnt ); 
-        void valDet( TValElem *cnt ); 
-	
+	void valAtt( TValElem *cnt ); 
+	void valDet( TValElem *cnt ); 
+
     private:
 	//Attributes
-        string       	m_name;
-	vector<TFld*>	elem;
-	vector<TValElem*>	cont;        //Conteiners
+	string			m_name;
+	vector<TFld*>		elem;
+	vector<TValElem*>	cont;		//Conteiners
 };
 
 //*************************************************
@@ -168,11 +168,11 @@ class TElem
 class TValElem
 {
     friend class TElem;
-    
-    public:	
+
+    public:
 	//Methods
 	TValElem( )	{ };
-	
+
     protected:
 	//Methods
 	virtual void detElem( TElem *el ) = 0;

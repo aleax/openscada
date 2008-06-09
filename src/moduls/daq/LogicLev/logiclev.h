@@ -43,85 +43,85 @@ namespace LogicLev
 //* TMdPrm                                        *
 //*************************************************
 class TMdContr;
-    
+
 class TMdPrm : public TParamContr
 {
     public:
 	//Data
 	enum Mode { Free, DirRefl, Template };
-	
+
 	//Methods
-    	TMdPrm( string name, TTipParam *tp_prm );
-	~TMdPrm( );	
-	
+	TMdPrm( string name, TTipParam *tp_prm );
+	~TMdPrm( );
+
 	Mode mode( )	{ return m_wmode; }
-        void mode( Mode md, const string &prm = "" );		
-	
+	void mode( Mode md, const string &prm = "" );
+
 	void enable( );
 	void disable( );
-	
+
 	void calc( bool first, bool last );	//Calc template's algoritmes
 
     protected:
 	//Methods
 	void load_( );
-	void save_( );	
+	void save_( );
 
 	TMdContr &owner( )	{ return (TMdContr&)TParamContr::owner(); }
-	
+
     private:
 	//Data
 	class SLnk
 	{
 	    public:
-	        SLnk( int iid, const string &iprm_attr = "" ) : 
+	        SLnk( int iid, const string &iprm_attr = "" ) :
 		    io_id(iid), prm_attr(iprm_attr) { }
-	        int 	io_id;
-		string  prm_attr;
+	        int	io_id;
+		string	prm_attr;
 	        AutoHD<TVal> aprm;
 	};
 	
-        struct STmpl
-        {
-            TValFunc     val;
-    	    vector<SLnk> lnk;
-        };
-	
-	union
-        {
-            AutoHD<TValue> *prm_refl;   //Direct reflection
-            STmpl *tmpl;                //Template
-        };
-	
-	//Methods
-        void postEnable( int flag );
-        void postDisable( int flag );
-	
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process			
-						
-        void vlGet( TVal &val );
-        void vlSet( TVal &val );
-	void vlArchMake( TVal &val );
-	
-	//- Template link operations -
-        int lnkSize( );
-        int lnkId( int id );
-        int lnkId( const string &id );
-        SLnk &lnk( int num );
-			
-        void loadIO();
-        void saveIO();
-        void initTmplLnks();
-							
-        //Attributes
-        string  &m_prm, m_wprm;
-        int     &m_mode;        //Config parameter mode
-        Mode    m_wmode;        //Work parameter mode
+	struct STmpl
+	{
+	    TValFunc     val;
+	    vector<SLnk> lnk;
+	};
 
-        TElem   p_el;           //Work atribute elements
-	
-	bool	chk_lnk_need;	//Check lnk need flag
-	Res 	moderes;	//Resource
+	union
+	{
+	    AutoHD<TValue> *prm_refl;		//Direct reflection
+	    STmpl *tmpl;			//Template
+	};
+
+	//Methods
+	void postEnable( int flag );
+	void postDisable( int flag );
+
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+
+	void vlGet( TVal &val );
+	void vlSet( TVal &val );
+	void vlArchMake( TVal &val );
+
+	//- Template link operations -
+	int lnkSize( );
+	int lnkId( int id );
+	int lnkId( const string &id );
+	SLnk &lnk( int num );
+
+	void loadIO();
+	void saveIO();
+	void initTmplLnks();
+
+	//Attributes
+	string	&m_prm, m_wprm;
+	int	&m_mode;			//Config parameter mode
+	Mode	m_wmode;			//Work parameter mode
+
+	TElem	p_el;				//Work atribute elements
+
+	bool	chk_lnk_need;			//Check lnk need flag
+	Res	moderes;			//Resource
 	int	id_freq, id_start, id_stop, id_err;	//Fixed system attributes identifiers
 };
 
@@ -133,40 +133,40 @@ class TMdContr: public TController
     friend class TMdPrm;
     public:
 	//Methods
-    	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem);
-	~TMdContr( );   
+	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem);
+	~TMdContr( );
 
 	int period( )	{ return m_per; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
-	
+
     protected:
 	//Methods
 	void prmEn( const string &id, bool val );
-	void postDisable( int flag );     	//Delete all DB if flag 1
-	
-	void start_( );
-	void stop_( );    
+	void postDisable( int flag );		//Delete all DB if flag 1
 
-    	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-	
+	void start_( );
+	void stop_( );
+
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+
     private:
 	//Methods
 	TParamContr *ParamAttach( const string &name, int type );
 	static void *Task( void *icntr );
-	
+
 	//Attributes
-	Res	en_res;         //Resource for enable params
-	int	&m_per,     	// ms
-		&m_prior;	// Process task priority
-		
-	bool    prc_st,		// Process task active
-		endrun_req;	// Request to stop of the Process task
-        vector< AutoHD<TMdPrm> >  p_hd;
-	
-	pthread_t procPthr;     // Process task thread
-	
-	double 	tm_calc;	// Template functions calc time
+	Res	en_res;				//Resource for enable params
+	int	&m_per,				// ms
+		&m_prior;			// Process task priority
+
+	bool	prc_st,				// Process task active
+		endrun_req;			// Request to stop of the Process task
+	vector< AutoHD<TMdPrm> >  p_hd;
+
+	pthread_t procPthr;			// Process task thread
+
+	double	tm_calc;			// Template functions calc time
 };
 
 //*************************************************
@@ -176,28 +176,27 @@ class TTpContr: public TTipDAQ
 {
     public:
 	//Methods
-    	TTpContr( string name );
+	TTpContr( string name );
 	~TTpContr( );
 
-	TElem   &prmIOE( )	{ return el_prm_io; }
+	TElem	&prmIOE( )	{ return el_prm_io; }
 
     protected:
 	//Methods
 	void postEnable( int flag );
-	void load_( );	
+	void load_( );
 
     private:
 	//Methods
 	TController *ContrAttach( const string &name, const string &daq_db );
 	string optDescr( );
-    
+
 	//Attributes
-	TElem   el_prm_io;	
+	TElem	el_prm_io;
 };
 
 extern TTpContr *mod;
 
-} //End namespace 
+} //End namespace
 
 #endif //LOGICLEV_H
-

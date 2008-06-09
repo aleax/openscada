@@ -100,26 +100,21 @@ void TTransportS::load_( )
     {
 	TConfig c_el(&el_in);
 	c_el.cfgViewAll(false);
-	vector<string> tdb_ls, db_ls;
+	vector<string> db_ls;
 	
 	//--- Search into DB ---
-	SYS->db().at().modList(tdb_ls);
-	for( int i_tp = 0; i_tp < tdb_ls.size(); i_tp++ )
+	SYS->db().at().dbList(db_ls);
+	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
 	{
-	    SYS->db().at().at(tdb_ls[i_tp]).at().list(db_ls);
-	    for( int i_db = 0; i_db < db_ls.size(); i_db++ )
+	    int fld_cnt=0;
+	    while( SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_in","",fld_cnt++,c_el) )
 	    {
-		string wbd = tdb_ls[i_tp]+"."+db_ls[i_db];
-		int fld_cnt=0;
-		while( SYS->db().at().dataSeek(wbd+"."+subId()+"_in","",fld_cnt++,c_el) )
-		{
-		    id   = c_el.cfg("ID").getS();
-		    type = c_el.cfg("MODULE").getS();
-		    if( !at(type).at().inPresent(id) )
-			at(type).at().inAdd(id,(wbd==SYS->workDB())?"*.*":wbd);
-		    c_el.cfg("ID").setS("");
-		    c_el.cfg("MODULE").setS("");
-		}
+		id   = c_el.cfg("ID").getS();
+		type = c_el.cfg("MODULE").getS();
+		if( !at(type).at().inPresent(id) )
+		    at(type).at().inAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+		c_el.cfg("ID").setS("");
+		c_el.cfg("MODULE").setS("");
 	    }
 	}
 
@@ -149,23 +144,18 @@ void TTransportS::load_( )
 	vector<string> tdb_ls, db_ls;
 
 	//--- Search into DB ---
-	SYS->db().at().modList(tdb_ls);
-	for( int i_tp = 0; i_tp < tdb_ls.size(); i_tp++ )
+	SYS->db().at().dbList(db_ls);
+	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
 	{
-	    SYS->db().at().at(tdb_ls[i_tp]).at().list(db_ls);
-	    for( int i_db = 0; i_db < db_ls.size(); i_db++ )
+	    int fld_cnt=0;
+	    while( SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_out","",fld_cnt++,c_el) )
 	    {
-		string wbd = tdb_ls[i_tp]+"."+db_ls[i_db];
-		int fld_cnt=0;
-		while( SYS->db().at().dataSeek(wbd+"."+subId()+"_out","",fld_cnt++,c_el) )
-		{
-		    id = c_el.cfg("ID").getS();
-		    type = c_el.cfg("MODULE").getS();
-		    if( !at(type).at().outPresent(id) )
-			at(type).at().outAdd(id,(wbd==SYS->workDB())?"*.*":wbd);
-		    c_el.cfg("ID").setS("");
-		    c_el.cfg("MODULE").setS("");
-		}
+		id = c_el.cfg("ID").getS();
+		type = c_el.cfg("MODULE").getS();
+		if( !at(type).at().outPresent(id) )
+		    at(type).at().outAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+		c_el.cfg("ID").setS("");
+		c_el.cfg("MODULE").setS("");
 	    }
 	}
 	//--- Search into config file ---
@@ -630,8 +620,8 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))
 	    {
 		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Runing"),0664,"root","root",1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Transport DB"),0660,"root","root",2,
-		    "tp","str","help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set symbol '*'."));
+		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Transport DB"),0664,"root","root",4,"tp","str","dest","select","select","/db/list",
+		    "help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Config")))
 	    {
@@ -654,8 +644,8 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/prm/st/db" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText(DB());
-	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	setDB(opt->text());
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(DB());
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setDB(opt->text());
     }
     else if( a_path == "/prm/cfg/id" && ctrChkNode(opt) )	opt->setText(id());
     else if( a_path == "/prm/cfg/name" )
@@ -775,8 +765,8 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))
 	    {
 		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Runing"),0664,"root","root",1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Transport DB"),0660,"root","root",2,
-		    "tp","str","help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set symbol '*'."));
+		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Transport DB"),0664,"root","root",4,"tp","str","dest","select","select","/db/list",
+		    "help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Config")))
 	    {
@@ -798,8 +788,8 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/prm/st/db" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText(DB());
-	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	setDB(opt->text());
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(DB());
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setDB(opt->text());
     }
     else if( a_path == "/prm/cfg/id" && ctrChkNode(opt) )	opt->setText(id());
     else if( a_path == "/prm/cfg/name" )

@@ -1,3 +1,17 @@
+2008-06-09 Roman
+- !!:/DB: Add and everywhere use function TDBS::dbList() for all DB list request.
+- !!:/CntrNode: Add generic requests "/db/list" and "/db/tblList". Use requests into into all DB edit fields for make select combo.
+- !!:/CntrNode, /UI/QTCfg, /UI/WebCfg: Static select list support is added, for generic fields.
+- !!:/SYS: More odd spaces from sources is removing continued.
+- /SYS: Translation to Russian and Ukranian is updated.
+- FIX:/DAQ/BlockCalc: Zero period hang is fixed.
+- /DAQ/BlockCalc: Help for the attributes of parameter field configuration format is added.
+- FIX:/DAQ/JavaLikeCalc: Zero period hang is fixed.
+- /DAQ/ModBus: Help for the attributes of parameter field configuration format is added.
+- /DAQ/ModBus: Make selection of serial devices by combo.
+- !!:/UI/QTCfg: Move base widgets generation to object LineEdit from Vision. Edited combo edit contol is added.
+
+
 2008-06-04 Roman
 - FIX:/DAQ/FSArch: Value archive's directory period check time is fixed.
 - FIX:/UI/Vision: Alarm level lamp color restoring after quitation is fixed.

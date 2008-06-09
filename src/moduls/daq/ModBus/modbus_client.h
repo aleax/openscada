@@ -46,12 +46,12 @@ namespace ModBusDAQ
 //* TMdPrm                                             *
 //******************************************************
 class TMdContr;
-    
+
 class TMdPrm : public TParamContr
 {
     public:
 	//Methods
-    	TMdPrm( string name, TTipParam *tp_prm );
+	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );
 
 	void enable( );
@@ -60,17 +60,20 @@ class TMdPrm : public TParamContr
 	TElem &elem( )		{ return p_el; }
 	TMdContr &owner( )	{ return (TMdContr&)TParamContr::owner(); }
 
+    protected:
+	void	cntrCmdProc( XMLNode *opt );	//Control interface command process
+
     private:
 	//Methods
-        void postEnable( int flag );
+	void postEnable( int flag );
 	void vlGet( TVal &val );
 	void vlSet( TVal &val );
 	void vlArchMake( TVal &val );
-	
+
         //Attributes
-	string  &m_attrLs;
-        TElem   p_el;           //Work atribute elements
-	string  acq_err;
+	string	&m_attrLs;
+	TElem	p_el;		//Work atribute elements
+	string	acq_err;
 };
 
 //******************************************************
@@ -80,62 +83,62 @@ class TMdContr: public TController
 {
     public:
 	//Methods
-    	TMdContr( string name_c, const string &daq_db, TElem *cfgelem);
+	TMdContr( string name_c, const string &daq_db, TElem *cfgelem);
 	~TMdContr( );
 
-	double period( )	{ return vmax(m_per,0.01); }
-	int    prior( )		{ return m_prior; }
+	double	period( )	{ return vmax(m_per,0.01); }
+	int	prior( )	{ return m_prior; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
 	void prmEn( const string &id, bool val );
-	void regVal( int reg );    			//Register value for acquisition
+	void regVal( int reg );				//Register value for acquisition
 	int  getVal( int reg, string &err );		//Get register value
 	void setVal( int val, int reg, string &err );	//Set value
-	string modBusReq( string &pdu );	
+	string modBusReq( string &pdu );
 
     protected:
 	//Methods
-        void disable_( );
+	void disable_( );
 	void start_( );
-	void stop_( );	
-    	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	void stop_( );
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 	bool cfgChange( TCfg &cfg );
-	
+
     private:
-        //Data
-        class SDataRec
-        {
-            public:
-                SDataRec( int ioff, int v_rez ) : off(ioff)
-                { val.assign(v_rez,0); err="11:Value not gathered."; }
-									   
-                int off;        //Data block start offset
-                string val;     //Data block values kadr
-                string err;     //Acquisition error text
-        };
-	
+	//Data
+	class SDataRec
+	{
+	    public:
+		SDataRec( int ioff, int v_rez ) : off(ioff)
+		{ val.assign(v_rez,0); err="11:Value not gathered."; }
+
+		int	off;			//Data block start offset
+		string	val;			//Data block values kadr
+		string	err;			//Acquisition error text
+	};
+
 	//Methods
 	TParamContr *ParamAttach( const string &name, int type );
 	static void *Task( void *icntr );
-	
+
 	//Attributes
 	Res	en_res, req_res;		//Resource for enable params and request values
-	double	&m_per;     			//Acquisition task (seconds)
+	double	&m_per;				//Acquisition task (seconds)
 	int	&m_prior,			//Process task priority
 		&m_prt,				//Protocol
 		&m_node;			//Node
 	string	&m_addr;			//Transport device address
 	bool	&m_merge;			//Fragments of register merge
-		
-	bool    prc_st,				//Process task active
+
+	bool	prc_st,				//Process task active
 		endrun_req;			//Request to stop of the Process task
-        vector< AutoHD<TMdPrm> >  p_hd;
-	vector< SDataRec > 	acqBlks;     	//Acquisition data blocks
-	
-	pthread_t procPthr;     		//Process task thread
-	
-	double 	tm_gath;			//Gathering time
+	vector< AutoHD<TMdPrm> > p_hd;
+	vector< SDataRec >	acqBlks;	//Acquisition data blocks
+
+	pthread_t	procPthr;		//Process task thread
+
+	double	tm_gath;			//Gathering time
 };
 
 //*************************************************
@@ -147,13 +150,13 @@ class SSerial : public TCntrNode, public TConfig
 {
     public:
 	//Data
-	enum	Prot 	{ Free, ASCII, RTU };
+	enum	Prot	{ Free, ASCII, RTU };
 
 	//Methods
-	SSerial( const string &dev, TTpContr *iown );	
+	SSerial( const string &dev, TTpContr *iown );
 
-	string 	id( )		{ return m_id; }
-	int 	speed( )	{ return m_speed; }
+	string	id( )		{ return m_id; }
+	int	speed( )	{ return m_speed; }
 	int	len( )		{ return m_len; }
 	bool	twostop( )	{ return m_twostop; }
 	int	parity( )	{ return m_parity; }
@@ -162,23 +165,23 @@ class SSerial : public TCntrNode, public TConfig
 	int	timeoutReq( )	{ return reqTm; }
 	bool	hasOpen( )	{ return (fd>0); }
 
-	void 	setSpeed( int val, bool tmAdj = false );
+	void	setSpeed( int val, bool tmAdj = false );
 	void	setLen( int val );
 	void	setTwostop( bool val );
 	void	setParity( int val );
-	void 	setTimeoutFrame( int val )	{ frTm = val; modif(); }
+	void	setTimeoutFrame( int val )	{ frTm = val; modif(); }
 	void	setTimeoutChar( double val )	{ charTm = val; modif(); }
 	void	setTimeoutReq( int val )	{ reqTm = val; modif(); }
 	void	setOpen( bool vl );
-	
+
 	string req( const string &vl );
 
 	TTpContr &owner( )	{ return *(TTpContr *)nodePrev(); }
 
     protected:
-        //Methods
-        string nodeName( )	{ return id(); }
-	void postDisable( int flag );
+	//Methods
+	string	nodeName( )	{ return id(); }
+	void	postDisable( int flag );
 
 	//- DB commands -
 	void load_( );
@@ -191,10 +194,10 @@ class SSerial : public TCntrNode, public TConfig
 	int	&m_len;				//Length
 	bool	&m_twostop;			//Two stop bits
 	int	&m_parity;			//Parity check
-	int 	&frTm;				//Frame timeout in ms
+	int	&frTm;				//Frame timeout in ms
 	double	&charTm;			//Char timeout in ms
 	int	&reqTm;				//Request timeout in ms
-		
+
 	Res	m_res;				//Serial port resource
 	int	fd;				//Serial port
 };
@@ -206,41 +209,41 @@ class TTpContr: public TTipDAQ
 {
     public:
 	//Methods
-    	TTpContr( string name );
+	TTpContr( string name );
 	~TTpContr( );
 
 	TElem &serDevE( )	{ return el_ser_dev; }
 
 	//- Serial devices -
 	string serDevDB( );
-        void serDevList( vector<string> &list )		{ chldList(m_sdev,list); }
+	void serDevList( vector<string> &list )		{ chldList(m_sdev,list); }
 	void serDevAdd( const string &dev );
-        void serDevDel( const string &dev, bool full = false )		{ chldDel(m_sdev,dev,-1,full); }
-        bool serDevPresent( const string &dev )		{ return chldPresent(m_sdev,dev); }
+	void serDevDel( const string &dev, bool full = false )		{ chldDel(m_sdev,dev,-1,full); }
+	bool serDevPresent( const string &dev )		{ return chldPresent(m_sdev,dev); }
 	AutoHD<SSerial> serDevAt( const string &dev )	{ return chldAt(m_sdev,dev); }
-	
+
 	//- Special modbus protocol's -
-	ui16 CRC16( const string &mbap );
-	ui8  LRC( const string &mbap );
-	string DataToASCII( const string &in );
-	string ASCIIToData( const string &in );
+	ui16	CRC16( const string &mbap );
+	ui8	LRC( const string &mbap );
+	string	DataToASCII( const string &in );
+	string	ASCIIToData( const string &in );
 
     protected:
 	//Methods
-        void cntrCmdProc( XMLNode *opt );       //Control interface command process
-	void load_( );
-        void save_( );
+	void	cntrCmdProc( XMLNode *opt );	//Control interface command process
+	void	load_( );
+	void	save_( );
 
     private:
 	//Methods
-	void postEnable( int flag );
+	void	postEnable( int flag );
 	TController *ContrAttach( const string &name, const string &daq_db );
-	string optDescr( );
-	
+	string	optDescr( );
+
 	//Attributes
-	TElem   		el_ser_dev;
-	int             	m_sdev;	
-	
+	TElem	el_ser_dev;
+	int	m_sdev;
+
 	//- Special modbus protocol's -
 	static ui8 CRCHi[];
 	static ui8 CRCLo[];
@@ -248,6 +251,6 @@ class TTpContr: public TTipDAQ
 
 extern TTpContr *mod;
 
-} //End namespace 
+} //End namespace
 
 #endif //MODBUS_CLIENT_H

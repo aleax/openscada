@@ -44,25 +44,25 @@ class TDAQS : public TSubSYS
 	//Public methods
 	TDAQS( );
 	~TDAQS( );
-	
+
 	int subVer( )	{ return VER_CNTR; }
 	void subStart(  );
 	void subStop( );
-	
-	AutoHD<TTipDAQ> at( const string &name )	{ return modAt(name); }
-	
-        //- Parameter's templates library -
-	string tmplLibTable( )				{ return "ParamTemplLibs"; }
-        void tmplLibList( vector<string> &list )    	{ chldList(m_tmplib,list); }
-	bool tmplLibPresent( const string &id )   	{ return chldPresent(m_tmplib,id); }
-	void tmplLibReg( TPrmTmplLib *lib )		{ chldAdd(m_tmplib,lib); }
-        void tmplLibUnreg( const string &id, int flg = 0 )	{ chldDel(m_tmplib,id,-1,flg); }
-        AutoHD<TPrmTmplLib> tmplLibAt( const string &id )	{ return chldAt(m_tmplib,id); }								
-	
+
+	AutoHD<TTipDAQ> at( const string &name )		{ return modAt(name); }
+
+	//- Parameter's templates library -
+	string tmplLibTable( )					{ return "ParamTemplLibs"; }
+	void tmplLibList( vector<string> &list )		{ chldList(m_tmplib,list); }
+	bool tmplLibPresent( const string &id )			{ return chldPresent(m_tmplib,id); }
+	void tmplLibReg( TPrmTmplLib *lib )			{ chldAdd(m_tmplib,lib); }
+	void tmplLibUnreg( const string &id, int flg = 0 )	{ chldDel(m_tmplib,id,-1,flg); }
+	AutoHD<TPrmTmplLib> tmplLibAt( const string &id )	{ return chldAt(m_tmplib,id); }
+
 	TElem &elLib( )	{ return lb_el; }
 	TElem &tplE( ) 	{ return el_tmpl; }
-        TElem &tplIOE( ){ return el_tmpl_io; }
-	
+	TElem &tplIOE( ){ return el_tmpl_io; }
+
 	TElem &errE( )	{ return el_err; }	//Error atributes structure
 
     protected:
@@ -71,11 +71,11 @@ class TDAQS : public TSubSYS
     private:
 	//Private methods
 	string optDescr( );
-    
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-	
+
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+
 	//Private attributes
-	TElem   el_err, lb_el, el_tmpl, el_tmpl_io;
+	TElem	el_err, lb_el, el_tmpl, el_tmpl_io;
 	int	m_tmplib;
 };
 

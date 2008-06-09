@@ -35,8 +35,8 @@ TConfig::~TConfig()
     TCfgMap::iterator p;
     while( (p=value.begin())!=value.end() )
     {
-        delete p->second;
-        value.erase(p);
+	delete p->second;
+	value.erase(p);
     }
 
     m_elem->valDet(this);
@@ -46,7 +46,7 @@ TConfig::~TConfig()
 TConfig &TConfig::operator=(TConfig &config)
 {
     vector<string> list_el;
-    
+
     cfgList( list_el );
     for( int i_el = 0; i_el < list_el.size(); i_el++)
     {
@@ -72,14 +72,14 @@ void TConfig::addFld( TElem *el, unsigned id )
 {
     value.insert( std::pair<string,TCfg*>(m_elem->fldAt(id).name(),new TCfg(m_elem->fldAt(id),*this)) );
 }
-	    
+
 void TConfig::delFld( TElem *el, unsigned id )
 {
     TCfgMap::iterator p=value.find(m_elem->fldAt(id).name());
     if(p==value.end())	return;
     delete p->second;
     value.erase(p);
-}					
+}
 
 TCfg &TConfig::cfg( const string &n_val )
 {
@@ -110,20 +110,20 @@ void TConfig::cfgViewAll( bool val )
 void TConfig::setElem(TElem *Elements, bool first)
 {
     if(m_elem == Elements && !first ) return;
-    
+
     //- Clear previos setting -
     if(m_elem)
     {
 	TCfgMap::iterator p;
 	while( (p=value.begin())!=value.end() )
 	{
-    	    delete p->second;
-    	    value.erase(p);
-	}    
+	    delete p->second;
+	    value.erase(p);
+	}
 	m_elem->valDet(this);
 	if(single) delete m_elem;
     }
-    
+
     //- Set new setting -
     if( !Elements )
     {
@@ -133,9 +133,9 @@ void TConfig::setElem(TElem *Elements, bool first)
     else
     {
 	m_elem = Elements;
-    	single = false;
+	single = false;
     }
-    
+
     m_elem->valAtt(this);
     for(unsigned i=0; i < m_elem->fldSize(); i++) 
 	value.insert( std::pair<string,TCfg*>(m_elem->fldAt(i).name(),new TCfg(m_elem->fldAt(i),*this)) );    
@@ -149,7 +149,7 @@ TElem &TConfig::elem()
 void TConfig::cntrCmdMake( XMLNode *opt, const string &path, int pos, const string &user, const string &grp, int perm )
 {
     vector<string> list_c;
-    cfgList(list_c);    
+    cfgList(list_c);
     for( unsigned i_el = 0; i_el < list_c.size(); i_el++ )
 	if( cfg(list_c[i_el]).view() )
 	    cfg(list_c[i_el]).fld().cntrCmdMake(opt,path,(pos<0)?pos:pos++,user,grp,perm);
@@ -158,7 +158,7 @@ void TConfig::cntrCmdMake( XMLNode *opt, const string &path, int pos, const stri
 void TConfig::cntrCmdProc( XMLNode *opt, const string &elem, const string &user, const string &grp, int perm )
 {
     if( elem.size() > 4 && elem.substr(0,4) == "sel_" && TCntrNode::ctrChkNode(opt) )
-    { 
+    {
 	TFld &n_e_fld = cfg(elem.substr(4)).fld();
 	for( unsigned i_a=0; i_a < n_e_fld.selNm().size(); i_a++ )
 	    opt->childAdd("el")->setText(n_e_fld.selNm()[i_a]);
@@ -167,13 +167,13 @@ void TConfig::cntrCmdProc( XMLNode *opt, const string &elem, const string &user,
     TCfg &cel = cfg(elem);
     if( TCntrNode::ctrChkNode(opt,"get",(cel.fld().flg()&TFld::NoWrite)?(perm&~0222):perm,user.c_str(),grp.c_str(),SEQ_RD) )
     {
-	if( cel.fld().flg()&TFld::Selected )	opt->setText(cel.getSEL());       	
-	else 					opt->setText(cel.getS());
-    }	
+	if( cel.fld().flg()&TFld::Selected )	opt->setText(cel.getSEL());
+	else					opt->setText(cel.getS());
+    }
     if( TCntrNode::ctrChkNode(opt,"set",(cel.fld().flg()&TFld::NoWrite)?(perm&~0222):perm,user.c_str(),grp.c_str(),SEQ_WR) )
     {
 	if( cel.fld().flg()&TFld::Selected )	cel.setSEL(opt->text());
-	else 					cel.setS(opt->text());
+	else					cel.setS(opt->text());
     }
 }
 
@@ -189,7 +189,7 @@ TCfg::TCfg( TFld &fld, TConfig &owner ) : m_view(true), m_owner(owner)
 	*m_fld = fld;
     }
     else m_fld = &fld;
-    
+
     switch(m_fld->type())
     {
 	case TFld::String:
@@ -197,7 +197,7 @@ TCfg::TCfg( TFld &fld, TConfig &owner ) : m_view(true), m_owner(owner)
 	    *(m_val.s_val) = m_fld->def();
 	    break;
 	case TFld::Integer:	m_val.i_val = atoi(m_fld->def().c_str());	break;
-	case TFld::Real: 	m_val.r_val = atof(m_fld->def().c_str());	break;
+	case TFld::Real:	m_val.r_val = atof(m_fld->def().c_str());	break;
 	case TFld::Boolean:	m_val.b_val = atoi(m_fld->def().c_str());	break;
     }
     if( fld.flg()&TCfg::Hide )	m_view = false;
@@ -216,7 +216,7 @@ const string &TCfg::name()
 
 string TCfg::getSEL( )
 {
-    if( !(m_fld->flg()&TFld::Selected) )   
+    if( !(m_fld->flg()&TFld::Selected) )
 	throw TError("Cfg",_("Element type no select!"));
     switch( m_fld->type() )
     {
@@ -230,8 +230,8 @@ string TCfg::getSEL( )
 string &TCfg::getSd( )
 {
     if( m_fld->type()!=TFld::String )
-        throw TError("Cfg",_("Element type no string!"));
-	    
+	throw TError("Cfg",_("Element type no string!"));
+
     return *m_val.s_val;
 }
 
@@ -239,23 +239,23 @@ double &TCfg::getRd( )
 {
     if( m_fld->type()!=TFld::Real )
 	throw TError("Cfg",_("Element type no real!"));
-	     
+
     return m_val.r_val;
 }
 
 int &TCfg::getId( )
 {
     if( m_fld->type()!=TFld::Integer )
-        throw TError("Cfg",_("Element type no int!"));
-	    
+	throw TError("Cfg",_("Element type no int!"));
+
     return m_val.i_val;
 }
 
 bool &TCfg::getBd( )
 {
     if( m_fld->type()!=TFld::Boolean )
-        throw TError("Cfg",_("Element type no boolean!"));
-	    
+	throw TError("Cfg",_("Element type no boolean!"));
+
     return m_val.b_val;
 }
 
@@ -309,7 +309,7 @@ void TCfg::setSEL( const string &val, bool forcView )
 	throw TError("Cfg",_("Element type no select!"));
     switch( m_fld->type() )
     {
-	case TFld::String:      setS( m_fld->selNm2VlS(val),forcView );	break;
+	case TFld::String:	setS( m_fld->selNm2VlS(val),forcView );	break;
 	case TFld::Integer:	setI( m_fld->selNm2VlI(val),forcView );	break;
 	case TFld::Real:	setR( m_fld->selNm2VlR(val),forcView );	break;
 	case TFld::Boolean:	setB( m_fld->selNm2VlB(val),forcView );	break;
@@ -323,7 +323,7 @@ void TCfg::setS( const string &val, bool forcView )
 	case TFld::String:
 	{
 	    string t_str = *(m_val.s_val);
-	    *(m_val.s_val) = val;    
+	    *(m_val.s_val) = val;
 	    if( !m_owner.cfgChange(*this) )	*(m_val.s_val) = t_str;
 	    if( forcView ) setView(true);
 	    break;
@@ -365,13 +365,13 @@ void TCfg::setI( int val, bool forcView )
 	case TFld::Integer:
 	{
 	    if( !(m_fld->flg()&TFld::Selected) && m_fld->selValI()[0] < m_fld->selValI()[1] )
-	    {        
+	    {
 		if( val < m_fld->selValI()[0] )	val = m_fld->selValI()[0];
 		if( val > m_fld->selValI()[1] )	val = m_fld->selValI()[1];
 	    }
 	    int t_val = m_val.i_val;
 	    m_val.i_val = val;
-	    if( !m_owner.cfgChange(*this) ) 	m_val.i_val = t_val;
+	    if( !m_owner.cfgChange(*this) )	m_val.i_val = t_val;
 	    if( forcView ) setView(true);
 	    break;
 	}
@@ -391,7 +391,7 @@ void TCfg::setB( bool val, bool forcView )
 	{
 	    bool t_val = m_val.b_val;
 	    m_val.b_val = val;
-	    if( !m_owner.cfgChange(*this) ) 	m_val.b_val = t_val;
+	    if( !m_owner.cfgChange(*this) )	m_val.b_val = t_val;
 	    if( forcView ) setView(true);
 	    break;
 	}

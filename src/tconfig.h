@@ -18,7 +18,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-  
+ 
 #ifndef TCONFIG_H
 #define TCONFIG_H
 
@@ -43,58 +43,58 @@ class TCfg
 	//Data
 	enum AttrFlg
 	{
-	    NoVal   = 0x200,	//No value mirrored
-	    Key     = 0x400,	//Primary key
-	    Hide    = 0x800	//Attribute hide
-	};	
-    
+	    NoVal	= 0x200,	//No value mirrored
+	    Key		= 0x400,	//Primary key
+	    Hide	= 0x800		//Attribute hide
+	};
+
 	//Methods
 	TCfg( TFld &fld, TConfig &owner );
 	~TCfg( );
-	
+
 	const string &name( );
-	
+
 	bool operator==( TCfg &cfg );
-        TCfg &operator=( TCfg &cfg );
-	
-	bool  view( )			{ return m_view; }
-	void  setView( bool vw )	{ m_view = vw; }
-	
-	TFld &fld( )			{ return *m_fld; }	
-	
+	TCfg &operator=( TCfg &cfg );
+
+	bool	view( )			{ return m_view; }
+	void	setView( bool vw )	{ m_view = vw; }
+
+	TFld &fld( )			{ return *m_fld; }
+
 	//- Universal access -
-        string getSEL( );
-	string getS( );
-	double getR( );
-	int    getI( );
-	bool   getB( );
+	string	getSEL( );
+	string	getS( );
+	double	getR( );
+	int	getI( );
+	bool	getB( );
 	//- Direct access -
-        string &getSd( );
-        double &getRd( );
-        int    &getId( );
-        bool   &getBd( );					
-	
+	string	&getSd( );
+	double	&getRd( );
+	int	&getId( );
+	bool	&getBd( );
+
 	void setSEL( const string &val, bool forcView = false );
 	void setS( const string &val, bool forcView = false );
 	void setR( double val, bool forcView = false );
 	void setI( int val, bool forcView = false );
 	void setB( bool val, bool forcView = false );
-	
+
     private:
 	//Data
-    	union 
+	union
 	{
-	    string *s_val;
-	    double r_val;
-	    int    i_val;
-	    bool   b_val;
-	}m_val;	
-	
+	    string	*s_val;
+	    double	r_val;
+	    int		i_val;
+	    bool	b_val;
+	}m_val;
+
 	//Attributes
 	bool m_view;
-	
-	TFld     *m_fld;
-	TConfig  &m_owner;	
+
+	TFld	*m_fld;
+	TConfig	&m_owner;
 };
 
 //*************************************************
@@ -117,28 +117,28 @@ class TConfig: public TValElem
 	bool cfgPresent( const string &n_val );
 	TCfg &cfg( const string &n_val );
 	void cfgViewAll( bool val = true );	//Hide all no key elements
-	
+
 	TElem &elem( );
 	void setElem( TElem *Elements, bool first = false );
 
-	void cntrCmdMake( XMLNode *fld, const string &path, int pos, 
+	void cntrCmdMake( XMLNode *fld, const string &path, int pos,
 		const string &user = "root", const string &grp = "root", int perm = 0664 );
-        void cntrCmdProc( XMLNode *fld, const string &elem, 
+        void cntrCmdProc( XMLNode *fld, const string &elem,
 		const string &user = "root", const string &grp = "root", int perm = 0664 );
 
-    protected:	
+    protected:
 	//Methods
 	virtual bool cfgChange( TCfg &cfg )	{ return true; }
-	
+
 	void detElem( TElem *el );
 	void addFld( TElem *el, unsigned id );
-	void delFld( TElem *el, unsigned id );	
+	void delFld( TElem *el, unsigned id );
 
-    private:	
+    private:
 	//Attributes
 	TCfgMap		value;
-	TElem   	*m_elem;
-        bool     	single;
+	TElem		*m_elem;
+	bool		single;
 };
 
 #endif // TCONFIG_H

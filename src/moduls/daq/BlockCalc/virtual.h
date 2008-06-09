@@ -44,30 +44,34 @@ namespace Virtual
 //*      of calced blocks                         *
 //************************************************* 
 class Contr;
-    
+
 class Prm : public TParamContr
 {
     public:
 	//Public methods
-     	Prm( string name, TTipParam *tp_prm );
+	Prm( string name, TTipParam *tp_prm );
 	~Prm( );
-    
+
 	void enable( );
 	void disable( );
-	
+
 	Contr &owner( )		{ return (Contr&)TParamContr::owner( ); }
-	
+
+    protected:
+	//Protected methods
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+
     private:
         //Private methods
 	void postEnable( int flag );
-	
+
 	void vlSet( TVal &val );
 	void vlGet( TVal &val );
 	void vlArchMake( TVal &val );
-    
+
 	//Private attributes
 	TElem  v_el;				//Values elem
-}; 
+};
 
 //*************************************************
 //* Contr: Blocks and parameters container        *
@@ -76,62 +80,62 @@ class TipContr;
 
 class Contr: public TController
 {
-    friend class Block;    
+    friend class Block;
 
     public:
-    	//Public methods
+	//Public methods
 	Contr( string name_c, const string &daq_db, ::TElem *cfgelem );
 	~Contr( );
 
 	TCntrNode &operator=( TCntrNode &node );
-    
+
 	TParamContr *ParamAttach( const string &name, int type );
-	int period( )  				{ return m_per; }
-	int iterate( ) 				{ return m_iter; }
-	
+	int period( )				{ return vmax(1,m_per); }
+	int iterate( )				{ return m_iter; }
+
 	//- Scheme's functions -
-        void blkList( vector<string> &ls )	{ chldList(m_bl,ls); }
-        bool blkPresent( const string &id )    	{ return chldPresent(m_bl,id); }
-        void blkAdd( const string &id );
-        void blkDel( const string &id )    	{ chldDel(m_bl,id); }
-        AutoHD<Block> blkAt( const string &id )	{ return chldAt(m_bl,id); }
-	
+	void blkList( vector<string> &ls )	{ chldList(m_bl,ls); }
+	bool blkPresent( const string &id )	{ return chldPresent(m_bl,id); }
+	void blkAdd( const string &id );
+	void blkDel( const string &id )		{ chldDel(m_bl,id); }
+	AutoHD<Block> blkAt( const string &id )	{ return chldAt(m_bl,id); }
+
 	Res &res( )				{ return hd_res; }
-    
+
 	TipContr &owner( )			{ return (TipContr&)TController::owner( ); }
-    
+
     protected:
 	//Protected methods
 	void load_( );
 	void enable_( );
-	void disable_( );		
+	void disable_( );
 	void start_( );
-	void stop_( );		
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-	
-        //- Process stat -
-        void blkProc( const string & id, bool val );
-	
+	void stop_( );
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+
+	//- Process stat -
+	void blkProc( const string & id, bool val );
+
 	void postDisable(int flag);
-    
+
     private:
 	//Private methods
 	static void *Task( void *contr );
-	
+
 	//Private attributes
-	bool	prc_st,      	// Calc status
+	bool	prc_st,		// Calc status
 		endrun_req,	// Endrun calc request
 		sync_st;	// Sync DB status
-	int	&m_per,  	// Clock period (ms)
+	int	&m_per,		// Clock period (ms)
 		&m_prior,	// Process data task priority
-		&m_iter;    	// Iteration into clock
-	
+		&m_iter;	// Iteration into clock
+
 	pthread_t calcPthr;	// Calc pthread
-	
+
 	int	m_bl;
 	vector< AutoHD<Block> >	clc_blks;	// Calc blocks HD
 	double	tm_calc;			// Scheme's calc time
-	
+
 	Res	hd_res;		// Resource for process block
 };
 
@@ -144,30 +148,30 @@ class TipContr: public TTipDAQ
 	//Public methods
 	TipContr( string name );
 	~TipContr( );
-	
+
 	TController *ContrAttach( const string &name, const string &daq_db );
-	
+
 	TElem &blockE( )	{ return blk_el; }
 	TElem &blockIOE( )	{ return blkio_el; }
 
 	AutoHD<Contr> at( const string &name, const string &who = "" )
 	{ return TTipDAQ::at(name,who); }
- 	void copy( const string &src, const string &dst );
-	
+	void copy( const string &src, const string &dst );
+
     protected:
 	//Protected methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	void load_( );
-    
+
     private:
 	//Private methods
 	void postEnable( int flag );
 	void preDisable( int flag );
-        string optDescr( );
-	
-        //Private attributes
+	string optDescr( );
+
+	//Private attributes
 	TElem	blk_el;
-	TElem   blkio_el;	
+	TElem	blkio_el;
 };
 
 extern TipContr *mod;
@@ -175,4 +179,3 @@ extern TipContr *mod;
 } //End namespace virtual
 
 #endif //VIRTUAL_H
-

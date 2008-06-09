@@ -4,17 +4,17 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #: modbus_client.cpp:55 modbus_client.cpp:120 modbus_client.cpp:130
-#: modbus_client.cpp:172 modbus_client.cpp:336 modbus_client.cpp:337
-#: modbus_client.cpp:338 modbus_client.cpp:339 modbus_client.cpp:340
-#: modbus_client.cpp:341 modbus_client.cpp:342 modbus_client.cpp:343
-#: modbus_client.cpp:344 modbus_client.cpp:913 modbus_client.cpp:948
-#: modbus_client.cpp:1068
+#: modbus_client.cpp:172 modbus_client.cpp:334 modbus_client.cpp:335
+#: modbus_client.cpp:336 modbus_client.cpp:337 modbus_client.cpp:338
+#: modbus_client.cpp:339 modbus_client.cpp:340 modbus_client.cpp:341
+#: modbus_client.cpp:342 modbus_client.cpp:900 modbus_client.cpp:935
+#: modbus_client.cpp:1064
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.ModBus 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-28 14:16+0200\n"
+"POT-Creation-Date: 2008-06-09 11:25+0300\n"
 "PO-Revision-Date: 2007-10-29 10:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -107,7 +107,7 @@ msgstr ""
 #: modbus_client.cpp:121 modbus_client.cpp:123 modbus_client.cpp:125
 #: modbus_client.cpp:126 modbus_client.cpp:135 modbus_client.cpp:136
 #: modbus_client.cpp:137 modbus_client.cpp:315 modbus_client.cpp:317
-#: modbus_client.cpp:318 modbus_client.cpp:411
+#: modbus_client.cpp:318 modbus_client.cpp:409
 msgid "1"
 msgstr ""
 
@@ -123,12 +123,12 @@ msgstr ""
 msgid "Gather task priority"
 msgstr "Уровень приоритета задачи сбора данных"
 
-#: modbus_client.cpp:122 modbus_client.cpp:317 modbus_client.cpp:412
+#: modbus_client.cpp:122 modbus_client.cpp:317 modbus_client.cpp:410
 msgid "2"
 msgstr ""
 
 #: modbus_client.cpp:122 modbus_client.cpp:123 modbus_client.cpp:126
-#: modbus_client.cpp:137 modbus_client.cpp:410 modbus_client.cpp:1121
+#: modbus_client.cpp:137 modbus_client.cpp:408 modbus_client.cpp:1117
 msgid "0"
 msgstr ""
 
@@ -136,7 +136,7 @@ msgstr ""
 msgid "0;100"
 msgstr ""
 
-#: modbus_client.cpp:123 modbus_client.cpp:653 modbus_client.cpp:750
+#: modbus_client.cpp:123 modbus_client.cpp:653 modbus_client.cpp:737
 msgid "PROT"
 msgstr ""
 
@@ -152,12 +152,12 @@ msgstr ""
 msgid "TCP/IP;RTU;ASCII"
 msgstr ""
 
-#: modbus_client.cpp:124 modbus_client.cpp:654 modbus_client.cpp:754
-#: modbus_client.cpp:759
+#: modbus_client.cpp:124 modbus_client.cpp:654 modbus_client.cpp:741
+#: modbus_client.cpp:746 modbus_client.cpp:1000
 msgid "ADDR"
 msgstr ""
 
-#: modbus_client.cpp:124 modbus_client.cpp:754
+#: modbus_client.cpp:124 modbus_client.cpp:741
 msgid "Host address"
 msgstr "Адрес хоста"
 
@@ -197,24 +197,24 @@ msgstr ""
 msgid "Standard"
 msgstr "Стандарт"
 
-#: modbus_client.cpp:130 modbus_client.cpp:1024
+#: modbus_client.cpp:130 modbus_client.cpp:1020 modbus_client.cpp:1143
 msgid "ATTR_LS"
 msgstr ""
 
 #: modbus_client.cpp:130
-msgid "Attributes list (next line separated)"
-msgstr "Перечень атрибутов (разделение след. строкой)"
+msgid "Attributes list"
+msgstr ""
 
 #: modbus_client.cpp:130
 msgid "100"
 msgstr ""
 
 #: modbus_client.cpp:133 modbus_client.cpp:171 modbus_client.cpp:172
-#: modbus_client.cpp:380 modbus_client.cpp:424
+#: modbus_client.cpp:378 modbus_client.cpp:420
 msgid "ID"
 msgstr ""
 
-#: modbus_client.cpp:134 modbus_client.cpp:424
+#: modbus_client.cpp:134 modbus_client.cpp:420
 msgid "SPEED"
 msgstr ""
 
@@ -226,11 +226,11 @@ msgstr "Скорость"
 msgid "6"
 msgstr ""
 
-#: modbus_client.cpp:134 modbus_client.cpp:400
+#: modbus_client.cpp:134 modbus_client.cpp:398
 msgid "9600"
 msgstr ""
 
-#: modbus_client.cpp:135 modbus_client.cpp:424
+#: modbus_client.cpp:135 modbus_client.cpp:420
 msgid "LEN"
 msgstr ""
 
@@ -242,7 +242,7 @@ msgstr "Длина"
 msgid "8"
 msgstr ""
 
-#: modbus_client.cpp:136 modbus_client.cpp:425
+#: modbus_client.cpp:136 modbus_client.cpp:421
 msgid "TWOSTOP"
 msgstr ""
 
@@ -250,15 +250,15 @@ msgstr ""
 msgid "Two stop bit"
 msgstr "Два стоп бита"
 
-#: modbus_client.cpp:137 modbus_client.cpp:425
+#: modbus_client.cpp:137 modbus_client.cpp:421
 msgid "PARITY"
 msgstr ""
 
-#: modbus_client.cpp:137 modbus_client.cpp:318 modbus_client.cpp:411
+#: modbus_client.cpp:137 modbus_client.cpp:318 modbus_client.cpp:409
 msgid "Parity"
 msgstr "Чётность"
 
-#: modbus_client.cpp:138 modbus_client.cpp:426
+#: modbus_client.cpp:138 modbus_client.cpp:422
 msgid "TM_FRM"
 msgstr ""
 
@@ -274,7 +274,7 @@ msgstr ""
 msgid "1000"
 msgstr ""
 
-#: modbus_client.cpp:139 modbus_client.cpp:426
+#: modbus_client.cpp:139 modbus_client.cpp:422
 msgid "TM_CHAR"
 msgstr ""
 
@@ -290,7 +290,7 @@ msgstr ""
 msgid "4"
 msgstr ""
 
-#: modbus_client.cpp:140 modbus_client.cpp:426
+#: modbus_client.cpp:140 modbus_client.cpp:422
 msgid "TM_REQ"
 msgstr ""
 
@@ -306,16 +306,16 @@ msgstr ""
 msgid "h"
 msgstr ""
 
-#: modbus_client.cpp:150
+#: modbus_client.cpp:150 modbus_client.cpp:1144
 msgid "help"
 msgstr ""
 
-#: modbus_client.cpp:169 modbus_client.cpp:438 modbus_client.cpp:445
-#: modbus_client.cpp:450
+#: modbus_client.cpp:169 modbus_client.cpp:434 modbus_client.cpp:441
+#: modbus_client.cpp:446
 msgid "sDevs/"
 msgstr ""
 
-#: modbus_client.cpp:178 modbus_client.cpp:182 modbus_client.cpp:440
+#: modbus_client.cpp:178 modbus_client.cpp:182 modbus_client.cpp:436
 #, c-format
 msgid "%s"
 msgstr ""
@@ -324,7 +324,7 @@ msgstr ""
 msgid "Search and load serial devices' DB is error."
 msgstr "Ошибка поиска и загрузки БД последовательных устройств."
 
-#: modbus_client.cpp:307 modbus_client.cpp:1008
+#: modbus_client.cpp:307 modbus_client.cpp:995 modbus_client.cpp:1140
 msgid "info"
 msgstr ""
 
@@ -340,7 +340,7 @@ msgstr ""
 msgid "table"
 msgstr ""
 
-#: modbus_client.cpp:312 modbus_client.cpp:331
+#: modbus_client.cpp:312 modbus_client.cpp:329
 msgid "/mod/dev"
 msgstr ""
 
@@ -351,9 +351,9 @@ msgstr "Последовательные устройства"
 #: modbus_client.cpp:312 modbus_client.cpp:314 modbus_client.cpp:315
 #: modbus_client.cpp:316 modbus_client.cpp:317 modbus_client.cpp:318
 #: modbus_client.cpp:319 modbus_client.cpp:320 modbus_client.cpp:321
-#: modbus_client.cpp:322 modbus_client.cpp:333 modbus_client.cpp:361
-#: modbus_client.cpp:370 modbus_client.cpp:372 modbus_client.cpp:414
-#: modbus_client.cpp:415 modbus_client.cpp:718 modbus_client.cpp:1011
+#: modbus_client.cpp:322 modbus_client.cpp:331 modbus_client.cpp:359
+#: modbus_client.cpp:368 modbus_client.cpp:370 modbus_client.cpp:703
+#: modbus_client.cpp:998 modbus_client.cpp:1000 modbus_client.cpp:1143
 msgid "root"
 msgstr ""
 
@@ -369,20 +369,20 @@ msgstr ""
 msgid "key"
 msgstr ""
 
-#: modbus_client.cpp:312 modbus_client.cpp:376
+#: modbus_client.cpp:312 modbus_client.cpp:374
 msgid "dev"
 msgstr ""
 
 #: modbus_client.cpp:314 modbus_client.cpp:315 modbus_client.cpp:316
 #: modbus_client.cpp:317 modbus_client.cpp:318 modbus_client.cpp:319
 #: modbus_client.cpp:320 modbus_client.cpp:321 modbus_client.cpp:322
-#: modbus_client.cpp:336 modbus_client.cpp:337 modbus_client.cpp:338
-#: modbus_client.cpp:339 modbus_client.cpp:340 modbus_client.cpp:341
-#: modbus_client.cpp:342 modbus_client.cpp:343 modbus_client.cpp:344
+#: modbus_client.cpp:334 modbus_client.cpp:335 modbus_client.cpp:336
+#: modbus_client.cpp:337 modbus_client.cpp:338 modbus_client.cpp:339
+#: modbus_client.cpp:340 modbus_client.cpp:341 modbus_client.cpp:342
 msgid "list"
 msgstr ""
 
-#: modbus_client.cpp:314 modbus_client.cpp:336
+#: modbus_client.cpp:314 modbus_client.cpp:334
 msgid "/mod/dev/dev"
 msgstr ""
 
@@ -393,15 +393,15 @@ msgstr "Устройство"
 #: modbus_client.cpp:314 modbus_client.cpp:315 modbus_client.cpp:316
 #: modbus_client.cpp:317 modbus_client.cpp:318 modbus_client.cpp:319
 #: modbus_client.cpp:320 modbus_client.cpp:321 modbus_client.cpp:322
-#: modbus_client.cpp:1011
+#: modbus_client.cpp:998 modbus_client.cpp:1000
 msgid "tp"
 msgstr ""
 
-#: modbus_client.cpp:314
+#: modbus_client.cpp:314 modbus_client.cpp:1000
 msgid "str"
 msgstr ""
 
-#: modbus_client.cpp:315 modbus_client.cpp:337
+#: modbus_client.cpp:315 modbus_client.cpp:335
 msgid "/mod/dev/speed"
 msgstr ""
 
@@ -414,19 +414,19 @@ msgstr ""
 msgid "idm"
 msgstr ""
 
-#: modbus_client.cpp:315 modbus_client.cpp:318
+#: modbus_client.cpp:315 modbus_client.cpp:318 modbus_client.cpp:1000
 msgid "dest"
 msgstr ""
 
-#: modbus_client.cpp:315 modbus_client.cpp:318
+#: modbus_client.cpp:315 modbus_client.cpp:318 modbus_client.cpp:1000
 msgid "select"
 msgstr ""
 
-#: modbus_client.cpp:315 modbus_client.cpp:393
+#: modbus_client.cpp:315 modbus_client.cpp:391
 msgid "/mod/dev/lsspd"
 msgstr ""
 
-#: modbus_client.cpp:316 modbus_client.cpp:338
+#: modbus_client.cpp:316 modbus_client.cpp:336
 msgid "/mod/dev/len"
 msgstr ""
 
@@ -442,7 +442,7 @@ msgstr ""
 msgid "max"
 msgstr ""
 
-#: modbus_client.cpp:317 modbus_client.cpp:339
+#: modbus_client.cpp:317 modbus_client.cpp:337
 msgid "/mod/dev/stop"
 msgstr ""
 
@@ -450,31 +450,31 @@ msgstr ""
 msgid "Stop bits"
 msgstr "Стоп битов"
 
-#: modbus_client.cpp:318 modbus_client.cpp:340
+#: modbus_client.cpp:318 modbus_client.cpp:338
 msgid "/mod/dev/parity"
 msgstr ""
 
-#: modbus_client.cpp:318 modbus_client.cpp:408
+#: modbus_client.cpp:318 modbus_client.cpp:406
 msgid "/mod/dev/lsprt"
 msgstr ""
 
-#: modbus_client.cpp:319 modbus_client.cpp:341
+#: modbus_client.cpp:319 modbus_client.cpp:339
 msgid "/mod/dev/frTm"
 msgstr ""
 
-#: modbus_client.cpp:320 modbus_client.cpp:342
+#: modbus_client.cpp:320 modbus_client.cpp:340
 msgid "/mod/dev/charTm"
 msgstr ""
 
-#: modbus_client.cpp:320 modbus_client.cpp:1011
+#: modbus_client.cpp:320 modbus_client.cpp:998
 msgid "real"
 msgstr ""
 
-#: modbus_client.cpp:321 modbus_client.cpp:343
+#: modbus_client.cpp:321 modbus_client.cpp:341
 msgid "/mod/dev/reqTm"
 msgstr ""
 
-#: modbus_client.cpp:322 modbus_client.cpp:344
+#: modbus_client.cpp:322 modbus_client.cpp:342
 msgid "/mod/dev/open"
 msgstr ""
 
@@ -486,186 +486,167 @@ msgstr "Открыт"
 msgid "bool"
 msgstr ""
 
-#: modbus_client.cpp:324 modbus_client.cpp:325
-msgid "comm"
-msgstr ""
-
-#: modbus_client.cpp:324 modbus_client.cpp:414
-msgid "/mod/load"
-msgstr ""
-
-#: modbus_client.cpp:324
-msgid "Load"
-msgstr "Загрузить"
-
-#: modbus_client.cpp:325 modbus_client.cpp:415
-msgid "/mod/save"
-msgstr ""
-
-#: modbus_client.cpp:325
-msgid "Save"
-msgstr "Сохранить"
-
-#: modbus_client.cpp:330 modbus_client.cpp:1015
+#: modbus_client.cpp:328 modbus_client.cpp:1004
 msgid "path"
 msgstr ""
 
-#: modbus_client.cpp:333
+#: modbus_client.cpp:331
 msgid "get"
 msgstr ""
 
-#: modbus_client.cpp:350 modbus_client.cpp:351 modbus_client.cpp:352
-#: modbus_client.cpp:353 modbus_client.cpp:354 modbus_client.cpp:355
-#: modbus_client.cpp:356 modbus_client.cpp:357 modbus_client.cpp:358
-#: modbus_client.cpp:395 modbus_client.cpp:396 modbus_client.cpp:397
-#: modbus_client.cpp:398 modbus_client.cpp:399 modbus_client.cpp:400
-#: modbus_client.cpp:401 modbus_client.cpp:402 modbus_client.cpp:403
-#: modbus_client.cpp:404 modbus_client.cpp:405 modbus_client.cpp:406
-#: modbus_client.cpp:410 modbus_client.cpp:411 modbus_client.cpp:412
+#: modbus_client.cpp:348 modbus_client.cpp:349 modbus_client.cpp:350
+#: modbus_client.cpp:351 modbus_client.cpp:352 modbus_client.cpp:353
+#: modbus_client.cpp:354 modbus_client.cpp:355 modbus_client.cpp:356
+#: modbus_client.cpp:393 modbus_client.cpp:394 modbus_client.cpp:395
+#: modbus_client.cpp:396 modbus_client.cpp:397 modbus_client.cpp:398
+#: modbus_client.cpp:399 modbus_client.cpp:400 modbus_client.cpp:401
+#: modbus_client.cpp:402 modbus_client.cpp:403 modbus_client.cpp:404
+#: modbus_client.cpp:408 modbus_client.cpp:409 modbus_client.cpp:410
+#: modbus_client.cpp:1011
 msgid "el"
 msgstr ""
 
-#: modbus_client.cpp:361
+#: modbus_client.cpp:359
 msgid "add"
 msgstr ""
 
-#: modbus_client.cpp:363
+#: modbus_client.cpp:361
 msgid "/dev/NewSDev"
 msgstr ""
 
-#: modbus_client.cpp:370
+#: modbus_client.cpp:368
 msgid "del"
 msgstr ""
 
-#: modbus_client.cpp:371 modbus_client.cpp:375
+#: modbus_client.cpp:369 modbus_client.cpp:373
 msgid "key_dev"
 msgstr ""
 
-#: modbus_client.cpp:372 modbus_client.cpp:414 modbus_client.cpp:415
+#: modbus_client.cpp:370
 msgid "set"
 msgstr ""
 
-#: modbus_client.cpp:374
+#: modbus_client.cpp:372
 msgid "col"
 msgstr ""
 
-#: modbus_client.cpp:383
+#: modbus_client.cpp:381
 msgid "speed"
 msgstr ""
 
-#: modbus_client.cpp:384
+#: modbus_client.cpp:382
 msgid "len"
 msgstr ""
 
-#: modbus_client.cpp:385 modbus_client.cpp:738
+#: modbus_client.cpp:383 modbus_client.cpp:723
 msgid "stop"
 msgstr ""
 
-#: modbus_client.cpp:386
+#: modbus_client.cpp:384
 msgid "parity"
 msgstr ""
 
-#: modbus_client.cpp:387
+#: modbus_client.cpp:385
 msgid "frTm"
 msgstr ""
 
-#: modbus_client.cpp:388
+#: modbus_client.cpp:386
 msgid "charTm"
 msgstr ""
 
-#: modbus_client.cpp:389
+#: modbus_client.cpp:387
 msgid "reqTm"
 msgstr ""
 
-#: modbus_client.cpp:390
+#: modbus_client.cpp:388
 msgid "open"
 msgstr ""
 
-#: modbus_client.cpp:395 modbus_client.cpp:396 modbus_client.cpp:397
-#: modbus_client.cpp:398 modbus_client.cpp:399 modbus_client.cpp:400
-#: modbus_client.cpp:401 modbus_client.cpp:402 modbus_client.cpp:403
-#: modbus_client.cpp:404 modbus_client.cpp:405 modbus_client.cpp:406
-#: modbus_client.cpp:410 modbus_client.cpp:411 modbus_client.cpp:412
+#: modbus_client.cpp:393 modbus_client.cpp:394 modbus_client.cpp:395
+#: modbus_client.cpp:396 modbus_client.cpp:397 modbus_client.cpp:398
+#: modbus_client.cpp:399 modbus_client.cpp:400 modbus_client.cpp:401
+#: modbus_client.cpp:402 modbus_client.cpp:403 modbus_client.cpp:404
+#: modbus_client.cpp:408 modbus_client.cpp:409 modbus_client.cpp:410
 msgid "id"
 msgstr ""
 
-#: modbus_client.cpp:395
+#: modbus_client.cpp:393
 msgid "300"
 msgstr ""
 
-#: modbus_client.cpp:396
+#: modbus_client.cpp:394
 msgid "600"
 msgstr ""
 
-#: modbus_client.cpp:397
+#: modbus_client.cpp:395
 msgid "1200"
 msgstr ""
 
-#: modbus_client.cpp:398
+#: modbus_client.cpp:396
 msgid "2400"
 msgstr ""
 
-#: modbus_client.cpp:399
+#: modbus_client.cpp:397
 msgid "4800"
 msgstr ""
 
-#: modbus_client.cpp:401
+#: modbus_client.cpp:399
 msgid "19200"
 msgstr ""
 
-#: modbus_client.cpp:401
+#: modbus_client.cpp:399
 msgid "19.2k"
 msgstr ""
 
-#: modbus_client.cpp:402
+#: modbus_client.cpp:400
 msgid "38400"
 msgstr ""
 
-#: modbus_client.cpp:402
+#: modbus_client.cpp:400
 msgid "38.4k"
 msgstr ""
 
-#: modbus_client.cpp:403
+#: modbus_client.cpp:401
 msgid "57600"
 msgstr ""
 
-#: modbus_client.cpp:403
+#: modbus_client.cpp:401
 msgid "57.6k"
 msgstr ""
 
-#: modbus_client.cpp:404
+#: modbus_client.cpp:402
 msgid "115200"
 msgstr ""
 
-#: modbus_client.cpp:404
+#: modbus_client.cpp:402
 msgid "115.2k"
 msgstr ""
 
-#: modbus_client.cpp:405
+#: modbus_client.cpp:403
 msgid "230400"
 msgstr ""
 
-#: modbus_client.cpp:405
+#: modbus_client.cpp:403
 msgid "230.4k"
 msgstr ""
 
-#: modbus_client.cpp:406
+#: modbus_client.cpp:404
 msgid "460800"
 msgstr ""
 
-#: modbus_client.cpp:406
+#: modbus_client.cpp:404
 msgid "460.8k"
 msgstr ""
 
-#: modbus_client.cpp:410
+#: modbus_client.cpp:408
 msgid "No check"
 msgstr "Без проверки"
 
-#: modbus_client.cpp:412
+#: modbus_client.cpp:410
 msgid "Odd parity"
 msgstr "Нечётность"
 
-#: modbus_client.cpp:462
+#: modbus_client.cpp:458
 #, c-format
 msgid "Serial port '%s' open error."
 msgstr "Ошибка открытия последовательного порта '%s'."
@@ -689,134 +670,163 @@ msgstr "Исчерпано время ответа из последовател
 msgid "ModBusPrm_"
 msgstr ""
 
-#: modbus_client.cpp:699 modbus_client.cpp:700 modbus_client.cpp:703
-#: modbus_client.cpp:704 modbus_client.cpp:743 modbus_client.cpp:744
-#: modbus_client.cpp:868
+#: modbus_client.cpp:684 modbus_client.cpp:685 modbus_client.cpp:688
+#: modbus_client.cpp:689 modbus_client.cpp:728 modbus_client.cpp:729
+#: modbus_client.cpp:855
 msgid "Sockets"
 msgstr "Сокеты"
 
-#: modbus_client.cpp:701
+#: modbus_client.cpp:686
 msgid "TCP:"
 msgstr ""
 
-#: modbus_client.cpp:701 modbus_client.cpp:913 modbus_client.cpp:1059
+#: modbus_client.cpp:686 modbus_client.cpp:900 modbus_client.cpp:1055
 msgid ":"
 msgstr ""
 
-#: modbus_client.cpp:702
+#: modbus_client.cpp:687
 msgid "502"
 msgstr ""
 
-#: modbus_client.cpp:726
+#: modbus_client.cpp:711
 msgid "start"
 msgstr ""
 
-#: modbus_client.cpp:727
+#: modbus_client.cpp:712
 msgid "Gathering task no started!"
 msgstr "Задача сбора данных не запущена!"
 
-#: modbus_client.cpp:739
+#: modbus_client.cpp:724
 msgid "Gathering task no stoped!"
 msgstr "Задача сбора данных не остановлена!"
 
-#: modbus_client.cpp:759
+#: modbus_client.cpp:746
 msgid "Serial port"
 msgstr "Последовательный порт"
 
-#: modbus_client.cpp:883
+#: modbus_client.cpp:870
 msgid "13:Error server respond"
 msgstr "13:Ошибка в ответе сервера"
 
-#: modbus_client.cpp:902
+#: modbus_client.cpp:889
 msgid "13:Error respond: Too short."
 msgstr "13:Ошибка ответа: Очень короткий."
 
-#: modbus_client.cpp:904
+#: modbus_client.cpp:891
 msgid "13:Error respond: CRC check error."
 msgstr "13:Ошибка ответа: Ошибка проверки CRC."
 
-#: modbus_client.cpp:916
+#: modbus_client.cpp:903
 msgid "13:Error respond: Error format."
 msgstr "13:Ошибка ответа: Ошибка формата."
 
-#: modbus_client.cpp:919
+#: modbus_client.cpp:906
 msgid "13:Error respond: LRC check error."
 msgstr "13:Ошибка ответа: Ошибка проверки LRC."
 
-#: modbus_client.cpp:925
+#: modbus_client.cpp:912
 msgid "13:Error respond"
 msgstr "13:Ошибка ответа"
 
-#: modbus_client.cpp:930
+#: modbus_client.cpp:917
 #, c-format
 msgid "1:Function %xh no support."
 msgstr "1:Функция %xh не поддерживается."
 
-#: modbus_client.cpp:932
+#: modbus_client.cpp:919
 msgid "2:Requested registers length too long."
 msgstr "2:Длина запрошенных регистров очень большая."
 
-#: modbus_client.cpp:933
+#: modbus_client.cpp:920
 msgid "3:Illegal data value."
 msgstr "3:Нелегальное значение данных."
 
-#: modbus_client.cpp:934
+#: modbus_client.cpp:921
 msgid "4:Server failure."
 msgstr "4:Ошибка сервера."
 
-#: modbus_client.cpp:935
+#: modbus_client.cpp:922
 msgid "5:Request require too long time for execute."
 msgstr "5:Запрос требует очень много времени для исполнения."
 
-#: modbus_client.cpp:936
+#: modbus_client.cpp:923
 msgid "6:Server busy."
 msgstr "6:Сервер занят."
 
-#: modbus_client.cpp:937
+#: modbus_client.cpp:924
 msgid "10:Gateway problem."
 msgstr "10:Проблема со шлюзом."
 
-#: modbus_client.cpp:939
+#: modbus_client.cpp:926
 #, c-format
 msgid "12:Unknown error: %xh."
 msgstr "12:Неизвестная ошибка: %xh."
 
-#: modbus_client.cpp:945
+#: modbus_client.cpp:932
 msgid "14:Request is error: "
 msgstr "14:Ошибка запроса: "
 
-#: modbus_client.cpp:1011
+#: modbus_client.cpp:998 modbus_client.cpp:1000 modbus_client.cpp:1143
 msgid "fld"
 msgstr ""
 
-#: modbus_client.cpp:1011 modbus_client.cpp:1016
+#: modbus_client.cpp:998 modbus_client.cpp:1005
 msgid "/cntr/st/gath_tm"
 msgstr ""
 
-#: modbus_client.cpp:1011
+#: modbus_client.cpp:998
 msgid "Gather data time (ms)"
 msgstr "Время сбора данных (мс)"
 
-#: modbus_client.cpp:1024
+#: modbus_client.cpp:1000
+msgid "/cntr/cfg/ADDR"
+msgstr ""
+
+#: modbus_client.cpp:1000 modbus_client.cpp:1006
+msgid "/cntr/cfg/serDevLst"
+msgstr ""
+
+#: modbus_client.cpp:1020
 msgid "w_attr"
 msgstr ""
 
-#: modbus_client.cpp:1068
+#: modbus_client.cpp:1064
 msgid "0:65535"
 msgstr ""
 
-#: modbus_client.cpp:1109 modbus_client.cpp:1119
+#: modbus_client.cpp:1105 modbus_client.cpp:1115
 msgid "err"
 msgstr ""
 
-#: modbus_client.cpp:1111
+#: modbus_client.cpp:1107
 msgid "1:Parameter had disabled."
 msgstr "1:Параметр отключен."
 
-#: modbus_client.cpp:1112
+#: modbus_client.cpp:1108
 msgid "2:Acquisition is stoped."
 msgstr "2:Опрос остановлен."
 
-#: modbus_client.h:115
+#: modbus_client.cpp:1143
+msgid "/prm/cfg/ATTR_LS"
+msgstr ""
+
+#: modbus_client.cpp:1144
+msgid ""
+"Attributes configuration list. List writed by lines in format: [<numb>:<wr>:"
+"<id>:<name>]\n"
+"Where:\n"
+"  numb - ModBus device's register number (decimal);\n"
+"  wr - write allow (1-allow; 0-deny);\n"
+"  id - created attribute identifier;\n"
+"  name - created attribute name."
+msgstr ""
+"Список конфигурации атрибутов. Список формируется строками в формате: [<номер>:<запись>:<id>:<имя>]\n"
+"Где:\n"
+"  номер - номер (десятичный) регистра ModBus устройства;\n"
+"  запись - возможность записи (1-возможно; 0-запрещено);\n"
+"  id - идентификатор создаваемого атрибута;\n"
+"  имя - имя создаваемого атрибута."
+
+#: modbus_client.h:114
 msgid "11:Value not gathered."
 msgstr "11:Значения не опрошены."

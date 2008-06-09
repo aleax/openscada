@@ -252,23 +252,18 @@ void Engine::load_( )
 	//--- Search and create new libraries ---
 	TConfig c_el(&elWdgLib());
 	c_el.cfgViewAll(false);
-	vector<string> tdb_ls, db_ls;
+	vector<string> db_ls;
 
 	//---- Search into DB ----
-	SYS->db().at().modList(tdb_ls);
-	for( int i_tp = 0; i_tp < tdb_ls.size(); i_tp++ )
+	SYS->db().at().dbList(db_ls);
+	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
 	{
-	    SYS->db().at().at(tdb_ls[i_tp]).at().list(db_ls);
-	    for( int i_db = 0; i_db < db_ls.size(); i_db++ )
+	    int lib_cnt = 0;
+	    while(SYS->db().at().dataSeek(db_ls[i_db]+"."+wlbTable(),"",lib_cnt++,c_el) )
 	    {
-		string wbd=tdb_ls[i_tp]+"."+db_ls[i_db];
-		int lib_cnt = 0;
-		while(SYS->db().at().dataSeek(wbd+"."+wlbTable(),"",lib_cnt++,c_el) )
-		{
-		    string l_id = c_el.cfg("ID").getS();
-		    c_el.cfg("ID").setS("");
-		    if(!wlbPresent(l_id)) wlbAdd(l_id,"",(wbd==SYS->workDB())?"*.*":wbd);
-		}
+		string l_id = c_el.cfg("ID").getS();
+		c_el.cfg("ID").setS("");
+		if(!wlbPresent(l_id)) wlbAdd(l_id,"",(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
 	    }
 	}
 
@@ -282,9 +277,9 @@ void Engine::load_( )
 	}
 
 	//--- Load present libraries ---
-	wlbList(tdb_ls);
-	for( int l_id = 0; l_id < tdb_ls.size(); l_id++ )
-	    wlbAt(tdb_ls[l_id]).at().load();
+	wlbList(db_ls);
+	for( int l_id = 0; l_id < db_ls.size(); l_id++ )
+	    wlbAt(db_ls[l_id]).at().load();
     }catch( TError err )
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
@@ -297,24 +292,19 @@ void Engine::load_( )
 	//--- Search and create new projects ---
 	TConfig c_el(&elProject());
 	c_el.cfgViewAll(false);
-	vector<string> tdb_ls, db_ls;
+	vector<string> db_ls;
 
 	//---- Search into DB ----
-	SYS->db().at().modList(tdb_ls);
-	for( int i_tp = 0; i_tp < tdb_ls.size(); i_tp++ )
+	SYS->db().at().dbList(db_ls);
+	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
 	{
-	    SYS->db().at().at(tdb_ls[i_tp]).at().list(db_ls);
-	    for( int i_db = 0; i_db < db_ls.size(); i_db++ )
+	    int lib_cnt = 0;
+	    while(SYS->db().at().dataSeek(db_ls[i_db]+"."+prjTable(),"",lib_cnt++,c_el) )
 	    {
-		string wbd=tdb_ls[i_tp]+"."+db_ls[i_db];
-		int lib_cnt = 0;
-		while(SYS->db().at().dataSeek(wbd+"."+prjTable(),"",lib_cnt++,c_el) )
-		{
-		    string prj_id = c_el.cfg("ID").getS();
-		    c_el.cfg("ID").setS("");
-		    if( !prjPresent(prj_id) )
-			prjAdd(prj_id,"",(wbd==SYS->workDB())?"*.*":wbd);
-		}
+		string prj_id = c_el.cfg("ID").getS();
+		c_el.cfg("ID").setS("");
+		if( !prjPresent(prj_id) )
+		    prjAdd(prj_id,"",(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
 	    }
 	}
 
@@ -328,9 +318,9 @@ void Engine::load_( )
 	}
 
 	//--- Load present projects ---
-	prjList(tdb_ls);
-	for( int el_id = 0; el_id < tdb_ls.size(); el_id++ )
-	    prjAt(tdb_ls[el_id]).at().load();
+	prjList(db_ls);
+	for( int el_id = 0; el_id < db_ls.size(); el_id++ )
+	    prjAt(db_ls[el_id]).at().load();
     }catch( TError err )
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());

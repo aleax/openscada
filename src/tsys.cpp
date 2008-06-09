@@ -805,12 +805,12 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/gen/in_charset",_("Internal charset"),0440,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/config",_("Config file"),0440,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/workdir",_("Work directory"),0440,"root","root",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/gen/wrk_db",_("Work DB"),0660,"root",db().at().subId().c_str(),2,
-		"tp","str","help",_("Work DB address in format [<DB module>.<DB name>].\nChange it field if you want save or reload all system from other DB."));
-	    ctrMkNode("fld",opt,-1,"/gen/saveExit",_("Save system at exit"),0664,"root","root",2,
-		"tp","bool","help",_("Select for automatic system saving to DB on exit."));
-	    ctrMkNode("fld",opt,-1,"/gen/savePeriod",_("Save system period"),0664,"root","root",2,
-		"tp","dec","help",_("Use no zero period for periodic saving of changed systems parts to DB."));
+	    ctrMkNode("fld",opt,-1,"/gen/wrk_db",_("Work DB"),0664,"root",db().at().subId().c_str(),4,"tp","str","dest","select","select","/db/list",
+		"help",_("Work DB address in format [<DB module>.<DB name>].\nChange it field if you want save or reload all system from other DB."));
+	    ctrMkNode("fld",opt,-1,"/gen/saveExit",_("Save system at exit"),0664,"root","root",2,"tp","bool",
+		"help",_("Select for automatic system saving to DB on exit."));
+	    ctrMkNode("fld",opt,-1,"/gen/savePeriod",_("Save system period"),0664,"root","root",2,"tp","dec",
+		"help",_("Use no zero period (seconds) for periodic saving of changed systems parts to DB."));
 	    ctrMkNode("fld",opt,-1,"/gen/lang",_("Language"),0664,"root","root",1,"tp","str");
 	    if(ctrMkNode("area",opt,-1,"/gen/mess",_("Messages"),0444))
 	    {
@@ -862,8 +862,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     else if( a_path == "/gen/config" && ctrChkNode(opt) )	opt->setText(m_confFile);
     else if( a_path == "/gen/wrk_db" )
     {
-	if( ctrChkNode(opt,"get",0660,"root",db().at().subId().c_str(),SEQ_RD) ) opt->setText(mWorkDB);
-	if( ctrChkNode(opt,"set",0660,"root",db().at().subId().c_str(),SEQ_WR) ) setWorkDB(opt->text());
+	if( ctrChkNode(opt,"get",0664,"root",db().at().subId().c_str(),SEQ_RD) ) opt->setText(mWorkDB);
+	if( ctrChkNode(opt,"set",0664,"root",db().at().subId().c_str(),SEQ_WR) ) setWorkDB(opt->text());
     }
     else if( a_path == "/gen/saveExit" )
     {

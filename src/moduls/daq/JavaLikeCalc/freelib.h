@@ -32,7 +32,7 @@ using std::string;
 using std::vector;
 
 namespace JavaLikeCalc
-{    
+{
 
 //*************************************************
 //* Lib: Free library                             *
@@ -49,13 +49,13 @@ class Lib : public TCntrNode, public TConfig
 
 	const string &id( )	{ return m_id; }
 	string name( );
-        string descr( )	 	{ return m_descr; }
-	bool startStat( )	{ return run_st; }	
-	
-	string DB( )            { return work_lib_db; }
-        string tbl( )           { return m_db; }
-        string fullDB( )        { return DB()+'.'+tbl(); }
-        
+	string descr( )		{ return m_descr; }
+	bool startStat( )	{ return run_st; }
+
+	string DB( )		{ return work_lib_db; }
+	string tbl( )		{ return m_db; }
+	string fullDB( )	{ return DB()+'.'+tbl(); }
+
 	void setName( const string &inm )	{ m_name = inm; modif(); }
 	void setDescr( const string &idscr )	{ m_descr = idscr; modif(); }
 	void setStart( bool val );
@@ -63,10 +63,10 @@ class Lib : public TCntrNode, public TConfig
 
 	void list( vector<string> &ls )		{ chldList(m_fnc,ls); }
 	bool present( const string &id )	{ return chldPresent(m_fnc,id); }
-	AutoHD<Func> at( const string &id )	{ return chldAt(m_fnc,id); }	
+	AutoHD<Func> at( const string &id )	{ return chldAt(m_fnc,id); }
 	void add( const char *id, const char *name = "" );
 	void del( const char *id );
-	
+
 	void copyFunc( const string &f_id, const string &l_id, const string &to_id, const string &to_name );
 
     protected:
@@ -74,14 +74,14 @@ class Lib : public TCntrNode, public TConfig
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
 	void load_( );
-        void save_( );
-	
+	void save_( );
+
 	void preDisable( int flag );
 	void postDisable( int flag );
 
     private:
-	bool 	run_st;
-	int     m_fnc;
+	bool	run_st;
+	int	m_fnc;
 	string	&m_id, &m_name, &m_descr, &m_db, work_lib_db;
 };
 

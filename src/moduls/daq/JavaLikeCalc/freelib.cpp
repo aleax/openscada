@@ -31,8 +31,8 @@ using namespace JavaLikeCalc;
 //*************************************************
 //* Lib: Functions library                        *
 //*************************************************
-Lib::Lib( const char *id, const char *name, const string &lib_db ) : 
-    TConfig(&mod->elLib()), m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()), 
+Lib::Lib( const char *id, const char *name, const string &lib_db ) :
+    TConfig(&mod->elLib()), m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()),
     m_descr(cfg("DESCR").getSd()), m_db(cfg("DB").getSd()), work_lib_db(lib_db)
 {
     m_id = id;
@@ -44,27 +44,27 @@ Lib::Lib( const char *id, const char *name, const string &lib_db ) :
 
 Lib::~Lib( )
 {
-    
+
 }
 
 TCntrNode &Lib::operator=( TCntrNode &node )
 {
     Lib *src_n = dynamic_cast<Lib*>(&node);
     if( !src_n ) return *this;
-	
+
     //- Configuration copy -
     string tid = id();
     *(TConfig*)this = *(TConfig*)src_n;
     m_id = tid;
     work_lib_db = src_n->work_lib_db;
-			    
+
     //- Functions copy -
-    vector<string> ls;    
+    vector<string> ls;
     src_n->list(ls);
     for( int i_p = 0; i_p < ls.size(); i_p++ )
     {
-        if( !present(ls[i_p]) ) add(ls[i_p].c_str());
-        (TCntrNode&)at(ls[i_p]).at() = (TCntrNode&)src_n->at(ls[i_p]).at();
+	if( !present(ls[i_p]) ) add(ls[i_p].c_str());
+	(TCntrNode&)at(ls[i_p]).at() = (TCntrNode&)src_n->at(ls[i_p]).at();
     }
     if( src_n->startStat() && !startStat() )	setStart(true);
 
@@ -77,12 +77,12 @@ void Lib::preDisable( int flag )
 }
 
 void Lib::postDisable( int flag )
-{   
+{
     if( flag && DB().size() )
     {
 	//- Delete libraries record -
 	SYS->db().at().dataDel(DB()+"."+mod->libTable(),mod->nodePath()+"lib/",*this);
-	
+
 	//- Delete function's files -
 	SYS->db().at().open(fullDB());
 	SYS->db().at().close(fullDB(),true);
@@ -93,7 +93,7 @@ void Lib::postDisable( int flag )
 }
 
 string Lib::name( )
-{ 
+{
     return (m_name.size())?m_name:m_id;
 }
 
@@ -107,7 +107,7 @@ void Lib::setFullDB( const string &idb )
 void Lib::load_( )
 {
     if( DB().empty() )	return;
-    
+
     SYS->db().at().dataGet(work_lib_db+"."+mod->libTable(),mod->nodePath()+"lib/",*this);
 
     //- Load functions -
@@ -117,18 +117,18 @@ void Lib::load_( )
     while( SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl(), fld_cnt++,c_el) )
     {
 	string f_id = c_el.cfg("ID").getS();
-        
+
 	if( !present(f_id) )	add(f_id.c_str());
-        at(f_id).at().load();
-	
+	at(f_id).at().load();
+
 	c_el.cfg("ID").setS("");
     }
 }
 
 void Lib::save_( )
-{   
+{
     if( DB().empty() )    return;
- 
+
     SYS->db().at().dataSet(work_lib_db+"."+mod->libTable(),mod->nodePath()+"lib/",*this);
 }
 
@@ -137,8 +137,8 @@ void Lib::setStart( bool val )
     vector<string> lst;
     list(lst);
     for( int i_f = 0; i_f < lst.size(); i_f++ )
-        at(lst[i_f]).at().setStart(val);
-	    
+	at(lst[i_f]).at().setStart(val);
+
     run_st = val;
 }
 
@@ -156,8 +156,8 @@ void Lib::cntrCmdProc( XMLNode *opt )
 {
     //- Get page info -
     if( opt->name() == "info" )
-    {	
-    	ctrMkNode("oscada_cntr",opt,-1,"/",_("Function's library: ")+id(),0664,"root","root");
+    {
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Function's library: ")+id(),0664,"root","root");
 	if(ctrMkNode("branches",opt,-1,"/br","",0444))	
 	    ctrMkNode("grp",opt,-1,"/br/fnc_",_("Function"),0664,"root","root",1,"idm","1");
 	if(ctrMkNode("area",opt,-1,"/lib",_("Library")))
@@ -166,7 +166,8 @@ void Lib::cntrCmdProc( XMLNode *opt )
 	    {
 		ctrMkNode("fld",opt,-1,"/lib/st/st",_("Accessing"),0664,"root","root",1,"tp","bool");
 		if(DB().size())
-		    ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library DB (module.db.table)"),0660,"root","root",1,"tp","str");
+		    ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library DB"),0664,"root","root",4,"tp","str","dest","sel_ed","select","/db/tblList",
+			"help",_("DB address in format [<DB module>.<DB name>.<Table name>].\nFor use main work DB set '*.*'."));
 	    }
 	    if(ctrMkNode("area",opt,-1,"/lib/cfg",_("Config")))
 	    {
@@ -177,7 +178,7 @@ void Lib::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrMkNode("area",opt,-1,"/func",_("Functions")))
 	    ctrMkNode("list",opt,-1,"/func/func",_("Functions"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","fnc_");
-        return;
+	return;
     }
 
     //- Process command to page -
@@ -202,19 +203,19 @@ void Lib::cntrCmdProc( XMLNode *opt )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( descr() );
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setDescr( opt->text() );
-    }	
+    }
     else if( a_path == "/br/fnc_" || a_path == "/func/func" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
-        {
+	{
 	    vector<string> lst;
-            list(lst);
-            for( unsigned i_f=0; i_f < lst.size(); i_f++ )
-                opt->childAdd("el")->setAttr("id",lst[i_f])->setText(at(lst[i_f]).at().name());
-        }
+	    list(lst);
+	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
+		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(at(lst[i_f]).at().name());
+	}
 	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )	add(opt->attr("id").c_str(),opt->text().c_str());
 	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	chldDel(m_fnc,opt->attr("id"),-1,1);
-    }	
+    }
     else if( a_path == "/func/ls_lib" && ctrChkNode(opt) )
     {
 	vector<string> lst;

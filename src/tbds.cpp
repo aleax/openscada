@@ -68,6 +68,21 @@ string TBDS::realDBName( const string &bdn )
 	   ((bd_n=="*") ? TSYS::strSepParse(SYS->workDB(),1,'.') : bd_n)+(bd_tbl.empty() ? "" : "."+bd_tbl);
 }
 
+void TBDS::dbList( vector<string> &ls )
+{
+    vector<string> tdb_ls, db_ls;
+
+    ls.clear();
+
+    modList(tdb_ls);
+    for( int i_tp = 0; i_tp < tdb_ls.size(); i_tp++ )
+    {
+	SYS->db().at().at(tdb_ls[i_tp]).at().list(db_ls);
+	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
+	    ls.push_back(tdb_ls[i_tp]+"."+db_ls[i_db]);
+    }
+}
+
 AutoHD<TTable> TBDS::open( const string &bdn, bool create )
 {
     bool bd_op = false;
