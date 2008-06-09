@@ -189,9 +189,9 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
     bool rel_cfg = false;	//Reload configuration
 
     w->dc()["evLock"] = true;
-    int     el  = w->dc()["elType"].toInt();
-    int     wel = w->dc()["welType"].toInt();
-    QWidget *el_wdg = (QWidget *)w->dc()["addrWdg"].value<void*>();
+    int		el  = w->dc()["elType"].toInt();
+    int		wel = w->dc()["welType"].toInt();
+    QWidget	*el_wdg = (QWidget *)w->dc()["addrWdg"].value<void*>();
 
     switch( uiPrmPos )
     {
@@ -506,6 +506,7 @@ bool ShapeFormEl::event( WdgView *view, QEvent *event )
 bool ShapeFormEl::eventFilter( WdgView *w, QObject *object, QEvent *event )
 {
     if( qobject_cast<DevelWdgView*>(w) )
+    {
 	switch( event->type() )
 	{
 	    case QEvent::Enter:
@@ -515,8 +516,9 @@ bool ShapeFormEl::eventFilter( WdgView *w, QObject *object, QEvent *event )
 	    case QEvent::MouseButtonRelease:
 	    case QEvent::ContextMenu:
 		QApplication::sendEvent(w,event);
-		return false;
+		return true;
 	}
+    }
     else
 	switch( event->type() )
 	{

@@ -63,18 +63,18 @@ class ModInspAttr: public QAbstractTableModel
 		enum Type { WdgGrp, Wdg, AttrGrp, Attr };
 		enum Flag
 		{
-		    Select   = 0x01,
-		    FullText = 0x08,
-		    Active   = 0x0100,
-		    Image    = 0x0200,
-		    Color    = 0x0400,
-		    Font     = 0x0800,
-		    DataTime = 0x0200
+		    Select	= 0x01,
+		    FullText	= 0x08,
+		    Active	= 0x0100,
+		    Image	= 0x0200,
+		    Color	= 0x0400,
+		    Font	= 0x0800,
+		    DataTime	= 0x0200
 		};
 
 		//Public attributes
 		Item( const string &iid, Type tp, Item *parent = NULL );
-		~Item();
+		~Item( );
 
 		string	id( )		{ return idItem; }
 		string	name( );
@@ -242,31 +242,31 @@ class InspLnk: public QTreeWidget
 
     private:
 	//Private methods
-        bool event( QEvent *event );
+	bool event( QEvent *event );
 
 	//Private attributes
 	bool show_init;
 	string it_wdg;
 	VisDevelop *main_win;
 };
- 
+
 //*************************
 //* Link item delegate    *
 //*************************
 class LinkItemDelegate: public QItemDelegate
 {
     Q_OBJECT
-	
+
     public:
 	//Public methods
-        LinkItemDelegate(InspLnk *parent = 0);		
+	LinkItemDelegate(InspLnk *parent = 0);
 
-        QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-        void setEditorData(QWidget *editor, const QModelIndex &index) const;
+	QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+	void setEditorData(QWidget *editor, const QModelIndex &index) const;
 	void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
 
 	InspLnk *owner( ) const;
-		
+
     //public slots:
     //	void selItem( int val );
 
@@ -278,24 +278,24 @@ class LinkItemDelegate: public QItemDelegate
 //* Inspector of links dock widget       *
 //**************************************** 
 class InspLnkDock: public QDockWidget
-{    
+{
     Q_OBJECT
 
     public:
 	//Public methods
 	InspLnkDock( VisDevelop * parent );
 	~InspLnkDock( );
-	
+
 	VisDevelop *owner( );
 
     public slots:
-	void setWdg( const string &iwdg );	
+	void setWdg( const string &iwdg );
 
     private:
 	//Private attributes
 	InspLnk *ainsp_w;
 };
- 
+
 //****************************************
 //* Widget's libraries tree              *
 //****************************************
@@ -307,17 +307,17 @@ class WdgTree: public QDockWidget
 	//Public methods
 	WdgTree( VisDevelop *parent = 0 );
 	~WdgTree();
-	
+
 	VisDevelop *owner( );
-	
+
 	bool hasFocus( );
 
     signals:
         void selectItem( const string &vca_it, bool force = false );
 
-    public slots:	
+    public slots:
 	void updateTree( const string &vca_it = "" );
-	
+
     protected:
 	//Protecten methods
 	bool eventFilter( QObject *target, QEvent *event );
@@ -327,13 +327,13 @@ class WdgTree: public QDockWidget
 	void ctrTreePopup( );
 	void dblClick( );
 	void selectItem( bool force = false );
-	
+
     private:
 	//Private attributes
-	QTreeWidget *treeW;
-	QPoint      dragStartPos;
+	QTreeWidget	*treeW;
+	QPoint		dragStartPos;
 };
- 
+
 //****************************************
 //* Project's tree                       *
 //**************************************** 
@@ -345,17 +345,17 @@ class ProjTree: public QDockWidget
 	//Public methods
 	ProjTree( VisDevelop * parent = 0 );
 	~ProjTree();
-	
+
 	bool hasFocus( );
-	
-	VisDevelop *owner( );	
+
+	VisDevelop *owner( );
 
     signals:
         void selectItem( const string &idwdg, bool force = false );
 
-    public slots:	
+    public slots:
 	void updateTree( const string &vca_it = "", QTreeWidgetItem *it = NULL );
-	
+
     protected:
 	//Protecten methods
 	bool eventFilter( QObject *target, QEvent *event );
@@ -365,10 +365,10 @@ class ProjTree: public QDockWidget
 	void ctrTreePopup( );
 	void dblClick( );
 	void selectItem( bool force = false );
-	
+
     private:
 	//Private attributes
-	QTreeWidget *treeW;	
+	QTreeWidget *treeW;
 };
 
 //**********************************************************************************************
@@ -379,24 +379,24 @@ class LineEditProp : public QWidget
     Q_OBJECT
 
     public:
-        //- Data -
-        enum DType { Font, Color };
+	//- Data -
+	enum DType { Font, Color };
 
-        //- Methods -
-        LineEditProp( QWidget *parent, DType tp = Font );
+	//- Methods -
+	LineEditProp( QWidget *parent, DType tp = Font );
 
-        DType type( )       { return m_tp; }
-        QString value( );
+	DType type( )       { return m_tp; }
+	QString value( );
 
-        void setType( DType tp )	{ m_tp = tp; }
-        void setValue( const QString& );
+	void setType( DType tp )	{ m_tp = tp; }
+	void setValue( const QString& );
 
     private slots:
 	void callDlg( );
 
     private:
-        DType       m_tp;
-	QLineEdit   *ed_fld;
+	DType		m_tp;
+	QLineEdit	*ed_fld;
 };
 
 //*********************************************
@@ -409,14 +409,14 @@ class WScaleStBar : public QLabel
     public:
 	WScaleStBar( QWidget *parent = 0 );
 
-        bool scale()			{ return isScale; }
-        void setScale( bool val );
-						
+	bool scale()			{ return isScale; }
+	void setScale( bool val );
+
     protected:
 	void mousePressEvent( QMouseEvent * event );
-	
+
     private:
-        bool isScale;
+	bool isScale;
 };
 
 //*************************************************
@@ -427,26 +427,26 @@ class SizePntWdg : public QWidget
     Q_OBJECT
 
     public:
-        //Data
-        enum WView { SizeDots, EditBorder, SelectBorder };
-        //Methods
-        SizePntWdg( QWidget* parent = 0 );
+	//Data
+	enum WView { SizeDots, EditBorder, SelectBorder };
+	//Methods
+	SizePntWdg( QWidget* parent = 0 );
 
-        QPointF posF( )             { return w_pos; }
-        QSizeF  sizeF( )            { return w_size; }
-        QRectF geometryF( )         { return QRectF(w_pos,w_size); }
-        
+	QPointF posF( )             { return w_pos; }
+	QSizeF  sizeF( )            { return w_size; }
+	QRectF geometryF( )         { return QRectF(w_pos,w_size); }
+
 	void setSelArea( const QRectF &geom, WView view = SizeDots );
-        bool event( QEvent *event );
+	bool event( QEvent *event );
 
     public slots:
 	void apply( );
-    
+
     private:
-        //Attributes
-        WView   view;
-        QPointF w_pos;          //Widget position into real;
-        QSizeF  w_size;         //Widget size into real;
+	//Attributes
+	WView	view;
+	QPointF	w_pos;		//Widget position into real;
+	QSizeF	w_size;		//Widget size into real;
 };
 
 //*************************************************
@@ -455,68 +455,68 @@ class SizePntWdg : public QWidget
 class DevelWdgView: public WdgView
 {
     Q_OBJECT
-		
+
     public:
 	//Data
 	enum DevelFlgs
 	{
-	    makeScale 	= 0x01,	//Make visual item scaling
-	    wdgEdit   	= 0x02,	//Widget under edition
-	    wdgSelect 	= 0x04,	//Widget is selected
-	    moveHold  	= 0x08,	//Mouse move hold state
-	    holdChild 	= 0x10,	//Hold child widget in time of moving and resizing
-	    leftTop   	= 0x20,	//Left top anchors
-	    holdSelRect = 0x40,	//Hold for select rect
-	    moveHoldMove= 0x80	//Mouse move on hold
+	    makeScale	= 0x01,		//Make visual item scaling
+	    wdgEdit	= 0x02,		//Widget under edition
+	    wdgSelect	= 0x04,		//Widget is selected
+	    moveHold	= 0x08,		//Mouse move hold state
+	    holdChild	= 0x10,		//Hold child widget in time of moving and resizing
+	    leftTop	= 0x20,		//Left top anchors
+	    holdSelRect = 0x40,		//Hold for select rect
+	    moveHoldMove= 0x80		//Mouse move on hold
 	};
-    
+
 	//Public methods
-        DevelWdgView( const string &iwid, int ilevel, VisDevelop *mainWind, QWidget* parent = 0 );
+	DevelWdgView( const string &iwid, int ilevel, VisDevelop *mainWind, QWidget* parent = 0 );
 	~DevelWdgView( );
-	
+
 	string user( );
 	VisDevelop *mainWin( );
-	
-        bool select( )		{ return m_flgs&wdgSelect; }	//Select widget state
-        string selectChilds( int *cnt = NULL, vector<DevelWdgView*> *wdgs = NULL );     	//Get selected include widgets list
-        bool edit( )		{ return m_flgs&wdgEdit; }     	//Edit mode state
-	
-        void setSelect( bool vl, bool childs = true );
-        void setEdit( bool vl );
+
+	bool select( )		{ return m_flgs&wdgSelect; }	//Select widget state
+	string selectChilds( int *cnt = NULL, vector<DevelWdgView*> *wdgs = NULL );	//Get selected include widgets list
+	bool edit( )		{ return m_flgs&wdgEdit; }	//Edit mode state
+
+	void setSelect( bool vl, bool childs = true );
+	void setEdit( bool vl );
 	void wdgsMoveResize( const QPointF &dP );
-	
+
 	WdgView *newWdgItem( const string &iwid );
 
 	void load( const string& item, bool load = true, bool init = true );
-						
+
     signals:
-        void selected( const string& item );        //Change selection signal
+	void selected( const string& item );		//Change selection signal
 	void apply( const string & );
-    
+
     public slots:
-        void wdgViewTool( QAction* );               //View order and align of included widgets operated
+	void wdgViewTool( QAction* );			//View order and align of included widgets operated
 	void saveGeom( const string& item );
 	void wdgPopup( );
 	void makeIcon( );
 	void editEnter( );
 	void editExit( );
-	
+
     protected:
-        //Protected methods
+	//Protected methods
 	bool event( QEvent * event );
 	int cntrIfCmd( XMLNode &node, bool glob = false );
-    
+
     private:
 	//Private methods
-        bool grepAnchor( const QPointF &apnt, const QPoint &cpnt );
-        void upMouseCursors( const QPoint &pnt );
-	
-        //Private attributes
+	bool grepAnchor( const QPointF &apnt, const QPoint &cpnt );
+	void upMouseCursors( const QPoint &pnt );
+
+	//Private attributes
 	char		m_flgs;		//Developmen flags
-	QPoint 		holdPnt;	//Hold move point
-        SizePntWdg 	*pntView;	//Point view
+	QPoint		holdPnt;	//Hold move point
+	SizePntWdg	*pntView;	//Point view
 	DevelWdgView	*editWdg;
-        QPoint 		dragStartPos;
+	QPoint		dragStartPos;
 };
 
 }

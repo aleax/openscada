@@ -149,7 +149,7 @@ class ShapeText : public WdgShape
 
 		void setCfg( const string &vl )		{ m_cfg = vl; }
 		void setVal( const QVariant &vl )	{ m_val = vl; }
-		
+
 	    private:
 		//Attributes
 		QVariant	m_val;
@@ -183,7 +183,7 @@ class ShapeMedia : public WdgShape
 		bool containsPoint( const QPoint & point );
 
 		//Attributes
-		int 	shp;		//Area shape
+		int	shp;		//Area shape
 		string	title;		//Area title
 		QVector<QPoint>	pnts;	//Area points
 	};
@@ -225,15 +225,15 @@ class ShapeDiagram : public WdgShape
 		//Methods
 		TrendObj( WdgView *view );
 
-		string addr( )		{ return m_addr; }
-		double bordL( )		{ return m_bord_low; }
-		double bordU( )		{ return m_bord_up; }
-		string color( )		{ return m_color; }
-		double curVal( )	{ return m_curvl; }
-		int    valTp( )		{ return val_tp; }
+		string	addr( )		{ return m_addr; }
+		double	bordL( )	{ return m_bord_low; }
+		double	bordU( )	{ return m_bord_up; }
+		string	color( )	{ return m_color; }
+		double	curVal( )	{ return m_curvl; }
+		int	valTp( )	{ return val_tp; }
 		long long valBeg( );
 		long long valEnd( );
-		int val( long long tm );
+		int	val( long long tm );
 		deque<SHg> &val( )	{ return vals; }
 
 		void setAddr( const string &vl );
@@ -246,18 +246,18 @@ class ShapeDiagram : public WdgShape
 
 	    private:
 		//Attributes
-		string 		m_addr;		//A parameter or an archive item address
+		string		m_addr;		//A parameter or an archive item address
 		double m_bord_low, m_bord_up;	//Borders
 		double		m_curvl;	//Curent value
-		string 		m_color;	//Values line color
-                //- Archive -		
+		string		m_color;	//Values line color
+		//- Archive -
 		int		arh_per;	//Archive period
-		long long       arh_beg;        //Archive begin time
-		long long       arh_end;        //Archive end time
+		long long	arh_beg;	//Archive begin time
+		long long	arh_end;	//Archive end time
 		//- Values -
-		int    		val_tp;		//Values type
+		int		val_tp;		//Values type
 		deque<SHg>	vals;		//Values buffer
-		
+
 		WdgView 	*view;
 	};
 

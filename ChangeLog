@@ -10,6 +10,7 @@
 - /DAQ/ModBus: Help for the attributes of parameter field configuration format is added.
 - /DAQ/ModBus: Make selection of serial devices by combo.
 - !!:/UI/QTCfg: Move base widgets generation to object LineEdit from Vision. Edited combo edit contol is added.
+- FIX:/UI/Vision: Events process for elements of primitive "FormEl" on development is fixed.
 
 
 2008-06-04 Roman
