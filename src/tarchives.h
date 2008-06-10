@@ -176,7 +176,7 @@ class TArchiveS : public TSubSYS
 	int subVer( )		{ return VER_ARH; }
 
 	int messPeriod( )	{ return m_mess_per; }
-	int valPeriod( )	{ return m_val_per; }
+	int valPeriod( );
 	int valPrior( )		{ return m_val_prior; }
 
 	void setMessPeriod( int ivl );
@@ -199,7 +199,7 @@ class TArchiveS : public TSubSYS
 	AutoHD<TTipArchivator> at( const string &name )		{ return modAt(name); }
 
 	//- Message archive function -
- 	void messPut( time_t tm, const string &categ, TMess::Type level, const string &mess );
+	void messPut( time_t tm, const string &categ, TMess::Type level, const string &mess );
 	void messPut( const vector<TMess::SRec> &recs );
 	void messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const string &category = "",
 		TMess::Type level = TMess::Debug, const string &arch = "" );

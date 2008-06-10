@@ -74,16 +74,16 @@ class TMdPrm : public TParamContr
 	class SLnk
 	{
 	    public:
-	        SLnk( int iid, const string &iprm_attr = "" ) :
+		SLnk( int iid, const string &iprm_attr = "" ) :
 		    io_id(iid), prm_attr(iprm_attr) { }
-	        int	io_id;
+		int	io_id;
 		string	prm_attr;
-	        AutoHD<TVal> aprm;
+		AutoHD<TVal> aprm;
 	};
-	
+
 	struct STmpl
 	{
-	    TValFunc     val;
+	    TValFunc	val;
 	    vector<SLnk> lnk;
 	};
 
@@ -136,7 +136,7 @@ class TMdContr: public TController
 	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem);
 	~TMdContr( );
 
-	int period( )	{ return m_per; }
+	int period( )	{ return vmax(1,m_per); }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 

@@ -1,3 +1,8 @@
+2008-06-10 Roman
+- FIX:/DAQ/Siemens, /DAQ/Transporter, /DAQ/LogicLev, /DAQ/System, /DAQ/DiamondBoards, /VAQ/SNMP, /UI/VCAEngine: Zero period hang is fixed.
+- !!:/SYS: More odd spaces from sources is removing continued.
+
+
 2008-06-09 Roman
 - !!:/DB: Add and everywhere use function TDBS::dbList() for all DB list request.
 - !!:/CntrNode: Add generic requests "/db/list" and "/db/tblList". Use requests into into all DB edit fields for make select combo.

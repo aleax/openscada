@@ -47,7 +47,7 @@ class Session : public TCntrNode
 	const string &id( )	{ return m_id; }		//Identifier
 	string projNm( )	{ return m_prjnm; }		//Project's name
 	string user( )		{ return m_user; }		//Open session user
-	int    period( )	{ return m_per; }		//Process period (ms)
+	int    period( )	{ return vmax(1,m_per); }	//Process period (ms)
 	double calcTm( )	{ return tm_calc; }		//Calc session time
 	bool   enable( )	{ return m_enable; }		//Enable stat
 	bool   start( )		{ return m_start; }		//Start stat

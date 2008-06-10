@@ -18,7 +18,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
- 
+
 #ifndef OS_CONTR_H
 #define OS_CONTR_H
 
@@ -50,12 +50,12 @@ class TMdPrm : public TParamContr
 {
     public:
 	//Methods
-    	TMdPrm( string name, TTipParam *tp_prm );
-	~TMdPrm( );	
-	
+	TMdPrm( string name, TTipParam *tp_prm );
+	~TMdPrm( );
+
 	void enable( );
 	void disable( );
-	
+
 	void autoC( bool val )	{ m_auto = val; }
 	bool autoC( )		{ return m_auto; }
 
@@ -64,24 +64,24 @@ class TMdPrm : public TParamContr
 	//- Get new value -
 	void getVal( );
 	void setEval( );
-	
-	TMdContr &owner( )       { return (TMdContr&)TParamContr::owner(); }
-	
+
+	TMdContr &owner( )	{ return (TMdContr&)TParamContr::owner(); }
+
     protected:
 	//Methods
 	void load_( );
-	void save_( );	
-	
-        bool cfgChange( TCfg &cfg );	//config change
-		       
+	void save_( );
+
+	bool cfgChange( TCfg &cfg );	//config change
+
 	void vlGet( TVal &val );
 	void vlArchMake( TVal &val );
 
 	void postEnable( int flag );
-	
+
     private:
 	//Attributes
-	bool	m_auto;	//Autocreated
+	bool	m_auto;			//Autocreated
 	DA	*m_da;
 };
 
@@ -93,39 +93,39 @@ class TMdContr: public TController
     friend class TMdPrm;
     public:
 	//Methods
-    	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem );
-	~TMdContr( );   
+	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem );
+	~TMdContr( );
 
-	int period( )	{ return m_per; }
+	int period( )	{ return vmax(1,m_per); }
 	int prior( )	{ return m_prior; }
 
 	AutoHD<TMdPrm> at( const string &nm )
-        { return TController::at(nm); }
-	
+	{ return TController::at(nm); }
+
     protected:
 	//Methods
 	void enable_( );
 	void start_( );
-	void stop_( );    	
+	void stop_( );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	void prmEn( const string &id, bool val );
-    	
+
     private:
 	//Methods
 	TParamContr *ParamAttach( const string &name, int type );
 	static void *Task( void *icntr );
-	
-	//Attributes
-	Res	en_res;         //Resource for enable params
-	int	&m_per,     	// ms
-		&m_prior;	// Process task priority
-		
-	bool    prc_st,		// Process task active
-		endrun_req;	// Request to stop of the Process task
-	vector< AutoHD<TMdPrm> >  p_hd;    
 
-	double  tm_calc;	// Scheme's calc time
-	pthread_t procPthr;     // Process task thread
+	//Attributes
+	Res	en_res;		//Resource for enable params
+	int	&m_per,		// ms
+		&m_prior;	// Process task priority
+
+	bool	prc_st,		// Process task active
+		endrun_req;	// Request to stop of the Process task
+	vector< AutoHD<TMdPrm> >  p_hd;
+
+	double	tm_calc;	// Scheme's calc time
+	pthread_t procPthr;	// Process task thread
 };
 
 //*************************************************
@@ -135,30 +135,29 @@ class TTpContr: public TTipDAQ
 {
     public:
 	//Methods
-    	TTpContr( string name );
+	TTpContr( string name );
 	~TTpContr( );
 
-	void daList( vector<string> &da );
-	void daReg( DA *da );
-	DA  *daGet( const string &da );	
-    
+	void	daList( vector<string> &da );
+	void	daReg( DA *da );
+	DA	*daGet( const string &da );
+
     protected:
 	//Methods
 	void postEnable( int flag );
-	void load_( );	
-    
+	void load_( );
+
     private:
 	//Methods
 	TController *ContrAttach( const string &name, const string &daq_db );
 	string optDescr( );
-	
+
 	//Attributes
 	vector<DA *> m_da;
 };
 
 extern TTpContr *mod;
 
-} //End namespace 
+} //End namespace
 
 #endif //OS_CONTR_H
-

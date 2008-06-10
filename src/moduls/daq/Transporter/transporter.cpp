@@ -29,14 +29,14 @@
 
 //******************************************************
 //* Modul info!                                        *
-#define MOD_ID      "Transporter"
-#define MOD_NAME    "Data sources transporter"
-#define MOD_TYPE    "DAQ"
-#define VER_TYPE    VER_CNTR
-#define VERSION     "0.3.1"
-#define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "Allow to make transport data sources of remote OpenSCADA station to local OpenSCADA station."
-#define LICENSE     "GPL"
+#define MOD_ID		"Transporter"
+#define MOD_NAME	"Data sources transporter"
+#define MOD_TYPE	"DAQ"
+#define VER_TYPE	VER_CNTR
+#define VERSION		"0.3.1"
+#define AUTORS		"Roman Savochenko"
+#define DESCRIPTION	"Allow to make transport data sources of remote OpenSCADA station to local OpenSCADA station."
+#define LICENSE		"GPL"
 //******************************************************
 
 DAQTrasport::TTpContr *DAQTrasport::mod;  //Pointer for direct access to main module object
@@ -51,7 +51,7 @@ extern "C"
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-    	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
+	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
 	    return new DAQTrasport::TTpContr( source );
 	return NULL;
     }
@@ -62,22 +62,22 @@ using namespace DAQTrasport;
 //******************************************************
 //* TTpContr                                           *
 //******************************************************
-TTpContr::TTpContr( string name )  
+TTpContr::TTpContr( string name )
 {
-    mId 	= MOD_ID;
-    mName       = MOD_NAME;
-    mType  	= MOD_TYPE;
-    mVers      	= VERSION;
-    mAutor    	= AUTORS;
-    mDescr  	= DESCRIPTION;
-    mLicense   	= LICENSE;
-    mSource    	= name;
-    
+    mId		= MOD_ID;
+    mName	= MOD_NAME;
+    mType	= MOD_TYPE;
+    mVers	= VERSION;
+    mAutor	= AUTORS;
+    mDescr	= DESCRIPTION;
+    mLicense	= LICENSE;
+    mSource	= name;
+
     mod		= this;
 }
 
 TTpContr::~TTpContr( )
-{    
+{
 
 }
 
@@ -89,7 +89,7 @@ string TTpContr::optDescr( )
 	"======================= The module <%s:%s> options =======================\n"
 	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
-    
+
     return buf;
 }
 
@@ -117,7 +117,7 @@ void TTpContr::load_( )
 }
 
 void TTpContr::postEnable( int flag )
-{    
+{
     TModule::postEnable(flag);
 
     //- Controler's DB structure -
@@ -127,7 +127,7 @@ void TTpContr::postEnable( int flag )
     fldAdd( new TFld("STATIONS",_("Remote stations list"),TFld::String,TFld::FullText,"100") );
     fldAdd( new TFld("CNTRPRM",_("Remote cotrollers and parameters list"),TFld::String,TFld::FullText,"200") );
     //- Parameter type bd structure -
-    int t_prm = tpParmAdd("std","",_("Standard"));    
+    int t_prm = tpParmAdd("std","",_("Standard"));
     //- Set to read only  -
     for( int i_sz = 0; i_sz < tpPrmAt(t_prm).fldSize(); i_sz++ )
 	tpPrmAt(t_prm).fldAt(i_sz).setFlg(tpPrmAt(t_prm).fldAt(i_sz).flg()|TFld::NoWrite);
@@ -180,9 +180,9 @@ void TMdContr::enable_( )
     string statv, cp_el, daqtp, cntrnm, prmnm, cntrpath;
     vector<string> prm_ls;
     XMLNode req("list");
-    
+
     bool en_err = false;
-    
+
     //- Remote station scaning -
     for( int st_off = 0; (statv=TSYS::strSepParse(m_stations,0,'\n',&st_off)).size(); )
 	//- Controllers and parameters scaning -
@@ -200,18 +200,18 @@ void TMdContr::enable_( )
 		if( prmnm.empty() || prmnm == "*" )
 		{
 		    //-- Get attributes list --
-    		    req.clear()->setName("get")->setAttr("path",cntrpath+"%2fprm%2fprm");
+		    req.clear()->setName("get")->setAttr("path",cntrpath+"%2fprm%2fprm");
 		    if( mod->cntrIfCmd(req) || req.childSize() == 0 )	en_err = true;
 		    else for( int i_ch = 0; i_ch < req.childSize(); i_ch++ )
 			prm_ls.push_back(req.childGet(i_ch)->attr("id"));
 		}
 		else prm_ls.push_back(prmnm);
-		
+
 		//-- Process remote parameters --
 		for( int i_p = 0; i_p < prm_ls.size(); i_p++ )
 		{
 		    if( !present(prm_ls[i_p]) )
-		    {		    
+		    {
 			//--- Parameter name request and make new parameter object ---
 			req.clear()->setName("get")->setAttr("path",cntrpath+prm_ls[i_p]+"/%2fprm%2fcfg%2fNAME");
 			if( mod->cntrIfCmd(req) ) { en_err = true; continue; }
@@ -232,7 +232,7 @@ void TMdContr::start_( )
 {
     if( !prc_st )
     {
-	//- Start the gathering data task -    
+	//- Start the gathering data task -
 	pthread_attr_t pthr_attr;
 	pthread_attr_init(&pthr_attr);
 	struct sched_param prior;
@@ -240,27 +240,27 @@ void TMdContr::start_( )
 	    pthread_attr_setschedpolicy(&pthr_attr,SCHED_RR);
 	else pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
 	prior.__sched_priority=m_prior;
-        pthread_attr_setschedparam(&pthr_attr,&prior);
-	
-        pthread_create(&procPthr,&pthr_attr,TMdContr::Task,this);
-        pthread_attr_destroy(&pthr_attr);
-        if( TSYS::eventWait(prc_st, true, nodePath()+"start",5) )
-            throw TError(nodePath().c_str(),_("Gathering task no started!"));    
+	pthread_attr_setschedparam(&pthr_attr,&prior);
+
+	pthread_create(&procPthr,&pthr_attr,TMdContr::Task,this);
+	pthread_attr_destroy(&pthr_attr);
+	if( TSYS::eventWait(prc_st, true, nodePath()+"start",5) )
+	    throw TError(nodePath().c_str(),_("Gathering task no started!"));
     }
 }
 
 void TMdContr::stop_( )
-{  
+{
     if( prc_st )
-    {	
+    {
 	//- Stop the request and calc data task -
-        endrun_req = true;
-        pthread_kill( procPthr, SIGALRM );
-        if( TSYS::eventWait(prc_st,false,nodePath()+"stop",5) )
-            throw TError(nodePath().c_str(),_("Gathering task no stoped!"));
-        pthread_join( procPthr, NULL );
+	endrun_req = true;
+	pthread_kill( procPthr, SIGALRM );
+	if( TSYS::eventWait(prc_st,false,nodePath()+"stop",5) )
+	    throw TError(nodePath().c_str(),_("Gathering task no stoped!"));
+	pthread_join( procPthr, NULL );
     }
-} 
+}
 
 void TMdContr::prmEn( const string &id, bool val )
 {
@@ -268,8 +268,8 @@ void TMdContr::prmEn( const string &id, bool val )
 
     ResAlloc res(en_res,true);
     for( i_prm = 0; i_prm < p_hd.size(); i_prm++)
-        if( p_hd[i_prm].at().id() == id ) break;
-    
+	if( p_hd[i_prm].at().id() == id ) break;
+
     if( val && i_prm >= p_hd.size() )	p_hd.push_back(at(id));
     if( !val && i_prm < p_hd.size() )	p_hd.erase(p_hd.begin()+i_prm);
 }
@@ -284,21 +284,21 @@ void *TMdContr::Task( void *icntr )
     cntr.prc_st = true;
 
     try
-    {    
-    	for( unsigned int it_cnt = 0; !cntr.endrun_req; it_cnt++ )
-	{	
-	    long long t_cnt = SYS->shrtCnt();	
+    {
+	for( unsigned int it_cnt = 0; !cntr.endrun_req; it_cnt++ )
+	{
+	    long long t_cnt = SYS->shrtCnt();
 	    cntr.en_res.resRequestR( );
 
-            //- Update controller's data -
-            for( int i_p=0; i_p < cntr.p_hd.size(); i_p++)
-            {
+	    //- Update controller's data -
+	    for( int i_p=0; i_p < cntr.p_hd.size(); i_p++)
+	    {
 		//-- Update parameter's values --
 		cntr.p_hd[i_p].at().update();
 		//-- Check sync moment and sync parameter's structure --
 		unsigned int div = (unsigned int)(cntr.m_sync/cntr.period());
 		if( div && (it_cnt+i_p)%div == 0 )
-		{ 
+		{
 		    cntr.p_hd[i_p].at().modifG();
 		    cntr.p_hd[i_p].at().load();
 		    //-- Check for delete parameter --
@@ -314,22 +314,22 @@ void *TMdContr::Task( void *icntr )
 		}
 	    }
 
-    	    //- Calc acquisition process time -
-    	    cntr.en_res.resReleaseR( );    
-    	    cntr.tm_gath = 1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
-    
-    	    //- Calc next work time and sleep -
-    	    clock_gettime(CLOCK_REALTIME,&get_tm);
+	    //- Calc acquisition process time -
+	    cntr.en_res.resReleaseR( );
+	    cntr.tm_gath = 1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
+
+	    //- Calc next work time and sleep -
+	    clock_gettime(CLOCK_REALTIME,&get_tm);
 	    work_tm = (((long long)get_tm.tv_sec*1000000000+get_tm.tv_nsec)/(long long)(cntr.period()*1000000000) + 1)*(long long)(cntr.period()*1000000000);
 	    if(last_tm == work_tm)	work_tm+=(long long)(cntr.period()*1000000000);	//Fix early call
-    	    last_tm = work_tm;
+	    last_tm = work_tm;
 	    get_tm.tv_sec = work_tm/1000000000; get_tm.tv_nsec = work_tm%1000000000;
-    	    clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&get_tm,NULL);
-    	}
+	    clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&get_tm,NULL);
+	}
     }catch(TError err)	{ mess_err(err.cat.c_str(),err.mess.c_str()); }
-    
+
     cntr.prc_st = false;
-    
+
     return NULL;
 }
 
@@ -343,14 +343,14 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("comm",opt,-1,"/cntr/cfg/host_lnk",_("Go to remote stations list configuration"),0660,"root","root",1,"tp","lnk");
 	return;
     }
-    
+
     //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/cntr/st/gath_tm" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(tm_gath,6));
     else if( a_path == "/cntr/cfg/host_lnk" && ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )
     {
 	SYS->transport().at().setSysHost(true);
-        opt->setText("/Transport");
+	opt->setText("/Transport");
     }
     else TController::cntrCmdProc(opt);
 }
@@ -358,7 +358,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //******************************************************
 //* TMdPrm                                             *
 //******************************************************
-TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : 
+TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
     TParamContr(name,tp_prm), p_el("w_attr"), m_pdel(false)
 {
     setToEnable(true);
@@ -366,19 +366,19 @@ TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
 
 TMdPrm::~TMdPrm( )
 {
-    nodeDelAll();    
+    nodeDelAll();
 }
 
 void TMdPrm::postEnable( int flag )
 {
     TParamContr::postEnable(flag);
     if(vlCfg())  setVlCfg(NULL);
-    if(!vlElemPresent(&p_el))   vlElemAtt(&p_el);
+    if(!vlElemPresent(&p_el))	vlElemAtt(&p_el);
 }
 
 void TMdPrm::enable()
 {
-    if( enableStat() )	return;    
+    if( enableStat() )	return;
 
     TParamContr::enable();
 
@@ -390,9 +390,9 @@ void TMdPrm::disable()
     if( !enableStat() )  return;
 
     owner().prmEn( id(), false );
-    
+
     TParamContr::disable();
-    
+
     //- Set EVAL to parameter attributes -
     vector<string> ls;
     elem().fldList(ls);
@@ -455,7 +455,7 @@ void TMdPrm::load_( )
 
 void TMdPrm::update( )
 {
-    string scntr;    
+    string scntr;
     XMLNode req("get");
     //- Request and update attributes list -
     for( int c_off = 0; (scntr=TSYS::strSepParse(cntrAdr(),0,';',&c_off)).size(); )
@@ -476,7 +476,7 @@ void TMdPrm::vlSet( TVal &valo )
     string scntr;
     for( int c_off = 0; (scntr=TSYS::strSepParse(cntrAdr(),0,';',&c_off)).size(); )
 	try
-	{    
+	{
 	    XMLNode req("set");
 	    req.clear()->setAttr("path",scntr+id()+"/%2fserv%2f0")->
 		childAdd("el")->setAttr("id",valo.name())->setText(valo.getS());
@@ -496,28 +496,28 @@ void TMdPrm::vlArchMake( TVal &val )
 void TMdPrm::cntrCmdProc( XMLNode *opt )
 {
     string a_path = opt->attr("path");
-	
+
     //- Service commands process -
     if( a_path.substr(0,6) == "/serv/" ) { TParamContr::cntrCmdProc(opt); return; }
-		
+
     //- Get page info -
     if( opt->name() == "info" )
     {
-        TValue::cntrCmdProc(opt);
-        ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter: ")+name());
-        if(ctrMkNode("area",opt,0,"/prm",_("Parameter")))
-        {
-            if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))
-            {
-                ctrMkNode("fld",opt,-1,"/prm/st/type",_("Type"),0444,"root","root",1,"tp","str");
-                if( owner().enableStat() )
-                    ctrMkNode("fld",opt,-1,"/prm/st/en",_("Enable"),0664,"root","root",1,"tp","bool");
+	TValue::cntrCmdProc(opt);
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter: ")+name());
+	if(ctrMkNode("area",opt,0,"/prm",_("Parameter")))
+	{
+	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))
+	    {
+		ctrMkNode("fld",opt,-1,"/prm/st/type",_("Type"),0444,"root","root",1,"tp","str");
+		if( owner().enableStat() )
+		    ctrMkNode("fld",opt,-1,"/prm/st/en",_("Enable"),0664,"root","root",1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/prm/st/id",_("Id"),0444,"root","root",1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/st/nm",_("Name"),0444,"root","root",1,"tp","str");
-            }
+	    }
 	    XMLNode *cfgN = ctrMkNode("area",opt,-1,"/prm/cfg",_("Config"));
-            if(cfgN)
-            {
+	    if(cfgN)
+	    {
 		//-- Get remote parameter's config section --
 		string scntr;
 		XMLNode req("info");
@@ -527,26 +527,26 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 			req.clear()->setAttr("path",scntr+id()+"/%2fprm%2fcfg");
 			if( mod->cntrIfCmd(req) ) throw TError(req.attr("mcat").c_str(),req.text().c_str());
 			break;
-        	    }catch(TError err) { continue; }
+		    }catch(TError err) { continue; }
 		if( req.childSize() )
 		{
 		    *cfgN = *req.childGet(0);
 		    cfgN->setAttr("dscr",_("Remote station config"));
 		}
-    	    }
+	    }
 	}
-    	return;
+	return;
     }
     //- Process command to page -
     if( a_path == "/prm/st/type" && ctrChkNode(opt) )   opt->setText(type().descr);
     else if( a_path == "/prm/st/en" )
     {
-        if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )   opt->setText(enableStat()?"1":"0");
-        if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
-        {
-            if( !owner().enableStat() ) throw TError(nodePath().c_str(),"Controller no started!");
-            else atoi(opt->text().c_str())?enable():disable();
-        }
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )   opt->setText(enableStat()?"1":"0");
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
+	{
+	    if( !owner().enableStat() ) throw TError(nodePath().c_str(),"Controller no started!");
+	    else atoi(opt->text().c_str())?enable():disable();
+	}
     }
     else if( a_path == "/prm/st/id" && ctrChkNode(opt) )opt->setText(id());
     else if( a_path == "/prm/st/nm" && ctrChkNode(opt) )opt->setText(name());
@@ -559,7 +559,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    {
 		opt->setAttr("path",scntr+id()+"/"+TSYS::strEncode(a_path,TSYS::PathEl));
 		if( mod->cntrIfCmd(*opt) ) throw TError(opt->attr("mcat").c_str(),opt->text().c_str());
-            }catch(TError err) { continue; }
+	    }catch(TError err) { continue; }
 	opt->setAttr("path",a_path);
     }
     else TValue::cntrCmdProc(opt);

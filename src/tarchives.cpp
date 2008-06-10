@@ -32,7 +32,7 @@
 
 //************************************************
 //* Archive subsystem                            *
-//************************************************ 
+//************************************************
 
 //************************************************
 //* TArchiveS                                    *
@@ -105,6 +105,11 @@ TArchiveS::~TArchiveS(  )
 
     //- Free other resources -
     nodeDelAll();
+}
+
+int TArchiveS::valPeriod( )
+{
+    return vmax(1,m_val_per);
 }
 
 void TArchiveS::load_( )

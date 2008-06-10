@@ -38,17 +38,17 @@
 
 //************************************************
 //* Modul info!                                  *
-#define MOD_ID      "Siemens"
-#define MOD_NAME    "Siemens DAQ"
-#define MOD_TYPE    "DAQ"
-#define VER_TYPE    VER_CNTR
-#define VERSION     "1.0.0"
-#define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "Allow data source Siemens PLC by CP of Hilscher CIF cards use MPI protocol and library Libnodave for other."
-#define LICENSE     "GPL"
+#define MOD_ID		"Siemens"
+#define MOD_NAME	"Siemens DAQ"
+#define MOD_TYPE	"DAQ"
+#define VER_TYPE	VER_CNTR
+#define VERSION		"1.0.0"
+#define AUTORS		"Roman Savochenko"
+#define DESCRIPTION	"Allow data source Siemens PLC by CP of Hilscher CIF cards use MPI protocol and library Libnodave for other."
+#define LICENSE		"GPL"
 //************************************************
 
-Siemens::TTpContr *Siemens::mod;  //Pointer for direct access to module
+Siemens::TTpContr *Siemens::mod;	//Pointer for direct access to module
 
 extern "C"
 {
@@ -60,7 +60,7 @@ extern "C"
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-    	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
+	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
 	    return new Siemens::TTpContr( source );
 	return NULL;
     }
@@ -73,20 +73,20 @@ using namespace Siemens;
 //************************************************
 TTpContr::TTpContr( string name ) : drv_CIF_OK(false)
 {
-    mId 	= MOD_ID;
-    mName       = MOD_NAME;
-    mType  	= MOD_TYPE;
-    mVers      	= VERSION;
-    mAutor    	= AUTORS;
-    mDescr  	= DESCRIPTION;
-    mLicense   	= LICENSE;
-    mSource    	= name;
-    
+    mId		= MOD_ID;
+    mName	= MOD_NAME;
+    mType	= MOD_TYPE;
+    mVers	= VERSION;
+    mAutor	= AUTORS;
+    mDescr	= DESCRIPTION;
+    mLicense	= LICENSE;
+    mSource	= name;
+
     mod		= this;
 }
 
 TTpContr::~TTpContr( )
-{    
+{
     for( int i_b = 0; i_b < MAX_DEV_BOARDS; i_b++ )
 	if( cif_devs[i_b].present )	DevExitBoard(i_b);
     if( drvCIFOK( ) )	DevCloseDriver( );
@@ -100,12 +100,12 @@ string TTpContr::optDescr( )
 	"======================= The module <%s:%s> options =======================\n"
 	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
-    
+
     return buf;
 }
 
 void TTpContr::postEnable( int flag )
-{    
+{
     TModule::postEnable(flag);
 
     //- Controler's DB structure -
@@ -117,7 +117,7 @@ void TTpContr::postEnable( int flag )
 	(TSYS::int2str(TMdContr::CIF_PB)+";"+TSYS::int2str(TMdContr::ISO_TCP)).c_str(),"CIF_PB;ISO_TCP") );
     fldAdd( new TFld("ADDR",_("Remote controller address"),TFld::String,TFld::NoFlag,"40","10") );
     fldAdd( new TFld("SLOT",_("Slot CPU"),TFld::Integer,TFld::NoFlag,"2","2","0;30") );
-    fldAdd( new TFld("CIF_DEV",_("CIF board"),TFld::Integer,TFld::NoFlag,"1","0","0;3") );    
+    fldAdd( new TFld("CIF_DEV",_("CIF board"),TFld::Integer,TFld::NoFlag,"1","0","0;3") );
     //-- Parameter type DB structure --
     int t_prm = tpParmAdd("logic","PRM_BD",_("Logical"));
     tpPrmAt(t_prm).fldAdd( new TFld("TMPL",_("Parameter template"),TFld::String,TCfg::NoVal,"50","") );
@@ -130,7 +130,7 @@ void TTpContr::postEnable( int flag )
     el_cif_dev.fldAdd( new TFld("ID",_("ID"),TFld::Integer,TCfg::Key,"1") );
     el_cif_dev.fldAdd( new TFld("ADDR",_("Address"),TFld::Integer,TFld::NoFlag,"3","5") );
     el_cif_dev.fldAdd( new TFld("SPEED",_("Speed"),TFld::Integer,TFld::NoFlag,"1","7") );
-    
+
     //- Clear CIF devices info -
     for(int i_b = 0; i_b < MAX_DEV_BOARDS; i_b++)
     {
@@ -138,9 +138,9 @@ void TTpContr::postEnable( int flag )
 	cif_devs[i_b].board = -1;
 	cif_devs[i_b].phAddr = 0;
 	cif_devs[i_b].irq = 0;
-        cif_devs[i_b].fwname  = _("No device");
-        cif_devs[i_b].fwver = "";
-        cif_devs[i_b].pbspeed = cif_devs[i_b].pbaddr = 0;
+	cif_devs[i_b].fwname  = _("No device");
+	cif_devs[i_b].fwver = "";
+	cif_devs[i_b].pbspeed = cif_devs[i_b].pbaddr = 0;
     }
 }
 
@@ -165,7 +165,7 @@ void TTpContr::load_( )
 	    case -1 : break;
 	}
     } while(next_opt != -1);
-    
+
     //-- Load CIF devices configuration --
     TConfig cfg(&CIFDevE());
     string bd_tbl = modId()+"_CIFdevs";
@@ -178,7 +178,7 @@ void TTpContr::load_( )
 	    cif_devs[i_b].pbspeed = cfg.cfg("SPEED").getI();
 	}
 	if(drvCIFOK())	initCIF(i_b);
-    }	
+    }
 }
 
 void TTpContr::save_()
@@ -188,10 +188,10 @@ void TTpContr::save_()
     string bd_tbl = modId()+"_CIFdevs";
     for( int i_b = 0; i_b < MAX_DEV_BOARDS; i_b++ )
     {
-        cfg.cfg("ID").setI(i_b);
-        cfg.cfg("ADDR").setI(cif_devs[i_b].pbaddr);
+	cfg.cfg("ID").setI(i_b);
+	cfg.cfg("ADDR").setI(cif_devs[i_b].pbaddr);
 	cfg.cfg("SPEED").setI(cif_devs[i_b].pbspeed);
-        SYS->db().at().dataSet(SYS->workDB()+"."+bd_tbl,mod->nodePath()+bd_tbl,cfg);
+	SYS->db().at().dataSet(SYS->workDB()+"."+bd_tbl,mod->nodePath()+bd_tbl,cfg);
     }
 }
 
@@ -206,7 +206,7 @@ bool TTpContr::drvCIFOK()
 
     if(drv_CIF_OK) return drv_CIF_OK;
     drv_CIF_OK = (DevOpenDriver()==DRV_NO_ERROR);
-    
+
     //- Load CIF boards configuration -
     if(drv_CIF_OK)
     {
@@ -225,7 +225,7 @@ bool TTpContr::drvCIFOK()
 		{
 		    cif_devs[i_b].fwname.assign((char *)&fwInfo[0],16);
 		    cif_devs[i_b].fwver.assign((char *)&fwInfo[16],16);
-		}	
+		}
 		DevInitBoard(i_b);
 	    }
     }
@@ -241,40 +241,40 @@ void TTpContr::initCIF( int dev )
     DPM_DIAGNOSTICS tTaskState;
     DDLM_DOWNLOAD_REQUEST *ptDownloadRequest;
     DPM_BUS_DP *ptBusDpm;
-    
+
     struct Spar_bus
     {
-        unsigned char  bMax_Retry_Limit;
-        unsigned char  bTQUI;
-        unsigned short usTSL;
-        unsigned char  bTSET;
-	unsigned short usMin_TSDR;
-	unsigned short usMax_TSDR;
-	unsigned long  ulTTR;
-	unsigned char  bG;
+	unsigned char	bMax_Retry_Limit;
+	unsigned char	bTQUI;
+	unsigned short	usTSL;
+	unsigned char	bTSET;
+	unsigned short	usMin_TSDR;
+	unsigned short	usMax_TSDR;
+	unsigned long	ulTTR;
+	unsigned char	bG;
     };
-    
+
     struct Spar_bus par_bus[] =
     {
-        {1,0, 100, 1,11,60 ,11520,10},      //0  9.6
-	{1,0, 100, 1,11,60 ,11520,10},      //1  19.2
-	{1,0, 100, 1,11,60 ,11520,10},      //2  93.75
-        {1,0, 100, 1,11,60 ,11520,10},      //3  187.5
-	{1,0, 200, 1,11,100,11520,10},      //4  500
-	{1,0, 300, 1,11,150,11520,10},      //5  1000
-	{1,0, 300, 1,11,150,11520,10},      //6  1500
-	{2,3, 400, 4,11,250,13824, 1},      //7  3000
-	{3,6, 600, 8,11,450,13824, 1},      //8  6000
-	{4,9,1000,16,11,800,13824, 1},      //9  12000
+	{1,0, 100, 1,11,60 ,11520,10},		//0  9.6
+	{1,0, 100, 1,11,60 ,11520,10},		//1  19.2
+	{1,0, 100, 1,11,60 ,11520,10},		//2  93.75
+	{1,0, 100, 1,11,60 ,11520,10},		//3  187.5
+	{1,0, 200, 1,11,100,11520,10},		//4  500
+	{1,0, 300, 1,11,150,11520,10},		//5  1000
+	{1,0, 300, 1,11,150,11520,10},		//6  1500
+	{2,3, 400, 4,11,250,13824, 1},		//7  3000
+	{3,6, 600, 8,11,450,13824, 1},		//8  6000
+	{4,9,1000,16,11,800,13824, 1},		//9  12000
     };
-		      
-    
+
+
     if( dev < 0 || dev > MAX_DEV_BOARDS || !drvCIFOK() ) 
 	throw TError( nodePath().c_str(), _("CIF device %d or device driver error!"), dev);
     if(!cif_devs[dev].present)	return;
-    
+
     ResAlloc resource(cif_devs[dev].res,true);
-    
+
     // Load parameters to board 
     //- Running board aplications -
     if( (sRet = DevSetHostState( dev, HOST_READY, 0L )) != DRV_NO_ERROR )
@@ -292,24 +292,24 @@ void TTpContr::initCIF( int dev )
     //-- Delete The static data base if present --
     DevGetInfo(dev, GET_DRIVER_INFO, sizeof(DRIVERINFO), &tDriverInfo);
     if(tDriverInfo.bHostFlags&0x40)
-    {	
-	tMsg.rx = 0;      // task = OS-Task (RCS-Task)
-        tMsg.tx = 16;
+    {
+	tMsg.rx = 0;			// task = OS-Task (RCS-Task)
+	tMsg.tx = 16;
 	tMsg.ln = 2;
 	tMsg.nr = 0;
-        tMsg.a  = 0;
-        tMsg.f  = 0;
-	tMsg.b  = RCS_B_LOADFKT;      // command data base access
-        tMsg.e  = 0;
-	tMsg.d[0] = 4;    // mode clear data base
-        tMsg.d[1] = 8;    // startsegment = 8
-        if( (sRet=DevPutMessage(dev, (MSG_STRUC *)&tMsg, 200L)) != DRV_NO_ERROR )
+	tMsg.a  = 0;
+	tMsg.f  = 0;
+	tMsg.b  = RCS_B_LOADFKT;	// command data base access
+	tMsg.e  = 0;
+	tMsg.d[0] = 4;			// mode clear data base
+	tMsg.d[1] = 8;			// startsegment = 8
+	if( (sRet=DevPutMessage(dev, (MSG_STRUC *)&tMsg, 200L)) != DRV_NO_ERROR )
 	    throw TError( nodePath().c_str(), _("CIF device %d. DevPutMessage() error!"), dev);
 	if( (sRet=DevGetMessage(dev,sizeof(tMsg),(MSG_STRUC *)&tMsg,200L)) != DRV_NO_ERROR )
 	    throw TError( nodePath().c_str(), _("CIF device %d. DevGetMessage() error!"), dev);
     }
     //-- Load new bus parameters --
-    tMsg.rx = 3;	// task = DPM-Task
+    tMsg.rx = 3;			// task = DPM-Task
     tMsg.tx = 16;
     tMsg.ln = sizeof( DDLM_DOWNLOAD_REQUEST );
     tMsg.nr = 0;
@@ -323,23 +323,23 @@ void TTpContr::initCIF( int dev )
     ptDownloadRequest->usAdd_Offset = 0;
     ptBusDpm = ( DPM_BUS_DP* )&ptDownloadRequest->abData;
     ptBusDpm->usBus_Para_Len = sizeof( DPM_BUS_DP );
-    ptBusDpm->bFDL_Add  	= cif_devs[dev].pbaddr;				//Own master address
-    ptBusDpm->bBaudrate 	= cif_devs[dev].pbspeed;			//Specified profibus the baud rate
-    ptBusDpm->usTSL     	= par_bus[cif_devs[dev].pbspeed].usTSL;      	//300 (37-16383);
-    ptBusDpm->usMin_TSDR        = par_bus[cif_devs[dev].pbspeed].usMin_TSDR;	//11 (1-1023);
-    ptBusDpm->usMax_TSDR        = par_bus[cif_devs[dev].pbspeed].usMax_TSDR;	//150 (1-1023);
-    ptBusDpm->bTQUI             = par_bus[cif_devs[dev].pbspeed].bTQUI;     	//0 (0-127);
-    ptBusDpm->bTSET             = par_bus[cif_devs[dev].pbspeed].bTSET;         //1 (1-255);
-    ptBusDpm->ulTTR             = par_bus[cif_devs[dev].pbspeed].ulTTR;        	//2021 (255-...);
-    ptBusDpm->bG                = par_bus[cif_devs[dev].pbspeed].bG;            //10 (1-255);
-    ptBusDpm->bHSA              = 126;
-    ptBusDpm->bMax_Retry_Limit  = par_bus[cif_devs[dev].pbspeed].bMax_Retry_Limit; //1 (0-7);
+    ptBusDpm->bFDL_Add		= cif_devs[dev].pbaddr;				//Own master address
+    ptBusDpm->bBaudrate		= cif_devs[dev].pbspeed;			//Specified profibus the baud rate
+    ptBusDpm->usTSL		= par_bus[cif_devs[dev].pbspeed].usTSL;		//300 (37-16383);
+    ptBusDpm->usMin_TSDR	= par_bus[cif_devs[dev].pbspeed].usMin_TSDR;	//11 (1-1023);
+    ptBusDpm->usMax_TSDR	= par_bus[cif_devs[dev].pbspeed].usMax_TSDR;	//150 (1-1023);
+    ptBusDpm->bTQUI		= par_bus[cif_devs[dev].pbspeed].bTQUI;		//0 (0-127);
+    ptBusDpm->bTSET		= par_bus[cif_devs[dev].pbspeed].bTSET;		//1 (1-255);
+    ptBusDpm->ulTTR		= par_bus[cif_devs[dev].pbspeed].ulTTR;		//2021 (255-...);
+    ptBusDpm->bG		= par_bus[cif_devs[dev].pbspeed].bG;		//10 (1-255);
+    ptBusDpm->bHSA		= 126;
+    ptBusDpm->bMax_Retry_Limit	= par_bus[cif_devs[dev].pbspeed].bMax_Retry_Limit; //1 (0-7);
     ptBusDpm->Bp_Flag.bReserved = 0;
-    ptBusDpm->Bp_Flag.bError_Action_Flag  = 0;
-    ptBusDpm->usMin_Slave_Intervall       = 0;
-    ptBusDpm->usPoll_Timeout              = 10;		//(0-65535)
-    ptBusDpm->usData_Control_Time         = 120;	//(1-65535)
-    ptBusDpm->bAlarm_Max        = 0;
+    ptBusDpm->Bp_Flag.bError_Action_Flag	= 0;
+    ptBusDpm->usMin_Slave_Intervall		= 0;
+    ptBusDpm->usPoll_Timeout	= 10;						//(0-65535)
+    ptBusDpm->usData_Control_Time		= 120;				//(1-65535)
+    ptBusDpm->bAlarm_Max	= 0;
     ptBusDpm->bMax_User_Global_Control = 0;
     ptBusDpm->abOctet[0] = 0;
     ptBusDpm->abOctet[1] = 0;
@@ -351,8 +351,8 @@ void TTpContr::initCIF( int dev )
     if((sRet = DevGetMessage(dev,sizeof(RCS_MESSAGE),(MSG_STRUC *)&tMsg, 200L))!=DRV_NO_ERROR)
 	throw TError( nodePath().c_str(), _("Get request is error: %d."),sRet);
     //-- Wait for operation start with new parameters of PLC task --
-    do 
-    { 
+    do
+    {
 	DevGetTaskState(dev,2,sizeof( tTaskState ),&tTaskState); 
 	sleep(0);
     }
@@ -410,7 +410,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 	    if( ctrMkNode("table",opt,-1,"/mod/dev",_("CIF devices"),0664,"root","root"))
 	    {
 		ctrMkNode("list",opt,-1,"/mod/dev/brd",_("Board"),0444,"root","root",1,"tp","str");
-	        ctrMkNode("list",opt,-1,"/mod/dev/fwnm",_("Firmware name"),0444,"root","root",1,"tp","real");
+		ctrMkNode("list",opt,-1,"/mod/dev/fwnm",_("Firmware name"),0444,"root","root",1,"tp","real");
 		ctrMkNode("list",opt,-1,"/mod/dev/fwver",_("Firmware version"),0444,"root","root",1,"tp","dec");
 		ctrMkNode("list",opt,-1,"/mod/dev/phAddr",_("Physical address"),0444,"root","root",1,"tp","str");
 		ctrMkNode("list",opt,-1,"/mod/dev/irq",_("IRQ"),0444,"root","root",1,"tp","dec");
@@ -420,7 +420,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrMkNode("area",opt,1,"/PB",_("Profibus")))
 	{
-            ctrMkNode("fld",opt,-1,"/PB/dev",_("CIF device"),0664,"root","root",1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/PB/dev",_("CIF device"),0664,"root","root",1,"tp","dec");
 	    ctrMkNode("list",opt,-1,"/PB/lifels",_("Life stations list"),0444,"root","root",1,"tp","str");
 	}
 	return;
@@ -432,32 +432,32 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
     {
 	if(ctrChkNode(opt))
 	{
-    	    //- Fill Archives table -
-    	    XMLNode *n_brd  = ctrMkNode("list",opt,-1,"/mod/dev/brd","");
-    	    XMLNode *n_fwnm = ctrMkNode("list",opt,-1,"/mod/dev/fwnm","");
-    	    XMLNode *n_fwver= ctrMkNode("list",opt,-1,"/mod/dev/fwver","");
+	    //- Fill Archives table -
+	    XMLNode *n_brd  = ctrMkNode("list",opt,-1,"/mod/dev/brd","");
+	    XMLNode *n_fwnm = ctrMkNode("list",opt,-1,"/mod/dev/fwnm","");
+	    XMLNode *n_fwver= ctrMkNode("list",opt,-1,"/mod/dev/fwver","");
 	    XMLNode *n_phAddr = ctrMkNode("list",opt,-1,"/mod/dev/phAddr","");
 	    XMLNode *n_irq  = ctrMkNode("list",opt,-1,"/mod/dev/irq","");
 	    XMLNode *n_pba  = ctrMkNode("list",opt,-1,"/mod/dev/addr","");
 	    XMLNode *n_pbspd= ctrMkNode("list",opt,-1,"/mod/dev/speed","");
-					
-    	    for( int i_b = 0; i_b < MAX_DEV_BOARDS; i_b++ )
-    	    {
-    		if(n_brd)	n_brd->childAdd("el")->setText(TSYS::int2str(cif_devs[i_b].board));
-        	if(n_fwnm)	n_fwnm->childAdd("el")->setText(cif_devs[i_b].fwname);
-        	if(n_fwver)	n_fwver->childAdd("el")->setText(cif_devs[i_b].fwver);
+
+	    for( int i_b = 0; i_b < MAX_DEV_BOARDS; i_b++ )
+	    {
+		if(n_brd)	n_brd->childAdd("el")->setText(TSYS::int2str(cif_devs[i_b].board));
+		if(n_fwnm)	n_fwnm->childAdd("el")->setText(cif_devs[i_b].fwname);
+		if(n_fwver)	n_fwver->childAdd("el")->setText(cif_devs[i_b].fwver);
 		if(n_phAddr)	n_phAddr->childAdd("el")->setText(TSYS::int2str(cif_devs[i_b].phAddr,TSYS::Hex));
 		if(n_irq)	n_irq->childAdd("el")->setText(TSYS::int2str(cif_devs[i_b].irq));
 		if(n_pba)	n_pba->childAdd("el")->setText(TSYS::int2str(cif_devs[i_b].pbaddr));
 		if(n_pbspd)	n_pbspd->childAdd("el")->setText(TSYS::int2str(cif_devs[i_b].pbspeed));
-    	    }
+	    }
 	}
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
-        {
+	{
 	    int brd = atoi(opt->attr("row").c_str());
 	    string col  = opt->attr("col");
 	    if( brd < 0 || brd > 3 )	throw TError(nodePath().c_str(),_("Board number %d error!"),brd);
-	    if( col == "addr" )	
+	    if( col == "addr" )
 	    {
 		int addr = atoi(opt->text().c_str());
 		cif_devs[brd].pbaddr = (addr<0)?0:(addr>126)?126:addr;
@@ -469,7 +469,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/mod/dev/lsspd" && ctrChkNode(opt) )
     {
-	opt->childAdd("el")->setAttr("id","0")->setText("9600Baud");    
+	opt->childAdd("el")->setAttr("id","0")->setText("9600Baud");
 	opt->childAdd("el")->setAttr("id","1")->setText("19.2kBaud");
 	opt->childAdd("el")->setAttr("id","2")->setText("93.75kBaud");
 	opt->childAdd("el")->setAttr("id","3")->setText("187.5kBaud");
@@ -481,17 +481,17 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/PB/dev" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
 	    opt->setText(TBDS::genDBGet(mod->nodePath()+"lifeLsDev","0",opt->attr("user")));
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
 	    TBDS::genDBSet(mod->nodePath()+"lifeLsDev",opt->text(),opt->attr("user"));
     }
     else if( a_path == "/PB/lifels" && ctrChkNode(opt) )
     {
 	int board = atoi(TBDS::genDBGet(mod->nodePath()+"lifeLsDev","0",opt->attr("user")).c_str());
 	string lifeLst;
-	try 
-	{ 
+	try
+	{
 	    getLifeListPB(board, lifeLst);
 	    for( int i_st = 0; i_st < lifeLst.size(); i_st++ )
 		switch((unsigned char)lifeLst[i_st])
@@ -510,10 +510,10 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 //* TMdContr                                     *
 //************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
-	::TController(name_c,daq_db,cfgelem), prc_st(false), endrun_req(false), tm_calc(0), di(NULL), dc(NULL),		
+	::TController(name_c,daq_db,cfgelem), prc_st(false), endrun_req(false), tm_calc(0), di(NULL), dc(NULL),
 	m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId()), m_type(cfg("TYPE").getId()), m_assinc_wr(cfg("ASINC_WR").getBd()),
 	m_slot(cfg("SLOT").getId()), m_dev(cfg("CIF_DEV").getId()), m_addr(cfg("ADDR").getSd())
-{    
+{
     cfg("PRM_BD").setS("CIFPrm_"+name_c);
 }
 
@@ -528,16 +528,15 @@ void TMdContr::postDisable( int flag )
     try
     {
 	if( flag )
-        {
-    	    //- Delete parameter's io table -
-            string tbl = DB()+"."+cfg("PRM_BD").getS()+"_io";
-            SYS->db().at().open(tbl);
-            SYS->db().at().close(tbl,true);
-        }
+	{
+	    //- Delete parameter's io table -
+	    string tbl = DB()+"."+cfg("PRM_BD").getS()+"_io";
+	    SYS->db().at().open(tbl);
+	    SYS->db().at().close(tbl,true);
+	}
     }catch(TError err)
     { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
-																				
 
 TParamContr *TMdContr::ParamAttach( const string &name, int type )
 {
@@ -565,7 +564,7 @@ void TMdContr::disable_( )
 {
     //- Clear acquisition data blocks and asynchronous write mode data blocks -
     acqBlks.clear();
-    writeBlks.clear();    
+    writeBlks.clear();
 }
 
 void TMdContr::start_( )
@@ -576,9 +575,9 @@ void TMdContr::start_( )
     vector<string> list_p;
     list(list_p);
     for(int i_prm=0; i_prm < list_p.size(); i_prm++)
-        if( at(list_p[i_prm]).at().enableStat() )
-            prmEn( list_p[i_prm], true );    
-   
+	if( at(list_p[i_prm]).at().enableStat() )
+	    prmEn( list_p[i_prm], true );
+
     //- Start the request data task -
     if( !prc_st )
     {
@@ -589,28 +588,28 @@ void TMdContr::start_( )
 	    pthread_attr_setschedpolicy(&pthr_attr,SCHED_RR);
 	else pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
 	prior.__sched_priority=m_prior;
-        pthread_attr_setschedparam(&pthr_attr,&prior);
-	
-        pthread_create(&procPthr,&pthr_attr,TMdContr::Task,this);
-        pthread_attr_destroy(&pthr_attr);
-        if( TSYS::eventWait(prc_st, true, nodePath()+"start",5) )
-            throw TError(nodePath().c_str(),_("Acquisition task no started!"));
+	pthread_attr_setschedparam(&pthr_attr,&prior);
+
+	pthread_create(&procPthr,&pthr_attr,TMdContr::Task,this);
+	pthread_attr_destroy(&pthr_attr);
+	if( TSYS::eventWait(prc_st, true, nodePath()+"start",5) )
+	    throw TError(nodePath().c_str(),_("Acquisition task no started!"));
     }
 }
 
 void TMdContr::stop_( )
-{  
+{
     //- Stop the request and calc data task -
     if( prc_st )
     {
-        endrun_req = true;
-        pthread_kill( procPthr, SIGALRM );
-        if( TSYS::eventWait(prc_st,false,nodePath()+"stop",5) )
-            throw TError(nodePath().c_str(),_("Acquisition task no stoped!"));
-        pthread_join( procPthr, NULL );
+	endrun_req = true;
+	pthread_kill( procPthr, SIGALRM );
+	if( TSYS::eventWait(prc_st,false,nodePath()+"stop",5) )
+	    throw TError(nodePath().c_str(),_("Acquisition task no stoped!"));
+	pthread_join( procPthr, NULL );
     }
     //- Clear proccess parameters list -
-    p_hd.clear();    
+    p_hd.clear();
 
     disconnectRemotePLC( );
 }
@@ -618,11 +617,11 @@ void TMdContr::stop_( )
 bool TMdContr::cfgChange( TCfg &icfg )
 {
     TController::cfgChange(icfg);
-    
+
     if( icfg.fld().name() == "TYPE" )
     {
 	cfg("CIF_DEV").setView(icfg.getI()==0);
-        if( startStat() )	stop();
+	if( startStat() )	stop();
     }
 
     return true;
@@ -634,22 +633,22 @@ void TMdContr::prmEn( const string &id, bool val )
 
     ResAlloc res(en_res,true);
     for( i_prm = 0; i_prm < p_hd.size(); i_prm++)
-        if( p_hd[i_prm].at().id() == id ) break;
-    
+	if( p_hd[i_prm].at().id() == id ) break;
+
     if( val && i_prm >= p_hd.size() )
-        p_hd.push_back(at(id));
+	p_hd.push_back(at(id));
     if( !val && i_prm < p_hd.size() )
-        p_hd.erase(p_hd.begin()+i_prm);
+	p_hd.erase(p_hd.begin()+i_prm);
 }
 
 void TMdContr::regVal( SValData ival, IO::Type itp, bool wr )
 {
     if( ival.db < 0 || ival.off < 0 )	return;
-    
+
     int iv_sz = valSize(itp,ival.sz); //Get real value's size
-    
+
     ResAlloc res(en_res,true);
-    
+
     //- Register to acquisition block -
     int i_b;
     for(i_b = 0; i_b < acqBlks.size(); i_b++)
@@ -674,7 +673,7 @@ void TMdContr::regVal( SValData ival, IO::Type itp, bool wr )
 	    break;
 	}
     if( i_b >= acqBlks.size() )
-    	acqBlks.insert(acqBlks.begin()+i_b,SDataRec(ival.db,ival.off,iv_sz));
+	acqBlks.insert(acqBlks.begin()+i_b,SDataRec(ival.db,ival.off,iv_sz));
 
     //- Register to asynchronous write block -
     if( wr && assincWrite( ) )
@@ -684,7 +683,7 @@ void TMdContr::regVal( SValData ival, IO::Type itp, bool wr )
 	    else if(writeBlks[i_b].db == ival.db)
 	    {
 		if( ival.off < writeBlks[i_b].off )
-    		{
+		{
 		    if( (ival.off+iv_sz) >= writeBlks[i_b].off && 
 			    (writeBlks[i_b].val.size()+writeBlks[i_b].off-ival.off) < MaxLenReq )
 		    {
@@ -693,7 +692,7 @@ void TMdContr::regVal( SValData ival, IO::Type itp, bool wr )
 		    }
 		    else writeBlks.insert(writeBlks.begin()+i_b,SDataRec(ival.db,ival.off,iv_sz));
 		}
-    		else if( (ival.off+iv_sz) > (writeBlks[i_b].off+writeBlks[i_b].val.size()) )
+		else if( (ival.off+iv_sz) > (writeBlks[i_b].off+writeBlks[i_b].val.size()) )
 		{
 		    if( ival.off <= (writeBlks[i_b].off+writeBlks[i_b].val.size()) &&
 			    (ival.off+iv_sz-writeBlks[i_b].off) < MaxLenReq )
@@ -708,7 +707,7 @@ void TMdContr::regVal( SValData ival, IO::Type itp, bool wr )
 			}
 		    }
 		    else continue;
-		}	    
+		}
 		break;
 	    }
 	if( i_b >= writeBlks.size() )
@@ -729,28 +728,28 @@ void TMdContr::connectRemotePLC( )
 	    //- Full Libnodave API -
 	    _daveOSserialType fds;
 	    fds.wfd = fds.rfd = openSocket(102,m_addr.c_str());
-	    if( fds.rfd <= 0 ) throw TError(nodePath().c_str(),_("Open socket of remote PLC is error."));	    
+	    if( fds.rfd <= 0 ) throw TError(nodePath().c_str(),_("Open socket of remote PLC is error."));
 	    di = daveNewInterface(fds,(char*)(string("IF")+id()).c_str(),0,daveProtoISOTCP,daveSpeed187k);
-    	    daveSetTimeout(di,5000000);
-            dc = daveNewConnection(di,2,0,m_slot);
-            if( daveConnectPLC(dc) )
-            {
-                close(fds.wfd);
+	    daveSetTimeout(di,5000000);
+	    dc = daveNewConnection(di,2,0,m_slot);
+	    if( daveConnectPLC(dc) )
+	    {
+		close(fds.wfd);
 		delete dc;
 		delete di;
-                throw TError(nodePath().c_str(),_("Connection to PLC is error."));
-            }	
-	
+		throw TError(nodePath().c_str(),_("Connection to PLC is error."));
+	    }
+
 	    //- Self OpenSCADA API -
 	    //- Output transport open -
 	    /*if( !SYS->transport().at().at("Sockets").at().outPresent(mod->modId()+id()) )
-                SYS->transport().at().at("Sockets").at().outAdd(mod->modId()+id());
+		SYS->transport().at().at("Sockets").at().outAdd(mod->modId()+id());
 	    AutoHD<TTransportOut> tr = SYS->transport().at().at("Sockets").at().outAt(mod->modId()+id());
-            string trAddr = "TCP:"+TSYS::strSepParse(m_addr,0,':')+":"+
+	    string trAddr = "TCP:"+TSYS::strSepParse(m_addr,0,':')+":"+
 			        (TSYS::strSepParse(m_addr,1,':').empty() ? "102" : TSYS::strSepParse(m_addr,1,':'));
 	    tr.at().setAddr(trAddr);
 	    tr.at().start();
-	    
+
 	    //- Connect to remote PLC on ISO-TSAP protocol -
 	    string pdu, mbap;
 	    pdu = pdu + (char)0x11 + (char)0xE0 + (char)0x00 +
@@ -758,7 +757,7 @@ void TMdContr::connectRemotePLC( )
 			(char)0xC1 + (char)0x02 + (char)0x01 + (char)0x00 +
 			(char)0xC2 + (char)0x02 + (char)0x01 + (char)m_slot +
 			(char)0xC0 + (char)0x01 + (char)0x09;
-	    
+
 	    mbap = mbap + (char)0x03 + (char)0x00 +
 			  (char)((pdu.size()+4)>>8) + (char)(pdu.size()+4) +
 			  pdu;
@@ -768,7 +767,7 @@ void TMdContr::connectRemotePLC( )
 	    if( resp_len < 4 )	throw TError(nodePath().c_str(),_("PLC respond is zero or too short."));
 	    int lenPDU = (buf[2]<<8)+buf[3];
 	    if( lenPDU != 22 )	throw TError(nodePath().c_str(),_("Connection respond is broken."));
-	    
+
 	    //- Neg PDU length request -
 	    //_daveNegPDUlengthRequest(
 	    mbap = pdu = "";
@@ -823,7 +822,7 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 	    if( !owner().cif_devs[m_dev].present )	throw TError(nodePath().c_str(),_("15:Board %d no present."),m_dev);
 	
 	    ResAlloc resource(owner().cif_devs[m_dev].res,true);
-    
+
 	    do
 	    {
 		e_try--;
@@ -847,17 +846,17 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 		tMsg.d[5] = (unsigned char)buffer.size();
 		tMsg.d[6] = TASK_TDT_UINT8;
 		tMsg.d[7] = TASK_TFC_READ;
-	
+
 		//- Put message to remote host -
 		res = DevPutMessage(m_dev,(MSG_STRUC *)&tMsg, 200L);
 		if( res == DRV_DEV_PUT_TIMEOUT )
 		    throw TError(nodePath().c_str(),_("12:Put request is timeouted."));
 		//- Get remote host's response -
 		if( res == DRV_NO_ERROR )
-    		    res = DevGetMessage(m_dev,sizeof(RCS_MESSAGE),(MSG_STRUC *)&tMsg,200L);
+		    res = DevGetMessage(m_dev,sizeof(RCS_MESSAGE),(MSG_STRUC *)&tMsg,200L);
 	    }
 	    while( (res == DRV_NO_ERROR) && (tMsg.f == 0x02 || tMsg.f == 0x39) && e_try > 0 );
-        
+
 	    //- Process errors -
 	    if( res != DRV_NO_ERROR )		throw TError(nodePath().c_str(),_("19:Request to DB error %d."),res);
 	    if( res == DRV_DEV_GET_TIMEOUT )	throw TError(nodePath().c_str(),_("13:Get request is timeouted."));
@@ -885,7 +884,7 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 	    buffer.replace(0,buffer.size(),(char *)tMsg.d+8,buffer.size());
 	    break;
 	}
-    	case ISO_TCP:
+	case ISO_TCP:
 	{
 	    //- Full libnodave API -
 	    int res;
@@ -895,7 +894,7 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 		throw TError(nodePath().c_str(),_("Read DB from controller error."));
 	    }
 	    buffer.assign((char*)dc->resultPointer,buffer.size());
-	
+
 	    //- Self OpenSCADA API -
 	    /*string pdu, mbap;
 	    pdu = pdu+(char)0x02+(char)0xf0+(char)0x80;
@@ -920,17 +919,17 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 	    mbap = mbap+(char)0x03 + (char)0x00 +
 			(char)((pdu.size()+4)>>8) + (char)(pdu.size()+4) +
 			pdu;
- 	    
-            AutoHD<TTransportOut> tr;
+
+	    AutoHD<TTransportOut> tr;
 	    try{ tr = SYS->transport().at().at("Sockets").at().outAt(mod->modId()+id()); }
 	    catch(...) { tr.at().stop(); throw; }
 
 	    if( !tr.at().startStat() ){ stop(); start(); }
-	    
+
 	    unsigned char buf[1000];
-	    int resp_len = tr.at().messIO( mbap.data(), mbap.size(), (char*)buf, sizeof(buf), 10 );	    
+	    int resp_len = tr.at().messIO( mbap.data(), mbap.size(), (char*)buf, sizeof(buf), 10 );
 	    if( resp_len < 16 )	throw TError(nodePath().c_str(),_("PLC respond is zero or too short."));
-	    
+
 	    int pheader = 7;
 	    int phlen = 10;
 	    if( buf[pheader+1] == 2 || buf[pheader+1] == 3 ) phlen = 12;
@@ -938,7 +937,7 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 	    int plen  = (buf[pheader+6]<<8) + buf[pheader+7];	//2
 	    int pdata = pparam+plen;	//21
 	    int pdlen = (buf[pheader+8]<<8) + buf[pheader+9];	//6
-	    buffer.replace(0,buffer.size(),(char*)buf+pdata,buffer.size());*/	    
+	    buffer.replace(0,buffer.size(),(char*)buf+pdata,buffer.size());*/
 
 	    break;
 	}
@@ -958,7 +957,7 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 	    if( !owner().cif_devs[m_dev].present )	throw TError(nodePath().c_str(),_("15:Board %d no present."),m_dev);
 
 	    ResAlloc resource(owner().cif_devs[m_dev].res,true);
-    
+
 	    do
 	    {
 		e_try--;
@@ -984,36 +983,36 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 		tMsg.d[6] = TASK_TDT_UINT8;
 		tMsg.d[7] = TASK_TFC_WRITE;
 		memcpy(tMsg.d+8,buffer.c_str(),buffer.size());
-	
-		//- Put message to remote host -	
+
+		//- Put message to remote host -
 		res = DevPutMessage(m_dev,(MSG_STRUC *)&tMsg,200L);
 		if( res == DRV_DEV_PUT_TIMEOUT )
 		    throw TError(nodePath().c_str(),_("12:Put request is timeouted."));
-		//- Get remote host's response -	    
-		if( res == DRV_NO_ERROR) 
+		//- Get remote host's response -
+		if( res == DRV_NO_ERROR)
 		    res = DevGetMessage(m_dev,sizeof(RCS_MESSAGE),(MSG_STRUC *)&tMsg, 200L);
 	    }
 	    while( (res == DRV_NO_ERROR) && (tMsg.f == 0x02 || tMsg.f == 0x39) && e_try > 0 );
-    
+
 	    //printf("Put DB %d:%d DB%d.%d(%d) -- %d \n",m_dev,vmax(0,vmin(126,atoi(m_addr.c_str()))),n_db,offset,buffer.size(),tMsg.f);
-    
+
 	    //- Process errors -
-	    if( res != DRV_NO_ERROR )		throw TError(nodePath().c_str(),_("19:Request to DB error %d."),res);    
+	    if( res != DRV_NO_ERROR )		throw TError(nodePath().c_str(),_("19:Request to DB error %d."),res);
 	    if( res == DRV_DEV_GET_TIMEOUT )	throw TError(nodePath().c_str(),_("13:Get request is timeouted."));
 	    if( tMsg.f == 17 )	throw TError(nodePath().c_str(),_("17:No response of the remote station."));
 	    if( tMsg.f == 18 )	throw TError(nodePath().c_str(),_("18:Master not into the logical token ring."));
 	    if( tMsg.f == 0x85 )throw TError(nodePath().c_str(),_("20:Specified offset address or DB error."));
 	    break;
-	} 
+	}
 	case ISO_TCP:
 	    //- Full Libnodave API -
 	    int res;
-    	    if( (res = daveWriteBytes(dc,daveDB,n_db,offset,buffer.size(),(char*)buffer.c_str())) )
+	    if( (res = daveWriteBytes(dc,daveDB,n_db,offset,buffer.size(),(char*)buffer.c_str())) )
 	    {
 		mess_debug(nodePath().c_str(),_("Write block '%d' error: %d\n"),n_db,res);
-	    	throw TError(nodePath().c_str(),_("Write DB to controller error."));
+		throw TError(nodePath().c_str(),_("Write DB to controller error."));
 	    }
-	
+
 	    //- Self OpenSCADA API -
 	    /*string pdu, mbap;
 	    pdu = pdu+(char)0x02+(char)0xf0+(char)0x80;
@@ -1024,36 +1023,36 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 			(char)0x00 +			//b
 			(char)0x00 + (char)0x00 +	//number
 			(char)0x00 + (char)0x0e +	//plen
-			(char)((buffer.size()+4)>>8) + (char)(buffer.size()+4);  	//dlen
+			(char)((buffer.size()+4)>>8) + (char)(buffer.size()+4);	//dlen
 	    //- Parameters -
 	    pdu = pdu + (char)0x05 +						// FuncWrite
 			(char)0x01 +						// Parameters counter
 			(char)0x12 + (char)0x0A + (char)0x10 +
 			(char)0x02 +						// 1=single bit, 2=byte, 4=word
-	    		(char)(buffer.size()>>8) + (char)buffer.size() +	// length in bytes
-		        (char)(n_db>>8) + (char)n_db +				// DB number
+			(char)(buffer.size()>>8) + (char)buffer.size() +	// length in bytes
+			(char)(n_db>>8) + (char)n_db +				// DB number
 			(char)0x84 +						// DB area
 			(char)((offset*8)>>16) + (char)((offset*8)>>8) + (char)(offset*8);	// start address in bits
 	    //- Data -
 	    pdu = pdu + (char)0x00 + (char)0x04 + (char)0x00 + (char)0x00+
 			buffer;
-			
+
 	    mbap = mbap+(char)0x03 + (char)0x00 +
 			(char)((pdu.size()+4)>>8) + (char)(pdu.size()+4) +
-			pdu;	
+			pdu;
 
 	    for( int j=0; j < mbap.size(); j++ )
 	    {
 	        if( (j&0xf)==0 )	printf("\n%x :",j);
 	        printf("0x%02X ",mbap[j]);
-	    }*/	
+	    }*/
 
 	    break;
     }
 }
 
 char TMdContr::getValB( SValData ival, string &err )
-{    
+{
     for(int i_b = 0; i_b < acqBlks.size(); i_b++)
 	if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off && 
 	    (ival.off+1) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
@@ -1064,7 +1063,7 @@ char TMdContr::getValB( SValData ival, string &err )
 	    break;
 	}
     err = err.size()?err:_("11:Value not gathered.");
-    
+
     return EVAL_BOOL;
 }
 
@@ -1072,13 +1071,13 @@ int TMdContr::getValI( SValData ival, string &err )
 {
     int iv_sz = valSize( IO::Integer, ival.sz );
     for(int i_b = 0; i_b < acqBlks.size(); i_b++)
-        if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off && 
-    	    (ival.off+iv_sz) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
-        {
-    	    if(!acqBlks[i_b].err.size())
-	        switch(iv_sz)
-	        {
-	    	    case 1:	return acqBlks[i_b].val[ival.off-acqBlks[i_b].off];
+	if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off && 
+	    (ival.off+iv_sz) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
+	{
+	    if(!acqBlks[i_b].err.size())
+		switch(iv_sz)
+		{
+		    case 1:	return acqBlks[i_b].val[ival.off-acqBlks[i_b].off];
 		    case 2:	return *(si16*)revers(acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz)).c_str();
 		    case 4:	return *(si32*)revers(acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz)).c_str();
 		}
@@ -1086,7 +1085,7 @@ int TMdContr::getValI( SValData ival, string &err )
 	    break;
 	}
     err = err.size()?err:_("11:Value not gathered.");
-    
+
     return EVAL_INT;
 }
 
@@ -1098,8 +1097,8 @@ double TMdContr::getValR( SValData ival, string &err )
 	    (ival.off+iv_sz) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
 	{
 	    if(!acqBlks[i_b].err.size())
-	        switch(iv_sz)
-	        {
+		switch(iv_sz)
+		{
 		    case 4:	return *(float*)revers(acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz)).c_str();
 		    case 8:	return *(double*)revers(acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz)).c_str();
 		}
@@ -1107,7 +1106,7 @@ double TMdContr::getValR( SValData ival, string &err )
 	    break;
 	}
     err = err.size()?err:_("11:Value not gathered.");
-    
+
     return EVAL_REAL;
 }
 
@@ -1116,18 +1115,18 @@ string TMdContr::getValS( SValData ival, string &err )
     int iv_sz = valSize( IO::String, ival.sz );
     char buf[iv_sz];
     for(int i_b = 0; i_b < acqBlks.size(); i_b++)
-        if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off && 
-    	    (ival.off+iv_sz) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
-        {
-    	    if( !acqBlks[i_b].err.size() )	return acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz);
+	if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off && 
+	    (ival.off+iv_sz) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
+	{
+	    if( !acqBlks[i_b].err.size() )	return acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz);
 	    else err = acqBlks[i_b].err;
 	    break;
 	}
     err = err.size()?err:_("11:Value not gathered.");
-    
+
     return EVAL_STR;
 }
-		
+
 void TMdContr::setValB( bool ivl, SValData ival, string &err )
 {
     int val = getValI(SValData(ival.db,ival.off,1),err);
@@ -1135,9 +1134,9 @@ void TMdContr::setValB( bool ivl, SValData ival, string &err )
     //- Write data to controller or write data block -
     val^=(0x01<<ival.sz);
     try
-    { 
+    {
 	if( !assincWrite( ) )	putDB(ival.db,ival.off,string((char*)&val,1));
-	else 
+	else
 	    for(int i_b = 0; i_b < writeBlks.size(); i_b++)
 		if( writeBlks[i_b].db == ival.db && ival.off >= writeBlks[i_b].off && 
 			(ival.off+1) <= (writeBlks[i_b].off+writeBlks[i_b].val.size()) )
@@ -1156,13 +1155,13 @@ void TMdContr::setValI( int ivl, SValData ival, string &err )
     int val = getValI(ival,err);
     if(val==EVAL_INT || val == ivl) return;
     //- Write data to controller or write data block -
-    val = ivl;    
+    val = ivl;
     int iv_sz = valSize( IO::Integer, ival.sz );
     try
-    { 
+    {
 	if( !assincWrite( ) )	putDB(ival.db,ival.off,revers(string((char *)&val,iv_sz)));
 	else
-     	    for(int i_b = 0; i_b < writeBlks.size(); i_b++)
+ 	    for(int i_b = 0; i_b < writeBlks.size(); i_b++)
 		if( writeBlks[i_b].db == ival.db && ival.off >= writeBlks[i_b].off && 
 			(ival.off+iv_sz) <= (writeBlks[i_b].off+writeBlks[i_b].val.size()) )
 		{ writeBlks[i_b].val.replace(ival.off-writeBlks[i_b].off,iv_sz,revers(string((char *)&val,iv_sz))); break; }
@@ -1184,16 +1183,16 @@ void TMdContr::setValR( double ivl, SValData ival, string &err )
     val = ivl;
     int iv_sz = valSize( IO::Real, ival.sz );
     try
-    { 
-       	if( !assincWrite( ) )	putDB(ival.db,ival.off,revers(string((char *)&val,iv_sz)));
+    {
+	if( !assincWrite( ) )	putDB(ival.db,ival.off,revers(string((char *)&val,iv_sz)));
 	else
-     	    for(int i_b = 0; i_b < writeBlks.size(); i_b++)
-    		if(writeBlks[i_b].db == ival.db && ival.off >= writeBlks[i_b].off && 
-    			(ival.off+iv_sz) <= (writeBlks[i_b].off+writeBlks[i_b].val.size()) )
-    		{
-    		    writeBlks[i_b].val.replace(ival.off-writeBlks[i_b].off,iv_sz,revers(string(((iv_sz==4)?(char *)&val_4:(char *)&val),iv_sz)));
-    		    break;
-    		}	 
+	    for(int i_b = 0; i_b < writeBlks.size(); i_b++)
+		if(writeBlks[i_b].db == ival.db && ival.off >= writeBlks[i_b].off && 
+			(ival.off+iv_sz) <= (writeBlks[i_b].off+writeBlks[i_b].val.size()) )
+		{
+		    writeBlks[i_b].val.replace(ival.off-writeBlks[i_b].off,iv_sz,revers(string(((iv_sz==4)?(char *)&val_4:(char *)&val),iv_sz)));
+		    break;
+		}
 	//- Set to DB buffer -
 	for(int i_b = 0; i_b < acqBlks.size(); i_b++)
 	    if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off && 
@@ -1201,7 +1200,7 @@ void TMdContr::setValR( double ivl, SValData ival, string &err )
 	    {
 		acqBlks[i_b].val.replace(ival.off-acqBlks[i_b].off,iv_sz,revers(string(((iv_sz==4)?(char *)&val_4:(char *)&val),iv_sz))); 
 		break;
-	    }	
+	    }
     }
     catch(TError cerr){ err = err.size()?err:cerr.mess; }
 }
@@ -1215,16 +1214,16 @@ void TMdContr::setValS( const string &ivl, SValData ival, string &err )
     if(val==EVAL_STR || val == vali) return;
     //- Write data to controller or write data block -
     try
-    { 
-       	if( !assincWrite( ) )	putDB(ival.db,ival.off,vali);
+    {
+	if( !assincWrite( ) )	putDB(ival.db,ival.off,vali);
 	else
-    	    for(int i_b = 0; i_b < writeBlks.size(); i_b++)
-    		if(writeBlks[i_b].db == ival.db && ival.off >= writeBlks[i_b].off && 
-    			(ival.off+iv_sz) <= (writeBlks[i_b].off+writeBlks[i_b].val.size()) )
-    		{ writeBlks[i_b].val.replace(ival.off-writeBlks[i_b].off,iv_sz,vali.c_str()); break; } 
+	    for(int i_b = 0; i_b < writeBlks.size(); i_b++)
+		if(writeBlks[i_b].db == ival.db && ival.off >= writeBlks[i_b].off &&
+			(ival.off+iv_sz) <= (writeBlks[i_b].off+writeBlks[i_b].val.size()) )
+		{ writeBlks[i_b].val.replace(ival.off-writeBlks[i_b].off,iv_sz,vali.c_str()); break; }
 	//- Set to DB buffer -
 	for(int i_b = 0; i_b < acqBlks.size(); i_b++)
-	    if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off && 
+	    if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off &&
 		    (ival.off+iv_sz) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
 	    { acqBlks[i_b].val.replace(ival.off-acqBlks[i_b].off,iv_sz,vali.c_str()); break; }
     }
@@ -1248,24 +1247,24 @@ void *TMdContr::Task( void *icntr )
     long long work_tm, last_tm = 0;
     struct timespec get_tm;
     TMdContr &cntr = *(TMdContr *)icntr;
-    
+
     cntr.endrun_req = false;
     cntr.prc_st = true;
-    
+
     bool is_start = true;
     bool is_stop  = false;
-    
+
     while(true)
     {
 	long long t_cnt = SYS->shrtCnt();
-	
+
 	//- Update controller's data -
 	cntr.en_res.resRequestR( );
 	//- Process write data blocks -
 	if( cntr.assincWrite( ) )
 	    for(int i_b = 0; i_b < cntr.writeBlks.size(); i_b++)
-    		try
-    		{ 
+		try
+		{
 		    //printf("TEST 00: Put %d: (%d:%d)\n",
 		    //	cntr.writeBlks[i_b].db, cntr.writeBlks[i_b].off, cntr.writeBlks[i_b].val.size() );
 		    cntr.putDB( cntr.writeBlks[i_b].db,cntr.writeBlks[i_b].off,cntr.writeBlks[i_b].val );
@@ -1275,38 +1274,38 @@ void *TMdContr::Task( void *icntr )
 	//- Process acquisition data blocks -
 	for(int i_b = 0; i_b < cntr.acqBlks.size(); i_b++)
 	    try
-	    { 
+	    {
 		//printf("TEST 00: Get %d: (%d:%d)\n",
 		//    cntr.acqBlks[i_b].db, cntr.acqBlks[i_b].off, cntr.acqBlks[i_b].val.size() );
 		cntr.getDB(cntr.acqBlks[i_b].db, cntr.acqBlks[i_b].off, cntr.acqBlks[i_b].val);
 		cntr.acqBlks[i_b].err="";
 	    }
-	    catch(TError err) { cntr.acqBlks[i_b].err=err.mess; }	
+	    catch(TError err) { cntr.acqBlks[i_b].err=err.mess; }
 
 	//- Calc parameters -
 	for(unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++)
 	    try{ cntr.p_hd[i_p].at().calc(is_start,is_stop); }
 	    catch(TError err)
-    	    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-	cntr.en_res.resReleaseR( );    
+	    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+	cntr.en_res.resReleaseR( );
 	cntr.tm_calc = 1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
-    
+
 	if(is_stop) break;
-    
-        //- Calc next work time and sleep -
-        clock_gettime(CLOCK_REALTIME,&get_tm);
-        work_tm = (((long long)get_tm.tv_sec*1000000000+get_tm.tv_nsec)/((long long)cntr.m_per*1000000) + 1)*(long long)cntr.m_per*1000000;
-	if(last_tm == work_tm)	work_tm+=(long long)cntr.m_per*1000000;	//Fix early call
+
+	//- Calc next work time and sleep -
+	clock_gettime(CLOCK_REALTIME,&get_tm);
+	work_tm = (((long long)get_tm.tv_sec*1000000000+get_tm.tv_nsec)/((long long)cntr.period()*1000000) + 1)*(long long)cntr.period()*1000000;
+	if(last_tm == work_tm)	work_tm+=(long long)cntr.period()*1000000;	//Fix early call
 	last_tm = work_tm;
-        get_tm.tv_sec = work_tm/1000000000; get_tm.tv_nsec = work_tm%1000000000;
-        clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&get_tm,NULL);
-	
+	get_tm.tv_sec = work_tm/1000000000; get_tm.tv_nsec = work_tm%1000000000;
+	clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&get_tm,NULL);
+
 	if(cntr.endrun_req) is_stop = true;
 	is_start = false;
     }
-    
+
     cntr.prc_st = false;
-    
+
     return NULL;
 }
 
@@ -1319,7 +1318,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/cntr/st/acq_tm",_("Acquisition time (ms)"),0444,"root","root",1,"tp","real");
 	return;
     }
-    
+
     //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/cntr/st/acq_tm" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(tm_calc,6));
@@ -1329,17 +1328,17 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* TMdPrm                                       *
 //************************************************
-TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : 
-    TParamContr(name,tp_prm), TValFunc(name+"CIFprm"), p_el("cif_attr"), 
+TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
+    TParamContr(name,tp_prm), TValFunc(name+"CIFprm"), p_el("cif_attr"),
     id_freq(-1), id_start(-1), id_stop(-1), id_err(-1), acq_err_tm(0),
     m_tmpl(cfg("TMPL").getSd())
 {
-    
+
 }
 
 TMdPrm::~TMdPrm( )
 {
-    nodeDelAll();    
+    nodeDelAll();
 }
 
 void TMdPrm::postEnable( int flag )
@@ -1351,96 +1350,96 @@ void TMdPrm::postEnable( int flag )
 void TMdPrm::postDisable(int flag)
 {
     TParamContr::postDisable(flag);
-    
+
     try
     {
-        if( flag )
-        {
-            string io_bd = owner().DB()+"."+owner().cfg(type().db).getS()+"_io";
-            TConfig cfg(&mod->prmIOE());
+	if( flag )
+	{
+	    string io_bd = owner().DB()+"."+owner().cfg(type().db).getS()+"_io";
+	    TConfig cfg(&mod->prmIOE());
 	    cfg.cfg("PRM_ID").setS(id());
 	    cfg.cfg("ID").setS("");
 	    SYS->db().at().dataDel(io_bd,owner().owner().nodePath()+owner().cfg(type().db).getS()+"_io",cfg);
-        }
+	}
     }catch(TError err)
     { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 void TMdPrm::enable()
 {
-    if( enableStat() )	return;    
+    if( enableStat() )	return;
 
     TParamContr::enable();
     //- Template's function connect -
     try
     {
 	bool to_make = false;
-        if( !func() )
+	if( !func() )
 	{
-    	    setFunc(&SYS->daq().at().tmplLibAt(TSYS::strSepParse(m_tmpl,0,'.')).at().
-			          at(TSYS::strSepParse(m_tmpl,1,'.')).at().func().at());
-    	    to_make = true;
+	    setFunc(&SYS->daq().at().tmplLibAt(TSYS::strSepParse(m_tmpl,0,'.')).at().
+				     at(TSYS::strSepParse(m_tmpl,1,'.')).at().func().at());
+	    to_make = true;
 	}
 	//-- Init attrubutes --
 	for( int i_io = 0; i_io < func()->ioSize(); i_io++ )
 	{
-    	    if( (func()->io(i_io)->flg()&TPrmTempl::CfgLink) && lnkId(i_io) < 0 )
-    	        plnk.push_back(SLnk(i_io));
-    	    if( (func()->io(i_io)->flg()&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)) &&
-        	!vlPresent(func()->io(i_io)->id()) )
-    	    {
-    		TFld::Type tp;
-        	unsigned flg = TVal::DirWrite|TVal::DirRead;
-            
+	    if( (func()->io(i_io)->flg()&TPrmTempl::CfgLink) && lnkId(i_io) < 0 )
+		plnk.push_back(SLnk(i_io));
+	    if( (func()->io(i_io)->flg()&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)) &&
+		!vlPresent(func()->io(i_io)->id()) )
+	    {
+		TFld::Type tp;
+		unsigned flg = TVal::DirWrite|TVal::DirRead;
+
 		switch( ioType(i_io) )
-        	{
-            	    case IO::String:        tp = TFld::String;      break;
-            	    case IO::Integer:       tp = TFld::Integer;     break;
-            	    case IO::Real:          tp = TFld::Real;        break;
-            	    case IO::Boolean:       tp = TFld::Boolean;     break;
-        	}
-        	if( func()->io(i_io)->flg()&TPrmTempl::AttrRead )	flg|=TFld::NoWrite;
-        	    p_el.fldAdd( new TFld(func()->io(i_io)->id().c_str(),func()->io(i_io)->name().c_str(),tp,flg) );
-    	    }
-	    if( to_make && (func()->io(i_io)->flg()&TPrmTempl::CfgLink) ) setS(i_io,"0");	
+		{
+		    case IO::String:	tp = TFld::String;	break;
+		    case IO::Integer:	tp = TFld::Integer;	break;
+		    case IO::Real:	tp = TFld::Real;	break;
+		    case IO::Boolean:	tp = TFld::Boolean;	break;
+		}
+		if( func()->io(i_io)->flg()&TPrmTempl::AttrRead )	flg|=TFld::NoWrite;
+		    p_el.fldAdd( new TFld(func()->io(i_io)->id().c_str(),func()->io(i_io)->name().c_str(),tp,flg) );
+	    }
+	    if( to_make && (func()->io(i_io)->flg()&TPrmTempl::CfgLink) ) setS(i_io,"0");
 	}
 	//-- Init links --
 	initLnks();
-    
+
 	//-- Set to process --
 	if(owner().startStat())	owner().prmEn( id(), true );
-	
+
 	//-- Init system attributes identifiers --
 	id_freq  = func()->ioId("f_frq");
 	id_start = func()->ioId("f_start");
 	id_stop  = func()->ioId("f_stop");
 	id_err   = func()->ioId("f_err");
-	
+
 	//-- Load IO at enabling --
 	if(to_make)	loadIO();
-	
+
     }catch(TError err) { disable(); throw; }
 }
 
 void TMdPrm::disable()
 {
     if( !enableStat() )  return;
-    
+
     //- Unregister parameter -
     if(owner().startStat()) owner().prmEn( id(), false );
-    
+
     //- Delete not using attributes -
     for(int i_f = 0; i_f < p_el.fldSize(); i_f++ )
-        if( vlAt(p_el.fldAt(i_f).name()).at().nodeUse() == 1 )
-        {
-            p_el.fldDel(i_f);
-            i_f--;
-        }
-    
+	if( vlAt(p_el.fldAt(i_f).name()).at().nodeUse() == 1 )
+	{
+	    p_el.fldDel(i_f);
+	    i_f--;
+	}
+
     //- Template's function disconnect -
     setFunc(NULL);
     id_freq=id_start=id_stop=id_err-1;
-    
+
     TParamContr::disable();
 }
 
@@ -1454,19 +1453,19 @@ void TMdPrm::loadIO()
 {
     //- Load IO and init links -
     if( !enableStat() )	return;
-    
+
     TConfig cfg(&mod->prmIOE());
     cfg.cfg("PRM_ID").setS(id());
     string io_bd = owner().DB()+"."+owner().cfg(type().db).getS()+"_io";
-				    
+
     for( int i_io = 0; i_io < ioSize(); i_io++ )
     {
-        cfg.cfg("ID").setS(func()->io(i_io)->id());
-        if(!SYS->db().at().dataGet(io_bd,owner().owner().nodePath()+owner().cfg(type().db).getS()+"_io",cfg))
-    	    continue;
-        if( func()->io(i_io)->flg()&TPrmTempl::CfgLink )
-    	    lnk(lnkId(i_io)).db_addr = cfg.cfg("VALUE").getS();
-    	else setS(i_io,cfg.cfg("VALUE").getS());
+	cfg.cfg("ID").setS(func()->io(i_io)->id());
+	if(!SYS->db().at().dataGet(io_bd,owner().owner().nodePath()+owner().cfg(type().db).getS()+"_io",cfg))
+	    continue;
+	if( func()->io(i_io)->flg()&TPrmTempl::CfgLink )
+	    lnk(lnkId(i_io)).db_addr = cfg.cfg("VALUE").getS();
+	else setS(i_io,cfg.cfg("VALUE").getS());
     }
     initLnks();
 }
@@ -1481,17 +1480,17 @@ void TMdPrm::saveIO()
 {
     //- Save IO and init links -
     if( !enableStat() )	return;
-    
+
     TConfig cfg(&mod->prmIOE());
     cfg.cfg("PRM_ID").setS(id());
     string io_bd = owner().DB()+"."+owner().cfg(type().db).getS()+"_io";
-		    
+
     for( int i_io = 0; i_io < func()->ioSize(); i_io++ )
     {
-        cfg.cfg("ID").setS(func()->io(i_io)->id());
-        if( func()->io(i_io)->flg()&TPrmTempl::CfgLink )
-            cfg.cfg("VALUE").setS(lnk(lnkId(i_io)).db_addr);
-        else cfg.cfg("VALUE").setS(getS(i_io));
+	cfg.cfg("ID").setS(func()->io(i_io)->id());
+	if( func()->io(i_io)->flg()&TPrmTempl::CfgLink )
+	    cfg.cfg("VALUE").setS(lnk(lnkId(i_io)).db_addr);
+	else cfg.cfg("VALUE").setS(getS(i_io));
 	SYS->db().at().dataSet(io_bd,owner().owner().nodePath()+owner().cfg(type().db).getS()+"_io",cfg);
     }
 }
@@ -1500,47 +1499,47 @@ void TMdPrm::vlGet( TVal &val )
 {
     if( !enableStat() || !owner().startStat() )
     {
-        if( val.name() == "err" )
+	if( val.name() == "err" )
 	{
-	    if(!enableStat())		
+	    if(!enableStat())
 		val.setS(_("1:Parameter had disabled."),0,true);
-	    else if(!owner().startStat())	
+	    else if(!owner().startStat())
 		val.setS(_("2:Controller is stoped."),0,true);
 	}
 	else val.setS(EVAL_STR,0,true);
-        return;
+	return;
     }
     try
-    {   
+    {
 	int id_lnk = lnkId(val.name());
-        if( id_lnk >= 0 && lnk(id_lnk).val.db < 0 )
+	if( id_lnk >= 0 && lnk(id_lnk).val.db < 0 )
 	    id_lnk=-1;
 	switch(val.fld().type())
-        {
-            case TFld::String:
-                if( id_lnk < 0 ) val.setS(getS(ioId(val.name())),0,true);
-                else val.setS(owner().getValS(lnk(id_lnk).val,acq_err),0,true);
-        	break;
-            case TFld::Integer:
-                if( id_lnk < 0 ) val.setI(getI(ioId(val.name())),0,true);
-                else val.setI(owner().getValI(lnk(id_lnk).val,acq_err),0,true);
-                break;
-            case TFld::Real:
-                if( id_lnk < 0 ) val.setR(getR(ioId(val.name())),0,true);
-                else val.setR(owner().getValR(lnk(id_lnk).val,acq_err),0,true);
-                break;
-    	    case TFld::Boolean:
-                if( id_lnk < 0 ) val.setB(getB(ioId(val.name())),0,true);
-                else val.setB(owner().getValB(lnk(id_lnk).val,acq_err),0,true);
-                break;
-        }
+	{
+	    case TFld::String:
+		if( id_lnk < 0 ) val.setS(getS(ioId(val.name())),0,true);
+		else val.setS(owner().getValS(lnk(id_lnk).val,acq_err),0,true);
+		break;
+	    case TFld::Integer:
+		if( id_lnk < 0 ) val.setI(getI(ioId(val.name())),0,true);
+		else val.setI(owner().getValI(lnk(id_lnk).val,acq_err),0,true);
+		break;
+	    case TFld::Real:
+		if( id_lnk < 0 ) val.setR(getR(ioId(val.name())),0,true);
+		else val.setR(owner().getValR(lnk(id_lnk).val,acq_err),0,true);
+		break;
+	    case TFld::Boolean:
+		if( id_lnk < 0 ) val.setB(getB(ioId(val.name())),0,true);
+		else val.setB(owner().getValB(lnk(id_lnk).val,acq_err),0,true);
+		break;
+	}
     }catch(TError err)
-    { 
-	if( val.name() == "err" ) 
+    {
+	if( val.name() == "err" )
 	{
 	    if(acq_err.size())	val.setS(acq_err,0,true);
 	    else if(id_err>=0)	val.setS(getS(id_err),0,true);
-	    else val.setS("0",0,true); 
+	    else val.setS("0",0,true);
 	}
     }
 }
@@ -1554,22 +1553,22 @@ void TMdPrm::vlSet( TVal &val )
 	    id_lnk=-1;
 	switch(val.fld().type())
 	{
-    	    case TFld::String:
-        	if( id_lnk < 0 ) setS(ioId(val.name()),val.getS(0,true));
-        	else owner().setValS(val.getS(0,true),lnk(id_lnk).val,acq_err);
-    		break;
-    	    case TFld::Integer:
-        	if( id_lnk < 0 ) setI(ioId(val.name()),val.getI(0,true));
-        	else owner().setValI(val.getI(0,true),lnk(id_lnk).val,acq_err);
-        	break;
-    	    case TFld::Real:
-        	if( id_lnk < 0 ) setR(ioId(val.name()),val.getR(0,true));
-        	else owner().setValR(val.getR(0,true),lnk(id_lnk).val,acq_err);
-        	break;
-    	    case TFld::Boolean:
-    		if( id_lnk < 0 ) setB(ioId(val.name()),val.getB(0,true));
-    		else owner().setValB(val.getB(0,true),lnk(id_lnk).val,acq_err);
-        	break;
+	    case TFld::String:
+		if( id_lnk < 0 ) setS(ioId(val.name()),val.getS(0,true));
+		else owner().setValS(val.getS(0,true),lnk(id_lnk).val,acq_err);
+		break;
+	    case TFld::Integer:
+		if( id_lnk < 0 ) setI(ioId(val.name()),val.getI(0,true));
+		else owner().setValI(val.getI(0,true),lnk(id_lnk).val,acq_err);
+		break;
+	    case TFld::Real:
+		if( id_lnk < 0 ) setR(ioId(val.name()),val.getR(0,true));
+		else owner().setValR(val.getR(0,true),lnk(id_lnk).val,acq_err);
+		break;
+	    case TFld::Boolean:
+		if( id_lnk < 0 ) setB(ioId(val.name()),val.getB(0,true));
+		else owner().setValB(val.getB(0,true),lnk(id_lnk).val,acq_err);
+		break;
 	}
     }catch(TError err) {  }
 }
@@ -1586,34 +1585,34 @@ void TMdPrm::vlArchMake( TVal &val )
 int TMdPrm::lnkSize()
 {
     if( !enableStat() )
-        throw TError(nodePath().c_str(),_("Parameter disabled."));
+	throw TError(nodePath().c_str(),_("Parameter disabled."));
     return plnk.size();
 }
 
 int TMdPrm::lnkId( int id )
 {
     if( !enableStat() )
-        throw TError(nodePath().c_str(),_("Parameter disabled."));
+	throw TError(nodePath().c_str(),_("Parameter disabled."));
     for( int i_l = 0; i_l < plnk.size(); i_l++ )
-        if( lnk(i_l).io_id == id )
-    	    return i_l;
+	if( lnk(i_l).io_id == id )
+	    return i_l;
     return -1;
 }
 
 int TMdPrm::lnkId( const string &id )
 {
     if( !enableStat() )
-        throw TError(nodePath().c_str(),_("Parameter disabled."));
+	throw TError(nodePath().c_str(),_("Parameter disabled."));
     for( int i_l = 0; i_l < plnk.size(); i_l++ )
     if( func()->io(lnk(i_l).io_id)->id() == id )
-        return i_l;
+	return i_l;
     return -1;
 }
-					
+
 TMdPrm::SLnk &TMdPrm::lnk( int num )
 {
     if( !enableStat() || num < 0 || num >= plnk.size() )
-        throw TError(nodePath().c_str(),_("Parameter disabled or id error."));
+	throw TError(nodePath().c_str(),_("Parameter disabled or id error."));
     return plnk[num];
 }
 
@@ -1645,56 +1644,56 @@ void TMdPrm::calc( bool first, bool last )
 	    if(!acq_err_tm)	acq_err_tm=tm+5;
 	    if(tm>acq_err_tm)	{ acq_err = ""; acq_err_tm=0; }
 	}
-	
-        //- Set fixed system attributes -
-        if(id_freq>=0)  setR(id_freq,1000./owner().period());
-        if(id_start>=0) setB(id_start,first);
-        if(id_stop>=0)  setB(id_stop,last);
-	
-        //- Get input links -
-        for( int i_l = 0; i_l < lnkSize(); i_l++ )
-            if( lnk(i_l).val.db >= 0 )
-                switch(ioType(lnk(i_l).io_id))
-        	{
-            	    case IO::String:
-		        setS(lnk(i_l).io_id,owner().getValS(lnk(i_l).val,acq_err));
-		        break;
+
+	//- Set fixed system attributes -
+	if( id_freq>=0 )	setR(id_freq,1000./owner().period());
+	if( id_start>=0 )	setB(id_start,first);
+	if( id_stop>=0 )	setB(id_stop,last);
+
+	//- Get input links -
+	for( int i_l = 0; i_l < lnkSize(); i_l++ )
+	    if( lnk(i_l).val.db >= 0 )
+		switch(ioType(lnk(i_l).io_id))
+		{
+		    case IO::String:
+			setS(lnk(i_l).io_id,owner().getValS(lnk(i_l).val,acq_err));
+			break;
 		    case IO::Integer:
-		        setI(lnk(i_l).io_id,owner().getValI(lnk(i_l).val,acq_err));
-		        break;
+			setI(lnk(i_l).io_id,owner().getValI(lnk(i_l).val,acq_err));
+			break;
 		    case IO::Real:
-		        setR(lnk(i_l).io_id,owner().getValR(lnk(i_l).val,acq_err));
-		        break;
+			setR(lnk(i_l).io_id,owner().getValR(lnk(i_l).val,acq_err));
+			break;
 		    case IO::Boolean:
-		        setB(lnk(i_l).io_id,owner().getValB(lnk(i_l).val,acq_err));
-		        break;
-                }
-        //- Calc template -	
-        TValFunc::calc();
+			setB(lnk(i_l).io_id,owner().getValB(lnk(i_l).val,acq_err));
+			break;
+		}
+	//- Calc template -
+	TValFunc::calc();
 	modif();
-	
+
 	//- Put output links -
-        for( int i_l = 0; i_l < lnkSize(); i_l++ )
-            if( lnk(i_l).val.db >= 0 && ioFlg(lnk(i_l).io_id)&(IO::Output|IO::Return) )
-                switch(ioType(lnk(i_l).io_id))
-                {
-            	    case IO::String:
+	for( int i_l = 0; i_l < lnkSize(); i_l++ )
+	    if( lnk(i_l).val.db >= 0 && ioFlg(lnk(i_l).io_id)&(IO::Output|IO::Return) )
+		switch(ioType(lnk(i_l).io_id))
+		{
+		    case IO::String:
 			owner().setValS(getS(lnk(i_l).io_id),lnk(i_l).val,acq_err);
-                	break;
-                    case IO::Integer:
+			break;
+		    case IO::Integer:
 			owner().setValI(getI(lnk(i_l).io_id),lnk(i_l).val,acq_err);
-                        break;
-                    case IO::Real:
+			break;
+		    case IO::Real:
 			owner().setValR(getR(lnk(i_l).io_id),lnk(i_l).val,acq_err);
-                        break;
-                    case IO::Boolean:
+			break;
+		    case IO::Boolean:
 			owner().setValB(getB(lnk(i_l).io_id),lnk(i_l).val,acq_err);
-                	break;
-        	}
+			break;
+		}
     }catch(TError err)
     {
-        mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
-        mess_warning(nodePath().c_str(),_("Error calc template."));
+	mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
+	mess_warning(nodePath().c_str(),_("Error calc template."));
     }
 }
 
@@ -1708,85 +1707,83 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
-        TParamContr::cntrCmdProc(opt);
+	TParamContr::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/TMPL",cfg("TMPL").fld().descr(),0660,"root","root",3,"tp","str","dest","sel_ed","select","/cfg/prmp_lst");
-        if( enableStat() && ctrMkNode("area",opt,1,"/cfg",_("Template config")) )
+	if( enableStat() && ctrMkNode("area",opt,1,"/cfg",_("Template config")) )
 	{
-            ctrMkNode("fld",opt,-1,"/cfg/only_off",_("Only DB offsets show"),0664,"root","root",1,"tp","bool");
-            if(ctrMkNode("area",opt,-1,"/cfg/prm",_("Parameters")))	    
-        	for( int i_io = 0; i_io < ioSize(); i_io++ )
-        	{
+	    ctrMkNode("fld",opt,-1,"/cfg/only_off",_("Only DB offsets show"),0664,"root","root",1,"tp","bool");
+	    if(ctrMkNode("area",opt,-1,"/cfg/prm",_("Parameters")))
+		for( int i_io = 0; i_io < ioSize(); i_io++ )
+		{
 		    if( !(func()->io(i_io)->flg()&(TPrmTempl::CfgLink|TPrmTempl::CfgPublConst)) )
 			continue;
-    		    //-- Check select param --
+		    //-- Check select param --
 		    bool is_lnk = func()->io(i_io)->flg()&TPrmTempl::CfgLink;
-            	    if( is_lnk && func()->io(i_io)->def().size() && 
+		    if( is_lnk && func()->io(i_io)->def().size() && 
 			!atoi(TBDS::genDBGet(mod->nodePath()+"onlOff","0",opt->attr("user")).c_str()) )
-            	    {
-                	string nprm = TSYS::strSepParse(func()->io(i_io)->def(),0,'|');
-                	//-- Check already to present parameters --
-                	bool f_ok = false;
-                	for( int i_l = 0; i_l < list.size(); i_l++ )
-                    	    if( list[i_l] == nprm ) { f_ok = true; break; }
-                	if(!f_ok)
-                	{
-                    	    ctrMkNode("fld",opt,-1,(string("/cfg/prm/pr_")+TSYS::int2str(i_io)).c_str(),nprm,
-				      0664,"root","root",1,"tp","str");
-                    	    list.push_back(nprm);
-                	}
-            	    }
-            	    else
-            	    {
-                	char *tip = "str";
-                	if( !is_lnk )
-                    	    switch(ioType(i_io))
-                    	    {
-                        	case IO::Integer:   tip = "dec";    break;
-                        	case IO::Real:      tip = "real";   break;
-                    		case IO::Boolean:   tip = "bool";   break;
-	            	    }
-                    	ctrMkNode("fld",opt,-1,(string("/cfg/prm/el_")+TSYS::int2str(i_io)).c_str(),func()->io(i_io)->name(),
-				  0664,"root","root",1,"tp",tip);
-            	    }
-        	}
+		    {
+			string nprm = TSYS::strSepParse(func()->io(i_io)->def(),0,'|');
+			//-- Check already to present parameters --
+			bool f_ok = false;
+			for( int i_l = 0; i_l < list.size(); i_l++ )
+			    if( list[i_l] == nprm ) { f_ok = true; break; }
+			if(!f_ok)
+			{
+			    ctrMkNode("fld",opt,-1,(string("/cfg/prm/pr_")+TSYS::int2str(i_io)).c_str(),nprm,0664,"root","root",1,"tp","str");
+			    list.push_back(nprm);
+			}
+		    }
+		    else
+		    {
+			char *tip = "str";
+			if( !is_lnk )
+			    switch(ioType(i_io))
+			    {
+				case IO::Integer:   tip = "dec";    break;
+				case IO::Real:      tip = "real";   break;
+				case IO::Boolean:   tip = "bool";   break;
+			    }
+			ctrMkNode("fld",opt,-1,(string("/cfg/prm/el_")+TSYS::int2str(i_io)).c_str(),func()->io(i_io)->name(),0664,"root","root",1,"tp",tip);
+		    }
+		}
 	}
 	return;
     }
     //- Process command to page -
     if( a_path == "/prm/cfg/TMPL" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )
     {
-        m_tmpl = opt->text();
+	m_tmpl = opt->text();
 	disable();
     }
     else if( a_path == "/cfg/prmp_lst" && ctrChkNode(opt) )
     {
 	int c_lv = 0;
 	string c_path = "", c_el;
-        opt->childAdd("el")->setText(c_path);
-        for( int c_off = 0; (c_el=TSYS::strSepParse(m_tmpl,0,'.',&c_off)).size(); c_lv++ )
-        {
-            c_path += c_lv ? "."+c_el : c_el;
-    	    opt->childAdd("el")->setText(c_path);
-        }
-        if(c_lv) c_path+=".";
+	opt->childAdd("el")->setText(c_path);
+	for( int c_off = 0; (c_el=TSYS::strSepParse(m_tmpl,0,'.',&c_off)).size(); c_lv++ )
+	{
+	    c_path += c_lv ? "."+c_el : c_el;
+	    opt->childAdd("el")->setText(c_path);
+	}
+	if(c_lv) c_path+=".";
 	string prm0 = TSYS::strSepParse(m_tmpl,0,'.');
-        vector<string>  ls;
-        switch(c_lv)
-        {
-            case 0:	SYS->daq().at().tmplLibList(ls);	break;
-            case 1:
+	vector<string>  ls;
+	switch(c_lv)
+	{
+	    case 0:	SYS->daq().at().tmplLibList(ls);	break;
+	    case 1:
 		if( SYS->daq().at().tmplLibPresent(prm0))
 		    SYS->daq().at().tmplLibAt(prm0).at().list(ls);
-                break;
-        }
-        for(int i_l = 0; i_l < ls.size(); i_l++)
-            opt->childAdd("el")->setText(c_path+ls[i_l]);
+	    break;
+	}
+	for(int i_l = 0; i_l < ls.size(); i_l++)
+	    opt->childAdd("el")->setText(c_path+ls[i_l]);
     }
     else if( a_path == "/cfg/only_off" && enableStat() )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
 	    opt->setText(TBDS::genDBGet(mod->nodePath()+"onlOff","0",opt->attr("user")));
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
 	    TBDS::genDBSet(mod->nodePath()+"onlOff",opt->text(),opt->attr("user"));
     }
     else if( a_path.substr(0,12) == "/cfg/prm/pr_" && enableStat() )
@@ -1801,20 +1798,20 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    opt->setText(sdb);
 	}
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
-        {	    
+	{
 	    string p_nm, cp_nm;
 	    int off, coff, cbit, csz;
 	    int lnk_id = lnkId(atoi(a_path.substr(12).c_str()));
 	    string sdb = TSYS::strSepParse(opt->text(),0,'.');
 	    off = atoi(TSYS::strSepParse(opt->text(),1,'.').c_str());
-            p_nm = TSYS::strSepParse(func()->io(lnk(lnk_id).io_id)->def(),0,'|');
-	    
-            for( int i_l = 0; i_l < lnkSize(); i_l++ )
+	    p_nm = TSYS::strSepParse(func()->io(lnk(lnk_id).io_id)->def(),0,'|');
+
+	    for( int i_l = 0; i_l < lnkSize(); i_l++ )
 	    {
 		cp_nm = TSYS::strSepParse(func()->io(lnk(i_l).io_id)->def(),0,'|');
 		sscanf(TSYS::strSepParse(func()->io(lnk(i_l).io_id)->def(),1,'|').c_str(),"%d.%d",&coff,&cbit);
-		csz   = atoi(TSYS::strSepParse(func()->io(lnk(i_l).io_id)->def(),2,'|').c_str());		
-                if( p_nm == cp_nm )
+		csz   = atoi(TSYS::strSepParse(func()->io(lnk(i_l).io_id)->def(),2,'|').c_str());
+		if( p_nm == cp_nm )
 		{
 		    lnk(i_l).db_addr = sdb+"."+TSYS::int2str(off+coff);
 		    if(ioType(lnk(i_l).io_id)==IO::Boolean)
@@ -1825,29 +1822,29 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    }
 	    initLnks();
 	}
-    }	
+    }
     else if( a_path.substr(0,12) == "/cfg/prm/el_" && enableStat() )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	    
-        {
-            int i_io = atoi(a_path.substr(12).c_str());
-    	    if( func()->io(i_io)->flg()&TPrmTempl::CfgLink )
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
+	{
+	    int i_io = atoi(a_path.substr(12).c_str());
+	    if( func()->io(i_io)->flg()&TPrmTempl::CfgLink )
 		opt->setText(lnk(lnkId(i_io)).db_addr);
 	    else if( func()->io(i_io)->flg()&TPrmTempl::CfgPublConst )
 		opt->setText(getS(i_io));
-        }
+	}
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
-        {
-    	    int i_io = atoi(a_path.substr(12).c_str());
-    	    if( func()->io(i_io)->flg()&TPrmTempl::CfgLink )
-            {
-                lnk(lnkId(i_io)).db_addr = opt->text();
+	{
+	    int i_io = atoi(a_path.substr(12).c_str());
+	    if( func()->io(i_io)->flg()&TPrmTempl::CfgLink )
+	    {
+		lnk(lnkId(i_io)).db_addr = opt->text();
 		initLnks();
-            }
-            else if( func()->io(i_io)->flg()&TPrmTempl::CfgPublConst )
+	    }
+	    else if( func()->io(i_io)->flg()&TPrmTempl::CfgPublConst )
 		setS(i_io,opt->text());
 	    modif();
-        }
+	}
     }
     else TParamContr::cntrCmdProc(opt);
 }

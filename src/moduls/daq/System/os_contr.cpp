@@ -45,14 +45,14 @@
 
 //*************************************************
 //* Modul info!                                   *
-#define MOD_ID      "System"
-#define MOD_NAME    "System DA"
-#define MOD_TYPE    "DAQ"
-#define VER_TYPE    VER_CNTR
-#define VERSION     "1.6.0"
-#define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "Allow operation system data acquisition. Support OS Linux data sources: HDDTemp, Sensors, Uptime, Memory, CPU and other."
-#define LICENSE     "GPL"
+#define MOD_ID		"System"
+#define MOD_NAME	"System DA"
+#define MOD_TYPE	"DAQ"
+#define VER_TYPE	VER_CNTR
+#define VERSION		"1.6.0"
+#define AUTORS		"Roman Savochenko"
+#define DESCRIPTION	"Allow operation system data acquisition. Support OS Linux data sources: HDDTemp, Sensors, Uptime, Memory, CPU and other."
+#define LICENSE		"GPL"
 //*************************************************
 
 SystemCntr::TTpContr *SystemCntr::mod;  //Pointer for direct access to module
@@ -67,7 +67,7 @@ extern "C"
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-    	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
+	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
 	    return new SystemCntr::TTpContr( source );
 	return NULL;
     }
@@ -80,20 +80,20 @@ using namespace SystemCntr;
 //*************************************************
 TTpContr::TTpContr( string name )
 {
-    mId 	= MOD_ID;
-    mName       = MOD_NAME;
-    mType  	= MOD_TYPE;
-    mVers      	= VERSION;
-    mAutor    	= AUTORS;
-    mDescr  	= DESCRIPTION;
-    mLicense   	= LICENSE;
-    mSource    	= name;
-    
+    mId		= MOD_ID;
+    mName	= MOD_NAME;
+    mType	= MOD_TYPE;
+    mVers	= VERSION;
+    mAutor	= AUTORS;
+    mDescr	= DESCRIPTION;
+    mLicense	= LICENSE;
+    mSource	= name;
+
     mod		= this;
 }
 
 TTpContr::~TTpContr()
-{    
+{
     nodeDelAll();
     for(int i_da = 0; i_da < m_da.size(); i_da++ )	delete m_da[i_da];
     m_da.clear();
@@ -107,7 +107,7 @@ string TTpContr::optDescr( )
 	"======================= The module <%s:%s> options =======================\n"
 	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
-    
+
     return(buf);
 }
 
@@ -135,7 +135,7 @@ void TTpContr::load_( )
 }
 
 void TTpContr::postEnable( int flag )
-{    
+{
     TModule::postEnable(flag);
 
     //- Init DA sources -
@@ -153,7 +153,7 @@ void TTpContr::postEnable( int flag )
     fldAdd( new TFld("PRM_BD",_("System parameteres table"),TFld::String,TFld::NoFlag,"30","system") );
     fldAdd( new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","0;10000") );
     fldAdd( new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
-    
+
     //- Parameter type bd structure -
     //-- Make enumerated --
     string el_id,el_name,el_def;
@@ -164,7 +164,7 @@ void TTpContr::postEnable( int flag )
 	if( i_ls == 0 )	el_def = list[i_ls];
 	el_id+=list[i_ls]+";";
 	el_name=el_name+_(daGet(list[i_ls])->name().c_str())+";";
-    }   
+    }
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
     tpPrmAt(t_prm).fldAdd( new TFld("TYPE",_("System part"),TFld::String,TFld::Selected|TCfg::NoVal,"10",el_def.c_str(),el_id.c_str(),el_name.c_str()) );
     tpPrmAt(t_prm).fldAdd( new TFld("SUBT" ,"",TFld::String,TFld::Selected|TCfg::NoVal|TFld::SelfFld,"10") );
@@ -182,16 +182,16 @@ void TTpContr::daList( vector<string> &da )
 	da.push_back(m_da[i_da]->id());
 }
 
-void TTpContr::daReg( DA *da )    
-{ 
-    m_da.push_back(da); 
+void TTpContr::daReg( DA *da )
+{
+    m_da.push_back(da);
 }
 
 DA *TTpContr::daGet( const string &da )
 {
     for(int i_da = 0; i_da < m_da.size(); i_da++ )
-        if( m_da[i_da]->id() == da ) return m_da[i_da];
-	
+	if( m_da[i_da]->id() == da ) return m_da[i_da];
+
     return NULL;
 }
 
@@ -199,9 +199,9 @@ DA *TTpContr::daGet( const string &da )
 //* TMdContr                                      *
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
-	::TController(name_c,daq_db,cfgelem), prc_st(false), endrun_req(false), 
+	::TController(name_c,daq_db,cfgelem), prc_st(false), endrun_req(false),
 	m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId()), tm_calc(0.0)
-{    
+{
     cfg("PRM_BD").setS("OSPrm_"+name_c);
 }
 
@@ -222,12 +222,12 @@ void TMdContr::enable_(  )
 	vector<string> list;
 	mod->daList(list);
 	for( int i_l = 0; i_l < list.size(); i_l++ )
-	    mod->daGet(list[i_l])->makeActiveDA(this);	    
+	    mod->daGet(list[i_l])->makeActiveDA(this);
     }
 }
 
 void TMdContr::start_( )
-{      
+{
     //- Start the request data task -
     if( !prc_st )
     {
@@ -238,31 +238,31 @@ void TMdContr::start_( )
 	    pthread_attr_setschedpolicy(&pthr_attr,SCHED_RR);
 	else pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
 	prior.__sched_priority=m_prior;
-        pthread_attr_setschedparam(&pthr_attr,&prior);
-	
-        pthread_create(&procPthr,&pthr_attr,TMdContr::Task,this);
-        pthread_attr_destroy(&pthr_attr);
-        if( TSYS::eventWait(prc_st, true, nodePath()+"start",5) )
-            throw TError(nodePath().c_str(),_("Acquisition task no started!"));    
+	pthread_attr_setschedparam(&pthr_attr,&prior);
+
+	pthread_create(&procPthr,&pthr_attr,TMdContr::Task,this);
+	pthread_attr_destroy(&pthr_attr);
+	if( TSYS::eventWait(prc_st, true, nodePath()+"start",5) )
+	    throw TError(nodePath().c_str(),_("Acquisition task no started!"));
     }
 }
 
 void TMdContr::stop_( )
-{  
+{
     //- Stop the request and calc data task -
     if( prc_st )
     {
-        endrun_req = true;
-        pthread_kill( procPthr, SIGALRM );
-        if( TSYS::eventWait(prc_st,false,nodePath()+"stop",5) )
-            throw TError(nodePath().c_str(),_("Acquisition task no stoped!"));
-        pthread_join( procPthr, NULL );
+	endrun_req = true;
+	pthread_kill( procPthr, SIGALRM );
+	if( TSYS::eventWait(prc_st,false,nodePath()+"stop",5) )
+	    throw TError(nodePath().c_str(),_("Acquisition task no stoped!"));
+	pthread_join( procPthr, NULL );
     }
     //- Set Eval for parameters -
     ResAlloc res(en_res,true);
     for( int i_prm = 0; i_prm < p_hd.size(); i_prm++ )
-        p_hd[i_prm].at().setEval();    
-} 
+        p_hd[i_prm].at().setEval();
+}
 
 void TMdContr::prmEn( const string &id, bool val )
 {
@@ -270,12 +270,12 @@ void TMdContr::prmEn( const string &id, bool val )
 
     ResAlloc res(en_res,true);
     for( i_prm = 0; i_prm < p_hd.size(); i_prm++)
-        if( p_hd[i_prm].at().id() == id ) break;
-    
+	if( p_hd[i_prm].at().id() == id ) break;
+
     if( val && i_prm >= p_hd.size() )
-        p_hd.push_back(at(id));
+	p_hd.push_back(at(id));
     if( !val && i_prm < p_hd.size() )
-        p_hd.erase(p_hd.begin()+i_prm);
+	p_hd.erase(p_hd.begin()+i_prm);
 }
 
 void *TMdContr::Task( void *icntr )
@@ -283,37 +283,37 @@ void *TMdContr::Task( void *icntr )
     long long work_tm, last_tm = 0;
     struct timespec get_tm;
     TMdContr &cntr = *(TMdContr *)icntr;
-    
+
     cntr.endrun_req = false;
     cntr.prc_st = true;
-    
+
     while(!cntr.endrun_req)
     {
 	//- Update controller's data -
 	try
 	{
 	    unsigned long long t_cnt = SYS->shrtCnt();
-	    
+
 	    cntr.en_res.resRequestR();
 	    for(unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++)
 		cntr.p_hd[i_p].at().getVal();
 	    cntr.en_res.resReleaseR();
-		
-	    cntr.tm_calc = 1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());	
+
+	    cntr.tm_calc = 1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
 	} catch(TError err)
-	{ mess_err(err.cat.c_str(),"%s",err.mess.c_str() ); }    
-    
-        //- Calc next work time and sleep -
-        clock_gettime(CLOCK_REALTIME,&get_tm);
-        work_tm = (((long long)get_tm.tv_sec*1000000000+get_tm.tv_nsec)/((long long)cntr.m_per*1000000) + 1)*(long long)cntr.m_per*1000000;
-	if(last_tm == work_tm)  work_tm+=(long long)cntr.m_per*1000000; //Fix early call
+	{ mess_err(err.cat.c_str(),"%s",err.mess.c_str() ); }
+
+	//- Calc next work time and sleep -
+	clock_gettime(CLOCK_REALTIME,&get_tm);
+	work_tm = (((long long)get_tm.tv_sec*1000000000+get_tm.tv_nsec)/((long long)cntr.period()*1000000) + 1)*(long long)cntr.period()*1000000;
+	if(last_tm == work_tm)  work_tm+=(long long)cntr.period()*1000000; //Fix early call
 	last_tm = work_tm;
-        get_tm.tv_sec = work_tm/1000000000; get_tm.tv_nsec = work_tm%1000000000;
-        clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&get_tm,NULL);
+	get_tm.tv_sec = work_tm/1000000000; get_tm.tv_nsec = work_tm%1000000000;
+	clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&get_tm,NULL);
     }
-    
+
     cntr.prc_st = false;
-    
+
     return NULL;
 }
 
@@ -322,21 +322,21 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
-        TController::cntrCmdProc(opt);
+	TController::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/cntr/st/ctm",_("Calk time (msek)"),0444,"root","root",1,"tp","real");
 	return;
     }
-    
+
     //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/cntr/st/ctm" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(tm_calc,6));
     else TController::cntrCmdProc(opt);
-}						    
+}
 
 //*************************************************
 //* TMdPrm                                        *
 //*************************************************
-TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : 
+TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
     TParamContr(name,tp_prm), m_da(NULL), m_auto(false)
 {
 
@@ -345,7 +345,7 @@ TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
 void TMdPrm::postEnable( int flag )
 {
     TParamContr::postEnable(flag);
-    
+
     vector<string> list;
     mod->daList(list);
     if(list.size())	cfg("TYPE").setS(list[0]);
@@ -353,12 +353,12 @@ void TMdPrm::postEnable( int flag )
 
 TMdPrm::~TMdPrm( )
 {
-    nodeDelAll();    
+    nodeDelAll();
 }
 
 void TMdPrm::enable( )
 {
-    if( enableStat() )	return;    
+    if( enableStat() )	return;
     cfg("TYPE").setS(cfg("TYPE").getS());
     TParamContr::enable();
     ((TMdContr&)owner()).prmEn( id(), true );	//Put to process
@@ -367,7 +367,7 @@ void TMdPrm::enable( )
 void TMdPrm::disable( )
 {
     if( !enableStat() )  return;
-    ((TMdContr&)owner()).prmEn( id(), false );      //Remove from process 
+    ((TMdContr&)owner()).prmEn( id(), false );	//Remove from process
     setEval( );
     //setType("");
     TParamContr::disable();
@@ -401,12 +401,12 @@ void TMdPrm::getVal( )
 void TMdPrm::setEval( )
 {
     if( !m_da )	return;
-    
+
     vector<string> als;
     m_da->fldList(als);
     for( int i_a = 0; i_a < als.size(); i_a++ )
-        if( vlPresent(als[i_a]) )
-    	    vlAt(als[i_a]).at().setS(EVAL_STR,0,true);
+	if( vlPresent(als[i_a]) )
+	    vlAt(als[i_a]).at().setS(EVAL_STR,0,true);
 }
 
 void TMdPrm::vlArchMake( TVal &val )
@@ -421,21 +421,21 @@ void TMdPrm::vlArchMake( TVal &val )
 void TMdPrm::setType( const string &da_id )
 {
     if( m_da && da_id == m_da->id() )	return;
-        
+
     //- Free previous type -
     if( m_da )
-    {	
+    {
 	m_da->deInit(this);
 	vlElemDet(m_da);
 	m_da = NULL;
     }
 
     //- Create new type -
-    try 
-    { 	
+    try
+    {
 	if(da_id.size())
 	{
-	    m_da = mod->daGet(da_id); 
+	    m_da = mod->daGet(da_id);
 	    if(m_da)
 	    {
 		vlElemAtt(m_da);
@@ -447,12 +447,12 @@ void TMdPrm::setType( const string &da_id )
 }
 
 bool TMdPrm::cfgChange( TCfg &i_cfg )
-{ 
+{
     //- Change TYPE parameter -
     if( i_cfg.name() == "TYPE" )
     {
 	setType(i_cfg.getS());
-       	return true;       
+	return true;
     }
     if( !autoC( ) ) modif();
     return true;

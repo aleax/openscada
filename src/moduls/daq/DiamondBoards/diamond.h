@@ -18,7 +18,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
- 
+
 #ifndef ATHENA_H
 #define ATHENA_H
 
@@ -51,37 +51,35 @@ class TMdPrm : public TParamContr
     public:
 	//Data
 	enum Type { NONE, AI, AO, DI, DO };
-    
+
 	//Methods
-    	TMdPrm( string name, TTipParam *tp_prm );
+	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );
-	
-	Type type( )		{ return m_tp; }
-	int  cnl( ) 		{ return m_cnl; }
-	void setType( Type val );
 
-
+	Type	type( )		{ return m_tp; }
+	int	cnl( )		{ return m_cnl; }
+	void	setType( Type val );
 
 	TMdContr &owner( )	{ return (TMdContr &)TParamContr::owner(); }
-	
+
     protected:
 	//Methods
 	void load_( );
 	bool cfgChange( TCfg &cfg );
 	void vlSet( TVal &val );
-        void vlGet( TVal &val );
+	void vlGet( TVal &val );
 	void vlArchMake( TVal &val );
 
 	void postEnable( int flag );
-	
+
     private:
 	//Attributes
-	int 	&m_cnl;
-	Type    m_tp;
+	int	&m_cnl;
+	Type	m_tp;
 	union
 	{
 	    int	m_gain;		//AI gain
-	    int m_dio_port;	//DIO port
+	    int	m_dio_port;	//DIO port
 	};
 };
 
@@ -95,40 +93,40 @@ class TMdContr: public TController
     friend class TMdPrm;
     public:
 	//Methods
-    	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem);
-	~TMdContr( );   
-	
+	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem);
+	~TMdContr( );
+
 	bool ADIIntMode( )	{ return ad_int_mode; }
 	bool dataEmul( )	{ return data_emul; }
 
 	TParamContr *ParamAttach( const string &name, int type );
 
-	TTpContr &owner( ) 	{ return (TTpContr&)TController::owner(); }
+	TTpContr &owner( )	{ return (TTpContr&)TController::owner(); }
 
     protected:
 	//Methods
 	void load_( );
 	void start_( );
-	void stop_( );	
+	void stop_( );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	bool cfgChange( TCfg &cfg );
-    
+
     private:
 	//Methods
 	static void *AD_DSCTask( void *param );
-	
+
 	//Attributes
-	int &m_addr;
-	bool &ad_int_mode, &data_emul;
-	
-	double dataEmulTm;
-	
-	DSCB 	dscb;
+	int	&m_addr;
+	bool	&ad_int_mode, &data_emul;
+
+	double	dataEmulTm;
+
+	DSCB	dscb;
 	DSCADSETTINGS dscadsettings;
-	
+
 	pthread_t ad_dsc_pthr;
 	bool	ad_dsc_st, endrun_req_ad_dsc;
-	
+
 	Res	ai_res, ao_res, dio_res;
 };
 
@@ -140,32 +138,32 @@ class TTpContr: public TTipDAQ
     public:
 	//Methods
 	TTpContr( string name );
-	~TTpContr();	    
-	
+	~TTpContr( );
+
 	bool drvInitOk( )	{ return m_init; }
 	void postEnable( int flag );
-	
+
 	TController *ContrAttach( const string &name, const string &daq_db );
-	
+
 	TElem &elemAI( )	{ return elem_ai; }
 	TElem &elemAO( )	{ return elem_ao; }
-	TElem &elemDI( ) 	{ return elem_di; }
-	TElem &elemDO( ) 	{ return elem_do; }
-	
+	TElem &elemDI( )	{ return elem_di; }
+	TElem &elemDO( )	{ return elem_do; }
+
     private:
 	//Attributes
-	bool	m_init;	
-	
-	TElem 	elem_ai;
-	TElem   elem_ao;
-	TElem   elem_di;
-	TElem   elem_do;
-	
-	Res  	drvRes;
+	bool	m_init;
+
+	TElem	elem_ai;
+	TElem	elem_ao;
+	TElem	elem_di;
+	TElem	elem_do;
+
+	Res	drvRes;
 };
 
 extern TTpContr *mod;
 
-} //End namespace 
+} //End namespace
 
 #endif //ATHENA_H

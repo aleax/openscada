@@ -37,48 +37,47 @@ using std::vector;
 
 namespace DAQTrasport
 {
-    
+
 //******************************************************
 //* TMdPrm                                             *
 //******************************************************
 class TMdContr;
-    
+
 class TMdPrm : public TParamContr
 {
     public:
 	//Methods
-    	TMdPrm( string name, TTipParam *tp_prm );
+	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );
-	
+
 	bool isDel( )		{ return m_pdel; }
 	string cntrAdr( )	{ return m_cntr_adr; }
-	
+
 	void setCntrAdr( const string &vl );
 
 	void enable( );
 	void disable( );
-	
 
-	void update( );		//Update parameter
+	void update( );				//Update parameter
 
 	TElem &elem( )		{ return p_el; }
 	TMdContr &owner( )	{ return (TMdContr&)TParamContr::owner(); }
 
     protected:
 	//Methods
-	void load_( );		//Synchronize parameter
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-	
+	void load_( );				//Synchronize parameter
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+
     private:
 	//Methods
-        void postEnable( int flag );
+	void postEnable( int flag );
 	void vlSet( TVal &val );
 	void vlArchMake( TVal &val );
-	
-        //Attributes
-        TElem   p_el;           //Work atribute elements
-	bool    m_pdel;		//Remote parameter deleted flag
-	string  m_cntr_adr;	//Parameter's remote controller address'
+
+	//Attributes
+	TElem	p_el;				//Work atribute elements
+	bool	m_pdel;				//Remote parameter deleted flag
+	string	m_cntr_adr;			//Parameter's remote controller address'
 };
 
 //******************************************************
@@ -88,45 +87,45 @@ class TMdContr: public TController
 {
     public:
 	//Methods
-    	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem );
+	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem );
 	~TMdContr( );
 
-	double period( )	{ return vmax(m_per,0.1); }
-	int    prior( )		{ return m_prior; }
-	double syncPer( )	{ return m_sync; }
+	double	period( )	{ return vmax(m_per,0.1); }
+	int	prior( )	{ return m_prior; }
+	double	syncPer( )	{ return m_sync; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
-	
+
 	void prmEn( const string &id, bool val );
 
     protected:
 	//Methods
 	void enable_( );
 	void start_( );
-	void stop_( );	
-    	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-	
+	void stop_( );
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+
     private:
 	//Methods
 	TParamContr *ParamAttach( const string &name, int type );
 	static void *Task( void *icntr );
-	
+
 	//Attributes
-	Res	en_res, req_res;//Resource for enable params and request to remote OpenSCADA station
-	double	&m_per,     	//Acquisition task (seconds)
-		&m_sync;	//Synchronization inter remote OpenSCADA station: 
-				//configuration update, attributes list update, local and remote archives sync.
-	int	&m_prior;	//Process task priority
-	string	&m_stations,	//Remote stations list
-		&m_contr_prm;	//Transported remote cotrollers and parameters list
-		
-	bool    prc_st,		//Process task active
-		endrun_req;	//Request to stop of the Process task
-        vector< AutoHD<TMdPrm> >  p_hd;
-	
-	pthread_t procPthr;     //Process task thread
-	
-	double 	tm_gath;	//Gathering time
+	Res	en_res, req_res;		//Resource for enable params and request to remote OpenSCADA station
+	double	&m_per,				//Acquisition task (seconds)
+		&m_sync;			//Synchronization inter remote OpenSCADA station:
+						//configuration update, attributes list update, local and remote archives sync.
+	int	&m_prior;			//Process task priority
+	string	&m_stations,			//Remote stations list
+		&m_contr_prm;			//Transported remote cotrollers and parameters list
+
+	bool	prc_st,				//Process task active
+		endrun_req;			//Request to stop of the Process task
+	vector< AutoHD<TMdPrm> > p_hd;
+
+	pthread_t procPthr;			//Process task thread
+
+	double	tm_gath;			//Gathering time
 };
 
 //******************************************************
@@ -139,28 +138,28 @@ class TTpContr: public TTipDAQ
 	class RemHost
 	{
 	    public:
-	        //Methods
-	        RemHost( const string &ist, const string &itransp, const string &iaddr,
-	                const string &iuser, const string &ipass ) :
-                    stat(ist), transp(itransp), addr(iaddr), user(iuser), pass(ipass),
-                    ses_id(-1), link_ok(false) { }
-	        
+		//Methods
+		RemHost( const string &ist, const string &itransp, const string &iaddr,
+			const string &iuser, const string &ipass ) :
+		    stat(ist), transp(itransp), addr(iaddr), user(iuser), pass(ipass),
+		    ses_id(-1), link_ok(false) { }
+
 		//Attributes
-	        string  stat;           //External station
-	        string  transp;         //Connect transport
-	        string  addr;           //External host address
-	        string  user;           //External host user
-	        string  pass;           //External host password
-	        int     ses_id;         //Session ID
-	        bool    link_ok;        //Link OK
+		string	stat;		//External station
+		string	transp;		//Connect transport
+		string	addr;		//External host address
+		string	user;		//External host user
+		string	pass;		//External host password
+		int	ses_id;		//Session ID
+		bool	link_ok;	//Link OK
 	};
-	
+
 	//Methods
-    	TTpContr( string name );
+	TTpContr( string name );
 	~TTpContr( );
- 	
-	//- Request to OpenSCADA control interface -	
-        int cntrIfCmd( XMLNode &node ); 
+
+	//- Request to OpenSCADA control interface -
+	int cntrIfCmd( XMLNode &node );
 
     protected:
 	//Methods
@@ -171,13 +170,13 @@ class TTpContr: public TTipDAQ
 	//Methods
 	TController *ContrAttach( const string &name, const string &daq_db );
 	string optDescr( );
-	
+
 	//Attributes
 	vector<RemHost>	openHosts;
 };
 
 extern TTpContr *mod;
 
-} //End namespace 
+} //End namespace
 
 #endif //TRANSPORTER_H
