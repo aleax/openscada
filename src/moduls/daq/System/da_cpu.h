@@ -18,7 +18,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
- 
+
 #ifndef DA_CPU_H
 #define DA_CPU_H
 
@@ -42,9 +42,9 @@ class CPU: public DA
 
 	void init( TMdPrm *prm );
 	void getVal( TMdPrm *prm );
-	
+
 	void makeActiveDA( TMdContr *a_cntr );
-	
+
     private:
 	//Attributes
 	struct tval
@@ -57,6 +57,6 @@ class CPU: public DA
 	vector<tval>	c_vls;
 };
 
-} //End namespace 
+} //End namespace
 
 #endif //DA_CPU_H

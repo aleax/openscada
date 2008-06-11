@@ -370,23 +370,22 @@ void TUser::save_( )
 
 void TUser::cntrCmdProc( XMLNode *opt )
 {
-    string grp = owner().subId();
     //- Get page info -
     if( opt->name() == "info" )
     {
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("User ")+name(),0664,name().c_str(),grp.c_str());
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("User ")+name(),0664,name().c_str(),"Security");
 	if(picture().size()) ctrMkNode("img",opt,-1,"/ico","",0444);
 	if(ctrMkNode("area",opt,-1,"/prm",_("User")))
 	{
 	    ctrMkNode("fld",opt,-1,"/prm/name",cfg("NAME").fld().descr(),0444,"root","root",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/prm/dscr",cfg("DESCR").fld().descr(),0664,name().c_str(),grp.c_str(),1,"tp","str");
-	    ctrMkNode("img",opt,-1,"/prm/pct",cfg("PICTURE").fld().descr(),0664,name().c_str(),grp.c_str(),1,"v_sz","100");
+	    ctrMkNode("fld",opt,-1,"/prm/dscr",cfg("DESCR").fld().descr(),0664,name().c_str(),"Security",1,"tp","str");
+	    ctrMkNode("img",opt,-1,"/prm/pct",cfg("PICTURE").fld().descr(),0664,name().c_str(),"Security",1,"v_sz","100");
 	    ctrMkNode("fld",opt,-1,"/prm/db",_("User DB"),0664,"root",SYS->db().at().subId().c_str(),4,"tp","str","dest","select","select","/db/list",
 		"help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
-	    ctrMkNode("fld",opt,-1,"/prm/pass",cfg("PASS").fld().descr(),0660,name().c_str(),grp.c_str(),1,"tp","str");
-	    ctrMkNode("table",opt,-1,"/prm/grps",_("Groups"),0444,"root",grp.c_str(),1,"key","grp");
-	    ctrMkNode("list",opt,-1,"/prm/grps/grp",_("Group"),0444,"root",grp.c_str(),1,"tp","str");
-	    ctrMkNode("list",opt,-1,"/prm/grps/vl",_("Include"),0444,"root",grp.c_str(),1,"tp","bool");
+	    ctrMkNode("fld",opt,-1,"/prm/pass",cfg("PASS").fld().descr(),0660,name().c_str(),"Security",1,"tp","str");
+	    ctrMkNode("table",opt,-1,"/prm/grps",_("Groups"),0444,"root","Security",1,"key","grp");
+	    ctrMkNode("list",opt,-1,"/prm/grps/grp",_("Group"),0444,"root","Security",1,"tp","str");
+	    ctrMkNode("list",opt,-1,"/prm/grps/vl",_("Include"),0444,"root","Security",1,"tp","bool");
 	}
 	return;
     }
@@ -415,7 +414,7 @@ void TUser::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/prm/grps" )
     {
-	if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )
+	if( ctrChkNode(opt,"get",0660,"root","Security",SEQ_RD) )
 	{
 	    //-- Prepare headers --
 	    XMLNode *grp = ctrMkNode("list",opt,-1,"/prm/grps/grp","",0440);
@@ -428,7 +427,7 @@ void TUser::cntrCmdProc( XMLNode *opt )
 		if(vl)	vl->childAdd("el")->setText(TSYS::int2str(owner().grpAt(ls[i_g]).at().user(name())));
 	    }
 	}
-	/*if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )
+	/*if( ctrChkNode(opt,"set",0660,"root","Security",SEQ_WR) )
 	{
 	    if(atoi(opt->text().c_str()))
 		owner().grpAt(opt->attr("key_grp")).at().userAdd(name());

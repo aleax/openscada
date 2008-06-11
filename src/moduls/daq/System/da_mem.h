@@ -18,7 +18,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
- 
+
 #ifndef DA_MEM_H
 #define DA_MEM_H
 
@@ -36,17 +36,17 @@ class Mem: public DA
 	//Methods
 	Mem( );
 	~Mem( );
-	
-        string id( ) 	{ return "MEM"; }
-        string name( )	{ return "Memory"; }			
+
+	string id( )	{ return "MEM"; }
+	string name( )	{ return "Memory"; }
 
 	void init( TMdPrm *prm );
 	void deInit( TMdPrm *prm );
 	void getVal( TMdPrm *prm );
-	
+
 	void makeActiveDA( TMdContr *a_cntr );
 };
 
-} //End namespace 
+} //End namespace
 
 #endif //DA_MEM_H

@@ -18,7 +18,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
- 
+
 #ifndef DA_SMART_H
 #define DA_SMART_H
 
@@ -34,26 +34,25 @@ class HddSmart: public DA
 {
     public:
 	//Methods
-        HddSmart( );
+	HddSmart( );
 	~HddSmart( );
-	
-        string id( ) 	{ return "hddsmart"; }
-        string name( )	{ return "HDD Smart"; }			
-		    
-        void init( TMdPrm *prm );
-        void getVal( TMdPrm *prm );
-	
+
+	string id( )	{ return "hddsmart"; }
+	string name( )	{ return "HDD Smart"; }
+
+	void init( TMdPrm *prm );
+	void getVal( TMdPrm *prm );
+
 	void makeActiveDA( TMdContr *a_cntr );
-	
+
     private:
 	//Methods
-        void dList( vector<string> &list, bool part = false );
-	
+	void dList( vector<string> &list, bool part = false );
+
 	//Attributes
 	static char *smartval_cmd;
 };
 
-} //End namespace 
+} //End namespace
 
 #endif //DA_SMART_H
-

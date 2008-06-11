@@ -34,7 +34,7 @@ using namespace SystemCntr;
 UpTime::UpTime( )
 {
     st_tm = time(NULL);
-    
+
     //- Uptime value structure -
     fldAdd( new TFld("full",_("Full seconds"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
     fldAdd( new TFld("sec",_("Seconds"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
@@ -47,13 +47,13 @@ UpTime::~UpTime( )
 {
 
 }
-    
+
 void UpTime::init( TMdPrm *prm )
 {
     //- Create config -
     TCfg &c_subt = prm->cfg("SUBT");
     c_subt.fld().setDescr("");
-			
+
     c_subt.fld().setValues("sys;stat"); 
     c_subt.fld().setSelNames(string(_("System"))+";"+_("Station"));
     try{ c_subt.getSEL(); }
@@ -63,15 +63,15 @@ void UpTime::init( TMdPrm *prm )
 void UpTime::getVal( TMdPrm *prm )
 {
     long val;
-    
+
     string trg = prm->cfg("SUBT").getS();
-	    
+
     if( trg == "sys" )
     {
-        FILE *f = fopen("/proc/uptime","r");
-        if( f == NULL ) return;
-        fscanf(f,"%lu",&val);
-        fclose(f);
+	FILE *f = fopen("/proc/uptime","r");
+	if( f == NULL ) return;
+	fscanf(f,"%lu",&val);
+	fclose(f);
     }
     else val = time(NULL) - st_tm;
     prm->vlAt("full").at().setI(val,0,true);
@@ -79,23 +79,23 @@ void UpTime::getVal( TMdPrm *prm )
     prm->vlAt("hour").at().setI((val%86400)/3600,0,true);
     prm->vlAt("min").at().setI(((val%86400)%3600)/60,0,true);
     prm->vlAt("sec").at().setI(((val%86400)%3600)%60,0,true);
-}														    
+}
 
 void UpTime::makeActiveDA( TMdContr *a_cntr )
 {
-    string ap_nm = "UpTimeSystem";    
+    string ap_nm = "UpTimeSystem";
     if(!a_cntr->present(ap_nm))
     {
-        FILE *f = fopen("/proc/uptime","r");
-        if( f != NULL )
+	FILE *f = fopen("/proc/uptime","r");
+	if( f != NULL )
 	{
-    	    a_cntr->add(ap_nm,0);
+	    a_cntr->add(ap_nm,0);
 	    a_cntr->at(ap_nm).at().setName(_("System up time"));
 	    a_cntr->at(ap_nm).at().autoC(true);
-    	    a_cntr->at(ap_nm).at().cfg("TYPE").setS(id());
+	    a_cntr->at(ap_nm).at().cfg("TYPE").setS(id());
 	    a_cntr->at(ap_nm).at().cfg("SUBT").setS("sys");
-    	    a_cntr->at(ap_nm).at().cfg("EN").setB(true);
-    	    fclose(f);
+	    a_cntr->at(ap_nm).at().cfg("EN").setB(true);
+	    fclose(f);
 	}
     }
     ap_nm = "UpTimeStation";
@@ -104,7 +104,7 @@ void UpTime::makeActiveDA( TMdContr *a_cntr )
 	a_cntr->add(ap_nm,0);
 	a_cntr->at(ap_nm).at().setName(_("Station up time"));
 	a_cntr->at(ap_nm).at().autoC(true);
-        a_cntr->at(ap_nm).at().cfg("TYPE").setS(id());
+	a_cntr->at(ap_nm).at().cfg("TYPE").setS(id());
 	a_cntr->at(ap_nm).at().cfg("SUBT").setS("stat");
 	a_cntr->at(ap_nm).at().cfg("EN").setB(true);
     }

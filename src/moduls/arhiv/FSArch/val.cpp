@@ -317,19 +317,18 @@ TVArchEl *ModVArch::getArchEl( TVArchive &arch )
 
 void ModVArch::cntrCmdProc( XMLNode *opt )
 {
-    string grp = owner().owner().subId();
     //- Get page info -
     if( opt->name() == "info" )
     {
 	TVArchivator::cntrCmdProc(opt);
-	if(ctrMkNode("area",opt,1,"/bs",_("Additional options"),0444,"root",grp.c_str()))
+	if(ctrMkNode("area",opt,1,"/bs",_("Additional options"),0444,"root","Archive"))
 	{
-	    ctrMkNode("fld",opt,-1,"/bs/tm",cfg("FSArchTmSize").fld().descr(),0664,"root",grp.c_str(),1,"tp","real");
-	    ctrMkNode("fld",opt,-1,"/bs/fn",cfg("FSArchNFiles").fld().descr(),0664,"root",grp.c_str(),1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/bs/round",cfg("FSArchRound").fld().descr(),0664,"root",grp.c_str(),1,"tp","real");
-	    ctrMkNode("fld",opt,-1,"/bs/pcktm",cfg("FSArchPackTm").fld().descr(),0664,"root",grp.c_str(),1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/bs/tmout",cfg("FSArchTm").fld().descr(),0664,"root",grp.c_str(),1,"tp","dec");
-	    ctrMkNode("comm",opt,-1,"/bs/chk_nw",_("Check archivator directory now"),0660,"root",grp.c_str());	
+	    ctrMkNode("fld",opt,-1,"/bs/tm",cfg("FSArchTmSize").fld().descr(),0664,"root","Archive",1,"tp","real");
+	    ctrMkNode("fld",opt,-1,"/bs/fn",cfg("FSArchNFiles").fld().descr(),0664,"root","Archive",1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/bs/round",cfg("FSArchRound").fld().descr(),0664,"root","Archive",1,"tp","real");
+	    ctrMkNode("fld",opt,-1,"/bs/pcktm",cfg("FSArchPackTm").fld().descr(),0664,"root","Archive",1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/bs/tmout",cfg("FSArchTm").fld().descr(),0664,"root","Archive",1,"tp","dec");
+	    ctrMkNode("comm",opt,-1,"/bs/chk_nw",_("Check archivator directory now"),0660,"root","Archive");
 	}
 	ctrMkNode("list",opt,-1,"/arch/arch/3",_("Files size (Mb)"),0444,"root","root",1,"tp","real");
 	if(ctrMkNode("comm",opt,-1,"/arch/exp",_("Export"),0660))
@@ -346,28 +345,28 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/bs/tm" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::real2str( fileTimeSize(), 6 ));
-	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	setFileTimeSize( atof(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",0664,"root","Archive",SEQ_RD) )	opt->setText(TSYS::real2str( fileTimeSize(), 6 ));
+	if( ctrChkNode(opt,"set",0664,"root","Archive",SEQ_WR) )	setFileTimeSize( atof(opt->text().c_str()) );
     }
     else if( a_path == "/bs/fn" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str( fileNumber() ));
-	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	setFileNumber( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",0664,"root","Archive",SEQ_RD) )	opt->setText(TSYS::int2str( fileNumber() ));
+	if( ctrChkNode(opt,"set",0664,"root","Archive",SEQ_WR) )	setFileNumber( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/bs/round" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::real2str( roundProc(), 6 ));
-	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	setRoundProc( atof(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",0664,"root","Archive",SEQ_RD) )	opt->setText(TSYS::real2str( roundProc(), 6 ));
+	if( ctrChkNode(opt,"set",0664,"root","Archive",SEQ_WR) )	setRoundProc( atof(opt->text().c_str()) );
     }
     else if( a_path == "/bs/pcktm" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str( packTm() ));
-	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	setPackTm( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",0664,"root","Archive",SEQ_RD) )	opt->setText(TSYS::int2str( packTm() ));
+	if( ctrChkNode(opt,"set",0664,"root","Archive",SEQ_WR) )	setPackTm( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/bs/tmout" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str( checkTm() ));
-	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	setCheckTm( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",0664,"root","Archive",SEQ_RD) )	opt->setText(TSYS::int2str( checkTm() ));
+	if( ctrChkNode(opt,"set",0664,"root","Archive",SEQ_WR) )	setCheckTm( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/arch/arch" && ctrChkNode(opt) )
     {
@@ -398,7 +397,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("el")->setText("ascii");
 	opt->childAdd("el")->setText("wav");
     }
-    else if( a_path == "/bs/chk_nw" && ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	checkArchivator(true);
+    else if( a_path == "/bs/chk_nw" && ctrChkNode(opt,"set",0660,"root","Archive",SEQ_WR) )	checkArchivator(true);
     else if( a_path == "/arch/exp" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )
 	expArch(ctrId(opt,"arch")->text(),
 		atoi(ctrId(opt,"beg")->text().c_str()),

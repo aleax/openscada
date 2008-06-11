@@ -18,7 +18,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
- 
+
 #ifndef DA_HDDTEMP_H
 #define DA_HDDTEMP_H
 
@@ -34,28 +34,27 @@ class Hddtemp: public DA
 {
     public:
 	//Methods
-        Hddtemp( );
-        ~Hddtemp( );
-	
-        string id( ) 	{ return "hddtemp"; }
-        string name( )	{ return "HDD temperature"; }			
-		    
-        void init( TMdPrm *prm );
-        void getVal( TMdPrm *prm );
-	
+	Hddtemp( );
+	~Hddtemp( );
+
+	string id( )	{ return "hddtemp"; }
+	string name( )	{ return "HDD temperature"; }
+
+	void init( TMdPrm *prm );
+	void getVal( TMdPrm *prm );
+
 	void makeActiveDA( TMdContr *a_cntr );
-	
+
     private:
 	//Methods
 	string getHDDTemp( );
-        void dList( vector<string> &list );
-	
+	void dList( vector<string> &list );
+
 	//Attributes
-	Res     m_res;		//Resource for access to HDDTemp transport
-        string	t_tr, n_tr;
+	Res	m_res;		//Resource for access to HDDTemp transport
+	string	t_tr, n_tr;
 };
 
-} //End namespace 
+} //End namespace
 
 #endif //DA_HDDTEMP_H
-

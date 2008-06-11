@@ -18,7 +18,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
- 
+
 #ifndef DA_UPTIME_H
 #define DA_UPTIME_H
 
@@ -34,23 +34,22 @@ class UpTime: public DA
 {
     public:
 	//Methods
-        UpTime( );
-        ~UpTime( );
-	
-        string id( )	{ return "uptime"; }
-        string name( )	{ return "Up time"; }
-		    
-        void init( TMdPrm *prm );
-        void getVal( TMdPrm *prm );
-	
+	UpTime( );
+	~UpTime( );
+
+	string id( )	{ return "uptime"; }
+	string name( )	{ return "Up time"; }
+
+	void init( TMdPrm *prm );
+	void getVal( TMdPrm *prm );
+
 	void makeActiveDA( TMdContr *a_cntr );
-	
+
     private:
 	//Attributes
-        time_t      st_tm;		
+	time_t	st_tm;
 };
 
-} //End namespace 
+} //End namespace
 
 #endif //DA_UPTIME_H
-

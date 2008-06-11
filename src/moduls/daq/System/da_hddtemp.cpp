@@ -34,7 +34,7 @@ Hddtemp::Hddtemp( ) : t_tr("Sockets"), n_tr("HDDTemp")
     //HDD value structure
     fldAdd( new TFld("disk",_("Name"),TFld::String,TFld::NoWrite,"",EVAL_STR) );
     fldAdd( new TFld("ed",_("Measure unit"),TFld::String,TFld::NoWrite,"",EVAL_STR) );
-    fldAdd( new TFld("t",_("Temperature"),TFld::Integer,TFld::NoWrite,"0",TSYS::int2str(EVAL_INT).c_str()) );    
+    fldAdd( new TFld("t",_("Temperature"),TFld::Integer,TFld::NoWrite,"0",TSYS::int2str(EVAL_INT).c_str()) );
 }
 
 Hddtemp::~Hddtemp( )
@@ -46,7 +46,7 @@ Hddtemp::~Hddtemp( )
 void Hddtemp::init( TMdPrm *prm )
 {
     TCfg &c_subt = prm->cfg("SUBT");
-    
+
     //- Create Config -
     c_subt.fld().setDescr(_("Disk"));
 
@@ -57,7 +57,7 @@ void Hddtemp::init( TMdPrm *prm )
 	dls=dls+list[i_l]+";";
     c_subt.fld().setValues(dls);
     c_subt.fld().setSelNames(dls);
-    
+
     try{ c_subt.getSEL(); }
     catch(...)
     {
@@ -66,25 +66,25 @@ void Hddtemp::init( TMdPrm *prm )
 }
 
 void Hddtemp::dList( vector<string> &list )
-{    
-    try 
-    { 
+{
+    try
+    {
 	string val = getHDDTemp( ), c_el;
 	list.clear();
-        for( int p_cnt = 0; (c_el=TSYS::strSepParse(val,p_cnt+1,'|')).size(); p_cnt+=5 )
-            list.push_back(c_el);
+	for( int p_cnt = 0; (c_el=TSYS::strSepParse(val,p_cnt+1,'|')).size(); p_cnt+=5 )
+	    list.push_back(c_el);
     }
     catch( TError err ) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 void Hddtemp::getVal( TMdPrm *prm )
-{    
-    try 
-    { 
-       	string dev = prm->cfg("SUBT").getS(),	
-	       val = getHDDTemp( ),
-	       c_el;	
-        for( int p_cnt = 0; (c_el=TSYS::strSepParse(val,p_cnt+1,'|')).size(); p_cnt+=5 )
+{
+    try
+    {
+	string	dev = prm->cfg("SUBT").getS(),
+		val = getHDDTemp( ),
+		c_el;
+	for( int p_cnt = 0; (c_el=TSYS::strSepParse(val,p_cnt+1,'|')).size(); p_cnt+=5 )
 	    if( c_el == dev )
 	    {
 		prm->vlAt("disk").at().setS( TSYS::strSepParse(val,p_cnt+2,'|'), 0, true );
@@ -92,7 +92,7 @@ void Hddtemp::getVal( TMdPrm *prm )
 		prm->vlAt("ed").at().setS( TSYS::strSepParse(val,p_cnt+4,'|'), 0, true );
 		break;
 	    }
-    }    
+    }
     catch( TError err ) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
@@ -100,14 +100,14 @@ string Hddtemp::getHDDTemp( )
 {
     string val;
     char buf[20];
-    
+
     ResAlloc res(m_res,true);
     //- Check connect and start -
     if( !SYS->transport().at().at(t_tr).at().outPresent(n_tr) )
     {
-        SYS->transport().at().at(t_tr).at().outAdd(n_tr);
-        SYS->transport().at().at(t_tr).at().outAt(n_tr).at().setName(_("Parameter Hddtemp"));
-        SYS->transport().at().at(t_tr).at().outAt(n_tr).at().setAddr("TCP:127.0.0.1:7634");
+	SYS->transport().at().at(t_tr).at().outAdd(n_tr);
+	SYS->transport().at().at(t_tr).at().outAt(n_tr).at().setName(_("Parameter Hddtemp"));
+	SYS->transport().at().at(t_tr).at().outAt(n_tr).at().setAddr("TCP:127.0.0.1:7634");
     }
     if( SYS->transport().at().at(t_tr).at().outAt(n_tr).at().startStat() )
 	SYS->transport().at().at(t_tr).at().outAt(n_tr).at().stop();
@@ -117,29 +117,29 @@ string Hddtemp::getHDDTemp( )
 	SYS->transport().at().at(t_tr).at().outDel(n_tr,true);
 	throw;
     }
-    
+
     //- Request -
     int len;
-    do{	    
+    do{
         len = SYS->transport().at().at(t_tr).at().outAt(n_tr).at().messIO(NULL,0,buf,sizeof(buf),1);
         val.append(buf,len);
     }while( len == sizeof(buf) );
-    
+
     SYS->transport().at().at(t_tr).at().outAt(n_tr).at().stop();
-    
-    return val;    
+
+    return val;
 }
 
 void Hddtemp::makeActiveDA( TMdContr *a_cntr )
 {
     string ap_nm = "Temperature_hd";
-    
+
     vector<string> list;
-    dList(list);    
+    dList(list);
     try
     {
 	for( int i_hd = 0; i_hd < list.size(); i_hd++ )
-	{   
+	{
 	    string hddprm = ap_nm+TSYS::int2str(i_hd);
 	    if(!a_cntr->present(hddprm))
 	    {
@@ -148,9 +148,9 @@ void Hddtemp::makeActiveDA( TMdContr *a_cntr )
 		a_cntr->at(hddprm).at().autoC(true);
 		a_cntr->at(hddprm).at().cfg("TYPE").setS(id());
 		a_cntr->at(hddprm).at().cfg("SUBT").setS(list[i_hd]);
-		a_cntr->at(hddprm).at().cfg("EN").setB(true);    
+		a_cntr->at(hddprm).at().cfg("EN").setB(true);
 	    }
 	}
     }
-    catch( TError err ) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }			    
+    catch( TError err ) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }

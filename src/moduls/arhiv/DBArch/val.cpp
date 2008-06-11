@@ -55,7 +55,7 @@ void ModVArch::setValPeriod( double iper )
 void ModVArch::load_( )
 {
     TVArchivator::load_();
-    
+
     if( addr().empty() ) setAddr("*.*");
 }
 
@@ -72,28 +72,27 @@ void ModVArch::stop()
 }
 
 TVArchEl *ModVArch::getArchEl( TVArchive &arch )
-{   
+{
     return new ModVArchEl(arch,*this); 
 }
 
 void ModVArch::cntrCmdProc( XMLNode *opt )
 {
-    string grp = owner().owner().subId();
     //- Get page info -
     if( opt->name() == "info" )
     {
-        TVArchivator::cntrCmdProc(opt);
-        if( ctrMkNode("area",opt,1,"/bs",_("Additional options"),0444,"root",grp.c_str()) )
-    	    ctrMkNode("fld",opt,-1,"/bs/sz",cfg("DBArchSize").fld().descr(),0664,"root",grp.c_str(),1,"tp","real");
-        return;
+	TVArchivator::cntrCmdProc(opt);
+	if( ctrMkNode("area",opt,1,"/bs",_("Additional options"),0444,"root","Archive") )
+	    ctrMkNode("fld",opt,-1,"/bs/sz",cfg("DBArchSize").fld().descr(),0664,"root","Archive",1,"tp","real");
+	return;
     }
-    
+
     //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/bs/sz" )
     {
-        if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) ) opt->setText(TSYS::real2str( maxSize() ));
-        if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) ) setMaxSize( atof(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",0664,"root","Archive",SEQ_RD) ) opt->setText(TSYS::real2str( maxSize() ));
+	if( ctrChkNode(opt,"set",0664,"root","Archive",SEQ_WR) ) setMaxSize( atof(opt->text().c_str()) );
     }
     else TVArchivator::cntrCmdProc(opt);
 }
@@ -109,13 +108,13 @@ ModVArchEl::ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator ) :
     cfg.cfg("TBL").setS(archTbl());
     if(SYS->db().at().dataGet(archivator().addr()+"."+mod->mainTbl(),"",cfg))
     {
-        m_beg = strtoll(cfg.cfg("BEGIN").getS().c_str(),NULL,10);
-        m_end = strtoll(cfg.cfg("END").getS().c_str(),NULL,10);
+	m_beg = strtoll(cfg.cfg("BEGIN").getS().c_str(),NULL,10);
+	m_end = strtoll(cfg.cfg("END").getS().c_str(),NULL,10);
 	m_per = strtoll(cfg.cfg("PRM1").getS().c_str(),NULL,10);
 	//-- Check for delete archivator table --
 	if( m_end <= (TSYS::curTime()-(long long)(archivator().maxSize()*3600000000.)) )
 	{
-            SYS->db().at().open(archivator().addr()+"."+archTbl());
+	    SYS->db().at().open(archivator().addr()+"."+archTbl());
 	    SYS->db().at().close(archivator().addr()+"."+archTbl(),true);
 	    m_beg = m_end = m_per = 0;
 	}
@@ -139,7 +138,7 @@ void ModVArchEl::fullErase()
     TConfig cfg(&mod->archEl());
     cfg.cfg("TBL").setS(archTbl());
     SYS->db().at().dataDel(archivator().addr()+"."+mod->mainTbl(),"",cfg);
-    
+
     //- Remove archive's DB table -
     SYS->db().at().open( archivator().addr()+"."+archTbl() );
     SYS->db().at().close( archivator().addr()+"."+archTbl(), true );
@@ -149,14 +148,14 @@ void ModVArchEl::getVal( TValBuf &buf, long long ibeg, long long iend )
 {
     //- Going border to period time -
     ibeg = (ibeg/period())*period();
-    iend = (iend/period())*period();    
+    iend = (iend/period())*period();
 
     //- Prepare border -
-    ibeg = vmax( ibeg, begin() );    
+    ibeg = vmax( ibeg, begin() );
     iend = vmin( iend, end() );
-    
+
     if( iend < ibeg )	return;
-    
+
     //- Get values -
     switch(archive().valType())
     {
@@ -206,10 +205,10 @@ void ModVArchEl::getVal( TValBuf &buf, long long ibeg, long long iend )
 }
 
 string ModVArchEl::getS( long long *tm, bool up_ord )
-{   
+{
     switch(archive().valType())
     {
-	case TFld::Boolean: 	return TSYS::int2str(getB(tm,up_ord));
+	case TFld::Boolean:	return TSYS::int2str(getB(tm,up_ord));
 	case TFld::Integer:	return TSYS::int2str(getI(tm,up_ord));
 	case TFld::Real:	return TSYS::real2str(getR(tm,up_ord));
 	case TFld::String:
@@ -221,7 +220,7 @@ string ModVArchEl::getS( long long *tm, bool up_ord )
 	    cfg.cfg("TM").setI(itm/1000000);
 	    cfg.cfg("TMU").setI(itm%1000000);
 	    if( SYS->db().at().dataGet(archivator().addr()+"."+archTbl(),"",cfg) )
-		return cfg.cfg("VAL").getS();    
+		return cfg.cfg("VAL").getS();
 	    return EVAL_STR;
 	}
     }
@@ -231,7 +230,7 @@ double ModVArchEl::getR( long long *tm, bool up_ord )
 {
     switch(archive().valType())
     {
-	case TFld::Boolean: 	return getB(tm,up_ord);
+	case TFld::Boolean:	return getB(tm,up_ord);
 	case TFld::Integer:	return getI(tm,up_ord);
 	case TFld::String:	return atof(getS(tm,up_ord).c_str());
 	case TFld::Real:
@@ -243,7 +242,7 @@ double ModVArchEl::getR( long long *tm, bool up_ord )
 	    cfg.cfg("TM").setI(itm/1000000);
 	    cfg.cfg("TMU").setI(itm%1000000);
 	    if( SYS->db().at().dataGet(archivator().addr()+"."+archTbl(),"",cfg) )
-		return cfg.cfg("VAL").getR();    
+		return cfg.cfg("VAL").getR();
 	    return EVAL_REAL;
 	}
     }
@@ -253,7 +252,7 @@ int ModVArchEl::getI( long long *tm, bool up_ord )
 {
     switch(archive().valType())
     {
-	case TFld::Boolean: 	return getB(tm,up_ord);
+	case TFld::Boolean:	return getB(tm,up_ord);
 	case TFld::Real:	return (int)getR(tm,up_ord);
 	case TFld::String:	return atoi(getS(tm,up_ord).c_str());
 	case TFld::Integer:
@@ -265,7 +264,7 @@ int ModVArchEl::getI( long long *tm, bool up_ord )
 	    cfg.cfg("TM").setI(itm/1000000);
 	    cfg.cfg("TMU").setI(itm%1000000);
 	    if( SYS->db().at().dataGet(archivator().addr()+"."+archTbl(),"",cfg) )
-		return cfg.cfg("VAL").getI();    
+		return cfg.cfg("VAL").getI();
 	    return EVAL_INT;
 	}
     }
@@ -277,7 +276,7 @@ char ModVArchEl::getB( long long *tm, bool up_ord )
     {
 	case TFld::Real:	return (int)getR(tm,up_ord);
 	case TFld::String:	return atoi(getS(tm,up_ord).c_str());
-	case TFld::Integer:	return getI(tm,up_ord);	
+	case TFld::Integer:	return getI(tm,up_ord);
 	case TFld::Boolean:
 	{
 	    long long itm = tm?*tm:SYS->curTime();
@@ -288,65 +287,64 @@ char ModVArchEl::getB( long long *tm, bool up_ord )
 	    cfg.cfg("TMU").setI(itm%1000000);
 	    if( SYS->db().at().dataGet(archivator().addr()+"."+archTbl(),"",cfg) )
 		return cfg.cfg("VAL").getI();
-    	    return EVAL_BOOL;
+	    return EVAL_BOOL;
 	}
     }
 }
 
 void ModVArchEl::setVal( TValBuf &buf, long long beg, long long end )
-{    
+{
     //- Check border -
     if( !buf.vOK(beg,end) )	return;
     beg = vmax(beg,buf.begin());
     end = vmin(end,buf.end());
 
     //- Table struct init -
-    TConfig cfg( (archive().valType()==TFld::Real) ? (&mod->vlRealEl()) : 
-		 (archive().valType()==TFld::String) ? (&mod->vlStrEl()) : &mod->vlIntEl() );    
+    TConfig cfg( (archive().valType()==TFld::Real) ? (&mod->vlRealEl()) :
+		 (archive().valType()==TFld::String) ? (&mod->vlStrEl()) : &mod->vlIntEl() );
 
     AutoHD<TTable> tbl = SYS->db().at().open(archivator().addr()+"."+archTbl(),true);
     if( tbl.freeStat() ) return;
     //- Write data to table -
     for( long long ctm; beg <= end; beg++ )
-    {	
+    {
 	switch( archive().valType() )
 	{
-    	    case TFld::Boolean:	cfg.cfg("VAL").setI(buf.getB(&beg,true));	break;
-	    case TFld::Integer:	cfg.cfg("VAL").setI(buf.getI(&beg,true));       break;
-	    case TFld::Real:	cfg.cfg("VAL").setR(buf.getR(&beg,true));       break;
-	    case TFld::String:	cfg.cfg("VAL").setS(buf.getS(&beg,true));       break;
+	    case TFld::Boolean:	cfg.cfg("VAL").setI(buf.getB(&beg,true));	break;
+	    case TFld::Integer:	cfg.cfg("VAL").setI(buf.getI(&beg,true));	break;
+	    case TFld::Real:	cfg.cfg("VAL").setR(buf.getR(&beg,true));	break;
+	    case TFld::String:	cfg.cfg("VAL").setS(buf.getS(&beg,true));	break;
 	}
 	ctm = (beg/period())*period();
 	cfg.cfg("TM").setI(ctm/1000000);
 	cfg.cfg("TMU").setI(ctm%1000000);
 	tbl.at().fieldSet(cfg);
-        //- Archive time border update -
-        m_beg=m_beg?vmin(m_beg,ctm):ctm;
-        m_end=m_end?vmax(m_end,ctm):ctm;
+	//- Archive time border update -
+	m_beg = m_beg ? vmin(m_beg,ctm) : ctm;
+	m_end = m_end ? vmax(m_end,ctm) : ctm;
     }
-    
+
     //- Archive size limit process -
     if( (m_end-m_beg) > (long long)(archivator().maxSize()*3600000000.) )
     {
-        long long n_end = ((m_end-(long long)(archivator().maxSize()*3600000000.))/period())*period();	
-        for( long long t_c = vmax(m_beg,n_end-3600ll*period()); t_c < n_end; t_c+=period() )
+	long long n_end = ((m_end-(long long)(archivator().maxSize()*3600000000.))/period())*period();
+	for( long long t_c = vmax(m_beg,n_end-3600ll*period()); t_c < n_end; t_c+=period() )
 	{
 	    cfg.cfg("TM").setI(t_c/1000000);
 	    cfg.cfg("TMU").setI(t_c%1000000);
 	    tbl.at().fieldDel(cfg);
-        }
+	}
 	m_beg=n_end;
     }
     tbl.free();
     SYS->db().at().close(archivator().addr()+"."+archTbl());
- 
+
     //- Update archive info -
     cfg.setElem(&mod->archEl());
     cfg.cfgViewAll(false);
     cfg.cfg("TBL").setS(archTbl(),true);
     cfg.cfg("BEGIN").setS(TSYS::ll2str(m_beg),true);
     cfg.cfg("END").setS(TSYS::ll2str(m_end),true);
-    cfg.cfg("PRM1").setS(TSYS::ll2str(m_per),true);    
+    cfg.cfg("PRM1").setS(TSYS::ll2str(m_per),true);
     SYS->db().at().dataSet(archivator().addr()+"."+mod->mainTbl(),"",cfg);
 }
-

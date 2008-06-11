@@ -30,44 +30,43 @@
 int main(int argc, char *argv[], char *envp[] )
 {
     int rez = 0, i_krn = 0;
-    
+
     //Check demon mode start
     int next_opt;
     optind=opterr=0;
-    struct option long_opt[] = { {"demon" ,0,NULL,'d'}, {NULL    ,0,NULL,0  } };	
+    struct option long_opt[] = { {"demon" ,0,NULL,'d'}, {NULL    ,0,NULL,0  } };
     while((next_opt=getopt_long(argc,argv,"",long_opt,NULL)) != -1)
 	if( next_opt == 'd' )
 	{
 	    printf("Start into demon mode!\n");
 	    int pid = fork();
 	    if( pid == -1 )
-	    {	
+	    {
 		printf("Error: fork error!\n");
 		return(-1);
 	    }
 	    if( pid != 0 )	return(0);
-	    
+
 	    //Prepare demon environment
 	    setsid();
-	    
-	    break;	    
+
+	    break;
 	}
-    
+
     //while(*envp) printf("%s\n",*envp++);
     try
     {
-	SYS = new TSYS(argc,argv,envp);	
-	
+	SYS = new TSYS(argc,argv,envp);
+
 	SYS->load();
 	if( rez=SYS->stopSignal() ) return rez;
 	rez = SYS->start();
-	
+
 	delete SYS;
     }catch(TError err)
     { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
-    printf("OpenSCADA system is correct exited.\n");	
+    printf("OpenSCADA system is correct exited.\n");
 
     return rez;
 }
-

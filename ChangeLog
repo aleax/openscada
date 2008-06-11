@@ -1,3 +1,10 @@
+2008-06-11 Roman
+- !:/Archive, /DB, /Security, : Groups identifier write, for permission to control node, changed to direct string.
+- !!:/UI/VCAEngine: Development permission made check to user "root" and "UI". Widget's parmission used only for runtime.
+- /UI/Vision: Single dash rect paint on time widgets mouse move is made.
+- !!:/SYS: More odd spaces from sources is removing continued.
+
+
 2008-06-10 Roman
 - FIX:/DAQ/Siemens, /DAQ/Transporter, /DAQ/LogicLev, /DAQ/System, /DAQ/DiamondBoards, /VAQ/SNMP, /UI/VCAEngine: Zero period hang is fixed.
 - !!:/SYS: More odd spaces from sources is removing continued.

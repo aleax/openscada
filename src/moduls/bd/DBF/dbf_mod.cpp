@@ -194,13 +194,11 @@ TTable *MBD::openTable( const string &nm, bool create )
 
 void MBD::cntrCmdProc( XMLNode *opt )
 {
-    string grp = owner().owner().subId();
-
     //Get page info
     if( opt->name() == "info" )
     {
 	TBD::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root",grp.c_str(),2,
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","BD",2,
 	    "tp","str","help",
 	    _("For DBF address DB is directory which contain files of tables (*.dbf).\n"
 	      "For example: /opt/dbf ."));

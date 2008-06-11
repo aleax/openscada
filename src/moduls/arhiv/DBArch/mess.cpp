@@ -199,14 +199,13 @@ void ModMArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const s
 
 void ModMArch::cntrCmdProc( XMLNode *opt )
 {
-    string grp = owner().owner().subId();
     //- Get page info -
     if( opt->name() == "info" )
     {
 	TMArchivator::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/st/tarch",_("Archiving time (msek)"),0444,"root",grp.c_str(),1,"tp","real");
-	if( ctrMkNode("area",opt,1,"/bs",_("Additional options"),0444,"root",grp.c_str()) )
-	    ctrMkNode("fld",opt,-1,"/bs/sz",cfg("DBArchSize").fld().descr(),0664,"root",grp.c_str(),1,"tp","real");
+	ctrMkNode("fld",opt,-1,"/prm/st/tarch",_("Archiving time (msek)"),0444,"root","Archive",1,"tp","real");
+	if( ctrMkNode("area",opt,1,"/bs",_("Additional options"),0444,"root","Archive") )
+	    ctrMkNode("fld",opt,-1,"/bs/sz",cfg("DBArchSize").fld().descr(),0664,"root","Archive",1,"tp","real");
 	return;
     }
 
@@ -215,8 +214,8 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
     if( a_path == "/prm/st/tarch" && ctrChkNode(opt) ) 	opt->setText(TSYS::real2str(tm_calc,6));
     else if( a_path == "/bs/sz" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) ) opt->setText(TSYS::real2str( maxSize() ));
-	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) ) setMaxSize( atof(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",0664,"root","Archive",SEQ_RD) ) opt->setText(TSYS::real2str( maxSize() ));
+	if( ctrChkNode(opt,"set",0664,"root","Archive",SEQ_WR) ) setMaxSize( atof(opt->text().c_str()) );
     }
     else TMArchivator::cntrCmdProc(opt);
 }

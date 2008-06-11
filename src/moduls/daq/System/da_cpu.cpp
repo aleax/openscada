@@ -32,7 +32,7 @@ using namespace SystemCntr;
 //* CPU                                           *
 //*************************************************
 CPU::CPU( )
-{   
+{
     //- CPU value structure -
     fldAdd( new TFld("load",_("Load (%)"),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
     fldAdd( new TFld("sys",_("System (%)"),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
@@ -41,23 +41,23 @@ CPU::CPU( )
 }
 
 CPU::~CPU( )
-{    
+{
 
 }
 
 void CPU::init( TMdPrm *prm )
-{    
+{
     char buf[256];
     //- Create config -
     TCfg &t_cf = prm->cfg("SUBT");
     t_cf.fld().setDescr("");
-    
+
     //t_fl.selValI().push_back(-1); t_fl.selNm().push_back("OpenSCADA");
-    
+
     //- Init start value -
     FILE *f = fopen("/proc/stat","r");
     if( f == NULL ) return;
-    
+
     string cpuLs, cpuLsNm;
     while( fgets(buf,sizeof(buf),f) != NULL )
     {
@@ -80,19 +80,19 @@ void CPU::init( TMdPrm *prm )
     }
     t_cf.fld().setValues(cpuLs);
     t_cf.fld().setSelNames(cpuLsNm);
-    
-    fclose(f);	
+
+    fclose(f);
     try{ t_cf.getSEL(); }
     catch(...){ t_cf.setS("gen"); }
 }
 
 void CPU::getVal( TMdPrm *prm )
-{    
+{
     long unsigned user,nice,sys,idle,iowait;
     float sum;
-    
+
     string trg = prm->cfg("SUBT").getS();
-    
+
     /*if( trg == "OpenSCADA" )
     {
 	struct tms p_tm;
@@ -100,27 +100,27 @@ void CPU::getVal( TMdPrm *prm )
 	sum  = cur_tm - m_nice;
 	user = p_tm.tms_utime + p_tm.tms_cutime - m_user;
 	sys  = p_tm.tms_stime + p_tm.tms_cstime - m_sys;
-	
-       	prm->vlAt("value").at().setR( 100.0*(float(user + sys))/sum,NULL,true);       
-       	prm->vlAt("sys").at().setR( 100.0*(float(sys))/sum,NULL,true);       
-       	prm->vlAt("user").at().setR( 100.0*(float(user))/sum,NULL,true);       
-       	prm->vlAt("idle").at().setR( 100.0*(float(sum - user - sys))/sum,NULL,true);       
-	
+
+	prm->vlAt("value").at().setR( 100.0*(float(user + sys))/sum,NULL,true);
+	prm->vlAt("sys").at().setR( 100.0*(float(sys))/sum,NULL,true);
+	prm->vlAt("user").at().setR( 100.0*(float(user))/sum,NULL,true);
+	prm->vlAt("idle").at().setR( 100.0*(float(sum - user - sys))/sum,NULL,true);
+
 	m_nice = cur_tm;
 	m_user = p_tm.tms_utime + p_tm.tms_cutime;
 	m_sys  = p_tm.tms_stime + p_tm.tms_cstime;
-	
+
 	return;
     }*/
 
     //- File /proc/stat scan -
     int n_el;	//CPU number
     int n = 0;
-    char buf[256];	
+    char buf[256];
     FILE *f = fopen("/proc/stat","r");
     if( f == NULL ) return;
     while( fgets(buf,sizeof(buf),f) != NULL )
-    {    
+    {
 	if( trg == "gen" )
 	{
 	    n = sscanf(buf,"cpu %lu %lu %lu %lu %lu\n",&user,&nice,&sys,&idle,&iowait);
@@ -146,24 +146,24 @@ void CPU::getVal( TMdPrm *prm )
 	    break;
 	}
     }
-    fclose(f);    
+    fclose(f);
 }
 
 void CPU::makeActiveDA( TMdContr *a_cntr )
 {
-    char buf[256];    
+    char buf[256];
 
     FILE *f = fopen("/proc/stat","r");
     if( f == NULL ) return;
-    
+
     //- Check for allow CPU -
     while( fgets(buf,sizeof(buf),f) != NULL )
     {
-        int n_cpu;
-        if( sscanf(buf,"cpu%d",&n_cpu) )
-        {
-            if( !isdigit(buf[3]) )
-    	    {
+	int n_cpu;
+	if( sscanf(buf,"cpu%d",&n_cpu) )
+	{
+	    if( !isdigit(buf[3]) )
+	    {
 		if(!a_cntr->present("CPULoad"))
 		{
 		    a_cntr->add("CPULoad",0);
@@ -173,21 +173,21 @@ void CPU::makeActiveDA( TMdContr *a_cntr )
 		    a_cntr->at("CPULoad").at().cfg("SUBT").setS("gen");
 		    a_cntr->at("CPULoad").at().cfg("EN").setB(true);
 		}
-            }
-            else
-            {
+	    }
+	    else
+	    {
 		string ncpu = "CPU"+TSYS::int2str(n_cpu)+"Load";
 		if(!a_cntr->present(ncpu))
-                {
+		{
 		    a_cntr->add(ncpu,0);
 		    a_cntr->at(ncpu).at().setName(_("CPU Load :")+TSYS::int2str(n_cpu));
 		    a_cntr->at(ncpu).at().autoC(true);
 		    a_cntr->at(ncpu).at().cfg("TYPE").setS(id());
 		    a_cntr->at(ncpu).at().cfg("SUBT").setS(TSYS::int2str(n_cpu));
 		    a_cntr->at(ncpu).at().cfg("EN").setB(true);
-                }
-            }
+		}
+	    }
 	}
-    } 
+    }
     fclose(f);
 }

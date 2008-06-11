@@ -31,7 +31,7 @@
 using namespace SystemCntr;
 
 char *Sensors::mbmon_cmd = "mbmon -r -c 1";	//write one try to stdout
- 
+
 //*************************************************
 //* Sensors                                       *
 //*************************************************
@@ -41,8 +41,8 @@ Sensors::Sensors( ) : libsensor_ok(false)
     FILE *f = fopen("/etc/sensors.conf", "r");
     if( f )
     {
-        if( sensors_init(f) == 0 )	libsensor_ok = true;
-        fclose(f);
+	if( sensors_init(f) == 0 )	libsensor_ok = true;
+	fclose(f);
     }
 }
 
@@ -60,29 +60,29 @@ void Sensors::init( TMdPrm *prm )
 void Sensors::deInit( TMdPrm *prm )
 {
     prm->cfg("SUBT").setView(true);
-}	
+}
 
 void Sensors::getVal( TMdPrm *prm )
 {
     //- Use libsensor -
     if( libsensor_ok )
     {
-        int nr = 0, nr1, nr2;
+	int nr = 0, nr1, nr2;
 	double val;
 	string	s_id;
 	const sensors_chip_name		*name;
-	const sensors_feature_data      *feature;
-        while( name = sensors_get_detected_chips(&nr) )
-        {
-            nr1 = 0, nr2 = 0;
-            while( feature = sensors_get_all_features( *name, &nr1, &nr2 ) )
-	        if( sensors_get_ignored( *name, feature->number ) == 1 && feature->mapping == SENSORS_NO_MAPPING )
-                {
+	const sensors_feature_data	*feature;
+	while( name = sensors_get_detected_chips(&nr) )
+	{
+	    nr1 = 0, nr2 = 0;
+	    while( feature = sensors_get_all_features( *name, &nr1, &nr2 ) )
+		if( sensors_get_ignored( *name, feature->number ) == 1 && feature->mapping == SENSORS_NO_MAPPING )
+		{
 		    s_id = string(name->prefix)+"_"+feature->name;
 		    if( !prm->vlPresent(s_id) )
 			fldAdd( new TFld(s_id.c_str(),(string(name->prefix)+" "+feature->name).c_str(),
 				TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
-		    sensors_get_feature( *name, feature->number, &val);		    
+		    sensors_get_feature( *name, feature->number, &val);
 		    prm->vlAt(s_id).at().setR(val,0,true);
 		}
 	}
@@ -102,7 +102,7 @@ void Sensors::getVal( TMdPrm *prm )
 		fldAdd( new TFld(name,name,TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
 	    prm->vlAt(name).at().setR(val,0,true);
 	}
-        pclose(fp);
+	pclose(fp);
     }
 }
 
@@ -113,22 +113,22 @@ void Sensors::makeActiveDA( TMdContr *a_cntr )
     string ap_nm = "SensorsData";
 
     if( !a_cntr->present(ap_nm) )
-    {	
-	bool sens_allow = false;    
+    {
+	bool sens_allow = false;
 	//- Use libsensor check -
 	if( libsensor_ok )
 	{
-    	    int nr = 0, nr1, nr2;
+	    int nr = 0, nr1, nr2;
 	    char  id_name[512], sensor_path[512];
 	    const sensors_chip_name	*name;
 	    const sensors_feature_data	*feature;
-    	    while( name = sensors_get_detected_chips(&nr) )
-    	    {
-        	nr1 = 0, nr2 = 0;
-        	while( feature = sensors_get_all_features( *name, &nr1, &nr2 ) )
-	    	    if( sensors_get_ignored( *name, feature->number ) == 1 && feature->mapping == SENSORS_NO_MAPPING )
-            	    { sens_allow |= true; break; }
-	    }	
+	    while( name = sensors_get_detected_chips(&nr) )
+	    {
+		nr1 = 0, nr2 = 0;
+		while( feature = sensors_get_all_features( *name, &nr1, &nr2 ) )
+		    if( sensors_get_ignored( *name, feature->number ) == 1 && feature->mapping == SENSORS_NO_MAPPING )
+		    { sens_allow |= true; break; }
+	    }
 	}
 	//- Check monitor present -
 	else
@@ -144,12 +144,12 @@ void Sensors::makeActiveDA( TMdContr *a_cntr )
 	}
 	//- Sensor parameter create -
 	if( sens_allow )
-	{	
+	{
 	    a_cntr->add(ap_nm,0);
 	    a_cntr->at(ap_nm).at().setName(_("Data sensors"));
 	    a_cntr->at(ap_nm).at().autoC(true);
-    	    a_cntr->at(ap_nm).at().cfg("TYPE").setS(id());
-    	    a_cntr->at(ap_nm).at().cfg("EN").setB(true);
+	    a_cntr->at(ap_nm).at().cfg("TYPE").setS(id());
+	    a_cntr->at(ap_nm).at().cfg("EN").setB(true);
 	}
     }
 }

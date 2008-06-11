@@ -31,39 +31,39 @@ using std::vector;
 //********************************************
 //* Resource object                          *
 //********************************************
-class Res 
+class Res
 {
-    public: 
+    public:
 	Res( unsigned val = 1 );
 	~Res( );
 
-	void resRequestW( long tm = 0 ); 	// Write request
-        void resReleaseW( );   			// Write release
-	void resRequestR( long tm = 0 ); 	// Read request
-	void resReleaseR( );             	// Read release
-	
+	void resRequestW( long tm = 0 );	// Write request
+	void resReleaseW( );			// Write release
+	void resRequestR( long tm = 0 );	// Read request
+	void resReleaseR( );			// Read release
+
     private:
-	sem_t sem;	// semaphore id
-	sem_t sem_rc;	// read counter semaphore
-	int   rd_c;   	// readers counter
+	sem_t	sem;				// semaphore id
+	sem_t	sem_rc;				// read counter semaphore
+	int	rd_c;				// readers counter
 };
 
 //********************************************
 //* Automatic resource allocator/deallocator *
 //********************************************
-class ResAlloc 
+class ResAlloc
 {
-    public: 
+    public:
 	ResAlloc( Res &rid );
 	ResAlloc( Res &rid, bool write, long tm = 0 );
 	~ResAlloc( );
 
 	void request( bool write = false, long tm = 0 );
 	void release( );
-    
-    private:    
+
+    private:
 	Res	&m_id;
-	char  	m_wr;	//0x01 - alloc; 0x02 - write
+	char	m_wr;				//0x01 - alloc; 0x02 - write
 };
 
 #endif // RESALLOC_H

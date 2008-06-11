@@ -437,13 +437,11 @@ string MBD::clrEndSpace( const string &vl )
 
 void MBD::cntrCmdProc( XMLNode *opt )
 {
-    string grp = owner().owner().subId();
-
     //Get page info
     if( opt->name() == "info" )
     {
 	TBD::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root",grp.c_str(),2,
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","BD",2,
 	    "tp","str","help",
 	    _("FireBird address to DB writed as: [<file>;<user>;<pass>].\n"
 	      "Where:\n"

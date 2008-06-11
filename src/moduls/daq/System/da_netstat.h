@@ -34,23 +34,23 @@ class NetStat: public DA
 {
     public:
 	//Methods
-        NetStat( );
+	NetStat( );
 	~NetStat( );
-	
-        string id( ) 	{ return "netstat"; }
-        string name( )	{ return "Net statistic"; }			
-		    
-        void init( TMdPrm *prm );
-        void getVal( TMdPrm *prm );
-	
+
+	string id( )	{ return "netstat"; }
+	string name( )	{ return "Net statistic"; }
+
+	void init( TMdPrm *prm );
+	void getVal( TMdPrm *prm );
+
 	void makeActiveDA( TMdContr *a_cntr );
-	
+
     private:
 	//Attributes
-        void dList( vector<string> &list, bool part = false );	
+	void dList( vector<string> &list, bool part = false );
 };
 
-} //End namespace 
+} //End namespace
 
 #endif //DA_NETSTAT_H
 

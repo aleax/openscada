@@ -266,13 +266,11 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
 
 void MBD::cntrCmdProc( XMLNode *opt )
 {
-    string grp = owner().owner().subId();
-
     //Get page info
     if( opt->name() == "info" )
     {
 	TBD::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root",grp.c_str(),2,
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","BD",2,
 	    "tp","str","help",
 	    _("MySQL DB address writed in form: [<host>;<user>;<pass>;<db>;<port>;<u_sock>].\n"
 	      "Where:\n"

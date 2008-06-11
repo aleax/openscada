@@ -1853,7 +1853,7 @@ void DevelWdgView::upMouseCursors( const QPoint &curp )
 	new_shp = Qt::SizeHorCursor;
     else if( curp.y()>(rect().height()-4) && curp.y()<(rect().height()+4) )
 	new_shp = Qt::SizeVerCursor;
-    if( new_shp != Qt::ArrowCursor ) 
+    if( new_shp != Qt::ArrowCursor )
     {
 	m_flgs &= ~DevelWdgView::holdChild;
 	if( new_shp != cursor().shape() ) setCursor(new_shp);
@@ -2210,12 +2210,11 @@ void DevelWdgView::wdgsMoveResize( const QPointF &dP )
 	//-- Set status bar --
 	QRectF srect;
 	for( int i_c = 0; i_c < children().size(); i_c++ )
-	    if( qobject_cast<DevelWdgView*>(children().at(i_c)) && 
+	    if( qobject_cast<DevelWdgView*>(children().at(i_c)) &&
 		    ((DevelWdgView*)children().at(i_c))->select( ) )
 		srect = srect.united(((DevelWdgView*)children().at(i_c))->geometryF());
 	mainWin()->statusBar()->showMessage(
-	    QString(_("Elements: '%1' --- xy(%2:%3) wh[%4:%5]"))
-		.arg(selectChilds().c_str())
+	    QString(_("Selected elements --- xy(%2:%3) wh[%4:%5]"))
 		.arg(srect.x()/x_scale).arg(srect.y()/y_scale)
 		.arg(srect.width()/x_scale).arg(srect.height()/y_scale),10000);
     }
@@ -2263,6 +2262,31 @@ bool DevelWdgView::event( QEvent *event )
 	    pnt.setPen("black");
 	    pnt.setBrush(QBrush(QColor("white")));
 	    pnt.drawRect(rect().adjusted(0,0,-1,-1));
+	}
+	//- Draw widget border geometry -
+	else if( select() && ((DevelWdgView*)parentWidget())->flags()&DevelWdgView::moveHoldMove )
+	{
+	    if( !(flags()&DevelWdgView::hideChilds) )
+	    {
+		m_flgs |= DevelWdgView::hideChilds;
+		for( int i_c = 0; i_c < children().size(); i_c++ )
+		    if( qobject_cast<QWidget*>(children().at(i_c)) )
+			((QWidget*)children().at(i_c))->hide();
+	    }
+	    pnt.setPen("white");
+	    pnt.drawRect(rect().adjusted(0,0,-1,-1));
+	    QPen pen(QColor("black"));
+	    pen.setStyle(Qt::DashLine);
+	    pnt.setPen(pen);
+	    pnt.drawRect(rect().adjusted(0,0,-1,-1));
+	    return true;
+	}
+	else if( flags()&DevelWdgView::hideChilds )
+	{
+	    m_flgs &= ~DevelWdgView::hideChilds;
+	    for( int i_c = 0; i_c < children().size(); i_c++ )
+		if( qobject_cast<QWidget*>(children().at(i_c)) )
+		    ((QWidget*)children().at(i_c))->show();
 	}
 	//- Check widget -
 	if( !shape )

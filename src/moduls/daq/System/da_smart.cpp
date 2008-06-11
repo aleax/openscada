@@ -50,7 +50,7 @@ HddSmart::~HddSmart( )
 void HddSmart::init( TMdPrm *prm )
 {
     TCfg &c_subt = prm->cfg("SUBT");
-    
+
     //Create Config
     c_subt.fld().setDescr(_("Disk"));
 
@@ -119,30 +119,30 @@ void HddSmart::getVal( TMdPrm *prm )
     if( fp )
     {
 	printf("TEST 00\n");
-        while( fgets(buf,sizeof(buf),fp) != NULL )
-	{	
+	while( fgets(buf,sizeof(buf),fp) != NULL )
+	{
 	    if( sscanf(buf,"%30s : %50s",name,info) != 2 ) continue;
 	    printf("TEST 01: <%s>\n",name);
 	    if(!prm->vlPresent(name))
                 fldAdd( new TFld(name,name,TFld::String,Fld::NoWrite) );
 	    prm->vlAt(name).at().setS(info,NULL,true);
-	}	    
-	fclose(fp);    
-    }*/   
-    
+	}
+	fclose(fp);
+    }*/
+
     //- SMART atributes -
-    string cmd = string(smartval_cmd)+dev+((dev.size()&&dev[0]=='s')?" -d ata":"");	
+    string cmd = string(smartval_cmd)+dev+((dev.size()&&dev[0]=='s')?" -d ata":"");
     FILE *fp = popen(cmd.c_str(),"r");
-    if( fp ) 
-    {	
-        while( fgets(buf,sizeof(buf),fp) != NULL )
-	{	
+    if( fp )
+    {
+	while( fgets(buf,sizeof(buf),fp) != NULL )
+	{
 	    if( sscanf(buf,"%d %30s %*x %*d %*d %*d %*s %*s %*s %lu\n",&id,name,&val) != 3 ) continue;
 	    string s_id = TSYS::int2str(id);
 	    if(!prm->vlPresent(s_id))
-                fldAdd( new TFld(s_id.c_str(),name,TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
-	    prm->vlAt(s_id).at().setI(val,0,true);		
-	}	    
+		fldAdd( new TFld(s_id.c_str(),name,TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
+	    prm->vlAt(s_id).at().setI(val,0,true);
+	}
 	fclose(fp);
     }
 }
@@ -150,20 +150,20 @@ void HddSmart::getVal( TMdPrm *prm )
 void HddSmart::makeActiveDA( TMdContr *a_cntr )
 {
     string ap_nm = "Smart_";
-	
+
     vector<string> list;
     dList(list);
     for( int i_hd = 0; i_hd < list.size(); i_hd++ )
     {
-        string hddprm = ap_nm+list[i_hd];
-        if(!a_cntr->present(hddprm))
-        {
-            a_cntr->add(hddprm,0);
+	string hddprm = ap_nm+list[i_hd];
+	if(!a_cntr->present(hddprm))
+	{
+	    a_cntr->add(hddprm,0);
 	    a_cntr->at(hddprm).at().setName(_("HD smart: ")+list[i_hd]);
 	    a_cntr->at(hddprm).at().autoC(true);
-            a_cntr->at(hddprm).at().cfg("TYPE").setS(id());
-    	    a_cntr->at(hddprm).at().cfg("SUBT").setS(list[i_hd]);
-            a_cntr->at(hddprm).at().cfg("EN").setB(true);
-        }
+	    a_cntr->at(hddprm).at().cfg("TYPE").setS(id());
+	    a_cntr->at(hddprm).at().cfg("SUBT").setS(list[i_hd]);
+	    a_cntr->at(hddprm).at().cfg("EN").setB(true);
+	}
     }
 }

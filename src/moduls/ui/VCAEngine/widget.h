@@ -40,24 +40,24 @@ class Attr : public TCntrNode
 	//- Attribute flags -
 	enum GlobalAttrFlgs
 	{
-	    Active  = 0x0100,	//Active attribute for primitives process
-	    Image   = 0x0200,	//Store image link to DB or to file
-	    DataTime= 0x0200,	//Store data and time into integer attribute
-	    Color   = 0x0400,	//Store color
-	    Font    = 0x0800,	//Store font
-	    Address = 0x1000,	//Store address to a parameter or an attribute
-	    IsUser  = 0x2000,	//User created element
-	    IsInher = 0x4000,	//Inherit attribute
-	    Mutable = 0x8000	//Mutable attribute, present depend from "Active" attribute value
+	    Active	= 0x0100,	//Active attribute for primitives process
+	    Image	= 0x0200,	//Store image link to DB or to file
+	    DataTime	= 0x0200,	//Store data and time into integer attribute
+	    Color	= 0x0400,	//Store color
+	    Font	= 0x0800,	//Store font
+	    Address	= 0x1000,	//Store address to a parameter or an attribute
+	    IsUser	= 0x2000,	//User created element
+	    IsInher	= 0x4000,	//Inherit attribute
+	    Mutable	= 0x8000	//Mutable attribute, present depend from "Active" attribute value
 	};
 
 	//- Link types -
 	enum SelfAttrFlgs
 	{
-	    CfgConst	= 0x01,	//Constant
-	    CfgLnkIn	= 0x02,	//Input link
-	    CfgLnkOut	= 0x04,	//Output link
-	    ProcAttr	= 0x08	//Process attribute
+	    CfgConst	= 0x01,		//Constant
+	    CfgLnkIn	= 0x02,		//Input link
+	    CfgLnkOut	= 0x04,		//Output link
+	    ProcAttr	= 0x08		//Process attribute
 	};
 
 	//Methods
@@ -106,10 +106,10 @@ class Attr : public TCntrNode
 	//- Storing -
 	union
 	{
-	    string *s_val;		//String
-	    double r_val;		//Real
-	    int    i_val;		//Integer
-	    char   b_val;		//Boolean
+	    string	*s_val;		//String
+	    double	r_val;		//Real
+	    int		i_val;		//Integer
+	    char	b_val;		//Boolean
 	}m_val;
 	//- Attributes -
 	TFld	*m_fld;			//Base field
@@ -160,8 +160,8 @@ class Widget : public TCntrNode, public TValElem
 	virtual void setCalcPer( int vl )		{ };
 
 	//- Storing -
-	virtual void loadIO( )  { }     //Load widget's IO
-	virtual void saveIO( )  { }     //Save widget's IO
+	virtual void loadIO( )		{ }			//Load widget's IO
+	virtual void saveIO( )		{ }			//Save widget's IO
 
 	//- Enable stat -
 	bool enable( );
@@ -223,7 +223,7 @@ class Widget : public TCntrNode, public TValElem
 
 	bool	m_enable;		//Enable status
 	bool	m_lnk;			//Widget as link
-	int 	attrId, inclWdg;	//The widget's container id
+	int	attrId, inclWdg;	//The widget's container id
 	string	m_parent_nm;		//Parent widget name
 	AutoHD<Widget>	m_parent;	//Parent widget
 	vector< AutoHD<Widget> > m_herit;	//Heritators

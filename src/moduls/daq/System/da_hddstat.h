@@ -18,7 +18,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
- 
+
 #ifndef DA_HDDSTAT_H
 #define DA_HDDSTAT_H
 
@@ -34,23 +34,22 @@ class HddStat: public DA
 {
     public:
 	//Methods
-        HddStat( );
+	HddStat( );
 	~HddStat( );
-	
-        string id( ) 	{ return "hddstat"; }
-        string name( )	{ return "HDD statistic"; }
-		    
-        void init( TMdPrm *prm );
-        void getVal( TMdPrm *prm );
-	
+
+	string id( )	{ return "hddstat"; }
+	string name( )	{ return "HDD statistic"; }
+
+	void init( TMdPrm *prm );
+	void getVal( TMdPrm *prm );
+
 	void makeActiveDA( TMdContr *a_cntr );
-	
+
     private:
 	//Methods
-        void dList( vector<string> &list, bool part = false );	
+	void dList( vector<string> &list, bool part = false );
 };
 
-} //End namespace 
+} //End namespace
 
 #endif //DA_HDDSTAT_H
-

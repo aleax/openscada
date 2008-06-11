@@ -18,7 +18,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
- 
+
 #ifndef DA_H
 #define DA_H
 
@@ -37,19 +37,18 @@ class DA: public ::TElem
 {
     public:
 	//Methods
-        DA( ) : TElem("da_el") { }
-		    
+	DA( ) : TElem("da_el") { }
+
 	virtual string id( ) = 0;
 	virtual string name( ) = 0;
-	
-        virtual void init( TMdPrm *prm ) 	{ }
+
+	virtual void init( TMdPrm *prm ) 	{ }
 	virtual void deInit( TMdPrm *prm )	{ }
-        virtual void getVal( TMdPrm *prm )	{ }
-	
+	virtual void getVal( TMdPrm *prm )	{ }
+
 	virtual void makeActiveDA( TMdContr *a_cntr )	{ }
 };
 
-} //End namespace 
+} //End namespace
 
 #endif //DA_H
-

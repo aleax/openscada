@@ -466,8 +466,9 @@ class DevelWdgView: public WdgView
 	    moveHold	= 0x08,		//Mouse move hold state
 	    holdChild	= 0x10,		//Hold child widget in time of moving and resizing
 	    leftTop	= 0x20,		//Left top anchors
-	    holdSelRect = 0x40,		//Hold for select rect
-	    moveHoldMove= 0x80		//Mouse move on hold
+	    holdSelRect	= 0x40,		//Hold for select rect
+	    moveHoldMove= 0x80,		//Mouse move on hold
+	    hideChilds  = 0x100		//Hide childs on move
 	};
 
 	//Public methods
@@ -477,6 +478,7 @@ class DevelWdgView: public WdgView
 	string user( );
 	VisDevelop *mainWin( );
 
+	short int flags( )	{ return m_flgs; }
 	bool select( )		{ return m_flgs&wdgSelect; }	//Select widget state
 	string selectChilds( int *cnt = NULL, vector<DevelWdgView*> *wdgs = NULL );	//Get selected include widgets list
 	bool edit( )		{ return m_flgs&wdgEdit; }	//Edit mode state
@@ -512,7 +514,7 @@ class DevelWdgView: public WdgView
 	void upMouseCursors( const QPoint &pnt );
 
 	//Private attributes
-	char		m_flgs;		//Developmen flags
+	short int	m_flgs;		//Developmen flags
 	QPoint		holdPnt;	//Hold move point
 	SizePntWdg	*pntView;	//Point view
 	DevelWdgView	*editWdg;

@@ -32,7 +32,7 @@
 
 namespace DBArch
 {
- 
+
 //*************************************************
 //* DBArch::ModArch                               *
 //*************************************************
@@ -41,17 +41,17 @@ class ModArch: public TTipArchivator
     public:
 	ModArch( const string &name );
 	~ModArch();
-	    
+
 	void modStart( );
 	void modStop( );
 
 	AutoHD<ModMArch> messAt( const string &iid )	{ return TTipArchivator::messAt(iid); }
 	AutoHD<ModVArch> valAt( const string &iid )	{ return TTipArchivator::valAt(iid); }
-	
+
 	string mainTbl( )	{ return modId(); }
 
 	TElem &archEl( )	{ return el_arch; }
-        TElem &messEl( )	{ return el_mess; }
+	TElem &messEl( )	{ return el_mess; }
 	TElem &vlIntEl( )	{ return el_vl_int; }
 	TElem &vlRealEl( )	{ return el_vl_real; }
 	TElem &vlStrEl( )	{ return el_vl_str; }
@@ -60,7 +60,7 @@ class ModArch: public TTipArchivator
 	//Methods
 	void load_( );
 
-	void postEnable( int flag );	
+	void postEnable( int flag );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
 	TMArchivator *AMess( const string &id, const string &db );
@@ -78,4 +78,3 @@ extern ModArch *mod;
 }
 
 #endif //ARCH_H
-

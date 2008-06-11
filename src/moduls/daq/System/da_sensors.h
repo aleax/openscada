@@ -18,7 +18,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
- 
+
 #ifndef DA_SENSORS_H
 #define DA_SENSORS_H
 
@@ -34,27 +34,27 @@ class Sensors: public DA
 {
     public:
 	//Methods
-        Sensors( );
-        ~Sensors( );
-	
-        string id( )	{ return "sensors"; }
-        string name( )	{ return "Sensors"; }			
-		    
-        void init( TMdPrm *prm );
+	Sensors( );
+	~Sensors( );
+
+	string id( )	{ return "sensors"; }
+	string name( )	{ return "Sensors"; }
+
+	void init( TMdPrm *prm );
 	void deInit( TMdPrm *prm );
-        void getVal( TMdPrm *prm );
-	
+	void getVal( TMdPrm *prm );
+
 	void makeActiveDA( TMdContr *a_cntr );
-	
+
     private:
 	//Attributes
 	static char *mbmon_cmd;
 	bool libsensor_ok;
-};									    
+};
 
 
 
-} //End namespace 
+} //End namespace
 
 #endif //DA_SENSORS_H
 

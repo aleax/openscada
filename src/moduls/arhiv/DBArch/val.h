@@ -29,13 +29,13 @@
 using std::string;
 
 namespace DBArch
-{    
+{
 
 //************************************************
 //* DBArch::ModVArchEl - Value archive element   *
 //************************************************
 class ModVArch;
-    
+
 class ModVArchEl: public TVArchEl
 {
     public:
@@ -46,7 +46,7 @@ class ModVArchEl: public TVArchEl
 	string archTbl( );
 
 	void fullErase( );
-		    
+
 	long long begin( )	{ return m_beg;	}
 	long long end( )	{ return m_end; }
 	long long period( )	{ return m_per; }
@@ -58,14 +58,14 @@ class ModVArchEl: public TVArchEl
 	char   getB( long long *tm, bool up_ord );
 
 	void setVal( TValBuf &buf, long long beg = 0, long long end = 0 );
-	    
+
 	ModVArch &archivator()	{ return (ModVArch&)TVArchEl::archivator(); }
-	
+
     private:
 	//Attributes
 	long long m_beg, m_end, m_per;
 };
- 
+
 //************************************************
 //* DBArch::ModVArch - Value archivator          *
 //************************************************
@@ -87,9 +87,9 @@ class ModVArch: public TVArchivator
     protected:
 	//Methods
 	void load_( );
-	
-	void cntrCmdProc( XMLNode *opt );	
-	
+
+	void cntrCmdProc( XMLNode *opt );
+
 	TVArchEl *getArchEl( TVArchive &arch );
 
     private:
@@ -100,4 +100,3 @@ class ModVArch: public TVArchivator
 }
 
 #endif //DB_VAL_H
-
