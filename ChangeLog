@@ -1,3 +1,7 @@
+2008-06-13 Maxim
+- /UI/Vision: Scaling and rotating of the image when filling with it the primitive "ElFigure" is added.
+
+
 2008-06-11 Roman
 - !:/Archive, /DB, /Security, : Groups identifier write, for permission to control node, changed to direct string.
 - !!:/UI/VCAEngine: Development permission made check to user "root" and "UI". Widget's parmission used only for runtime.

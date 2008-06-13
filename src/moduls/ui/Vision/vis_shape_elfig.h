@@ -170,8 +170,8 @@ class ShapeElFigure : public WdgShape
         bool inundation( const QPointF &point, const QVector<ShapeItem> &shapeItems, PntMap *pnts, const QVector<int> &vect, int N, WdgView *w );
         bool inundation1_2( const QPointF &point, const QVector<ShapeItem> &shapeItems, QVector<inundationItem> &inundationItems, PntMap *pnts, WdgView *w, int number );
         int  buildMatrix( const QVector<ShapeItem> &shapeItems );
-        QPointF scaleRotate( const QPointF &point, WdgView *w, bool flag_scale );
-        QPointF unScaleRotate( const QPointF &point, WdgView *w, bool flag_scale );
+        QPointF scaleRotate( const QPointF &point, WdgView *w, bool flag_scale, bool flag_rotate );
+        QPointF unScaleRotate( const QPointF &point, WdgView *w, bool flag_scale, bool flag_rotate );
         QPainterPath createInundationPath( const QVector<int> &in_fig_num, const QVector<ShapeItem> &shapeItems, PntMap *pnts, WdgView *w );
         QVector<int> inundationSort( const QPainterPath &inundationPath, QVector<int> &inundation_fig_num, const QVector<ShapeItem> &shapeItems, PntMap *pnts, WdgView *w );
       	
@@ -199,7 +199,7 @@ class ShapeElFigure : public WdgShape
         bool flag_holds;			
         bool flag_hold_move;			
         bool flag_inund_break;
-        bool flag_scaleRotate;
+        bool flag_scale, flag_rotate;
         double t_start, t_end;			
 	QPointF Mouse_pos, offset;		
         int current_ss, current_se, current_ee, current_es;

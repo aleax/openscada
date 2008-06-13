@@ -79,7 +79,9 @@ class VCAObj : public TCntrNode
 	string nodeName( )		{ return m_id; }
 
 	//Attributes
-	string 	m_id;
+	string	m_id;
+    protected:
+            Res	mRes;
 };
 
 //*************************************************

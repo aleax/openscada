@@ -427,6 +427,7 @@ bool VCAElFigure::isPaintable( ShapeItem item, double xScale, double yScale )
     return false;
 }
 
+//- Drawing of dashed or dotted borders of the figure -
 void VCAElFigure::dashDotFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3, Point el_p4, Point el_p5, Point el_p6, int  clr_el, int clr_el_line, double el_width, double el_border_width, int type, double wdt, double wdt_1  )
 {
     switch( type )
@@ -533,6 +534,7 @@ void VCAElFigure::dashDotFigureBorders( gdImagePtr im, Point el_p1, Point el_p2,
     }
 }
 
+//- Drawing the borders of the figure -
 void VCAElFigure::paintFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3, Point el_p4, Point el_p5, Point el_p6, int  clr_el, int clr_el_line, double el_width, double el_border_width, int type )
 {
     double el_ang, x_center, y_center, t, t_start, t_end, ang, arc_a, arc_b, arc_a_small, arc_b_small, delta ;
@@ -541,10 +543,8 @@ void VCAElFigure::paintFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, P
     {
         case 1:
             gdImageSetThickness( im, (int)(el_border_width*2) );
-            if( el_p1.y <= el_p2.y )
-                el_ang = 360 - angle( el_p1, el_p2, el_p1, Point( el_p1.x+10, el_p1.y ) );
-            else
-                el_ang = angle( el_p1, el_p2, el_p1, Point( el_p1.x+10, el_p1.y ) );
+            if( el_p1.y <= el_p2.y ) el_ang = 360 - angle( el_p1, el_p2, el_p1, Point( el_p1.x+10, el_p1.y ) );
+            else el_ang = angle( el_p1, el_p2, el_p1, Point( el_p1.x+10, el_p1.y ) );
             
             gdImageLine( im, (int)TSYS::realRound( el_p1.x + rotate( Point( -el_border_width, -(el_width/2+el_border_width) ), el_ang ).x, 2, true ),
                              (int)TSYS::realRound( el_p1.y - rotate( Point( -el_border_width, - (el_width/2+el_border_width)), el_ang ).y, 2, true ),
@@ -677,8 +677,7 @@ void VCAElFigure::paintFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, P
             arc_b = length( el_p3, el_p4 ) + el_width/2 + el_border_width/2;
             arc_a_small = arc_a - el_width - el_border_width;
             arc_b_small = arc_b - el_width - el_border_width;
-            if ( el_p5.y <= el_p3.y )
-                ang = angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
+            if ( el_p5.y <= el_p3.y ) ang = angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
             else ang = 360 - angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
             t_start = el_p6.x;
             t_end = el_p6.y;
@@ -719,6 +718,7 @@ void VCAElFigure::paintFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, P
     }
 }
 
+//- Drawing the dashed or dotted figure without borders -
 void VCAElFigure::dashDot( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3, Point el_p4, Point el_p5, Point el_p6, int  clr_el, double el_width, int type, int style )
 {
     switch( type )
@@ -785,8 +785,7 @@ void VCAElFigure::dashDot( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3,
         case 2:
         {
             double ang, arc_a, arc_b, t_start, t_end, t;
-            if ( el_p5.y <= el_p3.y ) 
-                ang = angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
+            if ( el_p5.y <= el_p3.y ) ang = angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
             else ang = 360 - angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
             arc_a = length( el_p5, el_p3 );
             arc_b = length( el_p3, el_p4 );
@@ -974,8 +973,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                 else
                 {
                     clr_el = item.borderColor;
-                    if( item.flag_brd )
-                        clr_el_line = clr_el;
+                    if( item.flag_brd ) clr_el_line = clr_el;
                 }
                 if( item.border_width < 4 && item.style != 0 && item.flag_brd && flag_style )//---- Drawing the dashed or dotted arc with borders' width < 4 and flag_brd ----
                 {
@@ -1117,8 +1115,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                 //---- Drawing the solid arc with borders' width >=4 ----
                 if( item.border_width >= 4 && ( item.style == 0 || !flag_style ) )
                 {
-                    if( flag_clr_ln )
-                        el_border_width = el_border_width/2;
+                    if( flag_clr_ln ) el_border_width = el_border_width/2;
                     t_start = el_p6.x;
                     t_end = el_p6.y; 
                     arc_a = length( el_p5, el_p3 ) + el_width/2 + el_border_width - 2;
@@ -1178,7 +1175,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                     gdImageFillToBorder( im, (int)TSYS::realRound( p_center.x ), (int)TSYS::realRound( p_center.y ), clr_el, clr_el_line );
                     
                 }
-                // Recalculating the points of the arc to make them really belonging to the arc
+                //---- Recalculating the points of the arc to make them really belonging to the arc ----
                 el_p1 = scaleRotate( (pnts)[item.n1], xScale, yScale, true );
                 el_p2 = scaleRotate( (pnts)[item.n2], xScale, yScale, true );
                 el_p3 = scaleRotate( (pnts)[item.n3], xScale, yScale, true );
@@ -1261,8 +1258,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
             Point el_p2 = scaleRotate( (pnts)[item.n2], xScale, yScale, true );
             Point el_p3 = scaleRotate( (pnts)[item.n3], xScale, yScale, true );
             Point el_p4 = scaleRotate( (pnts)[item.n4], xScale, yScale, true );
-            double delta = bezierDeltaT( el_p1, el_p3,
-                                         el_p4, el_p2 );
+            double delta = bezierDeltaT( el_p1, el_p3, el_p4, el_p2 );
             if( el_p1.y <= el_p2.y )
                 el_ang = 360 - angle( el_p1, el_p2, el_p1, Point( el_p1.x+10, el_p1.y ) );
             else
@@ -1273,8 +1269,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
             else 
             {
                 clr_el = item.borderColor;
-                if( item.flag_brd )
-                    clr_el_line = clr_el;
+                if( item.flag_brd ) clr_el_line = clr_el;
             }
             if( item.border_width < 4 && item.style != 0 && item.flag_brd && flag_style )//---- Drawing the dashed or dotted bezier curve with borders' width < 4 and with flag_brd ----
             {
@@ -1383,8 +1378,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
             }
             if( item.border_width >=4 && ( item.style == 0 || !flag_style ) )//----- Drawing the solid bezier curve with borders' width >= 4 -----
             {
-                if( flag_clr_ln )
-                    el_border_width = el_border_width/2;
+                if( flag_clr_ln ) el_border_width = el_border_width/2;
                 Point p1 = unrotate( el_p1, el_ang, el_p1.x, el_p1.y );
                 Point p2 = unrotate( el_p2, el_ang, el_p1.x, el_p1.y );
                 Point p3 = unrotate( el_p3, el_ang,el_p1.x, el_p1.y );
@@ -1591,6 +1585,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 
 void VCAElFigure::getReq( SSess &ses )
 {
+    ResAlloc res(mRes,true);
     //- Prepare picture -
     vector<int> shape_temp;
     vector<int> line_color_shape;
@@ -1750,11 +1745,14 @@ void VCAElFigure::getReq( SSess &ses )
             delta_point_center = scaleRotate( (pnts)[shapeItems[fig[0]].n3], xSc, ySc, true );
             paintFill( im, delta_point_center, inundationItems[i], tmp_clr );
         }
-        if( point_num.size() > 1 )
+        if( point_num.size() > 1 && 
+            length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true ), scaleRotate( (pnts)[point_num[0]], xSc, ySc, true ) ) > 1 &&
+            length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true ) ) > 1 )
         {
             //-- Line and line --
             if( shapeItems[fig[0]].type == 1 && shapeItems[fig[1]].type == 1 )
             {
+                //for(int d=0; d<point_num.size(); d++)
                 Point P1, P2, P3, P4, P5, P6, P7, P8, dP1, dP2, num_pnt_new;
                 double a,b,a1,b1;
                 double scale;
@@ -2895,6 +2893,7 @@ void VCAElFigure::postReq( SSess &ses )
 
 void VCAElFigure::setAttrs( XMLNode &node, const string &user )
 {
+    ResAlloc res(mRes,true);
     XMLNode *req_el;
     Point StartMotionPos;
     Point EndMotionPos;
@@ -2904,7 +2903,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
     Point CtrlMotionPos_4;
     double t_start, t_end, a, b, ang_t, ang;
     int MotionWidth;
-    pnts.clear();
+    //pnts.clear();
     //shapeItems.clear();
     rel_list=false;
     for( int i_a = 0; i_a < node.childSize(); i_a++ )
