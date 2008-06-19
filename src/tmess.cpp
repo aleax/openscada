@@ -40,7 +40,7 @@
 //*************************************************
 //* TMess                                         *
 //*************************************************
-TMess::TMess(  ) : IOCharSet("UTF8"), m_mess_level(0), log_dir(0x2)
+TMess::TMess(  ) : IOCharSet("UTF-8"), m_mess_level(0), log_dir(0x2)
 {
     openlog(PACKAGE,0,LOG_USER);
     setlocale(LC_ALL,"");

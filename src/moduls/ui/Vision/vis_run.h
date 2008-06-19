@@ -47,20 +47,20 @@ class VisRun : public QMainWindow
     Q_OBJECT
     public:
 	//Public methods
-	VisRun( const string &prj_it, const string &open_user, const string &VCAstat, bool crSessForce = false );
+	VisRun( const string &prj_it, const string &open_user, const string &open_user, const string &VCAstat, bool crSessForce = false );
 	~VisRun( );
 
 	string user( );
+	string password( );
+	string VCAStation( );
 	int period( )		{ return m_period; }
 	string workSess( )	{ return work_sess; }
 
 	string srcProject( )	{ return src_prj; }
-	string VCAStation( )	{ return m_stat; }
 	float  xScale( )	{ return x_scale; }
 	float  yScale( )	{ return y_scale; }
 	unsigned reqTm( )	{ return reqtm; }
 
-	void setVCAStation( const string& st );
 	void setXScale( float vl )	{ x_scale = vl; }
 	void setYScale( float vl )	{ y_scale = vl; }
 
@@ -68,6 +68,7 @@ class VisRun : public QMainWindow
 	void callPage( const string &ses_it, XMLNode *upw = NULL );	//Call session page
 
 	//- Cache commands -
+	void pgCacheClear( );
 	void pgCacheAdd( RunWdgView *wdg );
 	RunWdgView *pgCacheGet( const string &id );
 
@@ -95,6 +96,8 @@ class VisRun : public QMainWindow
 	void quitSt( );				//Full quit OpenSCADA
 
 	void fullScreen( bool vl );		//Full screen toggle
+
+	void userChanged( const QString &oldUser, const QString &oldPass );	//User changed
 
 	void about( );				//About at programm
 	void aboutQt( );			//About at QT library
@@ -126,14 +129,13 @@ class VisRun : public QMainWindow
 	//- Main components -
 	QTimer		*endRunTimer, *updateTimer;
 	bool		winClose;		//Close window flag
-	UserStBar	*w_user;		//User status widget
+	UserStBar	*wUser;			//User status widget
 	QLabel		*w_stat;		//VCA engine station
 	string 		work_sess, src_prj;	//Work session and source project
 	RunPageView	*master_pg;		//Master page of runtime session
 	int 		m_period;		//Clock's period
 	unsigned	w_prc_cnt;		//Process counter
 	float		upd_tm;
-	string		m_stat;			//Station
 	unsigned	reqtm;			//Requested time
 
 	float		x_scale, y_scale;	//RunTime scaling

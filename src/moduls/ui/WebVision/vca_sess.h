@@ -80,8 +80,6 @@ class VCAObj : public TCntrNode
 
 	//Attributes
 	string	m_id;
-    protected:
-            Res	mRes;
 };
 
 //*************************************************
@@ -110,7 +108,7 @@ class ShapeItem
 	bool		flag_brd;
 };
 
-class InundationItem 
+class InundationItem
 {
     public:
 	InundationItem( )	{ }
@@ -169,6 +167,8 @@ class VCAElFigure : public VCAObj
 	PntMap pnts;
 	vector<ShapeItem> shapeItems;
 	vector<InundationItem> inundationItems;
+
+	Res	mRes;
 };
 
 
@@ -183,20 +183,20 @@ class VCADiagram : public VCAObj
 
 	void getReq( SSess &ses );
 	void postReq( SSess &ses );
-	void setAttrs( XMLNode &node, const string &user );	
+	void setAttrs( XMLNode &node, const string &user );
 
 	//Attributes
 	int		width, height,		//Widget geometry
 			geomMargin,		//Margin
 			bordWidth;		//Border width
-	bool 		active,			//Active diagram
+	bool		active,			//Active diagram
 			tTimeCurent;		//Curent time
-	long long 	tTime, curTime;		//Trend time and trend cursor's time position
+	long long	tTime, curTime;		//Trend time and trend cursor's time position
 	int		trcPer;			//Tracing period
 	float		tSize;			//Trend size (s)
 	int		curColor, 		//Cursor line color
 			sclColor,		//Scale grid color
-			sclMarkColor; 		//Scale markers color
+			sclMarkColor;		//Scale markers color
 	string		sclMarkFont,		//Scale markers font
 			valArch;		//Value archivator
 	int		sclHor, sclVer;		//Horisontal and Vertical scale mode 
@@ -263,6 +263,8 @@ class VCADiagram : public VCAObj
 
 	//Attributes
 	vector<TrendObj> trnds;			//Trends container
+
+	Res	mRes;
 };
 
 //*************************************************

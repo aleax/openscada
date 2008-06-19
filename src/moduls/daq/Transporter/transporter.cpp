@@ -149,7 +149,7 @@ int TTpContr::cntrIfCmd( XMLNode &node )
     TTransportS::ExtHost host = SYS->transport().at().extHostGet("*",station);
     AutoHD<TTransportOut> tr = SYS->transport().at().extHost(host,"TrCntr");
     if( !tr.at().startStat() )	tr.at().start();
-    node.load(tr.at().messProtIO(host.user+"\n"+host.pass+"\n"+node.save(),"SelfSystem"));
+    node.load(tr.at().messProtIO("0\n"+host.user+"\n"+host.pass+"\n"+node.save(),"SelfSystem"));
     node.setAttr("path",path);
     return atoi(node.attr("rez").c_str());
 }

@@ -214,7 +214,7 @@ void TArchiveS::load_( )
 		at(type).at().valAdd(id,"*.*");
 	    c_el.cfg("ID").setS("");
 	    c_el.cfg("MODUL").setS("");
-	}	
+	}
     }catch( TError err )
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str()); 

@@ -47,6 +47,9 @@ class Session : public TCntrNode
 	const string &id( )	{ return m_id; }		//Identifier
 	string projNm( )	{ return m_prjnm; }		//Project's name
 	string user( )		{ return m_user; }		//Open session user
+	string owner( )		{ return mOwner; }		//Source project owner
+	string grp( )		{ return mGrp; }		//Source project group
+	short  permit( )	{ return mPermit; }		//Permition for access to source project
 	int    period( )	{ return vmax(1,m_per); }	//Process period (ms)
 	double calcTm( )	{ return tm_calc; }		//Calc session time
 	bool   enable( )	{ return m_enable; }		//Enable stat
@@ -120,8 +123,8 @@ class Session : public TCntrNode
 
 	//Attributes
 	int	m_page;
-	string	m_id, m_prjnm, m_user;
-	int	m_per;
+	string	m_id, m_prjnm, m_user, mOwner, mGrp;
+	int	m_per, mPermit;
 	bool	m_enable, m_start, endrun_req;	//Enabled, Started and endrun stats
 	bool	m_backgrnd;			//Backgrounded execution of a session
 	int	m_connects;			//Connections counter
@@ -154,7 +157,7 @@ class SessWdg : public Widget, public TValFunc
 	string ownerFullId( bool contr = false );
 	string type( )		{ return "SessWidget"; }
 	string ico( );
-	string user( );
+	string owner( );
 	string grp( );
 	short  permit( );
 	string calcLang( );

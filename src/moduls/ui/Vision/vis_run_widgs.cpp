@@ -37,7 +37,7 @@ using namespace VISION;
 //* Shape widget view runtime mode                *
 //*************************************************
 RunWdgView::RunWdgView( const string &iwid, int ilevel, VisRun *mainWind, QWidget* parent, Qt::WindowFlags f ) :
-    WdgView(iwid,ilevel,(QMainWindow*)mainWind,parent,f), reqtm(1)
+    WdgView(iwid,ilevel,(QMainWindow*)mainWind,parent,f), reqtm(1), mPermCntr(false)
 {
     int endElSt = iwid.rfind("/");
     if( endElSt == string::npos ) return;
@@ -119,6 +119,9 @@ void RunWdgView::update( unsigned cnt, int div_max, const string &wpath )
 	    {
 		setAllAttrLoad(false);
 		attrSet("","load",-1);
+		//- Childs update for permition change -
+		childsUpdate(true);
+		orderUpdate();
 	    }
 	    reqtm = strtoul(req.attr("tm").c_str(),0,10);
 
@@ -135,9 +138,69 @@ void RunWdgView::update( unsigned cnt, int div_max, const string &wpath )
 		((RunWdgView*)children().at(i_c))->update(cnt,div_max);
 }
 
+void RunWdgView::childsUpdate( bool newLoad )
+{
+    XMLNode req("get");
+
+    string b_nm = id();
+    req.setAttr("path",id()+"/%2fwdg%2fcfg%2fpath")->setAttr("resLink","1");
+    if( !cntrIfCmd(req) ) b_nm = req.text();
+
+    vector<string> lst;
+    req.clear()->setAttr("path",b_nm+"/%2finclwdg%2fwdg")->setAttr("chkUserPerm","1");
+
+    if( !cntrIfCmd(req) )
+	for( int i_el = 0; i_el < req.childSize(); i_el++ )
+	    lst.push_back(req.childGet(i_el)->attr("id"));
+
+    //- Delete child widgets -
+    for( int i_c = 0; i_c < children().size(); i_c++ )
+    {
+	if( !qobject_cast<RunWdgView*>(children().at(i_c)) || qobject_cast<RunPageView*>(children().at(i_c)) ) continue;
+	int i_l;
+	for( i_l = 0; i_l < lst.size(); i_l++ )
+	if( qobject_cast<WdgView*>(children().at(i_c))->id() == (b_nm+"/wdg_"+lst[i_l]) )
+	    break;
+	if( i_l >= lst.size() ) delete children().at(i_c);
+    }
+
+    //- Create new child widget -
+    for( int i_l = 0; i_l < lst.size(); i_l++ )
+    {
+	int i_c;
+	for( i_c = 0; i_c < children().size(); i_c++ )
+	if( qobject_cast<WdgView*>(children().at(i_c)) &&
+		qobject_cast<WdgView*>(children().at(i_c))->id() == (b_nm+"/wdg_"+lst[i_l]) )
+	    break;
+	if( i_c >= children().size() )
+	{
+	    WdgView *nwdg = newWdgItem(b_nm+"/wdg_"+lst[i_l]);
+	    if( nwdg )
+	    {
+		nwdg->show();
+		if( newLoad ) nwdg->load("");
+	    }
+	}
+    }
+}
+
 void RunWdgView::orderUpdate( )
 {
-    WdgView::orderUpdate( );
+    //- Same order of included widgets is update -
+    WdgView *lw = NULL;
+    for( int i_c = 0; i_c < children().size(); i_c++ )
+    {
+	WdgView *cw = qobject_cast<RunWdgView*>(children().at(i_c));
+	if( !cw || qobject_cast<RunPageView*>(cw) ) continue;
+	//- Change order -
+	if( lw && (cw->z() < lw->z()) )
+	{
+	    cw->stackUnder(lw);
+	    i_c = -1;
+	    lw = NULL;
+	}
+	else lw = cw;
+    }
 
     //- Update tab order -
     RunWdgView *prev_aw = NULL;
@@ -156,9 +219,12 @@ bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 
     switch(uiPrmPos)
     {
-	case -2:        //focus
+	case -2:	//focus
 	    if( (bool)atoi(val.c_str()) == hasFocus() )      break;
 	    if( (bool)atoi(val.c_str()) ) setFocus(Qt::OtherFocusReason);
+	    break;
+	case -3:	//permCntr
+	    setPermCntr( (bool)atoi(val.c_str()) );
 	    break;
     }
     return rez;

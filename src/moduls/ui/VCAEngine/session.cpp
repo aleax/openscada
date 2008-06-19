@@ -36,6 +36,7 @@ using namespace VCA;
 Session::Session( const string &iid, const string &iproj ) :
     m_enable(false), m_start(false), endrun_req(false), tm_calc(0.0),
     m_id(iid), m_user("root"), m_prjnm(iproj), m_per(100), m_calcClk(1),
+    mOwner("root"), mGrp("UI"), mPermit(R_R_R_),
     m_backgrnd(false), m_connects(0)
 {
     m_page = grpAdd("pg_");
@@ -68,7 +69,13 @@ void Session::setEnable( bool val )
 	{
 	    //- Connect to project -
 	    m_parent = mod->prjAt(m_prjnm);
-	
+
+	    //- Get data from project -
+	    mOwner	= parent().at().owner( );
+	    mGrp	= parent().at().grp( );
+	    mPermit	= parent().at().permit( );
+	    setPeriod( parent().at().period( ) );
+
 	    //- Create root pages -
 	    parent().at().list(pg_ls);
 	    for( int i_p = 0; i_p < pg_ls.size(); i_p++ )
@@ -439,12 +446,16 @@ void Session::cntrCmdProc( XMLNode *opt )
 	    vector<string> &lst = openList();
 	    for( int i_f = 0; i_f < lst.size(); i_f++ )
 	    {
+		//- Permission to view page check -
+		AutoHD<SessWdg> swdg = nodeAt(lst[i_f],1);
+		if( !SYS->security().at().access(opt->attr("user"),SEQ_RD,swdg.at().owner(),swdg.at().grp(),swdg.at().permit()) )
+		    continue;
 		XMLNode *pel = opt->childAdd("pg");
 		pel->setText(lst[i_f]);
 		if( tm )
 		{
 		    vector<string> updEl;
-		    ((AutoHD<SessWdg>)nodeAt(lst[i_f],1)).at().getUpdtWdg("",tm,updEl);
+		    swdg.at().getUpdtWdg("",tm,updEl);
 		    for( int i_e = 0; i_e < updEl.size(); i_e++ )
 			pel->childAdd("el")->setText(updEl[i_e]);
 		}
@@ -505,7 +516,15 @@ void Session::cntrCmdProc( XMLNode *opt )
 	    {
 		ctrMkNode("fld",opt,-1,"/obj/st/en",_("Enable"),RWRWR_,user().c_str(),"UI",1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/obj/st/start",_("Start"),RWRWR_,user().c_str(),"UI",1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/obj/st/user",_("User"),R_R_R_,"root","root",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/obj/st/user",_("User"),R_R_R_,"root","UI",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/obj/st/owner",_("Owner"),R_R_R_,"root","UI",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/obj/st/grp",_("Group"),R_R_R_,"root","UI",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/obj/st/u_a",_("Access"),R_R_R_,"root","UI",4,"tp","dec","dest","select",
+		    "sel_id","0;4;6","sel_list",_("No access;View;View and control"));
+		ctrMkNode("fld",opt,-1,"/obj/st/g_a","",R_R_R_,"root","UI",4,"tp","dec","dest","select",
+		    "sel_id","0;4;6","sel_list",_("No access;View;View and control"));
+		ctrMkNode("fld",opt,-1,"/obj/st/o_a","",R_R_R_,"root","UI",4,"tp","dec","dest","select",
+		    "sel_id","0;4;6","sel_list",_("No access;View;View and control"));
 		ctrMkNode("fld",opt,-1,"/obj/st/prj",_("Project"),RWR_R_,user().c_str(),"UI",3,"tp","str","dest","sel_ed","select","/obj/prj_ls");
 		ctrMkNode("fld",opt,-1,"/obj/st/backgrnd",_("Background execution mode"),R_R_R_,"root","root",1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/obj/st/connect",_("Connections counter"),R_R_R_,"root","root",1,"tp","int");
@@ -545,6 +564,14 @@ void Session::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"set",RWRWR_,user().c_str(),"UI",SEQ_WR) )	setStart(atoi(opt->text().c_str()));
     }
     else if( a_path == "/obj/st/user" && ctrChkNode(opt) )	opt->setText(user());
+    else if( a_path == "/obj/st/owner" && ctrChkNode(opt) )	opt->setText(owner());
+    else if( a_path == "/obj/st/grp" && ctrChkNode(opt) )	opt->setText(grp());
+    else if( (a_path == "/obj/st/u_a" || a_path == "/obj/st/g_a" || a_path == "/obj/st/o_a") && ctrChkNode(opt) )
+    {
+	if( a_path == "/obj/st/u_a" )	opt->setText( TSYS::int2str((permit()>>6)&0x7) );
+	if( a_path == "/obj/st/g_a" )	opt->setText( TSYS::int2str((permit()>>3)&0x7) );
+	if( a_path == "/obj/st/o_a" )	opt->setText( TSYS::int2str(permit()&0x7) );
+    }
     else if( a_path == "/obj/st/prj" )
     {
 	if( ctrChkNode(opt,"get",RWR_R_,user().c_str(),"UI",SEQ_RD) )	opt->setText(projNm());
@@ -802,7 +829,7 @@ bool SessPage::cntrCmdGeneric( XMLNode *opt )
 	SessWdg::cntrCmdGeneric(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Session page: ")+ownerFullId()+"/"+id());
 	if( enable() && !(parent().at().prjFlags( )&Page::Empty) )
-	    ctrMkNode("fld",opt,1,"/wdg/st/open",_("Open"),RWRWR_,user().c_str(),grp().c_str(),1,"tp","bool");
+	    ctrMkNode("fld",opt,1,"/wdg/st/open",_("Open"),RWRWR_,owner().c_str(),grp().c_str(),1,"tp","bool");
 	if( enable() && parent().at().prjFlags()&(Page::Template|Page::Container) )
 	{
 	    if(ctrMkNode("area",opt,1,"/page",_("Pages")))
@@ -817,9 +844,9 @@ bool SessPage::cntrCmdGeneric( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/wdg/st/open" && enable() && !(parent().at().prjFlags( )&Page::Empty) )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,user().c_str(),grp().c_str(),SEQ_RD) ) 
+	if( ctrChkNode(opt,"get",RWRWR_,owner().c_str(),grp().c_str(),SEQ_RD) ) 
 	    opt->setText(TSYS::int2str(attrAt("pgOpen").at().getB()));
-	if( ctrChkNode(opt,"set",RWRWR_,user().c_str(),grp().c_str(),SEQ_WR) ) 
+	if( ctrChkNode(opt,"set",RWRWR_,owner().c_str(),grp().c_str(),SEQ_WR) ) 
 	    attrAt("pgOpen").at().setB(atoi(opt->text().c_str()));
     }
     else if( (a_path == "/br/pg_" || a_path == "/page/page") && ctrChkNode(opt) )
@@ -1000,21 +1027,26 @@ string SessWdg::ico( )
     return "";
 }
 
-string SessWdg::user( )
+string SessWdg::owner( )
 {
-    if( !parent().freeStat() )  return parent().at().user();
-    return Widget::user();
+    SessWdg *sWdg = ownerSessWdg(false);
+    if( sWdg )	return sWdg->owner();
+    if( !parent().freeStat() )  return parent().at().owner();
+    return Widget::owner();
 }
 
 string SessWdg::grp( )
 {
+    SessWdg *sWdg = ownerSessWdg(false);
+    if( sWdg )	return sWdg->grp();
     if( !parent().freeStat() )  return parent().at().grp();
     return Widget::grp();
 }
 
 short SessWdg::permit( )
 {
-    //return R_R_R_;
+    SessWdg *sWdg = ownerSessWdg(false);
+    if( sWdg )	return sWdg->permit();
     if( !parent().freeStat() )	return parent().at().permit();
     return Widget::permit();
 }
@@ -1159,7 +1191,7 @@ unsigned int SessWdg::modifVal( Attr &cfg )
 {
     int m_clc = ownerSess()->calcClk( );
     if( atoi(cfg.fld().reserve().c_str()) ) m_mdfClc = m_clc;
-    return m_clc; 
+    return m_clc;
 }
 
 void SessWdg::calc( bool first, bool last )
@@ -1381,9 +1413,11 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/serv/0" )		//Attribute's value operations
     {
-	if( ctrChkNode(opt,"get",RWRWRW,"root","root",SEQ_RD) )		//Get values
+	if( ctrChkNode(opt,"get",permit(),owner().c_str(),grp().c_str(),SEQ_RD) )	//Get values
 	{
 	    unsigned  tm = strtoul(opt->attr("tm").c_str(),0,10);
+	    if( !tm )	opt->childAdd("el")->setAttr("id","permCntr")->setAttr("pos","-3")->
+		setText( TSYS::int2str((bool)SYS->security().at().access(opt->attr("user"),SEQ_WR,owner(),grp(),permit())) );
 	    AutoHD<Attr> attr;
 	    if( m_mdfClc >= tm )
 		for( int i_l = 0; i_l < m_attrUILs.size(); i_l++ )
@@ -1396,7 +1430,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 		}
 	    opt->setAttr("tm",TSYS::uint2str(ownerSess()->calcClk( )));
 	}
-	else if( ctrChkNode(opt,"set",RWRWRW,"root","root",SEQ_WR) )	//Set values
+	else if( ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEQ_WR) )	//Set values
 	    for( int i_ch = 0; i_ch < opt->childSize(); i_ch++ )
 	    {
 	        string aid = opt->childGet(i_ch)->attr("id");
@@ -1415,7 +1449,7 @@ bool SessWdg::cntrCmdGeneric( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	Widget::cntrCmdGeneric(opt);
-	ctrMkNode("fld",opt,1,"/wdg/st/proc",_("Process"),RWRWR_,user().c_str(),grp().c_str(),1,"tp","bool");
+	ctrMkNode("fld",opt,1,"/wdg/st/proc",_("Process"),RWRWR_,owner().c_str(),grp().c_str(),1,"tp","bool");
 	return true;
     }
 
@@ -1433,12 +1467,12 @@ bool SessWdg::cntrCmdGeneric( XMLNode *opt )
     {
 	//unsigned tm = ownerSess()->calcClk( );//time(NULL);
 	AutoHD<Attr> attr = attrAt(TSYS::pathLev(a_path,1));
-	if( ctrChkNode(opt,"get",(attr.at().fld().flg()&TFld::NoWrite)?(permit()&~0222):permit(),user().c_str(),grp().c_str(),SEQ_RD) )
+	if( ctrChkNode(opt,"get",(attr.at().fld().flg()&TFld::NoWrite)?(permit()&~0222):permit(),owner().c_str(),grp().c_str(),SEQ_RD) )
 	{
 	    if( attr.at().fld().flg()&TFld::Selected )  opt->setText(attr.at().getSEL());
 	    else                                        opt->setText(attr.at().getS());
 	}
-	if( ctrChkNode(opt,"set",(attr.at().fld().flg()&TFld::NoWrite)?(permit()&~0222):permit(),user().c_str(),grp().c_str(),SEQ_WR) )
+	if( ctrChkNode(opt,"set",(attr.at().fld().flg()&TFld::NoWrite)?(permit()&~0222):permit(),owner().c_str(),grp().c_str(),SEQ_WR) )
 	{
 	    if( attr.at().id() == "event" )	eventAdd(opt->text()+"\n");
 	    else if( attr.at().fld().flg()&TFld::Selected )
@@ -1448,8 +1482,8 @@ bool SessWdg::cntrCmdGeneric( XMLNode *opt )
     }
     else if( a_path == "/wdg/st/proc" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,user().c_str(),grp().c_str(),SEQ_RD) ) opt->setText(TSYS::int2str(process()));
-	if( ctrChkNode(opt,"set",RWRWR_,user().c_str(),grp().c_str(),SEQ_WR) ) setProcess(atoi(opt->text().c_str()));
+	if( ctrChkNode(opt,"get",RWRWR_,owner().c_str(),grp().c_str(),SEQ_RD) ) opt->setText(TSYS::int2str(process()));
+	if( ctrChkNode(opt,"set",RWRWR_,owner().c_str(),grp().c_str(),SEQ_WR) ) setProcess(atoi(opt->text().c_str()));
     }
     else if( Widget::cntrCmdGeneric(opt) ) return true;
     else return false;

@@ -47,7 +47,7 @@
 
 using namespace VISION;
 
-VisRun::VisRun( const string &prj_it, const string &open_user, const string &VCAstat, bool crSessForce ) :
+VisRun::VisRun( const string &prj_it, const string &open_user, const string &user_pass, const string &VCAstat, bool crSessForce ) :
     winClose(false), master_pg(NULL), m_period(1000), w_prc_cnt(0), reqtm(1), x_scale(1.0), y_scale(1.0), mAlrmSt(0xFFFFFF)
 {
     setAttribute(Qt::WA_DeleteOnClose,true);
@@ -168,12 +168,13 @@ VisRun::VisRun( const string &prj_it, const string &open_user, const string &VCA
     toolBarAlarm->addAction(actAlrmSound);
 
     //- Init status bar -
-    w_user = new UserStBar(open_user.c_str(), this);
-    w_user->setWhatsThis(_("This label display curent user."));
-    w_user->setToolTip(_("Field for display of the current user."));
-    w_user->setStatusTip(_("Double click for change user."));
-    statusBar()->insertPermanentWidget(0,w_user);
-    w_stat = new QLabel(VCAstat.c_str(), this);
+    wUser = new UserStBar( open_user.c_str(), user_pass.c_str(), VCAstat.c_str(), this );
+    wUser->setWhatsThis(_("This label display curent user."));
+    wUser->setToolTip(_("Field for display of the current user."));
+    wUser->setStatusTip(_("Double click for change user."));
+    connect( wUser, SIGNAL(userChanged(const QString&,const QString&)), this, SLOT(userChanged(const QString&,const QString&)) );
+    statusBar()->insertPermanentWidget(0,wUser);
+    w_stat = new QLabel( VCAStation().c_str(), this );
     w_stat->setWhatsThis(_("This label display used VCA engine station."));
     w_stat->setToolTip(_("Field for display of the used VCA engine station."));
     statusBar()->insertPermanentWidget(0,w_stat);
@@ -199,9 +200,7 @@ VisRun::VisRun( const string &prj_it, const string &open_user, const string &VCA
 
     resize( 600, 400 );
 
-    setVCAStation(VCAstat);
-
-    //- Init sesion -
+    //- Init session -
     initSess(prj_it,crSessForce);
 
     //w_stat->setText(host.st_nm.c_str());
@@ -229,27 +228,27 @@ VisRun::~VisRun()
     mod->unregWin(this);
 
     //- Clear cache -
-    while( !cache_pg.empty() )
-    {
-	delete cache_pg.front();
-	cache_pg.pop_front();
-    }
+    pgCacheClear();
 }
 
 string VisRun::user()
 {
-    return w_user->user().toAscii().data();
+    return wUser->user().toAscii().data();
 }
 
-void VisRun::setVCAStation( const string& st )
+string VisRun::password( )
 {
-    m_stat = st.empty() ? "." : st;
+    return wUser->pass().toAscii().data();
+}
+
+string VisRun::VCAStation( )
+{
+    return wUser->VCAStation().toAscii().data();
 }
 
 int VisRun::cntrIfCmd( XMLNode &node, bool glob )
 {
-    if( VCAStation().empty() || VCAStation() == "." ) node.setAttr("user",user());
-    return mod->cntrIfCmd(node,user(),VCAStation(),glob);
+    return mod->cntrIfCmd(node,user(),password(),VCAStation(),glob);
 }
 
 void VisRun::closeEvent( QCloseEvent* ce )
@@ -285,12 +284,32 @@ void VisRun::quitSt()
 
 void VisRun::about()
 {
-    QMessageBox::about(this,windowTitle(), 
+    QMessageBox::about(this,windowTitle(),
 		QString(_("%1 v%2.\nAutor: %3\nLicense: %4\n")).
 			arg(mod->modInfo("Name").c_str()).
 			arg(mod->modInfo("Version").c_str()).
 			arg(mod->modInfo("Author").c_str()).
 			arg(mod->modInfo("License").c_str()));
+}
+
+void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
+{
+    //- Try second connect to session for permition check -
+    XMLNode req("connect");
+    req.setAttr("path","/%2fserv%2f0")->setAttr("sess",workSess());
+    if( cntrIfCmd(req) )
+    {
+	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+	wUser->setUser(oldUser);
+	wUser->setPass(oldPass);
+	return;
+    }
+    req.clear()->setName("disconnect")->setAttr("path","/%2fserv%2f0")->setAttr("sess",workSess());
+    cntrIfCmd(req);
+
+    //- Update pages after user change -
+    pgCacheClear();
+    if( master_pg )	master_pg->update(0,0);
 }
 
 void VisRun::aboutQt()
@@ -413,6 +432,7 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
     if( cntrIfCmd(req) )
     {
 	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+	close();
 	return;
     }
 
@@ -524,6 +544,15 @@ void VisRun::callPage( const string& pg_it, XMLNode *upw )
 		    }
 		    break;
 		}
+    }
+}
+
+void VisRun::pgCacheClear( )
+{
+    while( !cache_pg.empty() )
+    {
+	delete cache_pg.front();
+	cache_pg.pop_front();
     }
 }
 

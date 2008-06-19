@@ -391,7 +391,9 @@ void TUser::cntrCmdProc( XMLNode *opt )
     }
     //- Process command to page -
     string a_path = opt->attr("path");
-    if( a_path == "/prm/db" )
+    if( a_path == "/auth" && ctrChkNode(opt) )
+	opt->setText( TSYS::int2str(auth(opt->attr("password"))) );
+    else if( a_path == "/prm/db" )
     {
 	if( ctrChkNode(opt,"get",0664,"root",SYS->db().at().subId().c_str(),SEQ_RD) )	opt->setText(DB());
 	if( ctrChkNode(opt,"set",0664,"root",SYS->db().at().subId().c_str(),SEQ_WR) )	setDB(opt->text());

@@ -81,7 +81,7 @@ namespace VISION
 	    enum Results { SelCancel, SelOK, SelErr };
 
 	    //Methods
-	    DlgUser( QWidget *parent = 0 );
+	    DlgUser( const QString &iuser, const QString &ipass, const QString &iVCAstat, QWidget *parent = 0 );
 
 	    QString user();
 	    QString password();
@@ -92,6 +92,7 @@ namespace VISION
 	private:
 	    QComboBox	*users;
 	    QLineEdit	*passwd;
+	    QString	VCAstat;
     };
 
     //*********************************************
@@ -129,21 +130,26 @@ namespace VISION
 	Q_OBJECT
 
 	public:
-	    UserStBar( const QString &iuser, QWidget * parent = 0 );
+	    UserStBar( const QString &iuser, const QString &ipass, const QString &iVCAstat, QWidget *parent = 0 );
 
-	    QString user();
+	    QString user( )		{ return user_txt; }
+	    QString pass( )		{ return user_pass; }
+	    QString VCAStation( )	{ return VCA_stat; }
+
 	    void setUser( const QString &val );
+	    void setPass( const QString &val )		{ user_pass = val; }
+	    void setVCAStation( const QString &val )	{ VCA_stat = val.isEmpty() ? "." : val; }
 
 	    bool userSel( );
 
 	signals:
-	    void userChanged();
+	    void userChanged( const QString &oldUser, const QString &oldPass );
 
 	protected:
 	    bool event( QEvent *event );
 
 	private:
-	    QString	user_txt;
+	    QString	user_txt, user_pass, VCA_stat;
     };
 
     //*********************************************************************************************
@@ -266,7 +272,7 @@ namespace VISION
 
 	protected:
 	    //- Protected methods -
-	    void childsUpdate( bool newLoad = true );
+	    virtual void childsUpdate( bool newLoad = true );
 	    void shapeUpdate( );
 	    virtual void orderUpdate( );
 

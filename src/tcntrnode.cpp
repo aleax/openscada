@@ -685,6 +685,6 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 	SYS->db().at().dbList(c_list);
 	opt->childAdd("el")->setText("*.*");
 	for( int i_db = 0; i_db < c_list.size(); i_db++ )
-	    opt->childAdd("el")->setText( tblList ? c_list[i_db]+"."+_("<enter table name>") : c_list[i_db] );
+	    opt->childAdd("el")->setText( tblList ? c_list[i_db]+"."+_("<TableName>") : c_list[i_db] );
     }
 }

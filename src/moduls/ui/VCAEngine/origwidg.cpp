@@ -78,14 +78,14 @@ bool PrWidget::cntrCmdGeneric( XMLNode *opt )
     {
         Widget::cntrCmdGeneric(opt);
         ctrMkNode("oscada_cntr",opt,-1,"/",_("Base widget: ")+id());
-	ctrMkNode("fld",opt,-1,"/wdg/st/parent",_("Parent"),R_R_R_,user().c_str(),grp().c_str(),
+	ctrMkNode("fld",opt,-1,"/wdg/st/parent",_("Parent"),R_R_R_,owner().c_str(),grp().c_str(),
 		2,"tp","str","dest","");		
         return true;
     }
     
     //- Process command to page -
     string a_path = opt->attr("path");
-    if( a_path == "/wdg/st/parent" && ctrChkNode(opt,"get",R_R_R_,user().c_str(),grp().c_str(),SEQ_RD) )
+    if( a_path == "/wdg/st/parent" && ctrChkNode(opt,"get",R_R_R_,owner().c_str(),grp().c_str(),SEQ_RD) )
 	opt->setText(parentNm());
     else if( Widget::cntrCmdGeneric(opt) ) return true;
     else return false;

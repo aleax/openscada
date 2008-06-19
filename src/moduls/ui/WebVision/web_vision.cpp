@@ -1054,7 +1054,7 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		    "<center><table class='page_auth'>\n";
 		//-- Get present sessions list --
 		XMLNode req("get");
-		req.setAttr("path","/%2fses%2fses");
+		req.setAttr("path","/%2fses%2fses")->setAttr("chkUserPerm","1");
 		cntrIfCmd(req,ses.user);
 		if( req.childSize() )
 		{
@@ -1069,7 +1069,7 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		    sesPrjOk = true;
 		}
 		//-- Get present projects list --
-		req.clear()->setAttr("path","/%2fprm%2fcfg%2fprj");
+		req.clear()->setAttr("path","/%2fprm%2fcfg%2fprj")->setAttr("chkUserPerm","1");
 		cntrIfCmd(req,ses.user);
 		if( req.childSize() )
 		{
@@ -1084,7 +1084,7 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		    sesPrjOk = true;
 		}
 		ses.page += "</table></center>";
-		if( !sesPrjOk )	messPost(ses.page,nodePath(),_("No one sessions and projects VCA engine present!"),TWEB::Warning);
+		if( !sesPrjOk )	messPost(ses.page,nodePath(),_("No one sessions and projects VCA engine present for user!"),TWEB::Warning);
 	    }
 	    //- New session creation -
 	    else if( zero_lev.size() > 4 && zero_lev.substr(0,4) == "prj_" )
@@ -1190,10 +1190,10 @@ int TWEB::sesOpen( string name )
     //- Get free identifier -
     do{ sess_id = rand(); }
     while( sess_id == 0 || m_auth.find(sess_id) != m_auth.end() );
-    
+
     //- Add new session authentification -
     m_auth[sess_id] = SAuth(name,time(NULL));
-    
+
     return sess_id;
 }
 
@@ -1216,7 +1216,7 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
     //- Check for autentification POST requests -
     if( ses.cnt.find("auth_enter") != ses.cnt.end() )
     {
-	string pass;    
+	string pass;
 	if( (cntEl=ses.cnt.find("user")) != ses.cnt.end() )	ses.user = cntEl->second;
 	if( (cntEl=ses.cnt.find("pass")) != ses.cnt.end() )	pass = cntEl->second;
 	if( SYS->security().at().usrPresent(ses.user) && SYS->security().at().usrAt(ses.user).at().auth(pass) )

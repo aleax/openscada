@@ -124,9 +124,6 @@ void Engine::postEnable( int flag )
     lbwdg_el.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::NoFlag,"300") );
     lbwdg_el.fldAdd( new TFld("DB_TBL",_("Data base"),TFld::String,TFld::NoFlag,"30") );
     lbwdg_el.fldAdd( new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000") );
-    lbwdg_el.fldAdd( new TFld("USER",_("User"),TFld::String,TFld::NoFlag,"20","root") );
-    lbwdg_el.fldAdd( new TFld("GRP",_("Group"),TFld::String,TFld::NoFlag,"20","UI") );
-    lbwdg_el.fldAdd( new TFld("PERMIT",_("Permision"),TFld::Integer,TFld::OctDec,"3","436") );
 
     //- Make library widgets data container -
     wdgdata_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
@@ -149,6 +146,9 @@ void Engine::postEnable( int flag )
     inclwdg_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
     inclwdg_el.fldAdd( new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200") );
     inclwdg_el.fldAdd( new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*") );
+    inclwdg_el.fldAdd( new TFld("USER",_("User"),TFld::String,TFld::NoFlag,"20","root") );
+    inclwdg_el.fldAdd( new TFld("GRP",_("Group"),TFld::String,TFld::NoFlag,"20","UI") );
+    inclwdg_el.fldAdd( new TFld("PERMIT",_("Permision"),TFld::Integer,TFld::OctDec,"3","436") );
 
     //- Make widget's IO DB structure -
     wdgio_el.fldAdd( new TFld("IDW",_("Widget ID"),TFld::String,TCfg::Key,"100") );
@@ -177,6 +177,7 @@ void Engine::postEnable( int flag )
     prj_el.fldAdd( new TFld("USER",_("User"),TFld::String,TFld::NoFlag,"20","root") );
     prj_el.fldAdd( new TFld("GRP",_("Group"),TFld::String,TFld::NoFlag,"20","UI") );
     prj_el.fldAdd( new TFld("PERMIT",_("Permision"),TFld::Integer,TFld::OctDec,"3","436") );
+    prj_el.fldAdd( new TFld("PER",_("Calc period (ms)"),TFld::Integer,TFld::NoFlag,"4","100") );
 
     //- Make pages DB structure -
     page_el.fldAdd( new TFld("OWNER",_("Owner"),TFld::String,TCfg::Key,"100") );
@@ -492,16 +493,27 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    sesList(ls);
 	    for( int i_l = 0; i_l < ls.size(); i_l++ )
 		if( prj.empty() || sesAt(ls[i_l]).at().projNm() == prj )
-		    opt->childAdd("el")->setText(ls[i_l]);
+		{
+		    AutoHD<Project> prj = sesAt(ls[i_l]).at().parent();
+		    if( SYS->security().at().access(opt->attr("user"),SEQ_RD,prj.at().owner(),prj.at().grp(),prj.at().permit()) )
+			opt->childAdd("el")->setText(ls[i_l]);
+		}
 	}
 	else if( ctrChkNode(opt,"connect",RWRWRW,"root","root",SEQ_WR) )
 	{
 	    string sess = opt->attr("sess");
 	    string prj  = opt->attr("prj");
-	    if( !sess.empty() ) sesAt(sess).at().connect();
+
+	    //-- User permission check --
+	    AutoHD<Project> wprj = (!sess.empty()) ? sesAt(sess).at().parent() : prjAt(prj);
+	    if( !SYS->security().at().access(opt->attr("user"),SEQ_RD,wprj.at().owner(),wprj.at().grp(),wprj.at().permit()) )
+		throw TError(nodePath().c_str(),_("Connection to session no permit for '%s'."),opt->attr("user").c_str());
+	    //-- Connect to present session --
+	    if( !sess.empty() )	sesAt(sess).at().connect();
+	    //-- Create session --
 	    else if( !prj.empty() )
 	    {
-		//- Prepare session name -
+		//--- Prepare session name ---
 		sess = prj;
 		for( int p_cnt = 0; sesPresent(sess); p_cnt++ )
 		    sess = prj+TSYS::int2str(p_cnt);
@@ -557,13 +569,22 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	{
 	    vector<string> lst;
 	    prjList(lst);
+	    bool chkUserPerm = atoi(opt->attr("chkUserPerm").c_str());
 	    for( unsigned i_a=0; i_a < lst.size(); i_a++ )
+	    {
+		if( chkUserPerm )
+		{
+		    AutoHD<Project> prj = prjAt(lst[i_a]);
+		    if( !SYS->security().at().access(opt->attr("user"),SEQ_RD,prj.at().owner(),prj.at().grp(),prj.at().permit()) )
+			continue;
+		}
 		opt->childAdd("el")->setAttr("id",lst[i_a])->setText(prjAt(lst[i_a]).at().name());
+	    }
 	}
 	if( ctrChkNode(opt,"add",0664,"root","UI",SEQ_WR) )
 	{
 	    prjAdd(opt->attr("id"),opt->text());
-	    prjAt(opt->attr("id")).at().setUser(opt->attr("user"));
+	    prjAt(opt->attr("id")).at().setOwner(opt->attr("user"));
 	}
 	if( ctrChkNode(opt,"del",0664,"root","UI",SEQ_WR) )   prjDel(opt->attr("id"),true);
     }
@@ -576,12 +597,8 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    for( unsigned i_a=0; i_a < lst.size(); i_a++ )
 		opt->childAdd("el")->setAttr("id",lst[i_a])->setText(wlbAt(lst[i_a]).at().name());
 	}
-	if( ctrChkNode(opt,"add",0664,"root","UI",SEQ_WR) )
-	{
-	    wlbAdd(opt->attr("id"),opt->text());
-	    wlbAt(opt->attr("id")).at().setUser(opt->attr("user"));
-	}
-	if( ctrChkNode(opt,"del",0664,"root","UI",SEQ_WR) )   wlbDel(opt->attr("id"),true);
+	if( ctrChkNode(opt,"add",0664,"root","UI",SEQ_WR) )	wlbAdd(opt->attr("id"),opt->text());
+	if( ctrChkNode(opt,"del",0664,"root","UI",SEQ_WR) )	wlbDel(opt->attr("id"),true);
     }
     else if( a_path == "/prm/cfg/cp/cp" && ctrChkNode(opt,"set",0660,"root","UI",SEQ_WR) )
 	nodeCopy( nodePath(0,true)+opt->attr("src"), nodePath(0,true)+opt->attr("dst"), opt->attr("user") );
@@ -591,8 +608,17 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	{
 	    vector<string> lst;
 	    sesList(lst);
+	    bool chkUserPerm = atoi(opt->attr("chkUserPerm").c_str());
 	    for( unsigned i_a=0; i_a < lst.size(); i_a++ )
+	    {
+		if( chkUserPerm )
+		{
+		    AutoHD<Project> prj = sesAt(lst[i_a]).at().parent();
+		    if( !SYS->security().at().access(opt->attr("user"),SEQ_RD,prj.at().owner(),prj.at().grp(),prj.at().permit()) )
+			continue;
+		}
 		opt->childAdd("el")->setText(lst[i_a]);
+	    }
 	}
 	if( ctrChkNode(opt,"add",0664,"root","UI",SEQ_WR) )
 	{

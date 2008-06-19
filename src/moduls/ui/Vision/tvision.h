@@ -52,11 +52,13 @@ class TVision : public TUI
 
 	bool endRun( )				{ return end_run; }
 	string startUser( )			{ return start_user; }
+	string userPass( )			{ return user_pass; }
 	string runPrjs( )			{ return run_prjs; }
 	string VCAStation( )			{ return vca_station; }
 	string playCom( )			{ return mPlayCom; }
 
 	void setStartUser( const string &user )	{ start_user = user; modif(); }
+	void setUserPass( const string &pass )	{ user_pass = pass; modif(); }
 	void setRunPrjs( const string &prj )	{ run_prjs = prj; modif(); }
 	void setVCAStation( const string &stat ){ vca_station = stat; modif(); }
 	void setPlayCom( const string &com )	{ mPlayCom = com; modif(); }
@@ -81,7 +83,7 @@ class TVision : public TUI
 	static QWidget *getFocusedWdg( QWidget *wcntr );
 
 	//- Request to OpenSCADA control interface -
-	int cntrIfCmd( XMLNode &node, const string &user, const string &stat, bool glob = false );
+	int cntrIfCmd( XMLNode &node, const string &user, const string &password, const string &VCAStat, bool glob = false );
 
     protected:
 	//Methods
@@ -98,6 +100,7 @@ class TVision : public TUI
 	//Attributes
 	vector<QMainWindow *>	mn_winds;
 	string			start_user,	//No question start user
+				user_pass,	//No quest user password
 				run_prjs;	//Run projects list on the module start
 	vector<WdgShape *>	shapesWdg;
 	bool			end_run;	//End run command. Close all windows

@@ -66,55 +66,56 @@ class LibProjProp: public QDialog
 	VisDevelop *owner();
 
     protected:
-        //Protected methods
-        void closeEvent( QCloseEvent* );
+	//Protected methods
+	void closeEvent( QCloseEvent* );
 
     signals:
-        void apply(const string &);
+	void apply(const string &);
 
     private slots:
 	//Private slots
 	void selectIco( );
 	void isModify( );
-	
+
 	void addMimeData( );
 	void delMimeData( );
 	void loadMimeData( );
 	void unloadMimeData( );
 	void mimeDataChange(int,int);
-	
-	void tabChanged( int itb );	
-	
+
+	void tabChanged( int itb );
+
     private:
 	//Private attributes
-	QTabWidget  	*wdg_tabs;	//Tabs	
+	QTabWidget	*wdg_tabs;	//Tabs
 	QPushButton	*obj_ico;	//Icon
 	QCheckBox	*obj_enable;	//Enabled stat
-        LineEdit 	*obj_db;	//DB
-	QComboBox 	*obj_user,	//User 
+	LineEdit	*obj_db;	//DB
+	QComboBox	*obj_user,	//User
 			*obj_grp,	//Group
 			*obj_accuser,	//User access
 			*obj_accgrp,	//Group access
 			*obj_accother;	//Other access
-	QLabel    	*obj_id;	//Id
-	LineEdit 	*obj_name;	//Name
-	TextEdit 	*obj_descr;	//Description
-	
-	QTableWidget 	*mimeDataTable;
-	QPushButton 	*buttDataAdd,
+	QLabel		*obj_id;	//Id
+	LineEdit	*obj_name,	//Name
+			*prj_ctm;	//Calc time of project
+	TextEdit	*obj_descr;	//Description
+
+	QTableWidget	*mimeDataTable;
+	QPushButton	*buttDataAdd,
 			*buttDataDel,
 			*buttDataLoad,
 			*buttDataUnload;
-	
+
 	QDialogButtonBox *butbox;	//Buttons
-	
-	bool	  show_init, is_modif, ico_modif;
-	string	  ed_it;
+
+	bool		show_init, is_modif, ico_modif;
+	string		ed_it;
 };
 
 //****************************************
 //* Visual item properties dialog        *
-//**************************************** 
+//****************************************
 class VisItProp : public QDialog
 {
     Q_OBJECT
@@ -123,14 +124,14 @@ class VisItProp : public QDialog
 	//Public methods
 	VisItProp( VisDevelop *parent = 0 );
 	~VisItProp( );
-	
+
 	void showDlg( const string &iit, bool reload = false );
 
-	VisDevelop *owner();    
-	
+	VisDevelop *owner();
+
     signals:
 	void apply(const string &);
-	
+
     protected:
 	//Protected methods
 	void closeEvent( QCloseEvent* );
@@ -140,11 +141,11 @@ class VisItProp : public QDialog
 	void selectIco( );
 	void selectParent( );
 	void isModify( );
-	
-        void addAttr( );
-        void delAttr( );
+
+	void addAttr( );
+	void delAttr( );
 	void changeAttr(QTreeWidgetItem *it, int col);
-	
+
 	void tabChanged( int itb );
 
     private:
@@ -154,48 +155,47 @@ class VisItProp : public QDialog
 	{
 	    public:
 		//Public methods
-	        ItemDelegate(QObject *parent = 0);
-		
+		ItemDelegate(QObject *parent = 0);
+
 		void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-	        QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-	        void setEditorData(QWidget *editor, const QModelIndex &index) const;
-    		void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
+		QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+		void setEditorData(QWidget *editor, const QModelIndex &index) const;
+		void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
 	};
 	//Private attributes
-	QTabWidget  	*wdg_tabs;	//Tabs
-	QLabel    	*obj_id,	//Id
+	QTabWidget	*wdg_tabs;	//Tabs
+	QLabel		*obj_id,	//Id
 			*obj_root,	//Root
-			*obj_path;	//Path	
+			*obj_path;	//Path
 	QPushButton	*obj_ico;	//Icon
-	QCheckBox   	*obj_enable;	//Enabled stat
-	QComboBox 	*obj_parent,	//Parent widget
-	 		*obj_user,	//User 
+	QCheckBox	*obj_enable;	//Enabled stat
+	QComboBox	*obj_parent,	//Parent widget
+	 		*obj_user,	//User
 			*obj_grp,	//Group
 			*obj_accuser,	//User access
 			*obj_accgrp,	//Group access
 			*obj_accother,	//Other access
 			*pg_tp;		//Page: Page type
-		 
-	LineEdit 	*obj_name;	//Name
-	TextEdit 	*obj_descr;	//Description
-	
-	InspAttr  	*obj_attr;	//Attributes inspector
-	InspLnk	  	*obj_lnk;	//Links inspector
-	
-	LineEdit        *proc_per;	//Procedure calc period
-	QComboBox    	*proc_lang;	//Widget's procedure name
-	TextEdit    	*proc_text;	//Widget's procedure programm text
-	
-	QTreeWidget  	*obj_attr_cfg;	//Attribute configuration widget
-	QPushButton  	*buttAttrAdd,	//Add new attribute button
-		        *buttAttrDel;	//Delete attribute record
-	
-	QDialogButtonBox *butbox;	//Buttons
-	
-	bool	  show_init, is_modif, ico_modif, lib_wdg;
-	string	  ed_it;
-};
 
+	LineEdit	*obj_name;	//Name
+	TextEdit	*obj_descr;	//Description
+
+	InspAttr	*obj_attr;	//Attributes inspector
+	InspLnk		*obj_lnk;	//Links inspector
+
+	LineEdit	*proc_per;	//Procedure calc period
+	QComboBox	*proc_lang;	//Widget's procedure name
+	TextEdit	*proc_text;	//Widget's procedure programm text
+
+	QTreeWidget	*obj_attr_cfg;	//Attribute configuration widget
+	QPushButton	*buttAttrAdd,	//Add new attribute button
+			*buttAttrDel;	//Delete attribute record
+
+	QDialogButtonBox *butbox;	//Buttons
+
+	bool		show_init, is_modif, ico_modif, lib_wdg;
+	string		ed_it;
+};
 
 }
 

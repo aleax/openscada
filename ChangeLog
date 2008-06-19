@@ -1,3 +1,16 @@
+2008-06-19 Roman
+- FIX:/XML: Load and save external codepage name changed from UTF8 to UTF-8 for odd iconv call prevent.
+- /Security: Service call "/auth" for user auth control is added.
+- !:/Protocol/SelfSystem: Direct requests, drop session open stage, support is added.
+- !!!!:/UI/VCAEngine, /UI/Vision, /UI/WebVision: User permition contol is added to session and run mode. Devel mode permition made fixed to "root.UI:RWRWR_".
+    Self owner and permition control is added for included to page widgets.
+- !!!!:/UI/Vision: Runtime user changing support is added. Include run interface permition update.
+- !:/UI/VCAEngine, /UI/Vision: Widget's user renamed to owner.
+- FIX:/UI/Vision, /UI/WebVision: Three blocks data load is fixed for primitive "Diagram".
+- !!:/SYS: More odd spaces from sources is removing continued.
+- !!:/SYS: Demo DB is updated.
+
+
 2008-06-13 Maxim
 - /UI/Vision: Scaling and rotating of the image when filling with it the primitive "ElFigure" is added.
 

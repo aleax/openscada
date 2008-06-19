@@ -42,6 +42,7 @@
 #include "vis_shapes.h"
 #include "tvision.h"
 #include "vis_widgs.h"
+#include "vis_run_widgs.h"
 
 using namespace VISION;
 
@@ -155,7 +156,8 @@ void InputDlg::setMess( const QString &val )
 //*************************************************
 //* User select dialog                            *
 //*************************************************
-DlgUser::DlgUser( QWidget *parent ) : QDialog(parent)
+DlgUser::DlgUser( const QString &iuser, const QString &ipass, const QString &iVCAstat, QWidget *parent ) : 
+    QDialog(parent), VCAstat(iVCAstat)
 {
     setWindowTitle(_("Select user"));
 
@@ -167,6 +169,7 @@ DlgUser::DlgUser( QWidget *parent ) : QDialog(parent)
     ed_lay->setSpacing(6);
     ed_lay->addWidget( new QLabel(_("User:"),this), 0, 0 );
     users = new QComboBox(this);
+    users->setEditable(true);
     ed_lay->addWidget( users, 0, 1 );
     ed_lay->addWidget( new QLabel(_("Password:"),this), 1, 0 );
     passwd = new QLineEdit(this);
@@ -196,17 +199,14 @@ DlgUser::DlgUser( QWidget *parent ) : QDialog(parent)
 
     connect(this, SIGNAL(finished(int)), this, SLOT(finish(int)));
 
-    //Fill users list
-    vector<string> u_list;
-    SYS->security().at().usrList(u_list);
-    for(int i_l = 0; i_l < u_list.size(); i_l++ )
-    {
-	string simg = TSYS::strDecode(SYS->security().at().usrAt(u_list[i_l]).at().picture(),TSYS::base64);
-	QImage img;
-	if( img.loadFromData((const uchar*)simg.c_str(),simg.size()) )
-	    users->addItem(QPixmap::fromImage(img),u_list[i_l].c_str());
-	else users->addItem(u_list[i_l].c_str());
-    }
+    //- Fill users list -
+    XMLNode req("get");
+    req.setAttr("path","/Security/%2fusgr%2fusers");
+    if( !mod->cntrIfCmd(req,iuser.toAscii().data(),ipass.toAscii().data(),iVCAstat.toAscii().data(),true) )
+	for( int i_u = 0; i_u < req.childSize(); i_u++ )
+	    users->addItem(req.childGet(i_u)->text().c_str());
+
+    users->setEditText(iuser);
 }
 
 QString DlgUser::user()
@@ -223,9 +223,10 @@ void DlgUser::finish( int result )
 {
     if( result )
     {
-	//Check user
-	if( SYS->security().at().usrPresent(user().toAscii().data()) && 
-		SYS->security().at().usrAt(user().toAscii().data()).at().auth(password().toAscii().data()) )
+	//- Check user auth -
+	XMLNode req("get");
+	req.setAttr("path",string("/Security/")+user().toAscii().data()+"/%2fauth")->setAttr("password",password().toAscii().data());
+	if( !mod->cntrIfCmd(req,user().toAscii().data(),password().toAscii().data(),VCAstat.toAscii().data(),true) && atoi(req.text().c_str()) )
 	    setResult(SelOK);
 	else setResult(SelErr);
     }
@@ -345,14 +346,11 @@ void FontDlg::cfgChange()
 //*********************************************
 //* Status bar user widget                    *
 //*********************************************
-UserStBar::UserStBar( const QString &iuser, QWidget *parent ) : QLabel(parent)
+UserStBar::UserStBar( const QString &iuser, const QString &ipass, const QString &iVCAstat, QWidget *parent ) : QLabel(parent)
 {
     setUser(iuser);
-}
-
-QString UserStBar::user()
-{
-    return user_txt;
+    setPass(ipass);
+    setVCAStation(iVCAstat);
 }
 
 void UserStBar::setUser( const QString &val )
@@ -369,12 +367,15 @@ bool UserStBar::event( QEvent *event )
 
 bool UserStBar::userSel()
 {
-    DlgUser d_usr(parentWidget());
+    DlgUser d_usr(user(),pass(),VCAStation(),parentWidget());
     int rez = d_usr.exec();
     if( rez == DlgUser::SelOK && d_usr.user() != user() )
     {
+	QString old_user = user(),
+		old_pass = pass();
 	setUser( d_usr.user() );
-	emit userChanged();
+	setPass( d_usr.password() );
+	emit userChanged( old_user, old_pass );
 	return true;
     }
     else if( rez == DlgUser::SelErr )
@@ -826,7 +827,7 @@ void WdgView::load( const string& item, bool load, bool init )
 	{
 	    shapeUpdate( );
 	
-	    //-- Request to widget for last attributes --
+	    //-- Request the widget for last attributes --
 	    XMLNode req("get");
 	    req.setAttr("path",id()+"/%2fserv%2f0");
 	    if( !cntrIfCmd(req) )
@@ -879,6 +880,7 @@ void WdgView::childsUpdate( bool newLoad )
 
     vector<string> lst;
     req.clear()->setAttr("path",b_nm+"/%2finclwdg%2fwdg");
+
     if( !cntrIfCmd(req) )
 	for( int i_el = 0; i_el < req.childSize(); i_el++ )
 	    lst.push_back(req.childGet(i_el)->attr("id"));

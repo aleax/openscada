@@ -18,7 +18,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
- 
+
 #ifndef SELF_H
 #define SELF_H
 
@@ -41,7 +41,7 @@ class TProtIn: public TProtocolIn
 	~TProtIn();
 
 	bool mess( const string &request, string &answer, const string &sender );
-	
+
     private:
 	//Attributes
 	bool m_nofull;
@@ -56,7 +56,7 @@ class TProt: public TProtocol
     public:
 	//Data
 	//*****************************************
-	//* SAuth                                 *	
+	//* SAuth                                 *
 	class SAuth
 	{
 	    public:
@@ -67,15 +67,15 @@ class TProt: public TProtocol
 		time_t t_auth;
 		string name;
 		int    id_ses;
-	};					    
-    
+	};
+
 	//Methods
 	TProt( string name );
 	~TProt();
-	
+
 	int authTime( )			{ return m_t_auth; }
 	void setAuthTime( int vl )	{ m_t_auth = vl; modif(); }
-	
+
 	int sesOpen( const char *user, const char *pass );
 	void sesClose( int id_ses );
 	SAuth sesGet( int id_ses );
@@ -84,17 +84,17 @@ class TProt: public TProtocol
 
     protected:
 	void load_( );
-	void save_( );	
+	void save_( );
 
     private:
 	//Methods
 	void cntrCmdProc( XMLNode *opt );
 	string optDescr( );
 	TProtocolIn *in_open( const string &name );
-	
+
 	//Attributes
 	Res		ses_res;
-	Res     	ores;
+	Res		ores;
 	vector<SAuth>	auth_lst;
 	int		m_t_auth;
 };
@@ -103,4 +103,3 @@ extern TProt *mod;
 } //End namespace SelfPr
 
 #endif //SELF_H
-

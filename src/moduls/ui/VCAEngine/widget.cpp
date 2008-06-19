@@ -64,7 +64,7 @@ TCntrNode &Widget::operator=( TCntrNode &node )
     if( src_n->parent().freeStat() || src_n->name() != src_n->parent().at().name() )	setName(src_n->name());
     if( src_n->parent().freeStat() || src_n->descr() != src_n->parent().at().descr() )	setDescr(src_n->descr());
     if( src_n->parent().freeStat() || src_n->ico() != src_n->parent().at().ico() )	setIco(src_n->ico());
-    setUser( src_n->user() );
+    setOwner( src_n->owner() );
     setGrp( src_n->grp() );
     setPermit( src_n->permit() );
     if( src_n->parent().freeStat() || src_n->calcLang() != src_n->parent().at().calcLang() )	setCalcLang(src_n->calcLang());
@@ -469,8 +469,6 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/wdg/st",_("State")))
 	    {
 		ctrMkNode("fld",opt,-1,"/wdg/st/en",_("Enable"),RWRWR_,"root","UI",1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/wdg/st/user",_("User and group"),(isLink()?R_R_R_:RWRWR_),"root","UI",3,"tp","str","dest","select","select","/wdg/u_lst");
-		ctrMkNode("fld",opt,-1,"/wdg/st/grp","",(isLink()?R_R_R_:RWRWR_),"root","UI",3,"tp","str","dest","select","select","/wdg/g_lst");
 		ctrMkNode("fld",opt,-1,"/wdg/st/parent",_("Parent"),RWRWR_,"root","UI",3,"tp","str","dest","sel_ed","select","/wdg/w_lst");
 		if(!parent().freeStat())
 		    ctrMkNode("comm",opt,-1,"/wdg/st/goparent",_("Go to parent"),RWRWR_,"root","UI",1,"tp","lnk");
@@ -484,9 +482,14 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/wdg/cfg/name",_("Name"),RWRWR_,"root","UI",1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/wdg/cfg/descr",_("Description"),RWRWR_,"root","UI",3,"tp","str","cols","50","rows","3");
 		ctrMkNode("img",opt,-1,"/wdg/cfg/ico",_("Icon"),(isLink()?R_R_R_:RWRWR_),"root","UI",2,"v_sz","64","h_sz","64");
-		ctrMkNode("fld",opt,-1,"/wdg/cfg/u_a",_("Access: user-grp-other"),(isLink()?R_R_R_:RWRWR_),"root","UI",3,"tp","dec","dest","select","select","/wdg/a_lst");
-		ctrMkNode("fld",opt,-1,"/wdg/cfg/g_a","",(isLink()?R_R_R_:RWRWR_),"root","UI",3,"tp","dec","dest","select","select","/wdg/a_lst");
-		ctrMkNode("fld",opt,-1,"/wdg/cfg/o_a","",(isLink()?R_R_R_:RWRWR_),"root","UI",3,"tp","dec","dest","select","select","/wdg/a_lst");
+		ctrMkNode("fld",opt,-1,"/wdg/cfg/owner",_("Owner and group"),RWRWR_,"root","UI",3,"tp","str","dest","select","select","/wdg/u_lst");
+		ctrMkNode("fld",opt,-1,"/wdg/cfg/grp","",RWRWR_,"root","UI",3,"tp","str","dest","select","select","/wdg/g_lst");
+		ctrMkNode("fld",opt,-1,"/wdg/cfg/u_a",_("Access"),RWRWR_,"root","UI",4,"tp","dec","dest","select",
+		    "sel_id","0;4;6","sel_list",_("No access;View;View and control"));
+		ctrMkNode("fld",opt,-1,"/wdg/cfg/g_a","",RWRWR_,"root","UI",4,"tp","dec","dest","select",
+		    "sel_id","0;4;6","sel_list",_("No access;View;View and control"));
+		ctrMkNode("fld",opt,-1,"/wdg/cfg/o_a","",RWRWR_,"root","UI",4,"tp","dec","dest","select",
+		    "sel_id","0;4;6","sel_list",_("No access;View;View and control"));
 	    }
 	}
 	if(isContainer() && (!isLink()) && ctrMkNode("area",opt,-1,"/inclwdg",_("Include widgets")))
@@ -518,12 +521,12 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
     else if( a_path == "/wdg/st/goparent" &&
 	    ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) && !parent().freeStat() )
 	opt->setText(parent().at().nodePath(0,true));
-    else if( a_path == "/wdg/st/user" )
+    else if( a_path == "/wdg/cfg/owner" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( user() );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setUser( opt->text() );
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( owner() );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setOwner( opt->text() );
     }
-    else if( a_path == "/wdg/st/grp" )
+    else if( a_path == "/wdg/cfg/grp" )
     {
 	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( grp() );
 	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setGrp( opt->text() );
@@ -573,16 +576,9 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
     else if( a_path == "/wdg/g_lst" && ctrChkNode(opt) )
     {
 	vector<string> ls;
-	SYS->security().at().usrGrpList(user(), ls );
+	SYS->security().at().usrGrpList(owner(), ls );
 	for(int i_l = 0; i_l < ls.size(); i_l++)
 	    opt->childAdd("el")->setText(ls[i_l]);
-    }
-    else if( a_path == "/wdg/a_lst" && ctrChkNode(opt) )
-    {
-	opt->childAdd("el")->setAttr("id","0")->setText(_("No access"));
-	opt->childAdd("el")->setAttr("id","4")->setText(_("Use(open)"));
-	opt->childAdd("el")->setAttr("id","2")->setText(_("Modify"));
-	opt->childAdd("el")->setAttr("id","6")->setText(_("Full"));
     }
     else if( a_path == "/wdg/w_lst" && ctrChkNode(opt) )
     {
@@ -598,7 +594,7 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 	}
 	vector<string>  ls;
 	switch(c_lv)
-        {
+	{
 	    case 0: mod->nodeList(ls);   break;
 	    case 1:
 		if( TSYS::pathLev(lnk,0) != ".." )
@@ -612,10 +608,16 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
     {
 	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )
 	{
+	    bool chkUserPerm = atoi(opt->attr("chkUserPerm").c_str());
 	    vector<string>  lst;
 	    wdgList(lst);
 	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
-		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(wdgAt(lst[i_f]).at().name());
+	    {
+		AutoHD<Widget> iwdg = wdgAt(lst[i_f]);
+		if( chkUserPerm && !SYS->security().at().access(opt->attr("user"),SEQ_RD,iwdg.at().owner(),iwdg.at().grp(),iwdg.at().permit()) )
+		    continue;
+		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(iwdg.at().name());
+	    }
 	}
 	if( ctrChkNode(opt,"add",RWRWR_,"root","UI",SEQ_WR) )	wdgAdd(opt->attr("id").c_str(),opt->text(),"");
 	if( ctrChkNode(opt,"del",RWRWR_,"root","UI",SEQ_WR) )	wdgDel(opt->attr("id").c_str(),true);

@@ -49,9 +49,11 @@ namespace VISION
 	    string pgGrp( );
 	    string pgOpenSrc( );
 
+	    bool   permCntr( )	{ return mPermCntr; }
 	    unsigned reqTm( )	{ return reqtm; }
 
 	    void setPgOpenSrc( const string &vl );
+	    void   setPermCntr( bool vl )	{ mPermCntr = vl; }
 	    unsigned setReqTm( unsigned vl )	{ reqtm = vl; }
 
 	    WdgView *newWdgItem( const string &iwid );
@@ -64,12 +66,14 @@ namespace VISION
 	    //- Protected methods -
 	    bool event( QEvent * event );
 	    int cntrIfCmd( XMLNode &node, bool glob = false );
+	    void childsUpdate( bool newLoad = true );
 	    void orderUpdate( );
 
 	private:
 	    //- Attributes -
 	    unsigned	reqtm;		//Request values time
 	    int		curDiv;		//Current divider
+	    bool	mPermCntr;	//Control widget's permition
     };
 
     //*********************************************

@@ -139,7 +139,7 @@ class Widget : public TCntrNode, public TValElem
 	virtual string descr( );				//Description
 	virtual string ico( )		{ return ""; }		//Icon
 	virtual string type( )		{ return "Generic"; }	//Widget hierarchy type
-	virtual string user( )		{ return "root"; }	//Widget user
+	virtual string owner( )		{ return "root"; }	//Widget owner
 	virtual string grp( )		{ return "UI"; }	//Widget group
 	virtual short  permit( )	{ return 0644; }	//Permition for access to widget
 	virtual string calcId( )	{ return m_id; }	//Compile function identifier
@@ -152,7 +152,7 @@ class Widget : public TCntrNode, public TValElem
 	virtual void setName( const string &inm );
 	virtual void setDescr( const string &idscr );
 	virtual void setIco( const string &ico )	{ };
-	virtual void setUser( const string &iuser )	{ };
+	virtual void setOwner( const string &iown )	{ };
 	virtual void setGrp( const string &igrp )	{ };
 	virtual void setPermit( short iperm )		{ };
 	virtual void setCalcLang( const string &ilng )	{ };

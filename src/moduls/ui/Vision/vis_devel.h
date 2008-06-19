@@ -57,11 +57,12 @@ class VisDevelop : public QMainWindow
 
     public:
 	//Public methods
-	VisDevelop( const string &open_user, const string &VCAstat );
+	VisDevelop( const string &open_user, const string &user_pass, const string &VCAstat );
 	~VisDevelop( );
 
 	string user( );
-	string VCAStation( )	{ return m_stat; }
+	string password( );
+	string VCAStation( );
 	bool   wdgScale( );
 
 	void setVCAStation( const string& st );
@@ -190,7 +191,6 @@ class VisDevelop : public QMainWindow
 	string		work_wdg, work_wdg_new,	//Work widget
 			copy_buf;	//Copy buffer
 	QSignalMapper 	*wMapper;	//Internal window mapper
-	string		m_stat;		//Station
 
 	//- Main dialogs -
 	LibProjProp	*prjLibPropDlg;	//Widget's library and project properties dialog

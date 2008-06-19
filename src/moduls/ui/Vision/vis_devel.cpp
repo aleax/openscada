@@ -44,7 +44,7 @@
 
 using namespace VISION;
 
-VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) : 
+VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const string &VCAstat ) :
     prjLibPropDlg(NULL), visItPropDlg(NULL), winClose(false), copy_buf("0")
 {
     setAttribute(Qt::WA_DeleteOnClose,true);
@@ -488,15 +488,14 @@ VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) :
     mn_view->addAction(elFigTool->toggleViewAction());
     mn_view->addSeparator();
     //- Init status bar -
-    w_user = new UserStBar(open_user.c_str(), this);
+    w_user = new UserStBar( open_user.c_str(), user_pass.c_str(), VCAstat.c_str(), this);
     w_user->setWhatsThis(_("This label display curent user."));
     w_user->setToolTip(_("Field for display of the current user."));
     w_user->setStatusTip(_("Double click for change user."));
     statusBar()->insertPermanentWidget(0,w_user);
-    w_stat = new QLabel(VCAstat.c_str(), this);
+    w_stat = new QLabel( VCAStation().c_str(), this );
     w_stat->setWhatsThis(_("This label display used VCA engine station."));
     w_stat->setToolTip(_("Field for display of the used VCA engine station."));
-    w_stat->setStatusTip(_("Double click for change VCA engine station."));
     statusBar()->insertPermanentWidget(0,w_stat);
     w_scale = new WScaleStBar( this );
     w_scale->setWhatsThis(_("This label display widgets' scaling mode."));
@@ -552,8 +551,6 @@ VisDevelop::VisDevelop( const string &open_user, const string &VCAstat ) :
     //resize( 1000, 800 );
     setWindowState(Qt::WindowMaximized);
 
-    setVCAStation(VCAstat);
-
     connect(this, SIGNAL(modifiedItem(const string&)), this, SLOT(updateLibToolbar(const string&)));
     updateLibToolbar();
     wdgTree->updateTree();
@@ -590,20 +587,24 @@ VisDevelop::~VisDevelop()
     mod->unregWin(this);
 }
 
-void VisDevelop::setVCAStation( const string& st )
-{
-    m_stat = st.empty() ? "." : st;
-}
-
 int VisDevelop::cntrIfCmd( XMLNode &node, bool glob )
 {
-    if( VCAStation().empty() || VCAStation() == "." ) node.setAttr("user",user());
-    return mod->cntrIfCmd(node,user(),VCAStation(),glob);
+    return mod->cntrIfCmd(node,user(),password(),VCAStation(),glob);
 }
 
-string VisDevelop::user()
+string VisDevelop::user( )
 {
     return w_user->user().toAscii().data();
+}
+
+string VisDevelop::password( )
+{
+    return w_user->pass().toAscii().data();
+}
+
+string VisDevelop::VCAStation( )
+{
+    return w_user->VCAStation().toAscii().data();
 }
 
 bool VisDevelop::wdgScale( )
@@ -986,7 +987,7 @@ void VisDevelop::prjRun( )
 {
     string own_wdg = TSYS::strSepParse(work_wdg,0,';');
 
-    VisRun *sess = new VisRun( own_wdg, user(), VCAStation() );
+    VisRun *sess = new VisRun( own_wdg, user(), password(), VCAStation() );
     sess->show();
     sess->raise();
     sess->activateWindow();

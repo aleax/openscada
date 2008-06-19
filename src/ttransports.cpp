@@ -362,7 +362,7 @@ TTransportS::ExtHost TTransportS::extHostGet( const string &user, const string &
 {
     ResAlloc res(extHostRes,false);
     for(int i_h = 0; i_h < extHostLs.size(); i_h++)
-	if( (!user.size() || user == extHostLs[i_h].user_open) && extHostLs[i_h].id == id )
+	if( (user.empty() || user == extHostLs[i_h].user_open) && extHostLs[i_h].id == id )
 	    return extHostLs[i_h];
     return ExtHost(user,"","","","","","");
 }
@@ -749,7 +749,7 @@ void TTransportOut::preEnable(int flag)
 
 string TTransportOut::messProtIO( const string &in, const string &prot )
 {
-    if( !SYS->protocol().at().modPresent(prot) ) 
+    if( !SYS->protocol().at().modPresent(prot) )
 	throw TError(nodePath().c_str(),_("Transport protocol '%s' no present"),prot.c_str());
     return SYS->protocol().at().at(prot).at().outMess( in, *this );
 }

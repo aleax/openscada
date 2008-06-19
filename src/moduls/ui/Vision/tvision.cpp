@@ -40,16 +40,16 @@
 
 //*************************************************
 //* Modul info!                                   *
-#define MOD_ID      "Vision"
-#define MOD_NAME    "Operation user interface (QT)"
-#define MOD_TYPE    "UI"
-#define VER_TYPE    VER_UI
-#define SUB_TYPE    "QT"
-#define VERSION     "0.6.0"
-#define AUTORS      "Roman Savochenko"
-#define DEVELOPERS  "Roman Savochenko, Lysenko Maxim, Yashina Kseniya"
-#define DESCRIPTION "Visual operation user interface."
-#define LICENSE     "GPL"
+#define MOD_ID		"Vision"
+#define MOD_NAME	"Operation user interface (QT)"
+#define MOD_TYPE	"UI"
+#define VER_TYPE	VER_UI
+#define SUB_TYPE	"QT"
+#define VERSION		"0.6.0"
+#define AUTORS		"Roman Savochenko"
+#define DEVELOPERS	"Roman Savochenko, Lysenko Maxim, Yashina Kseniya"
+#define DESCRIPTION	"Visual operation user interface."
+#define LICENSE		"GPL"
 //*************************************************
 
 VISION::TVision *VISION::mod;
@@ -172,6 +172,7 @@ void TVision::load_( )
 
     //- Load parameters from config file and DB -
     setStartUser(TBDS::genDBGet(nodePath()+"StartUser",startUser()));
+    setUserPass(TBDS::genDBGet(nodePath()+"UserPass",userPass()));
     setRunPrjs(TBDS::genDBGet(nodePath()+"RunPrjs",runPrjs()));
     setVCAStation(TBDS::genDBGet(nodePath()+"VCAstation",VCAStation()));
     setPlayCom(TBDS::genDBGet(nodePath()+"PlayCom",playCom()));
@@ -184,6 +185,7 @@ void TVision::save_( )
 #endif
     //- Save parameters to DB -
     TBDS::genDBSet(nodePath()+"StartUser",startUser());
+    TBDS::genDBSet(nodePath()+"UserPass",userPass());
     TBDS::genDBSet(nodePath()+"RunPrjs",runPrjs());
     TBDS::genDBSet(nodePath()+"VCAstation",VCAStation());
     TBDS::genDBSet(nodePath()+"PlayCom",playCom());
@@ -218,19 +220,25 @@ QMainWindow *TVision::openWindow()
 	shapesWdg.push_back( new ShapeLink );
     }
 
-    string user_open = startUser();
-    if(!SYS->security().at().usrPresent(user_open))
+    string user_open = startUser( );
+    string user_pass = userPass( );
+
+    //- Check for start user set OK -
+    XMLNode req("get");
+    req.setAttr("path",string("/Security/")+user_open+"/%2fauth")->setAttr("password",user_pass);
+    if( mod->cntrIfCmd(req,startUser(),userPass(),VCAStation(),true) || !atoi(req.text().c_str()) )
 	while(true)
 	{
-	    DlgUser d_usr;
+	    DlgUser d_usr(startUser().c_str(),userPass().c_str(),VCAStation().c_str());
 	    int rez = d_usr.exec();
 	    if( rez == DlgUser::SelCancel ) return NULL;
 	    if( rez == DlgUser::SelErr )
 	    {
-	        postMess(nodePath().c_str(),_("Auth wrong!!!"));
+		postMess(nodePath().c_str(),_("Auth wrong!!!"));
 		continue;
 	    }
 	    user_open = d_usr.user().toAscii().data();
+	    user_pass = d_usr.password().toAscii().data();
 	    break;
 	}
 
@@ -245,14 +253,14 @@ QMainWindow *TVision::openWindow()
 	    if( qobject_cast<VisRun*>(mn_winds[i_w]) && ((VisRun*)mn_winds[i_w])->srcProject( ) == sprj )
 		break;
 	if( i_w < mn_winds.size() ) continue;
-	VisRun *sess = new VisRun( "/prj_"+sprj, user_open, VCAStation(), true );
+	VisRun *sess = new VisRun( "/prj_"+sprj, user_open, user_pass, VCAStation(), true );
 	sess->show();
 	sess->raise();
 	sess->activateWindow();
 	runPrj = true;
     }
 
-    return runPrj ? NULL : new VisDevelop(user_open,VCAStation());
+    return runPrj ? NULL : new VisDevelop( user_open, user_pass, VCAStation() );
 }
 
 void TVision::modStart()
@@ -311,16 +319,22 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	TUI::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
 	{
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/start_user",_("Start user"),0664,"root","root",3,"tp","str","dest","select","select","/prm/cfg/u_lst");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/run_prj",_("Run projects list (';' - sep)"),0664,"root","root",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/stationVCA",_("VCA engine station"),0664,"root","root",4,"tp","str","idm","1","dest","select","select","/prm/cfg/vca_lst");
-	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to remote stations list configuration"),0660,"root","root",1,"tp","lnk");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/stationVCA",_("VCA engine station"),0664,"root","UI",4,"tp","str","idm","1","dest","select","select","/prm/cfg/vca_lst");
+	    if( VCAStation() == "." )
+		ctrMkNode("fld",opt,-1,"/prm/cfg/start_user",_("Start user"),0664,"root","UI",3,"tp","str","dest","select","select","/prm/cfg/u_lst");
+	    else
+	    {
+		ctrMkNode("fld",opt,-1,"/prm/cfg/start_user",_("Start user"),0664,"root","UI",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/u_pass",_("User password"),0664,"root","UI",1,"tp","str");
+	    }
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/run_prj",_("Run projects list (';' - sep)"),0664,"root","UI",1,"tp","str");
+	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to remote stations list configuration"),0660,"root","UI",1,"tp","lnk");
 	}
-	if(ctrMkNode("area",opt,2,"/alarm",_("Alarms"),0444,"root","root"))
-	    ctrMkNode("fld",opt,-1,"/alarm/plComm",_("Play command"),0664,"root","root",4,"tp","str","dest","sel_ed","select","/alarm/plComLs","help",
+	if(ctrMkNode("area",opt,2,"/alarm",_("Alarms"),0444,"root","UI"))
+	    ctrMkNode("fld",opt,-1,"/alarm/plComm",_("Play command"),0664,"root","UI",4,"tp","str","dest","sel_ed","select","/alarm/plComLs","help",
 		    _("Command line for call sounds play.\n"
 		    "Use %f for source file name insert. If source file not used then play sample send to pipe."));
-	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
+	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","UI",3,"tp","str","cols","90","rows","5");
 	return;
     }
 
@@ -328,25 +342,30 @@ void TVision::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/prm/cfg/start_user" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )   opt->setText(startUser());
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )   setStartUser(opt->text());
+	if( ctrChkNode(opt,"get",0664,"root","UI",SEQ_RD) )	opt->setText(startUser());
+	if( ctrChkNode(opt,"set",0664,"root","UI",SEQ_WR) )	setStartUser(opt->text());
+    }
+    if( a_path == "/prm/cfg/u_pass" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","UI",SEQ_RD) )	opt->setText("*******");
+	if( ctrChkNode(opt,"set",0664,"root","UI",SEQ_WR) )	setUserPass(opt->text());
     }
     else if( a_path == "/prm/cfg/run_prj" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(runPrjs());
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setRunPrjs(opt->text());
+	if( ctrChkNode(opt,"get",0664,"root","UI",SEQ_RD) )	opt->setText(runPrjs());
+	if( ctrChkNode(opt,"set",0664,"root","UI",SEQ_WR) )	setRunPrjs(opt->text());
     }
     else if( a_path == "/prm/cfg/stationVCA" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(VCAStation());
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setVCAStation(opt->text());
+	if( ctrChkNode(opt,"get",0664,"root","UI",SEQ_RD) )	opt->setText(VCAStation());
+	if( ctrChkNode(opt,"set",0664,"root","UI",SEQ_WR) )	setVCAStation(opt->text());
     }
-    else if( a_path == "/prm/cfg/host_lnk" && ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )
+    else if( a_path == "/prm/cfg/host_lnk" && ctrChkNode(opt,"get",0660,"root","UI",SEQ_RD) )
     {
-	SYS->transport().at().setSysHost(false);
+	SYS->transport().at().setSysHost(true);
 	opt->setText("/Transport");
     }
-    else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )   opt->setText(optDescr());
+    else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440,"root","UI") )	opt->setText(optDescr());
     else if( a_path == "/prm/cfg/u_lst" && ctrChkNode(opt) )
     {
 	vector<string> ls;
@@ -359,15 +378,15 @@ void TVision::cntrCmdProc( XMLNode *opt )
     {
 	opt->childAdd("el")->setAttr("id",".")->setText("Local");
 	vector<string> lst;
-	SYS->transport().at().extHostList(opt->attr("user"),lst);
+	SYS->transport().at().extHostList("*",lst);
 	for( int i_ls = 0; i_ls < lst.size(); i_ls++ )
 	    opt->childAdd("el")->setAttr("id",lst[i_ls])->
 		setText(SYS->transport().at().extHostGet(opt->attr("user"),lst[i_ls]).name);
     }
     else if( a_path == "/alarm/plComm" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(playCom());
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setPlayCom(opt->text());
+	if( ctrChkNode(opt,"get",0664,"root","UI",SEQ_RD) )	opt->setText(playCom());
+	if( ctrChkNode(opt,"set",0664,"root","UI",SEQ_WR) )	setPlayCom(opt->text());
     }
     else if( a_path == "/alarm/plComLs" && ctrChkNode(opt) )
     {
@@ -396,24 +415,32 @@ void TVision::postMess( const QString &cat, const QString &mess, TVision::MessLe
     }
 }
 
-int TVision::cntrIfCmd( XMLNode &node, const string &user, const string &stat, bool glob )
+int TVision::cntrIfCmd( XMLNode &node, const string &user, const string &password, const string &VCAStat, bool glob )
 {
     //- Check for local VCAEngine path -
     if( !glob ) node.setAttr("path","/UI/VCAEngine"+node.attr("path"));
 
     //- Local station request -
-    if( stat.empty() || stat == "." )
+    if( VCAStat.empty() || VCAStat == "." )
     {
+	node.setAttr("user",user);
 	SYS->cntrCmd(&node);
 	return atoi(node.attr("rez").c_str());
     }
 
     //- Request remote host -
-    TTransportS::ExtHost host = SYS->transport().at().extHostGet(user,stat);
-    AutoHD<TTransportOut> tr = SYS->transport().at().extHost(host,"VCAStat");
-    if(!tr.at().startStat())    tr.at().start();
-    node.load(tr.at().messProtIO(host.user+"\n"+host.pass+"\n"+node.save(),"SelfSystem"));
-    return atoi(node.attr("rez").c_str());
+    try
+    {
+	TTransportS::ExtHost host = SYS->transport().at().extHostGet("*",VCAStat);
+	AutoHD<TTransportOut> tr = SYS->transport().at().extHost(host,"VCAStat");
+	if( !tr.at().startStat() )	tr.at().start();
+	if( user.empty() || user == host.user )
+	    node.load(tr.at().messProtIO("0\n"+host.user+"\n"+host.pass+"\n"+node.save(),"SelfSystem"));
+	else node.load(tr.at().messProtIO("1\n"+user+"\n"+password+"\n"+node.save(),"SelfSystem"));
+
+	return atoi(node.attr("rez").c_str());
+    }
+    catch(TError err)	{ return 10; }
 }
 
 QWidget *TVision::getFocusedWdg( QWidget *wcntr )

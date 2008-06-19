@@ -213,8 +213,8 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    w->dc()["active"] = (bool)atoi(val.c_str());
 	    if( el >= 0 )
 	    {
-		setFocus(w,el_wdg,atoi(val.c_str()));
-		el_wdg->setEnabled((bool)atoi(val.c_str()));
+		setFocus(w,el_wdg,atoi(val.c_str()) && runW->permCntr());
+		el_wdg->setEnabled(atoi(val.c_str()) && runW->permCntr());
 	    }
 	    break;
 	case 12:	//geomMargin
@@ -482,8 +482,12 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    //-- Install event's filter and disable focus --
 	    eventFilterSet(w,el_wdg,true);
 	    w->setFocusProxy(el_wdg);
-	    setFocus(w,el_wdg,w->dc()["active"].toInt()&&(!devW),devW);
-	    if( runW )	el_wdg->setEnabled(w->dc()["active"].toInt());
+	    if( devW )	setFocus(w,el_wdg,false,devW);
+	    if( runW )
+	    {
+		setFocus( w, el_wdg, w->dc()["active"].toInt() && runW->permCntr() );
+		el_wdg->setEnabled( w->dc()["active"].toInt() && runW->permCntr() );
+	    }
 	    el_wdg->setVisible(w->dc()["en"].toInt());
 	    //-- Fix widget --
 	    ((QVBoxLayout*)w->layout())->addWidget(el_wdg);
@@ -687,7 +691,7 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	case 6:		//active
 	    if( !qobject_cast<RunWdgView*>(w) ) break;
 	    w->dc()["active"] = (bool)atoi(val.c_str());
-	    w->setFocusPolicy( (bool)atoi(val.c_str()) ? Qt::StrongFocus : Qt::NoFocus );
+	    w->setFocusPolicy( (atoi(val.c_str())&&((RunWdgView*)w)->permCntr()) ? Qt::StrongFocus : Qt::NoFocus );
 	    break;
 	case 12:	//geomMargin
 	    w->dc()["geomMargin"] = atoi(val.c_str());	up = true;
@@ -964,8 +968,8 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    break;
 	case 6:		//active
 	    if( !qobject_cast<RunWdgView*>(w) )	break;
-	    lab->setMouseTracking(atoi(val.c_str()));
-	    w->setMouseTracking(atoi(val.c_str()));
+	    lab->setMouseTracking( atoi(val.c_str()) && ((RunWdgView*)w)->permCntr() );
+	    w->setMouseTracking( atoi(val.c_str()) && ((RunWdgView*)w)->permCntr() );
 	    break;
 	case 12:	//geomMargin
 	    w->dc()["geomMargin"] = atoi(val.c_str());
@@ -1284,8 +1288,9 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    up = true;
 	    break;
 	case 6:		//active
+	    if( !qobject_cast<RunWdgView*>(w) )	break;
 	    w->dc()["active"] = (bool)atoi(val.c_str());
-	    if( w->dc()["active"].toBool() )	w->setFocusPolicy(Qt::StrongFocus);
+	    if( w->dc()["active"].toBool() && ((RunWdgView*)w)->permCntr() )	w->setFocusPolicy(Qt::StrongFocus);
 	    else w->setFocusPolicy(Qt::NoFocus);
 	    break;
 	case 9:	case 10: make_pct = true;	break;
@@ -1840,7 +1845,6 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 	    if( w->hasFocus() )	qDrawShadeRect(&pnt,dA.x(),dA.y(),dA.width(),dA.height(),w->palette());
 
 	    //- Draw cursor -
-
 	    if( w->dc().value("active",1).toInt() && curTime && tTimeGrnd && tPict && (curTime >= tTimeGrnd || curTime <= tPict) )
 	    {
 		int curPos = tAr->x()+tAr->width()*(curTime-tTimeGrnd)/(tPict-tTimeGrnd);
@@ -2021,9 +2025,9 @@ void ShapeDiagram::TrendObj::loadData( bool full )
     double	curVal, prevVal;
     string	svl;
     vector<SHg>	buf;
-    deque<SHg>::iterator bufEndOff = vals.end();
-    XMLNode req("get");
     bool toEnd = (tTimeGrnd >= valEnd());
+    int  endBlks = 0;
+    XMLNode req("get");
     m1: req.clear()->
 	    setAttr("arch",arch)->
 	    setAttr("path",addr()+"/%2fserv%2f0")->
@@ -2034,6 +2038,7 @@ void ShapeDiagram::TrendObj::loadData( bool full )
 	    setAttr("real_prec","6")->
 	    setAttr("round_perc","0");//TSYS::real2str(100.0/(float)view->size().height()));
     if( view->cntrIfCmd(req,true) )	return;
+
     //- Get data buffer parameters -
     bbeg = atoll(req.attr("tm_grnd").c_str());
     bend = atoll(req.attr("tm").c_str());
@@ -2054,9 +2059,9 @@ void ShapeDiagram::TrendObj::loadData( bool full )
     //- Append buffer to values deque -
     if( toEnd )
     {
-	vals.insert(bufEndOff,buf.begin(),buf.end());
+	vals.insert(vals.end()-endBlks,buf.begin(),buf.end());
 	while( vals.size() > 2000 )	vals.pop_front();
-	bufEndOff = vals.end()-buf.size();
+	endBlks+=buf.size();
     }
     else
     {
@@ -2126,7 +2131,7 @@ bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	case 6:		//active
 	    if( !qobject_cast<RunWdgView*>(w) ) break;
 	    w->dc()["active"] = (bool)atoi(val.c_str());
-	    setFocus(w,tw,atoi(val.c_str()));
+	    setFocus( w, tw, atoi(val.c_str()) && ((RunWdgView*)w)->permCntr() );
 	    break;
  	case 12:	//geomMargin
 	    w->layout()->setMargin(atoi(val.c_str()));	break;
@@ -2523,7 +2528,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    break;
 	case 6:		//active
 	    if( !qobject_cast<RunWdgView*>(w) ) break;
-	    if( atoi(val.c_str()) ) w->setFocusPolicy( Qt::StrongFocus );
+	    if( atoi(val.c_str()) && ((RunWdgView*)w)->permCntr() ) w->setFocusPolicy( Qt::StrongFocus );
 	    else w->setFocusPolicy( Qt::NoFocus );
 	    break;
 	case 12:	//geomMargin

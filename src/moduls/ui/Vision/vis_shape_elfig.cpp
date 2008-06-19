@@ -1,22 +1,22 @@
 //OpenSCADA system module UI.VISION file: vis_shape_elfig.cpp
 /***************************************************************************
  *   Copyright (C) 2007 by Lysenko Maxim (mlisenko@ukr.net)
- *   			by Yashina Kseniya (sobacurka@ukr.net) 
- *                                                                         
+ *   			by Yashina Kseniya (sobacurka@ukr.net)
+ *
  *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by  
- *   the Free Software Foundation; either version 2 of the License, or     
- *   (at your option) any later version.                                   
- *                                                                         
- *   This program is distributed in the hope that it will be useful,       
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         
- *   GNU General Public License for more details.                          
- *                                                                         
- *   You should have received a copy of the GNU General Public License     
- *   along with this program; if not, write to the                         
- *   Free Software Foundation, Inc.,                                       
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation; either version 2 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program; if not, write to the
+ *   Free Software Foundation, Inc.,
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  ***************************************************************************/
 #include <stdlib.h>
 #include <string.h>
@@ -40,10 +40,10 @@
 
 using namespace VISION;
 
-ShapeElFigure::ShapeElFigure( ) : 
-    WdgShape("ElFigure"), itemInMotion(0), flag_down(false), flag_up(false), flag_left(false), flag_right(false), flag_A(false), flag_ctrl(false), 
-    status_hold(false), flag_rect(false), flag_hold_move(false), flag_m(false), flag_scale(true), flag_rotate(true), flag_hold_arc(false), flag_angle_temp(false), 
-    flag_arc_rect_3_4(false), flag_first_move(false), flag_hold_checked(false), current_ss(-1), current_se(-1), current_es(-1), current_ee(-1), 
+ShapeElFigure::ShapeElFigure( ) :
+    WdgShape("ElFigure"), itemInMotion(0), flag_down(false), flag_up(false), flag_left(false), flag_right(false), flag_A(false), flag_ctrl(false),
+    status_hold(false), flag_rect(false), flag_hold_move(false), flag_m(false), flag_scale(true), flag_rotate(true), flag_hold_arc(false), flag_angle_temp(false),
+    flag_arc_rect_3_4(false), flag_first_move(false), flag_hold_checked(false), current_ss(-1), current_se(-1), current_es(-1), current_ee(-1),
     count_Shapes(0), count_holds(0), count_rects(0), rect_num_arc(-1), rect_num(-1), index_del(-1)
 {
     newPath.addEllipse( QRect(0,0,0,0) );
@@ -71,9 +71,9 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 {
     DevelWdgView *devW = qobject_cast<DevelWdgView*>(w);
     RunWdgView   *runW = qobject_cast<RunWdgView*>(w);
-    bool rel_list = false;					//change signal
-    bool up 	  = false;
-    status	  = false;
+    bool rel_list	= false;				//change signal
+    bool up 		= false;
+    status		= false;
     QVector<ShapeItem> &shapeItems = *(QVector<ShapeItem> *)w->dc().value("shapeItems",(void*)0).value< void* >();
     QVector<inundationItem> &inundationItems = *(QVector<inundationItem> *)w->dc().value("inundationItems",(void*)0).value< void* >();
     PntMap *pnts = (PntMap*)w->dc().value("shapePnts",(void*)0).value< void* >();
@@ -83,28 +83,28 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
     double t_start, t_end, a, b, ang_t;
     float MotionWidth;
     QPainterPath circlePath;
-    
+
     switch( uiPrmPos )
     {
 	case -1:	//load
 	    rel_list = true;
 	    break;
-        case 5:		//en
-            if( !runW )	break;
+	case 5:		//en
+	    if( !runW )	break;
 	    w->dc()["en"] = (bool)atoi(val.c_str());
-    	    w->setVisible(atoi(val.c_str()));
-            break;
-        case 6:		//active
-            if( !runW )	break;    
+	    w->setVisible(atoi(val.c_str()));
+	    break;
+	case 6:		//active
+	    if( !runW )	break;
 	    w->dc()["active"] = (bool)atoi(val.c_str());
-	    w->setFocusPolicy( (bool)atoi(val.c_str()) ? Qt::TabFocus : Qt::NoFocus );
-            break;
-        case 12:	//geomMargin
-            w->dc()["geomMargin"] = atoi(val.c_str());
-            up=true;
-            break;
-        case 20:	//lineWdth
-            w->dc()["lineWdth"] = atof(val.c_str());
+	    w->setFocusPolicy( (atoi(val.c_str()) && ((RunWdgView*)w)->permCntr()) ? Qt::TabFocus : Qt::NoFocus );
+	    break;
+	case 12:	//geomMargin
+	    w->dc()["geomMargin"] = atoi(val.c_str());
+	    up=true;
+	    break;
+	case 20:	//lineWdth
+	    w->dc()["lineWdth"] = atof(val.c_str());
             rel_list = true;
             break;
         case 21:	//lineClr
@@ -906,7 +906,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
             QMouseEvent *ev = static_cast<QMouseEvent*>(event);
             DevelWdgView *devW = qobject_cast<DevelWdgView*>(view);
             RunWdgView   *runW = qobject_cast<RunWdgView*>(view);
-            if( runW && runW->dc()["active"].toBool() ) 
+            if( runW && runW->dc()["active"].toBool() && runW->permCntr() )
             {
                 string sev;
                 for( int i=0; i < inundationItems.size(); i++ )
@@ -1021,30 +1021,30 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         view->repaint();
                     }
                 }
-        	return true;		
+        	return true;
             }
 	    break;
         }
         case QEvent::MouseButtonDblClick:
         {
-            bool flag_arc_inund = false, 
+            bool flag_arc_inund = false,
 		 flag_break_move, fl_brk;
-            QMouseEvent *ev = static_cast<QMouseEvent*>(event); 
+            QMouseEvent *ev = static_cast<QMouseEvent*>(event);
             DevelWdgView *devW = qobject_cast<DevelWdgView*>(view);
             RunWdgView   *runW = qobject_cast<RunWdgView*>(view);
-            
-	    if( runW && runW->dc()["active"].toBool() ) 
-            {
-                string sev;
-                for( int i=0; i < inundationItems.size(); i++ )
-                    if( inundationItems[i].path.contains(ev->pos()) )
-                    	sev="ws_Fig"+TSYS::int2str(i);		
-                if( !sev.empty() )	
+
+	    if( runW && runW->dc()["active"].toBool() && runW->permCntr() )
+	    {
+		string sev;
+		for( int i=0; i < inundationItems.size(); i++ )
+		    if( inundationItems[i].path.contains(ev->pos()) )
+			sev="ws_Fig"+TSYS::int2str(i);
+		if( !sev.empty() )
 		{
 		    view->attrSet( "event", sev+"DblClick" );
 		    return true;
 		}
-            }	    
+            }
             else if( devW )
             {
                 if( !flag_down && !flag_up && !flag_left && !flag_right )

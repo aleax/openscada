@@ -35,9 +35,7 @@ using namespace VCA;
 //************************************************
 WidgetLib::WidgetLib( const string &id, const string &name, const string &lib_db ) :
     TConfig(&mod->elWdgLib()), m_enable(false), m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()),
-    m_descr(cfg("DESCR").getSd()), m_ico(cfg("ICO").getSd()), m_dbt(cfg("DB_TBL").getSd()),
-    m_user(cfg("USER").getSd()), m_grp(cfg("GRP").getSd()), m_permit(cfg("PERMIT").getId()),
-    work_lib_db(lib_db)
+    m_descr(cfg("DESCR").getSd()), m_ico(cfg("ICO").getSd()), m_dbt(cfg("DB_TBL").getSd()), work_lib_db(lib_db)
 {
     m_id = id;
     m_name = name;
@@ -125,31 +123,6 @@ void WidgetLib::postDisable( int flag )
 string WidgetLib::name( )
 {
     return (m_name.size())?m_name:m_id;
-}
-
-string WidgetLib::user( )
-{
-    return SYS->security().at().usrPresent(m_user)?m_user:"root";
-}
-
-string WidgetLib::grp( )
-{
-    return SYS->security().at().grpPresent(m_grp)?m_grp:"UI";
-}
-
-void WidgetLib::setUser( const string &it )
-{
-    m_user = it;
-    //- Update librarie's group -
-    if(SYS->security().at().grpAt("UI").at().user(it))
-	setGrp("UI");
-    else
-    {
-	vector<string> gls;
-	SYS->security().at().usrGrpList(user(),gls);
-	setGrp(gls.size()?gls[0]:"UI");
-    }
-    modif();
 }
 
 void WidgetLib::setFullDB( const string &it )
@@ -335,8 +308,6 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/obj/st/en",_("Enable"),RWRWR_,"root","UI",1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/obj/st/db",_("Library DB"),RWRWR_,"root","UI",4,"tp","str","dest","sel_ed","select","/db/tblList",
 		    "help",_("DB address in format [<DB module>.<DB name>.<Table name>].\nFor use main work DB set '*.*'."));
-		ctrMkNode("fld",opt,-1,"/obj/st/user",_("User and group"),RWRWR_,"root","UI",3,"tp","str","dest","select","select","/obj/u_lst");
-		ctrMkNode("fld",opt,-1,"/obj/st/grp","",RWRWR_,"root","UI",3,"tp","str","dest","select","select","/obj/g_lst");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/obj/cfg",_("Config")))
 	    {
@@ -344,9 +315,6 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/obj/cfg/name",_("Name"),RWRWR_,"root","UI",1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/obj/cfg/descr",_("Description"),RWRWR_,"root","UI",3,"tp","str","cols","50","rows","3");
 		ctrMkNode("img",opt,-1,"/obj/cfg/ico",_("Icon"),RWRWR_,"root","UI",2,"v_sz","64","h_sz","64");
-		ctrMkNode("fld",opt,-1,"/obj/cfg/u_a",_("Access: user-grp-other"),RWRWR_,"root","UI",3,"tp","dec","dest","select","select","/obj/a_lst");
-		ctrMkNode("fld",opt,-1,"/obj/cfg/g_a","",RWRWR_,"root","UI",3,"tp","dec","dest","select","select","/obj/a_lst");
-		ctrMkNode("fld",opt,-1,"/obj/cfg/o_a","",RWRWR_,"root","UI",3,"tp","dec","dest","select","select","/obj/a_lst");
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/wdg",_("Widgets")))
@@ -372,31 +340,6 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
     {
 	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( fullDB() );
 	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setFullDB( opt->text() );
-    }
-    else if( a_path == "/obj/st/user" )
-    {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( user() );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setUser( opt->text() );
-    }
-    else if( a_path == "/obj/st/grp" )
-    {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( grp() );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setGrp( opt->text() );
-    }
-    else if( a_path == "/obj/cfg/u_a" || a_path == "/obj/cfg/g_a" || a_path == "/obj/cfg/o_a" )
-    {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )
-	{
-	    if( a_path == "/obj/cfg/u_a" )	opt->setText( TSYS::int2str((permit()>>6)&0x7) );
-	    if( a_path == "/obj/cfg/g_a" )	opt->setText( TSYS::int2str((permit()>>3)&0x7) );
-	    if( a_path == "/obj/cfg/o_a" )	opt->setText( TSYS::int2str(permit()&0x7) );
-	}
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )
-	{
-	    if( a_path == "/obj/cfg/u_a" )	setPermit( (permit()&(~(0x07<<6)))|(atoi(opt->text().c_str())<<6) );
-	    if( a_path == "/obj/cfg/g_a" )	setPermit( (permit()&(~(0x07<<3)))|(atoi(opt->text().c_str())<<3) );
-	    if( a_path == "/obj/cfg/o_a" )	setPermit( (permit()&(~0x07))|atoi(opt->text().c_str()) );
-	}
     }
     else if( a_path == "/obj/cfg/ico" || a_path == "/ico" )
     {
@@ -426,30 +369,9 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"add",RWRWR_,"root","UI",SEQ_WR) )
 	{
 	    add(opt->attr("id").c_str(),opt->text().c_str());
-	    at(opt->attr("id")).at().setUser(opt->attr("user"));
+	    at(opt->attr("id")).at().setOwner(opt->attr("user"));
 	}
 	if( ctrChkNode(opt,"del",RWRWR_,"root","UI",SEQ_WR) ) del(opt->attr("id"),true);
-    }
-    else if( a_path == "/obj/u_lst" && ctrChkNode(opt) )
-    {
-	vector<string> ls;
-	SYS->security().at().usrList(ls);
-	for(int i_l = 0; i_l < ls.size(); i_l++)
-		opt->childAdd("el")->setText(ls[i_l]);
-    }
-    else if( a_path == "/obj/g_lst" && ctrChkNode(opt) )
-    {
-	vector<string> ls;
-	SYS->security().at().usrGrpList(user(), ls );
-	for(int i_l = 0; i_l < ls.size(); i_l++)
-	    opt->childAdd("el")->setText(ls[i_l]);
-    }
-    else if( a_path == "/obj/a_lst" && ctrChkNode(opt) )
-    {
-	opt->childAdd("el")->setAttr("id","0")->setText(_("No access"));
-	opt->childAdd("el")->setAttr("id","4")->setText(_("Use(open)"));
-	opt->childAdd("el")->setAttr("id","2")->setText(_("Modify"));
-	opt->childAdd("el")->setAttr("id","6")->setText(_("Full"));
     }
     else if( a_path == "/mime/mime" )
     {
@@ -521,7 +443,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 LWidget::LWidget( const string &iid, const string &isrcwdg ) :
 	Widget(iid), TConfig(&mod->elWdg()),
 	m_ico(cfg("ICO").getSd()), m_proc(cfg("PROC").getSd()), m_proc_per(cfg("PROC_PER").getId()),
-	m_user(cfg("USER").getSd()), m_grp(cfg("GRP").getSd()), m_permit(cfg("PERMIT").getId()), 
+	m_owner(cfg("USER").getSd()), m_grp(cfg("GRP").getSd()), m_permit(cfg("PERMIT").getId()),
 	m_parent(cfg("PARENT").getSd()), m_attrs(cfg("ATTRS").getSd())
 {
     cfg("ID").setS(id());
@@ -534,7 +456,7 @@ LWidget::~LWidget( )
 
 }
 
-WidgetLib &LWidget::owner( )
+WidgetLib &LWidget::ownerLib( )
 {
     return *(WidgetLib*)nodePrev( );
 }
@@ -546,7 +468,7 @@ void LWidget::postDisable( int flag )
 
 string LWidget::path( )
 {
-    return "/wlb_"+owner().id()+"/wdg_"+id();
+    return "/wlb_"+ownerLib().id()+"/wdg_"+id();
 }
 
 string LWidget::ico( )
@@ -556,21 +478,21 @@ string LWidget::ico( )
     return "";
 }
 
-string LWidget::user( )
+string LWidget::owner( )
 {
-    return SYS->security().at().usrPresent(m_user)?m_user:Widget::user( );
+    return SYS->security().at().usrPresent(m_owner) ? m_owner : Widget::owner( );
 }
 
-void LWidget::setUser( const string &iuser )
+void LWidget::setOwner( const string &iown )
 {
-    m_user = iuser;
+    m_owner = iown;
     //- Group update -
-    if(SYS->security().at().grpAt("UI").at().user(iuser))
+    if(SYS->security().at().grpAt("UI").at().user(iown))
 	setGrp("UI");
     else
     {
 	vector<string> gls;
-	SYS->security().at().usrGrpList(user(),gls);
+	SYS->security().at().usrGrpList(owner(),gls);
 	setGrp(gls.size()?gls[0]:Widget::grp());
     }
     modif();
@@ -588,7 +510,7 @@ string LWidget::calcId( )
 	if( !parent().freeStat() ) return parent().at().calcId( );
 	return "";
     }
-    return "L_"+owner().id()+"_"+id();
+    return "L_"+ownerLib().id()+"_"+id();
 }
 
 string LWidget::calcLang( )
@@ -652,8 +574,8 @@ void LWidget::setCalcPer( int vl )
 void LWidget::load_( )
 {
     //- Load generic widget's data -
-    string db  = owner().DB();
-    string tbl = owner().tbl();
+    string db  = ownerLib().DB();
+    string tbl = ownerLib().tbl();
     SYS->db().at().dataGet( db+"."+tbl, mod->nodePath()+tbl, *this );
 
     loadIO();
@@ -667,8 +589,8 @@ void LWidget::loadIO( )
     if( !enable() ) return;
 
     //- Load widget's work attributes -
-    string db  = owner().DB();
-    string tbl = owner().tbl()+"_io";
+    string db  = ownerLib().DB();
+    string tbl = ownerLib().tbl()+"_io";
 
     //- Inherit modify attributes -
     /*attrList( als );
@@ -706,7 +628,7 @@ void LWidget::loadIO( )
     }
 
     //- Load widget's user attributes -
-    tbl = owner().tbl()+"_uio";
+    tbl = ownerLib().tbl()+"_uio";
     c_el.setElem(&mod->elWdgUIO());
     c_el.cfg("IDW").setS(id());
     c_el.cfg("ID").setS("");
@@ -733,7 +655,7 @@ void LWidget::loadIO( )
     //- Load cotainer widgets -
     if( !enable() || !isContainer() ) return;
     c_el.setElem(&mod->elInclWdg());
-    tbl=owner().tbl()+"_incl";
+    tbl=ownerLib().tbl()+"_incl";
     c_el.cfg("IDW").setS(id());
     c_el.cfg("ID").setS("");
     fld_cnt=0;
@@ -754,8 +676,8 @@ void LWidget::loadIO( )
 
 void LWidget::save_( )
 {
-    string db  = owner().DB();
-    string tbl = owner().tbl();
+    string db  = ownerLib().DB();
+    string tbl = ownerLib().tbl();
 
     //- Remove from DB -
     if( nodeMode() == TCntrNode::Disable )
@@ -808,9 +730,9 @@ void LWidget::saveIO( )
     if( !enable() ) return;
 
     //- Save widget's attributes -
-    string db  = owner().DB();
-    string tbl = owner().tbl()+"_io";
-    string utbl = owner().tbl()+"_uio";
+    string db  = ownerLib().DB();
+    string tbl = ownerLib().tbl()+"_io";
+    string utbl = ownerLib().tbl()+"_uio";
 
     attrList( als );
     TConfig c_el(&mod->elWdgIO());
@@ -869,8 +791,8 @@ void LWidget::wdgAdd( const string &wid, const string &name, const string &path 
     if( wdgPresent(wid) ) return;
 
     //- Check for label <deleted> -
-    string db  = owner().DB();
-    string tbl = owner().tbl()+"_incl";
+    string db  = ownerLib().DB();
+    string tbl = ownerLib().tbl()+"_incl";
     TConfig c_el( &mod->elInclWdg() );
     c_el.cfg("IDW").setS(id());
     c_el.cfg("ID").setS(wid);
@@ -899,7 +821,7 @@ string LWidget::resourceGet( const string &id, string *mime )
 {
     string mimeType, mimeData;
 
-    if( !owner().mimeDataGet( id, mimeType, &mimeData ) && !parent().freeStat() )
+    if( !ownerLib().mimeDataGet( id, mimeType, &mimeData ) && !parent().freeStat() )
 	mimeData = parent().at().resourceGet( id, &mimeType );
     if( mime )	*mime = mimeType;
 
@@ -934,7 +856,10 @@ void LWidget::cntrCmdProc( XMLNode *opt )
 //* CWidget: Container stored widget             *
 //************************************************
 CWidget::CWidget( const string &iid, const string &isrcwdg ) :
-        Widget(iid), TConfig(&mod->elInclWdg()), m_parent(cfg("PARENT").getSd()), m_attrs(cfg("ATTRS").getSd()), delMark(false)
+        Widget(iid), TConfig(&mod->elInclWdg()),
+        m_parent(cfg("PARENT").getSd()), m_attrs(cfg("ATTRS").getSd()),
+        m_owner(cfg("USER").getSd()), m_grp(cfg("GRP").getSd()), m_permit(cfg("PERMIT").getId()),
+        delMark(false)
 {
     cfg("ID").setS(id());
     m_lnk = true;
@@ -948,10 +873,10 @@ CWidget::~CWidget( )
 
 string CWidget::path( )
 {
-    return "/wlb_"+owner().owner().id()+"/wdg_"+owner().id()+"/wdg_"+id();
+    return "/wlb_"+ownerLWdg().ownerLib().id()+"/wdg_"+ownerLWdg().id()+"/wdg_"+id();
 }
 
-LWidget &CWidget::owner()
+LWidget &CWidget::ownerLWdg()
 {
     return *(LWidget*)nodePrev();
 }
@@ -961,7 +886,7 @@ void CWidget::postEnable( int flag )
     //- Call parent methos -
     Widget::postEnable(flag);
     //- Set container widget id -
-    cfg("IDW").setS(owner().id());
+    cfg("IDW").setS(ownerLWdg().id());
 }
 
 void CWidget::preDisable( int flag )
@@ -977,19 +902,28 @@ string CWidget::ico( )
     return "";
 }
 
-string CWidget::user( )
+string CWidget::owner( )
 {
-    return owner().user();
+    return SYS->security().at().usrPresent(m_owner) ? m_owner : Widget::owner( );
+}
+
+void CWidget::setOwner( const string &iown )
+{
+    m_owner = iown;
+    //- Group update -
+    if( SYS->security().at().grpAt("UI").at().user(iown) ) setGrp("UI");
+    else
+    {
+	vector<string> gls;
+	SYS->security().at().usrGrpList(owner(),gls);
+	setGrp( gls.size() ? gls[0] : Widget::grp() );
+    }
+    modif();
 }
 
 string CWidget::grp( )
 {
-    return owner().grp( );
-}
-
-short CWidget::permit( )
-{
-    return owner().permit( );
+    return SYS->security().at().grpPresent(m_grp) ? m_grp : Widget::grp( );
 }
 
 void CWidget::setEnable( bool val )
@@ -1000,9 +934,9 @@ void CWidget::setEnable( bool val )
 
     //- Disable heritors widgets -
     if( val )
-	for( int i_h = 0; i_h < owner().herit().size(); i_h++ )
-	    if( owner().herit()[i_h].at().wdgPresent(id()) && !owner().herit()[i_h].at().wdgAt(id()).at().enable( ) )
-	    try { owner().herit()[i_h].at().wdgAt(id()).at().setEnable(true); }
+	for( int i_h = 0; i_h < ownerLWdg().herit().size(); i_h++ )
+	    if( ownerLWdg().herit()[i_h].at().wdgPresent(id()) && !ownerLWdg().herit()[i_h].at().wdgAt(id()).at().enable( ) )
+	    try { ownerLWdg().herit()[i_h].at().wdgAt(id()).at().setEnable(true); }
 	    catch(...)
 	    { mess_err(nodePath().c_str(),_("Heritors widget <%s> enable error"),id().c_str()); }
 }
@@ -1034,8 +968,8 @@ int CWidget::calcPer( )
 void CWidget::load_( )
 {
     //- Load generic widget's data -
-    string db  = owner().owner().DB();
-    string tbl = owner().owner().tbl()+"_incl";
+    string db  = ownerLWdg().ownerLib().DB();
+    string tbl = ownerLWdg().ownerLib().tbl()+"_incl";
     SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,*this);
 
     //- Load widget's attributes -
@@ -1050,8 +984,8 @@ void CWidget::loadIO( )
     if( !enable() ) return;
 
     //- Load widget's work attributes -
-    string db  = owner().owner().DB();
-    string tbl = owner().owner().tbl()+"_io";
+    string db  = ownerLWdg().ownerLib().DB();
+    string tbl = ownerLWdg().ownerLib().tbl()+"_io";
 
     //- Inherit modify attributes -
     /*attrList( als );
@@ -1073,7 +1007,7 @@ void CWidget::loadIO( )
 
     //-- Same load --
     TConfig c_el(&mod->elWdgIO());
-    c_el.cfg("IDW").setS(owner().id());
+    c_el.cfg("IDW").setS(ownerLWdg().id());
     for( int i_a = 0; i_a < als.size(); i_a++ )
     {
 	if( !attrPresent(als[i_a]) )    continue;
@@ -1088,9 +1022,9 @@ void CWidget::loadIO( )
 	if( full_ls && attr.at().flgGlob()&Attr::Active ) attrList( als );
     }
     //- Load widget's user attributes -
-    tbl = owner().owner().tbl()+"_uio";
+    tbl = ownerLWdg().ownerLib().tbl()+"_uio";
     c_el.setElem(&mod->elWdgUIO());
-    c_el.cfg("IDW").setS(owner().id());
+    c_el.cfg("IDW").setS(ownerLWdg().id());
     c_el.cfg("ID").setS("");
     int fld_cnt = 0;
     while( SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el) )
@@ -1118,8 +1052,8 @@ void CWidget::loadIO( )
 
 void CWidget::save_( )
 {
-    string db  = owner().owner().DB();
-    string tbl = owner().owner().tbl();
+    string db  = ownerLWdg().ownerLib().DB();
+    string tbl = ownerLWdg().ownerLib().tbl();
 
     //- Delete from DB -
     if( nodeMode() == TCntrNode::Disable )
@@ -1134,7 +1068,7 @@ void CWidget::save_( )
 
 	//-- Remove widget's work and users IO from library IO table --
 	TConfig c_el( &mod->elWdgIO() );
-	c_el.cfg("IDW").setS( owner().id() );
+	c_el.cfg("IDW").setS( ownerLWdg().id() );
 	int io_cnt = 0;
 	while( SYS->db().at().dataSeek( db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", io_cnt++, c_el ) )
 	{
@@ -1143,7 +1077,7 @@ void CWidget::save_( )
 	    c_el.cfg("ID").setS("");
 	}
 	c_el.setElem(&mod->elWdgUIO());
-	c_el.cfg("IDW").setS( owner().id() );
+	c_el.cfg("IDW").setS( ownerLWdg().id() );
 	io_cnt = 0;
 	while( SYS->db().at().dataSeek( db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", io_cnt++, c_el ) )
 	{
@@ -1177,15 +1111,15 @@ void CWidget::saveIO( )
     vector<string> als;
 
     //- Save widget's attributes -
-    string db  = owner().owner().DB();
-    string tbl = owner().owner().tbl()+"_io";
-    string utbl = owner().owner().tbl()+"_uio";
+    string db  = ownerLWdg().ownerLib().DB();
+    string tbl = ownerLWdg().ownerLib().tbl()+"_io";
+    string utbl = ownerLWdg().ownerLib().tbl()+"_uio";
 
     attrList( als );
     TConfig c_el(&mod->elWdgIO());
-    c_el.cfg("IDW").setS(owner().id());
+    c_el.cfg("IDW").setS(ownerLWdg().id());
     TConfig c_elu(&mod->elWdgUIO());
-    c_elu.cfg("IDW").setS(owner().id());
+    c_elu.cfg("IDW").setS(ownerLWdg().id());
     for( int i_a = 0; i_a < als.size(); i_a++ )
     {
 	AutoHD<Attr> attr = attrAt(als[i_a]);
@@ -1235,7 +1169,7 @@ string CWidget::resourceGet( const string &id, string *mime )
 {
     string mimeType, mimeData;
 
-    if( (mimeData=owner().resourceGet( id, &mimeType )).empty() && !parent().freeStat() )
+    if( (mimeData=ownerLWdg().resourceGet( id, &mimeType )).empty() && !parent().freeStat() )
 	mimeData = parent().at().resourceGet( id, &mimeType );
     if( mime )	*mime = mimeType;
 

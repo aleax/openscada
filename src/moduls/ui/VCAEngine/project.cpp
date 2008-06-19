@@ -36,7 +36,7 @@ using namespace VCA;
 Project::Project( const string &id, const string &name, const string &lib_db ) :
     TConfig(&mod->elProject()), m_enable(false), m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()),
     m_descr(cfg("DESCR").getSd()), m_ico(cfg("ICO").getSd()), m_dbt(cfg("DB_TBL").getSd()),
-    m_user(cfg("USER").getSd()), m_grp(cfg("GRP").getSd()), m_permit(cfg("PERMIT").getId()),
+    m_owner(cfg("USER").getSd()), m_grp(cfg("GRP").getSd()), m_permit(cfg("PERMIT").getId()), mPer(cfg("PER").getId()),
     work_prj_db(lib_db)
 {
     m_id = id;
@@ -127,9 +127,9 @@ string Project::name( )
     return (m_name.size())?m_name:m_id;
 }
 
-string Project::user( )
+string Project::owner( )
 {
-    return SYS->security().at().usrPresent(m_user)?m_user:"root";
+    return SYS->security().at().usrPresent(m_owner) ? m_owner : "root";
 }
 
 string Project::grp( )
@@ -137,16 +137,16 @@ string Project::grp( )
     return SYS->security().at().grpPresent(m_grp)?m_grp:"UI";
 }
 
-void Project::setUser( const string &it )
+void Project::setOwner( const string &it )
 {
-    m_user = it;
+    m_owner = it;
     //- Update librarie's group -
     if(SYS->security().at().grpAt("UI").at().user(it))
 	setGrp("UI");
     else
     {
 	vector<string> gls;
-	SYS->security().at().usrGrpList(user(),gls);
+	SYS->security().at().usrGrpList(owner(),gls);
 	setGrp(gls.size()?gls[0]:"UI");
     }
     modif();
@@ -325,8 +325,6 @@ void Project::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/obj/st/en",_("Enable"),RWRWR_,"root","UI",1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/obj/st/db",_("Project DB"),RWRWR_,"root","UI",4,"tp","str","dest","sel_ed","select","/db/tblList",
 		    "help",_("DB address in format [<DB module>.<DB name>.<Table name>].\nFor use main work DB set '*.*'."));
-		ctrMkNode("fld",opt,-1,"/obj/st/user",_("User and group"),RWRWR_,"root","UI",3,"tp","str","dest","select","select","/obj/u_lst");
-		ctrMkNode("fld",opt,-1,"/obj/st/grp","",RWRWR_,"root","UI",3,"tp","str","dest","select","select","/obj/g_lst");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/obj/cfg",_("Config")))
 	    {
@@ -334,9 +332,16 @@ void Project::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/obj/cfg/name",_("Name"),RWRWR_,"root","UI",1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/obj/cfg/descr",_("Description"),RWRWR_,"root","UI",3,"tp","str","cols","50","rows","3");
 		ctrMkNode("img",opt,-1,"/obj/cfg/ico",_("Icon"),RWRWR_,"root","UI",2,"v_sz","64","h_sz","64");
-		ctrMkNode("fld",opt,-1,"/obj/cfg/u_a",_("Access: user-grp-other"),RWRWR_,"root","UI",3,"tp","dec","dest","select","select","/obj/a_lst");
-		ctrMkNode("fld",opt,-1,"/obj/cfg/g_a","",RWRWR_,"root","UI",3,"tp","dec","dest","select","select","/obj/a_lst");
-		ctrMkNode("fld",opt,-1,"/obj/cfg/o_a","",RWRWR_,"root","UI",3,"tp","dec","dest","select","select","/obj/a_lst");
+		ctrMkNode("fld",opt,-1,"/obj/cfg/owner",_("Owner and group"),RWRWR_,"root","UI",3,"tp","str","dest","select","select","/obj/u_lst");
+		ctrMkNode("fld",opt,-1,"/obj/cfg/grp","",RWRWR_,"root","UI",3,"tp","str","dest","select","select","/obj/g_lst");
+		ctrMkNode("fld",opt,-1,"/obj/cfg/u_a",_("Access"),RWRWR_,"root","UI",4,"tp","dec","dest","select",
+		    "sel_id","0;4;6","sel_list",_("No access;View;View and control"));
+		ctrMkNode("fld",opt,-1,"/obj/cfg/g_a","",RWRWR_,"root","UI",4,"tp","dec","dest","select",
+		    "sel_id","0;4;6","sel_list",_("No access;View;View and control"));
+		ctrMkNode("fld",opt,-1,"/obj/cfg/o_a","",RWRWR_,"root","UI",4,"tp","dec","dest","select",
+		    "sel_id","0;4;6","sel_list",_("No access;View;View and control"));
+		ctrMkNode("fld",opt,-1,"/obj/cfg/per",_("Calc period"),RWRWR_,"root","UI",2,"tp","dec",
+		    "help",_("Project's session calc period on milliseconds."));
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/page",_("Pages")))
@@ -363,12 +368,12 @@ void Project::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( fullDB() );
 	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setFullDB( opt->text() );
     }
-    else if( a_path == "/obj/st/user" )
+    else if( a_path == "/obj/cfg/owner" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( user() );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setUser( opt->text() );
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( owner() );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setOwner( opt->text() );
     }
-    else if( a_path == "/obj/st/grp" )
+    else if( a_path == "/obj/cfg/grp" )
     {
 	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( grp() );
 	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setGrp( opt->text() );
@@ -404,6 +409,11 @@ void Project::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( descr() );
 	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setDescr( opt->text() );
     }
+    else if( a_path == "/obj/cfg/per" )
+    {
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( TSYS::int2str(period()) );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setPeriod( atoi(opt->text().c_str()) );
+    }
     else if( a_path == "/br/pg_" || a_path == "/page/page" )
     {
 	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )
@@ -416,7 +426,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"add",RWRWR_,"root","UI",SEQ_WR) )
 	{
 	    add(opt->attr("id").c_str(),opt->text().c_str());
-	    at(opt->attr("id")).at().setUser(opt->attr("user"));
+	    at(opt->attr("id")).at().setOwner(opt->attr("user"));
 	}
 	if( ctrChkNode(opt,"del",RWRWR_,"root","UI",SEQ_WR) )	del(opt->attr("id"),true);
     }
@@ -430,16 +440,9 @@ void Project::cntrCmdProc( XMLNode *opt )
     else if( a_path == "/obj/g_lst" && ctrChkNode(opt) )
     {
 	vector<string> ls;
-	SYS->security().at().usrGrpList(user(), ls );
+	SYS->security().at().usrGrpList(owner(), ls );
 	for(int i_l = 0; i_l < ls.size(); i_l++)
 	    opt->childAdd("el")->setText(ls[i_l]);
-    }
-    else if( a_path == "/obj/a_lst" && ctrChkNode(opt) )
-    {
-	opt->childAdd("el")->setAttr("id","0")->setText(_("No access"));
-	opt->childAdd("el")->setAttr("id","4")->setText(_("Use(open)"));
-	opt->childAdd("el")->setAttr("id","2")->setText(_("Modify"));
-	opt->childAdd("el")->setAttr("id","6")->setText(_("Full"));
     }
     else if( a_path == "/mime/mime" )
     {
@@ -511,7 +514,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 Page::Page( const string &iid, const string &isrcwdg ) :
 	Widget(iid), TConfig(&mod->elPage()),
 	m_ico(cfg("ICO").getSd()), m_proc(cfg("PROC").getSd()), m_proc_per(cfg("PROC_PER").getId()),
-	m_flgs(cfg("FLGS").getId()), m_user(cfg("USER").getSd()), m_grp(cfg("GRP").getSd()), 
+	m_flgs(cfg("FLGS").getId()), m_owner(cfg("USER").getSd()), m_grp(cfg("GRP").getSd()), 
 	m_permit(cfg("PERMIT").getId()), m_parent(cfg("PARENT").getSd()), m_attrs(cfg("ATTRS").getSd())
 {
     cfg("ID").setS(id());
@@ -602,21 +605,21 @@ string Page::ico( )
     return "";
 }
 
-string Page::user( )
+string Page::owner( )
 {
-    return SYS->security().at().usrPresent(m_user)?m_user:Widget::user( );
+    return SYS->security().at().usrPresent(m_owner) ? m_owner : Widget::owner( );
 }
 
-void Page::setUser( const string &iuser )
+void Page::setOwner( const string &iown )
 {
-    m_user = iuser;
+    m_owner = iown;
     //- Group update -
-    if(SYS->security().at().grpAt("UI").at().user(iuser))
+    if(SYS->security().at().grpAt("UI").at().user(iown))
 	setGrp("UI");
     else
     {
 	vector<string> gls;
-	SYS->security().at().usrGrpList(user(),gls);
+	SYS->security().at().usrGrpList(owner(),gls);
 	setGrp(gls.size()?gls[0]:Widget::grp());
     }
     modif();
@@ -1100,7 +1103,7 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 	if( ctrChkNode(opt,"add",RWRWR_,"root","UI",SEQ_WR) )
 	{
 	    pageAdd(opt->attr("id").c_str(),opt->text().c_str());
-	    pageAt(opt->attr("id")).at().setUser(opt->attr("user"));
+	    pageAt(opt->attr("id")).at().setOwner(opt->attr("user"));
 	}
 	if( ctrChkNode(opt,"del",RWRWR_,"root","UI",SEQ_WR) )	pageDel(opt->attr("id"),true);
     }
@@ -1137,7 +1140,9 @@ void Page::cntrCmdProc( XMLNode *opt )
 //* PageWdg: Container stored widget             *
 //************************************************
 PageWdg::PageWdg( const string &iid, const string &isrcwdg ) :
-        Widget(iid), TConfig(&mod->elInclWdg()), m_parent(cfg("PARENT").getSd()), m_attrs(cfg("ATTRS").getSd()), delMark(false)
+        Widget(iid), TConfig(&mod->elInclWdg()), delMark(false),
+        m_parent(cfg("PARENT").getSd()), m_attrs(cfg("ATTRS").getSd()),
+        m_owner(cfg("USER").getSd()), m_grp(cfg("GRP").getSd()), m_permit(cfg("PERMIT").getId())
 {
     cfg("ID").setS(id());
     m_lnk = true;
@@ -1153,11 +1158,11 @@ TCntrNode &PageWdg::operator=( TCntrNode &node )
 {
     Widget::operator=( node );
 
-    if( owner().parentNm() == ".." && owner().parent().at().wdgPresent(id()) )
-	setParentNm( owner().parent().at().path()+"/wdg_"+id() );
+    if( ownerPage().parentNm() == ".." && ownerPage().parent().at().wdgPresent(id()) )
+	setParentNm( ownerPage().parent().at().path()+"/wdg_"+id() );
 }
 
-Page &PageWdg::owner()
+Page &PageWdg::ownerPage()
 {
     return *(Page*)nodePrev();
 }
@@ -1167,7 +1172,7 @@ void PageWdg::postEnable( int flag )
     //- Call parent method -
     Widget::postEnable(flag);
     //- Set parent page for this widget -
-    cfg("IDW").setS(owner().path());
+    cfg("IDW").setS(ownerPage().path());
 }
 
 void PageWdg::preDisable( int flag )
@@ -1179,7 +1184,7 @@ void PageWdg::preDisable( int flag )
 
 string PageWdg::path( )
 {
-    return owner().path()+"/wdg_"+id();
+    return ownerPage().path()+"/wdg_"+id();
 }
 
 string PageWdg::ico( )
@@ -1188,19 +1193,29 @@ string PageWdg::ico( )
     return "";
 }
 
-string PageWdg::user( )
+string PageWdg::owner( )
 {
-    return owner().user();
+    return SYS->security().at().usrPresent(m_owner) ? m_owner : Widget::owner( );
+}
+
+void PageWdg::setOwner( const string &iown )
+{
+    m_owner = iown;
+    //- Group update -
+    if(SYS->security().at().grpAt("UI").at().user(iown))
+	setGrp("UI");
+    else
+    {
+	vector<string> gls;
+	SYS->security().at().usrGrpList(owner(),gls);
+	setGrp( gls.size() ? gls[0] : Widget::grp() );
+    }
+    modif();
 }
 
 string PageWdg::grp( )
 {
-    return owner().grp( );
-}
-
-short PageWdg::permit( )
-{
-    return owner().permit( );
+    return SYS->security().at().grpPresent(m_grp) ? m_grp : Widget::grp( );
 }
 
 void PageWdg::setEnable( bool val )
@@ -1211,9 +1226,9 @@ void PageWdg::setEnable( bool val )
 
     //- Disable heritors widgets -
     if( val )
-	for( int i_h = 0; i_h < owner().herit().size(); i_h++ )
-	    if( owner().herit()[i_h].at().wdgPresent(id()) && !owner().herit()[i_h].at().wdgAt(id()).at().enable( ) )
-		try { owner().herit()[i_h].at().wdgAt(id()).at().setEnable(true); }
+	for( int i_h = 0; i_h < ownerPage().herit().size(); i_h++ )
+	    if( ownerPage().herit()[i_h].at().wdgPresent(id()) && !ownerPage().herit()[i_h].at().wdgAt(id()).at().enable( ) )
+		try { ownerPage().herit()[i_h].at().wdgAt(id()).at().setEnable(true); }
 		catch(...)
 		{ mess_err(nodePath().c_str(),_("Heritors widget <%s> enable error"),id().c_str()); }
 }
@@ -1245,8 +1260,8 @@ int PageWdg::calcPer(  )
 void PageWdg::load_( )
 {
     //- Load generic widget's data -
-    string db  = owner().ownerProj()->DB();
-    string tbl = owner().ownerProj()->tbl()+"_incl";
+    string db  = ownerPage().ownerProj()->DB();
+    string tbl = ownerPage().ownerProj()->tbl()+"_incl";
     SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,*this);
 
     //- Load widget's attributes -
@@ -1261,8 +1276,8 @@ void PageWdg::loadIO( )
     if( !enable() ) return;
 
     //- Load widget's work attributes -
-    string db  = owner().ownerProj()->DB();
-    string tbl = owner().ownerProj()->tbl()+"_io";
+    string db  = ownerPage().ownerProj()->DB();
+    string tbl = ownerPage().ownerProj()->tbl()+"_io";
 
     //- Inherit modify attributes -
     /*attrList( als );
@@ -1285,7 +1300,7 @@ void PageWdg::loadIO( )
 
     //-- Same load --
     TConfig c_el(&mod->elWdgIO());
-    c_el.cfg("IDW").setS(owner().path());
+    c_el.cfg("IDW").setS(ownerPage().path());
     for( int i_a = 0; i_a < als.size(); i_a++ )
     {
 	if( !attrPresent(als[i_a]) )	continue;
@@ -1301,9 +1316,9 @@ void PageWdg::loadIO( )
     }
 
     //- Load widget's user attributes -
-    tbl = owner().ownerProj()->tbl()+"_uio";
+    tbl = ownerPage().ownerProj()->tbl()+"_uio";
     c_el.setElem(&mod->elWdgUIO());
-    c_el.cfg("IDW").setS(owner().path());
+    c_el.cfg("IDW").setS(ownerPage().path());
     c_el.cfg("ID").setS("");
     int fld_cnt = 0;
     while( SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el) )
@@ -1331,8 +1346,8 @@ void PageWdg::loadIO( )
 
 void PageWdg::save_( )
 {
-    string db  = owner().ownerProj()->DB();
-    string tbl = owner().ownerProj()->tbl();
+    string db  = ownerPage().ownerProj()->DB();
+    string tbl = ownerPage().ownerProj()->tbl();
 
     //- Delete from DB -
     if( nodeMode() == TCntrNode::Disable )
@@ -1347,7 +1362,7 @@ void PageWdg::save_( )
 
 	//-- Remove widget's work and users IO from library IO table --
 	TConfig c_el( &mod->elWdgIO() );
-	c_el.cfg("IDW").setS( owner().path() );
+	c_el.cfg("IDW").setS( ownerPage().path() );
 	int io_cnt = 0;
 	while( SYS->db().at().dataSeek( db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", io_cnt++, c_el ) )
 	{
@@ -1356,7 +1371,7 @@ void PageWdg::save_( )
 	    c_el.cfg("ID").setS("");
 	}
 	c_el.setElem(&mod->elWdgUIO());
-	c_el.cfg("IDW").setS( owner().path() );
+	c_el.cfg("IDW").setS( ownerPage().path() );
 	io_cnt = 0;
 	while( SYS->db().at().dataSeek( db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", io_cnt++, c_el ) )
 	{
@@ -1392,15 +1407,15 @@ void PageWdg::saveIO( )
     if( !enable() ) return;
 
     //- Save widget's attributes -
-    string db  = owner().ownerProj()->DB();
-    string tbl = owner().ownerProj()->tbl()+"_io";
-    string utbl = owner().ownerProj()->tbl()+"_uio";
+    string db  = ownerPage().ownerProj()->DB();
+    string tbl = ownerPage().ownerProj()->tbl()+"_io";
+    string utbl = ownerPage().ownerProj()->tbl()+"_uio";
 
     attrList( als );
     TConfig c_el(&mod->elWdgIO());
-    c_el.cfg("IDW").setS(owner().path());
+    c_el.cfg("IDW").setS(ownerPage().path());
     TConfig c_elu(&mod->elWdgUIO());
-    c_elu.cfg("IDW").setS(owner().path());
+    c_elu.cfg("IDW").setS(ownerPage().path());
     for( int i_a = 0; i_a < als.size(); i_a++ )
     {
 	AutoHD<Attr> attr = attrAt(als[i_a]);
@@ -1457,7 +1472,7 @@ string PageWdg::resourceGet( const string &id, string *mime )
 {
     string mimeType, mimeData;
 
-    if( (mimeData=owner().resourceGet( id, &mimeType )).empty() && !parent().freeStat() )
+    if( (mimeData=ownerPage().resourceGet( id, &mimeType )).empty() && !parent().freeStat() )
 	mimeData = parent().at().resourceGet( id, &mimeType );
     if( mime )  *mime = mimeType;
 
