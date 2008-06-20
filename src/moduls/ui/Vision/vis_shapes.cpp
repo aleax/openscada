@@ -1085,8 +1085,8 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 		if( !sdata.empty() && img.loadFromData((const uchar*)sdata.data(),sdata.size()) )
 		{
 		    lab->setPixmap(QPixmap::fromImage(img.scaled(
-		        (int)((float)img.width()*w->xScale(true)),
-		        (int)((float)img.height()*w->yScale(true)),
+			(int)((float)img.width()*w->xScale(true)),
+			(int)((float)img.height()*w->yScale(true)),
 			Qt::KeepAspectRatio,Qt::SmoothTransformation)));
 		    lab->setScaledContents( w->dc()["mediaFit"].toInt()  );
 		}
@@ -1095,14 +1095,14 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    }
 	    case 1:
 	    {
-	        //- Clear previous movie data -
-	        if( lab->movie() )
-	        {
-	            if(lab->movie()->device()) delete lab->movie()->device();
-	            delete lab->movie();
-	            lab->clear();
-	        }
-	        //- Set new data -
+		//- Clear previous movie data -
+		if( lab->movie() )
+		{
+		    if(lab->movie()->device()) delete lab->movie()->device();
+		    delete lab->movie();
+		    lab->clear();
+		}
+		//- Set new data -
 		if( sdata.size() )
 		{
 		    QBuffer *buf = new QBuffer(w);
@@ -1288,8 +1288,8 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    up = true;
 	    break;
 	case 6:		//active
-	    if( !qobject_cast<RunWdgView*>(w) )	break;
 	    w->dc()["active"] = (bool)atoi(val.c_str());
+	    if( !qobject_cast<RunWdgView*>(w) )	break;
 	    if( w->dc()["active"].toBool() && ((RunWdgView*)w)->permCntr() )	w->setFocusPolicy(Qt::StrongFocus);
 	    else w->setFocusPolicy(Qt::NoFocus);
 	    break;

@@ -24,11 +24,13 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 #include "resalloc.h"
 
 using std::string;
 using std::vector;
+using std::map;
 
 #define BUF_ARCH_NM "<bufer>"
 
@@ -262,7 +264,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	//- Mode params -
 	AutoHD<TVal>	pattr_src;
 	//- Phisical archive's elements -
-	vector<TVArchEl *> arch_el;	//Links
+	vector<TVArchEl*> arch_el;	//Links
 };
 
 
@@ -336,7 +338,7 @@ class TVArchivator : public TCntrNode, public TConfig
 	Res	a_res;
 	bool	run_st;
 	//- Phisical elements storing -
-	vector<TVArchEl *> arch_el;
+	map<string,TVArchEl*> archEl;
 
     private:
 	//Private methods

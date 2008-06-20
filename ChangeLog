@@ -1,3 +1,9 @@
+2008-06-20 Roman
+- !!:/Archive/Value: Archives list container, into archivator, move from vector to map for fastest access.
+- FIX:/Archive/FSArch: Too long big archives' files list load is fixed. Multiply archive directory scan is removed.
+- FIX:/Vision: View cursor for no active primitive "Diagram" on development is fixed.
+
+
 2008-06-19 Roman
 - FIX:/XML: Load and save external codepage name changed from UTF8 to UTF-8 for odd iconv call prevent.
 - /Security: Service call "/auth" for user auth control is added.

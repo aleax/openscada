@@ -2023,8 +2023,8 @@ void TVArchivator::setValPeriod( double iper )
 
     //- Call sort for all archives -
     ResAlloc res(a_res,false);
-    for( int i_l = 0; i_l < arch_el.size(); i_l++ )
-        arch_el[i_l]->archive().archivatorSort();
+    for( map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); iel++ )
+	iel->second->archive().archivatorSort();
 
     modif();
 }
@@ -2076,9 +2076,9 @@ void TVArchivator::stop( bool full_del )
 
     //- Detach from all archives -
     ResAlloc res(a_res,false);
-    while(arch_el.size())
+    while(archEl.size())
     {
-	AutoHD<TVArchive> arch(&arch_el[0]->archive());
+	AutoHD<TVArchive> arch(&archEl.begin()->second->archive());
 	res.release();
 	arch.at().archivatorDetach(workId(),full_del);
 	res.request(false);
@@ -2091,27 +2091,24 @@ void TVArchivator::archiveList( vector<string> &ls )
 {
     ResAlloc res(a_res,false);
     ls.clear();
-    for( int i_l = 0; i_l < arch_el.size(); i_l++ )
-	ls.push_back(arch_el[i_l]->archive().id());
+    for( map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); iel++ )
+	ls.push_back(iel->first);
 }
 
 bool TVArchivator::archivePresent( const string &iid )
 {
     ResAlloc res(a_res,false);
-    for( int i_l = 0; i_l < arch_el.size(); i_l++ )
-	if( arch_el[i_l]->archive().id() == iid )
-	    return true;
+    if( archEl.find(iid) != archEl.end() )	return true;
     return false;
 }
 
 TVArchEl *TVArchivator::archivePlace( TVArchive &item )
 {
     ResAlloc res(a_res,true);
-    for( int i_l = 0; i_l < arch_el.size(); i_l++ )
-	if( arch_el[i_l]->archive().id() == item.id() )
-	    return arch_el[i_l];
+    map<string,TVArchEl*>::iterator iel = archEl.find(item.id());
+    if( iel != archEl.end() )	return iel->second;
     TVArchEl *it_el = getArchEl( item );
-    arch_el.push_back(it_el);
+    archEl[item.id()] = it_el;
 
     return it_el;
 }
@@ -2119,14 +2116,13 @@ TVArchEl *TVArchivator::archivePlace( TVArchive &item )
 void TVArchivator::archiveRemove( const string &iid, bool full )
 {
     ResAlloc res(a_res,true);
-    for( int i_l = 0; i_l < arch_el.size(); i_l++ )
-	if( arch_el[i_l]->archive().id() == iid )
-	{
-	    if(full) arch_el[i_l]->fullErase();
-	    delete arch_el[i_l];
-	    arch_el.erase(arch_el.begin()+i_l);
-	    break;
-	}
+    map<string,TVArchEl*>::iterator iel = archEl.find(iid);
+    if( iel != archEl.end() )
+    {
+	if( full ) iel->second->fullErase();
+	delete iel->second;
+	archEl.erase(iel);
+    }
 }
 
 TVArchEl *TVArchivator::getArchEl( TVArchive &arch )
@@ -2151,7 +2147,7 @@ void TVArchivator::save_( )
 
 void TVArchivator::Task(union sigval obj)
 {
-    TVArchivator *arch = (TVArchivator *)obj.sival_ptr;
+    TVArchivator *arch = (TVArchivator*)obj.sival_ptr;
     if( arch->prc_st )  return;
     arch->prc_st = true;
 
@@ -2162,10 +2158,10 @@ void TVArchivator::Task(union sigval obj)
 
 	ResAlloc res(arch->a_res,false);
 	long long beg, end;
-	for( int i_l = 0; i_l < arch->arch_el.size(); i_l++ )
-	    if(arch->arch_el[i_l]->archive().startStat())
+	for( map<string,TVArchEl*>::iterator iel = arch->archEl.begin(); iel != arch->archEl.end(); iel++ )
+	    if( iel->second->archive().startStat() )
 	    {
-		TVArchEl *arch_el = arch->arch_el[i_l];
+		TVArchEl *arch_el = iel->second;
 		beg = vmax(arch_el->m_last_get,arch_el->archive().begin());
 		end = arch_el->archive().end();
 		if(!beg || !end || beg > end )	continue;
@@ -2364,11 +2360,11 @@ void TVArchivator::cntrCmdProc( XMLNode *opt )
 	XMLNode *n_size = ctrMkNode("list",opt,-1,"/arch/arch/2","");
 
 	ResAlloc res(a_res,false);
-	for( int i_l = 0; i_l < arch_el.size(); i_l++ )
+	for( map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); iel++ )
 	{
-	    if(n_arch)	n_arch->childAdd("el")->setText(arch_el[i_l]->archive().id());
-	    if(n_per)	n_per->childAdd("el")->setText(TSYS::real2str((double)arch_el[i_l]->archive().period()/1000000.,6));
-	    if(n_size)	n_size->childAdd("el")->setText(TSYS::int2str(arch_el[i_l]->archive().size()));
+	    if(n_arch)	n_arch->childAdd("el")->setText(iel->second->archive().id());
+	    if(n_per)	n_per->childAdd("el")->setText(TSYS::real2str((double)iel->second->archive().period()/1000000.,6));
+	    if(n_size)	n_size->childAdd("el")->setText(TSYS::int2str(iel->second->archive().size()));
 	}
     }
     else TCntrNode::cntrCmdProc(opt);

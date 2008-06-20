@@ -36,7 +36,7 @@ using namespace FSArch;
 //* FSArch::ModVArch - Value archivator           *
 //*************************************************
 ModVArch::ModVArch( const string &iid, const string &idb, TElem *cf_el ) :
-    TVArchivator(iid,idb,cf_el), mLstCheck(0),
+    TVArchivator(iid,idb,cf_el), mLstCheck(0), chkANow(false),
     time_size(cfg("FSArchTmSize").getRd()), numb_files(cfg("FSArchNFiles").getId()),
     round_proc(cfg("FSArchRound").getRd()), m_chk_tm(cfg("FSArchTm").getId()),
     m_pack_tm(cfg("FSArchPackTm").getId())
@@ -56,16 +56,16 @@ void ModVArch::setValPeriod( double iper )
     time_size=vmax(0.2,1000.*valPeriod());
 }
 
-void ModVArch::start()
+void ModVArch::start( )
 {
     //- Start getting data cycle -
     TVArchivator::start();
 
     //- First scan dir. Load and connect archive files -
-    checkArchivator();
+    checkArchivator(true);
 }
 
-void ModVArch::stop()
+void ModVArch::stop( )
 {
     //- Stop getting data cicle an detach archives -
     TVArchivator::stop();
@@ -129,7 +129,10 @@ void ModVArch::checkArchivator( bool now )
 {
     if( !startStat() )	return;
 
-    if( now || time(NULL) > (mLstCheck+checkTm()*60) )
+    chkANow = true;
+
+    bool isTm = time(NULL) > (mLstCheck+checkTm()*60);
+    if( now || isTm )
     {
 	//- Find archive files for no present archives and create it. -
 	struct stat file_stat;
@@ -155,20 +158,26 @@ void ModVArch::checkArchivator( bool now )
 	    stat(NameArhFile.c_str(),&file_stat);
 	    if( (file_stat.st_mode&S_IFMT) != S_IFREG || access(NameArhFile.c_str(),F_OK|R_OK) != 0 ) continue;
 
-	    if(!filePrmGet(NameArhFile,&ArhNm,&ArhTp,NULL,NULL,NULL))	continue;
+	    if( !filePrmGet(NameArhFile,&ArhNm,&ArhTp,NULL,NULL,NULL) )	continue;
 
 	    //---- Check to archive present ----
-	    if( !owner().owner().valPresent(ArhNm) )
+	    AutoHD<TVArchive> varch;
+	    if( owner().owner().valPresent(ArhNm) )	varch = owner().owner().valAt(ArhNm);
+	    else
 	    {
 		//----- Add no present archive -----
 		owner().owner().valAdd(ArhNm);
-		owner().owner().valAt(ArhNm).at().setToStart(true);
-		owner().owner().valAt(ArhNm).at().setValType(ArhTp);
-		owner().owner().valAt(ArhNm).at().start();
+		varch = owner().owner().valAt(ArhNm);
+		varch.at().setToStart(true);
+		varch.at().setValType(ArhTp);
+		varch.at().start();
 	    }
 	    //---- Check for attached ----
-	    if( !owner().owner().valAt(ArhNm).at().archivatorPresent(workId()) )
-		owner().owner().valAt(ArhNm).at().archivatorAttach(workId());
+	    if( !varch.at().archivatorPresent(workId()) )	varch.at().archivatorAttach(workId());
+	    //---- Try connect new file ----
+	    ResAlloc res(a_res,false);
+	    map<string,TVArchEl*>::iterator iel = archEl.find(ArhNm);
+	    if( iel != archEl.end() )	((ModVArchEl *)iel->second)->fileAdd(NameArhFile);
 	}
 
 	closedir(IdDir);
@@ -177,10 +186,11 @@ void ModVArch::checkArchivator( bool now )
 
     //-- Scan files of attached archives --
     ResAlloc res(a_res,false);
-    for( int i_l = 0; i_l < arch_el.size(); i_l++ )
-	((ModVArchEl *)arch_el[i_l])->checkArchivator(now);
+    for( map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); iel++ )
+	((ModVArchEl *)iel->second)->checkArchivator( now );
 
-    mLstCheck = time(NULL);
+    chkANow = false;
+    if( isTm )	mLstCheck = time(NULL);
 }
 
 void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const string &file_tp, const string &file_nm)
@@ -310,8 +320,8 @@ void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const stri
 
 TVArchEl *ModVArch::getArchEl( TVArchive &arch )
 {
-    ModVArchEl *v_el = new ModVArchEl(arch,*this); 
-    v_el->checkArchivator();
+    ModVArchEl *v_el = new ModVArchEl(arch,*this);
+    v_el->checkArchivator(true);
     return v_el;
 }
 
@@ -377,12 +387,12 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 	XMLNode *f_size = ctrMkNode("list",opt,-1,"/arch/arch/3","");
 
 	ResAlloc res(a_res,false);
-	for( int i_l = 0; i_l < arch_el.size(); i_l++ )
+	for( map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); iel++ )
 	{
-	    if(n_arch)	n_arch->childAdd("el")->setText(arch_el[i_l]->archive().id());
-	    if(n_per)	n_per->childAdd("el")->setText(TSYS::real2str((double)arch_el[i_l]->archive().period()/1000000.,6));
-	    if(n_size)	n_size->childAdd("el")->setText(TSYS::int2str(arch_el[i_l]->archive().size()));
-	    if(f_size)	f_size->childAdd("el")->setText(TSYS::real2str((double)((ModVArchEl *)arch_el[i_l])->size()/1024.,6));
+	    if(n_arch)	n_arch->childAdd("el")->setText(iel->second->archive().id());
+	    if(n_per)	n_per->childAdd("el")->setText(TSYS::real2str((double)iel->second->archive().period()/1000000.,6));
+	    if(n_size)	n_size->childAdd("el")->setText(TSYS::int2str(iel->second->archive().size()));
+	    if(f_size)	f_size->childAdd("el")->setText(TSYS::real2str((double)((ModVArchEl *)iel->second)->size()/1024.,6));
 	}
     }
     else if( a_path == "/arch/lst" && ctrChkNode(opt) )
@@ -453,7 +463,7 @@ int ModVArchEl::size()
 
 void ModVArchEl::checkArchivator( bool now )
 {
-    if( now )
+    if( now && !archivator().chkANow )
     {
 	//- Scan directory for find new files and deleted files -
 	struct stat file_stat;
@@ -463,97 +473,76 @@ void ModVArchEl::checkArchivator( bool now )
 	DIR *IdDir = opendir(archivator().addr().c_str());
 	if(IdDir == NULL) return;
 
-	//-- Clean scan flag --
-	ResAlloc res(m_res,false);
-	for( unsigned i_arh = 0; i_arh < arh_f.size(); i_arh++) 
-	    arh_f[i_arh]->scan = false;
-	res.release();
-
 	//-- Check to allow files --
 	while((scan_dirent = readdir(IdDir)) != NULL)
 	{
-	    if( string("..") == scan_dirent->d_name || string(".") == scan_dirent->d_name ) continue;
+	    if( string("..") == scan_dirent->d_name || string(".") == scan_dirent->d_name )	continue;
 
 	    string ArhNm;
 	    string NameArhFile = archivator().addr()+"/"+scan_dirent->d_name;
 
 	    stat(NameArhFile.c_str(),&file_stat);
-	    if( (file_stat.st_mode&S_IFMT) != S_IFREG || access(NameArhFile.c_str(),F_OK|R_OK) != 0) continue;
+	    if( (file_stat.st_mode&S_IFMT) != S_IFREG || access(NameArhFile.c_str(),F_OK|R_OK) != 0)	continue;
 
-	    if(!archivator().filePrmGet(NameArhFile,&ArhNm,NULL,NULL,NULL,NULL))    continue;
+	    if( !archivator().filePrmGet(NameArhFile,&ArhNm,NULL,NULL,NULL,NULL) || archive().id() != ArhNm )	continue;
 
-	    if( archive().id() != ArhNm )	continue;
-
-	    //---- Check to present archive files ----
-	    int i_arh;
-	    res.request(false);
-	    for( i_arh = 0; i_arh < arh_f.size(); i_arh++)
-		if( arh_f[i_arh]->name() == NameArhFile )
-		{
-		    arh_f[i_arh]->scan = true;
-		    res.release();
-		    break;
-		}
-
-	    //----- Attach a new archive file -----
-	    if( i_arh >= arh_f.size() )
-	    {
-		res.release();
-
-		VFileArch *f_arh = new VFileArch(this);
-		f_arh->attach( NameArhFile );
-		f_arh->scan = true;
-
-		//------ Broken archives delete. Oldest arhives to up. ------
-		if( f_arh->err() )	{ delete f_arh; continue; }	//arh_f.push_front( f_arh );
-		else
-		{
-		    res.request(true);
-		    int i_arh;
-		    for( i_arh = arh_f.size()-1; i_arh >= 0 ; i_arh--)
-			if( arh_f[i_arh]->err() || f_arh->begin() >= arh_f[i_arh]->begin() )
-			{
-			    arh_f.insert(arh_f.begin()+i_arh+1,f_arh);
-			    break;
-			}
-		    if( i_arh >= arh_f.size() ) arh_f.push_front( f_arh );
-		    res.release();
-		}
-	    }
+	    fileAdd( NameArhFile );
 	}
 
 	closedir(IdDir);
-
-	//-- Check to deleting archive files --
-	res.request(true);
-	for( unsigned i_arh = 0; i_arh < arh_f.size(); i_arh++)
-	    if( !arh_f[i_arh]->scan )
-	    {
-		delete arh_f[i_arh];
-		arh_f.erase( arh_f.begin() + i_arh );
-		i_arh--;
-	    }
-	res.release();
-
-	//-- Check file count for delete old files --
-	if( ((ModVArch &)archivator()).fileNumber() )
-	    if( arh_f.size() > ((ModVArch &)archivator()).fileNumber() )
-		for( int i_arh = 0; i_arh < arh_f.size(); i_arh++ )
-		    if( arh_f.size() <= ((ModVArch &)archivator()).fileNumber() )	break;
-		    else if( !arh_f[i_arh]->err() )
-		    {
-			string f_nm = arh_f[i_arh]->name();
-			delete arh_f[i_arh];
-			arh_f.erase( arh_f.begin() + i_arh );
-			remove(f_nm.c_str());
-			i_arh--;
-		    }
     }
 
-    //- Check the archive's files -
-    ResAlloc res(m_res,false);
-    for( int i_arh = 0; i_arh < arh_f.size(); i_arh++)
+    ResAlloc res(m_res,true);
+    //-- Check file count for delete old files --
+    if( now && ((ModVArch &)archivator()).fileNumber() && arh_f.size() > ((ModVArch &)archivator()).fileNumber() )
+	for( int i_arh = 0; i_arh < arh_f.size(); i_arh++ )
+	    if( arh_f.size() <= ((ModVArch &)archivator()).fileNumber() )	break;
+	    else if( !arh_f[i_arh]->err() )
+	    {
+		string f_nm = arh_f[i_arh]->name();
+		delete arh_f[i_arh];
+		arh_f.erase( arh_f.begin() + i_arh );
+		remove(f_nm.c_str());
+		i_arh--;
+	    }
+
+    //- Check the archive's files for pack -
+    res.request(false);
+    for( int i_arh = 0; i_arh < arh_f.size(); i_arh++ )
 	arh_f[i_arh]->check();
+}
+
+void ModVArchEl::fileAdd( const string &file )
+{
+    //---- Check to present archive files ----
+    int i_arh;
+    ResAlloc res(m_res,false);
+    for( i_arh = 0; i_arh < arh_f.size(); i_arh++)
+	if( arh_f[i_arh]->name() == file )	return;
+
+    //----- Attach a new archive file -----
+    if( i_arh >= arh_f.size() )
+    {
+	res.release();
+
+	VFileArch *f_arh = new VFileArch(this);
+	f_arh->attach( file );
+
+	//------ Broken archives delete. Oldest arhives to up. ------
+	if( f_arh->err() )	delete f_arh;
+	else
+	{
+	    res.request(true);
+	    int i_arh;
+	    for( i_arh = arh_f.size()-1; i_arh >= 0 ; i_arh--)
+		if( arh_f[i_arh]->err() || f_arh->begin() >= arh_f[i_arh]->begin() )
+		{
+		    arh_f.insert(arh_f.begin()+i_arh+1,f_arh);
+		    break;
+		}
+	    if( i_arh >= arh_f.size() ) arh_f.push_front( f_arh );
+	}
+    }
 }
 
 long long ModVArchEl::end()
@@ -704,7 +693,7 @@ void ModVArchEl::setVal( TValBuf &buf, long long beg, long long end )
 //*************************************************
 string VFileArch::afl_id = "OpenSCADA Val Arch.";
 
-VFileArch::VFileArch( ModVArchEl *owner ) : 
+VFileArch::VFileArch( ModVArchEl *owner ) :
     m_owner(owner), m_err(true), m_size(0), m_beg(0), m_end(0), m_per(1000000), m_pack(false),
     m_tp(TFld::Real), fixVl(true), vSize(sizeof(double)), mpos(0)
 {
@@ -932,7 +921,7 @@ void VFileArch::check( )
 {
     //- Check for pack archive file -
     ResAlloc res(m_res,false);
-    if( !m_err && !m_pack && owner().archivator().packTm() && (time(NULL) > m_acces + owner().archivator().packTm()*60) )
+    if( !err() && !isPack( ) && owner().archivator().packTm() && (time(NULL) > m_acces + owner().archivator().packTm()*60) )
     {
 	res.request(true);
 	m_name = mod->packArch(name());

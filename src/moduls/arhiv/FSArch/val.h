@@ -50,13 +50,14 @@ class VFileArch
 
 	void attach( const string &name );
 
-	string	&name()		{ return m_name; }
-	int	size()		{ return m_size; }
-	long long begin()	{ return m_beg; }
-	long long end()		{ return m_end; }
-	long long period()	{ return m_per; }
-	TFld::Type type()	{ return m_tp; }
-	bool	err()		{ return m_err; }
+	string	&name( )	{ return m_name; }
+	int	size( )		{ return m_size; }
+	long long begin( )	{ return m_beg; }
+	long long end( )	{ return m_end; }
+	long long period( )	{ return m_per; }
+	TFld::Type type( )	{ return m_tp; }
+	bool	err( )		{ return m_err; }
+	bool	isPack( )	{ return m_pack; }
 
 	void	setVal( TValBuf &buf, long long beg, long long end );
 	void	getVal( TValBuf &buf, long long beg, long long end );
@@ -72,8 +73,6 @@ class VFileArch
 	int maxPos( )		{ return mpos; }
 
 	//Attributes
-	bool	scan;				// Archive scaned (for check deleted files). Use from ModVArchEl
-
 	static string afl_id;
 	struct FHead
 	{
@@ -152,10 +151,10 @@ class ModVArchEl: public TVArchEl
 	~ModVArchEl( );
 	void fullErase();
 
-	int size();
+	int size( );
 
-	long long begin();
-	long long end();
+	long long begin( );
+	long long end( );
 
 	void	getVal( TValBuf &buf, long long beg = 0, long long end = 0 );
 	string	getS( long long *tm, bool up_ord );
@@ -168,6 +167,7 @@ class ModVArchEl: public TVArchEl
 	ModVArch &archivator()	{ return (ModVArch&)TVArchEl::archivator(); }
 
 	void checkArchivator( bool now = false );
+	void fileAdd( const string &file );
 
     private:
 	Res	m_res;		// resource to access;
@@ -208,6 +208,10 @@ class ModVArch: public TVArchivator
 
 	//- Export archive data -
 	void expArch(const string &arch_nm, time_t beg, time_t end, const string &file_tp, const string &file_nm);
+
+    public:
+	//Methods
+	bool	chkANow;
 
     private:
 	//Methods
