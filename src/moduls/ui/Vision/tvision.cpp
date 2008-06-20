@@ -171,10 +171,10 @@ void TVision::load_( )
     } while(next_opt != -1);
 
     //- Load parameters from config file and DB -
-    setStartUser(TBDS::genDBGet(nodePath()+"StartUser",startUser()));
-    setUserPass(TBDS::genDBGet(nodePath()+"UserPass",userPass()));
-    setRunPrjs(TBDS::genDBGet(nodePath()+"RunPrjs",runPrjs()));
-    setVCAStation(TBDS::genDBGet(nodePath()+"VCAstation",VCAStation()));
+    setStartUser(TBDS::genDBGet(nodePath()+"StartUser",""));
+    setUserPass(TBDS::genDBGet(nodePath()+"UserPass",""));
+    setRunPrjs(TBDS::genDBGet(nodePath()+"RunPrjs",""));
+    setVCAStation(TBDS::genDBGet(nodePath()+"VCAstation","."));
     setPlayCom(TBDS::genDBGet(nodePath()+"PlayCom",playCom()));
 }
 
