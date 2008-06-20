@@ -226,7 +226,8 @@ QMainWindow *TVision::openWindow()
     //- Check for start user set OK -
     XMLNode req("get");
     req.setAttr("path",string("/Security/")+user_open+"/%2fauth")->setAttr("password",user_pass);
-    if( mod->cntrIfCmd(req,startUser(),userPass(),VCAStation(),true) || !atoi(req.text().c_str()) )
+    if( !((VCAStation() == "." && SYS->security().at().usrPresent(startUser())) ||
+	    (!mod->cntrIfCmd(req,startUser(),userPass(),VCAStation(),true) && atoi(req.text().c_str()))) )
 	while(true)
 	{
 	    DlgUser d_usr(startUser().c_str(),userPass().c_str(),VCAStation().c_str());
