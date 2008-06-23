@@ -44,7 +44,7 @@ void VCASess::postDisable( int flag )
     if( mIsCreate )
     {
 	XMLNode req("disconnect");
-	req.setAttr("path","/%2fserv%2f0")->setAttr("sess",id());
+	req.setAttr("path","/%2fserv%2fsess")->setAttr("sess",id());
 	mod->cntrIfCmd(req,"root");
     }
 }
@@ -72,22 +72,23 @@ void VCASess::getReq( SSess &ses )
 	ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page;
     }
     //- Get open pages list -
-    else if( wp_com == "pgOpen" && first_lev.empty() )
+    else if( wp_com == "pgOpenList" && first_lev.empty() )
     {
 	prmEl = ses.prm.find("tm");
 	XMLNode req("openlist");
-	req.setAttr("path",ses.url+"/%2fserv%2f0")->
+	req.setAttr("path",ses.url+"/%2fserv%2fpg")->
 	    setAttr("tm",(prmEl!=ses.prm.end())?prmEl->second:"0");
 	mod->cntrIfCmd(req,ses.user);
 	ses.page = req.save();
 	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
     }
+    //- Close page command -
     //- Page and widget attributes request -
     else if( wp_com == "attrs" )
     {
 	prmEl = ses.prm.find("tm");
 	XMLNode req("get");
-	req.setAttr("path",ses.url+"/%2fserv%2f0")->
+	req.setAttr("path",ses.url+"/%2fserv%2fattr")->
 	    setAttr("tm",(prmEl!=ses.prm.end())?prmEl->second:"0");
 	mod->cntrIfCmd(req,ses.user);
 	if( objPresent(ses.url) ) objAt(ses.url).at().setAttrs(req,ses.user);
@@ -144,7 +145,7 @@ void VCASess::getReq( SSess &ses )
 	    if( new_obj )
 	    {
 		//-- Request new object's attributes --
-		req.clear()->setAttr("path",ses.url+"/%2fserv%2f0");
+		req.clear()->setAttr("path",ses.url+"/%2fserv%2fattr");
 		mod->cntrIfCmd(req,ses.user);
 		objAt(ses.url).at().setAttrs(req,ses.user);
 	    }
@@ -164,11 +165,19 @@ void VCASess::postReq( SSess &ses )
     //- Commands process -
     map< string, string >::iterator cntEl = ses.prm.find("com");
     string wp_com = (cntEl!=ses.prm.end()) ? cntEl->second : "";
+    //- Attributes set -
     if( wp_com == "attrs" )
     {
 	XMLNode req("set");
 	req.load(ses.content);
-	req.setAttr("path",ses.url+"/%2fserv%2f0");
+	req.setAttr("path",ses.url+"/%2fserv%2fattr");
+	mod->cntrIfCmd(req,ses.user);
+    }
+    //- Open page command -
+    else if( wp_com == "pgClose" || wp_com == "pgOpen" )
+    {
+	XMLNode req((wp_com == "pgOpen")?"open":"close");
+	req.setAttr("path",TSYS::pathLev(ses.url,0)+"/%2fserv%2fpg")->setAttr("pg",ses.url);
 	mod->cntrIfCmd(req,ses.user);
     }
     ses.page = mod->httpHead("200 OK",ses.page.size(),"text/html")+ses.page;
@@ -3681,7 +3690,7 @@ void VCADiagram::setCursor( long long itm, const string& user )
     curTime = vmax(vmin(itm,tTime),tTimeGrnd);
 
     XMLNode req("set");
-    req.setAttr("path",id()+"/%2fserv%2f0");
+    req.setAttr("path",id()+"/%2fserv%2fattr");
     req.childAdd("el")->setAttr("id","curSek")->setText(TSYS::int2str(curTime/1000000));
     req.childAdd("el")->setAttr("id","curUSek")->setText(TSYS::int2str(curTime%1000000));
 
@@ -3758,7 +3767,7 @@ void VCADiagram::TrendObj::loadData( const string &user, bool full )
     if( !arh_per || tTime > arh_end )
     {
 	XMLNode req("info");
-	req.setAttr("arch",arch)->setAttr("path",addr()+"/%2fserv%2f0");
+	req.setAttr("arch",arch)->setAttr("path",addr()+"/%2fserv%2fval");
 	if( mod->cntrIfCmd(req,user,false) || atoi(req.attr("vtp").c_str()) == 5 )
 	{ arh_per = arh_beg = arh_end = 0; return; }
 	else
@@ -3775,7 +3784,7 @@ void VCADiagram::TrendObj::loadData( const string &user, bool full )
     if( owner().tTimeCurent && trcPer && (!arh_per || (arh_per >= trcPer && (tTime-valEnd())/trcPer < 2)) )
     {
 	XMLNode req("get");
-	req.setAttr("path",addr()+"/%2fserv%2f0")->
+	req.setAttr("path",addr()+"/%2fserv%2fval")->
 	    setAttr("tm",TSYS::ll2str(tTime))->
 	    setAttr("tm_grnd","0");
 	if( mod->cntrIfCmd(req,user,false) ) return;
@@ -3818,7 +3827,7 @@ void VCADiagram::TrendObj::loadData( const string &user, bool full )
     XMLNode req("get");
     m1: req.clear()->
 	    setAttr("arch",arch)->
-	    setAttr("path",addr()+"/%2fserv%2f0")->
+	    setAttr("path",addr()+"/%2fserv%2fval")->
 	    setAttr("tm",TSYS::ll2str(tTime))->
 	    setAttr("tm_grnd",TSYS::ll2str(tTimeGrnd))->
 	    setAttr("per",TSYS::ll2str(wantPer))->

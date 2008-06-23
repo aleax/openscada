@@ -23,6 +23,7 @@
 #include <QEvent>
 #include <QKeyEvent>
 #include <QApplication>
+#include <QPainter>
 
 #include <tsys.h>
 
@@ -37,7 +38,7 @@ using namespace VISION;
 //* Shape widget view runtime mode                *
 //*************************************************
 RunWdgView::RunWdgView( const string &iwid, int ilevel, VisRun *mainWind, QWidget* parent, Qt::WindowFlags f ) :
-    WdgView(iwid,ilevel,(QMainWindow*)mainWind,parent,f), reqtm(1), mPermCntr(false)
+    WdgView(iwid,ilevel,(QMainWindow*)mainWind,parent,f), reqtm(1), mPermCntr(false), mPermView(true)
 {
     int endElSt = iwid.rfind("/");
     if( endElSt == string::npos ) return;
@@ -104,7 +105,7 @@ void RunWdgView::update( unsigned cnt, int div_max, const string &wpath )
 	bool change = false;
 	XMLNode *req_el;
 	XMLNode req("get");
-	req.setAttr("path",id()+"/%2fserv%2f0")->
+	req.setAttr("path",id()+"/%2fserv%2fattr")->
 	    setAttr("tm",TSYS::uint2str(cnt?reqtm:0));
 	if( !cntrIfCmd(req) )
 	{
@@ -223,8 +224,9 @@ bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 	    if( (bool)atoi(val.c_str()) == hasFocus() )      break;
 	    if( (bool)atoi(val.c_str()) ) setFocus(Qt::OtherFocusReason);
 	    break;
-	case -3:	//permCntr
-	    setPermCntr( (bool)atoi(val.c_str()) );
+	case -3:	//perm
+	    setPermCntr( atoi(val.c_str())&SEQ_WR );
+	    setPermView( atoi(val.c_str())&SEQ_RD );
 	    break;
     }
     return rez;
@@ -232,6 +234,23 @@ bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 
 bool RunWdgView::event( QEvent *event )
 {
+    //- Paint message about access denied -
+    if( event->type() == QEvent::Paint && !permView() )
+    {
+	QPainter pnt(this);
+	//-- Fill page and draw border --
+	pnt.fillRect(rect(),QBrush(QColor("black"),Qt::Dense4Pattern));
+	pnt.setPen(QPen(QBrush(QColor("black")),1));
+	pnt.drawRect(rect().adjusted(0,0,-1,-1));
+	//-- Draw message --
+	QTextOption to;
+	pnt.setPen(QColor("red"));
+	to.setAlignment(Qt::AlignCenter);
+	to.setWrapMode(QTextOption::WordWrap);
+	pnt.drawText(rect(),QString(_("Widget: '%1'.\nView access is no permited.")).arg(id().c_str()),to);
+	return true;
+    }
+
     if( WdgView::event(event) || (shape&&shape->event(this,event)) )	return true;
 
     //- Key events process for send to model -
@@ -449,7 +468,13 @@ bool RunPageView::callPage( const string &pg_it, const string &pgGrp, const stri
 	    string pg_it_prev = ((RunWdgView*)children().at(i_ch))->pgOpenSrc();
 	    if( pg_it != pg_it_prev )
 	    {
-		if( !pg_it_prev.empty() ) mainWin()->wAttrSet(pg_it_prev,"pgOpen","0");
+		if( !pg_it_prev.empty() )
+		{
+		    XMLNode req("close");
+		    req.setAttr("path","/ses_"+mainWin()->workSess()+"/%2fserv%2fpg")->setAttr("pg",pg_it_prev);
+		    mainWin()->cntrIfCmd(req);
+		    //mainWin()->wAttrSet(pg_it_prev,"pgOpen","0");
+		}
 		((RunWdgView*)children().at(i_ch))->setPgOpenSrc(pg_it);
 	    }
 	    return true;
@@ -482,7 +507,10 @@ RunPageView *RunPageView::pgOpen( const string &ipg )
 void RunPageView::closeEvent( QCloseEvent *event )
 {
     //-- Send close command --
-    attrSet("pgOpen","0");
+    XMLNode req("close");
+    req.setAttr("path","/ses_"+mainWin()->workSess()+"/%2fserv%2fpg")->setAttr("pg",id());
+    mainWin()->cntrIfCmd(req);
+    //attrSet("pgOpen","0");
 }
 
 //*********************************************

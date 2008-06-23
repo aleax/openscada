@@ -1,3 +1,10 @@
+2008-06-23 Roman
+- !!:/SYS: All service control command is renamed from numbers (/serv/0) to object's names (/serv/attr).
+- FIX:/UI/VCAEngine: Model data permition on session run is fixed.
+- /UI/VCAEngine: Open and close pages control commands is added. Used for direct pages' operations, independent from pages permition.
+- FIX:/UI/VCAEngine,/UI/Vision: No permited pages dispaly is fixed. View messages for denied access to no permited pages.
+
+
 2008-06-20 Roman
 - !!:/Archive/Value: Archives list container, into archivator, move from vector to map for fastest access.
 - FIX:/Archive/FSArch: Too long big archives' files list load is fixed. Multiply archive directory scan is removed.

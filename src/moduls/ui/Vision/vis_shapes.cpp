@@ -1970,7 +1970,7 @@ void ShapeDiagram::TrendObj::loadData( bool full )
     if( !arh_per || tTime > arh_end )
     {
 	XMLNode req("info");
-	req.setAttr("arch",arch)->setAttr("path",addr()+"/%2fserv%2f0");
+	req.setAttr("arch",arch)->setAttr("path",addr()+"/%2fserv%2fval");
 	if( view->cntrIfCmd(req,true) || atoi(req.attr("vtp").c_str()) == 5 )
 	{ arh_per = arh_beg = arh_end = 0; return; }
 	else
@@ -1987,7 +1987,7 @@ void ShapeDiagram::TrendObj::loadData( bool full )
 	(!arh_per || (arh_per >= trcPer && (tTime-valEnd())/trcPer < 2)) )
     {
 	XMLNode req("get");
-	req.setAttr("path",addr()+"/%2fserv%2f0")->
+	req.setAttr("path",addr()+"/%2fserv%2fval")->
 	    setAttr("tm",TSYS::ll2str(tTime))->
 	    setAttr("tm_grnd","0");
 	if( view->cntrIfCmd(req,true) )	return;
@@ -2030,7 +2030,7 @@ void ShapeDiagram::TrendObj::loadData( bool full )
     XMLNode req("get");
     m1: req.clear()->
 	    setAttr("arch",arch)->
-	    setAttr("path",addr()+"/%2fserv%2f0")->
+	    setAttr("path",addr()+"/%2fserv%2fval")->
 	    setAttr("tm",TSYS::ll2str(tTime))->
 	    setAttr("tm_grnd",TSYS::ll2str(tTimeGrnd))->
 	    setAttr("per",TSYS::ll2str(wantPer))->
@@ -2257,7 +2257,7 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
     if( !arhBeg || !arhEnd || tTime > arhEnd )
     {
 	XMLNode req("info");
-	req.setAttr("arch",arch)->setAttr("path","/Archive/%2fserv%2f0");
+	req.setAttr("arch",arch)->setAttr("path","/Archive/%2fserv%2fmess");
 	if( w->cntrIfCmd(req,true) )	arhBeg = arhEnd = 0;
 	else
 	{
@@ -2290,7 +2290,7 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
     XMLNode req("get");
     req.clear()->
 	setAttr("arch",arch)->
-	setAttr("path","/Archive/%2fserv%2f0")->
+	setAttr("path","/Archive/%2fserv%2fmess")->
 	setAttr("tm",TSYS::ll2str(tTime))->
 	setAttr("tm_grnd",TSYS::ll2str(tTimeGrnd))->
 	setAttr("cat",w->dc()["tmpl"].toString().toAscii().data())->

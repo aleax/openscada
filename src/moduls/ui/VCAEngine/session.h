@@ -197,6 +197,7 @@ class SessWdg : public Widget, public TValFunc
 
 	bool cntrCmdServ( XMLNode *opt );
 	bool cntrCmdGeneric( XMLNode *opt );
+	bool cntrCmdAttributes( XMLNode *opt );
 	void cntrCmdProc( XMLNode *opt );			//Control interface command process
 	bool attrChange( Attr &cfg, void *prev );
 	unsigned int modifVal( Attr &cfg );

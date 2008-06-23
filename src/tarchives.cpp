@@ -707,7 +707,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 {
     string a_path = opt->attr("path");
     //- Service commands process -
-    if( a_path == "/serv/0" )           //Messages access
+    if( a_path == "/serv/mess" )           //Messages access
     {
 	if( ctrChkNode(opt,"info",RWRWRW,"root","root",SEQ_RD) )        //Messages information
 	{

@@ -72,7 +72,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
     DevelWdgView *devW = qobject_cast<DevelWdgView*>(w);
     RunWdgView   *runW = qobject_cast<RunWdgView*>(w);
     bool rel_list	= false;				//change signal
-    bool up 		= false;
+    bool up		= false;
     status		= false;
     QVector<ShapeItem> &shapeItems = *(QVector<ShapeItem> *)w->dc().value("shapeItems",(void*)0).value< void* >();
     QVector<inundationItem> &inundationItems = *(QVector<inundationItem> *)w->dc().value("inundationItems",(void*)0).value< void* >();

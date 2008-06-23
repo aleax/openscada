@@ -72,10 +72,10 @@ class SSess
 	string user;		//sesion user
 	string content;		//Contain
 
-	vector<string> 		vars;	//request vars
+	vector<string>		vars;	//request vars
 	map<string,string>	cnt;	//Parsed contain
-	map<string,string>	prm;	//URL parameters    
-	
+	map<string,string>	prm;	//URL parameters
+
 	vector<string> mess;	//no interrupt messages
 };
 
@@ -152,7 +152,7 @@ class TWEB: public TUI
 	Res		m_res;
 	map<int,SAuth>	m_auth;
 	int		m_t_auth;			//Time of sesion life (minutes)
-	timer_t 	chkSessTm;			//Check session's timer
+	timer_t		chkSessTm;			//Check session's timer
 	bool		chck_st;			//Check session's status
 	int		id_vcases;			//VCA session's container identifier
 	string		m_CSStables;			//CSS tables

@@ -221,7 +221,7 @@ VisRun::~VisRun()
 
     //- Disconnect/delete session -
     XMLNode req("disconnect");
-    req.setAttr("path","/%2fserv%2f0")->setAttr("sess",work_sess);
+    req.setAttr("path","/%2fserv%2fsess")->setAttr("sess",work_sess);
     cntrIfCmd(req);
 
     //- Unregister window -
@@ -296,7 +296,7 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
 {
     //- Try second connect to session for permition check -
     XMLNode req("connect");
-    req.setAttr("path","/%2fserv%2f0")->setAttr("sess",workSess());
+    req.setAttr("path","/%2fserv%2fsess")->setAttr("sess",workSess());
     if( cntrIfCmd(req) )
     {
 	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
@@ -304,7 +304,7 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
 	wUser->setPass(oldPass);
 	return;
     }
-    req.clear()->setName("disconnect")->setAttr("path","/%2fserv%2f0")->setAttr("sess",workSess());
+    req.clear()->setName("disconnect")->setAttr("path","/%2fserv%2fsess")->setAttr("sess",workSess());
     cntrIfCmd(req);
 
     //- Update pages after user change -
@@ -361,7 +361,7 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
 
     //-- Get opened sessions list for our page and put dialog for connection --
     XMLNode req("list");
-    req.setAttr("path","/%2fserv%2f0")->setAttr("prj",src_prj);
+    req.setAttr("path","/%2fserv%2fsess")->setAttr("prj",src_prj);
     if( !crSessForce && !cntrIfCmd(req) && req.childSize() )
     {
 	//--- Prepare dialog ---
@@ -426,7 +426,7 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
 	    work_sess = ls_wdg->currentItem()->text().toAscii().data();
     }
 
-    req.clear()->setName("connect")->setAttr("path","/%2fserv%2f0");
+    req.clear()->setName("connect")->setAttr("path","/%2fserv%2fsess");
     if( work_sess.empty() ) req.setAttr("prj",src_prj);
     else req.setAttr("sess",work_sess);
     if( cntrIfCmd(req) )
@@ -455,7 +455,7 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
     if( !cntrIfCmd(req) ) m_period = atoi(req.text().c_str());
 
     //- Get open pages list -
-    req.clear()->setName("openlist")->setAttr("path","/ses_"+work_sess+"/%2fserv%2f0");
+    req.clear()->setName("openlist")->setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg");
     if( !cntrIfCmd(req) )
 	for( int i_ch = 0; i_ch < req.childSize(); i_ch++ )
 	    callPage(req.childGet(i_ch)->text());
@@ -471,7 +471,9 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
 	    ses_it = ses_it+"/"+prj_el;
 
 	//- Send open command -
-	wAttrSet(ses_it,"pgOpen","1");
+	req.clear()->setName("open")->setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg")->setAttr("pg",ses_it);
+	cntrIfCmd(req);
+	//wAttrSet(ses_it,"pgOpen","1");
 
 	callPage(ses_it);
     }
@@ -507,7 +509,13 @@ void VisRun::callPage( const string& pg_it, XMLNode *upw )
     if( !master_pg || pgGrp == "main" || master_pg->pgGrp() == pgGrp )
     {
 	//-- Send close command --
-	if( master_pg ) wAttrSet(master_pg->id(),"pgOpen","0");
+	if( master_pg )
+	{
+	    XMLNode req("close");
+	    req.setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg")->setAttr("pg",master_pg->id());
+	    cntrIfCmd(req);
+	    //wAttrSet(master_pg->id(),"pgOpen","0");
+	}
 
 	//-- Create widget view --
 	master_pg = new RunPageView(pg_it,this,centralWidget());
@@ -531,7 +539,7 @@ void VisRun::callPage( const string& pg_it, XMLNode *upw )
 	RunPageView *pg = master_pg->findOpenPage(pg_it);
 	if( !pg || pg->reqTm() == reqtm ) return;
 	XMLNode req("openlist");
-	req.setAttr("tm",TSYS::uint2str(pg->reqTm()))->setAttr("path","/ses_"+work_sess+"/%2fserv%2f0");
+	req.setAttr("tm",TSYS::uint2str(pg->reqTm()))->setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg");
 	if( !cntrIfCmd(req) )
 	    for( int i_ch = 0; i_ch < req.childSize(); i_ch++ )
 		if( req.childGet(i_ch)->text() == pg_it )
@@ -594,7 +602,7 @@ bool VisRun::wAttrSet( const string &path, const string &attr, const string &val
 {
     //- Send value to model -
     XMLNode req("set");
-    req.setAttr("path",path+"/%2fserv%2f0");
+    req.setAttr("path",path+"/%2fserv%2fattr");
     req.childAdd("el")->setAttr("id",attr)->setText(val);
     return !cntrIfCmd(req);
 }
@@ -676,7 +684,7 @@ void VisRun::updatePage( )
     //- Pages update -
     XMLNode req("openlist");
     req.setAttr("tm",TSYS::uint2str(reqtm))->
-	setAttr("path","/ses_"+work_sess+"/%2fserv%2f0");
+	setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg");
     if( !cntrIfCmd(req) )
 	for( int i_ch = 0; i_ch < req.childSize(); i_ch++ )
 	    callPage(req.childGet(i_ch)->text(),req.childGet(i_ch));

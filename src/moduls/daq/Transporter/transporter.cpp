@@ -427,7 +427,7 @@ void TMdPrm::load_( )
 	    setDescr(req.text());
 
 	    //-- Attributes list request --
-	    req.clear()->setName("list")->setAttr("path",scntr+id()+"/%2fserv%2f0");
+	    req.clear()->setName("list")->setAttr("path",scntr+id()+"/%2fserv%2fattr");
 	    if( mod->cntrIfCmd(req) )	throw TError(req.attr("mcat").c_str(),req.text().c_str());
 	    //--- Check and create new attributes ---
 	    for( int i_a = 0; req.childSize(); i_a++ )
@@ -462,7 +462,7 @@ void TMdPrm::update( )
 	try
 	{
 	    //-- Attributes values request --
-	    req.clear()->setAttr("path",scntr+id()+"/%2fserv%2f0");
+	    req.clear()->setAttr("path",scntr+id()+"/%2fserv%2fattr");
 	    if( mod->cntrIfCmd(req) )	throw TError(req.attr("mcat").c_str(),req.text().c_str());
 	    for( int i_a = 0; req.childSize(); i_a++ )
 		vlAt(req.childGet(i_a)->attr("id")).at().setS(req.childGet(i_a)->text(),0,true);
@@ -478,7 +478,7 @@ void TMdPrm::vlSet( TVal &valo )
 	try
 	{
 	    XMLNode req("set");
-	    req.clear()->setAttr("path",scntr+id()+"/%2fserv%2f0")->
+	    req.clear()->setAttr("path",scntr+id()+"/%2fserv%2fattr")->
 		childAdd("el")->setAttr("id",valo.name())->setText(valo.getS());
 	    if( mod->cntrIfCmd(req) )   throw TError(req.attr("mcat").c_str(),req.text().c_str());
 	}catch(TError err) { continue; }

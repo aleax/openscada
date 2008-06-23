@@ -435,7 +435,7 @@ bool Widget::cntrCmdServ( XMLNode *opt )
 {
     string a_path = opt->attr("path");
     //- Service commands process -
-    if( a_path == "/serv/0" )	//Attribute's access
+    if( a_path == "/serv/attr" )	//Attribute's access
     {
 	if( ctrChkNode(opt,"get",RWRWRW,"root","root",SEQ_RD) )		//Get values
 	{
@@ -609,14 +609,17 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )
 	{
 	    bool chkUserPerm = atoi(opt->attr("chkUserPerm").c_str());
-	    vector<string>  lst;
-	    wdgList(lst);
-	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
+	    if( !chkUserPerm || SYS->security().at().access(opt->attr("user"),SEQ_RD,owner(),grp(),permit()) )
 	    {
-		AutoHD<Widget> iwdg = wdgAt(lst[i_f]);
-		if( chkUserPerm && !SYS->security().at().access(opt->attr("user"),SEQ_RD,iwdg.at().owner(),iwdg.at().grp(),iwdg.at().permit()) )
-		    continue;
-		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(iwdg.at().name());
+		vector<string>  lst;
+		wdgList(lst);
+		for( unsigned i_f=0; i_f < lst.size(); i_f++ )
+		{
+		    AutoHD<Widget> iwdg = wdgAt(lst[i_f]);
+		    if( chkUserPerm && !SYS->security().at().access(opt->attr("user"),SEQ_RD,iwdg.at().owner(),iwdg.at().grp(),iwdg.at().permit()) )
+			continue;
+		    opt->childAdd("el")->setAttr("id",lst[i_f])->setText(iwdg.at().name());
+		}
 	    }
 	}
 	if( ctrChkNode(opt,"add",RWRWR_,"root","UI",SEQ_WR) )	wdgAdd(opt->attr("id").c_str(),opt->text(),"");
@@ -648,15 +651,7 @@ bool Widget::cntrCmdAttributes( XMLNode *opt )
 
     //- Process command to page -
     string a_path = opt->attr("path");
-    if( a_path.substr(0,5) == "/attr" &&
-	    TSYS::pathLev(a_path,1).size() > 4 &&
-	    TSYS::pathLev(a_path,1).substr(0,4) == "sel_" && TCntrNode::ctrChkNode(opt) )
-    {
-	AutoHD<Attr> attr = attrAt(TSYS::pathLev(a_path,1).substr(4));
-	for( int i_a=0; i_a < attr.at().fld().selNm().size(); i_a++ )
-	    opt->childAdd("el")->setText(attr.at().fld().selNm()[i_a]);
-    }
-    else if( a_path.substr(0,6) == "/attr/" )
+    if( a_path.substr(0,6) == "/attr/" )
     {
 	AutoHD<Attr> attr = attrAt(TSYS::pathLev(a_path,1));
 	if( ctrChkNode(opt,"get",(attr.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root","UI",SEQ_RD) )

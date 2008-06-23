@@ -127,7 +127,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
     vector<string> list_c;
     string a_path = opt->attr("path");
     //- Service commands process -
-    if( a_path == "/serv/0"  )		//Attributes access
+    if( a_path == "/serv/attr"  )		//Attributes access
     {
 	vlList(list_c);
 	if( ctrChkNode(opt,"list",RWRWRW,"root","root",SEQ_RD) )	//Full info attributes list
@@ -609,7 +609,7 @@ void TVal::cntrCmdProc( XMLNode *opt )
 {
     string a_path = opt->attr("path");
     //- Service commands process -
-    if( a_path == "/serv/0"  )		//Values access
+    if( a_path == "/serv/val"  )		//Values access
     {
 	if( ctrChkNode(opt,"info",RWRWRW,"root","root",SEQ_RD) )	//Value's data information
 	{

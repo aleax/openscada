@@ -50,10 +50,12 @@ namespace VISION
 	    string pgOpenSrc( );
 
 	    bool   permCntr( )	{ return mPermCntr; }
+	    bool   permView( )	{ return mPermView; }
 	    unsigned reqTm( )	{ return reqtm; }
 
 	    void setPgOpenSrc( const string &vl );
-	    void   setPermCntr( bool vl )	{ mPermCntr = vl; }
+	    void setPermCntr( bool vl )	{ mPermCntr = vl; }
+	    void setPermView( bool vl )	{ mPermView = vl; }
 	    unsigned setReqTm( unsigned vl )	{ reqtm = vl; }
 
 	    WdgView *newWdgItem( const string &iwid );
@@ -74,6 +76,7 @@ namespace VISION
 	    unsigned	reqtm;		//Request values time
 	    int		curDiv;		//Current divider
 	    bool	mPermCntr;	//Control widget's permition
+	    bool	mPermView;	//View widget's permition
     };
 
     //*********************************************

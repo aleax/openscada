@@ -484,7 +484,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 {
     string a_path = opt->attr("path");
     //- Service commands process -
-    if( a_path == "/serv/0" )	//Session operation
+    if( a_path == "/serv/sess" )	//Session operation
     {
 	if( ctrChkNode(opt,"list",RWRWRW,"root","root",SEQ_RD) ) //List session for some project
 	{
