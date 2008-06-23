@@ -528,7 +528,7 @@ void TGroup::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("area",opt,-1,"/prm",_("Group"));
 	ctrMkNode("fld",opt,-1,"/prm/name",cfg("NAME").fld().descr(),0444,"root",owner().subId().c_str(),1,"tp","str");
 	ctrMkNode("fld",opt,-1,"/prm/dscr",cfg("DESCR").fld().descr(),0664,"root",owner().subId().c_str(),1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/prm/db",_("User group DB"),0664,"root",SYS->db().at().subId().c_str(),4,"tp","str","dest","select","select","/db/list"
+	ctrMkNode("fld",opt,-1,"/prm/db",_("User group DB"),0664,"root",SYS->db().at().subId().c_str(),4,"tp","str","dest","select","select","/db/list",
 	    "help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
 	ctrMkNode("list",opt,-1,"/prm/users",cfg("USERS").fld().descr(),0664,"root",owner().subId().c_str(),2,"tp","str","s_com","add,del");
 	return;

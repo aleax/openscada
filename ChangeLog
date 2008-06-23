@@ -3,6 +3,7 @@
 - FIX:/UI/VCAEngine: Model data permition on session run is fixed.
 - /UI/VCAEngine: Open and close pages control commands is added. Used for direct pages' operations, independent from pages permition.
 - FIX:/UI/VCAEngine,/UI/Vision: No permited pages dispaly is fixed. View messages for denied access to no permited pages.
+- FIX:/Security/Grp: Field "/prm/db" write form error is fixed.
 
 
 2008-06-20 Roman
@@ -137,7 +138,7 @@
 
 
 2008-05-08 Roman
-- /SYS: Redhat vendor control is added to RPM build spec file.
+- !:/SYS: Redhat vendor control is added to RPM build spec file.
 - /SYS: Work directory change allow is excluded.
 - FIX:/UI/QTCfg: No check for loading image dialog cancel is fixed.
 - FIX:/UI/Vision: No update widgets tree on three level widget's add/delete is fixed.
@@ -150,7 +151,7 @@
 2008-05-01 Roman
 - /DATA: The OpenSCADA version to start splash is added.
 - /UI/QTCfg: Menu "Go" and "View" is merged.
-- /SYS: Parameter --with-qt4-dir=DIR to configure script is added, for flexibly QT4 installation control.
+- !:/SYS: Parameter --with-qt4-dir=DIR to configure script is added, for flexibly QT4 installation control.
 
 
 2008-04-30 Roman
