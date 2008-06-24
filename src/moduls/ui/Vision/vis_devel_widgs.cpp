@@ -2296,14 +2296,15 @@ bool DevelWdgView::event( QEvent *event )
 	}
 
 	//- Update select widget data -
-	if( wLevel() == 0 && !(m_flgs&DevelWdgView::holdSelRect) )
+	if( wLevel() == 0 && !(flags()&DevelWdgView::holdSelRect) )
 	{
 	    QRectF rsel;
-	    for( int i_c = 0; i_c < children().size(); i_c++ )
-		if( qobject_cast<DevelWdgView*>(children().at(i_c)) &&
+	    //if( !(flags()&DevelWdgView::moveHoldMove) )
+		for( int i_c = 0; i_c < children().size(); i_c++ )
+		    if( qobject_cast<DevelWdgView*>(children().at(i_c)) &&
 			    ((DevelWdgView*)children().at(i_c))->select( ) )
-		    rsel = rsel.united(((DevelWdgView*)children().at(i_c))->geometryF());
-	    pntView->setSelArea( rsel, edit() ? SizePntWdg::EditBorder : SizePntWdg::SizeDots );
+			rsel = rsel.united(((DevelWdgView*)children().at(i_c))->geometryF());
+	    pntView->setSelArea( rsel, (flags()&DevelWdgView::moveHoldMove) ?  SizePntWdg::Hide : (edit() ? SizePntWdg::EditBorder : SizePntWdg::SizeDots) );
 	}
 	pnt.end();
 
@@ -2515,7 +2516,7 @@ bool DevelWdgView::event( QEvent *event )
 		}
 
 		//- New widget add cursor view -
-		if( mainWin()->actGrpWdgAdd->checkedAction() && 
+		if( mainWin()->actGrpWdgAdd->checkedAction() &&
 		    mainWin()->actGrpWdgAdd->checkedAction()->isChecked() )
 		{
 		    setCursor(QCursor(((VisDevelop *)main_win)->actGrpWdgAdd->
@@ -2534,13 +2535,13 @@ bool DevelWdgView::event( QEvent *event )
 		    dragStartPos = QPoint(-100,-100);
 		    wdgsMoveResize(curp-holdPnt);
 		    holdPnt = curp;
-		    if( m_flgs&DevelWdgView::holdChild )	update();
+		    //if( m_flgs&DevelWdgView::holdChild )	update();
 		    m_flgs |= DevelWdgView::moveHoldMove;
 		    return true;
 		}
 		if( m_flgs&DevelWdgView::moveHold && !(((QMouseEvent*)event)->buttons()&Qt::LeftButton) )
 		    m_flgs &= ~DevelWdgView::moveHold;
-		
+
 		break;
 	    }
 	    case QEvent::KeyPress:

@@ -428,7 +428,7 @@ class SizePntWdg : public QWidget
 
     public:
 	//Data
-	enum WView { SizeDots, EditBorder, SelectBorder };
+	enum WView { Hide, SizeDots, EditBorder, SelectBorder };
 	//Methods
 	SizePntWdg( QWidget* parent = 0 );
 
