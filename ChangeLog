@@ -1,3 +1,7 @@
+2008-06-24 Roman
+- FIX:/SYS: Configure QT4 environment is fixed on Mandriva 2008.1
+
+
 2008-06-23 Roman
 - !!:/SYS: All service control command is renamed from numbers (/serv/0) to object's names (/serv/attr).
 - FIX:/UI/VCAEngine: Model data permition on session run is fixed.

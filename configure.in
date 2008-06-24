@@ -405,13 +405,13 @@ if test ${QT4use} = true; then
          then 
 	   QT4_MOC="${QT4_DIR}/bin/moc"; 
 	   QT4_RCC="${QT4_DIR}/bin/rcc";
-	   QT4_LIB="${QT4_DIR}/lib";
          else AC_MSG_ERROR([QT4 development utilites no present (into directory ${QT4_DIR})! Install QT4 library development package.]); fi;
     fi;
     if test -d "${oldincludedir}/qt4/QtCore"; then QT4_INCL="${oldincludedir}/qt4";
     elif test -d "${oldincludedir}/QtCore"; then QT4_INCL="${oldincludedir}";
     elif test -d "${QT4_DIR}/include/QtCore"; then QT4_INCL="${QT4_DIR}/include"; fi
     if test -z ${QT4_INCL}; then AC_MSG_ERROR([QT4 development, include files no present (into directory ${QT4_DIR})! Install QT4 library development package.]); fi
+    QT4_LIB="${QT4_DIR}/lib";
     AC_SUBST(QT4_INCL)
     AC_SUBST(QT4_LIB)
 #--- Modules checkings ---    
