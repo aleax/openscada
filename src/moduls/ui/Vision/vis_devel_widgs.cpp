@@ -1864,10 +1864,21 @@ void DevelWdgView::upMouseCursors( const QPoint &curp )
     //-- Check child's anchor selection and widget's geometry --
     m_flgs &= ~DevelWdgView::leftTop;
     QRectF selRect;
-    for( int i_c = 0; i_c < children().size(); i_c++ )
-	if( qobject_cast<DevelWdgView*>(children().at(i_c)) &&
-		((DevelWdgView*)children().at(i_c))->select( ) )
-	    selRect = selRect.united(((DevelWdgView*)children().at(i_c))->geometryF());
+    bool firs_nosel = true;
+    for( int i_c = children().size()-1; i_c >= 0; i_c-- )
+	if( qobject_cast<DevelWdgView*>(children().at(i_c)) )
+	{
+	    if( ((DevelWdgView*)children().at(i_c))->select( ) )
+	    {
+		selRect = selRect.united(((DevelWdgView*)children().at(i_c))->geometryF());
+		firs_nosel = false;
+	    }
+	    else if( firs_nosel && ((DevelWdgView*)children().at(i_c))->geometryF().contains(curp) )
+	    {
+		selRect = QRectF();
+		break;
+	    }
+	}
     //-- Select childs anchors --
     if( !selRect.isNull() )
     {

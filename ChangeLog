@@ -1,5 +1,6 @@
 2008-07-01 Roman
 - !:/UI/VCAEngine, /UI/Vision: Make widget's attributes id, name, dscr, path no visual. For visual traffic decrease.
+- FIX:/UI/Vision: Widget selection impossible, if it lie on other selected big widget, is  fixed.
 
 
 2008-06-24 Roman
