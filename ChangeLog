@@ -1,3 +1,7 @@
+2008-07-01 Roman
+- !:/UI/VCAEngine, /UI/Vision: Make widget's attributes id, name, dscr, path no visual. For visual traffic decrease.
+
+
 2008-06-24 Roman
 - FIX:/SYS: Configure QT4 environment is fixed on Mandriva 2008.1
 - !:/UI/Vision: Move and resize widgets of a development page make a performance optimal.

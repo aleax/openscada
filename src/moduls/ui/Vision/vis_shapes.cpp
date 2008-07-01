@@ -198,11 +198,6 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	case -1:	//load
 	    rel_cfg = true;
 	    break;
-	case 2:		//name
-	    w->dc()["name"] = val.c_str();
-	    if( wel == 2)	((QCheckBox*)el_wdg)->setText(val.c_str());
-	    else if( wel == 3 )	((QPushButton*)el_wdg)->setText(val.c_str());
-	    break;
 	case 5:		//en
 	    if(!runW)	break;
 	    w->dc()["en"] = (bool)atoi(val.c_str());
@@ -302,6 +297,11 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    rel_cfg = true;
 	    break;
 	}
+	case 26:	//name
+	    w->dc()["name"] = val.c_str();
+	    if( wel == 2)	((QCheckBox*)el_wdg)->setText(val.c_str());
+	    else if( wel == 3 )	((QPushButton*)el_wdg)->setText(val.c_str());
+	    break;
     }
     if( rel_cfg && !w->allAttrLoad() )
     {

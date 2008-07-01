@@ -34,17 +34,17 @@ class PrWidget : public LWidget
 {
     public:
 	//Methods
-	PrWidget( const string &iid );    
+	PrWidget( const string &iid );
 
 	string rootId( )	{ return id(); }
 	string ico( );
-	string type( )          { return "Terminator"; }
+	string type( )		{ return "Terminator"; }
 	string parentNm( )	{ return "root"; }
-	string name( )     	{ return "Root primitive"; }
-	string descr( )    	{ return "Abstract root primitive"; }
+	string name( )		{ return "Root primitive"; }
+	string descr( )		{ return "Abstract root primitive"; }
 
-	void setName( const string &inm )     { };
-	void setDescr( const string &idscr )  { };	
+	void setName( const string &inm )	{ };
+	void setDescr( const string &idscr )	{ };
 	void setEnable( bool val );
 
     protected:
@@ -67,10 +67,10 @@ class OrigElFigure : public PrWidget
     public:
 	//Methods
 	OrigElFigure( );
-	
+
 	string name( );
 	string descr( );
-    
+
     protected:
 	//Methods
 	void postEnable( int flag );
@@ -88,7 +88,7 @@ class OrigFormEl : public PrWidget
 
 	string name( );
 	string descr( );
-    
+
     protected:
 	//Methods
 	void postEnable( int flag );
@@ -102,16 +102,16 @@ class OrigText : public PrWidget
 {
     public:
 	//Methods
-      	OrigText( );
-    
+	OrigText( );
+
 	string name( );
 	string descr( );
 
      protected:
-        //Methods
-	void postEnable( int flag );	
+	//Methods
+	void postEnable( int flag );
 	bool attrChange( Attr &cfg, void *prev );
-}; 
+};
 
 //************************************************
 //* OrigMedia: Media view original widget        *
@@ -120,11 +120,11 @@ class OrigMedia : public PrWidget
 {
     public:
 	//Methods
-	OrigMedia( );	
-    
+	OrigMedia( );
+
 	string name( );
 	string descr( );
- 
+
     protected:
 	//Methods
 	void postEnable( int flag );
@@ -138,16 +138,16 @@ class OrigDiagram : public PrWidget
 {
     public:
 	//Methods
-    	OrigDiagram( );
-    
+	OrigDiagram( );
+
 	string name( );
 	string descr( );
-    
+
     protected:
 	//Methods
 	void postEnable( int flag );
 	bool attrChange( Attr &cfg, void *prev );
-};    
+};
 
 //************************************************
 //* OrigProtocol: Protocol view original widget  *
@@ -156,8 +156,8 @@ class OrigProtocol : public PrWidget
 {
     public:
 	//Methods
-    	OrigProtocol( );
-    
+	OrigProtocol( );
+
 	string name( );
 	string descr( );
 
@@ -174,9 +174,9 @@ class OrigDocument : public PrWidget
 {
     public:
 	//Methods
-    	OrigDocument( );
-    
-    	string name( );
+	OrigDocument( );
+
+	string name( );
 	string descr( );
 };
 
@@ -187,8 +187,8 @@ class OrigFunction : public PrWidget
 {
     public:
 	//Methods
-    	OrigFunction( );
-    
+	OrigFunction( );
+
 	string name( );
 	string descr( );
 };
@@ -201,15 +201,15 @@ class OrigBox : public PrWidget
     public:
 	//Methods
 	OrigBox( );
-    
+
 	string name( );
 	string descr( );
-    
+
 	bool isContainer( )	{ return true; }
-     
+
     protected:
 	//Methods
-	void postEnable( int flag );    
+	void postEnable( int flag );
 };
 
 //************************************************
@@ -219,14 +219,14 @@ class OrigLink : public PrWidget
 {
     public:
 	//Methods
-    	OrigLink( );
-    
+	OrigLink( );
+
 	string name( );
 	string descr( );
- 
+
     protected:
 	//Methods
-	void postEnable( int flag );       
+	void postEnable( int flag );
 };
 
 }

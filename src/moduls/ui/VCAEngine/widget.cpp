@@ -117,10 +117,10 @@ void Widget::postEnable( int flag )
     if( flag&TCntrNode::NodeConnect )
     {
 	//- Add main attributes -
-	attrAdd( new TFld("id",_("Id"),TFld::String,TFld::NoWrite,"","","","","1") );
-	attrAdd( new TFld("name",_("Name"),TFld::String,TFld::NoFlag,"","","","","2") );
-	attrAdd( new TFld("dscr",_("Description"),TFld::String,TFld::FullText,"","","","","3") );
-	attrAdd( new TFld("path",_("Path"),TFld::String,TFld::NoWrite,"","","","","4") );
+	attrAdd( new TFld("id",_("Id"),TFld::String,TFld::NoWrite) );
+	attrAdd( new TFld("name",_("Name"),TFld::String,TFld::NoFlag) );
+	attrAdd( new TFld("dscr",_("Description"),TFld::String,TFld::FullText) );
+	attrAdd( new TFld("path",_("Path"),TFld::String,TFld::NoWrite) );
 	attrAdd( new TFld("en",_("Enabled"),TFld::Boolean,TFld::NoFlag,"","1","","","5") );
 	attrAdd( new TFld("active",_("Active"),TFld::Boolean,Attr::Active,"","0","","","6") );
 	attrAdd( new TFld("geomX",_("Geometry:x"),TFld::Real,TFld::NoFlag,"","0","0;10000","","7") );
@@ -1001,7 +1001,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	    if( wattr != "." && !wdgPresent(wattr) )	wattr = ".";
 	    opt->setText(wattr);
 	}
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) ) 
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )
 	    TBDS::genDBSet(mod->nodePath()+"wdgAttr",opt->text(),opt->attr("user"));
     }
     else if( a_path == "/proc/w_lst" && ctrChkNode(opt) )
