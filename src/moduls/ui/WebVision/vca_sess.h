@@ -73,6 +73,9 @@ class VCAObj : public TCntrNode
 	virtual void setAttrs( XMLNode &node, const string &user ) = 0;
 
 	VCASess &owner( );
+        
+    protected:    
+        string imgDef;
 
     private:
 	//Methods
@@ -80,7 +83,7 @@ class VCAObj : public TCntrNode
 
 	//Attributes
 	string	m_id;
-            string imgDef;
+       
 };
 
 //*************************************************
