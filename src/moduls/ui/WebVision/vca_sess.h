@@ -80,6 +80,7 @@ class VCAObj : public TCntrNode
 
 	//Attributes
 	string	m_id;
+            string imgDef;
 };
 
 //*************************************************
@@ -112,11 +113,12 @@ class InundationItem
 {
     public:
 	InundationItem( )	{ }
-	InundationItem( vector<int> inumber_point, int color ) : number_point(inumber_point), P_color(color)
+        InundationItem( vector<int> inumber_point, int color, string P_imgFill ) : number_point(inumber_point), P_color(color), imgFill(P_imgFill)
 	{ }
 
 	vector<int>	number_point;
 	int		P_color;
+        string          imgFill;
 
 };
 
@@ -126,7 +128,7 @@ class VCAElFigure : public VCAObj
 	//Methods
 	VCAElFigure( const string &iid );
 
-	void getReq( SSess &ses );
+        void getReq( SSess &ses );
 	void postReq( SSess &ses );
 	void setAttrs( XMLNode &node, const string &user );
 
@@ -147,8 +149,8 @@ class VCAElFigure : public VCAObj
 	void dashDot( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3, Point el_p4, Point el_p5, Point el_p6, int  clr_el, double el_width, int type, int style  );
 	void dashDotFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3, Point el_p4, Point el_p5, Point el_p6, int  clr_el, int clr_el_line, double el_width, double el_border_width, int type, double wdt, double wdt_1  );
 	void paintFill( gdImagePtr im, Point pnt, InundationItem in_item, int color );
-	Point unscaleUnrotate( Point point, double xScale, double yScale, bool flag_scale );
-	Point scaleRotate( Point point, double xScale, double yScale, bool flag_scale );
+	Point unscaleUnrotate( Point point, double xScale, double yScale, bool flag_scale, bool flag_rotate );
+        Point scaleRotate( Point point, double xScale, double yScale, bool flag_scale, bool flag_rotate );
 	//Attributes
 	double	width,		//Widget geometry
 		height;

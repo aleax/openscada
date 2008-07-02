@@ -64,7 +64,7 @@ void ShapeElFigure::destroy( WdgView *w )
     delete (QVector<ShapeItem> *)w->dc().value("shapeItems",(void*)0).value< void* >();
     delete (PntMap*)w->dc().value("shapePnts",(void*)0).value< void* >();
     delete (QVector<inundationItem> *)w->dc().value("inundationItems",(void*)0).value< void* >();
-    rectItems.clear();
+    if( rectItems.size() ) rectItems.clear();
 }
 
 bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
@@ -83,7 +83,8 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
     double t_start, t_end, a, b, ang_t;
     float MotionWidth;
     QPainterPath circlePath;
-
+    QVector<inundationItem> inundationItems_temp;
+    QVector<ShapeItem> shapeItems_temp;
     switch( uiPrmPos )
     {
 	case -1:	//load
@@ -166,13 +167,17 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
     }
     if( rel_list && !w->allAttrLoad( ) )
     {
-        QVector<ShapeItem> shapeItems_temp;
         if(shapeItems.size())
         {
             shapeItems_temp = shapeItems;
             shapeItems.clear();
         }
-        if( inundationItems.size() ) inundationItems.clear();
+        if( inundationItems.size() )
+        {
+
+            inundationItems_temp = inundationItems;
+            inundationItems.clear();
+        }
         
 	//- Parse last attributes list and make point list -
         string sel, ln_st;
@@ -204,17 +209,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 else if( ln_st == "dashed" ) style = Qt::DashLine;
                 else if( ln_st == "dotted" ) style = Qt::DotLine;
                 else style = Qt::SolidLine;
-
                 //-- Reading coordinates for the points of the line --
-                for( int i_p = 0; i_p < 2; i_p++ )
-                    ip[i_p] = scaleRotate( (*pnts)[p[i_p]], w, flag_scale, flag_rotate );
-                
-		//-- Detecting the rotation angle of the line --
-                line2 = QLineF( ip[0], QPointF(ip[0].x()+10,ip[0].y()) );
-                line1 = QLineF( ip[0], ip[1] );
-                if( ip[0].y() <= ip[1].y() ) ang = 360 - angle( line1, line2 );
-                else ang = angle( line1, line2 );
-               
 		//-- Building the path of the line and adding it to container --
                 if( bord_width > 0 )
                 {
@@ -303,15 +298,6 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 if( (t_end-1) > t_start ) 	t_end-=1;
                 if( t_start == t_end ) 		t_end+=1;
                 if( t_end > t_start && t_start >= 1 && t_end > 1 )	{ t_start-=1; t_end-=1; }
-                StartMotionPos = scaleRotate( QPointF( CtrlMotionPos_1.x()+rotate(arc(t_start,a,b),ang).x(),
-                                       		       CtrlMotionPos_1.y()-rotate(arc(t_start,a,b),ang).y() ),
-                                            w, flag_scale, flag_rotate );
-                EndMotionPos = scaleRotate( QPointF( CtrlMotionPos_1.x()+rotate(arc(t_end,a,b),ang).x(),
-                                     		     CtrlMotionPos_1.y()-rotate(arc(t_end,a,b),ang).y()),
-                                            w, flag_scale, flag_rotate );
-                CtrlMotionPos_1 = scaleRotate( CtrlMotionPos_1, w, flag_scale, flag_rotate );
-                CtrlMotionPos_2 = scaleRotate( CtrlMotionPos_2, w, flag_scale, flag_rotate );
-                CtrlMotionPos_3 = scaleRotate( CtrlMotionPos_3, w, flag_scale, flag_rotate );
                 CtrlMotionPos_4 = QPointF( t_start, t_end );
                
 		//-- Building the path of the line and adding it to container --
@@ -367,12 +353,6 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 else if( ln_st == "dashed" ) style = Qt::DashLine;
                 else if( ln_st == "dotted" ) style = Qt::DotLine;
                 else style = Qt::SolidLine;
-                for( int i_p = 0; i_p < 4; i_p++ )
-                    ip[i_p] = scaleRotate( (*pnts)[p[i_p]], w, flag_scale, flag_rotate );
-                line2 = QLineF( ip[0], QPointF(ip[0].x()+10,ip[0].y()) );
-                line1 = QLineF( ip[0], ip[1] );
-                if( ip[0].y() <= ip[1].y() )	ang = 360-angle(line1,line2);
-                else                   		ang = angle(line1,line2);
                 
                 if( bord_width > 0 )
                 {
@@ -431,7 +411,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 else 
                     brsh.setTextureImage(w->dc()["fillImg"].value<QBrush>().textureImage ());
                 //- Make elements -
-                if( fl_pnts.size() > 1 ) inundationItems.push_back(inundationItem(newPath,color,brsh, fl_pnts));
+                if( fl_pnts.size() > 1 ) inundationItems.push_back(inundationItem(newPath,color,brsh, fl_pnts, fl_pnts));
             }
         }
         for( int i=0; i < shapeItems_temp.size(); i++ )
@@ -442,7 +422,6 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
             dropPoint( shapeItems_temp[i].n4, shapeItems.size()+1, shapeItems, pnts );
             dropPoint( shapeItems_temp[i].n5, shapeItems.size()+1, shapeItems, pnts );
         }
-        shapeItems_temp.clear();
         up = true;
     }	
     if( up && !w->allAttrLoad( ) )
@@ -474,6 +453,59 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 itemInMotion = &shapeItems[index];
                 moveItemTo( QPointF(0,0), shapeItems, pnts, w );
             }
+        bool fill_build = false;
+        bool flag_all = false;
+        QVector<inundationItem> in_build;
+        QVector<int> fill_number;
+        //- Detecting if there is a necessity to rebuild inundationItem -
+        if( shapeItems.size() != shapeItems_temp.size() ) fill_build = true;
+        else
+            for( int i = 0; i < shapeItems.size(); i++ )
+            {
+                //-- Detecting if the shapeItems have changed --
+                if( shapeItems[i].path != shapeItems_temp[i].path ) { fill_build = true; break; }
+                if( shapeItems[i].pathSimple != shapeItems_temp[i].pathSimple ) { fill_build = true; break; }
+                if( (int)TSYS::realRound(shapeItems[i].ctrlPos4.x(), 3, true) != 
+                    (int)TSYS::realRound(shapeItems_temp[i].ctrlPos4.x(), 3, true) ||
+                    (int)TSYS::realRound(shapeItems[i].ctrlPos4.y(), 3, true) != 
+                    (int)TSYS::realRound(shapeItems_temp[i].ctrlPos4.y(), 3, true) ) { fill_build = true; break; }
+                if( shapeItems[i].n1 != shapeItems_temp[i].n1 ) { fill_build = true; break; }
+                if( shapeItems[i].n2 != shapeItems_temp[i].n2 ) { fill_build = true; break; }
+                if( shapeItems[i].n3 != shapeItems_temp[i].n3 ) { fill_build = true; break; }
+                if( shapeItems[i].n4 != shapeItems_temp[i].n4 ) { fill_build = true; break; }
+                if( shapeItems[i].n5 != shapeItems_temp[i].n5 ) { fill_build = true; break; }
+                if( shapeItems[i].brush != shapeItems_temp[i].brush ) { fill_build = true; break; }
+                if( shapeItems[i].pen != shapeItems_temp[i].pen ) { fill_build = true; break; }
+                if( shapeItems[i].penSimple != shapeItems_temp[i].penSimple ) { fill_build = true; break; }
+                if( shapeItems[i].width != shapeItems_temp[i].width ) { fill_build = true; break; }
+                if( shapeItems[i].border_width != shapeItems_temp[i].border_width ) { fill_build = true; break; }
+                if( shapeItems[i].type != shapeItems_temp[i].type ) { fill_build = true; break; }
+                if( (int)TSYS::realRound(shapeItems[i].angle_temp, 2, true) != 
+                    (int)TSYS::realRound(shapeItems_temp[i].angle_temp, 2, true) ) { fill_build = true; break; }
+            }
+        //-- Detecting the difference beetwen inundationItems --
+        if( inundationItems.size() != inundationItems_temp.size() )
+        {
+            flag_all = true;
+            in_build = inundationItems;
+        }
+        else
+            for( int i_f = 0; i_f < inundationItems.size(); i_f++ )
+            {
+                if( (inundationItems[i_f].number_shape != inundationItems_temp[i_f].number_point) || fill_build )// && shapeItems != shapeItems_temp
+                {
+                    in_build.push_back(inundationItems[i_f]);
+                    fill_number.push_back(i_f);
+                    continue;
+                }
+                if( inundationItems[i_f].brush != inundationItems_temp[i_f].brush )
+                     inundationItems_temp[i_f].brush = inundationItems[i_f].brush;
+                if( inundationItems[i_f].brush_img != inundationItems_temp[i_f].brush_img )
+                    inundationItems_temp[i_f].brush_img = inundationItems[i_f].brush_img;
+            }
+
+            inundationItems.clear();
+            inundationItems = in_build;
         //-Building fills-
         if( shapeItems.size() )
             for( int i=0; i < inundationItems.size(); i++ )
@@ -540,14 +572,21 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 }
                 inundation_fig_num.clear();
             }
+         if( inundationItems_temp.size() && shapeItems.size() && !flag_all )
+        {
+            for( int k = 0; k < fill_number.size(); k++ )
+                inundationItems_temp.replace( fill_number[k], inundationItems[k] );
+            inundationItems.clear();
+            inundationItems = inundationItems_temp;
+        }
         itemInMotion = 0;
         index        = -1;
         if( rectItems.size() )	rectItems.clear();
         flag_ctrl    = false;
-        if( uiPrmPos != -1 ) w->update();
-    }    
+    }
     return up;
 }
+
 
 //-Saving shapes' attributes to data model-
 bool ShapeElFigure::shapeSave( WdgView *w )
@@ -718,7 +757,8 @@ void ShapeElFigure::editExit( WdgView *view )
     status = false;
     flag_A = false;
     flag_ctrl = false;
-    rectItems.clear();
+    itemInMotion = 0;
+    if( rectItems.size() ) rectItems.clear();
 }
 
 void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
@@ -774,7 +814,7 @@ void ShapeElFigure::toolAct( QAction *act )
             flag_hold_checked = true;
         }
         status_hold = act->isChecked();
-        rectItems.clear();
+        if( rectItems.size() ) rectItems.clear();
         w->update();
     }
     if( act->objectName() == "cursor" )
@@ -838,7 +878,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     QColor color;
                     double alpha, color_r, color_g, color_b;
                     QRgb rgb;
-                    QPointF drw_pnt;
+                    QPointF drw_pnt,drw_pnt1;
                     QPen im_pen;
                     im_y = yMin;
                     //-- Calculating the resulting color of the image and drawing the scaled and rotated points of it into the inundation path --
@@ -849,7 +889,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         {
                             if( in_path.contains( QPointF(im_x, im_y) ) )
                             {
-                                rgb = im.pixel ( (int)TSYS::realRound(im_x - xMin),  (int)TSYS::realRound(im_y - yMin) );
+                                rgb = im.pixel ( (int)TSYS::realRound( im_x - xMin, 2, true ),  (int)TSYS::realRound( im_y - yMin, 2, true ) );
                                 alpha = (double)((rgb>>24)&0xff)/255;
                                 color_r = alpha*((rgb>>16)&0xff) + (1-alpha)*inundationItems[i].brush.color().red();
                                 color_g = alpha*((rgb>>8)&0xff) + (1-alpha)*inundationItems[i].brush.color().green();
@@ -857,8 +897,11 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                 im_pen.setColor ( QColor((int)(color_r), (int)(color_g), (int)(color_b) ) );
                                 pnt.setPen( im_pen );
                                 drw_pnt = unScaleRotate( QPointF( im_x, im_y ), view, flag_scale, false );
-                                pnt.drawPoint( QPointF( (int)TSYS::realRound(scaleRotate( drw_pnt, view, flag_scale, flag_rotate ).x(), 2, true),
-                                               (int)TSYS::realRound(scaleRotate( drw_pnt, view, flag_scale, flag_rotate ).y(), 2, true) ) );
+                                drw_pnt1 = QPointF( scaleRotate( drw_pnt, view, true, true ).x(),
+                                                    scaleRotate( drw_pnt, view, true, true ).y() ) ;
+
+                                pnt.drawPoint( QPointF( (int)TSYS::realRound( drw_pnt1.x(), 2, true),
+                                               (int)TSYS::realRound( drw_pnt1.y(), 2, true) ) );
                             }
                             im_x += 0.7;// 0.7 - to avoid the free points, wich happen during the rotation of the image
                         }
@@ -877,7 +920,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
             //- Drawing all el_figures -
             for( int k=0; k < shapeItems.size(); k++ )
             {
-                
                 pnt.setBrush( shapeItems[k].brush );
                 pnt.setPen( shapeItems[k].pen );
                 pnt.drawPath( shapeItems[k].path );
@@ -889,7 +931,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
             pnt.setRenderHint( QPainter::Antialiasing, false );
             if( devW && devW->edit() )
             {
-                for( int k=0; k <= rectItems.size()-1; k++ )
+                for( int k = 0; k < rectItems.size(); k++ )
                 {
                     pnt.setBrush( rectItems[k].brush );
                     pnt.setPen( rectItems[k].pen );
@@ -1004,7 +1046,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                 itemInMotion = 0;
 				count_Shapes = 0;
                             }
-                            rectItems.clear();
+                            if( rectItems.size() ) rectItems.clear();
                             view->repaint();
                         }
                     }
@@ -1075,7 +1117,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                             break;
                                         }
                                     if( !fl_brk )
-                                        inundationItems.push_back(inundationItem(inundationPath,fill_brush,fill_img_brush, inundation_vector));
+                                        inundationItems.push_back(inundationItem(inundationPath,fill_brush,fill_img_brush, inundation_vector, inundation_vector));
                                 }
                             }
                             inundation_vector.clear();
@@ -1322,9 +1364,10 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             flag_ctrl = false;
                             count_Shapes = 0;
                             count_holds = 0;
-                            index_array.clear();
-                            if( count_rects && !flag_arc_rect_3_4 && flag_rect ) rect_array.clear();
-                            if( count_rects && flag_arc_rect_3_4 )
+                            if ( index_array.size() )
+                                index_array.clear();
+                            if( count_rects && !flag_arc_rect_3_4 && flag_rect && rect_array.size() ) rect_array.clear();
+                            if( count_rects && flag_arc_rect_3_4 && arc_rect_array.size() && fig_rect_array.size() )
                             {
                                 arc_rect_array.clear();
                                 fig_rect_array.clear();
@@ -1794,7 +1837,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     }
                 }
             }
-    	    return true;
+            return true;
         }
         case QEvent::KeyPress:
         {
@@ -2011,8 +2054,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
             }
         }
 	break;
-    }
-
+    } 
     return false;
 } 
 
@@ -2054,6 +2096,7 @@ double ShapeElFigure::length( const QPointF &pt1, const QPointF &pt2 )
 //- moving the figure -
 void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeItems, PntMap *pnts, WdgView *view )
 {
+    DevelWdgView *devW = qobject_cast<DevelWdgView*>(view);
     ShapeItem temp_shape;
     double ang_t;
     double a, a_small, b, b_small;
@@ -2128,16 +2171,6 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
         }
         else
         {
-            StartMotionPos = (*pnts)[itemInMotion->n1];
-            EndMotionPos = (*pnts)[itemInMotion->n2];
-            /*line2 = QLineF( StartMotionPos, QPointF( StartMotionPos.x() + 10, StartMotionPos.y() ) );
-            line1 = QLineF( StartMotionPos, EndMotionPos );
-            if ( StartMotionPos.y() <= EndMotionPos.y() ) ang = 360 - angle( line1, line2 );
-            else ang = angle( line1, line2 );
-            EndMotionPos = unRotate( EndMotionPos, ang, StartMotionPos.x(), StartMotionPos.y() );
-            EndMotionPos.setX( EndMotionPos.x() + 1 );
-            EndMotionPos = QPointF( StartMotionPos.x() + rotate(EndMotionPos, ang).x(), StartMotionPos.y() - rotate(EndMotionPos, ang).y() );*/
-            
             StartMotionPos = scaleRotate( (*pnts)[itemInMotion->n1], view, flag_scale, flag_rotate );
             EndMotionPos = scaleRotate( (*pnts)[itemInMotion->n2], view, flag_scale, flag_rotate );
             StartMotionPos += offset;
@@ -2404,7 +2437,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
         }
     }
     //- moving the third control point of the figure -
-    if (rect_num==4)
+    if ( rect_num == 4 )
     {
         view->mainWin()->statusBar()->showMessage(QString(_("Coordinates(x,y): (%1, %2)")).
                 arg((*pnts)[itemInMotion->n5].x()).arg((*pnts)[itemInMotion->n5].y()), 10000 );
@@ -2438,27 +2471,24 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
         line1 = QLineF( StartMotionPos, EndMotionPos );
         if ( StartMotionPos.y() <= EndMotionPos.y() ) ang = 360 - angle( line1, line2 );
         else ang = angle( line1, line2 );
-        
-       
-       /* EndMotionPos = unRotate( EndMotionPos, ang, StartMotionPos.x(), StartMotionPos.y() );
-        EndMotionPos.setX( EndMotionPos.x() + 1 );
-        EndMotionPos = QPointF( StartMotionPos.x() + rotate(EndMotionPos, ang).x(), StartMotionPos.y() - rotate(EndMotionPos, ang).y() );*/
-        
         if( MotionWidth == 1 && MotionBorderWidth == 0 )
             shapeItems.append( ShapeItem( painterPath( MotionWidth+1,MotionBorderWidth, 1, ang, StartMotionPos, EndMotionPos ), painterPathSimple( 1, ang, StartMotionPos,EndMotionPos ),
                                MotionNum_1, MotionNum_2, -1, -1, -1, QPointF(0,0), MotionBrush, MotionPen, MotionPenSimple, MotionWidth, MotionBorderWidth, 1,angle_temp ) );
         else
             shapeItems.append( ShapeItem( painterPath( MotionWidth,MotionBorderWidth, 1, ang, StartMotionPos, EndMotionPos ), painterPathSimple( 1, ang, StartMotionPos,EndMotionPos ),
                                MotionNum_1, MotionNum_2, -1, -1, -1, QPointF(0,0), MotionBrush, MotionPen, MotionPenSimple, MotionWidth, MotionBorderWidth, 1,angle_temp ) );
-        rectPath.addRect( QRectF( QPointF( StartMotionPos.x()-4, StartMotionPos.y()-4 ), QSize(8,8) ) );
+        if( devW && devW->edit() )
+        {
+            rectPath.addRect( QRectF( QPointF( StartMotionPos.x()-4, StartMotionPos.y()-4 ), QSize(8,8) ) );
 	
-        rectItems.append( RectItem( rectPath, MotionNum_1, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ),
-                          QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin) ) );
-        rectPath = newPath;
-        rectPath.addRect( QRectF( QPointF( EndMotionPos.x()-4, EndMotionPos.y()-4 ), QSize(8,8)) );
-        rectItems.append( RectItem( rectPath, MotionNum_2, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ),
-                          QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin ) ) );
-        rectPath = newPath;
+            rectItems.append( RectItem( rectPath, MotionNum_1, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ),
+                              QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin) ) );
+            rectPath = newPath;
+            rectPath.addRect( QRectF( QPointF( EndMotionPos.x()-4, EndMotionPos.y()-4 ), QSize(8,8)) );
+            rectItems.append( RectItem( rectPath, MotionNum_2, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ),
+                              QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin ) ) );
+            rectPath = newPath;
+        }
         StartMotionPos = unScaleRotate( StartMotionPos, view, flag_scale, flag_rotate );
         EndMotionPos = unScaleRotate( EndMotionPos, view, flag_scale, flag_rotate );
         (*pnts).insert( MotionNum_1, StartMotionPos );
@@ -2481,27 +2511,30 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
             shapeItems.append( ShapeItem( painterPath( MotionWidth, MotionBorderWidth, 2, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4 ),
                                painterPathSimple( 2, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4 ),
                                        MotionNum_1, MotionNum_2, MotionNum_3, MotionNum_4, MotionNum_5, CtrlMotionPos_4, MotionBrush,MotionPen, MotionPenSimple, MotionWidth, MotionBorderWidth, 2, angle_temp ) );
-        rectPath.addRect( QRectF( QPointF( StartMotionPos.x() - 4, StartMotionPos.y() - 4 ),QSize(8,8) ) );
-        rectItems.append( RectItem( rectPath, MotionNum_1, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ),
-                          QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin ) ) );
-        rectPath = newPath;
-        rectPath.addRect( QRectF( QPointF( EndMotionPos.x() - 4, EndMotionPos.y() - 4 ), QSize(8,8) ) );
-        rectItems.append( RectItem( rectPath, MotionNum_2, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ),
-                          QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin) ) );
-        rectPath = newPath;
-        rectPath.addRect( QRectF( CtrlMotionPos_1.toPoint(), QSize(8,8) ) );
-        rectItems.append( RectItem( rectPath, MotionNum_3, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ), 
-                          QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin ) ) );
-        rectPath = newPath;
-        rectPath.addRect( QRectF( QPointF( CtrlMotionPos_2.x() - 4, CtrlMotionPos_2.y() - 4), QSize(8,8) ) );
-        rectItems.append( RectItem( rectPath, MotionNum_4, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ), 
-                          QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin) ) );
-        rectPath = newPath;
-        Temp = QPointF( CtrlMotionPos_3.x() - 20, CtrlMotionPos_3.y() - 4);
-        rectPath.addRect( QRectF( Temp, QSize(8,8) ) );
-        rectItems.append( RectItem( rectPath, MotionNum_5, QBrush( QColor( 0, 0, 0, 255) ,Qt::SolidPattern ), 
-                          QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin ) ) );
-        rectPath = newPath;
+        if( devW && devW->edit() )
+        {
+            rectPath.addRect( QRectF( QPointF( StartMotionPos.x() - 4, StartMotionPos.y() - 4 ),QSize(8,8) ) );
+            rectItems.append( RectItem( rectPath, MotionNum_1, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ),
+                              QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin ) ) );
+            rectPath = newPath;
+            rectPath.addRect( QRectF( QPointF( EndMotionPos.x() - 4, EndMotionPos.y() - 4 ), QSize(8,8) ) );
+            rectItems.append( RectItem( rectPath, MotionNum_2, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ),
+                              QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin) ) );
+            rectPath = newPath;
+            rectPath.addRect( QRectF( CtrlMotionPos_1.toPoint(), QSize(8,8) ) );
+            rectItems.append( RectItem( rectPath, MotionNum_3, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ), 
+                              QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin ) ) );
+            rectPath = newPath;
+            rectPath.addRect( QRectF( QPointF( CtrlMotionPos_2.x() - 4, CtrlMotionPos_2.y() - 4), QSize(8,8) ) );
+            rectItems.append( RectItem( rectPath, MotionNum_4, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ), 
+                              QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin) ) );
+            rectPath = newPath;
+            Temp = QPointF( CtrlMotionPos_3.x() - 20, CtrlMotionPos_3.y() - 4);
+            rectPath.addRect( QRectF( Temp, QSize(8,8) ) );
+            rectItems.append( RectItem( rectPath, MotionNum_5, QBrush( QColor( 0, 0, 0, 255) ,Qt::SolidPattern ), 
+                              QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin ) ) );
+            rectPath = newPath;
+        }
         
         StartMotionPos = unScaleRotate( StartMotionPos, view, flag_scale, flag_rotate );
         EndMotionPos = unScaleRotate( EndMotionPos, view, flag_scale, flag_rotate );
@@ -2531,22 +2564,25 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
             shapeItems.append( ShapeItem( painterPath( MotionWidth, MotionBorderWidth, 3, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2 ),
                                painterPathSimple( 3, ang,StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2 ),
                                        MotionNum_1, MotionNum_2, MotionNum_3, MotionNum_4, -1, QPointF(0,0), MotionBrush, MotionPen, MotionPenSimple, MotionWidth, MotionBorderWidth, 3, angle_temp ) );
-        rectPath.addRect( QRectF( QPointF( StartMotionPos.x() - 4, StartMotionPos.y() - 4), QSize(8,8) ) );
-        rectItems.append( RectItem( rectPath, MotionNum_1, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ),
-                          QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin ) ) );
-        rectPath = newPath;
-        rectPath.addRect( QRectF( QPointF( EndMotionPos.x() - 4, EndMotionPos.y() - 4 ), QSize(8,8) ) );
-        rectItems.append( RectItem( rectPath, MotionNum_2, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ),
-                          QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin ) ) );
-        rectPath = newPath;
-        rectPath.addRect( QRectF( CtrlMotionPos_1.toPoint(), QSize(8,8) ) );
-        rectItems.append( RectItem( rectPath, MotionNum_3, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ),
-                          QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin ) ) );
-        rectPath = newPath;
-        rectPath.addRect( QRectF( CtrlMotionPos_2.toPoint(), QSize(8,8) ) );
-        rectItems.append( RectItem( rectPath, MotionNum_4, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ),
-                          QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin ) ) );
-        rectPath = newPath;
+        if( devW && devW->edit() )
+        {
+            rectPath.addRect( QRectF( QPointF( StartMotionPos.x() - 4, StartMotionPos.y() - 4), QSize(8,8) ) );
+            rectItems.append( RectItem( rectPath, MotionNum_1, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ),
+                              QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin ) ) );
+            rectPath = newPath;
+            rectPath.addRect( QRectF( QPointF( EndMotionPos.x() - 4, EndMotionPos.y() - 4 ), QSize(8,8) ) );
+            rectItems.append( RectItem( rectPath, MotionNum_2, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ),
+                              QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin ) ) );
+            rectPath = newPath;
+            rectPath.addRect( QRectF( CtrlMotionPos_1.toPoint(), QSize(8,8) ) );
+            rectItems.append( RectItem( rectPath, MotionNum_3, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ),
+                              QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin ) ) );
+            rectPath = newPath;
+            rectPath.addRect( QRectF( CtrlMotionPos_2.toPoint(), QSize(8,8) ) );
+            rectItems.append( RectItem( rectPath, MotionNum_4, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ),
+                              QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin ) ) );
+            rectPath = newPath;
+        }
         StartMotionPos = unScaleRotate( StartMotionPos, view, flag_scale, flag_rotate );
         EndMotionPos = unScaleRotate( EndMotionPos, view, flag_scale, flag_rotate );
         CtrlMotionPos_1 = unScaleRotate( CtrlMotionPos_1, view, flag_scale, flag_rotate );
@@ -3415,7 +3451,7 @@ bool ShapeElFigure::inundation1_2( const QPointF &point, const QVector<ShapeItem
                     if( !fl_brk )
                     {
                         if( number == -1 )
-                            inundationItems.push_back( inundationItem( inundationPath_1_2, fill_brush, fill_img_brush, in_fig_num ) );
+                            inundationItems.push_back( inundationItem( inundationPath_1_2, fill_brush, fill_img_brush, in_fig_num, in_fig_num ) );
                         else
                         {
                             if( !flag_scale && !flag_rotate )
@@ -3461,7 +3497,7 @@ bool ShapeElFigure::inundation1_2( const QPointF &point, const QVector<ShapeItem
                             if( !fl_brk )
                             {
                                 if( number == -1 )
-                                    inundationItems.push_back( inundationItem( inundationPath_1_2, fill_brush, fill_img_brush, in_fig_num ) );
+                                    inundationItems.push_back( inundationItem( inundationPath_1_2, fill_brush, fill_img_brush, in_fig_num, in_fig_num ) );
                                 else
                                 {
                                     if( !flag_scale && !flag_rotate )
