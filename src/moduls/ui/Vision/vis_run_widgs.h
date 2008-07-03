@@ -61,7 +61,7 @@ namespace VISION
 	    WdgView *newWdgItem( const string &iwid );
 	    void attrLoad( QMap<QString, QString> &attrs );
 
-	    void update( unsigned cnt, int div_max, const string &wpath = "" );
+	    void update( bool full, const string &wpath = "" );
 	    bool attrSet( const string &attr, const string &val, int uiPrmPos = 0 );
 
 	protected:
@@ -74,7 +74,6 @@ namespace VISION
 	private:
 	    //- Attributes -
 	    unsigned	reqtm;		//Request values time
-	    int		curDiv;		//Current divider
 	    bool	mPermCntr;	//Control widget's permition
 	    bool	mPermView;	//View widget's permition
     };

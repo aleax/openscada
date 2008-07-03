@@ -45,7 +45,6 @@ RunWdgView::RunWdgView( const string &iwid, int ilevel, VisRun *mainWind, QWidge
     string lstEl = iwid.substr(endElSt+1);
     if( lstEl.size() > 4 && lstEl.substr(0,4) == "wdg_" ) setObjectName(lstEl.substr(4).c_str());
     if( lstEl.size() > 3 && lstEl.substr(0,3) == "pg_" )  setObjectName(lstEl.substr(3).c_str());
-    curDiv = vmax(1,1000/mainWin()->period());
 }
 
 RunWdgView::~RunWdgView( )
@@ -89,54 +88,48 @@ WdgView *RunWdgView::newWdgItem( const string &iwid )
     return new RunWdgView(iwid,wLevel()+1,mainWin(),this);
 }
 
-void RunWdgView::update( unsigned cnt, int div_max, const string &wpath )
+void RunWdgView::update( bool full, const string &wpath )
 {
     if( !wpath.empty() )
     {
 	int off = 0;
 	RunWdgView *wdg = findChild<RunWdgView*>(TSYS::pathLev(wpath,0,true,&off).c_str());
-	if( wdg ) wdg->update(1,0,wpath.substr(off));
+	if( wdg ) wdg->update(false,wpath.substr(off));
 	return;
     }
 
     //- Request to widget for last attributes -
-    if( !div_max || !((cnt+(unsigned)wLevel())%curDiv) )
-    {
 	bool change = false;
 	XMLNode *req_el;
 	XMLNode req("get");
 	req.setAttr("path",id()+"/%2fserv%2fattr")->
-	    setAttr("tm",TSYS::uint2str(cnt?reqtm:0));
+	    setAttr("tm",TSYS::uint2str(full?0:reqtm));
 	if( !cntrIfCmd(req) )
 	{
-	    if( !cnt )	setAllAttrLoad(true);
+	    if( full )	setAllAttrLoad(true);
 	    for( int i_el = 0; i_el < req.childSize(); i_el++ )
 	    {
 		req_el = req.childGet(i_el);
 		if( attrSet("",req_el->text(),atoi(req_el->attr("pos").c_str())) )
 		    change = true;
 	    }
-	    if( !cnt )
+	    if( full )
 	    {
 		setAllAttrLoad(false);
 		attrSet("","load",-1);
 		//- Childs update for permition change -
 		childsUpdate(true);
 		orderUpdate();
+		QWidget::update();
 	    }
 	    reqtm = strtoul(req.attr("tm").c_str(),0,10);
-
 	}
-	//-- Update divider --
-	if( curDiv > 1 && change )		curDiv--;
-	if( curDiv < div_max && !change )	curDiv++;
-    }
 
     //- Call childs for update -
-    if( div_max || !cnt )
+    if( full )
 	for( int i_c = 0; i_c < children().size(); i_c++ )
 	    if( qobject_cast<RunWdgView*>(children().at(i_c)) && ((RunWdgView*)children().at(i_c))->isEnabled() )
-		((RunWdgView*)children().at(i_c))->update(cnt,div_max);
+		((RunWdgView*)children().at(i_c))->update(full);
 }
 
 void RunWdgView::childsUpdate( bool newLoad )

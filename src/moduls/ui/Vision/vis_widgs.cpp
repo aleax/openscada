@@ -779,27 +779,51 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
     switch(uiPrmPos)
     {
 	case 0:	return false;
+	case -1:
+	    if( allAttrLoad( ) )	break;
+	    moveF(posF());
+	    resizeF(sizeF());
+	    break;
 	case 7:
-	    if( wLevel( ) == 0 )break;
-	    moveF(QPointF(((WdgView*)parentWidget())->xScale(true)*atof(val.c_str()),posF().y()));
+	    if( wLevel( ) == 0 )	break;
+	    w_pos = QPointF(((WdgView*)parentWidget())->xScale(true)*atof(val.c_str()),posF().y());
+	    if( !allAttrLoad( ) )	moveF(posF());
+	    //moveF(QPointF(((WdgView*)parentWidget())->xScale(true)*atof(val.c_str()),posF().y()));
 	    break;
 	case 8:
-	    if( wLevel( ) == 0 )break;
-	    moveF(QPointF(posF().x(),((WdgView*)parentWidget())->yScale(true)*atof(val.c_str())));
+	    if( wLevel( ) == 0 )	break;
+	    w_pos = QPointF(posF().x(),((WdgView*)parentWidget())->yScale(true)*atof(val.c_str()));
+	    if( !allAttrLoad( ) )	moveF(posF());
+	    //moveF(QPointF(posF().x(),((WdgView*)parentWidget())->yScale(true)*atof(val.c_str())));
 	    break;
-	case 9:	resizeF(QSizeF(xScale(true)*atof(val.c_str()),sizeF().height()));	break;
-	case 10:resizeF(QSizeF(sizeF().width(),yScale(true)*atof(val.c_str())));	break;
-	case 11:if(wLevel( )>0) z_coord = atoi(val.c_str());				break;
+	case 9:
+	    w_size = QSizeF(xScale(true)*atof(val.c_str()),sizeF().height());
+	    if( !allAttrLoad( ) )	resizeF(sizeF());
+	    //resizeF(QSizeF(xScale(true)*atof(val.c_str()),sizeF().height()));
+	    break;
+	case 10:
+	    w_size = QSizeF(sizeF().width(),yScale(true)*atof(val.c_str()));
+	    if( !allAttrLoad( ) )	resizeF(sizeF());
+	    //resizeF(QSizeF(sizeF().width(),yScale(true)*atof(val.c_str())));
+	    break;
+	case 11: if(wLevel( )>0) z_coord = atoi(val.c_str());	break;
 	case 13:
-	    resizeF(QSizeF((atof(val.c_str())/x_scale)*sizeF().width(),sizeF().height()));
+	    w_size = QSizeF((atof(val.c_str())/x_scale)*sizeF().width(),sizeF().height());
+	    //resizeF(QSizeF((atof(val.c_str())/x_scale)*sizeF().width(),sizeF().height()));
 	    x_scale = atof(val.c_str());
+	    if( !allAttrLoad( ) )	resizeF(sizeF());
 	    break;
 	case 14:
-	    resizeF(QSizeF(sizeF().width(),(atof(val.c_str())/y_scale)*sizeF().height()));
+	    w_size = QSizeF(sizeF().width(),(atof(val.c_str())/y_scale)*sizeF().height());
+	    //resizeF(QSizeF(sizeF().width(),(atof(val.c_str())/y_scale)*sizeF().height()));
 	    y_scale = atof(val.c_str());
+	    if( !allAttrLoad( ) )	resizeF(sizeF());
 	    break;
     }
-    return shape ? shape->attrSet(this,uiPrmPos,val) : true;
+
+    if( shape )	return shape->attrSet(this,uiPrmPos,val);
+
+    return true;
 }
 
 string WdgView::resGet( const string &res )
@@ -815,8 +839,8 @@ void WdgView::load( const string& item, bool load, bool init )
 {
     //printf("TEST 00: Load: %s (%d:%d)\n",id().c_str(),load,init);
 
-    unsigned long long t_cnt;
-    if( wLevel() == 0 ) t_cnt = SYS->shrtCnt();
+    //unsigned long long t_cnt;
+    //if( wLevel() == 0 ) t_cnt = SYS->shrtCnt();
 
     //- Load from data model -
     if( load )
@@ -830,7 +854,7 @@ void WdgView::load( const string& item, bool load, bool init )
 	    //-- Request the widget for last attributes --
 	    XMLNode req("get");
 	    req.setAttr("path",id()+"/%2fserv%2fattr");
-	    if( !cntrIfCmd(req) )
+	    if( !cntrIfCmd(req) /*&& id().substr(0,48) != "/ses_Kotel9/pg_so/pg_1/pg_mn/pg_Test_1_arc_in_11"*/ )
 		for( int i_el = 0; i_el < req.childSize(); i_el++ )
 		    attrSet("",req.childGet(i_el)->text(),atoi(req.childGet(i_el)->attr("pos").c_str()));
 	}
@@ -854,7 +878,7 @@ void WdgView::load( const string& item, bool load, bool init )
     //- Post load init for root widget -
     if( wLevel() == 0 )
     {
-	//printf("TEST 01: Load '%s' time %fms\n",item.c_str(),1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk()));
+	//printf("TEST 01: Load '%s' time %fms\n",id().c_str(),1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk()));
 	//t_cnt = SYS->shrtCnt();
 
 	attrSet("","load",-1);
@@ -866,7 +890,7 @@ void WdgView::load( const string& item, bool load, bool init )
 	}
 	update();
 
-	//printf("TEST 02: Init '%s' time %fms\n",item.c_str(),1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk()));
+	//printf("TEST 02: Init '%s' time %fms\n",id().c_str(),1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk()));
     }
 }
 

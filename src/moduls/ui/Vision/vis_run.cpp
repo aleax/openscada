@@ -268,7 +268,7 @@ void VisRun::resizeEvent( QResizeEvent *ev )
 	    x_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().width()/(float)master_pg->size().width();
 	    y_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().height()/(float)master_pg->size().height();
 	}else x_scale = y_scale = 1.0;
-	if( x_scale_old != x_scale || y_scale_old != y_scale )	master_pg->update(0,0);
+	if( x_scale_old != x_scale || y_scale_old != y_scale )	master_pg->update(true);
     }
 }
 
@@ -309,7 +309,7 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
 
     //- Update pages after user change -
     pgCacheClear();
-    if( master_pg )	master_pg->update(0,0);
+    if( master_pg )	master_pg->update(true);
 }
 
 void VisRun::aboutQt()
@@ -459,6 +459,7 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
     if( !cntrIfCmd(req) )
 	for( int i_ch = 0; i_ch < req.childSize(); i_ch++ )
 	    callPage(req.childGet(i_ch)->text());
+    reqtm = strtoul(req.attr("tm").c_str(),NULL,10);
 
     //- Open direct-selected page -
     if( !TSYS::pathLev(prj_it,1).empty() )
@@ -496,7 +497,7 @@ void VisRun::callPage( const string& pg_it, XMLNode *upw )
 	    {
 		stmp = upw->childGet(i_p)->text();
 		TSYS::pathLev(stmp,0,true,&off);
-		pg->update(1,0,stmp.substr(off));
+		pg->update(false,stmp.substr(off));
 	    }
 	if( pg ) return;
     }
@@ -534,7 +535,7 @@ void VisRun::callPage( const string& pg_it, XMLNode *upw )
     else master_pg->callPage(pg_it,pgGrp,pgSrc);
 
     //- Update widgets of now opened page -
-    if( upw && master_pg )
+    if( upw && upw->childSize() && master_pg )
     {
 	RunPageView *pg = master_pg->findOpenPage(pg_it);
 	if( !pg || pg->reqTm() == reqtm ) return;
@@ -548,7 +549,7 @@ void VisRun::callPage( const string& pg_it, XMLNode *upw )
 		    {
 			stmp = req.childGet(i_ch)->childGet(i_p)->text();
 			TSYS::pathLev(stmp,0,true,&off);
-			pg->update(1,0,stmp.substr(off));
+			pg->update(false,stmp.substr(off));
 		    }
 		    break;
 		}

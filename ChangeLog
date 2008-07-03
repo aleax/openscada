@@ -1,3 +1,8 @@
+2008-07-03 Maxim,Roman
+- FIX:/UI/Vision: Widget's update function fixed.
+- FIX:/UI/Vision: ElFigure update view on atributes change is fixed.
+
+
 2008-07-03 Roman
 - /UI/Vision: Make image from development pages is added. Use for make screenshots and rasterizing for WEB-interfaces performance raise.
 

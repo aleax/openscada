@@ -85,6 +85,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
     QPainterPath circlePath;
     QVector<inundationItem> inundationItems_temp;
     QVector<ShapeItem> shapeItems_temp;
+
     switch( uiPrmPos )
     {
 	case -1:	//load
@@ -584,6 +585,9 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
         if( rectItems.size() )	rectItems.clear();
         flag_ctrl    = false;
     }
+
+    if( up && !w->allAttrLoad( ) && uiPrmPos != -1 ) w->update();
+
     return up;
 }
 
