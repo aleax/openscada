@@ -1,6 +1,10 @@
+2008-07-03 Roman
+- /UI/Vision: Make image from development pages is added. Use for make screenshots and rasterizing for WEB-interfaces performance raise.
+
+
 2008-07-02 Maxim
 - /UI/Vision: Tuning of the repainting and setting of the attributes for primitive "ElFigure" is done.
-- /UI/WebVision:Scaling and rotating of the image when filling with it the primitive "ElFigure" is added.
+- /UI/WebVision: Scaling and rotating of the image when filling with it the primitive "ElFigure" is added.
 
 
 2008-07-01 Roman

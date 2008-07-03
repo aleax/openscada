@@ -500,6 +500,7 @@ class DevelWdgView: public WdgView
 	void saveGeom( const string& item );
 	void wdgPopup( );
 	void makeIcon( );
+	void makeImage( );
 	void editEnter( );
 	void editExit( );
 

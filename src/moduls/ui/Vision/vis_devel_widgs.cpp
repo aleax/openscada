@@ -45,6 +45,7 @@
 #include <QPushButton>
 #include <QFontDialog>
 #include <QColorDialog>
+#include <QFileDialog>
 
 #include <tsys.h>
 
@@ -2064,6 +2065,12 @@ void DevelWdgView::wdgPopup( )
 	actMakeIco->setStatusTip(_("Press for make icon from widget."));
 	connect(actMakeIco, SIGNAL(activated()), this, SLOT(makeIcon()));
 	popup.addAction(actMakeIco);
+	//-- Make widget image --
+	QAction *actMakeImg = new QAction(_("Make image from widget"),this);
+	actMakeImg->setStatusTip(_("Press for make image from widget."));
+	connect(actMakeImg, SIGNAL(activated()), this, SLOT(makeImage()));
+	popup.addAction(actMakeImg);
+
 	popup.addSeparator();
 	popup.addAction(mainWin()->actVisItCut);
 	popup.addAction(mainWin()->actVisItCopy);
@@ -2096,6 +2103,17 @@ void DevelWdgView::makeIcon( )
     if( mainWin()->cntrIfCmd(req) )
 	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
     else emit apply(id());
+}
+
+void DevelWdgView::makeImage( )
+{
+    QPixmap img = QPixmap::grabWidget(this);
+
+    //- Call save file dialog -
+    QString fileName = QFileDialog::getSaveFileName(this,_("Save widget's image"),
+	(TSYS::path2sepstr(id())+".png").c_str(), _("Images (*.png *.xpm *.jpg)"));
+    if( !fileName.isEmpty() && !img.save(fileName) )
+	mod->postMess(mod->nodePath().c_str(),QString(_("Save to file '%1' is error.")).arg(fileName),TVision::Error,this);
 }
 
 void DevelWdgView::editEnter( )
