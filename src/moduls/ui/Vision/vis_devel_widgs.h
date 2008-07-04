@@ -457,20 +457,6 @@ class DevelWdgView: public WdgView
     Q_OBJECT
 
     public:
-	//Data
-	enum DevelFlgs
-	{
-	    makeScale	= 0x01,		//Make visual item scaling
-	    wdgEdit	= 0x02,		//Widget under edition
-	    wdgSelect	= 0x04,		//Widget is selected
-	    moveHold	= 0x08,		//Mouse move hold state
-	    holdChild	= 0x10,		//Hold child widget in time of moving and resizing
-	    leftTop	= 0x20,		//Left top anchors
-	    holdSelRect	= 0x40,		//Hold for select rect
-	    moveHoldMove= 0x80,		//Mouse move on hold
-	    hideChilds  = 0x100		//Hide childs on move
-	};
-
 	//Public methods
 	DevelWdgView( const string &iwid, int ilevel, VisDevelop *mainWind, QWidget* parent = 0 );
 	~DevelWdgView( );
@@ -478,10 +464,9 @@ class DevelWdgView: public WdgView
 	string user( );
 	VisDevelop *mainWin( );
 
-	short int flags( )	{ return m_flgs; }
-	bool select( )		{ return m_flgs&wdgSelect; }	//Select widget state
+	bool select( )		{ return fWdgSelect; }		//Select widget state
 	string selectChilds( int *cnt = NULL, vector<DevelWdgView*> *wdgs = NULL );	//Get selected include widgets list
-	bool edit( )		{ return m_flgs&wdgEdit; }	//Edit mode state
+	bool edit( )		{ return fWdgEdit; }		//Edit mode state
 
 	void setSelect( bool vl, bool childs = true );
 	void setEdit( bool vl );
@@ -515,7 +500,16 @@ class DevelWdgView: public WdgView
 	void upMouseCursors( const QPoint &pnt );
 
 	//Private attributes
-	short int	m_flgs;		//Developmen flags
+	short int	fMakeScale	:1;	//Make visual item scaling
+	short int	fWdgEdit	:1;	//Widget under edition
+	short int	fWdgSelect	:1;	//Widget is selected
+	short int	fMoveHold	:1;	//Mouse move hold state
+	short int	fHoldChild	:1;	//Hold child widget in time of moving and resizing
+	short int	fLeftTop	:1;	//Left top anchors
+	short int	fHoldSelRect	:1;	//Hold for select rect
+	short int	fMoveHoldMove	:1;	//Mouse move on hold
+	short int	fHideChilds	:1;	//Hide childs on move
+
 	QPoint		holdPnt;	//Hold move point
 	SizePntWdg	*pntView;	//Point view
 	DevelWdgView	*editWdg;

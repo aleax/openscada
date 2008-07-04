@@ -85,7 +85,7 @@ namespace VISION
     {
 	Q_OBJECT
 
-        public:
+	public:
 	    //- Public methods -
 	    RunPageView( const string &iwid, VisRun *mainWind, QWidget* parent = 0, Qt::WindowFlags f = 0 );
 	    ~RunPageView( );

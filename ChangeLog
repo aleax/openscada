@@ -1,3 +1,11 @@
+2008-07-04 Roman
+- !:/UI/Vision: Flags of development widgets write form changed.
+- !:/UI/Vision: The individual shape data store mechanism changed and make performance optimal.
+- !:/UI/Vision: Geometry parameters loading make optimal.
+- FIX:/UI/Vision: The big widgets' load time is fixed into empty resource get function.
+- !:/UI/WebVision: Automatic scroll enable on big mnemo support is added.
+
+
 2008-07-03 Maxim,Roman
 - FIX:/UI/Vision: Widget's update function fixed.
 - FIX:/UI/Vision: ElFigure update view on atributes change is fixed.

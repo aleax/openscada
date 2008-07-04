@@ -719,7 +719,7 @@ void TextEdit::cancelSlot( )
 //****************************************
 WdgView::WdgView( const string &iwid, int ilevel, QMainWindow *mainWind, QWidget *parent, Qt::WindowFlags f ) :
     QWidget(parent,f), idWidget(iwid), shape(NULL), w_level(ilevel), main_win(mainWind),
-    x_scale(1.0), y_scale(1.0), z_coord(0), all_attr_load(false)
+    x_scale(1.0), y_scale(1.0), z_coord(0), all_attr_load(false), shpData(NULL)
 {
     //setAttribute(Qt::WA_OpaquePaintEvent,true);
 }
@@ -776,50 +776,44 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 	req.childAdd("el")->setAttr("id",attr)->setText(val);
 	cntrIfCmd(req);
     }
-    switch(uiPrmPos)
+    bool up = false;
+    switch( uiPrmPos )
     {
-	case 0:	return false;
 	case -1:
-	    if( allAttrLoad( ) )	break;
-	    moveF(posF());
-	    resizeF(sizeF());
+	    up = true;
 	    break;
+	case 0:	return false;
 	case 7:
 	    if( wLevel( ) == 0 )	break;
 	    w_pos = QPointF(((WdgView*)parentWidget())->xScale(true)*atof(val.c_str()),posF().y());
-	    if( !allAttrLoad( ) )	moveF(posF());
-	    //moveF(QPointF(((WdgView*)parentWidget())->xScale(true)*atof(val.c_str()),posF().y()));
+	    up = true;
 	    break;
 	case 8:
 	    if( wLevel( ) == 0 )	break;
 	    w_pos = QPointF(posF().x(),((WdgView*)parentWidget())->yScale(true)*atof(val.c_str()));
-	    if( !allAttrLoad( ) )	moveF(posF());
-	    //moveF(QPointF(posF().x(),((WdgView*)parentWidget())->yScale(true)*atof(val.c_str())));
+	    up = true;
 	    break;
 	case 9:
 	    w_size = QSizeF(xScale(true)*atof(val.c_str()),sizeF().height());
-	    if( !allAttrLoad( ) )	resizeF(sizeF());
-	    //resizeF(QSizeF(xScale(true)*atof(val.c_str()),sizeF().height()));
+	    up = true;
 	    break;
 	case 10:
 	    w_size = QSizeF(sizeF().width(),yScale(true)*atof(val.c_str()));
-	    if( !allAttrLoad( ) )	resizeF(sizeF());
-	    //resizeF(QSizeF(sizeF().width(),yScale(true)*atof(val.c_str())));
+	    up = true;
 	    break;
 	case 11: if(wLevel( )>0) z_coord = atoi(val.c_str());	break;
 	case 13:
 	    w_size = QSizeF((atof(val.c_str())/x_scale)*sizeF().width(),sizeF().height());
-	    //resizeF(QSizeF((atof(val.c_str())/x_scale)*sizeF().width(),sizeF().height()));
 	    x_scale = atof(val.c_str());
-	    if( !allAttrLoad( ) )	resizeF(sizeF());
+	    up = true;
 	    break;
 	case 14:
 	    w_size = QSizeF(sizeF().width(),(atof(val.c_str())/y_scale)*sizeF().height());
-	    //resizeF(QSizeF(sizeF().width(),(atof(val.c_str())/y_scale)*sizeF().height()));
 	    y_scale = atof(val.c_str());
-	    if( !allAttrLoad( ) )	resizeF(sizeF());
+	    up = true;
 	    break;
     }
+    if( up && !allAttrLoad( ) )	{ moveF(posF()); resizeF(sizeF()); }
 
     if( shape )	return shape->attrSet(this,uiPrmPos,val);
 
@@ -828,6 +822,8 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 
 string WdgView::resGet( const string &res )
 {
+    if( res.empty() )	return "";
+
     XMLNode req("get");
     req.setAttr("path",id()+"/%2fwdg%2fres")->setAttr("id",res);
     if( !cntrIfCmd(req) )	return TSYS::strDecode(req.text(),TSYS::base64);
@@ -839,8 +835,8 @@ void WdgView::load( const string& item, bool load, bool init )
 {
     //printf("TEST 00: Load: %s (%d:%d)\n",id().c_str(),load,init);
 
-    //unsigned long long t_cnt;
-    //if( wLevel() == 0 ) t_cnt = SYS->shrtCnt();
+    unsigned long long t_cnt;
+    if( wLevel() == 0 ) t_cnt = SYS->shrtCnt();
 
     //- Load from data model -
     if( load )
@@ -878,8 +874,8 @@ void WdgView::load( const string& item, bool load, bool init )
     //- Post load init for root widget -
     if( wLevel() == 0 )
     {
-	//printf("TEST 01: Load '%s' time %fms\n",id().c_str(),1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk()));
-	//t_cnt = SYS->shrtCnt();
+	printf("TEST 01: Load '%s' time %fms\n",id().c_str(),1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk()));
+	t_cnt = SYS->shrtCnt();
 
 	attrSet("","load",-1);
 	for( int i_c = 0; i_c < children().size(); i_c++ )
@@ -890,7 +886,7 @@ void WdgView::load( const string& item, bool load, bool init )
 	}
 	update();
 
-	//printf("TEST 02: Init '%s' time %fms\n",id().c_str(),1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk()));
+	printf("TEST 02: Init '%s' time %fms\n",id().c_str(),1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk()));
     }
 }
 

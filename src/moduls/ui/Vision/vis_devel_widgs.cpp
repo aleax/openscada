@@ -1655,7 +1655,9 @@ void WScaleStBar::mousePressEvent( QMouseEvent * event )
 //* Shape widget view development mode   *
 //****************************************
 DevelWdgView::DevelWdgView( const string &iwid, int ilevel, VisDevelop *mainWind, QWidget* parent ) :
-    WdgView(iwid,ilevel,mainWind,parent), pntView(NULL), editWdg(NULL), m_flgs(0)
+    WdgView(iwid,ilevel,mainWind,parent), pntView(NULL), editWdg(NULL),
+    fMakeScale(false), fWdgEdit(false), fWdgSelect(false), fMoveHold(false), fHoldChild(false), fLeftTop(false),
+    fHoldSelRect(false), fMoveHoldMove(false), fHideChilds(false)
 {
     setMouseTracking(true);
     if( wLevel() == 0 )
@@ -1747,8 +1749,7 @@ void DevelWdgView::setSelect( bool vl, bool childs )
 {
     int chld_cnt = 0;
 
-    if( vl )	m_flgs |= DevelWdgView::wdgSelect;
-    else	m_flgs &= ~DevelWdgView::wdgSelect;
+    fWdgSelect = vl;
     if( !vl && edit() ) setEdit(false);
 
     //- Level 0 process -
@@ -1784,8 +1785,7 @@ void DevelWdgView::setSelect( bool vl, bool childs )
 
 void DevelWdgView::setEdit( bool vl )
 {
-    if( vl )	m_flgs |= DevelWdgView::wdgEdit;
-    else	m_flgs &= ~DevelWdgView::wdgEdit;
+    fWdgEdit = vl;
 
     if( vl )
     {
@@ -1844,7 +1844,7 @@ bool DevelWdgView::grepAnchor( const QPointF &apnt, const QPoint &cpnt )
 
 void DevelWdgView::upMouseCursors( const QPoint &curp )
 {
-    if( m_flgs&DevelWdgView::moveHold ) return;
+    if( fMoveHold ) return;
 
     Qt::CursorShape new_shp = Qt::ArrowCursor;
     //- Widget geometry -
@@ -1856,14 +1856,14 @@ void DevelWdgView::upMouseCursors( const QPoint &curp )
 	new_shp = Qt::SizeVerCursor;
     if( new_shp != Qt::ArrowCursor )
     {
-	m_flgs &= ~DevelWdgView::holdChild;
+	fHoldChild = false;
 	if( new_shp != cursor().shape() ) setCursor(new_shp);
 	return;
     }
 
     //- Childs' selection process -
     //-- Check child's anchor selection and widget's geometry --
-    m_flgs &= ~DevelWdgView::leftTop;
+    fLeftTop = false;
     QRectF selRect;
     bool firs_nosel = true;
     for( int i_c = children().size()-1; i_c >= 0; i_c-- )
@@ -1884,24 +1884,24 @@ void DevelWdgView::upMouseCursors( const QPoint &curp )
     if( !selRect.isNull() )
     {
 	if( grepAnchor(selRect.topLeft(),curp) )
-	{ new_shp = Qt::SizeFDiagCursor; m_flgs |= DevelWdgView::leftTop; }
+	{ new_shp = Qt::SizeFDiagCursor; fLeftTop = true; }
 	else if( grepAnchor(selRect.bottomRight(),curp) )
 	    new_shp = Qt::SizeFDiagCursor;
 	else if( grepAnchor(selRect.bottomLeft(),curp) )
-	{ new_shp = Qt::SizeBDiagCursor; m_flgs |= DevelWdgView::leftTop; }
+	{ new_shp = Qt::SizeBDiagCursor; fLeftTop = true; }
 	else if( grepAnchor(selRect.topRight(),curp) )
 	    new_shp = Qt::SizeBDiagCursor;
 	else if( grepAnchor(QPointF(selRect.center().x(),selRect.y()),curp) )
-	{ new_shp = Qt::SizeVerCursor; m_flgs |= DevelWdgView::leftTop; }
+	{ new_shp = Qt::SizeVerCursor; fLeftTop = true; }
 	else if( grepAnchor(QPointF(selRect.center().x(),selRect.bottomRight().y()),curp) )
 	    new_shp = Qt::SizeVerCursor;
 	else if( grepAnchor(QPointF(selRect.x(),selRect.center().y()),curp) )
-	{ new_shp = Qt::SizeHorCursor; m_flgs |= DevelWdgView::leftTop; }
+	{ new_shp = Qt::SizeHorCursor; fLeftTop = true; }
 	else if( grepAnchor(QPointF(selRect.bottomRight().x(),selRect.center().y()),curp) )
 	    new_shp = Qt::SizeHorCursor;
 	else if( selRect.contains(curp) )
 	    new_shp = Qt::PointingHandCursor;
-	if( new_shp != Qt::ArrowCursor )	m_flgs |= DevelWdgView::holdChild;
+	if( new_shp != Qt::ArrowCursor )	fHoldChild = true;
     }
     if( new_shp != cursor().shape() ) setCursor(new_shp);
 }
@@ -2150,9 +2150,9 @@ void DevelWdgView::wdgsMoveResize( const QPointF &dP )
 {
     if( QApplication::keyboardModifiers()&Qt::ControlModifier )	mainWin()->setWdgScale(true);
     bool isScale = mainWin()->wdgScale( );
-    if( isScale )	m_flgs |= DevelWdgView::makeScale;
+    if( isScale )	fMakeScale = true;
 
-    if( m_flgs&DevelWdgView::holdChild )
+    if( fHoldChild )
     {
 	QRectF bsRct = pntView->geometryF();
 	float xScale = (float)dP.x()/(float)bsRct.width();
@@ -2168,10 +2168,10 @@ void DevelWdgView::wdgsMoveResize( const QPointF &dP )
 		case Qt::SizeFDiagCursor:
 		    if( isScale )
 		    {
-			curw->x_scale *= 1+((m_flgs&leftTop)?-1:1)*xScale;
-			curw->y_scale *= 1+((m_flgs&leftTop)?-1:1)*yScale;
+			curw->x_scale *= 1+((fLeftTop)?-1:1)*xScale;
+			curw->y_scale *= 1+((fLeftTop)?-1:1)*yScale;
 		    }
-		    if( m_flgs&leftTop )
+		    if( fLeftTop )
 		    {
 			curw->moveF(QPointF(geom.x()+xScale*(bsRct.x()+bsRct.width()-geom.x()),geom.y()+yScale*(bsRct.y()+bsRct.height()-geom.y())));
 			curw->resizeF(QSizeF((float)geom.width()*(1.0-xScale), (float)geom.height()*(1.0-yScale)));
@@ -2185,10 +2185,10 @@ void DevelWdgView::wdgsMoveResize( const QPointF &dP )
 		case Qt::SizeBDiagCursor:
 		    if( isScale )
 		    {
-			curw->x_scale *= 1+((m_flgs&leftTop)?-1:1)*xScale;
-			curw->y_scale *= 1-((m_flgs&leftTop)?-1:1)*yScale;
+			curw->x_scale *= 1+((fLeftTop)?-1:1)*xScale;
+			curw->y_scale *= 1-((fLeftTop)?-1:1)*yScale;
 		    }
-		    if( m_flgs&leftTop )
+		    if( fLeftTop )
 		    {
 			curw->moveF(QPointF(geom.x()+xScale*(bsRct.x()+bsRct.width()-geom.x()),geom.y()+yScale*(geom.y()-bsRct.y())));
 			curw->resizeF(QSizeF((float)geom.width()*(1.0-xScale), (float)geom.height()*(1.0+yScale)));
@@ -2201,8 +2201,8 @@ void DevelWdgView::wdgsMoveResize( const QPointF &dP )
 		    break;
 		case Qt::SizeVerCursor:
 		    if( isScale )
-			curw->y_scale *= 1+((m_flgs&leftTop)?-1:1)*yScale;
-		    if( m_flgs&leftTop )
+			curw->y_scale *= 1+((fLeftTop)?-1:1)*yScale;
+		    if( fLeftTop )
 		    {
 			curw->moveF( QPointF(geom.x(), geom.y()+yScale*(bsRct.y()+bsRct.height()-geom.y())) );
 			curw->resizeF( QSizeF(geom.width(), (float)geom.height()*(1.0-yScale)) );
@@ -2215,8 +2215,8 @@ void DevelWdgView::wdgsMoveResize( const QPointF &dP )
 		    break;
 		case Qt::SizeHorCursor:
 		    if( isScale )
-			curw->x_scale *= 1+((m_flgs&leftTop)?-1:1)*xScale;
-		    if( m_flgs&leftTop )
+			curw->x_scale *= 1+((fLeftTop)?-1:1)*xScale;
+		    if( fLeftTop )
 		    {
 			curw->moveF(QPointF(geom.x()+xScale*(bsRct.x()+bsRct.width()-geom.x()),geom.y()));
 			curw->resizeF(QSizeF((float)geom.width()*(1.0-xScale), geom.height()));
@@ -2231,7 +2231,7 @@ void DevelWdgView::wdgsMoveResize( const QPointF &dP )
 		    curw->moveF(curw->posF()+dP);
 		    break;
 		default:
-		    if( m_flgs&DevelWdgView::moveHold )	break;
+		    if( fMoveHold )	break;
 		    curw->moveF(curw->posF()+dP);
 		    break;
 	    }
@@ -2293,11 +2293,11 @@ bool DevelWdgView::event( QEvent *event )
 	    pnt.drawRect(rect().adjusted(0,0,-1,-1));
 	}
 	//- Draw widget border geometry -
-	else if( select() && ((DevelWdgView*)parentWidget())->flags()&DevelWdgView::moveHoldMove )
+	else if( select() && ((DevelWdgView*)parentWidget())->fMoveHoldMove )
 	{
-	    if( !(flags()&DevelWdgView::hideChilds) )
+	    if( !fHideChilds )
 	    {
-		m_flgs |= DevelWdgView::hideChilds;
+		fHideChilds = true;
 		for( int i_c = 0; i_c < children().size(); i_c++ )
 		    if( qobject_cast<QWidget*>(children().at(i_c)) )
 			((QWidget*)children().at(i_c))->hide();
@@ -2310,9 +2310,9 @@ bool DevelWdgView::event( QEvent *event )
 	    pnt.drawRect(rect().adjusted(0,0,-1,-1));
 	    return true;
 	}
-	else if( flags()&DevelWdgView::hideChilds )
+	else if( fHideChilds )
 	{
-	    m_flgs &= ~DevelWdgView::hideChilds;
+	    fHideChilds = false;
 	    for( int i_c = 0; i_c < children().size(); i_c++ )
 		if( qobject_cast<QWidget*>(children().at(i_c)) )
 		    ((QWidget*)children().at(i_c))->show();
@@ -2325,7 +2325,7 @@ bool DevelWdgView::event( QEvent *event )
 	}
 
 	//- Update select widget data -
-	if( wLevel() == 0 && !(flags()&DevelWdgView::holdSelRect) )
+	if( wLevel() == 0 && !fHoldSelRect )
 	{
 	    QRectF rsel;
 	    //if( !(flags()&DevelWdgView::moveHoldMove) )
@@ -2333,7 +2333,7 @@ bool DevelWdgView::event( QEvent *event )
 		    if( qobject_cast<DevelWdgView*>(children().at(i_c)) &&
 			    ((DevelWdgView*)children().at(i_c))->select( ) )
 			rsel = rsel.united(((DevelWdgView*)children().at(i_c))->geometryF());
-	    pntView->setSelArea( rsel, (flags()&DevelWdgView::moveHoldMove) ?  SizePntWdg::Hide : (edit() ? SizePntWdg::EditBorder : SizePntWdg::SizeDots) );
+	    pntView->setSelArea( rsel, fMoveHoldMove ?  SizePntWdg::Hide : (edit() ? SizePntWdg::EditBorder : SizePntWdg::SizeDots) );
 	}
 	pnt.end();
 
@@ -2436,13 +2436,13 @@ bool DevelWdgView::event( QEvent *event )
 			//-- Hold select rect paint --
 			if( !chld_sel )
 			{
-			    m_flgs |= DevelWdgView::holdSelRect;
+			    fHoldSelRect = true;
 			    holdPnt = curp;
 			}
 		    }
 		    if( cursor().shape() != Qt::ArrowCursor )
 		    {
-			m_flgs |= DevelWdgView::moveHold;
+			fMoveHold = true;
 			holdPnt = curp;
 		    }
 		    return true;
@@ -2450,7 +2450,7 @@ bool DevelWdgView::event( QEvent *event )
 		break;
 	    }
 	    case QEvent::MouseButtonRelease:
-		if( m_flgs&DevelWdgView::holdSelRect )
+		if( fHoldSelRect )
 		{
 		    QPoint curp = mapFromGlobal(cursor().pos());
 		    for( int i_c = children().size()-1; i_c >= 0; i_c-- )
@@ -2460,33 +2460,32 @@ bool DevelWdgView::event( QEvent *event )
 			cwdg->setSelect(true);
 		    }
 		    setSelect(true);
-		    m_flgs &= ~DevelWdgView::holdSelRect;
+		    fHoldSelRect = false;
 		    //pntView->setSelArea(QRectF());
 		}
 
-		if( m_flgs&DevelWdgView::moveHold && !edit() )
+		if( fMoveHold && !edit() )
 		{
 		    if( cursor().shape() != Qt::ArrowCursor )
 		    {
 			vector<DevelWdgView*> lswdgs;
 			selectChilds(NULL,&lswdgs);
-			if( m_flgs&DevelWdgView::moveHoldMove )
+			if( fMoveHoldMove )
 			{
 			    if( !lswdgs.size() )
 			    {
 				saveGeom(id().c_str());
-				if( m_flgs&DevelWdgView::makeScale ) load("");
+				if( fMakeScale ) load("");
 			    }
 			    else for( int i_w = 0; i_w < lswdgs.size(); i_w++ )
 			    {
 				saveGeom(lswdgs[i_w]->id());
-				if( m_flgs&DevelWdgView::makeScale ) lswdgs[i_w]->load("");
+				if( fMakeScale ) lswdgs[i_w]->load("");
 			    }
 			}
-			m_flgs &= ~DevelWdgView::makeScale;
+			fMakeScale = false;
 		    }
-		    m_flgs &= ~DevelWdgView::moveHold;
-		    m_flgs &= ~DevelWdgView::moveHoldMove;
+		    fMoveHold = fMoveHoldMove = false;
 		    return true;
 		}
 		break;
@@ -2538,7 +2537,7 @@ bool DevelWdgView::event( QEvent *event )
 		QPoint curp = mapFromGlobal(cursor().pos());
 
 		//- Select board draw -
-		if( m_flgs&DevelWdgView::holdSelRect )
+		if( fHoldSelRect )
 		{
 		    pntView->setSelArea(QRect(holdPnt,curp).normalized(),SizePntWdg::SelectBorder);
 		    return true;
@@ -2557,19 +2556,18 @@ bool DevelWdgView::event( QEvent *event )
 		upMouseCursors(curp);
 
 		//- Move widgets control -
-		if( m_flgs&DevelWdgView::moveHold && cursor().shape() != Qt::ArrowCursor &&
+		if( fMoveHold && cursor().shape() != Qt::ArrowCursor &&
 		    ((QMouseEvent*)event)->buttons()&Qt::LeftButton &&
 		    (((QMouseEvent*)event)->pos()-dragStartPos).manhattanLength() >= QApplication::startDragDistance() )
 		{
 		    dragStartPos = QPoint(-100,-100);
 		    wdgsMoveResize(curp-holdPnt);
 		    holdPnt = curp;
-		    //if( m_flgs&DevelWdgView::holdChild )	update();
-		    m_flgs |= DevelWdgView::moveHoldMove;
+		    //if( fHoldChild )	update();
+		    fMoveHoldMove = true;
 		    return true;
 		}
-		if( m_flgs&DevelWdgView::moveHold && !(((QMouseEvent*)event)->buttons()&Qt::LeftButton) )
-		    m_flgs &= ~DevelWdgView::moveHold;
+		if( fMoveHold && !(((QMouseEvent*)event)->buttons()&Qt::LeftButton) )	fMoveHold = false;
 
 		break;
 	    }
@@ -2610,16 +2608,16 @@ bool DevelWdgView::event( QEvent *event )
 					((DevelWdgView*)children().at(i_c))->select( ) )
 				{
 				    saveGeom(((DevelWdgView*)children().at(i_c))->id());
-				    if( m_flgs&DevelWdgView::makeScale ) ((DevelWdgView*)children().at(i_c))->load("");
+				    if( fMakeScale ) ((DevelWdgView*)children().at(i_c))->load("");
 				    isSel = true;
 				}
 			    if( !isSel )
 			    {
 				if( cursor().shape() == Qt::ArrowCursor )	return false;
 				saveGeom(id());
-				if( m_flgs&DevelWdgView::makeScale ) load("");
+				if( fMakeScale ) load("");
 			    }
-			    m_flgs &= ~DevelWdgView::makeScale;
+			    fMakeScale = false;
 			    return true;
 			}
 		    }

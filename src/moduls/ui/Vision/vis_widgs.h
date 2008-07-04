@@ -266,6 +266,9 @@ namespace VISION
 
 	    virtual int cntrIfCmd( XMLNode &node, bool glob = false )	{ };
 
+            //Attributes
+	    void	*shpData;	//Shape data link
+
 	public slots:
 	    virtual WdgView *newWdgItem( const string &iwid );
 	    virtual void load( const string& item, bool load = true, bool init = true );

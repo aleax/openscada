@@ -25,14 +25,17 @@
 
 #include <string>
 #include <deque>
+#include <vector>
 
 #include <QObject>
 #include <QMap>
 #include <QVariant>
 #include <QMenu>
+#include <QPen>
 
 using std::string;
 using std::deque;
+using std::vector;
 
 class QEvent;
 class QAction;
@@ -65,7 +68,7 @@ class WdgShape : public QObject
 	virtual void editExit( WdgView *view )						{ }
 	virtual void wdgPopup( WdgView *view, QMenu &menu )				{ }
 
-	virtual bool attrSet( WdgView *view, int uiPrmPos, const string &val )		{ return false; }
+	virtual bool attrSet( WdgView *view, int uiPrmPos, const string &val );
 
 	virtual bool event( WdgView *view, QEvent *event );
 	virtual bool eventFilter( WdgView *view, QObject *object, QEvent *event )	{ }
@@ -116,7 +119,32 @@ class ShapeFormEl : public WdgShape
 	void sliderMoved( int val );
 
     private:
-	//- Private methods -
+	//Data
+	//- Shape node date -
+	class ShpDt
+	{
+	    public:
+		//Methods
+		ShpDt( ) : en(true), active(true), evLock(false), addrWdg(NULL), elType(-1), welType(-1) { }
+		//Attributes
+		short	en	:1;
+		short	active	:1;
+		short	evLock	:1;
+		short	elType	:4;
+		short	welType	:4;
+		short	view	:4;
+		short	wordWrap:1;
+		short	checkable:1;
+		QWidget	*addrWdg;
+		QFont	font;
+		string	name;
+		string	value;
+		string	img;
+		string	items;
+		string	cfg;
+		string	color;
+	};
+	//Private methods
 	//Recursively widgets process for disable focusable and events filter set
 	void eventFilterSet( WdgView *view, QWidget *wdg, bool en );
 	void setFocus(WdgView *view, QWidget *wdg, bool en = false, bool devel = false );
@@ -154,6 +182,28 @@ class ShapeText : public WdgShape
 		//Attributes
 		QVariant	m_val;
 		string		m_cfg;
+	};
+	//- Shape node date -
+	class ShpDt
+	{
+	    public:
+		//Methods
+		ShpDt( ) : en(true), active(true), text_flg(0)	{ }
+		//Attributes
+		short	en		:1;
+		short	active		:1;
+		short	geomMargin	:8;
+		short	bordStyle	:5;
+		short int orient;
+		short int text_flg;
+		string	text_tmpl,
+			text;
+		QColor	color,
+			backColor;
+		QBrush	backImg;
+		QFont	font;
+		QPen	border;
+		vector<ArgObj>	args;
 	};
 };
 
@@ -317,9 +367,12 @@ class ShapeFunction : public WdgShape
 //************************************************
 //* User element shape widget                    *
 //************************************************
+class RunPageView;
+
 class ShapeBox : public WdgShape
 {
     public:
+	//Methods
 	ShapeBox( );
 
 	void init( WdgView *view );
@@ -327,6 +380,24 @@ class ShapeBox : public WdgShape
 
 	bool attrSet( WdgView *view, int uiPrmPos, const string &val);
 	bool event( WdgView *view, QEvent *event );
+
+    private:
+	//Attributes
+	//- Shape node date -
+	class ShpDt
+	{
+	    public:
+		//Methods
+		ShpDt( ) : en(true), geomMargin(0), bordStyle(0), inclWidget(NULL)	{ }
+		//Attributes
+		short	en		:1;
+		short	geomMargin	:8;
+		short	bordStyle	:5;
+		QPen		border;
+		QColor		backColor;
+		QBrush		backImg;
+		RunPageView	*inclWidget;
+	};
 };
 
 //************************************************
