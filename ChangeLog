@@ -1,3 +1,8 @@
+2008-07-05 Roman
+- FIX:/UI/Vision: Move childs widgets on development is fixed.
+- !:/UI/Vision: Media shape is moved to new individual data per widget store mechanism.
+
+
 2008-07-04 Roman
 - !:/UI/Vision: Flags of development widgets write form changed.
 - !:/UI/Vision: The individual shape data store mechanism changed and make performance optimal.

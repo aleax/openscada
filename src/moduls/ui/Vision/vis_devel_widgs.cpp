@@ -2277,6 +2277,13 @@ void DevelWdgView::wdgsMoveResize( const QPointF &dP )
     }
 }
 
+DevelWdgView *DevelWdgView::levelWidget( int lev )
+{
+    if( qobject_cast<DevelWdgView*>(parentWidget()) && wLevel() > lev )
+	return ((DevelWdgView*)parentWidget())->levelWidget( lev );
+    return this;
+}
+
 bool DevelWdgView::event( QEvent *event )
 {
     //- Paint event process -
@@ -2293,14 +2300,14 @@ bool DevelWdgView::event( QEvent *event )
 	    pnt.drawRect(rect().adjusted(0,0,-1,-1));
 	}
 	//- Draw widget border geometry -
-	else if( select() && ((DevelWdgView*)parentWidget())->fMoveHoldMove )
+	else if( levelWidget(1)->select() && levelWidget(0)->fMoveHoldMove )
 	{
 	    if( !fHideChilds )
 	    {
 		fHideChilds = true;
 		for( int i_c = 0; i_c < children().size(); i_c++ )
 		    if( qobject_cast<QWidget*>(children().at(i_c)) )
-			((QWidget*)children().at(i_c))->hide();
+			((QWidget*)children().at(i_c))->setEnabled(false);//hide();
 	    }
 	    pnt.setPen("white");
 	    pnt.drawRect(rect().adjusted(0,0,-1,-1));
@@ -2315,7 +2322,7 @@ bool DevelWdgView::event( QEvent *event )
 	    fHideChilds = false;
 	    for( int i_c = 0; i_c < children().size(); i_c++ )
 		if( qobject_cast<QWidget*>(children().at(i_c)) )
-		    ((QWidget*)children().at(i_c))->show();
+		    ((QWidget*)children().at(i_c))->setEnabled(true);//show();
 	}
 	//- Check widget -
 	if( !shape )
@@ -2626,7 +2633,8 @@ bool DevelWdgView::event( QEvent *event )
 	}
 
     //- Self widget view -
-    if( edit() && editWdg && wLevel() <= 1 && editWdg->shape->event(editWdg,event) )	return true;
+    if( edit() && editWdg && wLevel() <= 1 && editWdg->shape->event(editWdg,event) )
+	return true;
 
     if( WdgView::event(event) )	return true;
     return QWidget::event(event);

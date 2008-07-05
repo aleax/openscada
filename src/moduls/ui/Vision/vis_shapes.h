@@ -32,6 +32,7 @@
 #include <QVariant>
 #include <QMenu>
 #include <QPen>
+#include <QLabel>
 
 using std::string;
 using std::deque;
@@ -188,7 +189,7 @@ class ShapeText : public WdgShape
 	{
 	    public:
 		//Methods
-		ShpDt( ) : en(true), active(true), text_flg(0)	{ }
+		ShpDt( ) : en(true), active(true), geomMargin(0), text_flg(0)	{ }
 		//Attributes
 		short	en		:1;
 		short	active		:1;
@@ -236,6 +237,26 @@ class ShapeMedia : public WdgShape
 		int	shp;		//Area shape
 		string	title;		//Area title
 		QVector<QPoint>	pnts;	//Area points
+	};
+	//- Shape node date -
+	class ShpDt
+	{
+	    public:
+		//Methods
+		ShpDt( ) : en(true), mediaType(-1), geomMargin(0)	{ }
+		//Attributes
+		short	en		:1;
+		short	geomMargin	:8;
+		short	bordStyle	:5;
+		short	mediaType	:3;
+		short	mediaFit	:1;
+		short	mediaSpeed	:8;
+		QColor	backColor;
+		QBrush	backImg;
+		QLabel	*labWdg;
+		QPen	border;
+		string	mediaSrc;
+		vector<MapArea>	maps;
 	};
 };
 

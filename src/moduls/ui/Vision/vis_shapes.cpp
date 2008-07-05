@@ -760,12 +760,13 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	}
 	case 30:	//numbArg
 	{
-	    while( shD->args.size() < atoi(val.c_str()) )	shD->args.push_back(ArgObj());
-	    while( shD->args.size() > atoi(val.c_str()) )	shD->args.pop_back();
+	    int numbArg = atoi(val.c_str());
+	    while( shD->args.size() < numbArg )	shD->args.push_back(ArgObj());
+	    while( shD->args.size() > numbArg )	shD->args.pop_back();
 	    reform = true;
 	    break;
 	}
-	default: 
+	default:
 	    //- Individual arguments process -
 	    if( uiPrmPos >= 50 && uiPrmPos < 150 )
 	    {
@@ -887,41 +888,37 @@ ShapeMedia::ShapeMedia( ) : WdgShape("Media")
 
 void ShapeMedia::init( WdgView *w )
 {
-    w->dc()["numbMAr"] = 0;
-    w->dc()["border"].setValue( (void*)new QPen() );
-    w->dc()["mediaType"] = -1;
+    w->shpData = new ShpDt();
+
     //- Create label widget -
     QLabel *lab = new QLabel(w);
     if( qobject_cast<DevelWdgView*>(w) ) lab->setMouseTracking(true);
     w->setMouseTracking(true);
     lab->setAlignment(Qt::AlignCenter);
     lab->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-    w->dc()["labWdg"].setValue( (void*)lab );
+    ((ShpDt*)w->shpData)->labWdg = lab;
     QVBoxLayout *lay = new QVBoxLayout(w);
     lay->addWidget(lab);
 }
 
 void ShapeMedia::destroy( WdgView *w )
 {
-    delete (QPen*)w->dc()["border"].value<void*>();
     //- Clear label widget's elements -
-    QLabel *lab = (QLabel*)w->dc()["labWdg"].value<void*>();
+    QLabel *lab = ((ShpDt*)w->shpData)->labWdg;
     if( lab && lab->movie() )
     {
 	if(lab->movie()->device()) delete lab->movie()->device();
 	delete lab->movie();
 	lab->clear();
     }
-    //- Clear map area's data objects -
-    int numbMAr = w->dc()["numbMAr"].toInt();
-    for( int i_a = 0; i_a < numbMAr; i_a++ )
-        delete (MapArea*)w->dc().value(QString("area_%1").arg(i_a)).value<void*>();
+
+    delete (ShpDt*)w->shpData;
 }
 
 bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 {
     bool up = true, reld_src = false;
-    QLabel *lab = (QLabel*)w->dc()["labWdg"].value< void* >();
+    ShpDt *shD = (ShpDt*)w->shpData;
 
     switch( uiPrmPos )
     {
@@ -930,23 +927,23 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    break;
 	case 5:		//en
 	    if( !qobject_cast<RunWdgView*>(w) )	{ up = false; break; }
-	    w->dc()["en"] = (bool)atoi(val.c_str());
-	    w->setVisible(atoi(val.c_str()));
+	    shD->en = (bool)atoi(val.c_str());
+	    w->setVisible(shD->en);
 	    break;
 	case 6:		//active
 	    if( !qobject_cast<RunWdgView*>(w) )	break;
-	    lab->setMouseTracking( atoi(val.c_str()) && ((RunWdgView*)w)->permCntr() );
+	    shD->labWdg->setMouseTracking( atoi(val.c_str()) && ((RunWdgView*)w)->permCntr() );
 	    w->setMouseTracking( atoi(val.c_str()) && ((RunWdgView*)w)->permCntr() );
 	    break;
 	case 12:	//geomMargin
-	    w->dc()["geomMargin"] = atoi(val.c_str());
-	    w->layout()->setMargin( atoi(val.c_str()) );
+	    shD->geomMargin = atoi(val.c_str());
+	    w->layout()->setMargin( shD->geomMargin );
 	    break;
 	case 20:	//backColor
 	{
-	    w->dc()["backColor"] = QColor(val.c_str());
+	    shD->backColor = QColor(val.c_str());
 	    QPalette p(w->palette());
-	    p.setColor(QPalette::Background,w->dc()["backColor"].value<QColor>());
+	    p.setColor(QPalette::Background,shD->backColor);
 	    w->setPalette(p);
 	    break;
 	}
@@ -954,120 +951,112 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	{
 	    QImage img;
 	    string backimg = w->resGet(val);
+	    shD->backImg = QBrush();
 	    if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
-		w->dc()["backImg"] = QBrush(img);
-	    else w->dc()["backImg"] = QBrush();
+		shD->backImg = QBrush(img);
 	    QPalette p(w->palette());
-	    p.setBrush(QPalette::Background,w->dc()["backImg"].value<QBrush>());
+	    p.setBrush(QPalette::Background,shD->backImg);
 	    w->setPalette(p);
 	    break;
 	}
 	case 22:	//bordWidth
-	    ((QPen*)w->dc()["border"].value<void*>())->setWidth(atoi(val.c_str()));	break;
+	    shD->border.setWidth(atoi(val.c_str()));	break;
 	case 23:	//bordColor
-	    ((QPen*)w->dc()["border"].value<void*>())->setColor(QColor(val.c_str()));	break;
+	    shD->border.setColor(QColor(val.c_str()));	break;
 	case 19:	//bordStyle
-	    w->dc()["bordStyle"] = atoi(val.c_str());		break;
+	    shD->bordStyle = atoi(val.c_str());		break;
 	case 24:	//src
-	    if( w->dc()["mediaSrc"].toString() == val.c_str() )	break;
-	    w->dc()["mediaSrc"] = val.c_str();
+	    if( shD->mediaSrc == val )	break;
+	    shD->mediaSrc = val;
 	    reld_src = true;
 	    break;
 	case 26:	//fit
-	    w->dc()["mediaFit"] = atoi(val.c_str());
-	    lab->setScaledContents( atoi(val.c_str()) );
+	    shD->mediaFit = (bool)atoi(val.c_str());
+	    shD->labWdg->setScaledContents( shD->mediaFit );
 	    break;
 	case 25:	//type
-	    if( w->dc()["mediaType"].toInt() == atoi(val.c_str()) )	break;
-	    w->dc()["mediaType"] = atoi(val.c_str()); 
+	    if( shD->mediaType == atoi(val.c_str()) )	break;
+	    shD->mediaType = atoi(val.c_str());
 	    reld_src = true;
 	    break;
 	case 27: 	//speed
 	{
-	    int vl = atoi(val.c_str());
-	    w->dc()["mediaSpeed"] = vl;
-	    if( !lab->movie() ) break;
-	    if( vl <= 1 ) lab->movie()->stop();
+	    shD->mediaSpeed = atoi(val.c_str());
+	    if( !shD->labWdg->movie() ) break;
+	    if( shD->mediaSpeed <= 1 ) shD->labWdg->movie()->stop();
 	    else
 	    {
-		lab->movie()->setSpeed(vl);
-		lab->movie()->start();
+		shD->labWdg->movie()->setSpeed(shD->mediaSpeed);
+		shD->labWdg->movie()->start();
 	    }
 	    break;
 	}
 	case 28:	//areas
 	{
-	    int numbMArPrev = w->dc()["numbMAr"].toInt();
 	    int numbMAr = atoi(val.c_str());
-	    if( numbMArPrev == numbMAr ) break;
-	    for( int i_a = 0; i_a < vmax(numbMAr,numbMArPrev); i_a++ )
-		if( i_a < numbMArPrev && i_a >= numbMAr )
-		    delete (MapArea*)w->dc()[QString("area_%1").arg(i_a)].value<void*>();
-		else if( i_a >= numbMArPrev && i_a < numbMAr )
-		    w->dc()[QString("area_%1").arg(i_a)].setValue( (void*)new MapArea() );
-	    w->dc()["numbMAr"] = numbMAr;
+	    while( shD->maps.size() < numbMAr )	shD->maps.push_back(MapArea());
+	    while( shD->maps.size() > numbMAr )	shD->maps.pop_back();
 	    break;
 	}
-	default: 
+	default:
 	    //- Individual arguments process -
 	    if( uiPrmPos >= 40 )
 	    {
 		int areaN = (uiPrmPos-40)/3;
-		if( areaN >= w->dc()["numbMAr"].toInt() ) break;
-		MapArea *area = (MapArea*)w->dc()[QString("area_%1").arg(areaN)].value<void*>();
+		if( areaN >= shD->maps.size() ) break;
 		switch( (uiPrmPos-40)%3 )
 		{
 		    case 0:	//shape
-			area->shp = atoi(val.c_str());	break;
+			shD->maps[areaN].shp = atoi(val.c_str());	break;
 		    case 1:	//coordinates
 		    {
 			string stmp;
-			area->pnts.clear();
+			shD->maps[areaN].pnts.clear();
 			for( int ncrd = 0, pos = 0; (stmp=TSYS::strSepParse(val,0,',',&ncrd)).size(); pos++ )
-			    if( !(pos%2) ) area->pnts.push_back(QPoint(atoi(stmp.c_str()),0));
-			    else           area->pnts[area->pnts.size()-1].setY(atoi(stmp.c_str()));
+			    if( !(pos%2) ) shD->maps[areaN].pnts.push_back(QPoint(atoi(stmp.c_str()),0));
+			    else           shD->maps[areaN].pnts[shD->maps[areaN].pnts.size()-1].setY(atoi(stmp.c_str()));
 		    }
 		    case 2:	//title
-			area->title = val;	break;
+			shD->maps[areaN].title = val;	break;
 		}
 	    }
     }
 
     if( reld_src && !w->allAttrLoad() )
     {
-	string sdata = w->dc()["mediaSrc"].toString().size() ? w->resGet(w->dc()["mediaSrc"].toString().toAscii().data()) : "";
-	switch(w->dc()["mediaType"].toInt())
+	string sdata = w->resGet(shD->mediaSrc);
+	switch( shD->mediaType )
 	{
 	    case 0:
 	    {
 		QImage img;
 		//- Free movie data, if set -
-		if( lab->movie() )
+		if( shD->labWdg->movie() )
 		{
-		    if(lab->movie()->device()) delete lab->movie()->device();
-		    delete lab->movie();
-		    lab->clear();
+		    if(shD->labWdg->movie()->device()) delete shD->labWdg->movie()->device();
+		    delete shD->labWdg->movie();
+		    shD->labWdg->clear();
 		}
 		//- Set new image -
 		if( !sdata.empty() && img.loadFromData((const uchar*)sdata.data(),sdata.size()) )
 		{
-		    lab->setPixmap(QPixmap::fromImage(img.scaled(
+		    shD->labWdg->setPixmap(QPixmap::fromImage(img.scaled(
 			(int)((float)img.width()*w->xScale(true)),
 			(int)((float)img.height()*w->yScale(true)),
 			Qt::KeepAspectRatio,Qt::SmoothTransformation)));
-		    lab->setScaledContents( w->dc()["mediaFit"].toInt()  );
+		    shD->labWdg->setScaledContents( shD->mediaFit );
 		}
-		else lab->setText("");
+		else shD->labWdg->setText("");
 		break;
 	    }
 	    case 1:
 	    {
 		//- Clear previous movie data -
-		if( lab->movie() )
+		if( shD->labWdg->movie() )
 		{
-		    if(lab->movie()->device()) delete lab->movie()->device();
-		    delete lab->movie();
-		    lab->clear();
+		    if(shD->labWdg->movie()->device()) delete shD->labWdg->movie()->device();
+		    delete shD->labWdg->movie();
+		    shD->labWdg->clear();
 		}
 		//- Set new data -
 		if( sdata.size() )
@@ -1075,18 +1064,17 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 		    QBuffer *buf = new QBuffer(w);
 		    buf->setData( sdata.data(), sdata.size() );
 		    buf->open( QIODevice::ReadOnly );
-		    lab->setMovie( new QMovie(buf) );
+		    shD->labWdg->setMovie( new QMovie(buf) );
 		    //- Play speed set -
-		    int vl = w->dc()["mediaSpeed"].toInt();
-		    if( vl <= 1 ) lab->movie()->stop();
+		    if( shD->mediaSpeed <= 1 ) shD->labWdg->movie()->stop();
 		    else
 		    {
-			lab->movie()->setSpeed(vl);
-			lab->movie()->start();
+			shD->labWdg->movie()->setSpeed(shD->mediaSpeed);
+			shD->labWdg->movie()->start();
 		    }
 		    //- Fit set -
-		    lab->setScaledContents( w->dc()["mediaFit"].toInt() );
-		}else lab->setText("");
+		    shD->labWdg->setScaledContents( shD->mediaFit );
+		}else shD->labWdg->setText("");
 
 		break;
 	    }
@@ -1100,7 +1088,8 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 
 bool ShapeMedia::event( WdgView *w, QEvent *event )
 {
-    if( !w->dc().value("en",1).toInt() ) return false;
+    ShpDt *shD = (ShpDt*)w->shpData;
+    if( !shD->en ) return false;
 
     switch( event->type() )
     {
@@ -1109,38 +1098,31 @@ bool ShapeMedia::event( WdgView *w, QEvent *event )
 	    QPainter pnt( w );
 
 	    //- Prepare draw area -
-	    int margin = w->dc()["geomMargin"].toInt();
-	    QRect dA = w->rect().adjusted(0,0,-2*margin,-2*margin);
+	    QRect dA = w->rect().adjusted(0,0,-2*shD->geomMargin,-2*shD->geomMargin);
 	    pnt.setWindow(dA);
-	    pnt.setViewport(w->rect().adjusted(margin,margin,-margin,-margin));
+	    pnt.setViewport(w->rect().adjusted(shD->geomMargin,shD->geomMargin,-shD->geomMargin,-shD->geomMargin));
 
 	    //- Draw decoration -
-	    QColor bkcol = w->dc()["backColor"].value<QColor>();
-	    if( bkcol.isValid() ) pnt.fillRect(dA,bkcol);
-	    QBrush bkbrsh = w->dc()["backImg"].value<QBrush>();
-	    if( bkbrsh.style() != Qt::NoBrush ) pnt.fillRect(dA,bkbrsh);
+	    if( shD->backColor.isValid() ) pnt.fillRect(dA,shD->backColor);
+	    if( shD->backImg.style() != Qt::NoBrush ) pnt.fillRect(dA,shD->backImg);
 
 	    //- Draw border -
-	    borderDraw( pnt, dA, *(QPen*)w->dc()["border"].value<void*>(), w->dc()["bordStyle"].toInt() );
+	    borderDraw( pnt, dA, shD->border, shD->bordStyle );
 
 	    return true;
 	}
 	case QEvent::MouseMove:
 	{
 	    Qt::CursorShape new_shp = Qt::ArrowCursor;
-	    int numbMAr = w->dc()["numbMAr"].toInt();
-	    if( numbMAr )
+	    if( !shD->maps.empty() )
 	    {
-		for( int i_a = 0; i_a < numbMAr; i_a++ )
-		{
-		    MapArea *area = (MapArea*)w->dc()[QString("area_%1").arg(i_a)].value<void*>();
-		    if( area->containsPoint(w->mapFromGlobal(w->cursor().pos())) )
+		for( int i_a = 0; i_a < shD->maps.size(); i_a++ )
+		    if( shD->maps[i_a].containsPoint(w->mapFromGlobal(w->cursor().pos())) )
 		    {
-			new_shp = Qt::PointingHandCursor; 
-			if( !area->title.empty() ) QToolTip::showText(w->cursor().pos(),area->title.c_str());
+			new_shp = Qt::PointingHandCursor;
+			if( !shD->maps[i_a].title.empty() ) QToolTip::showText(w->cursor().pos(),shD->maps[i_a].title.c_str());
 			break;
 		    }
-		}
 	    }
 	    else new_shp = Qt::PointingHandCursor;
 
@@ -1151,9 +1133,8 @@ bool ShapeMedia::event( WdgView *w, QEvent *event )
 	case QEvent::MouseButtonPress:
 	{
 	    string sev;
-	    int numbMAr = w->dc()["numbMAr"].toInt();
-	    for( int i_a = 0; i_a < numbMAr; i_a++ )
-	        if( ((MapArea*)w->dc()[QString("area_%1").arg(i_a)].value<void*>())->containsPoint(w->mapFromGlobal(w->cursor().pos())) )
+	    for( int i_a = 0; i_a < shD->maps.size(); i_a++ )
+	        if( shD->maps[i_a].containsPoint(w->mapFromGlobal(w->cursor().pos())) )
 	        { sev="ws_MapAct"+TSYS::int2str(i_a); break; }
 	    if( !sev.empty() )
 	    {

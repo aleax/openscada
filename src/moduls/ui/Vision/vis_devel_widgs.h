@@ -476,6 +476,8 @@ class DevelWdgView: public WdgView
 
 	void load( const string& item, bool load = true, bool init = true );
 
+	DevelWdgView *levelWidget( int lev );
+
     signals:
 	void selected( const string& item );		//Change selection signal
 	void apply( const string & );
