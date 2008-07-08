@@ -33,6 +33,7 @@
 #include <QMenu>
 #include <QPen>
 #include <QLabel>
+#include <QPicture>
 
 using std::string;
 using std::deque;
@@ -330,6 +331,35 @@ class ShapeDiagram : public WdgShape
 		deque<SHg>	vals;		//Values buffer
 
 		WdgView 	*view;
+	};
+	//- Shape node date -
+	class ShpDt
+	{
+	    public:
+		//Methods
+		ShpDt( ) : en(true), active(true), geomMargin(0), tTime(0), tPict(0), curTime(0), tTimeCurent(false), trcPer(0)	{ }
+		//Attributes
+		short	en		:1;
+		short	active		:1;
+		short	geomMargin	:8;
+		short	bordStyle	:5;
+		short	tTimeCurent	:1;
+		short	trcPer		:10;
+		short	sclHor		:4;
+		short	sclVer		:4;
+		QColor	backColor, curColor, sclColor, sclMarkColor;
+		QBrush	backImg;
+		QPen		border;
+		QPicture	pictObj;
+		QRect		pictRect;
+		QFont		sclMarkFont;
+		QTimer 		*trcTimer;
+		vector<TrendObj>	prms;
+		long long	tTime,
+				tPict,
+				curTime;
+		float		tSize;
+		string		valArch;
 	};
 
 	//Methods

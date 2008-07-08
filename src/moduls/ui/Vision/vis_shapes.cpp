@@ -1185,33 +1185,18 @@ ShapeDiagram::ShapeDiagram( ) : WdgShape("Diagram")
 
 void ShapeDiagram::init( WdgView *w )
 {
-    w->dc()["tTime"] = 0;
-    w->dc()["tPict"] = 0;
-    w->dc()["curTime"] = 0;
-    w->dc()["parNum"] = 0;
-    w->dc()["tTimeCurent"] = false;
-    w->dc()["trcPer"] = 0;
-    w->dc()["border"].setValue( (void*)new QPen() );
-    w->dc()["pictObj"].setValue( (void*)new QPicture() );
-    w->dc()["pictRect"].setValue( (void*)new QRect() );
-    w->dc()["sclMarkFont"].setValue( (void*)new QFont() );
+    w->shpData = new ShpDt();
+
     //- Init tracing timer -
-    QTimer *tmr = new QTimer(w);
-    w->dc()["trcTimer"].setValue( (void*)tmr );
-    connect( tmr, SIGNAL(timeout()), this, SLOT(tracing()) );
+    ((ShpDt*)w->shpData)->trcTimer = new QTimer(w);
+    connect( ((ShpDt*)w->shpData)->trcTimer, SIGNAL(timeout()), this, SLOT(tracing()) );
 }
 
 void ShapeDiagram::destroy( WdgView *w )
 {
-    delete (QPen*)w->dc()["border"].value<void*>();
-    delete (QPicture*)w->dc()["pictObj"].value<void*>();
-    delete (QRect*)w->dc()["pictRect"].value<void*>();
-    delete (QFont*)w->dc()["sclMarkFont"].value<void*>();
-    ((QTimer*)w->dc()["trcTimer"].value<void*>())->stop();
-    //- Clear trend's data objects -
-    int parNum = w->dc()["parNum"].toInt();
-    for( int i_p = 0; i_p < parNum; i_p++ )
-	delete (TrendObj*)w->dc().value(QString("trend_%1").arg(i_p)).value<void*>();
+    ((ShpDt*)w->shpData)->trcTimer->stop();
+
+    delete (ShpDt*)w->shpData;
 }
 
 bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
@@ -1219,6 +1204,8 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
     bool up = false,		//Repaint diagramm picture
 	 make_pct = false;	//Remake diagramm picture
     int  reld_tr_dt = 0;	//Reload trend's data ( 1-reload addons, 2-full reload)
+
+    ShpDt *shD = (ShpDt*)w->shpData;
 
     switch(uiPrmPos)
     {
@@ -1231,24 +1218,24 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    break;
 	case 5:		//en
 	    if( !qobject_cast<RunWdgView*>(w) )	break;
-	    w->dc()["en"] = (bool)atoi(val.c_str());
-	    w->setVisible(atoi(val.c_str()));
+	    shD->en = (bool)atoi(val.c_str());
+	    w->setVisible(shD->en);
 	    up = true;
 	    break;
 	case 6:		//active
-	    w->dc()["active"] = (bool)atoi(val.c_str());
+	    shD->active = (bool)atoi(val.c_str());
 	    if( !qobject_cast<RunWdgView*>(w) )	break;
-	    if( w->dc()["active"].toBool() && ((RunWdgView*)w)->permCntr() )	w->setFocusPolicy(Qt::StrongFocus);
+	    if( shD->active && ((RunWdgView*)w)->permCntr() )	w->setFocusPolicy(Qt::StrongFocus);
 	    else w->setFocusPolicy(Qt::NoFocus);
 	    break;
 	case 9:	case 10: make_pct = true;	break;
 	case 12:	//geomMargin
-	    w->dc()["geomMargin"] = atoi(val.c_str()); make_pct = true; break;
+	    shD->geomMargin = atoi(val.c_str()); make_pct = true; break;
 	case 20:	//backColor
 	{
-	    w->dc()["backColor"] = QColor(val.c_str());
+	    shD->backColor = QColor(val.c_str());
 	    QPalette p(w->palette());
-	    p.setColor(QPalette::Background,w->dc()["backColor"].value<QColor>());
+	    p.setColor(QPalette::Background,shD->backColor);
 	    w->setPalette(p);
 	    make_pct = true;
 	    break;
@@ -1257,91 +1244,82 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	{
 	    QImage img;
 	    string backimg = w->resGet(val);
+	    shD->backImg = QBrush();
 	    if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
-		w->dc()["backImg"] = QBrush(img);
-	    else w->dc()["backImg"] = QBrush();
+		shD->backImg = QBrush(img);
 	    QPalette p(w->palette());
-	    p.setBrush(QPalette::Background,w->dc()["backImg"].value<QBrush>());
+	    p.setBrush(QPalette::Background,shD->backImg);
 	    w->setPalette(p);
 	    break;
 	}
 	case 22:	//bordWidth
-	    ((QPen*)w->dc()["border"].value<void*>())->setWidth(atoi(val.c_str())); make_pct = true; break;
+	    shD->border.setWidth(atoi(val.c_str())); make_pct = true; break;
 	case 23:	//bordColor
-	    ((QPen*)w->dc()["border"].value<void*>())->setColor(QColor(val.c_str())); up = true; break;
+	    shD->border.setColor(QColor(val.c_str())); up = true; break;
 	case 19:	//bordStyle
-	    w->dc()["bordStyle"] = atoi(val.c_str()); up = true; break;
+	    shD->bordStyle = atoi(val.c_str()); up = true; break;
 	case 24:	//trcPer
-	    w->dc()["trcPer"] = atoi(val.c_str());
-	    if( atoi(val.c_str()) )
-		((QTimer*)w->dc()["trcTimer"].value<void*>())->start(atoi(val.c_str())*1000);
-	    else ((QTimer*)w->dc()["trcTimer"].value<void*>())->stop();
+	    shD->trcPer = atoi(val.c_str());
+	    if( shD->trcPer )	shD->trcTimer->start(shD->trcPer*1000);
+	    else shD->trcTimer->stop();
 	    break;
 	//case 25:	//type
-	//    w->dc()["type"] = atoi(val.c_str()); make_pct = true; break;
+	//    shD->type = atoi(val.c_str()); make_pct = true; break;
 	case 26:	//tSek
-	    w->dc()["tTimeCurent"] = false;
+	    shD->tTimeCurent = false;
 	    if( atoll(val.c_str()) == 0 )
 	    {
-		w->dc()["tTime"] = (long long)time(NULL)*1000000;
-		w->dc()["tTimeCurent"] = true;
-	    } else w->dc()["tTime"] = atoll(val.c_str())*1000000 + w->dc()["tTime"].toLongLong()%1000000;
+		shD->tTime = (long long)time(NULL)*1000000;
+		shD->tTimeCurent = true;
+	    } else shD->tTime = atoll(val.c_str())*1000000 + shD->tTime%1000000;
 	    reld_tr_dt = 1;	break;
 	case 27: 	//tUSek
-	    w->dc()["tTime"] = 1000000ll*(w->dc()["tTime"].toLongLong()/1000000)+atoll(val.c_str());
+	    shD->tTime = 1000000ll*(shD->tTime/1000000)+atoll(val.c_str());
 	    reld_tr_dt = 1;	break;
 	case 28:	//tSize
-	    w->dc()["tSize"] = atof(val.c_str());
+	    shD->tSize = atof(val.c_str());
 	    reld_tr_dt = 1;  break;
 	case 29:	//curSek
-	    if( (w->dc()["curTime"].toLongLong()/1000000) == atoi(val.c_str()) ) break;
-	    w->dc()["curTime"] = atoll(val.c_str())*1000000 + w->dc()["curTime"].toLongLong()%1000000;
+	    if( (shD->curTime/1000000) == atoi(val.c_str()) ) break;
+	    shD->curTime = atoll(val.c_str())*1000000 + shD->curTime%1000000;
 	    up = true;	break;
 	case 30:	//curUSek
-	    if( (w->dc()["curTime"].toLongLong()%1000000) == atoi(val.c_str()) ) break;
-	    w->dc()["curTime"] = 1000000ll*(w->dc()["curTime"].toLongLong()/1000000)+atoll(val.c_str());
+	    if( (shD->curTime%1000000) == atoi(val.c_str()) ) break;
+	    shD->curTime = 1000000ll*(shD->curTime/1000000)+atoll(val.c_str());
 	    up = true;	break;
 	case 36:	//curColor
-	    w->dc()["curColor"] = val.c_str();
-	    up = true;  break;
+	    shD->curColor = QColor(val.c_str());	up = true;		break;
 	case 31:	//sclColor
-	    w->dc()["sclColor"] = val.c_str();		make_pct = true;	break;
+	    shD->sclColor = QColor(val.c_str());	make_pct = true;	break;
 	case 32:	//sclHor
-	    w->dc()["sclHor"] = atoi(val.c_str());	make_pct = true;	break;
+	    shD->sclHor = atoi(val.c_str());		make_pct = true;	break;
 	case 33:	//sclVer
-	    w->dc()["sclVer"] = atoi(val.c_str());	make_pct = true;	break;
+	    shD->sclVer = atoi(val.c_str());		make_pct = true;	break;
 	case 37:	//sclMarkColor
-	    w->dc()["sclMarkColor"] = val.c_str();	make_pct = true;	break;
+	    shD->sclMarkColor = QColor(val.c_str());	make_pct = true;	break;
 	case 38:	//sclMarkFont
 	{
-	    QFont *fnt = (QFont*)w->dc()["sclMarkFont"].value<void*>();
 	    char family[101]; strcpy(family,"Arial");
 	    int size = 10, bold = 0, italic = 0, underline = 0, strike = 0;
 	    sscanf(val.c_str(),"%100s %d %d %d %d %d",family,&size,&bold,&italic,&underline,&strike);
-	    fnt->setFamily(QString(family).replace(QRegExp("_")," "));
-	    fnt->setPixelSize(size);
-	    fnt->setBold(bold);
-	    fnt->setItalic(italic);
-	    fnt->setUnderline(underline);
-	    fnt->setStrikeOut(strike);
+	    shD->sclMarkFont.setFamily(QString(family).replace(QRegExp("_")," "));
+	    shD->sclMarkFont.setPixelSize(size);
+	    shD->sclMarkFont.setBold(bold);
+	    shD->sclMarkFont.setItalic(italic);
+	    shD->sclMarkFont.setUnderline(underline);
+	    shD->sclMarkFont.setStrikeOut(strike);
 	    make_pct = true;
 	    break;
 	}
 	case 34:	//valArch
-	    if( w->dc()["valArch"].toString() == val.c_str() )	break;
-	    w->dc()["valArch"] = val.c_str();
+	    if( shD->valArch == val )	break;
+	    shD->valArch = val;
 	    reld_tr_dt = 2;	break;
 	case 35:	//parNum
 	{
-	    int parNumPrev = w->dc()["parNum"].toInt();
 	    int parNum = atoi(val.c_str());
-	    if( parNum == parNumPrev )	break;
-	    for( int i_p = vmin(parNumPrev,parNum); i_p < vmax(parNumPrev,parNum); i_p++ )
-		if( i_p < parNumPrev && i_p >= parNum )
-		    delete (TrendObj*)w->dc()[QString("trend_%1").arg(i_p)].value<void*>();
-		else if( i_p >= parNumPrev && i_p < parNum )
-		    w->dc()[QString("trend_%1").arg(i_p)].setValue( (void*)new TrendObj(w) );
-	    w->dc()["parNum"] = parNum;
+	    while( shD->prms.size() < parNum )	shD->prms.push_back(TrendObj(w));
+	    while( shD->prms.size() > parNum )	shD->prms.pop_back();
 	    make_pct = true;
 	    break;
 	}
@@ -1350,16 +1328,15 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    if( uiPrmPos >= 50 && uiPrmPos < 150 )
 	    {
 		int trndN = (uiPrmPos/10)-5;
-		if( trndN >= w->dc()["parNum"].toInt() ) break;
-		TrendObj *trnd = (TrendObj*)w->dc()[QString("trend_%1").arg(trndN)].value<void*>();
+		if( trndN >= shD->prms.size() ) break;
 		make_pct = true;
 		switch(uiPrmPos%10)
 		{
-		    case 0: trnd->setAddr(val);			break;		//addr
-		    case 1: trnd->setBordL(atof(val.c_str()));	break;		//bordL
-		    case 2: trnd->setBordU(atof(val.c_str()));	break;		//bordU
-		    case 3: trnd->setColor(val);		break;		//color
-		    case 4: trnd->setCurVal(atof(val.c_str())); make_pct = false;	break;		//value
+		    case 0: shD->prms[trndN].setAddr(val);			break;		//addr
+		    case 1: shD->prms[trndN].setBordL(atof(val.c_str()));	break;		//bordL
+		    case 2: shD->prms[trndN].setBordU(atof(val.c_str()));	break;		//bordU
+		    case 3: shD->prms[trndN].setColor(val);			break;		//color
+		    case 4: shD->prms[trndN].setCurVal(atof(val.c_str())); make_pct = false;	break;		//value
 		}
 	    }
     }
@@ -1376,46 +1353,47 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 
 void ShapeDiagram::loadTrendsData( WdgView *w, bool full )
 {
-    int parNum = w->dc()["parNum"].toInt();
-    for( int i_p = 0; i_p < parNum; i_p++ )
-	((TrendObj*)w->dc()[QString("trend_%1").arg(i_p)].value<void*>())->loadData(full);
+    ShpDt *shD = (ShpDt*)w->shpData;
+
+    for( int i_p = 0; i_p < shD->prms.size(); i_p++ )
+	shD->prms[i_p].loadData(full);
 }
 
 void ShapeDiagram::makeTrendsPicture( WdgView *w )
 {
     QPen grdPen, mrkPen;
     int  mrkHeight = 0;
-    if( !w->dc().value("en",1).toInt() )	return;
+
+    ShpDt *shD = (ShpDt*)w->shpData;
+
+    if( !shD->en )	return;
 
     //- Prepare picture -
-    QPainter pnt((QPicture*)w->dc()["pictObj"].value<void*>());
+    QPainter pnt( &shD->pictObj );
 
     //-- Get generic parameters --
-    int parNum      = w->dc()["parNum"].toInt();			//Parameter's number
-    long long tSize = (long long)(w->dc()["tSize"].toDouble()*1000000.);//Trends size (us)
-    long long tEnd  = w->dc()["tTime"].toLongLong();			//Trends end point (us)
+    long long tSize = (long long)(shD->tSize*1000000.);			//Trends size (us)
+    long long tEnd  = shD->tTime;					//Trends end point (us)
     long long tPict = tEnd;
     long long tBeg  = tEnd - tSize;					//Trends begin point (us)
-    if( !parNum || tSize <= 0 ) return;
+    if( shD->prms.empty() || tSize <= 0 ) return;
 
     //-- Make decoration and prepare trends area --
-    int margin = w->dc()["geomMargin"].toInt();				//Trends generic margin
-    int brdWdth = ((QPen*)w->dc()["border"].value<void*>())->width();	//Border width
-    QRect tAr  = w->rect().adjusted(1,1,-2*(margin+brdWdth+1),-2*(margin+brdWdth+1));	//Curves of trends area rect
-    int sclHor = w->dc()["sclHor"].toInt();				//Horisontal scale mode
-    int sclVer = w->dc()["sclVer"].toInt();				//Vertical scale mode
+    QRect tAr  = w->rect().adjusted(1,1,-2*(shD->geomMargin+shD->border.width()+1),-2*(shD->geomMargin+shD->border.width()+1));	//Curves of trends area rect
+    int sclHor = shD->sclHor;						//Horisontal scale mode
+    int sclVer = shD->sclVer;						//Vertical scale mode
 
     if( sclHor&0x3 || sclVer&0x3 )
     {
 	//--- Set grid pen ---
-	grdPen.setColor(w->dc()["sclColor"].toString());
+	grdPen.setColor(shD->sclColor);
 	grdPen.setStyle(Qt::SolidLine);
 	grdPen.setWidth(1);
 	if( sclHor&0x2 || sclVer&0x2 )
 	{
 	    //--- Set markers font and color ---
-	    mrkPen.setColor(w->dc()["sclMarkColor"].toString());
-	    pnt.setFont(*(QFont*)w->dc()["sclMarkFont"].value<void*>());
+	    mrkPen.setColor(shD->sclMarkColor);
+	    pnt.setFont(shD->sclMarkFont);
 	    mrkHeight = pnt.fontMetrics().height();
 
 	    if( sclHor&0x2 )
@@ -1445,7 +1423,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	while( hLen/hDiv > hmax_ln )	hDiv *= 10;
 	while( hLen/hDiv < hmax_ln/2 )	hDiv/=2;
 
-	if( (hLen/hDiv) >= 5 && w->dc()["trcPer"].toInt() )
+	if( (hLen/hDiv) >= 5 && shD->trcPer )
 	{
 	    tPict = hDiv*(tEnd/hDiv+1);
 	    tBeg = tPict-hLen;
@@ -1558,30 +1536,29 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
     //---- Check for scale mode ----
     double vsMax = 100, vsMin = 0;	//Trend's vertical scale border
     bool   vsPerc = true;		//Vertical scale percent mode
-    if( parNum == 1 )
+    if( shD->prms.size() == 1 )
     {
 	vsPerc = false;
-	TrendObj *sTr = (TrendObj*)w->dc()["trend_0"].value<void*>();
-	if( sTr->bordU() <= sTr->bordL() )
+	if( shD->prms[0].bordU() <= shD->prms[0].bordL() )
 	{
 	    //----- Check trend for valid data -----
-	    aVbeg = vmax(tBeg,sTr->valBeg());
-	    aVend = vmin(tEnd,sTr->valEnd());
+	    aVbeg = vmax(tBeg,shD->prms[0].valBeg());
+	    aVend = vmin(tEnd,shD->prms[0].valEnd());
 
 	    if( aVbeg >= aVend ) return;
 	    //----- Calc value borders -----
 	    vsMax = -3e300, vsMin = 3e300;
 	    bool end_vl = false;
-	    int ipos = sTr->val(aVbeg);
-	    if( ipos && sTr->val()[ipos].tm > aVbeg ) ipos--;
+	    int ipos = shD->prms[0].val(aVbeg);
+	    if( ipos && shD->prms[0].val()[ipos].tm > aVbeg ) ipos--;
 	    while( true )
 	    {
-		if( ipos >= sTr->val().size() || end_vl )	break;
-		if( sTr->val()[ipos].tm >= aVend )	end_vl = true;
-		if( sTr->val()[ipos].val != EVAL_REAL )
+		if( ipos >= shD->prms[0].val().size() || end_vl )	break;
+		if( shD->prms[0].val()[ipos].tm >= aVend )	end_vl = true;
+		if( shD->prms[0].val()[ipos].val != EVAL_REAL )
 		{
-		    vsMin  = vmin(vsMin,sTr->val()[ipos].val);
-		    vsMax  = vmax(vsMax,sTr->val()[ipos].val);
+		    vsMin  = vmin(vsMin,shD->prms[0].val()[ipos].val);
+		    vsMax  = vmax(vsMax,shD->prms[0].val()[ipos].val);
 		}
 		ipos++;
 	    }
@@ -1594,7 +1571,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		vsMax += wnt_dp/2;
 	    }
 	}
-	else { vsMax = sTr->bordU(); vsMin = sTr->bordL(); }
+	else { vsMax = shD->prms[0].bordU(); vsMin = shD->prms[0].bordL(); }
     }
 
     float vmax_ln = tAr.height()/20;
@@ -1630,9 +1607,9 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
     }
 
     //-- Draw trends --
-    for( int i_t = 0; i_t < parNum; i_t++ )
+    for( int i_t = 0; i_t < shD->prms.size(); i_t++ )
     {
-	TrendObj *sTr = (TrendObj*)w->dc()[QString("trend_%1").arg(i_t)].value<void*>();
+	TrendObj *sTr = &shD->prms[i_t];
 
 	//--- Set trend's pen ---
 	QPen trpen(QColor(sTr->color().c_str()));
@@ -1723,45 +1700,42 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	}
     }
 
-    (*(QRect*)w->dc()["pictRect"].value<void*>()) = tAr;
-    w->dc()["tPict"] = tPict;
+    shD->pictRect = tAr;
+    shD->tPict = tPict;
 }
 
 void ShapeDiagram::tracing( )
 {
     WdgView *w = (WdgView *)((QTimer*)sender())->parent();
+    ShpDt *shD = (ShpDt*)w->shpData;
+
     if( !w->isEnabled() ) return;
 
-    long long tTime  = w->dc()["tTime"].toLongLong();
-    long long trcPer = (long long)w->dc()["trcPer"].toInt()*1000000;
-    if( w->dc()["tTimeCurent"].toBool() )
-	w->dc()["tTime"] = (long long)time(NULL)*1000000;
-    else if( tTime )	w->dc()["tTime"] = tTime+trcPer;
+    long long trcPer = (long long)shD->trcPer*1000000;
+    if( shD->tTimeCurent )	shD->tTime = (long long)time(NULL)*1000000;
+    else if( shD->tTime )	shD->tTime += trcPer;
     loadTrendsData(w);
     makeTrendsPicture(w);
 
     //- Trace cursors value -
-    tTime  = w->dc()["tTime"].toLongLong();
-    if( w->dc().value("active",1).toInt() )
+    if( shD->active )
     {
-	long long tTimeGrnd = tTime - (long long)(w->dc()["tSize"].toDouble()*1000000.);
-	long long curTime = w->dc()["curTime"].toLongLong();
-	if( curTime >= (tTime-2*trcPer) || curTime <= tTimeGrnd )
-	    setCursor( w, tTime );
+	long long tTimeGrnd = shD->tTime - (long long)(shD->tSize*1000000.);
+	if( shD->curTime >= (shD->tTime-2*trcPer) || shD->curTime <= tTimeGrnd )
+	    setCursor( w, shD->tTime );
     }
     w->update();
 }
 
 bool ShapeDiagram::event( WdgView *w, QEvent *event )
 {
-    if( !w->dc().value("en",1).toInt() ) return false;
+    ShpDt *shD = (ShpDt*)w->shpData;
+
+    if( !shD->en ) return false;
 
     //- Get generic data -
-    long long tTime     = w->dc()["tTime"].toLongLong();
-    long long tPict	= w->dc()["tPict"].toLongLong();
-    long long tTimeGrnd = tPict - (long long)(w->dc()["tSize"].toDouble()*1000000.);
-    long long curTime	= vmax(vmin(w->dc()["curTime"].toLongLong(),tPict),tTimeGrnd);
-    QRect *tAr = (QRect*)w->dc()["pictRect"].value<void*>();    
+    long long tTimeGrnd = shD->tPict - (long long)(shD->tSize*1000000.);
+    long long curTime	= vmax(vmin(shD->curTime,shD->tPict),tTimeGrnd);
 
     //- Process event -
     switch( event->type() )
@@ -1771,35 +1745,31 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 	    QPainter pnt( w );
 	
 	    //- Decoration draw -
-	    int margin = w->dc()["geomMargin"].toInt();
-	    int brdWdth = ((QPen*)w->dc()["border"].value<void*>())->width();
-	    QRect dA = w->rect().adjusted(0,0,-2*margin,-2*margin);	    
+	    QRect dA = w->rect().adjusted(0,0,-2*shD->geomMargin,-2*shD->geomMargin);
 	    pnt.setWindow(dA);
-	    pnt.setViewport(w->rect().adjusted(margin,margin,-margin,-margin));
+	    pnt.setViewport(w->rect().adjusted(shD->geomMargin,shD->geomMargin,-shD->geomMargin,-shD->geomMargin));
 	
 	    //- Draw decoration -
-	    QColor bkcol = w->dc()["backColor"].value<QColor>();
-	    if( bkcol.isValid() ) pnt.fillRect(dA,bkcol);
-	    QBrush bkbrsh = w->dc()["backImg"].value<QBrush>();
-	    if( bkbrsh.style() != Qt::NoBrush ) pnt.fillRect(dA,bkbrsh);
+	    if( shD->backColor.isValid() ) pnt.fillRect(dA,shD->backColor);
+	    if( shD->backImg.style() != Qt::NoBrush ) pnt.fillRect(dA,shD->backImg);
 
 	    //- Draw border -
-	    borderDraw( pnt, dA, *(QPen*)w->dc()["border"].value<void*>(), w->dc()["bordStyle"].toInt() );
+	    borderDraw( pnt, dA, shD->border, shD->bordStyle );
 
 	    //- Trend's picture -
-	    pnt.drawPicture(brdWdth,brdWdth,*(QPicture*)w->dc()["pictObj"].value<void*>());
+	    pnt.drawPicture(shD->border.width(),shD->border.width(),shD->pictObj);
 
 	    //- Draw focused border -
 	    if( w->hasFocus() )	qDrawShadeRect(&pnt,dA.x(),dA.y(),dA.width(),dA.height(),w->palette());
 
 	    //- Draw cursor -
-	    if( w->dc().value("active",1).toInt() && curTime && tTimeGrnd && tPict && (curTime >= tTimeGrnd || curTime <= tPict) )
+	    if( shD->active && curTime && tTimeGrnd && shD->tPict && (curTime >= tTimeGrnd || curTime <= shD->tPict) )
 	    {
-		int curPos = tAr->x()+tAr->width()*(curTime-tTimeGrnd)/(tPict-tTimeGrnd);
-		QPen curpen(QColor(w->dc()["curColor"].toString()));
+		int curPos = shD->pictRect.x()+shD->pictRect.width()*(curTime-tTimeGrnd)/(shD->tPict-tTimeGrnd);
+		QPen curpen(shD->curColor);
 		curpen.setWidth(1);
 		pnt.setPen(curpen);
-		pnt.drawLine(curPos,tAr->y(),curPos,tAr->y()+tAr->height());
+		pnt.drawLine(curPos,shD->pictRect.y(),curPos,shD->pictRect.y()+shD->pictRect.height());
 	    }
 
 	    return true;
@@ -1812,12 +1782,12 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 	    {
 		case Qt::Key_Left:
 		    if( curTime <= tTimeGrnd ) break;
-		    setCursor( w, curTime-(tTime-tTimeGrnd)/tAr->width() );
+		    setCursor( w, curTime-(shD->tTime-tTimeGrnd)/shD->pictRect.width() );
 		    w->update();
 		    return true;
 		case Qt::Key_Right:
-		    if( curTime >= tTime ) break;
-		    setCursor( w, curTime+(tTime-tTimeGrnd)/tAr->width() );
+		    if( curTime >= shD->tTime ) break;
+		    setCursor( w, curTime+(shD->tTime-tTimeGrnd)/shD->pictRect.width() );
 		    w->update();
 		    return true;
 	    }
@@ -1827,8 +1797,8 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 	{
 	    if( !w->hasFocus() ) break;
 	    QPoint curp = w->mapFromGlobal(w->cursor().pos());
-	    if( curp.x() < tAr->x() || curp.x() > (tAr->x()+tAr->width()) ) break;
-	    setCursor( w, tTimeGrnd + (tPict-tTimeGrnd)*(curp.x()-tAr->x())/tAr->width() );
+	    if( curp.x() < shD->pictRect.x() || curp.x() > (shD->pictRect.x()+shD->pictRect.width()) ) break;
+	    setCursor( w, tTimeGrnd + (shD->tPict-tTimeGrnd)*(curp.x()-shD->pictRect.x())/shD->pictRect.width() );
 	    w->update();
 	    break;
 	}
@@ -1839,24 +1809,23 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 
 void ShapeDiagram::setCursor( WdgView *w, long long itm )
 {
-    long long tTime     = w->dc()["tTime"].toLongLong();
-    long long tTimeGrnd = tTime - (long long)(w->dc()["tSize"].toDouble()*1000000.);
-    long long curTime   = vmax(vmin(itm,tTime),tTimeGrnd);
+    ShpDt *shD = (ShpDt*)w->shpData;
+
+    long long tTimeGrnd = shD->tTime - (long long)(shD->tSize*1000000.);
+    long long curTime   = vmax(vmin(itm,shD->tTime),tTimeGrnd);
 
     w->setAllAttrLoad(true);
     w->attrSet("curSek",TSYS::int2str(curTime/1000000),29);
     w->attrSet("curUSek",TSYS::int2str(curTime%1000000),30);
 
     //- Update trend's current values -
-    int parNum = w->dc()["parNum"].toInt();
-    for( int i_p = 0; i_p < parNum; i_p++ )
+    for( int i_p = 0; i_p < shD->prms.size(); i_p++ )
     {
-	TrendObj *sTr = (TrendObj*)w->dc()[QString("trend_%1").arg(i_p)].value<void*>();
-	int vpos = sTr->val(curTime);
-	if( vpos >= sTr->val().size() )	continue;
-	if( vpos && sTr->val()[vpos].tm > curTime )	vpos--;
-	double val = sTr->val()[vpos].val;
-	if( val != sTr->curVal() )
+	int vpos = shD->prms[i_p].val(curTime);
+	if( vpos >= shD->prms[i_p].val().size() )	continue;
+	if( vpos && shD->prms[i_p].val()[vpos].tm > curTime )	vpos--;
+	double val = shD->prms[i_p].val()[vpos].val;
+	if( val != shD->prms[i_p].curVal() )
 	    w->attrSet(QString("prm%1val").arg(i_p).toAscii().data(),TSYS::real2str(val,6),54+10*i_p);
     }
     w->setAllAttrLoad(false);
@@ -1900,11 +1869,12 @@ void ShapeDiagram::TrendObj::setAddr( const string &vl )
 
 void ShapeDiagram::TrendObj::loadData( bool full )
 {
-    long long tSize     = (long long)(view->dc()["tSize"].toDouble()*1000000.);
-    long long tTime     = view->dc()["tTime"].toLongLong();
+    ShpDt *shD = (ShpDt*)view->shpData;
+
+    long long tSize     = (long long)(shD->tSize*1000000.);
+    long long tTime     = shD->tTime;
     long long tTimeGrnd = tTime - tSize;
     long long wantPer = tSize/view->size().width();
-    string arch = view->dc()["valArch"].toString().toAscii().data();
 
     //- Clear trend for empty address and the full reload data -
     if( full || addr().empty() )
@@ -1918,7 +1888,7 @@ void ShapeDiagram::TrendObj::loadData( bool full )
     if( !arh_per || tTime > arh_end )
     {
 	XMLNode req("info");
-	req.setAttr("arch",arch)->setAttr("path",addr()+"/%2fserv%2fval");
+	req.setAttr("arch",shD->valArch)->setAttr("path",addr()+"/%2fserv%2fval");
 	if( view->cntrIfCmd(req,true) || atoi(req.attr("vtp").c_str()) == 5 )
 	{ arh_per = arh_beg = arh_end = 0; return; }
 	else
@@ -1930,9 +1900,8 @@ void ShapeDiagram::TrendObj::loadData( bool full )
 	}
     }
     //- One request check and prepare -
-    int trcPer = view->dc()["trcPer"].toInt()*1000000;
-    if( view->dc()["tTimeCurent"].toBool() && trcPer && 
-	(!arh_per || (arh_per >= trcPer && (tTime-valEnd())/trcPer < 2)) )
+    int trcPer = shD->trcPer*1000000;
+    if( shD->tTimeCurent && trcPer && (!arh_per || (arh_per >= trcPer && (tTime-valEnd())/trcPer < 2)) )
     {
 	XMLNode req("get");
 	req.setAttr("path",addr()+"/%2fserv%2fval")->
@@ -1977,7 +1946,7 @@ void ShapeDiagram::TrendObj::loadData( bool full )
     int  endBlks = 0;
     XMLNode req("get");
     m1: req.clear()->
-	    setAttr("arch",arch)->
+	    setAttr("arch",shD->valArch)->
 	    setAttr("path",addr()+"/%2fserv%2fval")->
 	    setAttr("tm",TSYS::ll2str(tTime))->
 	    setAttr("tm_grnd",TSYS::ll2str(tTimeGrnd))->
@@ -2017,7 +1986,7 @@ void ShapeDiagram::TrendObj::loadData( bool full )
 	while( vals.size() > 2000 )	vals.pop_back();
     }
     //- Check for archive jump -
-    if( arch.empty() && (bbeg-tTimeGrnd)/bper )	{ tTime = bbeg-bper; goto m1; }
+    if( shD->valArch.empty() && (bbeg-tTimeGrnd)/bper )	{ tTime = bbeg-bper; goto m1; }
 }
 
 //************************************************

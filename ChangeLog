@@ -1,3 +1,9 @@
+2008-07-08 Roman:
+- FIX:/UI/Vision: Big images scroll position lost on development is fixed.
+- !:/UI/Vision: Diagramm shape is moved to new individual data per widget store mechanism.
+- /UI/Vision: Unselect included widgets on development at lost focus is disabled.
+
+
 2008-07-05 Roman
 - FIX:/UI/Vision: Move childs widgets on development is fixed.
 - !:/UI/Vision: Media shape is moved to new individual data per widget store mechanism.

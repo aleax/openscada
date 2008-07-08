@@ -813,7 +813,11 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 	    up = true;
 	    break;
     }
-    if( up && !allAttrLoad( ) )	{ moveF(posF()); resizeF(sizeF()); }
+    if( up && !allAttrLoad( ) )
+    {
+	if( wLevel( ) > 0 )	moveF(posF());
+	resizeF(sizeF());
+    }
 
     if( shape )	return shape->attrSet(this,uiPrmPos,val);
 

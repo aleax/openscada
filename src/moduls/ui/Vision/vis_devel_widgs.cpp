@@ -2523,9 +2523,8 @@ bool DevelWdgView::event( QEvent *event )
 		mainWin()->setWdgScale(false);
 		return true;
 	    case QEvent::FocusOut:
-		if( cursor().shape() != Qt::ArrowCursor )
-		    setCursor(Qt::ArrowCursor);
-		if( QApplication::focusWidget() != this )
+		if( cursor().shape() != Qt::ArrowCursor )	setCursor(Qt::ArrowCursor);
+		/*if( QApplication::focusWidget() != this )
 		{
 		    if( !mainWin()->attrInsp->hasFocus() )
 		    {
@@ -2535,7 +2534,7 @@ bool DevelWdgView::event( QEvent *event )
 			    if( qobject_cast<DevelWdgView*>(children().at(i_c)) )
 				((DevelWdgView*)children().at(i_c))->setSelect(false);
 		    }
-		}
+		}*/
 		return true;
 	    case QEvent::MouseMove:
 	    {
