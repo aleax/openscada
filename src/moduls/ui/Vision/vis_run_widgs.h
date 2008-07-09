@@ -46,8 +46,8 @@ namespace VISION
 	    string user( );
 	    VisRun *mainWin( );
 
-	    string pgGrp( );
-	    string pgOpenSrc( );
+	    string pgGrp( )	{ return mPgGrp; }
+	    string pgOpenSrc( )	{ return mPgOpenSrc; }
 
 	    bool   permCntr( )	{ return mPermCntr; }
 	    bool   permView( )	{ return mPermView; }
@@ -76,6 +76,7 @@ namespace VISION
 	    unsigned	reqtm;		//Request values time
 	    bool	mPermCntr;	//Control widget's permition
 	    bool	mPermView;	//View widget's permition
+	    string	mPgGrp, mPgOpenSrc;
     };
 
     //*********************************************

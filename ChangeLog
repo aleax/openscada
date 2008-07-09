@@ -1,3 +1,9 @@
+2008-07-09 Roman:
+- /UI/Vision: Full screen and maximize run window attributes moved to project.
+- /UI/Vision: Attributes pgOpen, pgNoOpenProc, pgGrp and pgOpenSrc moved from box shape to project's pages.
+- !:/UI/Vision: Protocol shape is moved to new individual data per widget store mechanism.
+
+
 2008-07-08 Roman:
 - FIX:/UI/Vision: Big images scroll position lost on development is fixed.
 - !:/UI/Vision: Diagramm shape is moved to new individual data per widget store mechanism.

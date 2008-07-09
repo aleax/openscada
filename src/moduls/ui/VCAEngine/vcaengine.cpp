@@ -31,15 +31,15 @@
 
 //*************************************************
 //* Modul info!                                   *
-#define MOD_ID      "VCAEngine"
-#define MOD_NAME    "Visual control area engine"
-#define MOD_TYPE    "UI"
-#define MOD_SUBTYPE "VCAEngine"
-#define VER_TYPE    VER_UI
-#define VERSION     "0.6.0"
-#define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "Generic visual control area engine."
-#define LICENSE     "GPL"
+#define MOD_ID		"VCAEngine"
+#define MOD_NAME	"Visual control area engine"
+#define MOD_TYPE	"UI"
+#define MOD_SUBTYPE	"VCAEngine"
+#define VER_TYPE	VER_UI
+#define VERSION		"0.6.0"
+#define AUTORS		"Roman Savochenko"
+#define DESCRIPTION	"Generic visual control area engine."
+#define LICENSE		"GPL"
 //*************************************************
 
 VCA::Engine *VCA::mod;
@@ -178,6 +178,7 @@ void Engine::postEnable( int flag )
     prj_el.fldAdd( new TFld("GRP",_("Group"),TFld::String,TFld::NoFlag,"20","UI") );
     prj_el.fldAdd( new TFld("PERMIT",_("Permision"),TFld::Integer,TFld::OctDec,"3","436") );
     prj_el.fldAdd( new TFld("PER",_("Calc period (ms)"),TFld::Integer,TFld::NoFlag,"4","100") );
+    prj_el.fldAdd( new TFld("FLGS",_("Flags"),TFld::Integer,TFld::NoFlag,"4") );
 
     //- Make pages DB structure -
     page_el.fldAdd( new TFld("OWNER",_("Owner"),TFld::String,TCfg::Key,"100") );

@@ -38,6 +38,12 @@ class Page;
 class Project : public TCntrNode, public TConfig
 {
     public:
+	//Data
+	enum Flag
+	{
+	    Maximize	= 0x01,	//Maximize master window and resize content
+	    FullScreen	= 0x02,	//Full screen project run
+	};
 	//Methods
 	Project( const string &id, const string &name, const string &lib_db = "*.*" );
 	~Project( );
@@ -52,6 +58,7 @@ class Project : public TCntrNode, public TConfig
 	string	grp( );						//Library group
 	short	permit( )	{ return m_permit; }		//Permition for access to library
 	int	period( )	{ return mPer; }		//Project's session calc period
+	int	prjFlags( )	{ return mFlgs; }		//Project's flags
 
 	string DB( )		{ return work_prj_db; }		//Current library DB
 	string tbl( )		{ return m_dbt; }		//Table of storing library data
@@ -64,8 +71,9 @@ class Project : public TCntrNode, public TConfig
 	void setGrp( const string &it )		{ m_grp = it; modif(); }
 	void setPermit( short it )		{ m_permit = it; modif(); }
 	void setPeriod( int it )		{ mPer = it; modif(); }
+	void setPrjFlags( int val )		{ mFlgs = val; modif(); }
 
-	void setTbl( const string &it )		{ m_dbt = it; }	
+	void setTbl( const string &it )		{ m_dbt = it; }
 	void setFullDB( const string &it );
 
 	//- Enable stat -
@@ -114,12 +122,13 @@ class Project : public TCntrNode, public TConfig
 		work_prj_db,	//Work DB
 		mOldDB;
 	int	&m_permit,	//Access permition
-		&mPer;		//Calc period
+		&mPer,		//Calc period
+		&mFlgs;		//Project's flags
 	bool	m_enable;	//Enable state
 };
 
 //************************************************
-//* Page: Project's page                    	 *
+//* Page: Project's page			 *
 //************************************************
 class PageWdg;
 

@@ -37,7 +37,7 @@ Project::Project( const string &id, const string &name, const string &lib_db ) :
     TConfig(&mod->elProject()), m_enable(false), m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()),
     m_descr(cfg("DESCR").getSd()), m_ico(cfg("ICO").getSd()), m_dbt(cfg("DB_TBL").getSd()),
     m_owner(cfg("USER").getSd()), m_grp(cfg("GRP").getSd()), m_permit(cfg("PERMIT").getId()), mPer(cfg("PER").getId()),
-    work_prj_db(lib_db)
+    mFlgs(cfg("FLGS").getId()), work_prj_db(lib_db)
 {
     m_id = id;
     m_name = name;
@@ -342,6 +342,8 @@ void Project::cntrCmdProc( XMLNode *opt )
 		    "sel_id","0;4;6","sel_list",_("No access;View;View and control"));
 		ctrMkNode("fld",opt,-1,"/obj/cfg/per",_("Calc period"),RWRWR_,"root","UI",2,"tp","dec",
 		    "help",_("Project's session calc period on milliseconds."));
+		ctrMkNode("fld",opt,-1,"/obj/cfg/runWin",_("Run window"),RWRWR_,"root","UI",4,"tp","dec","dest","select",
+		    "sel_id","0;1;2","sel_list",_("Original size;Maximize;Full screen"));
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/page",_("Pages")))
@@ -413,6 +415,12 @@ void Project::cntrCmdProc( XMLNode *opt )
     {
 	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( TSYS::int2str(period()) );
 	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setPeriod( atoi(opt->text().c_str()) );
+    }
+    else if( a_path == "/obj/cfg/runWin" )
+    {
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( TSYS::int2str(prjFlags()&(Maximize|FullScreen)) );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )
+	    setPrjFlags( (prjFlags()&(~(Maximize|FullScreen)))|atoi(opt->text().c_str()) );
     }
     else if( a_path == "/br/pg_" || a_path == "/page/page" )
     {
@@ -584,6 +592,15 @@ void Page::postEnable( int flag )
 {
     //- Call parent method -
     Widget::postEnable(flag);
+
+    //- Add main attributes -
+    if( flag&TCntrNode::NodeConnect )
+    {
+	attrAdd( new TFld("pgOpen",_("Page:open state"),TFld::Boolean,TFld::NoFlag) );
+	attrAdd( new TFld("pgNoOpenProc",_("Page:process no opened"),TFld::Boolean,TFld::NoFlag) );
+	attrAdd( new TFld("pgGrp",_("Page:group"),TFld::String,TFld::NoFlag,"","","","","4") );
+	attrAdd( new TFld("pgOpenSrc",_("Page:open source"),TFld::String,TFld::NoFlag,"","","","","3") );
+    }
 
     //- Set owner key for this page -
     cfg("OWNER").setS(ownerFullId());

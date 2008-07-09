@@ -168,6 +168,13 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     prj_ctm->setWindowIconText(TSYS::addr2str(lab).c_str());
     connect(prj_ctm, SIGNAL(apply()), this, SLOT(isModify()));
     glay->addWidget(prj_ctm,6,1,1,3);
+    lab = new QLabel(_("Run window mode:"),tab_w);
+    glay->addWidget(lab,7,0);
+    prj_runw = new QComboBox( tab_w);
+    prj_runw->setObjectName("/obj/cfg/runWin");
+    prj_runw->setWindowIconText(TSYS::addr2str(lab).c_str());
+    connect(prj_runw, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
+    glay->addWidget(prj_runw,7,1,1,3);
 
     grp->setLayout(glay);
     dlg_lay->addWidget(grp,1,0,1,2);
@@ -395,6 +402,17 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(prj_ctm->objectName().toAscii().data(),TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) ) prj_ctm->setValue(req.text().c_str());
 	}
+	//--- Run window mode ---
+	gnd=TCntrNode::ctrId(root,prj_runw->objectName().toAscii().data(),true);
+	prj_runw->setVisible(gnd); ((QLabel *)TSYS::str2addr(prj_runw->windowIconText().toAscii().data()))->setVisible(gnd);
+	if( gnd )
+	{
+	    prj_runw->clear( );
+	    for( int i_l = 0, i_i = 0; (wstr=TSYS::strSepParse(gnd->attr("sel_list"),0,';',&i_l)).size(); )
+		prj_runw->addItem(wstr.c_str(),atoi(TSYS::strSepParse(gnd->attr("sel_id"),0,';',&i_i).c_str()));
+	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(prj_runw->objectName().toAscii().data(),TSYS::PathEl));
+	    if( !owner()->cntrIfCmd(req) ) prj_runw->setCurrentIndex( prj_runw->findData(atoi(req.text().c_str())) );
+	}
     }
 
     //- Mime data page -
@@ -510,7 +528,8 @@ void LibProjProp::isModify( )
 	req.setText(((QComboBox*)sender())->currentText().toAscii().data());
 	update = true;
     }
-    else if( oname == obj_accuser->objectName() || oname == obj_accgrp->objectName() || oname == obj_accother->objectName() )
+    else if( oname == obj_accuser->objectName() || oname == obj_accgrp->objectName() || oname == obj_accother->objectName() ||
+	oname == prj_runw->objectName() )
     {
 	req.setText(((QComboBox*)sender())->itemData(((QComboBox*)sender())->currentIndex()).toString().toAscii().data());
 	update = true;

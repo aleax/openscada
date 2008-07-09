@@ -25,6 +25,8 @@
 
 #include <linux/input.h>
 
+#include <QApplication>
+#include <QDesktopWidget>
 #include <QMenu>
 #include <QTimer>
 #include <QMenuBar>
@@ -453,6 +455,13 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
     //- Get update period -
     req.clear()->setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fper");
     if( !cntrIfCmd(req) ) m_period = atoi(req.text().c_str());
+    //- Get project's flags -
+    req.clear()->setAttr("path","/prj_"+src_prj+"/%2fobj%2fcfg%2frunWin");
+    if( !cntrIfCmd(req) )
+    {
+	setWindowState( atoi(req.text().c_str())&0x01 ? Qt::WindowMaximized : Qt::WindowNoState );
+	actFullScr->setChecked( atoi(req.text().c_str())&0x02 );
+    }
 
     //- Get open pages list -
     req.clear()->setName("openlist")->setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg");
@@ -523,12 +532,10 @@ void VisRun::callPage( const string& pg_it, XMLNode *upw )
 	master_pg->load("");
 	master_pg->setFocusPolicy( Qt::StrongFocus );
 	((QScrollArea *)centralWidget())->setWidget( master_pg );
-	if( master_pg->dc().value("pgFullScr",false).toBool() )
-	    actFullScr->setChecked(true);
-	else
+	if( !(windowState()&(Qt::WindowFullScreen|Qt::WindowMaximized)) )
 	{
-	    actFullScr->setChecked(false);
-	    resize( master_pg->size().width()+10, master_pg->size().height()+55 );
+	    QRect ws = QApplication::desktop()->availableGeometry(this);
+	    resize( vmin(master_pg->size().width()+10,ws.width()-10), vmin(master_pg->size().height()+55,ws.height()-10) );
 	}
     }
     //- Put to check for include -

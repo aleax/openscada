@@ -807,11 +807,8 @@ void OrigBox::postEnable( int flag )
 	attrAdd( new TFld("bordColor",_("Border:color"),TFld::String,Attr::Color,"","#000000","","","23") );
 	attrAdd( new TFld("bordStyle",_("Border:style"),TFld::Integer,TFld::Selected,"","3","0;1;2;3;4;5;6;7;8",
 						_("None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"),"19") );
-	attrAdd( new TFld("pgOpen",_("Page:open state"),TFld::Boolean,TFld::NoFlag,"","","","","24") );
-	attrAdd( new TFld("pgNoOpenProc",_("Page:no open process"),TFld::Boolean,TFld::NoFlag,"","","","","25") );
-	attrAdd( new TFld("pgOpenSrc",_("Page:open source"),TFld::String,TFld::NoFlag,"","","","","26") );
-	attrAdd( new TFld("pgGrp",_("Page:group"),TFld::String,TFld::NoFlag,"","","","","27") );
-	attrAdd( new TFld("pgFullScr",_("Page:full screen"),TFld::Boolean,TFld::NoFlag,"","","","","28") );
+	attrAdd( new TFld("pgOpenSrc",_("Page:open source"),TFld::String,TFld::NoFlag,"","","","","3") );
+	attrAdd( new TFld("pgGrp",_("Page:group"),TFld::String,TFld::NoFlag,"","","","","4") );
     }
 }
 

@@ -34,6 +34,7 @@
 #include <QPen>
 #include <QLabel>
 #include <QPicture>
+#include <QTableWidget>
 
 using std::string;
 using std::deque;
@@ -355,9 +356,7 @@ class ShapeDiagram : public WdgShape
 		QFont		sclMarkFont;
 		QTimer 		*trcTimer;
 		vector<TrendObj>	prms;
-		long long	tTime,
-				tPict,
-				curTime;
+		long long	tTime, tPict, curTime;
 		float		tSize;
 		string		valArch;
 	};
@@ -388,6 +387,27 @@ class ShapeProtocol : public WdgShape
 	void tracing( );	//Trends tracing
 
     private:
+	//Data
+	//- Shape node date -
+	class ShpDt
+	{
+	    public:
+		//Methods
+		ShpDt( ) : active(true), time(0), tSize(60), timeCurent(false), arhBeg(0), arhEnd(0)	{ }
+		//Attributes
+		short	active		:1;
+		short	timeCurent	:1;
+		short	trcPer		:10;
+		short	lev		:4;
+		short	viewOrd		:3;
+		short	itProp		:3;
+		QTimer 		*trcTimer;
+		QTableWidget	*addrWdg;
+		QMap<QString,int> indMap;
+		unsigned int	time, tSize;
+		unsigned int	arhBeg, arhEnd;
+		string		arch, tmpl, col;
+	};
 	//Private methods
 	void loadData( WdgView *view, bool full = false );
 	//- Recursively widgets process for disable focusable and events filter set -

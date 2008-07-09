@@ -62,20 +62,10 @@ VisRun *RunWdgView::mainWin( )
     return (VisRun *)WdgView::mainWin();
 }
 
-string RunWdgView::pgGrp( )
-{
-    return dc().value("pgGrp").toString().toAscii().data();
-}
-
-string RunWdgView::pgOpenSrc( )
-{
-    return dc().value("pgOpenSrc").toString().toAscii().data();
-}
-
 void RunWdgView::setPgOpenSrc( const string &vl )
 {
-    dc()["pgOpenSrc"] = vl.c_str();
-    attrSet("pgOpenSrc",vl,26);
+    mPgOpenSrc = vl;
+    attrSet("pgOpenSrc",vl,3);
 }
 
 int RunWdgView::cntrIfCmd( XMLNode &node, bool glob )
@@ -216,12 +206,19 @@ bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 	case -2:	//focus
 	    if( (bool)atoi(val.c_str()) == hasFocus() )      break;
 	    if( (bool)atoi(val.c_str()) ) setFocus(Qt::OtherFocusReason);
-	    break;
+	    return true;
 	case -3:	//perm
 	    setPermCntr( atoi(val.c_str())&SEQ_WR );
 	    setPermView( atoi(val.c_str())&SEQ_RD );
-	    break;
+	    return true;
+	case 4:		//pgGrp
+	    mPgGrp = val;
+	    return true;
+	case 3:		//mPgOpenSrc
+	    mPgOpenSrc = val;
+	    return true;
     }
+
     return rez;
 }
 

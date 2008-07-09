@@ -1354,7 +1354,7 @@ void VisDevelop::visualItPaste( )
 	    t1_el = s_el.substr(4);
 	}
 	//-- Copy scheme error --
-	else 
+	else
 	{
 	    mod->postMess(mod->nodePath().c_str(),QString(_("Copy/move scheme from '%1' to '%2' no support.")).
 		arg(copy_buf_el.c_str()).arg(work_wdg_work.c_str()),TVision::Error,this);
@@ -1374,7 +1374,7 @@ void VisDevelop::visualItPaste( )
 		if( req.childGet(i_w)->attr("id") == t1_el+TSYS::int2str(i_c) ) { i_w = 0; i_c++; }
 		else i_w++;
 	    t1_el += TSYS::int2str(i_c);
-	}	
+	}
 	//-- Make request dialog --
 	dlg.setMess(t_el.c_str());
 	dlg.setId(t1_el.c_str());
@@ -1382,7 +1382,7 @@ void VisDevelop::visualItPaste( )
 	{
 	    d_el += dlg.id().toAscii().data();
 	    string it_nm = dlg.name().toAscii().data();
-	
+
 	    req.clear()->setName("set")->
 		setAttr( "path", "/%2fprm%2fcfg%2fcp%2fcp" )->
 		setAttr( "src", s_elp+"/"+s_el )->

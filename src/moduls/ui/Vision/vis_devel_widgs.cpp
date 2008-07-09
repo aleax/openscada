@@ -2519,22 +2519,20 @@ bool DevelWdgView::event( QEvent *event )
 		return true;
 	    }
 	    case QEvent::FocusIn:
+		//-- Unselect and store child widgets --
 		if(select()) setSelect(true);
 		mainWin()->setWdgScale(false);
 		return true;
 	    case QEvent::FocusOut:
 		if( cursor().shape() != Qt::ArrowCursor )	setCursor(Qt::ArrowCursor);
-		/*if( QApplication::focusWidget() != this )
+		if( QApplication::focusWidget() != this && !mainWin()->attrInsp->hasFocus() )
 		{
-		    if( !mainWin()->attrInsp->hasFocus() )
-		    {
-			setSelect(false,false);
-			//-- Unselect child widgets --
-			for( int i_c = 0; i_c < children().size(); i_c++ )
-			    if( qobject_cast<DevelWdgView*>(children().at(i_c)) )
-				((DevelWdgView*)children().at(i_c))->setSelect(false);
-		    }
-		}*/
+		    setSelect(false,false);
+		    //-- Unselect and store child widgets --
+		    /*for( int i_c = 0; i_c < children().size(); i_c++ )
+			if( qobject_cast<DevelWdgView*>(children().at(i_c)) && ((DevelWdgView*)children().at(i_c))->select() )
+			    ((DevelWdgView*)children().at(i_c))->setSelect(false);*/
+		}
 		return true;
 	    case QEvent::MouseMove:
 	    {
