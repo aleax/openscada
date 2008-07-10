@@ -854,7 +854,7 @@ void WdgView::load( const string& item, bool load, bool init )
 	    //-- Request the widget for last attributes --
 	    XMLNode req("get");
 	    req.setAttr("path",id()+"/%2fserv%2fattr");
-	    if( !cntrIfCmd(req) /*&& id().substr(0,48) != "/ses_Kotel9/pg_so/pg_1/pg_mn/pg_Test_1_arc_in_11"*/ )
+	    if( !cntrIfCmd(req) )
 		for( int i_el = 0; i_el < req.childSize(); i_el++ )
 		    attrSet("",req.childGet(i_el)->text(),atoi(req.childGet(i_el)->attr("pos").c_str()));
 	}

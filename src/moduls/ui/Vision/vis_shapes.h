@@ -35,6 +35,7 @@
 #include <QLabel>
 #include <QPicture>
 #include <QTableWidget>
+#include <QScrollArea>
 
 using std::string;
 using std::deque;
@@ -459,7 +460,7 @@ class ShapeBox : public WdgShape
 	{
 	    public:
 		//Methods
-		ShpDt( ) : en(true), geomMargin(0), bordStyle(0), inclWidget(NULL)	{ }
+		ShpDt( ) : en(true), geomMargin(0), bordStyle(0), inclWidget(NULL), inclScrl(NULL)	{ }
 		//Attributes
 		short	en		:1;
 		short	geomMargin	:8;
@@ -468,6 +469,7 @@ class ShapeBox : public WdgShape
 		QColor		backColor;
 		QBrush		backImg;
 		RunPageView	*inclWidget;
+		QScrollArea 	*inclScrl;
 	};
 };
 

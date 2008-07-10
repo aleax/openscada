@@ -24,7 +24,7 @@
 #include <QEvent>
 #include <QPainter>
 #include <QVBoxLayout>
-#include <QStackedLayout>
+#include <QStackedWidget>
 #include <QPushButton>
 #include <QLineEdit>
 #include <QTextEdit>
@@ -2461,7 +2461,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    if( !qobject_cast<RunWdgView*>(w) )	{ up = false; break; }
 
 	    //-- Put previous include widget to page cache --
-	    if( !shD->inclWidget || val != shD->inclWidget->id() )
+	    if( (shD->inclWidget && val != shD->inclWidget->id()) || val.size() )
 	    {
 		if( shD->inclWidget )
 		{
@@ -2469,28 +2469,38 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    ((RunPageView*)w)->mainWin()->pgCacheAdd(shD->inclWidget);
 		    shD->inclWidget->setEnabled(false);
 		    shD->inclWidget->setVisible(false);
+		    shD->inclScrl->takeWidget();
 		    shD->inclWidget->setParent(NULL);
 		    shD->inclWidget->wx_scale = shD->inclWidget->mainWin()->xScale( );
 		    shD->inclWidget->wy_scale = shD->inclWidget->mainWin()->yScale( );
 		    shD->inclWidget = NULL;
+		    w->setProperty("inclPg","");
 		}
 		//-- Create new include widget --
 		if( val.size() )
 		{
-		    QStackedLayout *lay = (QStackedLayout*)w->layout();
-		    if( !lay ) lay = new QStackedLayout(w);
+		    if( !shD->inclScrl )
+		    {
+			QGridLayout *wlay = (QGridLayout*)w->layout();
+			if( !wlay ) wlay = new QGridLayout(w);
+			wlay->setMargin(shD->geomMargin);
+			shD->inclScrl = new QScrollArea(w);
+			shD->inclScrl->setFocusPolicy( Qt::NoFocus );
+			shD->inclScrl->setFrameShape(QFrame::NoFrame);
+			wlay->addWidget(shD->inclScrl);
+			//shD->inclScrl->setWidget(new QStackedWidget());
+		    }
+		    //QStackedWidget *stw = (QStackedWidget*)shD->inclScrl->widget();
 
-		    QLabel *lab = new QLabel(QString("Load page: '%1'.").arg(val.c_str()),w);
+		    QLabel *lab = new QLabel(QString("Load page: '%1'.").arg(val.c_str()),shD->inclWidget);
 		    lab->setAlignment(Qt::AlignCenter);
-		    lay->addWidget(lab);
-		    lay->setCurrentWidget(lab);
-		    qApp->processEvents();
-		
+		    shD->inclScrl->setWidget(lab);
+		    //qApp->processEvents();
+
 		    shD->inclWidget = (RunPageView *)(((RunWdgView*)w)->mainWin()->pgCacheGet(val));
 		    if( shD->inclWidget )
 		    {
-			shD->inclWidget->setParent(w);
-			lay->addWidget(shD->inclWidget);
+			shD->inclScrl->setWidget(shD->inclWidget);
 			shD->inclWidget->setEnabled(true);
 			shD->inclWidget->setVisible(true);
 			if( shD->inclWidget->wx_scale != shD->inclWidget->mainWin()->xScale() ||
@@ -2499,16 +2509,14 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    }
 		    else
 		    {
-		        shD->inclWidget = new RunPageView(val,(VisRun*)w->mainWin(),w,Qt::SubWindow);
-			lay->addWidget(shD->inclWidget);
+			shD->inclWidget = new RunPageView(val,(VisRun*)w->mainWin(),w/*shD->inclWidget*/,Qt::SubWindow);
+			shD->inclScrl->setWidget(shD->inclWidget);
 			shD->inclWidget->load("");
 		    }
-
-		    delete lab;
+		    w->setProperty("inclPg",TSYS::addr2str(shD->inclWidget).c_str());
 		    //shD->inclWidget->resize(w->size());
-		    //lay->addWidget(shD->inclWidget);
-		    lay->setCurrentWidget(shD->inclWidget);
-		    lay->setMargin(shD->geomMargin);
+		    //stw->setCurrentWidget(shD->inclWidget);
+		    //delete lab;
 		}
 	    } else up = false;
 	    break;
@@ -2550,6 +2558,8 @@ bool ShapeBox::event( WdgView *w, QEvent *event )
 
 	    return true;
 	}
+	//case QEvent::User:
+	//    if( shD->inclWidget ) shD->inclWidget->update();
     }
     return false;
 }

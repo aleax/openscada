@@ -25,6 +25,7 @@
 
 #include <string>
 #include <deque>
+#include <map>
 
 #include <QMainWindow>
 #include <QLabel>
@@ -33,6 +34,7 @@
 
 using std::string;
 using std::deque;
+using std::map;
 
 namespace VISION
 {
@@ -66,6 +68,7 @@ class VisRun : public QMainWindow
 
 	void initSess( const string &prj_it, bool crSessForce = false ); //Init session for project's item path
 	void callPage( const string &ses_it, XMLNode *upw = NULL );	//Call session page
+	void fullUpdatePgs( );
 
 	//- Cache commands -
 	void pgCacheClear( );
@@ -79,6 +82,10 @@ class VisRun : public QMainWindow
 	int cntrIfCmd( XMLNode &node, bool glob = false );
 
 	void load( const string& item );
+
+	//- Cache commands -
+	string cacheResGet( const string &res );
+	void cacheResSet( const string &res, const string &val );
 
 	//- Alarms commands -
 	unsigned alarmSt( )					{ return mAlrmSt; }
@@ -108,6 +115,15 @@ class VisRun : public QMainWindow
 	void alarmAct( QAction *alrm );		//Alarm actions process
 
     private:
+	//Data
+	class CacheEl
+	{
+	    public:
+		CacheEl( time_t itm, const string &ival ) : tm(itm), val(ival)	{ }
+		CacheEl( )	{ }
+		time_t	tm;
+		string	val;
+	};
 	//Private attributes
 	//- Menu root items -
 	QMenu	*mn_file,			//Menu "File"
@@ -140,12 +156,18 @@ class VisRun : public QMainWindow
 
 	float		x_scale, y_scale;	//RunTime scaling
 
+	//map<string,RunPageView*> pg_ls;		//Pages list
 	deque<RunWdgView *>  cache_pg;		//Pages cache
 
 	//- Alarm attributes -
 	unsigned	mAlrmSt;		//Alarm status
 	SndPlay		*alrmPlay;		//Alarm play widget
 	bool		alrLevSet;		//Use for no quitance lamp blinking
+
+	vector<string>	pgList;			//Pages list
+
+	//- Resource cache -
+	map<string,CacheEl>	mCacheRes;	//Resources cache
 };
 
 }

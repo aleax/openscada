@@ -59,7 +59,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     //- Init workspace -
     work_space = new QWorkspace(this);
     work_space->setScrollBarsEnabled(true);
-    work_space->setBackground(QBrush(QColor(156,179,196),Qt::Dense2Pattern));
+    work_space->setBackground(QBrush(QColor(156,179,196)/*,Qt::Dense2Pattern*/));
     setCentralWidget(work_space);
 
     //- Create actions -
@@ -142,7 +142,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     actLibNew->setToolTip(_("New widgets library create"));
     actLibNew->setWhatsThis(_("The button for creating new widgets library"));
     actLibNew->setStatusTip(_("Press for creating new widgets library."));
-    connect(actLibNew, SIGNAL(activated()), this, SLOT(libNew()));    
+    connect(actLibNew, SIGNAL(activated()), this, SLOT(libNew()));
     //--- Visual item add (widget or page) ---
     if(!ico_t.load(TUIS::icoPath("vision_it_add").c_str())) ico_t.load(":/images/it_add.png");
     actVisItAdd = new QAction(QPixmap::fromImage(ico_t),_("Add visual item"),this);
@@ -1057,7 +1057,7 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt )
     //- Count level -
     int p_el_cnt = 0;
     for( int i_off = 0; TSYS::pathLev(own_wdg,0,true,&i_off).size(); p_el_cnt++ ) ;
-    string sid1 = TSYS::pathLev(own_wdg,0);    
+    string sid1 = TSYS::pathLev(own_wdg,0);
 
     //- Make request id and name dialog -
     InputDlg dlg(this,cact->icon(),
@@ -1077,7 +1077,7 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt )
 	    if( !par_nm.empty() )	base_nm = TSYS::pathLev(par_nm,1,true).substr(4);
 	    int i_c = 1, i_w = 0;
 	    while( i_w < req.childSize() )
-		if( req.childGet(i_w)->attr("id") == base_nm+TSYS::int2str(i_c) ) 
+		if( req.childGet(i_w)->attr("id") == base_nm+TSYS::int2str(i_c) )
 		{ i_w = 0; i_c++; }
 		else i_w++;
 	    dlg.setId((base_nm+TSYS::int2str(i_c)).c_str());

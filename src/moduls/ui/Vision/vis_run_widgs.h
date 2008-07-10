@@ -30,6 +30,7 @@
 
 namespace VISION
 {
+
     class VisRun;
     //*********************************************
     //* Shape widget view runtime mode            *
@@ -46,8 +47,8 @@ namespace VISION
 	    string user( );
 	    VisRun *mainWin( );
 
-	    string pgGrp( )	{ return mPgGrp; }
-	    string pgOpenSrc( )	{ return mPgOpenSrc; }
+	    string pgGrp( );
+	    string pgOpenSrc( );
 
 	    bool   permCntr( )	{ return mPermCntr; }
 	    bool   permView( )	{ return mPermView; }
@@ -64,6 +65,8 @@ namespace VISION
 	    void update( bool full, const string &wpath = "" );
 	    bool attrSet( const string &attr, const string &val, int uiPrmPos = 0 );
 
+	    string resGet( const string &res );
+
 	protected:
 	    //- Protected methods -
 	    bool event( QEvent * event );
@@ -74,9 +77,8 @@ namespace VISION
 	private:
 	    //- Attributes -
 	    unsigned	reqtm;		//Request values time
-	    bool	mPermCntr;	//Control widget's permition
-	    bool	mPermView;	//View widget's permition
-	    string	mPgGrp, mPgOpenSrc;
+	    char	mPermCntr :1;	//Control widget's permition
+	    char	mPermView :1;	//View widget's permition
     };
 
     //*********************************************

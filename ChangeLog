@@ -1,10 +1,19 @@
-2008-07-10 Maxim
-- FIX/UI/Vision: Development widget pattern is fixed.
+2008-07-10 Roman
+- FIX:/UI/Vision: Exit form included widgets edit is fixed.
+- !!:/UI/Vision: Resource cache support is added to runtime.
+- /UI/Vision: Work pages attributes moved to QT object's atributes store.
+- !:/UI/Vision: Include widget's scroll area support is added.
+- FIX:/UI/Vision: Maximize and full screen runtime window mode is fixed.
+- FIX:/UI/Vision: Update widgets runtime mechanism is fixed.
 
 
 2008-07-10 Maxim
-- !/UI/Vision: Protocol shape is moved to new individual data per widget store mechanism for primitive ElFigure.
-- !/UI/Vision: Copy function for primitive ElFigure is added.
+- FIX:/UI/Vision: Development widget pattern is fixed.
+
+
+2008-07-10 Maxim
+- !:/UI/Vision: Protocol shape is moved to new individual data per widget store mechanism for primitive ElFigure.
+- !:/UI/Vision: Copy function for primitive ElFigure is added.
 
 
 2008-07-09 Roman:

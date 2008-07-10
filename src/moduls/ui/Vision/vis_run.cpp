@@ -261,7 +261,7 @@ void VisRun::closeEvent( QCloseEvent* ce )
 
 void VisRun::resizeEvent( QResizeEvent *ev )
 {
-    if( !ev->oldSize().isEmpty() && master_pg )
+    if( ev && !ev->oldSize().isEmpty() && master_pg )
     {
 	float x_scale_old = x_scale;
 	float y_scale_old = y_scale;
@@ -270,7 +270,7 @@ void VisRun::resizeEvent( QResizeEvent *ev )
 	    x_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().width()/(float)master_pg->size().width();
 	    y_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().height()/(float)master_pg->size().height();
 	}else x_scale = y_scale = 1.0;
-	if( x_scale_old != x_scale || y_scale_old != y_scale )	master_pg->update(true);
+	if( x_scale_old != x_scale || y_scale_old != y_scale )	fullUpdatePgs();
     }
 }
 
@@ -311,7 +311,7 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
 
     //- Update pages after user change -
     pgCacheClear();
-    if( master_pg )	master_pg->update(true);
+    if( master_pg ) fullUpdatePgs();
 }
 
 void VisRun::aboutQt()
@@ -455,13 +455,6 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
     //- Get update period -
     req.clear()->setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fper");
     if( !cntrIfCmd(req) ) m_period = atoi(req.text().c_str());
-    //- Get project's flags -
-    req.clear()->setAttr("path","/prj_"+src_prj+"/%2fobj%2fcfg%2frunWin");
-    if( !cntrIfCmd(req) )
-    {
-	setWindowState( atoi(req.text().c_str())&0x01 ? Qt::WindowMaximized : Qt::WindowNoState );
-	actFullScr->setChecked( atoi(req.text().c_str())&0x02 );
-    }
 
     //- Get open pages list -
     req.clear()->setName("openlist")->setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg");
@@ -488,8 +481,25 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
 	callPage(ses_it);
     }
 
+    //- Get project's flags -
+    req.clear()->setName("get")->setAttr("path","/prj_"+src_prj+"/%2fobj%2fcfg%2frunWin");
+    if( !cntrIfCmd(req) )
+    {
+	if( atoi(req.text().c_str())&0x01 )	setWindowState( Qt::WindowMaximized );
+	else if( atoi(req.text().c_str())&0x02 )actFullScr->setChecked( true );
+    }
+
     //- Start timer -
     updateTimer->start(period());
+}
+
+void VisRun::fullUpdatePgs( )
+{
+    for( int i_p = 0; i_p < pgList.size(); i_p++ )
+    {
+	RunPageView *pg = master_pg->findOpenPage(pgList[i_p]);
+	if( pg ) pg->update(true);
+    }
 }
 
 void VisRun::callPage( const string& pg_it, XMLNode *upw )
@@ -536,6 +546,11 @@ void VisRun::callPage( const string& pg_it, XMLNode *upw )
 	{
 	    QRect ws = QApplication::desktop()->availableGeometry(this);
 	    resize( vmin(master_pg->size().width()+10,ws.width()-10), vmin(master_pg->size().height()+55,ws.height()-10) );
+	}
+	else
+	{
+	    x_scale = y_scale = 1.0;
+	    resizeEvent(NULL);
 	}
     }
     //- Put to check for include -
@@ -683,19 +698,43 @@ void VisRun::alarmSet( unsigned alarm )
     mAlrmSt = alarm;
 }
 
+string VisRun::cacheResGet( const string &res )
+{
+    map<string,CacheEl>::iterator ires = mCacheRes.find(res);
+    if( ires == mCacheRes.end() ) return "";
+    ires->second.tm = time(NULL);
+    return ires->second.val;
+}
+
+void VisRun::cacheResSet( const string &res, const string &val )
+{
+    if( val.size() > 1024*1024 ) return;
+    mCacheRes[res] = CacheEl(time(NULL),val);
+    if( mCacheRes.size() > 100 )
+    {
+	map<string,CacheEl>::iterator ilast = mCacheRes.begin();
+	for( map<string,CacheEl>::iterator ires = mCacheRes.begin(); ires != mCacheRes.end(); ires++ )
+	    if( ires->second.tm < ilast->second.tm )	ilast = ires;
+	mCacheRes.erase(ilast);
+    }
+}
+
 void VisRun::updatePage( )
 {
     if( winClose ) return;
 
     //unsigned long long t_cnt = SYS->shrtCnt();
-
     //- Pages update -
     XMLNode req("openlist");
     req.setAttr("tm",TSYS::uint2str(reqtm))->
 	setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg");
+    pgList.clear();
     if( !cntrIfCmd(req) )
 	for( int i_ch = 0; i_ch < req.childSize(); i_ch++ )
+	{
+	    pgList.push_back(req.childGet(i_ch)->text());
 	    callPage(req.childGet(i_ch)->text(),req.childGet(i_ch));
+	}
     reqtm = strtoul(req.attr("tm").c_str(),NULL,10);
 
     //- Alarms update (one seconds update) -

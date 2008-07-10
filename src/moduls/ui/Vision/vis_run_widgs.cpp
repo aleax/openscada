@@ -62,9 +62,19 @@ VisRun *RunWdgView::mainWin( )
     return (VisRun *)WdgView::mainWin();
 }
 
+string RunWdgView::pgGrp( )
+{
+    return property("pgGrp").toString().toAscii().data();
+}
+
+string RunWdgView::pgOpenSrc( )
+{
+    return property("pgOpenSrc").toString().toAscii().data();
+}
+
 void RunWdgView::setPgOpenSrc( const string &vl )
 {
-    mPgOpenSrc = vl;
+    setProperty("pgOpenSrc",vl.c_str());
     attrSet("pgOpenSrc",vl,3);
 }
 
@@ -84,41 +94,42 @@ void RunWdgView::update( bool full, const string &wpath )
     {
 	int off = 0;
 	RunWdgView *wdg = findChild<RunWdgView*>(TSYS::pathLev(wpath,0,true,&off).c_str());
-	if( wdg ) wdg->update(false,wpath.substr(off));
+	if( wdg && !qobject_cast<RunPageView*>(wdg) ) wdg->update(false,wpath.substr(off));
 	return;
     }
 
     //- Request to widget for last attributes -
-	bool change = false;
-	XMLNode *req_el;
-	XMLNode req("get");
-	req.setAttr("path",id()+"/%2fserv%2fattr")->
-	    setAttr("tm",TSYS::uint2str(full?0:reqtm));
-	if( !cntrIfCmd(req) )
-	{
-	    if( full )	setAllAttrLoad(true);
-	    for( int i_el = 0; i_el < req.childSize(); i_el++ )
-	    {
-		req_el = req.childGet(i_el);
-		if( attrSet("",req_el->text(),atoi(req_el->attr("pos").c_str())) )
-		    change = true;
-	    }
-	    if( full )
-	    {
-		setAllAttrLoad(false);
-		attrSet("","load",-1);
-		//- Childs update for permition change -
-		childsUpdate(true);
-		orderUpdate();
-		QWidget::update();
-	    }
-	    reqtm = strtoul(req.attr("tm").c_str(),0,10);
+    bool change = false;
+    XMLNode *req_el;
+    XMLNode req("get");
+    req.setAttr("path",id()+"/%2fserv%2fattr")->
+        setAttr("tm",TSYS::uint2str(full?0:reqtm));
+    if( !cntrIfCmd(req) )
+    {
+        if( full )	setAllAttrLoad(true);
+        for( int i_el = 0; i_el < req.childSize(); i_el++ )
+        {
+	    req_el = req.childGet(i_el);
+	    if( attrSet("",req_el->text(),atoi(req_el->attr("pos").c_str())) )
+		change = true;
 	}
+	if( full )
+	{
+	    setAllAttrLoad(false);
+	    attrSet("","load",-1);
+	    //- Childs update for permition change -
+	    childsUpdate(true);
+	    orderUpdate();
+	    QWidget::update();
+	}
+	reqtm = strtoul(req.attr("tm").c_str(),0,10);
+    }
 
     //- Call childs for update -
     if( full )
 	for( int i_c = 0; i_c < children().size(); i_c++ )
-	    if( qobject_cast<RunWdgView*>(children().at(i_c)) && ((RunWdgView*)children().at(i_c))->isEnabled() )
+	    if( qobject_cast<RunWdgView*>(children().at(i_c)) && !qobject_cast<RunPageView*>(children().at(i_c)) &&
+		    ((RunWdgView*)children().at(i_c))->isEnabled() )
 		((RunWdgView*)children().at(i_c))->update(full);
 }
 
@@ -212,14 +223,24 @@ bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 	    setPermView( atoi(val.c_str())&SEQ_RD );
 	    return true;
 	case 4:		//pgGrp
-	    mPgGrp = val;
+	    setProperty("pgGrp",val.c_str());
 	    return true;
-	case 3:		//mPgOpenSrc
-	    mPgOpenSrc = val;
+	case 3:		//pgOpenSrc
+	    setProperty("pgOpenSrc",val.c_str());
 	    return true;
     }
 
     return rez;
+}
+
+string RunWdgView::resGet( const string &res )
+{
+    if( res.empty() )	return "";
+    string ret = mainWin( )->cacheResGet(res);
+    if( ret.empty() && !(ret=WdgView::resGet(res)).empty() )
+	mainWin( )->cacheResSet(res,ret);
+
+    return ret;
 }
 
 bool RunWdgView::event( QEvent *event )
@@ -426,22 +447,18 @@ RunPageView *RunPageView::findOpenPage( const string &ipg )
     if( id() == ipg ) return this;
     //- Check to included widgets -
     for( int i_ch = 0; i_ch < children().size(); i_ch++ )
-	if( qobject_cast<RunWdgView*>(children().at(i_ch)) &&
-		((RunWdgView*)children().at(i_ch))->root() == "Box" &&
-		((RunWdgView*)children().at(i_ch))->pgOpenSrc() == ipg.c_str() )
     {
-	for( int i_w = 0; i_w < ((RunWdgView*)children().at(i_ch))->children().size(); i_w++ )
-	    if( qobject_cast<RunPageView*>(((RunWdgView*)children().at(i_ch))->children().at(i_w)) )
-		return ((RunPageView*)((RunWdgView*)children().at(i_ch))->children().at(i_w));
-	return NULL;
-    }
-    //- Put checking to childs -
-    for( int i_ch = 0; i_ch < children().size(); i_ch++ )
 	if( qobject_cast<RunPageView*>(children().at(i_ch)) )
 	{
 	    RunPageView *pg = ((RunPageView*)children().at(i_ch))->findOpenPage(ipg);
 	    if( pg ) return pg;
+	    continue;
 	}
+	if( !qobject_cast<RunWdgView*>(children().at(i_ch)) )	continue;
+	RunWdgView *rwdg = (RunWdgView*)children().at(i_ch);
+	if( rwdg->root() == "Box" && rwdg->pgOpenSrc() == ipg && !rwdg->property("inclPg").toString().isEmpty() )
+	    return (RunPageView*)TSYS::str2addr(rwdg->property("inclPg").toString().toAscii().data());
+    }
 
     return NULL;
 }
