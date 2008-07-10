@@ -181,7 +181,8 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     connect(actVisItEdit, SIGNAL(activated()), this, SLOT(visualItEdit()));
     //--- Cut visual item ---
     if(!ico_t.load(TUIS::icoPath("editcut").c_str())) ico_t.load(":/images/editcut.png");
-    actVisItCut = new QAction(QPixmap::fromImage(ico_t),_("Visual item cut"),this);
+    actVisItCut = new QAction(QPixmap::fromImage(ico_t),_("Visual item cut"),this);    
+    actVisItCut->setObjectName("editcut");
     actVisItCut->setToolTip(_("Goes visual item cut"));
     actVisItCut->setWhatsThis(_("The button for goes to visual item cut"));
     actVisItCut->setStatusTip(_("Press for goes to visual item cut."));
@@ -191,6 +192,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     //--- Copy visual item ---
     if(!ico_t.load(TUIS::icoPath("editcopy").c_str())) ico_t.load(":/images/editcopy.png");
     actVisItCopy = new QAction(QPixmap::fromImage(ico_t),_("Visual item copy"),this);
+    actVisItCopy->setObjectName("editcopy");
     actVisItCopy->setToolTip(_("Goes visual item copy"));
     actVisItCopy->setWhatsThis(_("The button for goes to visual item copy"));
     actVisItCopy->setStatusTip(_("Press for goes to visual item copy."));
@@ -200,6 +202,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     //--- Paste visual item ---
     if(!ico_t.load(TUIS::icoPath("editpaste").c_str())) ico_t.load(":/images/editpaste.png");
     actVisItPaste = new QAction(QPixmap::fromImage(ico_t),_("Visual item paste"),this);
+    actVisItPaste->setObjectName("editpaste");
     actVisItPaste->setToolTip(_("Goes visual item paste"));
     actVisItPaste->setWhatsThis(_("The button for goes to visual item paste"));
     actVisItPaste->setStatusTip(_("Press for goes to visual item paste."));
@@ -305,7 +308,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     //--- Line creation ---
     if(!ico_t.load(TUIS::icoPath("vision_elfig_line").c_str())) ico_t.load(":/images/elfig_line.png");
     actElFigLine = new QAction(QPixmap::fromImage(ico_t),_("Add line"),this);
-    //actElFigCursorAct->setCheckable(true);
+    actElFigLine->setCheckable(true);
     actElFigLine->setObjectName("line");
     actElFigLine->setToolTip(_("Add line to elementary figure"));
     actElFigLine->setWhatsThis(_("The button for adding line to elementary figure"));
@@ -314,7 +317,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     //--- Arc creation ---
     if(!ico_t.load(TUIS::icoPath("vision_elfig_arc").c_str())) ico_t.load(":/images/elfig_arc.png");
     actElFigArc = new QAction(QPixmap::fromImage(ico_t),_("Add arc"),this);
-    //actElFigCursorAct->setCheckable(true);
+    actElFigArc->setCheckable(true);
     actElFigArc->setObjectName("arc");
     actElFigArc->setToolTip(_("Add arc to elementary figure"));
     actElFigArc->setWhatsThis(_("The button for adding arc to elementary figure"));
@@ -323,7 +326,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     //--- Add Besie curve ---
     if(!ico_t.load(TUIS::icoPath("vision_elfig_besie").c_str())) ico_t.load(":/images/elfig_besie.png");
     actElFigBesie = new QAction(QPixmap::fromImage(ico_t),_("Add besier curve"),this);
-    //actElFigCursorAct->setCheckable(true);
+    actElFigBesie->setCheckable(true);
     actElFigBesie->setObjectName("besier");
     actElFigBesie->setToolTip(_("Add Besier curve to elementary figure"));
     actElFigBesie->setWhatsThis(_("The button for adding Besier curve to elementary figure"));
@@ -332,9 +335,8 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     //--- Add Hold points check ---
     if(!ico_t.load(TUIS::icoPath("vision_elfig_lock").c_str())) ico_t.load(":/images/elfig_lock.png");
     actElFigCheckAct=new QAction(QPixmap::fromImage(ico_t),_("Holds"),this);
-    //actElFigCheckAct->setCheckable(true);
-    actElFigCursorAct->setCheckable(true);
-    actElFigCursorAct->setChecked(true);
+    actElFigCheckAct->setCheckable(true);
+    actElFigCheckAct->setChecked(true);
     actElFigCheckAct->setObjectName("hold");
     actElFigCheckAct->setToolTip(_("Enable holds"));
     actElFigCheckAct->setWhatsThis(_("The button for enabling holds"));
@@ -440,7 +442,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
 
     //- Init tool bars -
     //-- Visual items tools bar --
-    QToolBar *visItToolBar = new QToolBar(_("Visual items toolbar"),this);
+    visItToolBar = new QToolBar(_("Visual items toolbar"),this);
     visItToolBar->setObjectName("visItToolBar");
     addToolBar(visItToolBar);
     visItToolBar->addAction(actPrjRun);
@@ -1282,18 +1284,21 @@ void VisDevelop::visualItEdit( )
 
 void VisDevelop::visualItCut( )
 {
+    if( !actVisItCut->property("wdgAddr").toString().isEmpty() )   return;
     copy_buf = "1"+work_wdg;
     editToolUpdate();
 }
 
 void VisDevelop::visualItCopy( )
 {
+    if( !actVisItCopy->property("wdgAddr").toString().isEmpty() )   return;
     copy_buf = "0"+work_wdg;
     editToolUpdate();
 }
 
 void VisDevelop::visualItPaste( )
 {
+    if( !actVisItPaste->property("wdgAddr").toString().isEmpty() )   return;
     string copy_buf_el;
     string work_wdg_work = work_wdg;
     vector<string> copy_els, del_els;
@@ -1419,6 +1424,7 @@ void VisDevelop::visualItPaste( )
 
 void VisDevelop::editToolUpdate( )
 {
+    if( !actVisItCopy->property("wdgAddr").toString().isEmpty() )   return;
     actVisItCut->setEnabled(!work_wdg.empty());
     actVisItCopy->setEnabled(!work_wdg.empty());
     //- Src and destination elements calc -

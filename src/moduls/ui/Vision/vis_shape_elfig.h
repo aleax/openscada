@@ -144,6 +144,31 @@ class ShapeElFigure : public WdgShape
         void toolAct( QAction* );
     
     private:
+        //Data
+        class ElFigDt
+        {
+            public:
+		//Methods
+                ElFigDt( ) : en(true), active(true), geomMargin(0), lineWdth(1), lineDecor(0),
+                        bordWdth(0), orient(0)  { }
+		//Attributes
+                short	en          :1;
+                short	active      :1;
+                short   geomMargin  :8;
+                short   lineDecor   :4;
+                short   bordWdth    :8;
+                float   lineWdth;
+                QColor  lineClr;
+                QColor  bordClr;
+                QColor  fillClr;
+                QBrush  fillImg;
+                double  orient;
+                string  elLst;
+                string  lineStyle;
+                QVector<ShapeItem> shapeItems;
+                QVector<inundationItem> inundationItems;
+                PntMap  shapePnts;
+        };
     	//Methods
         int itemAt( const QPointF &pos, const QVector<ShapeItem> &shapeItems, WdgView *w );			//Check for figure type under cursor
         void moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeItems, PntMap *pnts, WdgView *w );	//Move figure procedure
@@ -189,12 +214,13 @@ class ShapeElFigure : public WdgShape
     
         QVector<int> index_array;
         QVector<int> rect_array;
+        QVector<int> copy_index, index_array_copy, index_array_copy_flag_A;
             
 	int count_Shapes, count_moveItemTo,
 	    index, index_temp, index_del,index_inund,
 	    rect_num;
 	bool flag_cursor, flag_key, flag_up, flag_down, flag_left, flag_right, 
-	     flag_ctrl, flag_ctrl_move, flag_m, flag_hold_arc, flag_A, flag_hold_checked;
+	     flag_ctrl, flag_ctrl_move, flag_m, flag_hold_arc, flag_A, flag_copy;
 					    	
         bool flag_rect, flag_arc_rect_3_4, flag_arc_release, flag_first_move, Flag;
         QPointF Start_offset, End_offset, CtrlPos1_offset, CtrlPos2_offset, CtrlPos3_offset, CtrlPos4_offset;

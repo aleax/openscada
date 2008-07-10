@@ -146,6 +146,7 @@ class VisDevelop : public QMainWindow
 	QActionGroup	*actGrpWdgAdd;	//Add widgets action group
 
 	//- Toolbars -
+        QToolBar *visItToolBar;         //Main visual items toolbar
 	QToolBar *wdgToolView;		//Widget's view functions
 	QToolBar *elFigTool;		//Elementar figure base widget tools
 	vector<QToolBar*> lb_toolbar;	//Library toolbars

@@ -254,7 +254,6 @@ namespace VISION
 	    virtual float yScale( bool full = false );
 	    int		z( )		{ return z_coord;  }
 	    virtual string user( )	{ return ""; }
-	    QMap<QString, QVariant> &dc(){ return cache_data; }
 	    bool	allAttrLoad( )	{ return all_attr_load; }
 
 	    void	moveF( const QPointF &pos );
@@ -293,7 +292,6 @@ namespace VISION
 	    string		idWidget,	//Full widget identifier
 				m_root;		//Root widget identifier
 	    WdgShape		*shape;		//Link to root widget shape
-	    QMap<QString, QVariant> cache_data;	//Internal data cache
 	    QMainWindow		*main_win;	//Main window
     };
 }

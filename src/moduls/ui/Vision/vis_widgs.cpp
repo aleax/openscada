@@ -889,6 +889,7 @@ void WdgView::load( const string& item, bool load, bool init )
 		wdg->load((item==id())?"":item,false,true);
 	}
 	update();
+        //repaint();
 
 	printf("TEST 02: Init '%s' time %fms\n",id().c_str(),1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk()));
     }

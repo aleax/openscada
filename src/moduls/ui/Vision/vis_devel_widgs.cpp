@@ -2527,7 +2527,8 @@ bool DevelWdgView::event( QEvent *event )
 		if( cursor().shape() != Qt::ArrowCursor )	setCursor(Qt::ArrowCursor);
 		if( QApplication::focusWidget() != this && !mainWin()->attrInsp->hasFocus() )
 		{
-		    setSelect(false,false);
+		    emit selected("");
+                    //setSelect(false,false);
 		    //-- Unselect and store child widgets --
 		    /*for( int i_c = 0; i_c < children().size(); i_c++ )
 			if( qobject_cast<DevelWdgView*>(children().at(i_c)) && ((DevelWdgView*)children().at(i_c))->select() )

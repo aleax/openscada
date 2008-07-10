@@ -1,3 +1,8 @@
+2008-07-10 Maxim
+- !/UI/Vision: Protocol shape is moved to new individual data per widget store mechanism for primitive ElFigure.
+- !/UI/Vision: Copy function for primitive ElFigure is added.
+
+
 2008-07-09 Roman:
 - /UI/Vision: Full screen and maximize run window attributes moved to project.
 - /UI/Vision: Attributes pgOpen, pgNoOpenProc, pgGrp and pgOpenSrc moved from box shape to project's pages.
