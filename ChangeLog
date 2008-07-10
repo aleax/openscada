@@ -1,4 +1,8 @@
 2008-07-10 Maxim
+- FIX/UI/Vision: Development widget pattern is fixed.
+
+
+2008-07-10 Maxim
 - !/UI/Vision: Protocol shape is moved to new individual data per widget store mechanism for primitive ElFigure.
 - !/UI/Vision: Copy function for primitive ElFigure is added.
 

@@ -1252,10 +1252,10 @@ void VisDevelop::visualItEdit( )
 #if QT_VERSION >= 0x040400
 	scrl->setAlignment(Qt::AlignCenter);
 #endif
-	QPalette plt = scrl->palette();
-	plt.setBrush(QPalette::Window,QBrush("grey",Qt::Dense2Pattern));
-	scrl->setPalette(plt);
-	//scrl->setBackgroundRole(QPalette::Dark);
+	//QPalette plt = scrl->palette();
+        //plt.setBrush(QPalette::Window,QBrush("grey",Qt::CrossPattern));
+	//scrl->setPalette(plt);
+	scrl->setBackgroundRole(QPalette::Dark);
 	scrl->setAttribute(Qt::WA_DeleteOnClose);
 	scrl->setWindowTitle(w_title);
 	//- Set window icon -

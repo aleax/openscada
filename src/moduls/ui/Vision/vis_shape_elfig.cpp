@@ -1005,6 +1005,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                 pnt.drawPath( ellipse_draw_startPath );
                 pnt.drawPath( ellipse_draw_endPath );
             }
+
             return true;
         }
         case QEvent::MouseButtonPress:
@@ -1656,6 +1657,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
         }
         case QEvent::MouseMove:
         {
+            
             int fl;
             int index_arc;// - index of the arc, wich take part in moving -
             int temp;
@@ -1793,6 +1795,8 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 			    }
 			    flag_arc_inund = false;
 			    view->repaint();
+
+                           
 			}
                         if( rect_num != -1 )	temp = realRectNum( rect_num, shapeItems );
                         //- if the figure or it's rect is not connected to other one -
@@ -1909,6 +1913,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     }
                 }
             }
+            
             return true;
         }
         case QEvent::KeyPress:
@@ -2678,6 +2683,8 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
     }
     if ( count_moveItemTo == count_Shapes ) 
         previousPosition_all = pos;
+    
+    
 }
 
 //- detecting connected figures -

@@ -2343,7 +2343,6 @@ bool DevelWdgView::event( QEvent *event )
 	    pntView->setSelArea( rsel, fMoveHoldMove ?  SizePntWdg::Hide : (edit() ? SizePntWdg::EditBorder : SizePntWdg::SizeDots) );
 	}
 	pnt.end();
-
 	if( WdgView::event(event) )	return true;
 	return QWidget::event(event);
     }
