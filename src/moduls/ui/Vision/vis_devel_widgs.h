@@ -25,6 +25,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 #include <QAbstractTableModel>
 #include <QDockWidget>
@@ -36,6 +37,7 @@
 
 using std::string;
 using std::vector;
+using std::map;
 
 class QTreeWidgetItem;
 class QTreeWidget;
@@ -478,6 +480,11 @@ class DevelWdgView: public WdgView
 
 	DevelWdgView *levelWidget( int lev );
 
+	//- Resource and cache operations -
+	string resGet( const string &res );
+	string cacheResGet( const string &res );
+	void cacheResSet( const string &res, const string &val );
+
     signals:
 	void selected( const string& item );		//Change selection signal
 	void apply( const string & );
@@ -512,10 +519,11 @@ class DevelWdgView: public WdgView
 	short int	fMoveHoldMove	:1;	//Mouse move on hold
 	short int	fHideChilds	:1;	//Hide childs on move
 
-	QPoint		holdPnt;	//Hold move point
-	SizePntWdg	*pntView;	//Point view
+	QPoint		holdPnt;		//Hold move point
+	SizePntWdg	*pntView;		//Point view
 	DevelWdgView	*editWdg;
 	QPoint		dragStartPos;
+	map<string,string>	mCacheRes;	//Resources cache
 };
 
 }

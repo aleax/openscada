@@ -1179,7 +1179,7 @@ void SessWdg::prcElListUpdate( )
 	AutoHD<Attr> attr = attrAt(ls[i_a]);
 	if( attr.at().flgSelf()&(Attr::CfgConst|Attr::CfgLnkIn|Attr::CfgLnkOut) && !attr.at().cfgVal().empty() )
 	    m_attrLnkLs.push_back(ls[i_a]);
-	if( !(attr.at().flgGlob()&Attr::IsUser) ) m_attrUILs.push_back(ls[i_a]);
+	if( !(attr.at().flgGlob()&Attr::IsUser) )	m_attrUILs.push_back(ls[i_a]);
 	if( attr.at().flgSelf()&Attr::CfgLnkIn && attr.at().cfgVal().empty() )
 	    attr.at().setS(EVAL_STR);
     }

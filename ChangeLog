@@ -1,3 +1,10 @@
+2008-07-11 Roman
+- !!:/UI/Vision: Resource cache support is added to development pages.
+- FIX:/UI/Vision: Zero arguments list process for Text shape is fixed.
+- FIX:/UI/Vision: Multiply opened of included widgets into shape box is fixed.
+- /UI/Vision: Maximize include widgets to container box size is added.
+
+
 2008-07-10 Roman
 - FIX:/UI/Vision: Exit form included widgets edit is fixed.
 - !!:/UI/Vision: Resource cache support is added to runtime.

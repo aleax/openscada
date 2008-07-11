@@ -2284,6 +2284,29 @@ DevelWdgView *DevelWdgView::levelWidget( int lev )
     return this;
 }
 
+string DevelWdgView::resGet( const string &res )
+{
+    if( res.empty() )	return "";
+    string ret = levelWidget(0)->cacheResGet(res);
+    if( ret.empty() && !(ret=WdgView::resGet(res)).empty() )
+	levelWidget(0)->cacheResSet(res,ret);
+
+    return ret;
+}
+
+string DevelWdgView::cacheResGet( const string &res )
+{
+    map<string,string>::iterator ires = mCacheRes.find(res);
+    if( ires == mCacheRes.end() ) return "";
+    return ires->second;
+}
+
+void DevelWdgView::cacheResSet( const string &res, const string &val )
+{
+    if( val.size() > 1024*1024 ) return;
+    mCacheRes[res] = val;
+}
+
 bool DevelWdgView::event( QEvent *event )
 {
     //- Paint event process -

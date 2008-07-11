@@ -771,6 +771,7 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    if( uiPrmPos >= 50 && uiPrmPos < 150 )
 	    {
 		int argN = (uiPrmPos/10)-5;
+		if( argN >= shD->args.size() )	break;
 		if( (uiPrmPos%10) == 0 || (uiPrmPos%10) == 1 )
 		{
 		    QVariant gval = shD->args[argN].val();
@@ -2412,6 +2413,8 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
     {
 	case -1:	//load
 	    up = true;
+	    if( qobject_cast<RunWdgView*>(w) && shD->inclWidget )
+		shD->inclWidget->setMinimumSize(w->size());
 	    break;
 	case -2:	//focus
 	    //if( (bool)atoi(val.c_str()) == w->hasFocus() )	up = false;
@@ -2461,7 +2464,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    if( !qobject_cast<RunWdgView*>(w) )	{ up = false; break; }
 
 	    //-- Put previous include widget to page cache --
-	    if( (shD->inclWidget && val != shD->inclWidget->id()) || val.size() )
+	    if( (shD->inclWidget && val != shD->inclWidget->id()) || (!shD->inclWidget && !val.empty()) )
 	    {
 		if( shD->inclWidget )
 		{
@@ -2483,19 +2486,19 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    {
 			QGridLayout *wlay = (QGridLayout*)w->layout();
 			if( !wlay ) wlay = new QGridLayout(w);
-			wlay->setMargin(shD->geomMargin);
+			wlay->setMargin(0/*shD->geomMargin*/);
 			shD->inclScrl = new QScrollArea(w);
 			shD->inclScrl->setFocusPolicy( Qt::NoFocus );
 			shD->inclScrl->setFrameShape(QFrame::NoFrame);
 			wlay->addWidget(shD->inclScrl);
-			//shD->inclScrl->setWidget(new QStackedWidget());
 		    }
-		    //QStackedWidget *stw = (QStackedWidget*)shD->inclScrl->widget();
 
 		    QLabel *lab = new QLabel(QString("Load page: '%1'.").arg(val.c_str()),shD->inclWidget);
 		    lab->setAlignment(Qt::AlignCenter);
+		    lab->setWordWrap(true);
+		    lab->resize(w->size());
 		    shD->inclScrl->setWidget(lab);
-		    //qApp->processEvents();
+		    qApp->processEvents();
 
 		    shD->inclWidget = (RunPageView *)(((RunWdgView*)w)->mainWin()->pgCacheGet(val));
 		    if( shD->inclWidget )
@@ -2509,14 +2512,12 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    }
 		    else
 		    {
-			shD->inclWidget = new RunPageView(val,(VisRun*)w->mainWin(),w/*shD->inclWidget*/,Qt::SubWindow);
+			shD->inclWidget = new RunPageView(val,(VisRun*)w->mainWin(),shD->inclScrl,Qt::SubWindow);
 			shD->inclScrl->setWidget(shD->inclWidget);
 			shD->inclWidget->load("");
 		    }
+		    shD->inclWidget->setMinimumSize(w->size());
 		    w->setProperty("inclPg",TSYS::addr2str(shD->inclWidget).c_str());
-		    //shD->inclWidget->resize(w->size());
-		    //stw->setCurrentWidget(shD->inclWidget);
-		    //delete lab;
 		}
 	    } else up = false;
 	    break;
