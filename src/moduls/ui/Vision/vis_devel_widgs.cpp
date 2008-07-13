@@ -2547,7 +2547,7 @@ bool DevelWdgView::event( QEvent *event )
 		return true;
 	    case QEvent::FocusOut:
 		if( cursor().shape() != Qt::ArrowCursor )	setCursor(Qt::ArrowCursor);
-		if( QApplication::focusWidget() != this && !mainWin()->attrInsp->hasFocus() )
+		if( QApplication::focusWidget() != this && !mainWin()->attrInsp->hasFocus() && !mainWin()->lnkInsp->hasFocus() )
 		{
 		    if( editWdg )	editWdg->setSelect(false);
 		    //emit selected("");

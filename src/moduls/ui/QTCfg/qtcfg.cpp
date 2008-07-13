@@ -396,12 +396,10 @@ ConfApp::~ConfApp()
 
 void ConfApp::quitSt()
 {
-    exitModifChk( );
-
-    SYS->stop();
+    if( exitModifChk( ) ) SYS->stop();
 }
 
-void ConfApp::exitModifChk( )
+bool ConfApp::exitModifChk( )
 {
     //- Check for no saved local station -
     XMLNode req("modify");
@@ -415,16 +413,30 @@ void ConfApp::exitModifChk( )
 	if( !cntrIfCmd(req) )	saveExit |= atoi(req.text().c_str());
 	if( !saveExit )
 	{
-	    InputDlg dlg(this,actDBSave->icon(),
+	    int ret = QMessageBox::information(this,_("Visual items save"),
+		_("Some visual items is changed. Save changing to DB on exit?"),QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel,QMessageBox::Yes);
+	    switch( ret )
+	    {
+		case QMessageBox::Yes:
+		    req.clear()->setName("save")->setAttr("path","/%2fobj");
+		    cntrIfCmd(req);
+		    return true;
+		case QMessageBox::No:
+		    return true;
+		case QMessageBox::Cancel:
+		    return false;
+	    }
+	    /*InputDlg dlg(this,actDBSave->icon(),
 		    _("Some nodes of local station is changed. Save changing to DB on exit?"),
 		    _("Station save"),false,false);
 	    if( dlg.exec() == QDialog::Accepted )
 	    {
 		req.clear()->setName("save")->setAttr("path","/"+SYS->id()+"/%2fobj");
 		cntrIfCmd(req);
-	    }
+	    }*/
 	}
     }
+    return true;
 }
 
 void ConfApp::endRunChk( )
@@ -754,7 +766,11 @@ void ConfApp::enterWhatsThis()
 
 void ConfApp::closeEvent( QCloseEvent* ce )
 {
-    if( !SYS->stopSignal() )    exitModifChk( );
+    if( !SYS->stopSignal() && !exitModifChk( ) )
+    {
+	ce->ignore();
+	return;
+    }
 
     ce->accept();
 }

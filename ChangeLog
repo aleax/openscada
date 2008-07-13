@@ -1,3 +1,9 @@
+2008-07-13 Roman
+- FIX:/DAQ/LogicLev: Mode list and Free stat is fixed.
+- /UI/QTCfg, /UI/Vision: Save check dialog on exit and close window is changed.
+- FIX:/UI/QTCfg: Apply at edited combo signal on item select is added.
+
+
 2008-07-11 Roman
 - !!:/UI/Vision: Resource cache support is added to development pages.
 - FIX:/UI/Vision: Zero arguments list process for Text shape is fixed.

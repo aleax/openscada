@@ -625,12 +625,16 @@ void VisDevelop::closeEvent( QCloseEvent* ce )
 
     work_space->closeAllWindows();
 
-    if( !SYS->stopSignal() )	exitModifChk( );
+    if( !SYS->stopSignal() && !exitModifChk( ) )
+    {
+	ce->ignore();
+	return;
+    }
 
     ce->accept();
 }
 
-void VisDevelop::exitModifChk( )
+bool VisDevelop::exitModifChk( )
 {
     XMLNode req("modify");
     req.setAttr("path","/%2fobj");
@@ -643,16 +647,31 @@ void VisDevelop::exitModifChk( )
 	if( !cntrIfCmd(req,true) )   saveExit |= atoi(req.text().c_str());
 	if( !saveExit )
 	{
-	    InputDlg dlg(this,actDBSave->icon(),
+	    int ret = QMessageBox::information(this,_("Visual items save"),
+		_("Some visual items is changed. Save changing to DB on exit?"),QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel,QMessageBox::Yes);
+	    switch( ret )
+	    {
+		case QMessageBox::Yes:
+		    req.clear()->setName("save")->setAttr("path","/%2fobj");
+		    cntrIfCmd(req);
+		    return true;
+		case QMessageBox::No:
+		    return true;
+		case QMessageBox::Cancel:
+		    return false;
+	    }
+	    /*InputDlg dlg(this,actDBSave->icon(),
 		    _("Some visual items is changed. Save changing to DB on exit?"),
 		    _("Visual items save"),false,false);
 	    if( dlg.exec() == QDialog::Accepted )
 	    {
 		req.clear()->setName("save")->setAttr("path","/%2fobj");
 		cntrIfCmd(req);
-	    }
+	    }*/
 	}
     }
+
+    return true;
 }
 
 void VisDevelop::endRunChk( )
@@ -662,9 +681,7 @@ void VisDevelop::endRunChk( )
 
 void VisDevelop::quitSt()
 {
-    exitModifChk( );
-
-    SYS->stop( );
+    if( exitModifChk( ) ) SYS->stop( );
 }
 
 void VisDevelop::about()

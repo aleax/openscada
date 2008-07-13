@@ -80,7 +80,7 @@ class VisDevelop : public QMainWindow
 	void updateLibToolbar( const string &vca_it = "" );		//Update lib's toolbars for item change
 	void editToolUpdate( );						//Edit tools visible update
 	void modifyToolUpdate( const string& );
-	void exitModifChk( );
+	bool exitModifChk( );
 
 	void quitSt( );		//Full quit OpenSCADA
 

@@ -71,7 +71,7 @@ class ConfApp: public QMainWindow
     private slots:
 	//Slots
 	void quitSt( );
-	void exitModifChk( );
+	bool exitModifChk( );
 
 	void pageUp( );
 	void pagePrev( );

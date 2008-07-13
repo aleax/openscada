@@ -84,7 +84,7 @@ TTpContr::TTpContr( string name )
 }
 
 TTpContr::~TTpContr()
-{    
+{
 
 }
 
@@ -796,7 +796,9 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TParamContr::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/MODE",cfg("MODE").fld().descr(),0660,"root","root",3,"tp","str","dest","select","select","/prm/cfg/mode_lst");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/MODE",cfg("MODE").fld().descr(),0660,"root","root",4,"tp","str","dest","select",
+	    "sel_id",(TSYS::int2str(TMdPrm::Free)+";"+TSYS::int2str(TMdPrm::DirRefl)+";"+TSYS::int2str(TMdPrm::Template)).c_str(),
+	    "sel_list",_("Free;Direct reflection;Template"));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/PRM",cfg("PRM").fld().descr(),0660,"root","root",3,"tp","str","dest","sel_ed","select","/prm/cfg/prmp_lst");
 	if( mode() == TMdPrm::Template && ctrMkNode("area",opt,-1,"/cfg",_("Template config")) )
 	{
@@ -855,11 +857,6 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		m_prm = owner().owner().modId()+"."+owner().id();
 	    mode( (TMdPrm::Mode)m_mode, m_prm );
 	} catch(...){ disable(); throw; }
-    else if( a_path == "/prm/cfg/mode_lst" && ctrChkNode(opt) )
-    {
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(TMdPrm::DirRefl))->setText(_("Direct reflection"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(TMdPrm::Template))->setText(_("Template"));
-    }
     else if( a_path == "/prm/cfg/prmp_lst" && ctrChkNode(opt) )
     {
 	int c_lv = 0;
