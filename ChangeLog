@@ -1,3 +1,7 @@
+2008-07-15 Roman
+- FIX:/DAQ/BlockCalc: Field for go to block function is hide for empty function.
+
+
 2008-07-13 Roman
 - FIX:/DAQ/LogicLev: Mode list and Free stat is fixed.
 - /UI/QTCfg, /UI/Vision: Save check dialog on exit and close window is changed.

@@ -43,18 +43,18 @@ class Block : public TCntrNode, public TValFunc, public TConfig
     public:
 	//Data
 	//- Link types:	-
-	// DIS	 - Disable IO 
+	// DIS	 - Disable IO
 	// FREE  - Free link or constant
 	// I_LOC - Input interblocks local link
 	// I_GLB - Input interblocks global link
 	// I_PRM - input parameter link
 	// O_LOC - Input interblocks local link
-	// O_GLB - Input interblocks global link	
+	// O_GLB - Input interblocks global link
 	// O_PRM - output parameter link
 	enum LnkT { FREE, I_LOC, I_GLB, I_PRM, O_PRM, O_LOC, O_GLB };
 	//- Link comands -
 	enum LnkCmd { INIT, DEINIT, SET };
-    
+
 	//Attributes
 	Block( const string &iid, Contr *iown );
 	~Block( );
@@ -62,47 +62,47 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	TCntrNode &operator=( TCntrNode &node );
 
 	//- Block's parameters -
-        const string &id( )	{ return m_id; }
-        string name( );
-        string descr( ) 	{ return m_descr; }
+	const string &id( )	{ return m_id; }
+	string name( );
+	string descr( ) 	{ return m_descr; }
 	int    errCnt( )	{ return err_cnt; }
-	bool   enable( )	{ return m_enable; }	
+	bool   enable( )	{ return m_enable; }
 	bool   process( )	{ return m_process; }
 	bool   toEnable( )	{ return m_to_en; }
 	bool   toProcess( )	{ return m_to_prc; }
 	string wFunc( )		{ return m_func; }
-	
-        void setName( const string &name )	{ m_name = name; modif(); }
-        void setDescr( const string &dscr )	{ m_descr = dscr; modif(); }
+
+	void setName( const string &name )	{ m_name = name; modif(); }
+	void setDescr( const string &dscr )	{ m_descr = dscr; modif(); }
 	void setEnable( bool val );
 	void setProcess( bool val );
 	void setToEnable( bool val )		{ m_to_en = val; modif(); }
 	void setToProcess( bool val )		{ m_to_prc = val; modif(); }
 	void setWFunc( const string &vl )	{ m_func = vl; modif(); }
-	
+
 	//- Link IO -
 	LnkT link( unsigned id );
 	bool linkActive( unsigned id );	
 	void setLink( unsigned id, LnkCmd cmd, LnkT lnk = FREE, const string &vlnk = "" );
-	
+
 	//- Calc block -
 	void calc( bool first, bool last );
 
 	Contr &owner( )		{ return *(Contr *)nodePrev(); }
-		
+
     protected:
 	//Attributes
 	void load_( );
-        void save_( );		
-	
+	void save_( );
+
 	void loadIO( const string &blk_db = "", const string &blk_id = "" );
 	void saveIO( );
-	    
+
 	string nodeName( )	{ return m_id; }
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-	
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+
 	void preDisable( int flag );
-	void postDisable( int flag );     	//Delete all DB if flag 1
+	void postDisable( int flag );		//Delete all DB if flag 1
 
     private:
 	//Data
@@ -112,7 +112,7 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	    AutoHD<Block>	w_bl;	//Block AutoHD
 	    unsigned		w_id;	//IO index
 	};
-	
+
 	//- Define link structures -
 	struct SLnk
 	{
@@ -124,24 +124,23 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 		AutoHD<TVal>	*aprm;	//Parameter atribute link structure
 	    };
 	};
-    
+
 	//Attributes
 	vector<SLnk>	m_lnk;
-	bool		m_enable, 
+	bool		m_enable,
 			m_process;	//Processing block
-	
-	string 		&m_id, 		//Block id
-			&m_name, 	//Block name
+
+	string 		&m_id,		//Block id
+			&m_name,	//Block name
 			&m_descr,	//Block description
 			&m_func;	//Associated function
 	bool		&m_to_en, &m_to_prc;
-	
+
 	Res		lnk_res;		//Link resource
 	int		err_cnt;
-	int     	id_freq, id_start, id_stop;     //Fixed system attributes identifiers
+	int		id_freq, id_start, id_stop;	//Fixed system attributes identifiers
 };
 
 } //End namespace virtual
 
 #endif //BLOCK_H
-
