@@ -1,5 +1,6 @@
 2008-07-15 Roman
 - FIX:/DAQ/BlockCalc: Field for go to block function is hide for empty function.
+- /UI/VCAEngine, TElem, TValue: Storing objects' size is made optimal.
 
 
 2008-07-13 Roman

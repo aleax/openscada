@@ -1463,7 +1463,7 @@ void Attr::setCfgVal( const string &vl )
 void Attr::setFlgSelf( SelfAttrFlgs flg )
 {
     if( self_flg == flg )	return;
-    SelfAttrFlgs t_flg = self_flg;
+    SelfAttrFlgs t_flg = (SelfAttrFlgs)self_flg;
     self_flg = flg;
     if( !owner()->attrChange(*this,NULL) )	self_flg = t_flg;
     else

@@ -18,7 +18,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-    
+
 #ifndef TELEM_H
 #define TELEM_H
 
@@ -70,7 +70,7 @@ class TFld
 	const string &descr( )	{ return m_descr; }	//Description
 	int len( )		{ return m_len; }	//Length
 	int dec( )		{ return m_dec; }	//Float dec
-	Type type( )		{ return m_type; }	//Value type
+	Type type( )		{ return (Type)m_type; }	//Value type
 	unsigned flg( )		{ return m_flg; }	//Flags
 	const string &def( )	{ return m_def; }	//Default value
 	string values( );				//Values range or values list
@@ -112,9 +112,9 @@ class TFld
 	//Attributes
 	string		m_name;		// Name of element (name column into BD);
 	string		m_descr;	// Description of element;
-	int		m_len;		// field len
-	int		m_dec;		// field dec (for real)
-	Type		m_type;		// Type (Dec, Hex, Oct, ...)
+	short int	m_len;		// field len
+	short int	m_dec	:5;	// field dec (for real)
+	short int	m_type	:4;	// Type (Dec, Hex, Oct, ...)
 	unsigned	m_flg;		// element flags (Selected, SelfFld ...);
 	string		m_def;		// default value;
 	string		m_res;		// reserve attribut

@@ -158,10 +158,10 @@ class TValue: public TCntrNode, public TValElem
 	void delFld( TElem *el, unsigned id_val); 
 
 	//Attributes
-	int		m_vl;
+	char		m_vl;
 	vector<TElem*>	elem;   // Elements (dinamic parts)
 
-	int		l_cfg;  // Config len
+	short int	l_cfg;  // Config len
 	TConfig*	m_cfg;  // Configs (static parts)
 };
 

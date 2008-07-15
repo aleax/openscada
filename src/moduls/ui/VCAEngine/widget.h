@@ -69,7 +69,7 @@ class Attr : public TCntrNode
 	string name( );
 	TFld::Type type( );
 	int flgGlob( );		//Global attribite's flags
-	SelfAttrFlgs flgSelf( )	{ return self_flg; }
+	SelfAttrFlgs flgSelf( )	{ return (SelfAttrFlgs)self_flg; }
 	unsigned modif( )	{ return m_modif; }
 	string cfgTempl( )	{ return cfg_tmpl; }
 	string cfgVal( )	{ return cfg_val; }
@@ -114,7 +114,7 @@ class Attr : public TCntrNode
 	//- Attributes -
 	TFld	*m_fld;			//Base field
 	unsigned m_modif;		//Modify counter
-	SelfAttrFlgs self_flg;		//Self attributes flags
+	char	self_flg;		//Self attributes flags
 
 	string	cfg_tmpl, cfg_val;	//Config template and value
 };
@@ -221,9 +221,10 @@ class Widget : public TCntrNode, public TValElem
 	//- Generic data -
 	string	m_id;			//Widget identifier
 
-	bool	m_enable;		//Enable status
-	bool	m_lnk;			//Widget as link
-	int	attrId, inclWdg;	//The widget's container id
+	char	m_enable	:1;	//Enable status
+	char	m_lnk		:1;	//Widget as link
+	char	attrId		:3;	//The widget's container id
+	char	inclWdg		:3;
 	string	m_parent_nm;		//Parent widget name
 	AutoHD<Widget>	m_parent;	//Parent widget
 	vector< AutoHD<Widget> > m_herit;	//Heritators

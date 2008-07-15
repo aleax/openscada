@@ -46,7 +46,7 @@ void TValue::detElem( TElem *el )
 
 void TValue::addFld( TElem *el, unsigned id_val )
 {
-    int i_off = l_cfg; 
+    int i_off = l_cfg;
     for(unsigned i_e = 0; i_e < elem.size(); i_e++)
 	if(elem[i_e]->elName() == el->elName() ) break;
 	else i_off+=elem[i_e]->fldSize();

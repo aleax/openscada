@@ -135,7 +135,7 @@ TFld::TFld( TFld &ifld ) : m_type(TFld::Integer), m_len(0), m_dec(0), m_flg(0)
 
 TFld::TFld( const char *name, const char *descr, TFld::Type itype, unsigned iflg,
             const char *valLen, const char *valDef, const char *val_s, const char *n_Sel, const char *ires ) :
-    m_type(TFld::Integer), m_len(0), m_dec(0), m_flg(0)
+    m_type(TFld::Integer), m_flg(0)
 {
     int st_pos, cur_pos;
     m_sel   = NULL;
@@ -148,7 +148,11 @@ TFld::TFld( const char *name, const char *descr, TFld::Type itype, unsigned iflg
     m_def   = valDef;
     m_res   = ires;
 
-    sscanf(valLen,"%d.%d",&m_len,&m_dec);
+    int ilen = 0, idec = 0;
+    sscanf(valLen,"%d.%d",&ilen,&idec);
+    m_len = ilen;
+    m_dec = idec;
+
     setValues(val_s);
     setSelNames(n_Sel);
 }
