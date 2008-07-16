@@ -512,12 +512,14 @@ void Prm::enable()
 	    if( TSYS::strSepParse(fel,0,':') == v_el.fldAt(i_fld).reserve() ) break;
 	if( fel.empty() )
 	{
-	    v_el.fldDel(i_fld);
-	    i_fld--;
+	    try{ v_el.fldDel(i_fld); i_fld--; }
+	    catch(TError err)
+	    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 	}
     }
 
     //- Init elements -
+    vector<string> pls;
     AutoHD<Block> blk;
     int io;
     string mio, ioaddr, ioblk, ioid, aid, anm;
@@ -547,6 +549,19 @@ void Prm::enable()
 	    if(v_el.fldPresent(aid)) v_el.fldDel(v_el.fldId(aid));
 	    v_el.fldAdd( new TFld(aid.c_str(),anm.empty() ? blk.at().func()->io(io)->name().c_str() : anm.c_str(),tp,flg,"","","","",ioaddr.c_str()) );
 	}
+	pls.push_back(aid);
+    }
+
+    //- Check and delete no used attrs -
+    for( int i_fld = 0; i_fld < v_el.fldSize(); i_fld++ )
+    {
+	int i_p;
+	for( i_p = 0; i_p < pls.size(); i_p++ )
+	    if( pls[i_p] == v_el.fldAt(i_fld).name() )	break;
+	if( i_p < pls.size() )	continue;
+	try{ v_el.fldDel(i_fld); i_fld--; }
+	catch(TError err)
+	{ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
     }
 
     TParamContr::enable();

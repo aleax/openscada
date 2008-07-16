@@ -1,3 +1,7 @@
+2008-07-16 Roman
+- FIX:/DAQ/BlockCalc: No clear old atributes after attribute identifier changing is fixed.
+
+
 2008-07-15 Roman
 - FIX:/DAQ/BlockCalc: Field for go to block function is hide for empty function.
 - /UI/VCAEngine, TElem, TValue: Storing objects' size is made optimal.
