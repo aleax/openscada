@@ -163,6 +163,10 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
     }
     if( rel_list && !w->allAttrLoad( ) )
     {
+        flag_ctrl = flag_A = flag_copy = false;
+        index_array.clear();
+        count_Shapes = 0;
+        itemInMotion = 0;
         if( shapeItems.size() )
         {
             shapeItems_temp = shapeItems;
@@ -309,7 +313,6 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 
                 if( bord_width == 0 )
                 {
-                    
                     QPainterPath bigPath = newPath;
                     circlePath = newPath;
                     ShapeItem item_temp;
@@ -714,7 +717,9 @@ bool ShapeElFigure::shapeSave( WdgView *w )
         w->attrSet( "p"+TSYS::int2str(pi.key())+"x", TSYS::real2str(TSYS::realRound(pi.value().x(),2)) );
         w->attrSet( "p"+TSYS::int2str(pi.key())+"y", TSYS::real2str(TSYS::realRound(pi.value().y(),2)) );
     }
-    devW->setSelect(true);
+
+    //emit devW->selected(devW->id());
+    devW->setSelect(true,false);
 }
 
 void ShapeElFigure::editEnter( WdgView *view )
@@ -729,13 +734,20 @@ void ShapeElFigure::editEnter( WdgView *view )
 	((VisDevelop *)view->mainWin())->elFigTool->actions().at(i_a)->setEnabled(true);
         ((VisDevelop *)view->mainWin())->elFigTool->actions().at(i_a)->setProperty("wdgAddr",TSYS::addr2str(view).c_str());
     }
-    //Main tools (copy)
+    //- Main tools (copy) -
     connect( ((VisDevelop *)view->mainWin())->visItToolBar, SIGNAL(actionTriggered(QAction*)), this, SLOT(toolAct(QAction*)) );
     ((VisDevelop *)view->mainWin())->actVisItCopy->setProperty("wdgAddr",TSYS::addr2str(view).c_str());
     ((VisDevelop *)view->mainWin())->actVisItPaste->setProperty("wdgAddr",TSYS::addr2str(view).c_str());
     ((VisDevelop *)view->mainWin())->actVisItCut->setVisible(false); 
     ((VisDevelop *)view->mainWin())->actVisItCopy->setEnabled(false); 
-    ((VisDevelop *)view->mainWin())->actVisItPaste->setEnabled(false); 
+    ((VisDevelop *)view->mainWin())->actVisItPaste->setEnabled(false);
+    //- Figures level tools -
+    connect( ((VisDevelop *)view->mainWin())->wdgToolView, SIGNAL(actionTriggered(QAction*)), this, SLOT(toolAct(QAction*)) ); 
+    ((VisDevelop *)view->mainWin())->actLevRise->setProperty("wdgAddr",TSYS::addr2str(view).c_str());
+    ((VisDevelop *)view->mainWin())->actLevLower->setProperty("wdgAddr",TSYS::addr2str(view).c_str());
+    ((VisDevelop *)view->mainWin())->actLevRise->setEnabled(false);
+    ((VisDevelop *)view->mainWin())->actLevLower->setEnabled(false);
+    status_hold = true;
 }
 
 void ShapeElFigure::editExit( WdgView *view )
@@ -753,21 +765,14 @@ void ShapeElFigure::editExit( WdgView *view )
     ((VisDevelop *)view->mainWin())->actElFigBesie->setChecked(false);
     ((VisDevelop *)view->mainWin())->actElFigCheckAct->setChecked(true);
     ((VisDevelop *)view->mainWin())->actElFigCursorAct->setChecked(true);
-    /*for( int i_a = 0; i_a < ((VisDevelop *)view->mainWin())->elFigTool->actions().size(); i_a++ )
-    {
-	if( ((VisDevelop *)view->mainWin())->elFigTool->actions().at(i_a)->objectName() == "arc" ||
-		((VisDevelop *)view->mainWin())->elFigTool->actions().at(i_a)->objectName() == "line" ||
-		((VisDevelop *)view->mainWin())->elFigTool->actions().at(i_a)->objectName() == "besier" )
-	    ((VisDevelop *)view->mainWin())->elFigTool->actions().at(i_a)->setChecked(false);
-        else if( ((VisDevelop *)view->mainWin())->elFigTool->actions().at(i_a)->objectName() == "cursor" ||
-                   ((VisDevelop *)view->mainWin())->elFigTool->actions().at(i_a)->objectName() == "hold" )
-            ((VisDevelop *)view->mainWin())->elFigTool->actions().at(i_a)->setChecked(true);
-    }*/
  
     disconnect( ((VisDevelop *)view->mainWin())->visItToolBar, SIGNAL(actionTriggered(QAction*)), this, SLOT(toolAct(QAction*)) );
     ((VisDevelop *)view->mainWin())->actVisItCopy->setProperty("wdgAddr","");
     ((VisDevelop *)view->mainWin())->actVisItPaste->setProperty("wdgAddr","");
     ((VisDevelop *)view->mainWin())->actVisItCut->setVisible(true); 
+    disconnect( ((VisDevelop *)view->mainWin())->wdgToolView, SIGNAL(actionTriggered(QAction*)), this, SLOT(toolAct(QAction*)) );
+    ((VisDevelop *)view->mainWin())->actLevRise->setProperty("wdgAddr","");
+    ((VisDevelop *)view->mainWin())->actLevLower->setProperty("wdgAddr","");
 
     shapeSave(view);
     view->unsetCursor();
@@ -795,6 +800,7 @@ void ShapeElFigure::toolAct( QAction *act )
 {
     bool ptr_line,ptr_arc,ptr_bezier;
     WdgView *w = (WdgView*)TSYS::str2addr(act->property("wdgAddr").toString().toAscii().data());
+    if( !w ) return;
     ElFigDt *elFD = (ElFigDt*)w->shpData;
     QVector<ShapeItem> &shapeItems = elFD->shapeItems;
     QVector<inundationItem> &inundationItems = elFD->inundationItems;
@@ -863,16 +869,37 @@ void ShapeElFigure::toolAct( QAction *act )
             {
                 shapeItems.push_back( shapeItems[copy_index[i]] );
                 index_array.push_back( shapeItems.size()-1 );
-                Temp = (*pnts)[shapeItems[shapeItems.size()-1].n1];
-                shapeItems[shapeItems.size()-1].n1 = appendPoint( Temp, shapeItems, pnts);
-                Temp = (*pnts)[shapeItems[shapeItems.size()-1].n2];
-                shapeItems[shapeItems.size()-1].n2 = appendPoint( Temp, shapeItems, pnts);
-                Temp = (*pnts)[shapeItems[shapeItems.size()-1].n3];
-                shapeItems[shapeItems.size()-1].n3 = appendPoint( Temp, shapeItems, pnts);
-                Temp = (*pnts)[shapeItems[shapeItems.size()-1].n4];
-                shapeItems[shapeItems.size()-1].n4 = appendPoint( Temp, shapeItems, pnts);
-                Temp = (*pnts)[shapeItems[shapeItems.size()-1].n5];
-                shapeItems[shapeItems.size()-1].n5 = appendPoint( Temp, shapeItems, pnts);
+                switch( shapeItems[copy_index[i]].type )
+                {
+                    case 1:
+                        Temp = (*pnts)[shapeItems[shapeItems.size()-1].n1];
+                        shapeItems[shapeItems.size()-1].n1 = appendPoint( Temp, shapeItems, pnts);
+                        Temp = (*pnts)[shapeItems[shapeItems.size()-1].n2];
+                        shapeItems[shapeItems.size()-1].n2 = appendPoint( Temp, shapeItems, pnts);
+                        break;
+                    case 2:
+                        Temp = (*pnts)[shapeItems[shapeItems.size()-1].n1];
+                        shapeItems[shapeItems.size()-1].n1 = appendPoint( Temp, shapeItems, pnts);
+                        Temp = (*pnts)[shapeItems[shapeItems.size()-1].n2];
+                        shapeItems[shapeItems.size()-1].n2 = appendPoint( Temp, shapeItems, pnts);
+                        Temp = (*pnts)[shapeItems[shapeItems.size()-1].n3];
+                        shapeItems[shapeItems.size()-1].n3 = appendPoint( Temp, shapeItems, pnts);
+                        Temp = (*pnts)[shapeItems[shapeItems.size()-1].n4];
+                        shapeItems[shapeItems.size()-1].n4 = appendPoint( Temp, shapeItems, pnts);
+                        Temp = (*pnts)[shapeItems[shapeItems.size()-1].n5];
+                        shapeItems[shapeItems.size()-1].n5 = appendPoint( Temp, shapeItems, pnts);
+                        break;
+                    case 3:
+                        Temp = (*pnts)[shapeItems[shapeItems.size()-1].n1];
+                        shapeItems[shapeItems.size()-1].n1 = appendPoint( Temp, shapeItems, pnts);
+                        Temp = (*pnts)[shapeItems[shapeItems.size()-1].n2];
+                        shapeItems[shapeItems.size()-1].n2 = appendPoint( Temp, shapeItems, pnts);
+                        Temp = (*pnts)[shapeItems[shapeItems.size()-1].n3];
+                        shapeItems[shapeItems.size()-1].n3 = appendPoint( Temp, shapeItems, pnts);
+                        Temp = (*pnts)[shapeItems[shapeItems.size()-1].n4];
+                        shapeItems[shapeItems.size()-1].n4 = appendPoint( Temp, shapeItems, pnts);
+                        break;
+                }
             }
         }
         if( index_array.size() )
@@ -883,8 +910,165 @@ void ShapeElFigure::toolAct( QAction *act )
             count_Shapes = index_array.size();
             moveAll( QPointF(0,0), shapeItems, pnts, inundationItems, w );
             w->repaint();
+            shapeSave( w );
         }
         ((VisDevelop *)w->mainWin())->actVisItPaste->setEnabled(false);
+    }
+    else if( act->objectName() == "level_rise" )
+    {
+        if( index_array.size() && !status_hold && index_array[0] != -1 )
+        {
+            ShapeItem item_temp;
+            for( int i = 0; i < index_array.size(); i++  )
+                if( index_array[i] != -1 )
+            {
+                item_temp = shapeItems[index_array[i]];
+                for( int j = index_array[i]; j < shapeItems.size()-1; j++ )
+                {
+                    shapeItems[j] = shapeItems[j+1];
+                    for( int k = 0; k < index_array.size(); k++ )
+                        if( j == index_array[k] && index_array[k] != -1 ) 
+                            index_array[k] = index_array[k] - 1;
+                }
+                shapeItems[shapeItems.size()-1] = item_temp;
+            }
+            /*for( int i = 0; i < index_array.size(); i++ )
+                if( index_array[i] != -1 )
+                    shapeItems.push_back(shapeItems[index_array[i]]);
+            int count = 0;
+            for( int i = 0; i < index_array.size(); i++ )
+                if( index_array[i] != -1 )
+                {
+                    if( i > 0 && index_array[i-1] < index_array[i] ) shapeItems.remove( index_array[i] - count );
+                    else shapeItems.remove( index_array[i] );
+                    count++;
+                }*/
+            
+        }
+        else if( status_hold && index_array_copy.size() )
+        {
+            ShapeItem item_temp;
+            for( int i = 0; i < index_array_copy.size(); i++  )
+                if( index_array_copy[i] != -1 )
+                {
+                    item_temp = shapeItems[index_array_copy[i]];
+                    for( int j = index_array_copy[i]; j < shapeItems.size()-1; j++ )
+                    {
+                        shapeItems[j] = shapeItems[j+1];
+                        for( int k = 0; k < index_array_copy.size(); k++ )
+                            if( j == index_array_copy[k] && index_array_copy[k] != -1 ) 
+                                index_array_copy[k] = index_array_copy[k] - 1;
+                    }
+                    shapeItems[shapeItems.size()-1] = item_temp;
+                }
+            /*for( int i = 0; i < index_array_copy.size(); i++ )
+                if( index_array_copy[i] != -1 )
+                    shapeItems.push_back(shapeItems[index_array_copy[i]]);
+            int count = 0;
+            for( int i = 0; i < index_array_copy.size(); i++ )
+                if( index_array_copy[i] != -1 )
+                {
+                    if( i > 0 && index_array_copy[i-1] < index_array_copy[i] ) shapeItems.remove( index_array_copy[i] - count );
+                    else shapeItems.remove( index_array_copy[i] );
+                    count++;
+                }*/
+        }
+        else if( index_temp != -1 )
+        {
+            shapeItems.push_back(shapeItems[index_temp]);
+            shapeItems.remove( index_temp );
+        }
+        shapeSave( w );
+        itemInMotion = 0;
+        rectItems.clear();
+        index_array.clear();
+        index_array_copy.clear();
+        index = index_temp = -1;
+        ((VisDevelop *)w->mainWin())->actLevRise->setEnabled(false);
+        ((VisDevelop *)w->mainWin())->actLevLower->setEnabled(false);
+        w->repaint();
+    }
+    else if( act->objectName() == "level_lower" )
+    {
+        if( index_array.size() && !status_hold && index_array[0] != -1 )
+        {
+            ShapeItem item_temp;
+            for( int i = 0; i < index_array.size(); i++  )
+                if( index_array[i] != -1 )
+            {
+                item_temp = shapeItems[index_array[i]];
+                for( int j = index_array[i]; j > 0; j-- )
+                {
+                    shapeItems[j] = shapeItems[j-1];
+                    for( int k = 0; k < index_array.size(); k++ )
+                        if( j == index_array[k] && index_array[k] != -1 ) 
+                            index_array[k] = index_array[k] + 1;
+                }
+                shapeItems[0] = item_temp;
+            }
+            /*int count_1 = 0;
+            for( int i = 0; i < index_array.size(); i++ )
+                if( index_array[i] != -1 )
+                {
+                    shapeItems.push_front(shapeItems[index_array[i]+ count_1]);
+                    count_1++;
+                }
+            int count_2 = 0;
+            for( int i = 0; i < index_array.size(); i++ )
+                if( index_array[i] != -1 )
+                {
+                    if( i > 0 && index_array[i-1] < index_array[i] ) shapeItems.remove( index_array[i]+count_1 - count_2 );
+                    else shapeItems.remove( index_array[i]+count_1 );
+                    count_2++;
+                }*/
+        }
+        else if( status_hold && index_array_copy.size() )
+        {
+            ShapeItem item_temp;
+            for( int i = 0; i < index_array_copy.size(); i++  )
+                if( index_array_copy[i] != -1 )
+                {
+                    item_temp = shapeItems[index_array_copy[i]];
+                    for( int j = index_array_copy[i]; j > 0; j-- )
+                    {
+                        shapeItems[j] = shapeItems[j-1];
+                        for( int k = 0; k < index_array_copy.size(); k++ )
+                            if( j == index_array_copy[k] && index_array_copy[k] != -1 ) 
+                                index_array_copy[k] = index_array_copy[k] + 1;
+                    }
+                    shapeItems[0] = item_temp;
+                }
+            /*int count_1 = 0;
+            for( int i = 0; i < index_array_copy.size(); i++ )
+                if( index_array_copy[i] != -1 )
+                {
+                    shapeItems.push_front(shapeItems[index_array_copy[i]+ count_1]);
+                    count_1++;
+                }
+            int count_2 = 0;
+            for( int i = 0; i < index_array_copy.size(); i++ )
+                if( index_array_copy[i] != -1 )
+                {
+                    //count += index_array[i];
+                    if( i > 0 && index_array_copy[i-1] < index_array_copy[i] ) shapeItems.remove( index_array_copy[i]+count_1 - count_2 );
+                    else shapeItems.remove( index_array_copy[i]+count_1 );
+                    count_2++;
+                }*/
+        }
+        else if( index_temp != -1 )
+        {
+            shapeItems.push_front(shapeItems[index_temp]);
+            shapeItems.remove( index_temp + 1 );
+        }
+        shapeSave( w );
+        itemInMotion = 0;
+        rectItems.clear();
+        index_array.clear();
+        index_array_copy.clear();
+        index = index_temp = -1;
+        ((VisDevelop *)w->mainWin())->actLevRise->setEnabled(false);
+        ((VisDevelop *)w->mainWin())->actLevLower->setEnabled(false);
+        w->repaint();
     }
 }
 
@@ -1040,7 +1224,12 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         flag_holds = true;
                         // - getting the index of the figure -
                         index = itemAt( ev->pos(), shapeItems, view );
-                        if( index == -1 ) ((VisDevelop *)view->mainWin())->actVisItCopy->setEnabled(false);
+                        if( index == -1 )
+                        {
+                            ((VisDevelop *)view->mainWin())->actVisItCopy->setEnabled(false);
+                            ((VisDevelop *)view->mainWin())->actLevRise->setEnabled(false);
+                            ((VisDevelop *)view->mainWin())->actLevLower->setEnabled(false);
+                        }
                         index_temp = index;
                         index_del = index;
                         previousPosition_all = ev->pos();
@@ -1051,6 +1240,8 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         {
                             ((VisDevelop *)view->mainWin())->actVisItCopy->setEnabled(true);
                             ((VisDevelop *)view->mainWin())->actVisItPaste->setEnabled(false);
+                            ((VisDevelop *)view->mainWin())->actLevRise->setEnabled(true);
+                            ((VisDevelop *)view->mainWin())->actLevLower->setEnabled(true);
                             if( !flag_copy )
                             {
                                 itemInMotion = &shapeItems[index];
@@ -1795,8 +1986,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 			    }
 			    flag_arc_inund = false;
 			    view->repaint();
-
-                           
 			}
                         if( rect_num != -1 )	temp = realRectNum( rect_num, shapeItems );
                         //- if the figure or it's rect is not connected to other one -
@@ -1929,7 +2118,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                 if( ev->key() == Qt::Key_Control )
                 {
                     if( flag_A ) index_array_copy_flag_A = index_array;
-                    if( status_hold )	break;
+                    if( status_hold || flag_copy )	break;
                     flag_ctrl = true;
                     index_array.clear();
                     for( int i=0; i < shapeItems.size(); i++ )
@@ -1942,7 +2131,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     bool flag_break_move;
                     if( flag_A )
                     {
-                        for( int i=0; i < shapeItems.size(); i++ )
+                        /*for( int i=0; i < shapeItems.size(); i++ )
                             switch( shapeItems[i].type )
                             {
 				case 1:
@@ -1962,7 +2151,8 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 				    dropPoint( shapeItems[i].n3, i, shapeItems, pnts );
 				    dropPoint( shapeItems[i].n4, i, shapeItems, pnts );
     				    break;
-                            }
+                            }*/
+                            (*pnts).clear();
                             inundationItems.clear();
                             shapeItems.clear();
                             rectItems.clear();

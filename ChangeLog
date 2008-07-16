@@ -1,3 +1,8 @@
+2008-07-16 Maxim
+- FIX:/UI/Vision: Copy function for primitive ElFigure is fixed.
+- /UI/Vision: Level(highest or lowest) configuration is added for primitive ElFigure.
+
+
 2008-07-16 Roman
 - FIX:/DAQ/BlockCalc: No clear old atributes after attribute identifier changing is fixed.
 

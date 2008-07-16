@@ -1748,7 +1748,7 @@ void DevelWdgView::saveGeom( const string& item )
 void DevelWdgView::setSelect( bool vl, bool childs )
 {
     int chld_cnt = 0;
-
+    
     fWdgSelect = vl;
     if( !vl && edit() ) setEdit(false);
 
@@ -1772,13 +1772,16 @@ void DevelWdgView::setSelect( bool vl, bool childs )
 
     //- Update actions access -
     //-- Enable view toolbar --
-    mainWin()->wdgToolView->setVisible(vl);
-    disconnect( mainWin()->wdgToolView, SIGNAL(actionTriggered(QAction*)), this, SLOT(wdgViewTool(QAction*)) );
-    if( vl ) connect( mainWin()->wdgToolView, SIGNAL(actionTriggered(QAction*)), this, SLOT(wdgViewTool(QAction*)) );
+    if( !edit() )
+    {
+        mainWin()->wdgToolView->setVisible(vl);
+        disconnect( mainWin()->wdgToolView, SIGNAL(actionTriggered(QAction*)), this, SLOT(wdgViewTool(QAction*)) );
+        if( vl ) connect( mainWin()->wdgToolView, SIGNAL(actionTriggered(QAction*)), this, SLOT(wdgViewTool(QAction*)) );
 
-    //-- Update widget view tools --
-    for( int i_a = 0; i_a < mainWin()->wdgToolView->actions().size(); i_a++ )
-	mainWin()->wdgToolView->actions().at(i_a)->setEnabled(chld_cnt>0);
+        //-- Update widget view tools --
+        for( int i_a = 0; i_a < mainWin()->wdgToolView->actions().size(); i_a++ )
+	   mainWin()->wdgToolView->actions().at(i_a)->setEnabled(chld_cnt>0);
+    }
 
     update();
 }
@@ -1908,6 +1911,7 @@ void DevelWdgView::upMouseCursors( const QPoint &curp )
 
 void DevelWdgView::wdgViewTool( QAction *act )
 {
+    if( edit() )    return;
     QStringList sact = act->objectName().split('_');
     if( sact.at(0) == "align" )
     {
@@ -2479,6 +2483,8 @@ bool DevelWdgView::event( QEvent *event )
 		break;
 	    }
 	    case QEvent::MouseButtonRelease:
+                if( edit() ) break;
+
 		if( fHoldSelRect )
 		{
 		    QPoint curp = mapFromGlobal(cursor().pos());
@@ -2493,7 +2499,7 @@ bool DevelWdgView::event( QEvent *event )
 		    //pntView->setSelArea(QRectF());
 		}
 
-		if( fMoveHold && !edit() )
+		if( fMoveHold )
 		{
 		    if( cursor().shape() != Qt::ArrowCursor )
 		    {
@@ -2541,8 +2547,10 @@ bool DevelWdgView::event( QEvent *event )
 		return true;
 	    }
 	    case QEvent::FocusIn:
+                if( edit() )    break;
 		//-- Unselect and store child widgets --
-		if(select()) setSelect(true);
+		//if(select())
+                    setSelect(true);
 		mainWin()->setWdgScale(false);
 		return true;
 	    case QEvent::FocusOut:
