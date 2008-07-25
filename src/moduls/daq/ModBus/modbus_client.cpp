@@ -312,10 +312,13 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 	    if( ctrMkNode("table",opt,-1,"/mod/dev",_("Serial devices"),0664,"root","root",2,"s_com","add,del","key","dev") )
 	    {
 		ctrMkNode("list",opt,-1,"/mod/dev/dev",_("Device"),0664,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/mod/dev/speed",_("Speed"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/mod/dev/lsspd");
+		ctrMkNode("list",opt,-1,"/mod/dev/speed",_("Speed"),0664,"root","root",5,"tp","dec","idm","1","dest","select",
+		    "sel_id","300;600;1200;2400;4800;9600;19200;38400;57600;115200;230400;460800",
+		    "sel_list","300;600;1200;2400;4800;9600;19.2k;38.4k;57.6k;115.2k;230.4k;460.8k");
 		ctrMkNode("list",opt,-1,"/mod/dev/len",_("Char length (bit)"),0664,"root","root",3,"tp","dec","min","5","max","8");
 		ctrMkNode("list",opt,-1,"/mod/dev/stop",_("Stop bits"),0664,"root","root",3,"tp","dec","min","1","max","2");
-		ctrMkNode("list",opt,-1,"/mod/dev/parity",_("Parity"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/mod/dev/lsprt");
+		ctrMkNode("list",opt,-1,"/mod/dev/parity",_("Parity"),0664,"root","root",5,"tp","dec","idm","1","dest","select",
+		    "sel_id","0;1;2","sel_list",_("No check;Parity;Odd parity"));
 		ctrMkNode("list",opt,-1,"/mod/dev/frTm",_("Time frame"),0664,"root","root",1,"tp","dec");
 		ctrMkNode("list",opt,-1,"/mod/dev/charTm",_("Time char"),0664,"root","root",1,"tp","real");
 		ctrMkNode("list",opt,-1,"/mod/dev/reqTm",_("Time request"),0664,"root","root",1,"tp","dec");
@@ -387,27 +390,6 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 	    else if( col == "reqTm" )	serDevAt(dev).at().setTimeoutReq(atoi(opt->text().c_str()));
 	    else if( col == "open" )	serDevAt(dev).at().setOpen(atoi(opt->text().c_str()));
 	}
-    }
-    else if( a_path == "/mod/dev/lsspd" && ctrChkNode(opt) )
-    {
-	opt->childAdd("el")->setAttr("id","300")->setText("300");
-	opt->childAdd("el")->setAttr("id","600")->setText("600");
-	opt->childAdd("el")->setAttr("id","1200")->setText("1200");
-	opt->childAdd("el")->setAttr("id","2400")->setText("2400");
-	opt->childAdd("el")->setAttr("id","4800")->setText("4800");
-	opt->childAdd("el")->setAttr("id","9600")->setText("9600");
-	opt->childAdd("el")->setAttr("id","19200")->setText("19.2k");
-	opt->childAdd("el")->setAttr("id","38400")->setText("38.4k");
-	opt->childAdd("el")->setAttr("id","57600")->setText("57.6k");
-	opt->childAdd("el")->setAttr("id","115200")->setText("115.2k");
-	opt->childAdd("el")->setAttr("id","230400")->setText("230.4k");
-	opt->childAdd("el")->setAttr("id","460800")->setText("460.8k");
-    }
-    else if( a_path == "/mod/dev/lsprt" && ctrChkNode(opt) )
-    {
-	opt->childAdd("el")->setAttr("id","0")->setText(_("No check"));
-	opt->childAdd("el")->setAttr("id","1")->setText(_("Parity"));
-	opt->childAdd("el")->setAttr("id","2")->setText(_("Odd parity"));
     }
     else TTipDAQ::cntrCmdProc( opt );
 }
@@ -642,6 +624,8 @@ string SSerial::req( const string &vl )
 	if( (TSYS::curTime()-tmptm) > vmin(timeoutFrame()*1000,10000000) )	break;
     }
 
+    usleep(vmax((int)(5000.0*timeoutChar()),1));
+
     return string( buf, blen );
 }
 
@@ -811,9 +795,9 @@ int TMdContr::getVal( int reg, string &err )
 	{
 	    err = acqBlks[i_b].err;
 	    if( err.empty() )
-		rez = (acqBlks[i_b].val[reg*2-acqBlks[i_b].off]<<8)+acqBlks[i_b].val[reg*2-acqBlks[i_b].off+1];
+		rez = (acqBlks[i_b].val[reg*2-acqBlks[i_b].off]<<8)+(unsigned char)acqBlks[i_b].val[reg*2-acqBlks[i_b].off+1];
 	    break;
-        }
+	}
     return rez;
 }
 
@@ -965,6 +949,7 @@ void *TMdContr::Task( void *icntr )
 		    pdu += (char)(cntr.acqBlks[i_b].val.size()/2);	//Number of registers LSB
 		    //- Request to remote server -
 		    cntr.acqBlks[i_b].err = cntr.modBusReq( pdu );
+		    //printf("TEST 00: %d Block %d(%d): %s\n",cntr.m_node,cntr.acqBlks[i_b].off,cntr.acqBlks[i_b].val.size(),cntr.acqBlks[i_b].err.c_str());
 		    if( cntr.acqBlks[i_b].err.empty() )
 			cntr.acqBlks[i_b].val.replace(0,cntr.acqBlks[i_b].val.size(),pdu.substr(2).c_str(),cntr.acqBlks[i_b].val.size());
 		}
@@ -995,7 +980,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TController::cntrCmdProc(opt);
-	ctrMkNode( "fld", opt, -1, "/cntr/st/gath_tm", _("Gather data time (ms)"), 0444, "root", "root", 1, "tp", "real" );
+	ctrMkNode("fld",opt,-1,"/cntr/st/gath_tm",_("Gather data time (ms)"),R_R_R_,"root","root",1,"tp","real");
 	if( m_prt == 1 || m_prt == 2 )
 	    ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",cfg("ADDR").fld().descr(),0664,"root","root",3,"tp","str","dest","select","select","/cntr/cfg/serDevLst");
 	return;
@@ -1046,7 +1031,7 @@ void TMdPrm::enable()
     string sel, aid, anm;
     for( int ioff = 0; (sel=TSYS::strSepParse(m_attrLs,0,'\n',&ioff)).size(); )
     {
-	ai  = atoi(TSYS::strSepParse(sel,0,':').c_str());
+	ai  = strtol(TSYS::strSepParse(sel,0,':').c_str(),NULL,0);
 	awr = atoi(TSYS::strSepParse(sel,1,':').c_str());
 	aid = TSYS::strSepParse(sel,2,':');
 	if( aid.empty() ) aid = TSYS::int2str(ai);
@@ -1100,6 +1085,7 @@ void TMdPrm::disable()
 
 void TMdPrm::vlGet( TVal &val )
 {
+    //printf("TEST 00");
     if( !enableStat() || !owner().startStat() )
     {
 	if( val.name() == "err" )
@@ -1111,6 +1097,7 @@ void TMdPrm::vlGet( TVal &val )
 	return;
     }
     int aid = atoi(val.fld().reserve().c_str());
+    //printf("TEST 01: %s: %d\n",val.fld().reserve().c_str(),aid);
     if( aid )	val.setI(owner().getVal(aid,acq_err),0,true);
     else if( val.name() == "err" )
     {

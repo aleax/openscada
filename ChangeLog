@@ -1,6 +1,8 @@
 2008-07-25 Roman
 - /SYS/CntrNode: Group clear of modify status function is added.
 - FIX:/UI/VCAEngine: Two loading VCA data is prevented.
+- FIX:/DAQ/ModBus: Multi controller request timeout is fixed.
+- /DAQ/ModBus: Hex and oct registers' address support is added.
 
 
 2008-07-16 Maxim
