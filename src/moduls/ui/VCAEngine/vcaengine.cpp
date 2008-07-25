@@ -339,6 +339,8 @@ void Engine::load_( )
     prjList(ls);
     for( int l_id = 0; l_id < ls.size(); l_id++ )
 	prjAt(ls[l_id]).at().setEnable(true);
+
+    modifGClr( );
 }
 
 void Engine::save_( )

@@ -65,7 +65,7 @@ using std::vector;
 //*************************************************
 //* TSYS					  *
 //*************************************************
-class TSYS : public TCntrNode 
+class TSYS : public TCntrNode
 {
 
     public:

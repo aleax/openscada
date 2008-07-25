@@ -131,7 +131,7 @@ class VisItProp : public QDialog
 	VisDevelop *owner();
 
     signals:
-	void apply(const string &);
+	void apply( const string& );
 
     protected:
 	//Protected methods

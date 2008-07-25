@@ -518,6 +518,15 @@ void TCntrNode::modifG( )
 	    p->second->modifG( );
 }
 
+void TCntrNode::modifGClr( )
+{
+    ResAlloc res( hd_res, false );
+    modifClr( );
+    for( unsigned i_g = 0; i_g < chGrp.size(); i_g++ )
+	for( TMap::iterator p=chGrp[i_g].elem.begin(); p != chGrp[i_g].elem.end(); p++ )
+	    p->second->modifGClr( );
+}
+
 void TCntrNode::load( )
 {
     //- Self load -

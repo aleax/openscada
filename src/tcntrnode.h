@@ -137,6 +137,7 @@ class TCntrNode
 	void modif( )	{ m_flg |= SelfModify; }		//Set local modify
 	void modifG( );						//Set group modify
 	void modifClr( ){ m_flg &= ~(SelfModify); }		//Clear modify
+	void modifGClr( );					//Modify group clear
 	void load( );						//Load node, if modified
 	void save( );						//Save node, if modified
 

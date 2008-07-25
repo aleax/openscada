@@ -329,9 +329,9 @@ void TSYS::load_()
     vector<string> lst;
     list(lst);
     for( unsigned i_a=0; i_a < lst.size(); i_a++ )
-        try{ at(lst[i_a]).at().load(); }
-        catch(TError err)
-        {
+	try { at(lst[i_a]).at().load(); }
+	catch(TError err)
+	{
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	    mess_err(nodePath().c_str(),_("Error load subsystem <%s>."),lst[i_a].c_str());
 	}

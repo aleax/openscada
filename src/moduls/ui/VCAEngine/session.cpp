@@ -1318,7 +1318,6 @@ void SessWdg::calc( bool first, bool last )
 		string sevup, sev, sev_ev, sev_path, sprc_lst, sprc, sprc_ev, sprc_path;
 		for( int el_off = 0; (sev=TSYS::strSepParse(wevent,0,'\n',&el_off)).size(); )
 		{
-		    //printf("TEST 00: %s\n",sev.c_str());
 		    //-- Check for process events --
 		    t_off = 0;
 		    sev_ev   = TSYS::strSepParse(sev,0,':',&t_off);

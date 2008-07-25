@@ -29,7 +29,7 @@
 //*************************************************
 //* TModSchedul                                   *
 //*************************************************
-class TModSchedul : public TSubSYS  
+class TModSchedul : public TSubSYS
 {
     public:
 	//Data
@@ -41,62 +41,61 @@ class TModSchedul : public TSubSYS
 		SHD( void *ihd, time_t itm, const string &iname ) : hd(ihd), m_tm(itm), name(iname)	{ }
 		
 		//Attributes
-    		void		*hd;         // NULL - share lib present but no attached
-		vector<string>	use;         // if share lib attached to show who modules used    
-		time_t		m_tm;        // data modify of share lib for automatic update
-		string		name;        // share lib path
+		void		*hd;		// NULL - share lib present but no attached
+		vector<string>	use;		// if share lib attached to show who modules used
+		time_t		m_tm;		// data modify of share lib for automatic update
+		string		name;		// share lib path
 	};
-	    
+
 	//Methods
-	TModSchedul( );    
+	TModSchedul( );
 	~TModSchedul( );
-	
+
 	int chkPer( )		{ return m_per; }
 	string modPath( )	{ return m_mod_path; }
 
 	void setChkPer( int per );
 	void setModPath( const string &vl )	{ m_mod_path = vl; modif(); }
 
-	void subStart( );	
+	void subStart( );
 	void subStop( );
-	
-	void loadLibS( );      				// Load/Init/Start all share libs and registry moduls into TSubSYS	
-	
-        SHD &lib( const string &name );			// Get stat share lib <name>
-    	void libList( vector<string> &list );		// List present share libs
-        void libLoad( const string &path, bool full );	// Load share libs for <dest> from <path> whith call gmdInit if set <full>
+
+	void loadLibS( );				// Load/Init/Start all share libs and registry moduls into TSubSYS	
+
+	SHD &lib( const string &name );			// Get stat share lib <name>
+	void libList( vector<string> &list );		// List present share libs
+	void libLoad( const string &path, bool full );	// Load share libs for <dest> from <path> whith call gmdInit if set <full>
 	void libAtt( const string &name, bool full = false);	// Attach share libs
-    	void libDet( const string &name );		// Detach share libs
+	void libDet( const string &name );		// Detach share libs
 
     protected:
 	//Methods
 	void load_( );
-        void save_( );
+	void save_( );
 	void preDisable( int flag );
-	
+
     private:
 	//Methods
-	string optDescr( );					// Description of config help	
-    	void ScanDir( const string &Paths, vector<string> &files );//Scan directory for OpenSCADA share libs
-    	bool CheckFile( const string &name );			//Check file to OpenSCADA share libs
-    	int  libReg( const string &name );			//Registre present share lib
+	string optDescr( );					// Description of config help
+	void ScanDir( const string &Paths, vector<string> &files );//Scan directory for OpenSCADA share libs
+	bool CheckFile( const string &name );			//Check file to OpenSCADA share libs
+	int  libReg( const string &name );			//Registre present share lib
 	void libUnreg( const string &name );			//Unreg deleted share lib
 	bool CheckAuto( const string &name) const;		//Check file to auto attaching
-	
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
-    	static void SchedTask( union sigval obj );
-	
+	void cntrCmdProc( XMLNode *opt );		//Control interface command process
+
+	static void SchedTask( union sigval obj );
+
 	//Attributes
-	string         	m_mod_path;
+	string		m_mod_path;
 	vector<string>	m_am_list;
-   
-	Res     	hd_res;   
-	int		m_per;	//Check to new modules period
-	vector<SHD> 	SchHD;
-	timer_t 	tmId;   //Thread timer
-	bool         	prc_st;
+
+	Res		hd_res;
+	int		m_per;				//Check to new modules period
+	vector<SHD>	SchHD;
+	timer_t		tmId;				//Thread timer
+	bool		prc_st;
 };
 
 #endif // TMODSCHEDUL_H
-

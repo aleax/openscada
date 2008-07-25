@@ -29,7 +29,7 @@
 //*************************************************
 //* TSubSYS                                       *
 //*************************************************
-TSubSYS::TSubSYS( char *id, char *name, bool modi ) : 
+TSubSYS::TSubSYS( char *id, char *name, bool modi ) :
 	m_id(id), m_name(name), m_mod_sys(modi), m_mod(-1)
 {
     if(subModule()) m_mod = grpAdd("mod_");
@@ -43,10 +43,10 @@ TSubSYS::~TSubSYS(  )
 string TSubSYS::subName()
 {
     return m_name.size()?_(m_name.c_str()):m_id;
-}    
+}
 
-void TSubSYS::modList( vector<string> &list )    
-{ 
+void TSubSYS::modList( vector<string> &list )
+{
     if( !subModule() ) throw TError(nodePath().c_str(),_("No modules subsystem!"));
     chldList(m_mod,list);
 }
@@ -55,18 +55,18 @@ bool TSubSYS::modPresent( const string &name )
 {
     if( !subModule() ) throw TError(nodePath().c_str(),_("No modules subsystem!")); 
     return chldPresent(m_mod,name); 
-}	
+}
 
 void TSubSYS::modAdd( TModule *modul )
 {
     if( !subModule() ) throw TError(nodePath().c_str(),_("No modules subsystem!"));
     if( chldPresent(m_mod,modul->modId()) ) return;
     chldAdd(m_mod,modul);
-#if OSC_DEBUG 
+#if OSC_DEBUG
     vector<string> list;
     modul->modInfo( list );
     for( unsigned i_opt = 0; i_opt < list.size(); i_opt++)
-    	mess_info(nodePath().c_str(),"-> %s: %s",_(list[i_opt].c_str()),modul->modInfo(list[i_opt]).c_str());
+	mess_info(nodePath().c_str(),"-> %s: %s",_(list[i_opt].c_str()),modul->modInfo(list[i_opt]).c_str());
 #endif
 }
 
@@ -80,10 +80,10 @@ void TSubSYS::modDel( const string &name )
 AutoHD<TModule> TSubSYS::modAt( const string &name )
 {
     if( !subModule() ) throw TError(nodePath().c_str(),_("No modules subsystem!")); 
-    return chldAt(m_mod,name); 
+    return chldAt(m_mod,name);
 }
 
-void TSubSYS::subStart( ) 
+void TSubSYS::subStart( )
 {
     if( !SYS->security().at().grpPresent(subId()) )
     {
@@ -92,32 +92,32 @@ void TSubSYS::subStart( )
 	SYS->security().at().grpAt(subId()).at().setSysItem(true);
 	SYS->security().at().grpAt(subId()).at().userAdd("root");
     }
- 
+
     if( !subModule() )	return;
     vector<string> list;
     modList(list);
     for(unsigned i_m=0; i_m < list.size(); i_m++)
 	try{ modAt(list[i_m]).at().modStart( ); }
 	catch(TError err)
-        { 
-	    mess_err(err.cat.c_str(),"%s",err.mess.c_str()); 
-	    mess_err(nodePath().c_str(),_("Start module '%s' is error."),list[i_m].c_str());	    
+	{
+	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+	    mess_err(nodePath().c_str(),_("Start module '%s' is error."),list[i_m].c_str());
 	}
 }
 
-void TSubSYS::subStop( ) 
-{ 
+void TSubSYS::subStop( )
+{
     if( !subModule() )	return;
     vector<string> list;
     modList(list);
     for(unsigned i_m=0; i_m < list.size(); i_m++)
 	try{ modAt(list[i_m]).at().modStop( ); }
 	catch(TError err)
-        { 
+	{
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str()); 
 	    mess_err(nodePath().c_str(),_("Stop module '%s' is error."),list[i_m].c_str());
-	}	
-}		
+	}
+}
 
 void TSubSYS::cntrCmdProc( XMLNode *opt )
 {
@@ -140,15 +140,15 @@ void TSubSYS::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/ico" && ctrChkNode(opt) )
     {
-        string itp;
-        opt->setText(TSYS::strEncode(TUIS::icoGet(subId(),&itp),TSYS::base64));
-        opt->setAttr("tp",itp);	
+	string itp;
+	opt->setText(TSYS::strEncode(TUIS::icoGet(subId(),&itp),TSYS::base64));
+	opt->setAttr("tp",itp);
     }
     else if( subModule() && (a_path == "/br/mod_" || a_path == "/mod/br") && ctrChkNode(opt,"get",0444,"root","root",SEQ_RD) )
     {
-        vector<string> list;
-        modList(list);
-        for( unsigned i_a=0; i_a < list.size(); i_a++ )
+	vector<string> list;
+	modList(list);
+	for( unsigned i_a=0; i_a < list.size(); i_a++ )
 	    opt->childAdd("el")->setAttr("id",list[i_a])->setText(modAt(list[i_a]).at().modName());
     }
     else TCntrNode::cntrCmdProc(opt);
