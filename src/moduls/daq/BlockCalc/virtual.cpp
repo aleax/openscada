@@ -535,8 +535,8 @@ void Prm::enable()
 	blk = ((Contr&)owner()).blkAt(ioblk);
 	if( (io=blk.at().ioId(ioid)) < 0 )	continue;
 
-	unsigned 	flg    = TVal::DirWrite|TVal::DirRead;
-	TFld::Type	tp     = TFld::String;
+	unsigned	flg = TVal::DirWrite|TVal::DirRead;
+	TFld::Type	tp  = TFld::String;
 	switch( blk.at().ioType(io) )
 	{
 	    case IO::String:	tp = TFld::String;	break;
@@ -544,11 +544,16 @@ void Prm::enable()
 	    case IO::Real:	tp = TFld::Real;	break;
 	    case IO::Boolean:	tp = TFld::Boolean;	break;
 	}
-	if( !v_el.fldPresent(aid) || v_el.fldAt(v_el.fldId(aid)).type() != tp || v_el.fldAt(v_el.fldId(aid)).flg() != flg )
+	if( !v_el.fldPresent(aid) || v_el.fldAt(v_el.fldId(aid)).type() != tp ||
+	    v_el.fldAt(v_el.fldId(aid)).flg() != flg )
 	{
 	    if(v_el.fldPresent(aid)) v_el.fldDel(v_el.fldId(aid));
-	    v_el.fldAdd( new TFld(aid.c_str(),anm.empty() ? blk.at().func()->io(io)->name().c_str() : anm.c_str(),tp,flg,"","","","",ioaddr.c_str()) );
+	    v_el.fldAdd( new TFld(aid.c_str(),"",tp,flg) );
 	}
+	int el_id = v_el.fldId(aid);
+	v_el.fldAt(el_id).setDescr( anm.empty() ? blk.at().func()->io(io)->name() : anm );
+	v_el.fldAt(el_id).setReserve( ioaddr );
+
 	pls.push_back(aid);
     }
 

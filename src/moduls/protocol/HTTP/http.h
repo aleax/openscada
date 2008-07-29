@@ -18,7 +18,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
- 
+
 #ifndef HTTP_H
 #define HTTP_H
 
@@ -45,15 +45,15 @@ class TProtIn: public TProtocolIn
 	~TProtIn( );
 
 	bool mess( const string &request, string &answer, const string &sender );
-    
+
     private:
 	//Methods
 	void index( string &answer );
-	
+
 	string http_head( const string &rcode, int cln, const string &addattr = "" );
 	string w_head( );
 	string w_tail( );
-	
+
 	//Attributes
 	bool m_nofull;
 	string m_buf;
@@ -70,7 +70,7 @@ class TProt: public TProtocol
 	~TProt( );
 
     protected:
-	//Methods	
+	//Methods
 	void load_( );
 
     private:
@@ -83,4 +83,3 @@ extern TProt *mod;
 } //End namespace PrHTTP
 
 #endif //HTTP_H
-

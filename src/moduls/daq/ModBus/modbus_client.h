@@ -91,10 +91,11 @@ class TMdContr: public TController
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
-	void prmEn( const string &id, bool val );
-	void regVal( int reg );				//Register value for acquisition
-	int  getVal( int reg, string &err );		//Get register value
-	void setVal( int val, int reg, string &err );	//Set value
+	void regVal( int reg, const string &dt = "R" );	//Register value for acquisition
+	int  getValR( int addr, string &err );		//Get register value
+	char getValC( int addr, string &err );		//Get coins value
+	void setValR( int val, int addr, string &err );	//Set register value
+	void setValC( char val, int addr, string &err );//Set coins value
 	string modBusReq( string &pdu );
 
     protected:
@@ -120,7 +121,9 @@ class TMdContr: public TController
 
 	//Methods
 	TParamContr *ParamAttach( const string &name, int type );
+
 	static void *Task( void *icntr );
+	void setCntrDelay( const string &err );
 
 	//Attributes
 	Res	en_res, req_res;		//Resource for enable params and request values
@@ -130,15 +133,19 @@ class TMdContr: public TController
 		&m_node;			//Node
 	string	&m_addr;			//Transport device address
 	bool	&m_merge;			//Fragments of register merge
+	int	&frTm;				//Frame timeout in ms
+	double	&charTm;			//Char timeout in ms
+	int	&reqTm;				//Request timeout in ms
 
 	bool	prc_st,				//Process task active
 		endrun_req;			//Request to stop of the Process task
-	vector< AutoHD<TMdPrm> > p_hd;
 	vector< SDataRec >	acqBlks;	//Acquisition data blocks
+	vector< SDataRec >	acqBlksCoil;	//Acquisition data blocks for coils
 
 	pthread_t	procPthr;		//Process task thread
 
 	double	tm_gath;			//Gathering time
+	float	tm_delay;			//Delay time for next try connect
 };
 
 //*************************************************
@@ -174,7 +181,7 @@ class SSerial : public TCntrNode, public TConfig
 	void	setTimeoutReq( int val )	{ reqTm = val; modif(); }
 	void	setOpen( bool vl );
 
-	string req( const string &vl );
+	string req( const string &vl, int iFrTm = 0, double iCharTm = 0, int iReqTm = 0 );
 
 	TTpContr &owner( )	{ return *(TTpContr *)nodePrev(); }
 
@@ -212,6 +219,9 @@ class TTpContr: public TTipDAQ
 	TTpContr( string name );
 	~TTpContr( );
 
+	int serConnResume( )	{ return mSerConnResume; }
+	void setSerConnResume( int vl )	{ mSerConnResume = vl; modif(); }
+
 	TElem &serDevE( )	{ return el_ser_dev; }
 
 	//- Serial devices -
@@ -239,6 +249,8 @@ class TTpContr: public TTipDAQ
 	void	postEnable( int flag );
 	TController *ContrAttach( const string &name, const string &daq_db );
 	string	optDescr( );
+
+	int	mSerConnResume;
 
 	//Attributes
 	TElem	el_ser_dev;

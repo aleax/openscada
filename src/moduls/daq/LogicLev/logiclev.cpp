@@ -124,7 +124,7 @@ void TTpContr::load_( )
 }
 
 void TTpContr::postEnable( int flag )
-{ 
+{
     TModule::postEnable( flag );
 
     //- Controler's bd structure -

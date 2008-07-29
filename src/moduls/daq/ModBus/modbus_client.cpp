@@ -68,7 +68,7 @@ using namespace ModBusDAQ;
 //******************************************************
 //* TTpContr                                           *
 //******************************************************
-TTpContr::TTpContr( string name )
+TTpContr::TTpContr( string name ) : mSerConnResume(30)
 {
     mId		= MOD_ID;
     mName	= MOD_NAME;
@@ -123,7 +123,10 @@ void TTpContr::postEnable( int flag )
     fldAdd( new TFld("PROT",_("Modbus protocol"),TFld::Integer,TFld::Selected,"1","0","0;1;2",_("TCP/IP;RTU;ASCII")) );
     fldAdd( new TFld("ADDR",_("Host address"),TFld::String,TFld::NoFlag,"30","devhost.org:502") );
     fldAdd( new TFld("NODE",_("Destination node"),TFld::Integer,TFld::NoFlag,"20","1","0;255") );
-    fldAdd( new TFld("FRAG_MERGE",_("Register's fragment merge"),TFld::Boolean,TFld::NoFlag,"1","0") );
+    fldAdd( new TFld("FRAG_MERGE",_("Data fragments merge"),TFld::Boolean,TFld::NoFlag,"1","0") );
+    fldAdd( new TFld("TM_FRM",_("Time frame"),TFld::Integer,TFld::NoFlag,"5","0") );
+    fldAdd( new TFld("TM_CHAR",_("Time char"),TFld::Real,TFld::NoFlag,"5.2","0") );
+    fldAdd( new TFld("TM_REQ",_("Time request"),TFld::Integer,TFld::NoFlag,"5","0") );
 
     //- Parameter type bd structure -
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
@@ -162,6 +165,9 @@ void TTpContr::load_( )
 	}
     } while( next_opt != -1 );
 
+    //- Load parameters from config file -
+    setSerConnResume( atoi(TBDS::genDBGet(nodePath()+"SerConnResume",TSYS::int2str(serConnResume())).c_str()) );
+
     //- Load Serial devices configuration -
     try
     {
@@ -186,6 +192,9 @@ void TTpContr::load_( )
 
 void TTpContr::save_()
 {
+    //- Save parameters to config file -
+    TBDS::genDBSet(nodePath()+"SerConnResume",TSYS::int2str(serConnResume()).c_str());
+
     //- Save Serial devices configuration -
     TConfig cfg(&serDevE());
     vector<string> lst;
@@ -309,6 +318,8 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 	TTipDAQ::cntrCmdProc( opt );
 	if( ctrMkNode("area",opt,0,"/mod",_("ModBus")) )
 	{
+	    ctrMkNode("fld",opt,-1,"/mod/serResConn",_("Serial devices resume timeout"),0664,"root","DAQ",2,"tp","dec",
+		"help",_("Resume timeout for connection to dead serial devices in seconds."));
 	    if( ctrMkNode("table",opt,-1,"/mod/dev",_("Serial devices"),0664,"root","root",2,"s_com","add,del","key","dev") )
 	    {
 		ctrMkNode("list",opt,-1,"/mod/dev/dev",_("Device"),0664,"root","root",1,"tp","str");
@@ -329,7 +340,12 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
     }
     //- Process command to page -
     string a_path = opt->attr("path");
-    if( a_path == "/mod/dev" )
+    if( a_path == "/mod/serResConn" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","DAQ",SEQ_RD) )	opt->setText( TSYS::int2str(serConnResume()) );
+	if( ctrChkNode(opt,"set",0664,"root","DAQ",SEQ_WR) )	setSerConnResume( atoi(opt->text().c_str()) );
+    }
+    else if( a_path == "/mod/dev" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
 	{
@@ -397,11 +413,11 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* SSerial                                       *
 //*************************************************
-SSerial::SSerial( const string &iDev, TTpContr *iown ) : 
+SSerial::SSerial( const string &iDev, TTpContr *iown ) :
     TCntrNode(iown), TConfig( &iown->serDevE() ), fd(-1),
-    m_id(cfg("ID").getSd()), m_speed(cfg("SPEED").getId()), m_len(cfg("LEN").getId()), 
+    m_id(cfg("ID").getSd()), m_speed(cfg("SPEED").getId()), m_len(cfg("LEN").getId()),
     m_twostop(cfg("TWOSTOP").getBd()), m_parity(cfg("PARITY").getId()),
-    frTm(cfg("TM_FRM").getId()), charTm(cfg("TM_CHAR").getRd()), reqTm(cfg("TM_REQ").getId()) 
+    frTm(cfg("TM_FRM").getId()), charTm(cfg("TM_CHAR").getRd()), reqTm(cfg("TM_REQ").getId())
 {
     m_id = iDev;
 }
@@ -579,10 +595,16 @@ void SSerial::setParity( int val )
     modif();
 }
 
-string SSerial::req( const string &vl )
+string SSerial::req( const string &vl, int iFrTm, double iCharTm, int iReqTm )
 {
+    int wFrTm = vmin( (iFrTm>0) ? iFrTm : timeoutFrame(), 10000000 );
+    double wCharTm = vmax( (iCharTm>0) ? iCharTm : timeoutChar(), 0.001 );
+    int wReqTm = vmin( (iReqTm>0) ? iReqTm : timeoutReq(), 10000000 );
+
     ResAlloc res( m_res, true );
     if( !hasOpen() )	throw TError(mod->nodePath().c_str(),_("Serial port '%s' no opened."),id().c_str());
+
+    usleep((int)(2500.0*wCharTm));
 
     //- Write request -
     if( write( fd, vl.data(), vl.size() ) == -1 )
@@ -597,7 +619,7 @@ string SSerial::req( const string &vl )
     //-- Char timeout init --
     struct timeval tv;
     tv.tv_sec = 0;
-    tv.tv_usec = vmax((int)(timeoutChar()*1000.0),1);
+    tv.tv_usec = (int)(1000.0*wCharTm);
 
     //--- Serial timeout ---
     tmptm = TSYS::curTime();
@@ -606,7 +628,7 @@ string SSerial::req( const string &vl )
 	int bytes = 0;
 	ioctl( fd, FIONREAD, &bytes );
 	if( bytes > 2 ) break;
-	if( (TSYS::curTime() - tmptm) >= vmin(timeoutReq()*1000,10000000) )
+	if( (TSYS::curTime() - tmptm) >= wReqTm )
 	    throw TError(mod->nodePath().c_str(),_("Respond from serial port '%s' is timeouted."),id().c_str());
 	usleep( 1000 );
     }
@@ -621,10 +643,10 @@ string SSerial::req( const string &vl )
     {
 	if( select(fd+1,&fdset,NULL,NULL,&tv) <= 0 )	break;
 	blen += read( fd, buf+blen, sizeof(buf)-blen );
-	if( (TSYS::curTime()-tmptm) > vmin(timeoutFrame()*1000,10000000) )	break;
+	if( (TSYS::curTime()-tmptm) > wFrTm )	break;
     }
 
-    usleep(vmax((int)(5000.0*timeoutChar()),1));
+    usleep((int)(2500.0*wCharTm));
 
     return string( buf, blen );
 }
@@ -633,9 +655,10 @@ string SSerial::req( const string &vl )
 //* TMdContr                                           *
 //******************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) :
-	TController( name_c, daq_db, cfgelem ), prc_st(false), endrun_req(false), tm_gath(0),
+	TController( name_c, daq_db, cfgelem ), prc_st(false), endrun_req(false), tm_gath(0), tm_delay(0),
 	m_per(cfg("PERIOD").getRd()), m_prior(cfg("PRIOR").getId()), m_prt(cfg("PROT").getId()),
-	m_addr(cfg("ADDR").getSd()), m_node(cfg("NODE").getId()), m_merge(cfg("FRAG_MERGE").getBd())
+	m_addr(cfg("ADDR").getSd()), m_node(cfg("NODE").getId()), m_merge(cfg("FRAG_MERGE").getBd()),
+	frTm(cfg("TM_FRM").getId()), charTm(cfg("TM_CHAR").getRd()), reqTm(cfg("TM_REQ").getId())
 {
     cfg("PRM_BD").setS("ModBusPrm_"+name_c);
 }
@@ -654,6 +677,7 @@ void TMdContr::disable_( )
 {
     //- Clear acquisition data block -
     acqBlks.clear();
+    acqBlksCoil.clear();
 }
 
 void TMdContr::start_( )
@@ -736,88 +760,146 @@ bool TMdContr::cfgChange( TCfg &icfg )
     return true;
 }
 
-void TMdContr::prmEn( const string &id, bool val )
-{
-    int i_prm;
-
-    ResAlloc res( en_res, true );
-    for( i_prm = 0; i_prm < p_hd.size(); i_prm++ )
-	if( p_hd[i_prm].at().id() == id ) break;
-
-    if( val && i_prm >= p_hd.size() )	p_hd.push_back(at(id));
-    if( !val && i_prm < p_hd.size() )	p_hd.erase(p_hd.begin()+i_prm);
-}
-
-void TMdContr::regVal( int reg )
+void TMdContr::regVal( int reg, const string &dt )
 {
     if( reg < 0 )	return;
 
     ResAlloc res( en_res, true );
 
     //- Register to acquisition block -
-    int i_b;
-    for( i_b = 0; i_b < acqBlks.size(); i_b++ )
+    //-- Registers --
+    if( dt == "R" )
     {
-	if( (reg*2) < acqBlks[i_b].off )
+	int i_b;
+	for( i_b = 0; i_b < acqBlks.size(); i_b++ )
 	{
-	    if( (m_merge || (reg*2+2) >= acqBlks[i_b].off) && (acqBlks[i_b].val.size()+acqBlks[i_b].off-(reg*2)) < MaxLenReq )
+	    if( (reg*2) < acqBlks[i_b].off )
 	    {
-		acqBlks[i_b].val.insert(0,acqBlks[i_b].off-reg*2,0);
-		acqBlks[i_b].off = reg*2;
-	    }
-	    else acqBlks.insert(acqBlks.begin()+i_b,SDataRec(reg*2,2));
-	}
-	else if( (reg*2+2) > (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
-	{
-	    if( (m_merge || reg*2 <= (acqBlks[i_b].off+acqBlks[i_b].val.size())) && (reg*2+2-acqBlks[i_b].off) < MaxLenReq )
-	    {
-		acqBlks[i_b].val.append((reg*2+2)-(acqBlks[i_b].off+acqBlks[i_b].val.size()),0);
-		//- Check for allow mergin to next block -
-		if( !m_merge && i_b+1 < acqBlks.size() && (acqBlks[i_b].off+acqBlks[i_b].val.size()) >= acqBlks[i_b+1].off )
+		if( (m_merge || (reg*2+2) >= acqBlks[i_b].off) && (acqBlks[i_b].val.size()+acqBlks[i_b].off-(reg*2)) < MaxLenReq )
 		{
-		    acqBlks[i_b].val.append(acqBlks[i_b+1].val,acqBlks[i_b].off+acqBlks[i_b].val.size()-acqBlks[i_b+1].off,string::npos);
-		    acqBlks.erase(acqBlks.begin()+i_b+1);
+		    acqBlks[i_b].val.insert(0,acqBlks[i_b].off-reg*2,0);
+		    acqBlks[i_b].off = reg*2;
 		}
+		else acqBlks.insert(acqBlks.begin()+i_b,SDataRec(reg*2,2));
 	    }
-	    else continue;
+	    else if( (reg*2+2) > (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
+	    {
+		if( (m_merge || reg*2 <= (acqBlks[i_b].off+acqBlks[i_b].val.size())) && (reg*2+2-acqBlks[i_b].off) < MaxLenReq )
+		{
+		    acqBlks[i_b].val.append((reg*2+2)-(acqBlks[i_b].off+acqBlks[i_b].val.size()),0);
+		    //- Check for allow mergin to next block -
+		    if( !m_merge && i_b+1 < acqBlks.size() && (acqBlks[i_b].off+acqBlks[i_b].val.size()) >= acqBlks[i_b+1].off )
+		    {
+			acqBlks[i_b].val.append(acqBlks[i_b+1].val,acqBlks[i_b].off+acqBlks[i_b].val.size()-acqBlks[i_b+1].off,string::npos);
+			acqBlks.erase(acqBlks.begin()+i_b+1);
+		    }
+		}
+		else continue;
+	    }
+	    break;
 	}
-	break;
+	if( i_b >= acqBlks.size() )
+	    acqBlks.insert(acqBlks.begin()+i_b,SDataRec(reg*2,2));
     }
-    if( i_b >= acqBlks.size() )
-	acqBlks.insert(acqBlks.begin()+i_b,SDataRec(reg*2,2));
+    //-- Coils --
+    else if( dt == "C" )
+    {
+	int i_b;
+	for( i_b = 0; i_b < acqBlksCoil.size(); i_b++ )
+	{
+	    if( reg < acqBlksCoil[i_b].off )
+	    {
+		if( (m_merge || (reg+1) >= acqBlksCoil[i_b].off) && (acqBlksCoil[i_b].val.size()+acqBlksCoil[i_b].off-reg) < MaxLenReq*8 )
+		{
+		    acqBlksCoil[i_b].val.insert(0,acqBlksCoil[i_b].off-reg,0);
+		    acqBlksCoil[i_b].off = reg;
+		}
+		else acqBlksCoil.insert(acqBlksCoil.begin()+i_b,SDataRec(reg,1));
+	    }
+	    else if( (reg+1) > (acqBlksCoil[i_b].off+acqBlksCoil[i_b].val.size()) )
+	    {
+		if( (m_merge || reg <= (acqBlksCoil[i_b].off+acqBlksCoil[i_b].val.size())) && (reg+1-acqBlksCoil[i_b].off) < MaxLenReq*8 )
+		{
+		    acqBlksCoil[i_b].val.append((reg+1)-(acqBlksCoil[i_b].off+acqBlksCoil[i_b].val.size()),0);
+		    //- Check for allow mergin to next block -
+		    if( !m_merge && i_b+1 < acqBlksCoil.size() && (acqBlksCoil[i_b].off+acqBlksCoil[i_b].val.size()) >= acqBlksCoil[i_b+1].off )
+		    {
+			acqBlksCoil[i_b].val.append(acqBlksCoil[i_b+1].val,acqBlksCoil[i_b].off+acqBlksCoil[i_b].val.size()-acqBlksCoil[i_b+1].off,string::npos);
+			acqBlksCoil.erase(acqBlksCoil.begin()+i_b+1);
+		    }
+		}
+		else continue;
+	    }
+	    break;
+	}
+    }
 }
 
-int TMdContr::getVal( int reg, string &err )
+int TMdContr::getValR( int addr, string &err )
 {
     int rez = EVAL_INT;
     for( int i_b = 0; i_b < acqBlks.size(); i_b++ )
-	if( (reg*2) >= acqBlks[i_b].off && (reg*2+2) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
+	if( (addr*2) >= acqBlks[i_b].off && (addr*2+2) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
 	{
 	    err = acqBlks[i_b].err;
 	    if( err.empty() )
-		rez = (acqBlks[i_b].val[reg*2-acqBlks[i_b].off]<<8)+(unsigned char)acqBlks[i_b].val[reg*2-acqBlks[i_b].off+1];
+		rez = (acqBlks[i_b].val[addr*2-acqBlks[i_b].off]<<8)+(unsigned char)acqBlks[i_b].val[addr*2-acqBlks[i_b].off+1];
 	    break;
 	}
     return rez;
 }
 
-void TMdContr::setVal( int val, int reg, string &err )
+char TMdContr::getValC( int addr, string &err )
+{
+    char rez = EVAL_BOOL;
+    for( int i_b = 0; i_b < acqBlksCoil.size(); i_b++ )
+	if( addr >= acqBlksCoil[i_b].off && (addr+1) <= (acqBlksCoil[i_b].off+acqBlksCoil[i_b].val.size()) )
+	{
+	    err = acqBlksCoil[i_b].err;
+	    if( err.empty() )
+		rez = acqBlksCoil[i_b].val[addr-acqBlks[i_b].off];
+	    break;
+	}
+    return rez;
+}
+
+void TMdContr::setValR( int val, int addr, string &err )
 {
     //- Encode request PDU (Protocol Data Units) --
     string pdu;
-    pdu = (char)0x6;		//Function, read multiple registers
-    pdu += (char)(reg>>8);	//Address MSB
-    pdu += (char)reg;		//Address LSB
+    pdu = (char)0x6;		//Function, preset single register
+    pdu += (char)(addr>>8);	//Address MSB
+    pdu += (char)addr;		//Address LSB
     pdu += (char)(val>>8);	//Data MSB
     pdu += (char)val;		//Data LSB
     //- Request to remote server -
     err = modBusReq( pdu );
     //- Set to acquisition block -
     for( int i_b = 0; i_b < acqBlks.size(); i_b++ )
-	if( (reg*2) >= acqBlks[i_b].off && (reg*2+2) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
+	if( (addr*2) >= acqBlks[i_b].off && (addr*2+2) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
 	{
-	    acqBlks[i_b].val[reg*2-acqBlks[i_b].off]   = (char)(val<<8);
-	    acqBlks[i_b].val[reg*2-acqBlks[i_b].off+1] = (char)val;
+	    acqBlks[i_b].val[addr*2-acqBlks[i_b].off]   = (char)(val<<8);
+	    acqBlks[i_b].val[addr*2-acqBlks[i_b].off+1] = (char)val;
+	    break;
+	}
+}
+
+void TMdContr::setValC( char val, int addr, string &err )
+{
+    //- Encode request PDU (Protocol Data Units) --
+    string pdu;
+    pdu = (char)0x5;		//Function, preset single coil
+    pdu += (char)(addr>>8);	//Address MSB
+    pdu += (char)addr;		//Address LSB
+    pdu += (char)val?0xFF:0x00;	//Data MSB
+    pdu += (char)0x00;		//Data LSB
+    //- Request to remote server -
+    err = modBusReq( pdu );
+    //- Set to acquisition block -
+    for( int i_b = 0; i_b < acqBlksCoil.size(); i_b++ )
+	if( addr >= acqBlksCoil[i_b].off && (addr+1) <= (acqBlksCoil[i_b].off+acqBlksCoil[i_b].val.size()) )
+	{
+	    acqBlksCoil[i_b].val[addr-acqBlksCoil[i_b].off] = val;
 	    break;
 	}
 }
@@ -869,7 +951,7 @@ string TMdContr::modBusReq( string &pdu )
 		ui16 crc = mod->CRC16( mbap );
 		mbap += crc >> 8;
 		mbap += crc;
-		string rez = mod->serDevAt(m_addr).at().req(mbap);
+		string rez = mod->serDevAt(m_addr).at().req(mbap,frTm,charTm,reqTm);
 		if( rez.size() < 2 ) return _("13:Error respond: Too short.");
 		if( mod->CRC16(rez.substr(0,rez.size()-2)) != (ui16)((rez[rez.size()-2]<<8)+(ui8)rez[rez.size()-1]) )
 		    return _("13:Error respond: CRC check error.");
@@ -882,7 +964,7 @@ string TMdContr::modBusReq( string &pdu )
 		mbap += pdu;
 		mbap += mod->LRC(mbap);
 		mbap = ":"+mod->DataToASCII(mbap)+"\0x0D\0x0A";
-		string rez = mod->serDevAt(m_addr).at().req(mbap);
+		string rez = mod->serDevAt(m_addr).at().req(mbap,frTm,charTm,reqTm);
 		if( rez.size() < 3 || rez[0] != ':' || rez[rez.size()-2] != 0x0D || rez[rez.size()-1] != 0x0A )
 		    return _("13:Error respond: Error format.");
 		rez = mod->ASCIIToData(rez.substr(1,rez.size()-3));
@@ -913,7 +995,7 @@ string TMdContr::modBusReq( string &pdu )
     }catch( TError err )
     {
 	//mess_err( err.cat.c_str(), err.mess.c_str() );
-	return _("14:Request is error: ")+err.mess;
+	return _("14:Device error: ")+err.mess;
     }
 
     return "";
@@ -935,14 +1017,40 @@ void *TMdContr::Task( void *icntr )
 	{
 	    long long t_cnt = SYS->shrtCnt();
 
-	    //- Update controller's data -
-	    ResAlloc res( cntr.en_res, false );
-	    for( int i_p = 0; i_p < cntr.p_hd.size(); i_p++ )
+	    if( cntr.tm_delay > 0 )	cntr.tm_delay-=cntr.period();
+	    else
+	    {
+		//- Update controller's data -
+		ResAlloc res( cntr.en_res, false );
+		//- Get coils -
+		for( int i_b = 0; i_b < cntr.acqBlksCoil.size(); i_b++ )
+		{
+		    if( cntr.endrun_req ) break;
+		    //- Encode request PDU (Protocol Data Units) -
+		    pdu = (char)0x1;					//Function, read multiple registers
+		    pdu += (char)(cntr.acqBlksCoil[i_b].off>>8);	//Address MSB
+		    pdu += (char)cntr.acqBlksCoil[i_b].off;		//Address LSB
+		    pdu += (char)(cntr.acqBlksCoil[i_b].val.size()>>8);	//Number of registers MSB
+		    pdu += (char)cntr.acqBlksCoil[i_b].val.size();	//Number of registers LSB
+		    //- Request to remote server -
+		    cntr.acqBlksCoil[i_b].err = cntr.modBusReq( pdu );
+		    //printf("TEST 00: %d Block %d(%d): %s\n",cntr.m_node,cntr.acqBlksCoil[i_b].off,cntr.acqBlksCoil[i_b].val.size(),cntr.acqBlksCoil[i_b].err.c_str());
+		    if( cntr.acqBlksCoil[i_b].err.empty() )
+			for( int i_c = 0; i_c < cntr.acqBlksCoil[i_b].val.size(); i_c++ )
+			    cntr.acqBlksCoil[i_b].val[i_c] = (bool)((pdu[2+i_c/8]>>(i_c%8))&0x01);
+		    else if( atoi(cntr.acqBlksCoil[i_b].err.c_str()) == 14 )
+		    {
+			cntr.setCntrDelay(cntr.acqBlksCoil[i_b].err);
+			break;
+		    }
+		}
+		if( cntr.tm_delay > 0 )	continue;
+		//- Get registers -
 		for( int i_b = 0; i_b < cntr.acqBlks.size(); i_b++ )
 		{
 		    if( cntr.endrun_req ) break;
 		    //- Encode request PDU (Protocol Data Units) -
-		    pdu = (char)0x3;					//Function, read multiple registers
+		    pdu = (char)0x3;				//Function, read multiple registers
 		    pdu += (char)((cntr.acqBlks[i_b].off/2)>>8);	//Address MSB
 		    pdu += (char)(cntr.acqBlks[i_b].off/2);		//Address LSB
 		    pdu += (char)((cntr.acqBlks[i_b].val.size()/2)>>8);	//Number of registers MSB
@@ -952,8 +1060,14 @@ void *TMdContr::Task( void *icntr )
 		    //printf("TEST 00: %d Block %d(%d): %s\n",cntr.m_node,cntr.acqBlks[i_b].off,cntr.acqBlks[i_b].val.size(),cntr.acqBlks[i_b].err.c_str());
 		    if( cntr.acqBlks[i_b].err.empty() )
 			cntr.acqBlks[i_b].val.replace(0,cntr.acqBlks[i_b].val.size(),pdu.substr(2).c_str(),cntr.acqBlks[i_b].val.size());
+		    else if( atoi(cntr.acqBlks[i_b].err.c_str()) == 14 )
+		    {
+			cntr.setCntrDelay(cntr.acqBlks[i_b].err);
+			break;
+		    }
 		}
-	    res.release();
+		res.release();
+	    }
 
 	    //- Calc acquisition process time -
 	    cntr.tm_gath = 1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
@@ -972,6 +1086,14 @@ void *TMdContr::Task( void *icntr )
     cntr.prc_st = false;
 
     return NULL;
+}
+
+void TMdContr::setCntrDelay( const string &err )
+{
+    tm_delay = mod->serConnResume( );
+    ResAlloc res( en_res, false );
+    for( int i_b = 0; i_b < acqBlksCoil.size(); i_b++ )	acqBlksCoil[i_b].err = err;
+    for( int i_b = 0; i_b < acqBlks.size(); i_b++ )	acqBlks[i_b].err = err;
 }
 
 void TMdContr::cntrCmdProc( XMLNode *opt )
@@ -1027,52 +1149,51 @@ void TMdPrm::enable()
     //- Parse ModBus attributes and convert to strong list -
     vector<string> als;
     int  ai;
-    bool awr;
-    string sel, aid, anm;
+    string sel, atp, aid, anm, awr;
     for( int ioff = 0; (sel=TSYS::strSepParse(m_attrLs,0,'\n',&ioff)).size(); )
     {
-	ai  = strtol(TSYS::strSepParse(sel,0,':').c_str(),NULL,0);
-	awr = atoi(TSYS::strSepParse(sel,1,':').c_str());
-	aid = TSYS::strSepParse(sel,2,':');
+	atp = TSYS::strSepParse(sel,0,':');
+	ai  = strtol(TSYS::strSepParse(sel,1,':').c_str(),NULL,0);
+	awr = TSYS::strSepParse(sel,2,':');
+	aid = TSYS::strSepParse(sel,3,':');
 	if( aid.empty() ) aid = TSYS::int2str(ai);
-	anm = TSYS::strSepParse(sel,3,':');
+	anm = TSYS::strSepParse(sel,4,':');
 	if( anm.empty() ) anm = TSYS::int2str(ai);
-	als.push_back(aid+":"+anm+":"+TSYS::int2str(ai)+":"+TSYS::int2str(awr));
+
+	if( vlPresent(aid) && !p_el.fldPresent(aid) )	continue;
+	TFld::Type	tp  = (atp=="C") ? TFld::Boolean : TFld::Integer;
+	if( !p_el.fldPresent(aid) || p_el.fldAt(p_el.fldId(aid)).type() != tp )
+	{
+	    if( p_el.fldPresent(aid)) p_el.fldDel(p_el.fldId(aid));
+	    p_el.fldAdd( new TFld(aid.c_str(),"",tp,TFld::NoFlag,"",TSYS::int2str((atp=="C")?EVAL_BOOL:EVAL_INT).c_str()) );
+	}
+	int el_id = p_el.fldId(aid);
+	unsigned flg = (awr=="rw") ? TVal::DirWrite|TVal::DirRead :
+				     ((awr=="w") ? TVal::DirWrite : TFld::NoWrite|TVal::DirRead);
+	p_el.fldAt(el_id).setFlg( flg );
+	p_el.fldAt(el_id).setDescr( anm );
+	p_el.fldAt(el_id).setReserve( TSYS::int2str(ai) );
+	if( flg&TVal::DirRead ) owner().regVal(ai,atp);
+
+	als.push_back(aid);
     }
 
-    //- Make DAQ parameter's attributes -
-    for( int i_l = 0; i_l < als.size(); i_l++ )
-    {
-	aid = TSYS::strSepParse( als[i_l], 0, ':' );
-	if( vlPresent(aid) && !p_el.fldPresent(aid) )	continue;
-	if( !p_el.fldPresent(aid) )
-	    p_el.fldAdd( new TFld( aid.c_str(), "", TFld::Integer, TFld::NoFlag, "", TSYS::int2str(EVAL_INT).c_str(), "0:65535" ) );
-	int el_id = p_el.fldId(aid);
-	p_el.fldAt(el_id).setDescr( TSYS::strSepParse(als[i_l],1,':') );
-	p_el.fldAt(el_id).setReserve( TSYS::strSepParse(als[i_l],2,':') );
-	p_el.fldAt(el_id).setFlg( atoi(TSYS::strSepParse(als[i_l],3,':').c_str()) ? (int)(TVal::DirWrite|TVal::DirRead) : (int)(TFld::NoWrite|TVal::DirRead) );
-	owner().regVal(atoi(TSYS::strSepParse(als[i_l],2,':').c_str()));
-    }
     //- Check for delete DAQ parameter's attributes -
     for( int i_p = 0; i_p < p_el.fldSize(); i_p++ )
     {
 	int i_l;
 	for( i_l = 0; i_l < als.size(); i_l++ )
-	    if( p_el.fldAt(i_p).name() == TSYS::strSepParse(als[i_l],0,':') )
+	    if( p_el.fldAt(i_p).name() == als[i_l] )
 		break;
 	if( i_l >= als.size() )
-	    try{ p_el.fldDel(i_p); }
+	    try{ p_el.fldDel(i_p); i_p--; }
 	    catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
     }
-
-    owner().prmEn( id(), true );
 }
 
 void TMdPrm::disable()
 {
     if( !enableStat() )  return;
-
-    owner().prmEn( id(), false );
 
     TParamContr::disable();
 
@@ -1097,8 +1218,12 @@ void TMdPrm::vlGet( TVal &val )
 	return;
     }
     int aid = atoi(val.fld().reserve().c_str());
-    //printf("TEST 01: %s: %d\n",val.fld().reserve().c_str(),aid);
-    if( aid )	val.setI(owner().getVal(aid,acq_err),0,true);
+    if( aid )
+	switch(val.fld().type())
+	{
+	    case TFld::Boolean:	val.setB(owner().getValC(aid,acq_err),0,true);	break;
+	    case TFld::Integer:	val.setI(owner().getValR(aid,acq_err),0,true);	break;
+	}
     else if( val.name() == "err" )
     {
 	if( acq_err.empty() )	val.setS("0",0,true);
@@ -1108,8 +1233,16 @@ void TMdPrm::vlGet( TVal &val )
 
 void TMdPrm::vlSet( TVal &valo )
 {
-    if( !enableStat() )	valo.setI( EVAL_INT, 0, true );
-    owner().setVal(valo.getI(NULL,true),atoi(valo.fld().reserve().c_str()),acq_err);
+    if( !enableStat() )	valo.setS( EVAL_STR, 0, true );
+    switch(valo.fld().type())
+    {
+	case TFld::Boolean:
+	    owner().setValC(valo.getB(NULL,true),atoi(valo.fld().reserve().c_str()),acq_err);
+	    break;
+	case TFld::Integer:
+	    owner().setValR(valo.getI(NULL,true),atoi(valo.fld().reserve().c_str()),acq_err);
+	    break;
+    }
 }
 
 void TMdPrm::vlArchMake( TVal &val )
@@ -1128,12 +1261,16 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     {
 	TParamContr::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ATTR_LS",cfg("ATTR_LS").fld().descr(),0664,"root","root",1,
-	    "help",_("Attributes configuration list. List writed by lines in format: [<numb>:<wr>:<id>:<name>]\n"
+	    "help",_("Attributes configuration list. List writed by lines in format: [dt:numb:rw:id:name]\n"
 		    "Where:\n"
-		    "  numb - ModBus device's register number (decimal);\n"
-		    "  wr - write allow (1-allow; 0-deny);\n"
+		    "  dt - Modbus data type (R-register,C-coil);\n"
+		    "  numb - ModBus device's data address (dec, hex or octal);\n"
+		    "  wr - read-write mode (r-read; w-write; rw-readwrite);\n"
 		    "  id - created attribute identifier;\n"
-		    "  name - created attribute name."));
+		    "  name - created attribute name.\n"
+		    "Example:\n"
+		    "  'R:0x300:rw:var:Variable' - register access;\n"
+		    "  'C:100:r:var1:Variable 1' - coin access."));
 	return;
     }
     //- Process command to page -

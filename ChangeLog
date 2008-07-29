@@ -1,3 +1,10 @@
+2008-07-29 Roman
+- !!:/DAQ/ModBus: Coins support is added by functions 01 and 05.
+- !!:/DAQ/ModBus: Individual RS485 timeouts at controller is added.
+- !!:/DAQ/ModBus: Resume time for dead serial controllers is added.
+- FIX:/DAQ/ModBus: Odd data block process on each parameter is fixed.
+
+
 2008-07-25 Roman
 - /SYS/CntrNode: Group clear of modify status function is added.
 - FIX:/UI/VCAEngine: Two loading VCA data is prevented.
