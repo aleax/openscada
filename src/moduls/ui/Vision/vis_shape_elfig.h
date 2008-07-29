@@ -134,7 +134,9 @@ class ShapeElFigure : public WdgShape
 			rectPath,		//Path fo RectItem creation
         		ellipse_startPath, ellipse_endPath,
         		ellipse_draw_startPath, ellipse_draw_endPath,
-                        inundationPath;
+                        inundationPath,
+                        dashedRectPath;
+        QRect           dashedRect;
     
 	bool status; 				//Check fo any primitive paint key pressed
 	int shapeType; 				//Selected figure type
@@ -186,6 +188,7 @@ class ShapeElFigure : public WdgShape
         void rectNum0_1( const QVector<ShapeItem> &shapeItems, int rect_num_temp, PntMap *pnts, WdgView *w );
         void rectNum3_4( const QVector<ShapeItem> &shapeItems);
         void moveAll( const QPointF &pos, QVector<ShapeItem> &shapeItems, PntMap *pnts, QVector<inundationItem> &inundationItems, WdgView *w );
+        void checkPoint_checkInundation( QVector<ShapeItem> &shapeItems, PntMap *pnts, QVector<inundationItem> &inundationItems );
         QPainterPath painterPath( float el_width, float el_border_width, int el_type, double el_ang,
 		QPointF el_p1 = QPointF(0,0), QPointF el_p2 = QPointF(0,0), QPointF el_p3 = QPointF(0,0), 
 		QPointF el_p4 = QPointF(0,0), QPointF el_p5 = QPointF(0,0), QPointF el_p6 = QPointF(0,0) );
@@ -220,9 +223,9 @@ class ShapeElFigure : public WdgShape
 	    index, index_temp, index_del,index_inund,
 	    rect_num;
 	bool flag_cursor, flag_key, flag_up, flag_down, flag_left, flag_right, 
-	     flag_ctrl, flag_ctrl_move, flag_m, flag_hold_arc, flag_A, flag_copy;
+             flag_ctrl, flag_ctrl_move, flag_m, flag_hold_arc, flag_A, flag_copy, flag_check_pnt_inund;
 					    	
-        bool flag_rect, flag_arc_rect_3_4, flag_arc_release, flag_first_move, Flag;
+        bool flag_rect, flag_arc_rect_3_4, flag_arc_release, flag_first_move, flag_move;
         QPointF Start_offset, End_offset, CtrlPos1_offset, CtrlPos2_offset, CtrlPos3_offset, CtrlPos4_offset;
         int count_rects, rect_num_arc, arc_rect;
         bool flag_holds;			
@@ -230,7 +233,8 @@ class ShapeElFigure : public WdgShape
         bool flag_inund_break;
         bool flag_scale, flag_rotate;
         double t_start, t_end;			
-	QPointF Mouse_pos, offset;		
+	QPointF Mouse_pos, offset;	
+        QPoint stPointDashedRect;	
         int current_ss, current_se, current_ee, current_es;
         int count_holds;			
         QVector<int> arc_rect_array, fig_rect_array, vect;

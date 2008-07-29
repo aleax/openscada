@@ -1,3 +1,10 @@
+2008-07-16 Maxim
+- /UI/Vision: Choosing the figures with the help of square selection for primitive ElFigure is added .
+- FIX:/UI/Vision: Level(highest or lowest) configuration for primitive ElFigure is fixed.
+- FIX:UI/Vision: Selection figures with the pressed CTRL and further movement of them for primitive ElFigure is fixed 
+- /UI/Vision:Deleting of choosen by different ways of figures for primitive ElFigure support is added 
+
+
 2008-07-29 Roman
 - !!:/DAQ/ModBus: Coins support is added by functions 01 and 05.
 - !!:/DAQ/ModBus: Individual RS485 timeouts at controller is added.
