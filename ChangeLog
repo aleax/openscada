@@ -1,4 +1,9 @@
-2008-07-16 Maxim
+2008-07-31 Maxim
+- FIX:/UI/Vision: Drawing of the holds' circles for primitive ElFigure is fixed.
+- FIX:UI/Vision: Square selectionof figures for primitive ElFigure is modified.
+
+
+2008-07-29 Maxim
 - /UI/Vision: Choosing the figures with the help of square selection for primitive ElFigure is added .
 - FIX:/UI/Vision: Level(highest or lowest) configuration for primitive ElFigure is fixed.
 - FIX:UI/Vision: Selection figures with the pressed CTRL and further movement of them for primitive ElFigure is fixed 

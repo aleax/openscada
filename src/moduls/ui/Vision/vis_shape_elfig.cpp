@@ -43,7 +43,7 @@ using namespace VISION;
 ShapeElFigure::ShapeElFigure( ) :
     WdgShape("ElFigure"), itemInMotion(0), flag_down(false), flag_up(false), flag_left(false), flag_right(false), flag_A(false), flag_ctrl(false),
     status_hold(true), flag_rect(false), flag_hold_move(false), flag_m(false), flag_scale(true), flag_rotate(true), flag_hold_arc(false), flag_angle_temp(false),
-                flag_arc_rect_3_4(false), flag_first_move(false), flag_copy(false), flag_move(false), flag_check_pnt_inund(false), current_ss(-1), current_se(-1), current_es(-1), current_ee(-1),
+                flag_arc_rect_3_4(false), flag_first_move(false), flag_inund_break(false), flag_copy(false), flag_move(false), flag_check_pnt_inund(false), current_ss(-1), current_se(-1), current_es(-1), current_ee(-1),
     count_Shapes(0), count_holds(0), count_rects(0), rect_num_arc(-1), rect_num(-1), index_del(-1)
 {
     newPath.addEllipse( QRect(0,0,0,0) );
@@ -840,13 +840,13 @@ void ShapeElFigure::toolAct( QAction *act )
     else if( act->objectName() == "hold" )
     {
         status_hold = act->isChecked();
-        if( !status_hold )
-        {
+        //if( !status_hold )
+        //{
             index_array.clear();
             index_array_copy.clear();
-        }
+        //}
         if( rectItems.size() ) rectItems.clear();
-        w->update();
+        w->repaint();
     }
     else if( act->objectName() == "cursor" )
     {
@@ -951,8 +951,11 @@ void ShapeElFigure::toolAct( QAction *act )
                             inundationItems[j].number_shape[p]--;
             }
         }
-        else if( status_hold && index_array_copy.size() )
+        else if( status_hold && ( index_array_copy.size() || 
+                 (index_array_copy.size() == 0 && ( index_array.size() && index_array[0] != -1) ) ) )
         {
+            if( (index_array_copy.size() == 0 && ( index_array.size() && index_array[0] != -1) ) )
+                index_array_copy = index_array;
             ShapeItem item_temp;
             for( int i = 0; i < index_array_copy.size(); i++  )
                 if( index_array_copy[i] != -1 )
@@ -992,6 +995,7 @@ void ShapeElFigure::toolAct( QAction *act )
         index_array.clear();
         index_array_copy.clear();
         index = index_temp = -1;
+        flag_ctrl = flag_A = flag_copy = false;
         ((VisDevelop *)w->mainWin())->actLevRise->setEnabled(false);
         ((VisDevelop *)w->mainWin())->actLevLower->setEnabled(false);
         w->repaint();
@@ -1023,8 +1027,11 @@ void ShapeElFigure::toolAct( QAction *act )
                             inundationItems[j].number_shape[p]++;
             }
         }
-        else if( status_hold && index_array_copy.size() )
+        else if( status_hold && ( index_array_copy.size() || 
+                 (index_array_copy.size() == 0 && ( index_array.size() && index_array[0] != -1) ) ) )
         {
+            if( (index_array_copy.size() == 0 && ( index_array.size() && index_array[0] != -1) ) )
+                index_array_copy = index_array;
             ShapeItem item_temp;
             for( int i = 0; i < index_array_copy.size(); i++  )
                 if( index_array_copy[i] != -1 )
@@ -1064,6 +1071,7 @@ void ShapeElFigure::toolAct( QAction *act )
         index_array.clear();
         index_array_copy.clear();
         index = index_temp = -1;
+        flag_ctrl = flag_A = flag_copy = false;
         ((VisDevelop *)w->mainWin())->actLevRise->setEnabled(false);
         ((VisDevelop *)w->mainWin())->actLevLower->setEnabled(false);
         w->repaint();
@@ -1182,18 +1190,32 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     pnt.setPen( rectItems[k].pen );
                     pnt.drawPath( rectItems[k].path );
                 }
-                pnt.setPen( QPen( QColor(0,0,0,127), 2, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin) );
-                QBrush brs;
-                brs = QBrush( QColor(127,127,127,127), Qt::SolidPattern );
-                brs.setColor( QColor(127,127,127,127) );
-                pnt.setBrush( brs );
+                pnt.setBrush( Qt::NoBrush );
+                pnt.setPen( QPen( Qt::gray , 2, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin) );
+                pnt.setBrush( QBrush( QColor(127,127,127,127), Qt::SolidPattern ) );
+                
+                
+                //QPainterPath ellPath;
+                //ellPath = ellipse_draw_startPath;
+                ellipse_draw_startPath.setFillRule ( Qt::WindingFill );
+                
                 pnt.drawPath( ellipse_draw_startPath );
+                //ellPath = ellipse_draw_endPath;
+                //ellPath.setFillRule ( Qt::WindingFill );
+                ellipse_draw_endPath.setFillRule ( Qt::WindingFill );
                 pnt.drawPath( ellipse_draw_endPath );
+                ellipse_draw_startPath = newPath;
+                ellipse_draw_endPath = newPath;
+                
+                
                 if( dashedRect.isValid() )
                 {
-                    pnt.setPen( QColor(0,0,0,255) );
-                    pnt.setPen( Qt::DashLine );
                     pnt.setBrush( Qt::NoBrush );
+                    pnt.setPen( Qt::white );
+                    pnt.drawRect( dashedRect );
+                    pnt.setBrush( Qt::NoBrush );
+                    pnt.setPen( Qt::black );
+                    pnt.setPen( Qt::DashLine );
                     pnt.drawRect( dashedRect );
                 }
             }
@@ -2054,6 +2076,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                         if( temp==0 || rect_num==-1 )
                                         {
                                             if( itemInMotion->type==2 && shapeItems[i].type==2 ) break;
+                                            //if( ellipse_draw_startPath != newPath )
                                             ellipse_draw_startPath.addEllipse( scaleRotate((*pnts)[shapeItems[i].n1], view, flag_scale, flag_rotate).x()-8,
                                                                                scaleRotate((*pnts)[shapeItems[i].n1], view, flag_scale, flag_rotate).y()-8, 16, 16 );
                                             current_ss = i;
@@ -2064,6 +2087,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                         if( temp==1 || rect_num==-1 )
                                         {
                                             if( itemInMotion->type==2 && shapeItems[i].type==2 ) break;
+                                            //if( ellipse_draw_startPath != newPath )
                                             ellipse_draw_startPath.addEllipse( scaleRotate((*pnts)[shapeItems[i].n1], view, flag_scale, flag_rotate).x()-8,
                                                                                scaleRotate((*pnts)[shapeItems[i].n1], view, flag_scale, flag_rotate).y()-8, 16, 16 );
                                             current_se = i;
@@ -2076,6 +2100,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                         if( temp==1 || rect_num==-1 )
                                         {
                                             if( itemInMotion->type==2 && shapeItems[i].type==2 ) break;
+                                            //if( ellipse_draw_endPath != newPath )
                                             ellipse_draw_endPath.addEllipse( scaleRotate((*pnts)[shapeItems[i].n2], view, flag_scale, flag_rotate).x()-8,
                                                                              scaleRotate((*pnts)[shapeItems[i].n2], view, flag_scale, flag_rotate).y()-8, 16, 16 );
                                             current_ee = i;
@@ -2086,6 +2111,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                         if( temp==0 || rect_num==-1 )
                                         {
                                             if( itemInMotion->type==2 && shapeItems[i].type==2 ) break;
+                                            //if( ellipse_draw_endPath != newPath )
                                             ellipse_draw_endPath.addEllipse( scaleRotate((*pnts)[shapeItems[i].n2], view, flag_scale, flag_rotate).x()-8,
                                                                              scaleRotate((*pnts)[shapeItems[i].n2], view, flag_scale, flag_rotate).y()-8, 16, 16 );
                                             current_es = i;
