@@ -841,6 +841,8 @@ int TMdContr::getValR( int addr, string &err )
     for( int i_b = 0; i_b < acqBlks.size(); i_b++ )
 	if( (addr*2) >= acqBlks[i_b].off && (addr*2+2) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
 	{
+	    printf("TEST 00: %xh (%d) = %d.\n",acqBlks[i_b].off,addr*2-acqBlks[i_b].off,
+		(acqBlks[i_b].val[addr*2-acqBlks[i_b].off]<<8)+(unsigned char)acqBlks[i_b].val[addr*2-acqBlks[i_b].off+1]);
 	    err = acqBlks[i_b].err;
 	    if( err.empty() )
 		rez = (acqBlks[i_b].val[addr*2-acqBlks[i_b].off]<<8)+(unsigned char)acqBlks[i_b].val[addr*2-acqBlks[i_b].off+1];
@@ -1020,6 +1022,7 @@ void *TMdContr::Task( void *icntr )
 	    if( cntr.tm_delay > 0 )	cntr.tm_delay-=cntr.period();
 	    else
 	    {
+		printf("TEST 10: %s\n",cntr.id().c_str());
 		//- Update controller's data -
 		ResAlloc res( cntr.en_res, false );
 		//- Get coils -
