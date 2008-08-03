@@ -454,6 +454,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	{
 	    ctrMkNode("fld",opt,-1,"/scheme/ctm",_("Calk time (usek)"),0444,"root","root",1,"tp","real");
 	    ctrMkNode("list",opt,-1,"/scheme/sch",_("Blocks"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","blk_");
+	    ctrMkNode("fld",opt,-1,"/scheme/nmb",_("Number"),0444,"root","root",1,"tp","dec");
 	}
 	return;
     }
@@ -475,6 +476,12 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	    blkAt(opt->attr("id")).at().setName(opt->text());
 	}
 	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	chldDel(m_bl,opt->attr("id"),-1,1);
+    }
+    else if( a_path == "/scheme/nmb" && ctrChkNode(opt) )
+    {
+	vector<string> lst;
+	blkList(lst);
+	opt->setText(TSYS::int2str(lst.size()));
     }
     else TController::cntrCmdProc(opt);
 }

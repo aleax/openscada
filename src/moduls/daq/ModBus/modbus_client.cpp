@@ -841,7 +841,7 @@ int TMdContr::getValR( int addr, string &err )
     for( int i_b = 0; i_b < acqBlks.size(); i_b++ )
 	if( (addr*2) >= acqBlks[i_b].off && (addr*2+2) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
 	{
-	    printf("TEST 00: %xh (%d) = %d.\n",acqBlks[i_b].off,addr*2-acqBlks[i_b].off,
+	    printf("TEST 11: Register %xh+%d = %d.\n",acqBlks[i_b].off/2,(addr*2-acqBlks[i_b].off)/2,
 		(acqBlks[i_b].val[addr*2-acqBlks[i_b].off]<<8)+(unsigned char)acqBlks[i_b].val[addr*2-acqBlks[i_b].off+1]);
 	    err = acqBlks[i_b].err;
 	    if( err.empty() )
@@ -1022,7 +1022,7 @@ void *TMdContr::Task( void *icntr )
 	    if( cntr.tm_delay > 0 )	cntr.tm_delay-=cntr.period();
 	    else
 	    {
-		printf("TEST 10: %s\n",cntr.id().c_str());
+		printf("TEST 10: Fetch: %s\n",cntr.id().c_str());
 		//- Update controller's data -
 		ResAlloc res( cntr.en_res, false );
 		//- Get coils -
@@ -1060,7 +1060,7 @@ void *TMdContr::Task( void *icntr )
 		    pdu += (char)(cntr.acqBlks[i_b].val.size()/2);	//Number of registers LSB
 		    //- Request to remote server -
 		    cntr.acqBlks[i_b].err = cntr.modBusReq( pdu );
-		    //printf("TEST 00: %d Block %d(%d): %s\n",cntr.m_node,cntr.acqBlks[i_b].off,cntr.acqBlks[i_b].val.size(),cntr.acqBlks[i_b].err.c_str());
+		    printf("TEST 10a: %d Block %xh(%d): %s\n",cntr.m_node,cntr.acqBlks[i_b].off/2,cntr.acqBlks[i_b].val.size()/2,cntr.acqBlks[i_b].err.c_str());
 		    if( cntr.acqBlks[i_b].err.empty() )
 			cntr.acqBlks[i_b].val.replace(0,cntr.acqBlks[i_b].val.size(),pdu.substr(2).c_str(),cntr.acqBlks[i_b].val.size());
 		    else if( atoi(cntr.acqBlks[i_b].err.c_str()) == 14 )

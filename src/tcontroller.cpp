@@ -297,7 +297,7 @@ void TController::cntrCmdProc( XMLNode *opt )
 		    ctrMkNode("fld",opt,-1,"/prm/t_prm",_("To add parameters"),0660,"root","root",3,"tp","str","dest","select","select","/prm/t_lst");
 		ctrMkNode("list",opt,-1,"/prm/prm",_("Parameters"),0660,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","prm_");
 		ctrMkNode("fld",opt,-1,"/prm/nmb",_("Number"),0444,"root","root",1,"tp","dec");
-		ctrMkNode("fld",opt,-1,"/prm/en",_("Enabled"),0444,"root","root",1,"tp","dec");	
+		ctrMkNode("fld",opt,-1,"/prm/en",_("Enabled"),0444,"root","root",1,"tp","dec");
 	    }
 	}
 	return;
