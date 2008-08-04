@@ -1062,7 +1062,12 @@ void *TMdContr::Task( void *icntr )
 		    cntr.acqBlks[i_b].err = cntr.modBusReq( pdu );
 		    printf("TEST 10a: %d Block %xh(%d): %s\n",cntr.m_node,cntr.acqBlks[i_b].off/2,cntr.acqBlks[i_b].val.size()/2,cntr.acqBlks[i_b].err.c_str());
 		    if( cntr.acqBlks[i_b].err.empty() )
+		    {
 			cntr.acqBlks[i_b].val.replace(0,cntr.acqBlks[i_b].val.size(),pdu.substr(2).c_str(),cntr.acqBlks[i_b].val.size());
+			for( int i_r = 0; i_r < cntr.acqBlks[i_b].val.size(); i_r+=2 )
+			    printf("TEST 10b: Reg %xh = %d\n",(cntr.acqBlks[i_b].off+i_r)/2,
+				(cntr.acqBlks[i_b].val[i_r]<<8)+(unsigned char)cntr.acqBlks[i_b].val[i_r+1]);
+		    }
 		    else if( atoi(cntr.acqBlks[i_b].err.c_str()) == 14 )
 		    {
 			cntr.setCntrDelay(cntr.acqBlks[i_b].err);
