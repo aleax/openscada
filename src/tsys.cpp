@@ -34,6 +34,7 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <langinfo.h>
+#include <zlib.h>
 
 #include "../config.h"
 #include "terror.h"
@@ -773,6 +774,69 @@ string TSYS::strDecode( const string &in, TSYS::Code tp )
     }
 
     return sout;
+}
+
+string TSYS::strCompr( const string &in, int lev )
+{
+    int ret;
+    z_stream strm;
+    unsigned char out[STR_BUF_LEN];
+    string rez;
+
+    if( in.empty() )	return "";
+
+    strm.zalloc = Z_NULL;
+    strm.zfree = Z_NULL;
+    strm.opaque = Z_NULL;
+    if( deflateInit(&strm,lev) != Z_OK ) return "";
+    strm.avail_in = in.size();
+    strm.next_in = (Bytef*)in.data();
+    do
+    {
+	strm.avail_out = sizeof(out);
+	strm.next_out = out;
+	if( (ret=deflate(&strm,Z_FINISH) == Z_STREAM_ERROR) )	break;
+	rez.append((char*)out,sizeof(out)-strm.avail_out);
+    } while( strm.avail_out == 0 );
+    deflateEnd(&strm);
+
+    if( ret != Z_OK )	return "";
+
+    return rez;
+}
+
+string TSYS::strUncompr( const string &in )
+{
+    int ret;
+    z_stream strm;
+    unsigned char out[STR_BUF_LEN];
+    string rez;
+
+    if( in.empty() )	return "";
+
+    strm.zalloc = Z_NULL;
+    strm.zfree = Z_NULL;
+    strm.opaque = Z_NULL;
+    strm.avail_in = 0;
+    strm.next_in = Z_NULL;
+    if( inflateInit(&strm) != Z_OK )	return "";
+    strm.avail_in = in.size();
+    strm.next_in = (Bytef*)in.data();
+    do
+    {
+	strm.avail_out = sizeof(out);
+	strm.next_out = out;
+	ret=inflate(&strm,Z_FINISH);
+	if( ret == Z_STREAM_ERROR || ret == Z_NEED_DICT || ret == Z_DATA_ERROR || ret == Z_MEM_ERROR )
+	    break;
+	rez.append((char*)out,sizeof(out)-strm.avail_out);
+    } while( strm.avail_out == 0 );
+    inflateEnd(&strm);
+
+    printf("TEST 30: %d\n",ret);
+    if( ret != Z_OK )	return "";
+
+    return rez;
 }
 
 long TSYS::HZ()

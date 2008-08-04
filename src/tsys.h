@@ -187,6 +187,9 @@ class TSYS : public TCntrNode
 	static string strEncode( const string &in, Code tp, const string &symb = " \t\n");
 	static string strDecode( const string &in, Code tp = Custom );
 
+	static string strCompr( const string &in, int lev = -1 );
+	static string strUncompr( const string &in );
+
 	//Public attributes
 	static bool finalKill;	//Final object's kill flag. For dead requsted resources
 	const int argc;		//Comand line seting counter.

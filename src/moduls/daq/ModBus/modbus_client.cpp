@@ -880,7 +880,7 @@ void TMdContr::setValR( int val, int addr, string &err )
     for( int i_b = 0; i_b < acqBlks.size(); i_b++ )
 	if( (addr*2) >= acqBlks[i_b].off && (addr*2+2) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
 	{
-	    acqBlks[i_b].val[addr*2-acqBlks[i_b].off]   = (char)(val<<8);
+	    acqBlks[i_b].val[addr*2-acqBlks[i_b].off]   = (char)(val>>8);
 	    acqBlks[i_b].val[addr*2-acqBlks[i_b].off+1] = (char)val;
 	    break;
 	}
@@ -1059,8 +1059,9 @@ void *TMdContr::Task( void *icntr )
 		    pdu += (char)((cntr.acqBlks[i_b].val.size()/2)>>8);	//Number of registers MSB
 		    pdu += (char)(cntr.acqBlks[i_b].val.size()/2);	//Number of registers LSB
 		    //- Request to remote server -
+		    printf("TEST 10a: %d\n",pdu.size());
 		    cntr.acqBlks[i_b].err = cntr.modBusReq( pdu );
-		    printf("TEST 10a: %d Block %xh(%d): %s\n",cntr.m_node,cntr.acqBlks[i_b].off/2,cntr.acqBlks[i_b].val.size()/2,cntr.acqBlks[i_b].err.c_str());
+		    printf("TEST 10b: %d Block %xh(%d): %s\n",cntr.m_node,cntr.acqBlks[i_b].off/2,cntr.acqBlks[i_b].val.size()/2,cntr.acqBlks[i_b].err.c_str());
 		    if( cntr.acqBlks[i_b].err.empty() )
 			cntr.acqBlks[i_b].val.replace(0,cntr.acqBlks[i_b].val.size(),pdu.substr(2).c_str(),cntr.acqBlks[i_b].val.size());
 		    else if( atoi(cntr.acqBlks[i_b].err.c_str()) == 14 )
