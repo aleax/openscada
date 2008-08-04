@@ -597,9 +597,9 @@ void SSerial::setParity( int val )
 
 string SSerial::req( const string &vl, int iFrTm, double iCharTm, int iReqTm )
 {
-    int wFrTm = vmin( (iFrTm>0) ? iFrTm : timeoutFrame(), 10000000 );
+    int wFrTm = 1000*vmin( (iFrTm>0) ? iFrTm : timeoutFrame(), 10000 );
     double wCharTm = vmax( (iCharTm>0) ? iCharTm : timeoutChar(), 0.001 );
-    int wReqTm = vmin( (iReqTm>0) ? iReqTm : timeoutReq(), 10000000 );
+    int wReqTm = 1000*vmin( (iReqTm>0) ? iReqTm : timeoutReq(), 10000 );
 
     ResAlloc res( m_res, true );
     if( !hasOpen() )	throw TError(mod->nodePath().c_str(),_("Serial port '%s' no opened."),id().c_str());
@@ -841,8 +841,11 @@ int TMdContr::getValR( int addr, string &err )
     for( int i_b = 0; i_b < acqBlks.size(); i_b++ )
 	if( (addr*2) >= acqBlks[i_b].off && (addr*2+2) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
 	{
-	    printf("TEST 11: Register %xh => %xh+%d = %d.\n",addr,acqBlks[i_b].off/2,(addr*2-acqBlks[i_b].off)/2,
+#if OSC_DEBUG
+	    mess_debug(nodePath().c_str(),_("Read register %xh => %xh+%d = %d."),
+		addr,acqBlks[i_b].off/2,(addr*2-acqBlks[i_b].off)/2,
 		(acqBlks[i_b].val[addr*2-acqBlks[i_b].off]<<8)+(unsigned char)acqBlks[i_b].val[addr*2-acqBlks[i_b].off+1]);
+#endif
 	    err = acqBlks[i_b].err;
 	    if( err.empty() )
 		rez = (acqBlks[i_b].val[addr*2-acqBlks[i_b].off]<<8)+(unsigned char)acqBlks[i_b].val[addr*2-acqBlks[i_b].off+1];
@@ -924,13 +927,13 @@ string TMdContr::modBusReq( string &pdu )
 		catch(...) { tr.at().stop(); throw; }
 
 		//- Encode MBAP (Modbus Application Protocol) -
-		mbap  = (char)0x15;		//Transaction ID MSB
-		mbap += (char)0x01;		//Transaction ID LSB
-		mbap += (char)0x00;		//Protocol ID MSB
-		mbap += (char)0x00;		//Protocol ID LSB
-		mbap += (char)(pdu.size()>>8);	//PDU size MSB
-		mbap += (char)pdu.size();	//PDU size LSB
-		mbap += (char)m_node;		//Unit identifier
+		mbap  = (char)0x15;			//Transaction ID MSB
+		mbap += (char)0x01;			//Transaction ID LSB
+		mbap += (char)0x00;			//Protocol ID MSB
+		mbap += (char)0x00;			//Protocol ID LSB
+		mbap += (char)((pdu.size()+1)>>8);	//PDU size MSB
+		mbap += (char)(pdu.size()+1);		//PDU size LSB
+		mbap += (char)m_node;			//Unit identifier
 
 		if( !tr.at().startStat() )	tr.at().start();
 		//- Send request -
@@ -1022,7 +1025,9 @@ void *TMdContr::Task( void *icntr )
 	    if( cntr.tm_delay > 0 )	cntr.tm_delay-=cntr.period();
 	    else
 	    {
-		printf("TEST 10: Fetch: %s\n",cntr.id().c_str());
+#if OSC_DEBUG
+		mess_debug(cntr.nodePath().c_str(),_("Fetch coils' and registers' blocks."));
+#endif
 		//- Update controller's data -
 		ResAlloc res( cntr.en_res, false );
 		//- Get coils -
@@ -1037,7 +1042,6 @@ void *TMdContr::Task( void *icntr )
 		    pdu += (char)cntr.acqBlksCoil[i_b].val.size();	//Number of registers LSB
 		    //- Request to remote server -
 		    cntr.acqBlksCoil[i_b].err = cntr.modBusReq( pdu );
-		    //printf("TEST 00: %d Block %d(%d): %s\n",cntr.m_node,cntr.acqBlksCoil[i_b].off,cntr.acqBlksCoil[i_b].val.size(),cntr.acqBlksCoil[i_b].err.c_str());
 		    if( cntr.acqBlksCoil[i_b].err.empty() )
 			for( int i_c = 0; i_c < cntr.acqBlksCoil[i_b].val.size(); i_c++ )
 			    cntr.acqBlksCoil[i_b].val[i_c] = (bool)((pdu[2+i_c/8]>>(i_c%8))&0x01);
@@ -1060,14 +1064,12 @@ void *TMdContr::Task( void *icntr )
 		    pdu += (char)(cntr.acqBlks[i_b].val.size()/2);	//Number of registers LSB
 		    //- Request to remote server -
 		    cntr.acqBlks[i_b].err = cntr.modBusReq( pdu );
-		    printf("TEST 10a: %d Block %xh(%d): %s\n",cntr.m_node,cntr.acqBlks[i_b].off/2,cntr.acqBlks[i_b].val.size()/2,cntr.acqBlks[i_b].err.c_str());
+#if OSC_DEBUG
+		    mess_debug(cntr.nodePath().c_str(),_("%d Block %xh(%d): %s."),
+			cntr.m_node,cntr.acqBlks[i_b].off/2,cntr.acqBlks[i_b].val.size()/2,cntr.acqBlks[i_b].err.c_str());
+#endif
 		    if( cntr.acqBlks[i_b].err.empty() )
-		    {
 			cntr.acqBlks[i_b].val.replace(0,cntr.acqBlks[i_b].val.size(),pdu.substr(2).c_str(),cntr.acqBlks[i_b].val.size());
-			for( int i_r = 0; i_r < cntr.acqBlks[i_b].val.size(); i_r+=2 )
-			    printf("TEST 10b: Reg %xh = %d\n",(cntr.acqBlks[i_b].off+i_r)/2,
-				(cntr.acqBlks[i_b].val[i_r]<<8)+(unsigned char)cntr.acqBlks[i_b].val[i_r+1]);
-		    }
 		    else if( atoi(cntr.acqBlks[i_b].err.c_str()) == 14 )
 		    {
 			cntr.setCntrDelay(cntr.acqBlks[i_b].err);
@@ -1214,7 +1216,6 @@ void TMdPrm::disable()
 
 void TMdPrm::vlGet( TVal &val )
 {
-    //printf("TEST 00");
     if( !enableStat() || !owner().startStat() )
     {
 	if( val.name() == "err" )
