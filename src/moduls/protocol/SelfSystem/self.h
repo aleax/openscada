@@ -75,9 +75,11 @@ class TProt: public TProtocol
 
 	int authTime( )			{ return m_t_auth; }
 	int comprLev( )			{ return mComprLev; }
+	int comprBrd( )			{ return mComprBrd; }
 
 	void setAuthTime( int vl )	{ m_t_auth = vl; modif(); }
 	void setComprLev( int vl )	{ mComprLev = vl; modif(); }
+	void setComprBrd( int vl )	{ mComprBrd = vl; modif(); }
 
 	int sesOpen( const char *user, const char *pass );
 	void sesClose( int id_ses );
@@ -99,7 +101,7 @@ class TProt: public TProtocol
 	Res		ses_res;
 	Res		ores;
 	vector<SAuth>	auth_lst;
-	int		m_t_auth, mComprLev;
+	int		m_t_auth, mComprLev, mComprBrd;
 };
 
 extern TProt *mod;

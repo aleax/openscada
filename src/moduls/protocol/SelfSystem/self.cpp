@@ -62,7 +62,7 @@ using namespace SelfPr;
 //*************************************************
 //* TProt                                         *
 //*************************************************
-TProt::TProt( string name ) : m_t_auth(60), mComprLev(0)
+TProt::TProt( string name ) : m_t_auth(60), mComprLev(0), mComprBrd(80)
 {
     mId		= MOD_ID;
     mName	= MOD_NAME;
@@ -168,12 +168,14 @@ void TProt::load_( )
     //- Load parameters from config file -
     setAuthTime( atoi(TBDS::genDBGet(nodePath()+"SessTimeLife",TSYS::int2str(authTime())).c_str()) );
     setComprLev( atoi(TBDS::genDBGet(nodePath()+"ComprLev",TSYS::int2str(comprLev())).c_str()) );
+    setComprBrd( atoi(TBDS::genDBGet(nodePath()+"ComprBrd",TSYS::int2str(comprBrd())).c_str()) );
 }
 
 void TProt::save_( )
 {
     TBDS::genDBSet(nodePath()+"SessTimeLife",TSYS::int2str(authTime()));
     TBDS::genDBSet(nodePath()+"ComprLev",TSYS::int2str(comprLev()));
+    TBDS::genDBSet(nodePath()+"ComprBrd",TSYS::int2str(comprBrd()));
 }
 
 TProtocolIn *TProt::in_open( const string &name )
@@ -213,10 +215,11 @@ string TProt::outMess( const string &in, TTransportOut &tro )
 	    }
 	    //- Request -
 	    //-- Compress data --
-	    if( comprLev( ) )	data = TSYS::strCompr(data,comprLev());
+	    bool reqCompr = comprLev() && data.size() > comprBrd();
+	    if( reqCompr )	data = TSYS::strCompr(data,comprLev());
 
-	    if(isDir)	req = "REQDIR "+user+" "+pass+" "+TSYS::int2str(data.size()*(comprLev()?-1:1))+"\n"+data;
-	    else	req = "REQ "+TSYS::int2str(tro.prm1())+" "+TSYS::int2str(data.size()*(comprLev()?-1:1))+"\n"+data;
+	    if(isDir)	req = "REQDIR "+user+" "+pass+" "+TSYS::int2str(data.size()*(reqCompr?-1:1))+"\n"+data;
+	    else	req = "REQ "+TSYS::int2str(tro.prm1())+" "+TSYS::int2str(data.size()*(reqCompr?-1:1))+"\n"+data;
 	    buf[0] = 0;
 	    resp_len = tro.messIO(req.c_str(),req.size(),buf,sizeof(buf),20);
 	    resp.assign(buf,resp_len);
@@ -240,9 +243,9 @@ string TProt::outMess( const string &in, TTransportOut &tro )
 	    }
 
 	    //-- Decompress data --
-	    if( resp_size < 0 )	return TSYS::strUncompr(resp.substr(head_end));
+	    if( resp_size < 0 )	return TSYS::strUncompr(resp.substr(head_end+sizeof('\n')));
 
-	    return resp.substr(head_end);
+	    return resp.substr(head_end+sizeof('\n'));
 	}
     }
     catch(TError err)   { tro.stop(); throw; }
@@ -261,10 +264,12 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	    {
 		ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of auth sesion(min)"),0664,"root","root",1,"tp","dec");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/compr",_("Compression level"),0664,"root","root",4,"tp","dec","min","-1","max","9",
-		    "help",_("ZLib compression level:\n  "
-			     "  -1  - optimal speed-size;"
-			     "  0   - disable;"
+		    "help",_("ZLib compression level:\n"
+			     "  -1  - optimal speed-size;\n"
+			     "  0   - disable;\n"
 			     "  1-9 - direct level."));
+		ctrMkNode("fld",opt,-1,"/prm/cfg/comprBrd",_("Lower compression border"),0664,"root","root",4,"tp","dec","min","10","max","1000",
+		    "help",_("Value in bytes."));
 	    }
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
 	return;
@@ -281,6 +286,11 @@ void TProt::cntrCmdProc( XMLNode *opt )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(comprLev()) );
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setComprLev( atoi(opt->text().c_str()) );
+    }
+    else if( a_path == "/prm/cfg/comprBrd" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(comprBrd()) );
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setComprBrd( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )	opt->setText(optDescr());
     else TProtocol::cntrCmdProc(opt);
@@ -349,12 +359,8 @@ bool TProtIn::mess( const string &request, string &answer, const string &sender 
 
 	    //- Decompress request -
 	    if( req_sz < 0 )
-	    {
-		printf("TEST 20 : %d\n",req_buf.size());
 		req_buf.replace(req.size()+strlen("\n"),abs(req_sz),
 		    TSYS::strUncompr(req_buf.substr(req.size()+strlen("\n"))));
-		printf("TEST 21 : %d\n",req_buf.size());
-	    }
 	    //- Process request -
 	    req_node.load(req_buf.substr(req.size()+strlen("\n")));
 	    req_node.setAttr("user",auth.name);
@@ -362,11 +368,10 @@ bool TProtIn::mess( const string &request, string &answer, const string &sender 
 	    string resp = req_node.save()+"\n";
 
 	    //- Compress respond -
-	    bool respCompr = (req_sz < 0 && ((TProt&)owner()).comprLev());
+	    bool respCompr = ((TProt&)owner()).comprLev() && resp.size() > ((TProt&)owner()).comprBrd();
 	    if( respCompr ) resp = TSYS::strCompr(resp,((TProt&)owner()).comprLev());
 
-	    answer="REZ 0 "+TSYS::int2str(resp.size()*(respCompr ? -1 : 1))+
-		    "\n"+resp;
+	    answer="REZ 0 "+TSYS::int2str(resp.size()*(respCompr?-1:1))+"\n"+resp;
 	}
 	catch(TError err)
 	{
