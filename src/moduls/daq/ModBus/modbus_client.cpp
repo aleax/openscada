@@ -617,18 +617,13 @@ string SSerial::req( const string &vl, int iFrTm, double iCharTm, int iReqTm )
     long long tmptm;
     fd_set fdset;
 
-    //-- Char timeout init --
-    struct timeval tv;
-    tv.tv_sec = 0;
-    tv.tv_usec = (int)(1000.0*wCharTm);
-
-    //--- Serial timeout ---
     tmptm = TSYS::curTime();
     while( true )
     {
 	int bytes = 0;
 	ioctl( fd, FIONREAD, &bytes );
 	if( bytes > 2 ) break;
+	//--- Serial timeout ---
 	if( (TSYS::curTime() - tmptm) >= wReqTm )
 	    throw TError(mod->nodePath().c_str(),_("Respond from serial port '%s' is timeouted."),id().c_str());
 	usleep( 1000 );
@@ -636,14 +631,17 @@ string SSerial::req( const string &vl, int iFrTm, double iCharTm, int iReqTm )
     fcntl( fd, F_SETFL, 0 );
     blen = read( fd, buf, sizeof(buf) );
 
-    //--- Frame timeout ---
     tmptm = TSYS::curTime();
     FD_ZERO( &fdset );
     FD_SET( fd, &fdset );
+    struct timeval tv;
     while( true )
     {
+	//--- Char timeout ---
+	tv.tv_sec = 0; tv.tv_usec = (int)(1000.0*wCharTm);
 	if( select(fd+1,&fdset,NULL,NULL,&tv) <= 0 )	break;
 	blen += read( fd, buf+blen, sizeof(buf)-blen );
+	//--- Frame timeout ---
 	if( (TSYS::curTime()-tmptm) > wFrTm )	break;
     }
 
