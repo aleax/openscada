@@ -1,3 +1,8 @@
+2008-08-05 Roman
+- !!:/SYS: ZLib compression functions added.
+- !!:/Protocol/SelfSystem: Protocol compression support is added.
+
+
 2008-07-31 Maxim
 - FIX:/UI/Vision: Drawing of the holds' circles for primitive ElFigure is fixed.
 - FIX:UI/Vision: Square selectionof figures for primitive ElFigure is modified.

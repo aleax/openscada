@@ -602,6 +602,7 @@ string SSerial::req( const string &vl, int iFrTm, double iCharTm, int iReqTm )
     int wReqTm = 1000*vmin( (iReqTm>0) ? iReqTm : timeoutReq(), 10000 );
 
     ResAlloc res( m_res, true );
+
     if( !hasOpen() )	throw TError(mod->nodePath().c_str(),_("Serial port '%s' no opened."),id().c_str());
 
     usleep((int)(2500.0*wCharTm));
@@ -747,11 +748,17 @@ bool TMdContr::cfgChange( TCfg &icfg )
 	if( icfg.getI() == 0 )
 	{
 	    cfg("ADDR").fld().setDescr(_("Host address"));
+	    cfg("TM_FRM").setView(false);
+	    cfg("TM_CHAR").setView(false);
+	    cfg("TM_REQ").setView(false);
 	    //cfg("ADDR").setS("devhost.org:502");
 	}
 	else
 	{
 	    cfg("ADDR").fld().setDescr(_("Serial port"));
+	    cfg("TM_FRM").setView(true);
+	    cfg("TM_CHAR").setView(true);
+	    cfg("TM_REQ").setView(true);
 	    //cfg("ADDR").setS("/dev/ttyS0");
 	}
 	if(startStat())	stop();
