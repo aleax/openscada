@@ -382,7 +382,7 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	SYS->transport().at().extHostList("*",lst);
 	for( int i_ls = 0; i_ls < lst.size(); i_ls++ )
 	    opt->childAdd("el")->setAttr("id",lst[i_ls])->
-		setText(SYS->transport().at().extHostGet(opt->attr("user"),lst[i_ls]).name);
+		setText(SYS->transport().at().extHostGet("*",lst[i_ls]).name);
     }
     else if( a_path == "/alarm/plComm" )
     {

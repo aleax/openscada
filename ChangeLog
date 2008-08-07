@@ -1,6 +1,11 @@
+2008-08-07 Roman
+- FIX:/UI/Vision: Remote VCA hosts' list is fixed.
+
+
 2008-08-05 Roman
 - !!:/SYS: ZLib compression functions added.
 - !!:/Protocol/SelfSystem: Protocol compression support is added.
+- FIX:/DAQ/ModBus: More fixes is made.
 
 
 2008-07-31 Maxim
