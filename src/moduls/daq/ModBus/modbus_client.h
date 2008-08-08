@@ -29,6 +29,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <deque>
 
 #undef _
 #define _(mess) mod->I18N(mess)
@@ -38,6 +39,7 @@
 using std::string;
 using std::vector;
 using std::map;
+using std::deque;
 
 namespace ModBusDAQ
 {
@@ -238,6 +240,11 @@ class TTpContr: public TTipDAQ
 	string	DataToASCII( const string &in );
 	string	ASCIIToData( const string &in );
 
+	//- Protocol -
+	int prtLen( )	{ return mPrtLen; }
+	void setPrtLen( int vl );
+	void pushPrtMess( const string &vl );
+
     protected:
 	//Methods
 	void	cntrCmdProc( XMLNode *opt );	//Control interface command process
@@ -255,6 +262,11 @@ class TTpContr: public TTipDAQ
 	//Attributes
 	TElem	el_ser_dev;
 	int	m_sdev;
+
+	//- Protocol -
+	Res	mPrtRes;
+	int	mPrtLen;
+	deque<string>	mPrt;
 
 	//- Special modbus protocol's -
 	static ui8 CRCHi[];

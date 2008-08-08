@@ -68,7 +68,7 @@ using namespace ModBusDAQ;
 //******************************************************
 //* TTpContr                                           *
 //******************************************************
-TTpContr::TTpContr( string name ) : mSerConnResume(30)
+TTpContr::TTpContr( string name ) : mSerConnResume(30), mPrtLen(0)
 {
     mId		= MOD_ID;
     mName	= MOD_NAME;
@@ -310,6 +310,26 @@ string TTpContr::ASCIIToData( const string &in )
     return rez;
 }
 
+void TTpContr::setPrtLen( int vl )
+{
+    ResAlloc res(mPrtRes,true);
+
+    while( mPrt.size() > vl )	mPrt.pop_back();
+
+    mPrtLen = vl;
+}
+
+void TTpContr::pushPrtMess( const string &vl )
+{
+    ResAlloc res(mPrtRes,true);
+
+    if( !prtLen() )	return;
+
+    mPrt.push_front(vl);
+
+    while( mPrt.size() > prtLen() )	mPrt.pop_back();
+}
+
 void TTpContr::cntrCmdProc( XMLNode *opt )
 {
     //- Get page info -
@@ -335,6 +355,10 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/mod/dev/reqTm",_("Time request"),0664,"root","root",1,"tp","dec");
 		ctrMkNode("list",opt,-1,"/mod/dev/open",_("Opened"),0664,"root","root",1,"tp","bool");
 	    }
+	    ctrMkNode("fld",opt,-1,"/mod/protLen",_("Protocol length"),0664,"root","DAQ",4,"tp","dec","min","0","max","10000",
+		"help",_("Zero use for protocol disabling"));
+	    if( prtLen() )
+		ctrMkNode("fld",opt,-1,"/mod/prot",_("Protocol"),0444,"root","DAQ",3,"tp","str","cols","90","rows","20");
 	}
 	return;
     }
@@ -406,6 +430,17 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 	    else if( col == "reqTm" )	serDevAt(dev).at().setTimeoutReq(atoi(opt->text().c_str()));
 	    else if( col == "open" )	serDevAt(dev).at().setOpen(atoi(opt->text().c_str()));
 	}
+    }
+    else if( a_path == "/mod/protLen" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","DAQ",SEQ_RD) )	opt->setText( TSYS::int2str(prtLen()) );
+	if( ctrChkNode(opt,"set",0664,"root","DAQ",SEQ_WR) )	setPrtLen( atoi(opt->text().c_str()) );
+    }
+    else if( a_path == "/mod/prot" && ctrChkNode(opt) )
+    {
+	ResAlloc res(mPrtRes,true);
+	for( int i_p = 0; i_p < mPrt.size(); i_p++ )
+	    opt->setText(opt->text()+mPrt[i_p]+"\n");
     }
     else TTipDAQ::cntrCmdProc( opt );
 }
@@ -847,13 +882,13 @@ int TMdContr::getValR( int addr, string &err )
 	if( (addr*2) >= acqBlks[i_b].off && (addr*2+2) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
 	{
 #if OSC_DEBUG
-	    mess_debug(nodePath().c_str(),_("Read register %xh => %xh+%d = %d."),
+	    /*mess_debug(nodePath().c_str(),_("Read register %xh => %xh+%d = %d."),
 		addr,acqBlks[i_b].off/2,(addr*2-acqBlks[i_b].off)/2,
-		(acqBlks[i_b].val[addr*2-acqBlks[i_b].off]<<8)+(unsigned char)acqBlks[i_b].val[addr*2-acqBlks[i_b].off+1]);
+		(unsigned short)(acqBlks[i_b].val[addr*2-acqBlks[i_b].off]<<8)|(unsigned char)acqBlks[i_b].val[addr*2-acqBlks[i_b].off+1]);*/
 #endif
 	    err = acqBlks[i_b].err;
 	    if( err.empty() )
-		rez = (acqBlks[i_b].val[addr*2-acqBlks[i_b].off]<<8)+(unsigned char)acqBlks[i_b].val[addr*2-acqBlks[i_b].off+1];
+		rez = (unsigned short)(acqBlks[i_b].val[addr*2-acqBlks[i_b].off]<<8)|(unsigned char)acqBlks[i_b].val[addr*2-acqBlks[i_b].off+1];
 	    break;
 	}
     return rez;
@@ -918,8 +953,8 @@ string TMdContr::modBusReq( string &pdu )
 {
     ResAlloc res( req_res, true );
 
-    string mbap;
-    unsigned char buf[1000];
+    string mbap, err, rez;
+    char buf[1000];
 
     try
     {
@@ -939,19 +974,20 @@ string TMdContr::modBusReq( string &pdu )
 		mbap += (char)((pdu.size()+1)>>8);	//PDU size MSB
 		mbap += (char)(pdu.size()+1);		//PDU size LSB
 		mbap += (char)m_node;			//Unit identifier
-
+		mbap += pdu;
 		if( !tr.at().startStat() )	tr.at().start();
 		//- Send request -
-		int resp_len = tr.at().messIO( (mbap+pdu).c_str(), mbap.size()+pdu.size(), (char*)buf, sizeof(buf), 10 );
-		if( resp_len < mbap.size() ) return _("13:Error server respond");
-		int resp_sz = (buf[4]<<8)+buf[5];
-		pdu.assign( (char*)buf+mbap.size(), resp_len-mbap.size() );
+		int resp_len = tr.at().messIO( mbap.data(), mbap.size(), buf, sizeof(buf), 10 );
+		rez.assign(buf,resp_len);
+		if( rez.size() < 7 )	{ err = _("13:Error server respond"); break; }
+		int resp_sz = (unsigned short)(rez[4]<<8)|(unsigned char)rez[5];
 		//- Wait tail -
-		while( pdu.size() < resp_sz-1 )
+		while( rez.size() < (resp_sz+6) )
 		{
-		    resp_len = tr.at().messIO( NULL, 0, (char*)buf, sizeof(buf), 10 );
-		    pdu.append( (char*)buf, resp_len );
+		    resp_len = tr.at().messIO( NULL, 0, buf, sizeof(buf), 10 );
+		    rez.append( buf, resp_len );
 		}
+		pdu = rez.substr(7);
 		break;
 	    }
 	    case 1:	// Modbus/RTU protocol process
@@ -961,10 +997,10 @@ string TMdContr::modBusReq( string &pdu )
 		ui16 crc = mod->CRC16( mbap );
 		mbap += crc >> 8;
 		mbap += crc;
-		string rez = mod->serDevAt(m_addr).at().req(mbap,frTm,charTm,reqTm);
-		if( rez.size() < 2 ) return _("13:Error respond: Too short.");
+		rez = mod->serDevAt(m_addr).at().req(mbap,frTm,charTm,reqTm);
+		if( rez.size() < 2 )	{ err = _("13:Error respond: Too short."); break; }
 		if( mod->CRC16(rez.substr(0,rez.size()-2)) != (ui16)((rez[rez.size()-2]<<8)+(ui8)rez[rez.size()-1]) )
-		    return _("13:Error respond: CRC check error.");
+		{ err = _("13:Error respond: CRC check error."); break; }
 		pdu = rez.substr( 1, rez.size()-3 );
 		break;
 	    }
@@ -973,42 +1009,76 @@ string TMdContr::modBusReq( string &pdu )
 		mbap = (ui8)m_node;		//Unit identifier
 		mbap += pdu;
 		mbap += mod->LRC(mbap);
-		mbap = ":"+mod->DataToASCII(mbap)+"\0x0D\0x0A";
-		string rez = mod->serDevAt(m_addr).at().req(mbap,frTm,charTm,reqTm);
+		rez = mod->serDevAt(m_addr).at().req(":"+mod->DataToASCII(mbap)+"\0x0D\0x0A",frTm,charTm,reqTm);
 		if( rez.size() < 3 || rez[0] != ':' || rez[rez.size()-2] != 0x0D || rez[rez.size()-1] != 0x0A )
-		    return _("13:Error respond: Error format.");
+		{ err = _("13:Error respond: Error format."); break; }
 		rez = mod->ASCIIToData(rez.substr(1,rez.size()-3));
 		if( mod->LRC(rez.substr(0,rez.size()-1)) != rez[rez.size()-1] )
-		    return _("13:Error respond: LRC check error.");
+		{ err = _("13:Error respond: LRC check error."); break; }
 		pdu = rez.substr(1,rez.size()-2);
 		break;
 	    }
 	}
 	//- Check respond pdu -
-	if( pdu.size() < 2 ) return _("13:Error respond");
-	if( pdu[0]&0x80 )
-	    switch( pdu[1] )
-	    {
-		case 0x1:
-		    snprintf( (char*)buf, sizeof(buf), _("1:Function %xh no support."), pdu[0]&(~0x80) );
-		    return (char*)buf;
-		case 0x2: return _("2:Requested registers length too long.");
-		case 0x3: return _("3:Illegal data value.");
-		case 0x4: return _("4:Server failure.");
-		case 0x5: return _("5:Request require too long time for execute.");
-		case 0x6: return _("6:Server busy.");
-		case 0xA: case 0xB: return _("10:Gateway problem.");
-		default:
-		    snprintf( (char*)buf, sizeof(buf), _("12:Unknown error: %xh."), pdu[1] );
-		    return (char*)buf;
+	if( err.empty() )
+	{
+	    if( pdu.size() < 2 ) err = _("13:Error respond");
+	    if( pdu[0]&0x80 )
+		switch( pdu[1] )
+		{
+		    case 0x1:
+			snprintf( buf, sizeof(buf), _("1:Function %xh no support."), pdu[0]&(~0x80) );
+			err = buf;
+			break;
+		    case 0x2: err = _("2:Requested registers length too long.");	break;
+		    case 0x3: err = _("3:Illegal data value.");				break;
+		    case 0x4: err = _("4:Server failure.");				break;
+		    case 0x5: err = _("5:Request require too long time for execute.");	break;
+		    case 0x6: err = _("6:Server busy.");				break;
+		    case 0xA: case 0xB: err = _("10:Gateway problem.");			break;
+		    default:
+			snprintf( buf, sizeof(buf), _("12:Unknown error: %xh."), pdu[1] );
+			err = buf;
+			break;
+		}
 	    }
-    }catch( TError err )
+    }catch( TError er )
     {
-	//mess_err( err.cat.c_str(), err.mess.c_str() );
-	return _("14:Device error: ")+err.mess;
+	//mess_err( err.cat.c_str(), er.mess.c_str() );
+	err = _("14:Device error: ")+er.mess;
     }
 
-    return "";
+    //- Prepare log -
+    if( mod->prtLen( ) )
+    {
+	time_t tm_t = time(NULL);
+	string mess = TSYS::strSepParse(ctime(&tm_t),0,'\n');
+	switch( m_prt )
+	{
+	    case 0:	mess += " -> TCP:"+m_addr;	break;
+	    case 1:	mess += " -> RTU:"+TSYS::int2str(m_node)+"("+m_addr+")";	break;
+	    case 2:	mess += " -> ASCII:"+TSYS::int2str(m_node)+"("+m_addr+")";	break;
+	}
+	mess += _("\nREQ -> ");
+	for( int i_d = 0; i_d < mbap.size(); i_d++ )
+	{
+	    sprintf(buf,"%0.2X",(unsigned char)mbap[i_d]);
+	    mess += string(buf) + " ";
+	}
+	if( !err.empty() )	mess += _("\nERR -> ")+err;
+	else
+	{
+	    mess += _("\nRESP -> ");
+	    for( int i_d = 0; i_d < rez.size(); i_d++ )
+	    {
+		sprintf(buf,"%0.2X",(unsigned char)rez[i_d]);
+		mess += string(buf) + " ";
+	    }
+	}
+	mod->pushPrtMess(mess+"\n");
+    }
+
+    return err;
 }
 
 void *TMdContr::Task( void *icntr )
@@ -1031,7 +1101,7 @@ void *TMdContr::Task( void *icntr )
 	    else
 	    {
 #if OSC_DEBUG
-		mess_debug(cntr.nodePath().c_str(),_("Fetch coils' and registers' blocks."));
+		//mess_debug(cntr.nodePath().c_str(),_("Fetch coils' and registers' blocks."));
 #endif
 		//- Update controller's data -
 		ResAlloc res( cntr.en_res, false );
@@ -1070,8 +1140,8 @@ void *TMdContr::Task( void *icntr )
 		    //- Request to remote server -
 		    cntr.acqBlks[i_b].err = cntr.modBusReq( pdu );
 #if OSC_DEBUG
-		    mess_debug(cntr.nodePath().c_str(),_("%d Block %xh(%d): %s."),
-			cntr.m_node,cntr.acqBlks[i_b].off/2,cntr.acqBlks[i_b].val.size()/2,cntr.acqBlks[i_b].err.c_str());
+		    /*mess_debug(cntr.nodePath().c_str(),_("%d Block %xh(%d): %s."),
+			cntr.m_node,cntr.acqBlks[i_b].off/2,cntr.acqBlks[i_b].val.size()/2,cntr.acqBlks[i_b].err.c_str());*/
 #endif
 		    if( cntr.acqBlks[i_b].err.empty() )
 			cntr.acqBlks[i_b].val.replace(0,cntr.acqBlks[i_b].val.size(),pdu.substr(2).c_str(),cntr.acqBlks[i_b].val.size());

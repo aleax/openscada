@@ -49,7 +49,7 @@ class VisRun : public QMainWindow
     Q_OBJECT
     public:
 	//Public methods
-	VisRun( const string &prj_it, const string &open_user, const string &open_user, const string &VCAstat, bool crSessForce = false );
+	VisRun( const string &prj_it, const string &open_user, const string &user_pass, const string &VCAstat, bool crSessForce = false );
 	~VisRun( );
 
 	string user( );
