@@ -1,6 +1,7 @@
 2008-08-11 Roman
 - !!:/SYS: System adapted to GCC 4.3
 - FIX:/DAQ/JavaLikeCalc: Start libraries functions after broken function is fixed.
+- FIX:/DAQ/ModBus: Coil buffer make is fixed.
 
 
 2008-08-08 Roman

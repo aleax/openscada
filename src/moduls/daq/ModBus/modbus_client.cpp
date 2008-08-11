@@ -873,6 +873,8 @@ void TMdContr::regVal( int reg, const string &dt )
 	    }
 	    break;
 	}
+	if( i_b >= acqBlksCoil.size() )
+	    acqBlksCoil.insert(acqBlksCoil.begin()+i_b,SDataRec(reg*2,2));
     }
 }
 
