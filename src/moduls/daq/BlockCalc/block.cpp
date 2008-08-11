@@ -469,7 +469,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 		    {
 			int id = ioId(list[i_io]);
 			if( ioHide(id) && !atoi(TBDS::genDBGet(nodePath()+"showHide","0",opt->attr("user")).c_str()) ) continue;
-			char *tip;
+			const char *tip;
 			switch(ioType(id))
 			{
 			    case IO::String:    tip = "str";    break;

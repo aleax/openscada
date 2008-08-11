@@ -19,8 +19,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <tsys.h>
+#include <string.h>
 
+#include <tsys.h>
 
 #include "web_vision.h"
 #include "vca_sess.h"

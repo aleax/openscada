@@ -26,6 +26,7 @@
 #include <sys/time.h>
 #include <sys/utsname.h>
 #include <errno.h>
+#include <string.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <getopt.h>
@@ -211,7 +212,7 @@ bool TSYS::cfgFileLoad()
 
     //================ Load parameters from commandline =========================
     int next_opt;
-    char *short_opt="h";
+    const char *short_opt="h";
     struct option long_opt[] =
     {
 	{"help"     ,0,NULL,'h'},
@@ -680,7 +681,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 	case TSYS::base64:
 	{
 	    sout.reserve(in.size()+in.size()/4+in.size()/57+10);
-	    char *base64alph = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+	    const char *base64alph = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 	    for( i_sz = 0; i_sz < in.size(); i_sz+=3 )
 	    {
 		if(i_sz && !(i_sz%57))	sout.push_back('\n');

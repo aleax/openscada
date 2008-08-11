@@ -125,7 +125,7 @@ void TUIMod::load_( )
 
     //- Load parameters from command line -
     int next_opt;
-    char *short_opt="h";
+    const char *short_opt="h";
     struct option long_opt[] =
     {
 	{"help"    ,0,NULL,'h'},

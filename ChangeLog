@@ -1,3 +1,8 @@
+2008-08-11 Roman
+- !!:/SYS: System adapted to GCC 4.3
+- FIX:/DAQ/JavaLikeCalc: Start libraries functions after broken function is fixed.
+
+
 2008-08-08 Roman
 - !!:/DAQ/ModBus: Protocol's log added.
 - FIX:/UI/Vision: Prototipe VisRun::VisRun() is fixed.

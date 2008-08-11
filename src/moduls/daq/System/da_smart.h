@@ -50,7 +50,7 @@ class HddSmart: public DA
 	void dList( vector<string> &list, bool part = false );
 
 	//Attributes
-	static char *smartval_cmd;
+	static const char *smartval_cmd;
 };
 
 } //End namespace

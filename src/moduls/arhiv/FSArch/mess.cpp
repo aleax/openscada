@@ -24,6 +24,7 @@
 #include <fcntl.h>
 #include <dirent.h>
 #include <errno.h>
+#include <string.h>
 
 #include <tsys.h>
 #include "base.h"

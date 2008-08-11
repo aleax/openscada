@@ -30,6 +30,7 @@
 #include <stdlib.h>
 #include <locale.h>
 #include <libintl.h>
+#include <string.h>
 #include <errno.h>
 
 #include "../config.h"
@@ -204,7 +205,7 @@ void TMess::load()
 {
     //- Load params from command line -
     int i,next_opt;
-    char *short_opt="h";
+    const char *short_opt="h";
     struct option long_opt[] =
     {
 	{"help"     ,0,NULL,'h'},

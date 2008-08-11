@@ -29,7 +29,7 @@
 //*************************************************
 //* TSubSYS                                       *
 //*************************************************
-TSubSYS::TSubSYS( char *id, char *name, bool modi ) :
+TSubSYS::TSubSYS( const char *id, const char *name, bool modi ) :
 	m_id(id), m_name(name), m_mod_sys(modi), m_mod(-1)
 {
     if(subModule()) m_mod = grpAdd("mod_");

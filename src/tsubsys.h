@@ -40,27 +40,27 @@ class TSubSYS : public TCntrNode
 {
     public:
 	//Public methods
-	TSubSYS( char *id, char *name, bool mod = false );
+	TSubSYS( const char *id, const char *name, bool mod = false );
 	virtual ~TSubSYS( );
-	
+
 	string subId( )		{ return m_id; }
 	string subName( );
-	
+
 	bool subModule( )	{ return m_mod_sys; }	//Module subsystem
-	
+
 	virtual int subVer( )	{ return 0; }		//Type/grp module version
-	
+
 	//- Start procedures -
 	virtual void subStart( );
 	virtual void subStop( );
-    
+
 	//- Modules -
 	void modList( vector<string> &list );
-        bool modPresent( const string &name );
+	bool modPresent( const string &name );
 	void modAdd( TModule *modul );
 	void modDel( const string &name );
-        AutoHD<TModule> modAt( const string &name );
-	
+	AutoHD<TModule> modAt( const string &name );
+
 	TSYS &owner( )		{ return *(TSYS *)nodePrev(); }
 
     protected:
@@ -70,11 +70,11 @@ class TSubSYS : public TCntrNode
     private:
 	//Private methods
 	string nodeName( )	{ return subId(); }
-	
+
 	//Private attributes
 	bool	m_mod_sys;
 	int	m_mod;
-	
+
 	string	m_id;		//Id
 	string	m_name;		//Name
 };

@@ -21,6 +21,7 @@
 
 #include <getopt.h>
 #include <signal.h>
+#include <string.h>
 
 #include <tsys.h>
 #include <tmess.h>
@@ -148,7 +149,7 @@ void TTpContr::load_( )
 {
     //- Load parameters from command line -
     int next_opt;
-    char *short_opt="h";
+    const char *short_opt="h";
     struct option long_opt[] =
     {
 	{"help"    ,0,NULL,'h'},
@@ -1735,7 +1736,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		    }
 		    else
 		    {
-			char *tip = "str";
+			const char *tip = "str";
 			if( !is_lnk )
 			    switch(ioType(i_io))
 			    {

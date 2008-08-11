@@ -226,7 +226,7 @@ void Engine::load_( )
 
     //- Load parameters from command line -
     int next_opt;
-    char *short_opt="h";
+    const char *short_opt="h";
     struct option long_opt[] =
     {
 	{"help"    ,0,NULL,'h'},
@@ -438,7 +438,7 @@ string Engine::callSynth( const string &itxt )
     int		comPos = 0;
     char	buf[STR_BUF_LEN];
     string	rez;
-    char	*synthRez = "/var/tmp/oscadaSynthTmp";
+    const char	*synthRez = "/var/tmp/oscadaSynthTmp";
     string	txt = Mess->codeConvOut(synthCode(),itxt);
 
     ResAlloc res( mSynthRes, true );

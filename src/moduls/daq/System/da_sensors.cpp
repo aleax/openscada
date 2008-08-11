@@ -30,7 +30,7 @@
 
 using namespace SystemCntr;
 
-char *Sensors::mbmon_cmd = "mbmon -r -c 1";	//write one try to stdout
+const char *Sensors::mbmon_cmd = "mbmon -r -c 1";	//write one try to stdout
 
 //*************************************************
 //* Sensors                                       *

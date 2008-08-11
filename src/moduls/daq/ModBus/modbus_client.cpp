@@ -27,6 +27,7 @@
 #include <termios.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
+#include <string.h>
 
 #include <tsys.h>
 #include <ttiparam.h>
@@ -147,7 +148,7 @@ void TTpContr::load_( )
 {
     //- Load parameters from command line -
     int next_opt;
-    char *short_opt = "h";
+    const char *short_opt = "h";
     struct option long_opt[] =
     {
 	{"help"    ,0,NULL,'h'},

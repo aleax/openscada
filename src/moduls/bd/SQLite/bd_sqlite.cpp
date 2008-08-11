@@ -21,6 +21,8 @@
 
 #include <getopt.h>
 #include <errno.h>
+#include <string.h>
+
 #include <sqlite3.h>
 
 #include <tsys.h>
@@ -103,7 +105,7 @@ void BDMod::load_( )
 {
     //- Load parameters from command line -
     int next_opt;
-    char *short_opt="h";
+    const char *short_opt="h";
     struct option long_opt[] =
     {
 	{"help"    ,0,NULL,'h'},

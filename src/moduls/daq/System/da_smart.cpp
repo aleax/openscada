@@ -32,7 +32,7 @@
 
 using namespace SystemCntr;
 
-char *HddSmart::smartval_cmd = "smartctl -A -v N,raw48 /dev/";
+const char *HddSmart::smartval_cmd = "smartctl -A -v N,raw48 /dev/";
 
 //*************************************************
 //* HddSmart                                      *

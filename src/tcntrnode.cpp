@@ -26,6 +26,7 @@
 #include <unistd.h>
 #include <dirent.h>
 #include <stdarg.h>
+#include <limits.h>
 
 #include "xml.h"
 #include "tsys.h"

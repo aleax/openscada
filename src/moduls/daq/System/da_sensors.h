@@ -48,7 +48,7 @@ class Sensors: public DA
 
     private:
 	//Attributes
-	static char *mbmon_cmd;
+	static const char *mbmon_cmd;
 	bool libsensor_ok;
 };
 

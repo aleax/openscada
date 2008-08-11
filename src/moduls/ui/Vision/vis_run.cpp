@@ -639,7 +639,7 @@ void VisRun::alarmSet( unsigned alarm )
     //-- Set momo sound alarm --
     if( (ch_tp>>16)&TVision::Alarm )
     {
-	char *spkEvDev = "/dev/input/by-path/platform-pcspkr-event-spkr";
+	const char *spkEvDev = "/dev/input/by-path/platform-pcspkr-event-spkr";
 	int hd = open(spkEvDev,O_WRONLY);
 	if( hd < 0 )	mess_warning(mod->nodePath().c_str(),"Error open: %s",spkEvDev);
 	else

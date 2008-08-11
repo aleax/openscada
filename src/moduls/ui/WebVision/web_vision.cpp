@@ -21,6 +21,7 @@
 
 #include <getopt.h>
 #include <signal.h>
+#include <string.h>
 
 #include <config.h>
 #include <tsys.h>
@@ -905,7 +906,7 @@ void TWEB::load_( )
 {
     //- Load parameters from command line -
     int next_opt;
-    char *short_opt="h";
+    const char *short_opt="h";
     struct option long_opt[] =
     {
 	{"help"      ,0,NULL,'h'},
@@ -1362,12 +1363,12 @@ SSess::SSess( const string &iurl, const string &ipage, const string &isender,
     //- Content parse -
     int pos = 0, i_bnd;
     string boundary;
-    char *c_bound = "boundary=";
-    char *c_term = "\r\n";
-    char *c_end = "--";
-    char *c_fd = "Content-Disposition: form-data;";
-    char *c_name = "name=\"";
-    char *c_file = "filename=\"";
+    const char *c_bound = "boundary=";
+    const char *c_term = "\r\n";
+    const char *c_end = "--";
+    const char *c_fd = "Content-Disposition: form-data;";
+    const char *c_name = "name=\"";
+    const char *c_file = "filename=\"";
 
     for( int i_vr = 0; i_vr < vars.size(); i_vr++ )
 	if( vars[i_vr].substr(0,vars[i_vr].find(":",0)) == "Content-Type" )

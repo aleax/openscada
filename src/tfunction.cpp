@@ -214,7 +214,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 		    {
 			if( m_io[i_io]->hide() ) continue;
 
-			char *tp = "";
+			const char *tp = "";
 			switch(io(i_io)->type())
 			{
 			    case IO::String:	tp = "str";	break;

@@ -137,7 +137,8 @@ void Lib::setStart( bool val )
     vector<string> lst;
     list(lst);
     for( int i_f = 0; i_f < lst.size(); i_f++ )
-	at(lst[i_f]).at().setStart(val);
+	try{ at(lst[i_f]).at().setStart(val); }
+	catch( TError err ) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     run_st = val;
 }
