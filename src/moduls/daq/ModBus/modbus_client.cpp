@@ -1058,9 +1058,9 @@ string TMdContr::modBusReq( string &pdu )
 	string mess = TSYS::strSepParse(ctime(&tm_t),0,'\n');
 	switch( m_prt )
 	{
-	    case 0:	mess += " -> TCP:"+m_addr;	break;
-	    case 1:	mess += " -> RTU:"+TSYS::int2str(m_node)+"("+m_addr+")";	break;
-	    case 2:	mess += " -> ASCII:"+TSYS::int2str(m_node)+"("+m_addr+")";	break;
+	    case 0:	mess += " '"+id()+"' TCP:"+m_addr;	break;
+	    case 1:	mess += " '"+id()+"' RTU:"+TSYS::int2str(m_node)+"("+m_addr+")";	break;
+	    case 2:	mess += " '"+id()+"' ASCII:"+TSYS::int2str(m_node)+"("+m_addr+")";	break;
 	}
 	mess += _("\nREQ -> ");
 	for( int i_d = 0; i_d < mbap.size(); i_d++ )
