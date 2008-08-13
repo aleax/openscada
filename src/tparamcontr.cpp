@@ -31,7 +31,7 @@
 //*************************************************
 //* TParamContr                                   *
 //*************************************************
-TParamContr::TParamContr( const string &name, TTipParam *tpprm ) : 
+TParamContr::TParamContr( const string &name, TTipParam *tpprm ) :
     TConfig(tpprm), tipparm(tpprm), m_en(false),
     m_id(cfg("SHIFR").getSd()), m_name(cfg("NAME").getSd()), m_descr(cfg("DESCR").getSd()), m_aen(cfg("EN").getBd())
 {
@@ -47,28 +47,28 @@ TCntrNode &TParamContr::operator=( TCntrNode &node )
 {
     TParamContr *src_n = dynamic_cast<TParamContr*>(&node);
     if( !src_n ) return *this;
-	
+
     //- Configuration copy -
     string tid = id();
     *(TConfig*)this = *(TConfig*)src_n;
     m_id = tid;
 
     if( src_n->enableStat() && toEnable( ) && !enableStat() )	enable();
-			    
+
     return *this;
 }
 
 string TParamContr::name()
-{ 
+{
     return (m_name.size())?m_name:m_id;
 }
 
 void TParamContr::postEnable(int flag)
 {
     TValue::postEnable(flag);
-    
-    if(!vlCfg())  setVlCfg(this);	
-    if(!vlElemPresent(&SYS->daq().at().errE())) 
+
+    if(!vlCfg())  setVlCfg(this);
+    if(!vlElemPresent(&SYS->daq().at().errE()))
 	vlElemAtt(&SYS->daq().at().errE());
 }
 
@@ -85,20 +85,20 @@ void TParamContr::preDisable(int flag)
 		string arh_id = vlAt(a_ls[i_a]).at().arch().at().id();
 		SYS->archive().at().valDel(arh_id,true);
 	    }
-    }    
+    }
 
     if( enableStat() )	disable();
 }
-	
+
 void TParamContr::postDisable(int flag)
 {
     if( flag )
-    {	
+    {
 	//- Delete parameter from DB -
 	try
 	{
 	    SYS->db().at().dataDel(owner().DB()+"."+owner().cfg(type().db).getS(),
-		    		   owner().owner().nodePath()+owner().cfg(type().db).getS(),*this);
+				   owner().owner().nodePath()+owner().cfg(type().db).getS(),*this);
 	}catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
     }
 }
@@ -106,26 +106,26 @@ void TParamContr::postDisable(int flag)
 void TParamContr::load_( )
 {
     SYS->db().at().dataGet(owner().DB()+"."+owner().cfg(type().db).getS(),
-	    		   owner().owner().nodePath()+owner().cfg(type().db).getS(),*this);
+			   owner().owner().nodePath()+owner().cfg(type().db).getS(),*this);
 }
 
 void TParamContr::save_( )
 {
     SYS->db().at().dataSet(owner().DB()+"."+owner().cfg(type().db).getS(),
-	    		   owner().owner().nodePath()+owner().cfg(type().db).getS(),*this);
-    
+			   owner().owner().nodePath()+owner().cfg(type().db).getS(),*this);
+
     //- Save archives -
     vector<string> a_ls;
     vlList(a_ls);
     for(int i_a = 0; i_a < a_ls.size(); i_a++)
-        if( !vlAt(a_ls[i_a]).at().arch().freeStat() )
-            vlAt(a_ls[i_a]).at().arch().at().save();				    
+	if( !vlAt(a_ls[i_a]).at().arch().freeStat() )
+	    vlAt(a_ls[i_a]).at().arch().at().save();
 }
 
 bool TParamContr::cfgChange( TCfg &cfg )
 {
     modif( );
-    
+
     return true;
 }
 
@@ -193,4 +193,4 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path.substr(0,8) == "/prm/cfg" ) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root","root",0664);
     else TValue::cntrCmdProc(opt);
-}                                                                                             
+}

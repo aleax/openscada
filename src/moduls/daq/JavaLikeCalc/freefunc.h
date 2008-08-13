@@ -100,15 +100,11 @@ class Reg
 	    MovI,	//[CRR]: Move integer from register to register.
 	    MovR,	//[CRR]: Move real from register to register.
 	    MovS,	//[CRR]: Move string from register to register.
-	    AddI,	//[CRRR]: Integer add.
 	    AddR,	//[CRRR]: Real add.
 	    AddS,	//[CRRR]: String add.
-	    SubI,	//[CRRR]: Integer subtract.
-	    SubR,	//[CRRR]: Real subtract.
-	    MulI,	//[CRRR]: Integer multiply.
-	    MulR,	//[CRRR]: Real multiply.
-	    DivI,	//[CRRR]: Integer divide.
-	    DivR,	//[CRRR]: Real divide.
+	    Sub,	//[CRRR]: Real subtract.
+	    Mul,	//[CRRR]: Real multiply.
+	    Div,	//[CRRR]: Real divide.
 	    RstI,	//[CRRR]: Integer divide rest.
 	    BitOr,	//[CRRR]: Integer bit or.
 	    BitAnd,	//[CRRR]: Integer bit and.
@@ -117,24 +113,17 @@ class Reg
 	    BitShRight,	//[CRRR]: Integer bit shift right.
 	    LOr,	//[CRRR]: Boolean OR.
 	    LAnd,	//[CRRR]: Boolean AND.
-	    LTI,	//[CRRR]: Integer least.
-	    LTR,	//[CRRR]: Real least.
-	    GTI,	//[CRRR]: Integer great.
-	    GTR,	//[CRRR]: Real great.
-	    LEI,	//[CRRR]: Integer least equal.
+	    LT,		//[CRRR]: Real least.
+	    GT,		//[CRRR]: Real great.
 	    LER,	//[CRRR]: Real least equal.
-	    GEI,	//[CRRR]: Integer great equal.
 	    GER,	//[CRRR]: Real great equal.
-	    EQI,	//[CRRR]: Integer equal.
 	    EQR,	//[CRRR]: Real equal.
 	    EQS,	//[CRRR]: String equal.
-	    NEI,	//[CRRR]: Integer no equal.
 	    NER,	//[CRRR]: Real no equal.
 	    NES,	//[CRRR]: String no equal.
 	    Not,	//[CRR]: Boolean not.
 	    BitNot,	//[CRR]: Integer bit not.
-	    NegI,	//[CRR]: Negate integer.
-	    NegR,	//[CRR]: Negate real.
+	    Neg,	//[CRR]: Negate real.
 	    If,		//[CR00nn]: Construction [if(R)  else <00>; <nn>]
 	    Cycle,	//[CRbbaann]: Cycles construction [for(<first_init>;R=<cond>;aa)<bb>;<nn>] [while(R=<cond>)<bb>;<nn>]
 	    Break,	//[C]: Break for cycles

@@ -558,9 +558,9 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 	case Reg::String:
 	    switch(cod)
 	    {
-		case Reg::SubI:
-		case Reg::MulI:
-		case Reg::DivI:
+		case Reg::Sub:
+		case Reg::Mul:
+		case Reg::Div:
 		case Reg::RstI:
 		case Reg::BitOr:
 		case Reg::BitAnd:
@@ -569,10 +569,10 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 		case Reg::BitShRight:
 		case Reg::LOr:
 		case Reg::LAnd:
-		case Reg::LTI:
-		case Reg::GTI:
-		case Reg::LEI:
-		case Reg::GEI:
+		case Reg::LT:
+		case Reg::GT:
+		case Reg::LER:
+		case Reg::GER:
 		    throw TError(nodePath().c_str(),_("Operation %d no support string type"),cod);
 	    }
 	    break;
@@ -581,16 +581,25 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
     //- Check allow the buildin calc and calc -
     if( op1->pos() < 0 && op2->pos() < 0 )
     {
+	switch(cod)
+	{
+	    case Reg::AddR: case Reg::Sub: case Reg::Mul:
+	    case Reg::Div: case Reg::LT: case Reg::GT:
+	    case Reg::LER: case Reg::GER: case Reg::EQR: case Reg::NER:
+		op1 = cdTypeConv( op1, Reg::Real, true );
+		break;
+	}
+
 	op2 = cdTypeConv( op2, op1->vType(this), true);
 	switch(op1->vType(this))
 	{
 	    case Reg::Int:
 		switch(cod)
 		{
-		    case Reg::AddI:	*op1 = op1->val().i_el + op2->val().i_el;	break;
-		    case Reg::SubI:	*op1 = op1->val().i_el - op2->val().i_el;	break;
-		    case Reg::MulI:	*op1 = op1->val().i_el * op2->val().i_el;	break;
-		    case Reg::DivI:	*op1 = op1->val().i_el / op2->val().i_el;	break;
+		    case Reg::AddR:	*op1 = op1->val().i_el + op2->val().i_el;	break;
+		    case Reg::Sub:	*op1 = op1->val().i_el - op2->val().i_el;	break;
+		    case Reg::Mul:	*op1 = op1->val().i_el * op2->val().i_el;	break;
+		    case Reg::Div:	*op1 = op1->val().i_el / op2->val().i_el;	break;
 		    case Reg::RstI:	*op1 = op1->val().i_el % op2->val().i_el;	break;
 		    case Reg::BitOr:	*op1 = op1->val().i_el | op2->val().i_el;	break;
 		    case Reg::BitAnd:	*op1 = op1->val().i_el & op2->val().i_el;	break;
@@ -599,21 +608,21 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 		    case Reg::BitShRight: *op1 = op1->val().i_el >> op2->val().i_el;	break;
 		    case Reg::LOr:	*op1 = op1->val().i_el || op2->val().i_el;	break;
 		    case Reg::LAnd:	*op1 = op1->val().i_el && op2->val().i_el;	break;
-		    case Reg::LTI:	*op1 = op1->val().i_el < op2->val().i_el;	break;
-		    case Reg::GTI:	*op1 = op1->val().i_el > op2->val().i_el;	break;
-		    case Reg::LEI:	*op1 = op1->val().i_el <= op2->val().i_el;	break;
-		    case Reg::GEI:	*op1 = op1->val().i_el >= op2->val().i_el;	break;
-		    case Reg::EQI:	*op1 = op1->val().i_el == op2->val().i_el;	break;
-		    case Reg::NEI:	*op1 = op1->val().i_el != op2->val().i_el;	break;
+		    case Reg::LT:	*op1 = op1->val().i_el < op2->val().i_el;	break;
+		    case Reg::GT:	*op1 = op1->val().i_el > op2->val().i_el;	break;
+		    case Reg::LER:	*op1 = op1->val().i_el <= op2->val().i_el;	break;
+		    case Reg::GER:	*op1 = op1->val().i_el >= op2->val().i_el;	break;
+		    case Reg::EQR:	*op1 = op1->val().i_el == op2->val().i_el;	break;
+		    case Reg::NER:	*op1 = op1->val().i_el != op2->val().i_el;	break;
 		}
 		break;
 	    case Reg::Real:
 		switch(cod)
 		{
-		    case Reg::AddI:	*op1 = op1->val().r_el + op2->val().r_el;	break;
-		    case Reg::SubI:	*op1 = op1->val().r_el - op2->val().r_el;	break;
-		    case Reg::MulI:	*op1 = op1->val().r_el * op2->val().r_el;	break;
-		    case Reg::DivI:	*op1 = op1->val().r_el / op2->val().r_el;	break;
+		    case Reg::AddR:	*op1 = op1->val().r_el + op2->val().r_el;	break;
+		    case Reg::Sub:	*op1 = op1->val().r_el - op2->val().r_el;	break;
+		    case Reg::Mul:	*op1 = op1->val().r_el * op2->val().r_el;	break;
+		    case Reg::Div:	*op1 = op1->val().r_el / op2->val().r_el;	break;
 		    case Reg::BitOr:	*op1 = (int)op1->val().r_el | (int)op2->val().r_el;	break;
 		    case Reg::BitAnd:	*op1 = (int)op1->val().r_el & (int)op2->val().r_el;	break;
 		    case Reg::BitXor:	*op1 = (int)op1->val().i_el ^ (int)op2->val().i_el;	break;
@@ -621,40 +630,40 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 		    case Reg::BitShRight: *op1 = (int)op1->val().i_el >> (int)op2->val().i_el;	break;
 		    case Reg::LOr:	*op1 = op1->val().r_el || op2->val().r_el;	break;
 		    case Reg::LAnd:	*op1 = op1->val().r_el && op2->val().r_el;	break;
-		    case Reg::LTI:	*op1 = op1->val().r_el < op2->val().r_el;	break;
-		    case Reg::GTI:	*op1 = op1->val().r_el > op2->val().r_el;	break;
-		    case Reg::LEI:	*op1 = op1->val().r_el <= op2->val().r_el;	break;
-		    case Reg::GEI:	*op1 = op1->val().r_el >= op2->val().r_el;	break;
-		    case Reg::EQI:	*op1 = op1->val().r_el == op2->val().r_el;	break;
-		    case Reg::NEI:	*op1 = op1->val().r_el != op2->val().r_el;	break;
+		    case Reg::LT:	*op1 = op1->val().r_el < op2->val().r_el;	break;
+		    case Reg::GT:	*op1 = op1->val().r_el > op2->val().r_el;	break;
+		    case Reg::LER:	*op1 = op1->val().r_el <= op2->val().r_el;	break;
+		    case Reg::GER:	*op1 = op1->val().r_el >= op2->val().r_el;	break;
+		    case Reg::EQR:	*op1 = op1->val().r_el == op2->val().r_el;	break;
+		    case Reg::NER:	*op1 = op1->val().r_el != op2->val().r_el;	break;
 		}
 		break;
 	    case Reg::Bool:
 		switch(cod)
 		{
-		    case Reg::AddI:	*op1 = op1->val().b_el + op2->val().b_el;	break;
-		    case Reg::SubI:	*op1 = op1->val().b_el - op2->val().b_el;	break;
-		    case Reg::MulI:	*op1 = op1->val().b_el * op2->val().b_el;	break;
-		    case Reg::DivI:	*op1 = op1->val().b_el / op2->val().b_el;	break;
+		    case Reg::AddR:	*op1 = op1->val().b_el + op2->val().b_el;	break;
+		    case Reg::Sub:	*op1 = op1->val().b_el - op2->val().b_el;	break;
+		    case Reg::Mul:	*op1 = op1->val().b_el * op2->val().b_el;	break;
+		    case Reg::Div:	*op1 = op1->val().b_el / op2->val().b_el;	break;
 		    case Reg::RstI:	*op1 = op1->val().b_el % op2->val().b_el;	break;
 		    case Reg::BitOr:	*op1 = op1->val().b_el | op2->val().b_el;	break;
 		    case Reg::BitAnd:	*op1 = op1->val().b_el & op2->val().b_el;	break;
 		    case Reg::BitXor:	*op1 = op1->val().b_el ^ op2->val().b_el;	break;
 		    case Reg::LOr:	*op1 = op1->val().b_el || op2->val().b_el;	break;
 		    case Reg::LAnd:	*op1 = op1->val().b_el && op2->val().b_el;	break;
-		    case Reg::LTI:	*op1 = op1->val().b_el < op2->val().b_el;	break;
-		    case Reg::GTI:	*op1 = op1->val().b_el > op2->val().b_el;	break;
-		    case Reg::LEI:	*op1 = op1->val().b_el <= op2->val().b_el;	break;
-		    case Reg::GEI:	*op1 = op1->val().b_el >= op2->val().b_el;	break;
-		    case Reg::EQI:	*op1 = op1->val().b_el == op2->val().b_el;	break;
-		    case Reg::NEI:	*op1 = op1->val().b_el != op2->val().b_el;	break;
+		    case Reg::LT:	*op1 = op1->val().b_el < op2->val().b_el;	break;
+		    case Reg::GT:	*op1 = op1->val().b_el > op2->val().b_el;	break;
+		    case Reg::LER:	*op1 = op1->val().b_el <= op2->val().b_el;	break;
+		    case Reg::GER:	*op1 = op1->val().b_el >= op2->val().b_el;	break;
+		    case Reg::EQR:	*op1 = op1->val().b_el == op2->val().b_el;	break;
+		    case Reg::NER:	*op1 = op1->val().b_el != op2->val().b_el;	break;
 		}	
 	    case Reg::String:
 		switch(cod)
 		{
-		    case Reg::AddI: *op1->val().s_el += *op2->val().s_el;		break;
-		    case Reg::EQI:  *op1 = (char)(*op1->val().s_el == *op2->val().s_el);	break;
-		    case Reg::NEI:  *op1 = (char)(*op1->val().s_el != *op2->val().s_el);	break;
+		    case Reg::AddR:	*op1->val().s_el += *op2->val().s_el;		break;
+		    case Reg::EQR:	*op1 = (char)(*op1->val().s_el == *op2->val().s_el);	break;
+		    case Reg::NER:	*op1 = (char)(*op1->val().s_el != *op2->val().s_el);	break;
 		}
 		break;
 	}
@@ -670,7 +679,7 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
     op2 = cdTypeConv(op2,op1_tp);
     int op2_pos = op2->pos();
     op1->free();
-    op2->free();    
+    op2->free();
     //-- Prepare rezult --
     Reg *rez = regAt(regNew());
     rez->setType(op1_tp);
@@ -681,10 +690,10 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 	case Reg::Int:
 	    switch(cod)
 	    {
-		case Reg::AddI:		prg+=(BYTE)Reg::AddI;		break;
-		case Reg::SubI:		prg+=(BYTE)Reg::SubI;		break;
-		case Reg::MulI:		prg+=(BYTE)Reg::MulI;		break;
-		case Reg::DivI:		prg+=(BYTE)Reg::DivI;		break;
+		case Reg::AddR:		prg+=(BYTE)Reg::AddR;		break;
+		case Reg::Sub:		prg+=(BYTE)Reg::Sub;		break;
+		case Reg::Mul:		prg+=(BYTE)Reg::Mul;		break;
+		case Reg::Div:		prg+=(BYTE)Reg::Div;		break;
 		case Reg::RstI:		prg+=(BYTE)Reg::RstI;		break;
 		case Reg::BitOr:	prg+=(BYTE)Reg::BitOr;		break;
 		case Reg::BitAnd:	prg+=(BYTE)Reg::BitAnd;		break;
@@ -693,21 +702,21 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 		case Reg::BitShRight:	prg+=(BYTE)Reg::BitShRight;	break;
 		case Reg::LOr:		 prg+=(BYTE)Reg::LOr;	rez->setType(Reg::Bool);	break;
 		case Reg::LAnd:		prg+=(BYTE)Reg::LAnd;	rez->setType(Reg::Bool);	break;
-		case Reg::LTI:		prg+=(BYTE)Reg::LTI;	rez->setType(Reg::Bool);	break;
-		case Reg::GTI:		prg+=(BYTE)Reg::GTI;	rez->setType(Reg::Bool);	break;
-		case Reg::LEI:		prg+=(BYTE)Reg::LEI;	rez->setType(Reg::Bool);	break;
-		case Reg::GEI:		prg+=(BYTE)Reg::GEI;	rez->setType(Reg::Bool);	break;
-		case Reg::EQI:		prg+=(BYTE)Reg::EQI;	rez->setType(Reg::Bool);	break;
-		case Reg::NEI:		prg+=(BYTE)Reg::NEI;	rez->setType(Reg::Bool);	break;
+		case Reg::LT:		prg+=(BYTE)Reg::LT;	rez->setType(Reg::Bool);	break;
+		case Reg::GT:		prg+=(BYTE)Reg::GT;	rez->setType(Reg::Bool);	break;
+		case Reg::LER:		prg+=(BYTE)Reg::LER;	rez->setType(Reg::Bool);	break;
+		case Reg::GER:		prg+=(BYTE)Reg::GER;	rez->setType(Reg::Bool);	break;
+		case Reg::EQR:		prg+=(BYTE)Reg::EQR;	rez->setType(Reg::Bool);	break;
+		case Reg::NER:		prg+=(BYTE)Reg::NER;	rez->setType(Reg::Bool);	break;
 	    }
 	    break;
 	case Reg::Real:
 	    switch(cod)
 	    {
-		case Reg::AddI:		prg+=(BYTE)Reg::AddR;	break;
-		case Reg::SubI:		prg+=(BYTE)Reg::SubR;	break;
-		case Reg::MulI:		prg+=(BYTE)Reg::MulR;	break;
-		case Reg::DivI:		prg+=(BYTE)Reg::DivR;	break;
+		case Reg::AddR:		prg+=(BYTE)Reg::AddR;	break;
+		case Reg::Sub:		prg+=(BYTE)Reg::Sub;	break;
+		case Reg::Mul:		prg+=(BYTE)Reg::Mul;	break;
+		case Reg::Div:		prg+=(BYTE)Reg::Div;	break;
 		case Reg::BitOr:	prg+=(BYTE)Reg::BitOr;	break;
 		case Reg::BitAnd:	prg+=(BYTE)Reg::BitAnd;	break;
 		case Reg::BitXor:	prg+=(BYTE)Reg::BitXor;	break;
@@ -715,20 +724,20 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 		case Reg::BitShRight:	prg+=(BYTE)Reg::BitShRight;	rez->setType(Reg::Int);	break;
 		case Reg::LOr:		prg+=(BYTE)Reg::LOr;	rez->setType(Reg::Bool);	break;
 		case Reg::LAnd:		prg+=(BYTE)Reg::LAnd;	rez->setType(Reg::Bool);	break;
-		case Reg::LTI:		prg+=(BYTE)Reg::LTR;	rez->setType(Reg::Bool);	break;
-		case Reg::GTI:		prg+=(BYTE)Reg::GTR;	rez->setType(Reg::Bool);	break;
-		case Reg::LEI:		prg+=(BYTE)Reg::LER;	rez->setType(Reg::Bool);	break;
-		case Reg::GEI:		prg+=(BYTE)Reg::GER;	rez->setType(Reg::Bool);	break;
-		case Reg::EQI:		prg+=(BYTE)Reg::EQR;	rez->setType(Reg::Bool);	break;
-		case Reg::NEI:		prg+=(BYTE)Reg::NER;	rez->setType(Reg::Bool);	break;
+		case Reg::LT:		prg+=(BYTE)Reg::LT;	rez->setType(Reg::Bool);	break;
+		case Reg::GT:		prg+=(BYTE)Reg::GT;	rez->setType(Reg::Bool);	break;
+		case Reg::LER:		prg+=(BYTE)Reg::LER;	rez->setType(Reg::Bool);	break;
+		case Reg::GER:		prg+=(BYTE)Reg::GER;	rez->setType(Reg::Bool);	break;
+		case Reg::EQR:		prg+=(BYTE)Reg::EQR;	rez->setType(Reg::Bool);	break;
+		case Reg::NER:		prg+=(BYTE)Reg::NER;	rez->setType(Reg::Bool);	break;
 	    }
 	    break;
 	case Reg::String:
 	    switch(cod)
 	    {
-		case Reg::AddI:		prg+=(BYTE)Reg::AddS;	break;
-		case Reg::EQI:		prg+=(BYTE)Reg::EQS;	rez->setType(Reg::Bool);	break;
-		case Reg::NEI:		prg+=(BYTE)Reg::NES;	rez->setType(Reg::Bool);	break;
+		case Reg::AddR:		prg+=(BYTE)Reg::AddS;	break;
+		case Reg::EQR:		prg+=(BYTE)Reg::EQS;	rez->setType(Reg::Bool);	break;
+		case Reg::NER:		prg+=(BYTE)Reg::NES;	rez->setType(Reg::Bool);	break;
 	    }
             break;
     }
@@ -749,7 +758,7 @@ Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
 	    {
 		case Reg::Not:
 		case Reg::BitNot:
-		case Reg::NegI:
+		case Reg::Neg:
 		    throw TError(nodePath().c_str(),_("Operation %d no support string type"),cod);
 	    }
     }
@@ -764,7 +773,7 @@ Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
 		{
 		    case Reg::Not:	*op = !op->val().i_el;	break;
 		    case Reg::BitNot:	*op = ~op->val().i_el;	break;
-		    case Reg::NegI:	*op = -op->val().i_el;	break;
+		    case Reg::Neg:	*op = -op->val().i_el;	break;
 		}
 		break;
 	    case Reg::Real:
@@ -772,7 +781,7 @@ Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
 		{
 		    case Reg::Not:	*op = !op->val().r_el;	break;
 		    case Reg::BitNot:	*op = ~(int)op->val().r_el;	break;
-		    case Reg::NegI:	*op = -op->val().r_el;	break;
+		    case Reg::Neg:	*op = -op->val().r_el;	break;
 		}
 		break;
 	    case Reg::Bool:
@@ -780,7 +789,7 @@ Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
 		{
 		    case Reg::Not:	*op = !op->val().b_el;	break;
 		    case Reg::BitNot:	*op = ~op->val().b_el;	break;
-		    case Reg::NegI:	*op = -op->val().b_el;	break;
+		    case Reg::Neg:	*op = -op->val().b_el;	break;
 		}
 	}
 	return op;
@@ -804,7 +813,7 @@ Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
 	    {
 		case Reg::Not:		prg+=(BYTE)Reg::Not;	break;
 		case Reg::BitNot:	prg+=(BYTE)Reg::BitNot;	break;
-		case Reg::NegI:		prg+=(BYTE)Reg::NegI;	break;
+		case Reg::Neg:		prg+=(BYTE)Reg::Neg;	break;
 	    }
 	    break;
 	case Reg::Real:
@@ -812,7 +821,7 @@ Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
 	    {
 		case Reg::Not:		prg+=(BYTE)Reg::Not;	break;
 		case Reg::BitNot:	prg+=(BYTE)Reg::BitNot;	break;
-		case Reg::NegI:		prg+=(BYTE)Reg::NegR;	break;
+		case Reg::Neg:		prg+=(BYTE)Reg::Neg;	break;
 	    }
 	    break;
     }
@@ -1198,12 +1207,6 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
 		reg[*(BYTE *)(cprg+1)] = getValS(val,reg[*(BYTE *)(cprg+2)]);
 		cprg+=3; break;
 	    //-- Binary operations --
-	    case Reg::AddI:
-#if DEBUG_VM
-		printf("CODE: Integer %d = %d + %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
-#endif
-		reg[*(BYTE *)(cprg+1)] = getValI(val,reg[*(BYTE *)(cprg+2)]) + getValI(val,reg[*(BYTE *)(cprg+3)]);
-		cprg+=4; break;
 	    case Reg::AddR:
 #if DEBUG_VM
 		printf("CODE: Real %d = %d + %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
@@ -1216,37 +1219,19 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
 #endif
 		reg[*(BYTE *)(cprg+1)] = getValS(val,reg[*(BYTE *)(cprg+2)]) + getValS(val,reg[*(BYTE *)(cprg+3)]);
 		cprg+=4; break;
-	    case Reg::SubI:
-#if DEBUG_VM
-		printf("CODE: Integer %d = %d - %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
-#endif
-		reg[*(BYTE *)(cprg+1)] = getValI(val,reg[*(BYTE *)(cprg+2)]) - getValI(val,reg[*(BYTE *)(cprg+3)]);
-		cprg+=4; break;
-	    case Reg::SubR:
+	    case Reg::Sub:
 #if DEBUG_VM
 		printf("CODE: Real %d = %d - %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
 #endif
 		reg[*(BYTE *)(cprg+1)] = getValR(val,reg[*(BYTE *)(cprg+2)]) - getValR(val,reg[*(BYTE *)(cprg+3)]);
 		cprg+=4; break;
-	    case Reg::MulI:
-#if DEBUG_VM
-		printf("CODE: Integer %d = %d * %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
-#endif
-		reg[*(BYTE *)(cprg+1)] = getValI(val,reg[*(BYTE *)(cprg+2)]) * getValI(val,reg[*(BYTE *)(cprg+3)]);
-		cprg+=4; break;
-	    case Reg::MulR:
+	    case Reg::Mul:
 #if DEBUG_VM
 		printf("CODE: Real %d = %d * %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
 #endif
 		reg[*(BYTE *)(cprg+1)] = getValR(val,reg[*(BYTE *)(cprg+2)]) * getValR(val,reg[*(BYTE *)(cprg+3)]);
 		cprg+=4; break;
-	    case Reg::DivI:
-#if DEBUG_VM
-		printf("CODE: Integer %d = %d / %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
-#endif
-		reg[*(BYTE *)(cprg+1)] = getValI(val,reg[*(BYTE *)(cprg+2)]) / getValI(val,reg[*(BYTE *)(cprg+3)]);
-		cprg+=4; break;
-	    case Reg::DivR:
+	    case Reg::Div:
 #if DEBUG_VM
 		printf("CODE: Real %d = %d / %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
 #endif
@@ -1300,35 +1285,17 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
 #endif
 		reg[*(BYTE *)(cprg+1)] = getValB(val,reg[*(BYTE *)(cprg+2)]) && getValB(val,reg[*(BYTE *)(cprg+3)]);
 		cprg+=4; break;
-	    case Reg::LTI:
-#if DEBUG_VM
-		printf("CODE: Integer %d = %d < %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
-#endif
-		reg[*(BYTE *)(cprg+1)] = getValI(val,reg[*(BYTE *)(cprg+2)]) < getValI(val,reg[*(BYTE *)(cprg+3)]);
-		cprg+=4; break;
-	    case Reg::LTR:
+	    case Reg::LT:
 #if DEBUG_VM
 		printf("CODE: Real %d = %d < %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
 #endif
 		reg[*(BYTE *)(cprg+1)] = getValR(val,reg[*(BYTE *)(cprg+2)]) < getValR(val,reg[*(BYTE *)(cprg+3)]);
 		cprg+=4; break;
-	    case Reg::GTI:
-#if DEBUG_VM
-		printf("CODE: Integer %d = %d > %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
-#endif
-		reg[*(BYTE *)(cprg+1)] = getValI(val,reg[*(BYTE *)(cprg+2)]) > getValI(val,reg[*(BYTE *)(cprg+3)]);
-		cprg+=4; break;
-	    case Reg::GTR:
+	    case Reg::GT:
 #if DEBUG_VM
 		printf("CODE: Real %d = %d > %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
 #endif
 		reg[*(BYTE *)(cprg+1)] = getValR(val,reg[*(BYTE *)(cprg+2)]) > getValR(val,reg[*(BYTE *)(cprg+3)]);
-		cprg+=4; break;
-	    case Reg::LEI:
-#if DEBUG_VM
-		printf("CODE: Integer %d = %d <= %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
-#endif
-		reg[*(BYTE *)(cprg+1)] = getValI(val,reg[*(BYTE *)(cprg+2)]) <= getValI(val,reg[*(BYTE *)(cprg+3)]);
 		cprg+=4; break;
 	    case Reg::LER:
 #if DEBUG_VM
@@ -1336,23 +1303,11 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
 #endif
 		reg[*(BYTE *)(cprg+1)] = getValR(val,reg[*(BYTE *)(cprg+2)]) <= getValR(val,reg[*(BYTE *)(cprg+3)]);
 		cprg+=4; break;
-	    case Reg::GEI:
-#if DEBUG_VM
-		printf("CODE: Integer %d = %d >= %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
-#endif
-		reg[*(BYTE *)(cprg+1)] = getValI(val,reg[*(BYTE *)(cprg+2)]) >= getValI(val,reg[*(BYTE *)(cprg+3)]);
-		cprg+=4; break;
 	    case Reg::GER:
 #if DEBUG_VM
 		printf("CODE: Real %d = %d >= %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
 #endif
 		reg[*(BYTE *)(cprg+1)] = getValR(val,reg[*(BYTE *)(cprg+2)]) >= getValR(val,reg[*(BYTE *)(cprg+3)]);
-		cprg+=4; break;
-	    case Reg::EQI:
-#if DEBUG_VM
-		printf("CODE: Integer %d = %d == %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
-#endif
-		reg[*(BYTE *)(cprg+1)] = getValI(val,reg[*(BYTE *)(cprg+2)]) == getValI(val,reg[*(BYTE *)(cprg+3)]);
 		cprg+=4; break;
 	    case Reg::EQR:
 #if DEBUG_VM
@@ -1365,12 +1320,6 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
 		printf("CODE: String %d = %d == %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
 #endif
 		reg[*(BYTE *)(cprg+1)] = getValS(val,reg[*(BYTE *)(cprg+2)]) == getValS(val,reg[*(BYTE *)(cprg+3)]);
-		cprg+=4; break;
-	    case Reg::NEI:
-#if DEBUG_VM
-		printf("CODE: Integer %d = %d != %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
-#endif
-		reg[*(BYTE *)(cprg+1)] = getValI(val,reg[*(BYTE *)(cprg+2)]) != getValI(val,reg[*(BYTE *)(cprg+3)]);
 		cprg+=4; break;
 	    case Reg::NER:
 #if DEBUG_VM
@@ -1397,13 +1346,7 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
 #endif
 		reg[*(BYTE *)(cprg+1)] = ~getValI(val,reg[*(BYTE *)(cprg+2)]);
 		cprg+=3; break;
-	    case Reg::NegI:
-#if DEBUG_VM
-		printf("CODE: Integer %d = -%d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
-#endif
-		reg[*(BYTE *)(cprg+1)] = -getValI(val,reg[*(BYTE *)(cprg+2)]);
-		cprg+=3; break;
-	    case Reg::NegR:
+	    case Reg::Neg:
 #if DEBUG_VM
 		printf("CODE: Real %d = -%d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
 #endif

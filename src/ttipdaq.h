@@ -40,10 +40,10 @@ class TTipDAQ : public TModule, public TElem
     public:
 	TTipDAQ( );
 	virtual ~TTipDAQ();
-    
+
 	void modStart( );
-        void modStop( );
-    
+	void modStop( );
+
 	//- Controllers -
 	void list( vector<string> &list )	{ chldList(m_cntr,list); }
 	bool present( const string &name )	{ return chldPresent(m_cntr,name); }
@@ -51,26 +51,25 @@ class TTipDAQ : public TModule, public TElem
 	void del( const string &name )		{ chldDel(m_cntr,name); }
 	AutoHD<TController> at( const string &name, const string &who = "" )
 	{ return chldAt(m_cntr,name); }
-	
+
 	//- Parameter types (DB structure) -
 	bool tpPrmPresent( const string &name_t );
 	int tpPrmToId( const string &name_t );
 	int tpParmAdd( const char *id, const char *n_db, const char *name );
-	unsigned tpPrmSize( ) 			{ return( paramt.size()); }
+	unsigned tpPrmSize( )			{ return( paramt.size()); }
 	TTipParam &tpPrmAt( unsigned id );
 
 	//- Compile functions support API -
 	virtual void compileFuncLangs( vector<string> &ls )	{ }
 	virtual string compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text );
-	
-    protected: 
+
+    protected:
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	virtual TController *ContrAttach( const string &name, const string &daq_db );
-    
-    private:    
+
+    private:
 	vector<TTipParam *>   paramt;  // List type parameter and Structure configs of parameter.
 	int	m_cntr;
 };
 
 #endif // TTIPCONTROLLER_H
-

@@ -42,52 +42,52 @@ class TParamContr : public TConfig, public TValue
 	virtual ~TParamContr( );
 
 	TCntrNode &operator=( TCntrNode &node );
-	
-    	const string &id( )	{ return m_id; }
-    	string name( );
+
+	const string &id( )	{ return m_id; }
+	string name( );
 	string descr( )		{ return m_descr; }
 	bool toEnable( )	{ return m_aen; }
-	bool enableStat( )	{ return m_en; }	
-	
-	void setName( const string &inm ) 	{ m_name = inm; }
+	bool enableStat( )	{ return m_en; }
+
+	void setName( const string &inm )	{ m_name = inm; }
 	void setDescr( const string &idsc )	{ m_descr = idsc; }
 	void setToEnable( bool vl )		{ m_aen = vl; }
-	
+
 	TTipParam &type( )	{ return *tipparm; }
-	
-    	virtual void enable( );		// Enable parameter and open access to value	
-    	virtual void disable( );	// Disable parameter and close access to value
-	
-    	bool operator==( TParamContr & PrmCntr )
+
+	virtual void enable( );			// Enable parameter and open access to value
+	virtual void disable( );		// Disable parameter and close access to value
+
+	bool operator==( TParamContr & PrmCntr )
 	{ if( id() == PrmCntr.id() ) return true; return false; };
-	
-    	TParamContr &operator=( TParamContr & PrmCntr );
+
+	TParamContr &operator=( TParamContr & PrmCntr );
 
 	TController &owner( ) 	{ return *(TController *)nodePrev(); }
-	
+
     protected:
 	//Methods
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	void load_( );
 	void save_( );
 	void postEnable( int flag );
 	void preDisable( int flag );
-        void postDisable( int flag );
+	void postDisable( int flag );
 
 	bool cfgChange( TCfg &cfg );
-	
+
 	void vlGet( TVal &val );
-	
+
     private:
 	//Methods
-	string nodeName( ) 	{ return m_id; }	
-	
+	string nodeName( )	{ return m_id; }
+
 	//Attributes
-        string	&m_id, &m_name,	&m_descr;
+	string	&m_id, &m_name,	&m_descr;
 	bool	&m_aen, m_en;
 	TElem	el_err;		//Error atributes
-	
+
 	TTipParam   *tipparm;
 };
 

@@ -1,3 +1,8 @@
+2008-08-13 Roman
+- !!:/SYS: System adapted to GCC 4.3
+- !!:/DAQ/JavaLikeCalc: Numpers process mechanism is rewrited. All generic operations made work with real type data, no integer separately.
+
+
 2008-08-11 Roman
 - !!:/SYS: System adapted to GCC 4.3
 - FIX:/DAQ/JavaLikeCalc: Start libraries functions after broken function is fixed.

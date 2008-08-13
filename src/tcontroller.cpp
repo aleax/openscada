@@ -361,6 +361,13 @@ void TController::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(run_st?"1":"0");
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	atoi(opt->text().c_str())?start():stop();
     }
-    else if( a_path.substr(0,9) == "/cntr/cfg" )	TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root","root",0664);
+    else if( a_path.substr(0,9) == "/cntr/cfg" )
+    {
+	TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root","root",0664);
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
+	    for( int i_t = 0; i_t < owner().tpPrmSize( ); i_t++ )
+		if( owner().tpPrmAt(i_t).db == TSYS::pathLev(a_path,2) )
+		     modifG( );
+    }
     else TCntrNode::cntrCmdProc(opt);
 }
