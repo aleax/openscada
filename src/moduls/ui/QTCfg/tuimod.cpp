@@ -220,7 +220,7 @@ void TUIMod::regWin( QMainWindow *win )
     int i_w;
     for( i_w = 0; i_w < cfapp.size(); i_w++ )
 	if( cfapp[i_w] == NULL ) break;
-    if( i_w == cfapp.size() )	cfapp.push_back(NULL);
+    if( i_w == cfapp.size() )	cfapp.push_back((QMainWindow*)NULL);
     cfapp[i_w] = win;
 }
 

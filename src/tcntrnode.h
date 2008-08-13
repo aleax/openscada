@@ -57,6 +57,10 @@ template <> class hash<string>
 };
 }
 typedef hash_map<string, TCntrNode*, __gnu_cxx::hash<string> > TMap;
+
+//#include <unordered_map>
+//using std::unordered_map;
+//typedef unordered_map<string, TCntrNode* > TMap;
 #else
 #include <map>
 using std::map;

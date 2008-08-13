@@ -302,7 +302,7 @@ void TVision::regWin( QMainWindow *mwd )
     int i_w;
     for( i_w = 0; i_w < mn_winds.size(); i_w++ )
 	if( mn_winds[i_w] == NULL ) break;
-    if( i_w == mn_winds.size() ) mn_winds.push_back(NULL);
+    if( i_w == mn_winds.size() ) mn_winds.push_back((QMainWindow*)NULL);
     mn_winds[i_w] = mwd;
 }
 
