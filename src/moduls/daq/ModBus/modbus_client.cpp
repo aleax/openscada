@@ -889,11 +889,6 @@ int TMdContr::getValR( int addr, string &err, bool in )
     for( int i_b = 0; i_b < workCnt.size(); i_b++ )
 	if( (addr*2) >= workCnt[i_b].off && (addr*2+2) <= (workCnt[i_b].off+workCnt[i_b].val.size()) )
 	{
-#if OSC_DEBUG
-	    /*mess_debug(nodePath().c_str(),_("Read register %xh => %xh+%d = %d."),
-		addr,workCnt[i_b].off/2,(addr*2-workCnt[i_b].off)/2,
-		(unsigned short)(workCnt[i_b].val[addr*2-workCnt[i_b].off]<<8)|(unsigned char)workCnt[i_b].val[addr*2-workCnt[i_b].off+1]);*/
-#endif
 	    err = workCnt[i_b].err;
 	    if( err.empty() )
 		rez = (unsigned short)(workCnt[i_b].val[addr*2-workCnt[i_b].off]<<8)|(unsigned char)workCnt[i_b].val[addr*2-workCnt[i_b].off+1];
@@ -911,7 +906,7 @@ char TMdContr::getValC( int addr, string &err, bool in )
 	{
 	    err = workCnt[i_b].err;
 	    if( err.empty() )
-		rez = workCnt[i_b].val[addr-acqBlks[i_b].off];
+		rez = workCnt[i_b].val[addr-workCnt[i_b].off];
 	    break;
 	}
     return rez;
