@@ -586,7 +586,8 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 	    case Reg::AddR: case Reg::Sub: case Reg::Mul:
 	    case Reg::Div: case Reg::LT: case Reg::GT:
 	    case Reg::LER: case Reg::GER: case Reg::EQR: case Reg::NER:
-		op1 = cdTypeConv( op1, Reg::Real, true );
+		if( op1->vType(this) != Reg::String )
+		    op1 = cdTypeConv( op1, Reg::Real, true );
 		break;
 	}
 
@@ -596,10 +597,6 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 	    case Reg::Int:
 		switch(cod)
 		{
-		    case Reg::AddR:	*op1 = op1->val().i_el + op2->val().i_el;	break;
-		    case Reg::Sub:	*op1 = op1->val().i_el - op2->val().i_el;	break;
-		    case Reg::Mul:	*op1 = op1->val().i_el * op2->val().i_el;	break;
-		    case Reg::Div:	*op1 = op1->val().i_el / op2->val().i_el;	break;
 		    case Reg::RstI:	*op1 = op1->val().i_el % op2->val().i_el;	break;
 		    case Reg::BitOr:	*op1 = op1->val().i_el | op2->val().i_el;	break;
 		    case Reg::BitAnd:	*op1 = op1->val().i_el & op2->val().i_el;	break;
@@ -608,12 +605,6 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 		    case Reg::BitShRight: *op1 = op1->val().i_el >> op2->val().i_el;	break;
 		    case Reg::LOr:	*op1 = op1->val().i_el || op2->val().i_el;	break;
 		    case Reg::LAnd:	*op1 = op1->val().i_el && op2->val().i_el;	break;
-		    case Reg::LT:	*op1 = op1->val().i_el < op2->val().i_el;	break;
-		    case Reg::GT:	*op1 = op1->val().i_el > op2->val().i_el;	break;
-		    case Reg::LER:	*op1 = op1->val().i_el <= op2->val().i_el;	break;
-		    case Reg::GER:	*op1 = op1->val().i_el >= op2->val().i_el;	break;
-		    case Reg::EQR:	*op1 = op1->val().i_el == op2->val().i_el;	break;
-		    case Reg::NER:	*op1 = op1->val().i_el != op2->val().i_el;	break;
 		}
 		break;
 	    case Reg::Real:
@@ -641,22 +632,12 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 	    case Reg::Bool:
 		switch(cod)
 		{
-		    case Reg::AddR:	*op1 = op1->val().b_el + op2->val().b_el;	break;
-		    case Reg::Sub:	*op1 = op1->val().b_el - op2->val().b_el;	break;
-		    case Reg::Mul:	*op1 = op1->val().b_el * op2->val().b_el;	break;
-		    case Reg::Div:	*op1 = op1->val().b_el / op2->val().b_el;	break;
 		    case Reg::RstI:	*op1 = op1->val().b_el % op2->val().b_el;	break;
 		    case Reg::BitOr:	*op1 = op1->val().b_el | op2->val().b_el;	break;
 		    case Reg::BitAnd:	*op1 = op1->val().b_el & op2->val().b_el;	break;
 		    case Reg::BitXor:	*op1 = op1->val().b_el ^ op2->val().b_el;	break;
 		    case Reg::LOr:	*op1 = op1->val().b_el || op2->val().b_el;	break;
 		    case Reg::LAnd:	*op1 = op1->val().b_el && op2->val().b_el;	break;
-		    case Reg::LT:	*op1 = op1->val().b_el < op2->val().b_el;	break;
-		    case Reg::GT:	*op1 = op1->val().b_el > op2->val().b_el;	break;
-		    case Reg::LER:	*op1 = op1->val().b_el <= op2->val().b_el;	break;
-		    case Reg::GER:	*op1 = op1->val().b_el >= op2->val().b_el;	break;
-		    case Reg::EQR:	*op1 = op1->val().b_el == op2->val().b_el;	break;
-		    case Reg::NER:	*op1 = op1->val().b_el != op2->val().b_el;	break;
 		}	
 	    case Reg::String:
 		switch(cod)

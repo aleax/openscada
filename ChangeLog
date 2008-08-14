@@ -1,3 +1,8 @@
+2008-08-14 Roman
+- FIX:/DAQ/JavaLikeCalc: String base operations is fixed.
+- !!:/DAQ/ModBus: Input coins(02) and input registers(04) gathering data support is added.
+
+
 2008-08-13 Roman
 - !!:/SYS: System adapted to GCC 4.3
 - !!:/DAQ/JavaLikeCalc: Numpers process mechanism is rewrited. All generic operations made work with real type data, no integer separately.
