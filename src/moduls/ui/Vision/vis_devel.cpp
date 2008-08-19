@@ -1396,19 +1396,20 @@ void VisDevelop::visualItPaste( )
 	while( no_numb >= 0 && t1_el[no_numb]>='0' && t1_el[no_numb]<='9' ) no_numb--;
 	if( no_numb >= 0 ) t1_el = t1_el.substr(0,no_numb+1);
 	//--- New identifier generator ---
+	int i_c = 0;
 	if( cntrIfCmd(req) ) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 	else
 	{
-	    int i_c = 1, i_w = 0;
+	    int i_w = 0;
 	    while( i_w < req.childSize() )
-		if( req.childGet(i_w)->attr("id") == t1_el+TSYS::int2str(i_c) ) { i_w = 0; i_c++; }
+		if( req.childGet(i_w)->attr("id") == t1_el+(i_c?TSYS::int2str(i_c):"") ) { i_w = 0; i_c++; }
 		else i_w++;
-	    t1_el += TSYS::int2str(i_c);
+	    if( i_c )	t1_el += TSYS::int2str(i_c);
 	}
 	//-- Make request dialog --
 	dlg.setMess(t_el.c_str());
 	dlg.setId(t1_el.c_str());
-	if( dlg.exec() == QDialog::Accepted )
+	if( !i_c || dlg.exec() == QDialog::Accepted )
 	{
 	    d_el += dlg.id().toAscii().data();
 	    string it_nm = dlg.name().toAscii().data();
