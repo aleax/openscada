@@ -1657,7 +1657,7 @@ void WScaleStBar::mousePressEvent( QMouseEvent * event )
 DevelWdgView::DevelWdgView( const string &iwid, int ilevel, VisDevelop *mainWind, QWidget* parent ) :
     WdgView(iwid,ilevel,mainWind,parent), pntView(NULL), editWdg(NULL),
     fMakeScale(false), fWdgEdit(false), fWdgSelect(false), fMoveHold(false), fHoldChild(false), fLeftTop(false),
-    fHoldSelRect(false), fMoveHoldMove(false), fHideChilds(false)
+    fHoldSelRect(false), fMoveHoldMove(false), fHideChilds(false), fSelChange(false)
 {
     setMouseTracking(true);
     if( wLevel() == 0 )
@@ -1707,6 +1707,56 @@ int DevelWdgView::cntrIfCmd( XMLNode &node, bool glob )
     return mainWin()->cntrIfCmd(node,glob);
 }
 
+void DevelWdgView::childsUpdate( bool newLoad )
+{
+    XMLNode req("get");
+
+    string b_nm = id();
+    req.setAttr("path",id()+"/%2fwdg%2fcfg%2fpath")->setAttr("resLink","1");
+    if( !cntrIfCmd(req) ) b_nm = req.text();
+
+    vector<string> lst;
+    req.clear()->setAttr("path",b_nm+"/%2finclwdg%2fwdg");
+
+    if( !cntrIfCmd(req) )
+	for( int i_el = 0; i_el < req.childSize(); i_el++ )
+    lst.push_back(req.childGet(i_el)->attr("id"));
+
+    bool isUpdate = false;
+
+    //- Delete child widgets -
+    for( int i_c = 0; i_c < children().size(); i_c++ )
+    {
+	if( !qobject_cast<WdgView*>(children().at(i_c)) ) continue;
+	isUpdate = true;
+	int i_l;
+	for( i_l = 0; i_l < lst.size(); i_l++ )
+	    if( qobject_cast<WdgView*>(children().at(i_c))->id() == (b_nm+"/wdg_"+lst[i_l]) )
+		break;
+	if( i_l >= lst.size() ) delete children().at(i_c--);
+    }
+
+    //- Create new child widget -
+    for( int i_l = 0; i_l < lst.size(); i_l++ )
+    {
+	int i_c;
+	for( i_c = 0; i_c < children().size(); i_c++ )
+	    if( qobject_cast<WdgView*>(children().at(i_c)) &&
+		    qobject_cast<WdgView*>(children().at(i_c))->id() == (b_nm+"/wdg_"+lst[i_l]) )
+	    break;
+	if( i_c >= children().size() )
+	{
+	    DevelWdgView *nwdg = (DevelWdgView*)newWdgItem(b_nm+"/wdg_"+lst[i_l]);
+	    if( nwdg )
+	    {
+		nwdg->show();
+		if( newLoad ) nwdg->load("");
+		if( isUpdate )	nwdg->setSelect(true);
+	    }
+	}
+    }
+}
+
 void DevelWdgView::load( const string& item, bool load, bool init )
 {
     WdgView::load( item, load, init );
@@ -1745,45 +1795,48 @@ void DevelWdgView::saveGeom( const string& item )
     if( wLevel() == 0  )  setSelect(true);
 }
 
-void DevelWdgView::setSelect( bool vl, bool childs )
+void DevelWdgView::setSelect( bool vl, bool childs, bool onlyFlag )
 {
     int chld_cnt = 0;
 
     fWdgSelect = vl;
-    if( !vl && edit() ) setEdit(false);
+    if( !vl && edit() && !onlyFlag ) setEdit(false);
 
     //- Level 0 process -
     if( wLevel() != 0 && !edit() ) return;
 
-    if( vl )
+    if( vl && !onlyFlag )
     {
 	string sel_chlds = selectChilds(&chld_cnt);
 	if( sel_chlds.size() )	emit selected(sel_chlds);
 	else			emit selected(id());
     }
-    else
+    if( !vl )
     {
 	if( childs )
 	    for( int i_c = 0; i_c < children().size(); i_c++ )
 		if( qobject_cast<DevelWdgView*>(children().at(i_c)) )
-		    qobject_cast<DevelWdgView*>(children().at(i_c))->setSelect(false);
-	emit selected("");
+		    qobject_cast<DevelWdgView*>(children().at(i_c))->setSelect(false,true,onlyFlag);
+	if( !onlyFlag )	emit selected("");
     }
 
     //- Update actions access -
     //-- Enable view toolbar --
-    if( !edit() )
+    if( !onlyFlag )
     {
-	mainWin()->wdgToolView->setVisible(vl);
-	disconnect( mainWin()->wdgToolView, SIGNAL(actionTriggered(QAction*)), this, SLOT(wdgViewTool(QAction*)) );
-	if( vl ) connect( mainWin()->wdgToolView, SIGNAL(actionTriggered(QAction*)), this, SLOT(wdgViewTool(QAction*)) );
+	if( !edit() )
+	{
+	    mainWin()->wdgToolView->setVisible(vl);
+	    disconnect( mainWin()->wdgToolView, SIGNAL(actionTriggered(QAction*)), this, SLOT(wdgViewTool(QAction*)) );
+	    if( vl ) connect( mainWin()->wdgToolView, SIGNAL(actionTriggered(QAction*)), this, SLOT(wdgViewTool(QAction*)) );
 
-	//-- Update widget view tools --
-	for( int i_a = 0; i_a < mainWin()->wdgToolView->actions().size(); i_a++ )
-	   mainWin()->wdgToolView->actions().at(i_a)->setEnabled(chld_cnt>0);
+	    //-- Update widget view tools --
+	    for( int i_a = 0; i_a < mainWin()->wdgToolView->actions().size(); i_a++ )
+		mainWin()->wdgToolView->actions().at(i_a)->setEnabled(chld_cnt>0);
+	}
+
+	update();
     }
-
-    update();
 }
 
 void DevelWdgView::setEdit( bool vl )
@@ -2443,8 +2496,8 @@ bool DevelWdgView::event( QEvent *event )
 			    if( !cwdg ) continue;
 			    if( cwdg->geometryF().contains(curp) )
 			    {
-				if( !cwdg->select() )	{ cwdg->setSelect(true);  sel_modif = true; }
-				else if( sh_hold )	{ cwdg->setSelect(false); sel_modif = true; }
+				if( !cwdg->select() )	{ cwdg->setSelect(true,true,true);  sel_modif = true; }
+				else if( sh_hold )	{ cwdg->setSelect(false,true,true); sel_modif = true; }
 				if( cwdg->select() )	chld_sel = true;
 				break;
 			    }
@@ -2455,9 +2508,9 @@ bool DevelWdgView::event( QEvent *event )
 			    {
 				DevelWdgView *curw = qobject_cast<DevelWdgView*>(children().at(i_c));
 				if( !curw || (chld_sel && (curw == cwdg)) )	continue;
-				if( curw->select() )	{ curw->setSelect(false); sel_modif = true; }
+				if( curw->select() )	{ curw->setSelect(false,true,true); sel_modif = true; }
 			    }
-			if( sel_modif || !select() ) setSelect(true);
+			if( sel_modif || !select() )	{ setSelect(true,true,true); fSelChange = true; }
 			event->accept();
 
 			upMouseCursors(mapFromGlobal(cursor().pos()));
@@ -2494,10 +2547,11 @@ bool DevelWdgView::event( QEvent *event )
 			if( !cwdg || !QRect(holdPnt,curp).contains(cwdg->geometryF().toRect()) ) continue;
 			cwdg->setSelect(true);
 		    }
-		    setSelect(true);
+		    //setSelect(true);
 		    fHoldSelRect = false;
 		    //pntView->setSelArea(QRectF());
 		}
+		if( fSelChange )	{ setSelect(true); fSelChange = false; }
 
 		if( fMoveHold )
 		{

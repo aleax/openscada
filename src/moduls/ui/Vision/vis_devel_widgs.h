@@ -470,7 +470,7 @@ class DevelWdgView: public WdgView
 	string selectChilds( int *cnt = NULL, vector<DevelWdgView*> *wdgs = NULL );	//Get selected include widgets list
 	bool edit( )		{ return fWdgEdit; }		//Edit mode state
 
-        void setSelect( bool vl, bool childs = true );
+        void setSelect( bool vl, bool childs = true, bool onlyFlag = false );
 	void setEdit( bool vl );
 	void wdgsMoveResize( const QPointF &dP );
 
@@ -500,6 +500,7 @@ class DevelWdgView: public WdgView
 
     protected:
 	//Protected methods
+	void childsUpdate( bool newLoad = true );
 	bool event( QEvent * event );
 	int cntrIfCmd( XMLNode &node, bool glob = false );
 
@@ -518,6 +519,7 @@ class DevelWdgView: public WdgView
 	short int	fHoldSelRect	:1;	//Hold for select rect
 	short int	fMoveHoldMove	:1;	//Mouse move on hold
 	short int	fHideChilds	:1;	//Hide childs on move
+	short int	fSelChange	:1;	//Changed select map
 
 	QPoint		holdPnt;		//Hold move point
 	SizePntWdg	*pntView;		//Point view
