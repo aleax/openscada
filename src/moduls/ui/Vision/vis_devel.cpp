@@ -1392,24 +1392,30 @@ void VisDevelop::visualItPaste( )
 	}
 	//-- Prepare new widget identifier --
 	//--- Remove digits from end of new identifier ---
-	int no_numb = t1_el.size()-1;
-	while( no_numb >= 0 && t1_el[no_numb]>='0' && t1_el[no_numb]<='9' ) no_numb--;
-	if( no_numb >= 0 ) t1_el = t1_el.substr(0,no_numb+1);
-	//--- New identifier generator ---
-	int i_c = 0;
-	if( cntrIfCmd(req) ) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
-	else
+	int i_w = 0;
+	while( i_w < req.childSize() )
+	    if( req.childGet(i_w)->attr("id") == t1_el )
+		break;
+	if( i_w < req.childSize() )
 	{
-	    int i_w = 0;
-	    while( i_w < req.childSize() )
-		if( req.childGet(i_w)->attr("id") == t1_el+(i_c?TSYS::int2str(i_c):"") ) { i_w = 0; i_c++; }
-		else i_w++;
-	    if( i_c )	t1_el += TSYS::int2str(i_c);
+	    int no_numb = t1_el.size()-1;
+	    while( no_numb >= 0 && t1_el[no_numb]>='0' && t1_el[no_numb]<='9' ) no_numb--;
+	    if( no_numb >= 0 ) t1_el = t1_el.substr(0,no_numb+1);
+	    //--- New identifier generator ---
+	    if( cntrIfCmd(req) ) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+	    else
+	    {
+		int i_c = 1, i_w = 0;
+		while( i_w < req.childSize() )
+		    if( req.childGet(i_w)->attr("id") == t1_el+TSYS::int2str(i_c) ) { i_w = 0; i_c++; }
+		    else i_w++;
+		t1_el += TSYS::int2str(i_c);
+	    }
 	}
 	//-- Make request dialog --
 	dlg.setMess(t_el.c_str());
 	dlg.setId(t1_el.c_str());
-	if( !i_c || dlg.exec() == QDialog::Accepted )
+	if( i_w >= req.childSize() || dlg.exec() == QDialog::Accepted )
 	{
 	    d_el += dlg.id().toAscii().data();
 	    string it_nm = dlg.name().toAscii().data();
@@ -1430,7 +1436,7 @@ void VisDevelop::visualItPaste( )
 		    else req.setAttr("path",d_elp+"/"+d_el+"/%2fwdg%2fcfg%2fname");
 		    cntrIfCmd(req);
 		}
-		if( n_del < 3 )	copy_els.push_back(d_elp+"/"+d_el);
+		if( n_del < 2 )	copy_els.push_back(d_elp+"/"+d_el);
 		else
 		{
 		    if( !last_del.empty() && last_del != d_elp )
