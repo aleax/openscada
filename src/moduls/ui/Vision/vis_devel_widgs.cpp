@@ -1748,7 +1748,7 @@ void DevelWdgView::saveGeom( const string& item )
 void DevelWdgView::setSelect( bool vl, bool childs )
 {
     int chld_cnt = 0;
-    
+
     fWdgSelect = vl;
     if( !vl && edit() ) setEdit(false);
 
@@ -1774,12 +1774,12 @@ void DevelWdgView::setSelect( bool vl, bool childs )
     //-- Enable view toolbar --
     if( !edit() )
     {
-        mainWin()->wdgToolView->setVisible(vl);
-        disconnect( mainWin()->wdgToolView, SIGNAL(actionTriggered(QAction*)), this, SLOT(wdgViewTool(QAction*)) );
-        if( vl ) connect( mainWin()->wdgToolView, SIGNAL(actionTriggered(QAction*)), this, SLOT(wdgViewTool(QAction*)) );
+	mainWin()->wdgToolView->setVisible(vl);
+	disconnect( mainWin()->wdgToolView, SIGNAL(actionTriggered(QAction*)), this, SLOT(wdgViewTool(QAction*)) );
+	if( vl ) connect( mainWin()->wdgToolView, SIGNAL(actionTriggered(QAction*)), this, SLOT(wdgViewTool(QAction*)) );
 
-        //-- Update widget view tools --
-        for( int i_a = 0; i_a < mainWin()->wdgToolView->actions().size(); i_a++ )
+	//-- Update widget view tools --
+	for( int i_a = 0; i_a < mainWin()->wdgToolView->actions().size(); i_a++ )
 	   mainWin()->wdgToolView->actions().at(i_a)->setEnabled(chld_cnt>0);
     }
 
