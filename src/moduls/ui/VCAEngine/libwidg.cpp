@@ -1069,16 +1069,21 @@ void CWidget::save_( )
 	//-- Remove widget's work and users IO from library IO table --
 	TConfig c_el( &mod->elWdgIO() );
 	c_el.cfg("IDW").setS( ownerLWdg().id() );
-	int io_cnt = 0;
+	for( int i_a = 0; i_a < m_attrs.size(); i_a++ )
+	{
+	    c_el.cfg("ID").setS(id()+"/"+m_attrs[i_a]);
+	    SYS->db().at().dataDel( db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", c_el );
+	}
+	/*int io_cnt = 0;
 	while( SYS->db().at().dataSeek( db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", io_cnt++, c_el ) )
 	{
 	    if( c_el.cfg("ID").getS().find(id()+"/") == 0 )
 	    { SYS->db().at().dataDel( db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", c_el ); io_cnt--; }
 	    c_el.cfg("ID").setS("");
-	}
+	}*/
 	c_el.setElem(&mod->elWdgUIO());
 	c_el.cfg("IDW").setS( ownerLWdg().id() );
-	io_cnt = 0;
+	int io_cnt = 0;
 	while( SYS->db().at().dataSeek( db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", io_cnt++, c_el ) )
 	{
 	    if( c_el.cfg("ID").getS().find(id()+"/") == 0 )
