@@ -2545,9 +2545,9 @@ bool DevelWdgView::event( QEvent *event )
 		    {
 			DevelWdgView *cwdg = qobject_cast<DevelWdgView*>(children().at(i_c));
 			if( !cwdg || !QRect(holdPnt,curp).contains(cwdg->geometryF().toRect()) ) continue;
-			cwdg->setSelect(true);
+			cwdg->setSelect(true,true,true);
 		    }
-		    //setSelect(true);
+		    setSelect(true);
 		    fHoldSelRect = false;
 		    //pntView->setSelArea(QRectF());
 		}
