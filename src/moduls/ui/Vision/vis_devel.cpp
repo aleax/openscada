@@ -1324,9 +1324,9 @@ void VisDevelop::visualItCopy( )
 void VisDevelop::visualItPaste( )
 {
     if( !actVisItPaste->property("wdgAddr").toString().isEmpty() )   return;
-    string copy_buf_el;
+    string copy_buf_el, del_els, last_del;
     string work_wdg_work = work_wdg;
-    vector<string> copy_els, del_els;
+    vector<string> copy_els;
 
     InputDlg dlg(this,actVisItPaste->icon(),"",_("Visual items move or copy"),true,true);
     for( int w_off = 0; (copy_buf_el=TSYS::strSepParse(copy_buf.substr(1),0,';',&w_off)).size(); )
@@ -1429,22 +1429,24 @@ void VisDevelop::visualItPaste( )
 		    else req.setAttr("path",d_elp+"/"+d_el+"/%2fwdg%2fcfg%2fname");
 		    cntrIfCmd(req);
 		}
-		copy_els.push_back(d_elp+"/"+d_el);
-		del_els.push_back(copy_buf_el);
+		if( n_del < 3 )	copy_els.push_back(d_elp+"/"+d_el);
+		else
+		{
+		    if( !last_del.empty() && last_del != d_elp )
+			copy_els.push_back(last_del);
+		    last_del = d_elp;
+		}
+		del_els += copy_buf_el+";";
 	    }
 	}
     }
+    if( !last_del.empty() )	copy_els.push_back(last_del);
 
-    //- Send created widgets events-
+    //- Send created widgets events -
     for( int i_e = 0; i_e < copy_els.size(); i_e++ )
 	emit modifiedItem(copy_els[i_e]);
     //- Remove source widget -
-    if( copy_buf[0] == '1' )
-    {
-	for( int i_e = 0; i_e < del_els.size(); i_e++ )
-	    visualItDel(del_els[i_e]);
-	copy_buf = "0";
-    }
+    if( copy_buf[0] == '1' )	{ visualItDel(del_els); copy_buf = "0"; }
 }
 
 void VisDevelop::editToolUpdate( )
