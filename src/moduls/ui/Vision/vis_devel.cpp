@@ -1163,7 +1163,7 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt )
 void VisDevelop::visualItDel( const string &itms )
 {
     string work_wdg_loc = itms.empty() ? work_wdg : itms;
-    string del_wdg;
+    string del_wdg, lst_wdg;
 
     //- Request to confirm -
     if( itms.empty() )
@@ -1173,6 +1173,7 @@ void VisDevelop::visualItDel( const string &itms )
 		_("Delete visual items"),false,false);
 	if( dlg.exec() != QDialog::Accepted )	return;
     }
+
     for( int w_off = 0; (del_wdg=TSYS::strSepParse(work_wdg_loc,0,';',&w_off)).size(); )
     {
 	//- Get owner object path and deleted item identifier -
@@ -1213,8 +1214,15 @@ void VisDevelop::visualItDel( const string &itms )
 	}
 	if( cntrIfCmd(req) )
 	    mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
-	else emit modifiedItem(del_wdg);
+	else if( p_el_cnt < 3 )	emit modifiedItem(del_wdg);
+	else
+	{
+	    if( !lst_wdg.empty() && lst_wdg != it_own )
+		emit modifiedItem(lst_wdg);
+	    lst_wdg = it_own;
+	}
     }
+    if( !lst_wdg.empty() )	emit modifiedItem(lst_wdg);
 }
 
 void VisDevelop::visualItProp( )
