@@ -1393,18 +1393,18 @@ void VisDevelop::visualItPaste( )
 	//-- Prepare new widget identifier --
 	//--- Remove digits from end of new identifier ---
 	int i_w = 0;
-	while( i_w < req.childSize() )
-	    if( req.childGet(i_w)->attr("id") == t1_el )
-		break;
-	if( i_w < req.childSize() )
+	if( cntrIfCmd(req) ) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+	else
 	{
-	    int no_numb = t1_el.size()-1;
-	    while( no_numb >= 0 && t1_el[no_numb]>='0' && t1_el[no_numb]<='9' ) no_numb--;
-	    if( no_numb >= 0 ) t1_el = t1_el.substr(0,no_numb+1);
-	    //--- New identifier generator ---
-	    if( cntrIfCmd(req) ) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
-	    else
+	    for( i_w = 0; i_w < req.childSize(); i_w++ )
+		if( req.childGet(i_w)->attr("id") == t1_el )
+		    break;
+	    if( i_w < req.childSize() )
 	    {
+		int no_numb = t1_el.size()-1;
+		while( no_numb >= 0 && t1_el[no_numb]>='0' && t1_el[no_numb]<='9' ) no_numb--;
+		if( no_numb >= 0 ) t1_el = t1_el.substr(0,no_numb+1);
+		//--- New identifier generator ---
 		int i_c = 1, i_w = 0;
 		while( i_w < req.childSize() )
 		    if( req.childGet(i_w)->attr("id") == t1_el+TSYS::int2str(i_c) ) { i_w = 0; i_c++; }
