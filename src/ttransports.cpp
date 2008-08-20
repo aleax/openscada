@@ -373,10 +373,13 @@ AutoHD<TTransportOut> TTransportS::extHost( TTransportS::ExtHost host, const str
 	throw TError(nodePath().c_str(),_("Remote host error!"));
 
     if( !at(host.transp).at().outPresent(pref+host.id) )
-    {
 	at(host.transp).at().outAdd(pref+host.id);
+    if( at(host.transp).at().outAt(pref+host.id).at().addr() != host.addr )
+    {
 	at(host.transp).at().outAt(pref+host.id).at().setAddr(host.addr);
+	at(host.transp).at().outAt(pref+host.id).at().stop();
     }
+
     return at(host.transp).at().outAt(pref+host.id);
 }
 

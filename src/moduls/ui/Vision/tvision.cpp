@@ -400,7 +400,6 @@ void TVision::cntrCmdProc( XMLNode *opt )
 
 void TVision::postMess( const QString &cat, const QString &mess, TVision::MessLev type, QWidget *parent )
 {
-    printf("TEST 00: %s:'%s' (%d)\n",cat.toAscii().data(),mess.toAscii().data(),type);
     //- Put system message. -
     message(cat.toAscii().data(),(type==TVision::Crit) ? TMess::Crit :
 			(type==TVision::Error)?TMess::Error:
