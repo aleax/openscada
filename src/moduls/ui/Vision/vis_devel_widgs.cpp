@@ -1265,7 +1265,7 @@ void WdgTree::updateTree( const string &vca_it )
 	    if( owner()->cntrIfCmd(w_req) )
 	    {
 		mod->postMess(w_req.attr("mcat").c_str(),w_req.text().c_str(),TVision::Error,this);
-		return;
+		continue;
 	    }
 
 	    vector<string> list_wc;
