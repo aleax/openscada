@@ -224,12 +224,14 @@ QMainWindow *TVision::openWindow()
     string user_pass = userPass( );
 
     //- Check for start user set OK -
+    int err;
     XMLNode req("get");
     req.setAttr("path",string("/Security/")+user_open+"/%2fauth")->setAttr("password",user_pass);
     if( !((VCAStation() == "." && SYS->security().at().usrPresent(startUser())) ||
-	    (!mod->cntrIfCmd(req,startUser(),userPass(),VCAStation(),true) && atoi(req.text().c_str()))) )
+	    (!(err=mod->cntrIfCmd(req,startUser(),userPass(),VCAStation(),true)) && atoi(req.text().c_str()))) )
 	while(true)
 	{
+	    if( err )	{ postMess(nodePath().c_str(),_("Error conection to remote station!")); return NULL; }
 	    DlgUser d_usr(startUser().c_str(),userPass().c_str(),VCAStation().c_str());
 	    int rez = d_usr.exec();
 	    if( rez == DlgUser::SelCancel ) return NULL;
