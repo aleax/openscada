@@ -1,3 +1,11 @@
+2008-08-19 Roman
+- !!:/UI/Vision: Big group of widgets deletion is made optimal.
+- !!:/UI/Vision: Big group copy-paste is made optimal.
+- FIX:/UI/Vision: Inserted widget's selection is fixed.
+- !!:/UI/Vision: Make rect selection is fastest. Select event generation moved to mouse button release.
+- FIX:/UI/VCAEngine: Real deletion time of included widgets on final save is make optimal.
+
+
 2008-08-14 Roman
 - FIX:/DAQ/JavaLikeCalc: String base operations is fixed.
 - !!:/DAQ/ModBus: Input coins(02) and input registers(04) gathering data support is added.
