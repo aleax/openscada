@@ -917,7 +917,7 @@ void InspLnk::changeLnk( QTreeWidgetItem *index, int col )
 {
     if( col != 1 || show_init ) return;
 
-    string attr_id = index->data(0,Qt::UserRole).toString().toAscii().data();    
+    string attr_id = index->data(0,Qt::UserRole).toString().toAscii().data();
 
     XMLNode req("set");
     req.setAttr("path",it_wdg+"/%2flinks%2flnk%2f"+(index->childCount()?"pr_":"el_")+attr_id)->
@@ -1174,6 +1174,7 @@ void WdgTree::updateTree( const string &vca_it )
 	mod->postMess(lb_req.attr("mcat").c_str(),lb_req.text().c_str(),TVision::Error,this);
 	return;
     }
+
     for( int i_ch = 0; i_ch < lb_req.childSize(); i_ch++ )
 	list_wl.push_back(lb_req.childGet(i_ch)->attr("id"));
     //- Remove no present libraries -
@@ -1219,6 +1220,7 @@ void WdgTree::updateTree( const string &vca_it )
 	    mod->postMess(lbw_req.attr("mcat").c_str(),lbw_req.text().c_str(),TVision::Error,this);
 	    return;
 	}
+
 	vector<string> list_w;
 	for( int i_ch = 0; i_ch < lbw_req.childSize(); i_ch++ )
 	    list_w.push_back(lbw_req.childGet(i_ch)->attr("id"));
@@ -1265,6 +1267,7 @@ void WdgTree::updateTree( const string &vca_it )
 		mod->postMess(w_req.attr("mcat").c_str(),w_req.text().c_str(),TVision::Error,this);
 		return;
 	    }
+
 	    vector<string> list_wc;
 	    for( int i_ch = 0; i_ch < w_req.childSize(); i_ch++ )
 		list_wc.push_back(w_req.childGet(i_ch)->attr("id"));

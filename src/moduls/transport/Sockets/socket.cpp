@@ -570,7 +570,7 @@ TSocketOut::~TSocketOut()
 
 void TSocketOut::start()
 {
-    ResAlloc res( wres, true ); 
+    ResAlloc res( wres, true );
 
     if( run_st ) return;
 
@@ -671,7 +671,16 @@ int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, in
 	while( (kz = write(sock_fd,obuf,len_ob)) <= 0)
 	{
 	    run_st = false;
-	    start();
+	    for( int i_tr = 0; true; )
+	    {
+		try{ start(); }
+		catch( TError err )
+		{
+		    if( i_tr++ < 5 )	continue;
+		    throw;
+		}
+		break;
+	    }
 	}
 
     //- Read reply -

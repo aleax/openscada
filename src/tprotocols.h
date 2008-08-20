@@ -40,19 +40,19 @@ class TProtocolIn : public TCntrNode
     public:
 	TProtocolIn( const string &name );
 	virtual ~TProtocolIn( );
-	
+
 	string &name( )		{ return m_name; }
-	
+
 	//- Process input messages -
 	virtual bool mess( const string &request, string &answer, const string &sender )
 	{ answer = ""; }
-	
+
 	TProtocol &owner( )	{ return *(TProtocol *)nodePrev(); }
-	
+
     private:
 	//Methods
 	string nodeName( )	{ return m_name; }
-	
+
 	//Attributes
 	string            m_name;
 };
@@ -70,20 +70,20 @@ class TProtocol: public TModule
 
 	//- Input protocol -
 	void list( vector<string> &list )		{ chldList(m_pr,list); }
-        bool openStat( const string &name )		{ return chldPresent(m_pr,name); } 
+	bool openStat( const string &name )		{ return chldPresent(m_pr,name); } 
 	void open( const string &name );
 	void close( const string &name );
 	AutoHD<TProtocolIn> at( const string &name )	{ return chldAt(m_pr,name); }
-	
+
 	//- Output protocol -
 	virtual string outMess( const string &in, TTransportOut &tro )
 	{ throw TError(nodePath().c_str(),"Function <%s> no support!","outMess"); }
-	
+
     private:
 	//Methods
 	virtual TProtocolIn *in_open( const string &name )
 	{ throw TError(nodePath().c_str(),"Function <%s> no support!","in_open"); }
-	
+
 	//Attributes
 	int	m_pr;
 };
@@ -96,7 +96,7 @@ class TProtocolS : public TSubSYS
     public:
 	TProtocolS( );
 	~TProtocolS( );
-    
+
 	int subVer( ) 		{ return(VER_PROT); }
 
 	AutoHD<TProtocol> at( const string &iid )	{ return modAt(iid); }

@@ -28,7 +28,7 @@
 //************************************************
 //* TProtocolS                                   *
 //************************************************
-TProtocolS::TProtocolS( ) : TSubSYS("Protocol","Transport protocols",true) 
+TProtocolS::TProtocolS( ) : TSubSYS("Protocol","Transport protocols",true)
 {
 
 }
@@ -41,7 +41,7 @@ TProtocolS::~TProtocolS( )
 string TProtocolS::optDescr(  )
 {
     return(_(
-    	"=============== Subsystem \"Transport protocols\" options =================\n\n"));
+	"=============== Subsystem \"Transport protocols\" options =================\n\n"));
 }
 
 void TProtocolS::load_()
@@ -55,17 +55,17 @@ void TProtocolS::load_()
 	{NULL        ,0,NULL,0  }
     };
 
-    optind=opterr=0;	
+    optind=opterr=0;
     do
     {
 	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
 	switch(next_opt)
-    	{
+	{
 	    case 'h': fprintf(stdout,optDescr().c_str()); break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);
-    
+
     //- Load parameters from config file -
 
 }
@@ -75,7 +75,7 @@ void TProtocolS::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
-        TSubSYS::cntrCmdProc(opt);
+	TSubSYS::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root",subId().c_str(),3,"tp","str","cols","90","rows","10");
 	return;
     }

@@ -142,8 +142,8 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 
 	//Attributes
 	bool	run_st;
-        int	m_ptmpl;
-        string	&m_id, &m_name, &m_descr, &m_db, work_lib_db;
+	int	m_ptmpl;
+	string	&m_id, &m_name, &m_descr, &m_db, work_lib_db;
 };
 
 #endif // TPRMTMPL_H

@@ -249,7 +249,7 @@ string TProt::outMess( const string &in, TTransportOut &tro )
 	    return resp.substr(head_end+sizeof('\n'));
 	}
     }
-    catch(TError err)   { tro.stop(); throw; }
+    catch( TError err )	{ tro.stop(); throw; }
 
     return "";
 }

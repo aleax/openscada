@@ -18,7 +18,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
- 
+
 #include "tsys.h"
 #include "tprmtmpl.h"
 
@@ -68,7 +68,7 @@ void TPrmTempl::postDisable(int flag)
 {
     try
     {
-        if( flag )
+	if( flag )
 	{
 	    SYS->db().at().dataDel(owner().fullDB(),owner().owner().nodePath()+owner().tbl(),*this);
 	    //- Delete template's IO -

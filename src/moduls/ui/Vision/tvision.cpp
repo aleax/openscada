@@ -398,6 +398,7 @@ void TVision::cntrCmdProc( XMLNode *opt )
 
 void TVision::postMess( const QString &cat, const QString &mess, TVision::MessLev type, QWidget *parent )
 {
+    printf("TEST 00: %s:'%s' (%d)\n",cat.toAscii().data(),mess.toAscii().data(),type);
     //- Put system message. -
     message(cat.toAscii().data(),(type==TVision::Crit) ? TMess::Crit :
 			(type==TVision::Error)?TMess::Error:
@@ -441,7 +442,13 @@ int TVision::cntrIfCmd( XMLNode &node, const string &user, const string &passwor
 
 	return atoi(node.attr("rez").c_str());
     }
-    catch(TError err)	{ return 10; }
+    catch( TError err )	
+    {
+	node.setAttr("rez","10");
+	node.setAttr("mcat",err.cat);
+	node.setText(err.mess);
+	return 10;
+    }
 }
 
 QWidget *TVision::getFocusedWdg( QWidget *wcntr )

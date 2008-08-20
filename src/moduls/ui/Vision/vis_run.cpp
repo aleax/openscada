@@ -439,10 +439,15 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
     }
 
     work_sess = req.attr("sess");
+
     //-- Set window title --
-    setWindowTitle(QString(_("Runing project: %1")).arg(src_prj.c_str()));
+    //--- Get project's name ---
+    req.clear()->setName("get")->setAttr("path","/prj_"+src_prj+"/%2fobj%2fcfg%2fname");
+    if( !cntrIfCmd(req) )	setWindowTitle(req.text().c_str());
+    else setWindowTitle(QString(_("Runing project: %1")).arg(src_prj.c_str()));
+
     //-- Set project's icon to window --
-    req.clear()->setName("get")->setAttr("path","/ses_"+work_sess+"/%2fico");
+    req.clear()->setAttr("path","/ses_"+work_sess+"/%2fico");
     if( !cntrIfCmd(req) )
     {
 	QImage img;

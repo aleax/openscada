@@ -234,7 +234,8 @@ void XMLNode::load( const string &s )
     if( !XML_Parse( p, s.c_str(), s.size(), true ) )
     {
 	XML_ParserFree( p );
-	throw TError(o_name,"Parse error at line %d --- %s", XML_GetCurrentLineNumber(p), XML_ErrorString(XML_GetErrorCode(p)) );
+	throw TError(o_name,"Parse error at line %d --- %s. Source string: '%s'",
+	    XML_GetCurrentLineNumber(p), XML_ErrorString(XML_GetErrorCode(p)), ((s.size()>1024)?s.substr(0,1024)+"...":s).c_str());
     }
     XML_ParserFree( p );
 }
