@@ -231,7 +231,7 @@ QMainWindow *TVision::openWindow()
 	    (!(err=mod->cntrIfCmd(req,startUser(),userPass(),VCAStation(),true)) && atoi(req.text().c_str()))) )
 	while(true)
 	{
-	    if( err )	{ postMess(nodePath().c_str(),_("Error conection to remote station!")); return NULL; }
+	    if( err == 10 )	{ postMess(nodePath().c_str(),_("Error conection to remote station!")); return NULL; }
 	    DlgUser d_usr(startUser().c_str(),userPass().c_str(),VCAStation().c_str());
 	    int rez = d_usr.exec();
 	    if( rez == DlgUser::SelCancel ) return NULL;
