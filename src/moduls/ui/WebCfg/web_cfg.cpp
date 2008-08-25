@@ -221,10 +221,9 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 	string zero_lev = TSYS::pathLev(ses.url,0);
 	//- Get about module page -
 	if( zero_lev == "about" )	getAbout(ses);
-	//- Get module icon -
+	//- Get global image -
 	else if( zero_lev.substr(0,4) == "img_" )
 	{
-	    //- Get global image -
 	    string itp;
 	    ses.page=TUIS::icoGet(zero_lev.substr(4),&itp);
 	    page = httpHead("200 OK",ses.page.size(),string("image/")+itp)+ses.page;

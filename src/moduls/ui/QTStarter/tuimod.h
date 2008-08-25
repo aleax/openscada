@@ -56,7 +56,7 @@ class WinControl: public QObject
 
     private:
 	//Attributes
-	QTimer 	*tm;
+	QTimer	*tm;
 };
 
 //*************************************************
@@ -88,12 +88,12 @@ class TUIMod: public TUI
 
     private:
 	//Methods
-        static void *Task( void * );
+	static void *Task( void * );
 	string optDescr( );
 
 	//Attributes
 	bool	demon_mode, end_run, start_com;
-        pthread_t pthr_tsk;
+	pthread_t pthr_tsk;
 	string	start_mod;
 
 	QApplication *QtApp;

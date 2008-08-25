@@ -60,7 +60,17 @@ void VCASess::getReq( SSess &ses )
     string wp_com = (prmEl!=ses.prm.end()) ? prmEl->second : "";
     if( wp_com.empty() )
     {
-	ses.page = mod->pgHead()+"<SCRIPT>\n"+mod->VCAjs+"\n</SCRIPT>\n"+mod->pgTail();
+	string prjNm;
+	//-- Get project's name --
+	XMLNode req("get");
+	req.setAttr("path",ses.url+"/%2fobj%2fst%2fprj");
+	if( !mod->cntrIfCmd(req,ses.user) )
+	{
+	    req.setAttr("path","/prj_"+req.text()+"/%2fobj%2fcfg%2fname");
+	    if( !mod->cntrIfCmd(req,ses.user) )	prjNm = req.text();
+	}
+
+	ses.page = mod->pgHead("",prjNm)+"<SCRIPT>\n"+mod->VCAjs+"\n</SCRIPT>\n"+mod->pgTail();
 	ses.page = mod->httpHead("200 OK",ses.page.size())+ses.page;
     }
     //- Session/projects icon -

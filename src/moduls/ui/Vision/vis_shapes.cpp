@@ -246,11 +246,11 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    rel_cfg = true;
 	    switch( shD->elType )
 	    {
-		case 0:	//view
+		case 0:		//view
 		    shD->view = atoi(val.c_str());	break;
-		case 1:	//wordWrap
+		case 1:		//wordWrap
 		    shD->wordWrap = atoi(val.c_str());	break;
-		case 3:	//img
+		case 3:		//img
 		    shD->img = val;		break;
 		case 4: case 5:	//items
 		    shD->items = val;		break;

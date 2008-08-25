@@ -261,7 +261,7 @@ void VisRun::closeEvent( QCloseEvent* ce )
 
 void VisRun::resizeEvent( QResizeEvent *ev )
 {
-    if( ev && !ev->oldSize().isEmpty() && master_pg )
+    if( ev && ev->oldSize().isValid() && master_pg )
     {
 	float x_scale_old = x_scale;
 	float y_scale_old = y_scale;
@@ -461,11 +461,22 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
     req.clear()->setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fper");
     if( !cntrIfCmd(req) ) m_period = atoi(req.text().c_str());
 
+    //- Get project's flags -
+    req.clear()->setName("get")->setAttr("path","/prj_"+src_prj+"/%2fobj%2fcfg%2frunWin");
+    if( !cntrIfCmd(req) )
+    {
+	if( atoi(req.text().c_str())&0x01 )	setWindowState( Qt::WindowMaximized );
+	else if( atoi(req.text().c_str())&0x02 )actFullScr->setChecked( true );
+    }
+
     //- Get open pages list -
     req.clear()->setName("openlist")->setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg");
     if( !cntrIfCmd(req) )
 	for( int i_ch = 0; i_ch < req.childSize(); i_ch++ )
+	{
+	    pgList.push_back(req.childGet(i_ch)->text());
 	    callPage(req.childGet(i_ch)->text());
+	}
     reqtm = strtoul(req.attr("tm").c_str(),NULL,10);
 
     //- Open direct-selected page -
@@ -486,13 +497,7 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
 	callPage(ses_it);
     }
 
-    //- Get project's flags -
-    req.clear()->setName("get")->setAttr("path","/prj_"+src_prj+"/%2fobj%2fcfg%2frunWin");
-    if( !cntrIfCmd(req) )
-    {
-	if( atoi(req.text().c_str())&0x01 )	setWindowState( Qt::WindowMaximized );
-	else if( atoi(req.text().c_str())&0x02 )actFullScr->setChecked( true );
-    }
+    QCoreApplication::processEvents();
 
     //- Start timer -
     updateTimer->start(period());
@@ -552,11 +557,7 @@ void VisRun::callPage( const string& pg_it, XMLNode *upw )
 	    QRect ws = QApplication::desktop()->availableGeometry(this);
 	    resize( vmin(master_pg->size().width()+10,ws.width()-10), vmin(master_pg->size().height()+55,ws.height()-10) );
 	}
-	else
-	{
-	    x_scale = y_scale = 1.0;
-	    resizeEvent(NULL);
-	}
+	else x_scale = y_scale = 1.0;
     }
     //- Put to check for include -
     else master_pg->callPage(pg_it,pgGrp,pgSrc);
@@ -637,7 +638,6 @@ bool VisRun::wAttrSet( const string &path, const string &attr, const string &val
 
 void VisRun::alarmSet( unsigned alarm )
 {
-    //printf("TEST 00: Set alarm: %xh (%d)\n",alarm,res.size());
     unsigned ch_tp = alarm^mAlrmSt;
 
     //- Alarm types init -

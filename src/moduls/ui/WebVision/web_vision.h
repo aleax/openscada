@@ -121,7 +121,7 @@ class TWEB: public TUI
 	void   modInfo( vector<string> &list );
 
 	string httpHead( const string &rcode, int cln = 0, const string &cnt_tp = "text/html", const string &addattr = "" );
-	string pgHead( string head_els = "" );
+	string pgHead( const string &head_els = "", const string &title = "" );
 	string pgTail( );
 
 	int cntrIfCmd( XMLNode &node, const string &user, bool VCA = true );

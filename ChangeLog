@@ -1,3 +1,10 @@
+2008-08-25 Roman
+- FIX:/UI/VCAEngine: Translation to Russian and Ukranian is fixed.
+- FIX:/UI/Vision: Runtime window maximize and fullscreen on start is fixed.
+- /UI/WebVision: Title name changet to project's name.
+- !!:/UI/WebVision: First realisation of active mode for view EditLine of primitive ElFigure.
+
+
 2008-08-20 Roman
 - !:/SYS/XML: Parse error part string is appended to error message.
 - !:/Transport/Socket: 5 tries for restore connection is added.

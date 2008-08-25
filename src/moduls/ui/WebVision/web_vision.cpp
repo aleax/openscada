@@ -312,9 +312,11 @@ TWEB::TWEB( string name ) : m_t_auth(10), chck_st(false)
 	"{\n"
 	"  var req = getXmlHttp();\n"
 	"  req.open('GET',encodeURI((full?'':'/"MOD_ID"')+adr+'?'+prm),false);\n"
-	"  req.send(null);\n"
-	"  if( req.status == 200 && req.responseXML.childNodes.length )\n"
-	"    return req.responseXML.childNodes[0];\n"
+	"  try\n"
+	"  { req.send(null);\n"
+	"    if( req.status == 200 && req.responseXML.childNodes.length )\n"
+	"      return req.responseXML.childNodes[0];\n"
+	"  } catch( e ) { window.location='/"MOD_ID"'; }\n"
 	"}\n"
 	"/***************************************************\n"
 	" * servSet - XML set request to server             *\n"
@@ -323,7 +325,9 @@ TWEB::TWEB( string name ) : m_t_auth(10), chck_st(false)
 	"{\n"
 	"  var req = getXmlHttp();\n"
 	"  req.open('POST',encodeURI('/"MOD_ID"'+adr+'?'+prm),true);\n"
-	"  req.send(body);\n"
+	"  try\n"
+	"  { req.send(body); }\n"
+	"  catch( e ) { window.location='/"MOD_ID"'; }\n"
 	"}\n"
 	"/***************************************************\n"
 	" * getWAttrs - request page/widget attributes      *\n"
@@ -450,6 +454,7 @@ TWEB::TWEB( string name ) : m_t_auth(10), chck_st(false)
 	"  elStyle+='position: absolute; left: '+geomX.toFixed(0)+'px; top: '+geomY.toFixed(0)+'px; ';\n"
 	"  var geomW = parseFloat(this.attrs['geomW'])-2*(elMargin+elBorder);\n"
 	"  var geomH = parseFloat(this.attrs['geomH'])-2*(elMargin+elBorder);\n"
+	//"  if( this == masterPage ) resizeTo(geomW,geomH);\n"
 	"  if( this.pg && this.parent && this.parent.inclOpen && this.parent.inclOpen == this.addr )\n"
 	"  {\n"
 	"    elStyle += 'overflow: auto; ';\n"
@@ -636,12 +641,96 @@ TWEB::TWEB( string name ) : m_t_auth(10), chck_st(false)
 	"      case 0:	//Line edit\n"
 	"        var tblCell = document.createElement('div');\n"
 	"        var formObj = document.createElement('input');\n"
+	"        var geomWint = geomW-4;\n"
+	"        formObj.wdgLnk = this;\n"
+	"        formObj.style.cssText = 'width: '+geomWint+'px; border-style: ridge; border-width: 2px; font: '+fontCfg+'; ';\n"
+	"        formObj.type = 'text';\n"
 	"        tblCell.className = 'vertalign';\n"
-	"        tblCell.style.width = formObj.style.width = (geomW-4)+'px'; tblCell.style.height = geomH+'px';\n"
-	"        formObj.type = 'text'; formObj.value = this.attrs['value'];\n"
-	"        formObj.style.borderStyle = 'ridge'; formObj.style.borderWidth = '2px';\n"
-	"        formObj.style.font = fontCfg;\n"
-	"        tblCell.appendChild(formObj); this.place.appendChild(tblCell);\n"
+	"        tblCell.style.cssText = 'width: '+geomWint+'px; height: '+geomH+'px; white-space: nowrap;';\n"
+	"        tblCell.appendChild(formObj);\n"
+	"        tblCell.view = parseInt(this.attrs['view']);\n"
+	"        tblCell.cfg = this.attrs['cfg'];\n"
+	"        switch(tblCell.view)\n"
+	"        {\n"
+	"          case 1:		//Combo\n"
+	"            var combImg = document.createElement('img');\n"
+	"            combImg.src = '/"MOD_ID"/img_combar';\n"
+	"            combImg.style.cssText = 'width: 16px; height: 16px; cursor: pointer;';\n"
+	"            formObj.style.width = (geomWint-16)+'px';\n"
+	"            tblCell.appendChild(combImg);\n"
+	"            break;\n"
+	"          case 2: case 3:	//Integer, Real\n"
+	"            var spinImg = document.createElement('img');\n"
+	"            spinImg.src = '/"MOD_ID"/img_spinar';\n"
+	"            spinImg.style.cssText = 'width: 16px; height: 16px; cursor: pointer;';\n"
+	"            formObj.style.width = (geomWint-16)+'px';\n"
+	"            tblCell.appendChild(spinImg);\n"
+	"            break;\n"
+	"        }\n"
+	"        formObj.onkeyup = function(e)\n"
+	"        {\n"
+	"          var okImg = this.parentNode.childNodes[(this.parentNode.view==2||this.parentNode.view==3)?2:1];\n"
+	"          if( okImg.style.visibility == 'visible' && e.keyCode == 13 ) this.chApply();\n"
+	"          if( okImg.style.visibility == 'visible' && e.keyCode == 27 ) this.chEscape();\n"
+	"          if( this.saveVal != this.value && okImg.style.visibility != 'visible')\n"
+	"          {\n"
+	"            this.style.width = (parseInt(this.style.width)-16)+'px';\n"
+	"            okImg.style.visibility = 'visible';\n"
+	"          }\n"
+	"        };\n"
+	"        formObj.valSet = function(val)\n"
+	"        {\n"
+	"          switch(this.parentNode.view)\n"
+	"          {\n"
+	"            case 0: case 1: this.value = val; break;\n"
+	"            case 2:\n"
+	"              var argCfg = this.parentNode.cfg.split(':');\n"
+	"              this.value = argCfg[3]+Math.max(parseInt(argCfg[0]),Math.min(parseInt(argCfg[1]),parseInt(val)))+argCfg[4];\n"
+	"              break;\n"
+	"           case 3:\n"
+	"              var argCfg = this.parentNode.cfg.split(':');\n"
+	"              this.value = argCfg[3]+Math.max(parseFloat(argCfg[0]),Math.min(parseFloat(argCfg[1]),parseFloat(val))).toFixed(parseInt(argCfg[5]))+argCfg[4];\n"
+	"              break;\n"
+	"           case 4:\n"
+	"          }\n"
+	"          this.saveVal = this.value;\n"
+	"        }\n"
+	"        formObj.valGet = function( )\n"
+	"        {\n"
+	"          switch(this.parentNode.view)\n"
+	"          {\n"
+	"            case 0: case 1: return this.value;\n"
+	"            case 2:\n"
+	"              var argCfg = this.parentNode.cfg.split(':');\n"
+	"              return parseInt(this.value.substring(argCfg[3].length));\n"
+	"           case 3:\n"
+	"              var argCfg = this.parentNode.cfg.split(':');\n"
+	"              return parseFloat(this.value.substring(argCfg[3].length));\n"
+	"           case 4:\n"
+	"          }\n"
+	"        }\n"
+	"        formObj.chApply = function( )\n"
+	"        {\n"
+	"          var val = this.valGet();\n"
+	"          this.valSet(val);\n"
+	"          var okImg = this.parentNode.childNodes[(this.parentNode.view==2||this.parentNode.view==3)?2:1];\n"
+	"          if( okImg.style.visibility == 'visible' ) { this.style.width = (parseInt(this.style.width)+16)+'px'; okImg.style.visibility='hidden'; }\n"
+	"          var attrs = new Object(); attrs.value = val; attrs.event = 'ws_LnAccept';\n"
+	"          setWAttrs(this.wdgLnk.addr,attrs);\n"
+	"        }\n"
+	"        formObj.chEscape = function( )\n"
+	"        {\n"
+	"          this.value = this.saveVal;\n"
+	"          var okImg = this.parentNode.childNodes[(this.parentNode.view==2||this.parentNode.view==3)?2:1];\n"
+	"          if( okImg.style.visibility == 'visible' ) { this.style.width = (parseInt(this.style.width)+16)+'px'; okImg.style.visibility='hidden'; }\n"
+	"        }\n"
+	"        var okImg = document.createElement('img');\n"
+	"        okImg.src = '/"MOD_ID"/img_button_ok';\n"
+	"        okImg.style.cssText = 'visibility: hidden; width: 16px; height: 16px; cursor: pointer;';\n"
+	"        okImg.onclick = function() { this.parentNode.childNodes[0].chApply(); };\n"
+	"        tblCell.appendChild(okImg);\n"
+	"        this.place.appendChild(tblCell);\n"
+	"        formObj.valSet(this.attrs['value']);\n"
 	"        break;\n"
 	"      case 1:	//Text edit\n"
 	"        var formObj = document.createElement('textarea');\n"
@@ -995,7 +1084,7 @@ string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const
 	"Charset="+Mess->charset()+"\n"+addattr+"\n";
 }
 
-string TWEB::pgHead( string head_els )
+string TWEB::pgHead( const string &head_els, const string &title )
 {
     string shead =
 	"<?xml version='1.0' ?>\n"
@@ -1008,7 +1097,7 @@ string TWEB::pgHead( string head_els )
 	"  <meta http-equiv='Cache-Control' content='post-check=0, pre-check=0'/>\n"
 	"  <meta http-equiv='Content-Script-Type' content='text/javascript'/>\n"
 	"  <link rel='shortcut icon' href='/"MOD_ID"/ico' type='image' />\n"
-	"  <title>"+PACKAGE_NAME+". "+_(MOD_NAME)+"</title>\n"
+	"  <title>"+(title.empty()?(string(PACKAGE_NAME)+". "+_(MOD_NAME)):title)+"</title>\n"
 	"  <style type='text/css'>\n"+m_CSStables+"</style>\n"+
 	head_els+
 	"</head>\n"
@@ -1039,6 +1128,13 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 	{
 	    string itp;
 	    ses.page=TUIS::icoGet("UI."MOD_ID,&itp);
+	    page = httpHead("200 OK",ses.page.size(),string("image/")+itp)+ses.page;
+	    return;
+	}
+	else if( zero_lev.substr(0,4) == "img_" )
+	{
+	    string itp;
+	    ses.page=TUIS::icoGet(zero_lev.substr(4),&itp);
 	    page = httpHead("200 OK",ses.page.size(),string("image/")+itp)+ses.page;
 	    return;
 	}
@@ -1092,7 +1188,7 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		ses.page += "</table></center>";
 		if( !sesPrjOk )	messPost(ses.page,nodePath(),_("No one sessions and projects VCA engine present for user!"),TWEB::Warning);
 	    }
-	    //- New session creation -
+	    //- New session create -
 	    else if( zero_lev.size() > 4 && zero_lev.substr(0,4) == "prj_" )
 	    {
 		XMLNode req("connect");

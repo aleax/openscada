@@ -40,14 +40,14 @@
 
 //*************************************************
 //* Modul info!                                   *
-#define MOD_ID      "QTStarter"
-#define MOD_NAME    "QT GUI starter"
-#define MOD_TYPE    "UI"
-#define VER_TYPE    VER_UI
-#define VERSION     "1.5.0"
-#define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "Allow QT GUI starter. It is single for all QT GUI modules!"
-#define LICENSE     "GPL"
+#define MOD_ID		"QTStarter"
+#define MOD_NAME	"QT GUI starter"
+#define MOD_TYPE	"UI"
+#define VER_TYPE	VER_UI
+#define VERSION		"1.5.0"
+#define AUTORS		"Roman Savochenko"
+#define DESCRIPTION	"Allow QT GUI starter. It is single for all QT GUI modules!"
+#define LICENSE		"GPL"
 //*************************************************
 
 QTStarter::TUIMod *QTStarter::mod;
@@ -76,13 +76,13 @@ using namespace QTStarter;
 TUIMod::TUIMod( string name ) : end_run(false), demon_mode(false), start_com(false)
 {
     mId		= MOD_ID;
-    mName       = MOD_NAME;
-    mType  	= MOD_TYPE;
-    mVers      	= VERSION;
-    mAutor    	= AUTORS;
-    mDescr  	= DESCRIPTION;
-    mLicense   	= LICENSE;
-    mSource    	= name;
+    mName	= MOD_NAME;
+    mType	= MOD_TYPE;
+    mVers	= VERSION;
+    mAutor	= AUTORS;
+    mDescr	= DESCRIPTION;
+    mLicense	= LICENSE;
+    mSource	= name;
 
     mod		= this;
 }
@@ -99,7 +99,7 @@ void TUIMod::postEnable( int flag )
     if( flag&TCntrNode::NodeConnect )
     {
 	//- Set QT environments -
-	QTextCodec::setCodecForCStrings( QTextCodec::codecForLocale () ); //codepage for QT across QString recode!    
+	QTextCodec::setCodecForCStrings( QTextCodec::codecForLocale () ); //codepage for QT across QString recode!
 
 	//- Check command line for options no help and no daemon -
 	bool isHelp = false;
@@ -113,7 +113,7 @@ void TUIMod::postEnable( int flag )
 	};
 
 	optind=opterr=0;
-        do
+	do
 	{
 	    next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
 	    switch( next_opt )
@@ -129,13 +129,13 @@ void TUIMod::postEnable( int flag )
 	{
 	    end_run = false;
 
-	    pthread_attr_t pthr_attr;    
+	    pthread_attr_t pthr_attr;
 	    pthread_attr_init(&pthr_attr);
 	    pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
 	    pthread_create(&pthr_tsk,&pthr_attr,Task,this);
 	    pthread_attr_destroy(&pthr_attr);
 	    if( TSYS::eventWait( run_st, true, nodePath()+"start",5) )
-		throw TError(nodePath().c_str(),_("QT main thread no started!"));   
+		throw TError(nodePath().c_str(),_("QT main thread no started!"));
 	}
     }
 }
@@ -162,21 +162,21 @@ void TUIMod::load_( )
     const char *short_opt="h";
     struct option long_opt[] =
     {
-        {"help"    ,0,NULL,'h'},
+	{"help"    ,0,NULL,'h'},
 	{"demon"   ,0,NULL,'d'},
-        {NULL      ,0,NULL,0  }
+	{NULL      ,0,NULL,0  }
     };
 
     optind=opterr=0;
     do
     {
-        next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
-        switch(next_opt)
-        {
-            case 'h': fprintf(stdout,optDescr().c_str()); break;
+	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
+	switch(next_opt)
+	{
+	    case 'h': fprintf(stdout,optDescr().c_str()); break;
 	    case 'd': demon_mode = true; break;
-            case -1 : break;
-        }
+	    case -1 : break;
+	}
     } while(next_opt != -1);
 
     //- Load parameters from config file -
@@ -202,7 +202,7 @@ void TUIMod::modStart()
 }
 
 void TUIMod::modStop()
-{    
+{
 #if OSC_DEBUG
     mess_debug(nodePath().c_str(),_("Stop module."));
 #endif
@@ -215,9 +215,9 @@ string TUIMod::optDescr( )
     char buf[STR_BUF_LEN];
 
     snprintf(buf,sizeof(buf),_(
-        "======================= The module <%s:%s> options =======================\n"
-        "---------- Parameters of the module section <%s> in config file ----------\n"
-        "StartMod  <moduls>    Start modules list (sep - ';').\n\n"),
+	"======================= The module <%s:%s> options =======================\n"
+	"---------- Parameters of the module section <%s> in config file ----------\n"
+	"StartMod  <moduls>    Start modules list (sep - ';').\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 
     return buf;
@@ -293,7 +293,7 @@ void *TUIMod::Task( void * )
 	QString mess;
 	for( int i_m = recs.size()-1; i_m >= 0 && i_m > (recs.size()-7); i_m-- )
 	    mess+=QString("\n%1: %2").arg(recs[i_m].categ.c_str()).arg(recs[i_m].mess.c_str());
-	splash->showMessage(mess,Qt::AlignBottom|Qt::AlignLeft);    
+	splash->showMessage(mess,Qt::AlignBottom|Qt::AlignLeft);
 	QtApp->processEvents();
 	usleep(STD_WAIT_DELAY*1000);
     }
@@ -313,10 +313,10 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
-        TUI::cntrCmdProc(opt);
-        if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
+	TUI::cntrCmdProc(opt);
+	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/st_mod",_("Start QT modules (sep - ';')"),0660,"root","root",1,"tp","str");
-        ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
+	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
 	return;
     }
 
@@ -384,11 +384,11 @@ bool WinControl::callQTModule( const string &nm )
     //, Qt::DockTop );
     mod->owner().modList(list);
     for( unsigned i_l = 0; i_l < list.size(); i_l++ )
-        if( mod->owner().modAt(list[i_l]).at().modInfo("SubType") == "QT" &&
-            mod->owner().modAt(list[i_l]).at().modFuncPresent("QMainWindow *openWindow();") )
+	if( mod->owner().modAt(list[i_l]).at().modInfo("SubType") == "QT" &&
+	    mod->owner().modAt(list[i_l]).at().modFuncPresent("QMainWindow *openWindow();") )
     {
 	AutoHD<TModule> qt_mod = mod->owner().modAt(list[i_l]);
-	
+
 	QIcon icon;
 	if( mod->owner().modAt(list[i_l]).at().modFuncPresent("QIcon icon();") )
 	{
@@ -403,7 +403,7 @@ bool WinControl::callQTModule( const string &nm )
 	act_1->setToolTip(qt_mod.at().modName().c_str());
 	act_1->setWhatsThis(qt_mod.at().modInfo("Descript").c_str());
 	QObject::connect(act_1, SIGNAL(activated()), this, SLOT(callQTModule()));
-	
+
 	toolBar->addAction(act_1);
     }
 
@@ -427,17 +427,17 @@ void WinControl::startDialog( )
 
     mod->owner().modList(list);
     for( unsigned i_l = 0; i_l < list.size(); i_l++ )
-        if( mod->owner().modAt(list[i_l]).at().modInfo("SubType") == "QT" &&
-            mod->owner().modAt(list[i_l]).at().modFuncPresent("QMainWindow *openWindow();") )
+	if( mod->owner().modAt(list[i_l]).at().modInfo("SubType") == "QT" &&
+	    mod->owner().modAt(list[i_l]).at().modFuncPresent("QMainWindow *openWindow();") )
     {
-        QIcon icon;
-        if( mod->owner().modAt(list[i_l]).at().modFuncPresent("QIcon icon();") )
-        {
-            QIcon (TModule::*iconGet)();
-            mod->owner().modAt(list[i_l]).at().modFunc("QIcon icon();",(void (TModule::**)()) &iconGet);
-            icon = ((&mod->owner().modAt(list[i_l]).at())->*iconGet)( );
-        }
-        else icon = QIcon(":/images/oscada_qt.png");
+	QIcon icon;
+	if( mod->owner().modAt(list[i_l]).at().modFuncPresent("QIcon icon();") )
+	{
+	    QIcon (TModule::*iconGet)();
+	    mod->owner().modAt(list[i_l]).at().modFunc("QIcon icon();",(void (TModule::**)()) &iconGet);
+	    icon = ((&mod->owner().modAt(list[i_l]).at())->*iconGet)( );
+	}
+	else icon = QIcon(":/images/oscada_qt.png");
 
 	AutoHD<TModule> qt_mod = mod->owner().modAt(list[i_l]);	
 	QPushButton *butt = new QPushButton(icon,qt_mod.at().modName().c_str(),new_wnd->centralWidget());
