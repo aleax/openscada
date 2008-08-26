@@ -1,3 +1,11 @@
+2008-08-26 Maxim
+- FIX:/UI/Vision: Building the inundation path for primitive ElFigure is fixed.
+- FIX:/UI/Vision: Drawing the arc with the help of mouse for primitive ElFigure is fixed.
+- FIX:/UI/Vision: Choosing the figure with the help of mouse for primitive ElFigure is fixed.
+- !/UI/Vision: Scaling the lines and borders is added for primitive ElFigure.
+- !/UI/WebVision: Scaling the lines and borders is added for primitive ElFigure.
+
+
 2008-08-25 Roman
 - FIX:/UI/VCAEngine: Translation to Russian and Ukranian is fixed.
 - FIX:/UI/Vision: Runtime window maximize and fullscreen on start is fixed.

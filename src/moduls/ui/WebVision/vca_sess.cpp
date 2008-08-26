@@ -1626,6 +1626,41 @@ void VCAElFigure::getReq( SSess &ses )
     double ySc = (prmEl!=ses.prm.end()) ? atof(prmEl->second.c_str()) : 1.0;
     gdImagePtr im = gdImageCreate( (int)TSYS::realRound(width*xSc), (int)TSYS::realRound(height*ySc) );
     gdImageFilledRectangle( im, 0, 0, (int)TSYS::realRound(width*xSc-1), (int)TSYS::realRound(height*ySc-1), gdImageColorAllocateAlpha(im,0,0,0,127) );
+    double scale;
+    double width;
+    double border_width;
+    bool flag_min;
+    if( xSc < ySc ) scale = xSc;
+    else scale = ySc;
+    if( scale != 1.0 )
+        for( int i=0; i<shapeItems.size(); i++ )
+        {
+            if( !shapeItems[i].flag_brd && shapeItems[i].border_width > 0 )
+            {
+                border_width = shapeItems[i].border_width;
+                border_width = border_width*scale;
+                shapeItems[i].border_width = (int)TSYS::realRound(border_width);
+                if( shapeItems[i].border_width < 1 ) shapeItems[i].border_width = 1;
+            }
+            
+            flag_min = false;
+            if( shapeItems[i].flag_brd ) shapeItems[i].width += 2;
+            width = shapeItems[i].width;
+            width = width*scale;
+            shapeItems[i].width = (int)TSYS::realRound(width);
+            if( shapeItems[i].width > 3 && shapeItems[i].flag_brd )
+            {
+                shapeItems[i].width -= 2;
+                flag_min = true;
+            }
+            if( shapeItems[i].width < 1 ) shapeItems[i].width = 1;
+            if( shapeItems[i].width <= 3 && shapeItems[i].flag_brd )
+            {
+                if( flag_min ) shapeItems[i].width += 2;
+                shapeItems[i].border_width = 0;
+                shapeItems[i].flag_brd = false;
+            }
+        }
     for(int i = 0; i < inundationItems.size(); i++ )
     {
         //- Detecting which figures correspond the points of each fill -
