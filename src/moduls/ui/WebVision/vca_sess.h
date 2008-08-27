@@ -114,11 +114,11 @@ class InundationItem
 {
     public:
 	InundationItem( )	{ }
-        InundationItem( vector<int> inumber_point, int color, string P_imgFill ) : number_point(inumber_point), P_color(color), imgFill(P_imgFill)
+        InundationItem( vector<int> inumber_point, int color, int i_index_color, string P_imgFill ) : number_point(inumber_point), P_color(color), index_color(i_index_color), imgFill(P_imgFill)
 	{ }
 
 	vector<int>	number_point;
-	int		P_color;
+	int		P_color, index_color;
         string          imgFill;
 
 };
@@ -128,7 +128,8 @@ class VCAElFigure : public VCAObj
     public:
 	//Methods
 	VCAElFigure( const string &iid );
-
+        ~VCAElFigure( );
+        
         void getReq( SSess &ses );
 	void postReq( SSess &ses );
 	void setAttrs( XMLNode &node, const string &user );
@@ -149,7 +150,7 @@ class VCAElFigure : public VCAObj
 	void paintFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3, Point el_p4, Point el_p5, Point el_p6, int  clr_el, int clr_el_line, double el_width, double el_border_width, int type );
 	void dashDot( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3, Point el_p4, Point el_p5, Point el_p6, int  clr_el, double el_width, int type, int style  );
 	void dashDotFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3, Point el_p4, Point el_p5, Point el_p6, int  clr_el, int clr_el_line, double el_width, double el_border_width, int type, double wdt, double wdt_1  );
-	void paintFill( gdImagePtr im, Point pnt, InundationItem in_item, int color );
+	void paintFill( gdImagePtr im, Point pnt, InundationItem &in_item, int color );
 	Point unscaleUnrotate( Point point, double xScale, double yScale, bool flag_scale, bool flag_rotate );
         Point scaleRotate( Point point, double xScale, double yScale, bool flag_scale, bool flag_rotate );
 	//Attributes
@@ -166,6 +167,7 @@ class VCAElFigure : public VCAObj
 	double	orient;
 	bool	active,		//Active diagram
 		rel_list;
+        gdImagePtr im;
 
 	PntMap pnts;
 	vector<ShapeItem> shapeItems;

@@ -845,29 +845,78 @@ void ShapeElFigure::toolAct( QAction *act )
     {
         act->setChecked(true);
         shapeType = 1;
+        if( flag_A )
+        {
+            flag_ctrl = flag_A = flag_copy = false;
+            flag_check_pnt_inund = false;
+            index_array.clear();
+            rectItems.clear();
+            itemInMotion = 0;
+            count_Shapes = 0;
+        }
+        else
+        {
+            rectItems.clear();
+            itemInMotion = 0;
+        }
         status = true;
+        w->repaint();
     }
     else if( act->objectName() == "arc" )
     {
         act->setChecked(true);
         shapeType = 2;
+        if( flag_A )
+        {
+            flag_ctrl = flag_A = flag_copy = false;
+            flag_check_pnt_inund = false;
+            index_array.clear();
+            rectItems.clear();
+            itemInMotion = 0;
+            count_Shapes = 0;
+        }
+        else
+        {
+            rectItems.clear();
+            itemInMotion = 0;
+        }
         status = true;
+        w->repaint();
     }
     else if( act->objectName() == "besier" )
     {
         act->setChecked(true);
         shapeType = 3;
+        if( flag_A )
+        {
+            flag_ctrl = flag_A = flag_copy = false;
+            flag_check_pnt_inund = false;
+            index_array.clear();
+            rectItems.clear();
+            itemInMotion = 0;
+            count_Shapes = 0;
+        }
+        else
+        {
+            rectItems.clear();
+            itemInMotion = 0;
+        }
         status = true;
+        w->repaint();
     }
     else if( act->objectName() == "hold" )
     {
         status_hold = act->isChecked();
-        //if( !status_hold )
-        //{
-            index_array.clear();
-            index_array_copy.clear();
-        //}
-        if( rectItems.size() ) rectItems.clear();
+        if( flag_A )
+        {
+            flag_ctrl = flag_A = flag_copy = false;
+            flag_check_pnt_inund = false;
+            itemInMotion = 0;
+            count_Shapes = 0;
+        }
+        index_array.clear();
+        index_array_copy.clear();
+        rectItems.clear();
         w->repaint();
     }
     else if( act->objectName() == "cursor" )

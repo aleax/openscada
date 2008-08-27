@@ -1,3 +1,8 @@
+2008-08-27 Maxim
+- FIX:/UI/WebVision: Color allocation for figures with borders is fixed for primitive ElFigure.
+- FIX:/UI/Vision: toolAct function is fixed.
+
+
 2008-08-26 Maxim
 - FIX:/UI/Vision: Building the inundation path for primitive ElFigure is fixed.
 - FIX:/UI/Vision: Drawing the arc with the help of mouse for primitive ElFigure is fixed.
