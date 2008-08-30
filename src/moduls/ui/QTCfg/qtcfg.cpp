@@ -310,7 +310,7 @@ ConfApp::ConfApp( string open_user ) :
     mn_file->addAction(actClose);
     mn_file->addAction(actQuit);
     //-- Create menu "edit" --
-    QMenu *mn_edit = menuBar()->addMenu(_("&Edit"));    
+    QMenu *mn_edit = menuBar()->addMenu(_("&Edit"));
     mn_edit->addAction(actItAdd);
     mn_edit->addAction(actItDel);
     mn_edit->addSeparator( );
@@ -318,7 +318,7 @@ ConfApp::ConfApp( string open_user ) :
     mn_edit->addAction(actItCut);
     mn_edit->addAction(actItPaste);
     //-- Create menu "view" --
-    QMenu *mn_view = menuBar()->addMenu(_("&View"));    
+    QMenu *mn_view = menuBar()->addMenu(_("&View"));
     mn_view->addAction(actUp);
     mn_view->addAction(actPrev);
     mn_view->addAction(actNext);
@@ -1822,9 +1822,12 @@ void ConfApp::pageDisplay( const string &path )
     actDBLoad->setEnabled(false); actDBSave->setEnabled(false);
     XMLNode req("modify");
     req.setAttr("path",sel_path+"/%2fobj");
-    if( cntrIfCmd(req) ) mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this); 
+    if( cntrIfCmd(req) ) mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this);
     else if( atoi(req.text().c_str()) )
-    { actDBLoad->setEnabled(true); actDBSave->setEnabled(true); }
+    {
+	actDBLoad->setEnabled(true);
+	actDBSave->setEnabled(true);
+    }
 
     //- Local station modifying check -
     mStModify->setText(" ");

@@ -1,3 +1,10 @@
+2008-08-30 Roman
+- FIX:/Protocol: Input protocol's modify status present is fixed.
+- FIX:/DAQ/DiamondBoards: No set some parameter's attributes is fixed.
+- FIX:/UI/VCAEngine: Session's list mode is fixed. Deletion from QTCfg is work now.
+- !:/UI/WebVision: The spin editable line for primitive FormEl make active.
+
+
 2008-08-27 Maxim
 - FIX:/UI/WebVision: Color allocation for figures with borders is fixed for primitive ElFigure.
 - FIX:/UI/Vision: toolAct function is fixed.

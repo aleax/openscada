@@ -114,7 +114,7 @@ void TProtocol::close( const string &name )
 //************************************************
 TProtocolIn::TProtocolIn( const string &name ) : m_name(name)
 {
-
+    modifClr( );
 }
 
 TProtocolIn::~TProtocolIn()

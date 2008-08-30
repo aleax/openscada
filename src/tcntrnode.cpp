@@ -497,6 +497,7 @@ int TCntrNode::isModify( int f )
 {
     ResAlloc res( hd_res, false );
     int rflg = 0;
+
     if( f&Self && m_flg&SelfModify )	rflg |= Self;
     if( f&Child )
 	for( unsigned i_g = 0; i_g < chGrp.size(); i_g++ )
@@ -678,14 +679,13 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Node: ")+nodeName(),0444,"root","root");
 
     //- Process command to page -
-
     string a_path = opt->attr("path");
     if( a_path == "/obj" )
     {
 	if( ctrChkNode(opt,"modify",RWRWRW) )	opt->setText( isModify(TCntrNode::All) ? "1" : "0" );
-	if( ctrChkNode(opt,"load",RWRWRW,"root","root",SEQ_WR) )	load( );
-	if( ctrChkNode(opt,"save",RWRWRW,"root","root",SEQ_WR) )	save( );
-	if( ctrChkNode(opt,"copy",RWRWRW,"root","root",SEQ_WR) )
+	else if( ctrChkNode(opt,"load",RWRWRW,"root","root",SEQ_WR) )	load( );
+	else if( ctrChkNode(opt,"save",RWRWRW,"root","root",SEQ_WR) )	save( );
+	else if( ctrChkNode(opt,"copy",RWRWRW,"root","root",SEQ_WR) )
 	    nodeCopy(opt->attr("src"),opt->attr("dst"),opt->attr("user"));
     }
     else if( (a_path == "/db/list" || a_path == "/db/tblList") && ctrChkNode(opt) )
