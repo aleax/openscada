@@ -646,7 +646,7 @@ bool OrigDiagram::attrChange( Attr &cfg, void *prev )
 		cfg.owner()->attrAdd( new TFld((fidp+"bordU").c_str(),(fnmp+_(":view border:upper")).c_str(),
 					       TFld::Real,Attr::Mutable,"","","","",TSYS::int2str(52+10*i_p).c_str()) );
 		cfg.owner()->attrAdd( new TFld((fidp+"aScale").c_str(),(fnmp+_(":view border:autoscale")).c_str(),
-					       TFld::Integer,Attr::Mutable,"","0","","",TSYS::int2str(55+10*i_p).c_str()) );		
+					       TFld::Integer,Attr::Mutable,"","0","","",TSYS::int2str(55+10*i_p).c_str()) );
 		cfg.owner()->attrAdd( new TFld((fidp+"color").c_str(),(fnmp+_(":color")).c_str(),
 					       TFld::String,Attr::Color|Attr::Mutable,"","","","",TSYS::int2str(53+10*i_p).c_str()) );
 		cfg.owner()->attrAdd( new TFld((fidp+"val").c_str(),(fnmp+_(":value")).c_str(),

@@ -3867,6 +3867,7 @@ void VCADiagram::getReq( SSess &ses )
 		    curVl = 100.*(curVl-bordL)/(bordU-bordL);
 		    curVl = (curVl>100) ? 100 : (curVl<0) ? 0 : curVl;
 		}
+		if( isnan(curVl) ) curVl = EVAL_REAL;
 		curPos = tArX+tArW*(curTm-tBeg)/(tPict-tBeg);
 	    }else curPos = 0;
 	    if( trnds[i_t].val()[a_pos].tm >= aVend )	end_vl = true;

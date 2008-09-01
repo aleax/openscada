@@ -1620,6 +1620,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	//--- Prepare generic parameters ---
 	aVbeg = vmax(tBeg,sTr->valBeg());
 	aVend = vmin(tEnd,sTr->valEnd());
+
 	if( aVbeg >= aVend ) continue;
 	int aPosBeg = sTr->val(aVbeg);
 	if( aPosBeg && sTr->val()[aPosBeg].tm > aVbeg ) aPosBeg--;
@@ -1664,6 +1665,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		    curVl = 100.*(curVl-bordL)/(bordU-bordL);
 		    curVl = (curVl>100) ? 100 : (curVl<0) ? 0 : curVl;
 		}
+		if( isnan(curVl) ) curVl = EVAL_REAL;
 		curPos = tAr.x()+tAr.width()*(curTm-tBeg)/(tPict-tBeg);
 	    }else curPos = 0;
 	    if( sTr->val()[a_pos].tm >= aVend )	end_vl = true;

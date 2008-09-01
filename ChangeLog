@@ -1,6 +1,6 @@
-2008-09-01 Maxim
-- FIX:/UI/Vision: Deleting of figures is fixed for primitive ElFigure.
-- FIX:/UI/Vision: Drawing of figures with the help of mouse is fixed for primitive ElFigure.
+2008-09-01 Roman
+- FIX:/UI/VCAEngine: Dynamic link to closed pages is fixed. If linked attribute have link to parameter then it use.
+- FIX:/UI/Vision,/UI/WebVision: NAN real values' crash into primitive Diagram is fixed.
 
 
 2008-08-30 Roman

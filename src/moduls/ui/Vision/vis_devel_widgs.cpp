@@ -2539,7 +2539,7 @@ bool DevelWdgView::event( QEvent *event )
 		break;
 	    }
 	    case QEvent::MouseButtonRelease:
-                if( edit() ) break;
+		if( edit() ) break;
 
 		if( fHoldSelRect )
 		{

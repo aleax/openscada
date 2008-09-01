@@ -281,10 +281,15 @@ void Session::uiComm( const string &com, const string &prm, SessWdg *src )
 		atr_id = TSYS::strSepParse(attr.at().cfgTempl(),1,'|');
 		if( src->attrPresent(atr_id) )
 		{
-		    attr.at().setCfgVal("wdg:"+src->path()+"/a_"+atr_id);
-		    if( prm_lnk.empty() && src->attrAt(atr_id).at().cfgVal().size() > 4 &&
-			    src->attrAt(atr_id).at().cfgVal().substr(0,4) == "prm:" )
-			prm_lnk = src->attrAt(atr_id).at().cfgVal().substr(4);
+		    if( src->attrAt(atr_id).at().cfgVal().size() > 4 && src->attrAt(atr_id).at().cfgVal().substr(0,4) == "prm:" )
+		    {
+			if( prm_lnk.empty() ) prm_lnk = src->attrAt(atr_id).at().cfgVal().substr(4);
+			attr.at().setCfgVal(src->attrAt(atr_id).at().cfgVal());
+		    }
+		    else attr.at().setCfgVal("wdg:"+src->path()+"/a_"+atr_id);
+//		    if( prm_lnk.empty() && src->attrAt(atr_id).at().cfgVal().size() > 4 &&
+//			    src->attrAt(atr_id).at().cfgVal().substr(0,4) == "prm:" )
+//			prm_lnk = src->attrAt(atr_id).at().cfgVal().substr(4);
 		}
 		else
 		{
@@ -1235,7 +1240,7 @@ void SessWdg::calc( bool first, bool last )
 		    {
 			try{ vl = SYS->daq().at().nodeAt(attr.at().cfgVal(),0,0,obj_tp.size()); }
 			catch(TError err) { attr.at().setS(EVAL_STR); continue; }
-			
+
 			if( attr.at().flgGlob()&Attr::Address )	
 			    attr.at().setS("/DAQ"+attr.at().cfgVal().substr(obj_tp.size()));
 			else switch( attr.at().type() )
