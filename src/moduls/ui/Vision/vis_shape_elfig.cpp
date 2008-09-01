@@ -42,7 +42,7 @@ using namespace VISION;
 
 ShapeElFigure::ShapeElFigure( ) :
     WdgShape("ElFigure"), itemInMotion(0), flag_down(false), flag_up(false), flag_left(false), flag_right(false), flag_A(false), flag_ctrl(false),
-    status_hold(true), flag_rect(false), flag_hold_move(false), flag_m(false), flag_scale(true), flag_rotate(true), flag_hold_arc(false), flag_angle_temp(false),
+             status_hold(true), flag_rect(false), flag_hold_move(false), flag_m(false), flag_scale(true), flag_release(false), flag_rotate(true), flag_hold_arc(false), flag_angle_temp(false),
                 flag_arc_rect_3_4(false), flag_first_move(false), flag_inund_break(false), flag_copy(false), flag_move(false), flag_check_pnt_inund(false), current_ss(-1), current_se(-1), current_es(-1), current_ee(-1),
     count_Shapes(0), count_holds(0), count_rects(0), rect_num_arc(-1), rect_num(-1), index_del(-1)
 {
@@ -1161,6 +1161,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
     { 
         case QEvent::Paint:
         {
+            //printf("Paint_start\n");
             DevelWdgView *devW = qobject_cast<DevelWdgView*>(view);
             RunWdgView   *runW = qobject_cast<RunWdgView*>(view);
             QPainter pnt( view );
@@ -1225,7 +1226,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                                     scaleRotate( drw_pnt, view, true, true ).y() ) ;
 
                                 pnt.drawPoint( QPointF( (int)TSYS::realRound( drw_pnt1.x(), 2, true),
-                                               (int)TSYS::realRound( drw_pnt1.y(), 2, true) ) );
+                                                        (int)TSYS::realRound( drw_pnt1.y(), 2, true) ) );
                             }
                             im_x += 0.7;// 0.7 - to avoid the free points, wich happen during the rotation of the image
                         }
@@ -1283,6 +1284,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     pnt.drawRect( dashedRect );
                 }
             }
+            //printf("Paint_end\n");
             return true;
         }
         case QEvent::MouseButtonPress:
@@ -1414,8 +1416,11 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         }
                     }
                     // - getting start point for drawing-
-                    if( (ev->button() == Qt::LeftButton) && (status==true) )
+                    if( (ev->button() == Qt::LeftButton) && status )
+                    {
+                        flag_release = false;
                         StartLine = ev->pos();
+                    }
                     // - repainting figures by mouse click -
                     if( (ev->button() == Qt::LeftButton) && (itemInMotion || rect_num != -1) && !status && flag_ctrl != 1 && count_holds == 0 )
                     {
@@ -1523,6 +1528,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         {
                             flag_A = true;
                             flag_copy = true;
+                            index_array_copy.clear();
                             flag_ctrl_move = 1;
                             count_Shapes = index_array.size();
                             moveAll( QPointF(0,0), shapeItems, pnts, inundationItems, view );
@@ -1781,7 +1787,11 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         double scale;
                         QLineF line1, line2;
                         EndLine = ev->pos();
-                        if( EndLine == StartLine ) break;
+                        if( EndLine == StartLine || flag_release )
+                        {
+                            flag_release = true;
+                            break;
+                        }
                         QPainterPath circlePath, bigPath;
                         Qt::PenStyle style;
                         string ln_st;
@@ -2279,7 +2289,11 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     {
                         flag_ar_break = false;
                         for( int i=0; i < index_array.size(); i++ )
-                            if( index_array[i] == -1 ) flag_ar_break = true;
+                            if( index_array[i] == -1 )
+                            {
+                                flag_ar_break = true;
+                                break;
+                            }
                         if( (index_array.size() == shapeItems.size()) && !flag_ar_break )
                         {
                             (*pnts).clear();
@@ -2421,6 +2435,9 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 			shapeSave(view);
 			view->repaint();
                     }
+                    view->unsetCursor();
+                    index_del = -1;
+                    flag_A = false;
                 }
                 if( ev->key() == Qt::Key_A && !status )
                 {

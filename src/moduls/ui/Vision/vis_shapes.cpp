@@ -190,7 +190,6 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
     bool rel_cfg = false;	//Reload configuration
 
     shD->evLock = true;
-
     switch( uiPrmPos )
     {
 	case -1:	//load

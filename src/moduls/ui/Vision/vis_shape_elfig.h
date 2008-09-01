@@ -225,7 +225,7 @@ class ShapeElFigure : public WdgShape
 	bool flag_cursor, flag_key, flag_up, flag_down, flag_left, flag_right, 
              flag_ctrl, flag_ctrl_move, flag_m, flag_hold_arc, flag_A, flag_copy, flag_check_pnt_inund;
 					    	
-        bool flag_rect, flag_arc_rect_3_4, flag_arc_release, flag_first_move, flag_move;
+        bool flag_rect, flag_arc_rect_3_4, flag_arc_release, flag_first_move, flag_move, flag_release;
         QPointF Start_offset, End_offset, CtrlPos1_offset, CtrlPos2_offset, CtrlPos3_offset, CtrlPos4_offset;
         int count_rects, rect_num_arc, arc_rect;
         bool flag_holds;			

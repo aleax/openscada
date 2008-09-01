@@ -1,3 +1,8 @@
+2008-09-01 Maxim
+- FIX:/UI/Vision: Deleting of figures is fixed for primitive ElFigure.
+- FIX:/UI/Vision: Drawing of figures with the help of mouse is fixed for primitive ElFigure.
+
+
 2008-08-30 Roman
 - FIX:/Protocol: Input protocol's modify status present is fixed.
 - FIX:/DAQ/DiamondBoards: No set some parameter's attributes is fixed.
