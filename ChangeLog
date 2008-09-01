@@ -7,6 +7,7 @@
 - FIX:/UI/Vision: Close included pages is fixed.
 - FIX:/UI/WebVision: Close and open commands is fixed.
 - !:/UI/WebVision: Focus support to primitive "Diagram" is added.
+- !:/UI/WebVision: Keyboard events process added.
 
 
 2008-08-30 Roman
