@@ -187,8 +187,8 @@ void VCASess::postReq( SSess &ses )
     //- Open page command -
     else if( wp_com == "pgClose" || wp_com == "pgOpen" )
     {
-	XMLNode req((wp_com == "pgOpen")?"open":"close");
-	req.setAttr("path",TSYS::pathLev(ses.url,0)+"/%2fserv%2fpg")->setAttr("pg",ses.url);
+	XMLNode req((wp_com=="pgOpen")?"open":"close");
+	req.setAttr("path","/"+TSYS::pathLev(ses.url,0)+"/%2fserv%2fpg")->setAttr("pg",ses.url);
 	mod->cntrIfCmd(req,ses.user);
     }
     else if( wp_com == "obj" && objPresent(ses.url) )

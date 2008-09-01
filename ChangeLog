@@ -1,6 +1,12 @@
 2008-09-01 Roman
 - FIX:/UI/VCAEngine: Dynamic link to closed pages is fixed. If linked attribute have link to parameter then it use.
 - FIX:/UI/Vision,/UI/WebVision: NAN real values' crash into primitive Diagram is fixed.
+- FIX:/DAQ/ModBus: ModBus/TCP timeout changed to 2 seconds.
+- FIX:/Transport/Sockets: Fix exeption from timeout expired.
+- FIX:/UI/Vision: Set new runtime window title is fixed.
+- FIX:/UI/Vision: Close included pages is fixed.
+- FIX:/UI/WebVision: Close and open commands is fixed.
+- !:/UI/WebVision: Focus support to primitive "Diagram" is added.
 
 
 2008-08-30 Roman

@@ -667,8 +667,8 @@ int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, in
     if( !run_st ) throw TError(nodePath().c_str(),_("Transport no started!"));
 
     //- Write request -
-    if( obuf != NULL && len_ob > 0)
-	while( (kz = write(sock_fd,obuf,len_ob)) <= 0)
+    if( obuf != NULL && len_ob > 0 )
+	while( (kz = write(sock_fd,obuf,len_ob)) <= 0 )
 	{
 	    run_st = false;
 	    for( int i_tr = 0; true; )
@@ -676,8 +676,8 @@ int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, in
 		try{ start(); }
 		catch( TError err )
 		{
-		    if( i_tr++ < 5 )	continue;
-		    throw;
+		    if( i_tr++ < 3 )	continue;
+		    throw err;
 		}
 		break;
 	    }
@@ -696,7 +696,11 @@ int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, in
 	FD_SET(sock_fd,&rd_fd);
 	do{ kz = select(sock_fd+1,&rd_fd,NULL,NULL,&tv); }
 	while( kz == -1 && errno == EINTR );
-	if( kz == 0 ) i_b = 0;
+	if( kz == 0 )
+	{
+	    run_st = false;
+	    throw TError(nodePath().c_str(),_("Timeouted!"));
+	}
 	else if( kz < 0)
 	{
 	    run_st = false;
@@ -710,11 +714,6 @@ int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, in
 		run_st = false;
 		throw TError(nodePath().c_str(),_("Read reply error: %s"),strerror(errno));
 	    }
-	}
-	else
-	{
-	    run_st = false;
-	    throw TError(nodePath().c_str(),_("Timeouted!"));
 	}
     }
 

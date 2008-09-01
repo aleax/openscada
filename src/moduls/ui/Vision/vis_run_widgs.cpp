@@ -491,7 +491,7 @@ bool RunPageView::callPage( const string &pg_it, const string &pgGrp, const stri
     //- Put checking to self include pages -
     for( int i_ch = 0; i_ch < children().size(); i_ch++ )
 	if( qobject_cast<RunPageView*>(children().at(i_ch)) &&
-		((RunPageView *)children().at(i_ch))->callPage(pg_it,pgGrp,pgSrc)) 
+		((RunPageView *)children().at(i_ch))->callPage(pg_it,pgGrp,pgSrc))
 	    return true;
     //- Unknown and empty source pages open as master page child windows -
     if( !parent() )		{ pgOpen( pg_it ); return true; }
@@ -504,6 +504,7 @@ RunPageView *RunPageView::pgOpen( const string &ipg )
     RunPageView *pg = new RunPageView(ipg,mainWin(),this);
     pg->setAttribute(Qt::WA_DeleteOnClose);
     pg->setWindowFlags(Qt::Sheet);
+    pg->setWindowTitle(mainWin()->windowTitle());
     pg->load("");
     pg->moveF(QPointF(mapToGlobal(pos()).x()+sizeF().width()/2-pg->sizeF().width()/2,
 	     mapToGlobal(pos()).y()+sizeF().height()/2-pg->sizeF().height()/2));
@@ -517,7 +518,15 @@ void RunPageView::closeEvent( QCloseEvent *event )
     XMLNode req("close");
     req.setAttr("path","/ses_"+mainWin()->workSess()+"/%2fserv%2fpg")->setAttr("pg",id());
     mainWin()->cntrIfCmd(req);
-    //attrSet("pgOpen","0");
+
+    //-- Close included pages --
+    for( int i_ch = 0; i_ch < children().size(); i_ch++ )
+	if( !qobject_cast<RunPageView*>(children().at(i_ch)) && ((RunWdgView *)children().at(i_ch))->root() == "Box" &&
+		!((RunWdgView*)children().at(i_ch))->pgOpenSrc().empty() )
+	{
+	    req.setAttr("path","/ses_"+mainWin()->workSess()+"/%2fserv%2fpg")->setAttr("pg",((RunWdgView*)children().at(i_ch))->pgOpenSrc());
+	    mainWin()->cntrIfCmd(req);
+	}
 }
 
 //*********************************************
