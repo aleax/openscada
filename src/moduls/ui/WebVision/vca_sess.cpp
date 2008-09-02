@@ -422,7 +422,7 @@ bool VCAElFigure::isPaintable( ShapeItem item, double xScale, double yScale )
     switch(item.type)
     {
         case 1:
-            if( (scaleRotate((pnts)[item.n1],xScale,yScale,true, true).x>=0 &&                                            scaleRotate((pnts)[item.n1],xScale,yScale,true,true).x<=(s_width)) &&
+            if(  (scaleRotate((pnts)[item.n1],xScale,yScale,true, true).x>=0 &&                                            scaleRotate((pnts)[item.n1],xScale,yScale,true,true).x<=(s_width)) &&
                  (scaleRotate((pnts)[item.n1],xScale,yScale,true,true).y>=0 && scaleRotate((pnts)[item.n1],xScale,yScale,true,true).y<=(s_height)) &&
                  (scaleRotate((pnts)[item.n2],xScale,yScale,true,true).x>=0 && scaleRotate((pnts)[item.n2],xScale,yScale,true,true).x<=(s_width)) &&
                  (scaleRotate((pnts)[item.n2],xScale,yScale,true,true).y>=0 && scaleRotate((pnts)[item.n2],xScale,yScale,true,true).y<=(s_height))

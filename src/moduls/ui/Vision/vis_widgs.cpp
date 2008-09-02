@@ -750,7 +750,7 @@ string WdgView::root( )
 void WdgView::moveF( const QPointF &pos )
 {
     w_pos = pos;
-    move( pos.toPoint() );
+    move( QPoint((int)TSYS::realRound(pos.x()),(int)TSYS::realRound(pos.y())) );
 }
 
 void WdgView::resizeF( const QSizeF &size )
@@ -758,7 +758,7 @@ void WdgView::resizeF( const QSizeF &size )
     w_size = size;
     w_size.setWidth(vmax(w_size.width(),3));
     w_size.setHeight(vmax(w_size.height(),3));
-    resize( w_size.toSize() );
+    resize( QSize((int)TSYS::realRound(w_size.width()), (int)TSYS::realRound(w_size.height())) );
 }
 
 WdgView *WdgView::newWdgItem( const string &iwid )

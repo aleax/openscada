@@ -1,3 +1,7 @@
+2008-09-2 Maxim
+- FIX:/UI/WebVision: Unification of rounding of geometry of widgets is done.
+
+
 2008-09-01 Roman
 - FIX:/UI/VCAEngine: Dynamic link to closed pages is fixed. If linked attribute have link to parameter then it use.
 - FIX:/UI/Vision,/UI/WebVision: NAN real values' crash into primitive Diagram is fixed.
