@@ -413,8 +413,8 @@ bool ConfApp::exitModifChk( )
 	if( !cntrIfCmd(req) )	saveExit |= atoi(req.text().c_str());
 	if( !saveExit )
 	{
-	    int ret = QMessageBox::information(this,_("Visual items save"),
-		_("Some visual items is changed. Save changing to DB on exit?"),QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel,QMessageBox::Yes);
+	    int ret = QMessageBox::information(this,_("Changes save"),
+		_("Some changing is made. Save changing to DB on exit?"),QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel,QMessageBox::Yes);
 	    switch( ret )
 	    {
 		case QMessageBox::Yes:

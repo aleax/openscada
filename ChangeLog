@@ -1,13 +1,18 @@
-2008-09-2 Roman
+2008-09-03 Roman
+- !:/UI/WebVision: Make active views Combobox, List and text mode.
+- !:/SYS: Adapted to Mandriva 2008.1 build
+
+
+2008-09-02 Roman
 - !:/UI/WebVision: Time and Data view for FormEl is made.
 - !:/UI/WebVision: Manual vertical align to center is made for FormEl views.
 
 
-2008-09-2 Roman
+2008-09-02 Roman
 - !:/UI/WebVision: Time view of FormEl is made.
 
 
-2008-09-2 Maxim
+2008-09-02 Maxim
 - FIX:/UI/WebVision: Unification of rounding of geometry of widgets is done.
 
 
