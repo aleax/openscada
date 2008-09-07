@@ -1,3 +1,9 @@
+2008-09-07 Roman
+- FIX:/DAQ/JavaLikeCalc: Unwanted tipe conversion from real to integer is fixed.
+- !:/UI/WebVision: Editable combobox active mode support is added for primitive FormEl.
+- !:/UI/WebVision: Toggle support for button is added for primitive FormEl.
+
+
 2008-09-03 Roman
 - !:/UI/WebVision: Make active views Combobox, List and text mode.
 - !:/SYS: Adapted to Mandriva 2008.1 build

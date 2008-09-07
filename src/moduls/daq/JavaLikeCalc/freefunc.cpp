@@ -461,7 +461,7 @@ Reg *Func::cdTypeConv( Reg *op, Reg::Type tp, bool no_code )
 			    *rez = (int)rez->val().b_el;
 			    break;
 			case Reg::Real:
-			    *rez = (int)rez->val().r_el;
+			//    *rez = (int)rez->val().r_el;
 			    break;
 			case Reg::String:
 			    *rez = atoi(rez->val().s_el->c_str());
@@ -581,7 +581,7 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
     //- Check allow the buildin calc and calc -
     if( op1->pos() < 0 && op2->pos() < 0 )
     {
-	switch(cod)
+	switch( cod )
 	{
 	    case Reg::AddR: case Reg::Sub: case Reg::Mul:
 	    case Reg::Div: case Reg::LT: case Reg::GT:
@@ -592,7 +592,7 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 	}
 
 	op2 = cdTypeConv( op2, op1->vType(this), true);
-	switch(op1->vType(this))
+	switch( op1->vType(this) )
 	{
 	    case Reg::Int:
 		switch(cod)
