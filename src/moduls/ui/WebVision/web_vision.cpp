@@ -349,6 +349,10 @@ TWEB::TWEB( string name ) : m_t_auth(10), chck_st(false)
 	"  return rez;\n"
 	"}\n"
 	"/***************************************************\n"
+	" * evMouseGet - Get mouse key code from event      *\n"
+	" ***************************************************/\n"
+	"function evMouseGet( e ) { if(e.which == 1) return 'Left'; else if(e.which == 2) return 'Midle'; else if(e.which == 3) return 'Right'; }\n"
+	"/***************************************************\n"
 	" * evKeyGet - Get key code from event              *\n"
 	" ***************************************************/\n"
 	"function evKeyGet( e )\n"
@@ -594,7 +598,7 @@ TWEB::TWEB( string name ) : m_t_auth(10), chck_st(false)
 	"      figObj.onclick = function(e)\n"
 	"      {\n"
 	"        if(!e) e = window.event;\n"
-	"        if( e.offsetX && e.offsetY ) servSet(this.wdgLnk.addr,'com=obj&sub=point&x='+e.offsetX+'&y='+e.offsetY);\n"
+	"        servSet(this.wdgLnk.addr,'com=obj&sub=point&x='+(e.offsetX?e.offsetX:(e.clientX-posGetX(this)+window.pageXOffset))+'&y='+(e.offsetY?e.offsetY:(e.clientY-posGetY(this)+window.pageYOffset))+'&key='+evMouseGet(e),'');\n"
 	"      }\n"
 	"    else figObj.onclick = '';\n"
 	"  }\n"
@@ -1169,8 +1173,13 @@ TWEB::TWEB( string name ) : m_t_auth(10), chck_st(false)
 	"      anchObj.onblur = function( ) { setWAttrs(this.wdgLnk.addr,'event','ws_FocusOut'); }\n"
 	"      anchObj.onkeydown = function(e) { setWAttrs(this.wdgLnk.addr,'event','key_pres'+evKeyGet(e?e:window.event)); }\n"
 	"      anchObj.onkeyup = function(e) { setWAttrs(this.wdgLnk.addr,'event','key_rels'+evKeyGet(e?e:window.even)); }\n"
-	"    }\n"
-	"    anchObj.onclick = function(e) { return false; }\n"
+	"      anchObj.onclick = function(e)\n"
+	"      {\n"
+	"        if(!e) e = window.event;\n"
+	"        servSet(this.wdgLnk.addr,'com=obj&sub=point&x='+(e.offsetX?e.offsetX:(e.clientX-posGetX(this)+window.pageXOffset))+'&y='+(e.offsetY?e.offsetY:(e.clientY-posGetY(this)+window.pageYOffset))+'&key='+evMouseGet(e),'');\n"
+	"        return false;\n"
+	"      }\n"
+	"    } else anchObj.onclick = function(e) { return false; }\n"
 	"    var dgrObj = anchObj.childNodes[0];\n"
 	"    dgrObj.src = '/"MOD_ID"'+this.addr+'?com=obj&tm='+tmCnt+'&xSc='+xSc.toFixed(2)+'&ySc='+ySc.toFixed(2);\n"
 	"    this.perUpdtEn( this.isEnabled() && parseInt(this.attrs['trcPer']) );\n"
@@ -1541,6 +1550,12 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 	    else if( zero_lev.size() > 4 && zero_lev.substr(0,4) == "ses_" )
 	    {
 		string sesnm = zero_lev.substr(4);
+		//-- Check for session present --
+		if( !ses.prm.size() )
+		{
+		    XMLNode req("get"); req.setAttr("path",ses.url+"/%2fobj%2fst%2fen");
+		    if( cntrIfCmd(req,ses.user) || !atoi(req.text().c_str()) )	{ HttpGet( "", page, sender, vars ); return; }
+		}
 		//-- Call to session --
 		try{ vcaSesAt(sesnm).at().getReq(ses); }
 		catch(...)

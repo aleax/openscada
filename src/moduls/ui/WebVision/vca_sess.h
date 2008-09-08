@@ -26,7 +26,6 @@
 #include <gdfonts.h>
 #include <gdfontt.h>
 
-
 #include <string>
 #include <vector>
 #include <map>
@@ -40,7 +39,7 @@ class Point
     public:
 	Point( ) {};
 	Point( double ix, double iy) : x(ix), y(iy)	{ };
-	double x; 
+	double x;
 	double y;
 };
 
@@ -73,8 +72,8 @@ class VCAObj : public TCntrNode
 	virtual void setAttrs( XMLNode &node, const string &user ) = 0;
 
 	VCASess &owner( );
-    protected:    
-        string imgDef;
+    protected:
+	string imgDef;
 
     private:
 	//Methods
@@ -87,7 +86,7 @@ class VCAObj : public TCntrNode
 //*************************************************
 //* ElFigure                                      *
 //*************************************************
-class ShapeItem 
+class ShapeItem
 {
     public:
 	ShapeItem( )	{ }
@@ -114,12 +113,12 @@ class InundationItem
 {
     public:
 	InundationItem( )	{ }
-        InundationItem( vector<int> inumber_point, int color, int i_index_color, string P_imgFill ) : number_point(inumber_point), P_color(color), index_color(i_index_color), imgFill(P_imgFill)
+	InundationItem( vector<int> inumber_point, int color, int i_index_color, string P_imgFill ) : number_point(inumber_point), P_color(color), index_color(i_index_color), imgFill(P_imgFill)
 	{ }
 
 	vector<int>	number_point;
 	int		P_color, index_color;
-        string          imgFill;
+	string		imgFill;
 
 };
 
@@ -128,9 +127,9 @@ class VCAElFigure : public VCAObj
     public:
 	//Methods
 	VCAElFigure( const string &iid );
-        ~VCAElFigure( );
-        
-        void getReq( SSess &ses );
+	~VCAElFigure( );
+
+	void getReq( SSess &ses );
 	void postReq( SSess &ses );
 	void setAttrs( XMLNode &node, const string &user );
 
@@ -191,12 +190,13 @@ class VCADiagram : public VCAObj
 	void setAttrs( XMLNode &node, const string &user );
 
 	//Attributes
-	int		width, height,		//Widget geometry
+	int		width,height,		//Widget geometry
+			tArX,tArY,tArW,tArH,	//Trend area geometry
 			geomMargin,		//Margin
 			bordWidth;		//Border width
 	bool		active,			//Active diagram
 			tTimeCurent;		//Curent time
-	long long	tTime, curTime;		//Trend time and trend cursor's time position
+	long long	tTime, curTime, tPict;	//Trend time, trend cursor's time position and picture time
 	int		trcPer;			//Tracing period
 	float		tSize;			//Trend size (s)
 	int		curColor, 		//Cursor line color

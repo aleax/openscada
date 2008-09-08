@@ -3208,25 +3208,22 @@ void VCAElFigure::postReq( SSess &ses )
 {
     ResAlloc res(mRes,true);
 
-    int x_coord, y_coord;
-    int color;
     map< string, string >::iterator prmEl = ses.prm.find("sub");
-    if(prmEl->second.c_str() == "point");
+    if( prmEl != ses.prm.end() && prmEl->second == "point");
     {
-        prmEl = ses.prm.find("x");
-        x_coord = (prmEl!=ses.prm.end()) ? atoi(prmEl->second.c_str()) : -1;
-        prmEl = ses.prm.find("y");
-        y_coord = (prmEl!=ses.prm.end()) ? atoi(prmEl->second.c_str()) : -1;
-    }
-    color = -1;
-    color = gdImageGetPixel(im, x_coord, y_coord);
-    
-    //printf("The value of pixel is %d; RGB values are %d,%d,%d\n",
+	prmEl = ses.prm.find("x");
+	int x_coord = (prmEl!=ses.prm.end()) ? atoi(prmEl->second.c_str()) : -1;
+	prmEl = ses.prm.find("y");
+	int y_coord = (prmEl!=ses.prm.end()) ? atoi(prmEl->second.c_str()) : -1;
+	if( x_coord < 0 || y_coord < 0 ) return;
+	int color = gdImageGetPixel( im, x_coord, y_coord );
+	//printf("The value of pixel is %d; RGB values are %d,%d,%d\n",
            //color, im->red[color], im->green[color], im->blue[color]);
-    for( int i=0; i < inundationItems.size(); i++ )
-    {
-        if( inundationItems[i].index_color == color )
-        printf("Fill number = %i\n", i);
+	for( int i=0; i < inundationItems.size(); i++ )
+	{
+	    if( inundationItems[i].index_color == color )
+	    printf("Fill number = %i\n", i);
+	}
     }
 }
 
@@ -3576,7 +3573,7 @@ void VCADiagram::getReq( SSess &ses )
     int parNum     = trnds.size();					//Parameter's number
     long long tSz  = (long long)(tSize*1000000.);			//Trends size (us)
     long long tEnd = tTime;						//Trends end point (us)
-    long long tPict = tEnd;
+    tPict = tEnd;
     long long tBeg = tEnd - tSz;					//Trends begin point (us)
     if( !parNum || tSz <= 0 )
     {
@@ -3597,9 +3594,9 @@ void VCADiagram::getReq( SSess &ses )
     gdImageFilledRectangle(im,0,0,imW-1,imH-1,gdImageColorAllocateAlpha(im,0,0,0,127));
 
     //-- Make decoration and prepare trends area --
-    int tArX = 1, tArY = 1,						//Curves of trends area rect
-	tArW = imW-2*(geomMargin+bordWidth+1),
-	tArH = imH-2*(geomMargin+bordWidth+1);
+    tArX = 1, tArY = 1,						//Curves of trends area rect
+    tArW = imW-2*(geomMargin+bordWidth+1),
+    tArH = imH-2*(geomMargin+bordWidth+1);
 
     if( sclHor&0x3 || sclVer&0x3 )
     {
@@ -3906,7 +3903,7 @@ void VCADiagram::getReq( SSess &ses )
     if( active && curTime && tBeg && tPict && (curTime >= tBeg || curTime <= tPict) )
     {
 	//--- Set trend's pen ---
-	int clr_cur = gdImageColorAllocate(im,(ui8)(curColor>>16),(ui8)(curColor>>8),(ui8)curColor);    
+	int clr_cur = gdImageColorAllocate(im,(ui8)(curColor>>16),(ui8)(curColor>>8),(ui8)curColor);
 	int curPos = tArX+tArW*(curTime-tBeg)/(tPict-tBeg);
 	gdImageLine(im,curPos,tArY,curPos,tArY+tArH,clr_cur);
     }
@@ -3922,7 +3919,23 @@ void VCADiagram::getReq( SSess &ses )
 
 void VCADiagram::postReq( SSess &ses )
 {
+    ResAlloc res(mRes,true);
 
+    map< string, string >::iterator prmEl = ses.prm.find("sub");
+    if( prmEl != ses.prm.end() && prmEl->second == "point" );
+    {
+	prmEl = ses.prm.find("x");
+	int x_coord = (prmEl!=ses.prm.end()) ? atoi(prmEl->second.c_str()) : 0;
+	prmEl = ses.prm.find("y");
+	int y_coord = (prmEl!=ses.prm.end()) ? atoi(prmEl->second.c_str()) : 0;
+	prmEl = ses.prm.find("key");
+	string key = (prmEl!=ses.prm.end()) ? prmEl->second : "";
+	if( x_coord >= tArX && x_coord <= tArX+tArW )
+	{
+	    long long tTimeGrnd = tPict - (long long)(tSize*1000000.);
+	    setCursor(  tTimeGrnd + (tPict-tTimeGrnd)*(x_coord-tArX)/tArW, ses.user );
+	}
+    }
 }
 
 void VCADiagram::setAttrs( XMLNode &node, const string &user )
