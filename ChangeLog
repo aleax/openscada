@@ -35,7 +35,7 @@
 2008-09-01 Roman
 - FIX:/UI/VCAEngine: Dynamic link to closed pages is fixed. If linked attribute have link to parameter then it use.
 - FIX:/UI/Vision,/UI/WebVision: NAN real values' crash into primitive Diagram is fixed.
-- FIX:/DAQ/ModBus: ModBus/TCP timeout changed to 2 seconds.
+- FIX:/DAQ/ModBus: ModBus/TCP timeout changed to 3 seconds.
 - FIX:/Transport/Sockets: Fix exeption from timeout expired.
 - FIX:/UI/Vision: Set new runtime window title is fixed.
 - FIX:/UI/Vision: Close included pages is fixed.
@@ -68,12 +68,12 @@
 - FIX:/UI/VCAEngine: Translation to Russian and Ukranian is fixed.
 - FIX:/UI/Vision: Runtime window maximize and fullscreen on start is fixed.
 - /UI/WebVision: Title name changet to project's name.
-- !!:/UI/WebVision: First realisation of active mode for view EditLine of primitive ElFigure.
+- !!:/UI/WebVision: First realisation of active mode for view EditLine of primitive FormEl.
 
 
 2008-08-20 Roman
 - !:/SYS/XML: Parse error part string is appended to error message.
-- !:/Transport/Socket: 5 tries for restore connection is added.
+- !:/Transport/Socket: 3 tries for restore connection is added.
 - FIX:/UI/Vision: Generic connection errors messages generation is fixed.
 - /UI/Vision: Runtime window title changed to run project's name.
 
@@ -93,7 +93,7 @@
 
 2008-08-13 Roman
 - !!:/SYS: System adapted to GCC 4.3
-- !!:/DAQ/JavaLikeCalc: Numpers process mechanism is rewrited. All generic operations made work with real type data, no integer separately.
+- !!:/DAQ/JavaLikeCalc: Numbers process mechanism is rewrited. All generic operations made work with real type data, no integer separately.
 
 
 2008-08-11 Roman
@@ -119,14 +119,14 @@
 
 2008-07-31 Maxim
 - FIX:/UI/Vision: Drawing of the holds' circles for primitive ElFigure is fixed.
-- FIX:UI/Vision: Square selectionof figures for primitive ElFigure is modified.
+- FIX:UI/Vision: Square selection of figures for primitive ElFigure is modified.
 
 
 2008-07-29 Maxim
 - /UI/Vision: Choosing the figures with the help of square selection for primitive ElFigure is added .
 - FIX:/UI/Vision: Level(highest or lowest) configuration for primitive ElFigure is fixed.
 - FIX:UI/Vision: Selection figures with the pressed CTRL and further movement of them for primitive ElFigure is fixed 
-- /UI/Vision:Deleting of choosen by different ways of figures for primitive ElFigure support is added 
+- /UI/Vision: Deleting of choosen by different ways of figures for primitive ElFigure support is added 
 
 
 2008-07-29 Roman

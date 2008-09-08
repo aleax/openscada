@@ -981,7 +981,7 @@ string TMdContr::modBusReq( string &pdu )
 		mbap += pdu;
 		if( !tr.at().startStat() )	tr.at().start();
 		//- Send request -
-		int resp_len = tr.at().messIO( mbap.data(), mbap.size(), buf, sizeof(buf), 2 );
+		int resp_len = tr.at().messIO( mbap.data(), mbap.size(), buf, sizeof(buf), 3 );
 		rez.assign(buf,resp_len);
 		if( rez.size() < 7 )	{ err = _("13:Error server respond"); break; }
 		int resp_sz = (unsigned short)(rez[4]<<8)|(unsigned char)rez[5];
