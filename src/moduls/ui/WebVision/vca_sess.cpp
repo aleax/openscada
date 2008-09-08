@@ -297,7 +297,7 @@ bool VCAElFigure::lineIntersect( double x1, double y1, double x2, double y2,
 Point VCAElFigure::rotate( const Point pnt, double alpha )
 {
     return Point( pnt.x*cos((alpha*M_PI)/180) - pnt.y*sin((alpha*M_PI)/180),
-                   pnt.x*sin((alpha*M_PI)/180) + pnt.y*cos((alpha*M_PI)/180) );
+                  pnt.x*sin((alpha*M_PI)/180) + pnt.y*cos((alpha*M_PI)/180) );
 }
 
 //- unrotation of the point -
@@ -371,8 +371,7 @@ Point VCAElFigure::scaleRotate( const Point point, double xScale, double yScale,
     Point center;
     if( flag_rotate )
     {
-        if ( !flag_scale )
-            center = Point( TSYS::realRound( width*xScale/2 ), TSYS::realRound( height*yScale/2 ) );
+        if ( !flag_scale ) center = Point( TSYS::realRound( width*xScale/2 ), TSYS::realRound( height*yScale/2 ) );
         else center = Point( TSYS::realRound( width/2 ), TSYS::realRound( height/2 ) );
         rpnt.x = rpnt.x - center.x;
         rpnt.y = rpnt.y - center.y;
@@ -393,8 +392,7 @@ Point VCAElFigure::unscaleUnrotate( const Point point, double xScale, double ySc
     if( flag_scale ) rpnt = Point( rpnt.x/xScale, rpnt.y/yScale );
     if( flag_rotate )
     {
-        if ( !flag_scale )
-            center = Point( TSYS::realRound( width*xScale/2 ), TSYS::realRound( height*yScale/ 2 ) );
+        if ( !flag_scale ) center = Point( TSYS::realRound( width*xScale/2 ), TSYS::realRound( height*yScale/ 2 ) );
         else center = Point( TSYS::realRound( width/2 ), TSYS::realRound( height/2 ) );
         rpnt.x = rpnt.x - center.x;
         rpnt.y = rpnt.y - center.y;
@@ -1008,11 +1006,11 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                 if( flag_clr_ln ) clr_el = clr_el_line;
                 else if( flag_allocate )
                     clr_el = gdImageColorAllocate( im, (ui8)(item.borderColor>>16), (ui8)(item.borderColor>>8), (ui8)item.borderColor );
-                else
-                {
-                    clr_el = item.borderColor;
-                    if( item.flag_brd ) clr_el_line = clr_el;
-                }
+                    else
+                    {
+                        clr_el = item.borderColor;
+                        if( item.flag_brd ) clr_el_line = clr_el;
+                    }
                 if( item.border_width < 4 && item.style != 0 && item.flag_brd && flag_style )//---- Drawing the dashed or dotted arc with borders' width < 4 and flag_brd ----
                 {
                     double wdt, wdt_1;
@@ -1690,12 +1688,12 @@ void VCAElFigure::getReq( SSess &ses )
         width_shape.clear();
         border_width_shape.clear();
         int tmp_clr=gdImageColorAllocate(im,(ui8)(inundationItems[i].P_color>>16), (ui8)(inundationItems[i].P_color>>8), 
-                                         (ui8)inundationItems[i].P_color);
+                                             (ui8)inundationItems[i].P_color);
         if( inundationItems[i].number_point.size() == 2 )
         {
             for( int k = 0; k < shapeItems.size(); k++ )
                 if( ((inundationItems[i].number_point[1] == shapeItems[k].n1) && (inundationItems[i].number_point[0] == shapeItems[k].n2)) ||
-                     ((inundationItems[i].number_point[1] == shapeItems[k].n2) && (inundationItems[i].number_point[0] == shapeItems[k].n1)))
+                    ((inundationItems[i].number_point[1] == shapeItems[k].n2) && (inundationItems[i].number_point[0] == shapeItems[k].n1)))
                 {
                     shape_temp.push_back(k);
                     width_shape.push_back( shapeItems[k].width );
@@ -1832,12 +1830,10 @@ void VCAElFigure::getReq( SSess &ses )
                         Point el_p5 = unscaleUnrotate( el_p5_rot, xSc, ySc, false, true );
                         Point el_p6 = item.ctrlPos4;
                         
-                        if ( el_p5.y <= el_p3.y )
-                            ang = angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
+                        if ( el_p5.y <= el_p3.y ) ang = angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
                         else ang = 360 - angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
                         
-                        if ( el_p5_rot.y <= el_p3_rot.y )
-                            ang_rot = angle( el_p3_rot, el_p5_rot, el_p3_rot, Point( el_p3_rot.x+10, el_p3_rot.y ) );
+                        if ( el_p5_rot.y <= el_p3_rot.y ) ang_rot = angle( el_p3_rot, el_p5_rot, el_p3_rot, Point( el_p3_rot.x+10, el_p3_rot.y ) );
                         else ang_rot = 360 - angle( el_p3_rot, el_p5_rot, el_p3_rot, Point( el_p3_rot.x+10, el_p3_rot.y ) );
                         
                         arc_a = length( el_p5, el_p3 );
@@ -2043,19 +2039,19 @@ void VCAElFigure::getReq( SSess &ses )
                     if( shapeItems[j].n1 == num_pnt )
                         for( int k = 0; k < inundationItems[i].number_point.size(); k++ )
                             if( shapeItems[j].n2 == inundationItems[i].number_point[k] )
-                    {
-                        fig.push_back(j);
-                        point_num.push_back( shapeItems[j].n2 );
-                        break;
-                    }
+                            {
+                                fig.push_back(j);
+                                point_num.push_back( shapeItems[j].n2 );
+                                break;
+                            }
                     if( shapeItems[j].n2 == num_pnt )
                         for( int k = 0; k < inundationItems[i].number_point.size(); k++ )
                             if( shapeItems[j].n1 == inundationItems[i].number_point[k] )
-                    {
-                        fig.push_back(j);
-                        point_num.push_back( shapeItems[j].n1 );
-                        break;
-                    }
+                            {
+                                fig.push_back(j);
+                                point_num.push_back( shapeItems[j].n1 );
+                                break;
+                            }
                 }
                 //- Detecting the real "filling" point for all possible combinations of types of two connected figures -
                 //-- Simple arc --
@@ -2266,7 +2262,7 @@ void VCAElFigure::getReq( SSess &ses )
                         //--- Line ---
                         if( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y <= scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ).y )
                             ang1 = 360 - angle( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ), scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ),
-                                Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x+10, scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y ) );
+                                                Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x+10, scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y ) );
                         else
                             ang1 = angle( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true), scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ),
                                           Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x+10, scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y ) );
@@ -2289,13 +2285,13 @@ void VCAElFigure::getReq( SSess &ses )
                             P2 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x + rotate( Point(0,-W2), ang1 ).x,
                                         scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y - rotate( Point(0,-W2), ang1 ).y );
                             P3 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x +
-                                    rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ) ), W2 ), ang1 ).x,
-                                            scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y -
-                                                    rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true) ), W2 ), ang1 ).y );
+                                        rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ) ), W2 ), ang1 ).x,
+                                        scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y -
+                                        rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true) ), W2 ), ang1 ).y );
                             P4 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x +
-                                    rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ) ), -W2 ), ang1 ).x,
-                                            scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y -
-                                                    rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ) ), -W2 ), ang1 ).y );
+                                        rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ) ), -W2 ), ang1 ).x,
+                                        scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y -
+                                        rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ) ), -W2 ), ang1 ).y );
                             P1 = Point( TSYS::realRound( P1.x, 2, true ), TSYS::realRound( P1.y, 2, true ) );
                             P2 = Point( TSYS::realRound( P2.x, 2, true ), TSYS::realRound( P2.y, 2, true ) );
                             P3 = Point( TSYS::realRound( P3.x, 2, true ), TSYS::realRound( P3.y, 2, true ) );
@@ -2320,12 +2316,12 @@ void VCAElFigure::getReq( SSess &ses )
                             }
                             Point arc_pnt, arc_pnt_pred;
                             arc_pnt_pred = Point( (int)TSYS::realRound( el_p3.x + rotate( arc( delta_t, arc_a_small, arc_b_small ), ang ).x, 2, true ),
-                                    (int)TSYS::realRound( el_p3.y - rotate( arc( delta_t, arc_a_small, arc_b_small ), ang ).y, 2, true ) );
+                                                  (int)TSYS::realRound( el_p3.y - rotate( arc( delta_t, arc_a_small, arc_b_small ), ang ).y, 2, true ) );
                             do
                             {
                                 delta_t += inc_delta;
                                 arc_pnt = Point( (int)TSYS::realRound( el_p3.x + rotate( arc( delta_t, arc_a_small, arc_b_small ), ang ).x, 2, true ),
-                                        (int)TSYS::realRound( el_p3.y - rotate( arc( delta_t, arc_a_small, arc_b_small ), ang ).y, 2, true ) );
+                                                 (int)TSYS::realRound( el_p3.y - rotate( arc( delta_t, arc_a_small, arc_b_small ), ang ).y, 2, true ) );
                                 if( lineIntersect( arc_pnt_pred.x, arc_pnt_pred.y, arc_pnt.x, arc_pnt.y,P1.x, P1.y, P3.x, P3.y ) )
                                 {
                                     new_pnt = Point( arc_pnt.x, arc_pnt.y );
@@ -2342,7 +2338,7 @@ void VCAElFigure::getReq( SSess &ses )
                             if( inc_delta > 0 ) delta = (t_end - delta_t)/2 + scale;
                             else delta =- ( (delta_t - t_start)/2 + scale );
                             delta_point_1 = Point( (int)TSYS::realRound( el_p3.x + rotate( arc( delta_t + delta, arc_a_small, arc_b_small ), ang ).x, 2, true ),
-                                    (int)TSYS::realRound( el_p3.y - rotate( arc( delta_t + delta, arc_a_small, arc_b_small ), ang ).y, 2, true ) );
+                                                   (int)TSYS::realRound( el_p3.y - rotate( arc( delta_t + delta, arc_a_small, arc_b_small ), ang ).y, 2, true ) );
                         }
                         else
                         {
@@ -2352,7 +2348,7 @@ void VCAElFigure::getReq( SSess &ses )
                             else delta_real = t_end - (t_end-t_start)/2 + scale;
                             new_pnt = scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true );
                             delta_point_1 = Point( (int)TSYS::realRound( el_p3.x + rotate( arc( delta_real, arc_a, arc_b ), ang ).x, 2, true ),
-                                    (int)TSYS::realRound( el_p3.y - rotate( arc( delta_real, arc_a, arc_b ), ang ).y, 2, true ) );
+                                                   (int)TSYS::realRound( el_p3.y - rotate( arc( delta_real, arc_a, arc_b ), ang ).y, 2, true ) );
                         }
                         delta_point_2 = unrotate( new_pnt, ang1, new_pnt.x, new_pnt.y );
                         delta_point_2.x = delta_point_2.x + length( new_pnt, scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ) ) * (0.15 + scale);
@@ -2391,7 +2387,7 @@ void VCAElFigure::getReq( SSess &ses )
                         //--- Line ---
                         if( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y <= scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ).y )
                             ang1 = 360 - angle( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ), scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ),
-                                Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x+10, scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y ) );
+                                                Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x+10, scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y ) );
                         else
                             ang1 = angle( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ), scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ),
                                           Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x+10, scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y ) );
@@ -2410,13 +2406,13 @@ void VCAElFigure::getReq( SSess &ses )
                             P2 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x + rotate( Point(0,-W2), ang1 ).x,
                                         scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y - rotate( Point(0,-W2), ang1 ).y );
                             P3 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x +
-                                    rotate( Point( length(scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ) ), W2 ), ang1 ).x,
-                                            scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y -
-                                                    rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ) ), W2 ), ang1 ).y );
+                                        rotate( Point( length(scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ) ), W2 ), ang1 ).x,
+                                        scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y -
+                                        rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ) ), W2 ), ang1 ).y );
                             P4 = Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x +
-                                    rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ) ), -W2 ), ang1 ).x,
-                                            scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y -
-                                                    rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true , true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true) ), -W2 ), ang1 ).y );
+                                        rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ) ), -W2 ), ang1 ).x,
+                                        scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y -
+                                        rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true , true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true) ), -W2 ), ang1 ).y );
                             P1 = Point( TSYS::realRound( P1.x, 2, true ), TSYS::realRound( P1.y, 2, true ) );
                             P2 = Point( TSYS::realRound( P2.x, 2, true ), TSYS::realRound( P2.y, 2, true ) );
                             P3 = Point( TSYS::realRound( P3.x, 2, true ), TSYS::realRound( P3.y, 2, true ) );
@@ -2441,34 +2437,34 @@ void VCAElFigure::getReq( SSess &ses )
                             ShapeItem item = shapeItems[fig[0]];
                             el_p1 = unrotate( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ), ang,
                                               scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).x, scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y );
-                            el_p2= unrotate( scaleRotate( (pnts)[item.n3], xSc, ySc, true, true ), ang,
-                                             scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).x, scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y );
+                            el_p2 = unrotate( scaleRotate( (pnts)[item.n3], xSc, ySc, true, true ), ang,
+                                              scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).x, scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y );
                             el_p3 = unrotate( scaleRotate( (pnts)[item.n4], xSc, ySc, true, true ), ang,
                                               scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).x, scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y );
                             el_p4 = unrotate( scaleRotate( (pnts)[item.n2], xSc, ySc, true, true ), ang,
                                               scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).x, scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y );
                     
                             bezier_pnt_pred_1 = Point( (int)TSYS::realRound( scaleRotate( (pnts)[shapeItems[fig[0]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t,
-                                    Point( el_p1.x, el_p1.y+W1 ),
-                                           Point( el_p2.x, el_p2.y+W1 ),
-                                                   Point( el_p3.x, el_p3.y+W1 ),
-                                                           Point( el_p4.x, el_p4.y+W1 ) ), ang ).x, 2, true ),
-                                    (int)TSYS::realRound( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t,
-                                     Point( el_p1.x, el_p1.y+W1 ),
-                                            Point( el_p2.x, el_p2.y+W1 ),
-                                                    Point( el_p3.x, el_p3.y+W1 ),
-                                                            Point( el_p4.x, el_p4.y+W1) ), ang ).y, 2, true ) );
+                                                Point( el_p1.x, el_p1.y+W1 ),
+                                                Point( el_p2.x, el_p2.y+W1 ),
+                                                Point( el_p3.x, el_p3.y+W1 ),
+                                                Point( el_p4.x, el_p4.y+W1 ) ), ang ).x, 2, true ),
+                                                       (int)TSYS::realRound( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t,
+                                                Point( el_p1.x, el_p1.y+W1 ),
+                                                Point( el_p2.x, el_p2.y+W1 ),
+                                                Point( el_p3.x, el_p3.y+W1 ),
+                                                Point( el_p4.x, el_p4.y+W1) ), ang ).y, 2, true ) );
                     
                             bezier_pnt_pred_2 = Point( (int)TSYS::realRound( scaleRotate( (pnts)[shapeItems[fig[0]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t,
-                                    Point( el_p1.x, el_p1.y-W1 ),
-                                           Point( el_p2.x, el_p2.y-W1 ),
-                                                   Point( el_p3.x, el_p3.y-W1 ),
-                                                           Point( el_p4.x, el_p4.y-W1 ) ), ang).x, 2, true ),
-                                    (int)TSYS::realRound( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t,
-                                     Point( el_p1.x, el_p1.y-W1 ),
-                                            Point( el_p2.x, el_p2.y-W1 ),
-                                                    Point( el_p3.x, el_p3.y-W1 ),
-                                                            Point( el_p4.x, el_p4.y-W1 ) ), ang ).y, 2, true ) );
+                                                Point( el_p1.x, el_p1.y-W1 ),
+                                                Point( el_p2.x, el_p2.y-W1 ),
+                                                Point( el_p3.x, el_p3.y-W1 ),
+                                                Point( el_p4.x, el_p4.y-W1 ) ), ang).x, 2, true ),
+                                                       (int)TSYS::realRound( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t,
+                                                Point( el_p1.x, el_p1.y-W1 ),
+                                                Point( el_p2.x, el_p2.y-W1 ),
+                                                Point( el_p3.x, el_p3.y-W1 ),
+                                                Point( el_p4.x, el_p4.y-W1 ) ), ang ).y, 2, true ) );
                             bool flag_brk_1, flag_brk_2;
                             flag_brk_1 = false;
                             flag_brk_2 = false;
@@ -2536,7 +2532,7 @@ void VCAElFigure::getReq( SSess &ses )
                                 if( num_pnt == shapeItems[fig[0]].n1 ) delta_real = 0.25 + scale;
                                 else delta_real = 0.75 - scale;
                                 delta_point_1 = Point( (int)TSYS::realRound( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).x, 2, true ),
-                                        (int)TSYS::realRound( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).y, 2, true ) );
+                                                       (int)TSYS::realRound( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).y, 2, true ) );
                             }
                             else
                             {
@@ -2585,7 +2581,7 @@ void VCAElFigure::getReq( SSess &ses )
                             if( num_pnt == shapeItems[fig[0]].n1 ) delta_real = 0.2 + scale;
                             else delta_real = 0.8 - scale;
                             delta_point_1 = Point( (int)TSYS::realRound( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).x, 2, true ),
-                                    (int)TSYS::realRound( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).y, 2, true ) );
+                                                   (int)TSYS::realRound( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).y, 2, true ) );
                         }
                         delta_point_2 = unrotate( new_pnt, ang1, new_pnt.x, new_pnt.y );
                         delta_point_2.x = delta_point_2.x + length( new_pnt, scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ) ) * (0.2 + scale);
@@ -2620,8 +2616,7 @@ void VCAElFigure::getReq( SSess &ses )
                         Point el_p3 = scaleRotate( (pnts)[shapeItems[fig[0]].n3], xSc, ySc, true, true );
                         Point el_p4 = scaleRotate( (pnts)[shapeItems[fig[0]].n4], xSc, ySc, true, true );
                         Point el_p5 = scaleRotate( (pnts)[shapeItems[fig[0]].n5], xSc, ySc, true, true );
-                        if ( el_p5.y <= el_p3.y )
-                            ang = angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
+                        if ( el_p5.y <= el_p3.y ) ang = angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
                         else ang = 360 - angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
                         arc_a = length( el_p5, el_p3 ) + shapeItems[fig[0]].width/2 + shapeItems[fig[0]].border_width;
                         arc_b = length( el_p3, el_p4 ) + shapeItems[fig[0]].width/2 + shapeItems[fig[0]].border_width;
@@ -2630,8 +2625,7 @@ void VCAElFigure::getReq( SSess &ses )
                         P2 = scaleRotate( (pnts)[shapeItems[fig[1]].n2], xSc, ySc, true, true );
                         P3 = scaleRotate( (pnts)[shapeItems[fig[1]].n3], xSc, ySc, true, true );
                         P4 = scaleRotate( (pnts)[shapeItems[fig[1]].n4], xSc, ySc, true, true );
-                        if ( P1.y <= P2.y )
-                            ang1 = 360 - angle( P1, P2, P1, Point( P1.x+10, P1.y ) );
+                        if ( P1.y <= P2.y ) ang1 = 360 - angle( P1, P2, P1, Point( P1.x+10, P1.y ) );
                         else ang1 = angle( P1, P2, P1, Point( P1.x+10, P1.y ) );
                         //-- if there is ane width(of figure itself or of its borders) --
                         if( (shapeItems[fig[0]].width > 1 || shapeItems[fig[0]].border_width > 0) || (shapeItems[fig[1]].width > 1 || shapeItems[fig[1]].border_width > 0) )
@@ -2651,8 +2645,8 @@ void VCAElFigure::getReq( SSess &ses )
                             double inc_delta_arc;
                             double s = 0.825056176207;
                             double Len_arc = (4*(arc_a_small + arc_b_small) -
-                                        (2*(4 - M_PI)* arc_a_small* arc_b_small)/
-                                        pow( pow(arc_a_small,s)/2 + pow(arc_b_small,s)/2 ,(1/s)))*(t_end-t_start);
+                                             (2*(4 - M_PI)* arc_a_small* arc_b_small)/
+                                              pow( pow(arc_a_small,s)/2 + pow(arc_b_small,s)/2 ,(1/s)))*(t_end-t_start);
                             if( num_pnt == shapeItems[fig[0]].n1 )
                             {
                                 delta_t_arc = t_start;
@@ -2665,11 +2659,11 @@ void VCAElFigure::getReq( SSess &ses )
                             }
                             Point arc_pnt, arc_pnt_pred;
                             arc_pnt_pred = Point( (int)TSYS::realRound( el_p3.x + rotate( arc( delta_t_arc, arc_a_small, arc_b_small ), ang ).x, 2, true ),
-                                    (int)TSYS::realRound( el_p3.y - rotate( arc( delta_t_arc, arc_a_small, arc_b_small ), ang ).y, 2, true ) );
+                                                  (int)TSYS::realRound( el_p3.y - rotate( arc( delta_t_arc, arc_a_small, arc_b_small ), ang ).y, 2, true ) );
                             //--- bezier ---
                             double Len = length( (pnts)[shapeItems[fig[1]].n1], (pnts)[shapeItems[fig[1]].n3] ) +
-                                        length( (pnts)[shapeItems[fig[1]].n3], (pnts)[shapeItems[fig[1]].n4] ) +
-                                        length( (pnts)[shapeItems[fig[1]].n4], (pnts)[shapeItems[fig[1]].n2] );
+                                         length( (pnts)[shapeItems[fig[1]].n3], (pnts)[shapeItems[fig[1]].n4] ) +
+                                         length( (pnts)[shapeItems[fig[1]].n4], (pnts)[shapeItems[fig[1]].n2] );
                             double inc_delta_bez;
                             if( num_pnt == shapeItems[fig[1]].n1 )
                             {
@@ -2745,7 +2739,7 @@ void VCAElFigure::getReq( SSess &ses )
                                 do
                                 {
                                     arc_pnt = Point( (int)TSYS::realRound( el_p3.x + rotate( arc( t_arc, arc_a_small, arc_b_small ), ang ).x, 2, true ),
-                                            (int)TSYS::realRound( el_p3.y - rotate( arc( t_arc, arc_a_small, arc_b_small ), ang ).y, 2, true ) );
+                                                     (int)TSYS::realRound( el_p3.y - rotate( arc( t_arc, arc_a_small, arc_b_small ), ang ).y, 2, true ) );
                                     if( ( ABS(arc_pnt.x - bezier_pnt_1.x) ) < 1 && ( ABS(arc_pnt.y - bezier_pnt_1.y) < 1 ) && !f_brk_1 )
                                     {
                                         new_pnt_1 = Point( arc_pnt.x, arc_pnt.y );
@@ -2774,7 +2768,7 @@ void VCAElFigure::getReq( SSess &ses )
                                 else delta_real = t_end - (t_end-t_start)/4 + scale;
                                 new_pnt = scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true );
                                 delta_point_1 = Point( (int)TSYS::realRound( el_p3.x + rotate( arc( delta_real, arc_a_small, arc_b_small ), ang ).x, 2, true ),
-                                        (int)TSYS::realRound( el_p3.y - rotate( arc( delta_real, arc_a_small, arc_b_small ), ang ).y, 2, true ) );
+                                                       (int)TSYS::realRound( el_p3.y - rotate( arc( delta_real, arc_a_small, arc_b_small ), ang ).y, 2, true ) );
                                 //--- bezier ---
                                 P1 = scaleRotate( (pnts)[shapeItems[fig[1]].n1], xSc, ySc, true, true );
                                 P2 = scaleRotate( (pnts)[shapeItems[fig[1]].n2], xSc, ySc, true, true );
@@ -2783,7 +2777,7 @@ void VCAElFigure::getReq( SSess &ses )
                                 if( num_pnt == shapeItems[fig[1]].n1 ) delta_real = 0.2 + scale;
                                 else delta_real = 0.8 - scale;
                                 delta_point_2 = Point( (int)TSYS::realRound (bezier( delta_real, P1, P3, P4, P2 ).x, 2, true ),
-                                        (int)TSYS::realRound( bezier( delta_real, P1, P3, P4, P2 ).y, 2, true ) );
+                                                       (int)TSYS::realRound( bezier( delta_real, P1, P3, P4, P2 ).y, 2, true ) );
                             }
                             else
                             {
@@ -2843,7 +2837,7 @@ void VCAElFigure::getReq( SSess &ses )
                                 if( num_pnt == shapeItems[fig[0]].n1 ) delta_real = t_start + (t_end-t_start)/4 + scale;
                                 else delta_real = t_end - (t_end-t_start)/4 + scale;
                                 delta_point_2 = Point( (int)TSYS::realRound( el_p3.x + rotate( arc( delta_real, arc_a_small, arc_b_small ), ang ).x, 2, true ),
-                                        (int)TSYS::realRound( el_p3.y - rotate( arc( delta_real, arc_a_small, arc_b_small ), ang ).y, 2, true ) );
+                                                       (int)TSYS::realRound( el_p3.y - rotate( arc( delta_real, arc_a_small, arc_b_small ), ang ).y, 2, true ) );
                             }
                         }
                         else
@@ -2855,12 +2849,12 @@ void VCAElFigure::getReq( SSess &ses )
                             else delta_real = t_end - (t_end-t_start)/4 + scale;
                             new_pnt = scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true );
                             delta_point_1 = Point( (int)TSYS::realRound( el_p3.x + rotate( arc( delta_real, arc_a, arc_b ), ang ).x, 2, true ),
-                                    (int)TSYS::realRound( el_p3.y - rotate( arc( delta_real, arc_a, arc_b ), ang ).y, 2, true ) );
+                                                   (int)TSYS::realRound( el_p3.y - rotate( arc( delta_real, arc_a, arc_b ), ang ).y, 2, true ) );
                             //--- bezier ---
                             if( num_pnt == shapeItems[fig[1]].n1 ) delta_real = 0.2 + scale;
                             else delta_real = 0.8 - scale;
                             delta_point_2 = Point( (int)TSYS::realRound( bezier( delta_real, P1, P3, P4, P2 ).x, 2, true ),
-                                    (int)TSYS::realRound( bezier( delta_real, P1, P3, P4, P2 ).y, 2, true ) );
+                                                   (int)TSYS::realRound( bezier( delta_real, P1, P3, P4, P2 ).y, 2, true ) );
                         }
                     }
                     //- bezier curve and bezier curve -
@@ -2907,11 +2901,11 @@ void VCAElFigure::getReq( SSess &ses )
                             if( shapeItems[fig[1]].width == 1 && shapeItems[fig[1]].border_width == 0 ) W2 = 0;
                             else W2 = (shapeItems[fig[1]].width)/2 + shapeItems[fig[1]].border_width;
                             double Len_1 = length( (pnts)[shapeItems[fig[0]].n1], (pnts)[shapeItems[fig[0]].n3] ) +
-                                        length( (pnts)[shapeItems[fig[0]].n3], (pnts)[shapeItems[fig[0]].n4] ) +
-                                        length( (pnts)[shapeItems[fig[0]].n4], (pnts)[shapeItems[fig[0]].n2] );
+                                           length( (pnts)[shapeItems[fig[0]].n3], (pnts)[shapeItems[fig[0]].n4] ) +
+                                           length( (pnts)[shapeItems[fig[0]].n4], (pnts)[shapeItems[fig[0]].n2] );
                             double Len_2 = length( (pnts)[shapeItems[fig[1]].n1], (pnts)[shapeItems[fig[1]].n3] ) +
-                                        length( (pnts)[shapeItems[fig[1]].n3], (pnts)[shapeItems[fig[1]].n4] ) +
-                                        length( (pnts)[shapeItems[fig[1]].n4], (pnts)[shapeItems[fig[1]].n2] );
+                                           length( (pnts)[shapeItems[fig[1]].n3], (pnts)[shapeItems[fig[1]].n4] ) +
+                                           length( (pnts)[shapeItems[fig[1]].n4], (pnts)[shapeItems[fig[1]].n2] );
                     
                             //--- bezier_1 ---
                             if( num_pnt == shapeItems[fig[0]].n1 )
@@ -3215,14 +3209,23 @@ void VCAElFigure::postReq( SSess &ses )
 	int x_coord = (prmEl!=ses.prm.end()) ? atoi(prmEl->second.c_str()) : -1;
 	prmEl = ses.prm.find("y");
 	int y_coord = (prmEl!=ses.prm.end()) ? atoi(prmEl->second.c_str()) : -1;
+	prmEl = ses.prm.find("key");
+	string key = (prmEl!=ses.prm.end()) ? prmEl->second : "";
 	if( x_coord < 0 || y_coord < 0 ) return;
+
 	int color = gdImageGetPixel( im, x_coord, y_coord );
-	//printf("The value of pixel is %d; RGB values are %d,%d,%d\n",
-           //color, im->red[color], im->green[color], im->blue[color]);
+	string sev;
 	for( int i=0; i < inundationItems.size(); i++ )
-	{
 	    if( inundationItems[i].index_color == color )
-	    printf("Fill number = %i\n", i);
+		sev="ws_Fig"+TSYS::int2str(i);
+	if( !sev.empty() )
+	{
+	    XMLNode req("set");
+	    req.setAttr("path",ses.url+"/%2fserv%2fattr");
+	    req.childAdd("el")->setAttr("id","event")->setText(sev+key);
+	    req.childAdd("el")->setAttr("id","event")->setText("ws_FocusIn");
+	    req.childAdd("el")->setAttr("id","focus")->setText("1");
+	    mod->cntrIfCmd(req,ses.user);
 	}
     }
 }
@@ -3928,8 +3931,7 @@ void VCADiagram::postReq( SSess &ses )
 	int x_coord = (prmEl!=ses.prm.end()) ? atoi(prmEl->second.c_str()) : 0;
 	prmEl = ses.prm.find("y");
 	int y_coord = (prmEl!=ses.prm.end()) ? atoi(prmEl->second.c_str()) : 0;
-	prmEl = ses.prm.find("key");
-	string key = (prmEl!=ses.prm.end()) ? prmEl->second : "";
+
 	if( x_coord >= tArX && x_coord <= tArX+tArW )
 	{
 	    long long tTimeGrnd = tPict - (long long)(tSize*1000000.);
