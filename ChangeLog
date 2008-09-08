@@ -4,6 +4,8 @@
 
 2008-09-08 Roman
 - !:/UI/WebVision: Cursor set to primitive Diagramm is added.
+- !!:/UI/WebVision: Force focus support is added.
+- FIX:/UI/WebVision: No full updation after page getting from cache is fixed.
 
 
 2008-09-07 Roman
