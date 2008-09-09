@@ -1,3 +1,7 @@
+2008-09-09 Maxim
+- FIX:/UI/WebVision: Drawing of the borders of the figure is fixed for primitive ElFigure.
+
+
 2008-09-08 Maxim
 - !:/UI/WebVision: Focus and events process is added to primitive ElFigure.
 
