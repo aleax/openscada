@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Special.FLibSYS file: statfunc.h
 /***************************************************************************
- *   Copyright (C) 2005-2007 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -45,35 +45,35 @@ class Lib : public TSpecial
 	//Methods
 	Lib( string src );
 	~Lib( );
-	
+
 	void modStart( );
-        void modStop( );		
-	
+	void modStop( );
+
 	void list( vector<string> &ls ) 	{ chldList(m_fnc,ls); }
 	bool present( const string &id )	{ return chldPresent(m_fnc,id); }
 	AutoHD<TFunction> at( const string &id )	{ return chldAt(m_fnc,id); }
 	void reg( TFunction *fnc )		{ chldAdd(m_fnc,fnc); }
-        void unreg( const char *id )		{ chldDel(m_fnc,id); }
-	
+	void unreg( const char *id )		{ chldDel(m_fnc,id); }
+
 	//- Value archives and buffers access methods -
 	int varchOpen( const string &inm );
-	int varchBufOpen( TFld::Type vtp, int isz, int ipr, bool ihgrd, bool ihres );	
+	int varchBufOpen( TFld::Type vtp, int isz, int ipr, bool ihgrd, bool ihres );
 	void varchClose( int id );
 	bool isArch( int id );
 	AutoHD<TVArchive> varch( int id );
 	TValBuf *vbuf( int id );
 	void varchFree( );
-	
+
     private:
 	//Methods
 	void postEnable( int flag );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-	
-	//Attributes    
-	int  m_fnc;
-	
+
+	//Attributes
+	int	m_fnc;
+
 	//- Value archive resources -
-	Res varch_res;	
+	Res	varch_res;
 	struct SVarch
 	{
 	    bool isArch;
@@ -83,7 +83,7 @@ class Lib : public TSpecial
 		TValBuf	*buf;
 	    };
 	};
-	
+
 	vector<SVarch>	varch_lst;
 };
 
@@ -92,4 +92,3 @@ extern Lib *mod;
 } //End namespace FLibSYS
 
 #endif //STATFUNC_H
-

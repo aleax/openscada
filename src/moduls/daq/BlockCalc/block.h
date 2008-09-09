@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.BlockCalc file: block.h
 /***************************************************************************
- *   Copyright (C) 2005-2007 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -42,8 +42,8 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 {
     public:
 	//Data
-	//- Link types:	-
-	// DIS	 - Disable IO
+	//- Link types: -
+	// DIS   - Disable IO
 	// FREE  - Free link or constant
 	// I_LOC - Input interblocks local link
 	// I_GLB - Input interblocks global link

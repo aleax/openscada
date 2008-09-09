@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.JavaLikeCalc file: virtual.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2007 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -38,7 +38,7 @@
 #define MOD_TYPE	"DAQ"
 #define VER_TYPE	VER_SPC
 #define SUB_TYPE	"LIB"
-#define VERSION		"1.0.1"
+#define VERSION		"1.2.0"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow java-like based calculator and function's libraries engine. User can create and modify function and libraries."
 #define LICENSE		"GPL"

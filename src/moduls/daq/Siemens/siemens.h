@@ -90,7 +90,7 @@ class TMdPrm : public TParamContr, public TValFunc
 		int	io_id;		//Template function io index
 		string	db_addr;	//DB full address: DB1.20.1
 		SValData val;		//Value address data
-        };
+	};
 
 	//Methods
 	TMdPrm( string name, TTipParam *tp_prm );

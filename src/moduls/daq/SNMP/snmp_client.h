@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.SNMP file: snmp_client.h
 /***************************************************************************
- *   Copyright (C) 2006-2007 by Roman Savochenko                           *
+ *   Copyright (C) 2006-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -18,7 +18,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
- 
+
 #ifndef SNMP_DAQ_H
 #define SNMP_DAQ_H
 
@@ -71,7 +71,7 @@ class TMdPrm : public TParamContr
 
 	void parseOIDList( const string &ioid );
 
-        //Attributes
+	//Attributes
 	string	&m_oid;			//Gaher OID list. Single text
 	vector<string>	ls_oid;		//Parsed IOD list.
 

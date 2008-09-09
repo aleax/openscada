@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Protocol.SelfSystem file: self.cpp
 /***************************************************************************
- *   Copyright (C) 2007 by Roman Savochenko                                *
+ *   Copyright (C) 2007-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -34,7 +34,7 @@
 #define MOD_NAME	"Self system OpenSCADA protocol"
 #define MOD_TYPE	"Protocol"
 #define VER_TYPE	VER_PROT
-#define VERSION		"0.7.0"
+#define VERSION		"0.8.0"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Self OpenSCADA protocol, support generic functions."
 #define LICENSE		"GPL"

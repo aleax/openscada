@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Special.SystemTests file: test_kernel.h
 /***************************************************************************
- *   Copyright (C) 2003-2007 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -43,7 +43,7 @@ class TTest: public TSpecial
 	void modStop( );
 
     protected:
-	void load_( );	
+	void load_( );
 
     private:
 	//Methods
@@ -54,13 +54,13 @@ class TTest: public TSpecial
 
 	static void *Task(void *);
 	void Test( const string &id, XMLNode *t_n );
-	    
+
 	//Attributes
 	pthread_t pthr_tsk;
 
-	bool      endrun;	   // Stop pthread command     	
+	bool	endrun;		// Stop pthread command
 };
-    
+
 extern TTest *mod;
 }
 

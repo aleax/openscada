@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Archive.DBArch file: arch.cpp
 /***************************************************************************
- *   Copyright (C) 2007 by Roman Savochenko                                *
+ *   Copyright (C) 2007-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -36,7 +36,7 @@
 #define MOD_NAME	"To DB archivator"
 #define MOD_TYPE	"Archive"
 #define VER_TYPE	VER_ARH
-#define VERSION		"0.6.0"
+#define VERSION		"0.7.0"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"The Archive module. Allow functions for messages and values arhiving to DB."
 #define LICENSE		"GPL"

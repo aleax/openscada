@@ -7,9 +7,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Special.FLibMath 0.5.0\n"
+"Project-Id-Version: OpenSCADA.Special.FLibMath 0.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-24 18:10+0300\n"
+"POT-Creation-Date: 2008-09-09 19:54+0300\n"
 "PO-Revision-Date: 2007-10-24 18:10+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -33,7 +33,7 @@ msgid "LIB"
 msgstr ""
 
 #: statfunc.cpp:35
-msgid "0.5.0"
+msgid "0.5.1"
 msgstr ""
 
 #: statfunc.cpp:40
@@ -64,7 +64,7 @@ msgstr ""
 msgid "grp"
 msgstr ""
 
-#: statfunc.cpp:135
+#: statfunc.cpp:135 statfunc.cpp:142
 msgid "/br/fnc_"
 msgstr ""
 
@@ -77,10 +77,18 @@ msgid "root"
 msgstr ""
 
 #: statfunc.cpp:135 statfunc.cpp:136
+msgid "idm"
+msgstr ""
+
+#: statfunc.cpp:135 statfunc.cpp:136 stdmath.h:449
+msgid "1"
+msgstr ""
+
+#: statfunc.cpp:136
 msgid "list"
 msgstr ""
 
-#: statfunc.cpp:135 statfunc.cpp:136 statfunc.cpp:142
+#: statfunc.cpp:136 statfunc.cpp:142
 msgid "/prm/func"
 msgstr ""
 
@@ -94,14 +102,6 @@ msgstr ""
 
 #: statfunc.cpp:136
 msgid "br"
-msgstr ""
-
-#: statfunc.cpp:136
-msgid "idm"
-msgstr ""
-
-#: statfunc.cpp:136 stdmath.h:449
-msgid "1"
 msgstr ""
 
 #: statfunc.cpp:136

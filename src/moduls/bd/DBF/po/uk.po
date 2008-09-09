@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: dbf_mod.cpp:55
+#: dbf_mod.cpp:56
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DB.DBF 1.8.1\n"
+"Project-Id-Version: OpenSCADA.DB.DBF 1.9.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-02 11:07+0300\n"
+"POT-Creation-Date: 2008-09-09 12:09+0300\n"
 "PO-Revision-Date: 2007-10-23 12:09+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -24,39 +24,39 @@ msgstr ""
 msgid ""
 msgstr ""
 
-#: dbf_mod.cpp:38
+#: dbf_mod.cpp:39
 msgid "DBF"
 msgstr ""
 
-#: dbf_mod.cpp:39
+#: dbf_mod.cpp:40
 msgid "DB DBF"
 msgstr "БД DBF"
 
-#: dbf_mod.cpp:40
+#: dbf_mod.cpp:41 dbf_mod.cpp:202
 msgid "BD"
 msgstr "БД"
 
-#: dbf_mod.cpp:42
-msgid "1.8.1"
+#: dbf_mod.cpp:43
+msgid "1.9.0"
 msgstr ""
 
-#: dbf_mod.cpp:43
+#: dbf_mod.cpp:44
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-#: dbf_mod.cpp:44
+#: dbf_mod.cpp:45
 msgid "BD modul. Allow support of the *.dbf files, version 3.0."
 msgstr "Модуль БД. Надає підтримку *.dbf файлів, версії 3.0."
 
-#: dbf_mod.cpp:45
+#: dbf_mod.cpp:46
 msgid "GPL"
 msgstr ""
 
-#: dbf_mod.cpp:50
+#: dbf_mod.cpp:51
 msgid "C"
 msgstr ""
 
-#: dbf_mod.cpp:100
+#: dbf_mod.cpp:101
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
@@ -67,78 +67,78 @@ msgstr ""
 "-------- Параметри модульної секції <%s> у конфігураційному файлі --------\n"
 "\n"
 
-#: dbf_mod.cpp:111
+#: dbf_mod.cpp:112
 msgid "h"
 msgstr ""
 
-#: dbf_mod.cpp:114 dbf_mod.cpp:204
+#: dbf_mod.cpp:115 dbf_mod.cpp:203
 msgid "help"
 msgstr ""
 
-#: dbf_mod.cpp:152
+#: dbf_mod.cpp:153
 msgid "Delete DB error!"
 msgstr "Помилка видалення БД!"
 
-#: dbf_mod.cpp:161
+#: dbf_mod.cpp:162
 #, c-format
 msgid "Error create DB directory <%s>!"
 msgstr "Помилка створення директорії БД <%s>!"
 
-#: dbf_mod.cpp:162
+#: dbf_mod.cpp:163
 msgid "Restore previous directory as curent is error."
 msgstr "Помилка відновлення минулої директорії як поточну."
 
-#: dbf_mod.cpp:179
+#: dbf_mod.cpp:180
 msgid ".."
 msgstr ""
 
-#: dbf_mod.cpp:179 dbf_mod.cpp:180 dbf_mod.cpp:183
+#: dbf_mod.cpp:180 dbf_mod.cpp:181 dbf_mod.cpp:184
 msgid "."
 msgstr ""
 
-#: dbf_mod.cpp:180 dbf_mod.cpp:222 dbf_mod.cpp:223 dbf_mod.cpp:249
-#: dbf_mod.cpp:250
+#: dbf_mod.cpp:181 dbf_mod.cpp:221 dbf_mod.cpp:222 dbf_mod.cpp:248
+#: dbf_mod.cpp:249
 msgid ".dbf"
 msgstr ""
 
-#: dbf_mod.cpp:181 dbf_mod.cpp:252
+#: dbf_mod.cpp:182 dbf_mod.cpp:251
 msgid "/"
 msgstr ""
 
-#: dbf_mod.cpp:191
+#: dbf_mod.cpp:192
 #, c-format
 msgid "Error open table <%s>. DB disabled."
 msgstr "Помилка відкриття таблиці <%s>. БД вимкнено."
 
-#: dbf_mod.cpp:200
+#: dbf_mod.cpp:199
 msgid "info"
 msgstr ""
 
-#: dbf_mod.cpp:203
+#: dbf_mod.cpp:202
 msgid "fld"
 msgstr ""
 
-#: dbf_mod.cpp:203
+#: dbf_mod.cpp:202
 msgid "/prm/cfg/addr"
 msgstr ""
 
-#: dbf_mod.cpp:203
+#: dbf_mod.cpp:202
 msgid "ADDR"
 msgstr ""
 
-#: dbf_mod.cpp:203
+#: dbf_mod.cpp:202
 msgid "root"
 msgstr ""
 
-#: dbf_mod.cpp:204
+#: dbf_mod.cpp:203
 msgid "tp"
 msgstr ""
 
-#: dbf_mod.cpp:204
+#: dbf_mod.cpp:203
 msgid "str"
 msgstr ""
 
-#: dbf_mod.cpp:205
+#: dbf_mod.cpp:204
 msgid ""
 "For DBF address DB is directory which contain files of tables (*.dbf).\n"
 "For example: /opt/dbf ."
@@ -146,49 +146,49 @@ msgstr ""
 "Для DBF адреса БД це директорія, яка містить файли таблиць (*.dbf).\n"
 "Наприклад: /opt/dbf ."
 
-#: dbf_mod.cpp:232
+#: dbf_mod.cpp:231
 msgid "Open table error!"
 msgstr "Помилка відкриття таблиці!"
 
-#: dbf_mod.cpp:253
+#: dbf_mod.cpp:252
 #, c-format
 msgid "%s"
 msgstr ""
 
-#: dbf_mod.cpp:284 dbf_mod.cpp:337 dbf_mod.cpp:458 dbf_mod.cpp:517
+#: dbf_mod.cpp:283 dbf_mod.cpp:336 dbf_mod.cpp:457 dbf_mod.cpp:516
 msgid "Cell error!"
 msgstr "Помилка чарунки!"
 
-#: dbf_mod.cpp:317 dbf_mod.cpp:480
+#: dbf_mod.cpp:316 dbf_mod.cpp:479
 msgid "Field no present!"
 msgstr "Поле відсутне!"
 
-#: dbf_mod.cpp:386 dbf_mod.cpp:412
+#: dbf_mod.cpp:385 dbf_mod.cpp:411
 msgid "Column error!"
 msgstr "Помилка стовпчику!"
 
-#: dbf_mod.cpp:424
+#: dbf_mod.cpp:423
 msgid "Delete field error!"
 msgstr "Помилка видалення поля!"
 
-#: dbf_mod.cpp:449
+#: dbf_mod.cpp:448
 #, c-format
 msgid "%*.*f"
 msgstr ""
 
-#: dbf_mod.cpp:453
+#: dbf_mod.cpp:452
 msgid "T"
 msgstr ""
 
-#: dbf_mod.cpp:453
+#: dbf_mod.cpp:452
 msgid "F"
 msgstr ""
 
-#: dbf_mod.cpp:475
+#: dbf_mod.cpp:474
 msgid "Line error!"
 msgstr "Помилка лінії!"
 
-#: dbf_mod.cpp:513
+#: dbf_mod.cpp:512
 #, c-format
 msgid "Key column <%s> no present!"
 msgstr "Ключовий стовпчик <%s> відсутнії!"

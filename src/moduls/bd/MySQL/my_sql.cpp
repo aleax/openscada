@@ -1,7 +1,7 @@
 
 //OpenSCADA system module BD.MySQL file: my_sql.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2007 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -31,14 +31,14 @@
 
 //************************************************
 //* Modul info!                                  *
-#define MOD_ID      "MySQL"
-#define MOD_NAME    "DB MySQL"
-#define MOD_TYPE    "BD"
-#define VER_TYPE    VER_BD
-#define VERSION     "1.3.1"
-#define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "BD modul. Allow support of the BD MySQL."
-#define MOD_LICENSE "GPL"
+#define MOD_ID		"MySQL"
+#define MOD_NAME	"DB MySQL"
+#define MOD_TYPE	"BD"
+#define VER_TYPE	VER_BD
+#define VERSION		"1.4.0"
+#define AUTORS		"Roman Savochenko"
+#define DESCRIPTION	"BD modul. Allow support of the BD MySQL."
+#define MOD_LICENSE	"GPL"
 //************************************************
 
 BDMySQL::BDMod *BDMySQL::mod;
@@ -627,7 +627,7 @@ void MTable::fieldFix( TConfig &cfg )
 		    f_tp = "double("+TSYS::int2str(vmax(3,u_cfg.fld().len()))+","+TSYS::int2str(vmax(2,u_cfg.fld().dec()))+")";
 		    break;
 		case TFld::Boolean:
- 		    f_tp = "tinyint(1)";
+		    f_tp = "tinyint(1)";
 		    break;
 	    }
 	    if( tblStrct[i_fld][1] == f_tp )	continue;

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.DiamondBoards file: diamond.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2007 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -39,7 +39,7 @@
 #define MOD_NAME	"Diamond DA boards"
 #define MOD_TYPE	"DAQ"
 #define VER_TYPE	VER_CNTR
-#define VERSION		"1.0.1"
+#define VERSION		"1.1.0"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow access to Diamond systems DA boards. Include support of Athena board."
 #define LICENSE		"GPL"

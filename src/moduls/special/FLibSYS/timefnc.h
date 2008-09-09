@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Special.FLibSYS file: timefnc.h
 /***************************************************************************
- *   Copyright (C) 2005-2007 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -49,7 +49,7 @@ class tmDate : public TFunction
 	    ioAdd( new IO("yday",_("Day of the year"),IO::Integer,IO::Output,"0") );
 	    ioAdd( new IO("isdst",_("Daylight saving time"),IO::Integer,IO::Output,"0") );
 	}
-	
+
 	string name( )	{ return _("Time: Date"); }
 	string descr( )	{ return _("Full date."); }
 
@@ -57,7 +57,7 @@ class tmDate : public TFunction
 	{
 	    time_t tm_t = val->getI(0);
 	    struct tm *tm_tm = localtime(&tm_t);
-	    
+
 	    val->setI(1,tm_tm->tm_sec);
 	    val->setI(2,tm_tm->tm_min);
 	    val->setI(3,tm_tm->tm_hour);
@@ -80,7 +80,7 @@ class tmTime : public TFunction
 	{
 	    ioAdd( new IO("sec",_("Seconds"),IO::Integer,IO::Return,"0") );
 	}
-	
+
 	string name( )	{ return _("Time: Time"); }
 	string descr( )	{ return _("Full time (since 01.01.1970)."); }
 
@@ -101,7 +101,7 @@ class tmCtime : public TFunction
 	    ioAdd( new IO("val",_("Full string date"),IO::String,IO::Return,"") );
 	    ioAdd( new IO("sec",_("Seconds"),IO::Integer,IO::Default,"0") );
 	}
-	
+
 	string name( )	{ return _("Time: String time"); }
 	string descr( )	{ return _("Full string time."); }
 
@@ -124,7 +124,7 @@ class tmStr2Tm : public TFunction
 	    ioAdd( new IO("str",_("Date string"),IO::String,IO::Default,"") );
 	    ioAdd( new IO("form",_("Date format"),IO::String,IO::Default,"%Y-%m-%d %H:%M:%S") );
 	}
-	
+
 	string name( )	{ return _("Time: String to time"); }
 	string descr( )	{ return _("Convert a string representation of time to a time."); }
 

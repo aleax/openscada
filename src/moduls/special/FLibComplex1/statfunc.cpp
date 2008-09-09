@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Special.FLibComplex1 file: statfunc.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2007 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -27,12 +27,12 @@
 
 //*************************************************
 //* Modul info!                                   *
-#define MOD_ID      "FLibComplex1"
-#define MOD_NAME    "Complex1 function's lib"
-#define MOD_TYPE    "Special"
-#define VER_TYPE    VER_SPC
-#define SUB_TYPE    "LIB"
-#define VERSION     "1.0.1"
+#define MOD_ID		"FLibComplex1"
+#define MOD_NAME	"Complex1 function's lib"
+#define MOD_TYPE	"Special"
+#define VER_TYPE	VER_SPC
+#define SUB_TYPE	"LIB"
+#define VERSION		"1.0.2"
 //*************************************************
 
 FLibComplex1::Lib *FLibComplex1::mod;
@@ -47,7 +47,7 @@ extern "C"
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-    	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
+	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
 	    return new FLibComplex1::Lib( source );
 	return NULL;
     }
@@ -59,19 +59,19 @@ using namespace FLibComplex1;
 //* Lib: Complex1 functions library               *
 //*************************************************
 Lib::Lib( string src )
-{    
+{
     //- Set modul info! -
-    mId 	= MOD_ID;
-    mName       = MOD_NAME;
-    mType  	= MOD_TYPE;
-    mVers      	= VERSION;
-    mAutor    	= "Roman Savochenko";
-    mDescr  	= "Allow static function library Complex1 (SCADA Complex1 functions).";
-    mLicense   	= "GPL";
-    mSource    	= src;
-    
+    mId		= MOD_ID;
+    mName	= MOD_NAME;
+    mType	= MOD_TYPE;
+    mVers	= VERSION;
+    mAutor	= "Roman Savochenko";
+    mDescr	= "Allow static function library Complex1 (SCADA Complex1 functions).";
+    mLicense	= "GPL";
+    mSource	= src;
+
     mod		= this;
-    
+
     m_fnc = grpAdd("fnc_");
 }
 
@@ -83,9 +83,9 @@ Lib::~Lib( )
 void Lib::postEnable( int flag )
 {
     TModule::postEnable( flag );
-    
+
     if( flag&TCntrNode::NodeRestore )	return;
-    
+
     //- Reg functions -
     reg( new DigitBlock() );
     reg( new Sum() );
@@ -104,7 +104,7 @@ void Lib::postEnable( int flag )
     reg( new Flow() );
     reg( new SumMult() );
     reg( new SumDiv() );
-    reg( new Lag() );    
+    reg( new Lag() );
 }
 
 void Lib::modStart( )
@@ -112,16 +112,16 @@ void Lib::modStart( )
     vector<string> lst;
     list(lst);
     for( int i_l = 0; i_l < lst.size(); i_l++ )
-        at(lst[i_l]).at().setStart(true);
+	at(lst[i_l]).at().setStart(true);
     run_st = true;
 }
-	    
+
 void Lib::modStop( )
 {
     vector<string> lst;
     list(lst);
     for( int i_l = 0; i_l < lst.size(); i_l++ )
-        at(lst[i_l]).at().setStart(false);
+	at(lst[i_l]).at().setStart(false);
     run_st = false;
 }
 
@@ -130,19 +130,19 @@ void Lib::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
-        TSpecial::cntrCmdProc(opt);
+	TSpecial::cntrCmdProc(opt);
 	ctrMkNode("grp",opt,-1,"/br/fnc_",_("Function"),0444,"root","root",1,"idm","1");
-        ctrMkNode("list",opt,-1,"/prm/func",_("Functions"),0444,"root","root",3,"tp","br","idm","1","br_pref","fnc_");	
+	ctrMkNode("list",opt,-1,"/prm/func",_("Functions"),0444,"root","root",3,"tp","br","idm","1","br_pref","fnc_");
 	return;
     }
     //- Process command to page -
     string a_path = opt->attr("path");
     if( (a_path == "/br/fnc_" || a_path == "/prm/func") && ctrChkNode(opt) )
     {
-        vector<string> lst;
-        list(lst);
-        for( unsigned i_f=0; i_f < lst.size(); i_f++ )
-            opt->childAdd("el")->setAttr("id",lst[i_f])->setText(at(lst[i_f]).at().name());
+	vector<string> lst;
+	list(lst);
+	for( unsigned i_f=0; i_f < lst.size(); i_f++ )
+	    opt->childAdd("el")->setAttr("id",lst[i_f])->setText(at(lst[i_f]).at().name());
     }
     else TSpecial::cntrCmdProc(opt);
 }

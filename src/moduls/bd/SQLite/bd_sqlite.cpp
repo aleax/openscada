@@ -1,7 +1,7 @@
 
 //OpenSCADA system module BD.SQLite file: bd_sqlite.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2007 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -31,14 +31,14 @@
 
 //******************************************************************************
 //* Modul info!                                                                *
-#define MOD_ID      "SQLite"
-#define MOD_NAME    "DB SQLite"
-#define MOD_TYPE    "BD"
-#define VER_TYPE    VER_BD
-#define VERSION     "1.3.1"
-#define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "BD modul. Allow support of the BD SQLite."
-#define LICENSE     "GPL"
+#define MOD_ID		"SQLite"
+#define MOD_NAME	"DB SQLite"
+#define MOD_TYPE	"BD"
+#define VER_TYPE	VER_BD
+#define VERSION		"1.4.0"
+#define AUTORS		"Roman Savochenko"
+#define DESCRIPTION	"BD modul. Allow support of the BD SQLite."
+#define LICENSE		"GPL"
 //******************************************************************************
 
 BDSQLite::BDMod *BDSQLite::mod;
@@ -197,13 +197,13 @@ void MBD::allowList( vector<string> &list )
     vector< vector<string> > tbl;
     sqlReq("SELECT name FROM sqlite_master WHERE type IN ('table','view') AND name NOT LIKE 'sqlite_%';",&tbl);
     for( int i_t = 1; i_t < tbl.size(); i_t++ )
-            list.push_back(tbl[i_t][0]);
+	list.push_back(tbl[i_t][0]);
 }
 
 TTable *MBD::openTable( const string &inm, bool create )
 {
     if( !enableStat() )
-        throw TError(TSYS::DBOpenTable,nodePath().c_str(),_("Error open table <%s>. DB disabled."),inm.c_str());
+	throw TError(TSYS::DBOpenTable,nodePath().c_str(),_("Error open table <%s>. DB disabled."),inm.c_str());
 
     return new MTable(inm,this,create);
 }
@@ -265,7 +265,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
     {
 	TBD::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","BD",2,
-	            "tp","str","help",
+		    "tp","str","help",
 		    _("SQLite DB address writet as: [<FileDBPath>;<nTransReq>].\n"
 		      "Where:\n"
 		      "  FileDBPath - full path to DB file (./oscada/Main.db);\n"

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Transport.Sockets file: socket.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2007 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -45,7 +45,7 @@
 #define MOD_NAME	"Sockets"
 #define MOD_TYPE	"Transport"
 #define VER_TYPE	VER_TR
-#define VERSION		"1.3.1"
+#define VERSION		"1.3.5"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow sockets based transport. Support inet and unix sockets. Inet socket use TCP and UDP protocols."
 #define LICENSE		"GPL"

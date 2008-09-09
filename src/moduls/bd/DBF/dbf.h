@@ -1,7 +1,7 @@
 
 //OpenSCADA system module BD.DBF file: dbf.h
 /***************************************************************************
- *   Copyright (C) 2001-2007 by Roman Savochenko                           *
+ *   Copyright (C) 2001-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -58,35 +58,35 @@ struct db_str_rec
 class TBasaDBF
 {
     public:
-        //Methods
-        TBasaDBF(  );
-        ~TBasaDBF(  );
+	//Methods
+	TBasaDBF(  );
+	~TBasaDBF(  );
 
-        int LoadFields( db_str_rec * fields, int number );
-        int addField( int pos, db_str_rec * field_ptr );
-        int DelField( int pos );
-        int DelField( char *NameField );
-        db_str_rec *getField( int posField );
-        db_str_rec *getField( char *NameField );
-        int setField( int posField, db_str_rec *attr );
-        int setField( char *NameField, db_str_rec *attr );
-        int CreateItems( int pos );
-        int DeleteItems( int pos, int fr );
-        void *getItem( int posItem );
-        void AddItem( int posItem, void *it );
-        int ModifiFieldIt( int posItems, int posField, const char *str );
-        int ModifiFieldIt( int posItems, char *NameField, const char *str );
-        int GetFieldIt( int posItems, int posField, string & str );
-        int GetFieldIt( int posItems, char *NameField, string & str );
-        int GetCountItems(  );
-        int SaveFile( char *Name );
-        int LoadFile( char *Name );
-        
+	int LoadFields( db_str_rec * fields, int number );
+	int addField( int pos, db_str_rec * field_ptr );
+	int DelField( int pos );
+	int DelField( char *NameField );
+	db_str_rec *getField( int posField );
+	db_str_rec *getField( char *NameField );
+	int setField( int posField, db_str_rec *attr );
+	int setField( char *NameField, db_str_rec *attr );
+	int CreateItems( int pos );
+	int DeleteItems( int pos, int fr );
+	void *getItem( int posItem );
+	void AddItem( int posItem, void *it );
+	int ModifiFieldIt( int posItems, int posField, const char *str );
+	int ModifiFieldIt( int posItems, char *NameField, const char *str );
+	int GetFieldIt( int posItems, int posField, string & str );
+	int GetFieldIt( int posItems, char *NameField, string & str );
+	int GetCountItems(  );
+	int SaveFile( char *Name );
+	int LoadFile( char *Name );
+
     protected:
 	//Attributes
-        db_head * db_head_ptr;      //pointer to header
-        db_str_rec *db_field_ptr;   //pointer to db fields
-        void **items;               //records
+	db_head * db_head_ptr;		//pointer to header
+	db_str_rec *db_field_ptr;	//pointer to db fields
+	void **items;			//records
 };
 
 #endif // DBF_H

@@ -7,9 +7,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Special.FLibSYS 0.6.0\n"
+"Project-Id-Version: OpenSCADA.Special.FLibSYS 0.6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-28 17:48+0200\n"
+"POT-Creation-Date: 2008-09-09 20:06+0300\n"
 "PO-Revision-Date: 2007-10-24 18:37+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -47,7 +47,7 @@ msgid "LIB"
 msgstr ""
 
 #: statfunc.cpp:39
-msgid "0.6.0"
+msgid "0.6.1"
 msgstr ""
 
 #: statfunc.cpp:44
@@ -66,7 +66,7 @@ msgstr ""
 msgid "grp"
 msgstr ""
 
-#: statfunc.cpp:250
+#: statfunc.cpp:250 statfunc.cpp:256
 msgid "/br/fnc_"
 msgstr ""
 
@@ -79,10 +79,18 @@ msgid "root"
 msgstr ""
 
 #: statfunc.cpp:250 statfunc.cpp:251
+msgid "idm"
+msgstr ""
+
+#: statfunc.cpp:250 statfunc.cpp:251 sysfnc.h:217
+msgid "1"
+msgstr ""
+
+#: statfunc.cpp:251
 msgid "list"
 msgstr ""
 
-#: statfunc.cpp:250 statfunc.cpp:251 statfunc.cpp:256
+#: statfunc.cpp:251 statfunc.cpp:256
 msgid "/prm/func"
 msgstr ""
 
@@ -96,14 +104,6 @@ msgstr ""
 
 #: statfunc.cpp:251
 msgid "br"
-msgstr ""
-
-#: statfunc.cpp:251
-msgid "idm"
-msgstr ""
-
-#: statfunc.cpp:251 sysfnc.h:217
-msgid "1"
 msgstr ""
 
 #: statfunc.cpp:251

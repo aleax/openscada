@@ -1,7 +1,7 @@
 
 //OpenSCADA system module BD.FireBird file: firebird.cpp
 /***************************************************************************
- *   Copyright (C) 2007 by Roman Savochenko                                *
+ *   Copyright (C) 2007-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -29,14 +29,14 @@
 
 //******************************************************************************
 //* Modul info!                                                                *
-#define MOD_ID      "FireBird"
-#define MOD_NAME    "DB FireBird"
-#define MOD_TYPE    "BD"
-#define VER_TYPE    VER_BD
-#define VERSION     "0.7.0"
-#define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "DB modul. Allow support of the DB FireBird."
-#define LICENSE     "GPL"
+#define MOD_ID		"FireBird"
+#define MOD_NAME	"DB FireBird"
+#define MOD_TYPE	"BD"
+#define VER_TYPE	VER_BD
+#define VERSION		"0.8.0"
+#define AUTORS		"Roman Savochenko"
+#define DESCRIPTION	"DB modul. Allow support of the DB FireBird."
+#define LICENSE		"GPL"
 //******************************************************************************
 
 FireBird::BDMod *FireBird::mod;
@@ -225,7 +225,7 @@ void MBD::allowList( vector<string> &list )
 TTable *MBD::openTable( const string &inm, bool create )
 {
     if( !enableStat() )
-        throw TError(TSYS::DBOpenTable,nodePath().c_str(),_("Error open table <%s>. DB disabled."),inm.c_str());
+	throw TError(TSYS::DBOpenTable,nodePath().c_str(),_("Error open table <%s>. DB disabled."),inm.c_str());
 
     return new MTable(inm,this,create);
 }
@@ -328,7 +328,7 @@ void MBD::sqlReq( isc_tr_handle *itrans, const string &ireq, vector< vector<stri
 		off += sizeof(short);
 	    }
 	}
-	
+
 	//-- Get data --
 	if( isc_dsql_execute(status, &trans, &stmt, 1, NULL) )
 	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("DSQL execute error: %s"),getErr(status).c_str());
@@ -340,14 +340,14 @@ void MBD::sqlReq( isc_tr_handle *itrans, const string &ireq, vector< vector<stri
 	    long  fetch_stat;
 	    while( (fetch_stat = isc_dsql_fetch(status, &stmt, 1, out_sqlda)) == 0 )
 	    {
-	        //-- Add head --
+		//-- Add head --
 		if( row.empty() )
 		{
 		    for( int i = 0; i < out_sqlda->sqld; i++ )
 			row.push_back(out_sqlda->sqlvar[i].sqlname);
 		    tbl->push_back(row);
 		}
-	        //-- Add row --
+		//-- Add row --
 		row.clear();
 		for( int i = 0; i < out_sqlda->sqld; i++ )
 		{
@@ -448,7 +448,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
 	      "  file - full DB file;\n"
 	      "  user - DB user;\n"
 	      "  pass - password of DB user."));
-        return;
+	return;
     }
     TBD::cntrCmdProc(opt);
 }

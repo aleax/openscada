@@ -3,83 +3,83 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: test_kernel.cpp:54 test_kernel.cpp:425 test_kernel.cpp:929
-#: test_kernel.cpp:935 test_kernel.cpp:938 test_kernel.cpp:942
-#: test_kernel.cpp:945 test_kernel.cpp:961 test_kernel.cpp:966
-#: test_kernel.cpp:981 test_kernel.cpp:989 test_kernel.cpp:995
-#: test_kernel.cpp:1021 test_kernel.cpp:1026 test_kernel.cpp:1041
-#: test_kernel.cpp:1049 test_kernel.cpp:1055 test_kernel.cpp:1081
-#: test_kernel.cpp:1086 test_kernel.cpp:1102 test_kernel.cpp:1111
-#: test_kernel.cpp:1117 test_kernel.cpp:1143 test_kernel.cpp:1148
-#: test_kernel.cpp:1164 test_kernel.cpp:1173 test_kernel.cpp:1179
-#: test_kernel.cpp:1205 test_kernel.cpp:1210 test_kernel.cpp:1226
-#: test_kernel.cpp:1235 test_kernel.cpp:1241 test_kernel.cpp:1267
-#: test_kernel.cpp:1272 test_kernel.cpp:1288 test_kernel.cpp:1297
-#: test_kernel.cpp:1303 test_kernel.cpp:1330 test_kernel.cpp:1334
-#: test_kernel.cpp:1349 test_kernel.cpp:1357 test_kernel.cpp:1363
-#: test_kernel.cpp:1390 test_kernel.cpp:1394 test_kernel.cpp:1409
-#: test_kernel.cpp:1415 test_kernel.cpp:1421 test_kernel.cpp:1448
-#: test_kernel.cpp:1452 test_kernel.cpp:1467 test_kernel.cpp:1473
-#: test_kernel.cpp:1479 test_kernel.cpp:1506 test_kernel.cpp:1510
-#: test_kernel.cpp:1525 test_kernel.cpp:1531 test_kernel.cpp:1537
-#: test_kernel.cpp:1572 test_kernel.cpp:1579 test_kernel.cpp:1586
-#: test_kernel.cpp:1593 test_kernel.cpp:1600 test_kernel.cpp:1607
-#: test_kernel.cpp:1614 test_kernel.cpp:1621 test_kernel.cpp:1628
-#: test_kernel.cpp:1636 test_kernel.cpp:1643 test_kernel.cpp:1651
-#: test_kernel.cpp:1658 test_kernel.cpp:1665 test_kernel.cpp:1705
+#: test_kernel.cpp:55 test_kernel.cpp:929 test_kernel.cpp:935
+#: test_kernel.cpp:938 test_kernel.cpp:942 test_kernel.cpp:945
+#: test_kernel.cpp:961 test_kernel.cpp:966 test_kernel.cpp:981
+#: test_kernel.cpp:989 test_kernel.cpp:995 test_kernel.cpp:1021
+#: test_kernel.cpp:1026 test_kernel.cpp:1041 test_kernel.cpp:1049
+#: test_kernel.cpp:1055 test_kernel.cpp:1081 test_kernel.cpp:1086
+#: test_kernel.cpp:1102 test_kernel.cpp:1111 test_kernel.cpp:1117
+#: test_kernel.cpp:1143 test_kernel.cpp:1148 test_kernel.cpp:1164
+#: test_kernel.cpp:1173 test_kernel.cpp:1179 test_kernel.cpp:1205
+#: test_kernel.cpp:1210 test_kernel.cpp:1226 test_kernel.cpp:1235
+#: test_kernel.cpp:1241 test_kernel.cpp:1267 test_kernel.cpp:1272
+#: test_kernel.cpp:1288 test_kernel.cpp:1297 test_kernel.cpp:1303
+#: test_kernel.cpp:1330 test_kernel.cpp:1334 test_kernel.cpp:1349
+#: test_kernel.cpp:1357 test_kernel.cpp:1363 test_kernel.cpp:1390
+#: test_kernel.cpp:1394 test_kernel.cpp:1409 test_kernel.cpp:1415
+#: test_kernel.cpp:1421 test_kernel.cpp:1448 test_kernel.cpp:1452
+#: test_kernel.cpp:1467 test_kernel.cpp:1473 test_kernel.cpp:1479
+#: test_kernel.cpp:1506 test_kernel.cpp:1510 test_kernel.cpp:1525
+#: test_kernel.cpp:1531 test_kernel.cpp:1537 test_kernel.cpp:1572
+#: test_kernel.cpp:1579 test_kernel.cpp:1586 test_kernel.cpp:1593
+#: test_kernel.cpp:1600 test_kernel.cpp:1607 test_kernel.cpp:1614
+#: test_kernel.cpp:1621 test_kernel.cpp:1628 test_kernel.cpp:1636
+#: test_kernel.cpp:1643 test_kernel.cpp:1651 test_kernel.cpp:1658
+#: test_kernel.cpp:1665 test_kernel.cpp:1705
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Special.SystemTests 1.3.0\n"
+"Project-Id-Version: OpenSCADA.Special.SystemTests 1.3.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-25 12:12+0200\n"
+"POT-Creation-Date: 2008-09-09 20:24+0300\n"
 "PO-Revision-Date: 2007-10-24 19:01+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: test_kernel.cpp:36
+#: test_kernel.cpp:37
 msgid "SystemTests"
 msgstr ""
 
-#: test_kernel.cpp:37
+#: test_kernel.cpp:38
 msgid "OpenSCADA system's tests"
 msgstr "Тесты системы OpenSCADA"
 
-#: test_kernel.cpp:38
+#: test_kernel.cpp:39
 msgid "Special"
 msgstr "Специальные"
 
-#: test_kernel.cpp:40
+#: test_kernel.cpp:41
 msgid "TEST"
 msgstr ""
 
-#: test_kernel.cpp:41
-msgid "1.3.5"
+#: test_kernel.cpp:42
+msgid "1.3.6"
 msgstr ""
 
-#: test_kernel.cpp:42
+#: test_kernel.cpp:43
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-#: test_kernel.cpp:43
+#: test_kernel.cpp:44
 msgid "Allow the group tests for OpenSCADA system."
 msgstr "Предоставляет группу тестов для системы OpenSCADA."
 
-#: test_kernel.cpp:44
+#: test_kernel.cpp:45
 msgid "GPL"
 msgstr ""
 
-#: test_kernel.cpp:49
+#: test_kernel.cpp:50
 msgid "C"
 msgstr ""
 
-#: test_kernel.cpp:91 test_kernel.cpp:98
+#: test_kernel.cpp:92 test_kernel.cpp:99
 msgid "SubType"
 msgstr "Подтип"
 
-#: test_kernel.cpp:106
+#: test_kernel.cpp:107
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
@@ -164,64 +164,64 @@ msgstr ""
 "Base64Code   Тесты алгоритма Mime Base64.\n"
 "\n"
 
-#: test_kernel.cpp:154
+#: test_kernel.cpp:155
 msgid "h"
 msgstr ""
 
-#: test_kernel.cpp:157
+#: test_kernel.cpp:158
 msgid "help"
 msgstr ""
 
-#: test_kernel.cpp:184
+#: test_kernel.cpp:185
 msgid ": Is starting...."
 msgstr ": Запуск...."
 
-#: test_kernel.cpp:185
+#: test_kernel.cpp:186
 msgid "No started!"
 msgstr "Не запущен!"
 
-#: test_kernel.cpp:193
+#: test_kernel.cpp:194
 msgid ": Is stoping...."
 msgstr ": Останов...."
 
-#: test_kernel.cpp:194
+#: test_kernel.cpp:195
 msgid "No stoped!"
 msgstr "Не остановлен"
 
-#: test_kernel.cpp:225
+#: test_kernel.cpp:226
 msgid "prm"
 msgstr ""
 
-#: test_kernel.cpp:227
+#: test_kernel.cpp:228
 msgid "on"
 msgstr ""
 
-#: test_kernel.cpp:227 test_kernel.cpp:425
+#: test_kernel.cpp:228 test_kernel.cpp:425
 msgid "1"
 msgstr ""
 
-#: test_kernel.cpp:227 test_kernel.cpp:228 test_kernel.cpp:342
+#: test_kernel.cpp:228 test_kernel.cpp:229 test_kernel.cpp:343
 msgid "per"
 msgstr ""
 
-#: test_kernel.cpp:230 test_kernel.cpp:424 test_kernel.cpp:435
+#: test_kernel.cpp:231 test_kernel.cpp:424 test_kernel.cpp:435
 #: test_kernel.cpp:449 test_kernel.cpp:466 test_kernel.cpp:475
 #: test_kernel.cpp:477 test_kernel.cpp:493 test_kernel.cpp:498
 #: test_kernel.cpp:510 test_kernel.cpp:515
 msgid "id"
 msgstr ""
 
-#: test_kernel.cpp:233
+#: test_kernel.cpp:234
 #, c-format
 msgid "%s"
 msgstr ""
 
-#: test_kernel.cpp:249
+#: test_kernel.cpp:250
 msgid "PARAM"
 msgstr ""
 
-#: test_kernel.cpp:251 test_kernel.cpp:255 test_kernel.cpp:310
-#: test_kernel.cpp:359 test_kernel.cpp:370 test_kernel.cpp:421
+#: test_kernel.cpp:252 test_kernel.cpp:256 test_kernel.cpp:311
+#: test_kernel.cpp:360 test_kernel.cpp:371 test_kernel.cpp:421
 #: test_kernel.cpp:432 test_kernel.cpp:446 test_kernel.cpp:460
 #: test_kernel.cpp:465 test_kernel.cpp:468 test_kernel.cpp:470
 #: test_kernel.cpp:488 test_kernel.cpp:490 test_kernel.cpp:492
@@ -230,173 +230,173 @@ msgstr ""
 msgid "name"
 msgstr ""
 
-#: test_kernel.cpp:255
+#: test_kernel.cpp:256
 #, c-format
 msgid "-------- Begin parameter <%s> test ----------"
 msgstr "-------- Начало теста параметра <%s> ----------"
 
-#: test_kernel.cpp:260
+#: test_kernel.cpp:261
 #, c-format
 msgid "Value attrbutes present: %d"
 msgstr "Значение атрибута присутствует: %d"
 
-#: test_kernel.cpp:265 test_kernel.cpp:288
+#: test_kernel.cpp:266 test_kernel.cpp:289
 #, c-format
 msgid "%s(SELECT): %s"
 msgstr ""
 
-#: test_kernel.cpp:269 test_kernel.cpp:292
+#: test_kernel.cpp:270 test_kernel.cpp:293
 #, c-format
 msgid "%s(STRING): %s"
 msgstr ""
 
-#: test_kernel.cpp:272 test_kernel.cpp:295
+#: test_kernel.cpp:273 test_kernel.cpp:296
 #, c-format
 msgid "%s(INTEGER): %d"
 msgstr ""
 
-#: test_kernel.cpp:275 test_kernel.cpp:298
+#: test_kernel.cpp:276 test_kernel.cpp:299
 #, c-format
 msgid "%s(REAL): %f"
 msgstr ""
 
-#: test_kernel.cpp:278 test_kernel.cpp:301
+#: test_kernel.cpp:279 test_kernel.cpp:302
 #, c-format
 msgid "%s(BOOLEAN): %d"
 msgstr ""
 
-#: test_kernel.cpp:284
+#: test_kernel.cpp:285
 #, c-format
 msgid "Configs throw control: %d"
 msgstr ""
 
-#: test_kernel.cpp:310
+#: test_kernel.cpp:311
 #, c-format
 msgid "-------- End parameter <%s> test ----------"
 msgstr ""
 
-#: test_kernel.cpp:314
+#: test_kernel.cpp:315
 msgid "XML"
 msgstr ""
 
-#: test_kernel.cpp:316
+#: test_kernel.cpp:317
 msgid "file"
 msgstr ""
 
-#: test_kernel.cpp:319
+#: test_kernel.cpp:320
 msgid "-------- Begin XML parsing test ----------"
 msgstr ""
 
-#: test_kernel.cpp:330
+#: test_kernel.cpp:331
 msgid "-------- End XML parsing test ----------"
 msgstr ""
 
-#: test_kernel.cpp:335
+#: test_kernel.cpp:336
 msgid "MESS"
 msgstr ""
 
-#: test_kernel.cpp:339
+#: test_kernel.cpp:340
 msgid "arhtor"
 msgstr ""
 
-#: test_kernel.cpp:340
+#: test_kernel.cpp:341
 #, c-format
 msgid "-------- Begin message archive test for archivator %s ----------"
 msgstr ""
 
-#: test_kernel.cpp:342
+#: test_kernel.cpp:343
 msgid "categ"
 msgstr ""
 
-#: test_kernel.cpp:343
+#: test_kernel.cpp:344
 #, c-format
 msgid "New messages present %d."
 msgstr ""
 
-#: test_kernel.cpp:349
+#: test_kernel.cpp:350
 #, c-format
 msgid "<%s> : <%s> : <%s>"
 msgstr ""
 
-#: test_kernel.cpp:351
+#: test_kernel.cpp:352
 #, c-format
 msgid "-------- End message archive test for archivator %s ----------"
 msgstr ""
 
-#: test_kernel.cpp:355
+#: test_kernel.cpp:356
 msgid "SOAttDet"
 msgstr ""
 
-#: test_kernel.cpp:361
+#: test_kernel.cpp:362
 #, c-format
 msgid "-------- Begin SO <%s> test ----------"
 msgstr ""
 
-#: test_kernel.cpp:363
+#: test_kernel.cpp:364
 msgid "full"
 msgstr ""
 
-#: test_kernel.cpp:364
+#: test_kernel.cpp:365
 #, c-format
 msgid "-------- End SO <%s> test ----------"
 msgstr ""
 
-#: test_kernel.cpp:368
+#: test_kernel.cpp:369
 msgid "Val"
 msgstr ""
 
-#: test_kernel.cpp:371
+#: test_kernel.cpp:372
 msgid "arch_len"
 msgstr ""
 
-#: test_kernel.cpp:372
+#: test_kernel.cpp:373
 msgid "arch_per"
 msgstr ""
 
-#: test_kernel.cpp:374
+#: test_kernel.cpp:375
 #, c-format
 msgid "Value of: %s."
 msgstr ""
 
-#: test_kernel.cpp:381
+#: test_kernel.cpp:382
 #, c-format
 msgid "Last value = %s"
 msgstr ""
 
-#: test_kernel.cpp:388
+#: test_kernel.cpp:389
 #, c-format
 msgid "Value %d = %s."
 msgstr ""
 
-#: test_kernel.cpp:394
+#: test_kernel.cpp:395
 msgid "BD"
 msgstr "БД"
 
-#: test_kernel.cpp:397 test_kernel.cpp:552
+#: test_kernel.cpp:398 test_kernel.cpp:552
 msgid "type"
 msgstr ""
 
-#: test_kernel.cpp:398
+#: test_kernel.cpp:399
 msgid "test_bd"
 msgstr ""
 
-#: test_kernel.cpp:399
+#: test_kernel.cpp:400
 msgid "bd"
 msgstr ""
 
-#: test_kernel.cpp:400
+#: test_kernel.cpp:401
 msgid "table"
 msgstr ""
 
-#: test_kernel.cpp:401
+#: test_kernel.cpp:402
 msgid "size"
 msgstr ""
 
-#: test_kernel.cpp:405
+#: test_kernel.cpp:406
 msgid "***** Begin DB tests block *****"
 msgstr ""
 
-#: test_kernel.cpp:407
+#: test_kernel.cpp:408
 #, c-format
 msgid "Open DB: <%s>"
 msgstr ""

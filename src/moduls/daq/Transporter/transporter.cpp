@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.Transporter file: transporter.cpp
 /***************************************************************************
- *   Copyright (C) 2007 by Roman Savochenko                                *
+ *   Copyright (C) 2007-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -33,7 +33,7 @@
 #define MOD_NAME	"Data sources transporter"
 #define MOD_TYPE	"DAQ"
 #define VER_TYPE	VER_CNTR
-#define VERSION		"0.3.1"
+#define VERSION		"0.3.2"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow to make transport data sources of remote OpenSCADA station to local OpenSCADA station."
 #define LICENSE		"GPL"

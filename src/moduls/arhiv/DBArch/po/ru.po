@@ -5,13 +5,13 @@
 #
 #: arch.cpp:52 mess.cpp:59 mess.cpp:79 mess.cpp:157 mess.cpp:175 mess.cpp:195
 #: val.cpp:109 val.cpp:140 val.cpp:169 val.cpp:185 val.cpp:198 val.cpp:222
-#: val.cpp:244 val.cpp:266 val.cpp:288 val.cpp:349 mess.h:48
+#: val.cpp:244 val.cpp:266 val.cpp:288 val.cpp:349 mess.h:51
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Archive.DBArch 0.6.0\n"
+"Project-Id-Version: OpenSCADA.Archive.DBArch 0.7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-27 18:23+0200\n"
+"POT-Creation-Date: 2008-09-09 11:16+0300\n"
 "PO-Revision-Date: 2007-10-21 22:40+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -26,12 +26,13 @@ msgstr ""
 msgid "To DB archivator"
 msgstr "Архиватор на БД"
 
-#: arch.cpp:37
+#: arch.cpp:37 mess.cpp:206 mess.cpp:207 mess.cpp:208 mess.cpp:217
+#: mess.cpp:218 val.cpp:85 val.cpp:86 val.cpp:94 val.cpp:95
 msgid "Archive"
 msgstr "Архив"
 
 #: arch.cpp:39
-msgid "0.6.0"
+msgid "0.7.0"
 msgstr ""
 
 #: arch.cpp:40
@@ -53,7 +54,7 @@ msgstr ""
 msgid "C"
 msgstr ""
 
-#: arch.cpp:89 arch.cpp:92 mess.cpp:39 mess.cpp:209 val.cpp:40 val.cpp:86
+#: arch.cpp:89 arch.cpp:92 mess.cpp:39 mess.cpp:208 val.cpp:40 val.cpp:86
 msgid "DBArchSize"
 msgstr ""
 
@@ -219,11 +220,11 @@ msgstr ""
 msgid "help"
 msgstr ""
 
-#: arch.cpp:189 mess.cpp:204 val.cpp:82
+#: arch.cpp:189 mess.cpp:203 val.cpp:82
 msgid "info"
 msgstr ""
 
-#: arch.cpp:192 mess.cpp:207 mess.cpp:209 val.cpp:86
+#: arch.cpp:192 mess.cpp:206 mess.cpp:208 val.cpp:86
 msgid "fld"
 msgstr ""
 
@@ -235,12 +236,12 @@ msgstr ""
 msgid "Options help"
 msgstr "Помощь по опциям"
 
-#: arch.cpp:192 mess.cpp:207 mess.cpp:208 mess.cpp:209 mess.cpp:218
-#: mess.cpp:219 val.cpp:85 val.cpp:86 val.cpp:94 val.cpp:95
+#: arch.cpp:192 mess.cpp:206 mess.cpp:207 mess.cpp:208 mess.cpp:217
+#: mess.cpp:218 val.cpp:85 val.cpp:86 val.cpp:94 val.cpp:95
 msgid "root"
 msgstr ""
 
-#: arch.cpp:192 mess.cpp:207 mess.cpp:209 val.cpp:86
+#: arch.cpp:192 mess.cpp:206 mess.cpp:208 val.cpp:86
 msgid "tp"
 msgstr ""
 
@@ -264,15 +265,15 @@ msgstr ""
 msgid "5"
 msgstr ""
 
-#: arch.cpp:197 mess.cpp:214 val.cpp:91
+#: arch.cpp:197 mess.cpp:213 val.cpp:91
 msgid "path"
 msgstr ""
 
-#: arch.cpp:198 mess.cpp:218 val.cpp:94
+#: arch.cpp:198 mess.cpp:217 val.cpp:94
 msgid "get"
 msgstr ""
 
-#: mess.cpp:41 mess.cpp:74 val.cpp:42 val.cpp:58
+#: mess.cpp:41 mess.cpp:74 val.cpp:42 val.cpp:59
 msgid "*.*"
 msgstr ""
 
@@ -293,35 +294,35 @@ msgstr ""
 msgid "Archive no started!"
 msgstr "Архив не запущен!"
 
-#: mess.cpp:207 mess.cpp:215
+#: mess.cpp:206 mess.cpp:214
 msgid "/prm/st/tarch"
 msgstr ""
 
-#: mess.cpp:207
+#: mess.cpp:206
 msgid "Archiving time (msek)"
 msgstr "Время архивирования (мс)"
 
-#: mess.cpp:207 mess.cpp:209 val.cpp:86
+#: mess.cpp:206 mess.cpp:208 val.cpp:86
 msgid "real"
 msgstr ""
 
-#: mess.cpp:208 val.cpp:85
+#: mess.cpp:207 val.cpp:85
 msgid "area"
 msgstr ""
 
-#: mess.cpp:208 val.cpp:85
+#: mess.cpp:207 val.cpp:85
 msgid "/bs"
 msgstr ""
 
-#: mess.cpp:208 val.cpp:85
+#: mess.cpp:207 val.cpp:85
 msgid "Additional options"
 msgstr "Дополнительные опции"
 
-#: mess.cpp:209 mess.cpp:216 val.cpp:86 val.cpp:92
+#: mess.cpp:208 mess.cpp:215 val.cpp:86 val.cpp:92
 msgid "/bs/sz"
 msgstr ""
 
-#: mess.cpp:219 val.cpp:95
+#: mess.cpp:218 val.cpp:95
 msgid "set"
 msgstr ""
 

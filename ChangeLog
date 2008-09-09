@@ -1,3 +1,28 @@
+2008-09-09 Roman
+- !!:/Archive/FSArch: Documentation and translation is updated and version 1.0.0 is relised.
+- !!:/Archive/DBArch: Documentation and translation is updated and version 0.7.0 is relised.
+- !!:/DB/MySQL: Documentation and translation is updated and version 1.4.0 is relised.
+- !!:/DB/SQLite: Documentation and translation is updated and version 1.4.0 is relised.
+- !!:/DB/DBF: Documentation and translation is updated and version 1.9.0 is relised.
+- !!:/DB/FireBird: Documentation and translation is updated and version 0.8.0 is relised.
+- !!:/DAQ/BlockCalc: Documentation and translation is updated and version 1.1.0 is relised.
+- !!:/DAQ/DiamondBoards: Documentation and translation is updated and version 1.1.0 is relised.
+- !!:/DAQ/JavaLikeCalc: Documentation and translation is updated and version 1.2.0 is relised.
+- !!:/DAQ/SNMP: Documentation and translation is updated and version 0.3.2 is relised.
+- !!:/DAQ/LogicLev: Documentation and translation is updated and version 0.9.1 is relised.
+- !!:/DAQ/ModBus: Documentation and translation is updated and version 0.9.0 is relised.
+- !!:/DAQ/Siemens: Documentation and translation is updated and version 1.1.0 is relised.
+- !!:/DAQ/System: Documentation and translation is updated and version 1.6.1 is relised.
+- !!:/DAQ/Transporter: Documentation and translation is updated and version 0.3.2 is relised.
+- !!:/Transport/Sockets: Documentation and translation is updated and version 1.3.5 is relised.
+- !!:/Protocol/HTTP: Documentation and translation is updated and version 1.3.2 is relised.
+- !!:/Protocol/SelfSystem: Documentation and translation is updated and version 0.8.0 is relised.
+- !!:/Special/FLibComplex1: Documentation and translation is updated and version 1.0.2 is relised.
+- !!:/Special/FLibMath: Documentation and translation is updated and version 0.5.1 is relised.
+- !!:/Special/FLibSYS: Documentation and translation is updated and version 0.6.1 is relised.
+- !!:/Special/SystemTests: Documentation and translation is updated and version 1.3.6 is relised.
+
+
 2008-09-09 Maxim
 - FIX:/UI/WebVision: Drawing of the borders of the figure is fixed for primitive ElFigure.
 
@@ -87,7 +112,7 @@
 - !!:/UI/Vision: Big group copy-paste is made optimal.
 - FIX:/UI/Vision: Inserted widget's selection is fixed.
 - !!:/UI/Vision: Make rect selection is fastest. Select event generation moved to mouse button release.
-- FIX:/UI/VCAEngine: Real deletion time of included widgets on final save is make optimal.
+- !!:/UI/VCAEngine: Real deletion time of included widgets on final save is make optimal.
 
 
 2008-08-14 Roman
@@ -102,7 +127,7 @@
 
 2008-08-11 Roman
 - !!:/SYS: System adapted to GCC 4.3
-- FIX:/DAQ/JavaLikeCalc: Start libraries functions after broken function is fixed.
+- FIX:/DAQ/JavaLikeCalc: Start libraries functions after one broken function is fixed.
 - FIX:/DAQ/ModBus: Coil buffer make is fixed.
 
 
@@ -280,7 +305,7 @@
 
 
 2008-06-10 Roman
-- FIX:/DAQ/Siemens, /DAQ/Transporter, /DAQ/LogicLev, /DAQ/System, /DAQ/DiamondBoards, /VAQ/SNMP, /UI/VCAEngine: Zero period hang is fixed.
+- FIX:/DAQ/Siemens, /DAQ/Transporter, /DAQ/LogicLev, /DAQ/System, /DAQ/DiamondBoards, /DAQ/SNMP, /UI/VCAEngine: Zero period hang is fixed.
 - !!:/SYS: More odd spaces from sources is removing continued.
 
 

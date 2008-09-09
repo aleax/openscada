@@ -1,7 +1,7 @@
 
 //OpenSCADA system module BD.DBF file: dbf.cpp
 /***************************************************************************
- *   Copyright (C) 2001-2007 by Roman Savochenko                           *
+ *   Copyright (C) 2001-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -247,7 +247,7 @@ int TBasaDBF::addField( int pos, db_str_rec * field_ptr )
 {
     int number, rec_len = 1, i, row;
     char *str_tmp;
-    
+
     number = ( db_head_ptr->len_head - sizeof( db_head ) - 2 ) / sizeof( db_str_rec );
     if( pos < number - 1 )
     {
@@ -261,8 +261,8 @@ int TBasaDBF::addField( int pos, db_str_rec * field_ptr )
 		rec_len += ( db_field_ptr + i )->len_fild;
 	    for( i = 0; i < db_head_ptr->numb_rec; i++ )
 	    {
-	    	//items[i]=realloc(items[i],db_head_ptr->len_rec+field_ptr->len_fild);
-        	str_tmp = ( char * ) malloc( db_head_ptr->len_rec + field_ptr->len_fild );
+		//items[i]=realloc(items[i],db_head_ptr->len_rec+field_ptr->len_fild);
+		str_tmp = ( char * ) malloc( db_head_ptr->len_rec + field_ptr->len_fild );
 		memmove( str_tmp, items[i], db_head_ptr->len_rec );
 		free( items[i] );
 		items[i] = str_tmp;
@@ -287,12 +287,12 @@ int TBasaDBF::addField( int pos, db_str_rec * field_ptr )
 	    items[i] = str_tmp;
 	    //items[i]=realloc(items[i],db_head_ptr->len_rec+field_ptr->len_fild);
 	    memset( ( char * ) items[i] + db_head_ptr->len_rec, ' ', field_ptr->len_fild );
-	}	    
+	}
 	row=number;
     }
     db_head_ptr->len_head += sizeof( db_str_rec );
     db_head_ptr->len_rec += field_ptr->len_fild;
-    
+
     return row;
 }
 
@@ -330,7 +330,7 @@ int TBasaDBF::setField( int posField, db_str_rec *attr )
 
     number = ( db_head_ptr->len_head - sizeof( db_head ) - 2 ) / sizeof( db_str_rec );
     if( posField >= number ) return -1;
- 
+
     if( !strncmp(db_field_ptr[posField].name,attr->name,11) )
 	strncpy(db_field_ptr[posField].name,attr->name,11);
     if( db_field_ptr[posField].tip_fild != attr->tip_fild )
@@ -345,10 +345,10 @@ int TBasaDBF::setField( int posField, db_str_rec *attr )
 	    memmove( str_tmp, items[i], rec_len + (attr->len_fild < db_field_ptr[posField].len_fild)?attr->len_fild:db_field_ptr[posField].len_fild );
 	    memmove( str_tmp + rec_len + attr->len_fild, (char *)items[i] + rec_len + db_field_ptr[posField].len_fild, db_head_ptr->len_rec - rec_len - db_field_ptr[posField].len_fild);
 	    free( items[i] );
-	    items[i] = str_tmp;	    
+	    items[i] = str_tmp;
 	}
-    	db_head_ptr->len_rec = db_head_ptr->len_rec + attr->len_fild - db_field_ptr[posField].len_fild;
-    	db_field_ptr[posField].len_fild = attr->len_fild;
+	db_head_ptr->len_rec = db_head_ptr->len_rec + attr->len_fild - db_field_ptr[posField].len_fild;
+	db_field_ptr[posField].len_fild = attr->len_fild;
     }
     if( db_field_ptr[posField].dec_field != attr->dec_field )
 	db_field_ptr[posField].dec_field  = attr->dec_field;
@@ -481,7 +481,7 @@ int TBasaDBF::GetFieldIt( int posItems, char *NameField, string & str )
 	return -1;
     str.assign( ( char * ) items[posItems] + rec_len, db_field_ptr[posField].len_fild ); 
     str.resize(strlen(str.c_str()));
-    
+
     return 0;
 }
 

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.BlockCalc file: virtual.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -44,7 +44,7 @@
 #define MOD_NAME	"Block based calculator"
 #define MOD_TYPE	"DAQ"
 #define VER_TYPE	VER_CNTR
-#define VERSION		"1.0.1"
+#define VERSION		"1.1.0"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow block based calculator."
 #define LICENSE		"GPL"
@@ -454,7 +454,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	{
 	    ctrMkNode("fld",opt,-1,"/scheme/ctm",_("Calk time (usek)"),0444,"root","root",1,"tp","real");
 	    ctrMkNode("list",opt,-1,"/scheme/sch",_("Blocks"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","blk_");
-	    ctrMkNode("fld",opt,-1,"/scheme/nmb",_("Number"),0444,"root","root",1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/scheme/nmb",_("Number"),0444,"root","root",1,"tp","str");
 	}
 	return;
     }
@@ -481,7 +481,15 @@ void Contr::cntrCmdProc( XMLNode *opt )
     {
 	vector<string> lst;
 	blkList(lst);
-	opt->setText(TSYS::int2str(lst.size()));
+	int enCnt = 0, prcCnt = 0;
+	for( int i_b = 0; i_b < lst.size(); i_b++ )
+	{
+	    if( blkAt(lst[i_b]).at().enable( ) )	enCnt++;
+	    if( blkAt(lst[i_b]).at().process( ) )	prcCnt++;
+	}
+	char buf[100];
+	snprintf(buf,sizeof(buf),_("All: %d; Enabled: %d; Process: %d"),lst.size(),enCnt,prcCnt);
+	opt->setText(buf);
     }
     else TController::cntrCmdProc(opt);
 }

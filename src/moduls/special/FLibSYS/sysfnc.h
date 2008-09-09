@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Special.FLibSYS file: sysfnc.h
 /***************************************************************************
- *   Copyright (C) 2005-2007 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -45,7 +45,7 @@ class varhOpen : public TFunction
 	    ioAdd( new IO("id",_("Archive id"),IO::Integer,IO::Return) );
 	    ioAdd( new IO("name",_("Name"),IO::String,IO::Default) );
 	}
-	
+
 	string name( )	{ return _("Varch: Open"); }
 	string descr( )	{ return _("Open value archive."); }
 
@@ -65,7 +65,7 @@ class varhClose : public TFunction
 	{
 	    ioAdd( new IO("id",_("Archive id"),IO::Integer,IO::Default) );
 	}
-	
+
 	string name( )	{ return _("Varch: Close"); }
 	string descr( )	{ return _("Close opened value archive or buffer."); }
 
@@ -82,27 +82,27 @@ class varhBeg : public TFunction
 {
     public:
 	varhBeg( ) : TFunction("varhBeg")
-	{	    
+	{
 	    ioAdd( new IO("id",_("Archive id"),IO::Integer,IO::Default) );
 	    ioAdd( new IO("sek",_("Seconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("usek",_("Microseconds"),IO::Integer,IO::Output) );
-	    ioAdd( new IO("archtor",_("Archivator"),IO::String,IO::Default) );	    
+	    ioAdd( new IO("archtor",_("Archivator"),IO::String,IO::Default) );
 	}
-	
+
 	string name( )	{ return _("Varch: Begin"); }
 	string descr( )	{ return _("Begin of opened value archive or buffer."); }
 
 	void calc( TValFunc *val )
-	{	    
+	{
 	    int id = val->getI(0);
 	    long long vbg;
 	    if(mod->isArch(id))
 		vbg = mod->varch(id).at().begin(val->getS(3));
-	    else 
+	    else
 	    {
 		TValBuf* vb = mod->vbuf(id);
-        	if(!vb)     return;
-                vbg = vb->begin();	    
+		if( !vb )	return;
+		vbg = vb->begin();
 	    }
 	    val->setI(1,vbg/1000000);
 	    val->setI(2,vbg%1000000);
@@ -116,13 +116,13 @@ class varhEnd : public TFunction
 {
     public:
 	varhEnd( ) : TFunction("varhEnd")
-	{	    
+	{
 	    ioAdd( new IO("id",_("Archive id"),IO::Integer,IO::Default) );
 	    ioAdd( new IO("sek",_("Seconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("usek",_("Microseconds"),IO::Integer,IO::Output) );
-	    ioAdd( new IO("archtor",_("Archivator"),IO::String,IO::Default) );	    
+	    ioAdd( new IO("archtor",_("Archivator"),IO::String,IO::Default) );
 	}
-	
+
 	string name( )	{ return _("Varch: End"); }
 	string descr( )	{ return _("End of opened value archive or buffer."); }
 
@@ -132,11 +132,11 @@ class varhEnd : public TFunction
 	    long long vend;
 	    if(mod->isArch(id))
 		vend = mod->varch(id).at().end(val->getS(3));
-	    else 
+	    else
 	    {
 		TValBuf* vb = mod->vbuf(id);
-        	if(!vb)     return;
-                vend = vb->end();	    
+		if( !vb )	return;
+		vend = vb->end();
 	    }
 	    val->setI(1,vend/1000000);
 	    val->setI(2,vend%1000000);
@@ -150,16 +150,16 @@ class varhCopyBuf : public TFunction
 {
     public:
 	varhCopyBuf( ) : TFunction("varhCopyBuf")
-	{	    
+	{
 	    ioAdd( new IO("sid",_("Source buffer id"),IO::Integer,IO::Default) );
 	    ioAdd( new IO("did",_("Destination buffer id"),IO::Integer,IO::Default) );
 	    ioAdd( new IO("begSek",_("Begin seconds"),IO::Integer,IO::Default) );
 	    ioAdd( new IO("begUsek",_("Begin microseconds"),IO::Integer,IO::Default) );
 	    ioAdd( new IO("endSek",_("End seconds"),IO::Integer,IO::Default) );
-	    ioAdd( new IO("endUsek",_("End microseconds"),IO::Integer,IO::Default) );    
+	    ioAdd( new IO("endUsek",_("End microseconds"),IO::Integer,IO::Default) );
 	    ioAdd( new IO("archtor",_("Archivator"),IO::String,IO::Default) );
 	}
-	
+
 	string name( )	{ return _("Varch: Copy values"); }
 	string descr( )	{ return _("Copy values among value archives and buffers."); }
 
@@ -192,17 +192,17 @@ class varhCopyBuf : public TFunction
 		else vb = mod->vbuf(sid);
 		if(!vb)     return;
 		mod->varch(did).at().setVal(*vb,(long long)val->getI(2)*1000000+val->getI(3),
-						(long long)val->getI(4)*1000000+val->getI(5),val->getS(6));		
+						(long long)val->getI(4)*1000000+val->getI(5),val->getS(6));
 	    }
 	    else
 	    {
 		TValBuf* svb = mod->vbuf(sid);
 		TValBuf* dvb = mod->vbuf(did);
-        	if(!svb || !dvb) return;
+		if(!svb || !dvb) return;
 		svb->getVal(*dvb,(long long)val->getI(2)*1000000+val->getI(3),
 				 (long long)val->getI(4)*1000000+val->getI(5));
 	    }
-    	}
+	}
 };
 
 //*************************************************
@@ -218,9 +218,9 @@ class varhBufOpen : public TFunction
 	    ioAdd( new IO("sz",_("Size"),IO::Integer,IO::Default,"100") );
 	    ioAdd( new IO("per",_("Period (us)"),IO::Integer,IO::Default,"1000000") );
 	    ioAdd( new IO("hgrd",_("Hard grid"),IO::Boolean,IO::Default,"0") );
-	    ioAdd( new IO("hres",_("High resolution"),IO::Boolean,IO::Default,"0") );        
+	    ioAdd( new IO("hres",_("High resolution"),IO::Boolean,IO::Default,"0") );
 	}
-	
+
 	string name( )	{ return _("Varch: Buffer open"); }
 	string descr( )	{ return _("Open value buffer for temporary values storing."); }
 
@@ -245,20 +245,20 @@ class varhGetI : public TFunction
 	    ioAdd( new IO("up_ord",_("Up order"),IO::Boolean,IO::Default,"0") );
 	    ioAdd( new IO("archtor",_("Archivator"),IO::String,IO::Default) );
 	}
-	
+
 	string name( )	{ return _("Varch: Get integer"); }
 	string descr( )	{ return _("Get integer from archive or buffer."); }
 
 	void calc( TValFunc *val )
 	{
 	    int id = val->getI(1);
-	    long long vtm = (long long)val->getI(2)*1000000+val->getI(3);	    
+	    long long vtm = (long long)val->getI(2)*1000000+val->getI(3);
 	    if(mod->isArch(id))
 		val->setI(0,mod->varch(id).at().getI(&vtm,val->getB(4),val->getS(5)));
 	    else
-	    {	
+	    {
 		TValBuf* vb = mod->vbuf(id);
-        	if(!vb)     return;	    
+		if( !vb )	return;
 		val->setI(0,vb->getI(&vtm,val->getB(4)));
 	    }
 	    val->setI(2,vtm/1000000); val->setI(3,vtm%1000000);
@@ -278,7 +278,7 @@ class varhGetR : public TFunction
 	    ioAdd( new IO("sec",_("Seconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("usec",_("Microseconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("up_ord",_("Up order"),IO::Boolean,IO::Default,"0") );
-	    ioAdd( new IO("archtor",_("Archivator"),IO::String,IO::Default) );	    
+	    ioAdd( new IO("archtor",_("Archivator"),IO::String,IO::Default) );
 	}
 	
 	string name( )	{ return _("Varch: Get real"); }
@@ -287,13 +287,13 @@ class varhGetR : public TFunction
 	void calc( TValFunc *val )
 	{
 	    int id = val->getI(1);
-	    long long vtm = (long long)val->getI(2)*1000000+val->getI(3);	    
+	    long long vtm = (long long)val->getI(2)*1000000+val->getI(3);
 	    if(mod->isArch(id))
 		val->setR(0,mod->varch(id).at().getR(&vtm,val->getB(4),val->getS(5)));
 	    else
-	    {	
+	    {
 		TValBuf* vb = mod->vbuf(id);
-        	if(!vb)     return;	    
+		if(!vb)     return;
 		val->setR(0,vb->getR(&vtm,val->getB(4)));
 	    }
 	    val->setI(2,vtm/1000000); val->setI(3,vtm%1000000);
@@ -315,20 +315,20 @@ class varhGetB : public TFunction
 	    ioAdd( new IO("up_ord",_("Up order"),IO::Boolean,IO::Default,"0") );
 	    ioAdd( new IO("archtor",_("Archivator"),IO::String,IO::Default) );
 	}
-	
+
 	string name( )	{ return _("Varch: Get boolean"); }
 	string descr( )	{ return _("Get boolean from archive or buffer."); }
 
 	void calc( TValFunc *val )
 	{
 	    int id = val->getI(1);
-	    long long vtm = (long long)val->getI(2)*1000000+val->getI(3);	    
+	    long long vtm = (long long)val->getI(2)*1000000+val->getI(3);
 	    if(mod->isArch(id))
 		val->setB(0,mod->varch(id).at().getB(&vtm,val->getB(4),val->getS(5)));
 	    else
-	    {	
+	    {
 		TValBuf* vb = mod->vbuf(id);
-        	if(!vb)     return;	    
+		if( !vb )	return;
 		val->setB(0,vb->getB(&vtm,val->getB(4)));
 	    }
 	    val->setI(2,vtm/1000000); val->setI(3,vtm%1000000);
@@ -348,22 +348,22 @@ class varhGetS : public TFunction
 	    ioAdd( new IO("sec",_("Seconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("usec",_("Microseconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("up_ord",_("Up order"),IO::Boolean,IO::Default,"0") );
-	    ioAdd( new IO("archtor",_("Archivator"),IO::String,IO::Default) );	    
+	    ioAdd( new IO("archtor",_("Archivator"),IO::String,IO::Default) );
 	}
-	
+
 	string name( )	{ return _("Varch: Get string"); }
 	string descr( )	{ return _("Get string from archive or buffer."); }
 
 	void calc( TValFunc *val )
 	{
 	    int id = val->getI(1);
-	    long long vtm = (long long)val->getI(2)*1000000+val->getI(3);	    
+	    long long vtm = (long long)val->getI(2)*1000000+val->getI(3);
 	    if(mod->isArch(id))
 		val->setS(0,mod->varch(id).at().getS(&vtm,val->getB(4),val->getS(5)));
 	    else
-	    {	
+	    {
 		TValBuf* vb = mod->vbuf(id);
-        	if(!vb)     return;	    
+		if( !vb )	return;
 		val->setS(0,vb->getS(&vtm,val->getB(4)));
 	    }
 	    val->setI(2,vtm/1000000); val->setI(3,vtm%1000000);
@@ -379,11 +379,11 @@ class varhSetI : public TFunction
 	varhSetI( ) : TFunction("varhSetI")
 	{
 	    ioAdd( new IO("id",_("Buffer id"),IO::Integer,IO::Default) );
-	    ioAdd( new IO("val",_("Value"),IO::Integer,IO::Default) );	    
+	    ioAdd( new IO("val",_("Value"),IO::Integer,IO::Default) );
 	    ioAdd( new IO("sec",_("Seconds"),IO::Integer,IO::Default) );
 	    ioAdd( new IO("usec",_("Microseconds"),IO::Integer,IO::Default) );
 	}
-	
+
 	string name( )	{ return _("Varch: Set integer"); }
 	string descr( )	{ return _("Set integer to archive or buffer."); }
 
@@ -392,10 +392,10 @@ class varhSetI : public TFunction
 	    int id = val->getI(0);
 	    if(mod->isArch(id))	
 		mod->varch(id).at().setI(val->getI(1),(long long)val->getI(2)*1000000+val->getI(3));
-	    else	
-	    {	
+	    else
+	    {
 		TValBuf* vb = mod->vbuf(id);
-	        if(!vb)     return;
+		if( !vb )	return;
 		vb->setI(val->getI(1),(long long)val->getI(2)*1000000+val->getI(3));
 	    }
 	}
@@ -414,7 +414,7 @@ class varhSetR : public TFunction
 	    ioAdd( new IO("sec",_("Seconds"),IO::Integer,IO::Default) );
 	    ioAdd( new IO("usec",_("Microseconds"),IO::Integer,IO::Default) );
 	}
-	
+
 	string name( )	{ return _("Varch: Set real"); }
 	string descr( )	{ return _("Set real to archive or buffer."); }
 
@@ -423,10 +423,10 @@ class varhSetR : public TFunction
 	    int id = val->getI(0);
 	    if(mod->isArch(id))	
 		mod->varch(id).at().setR(val->getR(1),(long long)val->getI(2)*1000000+val->getI(3));
-	    else	
-	    {	
+	    else
+	    {
 		TValBuf* vb = mod->vbuf(id);
-	        if(!vb)     return;
+		if( !vb )	return;
 		vb->setR(val->getR(1),(long long)val->getI(2)*1000000+val->getI(3));
 	    }
 	}
@@ -445,7 +445,7 @@ class varhSetB : public TFunction
 	    ioAdd( new IO("sec",_("Seconds"),IO::Integer,IO::Default) );
 	    ioAdd( new IO("usec",_("Microseconds"),IO::Integer,IO::Default) );
 	}
-	
+
 	string name( )	{ return _("Varch: Set boolean"); }
 	string descr( )	{ return _("Set boolean to archive or buffer."); }
 
@@ -454,10 +454,10 @@ class varhSetB : public TFunction
 	    int id = val->getI(0);
 	    if(mod->isArch(id))	
 		mod->varch(id).at().setB(val->getB(1),(long long)val->getI(2)*1000000+val->getI(3));
-	    else	
-	    {	
+	    else
+	    {
 		TValBuf* vb = mod->vbuf(id);
-	        if(!vb)     return;
+		if( !vb )	return;
 		vb->setB(val->getB(1),(long long)val->getI(2)*1000000+val->getI(3));
 	    }
 	}
@@ -476,7 +476,7 @@ class varhSetS : public TFunction
 	    ioAdd( new IO("sec",_("Seconds"),IO::Integer,IO::Default) );
 	    ioAdd( new IO("usec",_("Microseconds"),IO::Integer,IO::Default) );
 	}
-	
+
 	string name( )	{ return _("Varch: Set string"); }
 	string descr( )	{ return _("Set string to archive or buffer."); }
 
@@ -485,10 +485,10 @@ class varhSetS : public TFunction
 	    int id = val->getI(0);
 	    if(mod->isArch(id))	
 		mod->varch(id).at().setS(val->getS(1),(long long)val->getI(2)*1000000+val->getI(3));
-	    else	
-	    {	
+	    else
+	    {
 		TValBuf* vb = mod->vbuf(id);
-	        if(!vb)     return;
+		if( !vb )	return;
 		vb->setS(val->getS(1),(long long)val->getI(2)*1000000+val->getI(3));
 	    }
 	}
@@ -506,7 +506,7 @@ class messPut : public TFunction
 	    ioAdd( new IO("lev",_("Level"),IO::Integer,IO::Default) );
 	    ioAdd( new IO("mess",_("Message"),IO::String,IO::Default) );
 	}
-	
+
 	string name( )	{ return _("Mess: Put"); }
 	string descr( )	{ return _("Put message to system."); }
 
@@ -530,7 +530,7 @@ class strSize : public TFunction
 	    ioAdd( new IO("rez",_("Rezult"),IO::Integer,IO::Return) );
 	    ioAdd( new IO("str",_("String"),IO::String,IO::Default) );
 	}
-	
+
 	string name( )	{ return _("String: Get size"); }
 	string descr( )	{ return _("Use for string size getting."); }
 
@@ -553,7 +553,7 @@ class strSubstr : public TFunction
 	    ioAdd( new IO("pos",_("Position"),IO::Integer,IO::Default,"0") );
 	    ioAdd( new IO("n"  ,_("Number"),IO::Integer,IO::Default,"-1") );
 	}
-	
+
 	string name( )	{ return _("String: Get substring"); }
 	string descr( )	{ return _("Use for substring getting."); }
 
@@ -581,7 +581,7 @@ class strInsert : public TFunction
 	    ioAdd( new IO("pos",_("Position"),IO::Integer,IO::Default,"0") );
 	    ioAdd( new IO("ins",_("Insert string"),IO::String,IO::Default) );
 	}
-	
+
 	string name( )	{ return _("String: Insert string to other string"); }
 	string descr( )	{ return _("Use for insertion string to other string."); }
 
@@ -604,10 +604,10 @@ class strReplace : public TFunction
 	{
 	    ioAdd( new IO("str",_("String"),IO::String,IO::Output) );
 	    ioAdd( new IO("pos",_("Position"),IO::Integer,IO::Default,"0") );
-	    ioAdd( new IO("n"  ,_("Number"),IO::Integer,IO::Default,"-1") );	    
+	    ioAdd( new IO("n"  ,_("Number"),IO::Integer,IO::Default,"-1") );
 	    ioAdd( new IO("repl",_("Replace string"),IO::String,IO::Default) );
 	}
-	
+
 	string name( )	{ return _("String: Replace part string on other string"); }
 	string descr( )	{ return _("Use for replacing part string on other string."); }
 
@@ -637,7 +637,7 @@ class strParse : public TFunction
 	    ioAdd( new IO("sep",_("Separator"),IO::String,IO::Default,".") );
 	    ioAdd( new IO("off",_("Offset"),IO::Integer,IO::Output) );
 	}
-	
+
 	string name( )	{ return _("String: Parse on separator"); }
 	string descr( )	{ return _("Use for parse string on separator."); }
 
@@ -663,7 +663,7 @@ class strParsePath : public TFunction
 	    ioAdd( new IO("lev",_("Level"),IO::Integer,IO::Default) );
 	    ioAdd( new IO("off",_("Offset"),IO::Integer,IO::Output) );
 	}
-	
+
 	string name( )	{ return _("String: Path parse"); }
 	string descr( )	{ return _("Use for parse path on elements."); }
 
@@ -678,4 +678,3 @@ class strParsePath : public TFunction
 }
 
 #endif //SYSFNC_H
-

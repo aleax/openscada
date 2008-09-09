@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Special.FLibComplex1 file: libcompl1.h
 /***************************************************************************
- *   Copyright (C) 2005-2007 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -59,12 +59,12 @@ class DigitBlock : public TFunction
 	    ioAdd( new IO("w_tm",_("Process command clock"),IO::Real,IO::Output,"0",true) );
 	    ioAdd( new IO("last_cmd",_("Last command"),IO::Integer,IO::Output,"0",true) );
 	}
-	
+
 	string name( )	{ return _("Digital block"); }
-	string descr( )	{ return _("Digital assemble block."); }	//!!!! make full description 
+	string descr( )	{ return _("Digital assemble block."); }	//!!!! make full description
 
 	void calc( TValFunc *val )
-	{ 
+	{
 	    bool set = false;
 	
 	    if(val->getB(0) && val->getI(8)!=1)	{ val->setI(8,1); set = true; }
@@ -76,10 +76,10 @@ class DigitBlock : public TFunction
 	    {
 		val->setR(7,0);
 		if(val->getI(5)>0)
-		{		    
+		{
 		    if(val->getI(8)==1)	val->setB(0,0);
 		    if(val->getI(8)==2) val->setB(1,0);
-		    if(val->getI(8)==3) val->setB(2,0);		    
+		    if(val->getI(8)==3) val->setB(2,0);
 		    val->setI(8,0);
 		}
 	    }
@@ -97,7 +97,7 @@ class Sum : public TFunction
 	Sum( ) : TFunction("sum")
 	{
 	    char id_buf[10], nm_buf[20];
-    
+
 	    ioAdd( new IO("out",_("Output"),IO::Real,IO::Return,"1") );
 	    for( int i_in=1; i_in <= 8; i_in++ )
 	    {
@@ -109,10 +109,10 @@ class Sum : public TFunction
 		ioAdd( new IO(id_buf,nm_buf,IO::Real,IO::Default,"0") );
 	    }
 	}
-	
+
 	string name( )	{ return _("Simple summator"); }
-	string descr( )	
-	{ 
+	string descr( )
+	{
 	    return _("Simple summator per formula:\n"
 		"out=in1_1*in1_2+in2_1*in2_2+in3_1*in3_2+in4_1*in4_2+\n"
 		"    in5_1*in5_2+in6_1*in6_2+in7_1*in7_2+in8_1*in8_2;"); 
@@ -148,12 +148,12 @@ class Mult : public TFunction
 	    for( int i_c = 1; i_c <= 4; i_c++ )
 		ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),(_("Input 2.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	}
-	
+
 	string name( )	{ return _("Simple multiplicator"); }
 	string descr( )	
-	{ 
+	{
 	    return _("Simple moltiplicator per formula:\n"
-	    	"out=(in1_1*in1_2*in1_3*in1_4*in1_5*in1_6)/(in2_1*in2_2*in2_3*in2_4);"); 
+		"out=(in1_1*in1_2*in1_3*in1_4*in1_5*in1_6)/(in2_1*in2_2*in2_3*in2_4);");
 	}
 
 	void calc( TValFunc *val )
@@ -184,10 +184,10 @@ class MultDiv : public TFunction
 	    for( int i_c = 1; i_c <= 5; i_c++ )
 		ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),(_("Input 4.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	}
-	
+
 	string name( )	{ return _("Multiplicator+divider"); }
-	string descr( )	
-	{     
+	string descr( )
+	{
 	    return _("Multiplicator+divider per formula:\n"
 		"out=in1_1*in1_2*in1_3*in1_4*in1_5*(in2_1*in2_2*in2_3*in2_4*in2_5+\n"
 		"          (in3_1*in3_2*in3_3*in3_4*in3_5)/(in4_1*in4_2*in4_3*in4_4*in4_5));");
@@ -224,10 +224,10 @@ class Exp : public TFunction
 		ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),(_("Input 4.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	    ioAdd( new IO("in5",_("Input 5"),IO::Real,IO::Default,"1") );
 	}
-	
+
 	string name( )	{ return _("Exponent"); }
-	string descr( )	
-	{    
+	string descr( )
+	{
 	    return _("Exponent per formula:\n"
 		"out=exp (in1_1*in1_2*in1_3*in1_4*in1_5 +\n"
 		"         (in2_1*in2_2*in2_3*in2_4*in2_5+in3) / (in4_1*in4_2*in4_3*in4_4*in4_5+in5) );");
@@ -264,7 +264,7 @@ class Pow : public TFunction
 	    for( int i_c = 1; i_c <= 5; i_c++ )
 		ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),(_("Input 4.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	}
-	
+
 	string name( )	{ return _("Power"); }
 	string descr( )
 	{
@@ -430,7 +430,7 @@ class Select : public TFunction
 	    for( int i_c = 1; i_c <= 4; i_c++ )
 		ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),(_("Input 4.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	}
-	
+
 	string name( )	{ return _("Selector"); }
 	string descr( )	
 	{

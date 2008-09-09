@@ -1,7 +1,7 @@
 
 //OpenSCADA system module BD.DBF file: dbf_mod.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2007 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -36,14 +36,14 @@
 
 //************************************************
 //* Modul info!                                  *
-#define MOD_ID      "DBF"
-#define MOD_NAME    "DB DBF"
-#define MOD_TYPE    "BD"
-#define VER_TYPE    VER_BD
-#define VERSION     "1.8.1"
-#define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "BD modul. Allow support of the *.dbf files, version 3.0."
-#define LICENSE     "GPL"
+#define MOD_ID		"DBF"
+#define MOD_NAME	"DB DBF"
+#define MOD_TYPE	"BD"
+#define VER_TYPE	VER_BD
+#define VERSION		"1.9.0"
+#define AUTORS		"Roman Savochenko"
+#define DESCRIPTION	"BD modul. Allow support of the *.dbf files, version 3.0."
+#define LICENSE		"GPL"
 //************************************************
 
 BDDBF::BDMod *BDDBF::mod;

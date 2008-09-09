@@ -40,7 +40,7 @@
 #define MOD_NAME	"ModBus client"
 #define MOD_TYPE	"DAQ"
 #define VER_TYPE	VER_CNTR
-#define VERSION		"0.8.0"
+#define VERSION		"0.9.0"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow realisation of ModBus client service. Supported Modbus/TCP, Modbus/RTU and Modbus/ASCII protocols."
 #define LICENSE		"GPL"
