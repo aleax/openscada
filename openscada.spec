@@ -1,7 +1,7 @@
 #===== Generic Info ======
 Summary: Open SCADA system project
 Name: openscada
-Version: 0.6.1
+Version: 0.6.2
 Release: 1
 Source: %name-%version.tar.gz
 License: GPL
