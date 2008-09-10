@@ -15,15 +15,15 @@
 	<prm id="WorkDB">SQLite.GenDB</prm>
 
 	<node id="sub_BD">
-            <tbl id="DB">
-                <fld ID="GenDB" TYPE="SQLite" NAME="Generic DB" ADDR="./DATA/DemoSt.db" CODEPAGE="KOI8-R"/>
-            </tbl>
-        </node>
+	    <tbl id="DB">
+		<fld ID="GenDB" TYPE="SQLite" NAME="Generic DB" ADDR="./DATA/DemoSt.db" CODEPAGE="KOI8-R"/>
+	    </tbl>
+	</node>
 
 	<node id="sub_Security">
-            <!--
-            <tbl id="Security_user">
-        	<fld
+	    <!--
+	    <tbl id="Security_user">
+		<fld
 		    NAME="root"
 		    DESCR="Super user"
 		    PASS="openscada"/>
@@ -37,7 +37,7 @@
 		    NAME="root"
 		    DESCR="Super users groups."
 		    USERS="root;user"/>
-            </tbl>-->
+	    </tbl>-->
 	</node>
 
 	<node id="sub_ModSched">
@@ -48,8 +48,8 @@
 
 	<node id="sub_Transport">
 	    <!--
-            <tbl id="Transport_in">
-        	<fld
+	    <tbl id="Transport_in">
+		<fld
 		    ID="WEB_1"
 		    MODULE="Sockets"
 		    NAME="Generic transport for WEB interface."
@@ -62,7 +62,7 @@
 		    SocketsMaxClient="10"/>
 		<fld
 		    ID="WEB_2"
-		    MODULE="Sockets"		    
+		    MODULE="Sockets"
 		    NAME="Reserve transport for WEB interface."
 		    DESCRIPT=""
 		    ADDR="TCP::10004:0"
@@ -75,45 +75,45 @@
 	    <tbl id="Transport_out">
 	        <fld
 		    ID="WEB_test"
-		    MODULE="Sockets"		    
+		    MODULE="Sockets"
 		    NAME="WEB test"
 		    DESCRIPT="WEB output test"
 		    ADDR="TCP:127.0.0.1:10002"
 		    START="1"/>
-            </tbl>-->
+	    </tbl>-->
 	</node>
 
 	<node id="sub_DAQ">
-            <!--
-            <tbl id="tmplib">
-                <fld ID="test2" NAME="Test 2" DESCR="" DB="tmplib_test2"/>
-            </tbl>
-            <tbl id="tmplib_test2">
-                <fld ID="test2" NAME="Test 2" DESCR="" DB="test2"
-                    PROGRAM="JavaLikeCalc.JavaScript cnt=5*i"/>
-            </tbl>
-            <tbl id="tmplib_test2_io">
-                <fld TMPL_ID="test2" ID="i" NAME="I" TYPE="4" FLAGS="160" VALUE="" POS="0"/>
-                <fld TMPL_ID="test2" ID="cnt" NAME="Cnt" TYPE="4" FLAGS="32" VALUE="" POS="0"/>
-            </tbl>-->
+	    <!--
+	    <tbl id="tmplib">
+		<fld ID="test2" NAME="Test 2" DESCR="" DB="tmplib_test2"/>
+	    </tbl>
+	    <tbl id="tmplib_test2">
+		<fld ID="test2" NAME="Test 2" DESCR="" DB="test2"
+		    PROGRAM="JavaLikeCalc.JavaScript cnt=5*i"/>
+	    </tbl>
+	    <tbl id="tmplib_test2_io">
+		<fld TMPL_ID="test2" ID="i" NAME="I" TYPE="4" FLAGS="160" VALUE="" POS="0"/>
+		<fld TMPL_ID="test2" ID="cnt" NAME="Cnt" TYPE="4" FLAGS="32" VALUE="" POS="0"/>
+	    </tbl>-->
 
-            <node id="mod_LogicLev">
-        	<!--
-        	<tbl id="DAQ">
-            	    <fld
-                	ID="test2"
-                	NAME="Test 2"
-                	DESCR=""
-                	ENABLE="1"
-                	START="1"
-                	PRM_BD="test2prm"
-                	PERIOD="1000"
-                	PRIOR="0"/>
-        	</tbl>
-        	<tbl id="test2prm">
-            	    <fld SHIFR="test2" NAME="Test 2" DESCR="" EN="1" MODE="2" PRM="test2.test2"/>
-        	</tbl>-->
-            </node>
+	    <node id="mod_LogicLev">
+		<!--
+		<tbl id="DAQ">
+		    <fld
+			ID="test2"
+			NAME="Test 2"
+			DESCR=""
+			ENABLE="1"
+			START="1"
+			PRM_BD="test2prm"
+			PERIOD="1000"
+			PRIOR="0"/>
+		</tbl>
+		<tbl id="test2prm">
+		    <fld SHIFR="test2" NAME="Test 2" DESCR="" EN="1" MODE="2" PRM="test2.test2"/>
+		</tbl>-->
+	    </node>
 
 	    <node id="mod_System">
 		<!--
@@ -133,14 +133,14 @@
 		    <fld SHIFR="CPU" NAME="CPU load" DESCR="" EN="1" TYPE="CPU" SUBT="gen"/>
 		    <fld SHIFR="MEM" NAME="Memory" DESCR="" EN="1" TYPE="MEM"/>
 		</tbl>
-                -->
+		-->
 	    </node>
 
 	    <node id="mod_DiamondBoards">
 	        <!--
 		<tbl id="DAQ">
 		    <fld ID="Athena" NAME="Athena board" DESCR="" ENABLE="1" START="0"
-		        BOARD="25" PRM_BD_A="AthenaAnPrm" PRM_BD_D="AthenaDigPrm" ADDR="640" INT="5"
+			BOARD="25" PRM_BD_A="AthenaAnPrm" PRM_BD_D="AthenaDigPrm" ADDR="640" INT="5"
 			DIO_CFG="0" ADMODE="0" ADRANGE="0" ADPOLAR="0" ADGAIN="0" ADCONVRATE="1000"/>
 		</tbl>
 		<tbl id="AthenaAnPrm">
@@ -198,30 +198,30 @@
 		    <fld F_ID="d_alarm" ID="alrm_md" NAME="Alarm mode" TYPE="3" MODE="0" DEF="" HIDE="0" POS="2"/>
 		    <fld F_ID="d_alarm" ID="alrm_mess" NAME="Alarm message" TYPE="0" MODE="0" DEF="" HIDE="0" POS="3"/>
 		</tbl>-->
-	    </node> 
+	    </node>
 
-            <node id="mod_CIF">
-                <!--
-                <tbl id="DAQ">
-                    <fld ID="test2" NAME="Test 2" DESCR="" ENABLE="1" START="1" PRM_BD="test2prm"
-                         PERIOD="1000" PRIOR="0" CIF_DEV="0" ADDR="5" ASINC_WR="0"/>
-                </tbl>
+	    <node id="mod_CIF">
+		<!--
+		<tbl id="DAQ">
+		    <fld ID="test2" NAME="Test 2" DESCR="" ENABLE="1" START="1" PRM_BD="test2prm"
+			 PERIOD="1000" PRIOR="0" CIF_DEV="0" ADDR="5" ASINC_WR="0"/>
+		</tbl>
 		<tbl id="test2prm">
 		    <fld SHIFR="test2" NAME="Test 2" DESCR="" EN="1" TMPL="S7.ai_man"/>
 		</tbl>-->
 	    </node>
-									 
+
 	    <node id="mod_SNMP">
 		<!--
-	        <tbl id="DAQ">
+		<tbl id="DAQ">
 		    <fld ID="test2" NAME="Test 2" DESCR="" ENABLE="1" START="1" PRM_BD="test2prm"
 			 PERIOD="1000" PRIOR="0" ADDR="localhost" COMM="public" PATTR_LIM="20"/>
 		</tbl>
-	        <tbl id="test2prm">
+		<tbl id="test2prm">
 		    <fld SHIFR="test2" NAME="Test 2" DESCR="" EN="1" OID_LS="system"/>
 		</tbl>-->
 	    </node>
-																																					  
+
 	    <node id="mod_ModBus">
 		<!--
 		<tbl id="DAQ">
@@ -232,15 +232,15 @@
 		    <fld SHIFR="test2" NAME="Test 2" DESCR="" EN="1" ATTR_LS="321:0:tst:Test"/>
 		</tbl>-->
 	    </node>
-	    
-            <node id="mod_Transporter">
-	        <!--
+
+	    <node id="mod_Transporter">
+		<!--
 		<tbl id="DAQ">
 		    <fld ID="test2" NAME="Test 2" DESCR="" ENABLE="1" START="1" PRM_BD="test2prm"
 			 PERIOD="1000" PRIOR="0" SYNCPER="60" STATIONS="loop" CNTRPRM="System.AutoDA"/>
-	        </tbl>-->
+		</tbl>-->
 	    </node>
-	    
+
 	</node>
 
 	<node id="sub_Archive">
@@ -249,57 +249,57 @@
 	    <prm id="ValPeriod">1000</prm>
 	    <prm id="ValPriority">10</prm>
 	    <!--
-            <tbl id="Archive_mess_proc">
-                <fld
-                    ID="StatErrors"
-                    MODUL="FSArch"
-                    NAME="Errors satt"
-                    DESCR="Архив локальных ощибок"
-                    START="1"
-                    CATEG="/DemoStation*"
-                    LEVEL="4"
-                    ADDR="ARCHIVES/MESS/stError/"
-                    FSArchMSize="300"
-                    FSArchNFiles="10"
-                    FSArchTmSize="30"
-                    FSArchXML="1"
-                    FSArchPackTm="10"
-                    FSArchTm="60"/>
-                <fld
-                    ID="NetRequsts"
-                    MODUL="FSArch"
-                    NAME="Net requests"
-                    DESCR="Запросы к серверу через транспорт Sockets."
-                    START="1"
-                    CATEG="/DemoStation/Transport/Sockets*"
-                    LEVEL="1"
-                    ADDR="ARCHIVES/MESS/Net/"
-                    FSArchMSize="300"
-                    FSArchNFiles="10"
-                    FSArchTmSize="30"
-                    FSArchXML="1"
-                    FSArchPackTm="10"
-                    FSArchTm="60"/>
-            </tbl>
-            <tbl id="Archive_val_proc">
-                <fld
-                    ID="1h"
-                    MODUL="FSArch"
-                    NAME="1час"
-                    DESCR="Усреднение за час"
-                    START="1"
-                    ADDR="ARCHIVES/VAL/1h/"
-                    V_PER="360"
-                    A_PER="60"
-                    FSArchTmSize="8640"
-                    FSArchNFiles="10"
-                    FSArchRound="0.1"
-                    FSArchPackTm="10"
-                    FSArchTm="60"/>
-            </tbl>
+	    <tbl id="Archive_mess_proc">
+		<fld
+		    ID="StatErrors"
+		    MODUL="FSArch"
+		    NAME="Errors satt"
+		    DESCR="Архив локальных ощибок"
+		    START="1"
+		    CATEG="/DemoStation*"
+		    LEVEL="4"
+		    ADDR="ARCHIVES/MESS/stError/"
+		    FSArchMSize="300"
+		    FSArchNFiles="10"
+		    FSArchTmSize="30"
+		    FSArchXML="1"
+		    FSArchPackTm="10"
+		    FSArchTm="60"/>
+		<fld
+		    ID="NetRequsts"
+		    MODUL="FSArch"
+		    NAME="Net requests"
+		    DESCR="Запросы к серверу через транспорт Sockets."
+		    START="1"
+		    CATEG="/DemoStation/Transport/Sockets*"
+		    LEVEL="1"
+		    ADDR="ARCHIVES/MESS/Net/"
+		    FSArchMSize="300"
+		    FSArchNFiles="10"
+		    FSArchTmSize="30"
+		    FSArchXML="1"
+		    FSArchPackTm="10"
+		    FSArchTm="60"/>
+	    </tbl>
+	    <tbl id="Archive_val_proc">
+		<fld
+		    ID="1h"
+		    MODUL="FSArch"
+		    NAME="1час"
+		    DESCR="Усреднение за час"
+		    START="1"
+		    ADDR="ARCHIVES/VAL/1h/"
+		    V_PER="360"
+		    A_PER="60"
+		    FSArchTmSize="8640"
+		    FSArchNFiles="10"
+		    FSArchRound="0.1"
+		    FSArchPackTm="10"
+		    FSArchTm="60"/>
+	    </tbl>
 	    <tbl id="Archive_val">
 	        <fld
-	    	    ID="test1"
+		    ID="test1"
 		    NAME="Test 1"
 		    DESCR="Test 1"
 		    START="1"
@@ -343,36 +343,35 @@
 		    <fld OWNER="/test2" ID="pg1" ICO="" PARENT="/wlb_originals/wdg_Box" PROC="" PROC_PER="-1" USER="root" GRP="UI" PERMIT="436" FLGS="1"/>
 		    <fld OWNER="/test2/pg1" ID="pg2" ICO="" PARENT="/wlb_originals/wdg_Box" PROC="" PROC_PER="-1" USER="root" GRP="UI" PERMIT="436" FLGS="0"/>
 		</tbl>
-                <tbl id="prj_test2_incl">
-            	    <fld IDW="/prj_test2/pg_pg1" ID="wdg1" PARENT="/wlb_originals/wdg_Box"/>
+		<tbl id="prj_test2_incl">
+		    <fld IDW="/prj_test2/pg_pg1" ID="wdg1" PARENT="/wlb_originals/wdg_Box"/>
 		    </tbl>-->
 		</node>
 	</node>
 
 	<node id="sub_Special">
-    	    <node id="mod_SystemTests">
+	    <node id="mod_SystemTests">
 		<prm id="PARAM" on="0" per="5" name="LogicLev.experiment.F3"/>
-                <prm id="XML" on="0" per="10" file="/etc/oscada.xml"/>
+		<prm id="XML" on="0" per="10" file="/etc/oscada.xml"/>
 		<prm id="MESS" on="0" per="10" categ="" arhtor="DBArch.test3"/>
 		<prm id="SOAttDet" on="0" per="20" name="../../lib/openscada/daq_LogicLev.so" full="1"/>
 		<prm id="Val" on="0" per="1" name="LogicLev.experiment.F3.var" arch_len="5" arch_per="1000000"/>
-                <prm id="Val" on="0" per="1" name="System.AutoDA.CPULoad.load" arch_len="10" arch_per="1000000"/>
-                <prm id="BD" on="0" per="10" type="MySQL" bd="server.diya.org;roman;123456;oscadaTest" table="test" size="1000"/>
-                <prm id="BD" on="0" per="10" type="DBF" bd="./DATA/DBF" table="test.dbf" size="1000"/>
-                <prm id="BD" on="0" per="10" type="SQLite" bd="./DATA/test.db" table="test" size="1000"/>
-                <prm id="BD" on="0" per="10" type="FireBird" bd="server.diya.org:/var/tmp/test.fdb;roman;123456" table="test" size="1000"/>
-                <prm id="TrOut" on="0" per="1" addr="TCP:127.0.0.1:10001" type="Sockets" req="time"/>
-        	<prm id="TrOut" on="0" per="1" addr="UDP:127.0.0.1:10001" type="Sockets" req="time"/>
-                <prm id="TrOut" on="0" per="1" addr="UNIX:./oscada" type="Sockets" req="time"/>
-                <prm id="TrOut" on="0" per="1" addr="UDP:127.0.0.1:daytime" type="Sockets" req="time"/>
-                <prm id="Func" on="0" per="10"/>
-                <prm id="SysContrLang" on="0" per="10" path="/Archive/FSArch/mess_StatErrors/%2fprm%2fst"/>
-                <prm id="ValBuf" on="0" per="5"/>
-                <prm id="Archive" on="0" per="30" arch="test1" period="1000000"/>
-                <prm id="Base64Code" on="0" per="10"/>
-    	    </node>
+		<prm id="Val" on="0" per="1" name="System.AutoDA.CPULoad.load" arch_len="10" arch_per="1000000"/>
+		<prm id="BD" on="0" per="10" type="MySQL" bd="server.diya.org;roman;123456;oscadaTest" table="test" size="1000"/>
+		<prm id="BD" on="0" per="10" type="DBF" bd="./DATA/DBF" table="test.dbf" size="1000"/>
+		<prm id="BD" on="0" per="10" type="SQLite" bd="./DATA/test.db" table="test" size="1000"/>
+		<prm id="BD" on="0" per="10" type="FireBird" bd="server.diya.org:/var/tmp/test.fdb;roman;123456" table="test" size="1000"/>
+		<prm id="TrOut" on="0" per="1" addr="TCP:127.0.0.1:10001" type="Sockets" req="time"/>
+		<prm id="TrOut" on="0" per="1" addr="UDP:127.0.0.1:10001" type="Sockets" req="time"/>
+		<prm id="TrOut" on="0" per="1" addr="UNIX:./oscada" type="Sockets" req="time"/>
+		<prm id="TrOut" on="0" per="1" addr="UDP:127.0.0.1:daytime" type="Sockets" req="time"/>
+		<prm id="Func" on="0" per="10"/>
+		<prm id="SysContrLang" on="0" per="10" path="/Archive/FSArch/mess_StatErrors/%2fprm%2fst"/>
+		<prm id="ValBuf" on="0" per="5"/>
+		<prm id="Archive" on="0" per="30" arch="test1" period="1000000"/>
+		<prm id="Base64Code" on="0" per="10"/>
+	    </node>
 	</node>
   </station>
 
 </OpenSCADA>
-
