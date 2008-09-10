@@ -1,3 +1,8 @@
+2008-09-10 Maxim
+- FIX:/UI/WebVision: Filling of the figures is fixed for primitive ElFigure.
+
+
+=======
 2008-09-09 Roman
 - !!:/Archive/FSArch: Documentation and translation is updated and version 1.0.0 is relised.
 - !!:/Archive/DBArch: Documentation and translation is updated and version 0.7.0 is relised.

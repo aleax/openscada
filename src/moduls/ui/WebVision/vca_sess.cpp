@@ -1640,9 +1640,11 @@ void VCAElFigure::getReq( SSess &ses )
     im = gdImageCreate( (int)TSYS::realRound(width*xSc), (int)TSYS::realRound(height*ySc) );
     gdImageFilledRectangle( im, 0, 0, (int)TSYS::realRound(width*xSc-1), (int)TSYS::realRound(height*ySc-1), gdImageColorAllocateAlpha(im,0,0,0,127) );
     double scale;
-    double width;
+    double el_width;
     double border_width;
     bool flag_min;
+    int s_width = (int) (width*xSc + 0.5);
+    int s_height = (int) (height*ySc + 0.5);
     if( xSc < ySc ) scale = xSc;
     else scale = ySc;
     if( scale != 1.0 )
@@ -1658,9 +1660,9 @@ void VCAElFigure::getReq( SSess &ses )
             
             flag_min = false;
             if( shapeItems[i].flag_brd ) shapeItems[i].width += 2;
-            width = shapeItems[i].width;
-            width = width*scale;
-            shapeItems[i].width = (int)TSYS::realRound(width);
+            el_width = shapeItems[i].width;
+            el_width = el_width*scale;
+            shapeItems[i].width = (int)TSYS::realRound(el_width);
             if( shapeItems[i].width > 3 && shapeItems[i].flag_brd )
             {
                 shapeItems[i].width -= 2;
@@ -1919,7 +1921,6 @@ void VCAElFigure::getReq( SSess &ses )
                 
                 for (int yOut = 0; ( yOut < (int)TSYS::realRound( yMax - yMin )); yOut++)
                 {
-                    bool flag_printf = false;
                     for (int xOut = 0; ( xOut < (int)TSYS::realRound( xMax - xMin )); xOut++)
                     {
                         yIn = (int)TSYS::realRound( yOut/imYScale, 2, true );
@@ -2063,7 +2064,8 @@ void VCAElFigure::getReq( SSess &ses )
                 if( point_num.size() == 1 && shapeItems[fig[0]].type == 2 )
                 {
                     delta_point_center = scaleRotate( (pnts)[shapeItems[fig[0]].n3], xSc, ySc, true, true );
-                    paintFill( im, delta_point_center, inundationItems[i], tmp_clr );
+                    if( (int)(delta_point_center.x+0.5) < s_width && (int)(delta_point_center.y+0.5) < s_height )
+                        paintFill( im, delta_point_center, inundationItems[i], tmp_clr );
                 }
                 if( point_num.size() > 1 &&
                     length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[0]], xSc, ySc, true, true ) ) > 1 &&
@@ -3165,7 +3167,8 @@ void VCAElFigure::getReq( SSess &ses )
                     delta_point_center.x = (delta_point_1.x+delta_point_2.x)/2;
                     delta_point_center.y = (delta_point_1.y+delta_point_2.y)/2;
                     //-- Calling fill procedure for each fill with the real "fill" point --
-                    paintFill( im, delta_point_center, inundationItems[i], tmp_clr );
+                    if( (int)(delta_point_center.x+0.5) < s_width && (int)(delta_point_center.y+0.5) < s_height )
+                        paintFill( im, delta_point_center, inundationItems[i], tmp_clr );
                 }
             }
         //- Changing the color to the real one for all figures used in each fill(inundation)
