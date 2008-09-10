@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: ttipdaq.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2007 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -33,10 +33,10 @@
 //*************************************************
 //* TTipDAQ                                       *
 //*************************************************
-TTipDAQ::TTipDAQ( ) 
+TTipDAQ::TTipDAQ( )
 {
     m_cntr = grpAdd("cntr_");
-    
+
     fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,"20") );
     fldAdd( new TFld("NAME",_("Name"),TFld::String,0,"50") );
     fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::FullText,"300") );
@@ -47,11 +47,11 @@ TTipDAQ::TTipDAQ( )
 TTipDAQ::~TTipDAQ( )
 {
     nodeDelAll();
-    
+
     while(paramt.size())
     {
 	delete paramt[0];
-	paramt.erase(paramt.begin());	
+	paramt.erase(paramt.begin());
     }
 }
 
@@ -64,10 +64,10 @@ void TTipDAQ::modStart( )
 	if( at(lst[i_l]).at().toStart() )
 	try{ at(lst[i_l]).at().start( ); }
 	catch(TError err)
-        {
-    	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+	{
+	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	    mess_err(nodePath().c_str(),_("Start controller <%s> error."),(modId()+"."+lst[i_l]).c_str());
-        }
+	}
 }
 
 void TTipDAQ::modStop( )
@@ -78,9 +78,9 @@ void TTipDAQ::modStop( )
     for(int i_l=0; i_l < lst.size(); i_l++)
         at(lst[i_l]).at().stop( );
 }
-      
+
 void TTipDAQ::add( const string &name, const string &daq_db )
-{   
+{
     if( chldPresent(m_cntr,name) ) return;
     chldAdd(m_cntr,ContrAttach( name, daq_db ));
 }
@@ -101,8 +101,8 @@ bool TTipDAQ::tpPrmPresent( const string &name_t )
 
 int TTipDAQ::tpParmAdd( const char *id, const char *n_db, const char *name )
 {
-    if( tpPrmPresent(id) )	return tpPrmToId(id);    
-    
+    if( tpPrmPresent(id) )	return tpPrmToId(id);
+
     //- Add type -
     int i_t = paramt.size();
     paramt.push_back(new TTipParam(id, name, n_db) );
@@ -124,12 +124,12 @@ int TTipDAQ::tpPrmToId( const string &name_t)
 
 TController *TTipDAQ::ContrAttach( const string &name, const string &daq_db )
 {
-    throw TError(nodePath().c_str(),"Error attach new controller %s.",name.c_str()); 
+	throw TError(nodePath().c_str(),"Error attach new controller %s.",name.c_str()); 
 }
 
 string TTipDAQ::compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text )
 {
-    throw TError(nodePath().c_str(),"Module is no support of function compile languages.");
+	throw TError(nodePath().c_str(),"Module is no support of function compile languages.");
 }
 
 void TTipDAQ::cntrCmdProc( XMLNode *opt )
@@ -137,7 +137,7 @@ void TTipDAQ::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
-        TModule::cntrCmdProc(opt);
+	TModule::cntrCmdProc(opt);
 	ctrMkNode("grp",opt,-1,"/br/cntr_",_("Controller"),0664,"root","root",1,"idm","1");
 	if(ctrMkNode("area",opt,0,"/tctr",_("Controllers")))
 	    ctrMkNode("list",opt,-1,"/tctr/ctr",_("Controllers"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","cntr_");
@@ -154,10 +154,10 @@ void TTipDAQ::cntrCmdProc( XMLNode *opt )
 	    for( unsigned i_a=0; i_a < c_list.size(); i_a++ )
 		opt->childAdd("el")->setAttr("id",c_list[i_a])->setText(at(c_list[i_a]).at().name());
 	}
-	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )		
+	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )
 	{
 	    add(opt->attr("id"));
-	    at(opt->attr("id")).at().setName(opt->text());				
+	    at(opt->attr("id")).at().setName(opt->text());
 	}
 	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	chldDel(m_cntr,opt->attr("id"),-1,1);
     }

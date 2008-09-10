@@ -1,10 +1,12 @@
-2008-09-10 Roman
+2008-09-10 Roman OpenSCADA 0.6.2
 - !!:/UI/QTStarter: Documentation and translation is updated and version 1.5.1 is relised.
 - !!:/UI/QTCfg: Documentation and translation is updated and version 1.6.0 is relised.
 - !!:/UI/VCAEngine: Documentation and translation is updated and version 0.7.0 is relised.
 - !!:/UI/Vision: Documentation and translation is updated and version 0.7.0 is relised.
 - !!:/UI/WebVision: Documentation and translation is updated and version 0.4.0 is relised.
 - !!:/UI/WebCfg: Documentation and translation is updated and version 1.5.1 is relised.
+- !!:/SYS: Add release 0.6.2 anounce documents.
+- !!:/SYS: Updated API and TODO documents.
 
 
 2008-09-10 Maxim

@@ -1,6 +1,6 @@
 //OpenSCADA system file: tuis.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2007 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -38,7 +38,7 @@ TUIS::TUIS( ) : TSubSYS("UI","User interfaces",true)
 string TUIS::optDescr( )
 {
     return(_(
-    	"===================== Subsystem \"User interfaces\" options ===============\n\n"));
+	"===================== Subsystem \"User interfaces\" options ===============\n\n"));
 }
 
 void TUIS::load_( )
@@ -52,7 +52,7 @@ void TUIS::load_( )
 	{NULL        ,0,NULL,0  }
     };
 
-    optind=opterr=0;	
+    optind=opterr=0;
     do
     {
 	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
@@ -62,7 +62,7 @@ void TUIS::load_( )
 	    case -1 : break;
 	}
     } while(next_opt != -1);
-    
+
     //- Load parameters from config file -
 
 }
@@ -75,7 +75,7 @@ void TUIS::subStart(  )
 
     TSubSYS::subStart( );
 }
-    
+
 void TUIS::subStop( )
 {
 #if OSC_DEBUG
@@ -94,7 +94,7 @@ bool TUIS::icoPresent(const string &inm, string *tp)
 	close(hd);
 	return true;
     }
-    return false;    
+    return false;
 }
 
 string TUIS::icoGet(const string &inm, string *tp )
@@ -102,16 +102,16 @@ string TUIS::icoGet(const string &inm, string *tp )
     int len;
     char buf[STR_BUF_LEN];
     string rez;
-    
+
     int hd = open(icoPath(inm).c_str(),O_RDONLY);
     if( hd != -1 )
     {
-        if( tp ) *tp = "png";
-        while( len = read(hd,buf,sizeof(buf)) )
-    	    rez.append(buf,len);
-        close(hd);
+	if( tp ) *tp = "png";
+	while( len = read(hd,buf,sizeof(buf)) )
+	    rez.append(buf,len);
+	close(hd);
     }
-    
+
     return rez;
 }
 
@@ -125,7 +125,7 @@ void TUIS::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
-        TSubSYS::cntrCmdProc(opt);
+	TSubSYS::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","10");
 	return;
     }
@@ -133,7 +133,7 @@ void TUIS::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) ) opt->setText(optDescr());
     else TSubSYS::cntrCmdProc(opt);
-}		    
+}
 
 //*************************************************
 //* TUI                                           *
@@ -148,13 +148,13 @@ void TUI::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
-        TModule::cntrCmdProc(opt);
+	TModule::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,0,"/prm",_("User interface")))
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))
 		ctrMkNode("fld",opt,-1,"/prm/st/r_st",_("Runing"),0664,"root","root",1,"tp","bool");
 	return;
     }
-    
+
     //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/prm/st/r_st" )
@@ -163,4 +163,4 @@ void TUI::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	atoi(opt->text().c_str())?modStart():modStop();
     }
     else TModule::cntrCmdProc(opt);
-}		    
+}

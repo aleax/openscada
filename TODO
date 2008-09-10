@@ -1,8 +1,6 @@
 To do tasks of the project OpenSCADA
 
 1. Questions for study
-  * Study speech synthesizer on http://neospeech.com/. 
-  * Study synthesizer http://www.linuxshop.ru/unix4all. 
   * Study multitier -> CORBA. 
   * Study http://www.opennet.ru/opennews/art.shtml?num=2475. 
   * Study EiffelStudio: http://www.eiffel.com/products/studio52. 
@@ -20,22 +18,22 @@ To do tasks of the project OpenSCADA
 5. Subsystem DB
   * Make DB module for ODBC support. 
   * Make DB module for DBMS PostgresSQL support. 
+  * Make DB module for OpenLDAP support.
   * Make DB module for DBMS Oracle support.
 
 6. Subsystem “Data acquisition” (DAQ)
-  * Make data acquisition module for gathering data from conrollers of firm Siemens series S7 by help of library Libnodave. 
   * Make data acquisition module for gathering data from OPC-servers (for it should use OPC-server through Ethernet, based on drive Unidrive SP1202).
 
 6.1. Logic level parameters (RU)
   * Make full parameters standby (include archives) on logical level parameters.
 
-6.2. System (RU)
+6.2. System
   * Data source support is added: file system stat (busy, free of disk area).
 
 7. Subsystem “Transports”
   * Make realisation of SNMP protocol's agent.
 
-7.1. Sockets (RU)
+7.1. Sockets
   * SSL codifying support adding to transport/protocol.
 
 8. Subsystem “Protocols of transports”
@@ -43,35 +41,31 @@ To do tasks of the project OpenSCADA
 
 9. Subsystem “User interfaces”
 
-9.1. WebCfg (RU)
+9.1. WebCfg
   * Rewrite with using JavaScript, CSS и AJAX.
 
-9.2. WebVision (RU)
-  * Update of view of elements of primitive «ElForm". 
-  * Process situation of server link lost adding. 
+9.2. WebVision
   * Implementation of permissions share to VCA.
+  * Use fontconfig for fonts' operations.
 
-9.3. QTCfg RU)
+9.3. QTCfg
   * Add tabulators. 
-  * Add direct actions to navigation tree. 
   * Make asynchronous call to OpenSCADA controll interface.
 
-9.4. VCAEngine (RU)
-  * Develope the operator messaging and alarm interface. 
+9.4. VCAEngine
   * Develope and making the “Document” primitive. 
   * Develope and making the “Function” primitive. 
   * Develope and making the “Link” primitive.
 
-9.5. Vision (RU)
-  * Develope the operator messaging and alarm interface to module VCAEngine and visualisators which based on it. 
-  * Implementation of permissions share to VCA. 
+9.5. Vision
   * Develope and making the “Document” primitive. 
   * Develope and making the “Function” primitive. 
   * Develope and making the “Link” primitive.
 
 10. Subsystem “Archives”
+  * Make module for export to mail and SMS.
 
-10.1. FSArch (RU)
+10.1. FSArch
 
 11. Subsystem “Security”
 
@@ -79,10 +73,8 @@ To do tasks of the project OpenSCADA
 
 13. Documentation
   * Translate the documentations to English and Ukrainian languages: 
-  * API of system; 
-  * Modules documentation.
+    * API of system; 
+    * Modules documentation.
 
 14. Project site
-  * Add user authorising on site. 
-  * Add forum. 
   * Add changes tracker and continued works at project tracker.

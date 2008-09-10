@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tuis.h
 /***************************************************************************
- *   Copyright (C) 2003-2007 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -37,16 +37,16 @@ using std::string;
 class TUI : public TModule
 {
     public:
-     	TUI( );
+	TUI( );
 
 	bool startStat( )	{ return run_st; }
 
     protected:
 	//Methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-	
+
 	//Attributes
-	bool  run_st; 
+	bool  run_st;
 };
 
 //*************************************************
@@ -57,12 +57,12 @@ class TUIS : public TSubSYS
     public:
 	TUIS( );
 
-	int subVer( ) 		{ return VER_UI; }
-        void subStart( );
-        void subStop( );
-	
+	int subVer( )		{ return VER_UI; }
+	void subStart( );
+	void subStop( );
+
 	AutoHD<TUI> at( const string &name )	{ return modAt(name); }
-	
+
 	//- All system UI functions -
 	static bool icoPresent( const string &inm, string *tp = NULL );
 	static string icoGet( const string &inm, string *tp = NULL );
@@ -72,7 +72,7 @@ class TUIS : public TSubSYS
 	void load_( );
 
     private:
-	string optDescr( );    
+	string optDescr( );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 };
 

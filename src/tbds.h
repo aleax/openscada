@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tbds.h
 /***************************************************************************
- *   Copyright (C) 2003-2007 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -18,7 +18,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
- 
+
 #ifndef TBDS_H
 #define TBDS_H
 
@@ -55,16 +55,16 @@ class TTable : public TCntrNode
 	string &name( )		{ return m_name; }
 
 	virtual void fieldStruct( TConfig &cfg )
-        { throw TError(nodePath().c_str(),_("Function <%s> no support!"),"fieldStruct"); }
+	{ throw TError(nodePath().c_str(),_("Function <%s> no support!"),"fieldStruct"); }
 	virtual bool fieldSeek( int row, TConfig &cfg )
-        { throw TError(nodePath().c_str(),_("Function <%s> no support!"),"fieldSeek"); }
+	{ throw TError(nodePath().c_str(),_("Function <%s> no support!"),"fieldSeek"); }
 	virtual void fieldGet( TConfig &cfg )
-        { throw TError(nodePath().c_str(),_("Function <%s> no support!"),"fieldGet"); }
+	{ throw TError(nodePath().c_str(),_("Function <%s> no support!"),"fieldGet"); }
 	virtual void fieldSet( TConfig &cfg )
-        { throw TError(nodePath().c_str(),_("Function <%s> no support!"),"fieldSet"); }
+	{ throw TError(nodePath().c_str(),_("Function <%s> no support!"),"fieldSet"); }
 	virtual void fieldDel( TConfig &cfg )
-        { throw TError(nodePath().c_str(),_("Function <%s> no support!"),"fieldDel"); }
-	
+	{ throw TError(nodePath().c_str(),_("Function <%s> no support!"),"fieldDel"); }
+
 	TBD &owner( )		{ return *(TBD *)nodePrev(); }
 
     protected:

@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: ttiparam.h
 /***************************************************************************
- *   Copyright (C) 2003-2007 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -38,8 +38,8 @@ class TTipParam : public TElem
 {
     public:
 	//Methods
-	TTipParam( const char *iid, const char *iname, const char *idb ) : 
-	    name(iid), descr(iname), db(idb) 	{ };
+	TTipParam( const char *iid, const char *iname, const char *idb ) :
+	    name(iid), descr(iname), db(idb)	{ };
 	
 	//Attributes
 	string name;
@@ -48,4 +48,3 @@ class TTipParam : public TElem
 };
 
 #endif // TTIPARAM_H
-

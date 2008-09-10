@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tspecials.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2007 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -36,7 +36,7 @@ TSpecialS::TSpecialS( ) : TSubSYS("Special","Specials",true)
 string TSpecialS::optDescr( )
 {
     return(_(
-    	"======================= Subsystem \"Special\" options =====================\n\n"));
+	"======================= Subsystem \"Special\" options =====================\n\n"));
 }
 
 void TSpecialS::load_( )
@@ -50,7 +50,7 @@ void TSpecialS::load_( )
 	{NULL       ,0,NULL,0  }
     };
 
-    optind=opterr=0;	
+    optind=opterr=0;
     do
     {
 	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
@@ -60,7 +60,7 @@ void TSpecialS::load_( )
 	    case -1 : break;
 	}
     } while(next_opt != -1);
-    
+
     //- Load parameters from config file -
 
 }
@@ -70,16 +70,16 @@ void TSpecialS::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
-        TSubSYS::cntrCmdProc(opt);
+	TSubSYS::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","10");
-        return;
+	return;
     }
     //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440,"root","root") )	opt->setText(optDescr());
     else TSubSYS::cntrCmdProc(opt);
 }
-		    
+
 //*************************************************
 //* TSpecial                                      *
 //*************************************************
@@ -97,7 +97,7 @@ void TSpecial::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("area",opt,0,"/prm",_("Special"));
 	ctrMkNode("area",opt,-1,"/prm/st",_("State"));
 	ctrMkNode("fld",opt,-1,"/prm/st/st",_("Runing"),0664,"root","root",1,"tp","bool");
-        return;
+	return;
     }
     //- Process command to page -
     string a_path = opt->attr("path");

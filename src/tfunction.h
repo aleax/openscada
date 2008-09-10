@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tfunction.h
 /***************************************************************************
- *   Copyright (C) 2003-2007 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -42,25 +42,25 @@ class IO
     public:
 	//Data
 	enum Type { String, Integer, Real, Boolean };
-	enum IOFlgs 
-	{ 
+	enum IOFlgs
+	{
 	    Default = 0x00,	//Default mode (Input IO)
 	    Output  = 0x01,
 	    Return  = 0x02
 	};
-	
-	//Methods	
-	IO( const char *id, const char *name, IO::Type type, unsigned flgs, const char *def = "", 
+
+	//Methods
+	IO( const char *id, const char *name, IO::Type type, unsigned flgs, const char *def = "",
 		bool hide = false, const char *rez = "" );
 
 	IO &operator=( IO &iio );
 
-	const string &id( ) 	{ return m_id; }
-	const string &name( ) 	{ return m_name; }
+	const string &id( )	{ return m_id; }
+	const string &name( )	{ return m_name; }
 	const Type &type( )	{ return m_type; }
-	unsigned flg( )		{ return m_flg; }		
-	const string &def( ) 	{ return m_def; }
-	bool  hide( ) 		{ return m_hide; }
+	unsigned flg( )		{ return m_flg; }
+	const string &def( )	{ return m_def; }
+	bool  hide( )		{ return m_hide; }
 	const string &rez( )	{ return m_rez; }
 
 	void setId( const string &val );
@@ -73,14 +73,14 @@ class IO
 
     private:
 	//Attributes
-	string 	m_id;
-	string 	m_name;
+	string	m_id;
+	string	m_name;
 	Type	m_type;
 	unsigned m_flg;
-	string  m_def;
+	string	m_def;
 	bool	m_hide;
 	string	m_rez;
-	
+
 	TFunction *owner;
 };
 
@@ -92,19 +92,19 @@ class TValFunc;
 class TFunction : public TCntrNode
 {
     public:
-	//Methods		
+	//Methods
 	TFunction( const string &id );
 	virtual ~TFunction( );
-	
+
 	TFunction &operator=( TFunction &func );
-	
+
 	const string &id( )		{ return m_id; };
 	virtual string name( )		{ return ""; }
-	virtual string descr( )		{ return ""; }	
-	bool startStat( )        	{ return run_st; }
-	
+	virtual string descr( )		{ return ""; }
+	bool startStat( )		{ return run_st; }
+
 	virtual void setStart( bool val )  { run_st = val; }
-	
+
 	//- IO -
 	void ioList( vector<string> &list );
 	int ioId( const string &id );
@@ -114,32 +114,32 @@ class TFunction : public TCntrNode
 	void ioIns( IO *io, int pos );
 	void ioDel( int pos );
 	void ioMove( int pos, int to );
-	
+
 	virtual void calc( TValFunc *val )	{ }
-	
+
 	void valAtt( TValFunc *vfnc );
-        void valDet( TValFunc *vfnc );		
-	
+	void valDet( TValFunc *vfnc );
+
 	virtual void preIOCfgChange( );
-        virtual void postIOCfgChange( );
-	
+	virtual void postIOCfgChange( );
+
     protected:
 	//Methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-	
+
 	void preDisable( int flag );
-	
+
 	//Attributes
-	string          m_id;
-	bool            run_st;	
-	TValFunc        *m_tval;
+	string		m_id;
+	bool		run_st;
+	TValFunc	*m_tval;
 
     private:
 	//Methods
-	string nodeName()       { return id(); }
-    
+	string nodeName( )	{ return id(); }
+
 	//Attributes
-	Res             f_res;
+	Res		f_res;
 	vector<IO*>	m_io;
 	vector<TValFunc*>	used;
 };
@@ -152,36 +152,36 @@ class TValFunc
     public:
 	//Methods
 	TValFunc( const string &iname = "", TFunction *ifunc = NULL, bool iblk = true );
-    	virtual ~TValFunc( );
-	
+	virtual ~TValFunc( );
+
 	const string &vfName( )			{ return m_name; }
-    	void setVfName( const string &inm )	{ m_name = inm; }
-	
-	void ioList( vector<string> &list );	
+	void setVfName( const string &inm )	{ m_name = inm; }
+
+	void ioList( vector<string> &list );
 	int  ioId( const string &id );
 	int  ioSize( );
 	IO::Type ioType( unsigned id )
 	{
 	    if( id >= m_val.size() )    throw TError("ValFunc",_("Id or IO %d error!"),id);
-    	    return m_func->io(id)->type();
+	    return m_func->io(id)->type();
 	}
 	unsigned ioFlg( unsigned id )
-	{    	
+	{
 	    if( id >= m_val.size() )    throw TError("ValFunc",_("Id or IO %d error!"),id);
 	    return m_func->io(id)->flg();
-	}	    
+	}
 	bool ioHide( unsigned id )
 	{
 	    if( id >= m_val.size() )    throw TError("ValFunc",_("Id or IO %d error!"),id);
-    	    return m_func->io(id)->hide();	
+	    return m_func->io(id)->hide();
 	}
-	
+
 	//- get IO value -
-	string 	getS( unsigned id );
-	int 	getI( unsigned id );
-	double 	getR( unsigned id );
-	char 	getB( unsigned id );
-	
+	string	getS( unsigned id );
+	int	getI( unsigned id );
+	double	getR( unsigned id );
+	char	getB( unsigned id );
+
 	//- set IO value -
 	void setS( unsigned id, const string &val );
 	void setI( unsigned id, int val );
@@ -194,50 +194,49 @@ class TValFunc
 	//- Dimension controll -
 	bool	dimens( )		{ return m_dimens; }
 	void	setDimens( bool set )	{ m_dimens = set; }
- 	
+
 	//- Calc function -
 	virtual void calc( );
 	//- Calc time function -
 	double  calcTm( )		{ return tm_calc; }
 	void setCalcTm( double ivl )	{ tm_calc = ivl; }
-	
+
 	//- Attached function -
 	TFunction *func( )		{ return m_func; }
 	void setFunc( TFunction *func, bool att_det = true );
-	
+
 	virtual void preIOCfgChange( );
-        virtual void postIOCfgChange( );
+	virtual void postIOCfgChange( );
 
     protected:
 	//Data
 	struct SVl
-        {
-	    IO::Type 	tp;
+	{
+	    IO::Type	tp;
 	    union
 	    {
 	        string *s;
 	        double r;
 	        int    i;
 	        char   b;
-	    }val;										    
+	    }val;
 	};
-	
-	//Attributes			
-	vector<SVl>     m_val;          //pointer to: string, int, double, bool								
+
+	//Attributes
+	vector<SVl>	m_val;	//pointer to: string, int, double, bool
 
     private:
 	//Methods
 	void funcDisConnect( bool det = true );
-	
-	//Attributes	
+
+	//Attributes
 	string	m_name;		//Value name
-	bool  	m_blk,		//Blocked values screen
+	bool	m_blk,		//Blocked values screen
 		m_dimens;	//Make dimension of the calc time
-	
+
 	double tm_calc;		//Calc time in mikroseconds
-	
+
 	TFunction	*m_func;
 };
 
 #endif //TFUNCTIONS_H
-

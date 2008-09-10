@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tmodule.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2007 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -36,7 +36,7 @@
 //*************************************************
 //* TModule                                       *
 //*************************************************
-const char *TModule::l_info[] = 
+const char *TModule::l_info[] =
     {"Modul","Name","Type","Source","Version","Author","Descript","License"};
 
 TModule::TModule( )
@@ -51,15 +51,15 @@ TModule::~TModule(  )
         delete m_efunc[i];
 }
 
-string TModule::modName()	
-{ 
-    return I18Ns(mName); 
+string TModule::modName()
+{
+    return I18Ns(mName);
 }
 
 void TModule::postEnable( int flag )
 {
     if( flag&TCntrNode::NodeRestore )	return;
-    
+
     mess_info(nodePath().c_str(),_("Connect module!"));
 
     lc_id = string("oscd_")+mId;
@@ -68,9 +68,9 @@ void TModule::postEnable( int flag )
 
 void TModule::modFuncList( vector<string> &list )
 {
-    list.clear();    
+    list.clear();
     for(int i=0; i < m_efunc.size(); i++)
-        list.push_back(m_efunc[i]->prot);
+	list.push_back(m_efunc[i]->prot);
 }
 
 bool TModule::modFuncPresent( const string &prot )
@@ -78,15 +78,15 @@ bool TModule::modFuncPresent( const string &prot )
     for(int i=0; i < m_efunc.size(); i++)
 	if( m_efunc[i]->prot == prot )
 	    return true;
-    return false;	    
+    return false;
 }
 
 TModule::ExpFunc &TModule::modFunc( const string &prot )
 {
     for(int i=0; i < m_efunc.size(); i++)
 	if( m_efunc[i]->prot == prot ) return *m_efunc[i];
-    throw TError(nodePath().c_str(),_("Function <%s> no present into module!"),prot.c_str());        
-}	
+    throw TError(nodePath().c_str(),_("Function <%s> no present into module!"),prot.c_str());
+}
 
 void TModule::modFunc( const string &prot, void (TModule::**offptr)() )
 {
@@ -96,13 +96,13 @@ void TModule::modFunc( const string &prot, void (TModule::**offptr)() )
 void TModule::modInfo( vector<string> &list )
 {
     for( int i_opt = 0; i_opt < sizeof(l_info)/sizeof(char *); i_opt++ )
-    	list.push_back( l_info[i_opt] );
+	list.push_back( l_info[i_opt] );
 }
 
 string TModule::modInfo( const string &name )
 {
     string info;
-    
+
     if( name == l_info[0] )      info=mId;
     else if( name == l_info[1] ) info=I18Ns(mName);
     else if( name == l_info[2] ) info=I18Ns(mType);
@@ -111,7 +111,7 @@ string TModule::modInfo( const string &name )
     else if( name == l_info[5] ) info=I18Ns(mAutor);
     else if( name == l_info[6] ) info=I18Ns(mDescr);
     else if( name == l_info[7] ) info=I18Ns(mLicense);
-    
+
     return info;
 }
 
@@ -126,14 +126,14 @@ void TModule::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,-1,"/help",_("Help")))
 	    if(ctrMkNode("area",opt,-1,"/help/m_inf",_("Module information")))
 	    {
-    		vector<string> list;
+		vector<string> list;
 		modInfo(list);
 		for( int i_l = 0; i_l < list.size(); i_l++)
 		    ctrMkNode("fld",opt,-1,(string("/help/m_inf/")+list[i_l]).c_str(),I18Ns(list[i_l]),0444,"root","root",1,"tp","str");
 	    }
-        return;    
-    } 
-       
+	return;
+    }
+
     //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/ico" && ctrChkNode(opt) )
@@ -142,20 +142,20 @@ void TModule::cntrCmdProc( XMLNode *opt )
 	opt->setText(TSYS::strEncode(TUIS::icoGet(owner().subId()+"."+modId(),&itp),TSYS::base64));
 	opt->setAttr("tp",itp);
     }
-    else if( a_path.substr(0,11) == "/help/m_inf" && ctrChkNode(opt) )	
+    else if( a_path.substr(0,11) == "/help/m_inf" && ctrChkNode(opt) )
 	opt->setText(modInfo(TSYS::pathLev(a_path,2)));
     else TCntrNode::cntrCmdProc(opt);
 }
 
-const char *TModule::I18N( const char *mess )   
-{ 
+const char *TModule::I18N( const char *mess )
+{
     const char *rez = Mess->I18N(mess,lc_id.c_str());
     if( !strcmp(mess,rez) ) rez = _(mess);
-    return rez; 
+    return rez;
 }
 
 string TModule::I18Ns( const string &mess ) 
-{ 
+{
     return I18N(mess.c_str());
 }
 

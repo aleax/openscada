@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: xml.h
 /***************************************************************************
- *   Copyright (C) 2003-2007 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -101,4 +101,3 @@ class XMLNode
 };
 
 #endif  //XML_H
-

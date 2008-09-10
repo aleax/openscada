@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tmodule.h
 /***************************************************************************
- *   Copyright (C) 2003-2007 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -36,7 +36,7 @@ using std::vector;
 //*************************************************
 class TSubSYS;
 
-class TModule : public TCntrNode 
+class TModule : public TCntrNode
 {
     friend class TSubSYS;
     public:
@@ -50,21 +50,21 @@ class TModule : public TCntrNode
 		SAt( )	{ }
 		SAt( const string &iid, const string &itype = "", int itver = 0 ) :
 		    id(iid), type(itype), t_ver(itver)	{ }
-		    
+
 		bool operator==( const TModule::SAt &amst ) const
 		{
 		    if( amst.id == id && amst.type == type && amst.t_ver == t_ver ) return true;
 		    return false;
 		}
-		
+
 		//Attributes
 		string id;          //id module
 		string type;        //Type module
 		int    t_ver;       //Type version module
 	};
-	
+
 	//*****************************************
-	//* ExpFunc                               *	
+	//* ExpFunc                               *
 	class ExpFunc
 	{
 	    public:
@@ -73,60 +73,60 @@ class TModule : public TCntrNode
 		string prot;		//Prototip
 		string dscr;		//Description
 		void (TModule::*ptr)();	//Adress
-	};												
-	
+	};
+
 	//Methods
 	TModule( );
 	virtual ~TModule(  );
-	
-        const string &modId( )		{ return mId; }
+
+	const string &modId( )		{ return mId; }
 	string modName( );
-    
-        virtual void modStart( ) 	{ }
-        virtual void modStop( ) 	{ }
-    
+
+	virtual void modStart( )	{ }
+	virtual void modStop( )		{ }
+
 	virtual void   modInfo( vector<string> &list );
 	virtual string modInfo( const string &name );
-    
+
 	//- Export functions -
 	void modFuncList( vector<string> &list );
 	bool modFuncPresent( const string &prot );
 	ExpFunc &modFunc( const string &prot );
 	void modFunc( const string &prot, void (TModule::**offptr)() );
-	
-        //- Translate functions -
+
+	//- Translate functions -
 	const char *I18N( const char *mess );
-        string I18Ns( const string &mess );				
-    
+	string I18Ns( const string &mess );
+
 	TSubSYS &owner( )		{ return *(TSubSYS *)nodePrev(); }
-    
-    protected:    
+
+    protected:
 	//Methods
 	void postEnable( int flag );
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-	
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+
 	//- Reg export function -
 	void modFuncReg( ExpFunc *func ){ m_efunc.push_back(func); }
-	
+
 	//Attributes
-	string mId;  	// Identificator
-	string mName;	// Name
-	string mDescr;  // Describe
-	string mType;  	// Type
-	string mVers;  	// Version
-	string mAutor;	// Autor
-	string mLicense;// License 
-	string mSource; // Source of module (SO, in build, ....)
+	string mId;				// Identificator
+	string mName;				// Name
+	string mDescr;				// Describe
+	string mType;				// Type
+	string mVers;				// Version
+	string mAutor;				// Autor
+	string mLicense;			// License
+	string mSource;				// Source of module (SO, in build, ....)
 
     private:
 	//Methods
 	string nodeName( )       { return modId(); }
 
 	//Attributes
-	string         	lc_id;        // Locale id. For gettext.
+	string		lc_id;		// Locale id. For gettext.
 	vector<ExpFunc *> m_efunc;	// Export function list
-	
-	static const char *l_info[];    // list of the present info options
+
+	static const char *l_info[];	// list of the present info options
 };
 
 #endif // TMODULE_H
