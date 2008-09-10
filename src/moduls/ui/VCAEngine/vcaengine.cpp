@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.VCAEngine file: vcaengine.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2007 by Roman Savochenko                           * 
+ *   Copyright (C) 2006-2008 by Roman Savochenko                           * 
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -36,7 +36,7 @@
 #define MOD_TYPE	"UI"
 #define MOD_SUBTYPE	"VCAEngine"
 #define VER_TYPE	VER_UI
-#define VERSION		"0.6.0"
+#define VERSION		"0.7.0"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Generic visual control area engine."
 #define LICENSE		"GPL"

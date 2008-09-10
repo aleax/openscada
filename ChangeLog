@@ -1,8 +1,16 @@
+2008-09-10 Roman
+- !!:/UI/QTStarter: Documentation and translation is updated and version 1.5.1 is relised.
+- !!:/UI/QTCfg: Documentation and translation is updated and version 1.6.0 is relised.
+- !!:/UI/VCAEngine: Documentation and translation is updated and version 0.7.0 is relised.
+- !!:/UI/Vision: Documentation and translation is updated and version 0.7.0 is relised.
+- !!:/UI/WebVision: Documentation and translation is updated and version 0.4.0 is relised.
+- !!:/UI/WebCfg: Documentation and translation is updated and version 1.5.1 is relised.
+
+
 2008-09-10 Maxim
 - FIX:/UI/WebVision: Filling of the figures is fixed for primitive ElFigure.
 
 
-=======
 2008-09-09 Roman
 - !!:/Archive/FSArch: Documentation and translation is updated and version 1.0.0 is relised.
 - !!:/Archive/DBArch: Documentation and translation is updated and version 0.7.0 is relised.

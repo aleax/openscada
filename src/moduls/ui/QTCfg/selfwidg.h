@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.QTCfg file: selfwidg.h
 /***************************************************************************
- *   Copyright (C) 2004-2007 by Roman Savochenko                           *
+ *   Copyright (C) 2004-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -56,39 +56,39 @@ class LineEdit : public QWidget
     Q_OBJECT
 
     public:
-        //- Data -
-        enum LType { Text, Integer, Real, Time, Date, DateTime, Combo };
+	//- Data -
+	enum LType { Text, Integer, Real, Time, Date, DateTime, Combo };
 
-        //- Methods -
-        LineEdit( QWidget *parent, LType tp = Text, bool prev_dis = false );
+	//- Methods -
+	LineEdit( QWidget *parent, LType tp = Text, bool prev_dis = false );
 
-        LType type( )		{ return m_tp; }
-        QString value( );
-        bool isEdited( );
+	LType type( )		{ return m_tp; }
+	QString value( );
+	bool isEdited( );
 
-        void setType( LType tp );
-        void setValue( const QString& );
-        void setCfg( const QString& );
+	void setType( LType tp );
+	void setValue( const QString& );
+	void setCfg( const QString& );
 
-        QWidget *workWdg( )	{ return ed_fld; }
+	QWidget *workWdg( )	{ return ed_fld; }
 
     signals:
-        void apply( );
-        void cancel( );
-        void valChanged( const QString& );
+	void apply( );
+	void cancel( );
+	void valChanged( const QString& );
 
     protected:
-        bool event( QEvent * e );
+	bool event( QEvent * e );
 
     private slots:
-        void changed( );
-        void applySlot( );
+	void changed( );
+	void applySlot( );
 
     private:
-        LType		m_tp;
-        QString		m_val;
-        QWidget		*ed_fld;
-        QPushButton	*bt_fld;
+	LType		m_tp;
+	QString		m_val;
+	QWidget		*ed_fld;
+	QPushButton	*bt_fld;
 };
 
 //*************************************************

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebVision file: web_vision.cpp
 /***************************************************************************
- *   Copyright (C) 2007 by Roman Savochenko                                *
+ *   Copyright (C) 2007-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -36,7 +36,7 @@
 #define MOD_TYPE	"UI"
 #define VER_TYPE	VER_UI
 #define SUB_TYPE	"WWW"
-#define MOD_VERSION	"0.3.0"
+#define MOD_VERSION	"0.4.0"
 #define AUTORS		"Roman Savochenko"
 #define DEVELOPERS	"Roman Savochenko, Lysenko Maxim, Yashina Kseniya"
 #define DESCRIPTION	"Web operation user interface for visual control area (VCA) projects playing."

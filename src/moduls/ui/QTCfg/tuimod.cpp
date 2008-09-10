@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.QTCfg file: tuimod.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2007 by Roman Savochenko                           *
+ *   Copyright (C) 2004-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -34,15 +34,15 @@
 
 //*************************************************
 //* Modul info!                                   *
-#define MOD_ID      "QTCfg"
-#define MOD_NAME    "System configurator (QT)"
-#define MOD_TYPE    "UI"
-#define VER_TYPE    VER_UI
-#define SUB_TYPE    "QT"
-#define VERSION     "1.5.1"
-#define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "Allow the QT based OpenSCADA system configurator."
-#define LICENSE     "GPL"
+#define MOD_ID		"QTCfg"
+#define MOD_NAME	"System configurator (QT)"
+#define MOD_TYPE	"UI"
+#define VER_TYPE	VER_UI
+#define SUB_TYPE	"QT"
+#define VERSION		"1.6.0"
+#define AUTORS		"Roman Savochenko"
+#define DESCRIPTION	"Allow the QT based OpenSCADA system configurator."
+#define LICENSE		"GPL"
 //*************************************************
 
 QTCFG::TUIMod *QTCFG::mod;

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_devel_dlgs.cpp
 /***************************************************************************
- *   Copyright (C) 2007 by Roman Savochenko                                *
+ *   Copyright (C) 2007-2008 by Roman Savochenko                           *
  *   rom_as@diyaorg.dp.ua                                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -830,6 +830,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
 
     //-- Add attributes configuration widget --
     obj_attr_cfg = new QTreeWidget(attr_cf_fr);
+    obj_attr_cfg->setAlternatingRowColors(true);
     obj_attr_cfg->setObjectName("/proc/attr");
     obj_attr_cfg->setItemDelegate(new ItemDelegate);
     obj_attr_cfg->setSelectionBehavior(QAbstractItemView::SelectRows);

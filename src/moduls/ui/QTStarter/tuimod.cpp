@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.QTStarter file: tuimod.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2007 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2008 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -44,7 +44,7 @@
 #define MOD_NAME	"QT GUI starter"
 #define MOD_TYPE	"UI"
 #define VER_TYPE	VER_UI
-#define VERSION		"1.5.0"
+#define VERSION		"1.5.1"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow QT GUI starter. It is single for all QT GUI modules!"
 #define LICENSE		"GPL"

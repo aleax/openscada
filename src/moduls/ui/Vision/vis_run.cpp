@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_run.cpp
 /***************************************************************************
- *   Copyright (C) 2007 by Roman Savochenko                                *
+ *   Copyright (C) 2007-2008 by Roman Savochenko                           *
  *   rom_as@diyaorg.dp.ua                                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *

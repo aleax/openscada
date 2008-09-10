@@ -2,7 +2,7 @@
 //OpenSCADA system module UI.VISION file: tvision.cpp
 /***************************************************************************
  *   Copyright (C) 2005-2006 by Evgen Zaichuk
- *                 2006-2007 by Roman Savochenko (rom_as@diyaorg.dp.ua)
+ *                 2006-2008 by Roman Savochenko (rom_as@diyaorg.dp.ua)
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@
 #define MOD_TYPE	"UI"
 #define VER_TYPE	VER_UI
 #define SUB_TYPE	"QT"
-#define VERSION		"0.6.0"
+#define VERSION		"0.7.0"
 #define AUTORS		"Roman Savochenko"
 #define DEVELOPERS	"Roman Savochenko, Lysenko Maxim, Yashina Kseniya"
 #define DESCRIPTION	"Visual operation user interface."

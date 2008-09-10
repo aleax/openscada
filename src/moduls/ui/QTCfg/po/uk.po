@@ -10,16 +10,16 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.UI.QTCfg 1.5.1\n"
+"Project-Id-Version: OpenSCADA.UI.QTCfg 1.6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-04 18:08+0300\n"
+"POT-Creation-Date: 2008-09-10 11:10+0300\n"
 "PO-Revision-Date: 2007-10-29 19:12+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: moc_qtcfg.cpp:74
+#: moc_qtcfg.cpp:75
 msgid ""
 "QTCFG::ConfAppexitModifChk()pageNext()itAdd()itCut()pageCyclRefrStart()"
 "userSel()enterWhatsThis()endRunChk()viewChild(QTreeWidgetItem*)onItem"
@@ -27,27 +27,27 @@ msgid ""
 "(QListWidgetItem*)postableSet(int,int)applyButton()imgPopup(QPoint)"
 msgstr ""
 
-#: moc_selfwidg.cpp:42
+#: moc_selfwidg.cpp:43
 msgid "QTCFG::LineEditvalChanged(QString)"
 msgstr ""
 
-#: moc_selfwidg.cpp:124
+#: moc_selfwidg.cpp:125
 msgid "QTCFG::TextEdittextChanged(QString)btCancel()"
 msgstr ""
 
-#: moc_selfwidg.cpp:198
+#: moc_selfwidg.cpp:199
 msgid "QTCFG::ImgView"
 msgstr ""
 
-#: moc_selfwidg.cpp:243
+#: moc_selfwidg.cpp:244
 msgid "QTCFG::DlgUser"
 msgstr ""
 
-#: moc_selfwidg.cpp:294
+#: moc_selfwidg.cpp:295
 msgid "QTCFG::UserStBar"
 msgstr ""
 
-#: moc_selfwidg.cpp:348
+#: moc_selfwidg.cpp:349
 msgid "TableDelegate"
 msgstr ""
 
@@ -1474,7 +1474,7 @@ msgid "QT"
 msgstr ""
 
 #: tuimod.cpp:42
-msgid "1.5.1"
+msgid "1.6.0"
 msgstr ""
 
 #: tuimod.cpp:43
