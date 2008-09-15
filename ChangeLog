@@ -1,3 +1,8 @@
+2008-09-15 Roman
+- !:/SYS: Self script 'mkdist' is added for fixed work 'make dist'.
+- !:/SYS: RPM build spec file is updated for create noarch packages for ALTLinux.
+
+
 2008-09-10 Roman OpenSCADA 0.6.2
 - !!:/UI/QTStarter: Documentation and translation is updated and version 1.5.1 is relised.
 - !!:/UI/QTCfg: Documentation and translation is updated and version 1.6.0 is relised.

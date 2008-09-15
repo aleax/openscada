@@ -1,0 +1,27 @@
+#! /bin/sh
+
+pkg_nm="openscada"
+pkg_ver="$1"
+
+echo "Distribitive ${pkg_nm}-${pkg_ver} create"
+
+rm -rf ${pkg_nm}-${pkg_ver}
+mkdir ${pkg_nm}-${pkg_ver}
+
+function cp_dir( )
+{
+  for file in $( ls $1 ); do
+    if [ -d $1${file} ] && [ ${file} != ${pkg_nm}-${pkg_ver} ]; then
+      mkdir $2${file};
+      cp_dir $1${file}/ $2${file}/;
+    elif [ ! -d $1${file} ]; then
+      cp $1${file} $2${file};
+    fi
+  done
+}
+
+cp_dir ./ ${pkg_nm}-${pkg_ver}/
+tar cvzf ${pkg_nm}-${pkg_ver}.tar.gz ${pkg_nm}-${pkg_ver} > /dev/null
+rm -rf ${pkg_nm}-${pkg_ver}
+
+echo "Package file ${pkg_nm}-${pkg_ver}.tar.gz is created"

@@ -39,6 +39,9 @@ test -h /usr/lib/%name && rm -f /usr/lib/%name
 %package doc
 Summary: Open SCADA documents.
 Group: Applications/SCADA
+%if %_vendor == "alt"
+BuildArch: noarch
+%endif
 %description doc
 The %name-doc package include documents files.
 %description doc -l ru_RU.UTF8
@@ -62,6 +65,9 @@ The %name-devel package includes library archives and include files.
 %package demo
 Summary: Open SCADA demo data bases and config.
 Group: Applications/SCADA
+%if %_vendor == "alt"
+BuildArch: noarch
+%endif
 Requires: %name
 %description demo
 The %{name}-demo package includes demo data bases and configs. For start use command <openscada_demo>. For access use account "root" and password "openscada" or account "user" without password.
