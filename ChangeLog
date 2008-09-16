@@ -1,3 +1,7 @@
+2008-09-16 Roman
+- FIX:/UI/VCAEngune: Two level and more widgets path generation is fixed.
+
+
 2008-09-15 Roman
 - !:/SYS: Self script 'mkdist' is added for fixed work 'make dist'.
 - !:/SYS: RPM build spec file is updated for create noarch packages for ALTLinux.

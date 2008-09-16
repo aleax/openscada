@@ -179,6 +179,14 @@ bool Widget::isContainer( )
     return false;
 }
 
+string Widget::path( )
+{
+    Widget *ownW = dynamic_cast<Widget*>(nodePrev());
+    if( ownW )	return ownW->path()+"/wdg_"+m_id;
+
+    return m_id;
+}
+
 bool Widget::enable( )
 {
     return m_enable;
@@ -407,7 +415,7 @@ void Widget::wdgAdd( const string &wid, const string &name, const string &path )
 
 void Widget::wdgDel( const string &wid, bool full )
 {
-    if( wdgPresent(wid) ) chldDel( inclWdg, wid, -1, full, true );
+    if( wdgPresent(wid) )	chldDel( inclWdg, wid, -1, full, true );
 }
 
 AutoHD<Widget> Widget::wdgAt( const string &wdg )

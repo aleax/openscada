@@ -839,8 +839,8 @@ void WdgView::load( const string& item, bool load, bool init )
 {
     //printf("TEST 00: Load: %s (%d:%d)\n",id().c_str(),load,init);
 
-    unsigned long long t_cnt;
-    if( wLevel() == 0 ) t_cnt = SYS->shrtCnt();
+    //unsigned long long t_cnt;
+    //if( wLevel() == 0 ) t_cnt = SYS->shrtCnt();
 
     //- Load from data model -
     if( load )
@@ -878,8 +878,8 @@ void WdgView::load( const string& item, bool load, bool init )
     //- Post load init for root widget -
     if( wLevel() == 0 )
     {
-	printf("TEST 01: Load '%s' time %fms\n",id().c_str(),1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk()));
-	t_cnt = SYS->shrtCnt();
+	//printf("TEST 01: Load '%s' time %fms\n",id().c_str(),1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk()));
+	//t_cnt = SYS->shrtCnt();
 
 	attrSet("","load",-1);
 	for( int i_c = 0; i_c < children().size(); i_c++ )
@@ -891,7 +891,7 @@ void WdgView::load( const string& item, bool load, bool init )
 	update();
         //repaint();
 
-	printf("TEST 02: Init '%s' time %fms\n",id().c_str(),1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk()));
+	//printf("TEST 02: Init '%s' time %fms\n",id().c_str(),1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk()));
     }
 }
 

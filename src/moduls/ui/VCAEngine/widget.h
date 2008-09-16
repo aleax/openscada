@@ -134,7 +134,7 @@ class Widget : public TCntrNode, public TValElem
 	TCntrNode &operator=( TCntrNode &node );
 
 	string id( )			{ return m_id; }	//Identifier
-	virtual string path( )		{ return m_id; }	//Curent widget path
+	virtual string path( );					//Curent widget path
 	virtual string name( );					//Name
 	virtual string descr( );				//Description
 	virtual string ico( )		{ return ""; }		//Icon

@@ -15,6 +15,7 @@ URL: http://oscada.diyaorg.dp.ua
 %else
 %define _initdir /etc/init.d
 %define _desktopdir %_datadir/applications
+%define _iconsdir /usr/share/icons
 %endif
 %if %_vendor == "suse" || %_vendor == "redhat"
 BuildRoot: %_tmppath/%name-%version-root

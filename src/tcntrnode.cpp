@@ -412,7 +412,7 @@ void TCntrNode::chldDel( char igr, const string &name, long tm, int flag, bool s
     ResAlloc res(hd_res,false);
     if( igr >= chGrp.size() )	throw TError(nodePath().c_str(),"Group of childs %d error!",igr);
     if( !(nodeMode() == Enable || nodeMode() == Disable) )
-	throw TError(nodePath().c_str(),"Node is not enabled!");
+	throw TError(nodePath().c_str(),"Node is proced now!");
 
     TMap::iterator p=chGrp[igr].elem.find(name);
     if( p == chGrp[igr].elem.end() )
