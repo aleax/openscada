@@ -1161,7 +1161,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
     { 
         case QEvent::Paint:
         {
-            //printf("Paint_start\n");
             DevelWdgView *devW = qobject_cast<DevelWdgView*>(view);
             RunWdgView   *runW = qobject_cast<RunWdgView*>(view);
             QPainter pnt( view );
@@ -1284,7 +1283,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     pnt.drawRect( dashedRect );
                 }
             }
-            //printf("Paint_end\n");
             return true;
         }
         case QEvent::MouseButtonPress:
@@ -1462,7 +1460,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     index = itemAt( ev->pos(), shapeItems, view );
                    
                     // - getting fill by double click -
-                    if( ev->button() == Qt::LeftButton && shapeItems.size() && index == -1 && status_hold )
+                    if( ev->button() == Qt::LeftButton && shapeItems.size() && index == -1 /*&& status_hold*/ )
                     {
                         flag_angle_temp = true;
                         QBrush fill_brush( QColor(0,0,0,0), Qt::SolidPattern ), fill_img_brush;
@@ -1483,7 +1481,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                             fl_brk = true;
                                             break;
                                         }
-                                    if( !fl_brk )
+                                    if( !fl_brk && status_hold )
                                         inundationItems.push_back(inundationItem(inundationPath,fill_brush,fill_img_brush, inundation_vector, inundation_vector));
                                 }
                             }
@@ -4071,7 +4069,7 @@ bool ShapeElFigure::inundation1_2( const QPointF &point, const QVector<ShapeItem
                         }
                     if( !fl_brk )
                     {
-                        if( number == -1 )
+                        if( number == -1 && status_hold )
                             inundationItems.push_back( inundationItem( inundationPath_1_2, fill_brush, fill_img_brush, in_fig_num, in_fig_num ) );
                         else
                         {
@@ -4092,7 +4090,7 @@ bool ShapeElFigure::inundation1_2( const QPointF &point, const QVector<ShapeItem
             }
         if( flag_break )
             return true;
-        if( shapeItems[i].type == 2 || shapeItems[i].type == 3 && status_hold )
+        if( shapeItems[i].type == 2 || shapeItems[i].type == 3 )
         {
             for( int j = 0; j < shapeItems.size(); j++ )
             {
@@ -4117,7 +4115,7 @@ bool ShapeElFigure::inundation1_2( const QPointF &point, const QVector<ShapeItem
                                 }
                             if( !fl_brk )
                             {
-                                if( number == -1 )
+                                if( number == -1  && status_hold )
                                     inundationItems.push_back( inundationItem( inundationPath_1_2, fill_brush, fill_img_brush, in_fig_num, in_fig_num ) );
                                 else
                                 {

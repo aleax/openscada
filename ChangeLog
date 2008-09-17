@@ -1,3 +1,7 @@
+2008-09-17 Maxim
+- FIX:/UI/Vision: Deleting of fills for primitive ElFigure is fixed.
+
+
 2008-09-17 Roman
 - /DB/MySQL: For UTF codepages length multiplication to 2 for string is made.
 - FIX:/UI/QTCfg: Save on exit is fixed.
