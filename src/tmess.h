@@ -58,7 +58,7 @@ class TMess
 		SRec() : time(0), categ(""), level(TMess::Debug), mess("") { }
 		SRec(time_t itm, const string &icat, Type ilev, const string &imess) :
 		    time(itm), categ(icat), level(ilev), mess(imess) { }
-		
+
 		time_t time;
 		string categ;
 		Type   level;
@@ -68,7 +68,7 @@ class TMess
 	//Methods
 	TMess( );
 	~TMess( );
-	
+
 	void load( );
 	void save( );
 
@@ -81,29 +81,28 @@ class TMess
 	static const char *I18N( const char *mess, const char *d_name = NULL );
 	static string I18Ns( const string &mess, const char *d_name = NULL )
 	{ return I18N((char *)mess.c_str(), d_name); }
-	
+
 	static bool chkPattern( const string &val, const string &patern );
-	
+
 	string lang( );
-	string &charset( )    	{ return IOCharSet; }
-	int logDirect( )     	{ return log_dir; }
+	string &charset( )	{ return IOCharSet; }
+	int logDirect( )	{ return log_dir; }
 	int messLevel( )	{ return m_mess_level; }
-	
+
 	void setLang( const string &lang );
 	void setLogDirect( int dir );
 	void setMessLevel( int level );
-	
+
 	void put( const char *categ, Type level, const char *fmt,  ... );
-        void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const string &category = "", Type level = Debug );
-	
+	void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const string &category = "", Type level = Debug );
+
     private:
 	//Attributes
-	string IOCharSet;      	//Internal charset
-	int    m_mess_level;	//Work messages level
-	int    log_dir;        	//Log direction	
+	string	IOCharSet;		//Internal charset
+	int	m_mess_level;		//Work messages level
+	int	log_dir;		//Log direction
 };
 
 extern TMess *Mess;
 
 #endif // TMESSAGE_H
-

@@ -86,10 +86,10 @@ ConfApp::ConfApp( string open_user ) :
     //-- Init centrall widget --
     setCentralWidget( new QWidget(this) );
     QGridLayout *QTCfgLayout = new QGridLayout(centralWidget());
-    QTCfgLayout->setMargin( 3 );    
+    QTCfgLayout->setMargin( 3 );
     //-- Init splitter --
     QSplitter *splitter = new QSplitter( centralWidget() );
-    splitter->setOrientation( Qt::Horizontal );	
+    splitter->setOrientation( Qt::Horizontal );
 
     //- Create Navigator tree -
     CtrTree = new QTreeWidget( splitter );
@@ -164,7 +164,7 @@ ConfApp::ConfApp( string open_user ) :
     actQuit->setShortcut(Qt::CTRL+Qt::Key_Q);
     actQuit->setToolTip(_("Quit OpenSCADA"));
     actQuit->setWhatsThis(_("The button for full quit from OpenSCADA"));
-    actQuit->setStatusTip(_("Press for full quit from OpenSCADA"));    
+    actQuit->setStatusTip(_("Press for full quit from OpenSCADA"));
     connect(actQuit, SIGNAL(activated()), this, SLOT(quitSt()));
     //-- Up button --
     if(!ico_t.load(TUIS::icoPath("up").c_str())) ico_t.load(":/images/up.png");
@@ -418,7 +418,7 @@ bool ConfApp::exitModifChk( )
 	    switch( ret )
 	    {
 		case QMessageBox::Yes:
-		    req.clear()->setName("save")->setAttr("path","/%2fobj");
+		    req.clear()->setName("save")->setAttr("path","/"+SYS->id()+"/%2fobj");
 		    cntrIfCmd(req);
 		    return true;
 		case QMessageBox::No:

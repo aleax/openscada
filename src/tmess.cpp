@@ -57,14 +57,14 @@ TMess::~TMess(  )
     closelog();
 }
 
-void TMess::setMessLevel( int level )  
-{ 
+void TMess::setMessLevel( int level )
+{
     m_mess_level = level;
     SYS->modif();
 }
 
 void TMess::setLogDirect( int dir )
-{ 
+{
     log_dir = dir;
     SYS->modif();
 }
@@ -77,10 +77,10 @@ void TMess::put( const char *categ, Type level, const char *fmt,  ... )
     va_start(argptr,fmt);
     vsnprintf(mess,sizeof(mess),fmt,argptr);
     va_end(argptr);
-    
+
     level = (level<Debug)?Debug:(level>Emerg)?Emerg:level;
     if(level<messLevel()) return; 
-    
+
     int level_sys;
     switch(level)
     {
@@ -127,23 +127,23 @@ void TMess::setLang( const string &lng )
 string TMess::codeConv( const string &fromCH, const string &toCH, const string &mess)
 {
     //- Make convert to blocks 100 bytes !!! -
-    string buf = ""; 
+    string buf = "";
     char   *ibuf, outbuf[100], *obuf;
     size_t ilen, olen;
     iconv_t hd;
-    
+
     if( fromCH == toCH ) return mess;
-    
+
     hd = iconv_open(toCH.c_str(), fromCH.c_str());
     if( hd == (iconv_t)(-1) )
     {
 	mess_crit("IConv",_("Error iconv open: %s"),strerror(errno));
-    	return mess;
+	return mess;
     }
-        
+
     ibuf = (char *)mess.c_str();
     ilen = mess.size();
-    
+
     while(ilen)
     {
 	obuf = outbuf;
@@ -160,7 +160,7 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
 	    buf.append(outbuf,obuf-outbuf);
     }
     iconv_close(hd);
-    
+
     return buf;
 }
 
@@ -174,18 +174,17 @@ bool TMess::chkPattern( const string &val, const string &patt )
     bool mult_s = false;
     int v_cnt = 0, p_cnt = 0;
     int v_bck = -1, p_bck = -1;
-    
 
     while(true)
     {
 	if( p_cnt >= patt.size() )	return true;
-	if( patt[p_cnt] == '?' ) 	{ v_cnt++; p_cnt++; mult_s = false; continue; }
+	if( patt[p_cnt] == '?' )	{ v_cnt++; p_cnt++; mult_s = false; continue; }
 	if( patt[p_cnt] == '*' )	{ p_cnt++; mult_s = true; v_bck = -1; continue; }
-	if( patt[p_cnt] == '\\' ) 	p_cnt++;
-	if( v_cnt >= val.size() )       break;
-	if( patt[p_cnt] == val[v_cnt] )	
-	{ 
-	    if(mult_s && v_bck < 0 ) 	{ v_bck = v_cnt+1; p_bck = p_cnt; }
+	if( patt[p_cnt] == '\\' )	p_cnt++;
+	if( v_cnt >= val.size() )	break;
+	if( patt[p_cnt] == val[v_cnt] )
+	{
+	    if(mult_s && v_bck < 0 )	{ v_bck = v_cnt+1; p_bck = p_cnt; }
 	    v_cnt++; p_cnt++;
 	}
 	else
@@ -226,7 +225,7 @@ void TMess::load()
 	    case -1 : break;
 	}
     } while(next_opt != -1);
-    
+
     //- Load params config file -
     i = atoi(TBDS::genDBGet(SYS->nodePath()+"MessLev",TSYS::int2str(messLevel()),"root",SYS->sysOptCfg()).c_str());
     if( i >= 0 && i <= 7 ) setMessLevel(i);

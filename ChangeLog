@@ -1,3 +1,10 @@
+2008-09-17 Roman
+- /DB/MySQL: For UTF codepages length multiplication to 2 for string is made.
+- FIX:/UI/QTCfg: Save on exit is fixed.
+- FIX:/SYS: Fixed DB fields set is fixed for TArchives, TBDS and TTransports.
+- FIX:/SYS/Elements: Short DB fields length atribute is fixed.
+
+
 2008-09-16 Roman
 - FIX:/UI/VCAEngune: Two level and more widgets path generation is fixed.
 

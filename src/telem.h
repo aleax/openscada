@@ -112,7 +112,7 @@ class TFld
 	//Attributes
 	string		m_name;		// Name of element (name column into BD);
 	string		m_descr;	// Description of element;
-	short int	m_len;		// field len
+	int		m_len;		// field len
 	short int	m_dec	:5;	// field dec (for real)
 	short int	m_type	:4;	// Type (Dec, Hex, Oct, ...)
 	unsigned	m_flg;		// element flags (Selected, SelfFld ...);

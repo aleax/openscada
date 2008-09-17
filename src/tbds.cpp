@@ -550,6 +550,7 @@ TCntrNode &TBD::operator=( TCntrNode &node )
     {
 	string tid = id();
 	*(TConfig*)this = *(TConfig*)src_n;
+	cfg("TYPE").setS(owner().modId());
 	m_id = tid;
     }
 

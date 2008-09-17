@@ -60,6 +60,7 @@ class MTable : public TTable
 	void postDisable(int flag);
 	void fieldFix( TConfig &cfg );
 	void fieldPrmSet( TCfg &cfg, const string &last, string &req );
+	int  fieldLen( int len );
 
 	//Private attributes
 	vector< vector<string> > tblStrct;

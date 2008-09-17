@@ -974,6 +974,7 @@ TCntrNode &TMArchivator::operator=( TCntrNode &node )
     //- Configuration copy -
     string tid = id();
     *(TConfig*)this = *(TConfig*)src_n;
+    cfg("MODUL").setS(owner().modId());
     m_id = tid;
     m_db = src_n->m_db;
 

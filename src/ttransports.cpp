@@ -571,6 +571,7 @@ TCntrNode &TTransportIn::operator=( TCntrNode &node )
 
     string tid = id();
     *(TConfig*)this = *(TConfig*)src_n;
+    cfg("MODULE").setS(owner().modId());
     m_id = tid;
     setDB(src_n->m_db);
 
@@ -709,6 +710,7 @@ TCntrNode &TTransportOut::operator=( TCntrNode &node )
 
     string tid = id();
     *(TConfig*)this = *(TConfig*)src_n;
+    cfg("MODULE").setS(owner().modId());
     m_id = tid;
     setDB(src_n->m_db);
 
