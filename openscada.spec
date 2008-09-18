@@ -5,13 +5,14 @@ Version: 0.6.2
 Release: 1
 Source: %name-%version.tar.gz
 License: GPL
-Group: Applications/SCADA
+Group: Graphics
 Packager: Roman Savochenko <rom_as@fromru.com>
 URL: http://oscada.diyaorg.dp.ua
 
 #= Individual distributives seting =
 %if %_vendor == "alt"
 %set_verify_elf_method no
+BuildRequires: glibc-devel gcc4.1-c++ libgd2-devel libexpat-devel libMySQL-devel libsqlite3-devel libsensors-devel libnet-snmp-devel libqt4-devel
 %else
 %define _initdir /etc/init.d
 %define _desktopdir %_datadir/applications
@@ -39,7 +40,7 @@ test -h /usr/lib/%name && rm -f /usr/lib/%name
 
 %package doc
 Summary: Open SCADA documents.
-Group: Applications/SCADA
+Group: Documentation
 %if %_vendor == "alt"
 BuildArch: noarch
 %endif
@@ -53,7 +54,7 @@ The %name-doc package include documents files.
 
 %package devel
 Summary: Open SCADA development.
-Group: Development/Libraries
+Group: Development/C++
 #Requires: %name
 %description devel
 The %name-devel package includes library archives and include files.
@@ -65,7 +66,7 @@ The %name-devel package includes library archives and include files.
 
 %package demo
 Summary: Open SCADA demo data bases and config.
-Group: Applications/SCADA
+Group: Graphics
 %if %_vendor == "alt"
 BuildArch: noarch
 %endif
@@ -90,6 +91,7 @@ The %{name}-demo package includes demo data bases and configs. For start use com
 install -m 755 -d %buildroot/%_includedir/%name/
 install -m 644 *.h %buildroot/%_includedir/%name
 install -m 644 src/*.h %buildroot/%_includedir/%name
+install -m 755 -pD data/openscada_start %buildroot/%_bindir/openscada_start
 install -m 644 -pD data/oscada.xml %buildroot/%_sysconfdir/oscada.xml
 install -m 644 -pD data/openscada.desktop %buildroot/%_desktopdir/openscada.desktop
 install -m 644 -pD data/openscada.png %buildroot/%_iconsdir/openscada.png
@@ -98,13 +100,15 @@ install -m 644 -pD demo/oscada_demo.xml %buildroot/%_sysconfdir/oscada_demo.xml
 install -m 755 -pD demo/openscada_demo %buildroot/%_bindir/openscada_demo
 install -m 644 -pD demo/openscada_demo.desktop %buildroot/%_desktopdir/openscada_demo.desktop
 install -m 644 -pD demo/openscada_demo.png %buildroot/%_iconsdir/openscada_demo.png
-install -m 777 -d %buildroot/var/spool/%name/DATA
+install -m 755 -d %buildroot/var/spool/%name/DATA
 install -m 755 -d %buildroot/var/spool/%name/icons
-echo "Open SCADA data dir" > %buildroot/var/spool/%name/DATA/.data
-install -m 666 demo/*.db %buildroot/var/spool/%name/DATA
+echo "OpenSCADA data dir" > %buildroot/var/spool/%name/DATA/.info
+install -m 644 demo/*.db %buildroot/var/spool/%name/DATA
 install -m 644 data/icons/* %buildroot/var/spool/%name/icons
-install -m 777 -d %buildroot/var/spool/%name/ARCHIVES/MESS
-install -m 777 -d %buildroot/var/spool/%name/ARCHIVES/VAL
+install -m 755 -d %buildroot/var/spool/%name/ARCHIVES/MESS
+install -m 755 -d %buildroot/var/spool/%name/ARCHIVES/VAL
+echo "OpenSCADA messages archive dir" > %buildroot/var/spool/%name/ARCHIVES/MESS/.info
+echo "OpenSCADA values archive dir" > %buildroot/var/spool/%name/ARCHIVES/VAL/.info
 
 %clean
 #rm -rf %buildroot %buildroot/%name-%version
@@ -114,18 +118,20 @@ install -m 777 -d %buildroot/var/spool/%name/ARCHIVES/VAL
 %config(noreplace) %_sysconfdir/oscada.xml
 %config %_initdir/oscadad
 %_bindir/%name
+%_bindir/openscada_start
 %_desktopdir/openscada.desktop
 %_iconsdir/openscada.png
 %_libdir/*.so*
 %_libdir/%name/*.so
 %_datadir/locale/*/LC_MESSAGES/*
-/var/spool/%name/DATA/.data
+/var/spool/%name/DATA/.info
 /var/spool/%name/icons/*
-/var/spool/%name/ARCHIVES/
+/var/spool/%name/ARCHIVES/MESS/.info
+/var/spool/%name/ARCHIVES/VAL/.info
 
 %files doc
 %defattr(-,root,root)
-%_datadir/doc
+%_datadir/doc/*
 #doc README README_ru COPYING INSTALL TODO TODO_ru TODO_uk ChangeLog doc/*
 
 %files devel
@@ -139,9 +145,12 @@ install -m 777 -d %buildroot/var/spool/%name/ARCHIVES/VAL
 %_bindir/openscada_demo
 %_desktopdir/openscada_demo.desktop
 %_iconsdir/openscada_demo.png
-/var/spool/%name/DATA/
+/var/spool/%name/DATA/*.db
 
 %changelog
+* Thu Sep 18 2008 Roman Savochenko <rom_as@diyaorg.dp.ua>
+- Update spec to build for ALTLinux Sisyphus.
+
 * Wed Mar 26 2008 Roman Savochenko <rom_as@diyaorg.dp.ua>
 - Rebuilded for support x86_64 several distributives and some build system bugs is fixed.
 

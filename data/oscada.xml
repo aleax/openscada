@@ -9,7 +9,7 @@
 	Station this OpenSCADA programm.
 	-->
 	<prm id="SYSOptCfg">1</prm>
-	<prm id="Workdir">/var/spool/openscada</prm>
+	<prm id="Workdir">~/.openscada</prm>
 	<prm id="LogTarget">10</prm>
 	<prm id="MessLev">0</prm>
 	<prm id="WorkDB">SQLite.GenDB</prm>

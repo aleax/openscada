@@ -98,18 +98,18 @@ string TSYS::workDir( )
     return getcwd(buf,sizeof(buf));
 }
 
-string TSYS::setWorkDir( const string &wdir )
+void TSYS::setWorkDir( const string &wdir )
 {
-    chdir( wdir.c_str() );
+    if( chdir(wdir.c_str()) ) mess_err(nodePath().c_str(),"%s",strerror(errno));
     modif( );
 }
 
 string TSYS::int2str( int val, TSYS::IntView view )
 {
     char buf[STR_BUF_LEN];
-    if( view == TSYS::Dec )      snprintf(buf,sizeof(buf),"%d",val);
-    else if( view == TSYS::Oct ) snprintf(buf,sizeof(buf),"%o",val);
-    else if( view == TSYS::Hex ) snprintf(buf,sizeof(buf),"%x",val);
+    if( view == TSYS::Dec )		snprintf(buf,sizeof(buf),"%d",val);
+    else if( view == TSYS::Oct )	snprintf(buf,sizeof(buf),"%o",val);
+    else if( view == TSYS::Hex )	snprintf(buf,sizeof(buf),"%x",val);
 
     return buf;
 }
@@ -117,9 +117,9 @@ string TSYS::int2str( int val, TSYS::IntView view )
 string TSYS::uint2str( unsigned val, IntView view )
 {
     char buf[STR_BUF_LEN];
-    if( view == TSYS::Dec )      snprintf(buf,sizeof(buf),"%u",val);
-    else if( view == TSYS::Oct ) snprintf(buf,sizeof(buf),"%o",val);
-    else if( view == TSYS::Hex ) snprintf(buf,sizeof(buf),"%x",val);
+    if( view == TSYS::Dec )		snprintf(buf,sizeof(buf),"%u",val);
+    else if( view == TSYS::Oct )	snprintf(buf,sizeof(buf),"%o",val);
+    else if( view == TSYS::Hex )	snprintf(buf,sizeof(buf),"%x",val);
 
     return buf;
 }
@@ -127,9 +127,9 @@ string TSYS::uint2str( unsigned val, IntView view )
 string TSYS::ll2str( long long val, IntView view )
 {
     char buf[STR_BUF_LEN];
-    if( view == TSYS::Dec )      snprintf(buf,sizeof(buf),"%lld",val);
-    else if( view == TSYS::Oct ) snprintf(buf,sizeof(buf),"%llo",val);
-    else if( view == TSYS::Hex ) snprintf(buf,sizeof(buf),"%llx",val);
+    if( view == TSYS::Dec )		snprintf(buf,sizeof(buf),"%lld",val);
+    else if( view == TSYS::Oct )	snprintf(buf,sizeof(buf),"%llo",val);
+    else if( view == TSYS::Hex )	snprintf(buf,sizeof(buf),"%llx",val);
 
     return buf;
 }
@@ -286,7 +286,7 @@ void TSYS::cfgPrmLoad()
 {
     //System parameters
     m_sysOptCfg = atoi(TBDS::genDBGet(nodePath()+"SYSOptCfg",TSYS::int2str(m_sysOptCfg),"root",true).c_str());
-    chdir(TBDS::genDBGet(nodePath()+"Workdir","","root",sysOptCfg()).c_str());
+    setWorkDir(TBDS::genDBGet(nodePath()+"Workdir","","root",sysOptCfg()).c_str());
 
     mWorkDB = TBDS::genDBGet(nodePath()+"WorkDB","*.*","root",sysOptCfg());
     setSaveAtExit( atoi(TBDS::genDBGet(nodePath()+"SaveAtExit","0","root").c_str()) );
@@ -402,7 +402,7 @@ int TSYS::start(  )
 }
 
 void TSYS::stop( )
-{ 
+{
     stop_signal = SIGINT;
 }
 
@@ -873,7 +873,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/gen/clk_res",_("Realtime clock resolution (msec)"),0444,"root","root",1,"tp","real");
 	    ctrMkNode("fld",opt,-1,"/gen/in_charset",_("Internal charset"),0440,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/config",_("Config file"),0440,"root","root",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/gen/workdir",_("Work directory"),0440,"root","root",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/gen/workdir",_("Work directory"),0660,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/wrk_db",_("Work DB"),0664,"root",db().at().subId().c_str(),4,"tp","str","dest","select","select","/db/list",
 		"help",_("Work DB address in format [<DB module>.<DB name>].\nChange it field if you want save or reload all system from other DB."));
 	    ctrMkNode("fld",opt,-1,"/gen/saveExit",_("Save system at exit"),0664,"root","root",2,"tp","bool",

@@ -117,7 +117,7 @@ class TSYS : public TCntrNode
 	AutoHD<TSecurity>	security( )	{ return at("Security"); }
 
 	string workDir( );
-	string setWorkDir( const string &wdir );
+	void setWorkDir( const string &wdir );
 
 	//- Config file functions -
 	string cfgFile( )	{ return m_confFile; }

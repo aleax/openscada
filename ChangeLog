@@ -1,3 +1,9 @@
+2008-09-18 Roman
+- !!:/SYS: User's work directory support and user's start script 'openscada_start' added.
+- FIX:/SYS: TSYS::setWorkDir() function is fixed.
+- FIX:/SYS: RPM packages' build script is fixed for build into Hasher for ALTLinux Sisyphus repository.
+
+
 2008-09-17 Maxim
 - FIX:/UI/Vision: Deleting of fills for primitive ElFigure is fixed.
 

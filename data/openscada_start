@@ -1,0 +1,12 @@
+#!/bin/sh
+
+if [ ! -d ~/.openscada ]; then
+    install -m 755 -d ~/.openscada/DATA
+    install -m 755 -d ~/.openscada/ARCHIVES/MESS
+    install -m 755 -d ~/.openscada/ARCHIVES/VAL
+    ln -s /var/spool/openscada/icons ~/.openscada/icons
+fi
+
+cd ~/.openscada
+
+openscada $@
