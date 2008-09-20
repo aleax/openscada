@@ -5,6 +5,9 @@
   DAQ.ModBus, DAQ.SNMP, DAQ.Siemens, DAQ.System, DAQ.Transporter and UI.VCAEngine.
 - FIX:/DB/SQLite: High CPU load on work to read only DB is fixed.
 - /UI/QTCfg, /UI/Vision, /UI/WebCfg: Module and system information on 'About' menu is updated.
+- FIX:/Archive/FSArch: Stop value archivator is archivator db creation error.
+- FIX:/Archive/FSArch: Check disabled archivator make is fixed.
+- FIX:/DB/SQLite: Exeption generation on failed record deletion on readonly DB.
 
 
 2008-09-18 Roman

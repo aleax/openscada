@@ -63,7 +63,12 @@ void ModVArch::start( )
     TVArchivator::start();
 
     //- First scan dir. Load and connect archive files -
-    checkArchivator(true);
+    try{ checkArchivator(true); }
+    catch(TError err)
+    {
+	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+	stop( );
+    }
 }
 
 void ModVArch::stop( )

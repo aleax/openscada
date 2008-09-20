@@ -558,7 +558,8 @@ void MTable::fieldDel( TConfig &cfg )
     try{ owner().sqlReq( req ); }
     catch( TError err )
     {
-	if( (err.cod-100) == SQLITE_READONLY )	return;
+	if( (err.cod-100) == SQLITE_READONLY )
+	    throw TError(TSYS::DBReadOnly,nodePath().c_str(),_("Deletion no permit. Data base is read only.\n"));
 	throw;
     }
 }

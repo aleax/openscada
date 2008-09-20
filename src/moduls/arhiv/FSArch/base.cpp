@@ -236,22 +236,24 @@ void ModArch::Task( union sigval obj )
     //- Check message archivators -
     arh->messList(a_list);
     for( int i_a = 0; i_a < a_list.size(); i_a++ )
-	try{ arh->messAt(a_list[i_a]).at().checkArchivator(); }
-	catch(TError err)
-	{
-	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	    mess_err(arh->nodePath().c_str(),_("Check message archivator <%s> error."),a_list[i_a].c_str());
-	}
+	if( arh->messAt(a_list[i_a]).at().startStat( ) )
+	    try{ arh->messAt(a_list[i_a]).at().checkArchivator(); }
+	    catch(TError err)
+	    {
+		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+		mess_err(arh->nodePath().c_str(),_("Check message archivator <%s> error."),a_list[i_a].c_str());
+	    }
 
     //- Check value archivators -
     arh->valList(a_list);
     for( int i_a = 0; i_a < a_list.size(); i_a++ )
-	try{ arh->valAt(a_list[i_a]).at().checkArchivator(); }
-	catch(TError err)
-	{
-	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	    mess_err(arh->nodePath().c_str(),_("Check value archivator <%s> error."),a_list[i_a].c_str());
-	}
+	if( arh->valAt(a_list[i_a]).at().startStat( ) )
+	    try{ arh->valAt(a_list[i_a]).at().checkArchivator(); }
+	    catch(TError err)
+	    {
+		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+		mess_err(arh->nodePath().c_str(),_("Check value archivator <%s> error."),a_list[i_a].c_str());
+	    }
 
     //- Check to nopresent archive files -
     TConfig c_el(&mod->packFE());
@@ -262,7 +264,7 @@ void ModArch::Task( union sigval obj )
 	struct stat file_stat;
 	if( stat(c_el.cfg("FILE").getS().c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG )
 	{
-	    SYS->db().at().dataDel(mod->filesDB(),mod->nodePath()+"Pack/",c_el);
+	    if( !SYS->db().at().dataDel(mod->filesDB(),mod->nodePath()+"Pack/",c_el) )	break;
 	    fld_cnt--;
 	}
 	c_el.cfg("FILE").setS("");

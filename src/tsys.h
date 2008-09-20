@@ -89,7 +89,8 @@ class TSYS : public TCntrNode
 	    DBOpenTable,	//open table error
 	    DBClose,		//close DB or table error
 	    DBTableEmpty,	//table is empty
-	    DBRowNoPresent	//no present of requested row
+	    DBRowNoPresent,	//no present of requested row
+	    DBReadOnly		//read only db
 	};
 
 	//Public methods
