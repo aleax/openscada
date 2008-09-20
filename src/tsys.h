@@ -22,6 +22,12 @@
 #ifndef TSYS_H
 #define TSYS_H
 
+//- Programm constants -
+#define PACKAGE_LICENSE	"GPL v2"
+#define PACKAGE_DESCR	"Open Supervisory Control And Data Acquisition"
+#define PACKAGE_AUTHOR	"Roman Savochenko"
+#define PACKAGE_SITE	"http://oscada.diyaorg.dp.ua"
+
 //- Hardware independent types -
 typedef char si8;
 typedef short si16;
@@ -157,6 +163,8 @@ class TSYS : public TCntrNode
 	//Public system static methods
 	//- Current system time (usec) -
 	static long long curTime( );
+
+	static void taskSleep( long long per );
 
 	//- Wait event with timeout support -
 	static bool eventWait( bool &m_mess_r_stat, bool exempl, const string &loc, time_t time = 0 );

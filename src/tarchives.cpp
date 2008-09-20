@@ -667,16 +667,13 @@ void TArchiveS::ArhMessTask(union sigval obj)
 
 void *TArchiveS::ArhValTask( void *param )
 {
-    long long work_tm, last_tm = 0;
-    struct timespec get_tm;
-
     TArchiveS &arh = *(TArchiveS *)param;
     arh.endrun_req_val = false;
     arh.prc_st_val = true;
 
     while(!arh.endrun_req_val)
     {
-	work_tm = SYS->curTime();
+	long long work_tm = SYS->curTime();
 
 	arh.v_res.resRequestR( );
 	for(unsigned i_arh = 0; i_arh < arh.act_up_src.size(); i_arh++)
@@ -689,13 +686,7 @@ void *TArchiveS::ArhValTask( void *param )
 	    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 	arh.v_res.resReleaseR( );
 
-	//-- Calc next work time and sleep --
-	clock_gettime(CLOCK_REALTIME,&get_tm);
-	work_tm = (((long long)get_tm.tv_sec*1000000000+get_tm.tv_nsec)/(arh.valPeriod()*1000000) + 1)*arh.valPeriod()*1000000;
-	if(last_tm == work_tm)	work_tm+=arh.valPeriod()*1000000;	//Fix early call
-	last_tm = work_tm;
-	get_tm.tv_sec = work_tm/1000000000; get_tm.tv_nsec = work_tm%1000000000;
-	clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&get_tm,NULL);
+	TSYS::taskSleep((long long)arh.valPeriod()*1000000);
     }
 
     arh.prc_st_val = false;

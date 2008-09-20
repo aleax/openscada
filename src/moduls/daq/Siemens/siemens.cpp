@@ -1245,8 +1245,6 @@ int TMdContr::valSize( IO::Type itp, int iv_sz )
 
 void *TMdContr::Task( void *icntr )
 {
-    long long work_tm, last_tm = 0;
-    struct timespec get_tm;
     TMdContr &cntr = *(TMdContr *)icntr;
 
     cntr.endrun_req = false;
@@ -1293,13 +1291,7 @@ void *TMdContr::Task( void *icntr )
 
 	if(is_stop) break;
 
-	//- Calc next work time and sleep -
-	clock_gettime(CLOCK_REALTIME,&get_tm);
-	work_tm = (((long long)get_tm.tv_sec*1000000000+get_tm.tv_nsec)/((long long)cntr.period()*1000000) + 1)*(long long)cntr.period()*1000000;
-	if(last_tm == work_tm)	work_tm+=(long long)cntr.period()*1000000;	//Fix early call
-	last_tm = work_tm;
-	get_tm.tv_sec = work_tm/1000000000; get_tm.tv_nsec = work_tm%1000000000;
-	clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&get_tm,NULL);
+	TSYS::taskSleep((long long)cntr.period()*1000000);
 
 	if(cntr.endrun_req) is_stop = true;
 	is_start = false;

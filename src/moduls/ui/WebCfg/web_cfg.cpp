@@ -274,25 +274,28 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 
 void TWEB::getAbout( SSess &ses )
 {
-    ses.page = ses.page+"<center><table class='page_auth'>\n"
-	"<TR><TD>"+PACKAGE+" "+VERSION+"</TD></TR>\n"
+    ses.page = ses.page+"<center>\n"
+	"<table class='page_auth'>\n"
+	"<TR><TD>"+MOD_ID+" v"+MOD_VERSION+"</TD></TR>\n"
 	"<TR class='content'><TD>\n"
 	"<table border='0'>\n"
-	"<TR><TD><font color='Blue'>"+_("Name: ")+"</font></TD><TD>"+_("Open Supervisory Control And Data Acquisition")+"</TD></TR>\n"
-	"<TR><TD><font color='Blue'>"+_("License: ")+"</font></TD><TD>GPL</TD></TR>\n"
-	"<TR><TD><font color='Blue'>"+_("Author: ")+"</font></TD><TD>Roman Savochenko</TD></TR>\n"
+	"<TR><TD><font color='Blue'>"+_("Name: ")+"</font></TD><TD align='left'>"+_(MOD_NAME)+"</TD></TR>"
+	"<TR><TD><font color='Blue'>"+_("Desription: ")+"</font></TD><TD align='left'>"+_(DESCRIPTION)+"</TD></TR>"
+	"<TR><TD><font color='Blue'>"+_("License: ")+"</font></TD><TD align='left'>"+_(LICENSE)+"</TD></TR>"
+	"<TR><TD><font color='Blue'>"+_("Author: ")+"</font></TD><TD align='left'>"+_(AUTORS)+"</TD></TR>"
+	"</table>\n"
+	"</TD></TR>\n</table><br/>\n"
+	"<table class='page_auth'>\n"
+	"<TR><TD>"+PACKAGE+" v"+VERSION+"</TD></TR>\n"
+	"<TR class='content'><TD>\n"
+	"<table border='0'>\n"
+	"<TR><TD><font color='Blue'>"+_("Name: ")+"</font></TD><TD align='left'>"+_(PACKAGE_DESCR)+"</TD></TR>\n"
+	"<TR><TD><font color='Blue'>"+_("License: ")+"</font></TD><TD align='left'>"+PACKAGE_LICENSE+"</TD></TR>\n"
+	"<TR><TD><font color='Blue'>"+_("Author: ")+"</font></TD><TD align='left'>"+_(PACKAGE_AUTHOR)+"</TD></TR>\n"
+	"<TR><TD><font color='Blue'>"+_("Web site: ")+"</font></TD><TD align='left'>"+PACKAGE_SITE+"</TD></TR>\n"
 	"</table>\n"
 	"</TD></TR></table><br/>\n"
-	"<table class='page_auth'>\n"
-	"<TR><TD>"+MOD_ID+" "+MOD_VERSION+"</TD></TR>\n"
-	"<TR class='content'><TD>\n"
-	"<table border='0'>\n"
-	"<TR><TD><font color='Blue'>"+_("Name: ")+"</font></TD><TD>"+_(MOD_NAME)+"</TD></TR>"
-	"<TR><TD><font color='Blue'>"+_("Desription: ")+"</font></TD><TD>"+_(DESCRIPTION)+"</TD></TR>"
-	"<TR><TD><font color='Blue'>"+_("License: ")+"</font></TD><TD>"+_(LICENSE)+"</TD></TR>"
-	"<TR><TD><font color='Blue'>"+_("Author: ")+"</font></TD><TD>"+_(AUTORS)+"</TD></TR>"
-	"</table>\n"
-	"</TD></TR>\n</table><br/></center>\n";
+	"</center>\n";
 }
 
 void TWEB::getHead( SSess &ses )

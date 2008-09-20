@@ -23,6 +23,8 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+#include <config.h>
+
 #include <QApplication>
 #include <QToolTip>
 #include <QTreeWidget>
@@ -172,9 +174,9 @@ ConfApp::ConfApp( string open_user ) :
     actUp->setShortcut(Qt::ALT+Qt::Key_Up);
     actUp->setToolTip(_("Up page"));
     actUp->setWhatsThis(_("The button for going to level up"));
-    actUp->setStatusTip(_("Press for going to level up"));    
+    actUp->setStatusTip(_("Press for going to level up"));
     actUp->setEnabled(false);
-    connect(actUp, SIGNAL(activated()), this, SLOT(pageUp()));    
+    connect(actUp, SIGNAL(activated()), this, SLOT(pageUp()));
     //-- Previos page --
     if(!ico_t.load(TUIS::icoPath("previous").c_str())) ico_t.load(":/images/previous.png");
     actPrev = new QAction(QPixmap::fromImage(ico_t),_("&Previos"),this);
@@ -183,7 +185,7 @@ ConfApp::ConfApp( string open_user ) :
     actPrev->setWhatsThis(_("The button for going to previos page"));
     actPrev->setStatusTip(_("Press for going to previos page"));
     actPrev->setEnabled(false);
-    connect(actPrev, SIGNAL(activated()), this, SLOT(pagePrev()));    
+    connect(actPrev, SIGNAL(activated()), this, SLOT(pagePrev()));
     //-- Next page --
     if(!ico_t.load(TUIS::icoPath("next").c_str())) ico_t.load(":/images/next.png");
     actNext = new QAction(QPixmap::fromImage(ico_t),_("&Next"),this);
@@ -192,7 +194,7 @@ ConfApp::ConfApp( string open_user ) :
     actNext->setWhatsThis(_("The button for going to next page"));
     actNext->setStatusTip(_("Press for going to next page"));
     actNext->setEnabled(false);
-    connect(actNext, SIGNAL(activated()), this, SLOT(pageNext()));    
+    connect(actNext, SIGNAL(activated()), this, SLOT(pageNext()));
     //--- Load item from db ---
     if(!ico_t.load(TUIS::icoPath("load").c_str())) ico_t.load(":/images/load.png");
     actDBLoad = new QAction(QPixmap::fromImage(ico_t),_("Load from DB"),this);
@@ -209,7 +211,7 @@ ConfApp::ConfApp( string open_user ) :
     actDBSave->setStatusTip(_("Press for saving item data to DB."));
     actDBSave->setShortcut(QKeySequence("Ctrl+S"));
     actDBSave->setEnabled(false);
-    connect(actDBSave, SIGNAL(activated()), this, SLOT(itDBSave()));    
+    connect(actDBSave, SIGNAL(activated()), this, SLOT(itDBSave()));
     //-- Item add --
     if(!ico_t.load(TUIS::icoPath("it_add").c_str())) ico_t.load(":/images/it_add.png");
     actItAdd = new QAction(QPixmap::fromImage(ico_t),_("&Add"),this);
@@ -261,7 +263,7 @@ ConfApp::ConfApp( string open_user ) :
     actUpdate->setToolTip(_("Refresh current page"));
     actUpdate->setWhatsThis(_("The button for refreshing a content of the current page."));
     actUpdate->setStatusTip(_("Press for refreshing a content of the current page."));
-    connect(actUpdate, SIGNAL(activated()), this, SLOT(pageRefresh()));        
+    connect(actUpdate, SIGNAL(activated()), this, SLOT(pageRefresh()));
     //-- Start of "Auto update" --
     if(!ico_t.load(TUIS::icoPath("start").c_str())) ico_t.load(":/images/start.png");
     actStartUpd = new QAction(QPixmap::fromImage(ico_t),_("&Start"),this);
@@ -269,7 +271,7 @@ ConfApp::ConfApp( string open_user ) :
     actStartUpd->setToolTip(_("Start cycled refresh"));
     actStartUpd->setWhatsThis(_("The button for start of cycled refresh content of the current page."));
     actStartUpd->setStatusTip(_("Press for start of cycled refresh content of the current page."));
-    connect(actStartUpd, SIGNAL(activated()), this, SLOT(pageCyclRefrStart()));        
+    connect(actStartUpd, SIGNAL(activated()), this, SLOT(pageCyclRefrStart()));
     //-- Stop of "Auto update" --
     if(!ico_t.load(TUIS::icoPath("stop").c_str())) ico_t.load(":/images/stop.png");
     actStopUpd = new QAction(QPixmap::fromImage(ico_t),_("&Stop"),this);
@@ -278,7 +280,7 @@ ConfApp::ConfApp( string open_user ) :
     actStopUpd->setWhatsThis(_("The button for stop of cycled refresh content of the current page."));
     actStopUpd->setStatusTip(_("Press for stop of cycled refresh content of the current page."));
     actStopUpd->setEnabled(false);
-    connect(actStopUpd, SIGNAL(activated()), this, SLOT(pageCyclRefrStop()));        
+    connect(actStopUpd, SIGNAL(activated()), this, SLOT(pageCyclRefrStop()));
     //-- About "System info" --
     if(!ico_t.load(TUIS::icoPath("help").c_str())) ico_t.load(":/images/help.png");
     QAction *actAbout = new QAction(QPixmap::fromImage(ico_t),_("&About"),this);
@@ -746,10 +748,10 @@ void ConfApp::about( )
     char buf[STR_BUF_LEN];
 
     snprintf(buf,sizeof(buf),_(
-	"%s v%s.\n"
-	"Autor: %s\n"
-	"License: %s\n"),
-	mod->modInfo("Name").c_str(), mod->modInfo("Version").c_str(), mod->modInfo("Author").c_str(), mod->modInfo("License").c_str() );
+	"%s v%s.\n%s\nAutor: %s\nLicense: %s\n\n"
+	"%s v%s.\n%s\nLicense: %s\nAuthor: %s\nWeb site: %s"),
+	mod->modInfo("Name").c_str(), mod->modInfo("Version").c_str(), mod->modInfo("Descript").c_str(), mod->modInfo("Author").c_str(), mod->modInfo("License").c_str(),
+	PACKAGE_NAME, VERSION, _(PACKAGE_DESCR), PACKAGE_LICENSE, _(PACKAGE_AUTHOR), PACKAGE_SITE );
 
     QMessageBox::about(this,windowTitle(),buf);
 }

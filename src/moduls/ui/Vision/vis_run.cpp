@@ -42,6 +42,7 @@
 #include <QPainter>
 #include <QToolBar>
 
+#include <config.h>
 #include <tsys.h>
 #include "tvision.h"
 #include "vis_run_widgs.h"
@@ -287,11 +288,10 @@ void VisRun::quitSt()
 void VisRun::about()
 {
     QMessageBox::about(this,windowTitle(),
-		QString(_("%1 v%2.\nAutor: %3\nLicense: %4\n")).
-			arg(mod->modInfo("Name").c_str()).
-			arg(mod->modInfo("Version").c_str()).
-			arg(mod->modInfo("Author").c_str()).
-			arg(mod->modInfo("License").c_str()));
+	QString(_("%1 v%2.\n%3\nAutor: %4\nDevelopers: %5\nLicense: %6\n\n%7 v%8.\n%9\nLicense: %10\nAuthor: %11\nWeb site: %12")).
+	arg(mod->modInfo("Name").c_str()).arg(mod->modInfo("Version").c_str()).arg(mod->modInfo("Descript").c_str()).
+	arg(mod->modInfo("Author").c_str()).arg(mod->modInfo(_("Developers")).c_str()).arg(mod->modInfo("License").c_str()).
+	arg(PACKAGE_NAME).arg(VERSION).arg(_(PACKAGE_DESCR)).arg(PACKAGE_LICENSE).arg(_(PACKAGE_AUTHOR)).arg(PACKAGE_SITE));
 }
 
 void VisRun::userChanged( const QString &oldUser, const QString &oldPass )

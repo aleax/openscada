@@ -1,3 +1,12 @@
+2008-09-20 Roman
+- !/SYS: Default user on start QTCfg is made root. Used user directory configuration.
+- !/SYS: Add programm information: PACKAGE_LICENSE, PACKAGE_DESCR, PACKAGE_AUTHOR and PACKAGE_SITE.
+- !!:/SYS: Add unified sleep task function TSYS::taskSleep() and replaced sleep code into: TArchiveS, DAQ.BlockCalc, DAQ.JavaLikeCalc, DAQ.LogicLev
+  DAQ.ModBus, DAQ.SNMP, DAQ.Siemens, DAQ.System, DAQ.Transporter and UI.VCAEngine.
+- FIX:/DB/SQLite: High CPU load on work to read only DB is fixed.
+- /UI/QTCfg, /UI/Vision, /UI/WebCfg: Module and system information on 'About' menu is updated.
+
+
 2008-09-18 Roman
 - !!:/SYS: User's work directory support and user's start script 'openscada_start' added.
 - FIX:/SYS: TSYS::setWorkDir() function is fixed.

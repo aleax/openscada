@@ -385,8 +385,6 @@ void Session::alarmQuittance( const string &wpath, ui8 quit_tmpl )
 void *Session::Task( void *icontr )
 {
     vector<string> pls;
-    long long work_tm, last_tm = 0;
-    struct timespec get_tm;
     Session &ses = *(Session *)icontr;
 
     ses.endrun_req = false;
@@ -422,13 +420,7 @@ void *Session::Task( void *icontr )
 
 	if(is_stop) break;
 
-	//- Calc next work time and sleep -
-	clock_gettime(CLOCK_REALTIME,&get_tm);
-	work_tm = (((long long)get_tm.tv_sec*1000000000+get_tm.tv_nsec)/((long long)ses.period()*1000000) + 1)*(long long)ses.period()*1000000;
-	if( work_tm == last_tm ) work_tm+=(long long)ses.period()*1000000; //Fix early call!
-	last_tm = work_tm;
-	get_tm.tv_sec = work_tm/1000000000; get_tm.tv_nsec = work_tm%1000000000;
-	clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&get_tm,NULL);
+	TSYS::taskSleep((long long)ses.period()*1000000);
 
 	if(ses.endrun_req) is_stop = true;
 	is_start = false;

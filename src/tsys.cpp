@@ -849,6 +849,20 @@ long TSYS::HZ()
     return sysconf(_SC_CLK_TCK);
 }
 
+void TSYS::taskSleep( long long per )
+{
+    struct timespec sp_tm;
+
+    clock_gettime(CLOCK_REALTIME,&sp_tm);
+    long long pnt_tm = ( ((long long)sp_tm.tv_sec*1000000000+sp_tm.tv_nsec)/per + 1)*per;
+    do
+    {
+	sp_tm.tv_sec = pnt_tm/1000000000; sp_tm.tv_nsec = pnt_tm%1000000000;
+	if( clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&sp_tm,NULL) )	return;
+	clock_gettime(CLOCK_REALTIME,&sp_tm);
+    }while( ((long long)sp_tm.tv_sec*1000000000+sp_tm.tv_nsec) < pnt_tm );
+}
+
 void TSYS::cntrCmdProc( XMLNode *opt )
 {
     char buf[STR_BUF_LEN];

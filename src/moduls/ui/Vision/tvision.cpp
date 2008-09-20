@@ -123,7 +123,7 @@ void TVision::modInfo( vector<string> &list )
 string TVision::modInfo( const string &name )
 {
     if( name == "SubType" )		return SUB_TYPE;
-    else if( name == _("Developers") )	return DEVELOPERS;
+    else if( name == _("Developers") )	return _(DEVELOPERS);
     else return TModule::modInfo( name);
 }
 

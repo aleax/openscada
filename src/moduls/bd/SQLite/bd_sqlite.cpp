@@ -233,11 +233,11 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
     }
     //- Put request -
     rc = sqlite3_get_table(m_db,Mess->codeConvOut(cd_pg.c_str(),req).c_str(),&result, &nrow, &ncol, &zErrMsg );
-    if( rc != SQLITE_OK ) 
+    if( rc != SQLITE_OK )
     {
 	//-- Fix transaction --
 	if( trans_reqs>1 && (commCnt-1)<0 )	commCnt=trans_reqs;
-	throw TError(TSYS::DBRequest,nodePath().c_str(),_("Get table error: %s"),zErrMsg);
+	throw TError(100+rc,nodePath().c_str(),_("Get table error: %s"),zErrMsg);
     }
     if( tbl && ncol > 0 )
     {
@@ -295,7 +295,7 @@ MTable::MTable(string inm, MBD *iown, bool create ) : TTable(inm)
 	req ="PRAGMA table_info('"+mod->sqlReqCode(name())+"');";
 	owner().sqlReq( req, &tblStrct );
     }
-    catch(...) { if( !create ) throw; }	
+    catch(...) { if( !create ) throw; }
 }
 
 MTable::~MTable(  )
@@ -461,7 +461,11 @@ void MTable::fieldSet( TConfig &cfg )
     //- Prepare query -
     string req = "SELECT 1 FROM '"+mod->sqlReqCode(name())+"' "+req_where+";";
     try{ owner().sqlReq( req, &tbl ); }
-    catch(TError err)	{ fieldFix(cfg); owner().sqlReq( req ); }
+    catch(TError err)
+    {
+	if( (err.cod-100) == SQLITE_READONLY )	return;
+	fieldFix(cfg); owner().sqlReq( req );
+    }
     if( tbl.size() < 2 )
     {
 	//-- Add new record --
@@ -520,7 +524,11 @@ void MTable::fieldSet( TConfig &cfg )
     //- Query -
     //printf("TEST 02: query: <%s>\n",req.c_str());
     try{ owner().sqlReq( req ); }
-    catch(TError err)	{ fieldFix(cfg); owner().sqlReq( req ); }
+    catch(TError err)
+    {
+	if( (err.cod-100) == SQLITE_READONLY )	return;
+	fieldFix(cfg); owner().sqlReq( req );
+    }
     //printf("TEST 01b: End from set\n");
 }
 
@@ -547,7 +555,12 @@ void MTable::fieldDel( TConfig &cfg )
 	}
     }
     req += ";";
-    owner().sqlReq( req );
+    try{ owner().sqlReq( req ); }
+    catch( TError err )
+    {
+	if( (err.cod-100) == SQLITE_READONLY )	return;
+	throw;
+    }
 }
 
 void MTable::fieldFix( TConfig &cfg )
