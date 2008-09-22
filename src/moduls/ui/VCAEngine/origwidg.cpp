@@ -140,7 +140,7 @@ void OrigElFigure::postEnable( int flag )
     {
 	attrAdd( new TFld("lineWdth",_("Line:width"),TFld::Integer,TFld::NoFlag,"2","1","0;99","","20") );
 	attrAdd( new TFld("lineClr",_("Line:color"),TFld::String,Attr::Color,"20","#000000","","","21") );
-	attrAdd( new TFld("lineDecor",_("Line:decorate"),TFld::Integer,TFld::Selected,"1","0","0;1",_("No decor;Pipe"),"22") );
+	//attrAdd( new TFld("lineDecor",_("Line:decorate"),TFld::Integer,TFld::Selected,"1","0","0;1",_("No decor;Pipe"),"22") );
 	attrAdd( new TFld("lineStyle",_("Line:style"),TFld::String,TFld::Selected,"10","solid","solid;dashed;dotted",_("Solid;Dashed;Dotted"),"29") );
 	attrAdd( new TFld("bordWdth",_("Border:width"),TFld::Integer,TFld::NoFlag,"2","0","0;99","","23") );
 	attrAdd( new TFld("bordClr",_("Border:color"),TFld::String,Attr::Color,"20","#000000","","","24") );
@@ -155,50 +155,100 @@ bool OrigElFigure::attrChange( Attr &cfg, void *prev )
 {
     if( cfg.flgGlob()&Attr::Active && cfg.id() == "elLst" )
     {
-	string sel;
+	string sel, sel1;
 	string ls_prev = *(string*)prev;
-	vector<int> pntls, pntls_prev;
-	int p[5];
+	map<int,char> pntls, pntls_prev, wls, wls_prev, clrls, clrls_prev, imgls, imgls_prev;
 	//- Parse last attributes list and make point list -
-	for( int off = 0; (sel=TSYS::strSepParse(ls_prev,0,'\n',&off)).size(); )
+	for( int i_p = 0; i_p < 2; i_p++ )
 	{
-	    for( int i_p = 0; i_p < sizeof(p)/sizeof(int); i_p++ ) p[i_p]=-1;
-	    sscanf(sel.c_str(),"line:%d:%d",&p[0],&p[1]) ||
-	    sscanf(sel.c_str(),"arc:%d:%d:%d:%d:%d",&p[0],&p[1],&p[2],&p[3],&p[4]) ||
-	    sscanf(sel.c_str(),"bezier:%d:%d:%d:%d",&p[0],&p[1],&p[2],&p[3]);
-	    for( int i_p = 0; i_p < sizeof(p)/sizeof(int); i_p++ )
-		if( p[i_p]>=0 ) pntls_prev.push_back(p[i_p]);
-	}
-	//- Parse new attributes list and update point's attributes -
-	for( int off = 0; (sel=TSYS::strSepParse(cfg.getS(),0,'\n',&off)).size(); )
-	{
-	    for( int i_p = 0; i_p < sizeof(p)/sizeof(int); i_p++ ) p[i_p]=-1;
-	    sscanf(sel.c_str(),"line:%d:%d",&p[0],&p[1]) ||
-	    sscanf(sel.c_str(),"arc:%d:%d:%d:%d:%d",&p[0],&p[1],&p[2],&p[3],&p[4]) ||
-	    sscanf(sel.c_str(),"bezier:%d:%d:%d:%d",&p[0],&p[1],&p[2],&p[3]);
-	    for( int i_p = 0; i_p < sizeof(p)/sizeof(int); i_p++ )
-		if( p[i_p] >= 0 )
-		{
-		    pntls.push_back(p[i_p]);
-		    if( cfg.owner()->attrPresent("p"+TSYS::int2str(p[i_p])+"x") )	continue;
-		    cfg.owner()->attrAdd( new TFld(("p"+TSYS::int2str(p[i_p])+"x").c_str(),(_("Point ")+TSYS::int2str(p[i_p])+":x").c_str(),
-			TFld::Real,Attr::Mutable,"","0","","",TSYS::int2str(30+p[i_p]*2).c_str()) );
-		    cfg.owner()->attrAdd( new TFld(("p"+TSYS::int2str(p[i_p])+"y").c_str(),(_("Point ")+TSYS::int2str(p[i_p])+":y").c_str(),
-			TFld::Real,Attr::Mutable,"","0","","",TSYS::int2str(30+p[i_p]*2+1).c_str()) );
-		}
-	}
-	//- Delete points -
-	for( int i_p = 0; i_p < pntls_prev.size(); i_p++ )
-	{
-	    int i_p1;
-	    for( i_p1 = 0; i_p1 < pntls.size(); i_p1++ )
-		if( pntls[i_p1] == pntls_prev[i_p] ) break;
-	    if( i_p1 >= pntls.size() )
+	    string ls_w = (i_p==0)?ls_prev:cfg.getS();
+	    map<int,char> &pntls_w = (i_p==0)?pntls_prev:pntls;
+	    map<int,char> &wls_w = (i_p==0)?wls_prev:wls;
+	    map<int,char> &clrls_w = (i_p==0)?clrls_prev:clrls;
+	    map<int,char> &imgls_w = (i_p==0)?imgls_prev:imgls;
+	    for( int off = 0; (sel=TSYS::strSepParse(ls_w,0,'\n',&off)).size(); )
 	    {
-		cfg.owner()->attrDel("p"+TSYS::int2str(pntls_prev[i_p])+"x");
-		cfg.owner()->attrDel("p"+TSYS::int2str(pntls_prev[i_p])+"y");
+		int offe = 0;
+		string fTp = TSYS::strSepParse(sel,0,':',&offe);
+		if( fTp == "line" )
+		{
+		    for( int i = 0; i < 2; i++ ) pntls_w[atoi(TSYS::strSepParse(sel,0,':',&offe).c_str())] = true;
+		    if( (sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'w' ) wls_w[atoi(sel1.substr(1).c_str())] = true;
+		    if( (sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'c' ) clrls_w[atoi(sel1.substr(1).c_str())] = true;
+		    if( (sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'w' ) wls_w[atoi(sel1.substr(1).c_str())] = true;
+		    if( (sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'c' ) clrls_w[atoi(sel1.substr(1).c_str())] = true;
+		}
+		else if( fTp == "arc" )
+		{
+		    for( int i = 0; i < 5; i++ ) pntls_w[atoi(TSYS::strSepParse(sel,0,':',&offe).c_str())] = true;
+		    if( (sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'w' ) wls_w[atoi(sel1.substr(1).c_str())] = true;
+		    if( (sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'c' ) clrls_w[atoi(sel1.substr(1).c_str())] = true;
+		    if( (sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'w' ) wls_w[atoi(sel1.substr(1).c_str())] = true;
+		    if( (sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'c' ) clrls_w[atoi(sel1.substr(1).c_str())] = true;
+		}
+		else if( fTp == "bezier" )
+		{
+		    for( int i = 0; i < 4; i++ ) pntls_w[atoi(TSYS::strSepParse(sel,0,':',&offe).c_str())] = true;
+		    if( (sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'w' ) wls_w[atoi(sel1.substr(1).c_str())] = true;
+		    if( (sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'c' ) clrls_w[atoi(sel1.substr(1).c_str())] = true;
+		    if( (sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'w' ) wls_w[atoi(sel1.substr(1).c_str())] = true;
+		    if( (sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'c' ) clrls_w[atoi(sel1.substr(1).c_str())] = true;
+		}
+		else if( fTp == "fill" )
+		    while( (sel1=TSYS::strSepParse(sel,0,':',&offe)).size() )
+		    {
+			if( sel1[0] == 'c' )	clrls_w[atoi(sel1.substr(1).c_str())] = true;
+			else if( sel1[0] == 'i' )	imgls_w[atoi(sel1.substr(1).c_str())] = true;
+		    }
 	    }
 	}
+
+	//- Add new dynamic items -
+	//-- Add no present dynamic points --
+	for( map<int,char>::iterator it = pntls.begin(); it != pntls.end(); it++ )
+	    if( it->first && pntls_prev.find(it->first) == pntls_prev.end() && !cfg.owner()->attrPresent("p"+TSYS::int2str(it->first)+"x") )
+	    {
+		cfg.owner()->attrAdd( new TFld(("p"+TSYS::int2str(it->first)+"x").c_str(),(_("Point ")+TSYS::int2str(it->first)+":x").c_str(),
+		    TFld::Real,Attr::Mutable,"","0","","",TSYS::int2str(30+it->first*5).c_str()) );
+		cfg.owner()->attrAdd( new TFld(("p"+TSYS::int2str(it->first)+"y").c_str(),(_("Point ")+TSYS::int2str(it->first)+":y").c_str(),
+		    TFld::Real,Attr::Mutable,"","0","","",TSYS::int2str(30+it->first*5+1).c_str()) );
+	    }
+	//-- Add no present dynamic widths --
+	for( map<int,char>::iterator it = wls.begin(); it != wls.end(); it++ )
+	    if( it->first && wls_prev.find(it->first) == wls_prev.end() && !cfg.owner()->attrPresent("w"+TSYS::int2str(it->first)) )
+		cfg.owner()->attrAdd( new TFld(("w"+TSYS::int2str(it->first)).c_str(),(_("Width ")+TSYS::int2str(it->first)).c_str(),
+		    TFld::Real,Attr::Mutable,"","1","","",TSYS::int2str(30+it->first*5+2).c_str()) );
+	//-- Add no present dynamic colors --
+	for( map<int,char>::iterator it = clrls.begin(); it != clrls.end(); it++ )
+	    if( it->first && clrls_prev.find(it->first) == clrls_prev.end() && !cfg.owner()->attrPresent("c"+TSYS::int2str(it->first)) )
+		cfg.owner()->attrAdd( new TFld(("c"+TSYS::int2str(it->first)).c_str(),(_("Color ")+TSYS::int2str(it->first)).c_str(),
+		    TFld::String,Attr::Mutable,"","","","",TSYS::int2str(30+it->first*5+3).c_str()) );
+	//-- Add no present dynamic images --
+	for( map<int,char>::iterator it = imgls.begin(); it != imgls.end(); it++ )
+	    if( it->first && imgls_prev.find(it->first) == imgls_prev.end() && !cfg.owner()->attrPresent("i"+TSYS::int2str(it->first)) )
+		cfg.owner()->attrAdd( new TFld(("i"+TSYS::int2str(it->first)).c_str(),(_("Image ")+TSYS::int2str(it->first)).c_str(),
+		    TFld::String,Attr::Mutable,"","","","",TSYS::int2str(30+it->first*5+4).c_str()) );
+
+	//- Delete no dynamic items -
+	//-- Delete dynamic points --
+	for( map<int,char>::iterator it = pntls_prev.begin(); it != pntls_prev.end(); it++ )
+	    if( it->first && pntls.find(it->first) == pntls.end() )
+	    {
+		cfg.owner()->attrDel("p"+TSYS::int2str(it->first)+"x");
+		cfg.owner()->attrDel("p"+TSYS::int2str(it->first)+"y");
+	    }
+	//-- Delete dynamic widths --
+	for( map<int,char>::iterator it = wls_prev.begin(); it != wls_prev.end(); it++ )
+	    if( it->first && wls.find(it->first) == wls.end() )
+		cfg.owner()->attrDel("w"+TSYS::int2str(it->first));
+	//-- Delete dynamic colors --
+	for( map<int,char>::iterator it = clrls_prev.begin(); it != clrls_prev.end(); it++ )
+	    if( it->first && clrls.find(it->first) == clrls.end() )
+		cfg.owner()->attrDel("c"+TSYS::int2str(it->first));
+	//-- Delete dynamic images --
+	for( map<int,char>::iterator it = imgls_prev.begin(); it != imgls_prev.end(); it++ )
+	    if( it->first && imgls.find(it->first) == imgls.end() )
+		cfg.owner()->attrDel("i"+TSYS::int2str(it->first));
     }
     return Widget::attrChange(cfg,prev);
 }

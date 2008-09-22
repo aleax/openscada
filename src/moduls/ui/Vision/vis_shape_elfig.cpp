@@ -151,8 +151,8 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
         default:
             if( uiPrmPos >= 30 )
             {
-                int pnt  = (uiPrmPos-30)/2;
-                int patr = (uiPrmPos-30)%2;
+                int pnt  = (uiPrmPos-30)/5;
+                int patr = (uiPrmPos-30)%5;
                 double pval  = atof(val.c_str());
                 QPointF pnt_ = (*pnts)[pnt];
                 if( patr == 0 ) pnt_.setX(pval);

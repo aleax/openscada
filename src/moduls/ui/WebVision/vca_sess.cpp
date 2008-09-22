@@ -3327,8 +3327,8 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
             default:
                 if( uiPrmPos >= 30 )
                 {
-                    int pnt  = (uiPrmPos-30)/2;
-                    int patr = (uiPrmPos-30)%2;
+                    int pnt  = (uiPrmPos-30)/5;
+                    int patr = (uiPrmPos-30)%5;
                     double pval  = atof(req_el->text().c_str());
                     Point pnt_ = (pnts)[pnt];
                     if( patr == 0 ) pnt_.x=pval;

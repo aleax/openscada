@@ -1,3 +1,7 @@
+2008-09-22 Roman
+- !!:/UI/VCAEngine: For primitive ElFigure: Dynamic and static points support is added. Dynamic width, colors and images support is added.
+
+
 2008-09-20 Roman
 - !/SYS: Default user on start QTCfg is made root. Used user directory configuration.
 - !/SYS: Add programm information: PACKAGE_LICENSE, PACKAGE_DESCR, PACKAGE_AUTHOR and PACKAGE_SITE.
