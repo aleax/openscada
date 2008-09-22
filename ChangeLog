@@ -1,5 +1,6 @@
 2008-09-22 Roman
 - !!:/UI/VCAEngine: For primitive ElFigure: Dynamic and static points support is added. Dynamic width, colors and images support is added.
+- /UI/Vision: Disable word wrap for texts into attributes of atributes inspector.
 
 
 2008-09-20 Roman
