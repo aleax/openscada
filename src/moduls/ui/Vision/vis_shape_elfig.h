@@ -72,7 +72,7 @@ class inundationItem
         inundationItem( const QPainterPath &ipath, const QBrush &ibrush, QBrush &ibrush_img,
                         const QVector<int> &inumber_shape, const QVector<int> &inumber_point ) : 
                         brush(ibrush), brush_img(ibrush_img), path(ipath), number_shape(inumber_shape),
-                       number_point(inumber_point)       
+                       number_point(inumber_point)
         { };
 
         //Attributes
@@ -195,7 +195,7 @@ class ShapeElFigure : public WdgShape
         QPainterPath painterPathSimple( int el_type, double el_ang, 
 		QPointF el_p1 = QPointF(0,0), QPointF el_p2 = QPointF(0,0), QPointF el_p3 = QPointF(0,0), 
 		QPointF el_p4 = QPointF(0,0), QPointF el_p5 = QPointF(0,0), QPointF el_p6 = QPointF(0,0) );
-        int appendPoint( const QPointF &pos, const QVector<ShapeItem> &shapeItems, PntMap *pnts );
+        int appendPoint( const QPointF &pos, const QVector<ShapeItem> &shapeItems, PntMap *pnts, bool flag_down );
         void dropPoint( int num, int num_shape, const QVector<ShapeItem> &shapeItems, PntMap *pnts );
         void step( int s, int f, int p, const QVector<int> &vect, int N );
         bool inundation( const QPointF &point, const QVector<ShapeItem> &shapeItems, PntMap *pnts, const QVector<int> &vect, int N, WdgView *w );
