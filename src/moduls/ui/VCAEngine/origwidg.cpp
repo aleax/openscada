@@ -222,12 +222,12 @@ bool OrigElFigure::attrChange( Attr &cfg, void *prev )
 	for( map<int,char>::iterator it = clrls.begin(); it != clrls.end(); it++ )
 	    if( it->first && clrls_prev.find(it->first) == clrls_prev.end() && !cfg.owner()->attrPresent("c"+TSYS::int2str(it->first)) )
 		cfg.owner()->attrAdd( new TFld(("c"+TSYS::int2str(it->first)).c_str(),(_("Color ")+TSYS::int2str(it->first)).c_str(),
-		    TFld::String,Attr::Mutable,"","","","",TSYS::int2str(30+it->first*5+3).c_str()) );
+		    TFld::String,Attr::Mutable|Attr::Color,"","","","",TSYS::int2str(30+it->first*5+3).c_str()) );
 	//-- Add no present dynamic images --
 	for( map<int,char>::iterator it = imgls.begin(); it != imgls.end(); it++ )
 	    if( it->first && imgls_prev.find(it->first) == imgls_prev.end() && !cfg.owner()->attrPresent("i"+TSYS::int2str(it->first)) )
 		cfg.owner()->attrAdd( new TFld(("i"+TSYS::int2str(it->first)).c_str(),(_("Image ")+TSYS::int2str(it->first)).c_str(),
-		    TFld::String,Attr::Mutable,"","","","",TSYS::int2str(30+it->first*5+4).c_str()) );
+		    TFld::String,Attr::Mutable|Attr::Image,"","","","",TSYS::int2str(30+it->first*5+4).c_str()) );
 
 	//- Delete no dynamic items -
 	//-- Delete dynamic points --

@@ -307,7 +307,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    {
 		if( !shD->addrWdg || !qobject_cast<LineEdit*>(shD->addrWdg) )
 		{
-		    if( shD->addrWdg ) delete shD->addrWdg;
+		    if( shD->addrWdg ) shD->addrWdg->deleteLater();
 		    shD->addrWdg = new LineEdit(w);
 		    if( runW ) connect( shD->addrWdg, SIGNAL(apply()), this, SLOT(lineAccept()) );
 		    mk_new = true;
@@ -337,7 +337,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    case 1:	//Text edit
 		if( !shD->addrWdg || !qobject_cast<TextEdit*>(shD->addrWdg) )
 		{
-		    if( shD->addrWdg ) delete shD->addrWdg;
+		    if( shD->addrWdg ) shD->addrWdg->deleteLater();
 		    shD->addrWdg = new TextEdit(w);
 		    if( runW ) connect( shD->addrWdg, SIGNAL(apply()), this, SLOT(textAccept()) );
 		    mk_new = true;
@@ -352,7 +352,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    case 2:	//Chek box
 		if( !shD->addrWdg || !qobject_cast<QCheckBox*>(shD->addrWdg) )
 		{
-		    if( shD->addrWdg ) delete shD->addrWdg;
+		    if( shD->addrWdg ) shD->addrWdg->deleteLater();
 		    shD->addrWdg = new QCheckBox("test",w);
 		    if( runW ) connect( shD->addrWdg, SIGNAL(stateChanged(int)), this, SLOT(checkChange(int)) );
 		    mk_new = true;
@@ -368,7 +368,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    {
 		if( !shD->addrWdg || !qobject_cast<QPushButton*>(shD->addrWdg) )
 		{
-		    if( shD->addrWdg ) delete shD->addrWdg;
+		    if( shD->addrWdg ) shD->addrWdg->deleteLater();
 		    shD->addrWdg = new QPushButton("test",w);
 		    shD->addrWdg->setSizePolicy( QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum) );
 		    if( runW )
@@ -405,7 +405,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    {
 		if( !shD->addrWdg || !qobject_cast<QComboBox*>(shD->addrWdg) )
 		{
-		    if( shD->addrWdg ) delete shD->addrWdg;
+		    if( shD->addrWdg ) shD->addrWdg->deleteLater();
 		    shD->addrWdg = new QComboBox(w);
 		    if( runW ) connect( shD->addrWdg, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(comboChange(const QString&)) );
 		    mk_new = true;
@@ -424,7 +424,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    {
 		if( !shD->addrWdg || !qobject_cast<QListWidget*>(shD->addrWdg) )
 		{
-		    if( shD->addrWdg ) delete shD->addrWdg;
+		    if( shD->addrWdg ) shD->addrWdg->deleteLater();
 		    shD->addrWdg = new QListWidget(w);
 		    if( runW ) connect( shD->addrWdg, SIGNAL(currentRowChanged(int)), this, SLOT(listChange(int)) );
 		    mk_new = true;
@@ -444,7 +444,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    {
 		if( !shD->addrWdg || (shD->elType==6 && !qobject_cast<QSlider*>(shD->addrWdg)) || (shD->elType==7 && !qobject_cast<QScrollBar*>(shD->addrWdg)) )
 		{
-		    if( shD->addrWdg ) delete shD->addrWdg;
+		    if( shD->addrWdg ) shD->addrWdg->deleteLater();
 		    shD->addrWdg = (shD->elType==6 ? (QWidget *)new QSlider(w) : (QWidget *)new QScrollBar(w));
 		    if( runW ) connect( shD->addrWdg, SIGNAL(sliderMoved(int)), this, SLOT(sliderMoved(int)) );
 		    mk_new = true;

@@ -156,7 +156,7 @@ void RunWdgView::childsUpdate( bool newLoad )
 	for( i_l = 0; i_l < lst.size(); i_l++ )
 	if( qobject_cast<WdgView*>(children().at(i_c))->id() == (b_nm+"/wdg_"+lst[i_l]) )
 	    break;
-	if( i_l >= lst.size() ) delete children().at(i_c);
+	if( i_l >= lst.size() ) children().at(i_c)->deleteLater(); //delete children().at(i_c--);
     }
 
     //- Create new child widget -

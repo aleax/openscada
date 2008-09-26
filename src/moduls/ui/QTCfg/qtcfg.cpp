@@ -844,9 +844,11 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		block_tabs = true;
 		if( i_tbs == tabs->currentIndex() )
 		    node.childGet(i_tbs)->setAttr("qview","0");
-		QWidget *tab = tabs->widget(i_tbs);
+		tabs->widget(i_tbs)->deleteLater();
 		tabs->removeTab(i_tbs);
-		delete tab;
+		//QWidget *tab = tabs->widget(i_tbs);
+		//tabs->removeTab(i_tbs);
+		//delete tab;
 		i_tbs--;
 		block_tabs = false;
 	    }
@@ -877,7 +879,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		if( !refresh )
 		{
 		    int v_scrl = (scrl->verticalScrollBar()) ? scrl->verticalScrollBar()->value() : 0;
-		    if( wdg != NULL ) delete wdg;
+		    if( wdg != NULL ) wdg->deleteLater(); // delete wdg;
 		
 		    wdg = new QFrame(scrl);
 		    QVBoxLayout *wdg_lay = new QVBoxLayout(wdg);
@@ -1314,12 +1316,12 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		if(comb)
 		{
 		    if( *l_hbox ) (*l_hbox)->insertWidget( l_pos++, comb );
-		    else { delete comb; comb = NULL; }
+		    else { comb->deleteLater(); /*delete comb;*/ comb = NULL; }
 		}
 		if(lab_r)
 		{
 		    if( *l_hbox ) (*l_hbox)->insertWidget( l_pos++, lab_r );
-		    else { delete lab_r; lab_r = NULL; }
+		    else { lab_r->deleteLater(); /*delete lab_r;*/ lab_r = NULL; }
 		}
 	    }
 
@@ -1432,12 +1434,12 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    if(chBox)
 		    {
 			if( *l_hbox ) (*l_hbox)->insertWidget( l_pos++, chBox );
-			else { delete chBox; chBox = NULL; }
+			else { chBox->deleteLater(); /*delete chBox;*/ chBox = NULL; }
 		    }
 		    if(lab_r)
 		    {
 			if( *l_hbox ) (*l_hbox)->insertWidget( l_pos++, lab_r );
-			else { delete lab_r; lab_r = NULL; }
+			else { lab_r->deleteLater(); /*delete lab_r;*/ lab_r = NULL; }
 		    }
 		}
 
@@ -1568,7 +1570,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		else
 		{
 		    if( *l_hbox ) (*l_hbox)->insertWidget( l_pos++, (val_w?(QWidget*)val_w:(QWidget*)val_r) );
-		    else { delete (val_w?(QWidget*)val_w:(QWidget*)val_r); val_w = NULL; val_r = NULL; }
+		    else { (val_w?(QWidget*)val_w:(QWidget*)val_r)->deleteLater(); /*delete (val_w?(QWidget*)val_w:(QWidget*)val_r);*/ val_w = NULL; val_r = NULL; }
 		}
 		t_s.setAttr("addr_lab",TSYS::addr2str(lab));
 		t_s.setAttr("addr_dtw",TSYS::addr2str(val_w));
@@ -1685,8 +1687,8 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    }
 		    else
 		    {
-			if( val_w ) { delete val_w; val_w = NULL; }
-			if( val_r ) { delete val_r; val_r = NULL; }
+			if( val_w ) { val_w->deleteLater(); /*delete val_w;*/ val_w = NULL; }
+			if( val_r ) { val_r->deleteLater(); /*delete val_r;*/ val_r = NULL; }
 		    }
 		}
 		
@@ -1773,12 +1775,14 @@ void ConfApp::pageDisplay( const string &path )
 	pageCyclRefrStop();
 
 	block_tabs = true;
-        while(tabs->widget(0))
-        {
-            QWidget *tab = tabs->widget(0);
-            tabs->removeTab(0);
-            delete tab;
-        }
+	while(tabs->widget(0))
+	{
+	    tabs->widget(0)->deleteLater();
+	    tabs->removeTab(0);
+	    //QWidget *tab = tabs->widget(0);
+	    //tabs->removeTab(0);
+	    //delete tab;
+	}
 	block_tabs = false;
 	sel_path = path;
 
