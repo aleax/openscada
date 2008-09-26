@@ -1,3 +1,8 @@
+2008-09-26 Maxim
+- :/UI/Vision: Action for making dynamic points from static ones is added to the popup menu for primitive ElFigure.
+- !!:UI/WebVision: Dynamic and static points realization is done for primitive ElFigure.
+
+
 2008-09-26 Roman
 - !!:/UI/QTCfg, /UI/Vision: Use function deleteLater() for widgets deletion.
 - FIX:/UI/VCAEngine: Dynamic colors and images of primitive ElFigure is fixed.

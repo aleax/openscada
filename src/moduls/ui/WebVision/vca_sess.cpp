@@ -3339,7 +3339,10 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
     }
     if( rel_list)
     {
+        for( PntMap::iterator pi = pnts.begin(); pi != pnts.end(); pi++ )
+            if(pi->first <= -10 ) pnts.erase ( pi );
         string sel;
+        int map_index = -10;
         int  p[5];
         int lnwidth;
         int bord_width;
@@ -3360,8 +3363,52 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
             {
                 bool fl_wdt = false;
                 //-- Reading anf setting attributes for the current line --
-                p[0]  = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
-                p[1]  = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
+                float x_s, y_s;
+                string el_s = TSYS::strSepParse(sel,0,':',&el_off);
+                if( sscanf(el_s.c_str(), "(%f,%f)", &x_s, &y_s) != 2 ) p[0]  = atoi(el_s.c_str());
+                else 
+                {
+                    bool fl = false;
+                    //-- Detecting if there is a point with same coordinates in the map --
+                    for( PntMap::reverse_iterator pi = pnts.rbegin(); pi != pnts.rend(); pi++ )
+                        if(pi->first <= -10 )
+                            if( fabs(TSYS::realRound(x_s,2) -  TSYS::realRound(pi->second.x,2)) < 0.01 &&
+                                fabs(TSYS::realRound(y_s,2) -  TSYS::realRound(pi->second.y,2)) < 0.01 )  
+                            {
+                                p[0] = pi->first;
+                                fl = true;
+                                break;
+                            }
+                    if( !fl )
+                    {
+                        p[0] = map_index;
+                        (pnts)[map_index] = Point(x_s,y_s);
+                        map_index -= 1;
+                    }
+                }
+                el_s = TSYS::strSepParse(sel,0,':',&el_off);
+                if( sscanf(el_s.c_str(), "(%f,%f)", &x_s, &y_s) != 2 ) p[1]  = atoi(el_s.c_str());
+                else 
+                {
+                    bool fl = false;
+                    //-- Detecting if there is a point with same coordinates in the map --
+                    for( PntMap::reverse_iterator pi = pnts.rbegin(); pi != pnts.rend(); pi++ )
+                        if(pi->first <= -10 )
+                            if( fabs(TSYS::realRound(x_s,2) -  TSYS::realRound(pi->second.x,2)) < 0.01 &&
+                                fabs(TSYS::realRound(y_s,2) -  TSYS::realRound(pi->second.y,2)) < 0.01 )  
+                            {
+                                p[1] = pi->first;
+                                fl = true;
+                                break;
+                            }
+                    if( !fl )
+                    {
+                        p[1] = map_index;
+                        (pnts)[map_index] = Point(x_s,y_s);
+                        map_index -= 1;
+                    }
+                }
+
                 lnwidth = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
                 if( !lnwidth ) lnwidth=lineWdth;
                 color = mod->colorParse(TSYS::strSepParse(sel,0,':',&el_off));
@@ -3398,11 +3445,76 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
             {
                 bool fl_wdt = false;
                 //-- Reading anf setting attributes for the current arc --
-                p[0]  = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
-                p[1]  = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
-                p[2]  = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
-                p[3]  = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
-                p[4]  = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
+                float x_s, y_s;
+                string el_s = TSYS::strSepParse(sel,0,':',&el_off);
+                if( sscanf(el_s.c_str(), "(%f,%f)", &x_s, &y_s) != 2 ) p[0]  = atoi(el_s.c_str());
+                else 
+                {
+                    bool fl = false;
+                    //-- Detecting if there is a point with same coordinates in the map --
+                    for( PntMap::iterator pi = pnts.begin(); pi != pnts.end(); pi++ )
+                        if(pi->first <= -10 )
+                            if( fabs(TSYS::realRound(x_s,2) -  TSYS::realRound(pi->second.x,2)) < 0.01 &&
+                                fabs(TSYS::realRound(y_s,2) -  TSYS::realRound(pi->second.y,2)) < 0.01 )  
+                            {
+                                p[0] = pi->first;
+                                fl = true;
+                                break;
+                            }
+                    if( !fl )
+                    {
+                        p[0] = map_index;
+                        (pnts)[map_index] = Point(x_s,y_s);
+                        map_index -= 1;
+                    }
+                }
+                el_s = TSYS::strSepParse(sel,0,':',&el_off);
+                if( sscanf(el_s.c_str(), "(%f,%f)", &x_s, &y_s) != 2 ) p[1]  = atoi(el_s.c_str());
+                else 
+                {
+                    bool fl = false;
+                    //-- Detecting if there is a point with same coordinates in the map --
+                    for( PntMap::iterator pi = pnts.begin(); pi != pnts.end(); pi++ )
+                        if(pi->first <= -10 )
+                            if( fabs(TSYS::realRound(x_s,2) -  TSYS::realRound(pi->second.x,2)) < 0.01 &&
+                                fabs(TSYS::realRound(y_s,2) -  TSYS::realRound(pi->second.y,2)) < 0.01 )  
+                            {
+                                p[1] = pi->first;
+                                fl = true;
+                                break;
+                            }
+                    if( !fl )
+                    {
+                        p[1] = map_index;
+                        (pnts)[map_index] = Point(x_s,y_s);
+                        map_index -= 1;
+                    }
+                }
+                el_s = TSYS::strSepParse(sel,0,':',&el_off);
+                if( sscanf(el_s.c_str(), "(%f,%f)", &x_s, &y_s) != 2 ) p[2]  = atoi(el_s.c_str());
+                else 
+                {
+                    p[2] = map_index;
+                    (pnts)[map_index] = Point(x_s,y_s);
+                    map_index -= 1;
+                }
+                el_s = TSYS::strSepParse(sel,0,':',&el_off);
+                if( sscanf(el_s.c_str(), "(%f,%f)", &x_s, &y_s) != 2 ) p[3]  = atoi(el_s.c_str());
+                else 
+                {
+                    p[3] = map_index;
+                    (pnts)[map_index] = Point(x_s,y_s);
+                    map_index -= 1;
+                }
+                el_s = TSYS::strSepParse(sel,0,':',&el_off);
+                if( sscanf(el_s.c_str(), "(%f,%f)", &x_s, &y_s) != 2 ) p[4]  = atoi(el_s.c_str());
+                else 
+                {
+                    p[4] = map_index;
+                    (pnts)[map_index] = Point(x_s,y_s);
+                    map_index -= 1;
+                }
+
                 lnwidth = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
                 if( !lnwidth ) lnwidth=lineWdth;
                 color =  mod->colorParse(TSYS::strSepParse(sel,0,':',&el_off));
@@ -3488,10 +3600,68 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
             {
                 bool fl_wdt = false;
                 //-- Reading anf setting attributes for the current arc --
-                p[0]  = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
-                p[1]  = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
-                p[2]  = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
-                p[3]  = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
+                float x_s, y_s;
+                string el_s = TSYS::strSepParse(sel,0,':',&el_off);
+                if( sscanf(el_s.c_str(), "(%f,%f)", &x_s, &y_s) != 2 ) p[0]  = atoi(el_s.c_str());
+                else 
+                {
+                    bool fl = false;
+                    //-- Detecting if there is a point with same coordinates in the map --
+                    for( PntMap::reverse_iterator pi = pnts.rbegin(); pi != pnts.rend(); pi++ )
+                        if(pi->first <= -10 )
+                            if( fabs(TSYS::realRound(x_s,2) -  TSYS::realRound(pi->second.x,2)) < 0.01 &&
+                                fabs(TSYS::realRound(y_s,2) -  TSYS::realRound(pi->second.y,2)) < 0.01 )  
+                            {
+                                p[0] = pi->first;
+                                fl = true;
+                                break;
+                            }
+                    if( !fl )
+                    {
+                        p[0] = map_index;
+                        (pnts)[map_index] = Point(x_s,y_s);
+                        map_index -= 1;
+                    }
+                }
+                el_s = TSYS::strSepParse(sel,0,':',&el_off);
+                if( sscanf(el_s.c_str(), "(%f,%f)", &x_s, &y_s) != 2 ) p[1]  = atoi(el_s.c_str());
+                else 
+                {
+                    bool fl = false;
+                    //-- Detecting if there is a point with same coordinates in the map --
+                    for( PntMap::reverse_iterator pi = pnts.rbegin(); pi != pnts.rend(); pi++ )
+                        if(pi->first <= -10 )
+                            if( fabs(TSYS::realRound(x_s,2) -  TSYS::realRound(pi->second.x,2)) < 0.01 &&
+                                fabs(TSYS::realRound(y_s,2) -  TSYS::realRound(pi->second.y,2)) < 0.01 )  
+                            {
+                                p[1] = pi->first;
+                                fl = true;
+                                break;
+                            }
+                    if( !fl )
+                    {
+                        p[1] = map_index;
+                        (pnts)[map_index] = Point(x_s,y_s);
+                        map_index -= 1;
+                    }
+                }
+                el_s = TSYS::strSepParse(sel,0,':',&el_off);
+                if( sscanf(el_s.c_str(), "(%f,%f)", &x_s, &y_s) != 2 ) p[2]  = atoi(el_s.c_str());
+                else 
+                {
+                    p[2] = map_index;
+                    (pnts)[map_index] = Point(x_s,y_s);
+                    map_index -= 1;
+                }
+                el_s = TSYS::strSepParse(sel,0,':',&el_off);
+                if( sscanf(el_s.c_str(), "(%f,%f)", &x_s, &y_s) != 2 ) p[3]  = atoi(el_s.c_str());
+                else 
+                {
+                    p[3] = map_index;
+                    (pnts)[map_index] = Point(x_s,y_s);
+                    map_index -= 1;
+                }
+
                 lnwidth = atoi(TSYS::strSepParse(sel,0,':',&el_off).c_str());
                 if( !lnwidth ) lnwidth=lineWdth;
                 color =  mod->colorParse(TSYS::strSepParse(sel,0,':',&el_off));
@@ -3525,10 +3695,35 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                 int zero_pnts = 0;
                 string fl_color_1, fl_img;
                 vector <int> fl_pnts;
+                float x_s, y_s;
+                int vl;
                 while( true )
                 {
                     string svl = TSYS::strSepParse(sel,0,':',&el_off);
-                    int vl = atoi(svl.c_str());
+                    if( sscanf(svl.c_str(), "(%f,%f)", &x_s, &y_s) != 2 ) vl = atoi(svl.c_str());
+                    else 
+                    {
+                        bool fl = false;
+                        //-- Detecting if there is a point with same coordinates in the map --
+                        for( PntMap::reverse_iterator pi = pnts.rbegin(); pi != pnts.rend(); pi++ )
+                            if(pi->first <= -10 )
+                            {
+                                if( (fabs(TSYS::realRound(x_s,2) -  TSYS::realRound(pi->second.x,2)) < 0.01) &&
+                                    (fabs(TSYS::realRound(y_s,2) -  TSYS::realRound(pi->second.y,2)) < 0.01) )  
+                                    {
+                                        vl = pi->first;
+                                        fl = true;
+                                        break;
+                                    }
+                            }
+                        if( !fl )
+                        {
+                            vl = map_index;
+                            (pnts)[map_index] = Point(x_s,y_s);
+                            map_index -= 1;
+                        }
+
+                    }
                     if( vl ) fl_pnts.push_back(vl);
                     else if( zero_pnts == 0 ) { fl_color_1 = svl; zero_pnts++; }
                     else if( zero_pnts == 1 ) { fl_img= svl; zero_pnts++; }
@@ -3536,7 +3731,6 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                 }
                 int fl_color=mod->colorParse(fl_color_1);
                 if( fl_color==-1) fl_color=fillClr;
-                
                 if ( fl_img.size() )
                     inundationItems.push_back(InundationItem(fl_pnts, fl_color, -1, fl_img));
                 else

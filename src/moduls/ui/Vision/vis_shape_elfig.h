@@ -24,13 +24,14 @@
 #define VIS_SHAPE_ELFIG_H
 
 #include <math.h>
-
+#include <map>
 #include <QPen>
 
 #include "vis_shapes.h"
 #include "vis_widgs.h"
 
-typedef QMap<int,QPointF> PntMap;
+using std::map;
+typedef map<int,QPointF> PntMap;
 
 namespace VISION
 {
@@ -101,10 +102,44 @@ class RectItem
 };
 
 //*************************************************
+//* Second sideo of shape widget               *
+//*************************************************
+class ElFigDt : public QObject
+{
+    Q_OBJECT
+    public:
+        //Methods
+        ElFigDt( WdgView *wi ) : en(true), active(true), geomMargin(0), lineWdth(1), lineDecor(0),
+                bordWdth(0), orient(0), w(wi)  { }
+        //Attributes
+        short	en          :1;
+        short	active      :1;
+        short   geomMargin  :8;
+        short   lineDecor   :4;
+        short   bordWdth    :8;
+        float   lineWdth;
+        QColor  lineClr;
+        QColor  bordClr;
+        QColor  fillClr;
+        QBrush  fillImg;
+        double  orient;
+        string  elLst;
+        string  lineStyle;
+        QVector<ShapeItem> shapeItems;
+        QVector<inundationItem> inundationItems;
+        PntMap  shapePnts;
+        WdgView *w;
+    private slots:
+        void dynamicPoint();
+};
+
+
+//*************************************************
 //* Elementary figures shape widget               *
 //*************************************************
 class ShapeElFigure : public WdgShape 
 {    
+    friend class ElFigDt;
     Q_OBJECT
 
     public:
@@ -147,30 +182,6 @@ class ShapeElFigure : public WdgShape
     
     private:
         //Data
-        class ElFigDt
-        {
-            public:
-		//Methods
-                ElFigDt( ) : en(true), active(true), geomMargin(0), lineWdth(1), lineDecor(0),
-                        bordWdth(0), orient(0)  { }
-		//Attributes
-                short	en          :1;
-                short	active      :1;
-                short   geomMargin  :8;
-                short   lineDecor   :4;
-                short   bordWdth    :8;
-                float   lineWdth;
-                QColor  lineClr;
-                QColor  bordClr;
-                QColor  fillClr;
-                QBrush  fillImg;
-                double  orient;
-                string  elLst;
-                string  lineStyle;
-                QVector<ShapeItem> shapeItems;
-                QVector<inundationItem> inundationItems;
-                PntMap  shapePnts;
-        };
     	//Methods
         int itemAt( const QPointF &pos, const QVector<ShapeItem> &shapeItems, WdgView *w );			//Check for figure type under cursor
         void moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeItems, PntMap *pnts, WdgView *w );	//Move figure procedure
@@ -251,6 +262,7 @@ class ShapeElFigure : public WdgShape
         int rect_num_move;
         double angle_temp;
         bool flag_angle_temp;
+        int rect_dyn;
     };
 }
 
