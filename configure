@@ -25381,6 +25381,7 @@ fi
 sys_lib="/usr/lib"
 if test $target_cpu = "x86_64"; then sys_lib="/usr/lib64"; fi
 
+QT4use=false;
 
 # Check for libraries
 { echo "$as_me:$LINENO: checking for sin in -lm" >&5
@@ -29535,7 +29536,7 @@ test -n "$QT4_RCC" || QT4_RCC="false"
 
     if test ${QT4_MOC} = false || test ${QT4_RCC} = false;
     then if test -d ${QT4_DIR};
-         then
+	 then
 	   QT4_MOC="${QT4_DIR}/bin/moc";
 	   QT4_RCC="${QT4_DIR}/bin/rcc";
          else { { echo "$as_me:$LINENO: error: QT4 development utilites no present (into directory ${QT4_DIR})! Install QT4 library development package." >&5

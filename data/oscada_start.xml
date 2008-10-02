@@ -9,7 +9,7 @@
 	Station this OpenSCADA programm.
 	-->
 	<prm id="SYSOptCfg">1</prm>
-	<prm id="Workdir">/var/spool/openscada</prm>
+	<prm id="Workdir">~/.openscada</prm>
 	<prm id="LogTarget">10</prm>
 	<prm id="MessLev">0</prm>
 	<prm id="WorkDB">SQLite.GenDB</prm>
@@ -53,17 +53,6 @@
 		    SocketsBufLen="5"
 		    SocketsMaxQueue="10"
 		    SocketsMaxClient="10"/>
-		<fld
-		    ID="CNTR"
-		    MODULE="Sockets"
-		    NAME="Интерфейс контроля OpenSCADA"
-		    DESCRIPT=""
-		    ADDR="TCP::10005:1"
-		    PROT="SelfSystem"
-		    START="1"
-		    SocketsBufLen="10"
-		    SocketsMaxQueue="10"
-		    SocketsMaxClient="10"/>
 	    </tbl>
 	</node>
 
@@ -80,6 +69,9 @@
 	<node id="sub_UI">
 	    <node id="mod_QTStarter">
 		<prm id="StartMod">QTCfg</prm>
+	    </node>
+	    <node id="mod_QTCfg">
+		<prm id="StartUser">root</prm>
 	    </node>
 	    <node id="mod_WebCfg">
 		<prm id="SessTimeLife">20</prm>

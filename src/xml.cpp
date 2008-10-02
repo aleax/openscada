@@ -179,17 +179,17 @@ XMLNode* XMLNode::clear()
 
 string XMLNode::save( unsigned char flg )
 {
-    string xml = ((flg&XMLNode::BrOpenPrev)?"\n<":"<") + encode( name() );
+    string xml = ((flg&XMLNode::BrOpenPrev)?"\n<":"<") + encode(name());
 
     for(unsigned i_atr = 0; i_atr < n_attr.size(); i_atr++)
-	xml = xml + " " + n_attr[i_atr] + "=\"" + Mess->codeConvOut("UTF-8",encode(v_attr[i_atr])) + "\"";
+	xml = xml + " " + encode(n_attr[i_atr]) + "=\"" + Mess->codeConvOut("UTF-8",encode(v_attr[i_atr])) + "\"";
 
     if(!childSize() && !text().size())
 	xml+= (flg&(XMLNode::BrOpenPast|XMLNode::BrClosePast))?"/>\n":"/>";
     else
     {
 	xml = xml + ((flg&XMLNode::BrOpenPast)?">\n":">") +
-		    Mess->codeConvOut("UTF-8",encode(text())) +
+		    Mess->codeConvOut("UTF-8",encode(text(),true)) +
 		    ((flg&XMLNode::BrTextPast)?"\n":"");
 
 	for( int child_index = 0; child_index < childSize(); child_index++ )
@@ -197,13 +197,13 @@ string XMLNode::save( unsigned char flg )
 	    XMLNode *child = childGet( child_index );
 	    if( child )  xml += child->save(flg);
 	}
-	xml+= string("</") + encode( name() ) + ((flg&XMLNode::BrClosePast)?">\n":">");
+	xml+= string("</") + encode(name()) + ((flg&XMLNode::BrClosePast)?">\n":">");
     }
 
     return xml;
 }
 
-string XMLNode::encode( const string &s ) const
+string XMLNode::encode( const string &s, bool text ) const
 {
     string sout = s;
 
@@ -215,6 +215,7 @@ string XMLNode::encode( const string &s ) const
 	    case '"': sout.replace(i_sz,1,"&quot;"); i_sz+=5; break;
 	    case '&': sout.replace(i_sz,1,"&amp;"); i_sz+=4; break;
 	    case '\'': sout.replace(i_sz,1,"&#039;"); i_sz+=5; break;
+	    case '\n': if( !text ) { sout.replace(i_sz,1,"&#010;"); i_sz+=5; } break;
 	}
 
     return sout;

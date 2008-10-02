@@ -9,4 +9,4 @@ fi
 
 cd ~/.openscada
 
-openscada $@
+openscada --Config=/etc/oscada_start.xml $@

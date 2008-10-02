@@ -80,7 +80,7 @@ class XMLNode
 
     private:
 	//Methods
-	string encode ( const string &s ) const;
+	string encode ( const string &s, bool text = false ) const;
 
 	static void start_element ( void *data, const char *el, const char **attr );
 	static void end_element ( void *data, const char *el );

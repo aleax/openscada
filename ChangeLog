@@ -1,3 +1,13 @@
+2008-10-02 Roman
+- FIX:/SYS: Configure.in script is fixed by add default declaration of 'QT4use'.
+- !!:/SYS: RPM packages build spec-file is updated for simple package name changing allow. Used for build 'openscada-plc' package.
+- !!:/SYS: Individual user's config file 'oscada_start.xml', for low priority users start by 'openscada_start', is added.
+  Direct 'openscada' call and default config 'oscada.xml' used for superuser daemon mode.
+- !!:/SYS: Cofiguration to self openscada control intarface on port 10005 is added to default config 'oscada.xml'.
+- !!:/SYS: OpenSCADA init daemon script changed for use UTF-8 codepage.
+- !!!!:/SYS: Added support of nextline symbols into XML attributes its names and teg name. Often used into attributes.
+
+
 2008-09-26 Maxim
 - :/UI/Vision: Action for making dynamic points from static ones is added to the popup menu for primitive ElFigure.
 - !!:UI/WebVision: Dynamic and static points realization is done for primitive ElFigure.

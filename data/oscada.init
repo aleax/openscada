@@ -20,8 +20,8 @@ RETVAL=0
 
 start()
 {
-	export LANG=uk_UA.KOI8-U
-        export LANGUAGE=uk_UA.KOI8-U:ru_RU.KOI8-R		
+	export LANG=uk_UA.UTF-8
+	export LANGUAGE=uk_UA.UTF-8:ru_RU.UTF-8
 	start_daemon --lockfile "$LOCKFILE" --expect-user root -- $OPENSCADA $ARGS
 	RETVAL=$?
 	return $RETVAL

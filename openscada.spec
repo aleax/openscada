@@ -3,11 +3,13 @@ Summary: Open SCADA system project
 Name: openscada
 Version: 0.6.2
 Release: 1
-Source: %name-%version.tar.gz
+Source: openscada-%version.tar.gz
 License: GPL
 Group: Graphics
 Packager: Roman Savochenko <rom_as@fromru.com>
 URL: http://oscada.diyaorg.dp.ua
+
+%define srcname openscada-%version
 
 #= Individual distributives seting =
 %if %_vendor == "alt"
@@ -30,12 +32,12 @@ Open SCADA system. For access use account "root" and password "openscada".
 Відкрита SCADA система. Для доступу використовуйте запис "root" та пароль "openscada".
 
 %post
-test -e /usr/lib/%name || ln -s %_libdir/%name /usr/lib/%name
+test -e /usr/lib/openscada || ln -s %_libdir/openscada /usr/lib/openscada
 /sbin/chkconfig --add oscadad
 /sbin/chkconfig oscadad off
 
 %preun
-test -h /usr/lib/%name && rm -f /usr/lib/%name 
+test -h /usr/lib/openscada && rm -f /usr/lib/openscada
 /sbin/chkconfig --del oscadad
 
 %package doc
@@ -80,19 +82,20 @@ The %{name}-demo package includes demo data bases and configs. For start use com
 
 
 %prep
-%setup
+%setup -q -n %srcname
 
 %build
-%configure
+%configure --disable-QTStarter --disable-QTCfg --disable-Vision --disable-SNMP --disable-FireBird
 %__make
 
 %install
 %makeinstall
-install -m 755 -d %buildroot/%_includedir/%name/
-install -m 644 *.h %buildroot/%_includedir/%name
-install -m 644 src/*.h %buildroot/%_includedir/%name
-install -m 755 -pD data/openscada_start %buildroot/%_bindir/openscada_start
+install -m 755 -d %buildroot/%_includedir/openscada/
+install -m 644 *.h %buildroot/%_includedir/openscada
+install -m 644 src/*.h %buildroot/%_includedir/openscada
 install -m 644 -pD data/oscada.xml %buildroot/%_sysconfdir/oscada.xml
+install -m 644 -pD data/oscada_start.xml %buildroot/%_sysconfdir/oscada_start.xml
+install -m 755 -pD data/openscada_start %buildroot/%_bindir/openscada_start
 install -m 644 -pD data/openscada.desktop %buildroot/%_desktopdir/openscada.desktop
 install -m 644 -pD data/openscada.png %buildroot/%_iconsdir/openscada.png
 install -m 755 -pD data/oscada.init %buildroot/%_initdir/oscadad
@@ -100,15 +103,15 @@ install -m 644 -pD demo/oscada_demo.xml %buildroot/%_sysconfdir/oscada_demo.xml
 install -m 755 -pD demo/openscada_demo %buildroot/%_bindir/openscada_demo
 install -m 644 -pD demo/openscada_demo.desktop %buildroot/%_desktopdir/openscada_demo.desktop
 install -m 644 -pD demo/openscada_demo.png %buildroot/%_iconsdir/openscada_demo.png
-install -m 755 -d %buildroot/var/spool/%name/DATA
-install -m 755 -d %buildroot/var/spool/%name/icons
-echo "OpenSCADA data dir" > %buildroot/var/spool/%name/DATA/.info
-install -m 644 demo/*.db %buildroot/var/spool/%name/DATA
-install -m 644 data/icons/* %buildroot/var/spool/%name/icons
-install -m 755 -d %buildroot/var/spool/%name/ARCHIVES/MESS
-install -m 755 -d %buildroot/var/spool/%name/ARCHIVES/VAL
-echo "OpenSCADA messages archive dir" > %buildroot/var/spool/%name/ARCHIVES/MESS/.info
-echo "OpenSCADA values archive dir" > %buildroot/var/spool/%name/ARCHIVES/VAL/.info
+install -m 755 -d %buildroot/var/spool/openscada/DATA
+install -m 755 -d %buildroot/var/spool/openscada/icons
+echo "OpenSCADA data dir" > %buildroot/var/spool/openscada/DATA/.info
+install -m 644 demo/*.db %buildroot/var/spool/openscada/DATA
+install -m 644 data/icons/* %buildroot/var/spool/openscada/icons
+install -m 755 -d %buildroot/var/spool/openscada/ARCHIVES/MESS
+install -m 755 -d %buildroot/var/spool/openscada/ARCHIVES/VAL
+echo "OpenSCADA messages archive dir" > %buildroot/var/spool/openscada/ARCHIVES/MESS/.info
+echo "OpenSCADA values archive dir" > %buildroot/var/spool/openscada/ARCHIVES/VAL/.info
 
 %clean
 #rm -rf %buildroot %buildroot/%name-%version
@@ -116,18 +119,19 @@ echo "OpenSCADA values archive dir" > %buildroot/var/spool/%name/ARCHIVES/VAL/.i
 %files
 %defattr(-,root,root)
 %config(noreplace) %_sysconfdir/oscada.xml
+%config(noreplace) %_sysconfdir/oscada_start.xml
 %config %_initdir/oscadad
-%_bindir/%name
+%_bindir/openscada
 %_bindir/openscada_start
 %_desktopdir/openscada.desktop
 %_iconsdir/openscada.png
 %_libdir/*.so*
-%_libdir/%name/*.so
+%_libdir/openscada/*.so
 %_datadir/locale/*/LC_MESSAGES/*
-/var/spool/%name/DATA/.info
-/var/spool/%name/icons/*
-/var/spool/%name/ARCHIVES/MESS/.info
-/var/spool/%name/ARCHIVES/VAL/.info
+/var/spool/openscada/DATA/.info
+/var/spool/openscada/icons/*
+/var/spool/openscada/ARCHIVES/MESS/.info
+/var/spool/openscada/ARCHIVES/VAL/.info
 
 %files doc
 %defattr(-,root,root)
@@ -137,7 +141,7 @@ echo "OpenSCADA values archive dir" > %buildroot/var/spool/%name/ARCHIVES/VAL/.i
 %files devel
 %defattr(-,root,root)
 %_libdir/*.*
-%_includedir/%name/*
+%_includedir/openscada/*
 
 %files demo
 %defattr(-,root,root)
@@ -145,9 +149,12 @@ echo "OpenSCADA values archive dir" > %buildroot/var/spool/%name/ARCHIVES/VAL/.i
 %_bindir/openscada_demo
 %_desktopdir/openscada_demo.desktop
 %_iconsdir/openscada_demo.png
-/var/spool/%name/DATA/*.db
+/var/spool/openscada/DATA/*.db
 
 %changelog
+* Thu Oct 02 2008 Roman Savochenko <rom_as@fromru.com>
+- Package name simple changing allow is added.
+
 * Thu Sep 18 2008 Roman Savochenko <rom_as@diyaorg.dp.ua>
 - Update spec to build for ALTLinux Sisyphus.
 
