@@ -474,7 +474,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 			{
 			    case IO::String:    tip = "str";    break;
 			    case IO::Integer:   tip = "dec";    break;
-			    case IO::Real:      tip = "real";   break;
+			    case IO::Real:      tip = "str";   break;
 			    case IO::Boolean:   tip = "bool";   break;
 			}
 			ctrMkNode("fld",opt,-1,(string("/lio/io/")+list[i_io]).c_str(),
@@ -495,7 +495,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 		    {
 			int id = ioId(list[i_io]);
 
-			if( ioHide(id) && !atoi(TBDS::genDBGet(nodePath()+"showHide","0",opt->attr("user")).c_str()) ) continue;		
+			if( ioHide(id) && !atoi(TBDS::genDBGet(nodePath()+"showHide","0",opt->attr("user")).c_str()) ) continue;
 
 			//-- Add link's type --
 			ctrMkNode("fld",opt,-1,(string("/lnk/io/1|")+list[i_io]).c_str(),

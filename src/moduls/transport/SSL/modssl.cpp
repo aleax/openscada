@@ -291,6 +291,7 @@ void *TSocketIn::Task( void *sock_in )
     char err[255];
     TSocketIn &s = *(TSocketIn *)sock_in;
     AutoHD<TProtocolIn> prot_in;
+    string cfile;
 
 #if OSC_DEBUG >= 2
     mess_debug(s.nodePath().c_str(),_("Thread <%u> started. TID: %ld"),pthread_self(),(long int)syscall(224));
@@ -324,7 +325,7 @@ void *TSocketIn::Task( void *sock_in )
 	}
 
 	//- Write certificate and private key to temorary file -
-	string cfile = tmpnam(err);
+	cfile = tmpnam(err);
 	int icfile = open(cfile.c_str(),O_EXCL|O_CREAT|O_WRONLY,0644);
 	if( icfile < 0 ) throw TError(s.nodePath().c_str(),_("Open temporaty file '%s' is error: '%s'"),cfile.c_str(),strerror(errno));
 	write(icfile,s.certKey().data(),s.certKey().size());
@@ -346,7 +347,7 @@ void *TSocketIn::Task( void *sock_in )
 	}
 
 	//- Remove temporary certificate file -
-	remove(cfile.c_str());
+	remove(cfile.c_str()); cfile = "";
 
 	//- Create BIO object -
 	if( (bio=BIO_new_ssl(s.ctx,0)) == NULL )
@@ -444,6 +445,7 @@ void *TSocketIn::Task( void *sock_in )
     if( abio )	BIO_reset(abio);
     if( bio )	BIO_free_all(bio);
     if( s.ctx )	{ SSL_CTX_free(s.ctx); s.ctx = NULL; }
+    if( !cfile.empty() ) remove(cfile.c_str());
 
     s.run_st = false;
 
@@ -666,6 +668,7 @@ string TSocketOut::getStatus( )
 
 void TSocketOut::start()
 {
+    string	cfile;
     SSL		*ssl;
     char	err[255];
     ResAlloc res( wres, true );
@@ -688,6 +691,9 @@ void TSocketOut::start()
 
     try
     {
+	conn = NULL;
+	ctx = NULL;
+
 	ctx = SSL_CTX_new(meth);
 	if( ctx == NULL )
 	{
@@ -699,7 +705,7 @@ void TSocketOut::start()
 	if( !certKey().empty() )
 	{
 	    //-- Write certificate and private key to temorary file --
-	    string cfile = tmpnam(err);
+	    cfile = tmpnam(err);
 	    int icfile = open(cfile.c_str(),O_EXCL|O_CREAT|O_WRONLY,0644);
 	    if( icfile < 0 ) throw TError(nodePath().c_str(),_("Open temporaty file '%s' is error: '%s'"),cfile.c_str(),strerror(errno));
 	    write(icfile,certKey().data(),certKey().size());
@@ -711,17 +717,17 @@ void TSocketOut::start()
 	    if( SSL_CTX_use_certificate_chain_file(ctx,cfile.c_str()) != 1 )
 	    {
 		ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
-		mess_warning(nodePath().c_str(),_("Use client's certificate chain error: %s"),err);
+		throw TError(nodePath().c_str(),_("Use client's certificate chain error: %s"),err);
 	    }
 	    //-- Load private key --
 	    if( SSL_CTX_use_PrivateKey_file(ctx,cfile.c_str(),SSL_FILETYPE_PEM) != 1 )
 	    {
 		ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
-		mess_warning(nodePath().c_str(),_("Use client's private key error: %s"),err);
+		throw TError(nodePath().c_str(),_("Use client's private key error: %s"),err);
 	    }
 
 	    //-- Remove temporary certificate file --
-	    remove(cfile.c_str());
+	    remove(cfile.c_str()); cfile = "";
 	}
 
 	conn = BIO_new_ssl_connect(ctx);
@@ -745,6 +751,7 @@ void TSocketOut::start()
     {
 	if( conn )	{ BIO_reset(conn); BIO_free(conn); }
 	if( ctx )	SSL_CTX_free(ctx);
+	if( !cfile.empty() )	remove(cfile.c_str());
 	throw;
     }
 

@@ -1,10 +1,14 @@
 2008-10-14 Roman
 - !!!!:/Transport: New module of support SSL is added.
 - !!:/Transport/Socket: Code clean and transport's status is added.
+- !!:/Transport/SSL: Documentation is added.
+- !!:/Transport/Socket: Documentation is updated.
 - !!:/SYS: Debug messages print mechanism is reviewed. Now debug enabled by OSC_DEBUG in debug level value from 0 to 5.
   New mechanism is included to all modules.
 - !:/SYS: New function TSYS::strMess() is added for inline format string support.
 - !:/Transports: Added virtual function getStatus( ) to input and output transports interfaces for connection status get.
+- FIX:/DAQ/BlockClac: Small values set allow into real block's atributes is fixed.
+- !!:/SYS: Demo DB is updated.
 
 
 2008-10-14 Maxim
