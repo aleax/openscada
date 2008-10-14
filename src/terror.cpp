@@ -39,7 +39,7 @@ TError::TError( const char *icat, const char *fmt, ... )
     cod  = 0;
     mess = str;
     cat  = icat;
-}        
+}
 
 TError::TError( int icod, const char *icat, const char *fmt, ... )
 {

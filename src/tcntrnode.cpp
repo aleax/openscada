@@ -182,7 +182,7 @@ void TCntrNode::nodeDis( long tm, int flag )
 	while(1)
 	{
 	    if( !m_use )	break;
-#if OSC_DEBUG
+#if OSC_DEBUG >= 1
             mess_debug(nodePath().c_str(),_("Wait of free %d users!"),m_use);
 #endif
 	    //Check timeout

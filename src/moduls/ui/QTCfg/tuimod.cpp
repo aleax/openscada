@@ -119,7 +119,7 @@ string TUIMod::optDescr( )
 
 void TUIMod::load_( )
 {
-#if OSC_DEBUG
+#if OSC_DEBUG >= 1
     mess_debug(nodePath().c_str(),_("Load module."));
 #endif
 
@@ -150,7 +150,7 @@ void TUIMod::load_( )
 
 void TUIMod::save_( )
 {
-#if OSC_DEBUG
+#if OSC_DEBUG >= 1
     mess_debug(nodePath().c_str(),_("Save module."));
 #endif
 
@@ -193,7 +193,7 @@ QMainWindow *TUIMod::openWindow( )
 
 void TUIMod::modStart( )
 {
-#if OSC_DEBUG
+#if OSC_DEBUG >= 1
     mess_debug(nodePath().c_str(),_("Start module."));
 #endif
 
@@ -203,7 +203,7 @@ void TUIMod::modStart( )
 
 void TUIMod::modStop( )
 {
-#if OSC_DEBUG
+#if OSC_DEBUG >= 1
     mess_debug(nodePath().c_str(),_("Stop module."));
 #endif
 

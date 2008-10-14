@@ -62,7 +62,7 @@ void TSubSYS::modAdd( TModule *modul )
     if( !subModule() ) throw TError(nodePath().c_str(),_("No modules subsystem!"));
     if( chldPresent(m_mod,modul->modId()) ) return;
     chldAdd(m_mod,modul);
-#if OSC_DEBUG
+#if OSC_DEBUG >= 1
     vector<string> list;
     modul->modInfo( list );
     for( unsigned i_opt = 0; i_opt < list.size(); i_opt++)

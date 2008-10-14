@@ -403,7 +403,7 @@ void TArchiveS::subStop( )
 	    try{ aval.at().stop(); }
 	    catch(TError err)
 	    {
-		mess_err(err.cat.c_str(),"%s",err.mess.c_str()); 
+		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		mess_err(nodePath().c_str(),_("Value archive <%s> stop error."),o_lst[i_o].c_str());
 	    }
     }
@@ -670,6 +670,10 @@ void *TArchiveS::ArhValTask( void *param )
     TArchiveS &arh = *(TArchiveS *)param;
     arh.endrun_req_val = false;
     arh.prc_st_val = true;
+
+#if OSC_DEBUG >= 2
+    mess_debug(arh.nodePath().c_str(),_("Thread <%u> started. TID: %ld"),pthread_self(),(long int)syscall(224));
+#endif
 
     while(!arh.endrun_req_val)
     {

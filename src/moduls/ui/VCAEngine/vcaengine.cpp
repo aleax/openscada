@@ -220,9 +220,7 @@ void Engine::preDisable( int flag )
 
 void Engine::load_( )
 {
-#if OSC_DEBUG
-    mess_debug(nodePath().c_str(),_("Load module."));
-#endif
+    mess_info(nodePath().c_str(),_("Load module."));
 
     //- Load parameters from command line -
     int next_opt;
@@ -345,9 +343,7 @@ void Engine::load_( )
 
 void Engine::save_( )
 {
-#if OSC_DEBUG
-    mess_debug(nodePath().c_str(),_("Save module."));
-#endif
+    mess_info(nodePath().c_str(),_("Save module."));
 
     //- Save parameters to DB -
     TBDS::genDBSet( nodePath()+"SynthCom", synthCom() );
@@ -356,9 +352,7 @@ void Engine::save_( )
 
 void Engine::modStart()
 {
-#if OSC_DEBUG
-    mess_debug(nodePath().c_str(),_("Start module."));
-#endif
+    mess_info(nodePath().c_str(),_("Start module."));
 
     //- Libraries enable -
     vector<string> ls;
@@ -376,9 +370,7 @@ void Engine::modStart()
 
 void Engine::modStop()
 {
-#if OSC_DEBUG
-    mess_debug(nodePath().c_str(),_("Stop module."));
-#endif
+    mess_info(nodePath().c_str(),_("Stop module."));
 
     vector<string> ls;
 

@@ -22,8 +22,6 @@
 #ifndef FREEFUNC_H
 #define FREEFUNC_H
 
-#define DEBUG_VM 0
-
 typedef unsigned short int WORD;
 typedef unsigned char BYTE;
 

@@ -1,7 +1,7 @@
 
-//OpenSCADA system module Transport.Sockets file: socket.h
+//OpenSCADA system module Transport.SSL file: modssl.h
 /***************************************************************************
- *   Copyright (C) 2003-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2008 by Roman Savochenko                                *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -18,26 +18,27 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
- 
-#ifndef SOCKET_H
-#define SOCKET_H
+
+#ifndef MODSSL_H
+#define MODSSL_H
 
 #include <pthread.h>
+#include "openssl/bio.h"
+#include "openssl/ssl.h"
+#include "openssl/err.h"
 
 #include <ttransports.h>
 
 #undef _
 #define _(mess) mod->I18N(mess)
 
-#define S_NM_TCP  "TCP"
-#define S_NM_UDP  "UDP"
-#define S_NM_UNIX "UNIX"
+struct CRYPTO_dynlock_value
+{
+    pthread_mutex_t mutex;
+};
 
-#define SOCK_TCP  0
-#define SOCK_UDP  1
-#define SOCK_UNIX 2
 
-namespace Sockets
+namespace MSSL
 {
 
 class TSocketIn;
@@ -48,48 +49,32 @@ class TSocketIn;
 class SSockIn
 {
     public:
-	SSockIn( TSocketIn *is, int icSock, string isender ) :
-	    s(is), cSock(icSock), sender(isender)	{ }
+	SSockIn( TSocketIn *is, BIO *ibio ) : s(is), bio(ibio)	{ }
 
 	TSocketIn	*s;
-	int		cSock;
-	string		sender;
+	BIO		*bio;
 };
 
 //************************************************
-//* Sockets::SSockCl				 *
-//************************************************
-struct SSockCl
-{
-    pid_t	cl_id;    // Client's pids
-    int		cl_sock;
-};
-
-//************************************************
-//* Sockets::TSocketIn				 *
+//* SSL::TSocketIn				 *
 //************************************************
 class TSocketIn: public TTransportIn
 {
     public:
-	/* Open input socket <name> for locale <address>
-	 * address : <type:<specific>>
-	 * type:
-	 *   TCP  - TCP socket with  "UDP:<host>:<port>"
-	 *   UDP  - UDP socket with  "TCP:<host>:<port>"
-	 *   UNIX - UNIX socket with "UNIX:<path>"
-	 */
 	TSocketIn( string name, const string &idb, TElem *el );
 	~TSocketIn( );
 
 	string getStatus( );
 
-	int maxQueue( )		{ return max_queue; }
-	int maxFork( )		{ return mMaxFork; }
 	int bufLen( )		{ return mBufLen; }
+	int maxFork( )		{ return mMaxFork; }
+	string certKey( )	{ return mCertKey; }
+	string pKeyPass( )	{ return mKeyPass; }
 
-	void setMaxQueue( int vl )	{ max_queue = vl; modif(); }
-	void setMaxFork( int vl )	{ mMaxFork = vl; modif(); }
-	void setBufLen( int vl )	{ mBufLen = vl; modif(); }
+	void setBufLen( int vl )		{ mBufLen = vl; modif(); }
+	void setMaxFork( int vl )		{ mMaxFork = vl; modif(); }
+	void setCertKey( const string &val )	{ mCertKey = val; modif(); }
+	void setPKeyPass( const string &val )	{ mKeyPass = val; modif(); }
 
 	void start( );
 	void stop( );
@@ -99,59 +84,54 @@ class TSocketIn: public TTransportIn
 	static void *Task( void * );
 	static void *ClTask( void * );
 
-	void messPut( int sock, string &request, string &answer, string sender, AutoHD<TProtocolIn> &prot_in );
-
-	void clientReg( pthread_t thrid, int i_sock );
+	int clientReg( pthread_t thrid );
 	void clientUnreg( pthread_t thrid );
+
+	void messPut( int sock, string &request, string &answer, AutoHD<TProtocolIn> &prot_in );
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
 	pthread_t	pthr_tsk;
-	int		sock_fd;
 	Res		sock_res;
+	SSL_CTX		*ctx;
 
 	bool		endrun;			// Command for stop task
 	bool		endrun_cl;		// Command for stop client tasks
 
-	int		&max_queue;		// max queue for TCP, UNIX sockets
-	int		&mMaxFork;		// maximum forking (opened sockets)
 	int		&mBufLen;		// input buffer length
-
-	int		type;			// socket's types
-	string		path;			// path to file socket for UNIX socket
-	string		host;			// host for TCP/UDP sockets
-	string		port;			// port for TCP/UDP sockets
-	int		mode;			// mode for TCP/UNIX sockets (0 - no hand; 1 - hand connect)
+	int		&mMaxFork;		// maximum forking (opened SSL)
+	string		&mCertKey,		// SSL certificate
+			&mKeyPass;		// SSL private key password
 
 	bool		cl_free;		// Clients stoped
-	vector<SSockCl>	cl_id;			// Client's pids
+	vector<pthread_t>	cl_id;		// Client's pids
 
 	//- Status atributes -
+	string		stErr;			// Last error messages
 	float		trIn, trOut;		// Traffic in and out counter
 	int		connNumb;		// Connections number
 };
 
 //************************************************
-//* Sockets::TSocketOut				 *
+//* SSL::TSocketOut				 *
 //************************************************
 class TSocketOut: public TTransportOut
 {
     public:
-	/* Open output socket <name> for locale <address>
-	 * address : <type:<specific>>
-	 * type:
-	 *   TCP  - TCP socket with  "UDP:<host>:<port>"
-	 *   UDP  - UDP socket with  "TCP:<host>:<port>"
-	 *   UNIX - UNIX socket with "UNIX:<path>"
-	 */
 	TSocketOut( string name, const string &idb, TElem *el );
 	~TSocketOut( );
 
 	string getStatus( );
 
+	string certKey( )	{ return mCertKey; }
+	string pKeyPass( )	{ return mKeyPass; }
+
 	void start( );
 	void stop( );
+
+	void setCertKey( const string &val )	{ mCertKey = val; modif(); }
+	void setPKeyPass( const string &val )	{ mKeyPass = val; modif(); }
 
 	int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0 );
 
@@ -160,19 +140,19 @@ class TSocketOut: public TTransportOut
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
-	int			sock_fd;
+	string		&mCertKey,		// SSL certificate
+			&mKeyPass;		// SSL private key password
 
-	int			type;		// socket's types
-	struct sockaddr_in	name_in;
-	struct sockaddr_un	name_un;
-	Res			wres;
+	Res		wres;
+	SSL_CTX		*ctx;
+	BIO		*conn;
 
 	//- Status atributes -
-	float	trIn, trOut;	// Traffic in and out counter
+	float		trIn, trOut;		// Traffic in and out counter
 };
 
 //************************************************
-//* Sockets::TTransSock				 *
+//* SSL::TTransSock				 *
 //************************************************
 class TTransSock: public TTipTransport
 {
@@ -192,9 +172,18 @@ class TTransSock: public TTipTransport
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
 	void postEnable( int flag );
+
+	static unsigned long id_function( );
+	static void locking_function( int mode, int n, const char * file, int line );
+	static struct CRYPTO_dynlock_value *dyn_create_function( const char *file, int line );
+	static void dyn_lock_function( int mode, struct CRYPTO_dynlock_value *l, const char *file, int line );
+	static void dyn_destroy_function( struct CRYPTO_dynlock_value *l, const char *file, int line );
+
+	//Attributes
+	pthread_mutex_t *mutex_buf;
 };
 
 extern TTransSock *mod;
 }
 
-#endif //SOCKET_H
+#endif //MODSSL_H

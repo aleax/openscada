@@ -141,7 +141,7 @@ void TMdContr::start_( )
 }
 
 void TMdContr::stop_( )
-{  
+{
     //- Close sound interrupt process task -
     if( prc_st )
     {
@@ -151,16 +151,21 @@ void TMdContr::stop_( )
             throw TError(nodePath().c_str(),_("Sound input task no stoped!"));
         pthread_join( procPthr, NULL );
     }
-} 
+}
 
 void *TMdContr::Task( void *param )
-{   
+{
     long long work_tm, last_tm = 0;
-    struct timespec get_tm;	     
+    struct timespec get_tm;
     TMdContr &cntr = *(TMdContr *)param;
+
+#if OSC_DEBUG >= 2
+    mess_debug(cntr.nodePath().c_str(),_("Thread <%u> started. TID: %ld"),pthread_self(),(long int)syscall(224));
+#endif
+
     cntr.endrun_req = false;
     cntr.prc_st = true;
-    
+
     while( !cntr.endrun_req )
     {
 	//- Sound card acquisition procedure -
@@ -169,10 +174,10 @@ void *TMdContr::Task( void *param )
 
 	usleep(STD_WAIT_DELAY*1000);
     }
-    
+
     cntr.prc_st = false;
 
-    return NULL;																																																												    
+    return NULL;
 }
 
 //*************************************************

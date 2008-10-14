@@ -100,7 +100,8 @@ string TSYS::workDir( )
 
 void TSYS::setWorkDir( const string &wdir )
 {
-    if( chdir(wdir.c_str()) ) mess_err(nodePath().c_str(),"%s",strerror(errno));
+    if( chdir(wdir.c_str()) != 0 )
+	mess_err(nodePath().c_str(),_("Change work directory to '%s' is error: %s"),wdir.c_str(),strerror(errno));
     modif( );
 }
 
@@ -163,6 +164,18 @@ bool TSYS::strEmpty( const string &val )
 	    return false;
 
     return true;
+}
+
+string TSYS::strMess( const char *fmt, ... )
+{
+    char str[STR_BUF_LEN];
+    va_list argptr;
+
+    va_start(argptr,fmt);
+    vsnprintf(str,sizeof(str),fmt,argptr);
+    va_end(argptr);
+
+    return str;
 }
 
 string TSYS::optDescr( )

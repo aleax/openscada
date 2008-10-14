@@ -201,9 +201,8 @@ void Project::save_( )
 void Project::setEnable( bool val )
 {
     if( val == enable() )       return;
-#if OSC_DEBUG
-    mess_debug(nodePath().c_str(),val ? _("Enable project.") : _("Disable project."));
-#endif
+
+    mess_info(nodePath().c_str(),val ? _("Enable project.") : _("Disable project."));
 
     vector<string> f_lst;
     list(f_lst);

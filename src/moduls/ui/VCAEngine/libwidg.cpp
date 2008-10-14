@@ -134,9 +134,7 @@ void WidgetLib::setFullDB( const string &it )
 
 void WidgetLib::load_( )
 {
-#if OSC_DEBUG
-    mess_debug(nodePath().c_str(),_("Load widget library."));
-#endif
+    mess_info(nodePath().c_str(),_("Load widget library."));
 
     SYS->db().at().dataGet(DB()+"."+mod->wlbTable(),mod->nodePath()+"LIB/",*this);
 
@@ -156,9 +154,7 @@ void WidgetLib::load_( )
 
 void WidgetLib::save_( )
 {
-#if OSC_DEBUG
-    mess_debug(nodePath().c_str(),_("Save widget library."));
-#endif
+    mess_info(nodePath().c_str(),_("Save widget library."));
 
     SYS->db().at().dataSet(DB()+"."+mod->wlbTable(),mod->nodePath()+"LIB/",*this);
 
@@ -182,9 +178,7 @@ void WidgetLib::setEnable( bool val )
 {
     if( val == enable() )       return;
 
-#if OSC_DEBUG
-    mess_debug(nodePath().c_str(),val ? _("Enable widget library.") : _("Disable widget library."));
-#endif
+    mess_info(nodePath().c_str(),val ? _("Enable widget library.") : _("Disable widget library."));
 
     vector<string> f_lst;
     list(f_lst);

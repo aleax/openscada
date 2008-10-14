@@ -204,9 +204,9 @@ void *TTest::Task( void *CfgM )
     tst->run_st = true;
     tst->endrun = false;
 
-//#if OSC_DEBUG
-//    mess_debug(tst->nodePath().c_str(),_("Thread <%d> started!"),gettid());
-//#endif
+#if OSC_DEBUG >= 2
+    mess_debug(tst->nodePath().c_str(),_("Thread <%u> started. TID: %ld"),pthread_self(),(long int)syscall(224));
+#endif
 
     //Task counter
     while( !tst->endrun )

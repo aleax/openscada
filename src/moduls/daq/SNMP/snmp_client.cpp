@@ -222,6 +222,10 @@ void *TMdContr::Task( void *icntr )
 {
     TMdContr &cntr = *(TMdContr *)icntr;
 
+#if OSC_DEBUG >= 2
+    mess_debug(cntr.nodePath().c_str(),_("Thread <%u> started. TID: %ld"),pthread_self(),(long int)syscall(224));
+#endif
+
     int		el_cnt;
     string	soid;
 

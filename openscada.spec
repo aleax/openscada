@@ -85,7 +85,7 @@ The %{name}-demo package includes demo data bases and configs. For start use com
 %setup -q -n %srcname
 
 %build
-%configure --disable-QTStarter --disable-QTCfg --disable-Vision --disable-SNMP --disable-FireBird
+%configure
 %__make
 
 %install

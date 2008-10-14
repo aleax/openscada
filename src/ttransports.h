@@ -49,6 +49,7 @@ class TTransportIn : public TCntrNode, public TConfig
 	string dscr( )		{ return m_dscr; }
 	string addr( )		{ return m_addr; }
 	string protocol( )	{ return m_prot; }
+	virtual string getStatus( );
 
 	bool toStart( ) 	{ return m_start; }
 	bool startStat( )	{ return run_st; }
@@ -117,6 +118,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	int	prm2( )		{ return m_prm2; }
 	bool	toStart()	{ return m_start; }
 	bool	startStat()	{ return run_st; }
+	virtual	string getStatus( );
 
 	string DB( )		{ return m_db; }
 	string tbl( );

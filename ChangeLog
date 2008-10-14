@@ -1,3 +1,16 @@
+2008-10-14 Roman
+- !!!!:/Transport: New module of support SSL is added.
+- !!:/Transport/Socket: Code clean and transport's status is added.
+- !!:/SYS: Debug messages print mechanism is reviewed. Now debug enabled by OSC_DEBUG in debug level value from 0 to 5.
+  New mechanism is included to all modules.
+- !:/SYS: New function TSYS::strMess() is added for inline format string support.
+- !:/Transports: Added virtual function getStatus( ) to input and output transports interfaces for connection status get.
+
+
+2008-10-14 Maxim
+- FIX:/UI/Vision: Circle fill is fixed.
+
+
 2008-10-02 Roman
 - FIX:/SYS: Configure.in script is fixed by add default declaration of 'QT4use'.
 - !!:/SYS: RPM packages build spec-file is updated for simple package name changing allow. Used for build 'openscada-plc' package.

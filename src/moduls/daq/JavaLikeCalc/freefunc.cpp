@@ -1114,228 +1114,228 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
 	    case Reg::End: return;
 	    //-- MVI codes --
 	    case Reg::MviB:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Load bool %d to reg %d.\n",*(BYTE *)(cprg+2),*(BYTE *)(cprg+1));
 #endif
 		reg[*(BYTE *)(cprg+1)] = *(char*)(cprg+2);
 		cprg+=3; break;
 	    case Reg::MviI:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Load integer %d to reg %d.\n",*(int *)(cprg+2),*(BYTE *)(cprg+1));
 #endif
 		reg[*(BYTE *)(cprg+1)] = *(int *)(cprg+2);
 		cprg+=2+sizeof(int); break;
 	    case Reg::MviR:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Load real %f to reg %d.\n",*(double *)(cprg+2),*(BYTE *)(cprg+1));
 #endif
 		reg[*(BYTE *)(cprg+1)] = *(double *)(cprg+2);
 		cprg+=2+sizeof(double); break;
 	    case Reg::MviS:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Load string %s(%d) to reg %d.\n",string((char *)cprg+3,*(BYTE *)(cprg+2)).c_str(),*(BYTE *)(cprg+2),*(BYTE *)(cprg+1));
 #endif
 		reg[*(BYTE *)(cprg+1)] = string((char *)cprg+3,*(BYTE *)(cprg+2));
 		cprg+=3+ *(BYTE *)(cprg+2); break;
 	    //-- Assign codes --
 	    case Reg::AssB:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Assign boolean from %d to %d.\n",*(BYTE *)(cprg+2),*(BYTE *)(cprg+1));
 #endif		
 		setValB(val,reg[*(BYTE *)(cprg+1)],getValB(val,reg[*(BYTE *)(cprg+2)]));
 		cprg+=3; break;
 	    case Reg::AssI:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Assign integer from %d to %d.\n",*(BYTE *)(cprg+2),*(BYTE *)(cprg+1));
 #endif
 		setValI(val,reg[*(BYTE *)(cprg+1)],getValI(val,reg[*(BYTE *)(cprg+2)]));
 		cprg+=3; break;
 	    case Reg::AssR:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Assign real from %d to %d.\n",*(BYTE *)(cprg+2),*(BYTE *)(cprg+1));
 #endif
 		setValR(val,reg[*(BYTE *)(cprg+1)],getValR(val,reg[*(BYTE *)(cprg+2)]));
 		cprg+=3; break;
 	    case Reg::AssS: 
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Assign string from %d to %d.\n",*(BYTE *)(cprg+2),*(BYTE *)(cprg+1));
 #endif
 		setValS(val,reg[*(BYTE *)(cprg+1)],getValS(val,reg[*(BYTE *)(cprg+2)]));
 		cprg+=3; break;
 	    //-- Mov codes --
 	    case Reg::MovB:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Move boolean from %d to %d.\n",*(BYTE *)(cprg+2),*(BYTE *)(cprg+1));
 #endif
 		reg[*(BYTE *)(cprg+1)] = getValB(val,reg[*(BYTE *)(cprg+2)]);
 		cprg+=3; break;
 	    case Reg::MovI:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Move integer from %d to %d.\n",*(BYTE *)(cprg+2),*(BYTE *)(cprg+1));
 #endif
 		reg[*(BYTE *)(cprg+1)] = getValI(val,reg[*(BYTE *)(cprg+2)]);
 		cprg+=3; break;
 	    case Reg::MovR:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Move real from %d to %d.\n",*(BYTE *)(cprg+2),*(BYTE *)(cprg+1));
 #endif
 		reg[*(BYTE *)(cprg+1)] = getValR(val,reg[*(BYTE *)(cprg+2)]);
 		cprg+=3; break;
 	    case Reg::MovS:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Move string from %d to %d.\n",*(BYTE *)(cprg+2),*(BYTE *)(cprg+1));
 #endif
 		reg[*(BYTE *)(cprg+1)] = getValS(val,reg[*(BYTE *)(cprg+2)]);
 		cprg+=3; break;
 	    //-- Binary operations --
 	    case Reg::AddR:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Real %d = %d + %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
 #endif
 		reg[*(BYTE *)(cprg+1)] = getValR(val,reg[*(BYTE *)(cprg+2)]) + getValR(val,reg[*(BYTE *)(cprg+3)]);
 		cprg+=4; break;
 	    case Reg::AddS:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: String %d = %d + %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
 #endif
 		reg[*(BYTE *)(cprg+1)] = getValS(val,reg[*(BYTE *)(cprg+2)]) + getValS(val,reg[*(BYTE *)(cprg+3)]);
 		cprg+=4; break;
 	    case Reg::Sub:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Real %d = %d - %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
 #endif
 		reg[*(BYTE *)(cprg+1)] = getValR(val,reg[*(BYTE *)(cprg+2)]) - getValR(val,reg[*(BYTE *)(cprg+3)]);
 		cprg+=4; break;
 	    case Reg::Mul:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Real %d = %d * %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
 #endif
 		reg[*(BYTE *)(cprg+1)] = getValR(val,reg[*(BYTE *)(cprg+2)]) * getValR(val,reg[*(BYTE *)(cprg+3)]);
 		cprg+=4; break;
 	    case Reg::Div:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Real %d = %d / %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
 #endif
 		reg[*(BYTE *)(cprg+1)] = getValR(val,reg[*(BYTE *)(cprg+2)]) / getValR(val,reg[*(BYTE *)(cprg+3)]);
 		cprg+=4; break;
 	    case Reg::RstI:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: %d = %d % %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
 #endif
 		reg[*(BYTE *)(cprg+1)] = getValI(val,reg[*(BYTE *)(cprg+2)]) % getValI(val,reg[*(BYTE *)(cprg+3)]);
 		cprg+=4; break;
 	    case Reg::BitOr:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: %d = %d | %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
 #endif
 		reg[*(BYTE *)(cprg+1)] = getValI(val,reg[*(BYTE *)(cprg+2)]) | getValI(val,reg[*(BYTE *)(cprg+3)]);
 		cprg+=4; break;
 	    case Reg::BitAnd:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: %d = %d & %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
 #endif
 		reg[*(BYTE *)(cprg+1)] = getValI(val,reg[*(BYTE *)(cprg+2)]) & getValI(val,reg[*(BYTE *)(cprg+3)]);
 		cprg+=4; break;
 	    case Reg::BitXor:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: %d = %d ^ %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
 #endif
 		reg[*(BYTE *)(cprg+1)] = getValI(val,reg[*(BYTE *)(cprg+2)]) ^ getValI(val,reg[*(BYTE *)(cprg+3)]);
 		cprg+=4; break;
 	    case Reg::BitShLeft:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: %d = %d << %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
 #endif
 		reg[*(BYTE *)(cprg+1)] = getValI(val,reg[*(BYTE *)(cprg+2)]) << getValI(val,reg[*(BYTE *)(cprg+3)]);
 		cprg+=4; break;
 	    case Reg::BitShRight:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: %d = %d >> %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
 #endif
 		reg[*(BYTE *)(cprg+1)] = getValI(val,reg[*(BYTE *)(cprg+2)]) >> getValI(val,reg[*(BYTE *)(cprg+3)]);
 		cprg+=4; break;
 	    case Reg::LOr:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: %d = %d || %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
 #endif
 		reg[*(BYTE *)(cprg+1)] = getValB(val,reg[*(BYTE *)(cprg+2)]) || getValB(val,reg[*(BYTE *)(cprg+3)]);
 		cprg+=4; break;
 	    case Reg::LAnd:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: %d = %d && %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
 #endif
 		reg[*(BYTE *)(cprg+1)] = getValB(val,reg[*(BYTE *)(cprg+2)]) && getValB(val,reg[*(BYTE *)(cprg+3)]);
 		cprg+=4; break;
 	    case Reg::LT:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Real %d = %d < %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
 #endif
 		reg[*(BYTE *)(cprg+1)] = getValR(val,reg[*(BYTE *)(cprg+2)]) < getValR(val,reg[*(BYTE *)(cprg+3)]);
 		cprg+=4; break;
 	    case Reg::GT:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Real %d = %d > %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
 #endif
 		reg[*(BYTE *)(cprg+1)] = getValR(val,reg[*(BYTE *)(cprg+2)]) > getValR(val,reg[*(BYTE *)(cprg+3)]);
 		cprg+=4; break;
 	    case Reg::LER:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Real %d = %d <= %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
 #endif
 		reg[*(BYTE *)(cprg+1)] = getValR(val,reg[*(BYTE *)(cprg+2)]) <= getValR(val,reg[*(BYTE *)(cprg+3)]);
 		cprg+=4; break;
 	    case Reg::GER:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Real %d = %d >= %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
 #endif
 		reg[*(BYTE *)(cprg+1)] = getValR(val,reg[*(BYTE *)(cprg+2)]) >= getValR(val,reg[*(BYTE *)(cprg+3)]);
 		cprg+=4; break;
 	    case Reg::EQR:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Real %d = %d == %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
 #endif
 		reg[*(BYTE *)(cprg+1)] = getValR(val,reg[*(BYTE *)(cprg+2)]) == getValR(val,reg[*(BYTE *)(cprg+3)]);
 		cprg+=4; break;
 	    case Reg::EQS:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: String %d = %d == %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
 #endif
 		reg[*(BYTE *)(cprg+1)] = getValS(val,reg[*(BYTE *)(cprg+2)]) == getValS(val,reg[*(BYTE *)(cprg+3)]);
 		cprg+=4; break;
 	    case Reg::NER:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Real %d = %d != %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
 #endif
 		reg[*(BYTE *)(cprg+1)] = getValR(val,reg[*(BYTE *)(cprg+2)]) != getValR(val,reg[*(BYTE *)(cprg+3)]);
 		cprg+=4; break;
 	    case Reg::NES:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: String %d = %d != %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
 #endif
 		reg[*(BYTE *)(cprg+1)] = getValS(val,reg[*(BYTE *)(cprg+2)]) != getValS(val,reg[*(BYTE *)(cprg+3)]);
 		cprg+=4; break;
 	    //-- Unary operations --
 	    case Reg::Not: 
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: %d = !%d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
 #endif
 		reg[*(BYTE *)(cprg+1)] = !getValB(val,reg[*(BYTE *)(cprg+2)]);
 		cprg+=3; break;
 	    case Reg::BitNot:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: %d = ~%d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
 #endif
 		reg[*(BYTE *)(cprg+1)] = ~getValI(val,reg[*(BYTE *)(cprg+2)]);
 		cprg+=3; break;
 	    case Reg::Neg:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Real %d = -%d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
 #endif
 		reg[*(BYTE *)(cprg+1)] = -getValR(val,reg[*(BYTE *)(cprg+2)]);
 		cprg+=3; break;
 	    //-- Condition --
 	    case Reg::If:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Condition %d: %d|%d|%d.\n",*(BYTE *)(cprg+1),6,*(WORD *)(cprg+2),*(WORD *)(cprg+4));
 #endif
 		if(getValB(val,reg[*(BYTE *)(cprg+1)]))
@@ -1345,7 +1345,7 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
 		cprg = cprg + *(WORD *)(cprg+4);
 		continue;
 	    case Reg::Cycle:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Cycle %d: %d|%d|%d|%d.\n",*(BYTE *)(cprg+1),8,*(WORD *)(cprg+2),*(WORD *)(cprg+4),*(WORD *)(cprg+6));
 #endif
 		while( !(dt.flg&0x01) )
@@ -1366,127 +1366,127 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
 	    case Reg::Continue:	dt.flg|=0x05;	break;
 	    //-- Buildin functions --
 	    case Reg::FSin:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Function %d=sin(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
 #endif
 		reg[*(BYTE *)(cprg+1)] = sin(getValR(val,reg[*(BYTE *)(cprg+2)]));
 		cprg+=3; break;
 	    case Reg::FCos:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Function %d=cos(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
 #endif
 		reg[*(BYTE *)(cprg+1)] = cos(getValR(val,reg[*(BYTE *)(cprg+2)]));
 		cprg+=3; break;
 	    case Reg::FTan:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Function %d=tan(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
 #endif
 		reg[*(BYTE *)(cprg+1)] = tan(getValR(val,reg[*(BYTE *)(cprg+2)]));
 		cprg+=3; break;
 	    case Reg::FSinh:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Function %d=sinh(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
 #endif
 		reg[*(BYTE *)(cprg+1)] = sinh(getValR(val,reg[*(BYTE *)(cprg+2)]));
 		cprg+=3; break;
 	    case Reg::FCosh:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Function %d=cosh(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
 #endif
 		reg[*(BYTE *)(cprg+1)] = cosh(getValR(val,reg[*(BYTE *)(cprg+2)]));
 		cprg+=3; break;
 	    case Reg::FTanh:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Function %d=tanh(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
 #endif
 		reg[*(BYTE *)(cprg+1)] = tanh(getValR(val,reg[*(BYTE *)(cprg+2)]));
 		cprg+=3; break;
 	    case Reg::FAsin:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Function %d=asin(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
 #endif
 		reg[*(BYTE *)(cprg+1)] = asin(getValR(val,reg[*(BYTE *)(cprg+2)]));
 		cprg+=3; break;
 	    case Reg::FAcos:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Function %d=acos(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
 #endif
 		reg[*(BYTE *)(cprg+1)] = acos(getValR(val,reg[*(BYTE *)(cprg+2)]));
 		cprg+=3; break;
 	    case Reg::FAtan:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Function %d=atan(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
 #endif
 		reg[*(BYTE *)(cprg+1)] = atan(getValR(val,reg[*(BYTE *)(cprg+2)]));
 		cprg+=3; break;
 	    case Reg::FRand:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Function %d=rand(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
 #endif
 		reg[*(BYTE *)(cprg+1)] = getValR(val,reg[*(BYTE *)(cprg+2)])*(double)rand()/(double)RAND_MAX;
 		cprg+=3; break;
 	    case Reg::FLg:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Function %d=lg(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
 #endif
 		reg[*(BYTE *)(cprg+1)] = log10(getValR(val,reg[*(BYTE *)(cprg+2)]));
 		cprg+=3; break;
 	    case Reg::FLn:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Function %d=ln(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
 #endif
 		reg[*(BYTE *)(cprg+1)] = log(getValR(val,reg[*(BYTE *)(cprg+2)]));
 		cprg+=3; break;
 	    case Reg::FExp:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Function %d=exp(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
 #endif
 		reg[*(BYTE *)(cprg+1)] = exp(getValR(val,reg[*(BYTE *)(cprg+2)]));
 		cprg+=3; break;
 	    case Reg::FPow:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Function %d=pow(%d,%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
 #endif
 		reg[*(BYTE *)(cprg+1)] = pow(getValR(val,reg[*(BYTE *)(cprg+2)]),getValR(val,reg[*(BYTE *)(cprg+3)]));
 		cprg+=4; break;
 	    case Reg::FMin:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Function %d=min(%d,%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
 #endif
 		reg[*(BYTE *)(cprg+1)] = vmin(getValR(val,reg[*(BYTE *)(cprg+2)]),getValR(val,reg[*(BYTE *)(cprg+3)]));
 		cprg+=4; break;
 	    case Reg::FMax:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Function %d=max(%d,%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
 #endif
 		reg[*(BYTE *)(cprg+1)] = vmax(getValR(val,reg[*(BYTE *)(cprg+2)]),getValR(val,reg[*(BYTE *)(cprg+3)]));
 		cprg+=4; break;
 	    case Reg::FSqrt:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Function %d=sqrt(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
 #endif
 		reg[*(BYTE *)(cprg+1)] = sqrt(getValR(val,reg[*(BYTE *)(cprg+2)]));
 		cprg+=3; break;
 	    case Reg::FAbs:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Function %d=abs(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
 #endif
 		reg[*(BYTE *)(cprg+1)] = fabs(getValR(val,reg[*(BYTE *)(cprg+2)]));
 		cprg+=3; break;
 	    case Reg::FSign:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Function %d=sign(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
 #endif
 		reg[*(BYTE *)(cprg+1)] = (getValR(val,reg[*(BYTE *)(cprg+2)])>=0)?1:-1;
 		cprg+=3; break;
 	    case Reg::FCeil:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Function %d=ceil(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
 #endif
 		reg[*(BYTE *)(cprg+1)] = ceil(getValR(val,reg[*(BYTE *)(cprg+2)]));
 		cprg+=3; break;
 	    case Reg::FFloor:
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		printf("CODE: Function %d=floor(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
 #endif
 		reg[*(BYTE *)(cprg+1)] = floor(getValR(val,reg[*(BYTE *)(cprg+2)]));
@@ -1495,7 +1495,7 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
 	    case Reg::CFunc:
 		{
 		    TValFunc vfnc("JavaLikeFuncCalc",&funcAt(*(BYTE *)(cprg+1))->func().at());
-#if DEBUG_VM
+#if OSC_DEBUG >= 5
 		    printf("CODE: Call function/procedure %d = %s(%d).\n",*(BYTE *)(cprg+3),vfnc.func()->id().c_str(),*(BYTE *)(cprg+2));
 #endif
 		    //--- Get return position ---

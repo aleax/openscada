@@ -343,7 +343,7 @@ void TTransportS::extHostSet( const ExtHost &host )
     ResAlloc res(extHostRes,true);
     for(int i_h = 0; i_h < extHostLs.size(); i_h++)
 	if( host.user_open == extHostLs[i_h].user_open && extHostLs[i_h].id == host.id )
-	{ extHostLs[i_h] = host; return; }
+	{ extHostLs[i_h] = host; modif(); return; }
     extHostLs.push_back(host);
     modif();
 }
@@ -597,6 +597,11 @@ void TTransportIn::postDisable(int flag)
     { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
+string TTransportIn::getStatus( )
+{
+    return startStat() ? _("Started. ") : _("Stoped. ");
+}
+
 void TTransportIn::load_( )
 {
     SYS->db().at().dataGet(fullDB(),SYS->transport().at().nodePath()+tbl(),*this);
@@ -623,6 +628,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 	{
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))
 	    {
+		ctrMkNode("fld",opt,-1,"/prm/st/status",_("Status"),0444,"root","root",1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Runing"),0664,"root","root",1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Transport DB"),0664,"root","root",4,"tp","str","dest","select","select","/db/list",
 		    "help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
@@ -641,7 +647,8 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
     }
     //- Process command to page -
     string a_path = opt->attr("path");
-    if( a_path == "/prm/st/st" )
+    if( a_path == "/prm/st/status" && ctrChkNode(opt) )		opt->setText(getStatus());
+    else if( a_path == "/prm/st/st" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(run_st?"1":"0");
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	atoi(opt->text().c_str())?start():stop();
@@ -736,6 +743,11 @@ void TTransportOut::postDisable(int flag)
     { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
+string TTransportOut::getStatus( )
+{
+    return startStat() ? _("Started. ") : _("Stoped. ");
+}
+
 void TTransportOut::load_( )
 {
     SYS->db().at().dataGet(fullDB(),SYS->transport().at().nodePath()+tbl(),*this);
@@ -769,6 +781,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	{
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))
 	    {
+		ctrMkNode("fld",opt,-1,"/prm/st/status",_("Status"),0444,"root","root",1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Runing"),0664,"root","root",1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Transport DB"),0664,"root","root",4,"tp","str","dest","select","select","/db/list",
 		    "help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
@@ -786,7 +799,8 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
     }
     //- Process command to page -
     string a_path = opt->attr("path");
-    if( a_path == "/prm/st/st" )
+    if( a_path == "/prm/st/status" && ctrChkNode(opt) )		opt->setText(getStatus());
+    else if( a_path == "/prm/st/st" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(run_st?"1":"0");
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	atoi(opt->text().c_str())?start():stop();

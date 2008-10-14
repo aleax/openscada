@@ -195,6 +195,7 @@ class TSYS : public TCntrNode
 	static string sepstr2path( const string &str, char sep = '.' );
 	static string strEncode( const string &in, Code tp, const string &symb = " \t\n");
 	static string strDecode( const string &in, Code tp = Custom );
+	static string strMess( const char *fmt, ... );
 
 	static string strCompr( const string &in, int lev = -1 );
 	static string strUncompr( const string &in );

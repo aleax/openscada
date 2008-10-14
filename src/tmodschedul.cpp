@@ -87,8 +87,8 @@ string TModSchedul::optDescr( )
 }
 
 void TModSchedul::subStart(  )
-{ 
-#if OSC_DEBUG
+{
+#if OSC_DEBUG >= 1
     mess_debug(nodePath().c_str(),_("Start subsystem."));
 #endif
 
@@ -101,7 +101,7 @@ void TModSchedul::subStart(  )
 
 void TModSchedul::subStop(  )
 {
-#if OSC_DEBUG
+#if OSC_DEBUG >= 1
     mess_debug(nodePath().c_str(),_("Stop subsystem."));
 #endif
 
@@ -113,7 +113,7 @@ void TModSchedul::subStop(  )
     if( TSYS::eventWait( prc_st, false, nodePath()+"stop",20) )
 	throw TError(nodePath().c_str(),_("Module scheduler thread no stoped!"));
 
-#if OSC_DEBUG
+#if OSC_DEBUG >= 2
     mess_debug(nodePath().c_str(),_("Stop subsystem. OK"));
 #endif
 }

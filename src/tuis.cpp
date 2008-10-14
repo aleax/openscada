@@ -69,7 +69,7 @@ void TUIS::load_( )
 
 void TUIS::subStart(  )
 {
-#if OSC_DEBUG
+#if OSC_DEBUG >= 1
     mess_debug(nodePath().c_str(),_("Start subsystem."));
 #endif
 
@@ -78,7 +78,7 @@ void TUIS::subStart(  )
 
 void TUIS::subStop( )
 {
-#if OSC_DEBUG
+#if OSC_DEBUG >=1
     mess_debug(nodePath().c_str(),_("Stop subsystem."));
 #endif
 

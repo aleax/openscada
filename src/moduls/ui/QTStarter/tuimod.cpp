@@ -153,7 +153,7 @@ void TUIMod::postDisable( int flag )
 
 void TUIMod::load_( )
 {
-#if OSC_DEBUG
+#if OSC_DEBUG >= 1
     mess_debug(nodePath().c_str(),_("Load module."));
 #endif
 
@@ -185,7 +185,7 @@ void TUIMod::load_( )
 
 void TUIMod::save_( )
 {
-#if OSC_DEBUG
+#if OSC_DEBUG >= 1
     mess_debug(nodePath().c_str(),_("Save module."));
 #endif
 
@@ -194,7 +194,7 @@ void TUIMod::save_( )
 
 void TUIMod::modStart()
 {
-#if OSC_DEBUG
+#if OSC_DEBUG >= 1
     mess_debug(nodePath().c_str(),_("Start module."));
 #endif
 
@@ -203,7 +203,7 @@ void TUIMod::modStart()
 
 void TUIMod::modStop()
 {
-#if OSC_DEBUG
+#if OSC_DEBUG >= 1
     mess_debug(nodePath().c_str(),_("Stop module."));
 #endif
 
@@ -231,9 +231,9 @@ void *TUIMod::Task( void * )
     time_t st_time = time(NULL);
     vector<TMess::SRec> recs;
 
-//#if OSC_DEBUG
-//    mess_debug(mod->nodePath().c_str(),_("Thread <%d> started!"),gettid());
-//#endif
+#if OSC_DEBUG >= 2
+    mess_debug(mod->nodePath().c_str(),_("Thread <%u> started. TID: %ld"),pthread_self(),(long int)syscall(224));
+#endif
 
     //- QT application object init -
     QApplication *QtApp = new QApplication( (int&)SYS->argc,(char **)SYS->argv );

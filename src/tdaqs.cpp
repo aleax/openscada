@@ -178,7 +178,7 @@ void TDAQS::load_( )
 
 void TDAQS::subStart(  )
 {
-#if OSC_DEBUG
+#if OSC_DEBUG >= 1
     mess_debug(nodePath().c_str(),_("Start subsystem."));
 #endif
 
@@ -251,7 +251,7 @@ void TDAQS::subStart(  )
 
 void TDAQS::subStop( )
 {
-#if OSC_DEBUG
+#if OSC_DEBUG >= 1
     mess_debug(nodePath().c_str(),_("Stop subsystem."));
 #endif
 

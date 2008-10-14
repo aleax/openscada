@@ -146,7 +146,7 @@ string TVision::optDescr( )
 
 void TVision::load_( )
 {
-#if OSC_DEBUG
+#if OSC_DEBUG >= 1
     mess_debug(nodePath().c_str(),_("Load module."));
 #endif
 
@@ -180,7 +180,7 @@ void TVision::load_( )
 
 void TVision::save_( )
 {
-#if OSC_DEBUG
+#if OSC_DEBUG >= 1
     mess_debug(nodePath().c_str(),_("Save module."));
 #endif
     //- Save parameters to DB -
@@ -268,7 +268,7 @@ QMainWindow *TVision::openWindow()
 
 void TVision::modStart()
 {
-#if OSC_DEBUG
+#if OSC_DEBUG >= 1
     mess_debug(nodePath().c_str(),_("Start module."));
 #endif
 
@@ -278,7 +278,7 @@ void TVision::modStart()
 
 void TVision::modStop()
 {
-#if OSC_DEBUG
+#if OSC_DEBUG >= 1
     mess_debug(nodePath().c_str(),_("Stop module."));
 #endif
     end_run = true;

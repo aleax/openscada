@@ -81,11 +81,6 @@ TTpContr::TTpContr( string name ) :
     mSource	= name;
 
     mod		= this;
-
-    //- Init DSCAD -
-    if( dscInit( DSC_VERSION ) != DE_NONE )
-	mess_err(mod->nodePath().c_str(),_("dscInit error."));
-    else m_init = true;
 }
 
 TTpContr::~TTpContr()
@@ -97,6 +92,11 @@ TTpContr::~TTpContr()
 void TTpContr::postEnable( int flag )
 {
     TModule::postEnable( flag );
+
+    //- Init DSCAD -
+    if( dscInit( DSC_VERSION ) != DE_NONE )
+	mess_err(mod->nodePath().c_str(),_("dscInit error."));
+    else m_init = true;
 
     //- Controler's bd structure -
     fldAdd( new TFld("BOARD",_("Diamond system board"),TFld::Integer,TFld::Selected,"2","25",
@@ -291,6 +291,10 @@ void *TMdContr::AD_DSCTask( void *param )
     TMdContr &cntr = *(TMdContr *)param;
     cntr.endrun_req_ad_dsc = false;
     cntr.ad_dsc_st = true;
+
+#if OSC_DEBUG >= 2
+    mess_debug(cntr.nodePath().c_str(),_("Thread <%u> started. TID: %ld"),pthread_self(),(long int)syscall(224));
+#endif
 
     //- DSC strucures init -
     BYTE result;

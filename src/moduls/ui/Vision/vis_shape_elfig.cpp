@@ -609,7 +609,8 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    brsh.setTextureImage(img);
                 else brsh.setTextureImage(elFD->fillImg.textureImage ());
                 //- Make elements -
-                if( fl_pnts.size() > 1 ) inundationItems.push_back(inundationItem(newPath,color,brsh, fl_pnts, fl_pnts));
+                if( fl_pnts.size() > 1 ) 
+                    inundationItems.push_back(inundationItem(newPath,color,brsh, fl_pnts, fl_pnts));
             }
         }
         for( int i=0; i < shapeItems_temp.size(); i++ )
@@ -4715,7 +4716,7 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
     double arc_a,arc_b,t_start,t_end,t,ang;
     QLineF line1,line2;
     path = newPath;
-    if( in_fig_num.size() >= 2 )
+    if( in_fig_num.size() >= 2 || (shapeItems[in_fig_num[0]].type == 2 && in_fig_num.size() == 1) )
     {
     if( shapeItems[in_fig_num[0]].n1 < shapeItems[in_fig_num[0]].n2 )
     {

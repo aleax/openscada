@@ -107,7 +107,7 @@ oscd_modulpref="oscd_"
 AC_SUBST(oscd_modulpref)
 
 LDFLAGS=
-CXXFLAGS="-O2 -DOSC_DEBUG -DOSC_HASHMAP"
+CXXFLAGS="-O2 -DOSC_HASHMAP"
 
 AC_SUBST(subdir_mod)
 
@@ -131,6 +131,11 @@ AC_ARG_ENABLE(SQLite,AC_HELP_STRING([--disable-SQLite], [disable build module DB
 [ if test $enableval = yes; then ModSQLite=true; else ModSQLite=false; fi],[ ModSQLite=true; ])
 AC_ARG_ENABLE(FireBird,AC_HELP_STRING([--disable-FireBird], [disable build module DB/FireBird]),
 [ if test $enableval = yes; then ModFireBird=true; else ModFireBird=false; fi],[ ModFireBird=true; ])
+#-- Transport modules --
+AC_ARG_ENABLE(Sockets,AC_HELP_STRING([--disable-Sockets], [disable build module Transport/Sockets]),
+[ if test $enableval = yes; then ModSockets=true; else ModSockets=false; fi],[ ModSockets=true; ])
+AC_ARG_ENABLE(SSL,AC_HELP_STRING([--disable-SSL], [disable build module Transport/SSL]),
+[ if test $enableval = yes; then ModSSL=true; else ModSSL=false; fi],[ ModSSL=true; ])
 #-- Transport protocol modules --
 AC_ARG_ENABLE(HTTP,AC_HELP_STRING([--disable-HTTP], [disable build module Protocol/HTTP]),
 [ if test $enableval = yes; then ModHTTP=true; else ModHTTP=false; fi],[ ModHTTP=true; ])
@@ -166,9 +171,6 @@ AC_ARG_ENABLE(DAQTransporter,AC_HELP_STRING([--disable-DAQTransporter], [disable
 [ if test $enableval = yes; then ModDAQTransporter=true; else ModDAQTransporter=false; fi],[ ModDAQTransporter=true; ])
 AC_ARG_ENABLE(SoundCard,AC_HELP_STRING([--disable-SoundCard], [disable build module DAQ/SoundCard]),
 [ if test $enableval = yes; then ModSoundCard=true; else ModSoundCard=false; fi],[ ModSoundCard=true; ])
-#-- Transport modules --
-AC_ARG_ENABLE(Sockets,AC_HELP_STRING([--disable-Sockets], [disable build module Transport/Sockets]),
-[ if test $enableval = yes; then ModSockets=true; else ModSockets=false; fi],[ ModSockets=true; ])
 #-- UI modules --
 AC_ARG_ENABLE(VCAEngine,AC_HELP_STRING([--disable-VCAEngine], [disable build module UI/VCAEngine]),
 [ if test $enableval = yes; then ModVCAEngine=true; else ModVCAEngine=false; fi],[ ModVCAEngine=true; ])
@@ -235,6 +237,26 @@ if test ${ModFireBird} = true; then
 	[AC_MSG_ERROR(DB/FireBird: Some FireBird API headers not found. Install or check FireBird installation!)])
     AC_CHECK_LIB([fbclient],[isc_attach_database],[AC_MSG_NOTICE(Pass global library using)],
 	[AC_MSG_ERROR(DB/FireBird: FireBird API client library not found. Install or check FireBird installation!)])
+fi
+#-- Transport modules --
+AC_SUBST(TranspSub_mod)
+if test ${ModSockets} = true; then
+    AC_MSG_RESULT(Build module: Transport/Sockets)
+    AC_CONFIG_FILES(src/moduls/transport/Sockets/Makefile)
+    TranspSub_mod="${TranspSub_mod}Sockets "
+    #--- Modules checkings ---
+    AC_CHECK_HEADERS([sys/un.h sys/socket.h sys/select.h arpa/inet.h netinet/in.h netdb.h],[],
+	[AC_MSG_ERROR(Transport/Sockets: Some GLibC network headers not found. Install or check GLibC developing package!)])
+fi
+if test ${ModSSL} = true; then
+    AC_MSG_RESULT(Build module: Transport/SSL)
+    AC_CONFIG_FILES(src/moduls/transport/SSL/Makefile)
+    TranspSub_mod="${TranspSub_mod}SSL "
+    #--- Modules checkings ---
+    AC_CHECK_HEADERS([openssl/ssl.h openssl/err.h openssl/bio.h],[],
+	[AC_MSG_ERROR(Transport/SSL: Some OpenSSL headers not found. Install or check OpenSSL developing package!)])
+    AC_CHECK_LIB([ssl],[SSL_library_init],[AC_MSG_NOTICE(Pass global library using)],
+	[AC_MSG_ERROR(Transport/SSL: OpenSSL library not found. Install or check OpenSSL installation!)])
 fi
 #-- Transport protocol modules --
 AC_SUBST(ProtSub_mod)
@@ -343,16 +365,6 @@ if test ${ModSoundCard} = true; then
     AC_MSG_RESULT(Build module: DAQ/SoundCard)
     AC_CONFIG_FILES(src/moduls/daq/SoundCard/Makefile)
     DAQSub_mod="${DAQSub_mod}SoundCard "
-fi
-#-- Transport modules --
-AC_SUBST(TranspSub_mod)
-if test ${ModSockets} = true; then
-    AC_MSG_RESULT(Build module: Transport/Sockets)
-    AC_CONFIG_FILES(src/moduls/transport/Sockets/Makefile)
-    TranspSub_mod="${TranspSub_mod}Sockets "
-    #--- Modules checkings ---
-    AC_CHECK_HEADERS([sys/un.h sys/socket.h sys/select.h arpa/inet.h netinet/in.h netdb.h],[],
-	[AC_MSG_ERROR(Transport/Sockets: Some GLibC network headers not found. Install or check GLibC developing package!)])
 fi
 #-- UI modules --
 AC_SUBST(UISub_mod)

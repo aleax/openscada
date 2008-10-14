@@ -1091,6 +1091,10 @@ void *TMdContr::Task( void *icntr )
     string pdu;
     TMdContr &cntr = *(TMdContr *)icntr;
 
+#if OSC_DEBUG >= 2
+    mess_debug(cntr.nodePath().c_str(),_("Thread <%u> started. TID: %ld"),pthread_self(),(long int)syscall(224));
+#endif
+
     cntr.endrun_req = false;
     cntr.prc_st = true;
 
@@ -1103,8 +1107,8 @@ void *TMdContr::Task( void *icntr )
 	    if( cntr.tm_delay > 0 )	cntr.tm_delay-=cntr.period();
 	    else
 	    {
-#if OSC_DEBUG
-		//mess_debug(cntr.nodePath().c_str(),_("Fetch coils' and registers' blocks."));
+#if OSC_DEBUG >= 3
+		mess_debug(cntr.nodePath().c_str(),_("Fetch coils' and registers' blocks."));
 #endif
 		//- Update controller's data -
 		ResAlloc res( cntr.en_res, false );
