@@ -1527,6 +1527,7 @@ Optional Features:
   --disable-SNMP          disable build module DAQ/SNMP
   --disable-Siemens       disable build module DAQ/Siemens
   --disable-ModBus        disable build module DAQ/ModBus
+  --disable-DCON          disable build module DAQ/DCON
   --disable-DAQTransporter
                           disable build module DAQ/Transporter
   --disable-SoundCard     disable build module DAQ/SoundCard
@@ -5123,7 +5124,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 5126 "configure"' > conftest.$ac_ext
+  echo '#line 5127 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -7962,11 +7963,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7965: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7966: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7969: \$? = $ac_status" >&5
+   echo "$as_me:7970: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8252,11 +8253,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8255: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8256: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8259: \$? = $ac_status" >&5
+   echo "$as_me:8260: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8356,11 +8357,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8359: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8360: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:8363: \$? = $ac_status" >&5
+   echo "$as_me:8364: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -10834,7 +10835,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 10837 "configure"
+#line 10838 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -10934,7 +10935,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 10937 "configure"
+#line 10938 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -13338,11 +13339,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13341: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13342: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:13345: \$? = $ac_status" >&5
+   echo "$as_me:13346: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -13442,11 +13443,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13445: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13446: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:13449: \$? = $ac_status" >&5
+   echo "$as_me:13450: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -16344,11 +16345,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16347: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16348: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16351: \$? = $ac_status" >&5
+   echo "$as_me:16352: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16448,11 +16449,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16451: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16452: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:16455: \$? = $ac_status" >&5
+   echo "$as_me:16456: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -18035,11 +18036,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:18038: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:18039: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:18042: \$? = $ac_status" >&5
+   echo "$as_me:18043: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -18139,11 +18140,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:18142: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:18143: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:18146: \$? = $ac_status" >&5
+   echo "$as_me:18147: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -20350,11 +20351,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:20353: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:20354: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:20357: \$? = $ac_status" >&5
+   echo "$as_me:20358: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -20640,11 +20641,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:20643: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:20644: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:20647: \$? = $ac_status" >&5
+   echo "$as_me:20648: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -20744,11 +20745,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:20747: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:20748: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:20751: \$? = $ac_status" >&5
+   echo "$as_me:20752: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -27573,6 +27574,13 @@ else
    ModModBus=true;
 fi
 
+# Check whether --enable-DCON was given.
+if test "${enable_DCON+set}" = set; then
+  enableval=$enable_DCON;  if test $enableval = yes; then ModDCON=true; else ModDCON=false; fi
+else
+   ModDCON=true;
+fi
+
 # Check whether --enable-DAQTransporter was given.
 if test "${enable_DAQTransporter+set}" = set; then
   enableval=$enable_DAQTransporter;  if test $enableval = yes; then ModDAQTransporter=true; else ModDAQTransporter=false; fi
@@ -29604,6 +29612,13 @@ echo "${ECHO_T}Build module: DAQ/ModBus" >&6; }
 
     DAQSub_mod="${DAQSub_mod}ModBus "
 fi
+if test ${ModDCON} = true; then
+    { echo "$as_me:$LINENO: result: Build module: DAQ/DCON" >&5
+echo "${ECHO_T}Build module: DAQ/DCON" >&6; }
+    ac_config_files="$ac_config_files src/moduls/daq/DCON/Makefile"
+
+    DAQSub_mod="${DAQSub_mod}DCON "
+fi
 if test ${ModDAQTransporter} = true; then
     { echo "$as_me:$LINENO: result: Build module: DAQ/Transporter" >&5
 echo "${ECHO_T}Build module: DAQ/Transporter" >&6; }
@@ -30410,6 +30425,7 @@ do
     "src/moduls/daq/SNMP/Makefile") CONFIG_FILES="$CONFIG_FILES src/moduls/daq/SNMP/Makefile" ;;
     "src/moduls/daq/Siemens/Makefile") CONFIG_FILES="$CONFIG_FILES src/moduls/daq/Siemens/Makefile" ;;
     "src/moduls/daq/ModBus/Makefile") CONFIG_FILES="$CONFIG_FILES src/moduls/daq/ModBus/Makefile" ;;
+    "src/moduls/daq/DCON/Makefile") CONFIG_FILES="$CONFIG_FILES src/moduls/daq/DCON/Makefile" ;;
     "src/moduls/daq/Transporter/Makefile") CONFIG_FILES="$CONFIG_FILES src/moduls/daq/Transporter/Makefile" ;;
     "src/moduls/daq/SoundCard/Makefile") CONFIG_FILES="$CONFIG_FILES src/moduls/daq/SoundCard/Makefile" ;;
     "src/moduls/ui/VCAEngine/Makefile") CONFIG_FILES="$CONFIG_FILES src/moduls/ui/VCAEngine/Makefile" ;;

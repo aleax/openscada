@@ -48,23 +48,23 @@ class TMdPrm : public TParamContr
 {
     public:
 	//Methods
-    	TMdPrm( string name, TTipParam *tp_prm );
+	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );
-	
+
 	void load_( );
 
 	TMdContr &owner( )	{ return (TMdContr &)TParamContr::owner(); }
-	
+
     protected:
 	//Methods
 	void vlArchMake( TVal &val );
 
 	void postEnable( int flag );
-	
+
     private:
 	//Attributes
 	string	&m_in;
-	TElem   p_el;           //Work atribute elements
+	TElem	p_el;		//Work atribute elements
 };
 
 //*************************************************
@@ -77,9 +77,9 @@ class TMdContr: public TController
     friend class TMdPrm;
     public:
 	//Methods
-    	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem);
+	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem);
 	~TMdContr( );
-	
+
 	TParamContr *ParamAttach( const string &name, int type );
 
 	void load_( );
@@ -87,16 +87,16 @@ class TMdContr: public TController
 	void start_( );
 	void stop_( );
 
-	TTpContr &owner( ) 	{ return (TTpContr&)TController::owner(); }
+	TTpContr &owner( )	{ return (TTpContr&)TController::owner(); }
 
     private:
 	//Methods
 	static void *Task( void *param );
-	
+
 	//Attributes
 	pthread_t procPthr;
 	bool	prc_st, endrun_req;
-	string	&m_card;	
+	string	&m_card;
 };
 
 //*************************************************
@@ -107,18 +107,18 @@ class TTpContr: public TTipDAQ
     public:
 	//Methods
 	TTpContr( string name );
-	~TTpContr();	    
-	
+	~TTpContr();
+
 	void postEnable( int flag );
-	
+
 	TController *ContrAttach( const string &name, const string &daq_db );
-	
+
     private:
 	//Attributes
 };
 
 extern TTpContr *mod;
 
-} //End namespace 
+} //End namespace
 
 #endif //SOUND_H

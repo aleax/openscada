@@ -48,7 +48,7 @@ oscd_modulPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(oscd_modul_PROGRAMS)
 am_daq_SoundCard_so_OBJECTS = sound.$(OBJEXT)
 daq_SoundCard_so_OBJECTS = $(am_daq_SoundCard_so_OBJECTS)
-daq_SoundCard_so_LDADD = $(LDADD)
+daq_SoundCard_so_DEPENDENCIES =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -205,6 +205,7 @@ EXTRA_DIST = *.h
 AM_CXXFLAGS = -I$(top_srcdir)/src -fPIC -DPIC
 AM_LDFLAGS = -shared -module
 daq_SoundCard_so_SOURCES = sound.cpp
+daq_SoundCard_so_LDADD = -lasound
 
 #PO files process and doc install
 fm_name = Mod_DAQ_SoundCard

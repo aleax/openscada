@@ -20,6 +20,7 @@
  ***************************************************************************/
 
 #include <signal.h>
+#include <alsa/asoundlib.h>
 
 #include <tsys.h>
 #include <ttiparam.h>
@@ -50,7 +51,7 @@ extern "C"
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-    	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
+	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
 	    return new SoundCard::TTpContr( source );
 	return NULL;
     }
@@ -63,16 +64,39 @@ using namespace SoundCard;
 //*************************************************
 TTpContr::TTpContr( string name )
 {
-    mId 	= MOD_ID;
-    mName       = MOD_NAME;
-    mType  	= MOD_TYPE;
-    mVers      	= VERSION;
-    mAutor    	= AUTORS;
-    mDescr  	= DESCRIPTION;
-    mLicense   	= LICENSE;
-    mSource    	= name;
-    
+    mId		= MOD_ID;
+    mName	= MOD_NAME;
+    mType	= MOD_TYPE;
+    mVers	= VERSION;
+    mAutor	= AUTORS;
+    mDescr	= DESCRIPTION;
+    mLicense	= LICENSE;
+    mSource	= name;
+
     mod		= this;
+
+    /*printf("ALSA library version: %s\n",SND_LIB_VERSION_STR);
+
+    printf("\nPCM stream types:\n");
+    for( int val = 0; val <= SND_PCM_STREAM_LAST; val++ )
+    printf("  %s\n",snd_pcm_stream_name((snd_pcm_stream_t)val));
+
+    printf("\nPCM access types:\n");
+    for( int val = 0; val <= SND_PCM_ACCESS_LAST; val++ )
+    printf("  %s\n",snd_pcm_access_name((snd_pcm_access_t)val));
+
+    printf("\nPCM formats:\n");
+    for( int val = 0; val <= SND_PCM_FORMAT_LAST; val++ )
+	if( snd_pcm_format_name((snd_pcm_format_t)val) != NULL )
+	    printf("  %s (%s)\n", snd_pcm_format_name((snd_pcm_format_t)val), snd_pcm_format_description((snd_pcm_format_t)val));
+
+    printf("\nPCM subformats:\n");
+    for( int val = 0; val <= SND_PCM_SUBFORMAT_LAST; val++ )
+	printf("  %s (%s)\n", snd_pcm_subformat_name((snd_pcm_subformat_t)val), snd_pcm_subformat_description((snd_pcm_subformat_t)val));
+
+    printf("\nPCM states:\n");
+    for( int val = 0; val <= SND_PCM_STATE_LAST; val++ )
+	printf("  %s\n", snd_pcm_state_name((snd_pcm_state_t)val));*/
 }
 
 TTpContr::~TTpContr()
@@ -81,9 +105,9 @@ TTpContr::~TTpContr()
 }
 
 void TTpContr::postEnable( int flag )
-{    
+{
     TModule::postEnable( flag );
-    
+
     //- Controler's bd structure -
     fldAdd( new TFld("PRM_BD",_("Parameters' table"),TFld::String,0,"30") );
     fldAdd( new TFld("CARD",_("Card device"),TFld::String,0,"20","/dev/") );
@@ -113,7 +137,7 @@ TMdContr::~TMdContr()
 }
 
 TParamContr *TMdContr::ParamAttach( const string &name, int type )
-{    
+{
     return new TMdPrm(name,&owner().tpPrmAt(type));
 }
 
@@ -137,7 +161,7 @@ void TMdContr::start_( )
     pthread_create(&procPthr,&pthr_attr,Task,this);
     pthread_attr_destroy(&pthr_attr);
     if( TSYS::eventWait(prc_st, true, nodePath()+"task_start",5) )
-        throw TError(nodePath().c_str(),_("Sound input task no started!"));
+	throw TError(nodePath().c_str(),_("Sound input task no started!"));
 }
 
 void TMdContr::stop_( )
@@ -145,11 +169,11 @@ void TMdContr::stop_( )
     //- Close sound interrupt process task -
     if( prc_st )
     {
-        endrun_req = true;
-        pthread_kill( procPthr, SIGALRM );
-        if( TSYS::eventWait(prc_st,false,nodePath()+"task_stop",5) )
-            throw TError(nodePath().c_str(),_("Sound input task no stoped!"));
-        pthread_join( procPthr, NULL );
+	endrun_req = true;
+	pthread_kill( procPthr, SIGALRM );
+	if( TSYS::eventWait(prc_st,false,nodePath()+"task_stop",5) )
+	    throw TError(nodePath().c_str(),_("Sound input task no stoped!"));
+	pthread_join( procPthr, NULL );
     }
 }
 
@@ -190,16 +214,16 @@ TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
 }
 
 TMdPrm::~TMdPrm( )
-{   
+{
     nodeDelAll();
 }
 
 void TMdPrm::postEnable( int flag )
 {
-    TParamContr::postEnable( flag );    
-    
+    TParamContr::postEnable( flag );
+
     if( !vlElemPresent(&p_el) ) vlElemAtt(&p_el);
-    
+
     p_el.fldAdd( new TFld( "val", _("Value"), TFld::Real, TFld::NoWrite, "", TSYS::real2str(EVAL_REAL).c_str(), "-1:1" ) );
 }
 

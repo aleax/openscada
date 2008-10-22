@@ -702,7 +702,7 @@ void TSocketOut::start()
 	}
 
 	//- Certificates, private key and it password loading -
-	if( !certKey().empty() )
+	if( !TSYS::strEmpty(certKey()) )
 	{
 	    //-- Write certificate and private key to temorary file --
 	    cfile = tmpnam(err);

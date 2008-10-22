@@ -1,16 +1,16 @@
 ## process this file with automake to generate Makefile.in
-EXTRA_DIST = *.h
+
+EXTRA_DIST = *.h po/* doc/*
 
 AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
 AM_LDFLAGS= -shared -module
 
-oscd_modul_PROGRAMS = daq_SoundCard.so
-daq_SoundCard_so_SOURCES = sound.cpp
-daq_SoundCard_so_LDADD = -lasound
+oscd_modul_PROGRAMS = daq_DCON.so
+daq_DCON_so_SOURCES = DCON_client.cpp
 
 #PO files process and doc install
-fm_name = Mod_DAQ_SoundCard
-m_name = $(oscd_modulpref)SoundCard
+fm_name = Mod_DAQ_DCON
+m_name = $(oscd_modulpref)DCON
 
 messages:
 	@catalogs=`find ./po -name \*.po` ; \

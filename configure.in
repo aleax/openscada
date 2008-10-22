@@ -167,6 +167,8 @@ AC_ARG_ENABLE(Siemens,AC_HELP_STRING([--disable-Siemens], [disable build module 
 [ if test $enableval = yes; then ModSiemens=true; else ModSiemens=false; fi],[ ModSiemens=true; ])
 AC_ARG_ENABLE(ModBus,AC_HELP_STRING([--disable-ModBus], [disable build module DAQ/ModBus]),
 [ if test $enableval = yes; then ModModBus=true; else ModModBus=false; fi],[ ModModBus=true; ])
+AC_ARG_ENABLE(DCON,AC_HELP_STRING([--disable-DCON], [disable build module DAQ/DCON]),
+[ if test $enableval = yes; then ModDCON=true; else ModDCON=false; fi],[ ModDCON=true; ])
 AC_ARG_ENABLE(DAQTransporter,AC_HELP_STRING([--disable-DAQTransporter], [disable build module DAQ/Transporter]),
 [ if test $enableval = yes; then ModDAQTransporter=true; else ModDAQTransporter=false; fi],[ ModDAQTransporter=true; ])
 AC_ARG_ENABLE(SoundCard,AC_HELP_STRING([--disable-SoundCard], [disable build module DAQ/SoundCard]),
@@ -298,7 +300,7 @@ if test ${ModSystem} = true; then
     AC_MSG_RESULT(Build module: DAQ/System)
     AC_CONFIG_FILES(src/moduls/daq/System/Makefile)
     DAQSub_mod="${DAQSub_mod}System "
-    #--- Modules checkings ---    
+    #--- Modules checkings ---
     AC_CHECK_HEADERS([sensors/sensors.h],[],
 	[AC_MSG_ERROR(DAQ/System: Libsensors headers not found. Install or check of libsensors developing package!)])
     AC_CHECK_LIB([sensors],[sensors_init],[AC_MSG_NOTICE(Pass global library using)],
@@ -332,7 +334,7 @@ if test ${ModSNMP} = true; then
     AC_MSG_RESULT(Build module: DAQ/SNMP)
     AC_CONFIG_FILES(src/moduls/daq/SNMP/Makefile)
     DAQSub_mod="${DAQSub_mod}SNMP "
-    #--- Modules checkings ---    
+    #--- Modules checkings ---
     AC_CHECK_HEADERS([net-snmp/net-snmp-config.h],[],
 	[AC_MSG_ERROR(DAQ/SNMP: Net SNMP library headers not found. Install or check of Net SNMP developing package!)])
 #    AC_CHECK_LIB([crypto],[SSL_CTX_use_certificate],[AC_MSG_NOTICE(Pass global library using)],
@@ -349,12 +351,17 @@ if test ${ModSiemens} = true; then
     AC_CHECK_HEADERS([ctype.h],[],
 	[AC_MSG_ERROR(DAQ/Siemens: Some GLibC network headers not found. Install or check GLibC developing package!)])
     AC_CHECK_HEADERS([linux/kd.h],[],
-	[AC_MSG_ERROR(DAQ/Siemens: Linux kernel headers not found. Install or check Linux kernel headers package!)])	
+	[AC_MSG_ERROR(DAQ/Siemens: Linux kernel headers not found. Install or check Linux kernel headers package!)])
 fi
 if test ${ModModBus} = true; then
     AC_MSG_RESULT(Build module: DAQ/ModBus)
     AC_CONFIG_FILES(src/moduls/daq/ModBus/Makefile)
     DAQSub_mod="${DAQSub_mod}ModBus "
+fi
+if test ${ModDCON} = true; then
+    AC_MSG_RESULT(Build module: DAQ/DCON)
+    AC_CONFIG_FILES(src/moduls/daq/DCON/Makefile)
+    DAQSub_mod="${DAQSub_mod}DCON "
 fi
 if test ${ModDAQTransporter} = true; then
     AC_MSG_RESULT(Build module: DAQ/Transporter)

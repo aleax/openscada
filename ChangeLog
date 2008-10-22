@@ -1,3 +1,10 @@
+2008-10-22 Roman
+- !!!!:/DAQ: DCON protocol support module by Almaz Karimov is included to source tree.
+- /DAQ/DCON: Translation to Russian and Ukrainian is made.
+- !!:/UI/VCAEngine: First support of primitive "Document" is included.
+- /Transport/SSL: The icon of module included to source tree.
+
+
 2008-10-14 Roman
 - !!!!:/Transport: New module of support SSL is added.
 - !!:/Transport/Socket: Code clean and transport's status is added.

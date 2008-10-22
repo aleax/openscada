@@ -168,19 +168,6 @@ class OrigProtocol : public PrWidget
 };
 
 //************************************************
-//* OrigDocument: Document view original widget  *
-//************************************************
-class OrigDocument : public PrWidget
-{
-    public:
-	//Methods
-	OrigDocument( );
-
-	string name( );
-	string descr( );
-};
-
-//************************************************
 //* OrigFunction: User function original widget  *
 //************************************************
 class OrigFunction : public PrWidget

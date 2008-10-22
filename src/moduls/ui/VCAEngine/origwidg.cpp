@@ -601,107 +601,106 @@ void OrigDiagram::postEnable( int flag )
 
 bool OrigDiagram::attrChange( Attr &cfg, void *prev )
 {
-    if( cfg.flgGlob()&Attr::Active )
+    if( !(cfg.flgGlob()&Attr::Active) )	return Widget::attrChange(cfg,prev);
+
+    if( cfg.id() == "active" && cfg.getB() != *(bool*)prev && cfg.owner()->attrPresent("type") &&
+	cfg.owner()->attrAt("type").at().getI() == 0 )
     {
-	if( cfg.id() == "active" && cfg.getB() != *(bool*)prev && cfg.owner()->attrPresent("type") &&
-		cfg.owner()->attrAt("type").at().getI() == 0 )
+	if( !cfg.getB() )
 	{
-	    if( !cfg.getB() )
-	    {
+	    cfg.owner()->attrDel("curSek");
+	    cfg.owner()->attrDel("curUSek");
+	    cfg.owner()->attrDel("curColor");
+	}
+	else
+	{
+	    cfg.owner()->attrAdd( new TFld("curSek",_("Cursor:sek"),TFld::Integer,Attr::DataTime|Attr::Mutable,"","","","","29") );
+	    cfg.owner()->attrAdd( new TFld("curUSek",_("Cursor:usek"),TFld::Integer,Attr::Mutable,"","","","","30") );
+	    cfg.owner()->attrAdd( new TFld("curColor",_("Cursor:color"),TFld::String,Attr::Color|Attr::Mutable,"","white","","","36") );
+	}
+    }
+    else if( cfg.id() == "type" )
+    {
+	//- Delete specific attributes -
+	switch(*(int*)prev)
+	{
+	    case 0:
+		cfg.owner()->attrDel("tSek");
+		cfg.owner()->attrDel("tUSek");
+		cfg.owner()->attrDel("tSize");
 		cfg.owner()->attrDel("curSek");
 		cfg.owner()->attrDel("curUSek");
 		cfg.owner()->attrDel("curColor");
-	    }
-	    else
-	    {
-		cfg.owner()->attrAdd( new TFld("curSek",_("Cursor:sek"),TFld::Integer,Attr::DataTime|Attr::Mutable,"","","","","29") );
-		cfg.owner()->attrAdd( new TFld("curUSek",_("Cursor:usek"),TFld::Integer,Attr::Mutable,"","","","","30") );
-		cfg.owner()->attrAdd( new TFld("curColor",_("Cursor:color"),TFld::String,Attr::Color|Attr::Mutable,"","white","","","36") );
-	    }
+		cfg.owner()->attrDel("sclColor");
+		cfg.owner()->attrDel("sclHor");
+		cfg.owner()->attrDel("sclVer");
+		cfg.owner()->attrDel("sclMarkColor");
+		cfg.owner()->attrDel("sclMarkFont");
+		cfg.owner()->attrDel("valArch");
+		cfg.owner()->attrDel("parNum");
+		break;
 	}
-	else if( cfg.id() == "type" )
-	{
-	    //- Delete specific attributes -
-	    switch(*(int*)prev)
-	    {
-		case 0:
-		    cfg.owner()->attrDel("tSek");
-		    cfg.owner()->attrDel("tUSek");
-		    cfg.owner()->attrDel("tSize");
-		    cfg.owner()->attrDel("curSek");
-		    cfg.owner()->attrDel("curUSek");
-		    cfg.owner()->attrDel("curColor");
-		    cfg.owner()->attrDel("sclColor");
-		    cfg.owner()->attrDel("sclHor");
-		    cfg.owner()->attrDel("sclVer");
-		    cfg.owner()->attrDel("sclMarkColor");
-		    cfg.owner()->attrDel("sclMarkFont");
-		    cfg.owner()->attrDel("valArch");
-		    cfg.owner()->attrDel("parNum");
-		    break;
-	    }
 
-	    //- Create specific attributes -
-	    switch(cfg.getI())
+	//- Create specific attributes -
+	switch(cfg.getI())
+	{
+	    case 0:
+		cfg.owner()->attrAdd( new TFld("tSek",_("Time:sek"),TFld::Integer,Attr::DataTime|Attr::Mutable,"","","","","26") );
+		cfg.owner()->attrAdd( new TFld("tUSek",_("Time:usek"),TFld::Integer,Attr::Mutable,"","","","","27") );
+		cfg.owner()->attrAdd( new TFld("tSize",_("Size, sek"),TFld::Real,Attr::Mutable,"","60","","","28") );
+		if( cfg.owner()->attrAt("active").at().getB() )
+		{
+		    cfg.owner()->attrAdd( new TFld("curSek",_("Cursor:sek"),TFld::Integer,Attr::DataTime|Attr::Mutable,"","","","","29") );
+		    cfg.owner()->attrAdd( new TFld("curUSek",_("Cursor:usek"),TFld::Integer,Attr::Mutable,"","","","","30") );
+		    cfg.owner()->attrAdd( new TFld("curColor",_("Cursor:color"),TFld::String,Attr::Color|Attr::Mutable,"","white","","","36") );
+		}
+		cfg.owner()->attrAdd( new TFld("sclColor",_("Scale:color"),TFld::String,Attr::Color|Attr::Mutable,"","grey","","","31") );
+		cfg.owner()->attrAdd( new TFld("sclHor",_("Scale:horizontal"),TFld::Integer,Attr::Mutable|TFld::Selected,
+		    "1","0","0;1;2;3",_("No draw;Grid;Markers;Grid and markers"),"32") );
+		cfg.owner()->attrAdd( new TFld("sclVer",_("Scale:vertical"),TFld::Integer,Attr::Mutable|TFld::Selected,
+		    "1","0","0;1;2;3;5;6;7",_("No draw;Grid;Markers;Grid and markers;Grid (log);Marker (log);Grid and markers (log)"),"33") );
+		cfg.owner()->attrAdd( new TFld("sclMarkColor",_("Scale:Markers:color"),TFld::String,Attr::Color|Attr::Mutable,"","white","","","37") );
+		cfg.owner()->attrAdd( new TFld("sclMarkFont",_("Scale:Markers:font"),TFld::String,Attr::Font|Attr::Mutable,"","Arial 10","","","38") );
+		cfg.owner()->attrAdd( new TFld("valArch",_("Value archivator"),TFld::String,Attr::Mutable,"","","","","34") );
+		cfg.owner()->attrAdd( new TFld("parNum",_("Parameters number"),TFld::Integer,Attr::Mutable|Attr::Active,"1","1","0;10","","35") );
+		break;
+	}
+    }
+    else if( cfg.id() == "parNum" )
+    {
+	string fid("prm"), fnm(_("Parametr ")), fidp, fnmp;
+	//- Delete specific unnecessary attributes of parameters -
+	for( int i_p = 0; true; i_p++ )
+	{
+	    fidp = fid+TSYS::int2str(i_p);
+	    if( !cfg.owner()->attrPresent( fidp+"addr" ) )	break;
+	    else if( i_p >= cfg.getI() )
 	    {
-		case 0:
-		    cfg.owner()->attrAdd( new TFld("tSek",_("Time:sek"),TFld::Integer,Attr::DataTime|Attr::Mutable,"","","","","26") );
-		    cfg.owner()->attrAdd( new TFld("tUSek",_("Time:usek"),TFld::Integer,Attr::Mutable,"","","","","27") );
-		    cfg.owner()->attrAdd( new TFld("tSize",_("Size, sek"),TFld::Real,Attr::Mutable,"","60","","","28") );
-		    if( cfg.owner()->attrAt("active").at().getB() )
-		    {
-			cfg.owner()->attrAdd( new TFld("curSek",_("Cursor:sek"),TFld::Integer,Attr::DataTime|Attr::Mutable,"","","","","29") );
-			cfg.owner()->attrAdd( new TFld("curUSek",_("Cursor:usek"),TFld::Integer,Attr::Mutable,"","","","","30") );
-			cfg.owner()->attrAdd( new TFld("curColor",_("Cursor:color"),TFld::String,Attr::Color|Attr::Mutable,"","white","","","36") );
-		    }
-		    cfg.owner()->attrAdd( new TFld("sclColor",_("Scale:color"),TFld::String,Attr::Color|Attr::Mutable,"","grey","","","31") );
-		    cfg.owner()->attrAdd( new TFld("sclHor",_("Scale:horizontal"),TFld::Integer,Attr::Mutable|TFld::Selected,
-			"1","0","0;1;2;3",_("No draw;Grid;Markers;Grid and markers"),"32") );
-		    cfg.owner()->attrAdd( new TFld("sclVer",_("Scale:vertical"),TFld::Integer,Attr::Mutable|TFld::Selected,
-			"1","0","0;1;2;3;5;6;7",_("No draw;Grid;Markers;Grid and markers;Grid (log);Marker (log);Grid and markers (log)"),"33") );
-		    cfg.owner()->attrAdd( new TFld("sclMarkColor",_("Scale:Markers:color"),TFld::String,Attr::Color|Attr::Mutable,"","white","","","37") );
-		    cfg.owner()->attrAdd( new TFld("sclMarkFont",_("Scale:Markers:font"),TFld::String,Attr::Font|Attr::Mutable,"","Arial 10","","","38") );
-		    cfg.owner()->attrAdd( new TFld("valArch",_("Value archivator"),TFld::String,Attr::Mutable,"","","","","34") );
-		    cfg.owner()->attrAdd( new TFld("parNum",_("Parameters number"),TFld::Integer,Attr::Mutable|Attr::Active,"1","1","0;10","","35") );
-		    break;
+		cfg.owner()->attrDel(fidp+"addr");
+		cfg.owner()->attrDel(fidp+"bordL");
+		cfg.owner()->attrDel(fidp+"bordU");
+		cfg.owner()->attrDel(fidp+"color");
+		cfg.owner()->attrDel(fidp+"val");
 	    }
 	}
-	else if( cfg.id() == "parNum" )
+	//- Create ullage attributes of parameters -
+	for( int i_p = 0; i_p < cfg.getI(); i_p++ )
 	{
-	    string fid("prm"), fnm(_("Parametr ")), fidp, fnmp;
-	    //- Delete specific unnecessary attributes of parameters -
-	    for( int i_p = 0; true; i_p++ )
-	    {
-		fidp = fid+TSYS::int2str(i_p); 
-		if( !cfg.owner()->attrPresent( fidp+"addr" ) )	break;
-		else if( i_p >= cfg.getI() )
-		{
-		    cfg.owner()->attrDel(fidp+"addr");
-		    cfg.owner()->attrDel(fidp+"bordL");
-		    cfg.owner()->attrDel(fidp+"bordU");
-		    cfg.owner()->attrDel(fidp+"color");
-		    cfg.owner()->attrDel(fidp+"val");
-		}
-	    }
-	    //- Create ullage attributes of parameters -
-	    for( int i_p = 0; i_p < cfg.getI(); i_p++ )
-	    {
-		fidp = fid+TSYS::int2str(i_p);
-		fnmp = fnm+TSYS::int2str(i_p);
-		if( cfg.owner()->attrPresent( fidp+"addr" ) ) continue;
-		cfg.owner()->attrAdd( new TFld((fidp+"addr").c_str(),(fnmp+_(":address")).c_str(),
-					       TFld::String,Attr::Address|Attr::Mutable,"","","","",TSYS::int2str(50+10*i_p).c_str()) );
-		cfg.owner()->attrAdd( new TFld((fidp+"bordL").c_str(),(fnmp+_(":view border:lower")).c_str(),
-					       TFld::Real,Attr::Mutable,"","","","",TSYS::int2str(51+10*i_p).c_str()) );
+	    fidp = fid+TSYS::int2str(i_p);
+	    fnmp = fnm+TSYS::int2str(i_p);
+	    if( cfg.owner()->attrPresent( fidp+"addr" ) ) continue;
+	    cfg.owner()->attrAdd( new TFld((fidp+"addr").c_str(),(fnmp+_(":address")).c_str(),
+					    TFld::String,Attr::Address|Attr::Mutable,"","","","",TSYS::int2str(50+10*i_p).c_str()) );
+	    cfg.owner()->attrAdd( new TFld((fidp+"bordL").c_str(),(fnmp+_(":view border:lower")).c_str(),
+		TFld::Real,Attr::Mutable,"","","","",TSYS::int2str(51+10*i_p).c_str()) );
 		cfg.owner()->attrAdd( new TFld((fidp+"bordU").c_str(),(fnmp+_(":view border:upper")).c_str(),
-					       TFld::Real,Attr::Mutable,"","","","",TSYS::int2str(52+10*i_p).c_str()) );
+					    TFld::Real,Attr::Mutable,"","","","",TSYS::int2str(52+10*i_p).c_str()) );
 		cfg.owner()->attrAdd( new TFld((fidp+"aScale").c_str(),(fnmp+_(":view border:autoscale")).c_str(),
-					       TFld::Integer,Attr::Mutable,"","0","","",TSYS::int2str(55+10*i_p).c_str()) );
+					    TFld::Integer,Attr::Mutable,"","0","","",TSYS::int2str(55+10*i_p).c_str()) );
 		cfg.owner()->attrAdd( new TFld((fidp+"color").c_str(),(fnmp+_(":color")).c_str(),
-					       TFld::String,Attr::Color|Attr::Mutable,"","","","",TSYS::int2str(53+10*i_p).c_str()) );
+					    TFld::String,Attr::Color|Attr::Mutable,"","","","",TSYS::int2str(53+10*i_p).c_str()) );
 		cfg.owner()->attrAdd( new TFld((fidp+"val").c_str(),(fnmp+_(":value")).c_str(),
-					       TFld::Real,Attr::Mutable,"","","","",TSYS::int2str(54+10*i_p).c_str()) );
-	    }
+					    TFld::Real,Attr::Mutable,"","","","",TSYS::int2str(54+10*i_p).c_str()) );
 	}
     }
 
@@ -789,24 +788,6 @@ bool OrigProtocol::attrChange( Attr &cfg, void *prev )
 	}
     }
     return Widget::attrChange(cfg,prev);
-}
-
-//************************************************
-//* OrigDocument: Document original widget       *
-//************************************************
-OrigDocument::OrigDocument( ) : PrWidget("Document")
-{
-
-}
-
-string OrigDocument::name( )
-{
-    return _("Document");
-}
-
-string OrigDocument::descr( )
-{
-    return _("Document widget of the end visualisation.");
 }
 
 //************************************************
