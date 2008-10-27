@@ -492,18 +492,18 @@ XMLNode *TFld::cntrCmdMake( XMLNode *opt, const string &path, int pos, const str
     if( n_e )
     {
 	if( flg()&TFld::Selected )
-	    n_e->setAttr_("tp","str")->setAttr_("len","")->setAttr_("dest","select")->
+	    n_e->setAttr("tp","str")->setAttr("len","")->setAttr("dest","select")->
 		setAttr("sel_list",selNames());
 		//setAttr("select",path+"/sel_"+name());
 	else switch(type())
 	{
 	    case TFld::String:
-		n_e->setAttr_("tp","str");
-		if( flg()&FullText )	n_e->setAttr_("cols","50")->setAttr_("rows","4");
+		n_e->setAttr("tp","str");
+		if( flg()&FullText )	n_e->setAttr("cols","50")->setAttr("rows","4");
 		break;
-	    case TFld::Integer:	n_e->setAttr_("tp",(flg()&HexDec)?"hex":((flg()&OctDec)?"oct":"dec")); break;
-	    case TFld::Real:	n_e->setAttr_("tp","real");break;
-	    case TFld::Boolean:	n_e->setAttr_("tp","bool");break;
+	    case TFld::Integer:	n_e->setAttr("tp",(flg()&HexDec)?"hex":((flg()&OctDec)?"oct":"dec")); break;
+	    case TFld::Real:	n_e->setAttr("tp","real");break;
+	    case TFld::Boolean:	n_e->setAttr("tp","bool");break;
 	}
     }
     return n_e;

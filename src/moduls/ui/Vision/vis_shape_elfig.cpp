@@ -108,8 +108,8 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
             elFD->lineClr = QColor(val.c_str());
             rel_list = true;
             break;
-        case 22:	//lineDecor
-            elFD->lineDecor = atoi(val.c_str());
+        case 22:	//lineStyle
+            elFD->lineStyle = val.c_str();
             rel_list = true;
             break;
         case 23:	//bordWdth
@@ -144,15 +144,11 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
             elFD->elLst = val.c_str();
             rel_list = true;
             break;
-        case 29:
-            elFD->lineStyle = val.c_str();
-            rel_list = true;
-            break;
         default:
             if( uiPrmPos >= 30 )
             {
-                int pnt  = (uiPrmPos-30)/5;
-                int patr = (uiPrmPos-30)%5;
+                int pnt  = (uiPrmPos-30)/6;
+                int patr = (uiPrmPos-30)%6;
                 double pval  = atof(val.c_str());
                 QPointF pnt_ = (*pnts)[pnt];
                 if( patr == 0 ) pnt_.setX(pval);

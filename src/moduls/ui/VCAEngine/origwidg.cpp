@@ -138,16 +138,15 @@ void OrigElFigure::postEnable( int flag )
 
     if( flag&TCntrNode::NodeConnect )
     {
-	attrAdd( new TFld("lineWdth",_("Line:width"),TFld::Integer,TFld::NoFlag,"2","1","0;99","","20") );
-	attrAdd( new TFld("lineClr",_("Line:color"),TFld::String,Attr::Color,"20","#000000","","","21") );
-	//attrAdd( new TFld("lineDecor",_("Line:decorate"),TFld::Integer,TFld::Selected,"1","0","0;1",_("No decor;Pipe"),"22") );
-	attrAdd( new TFld("lineStyle",_("Line:style"),TFld::String,TFld::Selected,"10","solid","solid;dashed;dotted",_("Solid;Dashed;Dotted"),"29") );
-	attrAdd( new TFld("bordWdth",_("Border:width"),TFld::Integer,TFld::NoFlag,"2","0","0;99","","23") );
-	attrAdd( new TFld("bordClr",_("Border:color"),TFld::String,Attr::Color,"20","#000000","","","24") );
-	attrAdd( new TFld("fillColor",_("Fill:color"),TFld::String,Attr::Color,"20","","","","25") );
-	attrAdd( new TFld("fillImg",_("Fill:image"),TFld::String,Attr::Image,"20","","","","26") );
-	attrAdd( new TFld("orient",_("Orientation angle"),TFld::Integer,TFld::NoFlag,"3","0","-180;180","","28") );
-	attrAdd( new TFld("elLst",_("Element's list"),TFld::String,TFld::FullText|Attr::Active,"300","","","","27") );
+	attrAdd( new TFld("lineWdth",_("Line:width"),TFld::Integer,TFld::NoFlag,"","1","0;99","","20") );
+	attrAdd( new TFld("lineClr",_("Line:color"),TFld::String,Attr::Color,"","#000000","","","21") );
+	attrAdd( new TFld("lineStyle",_("Line:style"),TFld::Integer,TFld::Selected,"","0","0;1;2",_("Solid;Dashed;Dotted"),"22") );
+	attrAdd( new TFld("bordWdth",_("Border:width"),TFld::Integer,TFld::NoFlag,"","0","0;99","","23") );
+	attrAdd( new TFld("bordClr",_("Border:color"),TFld::String,Attr::Color,"","#000000","","","24") );
+	attrAdd( new TFld("fillColor",_("Fill:color"),TFld::String,Attr::Color,"","","","","25") );
+	attrAdd( new TFld("fillImg",_("Fill:image"),TFld::String,Attr::Image,"","","","","26") );
+	attrAdd( new TFld("orient",_("Orientation angle"),TFld::Integer,TFld::NoFlag,"","0","-180;180","","28") );
+	attrAdd( new TFld("elLst",_("Element's list"),TFld::String,TFld::FullText|Attr::Active,"","","","","27") );
     }
 }
 
@@ -157,7 +156,7 @@ bool OrigElFigure::attrChange( Attr &cfg, void *prev )
     {
 	string sel, sel1;
 	string ls_prev = *(string*)prev;
-	map<int,char> pntls, pntls_prev, wls, wls_prev, clrls, clrls_prev, imgls, imgls_prev;
+	map<int,char> pntls, pntls_prev, wls, wls_prev, clrls, clrls_prev, imgls, imgls_prev, lstls, lstls_prev;
 	//- Parse last attributes list and make point list -
 	for( int i_p = 0; i_p < 2; i_p++ )
 	{
@@ -166,37 +165,25 @@ bool OrigElFigure::attrChange( Attr &cfg, void *prev )
 	    map<int,char> &wls_w = (i_p==0)?wls_prev:wls;
 	    map<int,char> &clrls_w = (i_p==0)?clrls_prev:clrls;
 	    map<int,char> &imgls_w = (i_p==0)?imgls_prev:imgls;
+	    map<int,char> &lstls_w = (i_p==0)?lstls_prev:lstls;
 	    for( int off = 0; (sel=TSYS::strSepParse(ls_w,0,'\n',&off)).size(); )
 	    {
 		int offe = 0;
 		string fTp = TSYS::strSepParse(sel,0,':',&offe);
-		if( fTp == "line" )
+		if( fTp == "line" || fTp == "arc" || fTp == "bezier" )
 		{
-		    for( int i = 0; i < 2; i++ ) pntls_w[atoi(TSYS::strSepParse(sel,0,':',&offe).c_str())] = true;
+		    int np = (fTp=="arc") ? 5 : ((fTp=="bezier") ? 4 : 2);
+		    for( int i = 0; i < np; i++ ) pntls_w[atoi(TSYS::strSepParse(sel,0,':',&offe).c_str())] = true;
 		    if( (sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'w' ) wls_w[atoi(sel1.substr(1).c_str())] = true;
 		    if( (sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'c' ) clrls_w[atoi(sel1.substr(1).c_str())] = true;
 		    if( (sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'w' ) wls_w[atoi(sel1.substr(1).c_str())] = true;
 		    if( (sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'c' ) clrls_w[atoi(sel1.substr(1).c_str())] = true;
-		}
-		else if( fTp == "arc" )
-		{
-		    for( int i = 0; i < 5; i++ ) pntls_w[atoi(TSYS::strSepParse(sel,0,':',&offe).c_str())] = true;
-		    if( (sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'w' ) wls_w[atoi(sel1.substr(1).c_str())] = true;
-		    if( (sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'c' ) clrls_w[atoi(sel1.substr(1).c_str())] = true;
-		    if( (sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'w' ) wls_w[atoi(sel1.substr(1).c_str())] = true;
-		    if( (sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'c' ) clrls_w[atoi(sel1.substr(1).c_str())] = true;
-		}
-		else if( fTp == "bezier" )
-		{
-		    for( int i = 0; i < 4; i++ ) pntls_w[atoi(TSYS::strSepParse(sel,0,':',&offe).c_str())] = true;
-		    if( (sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'w' ) wls_w[atoi(sel1.substr(1).c_str())] = true;
-		    if( (sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'c' ) clrls_w[atoi(sel1.substr(1).c_str())] = true;
-		    if( (sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'w' ) wls_w[atoi(sel1.substr(1).c_str())] = true;
-		    if( (sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'c' ) clrls_w[atoi(sel1.substr(1).c_str())] = true;
+		    if( (sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 's' ) lstls_w[atoi(sel1.substr(1).c_str())] = true;
 		}
 		else if( fTp == "fill" )
-		    while( (sel1=TSYS::strSepParse(sel,0,':',&offe)).size() )
+		    for( int zPnt = 0; !(sel1=TSYS::strSepParse(sel,0,':',&offe)).empty() || zPnt < 2; )
 		    {
+			if( sel1.empty() )	zPnt++;
 			if( sel1[0] == 'c' )	clrls_w[atoi(sel1.substr(1).c_str())] = true;
 			else if( sel1[0] == 'i' )	imgls_w[atoi(sel1.substr(1).c_str())] = true;
 		    }
@@ -209,25 +196,30 @@ bool OrigElFigure::attrChange( Attr &cfg, void *prev )
 	    if( it->first && pntls_prev.find(it->first) == pntls_prev.end() && !cfg.owner()->attrPresent("p"+TSYS::int2str(it->first)+"x") )
 	    {
 		cfg.owner()->attrAdd( new TFld(("p"+TSYS::int2str(it->first)+"x").c_str(),(_("Point ")+TSYS::int2str(it->first)+":x").c_str(),
-		    TFld::Real,Attr::Mutable,"","0","","",TSYS::int2str(30+it->first*5).c_str()) );
+		    TFld::Real,Attr::Mutable,"","0","","",TSYS::int2str(30+it->first*6).c_str()) );
 		cfg.owner()->attrAdd( new TFld(("p"+TSYS::int2str(it->first)+"y").c_str(),(_("Point ")+TSYS::int2str(it->first)+":y").c_str(),
-		    TFld::Real,Attr::Mutable,"","0","","",TSYS::int2str(30+it->first*5+1).c_str()) );
+		    TFld::Real,Attr::Mutable,"","0","","",TSYS::int2str(30+it->first*6+1).c_str()) );
 	    }
 	//-- Add no present dynamic widths --
 	for( map<int,char>::iterator it = wls.begin(); it != wls.end(); it++ )
 	    if( it->first && wls_prev.find(it->first) == wls_prev.end() && !cfg.owner()->attrPresent("w"+TSYS::int2str(it->first)) )
 		cfg.owner()->attrAdd( new TFld(("w"+TSYS::int2str(it->first)).c_str(),(_("Width ")+TSYS::int2str(it->first)).c_str(),
-		    TFld::Real,Attr::Mutable,"","1","","",TSYS::int2str(30+it->first*5+2).c_str()) );
+		    TFld::Real,Attr::Mutable,"","1","","",TSYS::int2str(30+it->first*6+2).c_str()) );
 	//-- Add no present dynamic colors --
 	for( map<int,char>::iterator it = clrls.begin(); it != clrls.end(); it++ )
 	    if( it->first && clrls_prev.find(it->first) == clrls_prev.end() && !cfg.owner()->attrPresent("c"+TSYS::int2str(it->first)) )
 		cfg.owner()->attrAdd( new TFld(("c"+TSYS::int2str(it->first)).c_str(),(_("Color ")+TSYS::int2str(it->first)).c_str(),
-		    TFld::String,Attr::Mutable|Attr::Color,"","","","",TSYS::int2str(30+it->first*5+3).c_str()) );
+		    TFld::String,Attr::Mutable|Attr::Color,"","","","",TSYS::int2str(30+it->first*6+3).c_str()) );
 	//-- Add no present dynamic images --
 	for( map<int,char>::iterator it = imgls.begin(); it != imgls.end(); it++ )
 	    if( it->first && imgls_prev.find(it->first) == imgls_prev.end() && !cfg.owner()->attrPresent("i"+TSYS::int2str(it->first)) )
 		cfg.owner()->attrAdd( new TFld(("i"+TSYS::int2str(it->first)).c_str(),(_("Image ")+TSYS::int2str(it->first)).c_str(),
-		    TFld::String,Attr::Mutable|Attr::Image,"","","","",TSYS::int2str(30+it->first*5+4).c_str()) );
+		    TFld::String,Attr::Mutable|Attr::Image,"","","","",TSYS::int2str(30+it->first*6+4).c_str()) );
+	//-- Add no present line styles --
+	for( map<int,char>::iterator it = lstls.begin(); it != lstls.end(); it++ )
+	    if( it->first && lstls_prev.find(it->first) == lstls_prev.end() && !cfg.owner()->attrPresent("s"+TSYS::int2str(it->first)) )
+		cfg.owner()->attrAdd( new TFld(("s"+TSYS::int2str(it->first)).c_str(),(_("Style ")+TSYS::int2str(it->first)).c_str(),
+		    TFld::Integer,Attr::Mutable|TFld::Selected,"","0","0;1;2",_("Solid;Dashed;Dotted"),TSYS::int2str(30+it->first*6+5).c_str()) );
 
 	//- Delete no dynamic items -
 	//-- Delete dynamic points --
@@ -249,6 +241,10 @@ bool OrigElFigure::attrChange( Attr &cfg, void *prev )
 	for( map<int,char>::iterator it = imgls_prev.begin(); it != imgls_prev.end(); it++ )
 	    if( it->first && imgls.find(it->first) == imgls.end() )
 		cfg.owner()->attrDel("i"+TSYS::int2str(it->first));
+	//-- Delete dynamic line styles --
+	for( map<int,char>::iterator it = lstls_prev.begin(); it != lstls_prev.end(); it++ )
+	    if( it->first && lstls.find(it->first) == lstls.end() )
+		cfg.owner()->attrDel("s"+TSYS::int2str(it->first));
     }
     return Widget::attrChange(cfg,prev);
 }
@@ -789,6 +785,290 @@ bool OrigProtocol::attrChange( Attr &cfg, void *prev )
     }
     return Widget::attrChange(cfg,prev);
 }
+
+//************************************************
+//* OrigDocument: Document original widget       *
+//************************************************
+char *OrigDocument::XHTML_entity =
+    "<!DOCTYPE xhtml [\n"
+    "  <!ENTITY nbsp \"&#160;\" >\n"
+    "]>\n";
+
+OrigDocument::OrigDocument( ) : PrWidget("Document")
+{
+
+}
+
+string OrigDocument::name( )
+{
+    return _("Document");
+}
+
+string OrigDocument::descr( )
+{
+    return _("Document widget of the end visualisation.");
+}
+
+void OrigDocument::postEnable( int flag )
+{
+    LWidget::postEnable(flag);
+
+    if( flag&TCntrNode::NodeConnect )
+    {
+	attrAdd( new TFld("backColor",_("Background:color"),TFld::String,Attr::Color,"","","","","20") );
+	attrAdd( new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","","","","21") );
+	attrAdd( new TFld("style",_("CSS"),TFld::String,TFld::FullText,"","","","","22") );
+	attrAdd( new TFld("tmpl",_("Template"),TFld::String,TFld::FullText,"","","","","23") );
+	attrAdd( new TFld("n",_("Archive size"),TFld::Integer,Attr::Active,"","0","0;99","","24") );
+	attrAdd( new TFld("doc",_("Document"),TFld::String,TFld::FullText,"","","","","25") );
+	attrAdd( new TFld("time",_("Time:current"),TFld::Integer,Attr::DataTime|Attr::Active,"","0","","","26") );
+	attrAdd( new TFld("bTime",_("Time:begin"),TFld::Integer,Attr::DataTime,"","0","","","27") );
+	attrAdd( new TFld("trcPer",_("Tracing period (s)"),TFld::Integer,TFld::NoFlag,"","0","0;360","","28") );
+    }
+}
+
+bool OrigDocument::attrChange( Attr &cfg, void *prev )
+{
+    //- Document's number change process -
+    if( cfg.id() == "n" && cfg.getI() != *(int*)prev )
+    {
+	if( !cfg.getI() )
+	{
+	    cfg.owner()->attrDel("aCur");
+	    cfg.owner()->attrDel("vCur");
+	}
+	else
+	{
+	    cfg.owner()->attrAdd( new TFld("aCur",_("Cursor:archive"),TFld::Integer,Attr::Mutable|Attr::Active,"","0","0;99","","30") );
+	    cfg.owner()->attrAdd( new TFld("vCur",_("Cursor:view"),TFld::Integer,Attr::Mutable|Attr::Active,"","0","0;99","","31") );
+	}
+	string fidp;
+	//- Delete archive document's attributes -
+	for( int i_p = 0; true; i_p++ )
+	{
+	    fidp = "doc"+TSYS::int2str(i_p);
+	    if( !cfg.owner()->attrPresent(fidp) )      break;
+	    else if( i_p >= cfg.getI() )	cfg.owner()->attrDel(fidp);
+	}
+	//- Create archive document's attributes -
+	for( int i_p = 0; i_p < cfg.getI(); i_p++ )
+	{
+	    fidp = "doc"+TSYS::int2str(i_p);
+	    if( cfg.owner()->attrPresent(fidp) ) continue;
+	    cfg.owner()->attrAdd( new TFld(fidp.c_str(),(_("Document ")+TSYS::int2str(i_p)).c_str(),TFld::String,
+		TFld::FullText|Attr::Mutable,"","","","",TSYS::int2str(50+i_p).c_str()) );
+	}
+    }
+    if( !dynamic_cast<SessWdg*>(cfg.owner()) )	return Widget::attrChange(cfg,prev);
+    //- Make document after time set -
+    if( cfg.id() == "time" && cfg.getI() != *(int*)prev )
+    {
+	int n = cfg.owner()->attrAt("n").at().getI();
+	int aCur = cfg.owner()->attrAt("aCur").at().getI();
+	string mkDk;
+	if( !n )	mkDk = cfg.owner()->attrAt("doc").at().getS();
+	else if( aCur >= 0 && aCur < n )
+	    mkDk = cfg.owner()->attrAt("doc"+TSYS::int2str(aCur)).at().getS();
+	if( mkDk.empty() )	mkDk = cfg.owner()->attrAt("tmpl").at().getS();
+	mkDk = makeDoc(mkDk,cfg.owner());
+	if( !n )	cfg.owner()->attrAt("doc").at().setS(mkDk);
+	else
+	{
+	    cfg.owner()->attrAt("doc"+TSYS::int2str(aCur)).at().setS(mkDk);
+	    if( aCur == cfg.owner()->attrAt("vCur").at().getI() )
+		cfg.owner()->attrAt("doc").at().setS(mkDk);
+	}
+    }
+    //- Move archive cursor -
+    else if( cfg.id() == "aCur" && cfg.getI() != *(int*)prev )
+    {
+	int n = cfg.owner()->attrAt("n").at().getI();
+	if( cfg.getI() < 0 )		cfg.setI( ((*(int*)prev)+1 >= n) ? 0 : (*(int*)prev)+1 );
+	else if( cfg.getI() >= n )	cfg.setI( n-1 );
+	if( *(int*)prev == cfg.owner()->attrAt("vCur").at().getI() )
+	    cfg.owner()->attrAt("vCur").at().setI(cfg.getI());
+	if( cfg.getI() != *(int*)prev )
+	    cfg.owner()->attrAt("doc"+TSYS::int2str(cfg.getI())).at().setS("");
+    }
+    //- Move archive view cursor -
+    else if( cfg.id() == "vCur" && cfg.getI() != *(int*)prev )
+    {
+	int aCur = cfg.owner()->attrAt("aCur").at().getI();
+	int n = cfg.owner()->attrAt("n").at().getI();
+	if( cfg.getI() < 0 )
+	{
+	    int docN = *(int*)prev;
+	    //-- Search next document --
+	    if( cfg.getI() == -1 )
+		while( docN != aCur && (docN == *(int*)prev || cfg.owner()->attrAt("doc"+TSYS::int2str(docN)).at().getS().empty()) )
+		    if( ++docN >= n )	docN = 0;
+	    //- Search previous document -
+	    else
+	    {
+		if( --docN < 0 ) docN = n-1;
+		if( cfg.owner()->attrAt("doc"+TSYS::int2str(docN)).at().getS().empty() )	docN = *(int*)prev;
+	    }
+	    //- Copy selected document to attribut doc -
+	    if( docN != *(int*)prev )	cfg.setI(docN);
+	}
+	else if( cfg.getI() >= n )	cfg.setI( cfg.owner()->attrAt("aCur").at().getI() );
+	else cfg.owner()->attrAt("doc").at().setS( cfg.owner()->attrAt("doc"+TSYS::int2str(cfg.getI())).at().getS() );
+    }
+
+    return Widget::attrChange(cfg,prev);
+}
+
+string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
+{
+    XMLNode xdoc;
+    string iLang;				//Process instruction language
+    string wProgO;				//Object of work programm
+    time_t lstTime;				//Last time
+    TFunction funcIO(wdg->calcId()+"_doc");
+    TValFunc funcV(wdg->id()+"_doc",NULL,false);
+    vector<string> als;
+
+    //> Parse template
+    try{ xdoc.load(XHTML_entity+tmpl); }
+    catch(TError err)
+    {
+	mess_err(wdg->nodePath().c_str(),_("Document's template parsing error: %s:"),err.mess.c_str());
+	return "";
+    }
+
+    //> Prepare call instructions environment
+    if( strcasecmp(xdoc.name().c_str(),"body") == 0 )
+    {
+	iLang = xdoc.attr("docProcLang");
+	lstTime = atoi(xdoc.attr("docLstTime").c_str());
+    }
+    if( TSYS::strEmpty(iLang) )	iLang = "JavaLikeCalc.JavaScript";
+    if( !lstTime )		lstTime = wdg->attrAt("time").at().getI();
+    //>> Add generic io
+    funcIO.ioIns( new IO("rez",_("Result"),IO::String,IO::Return),0);
+    funcIO.ioIns( new IO("time",_("Document time"),IO::Integer,IO::Default),1);
+    funcIO.ioIns( new IO("bTime",_("Document begin time"),IO::Integer,IO::Default),2);
+    funcIO.ioIns( new IO("lTime",_("Last time"),IO::Integer,IO::Default),3);
+    funcIO.ioIns( new IO("rTime",_("Repeat time"),IO::Integer,IO::Default),4);
+    funcIO.ioIns( new IO("rPer",_("Repeat period"),IO::Integer,IO::Default),5);
+    funcIO.ioIns( new IO("mTime",_("Message time"),IO::Integer,IO::Default),6);
+    funcIO.ioIns( new IO("mLev",_("Message level"),IO::Integer,IO::Default),7);
+    funcIO.ioIns( new IO("mCat",_("Message category"),IO::String,IO::Default),8);
+    funcIO.ioIns( new IO("mVal",_("Message value"),IO::String,IO::Default),9);
+    //>> Add user io
+    wdg->attrList(als);
+    for( int i_a = 0; i_a < als.size(); i_a++ )
+    {
+	AutoHD<Attr> cattr = wdg->attrAt(als[i_a]);
+	if( !(cattr.at().flgGlob()&Attr::IsUser) )	continue;
+	IO::Type tp = IO::String;
+	switch( cattr.at().type() )
+	{
+	    case TFld::Boolean:	tp = IO::Boolean;	break;
+	    case TFld::Integer:	tp = IO::Integer;	break;
+	    case TFld::Real:	tp = IO::Real;		break;
+	    case TFld::String:	tp = IO::String;	break;
+	}
+	funcIO.ioAdd( new IO(als[i_a].c_str(),cattr.at().name().c_str(),tp,IO::Output) );
+    }
+    try
+    {
+	//>> Compile empty function for binding to object
+	wProgO = SYS->daq().at().at(TSYS::strSepParse(iLang,0,'.')).at().compileFunc(TSYS::strSepParse(iLang,1,'.'),funcIO,"");
+	//>> Connect to compiled function
+	funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(wProgO,1)).at());
+	//>> Load values of generic IO
+	funcV.setI(1,wdg->attrAt("time").at().getI());
+	funcV.setI(2,wdg->attrAt("bTime").at().getI());
+	funcV.setI(3,wdg->attrAt("lstTime").at().getI());
+	//>> Load values of user IO
+	for( int i_a = 9; i_a < funcV.ioSize( ); i_a++ )
+	    funcV.setS(i_a,wdg->attrAt(funcV.func()->io(i_a)->id()).at().getS());
+    }catch( TError err )
+    {
+	mess_err(nodePath().c_str(),_("Compile function for document is error: %s"),err.mess.c_str());
+	return "";
+    }
+
+    //> Node proocess
+    nodeProcess( &xdoc, funcV, funcIO, iLang );
+
+    return xdoc.save(XMLNode::BrAllPast);
+}
+
+void OrigDocument::nodeProcess( XMLNode *xcur, TValFunc &funcV, TFunction &funcIO, const string &iLang, bool instrDel )
+{
+    //> Process instructions
+    if( !xcur->prcInstr("dp").empty() )
+    {
+	try
+	{
+	    //>>> Compile for new instruction
+	    SYS->daq().at().at(TSYS::strSepParse(iLang,0,'.')).
+		       at().compileFunc(TSYS::strSepParse(iLang,1,'.'),funcIO,xcur->prcInstr("dp"));
+	    //>>> Call
+	    funcV.setS(0,"");
+	    funcV.calc( );
+	    //>>> Load result to XML tree
+	    XMLNode xproc;
+	    xproc.load(string(XHTML_entity)+"<i>"+funcV.getS(0)+"</i>");
+	    //>>> Set result
+	    bool docAppend = atoi(xcur->attr("docAppend").c_str());
+	    //>>> Copy text
+	    if( docAppend )	xcur->setText(xcur->text()+xproc.text());
+	    else xcur->setText(xproc.text());
+	    //>>> Copy included tags
+	    if( !docAppend )	xcur->childClear();
+	    for( int i_t = 0; i_t < xproc.childSize(); i_t++ )
+		*(xcur->childAdd()) = *xproc.childGet(i_t);
+	    if( instrDel )	xcur->prcInstrDel("dp");
+	}
+	catch( TError err )
+	{ mess_err(nodePath().c_str(),_("Instruction process is error: %s"),err.mess.c_str()); }
+    }
+
+    int dRpt;
+    string dAMess;
+    //> Go to include nodes
+    for( int i_c = 0; i_c < xcur->childSize(); i_c++ )
+    {
+	dRpt = atoi(xcur->childGet(i_c)->attr("docRept").c_str());
+	dAMess = xcur->childGet(i_c)->attr("docAMess");
+	//>> Repeat tags
+	if( dRpt )
+	{
+	    funcV.setI(5,dRpt);
+	    for( time_t rTime = funcV.getI(3); rTime < funcV.getI(1); rTime+=dRpt )
+	    {
+		funcV.setI(4,rTime);
+		*(xcur->childIns(i_c+1)) = *(xcur->childGet(i_c));
+		nodeProcess(xcur->childGet(i_c+1),funcV,funcIO,iLang,true);
+		xcur->childGet(i_c+1)->attrDel("docRept");
+	    }
+	    funcV.setI(4,0); funcV.setI(5,0);
+	}
+	//>> Repeat messages
+	else if( !dAMess.empty() )
+	{
+	    //>>> Messages request from last time and curent time
+	    vector<TMess::SRec> mess;
+	    SYS->archive().at().messGet( funcV.getI(3), funcV.getI(1), mess,
+		TSYS::strSepParse(dAMess,1,':'), (TMess::Type)atoi(TSYS::strSepParse(dAMess,0,':').c_str()) );
+	    for( int i_r = 0; i_r < mess.size(); i_r++ )
+	    {
+		funcV.setI(6,mess[i_r].time);
+		funcV.setI(7,mess[i_r].level);
+		funcV.setS(8,mess[i_r].categ);
+		funcV.setS(9,mess[i_r].mess);
+		*(xcur->childIns(i_c+1)) = *(xcur->childGet(i_c));
+		nodeProcess(xcur->childGet(i_c+1),funcV,funcIO,iLang,true);
+		xcur->childGet(i_c+1)->attrDel("docAMess");
+	    }
+	    funcV.setI(6,0); funcV.setI(7,0); funcV.setS(8,""); funcV.setS(9,"");
+	}
+	else nodeProcess(xcur->childGet(i_c),funcV,funcIO,iLang,instrDel);
+    }
+} 
 
 //************************************************
 //* OrigFunction: User function original widget  *

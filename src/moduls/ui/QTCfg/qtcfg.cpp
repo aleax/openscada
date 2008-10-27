@@ -1036,7 +1036,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 			XMLNode *t_lsel = req.childGet(i_col);
 			XMLNode *t_linf = t_s.childGet("id",t_lsel->attr("id"),true);
 			if(!t_linf) continue;
-			t_linf->childClean();
+			t_linf->childClear();
 			for( int i_rw = 0; i_rw < t_lsel->childSize(); i_rw++ )
 			    *t_linf->childAdd() = *t_lsel->childGet(i_rw);
 		    }
@@ -1888,7 +1888,7 @@ bool ConfApp::upStruct(XMLNode &w_nd, const XMLNode &n_nd)
 		str_ch = true;
 	    if( str_ch && w_nd.name() == "oscada_cntr" )
 	    {
-		w_nd.childGet(i_w)->setAttr_("qview","0");
+		w_nd.childGet(i_w)->setAttr("qview","0");
 		str_ch = false;
 		continue;
 	    }
@@ -1899,7 +1899,7 @@ bool ConfApp::upStruct(XMLNode &w_nd, const XMLNode &n_nd)
 	    str_ch = true;
 
 	//- Check base fields destination change -
-	if( w_nd.childGet(i_w)->name() == "fld" && 
+	if( w_nd.childGet(i_w)->name() == "fld" &&
 	    (w_nd.childGet(i_w)->attr("dest") != n_nd.childGet(i_n)->attr("dest") ||
 	     w_nd.childGet(i_w)->attr("tp") != n_nd.childGet(i_n)->attr("tp") ||
 	     w_nd.childGet(i_w)->attr("dest") != n_nd.childGet(i_n)->attr("dest")) )

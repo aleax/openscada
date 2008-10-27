@@ -33,15 +33,15 @@ TFunction::TFunction( const string &iid ) : m_id(iid), m_tval(NULL), run_st(fals
 
 }
 
-TFunction::~TFunction()
+TFunction::~TFunction( )
 {
     for( int i_io = 0; i_io < m_io.size(); i_io++ )
 	delete m_io[i_io];
 }
 
-TFunction &TFunction::operator=(TFunction &func)
+TFunction &TFunction::operator=( TFunction &func )
 {
-    if(m_id.empty())	m_id = func.id();
+    if( m_id.empty() )	m_id = func.id();
     //- Copy IO -
     //-- Clear no present IO --
     for( int i_io = 0; i_io < ioSize(); )
@@ -60,7 +60,7 @@ TFunction &TFunction::operator=(TFunction &func)
     return *this;
 }
 
-void TFunction::preDisable(int flag)
+void TFunction::preDisable( int flag )
 {
     if( m_tval ) { delete m_tval; m_tval = NULL; }
     if( used.size() )
@@ -72,9 +72,9 @@ void TFunction::preDisable(int flag)
     }
 }
 
-int TFunction::ioSize()
+int TFunction::ioSize( )
 {
-    return m_io.size();
+    return m_io.size( );
 }
 
 IO *TFunction::io( int iid )
@@ -386,7 +386,7 @@ void IO::setDef( const string &val )
 {
     if(m_def==val) return;
     //owner->preIOCfgChange();
-    m_def = val; 
+    m_def = val;
     //owner->postIOCfgChange();
 }
 
@@ -407,7 +407,7 @@ void IO::setRez( const string &val )
 //*************************************************
 //* TValFunc                                      *
 //*************************************************
-TValFunc::TValFunc( const string &iname, TFunction *ifunc, bool iblk ) : 
+TValFunc::TValFunc( const string &iname, TFunction *ifunc, bool iblk ) :
     m_name(iname), m_func(NULL), m_dimens(false), tm_calc(0.0), m_blk(iblk)
 {
     setFunc(ifunc);
@@ -589,12 +589,12 @@ void TValFunc::calc( )
     }
 }
 
-void TValFunc::preIOCfgChange()
+void TValFunc::preIOCfgChange( )
 {
     setFunc( NULL, false );
 }
 
-void TValFunc::postIOCfgChange()
+void TValFunc::postIOCfgChange( )
 {
     setFunc( m_func, false );
 }

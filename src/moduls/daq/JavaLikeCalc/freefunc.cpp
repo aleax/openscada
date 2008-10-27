@@ -72,7 +72,7 @@ void Func::postDisable( int flag )
 
 Lib &Func::owner( )
 {
-    return *((Lib*)nodePrev()); 
+    return *((Lib*)nodePrev());
 }
 
 string Func::name( )

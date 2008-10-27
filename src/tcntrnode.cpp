@@ -124,7 +124,7 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
     {
 	if( err.cat == "warning" )	opt->setAttr("rez","1");
 	else opt->setAttr("rez","2");
-	opt->childClean();
+	opt->childClear();
 	opt->setAttr("mcat",err.cat);
 	opt->setText(err.mess);	
     }

@@ -168,6 +168,30 @@ class OrigProtocol : public PrWidget
 };
 
 //************************************************
+//* OrigDocument: Document view original widget  *
+//************************************************
+class OrigDocument : public PrWidget
+{
+    public:
+	//Methods
+	OrigDocument( );
+
+	string name( );
+	string descr( );
+
+    protected:
+	//Methods
+	void postEnable( int flag );
+	bool attrChange( Attr &cfg, void *prev );
+
+	string makeDoc( const string &tmpl, Widget *wdg );
+	void nodeProcess( XMLNode *xcur, TValFunc &funcV, TFunction &funcIO, const string &iLang, bool instrDel = false );
+
+	//Attributes
+	static char *XHTML_entity;
+};
+
+//************************************************
 //* OrigFunction: User function original widget  *
 //************************************************
 class OrigFunction : public PrWidget

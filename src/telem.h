@@ -50,9 +50,10 @@ class TFld
 	    Selected	= 0x01,		//Connnect to simple elements
 	    SelfFld	= 0x02,		//Create self field
 	    NoWrite	= 0x04,		//No writeable
-	    HexDec	= 0x08,		//Hexodecimal view prefer for decimal value type
-	    OctDec	= 0x10,		//Octal view prefer for decimal value type
-	    FullText	= 0x08		//Full, multiline text for string type
+	    HexDec	= 0x08,		//Decimal value type: hexodecimal view prefer
+	    OctDec	= 0x10,		//Decimal value type: octal view prefer
+	    DateDec	= 0x20,		//Decimal value type: UTC date seconds counter
+	    FullText	= 0x08		//String value type: full, multiline text
 	};
 
 	//Methods

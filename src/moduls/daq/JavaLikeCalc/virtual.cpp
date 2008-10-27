@@ -179,21 +179,25 @@ void TipContr::compileFuncLangs( vector<string> &ls )
 string TipContr::compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text )
 {
     if( lang != "JavaScript" )	throw TError(nodePath().c_str(),_("Compile the program language %s is no support."),lang.c_str());
-    if(!lbPresent("sys_compile"))	lbReg( new Lib("sys_compile","","") );
-    if(!lbAt("sys_compile").at().present(fnc_cfg.id()))
+    if( !lbPresent("sys_compile") )	lbReg( new Lib("sys_compile","","") );
+    if( !lbAt("sys_compile").at().present(fnc_cfg.id()) )
 	lbAt("sys_compile").at().add(fnc_cfg.id().c_str(),"");
+
     AutoHD<Func> func = lbAt("sys_compile").at().at(fnc_cfg.id());
     ((TFunction&)func.at()).operator=(fnc_cfg);
     func.at().setProg(prog_text.c_str());
     try
     {
 	if(func.at().startStat()) func.at().setStart(false);
-	func.at().setStart(true); 
+	func.at().setStart(true);
     }
     catch(TError err)
     {
-	func.free();
-	lbAt("sys_compile").at().del(fnc_cfg.id().c_str());
+	if( !func.at().use() )
+	{
+	    func.free();
+	    lbAt("sys_compile").at().del(fnc_cfg.id().c_str());
+	}
 	throw TError(nodePath().c_str(),_("Compile error: %s\n"),err.mess.c_str());
     }
     return func.at().nodePath();

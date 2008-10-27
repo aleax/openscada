@@ -109,13 +109,11 @@ class ElFigDt : public QObject
     Q_OBJECT
     public:
         //Methods
-        ElFigDt( WdgView *wi ) : en(true), active(true), geomMargin(0), lineWdth(1), lineDecor(0),
-                bordWdth(0), orient(0), w(wi)  { }
+        ElFigDt( WdgView *wi ) : en(true), active(true), geomMargin(0), lineWdth(1), bordWdth(0), orient(0), w(wi)  { }
         //Attributes
         short	en          :1;
         short	active      :1;
         short   geomMargin  :8;
-        short   lineDecor   :4;
         short   bordWdth    :8;
         float   lineWdth;
         QColor  lineClr;

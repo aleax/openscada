@@ -26,24 +26,25 @@
 //*************************************************
 //* XMLNode                                       *
 //*************************************************
-const char *XMLNode::o_name = "XMLNode";
-
 XMLNode &XMLNode::operator=(XMLNode &prm)
 {
     //- Delete self children and atributes -
-    n_attr.clear();
-    v_attr.clear();
-    for( int i_ch = 0; i_ch < m_children.size(); i_ch++ )
-	delete m_children[i_ch];
-    m_children.clear();
+    mAttr.clear();
+    mPrcInstr.clear();
+    for( int i_ch = 0; i_ch < mChildren.size(); i_ch++ )
+	delete mChildren[i_ch];
+    mChildren.clear();
 
-    //- Copy params (name,text and atributes) -
+    //- Copy params (name,text, atributes and instructions) -
     setName( prm.name() );
     setText( prm.text() );
     vector<string> ls;
     prm.attrList(ls);
-    for( int i_atr = 0; i_atr < ls.size(); i_atr++)
-	setAttr(ls[i_atr],prm.attr(ls[i_atr]));
+    for( int i_a = 0; i_a < ls.size(); i_a++)
+	setAttr(ls[i_a],prm.attr(ls[i_a]));
+    prm.prcInstrList(ls);
+    for( int i_p = 0; i_p < ls.size(); i_p++)
+	setPrcInstr(ls[i_p],prm.prcInstr(ls[i_p]));
 
     //- Recursive copy children -
     for( int i_ch = 0; i_ch < prm.childSize(); i_ch++ )
@@ -54,54 +55,57 @@ XMLNode &XMLNode::operator=(XMLNode &prm)
 
 void XMLNode::childAdd( XMLNode * n )
 {
-    if( n )  m_children.push_back( n );
+    if( !n )	return;
+    mChildren.push_back(n);
+    n->mParent = this;
 }
 
 XMLNode* XMLNode::childAdd( const string &name )
 {
     XMLNode *n = new XMLNode( name );
-    childAdd( n );
+    childAdd(n);
 
     return n;
 }
 
 void XMLNode::childDel( const unsigned id )
 {
-    if( id >= childSize() ) throw TError(o_name,"Child %d no present.",id);
-    delete m_children[id];
-    m_children.erase( m_children.begin()+id );
+    if( id >= childSize() ) throw TError("XMLNode","Child %d no present.",id);
+    delete mChildren[id];
+    mChildren.erase( mChildren.begin()+id );
 }
 
-void XMLNode::childClean( const string &name )
+void XMLNode::childClear( const string &name )
 {
-    for( int i_ch = 0; i_ch < m_children.size(); i_ch++ )
-	if( !name.size() || m_children[i_ch]->name() == name )
+    for( int i_ch = 0; i_ch < mChildren.size(); i_ch++ )
+	if( !name.size() || mChildren[i_ch]->name() == name )
 	    childDel(i_ch--);
 }
 
 int XMLNode::childIns( unsigned id, XMLNode * n )
 {
-    if( n )
-    {
-	if( id > childSize() ) id = childSize();
-	m_children.insert( m_children.begin()+id, n );
-	return id;
-    }
+    if( !n )	return -1;
+
+    if( id > childSize() ) id = childSize();
+    mChildren.insert( mChildren.begin()+id, n );
+    n->mParent = this;
+
+    return id;
 }
 
 XMLNode* XMLNode::childIns( unsigned id, const string &name )
 {
     XMLNode *n = new XMLNode( name );
-    childIns( id, n );
+    childIns(id,n);
 
     return n;
 }
 
 XMLNode* XMLNode::childGet( const int index, bool noex ) const
 {
-    if( index < childSize() )	return m_children[index]; 
+    if( index < childSize() )	return mChildren[index]; 
     if( noex )	return NULL;
-    throw TError(o_name,"Child %d no present.",index);
+    throw TError("XMLNode","Child %d no present.",index);
 }
 
 XMLNode* XMLNode::childGet( const string &name, const int numb ) const
@@ -110,7 +114,7 @@ XMLNode* XMLNode::childGet( const string &name, const int numb ) const
 	if( childGet(i_ch)->name() == name && i_n++ == numb ) 
 	    return childGet(i_ch);
 
-    throw TError(o_name,"Child %s:%d no found!",name.c_str(),numb);
+    throw TError("XMLNode","Child %s:%d no found!",name.c_str(),numb);
 }
 
 XMLNode* XMLNode::childGet( const string &attr, const string &val, bool noex ) const
@@ -119,46 +123,87 @@ XMLNode* XMLNode::childGet( const string &attr, const string &val, bool noex ) c
 	if( childGet(i_f)->attr(attr) == val ) return childGet(i_f);
 
     if( noex ) return NULL;
-    throw TError(o_name,"Child with attribut %s=%s no present.",attr.c_str(),val.c_str());
+    throw TError("XMLNode","Child with attribut %s=%s no present.",attr.c_str(),val.c_str());
 }
 
 void XMLNode::attrList( vector<string> & list ) const
 {
     list.clear();
-    for(unsigned i_opt = 0; i_opt < n_attr.size(); i_opt++)
-	list.push_back(n_attr[i_opt]);
+    for( unsigned i_a = 0; i_a < mAttr.size(); i_a++ )
+	list.push_back(mAttr[i_a].first);
+}
+
+void XMLNode::attrDel( const string &name )
+{
+    for( unsigned i_a = 0; i_a < mAttr.size(); i_a++ )
+	if( mAttr[i_a].first == name )
+	{ mAttr.erase(mAttr.begin()+i_a); return; }
 }
 
 void XMLNode::attrClear( )
 {
-    n_attr.clear();
-    v_attr.clear();
+    mAttr.clear();
 }
 
 string XMLNode::attr( const string &name ) const
 {
-    for(unsigned i_opt = 0; i_opt < n_attr.size(); i_opt++)
-	if(n_attr[i_opt] == name) return(v_attr[i_opt]);
+    for( unsigned i_a = 0; i_a < mAttr.size(); i_a++ )
+	if( mAttr[i_a].first == name ) return mAttr[i_a].second;
 
-    return("");
-}
-
-XMLNode* XMLNode::setAttr_( const char *name, const char *val )
-{
-    return setAttr( name, val );
+    return "";
 }
 
 XMLNode* XMLNode::setAttr( const string &name, const string &val )
 {
-    for(unsigned i_opt = 0; i_opt < n_attr.size(); i_opt++)
-	if(n_attr[i_opt] == name)
+    for( unsigned i_a = 0; i_a < mAttr.size(); i_a++ )
+	if( mAttr[i_a].first == name )
 	{
-	    v_attr[i_opt] = val;
+	    mAttr[i_a].second = val;
 	    return this;
 	}
 
-    n_attr.push_back(name);
-    v_attr.push_back(val);
+    mAttr.push_back(pair<string,string>(name,val));
+
+    return this;
+}
+
+void XMLNode::prcInstrList( vector<string> & list ) const
+{
+    list.clear();
+    for( unsigned i_p = 0; i_p < mPrcInstr.size(); i_p++ )
+	list.push_back(mPrcInstr[i_p].first);
+}
+
+void XMLNode::prcInstrDel( const string &target )
+{
+    for( unsigned i_p = 0; i_p < mPrcInstr.size(); i_p++ )
+	if( mPrcInstr[i_p].first == target )
+	{ mPrcInstr.erase(mPrcInstr.begin()+i_p); return; }
+}
+
+void XMLNode::prcInstrClear( )
+{
+    mPrcInstr.clear();
+}
+
+string XMLNode::prcInstr( const string &target ) const
+{
+    for( unsigned i_p = 0; i_p < mPrcInstr.size(); i_p++ )
+	if( mPrcInstr[i_p].first == target ) return mPrcInstr[i_p].second;
+
+    return "";
+}
+
+XMLNode* XMLNode::setPrcInstr( const string &target, const string &val )
+{
+    for( unsigned i_p = 0; i_p < mPrcInstr.size(); i_p++ )
+	if( mPrcInstr[i_p].first == target )
+	{
+	    mPrcInstr[i_p].second = val;
+	    return this;
+	}
+
+    mPrcInstr.push_back(pair<string,string>(target,val));
 
     return this;
 }
@@ -167,12 +212,8 @@ XMLNode* XMLNode::clear()
 {
     attrClear();
     setText("");
-
-    for( unsigned i_ch = 0; i_ch < m_children.size(); i_ch++ )
-	if( m_children[i_ch] ) delete m_children[i_ch];
-
-    m_children.clear();
-    current_node = NULL;
+    prcInstrClear();
+    childClear();
 
     return this;
 }
@@ -181,23 +222,28 @@ string XMLNode::save( unsigned char flg )
 {
     string xml = ((flg&XMLNode::BrOpenPrev)?"\n<":"<") + encode(name());
 
-    for(unsigned i_atr = 0; i_atr < n_attr.size(); i_atr++)
-	xml = xml + " " + encode(n_attr[i_atr]) + "=\"" + Mess->codeConvOut("UTF-8",encode(v_attr[i_atr])) + "\"";
+    for( unsigned i_a = 0; i_a < mAttr.size(); i_a++ )
+	xml = xml + " " + encode(mAttr[i_a].first) + "=\"" + Mess->codeConvOut("UTF-8",encode(mAttr[i_a].second)) + "\"";
 
-    if(!childSize() && !text().size())
+    if( !childSize() && text().empty() && mPrcInstr.empty() )
 	xml+= (flg&(XMLNode::BrOpenPast|XMLNode::BrClosePast))?"/>\n":"/>";
     else
     {
-	xml = xml + ((flg&XMLNode::BrOpenPast)?">\n":">") +
-		    Mess->codeConvOut("UTF-8",encode(text(),true)) +
-		    ((flg&XMLNode::BrTextPast)?"\n":"");
-
-	for( int child_index = 0; child_index < childSize(); child_index++ )
+	xml = xml + ((flg&XMLNode::BrOpenPast)?">\n":">");
+	//- Save text -
+	if( !text().empty() )
+	    xml = xml + Mess->codeConvOut("UTF-8",encode(text(),true)) + (flg&XMLNode::BrTextPast?"\n":"");
+	//- Save process instructions -
+	for( int i_p = 0; i_p < mPrcInstr.size(); i_p++ )
+	    xml = xml + "<?"+mPrcInstr[i_p].first+" "+Mess->codeConvOut("UTF-8",mPrcInstr[i_p].second)+(flg&XMLNode::BrPrcInstrPast?" ?>\n":" ?>");
+	//- Save included childs -
+	for( int i_c = 0; i_c < childSize(); i_c++ )
 	{
-	    XMLNode *child = childGet( child_index );
+	    XMLNode *child = childGet(i_c);
 	    if( child )  xml += child->save(flg);
 	}
-	xml+= string("</") + encode(name()) + ((flg&XMLNode::BrClosePast)?">\n":">");
+	//- Close tag -
+	xml = xml + "</" + encode(name()) + (flg&XMLNode::BrClosePast?">\n":">");
     }
 
     return xml;
@@ -226,62 +272,75 @@ void XMLNode::load( const string &s )
     clear();
 
     XML_Parser p = XML_ParserCreate("UTF-8");
-    if( !p ) throw TError(o_name,"Couldn't allocate memory for parser.");
+    if( !p ) throw TError("XMLNode","Couldn't allocate memory for parser.");
 
     XML_SetElementHandler( p, start_element, end_element );
     XML_SetCharacterDataHandler( p, characters );
+    XML_SetProcessingInstructionHandler( p, instrHandler );
     XML_SetUserData( p, this );
+
+    XMLNode *lstParent = mParent;
+    mParent = NULL;
 
     if( !XML_Parse( p, s.c_str(), s.size(), true ) )
     {
 	XML_ParserFree( p );
-	throw TError(o_name,"Parse error at line %d --- %s. Source string: '%s'",
+	mParent = lstParent;
+	throw TError("XMLNode","Parse error at line %d --- %s. Source string: '%s'",
 	    XML_GetCurrentLineNumber(p), XML_ErrorString(XML_GetErrorCode(p)), ((s.size()>1024)?s.substr(0,1024)+"...":s).c_str());
     }
     XML_ParserFree( p );
+    mParent = lstParent;
 }
 
+//- Parse/load XML attributes -
 void XMLNode::start_element( void *data, const char *el, const char **attr )
 {
+    const char *a_n, *a_v;
     XMLNode *p = (XMLNode*)data;
     XMLNode *n = p;
 
-    if( p->current_node )
+    if( p->mParent )
     {
 	n = new XMLNode();
-	p->current_node->childAdd( n );
+	p->mParent->childAdd( n );
     }
 
     n->setName(el);
-    while(*attr)
+    while( *attr )
     {
-	n->n_attr.push_back(*attr++);
-	n->v_attr.push_back(Mess->codeConvIn("UTF-8",*attr++));
+	a_n = *attr++; a_v = *attr++;
+	n->mAttr.push_back(pair<string,string>(a_n,Mess->codeConvIn("UTF-8",a_v)));
     }
 
     p->node_stack.push_back(n);
-    p->current_node = n;
+    p->mParent = n;
 }
 
 void XMLNode::end_element( void *data, const char *el )
 {
     XMLNode *p = (XMLNode*)data;
-    p->current_node->setText(Mess->codeConvIn("UTF-8",p->current_node->text()));
+    p->mParent->setText(Mess->codeConvIn("UTF-8",p->mParent->text()));
     if( !p->node_stack.empty() ) p->node_stack.pop_back();
-    if( p->node_stack.empty() ) p->current_node = NULL;
-    else p->current_node = p->node_stack[p->node_stack.size()-1];
+    if( p->node_stack.empty() ) p->mParent = NULL;
+    else p->mParent = p->node_stack[p->node_stack.size()-1];
 }
 
 void XMLNode::characters( void *userData, const XML_Char *s, int len )
 {
-    XMLNode *p = (XMLNode*)userData;
+    XMLNode *p = ((XMLNode*)userData)->mParent;
     //if( !len )	return;
-    if( p->current_node->m_text.size() ) p->current_node->m_text.append(s,len);
+    if( p->mText.size() ) p->mText.append(s,len);
     else
 	for(int i_ch = 0; i_ch < len; i_ch++)
 	{
 	    if(s[i_ch] == ' ' || s[i_ch] == '\n' || s[i_ch] == '\t' )	continue;
-	    p->current_node->m_text.assign(s+i_ch,len-i_ch);
+	    p->mText.assign(s+i_ch,len-i_ch);
 	    break;
 	}
+}
+
+void XMLNode::instrHandler( void *userData, const XML_Char *target, const XML_Char *data )
+{
+    ((XMLNode*)userData)->mParent->mPrcInstr.push_back(pair<string,string>(target,Mess->codeConvIn("UTF-8",data)));
 }

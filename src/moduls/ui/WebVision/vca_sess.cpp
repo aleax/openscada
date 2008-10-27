@@ -3282,8 +3282,8 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                 if(lineClr==-1)  lineClr=0;
                 rel_list = true;
                 break;
-            case 22:	//lineDecor
-                lineDecor = atoi(req_el->text().c_str());
+            case 22:	//lineStyle
+                lineStyle = req_el->text();
                 rel_list = true;
                 break;
             case 23:	//bordWdth
@@ -3320,15 +3320,11 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                 elLst = req_el->text();
                 rel_list = true;
                 break;
-            case 29:
-                lineStyle = req_el->text();
-                rel_list = true;
-                break;
             default:
                 if( uiPrmPos >= 30 )
                 {
-                    int pnt  = (uiPrmPos-30)/5;
-                    int patr = (uiPrmPos-30)%5;
+                    int pnt  = (uiPrmPos-30)/6;
+                    int patr = (uiPrmPos-30)%6;
                     double pval  = atof(req_el->text().c_str());
                     Point pnt_ = (pnts)[pnt];
                     if( patr == 0 ) pnt_.x=pval;

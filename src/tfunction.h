@@ -102,6 +102,7 @@ class TFunction : public TCntrNode
 	virtual string name( )		{ return ""; }
 	virtual string descr( )		{ return ""; }
 	bool startStat( )		{ return run_st; }
+	int use( )			{ return used.size(); }
 
 	virtual void setStart( bool val )  { run_st = val; }
 

@@ -158,7 +158,6 @@ class VCAElFigure : public VCAObj
 		height;
 	int	geomMargin,	//Margin
 		lineClr,
-		lineDecor,
 		bordWdth,
 		bordClr,
 		lineWdth,

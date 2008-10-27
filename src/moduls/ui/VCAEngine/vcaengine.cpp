@@ -27,7 +27,6 @@
 #include <tmess.h>
 
 #include "origwidg.h"
-#include "orig_doc.h"
 #include "vcaengine.h"
 
 //*************************************************

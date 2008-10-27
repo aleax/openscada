@@ -1,3 +1,13 @@
+2008-10-28 Roman
+- /XML: Function childClean() renamed to childClear().
+- !!:/XML: XML process instruction support is added. Added function attrDel() and parent().
+- /TElem: Flag TFld::DateDec add for native date storing into DB.
+- /TFunction: Use function counter TFunction::use() is added.
+- FIX:/DAQ/JavaLikeCalc: Deletion used system compile function after new compile error is fixed.
+- !!!:/UI/VCAEngine: Base support of primitive "Document" is added.
+- !:/UI/VCAEngine: Dynamic style of lines is added to primitive ElFigure.
+
+
 2008-10-22 Roman
 - !!!!:/DAQ: DCON protocol support module by Almaz Karimov is included to source tree.
 - /DAQ/DCON: Translation to Russian and Ukrainian is made.

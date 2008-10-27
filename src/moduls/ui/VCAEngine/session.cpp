@@ -993,7 +993,8 @@ void SessWdg::setProcess( bool val )
 			case TFld::Real:    tp = IO::Real;	break;
 			case TFld::String:  tp = IO::String;	break;
 		    }
-		    fio.ioAdd( new IO((iwls[i_w]+"_"+als[i_a]).c_str(),(curw.at().name()+"."+cattr.at().name()).c_str(),tp,IO::Output,"",false,(iwls[i_w]+"/"+als[i_a]).c_str()) );
+		    fio.ioAdd( new IO((iwls[i_w]+"_"+als[i_a]).c_str(),(curw.at().name()+"."+cattr.at().name()).c_str(),tp,IO::Output,"",false,
+					(iwls[i_w]+"/"+als[i_a]).c_str()) );
 		}
 	    }
 	}
