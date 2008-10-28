@@ -32,6 +32,10 @@
 
 using std::map;
 typedef map<int,QPointF> PntMap;
+typedef map<int,float> WidthMap;
+typedef map<int,QColor> ColorMap;
+typedef map<int,string> ImageMap;
+typedef map<int,Qt::PenStyle> StyleMap;
 
 namespace VISION
 {
@@ -44,20 +48,19 @@ class ShapeItem
     public:
 	ShapeItem( )	{ }
 	ShapeItem( const QPainterPath &ipath, const QPainterPath &path_simple, int num_1, int num_2, int num_3, int num_4, int num_5,
-		    const QPointF &ctrlpos_4, const QBrush &brush, const QPen &ipen, const QPen &pen_simple, float iwidth, float bwidth, int itype, double iangle_temp ) : 
-    	    ctrlPos4(ctrlpos_4), n1(num_1), n2(num_2), n3(num_3), n4(num_4), n5(num_5), brush(brush),
-	    pen(ipen), penSimple(pen_simple), width(iwidth), border_width(bwidth), type(itype), path(ipath), pathSimple(path_simple), angle_temp(iangle_temp)
+		    const QPointF &ctrlpos_4, const int &ilineColor, const int &iborderColor, const int &istyle , int iwidth, int bwidth, int itype, double iangle_temp ) : 
+    	    ctrlPos4(ctrlpos_4), n1(num_1), n2(num_2), n3(num_3), n4(num_4), n5(num_5), lineColor(ilineColor),
+	    borderColor(iborderColor), style(istyle), width(iwidth), border_width(bwidth), type(itype), path(ipath), pathSimple(path_simple), angle_temp(iangle_temp)
 	{ };								
 
 	QPainterPath 	path, 
 		        pathSimple;
 	QPointF		ctrlPos4;
         int 		n1, n2, n3, n4, n5;
-	QBrush 		brush;
-	QPen 		pen, 
-			penSimple;
-	float 		width;
-        float           border_width;
+        int             lineColor, borderColor;
+        int             style;
+	int 		width;
+        int             border_width;
 	int 		type;
         double 		angle_temp;
 };
@@ -70,7 +73,7 @@ class inundationItem
     public:
         //Methods
         inundationItem( )	{ }
-        inundationItem( const QPainterPath &ipath, const QBrush &ibrush, QBrush &ibrush_img,
+        inundationItem( const QPainterPath &ipath, const int &ibrush, const int &ibrush_img,
                         const QVector<int> &inumber_shape, const QVector<int> &inumber_point ) : 
                         brush(ibrush), brush_img(ibrush_img), path(ipath), number_shape(inumber_shape),
                        number_point(inumber_point)
@@ -78,10 +81,9 @@ class inundationItem
 
         //Attributes
         QPainterPath   	path; 
-        QBrush         	brush, brush_img;
+        int         	brush, brush_img;
         QVector<int>  	number_shape;
         QVector<int>    number_point;
-        //QString        	img_nm;
 };
 
 
@@ -109,26 +111,23 @@ class ElFigDt : public QObject
     Q_OBJECT
     public:
         //Methods
-        ElFigDt( WdgView *wi ) : en(true), active(true), geomMargin(0), lineWdth(1), bordWdth(0), orient(0), w(wi)  { }
+        ElFigDt( WdgView *wi ) : en(true), active(true), geomMargin(0), orient(0), w(wi)  { }
         //Attributes
         short	en          :1;
         short	active      :1;
         short   geomMargin  :8;
-        short   bordWdth    :8;
-        float   lineWdth;
-        QColor  lineClr;
-        QColor  bordClr;
-        QColor  fillClr;
-        QBrush  fillImg;
         double  orient;
         string  elLst;
-        string  lineStyle;
         QVector<ShapeItem> shapeItems;
         QVector<inundationItem> inundationItems;
         PntMap  shapePnts;
+        WidthMap shapeWidths;
+        ColorMap shapeColors;
+        ImageMap shapeImages;
+        StyleMap shapeStyles;
         WdgView *w;
     private slots:
-        void dynamicPoint();
+        void dynamic();
 };
 
 
@@ -229,7 +228,7 @@ class ShapeElFigure : public WdgShape
         QVector<int> copy_index, index_array_copy, index_array_copy_flag_A;
             
 	int count_Shapes, count_moveItemTo,
-	    index, index_temp, index_del,index_inund,
+	    index, fill_index, index_temp, index_del,index_inund,
 	    rect_num;
 	bool flag_cursor, flag_key, flag_up, flag_down, flag_left, flag_right, 
              flag_ctrl, flag_ctrl_move, flag_m, flag_hold_arc, flag_A, flag_copy, flag_check_pnt_inund;
@@ -242,7 +241,7 @@ class ShapeElFigure : public WdgShape
         bool flag_inund_break;
         bool flag_scale, flag_rotate;
         double t_start, t_end;			
-	QPointF Mouse_pos, offset;	
+	QPointF Mouse_pos, offset, pop_pos;	
         QPoint stPointDashedRect;	
         int current_ss, current_se, current_ee, current_es;
         int count_holds;			

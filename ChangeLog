@@ -1,3 +1,7 @@
+2008-10-28 Maxim
+- !!:/UI/Vision: Dynamization of every parameter of primitive ElFigure support is added.
+
+
 2008-10-28 Roman
 - FIX:/SYS/*: Not safe using of function localtime() replaced by localtime_r().
 - /Archive/FSArch, /Archive/DBArch: Help for specific archivators' address format is added.
