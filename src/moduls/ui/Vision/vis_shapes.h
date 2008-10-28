@@ -36,6 +36,7 @@
 #include <QPicture>
 #include <QTableWidget>
 #include <QScrollArea>
+#include <QTextBrowser>
 
 using std::string;
 using std::deque;
@@ -96,6 +97,7 @@ class ShapeFormEl : public WdgShape
     Q_OBJECT
 
     public:
+	//Methods
 	ShapeFormEl( );
 
 	void init( WdgView *view );
@@ -105,6 +107,7 @@ class ShapeFormEl : public WdgShape
 	bool eventFilter( WdgView *view, QObject *object, QEvent *event );
 
     public slots:
+	//Public slots
 	//-- Edit line events --
 	void lineAccept( );
 	//-- Edit text events --
@@ -148,7 +151,8 @@ class ShapeFormEl : public WdgShape
 		string	cfg;
 		string	color;
 	};
-	//Private methods
+
+	//Methods
 	//Recursively widgets process for disable focusable and events filter set
 	void eventFilterSet( WdgView *view, QWidget *wdg, bool en );
 	void setFocus(WdgView *view, QWidget *wdg, bool en = false, bool devel = false );
@@ -160,6 +164,7 @@ class ShapeFormEl : public WdgShape
 class ShapeText : public WdgShape
 {
     public:
+	//Methods
 	ShapeText( );
 
 	void init( WdgView *view );
@@ -280,6 +285,7 @@ class ShapeDiagram : public WdgShape
 	bool event( WdgView *view, QEvent *event );
 
     private slots:
+	//Private slots
 	void tracing( );	//Trends tracing
 
     private:
@@ -376,6 +382,7 @@ class ShapeProtocol : public WdgShape
     Q_OBJECT
 
     public:
+	//Methods
 	ShapeProtocol( );
 
 	void init( WdgView *view );
@@ -385,6 +392,7 @@ class ShapeProtocol : public WdgShape
 	bool eventFilter( WdgView *view, QObject *object, QEvent *event );
 
     private slots:
+	//Private slots
 	void tracing( );	//Trends tracing
 
     private:
@@ -421,9 +429,43 @@ class ShapeProtocol : public WdgShape
 //************************************************
 class ShapeDocument : public WdgShape
 {
+    Q_OBJECT
+
     public:
+	//Methods
 	ShapeDocument( );
-	//bool event( WdgView *view, QEvent *event );
+
+	void init( WdgView *view );
+	void destroy( WdgView *w );
+	bool attrSet( WdgView *view, int uiPrmPos, const string &val);
+	bool event( WdgView *view, QEvent *event );
+	bool eventFilter( WdgView *view, QObject *object, QEvent *event );
+
+    private slots:
+	//Private slots
+	void tracing( );	//Document tracing
+
+    private:
+	//Data
+	//- Shape node date -
+	class ShpDt
+	{
+	    public:
+		//Methods
+		ShpDt( ) : en(true), active(true), web(NULL) { }
+		//Attributes
+		short	en	:1;
+		short	active	:1;
+		short	view	:4;
+		QTextBrowser	*web;
+		string	style;
+		string	doc;
+	};
+
+	//Methods
+	//Recursively widgets process for disable focusable and events filter set
+	void eventFilterSet( WdgView *view, QWidget *wdg, bool en );
+	void setFocus(WdgView *view, QWidget *wdg, bool en = false, bool devel = false );
 };
 
 //************************************************
@@ -432,6 +474,7 @@ class ShapeDocument : public WdgShape
 class ShapeFunction : public WdgShape
 {
     public:
+	//Methods
 	ShapeFunction( );
 	//bool event( WdgView *view, QEvent *event );
 };
@@ -454,7 +497,7 @@ class ShapeBox : public WdgShape
 	bool event( WdgView *view, QEvent *event );
 
     private:
-	//Attributes
+	//Data
 	//- Shape node date -
 	class ShpDt
 	{
@@ -479,6 +522,7 @@ class ShapeBox : public WdgShape
 class ShapeLink : public WdgShape
 {
     public:
+	//Methods
 	ShapeLink( );
 	//bool event( WdgView *view, QEvent *event );
 };

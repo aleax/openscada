@@ -56,17 +56,18 @@ class tmDate : public TFunction
 	void calc( TValFunc *val )
 	{
 	    time_t tm_t = val->getI(0);
-	    struct tm *tm_tm = localtime(&tm_t);
+	    struct tm tm_tm;
+	    localtime_r(&tm_t,&tm_tm);
 
-	    val->setI(1,tm_tm->tm_sec);
-	    val->setI(2,tm_tm->tm_min);
-	    val->setI(3,tm_tm->tm_hour);
-	    val->setI(4,tm_tm->tm_mday);
-	    val->setI(5,tm_tm->tm_mon);
-	    val->setI(6,1900+tm_tm->tm_year);
-	    val->setI(7,tm_tm->tm_wday);
-	    val->setI(8,tm_tm->tm_yday);
-	    val->setI(9,tm_tm->tm_isdst);
+	    val->setI(1,tm_tm.tm_sec);
+	    val->setI(2,tm_tm.tm_min);
+	    val->setI(3,tm_tm.tm_hour);
+	    val->setI(4,tm_tm.tm_mday);
+	    val->setI(5,tm_tm.tm_mon);
+	    val->setI(6,1900+tm_tm.tm_year);
+	    val->setI(7,tm_tm.tm_wday);
+	    val->setI(8,tm_tm.tm_yday);
+	    val->setI(9,tm_tm.tm_isdst);
 	}
 };
 
@@ -91,24 +92,29 @@ class tmTime : public TFunction
 };
 
 //*************************************************
-//* tmCtime                                       *
+//* tmFStr                                        *
 //*************************************************
-class tmCtime : public TFunction
+class tmFStr : public TFunction
 {
     public:
-	tmCtime( ) : TFunction("tmCtime")
+	tmFStr( ) : TFunction("tmFStr")
 	{
-	    ioAdd( new IO("val",_("Full string date"),IO::String,IO::Return,"") );
+	    ioAdd( new IO("val",_("Date and time string"),IO::String,IO::Return,"") );
 	    ioAdd( new IO("sec",_("Seconds"),IO::Integer,IO::Default,"0") );
+	    ioAdd( new IO("form",_("Date and time format"),IO::String,IO::Default,"%Y-%m-%d %H:%M:%S") );
 	}
 
 	string name( )	{ return _("Time: String time"); }
-	string descr( )	{ return _("Full string time."); }
+	string descr( )	{ return _("Formated string time."); }
 
 	void calc( TValFunc *val )
 	{
 	    time_t tm_t = val->getI(1);
-	    val->setS(0,ctime(&tm_t));
+	    struct tm tm_tm;
+	    localtime_r(&tm_t,&tm_tm);
+	    char buf[1000];
+	    int rez = strftime( buf, sizeof(buf), val->getS(2).c_str(), &tm_tm );
+	    val->setS(0,(rez>0)?string(buf,rez):"");
 	}
 };
 
@@ -121,8 +127,8 @@ class tmStr2Tm : public TFunction
 	tmStr2Tm( ) : TFunction("tmStrPTime")
 	{
 	    ioAdd( new IO("sec",_("Seconds"),IO::Integer,IO::Return,"0") );
-	    ioAdd( new IO("str",_("Date string"),IO::String,IO::Default,"") );
-	    ioAdd( new IO("form",_("Date format"),IO::String,IO::Default,"%Y-%m-%d %H:%M:%S") );
+	    ioAdd( new IO("str",_("Date and time string"),IO::String,IO::Default,"") );
+	    ioAdd( new IO("form",_("Date and time format"),IO::String,IO::Default,"%Y-%m-%d %H:%M:%S") );
 	}
 
 	string name( )	{ return _("Time: String to time"); }

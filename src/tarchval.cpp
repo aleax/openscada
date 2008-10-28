@@ -1195,7 +1195,7 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
 {
     char c_buf[30], c_buf1[30];
     time_t tm_t;
-    struct tm *ttm, ttm1;
+    struct tm ttm, ttm1;
     long long c_tm;
     string rez;
     int hv_border,		//Image border size
@@ -1265,13 +1265,13 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
 
 	//---- Draw full trend's data and time to the trend end position ----
 	tm_t = iend/1000000;
-	ttm = localtime(&tm_t);
-	snprintf(c_buf,sizeof(c_buf),"%d-%02d-%d",ttm->tm_mday,ttm->tm_mon+1,ttm->tm_year+1900);
-	if( ttm->tm_sec == 0 && iend%1000000 == 0 )
-	    snprintf(c_buf1,sizeof(c_buf1),"%d:%02d",ttm->tm_hour,ttm->tm_min);
+	localtime_r(&tm_t,&ttm);
+	snprintf(c_buf,sizeof(c_buf),"%d-%02d-%d",ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900);
+	if( ttm.tm_sec == 0 && iend%1000000 == 0 )
+	    snprintf(c_buf1,sizeof(c_buf1),"%d:%02d",ttm.tm_hour,ttm.tm_min);
 	else if( iend%1000000 == 0 )
-	    snprintf(c_buf1,sizeof(c_buf1),"%d:%02d:%02d",ttm->tm_hour,ttm->tm_min,ttm->tm_sec);
-	else snprintf(c_buf1,sizeof(c_buf1),"%d:%02d:%g",ttm->tm_hour,ttm->tm_min,(float)ttm->tm_sec+(float)(iend%1000000)/1e6);
+	    snprintf(c_buf1,sizeof(c_buf1),"%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec);
+	else snprintf(c_buf1,sizeof(c_buf1),"%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(iend%1000000)/1e6);
 	gdImageString(im,gdFontTiny,h_w_start+h_w_size-gdFontTiny->w*strlen(c_buf),v_w_start+v_w_size+3+gdFontTiny->h,(unsigned char *)c_buf,clr_symb);
 	gdImageString(im,gdFontTiny,h_w_start+h_w_size-gdFontTiny->w*strlen(c_buf1),v_w_start+v_w_size+3,(unsigned char *)c_buf1,clr_symb);
 	int begMarkBrd = -1;
@@ -1288,29 +1288,29 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
 	    if( !(i_h%h_div) && i_h != iend )
 	    {
 		tm_t = i_h/1000000;
-		ttm = localtime(&tm_t);
+		localtime_r(&tm_t,&ttm);
 		int chLev = -1;
 		if( !first_m )
 		{
-		    if( ttm->tm_mon > ttm1.tm_mon || ttm->tm_year > ttm1.tm_year )  chLev = 5;
-		    else if( ttm->tm_mday > ttm1.tm_mday )  chLev = 4;
-		    else if( ttm->tm_hour > ttm1.tm_hour )  chLev = 3;
-		    else if( ttm->tm_min > ttm1.tm_min )    chLev = 2;
-		    else if( ttm->tm_sec > ttm1.tm_sec )    chLev = 1;
+		    if( ttm.tm_mon > ttm1.tm_mon || ttm.tm_year > ttm1.tm_year )  chLev = 5;
+		    else if( ttm.tm_mday > ttm1.tm_mday )  chLev = 4;
+		    else if( ttm.tm_hour > ttm1.tm_hour )  chLev = 3;
+		    else if( ttm.tm_min > ttm1.tm_min )    chLev = 2;
+		    else if( ttm.tm_sec > ttm1.tm_sec )    chLev = 1;
 		    else chLev = 0;
 		}
 		c_buf[0] = c_buf1[0] = 0;
 		if( hvLev == 5 || chLev >= 4 )                                      //Date
-		    (chLev>=5 || chLev==-1) ? snprintf(c_buf,sizeof(c_buf),"%d-%02d-%d",ttm->tm_mday,ttm->tm_mon+1,ttm->tm_year+1900) :
-				snprintf(c_buf,sizeof(c_buf),"%d",ttm->tm_mday);
-		if( (hvLev == 4 || hvLev == 3 || ttm->tm_min) && !ttm->tm_sec )     //Hours and minuts
-		    snprintf(c_buf1,sizeof(c_buf1),"%d:%02d",ttm->tm_hour,ttm->tm_min);
-		else if( (hvLev == 2 || ttm->tm_sec) && !(i_h%1000000) )            //Seconds
-		    (chLev>=2 || chLev==-1) ? snprintf(c_buf1,sizeof(c_buf1),"%d:%02d:%02d",ttm->tm_hour,ttm->tm_min,ttm->tm_sec) :
-				snprintf(c_buf1,sizeof(c_buf1),"%ds",ttm->tm_sec);
+		    (chLev>=5 || chLev==-1) ? snprintf(c_buf,sizeof(c_buf),"%d-%02d-%d",ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900) :
+				snprintf(c_buf,sizeof(c_buf),"%d",ttm.tm_mday);
+		if( (hvLev == 4 || hvLev == 3 || ttm.tm_min) && !ttm.tm_sec )     //Hours and minuts
+		    snprintf(c_buf1,sizeof(c_buf1),"%d:%02d",ttm.tm_hour,ttm.tm_min);
+		else if( (hvLev == 2 || ttm.tm_sec) && !(i_h%1000000) )            //Seconds
+		    (chLev>=2 || chLev==-1) ? snprintf(c_buf1,sizeof(c_buf1),"%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec) :
+				snprintf(c_buf1,sizeof(c_buf1),"%ds",ttm.tm_sec);
 		else if( hvLev <= 1 || i_h%1000000 )                                //Milliseconds
-		    (chLev>=2 || chLev==-1) ? snprintf(c_buf1,sizeof(c_buf1),"%d:%02d:%g",ttm->tm_hour,ttm->tm_min,(float)ttm->tm_sec+(float)(i_h%1000000)/1e6) :
-		    (chLev>=1) ? snprintf(c_buf1,sizeof(c_buf1),"%gs",(float)ttm->tm_sec+(float)(i_h%1000000)/1e6) :
+		    (chLev>=2 || chLev==-1) ? snprintf(c_buf1,sizeof(c_buf1),"%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(i_h%1000000)/1e6) :
+		    (chLev>=1) ? snprintf(c_buf1,sizeof(c_buf1),"%gs",(float)ttm.tm_sec+(float)(i_h%1000000)/1e6) :
 				snprintf(c_buf1,sizeof(c_buf1),"%gms",(double)(i_h%1000000)/1000.);
 		int wdth, tpos, endPosTm = 0, endPosDt = 0;
 		if( c_buf[0] )
@@ -1334,7 +1334,7 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
 		    }
 		}
 		begMarkBrd = vmax(begMarkBrd,vmax(endPosTm,endPosDt));
-		memcpy((char*)&ttm1,(char*)ttm,sizeof(tm));
+		memcpy((char*)&ttm1,(char*)&ttm,sizeof(tm));
 		first_m = false;
 	    }
 	    //---- Next ----
@@ -1840,16 +1840,16 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		    {
 			if(n_prc)	n_prc->childAdd("el")->setText("1");
 			char c_buf[30];
-			struct tm *ttm;
+			struct tm ttm;
 			time_t tm_t = a_el->end()/1000000;
-			ttm = localtime(&tm_t);
+			localtime_r(&tm_t,&ttm);
 			snprintf(c_buf,sizeof(c_buf),"%d-%02d-%d %d:%02d:%02d.%d",
-			    ttm->tm_mday,ttm->tm_mon+1,ttm->tm_year+1900,ttm->tm_hour,ttm->tm_min,ttm->tm_sec,a_el->end()%1000000);
+			    ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900,ttm.tm_hour,ttm.tm_min,ttm.tm_sec,a_el->end()%1000000);
 			if(n_end)	n_end->childAdd("el")->setText(c_buf);
 			tm_t = a_el->begin()/1000000;
-			ttm = localtime(&tm_t);
+			localtime_r(&tm_t,&ttm);
 			snprintf(c_buf,sizeof(c_buf),"%d-%02d-%d %d:%02d:%02d.%d",
-			    ttm->tm_mday,ttm->tm_mon+1,ttm->tm_year+1900,ttm->tm_hour,ttm->tm_min,ttm->tm_sec,a_el->begin()%1000000);
+			    ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900,ttm.tm_hour,ttm.tm_min,ttm.tm_sec,a_el->begin()%1000000);
 			if(n_beg)	n_beg->childAdd("el")->setText(c_buf);
 		    }
 		    else
@@ -1935,7 +1935,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	XMLNode *n_val  = ctrMkNode("list",opt,-1,"/val/val/1","",0440);
 
 	char c_buf[30];
-	struct tm *ttm;
+	struct tm ttm;
 	time_t tm_t;
 	long long c_tm = buf.begin();
 	if(buf.end() && buf.begin())
@@ -1943,9 +1943,9 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    {
 	        string val = buf.getS(&c_tm,true);
 	        tm_t = c_tm/1000000;
-	        ttm = localtime(&tm_t);
+	        localtime_r(&tm_t,&ttm);
 	        snprintf(c_buf,sizeof(c_buf),"%d-%02d-%d %d:%02d:%02d.%d",
-		    ttm->tm_mday,ttm->tm_mon+1,ttm->tm_year+1900,ttm->tm_hour,ttm->tm_min,ttm->tm_sec,c_tm%1000000);
+		    ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900,ttm.tm_hour,ttm.tm_min,ttm.tm_sec,c_tm%1000000);
 		if(n_tm)	n_tm->childAdd("el")->setText(c_buf);
 		if(n_val)	n_val->childAdd("el")->setText(val);
 		c_tm++;

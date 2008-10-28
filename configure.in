@@ -304,7 +304,7 @@ if test ${ModSystem} = true; then
     AC_CHECK_HEADERS([sensors/sensors.h],[],
 	[AC_MSG_ERROR(DAQ/System: Libsensors headers not found. Install or check of libsensors developing package!)])
     AC_CHECK_LIB([sensors],[sensors_init],[AC_MSG_NOTICE(Pass global library using)],
-	[AC_MSG_ERROR(Libsensors library not found. Install or check libsensors library package!)])    
+	[AC_MSG_ERROR(Libsensors library not found. Install or check libsensors library package!)])
 fi
 if test ${ModBlockCalc} = true; then
     AC_MSG_RESULT(Build module: DAQ/BlockCalc)
@@ -372,6 +372,11 @@ if test ${ModSoundCard} = true; then
     AC_MSG_RESULT(Build module: DAQ/SoundCard)
     AC_CONFIG_FILES(src/moduls/daq/SoundCard/Makefile)
     DAQSub_mod="${DAQSub_mod}SoundCard "
+    #--- Modules checkings ---
+    AC_CHECK_HEADERS([alsa/asoundlib.h],[],
+	[AC_MSG_ERROR(DAQ/SoundCard: Some ALSA headers not found. Install or check ALSA developing package!)])
+    AC_CHECK_LIB([asound],[snd_pcm_stream_name],[AC_MSG_NOTICE(Pass global library using)],
+	[AC_MSG_ERROR(ALSA library not found. Install or check ALSA library package!)])
 fi
 #-- UI modules --
 AC_SUBST(UISub_mod)

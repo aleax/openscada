@@ -62,6 +62,12 @@ class MTable : public TTable
 	void fieldPrmSet( TCfg &cfg, const string &last, string &req );
 	int  fieldLen( int len );
 
+	string getVal( TCfg &cfg );
+	void   setVal( TCfg &cfg, const string &vl );
+
+	string UTCtoSQL( time_t val );
+	time_t SQLtoUTC( const string &val );
+
 	//Private attributes
 	vector< vector<string> > tblStrct;
 };

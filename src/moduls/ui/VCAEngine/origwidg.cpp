@@ -815,15 +815,13 @@ void OrigDocument::postEnable( int flag )
 
     if( flag&TCntrNode::NodeConnect )
     {
-	attrAdd( new TFld("backColor",_("Background:color"),TFld::String,Attr::Color,"","","","","20") );
-	attrAdd( new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","","","","21") );
-	attrAdd( new TFld("style",_("CSS"),TFld::String,TFld::FullText,"","","","","22") );
-	attrAdd( new TFld("tmpl",_("Template"),TFld::String,TFld::FullText,"","","","","23") );
-	attrAdd( new TFld("n",_("Archive size"),TFld::Integer,Attr::Active,"","0","0;99","","24") );
-	attrAdd( new TFld("doc",_("Document"),TFld::String,TFld::FullText,"","","","","25") );
-	attrAdd( new TFld("time",_("Time:current"),TFld::Integer,Attr::DataTime|Attr::Active,"","0","","","26") );
-	attrAdd( new TFld("bTime",_("Time:begin"),TFld::Integer,Attr::DataTime,"","0","","","27") );
-	attrAdd( new TFld("trcPer",_("Tracing period (s)"),TFld::Integer,TFld::NoFlag,"","0","0;360","","28") );
+	attrAdd( new TFld("style",_("CSS"),TFld::String,TFld::FullText,"","","","","20") );
+	attrAdd( new TFld("tmpl",_("Template"),TFld::String,TFld::FullText,"","","","","21") );
+	attrAdd( new TFld("n",_("Archive size"),TFld::Integer,Attr::Active,"","0","0;99","","22") );
+	attrAdd( new TFld("doc",_("Document"),TFld::String,TFld::FullText,"","","","","23") );
+	attrAdd( new TFld("time",_("Time:current"),TFld::Integer,Attr::DataTime|Attr::Active,"","0","","","24") );
+	attrAdd( new TFld("bTime",_("Time:begin"),TFld::Integer,Attr::DataTime,"","0","","","25") );
+	attrAdd( new TFld("trcPer",_("Tracing period (s)"),TFld::Integer,TFld::NoFlag,"","0","0;360","","26") );
     }
 }
 
@@ -839,8 +837,8 @@ bool OrigDocument::attrChange( Attr &cfg, void *prev )
 	}
 	else
 	{
-	    cfg.owner()->attrAdd( new TFld("aCur",_("Cursor:archive"),TFld::Integer,Attr::Mutable|Attr::Active,"","0","0;99","","30") );
-	    cfg.owner()->attrAdd( new TFld("vCur",_("Cursor:view"),TFld::Integer,Attr::Mutable|Attr::Active,"","0","0;99","","31") );
+	    cfg.owner()->attrAdd( new TFld("aCur",_("Cursor:archive"),TFld::Integer,Attr::Mutable|Attr::Active,"","0","0;99") );
+	    cfg.owner()->attrAdd( new TFld("vCur",_("Cursor:view"),TFld::Integer,Attr::Mutable|Attr::Active,"","0","0;99") );
 	}
 	string fidp;
 	//- Delete archive document's attributes -
@@ -855,8 +853,7 @@ bool OrigDocument::attrChange( Attr &cfg, void *prev )
 	{
 	    fidp = "doc"+TSYS::int2str(i_p);
 	    if( cfg.owner()->attrPresent(fidp) ) continue;
-	    cfg.owner()->attrAdd( new TFld(fidp.c_str(),(_("Document ")+TSYS::int2str(i_p)).c_str(),TFld::String,
-		TFld::FullText|Attr::Mutable,"","","","",TSYS::int2str(50+i_p).c_str()) );
+	    cfg.owner()->attrAdd( new TFld(fidp.c_str(),(_("Document ")+TSYS::int2str(i_p)).c_str(),TFld::String,TFld::FullText|Attr::Mutable) );
 	}
     }
     if( !dynamic_cast<SessWdg*>(cfg.owner()) )	return Widget::attrChange(cfg,prev);
@@ -940,7 +937,7 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
     if( strcasecmp(xdoc.name().c_str(),"body") == 0 )
     {
 	iLang = xdoc.attr("docProcLang");
-	lstTime = atoi(xdoc.attr("docLstTime").c_str());
+	lstTime = atoi(xdoc.attr("docTime").c_str());
     }
     if( TSYS::strEmpty(iLang) )	iLang = "JavaLikeCalc.JavaScript";
     if( !lstTime )		lstTime = wdg->attrAt("time").at().getI();
@@ -992,6 +989,8 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
 
     //> Node proocess
     nodeProcess( &xdoc, funcV, funcIO, iLang );
+
+    xdoc.setAttr("docTime",TSYS::int2str(funcV.getI(1)));
 
     return xdoc.save(XMLNode::BrAllPast);
 }

@@ -108,7 +108,7 @@ void Lib::postEnable( int flag )
     reg( new messPut() );
     reg( new tmDate() );
     reg( new tmTime() );
-    reg( new tmCtime() );
+    reg( new tmFStr() );
     reg( new tmStr2Tm() );
     reg( new strSize() );
     reg( new strSubstr() );

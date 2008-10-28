@@ -100,24 +100,24 @@ void ModArch::postEnable( int flag )
 	el_arch.fldAdd( new TFld("PRM3",_("Parameter 3"),TFld::String,TFld::NoFlag,"20") );
 
 	//- Message DB archive DB structure -
-	el_mess.fldAdd( new TFld("TM",_("Time (c)"),TFld::Integer,TCfg::Key,"10") );
+	el_mess.fldAdd( new TFld("TM",_("Time (s)"),TFld::Integer,TCfg::Key|TFld::DateTimeDec,"10") );
 	el_mess.fldAdd( new TFld("CATEG",_("Category"),TFld::String,TCfg::Key,"100") );
 	el_mess.fldAdd( new TFld("MESS",_("Message"),TFld::String,TCfg::Key,"255") );
 	el_mess.fldAdd( new TFld("LEV",_("Level"),TFld::Integer,TFld::NoFlag,"1") );
 
 	//- Boolean and integer value DB archive DB structure -
-	el_vl_int.fldAdd( new TFld("TM",_("Time (c)"),TFld::Integer,TCfg::Key,"10") );
-	el_vl_int.fldAdd( new TFld("TMU",_("Time (uc)"),TFld::Integer,TCfg::Key,"10") );
+	el_vl_int.fldAdd( new TFld("TM",_("Time (s)"),TFld::Integer,TCfg::Key|TFld::DateTimeDec,"10") );
+	el_vl_int.fldAdd( new TFld("TMU",_("Time (us)"),TFld::Integer,TCfg::Key,"10") );
 	el_vl_int.fldAdd( new TFld("VAL",_("Value"),TFld::Integer,TFld::NoFlag,"10") );
 
 	//- Real value DB archive DB structure -
-	el_vl_real.fldAdd( new TFld("TM",_("Time (c)"),TFld::Integer,TCfg::Key,"10") );
-	el_vl_real.fldAdd( new TFld("TMU",_("Time (uc)"),TFld::Integer,TCfg::Key,"10") );
+	el_vl_real.fldAdd( new TFld("TM",_("Time (s)"),TFld::Integer,TCfg::Key|TFld::DateTimeDec,"10") );
+	el_vl_real.fldAdd( new TFld("TMU",_("Time (us)"),TFld::Integer,TCfg::Key,"10") );
 	el_vl_real.fldAdd( new TFld("VAL",_("Value"),TFld::Real,TFld::NoFlag,"30.15") );
 
 	//- String value DB archive DB structure -
-	el_vl_str.fldAdd( new TFld("TM",_("Time (c)"),TFld::Integer,TCfg::Key,"10") );
-	el_vl_str.fldAdd( new TFld("TMU",_("Time (uc)"),TFld::Integer,TCfg::Key,"10") );
+	el_vl_str.fldAdd( new TFld("TM",_("Time (s)"),TFld::Integer,TCfg::Key|TFld::DateTimeDec,"10") );
+	el_vl_str.fldAdd( new TFld("TMU",_("Time (us)"),TFld::Integer,TCfg::Key,"10") );
 	el_vl_str.fldAdd( new TFld("VAL",_("Value"),TFld::String,TFld::NoFlag,"255") );
     }
 }

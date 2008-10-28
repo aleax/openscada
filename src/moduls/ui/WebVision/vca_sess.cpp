@@ -3845,7 +3845,7 @@ void VCADiagram::getReq( SSess &ses )
 	if( sclHor&0x3 )
 	{
 	    time_t tm_t;
-	    struct tm *ttm, ttm1;
+	    struct tm ttm, ttm1;
 	    char lab_tm[50], lab_dt[50];
 	    //---- Draw generic grid line ----
 	    gdImageLine(im,tArX,tArY+tArH,tArX+tArW,tArY+tArH,clr_grid);
@@ -3855,13 +3855,13 @@ void VCADiagram::getReq( SSess &ses )
 	    if( sclHor&0x2 )
 	    {
 		tm_t = tPict/1000000;
-		ttm = localtime(&tm_t);
-		snprintf(lab_dt,sizeof(lab_dt),"%d-%02d-%d",ttm->tm_mday,ttm->tm_mon+1,ttm->tm_year+1900);
-		if( ttm->tm_sec == 0 && tPict%1000000 == 0 )
-		    snprintf(lab_tm,sizeof(lab_tm),"%d:%02d",ttm->tm_hour,ttm->tm_min);
+		localtime_r(&tm_t,&ttm);
+		snprintf(lab_dt,sizeof(lab_dt),"%d-%02d-%d",ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900);
+		if( ttm.tm_sec == 0 && tPict%1000000 == 0 )
+		    snprintf(lab_tm,sizeof(lab_tm),"%d:%02d",ttm.tm_hour,ttm.tm_min);
 		else if( tPict%1000000 == 0 )
-		    snprintf(lab_tm,sizeof(lab_tm),"%d:%02d:%02d",ttm->tm_hour,ttm->tm_min,ttm->tm_sec);
-		else snprintf(lab_tm,sizeof(lab_tm),"%d:%02d:%g",ttm->tm_hour,ttm->tm_min,(float)ttm->tm_sec+(float)(tPict%1000000)/1e6);
+		    snprintf(lab_tm,sizeof(lab_tm),"%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec);
+		else snprintf(lab_tm,sizeof(lab_tm),"%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(tPict%1000000)/1e6);
 		gdImageString(im,gdFontTiny,tArX+tArW-gdFontTiny->w*strlen(lab_dt),tArY+tArH+3+gdFontTiny->h,(unsigned char *)lab_dt,clr_mrk);
 		gdImageString(im,gdFontTiny,tArX+tArW-gdFontTiny->w*strlen(lab_tm),tArY+tArH+3,(unsigned char *)lab_tm,clr_mrk);
 		endMarkBrd = vmin(tArX+tArW-gdFontTiny->w*strlen(lab_dt),tArX+tArW-gdFontTiny->w*strlen(lab_tm));
@@ -3879,30 +3879,30 @@ void VCADiagram::getReq( SSess &ses )
 		if( sclHor&0x2 && !(i_h%hDiv) && i_h != tPict )
 		{
 		    tm_t = i_h/1000000;
-		    ttm = localtime(&tm_t);
+		    localtime_r(&tm_t,&ttm);
 		    int chLev = -1;
 		    if( !first_m )
 		    {
-			if( ttm->tm_mon > ttm1.tm_mon || ttm->tm_year > ttm1.tm_year )  chLev = 5;
-			else if( ttm->tm_mday > ttm1.tm_mday )  chLev = 4;
-			else if( ttm->tm_hour > ttm1.tm_hour )  chLev = 3;
-			else if( ttm->tm_min > ttm1.tm_min )    chLev = 2;
-			else if( ttm->tm_sec > ttm1.tm_sec )    chLev = 1;
+			if( ttm.tm_mon > ttm1.tm_mon || ttm.tm_year > ttm1.tm_year )  chLev = 5;
+			else if( ttm.tm_mday > ttm1.tm_mday )  chLev = 4;
+			else if( ttm.tm_hour > ttm1.tm_hour )  chLev = 3;
+			else if( ttm.tm_min > ttm1.tm_min )    chLev = 2;
+			else if( ttm.tm_sec > ttm1.tm_sec )    chLev = 1;
 			else chLev = 0;
 		    }
 		    //Check for data present
 		    lab_dt[0] = lab_tm[0] = 0;
 		    if( hvLev == 5 || chLev >= 4 )					//Date
-			(chLev>=5 || chLev==-1) ? snprintf(lab_dt,sizeof(lab_dt),"%d-%02d-%d",ttm->tm_mday,ttm->tm_mon+1,ttm->tm_year+1900) :
-				     snprintf(lab_dt,sizeof(lab_dt),"%d",ttm->tm_mday);
-		    if( (hvLev == 4 || hvLev == 3 || ttm->tm_min) && !ttm->tm_sec )	//Hours and minuts
-			snprintf(lab_tm,sizeof(lab_tm),"%d:%02d",ttm->tm_hour,ttm->tm_min);
-		    else if( (hvLev == 2 || ttm->tm_sec) && !(i_h%1000000) )		//Seconds
-			(chLev>=2 || chLev==-1) ? snprintf(lab_tm,sizeof(lab_tm),"%d:%02d:%02d",ttm->tm_hour,ttm->tm_min,ttm->tm_sec) :
-				     snprintf(lab_tm,sizeof(lab_tm),"%ds",ttm->tm_sec);
+			(chLev>=5 || chLev==-1) ? snprintf(lab_dt,sizeof(lab_dt),"%d-%02d-%d",ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900) :
+				     snprintf(lab_dt,sizeof(lab_dt),"%d",ttm.tm_mday);
+		    if( (hvLev == 4 || hvLev == 3 || ttm.tm_min) && !ttm.tm_sec )	//Hours and minuts
+			snprintf(lab_tm,sizeof(lab_tm),"%d:%02d",ttm.tm_hour,ttm.tm_min);
+		    else if( (hvLev == 2 || ttm.tm_sec) && !(i_h%1000000) )		//Seconds
+			(chLev>=2 || chLev==-1) ? snprintf(lab_tm,sizeof(lab_tm),"%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec) :
+				     snprintf(lab_tm,sizeof(lab_tm),"%ds",ttm.tm_sec);
 		    else if( hvLev <= 1 || i_h%1000000 )				//Milliseconds
-			(chLev>=2 || chLev==-1) ? snprintf(lab_tm,sizeof(lab_tm),"%d:%02d:%g",ttm->tm_hour,ttm->tm_min,(float)ttm->tm_sec+(float)(i_h%1000000)/1e6) :
-			(chLev>=1) ? snprintf(lab_tm,sizeof(lab_tm),"%gs",(float)ttm->tm_sec+(float)(i_h%1000000)/1e6) :
+			(chLev>=2 || chLev==-1) ? snprintf(lab_tm,sizeof(lab_tm),"%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(i_h%1000000)/1e6) :
+			(chLev>=1) ? snprintf(lab_tm,sizeof(lab_tm),"%gs",(float)ttm.tm_sec+(float)(i_h%1000000)/1e6) :
 				     snprintf(lab_tm,sizeof(lab_tm),"%gms",(double)(i_h%1000000)/1000.);
 		    int wdth, tpos, endPosTm = 0, endPosDt = 0;
 		    if( lab_tm[0] )
@@ -3926,7 +3926,7 @@ void VCADiagram::getReq( SSess &ses )
 			}
 		    }
 		    begMarkBrd = vmax(begMarkBrd,vmax(endPosTm,endPosDt));
-		    memcpy((char*)&ttm1,(char*)ttm,sizeof(tm));
+		    memcpy((char*)&ttm1,(char*)&ttm,sizeof(tm));
 		    first_m = false;
 		}
 		//---- Next ----

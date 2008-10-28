@@ -1433,7 +1433,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	if( sclHor&0x3 )
 	{
 	    time_t tm_t;
-	    struct tm *ttm, ttm1;
+	    struct tm ttm, ttm1;
 	    QString lab_tm, lab_dt;
 	    //---- Draw generic grid line ----
 	    pnt.setPen(grdPen);
@@ -1445,13 +1445,13 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    {
 		pnt.setPen(mrkPen);
 		tm_t = tPict/1000000;
-		ttm = localtime(&tm_t);
-		lab_dt = QString("%1-%2-%3").arg(ttm->tm_mday).arg(ttm->tm_mon+1,2,10,QChar('0')).arg(ttm->tm_year+1900);
-		if( ttm->tm_sec == 0 && tPict%1000000 == 0 )
-		    lab_tm = QString("%1:%2").arg(ttm->tm_hour).arg(ttm->tm_min,2,10,QChar('0'));
+		localtime_r(&tm_t,&ttm);
+		lab_dt = QString("%1-%2-%3").arg(ttm.tm_mday).arg(ttm.tm_mon+1,2,10,QChar('0')).arg(ttm.tm_year+1900);
+		if( ttm.tm_sec == 0 && tPict%1000000 == 0 )
+		    lab_tm = QString("%1:%2").arg(ttm.tm_hour).arg(ttm.tm_min,2,10,QChar('0'));
 		else if( tPict%1000000 == 0 )
-		    lab_tm = QString("%1:%2:%3").arg(ttm->tm_hour).arg(ttm->tm_min,2,10,QChar('0')).arg(ttm->tm_sec,2,10,QChar('0'));
-		else lab_tm = QString("%1:%2:%3").arg(ttm->tm_hour).arg(ttm->tm_min,2,10,QChar('0')).arg((float)ttm->tm_sec+(float)(tPict%1000000)/1e6);
+		    lab_tm = QString("%1:%2:%3").arg(ttm.tm_hour).arg(ttm.tm_min,2,10,QChar('0')).arg(ttm.tm_sec,2,10,QChar('0'));
+		else lab_tm = QString("%1:%2:%3").arg(ttm.tm_hour).arg(ttm.tm_min,2,10,QChar('0')).arg((float)ttm.tm_sec+(float)(tPict%1000000)/1e6);
 		int markBrd = tAr.x()+tAr.width()-pnt.fontMetrics().boundingRect(lab_tm).width();
 		endMarkBrd = vmin(endMarkBrd,markBrd);
 		pnt.drawText(markBrd,tAr.y()+tAr.height()+mrkHeight,lab_tm);
@@ -1472,31 +1472,31 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		if( sclHor&0x2 && !(i_h%hDiv) && i_h != tPict )
 		{
 		    tm_t = i_h/1000000;
-		    ttm = localtime(&tm_t);
+		    localtime_r(&tm_t,&ttm);
 		    int chLev = -1;
 		    if( !first_m )
 		    {
-			if( ttm->tm_mon > ttm1.tm_mon || ttm->tm_year > ttm1.tm_year )	chLev = 5;
-			else if( ttm->tm_mday > ttm1.tm_mday )	chLev = 4;
-			else if( ttm->tm_hour > ttm1.tm_hour )	chLev = 3;
-			else if( ttm->tm_min > ttm1.tm_min )	chLev = 2;
-			else if( ttm->tm_sec > ttm1.tm_sec )	chLev = 1;
+			if( ttm.tm_mon > ttm1.tm_mon || ttm.tm_year > ttm1.tm_year )	chLev = 5;
+			else if( ttm.tm_mday > ttm1.tm_mday )	chLev = 4;
+			else if( ttm.tm_hour > ttm1.tm_hour )	chLev = 3;
+			else if( ttm.tm_min > ttm1.tm_min )	chLev = 2;
+			else if( ttm.tm_sec > ttm1.tm_sec )	chLev = 1;
 			else chLev = 0;
 		    }
 		
 		    //Check for data present
 		    lab_dt.clear(), lab_tm.clear();
 		    if( hvLev == 5 || chLev >= 4 )					//Date
-			lab_dt = (chLev>=5 || chLev==-1) ? QString("%1-%2-%3").arg(ttm->tm_mday).arg(ttm->tm_mon+1,2,10,QChar('0')).arg(ttm->tm_year+1900) :
-							   QString::number(ttm->tm_mday);
-		    if( (hvLev == 4 || hvLev == 3 || ttm->tm_min) && !ttm->tm_sec )	//Hours and minuts
-			lab_tm =  QString("%1:%2").arg(ttm->tm_hour).arg(ttm->tm_min,2,10,QChar('0'));
-		    else if( (hvLev == 2 || ttm->tm_sec) && !(i_h%1000000) )		//Seconds
-			lab_tm = (chLev>=2 || chLev==-1) ? QString("%1:%2:%3").arg(ttm->tm_hour).arg(ttm->tm_min,2,10,QChar('0')).arg(ttm->tm_sec,2,10,QChar('0')) :
-							   QString("%1s").arg(ttm->tm_sec);
+			lab_dt = (chLev>=5 || chLev==-1) ? QString("%1-%2-%3").arg(ttm.tm_mday).arg(ttm.tm_mon+1,2,10,QChar('0')).arg(ttm.tm_year+1900) :
+							   QString::number(ttm.tm_mday);
+		    if( (hvLev == 4 || hvLev == 3 || ttm.tm_min) && !ttm.tm_sec )	//Hours and minuts
+			lab_tm =  QString("%1:%2").arg(ttm.tm_hour).arg(ttm.tm_min,2,10,QChar('0'));
+		    else if( (hvLev == 2 || ttm.tm_sec) && !(i_h%1000000) )		//Seconds
+			lab_tm = (chLev>=2 || chLev==-1) ? QString("%1:%2:%3").arg(ttm.tm_hour).arg(ttm.tm_min,2,10,QChar('0')).arg(ttm.tm_sec,2,10,QChar('0')) :
+							   QString("%1s").arg(ttm.tm_sec);
 		    else if( hvLev <= 1 || i_h%1000000 )				//Milliseconds
-			lab_tm = (chLev>=2 || chLev==-1) ? QString("%1:%2:%3").arg(ttm->tm_hour).arg(ttm->tm_min,2,10,QChar('0')).arg((float)ttm->tm_sec+(float)(i_h%1000000)/1e6) :
-				 (chLev>=1) ? QString("%1s").arg((float)ttm->tm_sec+(float)(i_h%1000000)/1e6) :
+			lab_tm = (chLev>=2 || chLev==-1) ? QString("%1:%2:%3").arg(ttm.tm_hour).arg(ttm.tm_min,2,10,QChar('0')).arg((float)ttm.tm_sec+(float)(i_h%1000000)/1e6) :
+				 (chLev>=1) ? QString("%1s").arg((float)ttm.tm_sec+(float)(i_h%1000000)/1e6) :
 					      QString("%1ms").arg((double)(i_h%1000000)/1000.,0,'g');
 		    int wdth, tpos, endPosTm = 0, endPosDt = 0;
 		    pnt.setPen(mrkPen);
@@ -1521,7 +1521,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 			}
 		    }
 		    begMarkBrd = vmax(begMarkBrd,vmax(endPosTm,endPosDt));
-		    memcpy((char*)&ttm1,(char*)ttm,sizeof(tm));
+		    memcpy((char*)&ttm1,(char*)&ttm,sizeof(tm));
 		    first_m = false;
 		}
 		//---- Next ----
@@ -2369,10 +2369,157 @@ ShapeDocument::ShapeDocument( ) : WdgShape("Document")
 
 }
 
-/*bool ShapeDocument::event( WdgView *view, QEvent *event )
+void ShapeDocument::init( WdgView *w )
 {
+    w->shpData = new ShpDt();
+    ShpDt *shD = (ShpDt*)w->shpData;
 
-}*/
+    QVBoxLayout *lay = new QVBoxLayout(w);
+    shD->web = new QTextBrowser(w);
+
+    eventFilterSet( w, shD->web, true );
+    w->setFocusProxy( shD->web );
+    if( qobject_cast<DevelWdgView*>(w) )
+	setFocus( w, shD->web, false, true );
+
+    lay->addWidget(shD->web);
+}
+
+void ShapeDocument::destroy( WdgView *w )
+{
+    delete (ShpDt*)w->shpData;
+}
+
+bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val )
+{
+    ShpDt *shD = (ShpDt*)w->shpData;
+    DevelWdgView *devW = qobject_cast<DevelWdgView*>(w);
+    RunWdgView   *runW = qobject_cast<RunWdgView*>(w);
+
+    bool relDoc = false;	//Reload configuration
+
+    switch( uiPrmPos )
+    {
+	case -1:	//load
+	    relDoc = true;
+	    break;
+	case 5:		//en
+	    if(!runW)	break;
+	    shD->en = (bool)atoi(val.c_str());
+	    shD->web->setVisible(shD->en);
+	    break;
+	case 6:		//active
+	    if(!runW)	break;
+	    shD->active = (bool)atoi(val.c_str());
+	    setFocus( w, shD->web, shD->active && runW->permCntr() );
+	    shD->web->setEnabled( shD->web && runW->permCntr() );
+	    break;
+	case 12:	//geomMargin
+	    w->layout()->setMargin(atoi(val.c_str()));	break;
+	case 20:	//style
+	    shD->style = val;
+	    relDoc = true;
+	    break;
+	case 21:	//tmpl
+	    if( !shD->doc.empty() )	break;
+	    shD->doc = val;
+	    relDoc = true;
+	    break;
+	case 23:	//doc
+	    if( TSYS::strEmpty(val) )	break;
+	    shD->doc = val;
+	    relDoc = true;
+	    break;
+    }
+    if( relDoc && !w->allAttrLoad() )
+    {
+	shD->web->setHtml(
+	    ("<?xml version='1.0' ?>\n"
+	    "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
+	    "'DTD/xhtml1-transitional.dtd'>\n"
+	    "<html xmlns='http://www.w3.org/1999/xhtml'>\n"
+	    "<head>\n"
+	    "  <meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n"
+	    "  <meta http-equiv='Content-Script-Type' content='text/javascript'/>\n"
+	    "  <style type='text/css'>\n"+shD->style+"</style>\n"
+	    "</head>\n"+
+	    shD->doc+
+	    "</html>").c_str());
+    }
+
+    return true;
+}
+
+bool ShapeDocument::event( WdgView *view, QEvent *event )
+{
+    return false;
+}
+
+bool ShapeDocument::eventFilter( WdgView *w, QObject *object, QEvent *event )
+{
+    if( qobject_cast<DevelWdgView*>(w) )
+    {
+	switch( event->type() )
+	{
+	    case QEvent::Enter:
+	    case QEvent::Leave:		return true;
+	    case QEvent::MouseMove:
+	    case QEvent::MouseButtonPress:
+	    case QEvent::MouseButtonRelease:
+	    case QEvent::ContextMenu:
+		QApplication::sendEvent(w,event);
+		return true;
+	}
+    }
+    else
+	switch( event->type() )
+	{
+	    case QEvent::FocusIn:
+		w->attrSet("focus","1");
+		w->attrSet("event","ws_FocusIn");
+		break;
+	    case QEvent::FocusOut:
+		w->attrSet("focus","0");
+		w->attrSet("event","ws_FocusOut");
+		break;
+	}
+
+    return false;
+}
+
+void ShapeDocument::eventFilterSet( WdgView *view, QWidget *wdg, bool en )
+{
+    if( en )	wdg->installEventFilter(view);
+    else	wdg->removeEventFilter(view);
+    //- Process childs -
+    for( int i_c = 0; i_c < wdg->children().size(); i_c++ )
+	if( qobject_cast<QWidget*>(wdg->children().at(i_c)) )
+	    eventFilterSet(view,(QWidget*)wdg->children().at(i_c),en);
+}
+
+void ShapeDocument::setFocus( WdgView *view, QWidget *wdg, bool en, bool devel )
+{
+    int isFocus = wdg->windowIconText().toInt();
+    //- Set up current widget -
+    if( en )
+    {
+	if( isFocus && !devel )	wdg->setFocusPolicy((Qt::FocusPolicy)isFocus);
+    }
+    else
+    {
+	if( wdg->focusPolicy() != Qt::NoFocus )
+	{
+	    wdg->setWindowIconText(QString::number((int)wdg->focusPolicy()));
+	    wdg->setFocusPolicy(Qt::NoFocus);
+	}
+	if( devel ) wdg->setMouseTracking(true);
+    }
+
+    //- Process childs -
+    for( int i_c = 0; i_c < wdg->children().size(); i_c++ )
+	if( qobject_cast<QWidget*>(wdg->children().at(i_c)) )
+	    setFocus(view,(QWidget*)wdg->children().at(i_c),en,devel);
+}
 
 //************************************************
 //* User function shape widget                   *

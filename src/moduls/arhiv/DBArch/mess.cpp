@@ -204,15 +204,16 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
     {
 	TMArchivator::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/st/tarch",_("Archiving time (msek)"),0444,"root","Archive",1,"tp","real");
-	if( ctrMkNode("area",opt,1,"/bs",_("Additional options"),0444,"root","Archive") )
-	    ctrMkNode("fld",opt,-1,"/bs/sz",cfg("DBArchSize").fld().descr(),0664,"root","Archive",1,"tp","real");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","Archive",4,"tp","str","dest","select","select","/db/list",
+		"help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
+	ctrMkNode("fld",opt,-1,"/prm/cfg/sz",cfg("DBArchSize").fld().descr(),0664,"root","Archive",1,"tp","real");
 	return;
     }
 
     //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/prm/st/tarch" && ctrChkNode(opt) ) 	opt->setText(TSYS::real2str(tm_calc,6));
-    else if( a_path == "/bs/sz" )
+    else if( a_path == "/prm/cfg/sz" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","Archive",SEQ_RD) ) opt->setText(TSYS::real2str( maxSize() ));
 	if( ctrChkNode(opt,"set",0664,"root","Archive",SEQ_WR) ) setMaxSize( atof(opt->text().c_str()) );

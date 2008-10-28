@@ -36,7 +36,7 @@ using namespace DBArch;
 //*************************************************
 //* DBArch::ModVArch - Value archivator           *
 //*************************************************
-ModVArch::ModVArch( const string &iid, const string &idb, TElem *cf_el ) : 
+ModVArch::ModVArch( const string &iid, const string &idb, TElem *cf_el ) :
     TVArchivator(iid,idb,cf_el), m_max_size(cfg("DBArchSize").getRd())
 {
     setAddr("*.*");
@@ -73,7 +73,7 @@ void ModVArch::stop()
 
 TVArchEl *ModVArch::getArchEl( TVArchive &arch )
 {
-    return new ModVArchEl(arch,*this); 
+    return new ModVArchEl(arch,*this);
 }
 
 void ModVArch::cntrCmdProc( XMLNode *opt )
@@ -82,14 +82,15 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TVArchivator::cntrCmdProc(opt);
-	if( ctrMkNode("area",opt,1,"/bs",_("Additional options"),0444,"root","Archive") )
-	    ctrMkNode("fld",opt,-1,"/bs/sz",cfg("DBArchSize").fld().descr(),0664,"root","Archive",1,"tp","real");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","Archive",4,"tp","str","dest","select","select","/db/list",
+	    "help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
+	ctrMkNode("fld",opt,-1,"/prm/cfg/sz",cfg("DBArchSize").fld().descr(),0664,"root","Archive",1,"tp","real");
 	return;
     }
 
     //- Process command to page -
     string a_path = opt->attr("path");
-    if( a_path == "/bs/sz" )
+    if( a_path == "/prm/cfg/sz" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","Archive",SEQ_RD) ) opt->setText(TSYS::real2str( maxSize() ));
 	if( ctrChkNode(opt,"set",0664,"root","Archive",SEQ_WR) ) setMaxSize( atof(opt->text().c_str()) );

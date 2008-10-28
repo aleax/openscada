@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: statfunc.cpp:49 timefnc.h:101 timefnc.h:124
+#: statfunc.cpp:49 timefnc.h:102 timefnc.h:117 timefnc.h:130
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.FLibSYS 0.6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-09 20:06+0300\n"
+"POT-Creation-Date: 2008-10-28 15:24+0200\n"
 "PO-Revision-Date: 2007-10-24 18:37+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -170,7 +170,7 @@ msgstr ""
 
 #: sysfnc.h:87 sysfnc.h:121 sysfnc.h:243 sysfnc.h:278 sysfnc.h:313
 #: sysfnc.h:348 sysfnc.h:383 sysfnc.h:414 sysfnc.h:445 sysfnc.h:476
-#: timefnc.h:42 timefnc.h:81 timefnc.h:102 timefnc.h:123
+#: timefnc.h:42 timefnc.h:82 timefnc.h:103 timefnc.h:129
 msgid "Seconds"
 msgstr "Секунди"
 
@@ -316,8 +316,8 @@ msgstr "Жорстка сітка"
 #: sysfnc.h:220 sysfnc.h:221 sysfnc.h:245 sysfnc.h:280 sysfnc.h:315
 #: sysfnc.h:350 sysfnc.h:553 sysfnc.h:581 sysfnc.h:606 timefnc.h:41
 #: timefnc.h:42 timefnc.h:43 timefnc.h:44 timefnc.h:45 timefnc.h:46
-#: timefnc.h:47 timefnc.h:48 timefnc.h:49 timefnc.h:50 timefnc.h:81
-#: timefnc.h:102 timefnc.h:123
+#: timefnc.h:47 timefnc.h:48 timefnc.h:49 timefnc.h:50 timefnc.h:82
+#: timefnc.h:103 timefnc.h:129
 msgid "0"
 msgstr ""
 
@@ -342,7 +342,7 @@ msgid "varhGetI"
 msgstr ""
 
 #: sysfnc.h:241 sysfnc.h:276 sysfnc.h:311 sysfnc.h:346 sysfnc.h:382
-#: sysfnc.h:413 sysfnc.h:444 sysfnc.h:475 timefnc.h:101
+#: sysfnc.h:413 sysfnc.h:444 sysfnc.h:475 timefnc.h:102
 msgid "val"
 msgstr ""
 
@@ -356,8 +356,8 @@ msgid "Buffer id"
 msgstr "ID буферу"
 
 #: sysfnc.h:243 sysfnc.h:278 sysfnc.h:313 sysfnc.h:348 sysfnc.h:383
-#: sysfnc.h:414 sysfnc.h:445 sysfnc.h:476 timefnc.h:42 timefnc.h:81
-#: timefnc.h:102 timefnc.h:123
+#: sysfnc.h:414 sysfnc.h:445 sysfnc.h:476 timefnc.h:42 timefnc.h:82
+#: timefnc.h:103 timefnc.h:129
 msgid "sec"
 msgstr ""
 
@@ -524,7 +524,7 @@ msgid "Rezult"
 msgstr "Результат"
 
 #: sysfnc.h:531 sysfnc.h:552 sysfnc.h:580 sysfnc.h:605 sysfnc.h:635
-#: timefnc.h:124
+#: timefnc.h:130
 msgid "str"
 msgstr ""
 
@@ -744,58 +744,54 @@ msgstr "Time: Дата"
 msgid "Full date."
 msgstr "Повна дата."
 
-#: timefnc.h:79
+#: timefnc.h:80
 msgid "tmTime"
 msgstr ""
 
-#: timefnc.h:84
+#: timefnc.h:85
 msgid "Time: Time"
 msgstr "Time: Час"
 
-#: timefnc.h:85
+#: timefnc.h:86
 msgid "Full time (since 01.01.1970)."
 msgstr "Повний час (з 01.01.1970)."
 
-#: timefnc.h:99
-msgid "tmCtime"
+#: timefnc.h:100
+msgid "tmFStr"
 msgstr ""
 
-#: timefnc.h:101
-msgid "Full string date"
-msgstr "Строка повної дати"
+#: timefnc.h:102 timefnc.h:130
+msgid "Date and time string"
+msgstr "Строка дати та часу"
 
-#: timefnc.h:105
-msgid "Time: String time"
-msgstr "Time: Строка повного часу."
-
-#: timefnc.h:106
-msgid "Full string time."
-msgstr "Строка повного часу."
-
-#: timefnc.h:121
-msgid "tmStrPTime"
-msgstr ""
-
-#: timefnc.h:124
-msgid "Date string"
-msgstr "Строка дати"
-
-#: timefnc.h:125
+#: timefnc.h:104 timefnc.h:131
 msgid "form"
 msgstr ""
 
-#: timefnc.h:125
-msgid "Date format"
-msgstr "Формат дати"
+#: timefnc.h:104 timefnc.h:131
+msgid "Date and time format"
+msgstr "Формат дати та часу"
 
-#: timefnc.h:125
+#: timefnc.h:104 timefnc.h:131
 msgid "%Y-%m-%d %H:%M:%S"
 msgstr ""
 
-#: timefnc.h:128
+#: timefnc.h:107
+msgid "Time: String time"
+msgstr "Time: Строка повного часу."
+
+#: timefnc.h:108
+msgid "Formated string time."
+msgstr "Форматована строка часу."
+
+#: timefnc.h:127
+msgid "tmStrPTime"
+msgstr ""
+
+#: timefnc.h:134
 msgid "Time: String to time"
 msgstr "Time: Строка у час."
 
-#: timefnc.h:129
+#: timefnc.h:135
 msgid "Convert a string representation of time to a time."
 msgstr "Перетворення строкового представлення часу у абсолютний час."

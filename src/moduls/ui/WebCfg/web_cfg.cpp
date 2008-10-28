@@ -530,11 +530,11 @@ bool TWEB::getVal( SSess &ses, XMLNode &node, string a_path, bool rd )
 		}
 		else if( node.attr("tp") == "time" )
 		{
-		    struct tm *tm_tm;
+		    struct tm tm_tm;
 		    time_t tm_t;
 		    if( dt_req.text().size() ) tm_t = atoi(dt_req.text().c_str());
 		    else                       tm_t = time(NULL);
-		    tm_tm = localtime(&tm_t);
+		    localtime_r(&tm_t,&tm_tm);
 		    if( !wr )
 		    {
 			char *c_tm = ctime( &tm_t );
@@ -545,13 +545,13 @@ bool TWEB::getVal( SSess &ses, XMLNode &node, string a_path, bool rd )
 		    else
 		    {
 			string s_id = node.attr("id");
-			ses.page = ses.page+"<input type='text' name='"+s_id+"_d' value='"+TSYS::int2str(tm_tm->tm_mday)+"' maxlength='2' size='2'/>\n";
-			ses.page = ses.page+"<input type='text' name='"+s_id+"_ms' value='"+TSYS::int2str(tm_tm->tm_mon+1)+"' maxlength='2' size='2'/>\n";
-			ses.page = ses.page+"<input type='text' name='"+s_id+"_y' value='"+TSYS::int2str(tm_tm->tm_year+1900)+"' maxlength='4' size='4'/>\n";
+			ses.page = ses.page+"<input type='text' name='"+s_id+"_d' value='"+TSYS::int2str(tm_tm.tm_mday)+"' maxlength='2' size='2'/>\n";
+			ses.page = ses.page+"<input type='text' name='"+s_id+"_ms' value='"+TSYS::int2str(tm_tm.tm_mon+1)+"' maxlength='2' size='2'/>\n";
+			ses.page = ses.page+"<input type='text' name='"+s_id+"_y' value='"+TSYS::int2str(tm_tm.tm_year+1900)+"' maxlength='4' size='4'/>\n";
 			ses.page = ses.page+ " , ";
-			ses.page = ses.page+"<input type='text' name='"+s_id+"_h' value='"+TSYS::int2str(tm_tm->tm_hour)+"' maxlength='2' size='2'/>\n";
-			ses.page = ses.page+"<input type='text' name='"+s_id+"_m' value='"+TSYS::int2str(tm_tm->tm_min)+"' maxlength='2' size='2'/>\n";
-			ses.page = ses.page+"<input type='text' name='"+s_id+"_s' value='"+TSYS::int2str(tm_tm->tm_sec)+"' maxlength='2' size='2'/>\n";
+			ses.page = ses.page+"<input type='text' name='"+s_id+"_h' value='"+TSYS::int2str(tm_tm.tm_hour)+"' maxlength='2' size='2'/>\n";
+			ses.page = ses.page+"<input type='text' name='"+s_id+"_m' value='"+TSYS::int2str(tm_tm.tm_min)+"' maxlength='2' size='2'/>\n";
+			ses.page = ses.page+"<input type='text' name='"+s_id+"_s' value='"+TSYS::int2str(tm_tm.tm_sec)+"' maxlength='2' size='2'/>\n";
 		    }
 		}
 		else
@@ -1302,9 +1302,7 @@ bool TWEB::valPrepare( SSess &ses, XMLNode &node, string prs_path, bool compare 
     }
     else if( node.attr("tp") == "time" )
     {
-	//time_t c_tm = time(NULL);
 	struct tm tm_tm;
-	//tm_tm = *localtime(&c_tm);
 	string s_id = node.attr("id");
 	tm_tm.tm_isdst = -1;
 	if( (cntEl=ses.cnt.find(s_id+"_d")) != ses.cnt.end() )

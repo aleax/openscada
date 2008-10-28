@@ -1,4 +1,12 @@
 2008-10-28 Roman
+- FIX:/SYS/*: Not safe using of function localtime() replaced by localtime_r().
+- /Archive/FSArch, /Archive/DBArch: Help for specific archivators' address format is added.
+- !!!:/DB/MySQL: Specific date format (flag TFld::DateTimeDec) support is added. Used MySQL field type DATETIME.
+- !!:/Special/FLibSYS: User function tmCtime() replaced by function tmFStr(). tmFStr() allow user's formated date string getting.
+- !!:/UI/Vision: Firs support of primitive "Document" is added.
+
+
+2008-10-27 Roman
 - /XML: Function childClean() renamed to childClear().
 - !!:/XML: XML process instruction support is added. Added function attrDel() and parent().
 - /TElem: Flag TFld::DateDec add for native date storing into DB.
