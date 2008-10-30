@@ -745,7 +745,7 @@ void VCAElFigure::dashDot( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3,
             un_p2 = unrotate( el_p2, el_ang, el_p1.x, el_p1.y );
             gdImageSetThickness( im, (int)el_width );
             double wdt, wdt_1;
-            if( style == 2 )
+            if( style == 1 )
             {
                 if( el_width < 3 )
                 {
@@ -758,7 +758,7 @@ void VCAElFigure::dashDot( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3,
                     wdt_1 = 2*el_width+1;
                 }
             }
-            else if( style == 3 )
+            else if( style == 2 )
             {
                 if( el_width < 3 )
                 {
@@ -809,7 +809,7 @@ void VCAElFigure::dashDot( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3,
                                         el_p3.y - rotate( arc( t_start, arc_a, arc_b ), ang ).y ),
                                  Point( el_p3.x + rotate( arc( t_start+0.00277777777778, arc_a, arc_b ), ang ).x,
                                         el_p3.y - rotate( arc( t_start+0.00277777777778, arc_a, arc_b ), ang ).y ) );
-            if( style == 2 )
+            if( style == 1 )
             {
                 if( el_width < 3 )
                 {
@@ -822,7 +822,7 @@ void VCAElFigure::dashDot( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3,
                     wdt_1 = 2*el_width+1;
                 }
             }
-            else if( style == 3 )
+            else if( style == 2 )
             {
                 if( el_width < 3 )
                 {
@@ -870,12 +870,12 @@ void VCAElFigure::dashDot( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3,
                                        bezier( 0.0, el_p1, el_p3, el_p4, el_p2 ).y ),
                                  Point(bezier( 0.0+delta, el_p1, el_p3, el_p4, el_p2 ).x,
                                        bezier( 0.0+delta, el_p1, el_p3, el_p4, el_p2 ).y ) );
-            if( style == 2 )
+            if( style == 1 )
             {
                 wdt = 4*el_width-1;
                 wdt_1 = 2*el_width;
             }
-            else if( style == 3 )
+            else if( style == 2 )
             {
                 wdt_1 = 2*el_width;
                 wdt = el_width;
@@ -939,7 +939,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                 if( flag_allocate )
                     clr_el = gdImageColorResolve( im, (ui8)(item.lineColor>>16), (ui8)(item.lineColor>>8), (ui8)item.lineColor );
                 else clr_el = item.lineColor;
-                if( item.style != 1 && flag_style )//---- Drawing the dashed or dotted arc with borders' width == 0 ----
+                if( item.style != 0 && flag_style )//---- Drawing the dashed or dotted arc with borders' width == 0 ----
                     dashDot( im, el_p1, el_p2, el_p3, el_p4, el_p5, el_p6, clr_el, item.width, 2, item.style );
                 else//---- Drawing the solid arc with borders' width == 0 ----
                 {
@@ -987,22 +987,22 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                         clr_el = item.borderColor;
                         if( item.flag_brd ) clr_el_line = clr_el;
                     }
-                if( item.border_width < 4 && item.style != 1 && item.flag_brd && flag_style )//---- Drawing the dashed or dotted arc with borders' width < 4 and flag_brd ----
+                if( item.border_width < 4 && item.style != 0 && item.flag_brd && flag_style )//---- Drawing the dashed or dotted arc with borders' width < 4 and flag_brd ----
                 {
                     double wdt, wdt_1;
-                    if( item.style == 2 )
+                    if( item.style == 1 )
                     {
                         wdt = 4*(item.width+2)-1; 
                         wdt_1 = 2*(item.width+2);
                     }
-                    else if( item.style == 3 )
+                    else if( item.style == 2 )
                     {
                         wdt = (item.width+2)-1;
                         wdt_1 = 2*(item.width+2);
                     }
                     dashDotFigureBorders( im, el_p1, el_p2, el_p3, el_p4, el_p5, el_p6,  clr_el, clr_el_line, el_width, el_border_width, 2, wdt, wdt_1, xScale, yScale  );
                 }
-                if( item.border_width < 4 && item.style != 1 && !item.flag_brd && flag_style )//---- Drawing the dashed or dotted arc with borders' width < 4 and !flag_brd ----
+                if( item.border_width < 4 && item.style != 0 && !item.flag_brd && flag_style )//---- Drawing the dashed or dotted arc with borders' width < 4 and !flag_brd ----
                 {
                     Point el_pb1, el_pb2, el_pb3, el_pb4, el_pb5;
                     t_start = item.ctrlPos4.x;
@@ -1053,21 +1053,21 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                                           el_p3.y - rotate( arc( 0, arc_a, arc_b ), ang  ).y );
                     dashDot( im, el_pb1, el_pb2, el_pb3, el_pb4, el_pb5, item.ctrlPos4, clr_el, item.border_width, 2, item.style );
                 }
-                if( item.border_width < 4 && (item.style == 1 || !flag_style) )//---- Drawing the solid arc with borders' width <4 ----
+                if( item.border_width < 4 && (item.style == 0 || !flag_style) )//---- Drawing the solid arc with borders' width <4 ----
                     paintFigureBorders( im, el_p1, el_p2, el_p3, el_p4, el_p5, el_p6, clr_el, clr_el_line, el_width, el_border_width, 2, xScale, yScale  );
                 //---- Drawing the dashed or dotted border of the arc with borders' width >= 4 ----//
-                if( item.border_width > 4 && item.style != 1 && flag_style )
+                if( item.border_width > 4 && item.style != 0 && flag_style )
                 {
                     double el_ang;
                     Point p1, p2, un_p1, un_p2;
                     double wdt, wdt_1, len;
                     int kol, kol_1;
-                    if( item.style == 2 )
+                    if( item.style == 1 )
                     {
                         wdt = 4*item.border_width-1; 
                         wdt_1 = 2*item.border_width;
                     }
-                    else if( item.style == 3 )
+                    else if( item.style == 2 )
                     {
                         wdt = item.border_width-1;
                         wdt_1 = 2*item.border_width;
@@ -1125,7 +1125,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                     dashDotFigureBorders( im, el_pb1, el_pb2, el_pb3, el_pb4, el_pb5, el_pb6,  clr_el, clr_el, el_border_width-2, 1, 2, wdt, wdt_1, xScale, yScale  );
                 }
                 //---- Drawing the solid arc with borders' width >=4 ----
-                if( item.border_width >= 4 && ( item.style == 1 || !flag_style ) )
+                if( item.border_width >= 4 && ( item.style == 0 || !flag_style ) )
                 {
                     if( flag_clr_ln ) el_border_width = el_border_width/2;
                     t_start = el_p6.x;
@@ -1222,7 +1222,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
             t_start = 0;
             t_end = 1;
             //---- Drawing the dashed or dotted bezier curve with borders' width == 0 ----
-            if( item.style != 1 && flag_style )
+            if( item.style != 0 && flag_style )
             {
                 Point el_p1 = scaleRotate( (pnts)[item.n1], xScale, yScale, true, true );
                 Point el_p2 = scaleRotate( (pnts)[item.n2], xScale, yScale, true, true );
@@ -1282,22 +1282,22 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                 clr_el = item.borderColor;
                 if( item.flag_brd ) clr_el_line = clr_el;
             }
-            if( item.border_width < 4 && item.style != 1 && item.flag_brd && flag_style )//---- Drawing the dashed or dotted bezier curve with borders' width < 4 and with flag_brd ----
+            if( item.border_width < 4 && item.style != 0 && item.flag_brd && flag_style )//---- Drawing the dashed or dotted bezier curve with borders' width < 4 and with flag_brd ----
             {
                 double wdt, wdt_1;
-                if( item.style == 2 )
+                if( item.style == 1 )
                 {
                     wdt = 4*(item.width+2)-1; 
                     wdt_1 = 2*(item.width+2);
                 }
-                else if( item.style == 3 )
+                else if( item.style == 2 )
                 {
                     wdt = (item.width+2)-1; 
                     wdt_1 = 2*(item.width+2);
                 }
                 dashDotFigureBorders( im, el_p1, el_p2, el_p3, el_p4, Point(0,0), Point(0,0), clr_el, clr_el_line, el_width, el_border_width, 3, wdt, wdt_1, xScale, yScale  );
             }
-            if( item.border_width < 4 && item.style != 1 && !item.flag_brd && flag_style )//---- Drawing the dashed or dotted bezier curve with borders' width < 4 and without flag_brd ----
+            if( item.border_width < 4 && item.style != 0 && !item.flag_brd && flag_style )//---- Drawing the dashed or dotted bezier curve with borders' width < 4 and without flag_brd ----
             {
                 Point p1 = unrotate( el_p1, el_ang, el_p1.x, el_p1.y );
                 Point p2 = unrotate( el_p2, el_ang, el_p1.x, el_p1.y );
@@ -1335,9 +1335,9 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                                 el_p1.y - rotate( Point( p2.x+el_border_width/2, p2.y-(el_width/2+el_border_width-1) ), el_ang ).y );
                 dashDot( im, el_pb1, el_pb2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, item.border_width, 1, item.style );
             }
-            if( item.border_width < 4 && ( item.style == 1 || !flag_style ) )//----- Drawing the solid bezier curve with borders' width < 4 -----
+            if( item.border_width < 4 && ( item.style == 0 || !flag_style ) )//----- Drawing the solid bezier curve with borders' width < 4 -----
                 paintFigureBorders( im, el_p1, el_p2, el_p3, el_p4, Point(0.0,1.0), Point(0,0), clr_el, clr_el_line, el_width, el_border_width, 3, xScale, yScale  );
-            if( item.border_width >=4 && item.style != 1 && flag_style )//----- Drawing the dashed or dotted bezier curve with borders' width >= 4 -----
+            if( item.border_width >=4 && item.style != 0 && flag_style )//----- Drawing the dashed or dotted bezier curve with borders' width >= 4 -----
             {
                 Point p1 = unrotate( el_p1, el_ang, el_p1.x, el_p1.y );
                 Point p2 = unrotate( el_p2, el_ang, el_p1.x, el_p1.y );
@@ -1353,12 +1353,12 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                 Point el_pb4 = Point( el_p1.x + rotate( Point(p4.x, p4.y+(el_width/2+el_border_width/2)), el_ang ).x,
                                       el_p1.y - rotate( Point( p4.x, p4.y+(el_width/2+el_border_width/2) ), el_ang ).y );
                 double wdt, wdt_1;
-                if( item.style == 2 )
+                if( item.style == 1 )
                 {
                     wdt = 4*item.border_width-1; 
                     wdt_1 = 2*item.border_width;
                 }
-                else if( item.style == 3 )
+                else if( item.style == 2 )
                 {
                     wdt = item.border_width-1; 
                     wdt_1 = 2*item.border_width;
@@ -1387,7 +1387,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                                 el_p1.y - rotate( Point( p2.x+el_border_width/2, p2.y-(el_width/2+el_border_width-1) ), el_ang ).y );
                 dashDotFigureBorders( im, el_pb1, el_pb2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, clr_el, el_border_width-2, 0.5, 1, wdt, 0.0, xScale, yScale  );
             }
-            if( item.border_width >=4 && ( item.style == 1 || !flag_style ) )//----- Drawing the solid bezier curve with borders' width >= 4 -----
+            if( item.border_width >=4 && ( item.style == 0 || !flag_style ) )//----- Drawing the solid bezier curve with borders' width >= 4 -----
             {
                 if( flag_clr_ln ) el_border_width = el_border_width/2;
                 Point p1 = unrotate( el_p1, el_ang, el_p1.x, el_p1.y );
@@ -1441,7 +1441,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                 else clr_el = item.lineColor;
                 gdImageSetThickness( im, item.width );
                 //---- Drawing the dashed line with borders' width == 0 ----
-                if( item.style != 1 && flag_style )
+                if( item.style != 0 && flag_style )
                 {
                     Point el_p1 = Point( scaleRotate( (pnts)[item.n1], xScale, yScale, true, true ) );
                     Point el_p2 = Point( scaleRotate( (pnts)[item.n2], xScale, yScale, true, true ) );
@@ -1470,16 +1470,16 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                 Point el_p2 = scaleRotate( (pnts)[item.n2], xScale, yScale, true, true );
                 double el_border_width = (double)item.border_width/2;
                 double el_width = item.width;
-                if( item.border_width < 4 && item.style != 1 && item.flag_brd && flag_style )//---- Drawing the dashed or dotted line with borders' width == 1(for lines with width > 3) ----
+                if( item.border_width < 4 && item.style != 0 && item.flag_brd && flag_style )//---- Drawing the dashed or dotted line with borders' width == 1(for lines with width > 3) ----
                 {
                     double wdt; 
-                    if( item.style == 2 )
+                    if( item.style == 1 )
                         wdt = 4*(item.width+2)-1;
-                    else if( item.style == 3 )
+                    else if( item.style == 2 )
                         wdt = item.width+1;
                     dashDotFigureBorders( im, el_p1, el_p2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, clr_el_line, el_width, el_border_width, 1, wdt, 0.0, xScale, yScale  );
                 }
-                if( item.border_width < 4 && item.style != 1 && !item.flag_brd  && flag_style)//---- Drawing the dashed or dotted borders of the line (for borders with width < 4) ----
+                if( item.border_width < 4 && item.style != 0 && !item.flag_brd  && flag_style)//---- Drawing the dashed or dotted borders of the line (for borders with width < 4) ----
                 {
                     double el_ang;
                     Point el_p1 = scaleRotate( (pnts)[item.n1], xScale, yScale, true, true );
@@ -1515,9 +1515,9 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                                     el_p1.y - rotate( Point( -el_border_width, - el_width/2 ), el_ang ).y );                    
                     dashDot( im, el_pb1, el_pb2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, item.border_width, 1, item.style );
                 }
-                if(  item.border_width < 4  && ( item.style == 1 || !flag_style ) )//----- Drawing the solid line with borders' width == 1(for lines with width > 3) -----
+                if(  item.border_width < 4  && ( item.style == 0 || !flag_style ) )//----- Drawing the solid line with borders' width == 1(for lines with width > 3) -----
                     paintFigureBorders( im, el_p1, el_p2, Point(0,0), Point(0,0),  Point(0,0), Point(0,0), clr_el, clr_el_line, el_width, el_border_width, 1, xScale, yScale  );
-                if( item.border_width >= 4 && item.style != 1 && flag_style )//---- Drawing the dashed or dotted line with the borders' width >= 4 ----
+                if( item.border_width >= 4 && item.style != 0 && flag_style )//---- Drawing the dashed or dotted line with the borders' width >= 4 ----
                 {
                     double el_ang;
                     if( el_p1.y <= el_p2.y )
@@ -1532,9 +1532,9 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                     p2 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + 2*el_border_width-1, -(el_width/2+el_border_width) ), el_ang ).x,
                                 el_p1.y - rotate( Point( length( el_p2, el_p1) + 2*el_border_width-1, -(el_width/2+el_border_width) ), el_ang ).y );
                     double wdt;
-                    if( item.style == 2 )
+                    if( item.style == 1 )
                         wdt = 4*item.border_width-1;
-                    else if( item.style == 3 )
+                    else if( item.style == 2 )
                         wdt = item.border_width-1;
                     dashDotFigureBorders( im, p1, p2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, clr_el, 2*el_border_width-2, 0.5, 1, wdt, 0.0, xScale, yScale  );
                         
@@ -1556,7 +1556,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                                 el_p1.y - rotate( Point( -el_border_width, - el_width/2 ), el_ang ).y );
                     dashDotFigureBorders( im, p1, p2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, clr_el, 2*el_border_width-2, 0.5, 1, wdt, 0.0, xScale, yScale  );
                 }
-                if( item.border_width >= 4 && ( item.style == 1 || !flag_style ) )//----- Drawing the solid borders of the line -----
+                if( item.border_width >= 4 && ( item.style == 0 || !flag_style ) )//----- Drawing the solid borders of the line -----
                 {
                     double el_ang;
                     if( flag_clr_ln )
@@ -3155,10 +3155,10 @@ void VCAElFigure::getReq( SSess &ses )
     //- Painting all figures -
     //-- Repainting the borders of the line with the color of the line instead their borders' color (for "dashed", "dotted" figures) --
     for( int i = 0; i < shapeItems.size(); i++ )
-        if( shapeItems[i].type == 2 && shapeItems[i].border_width > 0 && shapeItems[i].style != 1 && !shapeItems[i].flag_brd )
+        if( shapeItems[i].type == 2 && shapeItems[i].border_width > 0 && shapeItems[i].style != 0 && !shapeItems[i].flag_brd )
             paintFigure( im, shapeItems[i], xSc, ySc, true, false, true );
     for( int i = 0; i < shapeItems.size(); i++ )
-        if( shapeItems[i].type != 2 && shapeItems[i].border_width > 0 && shapeItems[i].style != 1 && !shapeItems[i].flag_brd )
+        if( shapeItems[i].type != 2 && shapeItems[i].border_width > 0 && shapeItems[i].style != 0 && !shapeItems[i].flag_brd )
             paintFigure( im, shapeItems[i], xSc, ySc, true, false, true );
     int styleDotted[2];
     int clr;
@@ -3412,7 +3412,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                 
                 el_s = TSYS::strSepParse(sel,0,':',&el_off);
                 if( sscanf(el_s.c_str(), "s%d", &w) == 1 ) style  = (styles)[w];
-                else if( atoi(el_s.c_str()) == 1 || atoi(el_s.c_str()) == 2 || atoi(el_s.c_str()) == 3 )
+                else if( el_s.size() && (atoi(el_s.c_str()) == 0 || atoi(el_s.c_str()) == 1 || atoi(el_s.c_str()) == 2) )
                     style = atoi(el_s.c_str());
                 else style = lineStyle;
 
@@ -3531,7 +3531,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                 
                 el_s = TSYS::strSepParse(sel,0,':',&el_off);
                 if( sscanf(el_s.c_str(), "s%d", &w) == 1 ) style  = (styles)[w];
-                else if( atoi(el_s.c_str()) == 1 || atoi(el_s.c_str()) == 2 || atoi(el_s.c_str()) == 3 )
+                else if( el_s.size() && (atoi(el_s.c_str()) == 0 || atoi(el_s.c_str()) == 1 || atoi(el_s.c_str()) == 2) )
                     style = atoi(el_s.c_str());
                 else style = lineStyle;
 
@@ -3692,7 +3692,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                 
                 el_s = TSYS::strSepParse(sel,0,':',&el_off);
                 if( sscanf(el_s.c_str(), "s%d", &w) == 1 ) style  = (styles)[w];
-                else if( atoi(el_s.c_str()) == 1 || atoi(el_s.c_str()) == 2 || atoi(el_s.c_str()) == 3 )
+                else if( el_s.size() && (atoi(el_s.c_str()) == 0 || atoi(el_s.c_str()) == 1 || atoi(el_s.c_str()) == 2) )
                     style = atoi(el_s.c_str());
                 else style = lineStyle;
 

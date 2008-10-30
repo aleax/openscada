@@ -47,8 +47,8 @@ class ShapeItem
 {
     public:
 	ShapeItem( )	{ }
-	ShapeItem( const QPainterPath &ipath, const QPainterPath &path_simple, int num_1, int num_2, int num_3, int num_4, int num_5,
-		    const QPointF &ctrlpos_4, const int &ilineColor, const int &iborderColor, const int &istyle , int iwidth, int bwidth, int itype, double iangle_temp ) : 
+        ShapeItem( const QPainterPath &ipath, const QPainterPath &path_simple, short num_1, short num_2, short num_3, short num_4, short num_5,
+		    const QPointF &ctrlpos_4, const short &ilineColor, const short &iborderColor, const short &istyle , short iwidth, short bwidth, short itype, double iangle_temp ) : 
     	    ctrlPos4(ctrlpos_4), n1(num_1), n2(num_2), n3(num_3), n4(num_4), n5(num_5), lineColor(ilineColor),
 	    borderColor(iborderColor), style(istyle), width(iwidth), border_width(bwidth), type(itype), path(ipath), pathSimple(path_simple), angle_temp(iangle_temp)
 	{ };								
@@ -56,12 +56,12 @@ class ShapeItem
 	QPainterPath 	path, 
 		        pathSimple;
 	QPointF		ctrlPos4;
-        int 		n1, n2, n3, n4, n5;
-        int             lineColor, borderColor;
-        int             style;
-	int 		width;
-        int             border_width;
-	int 		type;
+        short 		n1, n2, n3, n4, n5;
+        short           lineColor, borderColor;
+        short           style;
+	short 		width;
+        short           border_width;
+	short 		type :3;
         double 		angle_temp;
 };
 
@@ -73,7 +73,7 @@ class inundationItem
     public:
         //Methods
         inundationItem( )	{ }
-        inundationItem( const QPainterPath &ipath, const int &ibrush, const int &ibrush_img,
+        inundationItem( const QPainterPath &ipath, const short &ibrush, const short &ibrush_img,
                         const QVector<int> &inumber_shape, const QVector<int> &inumber_point ) : 
                         brush(ibrush), brush_img(ibrush_img), path(ipath), number_shape(inumber_shape),
                        number_point(inumber_point)
@@ -81,7 +81,7 @@ class inundationItem
 
         //Attributes
         QPainterPath   	path; 
-        int         	brush, brush_img;
+        short         	brush, brush_img;
         QVector<int>  	number_shape;
         QVector<int>    number_point;
 };

@@ -1,4 +1,9 @@
 2008-10-30 Maxim
+- FIX:/UI/WebVision, /UI/Vision: Interpretation of the style of the line for primitive ElFigure is synchronized.
+- FIX:/UI/Vision: Mechanism of calculating the angle for the arc while building inundation path is changed.
+
+
+2008-10-30 Maxim
 - !!:/UI/WebVision: Dynamization of every parameter of primitive ElFigure support is added.
 - FIX:/UI/Vision: PopUp menu is fixed for primitive ElFigure.
 

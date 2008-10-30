@@ -117,13 +117,13 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
         case 22:	//lineStyle
             switch(atoi(val.c_str()))
             {
-                case 1:
+                case 0:
                     (*styles)[-5] = Qt::SolidLine;
                     break;
-                case 2:
+                case 1:
                     (*styles)[-5] = Qt::DashLine;
                     break;
-                case 3:
+                case 2:
                     (*styles)[-5] = Qt::DotLine;
                     break;
             }
@@ -187,13 +187,13 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                     case 5:
                         switch(atoi(val.c_str()))
                         {
-                            case 1:
+                            case 0:
                                 (*styles)[pnt] = Qt::SolidLine;
                                 break;
-                            case 2:
+                            case 1:
                                 (*styles)[pnt] = Qt::DashLine;
                                 break;
-                            case 3:
+                            case 2:
                                 (*styles)[pnt] = Qt::DotLine;
                                 break;
                         }
@@ -345,10 +345,10 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 //-- Line style --
                 el_s = TSYS::strSepParse(sel,0,':',&el_off);
                 if( sscanf(el_s.c_str(), "s%d", &w) == 1 ) style  = w;
-                else if( atoi(el_s.c_str()) == 1 || atoi(el_s.c_str()) == 2 || atoi(el_s.c_str()) == 3 )
+                else if( el_s.size() && (atoi(el_s.c_str()) == 0 || atoi(el_s.c_str()) == 1 || atoi(el_s.c_str()) == 2) )
                 {
                     style = s_index;
-                    (*styles)[s_index] = (Qt::PenStyle)atoi(el_s.c_str());
+                    (*styles)[s_index] = (Qt::PenStyle)(atoi(el_s.c_str())+1);
                     s_index -= 1;
                 }
                 else style = -5;
@@ -486,10 +486,10 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 //-- Line style --
                 el_s = TSYS::strSepParse(sel,0,':',&el_off);
                 if( sscanf(el_s.c_str(), "s%d", &w) == 1 ) style  = w;
-                else if( atoi(el_s.c_str()) == 1 || atoi(el_s.c_str()) == 2 || atoi(el_s.c_str()) == 3 )
+                else if( el_s.size() && (atoi(el_s.c_str()) == 0 || atoi(el_s.c_str()) == 1 || atoi(el_s.c_str()) == 2) )
                 {
                     style = s_index;
-                    (*styles)[s_index] = (Qt::PenStyle)atoi(el_s.c_str());
+                    (*styles)[s_index] = (Qt::PenStyle)(atoi(el_s.c_str())+1);
                     s_index -= 1;
                 }
                 else style = -5;
@@ -654,10 +654,10 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 //-- Line style --
                 el_s = TSYS::strSepParse(sel,0,':',&el_off);
                 if( sscanf(el_s.c_str(), "s%d", &w) == 1 ) style  = w;
-                else if( atoi(el_s.c_str()) == 1 || atoi(el_s.c_str()) == 2 || atoi(el_s.c_str()) == 3 )
+                else if( el_s.size() && (atoi(el_s.c_str()) == 0 || atoi(el_s.c_str()) == 1 || atoi(el_s.c_str()) == 2) )
                 {
                     style = s_index;
-                    (*styles)[s_index] = (Qt::PenStyle)atoi(el_s.c_str());
+                    (*styles)[s_index] = (Qt::PenStyle)(atoi(el_s.c_str())+1);
                     s_index -= 1;
                 }
                 else style = -5;
@@ -1250,7 +1250,7 @@ bool ShapeElFigure::shapeSave( WdgView *w )
      //- Write shapes styles to data model -
     for( StyleMap::iterator pi = styles->begin(); pi != styles->end(); pi++ )
         if(pi->first > 0 )
-            w->attrSet( "s"+TSYS::int2str(pi->first), TSYS::int2str( pi->second ) );
+            w->attrSet( "s"+TSYS::int2str(pi->first), TSYS::int2str( pi->second - 1) );
     devW->setSelect(true,false);
 }
 
@@ -5126,7 +5126,7 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
                              TSYS::realRound( scaleRotate( (*pnts)[shapeItems[in_fig_num[0]].n2], view, flag_scale, flag_rotate ).y(), 2, true ) );
                 break;
             case 2:
-                if( (flag_angle_temp &&  view->xScale(true) == 1 && view->yScale(true) == 1) || (flag_scale && !flag_rotate) )
+                if( (flag_angle_temp &&  view->xScale(true) == 1 && view->yScale(true) == 1) )// || (flag_scale && !flag_rotate) )
                 {
                     line2 = QLineF( (*pnts)[shapeItems[in_fig_num[0]].n3].x(),
                                     (*pnts)[shapeItems[in_fig_num[0]].n3].y(),
@@ -5189,7 +5189,7 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
                              TSYS::realRound( scaleRotate( (*pnts)[shapeItems[in_fig_num[0]].n1], view, flag_scale, flag_rotate ).y(), 2, true ) );
                 break;
             case 2:
-                if( (flag_angle_temp &&  view->xScale(true) == 1 && view->yScale(true) == 1) || ( flag_scale && !flag_rotate ) )
+                if( (flag_angle_temp &&  view->xScale(true) == 1 && view->yScale(true) == 1) )//|| ( flag_scale && !flag_rotate ) )
                 {
                     line2 = QLineF( (*pnts)[shapeItems[in_fig_num[0]].n3].x(),
                                     (*pnts)[shapeItems[in_fig_num[0]].n3].y(),
@@ -5299,7 +5299,7 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
                                      TSYS::realRound( scaleRotate( (*pnts)[shapeItems[in_index].n2], view, flag_scale, flag_rotate ).y(), 2, true ) );
                         break;
                     case 2:
-                        if( (flag_angle_temp &&  view->xScale(true) == 1 && view->yScale(true) == 1) || ( flag_scale && !flag_rotate ) )
+                        if( (flag_angle_temp &&  view->xScale(true) == 1 && view->yScale(true) == 1) )// || ( flag_scale && !flag_rotate ) )
                         {
                             line2 = QLineF( (*pnts)[shapeItems[in_index].n3].x(),
                                             (*pnts)[shapeItems[in_index].n3].y(),
@@ -5359,7 +5359,7 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
                                      TSYS::realRound( scaleRotate( (*pnts)[shapeItems[in_index].n1], view, flag_scale, flag_rotate ).y(), 2, true ) );
                         break;
                     case 2:
-                        if( (flag_angle_temp &&  view->xScale(true) == 1 && view->yScale(true) == 1) || ( flag_scale && !flag_rotate ) )
+                        if( (flag_angle_temp &&  view->xScale(true) == 1 && view->yScale(true) == 1) )// || ( flag_scale && !flag_rotate ) )
                         {
                             line2 = QLineF( (*pnts)[shapeItems[in_index].n3].x(),
                                             (*pnts)[shapeItems[in_index].n3].y(),
