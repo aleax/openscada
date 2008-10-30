@@ -45,6 +45,11 @@ class Point
 };
 
 typedef map<int,Point> PntMap;
+typedef map<int,int> WidthMap;
+typedef map<int,int> ColorMap;
+typedef map<int,string> ImageMap;
+typedef map<int,int> StyleMap;
+
 
 using std::string;
 using std::vector;
@@ -136,7 +141,6 @@ class VCAElFigure : public VCAObj
 
 	bool lineIntersect( double x1, double y1, double x2, double y2,
 			    double x3, double y3, double x4, double y4 );
-	//Point line_intersect_point( Point pt1, Point pt2, Point pt3, Point pt4 );
 	double angle( const Point p1, const Point p2, const Point p3, const Point p4 );
 	double length( const Point pt1, const Point pt2 );
 	Point arc( double t, double a, double b );
@@ -161,14 +165,20 @@ class VCAElFigure : public VCAObj
 		bordWdth,
 		bordClr,
 		lineWdth,
-		fillClr;
-	string	elLst, lineStyle;
+		fillClr,
+                lineStyle;
+	string	elLst;
 	double	orient;
 	bool	active,		//Active diagram
 		rel_list;
         gdImagePtr im;
 
 	PntMap pnts;
+        WidthMap widths;
+        ColorMap colors;
+        ImageMap images;
+        StyleMap styles;
+
 	vector<ShapeItem> shapeItems;
 	vector<InundationItem> inundationItems;
 

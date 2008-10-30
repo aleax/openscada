@@ -140,7 +140,7 @@ void OrigElFigure::postEnable( int flag )
     {
 	attrAdd( new TFld("lineWdth",_("Line:width"),TFld::Integer,TFld::NoFlag,"","1","0;99","","20") );
 	attrAdd( new TFld("lineClr",_("Line:color"),TFld::String,Attr::Color,"","#000000","","","21") );
-	attrAdd( new TFld("lineStyle",_("Line:style"),TFld::Integer,TFld::Selected,"","1","0;1;2;3",_("Hide;Solid;Dashed;Dotted"),"22") );
+	attrAdd( new TFld("lineStyle",_("Line:style"),TFld::Integer,TFld::Selected,"","1","1;2;3",_("Solid;Dashed;Dotted"),"22") );
 	attrAdd( new TFld("bordWdth",_("Border:width"),TFld::Integer,TFld::NoFlag,"","0","0;99","","23") );
 	attrAdd( new TFld("bordClr",_("Border:color"),TFld::String,Attr::Color,"","#000000","","","24") );
 	attrAdd( new TFld("fillColor",_("Fill:color"),TFld::String,Attr::Color,"","","","","25") );
@@ -219,7 +219,7 @@ bool OrigElFigure::attrChange( Attr &cfg, void *prev )
 	for( map<int,char>::iterator it = lstls.begin(); it != lstls.end(); it++ )
 	    if( it->first && lstls_prev.find(it->first) == lstls_prev.end() && !cfg.owner()->attrPresent("s"+TSYS::int2str(it->first)) )
 		cfg.owner()->attrAdd( new TFld(("s"+TSYS::int2str(it->first)).c_str(),(_("Style ")+TSYS::int2str(it->first)).c_str(),
-		    TFld::Integer,Attr::Mutable|TFld::Selected,"","1","0;1;2;3",_("Hide;Solid;Dashed;Dotted"),TSYS::int2str(30+it->first*6+5).c_str()) );
+		    TFld::Integer,Attr::Mutable|TFld::Selected,"","1","1;2;3",_("Solid;Dashed;Dotted"),TSYS::int2str(30+it->first*6+5).c_str()) );
 
 	//- Delete no dynamic items -
 	//-- Delete dynamic points --

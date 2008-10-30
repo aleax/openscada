@@ -117,9 +117,6 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
         case 22:	//lineStyle
             switch(atoi(val.c_str()))
             {
-                case 0:
-                    (*styles)[-5] = Qt::NoPen;
-                    break;
                 case 1:
                     (*styles)[-5] = Qt::SolidLine;
                     break;
@@ -190,9 +187,6 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                     case 5:
                         switch(atoi(val.c_str()))
                         {
-                            case 0:
-                                (*styles)[pnt] = Qt::NoPen;
-                                break;
                             case 1:
                                 (*styles)[pnt] = Qt::SolidLine;
                                 break;
@@ -351,7 +345,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 //-- Line style --
                 el_s = TSYS::strSepParse(sel,0,':',&el_off);
                 if( sscanf(el_s.c_str(), "s%d", &w) == 1 ) style  = w;
-                else if( !el_s.empty() )
+                else if( atoi(el_s.c_str()) == 1 || atoi(el_s.c_str()) == 2 || atoi(el_s.c_str()) == 3 )
                 {
                     style = s_index;
                     (*styles)[s_index] = (Qt::PenStyle)atoi(el_s.c_str());
@@ -492,7 +486,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 //-- Line style --
                 el_s = TSYS::strSepParse(sel,0,':',&el_off);
                 if( sscanf(el_s.c_str(), "s%d", &w) == 1 ) style  = w;
-                else if( !el_s.empty() )
+                else if( atoi(el_s.c_str()) == 1 || atoi(el_s.c_str()) == 2 || atoi(el_s.c_str()) == 3 )
                 {
                     style = s_index;
                     (*styles)[s_index] = (Qt::PenStyle)atoi(el_s.c_str());
@@ -566,7 +560,6 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                             if( fabs(TSYS::realRound(x_s,2) -  TSYS::realRound(pi->second.x(),2)) < 0.01 &&
                                 fabs(TSYS::realRound(y_s,2) -  TSYS::realRound(pi->second.y(),2)) < 0.01 )  
                             {
-                                //if( pi.key() >= p[0] )
                                 p[0] = pi->first;
                                 fl = true;
                                 break;
@@ -661,7 +654,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 //-- Line style --
                 el_s = TSYS::strSepParse(sel,0,':',&el_off);
                 if( sscanf(el_s.c_str(), "s%d", &w) == 1 ) style  = w;
-                else if( !el_s.empty() )
+                else if( atoi(el_s.c_str()) == 1 || atoi(el_s.c_str()) == 2 || atoi(el_s.c_str()) == 3 )
                 {
                     style = s_index;
                     (*styles)[s_index] = (Qt::PenStyle)atoi(el_s.c_str());
@@ -1375,50 +1368,77 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
         }
         else if( index != -1 && !actDyn && rect_num == -1 )
         {
-            QAction *actDynamicWidth = new QAction( _("Make line width dynamic"), this );
-            actDynamicWidth->setObjectName("width");
-            connect( actDynamicWidth, SIGNAL(activated()), elFD, SLOT(dynamic()) ); 
-            menu.addAction(actDynamicWidth);
-            
-            QAction *actDynamicColor = new QAction( _("Make line color dynamic"), this );
-            actDynamicColor->setObjectName("color");
-            connect( actDynamicColor, SIGNAL(activated()), elFD, SLOT(dynamic()) ); 
-            menu.addAction(actDynamicColor);
+            bool fl = false;
+            if( shapeItems[index].width < 0 )
+            {
+                fl = true;
+                QAction *actDynamicWidth = new QAction( _("Make line width dynamic"), this );
+                actDynamicWidth->setObjectName("width");
+                connect( actDynamicWidth, SIGNAL(activated()), elFD, SLOT(dynamic()) ); 
+                menu.addAction(actDynamicWidth);
+            }
+            if( shapeItems[index].lineColor < 0 )
+            {
+                fl = true;
+                QAction *actDynamicColor = new QAction( _("Make line color dynamic"), this );
+                actDynamicColor->setObjectName("color");
+                connect( actDynamicColor, SIGNAL(activated()), elFD, SLOT(dynamic()) ); 
+                menu.addAction(actDynamicColor);
+            }
             if( (*widths)[shapeItems[index].border_width] > 0.01 )
             {
-                QAction *actDynamicBorderWidth = new QAction( _("Make border width dynamic"), this );
-                actDynamicBorderWidth->setObjectName("border_width");
-                connect( actDynamicBorderWidth, SIGNAL(activated()), elFD, SLOT(dynamic()) ); 
-                menu.addAction(actDynamicBorderWidth);
-
-                QAction *actDynamicBorderColor = new QAction( _("Make border color dynamic"), this );
-                actDynamicBorderColor->setObjectName("border_color");
-                connect( actDynamicBorderColor, SIGNAL(activated()), elFD, SLOT(dynamic()) ); 
-                menu.addAction(actDynamicBorderColor);
+                if( shapeItems[index].border_width < 0 )
+                {
+                    fl = true;
+                    QAction *actDynamicBorderWidth = new QAction( _("Make border width dynamic"), this );
+                    actDynamicBorderWidth->setObjectName("border_width");
+                    connect( actDynamicBorderWidth, SIGNAL(activated()), elFD, SLOT(dynamic()) ); 
+                    menu.addAction(actDynamicBorderWidth);
+                }
+                if( shapeItems[index].borderColor < 0 )
+                {
+                    fl = true;
+                    QAction *actDynamicBorderColor = new QAction( _("Make border color dynamic"), this );
+                    actDynamicBorderColor->setObjectName("border_color");
+                    connect( actDynamicBorderColor, SIGNAL(activated()), elFD, SLOT(dynamic()) ); 
+                    menu.addAction(actDynamicBorderColor);
+                }
             }
-            QAction *actDynamicStyle = new QAction( _("Make line style dynamic"), this );
-            actDynamicStyle->setObjectName("style");
-            connect( actDynamicStyle, SIGNAL(activated()), elFD, SLOT(dynamic()) ); 
-            menu.addAction(actDynamicStyle);
+            if( shapeItems[index].style < 0 )
+            {
+                fl = true;
+                QAction *actDynamicStyle = new QAction( _("Make line style dynamic"), this );
+                actDynamicStyle->setObjectName("style");
+                connect( actDynamicStyle, SIGNAL(activated()), elFD, SLOT(dynamic()) ); 
+                menu.addAction(actDynamicStyle);
+            }
             
-            menu.addSeparator();
+            if( fl ) menu.addSeparator();
         }
         else if( index == -1 && (int)pop_pos.x() != -1 && (int)pop_pos.y() != -1 )
             for( int i=0; i < inundationItems.size(); i++ )
                 if( inundationItems[i].path.contains(pop_pos) )
                 {
-                    fill_index = i;
-                    QAction *actDynamicFillColor = new QAction( _("Make fill color dynamic"), this );
-                    actDynamicFillColor->setObjectName("fill_color");
-                    connect( actDynamicFillColor, SIGNAL(activated()), elFD, SLOT(dynamic()) ); 
-                    menu.addAction(actDynamicFillColor);
-                    
-                    QAction *actDynamicFillImage = new QAction( _("Make fill image dynamic"), this );
-                    actDynamicFillImage->setObjectName("fill_image");
-                    connect( actDynamicFillImage, SIGNAL(activated()), elFD, SLOT(dynamic()) ); 
-                    menu.addAction(actDynamicFillImage);
-                    
-                    menu.addSeparator();
+                    bool fl = false;
+                    if( inundationItems[i].brush < 0 )
+                    {
+                        fl = true;
+                        fill_index = i;
+                        QAction *actDynamicFillColor = new QAction( _("Make fill color dynamic"), this );
+                        actDynamicFillColor->setObjectName("fill_color");
+                        connect( actDynamicFillColor, SIGNAL(activated()), elFD, SLOT(dynamic()) ); 
+                        menu.addAction(actDynamicFillColor);
+                    }
+                    if( inundationItems[i].brush_img < 0 )
+                    {
+                        fl = true;
+                        fill_index = i;
+                        QAction *actDynamicFillImage = new QAction( _("Make fill image dynamic"), this );
+                        actDynamicFillImage->setObjectName("fill_image");
+                        connect( actDynamicFillImage, SIGNAL(activated()), elFD, SLOT(dynamic()) ); 
+                        menu.addAction(actDynamicFillImage);
+                    }
+                    if( fl ) menu.addSeparator();
                     break;
                 }
         pop_pos = QPointF(-1,-1);
@@ -1811,7 +1831,6 @@ void ElFigDt::dynamic( )
     else if(sender()->objectName() == "fill_image") num =7;
     tmp = -5;
     real = -5;
-    //if( num = 0 )
     switch( num )
     {
         case 0:

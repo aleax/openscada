@@ -1,3 +1,8 @@
+2008-10-30 Maxim
+- !!:/UI/WebVision: Dynamization of every parameter of primitive ElFigure support is added.
+- FIX:/UI/Vision: PopUp menu is fixed for primitive ElFigure.
+
+
 2008-10-28 Maxim
 - !!:/UI/Vision: Dynamization of every parameter of primitive ElFigure support is added.
 
