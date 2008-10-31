@@ -109,7 +109,7 @@ void ResAlloc::request( bool write, long tm )
 {
     if( m_wr&0x01 ) release();
     m_wr |= 0x01;
-    if( write ) 
+    if( write )
     {
 	m_wr |= 0x02;
 	m_id.resRequestW(tm);

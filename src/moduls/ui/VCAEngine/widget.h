@@ -133,7 +133,7 @@ class Widget : public TCntrNode, public TValElem
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	string id( )			{ return m_id; }	//Identifier
+	string id( )			{ return mId; }		//Identifier
 	virtual string path( );					//Curent widget path
 	virtual string name( );					//Name
 	virtual string descr( );				//Description
@@ -142,7 +142,7 @@ class Widget : public TCntrNode, public TValElem
 	virtual string owner( )		{ return "root"; }	//Widget owner
 	virtual string grp( )		{ return "UI"; }	//Widget group
 	virtual short  permit( )	{ return 0644; }	//Permition for access to widget
-	virtual string calcId( )	{ return m_id; }	//Compile function identifier
+	virtual string calcId( );				//Compile function identifier
 	virtual string calcLang( )	{ return ""; }		//Calc procedure language
 	virtual string calcProg( )	{ return ""; }		//Calc procedure
 	virtual int    calcPer( )	{ return -1; }		//Calc widget period. 0 value talk for calc on session period.
@@ -168,14 +168,14 @@ class Widget : public TCntrNode, public TValElem
 	virtual void setEnable( bool val );
 
 	//- Inheritance methods -
-	virtual string parentNm( )	{ return m_parent_nm; }	//Parent widget name
+	virtual string parentNm( )	{ return mParentNm; }	//Parent widget name
 	virtual string rootId( );				//Root widget id
 	AutoHD<Widget> parent( );				//Parent widget
 	AutoHD<Widget> parentNoLink( );				//Parent no link widget
 	void heritReg( Widget *wdg );				//Register heritator
 	void heritUnreg( Widget *wdg );				//Unregister heritator
 	vector< AutoHD<Widget> > &herit( )		{ return m_herit; }
-	virtual void setParentNm( const string &isw )	{ m_parent_nm = isw; }
+	virtual void setParentNm( const string &isw )	{ mParentNm = isw; }
 	virtual void inheritAttr( const string &attr = "" );	//Inherit parent attributes
 	void inheritIncl( const string &wdg = "" );		//Inherit parent include widgets
 
@@ -199,7 +199,7 @@ class Widget : public TCntrNode, public TValElem
 
     protected:
 	//Methods
-	string nodeName()	{ return m_id; }
+	string nodeName()	{ return mId; }
 
 	void postEnable( int flag );
 	void preDisable( int flag );
@@ -219,14 +219,14 @@ class Widget : public TCntrNode, public TValElem
 
 	//Attributes
 	//- Generic data -
-	string	m_id;			//Widget identifier
+	string	mId;			//Widget identifier
 
-	char	m_enable	:1;	//Enable status
-	char	m_lnk		:1;	//Widget as link
-	char	attrId		:3;	//The widget's container id
-	char	inclWdg		:3;
-	string	m_parent_nm;		//Parent widget name
-	AutoHD<Widget>	m_parent;	//Parent widget
+	char	mEnable	:1;		//Enable status
+	char	m_lnk	:1;		//Widget as link
+	char	attrId	:3;		//The widget's container id
+	char	inclWdg	:3;
+	string	mParentNm;		//Parent widget name
+	AutoHD<Widget>	mParent;	//Parent widget
 	vector< AutoHD<Widget> > m_herit;	//Heritators
 
 	//- Attributes data -

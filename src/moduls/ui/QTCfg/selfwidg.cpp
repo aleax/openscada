@@ -189,6 +189,7 @@ void LineEdit::changed( )
 
 void LineEdit::setValue(const QString &txt)
 {
+    if( ed_fld ) ed_fld->blockSignals(true);
     switch(type())
     {
 	case Text:
@@ -212,6 +213,7 @@ void LineEdit::setValue(const QString &txt)
 	    ((QComboBox*)ed_fld)->setEditText(txt);
 	    break;
     }
+    if( ed_fld ) ed_fld->blockSignals(false);
 
     m_val = txt;
 
@@ -486,7 +488,7 @@ InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess,
     connect(but_box, SIGNAL(rejected()), this, SLOT(reject()));
     dlg_lay->addWidget( but_box );
 
-    resize(400,120+(40*with_nm)+(40*with_id));
+    resize(400,150+(40*with_nm)+(40*with_id));
 }
 
 QString InputDlg::id()

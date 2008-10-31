@@ -34,12 +34,12 @@ using namespace VCA;
 //* Session: Project's session			 *
 //************************************************
 Session::Session( const string &iid, const string &iproj ) :
-    m_enable(false), m_start(false), endrun_req(false), tm_calc(0.0),
-    m_id(iid), m_user("root"), m_prjnm(iproj), m_per(100), m_calcClk(1),
+    mEnable(false), mStart(false), endrun_req(false), tm_calc(0.0),
+    mId(iid), mUser("root"), mPrjnm(iproj), mPer(100), mCalcClk(1),
     mOwner("root"), mGrp("UI"), mPermit(R_R_R_),
-    m_backgrnd(false), m_connects(0)
+    mBackgrnd(false), mConnects(0)
 {
-    m_page = grpAdd("pg_");
+    mPage = grpAdd("pg_");
 }
 
 Session::~Session( )
@@ -68,7 +68,7 @@ void Session::setEnable( bool val )
 	try
 	{
 	    //- Connect to project -
-	    m_parent = mod->prjAt(m_prjnm);
+	    mParent = mod->prjAt(mPrjnm);
 
 	    //- Get data from project -
 	    mOwner	= parent().at().owner( );
@@ -88,7 +88,7 @@ void Session::setEnable( bool val )
 		try{ at(pg_ls[i_ls]).at().setEnable(true); }
 		catch( TError err )	{ mess_err( err.cat.c_str(), "%s", err.mess.c_str() ); }
 	}
-	catch(...){ m_parent.free(); }
+	catch(...){ mParent.free(); }
     }
     else
     {
@@ -104,10 +104,10 @@ void Session::setEnable( bool val )
 	    del(pg_ls[i_ls]);
 
 	//- Disconnect from project -
-	m_parent.free();
+	mParent.free();
     }
 
-    m_enable = val;
+    mEnable = val;
 }
 
 void Session::setStart( bool val )
@@ -125,7 +125,7 @@ void Session::setStart( bool val )
 	    at(pg_ls[i_ls]).at().setProcess(true);
 
 	//- Start process task -
-	if( !m_start )
+	if( !mStart )
 	{
 	    pthread_attr_t pthr_attr;
 	    pthread_attr_init(&pthr_attr);
@@ -136,18 +136,18 @@ void Session::setStart( bool val )
 
 	    pthread_create(&calcPthr,&pthr_attr,Session::Task,this);
 	    pthread_attr_destroy(&pthr_attr);
-	    if( TSYS::eventWait(m_start, true, nodePath()+"start",5) )
+	    if( TSYS::eventWait(mStart, true, nodePath()+"start",5) )
 		throw TError(nodePath().c_str(),_("Session process task no started!"));
 	}
     }
     else
     {
 	//- Stop process task -
-	if( m_start )
+	if( mStart )
 	{
 	    endrun_req = true;
 	    pthread_kill( calcPthr, SIGALRM );
-	    if( TSYS::eventWait(m_start,false,nodePath()+"stop",5) )
+	    if( TSYS::eventWait(mStart,false,nodePath()+"stop",5) )
 		throw TError(nodePath().c_str(),_("Sesion process task no stoped!"));
 	    pthread_join( calcPthr, NULL );
 	}
@@ -167,32 +167,32 @@ string Session::ico( )
 
 AutoHD<Project> Session::parent( )
 {
-    return m_parent;
+    return mParent;
 }
 
 void Session::add( const string &iid, const string &iparent )
 {
     if( present(iid) )	return;
-    chldAdd(m_page,new SessPage(iid,iparent,this));
+    chldAdd(mPage,new SessPage(iid,iparent,this));
 }
 
 void Session::openReg( const string &iid )
 {
     int i_op;
-    for( i_op = 0; i_op < m_open.size(); i_op++ )
-	if( iid == m_open[i_op] ) break;
-    if( i_op >= m_open.size() )	m_open.push_back(iid);
+    for( i_op = 0; i_op < mOpen.size(); i_op++ )
+	if( iid == mOpen[i_op] ) break;
+    if( i_op >= mOpen.size() )	mOpen.push_back(iid);
 }
 
 void Session::openUnreg( const string &iid )
 {
-    for( int i_op = 0; i_op < m_open.size(); i_op++ )
-	if( iid == m_open[i_op] ) m_open.erase(m_open.begin()+i_op);
+    for( int i_op = 0; i_op < mOpen.size(); i_op++ )
+	if( iid == mOpen[i_op] ) mOpen.erase(mOpen.begin()+i_op);
 }
 
 AutoHD<SessPage> Session::at( const string &id )
 {
-    return chldAt(m_page,id);
+    return chldAt(mPage,id);
 }
 
 void Session::uiComm( const string &com, const string &prm, SessWdg *src )
@@ -392,27 +392,24 @@ void *Session::Task( void *icontr )
 #endif
 
     ses.endrun_req = false;
-    ses.m_start    = true;
-
-    bool is_start = true;
-    bool is_stop  = false;
+    ses.mStart    = true;
 
     ses.list(pls);
-    while(true)
+    while( !ses.endrun_req )
     {
 	//- Check calk time -
 	unsigned long long t_cnt = SYS->shrtCnt();
 
 	//- Calc session pages and all other items at recursion -
 	for( int i_l = 0; i_l < pls.size(); i_l++ )
-	    try{ ses.at(pls[i_l]).at().calc(is_start,is_stop); }
+	    try{ ses.at(pls[i_l]).at().calc(false,false); }
 	    catch( TError err )
 	    {
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		mess_err(ses.nodePath().c_str(),_("Session '%s' calc error."),pls[i_l].c_str());
 	    }
 
-	if( (ses.m_calcClk++) == 0 ) ses.m_calcClk = 1;
+	if( (ses.mCalcClk++) == 0 ) ses.mCalcClk = 1;
 
 	ses.tm_calc = 1.0e3*((float)(SYS->shrtCnt()-t_cnt))/((float)SYS->sysClk());
 	/*ses.rez_calc+=ses.tm_calc;
@@ -422,15 +419,10 @@ void *Session::Task( void *icontr )
 	    ses.rez_calc=0;
 	}*/
 
-	if(is_stop) break;
-
 	TSYS::taskSleep((long long)ses.period()*1000000);
-
-	if(ses.endrun_req) is_stop = true;
-	is_start = false;
     }
 
-    ses.m_start = false;
+    ses.mStart = false;
 
     return NULL;
 }
@@ -653,7 +645,7 @@ Session::Alarm::Alarm( const string &ipath, const string &alrm, unsigned iclc ) 
 //************************************************
 SessPage::SessPage( const string &iid, const string &ipage, Session *sess ) : SessWdg(iid,ipage,sess)
 {
-    m_page = grpAdd("pg_");
+    mPage = grpAdd("pg_");
 }
 
 SessPage::~SessPage( )
@@ -718,10 +710,21 @@ void SessPage::setProcess( bool val )
         pageAt(ls[i_l]).at().setProcess(val);
 
     //- Change self process state -
-    if( val && !parent().at().parent().freeStat() && ( attrAt("pgOpen").at().getB() || 
+    bool diff = (val!=process());
+    if( val && !parent().at().parent().freeStat() && ( attrAt("pgOpen").at().getB() ||
 	    attrAt("pgNoOpenProc").at().getB() ) )
+    {
 	SessWdg::setProcess(true);
-    else if( !val ) SessWdg::setProcess(false);
+	//-- First calc --
+	if( diff ) calc(true,false);
+    }
+    else if( !val )
+    {
+	//-- Last calc --
+	if( diff ) calc(false,true);
+
+	SessWdg::setProcess(false);
+    }
 }
 
 AutoHD<Page> SessPage::parent( )
@@ -732,12 +735,12 @@ AutoHD<Page> SessPage::parent( )
 void SessPage::pageAdd( const string &iid, const string &iparent )
 {
     if( pagePresent(iid) )return;
-    chldAdd(m_page,new SessPage(iid,iparent,ownerSess()));
+    chldAdd(mPage,new SessPage(iid,iparent,ownerSess()));
 }
 
 AutoHD<SessPage> SessPage::pageAt( const string &iid )
 {
-    return chldAt(m_page,iid);
+    return chldAt(mPage,iid);
 }
 
 void SessPage::calc( bool first, bool last )
@@ -873,7 +876,7 @@ bool SessPage::cntrCmdGeneric( XMLNode *opt )
 //************************************************
 SessWdg::SessWdg( const string &iid, const string &iparent, Session *isess ) : 
     Widget(iid,iparent), m_proc(false), TValFunc(iid+"_wdg",NULL), m_mdfClc(0), 
-    m_sess(isess), inLnkGet(true)
+    mSess(isess), inLnkGet(true)
 {
 
 }
@@ -944,6 +947,7 @@ void SessWdg::setEnable( bool val )
 void SessWdg::setProcess( bool val )
 {
     if( val && !enable() ) setEnable(true);
+
     //- Prepare process function value level -
     if( val && !TSYS::strEmpty(calcProg()) )
     {
@@ -1013,6 +1017,7 @@ void SessWdg::setProcess( bool val )
     }
     if( !val )
     {
+	//-- Free function link --
 	m_proc = false;
 	TValFunc::setFunc(NULL);
     }
@@ -1204,9 +1209,11 @@ unsigned int SessWdg::modifVal( Attr &cfg )
 
 void SessWdg::calc( bool first, bool last )
 {
-    string sw_attr, s_attr, obj_tp;
-
     if( !process() )	return;
+
+    ResAlloc res(mCalcRes,true);
+
+    string sw_attr, s_attr, obj_tp;
 
     if( !(ownerSess()->calcClk()%100) ) prcElListUpdate( );
 
@@ -1218,7 +1225,7 @@ void SessWdg::calc( bool first, bool last )
     try
     {
 	//- Load events to process -
-	if( !((ownerSess()->calcClk())%(vmax(calcPer()/ownerSess()->period(),1))) )
+	if( !((ownerSess()->calcClk())%(vmax(calcPer()/ownerSess()->period(),1))) || first || last )
 	{
 	    string wevent = eventGet(true);
 	    //- Process input links and constants -
@@ -1287,7 +1294,7 @@ void SessWdg::calc( bool first, bool last )
 		    switch(ioType(i_io))
 		    {
 			case IO::String:	setS(i_io,attr.at().getS());	break;
-			case IO::Integer: 	setI(i_io,attr.at().getI());	break;
+			case IO::Integer:	setI(i_io,attr.at().getI());	break;
 			case IO::Real:	setR(i_io,attr.at().getR());	break;
 			case IO::Boolean:	setB(i_io,attr.at().getB());	break;
 		    }
@@ -1349,9 +1356,10 @@ void SessWdg::calc( bool first, bool last )
     }
     catch(TError err)
     {
+	res.release();
 	mess_err(err.cat.c_str(),err.mess.c_str());
-	mess_err(nodePath().c_str(),_("Widget '%s' calc is error. Process disabled."),path().c_str());
-	setProcess(false);
+	mess_err(nodePath().c_str(),_("Widget calc is error. Process disabled."));
+	if( !last )	setProcess(false);
     }
 }
 

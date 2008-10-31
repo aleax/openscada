@@ -34,10 +34,10 @@ using namespace VCA;
 //* WidgetLib: Widgets library                   *
 //************************************************
 WidgetLib::WidgetLib( const string &id, const string &name, const string &lib_db ) :
-    TConfig(&mod->elWdgLib()), m_enable(false), m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()),
+    TConfig(&mod->elWdgLib()), mEnable(false), mId(cfg("ID").getSd()), m_name(cfg("NAME").getSd()),
     m_descr(cfg("DESCR").getSd()), m_ico(cfg("ICO").getSd()), m_dbt(cfg("DB_TBL").getSd()), work_lib_db(lib_db)
 {
-    m_id = id;
+    mId = id;
     m_name = name;
     m_dbt = string("wlb_")+id;
     m_wdg = grpAdd("wdg_",(id=="originals")?true:false);
@@ -54,9 +54,9 @@ TCntrNode &WidgetLib::operator=( TCntrNode &node )
     if( !src_n ) return *this;
 
     //- Copy generic configuration -
-    string tid = m_id;
+    string tid = mId;
     *(TConfig*)this = *(TConfig*)src_n;
-    m_id  = tid;
+    mId  = tid;
     m_dbt = string("wlb_")+tid;
     work_lib_db = src_n->work_lib_db;
 
@@ -122,7 +122,7 @@ void WidgetLib::postDisable( int flag )
 
 string WidgetLib::name( )
 {
-    return (m_name.size())?m_name:m_id;
+    return (m_name.size())?m_name:mId;
 }
 
 void WidgetLib::setFullDB( const string &it )
@@ -187,7 +187,7 @@ void WidgetLib::setEnable( bool val )
 	catch( TError err )
 	{ mess_err(nodePath().c_str(),_("Enable/disable widget '%s' error %s."),f_lst[i_ls].c_str(),err.mess.c_str()); }
 
-    m_enable = val;
+    mEnable = val;
 }
 
 void WidgetLib::mimeDataList( vector<string> &list, const string &idb )
@@ -437,8 +437,8 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 LWidget::LWidget( const string &iid, const string &isrcwdg ) :
 	Widget(iid), TConfig(&mod->elWdg()),
 	m_ico(cfg("ICO").getSd()), m_proc(cfg("PROC").getSd()), m_proc_per(cfg("PROC_PER").getId()),
-	m_owner(cfg("USER").getSd()), m_grp(cfg("GRP").getSd()), m_permit(cfg("PERMIT").getId()),
-	m_parent(cfg("PARENT").getSd()), m_attrs(cfg("ATTRS").getSd())
+	m_owner(cfg("USER").getSd()), m_grp(cfg("GRP").getSd()), mPermit(cfg("PERMIT").getId()),
+	mParent(cfg("PARENT").getSd()), m_attrs(cfg("ATTRS").getSd())
 {
     cfg("ID").setS(id());
 
@@ -851,8 +851,8 @@ void LWidget::cntrCmdProc( XMLNode *opt )
 //************************************************
 CWidget::CWidget( const string &iid, const string &isrcwdg ) :
         Widget(iid), TConfig(&mod->elInclWdg()),
-        m_parent(cfg("PARENT").getSd()), m_attrs(cfg("ATTRS").getSd()),
-        m_owner(cfg("USER").getSd()), m_grp(cfg("GRP").getSd()), m_permit(cfg("PERMIT").getId()),
+        mParent(cfg("PARENT").getSd()), m_attrs(cfg("ATTRS").getSd()),
+        m_owner(cfg("USER").getSd()), m_grp(cfg("GRP").getSd()), mPermit(cfg("PERMIT").getId()),
         delMark(false)
 {
     cfg("ID").setS(id());
@@ -1055,7 +1055,7 @@ void CWidget::save_( )
 	//-- Remove from library table --
 	if( delMark )
 	{
-	    m_parent = "<deleted>";
+	    mParent = "<deleted>";
 	    SYS->db().at().dataSet( db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this );
 	}
 	else SYS->db().at().dataDel( db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this );	

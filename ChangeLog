@@ -1,3 +1,20 @@
+2008-10-30 Roman
+- FIX:/DAQ/Siemens: Not set modify flag for template field change.
+- !:/Special/FLibSYS: Direct access to archive or atribute's value address field is added for functions: varhBeg, varhEnd, varhGetR, varhGetB and varhGetS.
+- !!!:/Special/FLibSYS: Add user's functions: strPath2Sep, strEnc2HTML and real2str.
+- FIX:/UI/QTCfg: Block signals on time programm values set into LineEdit is fixed.
+- /UI/VCAEngine: Some attributes is renamed from m_attr to mAttr view.
+- FIX:/UI/VCAEngine: Some fixes for primitive "Document".
+- FIX:/UI/VCAEngine: Make stats f_start and f_stop for session's scripts is fixed.
+- FIX:/UI/VCAEngine: Function Widget:calcId() is fixed for full session path support.
+- FIX:/UI/VCAEngine: Two level's widgets list generation is fixed for widgets's parent edition.
+- FIX:/UI/VCAEngine: Widget's user atributes edit name, type and selected list for heritor is fixed.
+- FIX:/UI/Vision: Clean root link's fields, without group, is fixed.
+- FIX:/UI/Vision: Block signals on time programm values set into LineEdit is fixed.
+- !!!:/UI/Vision: Post process XML-source of primitive "Document" is added. Dinamic documents support by primitive "Document" is improved and tested.
+- !!:/SYS: Demo DB is updated. First primitive's "Document" reports is added.
+
+
 2008-10-30 Maxim
 - FIX:/UI/WebVision, /UI/Vision: Interpretation of the style of the line for primitive ElFigure is synchronized.
 - FIX:/UI/Vision: Mechanism of calculating the angle for the arc while building inundation path is changed.

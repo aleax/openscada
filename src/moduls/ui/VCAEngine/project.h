@@ -50,13 +50,13 @@ class Project : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return m_id; }		//Identifier
+	const string &id( )	{ return mId; }			//Identifier
 	string	name( );					//Name
 	string	descr( )	{ return m_descr; }		//Description
 	string	ico( )		{ return m_ico; }		//Icon
 	string	owner( );					//Library owner
 	string	grp( );						//Library group
-	short	permit( )	{ return m_permit; }		//Permition for access to library
+	short	permit( )	{ return mPermit; }		//Permition for access to library
 	int	period( )	{ return mPer; }		//Project's session calc period
 	int	prjFlags( )	{ return mFlgs; }		//Project's flags
 
@@ -69,7 +69,7 @@ class Project : public TCntrNode, public TConfig
 	void setIco( const string &it )		{ m_ico = it; modif(); }
 	void setOwner( const string &it );
 	void setGrp( const string &it )		{ m_grp = it; modif(); }
-	void setPermit( short it )		{ m_permit = it; modif(); }
+	void setPermit( short it )		{ mPermit = it; modif(); }
 	void setPeriod( int it )		{ mPer = it; modif(); }
 	void setPrjFlags( int val )		{ mFlgs = val; modif(); }
 
@@ -77,17 +77,17 @@ class Project : public TCntrNode, public TConfig
 	void setFullDB( const string &it );
 
 	//- Enable stat -
-	bool enable( )			{ return m_enable; }
+	bool enable( )			{ return mEnable; }
 	void setEnable( bool val );
 
 	//- Pages -
-	void list( vector<string> &ls ) 	{ chldList(m_page,ls); }
-	bool present( const string &id )	{ return chldPresent(m_page,id); }
+	void list( vector<string> &ls ) 	{ chldList(mPage,ls); }
+	bool present( const string &id )	{ return chldPresent(mPage,id); }
 	AutoHD<Page> at( const string &id );
 	void add( const string &id, const string &name, const string &orig = "" );
 	void add( Page *iwdg );
 	void del( const string &id, bool full = false )
-	{ chldDel( m_page, id, -1, full, true ); }
+	{ chldDel( mPage, id, -1, full, true ); }
 
 	//- Mime data access -
 	void mimeDataList( vector<string> &list, const string &idb = "" );
@@ -97,7 +97,7 @@ class Project : public TCntrNode, public TConfig
 
     protected:
 	//Methods
-	string nodeName( )	{ return m_id; }
+	string nodeName( )	{ return mId; }
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	void load_( );
@@ -108,11 +108,11 @@ class Project : public TCntrNode, public TConfig
 	void postDisable( int flag );
 
 	//Attributes
-	int	m_page;
+	int	mPage;
 
     private:
 	//Attributes
-	string  &m_id,		//Identifier
+	string  &mId,		//Identifier
 		&m_name,	//Name
 		&m_descr,	//Description
 		&m_dbt,		//DB table
@@ -121,10 +121,10 @@ class Project : public TCntrNode, public TConfig
 		&m_ico,		//Individual icon
 		work_prj_db,	//Work DB
 		mOldDB;
-	int	&m_permit,	//Access permition
+	int	&mPermit,	//Access permition
 		&mPer,		//Calc period
 		&mFlgs;		//Project's flags
-	bool	m_enable;	//Enable state
+	bool	mEnable;	//Enable state
 };
 
 //************************************************
@@ -154,19 +154,19 @@ class Page : public Widget, public TConfig
 	string type( )		{ return "ProjPage"; }
 	string owner( );
 	string grp( );
-	short  permit( )	{ return m_permit; }
+	short  permit( )	{ return mPermit; }
 	string calcId( );
 	string calcLang( );
 	string calcProg( );
 	int    calcPer( );
 	string ownerFullId( bool contr = false );
 	int    prjFlags( )	{ return m_flgs; }
-	string parentNm( )	{ return m_parent; }
+	string parentNm( )	{ return mParent; }
 
 	void setIco( const string &iico )	{ m_ico = iico; modif(); }
 	void setOwner( const string &iown );
 	void setGrp( const string &igrp )	{ m_grp = igrp; modif(); }
-	void setPermit( short iperm )		{ m_permit = iperm; modif(); }
+	void setPermit( short iperm )		{ mPermit = iperm; modif(); }
 	void setCalcLang( const string &ilng );
 	void setCalcProg( const string &iprg );
 	void setCalcPer( int vl );
@@ -184,13 +184,13 @@ class Page : public Widget, public TConfig
 	AutoHD<PageWdg> wdgAt( const string &wdg );
 
 	//- Pages -
-	void pageList( vector<string> &ls )	{ chldList(m_page,ls); }
-	bool pagePresent( const string &id )	{ return chldPresent(m_page,id); }
+	void pageList( vector<string> &ls )	{ chldList(mPage,ls); }
+	bool pagePresent( const string &id )	{ return chldPresent(mPage,id); }
 	AutoHD<Page> pageAt( const string &id );
 	void pageAdd( const string &id, const string &name, const string &orig = "" );
 	void pageAdd( Page *iwdg );
 	void pageDel( const string &id, bool full = false )
-	{ chldDel( m_page, id, -1, full, true ); }
+	{ chldDel( mPage, id, -1, full, true ); }
 
 	//- Data access -
 	string resourceGet( const string &id, string *mime = NULL );
@@ -216,14 +216,14 @@ class Page : public Widget, public TConfig
 
     private:
 	//Attributes
-	int	m_page;		//Page container identifier
+	int	mPage;		//Page container identifier
 	string	&m_ico,		//Widget icon
 		&m_owner,	//Widget owner
 		&m_grp,		//Widget group
 		&m_proc,	//Widget procedure
-		&m_parent,	//Widget parent
+		&mParent,	//Widget parent
 		&m_attrs;	//Changed attributes list
-	int	&m_permit,	//Widget permission
+	int	&mPermit,	//Widget permission
 		&m_flgs,	//Project's flags
 		&m_proc_per;	//Process period
 };
@@ -246,18 +246,18 @@ class PageWdg : public Widget, public TConfig
 	string type( )		{ return "ProjLink"; }
 	string owner( );
 	string grp( );
-	short  permit( )	{ return m_permit; }
+	short  permit( )	{ return mPermit; }
 	string calcId( );
 	string calcLang( );
 	string calcProg( );
 	int    calcPer( );
-	string parentNm( )	{ return m_parent; }
+	string parentNm( )	{ return mParent; }
 
 	void setEnable( bool val );
 	void setOwner( const string &iown );
 	void setGrp( const string &igrp )	{ m_grp = igrp; modif(); }
-	void setPermit( short iperm )		{ m_permit = iperm; modif(); }
-	void setParentNm( const string &isw )	{ m_parent = isw; modif(); }
+	void setPermit( short iperm )		{ mPermit = iperm; modif(); }
+	void setParentNm( const string &isw )	{ mParent = isw; modif(); }
 
 	//- Storing -
 	void loadIO( );
@@ -285,8 +285,8 @@ class PageWdg : public Widget, public TConfig
 
 	//Attributes
 	bool	delMark;
-	string	&m_parent, &m_attrs, &m_owner, &m_grp;
-	int	&m_permit;
+	string	&mParent, &m_attrs, &m_owner, &m_grp;
+	int	&mPermit;
 };
 
 }

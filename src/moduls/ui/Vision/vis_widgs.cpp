@@ -482,8 +482,9 @@ void LineEdit::changed( )
     emit valChanged(value());
 }
 
-void LineEdit::setValue(const QString &txt)
+void LineEdit::setValue( const QString &txt )
 {
+    if( ed_fld ) ed_fld->blockSignals(true);
     switch(type())
     {
 	case Text:
@@ -507,6 +508,7 @@ void LineEdit::setValue(const QString &txt)
 	    ((QComboBox*)ed_fld)->setEditText(txt);
 	    break;
     }
+    if( ed_fld ) ed_fld->blockSignals(false);
 
     m_val = txt;
 

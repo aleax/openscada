@@ -44,42 +44,42 @@ class Session : public TCntrNode
 	~Session( );
 
 	string ico( );
-	const string &id( )	{ return m_id; }		//Identifier
-	string projNm( )	{ return m_prjnm; }		//Project's name
-	string user( )		{ return m_user; }		//Open session user
+	const string &id( )	{ return mId; }			//Identifier
+	string projNm( )	{ return mPrjnm; }		//Project's name
+	string user( )		{ return mUser; }		//Open session user
 	string owner( )		{ return mOwner; }		//Source project owner
 	string grp( )		{ return mGrp; }		//Source project group
 	short  permit( )	{ return mPermit; }		//Permition for access to source project
-	int    period( )	{ return vmax(1,m_per); }	//Process period (ms)
+	int    period( )	{ return vmax(1,mPer); }	//Process period (ms)
 	double calcTm( )	{ return tm_calc; }		//Calc session time
-	bool   enable( )	{ return m_enable; }		//Enable stat
-	bool   start( )		{ return m_start; }		//Start stat
-	bool   backgrnd( )	{ return m_backgrnd; }		//Background session execution
-	int    connects( )	{ return m_connects; }		//Connections counter
-	unsigned calcClk( )	{ return m_calcClk; }		//Calc clock
+	bool   enable( )	{ return mEnable; }		//Enable stat
+	bool   start( )		{ return mStart; }		//Start stat
+	bool   backgrnd( )	{ return mBackgrnd; }		//Background session execution
+	int    connects( )	{ return mConnects; }		//Connections counter
+	unsigned calcClk( )	{ return mCalcClk; }		//Calc clock
 	AutoHD<Project> parent( );
 
-	void setProjNm( const string &it )	{ m_prjnm = it; }
-	void setUser( const string &it )	{ m_user = it; }
-	void setPeriod( int val )		{ m_per = val; }
+	void setProjNm( const string &it )	{ mPrjnm = it; }
+	void setUser( const string &it )	{ mUser = it; }
+	void setPeriod( int val )		{ mPer = val; }
 	void setEnable( bool val );
 	void setStart( bool val );
-	void setBackgrnd( bool val )		{ m_backgrnd = val; }
-	void connect( )				{ m_connects++; }
-	void disconnect( )			{ if(m_connects>0) m_connects--; }
+	void setBackgrnd( bool val )		{ mBackgrnd = val; }
+	void connect( )				{ mConnects++; }
+	void disconnect( )			{ if(mConnects>0) mConnects--; }
 
 	//- Pages -
-	void list( vector<string> &ls ) 	{ chldList(m_page,ls); }
-	bool present( const string &id )	{ return chldPresent(m_page,id); }
+	void list( vector<string> &ls ) 	{ chldList(mPage,ls); }
+	bool present( const string &id )	{ return chldPresent(mPage,id); }
 	AutoHD<SessPage> at( const string &id );
 	void add( const string &id, const string &parent = "" );
-	void del( const string &id, bool full = false )	{ chldDel(m_page,id,-1,full); }
+	void del( const string &id, bool full = false )	{ chldDel(mPage,id,-1,full); }
 
-	vector<string> &openList( )		{ return m_open; }
+	vector<string> &openList( )		{ return mOpen; }
 	void openReg( const string &id );
 	void openUnreg( const string &id );
 
-	Res &eventRes( )			{ return m_evRes; }
+	Res &eventRes( )			{ return mEvRes; }
 
 	void uiComm( const string &com, const string &prm, SessWdg *src = NULL );
 
@@ -90,7 +90,7 @@ class Session : public TCntrNode
 
     protected:
 	//Methods
-	string nodeName( )	{ return m_id; }
+	string nodeName( )	{ return mId; }
 	void cntrCmdProc( XMLNode *opt );				//Control interface command process
 
 	void postEnable( int flag );
@@ -122,21 +122,22 @@ class Session : public TCntrNode
 	static void *Task( void *contr );
 
 	//Attributes
-	int	m_page;
-	string	m_id, m_prjnm, m_user, mOwner, mGrp;
-	int	m_per, mPermit;
-	bool	m_enable, m_start, endrun_req;	//Enabled, Started and endrun stats
-	bool	m_backgrnd;			//Backgrounded execution of a session
-	int	m_connects;			//Connections counter
+	int	mPage;
+	string	mId, mPrjnm, mUser, mOwner, mGrp;
+	int	mPer, mPermit;
+	bool	mEnable, mStart, endrun_req;	//Enabled, Started and endrun stats
+	bool	mBackgrnd;			//Backgrounded execution of a session
+	int	mConnects;			//Connections counter
 
 	pthread_t	calcPthr;		//Calc pthread
-	unsigned	m_calcClk;		//Calc clock
+	unsigned	mCalcClk;		//Calc clock
 	float		tm_calc;		//Scheme's calc time
 	float		rez_calc;
-	AutoHD<Project>	m_parent;
-	Res		m_evRes;		//Event access resource
+	AutoHD<Project>	mParent;
+	Res		mCalcRes;		//Calc resource
+	Res		mEvRes;			//Event access resource
 
-	vector<string>	m_open;
+	vector<string>	mOpen;
 
 	Res		mAlrmRes;		//Alarms resource
 	vector<Alarm>	mAlrm;			//Alarms queue
@@ -189,7 +190,7 @@ class SessWdg : public Widget, public TValFunc
 
 	SessWdg  *ownerSessWdg( bool base = false );
 	SessPage *ownerPage( );
-	Session  *ownerSess( )	{ return m_sess; }
+	Session  *ownerSess( )	{ return mSess; }
 
     protected:
 	//Methods
@@ -207,12 +208,13 @@ class SessWdg : public Widget, public TValFunc
 	bool	m_proc, inLnkGet;
 	string	work_prog;
 	unsigned int m_mdfClc;
+	Res	mCalcRes;
 
 	vector<string>	m_wdgChldAct,	//Active childs widget's list
 			m_attrUILs,	//UI attributes list
 			m_attrLnkLs;	//Linked attributes list
 
-	Session		*m_sess;
+	Session		*mSess;
 };
 
 //************************************************
@@ -236,11 +238,11 @@ class SessPage : public SessWdg
 	AutoHD<Page> parent( );
 
 	//- Pages -
-	void pageList( vector<string> &ls )			{ chldList(m_page,ls); }
-	bool pagePresent( const string &id )			{ return chldPresent(m_page,id); }
+	void pageList( vector<string> &ls )			{ chldList(mPage,ls); }
+	bool pagePresent( const string &id )			{ return chldPresent(mPage,id); }
 	AutoHD<SessPage> pageAt( const string &id );
 	void pageAdd( const string &id, const string &parent = "" );
-	void pageDel( const string &id, bool full = false )	{ chldDel(m_page,id,-1,full); }
+	void pageDel( const string &id, bool full = false )	{ chldDel(mPage,id,-1,full); }
 
 	//- Alarms process -
 	void alarmSet( bool isSet = false );
@@ -254,7 +256,7 @@ class SessPage : public SessWdg
 
     private:
 	//Attributes
-	int	m_page;		//Pages container identifier
+	int	mPage;		//Pages container identifier
 };
 
 }

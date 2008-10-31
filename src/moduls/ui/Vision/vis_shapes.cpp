@@ -2364,6 +2364,11 @@ void ShapeProtocol::setFocus(WdgView *view, QWidget *wdg, bool en, bool devel )
 //************************************************
 //* Document view shape widget                   *
 //************************************************
+char *ShapeDocument::XHTML_entity =
+    "<!DOCTYPE xhtml [\n"
+    "  <!ENTITY nbsp \"&#160;\" >\n"
+    "]>\n";
+
 ShapeDocument::ShapeDocument( ) : WdgShape("Document")
 {
 
@@ -2421,18 +2426,29 @@ bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    relDoc = true;
 	    break;
 	case 21:	//tmpl
-	    if( !shD->doc.empty() )	break;
+	    if( !shD->doc.empty() && !shD->tmpl )	break;
 	    shD->doc = val;
 	    relDoc = true;
+	    shD->tmpl = true;
 	    break;
-	case 23:	//doc
+	case 22:	//doc
 	    if( TSYS::strEmpty(val) )	break;
 	    shD->doc = val;
 	    relDoc = true;
+	    shD->tmpl = false;
 	    break;
     }
     if( relDoc && !w->allAttrLoad() )
     {
+	//> Process source document
+	//>> Parse document
+	XMLNode xproc;
+	try{ xproc.load(string(XHTML_entity)+shD->doc); }
+	catch( TError err )
+	{ mess_err(mod->nodePath().c_str(),"Document '%s' parsing is error: %s",w->id().c_str(),err.mess.c_str()); }
+
+	nodeProcess( &xproc, shD );
+
 	shD->web->setHtml(
 	    ("<?xml version='1.0' ?>\n"
 	    "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
@@ -2443,11 +2459,31 @@ bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    "  <meta http-equiv='Content-Script-Type' content='text/javascript'/>\n"
 	    "  <style type='text/css'>\n"+shD->style+"</style>\n"
 	    "</head>\n"+
-	    shD->doc+
+	    xproc.save()+
 	    "</html>").c_str());
     }
 
     return true;
+}
+
+void ShapeDocument::nodeProcess( XMLNode *xcur, ShapeDocument::ShpDt *shD )
+{
+    //> Delete process instructions
+    xcur->prcInstrClear();
+
+    //> Go to include nodes
+    for( int i_c = 0; i_c < xcur->childSize(); i_c++ )
+    {
+	//>> Delete repeat template tag and archive of messages repeat tag
+	if( !shD->tmpl && (!xcur->childGet(i_c)->attr("docRept").empty() || !xcur->childGet(i_c)->attr("docAMess").empty()) )
+	{ xcur->childDel(i_c); i_c--; continue; }
+
+	//>> Check for special tags
+	if( xcur->childGet(i_c)->name().substr(0,3) == "doc" )
+	{ xcur->childDel(i_c); i_c--; continue; }
+
+	nodeProcess(xcur->childGet(i_c),shD);
+    }
 }
 
 bool ShapeDocument::event( WdgView *view, QEvent *event )

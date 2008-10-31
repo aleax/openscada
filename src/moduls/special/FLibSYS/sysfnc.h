@@ -87,6 +87,7 @@ class varhBeg : public TFunction
 	    ioAdd( new IO("sek",_("Seconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("usek",_("Microseconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("archtor",_("Archivator"),IO::String,IO::Default) );
+	    ioAdd( new IO("addr",_("Address of archive or atribute of parameter"),IO::String,IO::Default) );
 	}
 
 	string name( )	{ return _("Varch: Begin"); }
@@ -95,6 +96,9 @@ class varhBeg : public TFunction
 	void calc( TValFunc *val )
 	{
 	    int id = val->getI(0);
+	    string addr = val->getS(4);
+	    if( !addr.empty() )	id = mod->varchOpen(addr);
+
 	    long long vbg;
 	    if(mod->isArch(id))
 		vbg = mod->varch(id).at().begin(val->getS(3));
@@ -106,6 +110,8 @@ class varhBeg : public TFunction
 	    }
 	    val->setI(1,vbg/1000000);
 	    val->setI(2,vbg%1000000);
+
+	    if( !addr.empty() )	mod->varchClose(id);
 	}
 };
 
@@ -121,6 +127,7 @@ class varhEnd : public TFunction
 	    ioAdd( new IO("sek",_("Seconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("usek",_("Microseconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("archtor",_("Archivator"),IO::String,IO::Default) );
+	    ioAdd( new IO("addr",_("Address of archive or atribute of parameter"),IO::String,IO::Default) );
 	}
 
 	string name( )	{ return _("Varch: End"); }
@@ -129,6 +136,9 @@ class varhEnd : public TFunction
 	void calc( TValFunc *val )
 	{
 	    int id = val->getI(0);
+	    string addr = val->getS(4);
+	    if( !addr.empty() )	id = mod->varchOpen(addr);
+
 	    long long vend;
 	    if(mod->isArch(id))
 		vend = mod->varch(id).at().end(val->getS(3));
@@ -140,6 +150,8 @@ class varhEnd : public TFunction
 	    }
 	    val->setI(1,vend/1000000);
 	    val->setI(2,vend%1000000);
+
+	    if( !addr.empty() )	mod->varchClose(id);
 	}
 };
 
@@ -244,6 +256,7 @@ class varhGetI : public TFunction
 	    ioAdd( new IO("usec",_("Microseconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("up_ord",_("Up order"),IO::Boolean,IO::Default,"0") );
 	    ioAdd( new IO("archtor",_("Archivator"),IO::String,IO::Default) );
+	    ioAdd( new IO("addr",_("Address of archive or atribute of parameter"),IO::String,IO::Default) );
 	}
 
 	string name( )	{ return _("Varch: Get integer"); }
@@ -252,6 +265,9 @@ class varhGetI : public TFunction
 	void calc( TValFunc *val )
 	{
 	    int id = val->getI(1);
+	    string addr = val->getS(6);
+	    if( !addr.empty() )	id = mod->varchOpen(addr);
+
 	    long long vtm = (long long)val->getI(2)*1000000+val->getI(3);
 	    if(mod->isArch(id))
 		val->setI(0,mod->varch(id).at().getI(&vtm,val->getB(4),val->getS(5)));
@@ -262,6 +278,8 @@ class varhGetI : public TFunction
 		val->setI(0,vb->getI(&vtm,val->getB(4)));
 	    }
 	    val->setI(2,vtm/1000000); val->setI(3,vtm%1000000);
+
+	    if( !addr.empty() )	mod->varchClose(id);
 	}
 };
 
@@ -279,6 +297,7 @@ class varhGetR : public TFunction
 	    ioAdd( new IO("usec",_("Microseconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("up_ord",_("Up order"),IO::Boolean,IO::Default,"0") );
 	    ioAdd( new IO("archtor",_("Archivator"),IO::String,IO::Default) );
+	    ioAdd( new IO("addr",_("Address of archive or atribute of parameter"),IO::String,IO::Default) );
 	}
 	
 	string name( )	{ return _("Varch: Get real"); }
@@ -287,6 +306,9 @@ class varhGetR : public TFunction
 	void calc( TValFunc *val )
 	{
 	    int id = val->getI(1);
+	    string addr = val->getS(6);
+	    if( !addr.empty() )	id = mod->varchOpen(addr);
+
 	    long long vtm = (long long)val->getI(2)*1000000+val->getI(3);
 	    if(mod->isArch(id))
 		val->setR(0,mod->varch(id).at().getR(&vtm,val->getB(4),val->getS(5)));
@@ -297,6 +319,8 @@ class varhGetR : public TFunction
 		val->setR(0,vb->getR(&vtm,val->getB(4)));
 	    }
 	    val->setI(2,vtm/1000000); val->setI(3,vtm%1000000);
+
+	    if( !addr.empty() )	mod->varchClose(id);
 	}
 };
 
@@ -314,6 +338,7 @@ class varhGetB : public TFunction
 	    ioAdd( new IO("usec",_("Microseconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("up_ord",_("Up order"),IO::Boolean,IO::Default,"0") );
 	    ioAdd( new IO("archtor",_("Archivator"),IO::String,IO::Default) );
+	    ioAdd( new IO("addr",_("Address of archive or atribute of parameter"),IO::String,IO::Default) );
 	}
 
 	string name( )	{ return _("Varch: Get boolean"); }
@@ -322,6 +347,9 @@ class varhGetB : public TFunction
 	void calc( TValFunc *val )
 	{
 	    int id = val->getI(1);
+	    string addr = val->getS(6);
+	    if( !addr.empty() )	id = mod->varchOpen(addr);
+
 	    long long vtm = (long long)val->getI(2)*1000000+val->getI(3);
 	    if(mod->isArch(id))
 		val->setB(0,mod->varch(id).at().getB(&vtm,val->getB(4),val->getS(5)));
@@ -332,6 +360,8 @@ class varhGetB : public TFunction
 		val->setB(0,vb->getB(&vtm,val->getB(4)));
 	    }
 	    val->setI(2,vtm/1000000); val->setI(3,vtm%1000000);
+
+	    if( !addr.empty() )	mod->varchClose(id);
 	}
 };
 
@@ -349,6 +379,7 @@ class varhGetS : public TFunction
 	    ioAdd( new IO("usec",_("Microseconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("up_ord",_("Up order"),IO::Boolean,IO::Default,"0") );
 	    ioAdd( new IO("archtor",_("Archivator"),IO::String,IO::Default) );
+	    ioAdd( new IO("addr",_("Address of archive or atribute of parameter"),IO::String,IO::Default) );
 	}
 
 	string name( )	{ return _("Varch: Get string"); }
@@ -357,6 +388,9 @@ class varhGetS : public TFunction
 	void calc( TValFunc *val )
 	{
 	    int id = val->getI(1);
+	    string addr = val->getS(6);
+	    if( !addr.empty() )	id = mod->varchOpen(addr);
+
 	    long long vtm = (long long)val->getI(2)*1000000+val->getI(3);
 	    if(mod->isArch(id))
 		val->setS(0,mod->varch(id).at().getS(&vtm,val->getB(4),val->getS(5)));
@@ -367,6 +401,8 @@ class varhGetS : public TFunction
 		val->setS(0,vb->getS(&vtm,val->getB(4)));
 	    }
 	    val->setI(2,vtm/1000000); val->setI(3,vtm%1000000);
+
+	    if( !addr.empty() )	mod->varchClose(id);
 	}
 };
 
@@ -672,6 +708,72 @@ class strParsePath : public TFunction
 	    int off = val->getI(3);
 	    val->setS(0,TSYS::pathLev(val->getS(1),val->getI(2),true,&off));
 	    val->setI(3,off);
+	}
+};
+
+//*************************************************
+//* Path string convert to separated string       *
+//*************************************************
+class strPath2Sep : public TFunction
+{
+    public:
+	strPath2Sep( ) : TFunction("strPath2Sep")
+	{
+	    ioAdd( new IO("rez",_("Rezult"),IO::String,IO::Return) );
+	    ioAdd( new IO("src",_("Source"),IO::String,IO::Default) );
+	    ioAdd( new IO("sep",_("Separator"),IO::String,IO::Default,".") );
+	}
+
+	string name( )	{ return _("String: Path to separated string"); }
+	string descr( )	{ return _("Use for convert path to separated string."); }
+
+	void calc( TValFunc *val )
+	{
+	    val->setS(0,TSYS::path2sepstr(val->getS(1),val->getS(2).size()?val->getS(2)[0]:'.'));
+	}
+};
+
+//*************************************************
+//* String encode to HTML                         *
+//*************************************************
+class strEnc2HTML : public TFunction
+{
+    public:
+	strEnc2HTML( ) : TFunction("strEnc2HTML")
+	{
+	    ioAdd( new IO("rez",_("Rezult"),IO::String,IO::Return) );
+	    ioAdd( new IO("src",_("Source"),IO::String,IO::Default) );
+	}
+
+	string name( )	{ return _("String: Encode string to HTML"); }
+	string descr( )	{ return _("Use for encode string for use into HTML source."); }
+
+	void calc( TValFunc *val )
+	{
+	    val->setS(0,TSYS::strEncode(val->getS(1),TSYS::Html));
+	}
+};
+
+//*************************************************
+//* Convert real to string                        *
+//*************************************************
+class real2str : public TFunction
+{
+    public:
+	real2str( ) : TFunction("real2str")
+	{
+	    ioAdd( new IO("rez",_("Rezult"),IO::String,IO::Return) );
+	    ioAdd( new IO("val",_("Value"),IO::Real,IO::Default) );
+	    ioAdd( new IO("prc",_("Precision"),IO::Integer,IO::Default,"4") );
+	    ioAdd( new IO("tp",_("Type"),IO::String,IO::Default,"f") );
+	}
+
+	string name( )	{ return _("String: Real to string"); }
+	string descr( )	{ return _("Convert real to string."); }
+
+	void calc( TValFunc *val )
+	{
+	    val->setS(0,TSYS::strMess((val->getS(3)=="g")?"%.*g":"%.*f",val->getI(2),val->getR(1)));
 	}
 };
 

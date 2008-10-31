@@ -1751,6 +1751,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     {
 	m_tmpl = opt->text();
 	disable();
+	modif();
     }
     else if( a_path == "/cfg/prmp_lst" && ctrChkNode(opt) )
     {

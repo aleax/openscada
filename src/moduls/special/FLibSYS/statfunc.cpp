@@ -116,6 +116,9 @@ void Lib::postEnable( int flag )
     reg( new strReplace() );
     reg( new strParse() );
     reg( new strParsePath() );
+    reg( new strPath2Sep() );
+    reg( new strEnc2HTML() );
+    reg( new real2str() );
 }
 
 void Lib::modStart( )
@@ -153,7 +156,7 @@ int Lib::varchOpen( const string &inm )
 	    arch = SYS->nodeAt(inm,0,'.');
 	if( arch.freeStat() ) return -1;
 	for( i_id = 0; i_id < varch_lst.size(); i_id++ )
-	    if( !varch_lst[i_id].arch ) 
+	    if( !varch_lst[i_id].arch )
 	    {
 		varch_lst[i_id].arch = new AutoHD<TVArchive>(arch);
 		varch_lst[i_id].isArch = true;

@@ -881,7 +881,7 @@ void InspLnk::setWdg( const string &iwdg )
 	    int i_l;
 	    for( i_l = 0; i_l < rootel->childSize(); i_l++ )
 		if( rootel->childGet(i_l)->attr("id") == ("el_"+wdg_it->data(0,Qt::UserRole).toString()).toAscii().data() &&
-			(wdg_g==wdg_it || (wdg_g!=wdg_it && rootel->childGet(i_l)->attr("elGrp") == wdg_g->text(0).toAscii().data())) )
+			((wdg_g==wdg_it && rootel->childGet(i_l)->attr("elGrp").empty()) || (wdg_g!=wdg_it && rootel->childGet(i_l)->attr("elGrp") == wdg_g->text(0).toAscii().data())) )
 			//((bool)rootel->childGet(i_l)->attr("elGrp").size()^(wdg_g==wdg_it)) )
 		    break;
 	    if( i_l >= rootel->childSize() )

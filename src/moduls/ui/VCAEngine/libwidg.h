@@ -44,7 +44,7 @@ class WidgetLib : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return m_id; }		//Identifier
+	const string &id( )	{ return mId; }			//Identifier
 	string name( );						//Name
 	string descr( ) 	{ return m_descr; }		//Description
 	string ico( )		{ return m_ico; }		//Icon
@@ -61,7 +61,7 @@ class WidgetLib : public TCntrNode, public TConfig
 	void setFullDB( const string &it );
 
 	//- Enable stat -
-	bool enable( )		{ return m_enable; }
+	bool enable( )		{ return mEnable; }
 	void setEnable( bool val );
 
         //- Mime data access -
@@ -81,7 +81,7 @@ class WidgetLib : public TCntrNode, public TConfig
 
     protected:
 	//Methods
-	string nodeName()       { return m_id; }
+	string nodeName()       { return mId; }
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
 	void load_( );
@@ -96,8 +96,8 @@ class WidgetLib : public TCntrNode, public TConfig
 
     private:
 	//Attributes
-	string  &m_id, &m_name, &m_descr, &m_dbt, &m_ico, work_lib_db, mOldDB;
-	bool	m_enable;
+	string  &mId, &m_name, &m_descr, &m_dbt, &m_ico, work_lib_db, mOldDB;
+	bool	mEnable;
 };
 
 //************************************************
@@ -117,21 +117,21 @@ class LWidget : public Widget, public TConfig
 	string type( )		{ return "LibWidget"; }
 	string owner( );
 	string grp( );
-	short  permit( )	{ return m_permit; }
+	short  permit( )	{ return mPermit; }
 	string calcId( );
 	string calcLang( );
 	string calcProg( );
 	int    calcPer( );
-	string parentNm( )	{ return m_parent; }
+	string parentNm( )	{ return mParent; }
 
 	void setIco( const string &iico )	{ m_ico = iico; modif(); }
 	void setOwner( const string &iown );
 	void setGrp( const string &igrp )	{ m_grp = igrp; modif(); }
-	void setPermit( short iperm )		{ m_permit = iperm; modif(); }
+	void setPermit( short iperm )		{ mPermit = iperm; modif(); }
 	void setCalcLang( const string &ilng );
 	void setCalcProg( const string &iprg );
 	void setCalcPer( int vl );
-	void setParentNm( const string &isw )	{ m_parent = isw; modif(); }
+	void setParentNm( const string &isw )	{ mParent = isw; modif(); }
 
 	//- Include widgets -
 	void wdgAdd( const string &wid, const string &name, const string &path );
@@ -165,9 +165,9 @@ class LWidget : public Widget, public TConfig
 		&m_owner,	//Widget owner
 		&m_grp,		//Widget group
 		&m_proc,	//Widget procedure
-		&m_parent,	//Widget parent
+		&mParent,	//Widget parent
 		&m_attrs;	//Changed attributes list
-	int	&m_permit,	//Widget permission
+	int	&mPermit,	//Widget permission
 		&m_proc_per;	//Widget period
 };
 
@@ -187,18 +187,18 @@ class CWidget : public Widget, public TConfig
 	string type( )		{ return "LibLink"; }
 	string owner( );
 	string grp( );
-	short  permit( )	{ return m_permit; }
+	short  permit( )	{ return mPermit; }
 	string calcId( );
 	string calcLang( );
 	string calcProg( );
 	int    calcPer( );
-	string parentNm( )	{ return m_parent; }
+	string parentNm( )	{ return mParent; }
 
 	void setEnable( bool val );
 	void setOwner( const string &iown );
 	void setGrp( const string &igrp )	{ m_grp = igrp; modif(); }
-	void setPermit( short iperm )		{ m_permit = iperm; modif(); }
-	void setParentNm( const string &isw )	{ m_parent = isw; modif(); }
+	void setPermit( short iperm )		{ mPermit = iperm; modif(); }
+	void setParentNm( const string &isw )	{ mParent = isw; modif(); }
 
 	//- Storing -
 	void loadIO( );
@@ -226,8 +226,8 @@ class CWidget : public Widget, public TConfig
 
 	//Attributes
 	bool	delMark;
-	string	&m_parent, &m_attrs, &m_owner, &m_grp;
-	int	&m_permit;
+	string	&mParent, &m_attrs, &m_owner, &m_grp;
+	int	&mPermit;
 };
 
 }

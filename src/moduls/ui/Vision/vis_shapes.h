@@ -38,6 +38,8 @@
 #include <QScrollArea>
 #include <QTextBrowser>
 
+#include <xml.h>
+
 using std::string;
 using std::deque;
 using std::vector;
@@ -452,11 +454,12 @@ class ShapeDocument : public WdgShape
 	{
 	    public:
 		//Methods
-		ShpDt( ) : en(true), active(true), web(NULL) { }
+		ShpDt( ) : en(true), active(true), tmpl(false), web(NULL) { }
 		//Attributes
 		short	en	:1;
 		short	active	:1;
 		short	view	:4;
+		short	tmpl	:1;
 		QTextBrowser	*web;
 		string	style;
 		string	doc;
@@ -466,6 +469,11 @@ class ShapeDocument : public WdgShape
 	//Recursively widgets process for disable focusable and events filter set
 	void eventFilterSet( WdgView *view, QWidget *wdg, bool en );
 	void setFocus(WdgView *view, QWidget *wdg, bool en = false, bool devel = false );
+
+	void nodeProcess( XMLNode *xcur, ShpDt *shD );
+
+	//Attributes
+	static char *XHTML_entity;
 };
 
 //************************************************

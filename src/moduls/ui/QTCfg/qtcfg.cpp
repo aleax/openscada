@@ -629,7 +629,7 @@ void ConfApp::itPaste( )
 	for( int i_b = 0; i_b < branch->childSize(); i_b++ )
 	    if( atoi(branch->childGet(i_b)->attr("acs").c_str())&SEQ_WR )
 	    {
-		nCont->addItem( branch->childGet(i_b)->attr("dscr").c_str(), branch->childGet(i_b)->attr("id").c_str() );	    	    
+		nCont->addItem( branch->childGet(i_b)->attr("dscr").c_str(), branch->childGet(i_b)->attr("id").c_str() );
 		if( s_el.substr(0,branch->childGet(i_b)->attr("id").size()) == branch->childGet(i_b)->attr("id") )
 		{
 		    nCont->setCurrentIndex(nCont->count()-1);
@@ -646,7 +646,7 @@ void ConfApp::itPaste( )
     dlg.setMess( (QString((copy_buf[0] == '1') ? _("Move node '%1' to '%2'.\n") : _("Copy node '%1' to '%2'.\n"))+
             _("Enter new node identifier.")).arg(copy_buf.substr(1).c_str()).arg(sel_path.c_str()) );
     dlg.setId( s_el.substr(b_grp.size()).c_str() );
-    if( dlg.exec() != QDialog::Accepted ) return;    
+    if( dlg.exec() != QDialog::Accepted ) return;
 
     off = 0;
     string stat_nm = TSYS::pathLev(copy_buf.substr(1),0,true,&off);

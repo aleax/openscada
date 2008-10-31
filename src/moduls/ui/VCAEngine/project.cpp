@@ -34,15 +34,15 @@ using namespace VCA;
 //* Project					 *
 //************************************************
 Project::Project( const string &id, const string &name, const string &lib_db ) :
-    TConfig(&mod->elProject()), m_enable(false), m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()),
+    TConfig(&mod->elProject()), mEnable(false), mId(cfg("ID").getSd()), m_name(cfg("NAME").getSd()),
     m_descr(cfg("DESCR").getSd()), m_ico(cfg("ICO").getSd()), m_dbt(cfg("DB_TBL").getSd()),
-    m_owner(cfg("USER").getSd()), m_grp(cfg("GRP").getSd()), m_permit(cfg("PERMIT").getId()), mPer(cfg("PER").getId()),
+    m_owner(cfg("USER").getSd()), m_grp(cfg("GRP").getSd()), mPermit(cfg("PERMIT").getId()), mPer(cfg("PER").getId()),
     mFlgs(cfg("FLGS").getId()), work_prj_db(lib_db)
 {
-    m_id = id;
+    mId = id;
     m_name = name;
     m_dbt = string("prj_")+id;
-    m_page= grpAdd("pg_");
+    mPage= grpAdd("pg_");
 }
 
 Project::~Project( )
@@ -56,9 +56,9 @@ TCntrNode &Project::operator=( TCntrNode &node )
     if( !src_n ) return *this;
 
     //- Copy generic configuration -
-    string tid = m_id;
+    string tid = mId;
     *(TConfig *)this = *(TConfig*)src_n;
-    m_id  = tid;
+    mId  = tid;
     m_dbt = string("prj_")+tid;
     work_prj_db = src_n->work_prj_db;
 
@@ -124,7 +124,7 @@ void Project::postDisable( int flag )
 
 string Project::name( )
 {
-    return (m_name.size())?m_name:m_id;
+    return (m_name.size())?m_name:mId;
 }
 
 string Project::owner( )
@@ -210,25 +210,25 @@ void Project::setEnable( bool val )
 	try{ at(f_lst[i_ls]).at().setEnable(val); }
 	catch( TError err )	{ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
-    m_enable = val;
+    mEnable = val;
 }
 
 void Project::add( const string &id, const string &name, const string &orig )
 {
     if( present(id) )	return;
-    chldAdd(m_page,new Page(id,orig));
+    chldAdd(mPage,new Page(id,orig));
     at(id).at().setName(name);
 }
 
 void Project::add( Page *iwdg )
 {
     if( present(iwdg->id()) )	delete iwdg;
-    else chldAdd(m_page,iwdg);
+    else chldAdd(mPage,iwdg);
 }
 
 AutoHD<Page> Project::at( const string &id )
 {
-    return chldAt(m_page,id);
+    return chldAt(mPage,id);
 }
 
 void Project::mimeDataList( vector<string> &list, const string &idb )
@@ -522,11 +522,11 @@ Page::Page( const string &iid, const string &isrcwdg ) :
 	Widget(iid), TConfig(&mod->elPage()),
 	m_ico(cfg("ICO").getSd()), m_proc(cfg("PROC").getSd()), m_proc_per(cfg("PROC_PER").getId()),
 	m_flgs(cfg("FLGS").getId()), m_owner(cfg("USER").getSd()), m_grp(cfg("GRP").getSd()), 
-	m_permit(cfg("PERMIT").getId()), m_parent(cfg("PARENT").getSd()), m_attrs(cfg("ATTRS").getSd())
+	mPermit(cfg("PERMIT").getId()), mParent(cfg("PARENT").getSd()), m_attrs(cfg("ATTRS").getSd())
 {
     cfg("ID").setS(id());
 
-    m_page = grpAdd("pg_");
+    mPage = grpAdd("pg_");
 
     setParentNm(isrcwdg);
 }
@@ -648,9 +648,9 @@ string Page::grp( )
 
 void Page::setParentNm( const string &isw )
 {
-    m_parent = isw;
+    mParent = isw;
     if( ownerPage() && ownerPage()->prjFlags()&Page::Template && !(ownerPage()->prjFlags()&Page::Container) )	
-	m_parent = "..";
+	mParent = "..";
     modif();
 }
 
@@ -746,7 +746,7 @@ void Page::load_( )
     string db  = ownerProj()->DB();
     string tbl = ownerProj()->tbl();
     SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,*this);
-    setParentNm(m_parent);
+    setParentNm(mParent);
 
     //- Create new pages -
     TConfig c_el(&mod->elPage());
@@ -1028,7 +1028,7 @@ void Page::pageAdd( const string &id, const string &name, const string &orig )
     if( pagePresent(id) ) return;
     if( !(prjFlags()&(Page::Container|Page::Template)) )
 	throw TError(nodePath().c_str(),_("Page no container or template!"));
-    chldAdd(m_page,new Page(id,orig));
+    chldAdd(mPage,new Page(id,orig));
     pageAt(id).at().setName(name);
 }
 
@@ -1040,12 +1040,12 @@ void Page::pageAdd( Page *iwdg )
 	delete iwdg;
 	throw TError(nodePath().c_str(),_("Page no container or template!"));
     }
-    else chldAdd(m_page,iwdg);
+    else chldAdd(mPage,iwdg);
 }
 
 AutoHD<Page> Page::pageAt( const string &id )
 {
-    return chldAt(m_page,id);
+    return chldAt(mPage,id);
 }
 
 string Page::resourceGet( const string &id, string *mime )
@@ -1157,8 +1157,8 @@ void Page::cntrCmdProc( XMLNode *opt )
 //************************************************
 PageWdg::PageWdg( const string &iid, const string &isrcwdg ) :
         Widget(iid), TConfig(&mod->elInclWdg()), delMark(false),
-        m_parent(cfg("PARENT").getSd()), m_attrs(cfg("ATTRS").getSd()),
-        m_owner(cfg("USER").getSd()), m_grp(cfg("GRP").getSd()), m_permit(cfg("PERMIT").getId())
+        mParent(cfg("PARENT").getSd()), m_attrs(cfg("ATTRS").getSd()),
+        m_owner(cfg("USER").getSd()), m_grp(cfg("GRP").getSd()), mPermit(cfg("PERMIT").getId())
 {
     cfg("ID").setS(id());
     m_lnk = true;
@@ -1371,7 +1371,7 @@ void PageWdg::save_( )
 	//-- Remove from library table --
 	if( delMark )
 	{
-	    m_parent = "<deleted>";
+	    mParent = "<deleted>";
 	    SYS->db().at().dataSet( db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this );
 	}
 	else SYS->db().at().dataDel( db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this );	

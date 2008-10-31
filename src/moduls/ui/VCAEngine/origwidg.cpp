@@ -817,11 +817,10 @@ void OrigDocument::postEnable( int flag )
     {
 	attrAdd( new TFld("style",_("CSS"),TFld::String,TFld::FullText,"","","","","20") );
 	attrAdd( new TFld("tmpl",_("Template"),TFld::String,TFld::FullText,"","","","","21") );
-	attrAdd( new TFld("n",_("Archive size"),TFld::Integer,Attr::Active,"","0","0;99","","22") );
-	attrAdd( new TFld("doc",_("Document"),TFld::String,TFld::FullText,"","","","","23") );
-	attrAdd( new TFld("time",_("Time:current"),TFld::Integer,Attr::DataTime|Attr::Active,"","0","","","24") );
-	attrAdd( new TFld("bTime",_("Time:begin"),TFld::Integer,Attr::DataTime,"","0","","","25") );
-	attrAdd( new TFld("trcPer",_("Tracing period (s)"),TFld::Integer,TFld::NoFlag,"","0","0;360","","26") );
+	attrAdd( new TFld("doc",_("Document"),TFld::String,TFld::FullText,"","","","","22") );
+	attrAdd( new TFld("bTime",_("Time:begin"),TFld::Integer,Attr::DataTime,"","0","","","24") );
+	attrAdd( new TFld("time",_("Time:current"),TFld::Integer,Attr::DataTime|Attr::Active,"","0","","","23") );
+	attrAdd( new TFld("n",_("Archive size"),TFld::Integer,Attr::Active,"","0","0;99","","25") );
     }
 }
 
@@ -837,8 +836,10 @@ bool OrigDocument::attrChange( Attr &cfg, void *prev )
 	}
 	else
 	{
-	    cfg.owner()->attrAdd( new TFld("aCur",_("Cursor:archive"),TFld::Integer,Attr::Mutable|Attr::Active,"","0","0;99") );
-	    cfg.owner()->attrAdd( new TFld("vCur",_("Cursor:view"),TFld::Integer,Attr::Mutable|Attr::Active,"","0","0;99") );
+	    if( !cfg.owner()->attrPresent("aCur") )
+		cfg.owner()->attrAdd( new TFld("aCur",_("Cursor:archive"),TFld::Integer,Attr::Mutable|Attr::Active,"","0","0;99") );
+	    if( !cfg.owner()->attrPresent("vCur") )
+		cfg.owner()->attrAdd( new TFld("vCur",_("Cursor:view"),TFld::Integer,Attr::Mutable|Attr::Active,"","0","0;99") );
 	}
 	string fidp;
 	//- Delete archive document's attributes -
@@ -860,17 +861,21 @@ bool OrigDocument::attrChange( Attr &cfg, void *prev )
     //- Make document after time set -
     if( cfg.id() == "time" && cfg.getI() != *(int*)prev )
     {
-	int n = cfg.owner()->attrAt("n").at().getI();
-	int aCur = cfg.owner()->attrAt("aCur").at().getI();
 	string mkDk;
-	if( !n )	mkDk = cfg.owner()->attrAt("doc").at().getS();
-	else if( aCur >= 0 && aCur < n )
-	    mkDk = cfg.owner()->attrAt("doc"+TSYS::int2str(aCur)).at().getS();
-	if( mkDk.empty() )	mkDk = cfg.owner()->attrAt("tmpl").at().getS();
-	mkDk = makeDoc(mkDk,cfg.owner());
-	if( !n )	cfg.owner()->attrAt("doc").at().setS(mkDk);
+	int n = cfg.owner()->attrAt("n").at().getI();
+	if( !n )
+	{
+	    mkDk = cfg.owner()->attrAt("doc").at().getS();
+	    if( mkDk.empty() )	mkDk = cfg.owner()->attrAt("tmpl").at().getS();
+	    mkDk = makeDoc(mkDk,cfg.owner());
+	    cfg.owner()->attrAt("doc").at().setS(mkDk);
+	}
 	else
 	{
+	    int aCur = cfg.owner()->attrAt("aCur").at().getI();
+	    mkDk = cfg.owner()->attrAt("doc"+TSYS::int2str(aCur)).at().getS();
+	    if( mkDk.empty() )	mkDk = cfg.owner()->attrAt("tmpl").at().getS();
+	    mkDk = makeDoc(mkDk,cfg.owner());
 	    cfg.owner()->attrAt("doc"+TSYS::int2str(aCur)).at().setS(mkDk);
 	    if( aCur == cfg.owner()->attrAt("vCur").at().getI() )
 		cfg.owner()->attrAt("doc").at().setS(mkDk);
@@ -921,7 +926,7 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
     string iLang;				//Process instruction language
     string wProgO;				//Object of work programm
     time_t lstTime;				//Last time
-    TFunction funcIO(wdg->calcId()+"_doc");
+    TFunction funcIO("DOC_"+wdg->calcId());
     TValFunc funcV(wdg->id()+"_doc",NULL,false);
     vector<string> als;
 
@@ -929,7 +934,7 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
     try{ xdoc.load(XHTML_entity+tmpl); }
     catch(TError err)
     {
-	mess_err(wdg->nodePath().c_str(),_("Document's template parsing error: %s:"),err.mess.c_str());
+	mess_err(wdg->nodePath().c_str(),_("Document's template parsing error: %s."),err.mess.c_str());
 	return "";
     }
 
@@ -940,18 +945,19 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
 	lstTime = atoi(xdoc.attr("docTime").c_str());
     }
     if( TSYS::strEmpty(iLang) )	iLang = "JavaLikeCalc.JavaScript";
-    if( !lstTime )		lstTime = wdg->attrAt("time").at().getI();
+    if( !lstTime )		lstTime = wdg->attrAt("bTime").at().getI();
     //>> Add generic io
     funcIO.ioIns( new IO("rez",_("Result"),IO::String,IO::Return),0);
     funcIO.ioIns( new IO("time",_("Document time"),IO::Integer,IO::Default),1);
     funcIO.ioIns( new IO("bTime",_("Document begin time"),IO::Integer,IO::Default),2);
     funcIO.ioIns( new IO("lTime",_("Last time"),IO::Integer,IO::Default),3);
-    funcIO.ioIns( new IO("rTime",_("Repeat time"),IO::Integer,IO::Default),4);
-    funcIO.ioIns( new IO("rPer",_("Repeat period"),IO::Integer,IO::Default),5);
-    funcIO.ioIns( new IO("mTime",_("Message time"),IO::Integer,IO::Default),6);
-    funcIO.ioIns( new IO("mLev",_("Message level"),IO::Integer,IO::Default),7);
-    funcIO.ioIns( new IO("mCat",_("Message category"),IO::String,IO::Default),8);
-    funcIO.ioIns( new IO("mVal",_("Message value"),IO::String,IO::Default),9);
+    funcIO.ioIns( new IO("rTime",_("Repeat time (s)"),IO::Integer,IO::Default),4);
+    funcIO.ioIns( new IO("rTimeU",_("Repeat time (us)"),IO::Integer,IO::Default),5);
+    funcIO.ioIns( new IO("rPer",_("Repeat period"),IO::Real,IO::Default),6);
+    funcIO.ioIns( new IO("mTime",_("Message time"),IO::Integer,IO::Default),7);
+    funcIO.ioIns( new IO("mLev",_("Message level"),IO::Integer,IO::Default),8);
+    funcIO.ioIns( new IO("mCat",_("Message category"),IO::String,IO::Default),9);
+    funcIO.ioIns( new IO("mVal",_("Message value"),IO::String,IO::Default),10);
     //>> Add user io
     wdg->attrList(als);
     for( int i_a = 0; i_a < als.size(); i_a++ )
@@ -977,9 +983,9 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
 	//>> Load values of generic IO
 	funcV.setI(1,wdg->attrAt("time").at().getI());
 	funcV.setI(2,wdg->attrAt("bTime").at().getI());
-	funcV.setI(3,wdg->attrAt("lstTime").at().getI());
+	funcV.setI(3,lstTime);
 	//>> Load values of user IO
-	for( int i_a = 9; i_a < funcV.ioSize( ); i_a++ )
+	for( int i_a = 11; i_a < funcV.ioSize( ); i_a++ )
 	    funcV.setS(i_a,wdg->attrAt(funcV.func()->io(i_a)->id()).at().getS());
     }catch( TError err )
     {
@@ -1019,35 +1025,33 @@ void OrigDocument::nodeProcess( XMLNode *xcur, TValFunc &funcV, TFunction &funcI
 	    //>>> Copy included tags
 	    if( !docAppend )	xcur->childClear();
 	    for( int i_t = 0; i_t < xproc.childSize(); i_t++ )
-		*(xcur->childAdd()) = *xproc.childGet(i_t);
+		*(xcur->childIns(0)) = *xproc.childGet(i_t);
 	    if( instrDel )	xcur->prcInstrDel("dp");
 	}
 	catch( TError err )
 	{ mess_err(nodePath().c_str(),_("Instruction process is error: %s"),err.mess.c_str()); }
     }
 
-    int dRpt;
+    float dRpt;
     string dAMess;
     //> Go to include nodes
     for( int i_c = 0; i_c < xcur->childSize(); i_c++ )
     {
-	dRpt = atoi(xcur->childGet(i_c)->attr("docRept").c_str());
-	dAMess = xcur->childGet(i_c)->attr("docAMess");
 	//>> Repeat tags
-	if( dRpt )
+	if( (dRpt=atof(xcur->childGet(i_c)->attr("docRept").c_str())) > 1e-6 )
 	{
-	    funcV.setI(5,dRpt);
-	    for( time_t rTime = funcV.getI(3); rTime < funcV.getI(1); rTime+=dRpt )
+	    funcV.setR(6,dRpt);
+	    for( long long rTime = (long long)funcV.getI(3)*1000000+(long long)(1000000*dRpt); rTime <= (long long)funcV.getI(1)*1000000; rTime+=(long long)(1000000*dRpt) )
 	    {
-		funcV.setI(4,rTime);
+		funcV.setI(4,rTime/1000000); funcV.setI(5,rTime%1000000);
 		*(xcur->childIns(i_c+1)) = *(xcur->childGet(i_c));
 		nodeProcess(xcur->childGet(i_c+1),funcV,funcIO,iLang,true);
 		xcur->childGet(i_c+1)->attrDel("docRept");
 	    }
-	    funcV.setI(4,0); funcV.setI(5,0);
+	    funcV.setI(4,0); funcV.setI(5,0); funcV.setR(6,0);
 	}
 	//>> Repeat messages
-	else if( !dAMess.empty() )
+	else if( !(dAMess=xcur->childGet(i_c)->attr("docAMess")).empty() )
 	{
 	    //>>> Messages request from last time and curent time
 	    vector<TMess::SRec> mess;
@@ -1055,15 +1059,15 @@ void OrigDocument::nodeProcess( XMLNode *xcur, TValFunc &funcV, TFunction &funcI
 		TSYS::strSepParse(dAMess,1,':'), (TMess::Type)atoi(TSYS::strSepParse(dAMess,0,':').c_str()) );
 	    for( int i_r = 0; i_r < mess.size(); i_r++ )
 	    {
-		funcV.setI(6,mess[i_r].time);
-		funcV.setI(7,mess[i_r].level);
-		funcV.setS(8,mess[i_r].categ);
-		funcV.setS(9,mess[i_r].mess);
+		funcV.setI(7,mess[i_r].time);
+		funcV.setI(8,mess[i_r].level);
+		funcV.setS(9,mess[i_r].categ);
+		funcV.setS(10,mess[i_r].mess);
 		*(xcur->childIns(i_c+1)) = *(xcur->childGet(i_c));
 		nodeProcess(xcur->childGet(i_c+1),funcV,funcIO,iLang,true);
 		xcur->childGet(i_c+1)->attrDel("docAMess");
 	    }
-	    funcV.setI(6,0); funcV.setI(7,0); funcV.setS(8,""); funcV.setS(9,"");
+	    funcV.setI(7,0); funcV.setI(8,0); funcV.setS(9,""); funcV.setS(10,"");
 	}
 	else nodeProcess(xcur->childGet(i_c),funcV,funcIO,iLang,instrDel);
     }

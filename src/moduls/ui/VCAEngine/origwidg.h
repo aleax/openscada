@@ -22,6 +22,8 @@
 #ifndef ORIGWIDG_H
 #define ORIGWIDG_H
 
+#include <string.h>
+
 #include "libwidg.h"
 
 namespace VCA
