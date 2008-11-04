@@ -1845,18 +1845,18 @@ void VCAElFigure::getReq( SSess &ses )
                     if( item.type == 3 )
                     {
                         t = 0;
+                        Point el_p1_rot = scaleRotate( (pnts)[item.n1], xSc, ySc, true, true );
+                        Point el_p2_rot = scaleRotate( (pnts)[item.n2], xSc, ySc, true, true );
+                        Point el_p3_rot = scaleRotate( (pnts)[item.n3], xSc, ySc, true, true );
+                        Point el_p4_rot = scaleRotate( (pnts)[item.n4], xSc, ySc, true, true );
+                            
+                        Point el_p1 = unscaleUnrotate( el_p1_rot, xSc, ySc, false, true );
+                        Point el_p2 = unscaleUnrotate( el_p2_rot, xSc, ySc, false, true );
+                        Point el_p3 = unscaleUnrotate( el_p3_rot, xSc, ySc, false, true );
+                        Point el_p4 = unscaleUnrotate( el_p4_rot, xSc, ySc, false, true );
+ 
                         do
                         {
-                            Point el_p1_rot = scaleRotate( (pnts)[item.n1], xSc, ySc, true, true );
-                            Point el_p2_rot = scaleRotate( (pnts)[item.n2], xSc, ySc, true, true );
-                            Point el_p3_rot = scaleRotate( (pnts)[item.n3], xSc, ySc, true, true );
-                            Point el_p4_rot = scaleRotate( (pnts)[item.n4], xSc, ySc, true, true );
-                            
-                            Point el_p1 = unscaleUnrotate( el_p1_rot, xSc, ySc, false, true );
-                            Point el_p2 = unscaleUnrotate( el_p2_rot, xSc, ySc, false, true );
-                            Point el_p3 = unscaleUnrotate( el_p3_rot, xSc, ySc, false, true );
-                            Point el_p4 = unscaleUnrotate( el_p4_rot, xSc, ySc, false, true );
-                        
                             pnt_.x = bezier( t, el_p1, el_p3, el_p4, el_p2 ).x;
                             pnt_.x = bezier( t, el_p1, el_p3, el_p4, el_p2 ).y;
                             

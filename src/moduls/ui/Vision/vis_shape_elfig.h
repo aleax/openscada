@@ -211,7 +211,7 @@ class ShapeElFigure : public WdgShape
         int  buildMatrix( const QVector<ShapeItem> &shapeItems );
         QPointF scaleRotate( const QPointF &point, WdgView *w, bool flag_scale, bool flag_rotate );
         QPointF unScaleRotate( const QPointF &point, WdgView *w, bool flag_scale, bool flag_rotate );
-        QPainterPath createInundationPath( const QVector<int> &in_fig_num, const QVector<ShapeItem> &shapeItems, PntMap *pnts, WdgView *w );
+        QPainterPath createInundationPath( const QVector<int> &in_fig_num, const QVector<ShapeItem> &shapeItems, PntMap &pnts, WdgView *w );
         QVector<int> inundationSort( const QPainterPath &inundationPath, QVector<int> &inundation_fig_num, const QVector<ShapeItem> &shapeItems, PntMap *pnts, WdgView *w );
       	
 	//Attributes

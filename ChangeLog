@@ -1,3 +1,7 @@
+2008-11-4 Maxim
+- FIX:/UI/Vision: Filling by the image for primitive ElFigure is fixed.
+
+
 2008-10-30 Roman
 - FIX:/DAQ/Siemens: Not set modify flag for template field change.
 - !:/Special/FLibSYS: Direct access to archive or atribute's value address field is added for functions: varhBeg, varhEnd, varhGetR, varhGetB and varhGetS.
