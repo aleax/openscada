@@ -214,7 +214,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
         for( WidthMap::iterator pi = widths->begin(); pi != widths->end(); pi++ )
         {
             if(pi->first <= -10 ) (*widths).erase ( pi );
-            if( pi->first > 0 ) pi->second = pi->second * scale;
+            if( pi->first > 0 && fabs( pi->second - 0 ) >= 0.01 ) pi->second = vmax(1,pi->second * scale);
         }
         for( ColorMap::iterator pi = colors->begin(); pi != colors->end(); pi++ )
             if(pi->first <= -10 ) (*colors).erase ( pi );
@@ -247,8 +247,10 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
         int p[5];
         int width, bord_width, color, bord_color, style;
         QPointF ip[5];
-        (*widths)[-5] = (*widths)[-5]*scale;
-        (*widths)[-6] = (*widths)[-6]*scale;
+        if( fabs( (*widths)[-5] - 0) >= 0.01 ) (*widths)[-5] = vmax(1,(*widths)[-5]*scale);
+        else (*widths)[-5] = 0;
+        if( fabs( (*widths)[-6] - 0) >= 0.01 ) (*widths)[-6] = vmax(1,(*widths)[-6]*scale);
+        else (*widths)[-6] = 0;
         for( int off = 0; (sel=TSYS::strSepParse(elFD->elLst,0,'\n',&off)).size(); )
         {
             int el_off = 0;
@@ -308,7 +310,8 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 else if( sscanf(el_s.c_str(), "%d", &w) == 1 )
                 {
                         width = w_index;
-                        (*widths)[w_index] = w*scale;
+                        if( fabs( w - 0 ) >= 1 ) (*widths)[w_index] = vmax(1,w*scale);
+                        else (*widths)[w_index] = 0;
                         w_index -= 1;
                 }
                 else width = -5;
@@ -328,7 +331,8 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 else if( sscanf(el_s.c_str(), "%d", &w) == 1 )
                 {
                     bord_width = w_index;
-                    (*widths)[w_index] = w*scale;
+                    if( fabs( w - 0 ) >= 1 ) (*widths)[w_index] = vmax(1,w*scale);
+                    else (*widths)[w_index] = 0;
                     w_index -= 1;
                 }
                 else bord_width = -6;
@@ -447,7 +451,8 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 else if( sscanf(el_s.c_str(), "%d", &w) == 1 )
                 {
                     width = w_index;
-                    (*widths)[w_index] = w*scale;
+                    if( fabs( w - 0 ) >= 1 ) (*widths)[w_index] = vmax(1,w*scale);
+                    else (*widths)[w_index] = 0;
                     w_index -= 1;
                 }
                 else width = -5; 
@@ -467,7 +472,8 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 else if( sscanf(el_s.c_str(), "%d", &w) == 1 )
                 {
                     bord_width = w_index;
-                    (*widths)[w_index] = w*scale;
+                    if( fabs( w - 0 ) >= 1 ) (*widths)[w_index] = vmax(1,w*scale);
+                    else (*widths)[w_index] = 0;
                     w_index -= 1;
                 }
                 else bord_width = -6;
@@ -617,7 +623,8 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 else if( sscanf(el_s.c_str(), "%d", &w) == 1 )
                 {
                     width = w_index;
-                    (*widths)[w_index] = w*scale;
+                    if( fabs( w - 0 ) >= 1 ) (*widths)[w_index] = vmax(1,w*scale);
+                    else (*widths)[w_index] = 0;
                     w_index -= 1;
                 }
                 else width = -5;
@@ -637,7 +644,8 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 else if( sscanf(el_s.c_str(), "%d", &w) == 1 )
                 {
                     bord_width = w_index;
-                    (*widths)[w_index] = w*scale;
+                    if( fabs( w - 0 ) >= 1 ) (*widths)[w_index] = vmax(1,w*scale);
+                    else (*widths)[w_index] = 0;
                     w_index -= 1;
                 }
                 else bord_width = -6;
@@ -1953,31 +1961,38 @@ void ElFigDt::dynamic( )
                 break;
             case 1:
                 shapeItems[elF->index].width = real;
-                (*widths).erase(tmp);
+                if( tmp != -5 )
+                    (*widths).erase(tmp);
                 break;
             case 2:
                 shapeItems[elF->index].lineColor = real;
-                (*colors).erase(tmp);
+                if( tmp != -5 )
+                    (*colors).erase(tmp);
                 break;
             case 3:
                 shapeItems[elF->index].border_width = real;
-                (*widths).erase(tmp);
+                if( tmp != -6 )
+                    (*widths).erase(tmp);
                 break;
             case 4:
                 shapeItems[elF->index].borderColor = real;
-                (*colors).erase(tmp);
+                if( tmp != -6 )
+                    (*colors).erase(tmp);
                 break;
             case 5:
                 shapeItems[elF->index].style = real;
-                (*styles).erase(tmp);
+                if( tmp != -5 )
+                    (*styles).erase(tmp);
                 break;
             case 6:
                 inundationItems[elF->fill_index].brush = real;
-                (*colors).erase(tmp);
+                if( tmp != -7 )
+                    (*colors).erase(tmp);
                 break;
             case 7:
                 inundationItems[elF->fill_index].brush_img = real;
-                (*images).erase(tmp);
+                if( tmp != -5 )
+                    (*images).erase(tmp);
                 break;
 
         }
@@ -3991,11 +4006,13 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
         line1 = QLineF( StartMotionPos, EndMotionPos );
         if ( StartMotionPos.y() <= EndMotionPos.y() ) ang = 360 - angle( line1, line2 );
         else ang = angle( line1, line2 );
-        if( vmax(1,(*widths)[MotionWidth]) == 1 && (( (*widths)[MotionBorderWidth] >= 0) && (fabs((*widths)[MotionBorderWidth] - 0) < 0.01)) )
-            shapeItems.append( ShapeItem( painterPath( vmax(1,(*widths)[MotionWidth]) + 1,(*widths)[MotionBorderWidth], 1, ang, StartMotionPos, EndMotionPos ), painterPathSimple( 1, ang, StartMotionPos,EndMotionPos ),
+        if( (*widths)[MotionWidth] == 1 && (( (*widths)[MotionBorderWidth] >= 0) && (fabs((*widths)[MotionBorderWidth] - 0) < 0.01)) )
+        {
+            shapeItems.append( ShapeItem( painterPath( (*widths)[MotionWidth] + 1,(*widths)[MotionBorderWidth], 1, ang, StartMotionPos, EndMotionPos ), painterPathSimple( 1, ang, StartMotionPos,EndMotionPos ),
                                MotionNum_1, MotionNum_2, -1, -1, -1, QPointF(0,0), MotionLineColor, MotionBorderColor, MotionStyle, MotionWidth, MotionBorderWidth, 1,angle_temp ) );
+        }
         else
-            shapeItems.append( ShapeItem( painterPath( vmax(1,(*widths)[MotionWidth]), vmax(1,(*widths)[MotionBorderWidth]), 1, ang, StartMotionPos, EndMotionPos ), painterPathSimple( 1, ang, StartMotionPos,EndMotionPos ),
+            shapeItems.append( ShapeItem( painterPath( (*widths)[MotionWidth], (*widths)[MotionBorderWidth], 1, ang, StartMotionPos, EndMotionPos ), painterPathSimple( 1, ang, StartMotionPos,EndMotionPos ),
                                MotionNum_1, MotionNum_2, -1, -1, -1, QPointF(0,0), MotionLineColor, MotionBorderColor, MotionStyle, MotionWidth, MotionBorderWidth, 1,angle_temp ) );
         if( devW && devW->edit() )
         {
@@ -4023,12 +4040,12 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
         CtrlMotionPos_4 = QPointF( t_start, t_end );
         CtrlMotionPos_3 = QPointF( CtrlMotionPos_1.x() + rotate( arc( 0, a, b ), ang ).x(),
                                 CtrlMotionPos_1.y() - rotate( arc( 0, a, b ), ang ).y() );
-        if( vmax(1,(*widths)[MotionWidth]) == 1 && (( (*widths)[MotionBorderWidth] >= 0) && (fabs((*widths)[MotionBorderWidth] - 0) < 0.01)) )
-            shapeItems.append( ShapeItem( painterPath( vmax(1,(*widths)[MotionWidth]) + 1, (*widths)[MotionBorderWidth], 2, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4 ),
+        if( (*widths)[MotionWidth] == 1 && (( (*widths)[MotionBorderWidth] >= 0) && (fabs((*widths)[MotionBorderWidth] - 0) < 0.01)) )
+            shapeItems.append( ShapeItem( painterPath( (*widths)[MotionWidth] + 1, (*widths)[MotionBorderWidth], 2, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4 ),
                                painterPathSimple( 2, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4 ),
                                        MotionNum_1, MotionNum_2, MotionNum_3, MotionNum_4, MotionNum_5, CtrlMotionPos_4, MotionLineColor, MotionBorderColor, MotionStyle, MotionWidth, MotionBorderWidth, 2, angle_temp ) );
         else
-            shapeItems.append( ShapeItem( painterPath( vmax(1,(*widths)[MotionWidth]), vmax(1,(*widths)[MotionBorderWidth]), 2, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4 ),
+            shapeItems.append( ShapeItem( painterPath( (*widths)[MotionWidth], (*widths)[MotionBorderWidth], 2, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4 ),
                                painterPathSimple( 2, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4 ),
                                        MotionNum_1, MotionNum_2, MotionNum_3, MotionNum_4, MotionNum_5, CtrlMotionPos_4, MotionLineColor, MotionBorderColor, MotionStyle, MotionWidth, MotionBorderWidth, 2, angle_temp ) );
         if( devW && devW->edit() )
@@ -4076,12 +4093,12 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
             ang = 360 - angle( line1, line2 );
         else
             ang = angle( line1, line2 );
-        if( vmax(1,(*widths)[MotionWidth]) == 1 && (( (*widths)[MotionBorderWidth] >= 0) && (fabs((*widths)[MotionBorderWidth] - 0) < 0.01)) )
-            shapeItems.append( ShapeItem( painterPath( vmax(1,(*widths)[MotionWidth]) + 1, (*widths)[MotionBorderWidth], 3, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2 ),
+        if( (*widths)[MotionWidth] == 1 && (( (*widths)[MotionBorderWidth] >= 0) && (fabs((*widths)[MotionBorderWidth] - 0) < 0.01)) )
+            shapeItems.append( ShapeItem( painterPath( (*widths)[MotionWidth] + 1, (*widths)[MotionBorderWidth], 3, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2 ),
                                painterPathSimple( 3, ang,StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2 ),
                                        MotionNum_1, MotionNum_2, MotionNum_3, MotionNum_4, -1, QPointF(0,0), MotionLineColor, MotionBorderColor, MotionStyle, MotionWidth, MotionBorderWidth, 3, angle_temp ) );
         else
-            shapeItems.append( ShapeItem( painterPath( vmax(1,(*widths)[MotionWidth]), vmax(1,(*widths)[MotionBorderWidth]), 3, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2 ),
+            shapeItems.append( ShapeItem( painterPath( (*widths)[MotionWidth], (*widths)[MotionBorderWidth], 3, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2 ),
                                painterPathSimple( 3, ang,StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2 ),
                                        MotionNum_1, MotionNum_2, MotionNum_3, MotionNum_4, -1, QPointF(0,0), MotionLineColor, MotionBorderColor, MotionStyle, MotionWidth, MotionBorderWidth, 3, angle_temp ) );
         if( devW && devW->edit() )

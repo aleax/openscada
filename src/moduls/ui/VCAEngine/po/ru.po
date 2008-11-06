@@ -1171,7 +1171,7 @@ msgstr ""
 
 #: origwidg.cpp:143 origwidg.cpp:222
 msgid "Solid;Dashed;Dotted"
-msgstr "Сплошная;Штрих;Точечная"
+msgstr "Сплошная;Пунктир;Точечная"
 
 #: origwidg.cpp:143 origwidg.cpp:327 origwidg.cpp:333 origwidg.cpp:343
 #: origwidg.cpp:351 origwidg.cpp:356 origwidg.cpp:412 origwidg.cpp:506

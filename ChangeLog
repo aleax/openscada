@@ -1,3 +1,8 @@
+2008-11-6 Maxim
+- FIX:/UI/Vision: Addition the dynamic value instead of static one in procedure dynamic is fixed for primitive ElFigure.
+- FIX:/UI/Vision: Scaling the widths is fixed for primitive ElFigure.
+
+
 2008-11-4 Maxim
 - FIX:/UI/Vision: Filling by the image for primitive ElFigure is fixed.
 
