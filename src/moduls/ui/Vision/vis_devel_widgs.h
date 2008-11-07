@@ -269,8 +269,8 @@ class LinkItemDelegate: public QItemDelegate
 
 	InspLnk *owner( ) const;
 
-    //public slots:
-    //	void selItem( int val );
+    public slots:
+	void selItem( int val );
 
     private:
 	bool initVal;
@@ -338,7 +338,7 @@ class WdgTree: public QDockWidget
 
 //****************************************
 //* Project's tree                       *
-//**************************************** 
+//****************************************
 class ProjTree: public QDockWidget
 {
     Q_OBJECT

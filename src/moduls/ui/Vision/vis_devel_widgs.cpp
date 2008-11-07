@@ -960,7 +960,7 @@ QWidget *LinkItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 	((QComboBox*)w_del)->setEditable(true);
 	for( int i_l = 0; i_l < req.childSize(); i_l++ )
 	    ((QComboBox*)w_del)->addItem(req.childGet(i_l)->text().c_str());
-	//connect( w_del, SIGNAL( currentIndexChanged(int) ), this, SLOT( selItem(int) ) );
+	connect( w_del, SIGNAL( currentIndexChanged(int) ), this, SLOT( selItem(int) ) );
     }
     else
     {
@@ -971,12 +971,12 @@ QWidget *LinkItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
     return w_del;
 }
 
-/*void LinkItemDelegate::selItem( int pos )
+void LinkItemDelegate::selItem( int pos )
 {
     if( initVal ) return;
     emit commitData((QWidget*)sender());
-    //emit closeEditor((QWidget*)sender(), QAbstractItemDelegate::SubmitModelCache);
-}*/
+    emit closeEditor((QWidget*)sender());
+}
 
 void LinkItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {

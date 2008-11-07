@@ -88,7 +88,7 @@ WdgView *RunWdgView::newWdgItem( const string &iwid )
     return new RunWdgView(iwid,wLevel()+1,mainWin(),this);
 }
 
-void RunWdgView::update( bool full, const string &wpath )
+void RunWdgView::update( bool full, const string &wpath, bool all )
 {
     if( !wpath.empty() )
     {
@@ -103,12 +103,12 @@ void RunWdgView::update( bool full, const string &wpath )
     XMLNode *req_el;
     XMLNode req("get");
     req.setAttr("path",id()+"/%2fserv%2fattr")->
-        setAttr("tm",TSYS::uint2str(full?0:reqtm));
+	setAttr("tm",TSYS::uint2str(full?0:reqtm));
     if( !cntrIfCmd(req) )
     {
-        if( full )	setAllAttrLoad(true);
-        for( int i_el = 0; i_el < req.childSize(); i_el++ )
-        {
+	if( full )	setAllAttrLoad(true);
+	for( int i_el = 0; i_el < req.childSize(); i_el++ )
+	{
 	    req_el = req.childGet(i_el);
 	    if( attrSet("",req_el->text(),atoi(req_el->attr("pos").c_str())) )
 		change = true;
@@ -126,11 +126,11 @@ void RunWdgView::update( bool full, const string &wpath )
     }
 
     //- Call childs for update -
-    if( full )
+    if( full || all )
 	for( int i_c = 0; i_c < children().size(); i_c++ )
 	    if( qobject_cast<RunWdgView*>(children().at(i_c)) && !qobject_cast<RunPageView*>(children().at(i_c)) &&
 		    ((RunWdgView*)children().at(i_c))->isEnabled() )
-		((RunWdgView*)children().at(i_c))->update(full);
+		((RunWdgView*)children().at(i_c))->update(full,"",all);
 }
 
 void RunWdgView::childsUpdate( bool newLoad )

@@ -87,7 +87,7 @@ class Project : public TCntrNode, public TConfig
 	void add( const string &id, const string &name, const string &orig = "" );
 	void add( Page *iwdg );
 	void del( const string &id, bool full = false )
-	{ chldDel( mPage, id, -1, full, true ); }
+	{ chldDel( mPage, id, -1, full ); }
 
 	//- Mime data access -
 	void mimeDataList( vector<string> &list, const string &idb = "" );
@@ -190,7 +190,7 @@ class Page : public Widget, public TConfig
 	void pageAdd( const string &id, const string &name, const string &orig = "" );
 	void pageAdd( Page *iwdg );
 	void pageDel( const string &id, bool full = false )
-	{ chldDel( mPage, id, -1, full, true ); }
+	{ chldDel( mPage, id, -1, full ); }
 
 	//- Data access -
 	string resourceGet( const string &id, string *mime = NULL );

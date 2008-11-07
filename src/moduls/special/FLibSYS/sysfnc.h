@@ -773,7 +773,7 @@ class real2str : public TFunction
 
 	void calc( TValFunc *val )
 	{
-	    val->setS(0,TSYS::strMess((val->getS(3)=="g")?"%.*g":"%.*f",val->getI(2),val->getR(1)));
+	    val->setS(0,TSYS::real2str(val->getR(1),val->getI(2),val->getS(3).size()?val->getS(3)[0]:'f') );
 	}
 };
 

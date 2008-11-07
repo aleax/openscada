@@ -302,7 +302,7 @@ void Widget::inheritAttr( const string &iattr )
 {
     if( parent().freeStat() )	return;
 
-    //- Create no present attributes -
+    //> Create no present attributes
     vector<string>  ls;
     if( iattr.empty() )	parent().at().attrList(ls);
     else
@@ -311,8 +311,9 @@ void Widget::inheritAttr( const string &iattr )
 	else return;
     }
 
+    //> Configuration inherit
     AutoHD<Attr> attr, pattr;
-    for(int i_l = 0; i_l < ls.size(); i_l++)
+    for( int i_l = 0; i_l < ls.size(); i_l++ )
     {
 	if( !attrPresent(ls[i_l]) )
 	{
@@ -322,9 +323,9 @@ void Widget::inheritAttr( const string &iattr )
 	    fel->setFlg(fel->flg()|Attr::IsInher);
 	    attrAdd(fel);
 	}
-	if( ls[i_l]=="id" || ls[i_l]=="path" || attrAt(ls[i_l]).at().modif() )	continue;
 	attr  = attrAt(ls[i_l]);
 	pattr = parent().at().attrAt(ls[i_l]);
+	if( ls[i_l]=="id" || ls[i_l]=="path" || attr.at().modif() )	continue;
 	attr.at().setFlgSelf(pattr.at().flgSelf());
 	bool active = attr.at().flgGlob()&Attr::Active;
 	switch( attr.at().type() )
@@ -360,7 +361,7 @@ void Widget::inheritIncl( const string &iwdg )
 	    wdgAdd(ls[i_w],"",parw.at().wdgAt(ls[i_w]).at().path());
 }
 
-void Widget::attrAdd( TFld *attr, int pos )
+void Widget::attrAdd( TFld *attr, int pos, bool inher )
 {
     string anm = attr->name();
     if( attrPresent(anm) )
@@ -369,6 +370,7 @@ void Widget::attrAdd( TFld *attr, int pos )
 	throw TError(nodePath().c_str(),_("Attribut %s already present."),anm.c_str());
     }
     attr_cfg.fldAdd(attr,pos);
+    if( inher )	inheritAttr(anm);
 }
 
 void Widget::attrDel( const string &attr )
@@ -751,7 +753,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
 			else
 			{
 			    if( wdg.at().attrAt(alist[i_a]).at().flgSelf()&Attr::CfgConst )
- 				ctrMkNode("fld",opt,-1,(string("/links/lnk/el_")+idprm).c_str(),nprm,RWRWR_,"root","UI",2,"tp","str","elGrp",grpprm.c_str());
+				ctrMkNode("fld",opt,-1,(string("/links/lnk/el_")+idprm).c_str(),nprm,RWRWR_,"root","UI",2,"tp","str","elGrp",grpprm.c_str());
 			    else
 				ctrMkNode("fld",opt,-1,(string("/links/lnk/el_")+idprm).c_str(),
 				    nprm,RWRWR_,"root","UI",4,"tp","str","dest","sel_ed","select",(string("/links/lnk/ls_")+idprm).c_str(),"elGrp",grpprm.c_str());
@@ -1325,32 +1327,32 @@ char Attr::getB( )
     }
 }
 
-void Attr::setSEL( const string &val, bool strongPrev )
+void Attr::setSEL( const string &val, bool strongPrev, bool sys )
 {
     if( !(fld().flg()&TFld::Selected) )
 	throw TError("Cfg",_("Element type no select!"));
     switch( fld().type() )
     {
-	case TFld::String:	setS( fld().selNm2VlS(val), strongPrev );	break;
-	case TFld::Integer:	setI( fld().selNm2VlI(val), strongPrev );	break;
-	case TFld::Real:	setR( fld().selNm2VlR(val), strongPrev );	break;
-	case TFld::Boolean:	setB( fld().selNm2VlB(val), strongPrev );	break;
+	case TFld::String:	setS( fld().selNm2VlS(val), strongPrev, sys );	break;
+	case TFld::Integer:	setI( fld().selNm2VlI(val), strongPrev, sys );	break;
+	case TFld::Real:	setR( fld().selNm2VlR(val), strongPrev, sys );	break;
+	case TFld::Boolean:	setB( fld().selNm2VlB(val), strongPrev, sys );	break;
     }
 }
 
-void Attr::setS( const string &val, bool strongPrev )
+void Attr::setS( const string &val, bool strongPrev, bool sys )
 {
     switch( fld().type() )
     {
-	case TFld::Integer:	setI( (val!=EVAL_STR) ? atoi(val.c_str()) : EVAL_INT, strongPrev );	break;
-	case TFld::Real:	setR( (val!=EVAL_STR) ? atof(val.c_str()) : EVAL_REAL, strongPrev );	break;
-	case TFld::Boolean:	setB( (val!=EVAL_STR) ? (bool)atoi(val.c_str()) : EVAL_BOOL, strongPrev );	break;
+	case TFld::Integer:	setI( (val!=EVAL_STR) ? atoi(val.c_str()) : EVAL_INT, strongPrev, sys );	break;
+	case TFld::Real:	setR( (val!=EVAL_STR) ? atof(val.c_str()) : EVAL_REAL, strongPrev, sys );	break;
+	case TFld::Boolean:	setB( (val!=EVAL_STR) ? (bool)atoi(val.c_str()) : EVAL_BOOL, strongPrev, sys );	break;
 	case TFld::String:
 	{
 	    if( !strongPrev && *(m_val.s_val) == val )	break;
 	    string t_str = *(m_val.s_val);
 	    *(m_val.s_val) = val;
-	    if( !owner()->attrChange(*this,&t_str) )
+	    if( !sys && !owner()->attrChange(*this,&t_str) )
 		*(m_val.s_val) = t_str;
 	    else
 	    {
@@ -1362,13 +1364,13 @@ void Attr::setS( const string &val, bool strongPrev )
     }
 }
 
-void Attr::setI( int val, bool strongPrev )
+void Attr::setI( int val, bool strongPrev, bool sys )
 {
     switch( fld().type() )
     {
-	case TFld::String:	setS( (val!=EVAL_INT) ? TSYS::int2str(val) : EVAL_STR, strongPrev );	break;
-	case TFld::Real:	setR( (val!=EVAL_INT) ? val : EVAL_REAL, strongPrev );			break;
-	case TFld::Boolean:	setB( (val!=EVAL_INT) ? (bool)val : EVAL_BOOL, strongPrev );		break;
+	case TFld::String:	setS( (val!=EVAL_INT) ? TSYS::int2str(val) : EVAL_STR, strongPrev, sys );	break;
+	case TFld::Real:	setR( (val!=EVAL_INT) ? val : EVAL_REAL, strongPrev, sys );			break;
+	case TFld::Boolean:	setB( (val!=EVAL_INT) ? (bool)val : EVAL_BOOL, strongPrev, sys );		break;
 	case TFld::Integer:
 	{
 	    if( !(fld().flg()&TFld::Selected) && fld().selValI()[0] < fld().selValI()[1] )
@@ -1379,7 +1381,7 @@ void Attr::setI( int val, bool strongPrev )
 	    if( !strongPrev && m_val.i_val == val )	break;
 	    int t_val = m_val.i_val;
 	    m_val.i_val = val;
-	    if( !owner()->attrChange(*this,&t_val) )
+	    if( !sys && !owner()->attrChange(*this,&t_val) )
 		m_val.i_val = t_val;
 	    else
 	    {
@@ -1391,13 +1393,13 @@ void Attr::setI( int val, bool strongPrev )
     }
 }
 
-void Attr::setR( double val, bool strongPrev )
+void Attr::setR( double val, bool strongPrev, bool sys )
 {
     switch( fld().type() )
     {
-	case TFld::String:	setS( (val!=EVAL_REAL) ? TSYS::real2str(val) : EVAL_STR, strongPrev );	break;
-	case TFld::Integer:	setI( (val!=EVAL_REAL) ? (int)val : EVAL_INT, strongPrev );		break;
-	case TFld::Boolean:	setB( (val!=EVAL_REAL) ? (bool)val : EVAL_BOOL, strongPrev );		break;
+	case TFld::String:	setS( (val!=EVAL_REAL) ? TSYS::real2str(val) : EVAL_STR, strongPrev, sys );	break;
+	case TFld::Integer:	setI( (val!=EVAL_REAL) ? (int)val : EVAL_INT, strongPrev, sys );		break;
+	case TFld::Boolean:	setB( (val!=EVAL_REAL) ? (bool)val : EVAL_BOOL, strongPrev, sys );		break;
 	case TFld::Real:
 	{
 	    if( !(fld().flg()&TFld::Selected) && fld().selValR()[0] < fld().selValR()[1] )
@@ -1408,7 +1410,7 @@ void Attr::setR( double val, bool strongPrev )
 	    if( !strongPrev && m_val.r_val == val )	break;
 	    double t_val = m_val.r_val;
 	    m_val.r_val = val;
-	    if( !owner()->attrChange(*this,&t_val) )
+	    if( !sys && !owner()->attrChange(*this,&t_val) )
 		m_val.r_val = t_val;
 	    else
 	    {
@@ -1420,19 +1422,19 @@ void Attr::setR( double val, bool strongPrev )
     }
 }
 
-void Attr::setB( char val, bool strongPrev )
+void Attr::setB( char val, bool strongPrev, bool sys )
 {
     switch( fld().type() )
     {
-	case TFld::String:	setS( (val!=EVAL_BOOL) ? TSYS::int2str((bool)val) : EVAL_STR, strongPrev );	break;
-	case TFld::Integer:	setI( (val!=EVAL_BOOL) ? (bool)val : EVAL_INT, strongPrev );			break;
-	case TFld::Real:	setR( (val!=EVAL_BOOL) ? (bool)val : EVAL_REAL, strongPrev );			break;
+	case TFld::String:	setS( (val!=EVAL_BOOL) ? TSYS::int2str((bool)val) : EVAL_STR, strongPrev, sys );	break;
+	case TFld::Integer:	setI( (val!=EVAL_BOOL) ? (bool)val : EVAL_INT, strongPrev, sys );			break;
+	case TFld::Real:	setR( (val!=EVAL_BOOL) ? (bool)val : EVAL_REAL, strongPrev, sys );			break;
 	case TFld::Boolean:
 	{
 	    if( !strongPrev && m_val.b_val == val )	break;
 	    bool t_val = m_val.b_val;
 	    m_val.b_val = val;
-	    if( !owner()->attrChange(*this,&t_val) )
+	    if( !sys && !owner()->attrChange(*this,&t_val) )
 		m_val.b_val = t_val;
 	    else
 	    {

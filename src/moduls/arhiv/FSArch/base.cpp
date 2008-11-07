@@ -102,7 +102,7 @@ void ModArch::postEnable( int flag )
 	owner().messE().fldAdd( new TFld("FSArchTm",_("Check archives period (min)"),TFld::Integer,TFld::NoFlag,"2","60") );
 
 	//- Add self DB-fields for value archive -
-	owner().valE().fldAdd( new TFld("FSArchTmSize",_("File's time size (hours)"),TFld::Real,TFld::NoFlag,"4.2","800") );
+	owner().valE().fldAdd( new TFld("FSArchTmSize",_("File's time size (hours)"),TFld::Real,TFld::NoFlag,"8.4","800") );
 	owner().valE().fldAdd( new TFld("FSArchNFiles",_("Maximum files number"),TFld::Integer,TFld::NoFlag,"3","10") );
 	owner().valE().fldAdd( new TFld("FSArchRound",_("Numberic values rounding (%)"),TFld::Real,TFld::NoFlag,"2.2","0.1","0;50") );
 	owner().valE().fldAdd( new TFld("FSArchPackTm",_("Pack files timeout (min)"),TFld::Integer,TFld::NoFlag,"2","10") );

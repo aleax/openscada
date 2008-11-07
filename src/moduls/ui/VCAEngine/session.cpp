@@ -87,6 +87,8 @@ void Session::setEnable( bool val )
 	    for( int i_ls = 0; i_ls < pg_ls.size(); i_ls++ )
 		try{ at(pg_ls[i_ls]).at().setEnable(true); }
 		catch( TError err )	{ mess_err( err.cat.c_str(), "%s", err.mess.c_str() ); }
+	
+	    modifGClr();
 	}
 	catch(...){ mParent.free(); }
     }

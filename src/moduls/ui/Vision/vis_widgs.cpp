@@ -77,11 +77,11 @@ InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess,
     intr_lay->addWidget(inp_lab);
     dlg_lay->addItem(intr_lay);
 
+    ed_lay = new QGridLayout;
+    ed_lay->setSpacing(6);
     //Id and name fields
     if( with_nm || with_id )
     {
-	QGridLayout *ed_lay = new QGridLayout;
-	ed_lay->setSpacing(6);
 	if( with_id )
 	{
 	    ed_lay->addWidget( new QLabel(_("ID:"),this), 0, 0 );

@@ -235,7 +235,7 @@ string XMLNode::save( unsigned char flg )
 	    xml = xml + Mess->codeConvOut("UTF-8",encode(text(),true)) + (flg&XMLNode::BrTextPast?"\n":"");
 	//- Save process instructions -
 	for( int i_p = 0; i_p < mPrcInstr.size(); i_p++ )
-	    xml = xml + "<?"+mPrcInstr[i_p].first+" "+Mess->codeConvOut("UTF-8",mPrcInstr[i_p].second)+(flg&XMLNode::BrPrcInstrPast?" ?>\n":" ?>");
+	    xml = xml + "<?"+mPrcInstr[i_p].first+" "+Mess->codeConvOut("UTF-8",mPrcInstr[i_p].second)+(flg&XMLNode::BrPrcInstrPast?"?>\n":"?>");
 	//- Save included childs -
 	for( int i_c = 0; i_c < childSize(); i_c++ )
 	{
@@ -320,7 +320,15 @@ void XMLNode::start_element( void *data, const char *el, const char **attr )
 void XMLNode::end_element( void *data, const char *el )
 {
     XMLNode *p = (XMLNode*)data;
-    p->mParent->setText(Mess->codeConvIn("UTF-8",p->mParent->text()));
+
+    //> Remove spaces from end of text
+    int i_ch;
+    for( i_ch = p->mParent->mText.size()-1; i_ch >= 0; i_ch--)
+	if( !(p->mParent->mText[i_ch] == ' ' || p->mParent->mText[i_ch] == '\n' || p->mParent->mText[i_ch] == '\t') )
+	    break;
+    //> Encode text
+    p->mParent->setText(Mess->codeConvIn("UTF-8",p->mParent->mText.substr(0,i_ch+1)));
+
     if( !p->node_stack.empty() ) p->node_stack.pop_back();
     if( p->node_stack.empty() ) p->mParent = NULL;
     else p->mParent = p->node_stack[p->node_stack.size()-1];

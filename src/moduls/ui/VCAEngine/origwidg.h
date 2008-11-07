@@ -188,6 +188,7 @@ class OrigDocument : public PrWidget
 
 	string makeDoc( const string &tmpl, Widget *wdg );
 	void nodeProcess( XMLNode *xcur, TValFunc &funcV, TFunction &funcIO, const string &iLang, bool instrDel = false );
+	void nodeClear( XMLNode *xcur );
 
 	//Attributes
 	static char *XHTML_entity;

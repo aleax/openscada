@@ -30,6 +30,7 @@
 #include <QDialog>
 #include <QMap>
 #include <QVariant>
+#include <QGridLayout>
 
 #include <xml.h>
 
@@ -64,7 +65,10 @@ namespace VISION
 	    void setName( const QString &val );
 	    void setMess( const QString &val );
 
+	    QGridLayout *edLay( )	{ return ed_lay; }
+
 	private:
+	    QGridLayout *ed_lay;
 	    QLabel	*inp_lab;
 	    QLineEdit	*m_id, *m_name;
     };

@@ -135,10 +135,10 @@ string TSYS::ll2str( long long val, IntView view )
     return buf;
 }
 
-string TSYS::real2str( double val, int prec )
+string TSYS::real2str( double val, int prec, char tp )
 {
     char buf[STR_BUF_LEN];
-    snprintf(buf,sizeof(buf),"%.*g",prec,val);
+    snprintf(buf,sizeof(buf),(tp=='g')?"%.*g":"%.*f",prec,val);
 
     return buf;
 }

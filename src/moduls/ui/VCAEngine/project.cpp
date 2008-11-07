@@ -182,9 +182,10 @@ void Project::save_( )
 {
     SYS->db().at().dataSet(DB()+"."+mod->prjTable(),mod->nodePath()+"PRJ/",*this);
 
-    //- Check for need copy mime data to other DB and same copy -
+    //> Check for need copy mime data and sessions data to other DB and same copy
     if( !mOldDB.empty() && mOldDB != TBDS::realDBName(DB()) )
     {
+	//>> Mime data copy
 	vector<string> pls;
 	mimeDataList(pls,mOldDB);
 	string mimeType, mimeData;
@@ -192,6 +193,14 @@ void Project::save_( )
 	{
 	    mimeDataGet( pls[i_m], mimeType, &mimeData, mOldDB );
 	    mimeDataSet( pls[i_m], mimeType, mimeData, DB() );
+	}
+	//>> Session's data copy
+	string wtbl = tbl()+"_ses";
+	TConfig c_el(&mod->elPrjSes());
+	for( int fld_cnt = 0; SYS->db().at().dataSeek(mOldDB+"."+wtbl,"",fld_cnt,c_el); fld_cnt++ )
+	{
+	    SYS->db().at().dataSet(DB()+"."+wtbl,"",c_el);
+	    c_el.cfg("IDW").setS(""); c_el.cfg("ID").setS("");
 	}
     }
 
@@ -611,7 +620,32 @@ void Page::postEnable( int flag )
 
 void Page::postDisable( int flag )
 {
+    if( flag )
+    {
+	string db  = ownerProj()->DB();
+	string tbl = ownerProj()->tbl();
 
+	//-- Remove from library table --
+	SYS->db().at().dataDel( db+"."+tbl, mod->nodePath()+tbl, *this );
+
+	//-- Remove widget's IO from library IO table --
+	TConfig c_el(&mod->elWdgIO());
+	c_el.cfg("IDW").setS(path());
+	c_el.cfg("ID").setS("");
+	SYS->db().at().dataDel( db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", c_el );
+
+	//-- Remove widget's user IO from library IO table --
+	c_el.setElem(&mod->elWdgUIO());
+	c_el.cfg("IDW").setS(path());
+	c_el.cfg("ID").setS("");
+	SYS->db().at().dataDel( db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", c_el );
+
+	//-- Remove widget's included widgets from library include table --
+	c_el.setElem(&mod->elInclWdg());
+	c_el.cfg("IDW").setS(path());
+	c_el.cfg("ID").setS("");
+	SYS->db().at().dataDel( db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", c_el );
+    }
 }
 
 string Page::ico( )
@@ -869,50 +903,23 @@ void Page::save_( )
     string db  = ownerProj()->DB();
     string tbl = ownerProj()->tbl();
 
-    //- Delete form DB -
-    if( nodeMode() == TCntrNode::Disable )
-    {
-	//-- Remove from library table --
-	SYS->db().at().dataDel( db+"."+tbl, mod->nodePath()+tbl, *this );
-
-	//-- Remove widget's IO from library IO table --
-	TConfig c_el(&mod->elWdgIO());
-	c_el.cfg("IDW").setS(path());
-	c_el.cfg("ID").setS("");
-	SYS->db().at().dataDel( db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", c_el );
-
-	//-- Remove widget's user IO from library IO table --
-	c_el.setElem(&mod->elWdgUIO());
-	c_el.cfg("IDW").setS(path());
-	c_el.cfg("ID").setS("");
-	SYS->db().at().dataDel( db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", c_el );
-
-	//-- Remove widget's included widgets from library include table --
-	c_el.setElem(&mod->elInclWdg());
-	c_el.cfg("IDW").setS(path());
-	c_el.cfg("ID").setS("");
-	SYS->db().at().dataDel( db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", c_el );
-    }
     //- Save widget's data -
-    else
+    vector<string> ls;
+
+    //-- Save generic widget's data --
+    m_attrs="";
+    vector<string> als;
+    attrList( als );
+    for( int i_a = 0; i_a < als.size(); i_a++ )
     {
-	vector<string> ls;
-
-	//-- Save generic widget's data --
-	m_attrs="";
-	vector<string> als;
-	attrList( als );
-	for( int i_a = 0; i_a < als.size(); i_a++ )
-	{
-	    AutoHD<Attr> attr = attrAt(als[i_a]);
-	    if( attr.at().modif() && !(!(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser) )
-		m_attrs+=als[i_a]+";";
-	}
-	SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,*this);
-
-	//-- Save widget's attributes --
-	saveIO();
+	AutoHD<Attr> attr = attrAt(als[i_a]);
+	if( attr.at().modif() && !(!(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser) )
+	    m_attrs+=als[i_a]+";";
     }
+    SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,*this);
+
+    //-- Save widget's attributes --
+    saveIO();
 }
 
 void Page::saveIO( )

@@ -179,6 +179,7 @@ string TValBuf::getS( long long *itm, bool up_ord )
 	case TFld::String:
 	    ResAlloc res(b_res,false); return buf.str->get(itm,up_ord);
     }
+    return EVAL_STR;
 }
 
 double TValBuf::getR( long long *itm, bool up_ord )
@@ -194,6 +195,7 @@ double TValBuf::getR( long long *itm, bool up_ord )
 	case TFld::Real:
 	    ResAlloc res(b_res,false); return buf.real->get(itm,up_ord);
     }
+    return EVAL_REAL;
 }
 
 int TValBuf::getI( long long *itm, bool up_ord )
@@ -209,6 +211,7 @@ int TValBuf::getI( long long *itm, bool up_ord )
 	case TFld::Integer:
 	    ResAlloc res(b_res,false); return buf.dec->get(itm,up_ord);
     }
+    return EVAL_INT;
 }
 
 char TValBuf::getB( long long *itm, bool up_ord )
@@ -224,6 +227,7 @@ char TValBuf::getB( long long *itm, bool up_ord )
 	case TFld::Boolean:
 	    ResAlloc res(b_res,false); return buf.bl->get(itm,up_ord);
     }
+    return EVAL_BOOL;
 }
 
 void TValBuf::setS( const string &value, long long tm )
@@ -416,7 +420,7 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( long long *itm, bool up_
     {
 	//- Process hard grid buffer -
 	int npos = up_ord?(end-tm)/per:(long long)buf.grid->size()-1-(tm-beg)/per;
-	if( npos < 0 || npos >= buf.grid->size() ) return eval;
+	if( npos < 0 || npos >= buf.grid->size() ) { if(itm) *itm = 0; return eval; }
 	if(itm)	*itm = end-npos*per;
 	return (*buf.grid)[((cur-npos-1)>=0)?(cur-npos-1):(buf.grid->size()+(cur-npos-1))];
     }
@@ -444,6 +448,7 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( long long *itm, bool up_
 		if( --c_end < 0 ) c_end = buf.tm_high->size()-1;
 	    }while(c_end != c_cur);
 
+	    if(itm) *itm = 0;
 	    return eval;
 	}
 	else
@@ -466,6 +471,7 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( long long *itm, bool up_
 		if( --c_end < 0 ) c_end = buf.tm_low->size()-1;
 	    }while(c_end != c_cur);
 
+	    if(itm) *itm = 0;
 	    return eval;
 	}
     }
@@ -495,6 +501,7 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( long long *itm, bool up_
 		}
 		c_end--;
 	    }
+	    if(itm) *itm = 0;
 	    return eval;
 	}
 	else
@@ -520,6 +527,7 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( long long *itm, bool up_
 		}
 		c_end--;
 	    }
+	    if(itm) *itm = 0;
 	    return eval;
 	}
     }
@@ -541,7 +549,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
 	    (*buf.grid)[ (cur) ? cur-1 : buf.grid->size()-1 ] = value;	//Update last value
 	    return;
 	}
-	else if( npos < 0 )	throw TError("ValBuf",_("Grid mode no support inserting old values."));	
+	else if( npos < 0 )	throw TError("ValBuf",_("Grid mode no support inserting old values."));
 	else
 	    while( npos-- )
 	    {

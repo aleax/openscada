@@ -62,7 +62,7 @@ namespace VISION
 	    WdgView *newWdgItem( const string &iwid );
 	    void attrLoad( QMap<QString, QString> &attrs );
 
-	    void update( bool full, const string &wpath = "" );
+	    void update( bool full, const string &wpath = "", bool all = false );
 	    bool attrSet( const string &attr, const string &val, int uiPrmPos = 0 );
 
 	    string resGet( const string &res );

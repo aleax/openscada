@@ -77,7 +77,7 @@ class WidgetLib : public TCntrNode, public TConfig
 	void add( const string &id, const string &name, const string &orig = "" );
 	void add( LWidget *iwdg );
 	void del( const string &id, bool full = false )
-	{ chldDel( m_wdg, id, -1, full, true ); }
+	{ chldDel( m_wdg, id, -1, full ); }
 
     protected:
 	//Methods

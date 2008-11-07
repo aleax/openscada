@@ -129,7 +129,7 @@ ModVArchEl::~ModVArchEl( )
 }
 
 string ModVArchEl::archTbl( )
-{ 
+{
     return "DBAVl_"+archivator().id()+"_"+archive().id(); 
 }
 
@@ -221,7 +221,11 @@ string ModVArchEl::getS( long long *tm, bool up_ord )
 	    cfg.cfg("TM").setI(itm/1000000);
 	    cfg.cfg("TMU").setI(itm%1000000);
 	    if( SYS->db().at().dataGet(archivator().addr()+"."+archTbl(),"",cfg) )
+	    {
+		if(tm) *tm = itm;
 		return cfg.cfg("VAL").getS();
+	    }
+	    if(tm) *tm = 0;
 	    return EVAL_STR;
 	}
     }
@@ -243,7 +247,11 @@ double ModVArchEl::getR( long long *tm, bool up_ord )
 	    cfg.cfg("TM").setI(itm/1000000);
 	    cfg.cfg("TMU").setI(itm%1000000);
 	    if( SYS->db().at().dataGet(archivator().addr()+"."+archTbl(),"",cfg) )
+	    {
+		if(tm) *tm = itm;
 		return cfg.cfg("VAL").getR();
+	    }
+	    if(tm) *tm = 0;
 	    return EVAL_REAL;
 	}
     }
@@ -265,7 +273,11 @@ int ModVArchEl::getI( long long *tm, bool up_ord )
 	    cfg.cfg("TM").setI(itm/1000000);
 	    cfg.cfg("TMU").setI(itm%1000000);
 	    if( SYS->db().at().dataGet(archivator().addr()+"."+archTbl(),"",cfg) )
+	    {
+		if(tm) *tm = itm;
 		return cfg.cfg("VAL").getI();
+	    }
+	    if(tm) *tm = 0;
 	    return EVAL_INT;
 	}
     }
@@ -287,7 +299,11 @@ char ModVArchEl::getB( long long *tm, bool up_ord )
 	    cfg.cfg("TM").setI(itm/1000000);
 	    cfg.cfg("TMU").setI(itm%1000000);
 	    if( SYS->db().at().dataGet(archivator().addr()+"."+archTbl(),"",cfg) )
+	    {
+		if(tm) *tm = itm;
 		return cfg.cfg("VAL").getI();
+	    }
+	    if(tm) *tm = 0;
 	    return EVAL_BOOL;
 	}
     }

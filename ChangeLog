@@ -1,9 +1,25 @@
-2008-11-6 Maxim
+2008-11-07 Roman
+- FIX:/XML: Removing from XML node's text, from end, spaces is fixed.
+- FIX:/Archive, /Archive/FSArch, /Archive/DBArch: EVAL, get value time and zero time on EVAL is fixed for functions of getting values from archive.
+- /UI/VCAEngine: Disable shift deletion for container's elements.
+- FIX:/UI/VCAEngine: The modify flag clear for opened session is fixed.
+- !!!:/UI/VCAEngine, /UI/Vision: Improve the primitive "Document" realisation. Made more stabile archive mode.
+  Storing archive to projects's DB (*_ses) is added. Repeat tags generation mechanism is changed.
+- !:/UI/VCAEngine: System mode is added to attributes' set value functions. For no prevent mode support into primitives' update.
+- FIX:/UI/VCAEngine: Inherit flag is added to an atribute add function for first inherit fix on creation.
+- !!:/UI/Vision: Link mode is added to copy widget's dialog.
+- !:/UI/Vision: Link apply on select is return for links inspector.
+- FIX:/UI/Vision: No update cached pages after open is fixed.
+- !!:/DemoDB: Is updated. Primitive's "Document" the archive mode reports is added. An archive process JavaLikeCalc functions is added (sum and average).
+  1 hour (1h) periodic FS archivator is added.
+
+
+2008-11-06 Maxim
 - FIX:/UI/Vision: Addition the dynamic value instead of static one in procedure dynamic is fixed for primitive ElFigure.
-- FIX:/UI/Vision: Scaling the widths is fixed for primitive ElFigure.
+- FIX:/UI/Vision: Scaling the widgets is fixed for primitive ElFigure.
 
 
-2008-11-4 Maxim
+2008-11-04 Maxim
 - FIX:/UI/Vision: Filling by the image for primitive ElFigure is fixed.
 
 

@@ -2474,10 +2474,6 @@ void ShapeDocument::nodeProcess( XMLNode *xcur, ShapeDocument::ShpDt *shD )
     //> Go to include nodes
     for( int i_c = 0; i_c < xcur->childSize(); i_c++ )
     {
-	//>> Delete repeat template tag and archive of messages repeat tag
-	if( !shD->tmpl && (!xcur->childGet(i_c)->attr("docRept").empty() || !xcur->childGet(i_c)->attr("docAMess").empty()) )
-	{ xcur->childDel(i_c); i_c--; continue; }
-
 	//>> Check for special tags
 	if( xcur->childGet(i_c)->name().substr(0,3) == "doc" )
 	{ xcur->childDel(i_c); i_c--; continue; }
@@ -2673,7 +2669,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 			wlay->setMargin(0/*shD->geomMargin*/);
 			shD->inclScrl = new QScrollArea(w);
 			shD->inclScrl->setFocusPolicy( Qt::NoFocus );
-			shD->inclScrl->setFrameShape(QFrame::NoFrame);
+			shD->inclScrl->setFrameShape( QFrame::NoFrame );
 			wlay->addWidget(shD->inclScrl);
 		    }
 
@@ -2693,6 +2689,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 			if( shD->inclWidget->wx_scale != shD->inclWidget->mainWin()->xScale() ||
 				shD->inclWidget->wy_scale != shD->inclWidget->mainWin()->yScale() )
 			    shD->inclWidget->load("");
+			else shD->inclWidget->update(false,"",true);
 		    }
 		    else
 		    {

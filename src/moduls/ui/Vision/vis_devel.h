@@ -95,7 +95,7 @@ class VisDevelop : public QMainWindow
 	void prjRun( );		//Run project execution
 	void prjNew( );		//New project create
 	void libNew( );		//New widgets library creating
-	void visualItAdd( QAction*, const QPointF &pnt = QPointF() );//Add visual item (widget or page)
+	void visualItAdd( QAction*, const QPointF &pnt = QPointF(), const string &wid = "", const string &wnm = "" );//Add visual item (widget or page)
 	void visualItDel( const string &itms = "" );	//Delete selected visual items
 	void visualItProp( );	//Visual item (widget, library, project or page) properties
 	void visualItEdit( );	//Visual item graphical edit

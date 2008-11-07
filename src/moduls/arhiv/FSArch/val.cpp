@@ -401,7 +401,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 	    if(n_arch)	n_arch->childAdd("el")->setText(iel->second->archive().id());
 	    if(n_per)	n_per->childAdd("el")->setText(TSYS::real2str((double)iel->second->archive().period()/1000000.,6));
 	    if(n_size)	n_size->childAdd("el")->setText(TSYS::int2str(iel->second->archive().size()));
-	    if(f_size)	f_size->childAdd("el")->setText(TSYS::real2str((double)((ModVArchEl *)iel->second)->size()/1024.,6));
+	    if(f_size)	f_size->childAdd("el")->setText(TSYS::real2str((double)((ModVArchEl *)iel->second)->size()/1024.,4,'f'));
 	}
     }
     else if( a_path == "/arch/lst" && ctrChkNode(opt) )
@@ -600,7 +600,11 @@ string ModVArchEl::getS( long long *tm, bool up_ord )
 	if( !arh_f[i_a]->err() && (
 		(up_ord && itm <= arh_f[i_a]->end() && itm > arh_f[i_a]->begin()-arh_f[i_a]->period()) ||
 		(!up_ord && itm < arh_f[i_a]->end()+arh_f[i_a]->period() && itm >= arh_f[i_a]->begin()) ) )
+	{
+	    if(tm) *tm = (itm/arh_f[i_a]->period())*arh_f[i_a]->period()+((up_ord&&itm%arh_f[i_a]->period())?arh_f[i_a]->period():0);
 	    return arh_f[i_a]->getS(up_ord?arh_f[i_a]->maxPos()-(arh_f[i_a]->end()-itm)/arh_f[i_a]->period():(itm-arh_f[i_a]->begin())/arh_f[i_a]->period());
+	}
+    if(tm) *tm = 0;
     return EVAL_STR;
 }
 
@@ -612,7 +616,11 @@ double ModVArchEl::getR( long long *tm, bool up_ord )
 	if( !arh_f[i_a]->err() && (
 		(up_ord && itm <= arh_f[i_a]->end() && itm > arh_f[i_a]->begin()-arh_f[i_a]->period()) ||
 		(!up_ord && itm < arh_f[i_a]->end()+arh_f[i_a]->period() && itm >= arh_f[i_a]->begin()) ) )
+	{
+	    if(tm) *tm = (itm/arh_f[i_a]->period())*arh_f[i_a]->period()+((up_ord&&itm%arh_f[i_a]->period())?arh_f[i_a]->period():0);
 	    return arh_f[i_a]->getR(up_ord?arh_f[i_a]->maxPos()-(arh_f[i_a]->end()-itm)/arh_f[i_a]->period():(itm-arh_f[i_a]->begin())/arh_f[i_a]->period());
+	}
+    if(tm) *tm = 0;
     return EVAL_REAL;
 }
 
@@ -624,7 +632,11 @@ int ModVArchEl::getI( long long *tm, bool up_ord )
 	if( !arh_f[i_a]->err() && (
 		(up_ord && itm <= arh_f[i_a]->end() && itm > arh_f[i_a]->begin()-arh_f[i_a]->period()) ||
 		(!up_ord && itm < arh_f[i_a]->end()+arh_f[i_a]->period() && itm >= arh_f[i_a]->begin()) ) )
+	{
+	    if(tm) *tm = (itm/arh_f[i_a]->period())*arh_f[i_a]->period()+((up_ord&&itm%arh_f[i_a]->period())?arh_f[i_a]->period():0);
 	    return arh_f[i_a]->getI(up_ord?arh_f[i_a]->maxPos()-(arh_f[i_a]->end()-itm)/arh_f[i_a]->period():(itm-arh_f[i_a]->begin())/arh_f[i_a]->period());
+	}
+    if(tm) *tm = 0;
     return EVAL_INT;
 }
 
@@ -636,7 +648,11 @@ char ModVArchEl::getB( long long *tm, bool up_ord )
 	if( !arh_f[i_a]->err() && (
 		(up_ord && itm <= arh_f[i_a]->end() && itm > arh_f[i_a]->begin()-arh_f[i_a]->period()) ||
 		(!up_ord && itm < arh_f[i_a]->end()+arh_f[i_a]->period() && itm >= arh_f[i_a]->begin()) ) )
+	{
+	    if(tm) *tm = (itm/arh_f[i_a]->period())*arh_f[i_a]->period()+((up_ord&&itm%arh_f[i_a]->period())?arh_f[i_a]->period():0);
 	    return arh_f[i_a]->getB(up_ord?arh_f[i_a]->maxPos()-(arh_f[i_a]->end()-itm)/arh_f[i_a]->period():(itm-arh_f[i_a]->begin())/arh_f[i_a]->period());
+	}
+    if(tm) *tm = 0;
     return EVAL_BOOL;
 }
 

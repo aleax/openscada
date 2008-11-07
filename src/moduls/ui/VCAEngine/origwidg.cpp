@@ -826,7 +826,7 @@ void OrigDocument::postEnable( int flag )
 
 bool OrigDocument::attrChange( Attr &cfg, void *prev )
 {
-    //- Document's number change process -
+    //> Document's number change process
     if( cfg.id() == "n" && cfg.getI() != *(int*)prev )
     {
 	if( !cfg.getI() )
@@ -836,29 +836,32 @@ bool OrigDocument::attrChange( Attr &cfg, void *prev )
 	}
 	else
 	{
-	    if( !cfg.owner()->attrPresent("aCur") )
-		cfg.owner()->attrAdd( new TFld("aCur",_("Cursor:archive"),TFld::Integer,Attr::Mutable|Attr::Active,"","0","0;99") );
 	    if( !cfg.owner()->attrPresent("vCur") )
-		cfg.owner()->attrAdd( new TFld("vCur",_("Cursor:view"),TFld::Integer,Attr::Mutable|Attr::Active,"","0","0;99") );
+		cfg.owner()->attrAdd( new TFld("vCur",_("Cursor:view"),TFld::Integer,Attr::Mutable|Attr::Active,"","0","-2;99"), -1, true );
+	    if( !cfg.owner()->attrPresent("aCur") )
+		cfg.owner()->attrAdd( new TFld("aCur",_("Cursor:archive"),TFld::Integer,Attr::Mutable|Attr::Active,"","0","-1;99"), -1, true );
 	}
 	string fidp;
-	//- Delete archive document's attributes -
+	//>> Delete archive document's attributes
 	for( int i_p = 0; true; i_p++ )
 	{
 	    fidp = "doc"+TSYS::int2str(i_p);
 	    if( !cfg.owner()->attrPresent(fidp) )      break;
 	    else if( i_p >= cfg.getI() )	cfg.owner()->attrDel(fidp);
 	}
-	//- Create archive document's attributes -
+	//>> Create archive document's attributes
 	for( int i_p = 0; i_p < cfg.getI(); i_p++ )
 	{
 	    fidp = "doc"+TSYS::int2str(i_p);
 	    if( cfg.owner()->attrPresent(fidp) ) continue;
-	    cfg.owner()->attrAdd( new TFld(fidp.c_str(),(_("Document ")+TSYS::int2str(i_p)).c_str(),TFld::String,TFld::FullText|Attr::Mutable) );
+	    cfg.owner()->attrAdd( new TFld(fidp.c_str(),(_("Document ")+TSYS::int2str(i_p)).c_str(),TFld::String,TFld::FullText|Attr::Mutable|Attr::Active) );
 	}
     }
-    if( !dynamic_cast<SessWdg*>(cfg.owner()) )	return Widget::attrChange(cfg,prev);
-    //- Make document after time set -
+
+    SessWdg *sw = dynamic_cast<SessWdg*>(cfg.owner());
+    if( !sw )	return Widget::attrChange(cfg,prev);
+
+    //> Make document after time set
     if( cfg.id() == "time" && cfg.getI() != *(int*)prev )
     {
 	string mkDk;
@@ -881,18 +884,68 @@ bool OrigDocument::attrChange( Attr &cfg, void *prev )
 		cfg.owner()->attrAt("doc").at().setS(mkDk);
 	}
     }
-    //- Move archive cursor -
+    //> Load document's from project's DB
+    else if( cfg.id() == "n" && cfg.getI() != *(int*)prev )
+    {
+	string db  = sw->ownerSess()->parent().at().DB();
+	string tbl = sw->ownerSess()->parent().at().tbl()+"_ses";
+
+	TConfig c_el(&mod->elPrjSes());
+	c_el.cfg("IDW").setS(sw->path());
+	//>> Archive position load
+	c_el.cfg("ID").setS("aCur");
+	if( SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el) )
+	    cfg.owner()->attrAt("aCur").at().setI(c_el.cfg("IO_VAL").getI(),false,true);
+	//>> Documents load
+	for( int i_d = *(int*)prev; i_d < cfg.getI(); i_d++ )
+	{
+	    c_el.cfg("ID").setS("doc"+TSYS::int2str(i_d));
+	    if( SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el) )
+		cfg.owner()->attrAt("doc"+TSYS::int2str(i_d)).at().setS(c_el.cfg("IO_VAL").getS(),false,true);
+	}
+	//>> Set curent document
+	cfg.owner()->attrAt("vCur").at().setI(cfg.owner()->attrAt("aCur").at().getI(),false,true);
+	cfg.owner()->attrAt("doc").at().setS(cfg.owner()->attrAt("doc"+TSYS::int2str(cfg.owner()->attrAt("aCur").at().getI())).at().getS(),false,true);
+    }
+    //> Move archive cursor
     else if( cfg.id() == "aCur" && cfg.getI() != *(int*)prev )
     {
 	int n = cfg.owner()->attrAt("n").at().getI();
-	if( cfg.getI() < 0 )		cfg.setI( ((*(int*)prev)+1 >= n) ? 0 : (*(int*)prev)+1 );
-	else if( cfg.getI() >= n )	cfg.setI( n-1 );
-	if( *(int*)prev == cfg.owner()->attrAt("vCur").at().getI() )
-	    cfg.owner()->attrAt("vCur").at().setI(cfg.getI());
+	if( cfg.getI() < 0 )		cfg.setI( ((*(int*)prev)+1 >= n) ? 0 : (*(int*)prev)+1, false,true );
+	else if( cfg.getI() >= n )	cfg.setI( n-1, false,true );
 	if( cfg.getI() != *(int*)prev )
-	    cfg.owner()->attrAt("doc"+TSYS::int2str(cfg.getI())).at().setS("");
+	{
+	    cfg.owner()->attrAt("doc"+TSYS::int2str(cfg.getI())).at().setS(cfg.owner()->attrAt("tmpl").at().getS());
+	    if( *(int*)prev == cfg.owner()->attrAt("vCur").at().getI() )
+		cfg.owner()->attrAt("vCur").at().setI(cfg.getI());
+
+	    //>> Save cursor to document to project's DB
+	    if( *(int*)prev < n && *(int*)prev >=0 )
+	    {
+		string db  = sw->ownerSess()->parent().at().DB();
+		string tbl = sw->ownerSess()->parent().at().tbl()+"_ses";
+
+		TConfig c_el(&mod->elPrjSes());
+		c_el.cfg("IDW").setS(sw->path());
+		c_el.cfg("ID").setS(cfg.id());
+		c_el.cfg("IO_VAL").setI(cfg.getI());
+		SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,c_el);
+	    }
+	}
     }
-    //- Move archive view cursor -
+    //> Document save
+    else if( cfg.id().substr(0,3) == "doc" && cfg.getS() != *(string*)prev )
+    {
+	string db  = sw->ownerSess()->parent().at().DB();
+	string tbl = sw->ownerSess()->parent().at().tbl()+"_ses";
+
+	TConfig c_el(&mod->elPrjSes());
+	c_el.cfg("IDW").setS(sw->path());
+	c_el.cfg("ID").setS(cfg.id());
+	c_el.cfg("IO_VAL").setS(cfg.getS());
+	SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,c_el);
+    }
+    //> Move archive view cursor
     else if( cfg.id() == "vCur" && cfg.getI() != *(int*)prev )
     {
 	int aCur = cfg.owner()->attrAt("aCur").at().getI();
@@ -900,21 +953,23 @@ bool OrigDocument::attrChange( Attr &cfg, void *prev )
 	if( cfg.getI() < 0 )
 	{
 	    int docN = *(int*)prev;
-	    //-- Search next document --
+	    //>> Search next document
 	    if( cfg.getI() == -1 )
+	    {
 		while( docN != aCur && (docN == *(int*)prev || cfg.owner()->attrAt("doc"+TSYS::int2str(docN)).at().getS().empty()) )
 		    if( ++docN >= n )	docN = 0;
-	    //- Search previous document -
+	    }
+	    //>> Search previous document
 	    else
 	    {
 		if( --docN < 0 ) docN = n-1;
 		if( cfg.owner()->attrAt("doc"+TSYS::int2str(docN)).at().getS().empty() )	docN = *(int*)prev;
 	    }
-	    //- Copy selected document to attribut doc -
-	    if( docN != *(int*)prev )	cfg.setI(docN);
+	    if( docN != cfg.getI() )	cfg.setI(docN,false,true);
 	}
-	else if( cfg.getI() >= n )	cfg.setI( cfg.owner()->attrAt("aCur").at().getI() );
-	else cfg.owner()->attrAt("doc").at().setS( cfg.owner()->attrAt("doc"+TSYS::int2str(cfg.getI())).at().getS() );
+	else if( cfg.getI() >= n )	cfg.setI( cfg.owner()->attrAt("aCur").at().getI(), false, true );
+	if( cfg.getI() != *(int*)prev )
+	    cfg.owner()->attrAt("doc").at().setS( cfg.owner()->attrAt("doc"+TSYS::int2str(cfg.getI())).at().getS() );
     }
 
     return Widget::attrChange(cfg,prev);
@@ -926,7 +981,7 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
     string iLang;				//Process instruction language
     string wProgO;				//Object of work programm
     time_t lstTime;				//Last time
-    TFunction funcIO("DOC_"+wdg->calcId());
+    TFunction funcIO(TSYS::path2sepstr(wdg->path(),'_'));
     TValFunc funcV(wdg->id()+"_doc",NULL,false);
     vector<string> als;
 
@@ -1040,38 +1095,81 @@ void OrigDocument::nodeProcess( XMLNode *xcur, TValFunc &funcV, TFunction &funcI
 	//>> Repeat tags
 	if( (dRpt=atof(xcur->childGet(i_c)->attr("docRept").c_str())) > 1e-6 )
 	{
+	    int rCnt = 0;
+	    XMLNode *reptN = xcur->childGet(i_c);
+	    bool docRevers = atoi(xcur->childGet(i_c)->attr("docRevers").c_str());
 	    funcV.setR(6,dRpt);
-	    for( long long rTime = (long long)funcV.getI(3)*1000000+(long long)(1000000*dRpt); rTime <= (long long)funcV.getI(1)*1000000; rTime+=(long long)(1000000*dRpt) )
+
+	    long long time = (long long)funcV.getI(1)*1000000;
+	    long long bTime = (long long)funcV.getI(2)*1000000;
+	    long long lstTime = (long long)funcV.getI(3)*1000000;
+	    long long perRpt = (long long)(1000000*dRpt);
+	    long long rTime = bTime + perRpt*((lstTime-bTime)/perRpt);
+	    while( rTime < time )
 	    {
-		funcV.setI(4,rTime/1000000); funcV.setI(5,rTime%1000000);
-		*(xcur->childIns(i_c+1)) = *(xcur->childGet(i_c));
-		nodeProcess(xcur->childGet(i_c+1),funcV,funcIO,iLang,true);
-		xcur->childGet(i_c+1)->attrDel("docRept");
+		if( atoi(reptN->attr("docRptEnd").c_str()) )
+		{
+		    int i_n = docRevers?(i_c+1):i_c;
+		    *(xcur->childIns(i_n)) = *reptN;
+		    nodeClear(xcur->childGet(i_n));
+		    if( !docRevers ) i_c++;
+		    rCnt++;
+		}
+		long long rTimeT = vmin(rTime+perRpt,time);
+		funcV.setI(4,rTimeT/1000000); funcV.setI(5,rTimeT%1000000); funcV.setR(6,(rTimeT-rTime)/1000000.0);
+		nodeProcess(reptN,funcV,funcIO,iLang);
+		reptN->setAttr("docRptEnd",((rTimeT-rTime)==perRpt)?"1":"0");
+		rTime = rTimeT;
 	    }
 	    funcV.setI(4,0); funcV.setI(5,0); funcV.setR(6,0);
+	    if( docRevers ) i_c += rCnt;
 	}
 	//>> Repeat messages
 	else if( !(dAMess=xcur->childGet(i_c)->attr("docAMess")).empty() )
 	{
-	    //>>> Messages request from last time and curent time
+	    int rCnt = 0;
+	    XMLNode *reptN = xcur->childGet(i_c);
+	    bool docRevers = atoi(xcur->childGet(i_c)->attr("docRevers").c_str());
+
 	    vector<TMess::SRec> mess;
 	    SYS->archive().at().messGet( funcV.getI(3), funcV.getI(1), mess,
 		TSYS::strSepParse(dAMess,1,':'), (TMess::Type)atoi(TSYS::strSepParse(dAMess,0,':').c_str()) );
+
 	    for( int i_r = 0; i_r < mess.size(); i_r++ )
 	    {
+		if( atoi(reptN->attr("docRptEnd").c_str()) )
+		{
+		    int i_n = docRevers?(i_c+1):i_c;
+		    *(xcur->childIns(i_n)) = *reptN;
+		    nodeClear(xcur->childGet(i_n));
+		    if( !docRevers ) i_c++;
+		    rCnt++;
+		}
 		funcV.setI(7,mess[i_r].time);
 		funcV.setI(8,mess[i_r].level);
 		funcV.setS(9,mess[i_r].categ);
 		funcV.setS(10,mess[i_r].mess);
-		*(xcur->childIns(i_c+1)) = *(xcur->childGet(i_c));
-		nodeProcess(xcur->childGet(i_c+1),funcV,funcIO,iLang,true);
-		xcur->childGet(i_c+1)->attrDel("docAMess");
+		nodeProcess(reptN,funcV,funcIO,iLang);
+		reptN->setAttr("docRptEnd","1");
 	    }
 	    funcV.setI(7,0); funcV.setI(8,0); funcV.setS(9,""); funcV.setS(10,"");
+	    if( docRevers ) i_c += rCnt;
 	}
 	else nodeProcess(xcur->childGet(i_c),funcV,funcIO,iLang,instrDel);
     }
-} 
+}
+
+void OrigDocument::nodeClear( XMLNode *xcur )
+{
+    xcur->prcInstrClear();
+    xcur->attrDel("docRept");
+    xcur->attrDel("docRptEnd");
+    xcur->attrDel("docRevers");
+    xcur->attrDel("docAMess");
+
+    for( int i_c = 0; i_c < xcur->childSize(); i_c++ )
+	nodeClear( xcur->childGet(i_c) );
+}
 
 //************************************************
 //* OrigFunction: User function original widget  *

@@ -457,7 +457,32 @@ WidgetLib &LWidget::ownerLib( )
 
 void LWidget::postDisable( int flag )
 {
+    if( flag )
+    {
+	string db  = ownerLib().DB();
+	string tbl = ownerLib().tbl();
 
+	//-- Remove from library table --
+	SYS->db().at().dataDel( db+"."+tbl, mod->nodePath()+tbl, *this );
+
+	//-- Remove widget's IO from library IO table --
+	TConfig c_el( &mod->elWdgIO() );
+	c_el.cfg("IDW").setS( id() );
+	c_el.cfg("ID").setS( "" );
+	SYS->db().at().dataDel( db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", c_el );
+
+	//-- Remove widget's user IO from library IO table --
+	c_el.setElem( &mod->elWdgUIO() );
+	c_el.cfg("IDW").setS( id() );
+	c_el.cfg("ID").setS( "" );
+	SYS->db().at().dataDel( db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", c_el );
+
+	//-- Remove widget's included widgets from library include table --
+	c_el.setElem( &mod->elInclWdg() );
+	c_el.cfg("IDW").setS( id() );
+	c_el.cfg("ID").setS( "" );
+	SYS->db().at().dataDel( db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", c_el );
+    }
 }
 
 string LWidget::path( )
@@ -673,48 +698,20 @@ void LWidget::save_( )
     string db  = ownerLib().DB();
     string tbl = ownerLib().tbl();
 
-    //- Remove from DB -
-    if( nodeMode() == TCntrNode::Disable )
+    //-- Save generic widget's data --
+    m_attrs="";
+    vector<string> als;
+    attrList( als );
+    for( int i_a = 0; i_a < als.size(); i_a++ )
     {
-	//-- Remove from library table --
-	SYS->db().at().dataDel( db+"."+tbl, mod->nodePath()+tbl, *this );
-	
-	//-- Remove widget's IO from library IO table --
-	TConfig c_el( &mod->elWdgIO() );
-	c_el.cfg("IDW").setS( id() );
-	c_el.cfg("ID").setS( "" );
-	SYS->db().at().dataDel( db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", c_el );
-
-	//-- Remove widget's user IO from library IO table --
-	c_el.setElem( &mod->elWdgUIO() );
-	c_el.cfg("IDW").setS( id() );
-	c_el.cfg("ID").setS( "" );
-	SYS->db().at().dataDel( db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", c_el );
-
-	//-- Remove widget's included widgets from library include table --
-	c_el.setElem( &mod->elInclWdg() );
-	c_el.cfg("IDW").setS( id() );
-	c_el.cfg("ID").setS( "" );
-	SYS->db().at().dataDel( db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", c_el );
+	AutoHD<Attr> attr = attrAt(als[i_a]);
+	if( attr.at().modif() && !(!(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser) )
+	    m_attrs+=als[i_a]+";";
     }
-    //- Save widget's data -
-    else
-    {
-	//-- Save generic widget's data --
-	m_attrs="";
-	vector<string> als;
-	attrList( als );
-	for( int i_a = 0; i_a < als.size(); i_a++ )
-	{
-	    AutoHD<Attr> attr = attrAt(als[i_a]);
-	    if( attr.at().modif() && !(!(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser) )
-		m_attrs+=als[i_a]+";";
-	}
-	SYS->db().at().dataSet( db+"."+tbl, mod->nodePath()+tbl, *this );
+    SYS->db().at().dataSet( db+"."+tbl, mod->nodePath()+tbl, *this );
 
-	//-- Save widget's attributes --
-	saveIO();
-    }
+    //-- Save widget's attributes --
+    saveIO();
 }
 
 void LWidget::saveIO( )

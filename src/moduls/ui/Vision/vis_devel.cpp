@@ -33,6 +33,7 @@
 #include <QWhatsThis>
 #include <QTimer>
 #include <QScrollArea>
+#include <QCheckBox>
 
 #include <config.h>
 #include <tsys.h>
@@ -1060,7 +1061,7 @@ void VisDevelop::libNew( )
     }
 }
 
-void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt )
+void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt, const string &iWid, const string &iWnm )
 {
     XMLNode req("get");
     //QAction *cact = (QAction *)sender();
@@ -1080,7 +1081,7 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt )
     InputDlg dlg(this,cact->icon(),
 	    _("Enter new widget/page identifier and name."),_("Create widget/page"),true,true);
 
-    if( p_el_cnt > 1 )
+    if( p_el_cnt > 1 && iWid.empty() )
     {
 	//-- New include item id generator --
 	//--- Present include widgets list request ---
@@ -1102,10 +1103,10 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt )
     }
 
     //-- Execute dialog --
-    if( dlg.exec() == QDialog::Accepted )
+    if( !iWid.empty() || dlg.exec() == QDialog::Accepted )
     {
-	string w_id = dlg.id().toAscii().data();
-	string w_nm = dlg.name().toAscii().data();
+	string w_id = iWid.empty() ? dlg.id().toAscii().data() : iWid;
+	string w_nm = iWid.empty() ? dlg.name().toAscii().data() : iWnm;
 
 	//-- Check for widget's library --
 	req.clear()->setName("add");
@@ -1131,7 +1132,7 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt )
 	    }
 	}
 	//-- Create widget --
-	int err = cntrIfCmd(req); 
+	int err = cntrIfCmd(req);
 	if( err ) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 	else
 	{
@@ -1327,6 +1328,7 @@ void VisDevelop::visualItPaste( )
     string copy_buf_el, del_els, last_del;
     string work_wdg_work = work_wdg;
     vector<string> copy_els;
+    QCheckBox *wInher = NULL;
 
     InputDlg dlg(this,actVisItPaste->icon(),"",_("Visual items move or copy"),true,true);
     for( int w_off = 0; (copy_buf_el=TSYS::strSepParse(copy_buf.substr(1),0,';',&w_off)).size(); )
@@ -1358,7 +1360,7 @@ void VisDevelop::visualItPaste( )
 	    t_el = (QString((copy_buf[0] == '1') ? _("Widget's library '%1' move.\n") : _("Widget's library '%1' copy.\n"))+
 		_("Enter new widget's library identifier and name.")).arg(s_el.substr(4).c_str()).toAscii().data();
 	    req.setAttr("path","/%2fprm%2fcfg%2fwlb");
-	    d_el = "wlb_"; 
+	    d_el = "wlb_";
 	    t1_el = s_el.substr(4);
 	}
 	//-- Page copy --
@@ -1415,35 +1417,54 @@ void VisDevelop::visualItPaste( )
 	//-- Make request dialog --
 	dlg.setMess(t_el.c_str());
 	dlg.setId(t1_el.c_str());
-	if( i_w >= req.childSize() || dlg.exec() == QDialog::Accepted )
+	//-- Add Link flag for copy operation --
+	if( copy_buf[0] != '1' && d_el.substr(0,4) != "prj_" && d_el.substr(0,4) != "wlb_" )
+	{
+	    dlg.edLay()->addWidget( new QLabel(_("Inherit:"),&dlg), 2, 0 );
+	    wInher = new QCheckBox(&dlg);
+	    dlg.edLay()->addWidget( wInher, 2, 1 );
+	}
+	if( /*i_w >= req.childSize() ||*/ dlg.exec() == QDialog::Accepted )
 	{
 	    d_el += dlg.id().toAscii().data();
 	    string it_nm = dlg.name().toAscii().data();
 
-	    req.clear()->setName("set")->
-		setAttr( "path", "/%2fprm%2fcfg%2fcp%2fcp" )->
-		setAttr( "src", s_elp+"/"+s_el )->
-		setAttr( "dst", d_elp+"/"+d_el );
-	    if( cntrIfCmd(req) )
-		mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+	    //>>> Make link
+	    if( wInher && wInher->isChecked() )
+	    {
+		QAction addAct(NULL);
+		addAct.setObjectName((s_elp+"/"+s_el).c_str());
+		work_wdg = d_elp;
+		visualItAdd( &addAct, QPointF(), dlg.id().toAscii().data(), it_nm );
+	    }
+	    //>>> Make copy
 	    else
 	    {
-		if( it_nm.size() )
-		{
-		    req.clear()->setName("set")->setText(it_nm);
-		    if( d_el.substr(0,4) == "prj_" || d_el.substr(0,4) == "wlb_" )
-			req.setAttr("path",d_elp+"/"+d_el+"/%2fobj%2fcfg%2fname");
-		    else req.setAttr("path",d_elp+"/"+d_el+"/%2fwdg%2fcfg%2fname");
-		    cntrIfCmd(req);
-		}
-		if( n_del < 2 )	copy_els.push_back(d_elp+"/"+d_el);
+		req.clear()->setName("set")->
+		    setAttr( "path", "/%2fprm%2fcfg%2fcp%2fcp" )->
+		    setAttr( "src", s_elp+"/"+s_el )->
+		    setAttr( "dst", d_elp+"/"+d_el );
+		if( cntrIfCmd(req) )
+		    mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 		else
 		{
-		    if( !last_del.empty() && last_del != d_elp )
-			copy_els.push_back(last_del);
-		    last_del = d_elp;
+		    if( it_nm.size() )
+		    {
+			req.clear()->setName("set")->setText(it_nm);
+			if( d_el.substr(0,4) == "prj_" || d_el.substr(0,4) == "wlb_" )
+			    req.setAttr("path",d_elp+"/"+d_el+"/%2fobj%2fcfg%2fname");
+			else req.setAttr("path",d_elp+"/"+d_el+"/%2fwdg%2fcfg%2fname");
+			cntrIfCmd(req);
+		    }
+		    if( n_del < 2 )	copy_els.push_back(d_elp+"/"+d_el);
+		    else
+		    {
+			if( !last_del.empty() && last_del != d_elp )
+			    copy_els.push_back(last_del);
+			last_del = d_elp;
+		    }
+		    del_els += copy_buf_el+";";
 		}
-		del_els += copy_buf_el+";";
 	    }
 	}
     }

@@ -87,11 +87,11 @@ class Attr : public TCntrNode
 	char   getB( );
 
 	//- Set value -
-	void setSEL( const string &val, bool strongPrev = false );
-	void setS( const string &val, bool strongPrev = false );
-	void setR( double val, bool strongPrev = false );
-	void setI( int val, bool strongPrev = false );
-	void setB( char val, bool strongPrev = false );
+	void setSEL( const string &val, bool strongPrev = false, bool sys = false );
+	void setS( const string &val, bool strongPrev = false, bool sys = false );
+	void setR( double val, bool strongPrev = false, bool sys = false );
+	void setI( int val, bool strongPrev = false, bool sys = false );
+	void setB( char val, bool strongPrev = false, bool sys = false );
 
 	TFld &fld()			{ return *m_fld; }
 
@@ -181,7 +181,7 @@ class Widget : public TCntrNode, public TValElem
 
 	//- Widget's attributes -
 	void attrList( vector<string> &list )		{ attr_cfg.fldList(list); }
-	void attrAdd( TFld *attr, int pos = -1 );
+	void attrAdd( TFld *attr, int pos = -1, bool inher = false );
 	void attrDel( const string &attr );
 	bool attrPresent( const string &attr )		{ return chldPresent(attrId,attr); }
 	int  attrPos( const string &attr )		{ return attr_cfg.fldId(attr); }
