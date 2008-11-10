@@ -1,3 +1,8 @@
+2008-11-10 Maxim
+- FIX:/UI/Vision: Loadin image for filling the primitive ElFigure is fixed.
+- /UI/Vision: Copy function for primitive ElFigure is modified.
+
+
 2008-11-07 Roman
 - FIX:/XML: Removing from XML node's text, from end, spaces is fixed.
 - FIX:/Archive, /Archive/FSArch, /Archive/DBArch: EVAL, get value time and zero time on EVAL is fixed for functions of getting values from archive.

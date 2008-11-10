@@ -183,6 +183,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                         backimg = w->resGet(val);
                         if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
                             (*images)[pnt] = val;
+                        else (*images)[pnt] = "";
                         break;
                     case 5:
                         switch(atoi(val.c_str()))
@@ -1573,6 +1574,8 @@ void ShapeElFigure::toolAct( QAction *act )
     else if( act->objectName() == "editpaste" )
     {
         QPointF Temp;
+        QVector<int> inund_figs;
+        map< int, QVector<int> > inund_map;
         if ( index_array.size() ) index_array.clear();
         for( int i=0; i < copy_index.size(); i++ )
         {
@@ -1648,6 +1651,47 @@ void ShapeElFigure::toolAct( QAction *act )
         }
         if( index_array.size() )
         {
+            for( int i = 0; i < index_array.size(); i++ )
+                for( int h_p = 0; h_p < index_array.size(); h_p++ )
+                {
+                    if( (fabs((*pnts)[shapeItems[index_array[i]].n1].x() - (*pnts)[shapeItems[index_array[h_p]].n1].x()) < 0.01) && 
+                         (fabs((*pnts)[shapeItems[index_array[i]].n1].y() - (*pnts)[shapeItems[index_array[h_p]].n1].y()) < 0.01) &&
+                         (!(shapeItems[index_array[i]].type == 2 && shapeItems[index_array[h_p]].type == 2)) && (h_p != i) )
+                    {
+                        dropPoint( shapeItems[index_array[h_p]].n1, index_array[h_p], shapeItems, pnts );
+                        shapeItems[index_array[h_p]].n1 = shapeItems[index_array[i]].n1;
+                    }
+                    if( (fabs((*pnts)[shapeItems[index_array[i]].n1].x() - (*pnts)[shapeItems[index_array[h_p]].n2].x()) < 0.01) && 
+                         (fabs((*pnts)[shapeItems[index_array[i]].n1].y() - (*pnts)[shapeItems[index_array[h_p]].n2].y()) < 0.01) &&
+                         (!(shapeItems[index_array[i]].type == 2 && shapeItems[index_array[h_p]].type == 2)) && (h_p != i) )
+                    {
+                        dropPoint( shapeItems[index_array[h_p]].n2, index_array[h_p], shapeItems, pnts );
+                        shapeItems[index_array[h_p]].n2 = shapeItems[index_array[i]].n1;
+                    }
+                    if( (fabs((*pnts)[shapeItems[index_array[i]].n2].x() - (*pnts)[shapeItems[index_array[h_p]].n2].x()) < 0.01) && 
+                         (fabs((*pnts)[shapeItems[index_array[i]].n2].y() - (*pnts)[shapeItems[index_array[h_p]].n2].y()) < 0.01) &&
+                         (!(shapeItems[index_array[i]].type == 2 && shapeItems[index_array[h_p]].type == 2)) && (h_p != i) )
+                    {
+                        dropPoint( shapeItems[index_array[h_p]].n2, index_array[h_p], shapeItems, pnts );
+                        shapeItems[index_array[h_p]].n2 = shapeItems[index_array[i]].n2;
+                    }
+
+                }
+            for( int i = 0; i < inundationItems.size(); i++ )
+            {
+                for( int j = 0; j < inundationItems[i].number_shape.size(); j ++ )
+                    for( int k =0; k < copy_index.size(); k++ )
+                        if( inundationItems[i].number_shape[j] == copy_index[k] )
+                        inund_figs.push_back(index_array[k]);
+                if( inund_figs.size() == inundationItems[i].number_shape.size() )
+                    inund_map[i] = inund_figs;
+                inund_figs.clear();
+            }
+            for( map< int, QVector<int> >::iterator pi = inund_map.begin(); pi != inund_map.end(); pi++ )
+                inundationItems.push_back(inundationItem(createInundationPath( pi->second, shapeItems, *pnts,w ),
+                                          inundationItems[pi->first].brush,inundationItems[pi->first].brush_img, pi->second, pi->second));
+
+
             flag_A = true;
             flag_copy = true;
             flag_ctrl_move = 1;
