@@ -906,6 +906,14 @@ bool OrigDocument::attrChange( Attr &cfg, void *prev )
 	//>> Set curent document
 	cfg.owner()->attrAt("vCur").at().setI(cfg.owner()->attrAt("aCur").at().getI(),false,true);
 	cfg.owner()->attrAt("doc").at().setS(cfg.owner()->attrAt("doc"+TSYS::int2str(cfg.owner()->attrAt("aCur").at().getI())).at().getS(),false,true);
+	//>> Parse curent document and restore last document's time
+	string cdoc = cfg.owner()->attrAt("doc").at().getS();
+	if( !cdoc.empty() )
+	{
+	    XMLNode xdoc;
+	    try{ xdoc.load(XHTML_entity+cdoc); } catch(TError err) { }
+	    cfg.owner()->attrAt("time").at().setS(xdoc.attr("docTime"),false,true);
+	}
     }
     //> Move archive cursor
     else if( cfg.id() == "aCur" && cfg.getI() != *(int*)prev )

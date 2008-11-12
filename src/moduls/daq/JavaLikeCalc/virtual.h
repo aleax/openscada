@@ -111,8 +111,8 @@ class Contr: public TController, public TValFunc
 	Contr( string name_c, const string &daq_db, ::TElem *cfgelem );
 	~Contr( );
 
-	int period( )	{ return vmax(m_per,1); }
-	int iterate( )	{ return m_iter; }
+	int period( )	{ return vmax(mPer,1); }
+	int iterate( )	{ return mIter; }
 
     protected:
 	//Methods
@@ -136,10 +136,10 @@ class Contr: public TController, public TValFunc
 	//Attributes
 	bool	prc_st,		// Process task active
 		endrun_req;	// Request to stop of the Process task
-	int	&m_per,		// Calc period (ms)
-		&m_prior,	// Calc task priority
-		&m_iter;	// iteration number
-	string	&m_fnc;		// Work function
+	int	&mPer,		// Calc period (ms)
+		&mPrior,	// Calc task priority
+		&mIter;		// iteration number
+	string	&mFnc;		// Work function
 
 	pthread_t procPthr;	// Process task thread
 };
@@ -164,11 +164,11 @@ class TipContr : public TTipDAQ
 	TElem &elFnc( )		{ return fnc_el; }
 	TElem &elFncIO( )	{ return fncio_el; }
 
-	void lbList( vector<string> &ls ) 	{ chldList(m_lib,ls); }
-	bool lbPresent( const string &id )	{ return chldPresent(m_lib,id); }
-	void lbReg( Lib *lib )       		{ chldAdd(m_lib,lib); }
-	void lbUnreg( const string &id, int flg = 0 )	{ chldDel(m_lib,id,-1,flg); }
-	AutoHD<Lib> lbAt( const string &id )	{ return chldAt(m_lib,id); }
+	void lbList( vector<string> &ls ) 	{ chldList(mLib,ls); }
+	bool lbPresent( const string &id )	{ return chldPresent(mLib,id); }
+	void lbReg( Lib *lib )       		{ chldAdd(mLib,lib); }
+	void lbUnreg( const string &id, int flg = 0 )	{ chldDel(mLib,id,-1,flg); }
+	AutoHD<Lib> lbAt( const string &id )	{ return chldAt(mLib,id); }
 
 	Res &parseRes( )			{ return parse_res; }
 
@@ -179,7 +179,7 @@ class TipContr : public TTipDAQ
 	BFunc *bFuncGet( const char *nm );
 
 	void compileFuncLangs( vector<string> &ls );
-	string compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text );
+	string compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text, const string &usings = "" );
 
     protected:
 	//Methods
@@ -192,13 +192,13 @@ class TipContr : public TTipDAQ
 
     private:
 	//Attributes
-	int		m_lib;		//Function libraries
+	int		mLib;		//Function libraries
 	TElem		val_el, lb_el, fnc_el, fncio_el;
 
 	//- General parse data -
 	Res		parse_res;	//Syntax analisator
-	vector<NConst>	m_const;	//Name constant table
-	vector<BFunc>	m_bfunc;	//Buildin functions
+	vector<NConst>	mConst;		//Name constant table
+	vector<BFunc>	mBFunc;		//Buildin functions
 };
 
 extern TipContr *mod;

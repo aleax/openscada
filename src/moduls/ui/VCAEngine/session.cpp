@@ -1015,7 +1015,8 @@ void SessWdg::setProcess( bool val )
 		compileFunc(TSYS::strSepParse(calcLang(),1,'.'),fio,calcProg());
 	    //-- Connect to compiled function --
 	    TValFunc::setFunc(&((AutoHD<TFunction>)SYS->nodeAt(work_prog,1)).at());
-	}catch( TError err )	{ mess_err(nodePath().c_str(),_("Compile function for widget is error: %s"),err.mess.c_str()); }
+	}catch( TError err )
+	{ mess_err(nodePath().c_str(),_("Compile function '%s' by language '%s' for widget is error: %s"),fio.id().c_str(),calcLang().c_str(),err.mess.c_str()); }
     }
     if( !val )
     {

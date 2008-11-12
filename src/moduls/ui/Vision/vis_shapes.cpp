@@ -2456,7 +2456,6 @@ bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    "<html xmlns='http://www.w3.org/1999/xhtml'>\n"
 	    "<head>\n"
 	    "  <meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n"
-	    "  <meta http-equiv='Content-Script-Type' content='text/javascript'/>\n"
 	    "  <style type='text/css'>\n"+shD->style+"</style>\n"
 	    "</head>\n"+
 	    xproc.save()+

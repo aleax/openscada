@@ -79,6 +79,9 @@ class VisRun : public QMainWindow
 	string wAttrGet( const string &path, const string &attr );
 	bool wAttrSet( const string &path, const string &attr, const string &val );
 
+	RunPageView *findOpenPage( const string &pg );
+	RunWdgView *findOpenWidget( const string &wdg );
+
 	int cntrIfCmd( XMLNode &node, bool glob = false );
 
 	void load( const string& item );
@@ -100,6 +103,14 @@ class VisRun : public QMainWindow
 
     private slots:
 	//Private slots
+	void print( );				//Print master page
+	void printPg( const string &pg ="" );	//Print select page
+	void printDiag( const string &dg = "" );//Print select diagram
+	void printDoc( const string &doc = "" );//Print select document
+	void exportDef( );				//Export master page
+	void exportPg( const string &pg ="" );	//Export select page
+	void exportDiag( const string &dg ="" );//Export select diagram
+	void exportDoc( const string &doc ="" );//Export select document
 	void quitSt( );				//Full quit OpenSCADA
 
 	void fullScreen( bool vl );		//Full screen toggle
@@ -156,8 +167,7 @@ class VisRun : public QMainWindow
 
 	float		x_scale, y_scale;	//RunTime scaling
 
-	//map<string,RunPageView*> pg_ls;		//Pages list
-	deque<RunWdgView *>  cache_pg;		//Pages cache
+	deque<RunWdgView *> cache_pg;		//Pages cache
 
 	//- Alarm attributes -
 	unsigned	mAlrmSt;		//Alarm status

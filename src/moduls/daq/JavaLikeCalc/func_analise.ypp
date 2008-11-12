@@ -42,30 +42,30 @@ void sfErr( const string &mess, YYLTYPE *ps);
 /************************* GRAMMAR ****************************/
 %union
 {
-    int id;	//Function id
+    int	id;	//Function id
     Reg	*reg;	//Variable and Constant registers list index and function list index
-    int fp_cnt;	//Function parameters counter
-    int prg_cd;	//Programm code
+    int	fp_cnt;	//Function parameters counter
+    int	prg_cd;	//Programm code
 }
 
-%token ERR IF ELSE WHILE FOR BREAK CONTINUE ADDEQ SUBEQ MULEQ DIVEQ BITSHLEFT BITSHRIGHT
-%token <id>	FUNC B_FUNC B_FUNC1 B_FUNC2
-%token <reg>	VAR CONST
-%type  <reg>    expr
-%type  <prg_cd>	if if_expr end cycl
-%type  <fp_cnt>	prmlst
+%token	ERR IF ELSE WHILE FOR BREAK CONTINUE ADDEQ SUBEQ MULEQ DIVEQ BITSHLEFT BITSHRIGHT RETURN
+%token	<id>	FUNC B_FUNC B_FUNC1 B_FUNC2
+%token	<reg>	VAR CONST
+%type	<reg>	expr
+%type	<prg_cd>	if if_expr end cycl
+%type	<fp_cnt>	prmlst
 
-%right '=' ADDEQ SUBEQ MULEQ DIVEQ
-%right '?' ':'
-%left OR
-%left AND
-%left '|' '&' '^'
-%left '>' '<' GE LE EQ NE
-%left BITSHLEFT BITSHRIGHT
-%left '+' '-'
-%left '*' '/' '%'
-%right UN_MINUS '!' '~'
-%right INCREM DECREM
+%right	'=' ADDEQ SUBEQ MULEQ DIVEQ
+%right	'?' ':'
+%left	OR
+%left	AND
+%left	'|' '&' '^'
+%left	'>' '<' GE LE EQ NE
+%left	BITSHLEFT BITSHRIGHT
+%left	'+' '-'
+%left	'*' '/' '%'
+%right	UN_MINUS '!' '~'
+%right	INCREM DECREM
 
 %%
 root:	solver end
@@ -83,6 +83,24 @@ solve:  assign ';'
 	    { try{ p_fnc->cdCycle($5,$6,$10,$13,$7); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
 	| BREAK ';'	{ p_fnc->prg=p_fnc->prg+(char)Reg::Break; }
 	| CONTINUE ';'	{ p_fnc->prg=p_fnc->prg+(char)Reg::Continue; }
+	| RETURN ';'	{ p_fnc->prg+=(char)Reg::End; }
+	| RETURN expr ';'
+	    {
+		for( int i_io = 0; i_io < p_fnc->ioSize(); i_io++ )
+		    if( p_fnc->io(i_io)->flg()&IO::Return )
+		    {
+			Reg *rez = p_fnc->regAt(p_fnc->regGet(p_fnc->io(i_io)->id().c_str()));
+			if( !rez )
+			{
+			    rez = p_fnc->regAt(p_fnc->regNew(true));
+			    rez->setName(p_fnc->io(i_io)->id().c_str());
+			    rez->setVar(i_io); rez->setLock(true);
+			}
+			p_fnc->cdAssign(rez,$2);
+			break;
+		    }
+		p_fnc->prg+=(char)Reg::End;
+	    }
 	| FUNC '(' prmlst ')' ';'
 	    { try{ p_fnc->cdExtFnc($1,$3,true); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
 	| '{' solver '}'
@@ -261,41 +279,41 @@ int yylex( )
 
     if( pos == 0 ) { yylloc.last_line = yylloc.last_column = 1; }
 
-    while( pos < prog.size() && 
+retry:
+    //> Empty space
+    while( pos < prog.size() &&
 	((c = prog[pos]) == ' ' || c == '\n' || c == '\t' ||
 	c == '\f' || c == '\r' || c == '\v') )
     {
-	if( c == '\n' )
-	{
-	    yylloc.last_column = 1;
-	    yylloc.last_line++;
-	}
+	if( c == '\n' )	{ yylloc.last_column = 1; yylloc.last_line++; }
 	else yylloc.last_column++;
 	pos++;
     }
-    //Comentars
-    while( prog.substr(pos,2) == "//" )
+    //> End string
+    if( pos >= prog.size() ) return 0;
+    //> Comentars // and /* ... */
+    if( prog.substr(pos,2) == "//" )
     {
+	pos+=2;
 	while( pos < prog.size() && prog[pos] != '\n' ) pos++;
-	while( pos < prog.size() &&
-	    ((c = prog[pos]) == ' ' || c == '\n' || c == '\t' ||
-	    c == '\f' || c == '\r' || c == '\v') )
+	goto retry;
+    }
+    if( prog.substr(pos,2) == "/*" )
+    {
+	pos+=2;
+	while( pos < prog.size() && prog.substr(pos-1,2) != "*/" )
 	{
-	    if( c == '\n' )
-	    {
-		yylloc.last_column = 1;
-		yylloc.last_line++;
-	    }
+	    if( c == '\n' )	{ yylloc.last_column = 1; yylloc.last_line++; }
 	    else yylloc.last_column++;
 	    pos++;
 	}
+	pos++;
+	goto retry;
     }
 
     yylloc.first_line = yylloc.last_line;
     yylloc.first_column = yylloc.last_column;
 
-    //End string
-    if( pos >= prog.size() ) return 0;
     //Number
     if( isdigit(c) || (c == '.' && (pos+1) < prog.size() && isdigit(prog[pos+1])) )
     {
@@ -418,6 +436,25 @@ int yylex( )
 	if( smb_nm == "for" )	return FOR;
 	if( smb_nm == "break" )	return BREAK;
 	if( smb_nm == "continue" )	return CONTINUE;
+	if( smb_nm == "return" )	return RETURN;
+	if( smb_nm == "using" )
+	{
+	    char buf[255]; buf[0] = 0;
+	    while( pos < prog.size() && prog[pos] != ';' ) pos++;
+	    if( pos < prog.size() )
+		sscanf(prog.substr(st_pos,pos-st_pos).c_str(),"using %254s",buf);
+	    if( pos >= prog.size() || buf[0] == 0 )
+	    {
+		yyerror(_("Using namespace is error or empty, "));
+		return ERR;
+	    }
+	    string fVal;
+	    for( int off = 0; !(fVal=TSYS::strSepParse(p_fnc->mUsings,0,';',&off)).empty(); )
+		if( fVal == buf ) break;
+	    if( fVal.empty() )	p_fnc->mUsings = p_fnc->mUsings+buf+";";
+	    pos++;
+	    goto retry;
+	}
 	//Boolean
 	if( smb_nm == "true" || smb_nm == "false" )
 	{
@@ -446,19 +483,19 @@ int yylex( )
 	    yylval.id = mod->bFuncGet(smb_nm.c_str())->code;
 	    switch( mod->bFuncGet(smb_nm.c_str())->prm )
 	    {
-	        case 0: return B_FUNC;
-	        case 1: return B_FUNC1;
-	        case 2: return B_FUNC2;
-	        default:
+		case 0: return B_FUNC;
+		case 1: return B_FUNC1;
+		case 2: return B_FUNC2;
+		default:
 		    yyerror(_("Build in function have to mach parameters, "));
 		    return ERR;
 	    }
 	}
 
 	//Find external functions
-	if( c == '(' && p_fnc->funcGet( smb_nm ) >= 0 )
+	if( c == '(' && p_fnc->funcGet(smb_nm) >= 0 )
 	{
-	    yylval.id = p_fnc->funcGet( smb_nm );
+	    yylval.id = p_fnc->funcGet(smb_nm);
 	    return FUNC;
 	}
 

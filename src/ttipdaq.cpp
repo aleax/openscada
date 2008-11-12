@@ -127,7 +127,7 @@ TController *TTipDAQ::ContrAttach( const string &name, const string &daq_db )
 	throw TError(nodePath().c_str(),"Error attach new controller %s.",name.c_str()); 
 }
 
-string TTipDAQ::compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text )
+string TTipDAQ::compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text, const string &usings )
 {
 	throw TError(nodePath().c_str(),"Module is no support of function compile languages.");
 }

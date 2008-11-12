@@ -52,6 +52,14 @@ RunWdgView::~RunWdgView( )
 
 }
 
+string RunWdgView::name( )
+{
+    XMLNode req("get");
+    req.setAttr("path",id()+"/%2fattr%2fname");
+    if( !cntrIfCmd(req) )	return req.text();
+    return "";
+}
+
 string RunWdgView::user( )
 {
     return mainWin()->user();
@@ -128,9 +136,31 @@ void RunWdgView::update( bool full, const string &wpath, bool all )
     //- Call childs for update -
     if( full || all )
 	for( int i_c = 0; i_c < children().size(); i_c++ )
-	    if( qobject_cast<RunWdgView*>(children().at(i_c)) && !qobject_cast<RunPageView*>(children().at(i_c)) &&
-		    ((RunWdgView*)children().at(i_c))->isEnabled() )
+	    if( qobject_cast<RunWdgView*>(children().at(i_c)) && !qobject_cast<RunPageView*>(children().at(i_c)) && ((RunWdgView*)children().at(i_c))->isEnabled() )
 		((RunWdgView*)children().at(i_c))->update(full,"",all);
+}
+
+void RunWdgView::shapeList( const string &snm, vector<string> &ls )
+{
+    if( shape && snm == shape->id() )	ls.push_back(id());
+
+    for( int i_c = 0; i_c < children().size(); i_c++ )
+	if( qobject_cast<RunWdgView*>(children().at(i_c)) && !qobject_cast<RunPageView*>(children().at(i_c)) && ((RunWdgView*)children().at(i_c))->isEnabled() )
+	    ((RunWdgView*)children().at(i_c))->shapeList(snm,ls);
+}
+
+RunWdgView *RunWdgView::findOpenWidget( const string &iwdg )
+{
+    //- Self check -
+    if( id() == iwdg ) return this;
+    //- Check to included widgets -
+    RunWdgView *wdg;
+    for( int i_ch = 0; i_ch < children().size(); i_ch++ )
+	if( qobject_cast<RunWdgView*>(children().at(i_ch)) && !qobject_cast<RunPageView*>(children().at(i_ch)) && ((RunWdgView*)children().at(i_ch))->isEnabled() &&
+		(wdg=((RunWdgView*)children().at(i_ch))->findOpenWidget(iwdg)) )
+	    return wdg;
+
+    return NULL;
 }
 
 void RunWdgView::childsUpdate( bool newLoad )

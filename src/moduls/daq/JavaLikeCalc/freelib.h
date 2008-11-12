@@ -47,30 +47,30 @@ class Lib : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return m_id; }
+	const string &id( )	{ return mId; }
 	string name( );
-	string descr( )		{ return m_descr; }
+	string descr( )		{ return mDescr; }
 	bool startStat( )	{ return run_st; }
 
 	string DB( )		{ return work_lib_db; }
-	string tbl( )		{ return m_db; }
+	string tbl( )		{ return mDB; }
 	string fullDB( )	{ return DB()+'.'+tbl(); }
 
-	void setName( const string &inm )	{ m_name = inm; modif(); }
-	void setDescr( const string &idscr )	{ m_descr = idscr; modif(); }
+	void setName( const string &inm )	{ mName = inm; modif(); }
+	void setDescr( const string &idscr )	{ mDescr = idscr; modif(); }
 	void setStart( bool val );
 	void setFullDB( const string &idb );
 
-	void list( vector<string> &ls )		{ chldList(m_fnc,ls); }
-	bool present( const string &id )	{ return chldPresent(m_fnc,id); }
-	AutoHD<Func> at( const string &id )	{ return chldAt(m_fnc,id); }
+	void list( vector<string> &ls )		{ chldList(mFnc,ls); }
+	bool present( const string &id )	{ return chldPresent(mFnc,id); }
+	AutoHD<Func> at( const string &id )	{ return chldAt(mFnc,id); }
 	void add( const char *id, const char *name = "" );
 	void del( const char *id );
 
 	void copyFunc( const string &f_id, const string &l_id, const string &to_id, const string &to_name );
 
     protected:
-	string nodeName( )	{ return m_id; }
+	string nodeName( )	{ return mId; }
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
 	void load_( );
@@ -81,8 +81,8 @@ class Lib : public TCntrNode, public TConfig
 
     private:
 	bool	run_st;
-	int	m_fnc;
-	string	&m_id, &m_name, &m_descr, &m_db, work_lib_db;
+	int	mFnc;
+	string	&mId, &mName, &mDescr, &mDB, work_lib_db;
 };
 
 } //End namespace FreeLib

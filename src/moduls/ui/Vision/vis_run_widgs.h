@@ -44,14 +44,15 @@ namespace VISION
 	    RunWdgView( const string &iwid, int ilevel, VisRun *mainWind, QWidget* parent = 0, Qt::WindowFlags f = 0 );
 	    ~RunWdgView( );
 
+	    string name( );
 	    string user( );
 	    VisRun *mainWin( );
 
 	    string pgGrp( );
 	    string pgOpenSrc( );
 
-	    bool   permCntr( )	{ return mPermCntr; }
-	    bool   permView( )	{ return mPermView; }
+	    bool permCntr( )	{ return mPermCntr; }
+	    bool permView( )	{ return mPermView; }
 	    unsigned reqTm( )	{ return reqtm; }
 
 	    void setPgOpenSrc( const string &vl );
@@ -61,9 +62,11 @@ namespace VISION
 
 	    WdgView *newWdgItem( const string &iwid );
 	    void attrLoad( QMap<QString, QString> &attrs );
-
 	    void update( bool full, const string &wpath = "", bool all = false );
 	    bool attrSet( const string &attr, const string &val, int uiPrmPos = 0 );
+
+	    void shapeList( const string &snm, vector<string> &ls );
+	    RunWdgView *findOpenWidget( const string &wdg );
 
 	    string resGet( const string &res );
 

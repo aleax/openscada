@@ -32,13 +32,13 @@ using namespace JavaLikeCalc;
 //* Lib: Functions library                        *
 //*************************************************
 Lib::Lib( const char *id, const char *name, const string &lib_db ) :
-    TConfig(&mod->elLib()), m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()),
-    m_descr(cfg("DESCR").getSd()), m_db(cfg("DB").getSd()), work_lib_db(lib_db)
+    TConfig(&mod->elLib()), mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()),
+    mDescr(cfg("DESCR").getSd()), mDB(cfg("DB").getSd()), work_lib_db(lib_db)
 {
-    m_id = id;
-    m_name = name;
-    m_db = string("flb_")+id;
-    m_fnc = grpAdd("fnc_");
+    mId = id;
+    mName = name;
+    mDB = string("flb_")+id;
+    mFnc = grpAdd("fnc_");
     if( DB().empty() )	modifClr();
 }
 
@@ -55,7 +55,7 @@ TCntrNode &Lib::operator=( TCntrNode &node )
     //- Configuration copy -
     string tid = id();
     *(TConfig*)this = *(TConfig*)src_n;
-    m_id = tid;
+    mId = tid;
     work_lib_db = src_n->work_lib_db;
 
     //- Functions copy -
@@ -94,13 +94,13 @@ void Lib::postDisable( int flag )
 
 string Lib::name( )
 {
-    return (m_name.size())?m_name:m_id;
+    return (mName.size())?mName:mId;
 }
 
 void Lib::setFullDB( const string &idb )
 {
     work_lib_db = TSYS::strSepParse(idb,0,'.')+"."+TSYS::strSepParse(idb,1,'.');
-    m_db = TSYS::strSepParse(idb,2,'.');
+    mDB = TSYS::strSepParse(idb,2,'.');
     modifG( );
 }
 
@@ -145,12 +145,12 @@ void Lib::setStart( bool val )
 
 void Lib::add( const char *id, const char *name )
 {
-    chldAdd(m_fnc,new Func(id,name));
+    chldAdd(mFnc,new Func(id,name));
 }
 
 void Lib::del( const char *id )
 {
-    chldDel(m_fnc,id);
+    chldDel(mFnc,id);
 }
 
 void Lib::cntrCmdProc( XMLNode *opt )
@@ -215,7 +215,7 @@ void Lib::cntrCmdProc( XMLNode *opt )
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(at(lst[i_f]).at().name());
 	}
 	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )	add(opt->attr("id").c_str(),opt->text().c_str());
-	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	chldDel(m_fnc,opt->attr("id"),-1,1);
+	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	chldDel(mFnc,opt->attr("id"),-1,1);
     }
     else if( a_path == "/func/ls_lib" && ctrChkNode(opt) )
     {

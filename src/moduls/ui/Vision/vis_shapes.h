@@ -278,19 +278,6 @@ class ShapeDiagram : public WdgShape
     Q_OBJECT
 
     public:
-	//Methods
-	ShapeDiagram( );
-
-	void init( WdgView *view );
-	void destroy( WdgView *view );
-	bool attrSet( WdgView *view, int uiPrmPos, const string &val);
-	bool event( WdgView *view, QEvent *event );
-
-    private slots:
-	//Private slots
-	void tracing( );	//Trends tracing
-
-    private:
 	//Data
 	//- Trend object's class -
 	class TrendObj
@@ -371,6 +358,19 @@ class ShapeDiagram : public WdgShape
 	};
 
 	//Methods
+	ShapeDiagram( );
+
+	void init( WdgView *view );
+	void destroy( WdgView *view );
+	bool attrSet( WdgView *view, int uiPrmPos, const string &val);
+	bool event( WdgView *view, QEvent *event );
+
+    private slots:
+	//Private slots
+	void tracing( );	//Trends tracing
+
+    private:
+	//Methods
 	void makeTrendsPicture( WdgView *view );
 	void loadTrendsData( WdgView *view, bool full = false );
 	void setCursor( WdgView *view, long long itm );
@@ -434,20 +434,6 @@ class ShapeDocument : public WdgShape
     Q_OBJECT
 
     public:
-	//Methods
-	ShapeDocument( );
-
-	void init( WdgView *view );
-	void destroy( WdgView *w );
-	bool attrSet( WdgView *view, int uiPrmPos, const string &val);
-	bool event( WdgView *view, QEvent *event );
-	bool eventFilter( WdgView *view, QObject *object, QEvent *event );
-
-    private slots:
-	//Private slots
-	void tracing( );	//Document tracing
-
-    private:
 	//Data
 	//- Shape node date -
 	class ShpDt
@@ -465,6 +451,20 @@ class ShapeDocument : public WdgShape
 		string	doc;
 	};
 
+	//Methods
+	ShapeDocument( );
+
+	void init( WdgView *view );
+	void destroy( WdgView *w );
+	bool attrSet( WdgView *view, int uiPrmPos, const string &val);
+	bool event( WdgView *view, QEvent *event );
+	bool eventFilter( WdgView *view, QObject *object, QEvent *event );
+
+    private slots:
+	//Private slots
+	void tracing( );	//Document tracing
+
+    private:
 	//Methods
 	//Recursively widgets process for disable focusable and events filter set
 	void eventFilterSet( WdgView *view, QWidget *wdg, bool en );

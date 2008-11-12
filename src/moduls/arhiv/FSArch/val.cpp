@@ -595,64 +595,68 @@ void ModVArchEl::getVal( TValBuf &buf, long long ibeg, long long iend )
 string ModVArchEl::getS( long long *tm, bool up_ord )
 {
     long long itm = tm?*tm:SYS->curTime();
+    long long per;
     ResAlloc res(m_res,false);
     for( int i_a = 0; i_a < arh_f.size(); i_a++ )
 	if( !arh_f[i_a]->err() && (
 		(up_ord && itm <= arh_f[i_a]->end() && itm > arh_f[i_a]->begin()-arh_f[i_a]->period()) ||
 		(!up_ord && itm < arh_f[i_a]->end()+arh_f[i_a]->period() && itm >= arh_f[i_a]->begin()) ) )
 	{
-	    if(tm) *tm = (itm/arh_f[i_a]->period())*arh_f[i_a]->period()+((up_ord&&itm%arh_f[i_a]->period())?arh_f[i_a]->period():0);
+	    if(tm) { per = arh_f[i_a]->period(); *tm = (itm/per)*per+((up_ord&&itm%per)?per:0); }
 	    return arh_f[i_a]->getS(up_ord?arh_f[i_a]->maxPos()-(arh_f[i_a]->end()-itm)/arh_f[i_a]->period():(itm-arh_f[i_a]->begin())/arh_f[i_a]->period());
 	}
-    if(tm) *tm = 0;
+    if(tm) { per = (long long)(archivator().valPeriod()*1000000.); *tm = (itm>=begin()||itm<=end()) ? (itm/per)*per+((up_ord&&itm%per)?per:0) : 0; }
     return EVAL_STR;
 }
 
 double ModVArchEl::getR( long long *tm, bool up_ord )
 {
     long long itm = tm?*tm:SYS->curTime();
+    long long per;
     ResAlloc res(m_res,false);
     for( int i_a = 0; i_a < arh_f.size(); i_a++ )
 	if( !arh_f[i_a]->err() && (
 		(up_ord && itm <= arh_f[i_a]->end() && itm > arh_f[i_a]->begin()-arh_f[i_a]->period()) ||
 		(!up_ord && itm < arh_f[i_a]->end()+arh_f[i_a]->period() && itm >= arh_f[i_a]->begin()) ) )
 	{
-	    if(tm) *tm = (itm/arh_f[i_a]->period())*arh_f[i_a]->period()+((up_ord&&itm%arh_f[i_a]->period())?arh_f[i_a]->period():0);
+	    if(tm) { per = arh_f[i_a]->period(); *tm = (itm/per)*per+((up_ord&&itm%per)?per:0); }
 	    return arh_f[i_a]->getR(up_ord?arh_f[i_a]->maxPos()-(arh_f[i_a]->end()-itm)/arh_f[i_a]->period():(itm-arh_f[i_a]->begin())/arh_f[i_a]->period());
 	}
-    if(tm) *tm = 0;
+    if(tm) { per = (long long)(archivator().valPeriod()*1000000.); *tm = (itm>=begin()||itm<=end()) ? (itm/per)*per+((up_ord&&itm%per)?per:0) : 0; }
     return EVAL_REAL;
 }
 
 int ModVArchEl::getI( long long *tm, bool up_ord )
 {
     long long itm = tm?*tm:SYS->curTime();
+    long long per;
     ResAlloc res(m_res,false);
     for( int i_a = 0; i_a < arh_f.size(); i_a++ )
 	if( !arh_f[i_a]->err() && (
 		(up_ord && itm <= arh_f[i_a]->end() && itm > arh_f[i_a]->begin()-arh_f[i_a]->period()) ||
 		(!up_ord && itm < arh_f[i_a]->end()+arh_f[i_a]->period() && itm >= arh_f[i_a]->begin()) ) )
 	{
-	    if(tm) *tm = (itm/arh_f[i_a]->period())*arh_f[i_a]->period()+((up_ord&&itm%arh_f[i_a]->period())?arh_f[i_a]->period():0);
+	    if(tm) { per = arh_f[i_a]->period(); *tm = (itm/per)*per+((up_ord&&itm%per)?per:0); }
 	    return arh_f[i_a]->getI(up_ord?arh_f[i_a]->maxPos()-(arh_f[i_a]->end()-itm)/arh_f[i_a]->period():(itm-arh_f[i_a]->begin())/arh_f[i_a]->period());
 	}
-    if(tm) *tm = 0;
+    if(tm) { per = (long long)(archivator().valPeriod()*1000000.); *tm = (itm>=begin()||itm<=end()) ? (itm/per)*per+((up_ord&&itm%per)?per:0) : 0; }
     return EVAL_INT;
 }
 
 char ModVArchEl::getB( long long *tm, bool up_ord )
 {
     long long itm = tm?*tm:SYS->curTime();
+    long long per;
     ResAlloc res(m_res,false);
     for( int i_a = 0; i_a < arh_f.size(); i_a++ )
 	if( !arh_f[i_a]->err() && (
 		(up_ord && itm <= arh_f[i_a]->end() && itm > arh_f[i_a]->begin()-arh_f[i_a]->period()) ||
 		(!up_ord && itm < arh_f[i_a]->end()+arh_f[i_a]->period() && itm >= arh_f[i_a]->begin()) ) )
 	{
-	    if(tm) *tm = (itm/arh_f[i_a]->period())*arh_f[i_a]->period()+((up_ord&&itm%arh_f[i_a]->period())?arh_f[i_a]->period():0);
+	    if(tm) { per = arh_f[i_a]->period(); *tm = (itm/per)*per+((up_ord&&itm%per)?per:0); }
 	    return arh_f[i_a]->getB(up_ord?arh_f[i_a]->maxPos()-(arh_f[i_a]->end()-itm)/arh_f[i_a]->period():(itm-arh_f[i_a]->begin())/arh_f[i_a]->period());
 	}
-    if(tm) *tm = 0;
+    if(tm) { per = (long long)(archivator().valPeriod()*1000000.); *tm = (itm>=begin()||itm<=end()) ? (itm/per)*per+((up_ord&&itm%per)?per:0) : 0; }
     return EVAL_BOOL;
 }
 

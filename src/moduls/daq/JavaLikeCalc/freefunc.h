@@ -265,15 +265,17 @@ class Func : public TConfig, public TFunction
 	Func &operator=( Func &func );
 
 	string name( );
-	string descr( )			{ return m_descr; }
+	string descr( )			{ return mDescr; }
 	int maxCalcTm( )		{ return max_calc_tm; }
 	const string &prog( )		{ return prg_src; }
+	const string &usings( )		{ return mUsings; }
 
 	void setName( const string &nm );
 	void setDescr( const string &dscr );
 	void setMaxCalcTm( int vl );
 	void setProg( const string &prg );
 	void setStart( bool val );
+	void setUsings( const string &val )	{ mUsings = val; }
 
 	void del( );
 
@@ -284,13 +286,13 @@ class Func : public TConfig, public TFunction
 
 	//- Functins` list functions -
 	int funcGet( const string &path );
-	UFunc *funcAt( int id )	{ return m_fncs.at(id); }
+	UFunc *funcAt( int id )	{ return mFncs.at(id); }
 	void funcClear( );
 
 	//- Registers` list functions -
 	int regNew( bool var = false );
 	int regGet( const char *nm );
-	Reg *regAt( int id )	{ return m_regs.at(id); }
+	Reg *regAt( int id )	{ return (id>=0) ? mRegs.at(id) : NULL; }
 	void regClear( );
 
 	//- Temporary registers` list functions -
@@ -359,8 +361,8 @@ class Func : public TConfig, public TFunction
 
     private:
 	//Attributes
-	string	&m_name;
-	string	&m_descr;
+	string	&mName;
+	string	&mDescr;
 	int	&max_calc_tm;
 	string	&prg_src;
 
@@ -371,9 +373,10 @@ class Func : public TConfig, public TFunction
 	string		prg;		//Build prog
 	int		la_pos;		//LA position
 	string		p_err;		//Parse error
-	vector<UFunc*>	m_fncs;		//Work functions list
-	vector<Reg*>	m_regs;		//Work registers list
-	vector<Reg*>	m_tmpregs;	//Constant temporary list
+	string		mUsings;	//Functions usings namespaces
+	vector<UFunc*>	mFncs;		//Work functions list
+	vector<Reg*>	mRegs;		//Work registers list
+	vector<Reg*>	mTmpRegs;	//Constant temporary list
 	deque<Reg*>	f_prmst;	//Function's parameters stack
 	Res		&parse_res;
 };

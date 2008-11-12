@@ -2,6 +2,8 @@
 <qresource>
     <file>images/button_cancel.png</file>
     <file>images/button_ok.png</file>
+    <file>images/print.png</file>
+    <file>images/export.png</file>
     <file>images/close.png</file>
     <file>images/contexthelp.png</file>
     <file>images/exit.png</file>

@@ -80,22 +80,19 @@ InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess,
     ed_lay = new QGridLayout;
     ed_lay->setSpacing(6);
     //Id and name fields
-    if( with_nm || with_id )
+    if( with_id )
     {
-	if( with_id )
-	{
-	    ed_lay->addWidget( new QLabel(_("ID:"),this), 0, 0 );
-	    m_id = new QLineEdit(this);
-	    ed_lay->addWidget( m_id, 0, 1 );
-	}
-	if( with_nm )
-	{
-	    ed_lay->addWidget( new QLabel(_("Name:"),this), 1, 0 );
-	    m_name = new QLineEdit(this);
-	    ed_lay->addWidget( m_name, 1, 1 );
-	}
-	dlg_lay->addItem(ed_lay);
+	ed_lay->addWidget( new QLabel(_("ID:"),this), 0, 0 );
+	m_id = new QLineEdit(this);
+	ed_lay->addWidget( m_id, 0, 1 );
     }
+    if( with_nm )
+    {
+	ed_lay->addWidget( new QLabel(_("Name:"),this), 1, 0 );
+	m_name = new QLineEdit(this);
+	ed_lay->addWidget( m_name, 1, 1 );
+    }
+    dlg_lay->addItem(ed_lay);
 
     //Qk and Cancel buttons
     dlg_lay->addItem( new QSpacerItem( 10, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ) );

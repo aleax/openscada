@@ -1,3 +1,15 @@
+2008-11-12 Roman
+- !!!!:/Functions, /DAQ/JavaLikeCalc: Namespace support is added to users' compiled functions. Keyword 'using' is added to JavaLikeCalc for seting namespace.
+- !!!!:/DAQ/JavaLikeCalc: Add support keywords "using" and "return".
+- FIX:/Archive/FSArch: Scan values from holed archive is fixed.
+- /TFunction, /DAQ/JavaLikeCalc: Renamed functions from 'm_nm' view to mNm.
+- FIX:/VCAEngine: Lost language after inherit widget procedure modify is fixed.
+- !:/VCAEngine: Restore atribute 'time' from archived document on start is added.
+- !!!!:/Vision: Print and Export data of run project's is added. Include print and export by: pages, diagrams and documents.
+- !!!!:/WebVision: Primitive "Document" support is added.
+- !!:/DemoDB: Is updated. Sum and average archives data functions is fixed. Primitive's document is updated and one is added.
+
+
 2008-11-12 Maxim
 - FIX:/UI/Vision: Deleting the single figure for the primitive ElFigure is fixed.
 - /UI/Vision: Paint event is for primitive ElFigure is  modified.

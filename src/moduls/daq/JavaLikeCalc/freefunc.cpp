@@ -36,12 +36,12 @@ Func *JavaLikeCalc::p_fnc;
 //*************************************************
 Func::Func( const char *id, const char *name ) :
     TConfig(&mod->elFnc()), TFunction(id), parse_res(mod->parseRes( )),
-    m_name(cfg("NAME").getSd()), m_descr(cfg("DESCR").getSd()),
+    mName(cfg("NAME").getSd()), mDescr(cfg("DESCR").getSd()),
     max_calc_tm(cfg("MAXCALCTM").getId()),prg_src(cfg("FORMULA").getSd())
 {
     cfg("ID").setS(id);
-    m_name = name;
-    if( !m_name.size() ) m_name = id;
+    mName = name;
+    if( !mName.size() ) mName = id;
 }
 
 Func::~Func( )
@@ -56,7 +56,7 @@ void Func::postEnable( int flag )
 
 void Func::preDisable( int flag )
 {
-    if( m_tval ) { delete m_tval; m_tval = NULL; }
+    if( mTVal ) { delete mTVal; mTVal = NULL; }
 }
 
 void Func::postDisable( int flag )
@@ -77,7 +77,7 @@ Lib &Func::owner( )
 
 string Func::name( )
 {
-    return m_name.size()?m_name:id();
+    return mName.size()?mName:id();
 }
 
 TCntrNode &Func::operator=( TCntrNode &node )
@@ -89,7 +89,7 @@ TCntrNode &Func::operator=( TCntrNode &node )
     *(TFunction *)this = *(TFunction*)src_n;
 
     //- Set to DB -
-    cfg("ID").setS(m_id);
+    cfg("ID").setS(mId);
 
     if( src_n->startStat( ) && !startStat( ) )	setStart( true );
 }
@@ -100,18 +100,18 @@ Func &Func::operator=(Func &func)
     *(TFunction *)this = (TFunction&)func;
 
     //- Set to DB -
-    cfg("ID").setS(m_id);
+    cfg("ID").setS(mId);
 }
 
 void Func::setName( const string &nm )
 {
-    m_name = nm;
+    mName = nm;
     if(!owner().DB().empty()) modif();
 }
 
 void Func::setDescr( const string &dscr )
 {
-    m_descr = dscr;
+    mDescr = dscr;
     if(!owner().DB().empty()) modif();
 }
 
@@ -245,7 +245,7 @@ void Func::preIOCfgChange()
     if( be_start )
     {
 	setStart(false);
-	if( m_tval ) { delete m_tval; m_tval = NULL; }
+	if( mTVal ) { delete mTVal; mTVal = NULL; }
     }
     TFunction::preIOCfgChange();
 }
@@ -300,7 +300,7 @@ void Func::ioMove( int pos, int to )
     if(!owner().DB().empty()) modif();
 }
 
-void Func::progCompile()
+void Func::progCompile( )
 {
     ResAlloc res(parse_res,true);
     ResAlloc res1(calc_res,true);
@@ -327,71 +327,79 @@ void Func::progCompile()
 
 int Func::funcGet( const string &path )
 {
+    string ns, f_path;
+    //> Check to correct function's path
     try
     {
-	//- Check to correct function's path -
-	if( !dynamic_cast<TFunction *>(&SYS->nodeAt(path,0,'.').at()) )
-	    return -1;
-	//- Get full path -
-	string f_path = SYS->nodeAt(path,0,'.').at().nodePath();
-	for( int i_fnc = 0; i_fnc < m_fncs.size(); i_fnc++ )
-	    if( f_path == m_fncs[i_fnc]->func().at().nodePath() )
-		return i_fnc;
-	m_fncs.push_back(new UFunc(path));
-	return m_fncs.size()-1; 
-    }catch(...){ return -1; }
+	if( dynamic_cast<TFunction*>(&SYS->nodeAt(path,0,'.').at()) )
+	    f_path = SYS->nodeAt(path,0,'.').at().nodePath();
+    }catch(...){ }
+    if( f_path.empty() )
+    {
+	for( int off = 0; !(ns=TSYS::strSepParse(mUsings,0,';',&off)).empty(); )
+	    try{ if( dynamic_cast<TFunction*>(&SYS->nodeAt(ns+"."+path,0,'.').at()) ) break; }
+	    catch(...){ continue; }
+	if( ns.empty() ) return -1;
+	f_path = SYS->nodeAt(ns+"."+path,0,'.').at().nodePath();
+    }
+    //> Search for already registered function
+    for( int i_fnc = 0; i_fnc < mFncs.size(); i_fnc++ )
+	if( f_path == mFncs[i_fnc]->func().at().nodePath() )
+	    return i_fnc;
+    mFncs.push_back(new UFunc(ns.empty()?path:ns+"."+path));
+    return mFncs.size()-1;
 }
 
 void Func::funcClear( )
 {
-    for( int i_fnc = 0; i_fnc < m_fncs.size(); i_fnc++ )
-        delete m_fncs[i_fnc];
-    m_fncs.clear();
+    for( int i_fnc = 0; i_fnc < mFncs.size(); i_fnc++ )
+	delete mFncs[i_fnc];
+    mFncs.clear();
 }
 
 int Func::regNew( bool var )
 {
     //- Get new register -
-    int i_rg = m_regs.size();
+    int i_rg = mRegs.size();
     if( !var )
-	for( i_rg = 0; i_rg < m_regs.size(); i_rg++ )
-	    if( !m_regs[i_rg]->lock() && m_regs[i_rg]->type() == Reg::Free )
+	for( i_rg = 0; i_rg < mRegs.size(); i_rg++ )
+	    if( !mRegs[i_rg]->lock() && mRegs[i_rg]->type() == Reg::Free )
 		break;
-    if( i_rg >= m_regs.size() ) m_regs.push_back(new Reg(i_rg));
+    if( i_rg >= mRegs.size() ) mRegs.push_back(new Reg(i_rg));
     return i_rg;
 }
 
 int Func::regGet( const char *nm )
 {
     //- Check allow registers -
-    for( int i_rg = 0; i_rg < m_regs.size(); i_rg++ )
-	if( m_regs[i_rg]->name() == nm )
+    for( int i_rg = 0; i_rg < mRegs.size(); i_rg++ )
+	if( mRegs[i_rg]->name() == nm )
 	    return i_rg;
     return -1;
 }
 
 void Func::regClear( )
 {
-    for( int i_rg = 0; i_rg < m_regs.size(); i_rg++ )
-        delete m_regs[i_rg];
-    m_regs.clear();
+    for( int i_rg = 0; i_rg < mRegs.size(); i_rg++ )
+        delete mRegs[i_rg];
+    mRegs.clear();
 }
 
 Reg *Func::regTmpNew( )
 {
     int i_rg;
-    for( i_rg = 0; i_rg < m_tmpregs.size(); i_rg++ )
-        if( m_tmpregs[i_rg]->type() == Reg::Free )
-            break;
-    if( i_rg >= m_tmpregs.size() ) m_tmpregs.push_back(new Reg());
-    return m_tmpregs[i_rg];
+    for( i_rg = 0; i_rg < mTmpRegs.size(); i_rg++ )
+	if( mTmpRegs[i_rg]->type() == Reg::Free )
+	    break;
+    if( i_rg >= mTmpRegs.size() ) mTmpRegs.push_back(new Reg());
+    return mTmpRegs[i_rg];
 }
 
 void Func::regTmpClean( )
 {
-    for( int i_rg = 0; i_rg < m_tmpregs.size(); i_rg++ )
-        delete m_tmpregs[i_rg];
-    m_tmpregs.clear();
+    for( int i_rg = 0; i_rg < mTmpRegs.size(); i_rg++ )
+	delete mTmpRegs[i_rg];
+    mTmpRegs.clear();
 }
 
 Reg *Func::cdMvi( Reg *op, bool no_code )
@@ -1075,14 +1083,14 @@ void Func::calc( TValFunc *val )
     if( !startStat( ) )	return;
 
     //- Init list of registers -
-    RegW reg[m_regs.size()];
-    for( int i_rg = 0; i_rg < m_regs.size(); i_rg++ )
+    RegW reg[mRegs.size()];
+    for( int i_rg = 0; i_rg < mRegs.size(); i_rg++ )
     {
-	reg[i_rg].setType(m_regs[i_rg]->type());
-	if(reg[i_rg].type() == Reg::Var) 
-	    reg[i_rg].val().io = m_regs[i_rg]->val().io;
+	reg[i_rg].setType(mRegs[i_rg]->type());
+	if(reg[i_rg].type() == Reg::Var)
+	    reg[i_rg].val().io = mRegs[i_rg]->val().io;
 	else if(reg[i_rg].type() == Reg::PrmAttr)
-	    *reg[i_rg].val().p_attr = *m_regs[i_rg]->val().p_attr;
+	    *reg[i_rg].val().p_attr = *mRegs[i_rg]->val().p_attr;
     }
 
     //- Exec calc -

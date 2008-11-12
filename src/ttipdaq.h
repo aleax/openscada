@@ -61,7 +61,7 @@ class TTipDAQ : public TModule, public TElem
 
 	//- Compile functions support API -
 	virtual void compileFuncLangs( vector<string> &ls )	{ }
-	virtual string compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text );
+	virtual string compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text, const string &usings = "" );
 
     protected:
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process

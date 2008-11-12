@@ -80,7 +80,7 @@ TipContr::TipContr( string src )
 
     mod		= this;
 
-    m_lib = grpAdd("lib_");
+    mLib = grpAdd("lib_");
 }
 
 TipContr::~TipContr()
@@ -132,37 +132,37 @@ void TipContr::postEnable( int flag )
 
     //- Init named constant table -
     double rvl;
-    rvl = 3.14159265358l; m_const.push_back(NConst(TFld::Real,"pi",string((char*)&rvl,sizeof(rvl))));
-    rvl = 2.71828182845l; m_const.push_back(NConst(TFld::Real,"e",string((char*)&rvl,sizeof(rvl))));
-    rvl = EVAL_REAL; m_const.push_back(NConst(TFld::Real,"EVAL_REAL",string((char*)&rvl,sizeof(rvl))));
+    rvl = 3.14159265358l; mConst.push_back(NConst(TFld::Real,"pi",string((char*)&rvl,sizeof(rvl))));
+    rvl = 2.71828182845l; mConst.push_back(NConst(TFld::Real,"e",string((char*)&rvl,sizeof(rvl))));
+    rvl = EVAL_REAL; mConst.push_back(NConst(TFld::Real,"EVAL_REAL",string((char*)&rvl,sizeof(rvl))));
     int ivl;
-    ivl = EVAL_INT; m_const.push_back(NConst(TFld::Integer,"EVAL_INT",string((char*)&ivl,sizeof(ivl))));
-    ivl = EVAL_BOOL; m_const.push_back(NConst(TFld::Boolean,"EVAL_BOOL",string((char*)&ivl,1)));
+    ivl = EVAL_INT; mConst.push_back(NConst(TFld::Integer,"EVAL_INT",string((char*)&ivl,sizeof(ivl))));
+    ivl = EVAL_BOOL; mConst.push_back(NConst(TFld::Boolean,"EVAL_BOOL",string((char*)&ivl,1)));
 
-    m_const.push_back(NConst(TFld::String,"EVAL_STR",EVAL_STR));
+    mConst.push_back(NConst(TFld::String,"EVAL_STR",EVAL_STR));
 
     //- Init buildin functions list -
-    m_bfunc.push_back(BFunc("sin",Reg::FSin,1));
-    m_bfunc.push_back(BFunc("cos",Reg::FCos,1));
-    m_bfunc.push_back(BFunc("tan",Reg::FTan,1));
-    m_bfunc.push_back(BFunc("sinh",Reg::FSinh,1));
-    m_bfunc.push_back(BFunc("cosh",Reg::FCosh,1));
-    m_bfunc.push_back(BFunc("tanh",Reg::FTanh,1));
-    m_bfunc.push_back(BFunc("asin",Reg::FAsin,1));
-    m_bfunc.push_back(BFunc("acos",Reg::FAcos,1));
-    m_bfunc.push_back(BFunc("atan",Reg::FAtan,1));
-    m_bfunc.push_back(BFunc("rand",Reg::FRand,1));
-    m_bfunc.push_back(BFunc("lg",Reg::FLg,1));
-    m_bfunc.push_back(BFunc("ln",Reg::FLn,1));
-    m_bfunc.push_back(BFunc("exp",Reg::FExp,1));
-    m_bfunc.push_back(BFunc("pow",Reg::FPow,2));
-    m_bfunc.push_back(BFunc("min",Reg::FMin,2));
-    m_bfunc.push_back(BFunc("max",Reg::FMax,2));
-    m_bfunc.push_back(BFunc("sqrt",Reg::FSqrt,1));
-    m_bfunc.push_back(BFunc("abs",Reg::FAbs,1));
-    m_bfunc.push_back(BFunc("sign",Reg::FSign,1));
-    m_bfunc.push_back(BFunc("ceil",Reg::FCeil,1));
-    m_bfunc.push_back(BFunc("floor",Reg::FFloor,1));
+    mBFunc.push_back(BFunc("sin",Reg::FSin,1));
+    mBFunc.push_back(BFunc("cos",Reg::FCos,1));
+    mBFunc.push_back(BFunc("tan",Reg::FTan,1));
+    mBFunc.push_back(BFunc("sinh",Reg::FSinh,1));
+    mBFunc.push_back(BFunc("cosh",Reg::FCosh,1));
+    mBFunc.push_back(BFunc("tanh",Reg::FTanh,1));
+    mBFunc.push_back(BFunc("asin",Reg::FAsin,1));
+    mBFunc.push_back(BFunc("acos",Reg::FAcos,1));
+    mBFunc.push_back(BFunc("atan",Reg::FAtan,1));
+    mBFunc.push_back(BFunc("rand",Reg::FRand,1));
+    mBFunc.push_back(BFunc("lg",Reg::FLg,1));
+    mBFunc.push_back(BFunc("ln",Reg::FLn,1));
+    mBFunc.push_back(BFunc("exp",Reg::FExp,1));
+    mBFunc.push_back(BFunc("pow",Reg::FPow,2));
+    mBFunc.push_back(BFunc("min",Reg::FMin,2));
+    mBFunc.push_back(BFunc("max",Reg::FMax,2));
+    mBFunc.push_back(BFunc("sqrt",Reg::FSqrt,1));
+    mBFunc.push_back(BFunc("abs",Reg::FAbs,1));
+    mBFunc.push_back(BFunc("sign",Reg::FSign,1));
+    mBFunc.push_back(BFunc("ceil",Reg::FCeil,1));
+    mBFunc.push_back(BFunc("floor",Reg::FFloor,1));
 }
 
 TController *TipContr::ContrAttach( const string &name, const string &daq_db )
@@ -176,7 +176,7 @@ void TipContr::compileFuncLangs( vector<string> &ls )
     ls.push_back("JavaScript");
 }
 
-string TipContr::compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text )
+string TipContr::compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text, const string &usings )
 {
     if( lang != "JavaScript" )	throw TError(nodePath().c_str(),_("Compile the program language %s is no support."),lang.c_str());
     if( !lbPresent("sys_compile") )	lbReg( new Lib("sys_compile","","") );
@@ -189,6 +189,7 @@ string TipContr::compileFunc( const string &lang, TFunction &fnc_cfg, const stri
     try
     {
 	if(func.at().startStat()) func.at().setStart(false);
+	func.at().setUsings(usings);
 	func.at().setStart(true);
     }
     catch(TError err)
@@ -332,15 +333,15 @@ void TipContr::cntrCmdProc( XMLNode *opt )
 
 NConst *TipContr::constGet( const char *nm )
 {
-    for( int i_cst = 0; i_cst < m_const.size(); i_cst++)
-	if( m_const[i_cst].name == nm ) return &m_const[i_cst];
+    for( int i_cst = 0; i_cst < mConst.size(); i_cst++)
+	if( mConst[i_cst].name == nm ) return &mConst[i_cst];
 	    return NULL;
 }
 
 BFunc *TipContr::bFuncGet( const char *nm )
 {
-    for( int i_bf = 0; i_bf < m_bfunc.size(); i_bf++)
-	if( m_bfunc[i_bf].name == nm ) return &m_bfunc[i_bf];
+    for( int i_bf = 0; i_bf < mBFunc.size(); i_bf++)
+	if( mBFunc[i_bf].name == nm ) return &mBFunc[i_bf];
 	    return NULL;
 }
 
@@ -350,8 +351,8 @@ BFunc *TipContr::bFuncGet( const char *nm )
 Contr::Contr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     ::TController(name_c, daq_db, cfgelem), TValFunc(name_c.c_str(),NULL,false), prc_st(false),
     endrun_req(false),
-    m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId()),
-    m_iter(cfg("ITER").getId()), m_fnc(cfg("FUNC").getSd())
+    mPer(cfg("PERIOD").getId()), mPrior(cfg("PRIOR").getId()),
+    mIter(cfg("ITER").getId()), mFnc(cfg("FUNC").getSd())
 {
     cfg("PRM_BD").setS("JavaLikePrm_"+name_c);
     setDimens(true);
@@ -381,14 +382,14 @@ void Contr::postDisable(int flag)
 
 void Contr::enable_( )
 {
-    if( !mod->lbPresent(TSYS::strSepParse(m_fnc,0,'.')) )
-	throw TError(nodePath().c_str(),_("Functions library <%s> no present. Please, create functions library!"),TSYS::strSepParse(m_fnc,0,'.').c_str());
-    if( !mod->lbAt(TSYS::strSepParse(m_fnc,0,'.')).at().present(TSYS::strSepParse(m_fnc,1,'.')) )
+    if( !mod->lbPresent(TSYS::strSepParse(mFnc,0,'.')) )
+	throw TError(nodePath().c_str(),_("Functions library <%s> no present. Please, create functions library!"),TSYS::strSepParse(mFnc,0,'.').c_str());
+    if( !mod->lbAt(TSYS::strSepParse(mFnc,0,'.')).at().present(TSYS::strSepParse(mFnc,1,'.')) )
     {
-	mess_info(nodePath().c_str(),_("Create new function <%s>."),m_fnc.c_str());
-	mod->lbAt(TSYS::strSepParse(m_fnc,0,'.')).at().add(TSYS::strSepParse(m_fnc,1,'.').c_str());
+	mess_info(nodePath().c_str(),_("Create new function <%s>."),mFnc.c_str());
+	mod->lbAt(TSYS::strSepParse(mFnc,0,'.')).at().add(TSYS::strSepParse(mFnc,1,'.').c_str());
     }
-    setFunc( &mod->lbAt(TSYS::strSepParse(m_fnc,0,'.')).at().at(TSYS::strSepParse(m_fnc,1,'.')).at() );
+    setFunc( &mod->lbAt(TSYS::strSepParse(mFnc,0,'.')).at().at(TSYS::strSepParse(mFnc,1,'.')).at() );
     try{ loadFunc( ); }
     catch(TError err)
     {
@@ -475,10 +476,10 @@ void Contr::start_( )
 	pthread_attr_t pthr_attr;
 	pthread_attr_init(&pthr_attr);
 	struct sched_param prior;
-	if( m_prior && SYS->user() == "root" )
+	if( mPrior && SYS->user() == "root" )
 	    pthread_attr_setschedpolicy(&pthr_attr,SCHED_RR);
 	else pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
-	prior.__sched_priority=m_prior;
+	prior.__sched_priority=mPrior;
 	pthread_attr_setschedparam(&pthr_attr,&prior);
 
 	pthread_create(&procPthr,&pthr_attr,Contr::Task,this);
@@ -514,7 +515,7 @@ void *Contr::Task( void *icntr )
 
     while(!cntr.endrun_req)
     {
-	for( int i_it = 0; i_it < cntr.m_iter; i_it++ )
+	for( int i_it = 0; i_it < cntr.mIter; i_it++ )
 	    try
 	    {
 		cntr.calc();
@@ -574,7 +575,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	int c_lv = 0;
 	string c_path = "", c_el;
 	opt->childAdd("el")->setText(c_path);
-	for( int c_off = 0; (c_el=TSYS::strSepParse(m_fnc,0,'.',&c_off)).size(); c_lv++ )
+	for( int c_off = 0; (c_el=TSYS::strSepParse(mFnc,0,'.',&c_off)).size(); c_lv++ )
 	{
 	    c_path += c_lv ? "."+c_el : c_el;
 	    opt->childAdd("el")->setText(c_path);
@@ -584,8 +585,8 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	{
 	    case 0:	mod->lbList(lst); break;
 	    case 1:
-		if( mod->lbPresent(TSYS::strSepParse(m_fnc,0,'.')) )
-		    mod->lbAt(TSYS::strSepParse(m_fnc,0,'.')).at().list(lst);
+		if( mod->lbPresent(TSYS::strSepParse(mFnc,0,'.')) )
+		    mod->lbAt(TSYS::strSepParse(mFnc,0,'.')).at().list(lst);
 		break;
 	}
 	for( unsigned i_a=0; i_a < lst.size(); i_a++ )
@@ -637,7 +638,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	    if( !((Func *)func())->owner().DB().empty() ) ((Func *)func())->modif();
 	}
     }
-    else if( a_path == "/fnc/prog" && enableStat() ) 
+    else if( a_path == "/fnc/prog" && enableStat() )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(((Func *)func())->prog());
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )

@@ -734,20 +734,13 @@ int Page::calcPer(  )
 
 void Page::setCalcLang( const string &ilng )
 {
-    m_proc = m_proc.replace(0,m_proc.find("\n"),ilng);
+    m_proc = ilng+"\n"+calcProg();
     modif();
 }
 
 void Page::setCalcProg( const string &iprg )
 {
-    string tmp_prg = m_proc;
-    int lng_end = tmp_prg.find("\n");
-    if(lng_end == string::npos)
-    {
-	tmp_prg=tmp_prg+"\n";
-	lng_end=tmp_prg.find("\n");
-    }
-    m_proc = tmp_prg.replace(lng_end+1,string::npos,iprg);
+    m_proc = calcLang()+"\n"+iprg;
     modif();
 }
 
