@@ -80,7 +80,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
     QLineF line1, line2;
     double ang;
     QPointF StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4;
-    double t_start, t_end, a, b, ang_t;
+    double t_start, t_end, a, b;
     float MotionWidth;
     QPainterPath circlePath;
     QVector<inundationItem> inundationItems_temp;
@@ -370,7 +370,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                     circlePath = newPath;
                     QPainterPath bigPath = newPath;
                     shapeItems.push_back( ShapeItem(bigPath, circlePath, p[0], p[1], -1, -1, -1, QPointF(0,0),
-                                               color, bord_color, style, width, bord_width, 1, angle_temp) );
+                                          color, bord_color, style, width, bord_width, 1, angle_temp) );
                 }
             }
             if( el == "arc" )
@@ -549,7 +549,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                     QPainterPath bigPath = newPath;
                     circlePath = newPath;
                     shapeItems.push_back( ShapeItem(bigPath, circlePath, p[0], p[1], p[2], p[3], p[4], CtrlMotionPos_4, 
-                                                color, bord_color, style, width, bord_width, 2, angle_temp) );
+                                          color, bord_color, style, width, bord_width, 2, angle_temp) );
                 }
             }
             if( el == "bezier" )
@@ -682,7 +682,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                     QPainterPath bigPath = newPath;
                     circlePath = newPath;
                     shapeItems.push_back( ShapeItem(bigPath, circlePath, p[0], p[1], p[2], p[3], -1, QPointF(0,0), 
-                                               color, bord_color, style, width, bord_width, 3, angle_temp) );
+                                          color, bord_color, style, width, bord_width, 3, angle_temp) );
                 }
             }
             if( el == "fill" )
@@ -746,7 +746,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 
                 //- Make elements -
                 if( fl_pnts.size() > 1 ) 
-                    inundationItems.push_back(inundationItem(newPath,color,img, fl_pnts, fl_pnts));
+                    inundationItems.push_back( inundationItem(newPath,color,img, fl_pnts, fl_pnts) );
             }
         }
         for( int i=0; i < shapeItems_temp.size(); i++ )
@@ -967,12 +967,12 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 inundation_fig_num.clear();
             }
          if( inundationItems_temp.size() && shapeItems.size() && !flag_all )
-        {
+         {
             for( int k = 0; k < fill_number.size(); k++ )
                 inundationItems_temp.replace( fill_number[k], inundationItems[k] );
             inundationItems.clear();
             inundationItems = inundationItems_temp;
-        }
+         }
         itemInMotion = 0;
         index        = -1;
         if( rectItems.size() )	rectItems.clear();
@@ -1468,10 +1468,8 @@ void ShapeElFigure::toolAct( QAction *act )
     if( act->objectName() == "cursor" || act->objectName() == "line" || 
             act->objectName() == "arc" || act->objectName() == "besier" )
         for( int i_a = 0; i_a < ((VisDevelop *)w->mainWin())->elFigTool->actions().size(); i_a++ )
-        {
             if( ((VisDevelop *)w->mainWin())->elFigTool->actions().at(i_a)->objectName() != "hold" )
                 ((VisDevelop *)w->mainWin())->elFigTool->actions().at(i_a)->setChecked(false);
-        }
     if( act->objectName() == "line" )
     {
         act->setChecked(true);
@@ -1576,7 +1574,7 @@ void ShapeElFigure::toolAct( QAction *act )
         QPointF Temp;
         QVector<int> inund_figs;
         map< int, QVector<int> > inund_map;
-        if ( index_array.size() ) index_array.clear();
+        if( index_array.size() ) index_array.clear();
         for( int i=0; i < copy_index.size(); i++ )
         {
             if( copy_index[i] != -1 )
@@ -1690,8 +1688,6 @@ void ShapeElFigure::toolAct( QAction *act )
             for( map< int, QVector<int> >::iterator pi = inund_map.begin(); pi != inund_map.end(); pi++ )
                 inundationItems.push_back(inundationItem(createInundationPath( pi->second, shapeItems, *pnts,w ),
                                           inundationItems[pi->first].brush,inundationItems[pi->first].brush_img, pi->second, pi->second));
-
-
             flag_A = true;
             flag_copy = true;
             flag_ctrl_move = 1;
@@ -1700,6 +1696,7 @@ void ShapeElFigure::toolAct( QAction *act )
             w->repaint();
             shapeSave( w );
         }
+        copy_index.clear();
         ((VisDevelop *)w->mainWin())->actVisItPaste->setEnabled(false);
     }
     else if( act->objectName() == "level_rise" )
@@ -1710,24 +1707,24 @@ void ShapeElFigure::toolAct( QAction *act )
             ShapeItem item_temp;
             for( int i = 0; i < index_array.size(); i++  )
                 if( index_array[i] != -1 )
-            {
-                index_array_inund = index_array[i];
-                item_temp = shapeItems[index_array[i]];
-                for( int j = index_array[i]; j < shapeItems.size()-1; j++ )
                 {
-                    shapeItems[j] = shapeItems[j+1];
-                    for( int k = 0; k < index_array.size(); k++ )
-                        if( j == index_array[k] && index_array[k] != -1 ) 
-                            index_array[k] = index_array[k] - 1;
+                    index_array_inund = index_array[i];
+                    item_temp = shapeItems[index_array[i]];
+                    for( int j = index_array[i]; j < shapeItems.size()-1; j++ )
+                    {
+                        shapeItems[j] = shapeItems[j+1];
+                        for( int k = 0; k < index_array.size(); k++ )
+                            if( j == index_array[k] && index_array[k] != -1 ) 
+                                index_array[k] = index_array[k] - 1;
+                    }
+                    shapeItems[shapeItems.size()-1] = item_temp;
+                    for( int j = 0; j < inundationItems.size(); j++  )
+                        for( int p = 0; p < inundationItems[j].number_shape.size(); p++ ) 
+                            if( inundationItems[j].number_shape[p] == index_array_inund )
+                                inundationItems[j].number_shape[p] = shapeItems.size()-1;
+                            else if( inundationItems[j].number_shape[p] > index_array_inund )
+                                inundationItems[j].number_shape[p]--;
                 }
-                shapeItems[shapeItems.size()-1] = item_temp;
-                for( int j = 0; j < inundationItems.size(); j++  )
-                    for( int p = 0; p < inundationItems[j].number_shape.size(); p++ ) 
-                        if( inundationItems[j].number_shape[p] == index_array_inund )
-                            inundationItems[j].number_shape[p] = shapeItems.size()-1;
-                        else if( inundationItems[j].number_shape[p] > index_array_inund )
-                            inundationItems[j].number_shape[p]--;
-            }
         }
         else if( status_hold && ( index_array_copy.size() || 
                  (index_array_copy.size() == 0 && ( index_array.size() && index_array[0] != -1) ) ) )
@@ -1786,24 +1783,24 @@ void ShapeElFigure::toolAct( QAction *act )
             ShapeItem item_temp;
             for( int i = 0; i < index_array.size(); i++  )
                 if( index_array[i] != -1 )
-            {
-                index_array_inund = index_array[i];
-                item_temp = shapeItems[index_array[i]];
-                for( int j = index_array[i]; j > 0; j-- )
                 {
-                    shapeItems[j] = shapeItems[j-1];
-                    for( int k = 0; k < index_array.size(); k++ )
-                        if( j == index_array[k] && index_array[k] != -1 ) 
-                            index_array[k] = index_array[k] + 1;
+                    index_array_inund = index_array[i];
+                    item_temp = shapeItems[index_array[i]];
+                    for( int j = index_array[i]; j > 0; j-- )
+                    {
+                        shapeItems[j] = shapeItems[j-1];
+                        for( int k = 0; k < index_array.size(); k++ )
+                            if( j == index_array[k] && index_array[k] != -1 ) 
+                                index_array[k] = index_array[k] + 1;
+                    }
+                    shapeItems[0] = item_temp;
+                    for( int j = 0; j < inundationItems.size(); j++  )
+                        for( int p = 0; p < inundationItems[j].number_shape.size(); p++ ) 
+                            if( inundationItems[j].number_shape[p] == index_array_inund )
+                                inundationItems[j].number_shape[p] = 0;
+                            else if( inundationItems[j].number_shape[p] < index_array_inund )
+                                inundationItems[j].number_shape[p]++;
                 }
-                shapeItems[0] = item_temp;
-                for( int j = 0; j < inundationItems.size(); j++  )
-                    for( int p = 0; p < inundationItems[j].number_shape.size(); p++ ) 
-                        if( inundationItems[j].number_shape[p] == index_array_inund )
-                            inundationItems[j].number_shape[p] = 0;
-                        else if( inundationItems[j].number_shape[p] < index_array_inund )
-                            inundationItems[j].number_shape[p]++;
-            }
         }
         else if( status_hold && ( index_array_copy.size() || 
                  (index_array_copy.size() == 0 && ( index_array.size() && index_array[0] != -1) ) ) )
@@ -1874,13 +1871,13 @@ void ElFigDt::dynamic( )
     int i;
     int num;
     if(sender()->objectName() == "point") num = 0;
-    else if(sender()->objectName() == "width") num =1;
-    else if(sender()->objectName() == "color") num =2;
-    else if(sender()->objectName() == "border_width") num =3;
-    else if(sender()->objectName() == "border_color") num =4;
-    else if(sender()->objectName() == "style") num =5;
-    else if(sender()->objectName() == "fill_color") num =6;
-    else if(sender()->objectName() == "fill_image") num =7;
+    else if(sender()->objectName() == "width") num = 1;
+    else if(sender()->objectName() == "color") num = 2;
+    else if(sender()->objectName() == "border_width") num = 3;
+    else if(sender()->objectName() == "border_color") num = 4;
+    else if(sender()->objectName() == "style") num = 5;
+    else if(sender()->objectName() == "fill_color") num = 6;
+    else if(sender()->objectName() == "fill_image") num = 7;
     tmp = -5;
     real = -5;
     switch( num )
@@ -2081,7 +2078,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     //-- Building the scaled and unrotated inundation path --
                     QPointF p1;
                     PntMap tmp_pnts;
-                    QVector<QPointF> tmp_pnts_vector;
                     QVector<int> number_vector;
                     bool fl_;
                     for( int p = 0; p < inundationItems[i].number_shape.size(); p++ )
@@ -2190,8 +2186,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     flag_rotate = true;
                     flag_scale = true;
                     tmp_pnts.clear();
-                    
-                    
+
                     double xMax = in_path.pointAtPercent ( 0 ).x();
                     double xMin = in_path.pointAtPercent ( 0 ).x();
                     double yMax = in_path.pointAtPercent ( 0 ).y();
@@ -2207,7 +2202,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         t += 0.01;
                     }
                     while( t < 1 );
-                    
+
                     in_path_rot = createInundationPath( inundationItems[i].number_shape, shapeItems, *pnts, view );
                     double xMax_rot = in_path_rot.pointAtPercent ( 0 ).x();
                     double xMin_rot = in_path_rot.pointAtPercent ( 0 ).x();
@@ -2224,7 +2219,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         t += 0.01;
                     }
                     while( t < 1 );
-                    
+
                     //-- Scaling image for filling --
                     img = img.scaled ( QSize( (int)TSYS::realRound( xMax - xMin )+1, (int)TSYS::realRound( yMax - yMin )+1 ), Qt::IgnoreAspectRatio, Qt::SmoothTransformation  );
                     double im_x, im_y;
@@ -2343,7 +2338,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 		    view->attrSet( "event", sev );
 		    return true;
 		}
-            }	    
+            }
             else if( devW )
             {
                 if( flag_down==0 && flag_up==0 && flag_left==0 && flag_right==0 )
@@ -2559,10 +2554,9 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     view->repaint();
                 }
                 shapeSave(view);
-		
 		return true;
             }
-    	    break;    
+    	    break;
         }
         case QEvent::MouseButtonRelease:
         {
@@ -2636,7 +2630,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                             moveItemTo( ev->pos(), shapeItems, pnts, view );
                                             index = index_temp;
                                             itemInMotion = &shapeItems[index];
-                                        } 
+                                        }
                                     }
                                 }
                                 else
@@ -2679,7 +2673,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                             moveItemTo( ev->pos(), shapeItems, pnts, view );
                                             index = index_temp;
                                             itemInMotion = &shapeItems[index];
-                                        } 
+                                        }
                                     }
                                 }
                                 else
@@ -2714,7 +2708,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                             moveItemTo( ev->pos(), shapeItems, pnts, view );
                                             index = index_temp;
                                             itemInMotion = &shapeItems[index];
-                                        } 
+                                        }
                                         if( shapeItems[current_es].n2==shapeItems[i].n2 && i!=index )
                                         {
                                             shapeItems[i].n2 = shapeItems[index].n1;
@@ -2726,7 +2720,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                             moveItemTo( ev->pos(), shapeItems, pnts, view );
                                             index = index_temp;
                                             itemInMotion = &shapeItems[index];
-                                        } 
+                                        }
                                     }
                                 }
                                 else
@@ -2771,7 +2765,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                             moveItemTo( ev->pos(), shapeItems, pnts, view );
                                             index = index_temp;
                                             itemInMotion = &shapeItems[index];
-                                        } 
+                                        }
                                     }
                                 }
                                 else
@@ -2788,17 +2782,13 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                     }
                             }
                         }
-                        if( itemInMotion->type != 2 )
+                        if( itemInMotion->type != 2 && (!flag_ctrl && status_hold)  )// - if simple figure and status_hold -
                         {
-                            // - if simple figure and status_hold -
-                            if( !flag_ctrl && status_hold )
-                            {
-                                count_Shapes = 1;
-                                count_moveItemTo = 1;
-                                offset = QPointF(0,0);
-                                moveItemTo( ev->pos(), shapeItems, pnts, view );
-                            }
-                            view->repaint(); 
+                            count_Shapes = 1;
+                            count_moveItemTo = 1;
+                            offset = QPointF(0,0);
+                            moveItemTo( ev->pos(), shapeItems, pnts, view );
+                            view->repaint();
                         }
                         ellipse_draw_startPath = newPath;
                         ellipse_draw_endPath = newPath;
@@ -2822,7 +2812,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             flag_ctrl = false;
                             count_Shapes = 0;
                             count_holds = 0;
-                            if ( index_array.size() )
+                            if( index_array.size() )
                             {
                                 index_array_copy = index_array;
                                 index_array.clear();
@@ -2840,7 +2830,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             rect_num_arc = -1;
                             flag_arc_rect_3_4 = false;
                         }
-                        itemInMotion = 0;                        
+                        itemInMotion = 0;
 		     	flag_m=false;
                     }
                     if( ev->button()==Qt::RightButton && !status )
@@ -2852,7 +2842,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             flag_ctrl = false;
                             count_Shapes = 0;
                             count_holds = 0;
-                            if ( index_array.size() )
+                            if( index_array.size() )
                             {
                                 index_array_copy = index_array;
                                 index_array.clear();
@@ -2869,7 +2859,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             flag_hold_arc = false;
                             rect_num_arc = -1;
                             flag_arc_rect_3_4 = false;
-                        }                        
+                        }
                     }
                     double ang;
                     // - getting the end point of the figure and building it -
@@ -2943,7 +2933,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                     circlePath = painterPathSimple( 1, ang, StartLine, EndLine );
                                     QPainterPath bigPath = painterPath( vmax(1,(*widths)[-5])+1, (*widths)[-6], 1, ang, StartLine, EndLine );
                                     shapeItems.push_back( ShapeItem( bigPath,circlePath,-1,-1,-1,-1,-1,QPointF(0,0), -5,
-                                                                         -6, -5, -5, -6, 1, angle_temp ) );
+                                                                     -6, -5, -5, -6, 1, angle_temp ) );
                                 }
                                 StartLine = unScaleRotate( StartLine, view, flag_scale, flag_rotate );
                                 EndLine = unScaleRotate( EndLine, view, flag_scale, flag_rotate );
@@ -2977,7 +2967,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                 bigPath = painterPath( vmax(1,(*widths)[-5])+1, (*widths)[-6],3, ang, StartLine, EndLine, CtrlPos_1, CtrlPos_2 );
                                 circlePath = painterPathSimple( 3, ang, StartLine, EndLine, CtrlPos_1, CtrlPos_2 );
                                 shapeItems.push_back( ShapeItem( bigPath,circlePath,-1,-1,-1,-1,-1,QPointF(0,0), -5,
-                                                                     -6, -5, -5, -6, 3, angle_temp ) );
+                                                                 -6, -5, -5, -6, 3, angle_temp ) );
                             }
                             StartLine = unScaleRotate( StartLine, view, flag_scale, flag_rotate );
                             EndLine = unScaleRotate( EndLine, view, flag_scale, flag_rotate );
@@ -3021,7 +3011,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                 QPainterPath bigPath = painterPath( vmax(1,(*widths)[-5])+1, (*widths)[-6], 2, ang, StartLine, EndLine, CtrlPos_1, CtrlPos_2, CtrlPos_3, CtrlPos_4 );
                                 circlePath = painterPathSimple( 2, ang, StartLine, EndLine, CtrlPos_1, CtrlPos_2, CtrlPos_3, CtrlPos_4 );
                                 shapeItems.push_back( ShapeItem( bigPath,circlePath,-1,-1,-1,-1, -1,CtrlPos_4, -5,
-                                                                     -6, -5, -5, -6, 2, ang ) );
+                                                                 -6, -5, -5, -6, 2, ang ) );
                             }
                             StartLine = unScaleRotate( StartLine, view, flag_scale, flag_rotate );
                             EndLine = unScaleRotate( EndLine, view, flag_scale, flag_rotate );
@@ -3093,13 +3083,13 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             flag_ctrl_move = false;
                             count_Shapes = 1;
                             itemInMotion = &shapeItems[index];
-                            if( rect_num==2 && itemInMotion->type==2 ) offset = QPointF(0,0);
-                            if( itemInMotion->type==2 && rect_num!=2 ) rect_num = rect_num_arc;
+                            if( rect_num == 2 && itemInMotion->type == 2 ) offset = QPointF(0,0);
+                            if( itemInMotion->type == 2 && rect_num != 2 ) rect_num = rect_num_arc;
                             num_vector.clear();
                             moveItemTo( ev->pos(), shapeItems, pnts, view );
                             if( inundationItems.size() )
-                                for( int i=0; i < inundationItems.size(); i++ )
-                                    for( int j=0; j < inundationItems[i].number_shape.size(); j++ )
+                                for( int i = 0; i < inundationItems.size(); i++ )
+                                    for( int j = 0; j < inundationItems[i].number_shape.size(); j++ )
 				    {
 					flag_break_move = false;
                                         if( inundationItems[i].number_shape[j] == index )
@@ -3116,14 +3106,14 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         }
                         else if( !flag_ctrl )
 		    	{
-			    for( int i=0; i < shapeItems.size(); i++ )
+			    for( int i = 0; i < shapeItems.size(); i++ )
 			    {
     				if( i != index )
 				{
 				    if( shapeItems[index].type == 2 )
 				    {
-					if( shapeItems[index].n5==shapeItems[i].n1 || shapeItems[index].n5==shapeItems[i].n2 || shapeItems[index].n5==shapeItems[i].n3 || 
-						shapeItems[index].n5==shapeItems[i].n4 || shapeItems[index].n5==shapeItems[i].n5 )
+					if( shapeItems[index].n5 == shapeItems[i].n1 || shapeItems[index].n5 == shapeItems[i].n2 || shapeItems[index].n5 == shapeItems[i].n3 || 
+						shapeItems[index].n5 == shapeItems[i].n4 || shapeItems[index].n5 == shapeItems[i].n5 )
                                         {
                                             if( shapeItems[index].n5 > 0 )
                                                 shapeItems[index].n5 = appendPoint( QPointF( (*pnts)[shapeItems[index].n5].x(), (*pnts)[shapeItems[index].n5].y() ), shapeItems, pnts, 0 );
@@ -3131,18 +3121,18 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                                 shapeItems[index].n5 = appendPoint( QPointF( (*pnts)[shapeItems[index].n5].x(), (*pnts)[shapeItems[index].n5].y() ), shapeItems, pnts, 1 );
                                         }
 				    }
-				    if( shapeItems[index].type==2 || shapeItems[index].type==3 )
+				    if( shapeItems[index].type == 2 || shapeItems[index].type == 3 )
 				    {
-					if( shapeItems[index].n4==shapeItems[i].n1 || shapeItems[index].n4==shapeItems[i].n2 || shapeItems[index].n4==shapeItems[i].n3 || 
-						shapeItems[index].n4==shapeItems[i].n4 || shapeItems[index].n4==shapeItems[i].n5 )
+					if( shapeItems[index].n4 == shapeItems[i].n1 || shapeItems[index].n4 == shapeItems[i].n2 || shapeItems[index].n4 == shapeItems[i].n3 || 
+						shapeItems[index].n4 == shapeItems[i].n4 || shapeItems[index].n4 == shapeItems[i].n5 )
                                         {
                                             if( shapeItems[index].n4 > 0 )
                                                 shapeItems[index].n4 = appendPoint( QPointF( (*pnts)[shapeItems[index].n4].x(), (*pnts)[shapeItems[index].n4].y() ), shapeItems, pnts, 0 );
                                             else if( shapeItems[index].n4 <= -10 )
                                                 shapeItems[index].n4 = appendPoint( QPointF( (*pnts)[shapeItems[index].n4].x(), (*pnts)[shapeItems[index].n4].y() ), shapeItems, pnts, 1 );
                                         }
-					if( shapeItems[index].n3==shapeItems[i].n1 || shapeItems[index].n3==shapeItems[i].n2 || shapeItems[index].n3==shapeItems[i].n3 || 
-						shapeItems[index].n3==shapeItems[i].n4 || shapeItems[index].n3==shapeItems[i].n5 )
+					if( shapeItems[index].n3 == shapeItems[i].n1 || shapeItems[index].n3 == shapeItems[i].n2 || shapeItems[index].n3 == shapeItems[i].n3 || 
+						shapeItems[index].n3 == shapeItems[i].n4 || shapeItems[index].n3 == shapeItems[i].n5 )
                                         {
                                             if( shapeItems[index].n3 > 0 )
                                                 shapeItems[index].n3 = appendPoint( QPointF( (*pnts)[shapeItems[index].n3].x(), (*pnts)[shapeItems[index].n3].y() ), shapeItems, pnts, 0 );
@@ -3150,16 +3140,16 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                                 shapeItems[index].n3 = appendPoint( QPointF( (*pnts)[shapeItems[index].n3].x(), (*pnts)[shapeItems[index].n3].y() ), shapeItems, pnts, 1 );
                                         }
 				    }
-				    if( shapeItems[index].n1==shapeItems[i].n1 || shapeItems[index].n1==shapeItems[i].n2 || shapeItems[index].n1==shapeItems[i].n3 || 
-					    shapeItems[index].n1==shapeItems[i].n4 || shapeItems[index].n1==shapeItems[i].n5 )
+				    if( shapeItems[index].n1 == shapeItems[i].n1 || shapeItems[index].n1 == shapeItems[i].n2 || shapeItems[index].n1 == shapeItems[i].n3 || 
+					    shapeItems[index].n1 == shapeItems[i].n4 || shapeItems[index].n1 == shapeItems[i].n5 )
                                     {
                                         if( shapeItems[index].n1 > 0 )
                                             shapeItems[index].n1 = appendPoint( QPointF( (*pnts)[shapeItems[index].n1].x(), (*pnts)[shapeItems[index].n1].y() ), shapeItems, pnts, 0 );
                                         else if( shapeItems[index].n1 <= -10 )
                                             shapeItems[index].n1 = appendPoint( QPointF( (*pnts)[shapeItems[index].n1].x(), (*pnts)[shapeItems[index].n1].y() ), shapeItems, pnts, 1 );
                                     }
-				    if( shapeItems[index].n2==shapeItems[i].n1 || shapeItems[index].n2==shapeItems[i].n2 || shapeItems[index].n2==shapeItems[i].n3 ||
-                                            shapeItems[index].n2==shapeItems[i].n4 || shapeItems[index].n2==shapeItems[i].n5 )
+				    if( shapeItems[index].n2 == shapeItems[i].n1 || shapeItems[index].n2 == shapeItems[i].n2 || shapeItems[index].n2 == shapeItems[i].n3 ||
+                                            shapeItems[index].n2 == shapeItems[i].n4 || shapeItems[index].n2 == shapeItems[i].n5 )
                                     {
                                         if( shapeItems[index].n2 > 0 )
                                             shapeItems[index].n2 = appendPoint( QPointF( (*pnts)[shapeItems[index].n2].x(), (*pnts)[shapeItems[index].n2].y() ), shapeItems, pnts, 0 );
@@ -3177,9 +3167,9 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 			    if( inundationItems.size() )
 			      	for( int i=0; i < inundationItems.size(); i++ )
 			  	{
-		      		    if( shapeItems[index].type==2 && inundationItems[i].number_shape.size()==1 && inundationItems[i].number_shape[0]==index )
+		      		    if( shapeItems[index].type == 2 && inundationItems[i].number_shape.size() == 1 && inundationItems[i].number_shape[0] == index )
 				    {
-					if( rect_num==0 || rect_num==1 )
+					if( rect_num == 0 || rect_num == 1 )
 					{
 					    inundationItems.remove(i);
 				       	    shapeSave(view);
@@ -3214,7 +3204,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 			}
                         if( rect_num != -1 )	temp = realRectNum( rect_num, shapeItems );
                         //- if the figure or it's rect is not connected to other one -
-                        if( status_hold && (rect_num==-1|| ((temp==0 || temp==1) && !flag_rect)) )
+                        if( status_hold && (rect_num == -1|| ((temp == 0 || temp == 1) && !flag_rect)) )
                         {
                             current_se = current_ss = current_ee = current_es = -1;
                             ellipse_draw_startPath = newPath;
@@ -3231,9 +3221,9 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                                                   scaleRotate((*pnts)[shapeItems[i].n1], view, flag_scale, flag_rotate).y()-8, 16, 16 );
                                     if( ellipse_startPath.contains( scaleRotate((*pnts)[shapeItems[index].n1], view, flag_scale, flag_rotate) ) )
                                     { 
-                                        if( temp==0 || rect_num==-1 )
+                                        if( temp == 0 || rect_num == -1 )
                                         {
-                                            if( itemInMotion->type==2 && shapeItems[i].type==2 ) break;
+                                            if( itemInMotion->type == 2 && shapeItems[i].type == 2 ) break;
                                             ellipse_draw_startPath.addEllipse( scaleRotate((*pnts)[shapeItems[i].n1], view, flag_scale, flag_rotate).x()-8,
                                                                                scaleRotate((*pnts)[shapeItems[i].n1], view, flag_scale, flag_rotate).y()-8, 16, 16 );
                                             current_ss = i;
@@ -3241,9 +3231,9 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                     }
                                     if( ellipse_startPath.contains(scaleRotate((*pnts)[shapeItems[index].n2], view, flag_scale, flag_rotate)) )
                                     {
-                                        if( temp==1 || rect_num==-1 )
+                                        if( temp == 1 || rect_num == -1 )
                                         {
-                                            if( itemInMotion->type==2 && shapeItems[i].type==2 ) break;
+                                            if( itemInMotion->type == 2 && shapeItems[i].type == 2 ) break;
                                             ellipse_draw_startPath.addEllipse( scaleRotate((*pnts)[shapeItems[i].n1], view, flag_scale, flag_rotate).x()-8,
                                                                                scaleRotate((*pnts)[shapeItems[i].n1], view, flag_scale, flag_rotate).y()-8, 16, 16 );
                                             current_se = i;
@@ -3253,9 +3243,9 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                                                 scaleRotate((*pnts)[shapeItems[i].n2], view, flag_scale, flag_rotate).y()-8, 16, 16 );
                                     if( ellipse_endPath.contains( scaleRotate((*pnts)[shapeItems[index].n2], view, flag_scale, flag_rotate) ) )
                                     {
-                                        if( temp==1 || rect_num==-1 )
+                                        if( temp == 1 || rect_num == -1 )
                                         {
-                                            if( itemInMotion->type==2 && shapeItems[i].type==2 ) break;
+                                            if( itemInMotion->type == 2 && shapeItems[i].type == 2 ) break;
                                             ellipse_draw_endPath.addEllipse( scaleRotate((*pnts)[shapeItems[i].n2], view, flag_scale, flag_rotate).x()-8,
                                                                              scaleRotate((*pnts)[shapeItems[i].n2], view, flag_scale, flag_rotate).y()-8, 16, 16 );
                                             current_ee = i;
@@ -3263,9 +3253,9 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                     }
                                     if( ellipse_endPath.contains( scaleRotate((*pnts)[shapeItems[index].n1], view, flag_scale, flag_rotate) ) )
                                     {
-                                        if( temp==0 || rect_num==-1 )
+                                        if( temp == 0 || rect_num == -1 )
                                         {
-                                            if( itemInMotion->type==2 && shapeItems[i].type==2 ) break;
+                                            if( itemInMotion->type == 2 && shapeItems[i].type == 2 ) break;
                                             ellipse_draw_endPath.addEllipse( scaleRotate((*pnts)[shapeItems[i].n2], view, flag_scale, flag_rotate).x()-8,
                                                                              scaleRotate((*pnts)[shapeItems[i].n2], view, flag_scale, flag_rotate).y()-8, 16, 16 );
                                             current_es = i;
@@ -3356,7 +3346,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     if( status_hold || flag_copy )	break;
                     flag_ctrl = true;
                     index_array.clear();
-                    for( int i=0; i < shapeItems.size(); i++ )
+                    for( int i = 0; i < shapeItems.size(); i++ )
                         index_array.push_back(-1);
                     count_Shapes = 0;
                 }
@@ -3392,8 +3382,10 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         else
                         {
                             if( index_array_copy.size() )
-                                if( index_array_copy[0] != -1 && status_hold ) index_array = index_array_copy;//!!!!
-                            for( int i=0; i < inundationItems.size(); i++ )
+                                if( index_array_copy[0] != -1 && status_hold && index_array.size() == 0 )
+                                    index_array = index_array_copy;//!!!!
+                            
+                            for( int i = 0; i < inundationItems.size(); i++ )
                             {
                                 for( int j = 0; j < inundationItems[i].number_shape.size(); j++ )
                                 {
@@ -3484,17 +3476,17 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 				break;
 			}
 			// - deleting fill if deleted figure was in the fill's path -
-			for( int i=0; i < inundationItems.size(); i++ )
-			    if( shapeItems[index_del].type==2 && inundationItems[i].number_shape.size()==1 &&
-				inundationItems[i].number_shape[0]==index_del )
+			for( int i = 0; i < inundationItems.size(); i++ )
+			    if( shapeItems[index_del].type == 2 && inundationItems[i].number_shape.size() == 1 &&
+				inundationItems[i].number_shape[0] == index_del )
 			    {
 				inundationItems.remove(i);
 				flag_arc_inund = true;
 			    }
 			if( !flag_arc_inund )
 			{
-			    for( int i=0; i < inundationItems.size(); i++ )
-				for( int j=0; j < inundationItems[i].number_shape.size(); j++ )
+			    for( int i = 0; i < inundationItems.size(); i++ )
+				for( int j = 0; j < inundationItems[i].number_shape.size(); j++ )
 				{
 				    flag_break_move = false;
 				    if( inundationItems[i].number_shape[j] == index_del )
@@ -3506,8 +3498,8 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 				    if( flag_break_move ) break;
 				}
 			}
-			for( int i=0; i < inundationItems.size(); i++ )
-			    for( int j=0; j < inundationItems[i].number_shape.size(); j++ )
+			for( int i = 0; i < inundationItems.size(); i++ )
+			    for( int j = 0; j < inundationItems[i].number_shape.size(); j++ )
 				if( inundationItems[i].number_shape[j] > index_del )
 				    inundationItems[i].number_shape[j] -= 1;
 			shapeItems.remove(index_del);
@@ -3525,7 +3517,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     flag_A = true;
                     flag_ctrl_move = 1;
                     if( index_array.size() )	index_array.clear();
-                    for( int i=0; i < shapeItems.size(); i++ )
+                    for( int i = 0; i < shapeItems.size(); i++ )
                         index_array.push_back(i);
                     count_Shapes = shapeItems.size();
                     moveAll( QPointF(0,0), shapeItems, pnts, inundationItems, view );
@@ -3690,18 +3682,18 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
     int MotionBorderWidth = itemInMotion->border_width;
     QLineF line1, line2;
     QPointF Temp, EndMotionPos_temp, CtrlMotionPos_1_temp, CtrlMotionPos_2_temp;
-    bool flag_MotionNum_1=false,
-	 flag_MotionNum_2=false,
-	 flag_MotionNum_3=false,
-	 flag_MotionNum_4=false,
-	 flag_MotionNum_5=false;
-    for ( int i = 0; i < num_vector.size(); i++ )
+    bool flag_MotionNum_1 = false,
+	 flag_MotionNum_2 = false,
+	 flag_MotionNum_3 = false,
+	 flag_MotionNum_4 = false,
+	 flag_MotionNum_5 = false;
+    for( int i = 0; i < num_vector.size(); i++ )
     {
-        if ( num_vector[i] == MotionNum_1 ) flag_MotionNum_1 = true;
-        if ( num_vector[i] == MotionNum_2 ) flag_MotionNum_2 = true;
-        if ( num_vector[i] == MotionNum_3 ) flag_MotionNum_3 = true;
-        if ( num_vector[i] == MotionNum_4 ) flag_MotionNum_4 = true;
-        if ( num_vector[i] == MotionNum_5 ) flag_MotionNum_5 = true;
+        if( num_vector[i] == MotionNum_1 ) flag_MotionNum_1 = true;
+        if( num_vector[i] == MotionNum_2 ) flag_MotionNum_2 = true;
+        if( num_vector[i] == MotionNum_3 ) flag_MotionNum_3 = true;
+        if( num_vector[i] == MotionNum_4 ) flag_MotionNum_4 = true;
+        if( num_vector[i] == MotionNum_5 ) flag_MotionNum_5 = true;
     }
     //- moving the whole figure -
     if( rect_num == -1 )
@@ -3804,7 +3796,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
             angle_temp = ang;
             StartMotionPos = unRotate( StartMotionPos, ang, CtrlMotionPos_1.x(), CtrlMotionPos_1.y() );
             if( StartMotionPos.x() >= a )	StartMotionPos = QPointF( a, (StartMotionPos.y()/StartMotionPos.x())*a );
-            if (StartMotionPos.x() < -a)	StartMotionPos = QPointF( -a, (StartMotionPos.y()/StartMotionPos.x())*(-a) );
+            if(StartMotionPos.x() < -a)	StartMotionPos = QPointF( -a, (StartMotionPos.y()/StartMotionPos.x())*(-a) );
             if(StartMotionPos.y()<=0)	t_start = acos( StartMotionPos.x()/a )/( 2*M_PI );
             else			t_start = 1-acos( StartMotionPos.x()/a )/( 2*M_PI );
             if( t_start < 0 )		t_start = 1+t_start;
@@ -3855,15 +3847,15 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
         }
     }
     //- moving the end point of the figure -
-    if ( rect_num == 1 )
+    if( rect_num == 1 )
     {
         view->mainWin()->statusBar()->showMessage(QString(_("Coordinates(x,y): (%1, %2)")).
                 arg((*pnts)[itemInMotion->n2].x()).arg((*pnts)[itemInMotion->n2].y()), 10000 );
-        StartMotionPos=scaleRotate( (*pnts)[itemInMotion->n1], view, flag_scale, flag_rotate );
-        if ( shapeType == 2 )
+        StartMotionPos = scaleRotate( (*pnts)[itemInMotion->n1], view, flag_scale, flag_rotate );
+        if( shapeType == 2 )
         {
             EndMotionPos = Mouse_pos;
-            if ( flag_up || flag_down || flag_right || flag_left )
+            if( flag_up || flag_down || flag_right || flag_left )
             {
                 EndMotionPos = scaleRotate( (*pnts)[itemInMotion->n2], view, flag_scale, flag_rotate );
                 EndMotionPos += offset;
@@ -3876,16 +3868,16 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
             a = length( CtrlMotionPos_3, CtrlMotionPos_1 );
             line2 = QLineF( CtrlMotionPos_1, QPointF(CtrlMotionPos_1.x()+10,CtrlMotionPos_1.y()) );
             line1 = QLineF( CtrlMotionPos_1, CtrlMotionPos_3 );
-            if ( CtrlMotionPos_3.y() <= CtrlMotionPos_1.y()) ang=angle( line1,line2 );
+            if( CtrlMotionPos_3.y() <= CtrlMotionPos_1.y()) ang=angle( line1,line2 );
             else ang = 360 - angle( line1,line2 );
             angle_temp = ang;
             EndMotionPos = unRotate( EndMotionPos, ang, CtrlMotionPos_1.x(), CtrlMotionPos_1.y() );
-            if ( EndMotionPos.x() <= -a )
+            if( EndMotionPos.x() <= -a )
             {
                 EndMotionPos.setY( (EndMotionPos.y()/EndMotionPos.x())*(-a) );
                 EndMotionPos.setX( -a );
             }
-            if ( EndMotionPos.x() > a )
+            if( EndMotionPos.x() > a )
             {
                 EndMotionPos.setY( (EndMotionPos.y()/EndMotionPos.x())*(a) );
                 EndMotionPos.setX( a );
@@ -3894,10 +3886,10 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
                 t_end=acos( EndMotionPos.x()/a )/( 2*M_PI );
             else
                 t_end=1-acos( EndMotionPos.x()/a )/( 2*M_PI );
-            if ( t_start > t_end ) t_end += 1;
-            if ( (t_end-1) > t_start ) t_end -= 1;
-            if ( t_start == t_end ) t_end += 1;
-            if ( (t_end > t_start) && t_start >= 1 && t_end > 1)
+            if( t_start > t_end ) t_end += 1;
+            if( (t_end-1) > t_start ) t_end -= 1;
+            if( t_start == t_end ) t_end += 1;
+            if( (t_end > t_start) && t_start >= 1 && t_end > 1)
             {
                 t_start -= 1;
                 t_end -= 1;
@@ -3907,10 +3899,10 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
         }
         else
         {
-            if ( !flag_hold_arc && !flag_arc_rect_3_4 )
+            if( !flag_hold_arc && !flag_arc_rect_3_4 )
             { 
-                if ( status_hold && count_holds && flag_rect )
-                    if ( !flag_MotionNum_2 )
+                if( status_hold && count_holds && flag_rect )
+                    if( !flag_MotionNum_2 )
                     {
                         EndMotionPos = scaleRotate( (*pnts)[itemInMotion->n2], view, flag_scale, flag_rotate );
                         EndMotionPos += offset;
@@ -3925,15 +3917,15 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
                 CtrlMotionPos_1 = scaleRotate( (*pnts)[itemInMotion->n3], view, flag_scale, flag_rotate );
                 CtrlMotionPos_2 = scaleRotate( (*pnts)[itemInMotion->n4], view, flag_scale, flag_rotate );
             }
-            if ( flag_hold_arc || flag_arc_rect_3_4 )
+            if( flag_hold_arc || flag_arc_rect_3_4 )
             {
-                if (arc_rect == 0)
+                if(arc_rect == 0)
                 {
                     EndMotionPos = scaleRotate( (*pnts)[shapeItems[index_array[0]].n1], view, flag_scale, flag_rotate );
                     CtrlMotionPos_1 = scaleRotate( (*pnts)[itemInMotion->n3], view, flag_scale, flag_rotate );
                     CtrlMotionPos_2 = scaleRotate( (*pnts)[itemInMotion->n4], view, flag_scale, flag_rotate );
                 }
-                if ( arc_rect == 1 )
+                if( arc_rect == 1 )
                 {
                     EndMotionPos = scaleRotate( (*pnts)[shapeItems[index_array[0]].n2], view, flag_scale, flag_rotate );
                     CtrlMotionPos_1 = scaleRotate( (*pnts)[itemInMotion->n3], view, flag_scale, flag_rotate );
@@ -3944,13 +3936,13 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
         }
     }
     //- moving the first control point of the figure -
-    if ( rect_num == 2 )
+    if( rect_num == 2 )
     {
         view->mainWin()->statusBar()->showMessage(QString(_("Coordinates(x,y): (%1, %2)")).
                 arg((*pnts)[itemInMotion->n3].x()).arg((*pnts)[itemInMotion->n3].y()), 10000 );
         StartMotionPos = scaleRotate( (*pnts)[itemInMotion->n1], view, flag_scale, flag_rotate );
         EndMotionPos = scaleRotate( (*pnts)[itemInMotion->n2], view, flag_scale, flag_rotate );
-        if (shapeType == 2)
+        if(shapeType == 2)
         {
             CtrlMotionPos_1 = scaleRotate( (*pnts)[itemInMotion->n3], view, flag_scale, flag_rotate );
             CtrlMotionPos_2 = scaleRotate( (*pnts)[itemInMotion->n4], view, flag_scale, flag_rotate );
@@ -3960,7 +3952,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
             a = length( CtrlMotionPos_3, CtrlMotionPos_1);
             line2 = QLineF( CtrlMotionPos_1, QPointF( CtrlMotionPos_1.x()+10, CtrlMotionPos_1.y()) );
             line1 = QLineF( CtrlMotionPos_1, CtrlMotionPos_3 );
-            if ( CtrlMotionPos_3.y() <= CtrlMotionPos_1.y() ) ang = angle( line1, line2 );
+            if( CtrlMotionPos_3.y() <= CtrlMotionPos_1.y() ) ang = angle( line1, line2 );
             else ang = 360 - angle( line1, line2 );
             angle_temp = ang;
             t_start = CtrlMotionPos_4.x();
@@ -3974,13 +3966,13 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
         }
     }
     //- moving the second control point of the figure -
-    if (rect_num == 3)
+    if(rect_num == 3)
     {
         view->mainWin()->statusBar()->showMessage(QString(_("Coordinates(x,y): (%1, %2)")).
                 arg((*pnts)[itemInMotion->n4].x()).arg((*pnts)[itemInMotion->n4].y()), 10000 );
         StartMotionPos = scaleRotate( (*pnts)[itemInMotion->n1], view, flag_scale, flag_rotate );
         EndMotionPos = scaleRotate( (*pnts)[itemInMotion->n2], view, flag_scale, flag_rotate );
-        if ( shapeType == 2 )
+        if( shapeType == 2 )
         {
             CtrlMotionPos_1 = scaleRotate( (*pnts)[itemInMotion->n3], view, flag_scale, flag_rotate );
             CtrlMotionPos_2 = scaleRotate( (*pnts)[itemInMotion->n4], view, flag_scale, flag_rotate );
@@ -3994,7 +3986,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
             t_end = CtrlMotionPos_4.y();
             line2 = QLineF( CtrlMotionPos_1, QPointF( CtrlMotionPos_1.x() + 10, CtrlMotionPos_1.y() ) );
             line1 = QLineF( CtrlMotionPos_1, CtrlMotionPos_3 );
-            if ( CtrlMotionPos_3.y() <= CtrlMotionPos_1.y() ) ang = angle( line1,line2 ); 
+            if( CtrlMotionPos_3.y() <= CtrlMotionPos_1.y() ) ang = angle( line1,line2 ); 
             else ang = 360 - angle( line1, line2 );
             angle_temp = ang;
             CtrlMotionPos_3 = unRotate( CtrlMotionPos_3, ang,CtrlMotionPos_1.x(), CtrlMotionPos_1.y() );
@@ -4016,7 +4008,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
         }
     }
     //- moving the third control point of the figure -
-    if ( rect_num == 4 )
+    if( rect_num == 4 )
     {
         view->mainWin()->statusBar()->showMessage(QString(_("Coordinates(x,y): (%1, %2)")).
                 arg((*pnts)[itemInMotion->n5].x()).arg((*pnts)[itemInMotion->n5].y()), 10000 );
@@ -4032,7 +4024,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
         t_end = CtrlMotionPos_4.y();
         line2 = QLineF( CtrlMotionPos_1, QPointF( CtrlMotionPos_1.x() + 100, CtrlMotionPos_1.y() ) );
         line1 = QLineF( CtrlMotionPos_1, CtrlMotionPos_3 );
-        if ( CtrlMotionPos_3.y() <= CtrlMotionPos_1.y() ) ang = angle( line1, line2 );
+        if( CtrlMotionPos_3.y() <= CtrlMotionPos_1.y() ) ang = angle( line1, line2 );
         else ang = 360 - angle( line1, line2 );
         angle_temp = ang;
         StartMotionPos = QPointF( CtrlMotionPos_1.x()+rotate(arc(t_start,a,b),ang).x(),
@@ -4041,14 +4033,14 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
                              CtrlMotionPos_1.y()-rotate(arc(t_end,a,b),ang).y() );
     }
     shapeItems.remove( index );
-    if ( !flag_ctrl || ( !flag_ctrl_move && count_Shapes == count_moveItemTo + count_Shapes - 1 ) )
+    if( !flag_ctrl || ( !flag_ctrl_move && count_Shapes == count_moveItemTo + count_Shapes - 1 ) )
         rectItems.clear();
     //- building the line -
-    if ( shapeType == 1 )
+    if( shapeType == 1 )
     {
         line2 = QLineF( StartMotionPos, QPointF( StartMotionPos.x() + 10, StartMotionPos.y() ) );
         line1 = QLineF( StartMotionPos, EndMotionPos );
-        if ( StartMotionPos.y() <= EndMotionPos.y() ) ang = 360 - angle( line1, line2 );
+        if( StartMotionPos.y() <= EndMotionPos.y() ) ang = 360 - angle( line1, line2 );
         else ang = angle( line1, line2 );
         if( (*widths)[MotionWidth] == 1 && (( (*widths)[MotionBorderWidth] >= 0) && (fabs((*widths)[MotionBorderWidth] - 0) < 0.01)) )
         {
@@ -4076,7 +4068,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
         (*pnts)[MotionNum_2] = EndMotionPos;
     }
     //- building the arc -
-    if ( shapeType == 2 )
+    if( shapeType == 2 )
     {
         double t;
         CtrlMotionPos_2 = QPointF( CtrlMotionPos_1.x() + rotate( arc( 0.25, a, b ), ang ).x(),
@@ -4129,11 +4121,11 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
         (*pnts)[MotionNum_5] = CtrlMotionPos_3;
     }
     //- building the bezier curve -
-    if ( shapeType == 3 )
+    if( shapeType == 3 )
     {
         line2 = QLineF( StartMotionPos, QPointF( StartMotionPos.x() + 10, StartMotionPos.y() ) );
         line1 = QLineF( StartMotionPos, EndMotionPos );
-        if ( StartMotionPos.y() <= EndMotionPos.y() )
+        if( StartMotionPos.y() <= EndMotionPos.y() )
             ang = 360 - angle( line1, line2 );
         else
             ang = angle( line1, line2 );
@@ -4174,13 +4166,13 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
         (*pnts)[MotionNum_4] = CtrlMotionPos_2;
     }
 
-    for ( int i = shapeItems.size() - 1; i > index; i-- )
+    for( int i = shapeItems.size() - 1; i > index; i-- )
     {
         temp_shape = shapeItems[i-1];
         shapeItems[i-1] = shapeItems[i];
         shapeItems[i] = temp_shape;
     }
-    if ( count_moveItemTo == count_Shapes ) 
+    if( count_moveItemTo == count_Shapes ) 
         previousPosition_all = pos;
 }
 
@@ -4198,7 +4190,7 @@ bool ShapeElFigure::holds( const QVector<ShapeItem> &shapeItems, PntMap *pnts )
     do
     {
         index_hold = index_array[num];
-        for (int i = 0; i < shapeItems.size(); i++)
+        for(int i = 0; i < shapeItems.size(); i++)
             if( i != index_hold && ((shapeItems[index_hold].n1 == shapeItems[i].n1) ||
 			(shapeItems[index_hold].n2 == shapeItems[i].n2) ||
 			(shapeItems[index_hold].n1 == shapeItems[i].n2) ||
@@ -4206,9 +4198,9 @@ bool ShapeElFigure::holds( const QVector<ShapeItem> &shapeItems, PntMap *pnts )
 			ellipse_draw_startPath == newPath && ellipse_draw_endPath == newPath )
 	    {
                     flag_equal = 0;
-                    for ( int j = 0; j <= count_holds; j++ )
+                    for( int j = 0; j <= count_holds; j++ )
                         if( index_array[j] == i ) flag_equal = 1;
-                    if ( flag_equal == 0 )
+                    if( flag_equal == 0 )
                     {
                         count_holds++;
                         index_array[count_holds] = i;
@@ -4217,7 +4209,7 @@ bool ShapeElFigure::holds( const QVector<ShapeItem> &shapeItems, PntMap *pnts )
         num++;
     }
     while( num != count_holds + 1 );
-    if ( count_holds > 0 ) return true;
+    if( count_holds > 0 ) return true;
     else return false;
 }
 
@@ -4227,21 +4219,21 @@ void ShapeElFigure::moveUpDown( QVector<ShapeItem> &shapeItems, PntMap *pnts, QV
     int rect_num_temp;
     count_moveItemTo = 0;
     bool flag_break_move;
-    if ( flag_ctrl && count_Shapes )
+    if( flag_ctrl && count_Shapes )
     {
         moveAll( QPointF(0,0), shapeItems, pnts, inundationItems, view );
     }
     else 
-        if ( !flag_first_move )
+        if( !flag_first_move )
         {
             count_holds = 0;
             flag_rect = false;
-            if ( status_hold )
+            if( status_hold )
                 holds( shapeItems, pnts );//calling "holds" to detect is the figure connected with other or not.
-            if ( count_holds )// if the Ctrl is pressed and there are connected figures
+            if( count_holds )// if the Ctrl is pressed and there are connected figures
             {
                 count_Shapes = count_holds + 1;//getting the number of figures to move
-                if ( rect_num != -1 )// if ther is rect under the mouse pointer
+                if( rect_num != -1 )// if ther is rect under the mouse pointer
                 {
                     rect_num_temp = rect_num;
                     rect_num = realRectNum ( rect_num, shapeItems );// detecting the number of the rect for moveItemTo
@@ -4255,27 +4247,27 @@ void ShapeElFigure::moveUpDown( QVector<ShapeItem> &shapeItems, PntMap *pnts, QV
                         rectNum3_4( shapeItems );
                 }
             }
-        if ( flag_rect || flag_arc_rect_3_4 )// if there is the rect number of figures to move becomes equal to the number of figures, connected with this rect
+        if( flag_rect || flag_arc_rect_3_4 )// if there is the rect number of figures to move becomes equal to the number of figures, connected with this rect
             count_Shapes = count_rects;
         }
-    if ( flag_rect || flag_arc_rect_3_4 || ( rect_num == -1 && count_holds ) )
+    if( flag_rect || flag_arc_rect_3_4 || ( rect_num == -1 && count_holds ) )
         moveAll( QPointF(0,0), shapeItems, pnts, inundationItems, view );
-    if ( ( !flag_ctrl  || (!flag_rect && rect_num != -1 ) ) && !flag_arc_rect_3_4 )// if there is simple figure or one of its rects
-        if (index != -1)
+    if( ( !flag_ctrl  || (!flag_rect && rect_num != -1 ) ) && !flag_arc_rect_3_4 )// if there is simple figure or one of its rects
+        if(index != -1)
         {
             num_vector.clear();
             flag_ctrl = true;
             flag_ctrl_move = false;
             count_moveItemTo = 1;
             count_Shapes = 1;
-            if ( !status_hold )
-                for ( int i = 0; i < shapeItems.size(); i++ )
+            if( !status_hold )
+                for( int i = 0; i < shapeItems.size(); i++ )
                 {
-                    if ( i != index )
+                    if( i != index )
                     {
-                        if ( shapeItems[index].type == 2 )
+                        if( shapeItems[index].type == 2 )
                         {
-                            if ( (shapeItems[index].n5 == shapeItems[i].n1) || 
+                            if( (shapeItems[index].n5 == shapeItems[i].n1) || 
                                 (shapeItems[index].n5 == shapeItems[i].n2) ||
                                 (shapeItems[index].n5 == shapeItems[i].n3) || 
                                 (shapeItems[index].n5 == shapeItems[i].n4) ||
@@ -4288,9 +4280,9 @@ void ShapeElFigure::moveUpDown( QVector<ShapeItem> &shapeItems, PntMap *pnts, QV
                                     shapeItems[index].n5 = appendPoint( Temp, shapeItems, pnts, 1 );
                             }
                         }
-                        if ( shapeItems[index].type == 2 || shapeItems[index].type == 3 )
+                        if( shapeItems[index].type == 2 || shapeItems[index].type == 3 )
                         {
-                            if ( (shapeItems[index].n4 == shapeItems[i].n1) || 
+                            if( (shapeItems[index].n4 == shapeItems[i].n1) || 
                                 (shapeItems[index].n4 == shapeItems[i].n2) ||
                                 (shapeItems[index].n4 == shapeItems[i].n3) || 
                                 (shapeItems[index].n4 == shapeItems[i].n4) ||
@@ -4302,7 +4294,7 @@ void ShapeElFigure::moveUpDown( QVector<ShapeItem> &shapeItems, PntMap *pnts, QV
                                 else if( shapeItems[index].n4 <= -10 )
                                     shapeItems[index].n4 = appendPoint( Temp, shapeItems, pnts, 1 );
                             }
-                            if ( (shapeItems[index].n3 == shapeItems[i].n1) || 
+                            if( (shapeItems[index].n3 == shapeItems[i].n1) || 
                                 (shapeItems[index].n3 == shapeItems[i].n2) ||
                                 (shapeItems[index].n3 == shapeItems[i].n3) || 
                                 (shapeItems[index].n3 == shapeItems[i].n4) ||
@@ -4355,7 +4347,7 @@ void ShapeElFigure::moveUpDown( QVector<ShapeItem> &shapeItems, PntMap *pnts, QV
                             flag_break_move = true;
                             break;
                         }
-                        if ( flag_break_move ) break;
+                        if( flag_break_move ) break;
                     }
             flag_ctrl = false;
         }
@@ -4378,7 +4370,7 @@ void ShapeElFigure::moveUpDown( QVector<ShapeItem> &shapeItems, PntMap *pnts, QV
                         flag_break_move = true;
                         break;
                     }
-                    if ( flag_break_move ) break;
+                    if( flag_break_move ) break;
                 }
         }
     }
@@ -4390,7 +4382,7 @@ int ShapeElFigure::realRectNum( int rect_num_old, const QVector<ShapeItem> &shap
     int rect_num_new;
     bool flag_isArc = false;
     //- detecting the correct index of the figure -
-    for ( int i = 0; i <= shapeItems.size()-1; i++ )
+    for( int i = 0; i <= shapeItems.size()-1; i++ )
         switch( shapeItems[i].type )
     {
         case 1:
@@ -4440,62 +4432,62 @@ int ShapeElFigure::realRectNum( int rect_num_old, const QVector<ShapeItem> &shap
 
 void ShapeElFigure::rectNum0_1( const QVector<ShapeItem> &shapeItems, int rect_num_temp, PntMap *pnts, WdgView *view )
 {
-    flag_rect=true;
-    count_rects=0;
+    flag_rect = true;
+    count_rects = 0;
     QVector <int> index_array_temp;
-    for(int i=0; i<count_holds+1; i++)
+    for( int i = 0; i < count_holds+1; i++ )
     {
         index_array_temp.push_back(-1);
         rect_array.push_back(0);
     }
     //- detecting the common points for all connected figures -
-    for (int i=0; i<=count_holds; i++)
+    for( int i = 0; i <= count_holds; i++ )
     {
-        if ((*pnts)[rectItems[rect_num_temp].num]==(*pnts)[shapeItems[index_array[i]].n1])
+        if( (*pnts)[rectItems[rect_num_temp].num] == (*pnts)[shapeItems[index_array[i]].n1] )
         {
-            index_array_temp[count_rects]=index_array[i];
-            rect_array[count_rects]=0;
+            index_array_temp[count_rects] = index_array[i];
+            rect_array[count_rects] = 0;
             count_rects++;
-            flag_rect=true;
+            flag_rect = true;
         }
-        if ((*pnts)[rectItems[rect_num_temp].num]==(*pnts)[shapeItems[index_array[i]].n2])
+        if( (*pnts)[rectItems[rect_num_temp].num]==(*pnts)[shapeItems[index_array[i]].n2] )
         {
-            index_array_temp[count_rects]=index_array[i];
-            rect_array[count_rects]=1;
+            index_array_temp[count_rects] = index_array[i];
+            rect_array[count_rects] = 1;
             count_rects++;
-            flag_rect=true;
+            flag_rect = true;
         }
 
     }
     index_array.clear();
-    for(int i=0; i<count_rects+1; i++)
+    for( int i = 0; i < count_rects+1; i++ )
         index_array.push_back(-1);
-    for (int i=0; i<count_rects; i++)
-        index_array[i]=index_array_temp[i];
+    for( int i = 0; i < count_rects; i++ )
+        index_array[i] = index_array_temp[i];
     // if there is an arc in "index_array" we put it on the first place in it.
-    int num_arc=-1;
-    for (int i=0; i<count_rects; i++)
-        if (shapeItems[index_array[i]].type==2)
+    int num_arc = -1;
+    for( int i = 0; i < count_rects; i++ )
+        if( shapeItems[index_array[i]].type == 2 )
         {
-            flag_hold_arc=true;
-            num_arc=i;
+            flag_hold_arc = true;
+            num_arc = i;
         }
-    if (num_arc!=-1)
+    if( num_arc != -1 )
     {
-        int index_0=index_array[0];
-        int rect_0=rect_array[0];
-        index_array[0]=index_array[num_arc];
-        index_array[num_arc]=index_0;
-        rect_array[0]=rect_array[num_arc];
-        rect_array[num_arc]=rect_0;
+        int index_0 = index_array[0];
+        int rect_0 = rect_array[0];
+        index_array[0] = index_array[num_arc];
+        index_array[num_arc] = index_0;
+        rect_array[0] = rect_array[num_arc];
+        rect_array[num_arc] = rect_0;
     }
-    if (count_rects==1)
+    if( count_rects == 1 )
     {
-        flag_rect=false;
-        if (shapeItems[index_array[0]].type==2)
+        flag_rect = false;
+        if( shapeItems[index_array[0]].type == 2 )
         {
-            rect_num_arc=rect_num;
-            flag_hold_arc=false;
+            rect_num_arc = rect_num;
+            flag_hold_arc = false;
         }
     }
     index_array_temp.clear();
@@ -4512,12 +4504,12 @@ void ShapeElFigure::rectNum3_4( const QVector<ShapeItem> &shapeItems)
     }
     flag_rect = false;
     index_array_temp[0] = index;
-    if ( rect_num == 3 )
+    if( rect_num == 3 )
     {
         arc_rect_array[0] = 3;
         fig_rect_array[0] = 3;
     }
-    if ( rect_num == 4 )
+    if( rect_num == 4 )
     {
         arc_rect_array[0] = 4;
         fig_rect_array[0] = 4;
@@ -4558,9 +4550,9 @@ void ShapeElFigure::rectNum3_4( const QVector<ShapeItem> &shapeItems)
         }
     }
     index_array.clear();
-    for ( int i = 0; i < count_rects; i++ )
+    for( int i = 0; i < count_rects; i++ )
         index_array.push_back(-1);
-    for ( int i = 0; i < count_rects; i++ )
+    for( int i = 0; i < count_rects; i++ )
         index_array[i] = index_array_temp[i];
     index_array_temp.clear();
 }
@@ -4571,31 +4563,33 @@ void ShapeElFigure::moveAll( const QPointF &pos, QVector<ShapeItem> &shapeItems,
     num_vector.clear();
     int rect_num_temp;
     bool flag_break;
-    for ( int i = 0; i < count_Shapes; i++ )
+    for( int i = 0; i < count_Shapes; i++ )
     {
         count_moveItemTo += 1;
         flag_ctrl_move = false;
         flag_ctrl = true;
         itemInMotion = &shapeItems[index_array[i]];
-        if ( flag_rect )
+        if( flag_rect )
         {
             rect_num = rect_array[i];
             arc_rect = rect_array[0];
         }
-        if ( flag_arc_rect_3_4 )
+        if( flag_arc_rect_3_4 )
         {
-            if ( i == 0 && !flag_down && !flag_up && !flag_right && !flag_left ) offset = pos - previousPosition_all;
-            if ( i > 0 )
-                if ( arc_rect_array[i] == 0 ) 
+            if( i == 0 && !flag_down && !flag_up && !flag_right && !flag_left ) offset = pos - previousPosition_all;
+            if( i > 0 )
+            {
+                if( arc_rect_array[i] == 0 ) 
                     offset = scaleRotate( (*pnts)[shapeItems[index_array[0]].n1], view, flag_scale, flag_rotate ) - Prev_pos_1;
                 else 
                     offset = scaleRotate( (*pnts)[shapeItems[index_array[0]].n2], view, flag_scale, flag_rotate ) - Prev_pos_2;
+            }
             rect_num = fig_rect_array[i];
             arc_rect = arc_rect_array[i];
         }
         index = index_array[i];
         moveItemTo( pos, shapeItems, pnts, view );
-        if ( i == 0 && flag_arc_rect_3_4 )
+        if( i == 0 && flag_arc_rect_3_4 )
         {
             Prev_pos_1 = scaleRotate( (*pnts)[shapeItems[index_array[0]].n1], view, flag_scale, flag_rotate );
             Prev_pos_2 = scaleRotate( (*pnts)[shapeItems[index_array[0]].n2], view, flag_scale, flag_rotate );
@@ -4615,7 +4609,7 @@ void ShapeElFigure::moveAll( const QPointF &pos, QVector<ShapeItem> &shapeItems,
                         flag_break = true;
                         break;
                     }
-                    if ( flag_break ) break;
+                    if( flag_break ) break;
             }
     }
 }
@@ -4748,70 +4742,69 @@ int ShapeElFigure::itemAt( const QPointF &pos, const QVector<ShapeItem> &shapeIt
     QPointF point;
     rect_num = -1;
     bool flag_break = false;
-    for (int j = 0; j <= rectItems.size()-1; j++) 
+    for(int j = 0; j <= rectItems.size()-1; j++) 
     {
         const RectItem &item1 = rectItems[j];
-        if ( item1.path.contains(pos) ) rect_num = j;
+        if( item1.path.contains(pos) ) rect_num = j;
     }
     index = -1;
-    if ( rect_num != -1)
-        for ( int i = 0; i <= shapeItems.size()-1; i++ )
+    if( rect_num != -1)
+        for( int i = 0; i <= shapeItems.size()-1; i++ )
             switch( shapeItems[i].type )
-    {
-        case 1:
-            if( (rectItems[rect_num].num == shapeItems[i].n1) ||
-                 (rectItems[rect_num].num == shapeItems[i].n2) )
-                index = i;
-            break;
-        case 2:
-            if( (rectItems[rect_num].num == shapeItems[i].n1) ||
-                 (rectItems[rect_num].num == shapeItems[i].n2) ||
-                 (rectItems[rect_num].num == shapeItems[i].n3) ||
-                 (rectItems[rect_num].num == shapeItems[i].n4) ||
-                 (rectItems[rect_num].num == shapeItems[i].n5) )
-                index = i;
-            break;
-        case 3:
-            if( (rectItems[rect_num].num == shapeItems[i].n1) ||
-                 (rectItems[rect_num].num == shapeItems[i].n2) ||
-                 (rectItems[rect_num].num == shapeItems[i].n3) ||
-                 (rectItems[rect_num].num == shapeItems[i].n4) )
-                index = i;
-            break;
-    }
-    if ( rect_num == -1 )
-    //for ( int i = 0; i < shapeItems.size(); i++ )
-    for ( int i = shapeItems.size()-1; i > -1; i-- )  
+        {
+            case 1:
+                if( (rectItems[rect_num].num == shapeItems[i].n1) ||
+                    (rectItems[rect_num].num == shapeItems[i].n2) )
+                    index = i;
+                break;
+            case 2:
+                if( (rectItems[rect_num].num == shapeItems[i].n1) ||
+                    (rectItems[rect_num].num == shapeItems[i].n2) ||
+                    (rectItems[rect_num].num == shapeItems[i].n3) ||
+                    (rectItems[rect_num].num == shapeItems[i].n4) ||
+                    (rectItems[rect_num].num == shapeItems[i].n5) )
+                    index = i;
+                break;
+            case 3:
+                if( (rectItems[rect_num].num == shapeItems[i].n1) ||
+                    (rectItems[rect_num].num == shapeItems[i].n2) ||
+                    (rectItems[rect_num].num == shapeItems[i].n3) ||
+                    (rectItems[rect_num].num == shapeItems[i].n4) )
+                    index = i;
+                break;
+        }
+    if( rect_num == -1 )
+    for( int i = shapeItems.size()-1; i > -1; i-- )  
     {
         const ShapeItem &item = shapeItems[i];
-        if ( item.path.contains(pos) )
+        if( item.path.contains(pos) )
         {
             index = i;
             flag_break = true;
         }
-        if ( flag_break ) break;
+        if( flag_break ) break;
         for( int j = 2; j > 0; j-- )
         {
             point.setY(j);
             point.setX(j);
-            if ( item.path.contains(pos + point) ) 
+            if( item.path.contains(pos + point) ) 
             {
                index = i;
                flag_break = true;
             }
         }
-        if ( flag_break ) break;
+        if( flag_break ) break;
         for(int j = 2; j > 0; j-- )
         {
             point.setY(j);
             point.setX(j);
-            if ( item.path.contains(pos - point) ) 
+            if( item.path.contains(pos - point) ) 
             {
                 index = i;
                 flag_break = true;
             }
         }
-        if ( flag_break ) break;
+        if( flag_break ) break;
     }
    return index;
 }
@@ -4844,7 +4837,7 @@ QPainterPath ShapeElFigure::painterPath( float el_width, float el_border_width, 
         circlePath.setFillRule ( Qt::WindingFill );
     }
     //-- if arc --
-    if(el_type==2)
+    if( el_type == 2 )
     {
         arc_a = length( el_p5, el_p3 ) + el_width/2 + el_border_width/2;
         arc_b = length( el_p3, el_p4 ) + el_width/2 + el_border_width/2;
@@ -4856,21 +4849,20 @@ QPainterPath ShapeElFigure::painterPath( float el_width, float el_border_width, 
                            TSYS::realRound( el_p3.y() - rotate( arc( t_start, arc_a_small, arc_b_small ), el_ang ).y(), 2, true ) );
         circlePath.lineTo( TSYS::realRound( el_p3.x() + rotate( arc( t_start, arc_a, arc_b ), el_ang ).x(), 2, true ),
                            TSYS::realRound( el_p3.y() - rotate( arc( t_start, arc_a, arc_b ), el_ang ).y(), 2, true ) );
-        for ( t = t_start; t < t_end + 0.00277777777778; t += 0.00277777777778 ) 
+        for( t = t_start; t < t_end + 0.00277777777778; t += 0.00277777777778 ) 
             circlePath.lineTo( QPointF( TSYS::realRound( el_p3.x() + rotate( arc( t, arc_a, arc_b ), el_ang ).x(), 2, true ),
                                        TSYS::realRound( el_p3.y() - rotate( arc( t, arc_a, arc_b ), el_ang ).y(), 2, true ) ) );
         circlePath.lineTo( TSYS::realRound( el_p3.x() + rotate( arc( t_end, arc_a_small, arc_b_small ), el_ang ).x(), 2, true ),
                            TSYS::realRound( el_p3.y() - rotate( arc( t_end, arc_a_small, arc_b_small ), el_ang ).y(), 2, true ) );
-        for ( t = t_end; t > t_start; t -= 0.00277777777778 ) 
+        for( t = t_end; t > t_start; t -= 0.00277777777778 ) 
             circlePath.lineTo( QPointF( TSYS::realRound( el_p3.x() + rotate( arc( t, arc_a_small, arc_b_small ), el_ang ).x(), 2, true ),
                                        TSYS::realRound( el_p3.y() - rotate( arc( t, arc_a_small, arc_b_small ), el_ang ).y(), 2, true ) ) );
         circlePath.closeSubpath();
         circlePath.setFillRule ( Qt::WindingFill );
     }
     //-- if bezier --
-    if(el_type == 3)
+    if( el_type == 3 )
     {
-
         el_border_width = el_border_width/2;
         CtrlMotionPos_1_temp = unRotate( el_p3, el_ang, el_p1.x(), el_p1.y() );
         CtrlMotionPos_2_temp = unRotate( el_p4, el_ang, el_p1.x(), el_p1.y() );
@@ -4917,7 +4909,7 @@ QPainterPath ShapeElFigure::painterPathSimple( int el_type, double el_ang, QPoin
         t_end = el_p6.y();
         circlePath.moveTo( TSYS::realRound( el_p3.x() + rotate( arc( t_start, arc_a, arc_b ), el_ang ).x(), 2, true ),
                            TSYS::realRound( el_p3.y() - rotate( arc( t_start, arc_a, arc_b ), el_ang ).y(), 2, true ) );
-        for ( t = t_start; t < t_end + 0.00277777777778; t += 0.00277777777778 ) 
+        for( t = t_start; t < t_end + 0.00277777777778; t += 0.00277777777778 ) 
             circlePath.lineTo( TSYS::realRound( el_p3.x() + rotate( arc( t, arc_a, arc_b ), el_ang ).x(), 2, true ),
                                TSYS::realRound( el_p3.y() - rotate( arc( t, arc_a, arc_b ), el_ang ).y(), 2, true ) );
     }
@@ -4967,15 +4959,15 @@ void ShapeElFigure::dropPoint( int num, int num_shape, const QVector<ShapeItem> 
 int ShapeElFigure::buildMatrix( const QVector<ShapeItem> &shapeItems )
 {
     int N;
-    for ( int j = 0; j < 2*shapeItems.size()+1; j++ )
+    for( int j = 0; j < 2*shapeItems.size()+1; j++ )
         vect.push_back(0);
     int j = 1;
     bool flag_vect_n1, flag_vect_n2;
-    for (int i = 0; i < shapeItems.size(); i++ )
+    for(int i = 0; i < shapeItems.size(); i++ )
     {
         flag_vect_n1 = false;
         flag_vect_n2 = false;
-        for ( int k = 1; k < j; k++ )
+        for( int k = 1; k < j; k++ )
         {
             if( vect[k] == shapeItems[i].n1 )
                 flag_vect_n1 = true;
@@ -5000,7 +4992,7 @@ int ShapeElFigure::buildMatrix( const QVector<ShapeItem> &shapeItems )
         map_matrix.push_back(el);
     }
     N = j - 1;
-    for ( int v = 1; v < j; v++ )
+    for( int v = 1; v < j; v++ )
         for( int i = 0; i < shapeItems.size(); i++ )
     {
         if( shapeItems[i].n1 == vect[v] )
@@ -5024,7 +5016,7 @@ int ShapeElFigure::buildMatrix( const QVector<ShapeItem> &shapeItems )
 void ShapeElFigure::step( int s, int f, int p, const QVector<int> &vect, int N )
 {
     int c;
-    if ( s == f && p > 4 ) 
+    if( s == f && p > 4 ) 
     {
         if( len > 0 && len > clen )
             found--;
@@ -5037,7 +5029,7 @@ void ShapeElFigure::step( int s, int f, int p, const QVector<int> &vect, int N )
     else
     {
         for( c = 1; c <= N; c++ )
-            if ( map_matrix[s][c] && !incl[c]&& ( len == 0 || clen+map_matrix[s][c] <= len ) )
+            if( map_matrix[s][c] && !incl[c]&& ( len == 0 || clen+map_matrix[s][c] <= len ) )
             {
                 road[p] = c; incl[c] = 1; clen = clen + map_matrix[s][c];
                 step ( c, f, p+1, vect, N );
@@ -5071,7 +5063,7 @@ bool ShapeElFigure::inundation( const QPointF &point, const QVector<ShapeItem> &
             for( int z = 0; z < 2*shapeItems.size()+1; z++ )  el.push_back(0);
             minroad.push_back(el);
         }
-        for ( int k = 0; k < 2*shapeItems.size()+1; k++ )
+        for( int k = 0; k < 2*shapeItems.size()+1; k++ )
         {
             road.push_back(0);
             incl.push_back(0);
@@ -5086,13 +5078,10 @@ bool ShapeElFigure::inundation( const QPointF &point, const QVector<ShapeItem> &
                 for( int j = 0; j < shapeItems.size(); j++ )
                     if( (shapeItems[j].n1 == vect[minroad[i_found][k]] && shapeItems[j].n2 == vect[minroad[i_found][k+1]]) ||
                         (shapeItems[j].n1 == vect[minroad[i_found][k+1]] && shapeItems[j].n2 == vect[minroad[i_found][k]]) )
-                    {
-                        inundation_fig_num.push_back(j);
-                        break;
-                    }
+                    { inundation_fig_num.push_back(j); break; }
             inundationPath = createInundationPath( inundation_fig_num, shapeItems, *pnts, view );
             inundation_fig_num.clear();
-            if ( inundationPath.contains(point) )
+            if( inundationPath.contains(point) )
                 for( int i_m = 1; i_m <= minroad[i_found][0]+1; i_m++ )
                     if( work_sort[0] > minroad[i_found][0] || !work_sort[0] )
                         for( int i_p = 0; i_p <= minroad[i_found][0]+1; i_p++ )
@@ -5121,7 +5110,7 @@ bool ShapeElFigure::inundation( const QPointF &point, const QVector<ShapeItem> &
                             if( (shapeItems[inundation_fig_num[p]].type == 2 && shapeItems[j].type == 3) && (inundation_fig_num[p] != j) )
                                 inundation_fig_num[p] = j;
                         }
-                if ( flag_push_back )
+                if( flag_push_back )
                     inundation_fig_num.push_back(j);
         }
     work_sort.clear();
@@ -5166,17 +5155,12 @@ bool ShapeElFigure::inundation1_2( const QPointF &point, const QVector<ShapeItem
     bool flag_break, fl_brk;
     flag_break = false;
     fl_brk = false;
-    //QBrush fill_brush( QColor(0,0,0,0), Qt::SolidPattern ), 
-    //QBrush fill_img_brush;
-    //fill_brush.setColor( elFD->fillClr );
-    //fill_img_brush = elFD->fillImg;
     for( int i = 0; i < shapeItems.size(); i++ )
     {
         if( shapeItems[i].type == 2 )
             if( scaleRotate((*pnts)[shapeItems[i].n1], view, flag_scale, flag_rotate).toPoint()==scaleRotate((*pnts)[shapeItems[i].n2], view, flag_scale, flag_rotate).toPoint() )
             {
-                if( in_fig_num.size() )
-                    in_fig_num.clear();
+                if( in_fig_num.size() ) in_fig_num.clear();
                 in_fig_num.push_back(i);
                 inundationPath_1_2 = newPath;
                 inundationPath_1_2 = createInundationPath( in_fig_num, shapeItems, *pnts, view );
@@ -5210,8 +5194,7 @@ bool ShapeElFigure::inundation1_2( const QPointF &point, const QVector<ShapeItem
                     }
                 }
             }
-        if( flag_break )
-            return true;
+        if( flag_break ) return true;
         if( shapeItems[i].type == 2 || shapeItems[i].type == 3 )
         {
             for( int j = 0; j < shapeItems.size(); j++ )
@@ -5229,7 +5212,7 @@ bool ShapeElFigure::inundation1_2( const QPointF &point, const QVector<ShapeItem
                         if( inundationPath_1_2.contains(point) )
                         {
                             for( int i = 0; i < inundationItems.size(); i++ )
-                                if ( inundationItems[i].path == inundationPath_1_2 )
+                                if( inundationItems[i].path == inundationPath_1_2 )
                                 {
                                     inundationItems.remove(i);
                                     fl_brk = true;
@@ -5256,8 +5239,7 @@ bool ShapeElFigure::inundation1_2( const QPointF &point, const QVector<ShapeItem
                             }
                         }
                     }
-                if( flag_break )
-                    return true;
+                if( flag_break ) return true;
             }
         }
     }
@@ -5271,7 +5253,7 @@ QPointF ShapeElFigure::scaleRotate( const QPointF &point, WdgView *view, bool fl
     QPointF center;
     if( flag_rotate )
     {
-        if ( !flag_scale ) center = QPointF( view->sizeF().width()/2, view->sizeF().height()/2 ).toPoint();
+        if( !flag_scale ) center = QPointF( view->sizeF().width()/2, view->sizeF().height()/2 ).toPoint();
         else center = QPointF( (view->sizeF().width())/(2*view->xScale(true)), (view->sizeF().height())/(2*view->yScale(true)) ).toPoint();
         rpnt = rpnt - center;
         rpnt = rotate( rpnt, elFD->orient );
@@ -5289,9 +5271,8 @@ QPointF ShapeElFigure::unScaleRotate( const QPointF &point, WdgView *view, bool 
     if(flag_scale) rpnt = QPointF( rpnt.x()/view->xScale(true), rpnt.y()/view->yScale(true) );
     if( flag_rotate )
     {
-        if ( !flag_scale ) center = QPointF( view->sizeF().width()/2, view->sizeF().height()/2 ).toPoint();
+        if( !flag_scale ) center = QPointF( view->sizeF().width()/2, view->sizeF().height()/2 ).toPoint();
         else center = QPointF( (view->sizeF().width())/(2*view->xScale(true)), (view->sizeF().height())/(2*view->yScale(true)) ).toPoint();
-        //QPointF center= QPointF( (view->sizeF().width())/(2*view->xScale(true)), (view->sizeF().height())/(2*view->yScale(true)) ).toPoint();
         rpnt = rpnt - center;
         rpnt = rotate( rpnt, 360 - elFD->orient );
         rpnt = rpnt + center;
@@ -5334,12 +5315,12 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
                                     pnts[shapeItems[in_fig_num[0]].n3].y(),
                                     pnts[shapeItems[in_fig_num[0]].n5].x(),
                                     pnts[shapeItems[in_fig_num[0]].n5].y() );
-                    if ( pnts[shapeItems[in_fig_num[0]].n5].y() <= pnts[shapeItems[in_fig_num[0]].n3].y() ) 
+                    if( pnts[shapeItems[in_fig_num[0]].n5].y() <= pnts[shapeItems[in_fig_num[0]].n3].y() ) 
                         ang = angle( line1, line2 );
                     else ang = 360 - angle( line1, line2 );
                 }
                 else ang = shapeItems[in_fig_num[0]].angle_temp;
-                
+
                 if( !flag_scale && !flag_rotate )
                 {
                     arc_a = length( pnts[shapeItems[in_fig_num[0]].n3], pnts[shapeItems[in_fig_num[0]].n5] );
@@ -5359,7 +5340,7 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
                 }
                 t_start = shapeItems[in_fig_num[0]].ctrlPos4.x();
                 t_end = shapeItems[in_fig_num[0]].ctrlPos4.y();
-                for ( t = t_start; t < t_end+0.00277777777778; t += 0.00277777777778) 
+                for( t = t_start; t < t_end+0.00277777777778; t += 0.00277777777778) 
                     path.lineTo( TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n3], view, flag_scale, flag_rotate ).x() + rotate( arc( t, arc_a, arc_b ), ang ).x(), 2, true ),
                                  TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n3], view, flag_scale, flag_rotate ).y() - rotate( arc( t, arc_a, arc_b ), ang ).y(), 2, true ) ); 
                 break;
@@ -5370,7 +5351,6 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
                               TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n4], view, flag_scale, flag_rotate ).y(), 2, true ),
                               TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n2], view, flag_scale, flag_rotate ).x(), 2, true ),
                               TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n2], view, flag_scale, flag_rotate ).y(), 2, true ) );
-    
                 break;
         }
         flag_n2 = true;
@@ -5398,7 +5378,7 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
                                     pnts[shapeItems[in_fig_num[0]].n3].y()), view, flag_scale, flag_rotate ),
                                       scaleRotate(QPointF(pnts[shapeItems[in_fig_num[0]].n5].x(),
                                               pnts[shapeItems[in_fig_num[0]].n5].y()), view, flag_scale, flag_rotate) );
-                    if ( scaleRotate(pnts[shapeItems[in_fig_num[0]].n5], view, flag_scale, flag_rotate).y() <= scaleRotate(pnts[shapeItems[in_fig_num[0]].n3],view, flag_scale, flag_rotate).y() ) 
+                    if( scaleRotate(pnts[shapeItems[in_fig_num[0]].n5], view, flag_scale, flag_rotate).y() <= scaleRotate(pnts[shapeItems[in_fig_num[0]].n3],view, flag_scale, flag_rotate).y() ) 
                         ang = angle( line1, line2 );
                     else ang = 360 - angle( line1, line2 );
                 }
@@ -5423,7 +5403,7 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
 
                 t_start = shapeItems[in_fig_num[0]].ctrlPos4.x();
                 t_end = shapeItems[in_fig_num[0]].ctrlPos4.y();
-                for ( t = t_end; t > t_start-0.00277777777778; t -= 0.00277777777778) 
+                for( t = t_end; t > t_start-0.00277777777778; t -= 0.00277777777778) 
                     path.lineTo( TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n3], view, flag_scale, flag_rotate ).x() + rotate( arc( t, arc_a, arc_b ), ang ).x(), 2, true ),
                                  TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n3], view, flag_scale, flag_rotate ).y() - rotate( arc( t, arc_a, arc_b ), ang ).y(), 2, true ) ); 
                 break;
@@ -5445,7 +5425,7 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
         if( flag_n2 )
         {
             flag_break = false;
-            for ( int j = 0; j < in_fig_num.size(); j++ )
+            for( int j = 0; j < in_fig_num.size(); j++ )
             {
                 if( (k != j) && ( shapeItems[in_fig_num[k]].n2 == shapeItems[in_fig_num[j]].n1 ) )
                 {
@@ -5454,7 +5434,7 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
                     k = j;
                     flag_break = true;
                 }
-                if ( flag_break ) break;
+                if( flag_break ) break;
                 if( (k != j) && ( shapeItems[in_fig_num[k]].n2 == shapeItems[in_fig_num[j]].n2 ) )
                 {
                     flag = 2;
@@ -5462,13 +5442,13 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
                     k = j;
                     flag_break = true;
                 }
-                if ( flag_break ) break;
+                if( flag_break ) break;
             }
         }
         if( flag_n1 )
         {
             flag_break = false;
-            for ( int j = 0; j < in_fig_num.size(); j++ )
+            for( int j = 0; j < in_fig_num.size(); j++ )
             {
                 if( (k != j) && ( shapeItems[in_fig_num[k]].n1 == shapeItems[in_fig_num[j]].n1 ) )
                 {
@@ -5477,7 +5457,7 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
                     k = j;
                     flag_break = true;
                 }
-                if ( flag_break ) break;
+                if( flag_break ) break;
                 if( (k != j) && ( shapeItems[in_fig_num[k]].n1 == shapeItems[in_fig_num[j]].n2 ) )
                 {
                     flag = 2;
@@ -5485,7 +5465,7 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
                     k = j;
                     flag_break = true;
                 }
-                if ( flag_break ) break;
+                if( flag_break ) break;
             }
         }
         switch( flag )
@@ -5509,7 +5489,7 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
                                             pnts[shapeItems[in_index].n3].y(),
                                             pnts[shapeItems[in_index].n5].x(),
                                             pnts[shapeItems[in_index].n5].y() );
-                            if ( pnts[shapeItems[in_index].n5].y() <= pnts[shapeItems[in_index].n3].y() ) 
+                            if( pnts[shapeItems[in_index].n5].y() <= pnts[shapeItems[in_index].n3].y() ) 
                                 ang = angle( line1, line2 );
                             else ang = 360 - angle( line1, line2 );
                         }
@@ -5534,11 +5514,11 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
 
                         t_start = shapeItems[in_index].ctrlPos4.x();
                         t_end = shapeItems[in_index].ctrlPos4.y();
-                        for ( t = t_start; t < t_end+0.00277777777778; t += 0.00277777777778 ) 
+                        for( t = t_start; t < t_end+0.00277777777778; t += 0.00277777777778 ) 
                             path.lineTo( TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n3], view, flag_scale, flag_rotate ).x() + rotate( arc( t, arc_a, arc_b ), ang ).x(), 2, true ),
                                          TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n3], view, flag_scale, flag_rotate ).y() - rotate( arc( t, arc_a, arc_b ), ang ).y(), 2, true ) ); 
                         break;
-                
+
                     case 3:
                         path.cubicTo( TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n3], view, flag_scale, flag_rotate ).x(), 2, true ),
                                       TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n3], view, flag_scale, flag_rotate ).y(), 2, true ),
@@ -5570,7 +5550,7 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
                                             pnts[shapeItems[in_index].n3].y(),
                                             pnts[shapeItems[in_index].n5].x(),
                                             pnts[shapeItems[in_index].n5].y() );
-                            if ( pnts[shapeItems[in_index].n5].y() <= pnts[shapeItems[in_index].n3].y() ) 
+                            if( pnts[shapeItems[in_index].n5].y() <= pnts[shapeItems[in_index].n3].y() ) 
                                 ang = angle( line1, line2 );
                             else ang = 360 - angle( line1, line2 );
                         }
@@ -5595,7 +5575,7 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
 
                         t_start = shapeItems[in_index].ctrlPos4.x();
                         t_end = shapeItems[in_index].ctrlPos4.y();
-                        for ( t = t_end; t > t_start-0.00277777777778; t -= 0.00277777777778 ) 
+                        for( t = t_end; t > t_start-0.00277777777778; t -= 0.00277777777778 ) 
                             path.lineTo( TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n3], view, flag_scale, flag_rotate ).x() + rotate( arc( t, arc_a, arc_b ), ang ).x(), 2, true ),
                                          TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n3], view, flag_scale, flag_rotate ).y() - rotate( arc( t, arc_a, arc_b ), ang ).y(), 2, true ) ); 
                         break;

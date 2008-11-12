@@ -1,3 +1,8 @@
+2008-11-12 Maxim
+- FIX:/UI/Vision: Deleting the single figure for the primitive ElFigure is fixed.
+- /UI/Vision: Paint event is for primitive ElFigure is  modified.
+
+
 2008-11-10 Maxim
 - FIX:/UI/Vision: Loadin image for filling the primitive ElFigure is fixed.
 - /UI/Vision: Copy function for primitive ElFigure is modified.
