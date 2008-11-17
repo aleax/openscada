@@ -58,7 +58,7 @@
 using namespace VISION;
 
 VisRun::VisRun( const string &prj_it, const string &open_user, const string &user_pass, const string &VCAstat, bool crSessForce ) :
-    winClose(false), master_pg(NULL), m_period(1000), w_prc_cnt(0), reqtm(1), x_scale(1.0), y_scale(1.0), mAlrmSt(0xFFFFFF)
+    winClose(false), master_pg(NULL), mPeriod(1000), w_prc_cnt(0), reqtm(1), x_scale(1.0), y_scale(1.0), mAlrmSt(0xFFFFFF)
 {
     QImage ico_t;
 
@@ -224,8 +224,8 @@ VisRun::VisRun( const string &prj_it, const string &open_user, const string &use
     mn_help->addSeparator();
     mn_help->addAction(actWhatIs);
 
-    //- Init tool bars -
-    //-- Alarms tools bar --
+    //> Init tool bars
+    //>> Alarms tools bar
     toolBarAlarm = new QToolBar(_("Alarms (status)"),this);
     connect( toolBarAlarm, SIGNAL(actionTriggered(QAction*)), this, SLOT(alarmAct(QAction*)) );
     toolBarAlarm->setIconSize(QSize(16,16));
@@ -234,31 +234,31 @@ VisRun::VisRun( const string &prj_it, const string &open_user, const string &use
     toolBarAlarm->addAction(actAlrmAlarm);
     toolBarAlarm->addAction(actAlrmSound);
 
-    //- Init status bar -
-    wUser = new UserStBar( open_user.c_str(), user_pass.c_str(), VCAstat.c_str(), this );
-    wUser->setWhatsThis(_("This label display curent user."));
-    wUser->setToolTip(_("Field for display of the current user."));
-    wUser->setStatusTip(_("Double click for change user."));
-    connect( wUser, SIGNAL(userChanged(const QString&,const QString&)), this, SLOT(userChanged(const QString&,const QString&)) );
-    statusBar()->insertPermanentWidget(0,wUser);
-    w_stat = new QLabel( VCAStation().c_str(), this );
-    w_stat->setWhatsThis(_("This label display used VCA engine station."));
-    w_stat->setToolTip(_("Field for display of the used VCA engine station."));
-    statusBar()->insertPermanentWidget(0,w_stat);
+    //> Init status bar
+    mWUser = new UserStBar( open_user.c_str(), user_pass.c_str(), VCAstat.c_str(), this );
+    mWUser->setWhatsThis(_("This label display curent user."));
+    mWUser->setToolTip(_("Field for display of the current user."));
+    mWUser->setStatusTip(_("Double click for change user."));
+    connect( mWUser, SIGNAL(userChanged(const QString&,const QString&)), this, SLOT(userChanged(const QString&,const QString&)) );
+    statusBar()->insertPermanentWidget(0,mWUser);
+    mWStat = new QLabel( VCAStation().c_str(), this );
+    mWStat->setWhatsThis(_("This label display used VCA engine station."));
+    mWStat->setToolTip(_("Field for display of the used VCA engine station."));
+    statusBar()->insertPermanentWidget(0,mWStat);
     statusBar()->insertPermanentWidget(0,toolBarAlarm);
 
-    //- Init scroller -
+    //> Init scroller
     QScrollArea *scrl = new QScrollArea;
     scrl->setFocusPolicy( Qt::NoFocus );
     setCentralWidget( scrl );
 
-    //- Create timers -
-    //-- End run timer --
+    //> Create timers
+    //>> End run timer
     endRunTimer   = new QTimer( this );
     endRunTimer->setSingleShot(false);
     connect(endRunTimer, SIGNAL(timeout()), this, SLOT(endRunChk()));
     endRunTimer->start(STD_WAIT_DELAY);
-    //-- Update timer --
+    //>> Update timer
     updateTimer = new QTimer( this );
     updateTimer->setSingleShot(false);
     connect(updateTimer, SIGNAL(timeout()), this, SLOT(updatePage()));
@@ -267,10 +267,10 @@ VisRun::VisRun( const string &prj_it, const string &open_user, const string &use
 
     resize( 600, 400 );
 
-    //- Init session -
+    //> Init session
     initSess(prj_it,crSessForce);
 
-    //w_stat->setText(host.st_nm.c_str());
+    //mWStat->setText(host.st_nm.c_str());
     statusBar()->showMessage(_("Ready"), 2000 );
 
     alarmSet(0);
@@ -286,31 +286,31 @@ VisRun::~VisRun()
     alarmSet(0);
     alrmPlay->wait();
 
-    //- Disconnect/delete session -
+    //> Disconnect/delete session
     XMLNode req("disconnect");
     req.setAttr("path","/%2fserv%2fsess")->setAttr("sess",work_sess);
     cntrIfCmd(req);
 
-    //- Unregister window -
+    //> Unregister window
     mod->unregWin(this);
 
-    //- Clear cache -
+    //> Clear cache
     pgCacheClear();
 }
 
 string VisRun::user()
 {
-    return wUser->user().toAscii().data();
+    return mWUser->user().toAscii().data();
 }
 
 string VisRun::password( )
 {
-    return wUser->pass().toAscii().data();
+    return mWUser->pass().toAscii().data();
 }
 
 string VisRun::VCAStation( )
 {
-    return wUser->VCAStation().toAscii().data();
+    return mWUser->VCAStation().toAscii().data();
 }
 
 int VisRun::cntrIfCmd( XMLNode &node, bool glob )
@@ -709,8 +709,8 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
     if( cntrIfCmd(req) )
     {
 	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
-	wUser->setUser(oldUser);
-	wUser->setPass(oldPass);
+	mWUser->setUser(oldUser);
+	mWUser->setPass(oldPass);
 	return;
     }
     req.clear()->setName("disconnect")->setAttr("path","/%2fserv%2fsess")->setAttr("sess",workSess());
@@ -866,7 +866,7 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
 
     //- Get update period -
     req.clear()->setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fper");
-    if( !cntrIfCmd(req) ) m_period = atoi(req.text().c_str());
+    if( !cntrIfCmd(req) ) mPeriod = atoi(req.text().c_str());
 
     //- Get project's flags -
     req.clear()->setName("get")->setAttr("path","/prj_"+src_prj+"/%2fobj%2fcfg%2frunWin");
@@ -919,7 +919,7 @@ void VisRun::fullUpdatePgs( )
     }
 }
 
-void VisRun::callPage( const string& pg_it, XMLNode *upw )
+void VisRun::callPage( const string& pg_it, bool updWdg )
 {
     vector<int> idst;
     string pgGrp, pgSrc, stmp;
@@ -928,13 +928,7 @@ void VisRun::callPage( const string& pg_it, XMLNode *upw )
     if( master_pg )
     {
 	RunPageView *pg = master_pg->findOpenPage(pg_it);
-	if( pg && upw )
-	    for( int i_p = 0, off = 0; i_p < upw->childSize(); i_p++, off = 0 )
-	    {
-		stmp = upw->childGet(i_p)->text();
-		TSYS::pathLev(stmp,0,true,&off);
-		pg->update(false,stmp.substr(off));
-	    }
+	if( pg && updWdg ) pg->update(false);
 	if( pg ) return;
     }
 
@@ -970,7 +964,7 @@ void VisRun::callPage( const string& pg_it, XMLNode *upw )
     else master_pg->callPage(pg_it,pgGrp,pgSrc);
 
     //- Update widgets of now opened page -
-    if( upw && upw->childSize() && master_pg )
+/*    if( upw && upw->childSize() && master_pg )
     {
 	RunPageView *pg = master_pg->findOpenPage(pg_it);
 	if( !pg || pg->reqTm() == reqtm ) return;
@@ -978,17 +972,12 @@ void VisRun::callPage( const string& pg_it, XMLNode *upw )
 	req.setAttr("tm",TSYS::uint2str(pg->reqTm()))->setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg");
 	if( !cntrIfCmd(req) )
 	    for( int i_ch = 0; i_ch < req.childSize(); i_ch++ )
-		if( req.childGet(i_ch)->text() == pg_it )
+		if( req.childGet(i_ch)->text() == pg_it && atoi(req.childGet(i_ch)->attr("updWdg").c_str()) )
 		{
-		    for( int i_p = 0, off = 0; i_p < req.childGet(i_ch)->childSize(); i_p++, off = 0 )
-		    {
-			stmp = req.childGet(i_ch)->childGet(i_p)->text();
-			TSYS::pathLev(stmp,0,true,&off);
-			pg->update(false,stmp.substr(off));
-		    }
+		    pg->update(false);
 		    break;
 		}
-    }
+    }*/
 }
 
 void VisRun::pgCacheClear( )
@@ -1157,8 +1146,11 @@ void VisRun::updatePage( )
 {
     if( winClose ) return;
 
-    //unsigned long long t_cnt = SYS->shrtCnt();
-    //- Pages update -
+#if OSC_DEBUG >= 3
+    unsigned long long t_cnt = SYS->shrtCnt();
+#endif
+
+    //> Pages update
     XMLNode req("openlist");
     req.setAttr("tm",TSYS::uint2str(reqtm))->
 	setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg");
@@ -1167,11 +1159,11 @@ void VisRun::updatePage( )
 	for( int i_ch = 0; i_ch < req.childSize(); i_ch++ )
 	{
 	    pgList.push_back(req.childGet(i_ch)->text());
-	    callPage(req.childGet(i_ch)->text(),req.childGet(i_ch));
+	    callPage(req.childGet(i_ch)->text(),atoi(req.childGet(i_ch)->attr("updWdg").c_str()));
 	}
     reqtm = strtoul(req.attr("tm").c_str(),NULL,10);
 
-    //- Alarms update (one seconds update) -
+    //> Alarms update (one seconds update)
     if( w_prc_cnt%(500/period()) == 0 )
     {
 	//-- Get alarm status --
@@ -1203,12 +1195,14 @@ void VisRun::updatePage( )
 	alarmSet( wAlrmSt );
     }
 
-    /*upd_tm+=1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
-    if( !(w_prc_cnt%10) )
+#if OSC_DEBUG >= 3
+    upd_tm+=1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
+    if( !(1000/period() && w_prc_cnt%(1000/period())) )
     {
-	printf("TEST 01: Pages update time: %f\n",upd_tm);
+	mess_debug("VCA DEBUG",_("Session '%s' update time %f ms."),workSess().c_str(),upd_tm);
 	upd_tm = 0;
-    }*/
+    }
+#endif
 
     w_prc_cnt++;
 }

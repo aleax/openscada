@@ -1,3 +1,24 @@
+2008-11-17 Roman
+- /XML: Return (XMLNode *) to attribute delete (attrDel) function is added.
+- /Transport/SSL: Количество соединений закрытых из-за превышения лимита клиентских соединений добавлено в строку статуса.
+- FIX:/Transport/SSL: No error result process for BIO_should_retry() is added.
+- FIX:/Transport/SSL: Client connections' registration is fixed for protocol's objects' name fix.
+- FIX:/Transport/SSL: Closing protocol after broken connection is added.
+- FIX:/Transport/SSL: OpenSSL library bug is bypassed. No closing client's socket after connection terminate by client.
+- /UI/QTCfg: Real type field's enter mechanism is changed.
+- FIX:/UI/VCAEngine: Functions Widget::cntrCmdGeneric() and cntrCmdAttributes() call chain is fixed.
+- FIX:/UI/VCAEngine: Primitive "Document" storing is fixed. One data for all sessions.
+- !!!!:/UI/VCAEngine: Group service request '/serv/attrBr' is added. Request return attributes tree for all widget's branch. Used for made optimal access
+  to model's data from visualisators.
+- /UI/Vision: Renamed functions from 'm_nm' to 'mNm' view.
+- FIX:/UI/Vision: Select new made widgets mechanism is fixed.
+- !!!!:/UI/Vision: For time optimal requests used new group request '/serv/attrBr'. Performance network and local request significantly rised!
+- /UI/Vision: Debug messages is made through 'OSC_DEBUG >= 3' macro-condition.
+- !!:/UI/Vision: update time control mechanism is rewrited.
+- !!!!:/UI/WebVision: For time optimal requests used new group request '/serv/attrBr'. Performance of requests significantly rised!
+- !!:/DemoDB: Is updated.
+
+
 2008-11-17 Maxim
 - FIX:/UI/Vision: Inundattion path is fixed for the primitive ElFigure.
 - /UI/Vision: Action for making static all the dynamic values is added for the primitive ElFigure.
@@ -6,7 +27,6 @@
 
 2008-11-17 Maxim
 - FIX:/UI/WebVision: Filling by the image for the primitive ElFigure is fixed.
-
 
 
 2008-11-12 Roman

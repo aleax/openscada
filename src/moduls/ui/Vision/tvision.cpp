@@ -443,7 +443,7 @@ int TVision::cntrIfCmd( XMLNode &node, const string &user, const string &passwor
 
 	return atoi(node.attr("rez").c_str());
     }
-    catch( TError err )	
+    catch( TError err )
     {
 	node.setAttr("rez","10");
 	node.setAttr("mcat",err.cat);

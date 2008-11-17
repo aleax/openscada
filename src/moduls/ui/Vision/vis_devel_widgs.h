@@ -434,9 +434,9 @@ class SizePntWdg : public QWidget
 	//Methods
 	SizePntWdg( QWidget* parent = 0 );
 
-	QPointF posF( )             { return w_pos; }
-	QSizeF  sizeF( )            { return w_size; }
-	QRectF geometryF( )         { return QRectF(w_pos,w_size); }
+	QPointF posF( )             { return mWPos; }
+	QSizeF  sizeF( )            { return mWSize; }
+	QRectF geometryF( )         { return QRectF(mWPos,mWSize); }
 
 	void setSelArea( const QRectF &geom, WView view = SizeDots );
 	bool event( QEvent *event );
@@ -447,8 +447,8 @@ class SizePntWdg : public QWidget
     private:
 	//Attributes
 	WView	view;
-	QPointF	w_pos;		//Widget position into real;
-	QSizeF	w_size;		//Widget size into real;
+	QPointF	mWPos;		//Widget position into real;
+	QSizeF	mWSize;		//Widget size into real;
 };
 
 //*************************************************
@@ -476,8 +476,6 @@ class DevelWdgView: public WdgView
 
 	WdgView *newWdgItem( const string &iwid );
 
-	void load( const string& item, bool load = true, bool init = true );
-
 	DevelWdgView *levelWidget( int lev );
 
 	//- Resource and cache operations -
@@ -500,7 +498,6 @@ class DevelWdgView: public WdgView
 
     protected:
 	//Protected methods
-	void childsUpdate( bool newLoad = true );
 	bool event( QEvent * event );
 	int cntrIfCmd( XMLNode &node, bool glob = false );
 

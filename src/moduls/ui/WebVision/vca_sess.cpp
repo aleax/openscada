@@ -53,7 +53,7 @@ void VCASess::postDisable( int flag )
 
 void VCASess::getReq( SSess &ses )
 {
-    //- Access time to session is updating -
+    //> Access time to session is updating
     lst_ses_req = time(NULL);
 
     map< string, string >::iterator prmEl = ses.prm.find("com");
@@ -62,7 +62,7 @@ void VCASess::getReq( SSess &ses )
     if( wp_com.empty() )
     {
 	string prjNm;
-	//-- Get project's name --
+	//>> Get project's name
 	XMLNode req("get");
 	req.setAttr("path",ses.url+"/%2fobj%2fst%2fprj");
 	if( !mod->cntrIfCmd(req,ses.user) )
@@ -74,7 +74,7 @@ void VCASess::getReq( SSess &ses )
 	ses.page = mod->pgHead("",prjNm)+"<SCRIPT>\n"+mod->VCAjs+"\n</SCRIPT>\n"+mod->pgTail();
 	ses.page = mod->httpHead("200 OK",ses.page.size())+ses.page;
     }
-    //- Session/projects icon -
+    //> Session/projects icon
     else if( wp_com == "ico" )
     {
 	XMLNode req("get");
@@ -83,7 +83,7 @@ void VCASess::getReq( SSess &ses )
 	ses.page = TSYS::strDecode(req.text(),TSYS::base64);
 	ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page;
     }
-    //- Get open pages list -
+    //> Get open pages list
     else if( wp_com == "pgOpenList" && first_lev.empty() )
     {
 	prmEl = ses.prm.find("tm");
@@ -94,20 +94,45 @@ void VCASess::getReq( SSess &ses )
 	ses.page = req.save();
 	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
     }
-    //- Close page command -
-    //- Page and widget attributes request -
-    else if( wp_com == "attrs" )
+    //> Widget's (page) full attributes branch request
+    else if( wp_com == "attrsBr" )
     {
 	prmEl = ses.prm.find("tm");
 	XMLNode req("get");
-	req.setAttr("path",ses.url+"/%2fserv%2fattr")->
-	    setAttr("tm",(prmEl!=ses.prm.end())?prmEl->second:"0");
+	req.setAttr("path",ses.url+"/%2fserv%2fattrBr")->setAttr("tm",(prmEl!=ses.prm.end())?prmEl->second:"0");
 	mod->cntrIfCmd(req,ses.user);
-	if( objPresent(ses.url) ) objAt(ses.url).at().setAttrs(req,ses.user);
+
+	//>> Backend objects' attributes set
+	vector<int> pos;	int cpos = 0;
+	vector<string> addr;	string caddr = ses.url;
+	XMLNode *cn = &req;
+	while(true)
+	{
+	    if( cpos < cn->childSize() )
+	    {
+		if( cn->childGet(cpos)->name() == "w" )
+		{
+		    cn = cn->childGet(cpos);
+		    pos.push_back(cpos+1);
+		    cpos = 0;
+		    addr.push_back(caddr);
+		    caddr = caddr+"/wdg_"+cn->attr("id");
+		}
+		else cpos++;
+		continue;
+	    }
+	    if( objPresent(caddr) )	objAt(caddr).at().setAttrs(*cn,ses.user);
+	    if( !cn->parent() )	break;
+	    cn = cn->parent();
+	    cpos = pos.back();	pos.pop_back();
+	    caddr = addr.back(); addr.pop_back();
+	}
+
+	//>> Send request to browser
 	ses.page = req.save();
 	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
     }
-    //- Resources request (images and other files) -
+    //> Resources request (images and other files)
     else if( wp_com == "res" )
     {
 	prmEl = ses.prm.find("val");
@@ -120,34 +145,12 @@ void VCASess::getReq( SSess &ses )
 	    ses.page = mod->httpHead("200 OK",ses.page.size(),req.attr("mime"))+ses.page;
 	} else ses.page = mod->httpHead("404 Not Found");
     }
-    //- Page or widget child widgets request -
-    else if( wp_com == "chlds" )
-    {
-	XMLNode req("get");
-	req.setAttr("path",ses.url+"/%2fwdg%2fcfg%2fpath")->setAttr("resLink","1");
-	if( !mod->cntrIfCmd(req,ses.user) )
-	{
-	    req.clear()->setAttr("path",req.text()+"/%2finclwdg%2fwdg")->setAttr("chkUserPerm","1");
-	    mod->cntrIfCmd(req,ses.user);
-	}
-	ses.page = req.save();
-	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
-    }
-    //- Widget root element identifier (primitive) -
-    else if( wp_com == "root" )
-    {
-	XMLNode req("get");
-	req.setAttr("path",ses.url+"/%2fwdg%2fcfg%2froot");
-	mod->cntrIfCmd(req,ses.user);
-	ses.page = req.save();
-	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
-    }
-    //- Request to primitive object. Used for data caching -
+    //> Request to primitive object. Used for data caching
     else if( wp_com == "obj" )
     {
 	if( !objPresent(ses.url) )
 	{
-	    //-- Request to widget type --
+	    //>> Request to widget type
 	    bool new_obj = false;
 	    XMLNode req("get");
 	    req.setAttr("path",ses.url+"/%2fwdg%2fcfg%2froot");
@@ -156,7 +159,7 @@ void VCASess::getReq( SSess &ses )
 	    else if( req.text() == "Diagram" )	{ objAdd( new VCADiagram(ses.url) ); new_obj = true; }
 	    if( new_obj )
 	    {
-		//-- Request new object's attributes --
+		//>> Request new object's attributes
 		req.clear()->setAttr("path",ses.url+"/%2fserv%2fattr");
 		mod->cntrIfCmd(req,ses.user);
 		objAt(ses.url).at().setAttrs(req,ses.user);
@@ -3209,23 +3212,24 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
     for( int i_a = 0; i_a < node.childSize(); i_a++ )
     {
 	req_el = node.childGet(i_a);
-	int uiPrmPos = atoi(req_el->attr("pos").c_str());
-        
+	if( req_el->name() != "el" )	continue;
+	int uiPrmPos = atoi(req_el->attr("p").c_str());
+
 	switch( uiPrmPos )
 	{
 	    case 6:	//active
-                active = (bool)atoi(req_el->text().c_str());
-        	break;
-            case 9: 	//width
+		active = (bool)atoi(req_el->text().c_str());
+		break;
+	    case 9: 	//width
 		width = atof(req_el->text().c_str());
 		break;
-            case 10:	//height
+	    case 10:	//height
 		height = atof(req_el->text().c_str());
 		break;
-    	    case 12:	//geomMargin
-        	geomMargin = atoi(req_el->text().c_str());
+	    case 12:	//geomMargin
+		geomMargin = atoi(req_el->text().c_str());
 		break;
-            case 20:	//lineWdth
+	    case 20:	//lineWdth
                 lineWdth = (int)TSYS::realRound(atof(req_el->text().c_str()));
                 rel_list = true;
                 break;
@@ -4216,7 +4220,8 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
     for( int i_a = 0; i_a < node.childSize(); i_a++ )
     {
 	req_el = node.childGet(i_a);
-	int uiPrmPos = atoi(req_el->attr("pos").c_str());
+	if( req_el->name() != "el" )	continue;
+	int uiPrmPos = atoi(req_el->attr("p").c_str());
 	switch( uiPrmPos )
 	{
 	    case 6:	//active

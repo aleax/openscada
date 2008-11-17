@@ -1675,6 +1675,8 @@ DevelWdgView::DevelWdgView( const string &iwid, int ilevel, VisDevelop *mainWind
 	setContextMenuPolicy(Qt::CustomContextMenu);
 	connect( this, SIGNAL( customContextMenuRequested(const QPoint&) ), this, SLOT( wdgPopup() ) );	
     }
+    //> Select only created widgets by user
+    else if( wLevel() == 1 && ((WdgView*)parentWidget())->isReload )	setSelect(true);
 }
 
 DevelWdgView::~DevelWdgView( )
@@ -1709,72 +1711,6 @@ WdgView *DevelWdgView::newWdgItem( const string &iwid )
 int DevelWdgView::cntrIfCmd( XMLNode &node, bool glob )
 {
     return mainWin()->cntrIfCmd(node,glob);
-}
-
-void DevelWdgView::childsUpdate( bool newLoad )
-{
-    XMLNode req("get");
-
-    string b_nm = id();
-    req.setAttr("path",id()+"/%2fwdg%2fcfg%2fpath")->setAttr("resLink","1");
-    if( !cntrIfCmd(req) ) b_nm = req.text();
-
-    vector<string> lst;
-    req.clear()->setAttr("path",b_nm+"/%2finclwdg%2fwdg");
-
-    if( !cntrIfCmd(req) )
-	for( int i_el = 0; i_el < req.childSize(); i_el++ )
-    lst.push_back(req.childGet(i_el)->attr("id"));
-
-    bool isUpdate = false;
-
-    //- Delete child widgets -
-    for( int i_c = 0; i_c < children().size(); i_c++ )
-    {
-	if( !qobject_cast<WdgView*>(children().at(i_c)) ) continue;
-	isUpdate = true;
-	int i_l;
-	for( i_l = 0; i_l < lst.size(); i_l++ )
-	    if( qobject_cast<WdgView*>(children().at(i_c))->id() == (b_nm+"/wdg_"+lst[i_l]) )
-		break;
-	if( i_l >= lst.size() ) children().at(i_c)->deleteLater();// delete children().at(i_c--);
-    }
-
-    //- Create new child widget -
-    for( int i_l = 0; i_l < lst.size(); i_l++ )
-    {
-	int i_c;
-	for( i_c = 0; i_c < children().size(); i_c++ )
-	    if( qobject_cast<WdgView*>(children().at(i_c)) &&
-		    qobject_cast<WdgView*>(children().at(i_c))->id() == (b_nm+"/wdg_"+lst[i_l]) )
-	    break;
-	if( i_c >= children().size() )
-	{
-	    DevelWdgView *nwdg = (DevelWdgView*)newWdgItem(b_nm+"/wdg_"+lst[i_l]);
-	    if( nwdg )
-	    {
-		nwdg->show();
-		if( newLoad ) nwdg->load("");
-		if( isUpdate )	nwdg->setSelect(true);
-	    }
-	}
-    }
-}
-
-void DevelWdgView::load( const string& item, bool load, bool init )
-{
-    WdgView::load( item, load, init );
-
-    //- Select items -
-    if( wLevel() == 0 && !item.empty() )
-    {
-	for( int i_c = 0; i_c < children().size(); i_c++ )
-	{
-	    DevelWdgView *wdg = qobject_cast<DevelWdgView*>(children().at(i_c));
-	    if( wdg && wdg->id() == item )	wdg->setSelect(true);
-	}
-	setSelect(true);
-    }
 }
 
 void DevelWdgView::saveGeom( const string& item )
@@ -2738,23 +2674,23 @@ SizePntWdg::SizePntWdg( QWidget* parent ) : QWidget(parent), view(SizeDots)
 
 void SizePntWdg::setSelArea( const QRectF &geom, WView iview )
 {
-    if( view == iview && w_pos == geom.topLeft() && w_size == geom.size() ) return;
+    if( view == iview && mWPos == geom.topLeft() && mWSize == geom.size() ) return;
     view   = iview;
-    w_pos  = geom.topLeft();
-    w_size = geom.size();
+    mWPos  = geom.topLeft();
+    mWSize = geom.size();
     apply();
 }
 
 void SizePntWdg::apply( )
 {
-    if( w_size.width() > 2 && w_size.height() > 2 )
+    if( mWSize.width() > 2 && mWSize.height() > 2 )
     {
 	QRegion reg;
 	QRect   wrect, irect;
 	switch( view )
 	{
 	    case SizeDots:
-		wrect = QRectF(w_pos,w_size).adjusted(-3,-3,3,3).toRect();
+		wrect = QRectF(mWPos,mWSize).adjusted(-3,-3,3,3).toRect();
 		irect = QRect(0,0,wrect.width(),wrect.height());
 		//- Make widget's mask -
 		for(int i_p = 0; i_p < 9; i_p++)
@@ -2763,12 +2699,12 @@ void SizePntWdg::apply( )
 				   irect.y()+(i_p/3)*((irect.height()-7)/2),7,7));
 		break;
 	    case EditBorder:
-		wrect = QRectF(w_pos,w_size).adjusted(-7,-7,7,7).toRect();
+		wrect = QRectF(mWPos,mWSize).adjusted(-7,-7,7,7).toRect();
 		irect = QRect(0,0,wrect.width(),wrect.height());
 		reg = QRegion(irect).subtracted(QRegion(irect.adjusted(7,7,-7,-7)));
 		break;
 	    case SelectBorder:
-		wrect = QRectF(w_pos,w_size).adjusted(-1,-1,1,1).toRect();
+		wrect = QRectF(mWPos,mWSize).adjusted(-1,-1,1,1).toRect();
 		irect = QRect(0,0,wrect.width(),wrect.height());
 		reg = QRegion(irect).subtracted(QRegion(irect.adjusted(1,1,-1,-1)));
 		break;

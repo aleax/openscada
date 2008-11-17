@@ -243,7 +243,10 @@ string TSocketIn::getStatus( )
     if( !startStat() && !stErr.empty() )
 	rez += _("Start error: ") + stErr;
     else if( startStat() )
-	rez += TSYS::strMess(_("Connections %d, opened %d. Traffic in %.4g kb, out %.4g kb."),connNumb,cl_id.size(),trIn,trOut);
+    {
+	rez += TSYS::strMess(_("Connections %d, opened %d. Traffic in %.4g kb, out %.4g kb. Closed connections by limit %d."),
+	    connNumb,opConnCnt(),trIn,trOut,clsConnByLim);
+    }
 
     return rez;
 }
@@ -257,7 +260,7 @@ void TSocketIn::start()
     //- Status clear -
     stErr = "";
     trIn = trOut = 0;
-    connNumb = 0;
+    connNumb = clsConnByLim = 0;
 
     //- Wait connection main task start -
     pthread_attr_init(&pthr_attr);
@@ -275,7 +278,7 @@ void TSocketIn::stop()
     //- Status clear -
     stErr = "";
     trIn = trOut = 0;
-    connNumb = 0;
+    connNumb = clsConnByLim = 0;
 
     //- Wait connection main task stop -
     endrun = true;
@@ -321,7 +324,7 @@ void *TSocketIn::Task( void *sock_in )
 	if( s.ctx == NULL )
 	{
 	    ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
-	    throw TError(s.nodePath().c_str(),"%s",err);
+	    throw TError(s.nodePath().c_str(),"SSL_CTX_new: %s",err);
 	}
 
 	//- Write certificate and private key to temorary file -
@@ -337,13 +340,13 @@ void *TSocketIn::Task( void *sock_in )
 	if( SSL_CTX_use_certificate_chain_file(s.ctx,cfile.c_str()) != 1 )
 	{
 	    ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
-	    throw TError(s.nodePath().c_str(),"%s",err);
+	    throw TError(s.nodePath().c_str(),"SSL_CTX_use_certificate_chain_file: %s",err);
 	}
 	//-- Load private key --
 	if( SSL_CTX_use_PrivateKey_file(s.ctx,cfile.c_str(),SSL_FILETYPE_PEM) != 1 )
 	{
 	    ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
-	    throw TError(s.nodePath().c_str(),"%s",err);
+	    throw TError(s.nodePath().c_str(),"SSL_CTX_use_PrivateKey_file: %s",err);
 	}
 
 	//- Remove temporary certificate file -
@@ -353,7 +356,7 @@ void *TSocketIn::Task( void *sock_in )
 	if( (bio=BIO_new_ssl(s.ctx,0)) == NULL )
 	{
 	    ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
-	    throw TError(s.nodePath().c_str(),"%s",err);
+	    throw TError(s.nodePath().c_str(),"BIO_new_ssl: %s",err);
 	}
 	BIO_get_ssl(bio,&ssl);
 	SSL_set_mode(ssl,SSL_MODE_AUTO_RETRY);
@@ -369,7 +372,7 @@ void *TSocketIn::Task( void *sock_in )
 	if( BIO_do_accept(abio) <= 0 )
 	{
 	    ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
-	    throw TError(s.nodePath().c_str(),"%s",err);
+	    throw TError(s.nodePath().c_str(),"BIO_do_accept: %s",err);
 	}
 
 	s.run_st	= true;
@@ -392,13 +395,13 @@ void *TSocketIn::Task( void *sock_in )
 	    if( BIO_do_accept(abio) <= 0 )
 	    {
 	        ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
-	        mess_err(s.nodePath().c_str(),"%s",err);
+	        mess_err(s.nodePath().c_str(),"BIO_do_accept: %s",err);
 	        continue;
 	    }
 
 	    BIO *cbio = BIO_pop(abio);
 
-	    if( s.maxFork() <= (int)s.cl_id.size() )	{ BIO_reset(cbio); BIO_free(cbio); }
+	    if( s.maxFork() <= s.opConnCnt() )	{ s.clsConnByLim++; /*BIO_reset(cbio);*/ close(BIO_get_fd(cbio,NULL)); BIO_free(cbio); }
 	    //- Make client's socket thread -
 	    else if( pthread_create( &th, &pthr_attr, ClTask, new SSockIn(&s,cbio) ) < 0 )
 	    {
@@ -408,33 +411,6 @@ void *TSocketIn::Task( void *sock_in )
 	    }
 	    else s.connNumb++;
 	}
-
-	//- Direct unblocking mode -
-	//Accept process task
-	/*while( !s.endrun )
-	{
-	    //- Wait for incoming connection -
-	    if( BIO_do_accept(abio) <= 0 )
-	    {
-		if( !BIO_should_retry(abio) )
-		{
-		    ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
-		    mess_err(s.nodePath().c_str(),"%s",err);
-		}
-		usleep(STD_WAIT_DELAY*1000);
-		continue;
-	    }
-
-	    BIO *cbio = BIO_pop(abio);
-
-	    if( s.maxFork() <= (int)s.cl_id.size() )	BIO_free(cbio);
-	    //- Make client's socket thread -
-	    else if( pthread_create( &th, &pthr_attr, ClTask, new SSockIn(&s,cbio) ) < 0 )
-	    {
-		mess_err(s.nodePath().c_str(),_("Error create thread!"));
-		BIO_free(cbio);
-	    }
-	}*/
     }catch(TError err)	{ s.stErr = err.mess; mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     //- Client tasks stop command -
@@ -468,7 +444,7 @@ void *TSocketIn::ClTask( void *s_inf )
     mess_debug(s.s->nodePath().c_str(),_("Thread <%u> started. TID: %ld"),pthread_self(),(long int)syscall(224));
 #endif
 #if OSC_DEBUG >= 3
-    mess_debug(s.s->nodePath().c_str(),_("Socket have been connected (%d)."),s.s->cl_id.size());
+    mess_debug(s.s->nodePath().c_str(),_("Socket have been connected (%d)."),cSock);
 #endif
 
     if( BIO_do_handshake(s.bio) <= 0 )
@@ -477,8 +453,11 @@ void *TSocketIn::ClTask( void *s_inf )
 	    while( BIO_should_retry(s.bio) && !s.s->endrun_cl )	{ BIO_do_handshake(s.bio); usleep(STD_WAIT_DELAY*1000); }
 	else
 	{
-	    ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
-	    mess_err(s.s->nodePath().c_str(),"%s",err);
+	    if( ERR_peek_last_error() )
+	    {
+		ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
+		mess_err(s.s->nodePath().c_str(),"BIO_should_retry: %s",err);
+	    }
 	    BIO_flush(s.bio);
 	    delete (SSockIn*)s_inf;
 	    pthread_exit(NULL);
@@ -499,7 +478,7 @@ void *TSocketIn::ClTask( void *s_inf )
 	if( kz == 0 || (kz == -1 && errno == EINTR) || kz < 0 || !FD_ISSET(BIO_get_fd(s.bio,NULL),&rd_fd) ) continue;
 
 	rez=BIO_read(s.bio,buf,sizeof(buf)); s.s->trIn += (float)rez/1024;
-	if( rez == 0 )	break;				//Connection closed by client
+	if( rez == 0 )	break;		//Connection closed by client
 #if OSC_DEBUG >= 4
 	mess_debug(s.s->nodePath().c_str(),_("Receive message size <%d>."),rez);
 #endif
@@ -515,30 +494,19 @@ void *TSocketIn::ClTask( void *s_inf )
 	}
     }
 
-    //- Direct unblocked mode -
-    /*while( !s.s->endrun_cl )
-    {
-	rez=BIO_read(s.bio,buf,sizeof(buf));
-	if( rez == 0 )	break;				//Connection closed by client
-	else if( rez < 0 && BIO_should_retry(s.bio) )	{ usleep(STD_WAIT_DELAY*1000); continue; }
-#if OSC_DEBUG >= 4
-	mess_debug(s.s->nodePath().c_str(),_("Receive message size <%d>."),rez);
-#endif
-	req.assign(buf,rez);
-
-	s.s->messPut(cSock,req,answ,prot_in);
-	if( prot_in.freeStat() && answ.size() )
-	{
-#if OSC_DEBUG >= 4
-	    mess_debug(s.s->nodePath().c_str(),_("Reply message size <%d>."),answ.size());
-#endif
-	    BIO_write(s.bio,answ.data(),answ.size());
-	}
-    }*/
-
     BIO_flush(s.bio);
-    BIO_reset(s.bio);
+    close(BIO_get_fd(s.bio,NULL));
+    //BIO_reset(s.bio);
     BIO_free(s.bio);
+
+    //> Close protocol on broken connection
+    if( !prot_in.freeStat() )
+    {
+	string n_pr = prot_in.at().name();
+	prot_in.free();
+	AutoHD<TProtocol> proto = SYS->protocol().at().modAt(s.s->protocol());
+	if( proto.at().openStat(n_pr) ) proto.at().close(n_pr);
+    }
 
     s.s->clientUnreg( pthread_self() );
 
@@ -576,28 +544,45 @@ void TSocketIn::messPut( int sock, string &request, string &answer, AutoHD<TProt
     }
 }
 
+int TSocketIn::opConnCnt( )
+{
+    ResAlloc res(sock_res,true);
+    int opConn = 0;
+    for( int i_c = 0; i_c < cl_id.size(); i_c++ )
+	if( cl_id[i_c] ) opConn++;
+
+    return opConn;
+}
+
 int TSocketIn::clientReg( pthread_t thrid )
 {
     ResAlloc res(sock_res,true);
-    //- Find already registry -
+
+    int i_empt = -1;
     for( int i_id = 0; i_id < cl_id.size(); i_id++ )
-	if( cl_id[i_id] == thrid ) return i_id;
-    cl_id.push_back(thrid);
+	if( !cl_id[i_id] && i_empt < 0 ) i_empt = i_id;
+	else if( cl_id[i_id] == thrid ) return i_id;
+
+    if( i_empt >= 0 ) cl_id[i_empt] = thrid;
+    else { i_empt = cl_id.size(); cl_id.push_back(thrid); }
+
     cl_free = false;
 
-    return cl_id.size()-1;
+    return i_empt;
 }
 
 void TSocketIn::clientUnreg( pthread_t thrid )
 {
     ResAlloc res(sock_res,true);
+
+    bool noFreePres = false;
     for( int i_id = 0; i_id < cl_id.size(); i_id++ )
-	if( cl_id[i_id] == thrid )
-	{
-	    cl_id.erase( cl_id.begin()+i_id );
-	    if( !cl_id.size() ) cl_free = true;
-	    break;
-	}
+    {
+	if( cl_id[i_id] == thrid ) cl_id[i_id] = 0;
+	if( cl_id[i_id] && !noFreePres ) noFreePres = true;
+    }
+
+    cl_free = !noFreePres;
 }
 
 void TSocketIn::cntrCmdProc( XMLNode *opt )
@@ -698,7 +683,7 @@ void TSocketOut::start()
 	if( ctx == NULL )
 	{
 	    ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
-	    throw TError(nodePath().c_str(),"%s",err);
+	    throw TError(nodePath().c_str(),"SSL_CTX_new: %s",err);
 	}
 
 	//- Certificates, private key and it password loading -
@@ -717,13 +702,13 @@ void TSocketOut::start()
 	    if( SSL_CTX_use_certificate_chain_file(ctx,cfile.c_str()) != 1 )
 	    {
 		ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
-		throw TError(nodePath().c_str(),_("Use client's certificate chain error: %s"),err);
+		throw TError(nodePath().c_str(),_("SSL_CTX_use_certificate_chain_file: %s"),err);
 	    }
 	    //-- Load private key --
 	    if( SSL_CTX_use_PrivateKey_file(ctx,cfile.c_str(),SSL_FILETYPE_PEM) != 1 )
 	    {
 		ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
-		throw TError(nodePath().c_str(),_("Use client's private key error: %s"),err);
+		throw TError(nodePath().c_str(),_("SSL_CTX_use_PrivateKey_file: %s"),err);
 	    }
 
 	    //-- Remove temporary certificate file --
@@ -734,7 +719,7 @@ void TSocketOut::start()
 	if( !conn )
 	{
 	    ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
-	    throw TError(nodePath().c_str(),"%s",err);
+	    throw TError(nodePath().c_str(),"BIO_new_ssl_connect: %s",err);
 	}
 	BIO_get_ssl(conn,&ssl);
 	SSL_set_mode(ssl,SSL_MODE_AUTO_RETRY);
@@ -744,7 +729,7 @@ void TSocketOut::start()
 	if( BIO_do_connect(conn) <= 0 )
 	{
 	    ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
-	    throw TError(nodePath().c_str(),"%s",err);
+	    throw TError(nodePath().c_str(),"BIO_do_connect: %s",err);
 	}
     }
     catch(TError err)
@@ -792,7 +777,7 @@ int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, in
 	else
 	{
 	    ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
-	    throw TError(nodePath().c_str(),"%s",err);
+	    throw TError(nodePath().c_str(),"BIO_write: %s",err);
 	}
     }
     trOut += (float)ret/1024;
@@ -851,16 +836,6 @@ int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, in
 	}
     }
 
-    //- Direct Read reply -
-    /*if( ibuf != NULL && len_ib > 0 && (ret=BIO_read(conn,ibuf,len_ib)) <= 0 )
-    {
-	if( ret == 0 )	stop();
-	else
-	{
-	    ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
-	    throw TError(nodePath().c_str(),"%s",err);
-	}
-    }*/
 #if OSC_DEBUG >= 4
     if( ret > 0 ) mess_debug(nodePath().c_str(),_("Receive message size <%d>."),ret);
 #endif

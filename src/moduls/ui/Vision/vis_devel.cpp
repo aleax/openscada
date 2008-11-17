@@ -492,15 +492,15 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     mn_view->addAction(elFigTool->toggleViewAction());
     mn_view->addSeparator();
     //- Init status bar -
-    w_user = new UserStBar( open_user.c_str(), user_pass.c_str(), VCAstat.c_str(), this);
-    w_user->setWhatsThis(_("This label display curent user."));
-    w_user->setToolTip(_("Field for display of the current user."));
-    w_user->setStatusTip(_("Double click for change user."));
-    statusBar()->insertPermanentWidget(0,w_user);
-    w_stat = new QLabel( VCAStation().c_str(), this );
-    w_stat->setWhatsThis(_("This label display used VCA engine station."));
-    w_stat->setToolTip(_("Field for display of the used VCA engine station."));
-    statusBar()->insertPermanentWidget(0,w_stat);
+    mWUser = new UserStBar( open_user.c_str(), user_pass.c_str(), VCAstat.c_str(), this);
+    mWUser->setWhatsThis(_("This label display curent user."));
+    mWUser->setToolTip(_("Field for display of the current user."));
+    mWUser->setStatusTip(_("Double click for change user."));
+    statusBar()->insertPermanentWidget(0,mWUser);
+    mWStat = new QLabel( VCAStation().c_str(), this );
+    mWStat->setWhatsThis(_("This label display used VCA engine station."));
+    mWStat->setToolTip(_("Field for display of the used VCA engine station."));
+    statusBar()->insertPermanentWidget(0,mWStat);
     w_scale = new WScaleStBar( this );
     w_scale->setWhatsThis(_("This label display widgets' scaling mode."));
     w_scale->setToolTip(_("Field for display of widgets' scaling mode."));
@@ -568,7 +568,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     wdgToolView->setVisible(false);
     elFigTool->setVisible(false);
 
-    //w_stat->setText(host.st_nm.c_str());
+    //mWStat->setText(host.st_nm.c_str());
     statusBar()->showMessage(_("Ready"), 2000 );
 }
 
@@ -598,17 +598,17 @@ int VisDevelop::cntrIfCmd( XMLNode &node, bool glob )
 
 string VisDevelop::user( )
 {
-    return w_user->user().toAscii().data();
+    return mWUser->user().toAscii().data();
 }
 
 string VisDevelop::password( )
 {
-    return w_user->pass().toAscii().data();
+    return mWUser->pass().toAscii().data();
 }
 
 string VisDevelop::VCAStation( )
 {
-    return w_user->VCAStation().toAscii().data();
+    return mWUser->VCAStation().toAscii().data();
 }
 
 bool VisDevelop::wdgScale( )

@@ -452,28 +452,54 @@ void Widget::detElem( TElem *el )
 bool Widget::cntrCmdServ( XMLNode *opt )
 {
     string a_path = opt->attr("path");
-    //- Service commands process -
+    //> Service commands process -
     if( a_path == "/serv/attr" )	//Attribute's access
     {
 	if( ctrChkNode(opt,"get",RWRWRW,"root","root",SEQ_RD) )		//Get values
 	{
+	    opt->childAdd("el")->setAttr("id","root")->setAttr("p","-4")->setText(rootId());
+
 	    vector<string> ls;
 	    attrList(ls);
 	    AutoHD<Attr> attr;
 	    for( int i_l = 0; i_l < ls.size(); i_l++ )
 	    {
 		attr = attrAt(ls[i_l]);
+		if( attr.at().flgGlob()&Attr::IsUser )	continue;
 		opt->childAdd("el")->setAttr("id",ls[i_l].c_str())->
-				     setAttr("pos",attr.at().fld().reserve())->
+				     setAttr("p",attr.at().fld().reserve())->
 				     setText(attr.at().getS());
 	    }
 	}
 	else if( ctrChkNode(opt,"set",RWRWRW,"root","root",SEQ_WR) )	//Set values
 	    for( int i_ch = 0; i_ch < opt->childSize(); i_ch++ )
 	        attrAt(opt->childGet(i_ch)->attr("id")).at().setS(opt->childGet(i_ch)->text());
-	return true;
     }
-    return false;
+    else if( a_path == "/serv/attrBr" && ctrChkNode(opt,"get",R_R_R_,"root","root",SEQ_RD) )	//Get attributes all updated elements' of the branch
+    {
+	//>> Self attributes put
+	cntrCmdServ(opt->setAttr("path","/serv/attr"));
+	opt->setAttr("path",a_path);
+	//>> Child widgets process
+	AutoHD<Widget> iwdg;
+	vector<string>	lst;
+	if( isLink() )	parentNoLink().at().wdgList(lst); else wdgList(lst);
+	for( unsigned i_f=0; i_f < lst.size(); i_f++ )
+	{
+	    if( !isLink() ) iwdg = wdgAt(lst[i_f]);
+	    else
+	    {
+		iwdg = parentNoLink().at().wdgAt(lst[i_f]);
+		opt->setAttr("lnkPath",parentNoLink().at().path());
+	    }
+	    XMLNode *wn = opt->childAdd("get")->setAttr("path",a_path);
+	    iwdg.at().cntrCmdServ(wn);
+	    wn->setName("w")->attrDel("path")->attrDel("rez")->setAttr("id",lst[i_f]);
+	}
+    }
+    else return false;
+
+    return true;
 }
 
 bool Widget::cntrCmdGeneric( XMLNode *opt )

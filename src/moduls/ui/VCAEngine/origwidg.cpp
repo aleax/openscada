@@ -87,8 +87,9 @@ bool PrWidget::cntrCmdGeneric( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/wdg/st/parent" && ctrChkNode(opt,"get",R_R_R_,owner().c_str(),grp().c_str(),SEQ_RD) )
 	opt->setText(parentNm());
-    else if( Widget::cntrCmdGeneric(opt) ) return true;
-    else return false;
+    else return Widget::cntrCmdGeneric(opt);
+
+    return true;
 }
 
 void PrWidget::cntrCmdProc( XMLNode *opt )
@@ -826,6 +827,8 @@ void OrigDocument::postEnable( int flag )
 
 bool OrigDocument::attrChange( Attr &cfg, void *prev )
 {
+    int off = 0;
+
     //> Document's number change process
     if( cfg.id() == "n" && cfg.getI() != *(int*)prev )
     {
@@ -891,7 +894,8 @@ bool OrigDocument::attrChange( Attr &cfg, void *prev )
 	string tbl = sw->ownerSess()->parent().at().tbl()+"_ses";
 
 	TConfig c_el(&mod->elPrjSes());
-	c_el.cfg("IDW").setS(sw->path());
+	TSYS::pathLev(sw->path(),0,true,&off);
+	c_el.cfg("IDW").setS(sw->path().substr(off));
 	//>> Archive position load
 	c_el.cfg("ID").setS("aCur");
 	if( SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el) )
@@ -934,7 +938,8 @@ bool OrigDocument::attrChange( Attr &cfg, void *prev )
 		string tbl = sw->ownerSess()->parent().at().tbl()+"_ses";
 
 		TConfig c_el(&mod->elPrjSes());
-		c_el.cfg("IDW").setS(sw->path());
+		TSYS::pathLev(sw->path(),0,true,&off);
+		c_el.cfg("IDW").setS(sw->path().substr(off));
 		c_el.cfg("ID").setS(cfg.id());
 		c_el.cfg("IO_VAL").setI(cfg.getI());
 		SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,c_el);
@@ -948,7 +953,8 @@ bool OrigDocument::attrChange( Attr &cfg, void *prev )
 	string tbl = sw->ownerSess()->parent().at().tbl()+"_ses";
 
 	TConfig c_el(&mod->elPrjSes());
-	c_el.cfg("IDW").setS(sw->path());
+	TSYS::pathLev(sw->path(),0,true,&off);
+	c_el.cfg("IDW").setS(sw->path().substr(off));
 	c_el.cfg("ID").setS(cfg.id());
 	c_el.cfg("IO_VAL").setS(cfg.getS());
 	SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,c_el);

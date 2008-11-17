@@ -184,8 +184,8 @@ class VisDevelop : public QMainWindow
 	//Private attributes
 	//- Main components -
 	bool		winClose;
-	UserStBar	*w_user;	//User status widget
-	QLabel		*w_stat;	//VCA engine station
+	UserStBar	*mWUser;	//User status widget
+	QLabel		*mWStat;	//VCA engine station
 	QLabel		*mStModify;	//VCA station modified
 	WScaleStBar	*w_scale;	//Scale trigger
 	QTimer		*endRunTimer, *work_wdgTimer;

@@ -2688,7 +2688,13 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 			if( shD->inclWidget->wx_scale != shD->inclWidget->mainWin()->xScale() ||
 				shD->inclWidget->wy_scale != shD->inclWidget->mainWin()->yScale() )
 			    shD->inclWidget->load("");
-			else shD->inclWidget->update(false,"",true);
+			else
+			{
+			    unsigned trt = shD->inclWidget->mainWin()->reqTm();
+			    shD->inclWidget->mainWin()->setReqTm(shD->inclWidget->reqTm());
+			    shD->inclWidget->update(false);
+			    shD->inclWidget->mainWin()->setReqTm(trt);
+			}
 		    }
 		    else
 		    {

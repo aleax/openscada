@@ -133,11 +133,13 @@ void XMLNode::attrList( vector<string> & list ) const
 	list.push_back(mAttr[i_a].first);
 }
 
-void XMLNode::attrDel( const string &name )
+XMLNode* XMLNode::attrDel( const string &name )
 {
     for( unsigned i_a = 0; i_a < mAttr.size(); i_a++ )
 	if( mAttr[i_a].first == name )
-	{ mAttr.erase(mAttr.begin()+i_a); return; }
+	{ mAttr.erase(mAttr.begin()+i_a); break; }
+
+    return this;
 }
 
 void XMLNode::attrClear( )

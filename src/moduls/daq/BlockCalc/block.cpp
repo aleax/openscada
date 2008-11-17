@@ -474,7 +474,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 			{
 			    case IO::String:    tip = "str";    break;
 			    case IO::Integer:   tip = "dec";    break;
-			    case IO::Real:      tip = "str";   break;
+			    case IO::Real:      tip = "real";   break;
 			    case IO::Boolean:   tip = "bool";   break;
 			}
 			ctrMkNode("fld",opt,-1,(string("/lio/io/")+list[i_io]).c_str(),

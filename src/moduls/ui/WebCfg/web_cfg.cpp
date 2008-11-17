@@ -1117,7 +1117,7 @@ int TWEB::postList( SSess &ses, XMLNode &node, string prs_path )
 	    ses.user.c_str(), f_path.c_str(), i_pos.c_str(), i_pos_to.c_str());
     }
 
-    if(cntrIfCmd(n_el1)) ses.mess.push_back(n_el1.text().c_str());    
+    if(cntrIfCmd(n_el1)) ses.mess.push_back(n_el1.text().c_str());
 
     return 0x01;
 }

@@ -1654,10 +1654,13 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    else if( tp == "real" )
 		    {
 			val_w->setFixedWidth( 5*15+30 );
-			val_w->setType(LineEdit::Real);
-			QString	max = t_s.attr("max").empty() ? "9999999999" : t_s.attr("max").c_str();
+			val_w->setType(LineEdit::Text);
+			QDoubleValidator *dv = new QDoubleValidator(val_w->workWdg());
+			dv->setNotation(QDoubleValidator::ScientificNotation);
+			((QLineEdit*)val_w->workWdg())->setValidator(dv);
+			/*QString	max = t_s.attr("max").empty() ? "9999999999" : t_s.attr("max").c_str();
 			QString	min = t_s.attr("min").empty() ? "-9999999999" : t_s.attr("min").c_str();
-			val_w->setCfg(min+":"+max+":1:::4");
+			val_w->setCfg(min+":"+max+":1:::4");*/
 		    }
 		    else	val_w->setMinimumWidth( 7*15+30 );
 		}

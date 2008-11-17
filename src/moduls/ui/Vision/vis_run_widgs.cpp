@@ -38,7 +38,7 @@ using namespace VISION;
 //* Shape widget view runtime mode                *
 //*************************************************
 RunWdgView::RunWdgView( const string &iwid, int ilevel, VisRun *mainWind, QWidget* parent, Qt::WindowFlags f ) :
-    WdgView(iwid,ilevel,(QMainWindow*)mainWind,parent,f), reqtm(1), mPermCntr(false), mPermView(true)
+    WdgView(iwid,ilevel,(QMainWindow*)mainWind,parent,f), mPermCntr(false), mPermView(true)
 {
     int endElSt = iwid.rfind("/");
     if( endElSt == string::npos ) return;
@@ -96,48 +96,64 @@ WdgView *RunWdgView::newWdgItem( const string &iwid )
     return new RunWdgView(iwid,wLevel()+1,mainWin(),this);
 }
 
-void RunWdgView::update( bool full, const string &wpath, bool all )
+void RunWdgView::update( bool full, XMLNode *aBr )
 {
-    if( !wpath.empty() )
+    bool reqBrCr = false;
+    if( !aBr )
     {
-	int off = 0;
-	RunWdgView *wdg = findChild<RunWdgView*>(TSYS::pathLev(wpath,0,true,&off).c_str());
-	if( wdg && !qobject_cast<RunPageView*>(wdg) ) wdg->update(false,wpath.substr(off));
-	return;
+	aBr = new XMLNode("get");
+	aBr->setAttr("path",id()+"/%2fserv%2fattrBr")->setAttr("tm",TSYS::uint2str(full?0:mainWin()->reqTm()));
+	cntrIfCmd(*aBr);
+	reqBrCr = true;
     }
 
-    //- Request to widget for last attributes -
-    bool change = false;
-    XMLNode *req_el;
-    XMLNode req("get");
-    req.setAttr("path",id()+"/%2fserv%2fattr")->
-	setAttr("tm",TSYS::uint2str(full?0:reqtm));
-    if( !cntrIfCmd(req) )
+    if( full )	setAllAttrLoad(true);
+    for( int i_el = 0; i_el < aBr->childSize(); i_el++ )
+	if( aBr->childGet(i_el)->name() == "el" )
+	    attrSet("",aBr->childGet(i_el)->text(),atoi(aBr->childGet(i_el)->attr("p").c_str()));
+    if( full )
     {
-	if( full )	setAllAttrLoad(true);
-	for( int i_el = 0; i_el < req.childSize(); i_el++ )
+	setAllAttrLoad(false);
+
+	attrSet("","load",-1);
+
+	//> Delete child widgets
+	for( int i_c = 0, i_l = 0; i_c < children().size(); i_c++ )
 	{
-	    req_el = req.childGet(i_el);
-	    if( attrSet("",req_el->text(),atoi(req_el->attr("pos").c_str())) )
-		change = true;
+	    if( !qobject_cast<RunWdgView*>(children().at(i_c)) || qobject_cast<RunPageView*>(children().at(i_c)) ) continue;
+	    for( i_l = 0; i_l < aBr->childSize(); i_l++ )
+		if( aBr->childGet(i_l)->name() == "w" &&
+			((WdgView*)children().at(i_c))->id() == (id()+"/wdg_"+aBr->childGet(i_l)->attr("id")) )
+		    break;
+	    if( i_l >= aBr->childSize() ) children().at(i_c)->deleteLater();
 	}
-	if( full )
-	{
-	    setAllAttrLoad(false);
-	    attrSet("","load",-1);
-	    //- Childs update for permition change -
-	    childsUpdate(true);
-	    orderUpdate();
-	    QWidget::update();
-	}
-	reqtm = strtoul(req.attr("tm").c_str(),0,10);
     }
 
-    //- Call childs for update -
-    if( full || all )
-	for( int i_c = 0; i_c < children().size(); i_c++ )
-	    if( qobject_cast<RunWdgView*>(children().at(i_c)) && !qobject_cast<RunPageView*>(children().at(i_c)) && ((RunWdgView*)children().at(i_c))->isEnabled() )
-		((RunWdgView*)children().at(i_c))->update(full,"",all);
+    //> Create new child widget
+    for( int i_l = 0, i_c = 0; i_l < aBr->childSize(); i_l++ )
+    {
+	if( aBr->childGet(i_l)->name() != "w" ) continue;
+
+	for( i_c = 0; i_c < children().size(); i_c++ )
+	    if( qobject_cast<RunWdgView*>(children().at(i_c)) && !qobject_cast<RunPageView*>(children().at(i_c)) &&
+		    ((RunWdgView*)children().at(i_c))->id() == (id()+"/wdg_"+aBr->childGet(i_l)->attr("id")) )
+	    {
+		((RunWdgView*)children().at(i_c))->update(full,aBr->childGet(i_l));
+		break;
+	    }
+	if( i_c < children().size() ) continue;
+	WdgView *nwdg = newWdgItem(id()+"/wdg_"+aBr->childGet(i_l)->attr("id"));
+	nwdg->show();
+	nwdg->load("");
+    }
+
+    if( full )
+    {
+	orderUpdate();
+	QWidget::update();
+    }
+
+    if( reqBrCr ) delete aBr;
 }
 
 void RunWdgView::shapeList( const string &snm, vector<string> &ls )
@@ -161,52 +177,6 @@ RunWdgView *RunWdgView::findOpenWidget( const string &iwdg )
 	    return wdg;
 
     return NULL;
-}
-
-void RunWdgView::childsUpdate( bool newLoad )
-{
-    XMLNode req("get");
-
-    string b_nm = id();
-    req.setAttr("path",id()+"/%2fwdg%2fcfg%2fpath")->setAttr("resLink","1");
-    if( !cntrIfCmd(req) ) b_nm = req.text();
-
-    vector<string> lst;
-    req.clear()->setAttr("path",b_nm+"/%2finclwdg%2fwdg")->setAttr("chkUserPerm","1");
-
-    if( !cntrIfCmd(req) )
-	for( int i_el = 0; i_el < req.childSize(); i_el++ )
-	    lst.push_back(req.childGet(i_el)->attr("id"));
-
-    //- Delete child widgets -
-    for( int i_c = 0; i_c < children().size(); i_c++ )
-    {
-	if( !qobject_cast<RunWdgView*>(children().at(i_c)) || qobject_cast<RunPageView*>(children().at(i_c)) ) continue;
-	int i_l;
-	for( i_l = 0; i_l < lst.size(); i_l++ )
-	if( qobject_cast<WdgView*>(children().at(i_c))->id() == (b_nm+"/wdg_"+lst[i_l]) )
-	    break;
-	if( i_l >= lst.size() ) children().at(i_c)->deleteLater(); //delete children().at(i_c--);
-    }
-
-    //- Create new child widget -
-    for( int i_l = 0; i_l < lst.size(); i_l++ )
-    {
-	int i_c;
-	for( i_c = 0; i_c < children().size(); i_c++ )
-	if( qobject_cast<WdgView*>(children().at(i_c)) &&
-		qobject_cast<WdgView*>(children().at(i_c))->id() == (b_nm+"/wdg_"+lst[i_l]) )
-	    break;
-	if( i_c >= children().size() )
-	{
-	    WdgView *nwdg = newWdgItem(b_nm+"/wdg_"+lst[i_l]);
-	    if( nwdg )
-	    {
-		nwdg->show();
-		if( newLoad ) nwdg->load("");
-	    }
-	}
-    }
 }
 
 void RunWdgView::orderUpdate( )
@@ -605,4 +575,3 @@ void SndPlay::run( )
 
     mPlayData.clear();
 };
-

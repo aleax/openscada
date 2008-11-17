@@ -453,8 +453,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 		    //- Changed widgets list add -
 		    vector<string> updEl;
 		    swdg.at().getUpdtWdg("",tm,updEl);
-		    for( int i_e = 0; i_e < updEl.size(); i_e++ )
-			pel->childAdd("el")->setText(updEl[i_e]);
+		    pel->setAttr("updWdg",TSYS::int2str(updEl.size()));
 		}
 	    }
 	    opt->setAttr("tm",TSYS::uint2str(calcClk()));
@@ -856,9 +855,9 @@ bool SessPage::cntrCmdGeneric( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/wdg/st/open" && enable() && !(parent().at().prjFlags( )&Page::Empty) )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,owner().c_str(),grp().c_str(),SEQ_RD) ) 
+	if( ctrChkNode(opt,"get",RWRWR_,owner().c_str(),grp().c_str(),SEQ_RD) )
 	    opt->setText(TSYS::int2str(attrAt("pgOpen").at().getB()));
-	if( ctrChkNode(opt,"set",RWRWR_,owner().c_str(),grp().c_str(),SEQ_WR) ) 
+	if( ctrChkNode(opt,"set",RWRWR_,owner().c_str(),grp().c_str(),SEQ_WR) )
 	    attrAt("pgOpen").at().setB(atoi(opt->text().c_str()));
     }
     else if( (a_path == "/br/pg_" || a_path == "/page/page") && ctrChkNode(opt) )
@@ -868,8 +867,9 @@ bool SessPage::cntrCmdGeneric( XMLNode *opt )
 	for( unsigned i_f=0; i_f < lst.size(); i_f++ )
 	    opt->childAdd("el")->setAttr("id",lst[i_f])->setText(pageAt(lst[i_f]).at().name());
     }
-    else if( SessWdg::cntrCmdGeneric(opt) ) return true;
-    else return false;
+    else return SessWdg::cntrCmdGeneric(opt);
+
+    return true;
 }
 
 
@@ -1435,20 +1435,23 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	{
 	    unsigned  tm = strtoul(opt->attr("tm").c_str(),0,10);
 	    if( !tm )
-		opt->childAdd("el")->
-		    setAttr("id","perm")->
-		    setAttr("pos","-3")->
-		    setText( TSYS::int2str(SYS->security().at().access(opt->attr("user"),SEQ_RD|SEQ_WR,owner(),grp(),permit())) );
-	    AutoHD<Attr> attr;
-	    if( m_mdfClc >= tm )
+	    {
+		opt->childAdd("el")->setAttr("id","root")->setAttr("p","-4")->setText(rootId());
+		opt->childAdd("el")->setAttr("id","perm")->setAttr("p","-3")->
+		    setText(TSYS::int2str(SYS->security().at().access(opt->attr("user"),SEQ_RD|SEQ_WR,owner(),grp(),permit())) );
+	    }
+	    if( !tm || m_mdfClc >= tm )
+	    {
+		AutoHD<Attr> attr;
 		for( int i_l = 0; i_l < m_attrUILs.size(); i_l++ )
 		{
 		    attr = attrAt(m_attrUILs[i_l]);
 		    if( attr.at().modif() >= tm && atoi(attr.at().fld().reserve().c_str()) )
 			opt->childAdd("el")->setAttr("id",m_attrUILs[i_l].c_str())->
-					     setAttr("pos",attr.at().fld().reserve())->
+					     setAttr("p",attr.at().fld().reserve())->
 					     setText(attr.at().getS());
 		}
+	    }
 	    opt->setAttr("tm",TSYS::uint2str(ownerSess()->calcClk( )));
 	}
 	else if( ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEQ_WR) )	//Set values
@@ -1458,10 +1461,43 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	        if( aid == "event" ) eventAdd(opt->childGet(i_ch)->text()+"\n");
 	        else attrAt(aid).at().setS(opt->childGet(i_ch)->text());
 	    }
-	return true;
-    }else return Widget::cntrCmdServ(opt);
+    }
+    else if( a_path == "/serv/attrBr" && ctrChkNode(opt,"get",R_R_R_,"root","UI",SEQ_RD) )	//Get attributes all updated elements' of the branch
+    {
+	if( !SYS->security().at().access(opt->attr("user"),SEQ_RD,owner(),grp(),permit()) ) return true;
 
-    return false;
+	unsigned tm = strtoul(opt->attr("tm").c_str(),NULL,10);
+
+	//>> Self attributes put
+	if( !tm || m_mdfClc >= tm )
+	{
+	    cntrCmdServ(opt->setAttr("path","/serv/attr"));
+	    opt->setAttr("path",a_path);
+	}
+	
+	//>> Child widgets process
+	vector<string>	lst;
+	wdgList(lst);
+
+	for( unsigned i_f=0; i_f < lst.size(); i_f++ )
+	{
+	    AutoHD<SessWdg> iwdg = wdgAt(lst[i_f]);
+	    XMLNode *wn = new XMLNode("get");
+	    wn->setAttr("path",a_path)->setAttr("user",opt->attr("user"))->setAttr("tm",TSYS::uint2str(tm));
+	    iwdg.at().cntrCmdServ(wn);
+	    if( wn->childSize() )
+	    {
+		wn->setName("w")->attrDel("path")->attrDel("user")->attrDel("rez")->attrDel("tm")->setAttr("id",lst[i_f]);
+		opt->childAdd(wn);
+	    }
+	    else delete wn;
+	}
+
+	opt->setAttr("tm",TSYS::uint2str(ownerSess()->calcClk()));
+    }
+    else return Widget::cntrCmdServ(opt);
+
+    return true;
 }
 
 bool SessWdg::cntrCmdGeneric( XMLNode *opt )
@@ -1481,8 +1517,9 @@ bool SessWdg::cntrCmdGeneric( XMLNode *opt )
 	if( ctrChkNode(opt,"get",RWRWR_,owner().c_str(),grp().c_str(),SEQ_RD) ) opt->setText(TSYS::int2str(process()));
 	if( ctrChkNode(opt,"set",RWRWR_,owner().c_str(),grp().c_str(),SEQ_WR) ) setProcess(atoi(opt->text().c_str()));
     }
-    else if( Widget::cntrCmdGeneric(opt) ) return true;
-    else return false;
+    else return Widget::cntrCmdGeneric(opt);
+
+    return true;
 }
 
 bool SessWdg::cntrCmdAttributes( XMLNode *opt )
@@ -1524,8 +1561,9 @@ bool SessWdg::cntrCmdAttributes( XMLNode *opt )
 	    else				attr.at().setS(opt->text());
 	}
     }
-    else if( Widget::cntrCmdAttributes(opt) ) return true;
-    else return false;
+    else return Widget::cntrCmdAttributes(opt);
+
+    return true;
 }
 
 void SessWdg::cntrCmdProc( XMLNode *opt )

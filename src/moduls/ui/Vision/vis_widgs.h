@@ -165,12 +165,11 @@ namespace VISION
 	Q_OBJECT
 
 	public:
-	    //- Data -
+	    //Data
 	    enum LType { Text, Integer, Real, Time, Date, DateTime, Combo };
 
-	    //- Methods -
+	    //Methods
 	    LineEdit( QWidget *parent, LType tp = Text, bool prev_dis = false );
-	    ~LineEdit( );
 
 	    LType type( )	{ return m_tp; }
 	    QString value( );
@@ -243,26 +242,26 @@ namespace VISION
 	Q_OBJECT
 
 	public:
-	    //- Public methods -
+	    //Public methods
 	    WdgView( const string &iwid, int ilevel, QMainWindow *mainWind, QWidget* parent = 0, Qt::WindowFlags f = 0 );
 	    ~WdgView( );
 
 	    string	id( )		{ return idWidget; }
-	    int		wLevel( )	{ return w_level; }
+	    int		wLevel( )	{ return mWLevel; }
 	    string	root( );
 	    QMainWindow	*mainWin( )	{ return main_win; }
-	    QPointF	posF( )		{ return w_pos; }
-	    QSizeF	sizeF( )	{ return w_size; }
-	    QRectF	geometryF( )	{ return QRectF(w_pos,w_size); }
+	    QPointF	posF( )		{ return mWPos; }
+	    QSizeF	sizeF( )	{ return mWSize; }
+	    QRectF	geometryF( )	{ return QRectF(mWPos,mWSize); }
 	    virtual float xScale( bool full = false );
 	    virtual float yScale( bool full = false );
 	    int		z( )		{ return z_coord;  }
 	    virtual string user( )	{ return ""; }
-	    bool	allAttrLoad( )	{ return all_attr_load; }
+	    bool	allAttrLoad( )	{ return mAllAttrLoad; }
 
 	    void	moveF( const QPointF &pos );
 	    void	resizeF( const QSizeF &size );
-	    void	setAllAttrLoad( bool vl )	{ all_attr_load = vl; }
+	    void	setAllAttrLoad( bool vl )	{ mAllAttrLoad = vl; }
 
 	    virtual bool attrSet( const string &attr, const string &val, int uiPrmPos = 0 );
 	    virtual string resGet( const string &res );
@@ -271,30 +270,28 @@ namespace VISION
 
             //Attributes
 	    void	*shpData;	//Shape data link
+	    bool	isReload;	//Set if widget updated
 
 	public slots:
 	    virtual WdgView *newWdgItem( const string &iwid );
-	    virtual void load( const string& item, bool load = true, bool init = true );
+	    virtual void load( const string& item, bool load = true, bool init = true, XMLNode *aBr = NULL );
 
 	protected:
-	    //- Protected methods -
-	    virtual void childsUpdate( bool newLoad = true );
-	    void shapeUpdate( );
+	    //Protected methods
 	    virtual void orderUpdate( );
 
 	    bool event( QEvent * event );
 	    bool eventFilter( QObject *object, QEvent *event );
 
-	    //- Protected attributes -
-	    bool		all_attr_load;	//All attributes load
-	    int			w_level;	//Widget level
-	    QPointF		w_pos;		//Widget position into real;
-	    QSizeF		w_size;		//Widget size into real;
+	    //Protected attributes
+	    bool		mAllAttrLoad;	//All attributes load
+	    int			mWLevel;	//Widget level
+	    QPointF		mWPos;		//Widget position into real;
+	    QSizeF		mWSize;		//Widget size into real;
 	    float		x_scale, 	//Widget x scale
 				y_scale;	//	 y scale
 	    int			z_coord;	//Z coordinate
-	    string		idWidget,	//Full widget identifier
-				m_root;		//Root widget identifier
+	    string		idWidget;	//Full widget identifier
 	    WdgShape		*shape;		//Link to root widget shape
 	    QMainWindow		*main_win;	//Main window
     };

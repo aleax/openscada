@@ -49,13 +49,14 @@ class VisRun : public QMainWindow
     Q_OBJECT
     public:
 	//Public methods
-	VisRun( const string &prj_it, const string &open_user, const string &user_pass, const string &VCAstat, bool crSessForce = false );
+	VisRun( const string &prj_it, const string &open_user, const string &user_pass,
+	    const string &VCAstat, bool crSessForce = false );
 	~VisRun( );
 
 	string user( );
 	string password( );
 	string VCAStation( );
-	int period( )		{ return m_period; }
+	int period( )		{ return mPeriod; }
 	string workSess( )	{ return work_sess; }
 
 	string srcProject( )	{ return src_prj; }
@@ -65,17 +66,18 @@ class VisRun : public QMainWindow
 
 	void setXScale( float vl )	{ x_scale = vl; }
 	void setYScale( float vl )	{ y_scale = vl; }
+	void setReqTm( unsigned rt )	{ reqtm = rt; }
 
-	void initSess( const string &prj_it, bool crSessForce = false ); //Init session for project's item path
-	void callPage( const string &ses_it, XMLNode *upw = NULL );	//Call session page
+	void initSess( const string &prj_it, bool crSessForce = false );	//Init session for project's item path
+	void callPage( const string &ses_it, bool updWdg = false );		//Call session page
 	void fullUpdatePgs( );
 
-	//- Cache commands -
+	//> Page cache commands
 	void pgCacheClear( );
 	void pgCacheAdd( RunWdgView *wdg );
 	RunWdgView *pgCacheGet( const string &id );
 
-	//- Attributes commands -
+	//> Attributes commands
 	string wAttrGet( const string &path, const string &attr );
 	bool wAttrSet( const string &path, const string &attr, const string &val );
 
@@ -84,13 +86,11 @@ class VisRun : public QMainWindow
 
 	int cntrIfCmd( XMLNode &node, bool glob = false );
 
-	void load( const string& item );
-
-	//- Cache commands -
+	//> Resource cache commands
 	string cacheResGet( const string &res );
 	void cacheResSet( const string &res, const string &val );
 
-	//- Alarms commands -
+	//> Alarms commands
 	unsigned alarmSt( )					{ return mAlrmSt; }
 	char alarmTp( char tmpl, bool quitance = false )	{ return (mAlrmSt>>(quitance?16:8)) & tmpl; }
 	int  alarmLev( )					{ return mAlrmSt & 0xFF; }
@@ -98,32 +98,32 @@ class VisRun : public QMainWindow
 
     protected:
 	//Protected methods
-	void closeEvent( QCloseEvent* );	//Close runtime window event
-	void resizeEvent( QResizeEvent * );	//Resize window event
+	void closeEvent( QCloseEvent* );		//Close runtime window event
+	void resizeEvent( QResizeEvent * );		//Resize window event
 
     private slots:
 	//Private slots
-	void print( );				//Print master page
-	void printPg( const string &pg ="" );	//Print select page
-	void printDiag( const string &dg = "" );//Print select diagram
-	void printDoc( const string &doc = "" );//Print select document
+	void print( );					//Print master page
+	void printPg( const string &pg = "" );		//Print select page
+	void printDiag( const string &dg = "" );	//Print select diagram
+	void printDoc( const string &doc = "" );	//Print select document
 	void exportDef( );				//Export master page
-	void exportPg( const string &pg ="" );	//Export select page
-	void exportDiag( const string &dg ="" );//Export select diagram
-	void exportDoc( const string &doc ="" );//Export select document
-	void quitSt( );				//Full quit OpenSCADA
+	void exportPg( const string &pg = "" );		//Export select page
+	void exportDiag( const string &dg = "" );	//Export select diagram
+	void exportDoc( const string &doc = "" );	//Export select document
+	void quitSt( );					//Full quit OpenSCADA
 
-	void fullScreen( bool vl );		//Full screen toggle
+	void fullScreen( bool vl );			//Full screen toggle
 
 	void userChanged( const QString &oldUser, const QString &oldPass );	//User changed
 
-	void about( );				//About at programm
-	void aboutQt( );			//About at QT library
-	void enterWhatsThis( );			//What is GUI components
-	void updatePage( );			//Update page data
-	void endRunChk( );			//End run flag check
+	void about( );					//About at programm
+	void aboutQt( );				//About at QT library
+	void enterWhatsThis( );				//What is GUI components
+	void updatePage( );				//Update page data
+	void endRunChk( );				//End run flag check
 
-	void alarmAct( QAction *alrm );		//Alarm actions process
+	void alarmAct( QAction *alrm );			//Alarm actions process
 
     private:
 	//Data
@@ -136,47 +136,46 @@ class VisRun : public QMainWindow
 		string	val;
 	};
 	//Private attributes
-	//- Menu root items -
+	//> Menu root items
 	QMenu	*mn_file,			//Menu "File"
 		*mn_alarm,			//Menu "Alarm"
 		*mn_view,			//Menu "View"
 		*mn_help;			//Menu "Help"
 
-	//- Tool bars -
+	//> Tool bars
 	QToolBar	*toolBarAlarm;		//Alarms toolbar
 
-	//- Actions -
+	//> Actions
 	QAction *actFullScr,			//Full screen action
-	//-- Alarms actions --
+	//>> Alarms actions
 		*actAlrmLev,			//Alarm level
 		*actAlrmLight,			//Alarm by Light
 		*actAlrmAlarm,			//Alarm by mono sound (PC speaker)
 		*actAlrmSound;			//Alarm by sound or synthesis of speech
 
-	//- Main components -
+	//> Main components
 	QTimer		*endRunTimer, *updateTimer;
 	bool		winClose;		//Close window flag
-	UserStBar	*wUser;			//User status widget
-	QLabel		*w_stat;		//VCA engine station
+	UserStBar	*mWUser;			//User status widget
+	QLabel		*mWStat;		//VCA engine station
 	string 		work_sess, src_prj;	//Work session and source project
 	RunPageView	*master_pg;		//Master page of runtime session
-	int 		m_period;		//Clock's period
+	int 		mPeriod;		//Clock's period
 	unsigned	w_prc_cnt;		//Process counter
 	float		upd_tm;
 	unsigned	reqtm;			//Requested time
 
 	float		x_scale, y_scale;	//RunTime scaling
 
-	deque<RunWdgView *> cache_pg;		//Pages cache
-
-	//- Alarm attributes -
+	//> Alarm attributes
 	unsigned	mAlrmSt;		//Alarm status
 	SndPlay		*alrmPlay;		//Alarm play widget
 	bool		alrLevSet;		//Use for no quitance lamp blinking
 
 	vector<string>	pgList;			//Pages list
 
-	//- Resource cache -
+	//> Page and resource cache
+	deque<RunWdgView *>	cache_pg;	//Pages cache
 	map<string,CacheEl>	mCacheRes;	//Resources cache
 };
 

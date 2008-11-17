@@ -409,11 +409,6 @@ LineEdit::LineEdit( QWidget *parent, LType tp, bool prev_dis ) :
     setType(tp);
 }
 
-LineEdit::~LineEdit( )
-{
-    //printf("TEST 00: %d\n",d_ptr->inEventHandler);
-}
-
 bool LineEdit::isEdited( )
 {
     if( bt_fld && bt_fld->isVisible() )	return true;
@@ -556,7 +551,7 @@ void LineEdit::setCfg(const QString &cfg)
 	    ((QDoubleSpinBox*)ed_fld)->setRange(minv,maxv);
 	    ((QDoubleSpinBox*)ed_fld)->setSingleStep(sstep);
 	    ((QDoubleSpinBox*)ed_fld)->setPrefix(pref.c_str());
-	    ((QDoubleSpinBox*)ed_fld)->setSuffix(suff.c_str());	
+	    ((QDoubleSpinBox*)ed_fld)->setSuffix(suff.c_str());
 	    ((QDoubleSpinBox*)ed_fld)->setDecimals(dec);
 	    break;
 	}
@@ -717,8 +712,8 @@ void TextEdit::cancelSlot( )
 //* Shape widget view                    *
 //****************************************
 WdgView::WdgView( const string &iwid, int ilevel, QMainWindow *mainWind, QWidget *parent, Qt::WindowFlags f ) :
-    QWidget(parent,f), idWidget(iwid), shape(NULL), w_level(ilevel), main_win(mainWind),
-    x_scale(1.0), y_scale(1.0), z_coord(0), all_attr_load(false), shpData(NULL)
+    QWidget(parent,f), idWidget(iwid), shape(NULL), mWLevel(ilevel), main_win(mainWind),
+    x_scale(1.0), y_scale(1.0), z_coord(0), mAllAttrLoad(false), shpData(NULL), isReload(false)
 {
     //setAttribute(Qt::WA_OpaquePaintEvent,true);
 }
@@ -748,16 +743,16 @@ string WdgView::root( )
 
 void WdgView::moveF( const QPointF &pos )
 {
-    w_pos = pos;
+    mWPos = pos;
     move( QPoint((int)TSYS::realRound(pos.x()),(int)TSYS::realRound(pos.y())) );
 }
 
 void WdgView::resizeF( const QSizeF &size )
 {
-    w_size = size;
-    w_size.setWidth(vmax(w_size.width(),3));
-    w_size.setHeight(vmax(w_size.height(),3));
-    resize( QSize((int)TSYS::realRound(w_size.width()), (int)TSYS::realRound(w_size.height())) );
+    mWSize = size;
+    mWSize.setWidth(vmax(mWSize.width(),3));
+    mWSize.setHeight(vmax(mWSize.height(),3));
+    resize( QSize((int)TSYS::realRound(mWSize.width()), (int)TSYS::realRound(mWSize.height())) );
 }
 
 WdgView *WdgView::newWdgItem( const string &iwid )
@@ -778,36 +773,42 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
     bool up = false;
     switch( uiPrmPos )
     {
+	case -4:
+	    if( shape && shape->id() == val )	break;
+	    if( shape ) shape->destroy(this);
+	    shape = mod->getWdgShape(val);
+	    if( shape ) shape->init(this);
+	    break;
 	case -1:
 	    up = true;
 	    break;
 	case 0:	return false;
 	case 7:
 	    if( wLevel( ) == 0 )	break;
-	    w_pos = QPointF(((WdgView*)parentWidget())->xScale(true)*atof(val.c_str()),posF().y());
+	    mWPos = QPointF(((WdgView*)parentWidget())->xScale(true)*atof(val.c_str()),posF().y());
 	    up = true;
 	    break;
 	case 8:
 	    if( wLevel( ) == 0 )	break;
-	    w_pos = QPointF(posF().x(),((WdgView*)parentWidget())->yScale(true)*atof(val.c_str()));
+	    mWPos = QPointF(posF().x(),((WdgView*)parentWidget())->yScale(true)*atof(val.c_str()));
 	    up = true;
 	    break;
 	case 9:
-	    w_size = QSizeF(xScale(true)*atof(val.c_str()),sizeF().height());
+	    mWSize = QSizeF(xScale(true)*atof(val.c_str()),sizeF().height());
 	    up = true;
 	    break;
 	case 10:
-	    w_size = QSizeF(sizeF().width(),yScale(true)*atof(val.c_str()));
+	    mWSize = QSizeF(sizeF().width(),yScale(true)*atof(val.c_str()));
 	    up = true;
 	    break;
 	case 11: if(wLevel( )>0) z_coord = atoi(val.c_str());	break;
 	case 13:
-	    w_size = QSizeF((atof(val.c_str())/x_scale)*sizeF().width(),sizeF().height());
+	    mWSize = QSizeF((atof(val.c_str())/x_scale)*sizeF().width(),sizeF().height());
 	    x_scale = atof(val.c_str());
 	    up = true;
 	    break;
 	case 14:
-	    w_size = QSizeF(sizeF().width(),(atof(val.c_str())/y_scale)*sizeF().height());
+	    mWSize = QSizeF(sizeF().width(),(atof(val.c_str())/y_scale)*sizeF().height());
 	    y_scale = atof(val.c_str());
 	    up = true;
 	    break;
@@ -834,51 +835,87 @@ string WdgView::resGet( const string &res )
     return "";
 }
 
-void WdgView::load( const string& item, bool load, bool init )
+void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 {
-    //printf("TEST 00: Load: %s (%d:%d)\n",id().c_str(),load,init);
+#if OSC_DEBUG >= 3
+    unsigned long long t_cnt;
+    if( wLevel() == 0 ) t_cnt = SYS->shrtCnt();
+#endif
 
-    //unsigned long long t_cnt;
-    //if( wLevel() == 0 ) t_cnt = SYS->shrtCnt();
+    isReload = shape;
 
-    //- Load from data model -
-    if( load )
+    //> Load from data model -
+    if( isLoad )
     {
-	childsUpdate( false );
+        bool reqBrCr = false;
+	if( !aBr )
+	{
+	    aBr = new XMLNode("get");
+	    aBr->setAttr("path",id()+"/%2fserv%2fattrBr");
+	    cntrIfCmd(*aBr);
+	    reqBrCr = true;
+	}
+
 	setAllAttrLoad( true );
 	if( item.empty() || item == id() )
-	{
-	    shapeUpdate( );
-	
-	    //-- Request the widget for last attributes --
-	    XMLNode req("get");
-	    req.setAttr("path",id()+"/%2fserv%2fattr");
-	    if( !cntrIfCmd(req) )
-		for( int i_el = 0; i_el < req.childSize(); i_el++ )
-		    attrSet("",req.childGet(i_el)->text(),atoi(req.childGet(i_el)->attr("pos").c_str()));
-	}
+	    for( int i_el = 0; i_el < aBr->childSize(); i_el++ )
+		if( aBr->childGet(i_el)->name() == "el" )
+		    attrSet("",aBr->childGet(i_el)->text(),atoi(aBr->childGet(i_el)->attr("p").c_str()));
 	setAllAttrLoad( false );
+
+	//>> Delete child widgets
+	string b_nm = aBr->attr("lnkPath");
+	if( b_nm.empty() ) b_nm = id();
+	for( int i_c = 0, i_l = 0; i_c < children().size(); i_c++ )
+	{
+	    if( !qobject_cast<WdgView*>(children().at(i_c)) ) continue;
+	    for( i_l = 0; i_l < aBr->childSize(); i_l++ )
+		if( aBr->childGet(i_l)->name() == "w" && qobject_cast<WdgView*>(children().at(i_c))->id() == (b_nm+"/wdg_"+aBr->childGet(i_l)->attr("id")) )
+		    break;
+	    if( i_l >= aBr->childSize() ) children().at(i_c)->deleteLater();
+	}
+
+	//>> Create new child widget
+	for( int i_l = 0, i_c = 0; i_l < aBr->childSize(); i_l++ )
+	{
+	    if( aBr->childGet(i_l)->name() != "w" ) continue;
+	    for( i_c = 0; i_c < children().size(); i_c++ )
+		if( qobject_cast<WdgView*>(children().at(i_c)) &&
+			qobject_cast<WdgView*>(children().at(i_c))->id() == (b_nm+"/wdg_"+aBr->childGet(i_l)->attr("id")) )
+		{
+		    ((WdgView*)children().at(i_c))->load((item==id())?"":item,true,(wLevel()>0)?isInit:false,aBr->childGet(i_l));
+		    break;
+		}
+	    if( i_c < children().size() ) continue;
+	    WdgView *nwdg = newWdgItem(b_nm+"/wdg_"+aBr->childGet(i_l)->attr("id"));
+	    nwdg->show();
+	    nwdg->load((item==id())?"":item,true,(wLevel()>0)?isInit:false,aBr->childGet(i_l));
+	}
+
+	//>> Children widgets order update
+	orderUpdate( );
+
+	if( reqBrCr ) delete aBr;
     }
+    //- Going to children init -
+    else
+	for( int i_c = 0; i_c < children().size(); i_c++ )
+	{
+	    WdgView *wdg = qobject_cast<WdgView*>(children().at(i_c));
+	    if( wdg && (item.empty() || item == id() || wdg->id() == item.substr(0,wdg->id().size())) )
+		wdg->load((item==id())?"":item,false,(wLevel()>0)?isInit:false);
+	}
 
     //- Init loaded data -
-    if( init && (item.empty() || item == id()) && wLevel()>0 )	attrSet("","load",-1);
-
-    //- Going to children load and/or init -
-    for( int i_c = 0; i_c < children().size(); i_c++ )
-    {
-	WdgView *wdg = qobject_cast<WdgView*>(children().at(i_c));
-	if( wdg && (item.empty() || item == id() || wdg->id() == item.substr(0,wdg->id().size())) )
-	    wdg->load((item==id())?"":item,load,(wLevel()>0)?init:false);
-    }
-
-    //- Children widgets order update -
-    if( load ) orderUpdate( );
+    if( isInit && (item.empty() || item == id()) && wLevel()>0 )	attrSet("","load",-1);
 
     //- Post load init for root widget -
     if( wLevel() == 0 )
     {
-	//printf("TEST 01: Load '%s' time %fms\n",id().c_str(),1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk()));
-	//t_cnt = SYS->shrtCnt();
+#if OSC_DEBUG >= 3
+	mess_debug("VCA DEBUG",_("Load '%s' time %f ms."),id().c_str(),1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk()));
+	t_cnt = SYS->shrtCnt();
+#endif
 
 	attrSet("","load",-1);
 	for( int i_c = 0; i_c < children().size(); i_c++ )
@@ -890,66 +927,9 @@ void WdgView::load( const string& item, bool load, bool init )
 	update();
         //repaint();
 
-	//printf("TEST 02: Init '%s' time %fms\n",id().c_str(),1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk()));
-    }
-}
-
-void WdgView::childsUpdate( bool newLoad )
-{
-    XMLNode req("get");
-
-    string b_nm = id();
-    req.setAttr("path",id()+"/%2fwdg%2fcfg%2fpath")->setAttr("resLink","1");
-    if( !cntrIfCmd(req) ) b_nm = req.text();
-
-    vector<string> lst;
-    req.clear()->setAttr("path",b_nm+"/%2finclwdg%2fwdg");
-
-    if( !cntrIfCmd(req) )
-	for( int i_el = 0; i_el < req.childSize(); i_el++ )
-	    lst.push_back(req.childGet(i_el)->attr("id"));
-
-    //- Delete child widgets -
-    for( int i_c = 0; i_c < children().size(); i_c++ )
-    {
-	if( !qobject_cast<WdgView*>(children().at(i_c)) ) continue;
-	int i_l;
-	for( i_l = 0; i_l < lst.size(); i_l++ )
-	    if( qobject_cast<WdgView*>(children().at(i_c))->id() == (b_nm+"/wdg_"+lst[i_l]) )
-		break;
-	if( i_l >= lst.size() ) children().at(i_c)->deleteLater(); //delete children().at(i_c--);
-    }
-
-    //- Create new child widget -
-    for( int i_l = 0; i_l < lst.size(); i_l++ )
-    {
-	int i_c;
-	for( i_c = 0; i_c < children().size(); i_c++ )
-	    if( qobject_cast<WdgView*>(children().at(i_c)) && 
-		    qobject_cast<WdgView*>(children().at(i_c))->id() == (b_nm+"/wdg_"+lst[i_l]) )
-		break;
-	if( i_c >= children().size() )
-	{
-	    WdgView *nwdg = newWdgItem(b_nm+"/wdg_"+lst[i_l]);
-	    if( nwdg )
-	    {
-		nwdg->show();
-		if( newLoad ) nwdg->load("");
-	    }
-	}
-    }
-}
-
-void WdgView::shapeUpdate( )
-{
-    //- Get root id -
-    XMLNode req("get");
-    req.setAttr("path",id()+"/%2fwdg%2fcfg%2froot");
-    if( !cntrIfCmd(req) && ( !shape || shape->id() != req.text() ) )
-    {
-	if( shape ) shape->destroy(this);
-	shape = mod->getWdgShape(req.text());
-	if( shape ) shape->init(this);
+#if OSC_DEBUG >= 3
+	mess_debug("VCA DEBUG",_("Init '%s' time %f ms."),id().c_str(),1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk()));
+#endif
     }
 }
 

@@ -53,16 +53,14 @@ namespace VISION
 
 	    bool permCntr( )	{ return mPermCntr; }
 	    bool permView( )	{ return mPermView; }
-	    unsigned reqTm( )	{ return reqtm; }
 
 	    void setPgOpenSrc( const string &vl );
 	    void setPermCntr( bool vl )	{ mPermCntr = vl; }
 	    void setPermView( bool vl )	{ mPermView = vl; }
-	    unsigned setReqTm( unsigned vl )	{ reqtm = vl; }
 
 	    WdgView *newWdgItem( const string &iwid );
 	    void attrLoad( QMap<QString, QString> &attrs );
-	    void update( bool full, const string &wpath = "", bool all = false );
+	    void update( bool full, XMLNode *aBr = NULL );
 	    bool attrSet( const string &attr, const string &val, int uiPrmPos = 0 );
 
 	    void shapeList( const string &snm, vector<string> &ls );
@@ -74,12 +72,10 @@ namespace VISION
 	    //- Protected methods -
 	    bool event( QEvent * event );
 	    int cntrIfCmd( XMLNode &node, bool glob = false );
-	    void childsUpdate( bool newLoad = true );
 	    void orderUpdate( );
 
 	private:
 	    //- Attributes -
-	    unsigned	reqtm;		//Request values time
 	    char	mPermCntr :1;	//Control widget's permition
 	    char	mPermView :1;	//View widget's permition
     };
@@ -96,8 +92,11 @@ namespace VISION
 	    RunPageView( const string &iwid, VisRun *mainWind, QWidget* parent = 0, Qt::WindowFlags f = 0 );
 	    ~RunPageView( );
 
+	    unsigned reqTm( )	{ return reqtm; }
 	    float  xScale( bool full = false );
 	    float  yScale( bool full = false );
+
+	    unsigned setReqTm( unsigned vl )	{ reqtm = vl; }
 
 	    RunPageView *findOpenPage( const string &pg );
 	    bool callPage( const string &pg_it, const string &pgGrp, const string &pgSrc );
@@ -111,6 +110,10 @@ namespace VISION
 	protected:
 	    //- Protected methods -
 	    void closeEvent ( QCloseEvent *event );
+
+	private:
+	    //- Private attributes -
+	    unsigned	reqtm;		//Request values time
     };
 
     //*********************************************

@@ -70,6 +70,7 @@ class TSocketIn: public TTransportIn
 	int maxFork( )		{ return mMaxFork; }
 	string certKey( )	{ return mCertKey; }
 	string pKeyPass( )	{ return mKeyPass; }
+	int opConnCnt( );
 
 	void setBufLen( int vl )		{ mBufLen = vl; modif(); }
 	void setMaxFork( int vl )		{ mMaxFork = vl; modif(); }
@@ -110,7 +111,7 @@ class TSocketIn: public TTransportIn
 	//- Status atributes -
 	string		stErr;			// Last error messages
 	float		trIn, trOut;		// Traffic in and out counter
-	int		connNumb;		// Connections number
+	int		connNumb, clsConnByLim;	// Close connections by limit
 };
 
 //************************************************

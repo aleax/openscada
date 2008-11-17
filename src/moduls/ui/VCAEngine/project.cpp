@@ -1123,8 +1123,7 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 	}
 	if( ctrChkNode(opt,"del",RWRWR_,"root","UI",SEQ_WR) )	pageDel(opt->attr("id"),true);
     }
-    else if( Widget::cntrCmdGeneric(opt) ) return true;
-    else return false;
+    else return Widget::cntrCmdGeneric(opt);
 
     return true;
 }

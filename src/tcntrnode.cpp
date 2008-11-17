@@ -239,7 +239,7 @@ AutoHD<TCntrNode> TCntrNode::nodeAt( const string &path, int lev, char sep, int 
     for( int i_g = 0; i_g < chGrp.size(); i_g++ )
 	if( s_br.substr(0,chGrp[i_g].id.size()) == chGrp[i_g].id )
 	    return chldAt(i_g,s_br.substr(chGrp[i_g].id.size())).at().nodeAt(path,0,sep,off);
-    //Go to default group
+    //> Go to default group
     if( chGrp.size() )	return chldAt(0,s_br).at().nodeAt(path,0,sep,off);
 }
 
