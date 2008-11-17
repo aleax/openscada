@@ -1,3 +1,8 @@
+2008-11-17 Maxim
+- FIX:/UI/WebVision: Filling by the image for the primitive ElFigure is fixed.
+
+
+
 2008-11-12 Roman
 - !!!!:/Functions, /DAQ/JavaLikeCalc: Namespace support is added to users' compiled functions. Keyword 'using' is added to JavaLikeCalc for seting namespace.
 - !!!!:/DAQ/JavaLikeCalc: Add support keywords "using" and "return".
