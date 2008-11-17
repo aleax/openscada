@@ -3329,7 +3329,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                 //-- Reading anf setting attributes for the current line --
                 float x_s, y_s;
                 string el_s = TSYS::strSepParse(sel,0,':',&el_off);
-                if( sscanf(el_s.c_str(), "(%f,%f)", &x_s, &y_s) != 2 ) p[0]  = atoi(el_s.c_str());
+                if( sscanf(el_s.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) p[0]  = atoi(el_s.c_str());
                 else 
                 {
                     bool fl = false;
@@ -3351,7 +3351,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                     }
                 }
                 el_s = TSYS::strSepParse(sel,0,':',&el_off);
-                if( sscanf(el_s.c_str(), "(%f,%f)", &x_s, &y_s) != 2 ) p[1]  = atoi(el_s.c_str());
+                if( sscanf(el_s.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) p[1]  = atoi(el_s.c_str());
                 else 
                 {
                     bool fl = false;
@@ -3424,7 +3424,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                 //-- Reading anf setting attributes for the current arc --
                 float x_s, y_s;
                 string el_s = TSYS::strSepParse(sel,0,':',&el_off);
-                if( sscanf(el_s.c_str(), "(%f,%f)", &x_s, &y_s) != 2 ) p[0]  = atoi(el_s.c_str() );
+                if( sscanf(el_s.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) p[0]  = atoi(el_s.c_str() );
                 else 
                 {
                     bool fl = false;
@@ -3446,7 +3446,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                     }
                 }
                 el_s = TSYS::strSepParse(sel,0,':',&el_off);
-                if( sscanf(el_s.c_str(), "(%f,%f)", &x_s, &y_s) != 2 ) p[1]  = atoi(el_s.c_str());
+                if( sscanf(el_s.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) p[1]  = atoi(el_s.c_str());
                 else 
                 {
                     bool fl = false;
@@ -3468,7 +3468,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                     }
                 }
                 el_s = TSYS::strSepParse(sel,0,':',&el_off);
-                if( sscanf(el_s.c_str(), "(%f,%f)", &x_s, &y_s) != 2 ) p[2]  = atoi(el_s.c_str() );
+                if( sscanf(el_s.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) p[2]  = atoi(el_s.c_str() );
                 else 
                 {
                     p[2] = map_index;
@@ -3476,7 +3476,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                     map_index -= 1;
                 }
                 el_s = TSYS::strSepParse(sel,0,':',&el_off);
-                if( sscanf(el_s.c_str(), "(%f,%f)", &x_s, &y_s) != 2 ) p[3]  = atoi(el_s.c_str() );
+                if( sscanf(el_s.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) p[3]  = atoi(el_s.c_str() );
                 else 
                 {
                     p[3] = map_index;
@@ -3484,7 +3484,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                     map_index -= 1;
                 }
                 el_s = TSYS::strSepParse(sel,0,':',&el_off);
-                if( sscanf(el_s.c_str(), "(%f,%f)", &x_s, &y_s) != 2 ) p[4]  = atoi(el_s.c_str() );
+                if( sscanf(el_s.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) p[4]  = atoi(el_s.c_str() );
                 else 
                 {
                     p[4] = map_index;
@@ -3587,7 +3587,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                 //-- Reading anf setting attributes for the current arc --
                 float x_s, y_s;
                 string el_s = TSYS::strSepParse(sel,0,':',&el_off);
-                if( sscanf(el_s.c_str(), "(%f,%f)", &x_s, &y_s) != 2 ) p[0]  = atoi(el_s.c_str());
+                if( sscanf(el_s.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) p[0]  = atoi(el_s.c_str());
                 else 
                 {
                     bool fl = false;
@@ -3609,7 +3609,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                     }
                 }
                 el_s = TSYS::strSepParse(sel,0,':',&el_off);
-                if( sscanf(el_s.c_str(), "(%f,%f)", &x_s, &y_s) != 2 ) p[1]  = atoi(el_s.c_str());
+                if( sscanf(el_s.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) p[1]  = atoi(el_s.c_str());
                 else 
                 {
                     bool fl = false;
@@ -3631,7 +3631,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                     }
                 }
                 el_s = TSYS::strSepParse(sel,0,':',&el_off);
-                if( sscanf(el_s.c_str(), "(%f,%f)", &x_s, &y_s) != 2 ) p[2]  = atoi(el_s.c_str());
+                if( sscanf(el_s.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) p[2]  = atoi(el_s.c_str());
                 else 
                 {
                     p[2] = map_index;
@@ -3639,7 +3639,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                     map_index -= 1;
                 }
                 el_s = TSYS::strSepParse(sel,0,':',&el_off);
-                if( sscanf(el_s.c_str(), "(%f,%f)", &x_s, &y_s) != 2 ) p[3]  = atoi(el_s.c_str());
+                if( sscanf(el_s.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) p[3]  = atoi(el_s.c_str());
                 else 
                 {
                     p[3] = map_index;
@@ -3699,7 +3699,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                 while( true )
                 {
                     string svl = TSYS::strSepParse(sel,0,':',&el_off);
-                    if( sscanf(svl.c_str(), "(%f,%f)", &x_s, &y_s) != 2 ) vl = atoi(svl.c_str());
+                    if( sscanf(svl.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) vl = atoi(svl.c_str());
                     else 
                     {
                         bool fl = false;

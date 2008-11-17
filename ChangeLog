@@ -1,4 +1,10 @@
 2008-11-17 Maxim
+- FIX:/UI/Vision: Inundattion path is fixed for the primitive ElFigure.
+- /UI/Vision: Action for making static all the dynamic values is added for the primitive ElFigure.
+- /UI/Vision, /UI/WebVision: "," is changed to "|" between "x" and "y" coordinates for the primitive ElFigure.
+
+
+2008-11-17 Maxim
 - FIX:/UI/WebVision: Filling by the image for the primitive ElFigure is fixed.
 
 
