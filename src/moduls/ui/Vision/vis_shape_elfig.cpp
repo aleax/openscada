@@ -1330,9 +1330,15 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
     {
         bool actDyn = false;
         ElFigDt *elFD = (ElFigDt*)w->shpData;
+        
+        PntMap *pnts = &elFD->shapePnts;
+        WidthMap *widths = &elFD->shapeWidths;
+        ColorMap *colors = &elFD->shapeColors;
+        ImageMap *images = &elFD->shapeImages;
+        StyleMap *styles = &elFD->shapeStyles;
+
         QVector<ShapeItem> &shapeItems = elFD->shapeItems;
         QVector<inundationItem> &inundationItems = elFD->inundationItems;
-        WidthMap *widths = &elFD->shapeWidths;
 	for( int i_a = 0; i_a < ((VisDevelop *)w->mainWin())->elFigTool->actions().size(); i_a++ )
 	    menu.addAction(((VisDevelop *)w->mainWin())->elFigTool->actions().at(i_a));
 	menu.addSeparator();
@@ -1371,7 +1377,6 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
             actDynamicPoint->setObjectName("point");
             connect( actDynamicPoint, SIGNAL(activated()), elFD, SLOT(dynamic()) ); 
             menu.addAction(actDynamicPoint);
-            
             menu.addSeparator();
         }
         else if( index != -1 && !actDyn && rect_num == -1 )
@@ -1426,10 +1431,41 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
         else if( index == -1 && (int)pop_pos.x() != -1 && (int)pop_pos.y() != -1 )
         {
             bool flg = false;
+            for( PntMap::reverse_iterator pi = pnts->rbegin(); pi != pnts->rend(); pi++ )
+                if(pi->first > 0 )
+                {
+                    flg = true;
+                    break;
+                }
+                else for( WidthMap::reverse_iterator pi = widths->rbegin(); pi != widths->rend(); pi++ )
+                if(pi->first > 0 )
+                {
+                    flg = true;
+                    break;
+                }
+                else for( ColorMap::reverse_iterator pi = colors->rbegin(); pi != colors->rend(); pi++ )
+                if(pi->first > 0 )
+                {
+                    flg = true;
+                    break;
+                }
+                else for( ImageMap::reverse_iterator pi = images->rbegin(); pi != images->rend(); pi++ )
+                if(pi->first > 0 )
+                {
+                    flg = true;
+                    break;
+                }
+                else for( StyleMap::reverse_iterator pi = styles->rbegin(); pi != styles->rend(); pi++ )
+                if(pi->first > 0 )
+                {
+                    flg = true;
+                    break;
+                }
+
+
             for( int i=0; i < inundationItems.size(); i++ )
                 if( inundationItems[i].path.contains(pop_pos) )
                 {
-                    flg = true;
                     bool fl = false;
                     if( inundationItems[i].brush < 0 )
                     {
@@ -1452,7 +1488,7 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
                     if( fl ) menu.addSeparator();
                     break;
                 }
-            if( !flg )
+            if( flg )
             {
                 QAction *actStatic = new QAction( _("Make all values of the widget the static ones"), this );
                 actStatic->setObjectName("static");
@@ -1868,6 +1904,7 @@ void ShapeElFigure::toolAct( QAction *act )
 void ElFigDt::dynamic( )
 {
     ShapeElFigure *elF = (ShapeElFigure*) mod->getWdgShape("ElFigure");
+    //WdgView *w = (WdgView*)TSYS::str2addr(sender()->property("wdgAddr").toString().toAscii().data());
     PntMap *pnts = &shapePnts;
     WidthMap *widths = &shapeWidths;
     ColorMap *colors = &shapeColors;
@@ -2109,16 +2146,17 @@ void ElFigDt::dynamic( )
     }
     if( (tmp <= -10 || tmp == -5 || tmp == -6 || tmp == -7) && real > 0  )
     {
+        bool upd = false;
         switch( num )
         {
             case 0:
                 for( int i = 0; i < shapeItems.size(); i++ )
                 {
-                    if( shapeItems[i].n1 == tmp ) shapeItems[i].n1 = real;
-                    else if( shapeItems[i].n2 == tmp ) shapeItems[i].n2 = real;
-                    else if( shapeItems[i].n3 == tmp ) shapeItems[i].n3 = real;
-                    else if( shapeItems[i].n4 == tmp ) shapeItems[i].n4 = real;
-                    else if( shapeItems[i].n5 == tmp ) shapeItems[i].n5 = real;
+                    if( shapeItems[i].n1 == tmp ) { shapeItems[i].n1 = real; elF->rectItems.clear(); elF->rect_num = -1; upd = true; }
+                    else if( shapeItems[i].n2 == tmp ) { shapeItems[i].n2 = real; elF->rectItems.clear(); elF->rect_num = -1; upd = true; }
+                    else if( shapeItems[i].n3 == tmp ) { shapeItems[i].n3 = real; elF->rectItems.clear(); elF->rect_num = -1; upd = true; }
+                    else if( shapeItems[i].n4 == tmp ) { shapeItems[i].n4 = real; elF->rectItems.clear(); elF->rect_num = -1; upd = true; }
+                    else if( shapeItems[i].n5 == tmp ) { shapeItems[i].n5 = real; elF->rectItems.clear(); elF->rect_num = -1; upd = true; }
                 }
                 elF->dropPoint( tmp, elF->index, shapeItems, pnts );
                 break;
@@ -2160,6 +2198,8 @@ void ElFigDt::dynamic( )
 
         }
         elF->shapeSave( w );
+        if( upd )
+            w->update();
     }
 }
 
@@ -3897,7 +3937,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
     if( rect_num==0 )
     {
         view->mainWin()->statusBar()->showMessage(QString(_("Coordinates(x,y): (%1, %2)")).
-                arg((*pnts)[itemInMotion->n1].x()).arg((*pnts)[itemInMotion->n1].y()), 10000 );
+                arg(TSYS::realRound((*pnts)[itemInMotion->n1].x(),2)).arg(TSYS::realRound((*pnts)[itemInMotion->n1].y(),2)), 10000 );
         EndMotionPos = scaleRotate( (*pnts)[itemInMotion->n2], view, flag_scale, flag_rotate );
 
         if( shapeType==2 )
@@ -3936,6 +3976,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
 	    if( !flag_hold_arc && !flag_arc_rect_3_4 )		// if the figure is not connected to the arc
             {
                 if( status_hold && count_holds && flag_rect )
+                {
                     if( !flag_MotionNum_1 )
                     {
                         StartMotionPos = scaleRotate( (*pnts)[itemInMotion->n1], view, flag_scale, flag_rotate );
@@ -3943,6 +3984,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
                         num_vector.append(MotionNum_1);
                     }
                     else StartMotionPos = scaleRotate( (*pnts)[itemInMotion->n1], view, flag_scale, flag_rotate );
+                }
                 else 
                 {
                     StartMotionPos = scaleRotate( (*pnts)[itemInMotion->n1], view, flag_scale, flag_rotate );
@@ -3972,7 +4014,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
     if( rect_num == 1 )
     {
         view->mainWin()->statusBar()->showMessage(QString(_("Coordinates(x,y): (%1, %2)")).
-                arg((*pnts)[itemInMotion->n2].x()).arg((*pnts)[itemInMotion->n2].y()), 10000 );
+                arg(TSYS::realRound((*pnts)[itemInMotion->n2].x(),2)).arg(TSYS::realRound((*pnts)[itemInMotion->n2].y(),2)), 10000 );
         StartMotionPos = scaleRotate( (*pnts)[itemInMotion->n1], view, flag_scale, flag_rotate );
         if( shapeType == 2 )
         {
@@ -4024,6 +4066,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
             if( !flag_hold_arc && !flag_arc_rect_3_4 )
             { 
                 if( status_hold && count_holds && flag_rect )
+                {
                     if( !flag_MotionNum_2 )
                     {
                         EndMotionPos = scaleRotate( (*pnts)[itemInMotion->n2], view, flag_scale, flag_rotate );
@@ -4031,6 +4074,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
                         num_vector.append( MotionNum_2 );
                     }
                     else EndMotionPos = scaleRotate( (*pnts)[itemInMotion->n2], view, flag_scale, flag_rotate );
+                }
                 else
                 {
                     EndMotionPos = scaleRotate( (*pnts)[itemInMotion->n2], view, flag_scale, flag_rotate );
@@ -4061,7 +4105,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
     if( rect_num == 2 )
     {
         view->mainWin()->statusBar()->showMessage(QString(_("Coordinates(x,y): (%1, %2)")).
-                arg((*pnts)[itemInMotion->n3].x()).arg((*pnts)[itemInMotion->n3].y()), 10000 );
+                arg(TSYS::realRound((*pnts)[itemInMotion->n3].x(),2)).arg(TSYS::realRound((*pnts)[itemInMotion->n3].y(),2)), 10000 );
         StartMotionPos = scaleRotate( (*pnts)[itemInMotion->n1], view, flag_scale, flag_rotate );
         EndMotionPos = scaleRotate( (*pnts)[itemInMotion->n2], view, flag_scale, flag_rotate );
         if(shapeType == 2)
@@ -4091,7 +4135,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
     if(rect_num == 3)
     {
         view->mainWin()->statusBar()->showMessage(QString(_("Coordinates(x,y): (%1, %2)")).
-                arg((*pnts)[itemInMotion->n4].x()).arg((*pnts)[itemInMotion->n4].y()), 10000 );
+                arg(TSYS::realRound((*pnts)[itemInMotion->n4].x(),2)).arg(TSYS::realRound((*pnts)[itemInMotion->n4].y()),2), 10000 );
         StartMotionPos = scaleRotate( (*pnts)[itemInMotion->n1], view, flag_scale, flag_rotate );
         EndMotionPos = scaleRotate( (*pnts)[itemInMotion->n2], view, flag_scale, flag_rotate );
         if( shapeType == 2 )
@@ -4133,7 +4177,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
     if( rect_num == 4 )
     {
         view->mainWin()->statusBar()->showMessage(QString(_("Coordinates(x,y): (%1, %2)")).
-                arg((*pnts)[itemInMotion->n5].x()).arg((*pnts)[itemInMotion->n5].y()), 10000 );
+                arg(TSYS::realRound((*pnts)[itemInMotion->n5].x(),2)).arg(TSYS::realRound((*pnts)[itemInMotion->n5].y(),2)), 10000 );
         CtrlMotionPos_1 = scaleRotate( (*pnts)[itemInMotion->n3], view, flag_scale, flag_rotate );
         CtrlMotionPos_2 = scaleRotate( (*pnts)[itemInMotion->n4], view, flag_scale, flag_rotate );
         CtrlMotionPos_3 = scaleRotate( (*pnts)[itemInMotion->n5], view, flag_scale, flag_rotate );
@@ -4342,10 +4386,9 @@ void ShapeElFigure::moveUpDown( QVector<ShapeItem> &shapeItems, PntMap *pnts, QV
     count_moveItemTo = 0;
     bool flag_break_move;
     if( flag_ctrl && count_Shapes )
-    {
         moveAll( QPointF(0,0), shapeItems, pnts, inundationItems, view );
-    }
-    else 
+    else
+    { 
         if( !flag_first_move )
         {
             count_holds = 0;
@@ -4369,11 +4412,12 @@ void ShapeElFigure::moveUpDown( QVector<ShapeItem> &shapeItems, PntMap *pnts, QV
                         rectNum3_4( shapeItems );
                 }
             }
-        if( flag_rect || flag_arc_rect_3_4 )// if there is the rect number of figures to move becomes equal to the number of figures, connected with this rect
-            count_Shapes = count_rects;
+            if( flag_rect || flag_arc_rect_3_4 )// if there is the rect number of figures to move becomes equal to the number of figures, connected with this rect
+                count_Shapes = count_rects;
         }
-    if( flag_rect || flag_arc_rect_3_4 || ( rect_num == -1 && count_holds ) )
-        moveAll( QPointF(0,0), shapeItems, pnts, inundationItems, view );
+        if( flag_rect || flag_arc_rect_3_4 || ( rect_num == -1 && count_holds ) )
+            moveAll( QPointF(0,0), shapeItems, pnts, inundationItems, view );
+    }
     if( ( !flag_ctrl  || (!flag_rect && rect_num != -1 ) ) && !flag_arc_rect_3_4 )// if there is simple figure or one of its rects
         if(index != -1)
         {

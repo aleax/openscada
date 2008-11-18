@@ -1,3 +1,7 @@
+2008-11-18 Maxim
+- FIX:/UI/Vision: Different little fixes are made for primitive ElFigure.
+
+
 2008-11-17 Roman
 - /XML: Return (XMLNode *) to attribute delete (attrDel) function is added.
 - /Transport/SSL: Количество соединений закрытых из-за превышения лимита клиентских соединений добавлено в строку статуса.
