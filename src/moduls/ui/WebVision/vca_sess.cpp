@@ -2025,7 +2025,7 @@ void VCAElFigure::getReq( SSess &ses )
                 }
                 //- Detecting the real "filling" point for all possible combinations of types of two connected figures -
                 //-- Simple arc --
-                if( point_num.size() == 1 && shapeItems[fig[0]].type == 2 )
+                if( point_num.size() == 2 && fig.size() == 2 && shapeItems[fig[0]].type == 2 && shapeItems[fig[1]].type == 2 )
                 {
                     delta_point_center = scaleRotate( (pnts)[shapeItems[fig[0]].n3], xSc, ySc, true, true );
                     if( (int)(delta_point_center.x+0.5) < s_width && (int)(delta_point_center.y+0.5) < s_height )
@@ -3745,7 +3745,6 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                 mod->cntrIfCmd(req,user);
                 string imgDef_temp = TSYS::strDecode(req.text(),TSYS::base64);
                 if( imgDef_temp == "" ) img = "";
-
                 inundationItems.push_back( InundationItem(fl_pnts, fl_color, -1, img) );
             }
         }

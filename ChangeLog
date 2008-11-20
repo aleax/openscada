@@ -1,3 +1,8 @@
+2008-11-20 Maxim
+- FIX:/UI/Vision: procedure dynamic if fixed for primitive ElFigure.
+- FIX:/UI/WebVision: filling the simple arc is modified for primitive ElFigure.
+
+
 2008-11-20 Roman
 - /Transport/Sockets: Closed input connections limit counter is added to transport's status line.
 - FIX:/Transport/Sockets: Closing protocol after broken connection is added.
