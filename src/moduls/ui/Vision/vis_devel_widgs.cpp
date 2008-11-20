@@ -923,8 +923,8 @@ void InspLnk::changeLnk( QTreeWidgetItem *index, int col )
     XMLNode req("set");
     req.setAttr("path",it_wdg+"/%2flinks%2flnk%2f"+(index->childCount()?"pr_":"el_")+attr_id)->
 	setText(index->text(1).toAscii().data());
-    if( mainWin()->cntrIfCmd(req) )
-	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,mainWin());
+    if( mainWin()->cntrIfCmd(req) );
+//	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,mainWin());	//Crashed if from delegate call.
     setWdg(it_wdg);
 }
 
@@ -1858,45 +1858,32 @@ void DevelWdgView::upMouseCursors( const QPoint &curp )
     }
 
     //- Childs' selection process -
-    //-- Check child's anchor selection and widget's geometry --
     fLeftTop = false;
+
+    //-- Check child's anchor selection and widget's geometry --
     QRectF selRect;
-    bool firs_nosel = true;
+    bool firs_nosel = true, noSelUp = false;
     for( int i_c = children().size()-1; i_c >= 0; i_c-- )
 	if( qobject_cast<DevelWdgView*>(children().at(i_c)) )
 	{
 	    if( ((DevelWdgView*)children().at(i_c))->select( ) )
-	    {
-		selRect = selRect.united(((DevelWdgView*)children().at(i_c))->geometryF());
-		firs_nosel = false;
-	    }
-	    else if( firs_nosel && ((DevelWdgView*)children().at(i_c))->geometryF().contains(curp) )
-	    {
-		selRect = QRectF();
-		break;
-	    }
+	    { selRect = selRect.united(((DevelWdgView*)children().at(i_c))->geometryF()); firs_nosel = false;  }
+	    else if( firs_nosel && ((DevelWdgView*)children().at(i_c))->geometryF().contains(curp) )	noSelUp = true;
 	}
+
     //-- Select childs anchors --
     if( !selRect.isNull() )
     {
 	if( grepAnchor(selRect.topLeft(),curp) )
 	{ new_shp = Qt::SizeFDiagCursor; fLeftTop = true; }
-	else if( grepAnchor(selRect.bottomRight(),curp) )
-	    new_shp = Qt::SizeFDiagCursor;
-	else if( grepAnchor(selRect.bottomLeft(),curp) )
-	{ new_shp = Qt::SizeBDiagCursor; fLeftTop = true; }
-	else if( grepAnchor(selRect.topRight(),curp) )
-	    new_shp = Qt::SizeBDiagCursor;
-	else if( grepAnchor(QPointF(selRect.center().x(),selRect.y()),curp) )
-	{ new_shp = Qt::SizeVerCursor; fLeftTop = true; }
-	else if( grepAnchor(QPointF(selRect.center().x(),selRect.bottomRight().y()),curp) )
-	    new_shp = Qt::SizeVerCursor;
-	else if( grepAnchor(QPointF(selRect.x(),selRect.center().y()),curp) )
-	{ new_shp = Qt::SizeHorCursor; fLeftTop = true; }
-	else if( grepAnchor(QPointF(selRect.bottomRight().x(),selRect.center().y()),curp) )
-	    new_shp = Qt::SizeHorCursor;
-	else if( selRect.contains(curp) )
-	    new_shp = Qt::PointingHandCursor;
+	else if( grepAnchor(selRect.bottomRight(),curp) )					new_shp = Qt::SizeFDiagCursor;
+	else if( grepAnchor(selRect.bottomLeft(),curp) )					{ new_shp = Qt::SizeBDiagCursor; fLeftTop = true; }
+	else if( grepAnchor(selRect.topRight(),curp) )						new_shp = Qt::SizeBDiagCursor;
+	else if( grepAnchor(QPointF(selRect.center().x(),selRect.y()),curp) )			{ new_shp = Qt::SizeVerCursor; fLeftTop = true; }
+	else if( grepAnchor(QPointF(selRect.center().x(),selRect.bottomRight().y()),curp) )	new_shp = Qt::SizeVerCursor;
+	else if( grepAnchor(QPointF(selRect.x(),selRect.center().y()),curp) )			{ new_shp = Qt::SizeHorCursor; fLeftTop = true; }
+	else if( grepAnchor(QPointF(selRect.bottomRight().x(),selRect.center().y()),curp) )	new_shp = Qt::SizeHorCursor;
+	else if( !noSelUp && selRect.contains(curp) )						new_shp = Qt::PointingHandCursor;
 	if( new_shp != Qt::ArrowCursor )	fHoldChild = true;
     }
     if( new_shp != cursor().shape() ) setCursor(new_shp);

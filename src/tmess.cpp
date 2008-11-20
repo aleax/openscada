@@ -108,7 +108,7 @@ void TMess::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const str
 
 string TMess::lang( )
 {
-    if( getenv("LANGUAGE") )		return getenv("LANGUAGE");    
+    if( getenv("LANGUAGE") )		return getenv("LANGUAGE");
     else if( getenv("LC_MESSAGES") )	return getenv("LC_MESSAGES");
     else if( getenv("LANG") )		return getenv("LANG");
     else return("C");

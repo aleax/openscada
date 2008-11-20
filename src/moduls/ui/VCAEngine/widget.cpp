@@ -117,20 +117,20 @@ void Widget::postEnable( int flag )
     if( flag&TCntrNode::NodeConnect )
     {
 	//- Add main attributes -
-	attrAdd( new TFld("id",_("Id"),TFld::String,TFld::NoWrite) );
-	attrAdd( new TFld("name",_("Name"),TFld::String,TFld::NoFlag) );
-	attrAdd( new TFld("dscr",_("Description"),TFld::String,TFld::FullText) );
-	attrAdd( new TFld("path",_("Path"),TFld::String,TFld::NoWrite) );
-	attrAdd( new TFld("en",_("Enabled"),TFld::Boolean,TFld::NoFlag,"","1","","","5") );
+	attrAdd( new TFld("id",_("Id"),TFld::String,TFld::NoWrite|Attr::Generic) );
+	attrAdd( new TFld("name",_("Name"),TFld::String,Attr::Generic) );
+	attrAdd( new TFld("dscr",_("Description"),TFld::String,TFld::FullText|Attr::Generic) );
+	attrAdd( new TFld("path",_("Path"),TFld::String,TFld::NoWrite|Attr::Generic) );
+	attrAdd( new TFld("en",_("Enabled"),TFld::Boolean,Attr::Generic,"","1","","","5") );
 	attrAdd( new TFld("active",_("Active"),TFld::Boolean,Attr::Active,"","0","","","6") );
-	attrAdd( new TFld("geomX",_("Geometry:x"),TFld::Real,TFld::NoFlag,"","0","0;10000","","7") );
-	attrAdd( new TFld("geomY",_("Geometry:y"),TFld::Real,TFld::NoFlag,"","0","0;10000","","8") );
-	attrAdd( new TFld("geomW",_("Geometry:width"),TFld::Real,TFld::NoFlag,"","100","0;10000","","9") );
-	attrAdd( new TFld("geomH",_("Geometry:height"),TFld::Real,TFld::NoFlag,"","100","0;10000","","10") );
-	attrAdd( new TFld("geomXsc",_("Geometry:x scale"),TFld::Real,TFld::NoFlag,"","1","0.1;100","","13") );
-	attrAdd( new TFld("geomYsc",_("Geometry:y scale"),TFld::Real,TFld::NoFlag,"","1","0.1;100","","14") );
-	attrAdd( new TFld("geomZ",_("Geometry:z"),TFld::Integer,TFld::NoFlag,"","0","0;1000000","","11") );
-	attrAdd( new TFld("geomMargin",_("Geometry:margin"),TFld::Integer,TFld::NoFlag,"","0","0;1000","","12") );
+	attrAdd( new TFld("geomX",_("Geometry:x"),TFld::Real,Attr::Generic,"","0","0;10000","","7") );
+	attrAdd( new TFld("geomY",_("Geometry:y"),TFld::Real,Attr::Generic,"","0","0;10000","","8") );
+	attrAdd( new TFld("geomW",_("Geometry:width"),TFld::Real,Attr::Generic,"","100","0;10000","","9") );
+	attrAdd( new TFld("geomH",_("Geometry:height"),TFld::Real,Attr::Generic,"","100","0;10000","","10") );
+	attrAdd( new TFld("geomXsc",_("Geometry:x scale"),TFld::Real,Attr::Generic,"","1","0.1;100","","13") );
+	attrAdd( new TFld("geomYsc",_("Geometry:y scale"),TFld::Real,Attr::Generic,"","1","0.1;100","","14") );
+	attrAdd( new TFld("geomZ",_("Geometry:z"),TFld::Integer,Attr::Generic,"","0","0;1000000","","11") );
+	attrAdd( new TFld("geomMargin",_("Geometry:margin"),TFld::Integer,Attr::Generic,"","0","0;1000","","12") );
 	attrAdd( new TFld("evProc",_("Events process"),TFld::String,TFld::FullText,"200") );
     }
 
@@ -206,10 +206,11 @@ void Widget::setEnable( bool val )
 
     if( val )
     {
-	if( parentNm().size() && parentNm() != "root" )
+	if( parentNm() != "root" )
 	{
 	    try
 	    {
+		if( TSYS::strEmpty(parentNm()) ) throw TError(nodePath().c_str(),"%s",_("Empty parent!"));
 		if( parentNm() == ".." ) mParent=AutoHD<TCntrNode>(nodePrev());
 		else mParent=mod->nodeAt(parentNm());
 		//- Check for enable parent widget and enable if not -
@@ -481,20 +482,24 @@ bool Widget::cntrCmdServ( XMLNode *opt )
 	cntrCmdServ(opt->setAttr("path","/serv/attr"));
 	opt->setAttr("path",a_path);
 	//>> Child widgets process
-	AutoHD<Widget> iwdg;
-	vector<string>	lst;
-	if( isLink() )	parentNoLink().at().wdgList(lst); else wdgList(lst);
-	for( unsigned i_f=0; i_f < lst.size(); i_f++ )
+	if( enable() )
 	{
-	    if( !isLink() ) iwdg = wdgAt(lst[i_f]);
-	    else
+	    AutoHD<Widget> iwdg;
+	    vector<string>	lst;
+	    if( isLink() )
 	    {
-		iwdg = parentNoLink().at().wdgAt(lst[i_f]);
+		parentNoLink().at().wdgList(lst);
 		opt->setAttr("lnkPath",parentNoLink().at().path());
 	    }
-	    XMLNode *wn = opt->childAdd("get")->setAttr("path",a_path);
-	    iwdg.at().cntrCmdServ(wn);
-	    wn->setName("w")->attrDel("path")->attrDel("rez")->setAttr("id",lst[i_f]);
+	    else wdgList(lst);
+	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
+	    {
+		if( !isLink() ) iwdg = wdgAt(lst[i_f]);
+		else iwdg = parentNoLink().at().wdgAt(lst[i_f]);
+		XMLNode *wn = opt->childAdd("get")->setAttr("path",a_path);
+		iwdg.at().cntrCmdServ(wn);
+		wn->setName("w")->attrDel("path")->attrDel("rez")->setAttr("id",lst[i_f]);
+	    }
 	}
     }
     else return false;
@@ -1436,6 +1441,7 @@ void Attr::setR( double val, bool strongPrev, bool sys )
 	    if( !strongPrev && m_val.r_val == val )	break;
 	    double t_val = m_val.r_val;
 	    m_val.r_val = val;
+
 	    if( !sys && !owner()->attrChange(*this,&t_val) )
 		m_val.r_val = t_val;
 	    else

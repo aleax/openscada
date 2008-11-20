@@ -854,6 +854,9 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 	    aBr->setAttr("path",id()+"/%2fserv%2fattrBr");
 	    cntrIfCmd(*aBr);
 	    reqBrCr = true;
+#if OSC_DEBUG >= 3
+	    mess_debug("VCA DEBUG",_("Request to VCA engine '%s' time %f ms."),id().c_str(),1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk()));
+#endif
 	}
 
 	setAllAttrLoad( true );

@@ -40,15 +40,16 @@ class Attr : public TCntrNode
 	//- Attribute flags -
 	enum GlobalAttrFlgs
 	{
-	    Active	= 0x0100,	//Active attribute for primitives process
-	    Image	= 0x0200,	//Store image link to DB or to file
-	    DataTime	= 0x0200,	//Store data and time into integer attribute
-	    Color	= 0x0400,	//Store color
-	    Font	= 0x0800,	//Store font
-	    Address	= 0x1000,	//Store address to a parameter or an attribute
-	    IsUser	= 0x2000,	//User created element
-	    IsInher	= 0x4000,	//Inherit attribute
-	    Mutable	= 0x8000	//Mutable attribute, present depend from "Active" attribute value
+	    Active	= 0x00100,	//Active attribute for primitives process
+	    Image	= 0x00200,	//Store image link to DB or to file
+	    DataTime	= 0x00200,	//Store data and time into integer attribute
+	    Color	= 0x00400,	//Store color
+	    Font	= 0x00800,	//Store font
+	    Address	= 0x01000,	//Store address to a parameter or an attribute
+	    IsUser	= 0x02000,	//User created element
+	    IsInher	= 0x04000,	//Inherit attribute
+	    Mutable	= 0x08000,	//Mutable attribute, present depend from "Active" attribute value
+	    Generic	= 0x10000	//Generic atributes' flag. This atributes loaded independent from enabled state
 	};
 
 	//- Link types -

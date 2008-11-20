@@ -129,7 +129,7 @@ class TSocketIn: public TTransportIn
 
 	//- Status atributes -
 	float		trIn, trOut;		// Traffic in and out counter
-	int		connNumb;		// Connections number
+	int		connNumb, clsConnByLim;	// Connections number
 };
 
 //************************************************

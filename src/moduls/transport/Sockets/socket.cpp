@@ -186,7 +186,8 @@ string TSocketIn::getStatus( )
     string rez = TTransportIn::getStatus( );
 
     if( startStat() )
-        rez += TSYS::strMess(_("Connections %d, opened %d. Traffic in %.4g kb, out %.4g kb."),connNumb,cl_id.size(),trIn,trOut);
+	rez += TSYS::strMess(_("Connections %d, opened %d. Traffic in %.4g kb, out %.4g kb. Closed connections by limit %d."),
+	connNumb,cl_id.size(),trIn,trOut,clsConnByLim);
 
     return rez;
 }
@@ -199,7 +200,7 @@ void TSocketIn::start()
 
     //- Status clear -
     trIn = trOut = 0;
-    connNumb = 0;
+    connNumb = clsConnByLim = 0;
 
     //- Socket init -
     string s_type = TSYS::strSepParse(addr(),0,':');
@@ -308,7 +309,7 @@ void TSocketIn::stop()
 
     //- Status clear -
     trIn = trOut = 0;
-    connNumb = 0;
+    connNumb = clsConnByLim = 0;
 
     endrun = true;
     if( TSYS::eventWait( run_st, false, nodePath()+"close",5) )
@@ -364,6 +365,7 @@ void *TSocketIn::Task(void *sock_in)
 	    {
 		if( sock->maxFork() <= (int)sock->cl_id.size() )
 		{
+		    sock->clsConnByLim++;
 		    close(sock_fd_CL);
 		    continue;
 		}
@@ -379,6 +381,7 @@ void *TSocketIn::Task(void *sock_in)
 	    {
 		if( sock->maxFork() <= (int)sock->cl_id.size() )
 		{
+		    sock->clsConnByLim++;
 		    close(sock_fd_CL);
 		    continue;
 		}
@@ -474,6 +477,15 @@ void *TSocketIn::ClTask( void *s_inf )
 	    r_len = write(s.cSock,answ.c_str(),answ.size()); s.s->trOut += (float)r_len/1024;
 	}
     }while( !s.s->endrun_cl && (s.s->mode || !prot_in.freeStat()) );
+
+    //> Close protocol on broken connection
+    if( !prot_in.freeStat() )
+    {
+	string n_pr = prot_in.at().name();
+	prot_in.free();
+	AutoHD<TProtocol> proto = SYS->protocol().at().modAt(s.s->protocol());
+	if( proto.at().openStat(n_pr) ) proto.at().close(n_pr);
+    }
 
     s.s->clientUnreg( pthread_self( ) );
 

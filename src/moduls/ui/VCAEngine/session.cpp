@@ -1476,21 +1476,24 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	}
 	
 	//>> Child widgets process
-	vector<string>	lst;
-	wdgList(lst);
-
-	for( unsigned i_f=0; i_f < lst.size(); i_f++ )
+	if( enable() )
 	{
-	    AutoHD<SessWdg> iwdg = wdgAt(lst[i_f]);
-	    XMLNode *wn = new XMLNode("get");
-	    wn->setAttr("path",a_path)->setAttr("user",opt->attr("user"))->setAttr("tm",TSYS::uint2str(tm));
-	    iwdg.at().cntrCmdServ(wn);
-	    if( wn->childSize() )
+	    vector<string>	lst;
+	    wdgList(lst);
+
+	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
 	    {
-		wn->setName("w")->attrDel("path")->attrDel("user")->attrDel("rez")->attrDel("tm")->setAttr("id",lst[i_f]);
-		opt->childAdd(wn);
+		AutoHD<SessWdg> iwdg = wdgAt(lst[i_f]);
+		XMLNode *wn = new XMLNode("get");
+		wn->setAttr("path",a_path)->setAttr("user",opt->attr("user"))->setAttr("tm",TSYS::uint2str(tm));
+		iwdg.at().cntrCmdServ(wn);
+		if( wn->childSize() )
+		{
+		    wn->setName("w")->attrDel("path")->attrDel("user")->attrDel("rez")->attrDel("tm")->setAttr("id",lst[i_f]);
+		    opt->childAdd(wn);
+		}
+		else delete wn;
 	    }
-	    else delete wn;
 	}
 
 	opt->setAttr("tm",TSYS::uint2str(ownerSess()->calcClk()));

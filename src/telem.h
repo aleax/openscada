@@ -153,8 +153,8 @@ class TElem
 	void fldDel( unsigned int id );
 	TFld &fldAt( unsigned int id );
 
-	void valAtt( TValElem *cnt ); 
-	void valDet( TValElem *cnt ); 
+	void valAtt( TValElem *cnt );
+	void valDet( TValElem *cnt );
 
     private:
 	//Attributes

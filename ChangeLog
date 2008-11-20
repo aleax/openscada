@@ -1,10 +1,21 @@
+2008-11-20 Roman
+- /Transport/Sockets: Closed input connections limit counter is added to transport's status line.
+- FIX:/Transport/Sockets: Closing protocol after broken connection is added.
+- !:/UI/VCAEngine: Independent loading generic attributes is added. For storing of geometry broken and lost base widgets of inherits.
+- !:/UI/VCAEngine: Removed support of storing attributes old DB.
+- FIX:/UI/Vision: Disable message for not full link made connection. System crashed after it message dialog close.
+- /UI/Vision: Resize underlie selected widgets support is added.
+- FIX:/DAQ/Transporter: Default saving parameters is disabled.
+- !!:/DemoDB: Is updated. New mnemo to second signal object is added. Graphic's groups is updated and fixed.
+
+
 2008-11-18 Maxim
 - FIX:/UI/Vision: Different little fixes are made for primitive ElFigure.
 
 
 2008-11-17 Roman
 - /XML: Return (XMLNode *) to attribute delete (attrDel) function is added.
-- /Transport/SSL: Количество соединений закрытых из-за превышения лимита клиентских соединений добавлено в строку статуса.
+- /Transport/SSL: Number of closed connections by exceeding limit of client's connections is adding to status line.
 - FIX:/Transport/SSL: No error result process for BIO_should_retry() is added.
 - FIX:/Transport/SSL: Client connections' registration is fixed for protocol's objects' name fix.
 - FIX:/Transport/SSL: Closing protocol after broken connection is added.
@@ -27,9 +38,6 @@
 - FIX:/UI/Vision: Inundattion path is fixed for the primitive ElFigure.
 - /UI/Vision: Action for making static all the dynamic values is added for the primitive ElFigure.
 - /UI/Vision, /UI/WebVision: "," is changed to "|" between "x" and "y" coordinates for the primitive ElFigure.
-
-
-2008-11-17 Maxim
 - FIX:/UI/WebVision: Filling by the image for the primitive ElFigure is fixed.
 
 

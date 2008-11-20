@@ -449,6 +449,11 @@ void TMdPrm::load_( )
     }
 }
 
+void TMdPrm::save_( )
+{
+
+}
+
 void TMdPrm::update( )
 {
     string scntr;
