@@ -483,7 +483,7 @@ string Engine::callSynth( const string &itxt )
 void Engine::cntrCmdProc( XMLNode *opt )
 {
     string a_path = opt->attr("path");
-    //- Service commands process -
+    //> Service commands process
     if( a_path == "/serv/sess" )	//Session operation
     {
 	if( ctrChkNode(opt,"list",RWRWRW,"root","root",SEQ_RD) ) //List session for some project
@@ -504,16 +504,16 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    string sess = opt->attr("sess");
 	    string prj  = opt->attr("prj");
 
-	    //-- User permission check --
+	    //>> User permission check
 	    AutoHD<Project> wprj = (!sess.empty()) ? sesAt(sess).at().parent() : prjAt(prj);
 	    if( !SYS->security().at().access(opt->attr("user"),SEQ_RD,wprj.at().owner(),wprj.at().grp(),wprj.at().permit()) )
 		throw TError(nodePath().c_str(),_("Connection to session no permit for '%s'."),opt->attr("user").c_str());
-	    //-- Connect to present session --
+	    //>> Connect to present session
 	    if( !sess.empty() )	sesAt(sess).at().connect();
-	    //-- Create session --
+	    //>> Create session
 	    else if( !prj.empty() )
 	    {
-		//--- Prepare session name ---
+		//>>> Prepare session name
 		sess = prj;
 		for( int p_cnt = 0; sesPresent(sess); p_cnt++ )
 		    sess = prj+TSYS::int2str(p_cnt);
@@ -530,6 +530,54 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    sesAt(sess).at().disconnect();
 	    if( sesAt(sess).at().connects( ) == 0 && !sesAt(sess).at().backgrnd( ) )
 		sesDel(sess);
+	}
+	return;
+    }
+    else if( a_path == "/serv/wlbBr" )
+    {
+	//>> Widgets libraries
+	vector<string> ls;
+	wlbList(ls);
+	for( int i_wlb = 0; i_wlb < ls.size(); i_wlb++ )
+	{
+	    AutoHD<WidgetLib> wlb = wlbAt(ls[i_wlb]);
+	    XMLNode *wlbN = opt->childAdd("wlb")->setAttr("id",ls[i_wlb])->setText(wlb.at().name());
+	    wlbN->childAdd("ico")->setText(wlb.at().ico());
+
+	    //>> Widgets
+	    vector<string> wls;
+	    wlb.at().list(wls);
+	    for( int i_w = 0; i_w < wls.size(); i_w++ )
+	    {
+		AutoHD<LWidget> w = wlb.at().at(wls[i_w]);
+		XMLNode *wN = opt->childAdd("w")->setAttr("id",wls[i_w])->setText(w.at().name());
+		wN->childAdd("ico")->setText(w.at().ico());
+
+		//>> Child widgets
+		vector<string> cwls;
+		w.at().wdgList(cwls);
+		for( int i_c = 0; i_c < cwls.size(); i_c++ )
+		{
+		    AutoHD<CWidget> cw = w.at().wdgAt(cwls[i_c]);
+		    opt->childAdd("cw")->setAttr("id",cwls[i_c])->setText(cw.at().name())->childAdd("ico")->setText(cw.at().ico());;
+		}
+	    }
+	}
+	return;
+    }
+    else if( a_path == "/serv/prjBr" )
+    {
+	//>> Projects
+	vector<string> ls;
+	prjList(ls);
+	for( int i_prj = 0; i_prj < ls.size(); i_prj++ )
+	{
+	    AutoHD<Project> prj = prjAt(ls[i_prj]);
+	    XMLNode *prjN = opt->childAdd("prj")->setAttr("id",ls[i_prj])->setText(prj.at().name());
+	    prjN->childAdd("ico")->setText(prj.at().ico());
+
+	    //>> Pages process
+	    //????
 	}
 	return;
     }

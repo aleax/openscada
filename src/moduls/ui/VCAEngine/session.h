@@ -88,6 +88,9 @@ class Session : public TCntrNode
 	int  alarmStat( );						//Alarm status
 	void alarmQuittance( const string &wpath, ui8 quit_tmpl );	//Alarm quittance send
 
+	//Attributes
+	AutoHD<TSecurity> sec;
+
     protected:
 	//Methods
 	string nodeName( )	{ return mId; }

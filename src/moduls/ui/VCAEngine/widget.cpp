@@ -479,8 +479,19 @@ bool Widget::cntrCmdServ( XMLNode *opt )
     else if( a_path == "/serv/attrBr" && ctrChkNode(opt,"get",R_R_R_,"root","root",SEQ_RD) )	//Get attributes all updated elements' of the branch
     {
 	//>> Self attributes put
-	cntrCmdServ(opt->setAttr("path","/serv/attr"));
-	opt->setAttr("path",a_path);
+	opt->childAdd("el")->setAttr("id","root")->setAttr("p","-4")->setText(rootId());
+
+	vector<string> ls;
+	attrList(ls);
+	AutoHD<Attr> attr;
+	for( int i_l = 0; i_l < ls.size(); i_l++ )
+	{
+	    attr = attrAt(ls[i_l]);
+	    if( attr.at().flgGlob()&Attr::IsUser )	continue;
+	    opt->childAdd("el")->setAttr("id",ls[i_l].c_str())->
+			     setAttr("p",attr.at().fld().reserve())->
+			     setText(attr.at().getS());
+	}
 	//>> Child widgets process
 	if( enable() )
 	{

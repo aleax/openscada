@@ -120,14 +120,14 @@ char TSecurity::access( const string &user, char mode, const string &owner, cons
 {
     char rez = 0;
 
-    //- Check owner permision -
+    //> Check owner permision
     if( user == "root" || user == owner )
 	rez = ((access&0700)>>6)&mode;
-    //- Check other permision -
+    //> Check other permision
     if( rez == mode )	return rez;
     rez|=(access&07)&mode;
     if( rez == mode )	return rez;
-    //- Check groupe permision -
+    //> Check groupe permision
     if( grpAt(group).at().user(user) || grpAt("root").at().user(user) )
 	rez|=((access&070)>>3)&mode;
 

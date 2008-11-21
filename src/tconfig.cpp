@@ -305,7 +305,7 @@ bool TCfg::getB( )
 
 void TCfg::setSEL( const string &val, bool forcView )
 {
-    if( !(m_fld->flg()&TFld::Selected) ) 
+    if( !(m_fld->flg()&TFld::Selected) )
 	throw TError("Cfg",_("Element type no select!"));
     switch( m_fld->type() )
     {

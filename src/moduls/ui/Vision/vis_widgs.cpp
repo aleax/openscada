@@ -762,7 +762,7 @@ WdgView *WdgView::newWdgItem( const string &iwid )
 
 bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 {
-    //- Send value to model -
+    //> Send value to model
     if( !attr.empty() )
     {
 	XMLNode req("set");
@@ -900,7 +900,7 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 
 	if( reqBrCr ) delete aBr;
     }
-    //- Going to children init -
+    //> Going to children init
     else
 	for( int i_c = 0; i_c < children().size(); i_c++ )
 	{
@@ -909,10 +909,10 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 		wdg->load((item==id())?"":item,false,(wLevel()>0)?isInit:false);
 	}
 
-    //- Init loaded data -
+    //> Init loaded data
     if( isInit && (item.empty() || item == id()) && wLevel()>0 )	attrSet("","load",-1);
 
-    //- Post load init for root widget -
+    //> Post load init for root widget
     if( wLevel() == 0 )
     {
 #if OSC_DEBUG >= 3

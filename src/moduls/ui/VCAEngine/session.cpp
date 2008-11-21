@@ -40,6 +40,7 @@ Session::Session( const string &iid, const string &iproj ) :
     mBackgrnd(false), mConnects(0)
 {
     mPage = grpAdd("pg_");
+    sec = SYS->security();
 }
 
 Session::~Session( )
@@ -1438,7 +1439,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	    {
 		opt->childAdd("el")->setAttr("id","root")->setAttr("p","-4")->setText(rootId());
 		opt->childAdd("el")->setAttr("id","perm")->setAttr("p","-3")->
-		    setText(TSYS::int2str(SYS->security().at().access(opt->attr("user"),SEQ_RD|SEQ_WR,owner(),grp(),permit())) );
+		    setText(TSYS::int2str(ownerSess()->sec.at().access(opt->attr("user"),SEQ_RD|SEQ_WR,owner(),grp(),permit())) );
 	    }
 	    if( !tm || m_mdfClc >= tm )
 	    {
@@ -1452,7 +1453,6 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 					     setText(attr.at().getS());
 		}
 	    }
-	    opt->setAttr("tm",TSYS::uint2str(ownerSess()->calcClk( )));
 	}
 	else if( ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEQ_WR) )	//Set values
 	    for( int i_ch = 0; i_ch < opt->childSize(); i_ch++ )
@@ -1464,15 +1464,27 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
     }
     else if( a_path == "/serv/attrBr" && ctrChkNode(opt,"get",R_R_R_,"root","UI",SEQ_RD) )	//Get attributes all updated elements' of the branch
     {
-	if( !SYS->security().at().access(opt->attr("user"),SEQ_RD,owner(),grp(),permit()) ) return true;
-
 	unsigned tm = strtoul(opt->attr("tm").c_str(),NULL,10);
+	int perm = ownerSess()->sec.at().access(opt->attr("user"),(tm?SEQ_RD:SEQ_RD|SEQ_WR),owner(),grp(),permit());
+	if( !(perm&SEQ_RD) ) return true;
 
 	//>> Self attributes put
 	if( !tm || m_mdfClc >= tm )
 	{
-	    cntrCmdServ(opt->setAttr("path","/serv/attr"));
-	    opt->setAttr("path",a_path);
+	    if( !tm )
+	    {
+		opt->childAdd("el")->setAttr("id","root")->setAttr("p","-4")->setText(rootId());
+		opt->childAdd("el")->setAttr("id","perm")->setAttr("p","-3")->setText(TSYS::int2str(perm));
+	    }
+	    AutoHD<Attr> attr;
+	    for( int i_l = 0; i_l < m_attrUILs.size(); i_l++ )
+	    {
+		attr = attrAt(m_attrUILs[i_l]);
+		if( attr.at().modif() >= tm && atoi(attr.at().fld().reserve().c_str()) )
+		    opt->childAdd("el")->setAttr("id",m_attrUILs[i_l].c_str())->
+				     setAttr("p",attr.at().fld().reserve())->
+				     setText(attr.at().getS());
+	    }
 	}
 	
 	//>> Child widgets process
@@ -1485,7 +1497,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	    {
 		AutoHD<SessWdg> iwdg = wdgAt(lst[i_f]);
 		XMLNode *wn = new XMLNode("get");
-		wn->setAttr("path",a_path)->setAttr("user",opt->attr("user"))->setAttr("tm",TSYS::uint2str(tm));
+		wn->setAttr("path",a_path)->setAttr("user",opt->attr("user"))->setAttr("tm",opt->attr("tm"));
 		iwdg.at().cntrCmdServ(wn);
 		if( wn->childSize() )
 		{
@@ -1495,8 +1507,6 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 		else delete wn;
 	    }
 	}
-
-	opt->setAttr("tm",TSYS::uint2str(ownerSess()->calcClk()));
     }
     else return Widget::cntrCmdServ(opt);
 
