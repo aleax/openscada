@@ -949,7 +949,7 @@ void WdgView::orderUpdate( )
     {
 	WdgView *cw = qobject_cast<WdgView*>(ols[i_c]);
 	if( cw ) arr.push_back(pair<int,QObject*>(cw->z(),cw));
-	else arr.push_back(pair<int,QObject*>(0,ols[i_c]));
+	else arr.push_back(pair<int,QObject*>(100000,ols[i_c]));
     }
     make_heap(arr.begin(),arr.end());
     sort_heap(arr.begin(),arr.end());
