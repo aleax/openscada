@@ -771,6 +771,9 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 	cntrIfCmd(req);
     }
     bool up = false;
+
+//    if( shape && (shape->id() == "ElFigure" || shape->id() == "Text") && uiPrmPos == 11 ) return true;
+
     switch( uiPrmPos )
     {
 	case -4:
@@ -938,19 +941,20 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 
 void WdgView::orderUpdate( )
 {
-    WdgView *lw = NULL;
-    for( int i_c = 0; i_c < children().size(); i_c++ )
+    QObjectList &ols = d_ptr->children;
+
+    vector< pair<int,QObject*> > arr;
+    arr.reserve(children().size());
+    for( int i_c = 0; i_c < ols.size(); i_c++ )
     {
-	WdgView *cw = qobject_cast<WdgView*>(children().at(i_c));
-	if( !cw ) continue;
-	if( lw && (cw->z() < lw->z()) )
-	{
-	    cw->stackUnder(lw);
-	    i_c = -1;
-	    lw = NULL;
-	}
-	else lw = cw;
+	WdgView *cw = qobject_cast<WdgView*>(ols[i_c]);
+	if( cw ) arr.push_back(pair<int,QObject*>(cw->z(),cw));
+	else arr.push_back(pair<int,QObject*>(0,ols[i_c]));
     }
+    make_heap(arr.begin(),arr.end());
+    sort_heap(arr.begin(),arr.end());
+    for( int i_c = 0; i_c < ols.size(); i_c++ )
+	if( i_c < arr.size() ) ols[i_c] = arr[i_c].second;
 }
 
 bool WdgView::event( QEvent *event )

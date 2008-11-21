@@ -181,23 +181,9 @@ RunWdgView *RunWdgView::findOpenWidget( const string &iwdg )
 
 void RunWdgView::orderUpdate( )
 {
-    //- Same order of included widgets is update -
-    WdgView *lw = NULL;
-    for( int i_c = 0; i_c < children().size(); i_c++ )
-    {
-	WdgView *cw = qobject_cast<RunWdgView*>(children().at(i_c));
-	if( !cw || qobject_cast<RunPageView*>(cw) ) continue;
-	//- Change order -
-	if( lw && (cw->z() < lw->z()) )
-	{
-	    cw->stackUnder(lw);
-	    i_c = -1;
-	    lw = NULL;
-	}
-	else lw = cw;
-    }
+    WdgView::orderUpdate( );
 
-    //- Update tab order -
+    //> Update tab order
     RunWdgView *prev_aw = NULL;
     for( int i_c = 0; i_c < children().size(); i_c++ )
     {
