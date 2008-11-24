@@ -49,7 +49,7 @@ using namespace VISION;
 //*************************************************
 //* Id and name input dialog                      *
 //*************************************************
-InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess, 
+InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess,
 	const QString &ndlg, bool with_id, bool with_nm ) :
 		QDialog(parent), m_id(NULL), m_name(NULL)
 {
@@ -148,6 +148,11 @@ void InputDlg::setName(const QString &val)
 void InputDlg::setMess( const QString &val )
 {
     inp_lab->setText( val );
+}
+
+void InputDlg::setIdLen( int len )
+{
+    if( m_id )	m_id->setMaxLength(len);
 }
 
 //*************************************************

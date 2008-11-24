@@ -125,7 +125,7 @@ echo "OpenSCADA values archive dir" > %buildroot/var/spool/openscada/ARCHIVES/VA
 %_bindir/openscada_start
 %_desktopdir/openscada.desktop
 %_iconsdir/openscada.png
-%_libdir/*.so*
+%_libdir/*.so
 %_libdir/openscada/*.so
 %_datadir/locale/*/LC_MESSAGES/*
 /var/spool/openscada/DATA/.info
@@ -140,7 +140,7 @@ echo "OpenSCADA values archive dir" > %buildroot/var/spool/openscada/ARCHIVES/VA
 
 %files devel
 %defattr(-,root,root)
-%_libdir/*.*
+%_libdir/*.so.*
 %_includedir/openscada/*
 
 %files demo

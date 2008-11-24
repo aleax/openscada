@@ -43,7 +43,6 @@ typedef unsigned long long ui64;
 #define STR_BUF_LEN	3000	// Len of string buffers (no string class)
 #define STD_WAIT_DELAY	100	// Standart wait dalay (ms)
 #define STD_WAIT_TM	10	// Standart timeouts length (s)
-#define DEF_ID_LEN	63	// Default DB identifier length
 
 #include <math.h>
 #include <stdio.h>

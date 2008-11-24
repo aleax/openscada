@@ -257,12 +257,12 @@ void TSecurity::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TSubSYS::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/usr_",_("User"),0664,"root",subId().c_str());
-	ctrMkNode("grp",opt,-1,"/br/grp_",_("Group"),0664,"root",subId().c_str());
+	ctrMkNode("grp",opt,-1,"/br/usr_",_("User"),0664,"root",subId().c_str(),1,"idSz","20");
+	ctrMkNode("grp",opt,-1,"/br/grp_",_("Group"),0664,"root",subId().c_str(),1,"idSz","20");
 	if(ctrMkNode("area",opt,1,"/usgr",_("Users and groups")))
 	{
-	    ctrMkNode("list",opt,-1,"/usgr/users",_("Users"),0664,"root",subId().c_str(),3,"tp","br","s_com","add,del","br_pref","usr_");
-	    ctrMkNode("list",opt,-1,"/usgr/grps",_("Groups"),0664,"root",subId().c_str(),3,"tp","br","s_com","add,del","br_pref","grp_");
+	    ctrMkNode("list",opt,-1,"/usgr/users",_("Users"),0664,"root",subId().c_str(),4,"tp","br","s_com","add,del","br_pref","usr_","idSz","20");
+	    ctrMkNode("list",opt,-1,"/usgr/grps",_("Groups"),0664,"root",subId().c_str(),4,"tp","br","s_com","add,del","br_pref","grp_","idSz","20");
 	}
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root",subId().c_str(),3,"tp","str","cols","90","rows","10");
 
@@ -378,7 +378,7 @@ void TUser::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,-1,"/prm",_("User")))
 	{
 	    ctrMkNode("fld",opt,-1,"/prm/name",cfg("NAME").fld().descr(),0444,"root","root",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/prm/dscr",cfg("DESCR").fld().descr(),0664,name().c_str(),"Security",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/prm/dscr",cfg("DESCR").fld().descr(),0664,name().c_str(),"Security",2,"tp","str","len","50");
 	    ctrMkNode("img",opt,-1,"/prm/pct",cfg("PICTURE").fld().descr(),0664,name().c_str(),"Security",1,"v_sz","100");
 	    ctrMkNode("fld",opt,-1,"/prm/db",_("User DB"),0664,"root",SYS->db().at().subId().c_str(),4,"tp","str","dest","select","select","/db/list",
 		"help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
@@ -527,7 +527,7 @@ void TGroup::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Group ")+name(),0664,"root",owner().subId().c_str());
 	ctrMkNode("area",opt,-1,"/prm",_("Group"));
 	ctrMkNode("fld",opt,-1,"/prm/name",cfg("NAME").fld().descr(),0444,"root",owner().subId().c_str(),1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/prm/dscr",cfg("DESCR").fld().descr(),0664,"root",owner().subId().c_str(),1,"tp","str");
+	ctrMkNode("fld",opt,-1,"/prm/dscr",cfg("DESCR").fld().descr(),0664,"root",owner().subId().c_str(),2,"tp","str","len","50");
 	ctrMkNode("fld",opt,-1,"/prm/db",_("User group DB"),0664,"root",SYS->db().at().subId().c_str(),4,"tp","str","dest","select","select","/db/list",
 	    "help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
 	ctrMkNode("list",opt,-1,"/prm/users",cfg("USERS").fld().descr(),0664,"root",owner().subId().c_str(),2,"tp","str","s_com","add,del");

@@ -494,12 +494,12 @@ void TTipBD::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TModule::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/db_",_("DB"),0664,"root","BD",1,"idm","1");
+	ctrMkNode("grp",opt,-1,"/br/db_",_("DB"),0664,"root","BD",2,"idm","1","idSz","20");
 	if(ctrMkNode("area",opt,0,"/db",_("DB"),0444))
 	{
 	    ctrMkNode("fld",opt,-1,"/db/ful_db_del",_("Full DB delete"),0660,"root","BD",2,
 		"tp","bool","help",_("Select for full deletion DB on DB close. Else DB will be simple closed."));
-	    ctrMkNode("list",opt,-1,"/db/odb",_("DB"),0664,"root","BD",4,"tp","br","idm","1","s_com","add,del","br_pref","db_");
+	    ctrMkNode("list",opt,-1,"/db/odb",_("DB"),0664,"root","BD",5,"tp","br","idm","1","s_com","add,del","br_pref","db_","idSz","20");
 	}
 	return;
     }
@@ -659,7 +659,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Config")))
 	    {
 		ctrMkNode("fld",opt,-1,"/prm/cfg/id",cfg("ID").fld().descr(),0444,"root","BD",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/nm",cfg("NAME").fld().descr(),0664,"root","BD",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/nm",cfg("NAME").fld().descr(),0664,"root","BD",2,"tp","str","len","50");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCR").fld().descr(),0664,"root","BD",3,"tp","str","cols","50","rows","3");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","BD",1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/codep",cfg("CODEPAGE").fld().descr(),0664,"root","BD",2,

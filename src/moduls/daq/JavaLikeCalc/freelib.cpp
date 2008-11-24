@@ -159,8 +159,8 @@ void Lib::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Function's library: ")+id(),0664,"root","root");
-	if(ctrMkNode("branches",opt,-1,"/br","",0444))	
-	    ctrMkNode("grp",opt,-1,"/br/fnc_",_("Function"),0664,"root","root",1,"idm","1");
+	if(ctrMkNode("branches",opt,-1,"/br","",0444))
+	    ctrMkNode("grp",opt,-1,"/br/fnc_",_("Function"),0664,"root","root",2,"idm","1","idSz","20");
 	if(ctrMkNode("area",opt,-1,"/lib",_("Library")))
 	{
 	    if(ctrMkNode("area",opt,-1,"/lib/st",_("State")))
@@ -173,12 +173,12 @@ void Lib::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/lib/cfg",_("Config")))
 	    {
 		ctrMkNode("fld",opt,-1,"/lib/cfg/id",_("Id"),0444,"root","root",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/lib/cfg/name",_("Name"),DB().empty()?0444:0664,"root","root",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/lib/cfg/name",_("Name"),DB().empty()?0444:0664,"root","root",2,"tp","str","len","50");
 		ctrMkNode("fld",opt,-1,"/lib/cfg/descr",_("Description"),DB().empty()?0444:0664,"root","root",3,"tp","str","cols","50","rows","3");
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/func",_("Functions")))
-	    ctrMkNode("list",opt,-1,"/func/func",_("Functions"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","fnc_");
+	    ctrMkNode("list",opt,-1,"/func/func",_("Functions"),0664,"root","root",5,"tp","br","idm","1","s_com","add,del","br_pref","fnc_","idSz","20");
 	return;
     }
 

@@ -138,9 +138,9 @@ void TTipDAQ::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TModule::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/cntr_",_("Controller"),0664,"root","root",1,"idm","1");
+	ctrMkNode("grp",opt,-1,"/br/cntr_",_("Controller"),0664,"root","root",2,"idm","1","idSz","20");
 	if(ctrMkNode("area",opt,0,"/tctr",_("Controllers")))
-	    ctrMkNode("list",opt,-1,"/tctr/ctr",_("Controllers"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","cntr_");
+	    ctrMkNode("list",opt,-1,"/tctr/ctr",_("Controllers"),0664,"root","root",5,"tp","br","idm","1","s_com","add,del","br_pref","cntr_","idSz","20");
 	return;
     }
     //- Process command to page -

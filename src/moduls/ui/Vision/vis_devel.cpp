@@ -555,8 +555,6 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     //resize( 1000, 800 );
     setWindowState(Qt::WindowMaximized);
 
-    connect(this, SIGNAL(modifiedItem(const string&)), this, SLOT(updateLibToolbar(const string&)));
-    updateLibToolbar();
     wdgTree->updateTree();
     prjTree->updateTree();
 
@@ -705,151 +703,6 @@ void VisDevelop::enterWhatsThis()
     QWhatsThis::enterWhatsThisMode();
 }
 
-void VisDevelop::updateLibToolbar( const string &vca_it )
-{
-    bool is_create, root_allow;
-    int i_lb, i_t, i_m, i_a, i_w;
-    vector<string> lbls;
-    QImage ico_t;
-    string t_el, simg;
-
-    XMLNode req("get");
-
-    //- Get elements number into VCA item -
-    int vca_lev = 0;
-    for( int off = 0; !(t_el=TSYS::pathLev(vca_it,0,true,&off)).empty(); )  vca_lev++;
-    if( vca_lev == 3 )	return;
-    string upd_lb   = (vca_lev>=1) ? TSYS::pathLev(vca_it,0).substr(4) : "";
-    string upd_wdg  = (vca_lev>=2) ? TSYS::pathLev(vca_it,1).substr(4) : "";
-
-    //- Update library toolbars list -
-    XMLNode lb_req("get");    
-    lb_req.setAttr("path","/%2fprm%2fcfg%2fwlb");
-    if( !cntrIfCmd(lb_req) )
-	for( int i_ch = 0; i_ch < lb_req.childSize(); i_ch++ )
-	    lbls.push_back(lb_req.childGet(i_ch)->attr("id"));
-    //-- Delete toolbars --
-    for(i_t = 0; i_t < lb_toolbar.size(); i_t++)
-    {
-	for( i_lb = 0; i_lb < lbls.size(); i_lb++ )
-	    if( lb_toolbar[i_t]->objectName() == lbls[i_lb].c_str() )
-		break;
-	if( i_lb >= lbls.size() )
-	{
-	    delete lb_toolbar[i_t];
-	    lb_toolbar.erase(lb_toolbar.begin()+i_t);
-	}
-    }
-
-    //-- Delete menus --
-    for(i_m = 0; i_m < lb_menu.size(); i_m++)
-    {
-	for( i_lb = 0; i_lb < lbls.size(); i_lb++ )
-	    if( lb_menu[i_m]->objectName() == lbls[i_lb].c_str() )
-		break;
-	if( i_lb >= lbls.size() )
-	{
-	    delete lb_menu[i_m];
-	    lb_menu.erase(lb_menu.begin()+i_m);
-	}
-    }
-
-    //- Add libraries and check widget's actions at present -
-    for( i_lb = 0; i_lb < lbls.size(); i_lb++ )
-    {
-	if( !upd_lb.empty() && upd_lb != lbls[i_lb] ) continue;
-	is_create = false;
-	root_allow = false;
-	//-- Add toolbars and menus --
-	for(i_t = 0; i_t < lb_toolbar.size(); i_t++)
-	    if( lb_toolbar[i_t]->objectName() == lbls[i_lb].c_str() )
-		break;
-	if( i_t == lb_toolbar.size() )
-	{
-	    lb_toolbar.push_back( new QToolBar(QString(_("Library: %1")).arg(lbls[i_lb].c_str()),this) );
-	    lb_toolbar[i_t]->setObjectName(lbls[i_lb].c_str());
-	    addToolBar(lb_toolbar[i_t]);
-	    mn_view->addAction(lb_toolbar[i_t]->toggleViewAction());
-	    is_create = true;
-	}
-	for(i_m = 0; i_m < lb_menu.size(); i_m++)
-	    if( lb_menu[i_m]->objectName() == lbls[i_lb].c_str() )
-		break;
-	if( i_m == lb_menu.size() )
-	{
-	    lb_menu.push_back( new QMenu(QString(_("Library: %1")).arg(lbls[i_lb].c_str())) );
-	    lb_menu[i_m]->setObjectName(lbls[i_lb].c_str());
-	    mn_widg->addMenu(lb_menu[i_m]);
-	}
-	//--- Update menu icon ---
-	req.clear()->setAttr("path","/wlb_"+lbls[i_lb]+"/%2fico");
-	if( !cntrIfCmd(req) )
-	{
-	    simg = TSYS::strDecode(req.text(),TSYS::base64);
-	    if( ico_t.loadFromData((const uchar*)simg.c_str(),simg.size()) )
-		lb_menu[i_m]->setIcon(QPixmap::fromImage(ico_t));
-	}
-	//-- Get widget's actions list --
-	vector<string> wdgls;
-	lb_req.clear()->setAttr("path","/wlb_"+lbls[i_lb]+"/%2fwdg%2fwdg");
-	if( !cntrIfCmd(lb_req) )
-	    for( int i_ch = 0; i_ch < lb_req.childSize(); i_ch++ )
-		wdgls.push_back(lb_req.childGet(i_ch)->attr("id"));
-	
-	QList<QAction *> use_act = lb_toolbar[i_t]->actions();
-	//-- Delete widget's actions --
-	for(i_a = 0; i_a < use_act.size(); i_a++)
-	{
-	    for(i_w = 0; i_w < wdgls.size(); i_w++)
-		if( use_act[i_a]->objectName() == (string("/wlb_")+lbls[i_lb]+"/wdg_"+wdgls[i_w]).c_str() )
-		    break;
-	    if( i_w >= wdgls.size() )	delete use_act[i_a];
-	}
-	//-- Add widget's actions --
-	use_act = lb_toolbar[i_t]->actions();
-	for(i_w = 0; i_w < wdgls.size(); i_w++)
-	{
-	    if( !upd_wdg.empty() && upd_wdg != wdgls[i_w] ) continue;
-	    QAction *cur_act;
-	    //--- Get parent name ---
-	    string wipath = "/wlb_"+lbls[i_lb]+"/wdg_"+wdgls[i_w];
-	    req.clear()->setAttr("path",wipath+"/%2fwdg%2fst%2fparent");
-	    if( !cntrIfCmd(req) )
-		if(!root_allow && req.text() == "root") root_allow = true;
-	    //--- Delete action ---
-	    for(i_a = 0; i_a < use_act.size(); i_a++)
-		if( use_act[i_a]->objectName() == wipath.c_str() )
-		    break;
-	    if( i_a < use_act.size() )	cur_act = use_act[i_a];
-	    else
-	    {
-		//--- Create new action ---
-		cur_act = new QAction(lb_req.childGet(i_w)->text().c_str(),this);
-		//connect(cur_act, SIGNAL(activated()), this, SLOT(wdgAdd()));
-		cur_act->setObjectName(wipath.c_str());
-		cur_act->setToolTip(QString(_("Add widget based at '%1'")).arg(wipath.c_str()));
-		cur_act->setWhatsThis(QString(_("The button for add widget based at '%1'")).arg(wipath.c_str()));
-		cur_act->setStatusTip(QString(_("Press for add widget based at '%1'.")).arg(wipath.c_str()));
-		cur_act->setEnabled(false);
-		cur_act->setCheckable(true);
-		//--- Add action to toolbar and menu ---
-		actGrpWdgAdd->addAction(cur_act);
-		lb_toolbar[i_t]->addAction(cur_act);
-		lb_menu[i_m]->addAction(cur_act);
-	    }
-	    //--- Update action ---
-	    req.clear()->setAttr("path",wipath+"/%2fico");
-	    if( !cntrIfCmd(req) )
-	    {
-		simg = TSYS::strDecode(req.text(),TSYS::base64);
-		if( ico_t.loadFromData((const uchar*)simg.c_str(),simg.size()) )
-		    cur_act->setIcon(QPixmap::fromImage(ico_t));
-	    }
-	}
-	if(is_create) lb_toolbar[i_t]->setVisible(root_allow);
-    }
-}
-
 void VisDevelop::selectItem( const string &item, bool force )
 {
     if( winClose )	return;
@@ -866,11 +719,11 @@ void VisDevelop::applyWorkWdg( )
 
     modifyToolUpdate(work_wdg_new);
 
-    //Set/update attributes inspector
+    //> Set/update attributes inspector
     attrInsp->setWdg(work_wdg_new);
     lnkInsp->setWdg(work_wdg_new);
 
-    //Update actions
+    //> Update actions
     if( work_wdg == work_wdg_new )	return;
     work_wdg = work_wdg_new;
 
@@ -882,19 +735,19 @@ void VisDevelop::applyWorkWdg( )
     bool isProj = sel1.substr(0,4)=="prj_";
     bool isLib  = sel1.substr(0,4)=="wlb_";
 
-    //- Process main actions -
+    //> Process main actions
     actPrjRun->setEnabled(isProj);
 
-    //- Set visual item's actions -
+    //> Set visual item's actions
     actVisItAdd->setEnabled(isProj || (isLib&&sel3.empty()));
-    //-- Process add actions of visual items --
+    //>> Process add actions of visual items
     for( int i_a = 0; i_a < actGrpWdgAdd->actions().size(); i_a++ )
 	actGrpWdgAdd->actions().at(i_a)->setEnabled(isProj || (isLib&&sel3.empty()));
-    //- Process visual item actions -
+    //> Process visual item actions
     actVisItDel->setEnabled(isProj || isLib);
     actVisItProp->setEnabled(isProj || isLib);
     actVisItEdit->setEnabled((isProj || isLib) && sel2.size());
-    //- Edit actions update -
+    //> Edit actions update
     editToolUpdate( );
 }
 
@@ -1017,6 +870,7 @@ void VisDevelop::prjNew( )
 {
     InputDlg dlg(this,actPrjNew->icon(),
 	    _("Enter new project's identifier and name."),_("New project"),true,true);
+    dlg.setIdLen(30);
     if( dlg.exec() == QDialog::Accepted )
     {
 	XMLNode req("add");
@@ -1041,6 +895,7 @@ void VisDevelop::libNew( )
 {
     InputDlg dlg(this,actPrjNew->icon(),
 	    _("Enter new widget's library identifier and name."),_("New widget's library"),true,true);
+    dlg.setIdLen(30);
     if( dlg.exec() == QDialog::Accepted )
     {
 	XMLNode req("add");
@@ -1080,7 +935,7 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt, const string &i
     //- Make request id and name dialog -
     InputDlg dlg(this,cact->icon(),
 	    _("Enter new widget/page identifier and name."),_("Create widget/page"),true,true);
-
+    dlg.setIdLen(30);
     if( p_el_cnt > 1 && iWid.empty() )
     {
 	//-- New include item id generator --
@@ -1331,6 +1186,7 @@ void VisDevelop::visualItPaste( )
     QCheckBox *wInher = NULL;
 
     InputDlg dlg(this,actVisItPaste->icon(),"",_("Visual items move or copy"),true,true);
+    dlg.setIdLen(30);
     for( int w_off = 0; (copy_buf_el=TSYS::strSepParse(copy_buf.substr(1),0,';',&w_off)).size(); )
     {
 	string s_elp, d_elp, s_el, d_el, t_el, t1_el;

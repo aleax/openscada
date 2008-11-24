@@ -92,36 +92,36 @@ void TipContr::postEnable( int flag )
 {
     TModule::postEnable( flag );
 
-    //- Controller db structure -
-    fldAdd( new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30","system") );
-    fldAdd( new TFld("FUNC",_("Controller's function"),TFld::String,TFld::NoFlag,"20") );
+    //> Controller db structure
+    fldAdd( new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"60","system") );
+    fldAdd( new TFld("FUNC",_("Controller's function"),TFld::String,TFld::NoFlag,"40") );
     fldAdd( new TFld("PERIOD",_("Calc period (ms)"),TFld::Integer,TFld::NoFlag,"7","1000","0;1000000") );
     fldAdd( new TFld("PRIOR",_("Calc task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
     fldAdd( new TFld("ITER",_("Iteration number into calc period"),TFld::Integer,TFld::NoFlag,"2","1","0;99") );
 
-    //- Controller value db structure -
-    val_el.fldAdd( new TFld("ID",_("IO ID"),TFld::String,TCfg::Key,"10") );
-    val_el.fldAdd( new TFld("VAL",_("IO value"),TFld::String,TFld::NoFlag,"20") );
+    //> Controller value db structure
+    val_el.fldAdd( new TFld("ID",_("IO ID"),TFld::String,TCfg::Key,"20") );
+    val_el.fldAdd( new TFld("VAL",_("IO value"),TFld::String,TFld::NoFlag,"50") );
 
-    //- Add parameter types -
+    //> Add parameter types
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
     tpPrmAt(t_prm).fldAdd( new TFld("FLD",_("Data fields(Sep - ';')"),TFld::String,TCfg::NoVal,"50") );
 
-    //- Lib's db structure -
+    //> Lib's db structure
     lb_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
     lb_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
     lb_el.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::NoFlag,"300") );
     lb_el.fldAdd( new TFld("DB",_("Data base"),TFld::String,TFld::NoFlag,"30") );
 
-    //- Function's structure -
-    fnc_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"50") );
+    //> Function's structure
+    fnc_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
     fnc_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
     fnc_el.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::NoFlag,"300") );
     fnc_el.fldAdd( new TFld("MAXCALCTM",_("Maximum calc time"),TFld::Integer,TFld::NoFlag,"3","10","0;999") );
-    fnc_el.fldAdd( new TFld("FORMULA",_("Formula"),TFld::String,TFld::NoFlag,"1000") );
+    fnc_el.fldAdd( new TFld("FORMULA",_("Formula"),TFld::String,TFld::NoFlag,"10000") );
 
-    //- Function's IO structure -
-    fncio_el.fldAdd( new TFld("F_ID",_("Function ID"),TFld::String,TCfg::Key,"50") );
+    //> Function's IO structure
+    fncio_el.fldAdd( new TFld("F_ID",_("Function ID"),TFld::String,TCfg::Key,"20") );
     fncio_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
     fncio_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
     fncio_el.fldAdd( new TFld("TYPE",_("Type"),TFld::Integer,TFld::NoFlag,"1") );
@@ -130,7 +130,7 @@ void TipContr::postEnable( int flag )
     fncio_el.fldAdd( new TFld("HIDE",_("Hide"),TFld::Boolean,TFld::NoFlag,"1") );
     fncio_el.fldAdd( new TFld("POS",_("Position"),TFld::Integer,TFld::NoFlag,"3") );
 
-    //- Init named constant table -
+    //> Init named constant table
     double rvl;
     rvl = 3.14159265358l; mConst.push_back(NConst(TFld::Real,"pi",string((char*)&rvl,sizeof(rvl))));
     rvl = 2.71828182845l; mConst.push_back(NConst(TFld::Real,"e",string((char*)&rvl,sizeof(rvl))));
@@ -141,7 +141,7 @@ void TipContr::postEnable( int flag )
 
     mConst.push_back(NConst(TFld::String,"EVAL_STR",EVAL_STR));
 
-    //- Init buildin functions list -
+    //> Init buildin functions list
     mBFunc.push_back(BFunc("sin",Reg::FSin,1));
     mBFunc.push_back(BFunc("cos",Reg::FCos,1));
     mBFunc.push_back(BFunc("tan",Reg::FTan,1));
@@ -308,9 +308,9 @@ void TipContr::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TTipDAQ::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/lib_",_("Library"),0664,"root","root",1,"idm","1");
+	ctrMkNode("grp",opt,-1,"/br/lib_",_("Library"),0664,"root","root",2,"idm","1","idSz","20");
 	if(ctrMkNode("area",opt,1,"/libs",_("Functions' Libraries")))
-	    ctrMkNode("list",opt,-1,"/libs/lb",_("Libraries"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","lib_");
+	    ctrMkNode("list",opt,-1,"/libs/lb",_("Libraries"),0664,"root","root",5,"tp","br","idm","1","s_com","add,del","br_pref","lib_","idSz","20");
 	return;
     }
 

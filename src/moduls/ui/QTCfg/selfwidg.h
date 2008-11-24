@@ -152,7 +152,7 @@ class ImgView : public QWidget
 	//Attributes
 	QImage m_img;
 	int   h_sz, v_sz;
-    };
+};
 
 //************************************************
 //* InputDlg: Id and name input dialog           *
@@ -162,7 +162,7 @@ class InputDlg : public QDialog
     public:
 	//Methods
 	InputDlg( QWidget *parent, const QIcon &icon, const QString &mess,
-		const QString &ndlg = "QTCfg dialog", bool with_id = false, bool with_nm = true );
+		const QString &ndlg = "QTCfg dialog", int with_id = 0, int with_nm = 200 );
 
 	QString id( );
 	QString name( );
@@ -175,10 +175,35 @@ class InputDlg : public QDialog
 	//Attributes
 	QGridLayout	*ed_lay;
 
-    private:
+    protected:
 	//Attributes
-	QLabel		*inp_lab;
-	QLineEdit	*m_id, *m_name;
+	QLabel		*inpLab, *mIdLab, *mNameLab;
+	QLineEdit	*mId, *mName;
+};
+
+//*****************************************************
+//* ReqIdNameDlg: Request node identifier and/or name *
+//*****************************************************
+class ReqIdNameDlg : public InputDlg
+{
+    Q_OBJECT
+
+    public:
+	//Methods
+	ReqIdNameDlg( QWidget *parent, const QIcon &icon, const QString &mess, const QString &ndlg = "Node id and/or name select" );
+
+	string target( );
+
+	void setTargets( const vector<string> &tgs );
+
+    protected:
+	//Attributes
+	QLabel		*itTpLab;
+	QComboBox	*itTp;
+
+    private slots:
+	//Private slots
+	void selectItTp( int it );
 };
 
 //************************************************

@@ -144,16 +144,16 @@ void TipContr::postEnable( int flag )
     tpPrmAt(t_prm).fldAdd( new TFld("IO",_("Blocks' IOs"),TFld::String,TFld::FullText|TCfg::NoVal,"200") );
 
     //Blok's db structure
-    blk_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"10") );
-    blk_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"20") );
-    blk_el.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::NoFlag,"100") );
+    blk_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
+    blk_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
+    blk_el.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::NoFlag,"300") );
     blk_el.fldAdd( new TFld("FUNC",_("Function"),TFld::String,TFld::NoFlag,"75") );
     blk_el.fldAdd( new TFld("EN",_("To enable"),TFld::Boolean,TFld::NoFlag,"1","0") );
     blk_el.fldAdd( new TFld("PROC",_("To process"),TFld::Boolean,TFld::NoFlag,"1","0") );
 
     //IO blok's db structure
-    blkio_el.fldAdd( new TFld("BLK_ID",_("Blok's ID"),TFld::String,TCfg::Key,"10") );
-    blkio_el.fldAdd( new TFld("ID",_("IO ID"),TFld::String,TCfg::Key,"10") );
+    blkio_el.fldAdd( new TFld("BLK_ID",_("Blok's ID"),TFld::String,TCfg::Key,"20") );
+    blkio_el.fldAdd( new TFld("ID",_("IO ID"),TFld::String,TCfg::Key,"20") );
     blkio_el.fldAdd( new TFld("TLNK",_("Link's type"),TFld::Integer,TFld::NoFlag,"2") );
     blkio_el.fldAdd( new TFld("LNK",_("Link"),TFld::String,TFld::NoFlag,"50") );
     blkio_el.fldAdd( new TFld("VAL",_("Link's value"),TFld::String,TFld::NoFlag,"20") );
@@ -445,11 +445,11 @@ void Contr::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TController::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/blk_",_("Block"),0664,"root","root",1,"idm","1");
+	ctrMkNode("grp",opt,-1,"/br/blk_",_("Block"),0664,"root","root",2,"idm","1","idSz","20");
 	if(ctrMkNode("area",opt,-1,"/scheme",_("Blocks scheme")))
 	{
 	    ctrMkNode("fld",opt,-1,"/scheme/ctm",_("Calk time (usek)"),0444,"root","root",1,"tp","real");
-	    ctrMkNode("list",opt,-1,"/scheme/sch",_("Blocks"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","blk_");
+	    ctrMkNode("list",opt,-1,"/scheme/sch",_("Blocks"),0664,"root","root",5,"tp","br","idm","1","s_com","add,del","br_pref","blk_","idSz","20");
 	    ctrMkNode("fld",opt,-1,"/scheme/nmb",_("Number"),0444,"root","root",1,"tp","str");
 	}
 	return;

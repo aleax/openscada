@@ -325,7 +325,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Project: ")+id(),RWRWR_,"root","UI");
 	if(ico().size()) ctrMkNode("img",opt,-1,"/ico","",R_R_R_);
 	if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
-	    ctrMkNode("grp",opt,-1,"/br/pg_",_("Page"),RWRWR_,"root","UI",1,"idm","1");
+	    ctrMkNode("grp",opt,-1,"/br/pg_",_("Page"),RWRWR_,"root","UI",2,"idm","1","idSz","30");
 	if(ctrMkNode("area",opt,-1,"/obj",_("Project")))
 	{
 	    if(ctrMkNode("area",opt,-1,"/obj/st",_("State")))
@@ -355,7 +355,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/page",_("Pages")))
-	    ctrMkNode("list",opt,-1,"/page/page",_("Pages"),RWRWR_,"root","UI",4,"tp","br","idm","1","s_com","add,del","br_pref","pg_");
+	    ctrMkNode("list",opt,-1,"/page/page",_("Pages"),RWRWR_,"root","UI",5,"tp","br","idm","1","s_com","add,del","br_pref","pg_","idSz","30");
 	if(ctrMkNode("area",opt,-1,"/mime",_("Mime data")))
 	    if(ctrMkNode("table",opt,-1,"/mime/mime",_("Mime data"),RWRWR_,"root","UI",2,"s_com","add,del","key","id"))
 	    {
@@ -1106,9 +1106,9 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 	if( prjFlags()&(Page::Template|Page::Container) )
 	{
 	    if(ctrMkNode("area",opt,1,"/page",_("Pages")))
-		ctrMkNode("list",opt,-1,"/page/page",_("Pages"),RWRWR_,"root","UI",4,"tp","br","idm","1","s_com","add,del","br_pref","pg_");
+		ctrMkNode("list",opt,-1,"/page/page",_("Pages"),RWRWR_,"root","UI",5,"tp","br","idm","1","s_com","add,del","br_pref","pg_","idSz","30");
 	    if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
-		ctrMkNode("grp",opt,-1,"/br/pg_",_("Page"),RWRWR_,"root","UI",1,"idm","1");
+		ctrMkNode("grp",opt,-1,"/br/pg_",_("Page"),RWRWR_,"root","UI",2,"idm","1","idSz","30");
 	}
 	return true;
     }

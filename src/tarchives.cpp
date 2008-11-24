@@ -734,7 +734,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TSubSYS::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/va_",_("Value archive"),0664,"root",my_gr.c_str(),1,"idm","1");
+	ctrMkNode("grp",opt,-1,"/br/va_",_("Value archive"),0664,"root",my_gr.c_str(),2,"idm","1","idSz","20");
 	if(ctrMkNode("area",opt,1,"/m_arch",_("Messages archive"),0444,"root",my_gr.c_str()))
 	{
 	    ctrMkNode("fld",opt,-1,"/m_arch/max_am_req",_("Maximum requested messages"),0664,"root",my_gr.c_str(),1,"tp","dec");
@@ -752,7 +752,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 		    ctrMkNode("list",opt,-1,"/m_arch/view/mess/0",_("Time"),0440,"root",my_gr.c_str(),1,"tp","time");
 		    ctrMkNode("list",opt,-1,"/m_arch/view/mess/1",_("Category"),0440,"root",my_gr.c_str(),1,"tp","str");
 		    ctrMkNode("list",opt,-1,"/m_arch/view/mess/2",_("Level"),0440,"root",my_gr.c_str(),1,"tp","dec");
-		    ctrMkNode("list",opt,-1,"/m_arch/view/mess/3",_("Message"),0440,"root",my_gr.c_str(),1,"tp","str"); 
+		    ctrMkNode("list",opt,-1,"/m_arch/view/mess/3",_("Message"),0440,"root",my_gr.c_str(),1,"tp","str");
 		}
 	    }
 	}
@@ -760,7 +760,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	{
 	    ctrMkNode("fld",opt,-1,"/v_arch/per",_("Get data period (ms)"),0664,"root",my_gr.c_str(),1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/v_arch/prior",_("Get data task priority level"),0664,"root",my_gr.c_str(),1,"tp","dec");
-	    ctrMkNode("list",opt,-1,"/v_arch/archs",_("Value archives"),0664,"root",my_gr.c_str(),4,"tp","br","idm","1","s_com","add,del","br_pref","va_");
+	    ctrMkNode("list",opt,-1,"/v_arch/archs",_("Value archives"),0664,"root",my_gr.c_str(),5,"tp","br","idm","1","s_com","add,del","br_pref","va_","idSz","20");
 	}
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root",my_gr.c_str(),3,"tp","str","cols","90","rows","10");
 	return;
@@ -903,10 +903,10 @@ void TTipArchivator::cntrCmdProc( XMLNode *opt )
     {
 	TModule::cntrCmdProc(opt);
 	ctrMkNode("area",opt,0,"/arch",_("Archivators"));
-	ctrMkNode("grp",opt,-1,"/br/mess_",_("Message archivator"),0664,"root","Archive",1,"idm","1");
-	ctrMkNode("grp",opt,-1,"/br/val_",_("Value archivator"),0664,"root","Archive",1,"idm","1");
-	ctrMkNode("list",opt,-1,"/arch/mess",_("Message archivators"),0664,"root","Archive",4,"tp","br","idm","1","s_com","add,del","br_pref","mess_");
-	ctrMkNode("list",opt,-1,"/arch/val",_("Value archivators"),0664,"root","Archive",4,"tp","br","idm","1","s_com","add,del","br_pref","val_");
+	ctrMkNode("grp",opt,-1,"/br/mess_",_("Message archivator"),0664,"root","Archive",2,"idm","1","idSz","20");
+	ctrMkNode("grp",opt,-1,"/br/val_",_("Value archivator"),0664,"root","Archive",2,"idm","1","idSz","20");
+	ctrMkNode("list",opt,-1,"/arch/mess",_("Message archivators"),0664,"root","Archive",5,"tp","br","idm","1","s_com","add,del","br_pref","mess_","idSz","20");
+	ctrMkNode("list",opt,-1,"/arch/val",_("Value archivators"),0664,"root","Archive",5,"tp","br","idm","1","s_com","add,del","br_pref","val_","idSz","20");
 	return;
     }
     //- Process command to page -
@@ -1064,7 +1064,7 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Config")))
 	    {
 		ctrMkNode("fld",opt,-1,"/prm/cfg/id",cfg("ID").fld().descr(),0444,"root","Archive",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/nm",cfg("NAME").fld().descr(),0664,"root","Archive",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/nm",cfg("NAME").fld().descr(),0664,"root","Archive",2,"tp","str","len","50");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCR").fld().descr(),0664,"root","Archive",3,"tp","str","cols","50","rows","3");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","Archive",1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/lvl",cfg("LEVEL").fld().descr(),0664,"root","Archive",1,"tp","dec");

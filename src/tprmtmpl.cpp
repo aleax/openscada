@@ -243,7 +243,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/tmpl/cfg",_("Config")))
 	    {
 		ctrMkNode("fld",opt,-1,"/tmpl/cfg/id",_("Id"),0444,"root","root",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/tmpl/cfg/name",_("Name"),0664,"root","root",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/tmpl/cfg/name",_("Name"),0664,"root","root",2,"tp","str","len","50");
 		ctrMkNode("fld",opt,-1,"/tmpl/cfg/descr",_("Description"),0664,"root","root",3,"tp","str","cols","70","rows","4");
 	    }
 	}
@@ -528,8 +528,8 @@ void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter templates library: ")+id(),0664,"root","root");
-	if(ctrMkNode("branches",opt,-1,"/br","",0444))	
-	    ctrMkNode("grp",opt,-1,"/br/tmpl_",_("Template"),0664,"root","root",1,"idm","1");
+	if(ctrMkNode("branches",opt,-1,"/br","",0444))
+	    ctrMkNode("grp",opt,-1,"/br/tmpl_",_("Template"),0664,"root","root",2,"idm","1","idSz","20");
 	if(ctrMkNode("area",opt,-1,"/lib",_("Library")))
 	{
 	    if(ctrMkNode("area",opt,-1,"/lib/st",_("State")))
@@ -541,12 +541,12 @@ void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/lib/cfg",_("Config")))
 	    {
 		ctrMkNode("fld",opt,-1,"/lib/cfg/id",_("Id"),0444,"root","root",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/lib/cfg/name",_("Name"),0664,"root","root",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/lib/cfg/name",_("Name"),0664,"root","root",2,"tp","str","len","50");
 		ctrMkNode("fld",opt,-1,"/lib/cfg/descr",_("Description"),0664,"root","root",3,"tp","str","cols","50","rows","3");
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/tmpl",_("Parameter templates")))
-	    ctrMkNode("list",opt,-1,"/tmpl/tmpl",_("Templates"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","tmpl_");
+	    ctrMkNode("list",opt,-1,"/tmpl/tmpl",_("Templates"),0664,"root","root",5,"tp","br","idm","1","s_com","add,del","br_pref","tmpl_","idSz","20");
 	return;
     }
     //- Process command to page -

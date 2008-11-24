@@ -294,7 +294,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Widget's library: ")+id(),RWRWR_,"root","UI");
 	if(ico().size()) ctrMkNode("img",opt,-1,"/ico","",R_R_R_);
 	if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
-	    ctrMkNode("grp",opt,-1,"/br/wdg_",_("Widget"),RWRWR_,"root","UI",1,"idm","1");
+	    ctrMkNode("grp",opt,-1,"/br/wdg_",_("Widget"),RWRWR_,"root","UI",2,"idm","1","idSz","30");
 	if(ctrMkNode("area",opt,-1,"/obj",_("Library")))
 	{
 	    if(ctrMkNode("area",opt,-1,"/obj/st",_("State")))
@@ -306,13 +306,13 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/obj/cfg",_("Config")))
 	    {
 		ctrMkNode("fld",opt,-1,"/obj/cfg/id",_("Id"),R_R_R_,"root","UI",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/obj/cfg/name",_("Name"),RWRWR_,"root","UI",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/obj/cfg/name",_("Name"),RWRWR_,"root","UI",2,"tp","str","len","50");
 		ctrMkNode("fld",opt,-1,"/obj/cfg/descr",_("Description"),RWRWR_,"root","UI",3,"tp","str","cols","50","rows","3");
 		ctrMkNode("img",opt,-1,"/obj/cfg/ico",_("Icon"),RWRWR_,"root","UI",2,"v_sz","64","h_sz","64");
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/wdg",_("Widgets")))
-	    ctrMkNode("list",opt,-1,"/wdg/wdg",_("Widgets"),RWRWR_,"root","UI",4,"tp","br","idm","1","s_com","add,del","br_pref","wdg_");
+	    ctrMkNode("list",opt,-1,"/wdg/wdg",_("Widgets"),RWRWR_,"root","UI",5,"tp","br","idm","1","s_com","add,del","br_pref","wdg_","idSz","30");
 	if(ctrMkNode("area",opt,-1,"/mime",_("Mime data")))
 	    if(ctrMkNode("table",opt,-1,"/mime/mime",_("Mime data"),RWRWR_,"root","UI",2,"s_com","add,del","key","id"))
 	    {

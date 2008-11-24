@@ -553,9 +553,9 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 	    }
 	}
 	if(isContainer() && (!isLink()) && ctrMkNode("area",opt,-1,"/inclwdg",_("Include widgets")))
-	    ctrMkNode("list",opt,-1,"/inclwdg/wdg",_("Widgets"),RWRWR_,"root","UI",4,"tp","br","idm","1","s_com","add,del","br_pref","wdg_");
+	    ctrMkNode("list",opt,-1,"/inclwdg/wdg",_("Widgets"),RWRWR_,"root","UI",5,"tp","br","idm","1","s_com","add,del","br_pref","wdg_","idSz","30");
 	if(isContainer() && (!isLink()) && ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
-	    ctrMkNode("grp",opt,-1,"/br/wdg_",_("Widget"),RWRWR_,"root","UI",1,"idm","1");
+	    ctrMkNode("grp",opt,-1,"/br/wdg_",_("Widget"),RWRWR_,"root","UI",2,"idm","1","idSz","30");
 	if(ico().size()) ctrMkNode("img",opt,-1,"/ico","",0444);
 	return true;
     }

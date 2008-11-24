@@ -18,7 +18,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
- 
+
 #include "tbds.h"
 #include "tsys.h"
 #include "tmess.h"
@@ -172,7 +172,7 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))
 	    {
 		ctrMkNode("fld",opt,-1,"/prm/st/type",_("Type"),0444,"root","root",1,"tp","str");
-		if( owner().enableStat() ) 
+		if( owner().enableStat() )
 		    ctrMkNode("fld",opt,-1,"/prm/st/en",_("Enable"),0664,"root","root",1,"tp","bool");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Config")))

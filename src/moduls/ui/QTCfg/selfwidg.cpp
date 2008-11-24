@@ -420,8 +420,8 @@ void TextEdit::btCancel( )
 //* InputDlg: Id and name input dialog.           *
 //*************************************************
 InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess,
-        const QString &ndlg, bool with_id, bool with_nm ) :
-		QDialog(parent), m_id(NULL), m_name(NULL)
+	const QString &ndlg, int with_id, int with_nm ) :
+		QDialog(parent), mId(NULL), mName(NULL)
 {
     setWindowTitle(ndlg);
     setMinimumSize( QSize( 120, 150 ) );
@@ -441,10 +441,9 @@ InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess,
     icon_lab->setPixmap(icon.pixmap(48));
     intr_lay->addWidget(icon_lab);
 
-    inp_lab = new QLabel(mess,this);
-    //inp_lab->setAlignment(Qt::AlignHCenter);
-    inp_lab->setWordWrap(true);
-    intr_lay->addWidget(inp_lab);
+    inpLab = new QLabel(mess,this);
+    inpLab->setWordWrap(true);
+    intr_lay->addWidget(inpLab);
     dlg_lay->addItem(intr_lay);
 
     //- Id and name fields -
@@ -454,15 +453,19 @@ InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess,
 	ed_lay->setSpacing(6);
 	if( with_id )
 	{
-	    ed_lay->addWidget( new QLabel(_("ID:"),this), 3, 0 );
-	    m_id = new QLineEdit(this);
-	    ed_lay->addWidget( m_id, 3, 1 );
+	    mIdLab = new QLabel(_("ID:"),this);
+	    ed_lay->addWidget( mIdLab, 3, 0 );
+	    mId = new QLineEdit(this);
+	    mId->setMaxLength(with_id);
+	    ed_lay->addWidget( mId, 3, 1 );
 	}
 	if( with_nm )
 	{
-	    ed_lay->addWidget( new QLabel(_("Name:"),this), 4, 0 );
-	    m_name = new QLineEdit(this);
-	    ed_lay->addWidget( m_name, 4, 1 );
+	    mNameLab = new QLabel(_("Name:"),this);
+	    ed_lay->addWidget( mNameLab, 4, 0 );
+	    mName = new QLineEdit(this);
+	    mName->setMaxLength(with_nm);
+	    ed_lay->addWidget( mName, 4, 1 );
 	}
     }
     dlg_lay->addItem(ed_lay);
@@ -488,39 +491,83 @@ InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess,
     connect(but_box, SIGNAL(rejected()), this, SLOT(reject()));
     dlg_lay->addWidget( but_box );
 
-    resize(400,150+(40*with_nm)+(40*with_id));
+    resize(400,150+(35*(with_nm?1:0))+(35*(with_id?1:0)));
 }
 
 QString InputDlg::id()
 {
-    if( m_id )  return m_id->text();
+    if( mId )  return mId->text();
     return "";
 }
 
 QString InputDlg::name()
 {
-    if( m_name )return m_name->text();
+    if( mName )return mName->text();
     return "";
 }
 
 QString InputDlg::mess( )
 {
-    return inp_lab->text();
+    return inpLab->text();
 }
 
 void InputDlg::setId(const QString &val)
 {
-    if( m_id )  m_id->setText(val);
+    if( mId )  mId->setText(val);
 }
 
 void InputDlg::setName(const QString &val)
 {
-    if( m_name )m_name->setText(val);
+    if( mName ) mName->setText(val);
 }
 
 void InputDlg::setMess( const QString &val )
 {
-    inp_lab->setText( val );
+    inpLab->setText( val );
+}
+
+//*****************************************************
+//* ReqIdNameDlg: Request node identifier and/or name *
+//*****************************************************
+ReqIdNameDlg::ReqIdNameDlg( QWidget *parent, const QIcon &icon, const QString &mess, const QString &ndlg ) :
+    InputDlg( parent, icon, mess, ndlg , 20, 500 )
+{
+    itTpLab = new QLabel(_("Item type:"),this);
+    ed_lay->addWidget( itTpLab, 0, 0 );
+    itTp = new QComboBox(this);
+    ed_lay->addWidget( itTp, 0, 1 );
+    connect( itTp, SIGNAL( currentIndexChanged(int) ), this, SLOT( selectItTp(int) ) );
+}
+
+string ReqIdNameDlg::target( )
+{
+    if( itTp->count() <= 0 ) return "";
+
+    return itTp->itemData(itTp->currentIndex()).toString().toAscii().data();
+}
+
+void ReqIdNameDlg::setTargets( const vector<string> &tgs )
+{
+    itTp->clear();
+    int defPos = 0;
+    for( int i_t = 0; i_t < tgs.size(); i_t++ )
+    {
+	itTp->addItem( TSYS::strSepParse(tgs[i_t],3,'\n').c_str(), tgs[i_t].c_str() );
+	if( atoi(TSYS::strSepParse(tgs[i_t],4,'\n').c_str()) ) defPos = itTp->count()-1;
+    }
+    if( tgs.size() ) itTp->setCurrentIndex(defPos);
+    itTpLab->setVisible(itTp->count()>1); itTp->setVisible(itTp->count()>1);
+}
+
+void ReqIdNameDlg::selectItTp( int it )
+{
+    if( it < 0 ) return;
+    string its = itTp->itemData(it).toString().toAscii().data();
+    int idSz = atoi(TSYS::strSepParse(its,0,'\n').c_str());
+    if( idSz>0 ) mId->setMaxLength(idSz);
+    mIdLab->setVisible(idSz>=0); mId->setVisible(idSz>=0);
+    bool idm = atoi(TSYS::strSepParse(its,1,'\n').c_str());
+    mNameLab->setVisible(idm); mName->setVisible(idm);
 }
 
 //*************************************************

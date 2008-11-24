@@ -278,7 +278,7 @@ class LinkItemDelegate: public QItemDelegate
 
 //****************************************
 //* Inspector of links dock widget       *
-//**************************************** 
+//****************************************
 class InspLnkDock: public QDockWidget
 {
     Q_OBJECT

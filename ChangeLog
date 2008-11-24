@@ -1,3 +1,12 @@
+2008-11-24 Roman
+- !!!:/SYS, /UI/QTCfg, /UI/Vision: OpenSCADA nodes, when stored into DB, DB key identifier control is added. User bounded for enter big identifiers.
+- !!:/DemoDB: VCA DB is separated to vcaBase, vcaTest and vcaAGLKS DB's.
+- FIX:/UI/VCAEngine: Fixed group request's for libraries of widget's tree.
+- !!!!:/UI/Vision: Intgrate loading libraries widgets toolbars and Libraries widgets navigator. Move to use group request for libraries of widget's tree.
+  Made adaptive and optimal libraries of widget's tree loading.
+- /UI/Vision: Add widgets of libraries to popup menu for projects and libraries navigator.
+
+
 2008-11-24 Maxim
 - FIX:/UI/Vision: Some performance improvemet is done for developming mode by removing unnecessary repaints for primitive ElFigure.
 

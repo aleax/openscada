@@ -118,19 +118,19 @@ void Engine::postEnable( int flag )
 
     if( !(flag&TCntrNode::NodeConnect) ) return;
 
-    //- Make lib's DB structure -
+    //> Make lib's DB structure
     lbwdg_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
     lbwdg_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
     lbwdg_el.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::NoFlag,"300") );
     lbwdg_el.fldAdd( new TFld("DB_TBL",_("Data base"),TFld::String,TFld::NoFlag,"30") );
     lbwdg_el.fldAdd( new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000") );
 
-    //- Make library widgets data container -
+    //> Make library widgets data container
     wdgdata_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
     wdgdata_el.fldAdd( new TFld("MIME",_("Mime type"),TFld::String,TFld::NoFlag,"30") );
     wdgdata_el.fldAdd( new TFld("DATA",_("Mime data"),TFld::String,TFld::NoFlag,"500000") );
 
-    //- Make widgets DB structure -
+    //> Make widgets DB structure
     wdg_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
     wdg_el.fldAdd( new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000") );
     wdg_el.fldAdd( new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200") );
@@ -141,7 +141,7 @@ void Engine::postEnable( int flag )
     wdg_el.fldAdd( new TFld("PERMIT",_("Permision"),TFld::Integer,TFld::OctDec,"3","436") );
     wdg_el.fldAdd( new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*") );
 
-    //- Make include widgets DB structure -
+    //> Make include widgets DB structure
     inclwdg_el.fldAdd( new TFld("IDW",_("IDW"),TFld::String,TCfg::Key,"100") );
     inclwdg_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
     inclwdg_el.fldAdd( new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200") );
@@ -150,7 +150,7 @@ void Engine::postEnable( int flag )
     inclwdg_el.fldAdd( new TFld("GRP",_("Group"),TFld::String,TFld::NoFlag,"20","UI") );
     inclwdg_el.fldAdd( new TFld("PERMIT",_("Permision"),TFld::Integer,TFld::OctDec,"3","436") );
 
-    //- Make widget's IO DB structure -
+    //> Make widget's IO DB structure
     wdgio_el.fldAdd( new TFld("IDW",_("Widget ID"),TFld::String,TCfg::Key,"100") );
     wdgio_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"61") );
     wdgio_el.fldAdd( new TFld("IO_VAL",_("Attribute value"),TFld::String,TFld::NoFlag,"100000") );
@@ -158,7 +158,7 @@ void Engine::postEnable( int flag )
     wdgio_el.fldAdd( new TFld("CFG_TMPL",_("Configuration template"),TFld::String,TFld::NoFlag,"30") );
     wdgio_el.fldAdd( new TFld("CFG_VAL",_("Configuration value"),TFld::String,TFld::NoFlag,"1000") );
 
-    //- Make widget's user IO DB structure -
+    //> Make widget's user IO DB structure
     wdguio_el.fldAdd( new TFld("IDW",_("Widget ID"),TFld::String,TCfg::Key,"100") );
     wdguio_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"61") );
     wdguio_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
@@ -168,7 +168,7 @@ void Engine::postEnable( int flag )
     wdguio_el.fldAdd( new TFld("CFG_TMPL",_("Configuration template"),TFld::String,TFld::NoFlag,"30") );
     wdguio_el.fldAdd( new TFld("CFG_VAL",_("Configuration value"),TFld::String,TFld::NoFlag,"1000") );
 
-    //- Make project's DB structure -
+    //> Make project's DB structure
     prj_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
     prj_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
     prj_el.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::NoFlag,"300") );
@@ -180,7 +180,7 @@ void Engine::postEnable( int flag )
     prj_el.fldAdd( new TFld("PER",_("Calc period (ms)"),TFld::Integer,TFld::NoFlag,"4","100") );
     prj_el.fldAdd( new TFld("FLGS",_("Flags"),TFld::Integer,TFld::NoFlag,"4") );
 
-    //- Make pages DB structure -
+    //> Make pages DB structure
     page_el.fldAdd( new TFld("OWNER",_("Owner"),TFld::String,TCfg::Key,"100") );
     page_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
     page_el.fldAdd( new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000") );
@@ -193,17 +193,17 @@ void Engine::postEnable( int flag )
     page_el.fldAdd( new TFld("FLGS",_("Flags"),TFld::Integer,TFld::NoFlag,"1","0") );
     page_el.fldAdd( new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*") );
 
-    //- Make sessions' IO values of projects DB structure -
+    //> Make sessions' IO values of projects DB structure
     prj_ses_el.fldAdd( new TFld("IDW",_("Widget ID"),TFld::String,TCfg::Key,"200") );
     prj_ses_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
     prj_ses_el.fldAdd( new TFld("IO_VAL",_("Attribute value"),TFld::String,TFld::NoFlag,"100000") );
 
-    //- Init original widgets library -
+    //> Init original widgets library
     wlbAdd("originals",_("Original widget's library"));
-    //-- Set default library icon --
+    //>> Set default library icon
     if( TUIS::icoPresent("VCA.lwdg_root") )
         wlbAt("originals").at().setIco(TSYS::strEncode(TUIS::icoGet("VCA.lwdg_root"),TSYS::base64));
-    //-- Add main original widgets --
+    //>> Add main original widgets
     wlbAt("originals").at().add( new OrigElFigure() );
     wlbAt("originals").at().add( new OrigFormEl() );
     wlbAt("originals").at().add( new OrigText() );
@@ -533,13 +533,23 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	}
 	return;
     }
-    else if( a_path == "/serv/wlbBr" )
+    else if( a_path == "/serv/wlbBr" && ctrChkNode(opt,"get") )
     {
+	string item = opt->attr("item");
+	string upd_lb   = TSYS::pathLev(item,0);
+	if( upd_lb.size() > 4 && upd_lb.substr(0,4) != "wlb_" )	return;
+	if( upd_lb.size() > 4 )		upd_lb = upd_lb.substr(4);
+	string upd_wdg  = TSYS::pathLev(item,1);
+	if( upd_wdg.size() > 4 )	upd_wdg = upd_wdg.substr(4);
+	string upd_wdgi = TSYS::pathLev(item,2);
+	if( upd_wdgi.size() > 4 )	upd_wdgi = upd_wdgi.substr(4);
+
 	//>> Widgets libraries
 	vector<string> ls;
 	wlbList(ls);
 	for( int i_wlb = 0; i_wlb < ls.size(); i_wlb++ )
 	{
+	    if( !upd_lb.empty() && upd_lb != ls[i_wlb] ) continue;
 	    AutoHD<WidgetLib> wlb = wlbAt(ls[i_wlb]);
 	    XMLNode *wlbN = opt->childAdd("wlb")->setAttr("id",ls[i_wlb])->setText(wlb.at().name());
 	    wlbN->childAdd("ico")->setText(wlb.at().ico());
@@ -549,35 +559,22 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    wlb.at().list(wls);
 	    for( int i_w = 0; i_w < wls.size(); i_w++ )
 	    {
+		if( !upd_wdg.empty() && upd_wdg != wls[i_w] )	continue;
 		AutoHD<LWidget> w = wlb.at().at(wls[i_w]);
-		XMLNode *wN = opt->childAdd("w")->setAttr("id",wls[i_w])->setText(w.at().name());
+		XMLNode *wN = wlbN->childAdd("w")->setAttr("id",wls[i_w])->setAttr("parent",w.at().parentNm())->setText(w.at().name());
 		wN->childAdd("ico")->setText(w.at().ico());
 
 		//>> Child widgets
 		vector<string> cwls;
 		w.at().wdgList(cwls);
-		for( int i_c = 0; i_c < cwls.size(); i_c++ )
-		{
-		    AutoHD<CWidget> cw = w.at().wdgAt(cwls[i_c]);
-		    opt->childAdd("cw")->setAttr("id",cwls[i_c])->setText(cw.at().name())->childAdd("ico")->setText(cw.at().ico());;
-		}
+		if( cwls.size() < 1000 )
+		    for( int i_c = 0; i_c < cwls.size(); i_c++ )
+		    {
+			if( !upd_wdgi.empty() && upd_wdgi != cwls[i_c] )	continue;
+			AutoHD<CWidget> cw = w.at().wdgAt(cwls[i_c]);
+			wN->childAdd("cw")->setAttr("id",cwls[i_c])->setText(cw.at().name())->childAdd("ico")->setText((cwls.size()>=100)?"":cw.at().ico());
+		    }
 	    }
-	}
-	return;
-    }
-    else if( a_path == "/serv/prjBr" )
-    {
-	//>> Projects
-	vector<string> ls;
-	prjList(ls);
-	for( int i_prj = 0; i_prj < ls.size(); i_prj++ )
-	{
-	    AutoHD<Project> prj = prjAt(ls[i_prj]);
-	    XMLNode *prjN = opt->childAdd("prj")->setAttr("id",ls[i_prj])->setText(prj.at().name());
-	    prjN->childAdd("ico")->setText(prj.at().ico());
-
-	    //>> Pages process
-	    //????
 	}
 	return;
     }
@@ -586,13 +583,13 @@ void Engine::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TUI::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/prj_",_("Project"),0664,"root","UI",1,"idm","1");
-	ctrMkNode("grp",opt,-1,"/br/wlb_",_("Widget's library"),0664,"root","UI",1,"idm","1");
+	ctrMkNode("grp",opt,-1,"/br/prj_",_("Project"),0664,"root","UI",2,"idm","1","idSz","30");
+	ctrMkNode("grp",opt,-1,"/br/wlb_",_("Widget's library"),0664,"root","UI",2,"idm","1","idSz","30");
 	ctrMkNode("grp",opt,-1,"/br/ses_",_("Session"),0664,"root","UI");
 	if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"),0444,"root","UI"))
 	{
-	    ctrMkNode("list",opt,-1,"/prm/cfg/prj",_("Project"),0664,"root","UI",4,"tp","br","idm","1","s_com","add,del","br_pref","prj_");
-	    ctrMkNode("list",opt,-1,"/prm/cfg/wlb",_("Widget's libraries"),0664,"root","UI",4,"tp","br","idm","1","s_com","add,del","br_pref","wlb_");
+	    ctrMkNode("list",opt,-1,"/prm/cfg/prj",_("Project"),0664,"root","UI",5,"tp","br","idm","1","s_com","add,del","br_pref","prj_","idSz","30");
+	    ctrMkNode("list",opt,-1,"/prm/cfg/wlb",_("Widget's libraries"),0664,"root","UI",5,"tp","br","idm","1","s_com","add,del","br_pref","wlb_","idSz","30");
 	}
 	if(ctrMkNode("area",opt,1,"/ses",_("Sessions"),0444,"root","UI"))
 	    ctrMkNode("list",opt,-1,"/ses/ses",_("Sessions"),0664,"root","UI",3,"tp","br","s_com","add,del","br_pref","ses_");

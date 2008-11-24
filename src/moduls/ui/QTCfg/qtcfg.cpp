@@ -508,32 +508,21 @@ void ConfApp::itAdd( )
     if( sel_path.empty() || !root->childGet("id","br",true) )	return;
     XMLNode *branch = root->childGet("id","br");
 
-    QComboBox *nCont = new QComboBox(NULL);
-
-    //- Load branches list -
-    bool idm = false;
+    //> Load branches list
+    vector<string> brs;
     for( int i_b = 0; i_b < branch->childSize(); i_b++ )
 	if( atoi(branch->childGet(i_b)->attr("acs").c_str())&SEQ_WR )
-	{
-	    idm |= (bool)atoi(branch->childGet(i_b)->attr("idm").c_str());
-	    nCont->addItem( branch->childGet(i_b)->attr("dscr").c_str(), 
-			    (string(atoi(branch->childGet(i_b)->attr("idm").c_str())?"1":"0")+branch->childGet(i_b)->attr("id")).c_str() );
-	}
-    if( !nCont->count() )
-    { mod->postMess(mod->nodePath().c_str(),_("No one editable container present."),TUIMod::Info,this); return; }
+	    brs.push_back( branch->childGet(i_b)->attr("idSz")+"\n"+branch->childGet(i_b)->attr("idm")+"\n"+
+			   branch->childGet(i_b)->attr("id")+"\n"+branch->childGet(i_b)->attr("dscr"));
+    if( !brs.size() )	{ mod->postMess(mod->nodePath().c_str(),_("No one editable container present."),TUIMod::Info,this); return; }
 
-    InputDlg dlg(this,actItAdd->icon(),
-            QString(_("Add item to node: '%1'.")).arg(sel_path.c_str()),
-	    _("Add node"),true,idm);
-    dlg.ed_lay->addWidget( new QLabel(_("Item type:"),&dlg), 0, 0 );
-    nCont->setParent(&dlg);
-    dlg.ed_lay->addWidget( nCont, 0, 1 );
-
+    ReqIdNameDlg dlg(this,actItAdd->icon(), QString(_("Add item to node: '%1'.")).arg(sel_path.c_str()),_("Add node"));
+    dlg.setTargets(brs);
     if( dlg.exec() != QDialog::Accepted )   return;
 
-    //- Check for already present node -
+    //> Check for already present node
     XMLNode req("get");
-    req.setAttr("path",sel_path+"/%2fbr%2f"+string(nCont->itemData(nCont->currentIndex()).toString().toAscii().data()+1));
+    req.setAttr("path",sel_path+"/%2fbr%2f"+TSYS::strSepParse(dlg.target( ),2,'\n'));
     if( !cntrIfCmd(req) )
         for( int i_lel = 0; i_lel < req.childSize(); i_lel++ )
 	    if( (req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->attr("id") == dlg.id().toAscii().data()) ||
@@ -543,14 +532,14 @@ void ConfApp::itAdd( )
 		return;
 	    }
 
-    //- Send create request -
+    //> Send create request
     req.clear()->
 	setName("add")->
-	setAttr("path",sel_path+"/%2fbr%2f"+string(nCont->itemData(nCont->currentIndex()).toString().toAscii().data()+1));
-    if( nCont->itemData(nCont->currentIndex()).toString()[0] == '1' )
+	setAttr("path",sel_path+"/%2fbr%2f"+TSYS::strSepParse(dlg.target( ),2,'\n'));
+    if( atoi(TSYS::strSepParse(dlg.target(),1,'\n').c_str()) )
 	req.setAttr("id",dlg.id().toAscii().data())->setText(dlg.name().toAscii().data());
     else req.setText(dlg.id().toAscii().data());
-    if( cntrIfCmd(req) )	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Info,this);
+    if( cntrIfCmd(req) ) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Info,this);
     else { treeUpdate(); pageRefresh(); }
 }
 
@@ -563,7 +552,7 @@ void ConfApp::itDel( const string &iit )
     {
 	InputDlg dlg(this,actItDel->icon(),
 		QString(_("You sure for delete node: '%1'?")).arg(rmit.c_str()),
-		_("Delete node"),false,false);
+		_("Delete node"),0,0);
 	if( dlg.exec() != QDialog::Accepted )   return;
     }
 
@@ -613,7 +602,7 @@ void ConfApp::itPaste( )
     int off;
     string s_el, s_elp, t_el, b_grp;
 
-    //- Src elements calc -
+    //> Src elements calc
     int n_sel = 0;
     for( off = 0; !(t_el=TSYS::pathLev(copy_buf.substr(1),0,true,&off)).empty(); n_sel++ )
     { if( n_sel ) s_elp += ("/"+s_el); s_el = t_el; }
@@ -621,30 +610,26 @@ void ConfApp::itPaste( )
     if( TSYS::pathLev(copy_buf.substr(1),0) != TSYS::pathLev(sel_path,0) ) 
     { mod->postMess( mod->nodePath().c_str(), _("Copy is imposible."), TUIMod::Error, this ); return; }
 
-    QComboBox *nCont = new QComboBox(NULL);
-    if( atoi(root->attr("acs").c_str())&SEQ_WR ) nCont->addItem( _("Selected") );
+    vector<string> brs;
+    if( atoi(root->attr("acs").c_str())&SEQ_WR ) brs.push_back(string("-1\n0\n\n")+_("Selected"));
 
     XMLNode *branch = root->childGet("id","br",true);
     if( branch )
 	for( int i_b = 0; i_b < branch->childSize(); i_b++ )
 	    if( atoi(branch->childGet(i_b)->attr("acs").c_str())&SEQ_WR )
 	    {
-		nCont->addItem( branch->childGet(i_b)->attr("dscr").c_str(), branch->childGet(i_b)->attr("id").c_str() );
+		brs.push_back( branch->childGet(i_b)->attr("idSz")+"\n0\n"+branch->childGet(i_b)->attr("id")+"\n"+branch->childGet(i_b)->attr("dscr"));
 		if( s_el.substr(0,branch->childGet(i_b)->attr("id").size()) == branch->childGet(i_b)->attr("id") )
 		{
-		    nCont->setCurrentIndex(nCont->count()-1);
+		    brs[brs.size()-1]=brs[brs.size()-1]+"\n1";
 		    b_grp = branch->childGet(i_b)->attr("id");
 		}
 	    }
 
-    //-- Make request dialog --
-    InputDlg dlg(this,actItPaste->icon(),"",_("Move or copy node"),true,false);
-
-    dlg.ed_lay->addWidget( new QLabel(_("Target:"),&dlg), 0, 0 );
-    nCont->setParent(&dlg);
-    dlg.ed_lay->addWidget( nCont, 0, 1 );
-    dlg.setMess( (QString((copy_buf[0] == '1') ? _("Move node '%1' to '%2'.\n") : _("Copy node '%1' to '%2'.\n"))+
-            _("Enter new node identifier.")).arg(copy_buf.substr(1).c_str()).arg(sel_path.c_str()) );
+    //> Make request dialog
+    ReqIdNameDlg dlg(this,actItAdd->icon(),"",_("Move or copy node"));
+    dlg.setTargets(brs);
+    dlg.setMess( QString((copy_buf[0] == '1') ? _("Move node '%1' to '%2'.\n") : _("Copy node '%1' to '%2'.\n")).arg(copy_buf.substr(1).c_str()).arg(sel_path.c_str()) );
     dlg.setId( s_el.substr(b_grp.size()).c_str() );
     if( dlg.exec() != QDialog::Accepted ) return;
 
@@ -654,18 +639,20 @@ void ConfApp::itPaste( )
     off = 0;
     stat_nm = TSYS::pathLev(sel_path,0,true,&off);
     string dst_nm  = sel_path.substr(off);
-    if( !nCont->itemData(nCont->currentIndex()).toString().isEmpty() )
+
+    if( atoi(TSYS::strSepParse(dlg.target( ),0,'\n').c_str()) >= 0 )
     {
-	dst_nm = dst_nm + "/" + nCont->itemData(nCont->currentIndex()).toString().toAscii().data() + dlg.id().toAscii().data();
+	dst_nm = dst_nm + "/" +TSYS::strSepParse(dlg.target( ),2,'\n') + dlg.id().toAscii().data();
 	//- Check for already present node -
 	XMLNode req("get");
-	req.setAttr("path",sel_path+"/%2fbr%2f"+nCont->itemData(nCont->currentIndex()).toString().toAscii().data());
+	req.setAttr("path",sel_path+"/%2fbr%2f"+TSYS::strSepParse(dlg.target( ),2,'\n'));
 	if( !cntrIfCmd(req) )
 	    for( int i_lel = 0; i_lel < req.childSize(); i_lel++)
 		if( (req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->attr("id") == dlg.id().toAscii().data()) ||
 		    (!req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->text() == dlg.id().toAscii().data()) )
 		{
-		    InputDlg dlg1(this,actItPaste->icon(),QString(_("Node '%1' already present. Continue?")).arg(dst_nm.c_str()).toAscii().data(),_("Move or copy node"),false,false);
+		    InputDlg dlg1(this,actItPaste->icon(),QString(_("Node '%1' already present. Continue?")).arg(dst_nm.c_str()).toAscii().data(),
+			_("Move or copy node"),0,0);
 		    if( dlg1.exec() != QDialog::Accepted ) return;
 		}
     }
@@ -1662,7 +1649,13 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 			QString	min = t_s.attr("min").empty() ? "-9999999999" : t_s.attr("min").c_str();
 			val_w->setCfg(min+":"+max+":1:::4");*/
 		    }
-		    else	val_w->setMinimumWidth( 7*15+30 );
+		    else
+		    {
+			val_w->setType(LineEdit::Text);
+			val_w->setMinimumWidth( 7*15+30 );
+			int flen = atoi(t_s.attr("len").c_str());
+			if( flen ) ((QLineEdit*)val_w->workWdg())->setMaxLength(flen);
+		    }
 		}
 		//-- Check use label --
 		if(t_s.attr("dscr").size())
@@ -2417,12 +2410,12 @@ void ConfApp::listBoxPopup( )
 	    }
 	    if( n_el->attr("s_com").find("ins") != string::npos && item != NULL )
 	    {
-		actIns = last_it = new QAction(_("Insert"),this); 
+		actIns = last_it = new QAction(_("Insert"),this);
 		popup.addAction(actIns);
 	    }
 	    if( n_el->attr("s_com").find("edit") != string::npos && item != NULL )
 	    {
-		actEd = last_it = new QAction(_("Edit"),this); 
+		actEd = last_it = new QAction(_("Edit"),this);
 		popup.addAction(actEd);
 	    }
 	    if( n_el->attr("s_com").find("del") != string::npos && item != NULL )
@@ -2471,10 +2464,13 @@ void ConfApp::listBoxPopup( )
 	    }
 
 	    QAction *rez = popup.exec(QCursor::pos());
-	    if(!rez)	{ popup.clear(); return; }
+	    if( !rez )	{ popup.clear(); return; }
 	    if( rez == actAdd || rez == actIns || rez == actEd )
 	    {
-		InputDlg dlg(this,this->windowIcon(),"",_("Item name set"),ind_m,true);
+		ReqIdNameDlg dlg(this,this->windowIcon(),"",_("Item name set"));
+		vector<string> ils;
+		ils.push_back(n_el->attr("idSz")+"\n"+TSYS::int2str(ind_m));
+		dlg.setTargets(ils);
 		if( rez == actAdd )	dlg.setMess(_("Add new element."));
 		else if( rez == actIns )dlg.setMess(_("Insert new element."));
 		if( rez == actEd )
@@ -2485,8 +2481,8 @@ void ConfApp::listBoxPopup( )
 		}
 		int dlrez = dlg.exec();
 		id = dlg.id().toAscii().data();
-		text = dlg.name().toAscii().data();
-		if( dlrez != QDialog::Accepted ) return; 
+		text = ind_m ? dlg.name().toAscii().data() : id;
+		if( dlrez != QDialog::Accepted ) return;
 	    }
 
 	    //- Make command -

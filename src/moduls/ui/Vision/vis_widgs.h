@@ -64,6 +64,7 @@ namespace VISION
 	    void setId( const QString &val );
 	    void setName( const QString &val );
 	    void setMess( const QString &val );
+	    void setIdLen( int len );
 
 	    QGridLayout *edLay( )	{ return ed_lay; }
 
