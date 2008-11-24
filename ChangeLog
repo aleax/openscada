@@ -1,3 +1,7 @@
+2008-11-24 Maxim
+- FIX:/UI/Vision: Some performance improvemet is done for developming mode by removing unnecessary repaints for primitive ElFigure.
+
+
 2008-11-21 Roman,Maxim
 - !!!!:/UI/Vision: Binary heap sort algorithm is used for child's widgets order set. Significant performance improve.
 

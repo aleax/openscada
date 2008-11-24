@@ -368,7 +368,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
             }
             if( el == "arc" )
             {
-                //-- Reading anf setting attributes for the current arc --
+                //-- Reading and setting attributes for the current arc --
                 float x_s, y_s;
                 string el_s = TSYS::strSepParse(sel,0,':',&el_off);
                 if( sscanf(el_s.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) p[0]  = atoi(el_s.c_str());
@@ -2230,6 +2230,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
     {
         case QEvent::Paint:
         {
+            //printf("Paint\n");
             DevelWdgView *devW = qobject_cast<DevelWdgView*>(view);
             RunWdgView   *runW = qobject_cast<RunWdgView*>(view);
             QPainter pnt( view );
@@ -2600,7 +2601,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                             itemInMotion = &shapeItems[index_array[i]];
                                             index = index_array[i];
                                             moveItemTo( ev->pos(), shapeItems, pnts, view );
-                                            view->repaint();
+                                            //view->repaint();
                                         }
                                     }
                                 }
@@ -2961,7 +2962,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             count_moveItemTo = 1;
                             offset = QPointF(0,0);
                             moveItemTo( ev->pos(), shapeItems, pnts, view );
-                            view->repaint();
+                            //view->repaint();
                         }
                         ellipse_draw_startPath = newPath;
                         ellipse_draw_endPath = newPath;
