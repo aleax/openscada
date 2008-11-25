@@ -535,6 +535,7 @@ ReqIdNameDlg::ReqIdNameDlg( QWidget *parent, const QIcon &icon, const QString &m
     itTpLab = new QLabel(_("Item type:"),this);
     ed_lay->addWidget( itTpLab, 0, 0 );
     itTp = new QComboBox(this);
+    itTp->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed) );
     ed_lay->addWidget( itTp, 0, 1 );
     connect( itTp, SIGNAL( currentIndexChanged(int) ), this, SLOT( selectItTp(int) ) );
 }
@@ -556,7 +557,8 @@ void ReqIdNameDlg::setTargets( const vector<string> &tgs )
 	if( atoi(TSYS::strSepParse(tgs[i_t],4,'\n').c_str()) ) defPos = itTp->count()-1;
     }
     if( tgs.size() ) itTp->setCurrentIndex(defPos);
-    itTpLab->setVisible(itTp->count()>1); itTp->setVisible(itTp->count()>1);
+    bool tpView = !(itTp->count()==1 && itTp->itemText(0).isEmpty());
+    itTpLab->setVisible(tpView); itTp->setVisible(tpView);
 }
 
 void ReqIdNameDlg::selectItTp( int it )

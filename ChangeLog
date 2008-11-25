@@ -1,3 +1,10 @@
+2008-11-25 Roman
+- FIX:/SYS: Some fixes into RPM build spec file and data/openscada.desktop.
+- FIX:/UI/QTCfg: Enter new node identifier and name is fixed.
+- FIX:/UI/Vision: Crash after close dialog from links inspector call is final fixed.
+- /UI/Vision: Show widgets of libraries to popup menu for projects and libraries navigator limited by 10 and root libraries.
+
+
 2008-11-24 Roman
 - !!!:/SYS, /UI/QTCfg, /UI/Vision: OpenSCADA nodes, when stored into DB, DB key identifier control is added. User bounded for enter big identifiers.
 - !!:/DemoDB: VCA DB is separated to vcaBase, vcaTest and vcaAGLKS DB's.

@@ -271,9 +271,6 @@ class LinkItemDelegate: public QItemDelegate
 
     public slots:
 	void selItem( int val );
-
-    private:
-	bool initVal;
 };
 
 //****************************************
