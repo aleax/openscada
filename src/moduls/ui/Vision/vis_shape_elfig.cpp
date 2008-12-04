@@ -82,7 +82,6 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
     QPointF StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4;
     double t_start, t_end, a, b;
     float MotionWidth;
-    //QPainterPath circlePath;
     QVector<inundationItem> inundationItems_temp;
     QVector<ShapeItem> shapeItems_temp;
     string backimg;
@@ -2614,6 +2613,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                 flag_ctrl = flag_A = flag_copy = false;
                                 flag_check_pnt_inund = false;
                                 index_array.clear();
+                                offset = QPointF(0,0);
                                 itemInMotion = 0;
 				count_Shapes = 0;
                             }

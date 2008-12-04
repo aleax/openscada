@@ -1,3 +1,7 @@
+2008-11-24 Maxim
+- FIX:/UI/Vision: Fixing "offset" after CTRL+A or square selection is done for primitive ElFigure.
+
+
 2008-11-25 Roman
 - FIX:/SYS: Some fixes into RPM build spec file and data/openscada.desktop.
 - FIX:/UI/QTCfg: Enter new node identifier and name is fixed.
