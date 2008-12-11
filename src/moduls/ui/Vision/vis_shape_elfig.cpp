@@ -70,6 +70,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
     bool rel_list	= false;				//change signal
     bool up		= false;
     status		= false;
+    bool paint          = false;
     QVector<ShapeItem> &shapeItems = elFD->shapeItems;
     QVector<inundationItem> &inundationItems = elFD->inundationItems;
     PntMap *pnts = &elFD->shapePnts;
@@ -84,11 +85,20 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
     float MotionWidth;
     QVector<inundationItem> inundationItems_temp;
     QVector<ShapeItem> shapeItems_temp;
+
     string backimg;
     QImage img;
     rect_num = -1;
     switch( uiPrmPos )
     {
+        case -4:
+            // This have no matter for the Primitive ID, its done only for outer needs
+            shapePnts_temp = elFD->shapePnts;
+            shapeWidths_temp = elFD->shapeWidths;
+            shapeColors_temp = elFD->shapeColors;
+            shapeImages_temp = elFD->shapeImages;
+            shapeStyles_temp = elFD->shapeStyles;
+            break;
 	case -1:	//load
 	    rel_list = true;
 	    break;
@@ -835,31 +845,52 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
             for( int i = 0; i < shapeItems.size(); i++ )
             {
                 //-- Detecting if the shapeItems have changed --
-                if( shapeItems[i].path != shapeItems_temp[i].path ) { fill_build = true; break; }
-                if( shapeItems[i].pathSimple != shapeItems_temp[i].pathSimple ) { fill_build = true; break; }
+                if( shapeItems[i].path != shapeItems_temp[i].path )
+                    { fill_build = true; break; }
+                if( shapeItems[i].pathSimple != shapeItems_temp[i].pathSimple )
+                    { fill_build = true; break; }
                 if( (int)TSYS::realRound(shapeItems[i].ctrlPos4.x(), 3, true) != 
                     (int)TSYS::realRound(shapeItems_temp[i].ctrlPos4.x(), 3, true) ||
                     (int)TSYS::realRound(shapeItems[i].ctrlPos4.y(), 3, true) != 
-                    (int)TSYS::realRound(shapeItems_temp[i].ctrlPos4.y(), 3, true) ) { fill_build = true; break; }
-                if( shapeItems[i].n1 != shapeItems_temp[i].n1 ) { fill_build = true; break; }
-                if( shapeItems[i].n2 != shapeItems_temp[i].n2 ) { fill_build = true; break; }
-                if( shapeItems[i].n3 != shapeItems_temp[i].n3 ) { fill_build = true; break; }
-                if( shapeItems[i].n4 != shapeItems_temp[i].n4 ) { fill_build = true; break; }
-                if( shapeItems[i].n5 != shapeItems_temp[i].n5 ) { fill_build = true; break; }
-                if( shapeItems[i].lineColor != shapeItems_temp[i].lineColor ) { fill_build = true; break; }
-                if( shapeItems[i].borderColor != shapeItems_temp[i].borderColor ) { fill_build = true; break; }
-                if( shapeItems[i].style != shapeItems_temp[i].style ) { fill_build = true; break; }
-                if( shapeItems[i].width != shapeItems_temp[i].width ) { fill_build = true; break; }
-                if( shapeItems[i].border_width != shapeItems_temp[i].border_width ) { fill_build = true; break; }
-                if( shapeItems[i].type != shapeItems_temp[i].type ) { fill_build = true; break; }
-                if( (int)TSYS::realRound(shapeItems[i].angle_temp, 2, true) != 
-                    (int)TSYS::realRound(shapeItems_temp[i].angle_temp, 2, true) ) { fill_build = true; break; }
+                     (int)TSYS::realRound(shapeItems_temp[i].ctrlPos4.y(), 3, true) )
+                    { fill_build = true; break; }
+                if( TSYS::realRound((*pnts)[shapeItems[i].n1].x(),2,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n1].x(),2,true) ||
+                    TSYS::realRound((*pnts)[shapeItems[i].n1].y(),2,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n1].y(),2,true) )
+                    { fill_build = true; break; }
+                if( TSYS::realRound((*pnts)[shapeItems[i].n2].x(),2,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n2].x(),2,true) ||
+                    TSYS::realRound((*pnts)[shapeItems[i].n2].y(),2,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n2].y(),2,true) )
+                    { fill_build = true; break; }
+                if( TSYS::realRound((*pnts)[shapeItems[i].n3].x(),2,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n3].x(),2,true) ||
+                    TSYS::realRound((*pnts)[shapeItems[i].n3].y(),2,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n3].y(),2,true) )
+                    { fill_build = true; break; }
+                if( TSYS::realRound((*pnts)[shapeItems[i].n4].x(),2,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n4].x(),2,true) ||
+                    TSYS::realRound((*pnts)[shapeItems[i].n4].y(),2,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n4].y(),2,true) )
+                    { fill_build = true; break; }
+                if( TSYS::realRound((*pnts)[shapeItems[i].n5].x(),2,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n5].x(),2,true) ||
+                    TSYS::realRound((*pnts)[shapeItems[i].n5].y(),2,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n5].y(),2,true) )
+                    { fill_build = true; break; }
+                if( (*colors)[shapeItems[i].lineColor].rgb() != shapeColors_temp[shapeItems_temp[i].lineColor].rgb() )
+                    { fill_build = true; break; }
+                if( (*colors)[shapeItems[i].borderColor].rgb() != shapeColors_temp[shapeItems_temp[i].borderColor].rgb() )
+                    { fill_build = true; break; }
+                if( (*styles)[shapeItems[i].style] != shapeStyles_temp[shapeItems_temp[i].style] )
+                    { fill_build = true; break; }
+                if( (*widths)[shapeItems[i].width] != shapeWidths_temp[shapeItems_temp[i].width] )
+                    { fill_build = true; break; }
+                if( (*widths)[shapeItems[i].border_width] != shapeWidths_temp[shapeItems_temp[i].border_width] )
+                    { fill_build = true; break; }
+                if( shapeItems[i].type != shapeItems_temp[i].type )
+                    { fill_build = true; break; }
+                if( (int)TSYS::realRound(shapeItems[i].angle_temp, 2, true) != (int)TSYS::realRound(shapeItems_temp[i].angle_temp, 2, true) )
+                    { fill_build = true; break; }
             }
+        paint = fill_build;
         //-- Detecting the difference beetwen inundationItems --
         if( inundationItems.size() != inundationItems_temp.size() )
         {
             flag_all = true;
             in_build = inundationItems;
+            paint = true;
         }
         else
             for( int i_f = 0; i_f < inundationItems.size(); i_f++ )
@@ -868,12 +899,21 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 {
                     in_build.push_back(inundationItems[i_f]);
                     fill_number.push_back(i_f);
+                    paint = true;
                     continue;
                 }
-                if( inundationItems[i_f].brush != inundationItems_temp[i_f].brush )
-                     inundationItems_temp[i_f].brush = inundationItems[i_f].brush;
-                if( inundationItems[i_f].brush_img != inundationItems_temp[i_f].brush_img )
-                    inundationItems_temp[i_f].brush_img = inundationItems[i_f].brush_img;
+                if( (*colors)[inundationItems[i_f].brush].rgb() != shapeColors_temp[inundationItems_temp[i_f].brush].rgb() ||
+                      inundationItems_temp[i_f].brush != inundationItems[i_f].brush)
+                    {
+                        inundationItems_temp[i_f].brush = inundationItems[i_f].brush;
+                        paint = true; 
+                    }
+                if( (*images)[inundationItems[i_f].brush_img] != shapeImages_temp[inundationItems_temp[i_f].brush_img] ||
+                      inundationItems[i_f].brush_img != inundationItems_temp[i_f].brush_img)
+                    {
+                        inundationItems_temp[i_f].brush_img = inundationItems[i_f].brush_img;
+                        paint = true;
+                    }
             }
 
         inundationItems.clear();
@@ -956,8 +996,16 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
         if( rectItems.size() )	rectItems.clear();
         flag_ctrl    = false;
     }
-    if( up && !w->allAttrLoad( ) && uiPrmPos != -1 )
-        w->update();
+    if( up && !w->allAttrLoad( ) && uiPrmPos == -1 && 
+        (paint || (shapeItems_temp.size() == 0) || (inundationItems_temp.size() == 0)) )
+            paintImage( w );
+
+    if( up && !w->allAttrLoad( ) && uiPrmPos != -1 &&
+        (paint || (shapeItems_temp.size() == 0) || (inundationItems_temp.size() == 0)) )
+        {
+            paintImage( w );
+            w->update();
+        }
     return up;
 }
 
@@ -1299,7 +1347,11 @@ void ShapeElFigure::editExit( WdgView *view )
     itemInMotion = 0;
     count_Shapes = 0;
     index_array.clear();
-    if( rectItems.size() ) rectItems.clear();
+    if( rectItems.size() )
+    {
+        rectItems.clear();
+        paintImage(view);
+    }
 }
 
 void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
@@ -1524,6 +1576,7 @@ void ShapeElFigure::toolAct( QAction *act )
             itemInMotion = 0;
         }
         status = true;
+        paintImage(w);
         w->repaint();
     }
     else if( act->objectName() == "arc" )
@@ -1545,6 +1598,7 @@ void ShapeElFigure::toolAct( QAction *act )
             itemInMotion = 0;
         }
         status = true;
+        paintImage(w);
         w->repaint();
     }
     else if( act->objectName() == "besier" )
@@ -1566,6 +1620,7 @@ void ShapeElFigure::toolAct( QAction *act )
             itemInMotion = 0;
         }
         status = true;
+        paintImage(w);
         w->repaint();
     }
     else if( act->objectName() == "hold" )
@@ -1581,6 +1636,7 @@ void ShapeElFigure::toolAct( QAction *act )
         index_array.clear();
         index_array_copy.clear();
         rectItems.clear();
+        paintImage(w);
         w->repaint();
     }
     else if( act->objectName() == "cursor" )
@@ -1588,6 +1644,7 @@ void ShapeElFigure::toolAct( QAction *act )
         act->setChecked(true);
         w->unsetCursor();
         status = false;
+        paintImage(w);
         w->update();
     }
     else if( act->objectName() == "editcopy" )
@@ -1728,6 +1785,7 @@ void ShapeElFigure::toolAct( QAction *act )
             flag_ctrl_move = 1;
             count_Shapes = index_array.size();
             moveAll( QPointF(0,0), shapeItems, pnts, inundationItems, w );
+            paintImage(w);
             w->repaint();
             shapeSave( w );
         }
@@ -1808,6 +1866,7 @@ void ShapeElFigure::toolAct( QAction *act )
         flag_ctrl = flag_A = flag_copy = false;
         ((VisDevelop *)w->mainWin())->actLevRise->setEnabled(false);
         ((VisDevelop *)w->mainWin())->actLevLower->setEnabled(false);
+        paintImage(w);
         w->repaint();
     }
     else if( act->objectName() == "level_lower" )
@@ -1884,6 +1943,7 @@ void ShapeElFigure::toolAct( QAction *act )
         flag_ctrl = flag_A = flag_copy = false;
         ((VisDevelop *)w->mainWin())->actLevRise->setEnabled(false);
         ((VisDevelop *)w->mainWin())->actLevLower->setEnabled(false);
+        paintImage(w);
         w->repaint();
     }
 }
@@ -1891,7 +1951,6 @@ void ShapeElFigure::toolAct( QAction *act )
 void ElFigDt::dynamic( )
 {
     ShapeElFigure *elF = (ShapeElFigure*) mod->getWdgShape("ElFigure");
-    //WdgView *w = (WdgView*)TSYS::str2addr(sender()->property("wdgAddr").toString().toAscii().data());
     PntMap *pnts = &shapePnts;
     WidthMap *widths = &shapeWidths;
     ColorMap *colors = &shapeColors;
@@ -2021,7 +2080,7 @@ void ElFigDt::dynamic( )
             }
             break;
         case 6:
-            if( elF->index != -1 )
+            if( elF->index == -1 )
             {
                 temp_fc = (*colors)[inundationItems[elF->fill_index].brush];
                 tmp = inundationItems[elF->fill_index].brush;
@@ -2032,7 +2091,7 @@ void ElFigDt::dynamic( )
             }
             break;
         case 7:
-            if( elF->index != -1 )
+            if( elF->index == -1 )
             {
                 temp_fi = (*images)[inundationItems[elF->fill_index].brush_img];
                 tmp = inundationItems[elF->fill_index].brush_img;
@@ -2150,8 +2209,12 @@ void ElFigDt::dynamic( )
             for( StyleMap::iterator pi = styles->begin(); pi != styles->end(); pi++ )
                 if(pi->first  > 0 ) (*styles).erase ( pi );
             elF->shapeSave( w );
-            elF->rectItems.clear();
-            w->update();
+            if( elF->rectItems.size() )
+            {
+                elF->rectItems.clear();
+                elF->paintImage(w);
+                w->update();
+            }
             break;
     }
     if( (tmp <= -10 || tmp == -5 || tmp == -6 || tmp == -7) && real > 0  )
@@ -2208,8 +2271,12 @@ void ElFigDt::dynamic( )
 
         }
         elF->shapeSave( w );
-        if( upd )
+        if( elF->rectItems.size() || upd )
+        {
+            elF->rectItems.clear();
+            elF->paintImage(w);
             w->update();
+        }
     }
 }
 
@@ -2229,266 +2296,11 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
     {
         case QEvent::Paint:
         {
-            //printf("Paint\n");
-            DevelWdgView *devW = qobject_cast<DevelWdgView*>(view);
-            RunWdgView   *runW = qobject_cast<RunWdgView*>(view);
-            QPainter pnt( view );
-            //- Prepare draw area -
-            int margin = elFD->geomMargin;
-            QRect draw_area = view->rect().adjusted(0,0,-2*margin,-2*margin);	    
-            pnt.setWindow(draw_area);
-            pnt.setViewport(view->rect().adjusted(margin,margin,-margin,-margin));
-            //- Drawing all fills(inundations) -
-            for( int i=0; i < inundationItems.size(); i++ )
-            {
-                QImage img;
-                string backimg = view->resGet((*images)[inundationItems[i].brush_img]);
-                img.loadFromData((const uchar*)backimg.c_str(), backimg.size());
-                if( !img.isNull() )
-                {
-                    QPainterPath in_path, in_path_rot;
-                    in_path = newPath;
-                    //-- Building the scaled and unrotated inundation path --
-                    QPointF p1;
-                    PntMap tmp_pnts;
-                    QVector<int> number_vector;
-                    bool fl_;
-                    for( int p = 0; p < inundationItems[i].number_shape.size(); p++ )
-                        if( shapeItems[inundationItems[i].number_shape[p]].type == 1 )
-                        {
-                            fl_ = false;
-                            for( int k = 0; k < number_vector.size(); k ++ )
-                                if(shapeItems[inundationItems[i].number_shape[p]].n1 == number_vector[k])
-                                {
-                                    fl_ = true;
-                                    break;
-                                }
-                            if( !fl_ )
-                            {
-                                p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n1], view, true, true);
-                                tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n1] = unScaleRotate( p1, view, false, true);
-                                number_vector.push_back(shapeItems[inundationItems[i].number_shape[p]].n1);
-                            }
-                            fl_ = false;
-                            for( int k = 0; k < number_vector.size(); k ++ )
-                                if(shapeItems[inundationItems[i].number_shape[p]].n2 == number_vector[k])
-                                {
-                                    fl_ = true;
-                                    break;
-                                }
-                            if( !fl_ )
-                            {
-                                p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n2], view, true, true);
-                                tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n2] = unScaleRotate( p1, view, false, true);
-                                number_vector.push_back(shapeItems[inundationItems[i].number_shape[p]].n2);
-                            }
-                        }
-                        else if( shapeItems[inundationItems[i].number_shape[p]].type == 2 )
-                        {
-                            fl_ = false;
-                            for( int k = 0; k < number_vector.size(); k ++ )
-                                if(shapeItems[inundationItems[i].number_shape[p]].n1 == number_vector[k])
-                                {
-                                    fl_ = true;
-                                    break;
-                                }
-                            if( !fl_ )
-                            {
-                                p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n1], view, true, true);
-                                tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n1] = unScaleRotate( p1, view, false, true);
-                                number_vector.push_back(shapeItems[inundationItems[i].number_shape[p]].n1);
-                            }
-                            fl_ = false;
-                            for( int k = 0; k < number_vector.size(); k ++ )
-                                if(shapeItems[inundationItems[i].number_shape[p]].n2 == number_vector[k])
-                                {
-                                    fl_ = true;
-                                    break;
-                                }
-                            if( !fl_ )
-                            {
-                                p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n2], view, true, true);
-                                tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n2] = unScaleRotate( p1, view, false, true);
-                                number_vector.push_back(shapeItems[inundationItems[i].number_shape[p]].n2);
-                            }
-
-                            p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n3], view, true, true);
-                            tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n3] = unScaleRotate( p1, view, false, true);
-                            p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n4], view, true, true);
-                            tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n4] = unScaleRotate( p1, view, false, true);
-                            p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n5], view, true, true);
-                            tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n5] = unScaleRotate( p1, view, false, true);
-                        }
-                        else if( shapeItems[inundationItems[i].number_shape[p]].type == 3 )
-                        {
-                            fl_ = false;
-                            for( int k = 0; k < number_vector.size(); k ++ )
-                                if(shapeItems[inundationItems[i].number_shape[p]].n1 == number_vector[k])
-                            {
-                                fl_ = true;
-                                break;
-                            }
-                            if( !fl_ )
-                            {
-                                p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n1], view, true, true);
-                                tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n1] = unScaleRotate( p1, view, false, true);
-                                number_vector.push_back(shapeItems[inundationItems[i].number_shape[p]].n1);
-                            }
-                            fl_ = false;
-                            for( int k = 0; k < number_vector.size(); k ++ )
-                                if(shapeItems[inundationItems[i].number_shape[p]].n2 == number_vector[k])
-                            {
-                                fl_ = true;
-                                break;
-                            }
-                            if( !fl_ )
-                            {
-                                p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n2], view, true, true);
-                                tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n2] = unScaleRotate( p1, view, false, true);
-                                number_vector.push_back(shapeItems[inundationItems[i].number_shape[p]].n2);
-                            }
-                            p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n3], view, true, true);
-                            tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n3] = unScaleRotate( p1, view, false, true);
-                            p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n4], view, true, true);
-                            tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n4] = unScaleRotate( p1, view, false, true);
-                        }
-                    number_vector.clear();
-                    flag_rotate = false;
-                    flag_scale = false;
-                    in_path = createInundationPath( inundationItems[i].number_shape, shapeItems, tmp_pnts, view );
-                    flag_rotate = true;
-                    flag_scale = true;
-                    tmp_pnts.clear();
-
-                    double xMax = in_path.pointAtPercent ( 0 ).x();
-                    double xMin = in_path.pointAtPercent ( 0 ).x();
-                    double yMax = in_path.pointAtPercent ( 0 ).y();
-                    double yMin = in_path.pointAtPercent ( 0 ).y();
-                    double t = 0.01;
-                    do
-                    {
-                        QPointF pnt_ = in_path.pointAtPercent ( t );
-                        if( pnt_.x() < xMin ) xMin = pnt_.x();
-                        if( pnt_.x() > xMax ) xMax = pnt_.x();
-                        if( pnt_.y() < yMin ) yMin = pnt_.y();
-                        if( pnt_.y() > yMax ) yMax = pnt_.y();
-                        t += 0.01;
-                    }
-                    while( t < 1 );
-
-                    in_path_rot = createInundationPath( inundationItems[i].number_shape, shapeItems, *pnts, view );
-                    double xMax_rot = in_path_rot.pointAtPercent ( 0 ).x();
-                    double xMin_rot = in_path_rot.pointAtPercent ( 0 ).x();
-                    double yMax_rot = in_path_rot.pointAtPercent ( 0 ).y();
-                    double yMin_rot = in_path_rot.pointAtPercent ( 0 ).y();
-                    t = 0.01;
-                    do
-                    {
-                        QPointF pnt_ = in_path_rot.pointAtPercent ( t );
-                        if( pnt_.x() < xMin_rot ) xMin_rot = pnt_.x();
-                        if( pnt_.x() > xMax_rot ) xMax_rot = pnt_.x();
-                        if( pnt_.y() < yMin_rot ) yMin_rot = pnt_.y();
-                        if( pnt_.y() > yMax_rot ) yMax_rot = pnt_.y();
-                        t += 0.01;
-                    }
-                    while( t < 1 );
-
-                    //-- Scaling image for filling --
-                    img = img.scaled ( QSize( (int)TSYS::realRound( xMax - xMin )+1, (int)TSYS::realRound( yMax - yMin )+1 ), Qt::IgnoreAspectRatio, Qt::SmoothTransformation  );
-                    double im_x, im_y;
-                    QColor color;
-                    double alpha, color_r, color_g, color_b;
-                    QRgb rgb;
-                    QPointF drw_pnt,drw_pnt1;
-                    QPen im_pen;
-                    im_y = yMin_rot;
-                    //-- Calculating the resulting color of the image and drawing the scaled and rotated points of it into the inundation path --
-                    do
-                    {
-                        im_x = xMin_rot;
-                        do
-                        {
-                            if( in_path_rot.contains( QPointF(im_x, im_y) ) )
-                            {
-                                drw_pnt = unScaleRotate( QPointF( im_x, im_y ), view, false, true );
-                                if( img.valid ( (int)TSYS::realRound(  drw_pnt.x() - xMin, 2, true ), (int)TSYS::realRound(  drw_pnt.y() - yMin, 2, true ) ) )
-                                {
-                                    rgb = img.pixel ((int)TSYS::realRound(  drw_pnt.x() - xMin, 2, true ), (int)TSYS::realRound(  drw_pnt.y() - yMin, 2, true ));
-                                    alpha = (double)((rgb>>24)&0xff)/255;
-                                    color_r = alpha*((rgb>>16)&0xff) + (1-alpha)*(*colors)[inundationItems[i].brush].red();
-                                    color_g = alpha*((rgb>>8)&0xff) + (1-alpha)*(*colors)[inundationItems[i].brush].green();
-                                    color_b = alpha*(rgb&0xff) + (1-alpha)*(*colors)[inundationItems[i].brush].blue();
-                                    im_pen.setColor ( QColor((int)(color_r), (int)(color_g), (int)(color_b) ) );
-                                    pnt.setPen( im_pen );
-                                    drw_pnt1 = scaleRotate( drw_pnt, view, false, true );
-
-                                    pnt.drawPoint( QPointF( (int)TSYS::realRound( drw_pnt1.x(), 2, true),
-                                                            (int)TSYS::realRound( drw_pnt1.y(), 2, true) ) );
-                                }
-                            }
-                            im_x += 1;
-                        }
-                        while( im_x > xMin_rot && im_x < xMax_rot + 1 );
-                        im_y += 1;
-                    }
-                    while( im_y > yMin_rot && im_y < yMax_rot + 1 );
-                }
-               else
-               {
-                   pnt.setBrush( (*colors)[inundationItems[i].brush] );
-                   pnt.setPen( Qt::NoPen );
-                   pnt.drawPath( inundationItems[i].path );
-               }
-            }
-            //- Drawing all el_figures -
-            for( int k=0; k < shapeItems.size(); k++ )
-            {
-                if( (*widths)[shapeItems[k].border_width] > 0.01 )
-                {
-                    pnt.setBrush( QBrush( (*colors)[shapeItems[k].lineColor], Qt::SolidPattern ) );
-                    pnt.setPen( QPen( (*colors)[shapeItems[k].borderColor], (*widths)[shapeItems[k].border_width], (*styles)[shapeItems[k].style], Qt::FlatCap, Qt::MiterJoin ) );
-                    pnt.drawPath( shapeItems[k].path );
-                }
-                else if( ( (*widths)[shapeItems[k].border_width] >= 0) && (fabs((*widths)[shapeItems[k].border_width] - 0) < 0.01) )
-                {
-                    pnt.setBrush(Qt::NoBrush);
-                    if( (*widths)[shapeItems[k].width] < 3 )
-                        pnt.setPen( QPen( (*colors)[shapeItems[k].lineColor], (*widths)[shapeItems[k].width], (*styles)[shapeItems[k].style], Qt::SquareCap, Qt::RoundJoin ) );
-                    else
-                        pnt.setPen( QPen( (*colors)[shapeItems[k].lineColor], (*widths)[shapeItems[k].width], (*styles)[shapeItems[k].style], Qt::FlatCap, Qt::RoundJoin ) );
-                    pnt.drawPath( shapeItems[k].pathSimple );
-                }
-            }
-            //- Drawing all rects for choosen el_figures -
-            pnt.setRenderHint( QPainter::Antialiasing, false );
-            if( devW && devW->edit() )
-            {
-                for( int k = 0; k < rectItems.size(); k++ )
-                {
-                    pnt.setBrush( rectItems[k].brush );
-                    pnt.setPen( rectItems[k].pen );
-                    pnt.drawPath( rectItems[k].path );
-                }
-                pnt.setBrush( Qt::NoBrush );
-                pnt.setPen( QPen( Qt::gray , 2, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin) );
-                pnt.setBrush( QBrush( QColor(127,127,127,127), Qt::SolidPattern ) );
-                ellipse_draw_startPath.setFillRule ( Qt::WindingFill );
-                pnt.drawPath( ellipse_draw_startPath );
-                ellipse_draw_endPath.setFillRule ( Qt::WindingFill );
-                pnt.drawPath( ellipse_draw_endPath );
-                ellipse_draw_startPath = newPath;
-                ellipse_draw_endPath = newPath;
-                if( dashedRect.isValid() )
-                {
-                    pnt.setBrush( Qt::NoBrush );
-                    pnt.setPen( Qt::white );
-                    pnt.drawRect( dashedRect );
-                    pnt.setBrush( Qt::NoBrush );
-                    pnt.setPen( Qt::black );
-                    pnt.setPen( Qt::DashLine );
-                    pnt.drawRect( dashedRect );
-                }
-            }
+            QPainter pnt_v( view );
+            pnt_v.drawImage( QPoint(0,0),elFD->pictObj );
+            if( dashedRect.isValid() )
+                pnt_v.drawImage( QPoint(0,0), rect_img );
+            pnt_v.end();
             return true;
         }
         case QEvent::MouseButtonPress:
@@ -2520,7 +2332,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     {
                         //- initialization for holds - 
                         current_ss = current_se = current_es = current_ee = -1;
-                        flag_holds = true;
                         // - getting the index of the figure -
                         index = itemAt( ev->pos(), shapeItems, view );
                         if( index == -1 )
@@ -2545,7 +2356,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             if( !flag_copy )
                             {
                                 itemInMotion = &shapeItems[index];
-                                if( (flag_ctrl && !status_hold) || (flag_ctrl && flag_A) )
+                                if( (flag_ctrl && !status_hold && index_array.size()) || (flag_ctrl && flag_A) )
                                 {
                                     bool fn = false;
                                     for( int i=0; i < count_Shapes; i++ )
@@ -2560,6 +2371,8 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                         moveItemTo( previousPosition, shapeItems, pnts, view );
                                     }
                                     flag_check_pnt_inund = true;
+                                    paintImage(view);
+                                    view->repaint();
                                 }
                             }
                             else
@@ -2600,8 +2413,9 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                             itemInMotion = &shapeItems[index_array[i]];
                                             index = index_array[i];
                                             moveItemTo( ev->pos(), shapeItems, pnts, view );
-                                            //view->repaint();
                                         }
+                                        paintImage(view);
+                                        view->repaint();
                                     }
                                 }
                             }
@@ -2613,12 +2427,18 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                 flag_ctrl = flag_A = flag_copy = false;
                                 flag_check_pnt_inund = false;
                                 index_array.clear();
-                                offset = QPointF(0,0);
                                 itemInMotion = 0;
 				count_Shapes = 0;
                             }
-                            if( rectItems.size() ) rectItems.clear();
-                            view->repaint();
+                            if( !(QApplication::keyboardModifiers()&Qt::ControlModifier) )
+                            {
+                                if( rectItems.size() )
+                                {
+                                    rectItems.clear();
+                                    paintImage(view);
+                                    view->repaint();
+                                }
+                            }
                         }
                     }
                     if( ev->button()==Qt::RightButton && !status )
@@ -2662,6 +2482,8 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         count_moveItemTo = 1;
                         offset = QPointF(0,0);
                         moveItemTo( ev->pos(), shapeItems, pnts, view );
+                        paintImage(view);
+
                         view->repaint();
                     }
                 }
@@ -2713,19 +2535,29 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                         {
                                             inundationItems.remove(i);
                                             fl_brk = true;
+                                            paintImage(view);
+                                            view->repaint();
                                             break;
                                         }
                                     if( !fl_brk && status_hold )
+                                    {
                                         inundationItems.push_back(inundationItem(inundationPath,-7,-5, inundation_vector, inundation_vector));
+                                        paintImage(view);
+                                        view->repaint();
+                                    }
                                 }
                             }
                             inundation_vector.clear();
                             vect.clear();
                             map_matrix.clear();
                         }
+                        else
+                        {
+                            paintImage(view);
+                            view->repaint();
+                        }
                         flag_angle_temp = false;
                     }
-                    view->repaint();
                 }
                 shapeSave(view);
 		return true;
@@ -2741,7 +2573,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
             {
                 if( !flag_down && !flag_up && !flag_left && !flag_right )
                 {
-                    if( flag_move && ev->button() == Qt::LeftButton )
+                    if( flag_move && ev->button() == Qt::LeftButton && !(QApplication::keyboardModifiers()&Qt::ControlModifier) )
                     {
                         flag_move = false;
                         dashedRectPath = newPath;
@@ -2762,7 +2594,9 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             index_array_copy.clear();
                             flag_ctrl_move = 1;
                             count_Shapes = index_array.size();
+                            offset = QPointF(0,0);
                             moveAll( QPointF(0,0), shapeItems, pnts, inundationItems, view );
+                            paintImage(view);
                         }
                         ((VisDevelop *)view->mainWin())->actLevRise->setEnabled(true);
                         ((VisDevelop *)view->mainWin())->actLevLower->setEnabled(true);
@@ -2964,9 +2798,20 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             moveItemTo( ev->pos(), shapeItems, pnts, view );
                             //view->repaint();
                         }
-                        ellipse_draw_startPath = newPath;
-                        ellipse_draw_endPath = newPath;
-                        // - calling moveItemTo for figures, connected with the arc, if there was moving 3 or 4 rexts of the arc -
+                        if( ellipse_draw_startPath != newPath )
+                        {
+                            ellipse_draw_startPath = newPath;
+                            paintImage(view);
+                            view->repaint();
+                        }
+                        if( ellipse_draw_endPath != newPath )
+                        {
+                            ellipse_draw_endPath = newPath;
+                            paintImage(view);
+                            view->repaint();
+
+                        }
+                        // - calling moveItemTo for figures, connected with the arc, if there was moving 3 or 4 rects of the arc -
                         if( count_holds && (flag_arc_rect_3_4 || (flag_rect && shapeItems[index_array[0]].type==2)))
                         {
                             count_moveItemTo = 0;
@@ -2998,14 +2843,13 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                 fig_rect_array.clear();
                             }
                             flag_rect = false;
-                            flag_arc_release = false;
                             count_rects = 0;
                             flag_hold_arc = false;
                             rect_num_arc = -1;
                             flag_arc_rect_3_4 = false;
                         }
                         itemInMotion = 0;
-		     	flag_m=false;
+		     	flag_m = false;
                     }
                     if( ev->button()==Qt::RightButton && !status )
                     {
@@ -3028,7 +2872,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                 fig_rect_array.clear();
                             }
                             flag_rect = false;
-                            flag_arc_release = false;
                             count_rects = 0;
                             flag_hold_arc = false;
                             rect_num_arc = -1;
@@ -3086,6 +2929,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                 shapeItems[shapeItems.size()-1].n1 = appendPoint( StartLine, shapeItems, pnts, 1 );
                                 shapeItems[shapeItems.size()-1].n2 = appendPoint( EndLine, shapeItems, pnts, 1 );
                                 shapeSave( view );
+                                paintImage(view);
                                 view->repaint();
                             }
                             //--- if !orto ---
@@ -3114,6 +2958,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                 shapeItems[shapeItems.size()-1].n1 = appendPoint( StartLine, shapeItems, pnts, 1 );
                                 shapeItems[shapeItems.size()-1].n2 = appendPoint( EndLine, shapeItems, pnts, 1 );
                                 shapeSave( view );
+                                paintImage(view);
                                 view->repaint();
                             }
                         }
@@ -3153,6 +2998,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             shapeItems[shapeItems.size()-1].n3 = appendPoint( CtrlPos_1, shapeItems, pnts, 1 );
                             shapeItems[shapeItems.size()-1].n4 = appendPoint( CtrlPos_2, shapeItems, pnts, 1 );
                             shapeSave( view );
+                            paintImage(view);
                             view->repaint();
                         }
                         //-- if arc --
@@ -3198,6 +3044,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             shapeItems[shapeItems.size()-1].n4 = appendPoint( CtrlPos_2, shapeItems, pnts, 1 );
                             shapeItems[shapeItems.size()-1].n5 = appendPoint( CtrlPos_3, shapeItems, pnts, 1 );
                             shapeSave( view );
+                            paintImage(view);
                             view->repaint();
                         }
                         flag_key = 0;
@@ -3243,6 +3090,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         flag_hold_arc = false;
                         if( shapeItems[index_array[0]].type == 2 ) 	flag_hold_arc = true;
                         moveAll( ev->pos(), shapeItems, pnts, inundationItems, view );
+                        paintImage(view);
                         view->repaint();
                     }
                     // - moving the rect, which belongs only for one figure -
@@ -3276,6 +3124,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 					if( flag_break_move ) break;
 				    }
                             flag_hold_rect = true;
+                            paintImage(view);
                             view->repaint();
                         }
                         else if( !flag_ctrl )
@@ -3374,6 +3223,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                     flag_inund_break = true;
 			    }
 			    flag_arc_inund = false;
+                            paintImage(view);
 			    view->repaint();
 			}
                         if( rect_num != -1 )	temp = realRectNum( rect_num, shapeItems );
@@ -3440,7 +3290,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         }
                     }
                 }
-                else if( ev->buttons()&Qt::LeftButton && itemInMotion == 0 && !status && index_temp == -1 )
+                else if( ev->buttons()&Qt::LeftButton && itemInMotion == 0 && !status && index_temp == -1 && !(QApplication::keyboardModifiers()&Qt::ControlModifier)  )
                 {
                     if( !flag_move )
                     {
@@ -3449,6 +3299,23 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         flag_move = true;
                     }
                     else dashedRect = QRect( stPointDashedRect, ev->pos() ).normalized();
+                    //paintImage(view);//!!!!!!!!!Sdelat flag dlia onrisovki kvadrata!!!
+                    rect_img = QImage(view->width(), view->height(), QImage::Format_ARGB32_Premultiplied );
+                    rect_img.fill(0);
+                    QPainter pnt_rect( &rect_img );
+                    int margin = elFD->geomMargin;
+                    QRect draw_area = view->rect().adjusted(0,0,-2*margin,-2*margin);	    
+                    pnt_rect.setWindow(draw_area);
+                    pnt_rect.setViewport(view->rect().adjusted(margin,margin,-margin,-margin));
+                    pnt_rect.setBrush( Qt::NoBrush );
+                    pnt_rect.setPen( Qt::white );
+                    pnt_rect.drawRect( dashedRect );
+                    pnt_rect.setBrush( Qt::NoBrush );
+                    pnt_rect.setPen( Qt::black );
+                    pnt_rect.setPen( Qt::DashLine );
+                    pnt_rect.drawRect( dashedRect );
+                    pnt_rect.end();
+
                     view->repaint();
                 }
                 else //if( flag_cursor==0 )
@@ -3481,7 +3348,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             rect_num_arc = -1;
                             flag_ctrl    = false;
                             flag_rect    = false;
-                            flag_arc_release  = false;
                             flag_arc_rect_3_4 = false;
                             flag_hold_rect    = false;
                             index_array.clear();
@@ -3551,6 +3417,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             index_array.clear();
                             itemInMotion = 0;
                             count_Shapes = 0;
+                            paintImage(view);
                             view->repaint();
                         }
                         else
@@ -3558,7 +3425,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             if( index_array_copy.size() )
                                 if( index_array_copy[0] != -1 && status_hold && index_array.size() == 0 )
                                     index_array = index_array_copy;//!!!!
-                            
                             for( int i = 0; i < inundationItems.size(); i++ )
                             {
                                 for( int j = 0; j < inundationItems[i].number_shape.size(); j++ )
@@ -3624,6 +3490,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             drop_inunds.clear();
                             itemInMotion = 0;
                             count_Shapes = 0;
+                            paintImage(view);
                             view->repaint();
                         }
                     }
@@ -3679,6 +3546,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 			shapeItems.remove(index_del);
 			rectItems.clear();
 			shapeSave(view);
+                        paintImage(view);
 			view->repaint();
                     }
                     view->unsetCursor();
@@ -3694,9 +3562,12 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     for( int i = 0; i < shapeItems.size(); i++ )
                         index_array.push_back(i);
                     count_Shapes = shapeItems.size();
+                    offset = QPointF(0,0);
                     moveAll( QPointF(0,0), shapeItems, pnts, inundationItems, view );
                     if( index_array.size() )
                         ((VisDevelop *)view->mainWin())->actVisItCopy->setEnabled(true);
+                    paintImage(view);
+
                     view->repaint();
                 }
                 if( ev->key() == Qt::Key_Up && (index_temp!=-1 || flag_A) )
@@ -3705,6 +3576,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     flag_up = true;
                     offset = QPointF(0,-1);
                     moveUpDown( shapeItems, pnts, inundationItems, view );
+                    paintImage(view);
                     view->repaint();
                 }
                 if( ev->key() == Qt::Key_Down && (index_temp!=-1 || flag_A) )
@@ -3713,6 +3585,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     flag_down = true;
                     offset = QPointF(0,1);
                     moveUpDown( shapeItems, pnts, inundationItems, view );
+                    paintImage(view);
                     view->repaint();
                 }
 
@@ -3722,6 +3595,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     flag_left = true;
                     offset = QPointF(-1,0);
                     moveUpDown( shapeItems, pnts, inundationItems, view );
+                    paintImage(view);
                     view->repaint();
                 }
                 if( ev->key() == Qt::Key_Right && (index_temp!=-1 || flag_A) )
@@ -3730,6 +3604,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     flag_right = true;
                     offset = QPointF(1,0);
                     moveUpDown( shapeItems, pnts, inundationItems, view );
+                    paintImage(view);
                     view->repaint();
                 }
         	return true;		
@@ -3752,11 +3627,14 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         count_Shapes = 0;
                         rectItems.clear();
                         index_array.clear();
-                        view->repaint();
+                        flag_m = false;
+                        view->unsetCursor();
+                        paintImage(view);
                         itemInMotion = 0;
                         index_temp = -1;
                         ((VisDevelop *)view->mainWin())->actVisItCopy->setEnabled(false);
                         flag_ctrl = false;
+                        view->repaint();
                     }
                     else flag_ctrl = false;
                 }
@@ -5456,6 +5334,270 @@ QPointF ShapeElFigure::unScaleRotate( const QPointF &point, WdgView *view, bool 
         rpnt = rpnt + center;
     }
     return rpnt;
+}
+
+void ShapeElFigure::paintImage( WdgView *view )
+{
+    ElFigDt *elFD = (ElFigDt*)view->shpData;
+    QVector<ShapeItem> &shapeItems = elFD->shapeItems;
+    QVector<inundationItem> &inundationItems = elFD->inundationItems;
+    PntMap *pnts = &elFD->shapePnts;
+    WidthMap *widths = &elFD->shapeWidths;
+    ColorMap *colors = &elFD->shapeColors;
+    ImageMap *images = &elFD->shapeImages;
+    StyleMap *styles = &elFD->shapeStyles;
+
+    DevelWdgView *devW = qobject_cast<DevelWdgView*>(view);
+    RunWdgView   *runW = qobject_cast<RunWdgView*>(view);
+    elFD->pictObj = QImage(view->width(), view->height(), QImage::Format_ARGB32_Premultiplied );
+    elFD->pictObj.fill(0);
+    QPainter pnt( &elFD->pictObj );
+    //- Prepare draw area -
+    int margin = elFD->geomMargin;
+    QRect draw_area = view->rect().adjusted(0,0,-2*margin,-2*margin);	    
+    pnt.setWindow(draw_area);
+    pnt.setViewport(view->rect().adjusted(margin,margin,-margin,-margin));
+    //- Drawing all fills(inundations) -
+    for( int i=0; i < inundationItems.size(); i++ )
+    {
+        QImage img;
+        string backimg = view->resGet((*images)[inundationItems[i].brush_img]);
+        img.loadFromData((const uchar*)backimg.c_str(), backimg.size());
+        if( !img.isNull() )
+        {
+            QPainterPath in_path, in_path_rot;
+            in_path = newPath;
+            //-- Building the scaled and unrotated inundation path --
+            QPointF p1;
+            PntMap tmp_pnts;
+            QVector<int> number_vector;
+            bool fl_;
+            for( int p = 0; p < inundationItems[i].number_shape.size(); p++ )
+                if( shapeItems[inundationItems[i].number_shape[p]].type == 1 )
+            {
+                fl_ = false;
+                for( int k = 0; k < number_vector.size(); k ++ )
+                    if(shapeItems[inundationItems[i].number_shape[p]].n1 == number_vector[k])
+                {
+                    fl_ = true;
+                    break;
+                }
+                if( !fl_ )
+                {
+                    p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n1], view, true, true);
+                    tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n1] = unScaleRotate( p1, view, false, true);
+                    number_vector.push_back(shapeItems[inundationItems[i].number_shape[p]].n1);
+                }
+                fl_ = false;
+                for( int k = 0; k < number_vector.size(); k ++ )
+                    if(shapeItems[inundationItems[i].number_shape[p]].n2 == number_vector[k])
+                {
+                    fl_ = true;
+                    break;
+                }
+                if( !fl_ )
+                {
+                    p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n2], view, true, true);
+                    tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n2] = unScaleRotate( p1, view, false, true);
+                    number_vector.push_back(shapeItems[inundationItems[i].number_shape[p]].n2);
+                }
+            }
+            else if( shapeItems[inundationItems[i].number_shape[p]].type == 2 )
+            {
+                fl_ = false;
+                for( int k = 0; k < number_vector.size(); k ++ )
+                    if(shapeItems[inundationItems[i].number_shape[p]].n1 == number_vector[k])
+                {
+                    fl_ = true;
+                    break;
+                }
+                if( !fl_ )
+                {
+                    p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n1], view, true, true);
+                    tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n1] = unScaleRotate( p1, view, false, true);
+                    number_vector.push_back(shapeItems[inundationItems[i].number_shape[p]].n1);
+                }
+                fl_ = false;
+                for( int k = 0; k < number_vector.size(); k ++ )
+                    if(shapeItems[inundationItems[i].number_shape[p]].n2 == number_vector[k])
+                {
+                    fl_ = true;
+                    break;
+                }
+                if( !fl_ )
+                {
+                    p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n2], view, true, true);
+                    tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n2] = unScaleRotate( p1, view, false, true);
+                    number_vector.push_back(shapeItems[inundationItems[i].number_shape[p]].n2);
+                }
+
+                p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n3], view, true, true);
+                tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n3] = unScaleRotate( p1, view, false, true);
+                p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n4], view, true, true);
+                tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n4] = unScaleRotate( p1, view, false, true);
+                p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n5], view, true, true);
+                tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n5] = unScaleRotate( p1, view, false, true);
+            }
+            else if( shapeItems[inundationItems[i].number_shape[p]].type == 3 )
+            {
+                fl_ = false;
+                for( int k = 0; k < number_vector.size(); k ++ )
+                    if(shapeItems[inundationItems[i].number_shape[p]].n1 == number_vector[k])
+                {
+                    fl_ = true;
+                    break;
+                }
+                if( !fl_ )
+                {
+                    p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n1], view, true, true);
+                    tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n1] = unScaleRotate( p1, view, false, true);
+                    number_vector.push_back(shapeItems[inundationItems[i].number_shape[p]].n1);
+                }
+                fl_ = false;
+                for( int k = 0; k < number_vector.size(); k ++ )
+                    if(shapeItems[inundationItems[i].number_shape[p]].n2 == number_vector[k])
+                {
+                    fl_ = true;
+                    break;
+                }
+                if( !fl_ )
+                {
+                    p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n2], view, true, true);
+                    tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n2] = unScaleRotate( p1, view, false, true);
+                    number_vector.push_back(shapeItems[inundationItems[i].number_shape[p]].n2);
+                }
+                p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n3], view, true, true);
+                tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n3] = unScaleRotate( p1, view, false, true);
+                p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n4], view, true, true);
+                tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n4] = unScaleRotate( p1, view, false, true);
+            }
+            number_vector.clear();
+            flag_rotate = false;
+            flag_scale = false;
+            in_path = createInundationPath( inundationItems[i].number_shape, shapeItems, tmp_pnts, view );
+            flag_rotate = true;
+            flag_scale = true;
+            tmp_pnts.clear();
+
+            double xMax = in_path.pointAtPercent ( 0 ).x();
+            double xMin = in_path.pointAtPercent ( 0 ).x();
+            double yMax = in_path.pointAtPercent ( 0 ).y();
+            double yMin = in_path.pointAtPercent ( 0 ).y();
+            double t = 0.01;
+            do
+            {
+                QPointF pnt_ = in_path.pointAtPercent ( t );
+                if( pnt_.x() < xMin ) xMin = pnt_.x();
+                if( pnt_.x() > xMax ) xMax = pnt_.x();
+                if( pnt_.y() < yMin ) yMin = pnt_.y();
+                if( pnt_.y() > yMax ) yMax = pnt_.y();
+                t += 0.01;
+            }
+            while( t < 1 );
+
+            in_path_rot = createInundationPath( inundationItems[i].number_shape, shapeItems, *pnts, view );
+            double xMax_rot = in_path_rot.pointAtPercent ( 0 ).x();
+            double xMin_rot = in_path_rot.pointAtPercent ( 0 ).x();
+            double yMax_rot = in_path_rot.pointAtPercent ( 0 ).y();
+            double yMin_rot = in_path_rot.pointAtPercent ( 0 ).y();
+            t = 0.01;
+            do
+            {
+                QPointF pnt_ = in_path_rot.pointAtPercent ( t );
+                if( pnt_.x() < xMin_rot ) xMin_rot = pnt_.x();
+                if( pnt_.x() > xMax_rot ) xMax_rot = pnt_.x();
+                if( pnt_.y() < yMin_rot ) yMin_rot = pnt_.y();
+                if( pnt_.y() > yMax_rot ) yMax_rot = pnt_.y();
+                t += 0.01;
+            }
+            while( t < 1 );
+            //-- Scaling image for filling --
+            img = img.scaled ( QSize( (int)TSYS::realRound( xMax - xMin )+1, (int)TSYS::realRound( yMax - yMin )+1 ), Qt::IgnoreAspectRatio, Qt::SmoothTransformation  );
+            double im_x, im_y;
+            QColor color;
+            double alpha, color_r, color_g, color_b;
+            QRgb rgb;
+            QPointF drw_pnt,drw_pnt1;
+            QPen im_pen;
+            im_y = yMin_rot;
+            //-- Calculating the resulting color of the image and drawing the scaled and rotated points of it into the inundation path --
+            do
+            {
+                im_x = xMin_rot;
+                do
+                {
+                    if( in_path_rot.contains( QPointF(im_x, im_y) ) )
+                    {
+                        drw_pnt = unScaleRotate( QPointF( im_x, im_y ), view, false, true );
+                        if( img.valid ( (int)TSYS::realRound(  drw_pnt.x() - xMin, 2, true ), (int)TSYS::realRound(  drw_pnt.y() - yMin, 2, true ) ) )
+                        {
+                            rgb = img.pixel ((int)TSYS::realRound(  drw_pnt.x() - xMin, 2, true ), (int)TSYS::realRound(  drw_pnt.y() - yMin, 2, true ));
+                            alpha = (double)((rgb>>24)&0xff)/255;
+                            color_r = alpha*((rgb>>16)&0xff) + (1-alpha)*(*colors)[inundationItems[i].brush].red();
+                            color_g = alpha*((rgb>>8)&0xff) + (1-alpha)*(*colors)[inundationItems[i].brush].green();
+                            color_b = alpha*(rgb&0xff) + (1-alpha)*(*colors)[inundationItems[i].brush].blue();
+                            im_pen.setColor ( QColor((int)(color_r), (int)(color_g), (int)(color_b) ) );
+                            pnt.setPen( im_pen );
+                            drw_pnt1 = scaleRotate( drw_pnt, view, false, true );
+
+                            pnt.drawPoint( QPointF( (int)TSYS::realRound( drw_pnt1.x(), 2, true),
+                                           (int)TSYS::realRound( drw_pnt1.y(), 2, true) ) );
+                        }
+                    }
+                    im_x += 1;
+                }
+                while( im_x > xMin_rot && im_x < xMax_rot + 1 );
+                im_y += 1;
+            }
+            while( im_y > yMin_rot && im_y < yMax_rot + 1 ); 
+        }
+        else
+        {
+            pnt.setBrush( (*colors)[inundationItems[i].brush] );
+            pnt.setPen( Qt::NoPen );
+            pnt.drawPath( inundationItems[i].path );
+        }
+    }
+    //- Drawing all el_figures -
+    for( int k=0; k < shapeItems.size(); k++ )
+    {
+        if( (*widths)[shapeItems[k].border_width] > 0.01 )
+        {
+            pnt.setBrush( QBrush( (*colors)[shapeItems[k].lineColor], Qt::SolidPattern ) );
+            pnt.setPen( QPen( (*colors)[shapeItems[k].borderColor], (*widths)[shapeItems[k].border_width], (*styles)[shapeItems[k].style], Qt::FlatCap, Qt::MiterJoin ) );
+            pnt.drawPath( shapeItems[k].path );
+        }
+        else if( ( (*widths)[shapeItems[k].border_width] >= 0) && (fabs((*widths)[shapeItems[k].border_width] - 0) < 0.01) )
+        {
+            pnt.setBrush(Qt::NoBrush);
+            if( (*widths)[shapeItems[k].width] < 3 )
+                pnt.setPen( QPen( (*colors)[shapeItems[k].lineColor], (*widths)[shapeItems[k].width], (*styles)[shapeItems[k].style], Qt::SquareCap, Qt::RoundJoin ) );
+            else
+                pnt.setPen( QPen( (*colors)[shapeItems[k].lineColor], (*widths)[shapeItems[k].width], (*styles)[shapeItems[k].style], Qt::FlatCap, Qt::RoundJoin ) );
+            pnt.drawPath( shapeItems[k].pathSimple );
+        }
+    }
+    //- Drawing all rects for choosen el_figures -
+    pnt.setRenderHint( QPainter::Antialiasing, false );
+    if( devW && devW->edit() )
+    {
+        for( int k = 0; k < rectItems.size(); k++ )
+        {
+            pnt.setBrush( rectItems[k].brush );
+            pnt.setPen( rectItems[k].pen );
+            pnt.drawPath( rectItems[k].path );
+        }
+        pnt.setBrush( Qt::NoBrush );
+        pnt.setPen( QPen( Qt::gray , 2, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin) );
+        pnt.setBrush( QBrush( QColor(127,127,127,127), Qt::SolidPattern ) );
+        ellipse_draw_startPath.setFillRule ( Qt::WindingFill );
+        pnt.drawPath( ellipse_draw_startPath );
+        ellipse_draw_endPath.setFillRule ( Qt::WindingFill );
+        pnt.drawPath( ellipse_draw_endPath );
+        ellipse_draw_startPath = newPath;
+        ellipse_draw_endPath = newPath;
+    }
+    pnt.end();
 }
 
 //- Building the path for fill -

@@ -126,6 +126,7 @@ class ElFigDt : public QObject
         ImageMap shapeImages;
         StyleMap shapeStyles;
         WdgView *w;
+        QImage  pictObj;
     private slots:
         void dynamic();
 };
@@ -157,9 +158,6 @@ class ShapeElFigure : public WdgShape
      
 	bool event( WdgView *view, QEvent *event );
     
- 	QString userFriendlyCurrentFile( );
-	QString currentFile( ) 		{ return curFile; }
-
 	//Public attributes
 	QVector<RectItem> rectItems;		//RectItem's container
 	QPainterPath 	newPath,		//Null path
@@ -183,8 +181,6 @@ class ShapeElFigure : public WdgShape
         int itemAt( const QPointF &pos, const QVector<ShapeItem> &shapeItems, WdgView *w );			//Check for figure type under cursor
         void moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeItems, PntMap *pnts, WdgView *w );	//Move figure procedure
     
-	void setCurrentFile( const QString &fileName );
-	QString strippedName( const QString &fullFileName );
 	QPointF rotate( const QPointF &pnt, double alpha );
 	QPointF unRotate( const QPointF &pnt, double alpha, double a, double b );
 	QPointF arc( double t, double a, double b);	
@@ -197,6 +193,7 @@ class ShapeElFigure : public WdgShape
         void rectNum3_4( const QVector<ShapeItem> &shapeItems);
         void moveAll( const QPointF &pos, QVector<ShapeItem> &shapeItems, PntMap *pnts, QVector<inundationItem> &inundationItems, WdgView *w );
         void checkPoint_checkInundation( QVector<ShapeItem> &shapeItems, PntMap *pnts, QVector<inundationItem> &inundationItems );
+        void paintImage( WdgView *view );
         QPainterPath painterPath( float el_width, float el_border_width, int el_type, double el_ang,
 		QPointF el_p1 = QPointF(0,0), QPointF el_p2 = QPointF(0,0), QPointF el_p3 = QPointF(0,0), 
 		QPointF el_p4 = QPointF(0,0), QPointF el_p5 = QPointF(0,0), QPointF el_p6 = QPointF(0,0) );
@@ -219,8 +216,6 @@ class ShapeElFigure : public WdgShape
 		previousPosition, previousPosition_all;		//Previous position for drag point by figure moving
 	ShapeItem *itemInMotion;				//Selected (moving) figure
     
-	QString curFile;
-	bool isUntitled;
         bool status_hold;			
     
         QVector<int> index_array;
@@ -233,10 +228,8 @@ class ShapeElFigure : public WdgShape
 	bool flag_cursor, flag_key, flag_up, flag_down, flag_left, flag_right, 
              flag_ctrl, flag_ctrl_move, flag_m, flag_hold_arc, flag_A, flag_copy, flag_check_pnt_inund;
 					    	
-        bool flag_rect, flag_arc_rect_3_4, flag_arc_release, flag_first_move, flag_move, flag_release;
-        QPointF Start_offset, End_offset, CtrlPos1_offset, CtrlPos2_offset, CtrlPos3_offset, CtrlPos4_offset;
+        bool flag_rect, flag_arc_rect_3_4, flag_first_move, flag_move, flag_release;
         int count_rects, rect_num_arc, arc_rect;
-        bool flag_holds;			
         bool flag_hold_move;			
         bool flag_inund_break;
         bool flag_scale, flag_rotate;
@@ -248,18 +241,23 @@ class ShapeElFigure : public WdgShape
         QVector<int> arc_rect_array, fig_rect_array, vect;
         QVector< QVector<int> > map_matrix;
         QVector< QVector<int> > minroad;
-        int counter_start, counter_end;
         int len, clen;
         int found;
         QVector<int> road;
         QVector<int> incl;
         QVector<int> inundation_vector;
         QPointF Prev_pos_1, Prev_pos_2;
-        QVector<int> num_vector;       
-        int rect_num_move;
+        QVector<int> num_vector;
         double angle_temp;
         bool flag_angle_temp;
         int rect_dyn;
+        QImage rect_img;
+        PntMap  shapePnts_temp;
+        WidthMap shapeWidths_temp;
+        ColorMap shapeColors_temp;
+        ImageMap shapeImages_temp;
+        StyleMap shapeStyles_temp;
+
     };
 }
 

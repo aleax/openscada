@@ -1,3 +1,8 @@
+2008-12-11 Maxim
+- FIX:/UI/Vision: A lot of little fixes is done for primitive ElFigure.
+- !!!/UI/Vision: Conception of painting is changed for primitive ElFigure, by means of wich performance is greatly improved in both: the runtime and the devel modes.
+
+
 2008-12-04 Maxim
 - FIX:/UI/Vision: Fixing "offset" after CTRL+A or square selection is done for primitive ElFigure.
 
