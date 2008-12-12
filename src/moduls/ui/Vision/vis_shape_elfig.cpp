@@ -3239,7 +3239,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             {
                                 ellipse_startPath = newPath;
                                 ellipse_endPath = newPath;
-                                if( i != index )
+                                if( i != index && !flag_A )
                                 {
                                     ellipse_startPath.addEllipse( scaleRotate((*pnts)[shapeItems[i].n1], view, flag_scale, flag_rotate).x()-8, 
                                                                   scaleRotate((*pnts)[shapeItems[i].n1], view, flag_scale, flag_rotate).y()-8, 16, 16 );
@@ -3299,12 +3299,11 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         flag_move = true;
                     }
                     else dashedRect = QRect( stPointDashedRect, ev->pos() ).normalized();
-                    //paintImage(view);//!!!!!!!!!Sdelat flag dlia onrisovki kvadrata!!!
                     rect_img = QImage(view->width(), view->height(), QImage::Format_ARGB32_Premultiplied );
                     rect_img.fill(0);
                     QPainter pnt_rect( &rect_img );
                     int margin = elFD->geomMargin;
-                    QRect draw_area = view->rect().adjusted(0,0,-2*margin,-2*margin);	    
+                    QRect draw_area = view->rect().adjusted(0,0,-2*margin,-2*margin);
                     pnt_rect.setWindow(draw_area);
                     pnt_rect.setViewport(view->rect().adjusted(margin,margin,-margin,-margin));
                     pnt_rect.setBrush( Qt::NoBrush );
@@ -3318,10 +3317,9 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 
                     view->repaint();
                 }
-                else //if( flag_cursor==0 )
+                else
                 {
                     if( flag_down || flag_left || flag_right || flag_up ) break;
-                    
                     if( flag_first_move && !flag_A )
                     {
                         shapeSave( view );
@@ -3367,7 +3365,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     }
                 }
             }
-            
             return true;
         }
         case QEvent::KeyPress:
@@ -3453,33 +3450,33 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             {
                                 if( index_array[p] != -1 )
                                 {
-                                switch( shapeItems[index_array[p]].type )
-                                {
-                                    case 1:
-                                        dropPoint( shapeItems[index_array[p]].n1, index_array[p], shapeItems, pnts );
-                                        dropPoint( shapeItems[index_array[p]].n2, index_array[p], shapeItems, pnts );
-                                        break;
-                                    case 2:
-                                        dropPoint( shapeItems[index_array[p]].n1, index_array[p], shapeItems, pnts );
-                                        dropPoint( shapeItems[index_array[p]].n2, index_array[p], shapeItems, pnts );
-                                        dropPoint( shapeItems[index_array[p]].n3, index_array[p], shapeItems, pnts );
-                                        dropPoint( shapeItems[index_array[p]].n4, index_array[p], shapeItems, pnts );
-                                        dropPoint( shapeItems[index_array[p]].n5, index_array[p], shapeItems, pnts );
-                                        break;
-                                    case 3:
-                                        dropPoint( shapeItems[index_array[p]].n1, index_array[p], shapeItems, pnts );
-                                        dropPoint( shapeItems[index_array[p]].n2, index_array[p], shapeItems, pnts );
-                                        dropPoint( shapeItems[index_array[p]].n3, index_array[p], shapeItems, pnts );
-                                        dropPoint( shapeItems[index_array[p]].n4, index_array[p], shapeItems, pnts );
-                                        break;
-                                }
-                                shapeItems.remove(index_array[p]);
-                                for( int j = 0; j < inundationItems.size(); j++ )
-                                    for( int k = 0; k < inundationItems[j].number_shape.size(); k++ )
-                                        if( inundationItems[j].number_shape[k] > index_array[p] )
-                                            inundationItems[j].number_shape[k]--;
-                                for( int i = p+1; i < index_array.size(); i++ )
-                                    if( index_array[i] > index_array[p] ) index_array[i]--;
+                                    switch( shapeItems[index_array[p]].type )
+                                    {
+                                        case 1:
+                                            dropPoint( shapeItems[index_array[p]].n1, index_array[p], shapeItems, pnts );
+                                            dropPoint( shapeItems[index_array[p]].n2, index_array[p], shapeItems, pnts );
+                                            break;
+                                        case 2:
+                                            dropPoint( shapeItems[index_array[p]].n1, index_array[p], shapeItems, pnts );
+                                            dropPoint( shapeItems[index_array[p]].n2, index_array[p], shapeItems, pnts );
+                                            dropPoint( shapeItems[index_array[p]].n3, index_array[p], shapeItems, pnts );
+                                            dropPoint( shapeItems[index_array[p]].n4, index_array[p], shapeItems, pnts );
+                                            dropPoint( shapeItems[index_array[p]].n5, index_array[p], shapeItems, pnts );
+                                            break;
+                                        case 3:
+                                            dropPoint( shapeItems[index_array[p]].n1, index_array[p], shapeItems, pnts );
+                                            dropPoint( shapeItems[index_array[p]].n2, index_array[p], shapeItems, pnts );
+                                            dropPoint( shapeItems[index_array[p]].n3, index_array[p], shapeItems, pnts );
+                                            dropPoint( shapeItems[index_array[p]].n4, index_array[p], shapeItems, pnts );
+                                            break;
+                                    }
+                                    shapeItems.remove(index_array[p]);
+                                    for( int j = 0; j < inundationItems.size(); j++ )
+                                        for( int k = 0; k < inundationItems[j].number_shape.size(); k++ )
+                                            if( inundationItems[j].number_shape[k] > index_array[p] )
+                                                inundationItems[j].number_shape[k]--;
+                                    for( int i = p+1; i < index_array.size(); i++ )
+                                        if( index_array[i] > index_array[p] ) index_array[i]--;
                                 }
                             }
                             rectItems.clear();

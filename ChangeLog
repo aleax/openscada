@@ -1,3 +1,7 @@
+2008-12-12 Maxim
+- FIX:/UI/Vision: Moving one of the points of figure, which is connected to the other figure, while several figures are selected is fixed(blocked) for primitive ElFigure.
+
+
 2008-12-11 Maxim
 - FIX:/UI/Vision: A lot of little fixes is done for primitive ElFigure.
 - !!!/UI/Vision: Conception of painting is changed for primitive ElFigure, by means of wich performance is greatly improved in both: the runtime and the devel modes.
