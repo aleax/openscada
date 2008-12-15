@@ -435,6 +435,7 @@ void Block::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
+	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Block: ")+id(),0664,"root","root");
 	if(ctrMkNode("area",opt,-1,"/blck",_("Block")))
 	{

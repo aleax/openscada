@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.System 1.6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-09 18:17+0300\n"
+"POT-Creation-Date: 2008-12-15 13:11+0200\n"
 "PO-Revision-Date: 2007-10-29 11:52+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: LANGUAGE <uk@li.org>\n"
@@ -126,8 +126,8 @@ msgstr "Повне навантаження CPU"
 
 #: da_cpu.cpp:172 da_cpu.cpp:185 da_hddstat.cpp:148 da_hddtemp.cpp:149
 #: da_mem.cpp:103 da_netstat.cpp:130 da_sensors.cpp:151 da_smart.cpp:164
-#: da_uptime.cpp:95 da_uptime.cpp:107 os_contr.cpp:169 os_contr.cpp:351
-#: os_contr.cpp:362 os_contr.cpp:452
+#: da_uptime.cpp:95 da_uptime.cpp:107 os_contr.cpp:169 os_contr.cpp:347
+#: os_contr.cpp:358 os_contr.cpp:448
 msgid "TYPE"
 msgstr ""
 
@@ -236,7 +236,7 @@ msgstr ""
 msgid "Temperature"
 msgstr "Температура"
 
-#: da_hddtemp.cpp:37 os_contr.cpp:152 os_contr.cpp:155 os_contr.cpp:392
+#: da_hddtemp.cpp:37 os_contr.cpp:152 os_contr.cpp:155 os_contr.cpp:388
 msgid "0"
 msgstr ""
 
@@ -244,8 +244,8 @@ msgstr ""
 msgid "Disk"
 msgstr "Диск"
 
-#: da_hddtemp.cpp:77 da_hddtemp.cpp:96 da_hddtemp.cpp:155 os_contr.cpp:304
-#: os_contr.cpp:446
+#: da_hddtemp.cpp:77 da_hddtemp.cpp:96 da_hddtemp.cpp:155 os_contr.cpp:306
+#: os_contr.cpp:442
 #, c-format
 msgid "%s"
 msgstr ""
@@ -685,7 +685,7 @@ msgstr ""
 msgid "OSPrm_"
 msgstr ""
 
-#: os_contr.cpp:237 os_contr.cpp:326
+#: os_contr.cpp:237 os_contr.cpp:322
 msgid "root"
 msgstr ""
 
@@ -705,43 +705,48 @@ msgstr ""
 msgid "Acquisition task no stoped!"
 msgstr "Задача збору не зупинена!"
 
-#: os_contr.cpp:323
+#: os_contr.cpp:286
+#, c-format
+msgid "Thread <%u> started. TID: %ld"
+msgstr ""
+
+#: os_contr.cpp:319
 msgid "info"
 msgstr ""
 
-#: os_contr.cpp:326
+#: os_contr.cpp:322
 msgid "fld"
 msgstr ""
 
-#: os_contr.cpp:326 os_contr.cpp:332
+#: os_contr.cpp:322 os_contr.cpp:328
 msgid "/cntr/st/ctm"
 msgstr ""
 
-#: os_contr.cpp:326
+#: os_contr.cpp:322
 msgid "Calk time (msek)"
 msgstr "Час обчислення (мс)"
 
-#: os_contr.cpp:326
+#: os_contr.cpp:322
 msgid "tp"
 msgstr ""
 
-#: os_contr.cpp:326
+#: os_contr.cpp:322
 msgid "real"
 msgstr ""
 
-#: os_contr.cpp:331
+#: os_contr.cpp:327
 msgid "path"
 msgstr ""
 
-#: os_contr.cpp:388
+#: os_contr.cpp:384
 msgid "err"
 msgstr ""
 
-#: os_contr.cpp:390
+#: os_contr.cpp:386
 msgid "2:Controller stoped"
 msgstr "2:Контролер зупинено!"
 
-#: os_contr.cpp:391
+#: os_contr.cpp:387
 msgid "1:Parameter disabled"
 msgstr "1:Параметр вимкнено"
 

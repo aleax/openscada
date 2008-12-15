@@ -158,6 +158,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
     //-- Info command process --
     if( opt->name() == "info" )
     {
+	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter: ")+nodeName(),0664,"root","root");
 	if(ctrMkNode("area",opt,-1,"/val",_("Atributes")))
 	{

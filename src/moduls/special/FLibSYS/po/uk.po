@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.FLibSYS 0.6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-31 17:53+0200\n"
+"POT-Creation-Date: 2008-12-15 13:13+0200\n"
 "PO-Revision-Date: 2007-10-24 18:37+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -731,20 +731,6 @@ msgstr "Строка: Реальне у строку"
 #: sysfnc.h:772
 msgid "Convert real to string."
 msgstr "Перетворення реального у строку"
-
-#: sysfnc.h:776
-msgid "g"
-msgstr ""
-
-#: sysfnc.h:776
-#, c-format
-msgid "%.*g"
-msgstr ""
-
-#: sysfnc.h:776
-#, c-format
-msgid "%.*f"
-msgstr ""
 
 #: timefnc.h:39
 msgid "tmDate"

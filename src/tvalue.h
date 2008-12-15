@@ -154,8 +154,8 @@ class TValue: public TCntrNode, public TValElem
 
 	//- TElem commands -
 	void detElem( TElem *el );
-	void addFld( TElem *el, unsigned id_val); 
-	void delFld( TElem *el, unsigned id_val); 
+	void addFld( TElem *el, unsigned id_val);
+	void delFld( TElem *el, unsigned id_val);
 
 	//Attributes
 	char		m_vl;

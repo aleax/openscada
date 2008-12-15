@@ -4,13 +4,13 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #: snmp_client.cpp:59 snmp_client.cpp:137 snmp_client.cpp:146
-#: snmp_client.cpp:295 snmp_client.cpp:298 snmp_client.cpp:301
+#: snmp_client.cpp:297 snmp_client.cpp:300 snmp_client.cpp:303
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.SNMP 0.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-09 16:15+0300\n"
+"POT-Creation-Date: 2008-12-15 13:10+0200\n"
 "PO-Revision-Date: 2007-10-29 11:14+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -168,7 +168,7 @@ msgstr ""
 msgid "Standard"
 msgstr "Стандарт"
 
-#: snmp_client.cpp:146 snmp_client.cpp:392 snmp_client.cpp:467
+#: snmp_client.cpp:146 snmp_client.cpp:388 snmp_client.cpp:463
 msgid "OID_LS"
 msgstr ""
 
@@ -180,7 +180,7 @@ msgstr "Список OID (разделение след. строкой)"
 msgid "SNMPPrm_"
 msgstr ""
 
-#: snmp_client.cpp:183 snmp_client.cpp:379 snmp_client.cpp:472
+#: snmp_client.cpp:183 snmp_client.cpp:375 snmp_client.cpp:468
 msgid "root"
 msgstr ""
 
@@ -200,68 +200,73 @@ msgstr ""
 msgid "Gathering task no stoped!"
 msgstr "Задача сбора данных не остановлена!"
 
-#: snmp_client.cpp:242 snmp_client.cpp:345
+#: snmp_client.cpp:226
+#, c-format
+msgid "Thread <%u> started. TID: %ld"
+msgstr ""
+
+#: snmp_client.cpp:244 snmp_client.cpp:347
 #, c-format
 msgid "%s"
 msgstr ""
 
-#: snmp_client.cpp:242
+#: snmp_client.cpp:244
 msgid "Error SNMP session open."
 msgstr "Ошибка открытия SNMP сессии."
 
-#: snmp_client.cpp:336
+#: snmp_client.cpp:338
 #, c-format
 msgid "Timeout: No Response from %s."
 msgstr "Время ожидания ответа от %s превышено."
 
-#: snmp_client.cpp:369
+#: snmp_client.cpp:365
 msgid "_"
 msgstr ""
 
-#: snmp_client.cpp:376 snmp_client.cpp:464
+#: snmp_client.cpp:372 snmp_client.cpp:460
 msgid "info"
 msgstr ""
 
-#: snmp_client.cpp:379 snmp_client.cpp:467
+#: snmp_client.cpp:375 snmp_client.cpp:463
 msgid "fld"
 msgstr ""
 
-#: snmp_client.cpp:379 snmp_client.cpp:384
+#: snmp_client.cpp:375 snmp_client.cpp:380
 msgid "/cntr/st/gath_tm"
 msgstr ""
 
-#: snmp_client.cpp:379
+#: snmp_client.cpp:375
 msgid "Gather data time (ms)"
 msgstr "Время сбора данных (мс)"
 
-#: snmp_client.cpp:379
+#: snmp_client.cpp:375
 msgid "tp"
 msgstr ""
 
-#: snmp_client.cpp:379
+#: snmp_client.cpp:375
 msgid "real"
 msgstr ""
 
-#: snmp_client.cpp:383 snmp_client.cpp:460
+#: snmp_client.cpp:379 snmp_client.cpp:456
 msgid "path"
 msgstr ""
 
-#: snmp_client.cpp:392
+#: snmp_client.cpp:388
 msgid "w_attr"
 msgstr ""
 
-#: snmp_client.cpp:461
+#: snmp_client.cpp:457
 msgid "/serv/"
 msgstr ""
 
-#: snmp_client.cpp:467 snmp_client.cpp:472
+#: snmp_client.cpp:463 snmp_client.cpp:468
 msgid "/prm/cfg/OID_LS"
 msgstr ""
 
-#: snmp_client.cpp:472
+#: snmp_client.cpp:468
 msgid "set"
 msgstr ""
 
-#: snmp_client.cpp:474
+#: snmp_client.cpp:470
 msgid "Parameter is enabled."
 msgstr "Параметр включен."

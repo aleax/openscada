@@ -29,8 +29,7 @@
 //*************************************************
 //* TSubSYS                                       *
 //*************************************************
-TSubSYS::TSubSYS( const char *id, const char *name, bool modi ) :
-	m_id(id), m_name(name), m_mod_sys(modi), m_mod(-1)
+TSubSYS::TSubSYS( const char *id, const char *name, bool modi ) : m_id(id), m_name(name), m_mod_sys(modi), m_mod(-1)
 {
     if(subModule()) m_mod = grpAdd("mod_");
 }
@@ -124,6 +123,7 @@ void TSubSYS::cntrCmdProc( XMLNode *opt )
     //Get page info
     if( opt->name() == "info" )
     {
+	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Subsystem: ")+subName(),0444);
 	ctrMkNode("branches",opt,-1,"/br","",0444);
 	if(TUIS::icoPresent(subId()))	ctrMkNode("img",opt,-1,"/ico","",0444);

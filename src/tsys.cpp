@@ -48,18 +48,18 @@ TSYS	*SYS;
 bool TSYS::finalKill = false;
 
 TSYS::TSYS( int argi, char ** argb, char **env ) :
-    m_confFile("/etc/oscada.xml"), m_id("EmptySt"), m_name("Empty Station"),
-    m_user("root"),argc(argi), envp((const char **)env), argv((const char **)argb), stop_signal(0),
-    m_sysOptCfg(false), mWorkDB(""), mSaveAtExit(false), mSavePeriod(0)
+    mConfFile("/etc/oscada.xml"), mId("EmptySt"), mName("Empty Station"), mIcoDir("./icons/"), mModDir("./"),
+    mUser("root"),argc(argi), envp((const char **)env), argv((const char **)argb), mStopSignal(0),
+    mSysOptCfg(false), mWorkDB(""), mSaveAtExit(false), mSavePeriod(0)
 {
     finalKill = false;
     SYS = this;		//Init global access value
-    m_subst = grpAdd("sub_",true);
+    mSubst = grpAdd("sub_",true);
     nodeEn();
 
     Mess = new TMess();
 
-    if( getenv("USER") ) m_user = getenv("USER");
+    if( getenv("USER") ) mUser = getenv("USER");
 
     //Init system clock
     clkCalc();
@@ -203,6 +203,8 @@ string TSYS::optDescr( )
 	"                         <direct> & 8 - archive.\n"
 	"----------- The config file station <%s> parameters -----------\n"
 	"Workdir    <path>	Work directory.\n"
+	"IcoDir     <path>	Icons directory.\n"
+	"ModDir     <path>	Modules directory.\n"
 	"MessLev    <level>     Messages <level> (0-7).\n"
 	"LogTarget  <direction> Direct messages to:\n"
 	"                           <direct> & 1 - syslogd;\n"
@@ -245,16 +247,16 @@ bool TSYS::cfgFileLoad()
 		Mess->setMessLevel(7);
 		cmd_help = true;
 		break;
-	    case 'f': m_confFile = optarg; break;
-	    case 's': m_id = optarg; break;
+	    case 'f': mConfFile = optarg; break;
+	    case 's': mId = optarg; break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);
 
     //Load config file
-    int hd = open(m_confFile.c_str(),O_RDONLY);
+    int hd = open(mConfFile.c_str(),O_RDONLY);
     if( hd < 0 )
-	mess_err(nodePath().c_str(),_("Config file <%s> error: %s"),m_confFile.c_str(),strerror(errno));
+	mess_err(nodePath().c_str(),_("Config file <%s> error: %s"),mConfFile.c_str(),strerror(errno));
     else
     {
 	int cf_sz = lseek(hd,0,SEEK_END);
@@ -267,27 +269,27 @@ bool TSYS::cfgFileLoad()
 	free(buf);
 	try
 	{
-	    root_n.load(s_buf);
-	    if( root_n.name() == "OpenSCADA" )
+	    rootN.load(s_buf);
+	    if( rootN.name() == "OpenSCADA" )
 	    {
 		XMLNode *stat_n = NULL;
-		for( int i_st = root_n.childSize()-1; i_st >= 0; i_st-- )
-		    if( root_n.childGet(i_st)->name() == "station" )
+		for( int i_st = rootN.childSize()-1; i_st >= 0; i_st-- )
+		    if( rootN.childGet(i_st)->name() == "station" )
 		    {
-			stat_n = root_n.childGet(i_st);
-			if( stat_n->attr("id") == m_id ) break;
+			stat_n = rootN.childGet(i_st);
+			if( stat_n->attr("id") == mId ) break;
 		    }
-		if( stat_n && stat_n->attr("id") != m_id )
+		if( stat_n && stat_n->attr("id") != mId )
 		{
 		    mess_warning(nodePath().c_str(),_("Station <%s> into config file no present. Use <%s> station config!"),
-			m_id.c_str(), stat_n->attr("id").c_str() );
-		    m_id	= stat_n->attr("id");
-		    m_name	= stat_n->attr("name");
+			mId.c_str(), stat_n->attr("id").c_str() );
+		    mId	= stat_n->attr("id");
+		    mName	= stat_n->attr("name");
 		}
-		if( !stat_n )	root_n.clear();
-	    } else root_n.clear();
-	    if( !root_n.childSize() )
-		mess_err(nodePath().c_str(),_("Config <%s> error!"),m_confFile.c_str());
+		if( !stat_n )	rootN.clear();
+	    } else rootN.clear();
+	    if( !rootN.childSize() )
+		mess_err(nodePath().c_str(),_("Config <%s> error!"),mConfFile.c_str());
 	}
 	catch( TError err ) { mess_err(nodePath().c_str(),_("Load config file error: %s"),err.mess.c_str() ); }
     }
@@ -298,12 +300,14 @@ bool TSYS::cfgFileLoad()
 void TSYS::cfgPrmLoad()
 {
     //System parameters
-    m_sysOptCfg = atoi(TBDS::genDBGet(nodePath()+"SYSOptCfg",TSYS::int2str(m_sysOptCfg),"root",true).c_str());
+    mSysOptCfg = atoi(TBDS::genDBGet(nodePath()+"SYSOptCfg",TSYS::int2str(mSysOptCfg),"root",true).c_str());
     setWorkDir(TBDS::genDBGet(nodePath()+"Workdir","","root",sysOptCfg()).c_str());
 
     mWorkDB = TBDS::genDBGet(nodePath()+"WorkDB","*.*","root",sysOptCfg());
-    setSaveAtExit( atoi(TBDS::genDBGet(nodePath()+"SaveAtExit","0","root").c_str()) );
-    setSavePeriod( atoi(TBDS::genDBGet(nodePath()+"SavePeriod","0","root").c_str()) );
+    setIcoDir( TBDS::genDBGet(nodePath()+"IcoDir",icoDir()) );
+    setModDir( TBDS::genDBGet(nodePath()+"ModDir",modDir()) );
+    setSaveAtExit( atoi(TBDS::genDBGet(nodePath()+"SaveAtExit","0").c_str()) );
+    setSavePeriod( atoi(TBDS::genDBGet(nodePath()+"SavePeriod","0").c_str()) );
 }
 
 void TSYS::load_()
@@ -317,7 +321,7 @@ void TSYS::load_()
 
     if( first_load )
     {
-	//- Create subsystems -
+	//> Create subsystems
 	add( new TBDS() );
 	add( new TSecurity() );
 	add( new TTransportS() );
@@ -328,19 +332,19 @@ void TSYS::load_()
 	add( new TUIS() );
 	add( new TModSchedul() );
 
-	//- Load modules -
+	//> Load modules
 	modSchedul().at().load();
 	modSchedul().at().loadLibS();
 
-	//- First DB subsystem load -
+	//> First DB subsystem load
 	db().at().load();
 
-	//- Second load for load from generic DB -
+	//> Second load for load from generic DB
 	cfgPrmLoad();
 	Mess->load();
     }
 
-    //- Direct load subsystems and modules -
+    //> Direct load subsystems and modules
     vector<string> lst;
     list(lst);
     for( unsigned i_a=0; i_a < lst.size(); i_a++ )
@@ -361,14 +365,16 @@ void TSYS::save_( )
 
     mess_info(nodePath().c_str(),_("Save!"));
 
-    //System parameters
+    //> System parameters
     getcwd(buf,sizeof(buf));
     TBDS::genDBSet(nodePath()+"Workdir",buf);
     TBDS::genDBSet(nodePath()+"WorkDB",mWorkDB);
+    TBDS::genDBSet(nodePath()+"IcoDir",icoDir());
+    TBDS::genDBSet(nodePath()+"ModDir",modDir());
     TBDS::genDBSet(nodePath()+"SaveAtExit",TSYS::int2str(saveAtExit()));
     TBDS::genDBSet(nodePath()+"SavePeriod",TSYS::int2str(savePeriod()));
 
-    Mess->save();       //Messages load
+    Mess->save();	//Messages load
 }
 
 int TSYS::start(  )
@@ -387,7 +393,7 @@ int TSYS::start(  )
 
     cfgFileScan( true );
     unsigned int i_cnt = 1;
-    while( !stop_signal )
+    while( !mStopSignal )
     {
 	//- CPU frequency calc
 	if( !(i_cnt%(10*1000/STD_WAIT_DELAY)) )	clkCalc( );
@@ -411,12 +417,12 @@ int TSYS::start(  )
 	    mess_err(nodePath().c_str(),_("Error stop subsystem <%s>."),lst[i_a].c_str());
 	}
 
-    return stop_signal;
+    return mStopSignal;
 }
 
 void TSYS::stop( )
 {
-    stop_signal = SIGINT;
+    mStopSignal = SIGINT;
 }
 
 void TSYS::sighandler( int signal )
@@ -424,11 +430,11 @@ void TSYS::sighandler( int signal )
     switch(signal)
     {
 	case SIGINT:
-	    SYS->stop_signal=signal;
+	    SYS->mStopSignal=signal;
 	    break;
 	case SIGTERM:
 	    mess_warning(SYS->nodePath().c_str(),_("Have get a Terminate signal. Server been stoped!"));
-	    SYS->stop_signal=signal;
+	    SYS->mStopSignal=signal;
 	    break;
 	case SIGFPE:
 	    mess_warning(SYS->nodePath().c_str(),_("Float point exeption catch!"));
@@ -726,6 +732,21 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 	    for( i_sz = 0; i_sz < sout.size(); i_sz++ )
 		if( sout[i_sz] == '%' ) { sout.replace(i_sz,1,"%%"); i_sz++; }
 	    break;
+	case TSYS::ID:
+	    sout.reserve(in.size());
+	    for( i_sz = 0; i_sz < in.size(); i_sz++ )
+		switch( in[i_sz] )
+		{
+		    case ' ': case '/': case '\\': case '&': case '(':
+		    case ')': case '[': case ']': case '!': case '~':
+		    case '`': case '@': case '%': case '^': case '-':
+		    case '+': case '=': case '*': case '{': case '}':
+		    case ':': case ';': case '"': case '\'': case '<':
+		    case '>': case '?':
+			sout+="_";	break;
+		    default:	sout+=in[i_sz];
+		}
+	    break;
     }
     return sout;
 }
@@ -883,6 +904,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     //Get page info
     if( opt->name() == "info" )
     {
+	TCntrNode::cntrCmdProc(opt);
 	snprintf(buf,sizeof(buf),_("%s station: \"%s\""),PACKAGE_NAME,name().c_str());
 	ctrMkNode("oscada_cntr",opt,-1,"/",buf,0444);
 	if(ctrMkNode("branches",opt,-1,"/br","",0444))
@@ -901,6 +923,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/gen/in_charset",_("Internal charset"),0440,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/config",_("Config file"),0440,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/workdir",_("Work directory"),0660,"root","root",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/gen/icodir",_("Icons directory"),0660,"root","root",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/gen/moddir",_("Modules directory"),0660,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/wrk_db",_("Work DB"),0664,"root",db().at().subId().c_str(),4,"tp","str","dest","select","select","/db/list",
 		"help",_("Work DB address in format [<DB module>.<DB name>].\nChange it field if you want save or reload all system from other DB."));
 	    ctrMkNode("fld",opt,-1,"/gen/saveExit",_("Save system at exit"),0664,"root","root",2,"tp","bool",
@@ -943,7 +967,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	utsname ubuf; uname(&ubuf);
 	opt->setText(string(ubuf.sysname)+"-"+ubuf.release);
     }
-    else if( a_path == "/gen/user" && ctrChkNode(opt) )	opt->setText(m_user);
+    else if( a_path == "/gen/user" && ctrChkNode(opt) )	opt->setText(mUser);
     else if( a_path == "/gen/prog" && ctrChkNode(opt) )	opt->setText(PACKAGE_NAME);
     else if( a_path == "/gen/ver" && ctrChkNode(opt) )	opt->setText(VERSION);
     else if( a_path == "/gen/stat" && ctrChkNode(opt) )	opt->setText(name());
@@ -955,7 +979,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	opt->setText(TSYS::real2str((float)tmval.tv_nsec/1000000.,4));
     }
     else if( a_path == "/gen/in_charset" && ctrChkNode(opt) )	opt->setText(Mess->charset());
-    else if( a_path == "/gen/config" && ctrChkNode(opt) )	opt->setText(m_confFile);
+    else if( a_path == "/gen/config" && ctrChkNode(opt) )	opt->setText(mConfFile);
     else if( a_path == "/gen/wrk_db" )
     {
 	if( ctrChkNode(opt,"get",0664,"root",db().at().subId().c_str(),SEQ_RD) ) opt->setText(mWorkDB);
@@ -975,6 +999,16 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     {
 	if( ctrChkNode(opt,"get",0440,"root","root",SEQ_RD) )	opt->setText(workDir());
 	if( ctrChkNode(opt,"set",0440,"root","root",SEQ_WR) )	setWorkDir(opt->text().c_str());
+    }
+    else if( a_path == "/gen/icodir" )
+    {
+	if( ctrChkNode(opt,"get",0440,"root","root",SEQ_RD) )	opt->setText(icoDir());
+	if( ctrChkNode(opt,"set",0440,"root","root",SEQ_WR) )	setIcoDir(opt->text().c_str());
+    }
+    else if( a_path == "/gen/moddir" )
+    {
+	if( ctrChkNode(opt,"get",0440,"root","root",SEQ_RD) )	opt->setText(modDir());
+	if( ctrChkNode(opt,"set",0440,"root","root",SEQ_WR) )	setModDir(opt->text().c_str());
     }
     else if( a_path == "/gen/lang" )
     {

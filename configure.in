@@ -184,8 +184,8 @@ AC_ARG_ENABLE(QTCfg,AC_HELP_STRING([--disable-QTCfg], [disable build module UI/Q
 [ if test $enableval = yes; then ModQTCfg=true; else ModQTCfg=false; fi],[ ModQTCfg=true; ])
 AC_ARG_ENABLE(WebCfg,AC_HELP_STRING([--disable-WebCfg], [disable build module UI/WebCfg]),
 [ if test $enableval = yes; then ModWebCfg=true; else ModWebCfg=false; fi],[ ModWebCfg=true; ])
-AC_ARG_ENABLE(WebDbg,AC_HELP_STRING([--disable-WebDbg], [disable build module UI/WebDbg]),
-[ if test $enableval = yes; then ModWebDbg=true; else ModWebDbg=false; fi],[ ModWebDbg=true; ])
+AC_ARG_ENABLE(WebCfgD,AC_HELP_STRING([--disable-WebCfgD], [disable build module UI/WebCfgD]),
+[ if test $enableval = yes; then ModWebCfgD=true; else ModWebCfgD=false; fi],[ ModWebCfgD=true; ])
 AC_ARG_ENABLE(WebVision,AC_HELP_STRING([--disable-WebVision], [disable build module UI/WebVision]),
 [ if test $enableval = yes; then ModWebVision=true; else ModWebVision=false; fi],[ ModWebVision=true; ])
 
@@ -408,10 +408,10 @@ if test ${ModWebCfg} = true; then
     AC_CONFIG_FILES(src/moduls/ui/WebCfg/Makefile)
     UISub_mod="${UISub_mod}WebCfg "
 fi
-if test ${ModWebDbg} = true; then
-    AC_MSG_RESULT(Build module: UI/WebDbg)
-    AC_CONFIG_FILES(src/moduls/ui/WebDbg/Makefile)
-    UISub_mod="${UISub_mod}WebDbg "
+if test ${ModWebCfgD} = true; then
+    AC_MSG_RESULT(Build module: UI/WebCfgD)
+    AC_CONFIG_FILES(src/moduls/ui/WebCfgD/Makefile)
+    UISub_mod="${UISub_mod}WebCfgD "
 fi
 if test ${ModWebVision} = true; then
     AC_MSG_RESULT(Build module: UI/WebVision)

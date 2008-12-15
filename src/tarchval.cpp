@@ -779,7 +779,6 @@ TVArchive::TVArchive( const string &iid, const string &idb, TElem *cf_el ) :
     m_bhgrd(cfg("BHGRD").getBd()), m_bhres(cfg("BHRES").getBd()), m_srcmode(cfg("SrcMode").getId()),
     m_dsourc(cfg("Source").getSd()), m_archs(cfg("ArchS").getSd())
 {
-    //- First init -
     m_id = iid;
     m_vtype = TFld::Real;
 
@@ -1659,6 +1658,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
     //-- Info command process --
     if( opt->name() == "info" )
     {
+	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Value archive: ")+name(),0664,"root","Archive");
 	if(ctrMkNode("area",opt,-1,"/prm",_("Archive")))
 	{
@@ -1979,9 +1979,9 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TVArchivator                                  *
 //*************************************************
-TVArchivator::TVArchivator( const string &iid, const string &idb, TElem *cf_el ) : run_st(false), prc_st(false), 
-    tm_calc(0.0), TConfig(cf_el), m_db(idb), m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()), 
-    m_dscr(cfg("DESCR").getSd()), m_addr(cfg("ADDR").getSd()), m_start(cfg("START").getBd()), 
+TVArchivator::TVArchivator( const string &iid, const string &idb, TElem *cf_el ) : run_st(false), prc_st(false),
+    tm_calc(0.0), TConfig(cf_el), m_db(idb), m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()),
+    m_dscr(cfg("DESCR").getSd()), m_addr(cfg("ADDR").getSd()), m_start(cfg("START").getBd()),
     m_v_per(cfg("V_PER").getRd()), m_a_per(cfg("A_PER").getId())
 {
     m_id = iid;
@@ -2287,6 +2287,7 @@ void TVArchivator::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
+	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Value archivator: ")+name(),0664,"root","Archive");
 	if(ctrMkNode("area",opt,-1,"/prm",_("Archivator")))
 	{

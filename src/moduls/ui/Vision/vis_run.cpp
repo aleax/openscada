@@ -886,7 +886,7 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
 	}
     reqtm = strtoul(req.attr("tm").c_str(),NULL,10);
 
-    //- Open direct-selected page -
+    //> Open direct-selected page
     if( !TSYS::pathLev(prj_it,1).empty() )
     {
 	//- Convert project path to session path -
@@ -899,7 +899,6 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
 	//- Send open command -
 	req.clear()->setName("open")->setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg")->setAttr("pg",ses_it);
 	cntrIfCmd(req);
-	//wAttrSet(ses_it,"pgOpen","1");
 
 	callPage(ses_it);
     }
@@ -922,9 +921,9 @@ void VisRun::fullUpdatePgs( )
 void VisRun::callPage( const string& pg_it, bool updWdg )
 {
     vector<int> idst;
-    string pgGrp, pgSrc, stmp;
+    string stmp;
 
-    //- Scan and update opened page -
+    //> Scan and update opened page
     if( master_pg )
     {
 	RunPageView *pg = master_pg->findOpenPage(pg_it);
@@ -932,23 +931,21 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
 	if( pg ) return;
     }
 
-    //- Get group and parent page -
-    pgGrp = wAttrGet(pg_it,"pgGrp");
-    pgSrc = wAttrGet(pg_it,"pgOpenSrc");
+    // Get group and parent page
+    string pgGrp = wAttrGet(pg_it,"pgGrp");
+    string pgSrc = wAttrGet(pg_it,"pgOpenSrc");
 
-    //- Check for master page replace -
+    //> Check for master page replace
     if( !master_pg || pgGrp == "main" || master_pg->pgGrp() == pgGrp )
     {
-	//-- Send close command --
+	//>> Send close command
 	if( master_pg )
 	{
-	    XMLNode req("close");
-	    req.setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg")->setAttr("pg",master_pg->id());
+	    XMLNode req("close"); req.setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg")->setAttr("pg",master_pg->id());
 	    cntrIfCmd(req);
-	    //wAttrSet(master_pg->id(),"pgOpen","0");
 	}
 
-	//-- Create widget view --
+	//>> Create widget view
 	master_pg = new RunPageView(pg_it,this,centralWidget());
 	master_pg->load("");
 	master_pg->setFocusPolicy( Qt::StrongFocus );
@@ -960,24 +957,8 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
 	}
 	else x_scale = y_scale = 1.0;
     }
-    //- Put to check for include -
+    //> Put to check for include
     else master_pg->callPage(pg_it,pgGrp,pgSrc);
-
-    //- Update widgets of now opened page -
-/*    if( upw && upw->childSize() && master_pg )
-    {
-	RunPageView *pg = master_pg->findOpenPage(pg_it);
-	if( !pg || pg->reqTm() == reqtm ) return;
-	XMLNode req("openlist");
-	req.setAttr("tm",TSYS::uint2str(pg->reqTm()))->setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg");
-	if( !cntrIfCmd(req) )
-	    for( int i_ch = 0; i_ch < req.childSize(); i_ch++ )
-		if( req.childGet(i_ch)->text() == pg_it && atoi(req.childGet(i_ch)->attr("updWdg").c_str()) )
-		{
-		    pg->update(false);
-		    break;
-		}
-    }*/
 }
 
 void VisRun::pgCacheClear( )
@@ -1039,17 +1020,14 @@ RunWdgView *VisRun::findOpenWidget( const string &wdg )
 
 string VisRun::wAttrGet( const string &path, const string &attr )
 {
-    XMLNode req("get");
-    req.setAttr("path",path+"/%2fattr%2f"+attr);
+    XMLNode req("get"); req.setAttr("path",path+"/%2fattr%2f"+attr);
     if( !cntrIfCmd(req) ) return req.text();
     return "";
 }
 
 bool VisRun::wAttrSet( const string &path, const string &attr, const string &val )
 {
-    //- Send value to model -
-    XMLNode req("set");
-    req.setAttr("path",path+"/%2fserv%2fattr");
+    XMLNode req("set"); req.setAttr("path",path+"/%2fserv%2fattr");
     req.childAdd("el")->setAttr("id",attr)->setText(val);
     return !cntrIfCmd(req);
 }
@@ -1154,19 +1132,40 @@ void VisRun::updatePage( )
     XMLNode req("openlist");
     req.setAttr("tm",TSYS::uint2str(reqtm))->
 	setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg");
-    pgList.clear();
+
     if( !cntrIfCmd(req) )
+    {
+	//>> Check for delete pages
+	RunPageView *pg;
+	for( int i_p = 0; i_p < pgList.size(); i_p++ )
+	{
+	    int i_ch;
+	    for( i_ch = 0; i_ch < req.childSize(); i_ch++ )
+		if( pgList[i_p] == req.childGet(i_ch)->text() )
+		    break;
+	    if( i_ch < req.childSize() || !(pg=master_pg->findOpenPage(pgList[i_p])) ) continue;
+	    if( !pg->property("cntPg").toString().isEmpty() )
+		((RunWdgView*)TSYS::str2addr(pg->property("cntPg").toString().toAscii().data()))->setPgOpenSrc("");
+	    else
+	    {
+		pg->deleteLater();
+		if( pg == master_pg )	master_pg = NULL;
+	    }
+	}
+	//>> Process opened pages
+	pgList.clear();
 	for( int i_ch = 0; i_ch < req.childSize(); i_ch++ )
 	{
 	    pgList.push_back(req.childGet(i_ch)->text());
 	    callPage(req.childGet(i_ch)->text(),atoi(req.childGet(i_ch)->attr("updWdg").c_str()));
 	}
+    }
     reqtm = strtoul(req.attr("tm").c_str(),NULL,10);
 
     //> Alarms update (one seconds update)
     if( w_prc_cnt%(500/period()) == 0 )
     {
-	//-- Get alarm status --
+	//>> Get alarm status
 	unsigned wAlrmSt = alarmSt( );
 	req.clear()->
 	    setName("get")->
@@ -1174,7 +1173,7 @@ void VisRun::updatePage( )
 	    setAttr("path","/ses_"+work_sess+"/%2fserv%2falarm");
 	if( !cntrIfCmd(req) ) wAlrmSt = atoi(req.attr("alarmSt").c_str());
 
-	//-- Get sound resources for play --
+	//>> Get sound resources for play
 	if( alarmTp(TVision::Sound,true) && !alrmPlay->isRunning() )
 	{
 	    req.clear()->

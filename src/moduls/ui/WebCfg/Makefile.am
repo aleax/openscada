@@ -18,7 +18,7 @@ messages:
 	xgettext -o $$name -C -a *.cpp *.h &> /dev/null ; \
 	for cat in $$catalogs; do \
 	msgmerge -U $$cat $$name ; \
-	done						
+	done
 
 install-data-local:
 	@catalogs=`find ./po -name \*.po` ; \
@@ -41,4 +41,4 @@ uninstall-local:
 
 clean-local:
 	rm -f po/$(m_name).pot ; \
-	rm -f po/*~ ; 
+	rm -f po/*~ ;

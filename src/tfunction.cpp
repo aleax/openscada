@@ -182,6 +182,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
+	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Function: ")+name(),0444,"root","root");
 	if(ctrMkNode("area",opt,-1,"/func",_("Function")))
 	{

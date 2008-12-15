@@ -94,6 +94,7 @@ TWEB::TWEB( string name ) : m_t_auth(10), lst_ses_chk(0)
 	"h2.title {text-align:center; font-style:italic; margin: 0px; padding: 0px; border-width:0px }\n"
 	"table.page_head {background-color:#cccccc; border:3px ridge blue; width:100% }\n"
 	"table.page_head td.tool {text-align:center; border:1px solid blue; width:120px;  white-space: nowrap }\n"
+	"table.page_head td.tool img { height: 32px; border: 0; vertical-align: middle; }\n"
 	"table.page_head td.user {text-align:left; border:1px solid blue; width:120px; white-space: nowrap }\n"
 	"table.page_area {background-color:#9999ff; border:3px ridge #a9a9a9; width:100%; padding:2px }\n"
 	"table.page_area tr.content {background-color:#cccccc; border:5px ridge #9999ff; padding:5px }\n"
@@ -196,12 +197,12 @@ string TWEB::pgHead( string head_els )
 	"  <meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n"
 	"  <meta http-equiv='Cache-Control' content='no-cache'/>\n"+
 	head_els+
-	"  <link rel='shortcut icon' href='/"+MOD_ID+"/%2fico' type='image' />\n"
-	"  <title>"+PACKAGE_NAME+". "+_(MOD_NAME)+"</title>\n"
+	"  <link rel='shortcut icon' href='/"MOD_ID"/ico' type='image' />\n"
+	"  <title>"PACKAGE_NAME". "+_(MOD_NAME)+"</title>\n"
 	"  <style type='text/css'>\n"+m_CSStables+"</style>\n"
 	"</head>\n"
 	"<body alink='#33ccff' link='#3366ff' text='#000000' vlink='#339999'>\n"
-	"<h1 class='head'>"+PACKAGE_NAME+". "+_(MOD_NAME)+"</h1>\n"
+	"<h1 class='head'>"PACKAGE_NAME". "+_(MOD_NAME)+"</h1>\n"
 	"<hr size='3'/><br/>\n";
 }
 
@@ -212,27 +213,27 @@ string TWEB::pgTail( )
 
 void TWEB::HttpGet( const string &urli, string &page, const string &sender, vector<string> &vars )
 {
-    map< string, string >::iterator prmEl;
+    map<string,string>::iterator prmEl;
     SSess ses(TSYS::strDecode(urli,TSYS::HttpURL),page,sender,vars,"");
     ses.page = pgHead();
 
     try
     {
 	string zero_lev = TSYS::pathLev(ses.url,0);
-	//- Get about module page -
+	//> Get about module page
 	if( zero_lev == "about" )	getAbout(ses);
-	//- Get global image -
-	else if( zero_lev.substr(0,4) == "img_" )
+	//> Get module icon and global image
+	else if( zero_lev == "ico" || zero_lev.substr(0,4) == "img_" )
 	{
 	    string itp;
-	    ses.page=TUIS::icoGet(zero_lev.substr(4),&itp);
+	    ses.page=TUIS::icoGet( zero_lev=="ico"?"UI."MOD_ID:zero_lev.substr(4), &itp );
 	    page = httpHead("200 OK",ses.page.size(),string("image/")+itp)+ses.page;
 	    return;
 	}
 	else
 	{
 	    sesCheck( ses );
-	    //- Auth dialog preparing -
+	    //> Auth dialog preparing
 	    if( !ses.user.size() ) getAuth( ses );
 	    else
 	    {
@@ -240,10 +241,10 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 		ses.pg_info.setAttr("path",ses.url)->setAttr("user",ses.user);
 		if(cntrIfCmd(ses.pg_info)) throw TError(ses.pg_info.attr("mcat").c_str(),"%s",ses.pg_info.text().c_str());
 		ses.root = ses.pg_info.childGet(0);
-		
-		if(ses.root->name()=="img")
+
+		if( ses.root->name()=="img" )
 		{
-		    //-- Transfer page image --
+		    //>> Transfer page image
 		    XMLNode req("get"); req.setAttr("path",ses.url)->setAttr("user",ses.user);
 		    if(cntrIfCmd(req)) throw TError(req.attr("mcat").c_str(),"%s",req.text().c_str());
 		    ses.page=TSYS::strDecode(req.text(),TSYS::base64);
@@ -252,7 +253,19 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 		}
 		else
 		{
-		    //-- Get area --
+		    prmEl = ses.prm.find("com");
+		    string wp_com = (prmEl!=ses.prm.end()) ? prmEl->second : "";
+		    if( wp_com == "load" )
+		    {
+			XMLNode reqc("load"); reqc.setAttr("path",ses.url+"/%2fobj")->setAttr("user",ses.user);
+			cntrIfCmd(reqc);
+		    }
+		    else if( wp_com == "save" )
+		    {
+			XMLNode reqc("save"); reqc.setAttr("path",ses.url+"/%2fobj")->setAttr("user",ses.user);
+			cntrIfCmd(reqc);
+		    }
+		    //>> Get area
 		    getHead( ses );
 		    getArea( ses, *ses.root, "/" );
 		}
@@ -261,7 +274,7 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
     }catch(TError err)
     {
 	ses.page = "Page <"+ses.url+"> error: "+err.mess;
-	//postMess(ses.page,err.cat,err.mess,TWEB::Error); 
+	//postMess(ses.page,err.cat,err.mess,TWEB::Error);
 	page = httpHead("404 Not Found",ses.page.size())+ses.page;
 	return;
     }
@@ -304,10 +317,14 @@ void TWEB::getHead( SSess &ses )
 
     ses.page = ses.page+"<table class='page_head'><tr>\n"
 	"<td class='tool'>\n"
-	"<a href='/"+MOD_ID+"'><img src='/"+MOD_ID+"/img_gohome' alt='"+_("Root page")+"' border='0'/></a>\n"
-	"<a href='"+path+"'><img src='/"+MOD_ID+"/img_reload' alt='" +_("Curent page")+"' border='0'/></a>\n"
-	"<a href='"+path.substr(0,path.rfind("/"))+"'><img src='/"+MOD_ID+"/img_up' alt='"+_("Previos page")+"' border='0'/></a>\n"
-	"<a href='/"+MOD_ID+"/about'><img src='/"+MOD_ID+"/img_help' alt='"+_("About")+"' border='0'/></a>\n"
+	"<a href='"+path+"?com=load' title='"+_("Load")+"'><img src='/"MOD_ID"/img_load' alt='"+_("Load")+"'/></a>\n"
+	"<a href='"+path+"?com=save' title='"+_("Save")+"'><img src='/"MOD_ID"/img_save' alt='"+_("Save")+"'/></a>\n"
+	"<img src='/"MOD_ID"/img_line'/>\n"
+	"<a href='/"MOD_ID"' title='"+_("Root page")+"'><img src='/"MOD_ID"/img_gohome' alt='"+_("Root page")+"'/></a>\n"
+	"<a href='"+path+"' title='"+_("Curent page")+"'><img src='/"MOD_ID"/img_reload' alt='" +_("Curent page")+"'/></a>\n"
+	"<a href='"+path.substr(0,path.rfind("/"))+"' title='"+_("Previos page")+"'><img src='/"MOD_ID"/img_up' alt='"+_("Previos page")+"'/></a>\n"
+	"<img src='/"MOD_ID"/img_line'/>\n"
+	"<a href='/"MOD_ID"/about' title='"+_("About")+"'><img src='/"MOD_ID"/img_help' alt='"+_("About")+"'/></a>\n"
 	"</td>\n"
 	"<td>";
     if(ses.root->childGet("id","ico",true))
@@ -584,7 +601,7 @@ bool TWEB::getVal( SSess &ses, XMLNode &node, string a_path, bool rd )
 	if( node.attr("tp") == "br" || wr )
 	    ses.page = ses.page+"<form action='"+path+"' method='post' enctype='multipart/form-data'>\n";
 
-	XMLNode req("get"); 
+	XMLNode req("get");
 	req.setAttr("path",ses.url+"/"+TSYS::strEncode( a_path, TSYS::PathEl ))->
 	    setAttr("user",ses.user);
 	if(cntrIfCmd(req)) ses.mess.push_back(req.text().c_str());
@@ -877,7 +894,7 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 		getArea( ses, *ses.root, "/" );
 	    }
 	}
-    }catch(TError err) 
+    }catch(TError err)
     { messPost(ses.page,err.cat,err.mess,TWEB::Error); }
 
     colontDown( ses );
@@ -1419,7 +1436,7 @@ void TWEB::colontDown( SSess &ses )
 
 string TWEB::cntGet( SSess &ses, const string &nm )
 {
-    map< string, string >::iterator prmEl = ses.cnt.find(nm);
+    map<string,string>::iterator prmEl = ses.cnt.find(nm);
     if( prmEl != ses.cnt.end() ) return prmEl->second;
     return "<empty>";
 }

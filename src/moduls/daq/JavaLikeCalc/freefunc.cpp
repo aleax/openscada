@@ -34,14 +34,14 @@ Func *JavaLikeCalc::p_fnc;
 //*************************************************
 //* Func: Function                                *
 //*************************************************
-Func::Func( const char *id, const char *name ) :
-    TConfig(&mod->elFnc()), TFunction(id), parse_res(mod->parseRes( )),
+Func::Func( const char *iid, const char *name ) :
+    TConfig(&mod->elFnc()), TFunction(iid), parse_res(mod->parseRes( )),
     mName(cfg("NAME").getSd()), mDescr(cfg("DESCR").getSd()),
     max_calc_tm(cfg("MAXCALCTM").getId()),prg_src(cfg("FORMULA").getSd())
 {
-    cfg("ID").setS(id);
+    cfg("ID").setS(id());
     mName = name;
-    if( !mName.size() ) mName = id;
+    if( !mName.size() ) mName = id();
 }
 
 Func::~Func( )

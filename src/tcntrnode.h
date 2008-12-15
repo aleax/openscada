@@ -176,7 +176,7 @@ class TCntrNode
 
 	//- Conteiners -
 	char	grpSize( )	{ return chGrp.size(); }
-	char	 grpId( const string &sid );
+	char	grpId( const string &sid );
 	GrpEl	&grpAt( char id );
 	unsigned grpAdd( const string &id, bool ordered = false );
 

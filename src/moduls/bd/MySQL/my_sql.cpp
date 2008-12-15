@@ -638,7 +638,8 @@ void MTable::fieldPrmSet( TCfg &cfg, const string &last, string &req )
     {
 	case TFld::String:
 	    if( fieldLen(cfg.fld().len()) < 256 || cfg.fld().flg()&TCfg::Key )
-		req=req+"varchar("+SYS->int2str(vmax(1,vmin((cfg.fld().flg()&TCfg::Key)?150:255,fieldLen(cfg.fld().len()))))+") NOT NULL DEFAULT '"+cfg.fld().def()+"' ";
+		req=req+"varchar("+SYS->int2str(vmax(1,vmin((cfg.fld().flg()&TCfg::Key)?150:255,fieldLen(cfg.fld().len()))))+") "+
+			((cfg.fld().flg()&TCfg::Key)?"BINARY":"")+" NOT NULL DEFAULT '"+cfg.fld().def()+"' ";
 	    else if( fieldLen(cfg.fld().len()) < 65536 )
 		req=req+"text NOT NULL ";// DEFAULT '"+cfg.fld().def()+"' ";
 	    else req=req+"mediumtext NOT NULL ";// DEFAULT '"+cfg.fld().def()+"' ";

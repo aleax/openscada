@@ -48,10 +48,10 @@ namespace WebVision
 class SAuth
 {
     public:
-	SAuth( ) : t_auth(0), name("")	{ }
-	SAuth( string inm, time_t it_auth ) : t_auth(it_auth), name(inm)	{ }
+	SAuth( ) : tAuth(0), name("")	{ }
+	SAuth( string inm, time_t itAuth ) : tAuth(itAuth), name(inm)	{ }
 
-	time_t t_auth;
+	time_t tAuth;
 	string name;
 };
 
@@ -75,8 +75,6 @@ class SSess
 	vector<string>		vars;	//request vars
 	map<string,string>	cnt;	//Parsed contain
 	map<string,string>	prm;	//URL parameters
-
-	vector<string> mess;	//no interrupt messages
 };
 
 //************************************************
@@ -92,11 +90,11 @@ class TWEB: public TUI
 	TWEB( string name );
 	~TWEB( );
 
-	time_t authTime( )				{ return m_t_auth; }
-	string CSStables( )				{ return m_CSStables; }
+	time_t authTime( )				{ return mTAuth; }
+	string CSStables( )				{ return mCSStables; }
 
-	void setAuthTime( time_t vl )			{ m_t_auth = vl; modif(); }
-	void setCSStables( const string &vl )		{ m_CSStables = vl; modif(); }
+	void setAuthTime( time_t vl )			{ mTAuth = vl; modif(); }
+	void setCSStables( const string &vl )		{ mCSStables = vl; modif(); }
 
 	//- VCA sessions -
 	void vcaSesList( vector<string> &list )		{ chldList(id_vcases,list); }
@@ -128,9 +126,6 @@ class TWEB: public TUI
 
 	int colorParse( const string &clr );
 
-        //Attributes
-	string		VCAjs;				//Main page JavaScript programm VCA.js
-
     protected:
 	//Methods
 	void load_( );
@@ -149,14 +144,14 @@ class TWEB: public TUI
 	void messPost( string &page, const string &cat, const string &mess, MessLev type = Info );
 
 	//Attributes
-	Res		m_res;
-	map<int,SAuth>	m_auth;
-	int		m_t_auth;			//Time of sesion life (minutes)
+	Res		mRes;
+	map<int,SAuth>	mAuth;
+	int		mTAuth;				//Time of sesion life (minutes)
 	timer_t		chkSessTm;			//Check session's timer
 	bool		chck_st;			//Check session's status
 	int		id_vcases;			//VCA session's container identifier
-	string		m_CSStables;			//CSS tables
-	map<string, int> colors;			//Named colors
+	string		mCSStables;			//CSS tables
+	map<string,int> colors;				//Named colors
 };
 
 extern TWEB *mod;

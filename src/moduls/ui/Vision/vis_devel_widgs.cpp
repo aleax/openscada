@@ -1758,12 +1758,14 @@ void LineEditProp::callDlg( )
     {
 	FontDlg fnt_dlg(this,value().toAscii().data());
 	if( fnt_dlg.exec() )	setValue(fnt_dlg.font());
+	setFocus();
     }
     else if( type() == LineEditProp::Color )
     {
 	QColor clr(value());
 	clr = QColorDialog::getColor(clr,this);
 	if( clr.isValid() ) setValue(clr.name());
+	setFocus();
     }
     QApplication::postEvent(this,new QKeyEvent(QEvent::KeyPress,Qt::Key_Return,Qt::NoModifier));
 }

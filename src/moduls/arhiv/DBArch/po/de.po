@@ -1,0 +1,356 @@
+# translation of de.po to
+# translation of ru.po to
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# aleksey <aleksey@psniip.ru>, 2008.
+#: arch.cpp:52 mess.cpp:59 mess.cpp:79 mess.cpp:157 mess.cpp:175 mess.cpp:195
+#: val.cpp:110 val.cpp:141 val.cpp:170 val.cpp:186 val.cpp:199 val.cpp:223
+#: val.cpp:249 val.cpp:275 val.cpp:301 val.cpp:366 mess.h:51
+msgid ""
+msgstr ""
+"Project-Id-Version: de\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-12-15 12:59+0200\n"
+"PO-Revision-Date: 2008-12-11 13:33+0300\n"
+"Last-Translator: aleksey <aleksey@psniip.ru>\n"
+"Language-Team:  <ru@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+
+#: arch.cpp:35
+msgid "DBArch"
+msgstr ""
+
+#: arch.cpp:36
+msgid "To DB archivator"
+msgstr "Zum DB Archivator"
+
+#: arch.cpp:37 mess.cpp:206 mess.cpp:207 mess.cpp:209 mess.cpp:218
+#: mess.cpp:219 val.cpp:85 val.cpp:87 val.cpp:95 val.cpp:96
+msgid "Archive"
+msgstr "Archiv"
+
+#: arch.cpp:39
+msgid "0.7.0"
+msgstr ""
+
+#: arch.cpp:40
+msgid "Roman Savochenko"
+msgstr "Roman Savotschenko"
+
+#: arch.cpp:41
+msgid ""
+"The Archive module. Allow functions for messages and values arhiving to DB."
+msgstr ""
+"Modul des Archivs. Gewaehrt Archivierungsfunktionen der Mitteilungen und "
+"Bedeutungen  fuer DB."
+
+#: arch.cpp:42
+msgid "GPL"
+msgstr ""
+
+#: arch.cpp:47
+msgid "C"
+msgstr ""
+
+#: arch.cpp:89 arch.cpp:92 mess.cpp:39 mess.cpp:209 val.cpp:40 val.cpp:87
+msgid "DBArchSize"
+msgstr ""
+
+#: arch.cpp:89 arch.cpp:92
+msgid "Archive size (hours)"
+msgstr "Umfang vom Archiv (Stunden)"
+
+#: arch.cpp:89 arch.cpp:92
+msgid "20.5"
+msgstr ""
+
+#: arch.cpp:89 arch.cpp:92
+msgid "24"
+msgstr ""
+
+#: arch.cpp:95 mess.cpp:58 mess.cpp:78 mess.cpp:154 val.cpp:109 val.cpp:140
+#: val.cpp:362
+msgid "TBL"
+msgstr ""
+
+#: arch.cpp:95
+msgid "Table"
+msgstr " Tabelle"
+
+#: arch.cpp:95
+msgid "50"
+msgstr ""
+
+#: arch.cpp:96 mess.cpp:81 mess.cpp:155 val.cpp:112 val.cpp:363
+msgid "BEGIN"
+msgstr ""
+
+#: arch.cpp:96
+msgid "Begin"
+msgstr "Beginn"
+
+#: arch.cpp:96 arch.cpp:97 arch.cpp:98 arch.cpp:99 arch.cpp:100
+msgid "20"
+msgstr ""
+
+#: arch.cpp:97 mess.cpp:82 mess.cpp:156 val.cpp:113 val.cpp:364
+msgid "END"
+msgstr ""
+
+#: arch.cpp:97
+msgid "End"
+msgstr "Ende"
+
+#: arch.cpp:98 val.cpp:114 val.cpp:365
+msgid "PRM1"
+msgstr ""
+
+#: arch.cpp:98
+msgid "Parameter 1"
+msgstr "Parameter 1"
+
+#: arch.cpp:99
+msgid "PRM2"
+msgstr ""
+
+#: arch.cpp:99
+msgid "Parameter 2"
+msgstr "Parameter 2"
+
+#: arch.cpp:100
+msgid "PRM3"
+msgstr ""
+
+#: arch.cpp:100
+msgid "Parameter 3"
+msgstr "Parameter 3"
+
+#: arch.cpp:103 arch.cpp:109 arch.cpp:114 arch.cpp:119 mess.cpp:127
+#: mess.cpp:143 mess.cpp:174 val.cpp:168 val.cpp:184 val.cpp:197 val.cpp:221
+#: val.cpp:247 val.cpp:273 val.cpp:299 val.cpp:336 val.cpp:350
+msgid "TM"
+msgstr ""
+
+#: arch.cpp:103 arch.cpp:109 arch.cpp:114 arch.cpp:119
+msgid "Time (s)"
+msgstr "Zeit (sek)"
+
+#: arch.cpp:103 arch.cpp:109 arch.cpp:110 arch.cpp:111 arch.cpp:114
+#: arch.cpp:115 arch.cpp:119 arch.cpp:120
+msgid "10"
+msgstr ""
+
+#: arch.cpp:104 mess.cpp:128 mess.cpp:177 mess.cpp:195
+msgid "CATEG"
+msgstr ""
+
+#: arch.cpp:104
+msgid "Category"
+msgstr "Kategorie"
+
+#: arch.cpp:104
+msgid "100"
+msgstr ""
+
+#: arch.cpp:105 mess.cpp:129 mess.cpp:177 mess.cpp:195
+msgid "MESS"
+msgstr ""
+
+#: arch.cpp:105
+msgid "Message"
+msgstr "Mitteilung"
+
+#: arch.cpp:105 arch.cpp:121
+msgid "255"
+msgstr ""
+
+#: arch.cpp:106 mess.cpp:130 mess.cpp:177
+msgid "LEV"
+msgstr ""
+
+#: arch.cpp:106
+msgid "Level"
+msgstr "Niveau"
+
+#: arch.cpp:106
+msgid "1"
+msgstr ""
+
+#: arch.cpp:110 arch.cpp:115 arch.cpp:120 val.cpp:169 val.cpp:185 val.cpp:198
+#: val.cpp:222 val.cpp:248 val.cpp:274 val.cpp:300 val.cpp:337 val.cpp:351
+msgid "TMU"
+msgstr ""
+
+#: arch.cpp:110 arch.cpp:115 arch.cpp:120
+msgid "Time (us)"
+msgstr "Zeit (mks)"
+
+#: arch.cpp:111 arch.cpp:116 arch.cpp:121 val.cpp:172 val.cpp:173 val.cpp:187
+#: val.cpp:200 val.cpp:226 val.cpp:252 val.cpp:278 val.cpp:304 val.cpp:330
+#: val.cpp:331 val.cpp:332 val.cpp:333
+msgid "VAL"
+msgstr ""
+
+#: arch.cpp:111 arch.cpp:116 arch.cpp:121
+msgid "Value"
+msgstr "Bedeutung"
+
+#: arch.cpp:116
+msgid "30.15"
+msgstr ""
+
+#: arch.cpp:135
+#, c-format
+msgid ""
+"======================= The module <%s:%s> options =======================\n"
+"---------- Parameters of the module section <%s> in config file ----------\n"
+"\n"
+msgstr ""
+"========================== Оptionen des Moduls  <%s:%s> "
+"==========================\n"
+"-------- Parameter der modularen Sektion <%s> in der Konfigurationsdatei "
+"--------\n"
+"\n"
+
+#: arch.cpp:146
+msgid "h"
+msgstr ""
+
+#: arch.cpp:149 mess.cpp:208 val.cpp:86
+msgid "help"
+msgstr ""
+
+#: arch.cpp:189 mess.cpp:203 val.cpp:82
+msgid "info"
+msgstr ""
+
+#: arch.cpp:192 mess.cpp:206 mess.cpp:207 mess.cpp:209 val.cpp:85 val.cpp:87
+msgid "fld"
+msgstr ""
+
+#: arch.cpp:192 arch.cpp:198
+msgid "/help/g_help"
+msgstr ""
+
+#: arch.cpp:192
+msgid "Options help"
+msgstr " Optionenhilfe"
+
+#: arch.cpp:192 mess.cpp:206 mess.cpp:207 mess.cpp:209 mess.cpp:218
+#: mess.cpp:219 val.cpp:85 val.cpp:87 val.cpp:95 val.cpp:96
+msgid "root"
+msgstr ""
+
+#: arch.cpp:192 mess.cpp:206 mess.cpp:207 mess.cpp:209 val.cpp:85 val.cpp:87
+msgid "tp"
+msgstr ""
+
+#: arch.cpp:192 mess.cpp:207 val.cpp:85
+msgid "str"
+msgstr ""
+
+#: arch.cpp:192
+msgid "cols"
+msgstr ""
+
+#: arch.cpp:192
+msgid "90"
+msgstr ""
+
+#: arch.cpp:192
+msgid "rows"
+msgstr ""
+
+#: arch.cpp:192
+msgid "5"
+msgstr ""
+
+#: arch.cpp:197 mess.cpp:214 val.cpp:92
+msgid "path"
+msgstr ""
+
+#: arch.cpp:198 mess.cpp:218 val.cpp:95
+msgid "get"
+msgstr ""
+
+#: mess.cpp:41 mess.cpp:74 val.cpp:42 val.cpp:59
+msgid "*.*"
+msgstr ""
+
+#: mess.cpp:59 mess.cpp:62 mess.cpp:63 mess.cpp:79 mess.cpp:86 mess.cpp:87
+#: mess.cpp:117 mess.cpp:149 mess.cpp:157 mess.cpp:175 val.cpp:110 val.cpp:118
+#: val.cpp:119 val.cpp:141 val.cpp:144 val.cpp:145 val.cpp:170 val.cpp:186
+#: val.cpp:199 val.cpp:223 val.cpp:249 val.cpp:275 val.cpp:301 val.cpp:323
+#: val.cpp:357 val.cpp:366
+msgid "."
+msgstr ""
+
+#: mess.cpp:66
+#, c-format
+msgid "%s"
+msgstr ""
+
+#: mess.cpp:115 mess.cpp:164
+msgid "Archive no started!"
+msgstr "Archiv nicht gestartet"
+
+#: mess.cpp:206 mess.cpp:215
+msgid "/prm/st/tarch"
+msgstr ""
+
+#: mess.cpp:206
+msgid "Archiving time (msek)"
+msgstr "Archivierungszeit (mks)"
+
+#: mess.cpp:206 mess.cpp:209 val.cpp:87
+msgid "real"
+msgstr ""
+
+#: mess.cpp:207 val.cpp:85
+msgid "/prm/cfg/addr"
+msgstr ""
+
+#: mess.cpp:207 val.cpp:85
+msgid "ADDR"
+msgstr ""
+
+#: mess.cpp:207 val.cpp:85
+msgid "dest"
+msgstr ""
+
+#: mess.cpp:207 val.cpp:85
+msgid "select"
+msgstr ""
+
+#: mess.cpp:207 val.cpp:85
+msgid "/db/list"
+msgstr ""
+
+#: mess.cpp:208 val.cpp:86
+msgid ""
+"DB address in format [<DB module>.<DB name>].\n"
+"For use main work DB set '*.*'."
+msgstr ""
+
+#: mess.cpp:209 mess.cpp:216 val.cpp:87 val.cpp:93
+msgid "/prm/cfg/sz"
+msgstr ""
+
+#: mess.cpp:219 val.cpp:96
+msgid "set"
+msgstr ""
+
+#: val.cpp:133
+msgid "DBAVl_"
+msgstr ""
+
+#: val.cpp:133
+msgid "_"
+msgstr ""
+
+#: mess.h:42
+msgid "DBAMsg_"
+msgstr ""

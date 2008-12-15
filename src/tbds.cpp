@@ -522,8 +522,8 @@ void TTipBD::cntrCmdProc( XMLNode *opt )
 	}
 	if( ctrChkNode(opt,"add",0664,"root","BD",SEQ_WR) )
 	{
-	    open(opt->attr("id"));
-	    at(opt->attr("id")).at().setName(opt->text());
+	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::ID);
+	    open(vid); at(vid).at().setName(opt->text());
 	}
 	if( ctrChkNode(opt,"del",0664,"root","BD",SEQ_WR) )	close(opt->attr("id"),true);
     }
@@ -645,6 +645,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
     //Get page info
     if( opt->name() == "info" )
     {
+	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Data base: ")+name(),0664,"root","BD");
 	ctrMkNode("branches",opt,-1,"/br","",0444);
 	ctrMkNode("grp",opt,-1,"/br/tbl_",_("Opened table"),0664,"root","BD");
@@ -775,6 +776,7 @@ void TTable::cntrCmdProc( XMLNode *opt )
     //Get page info
     if( opt->name() == "info" )
     {
+	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Table: ")+name(),0664,"root","BD");
 	if(ctrMkNode("area",opt,0,"/prm",_("Table")))
 	{

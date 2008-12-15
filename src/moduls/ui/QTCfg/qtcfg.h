@@ -96,17 +96,17 @@ class ConfApp: public QMainWindow
 	void editToolUpdate( );				//Edit tools visible update
 	void endRunChk( );				//End run flag check
 
-	//- QListView -
+	//> QListView
 	void selectItem( );				//Processing of select item signal
 	void viewChild( QTreeWidgetItem * i );		//Processing of view item signal
 	void onItem( QTreeWidgetItem * i );		//View item path
 	void ctrTreePopup( );
 	void treeUpdate( );				//Update expanded content of tree
 
-	//- QTabWidget -
+	//> QTabWidget
 	void tabSelect( QWidget *wdg );			//Change curent widget
 
-	//- Self widget's slots -
+	//> Self widget's slots
 	void checkBoxStChange( int stat );		//QCheckBox
 	void buttonClicked( );				//Button
 	void combBoxActivate( const QString& );		//QComboBox
@@ -121,20 +121,21 @@ class ConfApp: public QMainWindow
 
     private:
 	//Methods
-	//- Page display -
+	//> Page display
+	void selectPage( const string &path );
 	void pageDisplay( const string &path );
 
-	//- View ListItem with recursive processing of the ControllArea -
-	void viewChildRecArea( QTreeWidgetItem *i, int level );
+	//> View ListItem with recursive processing of the ControllArea
+	void viewChildRecArea( QTreeWidgetItem *i, bool upTree = false );
 
-	//- Update structure and put service labels -
+	//> Update structure and put service labels
 	bool upStruct( XMLNode &w_nd, const XMLNode &n_nd );
 
-	//- Select ListItem with recursive processing of the ControllArea -
-	void selectChildRecArea( const XMLNode &node, const string &a_path, QWidget *widget = NULL, bool refr = false );
-	void basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, bool wr, QHBoxLayout **l_hbox, int &l_pos, bool refr, bool comm = false );
+	//> Select ListItem with recursive processing of the ControllArea
+	void selectChildRecArea( const XMLNode &node, const string &a_path, QWidget *widget = NULL );
+	void basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, bool wr, QHBoxLayout **l_hbox, int &l_pos, bool comm = false );
 
-	//- Controll system requests -
+	//> Controll system requests
 	void initHosts();
 	int cntrIfCmd( XMLNode &node );
 
@@ -163,8 +164,6 @@ class ConfApp: public QMainWindow
 	int		que_sz;
 	vector<string>	prev;
 	vector<string>	next;
-
-	bool		block_tabs;
 
 	bool 		tbl_init;
     };

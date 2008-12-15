@@ -231,20 +231,23 @@ string RunWdgView::resGet( const string &res )
 
 bool RunWdgView::event( QEvent *event )
 {
-    //- Paint message about access denied -
+    //> Paint message about access denied
     if( event->type() == QEvent::Paint && !permView() )
     {
-	QPainter pnt(this);
-	//-- Fill page and draw border --
-	pnt.fillRect(rect(),QBrush(QColor("black"),Qt::Dense4Pattern));
-	pnt.setPen(QPen(QBrush(QColor("black")),1));
-	pnt.drawRect(rect().adjusted(0,0,-1,-1));
-	//-- Draw message --
-	QTextOption to;
-	pnt.setPen(QColor("red"));
-	to.setAlignment(Qt::AlignCenter);
-	to.setWrapMode(QTextOption::WordWrap);
-	pnt.drawText(rect(),QString(_("Widget: '%1'.\nView access is no permited.")).arg(id().c_str()),to);
+        if( dynamic_cast<RunPageView*>(this) )
+        {
+	    QPainter pnt(this);
+	    //>> Fill page and draw border
+	    pnt.fillRect(rect(),QBrush(QColor("black"),Qt::Dense4Pattern));
+	    pnt.setPen(QPen(QBrush(QColor("black")),1));
+	    pnt.drawRect(rect().adjusted(0,0,-1,-1));
+	    //>> Draw message
+	    QTextOption to;
+	    pnt.setPen(QColor("red"));
+	    to.setAlignment(Qt::AlignCenter);
+	    to.setWrapMode(QTextOption::WordWrap);
+	    pnt.drawText(rect(),QString(_("Page: '%1'.\nView access is no permited.")).arg(id().c_str()),to);
+	}
 	return true;
     }
 
@@ -451,8 +454,7 @@ RunPageView *RunPageView::findOpenPage( const string &ipg )
 
 bool RunPageView::callPage( const string &pg_it, const string &pgGrp, const string &pgSrc )
 {
-    //printf("TEST 00: %s => %s\n",id().c_str(),pg_it.c_str());
-    //- Check for set include page -
+    //> Check for set include page
     for( int i_ch = 0; i_ch < children().size(); i_ch++ )
 	if( !pgGrp.empty() && !qobject_cast<RunPageView*>(children().at(i_ch)) &&
 		((RunWdgView *)children().at(i_ch))->root() == "Box" &&
@@ -466,46 +468,40 @@ bool RunPageView::callPage( const string &pg_it, const string &pgGrp, const stri
 		    XMLNode req("close");
 		    req.setAttr("path","/ses_"+mainWin()->workSess()+"/%2fserv%2fpg")->setAttr("pg",pg_it_prev);
 		    mainWin()->cntrIfCmd(req);
-		    //mainWin()->wAttrSet(pg_it_prev,"pgOpen","0");
 		}
 		((RunWdgView*)children().at(i_ch))->setPgOpenSrc(pg_it);
 	    }
 	    return true;
         }
-    //- Check for open child page -
-    if( pgSrc == id().c_str() )	{ pgOpen( pg_it ); return true; }
-    //- Put checking to self include pages -
+    //> Put checking to self include pages
     for( int i_ch = 0; i_ch < children().size(); i_ch++ )
 	if( qobject_cast<RunPageView*>(children().at(i_ch)) &&
 		((RunPageView *)children().at(i_ch))->callPage(pg_it,pgGrp,pgSrc))
 	    return true;
-    //- Unknown and empty source pages open as master page child windows -
-    if( !parent() )		{ pgOpen( pg_it ); return true; }
+    //> Check for open child page or for unknown and empty source pages open as master page child windows
+    if( pgSrc == id().c_str() || !parent() )
+    {
+	RunPageView *pg = new RunPageView(pg_it,mainWin(),this);
+	pg->setAttribute(Qt::WA_DeleteOnClose);
+	pg->setWindowFlags(Qt::Sheet);
+	pg->setWindowTitle(mainWin()->windowTitle());
+	pg->load("");
+	pg->moveF(QPointF(mapToGlobal(pos()).x()+sizeF().width()/2-pg->sizeF().width()/2,
+			  mapToGlobal(pos()).y()+sizeF().height()/2-pg->sizeF().height()/2));
+	return true;
+    }
 
     return false;
 }
 
-RunPageView *RunPageView::pgOpen( const string &ipg )
-{
-    RunPageView *pg = new RunPageView(ipg,mainWin(),this);
-    pg->setAttribute(Qt::WA_DeleteOnClose);
-    pg->setWindowFlags(Qt::Sheet);
-    pg->setWindowTitle(mainWin()->windowTitle());
-    pg->load("");
-    pg->moveF(QPointF(mapToGlobal(pos()).x()+sizeF().width()/2-pg->sizeF().width()/2,
-	     mapToGlobal(pos()).y()+sizeF().height()/2-pg->sizeF().height()/2));
-
-    return pg;
-}
-
 void RunPageView::closeEvent( QCloseEvent *event )
 {
-    //-- Send close command --
+    //> Send close command
     XMLNode req("close");
     req.setAttr("path","/ses_"+mainWin()->workSess()+"/%2fserv%2fpg")->setAttr("pg",id());
     mainWin()->cntrIfCmd(req);
 
-    //-- Close included pages --
+    //> Close included pages
     for( int i_ch = 0; i_ch < children().size(); i_ch++ )
 	if( !qobject_cast<RunPageView*>(children().at(i_ch)) && ((RunWdgView *)children().at(i_ch))->root() == "Box" &&
 		!((RunWdgView*)children().at(i_ch))->pgOpenSrc().empty() )

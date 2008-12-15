@@ -525,8 +525,8 @@ void TTipTransport::cntrCmdProc( XMLNode *opt )
 	}
 	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )
 	{
-	    inAdd(opt->attr("id"));
-	    inAt(opt->attr("id")).at().setName(opt->text());
+	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::ID);
+	    inAdd(vid); inAt(vid).at().setName(opt->text());
 	}
 	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	inDel(opt->attr("id"),true);
     }
@@ -540,8 +540,8 @@ void TTipTransport::cntrCmdProc( XMLNode *opt )
 	}
 	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )
 	{
-	    outAdd(opt->attr("id"));
-	    outAt(opt->attr("id")).at().setName(opt->text());
+	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::ID);
+	    outAdd(vid); outAt(vid).at().setName(opt->text());
 	}
 	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	outDel(opt->attr("id"),true);
     }
@@ -623,6 +623,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
+	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",(_("Input transport: ")+name()).c_str(),0664,"root","root");
 	if(ctrMkNode("area",opt,-1,"/prm",_("Transport")))
 	{
@@ -776,6 +777,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
+	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",(_("Output transport: ")+name()).c_str(),0664,"root","root");
 	if(ctrMkNode("area",opt,-1,"/prm",_("Transport")))
 	{

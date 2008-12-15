@@ -35,10 +35,11 @@ using namespace VCA;
 //************************************************
 Session::Session( const string &iid, const string &iproj ) :
     mEnable(false), mStart(false), endrun_req(false), tm_calc(0.0),
-    mId(iid), mUser("root"), mPrjnm(iproj), mPer(100), mCalcClk(1),
+    mUser("root"), mPrjnm(iproj), mPer(100), mCalcClk(1),
     mOwner("root"), mGrp("UI"), mPermit(R_R_R_),
     mBackgrnd(false), mConnects(0)
 {
+    mId = iid;
     mPage = grpAdd("pg_");
     sec = SYS->security();
 }
@@ -200,7 +201,7 @@ AutoHD<SessPage> Session::at( const string &id )
 
 void Session::uiComm( const string &com, const string &prm, SessWdg *src )
 {
-    //- Find of pattern adequancy for opened page -
+    //> Find of pattern adequancy for opened page
     string oppg;		//Opened page according of pattern
 
     vector<string> &op_ls = openList();
@@ -215,10 +216,10 @@ void Session::uiComm( const string &com, const string &prm, SessWdg *src )
 	}
 	if( cur_pt_el.empty() ) { oppg = op_ls[i_op]; break; }
     }
-    //- Individual commands process -
+    //> Individual commands process
     try
     {
-	//-- Go to destination page --
+	//>> Go to destination page
 	string cur_pt_el;
 	int i_el = 0;
 	AutoHD<SessPage> cpg;
@@ -263,16 +264,15 @@ void Session::uiComm( const string &com, const string &prm, SessWdg *src )
 		}
 	    }
 	    else op_pg = cur_pt_el;
-	    //-- Go to next page --
+	    //>> Go to next page
 	    cpg = cpg.freeStat() ? at(op_pg) : cpg.at().pageAt(op_pg);
 	}
-	//- Open found page -
+	//> Open found page
 	if( !cpg.freeStat() )
 	{
-	    //-- Close previous page --
-	    if( !oppg.empty() )
-		((AutoHD<SessPage>)mod->nodeAt(oppg)).at().attrAt("pgOpen").at().setB(false);
-	    //--- Set interwidget's links for new page ---
+	    //>> Close previous page
+	    if( !oppg.empty() )	((AutoHD<SessPage>)mod->nodeAt(oppg)).at().attrAt("pgOpen").at().setB(false);
+	    //>>> Set interwidget's links for new page
 	    bool emptyPresnt = false;
 	    string atr_id, prm_lnk;
 	    vector<string> cAtrLs;
@@ -301,7 +301,7 @@ void Session::uiComm( const string &com, const string &prm, SessWdg *src )
 		    emptyPresnt = true;
 		}
 	    }
-	    //--- Fill parameter's links for other attributes ---
+	    //>>> Fill parameter's links for other attributes
 	    if( emptyPresnt && !prm_lnk.empty() )
 	    {
 		AutoHD<TValue> prml;
@@ -317,7 +317,7 @@ void Session::uiComm( const string &com, const string &prm, SessWdg *src )
 		    if( prml.at().vlPresent(atr_id) )	attr.at().setCfgVal("prm:"+prm_lnk+"/a_"+atr_id);
 		}
 	    }
-	    //--- Open new page ---
+	    //>>> Open new page
 	    cpg.at().attrAt("pgOpen").at().setB(true);
 	}
     }catch(...){ }
@@ -507,6 +507,7 @@ void Session::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
+	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Session: ")+id(),permit(),owner().c_str(),grp().c_str());
 	if(ico().size()) ctrMkNode("img",opt,-1,"/ico","",R_R_R_);
 	if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
@@ -686,8 +687,7 @@ void SessPage::setEnable( bool val )
     {
 	vector<string> pg_ls;
 	//- Register opened page -
-	if( !(parent().at().prjFlags( )&Page::Empty) && attrAt("pgOpen").at().getB() ) 
-	    ownerSess()->openReg(path());
+	if( !(parent().at().prjFlags( )&Page::Empty) && attrAt("pgOpen").at().getB() ) ownerSess()->openReg(path());
 	//- Create included pages -
 	parent().at().pageList(pg_ls);
 	for( int i_p = 0; i_p < pg_ls.size(); i_p++ )
@@ -705,24 +705,23 @@ void SessPage::setProcess( bool val )
 {
     if( !enable() ) return;
 
-    //- Change process state for included pages -
+    //> Change process state for included pages
     vector<string> ls;
     pageList(ls);
     for(int i_l = 0; i_l < ls.size(); i_l++ )
         pageAt(ls[i_l]).at().setProcess(val);
 
-    //- Change self process state -
+    //> Change self process state
     bool diff = (val!=process());
-    if( val && !parent().at().parent().freeStat() && ( attrAt("pgOpen").at().getB() ||
-	    attrAt("pgNoOpenProc").at().getB() ) )
+    if( val && !parent().at().parent().freeStat() && ( attrAt("pgOpen").at().getB() || attrAt("pgNoOpenProc").at().getB() ) )
     {
 	SessWdg::setProcess(true);
-	//-- First calc --
+	//>> First calc
 	if( diff ) calc(true,false);
     }
     else if( !val )
     {
-	//-- Last calc --
+	//>> Last calc
 	if( diff ) calc(false,true);
 
 	SessWdg::setProcess(false);
@@ -852,7 +851,7 @@ bool SessPage::cntrCmdGeneric( XMLNode *opt )
         return true;
     }
 
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
     if( a_path == "/wdg/st/open" && enable() && !(parent().at().prjFlags( )&Page::Empty) )
     {
@@ -1466,7 +1465,6 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
     {
 	unsigned tm = strtoul(opt->attr("tm").c_str(),NULL,10);
 	int perm = ownerSess()->sec.at().access(opt->attr("user"),(tm?SEQ_RD:SEQ_RD|SEQ_WR),owner(),grp(),permit());
-	if( !(perm&SEQ_RD) ) return true;
 
 	//>> Self attributes put
 	if( !tm || m_mdfClc >= tm )
@@ -1486,9 +1484,9 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 				     setText(attr.at().getS());
 	    }
 	}
-	
+
 	//>> Child widgets process
-	if( enable() )
+	if( enable() && perm&SEQ_RD )
 	{
 	    vector<string>	lst;
 	    wdgList(lst);

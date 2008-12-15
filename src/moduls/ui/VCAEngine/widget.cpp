@@ -31,7 +31,7 @@ using namespace VCA;
 //* Widget                                       *
 //************************************************
 Widget::Widget( const string &id, const string &isrcwdg ) :
-        mEnable(false), m_lnk(false), mId(id.substr(0,30)), mParentNm(isrcwdg)
+    mId(id), mEnable(false), m_lnk(false), mParentNm(isrcwdg)
 {
     inclWdg = grpAdd("wdg_");
     attrId  = grpAdd("a_");
@@ -523,6 +523,7 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
+	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Widget: ")+id(),RWRWR_,"root","UI");
 	if(ctrMkNode("area",opt,-1,"/wdg",_("Widget")))
 	{
@@ -686,7 +687,7 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 		}
 	    }
 	}
-	if( ctrChkNode(opt,"add",RWRWR_,"root","UI",SEQ_WR) )	wdgAdd(opt->attr("id").c_str(),opt->text(),"");
+	if( ctrChkNode(opt,"add",RWRWR_,"root","UI",SEQ_WR) )	wdgAdd(TSYS::strEncode(opt->attr("id"),TSYS::ID).c_str(),opt->text(),"");
 	if( ctrChkNode(opt,"del",RWRWR_,"root","UI",SEQ_WR) )	wdgDel(opt->attr("id").c_str(),true);
     }
     else return false;
@@ -1261,7 +1262,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 //************************************************
 Attr::Attr( TFld &ifld ) : m_modif(0), self_flg((SelfAttrFlgs)0)
 {
-    //- Chek for self field for dinamic elements -
+    //> Chek for self field for dinamic elements
     if( ifld.flg()&TFld::SelfFld )
     {
 	m_fld = new TFld();
@@ -1314,8 +1315,7 @@ int Attr::flgGlob()
 
 string Attr::getSEL( )
 {
-    if( !(fld().flg()&TFld::Selected) )
-	throw TError("Cfg",_("Element type no select!"));
+    if( !(fld().flg()&TFld::Selected) ) throw TError("Cfg",_("Element type no select!"));
     switch( fld().type() )
     {
 	case TFld::String:	return fld().selVl2Nm(*m_val.s_val);

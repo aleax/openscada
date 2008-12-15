@@ -289,7 +289,7 @@ void TProtIn::index( string &answer )
     {
 	AutoHD<TModule> mod = owner().owner().owner().ui().at().modAt(list[i_l]);
 	if( mod.at().modInfo("SubType") == "WWW" )
-	    answer = answer+"<li><a href='"+list[i_l]+"'>"+mod.at().modInfo("Name")+"</a></li>\n";
+	    answer = answer+"<li><a href='"+list[i_l]+"/'>"+mod.at().modInfo("Name")+"</a></li>\n";
     }
     answer = answer+"</ul></td></tr></table>\n"+w_tail();
     answer = http_head("200 OK",answer.size())+answer;

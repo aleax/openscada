@@ -274,6 +274,7 @@ void TController::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
+	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Controller: ")+name(),0664,"root","root");
 	ctrMkNode("branches",opt,-1,"/br","",0444);
 	if(ctrMkNode("area",opt,-1,"/cntr",_("Controller")))
@@ -336,8 +337,9 @@ void TController::cntrCmdProc( XMLNode *opt )
 	}
 	if( ctrChkNode(opt,"add",0660,"root","root",SEQ_WR) )
 	{
-	    add(opt->attr("id"),owner().tpPrmToId(TBDS::genDBGet(owner().nodePath()+"addType",owner().tpPrmAt(0).name,opt->attr("user"))));
-	    at(opt->attr("id")).at().setName(opt->text());
+	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::ID);
+	    add(vid,owner().tpPrmToId(TBDS::genDBGet(owner().nodePath()+"addType",owner().tpPrmAt(0).name,opt->attr("user"))));
+	    at(vid).at().setName(opt->text());
 	}
 	if( ctrChkNode(opt,"del",0660,"root","root",SEQ_WR) )	del(opt->attr("id"),true);
     }

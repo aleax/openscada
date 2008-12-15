@@ -10,6 +10,8 @@
 	-->
 	<prm id="SYSOptCfg">1</prm>
 	<prm id="Workdir">~/.openscada</prm>
+	<prm id="IcoDir">./icons</prm>
+	<prm id="ModDir">/usr/lib/openscada</prm>
 	<prm id="LogTarget">10</prm>
 	<prm id="MessLev">0</prm>
 	<prm id="WorkDB">SQLite.GenDB</prm>
@@ -24,7 +26,6 @@
 	</node>
 
 	<node id="sub_ModSched">
-	    <prm id="ModPath">/usr/lib/openscada</prm>
 	    <prm id="ModAuto">*</prm>
 	    <prm id="ChkPer">0</prm>
 	</node>

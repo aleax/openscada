@@ -1536,7 +1536,7 @@ Optional Features:
   --disable-QTStarter     disable build module UI/QTStarter
   --disable-QTCfg         disable build module UI/QTCfg
   --disable-WebCfg        disable build module UI/WebCfg
-  --disable-WebDbg        disable build module UI/WebDbg
+  --disable-WebCfgD       disable build module UI/WebCfgD
   --disable-WebVision     disable build module UI/WebVision
 
 Optional Packages:
@@ -27631,11 +27631,11 @@ else
    ModWebCfg=true;
 fi
 
-# Check whether --enable-WebDbg was given.
-if test "${enable_WebDbg+set}" = set; then
-  enableval=$enable_WebDbg;  if test $enableval = yes; then ModWebDbg=true; else ModWebDbg=false; fi
+# Check whether --enable-WebCfgD was given.
+if test "${enable_WebCfgD+set}" = set; then
+  enableval=$enable_WebCfgD;  if test $enableval = yes; then ModWebCfgD=true; else ModWebCfgD=false; fi
 else
-   ModWebDbg=true;
+   ModWebCfgD=true;
 fi
 
 # Check whether --enable-WebVision was given.
@@ -29893,12 +29893,12 @@ echo "${ECHO_T}Build module: UI/WebCfg" >&6; }
 
     UISub_mod="${UISub_mod}WebCfg "
 fi
-if test ${ModWebDbg} = true; then
-    { echo "$as_me:$LINENO: result: Build module: UI/WebDbg" >&5
-echo "${ECHO_T}Build module: UI/WebDbg" >&6; }
-    ac_config_files="$ac_config_files src/moduls/ui/WebDbg/Makefile"
+if test ${ModWebCfgD} = true; then
+    { echo "$as_me:$LINENO: result: Build module: UI/WebCfgD" >&5
+echo "${ECHO_T}Build module: UI/WebCfgD" >&6; }
+    ac_config_files="$ac_config_files src/moduls/ui/WebCfgD/Makefile"
 
-    UISub_mod="${UISub_mod}WebDbg "
+    UISub_mod="${UISub_mod}WebCfgD "
 fi
 if test ${ModWebVision} = true; then
     { echo "$as_me:$LINENO: result: Build module: UI/WebVision" >&5
@@ -30653,7 +30653,7 @@ do
     "src/moduls/ui/QTStarter/Makefile") CONFIG_FILES="$CONFIG_FILES src/moduls/ui/QTStarter/Makefile" ;;
     "src/moduls/ui/QTCfg/Makefile") CONFIG_FILES="$CONFIG_FILES src/moduls/ui/QTCfg/Makefile" ;;
     "src/moduls/ui/WebCfg/Makefile") CONFIG_FILES="$CONFIG_FILES src/moduls/ui/WebCfg/Makefile" ;;
-    "src/moduls/ui/WebDbg/Makefile") CONFIG_FILES="$CONFIG_FILES src/moduls/ui/WebDbg/Makefile" ;;
+    "src/moduls/ui/WebCfgD/Makefile") CONFIG_FILES="$CONFIG_FILES src/moduls/ui/WebCfgD/Makefile" ;;
     "src/moduls/ui/WebVision/Makefile") CONFIG_FILES="$CONFIG_FILES src/moduls/ui/WebVision/Makefile" ;;
 
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5

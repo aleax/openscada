@@ -84,7 +84,7 @@ class XMLNode
 	void	childDel( const unsigned id );
 	void	childClear( const string &name = "" );
 	XMLNode* childGet( const int, bool noex = false ) const;
-	XMLNode* childGet( const string &name, const int numb = 0 ) const;
+	XMLNode* childGet( const string &name, const int numb = 0, bool noex = false ) const;
 	XMLNode* childGet( const string &attr, const string &name, bool noex = false ) const;
 
 	XMLNode* parent( )			{ return mParent; }

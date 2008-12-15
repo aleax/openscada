@@ -76,7 +76,7 @@ class TSYS : public TCntrNode
 
     public:
 	//Data
-	enum Code	{ PathEl, HttpURL, Html, JavaSc, SQL, Custom, base64, FormatPrint };
+	enum Code	{ PathEl, HttpURL, Html, JavaSc, SQL, Custom, base64, FormatPrint, ID };
 	enum IntView	{ Dec, Oct, Hex };
 	enum Errors
 	{
@@ -100,18 +100,18 @@ class TSYS : public TCntrNode
 	int  start( );
 	void stop( );
 
-	int stopSignal( )	{ return stop_signal; }
+	int stopSignal( )	{ return mStopSignal; }
 
         //- Programms options -
-	string id( )		{ return m_id; }
-	string name( )		{ return m_name; }
-	string user( )		{ return m_user; }               //Run user name
+	string id( )		{ return mId; }
+	string name( )		{ return mName; }
+	string user( )		{ return mUser; }	//Run user name
 
-	void list( vector<string> &list )	{ chldList(m_subst,list); }
-	bool present( const string &name )	{ return chldPresent(m_subst,name); }
-	void add( TSubSYS *sub )		{ chldAdd(m_subst,sub); }
-	void del( const string &name )		{ chldDel(m_subst,name); }
-	AutoHD<TSubSYS> at( const string &name ){ return chldAt(m_subst,name); }
+	void list( vector<string> &list )	{ chldList(mSubst,list); }
+	bool present( const string &name )	{ return chldPresent(mSubst,name); }
+	void add( TSubSYS *sub )		{ chldAdd(mSubst,sub); }
+	void del( const string &name )		{ chldDel(mSubst,name); }
+	AutoHD<TSubSYS> at( const string &name ){ return chldAt(mSubst,name); }
 
 	AutoHD<TUIS>		ui( )		{ return at("UI"); }
 	AutoHD<TArchiveS>	archive( )	{ return at("Archive"); }
@@ -124,11 +124,15 @@ class TSYS : public TCntrNode
 	AutoHD<TSecurity>	security( )	{ return at("Security"); }
 
 	string workDir( );
+	string icoDir( )	{ return mIcoDir; }
+	string modDir( )	{ return mModDir; }
 	void setWorkDir( const string &wdir );
+	void setIcoDir( const string &idir )	{ mIcoDir = idir; modif(); }
+	void setModDir( const string &mdir )	{ mModDir = mdir; modif(); }
 
 	//- Config file functions -
-	string cfgFile( )	{ return m_confFile; }
-	XMLNode &cfgRoot( )	{ return root_n; }
+	string cfgFile( )	{ return mConfFile; }
+	XMLNode &cfgRoot( )	{ return rootN; }
 
 	//- Default DB -
 	string workDB( )	{ return mWorkDB; }
@@ -139,19 +143,19 @@ class TSYS : public TCntrNode
 	void setSavePeriod( int vl )		{ mSavePeriod = vl; modif(); }
 
 	//- Get system options from DB -
-	bool sysOptCfg( )	{ return m_sysOptCfg; }
+	bool sysOptCfg( )	{ return mSysOptCfg; }
 
 	string optDescr( );	//print comand line options
 
 	static void sighandler( int signal );
 
         //- Short time dimensions -
-	unsigned long long sysClk( )		{ return m_sysclc; }
+	unsigned long long sysClk( )		{ return mSysclc; }
 	void clkCalc( )
 	{
 	    unsigned long long st_pnt = shrtCnt( );
 	    usleep(100000);
-	    m_sysclc = 10*(shrtCnt( )-st_pnt);
+	    mSysclc = 10*(shrtCnt( )-st_pnt);
 	}
 	unsigned long long shrtCnt( )
 	{
@@ -222,23 +226,25 @@ class TSYS : public TCntrNode
 	static unsigned char getBase64Code( unsigned char asymb );
 
 	//Private attributes
-	string	m_user,		// A owner user name!
-	 	m_confFile,	// Config file name
-		m_id,		// Station id
-		m_name;		// Station name
+	string	mUser,		// A owner user name!
+	 	mConfFile,	// Config file name
+		mId,		// Station id
+		mName,		// Station name
+		mIcoDir,	// Icons directory
+		mModDir;	// Modules directory
 
-	bool	m_sysOptCfg;	// Get system options from config only
+	bool	mSysOptCfg;	// Get system options from config only
 
 	string	mWorkDB;	// Work DB
 	bool	mSaveAtExit;	// Save at exit
 	int	mSavePeriod;	// Save period (s) for periodic system saving to DB
 
-	XMLNode root_n;		// Root of the config file tree
+	XMLNode rootN;		// Root of the config file tree
 
-	int	stop_signal,	// Stop station signal
-		m_subst;	// Subsystem tree id
+	int	mStopSignal,	// Stop station signal
+		mSubst;		// Subsystem tree id
 
-	unsigned long long m_sysclc;
+	unsigned long long mSysclc;
 };
 
 extern TSYS *SYS;

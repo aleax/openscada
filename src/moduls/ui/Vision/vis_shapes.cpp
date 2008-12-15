@@ -1368,33 +1368,33 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 
     if( !shD->en )	return;
 
-    //- Prepare picture -
+    //> Prepare picture
     QPainter pnt( &shD->pictObj );
 
-    //-- Get generic parameters --
+    //>> Get generic parameters
     long long tSize = (long long)(shD->tSize*1000000.);			//Trends size (us)
     long long tEnd  = shD->tTime;					//Trends end point (us)
     long long tPict = tEnd;
     long long tBeg  = tEnd - tSize;					//Trends begin point (us)
     if( shD->prms.empty() || tSize <= 0 ) return;
 
-    //-- Make decoration and prepare trends area --
+    //>> Make decoration and prepare trends area
     QRect tAr  = w->rect().adjusted(1,1,-2*(shD->geomMargin+shD->border.width()+1),-2*(shD->geomMargin+shD->border.width()+1));	//Curves of trends area rect
     int sclHor = shD->sclHor;						//Horisontal scale mode
     int sclVer = shD->sclVer;						//Vertical scale mode
 
     if( sclHor&0x3 || sclVer&0x3 )
     {
-	//--- Set grid pen ---
+	//>>> Set grid pen
 	grdPen.setColor(shD->sclColor);
 	grdPen.setStyle(Qt::SolidLine);
 	grdPen.setWidth(1);
 	if( sclHor&0x2 || sclVer&0x2 )
 	{
-	    //--- Set markers font and color ---
+	    //>>> Set markers font and color
 	    mrkPen.setColor(shD->sclMarkColor);
 	    pnt.setFont(shD->sclMarkFont);
-	    mrkHeight = pnt.fontMetrics().height();
+	    mrkHeight = pnt.fontMetrics().height()-pnt.fontMetrics().descent();
 
 	    if( sclHor&0x2 )
 	    {
@@ -1405,7 +1405,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	}
     }
 
-    //--- Calc horizontal scale ---
+    //>>> Calc horizontal scale
     long long aVend;			//Corrected for allow data the trend end point
     long long aVbeg;			//Corrected for allow data the trend begin point
     long long hDiv = 1, hDivBase = 1;	//Horisontal scale divisor
@@ -1429,16 +1429,16 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    tBeg = tPict-hLen;
 	}
 
-	//--- Draw horisontal grid and markers ---
+	//>>> Draw horisontal grid and markers
 	if( sclHor&0x3 )
 	{
 	    time_t tm_t;
 	    struct tm ttm, ttm1;
 	    QString lab_tm, lab_dt;
-	    //---- Draw generic grid line ----
+	    //>>>> Draw generic grid line
 	    pnt.setPen(grdPen);
 	    pnt.drawLine(tAr.x(),tAr.y()+tAr.height(),tAr.x()+tAr.width(),tAr.y()+tAr.height());
-	    //---- Draw full trend's data and time to the trend end position ----
+	    //>>>> Draw full trend's data and time to the trend end position
 	    int begMarkBrd = -1;
 	    int endMarkBrd = tAr.x()+tAr.width();
 	    if( sclHor&0x2 )
@@ -1459,11 +1459,11 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		endMarkBrd = vmin(endMarkBrd,markBrd);
 		pnt.drawText(markBrd,tAr.y()+tAr.height()+2*mrkHeight,lab_dt);
 	    }
-	    //---- Draw grid and/or markers ----
+	    //>>>> Draw grid and/or markers
 	    bool first_m = true;
 	    for( long long i_h = tBeg; true; )
 	    {
-		//---- Draw grid ----
+		//>>>> Draw grid
 		pnt.setPen(grdPen);
 		int h_pos = tAr.x()+tAr.width()*(i_h-tBeg)/(tPict-tBeg);
 		if( sclHor&0x1 ) pnt.drawLine(h_pos,tAr.y(),h_pos,tAr.y()+tAr.height());
@@ -1524,7 +1524,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		    memcpy((char*)&ttm1,(char*)&ttm,sizeof(tm));
 		    first_m = false;
 		}
-		//---- Next ----
+		//>>>> Next
 		if( i_h >= tPict )	break;
 		i_h = (i_h/hDiv)*hDiv + hDiv;
 		if( i_h > tPict )	i_h = tPict;
@@ -2682,6 +2682,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    shD->inclWidget = (RunPageView *)(((RunWdgView*)w)->mainWin()->pgCacheGet(val));
 		    if( shD->inclWidget )
 		    {
+			shD->inclWidget->setProperty("cntPg",TSYS::addr2str(w).c_str());
 			shD->inclScrl->setWidget(shD->inclWidget);
 			shD->inclWidget->setEnabled(true);
 			shD->inclWidget->setVisible(true);
@@ -2699,6 +2700,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    else
 		    {
 			shD->inclWidget = new RunPageView(val,(VisRun*)w->mainWin(),shD->inclScrl,Qt::SubWindow);
+			shD->inclWidget->setProperty("cntPg",TSYS::addr2str(w).c_str());
 			shD->inclScrl->setWidget(shD->inclWidget);
 			shD->inclWidget->load("");
 		    }

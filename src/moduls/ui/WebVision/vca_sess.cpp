@@ -27,6 +27,8 @@
 #include "web_vision.h"
 #include "vca_sess.h"
 
+extern char *WebVisionVCA_js;
+
 using namespace WebVision;
 
 //*************************************************
@@ -56,7 +58,7 @@ void VCASess::getReq( SSess &ses )
     //> Access time to session is updating
     lst_ses_req = time(NULL);
 
-    map< string, string >::iterator prmEl = ses.prm.find("com");
+    map<string,string>::iterator prmEl = ses.prm.find("com");
     string first_lev = TSYS::pathLev(ses.url,1);
     string wp_com = (prmEl!=ses.prm.end()) ? prmEl->second : "";
     if( wp_com.empty() )
@@ -71,7 +73,7 @@ void VCASess::getReq( SSess &ses )
 	    if( !mod->cntrIfCmd(req,ses.user) )	prjNm = req.text();
 	}
 
-	ses.page = mod->pgHead("",prjNm)+"<SCRIPT>\n"+mod->VCAjs+"\n</SCRIPT>\n"+mod->pgTail();
+	ses.page = mod->pgHead("",prjNm)+"<SCRIPT>\n"+WebVisionVCA_js+"\n</SCRIPT>\n"+mod->pgTail();
 	ses.page = mod->httpHead("200 OK",ses.page.size())+ses.page;
     }
     //> Session/projects icon
@@ -90,6 +92,17 @@ void VCASess::getReq( SSess &ses )
 	XMLNode req("openlist");
 	req.setAttr("path",ses.url+"/%2fserv%2fpg")->
 	    setAttr("tm",(prmEl!=ses.prm.end())?prmEl->second:"0");
+	mod->cntrIfCmd(req,ses.user);
+	ses.page = req.save();
+	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
+    }
+    //> Attribute get
+    else if( wp_com == "attr" )
+    {
+	prmEl = ses.prm.find("attr");
+	string attr = (prmEl!=ses.prm.end()) ? prmEl->second : "";
+
+	XMLNode req("get"); req.setAttr("path",ses.url+"/%2fattr%2f"+attr);
 	mod->cntrIfCmd(req,ses.user);
 	ses.page = req.save();
 	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
@@ -177,10 +190,10 @@ void VCASess::getReq( SSess &ses )
 
 void VCASess::postReq( SSess &ses )
 {
-    //- Commands process -
-    map< string, string >::iterator cntEl = ses.prm.find("com");
+    //> Commands process
+    map<string,string>::iterator cntEl = ses.prm.find("com");
     string wp_com = (cntEl!=ses.prm.end()) ? cntEl->second : "";
-    //- Attributes set -
+    //> Attributes set
     if( wp_com == "attrs" )
     {
 	XMLNode req("set");
@@ -188,7 +201,7 @@ void VCASess::postReq( SSess &ses )
 	req.setAttr("path",ses.url+"/%2fserv%2fattr");
 	mod->cntrIfCmd(req,ses.user);
     }
-    //- Open page command -
+    //> Open page command
     else if( wp_com == "pgClose" || wp_com == "pgOpen" )
     {
 	XMLNode req((wp_com=="pgOpen")?"open":"close");
@@ -354,7 +367,7 @@ Point VCAElFigure::scaleRotate( const Point point, double xScale, double yScale,
         rpnt.y = rpnt.y + center.y;
     }
     if( flag_scale ) rpnt = Point( rpnt.x*xScale, rpnt.y*yScale );
-    
+
     return rpnt;
 }
 
@@ -3820,7 +3833,7 @@ void VCADiagram::getReq( SSess &ses )
 {
     ResAlloc res(mRes,true);
 
-    //-- Check for trend's data reload --
+    //> Check for trend's data reload
     bool rld = true;
     if( tTimeCurent )	tTime = (long long)time(NULL)*1000000;
     else if( trcPer && lstTrc < time(NULL) )
@@ -3829,7 +3842,7 @@ void VCADiagram::getReq( SSess &ses )
     if( rld )
     {
 	for( int i_p = 0; i_p < trnds.size(); i_p++ ) trnds[i_p].loadData(ses.user);
-	//- Trace cursors value -
+	//> Trace cursors value
 	if( active )
 	{
 	    long long tTimeGrnd = tTime - (long long)(tSize*1000000.);
@@ -3841,7 +3854,7 @@ void VCADiagram::getReq( SSess &ses )
     int mrkHeight = 0;
     int clr_grid, clr_mrk;						//Colors
 
-    //-- Get generic parameters --
+    //> Get generic parameters
     int parNum     = trnds.size();					//Parameter's number
     long long tSz  = (long long)(tSize*1000000.);			//Trends size (us)
     long long tEnd = tTime;						//Trends end point (us)
@@ -3853,33 +3866,35 @@ void VCADiagram::getReq( SSess &ses )
 	return;
     }
 
-    //-- Get scale --
-    map< string, string >::iterator prmEl = ses.prm.find("xSc");
+    //> Get scale
+    map<string,string>::iterator prmEl = ses.prm.find("xSc");
     double xSc = (prmEl!=ses.prm.end()) ? atof(prmEl->second.c_str()) : 1.0;
     prmEl = ses.prm.find("ySc");
     double ySc = (prmEl!=ses.prm.end()) ? atof(prmEl->second.c_str()) : 1.0;
     int imW = (int)TSYS::realRound((double)width*xSc,2,true);
     int imH = (int)TSYS::realRound((double)height*ySc,2,true);
 
-    //- Prepare picture -
+    //> Prepare picture
     gdImagePtr im = gdImageCreate(imW,imH);
     gdImageFilledRectangle(im,0,0,imW-1,imH-1,gdImageColorAllocateAlpha(im,0,0,0,127));
+    gdFTUseFontConfig(1);
+    int brect[8];
 
-    //-- Make decoration and prepare trends area --
+    //> Make decoration and prepare trends area
     tArX = 1, tArY = 1,						//Curves of trends area rect
     tArW = imW-2*(geomMargin+bordWidth+1),
     tArH = imH-2*(geomMargin+bordWidth+1);
 
     if( sclHor&0x3 || sclVer&0x3 )
     {
-	//--- Set grid color ---
+	//>> Set grid color
 	clr_grid = gdImageColorAllocate(im,(ui8)(sclColor>>16),(ui8)(sclColor>>8),(ui8)sclColor);
 	if( sclHor&0x2 || sclVer&0x2 )
 	{
-	    //--- Set markers font and color ---
+	    //>> Set markers font and color
 	    clr_mrk = gdImageColorAllocate(im,(ui8)(sclMarkColor>>16),(ui8)(sclMarkColor>>8),(ui8)sclMarkColor);
-	    //!!!! Want set font from "sclMarkFont"
-	    mrkHeight = gdFontTiny->h;
+	    gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),sclMarkFontSize,0.,0,0,"Test");
+	    mrkHeight = brect[3]-brect[7];
 	    if( sclHor&0x2 )
 	    {
 	        if( tArH < 100 ) sclHor &= ~(0x02);
@@ -3888,7 +3903,7 @@ void VCADiagram::getReq( SSess &ses )
 	    if( sclVer&0x2 && tArW < 100 ) sclVer &= ~(0x02);
 	}
     }
-    //--- Calc horizontal scale ---
+    //> Calc horizontal scale
     long long aVend;							//Corrected for allow data the trend end point
     long long aVbeg;							//Corrected for allow data the trend begin point
     long long hDiv = 1, hDivBase = 1;					//Horisontal scale divisor
@@ -3911,15 +3926,15 @@ void VCADiagram::getReq( SSess &ses )
 	    tBeg = tPict-hLen;
 	}
 
-	//--- Draw horisontal grid and markers ---
+	//>> Draw horisontal grid and markers
 	if( sclHor&0x3 )
 	{
 	    time_t tm_t;
 	    struct tm ttm, ttm1;
 	    char lab_tm[50], lab_dt[50];
-	    //---- Draw generic grid line ----
+	    //>>> Draw generic grid line
 	    gdImageLine(im,tArX,tArY+tArH,tArX+tArW,tArY+tArH,clr_grid);
-	    //---- Draw full trend's data and time to the trend end position ----
+	    //>>> Draw full trend's data and time to the trend end position
 	    int begMarkBrd = -1;
 	    int endMarkBrd = tArX+tArW;
 	    if( sclHor&0x2 )
@@ -3932,20 +3947,25 @@ void VCADiagram::getReq( SSess &ses )
 		else if( tPict%1000000 == 0 )
 		    snprintf(lab_tm,sizeof(lab_tm),"%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec);
 		else snprintf(lab_tm,sizeof(lab_tm),"%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(tPict%1000000)/1e6);
-		gdImageString(im,gdFontTiny,tArX+tArW-gdFontTiny->w*strlen(lab_dt),tArY+tArH+3+gdFontTiny->h,(unsigned char *)lab_dt,clr_mrk);
-		gdImageString(im,gdFontTiny,tArX+tArW-gdFontTiny->w*strlen(lab_tm),tArY+tArH+3,(unsigned char *)lab_tm,clr_mrk);
-		endMarkBrd = vmin(tArX+tArW-gdFontTiny->w*strlen(lab_dt),tArX+tArW-gdFontTiny->w*strlen(lab_tm));
+		gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),sclMarkFontSize,0.0,0,0,lab_dt);
+		int markBrd = tArX+tArW-(brect[2]-brect[6]);
+		endMarkBrd = markBrd;
+		gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),sclMarkFontSize,0.0,markBrd,tArY+tArH+3+2*(brect[3]-brect[7]),lab_dt);
+		gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),sclMarkFontSize,0.0,0,0,lab_tm);
+		markBrd = tArX+tArW-(brect[2]-brect[6]);
+		endMarkBrd = vmin(endMarkBrd,markBrd);
+		gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),sclMarkFontSize,0.0,markBrd,tArY+tArH+3+(brect[3]-brect[7]),lab_tm);
 	    }
 
-	    //---- Draw grid and/or markers ----
+	    //>>> Draw grid and/or markers
 	    bool first_m = true;
 	    for( long long i_h = tBeg; true; )
 	    {
-		//---- Draw grid ----
+		//>>>> Draw grid
 		int h_pos = tArX+tArW*(i_h-tBeg)/(tPict-tBeg);
 		if( sclHor&0x1 ) gdImageLine(im,h_pos,tArY,h_pos,tArY+tArH,clr_grid);
 		else gdImageLine(im,h_pos,tArY+tArH-3,h_pos,tArY+tArH+3,clr_grid);
-		//---- Draw markers ----
+		//>>>> Draw markers
 		if( sclHor&0x2 && !(i_h%hDiv) && i_h != tPict )
 		{
 		    tm_t = i_h/1000000;
@@ -3977,21 +3997,23 @@ void VCADiagram::getReq( SSess &ses )
 		    int wdth, tpos, endPosTm = 0, endPosDt = 0;
 		    if( lab_tm[0] )
 		    {
-			wdth = gdFontTiny->w*strlen(lab_tm);
+			gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),sclMarkFontSize,0.0,0,0,lab_tm);
+			wdth = brect[2]-brect[6];
 			tpos = vmax(h_pos-wdth/2,0);
 			if( (tpos+wdth) < endMarkBrd && tpos > begMarkBrd )
 			{
-			    gdImageString(im,gdFontTiny,tpos,tArY+tArH+3,(unsigned char *)lab_tm,clr_mrk);
+			    gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),sclMarkFontSize,0.0,tpos,tArY+tArH+3+(brect[3]-brect[7]),lab_tm);
 			    endPosTm = tpos+wdth;
 			}
 		    }
 		    if( lab_dt[0] )
 		    {
-			wdth = gdFontTiny->w*strlen(lab_dt);
+			gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),sclMarkFontSize,0.0,0,0,lab_dt);
+			wdth = brect[2]-brect[6];
 			tpos = vmax(h_pos-wdth/2,0);
 			if( (tpos+wdth) < endMarkBrd && tpos > begMarkBrd )
 			{
-			    gdImageString(im,gdFontTiny,tpos,tArY+tArH+3+gdFontTiny->h,(unsigned char *)lab_dt,clr_mrk);
+			    gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),sclMarkFontSize,0.0,tpos,tArY+tArH+3+2*(brect[3]-brect[7]),lab_dt);
 			    endPosDt = tpos+wdth;
 			}
 		    }
@@ -3999,7 +4021,7 @@ void VCADiagram::getReq( SSess &ses )
 		    memcpy((char*)&ttm1,(char*)&ttm,sizeof(tm));
 		    first_m = false;
 		}
-		//---- Next ----
+		//>>>> Next
 		if( i_h >= tPict )	break;
 		i_h = (i_h/hDiv)*hDiv + hDiv;
 		if( i_h > tPict )	i_h = tPict;
@@ -4007,8 +4029,8 @@ void VCADiagram::getReq( SSess &ses )
 	}
     }
 
-    //--- Calc vertical scale ---
-    //---- Check for scale mode ----
+    //>>> Calc vertical scale
+    //>>>> Check for scale mode
     double vsMax = 100, vsMin = 0;      //Trend's vertical scale border
     bool   vsPerc = true;               //Vertical scale percent mode
     if( parNum == 1 )
@@ -4016,7 +4038,7 @@ void VCADiagram::getReq( SSess &ses )
 	vsPerc = false;
 	if( trnds[0].bordU() <= trnds[0].bordL() )
 	{
-	    //----- Check trend for valid data -----
+	    //>>>>> Check trend for valid data
 	    aVbeg = vmax(tBeg,trnds[0].valBeg());
 	    aVend = vmin(tEnd,trnds[0].valEnd());
 
@@ -4026,7 +4048,7 @@ void VCADiagram::getReq( SSess &ses )
 		ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page;
 		return;
 	    }
-	    //----- Calc value borders -----
+	    //>>>>> Calc value borders
 	    vsMax = -3e300, vsMin = 3e300;
 	    bool end_vl = false;
 	    int ipos = trnds[0].val(aVbeg);
@@ -4065,20 +4087,20 @@ void VCADiagram::getReq( SSess &ses )
 	vsMax = ceil(vsMax/vDiv)*vDiv;
 	while(((vsMax-vsMin)/vDiv) < vmax_ln/2) vDiv/=2;
 
-	//--- Draw vertical grid and markers ---
+	//>>> Draw vertical grid and markers
 	if( sclVer&0x3 )
 	{
 	    char lab_vl[50];
 	    gdImageLine(im,tArX,tArY,tArX,tArH,clr_grid);
 	    for( double i_v = vsMin; i_v <= vsMax; i_v+=vDiv )
 	    {
-		//---- Draw grid ----
+		//>>>> Draw grid
 		int v_pos = tArY+tArH-(int)((double)tArH*(i_v-vsMin)/(vsMax-vsMin));
 		if( sclVer&0x1 ) gdImageLine(im,tArX,v_pos,tArX+tArW,v_pos,clr_grid);
 		else gdImageLine(im,tArX-3,v_pos,tArX+3,v_pos,clr_grid);
-		//---- Draw markers ----
+		//>>>> Draw markers
 		if( sclVer&0x2 )
-		    gdImageString(im,gdFontTiny,tArX+2,v_pos-((i_v==vsMax)?0:gdFontTiny->h),(unsigned char *)TSYS::real2str(i_v).c_str(),clr_mrk);
+		    gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),sclMarkFontSize,0.0,tArX+2,v_pos+((i_v==vsMax)?mrkHeight:0),(char*)TSYS::real2str(i_v).c_str());
 	    }
 	}
     }
@@ -4275,7 +4297,22 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
 	    case 37:	//sclMarkColor
 		sclMarkColor = mod->colorParse(req_el->text());				break;
 	    case 38:	//sclMarkFont
-		sclMarkFont = req_el->text();						break;
+	    {
+		char family[101]; strcpy(family,"Arial");
+		int bold = 0, italic = 0;
+		sclMarkFontSize = 10;
+		sscanf(req_el->text().c_str(),"%100s %d %d %d",family,&sclMarkFontSize,&bold,&italic);
+		sclMarkFont = family;
+		for( int p = 0; p < sclMarkFont.size(); p++ ) if( sclMarkFont[p] == '_' ) sclMarkFont[p] = ' ';
+		if( bold ) sclMarkFont += ":bold";
+		if( italic ) sclMarkFont += ":italic";
+		//> Font size correct
+		int brect[8];
+		gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),sclMarkFontSize,0.,0,0,"Test");
+		if( (brect[3]-brect[7]) > sclMarkFontSize )
+		    sclMarkFontSize = (int)((float)sclMarkFontSize*((float)sclMarkFontSize/(float)(brect[3]-brect[7])));
+		break;
+	    }
 	    case 34:	//valArch
 		valArch == req_el->text();
 		reld_tr_dt = 2;
@@ -4336,7 +4373,7 @@ void VCADiagram::setCursor( long long itm, const string& user )
 
 //* Trend object's class                         *
 //************************************************
-VCADiagram::TrendObj::TrendObj( VCADiagram *iowner ) : 
+VCADiagram::TrendObj::TrendObj( VCADiagram *iowner ) :
     m_owner(iowner), m_bord_low(0), m_bord_up(0), m_curvl(EVAL_REAL), arh_beg(0), arh_end(0), arh_per(0),val_tp(0)
 {
     loadData("root");

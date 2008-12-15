@@ -24,8 +24,6 @@
 #define VCA_SESS_H
 
 #include <gd.h>
-#include <gdfonts.h>
-#include <gdfontt.h>
 
 #include <string>
 #include <vector>
@@ -211,7 +209,8 @@ class VCADiagram : public VCAObj
 	float		tSize;			//Trend size (s)
 	int		curColor, 		//Cursor line color
 			sclColor,		//Scale grid color
-			sclMarkColor;		//Scale markers color
+			sclMarkColor,		//Scale markers color
+			sclMarkFontSize;	//Scale markers font size
 	string		sclMarkFont,		//Scale markers font
 			valArch;		//Value archivator
 	int		sclHor, sclVer;		//Horisontal and Vertical scale mode 

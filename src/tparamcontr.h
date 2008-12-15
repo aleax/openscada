@@ -38,7 +38,7 @@ class TTipParam;
 class TParamContr : public TConfig, public TValue
 {
     public:
-	TParamContr( const string &name, TTipParam *tpprm ); 
+	TParamContr( const string &name, TTipParam *tpprm );
 	virtual ~TParamContr( );
 
 	TCntrNode &operator=( TCntrNode &node );

@@ -1,3 +1,32 @@
+2008-12-15 Roman
+- !!!!:/UI: Dynamic Web based configurator module (UI.WebCfgD) is added. Not all function yet reailed!
+- !!:/UI: UI subsystem's module template is added (src/moduls/ui/=Tmpl=).
+- !!:/UI/WebDbg: Remove module.
+- !!:/UI/WebVision: JavaScript module's code exuded to separate file WebVisionVCA.js.
+- !!:/UI/WebWision: Using fontconfig for TTF fonts location is added. Now into primitive "Diagram" used TTF fonts.
+- FIX:/UI/WebWision: Multiple loading page's tree is fixed.
+- /UI/WebWision: Check access to widget's support is added.
+- /UI/WebWision: Open popup windows support is added.
+- /UI/WebWision: Active mode check is added for primitive 'FormEl'.
+- /UI/WebWision: No write to user's modified primitive 'FormEl' support is added.
+- !!:/UI/QTCfg: Use new optimal for time childs requst for tree build.
+- FIX:/UI/QTCfg: Some fixes made.
+- !!:/UI: Icons types "png", "gif", "jpg" and "jpeg" get support is added.
+- FIX:/UI/Vision: Lost inspector's attributes content after closing Color and Font selection dialogs is fixed. Focus set to inspector attributes strong.
+- FIX:/UI/Vision: New window open and close in RunTime is fixed. Deleted window's checking is added.
+- FIX:/UI/Vision: The no permition message left only for pages, not for included widgets.
+- /UI/WebCfg: Load and save action is added to toolbar.
+- /SYS: Icons for Web-tree build is included. Add icons: line.png, disconnect.png, UI.WebCfgD.png.
+- !:/SYS: Icon path configuration field is added. Module path configuration field move to main OpenSCADA system page.
+- !!:/SYS: Node's idetifier encoding is added for all need subsystems. Used for remove spaces and other special simbols from identifier.
+- !!:/SYS: Node childs control interface's request is added. Used for faster build navigation trees (QTCfg, WebCfgD).
+- !:/SYS: Translation for Russian and Ukrainian is updated.
+- /DB/MySQL: Icon is updated.
+- !:/Archive/DBArch, /Archive/FSArch: Translation to German is added.
+- FIX:/DB/MySQL: Case-sensitive keys is fixed. Add parameter BINARY to created text keys "varchar(150) BINARY".
+- /DemoDB: Updated for case-sensitive keys for DB.MySQL fix.
+
+
 2008-12-12 Maxim
 - FIX:/UI/Vision: Moving one of the points of figure, which is connected to the other figure, while several figures are selected is fixed(blocked) for primitive ElFigure.
 

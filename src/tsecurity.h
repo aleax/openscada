@@ -33,7 +33,7 @@
 //*************************************************
 class TSecurity;
 
-class TUser : public TCntrNode, public TConfig 
+class TUser : public TCntrNode, public TConfig
 {
     public:
 	//Methods

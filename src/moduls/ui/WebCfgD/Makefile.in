@@ -33,8 +33,8 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
-oscd_modul_PROGRAMS = ui_WebDbg.so$(EXEEXT)
-subdir = src/moduls/ui/WebDbg
+oscd_modul_PROGRAMS = ui_WebCfgD.so$(EXEEXT)
+subdir = src/moduls/ui/WebCfgD
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.in
@@ -46,9 +46,9 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(oscd_moduldir)"
 oscd_modulPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(oscd_modul_PROGRAMS)
-am_ui_WebDbg_so_OBJECTS = web_dbg.$(OBJEXT)
-ui_WebDbg_so_OBJECTS = $(am_ui_WebDbg_so_OBJECTS)
-ui_WebDbg_so_LDADD = $(LDADD)
+am_ui_WebCfgD_so_OBJECTS = web_cfg.$(OBJEXT) VCAjs.$(OBJEXT)
+ui_WebCfgD_so_OBJECTS = $(am_ui_WebCfgD_so_OBJECTS)
+ui_WebCfgD_so_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -61,8 +61,8 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(ui_WebDbg_so_SOURCES)
-DIST_SOURCES = $(ui_WebDbg_so_SOURCES)
+SOURCES = $(ui_WebCfgD_so_SOURCES)
+DIST_SOURCES = $(ui_WebCfgD_so_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -201,10 +201,14 @@ target_os = @target_os@
 target_vendor = @target_vendor@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-EXTRA_DIST = *.h
+EXTRA_DIST = *.h po/* doc/*
 AM_CXXFLAGS = -I$(top_srcdir)/src -fPIC -DPIC
 AM_LDFLAGS = -shared -module
-ui_WebDbg_so_SOURCES = web_dbg.cpp
+ui_WebCfgD_so_SOURCES = web_cfg.cpp VCAjs.cpp
+
+#PO files process and doc install
+fm_name = Mod_UI_WebCfgD
+m_name = $(oscd_modulpref)WebCfgD
 all: all-am
 
 .SUFFIXES:
@@ -218,9 +222,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/moduls/ui/WebDbg/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/moduls/ui/WebCfgD/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  src/moduls/ui/WebDbg/Makefile
+	  $(AUTOMAKE) --gnu  src/moduls/ui/WebCfgD/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -266,9 +270,9 @@ clean-oscd_modulPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-ui_WebDbg.so$(EXEEXT): $(ui_WebDbg_so_OBJECTS) $(ui_WebDbg_so_DEPENDENCIES) 
-	@rm -f ui_WebDbg.so$(EXEEXT)
-	$(CXXLINK) $(ui_WebDbg_so_OBJECTS) $(ui_WebDbg_so_LDADD) $(LIBS)
+ui_WebCfgD.so$(EXEEXT): $(ui_WebCfgD_so_OBJECTS) $(ui_WebCfgD_so_DEPENDENCIES) 
+	@rm -f ui_WebCfgD.so$(EXEEXT)
+	$(CXXLINK) $(ui_WebCfgD_so_OBJECTS) $(ui_WebCfgD_so_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -276,7 +280,8 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/web_dbg.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/VCAjs.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/web_cfg.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -411,8 +416,8 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-generic clean-libtool clean-oscd_modulPROGRAMS \
-	mostlyclean-am
+clean-am: clean-generic clean-libtool clean-local \
+	clean-oscd_modulPROGRAMS mostlyclean-am
 
 distclean: distclean-am
 	-rm -rf ./$(DEPDIR)
@@ -430,7 +435,7 @@ info: info-am
 
 info-am:
 
-install-data-am: install-oscd_modulPROGRAMS
+install-data-am: install-data-local install-oscd_modulPROGRAMS
 
 install-dvi: install-dvi-am
 
@@ -466,24 +471,67 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-oscd_modulPROGRAMS
+uninstall-am: uninstall-local uninstall-oscd_modulPROGRAMS
 
 .MAKE: install-am install-strip
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
-	clean-libtool clean-oscd_modulPROGRAMS ctags distclean \
-	distclean-compile distclean-generic distclean-libtool \
-	distclean-tags distdir dvi dvi-am html html-am info info-am \
-	install install-am install-data install-data-am install-dvi \
-	install-dvi-am install-exec install-exec-am install-html \
-	install-html-am install-info install-info-am install-man \
+	clean-libtool clean-local clean-oscd_modulPROGRAMS ctags \
+	distclean distclean-compile distclean-generic \
+	distclean-libtool distclean-tags distdir dvi dvi-am html \
+	html-am info info-am install install-am install-data \
+	install-data-am install-data-local install-dvi install-dvi-am \
+	install-exec install-exec-am install-html install-html-am \
+	install-info install-info-am install-man \
 	install-oscd_modulPROGRAMS install-pdf install-pdf-am \
 	install-ps install-ps-am install-strip installcheck \
 	installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	tags uninstall uninstall-am uninstall-oscd_modulPROGRAMS
+	tags uninstall uninstall-am uninstall-local \
+	uninstall-oscd_modulPROGRAMS
 
+
+VCAjs.cpp: WebCfgDVCA.js
+	@lc=`cat $< | wc -l` ; \
+	il=1 ; \
+	echo "char *`echo "$<" | sed 's/\./_/g'`=" > $@ ; \
+	while [ $$il -le $$lc ] ; do \
+	  l="   \"`cat $< | sed -n $${il}p | sed 's/\\\\/\\\\\\\\/g' | sed 's/"/\\\\"/g'`\\n\""; \
+	  if [ $$il -eq $$lc ]; then l="$$l;"; fi; \
+	  echo "$$l" >> $@ ; \
+	  let il=il+1 ; \
+	done
+
+messages:
+	@catalogs=`find ./po -name \*.po` ; \
+	name=po/$(m_name).pot ; \
+	xgettext -o $$name -C -a *.cpp *.h &> /dev/null ; \
+	for cat in $$catalogs; do \
+	  msgmerge -U $$cat $$name ; \
+	done
+
+install-data-local:
+	@catalogs=`find ./po -name \*.po` ; \
+	name=$(m_name).mo ; \
+	for cat in $$catalogs; do \
+	mkdir -p $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES ; \
+	msgfmt -vo $$name $$cat ; \
+	cp $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
+	rm $$name ; \
+	done
+#	install -m 755 -d $(oscd_docdir)/$(fm_name)
+#	install -m 644 doc/*.pdf $(oscd_docdir)/$(fm_name)
+
+uninstall-local:
+	@catalogs=`find ./po -name \*.po` ; \
+	name=$(m_name).mo ; \
+	for cat in $$catalogs; do \
+	rm -f $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
+	done
+
+clean-local:
+	rm -f VCAjs.cpp po/$(m_name).pot po/*~
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

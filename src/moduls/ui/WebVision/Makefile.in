@@ -46,7 +46,8 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(oscd_moduldir)"
 oscd_modulPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(oscd_modul_PROGRAMS)
-am_ui_WebVision_so_OBJECTS = web_vision.$(OBJEXT) vca_sess.$(OBJEXT)
+am_ui_WebVision_so_OBJECTS = web_vision.$(OBJEXT) vca_sess.$(OBJEXT) \
+	VCAjs.$(OBJEXT)
 ui_WebVision_so_OBJECTS = $(am_ui_WebVision_so_OBJECTS)
 ui_WebVision_so_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
@@ -204,7 +205,7 @@ top_srcdir = @top_srcdir@
 EXTRA_DIST = *.h po/* doc/*
 AM_CXXFLAGS = -I$(top_srcdir)/src -fPIC -DPIC
 AM_LDFLAGS = -shared -module
-ui_WebVision_so_SOURCES = web_vision.cpp vca_sess.cpp
+ui_WebVision_so_SOURCES = web_vision.cpp vca_sess.cpp VCAjs.cpp
 
 #PO files process and doc install
 fm_name = Mod_UI_WebVision
@@ -280,6 +281,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/VCAjs.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vca_sess.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/web_vision.Po@am__quote@
 
@@ -492,6 +494,17 @@ uninstall-am: uninstall-local uninstall-oscd_modulPROGRAMS
 	uninstall-oscd_modulPROGRAMS
 
 
+VCAjs.cpp: WebVisionVCA.js
+	@lc=`cat $< | wc -l` ; \
+	il=1 ; \
+	echo "char *`echo "$<" | sed 's/\./_/g'`=" > $@ ; \
+	while [ $$il -le $$lc ] ; do \
+	  l="   \"`cat $< | sed -n $${il}p | sed 's/\\\\/\\\\\\\\/g' | sed 's/"/\\\\"/g'`\\n\""; \
+	  if [ $$il -eq $$lc ]; then l="$$l;"; fi; \
+	  echo "$$l" >> $@ ; \
+	  let il=il+1 ; \
+	done
+
 messages:
 	@catalogs=`find ./po -name \*.po` ; \
 	name=po/$(m_name).pot ; \
@@ -520,7 +533,7 @@ uninstall-local:
 	done
 
 clean-local:
-	rm -f po/$(m_name).pot po/*~
+	rm -f VCAjs.cpp po/$(m_name).pot po/*~
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

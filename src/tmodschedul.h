@@ -51,11 +51,9 @@ class TModSchedul : public TSubSYS
 	TModSchedul( );
 	~TModSchedul( );
 
-	int chkPer( )		{ return m_per; }
-	string modPath( )	{ return m_mod_path; }
+	int chkPer( )		{ return mPer; }
 
 	void setChkPer( int per );
-	void setModPath( const string &vl )	{ m_mod_path = vl; modif(); }
 
 	void subStart( );
 	void subStop( );
@@ -88,14 +86,13 @@ class TModSchedul : public TSubSYS
 	static void SchedTask( union sigval obj );
 
 	//Attributes
-	string		m_mod_path;
-	vector<string>	m_am_list;
+	vector<string>	mAmList;
 
-	Res		hd_res;
-	int		m_per;				//Check to new modules period
+	Res		hdRes;
+	int		mPer;				//Check to new modules period
 	vector<SHD>	SchHD;
 	timer_t		tmId;				//Thread timer
-	bool		prc_st;
+	bool		prcSt;
 };
 
 #endif // TMODSCHEDUL_H

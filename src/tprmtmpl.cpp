@@ -235,6 +235,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
+	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter template: ")+name(),0664,"root","root");
 	if(ctrMkNode("area",opt,-1,"/tmpl",_("Template")))
 	{
@@ -527,6 +528,7 @@ void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
+	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter templates library: ")+id(),0664,"root","root");
 	if(ctrMkNode("branches",opt,-1,"/br","",0444))
 	    ctrMkNode("grp",opt,-1,"/br/tmpl_",_("Template"),0664,"root","root",2,"idm","1","idSz","20");
@@ -581,7 +583,7 @@ void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
 	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(at(lst[i_f]).at().name());
 	}
-	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )	add(opt->attr("id").c_str(),opt->text().c_str());
+	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )	add(TSYS::strEncode(opt->attr("id"),TSYS::ID).c_str(),opt->text().c_str());
 	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	del(opt->attr("id").c_str(),true);
     }
     else TCntrNode::cntrCmdProc(opt);

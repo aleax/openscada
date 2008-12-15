@@ -856,8 +856,8 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	}
 	if( ctrChkNode(opt,"add",0664,"root",my_gr.c_str(),SEQ_WR) )
 	{
-	    valAdd(opt->attr("id"));
-	    valAt(opt->attr("id")).at().setName(opt->text());
+	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::ID);
+	    valAdd(vid); valAt(vid).at().setName(opt->text());
 	}
 	if( ctrChkNode(opt,"del",0664,"root",my_gr.c_str(),SEQ_WR) )	chldDel(m_aval,opt->attr("id"),-1,1);
     }
@@ -922,8 +922,8 @@ void TTipArchivator::cntrCmdProc( XMLNode *opt )
 	}
 	if( ctrChkNode(opt,"add",0664,"root","Archive",SEQ_WR) )
 	{
-	    messAdd(opt->attr("id"));
-	    messAt(opt->attr("id")).at().setName(opt->text());
+	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::ID);
+	    messAdd(vid); messAt(vid).at().setName(opt->text());
 	}
 	if( ctrChkNode(opt,"del",0664,"root","Archive",SEQ_WR) )	messDel(opt->attr("id"),true);
     }
@@ -938,8 +938,8 @@ void TTipArchivator::cntrCmdProc( XMLNode *opt )
 	}
 	if( ctrChkNode(opt,"add",0664,"root","Archive",SEQ_WR) )
 	{
-	    valAdd(opt->attr("id"));
-	    valAt(opt->attr("id")).at().setName(opt->text());
+	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::ID);
+	    valAdd(vid); valAt(vid).at().setName(opt->text());
 	}
 	if( ctrChkNode(opt,"del",0664,"root","Archive",SEQ_WR) )	valDel(opt->attr("id"),true);
     }
@@ -1050,6 +1050,7 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
+	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Message archivator: ")+name(),0664,"root","Archive");
 	if(ctrMkNode("area",opt,-1,"/prm",_("Archivator")))
 	{

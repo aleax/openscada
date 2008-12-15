@@ -9,16 +9,12 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-10 11:19+0300\n"
+"POT-Creation-Date: 2008-12-15 13:15+0200\n"
 "PO-Revision-Date: 2007-10-29 22:03+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-
-#: moc_tuimod.cpp:39
-msgid "QTStarter::WinControlcallQTModule()"
-msgstr ""
 
 #: tuimod.cpp:43
 msgid "QTStarter"
@@ -112,6 +108,11 @@ msgstr ""
 "-------- Параметри модульної секції <%s> у конфігураційному файлі --------\n"
 "StartMod  <модулі>    Перелік запускаємих модулів (розд. - ';');\n"
 "\n"
+
+#: tuimod.cpp:235
+#, c-format
+msgid "Thread <%u> started. TID: %ld"
+msgstr ""
 
 #: tuimod.cpp:245
 msgid "splash"

@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: transporter.cpp:49 transporter.cpp:130 transporter.cpp:447
+#: transporter.cpp:49 transporter.cpp:130 transporter.cpp:443
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Transporter 0.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-09 18:38+0300\n"
+"POT-Creation-Date: 2008-12-15 13:12+0200\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -83,7 +83,7 @@ msgstr "Період збору даних (с)"
 msgid "6.2"
 msgstr ""
 
-#: transporter.cpp:124 transporter.cpp:544
+#: transporter.cpp:124 transporter.cpp:545
 msgid "1"
 msgstr ""
 
@@ -103,7 +103,7 @@ msgstr "Рівень пріорітету задачі збору даних"
 msgid "2"
 msgstr ""
 
-#: transporter.cpp:125 transporter.cpp:544
+#: transporter.cpp:125 transporter.cpp:545
 msgid "0"
 msgstr ""
 
@@ -156,10 +156,10 @@ msgid "Standard"
 msgstr "Стандарт"
 
 #: transporter.cpp:144 transporter.cpp:146 transporter.cpp:153
-#: transporter.cpp:203 transporter.cpp:216 transporter.cpp:348
-#: transporter.cpp:421 transporter.cpp:425 transporter.cpp:430
-#: transporter.cpp:465 transporter.cpp:481 transporter.cpp:498
-#: transporter.cpp:527 transporter.cpp:560 transporter.cpp:563
+#: transporter.cpp:203 transporter.cpp:216 transporter.cpp:344
+#: transporter.cpp:417 transporter.cpp:421 transporter.cpp:426
+#: transporter.cpp:466 transporter.cpp:482 transporter.cpp:499
+#: transporter.cpp:528 transporter.cpp:561 transporter.cpp:564
 msgid "path"
 msgstr ""
 
@@ -187,11 +187,11 @@ msgstr ""
 msgid "rez"
 msgstr ""
 
-#: transporter.cpp:182 transporter.cpp:430
+#: transporter.cpp:182 transporter.cpp:426
 msgid "list"
 msgstr ""
 
-#: transporter.cpp:197 transporter.cpp:507 transporter.cpp:560
+#: transporter.cpp:197 transporter.cpp:508 transporter.cpp:561
 msgid "/"
 msgstr ""
 
@@ -199,8 +199,8 @@ msgstr ""
 msgid "/DAQ/"
 msgstr ""
 
-#: transporter.cpp:203 transporter.cpp:216 transporter.cpp:350
-#: transporter.cpp:414 transporter.cpp:459 transporter.cpp:544
+#: transporter.cpp:203 transporter.cpp:216 transporter.cpp:346
+#: transporter.cpp:410 transporter.cpp:460 transporter.cpp:545
 msgid "get"
 msgstr ""
 
@@ -209,12 +209,12 @@ msgstr ""
 msgid "%2fprm%2fprm"
 msgstr ""
 
-#: transporter.cpp:206 transporter.cpp:436 transporter.cpp:445
-#: transporter.cpp:468 transporter.cpp:482
+#: transporter.cpp:206 transporter.cpp:432 transporter.cpp:441
+#: transporter.cpp:469 transporter.cpp:483
 msgid "id"
 msgstr ""
 
-#: transporter.cpp:216 transporter.cpp:421
+#: transporter.cpp:216 transporter.cpp:417
 #, c-format
 msgid "/%2fprm%2fcfg%2fNAME"
 msgstr ""
@@ -223,10 +223,10 @@ msgstr ""
 msgid "Some enable errors is present"
 msgstr "Присутні деякі помилки включення"
 
-#: transporter.cpp:239 transporter.cpp:342 transporter.cpp:343
-#: transporter.cpp:350 transporter.cpp:512 transporter.cpp:514
-#: transporter.cpp:515 transporter.cpp:516 transporter.cpp:544
-#: transporter.cpp:545
+#: transporter.cpp:239 transporter.cpp:338 transporter.cpp:339
+#: transporter.cpp:346 transporter.cpp:513 transporter.cpp:515
+#: transporter.cpp:516 transporter.cpp:517 transporter.cpp:545
+#: transporter.cpp:546
 msgid "root"
 msgstr ""
 
@@ -246,194 +246,199 @@ msgstr ""
 msgid "Gathering task no stoped!"
 msgstr "Задачу збору даних не зупинено!"
 
-#: transporter.cpp:339 transporter.cpp:504 transporter.cpp:523
+#: transporter.cpp:282
+#, c-format
+msgid "Thread <%u> started. TID: %ld"
+msgstr ""
+
+#: transporter.cpp:335 transporter.cpp:505 transporter.cpp:524
 msgid "info"
 msgstr ""
 
-#: transporter.cpp:342 transporter.cpp:512 transporter.cpp:514
-#: transporter.cpp:515 transporter.cpp:516
+#: transporter.cpp:338 transporter.cpp:513 transporter.cpp:515
+#: transporter.cpp:516 transporter.cpp:517
 msgid "fld"
 msgstr ""
 
-#: transporter.cpp:342 transporter.cpp:349
+#: transporter.cpp:338 transporter.cpp:345
 msgid "/cntr/st/gath_tm"
 msgstr ""
 
-#: transporter.cpp:342
+#: transporter.cpp:338
 msgid "Gather data time (ms)"
 msgstr "Час збору даних (мс)"
 
-#: transporter.cpp:342 transporter.cpp:343 transporter.cpp:437
-#: transporter.cpp:512 transporter.cpp:514 transporter.cpp:515
-#: transporter.cpp:516
+#: transporter.cpp:338 transporter.cpp:339 transporter.cpp:433
+#: transporter.cpp:513 transporter.cpp:515 transporter.cpp:516
+#: transporter.cpp:517
 msgid "tp"
 msgstr ""
 
-#: transporter.cpp:342
+#: transporter.cpp:338
 msgid "real"
 msgstr ""
 
-#: transporter.cpp:343
+#: transporter.cpp:339
 msgid "comm"
 msgstr ""
 
-#: transporter.cpp:343 transporter.cpp:350
+#: transporter.cpp:339 transporter.cpp:346
 msgid "/cntr/cfg/host_lnk"
 msgstr ""
 
-#: transporter.cpp:343
+#: transporter.cpp:339
 msgid "Go to remote stations list configuration"
 msgstr "Перехід до конфігурації переліку віддалених станцій"
 
-#: transporter.cpp:343
+#: transporter.cpp:339
 msgid "lnk"
 msgstr ""
 
-#: transporter.cpp:353
+#: transporter.cpp:349
 msgid "/Transport"
 msgstr ""
 
-#: transporter.cpp:362
+#: transporter.cpp:358
 msgid "w_attr"
 msgstr ""
 
-#: transporter.cpp:408
+#: transporter.cpp:404
 msgid ";"
 msgstr ""
 
-#: transporter.cpp:422 transporter.cpp:426 transporter.cpp:431
-#: transporter.cpp:466 transporter.cpp:483 transporter.cpp:528
-#: transporter.cpp:561
+#: transporter.cpp:418 transporter.cpp:422 transporter.cpp:427
+#: transporter.cpp:467 transporter.cpp:484 transporter.cpp:529
+#: transporter.cpp:562
 msgid "mcat"
 msgstr ""
 
-#: transporter.cpp:425
+#: transporter.cpp:421
 #, c-format
 msgid "/%2fprm%2fcfg%2fDESCR"
 msgstr ""
 
-#: transporter.cpp:430 transporter.cpp:465 transporter.cpp:481
+#: transporter.cpp:426 transporter.cpp:466 transporter.cpp:482
 #, c-format
 msgid "/%2fserv%2fattr"
 msgstr ""
 
-#: transporter.cpp:445
+#: transporter.cpp:441
 msgid "nm"
 msgstr ""
 
-#: transporter.cpp:446
+#: transporter.cpp:442
 msgid "flg"
 msgstr ""
 
-#: transporter.cpp:447
+#: transporter.cpp:443
 msgid "vals"
 msgstr ""
 
-#: transporter.cpp:447
+#: transporter.cpp:443
 msgid "names"
 msgstr ""
 
-#: transporter.cpp:480 transporter.cpp:545
+#: transporter.cpp:481 transporter.cpp:546
 msgid "set"
 msgstr ""
 
-#: transporter.cpp:482
+#: transporter.cpp:483
 msgid "el"
 msgstr ""
 
-#: transporter.cpp:501
+#: transporter.cpp:502
 msgid "/serv/"
 msgstr ""
 
-#: transporter.cpp:507
+#: transporter.cpp:508
 msgid "oscada_cntr"
 msgstr ""
 
-#: transporter.cpp:507
+#: transporter.cpp:508
 msgid "Parameter: "
 msgstr "Параметр: "
 
-#: transporter.cpp:508 transporter.cpp:510 transporter.cpp:518
+#: transporter.cpp:509 transporter.cpp:511 transporter.cpp:519
 msgid "area"
 msgstr ""
 
-#: transporter.cpp:508
+#: transporter.cpp:509
 msgid "/prm"
 msgstr ""
 
-#: transporter.cpp:508
+#: transporter.cpp:509
 msgid "Parameter"
 msgstr "Параметр"
 
-#: transporter.cpp:510
+#: transporter.cpp:511
 msgid "/prm/st"
 msgstr ""
 
-#: transporter.cpp:510
+#: transporter.cpp:511
 msgid "State"
 msgstr "Стан"
 
-#: transporter.cpp:512 transporter.cpp:541
+#: transporter.cpp:513 transporter.cpp:542
 msgid "/prm/st/type"
 msgstr ""
 
-#: transporter.cpp:512
+#: transporter.cpp:513
 msgid "Type"
 msgstr "Тип"
 
-#: transporter.cpp:512 transporter.cpp:515 transporter.cpp:516
+#: transporter.cpp:513 transporter.cpp:516 transporter.cpp:517
 msgid "str"
 msgstr ""
 
-#: transporter.cpp:514 transporter.cpp:542
+#: transporter.cpp:515 transporter.cpp:543
 msgid "/prm/st/en"
 msgstr ""
 
-#: transporter.cpp:514
+#: transporter.cpp:515
 msgid "Enable"
 msgstr "Ввімкнено"
 
-#: transporter.cpp:514
+#: transporter.cpp:515
 msgid "bool"
 msgstr ""
 
-#: transporter.cpp:515 transporter.cpp:551
+#: transporter.cpp:516 transporter.cpp:552
 msgid "/prm/st/id"
 msgstr ""
 
-#: transporter.cpp:515
+#: transporter.cpp:516
 msgid "Id"
 msgstr ""
 
-#: transporter.cpp:516 transporter.cpp:552
+#: transporter.cpp:517 transporter.cpp:553
 msgid "/prm/st/nm"
 msgstr ""
 
-#: transporter.cpp:516
+#: transporter.cpp:517
 msgid "Name"
 msgstr "Ім'я"
 
-#: transporter.cpp:518 transporter.cpp:553
+#: transporter.cpp:519 transporter.cpp:554
 msgid "/prm/cfg"
 msgstr ""
 
-#: transporter.cpp:518
+#: transporter.cpp:519
 msgid "Config"
 msgstr "Кофігурація"
 
-#: transporter.cpp:527
+#: transporter.cpp:528
 #, c-format
 msgid "/%2fprm%2fcfg"
 msgstr ""
 
-#: transporter.cpp:534
+#: transporter.cpp:535
 msgid "dscr"
 msgstr ""
 
-#: transporter.cpp:534
+#: transporter.cpp:535
 msgid "Remote station config"
 msgstr "Конфігурація віддаленої станції"
 
-#: transporter.cpp:547
+#: transporter.cpp:548
 msgid "Controller no started!"
 msgstr "Контролер не запущено!"

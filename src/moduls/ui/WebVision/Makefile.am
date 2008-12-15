@@ -6,7 +6,18 @@ AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
 AM_LDFLAGS= -shared -module
 
 oscd_modul_PROGRAMS = ui_WebVision.so
-ui_WebVision_so_SOURCES = web_vision.cpp vca_sess.cpp
+ui_WebVision_so_SOURCES = web_vision.cpp vca_sess.cpp VCAjs.cpp
+
+VCAjs.cpp: WebVisionVCA.js
+	@lc=`cat $< | wc -l` ; \
+	il=1 ; \
+	echo "char *`echo "$<" | sed 's/\./_/g'`=" > $@ ; \
+	while [ $$il -le $$lc ] ; do \
+	  l="   \"`cat $< | sed -n $${il}p | sed 's/\\\\/\\\\\\\\/g' | sed 's/"/\\\\"/g'`\\n\""; \
+	  if [ $$il -eq $$lc ]; then l="$$l;"; fi; \
+	  echo "$$l" >> $@ ; \
+	  let il=il+1 ; \
+	done
 
 #PO files process and doc install
 fm_name = Mod_UI_WebVision
@@ -40,4 +51,4 @@ uninstall-local:
 	done
 
 clean-local:
-	rm -f po/$(m_name).pot po/*~
+	rm -f VCAjs.cpp po/$(m_name).pot po/*~

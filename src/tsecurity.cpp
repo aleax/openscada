@@ -281,7 +281,7 @@ void TSecurity::cntrCmdProc( XMLNode *opt )
 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
 	        opt->childAdd("el")->setText(list[i_a]);
 	}
-	if( ctrChkNode(opt,"add",0664,"root",subId().c_str(),SEQ_WR) )	usrAdd(opt->text());
+	if( ctrChkNode(opt,"add",0664,"root",subId().c_str(),SEQ_WR) )	usrAdd(TSYS::strEncode(opt->text(),TSYS::ID));
 	if( ctrChkNode(opt,"del",0664,"root",subId().c_str(),SEQ_WR) )	usrDel(opt->text(),true);
     }
     else if( a_path == "/br/grp_" || a_path == "/usgr/grps" )
@@ -293,7 +293,7 @@ void TSecurity::cntrCmdProc( XMLNode *opt )
 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
 	        opt->childAdd("el")->setText(list[i_a]);
 	}
-	if( ctrChkNode(opt,"add",0664,"root",subId().c_str(),SEQ_WR) )	grpAdd(opt->text());
+	if( ctrChkNode(opt,"add",0664,"root",subId().c_str(),SEQ_WR) )	grpAdd(TSYS::strEncode(opt->text(),TSYS::ID));
 	if( ctrChkNode(opt,"del",0664,"root",subId().c_str(),SEQ_WR) )	grpDel(opt->text(),true);
     }
     else TSubSYS::cntrCmdProc(opt);
@@ -373,6 +373,7 @@ void TUser::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
+	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("User ")+name(),0664,name().c_str(),"Security");
 	if(picture().size()) ctrMkNode("img",opt,-1,"/ico","",0444);
 	if(ctrMkNode("area",opt,-1,"/prm",_("User")))
@@ -524,6 +525,7 @@ void TGroup::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
+	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Group ")+name(),0664,"root",owner().subId().c_str());
 	ctrMkNode("area",opt,-1,"/prm",_("Group"));
 	ctrMkNode("fld",opt,-1,"/prm/name",cfg("NAME").fld().descr(),0444,"root",owner().subId().c_str(),1,"tp","str");

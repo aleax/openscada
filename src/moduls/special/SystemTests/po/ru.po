@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.SystemTests 1.3.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-09 20:24+0300\n"
+"POT-Creation-Date: 2008-12-15 13:13+0200\n"
 "PO-Revision-Date: 2007-10-24 19:01+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -187,6 +187,11 @@ msgstr ": Останов...."
 #: test_kernel.cpp:195
 msgid "No stoped!"
 msgstr "Не остановлен"
+
+#: test_kernel.cpp:208
+#, c-format
+msgid "Thread <%u> started. TID: %ld"
+msgstr ""
 
 #: test_kernel.cpp:226
 msgid "prm"

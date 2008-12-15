@@ -429,14 +429,12 @@ void Contr::blkProc( const string & id, bool val )
 {
     unsigned i_blk;
 
-    ResAlloc res(hd_res,true); 
+    ResAlloc res(hd_res,true);
     for( i_blk = 0; i_blk < clc_blks.size(); i_blk++)
 	if( clc_blks[i_blk].at().id() == id ) break;
 
-    if( val && i_blk >= clc_blks.size() )
-	clc_blks.push_back(blkAt(id));
-    if( !val && i_blk < clc_blks.size()	)
-	clc_blks.erase(clc_blks.begin()+i_blk);
+    if( val && i_blk >= clc_blks.size() ) clc_blks.push_back(blkAt(id));
+    if( !val && i_blk < clc_blks.size() ) clc_blks.erase(clc_blks.begin()+i_blk);
 }
 
 void Contr::cntrCmdProc( XMLNode *opt )
@@ -468,8 +466,8 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	}
 	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )
 	{
-	    blkAdd(opt->attr("id"));
-	    blkAt(opt->attr("id")).at().setName(opt->text());
+	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::ID);
+	    blkAdd(vid); blkAt(vid).at().setName(opt->text());
 	}
 	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	chldDel(m_bl,opt->attr("id"),-1,1);
     }

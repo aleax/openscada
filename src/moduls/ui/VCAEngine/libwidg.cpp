@@ -291,6 +291,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
     //- Get page info -
     if( opt->name() == "info" )
     {
+	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Widget's library: ")+id(),RWRWR_,"root","UI");
 	if(ico().size()) ctrMkNode("img",opt,-1,"/ico","",R_R_R_);
 	if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
@@ -362,8 +363,8 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 	}
 	if( ctrChkNode(opt,"add",RWRWR_,"root","UI",SEQ_WR) )
 	{
-	    add(opt->attr("id").c_str(),opt->text().c_str());
-	    at(opt->attr("id")).at().setOwner(opt->attr("user"));
+	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::ID);
+	    add(vid,opt->text().c_str()); at(vid).at().setOwner(opt->attr("user"));
 	}
 	if( ctrChkNode(opt,"del",RWRWR_,"root","UI",SEQ_WR) ) del(opt->attr("id"),true);
     }

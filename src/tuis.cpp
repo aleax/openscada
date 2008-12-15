@@ -99,14 +99,19 @@ bool TUIS::icoPresent(const string &inm, string *tp)
 
 string TUIS::icoGet(const string &inm, string *tp )
 {
-    int len;
+    int len, hd = -1, i_t;
     char buf[STR_BUF_LEN];
     string rez;
+    char types[][5] = {"png","gif","jpg","jpeg"};
 
-    int hd = open(icoPath(inm).c_str(),O_RDONLY);
+    for( i_t = 0; i_t < sizeof(types)/5; i_t++ )
+    {
+	hd = open(icoPath(inm,types[i_t]).c_str(),O_RDONLY);
+	if( hd != -1 ) break;
+    }
     if( hd != -1 )
     {
-	if( tp ) *tp = "png";
+	if( tp ) *tp = types[i_t];
 	while( len = read(hd,buf,sizeof(buf)) )
 	    rez.append(buf,len);
 	close(hd);
@@ -115,9 +120,9 @@ string TUIS::icoGet(const string &inm, string *tp )
     return rez;
 }
 
-string TUIS::icoPath(const string &ico)
+string TUIS::icoPath( const string &ico, const string &tp )
 {
-    return "./icons/"+ico+".png";
+    return SYS->icoDir()+"/"+ico+"."+tp;
 }
 
 void TUIS::cntrCmdProc( XMLNode *opt )

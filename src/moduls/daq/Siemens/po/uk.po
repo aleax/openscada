@@ -5,15 +5,15 @@
 #
 #: siemens.cpp:59 siemens.cpp:113 siemens.cpp:124 siemens.cpp:143
 #: siemens.cpp:437 siemens.cpp:438 siemens.cpp:439 siemens.cpp:440
-#: siemens.cpp:441 siemens.cpp:442 siemens.cpp:443 siemens.cpp:1272
-#: siemens.cpp:1282 siemens.cpp:1362 siemens.cpp:1646 siemens.cpp:1762
+#: siemens.cpp:441 siemens.cpp:442 siemens.cpp:443 siemens.cpp:1274
+#: siemens.cpp:1284 siemens.cpp:1358 siemens.cpp:1642 siemens.cpp:1759
 #: siemens.h:87
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Siemens 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-09 18:03+0300\n"
+"POT-Creation-Date: 2008-12-15 13:10+0200\n"
 "PO-Revision-Date: 2007-10-28 09:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -113,8 +113,8 @@ msgid "2"
 msgstr ""
 
 #: siemens.cpp:115 siemens.cpp:116 siemens.cpp:117 siemens.cpp:121
-#: siemens.cpp:473 siemens.cpp:486 siemens.cpp:492 siemens.cpp:1405
-#: siemens.cpp:1543 siemens.cpp:1724 siemens.cpp:1786
+#: siemens.cpp:473 siemens.cpp:486 siemens.cpp:492 siemens.cpp:1401
+#: siemens.cpp:1539 siemens.cpp:1720 siemens.cpp:1783
 msgid "0"
 msgstr ""
 
@@ -200,7 +200,7 @@ msgstr ""
 msgid "Logical"
 msgstr "Логічний"
 
-#: siemens.cpp:124 siemens.cpp:1335 siemens.cpp:1712
+#: siemens.cpp:124 siemens.cpp:1331 siemens.cpp:1708
 msgid "TMPL"
 msgstr ""
 
@@ -212,7 +212,7 @@ msgstr "Шаблон параметру"
 msgid "50"
 msgstr ""
 
-#: siemens.cpp:126 siemens.cpp:1361 siemens.cpp:1459 siemens.cpp:1486
+#: siemens.cpp:126 siemens.cpp:1357 siemens.cpp:1455 siemens.cpp:1482
 msgid "PRM_ID"
 msgstr ""
 
@@ -225,12 +225,12 @@ msgid "20"
 msgstr ""
 
 #: siemens.cpp:127 siemens.cpp:131 siemens.cpp:175 siemens.cpp:192
-#: siemens.cpp:1362 siemens.cpp:1464 siemens.cpp:1491
+#: siemens.cpp:1358 siemens.cpp:1460 siemens.cpp:1487
 msgid "ID"
 msgstr ""
 
-#: siemens.cpp:128 siemens.cpp:1468 siemens.cpp:1469 siemens.cpp:1493
-#: siemens.cpp:1494
+#: siemens.cpp:128 siemens.cpp:1464 siemens.cpp:1465 siemens.cpp:1489
+#: siemens.cpp:1490
 msgid "VALUE"
 msgstr ""
 
@@ -278,9 +278,9 @@ msgstr ""
 msgid "_CIFdevs"
 msgstr ""
 
-#: siemens.cpp:176 siemens.cpp:195 siemens.cpp:534 siemens.cpp:1359
-#: siemens.cpp:1460 siemens.cpp:1487 siemens.cpp:1766 siemens.cpp:1769
-#: siemens.cpp:1798 siemens.cpp:1817 siemens.cpp:1819
+#: siemens.cpp:176 siemens.cpp:195 siemens.cpp:534 siemens.cpp:1355
+#: siemens.cpp:1456 siemens.cpp:1483 siemens.cpp:1763 siemens.cpp:1766
+#: siemens.cpp:1795 siemens.cpp:1814 siemens.cpp:1816
 msgid "."
 msgstr ""
 
@@ -334,12 +334,12 @@ msgstr "12:Помилка надсилання запиту %d."
 msgid "13:Get request is error %d."
 msgstr "13:Помилка отримання запиту %d."
 
-#: siemens.cpp:404 siemens.cpp:1316 siemens.cpp:1709
+#: siemens.cpp:404 siemens.cpp:1312 siemens.cpp:1705
 msgid "info"
 msgstr ""
 
-#: siemens.cpp:407 siemens.cpp:409 siemens.cpp:422 siemens.cpp:1713
-#: siemens.cpp:1716
+#: siemens.cpp:407 siemens.cpp:409 siemens.cpp:422 siemens.cpp:1709
+#: siemens.cpp:1712
 msgid "area"
 msgstr ""
 
@@ -359,8 +359,8 @@ msgstr ""
 msgid "Status"
 msgstr "Статус"
 
-#: siemens.cpp:410 siemens.cpp:424 siemens.cpp:1319 siemens.cpp:1712
-#: siemens.cpp:1715 siemens.cpp:1733 siemens.cpp:1747
+#: siemens.cpp:410 siemens.cpp:424 siemens.cpp:1315 siemens.cpp:1708
+#: siemens.cpp:1711 siemens.cpp:1729 siemens.cpp:1743
 msgid "fld"
 msgstr ""
 
@@ -375,21 +375,21 @@ msgstr "CIF драйвер"
 #: siemens.cpp:410 siemens.cpp:411 siemens.cpp:413 siemens.cpp:414
 #: siemens.cpp:415 siemens.cpp:416 siemens.cpp:417 siemens.cpp:418
 #: siemens.cpp:419 siemens.cpp:424 siemens.cpp:425 siemens.cpp:456
-#: siemens.cpp:485 siemens.cpp:487 siemens.cpp:588 siemens.cpp:1319
-#: siemens.cpp:1712 siemens.cpp:1715 siemens.cpp:1733 siemens.cpp:1747
-#: siemens.cpp:1754 siemens.cpp:1785 siemens.cpp:1787 siemens.cpp:1792
-#: siemens.cpp:1801 siemens.cpp:1829 siemens.cpp:1837
+#: siemens.cpp:485 siemens.cpp:487 siemens.cpp:588 siemens.cpp:1315
+#: siemens.cpp:1708 siemens.cpp:1711 siemens.cpp:1729 siemens.cpp:1743
+#: siemens.cpp:1750 siemens.cpp:1782 siemens.cpp:1784 siemens.cpp:1789
+#: siemens.cpp:1798 siemens.cpp:1826 siemens.cpp:1834
 msgid "root"
 msgstr ""
 
 #: siemens.cpp:410 siemens.cpp:413 siemens.cpp:414 siemens.cpp:415
 #: siemens.cpp:416 siemens.cpp:417 siemens.cpp:418 siemens.cpp:419
-#: siemens.cpp:424 siemens.cpp:425 siemens.cpp:1319 siemens.cpp:1712
-#: siemens.cpp:1715 siemens.cpp:1733 siemens.cpp:1747
+#: siemens.cpp:424 siemens.cpp:425 siemens.cpp:1315 siemens.cpp:1708
+#: siemens.cpp:1711 siemens.cpp:1729 siemens.cpp:1743
 msgid "tp"
 msgstr ""
 
-#: siemens.cpp:410 siemens.cpp:1715 siemens.cpp:1745
+#: siemens.cpp:410 siemens.cpp:1711 siemens.cpp:1741
 msgid "bool"
 msgstr ""
 
@@ -420,8 +420,8 @@ msgstr ""
 msgid "Board"
 msgstr "Плата"
 
-#: siemens.cpp:413 siemens.cpp:416 siemens.cpp:425 siemens.cpp:1712
-#: siemens.cpp:1733 siemens.cpp:1739
+#: siemens.cpp:413 siemens.cpp:416 siemens.cpp:425 siemens.cpp:1708
+#: siemens.cpp:1729 siemens.cpp:1735
 msgid "str"
 msgstr ""
 
@@ -433,7 +433,7 @@ msgstr ""
 msgid "Firmware name"
 msgstr "Ім'я прошивки"
 
-#: siemens.cpp:414 siemens.cpp:1319 siemens.cpp:1744
+#: siemens.cpp:414 siemens.cpp:1315 siemens.cpp:1740
 msgid "real"
 msgstr ""
 
@@ -446,7 +446,7 @@ msgid "Firmware version"
 msgstr "Версія прошивки"
 
 #: siemens.cpp:415 siemens.cpp:417 siemens.cpp:418 siemens.cpp:419
-#: siemens.cpp:424 siemens.cpp:1743
+#: siemens.cpp:424 siemens.cpp:1739
 msgid "dec"
 msgstr ""
 
@@ -486,11 +486,11 @@ msgstr "PB швидкість"
 msgid "idm"
 msgstr ""
 
-#: siemens.cpp:419 siemens.cpp:1712
+#: siemens.cpp:419 siemens.cpp:1708
 msgid "dest"
 msgstr ""
 
-#: siemens.cpp:419 siemens.cpp:1712
+#: siemens.cpp:419 siemens.cpp:1708
 msgid "select"
 msgstr ""
 
@@ -522,7 +522,7 @@ msgstr ""
 msgid "Life stations list"
 msgstr "Перелік живих станцій"
 
-#: siemens.cpp:430 siemens.cpp:1324 siemens.cpp:1704
+#: siemens.cpp:430 siemens.cpp:1320 siemens.cpp:1700
 msgid "path"
 msgstr ""
 
@@ -531,12 +531,12 @@ msgstr ""
 #: siemens.cpp:474 siemens.cpp:475 siemens.cpp:476 siemens.cpp:477
 #: siemens.cpp:478 siemens.cpp:479 siemens.cpp:480 siemens.cpp:481
 #: siemens.cpp:500 siemens.cpp:501 siemens.cpp:502 siemens.cpp:505
-#: siemens.cpp:1763 siemens.cpp:1767 siemens.cpp:1781
+#: siemens.cpp:1760 siemens.cpp:1764 siemens.cpp:1778
 msgid "el"
 msgstr ""
 
-#: siemens.cpp:456 siemens.cpp:487 siemens.cpp:1754 siemens.cpp:1787
-#: siemens.cpp:1801 siemens.cpp:1837
+#: siemens.cpp:456 siemens.cpp:487 siemens.cpp:1750 siemens.cpp:1784
+#: siemens.cpp:1798 siemens.cpp:1834
 msgid "set"
 msgstr ""
 
@@ -619,7 +619,7 @@ msgstr ""
 msgid "12MBaud"
 msgstr "12MБод"
 
-#: siemens.cpp:485 siemens.cpp:1785 siemens.cpp:1792 siemens.cpp:1829
+#: siemens.cpp:485 siemens.cpp:1782 siemens.cpp:1789 siemens.cpp:1826
 msgid "get"
 msgstr ""
 
@@ -627,8 +627,8 @@ msgstr ""
 msgid "lifeLsDev"
 msgstr ""
 
-#: siemens.cpp:486 siemens.cpp:488 siemens.cpp:492 siemens.cpp:1724
-#: siemens.cpp:1786 siemens.cpp:1788
+#: siemens.cpp:486 siemens.cpp:488 siemens.cpp:492 siemens.cpp:1720
+#: siemens.cpp:1783 siemens.cpp:1785
 msgid "user"
 msgstr ""
 
@@ -648,12 +648,12 @@ msgstr " : Пасивна станція"
 msgid "CIFPrm_"
 msgstr ""
 
-#: siemens.cpp:534 siemens.cpp:1359 siemens.cpp:1363 siemens.cpp:1460
-#: siemens.cpp:1465 siemens.cpp:1487 siemens.cpp:1495
+#: siemens.cpp:534 siemens.cpp:1355 siemens.cpp:1359 siemens.cpp:1456
+#: siemens.cpp:1461 siemens.cpp:1483 siemens.cpp:1491
 msgid "_io"
 msgstr ""
 
-#: siemens.cpp:539 siemens.cpp:1290 siemens.cpp:1366 siemens.cpp:1696
+#: siemens.cpp:539 siemens.cpp:1292 siemens.cpp:1362 siemens.cpp:1692
 #, c-format
 msgid "%s"
 msgstr ""
@@ -755,125 +755,130 @@ msgstr "11:Значення не отримані."
 msgid "Value type is error."
 msgstr "Помилковий тип значення."
 
-#: siemens.cpp:1319 siemens.cpp:1325
+#: siemens.cpp:1251
+#, c-format
+msgid "Thread <%u> started. TID: %ld"
+msgstr ""
+
+#: siemens.cpp:1315 siemens.cpp:1321
 msgid "/cntr/st/acq_tm"
 msgstr ""
 
-#: siemens.cpp:1319
+#: siemens.cpp:1315
 msgid "Acquisition time (ms)"
 msgstr "Час збору (мс)"
 
-#: siemens.cpp:1333
+#: siemens.cpp:1329
 msgid "CIFprm"
 msgstr ""
 
-#: siemens.cpp:1333
+#: siemens.cpp:1329
 msgid "cif_attr"
 msgstr ""
 
-#: siemens.cpp:1414
+#: siemens.cpp:1410
 msgid "f_frq"
 msgstr ""
 
-#: siemens.cpp:1415
+#: siemens.cpp:1411
 msgid "f_start"
 msgstr ""
 
-#: siemens.cpp:1416
+#: siemens.cpp:1412
 msgid "f_stop"
 msgstr ""
 
-#: siemens.cpp:1417
+#: siemens.cpp:1413
 msgid "f_err"
 msgstr ""
 
-#: siemens.cpp:1503 siemens.cpp:1539
+#: siemens.cpp:1499 siemens.cpp:1535
 msgid "err"
 msgstr ""
 
-#: siemens.cpp:1506
+#: siemens.cpp:1502
 msgid "1:Parameter had disabled."
 msgstr "1:Параметр вимкнено."
 
-#: siemens.cpp:1508
+#: siemens.cpp:1504
 msgid "2:Controller is stoped."
 msgstr "2:Контролер зупинено."
 
-#: siemens.cpp:1589 siemens.cpp:1596 siemens.cpp:1606
+#: siemens.cpp:1585 siemens.cpp:1592 siemens.cpp:1602
 msgid "Parameter disabled."
 msgstr "Параметр вимкнено."
 
-#: siemens.cpp:1616
+#: siemens.cpp:1612
 msgid "Parameter disabled or id error."
 msgstr "Параметр вимкнено або помилковий id параметру."
 
-#: siemens.cpp:1628
+#: siemens.cpp:1624
 #, c-format
 msgid "DB%d.%d.%d"
 msgstr ""
 
-#: siemens.cpp:1631
+#: siemens.cpp:1627
 #, c-format
 msgid "DB%d.%d"
 msgstr ""
 
-#: siemens.cpp:1697
+#: siemens.cpp:1693
 msgid "Error calc template."
 msgstr "Помилка обчислення шаблону."
 
-#: siemens.cpp:1705
+#: siemens.cpp:1701
 msgid "/serv/"
 msgstr ""
 
-#: siemens.cpp:1712 siemens.cpp:1754
+#: siemens.cpp:1708 siemens.cpp:1750
 msgid "/prm/cfg/TMPL"
 msgstr ""
 
-#: siemens.cpp:1712
+#: siemens.cpp:1708
 msgid "sel_ed"
 msgstr ""
 
-#: siemens.cpp:1712 siemens.cpp:1759
+#: siemens.cpp:1708 siemens.cpp:1756
 msgid "/cfg/prmp_lst"
 msgstr ""
 
-#: siemens.cpp:1713
+#: siemens.cpp:1709
 msgid "/cfg"
 msgstr ""
 
-#: siemens.cpp:1713
+#: siemens.cpp:1709
 msgid "Template config"
 msgstr "Конфігурація шаблону"
 
-#: siemens.cpp:1715 siemens.cpp:1783
+#: siemens.cpp:1711 siemens.cpp:1780
 msgid "/cfg/only_off"
 msgstr ""
 
-#: siemens.cpp:1715
+#: siemens.cpp:1711
 msgid "Only DB offsets show"
 msgstr "Показувати тільки зміщення"
 
-#: siemens.cpp:1716
+#: siemens.cpp:1712
 msgid "/cfg/prm"
 msgstr ""
 
-#: siemens.cpp:1716
+#: siemens.cpp:1712
 msgid "Parameters"
 msgstr "Параметри"
 
-#: siemens.cpp:1724 siemens.cpp:1786 siemens.cpp:1788
+#: siemens.cpp:1720 siemens.cpp:1783 siemens.cpp:1785
 msgid "onlOff"
 msgstr ""
 
-#: siemens.cpp:1733 siemens.cpp:1790
+#: siemens.cpp:1729 siemens.cpp:1787
 msgid "/cfg/prm/pr_"
 msgstr ""
 
-#: siemens.cpp:1747 siemens.cpp:1827
+#: siemens.cpp:1743 siemens.cpp:1824
 msgid "/cfg/prm/el_"
 msgstr ""
 
-#: siemens.cpp:1813
+#: siemens.cpp:1810
 #, c-format
 msgid "%d.%d"
 msgstr ""

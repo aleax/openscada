@@ -714,6 +714,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred) );
     glay->addWidget(lab,1,1);
     obj_parent = new QComboBox(tab_w);
+    obj_parent->setSizePolicy( QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed) );
     obj_parent->setObjectName("/wdg/st/parent");
     connect(obj_parent, SIGNAL(activated(int)), this, SLOT(isModify()));
     glay->addWidget(obj_parent,1,2,1,4);
