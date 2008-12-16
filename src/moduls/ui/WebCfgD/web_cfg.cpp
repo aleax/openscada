@@ -110,7 +110,7 @@ TWEB::TWEB( string name ) : mTAuth(10), lst_ses_chk(0)
 	"table.main td.title { color : blue; font-family : Arial; font-size : 30px; font-style : italic; text-align : center; }\n"
 	"table.main td.tool { text-align: left; border-top: 2px solid black; }\n"
 	"table.main td.tool img { height: 22px; border: 0; vertical-align: middle; }\n"
-	"table.main td.status { text-align: left; border-top: 2px solid black; }\n"
+	"table.main td.status { text-align: left; }\n"
 	"table.main tr.body { background-color : lightgrey; overflow : auto; }\n"
 	"table.main td.tree { background-color : #F7FFF6; width: 250px; text-align: left; vertical-align : top; border: 3px ridge #F7FFF6;"
 	" white-space: nowrap; color: black; }\n"

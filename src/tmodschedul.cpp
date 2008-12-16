@@ -36,7 +36,7 @@
 //*************************************************
 //* TModSchedul                                   *
 //*************************************************
-TModSchedul::TModSchedul( ) : 
+TModSchedul::TModSchedul( ) :
     TSubSYS("ModSched","Modules sheduler",false), prcSt(false), mPer(10)
 {
     //- Create calc timer -

@@ -655,7 +655,7 @@ function makeEl( pgBr, inclPg )
 		combList.id = '#combo';
 		combList.appendChild(this.ownerDocument.createElement('select'));
 		combList.childNodes[0].size='100';
-		combList.childNodes[0].onchange = function() { this.formObj.value = this.childNodes[this.selectedIndex].value; this.formObj.setModify(true); this.parentNode.style.visibility = 'hidden'; }
+		combList.childNodes[0].onchange = function() { this.formObj.value = this.options[this.selectedIndex].value; this.formObj.setModify(true); this.parentNode.style.visibility = 'hidden'; }
 		combList.childNodes[0].onblur = function() { this.parentNode.style.visibility = 'hidden'; this.parentNode.style.top = "-100px"; }
 		this.ownerDocument.body.appendChild(combList);
 	      }
@@ -1005,11 +1005,11 @@ function makeEl( pgBr, inclPg )
 	formObj.wdgLnk = this;
 //	if( elTp == 5 ) formObj.setAttribute('size',100);
 	if( elTp == 4 )
-	  formObj.onchange = function( ) { var attrs = new Object(); attrs.value = this.childNodes[this.selectedIndex].value; attrs.event = 'ws_CombChange'; setWAttrs(this.wdgLnk.addr,attrs); }
+	  formObj.onchange = function( ) { var attrs = new Object(); attrs.value = this.options[this.selectedIndex].value; attrs.event = 'ws_CombChange'; setWAttrs(this.wdgLnk.addr,attrs); }
 	else
 	{
 	  formObj.size = 100;
-	  formObj.onchange = function( ) { var attrs = new Object(); attrs.value = this.childNodes[this.selectedIndex].value; attrs.event = 'ws_ListChange'; setWAttrs(this.wdgLnk.addr,attrs); }
+	  formObj.onchange = function( ) { var attrs = new Object(); attrs.value = this.options[this.selectedIndex].value; attrs.event = 'ws_ListChange'; setWAttrs(this.wdgLnk.addr,attrs); }
 	}
 	var selVal = this.attrs['value'];
 	var elLst = this.attrs['items'].split('\n');

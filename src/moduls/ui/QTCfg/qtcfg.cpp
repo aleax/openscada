@@ -555,23 +555,22 @@ void ConfApp::itDel( const string &iit )
     {
 	XMLNode req("info");
 	req.setAttr("path",sel_own+"/%2fbr");
-	if( !cntrIfCmd(req) && req.childGet(0,true) )
+	if( cntrIfCmd(req) || !req.childGet(0,true) ) return;
+
+	XMLNode *branch = req.childGet(0);
+	for( int i_b = 0; i_b < branch->childSize(); i_b++ )
 	{
-	    XMLNode *branch = req.childGet(0);
-	    for( int i_b = 0; i_b < branch->childSize(); i_b++ )
-		if( branch->childGet(i_b)->attr("id") == sel_el.substr(0,branch->childGet(i_b)->attr("id").size()) &&
-		    atoi(branch->childGet(i_b)->attr("acs").c_str())&SEQ_WR )
-		{
-		    string b_id = branch->childGet(i_b)->attr("id");
-		    bool idm = atoi(branch->childGet(i_b)->attr("idm").c_str());
-		    req.clear()->setName("del")->setAttr("path",sel_own+"/%2fbr%2f"+b_id);
-		    if( idm )	req.setAttr("id",sel_el.substr(b_id.size()));
-		    else	req.setText(sel_el.substr(b_id.size()));
-		    if( cntrIfCmd(req) )
-		        mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Info,this);
-		    else treeUpdate();
-		    break;
-		}
+	    string b_id = branch->childGet(i_b)->attr("id");
+	    if( b_id == sel_el.substr(0,b_id.size()) && atoi(branch->childGet(i_b)->attr("acs").c_str())&SEQ_WR )
+	    {
+		bool idm = atoi(branch->childGet(i_b)->attr("idm").c_str());
+		req.clear()->setName("del")->setAttr("path",sel_own+"/%2fbr%2f"+b_id);
+		if( idm ) req.setAttr("id",sel_el.substr(b_id.size()));
+		else req.setText(sel_el.substr(b_id.size()));
+		if( cntrIfCmd(req) ) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Info,this);
+		else treeUpdate();
+		break;
+	    }
 	}
     }
 }
@@ -598,7 +597,7 @@ void ConfApp::itPaste( )
     for( off = 0; !(t_el=TSYS::pathLev(copy_buf.substr(1),0,true,&off)).empty(); n_sel++ )
     { if( n_sel ) s_elp += ("/"+s_el); s_el = t_el; }
 
-    if( TSYS::pathLev(copy_buf.substr(1),0) != TSYS::pathLev(sel_path,0) ) 
+    if( TSYS::pathLev(copy_buf.substr(1),0) != TSYS::pathLev(sel_path,0) )
     { mod->postMess( mod->nodePath().c_str(), _("Copy is imposible."), TUIMod::Error, this ); return; }
 
     vector<string> brs;
@@ -609,54 +608,47 @@ void ConfApp::itPaste( )
 	for( int i_b = 0; i_b < branch->childSize(); i_b++ )
 	    if( atoi(branch->childGet(i_b)->attr("acs").c_str())&SEQ_WR )
 	    {
-		brs.push_back( branch->childGet(i_b)->attr("idSz")+"\n0\n"+branch->childGet(i_b)->attr("id")+"\n"+branch->childGet(i_b)->attr("dscr"));
-		if( s_el.substr(0,branch->childGet(i_b)->attr("id").size()) == branch->childGet(i_b)->attr("id") )
-		{
-		    brs[brs.size()-1]=brs[brs.size()-1]+"\n1";
-		    b_grp = branch->childGet(i_b)->attr("id");
-		}
+		string gbrId = branch->childGet(i_b)->attr("id");
+		brs.push_back( branch->childGet(i_b)->attr("idSz")+"\n0\n"+gbrId+"\n"+branch->childGet(i_b)->attr("dscr"));
+		if( s_el.substr(0,gbrId.size()) == gbrId ) { brs[brs.size()-1] = brs[brs.size()-1]+"\n1"; b_grp = gbrId; }
 	    }
 
     //> Make request dialog
     ReqIdNameDlg dlg(this,actItAdd->icon(),"",_("Move or copy node"));
     dlg.setTargets(brs);
-    dlg.setMess( QString((copy_buf[0] == '1') ? _("Move node '%1' to '%2'.\n") : _("Copy node '%1' to '%2'.\n")).arg(copy_buf.substr(1).c_str()).arg(sel_path.c_str()) );
+    dlg.setMess( QString((copy_buf[0] == '1') ? _("Move node '%1' to '%2'.\n") : _("Copy node '%1' to '%2'.\n")).
+		arg(copy_buf.substr(1).c_str()).arg(sel_path.c_str()) );
     dlg.setId( s_el.substr(b_grp.size()).c_str() );
     if( dlg.exec() != QDialog::Accepted ) return;
 
-    off = 0;
-    string stat_nm = TSYS::pathLev(copy_buf.substr(1),0,true,&off);
-    string src_nm  = copy_buf.substr(off+1);
-    off = 0;
-    stat_nm = TSYS::pathLev(sel_path,0,true,&off);
-    string dst_nm  = sel_path.substr(off);
+    string stat_nm, src_nm, dst_nm;
+    off = 1; stat_nm = TSYS::pathLev(copy_buf,0,true,&off); src_nm = copy_buf.substr(off);
+    off = 0; stat_nm = TSYS::pathLev(sel_path,0,true,&off); dst_nm = sel_path.substr(off);
 
     if( atoi(TSYS::strSepParse(dlg.target( ),0,'\n').c_str()) >= 0 )
     {
 	dst_nm = dst_nm + "/" +TSYS::strSepParse(dlg.target( ),2,'\n') + dlg.id().toAscii().data();
-	//- Check for already present node -
+	//> Check for already present node
 	XMLNode req("get");
 	req.setAttr("path",sel_path+"/%2fbr%2f"+TSYS::strSepParse(dlg.target( ),2,'\n'));
-	if( !cntrIfCmd(req) )
-	    for( int i_lel = 0; i_lel < req.childSize(); i_lel++)
-		if( (req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->attr("id") == dlg.id().toAscii().data()) ||
-		    (!req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->text() == dlg.id().toAscii().data()) )
-		{
-		    InputDlg dlg1(this,actItPaste->icon(),QString(_("Node '%1' already present. Continue?")).arg(dst_nm.c_str()).toAscii().data(),
-			_("Move or copy node"),0,0);
-		    if( dlg1.exec() != QDialog::Accepted ) return;
-		}
+	if( cntrIfCmd(req) ) { mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Error,this); return; }
+	for( int i_lel = 0; i_lel < req.childSize(); i_lel++ )
+	    if( (req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->attr("id") == dlg.id().toAscii().data()) ||
+		(!req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->text() == dlg.id().toAscii().data()) )
+	    {
+		InputDlg dlg1(this,actItPaste->icon(),QString(_("Node '%1' already present. Continue?")).arg(dst_nm.c_str()).toAscii().data(),_("Move or copy node"),0,0);
+		if( dlg1.exec() != QDialog::Accepted ) return;
+		break;
+	    }
     }
 
-    //- Copy visual item -
+    //> Copy visual item
     XMLNode req("copy");
     req.setAttr("path","/"+stat_nm+"/%2fobj")->setAttr("src",src_nm)->setAttr("dst",dst_nm);
-    if( cntrIfCmd(req) )
-    { mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Error,this); return; }
+    if( cntrIfCmd(req) ) { mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Error,this); return; }
 
-    //- Remove source widget -
-    if( copy_buf[0] == '1' )
-    { itDel(copy_buf.substr(1)); copy_buf = "0"; }
+    //> Remove source widget
+    if( copy_buf[0] == '1' ) { itDel(copy_buf.substr(1)); copy_buf = "0"; }
 
     treeUpdate( );
     pageRefresh( );

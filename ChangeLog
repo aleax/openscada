@@ -1,3 +1,10 @@
+2008-12-16 Roman
+- /UI/QTCfg: Some algoritms is optimized.
+- FIX:/UI/WebCfgD: Statusbar access is fixed.
+- FIX:/UI/WebCfgD,/UI/WebVision: Call to options of 'select' is made through option[].
+- !:/UI/WebCfgD: Delete item action is released. Copy, Cut and Paste actions is released.
+
+
 2008-12-15 Roman
 - !!!!:/UI: Dynamic Web based configurator module (UI.WebCfgD) is added. Not all function yet reailed!
 - !!:/UI: UI subsystem's module template is added (src/moduls/ui/=Tmpl=).

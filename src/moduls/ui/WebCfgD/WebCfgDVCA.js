@@ -172,7 +172,7 @@ function servSet( adr, prm, body, waitRez )
  ***************************************************/
 function setStatus( mess, tm )
 {
-  document.getElementById('status').childNodes[0].nodeValue = (mess?mess:'Ready');
+  setNodeText(document.getElementById('status'),mess?mess:'Ready');
   if( !mess ) return;
   if( stTmID ) clearTimeout(stTmID);
   if( !tm || tm > 0 ) stTmID = setTimeout('setStatus(null)',tm?tm:1000);
@@ -426,10 +426,11 @@ function editToolUpdate( )
     if( root.childNodes[i_ch].getAttribute('id') == 'br' )
     {
       for( var i_g = 0; i_g < root.childNodes[i_ch].childNodes.length; i_g++ )
-      if( parseInt(root.childNodes[i_ch].childNodes[i_g].getAttribute('acs'))&SEQ_WR )
-      { actEnable('actPaste',true); break; }
+        if( parseInt(root.childNodes[i_ch].childNodes[i_g].getAttribute('acs'))&SEQ_WR )
+        { actEnable('actPaste',true); break; }
       break;
     }
+  if( parseInt(root.getAttribute('acs'))&SEQ_WR ) actEnable('actPaste',true);
 }
 /***************************************************
  * selectChildRecArea - Make page content          *
@@ -572,8 +573,8 @@ function selectChildRecArea( node, aPath, cBlk )
 	    popUpMenu.itPath = this.itPath;
 	    if( this.selectedIndex >= 0 )
 	    {
-	      popUpMenu.lsId = this.childNodes[this.selectedIndex].lsId;
-	      popUpMenu.lsText = this.childNodes[this.selectedIndex].value;
+	      popUpMenu.lsId = this.options[this.selectedIndex].lsId;
+	      popUpMenu.lsText = this.options[this.selectedIndex].value;
 	      if( !popUpMenu.lsId ) popUpMenu.lsId = popUpMenu.lsText;
 	    }
 	    popUpMenu.childNodes[0].size = Math.max(3,popUpMenu.childNodes[0].childNodes.length);
@@ -583,9 +584,9 @@ function selectChildRecArea( node, aPath, cBlk )
 	    popUpMenu.childNodes[0].onclick = function()
 	    {
 	      this.parentNode.style.cssText = 'visibility: hidden; left: -200px; top: -200px;';
-	      if( this.selectedIndex < 0 || !this.childNodes[this.selectedIndex].posId ) return;
+	      if( this.selectedIndex < 0 || !this.options[this.selectedIndex].posId ) return;
 	      var idm = parseInt(this.parentNode.srcNode.getAttribute('idm'));
-	      var posId = this.childNodes[this.selectedIndex].posId;
+	      var posId = this.options[this.selectedIndex].posId;
 	      if( posId == 'go' )
 	        selectPage(selPath+'/'+(this.parentNode.srcNode.getAttribute('br_pref')+this.parentNode.lsId).replace(/%/g,'%25').replace(/\//g,'%2f'));
 	      else if( posId == 'add' || posId == 'ins' || posId == 'edit' )
@@ -1116,7 +1117,7 @@ function itAdd( )
   if( !branchS ) return;
 
   //> Load branches list
-  var typeCfg;
+  var typeCfg = '';
   for( var i_b = 0; i_b < branchS.childNodes.length; i_b++ )
     if( parseInt(branchS.childNodes[i_b].getAttribute('acs'))&SEQ_WR )
       typeCfg+="<option idSz='"+branchS.childNodes[i_b].getAttribute('idSz')+
@@ -1131,21 +1132,31 @@ function itAdd( )
   dlgWin.document.getElementById('type').childNodes[1].childNodes[0].onchange = function( )
   {
     if( this.selectedIndex < 0 ) return;
-    dlgWin.document.getElementById('id').childNodes[1].childNodes[0].maxLength = this.childNodes[this.selectedIndex].getAttribute('idSz');
-    dlgWin.document.getElementById('name').style.display = parseInt(this.childNodes[this.selectedIndex].getAttribute('idm'))?'':'none';
+    dlgWin.document.getElementById('id').childNodes[1].childNodes[0].maxLength = this.options[this.selectedIndex].getAttribute('idSz');
+    dlgWin.document.getElementById('name').style.display = parseInt(this.options[this.selectedIndex].getAttribute('idm'))?'':'none';
   }
   dlgWin.document.getElementById('type').childNodes[1].childNodes[0].onchange();
   dlgWin.document.getElementById('actOk').onclick = function()
   {
     var tpSel = dlgWin.document.getElementById('type').childNodes[1].childNodes[0];
-    if( !tpSel || tpSel.selectedIndex < 0 ) return;
-    var idm = parseInt(tpSel.childNodes[tpSel.selectedIndex].getAttribute('idm'));
+    if( !tpSel || tpSel.selectedIndex < 0 ) { dlgWin.close(); return false; }
+    var idm = parseInt(tpSel.options[tpSel.selectedIndex].getAttribute('idm'));
+    var gbrId = tpSel.options[tpSel.selectedIndex].getAttribute('gid');
     var inpId = dlgWin.document.getElementById('id').childNodes[1].childNodes[0].value;
     var inpName = idm ? dlgWin.document.getElementById('name').childNodes[1].childNodes[0].value : inpId;
-    var rez = servSet(selPath+'/%2fbr%2f'+tpSel.childNodes[tpSel.selectedIndex].getAttribute('gid'),'com=com',
-	"<add "+(idm?("id='"+inpId+"'"):"")+">"+inpName+"</add>",true);
-    if( rez && parseInt(rez.getAttribute('rez')) != 0 ) alert(nodeText(rez));
-    else { treeUpdate(); pageRefresh(); }
+
+    //> Check for already present node
+    var req = servSet(selPath+'/%2fbr%2f'+gbrId,'com=com','<get/>',true);
+    if( !req || parseInt(req.getAttribute('rez')) != 0 ) { if(req) alert(nodeText(req)); dlgWin.close(); return false; }
+    for( var i_lel = 0; i_lel < req.childNodes.length; i_lel++ )
+      if( (req.childNodes[i_lel].getAttribute('id') && req.childNodes[i_lel].getAttribute('id') == inpId) ||
+	(!req.childNodes[i_lel].getAttribute('id') && nodeText(req.childNodes[i_lel]) == inpId) )
+      { alert("Node '"+inpId+"' already present."); dlgWin.close( ); return; }
+
+    //> Send command
+    var rez = servSet(selPath+'/%2fbr%2f'+gbrId,'com=com',"<add "+(idm?("id='"+inpId+"'"):"")+">"+inpName+"</add>",true);
+    if( !rez || parseInt(rez.getAttribute('rez')) != 0 ) { if(rez) alert(nodeText(rez)); dlgWin.close(); return false; }
+    treeUpdate(); pageRefresh();
     dlgWin.close(); return false;
   }
 }
@@ -1154,8 +1165,140 @@ function itAdd( )
  **************************************************/
 function itDel( iit )
 {
-  var rmit = iit ? selPath : iit;
+  var rmit = iit ? iit : selPath;
   if( !rmit || !rmit.length ) return;
+
+  if( !iit && !confirm("You sure for delete node '"+rmit+"'?") ) return;
+
+  var t_el, sel_own = '', sel_el;
+  var n_obj = 0;
+  for( pathLev.off = 0; (t_el=pathLev(rmit,0,true)).length; n_obj++ )
+  { if( n_obj ) sel_own += ('/'+sel_el); sel_el = t_el; }
+  if( n_obj > 2 )
+  {
+    var req = servGet(sel_own+'/%2fbr','com=info');
+    if( parseInt(req.getAttribute('rez'))!=0 ) { alert(nodeText(req)); return; }
+    if( !req.childNodes[0] ) return;
+
+    var branch = req.childNodes[0];
+    for( var i_b = 0; i_b < branch.childNodes.length; i_b++ )
+    {
+      var b_id = branch.childNodes[i_b].getAttribute('id');
+      if( b_id == sel_el.substr(0,b_id.length) && parseInt(branch.childNodes[i_b].getAttribute('acs'))&SEQ_WR )
+      {
+	var idm = parseInt(branch.childNodes[i_b].getAttribute('idm'));
+	var com = idm ? ("<del id='"+sel_el.substr(b_id.length)+"'/>") :
+	                ("<del>"+sel_el.substr(b_id.length)+"</del>");
+	var rez = servSet(sel_own+'/%2fbr%2f'+b_id,'com=com',com,true);
+	if( rez && parseInt(rez.getAttribute('rez')) != 0 ) alert(nodeText(rez));
+	else { treeUpdate(); if(!iit) { selPath = sel_own; pageDisplay(selPath); } }
+	break;
+      }
+    }
+  }
+}
+/**************************************************
+ * itCut - Cut selected item.                     *
+ **************************************************/
+function itCut( )
+{
+  copyBuf = '1'+selPath;
+  editToolUpdate();
+}
+/**************************************************
+ * itCopy - Copy selected item.                   *
+ **************************************************/
+function itCopy( )
+{
+  copyBuf = '0'+selPath;
+  editToolUpdate();
+}
+/**************************************************
+ * itPaste - Paste copy or cut item.              *
+ **************************************************/
+function itPaste( )
+{
+  var typeCfg = '';
+  var itCnt = 0, defIt = 0;
+  var s_el, s_elp = '', t_el, b_grp = '';
+  var branchS = null;
+
+  //> Src elements calc
+  var n_sel = 0;
+  for( pathLev.off = 0; (t_el=pathLev(copyBuf.substr(1),0,true)).length; n_sel++ )
+  { if(n_sel) s_elp += ('/'+s_el); s_el = t_el; }
+
+  if( pathLev(copyBuf.substr(1),0) != pathLev(selPath,0) ) { alert('Copy is imposible.'); return; }
+
+  if( parseInt(root.getAttribute('acs'))&SEQ_WR ) { typeCfg+="<option idSz='-1' gid=''>Selected</option>"; itCnt++; }
+  for( var i_ch = 0; i_ch < root.childNodes.length; i_ch++ )
+    if( root.childNodes[i_ch].nodeName == 'branches' && root.childNodes[i_ch].getAttribute('id') == 'br' )
+      branchS =  root.childNodes[i_ch];
+  if( branchS )
+    for( var i_b = 0; i_b < branchS.childNodes.length; i_b++, itCnt++ )
+      if( parseInt(branchS.childNodes[i_b].getAttribute('acs'))&SEQ_WR )
+      {
+	var gbrId = branchS.childNodes[i_b].getAttribute('id');
+	typeCfg+="<option idSz='"+branchS.childNodes[i_b].getAttribute('idSz')+"' gid='"+gbrId+"'>"+branchS.childNodes[i_b].getAttribute('dscr')+"</option>";
+	if( s_el.substr(0,gbrId.length) == gbrId ) { defIt = itCnt; b_grp = gbrId; }
+      }
+
+  //> Make request dialog
+  dlgWin = ReqIdNameDlg('/'+MOD_ID+'/img_it_add');
+  if( copyBuf.charAt(0) == '1' ) setNodeText(dlgWin.document.getElementById('title').childNodes[1],"Move node '"+copyBuf.substr(1)+" to '"+selPath+"'.");
+  else setNodeText(dlgWin.document.getElementById('title').childNodes[1],"Copy node '"+copyBuf.substr(1)+" to '"+selPath+"'.");
+  if( b_grp.length ) dlgWin.document.getElementById('id').childNodes[1].childNodes[0].value = s_el.substr(b_grp.length);
+  dlgWin.document.getElementById('name').style.display = 'none';
+  dlgWin.document.getElementById('type').style.display = '';
+  dlgWin.document.getElementById('type').childNodes[1].childNodes[0].innerHTML = typeCfg;
+  dlgWin.document.getElementById('type').childNodes[1].childNodes[0].onchange = function( )
+  {
+    if( this.selectedIndex < 0 ) return;
+    var idSz = parseInt(this.options[this.selectedIndex].getAttribute('idSz'));
+    if( idSz < 0 ) dlgWin.document.getElementById('id').style.display = 'none';
+    else
+    {
+      dlgWin.document.getElementById('id').style.display = '';
+      dlgWin.document.getElementById('id').childNodes[1].childNodes[0].maxLength = idSz;
+    }
+  }
+  dlgWin.document.getElementById('type').childNodes[1].childNodes[0].selectedIndex = defIt;
+  dlgWin.document.getElementById('type').childNodes[1].childNodes[0].onchange();
+  dlgWin.document.getElementById('actOk').onclick = function()
+  {
+    var tpSel = dlgWin.document.getElementById('type').childNodes[1].childNodes[0];
+    if( !tpSel || tpSel.selectedIndex < 0 ) { dlgWin.close(); return false; }
+    var idSz = parseInt(tpSel.options[tpSel.selectedIndex].getAttribute('idSz'));
+    var gbrId = tpSel.options[tpSel.selectedIndex].getAttribute('gid');
+    var inpId = dlgWin.document.getElementById('id').childNodes[1].childNodes[0].value;
+
+    var statNm, srcNm;
+    pathLev.off = 1; statNm = pathLev(copyBuf,0,true); srcNm = copyBuf.substr(pathLev.off);
+    pathLev.off = 0; statNm = pathLev(selPath,0,true); dstNm = selPath.substr(pathLev.off);
+
+    if( idSz >= 0 )
+    {
+      dstNm+='/'+gbrId+inpId;
+      //> Check for already present node
+      var req = servSet(selPath+'/%2fbr%2f'+gbrId,'com=com','<get/>',true);
+      if( !req || parseInt(req.getAttribute('rez')) != 0 ) { if(req) alert(nodeText(req)); dlgWin.close(); return false; }
+      for( var i_lel = 0; i_lel < req.childNodes.length; i_lel++ )
+	if( (req.childNodes[i_lel].getAttribute('id') && req.childNodes[i_lel].getAttribute('id') == inpId) ||
+	    (!req.childNodes[i_lel].getAttribute('id') && nodeText(req.childNodes[i_lel]) == inpId) )
+	{
+	  if( confirm("Node '"+dstNm+"' already present. Continue?") ) break;
+	  dlgWin.close( ); return;
+	}
+    }
+    //> Copy visual item
+    var rez = servSet('/'+statNm+'/%2fobj','com=com',"<copy src='"+srcNm+"' dst='"+dstNm+"'/>",true);
+    if( !rez || parseInt(rez.getAttribute('rez')) != 0 ) { if(rez) alert(nodeText(rez)); dlgWin.close(); return false; }
+
+    //> Remove source widget
+    if( copyBuf.charAt(0) == '1' ) { itDel(copyBuf.substr(1)); copyBuf = '0'; }
+    treeUpdate( ); pageRefresh( );
+    dlgWin.close( ); return false;
+  }
 }
 /**********************************************************
  * ReqIdNameDlg - Get identifier and name request dialog. *
@@ -1169,6 +1312,7 @@ function ReqIdNameDlg( ico, mess )
     "<html><head>\n"+
     " <style type='text/css'>\n"+
     "  table.dlg { width: 98%; border: 3px ridge #FF9253; padding: 5px; text-align: left; vertical-align: top; font-family: Verdana,Arial,Helvetica,sans-serif; font-size:12px; }\n"+
+    "  table.dlg select,input { font-family: Verdana,Arial,Helvetica,sans-serif; font-size:12px; }\n"+
     " </style>\n"+
     "</head>\n"+
     "<body style='background-color: #E6E6E6;'>\n"+
@@ -1221,6 +1365,13 @@ var actAddIt = document.getElementById('actAddIt');
 if( actAddIt ) actAddIt.onclick = function() { if( this.className=='active' ) itAdd(); return false; }
 var actDelIt = document.getElementById('actDelIt');
 if( actDelIt ) actDelIt.onclick = function() { if( this.className=='active' ) itDel(); return false; }
+//>>> Copy actions
+var actCopy = document.getElementById('actCopy');
+if( actCopy ) actCopy.onclick = function() { if( this.className=='active' ) itCopy(); return false; }
+var actCut = document.getElementById('actCut');
+if( actCut ) actCut.onclick = function() { if( this.className=='active' ) itCut(); return false; }
+var actPaste = document.getElementById('actPaste');
+if( actPaste ) actPaste.onclick = function() { if( this.className=='active' ) itPaste(); return false; }
 
 pageDisplay(hostsUpdate());
 
