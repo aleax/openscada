@@ -1,3 +1,8 @@
+2008-12-17 Roman
+- /UI/QTCfg: Some codes is clear and algoritms is optimized.
+- !:/UI/WebCfgD: Realised support of Text area and combobox.
+
+
 2008-12-16 Roman
 - /UI/QTCfg: Some algoritms is optimized.
 - FIX:/UI/WebCfgD: Statusbar access is fixed.
