@@ -3877,7 +3877,6 @@ void VCADiagram::getReq( SSess &ses )
     //> Prepare picture
     gdImagePtr im = gdImageCreate(imW,imH);
     gdImageFilledRectangle(im,0,0,imW-1,imH-1,gdImageColorAllocateAlpha(im,0,0,0,127));
-    gdFTUseFontConfig(1);
     int brect[8];
 
     //> Make decoration and prepare trends area

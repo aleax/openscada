@@ -1456,8 +1456,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	//> View Data-Time fields
 	else if( t_s.attr("tp") == "time" )
 	{
-	    QLabel	*lab   = NULL;
-	    QLabel	*val_r = NULL;
+	    QLabel	*lab, *val_r = NULL;
 	    LineEdit	*val_w = NULL;
 
 	    if( widget )
@@ -2060,7 +2059,7 @@ void ConfApp::initHosts( )
     }
 
     //> Add/update hosts
-    bool emptyTree = CtrTree->topLevelItemCount();
+    bool emptyTree = !CtrTree->topLevelItemCount();
     for( int i_st = 0; i_st < stls.size(); i_st++ )
     {
 	QTreeWidgetItem *nit = NULL;

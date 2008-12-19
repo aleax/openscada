@@ -1,3 +1,11 @@
+2008-12-19 Roman
+- FIX:/UI: FontConfig enable call move to subsystem 'UI'.
+- !!:/DAQ/System: Adapted to support libsensors version 3 API.
+- FIX:/UI/QTCfg: Hosts list modify function fixed.
+- !!:/UI/WebCfgD: Base fields support realisation is finished.
+- FIX:/UI/WebCfgD: Some fixes is made.
+
+
 2008-12-17 Roman
 - /UI/QTCfg: Some codes is clear and algoritms is optimized.
 - !:/UI/WebCfgD: Realised support of Text area and combobox.

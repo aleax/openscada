@@ -23,6 +23,8 @@
 #include <fcntl.h>
 #include <getopt.h>
 
+#include <gd.h>
+
 #include "tsys.h"
 #include "tmess.h"
 #include "tuis.h"
@@ -32,7 +34,7 @@
 //*************************************************
 TUIS::TUIS( ) : TSubSYS("UI","User interfaces",true)
 {
-
+    gdFTUseFontConfig(1);
 }
 
 string TUIS::optDescr( )

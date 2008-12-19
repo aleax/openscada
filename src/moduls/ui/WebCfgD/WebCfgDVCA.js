@@ -96,26 +96,20 @@ function nodeTextByTagId( node, tag, avl )
 /***************************************************
  * posGetX - Get absolute position                 *
  ***************************************************/
-function posGetX(obj)
+function posGetX(obj,noWScrl)
 {
   var posX = 0;
-  for( ; obj && obj.nodeName != 'BODY' ; obj=obj.parentNode )
-    posX += (obj.style.left?parseInt(obj.style.left):0)+
-	(obj.parentNode.style.borderLeftWidth?parseInt(obj.parentNode.style.borderLeftWidth):0)+
-	(obj.parentNode.style.marginLeft?parseInt(obj.parentNode.style.marginLeft):0);
-  return posX;
+  for( ; obj != null; obj = obj.offsetParent ) posX += obj.offsetLeft;
+  return posX+(!noWScrl?-window.pageXOffset:0)+(isNN?5:0);
 }
 /***************************************************
  * posGetY - Get absolute position                 *
  ***************************************************/
-function posGetY(obj)
+function posGetY(obj,noWScrl)
 {
   var posY = 0;
-  for( ; obj && obj.nodeName != 'BODY' ; obj=obj.parentNode )
-    posY += (obj.style.top?parseInt(obj.style.top):0)+
-	(obj.parentNode.style.borderTopWidth?parseInt(obj.parentNode.style.borderTopWidth):0)+
-	(obj.parentNode.style.marginTop?parseInt(obj.parentNode.style.marginTop):0);
-  return posY;
+  for( ; obj != null; obj = obj.offsetParent ) posY += obj.offsetTop;
+  return posY+(!noWScrl?-window.pageYOffset:0)+(isNN?5:0);
 }
 /***************************************************
  * getXmlHttp - Check and return XMLHttpRequest for*
@@ -184,7 +178,6 @@ function expand( el, val, upTree )
 {
   if( !val )
   {
-    alert
     for( var i = 0; i < el.childNodes.length; i++ )
       if( el.childNodes[i].nodeName == 'UL' )
       { el.removeChild(el.childNodes[i]); break; }
@@ -193,7 +186,6 @@ function expand( el, val, upTree )
   }
   else
   {
-    var newCUL = false;
     var cUL = null;
     for( var i = 0; i < el.childNodes.length; i++ )
       if( el.childNodes[i].nodeName == 'UL' )
@@ -203,7 +195,6 @@ function expand( el, val, upTree )
       cUL = document.createElement('ul');
       if( el.parentNode.lastChild!=el ) cUL.style.backgroundImage = 'url(img_treeLine)';
       el.appendChild(cUL);
-      newCUL = true;
     }
     if( el.grps.length > 1 )
     {
@@ -261,9 +252,9 @@ function expand( el, val, upTree )
       if( hostN && parseInt(hostN.getAttribute('rez'))==0 && hostN.childNodes.length )
       {
 	//> Add and update present
-	for( var i = 0; i < hostN.childNodes.length; i++ )
+	for( var i_e = 0; i_e < hostN.childNodes.length; i_e++ )
 	{
-	  var tmpNdId = el.getAttribute('id')+'/'+(grpId+(hostN.childNodes[i].getAttribute('id')?hostN.childNodes[i].getAttribute('id'):nodeText(hostN.childNodes[i])));
+	  var tmpNdId = el.getAttribute('id')+'/'+(grpId+(hostN.childNodes[i_e].getAttribute('id')?hostN.childNodes[i_e].getAttribute('id'):nodeText(hostN.childNodes[i_e])));
 	  var liN = null;
 	  //>> Find item
 	  if( upTree )
@@ -273,30 +264,30 @@ function expand( el, val, upTree )
 	  if( !liN )
 	  {
 	    liN = document.createElement('li');
-	    if( i >= cUL.childNodes.length ) cUL.appendChild(liN);
-	    else cUL.insertBefore(liN,cUL.childNodes[i]);
+	    if( i_e >= cUL.childNodes.length ) cUL.appendChild(liN);
+	    else cUL.insertBefore(liN,cUL.childNodes[i_e]);
 	    liN.isExpand = false;
 	  }
 	  liN.setAttribute('id',tmpNdId);
 	  //> Load groups
 	  liN.grps = new Array();
-	  for( var i_grp = 0; i_grp < hostN.childNodes[i].childNodes.length; i_grp++ )
-	    if( hostN.childNodes[i].childNodes[i_grp].nodeName == 'grp' )
-	      liN.grps.push(hostN.childNodes[i].childNodes[i_grp]);
+	  for( var i_grp = 0; i_grp < hostN.childNodes[i_e].childNodes.length; i_grp++ )
+	    if( hostN.childNodes[i_e].childNodes[i_grp].nodeName == 'grp' )
+	      liN.grps.push(hostN.childNodes[i_e].childNodes[i_grp]);
 	  //> Init links
-	  var isUsable = liN.grps.length>1||(liN.grps.length&&parseInt(liN.grps[0].getAttribute('chPresent')));
-	  var treeIco = '/'+MOD_ID+'/img_tree'+(isUsable?(liN.isExpand?'Minus':'Plus'):'')+'Up'+((i!=(hostN.childNodes.length-1))?'Down':'');
+	  var isUsable = (liN.grps.length>1)||(liN.grps.length&&parseInt(liN.grps[0].getAttribute('chPresent')));
+	  var treeIco = '/'+MOD_ID+'/img_tree'+(isUsable?(liN.isExpand?'Minus':'Plus'):'')+'Up'+((i_e!=(hostN.childNodes.length-1))?'Down':'');
 	  var liCont = isUsable?"<a class='pm' onclick='expand(this.parentNode,!this.parentNode.isExpand); return false;'>":"";
 	  liCont += "<img src='"+treeIco+"'/></a>";
-	  if( parseInt(hostN.childNodes[i].getAttribute('icoSize')) )
+	  if( parseInt(hostN.childNodes[i_e].getAttribute('icoSize')) )
 	    liCont += "<span><img height='16px' src='/"+MOD_ID+liN.getAttribute('id')+"?com=ico'/></span>";
 	  liCont += "<span><a onclick='selectPage(this.parentNode.parentNode.getAttribute(\"id\")); return false;' "+
-	    "onmouseover='setStatus(this.parentNode.parentNode.getAttribute(\"id\"),10000);' href='#'>"+nodeText(hostN.childNodes[i])+"</a></span>";
+	    "onmouseover='setStatus(this.parentNode.parentNode.getAttribute(\"id\"),10000);' href='#'>"+nodeText(hostN.childNodes[i_e])+"</a></span>";
 	  //>> Next node for update
 	  if( upTree && liN.isExpand )
 	  {
 	    var liNUL = null;
-	    for( var i = 0; i < liN.childNodes.length; i++ ) if( liN.childNodes[i].nodeName == 'UL' ) { liNUL = liN.childNodes[i]; break; }
+	    for( var i_eu = 0; i_eu < liN.childNodes.length; i_eu++ ) if( liN.childNodes[i_eu].nodeName == 'UL' ) { liNUL = liN.childNodes[i_eu]; break; }
 	    liN.innerHTML = liCont;
 	    if( liNUL ) liN.appendChild(liNUL);
 	    expand(liN,val,upTree);
@@ -308,7 +299,7 @@ function expand( el, val, upTree )
 	  for( var i_it = 0; i_it < cUL.childNodes.length; i_it++ )
 	  {
 	    var i_e;
-	    for( var i_e = 0; i_e < hostN.childNodes.length; i_e++ )
+	    for( i_e = 0; i_e < hostN.childNodes.length; i_e++ )
 	    {
 	      var grpId = el.grps[0].getAttribute('id');
 	      var tmpNdId = el.getAttribute('id')+'/'+(grpId+(hostN.childNodes[i_e].getAttribute('id')?hostN.childNodes[i_e].getAttribute('id'):nodeText(hostN.childNodes[i_e])));
@@ -381,7 +372,8 @@ function pageDisplay( path )
     //>> Check the new node structure and the old node
     var iTree = servGet(selPath,'com=info');
     if( parseInt(iTree.getAttribute('rez'))!=0 ) { alert(nodeText(iTree)); return; }
-    upStruct(root,iTree.childNodes[0]);
+    if( chkStruct(root,iTree.childNodes[0]) )
+    { pgInfo = iTree; pgInfo.setAttribute('path',selPath); root = pgInfo.childNodes[0]; }
   }
 
   selectChildRecArea(root,'/');
@@ -452,7 +444,7 @@ function selectChildRecArea( node, aPath, cBlk )
     {
       var i_cf;
       for( i_cf = 0; i_cf < node.childNodes.length; i_cf++ )
-	if( node.childNodes[i_cf].nodeName == 'area' && nodeText(tabs.childNodes[i_tbs]) == node.childNodes[i_cf].getAttribute('dscr') )
+	if( node.childNodes[i_cf].nodeName.toLowerCase() == 'area' && nodeText(tabs.childNodes[i_tbs]) == node.childNodes[i_cf].getAttribute('dscr') )
 	  break;
       if( i_cf >= node.childNodes.length )
       {
@@ -465,7 +457,7 @@ function selectChildRecArea( node, aPath, cBlk )
     //>> Add new tabs
     for( var i_cf = 0; i_cf < node.childNodes.length; i_cf++ )
     {
-      if( node.childNodes[i_cf].nodeName != 'area' ) continue;
+      if( node.childNodes[i_cf].nodeName.toLowerCase() != 'area' ) continue;
       var i_tbs;
       for( i_tbs = 0; i_tbs < tabs.childNodes.length; i_tbs++ )
 	if( nodeText(tabs.childNodes[i_tbs]) == node.childNodes[i_cf].getAttribute('dscr') )
@@ -484,7 +476,7 @@ function selectChildRecArea( node, aPath, cBlk )
     if( !activeTab && tabs.childNodes.length ) { activeTab = tabs.childNodes[0]; activeTab.className = 'active'; }
     //>> Prepare active tab
     for( var i_cf = 0; i_cf < node.childNodes.length; i_cf++ )
-      if( node.childNodes[i_cf].nodeName == 'area' && nodeText(activeTab) == node.childNodes[i_cf].getAttribute('dscr') )
+      if( node.childNodes[i_cf].nodeName.toLowerCase() == 'area' && nodeText(activeTab) == node.childNodes[i_cf].getAttribute('dscr') )
       {
         var refresh = parseInt(node.childNodes[i_cf].getAttribute('qview'));
         var cPg = document.getElementById('pgCont');
@@ -509,7 +501,7 @@ function selectChildRecArea( node, aPath, cBlk )
     var wr = parseInt(t_s.getAttribute('acs'))&SEQ_WR;
 
     //>> View areas
-    if( t_s.nodeName == 'area' )
+    if( t_s.nodeName.toLowerCase() == 'area' )
     {
       var cntBlk = cBlk;
       if( cntBlk )
@@ -523,7 +515,7 @@ function selectChildRecArea( node, aPath, cBlk )
       selectChildRecArea(t_s,aPath+t_s.getAttribute('id')+'/',cntBlk);
     }
     //>> View list elements
-    else if( t_s.nodeName == 'list' )
+    else if( t_s.nodeName.toLowerCase() == 'list' )
     {
       var brPath = (aPath+t_s.getAttribute('id')).replace(/%/g,'%25').replace(/\//g,'%2f');
       var lab = null; var val = null;
@@ -592,7 +584,9 @@ function selectChildRecArea( node, aPath, cBlk )
 	      else if( posId == 'add' || posId == 'ins' || posId == 'edit' )
 	      {
 		dlgWin = ReqIdNameDlg('/'+MOD_ID+'/ico');
-		dlgWin.document.getElementById('id').childNodes[1].childNodes[0].maxLength = this.parentNode.srcNode.getAttribute('idSz');
+		var fIdVal = dlgWin.document.getElementById('id').childNodes[1].childNodes[0];
+		fIdVal.maxLength = this.parentNode.srcNode.getAttribute('idSz');
+		if( !fIdVal.maxLength ) fIdVal.maxLength = 1000;
 		dlgWin.document.getElementById('type').style.display = 'none';
 		dlgWin.document.getElementById('name').style.display = idm?'':'none';
 		dlgWin.document.getElementById('actOk').itPath = this.parentNode.itPath;
@@ -611,8 +605,8 @@ function selectChildRecArea( node, aPath, cBlk )
 		    var rez = servSet(this.itPath,'com=com',"<add "+(idm?("id='"+inpId+"'"):"")+">"+inpName+"</add>",true);
 		    if( rez && parseInt(rez.getAttribute('rez')) != 0 ) alert(nodeText(rez));
 		    if( this.srcNode.getAttribute('tp') == 'br' ) treeUpdate();
-		    pageRefresh();
-		    dlgWin.close(); return false;
+		    pageRefresh(); dlgWin.close();
+		    return false;
 		  }
 		}
 		else if( posId == 'ins' )
@@ -686,7 +680,7 @@ function selectChildRecArea( node, aPath, cBlk )
 
       while( val.childNodes.length ) val.removeChild(val.childNodes[0]);
       for( var i_el = 0; i_el < dataReq.childNodes.length; i_el++ )
-	if( dataReq.childNodes[i_el].nodeName == 'el' )
+	if( dataReq.childNodes[i_el].nodeName.toLowerCase() == 'el' )
 	{
 	  var opt = document.createElement('option');
 	  opt.lsId = dataReq.childNodes[i_el].getAttribute('id');
@@ -697,7 +691,7 @@ function selectChildRecArea( node, aPath, cBlk )
       val.size = Math.min(10,Math.max(4,val.childNodes.length));
     }
     //>> View standart fields
-    else if( t_s.nodeName == 'fld' ) basicFields(t_s,aPath,cBlk,wr);
+    else if( t_s.nodeName.toLowerCase() == 'fld' ) basicFields(t_s,aPath,cBlk,wr);
   }
 }
 /***************************************************
@@ -724,15 +718,13 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
       if( !wr )
       {
 	val_r = document.createElement('span'); val_r.className = 'const';
-	val_r.StatusTip = selPath+'/'+brPath;
-	val_r.onmouseover = function() { setStatus(this.StatusTip,10000); }
+	val_r.StatusTip = selPath+'/'+brPath; val_r.onmouseover = function() { setStatus(this.StatusTip,10000); }
       }
       //>> View edit
       else
       {
-	val_w = document.createElement('span');
+	val_w = document.createElement('span');	val_w.className = 'line';
 	val_w.appendChild(document.createElement('select'));
-	val_w.childNodes[0].className = 'line';
 	val_w.childNodes[0].itPath = selPath+'/'+brPath;
 	val_w.childNodes[0].onchange = function( )
 	{
@@ -744,8 +736,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 	  setTimeout('pageRefresh()',500);
 	  return false;
 	}
-	val_w.StatusTip = selPath+'/'+brPath;
-	val_w.onmouseover = function() { setStatus(this.StatusTip,10000); }
+	val_w.StatusTip = selPath+'/'+brPath; val_w.onmouseover = function() { setStatus(this.StatusTip,10000); }
       }
       //>> Check use label
       if( t_s.getAttribute('dscr') )
@@ -765,7 +756,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
     }
     else { lab = t_s.addr_lab; val_r = t_s.addr_val_r; val_w = t_s.addr_val_w; }
     //>> Fill combo
-    if( lab ) setNodeText(lab,t_s.getAttribute('dscr')+': ');
+    if( lab ) setNodeText(lab,t_s.getAttribute('dscr')+':');
     if( val_w || val_r )
     {
       (val_r||val_w).title = t_s.getAttribute('help');
@@ -790,7 +781,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 	if( x_lst )
 	  for( var i_el = 0; i_el < x_lst.childNodes.length; i_el++ )
 	  {
-	    if( x_lst.childNodes[i_el].nodeName != 'el' ) continue;
+	    if( x_lst.childNodes[i_el].nodeName.toLowerCase() != 'el' ) continue;
 	    var curElId = x_lst.childNodes[i_el].getAttribute('id');
 	    var curElVl = nodeText(x_lst.childNodes[i_el]);
 	    if( val_w ) valWCfg+="<option "+
@@ -821,15 +812,14 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 	if( !wr )
 	{
 	  val_r = document.createElement('span'); val_r.className = 'const';
-	  val_r.StatusTip = selPath+'/'+brPath;
-	  val_r.onmouseover = function() { setStatus(this.StatusTip,10000); }
+	  val_r.StatusTip = selPath+'/'+brPath; val_r.onmouseover = function() { setStatus(this.StatusTip,10000); }
 	}
 	//>> View edit
 	else
 	{
-	  val_w = document.createElement('span');
+	  val_w = document.createElement('span'); val_w.className = 'line';
 	  val_w.appendChild(document.createElement('input'));
-	  val_w.childNodes[0].type = 'checkbox'; val_w.childNodes[0].className = 'line'; val_w.childNodes[0].itPath = selPath+'/'+brPath;
+	  val_w.childNodes[0].type = 'checkbox'; val_w.childNodes[0].itPath = selPath+'/'+brPath;
 	  val_w.childNodes[0].onclick = function( )
 	  {
 	    var rez = servSet(this.itPath,'com=com','<set>'+(this.checked?'1':'0')+'</set>',true);
@@ -837,8 +827,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 	    setTimeout('pageRefresh()',500);
 	    return false;
 	  }
-	  val_w.StatusTip = selPath+'/'+brPath;
-	  val_w.onmouseover = function() { setStatus(this.StatusTip,10000); }
+	  val_w.StatusTip = selPath+'/'+brPath; val_w.onmouseover = function() { setStatus(this.StatusTip,10000); }
 	}
 	//>> Check use label
 	if( t_s.getAttribute('dscr') )
@@ -858,7 +847,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
       }
       else { lab = t_s.addr_lab; val_r = t_s.addr_val_r; val_w = t_s.addr_val_w; }
       //>> Fill CheckBox
-      if( lab ) setNodeText(lab,t_s.getAttribute('dscr')+': ');
+      if( lab ) setNodeText(lab,t_s.getAttribute('dscr')+':');
       if( val_w )
       {
 	val_w.title = t_s.getAttribute('help');
@@ -897,7 +886,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 	      var rez = servSet(wEl.childNodes[2].itPath,'com=com','<set>'+wEl.childNodes[2].value+'</set>',true);
 	      if( rez && parseInt(rez.getAttribute('rez')) != 0 ) alert(nodeText(rez));
 	      setTimeout('pageRefresh()',500);
-	      wEl.removeChild(wEl.childNodes[3]);
+	      wEl.removeChild(this.parentNode);
 	      wEl.childNodes[2].isChanged = false;
 	      return false;
 	    }
@@ -906,7 +895,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 	    {
 	      var wEl = this.parentNode.parentNode;
 	      wEl.childNodes[2].value = wEl.childNodes[2].defaultValue;
-	      wEl.removeChild(wEl.childNodes[3]);
+	      wEl.removeChild(this.parentNode);
 	      wEl.childNodes[2].isChanged = false;
 	      return false;
 	    }
@@ -924,7 +913,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
       }
       else { lab = t_s.addr_lab; edit = t_s.addr_edit; }
       //>> Fill Edit
-      if( lab ) setNodeText(lab,t_s.getAttribute('dscr')+': ');
+      if( lab ) setNodeText(lab,t_s.getAttribute('dscr')+':');
       if( edit && !edit.isChanged )
       {
 	edit.title = t_s.getAttribute('help');
@@ -934,11 +923,6 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
     //> View Data-Time fields
     else if( t_s.getAttribute('tp') == 'time' )
     {
-      //?
-    }
-    //> View other string and numberic fields
-    else
-    {
       var lab = null; var val_r = null; var val_w = null;
       if( cBlk )
       {
@@ -946,16 +930,50 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 	if( !wr )
 	{
 	  val_r = document.createElement('span'); val_r.className = 'const';
-	  val_r.StatusTip = selPath+'/'+brPath;
-	  val_r.onmouseover = function() { setStatus(this.StatusTip,10000); }
+	  val_r.StatusTip = selPath+'/'+brPath; val_r.onmouseover = function() { setStatus(this.StatusTip,10000); }
 	}
 	//>> View edit
 	else
 	{
-	  val_w = document.createElement('span');
-	  val_w.appendChild(document.createElement('input')); val_w.childNodes[0].type = 'text'; val_w.childNodes[0].className = 'line';
-	  val_w.StatusTip = selPath+'/'+brPath;
-	  val_w.onmouseover = function() { setStatus(this.StatusTip,10000); }
+	  val_w = document.createElement('span'); val_w.className = 'line number';
+	  val_w.itPath = selPath+'/'+brPath;
+	  val_w.innerHTML = "<input type='text' size='2'/><input type='text' size='2'/><input type='text' size='4'/>&nbsp;"+
+		"<input type='text' size='2'/><input type='text' size='2'/><input type='text' size='2'/>"
+	  val_w.childNodes[0].onkeyup = val_w.childNodes[1].onkeyup = val_w.childNodes[2].onkeyup =
+		val_w.childNodes[4].onkeyup = val_w.childNodes[5].onkeyup = val_w.childNodes[6].onkeyup = function(e)
+	  {
+	    if( !e ) e = window.event;
+	    if( this.parentNode.isEdited && e.keyCode == 13 ) { this.parentNode.childNodes[7].onclick(); return true; }
+	    if( this.parentNode.isEdited && e.keyCode == 27 )
+	    {
+	      var val_w = this.parentNode;
+	      for( var i_ch = 0; i_ch < val_w.childNodes.length; i_ch++ )
+	        if( val_w.childNodes[i_ch].defaultValue )
+	          val_w.childNodes[i_ch].value = val_w.childNodes[i_ch].defaultValue;
+	      val_w.removeChild(this.parentNode.childNodes[7]);
+	      val_w.isEdited = false;
+	      return true;
+	    }
+	    if( this.parentNode.isEdited || this.value == this.defaultValue ) return true;
+	    var btOk = document.createElement('img'); btOk.src = '/'+MOD_ID+'/img_button_ok';
+	    btOk.onclick = function( )
+	    {
+	      var val_w = this.parentNode;
+	      var dt = new Date(0);
+	      dt.setDate(parseInt(val_w.childNodes[0].value)); dt.setMonth(parseInt(val_w.childNodes[1].value)-1); dt.setFullYear(parseInt(val_w.childNodes[2].value));
+	      dt.setHours(parseInt(val_w.childNodes[4].value)); dt.setMinutes(parseInt(val_w.childNodes[5].value)); dt.setSeconds(parseInt(val_w.childNodes[6].value));
+	      var rez = servSet(val_w.itPath,'com=com','<set>'+Math.floor(dt.getTime()/1000)+'</set>',true);
+	      if( rez && parseInt(rez.getAttribute('rez')) != 0 ) alert(nodeText(rez));
+	      setTimeout('pageRefresh()',500);
+	      val_w.removeChild(this);
+	      val_w.isEdited = false;
+	      return false;
+	    }
+	    this.parentNode.appendChild(btOk);
+	    this.parentNode.isEdited = true;
+	    return true;
+	  }
+	  val_w.StatusTip = selPath+'/'+brPath; val_w.onmouseover = function() { setStatus(this.StatusTip,10000); }
 	}
 	//>> Check use label
 	if( t_s.getAttribute('dscr') )
@@ -974,21 +992,176 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 	t_s.addr_lab = lab; t_s.addr_val_r = val_r; t_s.addr_val_w = val_w;
       }
       else { lab = t_s.addr_lab; val_r = t_s.addr_val_r; val_w = t_s.addr_val_w; }
+      //>> Fill data
+      if( lab ) setNodeText(lab,t_s.getAttribute('dscr')+':');
+      if( val_w && !val_w.isEdited )
+      {
+	val_w.title = t_s.getAttribute('help');
+	var dt = new Date(parseInt(nodeText(dataReq))*1000);
+	val_w.childNodes[0].value = val_w.childNodes[0].defaultValue = dt.getDate();
+	val_w.childNodes[1].value = val_w.childNodes[1].defaultValue = dt.getMonth()+1;
+	val_w.childNodes[2].value = val_w.childNodes[2].defaultValue = dt.getFullYear();
+	val_w.childNodes[4].value = val_w.childNodes[4].defaultValue = dt.getHours();
+	val_w.childNodes[5].value = val_w.childNodes[5].defaultValue = dt.getMinutes();
+	val_w.childNodes[6].value = val_w.childNodes[6].defaultValue = dt.getSeconds();
+      }
+      if( val_r )
+      {
+	val_r.title = t_s.getAttribute('help');
+	var dt = new Date(parseInt(nodeText(dataReq))*1000);
+	setNodeText(val_r,dt.getDate()+'.'+(dt.getMonth()+1)+'.'+dt.getFullYear()+' '+dt.getHours()+':'+dt.getMinutes()+':'+dt.getSeconds());
+      }
+    }
+    //> View other string and numberic fields
+    else
+    {
+      var lab = null; var val_r = null; var val_w = null;
+      if( cBlk )
+      {
+	//>> View info
+	if( !wr )
+	{
+	  val_r = document.createElement('span'); val_r.className = 'const';
+	  val_r.StatusTip = selPath+'/'+brPath; val_r.onmouseover = function() { setStatus(this.StatusTip,10000); }
+	}
+	//>> View edit
+	else
+	{
+	  val_w = document.createElement('span'); val_w.className = 'line';
+	  val_w.itPath = selPath+'/'+brPath;
+	  val_w.appendChild(document.createElement('input')); val_w.childNodes[0].type = 'text';
+	  val_w.StatusTip = selPath+'/'+brPath; val_w.onmouseover = function() { setStatus(this.StatusTip,10000); }
+
+	  var tp = t_s.getAttribute('tp');
+	  if( t_s.getAttribute('dest') == 'sel_ed' )
+	  {
+	    val_w.childNodes[0].size = 20;
+	    var cmbImg = document.createElement('img'); cmbImg.src = '/'+MOD_ID+'/img_combar';
+	    cmbImg.onclick = function( )
+	    {
+	      if( !this.parentNode.sel_list || !this.parentNode.sel_list.length ) return false;
+	      var combMenu = getCombo();
+	      var optHTML = '';
+	      for( var i_l = 0; i_l < this.parentNode.sel_list.length; i_l++ )
+		optHTML += '<option>'+this.parentNode.sel_list[i_l]+'</option>';
+	      var edFld = this.parentNode.childNodes[0];
+	      combMenu.childNodes[0].edFld = edFld;
+	      combMenu.childNodes[0].innerHTML = optHTML;
+	      combMenu.childNodes[0].size = Math.max(3,this.parentNode.sel_list.length);
+	      combMenu.style.cssText = 'visibility: visible; left: '+posGetX(edFld,true)+'px; '+
+				       'top: '+(posGetY(edFld,true)+edFld.offsetHeight)+'px; '+
+				       'width: '+edFld.offsetWidth+'px';
+	      combMenu.childNodes[0].focus();
+	      combMenu.childNodes[0].onclick = function()
+	      {
+		this.parentNode.style.cssText = 'visibility: hidden; left: -200px; top: -200px;';
+		if( this.selectedIndex < 0 ) return;
+		this.edFld.value = nodeText(this.options[this.selectedIndex]);
+		var rez = servSet(this.edFld.parentNode.itPath,'com=com','<set>'+this.edFld.value+'</set>',true);
+		if( rez && parseInt(rez.getAttribute('rez')) != 0 ) alert(nodeText(rez));
+		setTimeout('pageRefresh()',500);
+		return false;
+	      }
+	      return false;
+	    }
+	    val_w.appendChild(cmbImg);
+	  }
+	  else if( tp == 'dec' )
+	  {
+	    val_w.className += ' number';
+	    val_w.childNodes[0].size = 7;
+	    var spinImg = document.createElement('img'); spinImg.src = '/'+MOD_ID+'/img_spinar';
+	    spinImg.onclick = function(e)
+	    {
+	      if(!e) e = window.event;
+	      var val_w = this.parentNode.childNodes[0];
+	      val_w.value = parseInt(val_w.value)+(((e.clientY-posGetY(this))<10)?1:-1);
+	      val_w.onkeyup();
+	      return false;
+	    }
+	    val_w.appendChild(spinImg);
+	  }
+	  else if( tp == 'hex' || tp == 'oct' || tp == 'real' ) { val_w.className += ' number'; val_w.childNodes[0].size = 7; }
+	  else
+	  {
+	    val_w.childNodes[0].size = 30;
+	    val_w.childNodes[0].maxLength = t_s.getAttribute('len');
+	    if( !val_w.childNodes[0].maxLength ) val_w.childNodes[0].maxLength = 1000;
+	  }
+
+	  val_w.childNodes[0].onkeyup = function(e)
+	  {
+	    if( !e ) e = window.event;
+	    if( this.parentNode.isEdited && e.keyCode == 13 ) { this.parentNode.lastChild.onclick(); return true; }
+	    if( this.parentNode.isEdited && e.keyCode == 27 )
+	    {
+	      this.value = this.defaultValue;
+	      this.parentNode.isEdited = false;
+	      this.parentNode.removeChild(this.parentNode.lastChild);
+	      return true;
+	    }
+	    if( this.parentNode.isEdited || this.value == this.defaultValue ) return true;
+	    var btOk = document.createElement('img'); btOk.src = '/'+MOD_ID+'/img_button_ok';
+	    btOk.onclick = function( )
+	    {
+	      var rez = servSet(this.parentNode.itPath,'com=com','<set>'+this.parentNode.childNodes[0].value+'</set>',true);
+	      if( rez && parseInt(rez.getAttribute('rez')) != 0 ) alert(nodeText(rez));
+	      setTimeout('pageRefresh()',500);
+	      this.parentNode.isEdited = false;
+	      this.parentNode.removeChild(this);
+	      return false;
+	    }
+	    this.parentNode.appendChild(btOk);
+	    this.parentNode.isEdited = true;
+	    return true;
+	  }
+	}
+	//>> Check use label
+	if( t_s.getAttribute('dscr') )
+	{
+	  lab = document.createElement('span'); lab.className = 'label';
+	  cBlk.dBlk = document.createElement('div'); cBlk.dBlk.className = 'elem'; cBlk.dBlk.appendChild(lab);
+	  if( val_w ) cBlk.dBlk.appendChild(val_w);
+	  if( val_r ) cBlk.dBlk.appendChild(val_r);
+	  cBlk.appendChild(cBlk.dBlk);
+	}
+	else
+	{
+	  if( val_w ) { if(cBlk.dBlk) cBlk.dBlk.appendChild(val_w); else { delete val_w; val_w = null; } }
+	  if( val_r ) { if(cBlk.dBlk) cBlk.dBlk.appendChild(val_r); else { delete val_r; val_r = null; } }
+	}
+	t_s.addr_lab = lab; t_s.addr_val_r = val_r; t_s.addr_val_w = val_w;
+      }
+      else { lab = t_s.addr_lab; val_r = t_s.addr_val_r; val_w = t_s.addr_val_w; }
       //>> Fill line
       var sval = nodeText(dataReq);
       if( t_s.getAttribute('tp') == 'hex' ) sval = '0x'+parseInt(nodeText(dataReq)).toString(16);
       else if( t_s.getAttribute('tp') == 'oct' ) sval = '0'+parseInt(nodeText(dataReq)).toString(8);
 
-      if( lab ) setNodeText(lab,t_s.getAttribute('dscr')+': ');
-      if( val_w /*&& !val_w->isEdited()*/ )
-      {
-	val_w.title = t_s.getAttribute('help');
-	val_w.childNodes[0].value = sval;
-      }
+      if( lab ) setNodeText(lab,t_s.getAttribute('dscr')+':');
       if( val_r )
       {
 	val_r.title = t_s.getAttribute('help');
 	setNodeText(val_r,sval);
+      }
+      if( val_w && !val_w.isEdited )
+      {
+	val_w.title = t_s.getAttribute('help');
+	val_w.childNodes[0].value = val_w.childNodes[0].defaultValue = sval;
+	//>> Load combo list
+	if( t_s.getAttribute('dest') == 'sel_ed' )
+	{
+	  if( !t_s.getAttribute('select') ) val_w.sel_list = t_s.getAttribute('sel_list').split(';');
+	  else
+	  {
+	    val_w.sel_list = new Array();
+	    var x_lst = servGet(selPath+'/'+(t_s.getAttribute('select').replace(/%/g,'%25').replace(/\//g,'%2f')),'com=get');
+	    if( x_lst )
+	      for( var i_el = 0; i_el < x_lst.childNodes.length; i_el++ )
+		if( x_lst.childNodes[i_el].nodeName.toLowerCase() == 'el' )
+		  val_w.sel_list.push(nodeText(x_lst.childNodes[i_el]));
+	  }
+	}
       }
     }
   }
@@ -1005,28 +1178,21 @@ function actEnable( act, vl )
 				 actEl.childNodes[0].src.replace('filtr=none','filtr=gray');
 }
 /***************************************************
- * upStruct - Info page tree update structure.     *
+ * chkStruct - Info page tree check structure.     *
  ***************************************************/
-function upStruct( w_nd, n_nd )
+function chkStruct( w_nd, n_nd )
 {
-  var strCh = false;
-
   //> Check access
-  if( w_nd.getAttribute('acs') != n_nd.getAttribute('acs') ) strCh = true;
+  if( w_nd.getAttribute('acs') != n_nd.getAttribute('acs') ) return true;
 
   //> Scan deleted nodes
   for( var i_w = 0; i_w < w_nd.childNodes.length; i_w++ )
   {
     var i_n;
     for( i_n = 0; i_n < n_nd.childNodes.length; i_n++ )
-      if( w_nd.childNodes[i_w].nodeName == n_nd.childNodes[i_n].nodeName && w_nd.childNodes[i_w].getAttribute('id') == n_nd.childNodes[i_n].getAttribute('id') )
+      if( w_nd.childNodes[i_w].nodeName.toLowerCase() == n_nd.childNodes[i_n].nodeName.toLowerCase() && w_nd.childNodes[i_w].getAttribute('id') == n_nd.childNodes[i_n].getAttribute('id') )
 	break;
-    if( i_n >= n_nd.childNodes.length )
-    {
-      w_nd.removeChild(w_nd.childNodes[i_w]);
-      i_w--;
-      if( w_nd.nodeName != 'table' && w_nd.nodeName != 'list' ) strCh = true;
-    }
+    if( i_n >= n_nd.childNodes.length ) return true;
   }
 
   //> Scan for new nodes and check present nodes
@@ -1034,52 +1200,29 @@ function upStruct( w_nd, n_nd )
   {
     var i_w;
     for( i_w = 0; i_w < w_nd.childNodes.length; i_w++ )
-      if( w_nd.childNodes[i_w].nodeName == n_nd.childNodes[i_n].nodeName &&
+      if( w_nd.childNodes[i_w].nodeName.toLowerCase() == n_nd.childNodes[i_n].nodeName.toLowerCase() &&
 	    w_nd.childNodes[i_w].getAttribute('id') == n_nd.childNodes[i_n].getAttribute('id') )
 	break;
-    if( i_w >= w_nd.childNodes.length )
-    {
-      //>> Add node
-      if( i_n >= w_nd.childNodes.length ) w_nd.appendChild(n_nd.childNodes[i_n].cloneNode(true));
-      else w_nd.insertBefore(n_nd.childNodes[i_n].cloneNode(true),w_nd.childNodes[i_n]);
-      strCh = true;
-      i_w = i_n;
-    }
-    else
-    {
-      //>> Check present node
-      if( upStruct(w_nd.childNodes[i_w],n_nd.childNodes[i_n]) ) strCh = true;
-      if( strCh && w_nd.nodeName == 'oscada_cntr' )
-      {
-	w_nd.childNodes[i_w].setAttribute('qview','0');
-	strCh = false;
-	continue;
-      }
-    }
+    if( i_w >= w_nd.childNodes.length ) return true;
+    else if( chkStruct(w_nd.childNodes[i_w],n_nd.childNodes[i_n]) ) return true;
 
     //> Check of the description present
-    if( (w_nd.childNodes[i_w].getAttribute('dscr').length && !n_nd.childNodes[i_n].getAttribute('dscr').length) ||
-	(!w_nd.childNodes[i_w].getAttribute('dscr').length && n_nd.childNodes[i_n].getAttribute('dscr').length) )
-      strCh = true;
+    if( (w_nd.childNodes[i_w].getAttribute('dscr') && !n_nd.childNodes[i_n].getAttribute('dscr')) ||
+	(!w_nd.childNodes[i_w].getAttribute('dscr') && n_nd.childNodes[i_n].getAttribute('dscr')) )
+      return true;
 
     //> Check base fields destination change
-    if( w_nd.childNodes[i_w].nodeName == 'fld' &&
+    if( w_nd.childNodes[i_w].nodeName.toLowerCase() == 'fld' &&
 	(w_nd.childNodes[i_w].getAttribute('dest') != n_nd.childNodes[i_n].getAttribute('dest') ||
 	w_nd.childNodes[i_w].getAttribute('tp') != n_nd.childNodes[i_n].getAttribute('tp')) )
     {
       w_nd.childNodes[i_w].setAttribute('dest','');
       w_nd.childNodes[i_w].setAttribute('tp','');
-      strCh = true;
+      return true;
     }
-
-    //> Sync node parameters (text and atributes)
-    if( nodeText(w_nd.childNodes[i_w]) != nodeText(n_nd.childNodes[i_n]) )
-      setNodeText(w_nd.childNodes[i_w],nodeText(n_nd.childNodes[i_n]));
-    for( var i_a = 0; i_a < n_nd.childNodes[i_n].attributes.length; i_a++ )
-      w_nd.childNodes[i_w].setAttribute(n_nd.childNodes[i_n].attributes[i_a].name,n_nd.childNodes[i_n].attributes[i_a].value);
   }
 
-  return strCh;
+  return false;
 }
 /***************************************************
  * tabSelect - Select page tab                     *
@@ -1093,7 +1236,7 @@ function tabSelect( tab )
   tab.className = 'active';
 
   for( var i_cf = 0; i_cf < root.childNodes.length; i_cf++ )
-    if( root.childNodes[i_cf].nodeName == 'area' && nodeText(tab) == root.childNodes[i_cf].getAttribute('dscr') )
+    if( root.childNodes[i_cf].nodeName.toLowerCase() == 'area' && nodeText(tab) == root.childNodes[i_cf].getAttribute('dscr') )
     { root.childNodes[i_cf].setAttribute('qview','0'); break; }
 
   pageCyclRefrStop();
@@ -1135,7 +1278,7 @@ function hostsUpdate( )
       //> Load groups
       liN.grps = new Array();
       for( var i_grp = 0; i_grp < hostN.childNodes[i].childNodes.length; i_grp++ )
-	if( hostN.childNodes[i].childNodes[i_grp].nodeName == 'grp' )
+	if( hostN.childNodes[i].childNodes[i_grp].nodeName.toLowerCase() == 'grp' )
 	  liN.grps.push(hostN.childNodes[i].childNodes[i_grp]);
       //> Init links
       var treeIco = '/'+MOD_ID+'/img_tree'+(liN.isExpand?'Minus':'Plus')+((i!=0)?'Up':'')+((i!=(hostN.childNodes.length-1))?'Down':'');
@@ -1167,14 +1310,29 @@ function getPopup( )
   var popUpMenu = document.getElementById('popupmenu');
   if( !popUpMenu )
   {
-    popUpMenu = document.createElement('div');
-    popUpMenu.id = 'popupmenu';
+    popUpMenu = document.createElement('div'); popUpMenu.id = 'popupmenu';
     popUpMenu.appendChild(document.createElement('select'));
     popUpMenu.childNodes[0].onblur = function() { this.parentNode.style.visibility = 'hidden'; }
     document.body.appendChild(popUpMenu);
     popUpMenu.style.visibility = 'hidden';
   }
   return popUpMenu;
+}
+/**************************************************
+ * getCombo - Get combo menu.                     *
+ **************************************************/
+function getCombo( )
+{
+  var comboMenu = document.getElementById('combomenu');
+  if( !comboMenu )
+  {
+    comboMenu = document.createElement('div'); comboMenu.id = 'combomenu';
+    comboMenu.appendChild(document.createElement('select'));
+    comboMenu.childNodes[0].onblur = function() { this.parentNode.style.visibility = 'hidden'; }
+    document.body.appendChild(comboMenu);
+    comboMenu.style.visibility = 'hidden';
+  }
+  return comboMenu;
 }
 /**************************************************
  * pageRefresh - Curent page refrash call.        *
@@ -1258,7 +1416,7 @@ function itAdd( )
   if( !selPath.length ) return;
   var branchS = null;
   for( var i_ch = 0; i_ch < root.childNodes.length; i_ch++ )
-    if( root.childNodes[i_ch].nodeName == 'branches' && root.childNodes[i_ch].getAttribute('id') == 'br' )
+    if( root.childNodes[i_ch].nodeName.toLowerCase() == 'branches' && root.childNodes[i_ch].getAttribute('id') == 'br' )
       branchS =  root.childNodes[i_ch];
   if( !branchS ) return;
 
@@ -1278,7 +1436,9 @@ function itAdd( )
   dlgWin.document.getElementById('type').childNodes[1].childNodes[0].onchange = function( )
   {
     if( this.selectedIndex < 0 ) return;
-    dlgWin.document.getElementById('id').childNodes[1].childNodes[0].maxLength = this.options[this.selectedIndex].getAttribute('idSz');
+    var fIdVal = dlgWin.document.getElementById('id').childNodes[1].childNodes[0];
+    fIdVal.maxLength = this.options[this.selectedIndex].getAttribute('idSz');
+    if( !fIdVal.maxLength ) fIdVal.maxLength = 1000;
     dlgWin.document.getElementById('name').style.display = parseInt(this.options[this.selectedIndex].getAttribute('idm'))?'':'none';
   }
   dlgWin.document.getElementById('type').childNodes[1].childNodes[0].onchange();
@@ -1302,8 +1462,9 @@ function itAdd( )
     //> Send command
     var rez = servSet(selPath+'/%2fbr%2f'+gbrId,'com=com',"<add "+(idm?("id='"+inpId+"'"):"")+">"+inpName+"</add>",true);
     if( !rez || parseInt(rez.getAttribute('rez')) != 0 ) { if(rez) alert(nodeText(rez)); dlgWin.close(); return false; }
+    dlgWin.close();
     treeUpdate(); pageRefresh();
-    dlgWin.close(); return false;
+    return false;
   }
 }
 /**************************************************
@@ -1378,7 +1539,7 @@ function itPaste( )
 
   if( parseInt(root.getAttribute('acs'))&SEQ_WR ) { typeCfg+="<option idSz='-1' gid=''>Selected</option>"; itCnt++; }
   for( var i_ch = 0; i_ch < root.childNodes.length; i_ch++ )
-    if( root.childNodes[i_ch].nodeName == 'branches' && root.childNodes[i_ch].getAttribute('id') == 'br' )
+    if( root.childNodes[i_ch].nodeName.toLowerCase() == 'branches' && root.childNodes[i_ch].getAttribute('id') == 'br' )
       branchS =  root.childNodes[i_ch];
   if( branchS )
     for( var i_b = 0; i_b < branchS.childNodes.length; i_b++, itCnt++ )
@@ -1405,7 +1566,8 @@ function itPaste( )
     else
     {
       dlgWin.document.getElementById('id').style.display = '';
-      dlgWin.document.getElementById('id').childNodes[1].childNodes[0].maxLength = idSz;
+      var fIdVal = dlgWin.document.getElementById('id').childNodes[1].childNodes[0];
+      fIdVal.maxLength = idSz; if( !fIdVal.maxLength ) fIdVal.maxLength = 1000;
     }
   }
   dlgWin.document.getElementById('type').childNodes[1].childNodes[0].selectedIndex = defIt;

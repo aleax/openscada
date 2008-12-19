@@ -37,18 +37,22 @@ const char *Sensors::mbmon_cmd = "mbmon -r -c 1";	//write one try to stdout
 //*************************************************
 Sensors::Sensors( ) : libsensor_ok(false)
 {
-    //- Libsensor API init -
+    //> Libsensor API init
+#if SENSORS_API_VERSION >= 0x400
+    if( sensors_init(NULL) == 0 ) libsensor_ok = true;
+#else
     FILE *f = fopen("/etc/sensors.conf", "r");
     if( f )
     {
-	if( sensors_init(f) == 0 )	libsensor_ok = true;
+	if( sensors_init(f) == 0 ) libsensor_ok = true;
 	fclose(f);
     }
+#endif
 }
 
 Sensors::~Sensors( )
 {
-    //- Libsensor API cleanup -
+    //> Libsensor API cleanup
     if( libsensor_ok ) sensors_cleanup();
 }
 
@@ -64,17 +68,47 @@ void Sensors::deInit( TMdPrm *prm )
 
 void Sensors::getVal( TMdPrm *prm )
 {
-    //- Use libsensor -
+    //> Use libsensor
     if( libsensor_ok )
     {
-	int nr = 0, nr1, nr2;
+	int nr = 0;
 	double val;
 	string	s_id;
-	const sensors_chip_name		*name;
-	const sensors_feature_data	*feature;
+	const sensors_chip_name	*name;
+#if SENSORS_API_VERSION >= 0x400
+        while( name = sensors_get_detected_chips(NULL,&nr) )
+	{
+	    const sensors_subfeature *feature;
+	    const sensors_feature *main_feature;
+	    int nr1 = 0;
+	    while( main_feature = sensors_get_features(name, &nr1) )
+	    {
+		switch( main_feature->type )
+		{
+		    case SENSORS_FEATURE_IN:
+			feature = sensors_get_subfeature(name,main_feature,SENSORS_SUBFEATURE_IN_INPUT);
+			break;
+		    case SENSORS_FEATURE_FAN:
+			feature = sensors_get_subfeature(name, main_feature, SENSORS_SUBFEATURE_FAN_INPUT);
+			break;
+		    case SENSORS_FEATURE_TEMP:
+			feature = sensors_get_subfeature(name, main_feature, SENSORS_SUBFEATURE_TEMP_INPUT);
+			break;
+		}
+		if( !feature ) continue;
+		s_id = string(name->prefix)+"_"+main_feature->name;
+		if( !prm->vlPresent(s_id) )
+		    fldAdd( new TFld(s_id.c_str(),(string(name->prefix)+" "+main_feature->name).c_str(),
+			TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
+		if( sensors_get_value( name, feature->number, &val) == 0 )
+		    prm->vlAt(s_id).at().setR(val,0,true);
+	    }
+	}
+#else
 	while( name = sensors_get_detected_chips(&nr) )
 	{
-	    nr1 = 0, nr2 = 0;
+	    int nr1 = 0, nr2 = 0;
+	    const sensors_feature_data *feature;
 	    while( feature = sensors_get_all_features( *name, &nr1, &nr2 ) )
 		if( sensors_get_ignored( *name, feature->number ) == 1 && feature->mapping == SENSORS_NO_MAPPING )
 		{
@@ -86,8 +120,9 @@ void Sensors::getVal( TMdPrm *prm )
 		    prm->vlAt(s_id).at().setR(val,0,true);
 		}
 	}
+#endif
     }
-    //- Use mbmon -
+    //> Use mbmon
     else
     {
 	char buf[100], name[31];
@@ -115,22 +150,47 @@ void Sensors::makeActiveDA( TMdContr *a_cntr )
     if( !a_cntr->present(ap_nm) )
     {
 	bool sens_allow = false;
-	//- Use libsensor check -
+	//> Use libsensor check
 	if( libsensor_ok )
 	{
 	    int nr = 0, nr1, nr2;
 	    char  id_name[512], sensor_path[512];
 	    const sensors_chip_name	*name;
-	    const sensors_feature_data	*feature;
+#if SENSORS_API_VERSION >= 0x400
+	    while( name = sensors_get_detected_chips(NULL,&nr) )
+	    {
+		const sensors_subfeature *feature;
+		const sensors_feature *main_feature;
+		int nr1 = 0;
+		while( main_feature = sensors_get_features(name, &nr1) )
+		{
+		    switch( main_feature->type )
+		    {
+			case SENSORS_FEATURE_IN:
+			    feature = sensors_get_subfeature(name,main_feature,SENSORS_SUBFEATURE_IN_INPUT);
+			    break;
+			case SENSORS_FEATURE_FAN:
+			    feature = sensors_get_subfeature(name, main_feature, SENSORS_SUBFEATURE_FAN_INPUT);
+			    break;
+			case SENSORS_FEATURE_TEMP:
+			    feature = sensors_get_subfeature(name, main_feature, SENSORS_SUBFEATURE_TEMP_INPUT);
+			    break;
+		    }
+		    if( feature ) { sens_allow |= true; break; }
+		}
+	    }
+#else
 	    while( name = sensors_get_detected_chips(&nr) )
 	    {
+		const sensors_feature_data *feature;
 		nr1 = 0, nr2 = 0;
 		while( feature = sensors_get_all_features( *name, &nr1, &nr2 ) )
 		    if( sensors_get_ignored( *name, feature->number ) == 1 && feature->mapping == SENSORS_NO_MAPPING )
 		    { sens_allow |= true; break; }
 	    }
+#endif
 	}
-	//- Check monitor present -
+	//> Check monitor present
 	else
 	{
 	    FILE *fp = popen(mbmon_cmd,"r");
@@ -142,7 +202,7 @@ void Sensors::makeActiveDA( TMdContr *a_cntr )
 		pclose(fp);
 	    }
 	}
-	//- Sensor parameter create -
+	//> Sensor parameter create
 	if( sens_allow )
 	{
 	    a_cntr->add(ap_nm,0);
