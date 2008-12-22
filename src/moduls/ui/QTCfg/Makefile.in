@@ -182,7 +182,8 @@ localstatedir = @localstatedir@
 mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
-oscd_docdir = @oscd_docdir@
+oscd_LIBREVISION = @oscd_LIBREVISION@
+oscd_docmodul = @oscd_docmodul@
 oscd_localedir = @oscd_localedir@
 oscd_moduldir = @oscd_moduldir@
 oscd_modulpref = @oscd_modulpref@
@@ -212,7 +213,7 @@ ui_QTCfg_so_SOURCES = tuimod.cpp qrc_qtcfg.cpp qtcfg.cpp selfwidg.cpp moc_qtcfg.
 ui_QTCfg_so_LDADD = -L$(QT4_LIB) -lQtGui
 
 #PO files process and doc install
-fm_name = Mod_UI_QTCfg
+doc_name = $(oscd_docmodul)UI.QTCfg
 m_name = $(oscd_modulpref)QTCfg
 all: all-am
 
@@ -227,9 +228,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/moduls/ui/QTCfg/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/moduls/ui/QTCfg/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  src/moduls/ui/QTCfg/Makefile
+	  $(AUTOMAKE) --foreign  src/moduls/ui/QTCfg/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -514,7 +515,7 @@ messages:
 	xgettext -o $$name -C -a *.cpp *.h &> /dev/null ; \
 	for cat in $$catalogs; do \
 	msgmerge -U $$cat $$name ; \
-	done						
+	done
 
 install-data-local:
 	@catalogs=`find ./po -name \*.po` ; \
@@ -525,8 +526,8 @@ install-data-local:
 	cp $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
 	rm $$name ; \
 	done
-	install -m 755 -d $(oscd_docdir)/$(fm_name)
-	install -m 644 doc/*.pdf $(oscd_docdir)/$(fm_name)
+	install -m 755 -d $(doc_name)
+	install -m 644 doc/*.pdf $(doc_name)
 
 uninstall-local:
 	@catalogs=`find ./po -name \*.po` ; \

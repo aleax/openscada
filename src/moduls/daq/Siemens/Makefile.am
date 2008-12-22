@@ -11,7 +11,7 @@ daq_Siemens_so_SOURCES = siemens.cpp cif_api.c nodave.c openSocket.c setport.c
 
 
 #PO files process and doc install
-fm_name = Mod_DAQ_Siemens
+doc_name = $(oscd_docmodul)DAQ.Siemens
 m_name = $(oscd_modulpref)Siemens
 
 messages:
@@ -31,8 +31,8 @@ install-data-local:
 	cp $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
 	rm $$name ; \
 	done
-	install -m 755 -d $(oscd_docdir)/$(fm_name)
-	install -m 644 doc/*.pdf $(oscd_docdir)/$(fm_name)
+	install -m 755 -d $(doc_name)
+	install -m 644 doc/*.pdf $(doc_name)
 
 uninstall-local:
 	@catalogs=`find ./po -name \*.po` ; \

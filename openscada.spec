@@ -57,7 +57,7 @@ The %name-doc package include documents files.
 %package devel
 Summary: Open SCADA development.
 Group: Development/C++
-#Requires: %name
+Requires: %name = %version-%release
 %description devel
 The %name-devel package includes library archives and include files.
 %description devel -l ru_RU.UTF8
@@ -123,9 +123,10 @@ echo "OpenSCADA values archive dir" > %buildroot/var/spool/openscada/ARCHIVES/VA
 %config %_initdir/oscadad
 %_bindir/openscada
 %_bindir/openscada_start
+%doc README README_ru COPYING ChangeLog INSTALL TODO TODO_ru TODO_uk
 %_desktopdir/openscada.desktop
 %_iconsdir/openscada.png
-%_libdir/*.so*
+%_libdir/*.so.*
 %_libdir/openscada/*.so
 %_datadir/locale/*/LC_MESSAGES/*
 /var/spool/openscada/DATA/.info
@@ -135,12 +136,14 @@ echo "OpenSCADA values archive dir" > %buildroot/var/spool/openscada/ARCHIVES/VA
 
 %files doc
 %defattr(-,root,root)
-%_datadir/doc/*
-#doc README README_ru COPYING INSTALL TODO TODO_ru TODO_uk ChangeLog doc/*
+%doc doc/*.pdf doc/Modules
+#_datadir/doc/*
 
 %files devel
 %defattr(-,root,root)
-%_libdir/*.*
+#_libdir/*.*
+%_libdir/*.so
+%_libdir/*.a
 %_includedir/openscada/*
 
 %files demo
@@ -152,6 +155,10 @@ echo "OpenSCADA values archive dir" > %buildroot/var/spool/openscada/ARCHIVES/VA
 /var/spool/openscada/DATA/*.db
 
 %changelog
+* Mon Dec 22 2008 Roman Savochenko <rom_as@diyaorg.dp.ua>
+- Documentation pack is unified and separated to project info files and documentation.
+- Dynamic librarie's links packing into main package and development is fixed.
+
 * Thu Oct 02 2008 Roman Savochenko <rom_as@fromru.com>
 - Package name simple changing allow is added.
 

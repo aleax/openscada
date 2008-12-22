@@ -213,7 +213,8 @@ localstatedir = @localstatedir@
 mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
-oscd_docdir = @oscd_docdir@
+oscd_LIBREVISION = @oscd_LIBREVISION@
+oscd_docmodul = @oscd_docmodul@
 oscd_localedir = @oscd_localedir@
 oscd_moduldir = @oscd_moduldir@
 oscd_modulpref = @oscd_modulpref@
@@ -245,12 +246,12 @@ liboscada_la_SOURCES = tsys.cpp resalloc.cpp tarchives.cpp tarchval.cpp tbds.cpp
     telem.cpp tparamcontr.cpp tmodule.cpp xml.cpp tcntrnode.cpp tdaqs.cpp tfunction.cpp
 
 liboscada_la_LIBADD = -ldl -lpthread -lrt -lexpat -lcrypt -lgd -lz
-liboscada_la_LDFLAGS = -no-undefined -version-info 0:0:0
+liboscada_la_LDFLAGS = -no-undefined -version-info $(oscd_LIBREVISION)
 #---------- Dinamic linking -----------------------------------------------
-openscada_SOURCES = main.cpp 
+openscada_SOURCES = main.cpp
 openscada_LDFLAGS = $(EXTRA_LDFLAGS) -Wl,-rpath,$(libdir) -loscada
 #---------- Static linking -----------------------------------------------
-#OpenScada_SOURCES = main.cpp 
+#OpenScada_SOURCES = main.cpp
 #OpenScada_LDFLAGS = -export-dynamic -static -loscada
 m_name = $(PACKAGE)
 all: all-recursive
@@ -266,9 +267,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  src/Makefile
+	  $(AUTOMAKE) --foreign  src/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \

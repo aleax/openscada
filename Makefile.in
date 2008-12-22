@@ -186,7 +186,8 @@ localstatedir = @localstatedir@
 mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
-oscd_docdir = @oscd_docdir@
+oscd_LIBREVISION = @oscd_LIBREVISION@
+oscd_docmodul = @oscd_docmodul@
 oscd_localedir = @oscd_localedir@
 oscd_moduldir = @oscd_moduldir@
 oscd_modulpref = @oscd_modulpref@
@@ -585,7 +586,7 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-recursive
 
-clean-am: clean-generic clean-libtool mostlyclean-am
+clean-am: clean-generic clean-libtool clean-local mostlyclean-am
 
 distclean: distclean-recursive
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
@@ -603,7 +604,7 @@ info: info-recursive
 
 info-am:
 
-install-data-am: install-data-local
+install-data-am:
 
 install-dvi: install-dvi-recursive
 
@@ -646,12 +647,12 @@ uninstall-am:
 
 .PHONY: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) CTAGS GTAGS \
 	all all-am am--refresh check check-am clean clean-generic \
-	clean-libtool ctags ctags-recursive dist dist-all dist-bzip2 \
-	dist-gzip dist-lzma dist-shar dist-tarZ dist-zip distcheck \
-	distclean distclean-generic distclean-hdr distclean-libtool \
-	distclean-tags distcleancheck distdir distuninstallcheck dvi \
-	dvi-am html html-am info info-am install install-am \
-	install-data install-data-am install-data-local install-dvi \
+	clean-libtool clean-local ctags ctags-recursive dist dist-all \
+	dist-bzip2 dist-gzip dist-lzma dist-shar dist-tarZ dist-zip \
+	distcheck distclean distclean-generic distclean-hdr \
+	distclean-libtool distclean-tags distcleancheck distdir \
+	distuninstallcheck dvi dvi-am html html-am info info-am \
+	install install-am install-data install-data-am install-dvi \
 	install-dvi-am install-exec install-exec-am install-html \
 	install-html-am install-info install-info-am install-man \
 	install-pdf install-pdf-am install-ps install-ps-am \
@@ -661,10 +662,8 @@ uninstall-am:
 	ps ps-am tags tags-recursive uninstall uninstall-am
 
 
-install-data-local:
-	install -m 755 -d $(oscd_docdir)
-	install -m 644 README README_ru COPYING INSTALL TODO TODO_ru TODO_uk ChangeLog $(oscd_docdir)
-	install -m 644 doc/*.pdf $(oscd_docdir)
+clean-local:
+	rm -rf doc/Modules ;
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

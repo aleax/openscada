@@ -2,6 +2,11 @@
 AC_PREREQ(2.50)
 
 AC_INIT([OpenSCADA],[0.6.2],[rom_as@fromru.com])
+oscd_LIBREVISION="0:10:0"
+oscd_defprefix="/usr"
+oscd_modulpref="oscd_"
+oscd_docmodul="../../../../doc/Modules/"
+
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE(AC_PACKAGE_TARNAME, AC_PACKAGE_VERSION)
 AM_CONFIG_HEADER(config.h)
@@ -96,15 +101,14 @@ AC_FUNC_STAT
 
 AC_ISC_POSIX
 
-AC_PREFIX_DEFAULT("/usr")
+AC_PREFIX_DEFAULT(oscd_defprefix)
 oscd_moduldir="\${libdir}/${PACKAGE}"
-AC_SUBST(oscd_moduldir)
 oscd_localedir="\${DESTDIR}\${datadir}/locale"
+AC_SUBST(oscd_LIBREVISION)
+AC_SUBST(oscd_moduldir)
 AC_SUBST(oscd_localedir)
-oscd_docdir="\${DESTDIR}\${datadir}/doc/${PACKAGE_TARNAME}-${PACKAGE_VERSION}"
-AC_SUBST(oscd_docdir)
-oscd_modulpref="oscd_"
 AC_SUBST(oscd_modulpref)
+AC_SUBST(oscd_docmodul)
 
 LDFLAGS=
 CXXFLAGS="-O2 -DOSC_HASHMAP"

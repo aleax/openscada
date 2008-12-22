@@ -870,7 +870,7 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	//-- Parse post category and path to area --
 	string prs_cat, prs_path;
 	unsigned i_el;
- 
+
 	string prs_comm;
 	for( cntEl = ses.cnt.begin(); cntEl != ses.cnt.end(); cntEl++ )
 	{
@@ -946,15 +946,15 @@ int  TWEB::postVal( SSess &ses, XMLNode &node, string prs_path)
 	XMLNode *t_c = node.childGet(i_cf);
 	if( t_c->name() == "fld" && (atoi(t_c->attr("acs").c_str())&SEQ_WR) )
 	{
-	    if( !valPrepare( ses, *t_c,prs_path, true ) ) 
+	    if( !valPrepare( ses, *t_c,prs_path, true ) )
 		continue;
 	    mess_info(nodePath().c_str(),_("%s| Change <%s:%s> to %s"),
 		ses.user.c_str(),
 		t_c->attr("id").c_str(),
 		t_c->attr("dscr").c_str(),
 		t_c->text().c_str());
-		
-	    XMLNode req("set"); 
+
+	    XMLNode req("set");
 	    req.setAttr("path",ses.url+"/"+TSYS::strEncode(prs_path+t_c->attr("id"), TSYS::PathEl))->
 		setAttr("user",ses.user)->setText(t_c->text());
 	    if(cntrIfCmd(req)) { ses.mess.push_back(req.text().c_str()); return 0x01; }

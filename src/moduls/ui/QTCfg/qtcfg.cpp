@@ -1109,10 +1109,10 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	else if( t_s.name() == "img" )
 	{
 	    string br_path = TSYS::strEncode(a_path+t_s.attr("id"),TSYS::PathEl);
-		
+
 	    QLabel *lab;
 	    ImgView *img;
-		
+
 	    if( widget )
 	    {
 		img = new ImgView(widget,0,atoi(t_s.attr("h_sz").c_str()),atoi(t_s.attr("v_sz").c_str()));
@@ -1128,7 +1128,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		lab = new QLabel(widget);
 		box->addWidget(lab);
 		box->addWidget(img);
-		if(box->direction()==QBoxLayout::LeftToRight) 
+		if( box->direction() == QBoxLayout::LeftToRight )
 		{
 		    lab->setAlignment( Qt::AlignTop );
 		    box->setSpacing(6);

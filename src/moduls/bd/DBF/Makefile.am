@@ -9,7 +9,7 @@ oscd_modul_PROGRAMS = bd_DBF.so
 bd_DBF_so_SOURCES = dbf_mod.cpp dbf.cpp
 
 #PO files process and doc install
-fm_name = Mod_DB_DBF
+doc_name = $(oscd_docmodul)DB.DBF
 m_name = $(oscd_modulpref)DBF
 
 messages:
@@ -29,8 +29,8 @@ install-data-local:
 	cp $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
 	rm $$name ; \
 	done
-	install -m 755 -d $(oscd_docdir)/$(fm_name)
-	cp -r doc/*.pdf $(oscd_docdir)/$(fm_name)
+	install -m 755 -d $(doc_name)
+	cp -r doc/*.pdf $(doc_name)
 
 uninstall-local:
 	@catalogs=`find ./po -name \*.po` ; \

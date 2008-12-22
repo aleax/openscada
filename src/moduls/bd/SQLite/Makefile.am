@@ -5,12 +5,12 @@ EXTRA_DIST = *.h po/* doc/*
 AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
 AM_LDFLAGS= -shared -module
 
-oscd_modul_PROGRAMS = bd_SQLite.so 
+oscd_modul_PROGRAMS = bd_SQLite.so
 bd_SQLite_so_SOURCES = bd_sqlite.cpp
 bd_SQLite_so_LDADD = -lsqlite3
 
 #PO files process and doc install
-fm_name = Mod_DB_SQLite
+doc_name = $(oscd_docmodul)DB.SQLite
 m_name = $(oscd_modulpref)SQLite
 
 messages:
@@ -30,8 +30,8 @@ install-data-local:
 	cp $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
 	rm $$name ; \
 	done
-	install -m 755 -d $(oscd_docdir)/$(fm_name)
-	install -m 644 doc/*.pdf $(oscd_docdir)/$(fm_name)
+	install -m 755 -d $(doc_name)
+	install -m 644 doc/*.pdf $(doc_name)
 
 uninstall-local:
 	@catalogs=`find ./po -name \*.po` ; \

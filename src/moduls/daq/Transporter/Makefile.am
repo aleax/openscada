@@ -9,7 +9,7 @@ oscd_modul_PROGRAMS = daq_Transporter.so
 daq_Transporter_so_SOURCES = transporter.cpp
 
 #PO files process and doc install
-fm_name = Mod_DAQ_Transporter
+doc_name = $(oscd_docmodul)DAQ.Transporter
 m_name = $(oscd_modulpref)Transporter
 
 messages:
@@ -29,8 +29,8 @@ install-data-local:
 	cp $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
 	rm $$name ; \
 	done
-	install -m 755 -d $(oscd_docdir)/$(fm_name)
-	install -m 644 doc/*.pdf $(oscd_docdir)/$(fm_name)
+	install -m 755 -d $(doc_name)
+	install -m 644 doc/*.pdf $(doc_name)
 
 uninstall-local:
 	@catalogs=`find ./po -name \*.po` ; \

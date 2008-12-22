@@ -15,7 +15,7 @@ moc_tuimod.cpp: tuimod.h
 	$(QT4_MOC) tuimod.h > moc_tuimod.cpp
 
 #PO files process and doc install
-fm_name = Mod_UI_QTStarter
+doc_name = $(oscd_docmodul)UI.QTStarter
 m_name = $(oscd_modulpref)QTStarter
 
 messages:
@@ -24,7 +24,7 @@ messages:
 	xgettext -o $$name -C -a *.cpp *.h &> /dev/null ; \
 	for cat in $$catalogs; do \
 	msgmerge -U $$cat $$name ; \
-	done						
+	done
 
 install-data-local:
 	@catalogs=`find ./po -name \*.po` ; \
@@ -35,8 +35,8 @@ install-data-local:
 	cp $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
 	rm $$name ; \
 	done
-	install -m 755 -d $(oscd_docdir)/$(fm_name)
-	install -m 644 doc/*.pdf $(oscd_docdir)/$(fm_name)
+	install -m 755 -d $(doc_name)
+	install -m 644 doc/*.pdf $(doc_name)
 
 uninstall-local:
 	@catalogs=`find ./po -name \*.po` ; \

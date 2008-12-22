@@ -32,7 +32,7 @@ moc_vis_shape_elfig.cpp: vis_shape_elfig.h
 	$(QT4_MOC) vis_shape_elfig.h > moc_vis_shape_elfig.cpp
 
 #PO files process and doc install
-fm_name = Mod_UI_Vision
+doc_name = $(oscd_docmodul)UI.Vision
 m_name = $(oscd_modulpref)Vision
 
 messages:
@@ -52,8 +52,8 @@ install-data-local:
 	cp $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
 	rm $$name ; \
 	done
-	install -m 755 -d $(oscd_docdir)/$(fm_name)
-	install -m 644 doc/*.pdf $(oscd_docdir)/$(fm_name)
+	install -m 755 -d $(doc_name)
+	install -m 644 doc/*.pdf $(doc_name)
 
 uninstall-local:
 	@catalogs=`find ./po -name \*.po` ; \

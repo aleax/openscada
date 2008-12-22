@@ -5,12 +5,12 @@ EXTRA_DIST = *.h po/* doc/*
 AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC -DUSE_OLD_FUNCTIONS
 AM_LDFLAGS= -shared -module
 
-oscd_modul_PROGRAMS = bd_MySQL.so 
+oscd_modul_PROGRAMS = bd_MySQL.so
 bd_MySQL_so_SOURCES = my_sql.cpp
 bd_MySQL_so_LDADD = -lmysqlclient
 
 #PO files process and doc install
-fm_name = Mod_DB_MySQL
+doc_name = $(oscd_docmodul)DB.MySQL
 m_name = $(oscd_modulpref)MySQL
 
 messages:
@@ -30,8 +30,8 @@ install-data-local:
 	cp $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
 	rm $$name ; \
 	done
-	install -m 755 -d $(oscd_docdir)/$(fm_name)
-	install -m 644 doc/*.pdf $(oscd_docdir)/$(fm_name)
+	install -m 755 -d $(doc_name)
+	install -m 644 doc/*.pdf $(doc_name)
 
 uninstall-local:
 	@catalogs=`find ./po -name \*.po` ; \

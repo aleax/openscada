@@ -353,10 +353,6 @@ function pageDisplay( path )
     //> Stop refresh
     pageCyclRefrStop();
 
-    //> Delete all tabs for new node
-//    var tabs = document.getElementById('pgTabs');
-//    while( tabs.childNodes.length ) tabs.removeChild(tabs.childNodes[0]);
-
     if( selPath.length && document.getElementById(selPath) ) document.getElementById(selPath).className = '';
     selPath = path;
     if( selPath.length && document.getElementById(selPath) ) document.getElementById(selPath).className = 'select';
@@ -376,7 +372,7 @@ function pageDisplay( path )
     { pgInfo = iTree; pgInfo.setAttribute('path',selPath); root = pgInfo.childNodes[0]; }
   }
 
-  selectChildRecArea(root,'/');
+  selectChildRecArea(root,'/',null);
 
   //> The add and the delete access allow check
   actEnable('actAddIt',false);
@@ -482,10 +478,8 @@ function selectChildRecArea( node, aPath, cBlk )
         var cPg = document.getElementById('pgCont');
 	if( !refresh )
 	{
-//	  var v_scrl = (scrl->verticalScrollBar()) ? scrl->verticalScrollBar()->value() : 0;
 	  while( cPg.childNodes.length ) cPg.removeChild(cPg.childNodes[0]);
 	  selectChildRecArea(node.childNodes[i_cf],aPath+node.childNodes[i_cf].getAttribute('id')+'/',cPg);
-//	  if( scrl->verticalScrollBar() ) scrl->verticalScrollBar()->setValue(v_scrl);
 	  //>>> Mark last drawed tabs
 	  node.childNodes[i_cf].setAttribute('qview','1');
 	}
@@ -589,15 +583,16 @@ function selectChildRecArea( node, aPath, cBlk )
 		if( !fIdVal.maxLength ) fIdVal.maxLength = 1000;
 		dlgWin.document.getElementById('type').style.display = 'none';
 		dlgWin.document.getElementById('name').style.display = idm?'':'none';
-		dlgWin.document.getElementById('actOk').itPath = this.parentNode.itPath;
-		dlgWin.document.getElementById('actOk').srcNode = this.parentNode.srcNode;
-		dlgWin.document.getElementById('actOk').selectedIndex = this.selectedIndex;
-		dlgWin.document.getElementById('actOk').lsId = this.parentNode.lsId;
-		dlgWin.document.getElementById('actOk').lsText = this.parentNode.lsText;
+		var actOkFld = dlgWin.document.getElementById('actOk');
+		actOkFld.itPath = this.parentNode.itPath;
+		actOkFld.srcNode = this.parentNode.srcNode;
+		actOkFld.selectedIndex = this.selectedIndex;
+		actOkFld.lsId = this.parentNode.lsId;
+		actOkFld.lsText = this.parentNode.lsText;
 		if( posId == 'add' )
 		{
 		  setNodeText(dlgWin.document.getElementById('title').childNodes[1],'Add new element.');
-		  dlgWin.document.getElementById('actOk').onclick = function()
+		  actOkFld.onclick = function()
 		  {
 		    var idm = dlgWin.document.getElementById('name').style.display!='none';
 		    var inpId = dlgWin.document.getElementById('id').childNodes[1].childNodes[0].value;
@@ -612,7 +607,7 @@ function selectChildRecArea( node, aPath, cBlk )
 		else if( posId == 'ins' )
 		{
 		  setNodeText(dlgWin.document.getElementById('title').childNodes[1],'Insert new element.');
-		  dlgWin.document.getElementById('actOk').onclick = function()
+		  actOkFld.onclick = function()
 		  {
 		    var idm = dlgWin.document.getElementById('name').style.display!='none';
 		    var inpId = dlgWin.document.getElementById('id').childNodes[1].childNodes[0].value;
@@ -630,7 +625,7 @@ function selectChildRecArea( node, aPath, cBlk )
 		  setNodeText(dlgWin.document.getElementById('title').childNodes[1],'Rename element.');
 		  dlgWin.document.getElementById('id').childNodes[1].childNodes[0].value = idm ? this.parentNode.lsId : this.parentNode.lsText;
 		  if( idm ) dlgWin.document.getElementById('name').childNodes[1].childNodes[0].value = this.parentNode.lsText;
-		  dlgWin.document.getElementById('actOk').onclick = function()
+		  actOkFld.onclick = function()
 		  {
 		    var idm = dlgWin.document.getElementById('name').style.display!='none';
 		    var inpId = dlgWin.document.getElementById('id').childNodes[1].childNodes[0].value;
@@ -689,6 +684,54 @@ function selectChildRecArea( node, aPath, cBlk )
 	}
       while( val.childNodes.length < 4 ) { var opt = document.createElement('option'); opt.disabled = true; val.appendChild(opt); }
       val.size = Math.min(10,Math.max(4,val.childNodes.length));
+    }
+    //>> View images
+    else if( t_s.nodeName.toLowerCase() == "img" )
+    {
+      var brPath = (aPath+t_s.getAttribute('id')).replace(/%/g,'%25').replace(/\//g,'%2f').replace(/%/g,'%25');
+      var lab = null; var val = null;
+
+      if( cBlk )
+      {
+	var dBlk = document.createElement('div'); dBlk.className = 'elem';
+	lab = document.createElement('span'); lab.className = 'label';
+	dBlk.appendChild(lab);
+	if( !t_s.getAttribute("v_sz") || parseInt(t_s.getAttribute("v_sz")) > 70 ) dBlk.appendChild(document.createElement('br'));
+	val = document.createElement('img'); val.className = 'picture';
+	if( t_s.getAttribute('h_sz') ) val.style.width = t_s.getAttribute('h_sz')+'px';
+	if( t_s.getAttribute("v_sz") ) val.style.height = t_s.getAttribute("v_sz")+'px';
+	val.itPath = selPath+'/'+brPath;
+	val.onmouseover = function() { setStatus(this.itPath,10000); }
+	if( wr )
+	{
+	  val.style.cursor = 'pointer';
+	  val.onclick = function( )
+	  {
+	    dlgWin = ReqIdNameDlg('/'+MOD_ID+'/img_save','Select image file for download to picture field.','/'+MOD_ID+this.itPath+'?com=img');
+	    dlgWin.document.getElementById('type').style.display = 'none';
+	    dlgWin.document.getElementById('id').style.display = 'none';
+	    var nmFld = dlgWin.document.getElementById('name');
+	    nmFld.style.display = '';
+	    nmFld.childNodes[1].childNodes[0].type = 'file';
+	    dlgWin.document.getElementById('actOk').type = 'submit';
+	    if( !isKonq ) dlgWin.document.getElementById('formBlk').onsubmit = function( ) { setTimeout('dlgWin.close(); pageRefresh();',200); }
+	    else dlgWin.document.getElementById('actCancel').onclick = function( ) { setTimeout('dlgWin.close(); pageRefresh();',200); }
+	    return false;
+	  }
+	}
+	dBlk.appendChild(val);
+	cBlk.appendChild(dBlk);
+
+	t_s.addr_lab = lab; t_s.addr_val = val;
+      }
+      else { lab = t_s.addr_lab; val = t_s.addr_val; }
+      //>>> Set image
+      if( lab ) setNodeText(lab,t_s.getAttribute('dscr')+':');
+      if( val )
+      {
+        val.title = t_s.getAttribute('help');
+        val.src = '/'+MOD_ID+selPath+'/'+brPath+'?com=img&rnd='+Math.floor(Math.random()*1000);
+      }
     }
     //>> View standart fields
     else if( t_s.nodeName.toLowerCase() == 'fld' ) basicFields(t_s,aPath,cBlk,wr);
@@ -1190,7 +1233,8 @@ function chkStruct( w_nd, n_nd )
   {
     var i_n;
     for( i_n = 0; i_n < n_nd.childNodes.length; i_n++ )
-      if( w_nd.childNodes[i_w].nodeName.toLowerCase() == n_nd.childNodes[i_n].nodeName.toLowerCase() && w_nd.childNodes[i_w].getAttribute('id') == n_nd.childNodes[i_n].getAttribute('id') )
+      if( w_nd.childNodes[i_w].nodeName.toLowerCase() == n_nd.childNodes[i_n].nodeName.toLowerCase() && 
+	    w_nd.childNodes[i_w].getAttribute('id') == n_nd.childNodes[i_n].getAttribute('id') )
 	break;
     if( i_n >= n_nd.childNodes.length ) return true;
   }
@@ -1215,11 +1259,7 @@ function chkStruct( w_nd, n_nd )
     if( w_nd.childNodes[i_w].nodeName.toLowerCase() == 'fld' &&
 	(w_nd.childNodes[i_w].getAttribute('dest') != n_nd.childNodes[i_n].getAttribute('dest') ||
 	w_nd.childNodes[i_w].getAttribute('tp') != n_nd.childNodes[i_n].getAttribute('tp')) )
-    {
-      w_nd.childNodes[i_w].setAttribute('dest','');
-      w_nd.childNodes[i_w].setAttribute('tp','');
       return true;
-    }
   }
 
   return false;
@@ -1611,7 +1651,7 @@ function itPaste( )
 /**********************************************************
  * ReqIdNameDlg - Get identifier and name request dialog. *
  **********************************************************/
-function ReqIdNameDlg( ico, mess )
+function ReqIdNameDlg( ico, mess, actPath )
 {
   var dlgWin = window.open('','ReqIdNameDlg','width=300,height=180,directories=no,menubar=no,toolbar=no,scrollbars=yes,dependent=yes,location=no,status=no,alwaysRaised=yes');
 
@@ -1625,14 +1665,17 @@ function ReqIdNameDlg( ico, mess )
     "</head>\n"+
     "<body style='background-color: #E6E6E6;'>\n"+
     "<center>\n"+
+    "<form id='formBlk' action='"+actPath+"' method='post' enctype='multipart/form-data'>\n"+
     "<table border='0' cellspacing='3px' class='dlg'>\n"+
     "<tr><td id='title' colspan='2'><img src='' style='height: 32px; float: left;'/><span/></td></tr>\n"+
-    "<tr id='type'><td>Element type:</td><td><select/></td></tr>\n"+
-    "<tr id='id'><td>ID:</td><td><input type='text'/></td></tr>\n"+
-    "<tr id='name'><td>Name:</td><td><input type='text'/></td></tr>\n"+
+    "<tr id='type'><td>Element type:</td><td><select name='type'/></td></tr>\n"+
+    "<tr id='id'><td>ID:</td><td><input type='text' name='id'/></td></tr>\n"+
+    "<tr id='name'><td>Name:</td><td><input name='name'/></td></tr>\n"+
     "<tr><td colspan='2' style='text-align: right; border-top: 1px solid black; padding-top: 10px;'>\n"+
-    "<input id='actOk' type='button' value='Ok'/> <input id='actCancel' type='button' value='Cancel' onclick='window.close(); return false;'/></td></tr>\n"+
+    "  <input id='actOk' name='actOk' type='button' value='Ok'/> <input id='actCancel' name='actCancel' type='button' value='Close' onclick='window.close(); return false;'/>\n"+
+    "</td></tr>\n"+
     "</table>\n"+
+    "</form>\n"+
     "</center></body></html>");
   dlgWin.document.close();
 

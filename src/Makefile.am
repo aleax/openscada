@@ -12,14 +12,14 @@ liboscada_la_SOURCES = tsys.cpp resalloc.cpp tarchives.cpp tarchval.cpp tbds.cpp
     tspecials.cpp ttipdaq.cpp tprmtmpl.cpp tvalue.cpp terror.cpp tuis.cpp tmodschedul.cpp \
     telem.cpp tparamcontr.cpp tmodule.cpp xml.cpp tcntrnode.cpp tdaqs.cpp tfunction.cpp
 liboscada_la_LIBADD = -ldl -lpthread -lrt -lexpat -lcrypt -lgd -lz
-liboscada_la_LDFLAGS = -no-undefined -version-info 0:0:0
+liboscada_la_LDFLAGS = -no-undefined -version-info $(oscd_LIBREVISION)
 
 bin_PROGRAMS = openscada 
 #---------- Dinamic linking -----------------------------------------------
-openscada_SOURCES = main.cpp 
+openscada_SOURCES = main.cpp
 openscada_LDFLAGS = $(EXTRA_LDFLAGS) -Wl,-rpath,$(libdir) -loscada
 #---------- Static linking -----------------------------------------------
-#OpenScada_SOURCES = main.cpp 
+#OpenScada_SOURCES = main.cpp
 #OpenScada_LDFLAGS = -export-dynamic -static -loscada
 
 m_name = $(PACKAGE)

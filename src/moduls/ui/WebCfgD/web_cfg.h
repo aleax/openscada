@@ -63,6 +63,7 @@ class SSess
 	vector<string>		vars;	//request vars
 	map<string,string>	cnt;	//Parsed contain
 	map<string,string>	prm;	//URL parameters
+	map<string,string>	files;	//Post files
 };
 
 //*************************************************

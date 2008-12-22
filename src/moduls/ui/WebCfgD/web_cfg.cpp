@@ -127,13 +127,14 @@ TWEB::TWEB( string name ) : mTAuth(10), lst_ses_chk(0)
 	"table.page td.tabs span { padding-left: 5px; padding-right: 5px; padding-bottom: 2px; padding-top: 2px; border: 1px solid gray; white-space: nowrap; background-color: #DEDED9; cursor: pointer; }\n"
 	"table.page td.tabs span.active { background-color: #F7F7F1; cursor: default; border-bottom: 0px none; border-top: 2px solid green; }\n"
 	"table.page td.content { border : 2px ridge grey; text-align : left; vertical-align : top; height: 300px; padding: 5px; }\n"
-	"table.page td.content div { overflow: auto; width: auto; max-height: 440px; white-space: nowrap; }\n"
+	"table.page td.content div { overflow: auto; width: 600px; max-height: 440px; white-space: nowrap; }\n"
 	"table.page td.content div.elem { margin-bottom: 2px; overflow : visible; width : 99%; }\n"
 	"table.page td.content div.elem span.label { white-space: nowrap; padding-right: 3px; }\n"
 	"table.page td.content div.elem span.const { font-weight: bold; }\n"
 	"table.page td.content div.elem textarea { width: 100%; }\n"
 	"table.page td.content fieldset.elem { margin : 0px; margin-bottom: 2px; padding: 3px; }\n"
 	"table.page td.content .list { width: 50%; }\n"
+	"table.page td.content .picture { border: 1px solid blue; vertical-align: top; }\n"
 	"table.page td.content div.elem .line { padding-right: 3px; }\n"
 	"table.page td.content div.elem .line input,select { vertical-align: middle; border: 1px solid black; }\n"
 	"table.page td.content div.elem .line img { vertical-align: middle; height: 18px; cursor: pointer; }\n"
@@ -369,19 +370,11 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 		//> Get node icon
 		else if( wp_com == "ico" )
 		{
-		    XMLNode req("get");
-		    req.setAttr("path",ses.url+"/%2fico");
-		    if( !mod->cntrIfCmd(req,ses.user) )
-		    {
-			ses.page = TSYS::strDecode(req.text(),TSYS::base64);
-			page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page;
-		    }
-		    else
-		    {
-			string itp;
-			ses.page = TUIS::icoGet("disconnect",&itp);
-			page = httpHead("200 OK",ses.page.size(),string("image/")+itp)+ses.page;
-		    }
+		    string itp = "png";
+		    XMLNode req("get"); req.setAttr("path",ses.url+"/%2fico");
+		    if( !mod->cntrIfCmd(req,ses.user) ) ses.page = TSYS::strDecode(req.text(),TSYS::base64);
+		    else ses.page = TUIS::icoGet("disconnect",&itp);
+		    page = httpHead("200 OK",ses.page.size(),string("image/")+itp)+ses.page;
 		    return;
 		}
 		//> Get node childs
@@ -452,6 +445,16 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 		    mod->cntrIfCmd(req,ses.user);
 		    ses.page = req.save();
 		    page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
+		    return;
+		}
+		else if( wp_com == "img" )
+		{
+		    string itp = "png";
+		    XMLNode req("get"); req.setAttr("path",ses.url);
+		    if( mod->cntrIfCmd(req,ses.user) || atoi(req.attr("rez").c_str()) || req.text().empty() )
+			ses.page = TUIS::icoGet("stop",&itp);
+		    else ses.page = TSYS::strDecode(req.text(),TSYS::base64);
+		    page = mod->httpHead("200 OK",ses.page.size(),"image/"+itp)+ses.page;
 		    return;
 		}
 		else
@@ -558,6 +561,15 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	mod->cntrIfCmd(req,ses.user);
 	ses.page = req.save();
 	page = httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
+    }
+    else if( wp_com == "img" )
+    {
+	if( (cntEl=ses.cnt.find("name")) != ses.cnt.end() && !ses.files[cntEl->second].empty() )
+	{
+	    XMLNode req("set"); req.setAttr("path",ses.url)->setText(TSYS::strEncode(ses.files[cntEl->second],TSYS::base64));
+	    mod->cntrIfCmd(req,ses.user);
+	}
+	page = httpHead("204 No Content",0,"");
     }
 }
 
@@ -704,7 +716,7 @@ SSess::SSess( const string &iurl, const string &ipage, const string &isender,
 	vector<string> &ivars, const string &icontent ) :
     url(iurl), page(ipage), sender(isender), vars(ivars), content(icontent)
 {
-    //- URL parameters parse -
+    //> URL parameters parse
     int prmSep = iurl.find("?");
     if( prmSep != string::npos )
     {
@@ -719,7 +731,7 @@ SSess::SSess( const string &iurl, const string &ipage, const string &isender,
 	}
     }
 
-    //- Content parse -
+    //> Content parse
     int pos = 0, i_bnd;
     string boundary;
     const char *c_bound = "boundary=";
@@ -735,7 +747,7 @@ SSess::SSess( const string &iurl, const string &ipage, const string &isender,
 	    int pos = vars[i_vr].find(c_bound,0)+strlen(c_bound);
 	    boundary = vars[i_vr].substr(pos,vars[i_vr].size()-pos);
 	}
-    if( !boundary.size() ) return;
+    if( boundary.empty() ) return;
 
     while(true)
     {
@@ -745,22 +757,32 @@ SSess::SSess( const string &iurl, const string &ipage, const string &isender,
 	string c_head = content.substr(pos, content.find(c_term,pos)-pos);
 	if( c_head.find(c_fd,0) == string::npos ) continue;
 
-	//-- Get name --
+	//>> Get name
 	i_bnd = c_head.find(c_name,0)+strlen(c_name);
 	string c_name = c_head.substr(i_bnd,c_head.find("\"",i_bnd)-i_bnd);
 	i_bnd = c_head.find(c_file,0);
 	if( i_bnd == string::npos )
 	{
-	    //--- Get value ---
+	    //>>> Get value
 	    pos += c_head.size()+(2*strlen(c_term));
-	    if(pos >= content.size()) break;
-	    string c_val  = content.substr(pos, content.find(string(c_term)+c_end+boundary,pos)-pos);
-	    cnt[c_name] = c_val;
+	    if( pos >= content.size() ) break;
+	    cnt[c_name] = content.substr(pos, content.find(string(c_term)+c_end+boundary,pos)-pos);
 	}
 	else
 	{
 	    i_bnd += strlen(c_file);
 	    cnt[c_name] = c_head.substr(i_bnd,c_head.find("\"",i_bnd)-i_bnd);
+
+	    //>>>> Get file data
+	    pos += c_head.size()+strlen(c_term);
+	    if( pos >= content.size() ) break;
+	    if( content.substr(pos,12) == "Content-Type" )
+	    {
+		string imgType = content.substr(pos,content.find(c_term,pos)-pos);
+		pos += imgType.size()+(2*strlen(c_term));
+		if( pos >= content.size() ) break;
+	    }else pos += strlen(c_term);
+	    files[cnt[c_name]] = content.substr(pos,content.find(string(c_term)+c_end+boundary,pos)-pos);
 	}
     }
 }
