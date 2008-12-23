@@ -99,7 +99,11 @@ function nodeTextByTagId( node, tag, avl )
 function posGetX(obj,noWScrl)
 {
   var posX = 0;
-  for( ; obj != null; obj = obj.offsetParent ) posX += obj.offsetLeft;
+  //> Calc offset on blocks
+  for( var cObj = obj; cObj != null; cObj = cObj.offsetParent ) posX += cObj.offsetLeft;
+  //> Calc block's scroll
+  if( !isOpera )
+    for( var cObj = obj ; (cObj && cObj.nodeName!='BODY'); cObj = cObj.parentNode ) posX -= (cObj.scrollLeft?cObj.scrollLeft:0);
   return posX+(!noWScrl?-window.pageXOffset:0)+(isNN?5:0);
 }
 /***************************************************
@@ -108,7 +112,11 @@ function posGetX(obj,noWScrl)
 function posGetY(obj,noWScrl)
 {
   var posY = 0;
-  for( ; obj != null; obj = obj.offsetParent ) posY += obj.offsetTop;
+  //> Calc offset on blocks
+  for( var cObj = obj; cObj != null; cObj = cObj.offsetParent ) posY += cObj.offsetTop;
+  //> Calc block's scroll
+  if( !isOpera )
+    for( var cObj = obj ; (cObj && cObj.nodeName!='BODY'); cObj = cObj.parentNode ) posY -= (cObj.scrollTop?cObj.scrollTop:0);
   return posY+(!noWScrl?-window.pageYOffset:0)+(isNN?5:0);
 }
 /***************************************************
@@ -735,6 +743,60 @@ function selectChildRecArea( node, aPath, cBlk )
     }
     //>> View standart fields
     else if( t_s.nodeName.toLowerCase() == 'fld' ) basicFields(t_s,aPath,cBlk,wr);
+    else if( t_s.nodeName.toLowerCase() == 'comm' )
+    {
+      var brPath = (aPath+t_s.getAttribute('id')).replace(/%/g,'%25').replace(/\//g,'%2f');
+      var dBlk = null; var button = null;
+      if( cBlk )
+      {
+        if( t_s.childNodes.length )
+        {
+          dBlk = document.createElement('fieldset');
+          dBlk.appendChild(document.createElement('legend'));
+          dBlk.childNodes[0].appendChild(document.createTextNode(t_s.getAttribute('dscr')));
+        }else dBlk = document.createElement('div');
+	dBlk.className = 'elem';
+	button = document.createElement('input'); button.type = 'button';
+	button.srcNode = t_s;
+	button.brPath = brPath;
+	button.onclick = function( )
+	{
+	  //> Check link
+	  if( this.srcNode.getAttribute('tp') == 'lnk' )
+	  {
+	    var dataReq = servGet(selPath+'/'+this.brPath,'com=get');
+	    if( !dataReq ) return false;
+	    else if( parseInt(dataReq.getAttribute('rez'))!=0 ) { alert(nodeText(dataReq)); return false; }
+	    selectPage('/'+pathLev(selPath,0)+nodeText(dataReq));
+	  }
+	  else
+	  {
+	    var com = '<set>';
+	    for( var f_com = 0; f_com < this.srcNode.childNodes.length; f_com++ )
+	      com += "<"+this.srcNode.childNodes[f_com].nodeName+" id='"+this.srcNode.childNodes[f_com].getAttribute('id')+"'>"+
+			nodeText(this.srcNode.childNodes[f_com])+"</"+this.srcNode.childNodes[f_com].nodeName+">";
+	    com += '</set>';
+	    var rez = servSet(selPath+'/'+this.brPath,'com=com',com,true);
+	    if( rez && parseInt(rez.getAttribute('rez')) != 0 ) alert(nodeText(rez));
+	    pageRefresh();
+	  }
+	  return false;
+	}
+	dBlk.appendChild(button);
+	cBlk.appendChild(dBlk);
+	t_s.addr_butt = button;
+      }
+      else button = t_s.addr_butt;
+
+      //>>> Update or create parameters
+      for( var f_com = 0; f_com < t_s.childNodes.length; f_com++ )
+        if( t_s.childNodes[f_com].nodeName.toLowerCase() == 'fld' )
+          basicFields(t_s.childNodes[f_com],aPath+t_s.getAttribute('id')+'/',dBlk,true,true);
+
+      //>>> Fill command
+      button.value = t_s.getAttribute('dscr');
+      button.title = t_s.getAttribute('help');
+    }
   }
 }
 /***************************************************
@@ -748,7 +810,8 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
   if( !comm )
   {
     dataReq = servGet(selPath+'/'+brPath,'com=get');
-    if( !dataReq || parseInt(dataReq.getAttribute('rez'))!=0 ) { alert(nodeText(dataReq)); setNodeText(dataReq,''); }
+    if( !dataReq ) dataReq = document.createElement('get');
+    else if( parseInt(dataReq.getAttribute('rez'))!=0 ) { alert(nodeText(dataReq)); setNodeText(dataReq,''); }
   }
 
   //> View select fields
@@ -769,14 +832,20 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 	val_w = document.createElement('span');	val_w.className = 'line';
 	val_w.appendChild(document.createElement('select'));
 	val_w.childNodes[0].itPath = selPath+'/'+brPath;
+	val_w.childNodes[0].srcNode = t_s;
+	val_w.childNodes[0].itComm = comm;
 	val_w.childNodes[0].onchange = function( )
 	{
 	  if( this.selectedIndex < 0 ) return;
 	  var selId = this.options[this.selectedIndex].getAttribute('vid');
 	  var selVal = nodeText(this.options[this.selectedIndex]);
-	  var rez = servSet(this.itPath,'com=com','<set>'+(selId?selId:selVal)+'</set>',true);
-	  if( rez && parseInt(rez.getAttribute('rez')) != 0 ) alert(nodeText(rez));
-	  setTimeout('pageRefresh()',500);
+	  if( this.itComm ) setNodeText(this.srcNode,(selId?selId:selVal));
+	  else
+	  {
+	    var rez = servSet(this.itPath,'com=com','<set>'+(selId?selId:selVal)+'</set>',true);
+	    if( rez && parseInt(rez.getAttribute('rez')) != 0 ) alert(nodeText(rez));
+	    setTimeout('pageRefresh()',500);
+	  }
 	  return false;
 	}
 	val_w.StatusTip = selPath+'/'+brPath; val_w.onmouseover = function() { setStatus(this.StatusTip,10000); }
@@ -862,12 +931,19 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 	{
 	  val_w = document.createElement('span'); val_w.className = 'line';
 	  val_w.appendChild(document.createElement('input'));
-	  val_w.childNodes[0].type = 'checkbox'; val_w.childNodes[0].itPath = selPath+'/'+brPath;
+	  val_w.childNodes[0].type = 'checkbox';
+	  val_w.childNodes[0].itPath = selPath+'/'+brPath;
+	  val_w.childNodes[0].srcNode = t_s;
+	  val_w.childNodes[0].itComm = comm;
 	  val_w.childNodes[0].onclick = function( )
 	  {
-	    var rez = servSet(this.itPath,'com=com','<set>'+(this.checked?'1':'0')+'</set>',true);
-	    if( rez && parseInt(rez.getAttribute('rez')) != 0 ) alert(nodeText(rez));
-	    setTimeout('pageRefresh()',500);
+	    if( this.itComm ) setNodeText(this.srcNode,(this.checked?'1':'0'));
+	    else
+	    {
+	      var rez = servSet(this.itPath,'com=com','<set>'+(this.checked?'1':'0')+'</set>',true);
+	      if( rez && parseInt(rez.getAttribute('rez')) != 0 ) alert(nodeText(rez));
+	      setTimeout('pageRefresh()',500);
+	    }
 	    return false;
 	  }
 	  val_w.StatusTip = selPath+'/'+brPath; val_w.onmouseover = function() { setStatus(this.StatusTip,10000); }
@@ -912,13 +988,16 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 	lab = document.createElement('span'); lab.className = 'label';
 	edit = document.createElement('textarea');
 	edit.itPath = selPath+'/'+brPath;
+	edit.srcNode = t_s;
+	edit.itComm = comm;
 	edit.readOnly = !wr;
 	if( t_s.getAttribute('cols') ) edit.setAttribute('cols',parseInt(t_s.getAttribute('cols')));
 	else edit.setAttribute('wrap','off');
 	edit.setAttribute('rows',parseInt(t_s.getAttribute('rows')) ? parseInt(t_s.getAttribute('rows')):5);
 	edit.onkeyup = function()
 	{
-	  if( !this.isChanged && this.value != this.defaultValue )
+	  if( this.itComm ) setNodeText(this.srcNode,this.value);
+	  else if( !this.isChanged && this.value != this.defaultValue )
 	  {
 	    var btBlk = document.createElement('div'); btBlk.style.textAlign = 'right';
 	    var btApply = document.createElement('input'); btApply.type = 'button'; btApply.value = 'Apply';
@@ -980,11 +1059,22 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 	{
 	  val_w = document.createElement('span'); val_w.className = 'line number';
 	  val_w.itPath = selPath+'/'+brPath;
+	  val_w.srcNode = t_s;
+	  val_w.itComm = comm;
 	  val_w.innerHTML = "<input type='text' size='2'/><input type='text' size='2'/><input type='text' size='4'/>&nbsp;"+
 		"<input type='text' size='2'/><input type='text' size='2'/><input type='text' size='2'/>"
 	  val_w.childNodes[0].onkeyup = val_w.childNodes[1].onkeyup = val_w.childNodes[2].onkeyup =
 		val_w.childNodes[4].onkeyup = val_w.childNodes[5].onkeyup = val_w.childNodes[6].onkeyup = function(e)
 	  {
+	    if( this.parentNode.itComm )
+	    {
+	      var val_w = this.parentNode;
+	      var dt = new Date(0);
+	      dt.setDate(parseInt(val_w.childNodes[0].value)); dt.setMonth(parseInt(val_w.childNodes[1].value)-1); dt.setFullYear(parseInt(val_w.childNodes[2].value));
+	      dt.setHours(parseInt(val_w.childNodes[4].value)); dt.setMinutes(parseInt(val_w.childNodes[5].value)); dt.setSeconds(parseInt(val_w.childNodes[6].value));
+	      setNodeText(val_w.srcNode,Math.floor(dt.getTime()/1000));
+	      return true;
+	    }
 	    if( !e ) e = window.event;
 	    if( this.parentNode.isEdited && e.keyCode == 13 ) { this.parentNode.childNodes[7].onclick(); return true; }
 	    if( this.parentNode.isEdited && e.keyCode == 27 )
@@ -1040,7 +1130,8 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
       if( val_w && !val_w.isEdited )
       {
 	val_w.title = t_s.getAttribute('help');
-	var dt = new Date(parseInt(nodeText(dataReq))*1000);
+	var dt_time_t = parseInt(nodeText(dataReq));
+	var dt = new Date(dt_time_t?(dt_time_t*1000):0);
 	val_w.childNodes[0].value = val_w.childNodes[0].defaultValue = dt.getDate();
 	val_w.childNodes[1].value = val_w.childNodes[1].defaultValue = dt.getMonth()+1;
 	val_w.childNodes[2].value = val_w.childNodes[2].defaultValue = dt.getFullYear();
@@ -1072,6 +1163,8 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 	{
 	  val_w = document.createElement('span'); val_w.className = 'line';
 	  val_w.itPath = selPath+'/'+brPath;
+	  val_w.srcNode = t_s;
+	  val_w.itComm = comm;
 	  val_w.appendChild(document.createElement('input')); val_w.childNodes[0].type = 'text';
 	  val_w.StatusTip = selPath+'/'+brPath; val_w.onmouseover = function() { setStatus(this.StatusTip,10000); }
 
@@ -1100,9 +1193,13 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 		this.parentNode.style.cssText = 'visibility: hidden; left: -200px; top: -200px;';
 		if( this.selectedIndex < 0 ) return;
 		this.edFld.value = nodeText(this.options[this.selectedIndex]);
-		var rez = servSet(this.edFld.parentNode.itPath,'com=com','<set>'+this.edFld.value+'</set>',true);
-		if( rez && parseInt(rez.getAttribute('rez')) != 0 ) alert(nodeText(rez));
-		setTimeout('pageRefresh()',500);
+		if( this.edFld.parentNode.itComm ) setNodeText(this.edFld.parentNode.srcNode,this.edFld.value);
+		else
+		{
+		  var rez = servSet(this.edFld.parentNode.itPath,'com=com','<set>'+this.edFld.value+'</set>',true);
+		  if( rez && parseInt(rez.getAttribute('rez')) != 0 ) alert(nodeText(rez));
+		  setTimeout('pageRefresh()',500);
+		}
 		return false;
 	      }
 	      return false;
@@ -1134,6 +1231,14 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 
 	  val_w.childNodes[0].onkeyup = function(e)
 	  {
+	    if( this.parentNode.itComm )
+	    {
+	      var curVal = this.value;
+	      if( this.parentNode.srcNode.getAttribute('tp') == 'hex' ) curVal = parseInt(curVal,16);
+	      else if( this.parentNode.srcNode.getAttribute('tp') == 'oct' ) curVal = parseInt(curVal,8);
+	      setNodeText(this.parentNode.srcNode,curVal);
+	      return true;
+	    }
 	    if( !e ) e = window.event;
 	    if( this.parentNode.isEdited && e.keyCode == 13 ) { this.parentNode.lastChild.onclick(); return true; }
 	    if( this.parentNode.isEdited && e.keyCode == 27 )
@@ -1147,7 +1252,10 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 	    var btOk = document.createElement('img'); btOk.src = '/'+MOD_ID+'/img_button_ok';
 	    btOk.onclick = function( )
 	    {
-	      var rez = servSet(this.parentNode.itPath,'com=com','<set>'+this.parentNode.childNodes[0].value+'</set>',true);
+	      var curVal = this.parentNode.childNodes[0].value;
+	      if( this.parentNode.srcNode.getAttribute('tp') == 'hex' ) curVal = parseInt(curVal,16);
+	      else if( this.parentNode.srcNode.getAttribute('tp') == 'oct' ) curVal = parseInt(curVal,8);
+	      var rez = servSet(this.parentNode.itPath,'com=com','<set>'+curVal+'</set>',true);
 	      if( rez && parseInt(rez.getAttribute('rez')) != 0 ) alert(nodeText(rez));
 	      setTimeout('pageRefresh()',500);
 	      this.parentNode.isEdited = false;
@@ -1309,7 +1417,6 @@ function hostsUpdate( )
       if( !emptyTree )
         for( var i_top = 0; i_top < treeRoot.childNodes.length; i_top++ )
         {
-//          alert(treeRoot.childNodes[i_top]);
           if( treeRoot.childNodes[i_top].getAttribute('id') == ('/'+hostN.childNodes[i].getAttribute('id')) )
           { liN = treeRoot.childNodes[i_top]; break; }
         }

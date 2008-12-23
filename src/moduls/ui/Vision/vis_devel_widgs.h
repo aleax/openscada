@@ -460,9 +460,9 @@ class DevelWdgView: public WdgView
 	DevelWdgView( const string &iwid, int ilevel, VisDevelop *mainWind, QWidget* parent = 0 );
 	~DevelWdgView( );
 
-        float xScale( bool full = false );
-        float yScale( bool full = false );
-        double visScale( )      { return mVisScale; }
+	float xScale( bool full = false );
+	float yScale( bool full = false );
+	float visScale( )	{ return mVisScale; }
 	string user( );
 	VisDevelop *mainWin( );
 
@@ -470,18 +470,16 @@ class DevelWdgView: public WdgView
 	string selectChilds( int *cnt = NULL, vector<DevelWdgView*> *wdgs = NULL );	//Get selected include widgets list
 	bool edit( )		{ return fWdgEdit; }		//Edit mode state
 
-        void setSelect( bool vl, bool childs = true, bool onlyFlag = false );
+	void setSelect( bool vl, bool childs = true, bool onlyFlag = false );
 	void setEdit( bool vl );
 	void wdgsMoveResize( const QPointF &dP );
-        void setVisScale( int val );
-
-
+	void setVisScale( float val );
 
 	WdgView *newWdgItem( const string &iwid );
 
 	DevelWdgView *levelWidget( int lev );
 
-	//- Resource and cache operations -
+	//> Resource and cache operations
 	string resGet( const string &res );
 	string cacheResGet( const string &res );
 	void cacheResSet( const string &res, const string &val );
@@ -498,7 +496,7 @@ class DevelWdgView: public WdgView
 	void makeImage( );
 	void editEnter( );
 	void editExit( );
-        void incDecVisScale( );
+	void incDecVisScale( );
 
     protected:
 	//Protected methods
@@ -521,9 +519,9 @@ class DevelWdgView: public WdgView
 	short int	fMoveHoldMove	:1;	//Mouse move on hold
 	short int	fHideChilds	:1;	//Hide childs on move
 	short int	fSelChange	:1;	//Changed select map
-        
-        double          mVisScale;
-                    
+
+	float		mVisScale;		//Visual scale value of root widget.
+
 	QPoint		holdPnt;		//Hold move point
 	SizePntWdg	*pntView;		//Point view
 	DevelWdgView	*editWdg;

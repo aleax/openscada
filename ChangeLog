@@ -1,3 +1,9 @@
+2008-12-23 Roman
+- FIX:/UI/Vision: Visual scale unified and fixed.
+- !:/UI/WebCfgD: The scroll offset added for absolute tag position calc.
+- !!:/UI/WebCfgD: Command's fields is released.
+
+
 2008-12-23 Maxim
 - /UI/Vision: Visual scale manipulation support is added.
 

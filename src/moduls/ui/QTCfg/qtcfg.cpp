@@ -1200,7 +1200,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	    else button = (QPushButton *)TSYS::str2addr(t_s.attr("addr_butt"));
 
 	    //>>> Update or create parameters
-	    for( unsigned i_cf = 0; i_cf < t_s.childSize(); i_cf++)
+	    for( unsigned i_cf = 0; i_cf < t_s.childSize(); i_cf++ )
 	    {
 		XMLNode &t_scm = *t_s.childGet(i_cf);
 		if( t_scm.name() == "fld" ) basicFields( t_scm, a_path+t_s.attr("id")+'/', comm_pan, true, &c_hbox, c_pos, true );
@@ -1503,7 +1503,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		else
 		{
 		    if( *l_hbox ) (*l_hbox)->insertWidget( l_pos++, (val_w?(QWidget*)val_w:(QWidget*)val_r) );
-		    else { (val_w?(QWidget*)val_w:(QWidget*)val_r)->deleteLater(); /*delete (val_w?(QWidget*)val_w:(QWidget*)val_r);*/ val_w = NULL; val_r = NULL; }
+		    else { (val_w?(QWidget*)val_w:(QWidget*)val_r)->deleteLater(); val_w = NULL; val_r = NULL; }
 		}
 		t_s.setAttr("addr_lab",TSYS::addr2str(lab));
 		t_s.setAttr("addr_dtw",TSYS::addr2str(val_w));
@@ -2148,37 +2148,30 @@ void ConfApp::buttonClicked( )
     {
 	XMLNode *n_el = SYS->ctrId(root,TSYS::strDecode(button->objectName().toAscii().data(),TSYS::PathEl) );
 
-	//- Check link -
+	//> Check link
 	if( n_el->attr("tp") == "lnk")
 	{
 	    XMLNode req("get"); req.setAttr("path",sel_path+"/"+button->objectName().toAscii().data());
-	    if( cntrIfCmd(req) )
-	    {
-		mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this); 
-		return;
-	    }
+	    if( cntrIfCmd(req) ) { mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this); return; }
 	    string url = "/"+TSYS::pathLev(sel_path,0)+req.text();
 	    mess_info(mod->nodePath().c_str(),_("%s| Go to link <%s>!"), w_user->user().toAscii().data(),url.c_str());
 	    selectPage( url );
+	    return;
 	}
 	else
 	{
 	    XMLNode req("set"); req.setAttr("path",sel_path+"/"+button->objectName().toAscii().data());
-	    //- Copy parameters -
+	    //> Copy parameters
 	    for( int i_ch = 0; i_ch < n_el->childSize(); i_ch++ )
 		*(req.childAdd()) = *(n_el->childGet(i_ch));
 
-	    mess_info(mod->nodePath().c_str(),_("%s| Press <%s>!"), w_user->user().toAscii().data(), 
+	    mess_info(mod->nodePath().c_str(),_("%s| Press <%s>!"), w_user->user().toAscii().data(),
 		(sel_path+"/"+button->objectName().toAscii().data()).c_str() );
-	    if( cntrIfCmd(req) )
-	    {
-		mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this); 
-		return;
-	    }
+	    if( cntrIfCmd(req) ) { mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this); return; }
 	}
     }catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 
-    //- Redraw -
+    //> Redraw
     autoUpdTimer->setSingleShot(true);
     autoUpdTimer->start(CH_REFR_TM);
 }
@@ -2578,14 +2571,14 @@ void ConfApp::imgPopup( const QPoint &pos )
 	    }
 	    else if( rez == load_img )
 	    {
-		//- Get path to image file -
+		//> Get path to image file
 		QString fileName = QFileDialog::getOpenFileName(this,_("Load picture"),"",_("Images (*.png *.jpg)"));
 		if( fileName.isNull( ) ) return;
 		int len;
 		char buf[STR_BUF_LEN];
 		string rez;
 
-		//- Load image file -
+		//> Load image file
 		int hd = open(fileName.toAscii().data(),O_RDONLY);
 		if( hd < 0 )	throw TError(mod->nodePath().c_str(),_("Open file %s is error\n"),fileName.toAscii().data());
 		{
@@ -2594,11 +2587,11 @@ void ConfApp::imgPopup( const QPoint &pos )
 		    ::close(hd);
 		}
 
-		//- Set image to widget -
+		//> Set image to widget
 		if( !img->setImage(rez) )
 		    throw TError(mod->nodePath().c_str(),_("Image file %s is error\n"),fileName.toAscii().data());
 
-		//- Send image to system -
+		//> Send image to system
 		XMLNode n_el1("set");
 		n_el1.setAttr("path",el_path)->setText(TSYS::strEncode(rez,TSYS::base64));
 		mess_info(mod->nodePath().c_str(),_("%s| Upload picture <%s> to: %s."),
@@ -2691,7 +2684,7 @@ void ConfApp::tableSet( int row, int col )
 	    for( int i_off = 0; (key=TSYS::strSepParse(n_el->attr("key"),0,',',&i_off)).size(); )
 		for( int i_el = 0; i_el < n_el->childSize(); i_el++ )
 		    if( n_el->childGet(i_el)->attr("id") == key )
-		    { 
+		    {
 			n_el1.setAttr("key_"+key,n_el->childGet(i_el)->childGet(row)->text());
 			row_addr=row_addr+"key_"+key+"="+n_el1.attr("key_"+key)+",";
 			break;

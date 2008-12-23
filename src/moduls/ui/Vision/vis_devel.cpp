@@ -625,12 +625,12 @@ void VisDevelop::setWdgScale( bool val )
 
 double VisDevelop::wdgVisScale( )
 {
-    return atof((*mWVisScale).text().toAscii().data());
+    return atof(mWVisScale->text().toAscii().data());
 }
 
 void VisDevelop::setWdgVisScale(double val )
 {
-    (*mWVisScale).setText(((string)(TSYS::real2str(TSYS::realRound(val*100, 2)) + "%")).c_str());
+    mWVisScale->setText((TSYS::int2str((int)(val*100))+"%").c_str());
 }
 
 void VisDevelop::closeEvent( QCloseEvent* ce )

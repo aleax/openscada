@@ -12,8 +12,8 @@
 #: vis_devel_widgs.cpp:1172 vis_devel_widgs.cpp:1514 vis_devel_widgs.cpp:1565
 #: vis_devel_widgs.cpp:1632 vis_devel_widgs.cpp:1895 vis_devel_widgs.cpp:2068
 #: vis_devel_widgs.cpp:2124 vis_devel_widgs.cpp:2426 vis_devel_widgs.cpp:2437
-#: vis_devel_widgs.cpp:2463 vis_devel_widgs.cpp:2688 vis_devel_widgs.cpp:2693
-#: vis_devel_widgs.cpp:2829 vis_devel_widgs.cpp:2836 vis_run.cpp:769
+#: vis_devel_widgs.cpp:2462 vis_devel_widgs.cpp:2673 vis_devel_widgs.cpp:2678
+#: vis_devel_widgs.cpp:2811 vis_devel_widgs.cpp:2818 vis_run.cpp:769
 #: vis_run.cpp:950 vis_run.cpp:1025 vis_run.cpp:1105 vis_run.cpp:1148
 #: vis_run_widgs.cpp:60 vis_run_widgs.cpp:113 vis_run_widgs.cpp:118
 #: vis_run_widgs.cpp:147 vis_run_widgs.cpp:224 vis_run_widgs.cpp:265
@@ -31,7 +31,7 @@
 #: vis_widgs.cpp:650 vis_widgs.cpp:655 vis_widgs.cpp:746 vis_widgs.cpp:837
 #: vis_widgs.cpp:843 vis_widgs.cpp:874 vis_widgs.cpp:897 vis_widgs.cpp:903
 #: vis_widgs.cpp:917 vis_widgs.cpp:921 vis_widgs.cpp:931 vis_widgs.cpp:936
-#: vis_devel.h:100 vis_devel.h:101 vis_devel_widgs.h:318 vis_devel_widgs.h:356
+#: vis_devel.h:99 vis_devel.h:100 vis_devel_widgs.h:318 vis_devel_widgs.h:356
 #: vis_run.h:107 vis_run.h:108 vis_run.h:109 vis_run.h:111 vis_run.h:112
 #: vis_run.h:113 vis_widgs.h:260
 #, fuzzy
@@ -39,152 +39,12 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 0.7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-23 14:47+0200\n"
+"POT-Creation-Date: 2008-12-23 17:58+0200\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-
-#: moc_vis_devel.cpp:67
-msgid ""
-"VISION::VisDevelopitem,forceitemmodifyToolUpdate(string)exitModifChk()aboutQt"
-"()updateMenuWindow()prjRun()visualItAdd(QAction*,QPointF,string,string),pnt,"
-"wid,pntvisualItAdd(QAction*)visualItDel(string)visualItProp()visualItCut()"
-"visualItPaste()endRunChk()"
-msgstr ""
-
-#: moc_vis_devel_dlgs.cpp:47
-msgid "VISION::LibProjPropselectIco()delMimeData()unloadMimeData()itb"
-msgstr ""
-
-#: moc_vis_devel_dlgs.cpp:126
-msgid ""
-"VISION::VisItPropselectIco()addAttr()changeAttr(QTreeWidgetItem*,int)"
-"tabChanged(int)"
-msgstr ""
-
-#: moc_vis_devel_widgs.cpp:37
-msgid "VISION::ModInspAttr"
-msgstr ""
-
-#: moc_vis_devel_widgs.cpp:95
-msgid "VISION::InspAttr"
-msgstr ""
-
-#: moc_vis_devel_widgs.cpp:156
-msgid "VISION::InspAttrDockmodified(string)"
-msgstr ""
-
-#: moc_vis_devel_widgs.cpp:216
-msgid "VISION::InspLnk"
-msgstr ""
-
-#: moc_vis_devel_widgs.cpp:267
-msgid "VISION::LinkItemDelegateselItem(int)"
-msgstr ""
-
-#: moc_vis_devel_widgs.cpp:319
-msgid "VISION::InspLnkDock"
-msgstr ""
-
-#: moc_vis_devel_widgs.cpp:379
-msgid ""
-"VISION::WdgTreeselectItem(string,bool)selectItem(string)updateTree()force"
-msgstr ""
-
-#: moc_vis_devel_widgs.cpp:458
-msgid ""
-"VISION::ProjTreeselectItem(string,bool)selectItem(string)updateTree(string,"
-"QTreeWidgetItem*)vca_itctrTreePopup()selectItem(bool)"
-msgstr ""
-
-#: moc_vis_devel_widgs.cpp:530
-msgid "VISION::LineEditProp"
-msgstr ""
-
-#: moc_vis_devel_widgs.cpp:578
-msgid "VISION::WScaleStBar"
-msgstr ""
-
-#: moc_vis_devel_widgs.cpp:623
-msgid "VISION::SizePntWdg"
-msgstr ""
-
-#: moc_vis_devel_widgs.cpp:685
-msgid ""
-"VISION::DevelWdgViewapply(string)saveGeom(string)makeImage()incDecVisScale()"
-msgstr ""
-
-#: moc_vis_run.cpp:59
-msgid ""
-"VISION::VisRunprintPg()printDiag()printDoc()exportPg()exportDiag()exportDoc()"
-"oldUser,oldPassabout()updatePage()alarmAct(QAction*)"
-msgstr ""
-
-#: moc_vis_run_widgs.cpp:34
-msgid "VISION::RunWdgView"
-msgstr ""
-
-#: moc_vis_run_widgs.cpp:76
-msgid "VISION::RunPageView"
-msgstr ""
-
-#: moc_vis_shape_elfig.cpp:37
-msgid "VISION::ElFigDt"
-msgstr ""
-
-#: moc_vis_shape_elfig.cpp:88
-msgid "VISION::ShapeElFigure"
-msgstr ""
-
-#: moc_vis_shapes.cpp:34
-msgid "VISION::WdgShape"
-msgstr ""
-
-#: moc_vis_shapes.cpp:87
-msgid ""
-"VISION::ShapeFormEltextAccept()comboChange(QString)buttonPressed()"
-"buttonToggled(bool)"
-msgstr ""
-
-#: moc_vis_shapes.cpp:150
-msgid "VISION::ShapeDiagram"
-msgstr ""
-
-#: moc_vis_shapes.cpp:201
-msgid "VISION::ShapeProtocol"
-msgstr ""
-
-#: moc_vis_shapes.cpp:252
-msgid "VISION::ShapeDocument"
-msgstr ""
-
-#: moc_vis_widgs.cpp:37
-msgid "VISION::DlgUser"
-msgstr ""
-
-#: moc_vis_widgs.cpp:88
-msgid "VISION::FontDlg"
-msgstr ""
-
-#: moc_vis_widgs.cpp:139
-msgid "VISION::UserStBaruserChanged(QString,QString)"
-msgstr ""
-
-#: moc_vis_widgs.cpp:204
-msgid "VISION::LineEditvalChanged(QString)"
-msgstr ""
-
-#: moc_vis_widgs.cpp:286
-msgid "VISION::TextEdittextChanged(QString)applySlot()"
-msgstr ""
-
-#: moc_vis_widgs.cpp:367
-msgid ""
-"VISION::WdgViewnewWdgItem(string)load(string,bool,bool,XMLNode*)item,load,"
-"inititem,loadload(string)"
-msgstr ""
 
 #: tvision.cpp:43
 msgid "Vision"
@@ -2716,7 +2576,7 @@ msgstr ""
 msgid "bool"
 msgstr ""
 
-#: vis_devel_widgs.cpp:271 vis_devel_widgs.cpp:2200 vis_devel_widgs.cpp:2480
+#: vis_devel_widgs.cpp:271 vis_devel_widgs.cpp:2200 vis_devel_widgs.cpp:2470
 msgid "dec"
 msgstr ""
 
@@ -2744,8 +2604,8 @@ msgstr "Значення"
 msgid "dd.MM.yyyy hh:mm:ss"
 msgstr ""
 
-#: vis_devel_widgs.cpp:379 vis_devel_widgs.cpp:2500 vis_devel_widgs.cpp:2513
-#: vis_devel_widgs.cpp:2939
+#: vis_devel_widgs.cpp:379 vis_devel_widgs.cpp:2485 vis_devel_widgs.cpp:2498
+#: vis_devel_widgs.cpp:2921
 msgid "white"
 msgstr ""
 
@@ -2836,8 +2696,8 @@ msgstr ""
 msgid "Type"
 msgstr "Тип"
 
-#: vis_devel_widgs.cpp:1111 vis_devel_widgs.cpp:2558 vis_devel_widgs.cpp:2569
-#: vis_devel_widgs.cpp:2571
+#: vis_devel_widgs.cpp:1111 vis_devel_widgs.cpp:2543 vis_devel_widgs.cpp:2554
+#: vis_devel_widgs.cpp:2556
 msgid "application/OpenSCADA-libwdg"
 msgstr ""
 
@@ -3081,10 +2941,10 @@ msgid "Press to make image from widget."
 msgstr "Натиснути для створення зображення з віджету."
 
 #: vis_devel_widgs.cpp:2194
-msgid "Increase the visual scale of the widget by 10%"
-msgstr "Збільшити візуальний масштаб віджету на 10%."
+msgid "Zoom in (+10%)"
+msgstr "Збільшити (+10%)"
 
-#: vis_devel_widgs.cpp:2195 vis_devel_widgs.cpp:2475
+#: vis_devel_widgs.cpp:2195 vis_devel_widgs.cpp:2469
 msgid "inc"
 msgstr ""
 
@@ -3093,24 +2953,24 @@ msgid "Press to increase the visual scale of the widget by 10%."
 msgstr "Натисніть, щоб збільшити візуальний масштаб віджету на 10%."
 
 #: vis_devel_widgs.cpp:2199
-msgid "Deccrease the visual scale of the widget by 10%"
-msgstr "Зменшити візуальний масштаб віджету на 10%."
+msgid "Zoom out (-10%)"
+msgstr "Зменшити (-10%)"
 
 #: vis_devel_widgs.cpp:2201
 msgid "Press to decrease the visual scale of the widget by 10%."
 msgstr "Натисніть, щоб зменшити візуальний масштаб віджету на 10%."
 
 #: vis_devel_widgs.cpp:2204
-msgid "Set the visual scale of the widget to 100%"
-msgstr "Встановитии візуальний масштаб віджету в 100%."
+msgid "Reset zoom (100%)"
+msgstr "Скинути масштаб (100%)"
 
-#: vis_devel_widgs.cpp:2205 vis_devel_widgs.cpp:2469
+#: vis_devel_widgs.cpp:2205 vis_devel_widgs.cpp:2468
 msgid "unset"
 msgstr ""
 
 #: vis_devel_widgs.cpp:2206
 msgid "Press to set the visual scale of the widget to 100%."
-msgstr "Натисніть, щоб встановитии візуальний масштаб віджету в 100%."
+msgstr "Натисніть, щоб встановитии візуальний масштаб віджету у 100%."
 
 #: vis_devel_widgs.cpp:2238
 #, c-format
@@ -3141,25 +3001,25 @@ msgstr "Вибрані елементи --- xy(%2:%3) шв[%4:%5]"
 msgid "Page: '%1' --- xy(%2:%3) wh[%4:%5]"
 msgstr "Сторінка: '%1' --- xy(%2:%3) шв[%4:%5]"
 
-#: vis_devel_widgs.cpp:2499 vis_devel_widgs.cpp:2515 vis_devel_widgs.cpp:2923
-#: vis_devel_widgs.cpp:2935 vis_devel_widgs.cpp:2941 vis_run_widgs.cpp:241
+#: vis_devel_widgs.cpp:2484 vis_devel_widgs.cpp:2500 vis_devel_widgs.cpp:2905
+#: vis_devel_widgs.cpp:2917 vis_devel_widgs.cpp:2923 vis_run_widgs.cpp:241
 #: vis_run_widgs.cpp:242
 msgid "black"
 msgstr ""
 
-#: vis_devel_widgs.cpp:2531 vis_shapes.cpp:75
+#: vis_devel_widgs.cpp:2516 vis_shapes.cpp:75
 msgid ":/images/attention.png"
 msgstr ""
 
-#: vis_devel_widgs.cpp:2532
+#: vis_devel_widgs.cpp:2517
 msgid "Widget is not enabled or shape is not supported!"
 msgstr "Віджет вимкнено або образ віджету не підтримується!"
 
-#: vis_devel_widgs.cpp:2640
+#: vis_devel_widgs.cpp:2625
 msgid "Select elements: '%1'"
 msgstr "Вибрано елементи: '%1'"
 
-#: vis_devel_widgs.cpp:2924
+#: vis_devel_widgs.cpp:2906
 msgid "lightgreen"
 msgstr ""
 
@@ -4927,27 +4787,3 @@ msgstr "Час ініціалізації '%s' %f мс."
 #: vis_widgs.h:58
 msgid "Vision dialog"
 msgstr "Vision діалог"
-
-#~ msgid "Up selected widget"
-#~ msgstr "Підняття вибраного віджета"
-
-#~ msgid "The button for make up selected widget"
-#~ msgstr "Кнопка для підняття вибраного віджета"
-
-#~ msgid "Press for make up selected widget."
-#~ msgstr "Натиснути для підняття вибраного віджета."
-
-#~ msgid "The button for make down selected widget"
-#~ msgstr "Кнопка для опускання вибраного віджета"
-
-#~ msgid "Lower selected widget"
-#~ msgstr "Опускання вибраного віджета донизу"
-
-#~ msgid "Press for lowering selected widget."
-#~ msgstr "Натиснути для опускання вибраного віджета донизу."
-
-#~ msgid "Press for cursor to be unseted"
-#~ msgstr "Натиснути для повернення курсору"
-
-#~ msgid "Press for holds to be anabled"
-#~ msgstr "Натиснути для включення прив'язок"

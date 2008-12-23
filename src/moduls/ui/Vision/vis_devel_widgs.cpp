@@ -2132,7 +2132,7 @@ void DevelWdgView::wdgPopup( )
     QMenu popup;
     QTreeWidget *lview = (QTreeWidget *)sender();
 
-    //- Cancel new widget inserting -
+    //> Cancel new widget inserting
     QAction *act = mainWin()->actGrpWdgAdd->checkedAction();
     if( act && act->isChecked() )
     {
@@ -2141,12 +2141,12 @@ void DevelWdgView::wdgPopup( )
 	return;
     }
 
-    //- Add actions -
+    //> Add actions
     if( edit() )
     {
-	//-- Individual primitive menus --
+	//>> Individual primitive menus
 	if( editWdg && editWdg->shape )	editWdg->shape->wdgPopup( editWdg, popup );
-	//-- Exit from widget edition --
+	//>> Exit from widget edition
 	QAction *actExitEdit = new QAction(_("Exit from widget editing"),this);
 	actExitEdit->setStatusTip(_("Press to exit from widget editing."));
 	connect(actExitEdit, SIGNAL(activated()), this, SLOT(editExit()));
@@ -2154,7 +2154,7 @@ void DevelWdgView::wdgPopup( )
     }
     else
     {
-	//-- Insert item actions --
+	//>> Insert item actions
 	if( !selectChilds(&sel_cnt,&sel_wdgs).empty() )
 	{
 	    popup.addAction(mainWin()->actVisItDel);
@@ -2167,10 +2167,10 @@ void DevelWdgView::wdgPopup( )
 	    popup.addAction(mainWin()->actDBLoad);
 	    popup.addAction(mainWin()->actDBSave);
 	    popup.addSeparator();
-	    //-- Insert item actions --
+	    //>> Insert item actions
 	    popup.addMenu(mainWin()->mn_widg_fnc);
 	}
-	//-- Make edit enter action --
+	//>> Make edit enter action
 	popup.addSeparator();
 	if( (sel_wdgs.size() == 1 && sel_wdgs[0]->shape && sel_wdgs[0]->shape->isEditable()) || (shape && shape->isEditable()) )
 	{
@@ -2179,34 +2179,34 @@ void DevelWdgView::wdgPopup( )
 	    connect(actEnterEdit, SIGNAL(activated()), this, SLOT(editEnter()));
 	    popup.addAction(actEnterEdit);
 	}
-	//-- Make widget icon --
+	//>> Make widget icon
 	QAction *actMakeIco = new QAction(parentWidget()->windowIcon(),_("Make icon from widget"),this);
 	actMakeIco->setStatusTip(_("Press to make icon from widget."));
 	connect(actMakeIco, SIGNAL(activated()), this, SLOT(makeIcon()));
 	popup.addAction(actMakeIco);
-	//-- Make widget image --
+	//>> Make widget image
 	QAction *actMakeImg = new QAction(_("Make image from widget"),this);
 	actMakeImg->setStatusTip(_("Press to make image from widget."));
 	connect(actMakeImg, SIGNAL(activated()), this, SLOT(makeImage()));
 	popup.addAction(actMakeImg);
 	popup.addSeparator();
-        //-- Unset, increase, decrease the visual scale of thge widget --
-        QAction *actIncVisScale = new QAction(_("Increase the visual scale of the widget by 10%"),this);
-        actIncVisScale->setObjectName("inc");
-        actIncVisScale->setStatusTip(_("Press to increase the visual scale of the widget by 10%."));
-        connect(actIncVisScale, SIGNAL(activated()), this, SLOT(incDecVisScale()));
-        popup.addAction(actIncVisScale);
-        QAction *actDecVisScale = new QAction(_("Deccrease the visual scale of the widget by 10%"),this);
-        actDecVisScale->setObjectName("dec");
-        actDecVisScale->setStatusTip(_("Press to decrease the visual scale of the widget by 10%."));
-        connect(actDecVisScale, SIGNAL(activated()), this, SLOT(incDecVisScale()));
-        popup.addAction(actDecVisScale);
-        QAction *actUnsetVisScale = new QAction(_("Set the visual scale of the widget to 100%"),this);
-        actUnsetVisScale->setObjectName("unset");
-        actUnsetVisScale->setStatusTip(_("Press to set the visual scale of the widget to 100%."));
-        connect(actUnsetVisScale, SIGNAL(activated()), this, SLOT(incDecVisScale()));
-        popup.addAction(actUnsetVisScale);
-        popup.addSeparator();
+	//>> Unset, increase, decrease the visual scale of thge widget
+	QAction *actIncVisScale = new QAction(_("Zoom in (+10%)"),this);
+	actIncVisScale->setObjectName("inc");
+	actIncVisScale->setStatusTip(_("Press to increase the visual scale of the widget by 10%."));
+	connect(actIncVisScale, SIGNAL(activated()), this, SLOT(incDecVisScale()));
+	popup.addAction(actIncVisScale);
+	QAction *actDecVisScale = new QAction(_("Zoom out (-10%)"),this);
+	actDecVisScale->setObjectName("dec");
+	actDecVisScale->setStatusTip(_("Press to decrease the visual scale of the widget by 10%."));
+	connect(actDecVisScale, SIGNAL(activated()), this, SLOT(incDecVisScale()));
+	popup.addAction(actDecVisScale);
+	QAction *actUnsetVisScale = new QAction(_("Reset zoom (100%)"),this);
+	actUnsetVisScale->setObjectName("unset");
+	actUnsetVisScale->setStatusTip(_("Press to set the visual scale of the widget to 100%."));
+	connect(actUnsetVisScale, SIGNAL(activated()), this, SLOT(incDecVisScale()));
+	popup.addAction(actUnsetVisScale);
+	popup.addSeparator();
 
 	popup.addAction(mainWin()->actVisItCut);
 	popup.addAction(mainWin()->actVisItCopy);
@@ -2456,33 +2456,18 @@ float DevelWdgView::yScale( bool full )
     return WdgView::yScale( full );
 }
 
-void DevelWdgView::setVisScale( int val )
+void DevelWdgView::setVisScale( float val )
 {
-    mVisScale = (val>0) ? vmin(20,vmax(0.01,mVisScale*((double)(val)/100)))
-                        : vmin(20,vmax(0.01,mVisScale/((double)(-val)/100)));
+    mVisScale = vmin(10,vmax(0.1,val));
     load("");
     mainWin( )->setWdgVisScale( mVisScale );
 }
 
 void DevelWdgView::incDecVisScale( )
 {
-    if(sender()->objectName() == "unset")
-    {
-        mVisScale = 1;
-        setVisScale( 100 );
-        mainWin( )->setWdgVisScale( mVisScale );
-    }
-    else if(sender()->objectName() == "inc")
-    {
-        setVisScale( 110 );
-        mainWin( )->setWdgVisScale( mVisScale );
-    }
-    else if(sender()->objectName() == "dec")
-    {
-        setVisScale( -110 );
-        mainWin( )->setWdgVisScale( mVisScale );
-    }
-
+    if( sender()->objectName() == "unset" )	setVisScale(1);
+    else if( sender()->objectName() == "inc" )	setVisScale(visScale()+0.1);
+    else if( sender()->objectName() == "dec" )	setVisScale(visScale()-0.1);
 }
 
 bool DevelWdgView::event( QEvent *event )
@@ -2721,18 +2706,15 @@ bool DevelWdgView::event( QEvent *event )
 		editEnter( );
 		return true;
 	    }
-            case QEvent::Wheel:
-            {
-                if( !(QApplication::keyboardModifiers()&Qt::ControlModifier) ) break;
-                QWheelEvent *ev = static_cast<QWheelEvent*>(event); 
-                setVisScale( ev->delta () );
-                return true;
-            }
+	    case QEvent::Wheel:
+		if( !(QApplication::keyboardModifiers()&Qt::ControlModifier) ) break;
+		setVisScale( visScale()+(float)((QWheelEvent*)event)->delta()/12000 );
+		return true;
 	    case QEvent::FocusIn:
-                if( edit() )    break;
+		if( edit() )    break;
 		//-- Unselect and store child widgets --
 		//if(select())
-                    setSelect(true);
+		setSelect(true);
 		mainWin()->setWdgScale(false);
 		return true;
 	    case QEvent::FocusOut:
