@@ -1,3 +1,6 @@
+2008-12-23 Maxim
+- /UI/Vision: Visual scale manipulation support is added.
+
 2008-12-22 Roman
 - !:/SYS: Documentation pack is unified and separated to project info files and documentation. Dynamic librarie's links packing into main
     package and development is fixed.

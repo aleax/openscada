@@ -4,47 +4,187 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #: tvision.cpp:70 tvision.cpp:174 tvision.cpp:175 tvision.cpp:176
-#: tvision.cpp:376 vis_devel.cpp:562 vis_devel.cpp:1041 vis_devel.cpp:1154
-#: vis_devel.cpp:1188 vis_devel_dlgs.cpp:483 vis_devel_dlgs.cpp:553
-#: vis_devel_dlgs.cpp:595 vis_devel_dlgs.cpp:653 vis_devel_dlgs.cpp:1297
-#: vis_devel_dlgs.cpp:1380 vis_devel_widgs.cpp:96 vis_devel_widgs.cpp:536
+#: tvision.cpp:376 vis_devel.cpp:566 vis_devel.cpp:1055 vis_devel.cpp:1168
+#: vis_devel.cpp:1202 vis_devel_dlgs.cpp:483 vis_devel_dlgs.cpp:553
+#: vis_devel_dlgs.cpp:595 vis_devel_dlgs.cpp:653 vis_devel_dlgs.cpp:1298
+#: vis_devel_dlgs.cpp:1381 vis_devel_widgs.cpp:96 vis_devel_widgs.cpp:536
 #: vis_devel_widgs.cpp:1081 vis_devel_widgs.cpp:1170 vis_devel_widgs.cpp:1171
 #: vis_devel_widgs.cpp:1172 vis_devel_widgs.cpp:1514 vis_devel_widgs.cpp:1565
-#: vis_devel_widgs.cpp:1632 vis_devel_widgs.cpp:1894 vis_devel_widgs.cpp:2067
-#: vis_devel_widgs.cpp:2123 vis_devel_widgs.cpp:2408 vis_devel_widgs.cpp:2419
-#: vis_devel_widgs.cpp:2629 vis_devel_widgs.cpp:2634 vis_devel_widgs.cpp:2763
-#: vis_devel_widgs.cpp:2770 vis_run.cpp:769 vis_run.cpp:950 vis_run.cpp:1025
-#: vis_run.cpp:1105 vis_run.cpp:1148 vis_run_widgs.cpp:60
-#: vis_run_widgs.cpp:113 vis_run_widgs.cpp:118 vis_run_widgs.cpp:147
-#: vis_run_widgs.cpp:224 vis_run_widgs.cpp:265 vis_run_widgs.cpp:488
-#: vis_shape_elfig.cpp:158 vis_shape_elfig.cpp:196 vis_shape_elfig.cpp:1048
-#: vis_shape_elfig.cpp:1052 vis_shape_elfig.cpp:1057 vis_shape_elfig.cpp:1061
-#: vis_shape_elfig.cpp:1065 vis_shape_elfig.cpp:1097 vis_shape_elfig.cpp:1101
-#: vis_shape_elfig.cpp:1105 vis_shape_elfig.cpp:1109 vis_shape_elfig.cpp:1114
-#: vis_shape_elfig.cpp:1141 vis_shape_elfig.cpp:1145 vis_shape_elfig.cpp:1149
-#: vis_shape_elfig.cpp:1153 vis_shape_elfig.cpp:1158 vis_shape_elfig.cpp:1254
-#: vis_shape_elfig.cpp:1259 vis_shape_elfig.cpp:1326 vis_shape_elfig.cpp:1336
-#: vis_shape_elfig.cpp:1337 vis_shape_elfig.cpp:1340 vis_shape_elfig.cpp:1341
-#: vis_shapes.cpp:1049 vis_shapes.cpp:1077 vis_shapes.cpp:1603
-#: vis_shapes.cpp:2659 vis_shapes.cpp:2691 vis_shapes.cpp:2705
-#: vis_widgs.cpp:124 vis_widgs.cpp:130 vis_widgs.cpp:598 vis_widgs.cpp:650
-#: vis_widgs.cpp:655 vis_widgs.cpp:746 vis_widgs.cpp:837 vis_widgs.cpp:843
-#: vis_widgs.cpp:874 vis_widgs.cpp:897 vis_widgs.cpp:903 vis_widgs.cpp:917
-#: vis_widgs.cpp:921 vis_widgs.cpp:931 vis_widgs.cpp:936 vis_devel.h:97
-#: vis_devel.h:98 vis_devel_widgs.h:318 vis_devel_widgs.h:356 vis_run.h:107
-#: vis_run.h:108 vis_run.h:109 vis_run.h:111 vis_run.h:112 vis_run.h:113
-#: vis_widgs.h:260
+#: vis_devel_widgs.cpp:1632 vis_devel_widgs.cpp:1895 vis_devel_widgs.cpp:2068
+#: vis_devel_widgs.cpp:2124 vis_devel_widgs.cpp:2426 vis_devel_widgs.cpp:2437
+#: vis_devel_widgs.cpp:2463 vis_devel_widgs.cpp:2688 vis_devel_widgs.cpp:2693
+#: vis_devel_widgs.cpp:2829 vis_devel_widgs.cpp:2836 vis_run.cpp:769
+#: vis_run.cpp:950 vis_run.cpp:1025 vis_run.cpp:1105 vis_run.cpp:1148
+#: vis_run_widgs.cpp:60 vis_run_widgs.cpp:113 vis_run_widgs.cpp:118
+#: vis_run_widgs.cpp:147 vis_run_widgs.cpp:224 vis_run_widgs.cpp:265
+#: vis_run_widgs.cpp:488 vis_shape_elfig.cpp:158 vis_shape_elfig.cpp:196
+#: vis_shape_elfig.cpp:1048 vis_shape_elfig.cpp:1052 vis_shape_elfig.cpp:1057
+#: vis_shape_elfig.cpp:1061 vis_shape_elfig.cpp:1065 vis_shape_elfig.cpp:1097
+#: vis_shape_elfig.cpp:1101 vis_shape_elfig.cpp:1105 vis_shape_elfig.cpp:1109
+#: vis_shape_elfig.cpp:1114 vis_shape_elfig.cpp:1141 vis_shape_elfig.cpp:1145
+#: vis_shape_elfig.cpp:1149 vis_shape_elfig.cpp:1153 vis_shape_elfig.cpp:1158
+#: vis_shape_elfig.cpp:1254 vis_shape_elfig.cpp:1259 vis_shape_elfig.cpp:1326
+#: vis_shape_elfig.cpp:1336 vis_shape_elfig.cpp:1337 vis_shape_elfig.cpp:1340
+#: vis_shape_elfig.cpp:1341 vis_shapes.cpp:1049 vis_shapes.cpp:1077
+#: vis_shapes.cpp:1603 vis_shapes.cpp:2659 vis_shapes.cpp:2691
+#: vis_shapes.cpp:2705 vis_widgs.cpp:124 vis_widgs.cpp:130 vis_widgs.cpp:598
+#: vis_widgs.cpp:650 vis_widgs.cpp:655 vis_widgs.cpp:746 vis_widgs.cpp:837
+#: vis_widgs.cpp:843 vis_widgs.cpp:874 vis_widgs.cpp:897 vis_widgs.cpp:903
+#: vis_widgs.cpp:917 vis_widgs.cpp:921 vis_widgs.cpp:931 vis_widgs.cpp:936
+#: vis_devel.h:100 vis_devel.h:101 vis_devel_widgs.h:318 vis_devel_widgs.h:356
+#: vis_run.h:107 vis_run.h:108 vis_run.h:109 vis_run.h:111 vis_run.h:112
+#: vis_run.h:113 vis_widgs.h:260
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 0.7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-15 13:20+0200\n"
+"POT-Creation-Date: 2008-12-23 14:47+0200\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
+
+#: moc_vis_devel.cpp:67
+msgid ""
+"VISION::VisDevelopitem,forceitemmodifyToolUpdate(string)exitModifChk()aboutQt"
+"()updateMenuWindow()prjRun()visualItAdd(QAction*,QPointF,string,string),pnt,"
+"wid,pntvisualItAdd(QAction*)visualItDel(string)visualItProp()visualItCut()"
+"visualItPaste()endRunChk()"
+msgstr ""
+
+#: moc_vis_devel_dlgs.cpp:47
+msgid "VISION::LibProjPropselectIco()delMimeData()unloadMimeData()itb"
+msgstr ""
+
+#: moc_vis_devel_dlgs.cpp:126
+msgid ""
+"VISION::VisItPropselectIco()addAttr()changeAttr(QTreeWidgetItem*,int)"
+"tabChanged(int)"
+msgstr ""
+
+#: moc_vis_devel_widgs.cpp:37
+msgid "VISION::ModInspAttr"
+msgstr ""
+
+#: moc_vis_devel_widgs.cpp:95
+msgid "VISION::InspAttr"
+msgstr ""
+
+#: moc_vis_devel_widgs.cpp:156
+msgid "VISION::InspAttrDockmodified(string)"
+msgstr ""
+
+#: moc_vis_devel_widgs.cpp:216
+msgid "VISION::InspLnk"
+msgstr ""
+
+#: moc_vis_devel_widgs.cpp:267
+msgid "VISION::LinkItemDelegateselItem(int)"
+msgstr ""
+
+#: moc_vis_devel_widgs.cpp:319
+msgid "VISION::InspLnkDock"
+msgstr ""
+
+#: moc_vis_devel_widgs.cpp:379
+msgid ""
+"VISION::WdgTreeselectItem(string,bool)selectItem(string)updateTree()force"
+msgstr ""
+
+#: moc_vis_devel_widgs.cpp:458
+msgid ""
+"VISION::ProjTreeselectItem(string,bool)selectItem(string)updateTree(string,"
+"QTreeWidgetItem*)vca_itctrTreePopup()selectItem(bool)"
+msgstr ""
+
+#: moc_vis_devel_widgs.cpp:530
+msgid "VISION::LineEditProp"
+msgstr ""
+
+#: moc_vis_devel_widgs.cpp:578
+msgid "VISION::WScaleStBar"
+msgstr ""
+
+#: moc_vis_devel_widgs.cpp:623
+msgid "VISION::SizePntWdg"
+msgstr ""
+
+#: moc_vis_devel_widgs.cpp:685
+msgid ""
+"VISION::DevelWdgViewapply(string)saveGeom(string)makeImage()incDecVisScale()"
+msgstr ""
+
+#: moc_vis_run.cpp:59
+msgid ""
+"VISION::VisRunprintPg()printDiag()printDoc()exportPg()exportDiag()exportDoc()"
+"oldUser,oldPassabout()updatePage()alarmAct(QAction*)"
+msgstr ""
+
+#: moc_vis_run_widgs.cpp:34
+msgid "VISION::RunWdgView"
+msgstr ""
+
+#: moc_vis_run_widgs.cpp:76
+msgid "VISION::RunPageView"
+msgstr ""
+
+#: moc_vis_shape_elfig.cpp:37
+msgid "VISION::ElFigDt"
+msgstr ""
+
+#: moc_vis_shape_elfig.cpp:88
+msgid "VISION::ShapeElFigure"
+msgstr ""
+
+#: moc_vis_shapes.cpp:34
+msgid "VISION::WdgShape"
+msgstr ""
+
+#: moc_vis_shapes.cpp:87
+msgid ""
+"VISION::ShapeFormEltextAccept()comboChange(QString)buttonPressed()"
+"buttonToggled(bool)"
+msgstr ""
+
+#: moc_vis_shapes.cpp:150
+msgid "VISION::ShapeDiagram"
+msgstr ""
+
+#: moc_vis_shapes.cpp:201
+msgid "VISION::ShapeProtocol"
+msgstr ""
+
+#: moc_vis_shapes.cpp:252
+msgid "VISION::ShapeDocument"
+msgstr ""
+
+#: moc_vis_widgs.cpp:37
+msgid "VISION::DlgUser"
+msgstr ""
+
+#: moc_vis_widgs.cpp:88
+msgid "VISION::FontDlg"
+msgstr ""
+
+#: moc_vis_widgs.cpp:139
+msgid "VISION::UserStBaruserChanged(QString,QString)"
+msgstr ""
+
+#: moc_vis_widgs.cpp:204
+msgid "VISION::LineEditvalChanged(QString)"
+msgstr ""
+
+#: moc_vis_widgs.cpp:286
+msgid "VISION::TextEdittextChanged(QString)applySlot()"
+msgstr ""
+
+#: moc_vis_widgs.cpp:367
+msgid ""
+"VISION::WdgViewnewWdgItem(string)load(string,bool,bool,XMLNode*)item,load,"
+"inititem,loadload(string)"
+msgstr ""
 
 #: tvision.cpp:43
 msgid "Vision"
@@ -121,7 +261,7 @@ msgstr "Запуск QT GUI"
 msgid "SubType"
 msgstr "Підтип"
 
-#: tvision.cpp:120 tvision.cpp:126 vis_devel.cpp:692 vis_run.cpp:700
+#: tvision.cpp:120 tvision.cpp:126 vis_devel.cpp:706 vis_run.cpp:700
 msgid "Developers"
 msgstr "Розробники"
 
@@ -193,9 +333,9 @@ msgstr ""
 
 #: tvision.cpp:228 tvision.cpp:348 tvision.cpp:353 tvision.cpp:358
 #: tvision.cpp:363 tvision.cpp:366 tvision.cpp:371 tvision.cpp:391
-#: vis_devel.cpp:644 vis_devel.cpp:921 vis_devel.cpp:1143 vis_devel.cpp:1203
+#: vis_devel.cpp:658 vis_devel.cpp:935 vis_devel.cpp:1157 vis_devel.cpp:1217
 #: vis_devel_dlgs.cpp:248 vis_devel_dlgs.cpp:442 vis_devel_dlgs.cpp:631
-#: vis_devel_dlgs.cpp:927 vis_devel_dlgs.cpp:1134 vis_devel_dlgs.cpp:1272
+#: vis_devel_dlgs.cpp:928 vis_devel_dlgs.cpp:1135 vis_devel_dlgs.cpp:1273
 #: vis_devel_widgs.cpp:162 vis_devel_widgs.cpp:402 vis_devel_widgs.cpp:807
 #: vis_devel_widgs.cpp:954 vis_devel_widgs.cpp:1174 vis_devel_widgs.cpp:1551
 #: vis_devel_widgs.cpp:1568 vis_devel_widgs.cpp:1635 vis_run.cpp:852
@@ -206,17 +346,17 @@ msgstr ""
 msgid "get"
 msgstr ""
 
-#: tvision.cpp:229 tvision.cpp:345 tvision.cpp:424 vis_devel.cpp:640
-#: vis_devel.cpp:644 vis_devel.cpp:646 vis_devel.cpp:655 vis_devel.cpp:763
-#: vis_devel.cpp:773 vis_devel.cpp:829 vis_devel.cpp:852 vis_devel.cpp:877
-#: vis_devel.cpp:886 vis_devel.cpp:902 vis_devel.cpp:911 vis_devel.cpp:943
-#: vis_devel.cpp:944 vis_devel.cpp:972 vis_devel.cpp:973 vis_devel.cpp:980
-#: vis_devel.cpp:985 vis_devel.cpp:999 vis_devel.cpp:1001 vis_devel.cpp:1007
-#: vis_devel.cpp:1009 vis_devel.cpp:1053 vis_devel.cpp:1055 vis_devel.cpp:1060
-#: vis_devel.cpp:1061 vis_devel.cpp:1066 vis_devel.cpp:1068 vis_devel.cpp:1069
-#: vis_devel.cpp:1144 vis_devel.cpp:1209 vis_devel.cpp:1218 vis_devel.cpp:1227
-#: vis_devel.cpp:1228 vis_devel.cpp:1238 vis_devel.cpp:1239 vis_devel.cpp:1300
-#: vis_devel.cpp:1311 vis_devel.cpp:1312 vis_devel_dlgs.cpp:251
+#: tvision.cpp:229 tvision.cpp:345 tvision.cpp:424 vis_devel.cpp:654
+#: vis_devel.cpp:658 vis_devel.cpp:660 vis_devel.cpp:669 vis_devel.cpp:777
+#: vis_devel.cpp:787 vis_devel.cpp:843 vis_devel.cpp:866 vis_devel.cpp:891
+#: vis_devel.cpp:900 vis_devel.cpp:916 vis_devel.cpp:925 vis_devel.cpp:957
+#: vis_devel.cpp:958 vis_devel.cpp:986 vis_devel.cpp:987 vis_devel.cpp:994
+#: vis_devel.cpp:999 vis_devel.cpp:1013 vis_devel.cpp:1015 vis_devel.cpp:1021
+#: vis_devel.cpp:1023 vis_devel.cpp:1067 vis_devel.cpp:1069 vis_devel.cpp:1074
+#: vis_devel.cpp:1075 vis_devel.cpp:1080 vis_devel.cpp:1082 vis_devel.cpp:1083
+#: vis_devel.cpp:1158 vis_devel.cpp:1223 vis_devel.cpp:1232 vis_devel.cpp:1241
+#: vis_devel.cpp:1242 vis_devel.cpp:1252 vis_devel.cpp:1253 vis_devel.cpp:1314
+#: vis_devel.cpp:1325 vis_devel.cpp:1326 vis_devel_dlgs.cpp:251
 #: vis_devel_dlgs.cpp:275 vis_devel_dlgs.cpp:283 vis_devel_dlgs.cpp:285
 #: vis_devel_dlgs.cpp:299 vis_devel_dlgs.cpp:302 vis_devel_dlgs.cpp:316
 #: vis_devel_dlgs.cpp:319 vis_devel_dlgs.cpp:333 vis_devel_dlgs.cpp:348
@@ -225,23 +365,23 @@ msgstr ""
 #: vis_devel_dlgs.cpp:413 vis_devel_dlgs.cpp:443 vis_devel_dlgs.cpp:501
 #: vis_devel_dlgs.cpp:517 vis_devel_dlgs.cpp:561 vis_devel_dlgs.cpp:578
 #: vis_devel_dlgs.cpp:604 vis_devel_dlgs.cpp:632 vis_devel_dlgs.cpp:652
-#: vis_devel_dlgs.cpp:930 vis_devel_dlgs.cpp:955 vis_devel_dlgs.cpp:968
-#: vis_devel_dlgs.cpp:970 vis_devel_dlgs.cpp:984 vis_devel_dlgs.cpp:986
-#: vis_devel_dlgs.cpp:1001 vis_devel_dlgs.cpp:1016 vis_devel_dlgs.cpp:1026
-#: vis_devel_dlgs.cpp:1036 vis_devel_dlgs.cpp:1044 vis_devel_dlgs.cpp:1051
-#: vis_devel_dlgs.cpp:1058 vis_devel_dlgs.cpp:1066 vis_devel_dlgs.cpp:1075
-#: vis_devel_dlgs.cpp:1088 vis_devel_dlgs.cpp:1092 vis_devel_dlgs.cpp:1138
-#: vis_devel_dlgs.cpp:1150 vis_devel_dlgs.cpp:1174 vis_devel_dlgs.cpp:1215
-#: vis_devel_dlgs.cpp:1222 vis_devel_dlgs.cpp:1234 vis_devel_dlgs.cpp:1242
-#: vis_devel_dlgs.cpp:1246 vis_devel_dlgs.cpp:1259 vis_devel_dlgs.cpp:1273
-#: vis_devel_dlgs.cpp:1279 vis_devel_dlgs.cpp:1315 vis_devel_dlgs.cpp:1332
-#: vis_devel_dlgs.cpp:1402 vis_devel_dlgs.cpp:1424 vis_devel_dlgs.cpp:1461
+#: vis_devel_dlgs.cpp:931 vis_devel_dlgs.cpp:956 vis_devel_dlgs.cpp:969
+#: vis_devel_dlgs.cpp:971 vis_devel_dlgs.cpp:985 vis_devel_dlgs.cpp:987
+#: vis_devel_dlgs.cpp:1002 vis_devel_dlgs.cpp:1017 vis_devel_dlgs.cpp:1027
+#: vis_devel_dlgs.cpp:1037 vis_devel_dlgs.cpp:1045 vis_devel_dlgs.cpp:1052
+#: vis_devel_dlgs.cpp:1059 vis_devel_dlgs.cpp:1067 vis_devel_dlgs.cpp:1076
+#: vis_devel_dlgs.cpp:1089 vis_devel_dlgs.cpp:1093 vis_devel_dlgs.cpp:1139
+#: vis_devel_dlgs.cpp:1151 vis_devel_dlgs.cpp:1175 vis_devel_dlgs.cpp:1216
+#: vis_devel_dlgs.cpp:1223 vis_devel_dlgs.cpp:1235 vis_devel_dlgs.cpp:1243
+#: vis_devel_dlgs.cpp:1247 vis_devel_dlgs.cpp:1260 vis_devel_dlgs.cpp:1274
+#: vis_devel_dlgs.cpp:1280 vis_devel_dlgs.cpp:1316 vis_devel_dlgs.cpp:1333
+#: vis_devel_dlgs.cpp:1403 vis_devel_dlgs.cpp:1425 vis_devel_dlgs.cpp:1462
 #: vis_devel_widgs.cpp:165 vis_devel_widgs.cpp:168 vis_devel_widgs.cpp:267
 #: vis_devel_widgs.cpp:403 vis_devel_widgs.cpp:441 vis_devel_widgs.cpp:811
 #: vis_devel_widgs.cpp:851 vis_devel_widgs.cpp:869 vis_devel_widgs.cpp:924
 #: vis_devel_widgs.cpp:955 vis_devel_widgs.cpp:1175 vis_devel_widgs.cpp:1569
 #: vis_devel_widgs.cpp:1601 vis_devel_widgs.cpp:1636 vis_devel_widgs.cpp:1668
-#: vis_devel_widgs.cpp:2220 vis_run.cpp:291 vis_run.cpp:708 vis_run.cpp:716
+#: vis_devel_widgs.cpp:2238 vis_run.cpp:291 vis_run.cpp:708 vis_run.cpp:716
 #: vis_run.cpp:757 vis_run.cpp:773 vis_run.cpp:838 vis_run.cpp:852
 #: vis_run.cpp:857 vis_run.cpp:868 vis_run.cpp:872 vis_run.cpp:880
 #: vis_run.cpp:900 vis_run.cpp:944 vis_run.cpp:1023 vis_run.cpp:1030
@@ -275,7 +415,7 @@ msgstr "Помилка підключення до віддаленої стан
 msgid "Auth wrong!!!"
 msgstr "Помилка аутентифікації!!!"
 
-#: tvision.cpp:259 vis_devel.cpp:886 vis_devel_widgs.cpp:1537
+#: tvision.cpp:259 vis_devel.cpp:900 vis_devel_widgs.cpp:1537
 #: vis_devel_widgs.cpp:1601 vis_devel_widgs.cpp:1627 vis_run.cpp:852
 #: vis_run.cpp:872
 msgid "/prj_"
@@ -289,8 +429,8 @@ msgstr "Старт модуля."
 msgid "Stop module."
 msgstr "Зупинка модуля."
 
-#: tvision.cpp:320 vis_devel_dlgs.cpp:250 vis_devel_dlgs.cpp:929
-#: vis_devel_dlgs.cpp:1137 vis_devel_widgs.cpp:161 vis_devel_widgs.cpp:810
+#: tvision.cpp:320 vis_devel_dlgs.cpp:250 vis_devel_dlgs.cpp:930
+#: vis_devel_dlgs.cpp:1138 vis_devel_widgs.cpp:161 vis_devel_widgs.cpp:810
 #: vis_shapes.cpp:1892 vis_shapes.cpp:2157
 msgid "info"
 msgstr ""
@@ -344,8 +484,8 @@ msgstr ""
 msgid "idm"
 msgstr ""
 
-#: tvision.cpp:325 vis_devel.cpp:887 vis_devel.cpp:912 vis_devel.cpp:1001
-#: vis_devel.cpp:1169 vis_devel_dlgs.cpp:633 vis_devel_widgs.cpp:443
+#: tvision.cpp:325 vis_devel.cpp:901 vis_devel.cpp:926 vis_devel.cpp:1015
+#: vis_devel.cpp:1183 vis_devel_dlgs.cpp:633 vis_devel_widgs.cpp:443
 #: vis_devel_widgs.cpp:811 vis_run_widgs.cpp:336 vis_run_widgs.cpp:396
 #: vis_shapes.cpp:520 vis_shapes.cpp:1956 vis_shapes.cpp:2509
 #: vis_widgs.cpp:317 vis_widgs.cpp:318 vis_widgs.cpp:319 vis_widgs.cpp:320
@@ -356,8 +496,8 @@ msgstr ""
 msgid "dest"
 msgstr ""
 
-#: tvision.cpp:325 tvision.cpp:327 tvision.cpp:337 vis_devel_dlgs.cpp:1092
-#: vis_devel_dlgs.cpp:1246 vis_devel_widgs.cpp:276
+#: tvision.cpp:325 tvision.cpp:327 tvision.cpp:337 vis_devel_dlgs.cpp:1093
+#: vis_devel_dlgs.cpp:1247 vis_devel_widgs.cpp:276
 msgid "select"
 msgstr ""
 
@@ -469,11 +609,11 @@ msgid "5"
 msgstr ""
 
 #: tvision.cpp:349 tvision.cpp:354 tvision.cpp:359 tvision.cpp:364
-#: tvision.cpp:392 vis_devel.cpp:885 vis_devel.cpp:910 vis_devel.cpp:995
-#: vis_devel.cpp:1299 vis_devel.cpp:1309 vis_devel_dlgs.cpp:500
+#: tvision.cpp:392 vis_devel.cpp:899 vis_devel.cpp:924 vis_devel.cpp:1009
+#: vis_devel.cpp:1313 vis_devel.cpp:1323 vis_devel_dlgs.cpp:500
 #: vis_devel_dlgs.cpp:516 vis_devel_dlgs.cpp:603 vis_devel_dlgs.cpp:651
-#: vis_devel_dlgs.cpp:1314 vis_devel_dlgs.cpp:1331 vis_devel_dlgs.cpp:1460
-#: vis_devel_widgs.cpp:440 vis_devel_widgs.cpp:923 vis_devel_widgs.cpp:2219
+#: vis_devel_dlgs.cpp:1315 vis_devel_dlgs.cpp:1332 vis_devel_dlgs.cpp:1461
+#: vis_devel_widgs.cpp:440 vis_devel_widgs.cpp:923 vis_devel_widgs.cpp:2237
 #: vis_run.cpp:1030 vis_widgs.cpp:773
 msgid "set"
 msgstr ""
@@ -492,16 +632,16 @@ msgstr ""
 msgid "el"
 msgstr ""
 
-#: tvision.cpp:382 tvision.cpp:386 vis_devel.cpp:878 vis_devel.cpp:903
-#: vis_devel.cpp:953 vis_devel.cpp:972 vis_devel.cpp:973 vis_devel.cpp:980
-#: vis_devel.cpp:985 vis_devel.cpp:1053 vis_devel.cpp:1055 vis_devel.cpp:1060
-#: vis_devel.cpp:1061 vis_devel.cpp:1066 vis_devel.cpp:1068 vis_devel.cpp:1069
-#: vis_devel.cpp:1258 vis_devel.cpp:1268 vis_devel_dlgs.cpp:653
-#: vis_devel_dlgs.cpp:1095 vis_devel_dlgs.cpp:1187 vis_devel_dlgs.cpp:1198
-#: vis_devel_dlgs.cpp:1203 vis_devel_dlgs.cpp:1205 vis_devel_dlgs.cpp:1206
-#: vis_devel_dlgs.cpp:1207 vis_devel_dlgs.cpp:1208 vis_devel_dlgs.cpp:1209
-#: vis_devel_dlgs.cpp:1210 vis_devel_dlgs.cpp:1218 vis_devel_dlgs.cpp:1225
-#: vis_devel_dlgs.cpp:1450 vis_devel_dlgs.cpp:1468 vis_devel_dlgs.cpp:1478
+#: tvision.cpp:382 tvision.cpp:386 vis_devel.cpp:892 vis_devel.cpp:917
+#: vis_devel.cpp:967 vis_devel.cpp:986 vis_devel.cpp:987 vis_devel.cpp:994
+#: vis_devel.cpp:999 vis_devel.cpp:1067 vis_devel.cpp:1069 vis_devel.cpp:1074
+#: vis_devel.cpp:1075 vis_devel.cpp:1080 vis_devel.cpp:1082 vis_devel.cpp:1083
+#: vis_devel.cpp:1272 vis_devel.cpp:1282 vis_devel_dlgs.cpp:653
+#: vis_devel_dlgs.cpp:1096 vis_devel_dlgs.cpp:1188 vis_devel_dlgs.cpp:1199
+#: vis_devel_dlgs.cpp:1204 vis_devel_dlgs.cpp:1206 vis_devel_dlgs.cpp:1207
+#: vis_devel_dlgs.cpp:1208 vis_devel_dlgs.cpp:1209 vis_devel_dlgs.cpp:1210
+#: vis_devel_dlgs.cpp:1211 vis_devel_dlgs.cpp:1219 vis_devel_dlgs.cpp:1226
+#: vis_devel_dlgs.cpp:1451 vis_devel_dlgs.cpp:1469 vis_devel_dlgs.cpp:1479
 #: vis_devel_widgs.cpp:188 vis_devel_widgs.cpp:238 vis_devel_widgs.cpp:403
 #: vis_devel_widgs.cpp:817 vis_devel_widgs.cpp:883 vis_devel_widgs.cpp:1188
 #: vis_devel_widgs.cpp:1203 vis_devel_widgs.cpp:1218 vis_devel_widgs.cpp:1233
@@ -517,7 +657,7 @@ msgstr ""
 msgid "Local"
 msgstr "Локальна"
 
-#: tvision.cpp:384 tvision.cpp:387 tvision.cpp:437 vis_devel.cpp:775
+#: tvision.cpp:384 tvision.cpp:387 tvision.cpp:437 vis_devel.cpp:789
 msgid "*"
 msgstr ""
 
@@ -571,19 +711,19 @@ msgstr ""
 msgid "10"
 msgstr ""
 
-#: tvision.cpp:449 vis_devel.cpp:831 vis_devel.cpp:854 vis_devel.cpp:881
-#: vis_devel.cpp:906 vis_devel.cpp:945 vis_devel.cpp:991 vis_devel.cpp:1012
-#: vis_devel.cpp:1072 vis_devel.cpp:1254 vis_devel.cpp:1304
+#: tvision.cpp:449 vis_devel.cpp:845 vis_devel.cpp:868 vis_devel.cpp:895
+#: vis_devel.cpp:920 vis_devel.cpp:959 vis_devel.cpp:1005 vis_devel.cpp:1026
+#: vis_devel.cpp:1086 vis_devel.cpp:1268 vis_devel.cpp:1318
 #: vis_devel_dlgs.cpp:504 vis_devel_dlgs.cpp:542 vis_devel_dlgs.cpp:563
 #: vis_devel_dlgs.cpp:581 vis_devel_dlgs.cpp:609 vis_devel_dlgs.cpp:637
-#: vis_devel_dlgs.cpp:657 vis_devel_dlgs.cpp:1318 vis_devel_dlgs.cpp:1364
-#: vis_devel_dlgs.cpp:1405 vis_devel_dlgs.cpp:1428 vis_devel_dlgs.cpp:1467
+#: vis_devel_dlgs.cpp:657 vis_devel_dlgs.cpp:1319 vis_devel_dlgs.cpp:1365
+#: vis_devel_dlgs.cpp:1406 vis_devel_dlgs.cpp:1429 vis_devel_dlgs.cpp:1468
 #: vis_devel_widgs.cpp:927 vis_devel_widgs.cpp:1572 vis_devel_widgs.cpp:1639
-#: vis_devel_widgs.cpp:2223 vis_run.cpp:711 vis_run.cpp:843
+#: vis_devel_widgs.cpp:2241 vis_run.cpp:711 vis_run.cpp:843
 msgid "mcat"
 msgstr ""
 
-#: vis_devel.cpp:50 vis_devel.cpp:1176 vis_devel.cpp:1333
+#: vis_devel.cpp:50 vis_devel.cpp:1190 vis_devel.cpp:1347
 #: vis_devel_widgs.cpp:443 vis_run_widgs.cpp:335 vis_run_widgs.cpp:397
 #: vis_shapes.cpp:524 vis_shapes.cpp:1911 vis_shapes.cpp:1958
 #: vis_shapes.cpp:2513 vis_widgs.cpp:317 vis_widgs.cpp:318 vis_widgs.cpp:319
@@ -617,7 +757,7 @@ msgid "The button for closing Vision developing window"
 msgstr "Кнопка для закриття вікна розробки Vision"
 
 #: vis_devel.cpp:76
-msgid "Press for close of current Vision developing window."
+msgid "Press to close the current Vision developing window."
 msgstr "Натиснути для закриття вікна розробки Vision."
 
 #: vis_devel.cpp:79 vis_run.cpp:135
@@ -660,8 +800,8 @@ msgstr "Інформація про програму та OpenSCADA"
 msgid "The button for display the programm and OpenSCADA information"
 msgstr "Кнопка для отримання інформації про програму та OpenSCADA"
 
-#: vis_devel.cpp:92 vis_run.cpp:158
-msgid "Press for display the programm and OpenSCADA information."
+#: vis_devel.cpp:92
+msgid "Press to display the programm and OpenSCADA information."
 msgstr "Натиснути для отримання інформації про програму та OpenSCADA."
 
 #: vis_devel.cpp:95 vis_run.cpp:161
@@ -672,12 +812,12 @@ msgstr "Про &Qt"
 msgid "Qt information"
 msgstr "Інформація про Qt"
 
-#: vis_devel.cpp:97 vis_run.cpp:163
-msgid "The button for using QT information"
+#: vis_devel.cpp:97
+msgid "The button for getting the using QT information"
 msgstr "Кнопка для отримання інформації про QT"
 
-#: vis_devel.cpp:98 vis_run.cpp:164
-msgid "Press for using QT information."
+#: vis_devel.cpp:98
+msgid "Press to get the using QT information."
 msgstr "Натиснути для отримання інформації про QT."
 
 #: vis_devel.cpp:101 vis_run.cpp:167
@@ -700,11 +840,11 @@ msgstr "Кнопка для запиту інформації про GUI еле�
 msgid "Get respond about user interface elements"
 msgstr "Запит інформації про GUI елементи"
 
-#: vis_devel.cpp:105 vis_run.cpp:171
-msgid "Press for respond about user interface elements."
+#: vis_devel.cpp:105
+msgid "Press to respond about user interface elements."
 msgstr "Натиснути для запиту інформації про GUI елементи."
 
-#: vis_devel.cpp:110 vis_devel.cpp:828 vis_run_widgs.cpp:118 vis_widgs.cpp:921
+#: vis_devel.cpp:110 vis_devel.cpp:842 vis_run_widgs.cpp:118 vis_widgs.cpp:921
 #: vis_widgs.cpp:931
 msgid "load"
 msgstr ""
@@ -726,10 +866,10 @@ msgid "The button for loading item data from DB"
 msgstr "Кнопка для завантаження даних елементу з БД"
 
 #: vis_devel.cpp:114
-msgid "Press for loading item data from DB."
+msgid "Press to load item data from DB."
 msgstr "Натиснути для завантаження даних елементу з БД."
 
-#: vis_devel.cpp:118 vis_devel.cpp:655 vis_devel.cpp:851
+#: vis_devel.cpp:118 vis_devel.cpp:669 vis_devel.cpp:865
 msgid "save"
 msgstr ""
 
@@ -750,7 +890,7 @@ msgid "The button for saving item data to DB"
 msgstr "Кнопка для збереження даних елементу у БД"
 
 #: vis_devel.cpp:122
-msgid "Press for saving item data to DB."
+msgid "Press to save item data to DB."
 msgstr "Натиснути для збереження даних елементу у БД."
 
 #: vis_devel.cpp:123
@@ -770,15 +910,15 @@ msgid "Run project execution"
 msgstr "Запуск виконання проекту"
 
 #: vis_devel.cpp:129
-msgid "Run project execution from selected item"
+msgid "Run project execution for selected item"
 msgstr "Запуск виконання проекту, для вибраного елемента"
 
 #: vis_devel.cpp:130
-msgid "The button for runing project execution from selected item"
+msgid "The button for runing project execution for selected item"
 msgstr "Кнопка для запуску виконання проекту, для вибраного елемента"
 
 #: vis_devel.cpp:131
-msgid "Press for runing project execution from selected item."
+msgid "Press to run project execution for selected item."
 msgstr "Натиснути для запуску виконання проекту, для вибраного елемента."
 
 #: vis_devel.cpp:135
@@ -789,7 +929,7 @@ msgstr ""
 msgid ":/images/prj_new.png"
 msgstr ""
 
-#: vis_devel.cpp:136 vis_devel.cpp:872
+#: vis_devel.cpp:136 vis_devel.cpp:886
 msgid "New project"
 msgstr "Новий проект"
 
@@ -798,11 +938,11 @@ msgid "New project create"
 msgstr "Створення нового проекту"
 
 #: vis_devel.cpp:138
-msgid "The button for creating new project"
+msgid "The button for creation of the new project"
 msgstr "Кнопка для створення нового проекту"
 
 #: vis_devel.cpp:139
-msgid "Press for creating new project."
+msgid "Press to create the new project."
 msgstr "Натиснути для створення нового проекту."
 
 #: vis_devel.cpp:142
@@ -818,15 +958,15 @@ msgid "New library"
 msgstr "Нова бібліотека"
 
 #: vis_devel.cpp:144
-msgid "New widgets library create"
+msgid "New widgets library creation"
 msgstr "Створення нової бібліотеки"
 
 #: vis_devel.cpp:145
-msgid "The button for creating new widgets library"
+msgid "The button for creation of the new widgets library"
 msgstr "Кнопка для створення нової бібліотеки"
 
 #: vis_devel.cpp:146
-msgid "Press for creating new widgets library."
+msgid "Press to create the new widgets library."
 msgstr "Натиснути для створення нової бібліотеки."
 
 #: vis_devel.cpp:149
@@ -849,15 +989,15 @@ msgstr ""
 
 #: vis_devel.cpp:152
 msgid ""
-"The button for adding visual item into library, container widget, project or "
-"page"
+"The button for addition of the visual item into library, container widget, "
+"project or page"
 msgstr ""
 "Кнопка для додавання візуальних елементів до бібліотеки, контейнерного "
 "віджету, проекту або сторінки"
 
 #: vis_devel.cpp:153
 msgid ""
-"Press for adding visual item into library, container widget, project or page."
+"Press to add visual item into library, container widget, project or page."
 msgstr ""
 "Натиснути для додавання візуальних елементів до бібліотеки, контейнерного "
 "віджету, проекту або сторінки."
@@ -894,7 +1034,7 @@ msgstr ""
 
 #: vis_devel.cpp:162
 msgid ""
-"Press for deleting visual item library, container widget, project or page."
+"Press to delete visual item from library, container widget, project or page."
 msgstr ""
 "Натиснути для видалення візуального елементу з бібліотеки, контейнерного "
 "віджета, проекту або сторінки."
@@ -920,11 +1060,11 @@ msgid "Get visual item properties"
 msgstr "Отримання властивостей візуального елементу"
 
 #: vis_devel.cpp:170
-msgid "The button for getting of visual item properies"
+msgid "The button for getting the visual item properties"
 msgstr "Кнопка для отримання властивостей візуального елементу"
 
 #: vis_devel.cpp:171
-msgid "Press for getting of visual item properies."
+msgid "Press to get the visual item properties."
 msgstr "Натиснути для отримання властивостей візуального елементу."
 
 #: vis_devel.cpp:172
@@ -948,11 +1088,11 @@ msgid "Goes visual item edit"
 msgstr "Перехід до редагування візуального елементу"
 
 #: vis_devel.cpp:179
-msgid "The button for goes to visual item edition"
+msgid "The button for going to visual item edition"
 msgstr "Кнопка для переходу до редагування візуального елементу"
 
 #: vis_devel.cpp:180
-msgid "Press for goes to visual item edition."
+msgid "Press to go to visual item edition."
 msgstr "Натиснути для переходу до редагування візуального елементу."
 
 #: vis_devel.cpp:181
@@ -972,15 +1112,15 @@ msgid "Visual item cut"
 msgstr "Вирізати візуальний елемент"
 
 #: vis_devel.cpp:188
-msgid "Goes visual item cut"
+msgid "Make visual item cut"
 msgstr "Виконати вирізання візуального елементу"
 
 #: vis_devel.cpp:189
-msgid "The button for goes to visual item cut"
+msgid "The button for making visual item cut"
 msgstr "Кнопка для виконання вирізання візуального елементу"
 
 #: vis_devel.cpp:190
-msgid "Press for goes to visual item cut."
+msgid "Press to make visual item cut."
 msgstr "Натиснути для виконання вирізання візуального елементу."
 
 #: vis_devel.cpp:191
@@ -1000,15 +1140,15 @@ msgid "Visual item copy"
 msgstr "Копіювати візуальний елемент"
 
 #: vis_devel.cpp:198
-msgid "Goes visual item copy"
+msgid "Make visual item copy"
 msgstr "Виконання копіювання візуального елементу"
 
 #: vis_devel.cpp:199
-msgid "The button for goes to visual item copy"
+msgid "The button for making visual item copy"
 msgstr "Кнопка для виконання копіювання візуального елементу"
 
 #: vis_devel.cpp:200
-msgid "Press for goes to visual item copy."
+msgid "Press to make visual item copy."
 msgstr "Натиснути для виконання копіювання візуального елементу."
 
 #: vis_devel.cpp:201
@@ -1028,15 +1168,15 @@ msgid "Visual item paste"
 msgstr "Вставити візуальний елемент"
 
 #: vis_devel.cpp:208
-msgid "Goes visual item paste"
+msgid "Make visual item paste"
 msgstr "Виконати вставку візуального елементу"
 
 #: vis_devel.cpp:209
-msgid "The button for goes to visual item paste"
+msgid "The button for making visual item paste"
 msgstr "Кнопка для виконання вставки візуального елементу"
 
 #: vis_devel.cpp:210
-msgid "Press for goes to visual item paste."
+msgid "Press to make visual item paste."
 msgstr "Натиснути для виконання вставки візуального елементу."
 
 #: vis_devel.cpp:211
@@ -1060,16 +1200,16 @@ msgid "level_up"
 msgstr ""
 
 #: vis_devel.cpp:220
-msgid "Up selected widget"
-msgstr "Підняття вибраного віджета"
+msgid "Raise selected widget to the top"
+msgstr "Підняти вибраний віджет догори"
 
 #: vis_devel.cpp:221
-msgid "The button for make up selected widget"
-msgstr "Кнопка для підняття вибраного віджета"
+msgid "The button for raising the selected widget to the top"
+msgstr "Кнопка для підняття вибраного віджету догори"
 
 #: vis_devel.cpp:222
-msgid "Press for make up selected widget."
-msgstr "Натиснути для підняття вибраного віджета."
+msgid "Press to raise the selected widget to the top."
+msgstr "Натиснути для підняття вибраного віджету догори."
 
 #: vis_devel.cpp:225
 msgid "vision_level_down"
@@ -1088,16 +1228,16 @@ msgid "level_down"
 msgstr ""
 
 #: vis_devel.cpp:228
-msgid "Down selected widget"
-msgstr "Опускання вибраного віджета"
+msgid "Down selected widget to the bottom"
+msgstr "Опустити вибраний віджет донизу"
 
 #: vis_devel.cpp:229
-msgid "The button for make down selected widget"
-msgstr "Кнопка для опускання вибраного віджета"
+msgid "The button for downing the selected widget to the bottom"
+msgstr "Кнопка для опускання вибраного віджету донизу"
 
 #: vis_devel.cpp:230
-msgid "Press for make down selected widget."
-msgstr "Натиснути для опускання вибраного віджета."
+msgid "Press to down the selected widget to the bottom."
+msgstr "Натиснути для опускання вибраного віджету донизу."
 
 #: vis_devel.cpp:233
 msgid "vision_level_rise"
@@ -1116,16 +1256,16 @@ msgid "level_rise"
 msgstr ""
 
 #: vis_devel.cpp:236
-msgid "Rise selected widget"
-msgstr "Підняття вибраного віджета на гору"
+msgid "Raise selected widget"
+msgstr "Підняття вибраного віджета"
 
 #: vis_devel.cpp:237
-msgid "The button for rising selected widget"
-msgstr "Кнопка для підняття вибраного віджета на гору"
+msgid "The button for raising the selected widget"
+msgstr "Кнопка для підняття вибраного віджета"
 
 #: vis_devel.cpp:238
-msgid "Press for rising selected widget."
-msgstr "Натиснути для підняття вибраного віджета на гору."
+msgid "Press to raise the selected widget."
+msgstr "Натиснути для підняття вибраного віджета."
 
 #: vis_devel.cpp:241
 msgid "vision_level_lower"
@@ -1144,16 +1284,16 @@ msgid "level_lower"
 msgstr ""
 
 #: vis_devel.cpp:244
-msgid "Lower selected widget"
-msgstr "Опускання вибраного віджета донизу"
+msgid "Down selected widget"
+msgstr "Опускання вибраного віджета"
 
 #: vis_devel.cpp:245
-msgid "The button for lowering selected widget"
-msgstr "Кнопка для опускання вибраного віджета донизу"
+msgid "The button for downing the selected widget"
+msgstr "Кнопка для опускання вибраного віджета"
 
 #: vis_devel.cpp:246
-msgid "Press for lowering selected widget."
-msgstr "Натиснути для опускання вибраного віджета донизу."
+msgid "Press to down the selected widget."
+msgstr "Натиснути для опускання вибраного віджета."
 
 #: vis_devel.cpp:251
 msgid "vision_align_left"
@@ -1172,15 +1312,15 @@ msgid "align_left"
 msgstr ""
 
 #: vis_devel.cpp:254
-msgid "Align selected widgets to left"
+msgid "Align selected widgets to the left"
 msgstr "Вирівнювання вибраних віджетів зліва"
 
 #: vis_devel.cpp:255
-msgid "The button for align selected widgets to left"
+msgid "The button for alignment of selected widgets to the left"
 msgstr "Кнопка для вирівнювання вибраних віджетів зліва"
 
 #: vis_devel.cpp:256
-msgid "Press for align selected widgets to left."
+msgid "Press to align selected widgets to the left."
 msgstr "Натиснути для вирівнювання вибраних віджетів зліва."
 
 #: vis_devel.cpp:259
@@ -1200,15 +1340,15 @@ msgid "align_vcenter"
 msgstr ""
 
 #: vis_devel.cpp:262
-msgid "Align selected widgets to vertical center"
+msgid "Align selected widgets to the vertical center"
 msgstr "Вирівнювання вибраних віджетів у центрі вертикально"
 
 #: vis_devel.cpp:263
-msgid "The button for align selected widgets to vertical center"
+msgid "The button for alignment of selected widgets to the vertical center"
 msgstr "Кнопка для вирівнювання вибраних віджетів у центрі вертикально"
 
 #: vis_devel.cpp:264
-msgid "Press for align selected widgets to vertical center."
+msgid "Press to align selected widgets to the vertical center."
 msgstr "Натиснути для вирівнювання вибраних віджетів у центрі вертикально."
 
 #: vis_devel.cpp:267
@@ -1228,15 +1368,15 @@ msgid "align_right"
 msgstr ""
 
 #: vis_devel.cpp:270
-msgid "Align selected widgets to right"
+msgid "Align selected widgets to the right"
 msgstr "Вирівнювання вибраних віджетів праворуч"
 
 #: vis_devel.cpp:271
-msgid "The button for align selected widgets to right"
+msgid "The button for alignment of selected widgets to the right"
 msgstr "Кнопка для вирівнювання вибраних віджетів праворуч"
 
 #: vis_devel.cpp:272
-msgid "Press for align selected widgets to right."
+msgid "Press to align selected widgets to the right."
 msgstr "Натиснути для вирівнювання вибраних віджетів праворуч."
 
 #: vis_devel.cpp:275
@@ -1256,15 +1396,15 @@ msgid "align_top"
 msgstr ""
 
 #: vis_devel.cpp:278
-msgid "Align selected widgets to top"
+msgid "Align selected widgets to the top"
 msgstr "Вирівнювання вибраних віджетів догори"
 
 #: vis_devel.cpp:279
-msgid "The button for align selected widgets to top"
+msgid "The button for alignment of selected widgets to the top"
 msgstr "Кнопка для вирівнювання вибраних віджетів догори"
 
 #: vis_devel.cpp:280
-msgid "Press for align selected widgets to top."
+msgid "Press to align selected widgets to the top."
 msgstr "Натиснути для вирівнювання вибраних віджетів догори."
 
 #: vis_devel.cpp:283
@@ -1284,15 +1424,15 @@ msgid "align_hcenter"
 msgstr ""
 
 #: vis_devel.cpp:286
-msgid "Align selected widgets to horizontal center"
+msgid "Align selected widgets to the horizontal center"
 msgstr "Вирівнювання вибраних віджетів у центрі горизонтально"
 
 #: vis_devel.cpp:287
-msgid "The button for align selected widgets to horizontal center"
+msgid "The button for alignment selected widgets to the horizontal center"
 msgstr "Кнопка для вирівнювання вибраних віджетів у центрі горизонтально"
 
 #: vis_devel.cpp:288
-msgid "Press for align selected widgets to horizontal center."
+msgid "Press to align selected widgets to the horizontal center."
 msgstr "Натиснути для вирівнювання вибраних віджетів у центрі горизонтально."
 
 #: vis_devel.cpp:291
@@ -1312,15 +1452,15 @@ msgid "align_bottom"
 msgstr ""
 
 #: vis_devel.cpp:294
-msgid "Align selected widgets to bottom"
+msgid "Align selected widgets to the bottom"
 msgstr "Вирівнювання вибраних віджетів додолу"
 
 #: vis_devel.cpp:295
-msgid "The button for align selected widgets to bottom"
+msgid "The button for alignment selected widgets to the bottom"
 msgstr "Кнопка для вирівнювання вибраних віджетів додолу"
 
 #: vis_devel.cpp:296
-msgid "Press for align selected widgets to bottom."
+msgid "Press to align selected widgets to the bottom."
 msgstr "Натиснути для вирівнювання вибраних віджетів додолу."
 
 #: vis_devel.cpp:301
@@ -1344,12 +1484,12 @@ msgid "Unset cursor"
 msgstr "Поверення курсору"
 
 #: vis_devel.cpp:307
-msgid "The button to unset cursor"
+msgid "The button for unset cursor"
 msgstr "Кнопка для поверення курсору"
 
 #: vis_devel.cpp:308
-msgid "Press for cursor to be unseted"
-msgstr "Натиснути для повернення курсору"
+msgid "Press to unset cursor"
+msgstr "Кнопка для поверення курсору"
 
 #: vis_devel.cpp:311
 msgid "vision_elfig_line"
@@ -1377,7 +1517,7 @@ msgid "The button for adding line to elementary figure"
 msgstr "Кнопка для додання лінії до елементарної фігури"
 
 #: vis_devel.cpp:317
-msgid "Press for add line to elementary figure."
+msgid "Press to add line to elementary figure."
 msgstr "Натиснути для додання лінії до елементарної фігури."
 
 #: vis_devel.cpp:320
@@ -1406,7 +1546,7 @@ msgid "The button for adding arc to elementary figure"
 msgstr "Кнопка для додання дуги до елементарної фігури"
 
 #: vis_devel.cpp:326
-msgid "Press for add arc to elementary figure."
+msgid "Press to add arc to elementary figure."
 msgstr "Натиснути для додання дуги до елементарної фігури."
 
 #: vis_devel.cpp:329
@@ -1434,7 +1574,7 @@ msgid "The button for adding Besier curve to elementary figure"
 msgstr "Кнопка для додання кривої безьє до елементарної фігури"
 
 #: vis_devel.cpp:335
-msgid "Press for add Besier curve to elementary figure."
+msgid "Press to add Besier curve to elementary figure."
 msgstr "Натиснути для додання кривої безьє до елементарної фігури."
 
 #: vis_devel.cpp:338
@@ -1462,8 +1602,8 @@ msgid "The button for enabling holds"
 msgstr "Кнопка для включення прив'язок"
 
 #: vis_devel.cpp:345
-msgid "Press for holds to be anabled"
-msgstr "Натиснути для включення прив'язок"
+msgid "Press to enable holds"
+msgstr "Включення прив'язок"
 
 #: vis_devel.cpp:351
 msgid "Cl&ose"
@@ -1478,7 +1618,7 @@ msgid "The button for the active window closing"
 msgstr "Кнопка для закриття активного вікна"
 
 #: vis_devel.cpp:354
-msgid "Press for close active window."
+msgid "Press to close active window."
 msgstr "Натиснути для закриття активного вікна."
 
 #: vis_devel.cpp:357
@@ -1494,7 +1634,7 @@ msgid "The button for all windows closing"
 msgstr "Кнопка для закриття всіх вікон"
 
 #: vis_devel.cpp:360
-msgid "Press for close all windows."
+msgid "Press to close all windows."
 msgstr "Натиснути для закриття всіх вікон."
 
 #: vis_devel.cpp:363
@@ -1510,7 +1650,7 @@ msgid "The button for all windows tiling"
 msgstr "Кнопка для укладення всіх вікон"
 
 #: vis_devel.cpp:366
-msgid "Press for tile all windows."
+msgid "Press to tile all windows."
 msgstr "Натиснути для укладення всіх вікон."
 
 #: vis_devel.cpp:369
@@ -1526,7 +1666,7 @@ msgid "The button for all windows cascading"
 msgstr "Кнопка для каскадування всіх вікон"
 
 #: vis_devel.cpp:372
-msgid "Press for cascade all windows."
+msgid "Press to cascade all windows."
 msgstr "Натиснути для каскадування всіх вікон."
 
 #: vis_devel.cpp:375
@@ -1542,7 +1682,7 @@ msgid "The button for next window activation"
 msgstr "Кнопка для активування наступного вікна"
 
 #: vis_devel.cpp:378
-msgid "Press for activate next window."
+msgid "Press to activate next window."
 msgstr "Натиснути для активування наступного вікна."
 
 #: vis_devel.cpp:381
@@ -1558,7 +1698,7 @@ msgid "The button for previous window activation"
 msgstr "Кнопка для активування минулого вікна"
 
 #: vis_devel.cpp:384
-msgid "Press for activate previous window."
+msgid "Press to activate previous window."
 msgstr "Натиснути для активування минулого вікна."
 
 #: vis_devel.cpp:395 vis_run.cpp:208
@@ -1613,104 +1753,120 @@ msgstr "Панель елементарних фігур"
 msgid "elFigTool"
 msgstr ""
 
-#: vis_devel.cpp:496 vis_run.cpp:239
-msgid "This label display curent user."
+#: vis_devel.cpp:496
+msgid "This label displays curent user."
 msgstr "Це маркування показує поточного користувача."
 
-#: vis_devel.cpp:497 vis_run.cpp:240
-msgid "Field for display of the current user."
+#: vis_devel.cpp:497
+msgid "Field for display the current user."
 msgstr "Поле для відображення поточного користувача."
 
-#: vis_devel.cpp:498 vis_run.cpp:241
-msgid "Double click for change user."
+#: vis_devel.cpp:498
+msgid "Double click to change user."
 msgstr "Подвійно клікнути для зміни користувача."
 
-#: vis_devel.cpp:501 vis_run.cpp:245
-msgid "This label display used VCA engine station."
+#: vis_devel.cpp:501
+msgid "This label displays the using VCA engine station."
 msgstr "Це маркування показує використану станцію рущія СВК"
 
-#: vis_devel.cpp:502 vis_run.cpp:246
-msgid "Field for display of the used VCA engine station."
+#: vis_devel.cpp:502
+msgid "Field for display of the using VCA engine station."
 msgstr "Поле для відображення використаної станції рущія СВК"
 
 #: vis_devel.cpp:505
-msgid "This label display widgets' scaling mode."
+msgid "This label displays widgets' scaling mode."
 msgstr "Це маркування показує поточний режим масштабування."
 
 #: vis_devel.cpp:506
-msgid "Field for display of widgets' scaling mode."
+msgid "Field for display widgets' scaling mode."
 msgstr "Поле для відображення поточного режиму масштабування."
 
 #: vis_devel.cpp:507
-msgid "Click for change widgets' scaling mode."
+msgid "Click to change widgets' scaling mode."
 msgstr "Натиснути для зміни режиму масштабування віджетів."
 
-#: vis_devel.cpp:509 vis_devel.cpp:772 vis_shapes.cpp:285 vis_shapes.cpp:717
+#: vis_devel.cpp:509 vis_devel.cpp:786 vis_shapes.cpp:285 vis_shapes.cpp:717
 #: vis_shapes.cpp:1305 vis_widgs.cpp:315 vis_widgs.cpp:328
 msgid " "
 msgstr ""
 
 #: vis_devel.cpp:510
-msgid "This label display modifying."
+msgid "This label displays modifying."
 msgstr "Це маркування показує факт внесення змін."
 
 #: vis_devel.cpp:511
-msgid "Field for display of modifying."
+msgid "Field for display modifying."
 msgstr "Поле для відображення факту внесення змін."
 
-#: vis_devel.cpp:518
+#: vis_devel.cpp:513
+msgid "100%"
+msgstr ""
+
+#: vis_devel.cpp:514
+msgid "This label displays current widget's scale."
+msgstr "Це маркування показує поточний режим масштабування."
+
+#: vis_devel.cpp:515
+msgid "Field for display the scale of the current widget."
+msgstr "Поле для відображення поточного користувача."
+
+#: vis_devel.cpp:522
 msgid "Dock window for projects management."
 msgstr "Плаваюче вікно для керування проектами"
 
-#: vis_devel.cpp:522
-msgid "Dock window for widgets and this libraries management."
+#: vis_devel.cpp:526
+msgid "Dock window for widgets and their libraries management."
 msgstr "Плаваюче вікно для керування віджетами та їх бібліотеками."
 
-#: vis_devel.cpp:533
+#: vis_devel.cpp:537
 msgid "Dock window for widget's attributes inspection."
 msgstr "Плаваюче вікно для інспектора атрибутів віджета."
 
-#: vis_devel.cpp:535
+#: vis_devel.cpp:539
 msgid "Dock window for widget's links inspection."
 msgstr "Плаваюче вікно для інспектора посилань віджета."
 
-#: vis_devel.cpp:562 vis_devel.cpp:579
+#: vis_devel.cpp:566 vis_devel.cpp:583
 msgid "devWinState"
 msgstr ""
 
-#: vis_devel.cpp:570 vis_run.cpp:274
+#: vis_devel.cpp:574 vis_run.cpp:274
 msgid "Ready"
 msgstr "Готовий"
 
-#: vis_devel.cpp:639 vis_devel.cpp:760
+#: vis_devel.cpp:633
+msgid "%"
+msgstr ""
+
+#: vis_devel.cpp:653 vis_devel.cpp:774
 msgid "modify"
 msgstr ""
 
-#: vis_devel.cpp:640 vis_devel.cpp:655 vis_devel.cpp:763 vis_devel.cpp:773
-#: vis_devel.cpp:829 vis_devel.cpp:852
+#: vis_devel.cpp:654 vis_devel.cpp:669 vis_devel.cpp:777 vis_devel.cpp:787
+#: vis_devel.cpp:843 vis_devel.cpp:866
 #, c-format
 msgid "/%2fobj"
 msgstr ""
 
-#: vis_devel.cpp:644
+#: vis_devel.cpp:658
 #, c-format
 msgid "/%2fgen%2fsaveExit"
 msgstr ""
 
-#: vis_devel.cpp:646
+#: vis_devel.cpp:660
 #, c-format
 msgid "/%2fgen%2fsavePeriod"
 msgstr ""
 
-#: vis_devel.cpp:650
+#: vis_devel.cpp:664
 msgid "Visual items save"
 msgstr "Збереження візуальних елементів"
 
-#: vis_devel.cpp:651
-msgid "Some visual items is changed. Save changing to DB on exit?"
+#: vis_devel.cpp:665
+msgid "Some visual items are changed. Save changings to DB on exit?"
 msgstr "Деякі візуальні елементи було змінено. Зберегти зміни у БД при виході?"
 
-#: vis_devel.cpp:690 vis_run.cpp:698
+#: vis_devel.cpp:704 vis_run.cpp:698
 msgid ""
 "%1 v%2.\n"
 "%3\n"
@@ -1736,178 +1892,178 @@ msgstr ""
 "Автор: %11\n"
 "Web сайт: %12"
 
-#: vis_devel.cpp:691 vis_devel.cpp:698 vis_devel_dlgs.cpp:840
+#: vis_devel.cpp:705 vis_devel.cpp:712 vis_devel_dlgs.cpp:841
 #: vis_devel_widgs.cpp:768 vis_devel_widgs.cpp:1045 vis_devel_widgs.cpp:1477
 #: vis_run.cpp:699 vis_run.cpp:726
 msgid "Name"
 msgstr "Ім'я"
 
-#: vis_devel.cpp:691 vis_run.cpp:699
+#: vis_devel.cpp:705 vis_run.cpp:699
 msgid "Version"
 msgstr "Версія"
 
-#: vis_devel.cpp:691 vis_run.cpp:699
+#: vis_devel.cpp:705 vis_run.cpp:699
 msgid "Descript"
 msgstr ""
 
-#: vis_devel.cpp:692 vis_run.cpp:700
+#: vis_devel.cpp:706 vis_run.cpp:700
 msgid "Author"
 msgstr "Автор"
 
-#: vis_devel.cpp:692 vis_run.cpp:700
+#: vis_devel.cpp:706 vis_run.cpp:700
 msgid "License"
 msgstr "Ліцензія"
 
-#: vis_devel.cpp:735 vis_devel.cpp:889 vis_devel.cpp:943 vis_devel.cpp:976
-#: vis_devel.cpp:1054 vis_devel.cpp:1063 vis_devel.cpp:1205 vis_devel.cpp:1210
-#: vis_devel.cpp:1223 vis_devel.cpp:1277 vis_devel.cpp:1310 vis_devel.cpp:1349
-#: vis_devel.cpp:1350 vis_devel_widgs.cpp:1563
+#: vis_devel.cpp:749 vis_devel.cpp:903 vis_devel.cpp:957 vis_devel.cpp:990
+#: vis_devel.cpp:1068 vis_devel.cpp:1077 vis_devel.cpp:1219 vis_devel.cpp:1224
+#: vis_devel.cpp:1237 vis_devel.cpp:1291 vis_devel.cpp:1324 vis_devel.cpp:1363
+#: vis_devel.cpp:1364 vis_devel_widgs.cpp:1563
 msgid "prj_"
 msgstr ""
 
-#: vis_devel.cpp:736 vis_devel.cpp:914 vis_devel.cpp:969 vis_devel.cpp:1052
-#: vis_devel.cpp:1057 vis_devel.cpp:1214 vis_devel.cpp:1219 vis_devel.cpp:1223
-#: vis_devel.cpp:1227 vis_devel.cpp:1230 vis_devel.cpp:1234 vis_devel.cpp:1238
-#: vis_devel.cpp:1277 vis_devel.cpp:1310 vis_devel.cpp:1349 vis_devel.cpp:1350
-#: vis_devel.cpp:1351 vis_devel_widgs.cpp:1169
+#: vis_devel.cpp:750 vis_devel.cpp:928 vis_devel.cpp:983 vis_devel.cpp:1066
+#: vis_devel.cpp:1071 vis_devel.cpp:1228 vis_devel.cpp:1233 vis_devel.cpp:1237
+#: vis_devel.cpp:1241 vis_devel.cpp:1244 vis_devel.cpp:1248 vis_devel.cpp:1252
+#: vis_devel.cpp:1291 vis_devel.cpp:1324 vis_devel.cpp:1363 vis_devel.cpp:1364
+#: vis_devel.cpp:1365 vis_devel_widgs.cpp:1169
 msgid "wlb_"
 msgstr ""
 
-#: vis_devel.cpp:806
+#: vis_devel.cpp:820
 msgid "&%1 %2"
 msgstr ""
 
-#: vis_devel.cpp:806
+#: vis_devel.cpp:820
 msgid "%1 %2"
 msgstr ""
 
-#: vis_devel.cpp:820
-msgid "You sure for load visual items '%1' from DB?"
+#: vis_devel.cpp:834
+msgid "Are you sure of loading visual items '%1' from DB?"
 msgstr "Ви дійсно бажаєте завантажити візуальні елементи '%1' з БД?"
 
-#: vis_devel.cpp:821
+#: vis_devel.cpp:835
 msgid "Load visual item's data from DB"
 msgstr "Завантаження даних візуального елементу з БД"
 
-#: vis_devel.cpp:843
-msgid "You sure for save visual items '%1' to DB?"
+#: vis_devel.cpp:857
+msgid "Are you sure of saving visual items '%1' to DB?"
 msgstr "Ви дійсно бажаєте зберегти візуальні елементи '%1' у БД?"
 
-#: vis_devel.cpp:844
+#: vis_devel.cpp:858
 msgid "Save visual item's data to DB"
 msgstr "Збереження даних візуальних елементів у БД"
 
-#: vis_devel.cpp:872 vis_devel.cpp:1208
+#: vis_devel.cpp:886 vis_devel.cpp:1222
 msgid "Enter new project's identifier and name."
 msgstr "Введіть ідентифікатор та ім'я нового проекта."
 
-#: vis_devel.cpp:876 vis_devel.cpp:901 vis_devel.cpp:967
-#: vis_devel_dlgs.cpp:560 vis_devel_dlgs.cpp:1401
+#: vis_devel.cpp:890 vis_devel.cpp:915 vis_devel.cpp:981
+#: vis_devel_dlgs.cpp:560 vis_devel_dlgs.cpp:1402
 msgid "add"
 msgstr ""
 
-#: vis_devel.cpp:877 vis_devel.cpp:1055 vis_devel.cpp:1209
+#: vis_devel.cpp:891 vis_devel.cpp:1069 vis_devel.cpp:1223
 #: vis_devel_widgs.cpp:1569
 #, c-format
 msgid "/%2fprm%2fcfg%2fprj"
 msgstr ""
 
-#: vis_devel.cpp:886 vis_devel.cpp:911
+#: vis_devel.cpp:900 vis_devel.cpp:925
 #, c-format
 msgid "/%2fobj%2fst%2fen"
 msgstr ""
 
-#: vis_devel.cpp:897 vis_devel.cpp:1217
+#: vis_devel.cpp:911 vis_devel.cpp:1231
 msgid "Enter new widget's library identifier and name."
 msgstr "Введіть ідентифікатор та ім'я нової бібліотеки віджетів."
 
-#: vis_devel.cpp:897
+#: vis_devel.cpp:911
 msgid "New widget's library"
 msgstr "Нова бібліотека віджетів"
 
-#: vis_devel.cpp:902 vis_devel.cpp:1053 vis_devel.cpp:1218
+#: vis_devel.cpp:916 vis_devel.cpp:1067 vis_devel.cpp:1232
 #, c-format
 msgid "/%2fprm%2fcfg%2fwlb"
 msgstr ""
 
-#: vis_devel.cpp:911 vis_devel_widgs.cpp:1097 vis_devel_widgs.cpp:1144
+#: vis_devel.cpp:925 vis_devel_widgs.cpp:1097 vis_devel_widgs.cpp:1144
 #: vis_devel_widgs.cpp:1307 vis_devel_widgs.cpp:1346
 msgid "/wlb_"
 msgstr ""
 
-#: vis_devel.cpp:937 vis_devel.cpp:1226
-msgid "Enter new widget/page identifier and name."
+#: vis_devel.cpp:951 vis_devel.cpp:1240
+msgid "Enter new widget's/page's identifier and name."
 msgstr "Введіть ідентифікатор та ім'я нового віджета/сторінки."
 
-#: vis_devel.cpp:937
+#: vis_devel.cpp:951
 msgid "Create widget/page"
 msgstr "Створити віджет/сторінку"
 
-#: vis_devel.cpp:943 vis_devel.cpp:980 vis_devel.cpp:1066 vis_devel.cpp:1068
-#: vis_devel.cpp:1228 vis_devel_widgs.cpp:1636
+#: vis_devel.cpp:957 vis_devel.cpp:994 vis_devel.cpp:1080 vis_devel.cpp:1082
+#: vis_devel.cpp:1242 vis_devel_widgs.cpp:1636
 #, c-format
 msgid "/%2fpage%2fpage"
 msgstr ""
 
-#: vis_devel.cpp:944 vis_devel.cpp:973 vis_devel.cpp:985 vis_devel.cpp:1061
-#: vis_devel.cpp:1069 vis_devel.cpp:1239
+#: vis_devel.cpp:958 vis_devel.cpp:987 vis_devel.cpp:999 vis_devel.cpp:1075
+#: vis_devel.cpp:1083 vis_devel.cpp:1253
 #, c-format
 msgid "/%2finclwdg%2fwdg"
 msgstr ""
 
-#: vis_devel.cpp:949 vis_devel_widgs.cpp:1175
+#: vis_devel.cpp:963 vis_devel_widgs.cpp:1175
 msgid "item"
 msgstr ""
 
-#: vis_devel.cpp:972 vis_devel.cpp:1060 vis_devel.cpp:1227 vis_devel.cpp:1238
+#: vis_devel.cpp:986 vis_devel.cpp:1074 vis_devel.cpp:1241 vis_devel.cpp:1252
 #, c-format
 msgid "/%2fwdg%2fwdg"
 msgstr ""
 
-#: vis_devel.cpp:974 vis_devel.cpp:986 vis_devel_widgs.cpp:1097
+#: vis_devel.cpp:988 vis_devel.cpp:1000 vis_devel_widgs.cpp:1097
 #: vis_devel_widgs.cpp:1144 vis_devel_widgs.cpp:1307 vis_devel_widgs.cpp:1346
 #: vis_run_widgs.cpp:126 vis_run_widgs.cpp:139 vis_run_widgs.cpp:145
 #: vis_widgs.cpp:884 vis_widgs.cpp:895 vis_widgs.cpp:901
 msgid "/wdg_"
 msgstr ""
 
-#: vis_devel.cpp:981 vis_devel_widgs.cpp:1537 vis_devel_widgs.cpp:1627
+#: vis_devel.cpp:995 vis_devel_widgs.cpp:1537 vis_devel_widgs.cpp:1627
 #: vis_devel_widgs.cpp:1668
 msgid "/pg_"
 msgstr ""
 
-#: vis_devel.cpp:999
+#: vis_devel.cpp:1013
 #, c-format
 msgid "/%2fwdg%2fst%2fparent"
 msgstr ""
 
-#: vis_devel.cpp:1001
+#: vis_devel.cpp:1015
 #, c-format
 msgid "/%2fwdg%2fst%2fen"
 msgstr ""
 
-#: vis_devel.cpp:1007
+#: vis_devel.cpp:1021
 #, c-format
 msgid "/%2fattr%2fgeomX"
 msgstr ""
 
-#: vis_devel.cpp:1009
+#: vis_devel.cpp:1023
 #, c-format
 msgid "/%2fattr%2fgeomY"
 msgstr ""
 
-#: vis_devel.cpp:1028
-msgid "You sure for delete visual items: '%1'?"
+#: vis_devel.cpp:1042
+msgid "Are you sure of deleting visual items: '%1'?"
 msgstr "Ви дійсно бажаєте видалити візуальні елементи '%1'?"
 
-#: vis_devel.cpp:1029
+#: vis_devel.cpp:1043
 msgid "Delete visual items"
 msgstr "Видалення візуальних елементів"
 
-#: vis_devel.cpp:1041 vis_devel.cpp:1196 vis_devel.cpp:1200 vis_devel.cpp:1229
-#: vis_devel.cpp:1240 vis_devel.cpp:1292 vis_devel.cpp:1301 vis_devel.cpp:1302
-#: vis_devel.cpp:1311 vis_devel.cpp:1312 vis_devel.cpp:1315 vis_devel.cpp:1346
-#: vis_devel.cpp:1348 vis_devel_dlgs.cpp:275 vis_devel_dlgs.cpp:283
+#: vis_devel.cpp:1055 vis_devel.cpp:1210 vis_devel.cpp:1214 vis_devel.cpp:1243
+#: vis_devel.cpp:1254 vis_devel.cpp:1306 vis_devel.cpp:1315 vis_devel.cpp:1316
+#: vis_devel.cpp:1325 vis_devel.cpp:1326 vis_devel.cpp:1329 vis_devel.cpp:1360
+#: vis_devel.cpp:1362 vis_devel_dlgs.cpp:275 vis_devel_dlgs.cpp:283
 #: vis_devel_dlgs.cpp:285 vis_devel_dlgs.cpp:299 vis_devel_dlgs.cpp:302
 #: vis_devel_dlgs.cpp:316 vis_devel_dlgs.cpp:319 vis_devel_dlgs.cpp:333
 #: vis_devel_dlgs.cpp:348 vis_devel_dlgs.cpp:358 vis_devel_dlgs.cpp:368
@@ -1915,45 +2071,45 @@ msgstr "Видалення візуальних елементів"
 #: vis_devel_dlgs.cpp:402 vis_devel_dlgs.cpp:413 vis_devel_dlgs.cpp:443
 #: vis_devel_dlgs.cpp:501 vis_devel_dlgs.cpp:517 vis_devel_dlgs.cpp:561
 #: vis_devel_dlgs.cpp:578 vis_devel_dlgs.cpp:604 vis_devel_dlgs.cpp:632
-#: vis_devel_dlgs.cpp:652 vis_devel_dlgs.cpp:955 vis_devel_dlgs.cpp:968
-#: vis_devel_dlgs.cpp:970 vis_devel_dlgs.cpp:984 vis_devel_dlgs.cpp:986
-#: vis_devel_dlgs.cpp:1001 vis_devel_dlgs.cpp:1016 vis_devel_dlgs.cpp:1026
-#: vis_devel_dlgs.cpp:1036 vis_devel_dlgs.cpp:1044 vis_devel_dlgs.cpp:1051
-#: vis_devel_dlgs.cpp:1058 vis_devel_dlgs.cpp:1066 vis_devel_dlgs.cpp:1075
-#: vis_devel_dlgs.cpp:1088 vis_devel_dlgs.cpp:1092 vis_devel_dlgs.cpp:1150
-#: vis_devel_dlgs.cpp:1174 vis_devel_dlgs.cpp:1215 vis_devel_dlgs.cpp:1222
-#: vis_devel_dlgs.cpp:1234 vis_devel_dlgs.cpp:1242 vis_devel_dlgs.cpp:1246
-#: vis_devel_dlgs.cpp:1259 vis_devel_dlgs.cpp:1273 vis_devel_dlgs.cpp:1279
-#: vis_devel_dlgs.cpp:1315 vis_devel_dlgs.cpp:1332 vis_devel_dlgs.cpp:1402
-#: vis_devel_dlgs.cpp:1424 vis_devel_dlgs.cpp:1461 vis_devel_widgs.cpp:165
+#: vis_devel_dlgs.cpp:652 vis_devel_dlgs.cpp:956 vis_devel_dlgs.cpp:969
+#: vis_devel_dlgs.cpp:971 vis_devel_dlgs.cpp:985 vis_devel_dlgs.cpp:987
+#: vis_devel_dlgs.cpp:1002 vis_devel_dlgs.cpp:1017 vis_devel_dlgs.cpp:1027
+#: vis_devel_dlgs.cpp:1037 vis_devel_dlgs.cpp:1045 vis_devel_dlgs.cpp:1052
+#: vis_devel_dlgs.cpp:1059 vis_devel_dlgs.cpp:1067 vis_devel_dlgs.cpp:1076
+#: vis_devel_dlgs.cpp:1089 vis_devel_dlgs.cpp:1093 vis_devel_dlgs.cpp:1151
+#: vis_devel_dlgs.cpp:1175 vis_devel_dlgs.cpp:1216 vis_devel_dlgs.cpp:1223
+#: vis_devel_dlgs.cpp:1235 vis_devel_dlgs.cpp:1243 vis_devel_dlgs.cpp:1247
+#: vis_devel_dlgs.cpp:1260 vis_devel_dlgs.cpp:1274 vis_devel_dlgs.cpp:1280
+#: vis_devel_dlgs.cpp:1316 vis_devel_dlgs.cpp:1333 vis_devel_dlgs.cpp:1403
+#: vis_devel_dlgs.cpp:1425 vis_devel_dlgs.cpp:1462 vis_devel_widgs.cpp:165
 #: vis_run.cpp:897 vis_run_widgs.cpp:43
 msgid "/"
 msgstr ""
 
-#: vis_devel.cpp:1047 vis_devel_dlgs.cpp:577 vis_devel_dlgs.cpp:1423
+#: vis_devel.cpp:1061 vis_devel_dlgs.cpp:577 vis_devel_dlgs.cpp:1424
 msgid "del"
 msgstr ""
 
-#: vis_devel.cpp:1067 vis_devel.cpp:1223 vis_devel.cpp:1230 vis_devel.cpp:1234
-#: vis_devel.cpp:1350 vis_devel.cpp:1351 vis_run_widgs.cpp:47
+#: vis_devel.cpp:1081 vis_devel.cpp:1237 vis_devel.cpp:1244 vis_devel.cpp:1248
+#: vis_devel.cpp:1364 vis_devel.cpp:1365 vis_run_widgs.cpp:47
 msgid "pg_"
 msgstr ""
 
-#: vis_devel.cpp:1117
+#: vis_devel.cpp:1131
 msgid "Widget: %1"
 msgstr "Віджет: %1"
 
-#: vis_devel.cpp:1125
-msgid "Widget's '%1' edit window already opened."
+#: vis_devel.cpp:1139
+msgid "Widget's '%1' editing window is already opened."
 msgstr "Вікно редагування віджету '%1' вже відкрито."
 
-#: vis_devel.cpp:1144 vis_devel_widgs.cpp:1601 vis_devel_widgs.cpp:1668
+#: vis_devel.cpp:1158 vis_devel_widgs.cpp:1601 vis_devel_widgs.cpp:1668
 #: vis_run.cpp:857
 #, c-format
 msgid "/%2fico"
 msgstr ""
 
-#: vis_devel.cpp:1168 vis_devel.cpp:1175 vis_devel.cpp:1182 vis_devel.cpp:1338
+#: vis_devel.cpp:1182 vis_devel.cpp:1189 vis_devel.cpp:1196 vis_devel.cpp:1352
 #: vis_shape_elfig.cpp:1301 vis_shape_elfig.cpp:1305 vis_shape_elfig.cpp:1306
 #: vis_shape_elfig.cpp:1312 vis_shape_elfig.cpp:1313 vis_shape_elfig.cpp:1326
 #: vis_shape_elfig.cpp:1336 vis_shape_elfig.cpp:1337 vis_shape_elfig.cpp:1340
@@ -1961,83 +2117,83 @@ msgstr ""
 msgid "wdgAddr"
 msgstr ""
 
-#: vis_devel.cpp:1188
+#: vis_devel.cpp:1202
 msgid "Visual items move or copy"
 msgstr "Копіювання або переміщення візуальних елементів"
 
-#: vis_devel.cpp:1207
+#: vis_devel.cpp:1221
 msgid "Project '%1' move.\n"
 msgstr "Переміщення проекту '%1'.\n"
 
-#: vis_devel.cpp:1207
+#: vis_devel.cpp:1221
 msgid "Project '%1' copy.\n"
 msgstr "Копіювання проекту '%1'.\n"
 
-#: vis_devel.cpp:1216
+#: vis_devel.cpp:1230
 msgid "Widget's library '%1' move.\n"
 msgstr "Переміщення бібліотеки віджетів '%1'.\n"
 
-#: vis_devel.cpp:1216
+#: vis_devel.cpp:1230
 msgid "Widget's library '%1' copy.\n"
 msgstr "Копіювання бібліотеки віджетів '%1'.\n"
 
-#: vis_devel.cpp:1225
+#: vis_devel.cpp:1239
 msgid "Move page '%1' to '%2'.\n"
 msgstr "Переміщення сторінки '%1' до '%2'.\n"
 
-#: vis_devel.cpp:1225
+#: vis_devel.cpp:1239
 msgid "Copy page '%1' to '%2'.\n"
 msgstr "Копіювання сторінки '%1' до '%2'.\n"
 
-#: vis_devel.cpp:1230 vis_devel.cpp:1234 vis_devel.cpp:1241 vis_devel.cpp:1351
+#: vis_devel.cpp:1244 vis_devel.cpp:1248 vis_devel.cpp:1255 vis_devel.cpp:1365
 #: vis_devel_widgs.cpp:1564 vis_run.cpp:1012 vis_run_widgs.cpp:46
 msgid "wdg_"
 msgstr ""
 
-#: vis_devel.cpp:1236
+#: vis_devel.cpp:1250
 msgid "Move widget '%1' to '%2'.\n"
 msgstr "Переміщення віджету '%1' до '%2'.\n"
 
-#: vis_devel.cpp:1236
+#: vis_devel.cpp:1250
 msgid "Copy widget '%1' to '%2'.\n"
 msgstr "Копіювання віджету '%1' до '%2'.\n"
 
-#: vis_devel.cpp:1237
-msgid "Enter new widget identifier and name."
+#: vis_devel.cpp:1251
+msgid "Enter new widget's identifier and name."
 msgstr "Введіть ідентифікатор та ім'я нового віджета."
 
-#: vis_devel.cpp:1247
-msgid "Copy/move scheme from '%1' to '%2' no support."
+#: vis_devel.cpp:1261
+msgid "Copy/move scheme from '%1' to '%2' is not supported."
 msgstr "Схема копіювання/переміщення з '%1' до '%2' не підтримується."
 
-#: vis_devel.cpp:1279
+#: vis_devel.cpp:1293
 msgid "Inherit:"
 msgstr "Наслідувати:"
 
-#: vis_devel.cpp:1300
+#: vis_devel.cpp:1314
 #, c-format
 msgid "/%2fprm%2fcfg%2fcp%2fcp"
 msgstr ""
 
-#: vis_devel.cpp:1301
+#: vis_devel.cpp:1315
 msgid "src"
 msgstr ""
 
-#: vis_devel.cpp:1302
+#: vis_devel.cpp:1316
 msgid "dst"
 msgstr ""
 
-#: vis_devel.cpp:1311 vis_run.cpp:852
+#: vis_devel.cpp:1325 vis_run.cpp:852
 #, c-format
 msgid "/%2fobj%2fcfg%2fname"
 msgstr ""
 
-#: vis_devel.cpp:1312
+#: vis_devel.cpp:1326
 #, c-format
 msgid "/%2fwdg%2fcfg%2fname"
 msgstr ""
 
-#: vis_devel.cpp:1322 vis_devel_widgs.cpp:277 vis_devel_widgs.cpp:1959
+#: vis_devel.cpp:1336 vis_devel_widgs.cpp:277 vis_devel_widgs.cpp:1960
 msgid ";"
 msgstr ""
 
@@ -2073,11 +2229,11 @@ msgstr "БД контейнера:"
 msgid "/obj/st/db"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:111 vis_devel_dlgs.cpp:734
+#: vis_devel_dlgs.cpp:111 vis_devel_dlgs.cpp:735
 msgid "Configuration"
 msgstr "Конфігурація"
 
-#: vis_devel_dlgs.cpp:116 vis_devel_dlgs.cpp:739
+#: vis_devel_dlgs.cpp:116 vis_devel_dlgs.cpp:740
 msgid "Id:"
 msgstr ""
 
@@ -2085,7 +2241,7 @@ msgstr ""
 msgid "/obj/cfg/id"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:123 vis_devel_dlgs.cpp:760 vis_widgs.cpp:91
+#: vis_devel_dlgs.cpp:123 vis_devel_dlgs.cpp:761 vis_widgs.cpp:91
 msgid "Name:"
 msgstr "Ім'я:"
 
@@ -2093,7 +2249,7 @@ msgstr "Ім'я:"
 msgid "/obj/cfg/name"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:129 vis_devel_dlgs.cpp:766
+#: vis_devel_dlgs.cpp:129 vis_devel_dlgs.cpp:767
 msgid "Description:"
 msgstr "Опис:"
 
@@ -2101,7 +2257,7 @@ msgstr "Опис:"
 msgid "/obj/cfg/descr"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:135 vis_devel_dlgs.cpp:772
+#: vis_devel_dlgs.cpp:135 vis_devel_dlgs.cpp:773
 msgid "Owner, group:"
 msgstr "Власник, група:"
 
@@ -2113,7 +2269,7 @@ msgstr ""
 msgid "/obj/cfg/grp"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:146 vis_devel_dlgs.cpp:783
+#: vis_devel_dlgs.cpp:146 vis_devel_dlgs.cpp:784
 msgid "Access:"
 msgstr "Доступ:"
 
@@ -2153,7 +2309,7 @@ msgstr ""
 msgid "Mime data"
 msgstr "Mime дані"
 
-#: vis_devel_dlgs.cpp:196 vis_devel_dlgs.cpp:840 vis_devel_widgs.cpp:1045
+#: vis_devel_dlgs.cpp:196 vis_devel_dlgs.cpp:841 vis_devel_widgs.cpp:1045
 #: vis_devel_widgs.cpp:1477
 msgid "Id"
 msgstr ""
@@ -2186,13 +2342,13 @@ msgstr "Вивантажити дані"
 msgid "Close"
 msgstr "Закрити"
 
-#: vis_devel_dlgs.cpp:256 vis_devel_dlgs.cpp:934 vis_devel_dlgs.cpp:1142
+#: vis_devel_dlgs.cpp:256 vis_devel_dlgs.cpp:935 vis_devel_dlgs.cpp:1143
 msgid "Get node '%1' information error."
 msgstr "Помилка запиту інформації вузла '%1'."
 
 #: vis_devel_dlgs.cpp:262 vis_devel_dlgs.cpp:269 vis_devel_dlgs.cpp:421
-#: vis_devel_dlgs.cpp:941 vis_devel_dlgs.cpp:948 vis_devel_dlgs.cpp:1103
-#: vis_devel_dlgs.cpp:1107 vis_devel_dlgs.cpp:1112 vis_devel_widgs.cpp:239
+#: vis_devel_dlgs.cpp:942 vis_devel_dlgs.cpp:949 vis_devel_dlgs.cpp:1104
+#: vis_devel_dlgs.cpp:1108 vis_devel_dlgs.cpp:1113 vis_devel_widgs.cpp:239
 msgid "dscr"
 msgstr ""
 
@@ -2203,12 +2359,12 @@ msgstr ""
 #: vis_devel_dlgs.cpp:272 vis_devel_dlgs.cpp:280 vis_devel_dlgs.cpp:296
 #: vis_devel_dlgs.cpp:313 vis_devel_dlgs.cpp:330 vis_devel_dlgs.cpp:342
 #: vis_devel_dlgs.cpp:352 vis_devel_dlgs.cpp:362 vis_devel_dlgs.cpp:380
-#: vis_devel_dlgs.cpp:388 vis_devel_dlgs.cpp:401 vis_devel_dlgs.cpp:952
-#: vis_devel_dlgs.cpp:960 vis_devel_dlgs.cpp:965 vis_devel_dlgs.cpp:981
-#: vis_devel_dlgs.cpp:998 vis_devel_dlgs.cpp:1010 vis_devel_dlgs.cpp:1020
-#: vis_devel_dlgs.cpp:1030 vis_devel_dlgs.cpp:1063 vis_devel_dlgs.cpp:1071
-#: vis_devel_dlgs.cpp:1085 vis_devel_dlgs.cpp:1231 vis_devel_dlgs.cpp:1239
-#: vis_devel_dlgs.cpp:1256 vis_devel_widgs.cpp:263
+#: vis_devel_dlgs.cpp:388 vis_devel_dlgs.cpp:401 vis_devel_dlgs.cpp:953
+#: vis_devel_dlgs.cpp:961 vis_devel_dlgs.cpp:966 vis_devel_dlgs.cpp:982
+#: vis_devel_dlgs.cpp:999 vis_devel_dlgs.cpp:1011 vis_devel_dlgs.cpp:1021
+#: vis_devel_dlgs.cpp:1031 vis_devel_dlgs.cpp:1064 vis_devel_dlgs.cpp:1072
+#: vis_devel_dlgs.cpp:1086 vis_devel_dlgs.cpp:1232 vis_devel_dlgs.cpp:1240
+#: vis_devel_dlgs.cpp:1257 vis_devel_widgs.cpp:263
 msgid "acs"
 msgstr ""
 
@@ -2225,14 +2381,14 @@ msgid "/obj/g_lst"
 msgstr ""
 
 #: vis_devel_dlgs.cpp:346 vis_devel_dlgs.cpp:356 vis_devel_dlgs.cpp:366
-#: vis_devel_dlgs.cpp:411 vis_devel_dlgs.cpp:1014 vis_devel_dlgs.cpp:1024
-#: vis_devel_dlgs.cpp:1034 vis_devel_widgs.cpp:277
+#: vis_devel_dlgs.cpp:411 vis_devel_dlgs.cpp:1015 vis_devel_dlgs.cpp:1025
+#: vis_devel_dlgs.cpp:1035 vis_devel_widgs.cpp:277
 msgid "sel_list"
 msgstr ""
 
 #: vis_devel_dlgs.cpp:347 vis_devel_dlgs.cpp:357 vis_devel_dlgs.cpp:367
-#: vis_devel_dlgs.cpp:412 vis_devel_dlgs.cpp:1015 vis_devel_dlgs.cpp:1025
-#: vis_devel_dlgs.cpp:1035
+#: vis_devel_dlgs.cpp:412 vis_devel_dlgs.cpp:1016 vis_devel_dlgs.cpp:1026
+#: vis_devel_dlgs.cpp:1036
 msgid "sel_id"
 msgstr ""
 
@@ -2245,19 +2401,19 @@ msgstr ""
 msgid "/mime/mime"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:483 vis_devel_dlgs.cpp:1297
+#: vis_devel_dlgs.cpp:483 vis_devel_dlgs.cpp:1298
 msgid "Load icon picture"
 msgstr "Завантажити зображення іконки"
 
-#: vis_devel_dlgs.cpp:483 vis_devel_dlgs.cpp:1297
+#: vis_devel_dlgs.cpp:483 vis_devel_dlgs.cpp:1298
 msgid "Images (*.png *.jpg)"
 msgstr "Зображення (*.png *.jpg)"
 
-#: vis_devel_dlgs.cpp:489 vis_devel_dlgs.cpp:1303
+#: vis_devel_dlgs.cpp:489 vis_devel_dlgs.cpp:1304
 msgid "Loaded icon image '%1' error."
 msgstr "Помилка завантаження зображення іконки '%1'."
 
-#: vis_devel_dlgs.cpp:498 vis_devel_dlgs.cpp:1312 vis_devel_widgs.cpp:2216
+#: vis_devel_dlgs.cpp:498 vis_devel_dlgs.cpp:1313 vis_devel_widgs.cpp:2234
 msgid "PNG"
 msgstr ""
 
@@ -2266,7 +2422,7 @@ msgid "No one row is selected."
 msgstr "Жодної строки не вибрано."
 
 #: vis_devel_dlgs.cpp:579 vis_devel_dlgs.cpp:606 vis_devel_dlgs.cpp:635
-#: vis_devel_dlgs.cpp:654 vis_devel_dlgs.cpp:1426 vis_devel_dlgs.cpp:1463
+#: vis_devel_dlgs.cpp:654 vis_devel_dlgs.cpp:1427 vis_devel_dlgs.cpp:1464
 msgid "key_id"
 msgstr ""
 
@@ -2279,7 +2435,7 @@ msgid "Open file '%1' is fail: %2"
 msgstr "Помилка відкриття файлу '%1': %2"
 
 #: vis_devel_dlgs.cpp:605 vis_devel_dlgs.cpp:634 vis_devel_dlgs.cpp:653
-#: vis_devel_dlgs.cpp:1464
+#: vis_devel_dlgs.cpp:1465
 msgid "col"
 msgstr ""
 
@@ -2319,192 +2475,192 @@ msgstr ""
 msgid "Parent widget:"
 msgstr "Батьківський віджет:"
 
-#: vis_devel_dlgs.cpp:717
+#: vis_devel_dlgs.cpp:718
 msgid "/wdg/st/parent"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:722
+#: vis_devel_dlgs.cpp:723
 msgid "Page type:"
 msgstr "Тип сторінки:"
 
-#: vis_devel_dlgs.cpp:725
+#: vis_devel_dlgs.cpp:726
 msgid "/wdg/st/pgTp"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:742
+#: vis_devel_dlgs.cpp:743
 msgid "/wdg/cfg/id"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:746
+#: vis_devel_dlgs.cpp:747
 msgid "Root:"
 msgstr "Корінь:"
 
-#: vis_devel_dlgs.cpp:749
+#: vis_devel_dlgs.cpp:750
 msgid "/wdg/cfg/root"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:753
+#: vis_devel_dlgs.cpp:754
 msgid "Path:"
 msgstr "Шлях:"
 
-#: vis_devel_dlgs.cpp:756
+#: vis_devel_dlgs.cpp:757
 msgid "/wdg/cfg/path"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:762 vis_devel_widgs.cpp:165
+#: vis_devel_dlgs.cpp:763 vis_devel_widgs.cpp:165
 msgid "/wdg/cfg/name"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:768
+#: vis_devel_dlgs.cpp:769
 msgid "/wdg/cfg/descr"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:776
+#: vis_devel_dlgs.cpp:777
 msgid "/wdg/cfg/owner"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:780
+#: vis_devel_dlgs.cpp:781
 msgid "/wdg/cfg/grp"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:787
+#: vis_devel_dlgs.cpp:788
 msgid "/wdg/cfg/u_a"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:791
+#: vis_devel_dlgs.cpp:792
 msgid "/wdg/cfg/g_a"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:795
+#: vis_devel_dlgs.cpp:796
 msgid "/wdg/cfg/o_a"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:804 vis_devel_widgs.cpp:728
+#: vis_devel_dlgs.cpp:805 vis_devel_widgs.cpp:728
 msgid "Attributes"
 msgstr "Атрибути"
 
-#: vis_devel_dlgs.cpp:820
+#: vis_devel_dlgs.cpp:821
 msgid "Widget process"
 msgstr "Обробка віджету"
 
-#: vis_devel_dlgs.cpp:834
+#: vis_devel_dlgs.cpp:835
 msgid "/proc/attr"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:840
+#: vis_devel_dlgs.cpp:841
 msgid "Data type"
 msgstr "Тип даних"
 
-#: vis_devel_dlgs.cpp:840
+#: vis_devel_dlgs.cpp:841
 msgid "Work area"
 msgstr "Робоча ділянка"
 
-#: vis_devel_dlgs.cpp:840
+#: vis_devel_dlgs.cpp:841
 msgid "Proc"
 msgstr "Оброб."
 
-#: vis_devel_dlgs.cpp:840
+#: vis_devel_dlgs.cpp:841
 msgid "Config"
 msgstr "Конфігурація"
 
-#: vis_devel_dlgs.cpp:840
+#: vis_devel_dlgs.cpp:841
 msgid "Config template"
 msgstr "Конфігураційний шаблон"
 
-#: vis_devel_dlgs.cpp:844
+#: vis_devel_dlgs.cpp:845
 msgid "Add attribute"
 msgstr "Додати атрибут"
 
-#: vis_devel_dlgs.cpp:847
+#: vis_devel_dlgs.cpp:848
 msgid "Delete attribute"
 msgstr "Видалити атрибут"
 
-#: vis_devel_dlgs.cpp:860
+#: vis_devel_dlgs.cpp:861
 msgid "Procedure language:"
 msgstr "Мова процедури:"
 
-#: vis_devel_dlgs.cpp:865
+#: vis_devel_dlgs.cpp:866
 msgid "/proc/calc/progLng"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:868
+#: vis_devel_dlgs.cpp:869
 msgid "Procedure calc (ms):"
 msgstr "Обчислення процедури (мс):"
 
-#: vis_devel_dlgs.cpp:872
+#: vis_devel_dlgs.cpp:873
 msgid "/proc/calc/per"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:876
+#: vis_devel_dlgs.cpp:877
 msgid "/proc/calc/prog"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:882 vis_devel_widgs.cpp:1006
+#: vis_devel_dlgs.cpp:883 vis_devel_widgs.cpp:1006
 msgid "Links"
 msgstr "Зв'язки"
 
-#: vis_devel_dlgs.cpp:944
+#: vis_devel_dlgs.cpp:945
 msgid "/wdg"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:970
+#: vis_devel_dlgs.cpp:971
 msgid "/wdg/u_lst"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:986
+#: vis_devel_dlgs.cpp:987
 msgid "/wdg/g_lst"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:1101
+#: vis_devel_dlgs.cpp:1102
 msgid "/attr"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:1105
+#: vis_devel_dlgs.cpp:1106
 msgid "/links"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:1110
+#: vis_devel_dlgs.cpp:1111
 msgid "/proc"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:1150
+#: vis_devel_dlgs.cpp:1151
 msgid "/proc/w_lst"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:1175 vis_devel_dlgs.cpp:1403 vis_devel_dlgs.cpp:1425
-#: vis_devel_dlgs.cpp:1462 vis_run.cpp:759 vis_run.cpp:1184 vis_run.cpp:1188
+#: vis_devel_dlgs.cpp:1176 vis_devel_dlgs.cpp:1404 vis_devel_dlgs.cpp:1426
+#: vis_devel_dlgs.cpp:1463 vis_run.cpp:759 vis_run.cpp:1184 vis_run.cpp:1188
 msgid "wdg"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:1205 vis_devel_dlgs.cpp:1451
+#: vis_devel_dlgs.cpp:1206 vis_devel_dlgs.cpp:1452
 msgid "name"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:1206 vis_devel_dlgs.cpp:1452
+#: vis_devel_dlgs.cpp:1207 vis_devel_dlgs.cpp:1453
 msgid "type"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:1207 vis_devel_dlgs.cpp:1453
+#: vis_devel_dlgs.cpp:1208 vis_devel_dlgs.cpp:1454
 msgid "wa"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:1208 vis_devel_dlgs.cpp:1454
+#: vis_devel_dlgs.cpp:1209 vis_devel_dlgs.cpp:1455
 msgid "proc"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:1209 vis_devel_dlgs.cpp:1455
+#: vis_devel_dlgs.cpp:1210 vis_devel_dlgs.cpp:1456
 msgid "cfg"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:1210 vis_devel_dlgs.cpp:1456
+#: vis_devel_dlgs.cpp:1211 vis_devel_dlgs.cpp:1457
 msgid "cfgtmpl"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:1215
+#: vis_devel_dlgs.cpp:1216
 msgid "/proc/tp_ls"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:1218 vis_devel_dlgs.cpp:1225 vis_shape_elfig.cpp:1040
+#: vis_devel_dlgs.cpp:1219 vis_devel_dlgs.cpp:1226 vis_shape_elfig.cpp:1040
 #: vis_shape_elfig.cpp:1045 vis_shape_elfig.cpp:1074 vis_shape_elfig.cpp:1079
 #: vis_shape_elfig.cpp:1084 vis_shape_elfig.cpp:1089 vis_shape_elfig.cpp:1094
 #: vis_shape_elfig.cpp:1123 vis_shape_elfig.cpp:1128 vis_shape_elfig.cpp:1133
@@ -2514,27 +2670,27 @@ msgstr ""
 msgid "|"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:1222
+#: vis_devel_dlgs.cpp:1223
 msgid "/proc/lnk_ls"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:1279
+#: vis_devel_dlgs.cpp:1280
 msgid "/wdg/w_lst"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:1397
+#: vis_devel_dlgs.cpp:1398
 msgid "Valid widget no selected"
 msgstr "Не вибрано коректного віджету"
 
-#: vis_devel_dlgs.cpp:1418 vis_devel_dlgs.cpp:1442
+#: vis_devel_dlgs.cpp:1419 vis_devel_dlgs.cpp:1443
 msgid "Valid attribute no selected"
 msgstr "Не вибрано коректного атрибуту"
 
-#: vis_devel_dlgs.cpp:1501
+#: vis_devel_dlgs.cpp:1502
 msgid "String"
 msgstr "Строка"
 
-#: vis_devel_dlgs.cpp:1514 vis_widgs.cpp:403
+#: vis_devel_dlgs.cpp:1515 vis_widgs.cpp:403
 msgid ":/images/ok.png"
 msgstr ""
 
@@ -2560,7 +2716,7 @@ msgstr ""
 msgid "bool"
 msgstr ""
 
-#: vis_devel_widgs.cpp:271
+#: vis_devel_widgs.cpp:271 vis_devel_widgs.cpp:2200 vis_devel_widgs.cpp:2480
 msgid "dec"
 msgstr ""
 
@@ -2588,8 +2744,8 @@ msgstr "Значення"
 msgid "dd.MM.yyyy hh:mm:ss"
 msgstr ""
 
-#: vis_devel_widgs.cpp:379 vis_devel_widgs.cpp:2441 vis_devel_widgs.cpp:2454
-#: vis_devel_widgs.cpp:2873
+#: vis_devel_widgs.cpp:379 vis_devel_widgs.cpp:2500 vis_devel_widgs.cpp:2513
+#: vis_devel_widgs.cpp:2939
 msgid "white"
 msgstr ""
 
@@ -2680,8 +2836,8 @@ msgstr ""
 msgid "Type"
 msgstr "Тип"
 
-#: vis_devel_widgs.cpp:1111 vis_devel_widgs.cpp:2499 vis_devel_widgs.cpp:2510
-#: vis_devel_widgs.cpp:2512
+#: vis_devel_widgs.cpp:1111 vis_devel_widgs.cpp:2558 vis_devel_widgs.cpp:2569
+#: vis_devel_widgs.cpp:2571
 msgid "application/OpenSCADA-libwdg"
 msgstr ""
 
@@ -2735,11 +2891,11 @@ msgid "Add widget based at '%1'"
 msgstr "Додання віджету базованого на '%1'"
 
 #: vis_devel_widgs.cpp:1362
-msgid "The button for add widget based at '%1'"
+msgid "The button for addition widget based at '%1'"
 msgstr "Кнопка для додання віджету базованого на '%1'"
 
 #: vis_devel_widgs.cpp:1363
-msgid "Press for add widget based at '%1'."
+msgid "Press to add widget based at '%1'."
 msgstr "Натиснути для додання віджету базованого на '%1'"
 
 #: vis_devel_widgs.cpp:1384 vis_devel_widgs.cpp:1395
@@ -2772,7 +2928,7 @@ msgid "Refresh libraries"
 msgstr "Оновити бібліотеки"
 
 #: vis_devel_widgs.cpp:1456
-msgid "Press for refresh present libraries."
+msgid "Press to refresh present libraries."
 msgstr "Натиснути для оновлення наявних бібліотек."
 
 #: vis_devel_widgs.cpp:1468
@@ -2801,7 +2957,7 @@ msgid "Refresh projects"
 msgstr "Оновити проекти"
 
 #: vis_devel_widgs.cpp:1713
-msgid "Press for refresh present projects."
+msgid "Press to refresh present projects."
 msgstr "Натиснути для оновлення наявних проектів."
 
 #: vis_devel_widgs.cpp:1735
@@ -2816,162 +2972,194 @@ msgstr "Масштаб"
 msgid "Resize"
 msgstr "Зміна розміру"
 
-#: vis_devel_widgs.cpp:1854
+#: vis_devel_widgs.cpp:1855
 msgid "geomX"
 msgstr ""
 
-#: vis_devel_widgs.cpp:1855
+#: vis_devel_widgs.cpp:1856
 msgid "geomY"
 msgstr ""
 
-#: vis_devel_widgs.cpp:1856
+#: vis_devel_widgs.cpp:1857
 msgid "geomW"
 msgstr ""
 
-#: vis_devel_widgs.cpp:1857
+#: vis_devel_widgs.cpp:1858
 msgid "geomH"
 msgstr ""
 
-#: vis_devel_widgs.cpp:1858
+#: vis_devel_widgs.cpp:1859
 msgid "geomXsc"
 msgstr ""
 
-#: vis_devel_widgs.cpp:1859
+#: vis_devel_widgs.cpp:1860
 msgid "geomYsc"
 msgstr ""
 
-#: vis_devel_widgs.cpp:1860
+#: vis_devel_widgs.cpp:1861
 msgid "geomZ"
 msgstr ""
 
-#: vis_devel_widgs.cpp:2030
+#: vis_devel_widgs.cpp:2031
 msgid "align"
 msgstr ""
 
-#: vis_devel_widgs.cpp:2053
+#: vis_devel_widgs.cpp:2054
 msgid "left"
 msgstr ""
 
-#: vis_devel_widgs.cpp:2055
+#: vis_devel_widgs.cpp:2056
 msgid "right"
 msgstr ""
 
-#: vis_devel_widgs.cpp:2057
+#: vis_devel_widgs.cpp:2058
 msgid "vcenter"
 msgstr ""
 
-#: vis_devel_widgs.cpp:2059
+#: vis_devel_widgs.cpp:2060
 msgid "top"
 msgstr ""
 
-#: vis_devel_widgs.cpp:2061
+#: vis_devel_widgs.cpp:2062
 msgid "bottom"
 msgstr ""
 
-#: vis_devel_widgs.cpp:2063
+#: vis_devel_widgs.cpp:2064
 msgid "hcenter"
 msgstr ""
 
-#: vis_devel_widgs.cpp:2069
+#: vis_devel_widgs.cpp:2070
 msgid "level"
 msgstr ""
 
-#: vis_devel_widgs.cpp:2071
+#: vis_devel_widgs.cpp:2072
 msgid "rise"
 msgstr ""
 
-#: vis_devel_widgs.cpp:2072
+#: vis_devel_widgs.cpp:2073
 msgid "up"
 msgstr ""
 
-#: vis_devel_widgs.cpp:2073
+#: vis_devel_widgs.cpp:2074
 msgid "lower"
 msgstr ""
 
-#: vis_devel_widgs.cpp:2074
+#: vis_devel_widgs.cpp:2075
 msgid "down"
 msgstr ""
 
-#: vis_devel_widgs.cpp:2149
+#: vis_devel_widgs.cpp:2150
 msgid "Exit from widget editing"
 msgstr "Вихід з редагування віджету"
 
-#: vis_devel_widgs.cpp:2150
-msgid "Press for exit from widget editing."
+#: vis_devel_widgs.cpp:2151
+msgid "Press to exit from widget editing."
 msgstr "Натиснути для виходу з редагування віджету."
 
-#: vis_devel_widgs.cpp:2176
+#: vis_devel_widgs.cpp:2177
 msgid "Enter for widget editing"
 msgstr "Вхід до редагування віджету"
 
-#: vis_devel_widgs.cpp:2177
-msgid "Press for enter for widget editing."
+#: vis_devel_widgs.cpp:2178
+msgid "Press to enter for widget editing."
 msgstr "Натиснути для входу до редагування віджету."
 
-#: vis_devel_widgs.cpp:2182
+#: vis_devel_widgs.cpp:2183
 msgid "Make icon from widget"
 msgstr "Створити іконку з віджета"
 
-#: vis_devel_widgs.cpp:2183
-msgid "Press for make icon from widget."
+#: vis_devel_widgs.cpp:2184
+msgid "Press to make icon from widget."
 msgstr "Натиснути для створення іконки з віджета."
 
-#: vis_devel_widgs.cpp:2187
+#: vis_devel_widgs.cpp:2188
 msgid "Make image from widget"
 msgstr "Створити зображення з віджету"
 
-#: vis_devel_widgs.cpp:2188
-msgid "Press for make image from widget."
+#: vis_devel_widgs.cpp:2189
+msgid "Press to make image from widget."
 msgstr "Натиснути для створення зображення з віджету."
 
-#: vis_devel_widgs.cpp:2220
+#: vis_devel_widgs.cpp:2194
+msgid "Increase the visual scale of the widget by 10%"
+msgstr "Збільшити візуальний масштаб віджету на 10%."
+
+#: vis_devel_widgs.cpp:2195 vis_devel_widgs.cpp:2475
+msgid "inc"
+msgstr ""
+
+#: vis_devel_widgs.cpp:2196
+msgid "Press to increase the visual scale of the widget by 10%."
+msgstr "Натисніть, щоб збільшити візуальний масштаб віджету на 10%."
+
+#: vis_devel_widgs.cpp:2199
+msgid "Deccrease the visual scale of the widget by 10%"
+msgstr "Зменшити візуальний масштаб віджету на 10%."
+
+#: vis_devel_widgs.cpp:2201
+msgid "Press to decrease the visual scale of the widget by 10%."
+msgstr "Натисніть, щоб зменшити візуальний масштаб віджету на 10%."
+
+#: vis_devel_widgs.cpp:2204
+msgid "Set the visual scale of the widget to 100%"
+msgstr "Встановитии візуальний масштаб віджету в 100%."
+
+#: vis_devel_widgs.cpp:2205 vis_devel_widgs.cpp:2469
+msgid "unset"
+msgstr ""
+
+#: vis_devel_widgs.cpp:2206
+msgid "Press to set the visual scale of the widget to 100%."
+msgstr "Натисніть, щоб встановитии візуальний масштаб віджету в 100%."
+
+#: vis_devel_widgs.cpp:2238
 #, c-format
 msgid "/%2fwdg%2fcfg%2fico"
 msgstr ""
 
-#: vis_devel_widgs.cpp:2232
+#: vis_devel_widgs.cpp:2250
 msgid "Save widget's image"
 msgstr "Збереження зображення віджету"
 
-#: vis_devel_widgs.cpp:2233 vis_run.cpp:586 vis_run.cpp:630
+#: vis_devel_widgs.cpp:2251 vis_run.cpp:586 vis_run.cpp:630
 msgid ".png"
 msgstr ""
 
-#: vis_devel_widgs.cpp:2233 vis_run.cpp:586 vis_run.cpp:630
+#: vis_devel_widgs.cpp:2251 vis_run.cpp:586 vis_run.cpp:630
 msgid "Images (*.png *.xpm *.jpg)"
 msgstr "Зображення (*.png *.xpm *.jpg)"
 
-#: vis_devel_widgs.cpp:2235 vis_run.cpp:588 vis_run.cpp:632 vis_run.cpp:677
+#: vis_devel_widgs.cpp:2253 vis_run.cpp:588 vis_run.cpp:632 vis_run.cpp:677
 msgid "Save to file '%1' is error."
 msgstr "Помилка збереження у файл '%1'."
 
-#: vis_devel_widgs.cpp:2365
+#: vis_devel_widgs.cpp:2383
 msgid "Selected elements --- xy(%2:%3) wh[%4:%5]"
 msgstr "Вибрані елементи --- xy(%2:%3) шв[%4:%5]"
 
-#: vis_devel_widgs.cpp:2393
+#: vis_devel_widgs.cpp:2411
 msgid "Page: '%1' --- xy(%2:%3) wh[%4:%5]"
 msgstr "Сторінка: '%1' --- xy(%2:%3) шв[%4:%5]"
 
-#: vis_devel_widgs.cpp:2440 vis_devel_widgs.cpp:2456 vis_devel_widgs.cpp:2857
-#: vis_devel_widgs.cpp:2869 vis_devel_widgs.cpp:2875 vis_run_widgs.cpp:241
+#: vis_devel_widgs.cpp:2499 vis_devel_widgs.cpp:2515 vis_devel_widgs.cpp:2923
+#: vis_devel_widgs.cpp:2935 vis_devel_widgs.cpp:2941 vis_run_widgs.cpp:241
 #: vis_run_widgs.cpp:242
 msgid "black"
 msgstr ""
 
-#: vis_devel_widgs.cpp:2472 vis_shapes.cpp:75
+#: vis_devel_widgs.cpp:2531 vis_shapes.cpp:75
 msgid ":/images/attention.png"
 msgstr ""
 
-#: vis_devel_widgs.cpp:2473
-msgid "Widget no enabled or shape no support!"
+#: vis_devel_widgs.cpp:2532
+msgid "Widget is not enabled or shape is not supported!"
 msgstr "Віджет вимкнено або образ віджету не підтримується!"
 
-#: vis_devel_widgs.cpp:2581
+#: vis_devel_widgs.cpp:2640
 msgid "Select elements: '%1'"
 msgstr "Вибрано елементи: '%1'"
 
-#: vis_devel_widgs.cpp:2858
+#: vis_devel_widgs.cpp:2924
 msgid "lightgreen"
 msgstr ""
 
@@ -3134,6 +3322,22 @@ msgstr "Кнопка для перемикання режиму \"На весь 
 msgid "Press for toggle full screen."
 msgstr "Натиснути для перемикання режиму \"На весь екран\"."
 
+#: vis_run.cpp:158
+msgid "Press for display the programm and OpenSCADA information."
+msgstr "Натиснути для отримання інформації про програму та OpenSCADA."
+
+#: vis_run.cpp:163
+msgid "The button for using QT information"
+msgstr "Кнопка для отримання інформації про QT"
+
+#: vis_run.cpp:164
+msgid "Press for using QT information."
+msgstr "Натиснути для отримання інформації про QT."
+
+#: vis_run.cpp:171
+msgid "Press for respond about user interface elements."
+msgstr "Натиснути для запиту інформації про GUI елементи."
+
 #: vis_run.cpp:176 vis_run.cpp:178 vis_run.cpp:746
 msgid "alarmLev"
 msgstr ""
@@ -3229,6 +3433,26 @@ msgstr "Порушення"
 #: vis_run.cpp:229
 msgid "Alarms (status)"
 msgstr "Порушення (статус)"
+
+#: vis_run.cpp:239
+msgid "This label display curent user."
+msgstr "Це маркування показує поточного користувача."
+
+#: vis_run.cpp:240
+msgid "Field for display of the current user."
+msgstr "Поле для відображення поточного користувача."
+
+#: vis_run.cpp:241
+msgid "Double click for change user."
+msgstr "Подвійно клікнути для зміни користувача."
+
+#: vis_run.cpp:245
+msgid "This label display used VCA engine station."
+msgstr "Це маркування показує використану станцію рущія СВК"
+
+#: vis_run.cpp:246
+msgid "Field for display of the used VCA engine station."
+msgstr "Поле для відображення використаної станції рущія СВК"
 
 #: vis_run.cpp:290 vis_run.cpp:716
 msgid "disconnect"
@@ -4703,3 +4927,27 @@ msgstr "Час ініціалізації '%s' %f мс."
 #: vis_widgs.h:58
 msgid "Vision dialog"
 msgstr "Vision діалог"
+
+#~ msgid "Up selected widget"
+#~ msgstr "Підняття вибраного віджета"
+
+#~ msgid "The button for make up selected widget"
+#~ msgstr "Кнопка для підняття вибраного віджета"
+
+#~ msgid "Press for make up selected widget."
+#~ msgstr "Натиснути для підняття вибраного віджета."
+
+#~ msgid "The button for make down selected widget"
+#~ msgstr "Кнопка для опускання вибраного віджета"
+
+#~ msgid "Lower selected widget"
+#~ msgstr "Опускання вибраного віджета донизу"
+
+#~ msgid "Press for lowering selected widget."
+#~ msgstr "Натиснути для опускання вибраного віджета донизу."
+
+#~ msgid "Press for cursor to be unseted"
+#~ msgstr "Натиснути для повернення курсору"
+
+#~ msgid "Press for holds to be anabled"
+#~ msgstr "Натиснути для включення прив'язок"

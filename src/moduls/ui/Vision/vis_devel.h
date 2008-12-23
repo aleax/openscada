@@ -64,9 +64,12 @@ class VisDevelop : public QMainWindow
 	string password( );
 	string VCAStation( );
 	bool   wdgScale( );
+        double   wdgVisScale( );
+        
 
 	void setVCAStation( const string& st );
 	void setWdgScale( bool val );
+        void setWdgVisScale(double val );
 
 	int cntrIfCmd( XMLNode &node, bool glob = false );
 
@@ -185,6 +188,7 @@ class VisDevelop : public QMainWindow
 	bool		winClose;
 	UserStBar	*mWUser;	//User status widget
 	QLabel		*mWStat;	//VCA engine station
+        QLabel		*mWVisScale;	//Current widget scaling
 	QLabel		*mStModify;	//VCA station modified
 	WScaleStBar	*w_scale;	//Scale trigger
 	QTimer		*endRunTimer, *work_wdgTimer;

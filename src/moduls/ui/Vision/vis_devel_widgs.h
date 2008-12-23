@@ -460,6 +460,9 @@ class DevelWdgView: public WdgView
 	DevelWdgView( const string &iwid, int ilevel, VisDevelop *mainWind, QWidget* parent = 0 );
 	~DevelWdgView( );
 
+        float xScale( bool full = false );
+        float yScale( bool full = false );
+        double visScale( )      { return mVisScale; }
 	string user( );
 	VisDevelop *mainWin( );
 
@@ -470,6 +473,9 @@ class DevelWdgView: public WdgView
         void setSelect( bool vl, bool childs = true, bool onlyFlag = false );
 	void setEdit( bool vl );
 	void wdgsMoveResize( const QPointF &dP );
+        void setVisScale( int val );
+
+
 
 	WdgView *newWdgItem( const string &iwid );
 
@@ -492,6 +498,7 @@ class DevelWdgView: public WdgView
 	void makeImage( );
 	void editEnter( );
 	void editExit( );
+        void incDecVisScale( );
 
     protected:
 	//Protected methods
@@ -514,7 +521,9 @@ class DevelWdgView: public WdgView
 	short int	fMoveHoldMove	:1;	//Mouse move on hold
 	short int	fHideChilds	:1;	//Hide childs on move
 	short int	fSelChange	:1;	//Changed select map
-
+        
+        double          mVisScale;
+                    
 	QPoint		holdPnt;		//Hold move point
 	SizePntWdg	*pntView;		//Point view
 	DevelWdgView	*editWdg;

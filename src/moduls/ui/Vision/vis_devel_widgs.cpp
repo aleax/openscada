@@ -1359,8 +1359,8 @@ void WdgTree::updateTree( const string &vca_it )
 		    cur_act = new QAction(wdgN->text().c_str(),owner());
 		    cur_act->setObjectName(wipath.c_str());
 		    cur_act->setToolTip(QString(_("Add widget based at '%1'")).arg(wipath.c_str()));
-		    cur_act->setWhatsThis(QString(_("The button for add widget based at '%1'")).arg(wipath.c_str()));
-		    cur_act->setStatusTip(QString(_("Press for add widget based at '%1'.")).arg(wipath.c_str()));
+		    cur_act->setWhatsThis(QString(_("The button for addition widget based at '%1'")).arg(wipath.c_str()));
+		    cur_act->setStatusTip(QString(_("Press to add widget based at '%1'.")).arg(wipath.c_str()));
 		    cur_act->setEnabled(false);
 		    cur_act->setCheckable(true);
 		    //>>>>> Add action to toolbar and menu
@@ -1453,7 +1453,7 @@ void WdgTree::ctrTreePopup( )
     QImage ico_t;
     if(!ico_t.load(TUIS::icoPath("reload").c_str())) ico_t.load(":/images/reload.png");
     QAction *actRefresh = new QAction(QPixmap::fromImage(ico_t),_("Refresh libraries"),this);
-    actRefresh->setStatusTip(_("Press for refresh present libraries."));
+    actRefresh->setStatusTip(_("Press to refresh present libraries."));
     connect(actRefresh, SIGNAL(activated()), this, SLOT(updateTree()));
     popup.addAction(actRefresh);
 
@@ -1710,7 +1710,7 @@ void ProjTree::ctrTreePopup( )
     QImage ico_t;
     if(!ico_t.load(TUIS::icoPath("reload").c_str())) ico_t.load(":/images/reload.png");
     QAction *actRefresh = new QAction(QPixmap::fromImage(ico_t),_("Refresh projects"),this);
-    actRefresh->setStatusTip(_("Press for refresh present projects."));
+    actRefresh->setStatusTip(_("Press to refresh present projects."));
     connect(actRefresh, SIGNAL(activated()), this, SLOT(updateTree()));
     popup.addAction(actRefresh);
 
@@ -1795,7 +1795,7 @@ void WScaleStBar::mousePressEvent( QMouseEvent * event )
 DevelWdgView::DevelWdgView( const string &iwid, int ilevel, VisDevelop *mainWind, QWidget* parent ) :
     WdgView(iwid,ilevel,mainWind,parent), pntView(NULL), editWdg(NULL),
     fMakeScale(false), fWdgEdit(false), fWdgSelect(false), fMoveHold(false), fHoldChild(false), fLeftTop(false),
-    fHoldSelRect(false), fMoveHoldMove(false), fHideChilds(false), fSelChange(false)
+    fHoldSelRect(false), fMoveHoldMove(false), fHideChilds(false), fSelChange(false), mVisScale(1)
 {
     setMouseTracking(true);
     if( wLevel() == 0 )
@@ -1807,6 +1807,7 @@ DevelWdgView::DevelWdgView( const string &iwid, int ilevel, VisDevelop *mainWind
 	setCursor(Qt::ArrowCursor);
 	setAcceptDrops(true);
 	setContextMenuPolicy(Qt::CustomContextMenu);
+        mainWin( )->setWdgVisScale( mVisScale );
 	connect( this, SIGNAL( customContextMenuRequested(const QPoint&) ), this, SLOT( wdgPopup() ) );	
     }
     //> Select only created widgets by user
@@ -2147,7 +2148,7 @@ void DevelWdgView::wdgPopup( )
 	if( editWdg && editWdg->shape )	editWdg->shape->wdgPopup( editWdg, popup );
 	//-- Exit from widget edition --
 	QAction *actExitEdit = new QAction(_("Exit from widget editing"),this);
-	actExitEdit->setStatusTip(_("Press for exit from widget editing."));
+	actExitEdit->setStatusTip(_("Press to exit from widget editing."));
 	connect(actExitEdit, SIGNAL(activated()), this, SLOT(editExit()));
 	popup.addAction(actExitEdit);
     }
@@ -2174,22 +2175,39 @@ void DevelWdgView::wdgPopup( )
 	if( (sel_wdgs.size() == 1 && sel_wdgs[0]->shape && sel_wdgs[0]->shape->isEditable()) || (shape && shape->isEditable()) )
 	{
 	    QAction *actEnterEdit = new QAction(_("Enter for widget editing"),this);
-	    actEnterEdit->setStatusTip(_("Press for enter for widget editing."));
+	    actEnterEdit->setStatusTip(_("Press to enter for widget editing."));
 	    connect(actEnterEdit, SIGNAL(activated()), this, SLOT(editEnter()));
 	    popup.addAction(actEnterEdit);
 	}
 	//-- Make widget icon --
 	QAction *actMakeIco = new QAction(parentWidget()->windowIcon(),_("Make icon from widget"),this);
-	actMakeIco->setStatusTip(_("Press for make icon from widget."));
+	actMakeIco->setStatusTip(_("Press to make icon from widget."));
 	connect(actMakeIco, SIGNAL(activated()), this, SLOT(makeIcon()));
 	popup.addAction(actMakeIco);
 	//-- Make widget image --
 	QAction *actMakeImg = new QAction(_("Make image from widget"),this);
-	actMakeImg->setStatusTip(_("Press for make image from widget."));
+	actMakeImg->setStatusTip(_("Press to make image from widget."));
 	connect(actMakeImg, SIGNAL(activated()), this, SLOT(makeImage()));
 	popup.addAction(actMakeImg);
-
 	popup.addSeparator();
+        //-- Unset, increase, decrease the visual scale of thge widget --
+        QAction *actIncVisScale = new QAction(_("Increase the visual scale of the widget by 10%"),this);
+        actIncVisScale->setObjectName("inc");
+        actIncVisScale->setStatusTip(_("Press to increase the visual scale of the widget by 10%."));
+        connect(actIncVisScale, SIGNAL(activated()), this, SLOT(incDecVisScale()));
+        popup.addAction(actIncVisScale);
+        QAction *actDecVisScale = new QAction(_("Deccrease the visual scale of the widget by 10%"),this);
+        actDecVisScale->setObjectName("dec");
+        actDecVisScale->setStatusTip(_("Press to decrease the visual scale of the widget by 10%."));
+        connect(actDecVisScale, SIGNAL(activated()), this, SLOT(incDecVisScale()));
+        popup.addAction(actDecVisScale);
+        QAction *actUnsetVisScale = new QAction(_("Set the visual scale of the widget to 100%"),this);
+        actUnsetVisScale->setObjectName("unset");
+        actUnsetVisScale->setStatusTip(_("Press to set the visual scale of the widget to 100%."));
+        connect(actUnsetVisScale, SIGNAL(activated()), this, SLOT(incDecVisScale()));
+        popup.addAction(actUnsetVisScale);
+        popup.addSeparator();
+
 	popup.addAction(mainWin()->actVisItCut);
 	popup.addAction(mainWin()->actVisItCopy);
 	popup.addAction(mainWin()->actVisItPaste);
@@ -2426,6 +2444,47 @@ void DevelWdgView::cacheResSet( const string &res, const string &val )
     mCacheRes[res] = val;
 }
 
+float DevelWdgView::xScale( bool full )
+{
+    if( wLevel() == 0 ) return WdgView::xScale( full ) * visScale( );
+    return WdgView::xScale( full );
+
+}
+float DevelWdgView::yScale( bool full )
+{
+    if( wLevel() == 0 ) return WdgView::yScale( full ) * visScale( );
+    return WdgView::yScale( full );
+}
+
+void DevelWdgView::setVisScale( int val )
+{
+    mVisScale = (val>0) ? vmin(20,vmax(0.01,mVisScale*((double)(val)/100)))
+                        : vmin(20,vmax(0.01,mVisScale/((double)(-val)/100)));
+    load("");
+    mainWin( )->setWdgVisScale( mVisScale );
+}
+
+void DevelWdgView::incDecVisScale( )
+{
+    if(sender()->objectName() == "unset")
+    {
+        mVisScale = 1;
+        setVisScale( 100 );
+        mainWin( )->setWdgVisScale( mVisScale );
+    }
+    else if(sender()->objectName() == "inc")
+    {
+        setVisScale( 110 );
+        mainWin( )->setWdgVisScale( mVisScale );
+    }
+    else if(sender()->objectName() == "dec")
+    {
+        setVisScale( -110 );
+        mainWin( )->setWdgVisScale( mVisScale );
+    }
+
+}
+
 bool DevelWdgView::event( QEvent *event )
 {
     //- Paint event process -
@@ -2470,7 +2529,7 @@ bool DevelWdgView::event( QEvent *event )
 	if( !shape )
 	{
 	    pnt.drawImage(rect(),QImage(":/images/attention.png"));
-	    setToolTip(QString(_("Widget no enabled or shape no support!")));
+	    setToolTip(QString(_("Widget is not enabled or shape is not supported!")));
 	}
 
 	//- Update select widget data -
@@ -2662,6 +2721,13 @@ bool DevelWdgView::event( QEvent *event )
 		editEnter( );
 		return true;
 	    }
+            case QEvent::Wheel:
+            {
+                if( !(QApplication::keyboardModifiers()&Qt::ControlModifier) ) break;
+                QWheelEvent *ev = static_cast<QWheelEvent*>(event); 
+                setVisScale( ev->delta () );
+                return true;
+            }
 	    case QEvent::FocusIn:
                 if( edit() )    break;
 		//-- Unselect and store child widgets --
