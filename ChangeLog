@@ -1,3 +1,7 @@
+2008-12-26 Maxim
+- :/SYS: Some fixes to English variant of translation is done.
+
+
 2008-12-26 Roman
 - !:/DB/SQLite,/DB/MySQL,/DB/FireBird,/DB/DBF,/DAQ/BlockCalc: Translation to German is added by Aleksey and Irina Popkov.
 - FIX:/SYS: RPM build spec file is fixed for *.la including.

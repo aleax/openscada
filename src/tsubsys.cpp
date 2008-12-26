@@ -100,7 +100,7 @@ void TSubSYS::subStart( )
 	catch(TError err)
 	{
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	    mess_err(nodePath().c_str(),_("Start module '%s' is error."),list[i_m].c_str());
+	    mess_err(nodePath().c_str(),_("Start module '%s' error."),list[i_m].c_str());
 	}
 }
 
@@ -114,7 +114,7 @@ void TSubSYS::subStop( )
 	catch(TError err)
 	{
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str()); 
-	    mess_err(nodePath().c_str(),_("Stop module '%s' is error."),list[i_m].c_str());
+	    mess_err(nodePath().c_str(),_("Stop module '%s' error."),list[i_m].c_str());
 	}
 }
 

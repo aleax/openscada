@@ -111,7 +111,7 @@ void TModSchedul::subStop(  )
 	itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
     timer_settime(tmId, 0, &itval, NULL);
     if( TSYS::eventWait( prcSt, false, nodePath()+"stop",20) )
-	throw TError(nodePath().c_str(),_("Module scheduler thread no stoped!"));
+	throw TError(nodePath().c_str(),_("Module scheduler thread is not stoped!"));
 
 #if OSC_DEBUG >= 2
     mess_debug(nodePath().c_str(),_("Stop subsystem. OK"));
@@ -272,7 +272,7 @@ void TModSchedul::libUnreg( const string &iname )
 	    SchHD.erase(SchHD.begin()+i_sh);
 	    return;
 	}
-    throw TError(nodePath().c_str(),_("SO <%s> no present!"),iname.c_str());
+    throw TError(nodePath().c_str(),_("SO <%s> is not present!"),iname.c_str());
 }
 
 void TModSchedul::libAtt( const string &iname, bool full )
@@ -282,7 +282,7 @@ void TModSchedul::libAtt( const string &iname, bool full )
 	if( SchHD[i_sh].name == iname ) 
 	{
 	    if( SchHD[i_sh].hd ) 
-		throw TError(nodePath().c_str(),_("SO <%s> already attached!"),iname.c_str());
+		throw TError(nodePath().c_str(),_("SO <%s> is already attached!"),iname.c_str());
 
 	    void *h_lib = dlopen(iname.c_str(),RTLD_LAZY|RTLD_GLOBAL);
 	    if( !h_lib )
@@ -323,13 +323,13 @@ void TModSchedul::libAtt( const string &iname, bool full )
 			//-- Check type module version --
 			if( AtMod.t_ver != owner().at(list[i_sub]).at().subVer() )
 			{
-			    mess_warning(nodePath().c_str(),_("%s for type <%s> no support module version: %d!"),
+			    mess_warning(nodePath().c_str(),_("%s for type <%s> doesn't support module version: %d!"),
 				AtMod.id.c_str(),AtMod.type.c_str(),AtMod.t_ver);
 			    break;
 			}
 			//-- Check module present --
 			if( owner().at(list[i_sub]).at().modPresent(AtMod.id) )
-			    mess_warning(nodePath().c_str(),_("Module <%s> already present!"),AtMod.id.c_str());
+			    mess_warning(nodePath().c_str(),_("Module <%s> is already present!"),AtMod.id.c_str());
 			else
 			{
 			    //-- Attach new module --
@@ -357,7 +357,7 @@ void TModSchedul::libAtt( const string &iname, bool full )
 	    else SchHD[i_sh].hd = h_lib;
 	    return;
 	}
-    throw TError(nodePath().c_str(),_("SO <%s> no present!"),iname.c_str());
+    throw TError(nodePath().c_str(),_("SO <%s> is not present!"),iname.c_str());
 }
 
 void TModSchedul::libDet( const string &iname )
@@ -389,7 +389,7 @@ void TModSchedul::libDet( const string &iname )
 	    return;
 	}
     }
-    throw TError(nodePath().c_str(),_("SO <%s> no present!"),iname.c_str());
+    throw TError(nodePath().c_str(),_("SO <%s> is not present!"),iname.c_str());
 }
 
 bool TModSchedul::CheckAuto( const string &name ) const
@@ -417,7 +417,7 @@ TModSchedul::SHD &TModSchedul::lib( const string &iname )
     for(unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++)
 	if( SchHD[i_sh].name == iname ) 
 	    return SchHD[i_sh];
-    throw TError(nodePath().c_str(),_("SO <%s> no present!"),iname.c_str());
+    throw TError(nodePath().c_str(),_("SO <%s> is not present!"),iname.c_str());
 }
 
 void TModSchedul::libLoad( const string &iname, bool full)

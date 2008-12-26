@@ -68,7 +68,7 @@ void TElem::fldDel( unsigned int id )
 void TElem::valAtt( TValElem *cnt )
 {
     for(unsigned i=0; i < cont.size() ;i++)
-	if(cont[i] == cnt) throw TError("Elem",_("The element container already attached!"));
+	if(cont[i] == cnt) throw TError("Elem",_("The element container is already attached!"));
     cont.push_back(cnt);
 }
 
@@ -82,7 +82,7 @@ unsigned TElem::fldId( const string &name )
 {
     for(unsigned i=0; i < elem.size(); i++)
 	if(elem[i]->name() == name) return(i);
-    throw TError("Elem",_("Element <%s> no present!"),name.c_str());
+    throw TError("Elem",_("Element <%s> is not present!"),name.c_str());
 }
 
 bool TElem::fldPresent( const string &name )

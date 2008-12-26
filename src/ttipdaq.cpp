@@ -119,7 +119,7 @@ int TTipDAQ::tpPrmToId( const string &name_t)
 {
     for(unsigned i_t=0; i_t < paramt.size(); i_t++)
 	if(paramt[i_t]->name == name_t) return i_t;
-    throw TError(nodePath().c_str(),_("Parameter type is no present."));
+    throw TError(nodePath().c_str(),_("Parameter type is not present."));
 }
 
 TController *TTipDAQ::ContrAttach( const string &name, const string &daq_db )
@@ -129,7 +129,7 @@ TController *TTipDAQ::ContrAttach( const string &name, const string &daq_db )
 
 string TTipDAQ::compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text, const string &usings )
 {
-	throw TError(nodePath().c_str(),"Module is no support of function compile languages.");
+	throw TError(nodePath().c_str(),"Module doesn't support the function for compilation programming languages.");
 }
 
 void TTipDAQ::cntrCmdProc( XMLNode *opt )

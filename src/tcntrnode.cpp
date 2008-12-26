@@ -183,13 +183,13 @@ void TCntrNode::nodeDis( long tm, int flag )
 	{
 	    if( !m_use )	break;
 #if OSC_DEBUG >= 1
-            mess_debug(nodePath().c_str(),_("Wait of free %d users!"),m_use);
+            mess_debug(nodePath().c_str(),_("Waiting for freeing by %d users!"),m_use);
 #endif
 	    //Check timeout
 	    if( tm && time(NULL) > t_cur+tm)
 	    {
 		if( !TSYS::finalKill )
-		    throw TError(nodePath().c_str(),_("Timeouted of wait. Object used by %d users. Free object first!"),m_use);
+		    throw TError(nodePath().c_str(),_("Timeouted of wait. Object is used by %d users. Free object first!"),m_use);
 		mess_err(nodePath().c_str(),_("Blocking node error. Inform developpers please!"));
 		break;
 	    }
@@ -264,7 +264,7 @@ void TCntrNode::nodeCopy( const string &src, const string &dst, const string &us
     int n_del = 0;
     for( int off = 0; !(t_el=TSYS::pathLev(dst,0,true,&off)).empty(); n_del++ )
     { if( n_del ) d_elp += ("/"+d_el); d_el = t_el; }
-    if( !n_del ) throw TError(SYS->nodePath().c_str(),_("Copy from '%s' to '%s' impossible"),src.c_str(),dst.c_str());
+    if( !n_del ) throw TError(SYS->nodePath().c_str(),_("Copy from '%s' to '%s' is impossible"),src.c_str(),dst.c_str());
 
     //- Connect to destination containers node -
     AutoHD<TCntrNode> dst_n = SYS->nodeAt(d_elp);
@@ -274,7 +274,7 @@ void TCntrNode::nodeCopy( const string &src, const string &dst, const string &us
     br_req.setAttr("user",user)->setAttr("path","/%2fbr");
     dst_n.at().cntrCmd(&br_req);
     if( atoi(br_req.attr("rez").c_str()) || !br_req.childGet(0,true) )
-	throw TError(SYS->nodePath().c_str(),_("Destination node not have branches."));
+	throw TError(SYS->nodePath().c_str(),_("Destination node doesn't have branches."));
     XMLNode *branch = br_req.childGet(0);
     int i_b;
     for( i_b = 0; i_b < branch->childSize(); i_b++ )
@@ -282,12 +282,12 @@ void TCntrNode::nodeCopy( const string &src, const string &dst, const string &us
 		atoi(branch->childGet(i_b)->attr("acs").c_str())&SEQ_WR )
 	    break;
     if( i_b >= branch->childSize() )
-	throw TError(SYS->nodePath().c_str(),_("Destination node not have want branche."));
+        throw TError(SYS->nodePath().c_str(),_("Destination node doesn't have necessary branche."));
     bool idm = atoi(branch->childGet(i_b)->attr("idm").c_str());
     string n_grp = branch->childGet(i_b)->attr("id");
     d_el = d_el.substr(n_grp.size());
     i_b = dst_n.at().grpId(n_grp);
-    if( i_b < 0 ) throw TError(SYS->nodePath().c_str(),_("Destination node not have want branche."));
+    if( i_b < 0 ) throw TError(SYS->nodePath().c_str(),_("Destination node doesn't have necessary branche."));
 
     //- Connect or create new destination node -
     if( !dst_n.at().chldPresent( i_b, d_el ) )
@@ -412,11 +412,11 @@ void TCntrNode::chldDel( char igr, const string &name, long tm, int flag, bool s
     ResAlloc res(hd_res,false);
     if( igr >= chGrp.size() )	throw TError(nodePath().c_str(),"Group of childs %d error!",igr);
     if( !(nodeMode() == Enable || nodeMode() == Disable) )
-	throw TError(nodePath().c_str(),"Node is proced now!");
+        throw TError(nodePath().c_str(),"Node is beign processed now!");
 
     TMap::iterator p=chGrp[igr].elem.find(name);
     if( p == chGrp[igr].elem.end() )
-	throw TError(nodePath().c_str(),"Child <%s> no present!", name.c_str());
+	throw TError(nodePath().c_str(),"Child <%s> is not present!", name.c_str());
 
     if( p->second->nodeMode() == Enable )
 	p->second->nodeDis( tm, (flag<<8)|(shDel?NodeShiftDel:0) );
@@ -477,7 +477,7 @@ TCntrNode *TCntrNode::nodePrev( bool noex )
 {
     if( prev.node ) return prev.node;
     if( noex )	return NULL;
-    throw TError(nodePath().c_str(),"Node is it root or no connect!");
+    throw TError(nodePath().c_str(),"Node is the root or is not connected!");
 }
 
 AutoHD<TCntrNode> TCntrNode::chldAt( char igr, const string &name, const string &user )
@@ -488,7 +488,7 @@ AutoHD<TCntrNode> TCntrNode::chldAt( char igr, const string &name, const string 
 
     TMap::iterator p=chGrp[igr].elem.find(name);
     if(p == chGrp[igr].elem.end() || p->second->nodeMode() == Disable)
-	throw TError(nodePath().c_str(),_("Element <%s> no present or disabled!"), name.c_str());
+	throw TError(nodePath().c_str(),_("Element <%s> is not present or disabled!"), name.c_str());
 
     return AutoHD<TCntrNode>(p->second,user);
 }
@@ -541,7 +541,7 @@ void TCntrNode::load( )
 	catch( TError err )
 	{
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	    mess_err(nodePath().c_str(),_("Load node is error."));
+	    mess_err(nodePath().c_str(),_("Loading node error."));
 	}
     //- Childs load process -
     if( isModify(Child)&Child )
@@ -562,7 +562,7 @@ void TCntrNode::save( )
 	catch(TError err)
 	{
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	    mess_err(nodePath().c_str(),_("Save node is error."));
+	    mess_err(nodePath().c_str(),_("Saving node error."));
 	}
     //- Childs load process -
     if( isModify(Child)&Child )
@@ -639,7 +639,7 @@ XMLNode *TCntrNode::ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const cha
 	if( obj1 ) { obj = obj1; continue; }
 	//int wofft = woff;
 	if( TSYS::pathLev(path,0,true,&woff).size() )
-	    throw TError("ContrItfc",_("Some tags on path <%s> missed!"),req.c_str());
+	    throw TError("ContrItfc",_("Some tags on path <%s> are missed!"),req.c_str());
 	obj = obj->childIns(pos);
     }
     obj->setName(n_nd)->setAttr("id",reqt1)->setAttr("dscr",dscr)->setAttr("acs",TSYS::int2str(n_acs));

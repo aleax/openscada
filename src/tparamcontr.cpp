@@ -151,7 +151,7 @@ void TParamContr::vlGet( TVal &val )
     if(val.name() == "err" )
     {
 	if( enableStat() ) val.setS("0",0,true);
-	else val.setS(_("1:Parameter had disabled."),0,true);
+	else val.setS(_("1:Parameter is disabled."),0,true);
     }
 }
 
@@ -187,7 +187,7 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(enableStat()?"1":"0");
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
 	{
-	    if( !owner().enableStat() )	throw TError(nodePath().c_str(),"Controller no started!");
+	    if( !owner().enableStat() )	throw TError(nodePath().c_str(),"Controller is not started!");
 	    else atoi(opt->text().c_str())?enable():disable();
 	}
     }

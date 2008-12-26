@@ -69,7 +69,7 @@ void TFunction::preDisable( int flag )
 	string mess;
 	for( int i=0; i < used.size(); i++ )
 	    mess+=used[i]->vfName()+", ";
-	throw TError(nodePath().c_str(),_("Function used by: %s"),mess.c_str());
+	throw TError(nodePath().c_str(),_("Function is used by: %s"),mess.c_str());
     }
 }
 
@@ -80,7 +80,7 @@ int TFunction::ioSize( )
 
 IO *TFunction::io( int iid )
 {
-    if( iid >= mIO.size() ) throw TError(nodePath().c_str(),_("Index %d broken!"),iid);
+    if( iid >= mIO.size() ) throw TError(nodePath().c_str(),_("Index %d is broken!"),iid);
     return mIO[iid];
 }
 
@@ -144,7 +144,7 @@ void TFunction::preIOCfgChange()
     for(unsigned i=0; i < used.size(); i++)
 	if( used[i]->blk() )	blk_lst+=used[i]->vfName()+",";
     if( blk_lst.size() )
-	throw TError(nodePath().c_str(),_("Change no permit by function used: %s"),blk_lst.c_str());
+	throw TError(nodePath().c_str(),_("Change is not permited while function is used: %s"),blk_lst.c_str());
 
     for(unsigned i=0; i < used.size(); i++)
 	used[i]->preIOCfgChange();
@@ -161,7 +161,7 @@ void TFunction::valAtt( TValFunc *vfnc )
     ResAlloc res(f_res,true);
     for(unsigned i=0; i < used.size() ;i++)
 	if(used[i] == vfnc)
-	    throw TError(nodePath().c_str(),_("Value <%s> already attached!"),vfnc->vfName().c_str());
+	    throw TError(nodePath().c_str(),_("Value <%s> is already attached!"),vfnc->vfName().c_str());
     used.push_back(vfnc);
 }
 
@@ -462,19 +462,19 @@ void TValFunc::funcDisConnect( bool det )
 
 int TValFunc::ioId( const string &iid )
 {
-    if( !mFunc )	throw TError("ValFnc",_("IO <%s> no present!"),iid.c_str());
+    if( !mFunc )	throw TError("ValFnc",_("IO <%s> is not present!"),iid.c_str());
     return mFunc->ioId(iid);
 }
 
 void TValFunc::ioList( vector<string> &list )
 {
-    if( !mFunc )       throw TError("ValFnc",_("Function no attached!"));
+    if( !mFunc )       throw TError("ValFnc",_("Function is not attached!"));
     return mFunc->ioList(list);
 }
 
 int TValFunc::ioSize( )
 {
-    if( !mFunc )       throw TError("ValFnc",_("Function no attached!"));
+    if( !mFunc )       throw TError("ValFnc",_("Function is not attached!"));
     return mFunc->ioSize();
 }
 

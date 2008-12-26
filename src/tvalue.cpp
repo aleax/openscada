@@ -119,7 +119,7 @@ TElem &TValue::vlElem( const string &name )
     for(unsigned i_e = 0; i_e < elem.size(); i_e++)
 	if( elem[i_e]->elName() == name )
 	    return *elem[i_e];
-    throw TError(nodePath().c_str(),"Element <%s> no present!",name.c_str());
+    throw TError(nodePath().c_str(),"Element <%s> is not present!",name.c_str());
 }
 
 void TValue::cntrCmdProc( XMLNode *opt )
@@ -362,7 +362,7 @@ void TVal::setArch(const AutoHD<TVArchive> &vl)
 
 string TVal::getSEL( long long *tm, bool sys )
 {
-    if( !(fld().flg()&TFld::Selected) )	throw TError("Val","No select type!");
+    if( !(fld().flg()&TFld::Selected) )	throw TError("Val","Not select type!");
     switch( fld().type() )
     {
 	case TFld::String:	return fld().selVl2Nm(getS(tm,sys));
@@ -482,7 +482,7 @@ char TVal::getB( long long *tm, bool sys )
 
 void TVal::setSEL( const string &value, long long tm, bool sys )
 {
-    if( !(fld().flg()&TFld::Selected) )	throw TError("Val","No select type!");
+    if( !(fld().flg()&TFld::Selected) )	throw TError("Val","Not select type!");
     switch( fld().type() )
     {
 	case TFld::String:	setS(fld().selNm2VlS(value),tm,sys);	break;
@@ -506,7 +506,7 @@ void TVal::setS( const string &value, long long tm, bool sys )
 	    //- Set value to config -
 	    if( m_cfg )	{ src.cfg->setS( value ); return; }
 	    //- Check to write -
-	    if( !sys && fld().flg()&TFld::NoWrite )	throw TError("Val","No write access!");
+	    if( !sys && fld().flg()&TFld::NoWrite )	throw TError("Val","Write access is denied!");
 	    //- Set current value and time -
 	    *val.val_s = value;
 	    time = tm;
@@ -532,7 +532,7 @@ void TVal::setI( int value, long long tm, bool sys )
 	    //- Set value to config -
 	    if( m_cfg )	{ src.cfg->setI( value ); return; }
 	    //- Check to write -
-	    if( !sys && fld().flg()&TFld::NoWrite )	throw TError("Val","No write access!");
+            if( !sys && fld().flg()&TFld::NoWrite )	throw TError("Val","Write access is denied!");
 	    //- Set current value and time -
 	    if( !(fld().flg()&TFld::Selected) && fld().selValI()[1] > fld().selValI()[0] && value != EVAL_INT )
 	    {
@@ -563,7 +563,7 @@ void TVal::setR( double value, long long tm, bool sys )
 	    //- Set value to config -
 	    if( m_cfg )	{ src.cfg->setR( value ); return; }
 	    //- Check to write -
-	    if( !sys && fld().flg()&TFld::NoWrite )	throw TError("Val","No write access!");
+            if( !sys && fld().flg()&TFld::NoWrite )	throw TError("Val","Write access is denied!");
 	    //- Set current value and time -
 	    if( !(fld().flg()&TFld::Selected) && fld().selValR()[1] > fld().selValR()[0] && value != EVAL_REAL )
 	    {
@@ -594,7 +594,7 @@ void TVal::setB( char value, long long tm, bool sys )
 	    //- Set value to config -
 	    if( m_cfg )	{ src.cfg->setB( value ); return; }
 	    //- Check to write -
-	    if( !sys && fld().flg()&TFld::NoWrite )	throw TError("Val","No write access!");
+            if( !sys && fld().flg()&TFld::NoWrite )	throw TError("Val","Write access is denied!");
 	    //- Set current value and time -
 	    val.val_b = value;
 	    time = tm;
@@ -630,7 +630,7 @@ void TVal::cntrCmdProc( XMLNode *opt )
 		opt->setAttr("tm",TSYS::ll2str(tm));
 	    }
 	    else if( !arch().freeStat() ) arch().at().cntrCmdProc(opt);
-	    else throw TError(nodePath().c_str(),"Attribute not have archive");
+	    else throw TError(nodePath().c_str(),"Attribute doesn't have archive");
 	}
 	return;
     }

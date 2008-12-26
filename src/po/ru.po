@@ -60,7 +60,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-15 12:49+0200\n"
+"POT-Creation-Date: 2008-12-24 16:34+0200\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -102,8 +102,8 @@ msgid "%s"
 msgstr ""
 
 #: main.cpp:69
-#, c-format
-msgid "OpenSCADA system is correct exited.\n"
+c-format
+msgid "OpenSCADA system is correctly exited.\n"
 msgstr "Система OpenSCADA корректно остановлена.\n"
 
 #: resalloc.cpp:32 resalloc.cpp:49 resalloc.cpp:57 resalloc.cpp:74
@@ -309,7 +309,7 @@ msgstr "Начало архива"
 #: ttipdaq.cpp:143 ttransports.cpp:42 ttransports.cpp:50 ttransports.cpp:399
 #: ttransports.cpp:507 ttransports.cpp:508 ttransports.cpp:511
 #: ttransports.cpp:512 ttransports.cpp:654 ttransports.cpp:685
-#: ttransports.cpp:807 ttransports.cpp:833 tuis.cpp:167 tvalue.cpp:240
+#: ttransports.cpp:807 ttransports.cpp:833 tuis.cpp:169 tvalue.cpp:240
 #: tvalue.cpp:242
 msgid "1"
 msgstr ""
@@ -369,7 +369,7 @@ msgstr "Адрес"
 #: tprmtmpl.cpp:558 tspecials.cpp:106 tsys.cpp:309 tsys.cpp:310 tsys.cpp:1025
 #: tsys.cpp:1030 tsys.cpp:1035 tsys.cpp:1040 ttipdaq.cpp:43 ttipdaq.cpp:44
 #: ttipdaq.cpp:113 ttransports.cpp:654 ttransports.cpp:685 ttransports.cpp:807
-#: ttransports.cpp:833 tuis.cpp:167 tvalue.cpp:240 tvalue.cpp:242
+#: ttransports.cpp:833 tuis.cpp:169 tvalue.cpp:240 tvalue.cpp:242
 #: tvalue.cpp:620
 msgid "0"
 msgstr ""
@@ -497,7 +497,7 @@ msgstr ""
 
 #: tarchives.cpp:119 tbds.cpp:403 tdaqs.cpp:73 tmess.cpp:207
 #: tmodschedul.cpp:154 tprotocols.cpp:51 tsecurity.cpp:141 tspecials.cpp:46
-#: tsys.cpp:230 ttransports.cpp:76 tuis.cpp:48
+#: tsys.cpp:230 ttransports.cpp:76 tuis.cpp:50
 msgid "h"
 msgstr ""
 
@@ -507,7 +507,7 @@ msgstr ""
 #: tprmtmpl.cpp:541 tprotocols.cpp:54 tsecurity.cpp:144 tsecurity.cpp:385
 #: tsecurity.cpp:534 tspecials.cpp:49 tsys.cpp:233 tsys.cpp:929 tsys.cpp:931
 #: tsys.cpp:933 tsys.cpp:938 ttransports.cpp:79 ttransports.cpp:635
-#: ttransports.cpp:789 tuis.cpp:51
+#: ttransports.cpp:789 tuis.cpp:53
 msgid "help"
 msgstr ""
 
@@ -540,7 +540,7 @@ msgstr ""
 #: tprmtmpl.cpp:361 tprmtmpl.cpp:364 tprmtmpl.cpp:457 tprmtmpl.cpp:475
 #: tprmtmpl.cpp:482 tprmtmpl.cpp:499 tsecurity.cpp:178 tsecurity.cpp:180
 #: tsecurity.cpp:217 tsecurity.cpp:219 ttipdaq.cpp:69 ttransports.cpp:110
-#: ttransports.cpp:151 tuis.cpp:125
+#: ttransports.cpp:151 tuis.cpp:127
 msgid "."
 msgstr ""
 
@@ -603,7 +603,7 @@ msgstr ""
 "\n"
 
 #: tarchives.cpp:295 tdaqs.cpp:182 tmodschedul.cpp:92 ttransports.cpp:239
-#: tuis.cpp:73
+#: tuis.cpp:75
 msgid "Start subsystem."
 msgstr "Пуск подсистемы."
 
@@ -772,8 +772,8 @@ msgstr "Ошибка запуска архива значений <%s>."
 #: ttransports.cpp:807 ttransports.cpp:808 ttransports.cpp:812
 #: ttransports.cpp:813 ttransports.cpp:818 ttransports.cpp:819
 #: ttransports.cpp:823 ttransports.cpp:824 ttransports.cpp:828
-#: ttransports.cpp:829 ttransports.cpp:833 ttransports.cpp:834 tuis.cpp:134
-#: tuis.cpp:159 tuis.cpp:167 tuis.cpp:168 tvalue.cpp:133 tvalue.cpp:148
+#: ttransports.cpp:829 ttransports.cpp:833 ttransports.cpp:834 tuis.cpp:136
+#: tuis.cpp:161 tuis.cpp:169 tuis.cpp:170 tvalue.cpp:133 tvalue.cpp:148
 #: tvalue.cpp:151 tvalue.cpp:162 tvalue.cpp:173 tvalue.cpp:177 tvalue.cpp:178
 #: tvalue.cpp:186 tvalue.cpp:204 tvalue.cpp:211 tvalue.cpp:219 tvalue.cpp:245
 #: tvalue.cpp:615 tvalue.cpp:624 tbds.h:225 tbds.h:226 tcntrnode.h:96
@@ -787,11 +787,11 @@ msgid "val_task_start"
 msgstr ""
 
 #: tarchives.cpp:365
-msgid "Values acquisition task no started!"
+msgid "Values acquisition task is not started!"
 msgstr "Задача сбора значений не запущена!"
 
 #: tarchives.cpp:373 tdaqs.cpp:255 tmodschedul.cpp:105 ttransports.cpp:278
-#: tuis.cpp:82
+#: tuis.cpp:84
 msgid "Stop subsystem."
 msgstr "Останов подсистемы."
 
@@ -800,11 +800,11 @@ msgid "mess_stop"
 msgstr ""
 
 #: tarchives.cpp:385
-msgid "Archive messages thread no stoped!"
+msgid "Archive messages thread is not stoped!"
 msgstr "Поток архива сообщений не остановлен!"
 
 #: tarchives.cpp:393
-msgid "Archive values task no stoped!"
+msgid "Archive values task is not stoped!"
 msgstr "Задача архивирования значений не остановлена!"
 
 #: tarchives.cpp:407
@@ -827,7 +827,7 @@ msgid "Buffer full. Messages lost!"
 msgstr "Буфер полон. Потеря сообщений!"
 
 #: tarchives.cpp:473
-msgid "Messagess buffer fill too fast!"
+msgid "Messagess buffer filling is too fast!"
 msgstr "Буфер сообщений заполняется слишком быстро!"
 
 #: tarchives.cpp:662
@@ -849,7 +849,7 @@ msgstr "Поток <%u> запущен. TID: %ld"
 #: tprotocols.cpp:83 tsecurity.cpp:273 tsecurity.cpp:394 tsecurity.cpp:540
 #: tspecials.cpp:78 tspecials.cpp:103 tsubsys.cpp:140 tsys.cpp:953
 #: ttipdaq.cpp:147 ttransports.cpp:409 ttransports.cpp:517 ttransports.cpp:650
-#: ttransports.cpp:803 tuis.cpp:138 tuis.cpp:164 tvalue.cpp:128 tvalue.cpp:611
+#: ttransports.cpp:803 tuis.cpp:140 tuis.cpp:166 tvalue.cpp:128 tvalue.cpp:611
 msgid "path"
 msgstr ""
 
@@ -865,8 +865,8 @@ msgstr ""
 #: tprmtmpl.cpp:236 tprmtmpl.cpp:529 tprotocols.cpp:76 tsecurity.cpp:257
 #: tsecurity.cpp:374 tsecurity.cpp:526 tspecials.cpp:71 tspecials.cpp:94
 #: tsubsys.cpp:124 tsys.cpp:905 ttipdaq.cpp:138 ttransports.cpp:389
-#: ttransports.cpp:504 ttransports.cpp:624 ttransports.cpp:778 tuis.cpp:131
-#: tuis.cpp:154 tvalue.cpp:159 tvalue.cpp:615 tvalue.cpp:640
+#: ttransports.cpp:504 ttransports.cpp:624 ttransports.cpp:778 tuis.cpp:133
+#: tuis.cpp:156 tvalue.cpp:159 tvalue.cpp:615 tvalue.cpp:640
 msgid "info"
 msgstr ""
 
@@ -921,8 +921,8 @@ msgstr ""
 #: ttransports.cpp:659 ttransports.cpp:665 ttransports.cpp:670
 #: ttransports.cpp:675 ttransports.cpp:680 ttransports.cpp:685
 #: ttransports.cpp:807 ttransports.cpp:812 ttransports.cpp:818
-#: ttransports.cpp:823 ttransports.cpp:828 ttransports.cpp:833 tuis.cpp:139
-#: tuis.cpp:167 tvalue.cpp:148 tvalue.cpp:204 tvalue.cpp:219 tvalue.cpp:624
+#: ttransports.cpp:823 ttransports.cpp:828 ttransports.cpp:833 tuis.cpp:141
+#: tuis.cpp:169 tvalue.cpp:148 tvalue.cpp:204 tvalue.cpp:219 tvalue.cpp:624
 #: tcntrnode.h:97
 msgid "get"
 msgstr ""
@@ -1032,7 +1032,7 @@ msgstr ""
 #: tsys.cpp:945 tsys.cpp:947 ttipdaq.cpp:142 ttransports.cpp:392
 #: ttransports.cpp:509 ttransports.cpp:628 ttransports.cpp:630
 #: ttransports.cpp:637 ttransports.cpp:782 ttransports.cpp:784
-#: ttransports.cpp:791 tuis.cpp:157 tuis.cpp:158 tvalue.cpp:163 tvalue.cpp:171
+#: ttransports.cpp:791 tuis.cpp:159 tuis.cpp:160 tvalue.cpp:163 tvalue.cpp:171
 msgid "area"
 msgstr ""
 
@@ -1082,8 +1082,8 @@ msgstr "Архив сообщений"
 #: ttransports.cpp:641 ttransports.cpp:642 ttransports.cpp:643
 #: ttransports.cpp:644 ttransports.cpp:786 ttransports.cpp:787
 #: ttransports.cpp:788 ttransports.cpp:793 ttransports.cpp:794
-#: ttransports.cpp:795 ttransports.cpp:796 ttransports.cpp:797 tuis.cpp:134
-#: tuis.cpp:159
+#: ttransports.cpp:795 ttransports.cpp:796 ttransports.cpp:797 tuis.cpp:136
+#: tuis.cpp:161
 msgid "fld"
 msgstr ""
 
@@ -1150,7 +1150,7 @@ msgstr "Макс. кол. запраш. сообщений"
 #: ttransports.cpp:642 ttransports.cpp:643 ttransports.cpp:644
 #: ttransports.cpp:786 ttransports.cpp:787 ttransports.cpp:788
 #: ttransports.cpp:793 ttransports.cpp:794 ttransports.cpp:795
-#: ttransports.cpp:796 ttransports.cpp:797 tuis.cpp:134 tuis.cpp:159
+#: ttransports.cpp:796 ttransports.cpp:797 tuis.cpp:136 tuis.cpp:161
 #: tvalue.cpp:143 tvalue.cpp:177 tvalue.cpp:178 tvalue.cpp:186
 msgid "tp"
 msgstr ""
@@ -1251,7 +1251,7 @@ msgstr "Категория"
 #: ttransports.cpp:640 ttransports.cpp:641 ttransports.cpp:642
 #: ttransports.cpp:643 ttransports.cpp:786 ttransports.cpp:788
 #: ttransports.cpp:793 ttransports.cpp:794 ttransports.cpp:795
-#: ttransports.cpp:796 tuis.cpp:134 tvalue.cpp:177
+#: ttransports.cpp:796 tuis.cpp:136 tvalue.cpp:177
 msgid "str"
 msgstr ""
 
@@ -1405,14 +1405,14 @@ msgstr ""
 #: tarchives.cpp:765 tarchives.cpp:864 tbds.cpp:463 tbds.cpp:468 tdaqs.cpp:324
 #: tdaqs.cpp:344 tmodschedul.cpp:466 tmodschedul.cpp:488 tprotocols.cpp:79
 #: tprotocols.cpp:84 tsecurity.cpp:267 tsecurity.cpp:274 tspecials.cpp:74
-#: tspecials.cpp:79 ttransports.cpp:405 ttransports.cpp:410 tuis.cpp:134
-#: tuis.cpp:139
+#: tspecials.cpp:79 ttransports.cpp:405 ttransports.cpp:410 tuis.cpp:136
+#: tuis.cpp:141
 msgid "/help/g_help"
 msgstr ""
 
 #: tarchives.cpp:765 tbds.cpp:463 tdaqs.cpp:324 tmodschedul.cpp:466
 #: tprotocols.cpp:79 tsecurity.cpp:267 tspecials.cpp:74 tsys.cpp:948
-#: ttransports.cpp:405 tuis.cpp:134
+#: ttransports.cpp:405 tuis.cpp:136
 msgid "Options help"
 msgstr "Помощь по опциям"
 
@@ -1420,13 +1420,13 @@ msgstr "Помощь по опциям"
 #: tbds.cpp:463 tbds.cpp:664 tdaqs.cpp:324 telem.cpp:502 tfunction.cpp:195
 #: tmodschedul.cpp:466 tprmtmpl.cpp:248 tprmtmpl.cpp:264 tprmtmpl.cpp:547
 #: tprotocols.cpp:79 tsecurity.cpp:267 tspecials.cpp:74 tsys.cpp:948
-#: ttransports.cpp:405 ttransports.cpp:641 ttransports.cpp:795 tuis.cpp:134
+#: ttransports.cpp:405 ttransports.cpp:641 ttransports.cpp:795 tuis.cpp:136
 msgid "cols"
 msgstr ""
 
 #: tarchives.cpp:765 tbds.cpp:463 tdaqs.cpp:324 tmodschedul.cpp:466
 #: tprmtmpl.cpp:264 tprotocols.cpp:79 tsecurity.cpp:267 tspecials.cpp:74
-#: tsys.cpp:948 ttransports.cpp:405 tuis.cpp:134
+#: tsys.cpp:948 ttransports.cpp:405 tuis.cpp:136
 msgid "90"
 msgstr ""
 
@@ -1435,14 +1435,14 @@ msgstr ""
 #: tmodschedul.cpp:466 tprmtmpl.cpp:248 tprmtmpl.cpp:253 tprmtmpl.cpp:264
 #: tprmtmpl.cpp:547 tprotocols.cpp:79 tsecurity.cpp:267 tspecials.cpp:74
 #: tsys.cpp:948 ttransports.cpp:405 ttransports.cpp:641 ttransports.cpp:795
-#: tuis.cpp:134
+#: tuis.cpp:136
 msgid "rows"
 msgstr ""
 
 #: tarchives.cpp:765 tarchives.cpp:1147 tarchives.cpp:1165 tbds.cpp:463
 #: tdaqs.cpp:324 tfunction.cpp:296 tfunction.cpp:316 tmodschedul.cpp:466
 #: tprotocols.cpp:79 tsecurity.cpp:267 tspecials.cpp:74 tsys.cpp:948
-#: ttransports.cpp:405 tuis.cpp:134
+#: ttransports.cpp:405 tuis.cpp:136
 msgid "10"
 msgstr ""
 
@@ -1475,7 +1475,7 @@ msgstr ""
 #: ttransports.cpp:666 ttransports.cpp:671 ttransports.cpp:676
 #: ttransports.cpp:681 ttransports.cpp:686 ttransports.cpp:808
 #: ttransports.cpp:813 ttransports.cpp:819 ttransports.cpp:824
-#: ttransports.cpp:829 ttransports.cpp:834 tuis.cpp:168 tvalue.cpp:151
+#: ttransports.cpp:829 ttransports.cpp:834 tuis.cpp:170 tvalue.cpp:151
 #: tvalue.cpp:211 tvalue.cpp:245
 msgid "set"
 msgstr ""
@@ -1631,7 +1631,7 @@ msgstr ""
 #: tmodschedul.cpp:215 tmodule.cpp:124 tparamcontr.cpp:169 tprmtmpl.cpp:239
 #: tprmtmpl.cpp:532 tsecurity.cpp:377 tsecurity.cpp:529 tsubsys.cpp:127
 #: tsys.cpp:577 tsys.cpp:610 tsys.cpp:909 ttransports.cpp:627
-#: ttransports.cpp:781 tuis.cpp:125 tvalue.cpp:162
+#: ttransports.cpp:781 tuis.cpp:127 tvalue.cpp:162
 msgid "/"
 msgstr ""
 
@@ -1642,20 +1642,20 @@ msgstr "Архиватор сообщений: "
 #: tarchives.cpp:1055 tarchval.cpp:1663 tarchval.cpp:2292 tbds.cpp:652
 #: tbds.cpp:781 tcontroller.cpp:295 tparamcontr.cpp:170 tsecurity.cpp:379
 #: tsecurity.cpp:530 tspecials.cpp:97 ttransports.cpp:628 ttransports.cpp:782
-#: tuis.cpp:157
+#: tuis.cpp:159
 msgid "/prm"
 msgstr ""
 
 #: tarchives.cpp:1057 tarchval.cpp:1665 tarchval.cpp:2294 tbds.cpp:654
 #: tparamcontr.cpp:172 tspecials.cpp:98 ttransports.cpp:630
-#: ttransports.cpp:784 tuis.cpp:158
+#: ttransports.cpp:784 tuis.cpp:160
 msgid "/prm/st"
 msgstr ""
 
 #: tarchives.cpp:1057 tarchval.cpp:1665 tarchval.cpp:2294 tbds.cpp:654
 #: tcontroller.cpp:282 tfunction.cpp:189 tparamcontr.cpp:172 tprmtmpl.cpp:242
 #: tprmtmpl.cpp:537 tspecials.cpp:98 ttransports.cpp:630 ttransports.cpp:784
-#: tuis.cpp:158
+#: tuis.cpp:160
 msgid "State"
 msgstr "Состояние"
 
@@ -1667,7 +1667,7 @@ msgid "/prm/st/st"
 msgstr ""
 
 #: tarchives.cpp:1059 tarchval.cpp:1667 tarchval.cpp:2296 tspecials.cpp:99
-#: ttransports.cpp:633 ttransports.cpp:787 tuis.cpp:159
+#: ttransports.cpp:633 ttransports.cpp:787 tuis.cpp:161
 msgid "Runing"
 msgstr "Выполняется"
 
@@ -1680,7 +1680,7 @@ msgstr "Выполняется"
 #: tprmtmpl.cpp:539 tsecurity.cpp:389 tspecials.cpp:99 tsys.cpp:930
 #: tsys.cpp:939 tsys.cpp:940 tsys.cpp:941 tsys.cpp:942 ttransports.cpp:394
 #: ttransports.cpp:633 ttransports.cpp:644 ttransports.cpp:787
-#: ttransports.cpp:797 tuis.cpp:159 tvalue.cpp:178 tvalue.cpp:186
+#: ttransports.cpp:797 tuis.cpp:161 tvalue.cpp:178 tvalue.cpp:186
 msgid "bool"
 msgstr ""
 
@@ -1863,11 +1863,11 @@ msgid "ValBuf"
 msgstr ""
 
 #: tarchval.cpp:418
-msgid "Value no present."
+msgid "Value is not present."
 msgstr "Значение отсутствует."
 
 #: tarchval.cpp:552 tarchval.cpp:575
-msgid "Grid mode no support inserting old values."
+msgid "Grid mode doesn't support inserting old values."
 msgstr "Режим привязки к сетке не поддерживает вставку старых значений."
 
 #: tarchval.cpp:703 tarchval.cpp:738
@@ -2274,7 +2274,7 @@ msgstr ""
 msgid "vMin"
 msgstr ""
 
-#: tarchval.cpp:1974 tuis.cpp:93 tuis.cpp:105 tuis.h:69
+#: tarchval.cpp:1974 tuis.cpp:95 tuis.cpp:107 tuis.h:69
 msgid "png"
 msgstr ""
 
@@ -2283,7 +2283,7 @@ msgid "stop"
 msgstr ""
 
 #: tarchval.cpp:2085
-msgid "Archive thread no stoped!"
+msgid "Archive thread is not stoped!"
 msgstr "Поток архива не остановлен!"
 
 #: tarchval.cpp:2291
@@ -2445,7 +2445,7 @@ msgid "Full DB delete"
 msgstr "Полное удаление БД"
 
 #: tbds.cpp:501
-msgid "Select for full deletion DB on DB close. Else DB will be simple closed."
+msgid "Select for full deletion DB on DB close. Else DB will be simply closed."
 msgstr ""
 "Выбрать для полного удаления БД при её закрытии. Иначе БД будет просто "
 "закрыта."
@@ -2493,12 +2493,12 @@ msgid "/prm/st/allow_tbls"
 msgstr ""
 
 #: tbds.cpp:657
-msgid "Allow tables"
+msgid "Accessible tables"
 msgstr "Доступные таблицы"
 
 #: tbds.cpp:658
-msgid "Tables contained into DB, no opened tables."
-msgstr "Таблицы содержащиеся в БД, не открытые на данный момент таблицы."
+msgid "Tables which are in the DB, tables which are not opened at that moment."
+msgstr ""
 
 #: tbds.cpp:666 tbds.cpp:715
 msgid "/prm/cfg/codep"
@@ -2531,7 +2531,8 @@ msgstr "Открытые таблицы"
 #: tbds.cpp:673
 msgid ""
 "Opened table list.\n"
-"Add and delete table operations is real open and close tables operations."
+"Adding and deleting tables operations are really open and close tables "
+"operations."
 msgstr ""
 "Перечень открытых таблиц.\n"
 "Операции добавления и удаления таблиц на самом деле являются операциями "
@@ -2609,13 +2610,13 @@ msgid "Node already in process!"
 msgstr "Узел уже обрабатывается!"
 
 #: tcntrnode.cpp:186
-#, c-format
-msgid "Wait of free %d users!"
+c-format
+msgid "Waiting for freeing by %d users!"
 msgstr "Ожидание освобождения %d пользователями!"
 
 #: tcntrnode.cpp:192
-#, c-format
-msgid "Timeouted of wait. Object used by %d users. Free object first!"
+c-format
+msgid "Timeouted of wait. Object is used by %d users. Free object first!"
 msgstr ""
 "Превышено время ожидания. Объект использован %d пользователями. Сначала "
 "освободите объект!"
@@ -2635,7 +2636,7 @@ msgstr "Узел отключен!"
 
 #: tcntrnode.cpp:267
 #, c-format
-msgid "Copy from '%s' to '%s' impossible"
+msgid "Copy from '%s' to '%s' is impossible"
 msgstr "Копирование из '%s' в '%s' невозможно."
 
 #: tcntrnode.cpp:274
@@ -2644,7 +2645,7 @@ msgid "/%2fbr"
 msgstr ""
 
 #: tcntrnode.cpp:277
-msgid "Destination node not have branches."
+msgid "Destination node doesn't have branches."
 msgstr "Целевой узел не имеет ветвей."
 
 #: tcntrnode.cpp:282 tcntrnode.cpp:645
@@ -2652,7 +2653,7 @@ msgid "acs"
 msgstr ""
 
 #: tcntrnode.cpp:285 tcntrnode.cpp:290
-msgid "Destination node not have want branche."
+msgid "Destination node doesn't have necessary branche."
 msgstr "Целевой узел не имеет нужной ветви."
 
 #: tcntrnode.cpp:295
@@ -2680,34 +2681,34 @@ msgid "Add child id is empty!"
 msgstr "Добавляемый дочерний идентификатор пуст!"
 
 #: tcntrnode.cpp:415
-msgid "Node is proced now!"
+msgid "Node is beign processed now!"
 msgstr "Узел сейчас обрабатывается!"
 
 #: tcntrnode.cpp:419
 #, c-format
-msgid "Child <%s> no present!"
+msgid "Child <%s> is not present!"
 msgstr "Дочерний узел <%d> отсутствует!"
 
 #: tcntrnode.cpp:480
-msgid "Node is it root or no connect!"
+msgid "Node is the root or is not connected!"
 msgstr "Узел корневой или не подключен!"
 
 #: tcntrnode.cpp:491
 #, c-format
-msgid "Element <%s> no present or disabled!"
+msgid "Element <%s> is not present or disabled!"
 msgstr "Элемент <%s> отсутствует или отключен!"
 
 #: tcntrnode.cpp:544
-msgid "Load node is error."
+msgid "Loading node error."
 msgstr "Ошибка загрузки узла."
 
 #: tcntrnode.cpp:565
-msgid "Save node is error."
+msgid "Saving node error."
 msgstr "Ошибка сохранения узла."
 
 #: tcntrnode.cpp:642
-#, c-format
-msgid "Some tags on path <%s> missed!"
+#,  c-format
+msgid "Some tags on path <%s> are missed!"
 msgstr "Некоторые теги в пути <%s> ошибочны!"
 
 #: tcntrnode.cpp:645
@@ -2803,7 +2804,7 @@ msgstr ""
 
 #: tconfig.cpp:87
 #, c-format
-msgid "Attribute '%s' no present!"
+msgid "Attribute '%s' is not present!"
 msgstr "Атрибут '%s' отсутствует!"
 
 #: tconfig.cpp:130
@@ -2820,23 +2821,23 @@ msgid "Cfg"
 msgstr ""
 
 #: tconfig.cpp:220 tconfig.cpp:309
-msgid "Element type no select!"
+msgid "Element type is not selected!"
 msgstr "Тип элемента не выбран!"
 
 #: tconfig.cpp:233
-msgid "Element type no string!"
+msgid "Element type is not string!"
 msgstr "Тип элемента не строка!"
 
 #: tconfig.cpp:241
-msgid "Element type no real!"
+msgid "Element type is not real!"
 msgstr "Тип элемента не вещественное!"
 
 #: tconfig.cpp:249
-msgid "Element type no int!"
+msgid "Element type is not int!"
 msgstr "Тип элемента не целый!"
 
 #: tconfig.cpp:257
-msgid "Element type no boolean!"
+msgid "Element type is not boolean!"
 msgstr "Тип элемента не логический!"
 
 #: tcontroller.cpp:33 ttipdaq.cpp:43
@@ -3125,12 +3126,12 @@ msgid "Id error!"
 msgstr "Ошибка идентификатора!"
 
 #: telem.cpp:71
-msgid "The element container already attached!"
+msgid "The element container is already attached!"
 msgstr "Элемент контейнера уже подключен!"
 
 #: telem.cpp:85 tvalue.cpp:122
 #, c-format
-msgid "Element <%s> no present!"
+msgid "Element <%s> is not present!"
 msgstr "Элемент <%s> отсутствует!"
 
 #: telem.cpp:152
@@ -3200,12 +3201,12 @@ msgstr ""
 
 #: tfunction.cpp:72
 #, c-format
-msgid "Function used by: %s"
+msgid "Function is used by: %s"
 msgstr "Функция использована: %s"
 
 #: tfunction.cpp:83
 #, c-format
-msgid "Index %d broken!"
+msgid "Index %d is broken!"
 msgstr "Индекс %d повреждён!"
 
 #: tfunction.cpp:122
@@ -3220,12 +3221,12 @@ msgstr "Ошибка перемещения IO из %d в %d."
 
 #: tfunction.cpp:147
 #, c-format
-msgid "Change no permit by function used: %s"
+msgid "Change is not permited while function is used: %s"
 msgstr "Изменение не допустимо пока функция используется: %s"
 
 #: tfunction.cpp:164
 #, c-format
-msgid "Value <%s> already attached!"
+msgid "Value <%s> is already attached!"
 msgstr "Значение <%s> уже подключено!"
 
 #: tfunction.cpp:186
@@ -3410,11 +3411,11 @@ msgstr ""
 
 #: tfunction.cpp:465
 #, c-format
-msgid "IO <%s> no present!"
+msgid "IO <%s> is not present!"
 msgstr "IO <%s> отсутствует!"
 
 #: tfunction.cpp:471 tfunction.cpp:477
-msgid "Function no attached!"
+msgid "Function is not attached!"
 msgstr "Функция не подключена!"
 
 #: tfunction.cpp:483 tfunction.cpp:496 tfunction.cpp:509 tfunction.cpp:522
@@ -3520,7 +3521,7 @@ msgstr ""
 "\n"
 
 #: tmodschedul.cpp:114
-msgid "Module scheduler thread no stoped!"
+msgid "Module scheduler thread is not stoped!"
 msgstr "Поток управления модулями не остановлен!"
 
 #: tmodschedul.cpp:117
@@ -3552,12 +3553,12 @@ msgstr "SO <%s> ошибка: %s !"
 #: tmodschedul.cpp:275 tmodschedul.cpp:360 tmodschedul.cpp:392
 #: tmodschedul.cpp:420
 #, c-format
-msgid "SO <%s> no present!"
+msgid "SO <%s> is not present!"
 msgstr "SO <%s> отсутствует!"
 
 #: tmodschedul.cpp:285
 #, c-format
-msgid "SO <%s> already attached!"
+msgid "SO <%s> is already attached!"
 msgstr "SO <%s> уже подключен!"
 
 #: tmodschedul.cpp:293
@@ -3570,12 +3571,12 @@ msgstr ""
 
 #: tmodschedul.cpp:326
 #, c-format
-msgid "%s for type <%s> no support module version: %d!"
+msgid "%s for type <%s> doesn't support module version: %d!"
 msgstr "%s для типа <%s> не поддерживает версию модуля: %s!"
 
 #: tmodschedul.cpp:332
 #, c-format
-msgid "Module <%s> already present!"
+msgid "Module <%s> is already present!"
 msgstr "Модуль <%s> уже присутствует!"
 
 #: tmodschedul.cpp:339
@@ -3674,7 +3675,7 @@ msgstr ""
 
 #: tmodule.cpp:88
 #, c-format
-msgid "Function <%s> no present into module!"
+msgid "Function <%s> is not present in the module!"
 msgstr "Функция <%s> отсутствует в модуле!"
 
 #: tmodule.cpp:124
@@ -3702,7 +3703,7 @@ msgid "/help/m_inf/"
 msgstr ""
 
 #: tparamcontr.cpp:154
-msgid "1:Parameter had disabled."
+msgid "1:Parameter is disabled."
 msgstr "1:Параметр отключен."
 
 #: tparamcontr.cpp:163
@@ -3722,7 +3723,7 @@ msgid "/prm/st/en"
 msgstr ""
 
 #: tparamcontr.cpp:190
-msgid "Controller no started!"
+msgid "Controller is not started!"
 msgstr "Контроллер не запущен!"
 
 #: tprmtmpl.cpp:29 tprmtmpl.cpp:415 tprmtmpl.cpp:551
@@ -3896,11 +3897,11 @@ msgid "to"
 msgstr ""
 
 #: tprmtmpl.cpp:327
-msgid "Empty value no valid."
+msgid "Empty value is not valid."
 msgstr "Пустое значение недопустимо."
 
 #: tprmtmpl.cpp:329
-msgid "Change lock atribute in not allow."
+msgid "Changing locked atribute is not allowed."
 msgstr "Изменение заблокированного атрибута невозможно."
 
 #: tprmtmpl.cpp:392
@@ -3937,7 +3938,7 @@ msgid "Template '%s' start is error."
 msgstr "Ошибка запуска шаблона '%s'."
 
 #: tprmtmpl.cpp:518
-msgid "Some templates start is error."
+msgid "Some templates start error."
 msgstr "Ошибка запуска некоторых шаблонов."
 
 #: tprmtmpl.cpp:532
@@ -4275,12 +4276,12 @@ msgstr "Отключение модуля <%s>!"
 
 #: tsubsys.cpp:103
 #, c-format
-msgid "Start module '%s' is error."
+msgid "Start module '%s' error."
 msgstr "Ошибка запуска модуля '%s'."
 
 #: tsubsys.cpp:117
 #, c-format
-msgid "Stop module '%s' is error."
+msgid "Stop module '%s' error."
 msgstr "Ошибка останова модуля '%s'."
 
 #: tsubsys.cpp:127
@@ -4335,7 +4336,7 @@ msgstr ""
 msgid "USER"
 msgstr ""
 
-#: tsys.cpp:83 tuis.cpp:33 tsys.h:116
+#: tsys.cpp:83 tuis.cpp:35 tsys.h:116
 msgid "UI"
 msgstr ""
 
@@ -4346,7 +4347,7 @@ msgstr "Транспорт"
 
 #: tsys.cpp:104
 #, c-format
-msgid "Change work directory to '%s' is error: %s"
+msgid "Change work directory to '%s' error: %s"
 msgstr "Ошибка изменения рабочей директории '%s': %s"
 
 #: tsys.cpp:112 tsys.cpp:122
@@ -4486,7 +4487,8 @@ msgstr ""
 
 #: tsys.cpp:284
 #, c-format
-msgid "Station <%s> into config file no present. Use <%s> station config!"
+msgid ""
+"Station <%s> is not present in the config file. Use <%s> station config!"
 msgstr ""
 "Станция <%s> отсутствует в конфигурационном файле. Использована конфигурация "
 "станции <%s>!"
@@ -4565,11 +4567,11 @@ msgid "Error stop subsystem <%s>."
 msgstr "Ошибка останова подсистемы <%s>."
 
 #: tsys.cpp:436
-msgid "Have get a Terminate signal. Server been stoped!"
+msgid "The Terminate signal is received.. Server is being stoped!"
 msgstr "Получен сигнал прерывания. Сервер останавливается!"
 
 #: tsys.cpp:440
-msgid "Float point exeption catch!"
+msgid "Floating point exception is catched!"
 msgstr "Исключение операции с плавающей точкой!"
 
 #: tsys.cpp:447
@@ -4582,7 +4584,7 @@ msgid "Segmentation fault signal!"
 msgstr "Сигнал нарушения сегментации памяти!"
 
 #: tsys.cpp:457
-msgid "OpenSCADA aborted!"
+msgid "OpenSCADA is aborted!"
 msgstr "OpenSCADA прервана!"
 
 #: tsys.cpp:461
@@ -4917,7 +4919,7 @@ msgid "Id of parameter type error!"
 msgstr "Ошибка идентификатора типа параметра!"
 
 #: ttipdaq.cpp:122
-msgid "Parameter type is no present."
+msgid "Parameter type is not present."
 msgstr "Тип параметра отсутствует."
 
 #: ttipdaq.cpp:127
@@ -4926,7 +4928,8 @@ msgid "Error attach new controller %s."
 msgstr "Ошибка подключения нового контроллера %s."
 
 #: ttipdaq.cpp:132
-msgid "Module is no support of function compile languages."
+msgid ""
+"Module doesn't support the function for compilation programming languages."
 msgstr "Модуль не поддерживает функцию компиляции языков программирования."
 
 #: ttipdaq.cpp:141 ttipdaq.cpp:148
@@ -5022,7 +5025,7 @@ msgid "ExtTansp/"
 msgstr ""
 
 #: ttransports.cpp:200
-msgid "Search and load external hosts DB is error."
+msgid "Search and load external hosts DB error."
 msgstr "Ошибка поиска и загрузки БД внешних хостов."
 
 #: ttransports.cpp:257
@@ -5219,11 +5222,11 @@ msgstr "Транспортный протокол '%s' отсутствует"
 msgid "Output transport: "
 msgstr "Выходной транспорт:"
 
-#: tuis.cpp:33
+#: tuis.cpp:35
 msgid "User interfaces"
 msgstr "Пользовательские интерфейсы"
 
-#: tuis.cpp:41
+#: tuis.cpp:43
 msgid ""
 "===================== Subsystem \"User interfaces\" options ===============\n"
 "\n"
@@ -5231,23 +5234,23 @@ msgstr ""
 "============= Опции подсистемы \"Пользовательские интерфейсы\" ============\n"
 "\n"
 
-#: tuis.cpp:105
+#: tuis.cpp:107
 msgid "gif"
 msgstr ""
 
-#: tuis.cpp:105
+#: tuis.cpp:107
 msgid "jpg"
 msgstr ""
 
-#: tuis.cpp:105
+#: tuis.cpp:107
 msgid "jpeg"
 msgstr ""
 
-#: tuis.cpp:157
+#: tuis.cpp:159
 msgid "User interface"
 msgstr "Пользовательский интерфейс"
 
-#: tuis.cpp:159 tuis.cpp:165
+#: tuis.cpp:161 tuis.cpp:167
 msgid "/prm/st/r_st"
 msgstr ""
 
@@ -5321,15 +5324,15 @@ msgid "Val"
 msgstr ""
 
 #: tvalue.cpp:365 tvalue.cpp:485
-msgid "No select type!"
+msgid "Not select type!"
 msgstr "Не выборочный тип!"
 
 #: tvalue.cpp:509 tvalue.cpp:535 tvalue.cpp:566 tvalue.cpp:597
-msgid "No write access!"
+msgid "Write access is denied!"
 msgstr "Нет доступа на запись!"
 
 #: tvalue.cpp:633
-msgid "Attribute not have archive"
+msgid "Attribute doesn't have archive"
 msgstr "Атрибут не имеет архива"
 
 #: xml.cpp:73 xml.cpp:108 xml.cpp:118 xml.cpp:127 xml.cpp:278 xml.cpp:292
@@ -5338,17 +5341,17 @@ msgstr ""
 
 #: xml.cpp:73 xml.cpp:108
 #, c-format
-msgid "Child %d no present."
+msgid "Child %d is not present."
 msgstr "Потомок %d отсутствует."
 
 #: xml.cpp:118
 #, c-format
-msgid "Child %s:%d no found!"
+msgid "Child %s:%d is not found!"
 msgstr "Потомок %s:%d не обнаружен!"
 
 #: xml.cpp:127
 #, c-format
-msgid "Child with attribut %s=%s no present."
+msgid "Child with attribut %s=%s is not present."
 msgstr "Потомок с атрибутом %s=%s отсутствует."
 
 #: xml.cpp:226
@@ -5565,3 +5568,6 @@ msgstr "Прямой доступ на запись значений недоп�
 #: tvalue.h:153
 msgid "Direct access to read value no admit."
 msgstr "Прямой доступ на чтение недопустим."
+
+#~ msgid "Tables contained into DB, no opened tables."
+#~ msgstr "Таблицы содержащиеся в БД, не открытые на данный момент таблицы."

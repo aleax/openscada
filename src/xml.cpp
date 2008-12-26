@@ -70,7 +70,7 @@ XMLNode* XMLNode::childAdd( const string &name )
 
 void XMLNode::childDel( const unsigned id )
 {
-    if( id >= childSize() ) throw TError("XMLNode","Child %d no present.",id);
+    if( id >= childSize() ) throw TError("XMLNode","Child %d is not present.",id);
     delete mChildren[id];
     mChildren.erase( mChildren.begin()+id );
 }
@@ -105,7 +105,7 @@ XMLNode* XMLNode::childGet( const int index, bool noex ) const
 {
     if( index < childSize() )	return mChildren[index];
     if( noex )	return NULL;
-    throw TError("XMLNode","Child %d no present.",index);
+    throw TError("XMLNode","Child %d is not present.",index);
 }
 
 XMLNode* XMLNode::childGet( const string &name, const int numb, bool noex ) const
@@ -115,7 +115,7 @@ XMLNode* XMLNode::childGet( const string &name, const int numb, bool noex ) cons
 	    return childGet(i_ch);
 
     if( noex ) return NULL;
-    throw TError("XMLNode","Child %s:%d no found!",name.c_str(),numb);
+    throw TError("XMLNode","Child %s:%d is not found!",name.c_str(),numb);
 }
 
 XMLNode* XMLNode::childGet( const string &attr, const string &val, bool noex ) const
@@ -124,7 +124,7 @@ XMLNode* XMLNode::childGet( const string &attr, const string &val, bool noex ) c
 	if( childGet(i_f)->attr(attr) == val ) return childGet(i_f);
 
     if( noex ) return NULL;
-    throw TError("XMLNode","Child with attribut %s=%s no present.",attr.c_str(),val.c_str());
+    throw TError("XMLNode","Child with attribut %s=%s is not present.",attr.c_str(),val.c_str());
 }
 
 void XMLNode::attrList( vector<string> & list ) const

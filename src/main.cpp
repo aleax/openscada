@@ -66,7 +66,7 @@ int main(int argc, char *argv[], char *envp[] )
     }catch(TError err)
     { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
-    printf("OpenSCADA system is correct exited.\n");
+    printf("OpenSCADA system is correctly exited.\n");
 
     return rez;
 }

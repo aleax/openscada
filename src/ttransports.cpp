@@ -197,7 +197,7 @@ void TTransportS::load_( )
     }catch( TError err )
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	mess_err(nodePath().c_str(),_("Search and load external hosts DB is error."));
+	mess_err(nodePath().c_str(),_("Search and load external hosts DB error."));
     }
 }
 

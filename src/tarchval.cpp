@@ -415,7 +415,7 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( long long *itm, bool up_
     long long tm = (itm)?(*itm):TSYS::curTime();
 
     if((up_ord && tm > end) || (!up_ord && tm < beg))
-	throw TError("ValBuf",_("Value no present."));
+	throw TError("ValBuf",_("Value is not present."));
     if( hrd_grd )
     {
 	//- Process hard grid buffer -
@@ -549,7 +549,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
 	    (*buf.grid)[ (cur) ? cur-1 : buf.grid->size()-1 ] = value;	//Update last value
 	    return;
 	}
-	else if( npos < 0 )	throw TError("ValBuf",_("Grid mode no support inserting old values."));
+	else if( npos < 0 )	throw TError("ValBuf",_("Grid mode doesn't support inserting old values."));
 	else
 	    while( npos-- )
 	    {
@@ -572,7 +572,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
 	//- Process soft grid buffer -
 	int npos = (tm-end)/per;
 	//-- Set value --
-	if( npos < 0 )	throw TError("ValBuf",_("Grid mode no support inserting old values."));
+        if( npos < 0 )	throw TError("ValBuf",_("Grid mode doesn't support inserting old values."));
 	else
 	{
 	    if( hg_res_tm )
@@ -2082,7 +2082,7 @@ void TVArchivator::stop( bool full_del )
     itval.it_interval.tv_sec = itval.it_interval.tv_nsec = itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
     timer_settime(tmId, 0, &itval, NULL);
     if( TSYS::eventWait( prc_st, false, nodePath()+"stop",5) )
-	throw TError(nodePath().c_str(),_("Archive thread no stoped!"));
+	throw TError(nodePath().c_str(),_("Archive thread is not stoped!"));
 
     //- Detach from all archives -
     ResAlloc res(a_res,false);

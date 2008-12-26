@@ -498,7 +498,7 @@ void TTipBD::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,0,"/db",_("DB"),0444))
 	{
 	    ctrMkNode("fld",opt,-1,"/db/ful_db_del",_("Full DB delete"),0660,"root","BD",2,
-		"tp","bool","help",_("Select for full deletion DB on DB close. Else DB will be simple closed."));
+		"tp","bool","help",_("Select for full deletion DB on DB close. Else DB will be simply closed."));
 	    ctrMkNode("list",opt,-1,"/db/odb",_("DB"),0664,"root","BD",5,"tp","br","idm","1","s_com","add,del","br_pref","db_","idSz","20");
 	}
 	return;
@@ -654,8 +654,8 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))
 	    {
 		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Enable"),0664,"root","BD",1,"tp","bool");
-		ctrMkNode("list",opt,-1,"/prm/st/allow_tbls",_("Allow tables"),0664,"root","BD",3,
-		    "tp","str","s_com","del","help",_("Tables contained into DB, no opened tables."));
+                ctrMkNode("list",opt,-1,"/prm/st/allow_tbls",_("Accessible tables"),0664,"root","BD",3,
+		    "tp","str","s_com","del","help",_("Tables which are in the DB, tables which are not opened at that moment."));
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Config")))
 	    {
@@ -670,7 +670,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrMkNode("area",opt,1,"/tbls",_("Tables"),0444))
 	    ctrMkNode("list",opt,-1,"/tbls/otbl",_("Opened tables"),0664,"root","BD",4,
-		"tp","br","s_com","add,del","br_pref","tbl_","help",_("Opened table list.\nAdd and delete table operations is real open and close tables operations."));
+		"tp","br","s_com","add,del","br_pref","tbl_","help",_("Opened table list.\nAdding and deleting tables operations are really open and close tables operations."));
 	return;
     }
 

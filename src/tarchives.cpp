@@ -362,7 +362,7 @@ void TArchiveS::subStart( )
 	pthread_create(&m_val_pthr,&pthr_attr,TArchiveS::ArhValTask,this);
 	pthread_attr_destroy(&pthr_attr);
 	if( TSYS::eventWait(prc_st_val, true, nodePath()+"val_task_start",5) )
-	    throw TError(nodePath().c_str(),_("Values acquisition task no started!"));
+	    throw TError(nodePath().c_str(),_("Values acquisition task is not started!"));
     }
 
     TSubSYS::subStart( );
@@ -382,7 +382,7 @@ void TArchiveS::subStop( )
 	itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
     timer_settime(tmIdMess, 0, &itval, NULL);
     if( TSYS::eventWait( prc_st_mess, false, nodePath()+"mess_stop",5) )
-	throw TError(nodePath().c_str(),_("Archive messages thread no stoped!"));
+	throw TError(nodePath().c_str(),_("Archive messages thread is not stoped!"));
 
     //- Values acquisition task stop -
     if( prc_st_val )
@@ -390,7 +390,7 @@ void TArchiveS::subStop( )
 	endrun_req_val = true;
 	pthread_kill( m_val_pthr, SIGALRM );
 	if( TSYS::eventWait(prc_st_val,false,nodePath()+"val_task_stop",5) )
-	    throw TError(nodePath().c_str(),_("Archive values task no stoped!"));
+	    throw TError(nodePath().c_str(),_("Archive values task is not stoped!"));
 	pthread_join( m_val_pthr, NULL );
     }
 
@@ -470,7 +470,7 @@ void TArchiveS::messPut( time_t tm, const string &categ, TMess::Type level, cons
 	{
 	    buf_err |= 0x02;
 	    res.release();
-	    mess_warning(nodePath().c_str(),_("Messagess buffer fill too fast!"));
+	    mess_warning(nodePath().c_str(),_("Messagess buffer filling is too fast!"));
 	    res.request(true);
 	}
     }

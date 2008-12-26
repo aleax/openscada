@@ -336,13 +336,13 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     actElFigBesie->setEnabled(false);
     //--- Add Hold points check ---
     if(!ico_t.load(TUIS::icoPath("vision_elfig_lock").c_str())) ico_t.load(":/images/elfig_lock.png");
-    actElFigCheckAct=new QAction(QPixmap::fromImage(ico_t),_("Holds"),this);
+    actElFigCheckAct=new QAction(QPixmap::fromImage(ico_t),_("Connections"),this);
     actElFigCheckAct->setCheckable(true);
     actElFigCheckAct->setChecked(true);
     actElFigCheckAct->setObjectName("hold");
-    actElFigCheckAct->setToolTip(_("Enable holds"));
-    actElFigCheckAct->setWhatsThis(_("The button for enabling holds"));
-    actElFigCheckAct->setStatusTip(_("Press to enable holds"));
+    actElFigCheckAct->setToolTip(_("Enable connections"));
+    actElFigCheckAct->setWhatsThis(_("The button for enabling connections"));
+    actElFigCheckAct->setStatusTip(_("Press to enable connections"));
     actElFigCheckAct->setEnabled(false);
 
     //connect(checkAct, SIGNAL(toggled(bool)),this, SLOT(setHold()));

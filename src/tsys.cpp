@@ -101,7 +101,7 @@ string TSYS::workDir( )
 void TSYS::setWorkDir( const string &wdir )
 {
     if( chdir(wdir.c_str()) != 0 )
-	mess_err(nodePath().c_str(),_("Change work directory to '%s' is error: %s"),wdir.c_str(),strerror(errno));
+	mess_err(nodePath().c_str(),_("Change work directory to '%s' error: %s"),wdir.c_str(),strerror(errno));
     modif( );
 }
 
@@ -281,7 +281,7 @@ bool TSYS::cfgFileLoad()
 		    }
 		if( stat_n && stat_n->attr("id") != mId )
 		{
-		    mess_warning(nodePath().c_str(),_("Station <%s> into config file no present. Use <%s> station config!"),
+                    mess_warning(nodePath().c_str(),_("Station <%s> is not present in the config file. Use <%s> station config!"),
 			mId.c_str(), stat_n->attr("id").c_str() );
 		    mId	= stat_n->attr("id");
 		    mName	= stat_n->attr("name");
@@ -433,11 +433,11 @@ void TSYS::sighandler( int signal )
 	    SYS->mStopSignal=signal;
 	    break;
 	case SIGTERM:
-	    mess_warning(SYS->nodePath().c_str(),_("Have get a Terminate signal. Server been stoped!"));
+            mess_warning(SYS->nodePath().c_str(),_("The Terminate signal is received.. Server is being stoped!"));
 	    SYS->mStopSignal=signal;
 	    break;
 	case SIGFPE:
-	    mess_warning(SYS->nodePath().c_str(),_("Float point exeption catch!"));
+            mess_warning(SYS->nodePath().c_str(),_("Floating point exception is catched!"));
 	    break;
 	case SIGCHLD:
 	{
@@ -454,7 +454,7 @@ void TSYS::sighandler( int signal )
 	    mess_emerg(SYS->nodePath().c_str(),_("Segmentation fault signal!"));
 	    break;
 	case SIGABRT:
-	    mess_emerg(SYS->nodePath().c_str(),_("OpenSCADA aborted!"));
+	    mess_emerg(SYS->nodePath().c_str(),_("OpenSCADA is aborted!"));
 	    break;
 	case SIGALRM:	break;
 	default:

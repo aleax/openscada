@@ -324,9 +324,9 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	    int row = atoi(opt->attr("row").c_str());
 	    int col = atoi(opt->attr("col").c_str());
 	    if( (col == 0 || col == 1) && !opt->text().size() )
-		throw TError(nodePath().c_str(),_("Empty value no valid."));
+		throw TError(nodePath().c_str(),_("Empty value is not valid."));
 	    if( io(row)->flg()&TPrmTempl::LockAttr )
-		throw TError(nodePath().c_str(),_("Change lock atribute in not allow."));
+		throw TError(nodePath().c_str(),_("Changing locked atribute is not allowed."));
 	    switch(col)
 	    {
 		case 0:	io(row)->setId(opt->text());	break;
@@ -515,7 +515,7 @@ void TPrmTmplLib::start( bool val )
 
     run_st = val;
 
-    if( isErr )	throw TError(nodePath().c_str(),_("Some templates start is error."));
+    if( isErr )	throw TError(nodePath().c_str(),_("Some templates start error."));
 }
 
 void TPrmTmplLib::add( const char *id, const char *name )
