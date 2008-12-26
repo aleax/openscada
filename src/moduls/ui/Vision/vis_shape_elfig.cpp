@@ -216,7 +216,6 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
     }
     if( rel_list && !w->allAttrLoad( ) )
     {
-        double scale;
         if( w->xScale(true) < w->yScale(true) ) scale = w->xScale(true);
         else scale = w->yScale(true);
         //- Deleting the pairs in the map with the key <= -10 -
@@ -2296,11 +2295,18 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
     {
         case QEvent::Paint:
         {
+            RunWdgView   *runW = qobject_cast<RunWdgView*>(view);
             QPainter pnt_v( view );
             pnt_v.drawImage( QPoint(0,0),elFD->pictObj );
             if( dashedRect.isValid() )
                 pnt_v.drawImage( QPoint(0,0), rect_img );
             pnt_v.end();
+            if( runW )
+            {
+                (*widths)[-5] = vmax(1,(*widths)[-5]/scale);
+                for( WidthMap::iterator pi = widths->begin(); pi != widths->end(); pi++ )
+                    if( pi->first > 0 && fabs( pi->second - 0 ) >= 0.01 ) pi->second = vmax(1,pi->second/scale);
+            }
             return true;
         }
         case QEvent::MouseButtonPress:
