@@ -6,6 +6,7 @@
 #: arch.cpp:52 mess.cpp:59 mess.cpp:79 mess.cpp:157 mess.cpp:175 mess.cpp:195
 #: val.cpp:110 val.cpp:141 val.cpp:170 val.cpp:186 val.cpp:199 val.cpp:223
 #: val.cpp:249 val.cpp:275 val.cpp:301 val.cpp:366 mess.h:51
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: de\n"

@@ -473,7 +473,7 @@ class ShapeDocument : public WdgShape
 	void nodeProcess( XMLNode *xcur, ShpDt *shD );
 
 	//Attributes
-	static char *XHTML_entity;
+	static const char *XHTML_entity;
 };
 
 //************************************************

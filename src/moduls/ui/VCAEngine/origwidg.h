@@ -191,7 +191,7 @@ class OrigDocument : public PrWidget
 	void nodeClear( XMLNode *xcur );
 
 	//Attributes
-	static char *XHTML_entity;
+	static const char *XHTML_entity;
 };
 
 //************************************************

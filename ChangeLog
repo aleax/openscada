@@ -1,3 +1,10 @@
+2008-12-26 Roman
+- !:/DB/SQLite,/DB/MySQL,/DB/FireBird,/DB/DBF,/DAQ/BlockCalc: Translation to German is added by Aleksey and Irina Popkov.
+- FIX:/SYS: RPM build spec file is fixed for *.la including.
+- !!:/UI/WebCfgD: The table's fields support is released.
+- FIX:/UI/WebCfgD: Some fixes made.
+
+
 2008-12-26 Maxim
 - FIX:/UI/Vision: Widths scaling for the primitive ElFigure for runtime mode is fixed.
 

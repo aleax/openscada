@@ -981,11 +981,10 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		//lab = (QLabel *)TSYS::str2addr(t_s.attr("addr_lab"));
 		tbl = (QTableWidget *)TSYS::str2addr(t_s.attr("addr_tbl"));
 	    }
-	    //>>> Fill tasetNumRowsble
+	    //>>> Fill table
 	    tbl->setToolTip(t_s.attr("help").c_str());
-	    XMLNode req("get");
-	    req.setAttr("path",sel_path+"/"+br_path);
-	    if(cntrIfCmd(req)) mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this);
+	    XMLNode req("get"); req.setAttr("path",sel_path+"/"+br_path);
+	    if( cntrIfCmd(req) ) mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this);
 	    else
 	    {
 		//>>>> Copy values to info tree
@@ -998,7 +997,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    for( int i_rw = 0; i_rw < t_lsel->childSize(); i_rw++ )
 			*t_linf->childAdd() = *t_lsel->childGet(i_rw);
 		}
-		
+
 		//>>>> Collumns adjusting flag
 		bool adjCol = widget || !tbl->rowCount();
 
@@ -1035,8 +1034,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 			}
 
 			//>>>> Set element
-			if( t_linf->attr("tp") == "bool" )
-			    thd_it->setData(Qt::DisplayRole,(bool)atoi(t_linf->childGet(i_el)->text().c_str()));
+			if( t_linf->attr("tp") == "bool" ) thd_it->setData(Qt::DisplayRole,(bool)atoi(t_linf->childGet(i_el)->text().c_str()));
 			else if( t_linf->attr("dest") == "select" || t_linf->attr("dest") == "sel_ed" )
 			{
 			    QStringList elms;
@@ -2643,13 +2641,9 @@ void ConfApp::tableSet( int row, int col )
 	    }
 	    else
 	    {
-		XMLNode x_lst("get");
-		x_lst.setAttr("path",sel_path+"/"+TSYS::strEncode(n_el->childGet(col)->attr("select"),TSYS::PathEl));
+		XMLNode x_lst("get"); x_lst.setAttr("path",sel_path+"/"+TSYS::strEncode(n_el->childGet(col)->attr("select"),TSYS::PathEl));
 		if( cntrIfCmd(x_lst) )
-		{
-		    mod->postMess(x_lst.attr("mcat"),x_lst.text(),TUIMod::Error,this);
-		    return;
-		}
+		{ mod->postMess(x_lst.attr("mcat"),x_lst.text(),TUIMod::Error,this); return; }
 
 		for( int i_el = 0; i_el < x_lst.childSize(); i_el++ )
 		    if( x_lst.childGet(i_el)->text() == value )
@@ -2663,14 +2657,13 @@ void ConfApp::tableSet( int row, int col )
 	}
 	else value = val.toString().toAscii().data();
 
-	//- Prepare request -
-	XMLNode n_el1("set");
-	n_el1.setAttr("path",el_path)->setText(value);
-	//-- Get current column id --
+	//> Prepare request
+	XMLNode n_el1("set"); n_el1.setAttr("path",el_path)->setText(value);
+	//>> Get current column id
 	for( int i_el = 0; i_el < n_el->childSize(); i_el++ )
 	    if( tbl->horizontalHeaderItem(col)->data(Qt::DisplayRole).toString() == n_el->childGet(i_el)->attr("dscr").c_str() )
 	    { n_el1.setAttr("col",n_el->childGet(i_el)->attr("id")); break; }
-	//-- Get row position --
+	//>> Get row position
 	string row_addr;
 	if( !n_el->attr("key").size() )
 	{
@@ -2679,7 +2672,7 @@ void ConfApp::tableSet( int row, int col )
 	}
 	else
 	{
-	    //-- Get Key columns --
+	    //>> Get Key columns
 	    string key;
 	    for( int i_off = 0; (key=TSYS::strSepParse(n_el->attr("key"),0,',',&i_off)).size(); )
 		for( int i_el = 0; i_el < n_el->childSize(); i_el++ )
@@ -2691,7 +2684,7 @@ void ConfApp::tableSet( int row, int col )
 		    }
 	}
 
-	//-- Put request --
+	//>> Put request
 	mess_info(mod->nodePath().c_str(),_("%s| Set <%s> cell (<%s>:%s) to: %s."),
 	    w_user->user().toAscii().data(), el_path.c_str(), row_addr.c_str(), n_el1.attr("col").c_str(), value.c_str());
 	if(cntrIfCmd(n_el1))	throw TError(n_el1.attr("mcat").c_str(),n_el1.text().c_str());

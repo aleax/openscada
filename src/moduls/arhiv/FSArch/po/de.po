@@ -5,6 +5,7 @@
 # aleksey <aleksey@psniip.ru>, 2008.
 #: base.cpp:52 base.cpp:270 val.cpp:393 val.cpp:394 val.cpp:395 val.cpp:396
 #: mess.h:115
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: de\n"

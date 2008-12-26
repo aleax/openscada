@@ -19,8 +19,6 @@ BuildRequires: glibc-devel gcc4.1-c++ libgd2-devel libexpat-devel libMySQL-devel
 %define _initdir /etc/init.d
 %define _desktopdir %_datadir/applications
 %define _iconsdir /usr/share/icons
-%endif
-%if %_vendor == "suse" || %_vendor == "redhat"
 BuildRoot: %_tmppath/%name-%version-root
 %endif
 
@@ -143,7 +141,7 @@ echo "OpenSCADA values archive dir" > %buildroot/var/spool/openscada/ARCHIVES/VA
 %defattr(-,root,root)
 #_libdir/*.*
 %_libdir/*.so
-%_libdir/*.a
+%_libdir/*.*a
 %_includedir/openscada/*
 
 %files demo

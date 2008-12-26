@@ -4,13 +4,13 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #: my_sql.cpp:51 my_sql.cpp:149 my_sql.cpp:175 my_sql.cpp:259 my_sql.cpp:400
-#: my_sql.cpp:606 my_sql.cpp:613 my_sql.cpp:673 my_sql.cpp:697
+#: my_sql.cpp:606 my_sql.cpp:613 my_sql.cpp:642 my_sql.cpp:674 my_sql.cpp:698
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.MySQL 1.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-15 13:08+0200\n"
+"POT-Creation-Date: 2008-12-24 09:22+0200\n"
 "PO-Revision-Date: 2007-10-23 12:23+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -289,8 +289,8 @@ msgid "`='"
 msgstr ""
 
 #: my_sql.cpp:387 my_sql.cpp:428 my_sql.cpp:470 my_sql.cpp:498 my_sql.cpp:514
-#: my_sql.cpp:544 my_sql.cpp:641 my_sql.cpp:648 my_sql.cpp:649 my_sql.cpp:652
-#: my_sql.cpp:655
+#: my_sql.cpp:544 my_sql.cpp:642 my_sql.cpp:649 my_sql.cpp:650 my_sql.cpp:653
+#: my_sql.cpp:656
 msgid "' "
 msgstr ""
 
@@ -332,7 +332,7 @@ msgid "INSERT INTO `"
 msgstr ""
 
 #: my_sql.cpp:494 my_sql.cpp:495 my_sql.cpp:513 my_sql.cpp:573 my_sql.cpp:596
-#: my_sql.cpp:604 my_sql.cpp:610 my_sql.cpp:620 my_sql.cpp:652
+#: my_sql.cpp:604 my_sql.cpp:610 my_sql.cpp:620 my_sql.cpp:653
 msgid ","
 msgstr ""
 
@@ -376,11 +376,11 @@ msgstr ""
 msgid "varchar("
 msgstr ""
 
-#: my_sql.cpp:593 my_sql.cpp:649
+#: my_sql.cpp:593 my_sql.cpp:650
 msgid "int("
 msgstr ""
 
-#: my_sql.cpp:596 my_sql.cpp:652
+#: my_sql.cpp:596 my_sql.cpp:653
 msgid "double("
 msgstr ""
 
@@ -404,30 +404,38 @@ msgstr ""
 msgid ",ADD PRIMARY KEY ("
 msgstr ""
 
-#: my_sql.cpp:623
+#: my_sql.cpp:623 my_sql.cpp:641
 msgid ") "
 msgstr ""
 
-#: my_sql.cpp:641 my_sql.cpp:649 my_sql.cpp:652
-msgid ") NOT NULL DEFAULT '"
+#: my_sql.cpp:642
+msgid "BINARY"
 msgstr ""
 
-#: my_sql.cpp:643
-msgid "text NOT NULL "
+#: my_sql.cpp:642
+msgid " NOT NULL DEFAULT '"
 msgstr ""
 
 #: my_sql.cpp:644
+msgid "text NOT NULL "
+msgstr ""
+
+#: my_sql.cpp:645
 msgid "mediumtext NOT NULL "
 msgstr ""
 
-#: my_sql.cpp:648
+#: my_sql.cpp:649
 msgid "datetime NOT NULL DEFAULT '"
 msgstr ""
 
-#: my_sql.cpp:655
+#: my_sql.cpp:650 my_sql.cpp:653
+msgid ") NOT NULL DEFAULT '"
+msgstr ""
+
+#: my_sql.cpp:656
 msgid "tinyint(1) NOT NULL DEFAULT '"
 msgstr ""
 
-#: my_sql.cpp:695 my_sql.cpp:703
+#: my_sql.cpp:696 my_sql.cpp:704
 msgid "%Y-%m-%d %H:%M:%S"
 msgstr ""

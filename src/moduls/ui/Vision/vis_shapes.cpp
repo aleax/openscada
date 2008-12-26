@@ -2364,7 +2364,7 @@ void ShapeProtocol::setFocus(WdgView *view, QWidget *wdg, bool en, bool devel )
 //************************************************
 //* Document view shape widget                   *
 //************************************************
-char *ShapeDocument::XHTML_entity =
+const char *ShapeDocument::XHTML_entity =
     "<!DOCTYPE xhtml [\n"
     "  <!ENTITY nbsp \"&#160;\" >\n"
     "]>\n";

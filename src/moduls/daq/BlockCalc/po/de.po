@@ -1,0 +1,833 @@
+# translation of de.po to
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#: block.cpp:88 block.cpp:168 block.cpp:505 block.cpp:556 block.cpp:595
+#: virtual.cpp:60 virtual.cpp:277 virtual.cpp:560 block.h:86 block.h:98
+#: virtual.h:157
+# aleksey <aleksey@psniip.ru>, 2008.
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: de\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-12-15 13:09+0200\n"
+"PO-Revision-Date: 2008-12-25 00:01+0300\n"
+"Last-Translator: aleksey <aleksey@psniip.ru>\n"
+"Language-Team:  <ru@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+
+#: block.cpp:36
+msgid "_block"
+msgstr ""
+
+#: block.cpp:38 block.cpp:88 block.cpp:144 block.cpp:166 virtual.cpp:147
+#: virtual.cpp:156 virtual.cpp:270 virtual.cpp:277
+msgid "ID"
+msgstr ""
+
+#: block.cpp:38 virtual.cpp:148
+msgid "NAME"
+msgstr ""
+
+#: block.cpp:38 virtual.cpp:149
+msgid "DESCR"
+msgstr ""
+
+#: block.cpp:39 virtual.cpp:150
+msgid "FUNC"
+msgstr ""
+
+#: block.cpp:39 virtual.cpp:151
+msgid "EN"
+msgstr ""
+
+#: block.cpp:39 virtual.cpp:152
+msgid "PROC"
+msgstr ""
+
+#: block.cpp:63 block.cpp:81 block.cpp:102 block.cpp:111 block.cpp:128
+#: block.cpp:161 block.cpp:560 block.cpp:563 block.cpp:600 block.cpp:603
+#: virtual.cpp:244 virtual.cpp:265
+msgid "."
+msgstr ""
+
+#: block.cpp:63 block.cpp:81 block.cpp:82 block.cpp:89 block.cpp:102
+#: block.cpp:103 block.cpp:111 block.cpp:112 block.cpp:127 block.cpp:160
+#: virtual.cpp:137 virtual.cpp:202 virtual.cpp:244 virtual.cpp:265
+#: virtual.cpp:268
+msgid "BLOCK_SH"
+msgstr ""
+
+#: block.cpp:86 block.cpp:89 block.cpp:127 block.cpp:132 block.cpp:160
+#: virtual.cpp:248
+msgid "_io"
+msgstr ""
+
+#: block.cpp:87 block.cpp:124 block.cpp:159 virtual.cpp:155
+msgid "BLK_ID"
+msgstr ""
+
+#: block.cpp:92 block.cpp:175 virtual.cpp:253 virtual.cpp:291 virtual.cpp:306
+#: virtual.cpp:321 virtual.cpp:390 virtual.cpp:526 virtual.cpp:578
+#, c-format
+msgid "%s"
+msgstr ""
+
+#: block.cpp:148 block.cpp:169 virtual.cpp:159
+msgid "VAL"
+msgstr ""
+
+#: block.cpp:150 block.cpp:167 virtual.cpp:157
+msgid "TLNK"
+msgstr ""
+
+#: block.cpp:150 block.cpp:168 virtual.cpp:158
+msgid "LNK"
+msgstr ""
+
+#: block.cpp:176
+#, c-format
+msgid "Block link <%s> save error."
+msgstr "Fehler der Rettung der Blockverbindung <%s>."
+
+#: block.cpp:188
+#, c-format
+msgid "Node '%s' is not function."
+msgstr "Knoten '%s' ist nicht Funktion."
+
+#: block.cpp:191
+msgid "f_frq"
+msgstr ""
+
+#: block.cpp:192
+msgid "f_start"
+msgstr ""
+
+#: block.cpp:193
+msgid "f_stop"
+msgstr ""
+
+#: block.cpp:241 block.cpp:249 block.cpp:265
+#, c-format
+msgid "Link %d error!"
+msgstr "Fehler in der Knuepfung %d!"
+
+#: block.cpp:379
+#, c-format
+msgid "Error read block's <%s> links."
+msgstr "Fehler des Lesens der Blocklinks <%s>."
+
+#: block.cpp:392
+#, c-format
+msgid "Error calc block <%s>."
+msgstr "Fehler der Berechnung des Blocks <%s>."
+
+#: block.cpp:427
+#, c-format
+msgid "Error write block's <%s> links."
+msgstr "Fehler des Eintragens der Blocklinks <%s>."
+
+#: block.cpp:436 virtual.cpp:182 virtual.cpp:443 virtual.cpp:651
+msgid "info"
+msgstr ""
+
+#: block.cpp:439
+msgid "oscada_cntr"
+msgstr ""
+
+#: block.cpp:439
+msgid "/"
+msgstr ""
+
+#: block.cpp:439
+msgid "Block: "
+msgstr "Block: "
+
+#: block.cpp:439 block.cpp:444 block.cpp:446 block.cpp:450 block.cpp:451
+#: block.cpp:452 block.cpp:453 block.cpp:454 block.cpp:455 block.cpp:456
+#: block.cpp:464 block.cpp:482 block.cpp:489 block.cpp:503 block.cpp:505
+#: block.cpp:516 block.cpp:517 block.cpp:521 block.cpp:522 block.cpp:527
+#: block.cpp:528 block.cpp:532 block.cpp:533 block.cpp:537 block.cpp:538
+#: block.cpp:542 block.cpp:543 block.cpp:547 block.cpp:548 block.cpp:550
+#: block.cpp:570 block.cpp:571 block.cpp:576 block.cpp:578 block.cpp:583
+#: block.cpp:640 virtual.cpp:185 virtual.cpp:331 virtual.cpp:446
+#: virtual.cpp:449 virtual.cpp:450 virtual.cpp:451 virtual.cpp:460
+#: virtual.cpp:467 virtual.cpp:472 virtual.cpp:654
+msgid "root"
+msgstr ""
+
+#: block.cpp:440 block.cpp:442 block.cpp:448 block.cpp:461 block.cpp:463
+#: block.cpp:465 block.cpp:486 block.cpp:488 block.cpp:490 virtual.cpp:447
+msgid "area"
+msgstr ""
+
+#: block.cpp:440
+msgid "/blck"
+msgstr ""
+
+#: block.cpp:440 virtual.cpp:446
+msgid "Block"
+msgstr "Block"
+
+#: block.cpp:442
+msgid "/blck/st"
+msgstr ""
+
+#: block.cpp:442
+msgid "State"
+msgstr "Zustand"
+
+#: block.cpp:444 block.cpp:446 block.cpp:450 block.cpp:451 block.cpp:452
+#: block.cpp:453 block.cpp:454 block.cpp:455 block.cpp:464 block.cpp:481
+#: block.cpp:489 block.cpp:502 block.cpp:505 virtual.cpp:185 virtual.cpp:449
+#: virtual.cpp:451 virtual.cpp:654
+msgid "fld"
+msgstr ""
+
+#: block.cpp:444 block.cpp:514
+msgid "/blck/st/en"
+msgstr ""
+
+#: block.cpp:444
+msgid "Enable"
+msgstr "Aktiv"
+
+#: block.cpp:444 block.cpp:446 block.cpp:450 block.cpp:451 block.cpp:452
+#: block.cpp:453 block.cpp:454 block.cpp:455 block.cpp:456 block.cpp:464
+#: block.cpp:482 block.cpp:489 block.cpp:503 block.cpp:505 virtual.cpp:185
+#: virtual.cpp:449 virtual.cpp:450 virtual.cpp:451
+msgid "tp"
+msgstr ""
+
+#: block.cpp:444 block.cpp:446 block.cpp:453 block.cpp:454 block.cpp:464
+#: block.cpp:479 block.cpp:489
+msgid "bool"
+msgstr ""
+
+#: block.cpp:446 block.cpp:519
+msgid "/blck/st/prc"
+msgstr ""
+
+#: block.cpp:446
+msgid "Process"
+msgstr "Bearbeitung"
+
+#: block.cpp:448
+msgid "/blck/cfg"
+msgstr ""
+
+#: block.cpp:448
+msgid "Config"
+msgstr "Konfiguration"
+
+#: block.cpp:450 block.cpp:524
+msgid "/blck/cfg/id"
+msgstr ""
+
+#: block.cpp:450
+msgid "Id"
+msgstr ""
+
+#: block.cpp:450 block.cpp:451 block.cpp:452 block.cpp:455 block.cpp:476
+#: block.cpp:505 virtual.cpp:185 virtual.cpp:451
+msgid "str"
+msgstr ""
+
+#: block.cpp:451 block.cpp:525
+msgid "/blck/cfg/name"
+msgstr ""
+
+#: block.cpp:451 virtual.cpp:148
+msgid "Name"
+msgstr "Name"
+
+#: block.cpp:451
+msgid "len"
+msgstr ""
+
+#: block.cpp:451 virtual.cpp:148 virtual.cpp:158
+msgid "50"
+msgstr ""
+
+#: block.cpp:452 block.cpp:530
+msgid "/blck/cfg/descr"
+msgstr ""
+
+#: block.cpp:452 virtual.cpp:149
+msgid "Description"
+msgstr "Beschreibung"
+
+#: block.cpp:452 virtual.cpp:185
+msgid "cols"
+msgstr ""
+
+#: block.cpp:452 virtual.cpp:185
+msgid "90"
+msgstr ""
+
+#: block.cpp:452 virtual.cpp:185
+msgid "rows"
+msgstr ""
+
+#: block.cpp:452
+msgid "4"
+msgstr ""
+
+#: block.cpp:453 block.cpp:535
+msgid "/blck/cfg/toen"
+msgstr ""
+
+#: block.cpp:453 virtual.cpp:151
+msgid "To enable"
+msgstr "Aktivieren"
+
+#: block.cpp:454 block.cpp:540
+msgid "/blck/cfg/toprc"
+msgstr ""
+
+#: block.cpp:454 virtual.cpp:152
+msgid "To process"
+msgstr "Bearbeiten"
+
+#: block.cpp:455 block.cpp:545
+msgid "/blck/cfg/func"
+msgstr ""
+
+#: block.cpp:455 virtual.cpp:150
+msgid "Function"
+msgstr "Funktion"
+
+#: block.cpp:455 block.cpp:503 block.cpp:505
+msgid "dest"
+msgstr ""
+
+#: block.cpp:455 block.cpp:505
+msgid "sel_ed"
+msgstr ""
+
+#: block.cpp:455 block.cpp:503 block.cpp:505
+msgid "select"
+msgstr ""
+
+#: block.cpp:455 block.cpp:552
+msgid "/blck/cfg/fncs"
+msgstr ""
+
+#: block.cpp:456
+msgid "comm"
+msgstr ""
+
+#: block.cpp:456 block.cpp:550
+msgid "/blck/cfg/func_lnk"
+msgstr ""
+
+#: block.cpp:456
+msgid "Go to function"
+msgstr "Zur Funktion"
+
+#: block.cpp:456
+msgid "lnk"
+msgstr ""
+
+#: block.cpp:461
+msgid "/lio"
+msgstr ""
+
+#: block.cpp:461 block.cpp:465 block.cpp:490 virtual.cpp:144 virtual.cpp:520
+#: virtual.cpp:535 virtual.cpp:654
+msgid "IO"
+msgstr ""
+
+#: block.cpp:463
+msgid "/lio/show"
+msgstr ""
+
+#: block.cpp:463 block.cpp:488
+msgid "Show"
+msgstr "Zeigen"
+
+#: block.cpp:464 block.cpp:568
+msgid "/lio/show/hide"
+msgstr ""
+
+#: block.cpp:464 block.cpp:489
+msgid "Hiden"
+msgstr "Geheim"
+
+#: block.cpp:465 block.cpp:573
+msgid "/lio/io"
+msgstr ""
+
+#: block.cpp:472 block.cpp:499 block.cpp:570 block.cpp:571
+msgid "showHide"
+msgstr ""
+
+#: block.cpp:472 block.cpp:499 block.cpp:516 block.cpp:521 block.cpp:537
+#: block.cpp:542 block.cpp:570 virtual.cpp:139 virtual.cpp:151 virtual.cpp:152
+#: virtual.cpp:618
+msgid "0"
+msgstr ""
+
+#: block.cpp:472 block.cpp:499 block.cpp:570 block.cpp:571
+msgid "user"
+msgstr ""
+
+#: block.cpp:477 block.cpp:503
+msgid "dec"
+msgstr ""
+
+#: block.cpp:478 virtual.cpp:449
+msgid "real"
+msgstr ""
+
+#: block.cpp:481
+msgid "/lio/io/"
+msgstr ""
+
+#: block.cpp:486
+msgid "/lnk"
+msgstr ""
+
+#: block.cpp:486
+msgid "Links"
+msgstr "Links"
+
+#: block.cpp:488
+msgid "/lnk/show"
+msgstr ""
+
+#: block.cpp:489 block.cpp:568
+msgid "/lnk/show/hide"
+msgstr ""
+
+#: block.cpp:490 block.cpp:581
+msgid "/lnk/io"
+msgstr ""
+
+#: block.cpp:502
+msgid "/lnk/io/1|"
+msgstr ""
+
+#: block.cpp:503 block.cpp:656
+msgid "/lnk/otp"
+msgstr ""
+
+#: block.cpp:503 block.cpp:649
+msgid "/lnk/itp"
+msgstr ""
+
+#: block.cpp:505
+msgid "/lnk/io/2|"
+msgstr ""
+
+#: block.cpp:505
+msgid "/lnk/io/3|"
+msgstr ""
+
+#: block.cpp:513 virtual.cpp:189 virtual.cpp:456
+msgid "path"
+msgstr ""
+
+#: block.cpp:516 block.cpp:521 block.cpp:527 block.cpp:532 block.cpp:537
+#: block.cpp:542 block.cpp:547 block.cpp:550 block.cpp:570 block.cpp:576
+#: block.cpp:583 virtual.cpp:190 virtual.cpp:460
+msgid "get"
+msgstr ""
+
+#: block.cpp:516 block.cpp:521 block.cpp:537 block.cpp:542 virtual.cpp:140
+#: virtual.cpp:151 virtual.cpp:152 virtual.cpp:446 virtual.cpp:450
+msgid "1"
+msgstr ""
+
+#: block.cpp:517 block.cpp:522 block.cpp:528 block.cpp:533 block.cpp:538
+#: block.cpp:543 block.cpp:548 block.cpp:571 block.cpp:578 block.cpp:640
+msgid "set"
+msgstr ""
+
+#: block.cpp:559 block.cpp:562 block.cpp:566 block.cpp:597 block.cpp:601
+#: block.cpp:637 block.cpp:651 block.cpp:652 block.cpp:653 block.cpp:654
+#: block.cpp:658 block.cpp:659 block.cpp:660 block.cpp:661 virtual.cpp:465
+msgid "el"
+msgstr ""
+
+#: block.cpp:651 block.cpp:652 block.cpp:653 block.cpp:654 block.cpp:658
+#: block.cpp:659 block.cpp:660 block.cpp:661 virtual.cpp:465 virtual.cpp:469
+#: virtual.cpp:472
+msgid "id"
+msgstr ""
+
+#: block.cpp:651 block.cpp:658
+msgid "Free"
+msgstr "Frei"
+
+#: block.cpp:652 block.cpp:659
+msgid "Local"
+msgstr "Lokal"
+
+#: block.cpp:653 block.cpp:660
+msgid "Global"
+msgstr "Global"
+
+#: block.cpp:654 block.cpp:661
+msgid "Parameter"
+msgstr "Parameter"
+
+#: virtual.cpp:43
+msgid "BlockCalc"
+msgstr ""
+
+#: virtual.cpp:44
+msgid "Block based calculator"
+msgstr "Blockrechner"
+
+#: virtual.cpp:45
+msgid "DAQ"
+msgstr ""
+
+#: virtual.cpp:47
+msgid "1.1.0"
+msgstr ""
+
+#: virtual.cpp:48
+msgid "Roman Savochenko"
+msgstr "Roman Savotschenko"
+
+#: virtual.cpp:49
+msgid "Allow block based calculator."
+msgstr "Gewaehrt den Blockrechner."
+
+#: virtual.cpp:50
+msgid "GPL"
+msgstr ""
+
+#: virtual.cpp:55
+msgid "C"
+msgstr ""
+
+#: virtual.cpp:100
+#, c-format
+msgid ""
+"======================= The module <%s:%s> options =======================\n"
+"---------- Parameters of the module section <%s> in config file ----------\n"
+msgstr ""
+"======================= Optionen des Moduls <%s:%s> =============================\n"
+"------- "
+"Parameter der modularen Sektion <%s> in der Konfigurationsdatei ---------\n"
+"\n"
+
+#: virtual.cpp:110
+msgid "h"
+msgstr ""
+
+#: virtual.cpp:113 virtual.cpp:655
+msgid "help"
+msgstr ""
+
+#: virtual.cpp:136 virtual.cpp:143 virtual.cpp:201
+msgid "PRM_BD"
+msgstr ""
+
+#: virtual.cpp:136
+msgid "Parameters table"
+msgstr "Tabelle der Parameter"
+
+#: virtual.cpp:136 virtual.cpp:137
+msgid "30"
+msgstr ""
+
+#: virtual.cpp:136
+msgid "system"
+msgstr ""
+
+#: virtual.cpp:137
+msgid "Block's table"
+msgstr "Tabelle der Blocks"
+
+#: virtual.cpp:137
+msgid "block"
+msgstr ""
+
+#: virtual.cpp:138 virtual.cpp:199
+msgid "PERIOD"
+msgstr ""
+
+#: virtual.cpp:138
+msgid "Calc period (ms)"
+msgstr "Periodizitaet der Berechnung (ms)"
+
+#: virtual.cpp:138 virtual.cpp:185
+msgid "5"
+msgstr ""
+
+#: virtual.cpp:138
+msgid "1000"
+msgstr ""
+
+#: virtual.cpp:138
+msgid "0;10000"
+msgstr ""
+
+#: virtual.cpp:139 virtual.cpp:199
+msgid "PRIOR"
+msgstr ""
+
+#: virtual.cpp:139
+msgid "Calc task priority"
+msgstr "Prioritaet der Rechenaufgabe"
+
+#: virtual.cpp:139 virtual.cpp:140 virtual.cpp:157
+msgid "2"
+msgstr ""
+
+#: virtual.cpp:139
+msgid "0;100"
+msgstr ""
+
+#: virtual.cpp:140 virtual.cpp:199
+msgid "ITER"
+msgstr ""
+
+#: virtual.cpp:140
+msgid "Iteration number into calc period"
+msgstr "Zahl der Iterationen in einer Berechnungsperiode"
+
+#: virtual.cpp:140
+msgid "0;99"
+msgstr ""
+
+#: virtual.cpp:143
+msgid "std"
+msgstr ""
+
+#: virtual.cpp:143
+msgid "Standard"
+msgstr "Standard"
+
+#: virtual.cpp:144
+msgid "Blocks' IOs"
+msgstr "Parameter des Blocks"
+
+#: virtual.cpp:144
+msgid "200"
+msgstr ""
+
+#: virtual.cpp:147 virtual.cpp:155 virtual.cpp:156 virtual.cpp:159
+#: virtual.cpp:446 virtual.cpp:450
+msgid "20"
+msgstr ""
+
+#: virtual.cpp:149
+msgid "300"
+msgstr ""
+
+#: virtual.cpp:150
+msgid "75"
+msgstr ""
+
+#: virtual.cpp:155
+msgid "Blok's ID"
+msgstr "Id des Blocks"
+
+#: virtual.cpp:156
+msgid "IO ID"
+msgstr ""
+
+#: virtual.cpp:157
+msgid "Link's type"
+msgstr "Typ des Links"
+
+#: virtual.cpp:158
+msgid "Link"
+msgstr "Link"
+
+#: virtual.cpp:159
+msgid "Link's value"
+msgstr "Bedeutung des Links"
+
+#: virtual.cpp:185 virtual.cpp:190
+msgid "/help/g_help"
+msgstr ""
+
+#: virtual.cpp:185
+msgid "Options help"
+msgstr "Optionenhilfe"
+
+#: virtual.cpp:201
+msgid "BlckCalcPrm_"
+msgstr ""
+
+#: virtual.cpp:202
+msgid "BlckCalcBlcks_"
+msgstr ""
+
+#: virtual.cpp:203 virtual.cpp:450
+msgid "blk_"
+msgstr ""
+
+#: virtual.cpp:292 virtual.cpp:307
+#, c-format
+msgid "Enable block <%s> error."
+msgstr "Fehler der Aktivierung des Blocks <%s>."
+
+#: virtual.cpp:322
+#, c-format
+msgid "Process block <%s> error."
+msgstr "Fehler der Bearbeitung des Blocks <%s>."
+
+#: virtual.cpp:339
+msgid "start"
+msgstr ""
+
+#: virtual.cpp:340
+msgid "Acquisition task no started!"
+msgstr "Sammlungstask ist nicht gestartet!"
+
+#: virtual.cpp:351
+msgid "stop"
+msgstr ""
+
+#: virtual.cpp:352
+msgid "Acquisition task no stoped!"
+msgstr "Sammlungstask ist nicht gestoppt!"
+
+#: virtual.cpp:369
+#, c-format
+msgid "Thread <%u> started. TID: %ld"
+msgstr ""
+
+#: virtual.cpp:392
+#, c-format
+msgid "Block <%s> calc error."
+msgstr "Fehler <%s> der Berechnung des Blocks."
+
+#: virtual.cpp:395
+#, c-format
+msgid "Block <%s> stoped."
+msgstr "Block <%s> ist gestoppt."
+
+#: virtual.cpp:446
+msgid "grp"
+msgstr ""
+
+#: virtual.cpp:446 virtual.cpp:458
+msgid "/br/blk_"
+msgstr ""
+
+#: virtual.cpp:446 virtual.cpp:450
+msgid "idm"
+msgstr ""
+
+#: virtual.cpp:446 virtual.cpp:450
+msgid "idSz"
+msgstr ""
+
+#: virtual.cpp:447
+msgid "/scheme"
+msgstr ""
+
+#: virtual.cpp:447
+msgid "Blocks scheme"
+msgstr "Blocksschema"
+
+#: virtual.cpp:449 virtual.cpp:457
+msgid "/scheme/ctm"
+msgstr ""
+
+#: virtual.cpp:449
+msgid "Calk time (usek)"
+msgstr "Berechnungszeit (mks)"
+
+#: virtual.cpp:450
+msgid "list"
+msgstr ""
+
+#: virtual.cpp:450 virtual.cpp:458
+msgid "/scheme/sch"
+msgstr ""
+
+#: virtual.cpp:450
+msgid "Blocks"
+msgstr "Blocks"
+
+#: virtual.cpp:450
+msgid "br"
+msgstr ""
+
+#: virtual.cpp:450
+msgid "s_com"
+msgstr ""
+
+#: virtual.cpp:450
+msgid "add,del"
+msgstr ""
+
+#: virtual.cpp:450
+msgid "br_pref"
+msgstr ""
+
+#: virtual.cpp:451 virtual.cpp:474
+msgid "/scheme/nmb"
+msgstr ""
+
+#: virtual.cpp:451
+msgid "Number"
+msgstr "Zahl"
+
+#: virtual.cpp:467
+msgid "add"
+msgstr ""
+
+#: virtual.cpp:472
+msgid "del"
+msgstr ""
+
+#: virtual.cpp:485
+#, c-format
+msgid "All: %d; Enabled: %d; Process: %d"
+msgstr "Insgesamt: %d; Aktiv: %d; in Bearbeitung: %d"
+
+#: virtual.cpp:542
+msgid "_"
+msgstr ""
+
+#: virtual.cpp:612
+msgid "err"
+msgstr ""
+
+#: virtual.cpp:615
+msgid "2:Controller stoped"
+msgstr "2:Controller ist gestoppt"
+
+#: virtual.cpp:617
+msgid "1:Parameter disabled"
+msgstr "1:Parameter ist nicht aktiv"
+
+#: virtual.cpp:654
+msgid "/prm/cfg/IO"
+msgstr ""
+
+#: virtual.cpp:655
+msgid ""
+"Attributes configuration list. List writed by lines in format: [<blk>."
+"<blk_io>:<aid>:<anm>]\n"
+"Where:\n"
+"  blk - block identifier from block's scheme;\n"
+"  blk_io - block's parameter from block's scheme;\n"
+"  aid - created attribute identifier;\n"
+"  anm - created attribute name.\n"
+"If 'aid' or 'anm' no set then it will be generated from selected block's "
+"parameter."
+msgstr ""
+"Liste der Konfiguration der Attribute. Die Liste wird mit Zeilen im naechsten Format geformt: [<blk>."
+"<blk_io>:<aid>:<anm>]\n"
+"Wo:\n"
+"  blk - Bezeichner des Blocks, der Blocksschema;\n"
+"  blk_io - Parameter des Blocks, der Blocksschema;\n"
+"  aid - Bezeichner des bildenden Attributs;\n"
+"  anm - Name des bildenden Attributs.\n"
+"Falls 'aid' или 'anm' nicht festgesetzt sind, wird ihre Generation aus dem gewaehlten "
+"Parameter des Blocks erfuellt."
+

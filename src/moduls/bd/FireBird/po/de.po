@@ -1,0 +1,428 @@
+# translation of de.po to
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#: firebird.cpp:49 firebird.cpp:357 firebird.cpp:402 firebird.cpp:514
+#: firebird.cpp:575
+# aleksey <aleksey@psniip.ru>, 2008.
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: de\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-09-09 11:50+0300\n"
+"PO-Revision-Date: 2008-12-23 09:57+0300\n"
+"Last-Translator: aleksey <aleksey@psniip.ru>\n"
+"Language-Team:  <ru@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+
+#: firebird.cpp:32
+msgid "FireBird"
+msgstr ""
+
+#: firebird.cpp:33
+msgid "DB FireBird"
+msgstr "DB FireBird"
+
+#: firebird.cpp:34 firebird.cpp:444
+msgid "BD"
+msgstr "DB"
+
+#: firebird.cpp:36
+msgid "0.8.0"
+msgstr ""
+
+#: firebird.cpp:37
+msgid "Roman Savochenko"
+msgstr "Roman Savotschenko "
+
+#: firebird.cpp:38
+msgid "DB modul. Allow support of the DB FireBird."
+msgstr "Das DB-Modul. Ermoegliht die FireBird Dateibasenunterstuetzung."
+
+#: firebird.cpp:39
+msgid "GPL"
+msgstr ""
+
+#: firebird.cpp:44
+msgid "C"
+msgstr ""
+
+#: firebird.cpp:94
+#, c-format
+msgid ""
+"======================= The module <%s:%s> options =======================\n"
+"---------- Parameters of the module section <%s> in config file ----------\n"
+"\n"
+msgstr ""
+"========================== Optionen des Moduls <%s:%s> ==========================\n"
+"-------- Parameter der modularen Sektion in der Konfigurationsdatei --------\n"
+"\n"
+
+#: firebird.cpp:106
+msgid "h"
+msgstr ""
+
+#: firebird.cpp:109 firebird.cpp:445
+msgid "help"
+msgstr ""
+
+#: firebird.cpp:167
+#, c-format
+msgid "Drop DB '%s' error: %s"
+msgstr "Fehler des Loeschens der DB '%s': %s"
+
+#: firebird.cpp:194
+msgid "CREATE DATABASE '"
+msgstr ""
+
+#: firebird.cpp:194
+msgid "' USER '"
+msgstr ""
+
+#: firebird.cpp:194
+msgid "' PASSWORD '"
+msgstr ""
+
+#: firebird.cpp:194 firebird.cpp:499 firebird.cpp:507 firebird.cpp:617
+#: firebird.cpp:697
+msgid "'"
+msgstr ""
+
+#: firebird.cpp:195
+#, c-format
+msgid "Create DB '%s' error: %s"
+msgstr "Fehler der Erschaffung der DB '%s': %s"
+
+#: firebird.cpp:218
+msgid ""
+"SELECT rdb$relation_name FROM rdb$relations WHERE ((rdb$system_flag = 0) OR "
+"(rdb$system_flag IS NULL)) AND (rdb$view_source IS NULL) ORDER BY rdb"
+"$relation_name"
+msgstr ""
+
+#: firebird.cpp:228
+#, c-format
+msgid "Error open table <%s>. DB disabled."
+msgstr "Fehler der Oeffnung der Tabelle <%s>. Die DB ist ausgeschaltet."
+
+#: firebird.cpp:238
+msgid ":"
+msgstr ""
+
+#: firebird.cpp:240
+msgid "-"
+msgstr ""
+
+#: firebird.cpp:252 firebird.cpp:295
+#, c-format
+msgid "Start trasaction error: %s"
+msgstr "Fehler der Oeffnung der Transaktion: %s"
+
+#: firebird.cpp:262 firebird.cpp:416
+#, c-format
+msgid "DSQL close transaction error: %s"
+msgstr "Fehler der Schliessung der Transaktion: %s"
+
+#: firebird.cpp:293
+#, c-format
+msgid "Allocate statement error: %s"
+msgstr "Fehler der Anordnung des Ausdrucks: %s"
+
+#: firebird.cpp:298
+#, c-format
+msgid "DSQL prepare error: %s"
+msgstr "Fehler der Vorbereitung DSQL: %s"
+
+#: firebird.cpp:300
+#, c-format
+msgid "DSQL describe error: %s"
+msgstr "Fehler der Beschreibung DSQL: %s"
+
+#: firebird.cpp:334
+#, c-format
+msgid "DSQL execute error: %s"
+msgstr "Fehler der Erfuellung DSQL: %s"
+
+#: firebird.cpp:411
+#, c-format
+msgid "DSQL free statement error: %s"
+msgstr "Ошибка освобождения выражения: %s"
+
+#: firebird.cpp:441
+msgid "info"
+msgstr ""
+
+#: firebird.cpp:444
+msgid "fld"
+msgstr ""
+
+#: firebird.cpp:444
+msgid "/prm/cfg/addr"
+msgstr ""
+
+#: firebird.cpp:444
+msgid "ADDR"
+msgstr ""
+
+#: firebird.cpp:444
+msgid "root"
+msgstr ""
+
+#: firebird.cpp:445
+msgid "tp"
+msgstr ""
+
+#: firebird.cpp:445
+msgid "str"
+msgstr ""
+
+#: firebird.cpp:446
+msgid ""
+"FireBird address to DB writed as: [<file>;<user>;<pass>].\n"
+"Where:\n"
+"  file - full DB file;\n"
+"  user - DB user;\n"
+"  pass - password of DB user."
+msgstr ""
+"Die Adresse DB FireBird wird geschrieben: [<file>;<user>;<pass>].\n"
+"Wo:\n"
+"  File - volle Datei der DB;\n"
+"  Nutzer - Nutzer der DB;\n"
+"  Kennwort - Kennwort des DB-Nutzers."
+
+#: firebird.cpp:465
+msgid ""
+"EXECUTE BLOCK AS BEGIN if (not exists(select 1 from rdb$relations where rdb"
+"$relation_name = '"
+msgstr ""
+
+#: firebird.cpp:466
+msgid "')) then execute statement 'create table \""
+msgstr ""
+
+#: firebird.cpp:467
+msgid "\" ( \"name\" VARCHAR(20) NOT NULL, CONSTRAINT \"pk_"
+msgstr ""
+
+#: firebird.cpp:468
+msgid "\" PRIMARY KEY(\"name\") )'; END"
+msgstr ""
+
+#: firebird.cpp:474
+#, c-format
+msgid "Table '%s' no present."
+msgstr "Tabelle '%s' ist nicht vorhanden."
+
+#: firebird.cpp:488
+msgid "DROP TABLE \""
+msgstr ""
+
+#: firebird.cpp:488 firebird.cpp:564 firebird.cpp:568 firebird.cpp:569
+#: firebird.cpp:616 firebird.cpp:621 firebird.cpp:622 firebird.cpp:668
+#: firebird.cpp:688 firebird.cpp:720 firebird.cpp:752 firebird.cpp:782
+msgid "\""
+msgstr ""
+
+#: firebird.cpp:489
+#, c-format
+msgid "%s"
+msgstr ""
+
+#: firebird.cpp:497
+msgid ""
+"SELECT R.RDB$FIELD_NAME, F.RDB$FIELD_TYPE, F.RDB$FIELD_LENGTH FROM RDB"
+"$FIELDS F, RDB$RELATION_FIELDS R where F.RDB$FIELD_NAME = R.RDB$FIELD_SOURCE "
+"and R.RDB$SYSTEM_FLAG = 0 and R.RDB$RELATION_NAME = '"
+msgstr ""
+
+#: firebird.cpp:504
+msgid ""
+"SELECT I.RDB$FIELD_NAME, C.RDB$CONSTRAINT_TYPE FROM RDB$RELATION_CONSTRAINTS "
+"C, RDB$INDEX_SEGMENTS I WHERE C.RDB$INDEX_NAME = I.RDB$INDEX_NAME AND C.RDB"
+"$RELATION_NAME = '"
+msgstr ""
+
+#: firebird.cpp:508
+msgid "Key"
+msgstr "Schluessel"
+
+#: firebird.cpp:521 firebird.cpp:546 firebird.cpp:600 firebird.cpp:735
+msgid "Table is empty."
+msgstr "Tabelle ist leer."
+
+#: firebird.cpp:528
+msgid "PRIMARY KEY"
+msgstr ""
+
+#: firebird.cpp:529 firebird.cpp:793
+msgid "37"
+msgstr ""
+
+#: firebird.cpp:531 firebird.cpp:796
+msgid "261"
+msgstr ""
+
+#: firebird.cpp:532
+msgid "1048576"
+msgstr ""
+
+#: firebird.cpp:533 firebird.cpp:798
+msgid "8"
+msgstr ""
+
+#: firebird.cpp:535 firebird.cpp:799
+msgid "27"
+msgstr ""
+
+#: firebird.cpp:537 firebird.cpp:800
+msgid "7"
+msgstr ""
+
+#: firebird.cpp:550
+msgid "SELECT FIRST 1 SKIP "
+msgstr ""
+
+#: firebird.cpp:550
+msgid " "
+msgstr ""
+
+#: firebird.cpp:551 firebird.cpp:660
+msgid "WHERE "
+msgstr ""
+
+#: firebird.cpp:563 firebird.cpp:615 firebird.cpp:667 firebird.cpp:751
+msgid "AND "
+msgstr ""
+
+#: firebird.cpp:564 firebird.cpp:616 firebird.cpp:668 firebird.cpp:720
+#: firebird.cpp:752
+msgid "\"='"
+msgstr ""
+
+#: firebird.cpp:564 firebird.cpp:669 firebird.cpp:697 firebird.cpp:720
+#: firebird.cpp:753
+msgid "' "
+msgstr ""
+
+#: firebird.cpp:569 firebird.cpp:622
+msgid ",\""
+msgstr ""
+
+#: firebird.cpp:575 firebird.cpp:626
+msgid " FROM \""
+msgstr ""
+
+#: firebird.cpp:575 firebird.cpp:674 firebird.cpp:688 firebird.cpp:804
+#: firebird.cpp:808 firebird.cpp:832
+msgid "\" "
+msgstr ""
+
+#: firebird.cpp:604
+msgid "SELECT "
+msgstr ""
+
+#: firebird.cpp:626 firebird.cpp:743
+msgid "\" WHERE "
+msgstr ""
+
+#: firebird.cpp:630
+msgid "Row no present."
+msgstr "Datensatz ist nicht vorhanden."
+
+#: firebird.cpp:674
+msgid "INSERT INTO \""
+msgstr ""
+
+#: firebird.cpp:685 firebird.cpp:686 firebird.cpp:711 firebird.cpp:781
+#: firebird.cpp:803 firebird.cpp:806 firebird.cpp:831
+msgid ","
+msgstr ""
+
+#: firebird.cpp:699
+msgid "("
+msgstr ""
+
+#: firebird.cpp:699
+msgid ") VALUES ("
+msgstr ""
+
+#: firebird.cpp:699
+msgid ")"
+msgstr ""
+
+#: firebird.cpp:704
+msgid "UPDATE \""
+msgstr ""
+
+#: firebird.cpp:704
+msgid "\" SET "
+msgstr ""
+
+#: firebird.cpp:743
+msgid "DELETE FROM \""
+msgstr ""
+
+#: firebird.cpp:770
+msgid "ALTER TABLE \""
+msgstr ""
+
+#: firebird.cpp:770
+msgid "\" DROP CONSTRAINT \"pk_"
+msgstr ""
+
+#: firebird.cpp:771
+msgid "\", "
+msgstr ""
+
+#: firebird.cpp:804 firebird.cpp:832
+msgid "DROP \""
+msgstr ""
+
+#: firebird.cpp:808
+msgid "ADD \""
+msgstr ""
+
+#: firebird.cpp:813
+msgid "VARCHAR("
+msgstr ""
+
+#: firebird.cpp:813
+msgid ") DEFAULT '"
+msgstr ""
+
+#: firebird.cpp:813 firebird.cpp:814 firebird.cpp:817 firebird.cpp:820
+#: firebird.cpp:823
+msgid "' NOT NULL "
+msgstr ""
+
+#: firebird.cpp:814
+msgid "BLOB SUB_TYPE TEXT DEFAULT '"
+msgstr ""
+
+#: firebird.cpp:817
+msgid "INTEGER DEFAULT '"
+msgstr ""
+
+#: firebird.cpp:820
+msgid "DOUBLE PRECISION DEFAULT '"
+msgstr ""
+
+#: firebird.cpp:823
+msgid "SMALLINT DEFAULT '"
+msgstr ""
+
+#: firebird.cpp:834
+msgid ", ADD CONSTRAINT \"pk_"
+msgstr ""
+
+#: firebird.cpp:834
+msgid "\" PRIMARY KEY ("
+msgstr ""
+
+#: firebird.cpp:834
+msgid ") "
+msgstr ""
+

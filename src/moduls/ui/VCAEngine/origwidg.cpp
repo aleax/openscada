@@ -790,7 +790,7 @@ bool OrigProtocol::attrChange( Attr &cfg, void *prev )
 //************************************************
 //* OrigDocument: Document original widget       *
 //************************************************
-char *OrigDocument::XHTML_entity =
+const char *OrigDocument::XHTML_entity =
     "<!DOCTYPE xhtml [\n"
     "  <!ENTITY nbsp \"&#160;\" >\n"
     "]>\n";

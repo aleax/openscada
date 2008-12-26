@@ -537,30 +537,19 @@ function selectChildRecArea( node, aPath, cBlk )
 	{
 	  if( !e ) e = window.event;
 	  var popUpMenu = getPopup();
-	  while( popUpMenu.childNodes[0].childNodes.length ) popUpMenu.childNodes[0].removeChild(popUpMenu.childNodes[0].childNodes[0]);
-	  var optEl = null;
+	  var optEl = '';
 	  if( this.srcNode.getAttribute('tp') == 'br' && this.selectedIndex >= 0 )
-	  {
-	    optEl = document.createElement('option'); setNodeText(optEl,'Go'); optEl.posId = 'go'; popUpMenu.childNodes[0].appendChild(optEl);
-	    optEl = document.createElement('option'); setNodeText(optEl,'----------'); optEl.disabled = true; popUpMenu.childNodes[0].appendChild(optEl);
-	  }
+	    optEl += "<option posId='go'>Go</option><option disabled='true'>------------</option>";
 	  if( (parseInt(this.srcNode.getAttribute('acs'))&SEQ_WR) && this.srcNode.getAttribute('s_com') )
 	  {
-	    if( this.srcNode.getAttribute('s_com').search('add') != -1 )
-	    { optEl = document.createElement('option'); setNodeText(optEl,'Add'); optEl.posId = 'add'; popUpMenu.childNodes[0].appendChild(optEl); }
-	    if( this.srcNode.getAttribute('s_com').search('ins') != -1 && this.selectedIndex >= 0 )
-	    { optEl = document.createElement('option'); setNodeText(optEl,'Insert'); optEl.posId = 'ins'; popUpMenu.childNodes[0].appendChild(optEl); }
-	    if( this.srcNode.getAttribute('s_com').search('edit') != -1 && this.selectedIndex >= 0 )
-	    { optEl = document.createElement('option'); setNodeText(optEl,'Edit'); optEl.posId = 'edit'; popUpMenu.childNodes[0].appendChild(optEl); }
-	    if( this.srcNode.getAttribute('s_com').search('del') != -1 && this.selectedIndex >= 0 )
-	    { optEl = document.createElement('option'); setNodeText(optEl,'Delete'); optEl.posId = 'del'; popUpMenu.childNodes[0].appendChild(optEl); }
+	    if( this.srcNode.getAttribute('s_com').search('add') != -1 ) optEl += "<option posId='add'>Add</option>";
+	    if( this.srcNode.getAttribute('s_com').search('ins') != -1 && this.selectedIndex >= 0 ) optEl += "<option posId='ins'>Insert</option>";
+	    if( this.srcNode.getAttribute('s_com').search('edit') != -1 && this.selectedIndex >= 0 ) optEl += "<option posId='edit'>Edit</option>";
+	    if( this.srcNode.getAttribute('s_com').search('del') != -1 && this.selectedIndex >= 0 ) optEl += "<option posId='del'>Delete</option>";
 	    if( this.srcNode.getAttribute('s_com').search('move') != -1 && this.selectedIndex >= 0 )
-	    {
-	      optEl = document.createElement('option'); setNodeText(optEl,'----------'); optEl.disabled = true; popUpMenu.childNodes[0].appendChild(optEl);
-	      optEl = document.createElement('option'); setNodeText(optEl,'Up'); optEl.posId = 'up'; popUpMenu.childNodes[0].appendChild(optEl);
-	      optEl = document.createElement('option'); setNodeText(optEl,'Down'); optEl.posId = 'down'; popUpMenu.childNodes[0].appendChild(optEl);
-	    }
+	      optEl += "<option disabled='true'>------------</option><option posId='up'>Up</option><option posId='down'>Down</option>";
 	  }
+	  popUpMenu.childNodes[0].innerHTML = optEl;
 	  if( popUpMenu.childNodes[0].childNodes.length )
 	  {
 	    popUpMenu.srcNode = this.srcNode;
@@ -572,15 +561,15 @@ function selectChildRecArea( node, aPath, cBlk )
 	      if( !popUpMenu.lsId ) popUpMenu.lsId = popUpMenu.lsText;
 	    }
 	    popUpMenu.childNodes[0].size = Math.max(3,popUpMenu.childNodes[0].childNodes.length);
-	    popUpMenu.style.cssText = 'visibility: visible; left: '+e.clientX+'px; top: '+e.clientY+'px;';
+	    popUpMenu.style.cssText = 'visibility: visible; left: '+(e.clientX+window.pageXOffset)+'px; top: '+(e.clientY+window.pageYOffset)+'px;';
 	    popUpMenu.childNodes[0].focus();
 	    popUpMenu.childNodes[0].selectedIndex = -1;
 	    popUpMenu.childNodes[0].onclick = function()
 	    {
 	      this.parentNode.style.cssText = 'visibility: hidden; left: -200px; top: -200px;';
-	      if( this.selectedIndex < 0 || !this.options[this.selectedIndex].posId ) return;
+	      if( this.selectedIndex < 0 || !this.options[this.selectedIndex].getAttribute('posId') ) return;
 	      var idm = parseInt(this.parentNode.srcNode.getAttribute('idm'));
-	      var posId = this.options[this.selectedIndex].posId;
+	      var posId = this.options[this.selectedIndex].getAttribute('posId');
 	      if( posId == 'go' )
 	        selectPage(selPath+'/'+(this.parentNode.srcNode.getAttribute('br_pref')+this.parentNode.lsId).replace(/%/g,'%25').replace(/\//g,'%2f'));
 	      else if( posId == 'add' || posId == 'ins' || posId == 'edit' )
@@ -737,8 +726,393 @@ function selectChildRecArea( node, aPath, cBlk )
       if( lab ) setNodeText(lab,t_s.getAttribute('dscr')+':');
       if( val )
       {
-        val.title = t_s.getAttribute('help');
-        val.src = '/'+MOD_ID+selPath+'/'+brPath+'?com=img&rnd='+Math.floor(Math.random()*1000);
+	val.title = t_s.getAttribute('help');
+	val.src = '/'+MOD_ID+selPath+'/'+brPath+'?com=img&rnd='+Math.floor(Math.random()*1000);
+      }
+    }
+    else if( t_s.nodeName.toLowerCase() == 'table' )
+    {
+      var brPath = (aPath+t_s.getAttribute('id')).replace(/%/g,'%25').replace(/\//g,'%2f');
+      var lab = null; var table = null;
+      if( cBlk )
+      {
+	var dBlk = document.createElement('div'); dBlk.className = 'elem';
+	lab = document.createElement('span'); lab.className = 'label';
+	dBlk.appendChild(lab);
+	dBlk.appendChild(document.createElement('div')); dBlk.childNodes[1].className = 'table';
+	table = document.createElement('table'); table.className = 'elem'; table.cellPadding = 2; table.cellSpacing = 0;
+	table.itPath = selPath+'/'+brPath;
+	table.onmouseover = function() { setStatus(this.itPath,10000); }
+	if( wr )
+	{
+	  table.srcNode = t_s;
+	  table.comSet = function(row,col,val)
+	  {
+	    var com = "<set col='"+this.srcNode.childNodes[col].getAttribute('id')+"' ";
+	    if( !this.srcNode.getAttribute('key') ) com += "row='"+row+"' ";
+	    else
+	    {
+	      var keys = this.srcNode.getAttribute('key').split(',');
+	      for( var i_off = 0; i_off < keys.length; i_off++ )
+		for( var i_el = 0; i_el < this.srcNode.childNodes.length; i_el++ )
+		  if( this.srcNode.childNodes[i_el].getAttribute('id') == keys[i_off] )
+		  { com += "key_"+keys[i_off]+"='"+nodeText(this.srcNode.childNodes[i_el].childNodes[row])+"' "; break; }
+	     }
+	     com += ">"+val+"</set>";
+
+	     var rez = servSet(this.itPath,'com=com',com,true);
+	     if( rez && parseInt(rez.getAttribute('rez')) != 0 ) alert(nodeText(rez));
+	     setTimeout('pageRefresh()',500);
+	  }
+	}
+	dBlk.childNodes[1].appendChild(table);
+	cBlk.appendChild(dBlk);
+
+	t_s.addr_lab = lab; t_s.addr_tbl = table;
+      }else { table = t_s.addr_tbl; lab = t_s.addr_lab; }
+      //>>> Fill table
+      if( lab ) setNodeText(lab,t_s.getAttribute('dscr')+':');
+      if( table )
+      {
+	table.title = t_s.getAttribute('help');
+
+	var dataReq = servGet(selPath+'/'+brPath,'com=get');
+	if( !dataReq ) continue;
+	else if( parseInt(dataReq.getAttribute('rez'))!=0 ) { alert(nodeText(dataReq)); continue; }
+	//>>>> Copy values to info tree
+	for( var i_cl = 0; i_cl < dataReq.childNodes.length; i_cl++ )
+	  for( var i_cli = 0; i_cli < t_s.childNodes.length; i_cli++ )
+	    if( dataReq.childNodes[i_cl].getAttribute('id') == t_s.childNodes[i_cli].getAttribute('id') )
+	    {
+	      while( t_s.childNodes[i_cli].lastChild ) t_s.childNodes[i_cli].removeChild(t_s.childNodes[i_cli].lastChild);
+	      for( var i_rw = 0; i_rw < dataReq.childNodes[i_cl].childNodes.length; i_rw++ )
+		if( !isKonq ) t_s.childNodes[i_cli].appendChild(dataReq.childNodes[i_cl].childNodes[i_rw].cloneNode(true));
+		else
+		{
+		  var el = t_s.ownerDocument.createElement(dataReq.childNodes[i_cl].childNodes[i_rw].nodeName);
+		  setNodeText(el,nodeText(dataReq.childNodes[i_cl].childNodes[i_rw]))
+		  t_s.childNodes[i_cli].appendChild(el);
+		}
+	    }
+	//>>>> Calc rows and columns
+	var n_col = t_s.childNodes.length;
+	var n_row = n_col ? t_s.childNodes[0].childNodes.length : 0;
+
+	//>>>> Update table structure
+	while( table.childNodes.length > (n_row+1) ) table.removeChild(table.lastChild);
+	while( table.childNodes.length < (n_row+1) ) table.appendChild(document.createElement('tr'));
+
+	for( var i_rw = 0; i_rw < table.childNodes.length; i_rw++ )
+	{
+	  while( table.childNodes[i_rw].childNodes.length > (n_col+1) ) table.childNodes[i_rw].removeChild(table.childNodes[i_rw].lastChild);
+	  while( table.childNodes[i_rw].childNodes.length < (n_col+1) )
+	  {
+	    var cCell = document.createElement(i_rw?'td':'th');
+	    if( !table.childNodes[i_rw].childNodes.length )
+	    {
+	      if( i_rw ) cCell.className = 'hd';
+	      if( wr && t_s.getAttribute('s_com') )
+	      {
+		cCell.style.cursor = 'pointer';
+		cCell.srcNode = t_s;
+		cCell.onclick = function( e )
+		{
+		  var rowP = parseInt(nodeText(this));
+		  if( !e ) e = window.event;
+		  var popUpMenu = getPopup();
+		  var optEl = '';
+		  if( this.srcNode.getAttribute('s_com').search('add') != -1 ) optEl += "<option posId='add'>Add row</option>";
+		  if( this.srcNode.getAttribute('s_com').search('ins') != -1 && rowP ) optEl += "<option posId='ins'>Insert row</option>";
+		  if( this.srcNode.getAttribute('s_com').search('del') != -1 && rowP ) optEl += "<option posId='del'>Delete row</option>";
+		  if( this.srcNode.getAttribute('s_com').search('move') != -1 && rowP )
+		    optEl += "<option disabled='true'>--------------</option><option posId='up'>Up row</option><option posId='down'>Down row</option>";
+		  popUpMenu.childNodes[0].innerHTML = optEl;
+
+		  if( popUpMenu.childNodes[0].childNodes.length )
+		  {
+		    popUpMenu.childNodes[0].srcNode = this.srcNode;
+		    popUpMenu.childNodes[0].itPath = this.parentNode.parentNode.itPath;
+		    popUpMenu.childNodes[0].rowP = rowP-1;
+		    popUpMenu.childNodes[0].size = Math.max(3,popUpMenu.childNodes[0].childNodes.length);
+		    popUpMenu.style.cssText = 'visibility: visible; left: '+(e.clientX+window.pageXOffset)+'px; top: '+(e.clientY+window.pageYOffset)+'px;';
+		    popUpMenu.childNodes[0].focus();
+		    popUpMenu.childNodes[0].selectedIndex = -1;
+		    popUpMenu.childNodes[0].onclick = function()
+		    {
+		      this.parentNode.style.cssText = 'visibility: hidden; left: -200px; top: -200px;';
+		      if( this.selectedIndex < 0 || !this.options[this.selectedIndex].getAttribute('posId') ) return;
+		      var posId = this.options[this.selectedIndex].getAttribute('posId');
+		      var com = '';
+		      if( posId == 'add' ) com = "<add/>";
+		      else if( posId == 'ins' ) com = "<ins row='"+this.rowP+"'/>";
+		      else if( posId == 'up' ) com = "<move row='"+this.rowP+"' to='"+(this.rowP-1)+"'/>";
+		      else if( posId == 'down' ) com = "<move row='"+this.rowP+"' to='"+(this.rowP+1)+"'/>";
+		      else if( posId == 'del' )
+		      {
+			var com = "<del ";
+			if( !this.srcNode.getAttribute('key') ) com += "row='"+this.rowP+"' ";
+			else
+			{
+			  var keys = this.srcNode.getAttribute('key').split(',');
+			  for( var i_off = 0; i_off < keys.length; i_off++ )
+			    for( var i_el = 0; i_el < this.srcNode.childNodes.length; i_el++ )
+			      if( this.srcNode.childNodes[i_el].getAttribute('id') == keys[i_off] )
+			      { com += "key_"+keys[i_off]+"='"+nodeText(this.srcNode.childNodes[i_el].childNodes[this.rowP])+"' "; break; }
+			}
+			com += "/>";
+		      }
+		      if( com.length )
+		      {
+			var rez = servSet(this.itPath,'com=com',com,true);
+			if( rez && parseInt(rez.getAttribute('rez')) != 0 ) alert(nodeText(rez));
+			setTimeout('pageRefresh()',200);
+		      }
+		      return false;
+		    }
+		  }
+		  return false;
+		}
+	      }
+	    }
+	    else if( i_rw && wr && parseInt(t_s.childNodes[table.childNodes[i_rw].childNodes.length-1].getAttribute('acs'))&SEQ_WR )
+	      cCell.ondblclick = function( )
+	      {
+		this.isEnter = true;
+		var cTbl = this.parentNode.parentNode;
+		var prcCol = cTbl.srcNode.childNodes[this.cCol];
+		var cval = nodeText(prcCol.childNodes[this.cRow]);
+
+		if( prcCol.getAttribute('tp') == 'bool' )
+		{
+		  this.innerHTML = "<input type='checkbox'/>";
+		  this.firstChild.checked = parseInt(cval);
+		  this.firstChild.onclick = function( )
+		  { this.parentNode.parentNode.parentNode.comSet(this.parentNode.cRow,this.parentNode.cCol,this.checked?'1':'0'); }
+		}
+		else if( prcCol.getAttribute('dest') == 'select' )
+		{
+		  this.innerHTML = "<select/>"
+		  this.firstChild.onchange = function( )
+		  {
+		    if( this.selectedIndex < 0 ) return;
+		    var selId = this.options[this.selectedIndex].getAttribute('vid');
+		    var selVal = nodeText(this.options[this.selectedIndex]);
+		    this.parentNode.parentNode.parentNode.comSet(this.parentNode.cRow,this.parentNode.cCol,selId?selId:selVal);
+		    return false;
+		  }
+		  var valWCfg = ''; var sel_ok = false;
+		  for( var i_el = 0; i_el < prcCol.val_ls.length; i_el++ )
+		  {
+		    valWCfg += "<option "+
+		      (prcCol.ind_ls.length ? ("vid='"+prcCol.ind_ls[i_el]+"' "+((prcCol.ind_ls[i_el]==cval)?"selected='true'":""))
+					    : ((prcCol.val_ls[i_el]==cval)?"selected='true'":""))+">"+prcCol.val_ls[i_el]+"</option>";
+		    if( (prcCol.ind_ls.length && prcCol.ind_ls[i_el] == cval) || (!prcCol.ind_ls.length && prcCol.val_ls[i_el] == cval) )
+		      sel_ok = true;
+		  }
+		  if( !sel_ok ) valWCfg += "<option selected='true'>"+cval+"</option>";
+		  this.firstChild.innerHTML = valWCfg;
+		}
+		else if( prcCol.getAttribute('tp') == 'time' )
+		{
+		  var dt = new Date(parseInt(cval)*1000);
+		  this.innerHTML = "<input size='2'/><input size='2'/><input size='4'/>&nbsp;<input size='2'/><input size='2'/><input size='2'/>";
+		  this.childNodes[0].onkeyup = this.childNodes[1].onkeyup = this.childNodes[2].onkeyup =
+		  this.childNodes[4].onkeyup = this.childNodes[5].onkeyup = this.childNodes[6].onkeyup = function(e)
+		  {
+		    if( !e ) e = window.event;
+		    if( this.parentNode.isEdited && e.keyCode == 13 ) { this.parentNode.childNodes[7].onclick(); return true; }
+		    if( this.parentNode.isEdited && e.keyCode == 27 )
+		    {
+		      var val_w = this.parentNode;
+		      for( var i_ch = 0; i_ch < val_w.childNodes.length; i_ch++ )
+			if( val_w.childNodes[i_ch].defaultValue )
+			  val_w.childNodes[i_ch].value = val_w.childNodes[i_ch].defaultValue;
+		      val_w.removeChild(this.parentNode.childNodes[7]);
+		      val_w.isEdited = false;
+		      return true;
+		    }
+		    if( this.parentNode.isEdited || this.value == this.defaultValue ) return true;
+		    var btOk = document.createElement('img'); btOk.src = '/'+MOD_ID+'/img_button_ok';
+		    btOk.onclick = function( )
+		    {
+		      var val_w = this.parentNode;
+		      var dt = new Date(0);
+		      dt.setDate(parseInt(val_w.childNodes[0].value)); dt.setMonth(parseInt(val_w.childNodes[1].value)-1); dt.setFullYear(parseInt(val_w.childNodes[2].value));
+		      dt.setHours(parseInt(val_w.childNodes[4].value)); dt.setMinutes(parseInt(val_w.childNodes[5].value)); dt.setSeconds(parseInt(val_w.childNodes[6].value));
+		      val_w.parentNode.parentNode.comSet(val_w.cRow,val_w.cCol,Math.floor(dt.getTime()/1000));
+		      val_w.removeChild(this);
+		      val_w.isEdited = false;
+		      return false;
+		    }
+		    this.parentNode.appendChild(btOk);
+		    this.parentNode.isEdited = true;
+		    return true;
+		  }
+		  this.childNodes[0].value = this.childNodes[0].defaultValue = dt.getDate();
+		  this.childNodes[1].value = this.childNodes[1].defaultValue = dt.getMonth()+1;
+		  this.childNodes[2].value = this.childNodes[2].defaultValue = dt.getFullYear();
+		  this.childNodes[4].value = this.childNodes[4].defaultValue = dt.getHours();
+		  this.childNodes[5].value = this.childNodes[5].defaultValue = dt.getMinutes();
+		  this.childNodes[6].value = this.childNodes[6].defaultValue = dt.getSeconds();
+		  this.isEdited = false;
+		}
+		else
+		{
+		  if( prcCol.getAttribute('tp') == 'hex' ) cval = '0x'+parseInt(cval).toString(16);
+		  else if( prcCol.getAttribute('tp') == 'oct' ) cval = '0'+parseInt(cval).toString(8);
+		  this.innerHTML = "<input/>";
+		  var tp = prcCol.getAttribute('tp');
+		  if( prcCol.getAttribute('dest') == 'sel_ed' )
+		  {
+		    this.childNodes[0].size = 20;
+		    var cmbImg = document.createElement('img'); cmbImg.src = '/'+MOD_ID+'/img_combar';
+		    cmbImg.onclick = function( )
+		    {
+		      if( !this.parentNode.val_ls || !this.parentNode.val_ls.length ) return false;
+		      var combMenu = getCombo();
+		      var optHTML = '';
+		      for( var i_l = 0; i_l < this.parentNode.val_ls.length; i_l++ )
+			optHTML += '<option>'+this.parentNode.val_ls[i_l]+'</option>';
+		      var edFld = this.parentNode.childNodes[0];
+		      combMenu.childNodes[0].edFld = edFld;
+		      combMenu.childNodes[0].innerHTML = optHTML;
+		      combMenu.childNodes[0].size = Math.max(3,this.parentNode.val_ls.length);
+		      combMenu.style.cssText = 'visibility: visible; left: '+posGetX(edFld,true)+'px; '+
+						'top: '+(posGetY(edFld,true)+edFld.offsetHeight)+'px; '+
+						'width: '+edFld.offsetWidth+'px';
+		      combMenu.childNodes[0].focus();
+		      combMenu.childNodes[0].onclick = function()
+		      {
+			this.parentNode.style.cssText = 'visibility: hidden; left: -200px; top: -200px;';
+			if( this.selectedIndex < 0 ) return;
+			this.edFld.value = nodeText(this.options[this.selectedIndex]);
+			this.edFld.parentNode.parentNode.parentNode.comSet(this.edFld.parentNode.cRow,this.edFld.parentNode.cCol,this.edFld.value);
+			return false;
+		      }
+		      return false;
+		    }
+		    tblCell.appendChild(cmbImg);
+		  }
+		  else if( tp == 'dec' )
+		  {
+		    this.className += ' number'; this.childNodes[0].size = 7;
+		    var spinImg = document.createElement('img'); spinImg.src = '/'+MOD_ID+'/img_spinar';
+		    spinImg.onclick = function(e)
+		    {
+		      if(!e) e = window.event;
+		      var val_w = this.parentNode.childNodes[0];
+		      val_w.value = parseInt(val_w.value)+(((e.clientY-posGetY(this))<10)?1:-1);
+		      val_w.onkeyup();
+		      return false;
+		    }
+		    val_w.appendChild(spinImg);
+		  }
+		  else if( tp == 'hex' || tp == 'oct' || tp == 'real' ) { this.className += ' number'; this.childNodes[0].size = 7; }
+		  else
+		  {
+		    this.childNodes[0].size = 30;
+		    this.childNodes[0].maxLength = prcCol.getAttribute('len');
+		    if( !this.childNodes[0].maxLength ) this.childNodes[0].maxLength = 1000;
+		  }
+		  this.prcCol = prcCol;
+		  this.childNodes[0].onkeyup = function(e)
+		  {
+		    if( !e ) e = window.event;
+		    if( this.parentNode.isEdited && e.keyCode == 13 ) { this.parentNode.lastChild.onclick(); return true; }
+		    if( this.parentNode.isEdited && e.keyCode == 27 )
+		    {
+		      this.value = this.defaultValue;
+		      this.parentNode.isEdited = false;
+		      this.parentNode.removeChild(this.parentNode.lastChild);
+		      return true;
+		    }
+		    if( this.parentNode.isEdited || this.value == this.defaultValue ) return true;
+		    var btOk = document.createElement('img'); btOk.src = '/'+MOD_ID+'/img_button_ok';
+		    btOk.onclick = function( )
+		    {
+		      var curVal = this.parentNode.childNodes[0].value;
+		      if( this.parentNode.prcCol.getAttribute('tp') == 'hex' ) curVal = parseInt(curVal,16);
+		      else if( this.parentNode.prcCol.getAttribute('tp') == 'oct' ) curVal = parseInt(curVal,8);
+		      this.parentNode.parentNode.parentNode.comSet(this.parentNode.cRow,this.parentNode.cCol,curVal);
+		      this.parentNode.isEdited = false;
+		      this.parentNode.removeChild(this);
+		      return false;
+		    }
+		    this.parentNode.appendChild(btOk);
+		    this.parentNode.isEdited = true;
+		    return true;
+		  }
+		  this.firstChild.value = cval;
+		  this.isEdited = false;
+		}
+	      }
+	    table.childNodes[i_rw].appendChild(cCell);
+	  }
+	  if( table.childNodes[i_rw].childNodes.length ) setNodeText(table.childNodes[i_rw].childNodes[0],i_rw?i_rw:'#');
+	}
+	//>>>> Set elements
+	for( var i_col = 0; i_col < t_s.childNodes.length; i_col++ )
+	{
+	  var prcCol = t_s.childNodes[i_col];
+	  setNodeText(table.childNodes[0].childNodes[i_col+1],prcCol.getAttribute('dscr'));
+
+	  //>>>> Load selected list
+	  if( prcCol.getAttribute('dest') == 'select' || prcCol.getAttribute('dest') == 'sel_ed' )
+	  {
+	    prcCol.ind_ls = new Array();
+	    prcCol.val_ls = new Array();
+	    if( !prcCol.getAttribute('select') )
+	    {
+	      if( prcCol.getAttribute('sel_id') ) prcCol.ind_ls = prcCol.getAttribute('sel_id').split(';');
+	      prcCol.val_ls = prcCol.getAttribute('sel_list').split(';');
+	    }
+	    else
+	    {
+	      var x_lst = servGet(selPath+'/'+(prcCol.getAttribute('select').replace(/%/g,'%25').replace(/\//g,'%2f')),'com=get');
+	      if( x_lst )
+	        for( var i_el = 0; i_el < x_lst.childNodes.length; i_el++ )
+	        {
+	          if( x_lst.childNodes[i_el].nodeName.toLowerCase() != 'el' ) continue;
+	          if( x_lst.childNodes[i_el].getAttribute('id') ) prcCol.ind_ls.push(x_lst.childNodes[i_el].getAttribute('id'));
+	          prcCol.val_ls.push(nodeText(x_lst.childNodes[i_el]));
+	        }
+	    }
+	  }
+
+	  for( var i_row = 0; i_row < prcCol.childNodes.length; i_row++ )
+	  {
+	    var tblCell = table.childNodes[i_row+1].childNodes[i_col+1];
+	    var cval = nodeText(prcCol.childNodes[i_row]);
+	    tblCell.isEdited = false; tblCell.cRow = i_row; tblCell.cCol = i_col;
+	    if( tblCell.isEnter ) while( tblCell.childNodes.length ) tblCell.removeChild(tblCell.lastChild);
+	    tblCell.isEnter = false;
+	    if( prcCol.getAttribute('tp') == 'bool' )
+	    {
+	      setNodeText(tblCell,parseInt(cval)?'On':'Off');
+	      tblCell.style.fontWeight = parseInt(cval)?'bold':'normal';
+	      tblCell.style.textAlign = 'center';
+	    }
+	    else if( prcCol.getAttribute('dest') == 'select' )
+	    {
+	      setNodeText(tblCell,cval);
+	      for( var i_el = 0; i_el < prcCol.val_ls.length; i_el++ )
+		if( (prcCol.ind_ls.length && prcCol.ind_ls[i_el] == cval) || (!prcCol.ind_ls.length && prcCol.val_ls[i_el] == cval) )
+		  setNodeText(tblCell,prcCol.val_ls[i_el]);
+	    }
+	    else if( prcCol.getAttribute('tp') == 'time' )
+	    {
+	      var dt = new Date(parseInt(cval)*1000);
+	      setNodeText(tblCell,dt.getDate()+'.'+(dt.getMonth()+1)+'.'+dt.getFullYear()+' '+dt.getHours()+':'+dt.getMinutes()+':'+dt.getSeconds());
+	    }
+	    else
+	    {
+	      if( prcCol.getAttribute('tp') == 'hex' ) cval = '0x'+parseInt(cval).toString(16);
+	      else if( prcCol.getAttribute('tp') == 'oct' ) cval = '0'+parseInt(cval).toString(8);
+	      setNodeText(tblCell,cval);
+	    }
+	  }
+	}
+	table.parentNode.style.height = Math.min(300,Math.max(100,table.clientHeight))+'px';
       }
     }
     //>> View standart fields
@@ -749,12 +1123,12 @@ function selectChildRecArea( node, aPath, cBlk )
       var dBlk = null; var button = null;
       if( cBlk )
       {
-        if( t_s.childNodes.length )
-        {
-          dBlk = document.createElement('fieldset');
-          dBlk.appendChild(document.createElement('legend'));
-          dBlk.childNodes[0].appendChild(document.createTextNode(t_s.getAttribute('dscr')));
-        }else dBlk = document.createElement('div');
+	if( t_s.childNodes.length )
+	{
+	  dBlk = document.createElement('fieldset');
+	  dBlk.appendChild(document.createElement('legend'));
+	  dBlk.childNodes[0].appendChild(document.createTextNode(t_s.getAttribute('dscr')));
+	}else dBlk = document.createElement('div');
 	dBlk.className = 'elem';
 	button = document.createElement('input'); button.type = 'button';
 	button.srcNode = t_s;
@@ -790,8 +1164,8 @@ function selectChildRecArea( node, aPath, cBlk )
 
       //>>> Update or create parameters
       for( var f_com = 0; f_com < t_s.childNodes.length; f_com++ )
-        if( t_s.childNodes[f_com].nodeName.toLowerCase() == 'fld' )
-          basicFields(t_s.childNodes[f_com],aPath+t_s.getAttribute('id')+'/',dBlk,true,true);
+	if( t_s.childNodes[f_com].nodeName.toLowerCase() == 'fld' )
+	  basicFields(t_s.childNodes[f_com],aPath+t_s.getAttribute('id')+'/',dBlk,true,true);
 
       //>>> Fill command
       button.value = t_s.getAttribute('dscr');
@@ -1061,8 +1435,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 	  val_w.itPath = selPath+'/'+brPath;
 	  val_w.srcNode = t_s;
 	  val_w.itComm = comm;
-	  val_w.innerHTML = "<input type='text' size='2'/><input type='text' size='2'/><input type='text' size='4'/>&nbsp;"+
-		"<input type='text' size='2'/><input type='text' size='2'/><input type='text' size='2'/>"
+	  val_w.innerHTML = "<input size='2'/><input size='2'/><input size='4'/>&nbsp;<input size='2'/><input size='2'/><input size='2'/>";
 	  val_w.childNodes[0].onkeyup = val_w.childNodes[1].onkeyup = val_w.childNodes[2].onkeyup =
 		val_w.childNodes[4].onkeyup = val_w.childNodes[5].onkeyup = val_w.childNodes[6].onkeyup = function(e)
 	  {
@@ -1286,8 +1659,8 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
       else { lab = t_s.addr_lab; val_r = t_s.addr_val_r; val_w = t_s.addr_val_w; }
       //>> Fill line
       var sval = nodeText(dataReq);
-      if( t_s.getAttribute('tp') == 'hex' ) sval = '0x'+parseInt(nodeText(dataReq)).toString(16);
-      else if( t_s.getAttribute('tp') == 'oct' ) sval = '0'+parseInt(nodeText(dataReq)).toString(8);
+      if( t_s.getAttribute('tp') == 'hex' ) sval = '0x'+parseInt(sval).toString(16);
+      else if( t_s.getAttribute('tp') == 'oct' ) sval = '0'+parseInt(sval).toString(8);
 
       if( lab ) setNodeText(lab,t_s.getAttribute('dscr')+':');
       if( val_r )
@@ -1341,10 +1714,11 @@ function chkStruct( w_nd, n_nd )
   {
     var i_n;
     for( i_n = 0; i_n < n_nd.childNodes.length; i_n++ )
-      if( w_nd.childNodes[i_w].nodeName.toLowerCase() == n_nd.childNodes[i_n].nodeName.toLowerCase() && 
+      if( w_nd.childNodes[i_w].nodeName.toLowerCase() == n_nd.childNodes[i_n].nodeName.toLowerCase() &&
 	    w_nd.childNodes[i_w].getAttribute('id') == n_nd.childNodes[i_n].getAttribute('id') )
 	break;
-    if( i_n >= n_nd.childNodes.length ) return true;
+    if( i_n >= n_nd.childNodes.length && w_nd.nodeName.toLowerCase() != 'table' && w_nd.nodeName.toLowerCase() != 'list' )
+	return true;
   }
 
   //> Scan for new nodes and check present nodes
@@ -1405,8 +1779,8 @@ function hostsUpdate( )
     {
       var i_h;
       for( i_h = 0; i_h < hostN.childNodes.length; i_h++ )
-        if( treeRoot.childNodes[i_top].getAttribute('id') == ('/'+hostN.childNodes[i_h].getAttribute('id')) )
-          break;
+	if( treeRoot.childNodes[i_top].getAttribute('id') == ('/'+hostN.childNodes[i_h].getAttribute('id')) )
+	  break;
       if( i_h >= hostN.childNodes.length ) { treeRoot.removeChild(treeRoot.childNodes[i_top]); i_top--; }
     }
     //> Add/update hosts
@@ -1417,8 +1791,8 @@ function hostsUpdate( )
       if( !emptyTree )
         for( var i_top = 0; i_top < treeRoot.childNodes.length; i_top++ )
         {
-          if( treeRoot.childNodes[i_top].getAttribute('id') == ('/'+hostN.childNodes[i].getAttribute('id')) )
-          { liN = treeRoot.childNodes[i_top]; break; }
+	  if( treeRoot.childNodes[i_top].getAttribute('id') == ('/'+hostN.childNodes[i].getAttribute('id')) )
+	  { liN = treeRoot.childNodes[i_top]; break; }
         }
       if( !liN ) { liN = document.createElement('li'); treeRoot.appendChild(liN); liN.isExpand = false; }
       liN.setAttribute('id','/'+hostN.childNodes[i].getAttribute('id'));
