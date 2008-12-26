@@ -80,10 +80,8 @@ class TWEB: public TUI
 	~TWEB( );
 
 	int authTime( )				{ return mTAuth; }
-	string CSStables( )			{ return mCSStables; }
 
 	void setAuthTime( int vl )		{ mTAuth = vl; modif(); }
-	void setCSStables( const string &vl )	{ mCSStables = vl; modif(); }
 
 	void modStart( );
 	void modStop( );
@@ -105,21 +103,22 @@ class TWEB: public TUI
 	string getCookie( string name, vector<string> &vars );
 
 	void HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &contain );
-	//- Post message dialog -
+	//> Post message dialog
 	void messPost( string &page, const string &cat, const string &mess, MessLev type = Info );
-	//- Sesion manipulation function -
+	//> Sesion manipulation function
 	int sesOpen( string name );
 	void sesCheck( SSess &ses );
 
-	//- Get form content for name -
+	//> Get form content for name
 	string cntGet( SSess &ses, const string &nm );
 
-	//- Controll system requests -
+	//> Controll system requests
 	int cntrIfCmd( XMLNode &node, const string &user );
 
 	string optDescr( );
 	string modInfo( const string &name );
 	void   modInfo( vector<string> &list );
+	string trMessReplace( const string &tsrc );
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
@@ -128,7 +127,6 @@ class TWEB: public TUI
 	map<int,SAuth>	mAuth;
 	int		mTAuth;			//Time of sesion life (minutes)
 	time_t		lst_ses_chk;		//Last time of sessions check
-	string		mCSStables;		//CSS tables
 };
 
 extern TWEB *mod;

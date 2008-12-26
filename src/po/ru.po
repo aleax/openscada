@@ -60,7 +60,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-24 16:34+0200\n"
+"POT-Creation-Date: 2008-12-26 17:02+0200\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -102,7 +102,7 @@ msgid "%s"
 msgstr ""
 
 #: main.cpp:69
-c-format
+#, c-format
 msgid "OpenSCADA system is correctly exited.\n"
 msgstr "Система OpenSCADA корректно остановлена.\n"
 
@@ -1418,15 +1418,15 @@ msgstr "Помощь по опциям"
 
 #: tarchives.cpp:765 tarchives.cpp:1069 tarchval.cpp:1675 tarchval.cpp:2305
 #: tbds.cpp:463 tbds.cpp:664 tdaqs.cpp:324 telem.cpp:502 tfunction.cpp:195
-#: tmodschedul.cpp:466 tprmtmpl.cpp:248 tprmtmpl.cpp:264 tprmtmpl.cpp:547
-#: tprotocols.cpp:79 tsecurity.cpp:267 tspecials.cpp:74 tsys.cpp:948
-#: ttransports.cpp:405 ttransports.cpp:641 ttransports.cpp:795 tuis.cpp:136
+#: tmodschedul.cpp:466 tprmtmpl.cpp:248 tprmtmpl.cpp:547 tprotocols.cpp:79
+#: tsecurity.cpp:267 tspecials.cpp:74 tsys.cpp:948 ttransports.cpp:405
+#: ttransports.cpp:641 ttransports.cpp:795 tuis.cpp:136
 msgid "cols"
 msgstr ""
 
 #: tarchives.cpp:765 tbds.cpp:463 tdaqs.cpp:324 tmodschedul.cpp:466
-#: tprmtmpl.cpp:264 tprotocols.cpp:79 tsecurity.cpp:267 tspecials.cpp:74
-#: tsys.cpp:948 ttransports.cpp:405 tuis.cpp:136
+#: tprotocols.cpp:79 tsecurity.cpp:267 tspecials.cpp:74 tsys.cpp:948
+#: ttransports.cpp:405 tuis.cpp:136
 msgid "90"
 msgstr ""
 
@@ -1441,8 +1441,8 @@ msgstr ""
 
 #: tarchives.cpp:765 tarchives.cpp:1147 tarchives.cpp:1165 tbds.cpp:463
 #: tdaqs.cpp:324 tfunction.cpp:296 tfunction.cpp:316 tmodschedul.cpp:466
-#: tprotocols.cpp:79 tsecurity.cpp:267 tspecials.cpp:74 tsys.cpp:948
-#: ttransports.cpp:405 tuis.cpp:136
+#: tprmtmpl.cpp:264 tprotocols.cpp:79 tsecurity.cpp:267 tspecials.cpp:74
+#: tsys.cpp:948 ttransports.cpp:405 tuis.cpp:136
 msgid "10"
 msgstr ""
 
@@ -2610,12 +2610,12 @@ msgid "Node already in process!"
 msgstr "Узел уже обрабатывается!"
 
 #: tcntrnode.cpp:186
-c-format
+#, c-format
 msgid "Waiting for freeing by %d users!"
 msgstr "Ожидание освобождения %d пользователями!"
 
 #: tcntrnode.cpp:192
-c-format
+#, c-format
 msgid "Timeouted of wait. Object is used by %d users. Free object first!"
 msgstr ""
 "Превышено время ожидания. Объект использован %d пользователями. Сначала "
@@ -2707,7 +2707,7 @@ msgid "Saving node error."
 msgstr "Ошибка сохранения узла."
 
 #: tcntrnode.cpp:642
-#,  c-format
+#, c-format
 msgid "Some tags on path <%s> are missed!"
 msgstr "Некоторые теги в пути <%s> ошибочны!"
 
@@ -3866,10 +3866,6 @@ msgstr ""
 #: tprmtmpl.cpp:264 tsys.cpp:916
 msgid "Programm"
 msgstr "Программа"
-
-#: tprmtmpl.cpp:264
-msgid "8"
-msgstr ""
 
 #: tprmtmpl.cpp:311 tprmtmpl.cpp:312
 msgid "new"
@@ -5568,6 +5564,3 @@ msgstr "Прямой доступ на запись значений недоп�
 #: tvalue.h:153
 msgid "Direct access to read value no admit."
 msgstr "Прямой доступ на чтение недопустим."
-
-#~ msgid "Tables contained into DB, no opened tables."
-#~ msgstr "Таблицы содержащиеся в БД, не открытые на данный момент таблицы."

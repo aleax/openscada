@@ -1,15 +1,17 @@
-2008-12-26 Maxim
-- :/SYS: Some fixes to English variant of translation is done.
-
-
 2008-12-26 Roman
 - !:/DB/SQLite,/DB/MySQL,/DB/FireBird,/DB/DBF,/DAQ/BlockCalc: Translation to German is added by Aleksey and Irina Popkov.
 - FIX:/SYS: RPM build spec file is fixed for *.la including.
 - !!:/UI/WebCfgD: The table's fields support is released.
 - FIX:/UI/WebCfgD: Some fixes made.
+- !:/UI/WebCfgD: HTML and CSS code of work page is moved to separated file (WebCfgDVCA.html)
+- !:/UI/WebCfgD: Full translation to Russian and Ukrainian is done.
+- !:/UI/WebCfgD: Documentation is done and included to source tree.
+- !!!!:/UI/WebCfgD: Version 0.5.0 is released.
+- FIX:/SYS: Fix some fixes to English variant of translation is done. :)
 
 
 2008-12-26 Maxim
+- !:/SYS: Some fixes to English variant of translation is done.
 - FIX:/UI/Vision: Widths scaling for the primitive ElFigure for runtime mode is fixed.
 
 

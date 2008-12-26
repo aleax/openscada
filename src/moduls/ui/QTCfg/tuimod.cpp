@@ -260,8 +260,8 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/prm/cfg/host_lnk" && ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )
     {
-        SYS->transport().at().setSysHost(false);
-        opt->setText("/Transport");
+	SYS->transport().at().setSysHost(false);
+	opt->setText("/Transport");
     }
     else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )   opt->setText(optDescr());
     else if( a_path == "/prm/cfg/u_lst" && ctrChkNode(opt) )

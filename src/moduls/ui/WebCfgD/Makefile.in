@@ -46,7 +46,8 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(oscd_moduldir)"
 oscd_modulPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(oscd_modul_PROGRAMS)
-am_ui_WebCfgD_so_OBJECTS = web_cfg.$(OBJEXT) VCAjs.$(OBJEXT)
+am_ui_WebCfgD_so_OBJECTS = web_cfg.$(OBJEXT) VCAjs.$(OBJEXT) \
+	VCAhtml.$(OBJEXT)
 ui_WebCfgD_so_OBJECTS = $(am_ui_WebCfgD_so_OBJECTS)
 ui_WebCfgD_so_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
@@ -205,7 +206,7 @@ top_srcdir = @top_srcdir@
 EXTRA_DIST = WebCfgDVCA.js *.h po/* doc/*
 AM_CXXFLAGS = -I$(top_srcdir)/src -fPIC -DPIC
 AM_LDFLAGS = -shared -module
-ui_WebCfgD_so_SOURCES = web_cfg.cpp VCAjs.cpp
+ui_WebCfgD_so_SOURCES = web_cfg.cpp VCAjs.cpp VCAhtml.cpp
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)UI.WebCfgD
@@ -223,9 +224,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/moduls/ui/WebCfgD/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/moduls/ui/WebCfgD/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  src/moduls/ui/WebCfgD/Makefile
+	  $(AUTOMAKE) --gnu  src/moduls/ui/WebCfgD/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -281,6 +282,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/VCAhtml.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/VCAjs.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/web_cfg.Po@am__quote@
 
@@ -504,6 +506,17 @@ VCAjs.cpp: WebCfgDVCA.js
 	  let il=il+1 ; \
 	done
 
+VCAhtml.cpp: WebCfgDVCA.html
+	@lc=`cat $< | wc -l` ; \
+	il=1 ; \
+	echo "char *`echo "$<" | sed 's/\./_/g'`=" > $@ ; \
+	while [ $$il -le $$lc ] ; do \
+	  l="   \"`cat $< | sed -n $${il}p | sed 's/\\\\/\\\\\\\\/g' | sed 's/"/\\\\"/g'`\\n\""; \
+	  if [ $$il -eq $$lc ]; then l="$$l;"; fi; \
+	  echo "$$l" >> $@ ; \
+	  let il=il+1 ; \
+	done
+
 messages:
 	@catalogs=`find ./po -name \*.po` ; \
 	name=po/$(m_name).pot ; \
@@ -521,8 +534,8 @@ install-data-local:
 	cp $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
 	rm $$name ; \
 	done
-#	install -m 755 -d $(doc_name)
-#	install -m 644 doc/*.pdf $(doc_name)
+	install -m 755 -d $(doc_name)
+	install -m 644 doc/*.pdf $(doc_name)
 
 uninstall-local:
 	@catalogs=`find ./po -name \*.po` ; \
@@ -532,7 +545,7 @@ uninstall-local:
 	done
 
 clean-local:
-	rm -f VCAjs.cpp po/$(m_name).pot po/*~
+	rm -f VCAhtml.cpp VCAjs.cpp po/$(m_name).pot po/*~
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

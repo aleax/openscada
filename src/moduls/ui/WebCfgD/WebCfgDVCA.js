@@ -174,7 +174,7 @@ function servSet( adr, prm, body, waitRez )
  ***************************************************/
 function setStatus( mess, tm )
 {
-  setNodeText(document.getElementById('status'),mess?mess:'Ready');
+  setNodeText(document.getElementById('status'),mess?mess:'###Ready###');
   if( !mess ) return;
   if( stTmID ) clearTimeout(stTmID);
   if( !tm || tm > 0 ) stTmID = setTimeout('setStatus(null)',tm?tm:1000);
@@ -189,8 +189,6 @@ function expand( el, val, upTree )
     for( var i = 0; i < el.childNodes.length; i++ )
       if( el.childNodes[i].nodeName == 'UL' )
       { el.removeChild(el.childNodes[i]); break; }
-//    var treeRoot = document.getElementById('treeRoot');
-//    if( treeRoot.scrollHeight <= treeRoot.offsetHeight ) treeRoot.childNodes[0].scrollIntoView();
   }
   else
   {
@@ -539,15 +537,15 @@ function selectChildRecArea( node, aPath, cBlk )
 	  var popUpMenu = getPopup();
 	  var optEl = '';
 	  if( this.srcNode.getAttribute('tp') == 'br' && this.selectedIndex >= 0 )
-	    optEl += "<option posId='go'>Go</option><option disabled='true'>------------</option>";
+	    optEl += "<option posId='go'>###Go###</option><option disabled='true'>------------</option>";
 	  if( (parseInt(this.srcNode.getAttribute('acs'))&SEQ_WR) && this.srcNode.getAttribute('s_com') )
 	  {
-	    if( this.srcNode.getAttribute('s_com').search('add') != -1 ) optEl += "<option posId='add'>Add</option>";
-	    if( this.srcNode.getAttribute('s_com').search('ins') != -1 && this.selectedIndex >= 0 ) optEl += "<option posId='ins'>Insert</option>";
-	    if( this.srcNode.getAttribute('s_com').search('edit') != -1 && this.selectedIndex >= 0 ) optEl += "<option posId='edit'>Edit</option>";
-	    if( this.srcNode.getAttribute('s_com').search('del') != -1 && this.selectedIndex >= 0 ) optEl += "<option posId='del'>Delete</option>";
+	    if( this.srcNode.getAttribute('s_com').search('add') != -1 ) optEl += "<option posId='add'>###Add###</option>";
+	    if( this.srcNode.getAttribute('s_com').search('ins') != -1 && this.selectedIndex >= 0 ) optEl += "<option posId='ins'>###Insert###</option>";
+	    if( this.srcNode.getAttribute('s_com').search('edit') != -1 && this.selectedIndex >= 0 ) optEl += "<option posId='edit'>###Edit###</option>";
+	    if( this.srcNode.getAttribute('s_com').search('del') != -1 && this.selectedIndex >= 0 ) optEl += "<option posId='del'>###Delete###</option>";
 	    if( this.srcNode.getAttribute('s_com').search('move') != -1 && this.selectedIndex >= 0 )
-	      optEl += "<option disabled='true'>------------</option><option posId='up'>Up</option><option posId='down'>Down</option>";
+	      optEl += "<option disabled='true'>------------</option><option posId='up'>###Item up###</option><option posId='down'>###Item down###</option>";
 	  }
 	  popUpMenu.childNodes[0].innerHTML = optEl;
 	  if( popUpMenu.childNodes[0].childNodes.length )
@@ -588,7 +586,7 @@ function selectChildRecArea( node, aPath, cBlk )
 		actOkFld.lsText = this.parentNode.lsText;
 		if( posId == 'add' )
 		{
-		  setNodeText(dlgWin.document.getElementById('title').childNodes[1],'Add new element.');
+		  setNodeText(dlgWin.document.getElementById('title').childNodes[1],'###Add new element.###');
 		  actOkFld.onclick = function()
 		  {
 		    var idm = dlgWin.document.getElementById('name').style.display!='none';
@@ -603,7 +601,7 @@ function selectChildRecArea( node, aPath, cBlk )
 		}
 		else if( posId == 'ins' )
 		{
-		  setNodeText(dlgWin.document.getElementById('title').childNodes[1],'Insert new element.');
+		  setNodeText(dlgWin.document.getElementById('title').childNodes[1],'###Insert new element.###');
 		  actOkFld.onclick = function()
 		  {
 		    var idm = dlgWin.document.getElementById('name').style.display!='none';
@@ -619,7 +617,7 @@ function selectChildRecArea( node, aPath, cBlk )
 		}
 		else if( posId == 'edit' )
 		{
-		  setNodeText(dlgWin.document.getElementById('title').childNodes[1],'Rename element.');
+		  setNodeText(dlgWin.document.getElementById('title').childNodes[1],'###Rename element.###');
 		  dlgWin.document.getElementById('id').childNodes[1].childNodes[0].value = idm ? this.parentNode.lsId : this.parentNode.lsText;
 		  if( idm ) dlgWin.document.getElementById('name').childNodes[1].childNodes[0].value = this.parentNode.lsText;
 		  actOkFld.onclick = function()
@@ -704,7 +702,7 @@ function selectChildRecArea( node, aPath, cBlk )
 	  val.style.cursor = 'pointer';
 	  val.onclick = function( )
 	  {
-	    dlgWin = ReqIdNameDlg('/'+MOD_ID+'/img_save','Select image file for download to picture field.','/'+MOD_ID+this.itPath+'?com=img');
+	    dlgWin = ReqIdNameDlg('/'+MOD_ID+'/img_save','###Select image file for download to picture field.###','/'+MOD_ID+this.itPath+'?com=img');
 	    dlgWin.document.getElementById('type').style.display = 'none';
 	    dlgWin.document.getElementById('id').style.display = 'none';
 	    var nmFld = dlgWin.document.getElementById('name');
@@ -821,11 +819,11 @@ function selectChildRecArea( node, aPath, cBlk )
 		  if( !e ) e = window.event;
 		  var popUpMenu = getPopup();
 		  var optEl = '';
-		  if( this.srcNode.getAttribute('s_com').search('add') != -1 ) optEl += "<option posId='add'>Add row</option>";
-		  if( this.srcNode.getAttribute('s_com').search('ins') != -1 && rowP ) optEl += "<option posId='ins'>Insert row</option>";
-		  if( this.srcNode.getAttribute('s_com').search('del') != -1 && rowP ) optEl += "<option posId='del'>Delete row</option>";
+		  if( this.srcNode.getAttribute('s_com').search('add') != -1 ) optEl += "<option posId='add'>###Add row###</option>";
+		  if( this.srcNode.getAttribute('s_com').search('ins') != -1 && rowP ) optEl += "<option posId='ins'>###Insert row###</option>";
+		  if( this.srcNode.getAttribute('s_com').search('del') != -1 && rowP ) optEl += "<option posId='del'>###Delete row###</option>";
 		  if( this.srcNode.getAttribute('s_com').search('move') != -1 && rowP )
-		    optEl += "<option disabled='true'>--------------</option><option posId='up'>Up row</option><option posId='down'>Down row</option>";
+		    optEl += "<option disabled='true'>--------------</option><option posId='up'>###Up row###</option><option posId='down'>###Down row###</option>";
 		  popUpMenu.childNodes[0].innerHTML = optEl;
 
 		  if( popUpMenu.childNodes[0].childNodes.length )
@@ -1949,9 +1947,9 @@ function itAdd( )
 		     "' gid='"+branchS.childNodes[i_b].getAttribute('id')+
 		     "' idm='"+(parseInt(branchS.childNodes[i_b].getAttribute('idm'))?"1":"0")+"'>"+
 		branchS.childNodes[i_b].getAttribute('dscr')+"</option>";
-  if( !typeCfg.length ) { alert('No one editable container present.'); return; }
+  if( !typeCfg.length ) { alert('###No one editable container present.###'); return; }
 
-  dlgWin = ReqIdNameDlg(document.getElementById('actAddIt').childNodes[0].src,'Add item to node:'+selPath);
+  dlgWin = ReqIdNameDlg(document.getElementById('actAddIt').childNodes[0].src,("###Add item to node '%1'.###").replace('%1',selPath));
   dlgWin.document.getElementById('type').style.display = '';
   dlgWin.document.getElementById('type').childNodes[1].childNodes[0].innerHTML = typeCfg;
   dlgWin.document.getElementById('type').childNodes[1].childNodes[0].onchange = function( )
@@ -1978,7 +1976,7 @@ function itAdd( )
     for( var i_lel = 0; i_lel < req.childNodes.length; i_lel++ )
       if( (req.childNodes[i_lel].getAttribute('id') && req.childNodes[i_lel].getAttribute('id') == inpId) ||
 	(!req.childNodes[i_lel].getAttribute('id') && nodeText(req.childNodes[i_lel]) == inpId) )
-      { alert("Node '"+inpId+"' already present."); dlgWin.close( ); return; }
+      { alert(("###Item '%1' already present.###").replace('%1',inpId)); dlgWin.close( ); return; }
 
     //> Send command
     var rez = servSet(selPath+'/%2fbr%2f'+gbrId,'com=com',"<add "+(idm?("id='"+inpId+"'"):"")+">"+inpName+"</add>",true);
@@ -1996,7 +1994,7 @@ function itDel( iit )
   var rmit = iit ? iit : selPath;
   if( !rmit || !rmit.length ) return;
 
-  if( !iit && !confirm("You sure for delete node '"+rmit+"'?") ) return;
+  if( !iit && !confirm(("###You sure for delete node '%1'?###").replace('%1',rmit)) ) return;
 
   var t_el, sel_own = '', sel_el;
   var n_obj = 0;
@@ -2056,9 +2054,9 @@ function itPaste( )
   for( pathLev.off = 0; (t_el=pathLev(copyBuf.substr(1),0,true)).length; n_sel++ )
   { if(n_sel) s_elp += ('/'+s_el); s_el = t_el; }
 
-  if( pathLev(copyBuf.substr(1),0) != pathLev(selPath,0) ) { alert('Copy is imposible.'); return; }
+  if( pathLev(copyBuf.substr(1),0) != pathLev(selPath,0) ) { alert('###Copy is imposible.###'); return; }
 
-  if( parseInt(root.getAttribute('acs'))&SEQ_WR ) { typeCfg+="<option idSz='-1' gid=''>Selected</option>"; itCnt++; }
+  if( parseInt(root.getAttribute('acs'))&SEQ_WR ) { typeCfg+="<option idSz='-1' gid=''>###Selected###</option>"; itCnt++; }
   for( var i_ch = 0; i_ch < root.childNodes.length; i_ch++ )
     if( root.childNodes[i_ch].nodeName.toLowerCase() == 'branches' && root.childNodes[i_ch].getAttribute('id') == 'br' )
       branchS =  root.childNodes[i_ch];
@@ -2073,8 +2071,9 @@ function itPaste( )
 
   //> Make request dialog
   dlgWin = ReqIdNameDlg('/'+MOD_ID+'/img_it_add');
-  if( copyBuf.charAt(0) == '1' ) setNodeText(dlgWin.document.getElementById('title').childNodes[1],"Move node '"+copyBuf.substr(1)+" to '"+selPath+"'.");
-  else setNodeText(dlgWin.document.getElementById('title').childNodes[1],"Copy node '"+copyBuf.substr(1)+" to '"+selPath+"'.");
+  if( copyBuf.charAt(0) == '1' )
+    setNodeText(dlgWin.document.getElementById('title').childNodes[1],("###Move node '%1' to '%2'.###").replace('%1',copyBuf.substr(1)).replace('%2',selPath));
+  else setNodeText(dlgWin.document.getElementById('title').childNodes[1],("###Copy node '%1' to '%2'.###").replace('%1',copyBuf.substr(1)).replace('%2',selPath));
   if( b_grp.length ) dlgWin.document.getElementById('id').childNodes[1].childNodes[0].value = s_el.substr(b_grp.length);
   dlgWin.document.getElementById('name').style.display = 'none';
   dlgWin.document.getElementById('type').style.display = '';
@@ -2115,7 +2114,7 @@ function itPaste( )
 	if( (req.childNodes[i_lel].getAttribute('id') && req.childNodes[i_lel].getAttribute('id') == inpId) ||
 	    (!req.childNodes[i_lel].getAttribute('id') && nodeText(req.childNodes[i_lel]) == inpId) )
 	{
-	  if( confirm("Node '"+dstNm+"' already present. Continue?") ) break;
+	  if( confirm(("###Node '%1' already present. Continue?###").replace('%1',dstNm)) ) break;
 	  dlgWin.close( ); return;
 	}
     }
@@ -2134,7 +2133,7 @@ function itPaste( )
  **********************************************************/
 function ReqIdNameDlg( ico, mess, actPath )
 {
-  var dlgWin = window.open('','ReqIdNameDlg','width=300,height=180,directories=no,menubar=no,toolbar=no,scrollbars=yes,dependent=yes,location=no,status=no,alwaysRaised=yes');
+  var dlgWin = window.open('','ReqIdNameDlg','width=400,height=200,directories=no,menubar=no,toolbar=no,scrollbars=yes,dependent=yes,location=no,status=no,alwaysRaised=yes');
 
   dlgWin.document.open();
   dlgWin.document.write(
@@ -2149,11 +2148,11 @@ function ReqIdNameDlg( ico, mess, actPath )
     "<form id='formBlk' action='"+actPath+"' method='post' enctype='multipart/form-data'>\n"+
     "<table border='0' cellspacing='3px' class='dlg'>\n"+
     "<tr><td id='title' colspan='2'><img src='' style='height: 32px; float: left;'/><span/></td></tr>\n"+
-    "<tr id='type'><td>Element type:</td><td><select name='type'/></td></tr>\n"+
-    "<tr id='id'><td>ID:</td><td><input type='text' name='id'/></td></tr>\n"+
-    "<tr id='name'><td>Name:</td><td><input name='name'/></td></tr>\n"+
+    "<tr id='type'><td>###Element type:###</td><td><select name='type'/></td></tr>\n"+
+    "<tr id='id'><td>###ID:###</td><td><input name='id'/></td></tr>\n"+
+    "<tr id='name'><td>###Name:###</td><td><input name='name'/></td></tr>\n"+
     "<tr><td colspan='2' style='text-align: right; border-top: 1px solid black; padding-top: 10px;'>\n"+
-    "  <input id='actOk' name='actOk' type='button' value='Ok'/> <input id='actCancel' name='actCancel' type='button' value='Close' onclick='window.close(); return false;'/>\n"+
+    "  <input id='actOk' name='actOk' type='button' value='###Ok###'/> <input id='actCancel' name='actCancel' type='button' value='###Close###' onclick='window.close(); return false;'/>\n"+
     "</td></tr>\n"+
     "</table>\n"+
     "</form>\n"+
@@ -2207,4 +2206,4 @@ if( actPaste ) actPaste.onclick = function() { if( this.className=='active' ) it
 
 pageDisplay(hostsUpdate());
 
-setStatus('Page loaded.',5000);
+setStatus('###Page loaded.###',5000);

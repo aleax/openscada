@@ -39,7 +39,7 @@
 #define MOD_TYPE	"UI"
 #define VER_TYPE	VER_UI
 #define SUB_TYPE	"WWW"
-#define MOD_VERSION	"0.3.0"
+#define MOD_VERSION	"0.5.0"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow the dynamic WEB based OpenSCADA system configurator. Use XHTML, CSS and JavaScript technologies."
 #define LICENSE		"GPL"
@@ -63,6 +63,7 @@ extern "C"
     }
 }
 
+extern char *WebCfgDVCA_html;
 extern char *WebCfgDVCA_js;
 
 using namespace WebCfgD;
@@ -89,71 +90,26 @@ TWEB::TWEB( string name ) : mTAuth(10), lst_ses_chk(0)
     modFuncReg( new ExpFunc("void HttpPost(const string&,string&,const string&,vector<string>&,const string&);",
 	"Process Set comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpPost) );
 
-    //> Default CSS init
-    mCSStables =
-	"hr {width:100%}\n"
-	"body {background-color:#818181}\n"
-	"h1.head {text-align:center; color:#ffff00 }\n"
-	"h2.title {text-align:center; font-style:italic; margin: 0px; padding: 0px; border-width:0px }\n"
-	"table.page_head {background-color:#cccccc; border:3px ridge blue; width: 100% }\n"
-	"table.page_head td.tool {text-align:center; border:1px solid blue; width: 120px;  white-space: nowrap }\n"
-	"table.page_head td.user {text-align:left; border:1px solid blue; width: 120px; white-space: nowrap }\n"
-	"table.page_area {background-color:#9999ff; border:3px ridge #a9a9a9; width: 100%; padding:2px }\n"
-	"table.page_area tr.content {background-color:#cccccc; border:5px ridge #9999ff; padding:5px }\n"
-	"table.page_auth {background-color:#9999ff; border:3px ridge #a9a9a9; padding: 2px; }\n"
-	"table.page_auth tr.content {background-color:#cccccc; border:5px ridge #9999ff; padding: 5px; }\n"
-	"select { font-family: Verdana,Arial,Helvetica,sans-serif; font-size:12px; }\n"
-	"#popupmenu { position: absolute; border: 0; width: 150px; height: 150px; overflow : auto; z-index: 10; }\n"
-	"#popupmenu select { background-color: #E6E6E6; border: 1px solid black; padding: 1px; }\n"
-	"#combomenu { position: absolute; border: 1px solid black; width: 150px; height: 120px; overflow: auto; background-color: white; padding: 1px; z-index: 10; }\n"
-	"#combomenu select { background-color: white; border: 0; }\n"
-	"table.main { background-color: #E6E6E6; border: 3px ridge #FF9253; padding: 5px; width: auto; table-layout: fixed; font-family: Verdana,Arial,Helvetica,sans-serif; font-size:12px; }\n"
-	"table.main input,select { font-family: Verdana,Arial,Helvetica,sans-serif; font-size:12px; }\n"
-	"table.main td.title { color : blue; font-family : Arial; font-size : 30px; font-style : italic; text-align : center; }\n"
-	"table.main td.tool { text-align: left; border-top: 2px solid black; }\n"
-	"table.main td.tool img { height: 22px; border: 0; vertical-align: middle; }\n"
-	"table.main td.status { text-align: left; }\n"
-	"table.main tr.body { background-color : lightgrey; overflow : auto; }\n"
-	"table.main td.tree { background-color : #F7FFF6; width: 250px; text-align: left; vertical-align : top; border: 3px ridge #F7FFF6;"
-	" white-space: nowrap; color: black; }\n"
-	"table.main td.tree li.select { background-color : #BDEBED; }\n"
-	"table.main td.tree ul { background-color: #F7FFF6; background-repeat: repeat-y; background-attachment: scroll; background-position: left top; }\n"
-	"table.main td.tree div { overflow: auto; width: 250px; padding: 5px; max-height: 500px; }\n"
-	"table.main td.page { width: 600px; text-align: left; vertical-align : top; border: 3px outset #F7F7F1; background-color: #F7F7F1; }\n"
-	"table.page { width: 100%; padding: 2px; }\n"
-	"table.page td.title { color: black; font-family : Arial; font-size : 20px; font-style : italic; text-align : left; padding-bottom: 5px; }\n"
-	"table.page td.title img { vertical-align: middle; height: 32px; }\n"
-	"table.page td.tabs { }\n"
-	"table.page td.tabs span { padding-left: 5px; padding-right: 5px; padding-bottom: 2px; padding-top: 2px; border: 1px solid gray; white-space: nowrap; background-color: #DEDED9; cursor: pointer; }\n"
-	"table.page td.tabs span.active { background-color: #F7F7F1; cursor: default; border-bottom: 0px none; border-top: 2px solid green; }\n"
-	"table.page td.content { border : 2px ridge grey; text-align : left; vertical-align : top; height: 300px; padding: 5px; }\n"
-	"table.page td.content #pgCont { overflow: auto; width: 600px; max-height: 440px; }\n"
-	"table.page td.content div.elem { margin-bottom: 2px; overflow: visible; width: auto; }\n"
-	"table.page td.content div.elem span.label { white-space: nowrap; padding-right: 3px; }\n"
-	"table.page td.content div.elem span.const { font-weight: bold; }\n"
-	"table.page td.content div.elem textarea { width: 99%; }\n"
-	"table.page td.content fieldset.elem { margin : 0px; margin-bottom: 2px; padding: 3px; }\n"
-	"table.page td.content div.table { width: auto; border: 1px solid black; height: 200px; background-color: white; overflow: auto; padding: 2px; }\n"
-	"table.page td.content table.elem { border: 1px solid black; border-collapse: collapse; empty-cells: show; }\n"
-	"table.page td.content table.elem th { border: 1px solid black; background-color: #E6E6E6; text-align: center; white-space: nowrap; }\n"
-	"table.page td.content table.elem td { border: 1px solid black; white-space: nowrap; }\n"
-	"table.page td.content table.elem td.hd { background-color: #E6E6E6; font-weight: bold; text-align: center; }\n"
-	"table.page td.content table.elem td input,select { vertical-align: middle; border: 1px solid gray; }\n"
-	"table.page td.content table.elem td img { vertical-align: middle; height: 16px; cursor: pointer; }\n"
-	"table.page td.content table.elem tr.select td { background-color: #00C8FF; }\n"
-	"table.page td.content .list { width: 50%; }\n"
-	"table.page td.content .picture { border: 1px solid blue; vertical-align: top; }\n"
-	"table.page td.content div.elem .line { padding-right: 3px; }\n"
-	"table.page td.content div.elem .line input,select { vertical-align: middle; border: 1px solid black; }\n"
-	"table.page td.content div.elem .line img { vertical-align: middle; height: 18px; cursor: pointer; }\n"
-	"table.page td.content div.elem .number input { text-align: right; }\n"
-	"ul.tree { clear: both; list-style-image: none; list-style-position: outside; list-style-type: none; margin: 0; padding: 0; white-space: nowrap; }\n"
-	"ul.tree a { text-decoration:none; color: black; }\n"
-	"ul.tree a.pm { cursor: pointer; }\n"
-	"ul.tree img { vertical-align:middle; }\n"
-	"ul.tree ul { list-style-image: none; list-style-position: outside; list-style-type: none; margin: 0; padding: 0 0 0 17px; }\n"
-	"a.active img {  cursor: pointer; }\n"
-	"a.inactive img { cursor: default; }\n";
+    //> Massages not for compile but for indexing by gettext
+#if 0
+    char mess[][100] =
+    {
+	"OpenSCADA. Dynamic WEB configurator", "About",
+	"Load", "Save", "Up", "Previous", "Next", "Add item","Delete item",
+	"Copy item", "Cut item", "Paste item",
+	"Reload item", "Start periodic update", "Stop periodic update",
+	"Ready",
+	"Go", "Add", "Insert", "Edit", "Delete", "Item up", "Item down",
+	"Add new element.", "Insert new element.", "Rename element.",
+	"Select image file for download to picture field.",
+	"Add row", "Insert row", "Delete row", "Up row", "Down row",
+	"No one editable container present.", "Add item to node '%1'.", "Item '%1' already present.",
+	"You sure for delete node '%1'?",
+	"Copy is imposible.", "Selected", "Move node '%1' to '%2'.", "Copy node '%1' to '%2'.", "Node '%1' already present. Continue?",
+	"Element type:", "ID:", "Name:", "Ok", "Close",
+	"Page loaded."
+    };
+#endif
 }
 
 TWEB::~TWEB()
@@ -210,13 +166,11 @@ void TWEB::load_( )
 
     //- Load parameters from config file -
     mTAuth = atoi( TBDS::genDBGet(nodePath()+"SessTimeLife",TSYS::int2str(mTAuth)).c_str() );
-    mCSStables = TBDS::genDBGet(nodePath()+"CSSTables",mCSStables);
 }
 
 void TWEB::save_( )
 {
     TBDS::genDBSet(nodePath()+"SessTimeLife",TSYS::int2str(mTAuth));
-    TBDS::genDBSet(nodePath()+"CSSTables",mCSStables);
 }
 
 void TWEB::modStart()
@@ -256,7 +210,19 @@ string TWEB::pgHead( string head_els )
 	head_els+
 	"  <link rel='shortcut icon' href='/"MOD_ID"/ico' type='image' />\n"
 	"  <title>"PACKAGE_NAME". "+_(MOD_NAME)+"</title>\n"
-	"  <style type='text/css'>\n"+mCSStables+"</style>\n"
+	"  <style type='text/css'>\n"
+	"    hr {width:100%}\n"
+	"    body {background-color:#818181}\n"
+	"    h1.head {text-align:center; color:#ffff00 }\n"
+	"    h2.title {text-align:center; font-style:italic; margin: 0px; padding: 0px; border-width:0px }\n"
+	"    table.page_head {background-color:#cccccc; border:3px ridge blue; width: 100% }\n"
+	"    table.page_head td.tool {text-align:center; border:1px solid blue; width: 120px;  white-space: nowrap }\n"
+	"    table.page_head td.user {text-align:left; border:1px solid blue; width: 120px; white-space: nowrap }\n"
+	"    table.page_area {background-color:#9999ff; border:3px ridge #a9a9a9; width: 100%; padding:2px }\n"
+	"    table.page_area tr.content {background-color:#cccccc; border:5px ridge #9999ff; padding:5px }\n"
+	"    table.page_auth {background-color:#9999ff; border:3px ridge #a9a9a9; padding: 2px; }\n"
+	"    table.page_auth tr.content {background-color:#cccccc; border:5px ridge #9999ff; padding: 5px; }\n"
+	"  </style>\n"
 	"</head>\n"
 	"<body alink='#33ccff' link='#3366ff' text='#000000' vlink='#339999'>\n";
 }
@@ -332,49 +298,19 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 		prmEl = ses.prm.find("com");
 		string wp_com = (prmEl!=ses.prm.end()) ? prmEl->second : "";
 
+		if( wp_com.empty() && zero_lev == "script.js" )
+		{
+		    ses.page = trMessReplace(WebCfgDVCA_js);
+		    page = httpHead("200 OK",ses.page.size(),"text/javascript")+ses.page;
+		    return;
+		}
 		//> Main work page create.
-		if( wp_com.empty() )
-		    ses.page = ses.page+
-			"<center>\n"
-			"<table class='main' border='0' cellspacing='3px'>\n"
-			" <tr><td class='title' colspan='2'>"+PACKAGE_NAME+". "+_(MOD_NAME)+"</td></tr>\n"
-			" <tr><td class='tool' colspan='2'>\n"
-			"  <a id='actLoad' class='inactive' title='Load'><img src='/"MOD_ID"/img_load?filtr=gray' /></a>\n"
-			"  <a id='actSave' class='inactive' title='Save'><img src='/"MOD_ID"/img_save?filtr=gray' /></a>\n"
-			"  <img src='/"MOD_ID"/img_line' />\n"
-			"  <a id='actUp' class='inactive' title='Up'><img src='/"MOD_ID"/img_up?filtr=gray' /></a>\n"
-			"  <a id='actPrevious' class='inactive' title='Previous'><img src='/"MOD_ID"/img_previous?filtr=gray' /></a>\n"
-			"  <a id='actNext' class='inactive' title='Next'><img src='/"MOD_ID"/img_next?filtr=gray' /></a>\n"
-			"  <img src='/"MOD_ID"/img_line'/>\n"
-			"  <a id='actAddIt' class='inactive' title='Add item'><img src='/"MOD_ID"/img_it_add?filtr=gray' /></a>\n"
-			"  <a id='actDelIt' class='inactive' title='Delete item'><img src='/"MOD_ID"/img_it_del?filtr=gray' /></a>\n"
-			"  <img src='/"MOD_ID"/img_line'/>\n"
-			"  <a id='actCopy' class='inactive' title='Copy item'><img src='/"MOD_ID"/img_editcopy?filtr=gray' /></a>\n"
-			"  <a id='actCut' class='inactive' title='Cut item'><img src='/"MOD_ID"/img_editcut?filtr=gray' /></a>\n"
-			"  <a id='actPaste' class='inactive' title='Paste item'><img src='/"MOD_ID"/img_editpaste?filtr=gray' /></a>\n"
-			"  <img src='/"MOD_ID"/img_line' />\n"
-			"  <a id='actUpdate' class='active' title='Reload item'><img src='/"MOD_ID"/img_reload?filtr=none' /></a>\n"
-			"  <a id='actStart' class='active' title='Start periodic update'><img src='/"MOD_ID"/img_start?filtr=none' /></a>\n"
-			"  <a id='actStop' class='inactive' title='Stop periodic update'><img src='/"MOD_ID"/img_stop?filtr=gray' /></a>\n"
-			"  <img src='/"MOD_ID"/img_line' />\n"
-			"  <a id='actAbout' class='active' href='/"MOD_ID"/about' title='About'><img src='/"MOD_ID"/img_help' /></a>\n"
-			"  <img src='/"MOD_ID"/img_line' />\n"
-			"  <span id='selPath' />\n"
-			" </td></tr>\n"
-			" <tr class='body'>\n"
-			"  <td class='tree'><div><ul id='treeRoot' class='tree' /></div></td>\n"
-			"  <td class='page'>\n"
-			"   <table class='page' border='0' cellspacing='0'>\n"
-			"    <tr><td class='title'><img id='pgIco' alt='' /><span id='pgTitle' /></td></tr>\n"
-			"    <tr><td id='pgTabs' class='tabs'></td></tr>\n"
-			"    <tr><td class='content'><div id='pgCont'></div></td></tr>\n"
-			"   </table>\n"
-			"  </td>\n"
-			" </tr>\n"
-			" <tr><td id='status' class='status' colspan='2'/></tr>\n"
-			"</table>\n"
-			"</center>\n"
-			"<SCRIPT>\n"+WebCfgDVCA_js+"\n</SCRIPT>\n";
+		else if( wp_com.empty() )
+		{
+		    ses.page = trMessReplace(WebCfgDVCA_html);
+		    page = httpHead("200 OK",ses.page.size(),"text/html")+ses.page;
+		    return;
+		}
 		//> Get node icon
 		else if( wp_com == "ico" )
 		{
@@ -595,6 +531,32 @@ void TWEB::messPost( string &page, const string &cat, const string &mess, MessLe
     page = page+"</tbody></table>\n";
 }
 
+string TWEB::trMessReplace( const string &tsrc )
+{
+    string trez; trez.reserve(tsrc.size());
+
+    int txtBeg = 0, i_s;
+    for( i_s = 0; i_s < tsrc.size(); i_s++ )
+      if( tsrc[i_s] == '#' && tsrc.substr(i_s,3) == "###" && (i_s+3)<tsrc.size() && tsrc[i_s+3] != '#' )
+      {
+        int i_r;
+        for( i_r = i_s+3; i_r < tsrc.size(); i_r++ )
+          if( (tsrc[i_r] == '#' && tsrc.substr(i_r,3) == "###" && ((i_r+3)>=tsrc.size() || tsrc[i_r+3] != '#')) || tsrc[i_r] == '\n' )
+            break;
+        if( i_r < tsrc.size() && tsrc[i_r] != '\n' )
+        {
+          trez.append(tsrc.substr(txtBeg,i_s-txtBeg));
+          trez.append(_(tsrc.substr(i_s+3,i_r-i_s-3).c_str()));
+          i_s = i_r+2;
+          txtBeg = i_r+3;
+          continue;
+        }
+      }
+    if( txtBeg < i_s ) trez.append(tsrc.substr(txtBeg,i_s-txtBeg));
+
+    return trez;
+}
+
 int TWEB::cntrIfCmd( XMLNode &node, const string &user )
 {
     int path_off = 0;
@@ -688,30 +650,30 @@ string TWEB::cntGet( SSess &ses, const string &nm )
 
 void TWEB::cntrCmdProc( XMLNode *opt )
 {
-    //-- Get page info --
+    //> Get page info
     if( opt->name() == "info" )
     {
 	TUI::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
 	{
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of auth sesion(min)"),0660,"root","root",1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/CSS",_("CSS"),0660,"root","root",3,"tp","str","cols","90","rows","7");
+	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to remote stations list configuration"),0660,"root","root",1,"tp","lnk");
 	}
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
         return;
     }
 
-    //-- Process command to page --
+    //> Process command to page
     string a_path = opt->attr("path");
     if( a_path == "/prm/cfg/lf_tm" )
     {
 	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(authTime()) );
 	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	setAuthTime( atoi(opt->text().c_str()) );
     }
-    else if( a_path == "/prm/cfg/CSS" )
+    else if( a_path == "/prm/cfg/host_lnk" && ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText( CSStables() );
-	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	setCSStables( opt->text() );
+	SYS->transport().at().setSysHost(false);
+	opt->setText("/Transport");
     }
     else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )	opt->setText(optDescr());
     else TUI::cntrCmdProc(opt);
@@ -794,3 +756,4 @@ SSess::SSess( const string &iurl, const string &ipage, const string &isender,
 	}
     }
 }
+

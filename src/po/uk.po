@@ -60,7 +60,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-24 16:34+0200\n"
+"POT-Creation-Date: 2008-12-26 17:00+0200\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -1418,15 +1418,15 @@ msgstr "Допомога по опціям"
 
 #: tarchives.cpp:765 tarchives.cpp:1069 tarchval.cpp:1675 tarchval.cpp:2305
 #: tbds.cpp:463 tbds.cpp:664 tdaqs.cpp:324 telem.cpp:502 tfunction.cpp:195
-#: tmodschedul.cpp:466 tprmtmpl.cpp:248 tprmtmpl.cpp:264 tprmtmpl.cpp:547
-#: tprotocols.cpp:79 tsecurity.cpp:267 tspecials.cpp:74 tsys.cpp:948
-#: ttransports.cpp:405 ttransports.cpp:641 ttransports.cpp:795 tuis.cpp:136
+#: tmodschedul.cpp:466 tprmtmpl.cpp:248 tprmtmpl.cpp:547 tprotocols.cpp:79
+#: tsecurity.cpp:267 tspecials.cpp:74 tsys.cpp:948 ttransports.cpp:405
+#: ttransports.cpp:641 ttransports.cpp:795 tuis.cpp:136
 msgid "cols"
 msgstr ""
 
 #: tarchives.cpp:765 tbds.cpp:463 tdaqs.cpp:324 tmodschedul.cpp:466
-#: tprmtmpl.cpp:264 tprotocols.cpp:79 tsecurity.cpp:267 tspecials.cpp:74
-#: tsys.cpp:948 ttransports.cpp:405 tuis.cpp:136
+#: tprotocols.cpp:79 tsecurity.cpp:267 tspecials.cpp:74 tsys.cpp:948
+#: ttransports.cpp:405 tuis.cpp:136
 msgid "90"
 msgstr ""
 
@@ -1441,8 +1441,8 @@ msgstr ""
 
 #: tarchives.cpp:765 tarchives.cpp:1147 tarchives.cpp:1165 tbds.cpp:463
 #: tdaqs.cpp:324 tfunction.cpp:296 tfunction.cpp:316 tmodschedul.cpp:466
-#: tprotocols.cpp:79 tsecurity.cpp:267 tspecials.cpp:74 tsys.cpp:948
-#: ttransports.cpp:405 tuis.cpp:136
+#: tprmtmpl.cpp:264 tprotocols.cpp:79 tsecurity.cpp:267 tspecials.cpp:74
+#: tsys.cpp:948 ttransports.cpp:405 tuis.cpp:136
 msgid "10"
 msgstr ""
 
@@ -3868,10 +3868,6 @@ msgstr ""
 msgid "Programm"
 msgstr "Програма"
 
-#: tprmtmpl.cpp:264
-msgid "8"
-msgstr ""
-
 #: tprmtmpl.cpp:311 tprmtmpl.cpp:312
 msgid "new"
 msgstr ""
@@ -5569,6 +5565,3 @@ msgstr "Прямий доступ запису значення не дозво�
 #: tvalue.h:153
 msgid "Direct access to read value no admit."
 msgstr "Прямий доступ читання значення не дозволено."
-
-#~ msgid "Tables contained into DB, no opened tables."
-#~ msgstr "Таблиці які містяться у БД, не відкриті таблиці."

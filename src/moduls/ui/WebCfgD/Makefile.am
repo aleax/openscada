@@ -6,9 +6,20 @@ AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
 AM_LDFLAGS= -shared -module
 
 oscd_modul_PROGRAMS = ui_WebCfgD.so
-ui_WebCfgD_so_SOURCES = web_cfg.cpp VCAjs.cpp
+ui_WebCfgD_so_SOURCES = web_cfg.cpp VCAjs.cpp VCAhtml.cpp
 
 VCAjs.cpp: WebCfgDVCA.js
+	@lc=`cat $< | wc -l` ; \
+	il=1 ; \
+	echo "char *`echo "$<" | sed 's/\./_/g'`=" > $@ ; \
+	while [ $$il -le $$lc ] ; do \
+	  l="   \"`cat $< | sed -n $${il}p | sed 's/\\\\/\\\\\\\\/g' | sed 's/"/\\\\"/g'`\\n\""; \
+	  if [ $$il -eq $$lc ]; then l="$$l;"; fi; \
+	  echo "$$l" >> $@ ; \
+	  let il=il+1 ; \
+	done
+
+VCAhtml.cpp: WebCfgDVCA.html
 	@lc=`cat $< | wc -l` ; \
 	il=1 ; \
 	echo "char *`echo "$<" | sed 's/\./_/g'`=" > $@ ; \
@@ -40,8 +51,8 @@ install-data-local:
 	cp $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
 	rm $$name ; \
 	done
-#	install -m 755 -d $(doc_name)
-#	install -m 644 doc/*.pdf $(doc_name)
+	install -m 755 -d $(doc_name)
+	install -m 644 doc/*.pdf $(doc_name)
 
 uninstall-local:
 	@catalogs=`find ./po -name \*.po` ; \
@@ -51,4 +62,4 @@ uninstall-local:
 	done
 
 clean-local:
-	rm -f VCAjs.cpp po/$(m_name).pot po/*~
+	rm -f VCAhtml.cpp VCAjs.cpp po/$(m_name).pot po/*~
