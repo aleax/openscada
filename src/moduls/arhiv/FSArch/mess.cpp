@@ -689,14 +689,14 @@ void MFileArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const 
 	    b_rec.categ = m_node->childGet(i_ch)->attr("cat");
 	    b_rec.level = (TMess::Type)atoi( m_node->childGet(i_ch)->attr("lv").c_str() );
 	    b_rec.mess  = m_node->childGet(i_ch)->text();
-	    if( b_rec.time >= b_tm && b_rec.time < e_tm && b_rec.level >= level && TMess::chkPattern(b_rec.categ,category) )
+	    if( b_rec.time >= b_tm && b_rec.time <= e_tm && b_rec.level >= level && TMess::chkPattern(b_rec.categ,category) )
 	    {
 		bool equal = false;
 		int i_p = mess.size();
 		for( int i_m = mess.size()-1; i_m >= 0; i_m-- )
 		{
 		    if( mess[i_m].time > b_rec.time )	i_p = i_m;
-		    else if( b_rec.time == mess[i_m].time && 
+		    else if( b_rec.time == mess[i_m].time &&
 			    b_rec.level == mess[i_m].level &&
 			    b_rec.mess == mess[i_m].mess )
 		    { equal = true; break; }

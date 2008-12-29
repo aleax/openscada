@@ -1100,7 +1100,8 @@ function selectChildRecArea( node, aPath, cBlk )
 	    else if( prcCol.getAttribute('tp') == 'time' )
 	    {
 	      var dt = new Date(parseInt(cval)*1000);
-	      setNodeText(tblCell,dt.getDate()+'.'+(dt.getMonth()+1)+'.'+dt.getFullYear()+' '+dt.getHours()+':'+dt.getMinutes()+':'+dt.getSeconds());
+	      setNodeText(tblCell,dt.getDate()+'.'+(dt.getMonth()+1)+'.'+dt.getFullYear()+' '+dt.getHours()+':'+
+				  ((dt.getMinutes()<10)?('0'+dt.getMinutes()):dt.getMinutes())+':'+((dt.getSeconds()<10)?('0'+dt.getSeconds()):dt.getSeconds()));
 	    }
 	    else
 	    {
@@ -1514,7 +1515,8 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
       {
 	val_r.title = t_s.getAttribute('help');
 	var dt = new Date(parseInt(nodeText(dataReq))*1000);
-	setNodeText(val_r,dt.getDate()+'.'+(dt.getMonth()+1)+'.'+dt.getFullYear()+' '+dt.getHours()+':'+dt.getMinutes()+':'+dt.getSeconds());
+	setNodeText(val_r,dt.getDate()+'.'+(dt.getMonth()+1)+'.'+dt.getFullYear()+' '+dt.getHours()+':'+
+			  ((dt.getMinutes()<10)?('0'+dt.getMinutes()):dt.getMinutes())+':'+((dt.getSeconds()<10)?('0'+dt.getSeconds()):dt.getSeconds()));
       }
     }
     //> View other string and numberic fields

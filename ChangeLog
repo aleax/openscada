@@ -1,3 +1,21 @@
+2008-12-29 Roman
+- !:/SYS: Disable default building of module SoundCard. By no realised yet.
+- !:/SYS: Remove default build flags "-O2 -DOSC_HASHMAP". For build add options CFLAGS="-O2" CXXFLAGS="-O2" to ./configure.
+- FIX:/Archives,/Archive/FSArch: No request the end message archive's value is fixed.
+- !:/SYS: Change optional map using from OSC_HASHMAP to OSC_ORDLISTMAP.
+- !:/UI/VCAEngine: To primitives 'Protocol' and 'Document' is added attribute 'font'. From primitive 'Protocol' is removed not realised attributes.
+- !:/UI/Vision: Storing background's color and image is made optimal, move int Brash object.
+- FIX:/UI/Vision: The background loading into widget's pallete is fixed.
+- !!:/UI/Vision, /UI/WebVision: Font scaling is released for all primitives. For primitive 'Diagram' scaling is done.
+- FIX:/UI/Vision: Not fit movie scaling is fixed.
+- FIX:/UI/Vision: Primitive 'Protocol' is made some fixes. Old data clearing is added. Mouse tracking is enabled for internal table's widgets.
+- FIX:/UI/Vision: Primitive 'Document' catch QEvent::Wheel events is fixed.
+- FIX:/UI/WebCfgD: Time's minutes and seconds view is fixed.
+- !!!:/UI/WebVision: Primitive 'Protocol' is released.
+- !:/UI/WebVision: Base font support is added to primitive 'Document'.
+- !:/UI/WebVision: JavaScript translation mechanism is released for JavaScript messages.
+
+
 2008-12-26 Roman
 - !:/DB/SQLite,/DB/MySQL,/DB/FireBird,/DB/DBF,/DAQ/BlockCalc: Translation to German is added by Aleksey and Irina Popkov.
 - FIX:/SYS: RPM build spec file is fixed for *.la including.

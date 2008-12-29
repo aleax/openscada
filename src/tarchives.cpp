@@ -492,7 +492,7 @@ void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, c
     int i_buf = head_buf;
     while( !arch.size() || arch==BUF_ARCH_NM )
     {
-	if( m_buf[i_buf].time >= b_tm && m_buf[i_buf].time != 0 && m_buf[i_buf].time < e_tm &&
+	if( m_buf[i_buf].time >= b_tm && m_buf[i_buf].time != 0 && m_buf[i_buf].time <= e_tm &&
 		m_buf[i_buf].level >= level && TMess::chkPattern( m_buf[i_buf].categ, category ) )
 	    recs.push_back(m_buf[i_buf]);
 	if( ++i_buf >= m_buf.size() ) i_buf = 0;

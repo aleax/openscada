@@ -229,12 +229,17 @@ function servGet( adr, prm )
 /***************************************************
  * servSet - XML set request to server             *
  ***************************************************/
-function servSet( adr, prm, body )
+function servSet( adr, prm, body, waitRez )
 {
   var req = getXmlHttp();
-  req.open('POST',encodeURI('/'+MOD_ID+adr+'?'+prm),true);
-  try { req.send(body); }
+  req.open('POST',encodeURI('/'+MOD_ID+adr+'?'+prm),!waitRez);
+  try
+  { req.send(body);
+    if( waitRez && req.status == 200 && req.responseXML.childNodes.length )
+      return req.responseXML.childNodes[0];
+  }
   catch( e ) { window.location='/'+MOD_ID; }
+  return null;
 }
 /***************************************************
  * getWAttrs - request page/widget attributes      *
@@ -1068,9 +1073,203 @@ function makeEl( pgBr, inclPg )
     dgrObj.src = '/'+MOD_ID+this.addr+'?com=obj&tm='+tmCnt+'&xSc='+xSc.toFixed(2)+'&ySc='+ySc.toFixed(2);
     this.perUpdtEn( this.isEnabled() && parseInt(this.attrs['trcPer']) );
   }
+  else if( this.attrs['root'] == 'Protocol' )
+  {
+    if( this.attrs['backColor'] ) elStyle += 'background-color: '+this.attrs['backColor']+'; ';
+    else elStyle+='background-color: white; ';
+    if( this.attrs['backImg'] )   elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
+    elStyle += 'border: 1px solid black; overflow: auto; padding: 2px; ';
+    geomW -= 4; geomH -= 4;
+
+    this.wFont = '';
+    var allFnt = this.attrs['font'].split(' ');
+    if( allFnt.length >= 1 ) this.wFont+='font-family: '+allFnt[0].replace(/_/g,' ')+'; ';
+    if( allFnt.length >= 2 ) this.wFont+='font-size: '+(parseInt(allFnt[1])*Math.min(xSc,ySc)).toFixed(0)+'px; ';
+    if( allFnt.length >= 3 ) this.wFont+='font-weight: '+(parseInt(allFnt[2])?'bold':'normal')+'; ';
+    if( allFnt.length >= 4 ) this.wFont+='font-style: '+(parseInt(allFnt[3])?'italic':'normal')+'; ';
+
+    if( !this.place.firstChild )
+    {
+      this.place.appendChild(document.createElement('table'));
+      this.place.firstChild.className='prot';
+      this.loadData = function( )
+      {
+        var tblB = this.place.firstChild;
+
+	//> Check for columns present and order
+	if( !this.curCols || this.curCols != this.attrs['col'] || this.curArch != this.attrs['arch'] || this.curTmpl != this.attrs['tmpl'] || this.curLev != this.attrs['lev'] )
+	{
+	  this['col_pos'] = this['col_tm'] = this['col_lev'] = this['col_cat'] = this['col_mess'] = -1;
+	  this.curCols = this.attrs['col'];
+	  this.curArch = this.attrs['arch'];
+	  this.curTmpl = this.attrs['tmpl'];
+	  this.curLev = this.attrs['lev'];
+	  var rowEl = document.createElement('tr');
+	  tblB.appendChild(rowEl);
+	  var colCfg = '';
+	  var clm = this.curCols.split(';');
+	  for( var c_off = 0; c_off < clm.length; c_off++ )
+	    if( clm[c_off] == 'pos' || clm[c_off] == 'tm' || clm[c_off] == 'lev' || clm[c_off] == 'cat' || clm[c_off] == 'mess' )
+	    {
+	      colCfg += "<th ind='"+clm[c_off]+"' "+
+			  "style='"+this.wFont+"'>"+((clm[c_off]=='pos') ? '#' :
+						    (clm[c_off]=='tm') ? '###Time###' :
+						    (clm[c_off]=='lev') ? '###Level###' :
+						    (clm[c_off]=='cat') ? '###Category###' :
+						    (clm[c_off]=='mess') ? '###Message###' : '')+"</th>";
+	      this['col_'+clm[c_off]] = c_off;
+	    }
+	  rowEl.innerHTML = colCfg;
+	  this.arhBeg = this.arhEnd = 0;
+	}
+
+	//> Get archive parameters
+	var tTime = parseInt(this.attrs['time']);
+	var tTimeGrnd = tTime - parseInt(this.attrs['tSize']);
+
+	if( !this.arhBeg || !this.arhEnd || !tTime || tTime > this.arhEnd )
+	{
+	  var rez = servSet('/Archive/%2fserv%2fmess','com=com',"<info arch='"+this.curArch+"'/>",true);
+	  if( !rez || parseInt(rez.getAttribute('rez')) != 0 ) { this.arhBeg = this.arhEnd = 0; }
+	  else
+	  {
+	    this.arhBeg = parseInt(rez.getAttribute('beg'));
+	    this.arhEnd = parseInt(rez.getAttribute('end'));
+	    if( !tTime ) { tTime = this.arhEnd; tTimeGrnd += tTime; }
+	  }
+	}
+	if( tblB.firstChild.childNodes.length <= 1 || !this.arhBeg || !this.arhEnd ) return;
+
+	//> Correct request to archive border
+	tTime = Math.min(tTime,this.arhEnd); tTimeGrnd = Math.max(tTimeGrnd,this.arhBeg);
+	//> Clear data at time error
+	var valEnd = 0; var valBeg = 0;
+	if( tblB.childNodes.length>1 && tblB.firstChild.childNodes.length )
+	{
+	  while( tblB.childNodes.length>1 && (valEnd=parseInt(tblB.childNodes[1].childNodes[0].getAttribute('time'))) > tTime )
+	    tblB.removeChild(tblB.childNodes[1]);
+	  while( tblB.childNodes.length>1 && (valBeg=parseInt(tblB.lastChild.childNodes[0].getAttribute('time'))) < tTimeGrnd )
+	    tblB.removeChild(tblB.lastChild);
+	}
+
+	if( tTime <= tTimeGrnd || (tTime < valEnd && tTimeGrnd > valBeg) )
+	{
+	  while( tblB.childNodes.length > 1 ) tblB.removeChild(tblB.lastChild);
+	  valEnd = valBeg = 0;
+	  return;
+	}
+
+	//> Correct request to present data
+	var toUp = false;
+	if( valEnd && tTime > valEnd ) { tTimeGrnd = valEnd; toUp = true; }
+	else if( valBeg && tTimeGrnd < valBeg ) tTime = valBeg-1;
+
+	var rez = servSet('/Archive/%2fserv%2fmess','com=com',
+	    "<get arch='"+this.curArch+"' tm='"+tTime+"' tm_grnd='"+tTimeGrnd+"' cat='"+this.curTmpl+"' lev='"+this.curLev+"' />",true);
+	if( !rez || parseInt(rez.getAttribute('rez')) != 0 ) return;
+
+	//> Process records
+	if( toUp )
+	  for( var i_req = 0; i_req < rez.childNodes.length; i_req++ )
+	  {
+	    var rcd = rez.childNodes[i_req];
+	    var rtm = parseInt(rcd.getAttribute('time'));
+	    var rlev = rcd.getAttribute('lev');
+	    var rcat = rcd.getAttribute('cat');
+	    var rmess = nodeText(rcd);
+
+	    //>> Check for dublicates
+	    var i_p;
+	    for( i_p = 1; i_p < tblB.childNodes.length; i_p++ )
+	    {
+	      if( rtm > parseInt(tblB.childNodes[1].childNodes[0].getAttribute('time')) && i_p>1 ) continue;
+	      if( (this.col_lev<0 || nodeText(tblB.childNodes[i_p].childNodes[this.col_lev]) == rlev) &&
+		    (this.col_cat<0 || nodeText(tblB.childNodes[i_p].childNodes[this.col_cat]) == rcat) &&
+		    (this.col_mess<0 || nodeText(tblB.childNodes[i_p].childNodes[this.col_mess]) == rmess ) )
+		break;
+	    }
+	    if( i_p < tblB.childNodes.length ) continue;
+
+	    var rowEl = document.createElement('tr');
+	    for( var i_cel = 0; i_cel < tblB.childNodes[0].childNodes.length; i_cel++ )
+	    {
+	      var celEl = document.createElement('td'); celEl.style.cssText = this.wFont;
+	      if( i_cel == 0 ) celEl.setAttribute('time',rtm);
+	      if( this.col_pos == i_cel ) { setNodeText(celEl,0); celEl.style.cssText+=' text-align: center; '; }
+	      else if( this.col_tm == i_cel )
+	      {
+		var dt = new Date(rtm*1000);
+		setNodeText(celEl,dt.getDate()+'.'+(dt.getMonth()+1)+'.'+dt.getFullYear()+' '+dt.getHours()+':'+
+				  ((dt.getMinutes()<10)?('0'+dt.getMinutes()):dt.getMinutes())+':'+((dt.getSeconds()<10)?('0'+dt.getSeconds()):dt.getSeconds()));
+	      }
+	      else if( this.col_lev == i_cel ) setNodeText(celEl,rlev);
+	      else if( this.col_cat == i_cel ) setNodeText(celEl,rcat);
+	      else if( this.col_mess == i_cel ) setNodeText(celEl,rmess);
+	      rowEl.appendChild(celEl);
+	    }
+	    tblB.insertBefore(rowEl,tblB.childNodes[1]);
+	  }
+	else
+	  for( var i_req = rez.childNodes.length-1; i_req >= 0; i_req-- )
+	  {
+	    var rcd = rez.childNodes[i_req];
+	    var rtm = parseInt(rcd.getAttribute('time'));
+	    var rlev = rcd.getAttribute('lev');
+	    var rcat = rcd.getAttribute('cat');
+	    var rmess = nodeText(rcd);
+
+	    //>> Check for dublicates
+	    var i_p;
+	    for( i_p = tblB.childNodes.length-1; i_p >= 1; i_p-- )
+	    {
+	      if( rtm < parseInt(tblB.childNodes[1].childNodes[0].getAttribute('time')) && (i_p<(tblB.childNodes.length-1)) ) continue;
+	      if( (this.col_lev<0 || nodeText(tblB.childNodes[i_p].childNodes[this.col_lev]) == rlev) &&
+		    (this.col_cat<0 || nodeText(tblB.childNodes[i_p].childNodes[this.col_cat]) == rcat) &&
+		    (this.col_mess<0 || nodeText(tblB.childNodes[i_p].childNodes[this.col_mess]) == rmess) )
+		break;
+	    }
+	    if( i_p >= 1 ) continue;
+
+	    var rowEl = document.createElement('tr');
+	    for( var i_cel = 0; i_cel < tblB.childNodes[0].childNodes.length; i_cel++ )
+	    {
+	      var celEl = document.createElement('td'); celEl.style.cssText = this.wFont;
+	      if( i_cel == 0 ) celEl.setAttribute('time',rtm);
+	      if( this.col_pos == i_cel ) { setNodeText(celEl,0); celEl.style.cssText+=' text-align: center; '; }
+	      else if( this.col_tm == i_cel )
+	      {
+		var dt = new Date(rtm*1000);
+		setNodeText(celEl,dt.getDate()+'.'+(dt.getMonth()+1)+'.'+dt.getFullYear()+' '+dt.getHours()+':'+
+				  ((dt.getMinutes()<10)?('0'+dt.getMinutes()):dt.getMinutes())+':'+((dt.getSeconds()<10)?('0'+dt.getSeconds()):dt.getSeconds()));
+	      }
+	      else if( this.col_lev == i_cel ) setNodeText(celEl,rlev);
+	      else if( this.col_cat == i_cel ) setNodeText(celEl,rcat);
+	      else if( this.col_mess == i_cel ) setNodeText(celEl,rmess);
+	      rowEl.appendChild(celEl);
+	    }
+	    tblB.appendChild(rowEl);
+	  }
+	//> Update position collumn
+	if( this.col_pos >= 0 )
+	  for( var i_rw = 1; i_rw < tblB.childNodes.length; i_rw++ )
+	    setNodeText(tblB.childNodes[i_rw].childNodes[this.col_pos],i_rw);
+      }
+    }
+
+    if( this.isEnabled() && parseInt(this.attrs['trcPer']) ) this.perUpdtEn( true );
+    else { this.perUpdtEn( false ); this.loadData(); }
+  }
   else if( this.attrs['root'] == 'Document' )
   {
-    elStyle+='background-color : white; ';
+    elStyle+='background-color: white; ';
+
+    this.wFont = '';
+    var allFnt = this.attrs['font'].split(' ');
+    if( allFnt.length >= 1 ) this.wFont+='font-family: '+allFnt[0].replace(/_/g,' ')+'; ';
+    if( allFnt.length >= 2 ) this.wFont+='font-size: '+(parseInt(allFnt[1])*Math.min(xSc,ySc)).toFixed(0)+'px; ';
+    if( allFnt.length >= 3 ) this.wFont+='font-weight: '+(parseInt(allFnt[2])?'bold':'normal')+'; ';
+    if( allFnt.length >= 4 ) this.wFont+='font-style: '+(parseInt(allFnt[3])?'italic':'normal')+'; ';
+
     var ifrmObj = this.place.childNodes[0];
     if( !ifrmObj )
     {
@@ -1104,7 +1303,7 @@ function makeEl( pgBr, inclPg )
 }
 function perUpdtEn( en )
 {
-  if( this.attrs['root'] == 'Diagram' )
+  if( this.attrs['root'] == 'Diagram' || this.attrs['root'] == 'Protocol' )
   {
      if( en && this.isEnabled() && !perUpdtWdgs[this.addr] && parseInt(this.attrs['trcPer']) ) perUpdtWdgs[this.addr] = this;
      if( !en && perUpdtWdgs[this.addr] ) delete perUpdtWdgs[this.addr];
@@ -1119,11 +1318,26 @@ function perUpdt( )
     var dgrObj = this.place.childNodes[0].childNodes[0];
     if( dgrObj ) dgrObj.src = '/'+MOD_ID+this.addr+'?com=obj&tm='+tmCnt+'&xSc='+this.xScale(true).toFixed(2)+'&ySc='+this.yScale(true).toFixed(2);
   }
+  else if( this.attrs['root'] == 'Protocol' && (this.updCntr % parseInt(this.attrs['trcPer'])) == 0 ) this.loadData();
   else if( this.attrs['root'] == 'Document' )
   {
     var frDoc = this.place.childNodes[0].contentDocument || this.place.childNodes[0].contentWindow || this.place.childNodes[0].document;
     frDoc.open();
-    frDoc.write('<html><head><style type=\'text/css\'>'+this.attrs['style']+'</style></head>'+(this.attrs['doc']?this.attrs['doc']:this.attrs['tmpl'])+'</html>');
+    frDoc.write("<html><head>"+
+		"<style type='text/css'>"+
+		" * { "+this.wFont+" }\n"+
+		" big { font-size: 120%; }\n"+
+		" small { font-size: 90%; }\n"+
+		" h1 { font-size: 200%; }\n"+
+		" h2 { font-size: 150%; }\n"+
+		" h3 { font-size: 120%; }\n"+
+		" h4 { font-size: 105%; }\n"+
+		" h5 { font-size: 95%; }\n"+
+		" h6 { font-size: 70%; }\n"+
+		" u,b,i { font-size : inherit; }\n"+
+		" sup,sub { font-size: 80%; }\n"+
+		this.attrs['style']+"</style>"+
+		"</head>"+(this.attrs['doc']?this.attrs['doc']:this.attrs['tmpl'])+"</html>");
     frDoc.close();
     this.perUpdtEn( false );
   }

@@ -730,16 +730,17 @@ void OrigProtocol::postEnable( int flag )
     {
 	attrAdd( new TFld("backColor",_("Background:color"),TFld::String,Attr::Color,"","","","","20") );
 	attrAdd( new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","","","","21") );
+	attrAdd( new TFld("font",_("Font"),TFld::String,Attr::Font,"","Arial 11","","","22") );
 	attrAdd( new TFld("time",_("Time, sek"),TFld::Integer,Attr::DataTime,"","","","","24") );
 	attrAdd( new TFld("tSize",_("Size, sek"),TFld::Integer,TFld::NoFlag,"","60","","","25") );
 	attrAdd( new TFld("trcPer",_("Tracing period (s)"),TFld::Integer,TFld::NoFlag,"","0","0;360","","26") );
 	attrAdd( new TFld("arch",_("Archivator"),TFld::String,TFld::NoFlag,"","","","","27") );
 	attrAdd( new TFld("tmpl",_("Template"),TFld::String,TFld::NoFlag,"","","","","28") );
 	attrAdd( new TFld("lev",_("Level"),TFld::Integer,TFld::NoFlag,"","0","","","29") );
-	attrAdd( new TFld("viewOrd",_("View order"),TFld::Integer,TFld::Selected,"","0",
-	    "0;1;2",_("On time;On level;On level and trigered"),"30") );
+//	attrAdd( new TFld("viewOrd",_("View order"),TFld::Integer,TFld::Selected,"","0",
+//	    "0;1;2",_("On time;On level;On level and trigered"),"30") );
 	attrAdd( new TFld("col",_("View columns"),TFld::String,TFld::NoFlag,"","pos;tm;lev;cat;mess","","","31") );
-	attrAdd( new TFld("itProp",_("Items properties"),TFld::Integer,Attr::Active,"","0","0;10","","32") );
+//	attrAdd( new TFld("itProp",_("Items properties"),TFld::Integer,Attr::Active,"","0","0;10","","32") );
     }
 }
 
@@ -819,6 +820,7 @@ void OrigDocument::postEnable( int flag )
 	attrAdd( new TFld("style",_("CSS"),TFld::String,TFld::FullText,"","","","","20") );
 	attrAdd( new TFld("tmpl",_("Template"),TFld::String,TFld::FullText,"","","","","21") );
 	attrAdd( new TFld("doc",_("Document"),TFld::String,TFld::FullText,"","","","","22") );
+	attrAdd( new TFld("font",_("Font"),TFld::String,Attr::Font,"","Arial 11","","","26") );
 	attrAdd( new TFld("bTime",_("Time:begin"),TFld::Integer,Attr::DataTime,"","0","","","24") );
 	attrAdd( new TFld("time",_("Time:current"),TFld::Integer,Attr::DataTime|Attr::Active,"","0","","","23") );
 	attrAdd( new TFld("n",_("Archive size"),TFld::Integer,Attr::Active,"","0","0;99","","25") );

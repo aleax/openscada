@@ -301,6 +301,9 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
     {
 	bool mk_new = false;
 	Qt::Alignment wAlign = 0;
+	QFont elFnt = shD->font;
+	if( elFnt.pixelSize() > 0 )
+	    elFnt.setPixelSize((int)((float)elFnt.pixelSize()*vmin(w->xScale(true),w->yScale(true))));
 	switch( shD->elType )
 	{
 	    case 0:	//Line edit
@@ -312,7 +315,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    if( runW ) connect( shD->addrWdg, SIGNAL(apply()), this, SLOT(lineAccept()) );
 		    mk_new = true;
 		}
-		//- View -
+		//> View
 		LineEdit::LType tp = LineEdit::Text;
 		switch( shD->view )
 		{
@@ -326,12 +329,12 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		}
 		if( ((LineEdit*)shD->addrWdg)->type() != tp )
 		{ ((LineEdit*)shD->addrWdg)->setType(tp); mk_new = true; }
-		//- Cfg -
+		//> Cfg
 		((LineEdit*)shD->addrWdg)->setCfg(shD->cfg.c_str());
-		//- Value -
+		//> Value
 		((LineEdit*)shD->addrWdg)->setValue(shD->value.c_str());
-		//- Font -
-		shD->addrWdg->setFont(shD->font);
+		//> Font
+		shD->addrWdg->setFont(elFnt);
 		break;
 	    }
 	    case 1:	//Text edit
@@ -347,7 +350,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		//- WordWrap -
 		((TextEdit*)shD->addrWdg)->workWdg()->setLineWrapMode( shD->wordWrap ? QTextEdit::WidgetWidth : QTextEdit::NoWrap );
 		//- Font -
-		shD->addrWdg->setFont(shD->font);
+		shD->addrWdg->setFont(elFnt);
 		break;
 	    case 2:	//Chek box
 		if( !shD->addrWdg || !qobject_cast<QCheckBox*>(shD->addrWdg) )
@@ -362,7 +365,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		//- Value -
 		((QCheckBox*)shD->addrWdg)->setChecked(atoi(shD->value.c_str()));
 		//- Font -
-		shD->addrWdg->setFont(shD->font);
+		shD->addrWdg->setFont(elFnt);
 		break;
 	    case 3:	//Button
 	    {
@@ -398,7 +401,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		//- Value -
 		((QPushButton*)shD->addrWdg)->setChecked(atoi(shD->value.c_str()));
 		//- Font -
-		shD->addrWdg->setFont(shD->font);
+		shD->addrWdg->setFont(elFnt);
 		break;
 	    }
 	    case 4:	//Combo box
@@ -417,7 +420,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		if( ((QComboBox*)shD->addrWdg)->findText(shD->value.c_str()) < 0 ) ((QComboBox*)shD->addrWdg)->addItem(shD->value.c_str());
 		((QComboBox*)shD->addrWdg)->setCurrentIndex(((QComboBox*)shD->addrWdg)->findText(shD->value.c_str()));
 		//- Font -
-		shD->addrWdg->setFont(shD->font);
+		shD->addrWdg->setFont(elFnt);
 		break;
 	    }
 	    case 5:	//List
@@ -436,7 +439,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		QList<QListWidgetItem *> its = ((QListWidget*)shD->addrWdg)->findItems(shD->value.c_str(),Qt::MatchExactly);
 		if( its.size() ) ((QListWidget*)shD->addrWdg)->setCurrentItem(its[0]);
 		//- Font -
-		shD->addrWdg->setFont(shD->font);
+		shD->addrWdg->setFont(elFnt);
 		break;
 	    }
 	    case 6:	//Slider
@@ -683,10 +686,16 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    break;
 	case 20:	//backColor
 	{
-	    shD->backColor = QColor(val.c_str());
-	    QPalette p(w->palette());
-	    p.setColor(QPalette::Background,shD->backColor);
-	    w->setPalette(p);
+	    shD->backGrnd.setColor(QColor(val.c_str()));
+
+	    QPalette plt(w->palette());
+	    QBrush brsh = plt.brush(QPalette::Background);
+	    brsh.setColor(shD->backGrnd.color());
+	    if( !brsh.color().isValid() ) brsh.setColor(QPalette().brush(QPalette::Background).color());
+	    brsh.setStyle( brsh.textureImage().isNull() ? Qt::SolidPattern : Qt::TexturePattern );
+	    plt.setBrush(QPalette::Background,brsh);
+	    w->setPalette(plt);
+
 	    up = true;
 	    break;
 	}
@@ -695,11 +704,16 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    QImage img;
 	    string backimg = w->resGet(val);
 	    if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
-		shD->backImg = QBrush(img);
-	    else shD->backImg = QBrush();
-	    QPalette p(w->palette());
-	    p.setBrush(QPalette::Background,shD->backImg);
-	    w->setPalette(p);
+		shD->backGrnd.setTextureImage(img);
+	    else shD->backGrnd.setTextureImage(QImage());
+
+	    QPalette plt(w->palette());
+	    QBrush brsh = plt.brush(QPalette::Background);
+	    brsh.setTextureImage(img);
+	    brsh.setStyle( !brsh.textureImage().isNull() ? Qt::TexturePattern : Qt::SolidPattern );
+	    plt.setBrush(QPalette::Base,brsh);
+	    w->setPalette(plt);
+
 	    up = true;
 	    break;
 	}
@@ -855,8 +869,8 @@ bool ShapeText::event( WdgView *w, QEvent *event )
 	    QRect dR = QRect(QPoint(-wdth/2,-heigt/2),QSize(wdth,heigt));
 
 	    //- Draw decoration -
-	    if( shD->backColor.isValid() ) pnt.fillRect(dR,shD->backColor);
-	    if( shD->backImg.style() != Qt::NoBrush ) pnt.fillRect(dR,shD->backImg);
+	    if( shD->backGrnd.color().isValid() ) pnt.fillRect(dR,shD->backGrnd.color());
+	    if( !shD->backGrnd.textureImage().isNull() ) pnt.fillRect(dR,shD->backGrnd.textureImage());
 
 	    //- Draw border -
 	    if( shD->border.width() )
@@ -941,22 +955,31 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    break;
 	case 20:	//backColor
 	{
-	    shD->backColor = QColor(val.c_str());
-	    QPalette p(w->palette());
-	    p.setColor(QPalette::Background,shD->backColor);
-	    w->setPalette(p);
+	    shD->backGrnd.setColor(QColor(val.c_str()));
+
+	    QPalette plt(w->palette());
+	    QBrush brsh = plt.brush(QPalette::Background);
+	    brsh.setColor(shD->backGrnd.color());
+	    if( !brsh.color().isValid() ) brsh.setColor(QPalette().brush(QPalette::Background).color());
+	    brsh.setStyle( brsh.textureImage().isNull() ? Qt::SolidPattern : Qt::TexturePattern );
+	    plt.setBrush(QPalette::Background,brsh);
+	    w->setPalette(plt);
 	    break;
 	}
 	case 21:	//backImg
 	{
 	    QImage img;
 	    string backimg = w->resGet(val);
-	    shD->backImg = QBrush();
+	    shD->backGrnd.setTextureImage(QImage());
 	    if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
-		shD->backImg = QBrush(img);
-	    QPalette p(w->palette());
-	    p.setBrush(QPalette::Background,shD->backImg);
-	    w->setPalette(p);
+		shD->backGrnd.setTextureImage(img);
+
+	    QPalette plt(w->palette());
+	    QBrush brsh = plt.brush(QPalette::Background);
+	    brsh.setTextureImage(img);
+	    brsh.setStyle( !brsh.textureImage().isNull() ? Qt::TexturePattern : Qt::SolidPattern );
+	    plt.setBrush(QPalette::Background,brsh);
+	    w->setPalette(plt);
 	    break;
 	}
 	case 22:	//bordWidth
@@ -1030,14 +1053,14 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    case 0:
 	    {
 		QImage img;
-		//- Free movie data, if set -
+		//> Free movie data, if set
 		if( shD->labWdg->movie() )
 		{
 		    if(shD->labWdg->movie()->device()) delete shD->labWdg->movie()->device();
 		    delete shD->labWdg->movie();
 		    shD->labWdg->clear();
 		}
-		//- Set new image -
+		//> Set new image
 		if( !sdata.empty() && img.loadFromData((const uchar*)sdata.data(),sdata.size()) )
 		{
 		    shD->labWdg->setPixmap(QPixmap::fromImage(img.scaled(
@@ -1051,29 +1074,35 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    }
 	    case 1:
 	    {
-		//- Clear previous movie data -
+		//> Clear previous movie data
 		if( shD->labWdg->movie() )
 		{
 		    if(shD->labWdg->movie()->device()) delete shD->labWdg->movie()->device();
 		    delete shD->labWdg->movie();
 		    shD->labWdg->clear();
 		}
-		//- Set new data -
+		//> Set new data
 		if( sdata.size() )
 		{
 		    QBuffer *buf = new QBuffer(w);
 		    buf->setData( sdata.data(), sdata.size() );
 		    buf->open( QIODevice::ReadOnly );
 		    shD->labWdg->setMovie( new QMovie(buf) );
-		    //- Play speed set -
+
+		    //> Play speed set
 		    if( shD->mediaSpeed <= 1 ) shD->labWdg->movie()->stop();
 		    else
 		    {
 			shD->labWdg->movie()->setSpeed(shD->mediaSpeed);
 			shD->labWdg->movie()->start();
 		    }
-		    //- Fit set -
+		    //> Fit set
 		    shD->labWdg->setScaledContents( shD->mediaFit );
+		    if( !shD->mediaFit && shD->labWdg->movie()->jumpToNextFrame() )
+		    {
+			QImage img = shD->labWdg->movie()->currentImage();
+			shD->labWdg->movie()->setScaledSize(QSize((int)((float)img.width()*w->xScale(true)),(int)((float)img.height()*w->yScale(true))));
+		    }
 		}else shD->labWdg->setText("");
 
 		break;
@@ -1097,16 +1126,16 @@ bool ShapeMedia::event( WdgView *w, QEvent *event )
 	{
 	    QPainter pnt( w );
 
-	    //- Prepare draw area -
+	    //> Prepare draw area
 	    QRect dA = w->rect().adjusted(0,0,-2*shD->geomMargin,-2*shD->geomMargin);
 	    pnt.setWindow(dA);
 	    pnt.setViewport(w->rect().adjusted(shD->geomMargin,shD->geomMargin,-shD->geomMargin,-shD->geomMargin));
 
-	    //- Draw decoration -
-	    if( shD->backColor.isValid() ) pnt.fillRect(dA,shD->backColor);
-	    if( shD->backImg.style() != Qt::NoBrush ) pnt.fillRect(dA,shD->backImg);
+	    //> Draw decoration
+	    if( shD->backGrnd.color().isValid() ) pnt.fillRect(dA,shD->backGrnd.color());
+	    if( !shD->backGrnd.textureImage().isNull() ) pnt.fillRect(dA,shD->backGrnd.textureImage());
 
-	    //- Draw border -
+	    //> Draw border
 	    borderDraw( pnt, dA, shD->border, shD->bordStyle );
 
 	    return true;
@@ -1233,23 +1262,33 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    shD->geomMargin = atoi(val.c_str()); make_pct = true; break;
 	case 20:	//backColor
 	{
-	    shD->backColor = QColor(val.c_str());
-	    QPalette p(w->palette());
-	    p.setColor(QPalette::Background,shD->backColor);
-	    w->setPalette(p);
-	    make_pct = true;
+	    shD->backGrnd.setColor( QColor(val.c_str()) );
+
+	    QPalette plt(w->palette());
+	    QBrush brsh = plt.brush(QPalette::Background);
+	    brsh.setColor(shD->backGrnd.color());
+	    if( !brsh.color().isValid() ) brsh.setColor(QPalette().brush(QPalette::Background).color());
+	    brsh.setStyle( brsh.textureImage().isNull() ? Qt::SolidPattern : Qt::TexturePattern );
+	    plt.setBrush(QPalette::Background,brsh);
+	    w->setPalette(plt);
+	    up = true;
 	    break;
 	}
 	case 21:	//backImg
 	{
 	    QImage img;
 	    string backimg = w->resGet(val);
-	    shD->backImg = QBrush();
+	    shD->backGrnd.setTextureImage(QImage());
 	    if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
-		shD->backImg = QBrush(img);
-	    QPalette p(w->palette());
-	    p.setBrush(QPalette::Background,shD->backImg);
-	    w->setPalette(p);
+		shD->backGrnd.setTextureImage(img);
+
+	    QPalette plt(w->palette());
+	    QBrush brsh = plt.brush(QPalette::Background);
+	    brsh.setTextureImage(img);
+	    brsh.setStyle( !brsh.textureImage().isNull() ? Qt::TexturePattern : Qt::SolidPattern );
+	    plt.setBrush(QPalette::Background,brsh);
+	    w->setPalette(plt);
+	    up = true;
 	    break;
 	}
 	case 22:	//bordWidth
@@ -1388,20 +1427,23 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	//>>> Set grid pen
 	grdPen.setColor(shD->sclColor);
 	grdPen.setStyle(Qt::SolidLine);
-	grdPen.setWidth(1);
+	grdPen.setWidth( (int)vmax(1.0,vmin(w->xScale(true),w->yScale(true))) );
 	if( sclHor&0x2 || sclVer&0x2 )
 	{
 	    //>>> Set markers font and color
 	    mrkPen.setColor(shD->sclMarkColor);
-	    pnt.setFont(shD->sclMarkFont);
+	    QFont mrkFnt = shD->sclMarkFont;
+	    mrkFnt.setPixelSize( (int)((float)mrkFnt.pixelSize()*vmin(w->xScale(true),w->yScale(true))) );
+	    pnt.setFont(mrkFnt);
 	    mrkHeight = pnt.fontMetrics().height()-pnt.fontMetrics().descent();
 
 	    if( sclHor&0x2 )
 	    {
-		if( tAr.height() < 100 ) sclHor &= ~(0x02);
+		if( tAr.height() < (int)(100.0*vmin(w->xScale(true),w->yScale(true))) ) sclHor &= ~(0x02);
 		else tAr.adjust(0,0,0,-2*mrkHeight);
 	    }
-	    if( sclVer&0x2 && tAr.width() < 100 ) sclVer &= ~(0x02);
+	    if( sclVer&0x2 && tAr.width() < (int)(100.0*vmin(w->xScale(true),w->yScale(true))) )
+		sclVer &= ~(0x02);
 	}
     }
 
@@ -1410,7 +1452,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
     long long aVbeg;			//Corrected for allow data the trend begin point
     long long hDiv = 1, hDivBase = 1;	//Horisontal scale divisor
 
-    int hmax_ln = tAr.width()/((sclHor&0x2)?40:15);
+    int hmax_ln = tAr.width() / (int)(((sclHor&0x2)?40.0:15.0)*vmin(w->xScale(true),w->yScale(true)));
     if( hmax_ln >= 2 )
     {
 	int hvLev = 0;
@@ -1468,7 +1510,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		int h_pos = tAr.x()+tAr.width()*(i_h-tBeg)/(tPict-tBeg);
 		if( sclHor&0x1 ) pnt.drawLine(h_pos,tAr.y(),h_pos,tAr.y()+tAr.height());
 		else pnt.drawLine(h_pos,tAr.y()+tAr.height()-3,h_pos,tAr.y()+tAr.height()+3);
-		
+
 		if( sclHor&0x2 && !(i_h%hDiv) && i_h != tPict )
 		{
 		    tm_t = i_h/1000000;
@@ -1483,7 +1525,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 			else if( ttm.tm_sec > ttm1.tm_sec )	chLev = 1;
 			else chLev = 0;
 		    }
-		
+
 		    //Check for data present
 		    lab_dt.clear(), lab_tm.clear();
 		    if( hvLev == 5 || chLev >= 4 )					//Date
@@ -1574,7 +1616,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	else { vsMax = shD->prms[0].bordU(); vsMin = shD->prms[0].bordL(); }
     }
 
-    float vmax_ln = tAr.height()/20;
+    float vmax_ln = tAr.height() / (int)(20.0*vmin(w->xScale(true),w->yScale(true)));
     if( vmax_ln >= 2 )
     {
 	double vDiv = 1.;
@@ -1752,8 +1794,8 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 	    pnt.setViewport(w->rect().adjusted(shD->geomMargin,shD->geomMargin,-shD->geomMargin,-shD->geomMargin));
 	
 	    //- Draw decoration -
-	    if( shD->backColor.isValid() ) pnt.fillRect(dA,shD->backColor);
-	    if( shD->backImg.style() != Qt::NoBrush ) pnt.fillRect(dA,shD->backImg);
+	    if( shD->backGrnd.color().isValid() ) pnt.fillRect(dA,shD->backGrnd.color());
+	    if( !shD->backGrnd.textureImage().isNull() ) pnt.fillRect(dA,shD->backGrnd.textureImage());
 
 	    //- Draw border -
 	    borderDraw( pnt, dA, shD->border, shD->bordStyle );
@@ -2050,20 +2092,41 @@ bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    w->layout()->setMargin(atoi(val.c_str()));	break;
 	case 20:	//backColor
 	{
-	    QPalette plt;
-	    QColor clr(val.c_str());
-	    if( clr.isValid() )	plt.setColor(QPalette::Base,QColor(val.c_str()));
+	    QPalette plt(shD->addrWdg->palette());
+	    QBrush brsh = plt.brush(QPalette::Base);
+	    brsh.setColor(QColor(val.c_str()));
+	    if( !brsh.color().isValid() ) brsh.setColor(QPalette().brush(QPalette::Base).color());
+	    brsh.setStyle( brsh.textureImage().isNull() ? Qt::SolidPattern : Qt::TexturePattern );
+	    plt.setBrush(QPalette::Base,brsh);
 	    shD->addrWdg->setPalette(plt);
 	    break;
 	}
 	case 21:	//backImg
 	{
-	    QPalette plt;
 	    QImage img;
+	    QPalette plt(shD->addrWdg->palette());
+	    QBrush brsh = plt.brush(QPalette::Base);
 	    string backimg = w->resGet(val);
-	    if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
-		plt.setBrush(QPalette::Base,QBrush(img));
+	    if( !backimg.empty() ) img.loadFromData((const uchar*)backimg.c_str(),backimg.size());
+	    brsh.setTextureImage(img);
+	    brsh.setStyle( !brsh.textureImage().isNull() ? Qt::TexturePattern : Qt::SolidPattern );
+	    plt.setBrush(QPalette::Base,brsh);
 	    shD->addrWdg->setPalette(plt);
+	    break;
+	}
+	case 22:	//font
+	{
+	    char family[101]; strcpy(family,"Arial");
+	    int size = 10, bold = 0, italic = 0, underline = 0, strike = 0;
+	    sscanf(val.c_str(),"%100s %d %d %d %d %d",family,&size,&bold,&italic,&underline,&strike);
+	    QFont fnt;
+	    fnt.setFamily(QString(family).replace(QRegExp("_")," "));
+	    fnt.setPixelSize( (int)((float)size*vmin(w->xScale(true),w->yScale(true))) );
+	    fnt.setBold(bold);
+	    fnt.setItalic(italic);
+	    fnt.setUnderline(underline);
+	    fnt.setStrikeOut(strike);
+	    shD->addrWdg->setFont(fnt);
 	    break;
 	}
 	case 24:	//time
@@ -2123,7 +2186,7 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 {
     ShpDt *shD = (ShpDt*)w->shpData;
 
-    //- Check for border of present data -
+    //> Check for border of present data
     unsigned int tTime		= shD->time;
     unsigned int tTimeGrnd	= tTime - shD->tSize;
     unsigned int arhBeg		= shD->arhBeg;
@@ -2136,7 +2199,7 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	shD->indMap.clear();
 	string clm;
 	for( int c_off = 0; (clm=TSYS::strSepParse(shD->col,0,';',&c_off)).size(); )
-	    if( clm == "tm" || clm == "lev" || clm == "cat" || clm == "mess" ) 
+	    if( clm == "tm" || clm == "lev" || clm == "cat" || clm == "mess" )
 	    {
 		int ncl = shD->addrWdg->columnCount();
 		shD->addrWdg->setColumnCount(ncl+1);
@@ -2151,7 +2214,7 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	arhBeg = arhEnd = 0;
     }
 
-    //- Get archive parameters -
+    //> Get archive parameters
     if( !arhBeg || !arhEnd || tTime > arhEnd )
     {
 	XMLNode req("info");
@@ -2164,23 +2227,29 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	}
     }
     if( !shD->addrWdg->columnCount() || !arhBeg || !arhEnd )	return;
-    //- Correct request to archive border -
+    //> Correct request to archive border
     tTime     = vmin(tTime,arhEnd);
     tTimeGrnd = vmax(tTimeGrnd,arhBeg);
-    //- Clear data at time error -
-    unsigned int valEnd = (shD->addrWdg->rowCount() && shD->addrWdg->columnCount()) ? shD->addrWdg->item(0,0)->data(Qt::UserRole).toUInt() : 0;
-    unsigned int valBeg = (shD->addrWdg->rowCount() && shD->addrWdg->columnCount()) ? shD->addrWdg->item(shD->addrWdg->rowCount()-1,0)->data(Qt::UserRole).toUInt() : 0;    
+    //> Clear data at time error
+    unsigned int valEnd = 0, valBeg = 0;
+    if( shD->addrWdg->rowCount() && shD->addrWdg->columnCount() )
+    {
+	while( shD->addrWdg->rowCount() && (valEnd=shD->addrWdg->item(0,0)->data(Qt::UserRole).toUInt()) > tTime )
+	    shD->addrWdg->removeRow(0);
+	while( shD->addrWdg->rowCount() && (valBeg=shD->addrWdg->item(shD->addrWdg->rowCount()-1,0)->data(Qt::UserRole).toUInt()) < tTimeGrnd )
+	    shD->addrWdg->removeRow(shD->addrWdg->rowCount()-1);
+    }
     if( tTime <= tTimeGrnd || (tTime < valEnd && tTimeGrnd > valBeg) )
     {
 	shD->addrWdg->setRowCount(0);
 	valEnd = valBeg = 0;
 	return;
     }
-    //- Correct request to present data -
+    //> Correct request to present data
     bool toUp = false;
     if( valEnd && tTime > valEnd )	{ tTimeGrnd = valEnd; toUp = true; }
     else if( valBeg && tTimeGrnd < valBeg )	tTime = valBeg-1;
-    //- Get values data -
+    //> Get values data -
     unsigned int rtm;			//Record's data
     QDateTime    dtm;
     QString   rlev, rcat, rmess;	//Record's level category and message
@@ -2197,46 +2266,42 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
     //int row = toUp ? 0 : shD->addrWdg->rowCount();
     bool newFill = (shD->addrWdg->rowCount()==0);
 
-    //- Get collumns indexes -
+    //> Get collumns indexes -
     int c_tm   = shD->indMap.value("tm",-1),
 	c_lev  = shD->indMap.value("lev",-1),
 	c_cat  = shD->indMap.value("cat",-1),
 	c_mess = shD->indMap.value("mess",-1);
 
     QTableWidgetItem *tit;
-    //- Process records -
+    //> Process records
     if( toUp )
 	for( int i_req = 0; i_req < req.childSize(); i_req++ )
 	{
 	    XMLNode *rcd = req.childGet(i_req);
 
-	    //-- Get parameters --
+	    //>> Get parameters
 	    rtm  = strtoul(rcd->attr("time").c_str(),0,10);
 	    rlev = rcd->attr("lev").c_str();
 	    rcat = rcd->attr("cat").c_str();
 	    rmess = rcd->text().c_str();
 
-	    //-- Check for dublicates --
-	    //--- Check for last message dublicate and like time messages ---
-	    bool is_dbl = false;
-	    for( int i_c = 0, i_p = 0; i_p < shD->addrWdg->rowCount(); i_p++, i_c++ )
+	    //>> Check for dublicates
+	    int i_p;
+	    for( i_p = 0; i_p < shD->addrWdg->rowCount(); i_p++ )
 	    {
-		if( rtm > shD->addrWdg->item(0,0)->data(Qt::UserRole).toUInt() && i_c )	continue;
+		if( rtm > shD->addrWdg->item(0,0)->data(Qt::UserRole).toUInt() && i_p )	continue;
 		if( (c_lev<0 || shD->addrWdg->item(i_p,c_lev)->text() == rlev) &&
-		    (c_cat<0 || shD->addrWdg->item(i_p,c_cat)->text() == rcat)  &&
-		    (c_mess<0 || shD->addrWdg->item(i_p,c_mess)->text() == rmess ) )
-		{
-		    is_dbl = true;
+			(c_cat<0 || shD->addrWdg->item(i_p,c_cat)->text() == rcat) &&
+			(c_mess<0 || shD->addrWdg->item(i_p,c_mess)->text() == rmess ) )
 		    break;
-		}
 	    }
-	    if( is_dbl ) continue;
-	    //--- Insert new row ---
+	    if( i_p < shD->addrWdg->rowCount() ) continue;
+	    //>> Insert new row
 	    shD->addrWdg->insertRow(0);
 	    if( c_tm >= 0 )
 	    {
 		dtm.setTime_t(rtm);
-		shD->addrWdg->setItem( 0, c_tm, tit=new QTableWidgetItem(dtm.toString(Qt::ISODate)) );
+		shD->addrWdg->setItem( 0, c_tm, tit=new QTableWidgetItem(dtm.toString("dd.MM.yyyy hh:mm:ss")) );
 		tit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
 	    }
 	    if( c_lev >= 0 )	{ shD->addrWdg->setItem( 0, c_lev, tit=new QTableWidgetItem(rlev) ); tit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable); }
@@ -2248,35 +2313,31 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	for( int i_req = req.childSize()-1; i_req >= 0; i_req-- )
 	{
 	    XMLNode *rcd = req.childGet(i_req);
-	    //-- Get parameters --
+	    //>> Get parameters
 	    rtm  = strtoul(rcd->attr("time").c_str(),0,10);
 	    rlev = rcd->attr("lev").c_str();
 	    rcat = rcd->attr("cat").c_str();
 	    rmess = rcd->text().c_str();
 
-	    //-- Check for dublicates --
-	    //--- Check for last message dublicate and like time messages ---
-	    bool is_dbl = false;
-	    for( int i_c = 0, i_p = shD->addrWdg->rowCount()-1; i_p >= 0; i_p--, i_c++ )
+	    //>> Check for dublicates
+	    int i_p;
+	    for( i_p = shD->addrWdg->rowCount()-1; i_p >= 0; i_p-- )
 	    {
-		if( rtm < shD->addrWdg->item(0,0)->data(Qt::UserRole).toUInt() && i_c )	continue;
+		if( rtm < shD->addrWdg->item(0,0)->data(Qt::UserRole).toUInt() && (i_p<(shD->addrWdg->rowCount()-1)) )	continue;
 		if( (c_lev<0 || shD->addrWdg->item(i_p,c_lev)->text() == rlev) &&
-		    (c_cat<0 || shD->addrWdg->item(i_p,c_cat)->text() == rcat)  &&
-		    (c_mess<0 || shD->addrWdg->item(i_p,c_mess)->text() == rmess ) )
-		{
-		    is_dbl = true;
+			(c_cat<0 || shD->addrWdg->item(i_p,c_cat)->text() == rcat)  &&
+			(c_mess<0 || shD->addrWdg->item(i_p,c_mess)->text() == rmess ) )
 		    break;
-		}
 	    }
-	    if( is_dbl ) continue;
+	    if( i_p >= 0 ) continue;
 	
-	    //--- Insert new row ---
+	    //>> Insert new row
 	    int row = shD->addrWdg->rowCount();
 	    shD->addrWdg->insertRow(row);
 	    if( c_tm >= 0 )
 	    {
 		dtm.setTime_t(rtm);
-		shD->addrWdg->setItem( row, c_tm, tit=new QTableWidgetItem(dtm.toString(Qt::ISODate)) );
+		shD->addrWdg->setItem( row, c_tm, tit=new QTableWidgetItem(dtm.toString("dd.MM.yyyy hh:mm:ss")) );
 		tit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
 	    }
 	    if( c_lev >= 0 )	{ shD->addrWdg->setItem( row, c_lev, tit=new QTableWidgetItem(rlev) ); tit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable); }
@@ -2334,7 +2395,10 @@ void ShapeProtocol::eventFilterSet( WdgView *view, QWidget *wdg, bool en )
     //- Process childs -
     for( int i_c = 0; i_c < wdg->children().size(); i_c++ )
 	if( qobject_cast<QWidget*>(wdg->children().at(i_c)) )
+	{
 	    eventFilterSet(view,(QWidget*)wdg->children().at(i_c),en);
+	    if( en ) ((QWidget*)wdg->children().at(i_c))->setMouseTracking(true);
+	}
 }
 
 void ShapeProtocol::setFocus(WdgView *view, QWidget *wdg, bool en, bool devel )
@@ -2437,6 +2501,21 @@ bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    relDoc = true;
 	    shD->tmpl = false;
 	    break;
+	case 26:	//font
+	{
+	    char family[101]; strcpy(family,"Arial");
+	    int size = 10, bold = 0, italic = 0, underline = 0, strike = 0;
+	    sscanf(val.c_str(),"%100s %d %d %d %d %d",family,&size,&bold,&italic,&underline,&strike);
+	    QFont fnt;
+	    fnt.setFamily(QString(family).replace(QRegExp("_")," "));
+	    fnt.setPixelSize( (int)((float)size*vmin(w->xScale(true),w->yScale(true))) );
+	    fnt.setBold(bold);
+	    fnt.setItalic(italic);
+	    fnt.setUnderline(underline);
+	    fnt.setStrikeOut(strike);
+	    shD->web->setFont(fnt);
+	    break;
+	}
     }
     if( relDoc && !w->allAttrLoad() )
     {
@@ -2498,6 +2577,7 @@ bool ShapeDocument::eventFilter( WdgView *w, QObject *object, QEvent *event )
 	    case QEvent::MouseButtonPress:
 	    case QEvent::MouseButtonRelease:
 	    case QEvent::ContextMenu:
+	    case QEvent::Wheel:
 		QApplication::sendEvent(w,event);
 		return true;
 	}
@@ -2614,22 +2694,31 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    break;
 	case 20: 	//backColor
 	{
-	    shD->backColor = QColor(val.c_str());
-	    QPalette p(w->palette());
-	    p.setColor(QPalette::Background,shD->backColor);
-	    w->setPalette(p);
+	    shD->backGrnd.setColor(QColor(val.c_str()));
+
+	    QPalette plt(w->palette());
+	    QBrush brsh = plt.brush(QPalette::Background);
+	    brsh.setColor(shD->backGrnd.color());
+	    if( !brsh.color().isValid() ) brsh.setColor(QPalette().brush(QPalette::Background).color());
+	    brsh.setStyle( brsh.textureImage().isNull() ? Qt::SolidPattern : Qt::TexturePattern );
+	    plt.setBrush(QPalette::Background,brsh);
+	    w->setPalette(plt);
 	    break;
 	}
 	case 21: 	//backImg
 	{
 	    QImage img;
 	    string backimg = w->resGet(val);
-	    shD->backImg = QBrush();
+	    shD->backGrnd.setTextureImage(QImage());
 	    if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
-		shD->backImg = QBrush(img);
-	    QPalette p(w->palette());
-	    p.setBrush(QPalette::Background,shD->backImg);
-	    w->setPalette(p);
+		shD->backGrnd.setTextureImage(img);
+
+	    QPalette plt(w->palette());
+	    QBrush brsh = plt.brush(QPalette::Background);
+	    brsh.setTextureImage(img);
+	    brsh.setStyle( !brsh.textureImage().isNull() ? Qt::TexturePattern : Qt::SolidPattern );
+	    plt.setBrush(QPalette::Background,brsh);
+	    w->setPalette(plt);
 	    break;
 	}
 	case 22:	//bordWidth
@@ -2736,8 +2825,8 @@ bool ShapeBox::event( WdgView *w, QEvent *event )
 	    pnt.setViewport(w->rect().adjusted(shD->geomMargin,shD->geomMargin,-shD->geomMargin,-shD->geomMargin));
 
 	    //- Draw background -
-	    if( shD->backColor.isValid() ) pnt.fillRect(dA,shD->backColor);
-	    if( shD->backImg.style() != Qt::NoBrush ) pnt.fillRect(dA,shD->backImg);
+	    if( shD->backGrnd.color().isValid() ) pnt.fillRect(dA,shD->backGrnd.color());
+	    if( !shD->backGrnd.textureImage().isNull() ) pnt.fillRect(dA,shD->backGrnd.textureImage());
 
 	    //- Draw border -
 	    borderDraw( pnt, dA, shD->border, shD->bordStyle );

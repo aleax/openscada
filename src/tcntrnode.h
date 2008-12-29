@@ -41,7 +41,14 @@ using std::vector;
 
 class TCntrNode;
 
-#if OSC_HASHMAP
+#if OSC_ORDLISTMAP
+
+#include <map>
+using std::map;
+typedef map<string, TCntrNode* > TMap;
+
+#else
+
 #include <ext/hash_map>
 using __gnu_cxx::hash_map;
 
@@ -61,10 +68,7 @@ typedef hash_map<string, TCntrNode*, __gnu_cxx::hash<string> > TMap;
 //#include <unordered_map>
 //using std::unordered_map;
 //typedef unordered_map<string, TCntrNode* > TMap;
-#else
-#include <map>
-using std::map;
-typedef map<string, TCntrNode* > TMap;
+
 #endif
 
 #include "xml.h"

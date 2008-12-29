@@ -125,6 +125,7 @@ class TWEB: public TUI
 	int cntrIfCmd( XMLNode &node, const string &user, bool VCA = true );
 
 	int colorParse( const string &clr );
+	string trMessReplace( const string &tsrc );
 
     protected:
 	//Methods

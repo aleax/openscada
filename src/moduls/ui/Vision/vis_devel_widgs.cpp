@@ -1807,7 +1807,7 @@ DevelWdgView::DevelWdgView( const string &iwid, int ilevel, VisDevelop *mainWind
 	setCursor(Qt::ArrowCursor);
 	setAcceptDrops(true);
 	setContextMenuPolicy(Qt::CustomContextMenu);
-        mainWin( )->setWdgVisScale( mVisScale );
+	mainWin( )->setWdgVisScale( mVisScale );
 	connect( this, SIGNAL( customContextMenuRequested(const QPoint&) ), this, SLOT( wdgPopup() ) );	
     }
     //> Select only created widgets by user
@@ -1978,7 +1978,7 @@ void DevelWdgView::upMouseCursors( const QPoint &curp )
     if( fMoveHold ) return;
 
     Qt::CursorShape new_shp = Qt::ArrowCursor;
-    //- Widget geometry -
+    //> Widget geometry
     if( grepAnchor(rect().bottomRight(),curp) )
 	new_shp = Qt::SizeFDiagCursor;
     else if( curp.x()>(rect().width()-4) && curp.x()<(rect().width()+4) )
@@ -1992,10 +1992,10 @@ void DevelWdgView::upMouseCursors( const QPoint &curp )
 	return;
     }
 
-    //- Childs' selection process -
+    //> Childs' selection process
     fLeftTop = false;
 
-    //-- Check child's anchor selection and widget's geometry --
+    //>> Check child's anchor selection and widget's geometry
     QRectF selRect;
     bool firs_nosel = true, noSelUp = false;
     for( int i_c = children().size()-1; i_c >= 0; i_c-- )
@@ -2006,7 +2006,7 @@ void DevelWdgView::upMouseCursors( const QPoint &curp )
 	    else if( firs_nosel && ((DevelWdgView*)children().at(i_c))->geometryF().contains(curp) )	noSelUp = true;
 	}
 
-    //-- Select childs anchors --
+    //>> Select childs anchors
     if( !selRect.isNull() )
     {
 	if( grepAnchor(selRect.topLeft(),curp) )

@@ -1531,7 +1531,7 @@ Optional Features:
   --disable-DCON          disable build module DAQ/DCON
   --disable-DAQTransporter
                           disable build module DAQ/Transporter
-  --disable-SoundCard     disable build module DAQ/SoundCard
+  --enable-SoundCard      enable build module DAQ/SoundCard
   --disable-VCAEngine     disable build module UI/VCAEngine
   --disable-Vision        disable build module UI/Vision
   --disable-QTStarter     disable build module UI/QTStarter
@@ -27410,9 +27410,6 @@ oscd_localedir="\${DESTDIR}\${datadir}/locale"
 
 
 
-LDFLAGS=
-CXXFLAGS="-O2 -DOSC_HASHMAP"
-
 
 
 ac_config_files="$ac_config_files Makefile src/Makefile src/moduls/Makefile src/moduls/arhiv/Makefile src/moduls/bd/Makefile src/moduls/protocol/Makefile src/moduls/special/Makefile src/moduls/daq/Makefile src/moduls/transport/Makefile src/moduls/ui/Makefile"
@@ -27597,7 +27594,7 @@ fi
 if test "${enable_SoundCard+set}" = set; then
   enableval=$enable_SoundCard;  if test $enableval = yes; then ModSoundCard=true; else ModSoundCard=false; fi
 else
-   ModSoundCard=true;
+   ModSoundCard=false;
 fi
 
 #-- UI modules --

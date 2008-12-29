@@ -257,7 +257,15 @@ TWEB::TWEB( string name ) : mTAuth(10), chck_st(false)
 	"table.page_auth {background-color:#9999ff; border:3px ridge #a9a9a9; padding:2px }\n"
 	"table.page_auth tr.content {background-color:#cccccc; border:5px ridge #9999ff; padding:5px }\n"
 	".vertalign { display: table-cell; text-align: center; vertical-align: middle; }\n"
-	".vertalign * { vertical-align: middle;	}\n";
+	".vertalign * { vertical-align: middle;	}\n"
+	"table.prot { border: 1px solid black; border-collapse: collapse; empty-cells: show; }\n"
+	"table.prot th { border: 1px solid black; background-color: #E6E6E6; text-align: center; white-space: nowrap; }\n"
+	"table.prot td { border: 1px solid black; white-space: nowrap; }\n"
+	"table.prot td.hd { background-color: #E6E6E6; font-weight: bold; text-align: center; }\n";
+
+#if 0
+    char mess[][100] = { "Time", "Level", "Category", "Message" };
+#endif
 }
 
 TWEB::~TWEB()
@@ -292,8 +300,7 @@ string TWEB::optDescr( )
     snprintf(buf,sizeof(buf),_(
 	"======================= The module <%s:%s> options =======================\n"
 	"---------- Parameters of the module section <%s> in config file ----------\n\n"
-	"SessTimeLife <time>      Time of the sesion life, minutes (default 10).\n"
-	"CSSTables    <CSS>       CSS for creating pages.\n\n"),
+	"SessTimeLife <time>      Time of the sesion life, minutes (default 10).\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 
     return buf;
@@ -323,13 +330,11 @@ void TWEB::load_( )
 
     //- Load parameters from config file -
     mTAuth = atoi( TBDS::genDBGet(nodePath()+"SessTimeLife",TSYS::int2str(mTAuth)).c_str() );
-    mCSStables = TBDS::genDBGet(nodePath()+"CSSTables",mCSStables);
 }
 
 void TWEB::save_( )
 {
     TBDS::genDBSet(nodePath()+"SessTimeLife",TSYS::int2str(mTAuth));
-    TBDS::genDBSet(nodePath()+"CSSTables",mCSStables);
 }
 
 void TWEB::modStart( )
@@ -617,7 +622,7 @@ void TWEB::sesCheck( SSess &ses )
 
 void TWEB::HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &contain )
 {
-    map< string, string >::iterator cntEl;
+    map<string,string>::iterator cntEl;
     SSess ses(TSYS::strDecode(url,TSYS::HttpURL),page,sender,vars,contain);
 
     //> Check for autentification POST requests
@@ -651,9 +656,19 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	return;
     }
 
-    //> Post command to session
     try
     {
+	//> To control interface request
+	if( (cntEl=ses.prm.find("com"))!=ses.prm.end() && cntEl->second == "com" )
+	{
+	    XMLNode req(""); req.load(ses.content); req.setAttr("path",ses.url);
+	    cntrIfCmd(req,ses.user,false);
+	    ses.page = req.save();
+	    page = httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
+	    return;
+	}
+
+	//> Post command to session
 	string sesnm = TSYS::pathLev(ses.url,0);
 	if( sesnm.size() <= 4 || sesnm.substr(0,4) != "ses_" ) page = httpHead("404 Not Found");
 	else
@@ -694,10 +709,7 @@ void TWEB::cntrCmdProc( XMLNode *opt )
     {
 	TUI::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
-	{
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of auth sesion(min)"),0660,"root","root",1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/CSS",_("CSS"),0660,"root","root",3,"tp","str","cols","90","rows","7");
-	}
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
 	return;
     }
@@ -708,11 +720,6 @@ void TWEB::cntrCmdProc( XMLNode *opt )
     {
 	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )   opt->setText( TSYS::int2str(authTime()) );
 	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )   setAuthTime( atoi(opt->text().c_str()) );
-    }
-    else if( a_path == "/prm/cfg/CSS" )
-    {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )   opt->setText( CSStables() );
-	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )   setCSStables( opt->text() );
     }
     else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )   opt->setText(optDescr());
     else TUI::cntrCmdProc(opt);
@@ -733,6 +740,32 @@ int TWEB::colorParse( const string &clr )
 	if( iclr != colors.end() )	return iclr->second;
     }
     return -1;
+}
+
+string TWEB::trMessReplace( const string &tsrc )
+{
+    string trez; trez.reserve(tsrc.size());
+
+    int txtBeg = 0, i_s;
+    for( i_s = 0; i_s < tsrc.size(); i_s++ )
+	if( tsrc[i_s] == '#' && tsrc.substr(i_s,3) == "###" && (i_s+3)<tsrc.size() && tsrc[i_s+3] != '#' )
+	{
+	    int i_r;
+	    for( i_r = i_s+3; i_r < tsrc.size(); i_r++ )
+	    if( (tsrc[i_r] == '#' && tsrc.substr(i_r,3) == "###" && ((i_r+3)>=tsrc.size() || tsrc[i_r+3] != '#')) || tsrc[i_r] == '\n' )
+		break;
+	    if( i_r < tsrc.size() && tsrc[i_r] != '\n' )
+	    {
+		trez.append(tsrc.substr(txtBeg,i_s-txtBeg));
+		trez.append(_(tsrc.substr(i_s+3,i_r-i_s-3).c_str()));
+		i_s = i_r+2;
+		txtBeg = i_r+3;
+		continue;
+	    }
+	}
+    if( txtBeg < i_s ) trez.append(tsrc.substr(txtBeg,i_s-txtBeg));
+
+    return trez;
 }
 
 //*************************************************

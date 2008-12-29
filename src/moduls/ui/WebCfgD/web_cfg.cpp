@@ -135,8 +135,7 @@ string TWEB::optDescr( )
     snprintf(buf,sizeof(buf),_(
 	"======================= The module <%s:%s> options =======================\n"
 	"---------- Parameters of the module section <%s> in config file ----------\n"
-	"SessTimeLife <time>      Time of the sesion life, minutes (default 10).\n"
-	"CSSTables    <CSS>	  CSS for creating pages.\n\n"),
+	"SessTimeLife <time>      Time of the sesion life, minutes (default 10).\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 
     return buf;

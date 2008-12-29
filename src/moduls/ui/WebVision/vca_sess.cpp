@@ -73,7 +73,7 @@ void VCASess::getReq( SSess &ses )
 	    if( !mod->cntrIfCmd(req,ses.user) )	prjNm = req.text();
 	}
 
-	ses.page = mod->pgHead("",prjNm)+"<SCRIPT>\n"+WebVisionVCA_js+"\n</SCRIPT>\n"+mod->pgTail();
+	ses.page = mod->pgHead("",prjNm)+"<SCRIPT>\n"+mod->trMessReplace(WebVisionVCA_js)+"\n</SCRIPT>\n"+mod->pgTail();
 	ses.page = mod->httpHead("200 OK",ses.page.size())+ses.page;
     }
     //> Session/projects icon
@@ -3851,6 +3851,7 @@ void VCADiagram::getReq( SSess &ses )
 	}
     }
 
+    int mrkFontSize = 0;
     int mrkHeight = 0;
     int clr_grid, clr_mrk;						//Colors
 
@@ -3868,11 +3869,11 @@ void VCADiagram::getReq( SSess &ses )
 
     //> Get scale
     map<string,string>::iterator prmEl = ses.prm.find("xSc");
-    double xSc = (prmEl!=ses.prm.end()) ? atof(prmEl->second.c_str()) : 1.0;
+    float xSc = (prmEl!=ses.prm.end()) ? atof(prmEl->second.c_str()) : 1.0;
     prmEl = ses.prm.find("ySc");
-    double ySc = (prmEl!=ses.prm.end()) ? atof(prmEl->second.c_str()) : 1.0;
-    int imW = (int)TSYS::realRound((double)width*xSc,2,true);
-    int imH = (int)TSYS::realRound((double)height*ySc,2,true);
+    float ySc = (prmEl!=ses.prm.end()) ? atof(prmEl->second.c_str()) : 1.0;
+    int imW = (int)TSYS::realRound((float)width*xSc,2,true);
+    int imH = (int)TSYS::realRound((float)height*ySc,2,true);
 
     //> Prepare picture
     gdImagePtr im = gdImageCreate(imW,imH);
@@ -3891,15 +3892,16 @@ void VCADiagram::getReq( SSess &ses )
 	if( sclHor&0x2 || sclVer&0x2 )
 	{
 	    //>> Set markers font and color
+	    mrkFontSize = (int)((float)sclMarkFontSize*vmin(xSc,ySc));
 	    clr_mrk = gdImageColorAllocate(im,(ui8)(sclMarkColor>>16),(ui8)(sclMarkColor>>8),(ui8)sclMarkColor);
-	    gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),sclMarkFontSize,0.,0,0,"Test");
+	    gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.,0,0,"Test");
 	    mrkHeight = brect[3]-brect[7];
 	    if( sclHor&0x2 )
 	    {
-	        if( tArH < 100 ) sclHor &= ~(0x02);
+	        if( tArH < (int)(100.0*vmin(xSc,ySc)) ) sclHor &= ~(0x02);
 	        else tArH -= 2*(mrkHeight+2);
 	    }
-	    if( sclVer&0x2 && tArW < 100 ) sclVer &= ~(0x02);
+	    if( sclVer&0x2 && tArW < (int)(100.0*vmin(xSc,ySc)) ) sclVer &= ~(0x02);
 	}
     }
     //> Calc horizontal scale
@@ -3907,7 +3909,7 @@ void VCADiagram::getReq( SSess &ses )
     long long aVbeg;							//Corrected for allow data the trend begin point
     long long hDiv = 1, hDivBase = 1;					//Horisontal scale divisor
 
-    int hmax_ln = tArW/((sclHor&0x2)?40:15);
+    int hmax_ln = tArW / (int)(((sclHor&0x2)?40.0:15.0)*vmin(xSc,ySc));
     if( hmax_ln >= 2 )
     {
 	int hvLev = 0;
@@ -3946,14 +3948,14 @@ void VCADiagram::getReq( SSess &ses )
 		else if( tPict%1000000 == 0 )
 		    snprintf(lab_tm,sizeof(lab_tm),"%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec);
 		else snprintf(lab_tm,sizeof(lab_tm),"%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(tPict%1000000)/1e6);
-		gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),sclMarkFontSize,0.0,0,0,lab_dt);
+		gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,lab_dt);
 		int markBrd = tArX+tArW-(brect[2]-brect[6]);
 		endMarkBrd = markBrd;
-		gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),sclMarkFontSize,0.0,markBrd,tArY+tArH+3+2*(brect[3]-brect[7]),lab_dt);
-		gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),sclMarkFontSize,0.0,0,0,lab_tm);
+		gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,markBrd,tArY+tArH+3+2*(brect[3]-brect[7]),lab_dt);
+		gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,lab_tm);
 		markBrd = tArX+tArW-(brect[2]-brect[6]);
 		endMarkBrd = vmin(endMarkBrd,markBrd);
-		gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),sclMarkFontSize,0.0,markBrd,tArY+tArH+3+(brect[3]-brect[7]),lab_tm);
+		gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,markBrd,tArY+tArH+3+(brect[3]-brect[7]),lab_tm);
 	    }
 
 	    //>>> Draw grid and/or markers
@@ -3996,23 +3998,23 @@ void VCADiagram::getReq( SSess &ses )
 		    int wdth, tpos, endPosTm = 0, endPosDt = 0;
 		    if( lab_tm[0] )
 		    {
-			gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),sclMarkFontSize,0.0,0,0,lab_tm);
+			gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,lab_tm);
 			wdth = brect[2]-brect[6];
 			tpos = vmax(h_pos-wdth/2,0);
 			if( (tpos+wdth) < endMarkBrd && tpos > begMarkBrd )
 			{
-			    gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),sclMarkFontSize,0.0,tpos,tArY+tArH+3+(brect[3]-brect[7]),lab_tm);
+			    gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tpos,tArY+tArH+3+(brect[3]-brect[7]),lab_tm);
 			    endPosTm = tpos+wdth;
 			}
 		    }
 		    if( lab_dt[0] )
 		    {
-			gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),sclMarkFontSize,0.0,0,0,lab_dt);
+			gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,lab_dt);
 			wdth = brect[2]-brect[6];
 			tpos = vmax(h_pos-wdth/2,0);
 			if( (tpos+wdth) < endMarkBrd && tpos > begMarkBrd )
 			{
-			    gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),sclMarkFontSize,0.0,tpos,tArY+tArH+3+2*(brect[3]-brect[7]),lab_dt);
+			    gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tpos,tArY+tArH+3+2*(brect[3]-brect[7]),lab_dt);
 			    endPosDt = tpos+wdth;
 			}
 		    }
@@ -4075,7 +4077,7 @@ void VCADiagram::getReq( SSess &ses )
 	else { vsMax = trnds[0].bordU(); vsMin = trnds[0].bordL(); }
     }
 
-    float vmax_ln = tArH/20;
+    float vmax_ln = tArH / (int)(20.0*vmin(xSc,ySc));
     if( vmax_ln >= 2 )
     {
 	double vDiv = 1.;
@@ -4099,7 +4101,7 @@ void VCADiagram::getReq( SSess &ses )
 		else gdImageLine(im,tArX-3,v_pos,tArX+3,v_pos,clr_grid);
 		//>>>> Draw markers
 		if( sclVer&0x2 )
-		    gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),sclMarkFontSize,0.0,tArX+2,v_pos+((i_v==vsMax)?mrkHeight:0),(char*)TSYS::real2str(i_v).c_str());
+		    gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tArX+2,v_pos+((i_v==vsMax)?mrkHeight:0),(char*)TSYS::real2str(i_v).c_str());
 	    }
 	}
     }

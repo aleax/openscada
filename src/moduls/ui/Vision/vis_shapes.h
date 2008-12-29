@@ -209,9 +209,8 @@ class ShapeText : public WdgShape
 		short int text_flg;
 		string	text_tmpl,
 			text;
-		QColor	color,
-			backColor;
-		QBrush	backImg;
+		QColor	color;
+		QBrush	backGrnd;
 		QFont	font;
 		QPen	border;
 		vector<ArgObj>	args;
@@ -261,8 +260,7 @@ class ShapeMedia : public WdgShape
 		short	mediaType	:3;
 		short	mediaFit	:1;
 		short	mediaSpeed	:8;
-		QColor	backColor;
-		QBrush	backImg;
+		QBrush	backGrnd;
 		QLabel	*labWdg;
 		QPen	border;
 		string	mediaSrc;
@@ -344,8 +342,8 @@ class ShapeDiagram : public WdgShape
 		short	trcPer		:10;
 		short	sclHor		:4;
 		short	sclVer		:4;
-		QColor	backColor, curColor, sclColor, sclMarkColor;
-		QBrush	backImg;
+		QColor	curColor, sclColor, sclMarkColor;
+		QBrush	backGrnd;
 		QPen		border;
 		QPicture	pictObj;
 		QRect		pictRect;
@@ -517,8 +515,7 @@ class ShapeBox : public WdgShape
 		short	geomMargin	:8;
 		short	bordStyle	:5;
 		QPen		border;
-		QColor		backColor;
-		QBrush		backImg;
+		QBrush		backGrnd;
 		RunPageView	*inclWidget;
 		QScrollArea 	*inclScrl;
 	};
