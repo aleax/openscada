@@ -74,7 +74,7 @@ bool WdgShape::event( WdgView *view, QEvent *event )
 		pnt.setWindow(view->rect());
 		pnt.drawImage(view->rect(),QImage(":/images/attention.png"));
 		event->accept();
-		view->setToolTip(QString(_("Widget's shape '%1' no implement yet!")).arg(id().c_str()));
+		view->setToolTip(QString(_("Widget's shape '%1' is not implemented yet!")).arg(id().c_str()));
 	    }
 	    return true;
     }

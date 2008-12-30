@@ -1018,7 +1018,7 @@ void Page::setEnable( bool val )
 
 void Page::wdgAdd( const string &wid, const string &name, const string &ipath )
 {
-    if( !isContainer() )  throw TError(nodePath().c_str(),_("No container widget!"));
+    if( !isContainer() )  throw TError(nodePath().c_str(),_("Widget is not container!"));
     if( wdgPresent(wid) ) return;
 
     //- Check for label <deleted> -
@@ -1052,7 +1052,7 @@ void Page::pageAdd( const string &id, const string &name, const string &orig )
 {
     if( pagePresent(id) ) return;
     if( !(prjFlags()&(Page::Container|Page::Template)) )
-	throw TError(nodePath().c_str(),_("Page no container or template!"));
+	throw TError(nodePath().c_str(),_("Page is not container or template!"));
     chldAdd(mPage,new Page(id,orig));
     pageAt(id).at().setName(name);
 }
@@ -1063,7 +1063,7 @@ void Page::pageAdd( Page *iwdg )
     if( !(prjFlags()&(Page::Container|Page::Template)) )
     {
 	delete iwdg;
-	throw TError(nodePath().c_str(),_("Page no container or template!"));
+	throw TError(nodePath().c_str(),_("Page is not container or template!"));
     }
     else chldAdd(mPage,iwdg);
 }
@@ -1270,7 +1270,7 @@ void PageWdg::setEnable( bool val )
 	    if( ownerPage().herit()[i_h].at().wdgPresent(id()) && !ownerPage().herit()[i_h].at().wdgAt(id()).at().enable( ) )
 		try { ownerPage().herit()[i_h].at().wdgAt(id()).at().setEnable(true); }
 		catch(...)
-		{ mess_err(nodePath().c_str(),_("Heritors widget <%s> enable error"),id().c_str()); }
+                { mess_err(nodePath().c_str(),_("Inheriting widget <%s> enable error"),id().c_str()); }
 }
 
 string PageWdg::calcId( )

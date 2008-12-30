@@ -157,8 +157,8 @@ ConfApp::ConfApp( string open_user ) :
     QAction *actClose = new QAction(QPixmap::fromImage(ico_t),_("&Close"),this);
     actClose->setShortcut(Qt::CTRL+Qt::Key_W);
     actClose->setToolTip(_("Close configurator window"));
-    actClose->setWhatsThis(_("The button for close OpenSCADA configurator window"));
-    actClose->setStatusTip(_("Press for close OpenSCADA configurator window"));
+    actClose->setWhatsThis(_("The button for closing OpenSCADA configurator window"));
+    actClose->setStatusTip(_("Press to close OpenSCADA configurator window"));
     connect(actClose, SIGNAL(activated()), this, SLOT(close()));
     //-- Quit --
     if(!ico_t.load(TUIS::icoPath("exit").c_str())) ico_t.load(":/images/exit.png");
@@ -232,27 +232,27 @@ ConfApp::ConfApp( string open_user ) :
     //--- Cut item ---
     if(!ico_t.load(TUIS::icoPath("editcut").c_str())) ico_t.load(":/images/editcut.png");
     actItCut = new QAction(QPixmap::fromImage(ico_t),_("Item cut"),this);
-    actItCut->setToolTip(_("Goes item cut"));
-    actItCut->setWhatsThis(_("The button for goes to item cut"));
-    actItCut->setStatusTip(_("Press for goes to item cut."));
+    actItCut->setToolTip(_("Cutting of the item"));
+    actItCut->setWhatsThis(_("The button for cutting of the item"));
+    actItCut->setStatusTip(_("Press to cut the item."));
     actItCut->setShortcut(QKeySequence("Ctrl+X"));
     actItCut->setEnabled(false);
     connect(actItCut, SIGNAL(activated()), this, SLOT(itCut()));
     //--- Copy item ---
     if(!ico_t.load(TUIS::icoPath("editcopy").c_str())) ico_t.load(":/images/editcopy.png");
     actItCopy = new QAction(QPixmap::fromImage(ico_t),_("Item copy"),this);
-    actItCopy->setToolTip(_("Goes item copy"));
-    actItCopy->setWhatsThis(_("The button for goes to item copy"));
-    actItCopy->setStatusTip(_("Press for goes to item copy."));
+    actItCopy->setToolTip(_("Copying of the item"));
+    actItCopy->setWhatsThis(_("The button for copying of the item"));
+    actItCopy->setStatusTip(_("Press to copy the item."));
     actItCopy->setShortcut(QKeySequence("Ctrl+C"));
     actItCopy->setEnabled(false);
     connect(actItCopy, SIGNAL(activated()), this, SLOT(itCopy()));
     //--- Paste item ---
     if(!ico_t.load(TUIS::icoPath("editpaste").c_str())) ico_t.load(":/images/editpaste.png");
     actItPaste = new QAction(QPixmap::fromImage(ico_t),_("Item paste"),this);
-    actItPaste->setToolTip(_("Goes item paste"));
-    actItPaste->setWhatsThis(_("The button for goes to item paste"));
-    actItPaste->setStatusTip(_("Press for goes to item paste."));
+    actItPaste->setToolTip(_("Pasting of the item"));
+    actItPaste->setWhatsThis(_("The button for pasting of the item"));
+    actItPaste->setStatusTip(_("Press to paste the item."));
     actItPaste->setShortcut(QKeySequence("Ctrl+V"));
     actItPaste->setEnabled(false);
     connect(actItPaste, SIGNAL(activated()), this, SLOT(itPaste()));
@@ -261,24 +261,24 @@ ConfApp::ConfApp( string open_user ) :
     QAction *actUpdate = new QAction(QPixmap::fromImage(ico_t),_("&Refresh"),this);
     actUpdate->setShortcut(Qt::Key_F5);
     actUpdate->setToolTip(_("Refresh current page"));
-    actUpdate->setWhatsThis(_("The button for refreshing a content of the current page."));
-    actUpdate->setStatusTip(_("Press for refreshing a content of the current page."));
+    actUpdate->setWhatsThis(_("The button for refreshing of the content of the current page."));
+    actUpdate->setStatusTip(_("Press for refreshing of the content of the current page."));
     connect(actUpdate, SIGNAL(activated()), this, SLOT(pageRefresh()));
     //-- Start of "Auto update" --
     if(!ico_t.load(TUIS::icoPath("start").c_str())) ico_t.load(":/images/start.png");
     actStartUpd = new QAction(QPixmap::fromImage(ico_t),_("&Start"),this);
     actStartUpd->setShortcut(Qt::CTRL+Qt::Key_B);
     actStartUpd->setToolTip(_("Start cycled refresh"));
-    actStartUpd->setWhatsThis(_("The button for start of cycled refresh content of the current page."));
-    actStartUpd->setStatusTip(_("Press for start of cycled refresh content of the current page."));
+    actStartUpd->setWhatsThis(_("The button for starting of the cycled refresh of the content of the current page."));
+    actStartUpd->setStatusTip(_("Press to start the cycled refresh of the content of the current page."));
     connect(actStartUpd, SIGNAL(activated()), this, SLOT(pageCyclRefrStart()));
     //-- Stop of "Auto update" --
     if(!ico_t.load(TUIS::icoPath("stop").c_str())) ico_t.load(":/images/stop.png");
     actStopUpd = new QAction(QPixmap::fromImage(ico_t),_("&Stop"),this);
     actStopUpd->setShortcut(Qt::CTRL+Qt::Key_E);
     actStopUpd->setToolTip(_("Stop cycled refresh"));
-    actStopUpd->setWhatsThis(_("The button for stop of cycled refresh content of the current page."));
-    actStopUpd->setStatusTip(_("Press for stop of cycled refresh content of the current page."));
+    actStopUpd->setWhatsThis(_("The button for stopping of the cycled refresh of the content of the current page."));
+    actStopUpd->setStatusTip(_("Press to stop the cycled refresh of the content of the current page."));
     actStopUpd->setEnabled(false);
     connect(actStopUpd, SIGNAL(activated()), this, SLOT(pageCyclRefrStop()));
     //-- About "System info" --
@@ -287,20 +287,20 @@ ConfApp::ConfApp( string open_user ) :
     actAbout->setShortcut(Qt::Key_F1);
     actAbout->setToolTip(_("Programm and OpenSCADA information"));
     actAbout->setWhatsThis(_("The button for display programm and OpenSCADA information"));
-    actAbout->setStatusTip(_("Press for display programm and OpenSCADA information"));
+    actAbout->setStatusTip(_("Press to display programm and OpenSCADA information"));
     connect(actAbout, SIGNAL(activated()), this, SLOT(about()));
     //-- About Qt --
     QAction *actQtAbout = new QAction(_("About &Qt"),this);
     actQtAbout->setToolTip(_("Qt information"));
-    actQtAbout->setWhatsThis(_("The button for using QT information"));
-    actQtAbout->setStatusTip(_("Press for using QT information"));
+    actQtAbout->setWhatsThis(_("The button for getting the using QT information"));
+    actQtAbout->setStatusTip(_("Press to get the using QT information."));
     connect(actQtAbout, SIGNAL(activated()), this, SLOT(aboutQt()));
     //-- What is --
     if(!ico_t.load(TUIS::icoPath("contexthelp").c_str())) ico_t.load(":/images/contexthelp.png");
     QAction *actWhatIs = new QAction(QPixmap::fromImage(ico_t),_("What's &This"),this);
     actWhatIs->setToolTip(_("Question about GUI elements"));
-    actWhatIs->setWhatsThis(_("The button for respond about user interface elements"));
-    actWhatIs->setStatusTip(_("Press for responding about user interface elements"));
+    actWhatIs->setWhatsThis(_("The button for requesting the information about user interface elements"));
+    actWhatIs->setStatusTip(_("Press for requesting about user interface elements"));
     connect(actWhatIs, SIGNAL(activated()), this, SLOT(enterWhatsThis()));
 
     //- Create menu -
@@ -359,14 +359,14 @@ ConfApp::ConfApp( string open_user ) :
 
     //- Init status bar -
     w_user = new UserStBar(open_user.c_str(), this);
-    w_user->setWhatsThis(_("This label display curent user."));
+    w_user->setWhatsThis(_("This label displays curent user."));
     w_user->setToolTip(_("Field for display of the current user."));
-    w_user->setStatusTip(_("Double click for change user."));
+    w_user->setStatusTip(_("Double click to change user."));
     statusBar()->insertPermanentWidget(0,w_user);
     connect(w_user, SIGNAL(userChanged()), this, SLOT(userSel()));
 
     mStModify = new QLabel(" ",this);
-    mStModify->setWhatsThis(_("This label display the local station modifying."));
+    mStModify->setWhatsThis(_("This label displays the local station modifying."));
     mStModify->setToolTip(_("Field for display of the local station modifying."));
     statusBar()->insertPermanentWidget(0,mStModify);
 
@@ -505,7 +505,7 @@ void ConfApp::itAdd( )
 	if( atoi(branch->childGet(i_b)->attr("acs").c_str())&SEQ_WR )
 	    brs.push_back( branch->childGet(i_b)->attr("idSz")+"\n"+branch->childGet(i_b)->attr("idm")+"\n"+
 			   branch->childGet(i_b)->attr("id")+"\n"+branch->childGet(i_b)->attr("dscr"));
-    if( !brs.size() )	{ mod->postMess(mod->nodePath().c_str(),_("No one editable container present."),TUIMod::Info,this); return; }
+    if( !brs.size() )	{ mod->postMess(mod->nodePath().c_str(),_("No one editable container is present."),TUIMod::Info,this); return; }
 
     ReqIdNameDlg dlg(this,actItAdd->icon(), QString(_("Add item to node: '%1'.")).arg(sel_path.c_str()),_("Add node"));
     dlg.setTargets(brs);
@@ -519,7 +519,7 @@ void ConfApp::itAdd( )
 	    if( (req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->attr("id") == dlg.id().toAscii().data()) ||
 	        (!req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->text() == dlg.id().toAscii().data()) )
 	    {
-		mod->postMess(mod->nodePath().c_str(),QString(_("Node '%1' already present.")).arg(dlg.id()).toAscii().data(),TUIMod::Info,this);
+		mod->postMess(mod->nodePath().c_str(),QString(_("Node '%1' is already present.")).arg(dlg.id()).toAscii().data(),TUIMod::Info,this);
 		return;
 	    }
 
@@ -542,7 +542,7 @@ void ConfApp::itDel( const string &iit )
     if( iit.empty() )
     {
 	InputDlg dlg(this,actItDel->icon(),
-		QString(_("You sure for delete node: '%1'?")).arg(rmit.c_str()),
+		QString(_("Are you sure of deleting node: '%1'?")).arg(rmit.c_str()),
 		_("Delete node"),0,0);
 	if( dlg.exec() != QDialog::Accepted )   return;
     }
@@ -636,7 +636,7 @@ void ConfApp::itPaste( )
 	    if( (req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->attr("id") == dlg.id().toAscii().data()) ||
 		(!req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->text() == dlg.id().toAscii().data()) )
 	    {
-		InputDlg dlg1(this,actItPaste->icon(),QString(_("Node '%1' already present. Continue?")).arg(dst_nm.c_str()).toAscii().data(),_("Move or copy node"),0,0);
+		InputDlg dlg1(this,actItPaste->icon(),QString(_("Node '%1' is already present. Continue?")).arg(dst_nm.c_str()).toAscii().data(),_("Move or copy node"),0,0);
 		if( dlg1.exec() != QDialog::Accepted ) return;
 		break;
 	    }
@@ -2565,7 +2565,7 @@ void ConfApp::imgPopup( const QPoint &pos )
 		QString fileName = QFileDialog::getSaveFileName(this,_("Save picture"),
 			"img.png", _("Images (*.png *.xpm *.jpg)"));
 		if( !fileName.isEmpty() && !img->image().save(fileName) )
-		    throw TError(mod->nodePath().c_str(),_("Save to file %s is error\n"),fileName.toAscii().data());
+		    throw TError(mod->nodePath().c_str(),_("Save to file %s error\n"),fileName.toAscii().data());
 	    }
 	    else if( rez == load_img )
 	    {
@@ -2578,7 +2578,7 @@ void ConfApp::imgPopup( const QPoint &pos )
 
 		//> Load image file
 		int hd = open(fileName.toAscii().data(),O_RDONLY);
-		if( hd < 0 )	throw TError(mod->nodePath().c_str(),_("Open file %s is error\n"),fileName.toAscii().data());
+		if( hd < 0 )	throw TError(mod->nodePath().c_str(),_("Open file %s error\n"),fileName.toAscii().data());
 		{
 		    while( len = read(hd,buf,sizeof(buf)) )
 		        rez.append(buf,len);
@@ -2587,7 +2587,7 @@ void ConfApp::imgPopup( const QPoint &pos )
 
 		//> Set image to widget
 		if( !img->setImage(rez) )
-		    throw TError(mod->nodePath().c_str(),_("Image file %s is error\n"),fileName.toAscii().data());
+		    throw TError(mod->nodePath().c_str(),_("Image file %s error\n"),fileName.toAscii().data());
 
 		//> Send image to system
 		XMLNode n_el1("set");
@@ -2653,7 +2653,7 @@ void ConfApp::tableSet( int row, int col )
 			find_ok = true;
 		    }
 	    }
-	    if( !find_ok ) throw TError(mod->nodePath().c_str(),_("Value <%s> no valid!"),value.c_str());
+	    if( !find_ok ) throw TError(mod->nodePath().c_str(),_("Value <%s> is not valid!"),value.c_str());
 	}
 	else value = val.toString().toAscii().data();
 
@@ -2720,7 +2720,7 @@ void ConfApp::listBoxGo( QListWidgetItem* item )
 		    path = sel_path+"/"+TSYS::strEncode(br_pref+req.childGet(i_el)->text(),TSYS::PathEl);
 		sel_ok = true;
 	    }
-	if( !sel_ok ) throw TError(mod->nodePath().c_str(),_("Select element <%s> no present!"),item->text().toAscii().data());
+	if( !sel_ok ) throw TError(mod->nodePath().c_str(),_("Selective element <%s> is not present!"),item->text().toAscii().data());
 
 	selectPage(path);
     }

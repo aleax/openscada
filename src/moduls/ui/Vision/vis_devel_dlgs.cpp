@@ -486,7 +486,7 @@ void LibProjProp::selectIco( )
     if(!ico_t.load(fileName))
     {
 	mod->postMess( mod->nodePath().c_str(), 
-		QString(_("Loaded icon image '%1' error.")).arg(fileName),TVision::Warning, this );
+		QString(_("Load icon image '%1' error.")).arg(fileName),TVision::Warning, this );
 	return;
     }
 
@@ -932,7 +932,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
     if( owner()->cntrIfCmd(info_req) )
     {
 	mod->postMess( mod->nodePath().c_str(),
-		QString(_("Get node '%1' information error.")).arg(ed_it.c_str()),TVision::Error, this );
+		QString(_("Getting node '%1' information error.")).arg(ed_it.c_str()),TVision::Error, this );
 	return;
     }
 
@@ -1140,7 +1140,7 @@ void VisItProp::tabChanged( int itb )
 	    if( owner()->cntrIfCmd(info_req) )
 	    {
 		mod->postMess( mod->nodePath().c_str(),
-			QString(_("Get node '%1' information error.")).arg(ed_it.c_str()),TVision::Error, this );
+			QString(_("Getting node '%1' information error.")).arg(ed_it.c_str()),TVision::Error, this );
 		return;
 	    }
 	    string sval;
@@ -1301,7 +1301,7 @@ void VisItProp::selectIco( )
     if(!ico_t.load(fileName))
     {
 	mod->postMess( mod->nodePath().c_str(), 
-		QString(_("Loaded icon image '%1' error.")).arg(fileName),TVision::Warning, this );
+		QString(_("Load icon image '%1' error.")).arg(fileName),TVision::Warning, this );
 	return;
     }
 
@@ -1395,7 +1395,7 @@ void VisItProp::addAttr( )
     //- Check current attribute -
     if( swdg.empty() )
     {
-	mod->postMess( mod->nodePath().c_str(), _("Valid widget no selected"),TVision::Warning,this);
+	mod->postMess( mod->nodePath().c_str(), _("Valid widget is not selected"),TVision::Warning,this);
 	return;
     }
 
@@ -1416,7 +1416,7 @@ void VisItProp::delAttr( )
     //- Check current attribute -
     if( !obj_attr_cfg->currentItem() || !obj_attr_cfg->currentItem()->parent() )
     {
-	mod->postMess( mod->nodePath().c_str(), _("Valid attribute no selected"),TVision::Warning,this);
+	mod->postMess( mod->nodePath().c_str(), _("Valid attribute is not selected"),TVision::Warning,this);
 	return;
     }
 
@@ -1440,7 +1440,7 @@ void VisItProp::changeAttr(QTreeWidgetItem *it, int col)
     //- Check current attribute -
     if( !it || !it->parent() )
     {
-	mod->postMess( mod->nodePath().c_str(), _("Valid attribute no selected"),TVision::Warning,this);
+	mod->postMess( mod->nodePath().c_str(), _("Valid attribute is not selected"),TVision::Warning,this);
 	return;
     }
 

@@ -1,3 +1,11 @@
+2008-12-30 Maxim
+- /UI/QTCfg: Some fixes to English variant of translation is done.
+- /UI/QTStarter: Some fixes to English variant of translation is done.
+- /UI/VCAEngine: Some fixes to English variant of translation is done.
+- /UI/Vision: Some fixes to English variant of translation is done.
+- FIX:/UI/Vision: Widths scaling for the primitive ElFigure is modified.
+
+
 2008-12-29 Roman
 - !:/SYS: Disable default building of module SoundCard. By no realised yet.
 - !:/SYS: Remove default build flags "-O2 -DOSC_HASHMAP". For build add options CFLAGS="-O2" CXXFLAGS="-O2" to ./configure.

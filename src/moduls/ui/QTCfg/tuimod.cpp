@@ -182,7 +182,7 @@ QMainWindow *TUIMod::openWindow( )
 	    if( rez == DlgUser::SelCancel )     return NULL;
 	    if( rez == DlgUser::SelErr )
 	    {
-		postMess(nodePath().c_str(),_("Auth wrong!!!"));
+		postMess(nodePath().c_str(),_("Auth is wrong!!!"));
 		continue;
 	    }
 	    user_open = d_usr.user().toAscii().data();

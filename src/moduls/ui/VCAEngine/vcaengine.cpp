@@ -507,7 +507,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    //>> User permission check
 	    AutoHD<Project> wprj = (!sess.empty()) ? sesAt(sess).at().parent() : prjAt(prj);
 	    if( !SYS->security().at().access(opt->attr("user"),SEQ_RD,wprj.at().owner(),wprj.at().grp(),wprj.at().permit()) )
-		throw TError(nodePath().c_str(),_("Connection to session no permit for '%s'."),opt->attr("user").c_str());
+		throw TError(nodePath().c_str(),_("Connection to session is not permited for '%s'."),opt->attr("user").c_str());
 	    //>> Connect to present session
 	    if( !sess.empty() )	sesAt(sess).at().connect();
 	    //>> Create session
@@ -596,13 +596,13 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,2,"/tts",_("Speech text synthesis"),0444,"root","UI"))
 	{
 	    ctrMkNode("fld",opt,-1,"/tts/comm",_("Command"),0664,"root","UI",4,"tp","str","dest","sel_ed","select","/tts/comm_ls","help",
-		_("Command line for call speech text synthesis engine.\n"
+		_("Command line for call of speech synthesis from the text engine.\n"
 		  "Use next words for replace:\n"
 		  "  %t - synthesis text;\n"
 		  "  %f - result file name.\n"
-		  "If result file name not used then result readed from pipe.\n"
-		  "If used result file name and not used %t then synthesis text sending to pipe."));
-	    ctrMkNode("fld",opt,-1,"/tts/code",_("Text code"),0664,"root","UI",2,"tp","str","help",_("Engine text codepage for text encode to it."));
+		  "If result file name is not used result is read from pipe.\n"
+		  "If result file name is used and  %t is not used synthesis text is sent to pipe."));
+	    ctrMkNode("fld",opt,-1,"/tts/code",_("Text code"),0664,"root","UI",2,"tp","str","help",_("Engine text codepage for text encode into it."));
 	}
 	return;
     }

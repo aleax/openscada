@@ -37,7 +37,7 @@ PrWidget::PrWidget( const string &iid ) : LWidget(iid)
 void PrWidget::preDisable(int flag)
 {
     if( flag )
-	throw TError(mod->nodePath().c_str(),_("Deleting of main primitive widgets is error."));
+	throw TError(mod->nodePath().c_str(),_("Deleting the base primitive-widget error."));
 
     Widget::preDisable(flag);
 }
@@ -130,7 +130,7 @@ string OrigElFigure::name( )
 
 string OrigElFigure::descr( )
 {
-    return _("Elementary figures widget of the end visualisation.");
+    return _("Elementary figures widget of the finite visualisation.");
 }
 
 void OrigElFigure::postEnable( int flag )
@@ -265,7 +265,7 @@ string OrigFormEl::name( )
 
 string OrigFormEl::descr( )
 {
-    return _("Form's elements widget of the end visualisation.");
+    return _("Form's elements widget of the finite visualisation.");
 }
 
 void OrigFormEl::postEnable( int flag )
@@ -399,7 +399,7 @@ string OrigText::name( )
 
 string OrigText::descr( )
 {
-    return _("Text fields widget of the end visualisation.");
+    return _("Text fields widget of the finite visualisation.");
 }
 
 void OrigText::postEnable( int flag )
@@ -493,7 +493,7 @@ string OrigMedia::name( )
 
 string OrigMedia::descr( )
 {
-    return _("Media widget of the end visualisation.");
+    return _("Media widget of the finite visualisation.");
 }
 
 void OrigMedia::postEnable( int flag )
@@ -576,7 +576,7 @@ string OrigDiagram::name( )
 
 string OrigDiagram::descr( )
 {
-    return _("Diagram widget of the end visualisation.");
+    return _("Diagram widget of the finite visualisation.");
 }
 
 void OrigDiagram::postEnable( int flag )
@@ -719,7 +719,7 @@ string OrigProtocol::name( )
 
 string OrigProtocol::descr( )
 {
-    return _("Protocol widget of the end visualisation.");
+    return _("Protocol widget of the finite visualisation.");
 }
 
 void OrigProtocol::postEnable( int flag )
@@ -808,7 +808,7 @@ string OrigDocument::name( )
 
 string OrigDocument::descr( )
 {
-    return _("Document widget of the end visualisation.");
+    return _("Document widget of the finite visualisation.");
 }
 
 void OrigDocument::postEnable( int flag )
@@ -1100,7 +1100,7 @@ void OrigDocument::nodeProcess( XMLNode *xcur, TValFunc &funcV, TFunction &funcI
 	    if( instrDel )	xcur->prcInstrDel("dp");
 	}
 	catch( TError err )
-	{ mess_err(nodePath().c_str(),_("Instruction process is error: %s"),err.mess.c_str()); }
+	{ mess_err(nodePath().c_str(),_("Instruction processing error: %s"),err.mess.c_str()); }
     }
 
     float dRpt;
@@ -1220,7 +1220,7 @@ string OrigBox::name( )
 
 string OrigBox::descr( )
 {
-    return _("Elements box widget of the end visualisation.");
+    return _("Elements box widget of the finite visualisation.");
 }
 
 void OrigBox::postEnable( int flag )
@@ -1255,7 +1255,7 @@ string OrigLink::name( )
 
 string OrigLink::descr( )
 {
-    return _("Interwidget link of the end visualisation.");
+    return _("Interwidget link of the finite visualisation.");
 }
 
 void OrigLink::postEnable( int flag )

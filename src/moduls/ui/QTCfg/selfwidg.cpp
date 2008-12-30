@@ -84,7 +84,7 @@ void ImgView::paintEvent( QPaintEvent * )
 	pnt.setPen(QColor(255,0,0));
 	pnt.setBackground(QBrush(QColor(210,237,234)));
 	pnt.drawRect(0,0,199,39);
-	pnt.drawText(3,3,194,34,Qt::AlignCenter,_("Picture no set!"));
+	pnt.drawText(3,3,194,34,Qt::AlignCenter,_("Picture is not set!"));
     }
     else
     {
@@ -688,7 +688,7 @@ bool UserStBar::userSel( )
 	return true;
     }
     else if( rez == DlgUser::SelErr )
-        mod->postMess(mod->nodePath().c_str(),_("Auth wrong!!!"),TUIMod::Warning,this);
+        mod->postMess(mod->nodePath().c_str(),_("Auth is wrong!!!"),TUIMod::Warning,this);
 
     return false;
 }

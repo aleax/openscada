@@ -216,15 +216,17 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
     }
     if( rel_list && !w->allAttrLoad( ) )
     {
+        double scale;
         if( w->xScale(true) < w->yScale(true) ) scale = w->xScale(true);
         else scale = w->yScale(true);
+        shapeWidths_unScale = elFD->shapeWidths;
         //- Deleting the pairs in the map with the key <= -10 -
         for( PntMap::iterator pi = pnts->begin(); pi != pnts->end(); pi++ )
             if(pi->first <= -10 ) (*pnts).erase ( pi );
         for( WidthMap::iterator pi = widths->begin(); pi != widths->end(); pi++ )
         {
             if(pi->first <= -10 ) (*widths).erase ( pi );
-            if( pi->first > 0 && fabs( pi->second - 0 ) >= 0.01 ) pi->second = vmax(1,pi->second * scale);
+            if( pi->first > 0 && fabs( pi->second - 0 ) >= 0.01 ) pi->second = vmin(1000,vmax(1,pi->second * scale));
         }
         for( ColorMap::iterator pi = colors->begin(); pi != colors->end(); pi++ )
             if(pi->first <= -10 ) (*colors).erase ( pi );
@@ -319,7 +321,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 else if( sscanf(el_s.c_str(), "%d", &w) == 1 )
                 {
                         width = w_index;
-                        if( fabs( w - 0 ) >= 1 ) (*widths)[w_index] = vmax(1,w*scale);
+                        if( fabs( w - 0 ) >= 1 ) (*widths)[w_index] = vmin(1000,vmax(1,w*scale));
                         else (*widths)[w_index] = 0;
                         w_index -= 1;
                 }
@@ -340,7 +342,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 else if( sscanf(el_s.c_str(), "%d", &w) == 1 )
                 {
                     bord_width = w_index;
-                    if( fabs( w - 0 ) >= 1 ) (*widths)[w_index] = vmax(1,w*scale);
+                    if( fabs( w - 0 ) >= 1 ) (*widths)[w_index] = vmin(1000,vmax(1,w*scale));
                     else (*widths)[w_index] = 0;
                     w_index -= 1;
                 }
@@ -453,7 +455,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 else if( sscanf(el_s.c_str(), "%d", &w) == 1 )
                 {
                     width = w_index;
-                    if( fabs( w - 0 ) >= 1 ) (*widths)[w_index] = vmax(1,w*scale);
+                    if( fabs( w - 0 ) >= 1 ) (*widths)[w_index] = vmin(1000,vmax(1,w*scale));
                     else (*widths)[w_index] = 0;
                     w_index -= 1;
                 }
@@ -474,7 +476,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 else if( sscanf(el_s.c_str(), "%d", &w) == 1 )
                 {
                     bord_width = w_index;
-                    if( fabs( w - 0 ) >= 1 ) (*widths)[w_index] = vmax(1,w*scale);
+                    if( fabs( w - 0 ) >= 1 ) (*widths)[w_index] = vmin(1000,vmax(1,w*scale));
                     else (*widths)[w_index] = 0;
                     w_index -= 1;
                 }
@@ -618,7 +620,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 else if( sscanf(el_s.c_str(), "%d", &w) == 1 )
                 {
                     width = w_index;
-                    if( fabs( w - 0 ) >= 1 ) (*widths)[w_index] = vmax(1,w*scale);
+                    if( fabs( w - 0 ) >= 1 ) (*widths)[w_index] = vmin(1000,vmax(1,w*scale));
                     else (*widths)[w_index] = 0;
                     w_index -= 1;
                 }
@@ -639,7 +641,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 else if( sscanf(el_s.c_str(), "%d", &w) == 1 )
                 {
                     bord_width = w_index;
-                    if( fabs( w - 0 ) >= 1 ) (*widths)[w_index] = vmax(1,w*scale);
+                    if( fabs( w - 0 ) >= 1 ) (*widths)[w_index] = vmin(1000,vmax(1,w*scale));
                     else (*widths)[w_index] = 0;
                     w_index -= 1;
                 }
@@ -2302,11 +2304,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                 pnt_v.drawImage( QPoint(0,0), rect_img );
             pnt_v.end();
             if( runW )
-            {
-                (*widths)[-5] = vmax(1,(*widths)[-5]/scale);
-                for( WidthMap::iterator pi = widths->begin(); pi != widths->end(); pi++ )
-                    if( pi->first > 0 && fabs( pi->second - 0 ) >= 0.01 ) pi->second = vmax(1,pi->second/scale);
-            }
+                elFD->shapeWidths = shapeWidths_unScale;
             return true;
         }
         case QEvent::MouseButtonPress:

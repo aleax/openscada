@@ -135,7 +135,7 @@ void TUIMod::postEnable( int flag )
 	    pthread_create(&pthr_tsk,&pthr_attr,Task,this);
 	    pthread_attr_destroy(&pthr_attr);
 	    if( TSYS::eventWait( run_st, true, nodePath()+"start",5) )
-		throw TError(nodePath().c_str(),_("QT main thread no started!"));
+		throw TError(nodePath().c_str(),_("QT main thread is not started!"));
 	}
     }
 }
@@ -146,7 +146,7 @@ void TUIMod::postDisable( int flag )
     {
 	end_run = true;
 	if( TSYS::eventWait( run_st, false, nodePath()+"stop",5) )
-	    throw TError(nodePath().c_str(),_("QT main thread no stoped!"));
+	    throw TError(nodePath().c_str(),_("QT main thread is not stoped!"));
 	pthread_join(pthr_tsk,NULL);
     }
 }
@@ -232,7 +232,7 @@ void *TUIMod::Task( void * )
     vector<TMess::SRec> recs;
 
 #if OSC_DEBUG >= 2
-    mess_debug(mod->nodePath().c_str(),_("Thread <%u> started. TID: %ld"),pthread_self(),(long int)syscall(224));
+    mess_debug(mod->nodePath().c_str(),_("Thread <%u> is started. TID: %ld"),pthread_self(),(long int)syscall(224));
 #endif
 
     //- QT application object init -

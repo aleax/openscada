@@ -141,7 +141,7 @@ void Session::setStart( bool val )
 	    pthread_create(&calcPthr,&pthr_attr,Session::Task,this);
 	    pthread_attr_destroy(&pthr_attr);
 	    if( TSYS::eventWait(mStart, true, nodePath()+"start",5) )
-		throw TError(nodePath().c_str(),_("Session process task no started!"));
+		throw TError(nodePath().c_str(),_("Session processing task is not started!"));
 	}
     }
     else
@@ -152,7 +152,7 @@ void Session::setStart( bool val )
 	    endrun_req = true;
 	    pthread_kill( calcPthr, SIGALRM );
 	    if( TSYS::eventWait(mStart,false,nodePath()+"stop",5) )
-		throw TError(nodePath().c_str(),_("Sesion process task no stoped!"));
+		throw TError(nodePath().c_str(),_("Sesion processing task is not stoped!"));
 	    pthread_join( calcPthr, NULL );
 	}
 
@@ -391,7 +391,7 @@ void *Session::Task( void *icontr )
     Session &ses = *(Session *)icontr;
 
 #if OSC_DEBUG >= 2
-    mess_debug(ses.nodePath().c_str(),_("Thread <%u> started. TID: %ld"),pthread_self(),(long int)syscall(224));
+    mess_debug(ses.nodePath().c_str(),_("Thread <%u> is started. TID: %ld"),pthread_self(),(long int)syscall(224));
 #endif
 
     ses.endrun_req = false;
@@ -1016,7 +1016,7 @@ void SessWdg::setProcess( bool val )
 	    //-- Connect to compiled function --
 	    TValFunc::setFunc(&((AutoHD<TFunction>)SYS->nodeAt(work_prog,1)).at());
 	}catch( TError err )
-	{ mess_err(nodePath().c_str(),_("Compile function '%s' by language '%s' for widget is error: %s"),fio.id().c_str(),calcLang().c_str(),err.mess.c_str()); }
+	{ mess_err(nodePath().c_str(),_("Compile function '%s' by language '%s' for widget error: %s"),fio.id().c_str(),calcLang().c_str(),err.mess.c_str()); }
     }
     if( !val )
     {
@@ -1097,7 +1097,7 @@ string SessWdg::resourceGet( const string &id, string *mime )
 
 void SessWdg::wdgAdd( const string &iid, const string &name, const string &iparent )
 {
-    if( !isContainer() )  throw TError(nodePath().c_str(),_("No container widget!"));
+    if( !isContainer() )  throw TError(nodePath().c_str(),_("Widget is not container!"));
     if( wdgPresent(iid) ) return;
 
     chldAdd(inclWdg,new SessWdg(iid,iparent,ownerSess()));
@@ -1361,7 +1361,7 @@ void SessWdg::calc( bool first, bool last )
     {
 	res.release();
 	mess_err(err.cat.c_str(),err.mess.c_str());
-	mess_err(nodePath().c_str(),_("Widget calc is error. Process disabled."));
+	mess_err(nodePath().c_str(),_("Widget calculation error. Process is disabled."));
 	if( !last )	setProcess(false);
     }
 }

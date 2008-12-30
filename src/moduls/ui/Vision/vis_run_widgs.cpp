@@ -246,7 +246,7 @@ bool RunWdgView::event( QEvent *event )
 	    pnt.setPen(QColor("red"));
 	    to.setAlignment(Qt::AlignCenter);
 	    to.setWrapMode(QTextOption::WordWrap);
-	    pnt.drawText(rect(),QString(_("Page: '%1'.\nView access is no permited.")).arg(id().c_str()),to);
+	    pnt.drawText(rect(),QString(_("Page: '%1'.\nView access is not permited.")).arg(id().c_str()),to);
 	}
 	return true;
     }

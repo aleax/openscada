@@ -248,12 +248,12 @@ class ShapeElFigure : public WdgShape
         QVector<int> inundation_vector;
         QPointF Prev_pos_1, Prev_pos_2;
         QVector<int> num_vector;
-        double angle_temp, scale;
+        double angle_temp;
         bool flag_angle_temp;
         int rect_dyn;
         QImage rect_img;
         PntMap  shapePnts_temp;
-        WidthMap shapeWidths_temp;
+        WidthMap shapeWidths_temp, shapeWidths_unScale;
         ColorMap shapeColors_temp;
         ImageMap shapeImages_temp;
         StyleMap shapeStyles_temp;

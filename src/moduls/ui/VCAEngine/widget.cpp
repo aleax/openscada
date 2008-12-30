@@ -239,7 +239,7 @@ void Widget::setEnable( bool val )
 	    if( herit()[i_h].at().enable( ) )
 		try { herit()[i_h].at().setEnable(false); }
 		catch(...)
-		{ mess_err(nodePath().c_str(),_("Heritors widget <%s> disable error"),herit()[i_h].at().id().c_str()); }
+		{ mess_err(nodePath().c_str(),_("Ingeriting widget <%s> disable error"),herit()[i_h].at().id().c_str()); }
 
 	//- Free no base attributes -
 	vector<string>  ls;
@@ -368,7 +368,7 @@ void Widget::attrAdd( TFld *attr, int pos, bool inher )
     if( attrPresent(anm) )
     {
 	delete attr;
-	throw TError(nodePath().c_str(),_("Attribut %s already present."),anm.c_str());
+	throw TError(nodePath().c_str(),_("Attribut %s is already present."),anm.c_str());
     }
     attr_cfg.fldAdd(attr,pos);
     if( inher )	inheritAttr(anm);
@@ -412,7 +412,7 @@ bool Widget::wdgPresent( const string &wdg )
 
 void Widget::wdgAdd( const string &wid, const string &name, const string &path )
 {
-    if( !isContainer() )  throw TError(nodePath().c_str(),_("No container widget!"));
+    if( !isContainer() )  throw TError(nodePath().c_str(),_("Widget is not container!"));
     if( wdgPresent(wid) ) return;
 
     chldAdd( inclWdg, new Widget(wid,path) );
@@ -897,8 +897,8 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
 		}
 	    if(!prm.freeStat() || !dstwdg.freeStat())
 	    {
-		if( noonly_no_set )     throw TError(nodePath().c_str(),_("Destination have not only atributes!"));
-		else if( no_set.size() )throw TError(nodePath().c_str(),_("Destination have not atributes: %s !"),no_set.c_str());
+                if( noonly_no_set )     throw TError(nodePath().c_str(),_("Destination has no any necessary attribute!"));
+		else if( no_set.size() )throw TError(nodePath().c_str(),_("Destination has no atributes: %s !"),no_set.c_str());
 	    }
 	}
     }
@@ -1121,11 +1121,11 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	{
 	    AutoHD<Widget> wdg = (wattr==".")?AutoHD<Widget>(this):wdgAt(wattr);
 	    if( !wdg.at().attrPresent(opt->attr("key_id")) )
-		throw TError(nodePath().c_str(),_("Delete a include widget's element is error."));
+                throw TError(nodePath().c_str(),_("Deleting the enclosed widget's elements error."));
 	    if( !(wdg.at().attrAt(opt->attr("key_id")).at().fld().flg()&Attr::IsInher) &&
 		    wdg.at().attrAt(opt->attr("key_id")).at().fld().flg()&Attr::IsUser )
 		wdg.at().attrDel(opt->attr("key_id"));
-	    else throw TError(nodePath().c_str(),_("Delete a not user element is error."));
+	    else throw TError(nodePath().c_str(),_("Deletint the not user element error."));
 	}
 	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )
 	{
@@ -1144,7 +1144,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		string		tsels	= wdg.at().attrAt(idattr).at().fld().selNames();
 
 		if( !(!(tflg&Attr::IsInher) && tflg&Attr::IsUser) )
-		    throw TError(nodePath().c_str(),_("Change a no user attribute is no permit"));
+		    throw TError(nodePath().c_str(),_("Changing of not user attribute is no permited"));
 
 		string tvl	= wdg.at().attrAt(idattr).at().getS();
 		Attr::SelfAttrFlgs sflgs = wdg.at().attrAt(idattr).at().flgSelf();
@@ -1315,7 +1315,7 @@ int Attr::flgGlob()
 
 string Attr::getSEL( )
 {
-    if( !(fld().flg()&TFld::Selected) ) throw TError("Cfg",_("Element type no select!"));
+    if( !(fld().flg()&TFld::Selected) ) throw TError("Cfg",_("Element type is not selected!"));
     switch( fld().type() )
     {
 	case TFld::String:	return fld().selVl2Nm(*m_val.s_val);
@@ -1372,7 +1372,7 @@ char Attr::getB( )
 void Attr::setSEL( const string &val, bool strongPrev, bool sys )
 {
     if( !(fld().flg()&TFld::Selected) )
-	throw TError("Cfg",_("Element type no select!"));
+	throw TError("Cfg",_("Element type is not selected!"));
     switch( fld().type() )
     {
 	case TFld::String:	setS( fld().selNm2VlS(val), strongPrev, sys );	break;

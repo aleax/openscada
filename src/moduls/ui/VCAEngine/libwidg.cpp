@@ -795,7 +795,7 @@ void LWidget::saveIO( )
 
 void LWidget::wdgAdd( const string &wid, const string &name, const string &path )
 {
-    if( !isContainer() )  throw TError(nodePath().c_str(),_("No container widget!"));
+    if( !isContainer() )  throw TError(nodePath().c_str(),_("Widget is not container!"));
     if( wdgPresent(wid) ) return;
 
     //- Check for label <deleted> -
@@ -946,7 +946,7 @@ void CWidget::setEnable( bool val )
 	    if( ownerLWdg().herit()[i_h].at().wdgPresent(id()) && !ownerLWdg().herit()[i_h].at().wdgAt(id()).at().enable( ) )
 	    try { ownerLWdg().herit()[i_h].at().wdgAt(id()).at().setEnable(true); }
 	    catch(...)
-	    { mess_err(nodePath().c_str(),_("Heritors widget <%s> enable error"),id().c_str()); }
+            { mess_err(nodePath().c_str(),_("Inheriting widget <%s> enable error"),id().c_str()); }
 }
 
 string CWidget::calcId( )

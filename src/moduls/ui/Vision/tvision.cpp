@@ -237,7 +237,7 @@ QMainWindow *TVision::openWindow()
 	    if( rez == DlgUser::SelCancel ) return NULL;
 	    if( rez == DlgUser::SelErr )
 	    {
-		postMess(nodePath().c_str(),_("Auth wrong!!!"));
+		postMess(nodePath().c_str(),_("Auth is wrong!!!"));
 		continue;
 	    }
 	    user_open = d_usr.user().toAscii().data();
@@ -336,7 +336,7 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,2,"/alarm",_("Alarms"),0444,"root","UI"))
 	    ctrMkNode("fld",opt,-1,"/alarm/plComm",_("Play command"),0664,"root","UI",4,"tp","str","dest","sel_ed","select","/alarm/plComLs","help",
 		    _("Command line for call sounds play.\n"
-		    "Use %f for source file name insert. If source file not used then play sample send to pipe."));
+		    "Use %f for source file name inserting. If source file is not used play sample is sent to pipe."));
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","UI",3,"tp","str","cols","90","rows","5");
 	return;
     }
