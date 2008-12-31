@@ -100,6 +100,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred) );
     glay->addWidget(lab,1,1);
     obj_db = new LineEdit(tab_w,LineEdit::Combo);
+    obj_db->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed) );
     obj_db->setObjectName("/obj/st/db");
     connect(obj_db, SIGNAL(apply()), this, SLOT(isModify()));
     glay->addWidget(obj_db,1,2);
@@ -177,7 +178,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     glay->addWidget(prj_runw,7,1,1,3);
 
     grp->setLayout(glay);
-    dlg_lay->addWidget(grp,1,0,1,2);
+    dlg_lay->addWidget(grp,1,0);
 
 
     //- Add tab 'Mime data' -
@@ -714,7 +715,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred) );
     glay->addWidget(lab,1,1);
     obj_parent = new QComboBox(tab_w);
-    obj_parent->setSizePolicy( QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed) );
+    obj_parent->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed) );
     obj_parent->setObjectName("/wdg/st/parent");
     connect(obj_parent, SIGNAL(activated(int)), this, SLOT(isModify()));
     glay->addWidget(obj_parent,1,2,1,4);
@@ -798,7 +799,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     glay->addWidget(obj_accother,7,3);
 
     grp->setLayout(glay);
-    dlg_lay->addWidget(grp,1,0,1,2);
+    dlg_lay->addWidget(grp,1,0);
 
     //- Add tab 'Attributes' -
     //------------------------

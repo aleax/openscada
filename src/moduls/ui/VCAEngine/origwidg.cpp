@@ -423,7 +423,7 @@ void OrigText::postEnable( int flag )
 			    "Bottom left;Bottom right;Bottom center;Bottom justify;"
 			    "V center left; V center right; Center; V center justify"),"28") );
 	attrAdd( new TFld("text",_("Text"),TFld::String,TFld::FullText,"0","Text","","","29") );
-	attrAdd( new TFld("numbArg",_("Arguments number"),TFld::Integer,Attr::Active,"","0","0;10","","30") );
+	attrAdd( new TFld("numbArg",_("Arguments number"),TFld::Integer,Attr::Active,"","0","0;20","","30") );
     }
 }
 
@@ -846,6 +846,7 @@ bool OrigDocument::attrChange( Attr &cfg, void *prev )
 	    if( !cfg.owner()->attrPresent("aCur") )
 		cfg.owner()->attrAdd( new TFld("aCur",_("Cursor:archive"),TFld::Integer,Attr::Mutable|Attr::Active,"","0","-1;99"), -1, true );
 	}
+
 	string fidp;
 	//>> Delete archive document's attributes
 	for( int i_p = 0; true; i_p++ )
@@ -854,6 +855,7 @@ bool OrigDocument::attrChange( Attr &cfg, void *prev )
 	    if( !cfg.owner()->attrPresent(fidp) )      break;
 	    else if( i_p >= cfg.getI() )	cfg.owner()->attrDel(fidp);
 	}
+
 	//>> Create archive document's attributes
 	for( int i_p = 0; i_p < cfg.getI(); i_p++ )
 	{
@@ -1017,6 +1019,7 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
     }
     if( TSYS::strEmpty(iLang) )	iLang = "JavaLikeCalc.JavaScript";
     if( !lstTime )		lstTime = wdg->attrAt("bTime").at().getI();
+
     //>> Add generic io
     funcIO.ioIns( new IO("rez",_("Result"),IO::String,IO::Return),0);
     funcIO.ioIns( new IO("time",_("Document time"),IO::Integer,IO::Default),1);
@@ -1109,7 +1112,7 @@ void OrigDocument::nodeProcess( XMLNode *xcur, TValFunc &funcV, TFunction &funcI
     for( int i_c = 0; i_c < xcur->childSize(); i_c++ )
     {
 	//>> Repeat tags
-	if( (dRpt=atof(xcur->childGet(i_c)->attr("docRept").c_str())) > 1e-6 )
+	if( funcV.getI(2) && (dRpt=atof(xcur->childGet(i_c)->attr("docRept").c_str())) > 1e-6 )
 	{
 	    int rCnt = 0;
 	    XMLNode *reptN = xcur->childGet(i_c);
@@ -1121,6 +1124,7 @@ void OrigDocument::nodeProcess( XMLNode *xcur, TValFunc &funcV, TFunction &funcI
 	    long long lstTime = (long long)funcV.getI(3)*1000000;
 	    long long perRpt = (long long)(1000000*dRpt);
 	    long long rTime = bTime + perRpt*((lstTime-bTime)/perRpt);
+	    if( ((time-rTime)/perRpt) > 1000 ) continue;
 	    while( rTime < time )
 	    {
 		if( atoi(reptN->attr("docRptEnd").c_str()) )

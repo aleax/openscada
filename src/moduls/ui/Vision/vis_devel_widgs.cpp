@@ -1811,7 +1811,8 @@ DevelWdgView::DevelWdgView( const string &iwid, int ilevel, VisDevelop *mainWind
 	connect( this, SIGNAL( customContextMenuRequested(const QPoint&) ), this, SLOT( wdgPopup() ) );	
     }
     //> Select only created widgets by user
-    else if( wLevel() == 1 && ((WdgView*)parentWidget())->isReload )	setSelect(true);
+    else if( wLevel() == 1 && ((WdgView*)parentWidget())->isReload )
+    { setSelect(true); z_coord = 100000; }
 }
 
 DevelWdgView::~DevelWdgView( )

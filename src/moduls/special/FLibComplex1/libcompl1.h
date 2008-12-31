@@ -629,42 +629,41 @@ class PID : public TFunction
 	    double	Kint	= (v->getI(8)>cycle)?cycle/v->getI(8):1.;
 	    double	Kdif	= (v->getI(9)>cycle)?cycle/v->getI(9):1.;
 
-	    //- Scale error -
+	    //> Scale error
 	    if( max <= min )	return;
 
-	    //- Prepare values -
+	    //> Prepare values
 	    sp = 100.*(sp+min)/(max-min);
 	    val = 100.*(val+min)/(max-min);
 	    val += k1*in1 + k2*in2;
 	    val=vmin(100.,vmax(-100.,val));
 
-	    //- Error -
+	    //> Error
 	    double err = sp - val;
 
-	    //- Insensibility -
+	    //> Insensibility
 	    err = (fabs(err)<zi)?0:((err>0)?err-zi:err+zi);
 
-	    //- Gain -
+	    //> Gain
 	    err*=kp;
 	    err=vmin(100.,vmax(-100.,err));
 
-	    //- Input filter lag -
+	    //> Input filter lag
 	    lag+=Kf*(err-lag);
 	    integ+=Kint*lag;		//Integral
 	    difer-=Kdif*(difer-lag);	//Differecial lag
 
-	    //- Automatic mode enabled -
-	    if( v->getB(5) )
-		out = (2.*lag + integ - difer) + k3*in3 + k4*in4;
-	    else v->setB(6,false);
+	    //> Automatic mode enabled
+	    if( v->getB(5) ) out = (2.*lag + integ - difer) + k3*in3 + k4*in4;
+	    else { v->setB(6,false); v->setR(1,v->getR(0)); }
 
-	    //- Check output limits -
+	    //> Check output limits
 	    out=vmin(h_up,vmax(h_dwn,out));
 
-	    //- Fix integral for manual and limits -
+	    //> Fix integral for manual and limits
 	    integ = out - 2.*lag + difer - k3*in3 + k4*in4;
 
-	    //- Write outputs -
+	    //> Write outputs
 	    v->setR(4,out);
 	    v->setR(23,integ);
 	    v->setR(24,difer);

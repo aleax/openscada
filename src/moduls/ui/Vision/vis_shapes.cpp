@@ -781,7 +781,7 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	}
 	default:
 	    //- Individual arguments process -
-	    if( uiPrmPos >= 50 && uiPrmPos < 150 )
+	    if( uiPrmPos >= 50 )
 	    {
 		int argN = (uiPrmPos/10)-5;
 		if( argN >= shD->args.size() )	break;
@@ -2047,18 +2047,24 @@ void ShapeProtocol::init( WdgView *w )
 
     ShpDt *shD = (ShpDt*)w->shpData;
 
-    // - Init main widget -
+    //> Init main widget
     QVBoxLayout *lay = new QVBoxLayout(w);
     shD->addrWdg = new QTableWidget(w);
     shD->addrWdg->setSelectionBehavior(QAbstractItemView::SelectRows);
     //shD->addrWdg->setSortingEnabled(true);
     DevelWdgView *devW = qobject_cast<DevelWdgView*>(w);
-    if( devW ) eventFilterSet(w,shD->addrWdg,true);
-    setFocus(w,shD->addrWdg,shD->active,devW);
+    eventFilterSet(w,shD->addrWdg,true);
+    w->setFocusProxy( shD->addrWdg );
+    if( qobject_cast<DevelWdgView*>(w) ) setFocus(w,shD->addrWdg,false,true);
     lay->addWidget(shD->addrWdg);
-    //- Init tracing timer -
+    //> Init tracing timer
     shD->trcTimer = new QTimer(w);
     connect( shD->trcTimer, SIGNAL(timeout()), this, SLOT(tracing()) );
+
+    //> Bckground palette init
+    QPalette plt(shD->addrWdg->palette());
+    plt.setBrush(QPalette::Background,QPalette().brush(QPalette::Background));
+    shD->addrWdg->setPalette(plt);
 }
 
 void ShapeProtocol::destroy( WdgView *w )
@@ -2087,6 +2093,7 @@ bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    if( !qobject_cast<RunWdgView*>(w) ) break;
 	    shD->active = (bool)atoi(val.c_str());
 	    setFocus( w, shD->addrWdg, shD->active && ((RunWdgView*)w)->permCntr() );
+//	    shD->addrWdg->setEnabled( shD->active && ((RunWdgView*)w)->permCntr() );
 	    break;
 	case 12:	//geomMargin
 	    w->layout()->setMargin(atoi(val.c_str()));	break;
@@ -2371,19 +2378,32 @@ bool ShapeProtocol::event( WdgView *w, QEvent *event )
     return false;
 }
 
-bool ShapeProtocol::eventFilter( WdgView *view, QObject *object, QEvent *event )
+bool ShapeProtocol::eventFilter( WdgView *w, QObject *object, QEvent *event )
 {
-    switch(event->type())
-    {
-	case QEvent::Enter:
-	case QEvent::Leave:
+    if( qobject_cast<DevelWdgView*>(w) )
+	switch(event->type())
+	{
+	    case QEvent::Enter:
+	    case QEvent::Leave:
+		return true;
+	    case QEvent::MouseMove:
+	    case QEvent::MouseButtonPress:
+	    case QEvent::MouseButtonRelease:
+		QApplication::sendEvent(w,event);
 	    return true;
-	case QEvent::MouseMove:
-	case QEvent::MouseButtonPress:
-	case QEvent::MouseButtonRelease:
-	    QApplication::sendEvent(view,event);
-	return true;
-    }
+	}
+    else
+	switch( event->type() )
+	{
+	    case QEvent::FocusIn:
+		w->attrSet("focus","1");
+		w->attrSet("event","ws_FocusIn");
+		break;
+	    case QEvent::FocusOut:
+		w->attrSet("focus","0");
+		w->attrSet("event","ws_FocusOut");
+		break;
+	}
 
     return false;
 }
@@ -2481,7 +2501,7 @@ bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    if(!runW)	break;
 	    shD->active = (bool)atoi(val.c_str());
 	    setFocus( w, shD->web, shD->active && runW->permCntr() );
-	    shD->web->setEnabled( shD->web && runW->permCntr() );
+	    shD->web->setEnabled( shD->active && runW->permCntr() );
 	    break;
 	case 12:	//geomMargin
 	    w->layout()->setMargin(atoi(val.c_str()));	break;
@@ -2568,7 +2588,6 @@ bool ShapeDocument::event( WdgView *view, QEvent *event )
 bool ShapeDocument::eventFilter( WdgView *w, QObject *object, QEvent *event )
 {
     if( qobject_cast<DevelWdgView*>(w) )
-    {
 	switch( event->type() )
 	{
 	    case QEvent::Enter:
@@ -2581,7 +2600,6 @@ bool ShapeDocument::eventFilter( WdgView *w, QObject *object, QEvent *event )
 		QApplication::sendEvent(w,event);
 		return true;
 	}
-    }
     else
 	switch( event->type() )
 	{

@@ -639,6 +639,7 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
     box->setSpacing(0);
 
     ed_fld = new QTextEdit(this);
+    ed_fld->setLineWrapMode(QTextEdit::NoWrap);
     setFocusProxy( ed_fld );
     connect( ed_fld, SIGNAL( textChanged() ), this, SLOT( changed() ) );
     box->addWidget(ed_fld);

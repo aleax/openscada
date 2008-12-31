@@ -290,9 +290,6 @@ void Session::uiComm( const string &com, const string &prm, SessWdg *src )
 			attr.at().setCfgVal(src->attrAt(atr_id).at().cfgVal());
 		    }
 		    else attr.at().setCfgVal("wdg:"+src->path()+"/a_"+atr_id);
-//		    if( prm_lnk.empty() && src->attrAt(atr_id).at().cfgVal().size() > 4 &&
-//			    src->attrAt(atr_id).at().cfgVal().substr(0,4) == "prm:" )
-//			prm_lnk = src->attrAt(atr_id).at().cfgVal().substr(4);
 		}
 		else
 		{
@@ -1374,9 +1371,9 @@ bool SessWdg::attrChange( Attr &cfg, void *prev )
     //-- Focus attribute process for active active --
     if( cfg.id() == "active" )
     {
-	if( cfg.getB() )
+	if( cfg.getB() && !cfg.owner()->attrPresent("focus") )
 	    cfg.owner()->attrAdd( new TFld("focus",_("Focus"),TFld::Boolean,TFld::NoFlag,"1","false","","","-2") );
-	else	cfg.owner()->attrDel("focus");
+//	else	cfg.owner()->attrDel("focus");
     }
     //- Alarm event for widget process -
     else if( cfg.id() == "alarm" && enable() && prev )		alarmSet( true );

@@ -1,3 +1,21 @@
+2008-12-31 Roman
+- FIX:/Special/FLibComplex1: Setup setpoint to variable value into manual mode is fixed.
+- /UI/VCAEngine: Arguments number for primitive "Text" expanded to 20 items.
+- FIX:/UI/VCAEngine: Repeat count number for primitive "Document" items bound to 1000 items to once call.
+- FIX:/UI/VCAEngine: The focus attribute deleting on time disable widget's active mode, on RunTime is fixed.
+- FIX:/UI/Vision: Status section expanding is fixed for the container and item properties dialog.
+- FIX:/UI/Vision: Up order is fixed for new created widgets.
+- FIX:/UI/Vision: Background palete is fixed for primitive "Protocol".
+- FIX:/UI/Vision: Focus mode is fixed for primitive "Protocol".
+- FIX:/UI/WebVision: Focus and active mode is fixed for primitive "Diagram".
+- !:/UI/WebVision: Focus and active mode support is added for primitive 'Protocol' and 'Document'.
+- !!!:/DemoDB: Document's close last document algoritm is fixed.
+	PID configuration page is added.
+	Navigation on document control panel is added. Self navigation elements is removed.
+	Parameters' control panel is updated and expanded for support digital parameters, PID control panel call and some fixes.
+	Some kran is connected to real devices in main mnemo.
+
+
 2008-12-30 Maxim
 - /UI/QTCfg: Some fixes to English variant of translation is done.
 - /UI/QTStarter: Some fixes to English variant of translation is done.

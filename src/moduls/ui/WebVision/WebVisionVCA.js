@@ -1052,23 +1052,22 @@ function makeEl( pgBr, inclPg )
       dgrObj.border = 0;
       anchObj.appendChild(dgrObj); this.place.appendChild(anchObj);
     }
-    if( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEQ_WR )
+    anchObj.isActive = (parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEQ_WR);
+    anchObj.href = '#';
+    anchObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
+    anchObj.onfocus = function( ) { if(this.isActive) setFocus(this.wdgLnk.addr); }
+    anchObj.onkeydown = function(e) { if(this.isActive) setWAttrs(this.wdgLnk.addr,'event','key_pres'+evKeyGet(e?e:window.event)); }
+    anchObj.onkeyup = function(e) { if(this.isActive) setWAttrs(this.wdgLnk.addr,'event','key_rels'+evKeyGet(e?e:window.even)); }
+    anchObj.onclick = function(e)
     {
-      anchObj.href = '#';
-      anchObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
-      anchObj.onfocus = function( ) { setFocus(this.wdgLnk.addr); }
-      anchObj.onkeydown = function(e) { setWAttrs(this.wdgLnk.addr,'event','key_pres'+evKeyGet(e?e:window.event)); }
-      anchObj.onkeyup = function(e) { setWAttrs(this.wdgLnk.addr,'event','key_rels'+evKeyGet(e?e:window.even)); }
-      anchObj.onclick = function(e)
-      {
-	if(!e) e = window.event;
-	servSet(this.wdgLnk.addr,'com=obj&sub=point&x='+(e.offsetX?e.offsetX:(e.clientX-posGetX(this)+window.pageXOffset))+
-						  '&y='+(e.offsetY?e.offsetY:(e.clientY-posGetY(this)+window.pageYOffset))+
-						  '&key='+evMouseGet(e),'');
-	setFocus(this.wdgLnk.addr);
-	return false;
-      }
-    } else anchObj.onclick = function(e) { return false; }
+      if( !this.isActive ) return false;
+      if(!e) e = window.event;
+      servSet(this.wdgLnk.addr,'com=obj&sub=point&x='+(e.offsetX?e.offsetX:(e.clientX-posGetX(this)+window.pageXOffset))+
+						'&y='+(e.offsetY?e.offsetY:(e.clientY-posGetY(this)+window.pageYOffset))+
+						'&key='+evMouseGet(e),'');
+      setFocus(this.wdgLnk.addr);
+      return false;
+    }
     var dgrObj = anchObj.childNodes[0];
     dgrObj.src = '/'+MOD_ID+this.addr+'?com=obj&tm='+tmCnt+'&xSc='+xSc.toFixed(2)+'&ySc='+ySc.toFixed(2);
     this.perUpdtEn( this.isEnabled() && parseInt(this.attrs['trcPer']) );
@@ -1091,6 +1090,13 @@ function makeEl( pgBr, inclPg )
     if( !this.place.firstChild )
     {
       this.place.appendChild(document.createElement('table'));
+      this.place.firstChild.wdgLnk = this;
+      this.place.firstChild.isActive = (parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEQ_WR);
+      this.place.firstChild.onclick = function(e)
+      {
+        if( this.isActive ) setFocus(this.wdgLnk.addr);
+        return false;
+      }
       this.place.firstChild.className='prot';
       this.loadData = function( )
       {
@@ -1339,6 +1345,13 @@ function perUpdt( )
 		this.attrs['style']+"</style>"+
 		"</head>"+(this.attrs['doc']?this.attrs['doc']:this.attrs['tmpl'])+"</html>");
     frDoc.close();
+    frDoc.wdgLnk = this;
+    frDoc.isActive = (parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEQ_WR);
+    frDoc.onclick = function(e)
+    {
+      if( this.isActive ) setFocus(this.wdgLnk.addr);
+      return false;
+    }
     this.perUpdtEn( false );
   }
   this.updCntr++;
