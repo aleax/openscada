@@ -2033,7 +2033,7 @@ void TVArchivator::setValPeriod( double iper )
 
     //- Call sort for all archives -
     ResAlloc res(a_res,false);
-    for( map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); iel++ )
+    for( map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); ++iel )
 	iel->second->archive().archivatorSort();
 
     modif();
@@ -2101,7 +2101,7 @@ void TVArchivator::archiveList( vector<string> &ls )
 {
     ResAlloc res(a_res,false);
     ls.clear();
-    for( map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); iel++ )
+    for( map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); ++iel )
 	ls.push_back(iel->first);
 }
 
@@ -2168,7 +2168,7 @@ void TVArchivator::Task(union sigval obj)
 
 	ResAlloc res(arch->a_res,false);
 	long long beg, end;
-	for( map<string,TVArchEl*>::iterator iel = arch->archEl.begin(); iel != arch->archEl.end(); iel++ )
+	for( map<string,TVArchEl*>::iterator iel = arch->archEl.begin(); iel != arch->archEl.end(); ++iel )
 	    if( iel->second->archive().startStat() )
 	    {
 		TVArchEl *arch_el = iel->second;
@@ -2371,7 +2371,7 @@ void TVArchivator::cntrCmdProc( XMLNode *opt )
 	XMLNode *n_size = ctrMkNode("list",opt,-1,"/arch/arch/2","");
 
 	ResAlloc res(a_res,false);
-	for( map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); iel++ )
+	for( map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); ++iel )
 	{
 	    if(n_arch)	n_arch->childAdd("el")->setText(iel->second->archive().id());
 	    if(n_per)	n_per->childAdd("el")->setText(TSYS::real2str((double)iel->second->archive().period()/1000000.,6));

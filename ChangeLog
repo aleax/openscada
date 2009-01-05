@@ -1,3 +1,31 @@
+2009-01-05 Roman
+- !!:/SYS: Source tree version is changed to 0.6.3.
+- /SYS: Translation's to Russian an Ukrainian files is updated.
+- /SYS: STD::MAP iteration is made optimal. Instead i++ used ++i.
+- !!:/DAQ/DCON: Add documentation file about_ru.pdf to source tree.
+- !!:/Archive/DBArch: Documentation and translation is updated and version 0.7.1 is relised.
+- !!:/Archive/FSArch: Documentation and translation is updated and version 1.0.1 is relised.
+- !!:/DB/DBF: Documentation and translation is updated and version 1.9.1 is relised.
+- !!:/DB/FireBird: Documentation and translation is updated and version 0.8.1 is relised.
+- !!:/DB/MySQL: Documentation and translation is updated and version 1.4.1 is relised.
+- !!:/DB/SQLite: Documentation and translation is updated and version 1.4.1 is relised.
+- !!:/DAQ/BlockCalc: Documentation and translation is updated and version 1.1.1 is relised.
+- !!:/DAQ/JavaLikeCalc: Documentation and translation is updated and version 1.3.0 is relised.
+- !!:/DAQ/LogicLev: Documentation and translation is updated and version 0.9.2 is relised.
+- !!:/DAQ/ModBus: Documentation and translation is updated and version 0.9.1 is relised.
+- !!:/DAQ/SNMP: Documentation and translation is updated and version 0.3.3 is relised.
+- !!:/DAQ/Siemens: Documentation and translation is updated and version 1.1.1 is relised.
+- !!:/DAQ/System: Documentation and translation is updated and version 1.6.2 is relised.
+- !!:/DAQ/Transporter: Documentation and translation is updated and version 0.3.3 is relised.
+- !!:/Special/FLibComplex1: Documentation and translation is updated and version 1.0.3 is relised.
+- !!:/Special/FLibSYS: Documentation and translation is updated and version 0.7.0 is relised.
+- !!:/Transport/SSL: Documentation and translation is updated and version 0.8.0 is relised.
+- !!:/Transport/Socket: Documentation and translation is updated and version 1.3.6 is relised.
+- !!:/UI/QTCfg: Documentation and translation is updated and version 1.7.0 is relised.
+- !!:/UI/WebCfg: Documentation and translation is updated and version 1.5.2 is relised.
+- !!!:/DemoDB: Document's close last document algoritm again is fixed. Some kran is connected to real devices in main mnemo.
+
+
 2008-12-31 Roman
 - FIX:/Special/FLibComplex1: Setup setpoint to variable value into manual mode is fixed.
 - /UI/VCAEngine: Arguments number for primitive "Text" expanded to 20 items.
@@ -17,10 +45,10 @@
 
 
 2008-12-30 Maxim
-- /UI/QTCfg: Some fixes to English variant of translation is done.
-- /UI/QTStarter: Some fixes to English variant of translation is done.
-- /UI/VCAEngine: Some fixes to English variant of translation is done.
-- /UI/Vision: Some fixes to English variant of translation is done.
+- FIX:/UI/QTCfg: Some fixes to English variant of translation is done.
+- FIX:/UI/QTStarter: Some fixes to English variant of translation is done.
+- FIX:/UI/VCAEngine: Some fixes to English variant of translation is done.
+- FIX:/UI/Vision: Some fixes to English variant of translation is done.
 - FIX:/UI/Vision: Widths scaling for the primitive ElFigure is modified.
 
 
@@ -55,7 +83,7 @@
 
 
 2008-12-26 Maxim
-- !:/SYS: Some fixes to English variant of translation is done.
+- FIX:/SYS: Some fixes to English variant of translation is done.
 - FIX:/UI/Vision: Widths scaling for the primitive ElFigure for runtime mode is fixed.
 
 
@@ -66,11 +94,12 @@
 
 
 2008-12-23 Maxim
-- /UI/Vision: Visual scale manipulation support is added.
+- !!:/UI/Vision: Visual scale manipulation support is added.
+
 
 2008-12-22 Roman
-- !:/SYS: Documentation pack is unified and separated to project info files and documentation. Dynamic librarie's links packing into main
-    package and development is fixed.
+- !:/SYS: Documentation pack is unified and separated to project info files and documentation.
+    Dynamic librarie's links packing into main package and development is fixed.
 - !:/SYS: Remove documentation default installation.
 - !:/SYS: Change project's library revision to "0:10:0".
 - !!:/UI/WebCfgD: Fields of images is released.
@@ -97,17 +126,17 @@
 
 
 2008-12-15 Roman
-- !!!!:/UI: Dynamic Web based configurator module (UI.WebCfgD) is added. Not all function yet reailed!
+- !!!!:/UI: Dynamic Web based configurator module (UI.WebCfgD) is added. Not all function yet realised!
 - !!:/UI: UI subsystem's module template is added (src/moduls/ui/=Tmpl=).
 - !!:/UI/WebDbg: Remove module.
 - !!:/UI/WebVision: JavaScript module's code exuded to separate file WebVisionVCA.js.
 - !!:/UI/WebWision: Using fontconfig for TTF fonts location is added. Now into primitive "Diagram" used TTF fonts.
-- FIX:/UI/WebWision: Multiple loading page's tree is fixed.
-- /UI/WebWision: Check access to widget's support is added.
-- /UI/WebWision: Open popup windows support is added.
-- /UI/WebWision: Active mode check is added for primitive 'FormEl'.
-- /UI/WebWision: No write to user's modified primitive 'FormEl' support is added.
-- !!:/UI/QTCfg: Use new optimal for time childs requst for tree build.
+- FIX:/UI/WebVision: Multiple loading page's tree is fixed.
+- /UI/WebVision: Check access to widget's support is added.
+- /UI/WebVision: Open popup windows support is added.
+- /UI/WebVision: Active mode check is added for primitive 'FormEl'.
+- /UI/WebVision: No write to user's modified primitive 'FormEl' support is added.
+- !!:/UI/QTCfg: Use new, optimal for time, childs requst to tree build.
 - FIX:/UI/QTCfg: Some fixes made.
 - !!:/UI: Icons types "png", "gif", "jpg" and "jpeg" get support is added.
 - FIX:/UI/Vision: Lost inspector's attributes content after closing Color and Font selection dialogs is fixed. Focus set to inspector attributes strong.
@@ -115,12 +144,12 @@
 - FIX:/UI/Vision: The no permition message left only for pages, not for included widgets.
 - /UI/WebCfg: Load and save action is added to toolbar.
 - /SYS: Icons for Web-tree build is included. Add icons: line.png, disconnect.png, UI.WebCfgD.png.
-- !:/SYS: Icon path configuration field is added. Module path configuration field move to main OpenSCADA system page.
-- !!:/SYS: Node's idetifier encoding is added for all need subsystems. Used for remove spaces and other special simbols from identifier.
+- !:/SYS: Icon path configuration field is added. The module path configuration field move to main OpenSCADA system page.
+- !!:/SYS: Node's identifier encoding is added for all need subsystems. Used for remove spaces and other special simbols from identifier.
 - !!:/SYS: Node childs control interface's request is added. Used for faster build navigation trees (QTCfg, WebCfgD).
 - !:/SYS: Translation for Russian and Ukrainian is updated.
 - /DB/MySQL: Icon is updated.
-- !:/Archive/DBArch, /Archive/FSArch: Translation to German is added.
+- !:/Archive/DBArch, /Archive/FSArch: Translation to German is added by Aleksey and Irina Popkov.
 - FIX:/DB/MySQL: Case-sensitive keys is fixed. Add parameter BINARY to created text keys "varchar(150) BINARY".
 - /DemoDB: Updated for case-sensitive keys for DB.MySQL fix.
 
@@ -142,16 +171,16 @@
 - FIX:/SYS: Some fixes into RPM build spec file and data/openscada.desktop.
 - FIX:/UI/QTCfg: Enter new node identifier and name is fixed.
 - FIX:/UI/Vision: Crash after close dialog from links inspector call is final fixed.
-- /UI/Vision: Show widgets of libraries to popup menu for projects and libraries navigator limited by 10 and root libraries.
+- /UI/Vision: Showing widgets of libraries to popup menu for projects and libraries navigator limited by 10 and root libraries.
 
 
 2008-11-24 Roman
 - !!!:/SYS, /UI/QTCfg, /UI/Vision: OpenSCADA nodes, when stored into DB, DB key identifier control is added. User bounded for enter big identifiers.
-- !!:/DemoDB: VCA DB is separated to vcaBase, vcaTest and vcaAGLKS DB's.
 - FIX:/UI/VCAEngine: Fixed group request's for libraries of widget's tree.
-- !!!!:/UI/Vision: Intgrate loading libraries widgets toolbars and Libraries widgets navigator. Move to use group request for libraries of widget's tree.
+- !!!!:/UI/Vision: Loading libraries' widgets' toolbars and libraries widgets navigator is integrated. Move to use group request for libraries of widget's tree.
   Made adaptive and optimal libraries of widget's tree loading.
 - /UI/Vision: Add widgets of libraries to popup menu for projects and libraries navigator.
+- !!:/DemoDB: VCA DB is separated to vcaBase, vcaTest and vcaAGLKS DB's.
 
 
 2008-11-24 Maxim
@@ -164,7 +193,7 @@
 
 2008-11-21 Roman
 - /UI/VCAEngine: Group request for widget's tree is made time optimal for session mode.
-- !:/UI/VCAEngine: Added not full group request's for libraries of widget's tree and projects tree.
+- !:/UI/VCAEngine: Added not full group request for libraries of widget's tree.
 
 
 2008-11-20 Maxim
@@ -173,9 +202,9 @@
 
 
 2008-11-20 Roman
-- /Transport/Sockets: Closed input connections limit counter is added to transport's status line.
-- FIX:/Transport/Sockets: Closing protocol after broken connection is added.
-- !:/UI/VCAEngine: Independent loading generic attributes is added. For storing of geometry broken and lost base widgets of inherits.
+- /Transport/Sockets: Close input connections limit counter is added to transport's status line.
+- FIX:/Transport/Sockets: Close protocol after broken connection is added.
+- !:/UI/VCAEngine: Independent load of generic attributes is added. For storing of geometry broken and lost base widgets of inherits.
 - !:/UI/VCAEngine: Removed support of storing attributes old DB.
 - FIX:/UI/Vision: Disable message for not full link made connection. System crashed after it message dialog close.
 - /UI/Vision: Resize underlie selected widgets support is added.
@@ -203,7 +232,7 @@
 - FIX:/UI/Vision: Select new made widgets mechanism is fixed.
 - !!!!:/UI/Vision: For time optimal requests used new group request '/serv/attrBr'. Performance network and local request significantly rised!
 - /UI/Vision: Debug messages is made through 'OSC_DEBUG >= 3' macro-condition.
-- !!:/UI/Vision: update time control mechanism is rewrited.
+- !!:/UI/Vision: The updating time control mechanism is rewrited.
 - !!!!:/UI/WebVision: For time optimal requests used new group request '/serv/attrBr'. Performance of requests significantly rised!
 - !!:/DemoDB: Is updated.
 
@@ -220,20 +249,20 @@
 - !!!!:/DAQ/JavaLikeCalc: Add support keywords "using" and "return".
 - FIX:/Archive/FSArch: Scan values from holed archive is fixed.
 - /TFunction, /DAQ/JavaLikeCalc: Renamed functions from 'm_nm' view to mNm.
-- FIX:/VCAEngine: Lost language after inherit widget procedure modify is fixed.
-- !:/VCAEngine: Restore atribute 'time' from archived document on start is added.
-- !!!!:/Vision: Print and Export data of run project's is added. Include print and export by: pages, diagrams and documents.
-- !!!!:/WebVision: Primitive "Document" support is added.
+- FIX:/UI/VCAEngine: Lost language after inherit widget procedure modify is fixed.
+- !:/UI/VCAEngine: Restore atribute 'time' from archived document on start is added.
+- !!!!:/UI/Vision: Print and Export data of run project's is added. Include print and export by: pages, diagrams and documents.
+- !!!!:/UI/WebVision: Primitive "Document" support is added.
 - !!:/DemoDB: Is updated. Sum and average archives data functions is fixed. Primitive's document is updated and one is added.
 
 
 2008-11-12 Maxim
 - FIX:/UI/Vision: Deleting the single figure for the primitive ElFigure is fixed.
-- /UI/Vision: Paint event is for primitive ElFigure is  modified.
+- /UI/Vision: Paint event for primitive ElFigure is modified.
 
 
 2008-11-10 Maxim
-- FIX:/UI/Vision: Loadin image for filling the primitive ElFigure is fixed.
+- FIX:/UI/Vision: Loading image for filling the primitive ElFigure is fixed.
 - /UI/Vision: Copy function for primitive ElFigure is modified.
 
 
@@ -264,27 +293,24 @@
 
 2008-10-30 Roman
 - FIX:/DAQ/Siemens: Not set modify flag for template field change.
-- !:/Special/FLibSYS: Direct access to archive or atribute's value address field is added for functions: varhBeg, varhEnd, varhGetR, varhGetB and varhGetS.
-- !!!:/Special/FLibSYS: Add user's functions: strPath2Sep, strEnc2HTML and real2str.
-- FIX:/UI/QTCfg: Block signals on time programm values set into LineEdit is fixed.
+- !:/Special/FLibSYS: Direct access to archive or atribute's value address field is added for functions: varhBeg(), varhEnd(), varhGetR(), varhGetB() and varhGetS().
+- !!!:/Special/FLibSYS: Add user's functions: strPath2Sep(), strEnc2HTML() and real2str().
+- FIX:/UI/QTCfg: Blocking signals on time programm values set into LineEdit is fixed.
 - /UI/VCAEngine: Some attributes is renamed from m_attr to mAttr view.
 - FIX:/UI/VCAEngine: Some fixes for primitive "Document".
 - FIX:/UI/VCAEngine: Make stats f_start and f_stop for session's scripts is fixed.
 - FIX:/UI/VCAEngine: Function Widget:calcId() is fixed for full session path support.
 - FIX:/UI/VCAEngine: Two level's widgets list generation is fixed for widgets's parent edition.
 - FIX:/UI/VCAEngine: Widget's user atributes edit name, type and selected list for heritor is fixed.
-- FIX:/UI/Vision: Clean root link's fields, without group, is fixed.
-- FIX:/UI/Vision: Block signals on time programm values set into LineEdit is fixed.
-- !!!:/UI/Vision: Post process XML-source of primitive "Document" is added. Dinamic documents support by primitive "Document" is improved and tested.
-- !!:/SYS: Demo DB is updated. First primitive's "Document" reports is added.
+- FIX:/UI/Vision: Cleaning root link's fields, without group, is fixed.
+- FIX:/UI/Vision: Blocking signals on time programm values set into LineEdit is fixed.
+- !!!:/UI/Vision: Post process XML-source of primitive "Document" is added. Dynamic documents support by primitive "Document" is improved and tested.
+- !!:/DemoDB: Demo DB is updated. First primitive's "Document" reports is added.
 
 
 2008-10-30 Maxim
 - FIX:/UI/WebVision, /UI/Vision: Interpretation of the style of the line for primitive ElFigure is synchronized.
 - FIX:/UI/Vision: Mechanism of calculating the angle for the arc while building inundation path is changed.
-
-
-2008-10-30 Maxim
 - !!:/UI/WebVision: Dynamization of every parameter of primitive ElFigure support is added.
 - FIX:/UI/Vision: PopUp menu is fixed for primitive ElFigure.
 
@@ -298,7 +324,7 @@
 - /Archive/FSArch, /Archive/DBArch: Help for specific archivators' address format is added.
 - !!!:/DB/MySQL: Specific date format (flag TFld::DateTimeDec) support is added. Used MySQL field type DATETIME.
 - !!:/Special/FLibSYS: User function tmCtime() replaced by function tmFStr(). tmFStr() allow user's formated date string getting.
-- !!:/UI/Vision: Firs support of primitive "Document" is added.
+- !!:/UI/Vision: First support of primitive "Document" is added.
 
 
 2008-10-27 Roman
@@ -322,12 +348,12 @@
 - !!!!:/Transport: New module of support SSL is added.
 - !!:/Transport/Socket: Code clean and transport's status is added.
 - !!:/Transport/SSL: Documentation is added.
-- !!:/Transport/Socket: Documentation is updated.
+- !:/Transport/Socket: Documentation is updated.
 - !!:/SYS: Debug messages print mechanism is reviewed. Now debug enabled by OSC_DEBUG in debug level value from 0 to 5.
   New mechanism is included to all modules.
 - !:/SYS: New function TSYS::strMess() is added for inline format string support.
 - !:/Transports: Added virtual function getStatus( ) to input and output transports interfaces for connection status get.
-- FIX:/DAQ/BlockClac: Small values set allow into real block's atributes is fixed.
+- FIX:/DAQ/BlockClac: Small values seting allow into real block's atributes is fixed.
 - !!:/SYS: Demo DB is updated.
 
 
@@ -342,7 +368,7 @@
   Direct 'openscada' call and default config 'oscada.xml' used for superuser daemon mode.
 - !!:/SYS: Cofiguration to self openscada control intarface on port 10005 is added to default config 'oscada.xml'.
 - !!:/SYS: OpenSCADA init daemon script changed for use UTF-8 codepage.
-- !!!!:/SYS: Added support of nextline symbols into XML attributes its names and teg name. Often used into attributes.
+- !!!!:/SYS: Added support of nextline symbols into XML attributes its for names and tag name. Often used into attributes.
 
 
 2008-09-26 Maxim
@@ -351,7 +377,7 @@
 
 
 2008-09-26 Roman
-- !!:/UI/QTCfg, /UI/Vision: Use function deleteLater() for widgets deletion.
+- FIX:/UI/QTCfg, /UI/Vision: Use function deleteLater() for widgets deletion.
 - FIX:/UI/VCAEngine: Dynamic colors and images of primitive ElFigure is fixed.
 
 
@@ -362,11 +388,11 @@
 
 2008-09-22 Roman
 - !!:/UI/VCAEngine: For primitive ElFigure: Dynamic and static points support is added. Dynamic width, colors and images support is added.
-- /UI/Vision: Disable word wrap for texts into attributes of atributes inspector.
+- /UI/Vision: Disable word wrap for texts into attributes of the atributes inspector.
 
 
 2008-09-20 Roman
-- !/SYS: Default user on start QTCfg is made root. Used user directory configuration.
+- !/SYS: Default user on start QTCfg is made as root. Used user directory configuration.
 - !/SYS: Add programm information: PACKAGE_LICENSE, PACKAGE_DESCR, PACKAGE_AUTHOR and PACKAGE_SITE.
 - !!:/SYS: Add unified sleep task function TSYS::taskSleep() and replaced sleep code into: TArchiveS, DAQ.BlockCalc, DAQ.JavaLikeCalc, DAQ.LogicLev
   DAQ.ModBus, DAQ.SNMP, DAQ.Siemens, DAQ.System, DAQ.Transporter and UI.VCAEngine.
@@ -380,7 +406,7 @@
 2008-09-18 Roman
 - !!:/SYS: User's work directory support and user's start script 'openscada_start' added.
 - FIX:/SYS: TSYS::setWorkDir() function is fixed.
-- FIX:/SYS: RPM packages' build script is fixed for build into Hasher for ALTLinux Sisyphus repository.
+- FIX:/SYS: RPM packages' build script is fixed for build into Hasher, for ALTLinux Sisyphus repository.
 
 
 2008-09-17 Maxim
@@ -388,19 +414,19 @@
 
 
 2008-09-17 Roman
-- /DB/MySQL: For UTF codepages length multiplication to 2 for string is made.
+- /DB/MySQL: For UTF codepages length multiplication to 2 is made for string.
 - FIX:/UI/QTCfg: Save on exit is fixed.
-- FIX:/SYS: Fixed DB fields set is fixed for TArchives, TBDS and TTransports.
-- FIX:/SYS/Elements: Short DB fields length atribute is fixed.
+- FIX:/SYS: Fixing DB fields set is fixed for TArchives, TBDS and TTransports.
+- FIX:/SYS/Elements: The short DB fields length atribute is fixed.
 
 
 2008-09-16 Roman
-- FIX:/UI/VCAEngune: Two level and more widgets path generation is fixed.
+- FIX:/UI/VCAEngune: Two level and more widget's path generation is fixed.
 
 
 2008-09-15 Roman
-- !:/SYS: Self script 'mkdist' is added for fixed work 'make dist'.
-- !:/SYS: RPM build spec file is updated for create noarch packages for ALTLinux.
+- !:/SYS: Self script 'mkdist' is added for fixed working of command 'make dist'.
+- !:/SYS: RPM build spec file is updated to create noarch packages for ALTLinux.
 
 
 2008-09-10 Roman OpenSCADA 0.6.2

@@ -1,7 +1,7 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# OpenSCADA.UI.QTCfg translate to Russian.
+# Copyright (C) 2004-2009 Roman Savochenko
+# This file is distributed under the same license as the OpenSCADA.UI.QTCfg package module.
+# Roman Savochenko <rom_as@fromru.com>, 2004-2009.
 #
 #: qtcfg.cpp:617 qtcfg.cpp:688 qtcfg.cpp:1020 qtcfg.cpp:1032 qtcfg.cpp:1216
 #: qtcfg.cpp:1225 qtcfg.cpp:1827 qtcfg.cpp:1828 qtcfg.cpp:2330 qtcfg.cpp:2573
@@ -10,50 +10,14 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.UI.QTCfg 1.6.0\n"
+"Project-Id-Version: OpenSCADA.UI.QTCfg 1.7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-30 14:04+0200\n"
+"POT-Creation-Date: 2009-01-05 12:02+0200\n"
 "PO-Revision-Date: 2007-10-29 19:12+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-
-#: moc_qtcfg.cpp:75
-msgid ""
-"QTCFG::ConfAppexitModifChk()pageNext()itAdd()itCut()pageCyclRefrStart()"
-"userSel()enterWhatsThis()endRunChk()viewChild(QTreeWidgetItem*)onItem"
-"(QTreeWidgetItem*)treeUpdate()statcombBoxActivate(QString)listBoxGo"
-"(QListWidgetItem*)postableSet(int,int)applyButton()imgPopup(QPoint)"
-msgstr ""
-
-#: moc_selfwidg.cpp:43
-msgid "QTCFG::LineEditvalChanged(QString)"
-msgstr ""
-
-#: moc_selfwidg.cpp:125
-msgid "QTCFG::TextEdittextChanged(QString)btCancel()"
-msgstr ""
-
-#: moc_selfwidg.cpp:199
-msgid "QTCFG::ImgView"
-msgstr ""
-
-#: moc_selfwidg.cpp:244
-msgid "QTCFG::ReqIdNameDlg"
-msgstr ""
-
-#: moc_selfwidg.cpp:295
-msgid "QTCFG::DlgUser"
-msgstr ""
-
-#: moc_selfwidg.cpp:346
-msgid "QTCFG::UserStBar"
-msgstr ""
-
-#: moc_selfwidg.cpp:400
-msgid "TableDelegate"
-msgstr "Удалить"
 
 #: qtcfg.cpp:78 qtcfg.cpp:556 qtcfg.cpp:1731 qtcfg.cpp:2092 tuimod.cpp:236
 msgid "info"
@@ -330,7 +294,7 @@ msgstr "Вырезать элемент"
 
 #: qtcfg.cpp:235
 msgid "Cutting of the item"
-msgstr ""
+msgstr "Вырезание элемента"
 
 #: qtcfg.cpp:236
 msgid "The button for cutting of the item"
@@ -358,7 +322,7 @@ msgstr "Копировать элемент"
 
 #: qtcfg.cpp:244
 msgid "Copying of the item"
-msgstr ""
+msgstr "Копирование элемента"
 
 #: qtcfg.cpp:245
 msgid "The button for copying of the item"
@@ -386,7 +350,7 @@ msgstr "Вставить элемент"
 
 #: qtcfg.cpp:253
 msgid "Pasting of the item"
-msgstr ""
+msgstr "Вставка элемента"
 
 #: qtcfg.cpp:254
 msgid "The button for pasting of the item"
@@ -1111,7 +1075,7 @@ msgstr ""
 #: qtcfg.cpp:2008
 #, c-format
 msgid "Expand/update branch '%s' time %f ms."
-msgstr ""
+msgstr "Время расширения/обновления ветви '%s' %f мс."
 
 #: qtcfg.cpp:2026
 msgid "user"
@@ -1534,7 +1498,7 @@ msgid "QT"
 msgstr ""
 
 #: tuimod.cpp:42
-msgid "1.6.0"
+msgid "1.7.0"
 msgstr ""
 
 #: tuimod.cpp:43
@@ -1682,38 +1646,8 @@ msgstr ""
 
 #: selfwidg.h:165
 msgid "QTCfg dialog"
-msgstr ""
+msgstr "QTCfg диалог"
 
 #: selfwidg.h:193
 msgid "Node id and/or name select"
-msgstr ""
-
-#~ msgid "Goes item cut"
-#~ msgstr "Выполнение вырезания элемента"
-
-#~ msgid "The button for goes to item cut"
-#~ msgstr "Кнопка для выполнения вырезания элемента"
-
-#~ msgid "Goes item copy"
-#~ msgstr "Выполнение копирования элемента"
-
-#~ msgid "The button for goes to item copy"
-#~ msgstr "Кнопка для выполнения копирования элемента"
-
-#~ msgid "Press for goes to item copy."
-#~ msgstr "Нажать для выполнения копирования элемента."
-
-#~ msgid "Goes item paste"
-#~ msgstr "Выполнить вставку элемента"
-
-#~ msgid "The button for goes to item paste"
-#~ msgstr "Кнопка для выполнения вставки элемента"
-
-#~ msgid "Press for goes to item paste."
-#~ msgstr "Нажать для выполнения вставки элемента."
-
-#~ msgid "Target:"
-#~ msgstr "Цель:"
-
-#~ msgid "Enter new node identifier."
-#~ msgstr "Введите новый идентификатор узла."
+msgstr "Выбор идентификатора и/или имени"

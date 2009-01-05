@@ -1,16 +1,16 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# OpenSCADA.DB.SQLite translate to Ukrainian.
+# Copyright (C) 2003-2009 Roman Savochenko
+# This file is distributed under the same license as the OpenSCADA.DB.SQLite module.
+# Roman Savochenko <rom_as@fromru.com>, 2003-2009.
 #
 #: bd_sqlite.cpp:51 bd_sqlite.cpp:184 bd_sqlite.cpp:247 bd_sqlite.cpp:254
 #: bd_sqlite.cpp:280 bd_sqlite.cpp:366
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DB.SQLite 1.4.0\n"
+"Project-Id-Version: OpenSCADA.DB.SQLite 1.4.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-15 13:08+0200\n"
+"POT-Creation-Date: 2009-01-04 11:31+0200\n"
 "PO-Revision-Date: 2007-10-23 12:39+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -30,7 +30,7 @@ msgid "BD"
 msgstr "БД"
 
 #: bd_sqlite.cpp:38
-msgid "1.4.0"
+msgid "1.4.1"
 msgstr ""
 
 #: bd_sqlite.cpp:39

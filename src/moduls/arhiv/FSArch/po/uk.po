@@ -1,16 +1,16 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# OpenSCADA.Archive.FSArch translate to Ukrainian.
+# Copyright (C) 2003-2009 Roman Savochenko
+# This file is distributed under the same license as the OpenSCADA.Archive.FSArch module.
+# Roman Savochenko <rom_as@fromru.com>, 2003-2009.
 #
 #: base.cpp:52 base.cpp:270 val.cpp:393 val.cpp:394 val.cpp:395 val.cpp:396
 #: mess.h:115
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Archive.FSArch 1.0.0\n"
+"Project-Id-Version: OpenSCADA.Archive.FSArch 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-15 13:06+0200\n"
+"POT-Creation-Date: 2009-01-04 09:52+0200\n"
 "PO-Revision-Date: 2007-10-21 22:21+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -38,7 +38,7 @@ msgid "Archive"
 msgstr "Архів"
 
 #: base.cpp:39
-msgid "1.0.0"
+msgid "1.0.1"
 msgstr ""
 
 #: base.cpp:40

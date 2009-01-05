@@ -1,16 +1,16 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# OpenSCADA.Transport.SSL translate to Russian.
+# Copyright (C) 2008-2009 Roman Savochenko
+# This file is distributed under the same license as the OpenSCADA.Transport.SSL package module.
+# Roman Savochenko <rom_as@fromru.com>, 2008-2009.
 #
 #: modssl.cpp:56 modssl.cpp:261 modssl.cpp:279 modssl.cpp:353 modssl.cpp:534
 #: modssl.cpp:715
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Transport.SSL 0.5.0\n"
+"Project-Id-Version: OpenSCADA.Transport.SSL 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-17 16:38+0200\n"
+"POT-Creation-Date: 2009-01-05 10:29+0200\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -26,7 +26,7 @@ msgid "Transport"
 msgstr "Транспорт"
 
 #: modssl.cpp:43
-msgid "0.5.0"
+msgid "0.8.0"
 msgstr ""
 
 #: modssl.cpp:44
@@ -198,7 +198,8 @@ msgid ""
 "Connections %d, opened %d. Traffic in %.4g kb, out %.4g kb. Closed "
 "connections by limit %d."
 msgstr ""
-"Подключений %d, открыто %d. Трафик входящий %.4g кб, исходящий %.4g кб. Закрыто соединений из-за лимита %d."
+"Подключений %d, открыто %d. Трафик входящий %.4g кб, исходящий %.4g кб. "
+"Закрыто соединений из-за лимита %d."
 
 #: modssl.cpp:270
 msgid "open"
@@ -443,4 +444,3 @@ msgstr ""
 "    addr - адрес удалённого SSL хоста;\n"
 "    port - сетевой порт (/etc/services);\n"
 "    mode - режим SSL и версия (SSLv2, SSLv3, SSLv23 and TLSv1)."
-

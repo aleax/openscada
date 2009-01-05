@@ -1,16 +1,16 @@
-# translation of de.po to
-# translation of ru.po to
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# aleksey <aleksey@psniip.ru>, 2008.
+# OpenSCADA.Archive.FSArch translate to German.
+# Copyright (C) 2008-2009 Aleksey Popkov
+# This file is distributed under the same license as the OpenSCADA.Archive.FSArch module.
+# aleksey <aleksey@psniip.ru>, 2008-2009.
+#
 #: base.cpp:52 base.cpp:270 val.cpp:393 val.cpp:394 val.cpp:395 val.cpp:396
 #: mess.h:115
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: de\n"
+"Project-Id-Version: OpenSCADA.Archive.FSArch 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-15 13:06+0200\n"
+"POT-Creation-Date: 2009-01-04 09:52+0200\n"
 "PO-Revision-Date: 2008-12-14 23:02+0300\n"
 "Last-Translator: aleksey <aleksey@psniip.ru>\n"
 "Language-Team:  <ru@li.org>\n"
@@ -40,7 +40,7 @@ msgid "Archive"
 msgstr "Archiv"
 
 #: base.cpp:39
-msgid "1.0.0"
+msgid "1.0.1"
 msgstr ""
 
 #: base.cpp:40

@@ -76,7 +76,7 @@ void TConfig::addFld( TElem *el, unsigned id )
 void TConfig::delFld( TElem *el, unsigned id )
 {
     TCfgMap::iterator p=value.find(m_elem->fldAt(id).name());
-    if(p==value.end())	return;
+    if( p==value.end() ) return;
     delete p->second;
     value.erase(p);
 }
@@ -84,7 +84,7 @@ void TConfig::delFld( TElem *el, unsigned id )
 TCfg &TConfig::cfg( const string &n_val )
 {
     TCfgMap::iterator p=value.find(n_val);
-    if(p==value.end())	throw TError("TConfig",_("Attribute '%s' is not present!"),n_val.c_str());
+    if( p==value.end() ) throw TError("TConfig",_("Attribute '%s' is not present!"),n_val.c_str());
     return *p->second;
 }
 
@@ -97,13 +97,13 @@ void TConfig::cfgList( vector<string> &list )
 bool TConfig::cfgPresent( const string &n_val )
 {
     TCfgMap::iterator p=value.find(n_val);
-    if(p==value.end()) return false;
+    if( p==value.end() ) return false;
     return true;
 }
 
 void TConfig::cfgViewAll( bool val )
 {
-    for( TCfgMap::iterator p = value.begin(); p != value.end(); p++ )
+    for( TCfgMap::iterator p = value.begin(); p != value.end(); ++p )
 	p->second->setView(val);
 }
 

@@ -1,23 +1,23 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# OpenSCADA.DAQ.System translate to Ukrainian.
+# Copyright (C) 2005-2009 Roman Savochenko
+# This file is distributed under the same license as the OpenSCADA.DAQ.System package module.
+# Roman Savochenko <rom_as@fromru.com>, 2005-2009.
 #
 #: da_cpu.cpp:37 da_cpu.cpp:38 da_cpu.cpp:39 da_cpu.cpp:40 da_cpu.cpp:53
 #: da_hddstat.cpp:41 da_hddstat.cpp:42 da_hddtemp.cpp:35 da_hddtemp.cpp:36
 #: da_mem.cpp:37 da_mem.cpp:38 da_mem.cpp:39 da_mem.cpp:40 da_mem.cpp:41
 #: da_mem.cpp:42 da_mem.cpp:43 da_mem.cpp:44 da_netstat.cpp:40
 #: da_netstat.cpp:41 da_netstat.cpp:74 da_netstat.cpp:75 da_netstat.cpp:93
-#: da_netstat.cpp:94 da_sensors.cpp:84 da_sensors.cpp:102 da_smart.cpp:87
-#: da_smart.cpp:134 da_smart.cpp:143 da_uptime.cpp:39 da_uptime.cpp:40
-#: da_uptime.cpp:41 da_uptime.cpp:42 da_uptime.cpp:43 da_uptime.cpp:55
-#: os_contr.cpp:65 os_contr.cpp:170
+#: da_netstat.cpp:94 da_sensors.cpp:102 da_sensors.cpp:118 da_sensors.cpp:137
+#: da_smart.cpp:87 da_smart.cpp:134 da_smart.cpp:143 da_uptime.cpp:39
+#: da_uptime.cpp:40 da_uptime.cpp:41 da_uptime.cpp:42 da_uptime.cpp:43
+#: da_uptime.cpp:55 os_contr.cpp:65 os_contr.cpp:170
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.System 1.6.1\n"
+"Project-Id-Version: OpenSCADA.DAQ.System 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-15 13:11+0200\n"
+"POT-Creation-Date: 2009-01-04 19:57+0200\n"
 "PO-Revision-Date: 2007-10-29 11:52+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: LANGUAGE <uk@li.org>\n"
@@ -60,7 +60,7 @@ msgstr "Простій (%)"
 #: da_cpu.cpp:52 da_cpu.cpp:94 da_cpu.cpp:173 da_cpu.cpp:186 da_hddstat.cpp:52
 #: da_hddstat.cpp:96 da_hddstat.cpp:149 da_hddtemp.cpp:48 da_hddtemp.cpp:84
 #: da_hddtemp.cpp:150 da_mem.cpp:54 da_mem.cpp:59 da_netstat.cpp:51
-#: da_netstat.cpp:96 da_netstat.cpp:131 da_sensors.cpp:57 da_sensors.cpp:62
+#: da_netstat.cpp:96 da_netstat.cpp:131 da_sensors.cpp:61 da_sensors.cpp:66
 #: da_smart.cpp:52 da_smart.cpp:114 da_smart.cpp:165 da_uptime.cpp:54
 #: da_uptime.cpp:67 da_uptime.cpp:96 da_uptime.cpp:108 os_contr.cpp:170
 msgid "SUBT"
@@ -72,8 +72,8 @@ msgstr ""
 
 #: da_cpu.cpp:58 da_cpu.cpp:120 da_cpu.cpp:156 da_hddstat.cpp:78
 #: da_hddstat.cpp:97 da_hddstat.cpp:120 da_mem.cpp:67 da_mem.cpp:97
-#: da_netstat.cpp:77 da_netstat.cpp:97 da_sensors.cpp:41 da_sensors.cpp:95
-#: da_sensors.cpp:136 da_smart.cpp:78 da_smart.cpp:88 da_smart.cpp:135
+#: da_netstat.cpp:77 da_netstat.cpp:97 da_sensors.cpp:44 da_sensors.cpp:130
+#: da_sensors.cpp:196 da_smart.cpp:78 da_smart.cpp:88 da_smart.cpp:135
 #: da_uptime.cpp:71 da_uptime.cpp:89
 msgid "r"
 msgstr ""
@@ -125,14 +125,14 @@ msgid "Full CPU Load"
 msgstr "Повне навантаження CPU"
 
 #: da_cpu.cpp:172 da_cpu.cpp:185 da_hddstat.cpp:148 da_hddtemp.cpp:149
-#: da_mem.cpp:103 da_netstat.cpp:130 da_sensors.cpp:151 da_smart.cpp:164
+#: da_mem.cpp:103 da_netstat.cpp:130 da_sensors.cpp:211 da_smart.cpp:164
 #: da_uptime.cpp:95 da_uptime.cpp:107 os_contr.cpp:169 os_contr.cpp:347
 #: os_contr.cpp:358 os_contr.cpp:448
 msgid "TYPE"
 msgstr ""
 
 #: da_cpu.cpp:174 da_cpu.cpp:187 da_hddstat.cpp:150 da_hddtemp.cpp:151
-#: da_mem.cpp:104 da_netstat.cpp:132 da_sensors.cpp:152 da_smart.cpp:166
+#: da_mem.cpp:104 da_netstat.cpp:132 da_sensors.cpp:212 da_smart.cpp:166
 #: da_uptime.cpp:97 da_uptime.cpp:109
 msgid "EN"
 msgstr ""
@@ -418,28 +418,28 @@ msgstr "Статистика інтерфейсу: "
 msgid "mbmon -r -c 1"
 msgstr ""
 
-#: da_sensors.cpp:41
+#: da_sensors.cpp:44
 msgid "/etc/sensors.conf"
 msgstr ""
 
-#: da_sensors.cpp:81
+#: da_sensors.cpp:99 da_sensors.cpp:115
 msgid "_"
 msgstr ""
 
-#: da_sensors.cpp:83
+#: da_sensors.cpp:101 da_sensors.cpp:117
 msgid " "
 msgstr ""
 
-#: da_sensors.cpp:100 da_sensors.cpp:140
+#: da_sensors.cpp:135 da_sensors.cpp:200
 #, c-format
 msgid "%31s : %f"
 msgstr ""
 
-#: da_sensors.cpp:113
+#: da_sensors.cpp:148
 msgid "SensorsData"
 msgstr ""
 
-#: da_sensors.cpp:149
+#: da_sensors.cpp:209
 msgid "Data sensors"
 msgstr "Сенсори даних"
 
@@ -559,7 +559,7 @@ msgid "DAQ"
 msgstr ""
 
 #: os_contr.cpp:52
-msgid "1.6.1"
+msgid "1.6.2"
 msgstr ""
 
 #: os_contr.cpp:53

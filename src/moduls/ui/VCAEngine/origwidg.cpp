@@ -193,7 +193,7 @@ bool OrigElFigure::attrChange( Attr &cfg, void *prev )
 
 	//- Add new dynamic items -
 	//-- Add no present dynamic points --
-	for( map<int,char>::iterator it = pntls.begin(); it != pntls.end(); it++ )
+	for( map<int,char>::iterator it = pntls.begin(); it != pntls.end(); ++it )
 	    if( it->first && pntls_prev.find(it->first) == pntls_prev.end() && !cfg.owner()->attrPresent("p"+TSYS::int2str(it->first)+"x") )
 	    {
 		cfg.owner()->attrAdd( new TFld(("p"+TSYS::int2str(it->first)+"x").c_str(),(_("Point ")+TSYS::int2str(it->first)+":x").c_str(),
@@ -202,48 +202,48 @@ bool OrigElFigure::attrChange( Attr &cfg, void *prev )
 		    TFld::Real,Attr::Mutable,"","0","","",TSYS::int2str(30+it->first*6+1).c_str()) );
 	    }
 	//-- Add no present dynamic widths --
-	for( map<int,char>::iterator it = wls.begin(); it != wls.end(); it++ )
+	for( map<int,char>::iterator it = wls.begin(); it != wls.end(); ++it )
 	    if( it->first && wls_prev.find(it->first) == wls_prev.end() && !cfg.owner()->attrPresent("w"+TSYS::int2str(it->first)) )
 		cfg.owner()->attrAdd( new TFld(("w"+TSYS::int2str(it->first)).c_str(),(_("Width ")+TSYS::int2str(it->first)).c_str(),
 		    TFld::Real,Attr::Mutable,"","1","","",TSYS::int2str(30+it->first*6+2).c_str()) );
 	//-- Add no present dynamic colors --
-	for( map<int,char>::iterator it = clrls.begin(); it != clrls.end(); it++ )
+	for( map<int,char>::iterator it = clrls.begin(); it != clrls.end(); ++it )
 	    if( it->first && clrls_prev.find(it->first) == clrls_prev.end() && !cfg.owner()->attrPresent("c"+TSYS::int2str(it->first)) )
 		cfg.owner()->attrAdd( new TFld(("c"+TSYS::int2str(it->first)).c_str(),(_("Color ")+TSYS::int2str(it->first)).c_str(),
 		    TFld::String,Attr::Mutable|Attr::Color,"","","","",TSYS::int2str(30+it->first*6+3).c_str()) );
 	//-- Add no present dynamic images --
-	for( map<int,char>::iterator it = imgls.begin(); it != imgls.end(); it++ )
+	for( map<int,char>::iterator it = imgls.begin(); it != imgls.end(); ++it )
 	    if( it->first && imgls_prev.find(it->first) == imgls_prev.end() && !cfg.owner()->attrPresent("i"+TSYS::int2str(it->first)) )
 		cfg.owner()->attrAdd( new TFld(("i"+TSYS::int2str(it->first)).c_str(),(_("Image ")+TSYS::int2str(it->first)).c_str(),
 		    TFld::String,Attr::Mutable|Attr::Image,"","","","",TSYS::int2str(30+it->first*6+4).c_str()) );
 	//-- Add no present line styles --
-	for( map<int,char>::iterator it = lstls.begin(); it != lstls.end(); it++ )
+	for( map<int,char>::iterator it = lstls.begin(); it != lstls.end(); ++it )
 	    if( it->first && lstls_prev.find(it->first) == lstls_prev.end() && !cfg.owner()->attrPresent("s"+TSYS::int2str(it->first)) )
 		cfg.owner()->attrAdd( new TFld(("s"+TSYS::int2str(it->first)).c_str(),(_("Style ")+TSYS::int2str(it->first)).c_str(),
 		    TFld::Integer,Attr::Mutable|TFld::Selected,"","0","0;1;2",_("Solid;Dashed;Dotted"),TSYS::int2str(30+it->first*6+5).c_str()) );
 
 	//- Delete no dynamic items -
 	//-- Delete dynamic points --
-	for( map<int,char>::iterator it = pntls_prev.begin(); it != pntls_prev.end(); it++ )
+	for( map<int,char>::iterator it = pntls_prev.begin(); it != pntls_prev.end(); ++it )
 	    if( it->first && pntls.find(it->first) == pntls.end() )
 	    {
 		cfg.owner()->attrDel("p"+TSYS::int2str(it->first)+"x");
 		cfg.owner()->attrDel("p"+TSYS::int2str(it->first)+"y");
 	    }
 	//-- Delete dynamic widths --
-	for( map<int,char>::iterator it = wls_prev.begin(); it != wls_prev.end(); it++ )
+	for( map<int,char>::iterator it = wls_prev.begin(); it != wls_prev.end(); ++it )
 	    if( it->first && wls.find(it->first) == wls.end() )
 		cfg.owner()->attrDel("w"+TSYS::int2str(it->first));
 	//-- Delete dynamic colors --
-	for( map<int,char>::iterator it = clrls_prev.begin(); it != clrls_prev.end(); it++ )
+	for( map<int,char>::iterator it = clrls_prev.begin(); it != clrls_prev.end(); ++it )
 	    if( it->first && clrls.find(it->first) == clrls.end() )
 		cfg.owner()->attrDel("c"+TSYS::int2str(it->first));
 	//-- Delete dynamic images --
-	for( map<int,char>::iterator it = imgls_prev.begin(); it != imgls_prev.end(); it++ )
+	for( map<int,char>::iterator it = imgls_prev.begin(); it != imgls_prev.end(); ++it )
 	    if( it->first && imgls.find(it->first) == imgls.end() )
 		cfg.owner()->attrDel("i"+TSYS::int2str(it->first));
 	//-- Delete dynamic line styles --
-	for( map<int,char>::iterator it = lstls_prev.begin(); it != lstls_prev.end(); it++ )
+	for( map<int,char>::iterator it = lstls_prev.begin(); it != lstls_prev.end(); ++it )
 	    if( it->first && lstls.find(it->first) == lstls.end() )
 		cfg.owner()->attrDel("s"+TSYS::int2str(it->first));
     }

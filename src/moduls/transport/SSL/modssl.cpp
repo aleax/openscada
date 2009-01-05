@@ -40,7 +40,7 @@
 #define MOD_NAME	"SSL"
 #define MOD_TYPE	"Transport"
 #define VER_TYPE	VER_TR
-#define VERSION		"0.5.0"
+#define VERSION		"0.8.0"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow security socket layer based transport. Used OpenSSL and supported SSLv2, SSLv3 and TLSv1."
 #define LICENSE		"GPL"

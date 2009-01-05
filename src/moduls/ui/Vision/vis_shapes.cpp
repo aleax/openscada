@@ -2620,7 +2620,7 @@ void ShapeDocument::eventFilterSet( WdgView *view, QWidget *wdg, bool en )
 {
     if( en )	wdg->installEventFilter(view);
     else	wdg->removeEventFilter(view);
-    //- Process childs -
+    //> Process childs
     for( int i_c = 0; i_c < wdg->children().size(); i_c++ )
 	if( qobject_cast<QWidget*>(wdg->children().at(i_c)) )
 	    eventFilterSet(view,(QWidget*)wdg->children().at(i_c),en);
@@ -2629,7 +2629,7 @@ void ShapeDocument::eventFilterSet( WdgView *view, QWidget *wdg, bool en )
 void ShapeDocument::setFocus( WdgView *view, QWidget *wdg, bool en, bool devel )
 {
     int isFocus = wdg->windowIconText().toInt();
-    //- Set up current widget -
+    //> Set up current widget
     if( en )
     {
 	if( isFocus && !devel )	wdg->setFocusPolicy((Qt::FocusPolicy)isFocus);

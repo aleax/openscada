@@ -260,13 +260,13 @@ void Func::setStart( bool val )
 {
     if( val )
     {
-	//- Start calc -
+	//> Start calc
 	progCompile( );
 	run_st = true;
     }
     else
     {
-	//- Stop calc -
+	//> Stop calc
 	ResAlloc res(calc_res,true);
 	prg = "";
 	regClear();
@@ -1082,7 +1082,7 @@ void Func::calc( TValFunc *val )
     calc_res.resRequestR( );
     if( !startStat( ) )	return;
 
-    //- Init list of registers -
+    //> Init list of registers
     RegW reg[mRegs.size()];
     for( int i_rg = 0; i_rg < mRegs.size(); i_rg++ )
     {
@@ -1093,7 +1093,7 @@ void Func::calc( TValFunc *val )
 	    *reg[i_rg].val().p_attr = *mRegs[i_rg]->val().p_attr;
     }
 
-    //- Exec calc -
+    //> Exec calc
     ExecData dt = { 1, 0, 0 };
     try{ exec(val,reg,(const BYTE *)prg.c_str(),dt); }
     catch(TError err){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }

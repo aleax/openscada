@@ -1,7 +1,7 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# OpenSCADA.DAQ.DiamondBoards translate to Ukrainian.
+# Copyright (C) 2005-2009 Roman Savochenko
+# This file is distributed under the same license as the OpenSCADA.DAQ.DiamondBoards module.
+# Roman Savochenko <rom_as@fromru.com>, 2005-2009.
 #
 #: diamond.cpp:55 diamond.cpp:135 diamond.cpp:136 diamond.cpp:137
 #: diamond.cpp:139 diamond.cpp:140 diamond.cpp:142 diamond.cpp:144

@@ -1,7 +1,7 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# OpenSCADA.DAQ.LogicLev translate to Russian.
+# Copyright (C) 2006-2009 Roman Savochenko
+# This file is distributed under the same license as the OpenSCADA.DAQ.LogicLev package module.
+# Roman Savochenko <rom_as@fromru.com>, 2006-2009.
 #
 #: logiclev.cpp:56 logiclev.cpp:131 logiclev.cpp:138 logiclev.cpp:332
 #: logiclev.cpp:835 logiclev.cpp:846 logiclev.cpp:859 logiclev.cpp:955
@@ -9,9 +9,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.LogicLev 0.9.1\n"
+"Project-Id-Version: OpenSCADA.DAQ.LogicLev 0.9.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-15 13:10+0200\n"
+"POT-Creation-Date: 2009-01-04 19:20+0200\n"
 "PO-Revision-Date: 2007-10-29 09:45+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -31,7 +31,7 @@ msgid "DAQ"
 msgstr ""
 
 #: logiclev.cpp:43
-msgid "0.9.1"
+msgid "0.9.2"
 msgstr ""
 
 #: logiclev.cpp:44

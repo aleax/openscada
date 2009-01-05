@@ -1,14 +1,15 @@
-# translation of de.po to
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# OpenSCADA.DB.DBF translate to German.
+# Copyright (C) 2008-2009 Aleksey Popkov
+# This file is distributed under the same license as the OpenSCADA.DB.DBF module.
+# aleksey <aleksey@psniip.ru>, 2008-2009.
+#
 #: dbf_mod.cpp:56
-# aleksey <aleksey@psniip.ru>, 2008.
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: de\n"
+"Project-Id-Version: OpenSCADA.DB.DBF 1.9.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-09 12:09+0300\n"
+"POT-Creation-Date: 2009-01-04 11:19+0200\n"
 "PO-Revision-Date: 2008-12-22 11:55+0300\n"
 "Last-Translator: aleksey <aleksey@psniip.ru>\n"
 "Language-Team:  <ru@li.org>\n"
@@ -38,7 +39,7 @@ msgid "BD"
 msgstr "DB"
 
 #: dbf_mod.cpp:43
-msgid "1.9.0"
+msgid "1.9.1"
 msgstr ""
 
 #: dbf_mod.cpp:44
@@ -64,8 +65,10 @@ msgid ""
 "---------- Parameters of the module section <%s> in config file ----------\n"
 "\n"
 msgstr ""
-"========================== Optionen des Moduls <%s:%s> ==========================\n"
-"-------- Die Parameter der modularen Sektion <%s> in der Konfigurationsdatei --------\n"
+"========================== Optionen des Moduls <%s:%s> "
+"==========================\n"
+"-------- Die Parameter der modularen Sektion <%s> in der Konfigurationsdatei "
+"--------\n"
 "\n"
 
 #: dbf_mod.cpp:112
@@ -87,7 +90,9 @@ msgstr "Fehler in der Erschaffung  des DB-Verzeichnisses <%s>!"
 
 #: dbf_mod.cpp:163
 msgid "Restore previous directory as curent is error."
-msgstr " Wiederherstellung des Vorverzeichnisses in der Rolle des laufenden ist falsch."
+msgstr ""
+" Wiederherstellung des Vorverzeichnisses in der Rolle des laufenden ist "
+"falsch."
 
 #: dbf_mod.cpp:180
 msgid ".."
@@ -144,7 +149,8 @@ msgid ""
 "For DBF address DB is directory which contain files of tables (*.dbf).\n"
 "For example: /opt/dbf ."
 msgstr ""
-"Fuer DBF die BD-Adresse ist das Verzeichnis, das enthaelt die Tabellendateien (*.dbf).\n"
+"Fuer DBF die BD-Adresse ist das Verzeichnis, das enthaelt die "
+"Tabellendateien (*.dbf).\n"
 "Zum Beispiel: /opt/dbf ."
 
 #: dbf_mod.cpp:231
@@ -193,4 +199,3 @@ msgstr "Fehler der Linie!"
 #, c-format
 msgid "Key column <%s> no present!"
 msgstr "Die Schluesselkolumne<%s> ist nicht vorhanden!"
-

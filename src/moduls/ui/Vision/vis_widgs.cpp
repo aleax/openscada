@@ -959,8 +959,9 @@ void WdgView::orderUpdate( )
     }
     make_heap(arr.begin(),arr.end());
     sort_heap(arr.begin(),arr.end());
-    for( int i_c = 0; i_c < ols.size(); i_c++ )
-	if( i_c < arr.size() ) ols[i_c] = arr[i_c].second;
+    if( ols.size() == arr.size() )
+	for( int i_c = 0; i_c < ols.size(); i_c++ )
+	    if( i_c < arr.size() ) ols[i_c] = arr[i_c].second;
 }
 
 bool WdgView::event( QEvent *event )

@@ -369,14 +369,14 @@ void TWEB::TaskSessCheck( union sigval obj )
 
     time_t cur_tm = time(NULL);
 
-    //- Check for opened sessions timeout close -
+    //> Check for opened sessions timeout close
     vector<string> list;
     web->vcaSesList( list );
     for( int i_s = 0; i_s < list.size(); i_s++ )
 	if( cur_tm > web->vcaSesAt(list[i_s]).at().lstReq()+web->authTime()*60 )
 	    web->vcaSesDel(list[i_s]);
 
-    //- Check for user auth session timeout -
+    //> Check for user auth session timeout
     ResAlloc res(web->mRes,false);
     for( map<int,SAuth>::iterator authEl = web->mAuth.begin(); authEl != web->mAuth.end(); )
 	if( cur_tm > authEl->second.tAuth+web->authTime()*60 )
@@ -388,7 +388,7 @@ void TWEB::TaskSessCheck( union sigval obj )
 
 string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const string &addattr )
 {
-    return  "HTTP/1.0 "+rcode+"\n"
+    return "HTTP/1.0 "+rcode+"\n"
 	"Server: "+PACKAGE_STRING+"\n"
 	"Accept-Ranges: bytes\n"
 	"Content-Length: "+TSYS::int2str(cln)+"\n"

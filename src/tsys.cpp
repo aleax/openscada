@@ -494,7 +494,7 @@ string TSYS::fNameFix( const string &fname )
     string tmp;
     char   buf[STR_BUF_LEN];
 
-    for( string::const_iterator it = fname.begin(); it != fname.end(); it++ )
+    for( string::const_iterator it = fname.begin(); it != fname.end(); ++it )
     {
 	if( *(it) == '.' && *(it+1) == '.' && *(it+2) == '/')
 	{

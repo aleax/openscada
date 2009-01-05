@@ -146,7 +146,7 @@ void TCntrNode::nodeEn( int flag )
 
     TMap::iterator p;
     for( unsigned i_g = 0; i_g < chGrp.size(); i_g++ )
-	for( p=chGrp[i_g].elem.begin(); p != chGrp[i_g].elem.end(); p++ )
+	for( p=chGrp[i_g].elem.begin(); p != chGrp[i_g].elem.end(); ++p )
 	    if( p->second->nodeMode( ) == Disable )
 		p->second->nodeEn( flag );
 
@@ -173,7 +173,7 @@ void TCntrNode::nodeDis( long tm, int flag )
     {
 	TMap::iterator p;
 	for( unsigned i_g = 0; i_g < chGrp.size(); i_g++ )
-	    for( p=chGrp[i_g].elem.begin(); p != chGrp[i_g].elem.end(); p++ )
+	    for( p=chGrp[i_g].elem.begin(); p != chGrp[i_g].elem.end(); ++p )
 		if( p->second->nodeMode() == Enable )
 		    p->second->nodeDis( tm, flag );
 
@@ -338,14 +338,14 @@ void TCntrNode::chldList( char igr, vector<string> &list )
     list.clear();
     if( !chGrp[igr].ordered )
     {
-	for( TMap::iterator p=chGrp[igr].elem.begin(); p!=chGrp[igr].elem.end(); p++ )
+	for( TMap::iterator p=chGrp[igr].elem.begin(); p!=chGrp[igr].elem.end(); ++p )
 	    if( p->second->nodeMode() != Disable )
 		list.push_back(p->first);
     }
     else
     {
 	bool disYes = false;
-	for( TMap::iterator p=chGrp[igr].elem.begin(); p != chGrp[igr].elem.end(); p++ )
+	for( TMap::iterator p=chGrp[igr].elem.begin(); p != chGrp[igr].elem.end(); ++p )
 	    if( p->second->nodeMode() == Disable )	disYes = true;
 	    else
 	    {
@@ -427,7 +427,7 @@ void TCntrNode::chldDel( char igr, const string &name, long tm, int flag, bool s
 	if( chGrp[igr].ordered )
 	{
 	    int pos = p->second->m_oi;
-	    for( TMap::iterator p1=chGrp[igr].elem.begin(); p1 != chGrp[igr].elem.end(); p1++ )
+	    for( TMap::iterator p1=chGrp[igr].elem.begin(); p1 != chGrp[igr].elem.end(); ++p1 )
 		if( p1->second->m_oi > pos ) p1->second->m_oi--;
 	}
 	delete p->second;
@@ -443,7 +443,7 @@ unsigned TCntrNode::nodeUse(  )
     unsigned i_use = m_use;
     TMap::iterator p;
     for( unsigned i_g = 0; i_g < chGrp.size(); i_g++ )
-     for( p=chGrp[i_g].elem.begin(); p!=chGrp[i_g].elem.end(); p++ )
+     for( p=chGrp[i_g].elem.begin(); p!=chGrp[i_g].elem.end(); ++p )
 	if( p->second->nodeMode() != Disable )
 	    i_use+=p->second->nodeUse();
 
@@ -487,7 +487,7 @@ AutoHD<TCntrNode> TCntrNode::chldAt( char igr, const string &name, const string 
     if( nodeMode() == Disable )	throw TError(nodePath().c_str(),"Node is disabled!");
 
     TMap::iterator p=chGrp[igr].elem.find(name);
-    if(p == chGrp[igr].elem.end() || p->second->nodeMode() == Disable)
+    if( p == chGrp[igr].elem.end() || p->second->nodeMode() == Disable )
 	throw TError(nodePath().c_str(),_("Element <%s> is not present or disabled!"), name.c_str());
 
     return AutoHD<TCntrNode>(p->second,user);
@@ -503,7 +503,7 @@ int TCntrNode::isModify( int f )
 	for( unsigned i_g = 0; i_g < chGrp.size(); i_g++ )
 	{
 	    TMap::iterator p;
-	    for( p=chGrp[i_g].elem.begin(); p != chGrp[i_g].elem.end(); p++ )
+	    for( p=chGrp[i_g].elem.begin(); p != chGrp[i_g].elem.end(); ++p )
 		if( p->second->isModify(Self|Child) )	{ rflg |= Child; break; }
 	    if( p != chGrp[i_g].elem.end() )	break;
 	}
@@ -516,7 +516,7 @@ void TCntrNode::modifG( )
     ResAlloc res( hd_res, false );
     modif( );
     for( unsigned i_g = 0; i_g < chGrp.size(); i_g++ )
-	for( TMap::iterator p=chGrp[i_g].elem.begin(); p != chGrp[i_g].elem.end(); p++ )
+	for( TMap::iterator p=chGrp[i_g].elem.begin(); p != chGrp[i_g].elem.end(); ++p )
 	    p->second->modifG( );
 }
 
@@ -525,7 +525,7 @@ void TCntrNode::modifGClr( )
     ResAlloc res( hd_res, false );
     modifClr( );
     for( unsigned i_g = 0; i_g < chGrp.size(); i_g++ )
-	for( TMap::iterator p=chGrp[i_g].elem.begin(); p != chGrp[i_g].elem.end(); p++ )
+	for( TMap::iterator p=chGrp[i_g].elem.begin(); p != chGrp[i_g].elem.end(); ++p )
 	    p->second->modifGClr( );
 }
 
@@ -548,7 +548,7 @@ void TCntrNode::load( )
     {
 	ResAlloc res( hd_res, false );
 	for( unsigned i_g = 0; i_g < chGrp.size(); i_g++ )
-	    for( TMap::iterator p = chGrp[i_g].elem.begin(); p != chGrp[i_g].elem.end(); p++ )
+	    for( TMap::iterator p = chGrp[i_g].elem.begin(); p != chGrp[i_g].elem.end(); ++p )
 		if( p->second->isModify(Self|Child) )	p->second->load( );
     }
     modifClr( );

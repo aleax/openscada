@@ -1114,7 +1114,7 @@ void VisRun::cacheResSet( const string &res, const string &val )
     if( mCacheRes.size() > 100 )
     {
 	map<string,CacheEl>::iterator ilast = mCacheRes.begin();
-	for( map<string,CacheEl>::iterator ires = mCacheRes.begin(); ires != mCacheRes.end(); ires++ )
+	for( map<string,CacheEl>::iterator ires = mCacheRes.begin(); ires != mCacheRes.end(); ++ires )
 	    if( ires->second.tm < ilast->second.tm )	ilast = ires;
 	mCacheRes.erase(ilast);
     }

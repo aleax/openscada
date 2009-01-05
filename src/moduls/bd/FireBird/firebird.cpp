@@ -33,7 +33,7 @@
 #define MOD_NAME	"DB FireBird"
 #define MOD_TYPE	"BD"
 #define VER_TYPE	VER_BD
-#define VERSION		"0.8.0"
+#define VERSION		"0.8.1"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"DB modul. Allow support of the DB FireBird."
 #define LICENSE		"GPL"
@@ -272,8 +272,6 @@ void MBD::sqlReq( isc_tr_handle *itrans, const string &ireq, vector< vector<stri
 {
     if( tbl ) tbl->clear();
     if(!enableStat()) return;
-
-    //printf("TEST 20: %s\n",ireq.c_str());
 
     ResAlloc res(conn_res,true);
 

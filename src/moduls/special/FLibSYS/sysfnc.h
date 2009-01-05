@@ -56,6 +56,31 @@ class varhOpen : public TFunction
 };
 
 //*************************************************
+//* Value buffer open                             *
+//*************************************************
+class varhBufOpen : public TFunction
+{
+    public:
+	varhBufOpen( ) : TFunction("varhBufOpen")
+	{
+	    ioAdd( new IO("id",_("Archive id"),IO::Integer,IO::Return) );
+	    ioAdd( new IO("tp",_("Type"),IO::Integer,IO::Default,"1") );
+	    ioAdd( new IO("sz",_("Size"),IO::Integer,IO::Default,"100") );
+	    ioAdd( new IO("per",_("Period (us)"),IO::Integer,IO::Default,"1000000") );
+	    ioAdd( new IO("hgrd",_("Hard grid"),IO::Boolean,IO::Default,"0") );
+	    ioAdd( new IO("hres",_("High resolution"),IO::Boolean,IO::Default,"0") );
+	}
+
+	string name( )	{ return _("Varch: Buffer open"); }
+	string descr( )	{ return _("Open value buffer for temporary values storing."); }
+
+	void calc( TValFunc *val )
+	{
+	    val->setI(0,mod->varchBufOpen((TFld::Type)val->getI(1),val->getI(2),val->getI(3),val->getB(4),val->getB(5)));
+	}
+};
+
+//*************************************************
 //* Value archive close                           *
 //*************************************************
 class varhClose : public TFunction
@@ -214,31 +239,6 @@ class varhCopyBuf : public TFunction
 		svb->getVal(*dvb,(long long)val->getI(2)*1000000+val->getI(3),
 				 (long long)val->getI(4)*1000000+val->getI(5));
 	    }
-	}
-};
-
-//*************************************************
-//* Value buffer open                             *
-//*************************************************
-class varhBufOpen : public TFunction
-{
-    public:
-	varhBufOpen( ) : TFunction("varhBufOpen")
-	{
-	    ioAdd( new IO("id",_("Archive id"),IO::Integer,IO::Return) );
-	    ioAdd( new IO("tp",_("Type"),IO::Integer,IO::Default,"1") );
-	    ioAdd( new IO("sz",_("Size"),IO::Integer,IO::Default,"100") );
-	    ioAdd( new IO("per",_("Period (us)"),IO::Integer,IO::Default,"1000000") );
-	    ioAdd( new IO("hgrd",_("Hard grid"),IO::Boolean,IO::Default,"0") );
-	    ioAdd( new IO("hres",_("High resolution"),IO::Boolean,IO::Default,"0") );
-	}
-
-	string name( )	{ return _("Varch: Buffer open"); }
-	string descr( )	{ return _("Open value buffer for temporary values storing."); }
-
-	void calc( TValFunc *val )
-	{
-	    val->setI(0,mod->varchBufOpen((TFld::Type)val->getI(1),val->getI(2),val->getI(3),val->getB(4),val->getB(5)));
 	}
 };
 

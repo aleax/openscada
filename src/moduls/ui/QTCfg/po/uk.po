@@ -1,7 +1,7 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# OpenSCADA.UI.QTCfg translate to Ukrainian.
+# Copyright (C) 2004-2009 Roman Savochenko
+# This file is distributed under the same license as the OpenSCADA.UI.QTCfg package module.
+# Roman Savochenko <rom_as@fromru.com>, 2004-2009.
 #
 #: qtcfg.cpp:617 qtcfg.cpp:688 qtcfg.cpp:1020 qtcfg.cpp:1032 qtcfg.cpp:1216
 #: qtcfg.cpp:1225 qtcfg.cpp:1827 qtcfg.cpp:1828 qtcfg.cpp:2330 qtcfg.cpp:2573
@@ -10,50 +10,14 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.UI.QTCfg 1.6.0\n"
+"Project-Id-Version: OpenSCADA.UI.QTCfg 1.7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-30 14:08+0200\n"
+"POT-Creation-Date: 2009-01-05 12:02+0200\n"
 "PO-Revision-Date: 2007-10-29 19:12+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-
-#: moc_qtcfg.cpp:75
-msgid ""
-"QTCFG::ConfAppexitModifChk()pageNext()itAdd()itCut()pageCyclRefrStart()"
-"userSel()enterWhatsThis()endRunChk()viewChild(QTreeWidgetItem*)onItem"
-"(QTreeWidgetItem*)treeUpdate()statcombBoxActivate(QString)listBoxGo"
-"(QListWidgetItem*)postableSet(int,int)applyButton()imgPopup(QPoint)"
-msgstr ""
-
-#: moc_selfwidg.cpp:43
-msgid "QTCFG::LineEditvalChanged(QString)"
-msgstr ""
-
-#: moc_selfwidg.cpp:125
-msgid "QTCFG::TextEdittextChanged(QString)btCancel()"
-msgstr ""
-
-#: moc_selfwidg.cpp:199
-msgid "QTCFG::ImgView"
-msgstr ""
-
-#: moc_selfwidg.cpp:244
-msgid "QTCFG::ReqIdNameDlg"
-msgstr ""
-
-#: moc_selfwidg.cpp:295
-msgid "QTCFG::DlgUser"
-msgstr ""
-
-#: moc_selfwidg.cpp:346
-msgid "QTCFG::UserStBar"
-msgstr ""
-
-#: moc_selfwidg.cpp:400
-msgid "TableDelegate"
-msgstr "Видалити"
 
 #: qtcfg.cpp:78 qtcfg.cpp:556 qtcfg.cpp:1731 qtcfg.cpp:2092 tuimod.cpp:236
 msgid "info"
@@ -330,7 +294,7 @@ msgstr "Вирізати елемент"
 
 #: qtcfg.cpp:235
 msgid "Cutting of the item"
-msgstr ""
+msgstr "Вирізання елементу"
 
 #: qtcfg.cpp:236
 msgid "The button for cutting of the item"
@@ -358,7 +322,7 @@ msgstr "Копіювати елемент"
 
 #: qtcfg.cpp:244
 msgid "Copying of the item"
-msgstr ""
+msgstr "Копіювання елементу"
 
 #: qtcfg.cpp:245
 msgid "The button for copying of the item"
@@ -386,7 +350,7 @@ msgstr "Вставити елемент"
 
 #: qtcfg.cpp:253
 msgid "Pasting of the item"
-msgstr ""
+msgstr "Вставлення елементу"
 
 #: qtcfg.cpp:254
 msgid "The button for pasting of the item"
@@ -1107,7 +1071,7 @@ msgstr ""
 #: qtcfg.cpp:2008
 #, c-format
 msgid "Expand/update branch '%s' time %f ms."
-msgstr ""
+msgstr "Час розширення/поновлення гілки '%s' %f мс."
 
 #: qtcfg.cpp:2026
 msgid "user"
@@ -1530,7 +1494,7 @@ msgid "QT"
 msgstr ""
 
 #: tuimod.cpp:42
-msgid "1.6.0"
+msgid "1.7.0"
 msgstr ""
 
 #: tuimod.cpp:43
@@ -1678,41 +1642,8 @@ msgstr ""
 
 #: selfwidg.h:165
 msgid "QTCfg dialog"
-msgstr ""
+msgstr "QTCfg діалог"
 
 #: selfwidg.h:193
 msgid "Node id and/or name select"
-msgstr ""
-
-#~ msgid "Goes item cut"
-#~ msgstr "Виконати вирізання елементу"
-
-#~ msgid "The button for goes to item cut"
-#~ msgstr "Кнопка для виконання вирізання елементу"
-
-#~ msgid "Goes item copy"
-#~ msgstr "Виконання копіювання елементу"
-
-#~ msgid "The button for goes to item copy"
-#~ msgstr "Кнопка для виконання копіювання елементу"
-
-#~ msgid "Press for goes to item copy."
-#~ msgstr "Натиснути для виконання копіювання елементу."
-
-#~ msgid "Goes item paste"
-#~ msgstr "Виконати вставку елементу"
-
-#~ msgid "The button for goes to item paste"
-#~ msgstr "Кнопка для виконання вставки елементу"
-
-#~ msgid "Press for goes to item paste."
-#~ msgstr "Натиснути для виконання вставки елементу."
-
-#~ msgid "Target:"
-#~ msgstr "Мета:"
-
-#~ msgid "Enter new node identifier."
-#~ msgstr "Вкажіть новий ідентифікатор."
-
-#~ msgid "Open Supervisory Control And Data Acquisition"
-#~ msgstr "Відкрита система диспетчерського контролю та збору даних"
+msgstr "Вибір ідентифікатора та/або ім'я вузлу"

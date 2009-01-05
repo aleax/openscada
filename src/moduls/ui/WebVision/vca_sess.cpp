@@ -3320,7 +3320,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
     }
     if( rel_list)
     {
-        for( PntMap::iterator pi = pnts.begin(); pi != pnts.end(); pi++ )
+        for( PntMap::iterator pi = pnts.begin(); pi != pnts.end(); ++pi )
             if(pi->first <= -10 ) pnts.erase ( pi );
         string sel;
         int map_index = -10;
@@ -3351,10 +3351,10 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                 {
                     bool fl = false;
                     //-- Detecting if there is a point with same coordinates in the map --
-                    for( PntMap::reverse_iterator pi = pnts.rbegin(); pi != pnts.rend(); pi++ )
+                    for( PntMap::reverse_iterator pi = pnts.rbegin(); pi != pnts.rend(); ++pi )
                         if(pi->first <= -10 )
                             if( fabs(TSYS::realRound(x_s,2) -  TSYS::realRound(pi->second.x,2)) < 0.01 &&
-                                fabs(TSYS::realRound(y_s,2) -  TSYS::realRound(pi->second.y,2)) < 0.01 )  
+                                fabs(TSYS::realRound(y_s,2) -  TSYS::realRound(pi->second.y,2)) < 0.01 )
                             {
                                 p[0] = pi->first;
                                 fl = true;
@@ -3373,10 +3373,10 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                 {
                     bool fl = false;
                     //-- Detecting if there is a point with same coordinates in the map --
-                    for( PntMap::reverse_iterator pi = pnts.rbegin(); pi != pnts.rend(); pi++ )
+                    for( PntMap::reverse_iterator pi = pnts.rbegin(); pi != pnts.rend(); ++pi )
                         if(pi->first <= -10 )
                             if( fabs(TSYS::realRound(x_s,2) -  TSYS::realRound(pi->second.x,2)) < 0.01 &&
-                                fabs(TSYS::realRound(y_s,2) -  TSYS::realRound(pi->second.y,2)) < 0.01 )  
+                                fabs(TSYS::realRound(y_s,2) -  TSYS::realRound(pi->second.y,2)) < 0.01 )
                             {
                                 p[1] = pi->first;
                                 fl = true;
@@ -3446,7 +3446,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                 {
                     bool fl = false;
                     //-- Detecting if there is a point with same coordinates in the map --
-                    for( PntMap::iterator pi = pnts.begin(); pi != pnts.end(); pi++ )
+                    for( PntMap::iterator pi = pnts.begin(); pi != pnts.end(); ++pi )
                         if(pi->first <= -10 )
                             if( fabs(TSYS::realRound(x_s,2) -  TSYS::realRound(pi->second.x,2)) < 0.01 &&
                                 fabs(TSYS::realRound(y_s,2) -  TSYS::realRound(pi->second.y,2)) < 0.01 )
@@ -3468,7 +3468,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                 {
                     bool fl = false;
                     //-- Detecting if there is a point with same coordinates in the map --
-                    for( PntMap::iterator pi = pnts.begin(); pi != pnts.end(); pi++ )
+                    for( PntMap::iterator pi = pnts.begin(); pi != pnts.end(); ++pi )
                         if(pi->first <= -10 )
                             if( fabs(TSYS::realRound(x_s,2) -  TSYS::realRound(pi->second.x,2)) < 0.01 &&
                                 fabs(TSYS::realRound(y_s,2) -  TSYS::realRound(pi->second.y,2)) < 0.01 )
@@ -3609,7 +3609,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                 {
                     bool fl = false;
                     //-- Detecting if there is a point with same coordinates in the map --
-                    for( PntMap::reverse_iterator pi = pnts.rbegin(); pi != pnts.rend(); pi++ )
+                    for( PntMap::reverse_iterator pi = pnts.rbegin(); pi != pnts.rend(); ++pi )
                         if( pi->first <= -10 )
                             if( fabs(TSYS::realRound(x_s,2) -  TSYS::realRound(pi->second.x,2)) < 0.01 &&
                                 fabs(TSYS::realRound(y_s,2) -  TSYS::realRound(pi->second.y,2)) < 0.01 )
@@ -3631,10 +3631,10 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                 {
                     bool fl = false;
                     //-- Detecting if there is a point with same coordinates in the map --
-                    for( PntMap::reverse_iterator pi = pnts.rbegin(); pi != pnts.rend(); pi++ )
+                    for( PntMap::reverse_iterator pi = pnts.rbegin(); pi != pnts.rend(); ++pi )
                         if(pi->first <= -10 )
                             if( fabs(TSYS::realRound(x_s,2) -  TSYS::realRound(pi->second.x,2)) < 0.01 &&
-                                fabs(TSYS::realRound(y_s,2) -  TSYS::realRound(pi->second.y,2)) < 0.01 )  
+                                fabs(TSYS::realRound(y_s,2) -  TSYS::realRound(pi->second.y,2)) < 0.01 )
                             {
                                 p[1] = pi->first;
                                 fl = true;
@@ -3721,11 +3721,11 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                     {
                         bool fl = false;
                         //-- Detecting if there is a point with same coordinates in the map --
-                        for( PntMap::reverse_iterator pi = pnts.rbegin(); pi != pnts.rend(); pi++ )
+                        for( PntMap::reverse_iterator pi = pnts.rbegin(); pi != pnts.rend(); ++pi )
                             if( pi->first <= -10 )
                             {
                                 if( (fabs(TSYS::realRound(x_s,2) -  TSYS::realRound(pi->second.x,2)) < 0.01) &&
-                                    (fabs(TSYS::realRound(y_s,2) -  TSYS::realRound(pi->second.y,2)) < 0.01) )  
+                                    (fabs(TSYS::realRound(y_s,2) -  TSYS::realRound(pi->second.y,2)) < 0.01) )
                                     {
                                         vl = pi->first;
                                         fl = true;
@@ -3761,7 +3761,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                 inundationItems.push_back( InundationItem(fl_pnts, fl_color, -1, img) );
             }
         }
-        for( WidthMap::iterator pi = widths.begin(); pi != widths.end(); pi++ )
+        for( WidthMap::iterator pi = widths.begin(); pi != widths.end(); ++pi )
         {
             bool unDel = false;
             for( int i=0; i < shapeItems.size(); i++ )
@@ -3773,7 +3773,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
             if( pi->first > 0 && unDel == false )
                 (widths).erase ( pi );
         }
-        for( ColorMap::iterator pi = colors.begin(); pi != colors.end(); pi++ )
+        for( ColorMap::iterator pi = colors.begin(); pi != colors.end(); ++pi )
         {
             bool unDel = false;
             for( int i=0; i < shapeItems.size(); i++ )
@@ -3792,7 +3792,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
             if( pi->first > 0 && unDel == false )
                 (colors).erase ( pi );
         }
-        for( ImageMap::iterator pi = images.begin(); pi != images.end(); pi++ )
+        for( ImageMap::iterator pi = images.begin(); pi != images.end(); ++pi )
         {
             bool unDel = false;
             for( int i=0; i < inundationItems.size(); i++ )
@@ -3803,12 +3803,12 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                 }
             if( pi->first > 0 && unDel == false ) (images).erase ( pi );
         }
-        for( StyleMap::iterator pi = styles.begin(); pi != styles.end(); pi++ )
+        for( StyleMap::iterator pi = styles.begin(); pi != styles.end(); ++pi )
         {
             bool unDel = false;
             for( int i=0; i < shapeItems.size(); i++ )
                 if( pi->first > 0 && ( pi->second == shapeItems[i].style ) )
-                { 
+                {
                     unDel = true;
                     break;
                 }

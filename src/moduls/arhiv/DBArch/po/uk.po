@@ -1,7 +1,7 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# OpenSCADA.Archive.DBArch translate to Ukrainian.
+# Copyright (C) 2007-2009 Roman Savochenko
+# This file is distributed under the same license as the OpenSCADA.Archive.DBArch module.
+# Roman Savochenko <rom_as@fromru.com>, 2007-2009.
 #
 #: arch.cpp:52 mess.cpp:59 mess.cpp:79 mess.cpp:157 mess.cpp:175 mess.cpp:195
 #: val.cpp:110 val.cpp:141 val.cpp:170 val.cpp:186 val.cpp:199 val.cpp:223
@@ -9,9 +9,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Archive.DBArch 0.7.0\n"
+"Project-Id-Version: OpenSCADA.Archive.DBArch 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-15 12:59+0200\n"
+"POT-Creation-Date: 2009-01-04 10:41+0200\n"
 "PO-Revision-Date: 2007-10-21 22:40+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -32,7 +32,7 @@ msgid "Archive"
 msgstr "Архів"
 
 #: arch.cpp:39
-msgid "0.7.0"
+msgid "0.7.1"
 msgstr ""
 
 #: arch.cpp:40

@@ -43,7 +43,7 @@
 #define MOD_NAME	"SNMP client"
 #define MOD_TYPE	"DAQ"
 #define VER_TYPE	VER_CNTR
-#define VERSION		"0.3.2"
+#define VERSION		"0.3.3"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow realising of SNMP client service."
 #define LICENSE		"GPL"

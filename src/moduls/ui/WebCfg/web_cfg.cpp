@@ -38,7 +38,7 @@
 #define MOD_TYPE	"UI"
 #define VER_TYPE	VER_UI
 #define SUB_TYPE	"WWW"
-#define MOD_VERSION	"1.5.1"
+#define MOD_VERSION	"1.5.2"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow the WEB based OpenSCADA system configurator."
 #define LICENSE		"GPL"
@@ -1302,7 +1302,7 @@ bool TWEB::valPrepare( SSess &ses, XMLNode &node, string prs_path, bool compare 
 {
     unsigned i_cnt;
     string   val;
-    map< string, string >::iterator cntEl;
+    map<string,string>::iterator cntEl;
 
     XMLNode req("get");
     req.setAttr("path",ses.url+"/"+TSYS::strEncode(prs_path+node.attr("id"),TSYS::PathEl))->
@@ -1383,7 +1383,7 @@ int TWEB::sesOpen( string name )
 void TWEB::sesCheck( SSess &ses )
 {
     time_t cur_tm = time(NULL);
-    map< int, SAuth >::iterator authEl;
+    map<int,SAuth>::iterator authEl;
 
     ResAlloc res(m_res,false);
 

@@ -192,7 +192,7 @@ void ModVArch::checkArchivator( bool now )
 
     //-- Scan files of attached archives --
     ResAlloc res(a_res,false);
-    for( map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); iel++ )
+    for( map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); ++iel )
 	((ModVArchEl *)iel->second)->checkArchivator( now );
 
     chkANow = false;
@@ -396,7 +396,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 	XMLNode *f_size = ctrMkNode("list",opt,-1,"/arch/arch/3","");
 
 	ResAlloc res(a_res,false);
-	for( map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); iel++ )
+	for( map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); ++iel )
 	{
 	    if(n_arch)	n_arch->childAdd("el")->setText(iel->second->archive().id());
 	    if(n_per)	n_per->childAdd("el")->setText(TSYS::real2str((double)iel->second->archive().period()/1000000.,6));

@@ -31,6 +31,33 @@ namespace FLibSYS
 {
 
 //*************************************************
+//* tmFStr                                        *
+//*************************************************
+class tmFStr : public TFunction
+{
+    public:
+	tmFStr( ) : TFunction("tmFStr")
+	{
+	    ioAdd( new IO("val",_("Date and time string"),IO::String,IO::Return,"") );
+	    ioAdd( new IO("sec",_("Seconds"),IO::Integer,IO::Default,"0") );
+	    ioAdd( new IO("form",_("Date and time format"),IO::String,IO::Default,"%Y-%m-%d %H:%M:%S") );
+	}
+
+	string name( )	{ return _("Time: String time"); }
+	string descr( )	{ return _("Formated string time."); }
+
+	void calc( TValFunc *val )
+	{
+	    time_t tm_t = val->getI(1);
+	    struct tm tm_tm;
+	    localtime_r(&tm_t,&tm_tm);
+	    char buf[1000];
+	    int rez = strftime( buf, sizeof(buf), val->getS(2).c_str(), &tm_tm );
+	    val->setS(0,(rez>0)?string(buf,rez):"");
+	}
+};
+
+//*************************************************
 //* tmDate                                        *
 //*************************************************
 class tmDate : public TFunction
@@ -88,33 +115,6 @@ class tmTime : public TFunction
 	void calc( TValFunc *val )
 	{
 	    val->setI(0,time(NULL));
-	}
-};
-
-//*************************************************
-//* tmFStr                                        *
-//*************************************************
-class tmFStr : public TFunction
-{
-    public:
-	tmFStr( ) : TFunction("tmFStr")
-	{
-	    ioAdd( new IO("val",_("Date and time string"),IO::String,IO::Return,"") );
-	    ioAdd( new IO("sec",_("Seconds"),IO::Integer,IO::Default,"0") );
-	    ioAdd( new IO("form",_("Date and time format"),IO::String,IO::Default,"%Y-%m-%d %H:%M:%S") );
-	}
-
-	string name( )	{ return _("Time: String time"); }
-	string descr( )	{ return _("Formated string time."); }
-
-	void calc( TValFunc *val )
-	{
-	    time_t tm_t = val->getI(1);
-	    struct tm tm_tm;
-	    localtime_r(&tm_t,&tm_tm);
-	    char buf[1000];
-	    int rez = strftime( buf, sizeof(buf), val->getS(2).c_str(), &tm_tm );
-	    val->setS(0,(rez>0)?string(buf,rez):"");
 	}
 };
 

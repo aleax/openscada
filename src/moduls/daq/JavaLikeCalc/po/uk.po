@@ -1,24 +1,25 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# OpenSCADA.DAQ.JavaLikeCalc translate to Ukrainian.
+# Copyright (C) 2005-2009 Roman Savochenko
+# This file is distributed under the same license as the OpenSCADA.DAQ.JavaLikeCalc module.
+# Roman Savochenko <rom_as@fromru.com>, 2005-2009.
 #
 #: freefunc.cpp:152 freefunc.cpp:156 freefunc.cpp:166 freefunc.cpp:211
 #: freefunc.cpp:220 freefunc.cpp:238 freefunc.cpp:271 freefunc.cpp:309
 #: freefunc.cpp:311 freefunc.cpp:318 freefunc.cpp:1603 freefunc.cpp:1604
 #: freefunc.cpp:1605 freefunc.cpp:1606 freefunc.cpp:1607 freefunc.cpp:1608
 #: freefunc.cpp:1669 freelib.cpp:124 freelib.cpp:163 freelib.cpp:224
-#: virtual.cpp:54 virtual.cpp:182 virtual.cpp:184 virtual.cpp:256
-#: virtual.cpp:259 virtual.cpp:260 virtual.cpp:266 virtual.cpp:269
-#: virtual.cpp:270 virtual.cpp:429 virtual.cpp:455 virtual.cpp:464
-#: virtual.cpp:576 virtual.cpp:600 virtual.cpp:601 virtual.cpp:602
-#: virtual.cpp:603 virtual.cpp:604 freefunc.h:260 freelib.h:67 virtual.h:182
+#: func_analise.ypp:72 virtual.cpp:54 virtual.cpp:182 virtual.cpp:184
+#: virtual.cpp:256 virtual.cpp:259 virtual.cpp:260 virtual.cpp:266
+#: virtual.cpp:269 virtual.cpp:270 virtual.cpp:429 virtual.cpp:455
+#: virtual.cpp:464 virtual.cpp:576 virtual.cpp:600 virtual.cpp:601
+#: virtual.cpp:602 virtual.cpp:603 virtual.cpp:604 freefunc.h:260 freelib.h:67
+#: virtual.h:182
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.2.0\n"
+"Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-15 13:09+0200\n"
+"POT-Creation-Date: 2009-01-04 18:45+0200\n"
 "PO-Revision-Date: 2007-10-28 10:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -98,7 +99,10 @@ msgstr ""
 msgid "."
 msgstr ""
 
-#: freefunc.cpp:417
+#: freefunc.cpp:417 func_analise.ypp:119 func_analise.ypp:127
+#: func_analise.ypp:135 func_analise.ypp:143 func_analise.ypp:151
+#: func_analise.ypp:160 func_analise.ypp:171 func_analise.ypp:188
+#: func_analise.ypp:198 func_analise.ypp:208 func_analise.ypp:218
 #, c-format
 msgid "Variable <%s> is used but undefined"
 msgstr "Змінна <%s> не визначена але використана"
@@ -466,13 +470,13 @@ msgstr "Функція: "
 #: freelib.cpp:176 freelib.cpp:177 freelib.cpp:178 freelib.cpp:182
 #: freelib.cpp:190 freelib.cpp:191 freelib.cpp:195 freelib.cpp:196
 #: freelib.cpp:201 freelib.cpp:202 freelib.cpp:206 freelib.cpp:207
-#: freelib.cpp:211 freelib.cpp:218 freelib.cpp:219 virtual.cpp:311
-#: virtual.cpp:313 virtual.cpp:321 virtual.cpp:328 virtual.cpp:329
-#: virtual.cpp:479 virtual.cpp:549 virtual.cpp:552 virtual.cpp:553
-#: virtual.cpp:555 virtual.cpp:556 virtual.cpp:557 virtual.cpp:560
-#: virtual.cpp:563 virtual.cpp:565 virtual.cpp:598 virtual.cpp:615
-#: virtual.cpp:617 virtual.cpp:619 virtual.cpp:621 virtual.cpp:623
-#: virtual.cpp:643 virtual.cpp:644
+#: freelib.cpp:211 freelib.cpp:218 freelib.cpp:219 func_analise.cpp:567
+#: virtual.cpp:311 virtual.cpp:313 virtual.cpp:321 virtual.cpp:328
+#: virtual.cpp:329 virtual.cpp:479 virtual.cpp:549 virtual.cpp:552
+#: virtual.cpp:553 virtual.cpp:555 virtual.cpp:556 virtual.cpp:557
+#: virtual.cpp:560 virtual.cpp:563 virtual.cpp:565 virtual.cpp:598
+#: virtual.cpp:615 virtual.cpp:617 virtual.cpp:619 virtual.cpp:621
+#: virtual.cpp:623 virtual.cpp:643 virtual.cpp:644
 msgid "root"
 msgstr ""
 
@@ -643,7 +647,8 @@ msgstr ""
 msgid "sel_id"
 msgstr ""
 
-#: freefunc.cpp:1577 freefunc.cpp:1580 virtual.cpp:558 virtual.cpp:561
+#: freefunc.cpp:1577 freefunc.cpp:1580 func_analise.ypp:454 virtual.cpp:558
+#: virtual.cpp:561
 msgid ";"
 msgstr ""
 
@@ -917,6 +922,565 @@ msgstr ""
 msgid "/func/ls_lib"
 msgstr ""
 
+#: func_analise.cpp:50
+msgid "2.3"
+msgstr ""
+
+#: func_analise.cpp:53
+msgid "yacc.c"
+msgstr ""
+
+#: func_analise.cpp:282
+msgid "bison-runtime"
+msgstr ""
+
+#: func_analise.cpp:561
+msgid "$end"
+msgstr ""
+
+#: func_analise.cpp:561
+msgid "error"
+msgstr ""
+
+#: func_analise.cpp:561
+msgid "$undefined"
+msgstr ""
+
+#: func_analise.cpp:561
+msgid "ERR"
+msgstr ""
+
+#: func_analise.cpp:561
+msgid "IF"
+msgstr ""
+
+#: func_analise.cpp:561
+msgid "ELSE"
+msgstr ""
+
+#: func_analise.cpp:561
+msgid "WHILE"
+msgstr ""
+
+#: func_analise.cpp:561
+msgid "FOR"
+msgstr ""
+
+#: func_analise.cpp:562
+msgid "BREAK"
+msgstr ""
+
+#: func_analise.cpp:562
+msgid "CONTINUE"
+msgstr ""
+
+#: func_analise.cpp:562
+msgid "ADDEQ"
+msgstr ""
+
+#: func_analise.cpp:562
+msgid "SUBEQ"
+msgstr ""
+
+#: func_analise.cpp:562
+msgid "MULEQ"
+msgstr ""
+
+#: func_analise.cpp:562
+msgid "DIVEQ"
+msgstr ""
+
+#: func_analise.cpp:562
+msgid "BITSHLEFT"
+msgstr ""
+
+#: func_analise.cpp:563
+msgid "BITSHRIGHT"
+msgstr ""
+
+#: func_analise.cpp:563
+msgid "RETURN"
+msgstr ""
+
+#: func_analise.cpp:563 virtual.cpp:97 virtual.cpp:355 virtual.cpp:549
+msgid "FUNC"
+msgstr ""
+
+#: func_analise.cpp:563
+msgid "B_FUNC"
+msgstr ""
+
+#: func_analise.cpp:563
+msgid "B_FUNC1"
+msgstr ""
+
+#: func_analise.cpp:563
+msgid "B_FUNC2"
+msgstr ""
+
+#: func_analise.cpp:563
+msgid "VAR"
+msgstr ""
+
+#: func_analise.cpp:564
+msgid "CONST"
+msgstr ""
+
+#: func_analise.cpp:564
+msgid "'='"
+msgstr ""
+
+#: func_analise.cpp:564
+msgid "'?'"
+msgstr ""
+
+#: func_analise.cpp:564
+msgid "':'"
+msgstr ""
+
+#: func_analise.cpp:564
+msgid "OR"
+msgstr ""
+
+#: func_analise.cpp:564
+msgid "AND"
+msgstr ""
+
+#: func_analise.cpp:564
+msgid "'|'"
+msgstr ""
+
+#: func_analise.cpp:564
+msgid "'&'"
+msgstr ""
+
+#: func_analise.cpp:564
+msgid "'^'"
+msgstr ""
+
+#: func_analise.cpp:564
+msgid "'>'"
+msgstr ""
+
+#: func_analise.cpp:565
+msgid "'<'"
+msgstr ""
+
+#: func_analise.cpp:565
+msgid "NE"
+msgstr ""
+
+#: func_analise.cpp:565
+msgid "EQ"
+msgstr ""
+
+#: func_analise.cpp:565
+msgid "LE"
+msgstr ""
+
+#: func_analise.cpp:565
+msgid "GE"
+msgstr ""
+
+#: func_analise.cpp:565
+msgid "'+'"
+msgstr ""
+
+#: func_analise.cpp:565
+msgid "'-'"
+msgstr ""
+
+#: func_analise.cpp:565
+msgid "'*'"
+msgstr ""
+
+#: func_analise.cpp:565
+msgid "'/'"
+msgstr ""
+
+#: func_analise.cpp:565
+msgid "'%'"
+msgstr ""
+
+#: func_analise.cpp:565
+msgid "'!'"
+msgstr ""
+
+#: func_analise.cpp:566
+msgid "'~'"
+msgstr ""
+
+#: func_analise.cpp:566
+msgid "UN_MINUS"
+msgstr ""
+
+#: func_analise.cpp:566
+msgid "DECREM"
+msgstr ""
+
+#: func_analise.cpp:566
+msgid "INCREM"
+msgstr ""
+
+#: func_analise.cpp:566
+msgid "';'"
+msgstr ""
+
+#: func_analise.cpp:566
+msgid "'('"
+msgstr ""
+
+#: func_analise.cpp:566
+msgid "')'"
+msgstr ""
+
+#: func_analise.cpp:566
+msgid "'{'"
+msgstr ""
+
+#: func_analise.cpp:566
+msgid "'}'"
+msgstr ""
+
+#: func_analise.cpp:567
+msgid "','"
+msgstr ""
+
+#: func_analise.cpp:567
+msgid "$accept"
+msgstr ""
+
+#: func_analise.cpp:567
+msgid "solver"
+msgstr ""
+
+#: func_analise.cpp:567
+msgid "solve"
+msgstr ""
+
+#: func_analise.cpp:567
+msgid "assign"
+msgstr ""
+
+#: func_analise.cpp:567
+msgid "expr"
+msgstr ""
+
+#: func_analise.cpp:567
+msgid "prmlst"
+msgstr ""
+
+#: func_analise.cpp:568 func_analise.ypp:433
+msgid "if"
+msgstr ""
+
+#: func_analise.cpp:568
+msgid "if_expr"
+msgstr ""
+
+#: func_analise.cpp:568
+msgid "cycl"
+msgstr ""
+
+#: func_analise.cpp:568
+msgid "end"
+msgstr ""
+
+#: func_analise.cpp:831
+msgid "syntax error: cannot back up"
+msgstr ""
+
+#: func_analise.cpp:874
+#, c-format
+msgid "%d.%d-%d.%d"
+msgstr ""
+
+#: func_analise.cpp:909
+#, c-format
+msgid "%s "
+msgstr ""
+
+#: func_analise.cpp:912 func_analise.cpp:999 func_analise.cpp:1037
+#, c-format
+msgid "\n"
+msgstr ""
+
+#: func_analise.cpp:970
+#, c-format
+msgid "token %s ("
+msgstr ""
+
+#: func_analise.cpp:972
+#, c-format
+msgid "nterm %s ("
+msgstr ""
+
+#: func_analise.cpp:975
+msgid ": "
+msgstr ""
+
+#: func_analise.cpp:977
+msgid ")"
+msgstr ""
+
+#: func_analise.cpp:996
+msgid "Stack now"
+msgstr ""
+
+#: func_analise.cpp:998
+#, c-format
+msgid " %d"
+msgstr ""
+
+#: func_analise.cpp:1028
+#, c-format
+msgid "Reducing stack by rule %d (line %lu):\n"
+msgstr ""
+
+#: func_analise.cpp:1033
+#, c-format
+msgid "   $%d = "
+msgstr ""
+
+#: func_analise.cpp:1205 func_analise.cpp:1213
+#, c-format
+msgid "syntax error, unexpected %s"
+msgstr ""
+
+#: func_analise.cpp:1206
+#, c-format
+msgid "syntax error, unexpected %s, expecting %s"
+msgstr ""
+
+#: func_analise.cpp:1207
+#, c-format
+msgid "syntax error, unexpected %s, expecting %s or %s"
+msgstr ""
+
+#: func_analise.cpp:1208
+#, c-format
+msgid "syntax error, unexpected %s, expecting %s or %s or %s"
+msgstr ""
+
+#: func_analise.cpp:1209
+#, c-format
+msgid "syntax error, unexpected %s, expecting %s or %s or %s or %s"
+msgstr ""
+
+#: func_analise.cpp:1214
+#, c-format
+msgid ", expecting %s"
+msgstr ""
+
+#: func_analise.cpp:1215
+#, c-format
+msgid " or %s"
+msgstr ""
+
+#: func_analise.cpp:1309
+msgid "Deleting"
+msgstr ""
+
+#: func_analise.cpp:1431
+msgid "Starting parse\n"
+msgstr ""
+
+#: func_analise.cpp:1483 func_analise.cpp:2218
+msgid "memory exhausted"
+msgstr ""
+
+#: func_analise.cpp:1523
+#, c-format
+msgid "Stack size increased to %lu\n"
+msgstr ""
+
+#: func_analise.cpp:1530
+#, c-format
+msgid "Entering state %d\n"
+msgstr ""
+
+#: func_analise.cpp:1552
+msgid "Reading a token: "
+msgstr ""
+
+#: func_analise.cpp:1559
+msgid "Now at end of input.\n"
+msgstr ""
+
+#: func_analise.cpp:1564
+msgid "Next token is"
+msgstr ""
+
+#: func_analise.cpp:1590 func_analise.cpp:2193
+msgid "Shifting"
+msgstr ""
+
+#: func_analise.ypp:255 func_analise.ypp:256
+msgid "R00nn"
+msgstr ""
+
+#: func_analise.ypp:257
+msgid "Rbbaann"
+msgstr ""
+
+#: func_analise.cpp:2033
+msgid "-> $$ ="
+msgstr ""
+
+#: func_analise.cpp:2066 func_analise.cpp:2094
+msgid "syntax error"
+msgstr ""
+
+#: func_analise.cpp:2117
+msgid "Error: discarding"
+msgstr ""
+
+#: func_analise.cpp:2174
+msgid "Error: popping"
+msgstr ""
+
+#: func_analise.cpp:2225
+msgid "Cleanup: discarding lookahead"
+msgstr ""
+
+#: func_analise.cpp:2233
+msgid "Cleanup: popping"
+msgstr ""
+
+#: func_analise.ypp:264
+#, c-format
+msgid "%s, pos: (%d,%d)-(%d,%d).\n"
+msgstr ""
+
+#: func_analise.ypp:295
+msgid "//"
+msgstr ""
+
+#: func_analise.ypp:301
+msgid "/*"
+msgstr ""
+
+#: func_analise.ypp:304
+msgid "*/"
+msgstr ""
+
+#: func_analise.ypp:405
+msgid "Unexpected end programm, expect end string symbol '\"', "
+msgstr ""
+
+#: func_analise.ypp:410
+msgid "The next line symbol failed into string, "
+msgstr ""
+
+#: func_analise.ypp:434
+msgid "else"
+msgstr ""
+
+#: func_analise.ypp:435
+msgid "while"
+msgstr ""
+
+#: func_analise.ypp:436
+msgid "for"
+msgstr ""
+
+#: func_analise.ypp:437
+msgid "break"
+msgstr ""
+
+#: func_analise.ypp:438
+msgid "continue"
+msgstr ""
+
+#: func_analise.ypp:439
+msgid "return"
+msgstr ""
+
+#: func_analise.ypp:440
+msgid "using"
+msgstr ""
+
+#: func_analise.ypp:445
+#, c-format
+msgid "using %254s"
+msgstr ""
+
+#: func_analise.ypp:448
+msgid "Using namespace is error or empty, "
+msgstr "Помилка площини найменувань або вона порожня, "
+
+#: func_analise.ypp:459 func_analise.ypp:462
+msgid "true"
+msgstr ""
+
+#: func_analise.ypp:459
+msgid "false"
+msgstr ""
+
+#: func_analise.ypp:490
+msgid "Build in function have to mach parameters, "
+msgstr "Вбудована функція має дуже багато параметрів, "
+
+#: func_analise.ypp:525
+msgid "Symbol error, "
+msgstr "Помилка символу, "
+
+#: func_analise.ypp:549
+msgid "++"
+msgstr ""
+
+#: func_analise.ypp:550
+msgid "--"
+msgstr ""
+
+#: func_analise.ypp:551
+msgid "||"
+msgstr ""
+
+#: func_analise.ypp:552
+msgid "&&"
+msgstr ""
+
+#: func_analise.ypp:553
+msgid ">="
+msgstr ""
+
+#: func_analise.ypp:554
+msgid "<="
+msgstr ""
+
+#: func_analise.ypp:555
+msgid "=="
+msgstr ""
+
+#: func_analise.ypp:556
+msgid "!="
+msgstr ""
+
+#: func_analise.ypp:557
+msgid "<<"
+msgstr ""
+
+#: func_analise.ypp:558
+msgid ">>"
+msgstr ""
+
+#: func_analise.ypp:559
+msgid "+="
+msgstr ""
+
+#: func_analise.ypp:560
+msgid "-="
+msgstr ""
+
+#: func_analise.ypp:561
+msgid "*="
+msgstr ""
+
+#: func_analise.ypp:562
+msgid "/="
+msgstr ""
+
 #: virtual.cpp:36
 msgid "JavaLikeCalc"
 msgstr ""
@@ -934,7 +1498,7 @@ msgid "LIB"
 msgstr ""
 
 #: virtual.cpp:41
-msgid "1.2.0"
+msgid "1.3.0"
 msgstr ""
 
 #: virtual.cpp:42
@@ -975,10 +1539,6 @@ msgstr ""
 
 #: virtual.cpp:96
 msgid "system"
-msgstr ""
-
-#: virtual.cpp:97 virtual.cpp:355 virtual.cpp:549
-msgid "FUNC"
 msgstr ""
 
 #: virtual.cpp:97

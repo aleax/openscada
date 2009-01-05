@@ -1,7 +1,7 @@
 
 AC_PREREQ(2.50)
 
-AC_INIT([OpenSCADA],[0.6.2],[rom_as@fromru.com])
+AC_INIT([OpenSCADA],[0.6.3],[rom_as@fromru.com])
 oscd_LIBREVISION="0:10:0"
 oscd_defprefix="/usr"
 oscd_modulpref="oscd_"

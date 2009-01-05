@@ -1,7 +1,7 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# OpenSCADA.DAQ.DCON translate to Ukrainian.
+# Copyright (C) 2008-2009 Almaz Karimov
+# This file is distributed under the same license as the OpenSCADA.DAQ.DCON package module.
+# Roman Savochenko <rom_as@fromru.com>, 2008-2009.
 #
 #: DCON_client.cpp:55 DCON_client.cpp:120 DCON_client.cpp:171
 #: DCON_client.cpp:231 DCON_client.cpp:232 DCON_client.cpp:233

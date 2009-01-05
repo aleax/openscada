@@ -1,7 +1,7 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# OpenSCADA core translate to Ukrainian.
+# Copyright (C) 2003-2009 Roman Savochenko
+# This file is distributed under the same license as the OpenSCADA package.
+# Roman Savochenko <rom_as@fromru.com>, 2003-2009.
 #
 #: main.cpp:38 tarchives.cpp:44 tarchives.cpp:55 tarchives.cpp:158
 #: tarchives.cpp:164 tarchives.cpp:165 tarchives.cpp:170 tarchives.cpp:176
@@ -58,7 +58,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA 0.6.1\n"
+"Project-Id-Version: OpenSCADA 0.6.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-12-26 17:00+0200\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"

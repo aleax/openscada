@@ -1,7 +1,7 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# OpenSCADA.Protocol.SelfSystem translate to Russian.
+# Copyright (C) 2007-2009 Roman Savochenko
+# This file is distributed under the same license as the OpenSCADA.Protocol.SelfSystem package module.
+# Roman Savochenko <rom_as@fromru.com>, 2007-2009.
 #
 #: self.cpp:50 self.cpp:132 self.cpp:254 self.cpp:317 self.cpp:344
 #, fuzzy

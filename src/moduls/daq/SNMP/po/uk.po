@@ -1,16 +1,16 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# OpenSCADA.DAQ.SNMP translate to Ukrainian.
+# Copyright (C) 2006-2009 Roman Savochenko
+# This file is distributed under the same license as the OpenSCADA.DAQ.SNMP module.
+# Roman Savochenko <rom_as@fromru.com>, 2006-2009.
 #
 #: snmp_client.cpp:59 snmp_client.cpp:137 snmp_client.cpp:146
 #: snmp_client.cpp:297 snmp_client.cpp:300 snmp_client.cpp:303
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.SNMP 0.3.2\n"
+"Project-Id-Version: OpenSCADA.DAQ.SNMP 0.3.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-15 13:10+0200\n"
+"POT-Creation-Date: 2009-01-04 19:12+0200\n"
 "PO-Revision-Date: 2007-10-29 11:14+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -30,7 +30,7 @@ msgid "DAQ"
 msgstr ""
 
 #: snmp_client.cpp:46
-msgid "0.3.2"
+msgid "0.3.3"
 msgstr ""
 
 #: snmp_client.cpp:47

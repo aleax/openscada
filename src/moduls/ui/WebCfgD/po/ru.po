@@ -1,7 +1,7 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# OpenSCADA.UI.WebCfgD translate to Russian.
+# Copyright (C) 2008-2009 Roman Savochenko
+# This file is distributed under the same license as the OpenSCADA.UI.WebCfgD package module.
+# Roman Savochenko <rom_as@fromru.com>, 2008-2009.
 #
 #: web_cfg.cpp:55 web_cfg.cpp:237 web_cfg.cpp:298 web_cfg.cpp:328
 #: web_cfg.cpp:499 web_cfg.cpp:503 web_cfg.cpp:515 web_cfg.cpp:636
@@ -9,7 +9,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.UI.WebCfgD 0.3.0\n"
+"Project-Id-Version: OpenSCADA.UI.WebCfgD 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-12-29 12:04+0200\n"
 "PO-Revision-Date: 2008-12-15 15:28+0200\n"

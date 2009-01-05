@@ -1,16 +1,16 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# OpenSCADA.DB.MySQL translate to Ukrainian.
+# Copyright (C) 2003-2009 Roman Savochenko
+# This file is distributed under the same license as the OpenSCADA.DB.MySQL module.
+# Roman Savochenko <rom_as@fromru.com>, 2003-2009.
 #
 #: my_sql.cpp:51 my_sql.cpp:149 my_sql.cpp:175 my_sql.cpp:259 my_sql.cpp:400
 #: my_sql.cpp:606 my_sql.cpp:613 my_sql.cpp:642 my_sql.cpp:674 my_sql.cpp:698
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DB.MySQL 1.4.0\n"
+"Project-Id-Version: OpenSCADA.DB.MySQL 1.4.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-24 09:22+0200\n"
+"POT-Creation-Date: 2009-01-04 11:20+0200\n"
 "PO-Revision-Date: 2007-10-23 12:23+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -30,7 +30,7 @@ msgid "BD"
 msgstr "БД"
 
 #: my_sql.cpp:38
-msgid "1.4.0"
+msgid "1.4.1"
 msgstr ""
 
 #: my_sql.cpp:39
