@@ -1,7 +1,7 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# OpenSCADA.UI.WebVision translate to Ukrainian.
+# Copyright (C) 2007-2009 Roman Savochenko
+# This file is distributed under the same license as the OpenSCADA.UI.WebVision package module.
+# Roman Savochenko <rom_as@fromru.com>, 2007-2009.
 #
 #: vca_sess.cpp:63 vca_sess.cpp:76 vca_sess.cpp:103 vca_sess.cpp:195
 #: vca_sess.cpp:3192 vca_sess.cpp:3760 web_vision.cpp:53 web_vision.cpp:429
@@ -10,9 +10,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.UI.WebVision 0.4.0\n"
+"Project-Id-Version: OpenSCADA.UI.WebVision 0.6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-29 12:02+0200\n"
+"POT-Creation-Date: 2009-01-06 17:48+0200\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -512,7 +512,7 @@ msgid "WWW"
 msgstr ""
 
 #: web_vision.cpp:39
-msgid "0.4.0"
+msgid "0.6.0"
 msgstr ""
 
 #: web_vision.cpp:40

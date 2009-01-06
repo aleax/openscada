@@ -697,12 +697,12 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 
 bool Widget::cntrCmdAttributes( XMLNode *opt )
 {
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	if(ctrMkNode("area",opt,-1,"/attr",_("Attributes")))
 	{
-	    //-- Properties form create --
+	    //>> Properties form create
 	    vector<string> list_a;
 	    attrList(list_a);
 	    for( unsigned i_el = 0; i_el < list_a.size(); i_el++ )
@@ -714,7 +714,7 @@ bool Widget::cntrCmdAttributes( XMLNode *opt )
 	return true;
     }
 
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
     if( a_path.substr(0,6) == "/attr/" )
     {
@@ -722,16 +722,12 @@ bool Widget::cntrCmdAttributes( XMLNode *opt )
 	if( ctrChkNode(opt,"get",(attr.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root","UI",SEQ_RD) )
 	{
 	    if( attr.at().fld().flg()&TFld::Selected )	opt->setText(attr.at().getSEL());
-	    else					opt->setText(attr.at().getS());
+	    else opt->setText(attr.at().getS());
 	}
 	if( ctrChkNode(opt,"set",(attr.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root","UI",SEQ_WR) )
 	{
 	    if( attr.at().fld().flg()&TFld::Selected )	attr.at().setSEL(opt->text());
-	    else
-	    {
-		//printf("Set attr %s to %s\n",attr.at().id().c_str(),opt->text().c_str());
-		attr.at().setS(opt->text());
-	    }
+	    else attr.at().setS(opt->text());
 	}
     }
     else return false;
@@ -910,7 +906,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
 	if( nattr.size() ) srcwdg = wdgAt(nwdg);
 	else nattr = nwdg;
 
-	bool is_pl = (a_path.substr(0,14) == "/links/lnk/pl_");	
+	bool is_pl = (a_path.substr(0,14) == "/links/lnk/pl_");
 	if( !(srcwdg.at().attrAt(nattr).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut)) )
 	{
 	    if( !is_pl ) throw TError(nodePath().c_str(),_("Variable is not link"));
@@ -925,6 +921,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
 	}
 
 	string m_prm = srcwdg.at().attrAt(nattr).at().cfgVal();
+
 	//-- Link interface process --
 	int c_lv = 0;
 	string obj_tp = TSYS::strSepParse(m_prm,0,':')+":";

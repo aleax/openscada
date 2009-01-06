@@ -8,6 +8,10 @@
 - FIX:/SYS: ResString object for resourcing string access.
 - FIX:/Value,/Function,/TConfig,/UI/VCAEngine: For resource sharing by string use ResString.
 - FIX:/UI/WebVision: Text primitive vertical align is fixed.
+- FIX:/UI/QTCfg: Not view current value if it empty into Editable combbox element is fixed.
+- !!:/UI/VCAEngine: Documentation and translation is updated and version 0.8.0 is relised.
+- !!:/UI/Vision: Documentation and translation is updated and version 0.8.0 is relised.
+- !!:/UI/WebVision: Documentation and translation is updated and version 0.6.0 is relised.
 
 
 2009-01-05 Roman
@@ -384,7 +388,7 @@
 
 
 2008-09-26 Maxim
-- :/UI/Vision: Action for making dynamic points from static ones is added to the popup menu for primitive ElFigure.
+- /UI/Vision: Action for making dynamic points from static ones is added to the popup menu for primitive ElFigure.
 - !!:UI/WebVision: Dynamic and static points realization is done for primitive ElFigure.
 
 

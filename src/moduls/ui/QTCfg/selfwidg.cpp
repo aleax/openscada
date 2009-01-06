@@ -276,11 +276,8 @@ void LineEdit::setCfg(const QString &cfg)
 	    QString ctext = ((QComboBox*)ed_fld)->currentText();
 	    ((QComboBox*)ed_fld)->clear();
 	    ((QComboBox*)ed_fld)->addItems(cfg.split("\n"));
-	    if( !ctext.isEmpty() )
-	    {
-		if( ((QComboBox*)ed_fld)->findText(ctext) < 0 ) ((QComboBox*)ed_fld)->addItem(ctext);
-		((QComboBox*)ed_fld)->setEditText(ctext);
-	    }
+	    if( ((QComboBox*)ed_fld)->findText(ctext) < 0 ) ((QComboBox*)ed_fld)->addItem(ctext);
+	    ((QComboBox*)ed_fld)->setEditText(ctext);
 	    break;
 	}
     }
