@@ -520,25 +520,26 @@ function makeEl( pgBr, inclPg )
     elStyle+='border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
     if( this.attrs['bordColor'] ) elStyle+='border-color: '+this.attrs['bordColor']+'; ';
     var txtAlign = parseInt(this.attrs['alignment']);
+    var spanStyle = 'display: table-cell; width: '+geomW+'px; height: '+geomH+'px; ';
     switch(txtAlign&0x3)
     {
-      case 0: elStyle+='text-align: left; '; break;
-      case 1: elStyle+='text-align: right; '; break;
-      case 2: elStyle+='text-align: center; '; break;
-      case 3: elStyle+='text-align: justify; '; break;
+      case 0: spanStyle+='text-align: left; '; break;
+      case 1: spanStyle+='text-align: right; '; break;
+      case 2: spanStyle+='text-align: center; '; break;
+      case 3: spanStyle+='text-align: justify; '; break;
     }
     switch(txtAlign>>2)
     {
-      case 0: elStyle+='vertical-align: top; '; break;
-      case 1: elStyle+='vertical-align: bottom; '; break;
-      case 2: elStyle+='vertical-align: middle; '; break;
+      case 0: spanStyle+='vertical-align: top; '; break;
+      case 1: spanStyle+='vertical-align: bottom; '; break;
+      case 2: spanStyle+='vertical-align: middle; '; break;
     }
     var allFnt = this.attrs['font'].split(' ');
-    if( allFnt.length >= 1 ) elStyle+='font-family: '+allFnt[0].replace(/_/g,' ')+'; ';
-    if( allFnt.length >= 2 ) elStyle+='font-size: '+(parseInt(allFnt[1])*Math.min(xSc,ySc)).toFixed(0)+'px; ';
-    if( allFnt.length >= 3 ) elStyle+='font-weight: '+(parseInt(allFnt[2])?'bold':'normal')+'; ';
-    if( allFnt.length >= 4 ) elStyle+='font-style: '+(parseInt(allFnt[3])?'italic':'normal')+'; ';
-    elStyle+='color: '+(this.attrs['color']?this.attrs['color']:'black')+'; ';
+    if( allFnt.length >= 1 ) spanStyle+='font-family: '+allFnt[0].replace(/_/g,' ')+'; ';
+    if( allFnt.length >= 2 ) spanStyle+='font-size: '+(parseInt(allFnt[1])*Math.min(xSc,ySc)).toFixed(0)+'px; ';
+    if( allFnt.length >= 3 ) spanStyle+='font-weight: '+(parseInt(allFnt[2])?'bold':'normal')+'; ';
+    if( allFnt.length >= 4 ) spanStyle+='font-style: '+(parseInt(allFnt[3])?'italic':'normal')+'; ';
+    spanStyle+='color: '+(this.attrs['color']?this.attrs['color']:'black')+'; ';
     var txtVal = this.attrs['text'];
     for( var i = 0; i < parseInt(this.attrs['numbArg']); i++ )
     {
@@ -567,8 +568,8 @@ function makeEl( pgBr, inclPg )
     for( var j = 0; j < txtVal.length; j++ )
       if( txtVal[j] == '\n' ) txtVal1+='<br />'; else txtVal1+=txtVal[j];
 //    txtVal.replace(/\n/g,'<br />');
-    while(this.place.childNodes.length) this.place.removeChild(this.place.childNodes[0]);
-    this.place.innerHTML = txtVal1;
+//    while(this.place.childNodes.length) this.place.removeChild(this.place.childNodes[0]);
+    this.place.innerHTML = "<span style='"+spanStyle+"'>"+txtVal1+"</span>";
     this.place.wdgLnk = this;
     if( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEQ_WR )
       this.place.onclick = function() { setFocus(this.wdgLnk.addr); return false; };

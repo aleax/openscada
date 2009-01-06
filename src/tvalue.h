@@ -81,6 +81,7 @@ class TVal : public TCntrNode
 	void setArch( const AutoHD<TVArchive> &vl );
 
     protected:
+	//Methods
 	void cntrCmdProc( XMLNode *opt );
 	void vlSet( );
 	void vlGet( );
@@ -92,7 +93,7 @@ class TVal : public TCntrNode
 	//Attributes
 	union
 	{
-	    string	*val_s;		//string value
+	    ResString	*val_s;		//string value
 	    double	val_r;		//real value
 	    int		val_i;		//integer value
 	    char	val_b;		//boolean value
@@ -121,19 +122,20 @@ class TValue: public TCntrNode, public TValElem
 	TValue( );
 	virtual ~TValue();
 
-	//- Atributes -
+	//> Atributes
 	void vlList( vector<string> &list )	{ chldList(m_vl,list); }
 	bool vlPresent( const string &name )	{ return chldPresent(m_vl,name); }
 	AutoHD<TVal> vlAt( const string &name )	{ return chldAt(m_vl,name); }
 
     protected:
+	//Methods
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
-	//- Manipulation for config element -
+	//> Manipulation for config element
 	TConfig *vlCfg( )			{ return m_cfg; }
 	void setVlCfg( TConfig *cfg );		//Set configs. NULL - clear configs.
 
-	//- Manipulation for elements of value -
+	//> Manipulation for elements of value
 	bool vlElemPresent( TElem *ValEl );
 	void vlElemAtt( TElem *ValEl );
 	void vlElemDet( TElem *ValEl );
@@ -145,14 +147,14 @@ class TValue: public TCntrNode, public TValElem
 
     private:
 	//Methods
-	//- Set value direct into controller param's -
+	//> Set value direct into controller param's
 	virtual void vlSet( int id_elem )
 	{ throw TError(nodePath().c_str(),_("Direct access to write value no admit.")); }
-	//- Get value direct from controller param's -
+	//> Get value direct from controller param's
 	virtual void vlGet( int id_elem )
 	{ throw TError(nodePath().c_str(),_("Direct access to read value no admit.")); }
 
-	//- TElem commands -
+	//> TElem commands
 	void detElem( TElem *el );
 	void addFld( TElem *el, unsigned id_val);
 	void delFld( TElem *el, unsigned id_val);

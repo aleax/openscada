@@ -1273,8 +1273,8 @@ Attr::Attr( TFld &ifld ) : m_modif(0), self_flg((SelfAttrFlgs)0)
     switch(fld().type())
     {
 	case TFld::String:
-	    m_val.s_val    = new string;
-	    *(m_val.s_val) = fld().def();
+	    m_val.s_val    = new ResString();
+	    m_val.s_val->setVal(fld().def());
 	    break;
 	case TFld::Integer:	m_val.i_val = atoi(m_fld->def().c_str());	break;
 	case TFld::Real:	m_val.r_val = atof(m_fld->def().c_str());	break;
@@ -1318,7 +1318,7 @@ string Attr::getSEL( )
     if( !(fld().flg()&TFld::Selected) ) throw TError("Cfg",_("Element type is not selected!"));
     switch( fld().type() )
     {
-	case TFld::String:	return fld().selVl2Nm(*m_val.s_val);
+	case TFld::String:	return fld().selVl2Nm(m_val.s_val->getVal());
 	case TFld::Integer:	return fld().selVl2Nm(m_val.i_val);
 	case TFld::Real:	return fld().selVl2Nm(m_val.r_val);
 	case TFld::Boolean:	return fld().selVl2Nm(m_val.b_val);
@@ -1332,7 +1332,7 @@ string Attr::getS( )
 	case TFld::Integer:	return (m_val.i_val!=EVAL_INT) ? TSYS::int2str(m_val.i_val) : EVAL_STR;
 	case TFld::Real:	return (m_val.r_val!=EVAL_REAL) ? TSYS::real2str(m_val.r_val) : EVAL_STR;
 	case TFld::Boolean:	return (m_val.b_val!=EVAL_BOOL) ? TSYS::int2str((bool)m_val.b_val) : EVAL_STR;
-	case TFld::String:	return *m_val.s_val;
+	case TFld::String:	return m_val.s_val->getVal();
     }
 }
 
@@ -1340,7 +1340,7 @@ int Attr::getI( )
 {
     switch(fld().type())
     {
-	case TFld::String:	return ((*m_val.s_val)!=EVAL_STR) ? atoi(m_val.s_val->c_str()) : EVAL_INT;
+	case TFld::String:	return (m_val.s_val->getVal()!=EVAL_STR) ? atoi(m_val.s_val->getVal().c_str()) : EVAL_INT;
 	case TFld::Real:	return (m_val.r_val!=EVAL_REAL) ? (int)m_val.r_val : EVAL_INT;
 	case TFld::Boolean:	return (m_val.b_val!=EVAL_BOOL) ? (bool)m_val.b_val : EVAL_INT;
 	case TFld::Integer:	return m_val.i_val;
@@ -1351,7 +1351,7 @@ double Attr::getR( )
 {
     switch(fld().type())
     {
-	case TFld::String:	return ((*m_val.s_val)!=EVAL_STR) ? atof(m_val.s_val->c_str()) : EVAL_REAL;
+	case TFld::String:	return (m_val.s_val->getVal()!=EVAL_STR) ? atof(m_val.s_val->getVal().c_str()) : EVAL_REAL;
 	case TFld::Integer:	return (m_val.i_val!=EVAL_INT) ? m_val.i_val : EVAL_REAL;
 	case TFld::Boolean:	return (m_val.b_val!=EVAL_BOOL) ? (bool)m_val.b_val : EVAL_REAL;
 	case TFld::Real:	return m_val.r_val;
@@ -1362,7 +1362,7 @@ char Attr::getB( )
 {
     switch(fld().type())
     {
-	case TFld::String:	return ((*m_val.s_val)!=EVAL_STR) ? (bool)atoi(m_val.s_val->c_str()) : EVAL_BOOL;
+	case TFld::String:	return (m_val.s_val->getVal()!=EVAL_STR) ? (bool)atoi(m_val.s_val->getVal().c_str()) : EVAL_BOOL;
 	case TFld::Integer:	return (m_val.i_val!=EVAL_INT) ? (bool)m_val.i_val : EVAL_BOOL;
 	case TFld::Real:	return (m_val.r_val!=EVAL_REAL) ? (bool)m_val.r_val : EVAL_BOOL;
 	case TFld::Boolean:	return m_val.b_val;
@@ -1391,11 +1391,10 @@ void Attr::setS( const string &val, bool strongPrev, bool sys )
 	case TFld::Boolean:	setB( (val!=EVAL_STR) ? (bool)atoi(val.c_str()) : EVAL_BOOL, strongPrev, sys );	break;
 	case TFld::String:
 	{
-	    if( !strongPrev && *(m_val.s_val) == val )	break;
-	    string t_str = *(m_val.s_val);
-	    *(m_val.s_val) = val;
-	    if( !sys && !owner()->attrChange(*this,&t_str) )
-		*(m_val.s_val) = t_str;
+	    if( !strongPrev && m_val.s_val->getVal() == val )	break;
+	    string t_str = m_val.s_val->getVal();
+	    m_val.s_val->setVal(val);
+	    if( !sys && !owner()->attrChange(*this,&t_str) )	m_val.s_val->setVal(t_str);
 	    else
 	    {
 		unsigned imdf = owner()->modifVal(*this);

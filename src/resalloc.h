@@ -24,9 +24,9 @@
 
 #include <semaphore.h>
 
-#include <vector>
+#include <string>
 
-using std::vector;
+using std::string;
 
 //********************************************
 //* Resource object                          *
@@ -54,6 +54,7 @@ class Res
 class ResAlloc
 {
     public:
+	//Methods
 	ResAlloc( Res &rid );
 	ResAlloc( Res &rid, bool write, long tm = 0 );
 	~ResAlloc( );
@@ -62,8 +63,26 @@ class ResAlloc
 	void release( );
 
     private:
+	//Attributes
 	Res	&m_id;
 	char	m_wr;				//0x01 - alloc; 0x02 - write
+};
+
+//********************************************
+//* String+resource for			     *
+//********************************************
+class ResString
+{
+    public:
+	//Methods
+	ResString( const string &vl = "" ) : str(vl)	{ }
+
+	void setVal( const string &vl )	{ ResAlloc wres(res,true); str = vl; }
+	const string &getVal( )		{ ResAlloc wres(res,false); return str; }
+
+	//Attributes
+	Res	res;
+	string	str;
 };
 
 #endif // RESALLOC_H

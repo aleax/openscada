@@ -193,8 +193,8 @@ TCfg::TCfg( TFld &fld, TConfig &owner ) : m_view(true), m_owner(owner)
     switch(m_fld->type())
     {
 	case TFld::String:
-	    m_val.s_val    = new string;
-	    *(m_val.s_val) = m_fld->def();
+	    m_val.s_val    = new ResString();
+	    m_val.s_val->setVal(m_fld->def());
 	    break;
 	case TFld::Integer:	m_val.i_val = atoi(m_fld->def().c_str());	break;
 	case TFld::Real:	m_val.r_val = atof(m_fld->def().c_str());	break;
@@ -220,7 +220,7 @@ string TCfg::getSEL( )
 	throw TError("Cfg",_("Element type is not selected!"));
     switch( m_fld->type() )
     {
-	case TFld::String:	return m_fld->selVl2Nm(*m_val.s_val);
+	case TFld::String:	return m_fld->selVl2Nm(m_val.s_val->getVal());
 	case TFld::Integer:	return m_fld->selVl2Nm(m_val.i_val);
 	case TFld::Real:	return m_fld->selVl2Nm(m_val.r_val);
 	case TFld::Boolean:	return m_fld->selVl2Nm(m_val.b_val);
@@ -232,7 +232,7 @@ string &TCfg::getSd( )
     if( m_fld->type()!=TFld::String )
 	throw TError("Cfg",_("Element type is not string!"));
 
-    return *m_val.s_val;
+    return m_val.s_val->str;
 }
 
 double &TCfg::getRd( )
@@ -263,7 +263,7 @@ string TCfg::getS( )
 {
     switch(m_fld->type())
     {
-	case TFld::String:	return *m_val.s_val;
+	case TFld::String:	return m_val.s_val->getVal();
 	case TFld::Integer:	return TSYS::int2str(m_val.i_val);
 	case TFld::Real:	return TSYS::real2str(m_val.r_val);
 	case TFld::Boolean:	return TSYS::int2str(m_val.b_val);
@@ -274,7 +274,7 @@ double TCfg::getR( )
 {
     switch(m_fld->type())
     {
-	case TFld::String:	return atof(m_val.s_val->c_str());
+	case TFld::String:	return atof(m_val.s_val->getVal().c_str());
 	case TFld::Integer:	return m_val.i_val;
 	case TFld::Real:	return m_val.r_val;
 	case TFld::Boolean:	return m_val.b_val;
@@ -285,7 +285,7 @@ int TCfg::getI( )
 {
     switch(m_fld->type())
     {
-	case TFld::String:	return atoi(m_val.s_val->c_str());
+	case TFld::String:	return atoi(m_val.s_val->getVal().c_str());
 	case TFld::Integer:	return m_val.i_val;
 	case TFld::Real:	return (int)m_val.r_val;
 	case TFld::Boolean:	return m_val.b_val;
@@ -296,7 +296,7 @@ bool TCfg::getB( )
 {
     switch(m_fld->type())
     {
-	case TFld::String:	return atoi(m_val.s_val->c_str());
+	case TFld::String:	return atoi(m_val.s_val->getVal().c_str());
 	case TFld::Integer:	return m_val.i_val;
 	case TFld::Real:	return (int)m_val.r_val;
 	case TFld::Boolean:	return m_val.b_val;
@@ -322,9 +322,9 @@ void TCfg::setS( const string &val, bool forcView )
     {
 	case TFld::String:
 	{
-	    string t_str = *(m_val.s_val);
-	    *(m_val.s_val) = val;
-	    if( !m_owner.cfgChange(*this) )	*(m_val.s_val) = t_str;
+	    string t_str = m_val.s_val->getVal();
+	    m_val.s_val->setVal(val);
+	    if( !m_owner.cfgChange(*this) )	m_val.s_val->setVal(t_str);
 	    if( forcView ) setView(true);
 	    break;
 	}

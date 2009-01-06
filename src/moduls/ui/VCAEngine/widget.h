@@ -107,7 +107,7 @@ class Attr : public TCntrNode
 	//- Storing -
 	union
 	{
-	    string	*s_val;		//String
+	    ResString	*s_val;		//String
 	    double	r_val;		//Real
 	    int		i_val;		//Integer
 	    char	b_val;		//Boolean

@@ -216,7 +216,7 @@ class TValFunc
 	    IO::Type	tp;
 	    union
 	    {
-	        string *s;
+	        ResString *s;
 	        double r;
 	        int    i;
 	        char   b;

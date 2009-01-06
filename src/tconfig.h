@@ -84,7 +84,7 @@ class TCfg
 	//Data
 	union
 	{
-	    string	*s_val;
+	    ResString	*s_val;
 	    double	r_val;
 	    int		i_val;
 	    bool	b_val;
