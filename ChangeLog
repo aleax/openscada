@@ -1,3 +1,9 @@
+2009-01-06 Maxim
+- FIX:/UI/Vision: map erasing is fixed for primitive ElFigure.
+- FIX:/UI/Vision: appending point, common for several elementary figures, when connections are disabled is fixed for primitive ElFigure.
+- FIX:/UI/WebVision: repainting ElFigure is fixed when dynamic attribute is changed.
+
+
 2009-01-06 Roman
 - FIX:/SYS: ResString object for resourcing string access.
 - FIX:/Value,/Function,/TConfig,/UI/VCAEngine: For resource sharing by string use ResString.

@@ -3296,22 +3296,28 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                         case 0 : 
                             pnt_.x = atof(req_el->text().c_str());
                             (pnts)[pnt] = pnt_;
+                            rel_list = true;
                             break;
                         case 1 :
                             pnt_.y = atof(req_el->text().c_str());
                             (pnts)[pnt] = pnt_;
+                            rel_list = true;
                             break;
                         case 2 : 
                             (widths)[pnt] = (int)TSYS::realRound(atof(req_el->text().c_str()));
+                            rel_list = true;
                             break;
                         case 3 : 
                             (colors)[pnt] = mod->colorParse(req_el->text());
+                            rel_list = true;
                             break;
                         case 4 :
                             (images)[pnt] = req_el->text();
+                            rel_list = true;
                             break;
                         case 5:
                             (styles)[pnt] = atoi(req_el->text().c_str());
+                            rel_list = true;
                             break;
                     }
 
@@ -3320,8 +3326,9 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
     }
     if( rel_list)
     {
-        for( PntMap::iterator pi = pnts.begin(); pi != pnts.end(); ++pi )
-            if(pi->first <= -10 ) pnts.erase ( pi );
+        for( PntMap::iterator pi = pnts.begin(); pi != pnts.end(); )
+            if(pi->first <= -10 ) pnts.erase ( pi++ );
+            else ++pi;
         string sel;
         int map_index = -10;
         int  p[5];
@@ -3761,7 +3768,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                 inundationItems.push_back( InundationItem(fl_pnts, fl_color, -1, img) );
             }
         }
-        for( WidthMap::iterator pi = widths.begin(); pi != widths.end(); ++pi )
+        for( WidthMap::iterator pi = widths.begin(); pi != widths.end(); )
         {
             bool unDel = false;
             for( int i=0; i < shapeItems.size(); i++ )
@@ -3770,10 +3777,10 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                     unDel = true;
                     break;
                 }
-            if( pi->first > 0 && unDel == false )
-                (widths).erase ( pi );
+            if( pi->first > 0 && unDel == false ) (widths).erase ( pi++ );
+            else ++pi;
         }
-        for( ColorMap::iterator pi = colors.begin(); pi != colors.end(); ++pi )
+        for( ColorMap::iterator pi = colors.begin(); pi != colors.end(); )
         {
             bool unDel = false;
             for( int i=0; i < shapeItems.size(); i++ )
@@ -3789,10 +3796,10 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                         unDel = true;
                         break;
                     }
-            if( pi->first > 0 && unDel == false )
-                (colors).erase ( pi );
+            if( pi->first > 0 && unDel == false ) (colors).erase ( pi++ );
+            else ++pi;
         }
-        for( ImageMap::iterator pi = images.begin(); pi != images.end(); ++pi )
+        for( ImageMap::iterator pi = images.begin(); pi != images.end(); )
         {
             bool unDel = false;
             for( int i=0; i < inundationItems.size(); i++ )
@@ -3801,9 +3808,10 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                     unDel = true;
                     break;
                 }
-            if( pi->first > 0 && unDel == false ) (images).erase ( pi );
+            if( pi->first > 0 && unDel == false ) (images).erase ( pi++ );
+            else ++pi;
         }
-        for( StyleMap::iterator pi = styles.begin(); pi != styles.end(); ++pi )
+        for( StyleMap::iterator pi = styles.begin(); pi != styles.end(); )
         {
             bool unDel = false;
             for( int i=0; i < shapeItems.size(); i++ )
@@ -3812,8 +3820,8 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                     unDel = true;
                     break;
                 }
-            if( pi->first > 0 && unDel == false )
-                (styles).erase ( pi );
+            if( pi->first > 0 && unDel == false ) (styles).erase ( pi++ );
+            else ++pi;
         }
 
     }
