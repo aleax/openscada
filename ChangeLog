@@ -1,12 +1,17 @@
+2009-01-07 Roman
+- FIX:/SYS: ResString::getVal() function result is fixed.
+- !!:/SYS: Updated API document.
+
+
 2009-01-06 Maxim
-- FIX:/UI/Vision: map erasing is fixed for primitive ElFigure.
+- !!!!:FIX:/UI/Vision: map erasing is fixed for primitive ElFigure.
 - FIX:/UI/Vision: appending point, common for several elementary figures, when connections are disabled is fixed for primitive ElFigure.
 - FIX:/UI/WebVision: repainting ElFigure is fixed when dynamic attribute is changed.
 
 
 2009-01-06 Roman
-- FIX:/SYS: ResString object for resourcing string access.
-- FIX:/Value,/Function,/TConfig,/UI/VCAEngine: For resource sharing by string use ResString.
+- !!:/SYS: ResString object for resourcing string access.
+- !!!!:FIX:/Value,/Function,/TConfig,/UI/VCAEngine: For resource sharing by string use ResString.
 - FIX:/UI/WebVision: Text primitive vertical align is fixed.
 - FIX:/UI/QTCfg: Not view current value if it empty into Editable combbox element is fixed.
 - !!:/UI/VCAEngine: Documentation and translation is updated and version 0.8.0 is relised.

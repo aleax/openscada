@@ -78,7 +78,7 @@ class ResString
 	ResString( const string &vl = "" ) : str(vl)	{ }
 
 	void setVal( const string &vl )	{ ResAlloc wres(res,true); str = vl; }
-	const string &getVal( )		{ ResAlloc wres(res,false); return str; }
+	string getVal( )		{ ResAlloc wres(res,false); return str; }
 
 	//Attributes
 	Res	res;
