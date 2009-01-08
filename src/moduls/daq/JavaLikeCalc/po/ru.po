@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-04 18:45+0200\n"
+"POT-Creation-Date: 2009-01-07 14:31+0200\n"
 "PO-Revision-Date: 2007-10-28 10:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -109,26 +109,26 @@ msgstr "Переменная <%s> не определена но использ�
 
 #: freefunc.cpp:563
 #, c-format
-msgid "Operation %d no support bool type"
+msgid "Operation %d don't support bool type"
 msgstr "Операция %d не поддеривает логический тип"
 
 #: freefunc.cpp:584 freefunc.cpp:751
 #, c-format
-msgid "Operation %d no support string type"
+msgid "Operation %d don't support string type"
 msgstr "Операция %d не поддеривает строковый тип"
 
 #: freefunc.cpp:905
-msgid "Buildin functions no support string type"
+msgid "Buildin functions don't support string type"
 msgstr "Встроенные функции не поддерживают строковый тип."
 
 #: freefunc.cpp:936
 #, c-format
-msgid "Request more %d parameters for function <%s>"
+msgid "More than %d parameters are specified for function <%s>"
 msgstr "Указанно более %d параметров для функции <%s>"
 
 #: freefunc.cpp:940
 #, c-format
-msgid "Request function <%s>, but it not have return IO"
+msgid "Function is requested <%s>, but it doesn't have return of IO"
 msgstr "Вызвана функция <%s>, но она не имеет IO возврата"
 
 #: freefunc.cpp:1114
@@ -441,7 +441,7 @@ msgstr ""
 
 #: freefunc.cpp:1555
 #, c-format
-msgid "Operation %c(%xh) error. Function <%s> stoped."
+msgid "Operation %c(%xh) error. Function <%s> is stoped."
 msgstr "Ошибка операции %c(%xh). Функция <%s> остановлена."
 
 #: freefunc.cpp:1563 freelib.cpp:159 virtual.cpp:308 virtual.cpp:546
@@ -766,7 +766,7 @@ msgid "col"
 msgstr ""
 
 #: freefunc.cpp:1628 virtual.cpp:628
-msgid "Empty value no valid."
+msgid "Empty value is not valid."
 msgstr "Пустое значение не допустимо."
 
 #: freelib.cpp:36 virtual.cpp:114
@@ -1365,7 +1365,7 @@ msgid "*/"
 msgstr ""
 
 #: func_analise.ypp:405
-msgid "Unexpected end programm, expect end string symbol '\"', "
+msgid "Unexpected end of programm, expect end string symbol '\"', "
 msgstr ""
 
 #: func_analise.ypp:410
@@ -1406,7 +1406,7 @@ msgid "using %254s"
 msgstr ""
 
 #: func_analise.ypp:448
-msgid "Using namespace is error or empty, "
+msgid "Using namespace error or it is empty, "
 msgstr "Ошибка использования области имён или она пуста, "
 
 #: func_analise.ypp:459 func_analise.ypp:462
@@ -1418,7 +1418,7 @@ msgid "false"
 msgstr ""
 
 #: func_analise.ypp:490
-msgid "Build in function have to mach parameters, "
+msgid "Build in function have too many parameters, "
 msgstr "Встроенная функция имеет слишком много параметров, "
 
 #: func_analise.ypp:525
@@ -1591,7 +1591,7 @@ msgid "ITER"
 msgstr ""
 
 #: virtual.cpp:100
-msgid "Iteration number into calc period"
+msgid "Iteration number in the calc period"
 msgstr "Количество итераций в периоде"
 
 #: virtual.cpp:100
@@ -1780,7 +1780,7 @@ msgstr ""
 
 #: virtual.cpp:181
 #, c-format
-msgid "Compile the program language %s is no support."
+msgid "Compilation with the help of the program language %s is not supported."
 msgstr "Компиляция на языке программирования %s не поддерживается."
 
 #: virtual.cpp:182 virtual.cpp:183 virtual.cpp:184 virtual.cpp:186
@@ -1846,7 +1846,8 @@ msgstr ""
 
 #: virtual.cpp:386
 #, c-format
-msgid "Functions library <%s> no present. Please, create functions library!"
+msgid ""
+"Functions library <%s> is not present. Please, create functions library!"
 msgstr ""
 "Библиотека функций <%s> отсутствует. Пожалуйста. создайте библиотеку функций!"
 
@@ -1864,7 +1865,7 @@ msgid "start"
 msgstr ""
 
 #: virtual.cpp:488
-msgid "Acquisition task no started!"
+msgid "Acquisition task is not started!"
 msgstr "Задача сбора не запущена!"
 
 #: virtual.cpp:499
@@ -1872,12 +1873,12 @@ msgid "stop"
 msgstr ""
 
 #: virtual.cpp:500
-msgid "Acquisition task no stoped!"
+msgid "Acquisition task is not stopped!"
 msgstr "Задача сбора не остановлена!"
 
 #: virtual.cpp:510
 #, c-format
-msgid "Thread <%u> started. TID: %ld"
+msgid "Thread <%u> is started. TID: %ld"
 msgstr ""
 
 #: virtual.cpp:527
@@ -1957,11 +1958,11 @@ msgid "err"
 msgstr ""
 
 #: virtual.cpp:757
-msgid "2:Controller stoped"
+msgid "2:Controller is stoped"
 msgstr "2:Контроллер остановлен!"
 
 #: virtual.cpp:758
-msgid "1:Parameter disabled"
+msgid "1:Parameter is disabled"
 msgstr "1:Параметр отключен"
 
 #: virtual.h:160

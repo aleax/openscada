@@ -187,7 +187,7 @@ void TTpContr::load_( )
     }catch( TError err )
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	mess_err(nodePath().c_str(),_("Search and load serial devices' DB is error."));
+	mess_err(nodePath().c_str(),_("Search and load serial devices' DB error."));
     }
 }
 
@@ -639,13 +639,13 @@ string SSerial::req( const string &vl, int iFrTm, double iCharTm, int iReqTm )
 
     ResAlloc res( m_res, true );
 
-    if( !hasOpen() )	throw TError(mod->nodePath().c_str(),_("Serial port '%s' no opened."),id().c_str());
+    if( !hasOpen() )	throw TError(mod->nodePath().c_str(),_("Serial port '%s' is not opened."),id().c_str());
 
     usleep((int)(2500.0*wCharTm));
 
     //- Write request -
     if( write( fd, vl.data(), vl.size() ) == -1 )
-	throw TError(mod->nodePath().c_str(),_("Write to serial port '%s' is error."),id().c_str());
+	throw TError(mod->nodePath().c_str(),_("Writing to serial port '%s' error."),id().c_str());
 
     //- Read reply -
     char buf[1000];
@@ -754,7 +754,7 @@ void TMdContr::start_( )
 	pthread_create( &procPthr, &pthr_attr, TMdContr::Task, this );
 	pthread_attr_destroy( &pthr_attr );
 	if( TSYS::eventWait( prc_st, true, nodePath()+"start", 5 ) )
-	    throw TError( nodePath().c_str(), _("Gathering task no started!") );
+	    throw TError( nodePath().c_str(), _("Gathering task is not started!") );
     }
 }
 
@@ -766,7 +766,7 @@ void TMdContr::stop_( )
 	endrun_req = true;
 	pthread_kill( procPthr, SIGALRM );
 	if( TSYS::eventWait( prc_st, false, nodePath()+"stop", 5 ) )
-	    throw TError( nodePath().c_str(), _("Gathering task no stoped!") );
+	    throw TError( nodePath().c_str(), _("Gathering task is not stopped!") );
 	pthread_join( procPthr, NULL );
 
 	//- Dissconnection -
@@ -1032,14 +1032,14 @@ string TMdContr::modBusReq( string &pdu )
 		switch( pdu[1] )
 		{
 		    case 0x1:
-			snprintf( buf, sizeof(buf), _("1:Function %xh no support."), pdu[0]&(~0x80) );
+			snprintf( buf, sizeof(buf), _("1:Function %xh is not supported."), pdu[0]&(~0x80) );
 			err = buf;
 			break;
-		    case 0x2: err = _("2:Requested registers length too long.");	break;
+		    case 0x2: err = _("2:Requested registers' length is too long.");	break;
 		    case 0x3: err = _("3:Illegal data value.");				break;
 		    case 0x4: err = _("4:Server failure.");				break;
-		    case 0x5: err = _("5:Request require too long time for execute.");	break;
-		    case 0x6: err = _("6:Server busy.");				break;
+		    case 0x5: err = _("5:Request requires too long time for execute.");	break;
+		    case 0x6: err = _("6:Server is busy.");				break;
 		    case 0xA: case 0xB: err = _("10:Gateway problem.");			break;
 		    default:
 			snprintf( buf, sizeof(buf), _("12:Unknown error: %xh."), pdu[1] );
@@ -1092,7 +1092,7 @@ void *TMdContr::Task( void *icntr )
     TMdContr &cntr = *(TMdContr *)icntr;
 
 #if OSC_DEBUG >= 2
-    mess_debug(cntr.nodePath().c_str(),_("Thread <%u> started. TID: %ld"),pthread_self(),(long int)syscall(224));
+    mess_debug(cntr.nodePath().c_str(),_("Thread <%u> is started. TID: %ld"),pthread_self(),(long int)syscall(224));
 #endif
 
     cntr.endrun_req = false;
@@ -1337,7 +1337,7 @@ void TMdPrm::vlGet( TVal &val )
     {
 	if( val.name() == "err" )
 	{
-	    if( !enableStat() )			val.setS(_("1:Parameter had disabled."),0,true);
+	    if( !enableStat() )			val.setS(_("1:Parameter is disabled."),0,true);
 	    else if(!owner().startStat())	val.setS(_("2:Acquisition is stoped."),0,true);
 	}
 	else val.setS(EVAL_STR,0,true);
@@ -1392,7 +1392,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     {
 	TParamContr::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ATTR_LS",cfg("ATTR_LS").fld().descr(),0664,"root","root",1,
-	    "help",_("Attributes configuration list. List writed by lines in format: [dt:numb:rw:id:name]\n"
+	    "help",_("Attributes configuration list. List must be written by lines in format: [dt:numb:rw:id:name]\n"
 		    "Where:\n"
 		    "  dt - Modbus data type (R-register,C-coil,RI-input register,CI-input coil);\n"
 		    "  numb - ModBus device's data address (dec, hex or octal);\n"

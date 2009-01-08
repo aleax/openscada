@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.LogicLev 0.9.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-04 19:20+0200\n"
+"POT-Creation-Date: 2009-01-07 14:34+0200\n"
 "PO-Revision-Date: 2007-10-29 09:45+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -211,7 +211,7 @@ msgid "start"
 msgstr ""
 
 #: logiclev.cpp:211
-msgid "Acquisition task no started!"
+msgid "Acquisition task is not started!"
 msgstr "Задача сбора данных не запущена!"
 
 #: logiclev.cpp:222
@@ -219,12 +219,12 @@ msgid "stop"
 msgstr ""
 
 #: logiclev.cpp:223
-msgid "Acquisition task no stoped!"
+msgid "Acquisition task is not stopped!"
 msgstr "Задача сбора данных не остановлена!"
 
 #: logiclev.cpp:250
 #, c-format
-msgid "Thread <%u> started. TID: %ld"
+msgid "Thread <%u> is started. TID: %ld"
 msgstr ""
 
 #: logiclev.cpp:288 logiclev.cpp:792
@@ -286,7 +286,7 @@ msgid "err"
 msgstr ""
 
 #: logiclev.cpp:568
-msgid "1:Parameter had disabled."
+msgid "1:Parameter is disabled."
 msgstr "1:Параметр отключен."
 
 #: logiclev.cpp:570
@@ -294,7 +294,7 @@ msgid "2:Controller is stoped."
 msgstr "2:Контроллер остановлен."
 
 #: logiclev.cpp:688 logiclev.cpp:695 logiclev.cpp:705 logiclev.cpp:715
-msgid "Parameter disabled or no template based."
+msgid "Parameter is disabled or is not based on the template."
 msgstr "Параметр отключен или не основан на шаблоне."
 
 #: logiclev.cpp:717
@@ -370,7 +370,7 @@ msgid "/cfg/attr_only"
 msgstr ""
 
 #: logiclev.cpp:801
-msgid "Only atributes show"
+msgid "Only atributes are to be shown"
 msgstr "Показывать только атрибуты"
 
 #: logiclev.cpp:801 logiclev.cpp:832
@@ -428,7 +428,7 @@ msgid "get"
 msgstr ""
 
 #: logiclev.cpp:920 logiclev.cpp:1006
-msgid "Self to self linking is error."
+msgid "Self to self linking error."
 msgstr "Ошибка, подключение самого к себе."
 
 #: logiclev.cpp:938
@@ -436,10 +436,10 @@ msgid ","
 msgstr ""
 
 #: logiclev.cpp:943
-msgid "Parameter have not only atributes!"
+msgid "Parameter has no one atribute!"
 msgstr "Параметр не имеет ни одного атрибута!"
 
 #: logiclev.cpp:944
 #, c-format
-msgid "Parameter have not atributes: %s !"
+msgid "Parameter has not atributes: %s !"
 msgstr "Параметр не имеет атрибутов: %s !"

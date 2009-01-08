@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.FSArch 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-04 09:52+0200\n"
+"POT-Creation-Date: 2009-01-07 14:15+0200\n"
 "PO-Revision-Date: 2008-12-14 23:02+0300\n"
 "Last-Translator: aleksey <aleksey@psniip.ru>\n"
 "Language-Team:  <ru@li.org>\n"
@@ -299,7 +299,7 @@ msgid "stop"
 msgstr ""
 
 #: base.cpp:226
-msgid "Check archives thread no stoped!"
+msgid "Check archives thread is not stopped!"
 msgstr "Der Archivepruefungsfluss ist nicht gestoppt"
 
 #: base.cpp:243 base.cpp:254 mess.cpp:538 val.cpp:69 val.cpp:946
@@ -392,7 +392,7 @@ msgid "get"
 msgstr ""
 
 #: mess.cpp:97 mess.cpp:145
-msgid "Archive no started!"
+msgid "Archive is not started!"
 msgstr "Archiv nicht gestartet"
 
 #: mess.cpp:126
@@ -559,8 +559,8 @@ msgstr ""
 
 #: mess.cpp:472
 #, c-format
-msgid "No my Archive file: <%s>"
-msgstr "Nicht meine Archivdatei <%s>"
+msgid "Archive file: <%s> is not mine."
+msgstr "Archivdatei <%s> ist nicht geoeffnet!"
 
 #: mess.cpp:497 mess.cpp:506
 #, c-format
@@ -568,12 +568,12 @@ msgid "Archive <%s> file error."
 msgstr "Archivdateifehler <%s>."
 
 #: mess.cpp:548
-msgid "Put message to error Archive file!"
+msgid "Inserting message to an error Archive file!"
 msgstr "Einschalten der Mitteilung in die Archivdatei enthaelt einen Fehler"
 
 #: mess.cpp:556
 #, c-format
-msgid "Archive file '%s' isn't attaching!"
+msgid "Archive file '%s' isn't attached!"
 msgstr "Archivdatei '%s' ist nicht angeschlossen (zugeschaltet)"
 
 #: mess.cpp:567 mess.cpp:571 mess.cpp:688
@@ -617,11 +617,11 @@ msgid "%x %*d"
 msgstr ""
 
 #: mess.cpp:672
-msgid "Get messages from error Archive file!"
+msgid "Getting messages from an error Archive file!"
 msgstr "Erhaelt Mitteilungen aus der Archivdatei mit dem Fehler!"
 
 #: mess.cpp:677
-msgid "Archive file isn't attaching!"
+msgid "Archive file isn't attached!"
 msgstr "Archivdatei ist nicht zugeschaltet!"
 
 #: mess.cpp:725
@@ -818,3 +818,6 @@ msgid "Error archive file structure: <%s>. Margin = %d byte. Will try fix it!"
 msgstr ""
 "Fehler in der Dateistruktur: <%s>.Differenz = %d .byte. Versuch es zu "
 "korrigieren!"
+
+#~ msgid "No my Archive file: <%s>"
+#~ msgstr "Nicht meine Archivdatei <%s>"

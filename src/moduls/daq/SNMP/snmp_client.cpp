@@ -189,7 +189,7 @@ void TMdContr::start_( )
 	pthread_create(&procPthr,&pthr_attr,TMdContr::Task,this);
 	pthread_attr_destroy(&pthr_attr);
 	if( TSYS::eventWait(prc_st, true, nodePath()+"start",5) )
-	    throw TError(nodePath().c_str(),_("Gathering task no started!"));
+	    throw TError(nodePath().c_str(),_("Gathering task is not started!"));
     }
 }
 
@@ -201,7 +201,7 @@ void TMdContr::stop_( )
 	endrun_req = true;
 	pthread_kill( procPthr, SIGALRM );
 	if( TSYS::eventWait(prc_st,false,nodePath()+"stop",5) )
-	    throw TError(nodePath().c_str(),_("Gathering task no stoped!"));
+	    throw TError(nodePath().c_str(),_("Gathering task is not stopped!"));
 	pthread_join( procPthr, NULL );
     }
 }
@@ -223,7 +223,7 @@ void *TMdContr::Task( void *icntr )
     TMdContr &cntr = *(TMdContr *)icntr;
 
 #if OSC_DEBUG >= 2
-    mess_debug(cntr.nodePath().c_str(),_("Thread <%u> started. TID: %ld"),pthread_self(),(long int)syscall(224));
+    mess_debug(cntr.nodePath().c_str(),_("Thread <%u> is started. TID: %ld"),pthread_self(),(long int)syscall(224));
 #endif
 
     int		el_cnt;

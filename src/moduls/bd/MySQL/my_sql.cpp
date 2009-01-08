@@ -204,7 +204,7 @@ void MBD::allowList( vector<string> &list )
 TTable *MBD::openTable( const string &inm, bool create )
 {
     if( !enableStat() )
-	throw TError(TSYS::DBOpen,nodePath().c_str(),_("Error open table <%s>. DB disabled."),inm.c_str());
+	throw TError(TSYS::DBOpen,nodePath().c_str(),_("Error open table <%s>. DB is disabled."),inm.c_str());
 
     return new MTable(inm,this,create);
 }
@@ -272,7 +272,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
 	TBD::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","BD",2,
 	    "tp","str","help",
-	    _("MySQL DB address writed in form: [<host>;<user>;<pass>;<db>;<port>;<u_sock>].\n"
+	    _("MySQL DB address must be written as: [<host>;<user>;<pass>;<db>;<port>;<u_sock>].\n"
 	      "Where:\n"
 	      "  host - MySQL server hostname;\n"
 	      "  user - DB user name;\n"
@@ -440,7 +440,7 @@ void MTable::fieldGet( TConfig &cfg )
     //- Query -
     //printf("TEST 01: query: <%s>\n",req.c_str());
     owner().sqlReq( req, &tbl );
-    if( tbl.size() < 2 ) throw TError(TSYS::DBRowNoPresent,nodePath().c_str(),_("Row no present!"));
+    if( tbl.size() < 2 ) throw TError(TSYS::DBRowNoPresent,nodePath().c_str(),_("Row is not present!"));
 
     //- Processing of query -
     for( int i_fld = 0; i_fld < tbl[0].size(); i_fld++ )

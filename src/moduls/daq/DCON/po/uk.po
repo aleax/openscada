@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DCON 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-22 13:05+0300\n"
+"POT-Creation-Date: 2009-01-07 14:22+0200\n"
 "PO-Revision-Date: 2008-10-22 13:05+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -63,7 +63,8 @@ msgstr "Алмаз Каримов"
 msgid ""
 "Allow realisation of DCON client service. Supported I-7000 DCON protocol."
 msgstr ""
-"Надає реалізацію клієнтського сервісу DCON. Підтримується I-7000 DCON протокол."
+"Надає реалізацію клієнтського сервісу DCON. Підтримується I-7000 DCON "
+"протокол."
 
 #: DCON_client.cpp:45
 msgid "GPL"
@@ -333,7 +334,7 @@ msgid "%s"
 msgstr ""
 
 #: DCON_client.cpp:182
-msgid "Search and load serial devices' DB is error."
+msgid "Search and load serial devices' DB error."
 msgstr "Помилка пошуку та завантаження БД послідовних пристроїв."
 
 #: DCON_client.cpp:204 DCON_client.cpp:925
@@ -664,12 +665,12 @@ msgstr "Помилка відкриття послідовного порту '%
 
 #: DCON_client.cpp:500
 #, c-format
-msgid "Serial port '%s' no opened."
+msgid "Serial port '%s' is not opened."
 msgstr "Послідовний порт '%s' не відкрито."
 
 #: DCON_client.cpp:506
 #, c-format
-msgid "Write to serial port '%s' is error."
+msgid "Write to serial port '%s' error."
 msgstr "Помилка запису до послідовного порту '%s'."
 
 #: DCON_client.cpp:527
@@ -686,11 +687,11 @@ msgid "start"
 msgstr ""
 
 #: DCON_client.cpp:595
-msgid "Gathering task no started!"
+msgid "Gathering task is not started!"
 msgstr "Задачу збору даних не запущено!"
 
 #: DCON_client.cpp:607
-msgid "Gathering task no stoped!"
+msgid "Gathering task is not stopped!"
 msgstr "Задачу збору даних не зупинено!"
 
 #: DCON_client.cpp:632 DCON_client.cpp:657 DCON_client.cpp:881
@@ -730,7 +731,7 @@ msgid "\r"
 msgstr ""
 
 #: DCON_client.cpp:649
-msgid "14:Request is error: "
+msgid "14:Request error: "
 msgstr "14:Помилка запиту: "
 
 #: DCON_client.cpp:685 DCON_client.cpp:726 DCON_client.cpp:748
@@ -961,7 +962,7 @@ msgid "err"
 msgstr ""
 
 #: DCON_client.cpp:1089
-msgid "1:Parameter had disabled."
+msgid "1:Parameter is disabled."
 msgstr "1:Параметр вимкнено."
 
 #: DCON_client.cpp:1090

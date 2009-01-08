@@ -152,7 +152,7 @@ void Session::setStart( bool val )
 	    endrun_req = true;
 	    pthread_kill( calcPthr, SIGALRM );
 	    if( TSYS::eventWait(mStart,false,nodePath()+"stop",5) )
-		throw TError(nodePath().c_str(),_("Sesion processing task is not stoped!"));
+		throw TError(nodePath().c_str(),_("Sesion processing task is not stopped!"));
 	    pthread_join( calcPthr, NULL );
 	}
 

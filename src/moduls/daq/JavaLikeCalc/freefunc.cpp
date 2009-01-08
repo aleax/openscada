@@ -560,7 +560,7 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 	    {
 		case Reg::BitShLeft:
 		case Reg::BitShRight:
-		    throw TError(nodePath().c_str(),_("Operation %d no support bool type"),cod);
+		    throw TError(nodePath().c_str(),_("Operation %d don't support bool type"),cod);
 	    }
 	    break;
 	case Reg::String:
@@ -581,7 +581,7 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 		case Reg::GT:
 		case Reg::LER:
 		case Reg::GER:
-		    throw TError(nodePath().c_str(),_("Operation %d no support string type"),cod);
+		    throw TError(nodePath().c_str(),_("Operation %d don't support string type"),cod);
 	    }
 	    break;
     }
@@ -748,7 +748,7 @@ Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
 		case Reg::Not:
 		case Reg::BitNot:
 		case Reg::Neg:
-		    throw TError(nodePath().c_str(),_("Operation %d no support string type"),cod);
+		    throw TError(nodePath().c_str(),_("Operation %d don't support string type"),cod);
 	    }
     }
 
@@ -902,7 +902,7 @@ Reg *Func::cdBldFnc( int f_cod, Reg *prm1, Reg *prm2 )
 
     if( (prm1 && prm1->vType(this) == Reg::String) ||
 	(prm2 && prm2->vType(this) == Reg::String) )
-	throw TError(nodePath().c_str(),_("Buildin functions no support string type"));
+	throw TError(nodePath().c_str(),_("Buildin functions don't support string type"));
     //- Free parameter's registers -
     if( prm1 )	{ prm1 = cdMvi( prm1 ); p1_pos = prm1->pos(); }
     if( prm2 )	{ prm2 = cdMvi( prm2 ); p2_pos = prm2->pos(); }
@@ -933,11 +933,11 @@ Reg *Func::cdExtFnc( int f_id, int p_cnt, bool proc )
 	{ ret_ok=true; break; }
     //- Check IO and parameters count -
     if( p_cnt > funcAt(f_id)->func().at().ioSize()-ret_ok )
-	throw TError(nodePath().c_str(),_("Request more %d parameters for function <%s>"),
+        throw TError(nodePath().c_str(),_("More than %d parameters are specified for function <%s>"),
 	    funcAt(f_id)->func().at().ioSize(),funcAt(f_id)->func().at().id().c_str());	
     //- Check the present return for fuction -
     if( !proc && !ret_ok )
-	throw TError(nodePath().c_str(),_("Request function <%s>, but it not have return IO"),funcAt(f_id)->func().at().id().c_str());
+	throw TError(nodePath().c_str(),_("Function is requested <%s>, but it doesn't have return of IO"),funcAt(f_id)->func().at().id().c_str());
     //- Mvi all parameters -
     for( int i_prm = 0; i_prm < p_cnt; i_prm++ )
 	f_prmst[i_prm] = cdMvi( f_prmst[i_prm] );
@@ -1552,7 +1552,7 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
 		}
 	    default:
 		setStart(false);
-		throw TError(nodePath().c_str(),_("Operation %c(%xh) error. Function <%s> stoped."),*cprg,*cprg,id().c_str());
+		throw TError(nodePath().c_str(),_("Operation %c(%xh) error. Function <%s> is stoped."),*cprg,*cprg,id().c_str());
 	}
     }
 }
@@ -1625,7 +1625,7 @@ void Func::cntrCmdProc( XMLNode *opt )
 	    int row = atoi(opt->attr("row").c_str());
 	    int col = atoi(opt->attr("col").c_str());
 	    if( (col == 0 || col == 1) && !opt->text().size() )
-	        throw TError(nodePath().c_str(),_("Empty value no valid."));
+	        throw TError(nodePath().c_str(),_("Empty value is not valid."));
 	    if( col == 0 )	io(row)->setId(opt->text());
 	    else if( col == 1 )	io(row)->setName(opt->text());
 	    else if( col == 2 )	io(row)->setType((IO::Type)atoi(opt->text().c_str()));

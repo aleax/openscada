@@ -337,7 +337,7 @@ void Contr::start_( )
 	pthread_create(&calcPthr,&pthr_attr,Contr::Task,this);
 	pthread_attr_destroy(&pthr_attr);
 	if( TSYS::eventWait(prc_st, true, nodePath()+"start",5) )
-	    throw TError(nodePath().c_str(),_("Acquisition task no started!"));
+	    throw TError(nodePath().c_str(),_("Acquisition task is not started!"));
     }
 }
 
@@ -349,7 +349,7 @@ void Contr::stop_( )
 	endrun_req = true;
 	pthread_kill( calcPthr, SIGALRM );
 	if( TSYS::eventWait(prc_st,false,nodePath()+"stop",5) )
-	    throw TError(nodePath().c_str(),_("Acquisition task no stoped!"));
+	    throw TError(nodePath().c_str(),_("Acquisition task is not stopped!"));
 	pthread_join( calcPthr, NULL );
     }
 
@@ -366,7 +366,7 @@ void *Contr::Task( void *icontr )
     Contr &cntr = *(Contr *)icontr;
 
 #if OSC_DEBUG >= 2
-    mess_debug(cntr.nodePath().c_str(),_("Thread <%u> started. TID: %ld"),pthread_self(),(long int)syscall(224));
+    mess_debug(cntr.nodePath().c_str(),_("Thread <%u> is started. TID: %ld"),pthread_self(),(long int)syscall(224));
 #endif
 
     cntr.endrun_req = false;
@@ -392,7 +392,7 @@ void *Contr::Task( void *icontr )
 		    mess_err(cntr.nodePath().c_str(),_("Block <%s> calc error."),blck.c_str());
 		    if( cntr.clc_blks[i_blk].at().errCnt() < 10 ) continue;
 		    cntr.hd_res.resReleaseR( );
-		    mess_err(cntr.nodePath().c_str(),_("Block <%s> stoped."),blck.c_str());
+		    mess_err(cntr.nodePath().c_str(),_("Block <%s> is stoped."),blck.c_str());
 		    cntr.blkAt(blck).at().setProcess(false);
 		    cntr.hd_res.resRequestR( );
 		}
@@ -612,9 +612,9 @@ void Prm::vlGet( TVal &val )
     if( val.name() == "err" )
     {
 	if( !owner().startStat() )
-	    val.setS(_("2:Controller stoped"),0,true);
+	    val.setS(_("2:Controller is stoped"),0,true);
 	else if( !enableStat() )
-	    val.setS(_("1:Parameter disabled"),0,true);
+	    val.setS(_("1:Parameter is disabled"),0,true);
 	else val.setS("0",0,true);
 	return;
     }
@@ -652,13 +652,13 @@ void Prm::cntrCmdProc( XMLNode *opt )
     {
 	TParamContr::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/IO",cfg("IO").fld().descr(),0664,"root","root",1,
-	    "help",_("Attributes configuration list. List writed by lines in format: [<blk>.<blk_io>:<aid>:<anm>]\n"
+	    "help",_("Attributes configuration list. List must be written by lines in format: [<blk>.<blk_io>:<aid>:<anm>]\n"
 	    "Where:\n"
 	    "  blk - block identifier from block's scheme;\n"
 	    "  blk_io - block's parameter from block's scheme;\n"
 	    "  aid - created attribute identifier;\n"
 	    "  anm - created attribute name.\n"
-	    "If 'aid' or 'anm' no set then it will be generated from selected block's parameter."));
+	    "If 'aid' or 'anm' are not set they will be generated from selected block's parameter."));
 	return;
     }
     //Process command to page

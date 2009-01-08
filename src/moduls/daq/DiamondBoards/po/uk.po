@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DiamondBoards 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-15 13:09+0200\n"
+"POT-Creation-Date: 2009-01-07 14:26+0200\n"
 "PO-Revision-Date: 2007-10-28 09:43+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: LANGUAGE <uk@li.org>\n"
@@ -367,7 +367,7 @@ msgid "DiamPrmD_"
 msgstr ""
 
 #: diamond.cpp:192
-msgid "DSC driver not inited!"
+msgid "DSC driver is not initialized!"
 msgstr "DSC драйвер не ініційовано!"
 
 #: diamond.cpp:209
@@ -385,7 +385,7 @@ msgid "addsc_task_start"
 msgstr ""
 
 #: diamond.cpp:236
-msgid "AD DSC driver task no started!"
+msgid "AD DSC driver task is not started!"
 msgstr "Задачу опитування аналогового параметру драйверу DSC не запущено!"
 
 #: diamond.cpp:247
@@ -393,12 +393,12 @@ msgid "addsc_task_stop"
 msgstr ""
 
 #: diamond.cpp:248
-msgid "AD DSC task no stoped!"
+msgid "AD DSC task is not stopped!"
 msgstr "Задачу опитування аналогового параметру драйверу DSC не зупинено!"
 
 #: diamond.cpp:296
 #, c-format
-msgid "Thread <%u> started. TID: %ld"
+msgid "Thread <%u> is started. TID: %ld"
 msgstr ""
 
 #: diamond.cpp:336 diamond.cpp:680
@@ -536,11 +536,11 @@ msgid "dscDIOOutputBit error: %s %s"
 msgstr "Помилка dscDIOOutputBit: %s %s"
 
 #: diamond.cpp:653
-msgid "2:Controller stoped"
+msgid "2:Controller is stoped"
 msgstr "2:Контролер зупинено"
 
 #: diamond.cpp:655
-msgid "1:Parameter disabled"
+msgid "1:Parameter is disabled"
 msgstr "1:Параметр вимкнено"
 
 #: diamond.cpp:687

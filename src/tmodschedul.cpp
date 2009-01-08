@@ -111,7 +111,7 @@ void TModSchedul::subStop(  )
 	itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
     timer_settime(tmId, 0, &itval, NULL);
     if( TSYS::eventWait( prcSt, false, nodePath()+"stop",20) )
-	throw TError(nodePath().c_str(),_("Module scheduler thread is not stoped!"));
+	throw TError(nodePath().c_str(),_("Module scheduler thread is not stopped!"));
 
 #if OSC_DEBUG >= 2
     mess_debug(nodePath().c_str(),_("Stop subsystem. OK"));

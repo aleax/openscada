@@ -112,7 +112,7 @@ time_t ModMArch::end()
 
 void ModMArch::put( vector<TMess::SRec> &mess )
 {
-    if(!run_st) throw TError(nodePath().c_str(),_("Archive no started!"));
+    if(!run_st) throw TError(nodePath().c_str(),_("Archive is not started!"));
 
     AutoHD<TTable> tbl = SYS->db().at().open(addr()+"."+archTbl(),true);
     if( tbl.freeStat() ) return;
@@ -161,7 +161,7 @@ void ModMArch::put( vector<TMess::SRec> &mess )
 
 void ModMArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category, char level )
 {
-    if( !run_st ) throw TError(nodePath().c_str(),_("Archive no started!"));
+    if( !run_st ) throw TError(nodePath().c_str(),_("Archive is not started!"));
 
     b_tm = vmax(b_tm,begin());
     e_tm = vmin(e_tm,end());

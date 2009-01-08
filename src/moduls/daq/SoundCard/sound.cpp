@@ -161,7 +161,7 @@ void TMdContr::start_( )
     pthread_create(&procPthr,&pthr_attr,Task,this);
     pthread_attr_destroy(&pthr_attr);
     if( TSYS::eventWait(prc_st, true, nodePath()+"task_start",5) )
-	throw TError(nodePath().c_str(),_("Sound input task no started!"));
+	throw TError(nodePath().c_str(),_("Sound input task is not started!"));
 }
 
 void TMdContr::stop_( )
@@ -172,7 +172,7 @@ void TMdContr::stop_( )
 	endrun_req = true;
 	pthread_kill( procPthr, SIGALRM );
 	if( TSYS::eventWait(prc_st,false,nodePath()+"task_stop",5) )
-	    throw TError(nodePath().c_str(),_("Sound input task no stoped!"));
+	    throw TError(nodePath().c_str(),_("Sound input task is not stopped!"));
 	pthread_join( procPthr, NULL );
     }
 }
@@ -184,7 +184,7 @@ void *TMdContr::Task( void *param )
     TMdContr &cntr = *(TMdContr *)param;
 
 #if OSC_DEBUG >= 2
-    mess_debug(cntr.nodePath().c_str(),_("Thread <%u> started. TID: %ld"),pthread_self(),(long int)syscall(224));
+    mess_debug(cntr.nodePath().c_str(),_("Thread <%u> is started. TID: %ld"),pthread_self(),(long int)syscall(224));
 #endif
 
     cntr.endrun_req = false;

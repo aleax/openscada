@@ -208,7 +208,7 @@ void TMdContr::start_( )
 	pthread_create(&procPthr,&pthr_attr,TMdContr::Task,this);
 	pthread_attr_destroy(&pthr_attr);
 	if( TSYS::eventWait(prc_st, true, nodePath()+"start",5) )
-	    throw TError(nodePath().c_str(),_("Acquisition task no started!"));
+	    throw TError(nodePath().c_str(),_("Acquisition task is not started!"));
     }
 }
 
@@ -220,7 +220,7 @@ void TMdContr::stop_( )
 	endrun_req = true;
 	pthread_kill( procPthr, SIGALRM );
 	if( TSYS::eventWait(prc_st,false,nodePath()+"stop",5) )
-	    throw TError(nodePath().c_str(),_("Acquisition task no stoped!"));
+	    throw TError(nodePath().c_str(),_("Acquisition task is not stopped!"));
 	pthread_join( procPthr, NULL );
     }
 
@@ -247,7 +247,7 @@ void *TMdContr::Task( void *icntr )
     TMdContr &cntr = *(TMdContr *)icntr;
 
 #if OSC_DEBUG >= 2
-    mess_debug(cntr.nodePath().c_str(),_("Thread <%u> started. TID: %ld"),pthread_self(),(long int)syscall(224));
+    mess_debug(cntr.nodePath().c_str(),_("Thread <%u> is started. TID: %ld"),pthread_self(),(long int)syscall(224));
 #endif
 
     cntr.endrun_req = false;
@@ -565,7 +565,7 @@ void TMdPrm::vlGet( TVal &val )
 	if( val.name() == "err" )
 	{
 	    if(!enableStat())
-		val.setS(_("1:Parameter had disabled."),0,true);
+		val.setS(_("1:Parameter is disabled."),0,true);
 	    else if(!owner().startStat())
 		val.setS(_("2:Controller is stoped."),0,true);
 	}
@@ -685,14 +685,14 @@ void TMdPrm::vlArchMake( TVal &val )
 int TMdPrm::lnkSize()
 {
     if( mode() != TMdPrm::Template )
-	throw TError(nodePath().c_str(),_("Parameter disabled or no template based."));
+        throw TError(nodePath().c_str(),_("Parameter is disabled or is not based on the template."));
     return tmpl->lnk.size();
 }
 
 int TMdPrm::lnkId( int id )
 {
     if( mode() != TMdPrm::Template )
-	throw TError(nodePath().c_str(),_("Parameter disabled or no template based."));
+        throw TError(nodePath().c_str(),_("Parameter is disabled or is not based on the template."));
     for( int i_l = 0; i_l < lnkSize(); i_l++ )
 	if( lnk(i_l).io_id == id )
 	    return i_l;
@@ -702,7 +702,7 @@ int TMdPrm::lnkId( int id )
 int TMdPrm::lnkId( const string &id )
 {
     if( mode() != TMdPrm::Template )
-	throw TError(nodePath().c_str(),_("Parameter disabled or no template based."));
+        throw TError(nodePath().c_str(),_("Parameter is disabled or is not based on the template."));
     for( int i_l = 0; i_l < lnkSize(); i_l++ )
 	if( tmpl->val.func()->io(lnk(i_l).io_id)->id() == id )
 	    return i_l;
@@ -712,7 +712,7 @@ int TMdPrm::lnkId( const string &id )
 TMdPrm::SLnk &TMdPrm::lnk( int num )
 {
     if( mode() != TMdPrm::Template )
-	throw TError(nodePath().c_str(),_("Parameter disabled or no template based."));
+        throw TError(nodePath().c_str(),_("Parameter is disabled or is not based on the template."));
     if( num < 0 || num >= tmpl->lnk.size() )
 	throw TError(nodePath().c_str(),_("Parameter id error."));
     return tmpl->lnk[num];
@@ -798,7 +798,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/prm/cfg/PRM",cfg("PRM").fld().descr(),0660,"root","root",3,"tp","str","dest","sel_ed","select","/prm/cfg/prmp_lst");
 	if( mode() == TMdPrm::Template && ctrMkNode("area",opt,-1,"/cfg",_("Template config")) )
 	{
-	    ctrMkNode("fld",opt,-1,"/cfg/attr_only",_("Only atributes show"),0664,"root","root",1,"tp","bool");
+	    ctrMkNode("fld",opt,-1,"/cfg/attr_only",_("Only atributes are to be shown"),0664,"root","root",1,"tp","bool");
 	    if(ctrMkNode("area",opt,-1,"/cfg/prm",_("Parameters")))
 		for( int i_io = 0; i_io < tmpl->val.ioSize(); i_io++ )
 		{
@@ -917,7 +917,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		if( TSYS::strSepParse(p_vl,0,'.') == owner().owner().modId() &&
 			TSYS::strSepParse(p_vl,1,'.') == owner().id() &&
 			TSYS::strSepParse(p_vl,2,'.') == id() )
-		    throw TError(nodePath().c_str(),_("Self to self linking is error."));
+		    throw TError(nodePath().c_str(),_("Self to self linking error."));
 		prm = SYS->daq().at().at(TSYS::strSepParse(p_vl,0,'.')).at().
 				      at(TSYS::strSepParse(p_vl,1,'.')).at().
 				      at(TSYS::strSepParse(p_vl,2,'.'));
@@ -940,8 +940,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		}
 	    if(!prm.freeStat())
 	    {
-		if( noonly_no_set )	throw TError(nodePath().c_str(),_("Parameter have not only atributes!"));
-		else if( no_set.size() )throw TError(nodePath().c_str(),_("Parameter have not atributes: %s !"),no_set.c_str());
+		if( noonly_no_set )	throw TError(nodePath().c_str(),_("Parameter has no one atribute!"));
+		else if( no_set.size() )throw TError(nodePath().c_str(),_("Parameter has not atributes: %s !"),no_set.c_str());
 		mode( (TMdPrm::Mode)m_mode, m_prm );
 	    }
 	}
@@ -1003,7 +1003,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		if( TSYS::strSepParse(opt->text(),0,'.') == owner().owner().modId() &&
 			TSYS::strSepParse(opt->text(),1,'.') == owner().id() &&
 			TSYS::strSepParse(opt->text(),2,'.') == id() )
-		    throw TError(nodePath().c_str(),_("Self to self linking is error."));
+		    throw TError(nodePath().c_str(),_("Self to self linking error."));
 		lnk(lnkId(i_io)).prm_attr = opt->text();
 		mode( (TMdPrm::Mode)m_mode, m_prm );
 	    }

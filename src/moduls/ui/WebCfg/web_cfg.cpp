@@ -322,7 +322,7 @@ void TWEB::getHead( SSess &ses )
 	"<img src='/"MOD_ID"/img_line'/>\n"
 	"<a href='/"MOD_ID"' title='"+_("Root page")+"'><img src='/"MOD_ID"/img_gohome' alt='"+_("Root page")+"'/></a>\n"
 	"<a href='"+path+"' title='"+_("Curent page")+"'><img src='/"MOD_ID"/img_reload' alt='" +_("Curent page")+"'/></a>\n"
-	"<a href='"+path.substr(0,path.rfind("/"))+"' title='"+_("Previos page")+"'><img src='/"MOD_ID"/img_up' alt='"+_("Previos page")+"'/></a>\n"
+	"<a href='"+path.substr(0,path.rfind("/"))+"' title='"+_("Previous page")+"'><img src='/"MOD_ID"/img_up' alt='"+_("Previos page")+"'/></a>\n"
 	"<img src='/"MOD_ID"/img_line'/>\n"
 	"<a href='/"MOD_ID"/about' title='"+_("About")+"'><img src='/"MOD_ID"/img_help' alt='"+_("About")+"'/></a>\n"
 	"</td>\n"
@@ -841,7 +841,7 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	    return;
 	}
 	ses.page = pgHead();
-	messPost(ses.page,nodePath(),_("Auth wrong! Retry please."),TWEB::Error);
+	messPost(ses.page,nodePath(),_("Auth is wrong! Retry please."),TWEB::Error);
 	ses.page += "\n";
 	getAuth( ses );
 	ses.page += pgTail();

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.SQLite 1.4.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-04 11:31+0200\n"
+"POT-Creation-Date: 2009-01-07 12:21+0200\n"
 "PO-Revision-Date: 2008-12-23 10:52+0300\n"
 "Last-Translator: aleksey <aleksey@psniip.ru>\n"
 "Language-Team:  <ru@li.org>\n"
@@ -90,7 +90,7 @@ msgstr ""
 
 #: bd_sqlite.cpp:206
 #, c-format
-msgid "Error open table <%s>. DB disabled."
+msgid "Error open table <%s>. DB is disabled."
 msgstr "Fehler der Oeffnung der Tabelle <%s>. Die DB ist ausgeschaltet."
 
 #: bd_sqlite.cpp:227
@@ -103,7 +103,7 @@ msgstr ""
 
 #: bd_sqlite.cpp:240
 #, c-format
-msgid "Get table error: %s"
+msgid "Getting table error: %s"
 msgstr "Fehler der Afrage der Tabelle: %s"
 
 #: bd_sqlite.cpp:264
@@ -136,7 +136,7 @@ msgstr ""
 
 #: bd_sqlite.cpp:269
 msgid ""
-"SQLite DB address writet as: [<FileDBPath>;<nTransReq>].\n"
+"SQLite DB address must be written as: [<FileDBPath>;<nTransReq>].\n"
 "Where:\n"
 "  FileDBPath - full path to DB file (./oscada/Main.db);\n"
 "  nTransReq - number requests into transaction (default 1)."
@@ -278,7 +278,7 @@ msgid ";"
 msgstr ""
 
 #: bd_sqlite.cpp:420
-msgid "Row no present."
+msgid "Row is not present."
 msgstr "Datensatz ist nicht vorhanden."
 
 #: bd_sqlite.cpp:462
@@ -323,7 +323,7 @@ msgid "DELETE FROM '"
 msgstr ""
 
 #: bd_sqlite.cpp:562
-msgid "Deletion no permit. Data base is read only.\n"
+msgid "Deletion is not permited. Data base is read only.\n"
 msgstr ""
 
 #: bd_sqlite.cpp:615

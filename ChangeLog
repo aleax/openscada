@@ -1,3 +1,28 @@
+2009-01-08 Maxim
+- FIX:/SYS: Some fixes to English variant of translation is done.
+- FIX:/DAQ/DCON: Some fixes to English variant of translation is done.
+- FIX:/Archive/DBArch: Some fixes to English variant of translation is done.
+- FIX:/Archive/FSArch: Some fixes to English variant of translation is done.
+- FIX:/DB/DBF: Some fixes to English variant of translation is done.
+- FIX:/DB/FireBird: Some fixes to English variant of translation is done.
+- FIX:/DB/MySQL: Some fixes to English variant of translation is done.
+- FIX:/DB/SQLite: Some fixes to English variant of translation is done.
+- FIX:/DAQ/BlockCalc: Some fixes to English variant of translation is done.
+- FIX:/DAQ/DiamondBoards: Some fixes to English variant of translation is done.
+- FIX:/DAQ/JavaLikeCalc: Some fixes to English variant of translation is done.
+- FIX:/DAQ/LogicLev: Some fixes to English variant of translation is done.
+- FIX:/DAQ/ModBus: Some fixes to English variant of translation is done.
+- FIX:/DAQ/SNMP: Some fixes to English variant of translation is done.
+- FIX:/DAQ/Siemens: Some fixes to English variant of translation is done.
+- FIX:/DAQ/SoundCard: Some fixes to English variant of translation is done.
+- FIX:/DAQ/Transporter: Some fixes to English variant of translation is done.
+- FIX:/Protocol/SelfSystem: Some fixes to English variant of translation is done.
+- FIX:/Special/SystemTests: Some fixes to English variant of translation is done.
+- FIX:/Transport/SSL: Some fixes to English variant of translation is done.
+- FIX:/Transport/Socket: Some fixes to English variant of translation is done.
+
+
+
 2009-01-07 Roman
 - FIX:/SYS: ResString::getVal() function result is fixed.
 - !!:/SYS: Updated API document.

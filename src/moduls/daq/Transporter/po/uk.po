@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Transporter 0.3.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-04 20:05+0200\n"
+"POT-Creation-Date: 2009-01-07 13:37+0200\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -220,7 +220,7 @@ msgid "/%2fprm%2fcfg%2fNAME"
 msgstr ""
 
 #: transporter.cpp:228
-msgid "Some enable errors is present"
+msgid "Some enable errors are present"
 msgstr "Присутні деякі помилки включення"
 
 #: transporter.cpp:239 transporter.cpp:338 transporter.cpp:339
@@ -235,7 +235,7 @@ msgid "start"
 msgstr ""
 
 #: transporter.cpp:248
-msgid "Gathering task no started!"
+msgid "Gathering task is not started!"
 msgstr "Задачу збору даних не запущено!"
 
 #: transporter.cpp:259
@@ -243,12 +243,12 @@ msgid "stop"
 msgstr ""
 
 #: transporter.cpp:260
-msgid "Gathering task no stoped!"
+msgid "Gathering task is not stopped!"
 msgstr "Задачу збору даних не зупинено!"
 
 #: transporter.cpp:282
 #, c-format
-msgid "Thread <%u> started. TID: %ld"
+msgid "Thread <%u> is started. TID: %ld"
 msgstr ""
 
 #: transporter.cpp:335 transporter.cpp:505 transporter.cpp:524
@@ -440,5 +440,5 @@ msgid "Remote station config"
 msgstr "Конфігурація віддаленої станції"
 
 #: transporter.cpp:548
-msgid "Controller no started!"
+msgid "Controller is not started!"
 msgstr "Контролер не запущено!"

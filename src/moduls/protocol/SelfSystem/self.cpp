@@ -233,7 +233,7 @@ string TProt::outMess( const string &in, TTransportOut &tro )
 	    if( rez > 0 )	throw TError(nodePath().c_str(),_("Station <%s> error: %d:%s!"),tro.id().c_str(),rez,buf1);
 	    int head_end = resp.find("\n",0);
 	    if( head_end == string::npos )
-		throw TError(nodePath().c_str(),_("Station <%s> error: Respond broken!"),tro.id().c_str());
+		throw TError(nodePath().c_str(),_("Station <%s> error: Respond is broken!"),tro.id().c_str());
 	    int resp_size = atoi(buf1);
 
 	    //-- Wait tail --

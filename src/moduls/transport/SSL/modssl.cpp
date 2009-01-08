@@ -268,7 +268,7 @@ void TSocketIn::start()
     pthread_create(&pthr_tsk,&pthr_attr,Task,this);
     pthread_attr_destroy(&pthr_attr);
     if( TSYS::eventWait( run_st, true,nodePath()+"open",5) )
-	throw TError(nodePath().c_str(),_("No open!"));
+	throw TError(nodePath().c_str(),_("Not opened!"));
 }
 
 void TSocketIn::stop()
@@ -283,7 +283,7 @@ void TSocketIn::stop()
     //- Wait connection main task stop -
     endrun = true;
     if( TSYS::eventWait( run_st, false, nodePath()+"close",5) )
-	throw TError(nodePath().c_str(),_("No close!"));
+	throw TError(nodePath().c_str(),_("Not closed!"));
     pthread_join( pthr_tsk, NULL );
 }
 
@@ -297,7 +297,7 @@ void *TSocketIn::Task( void *sock_in )
     string cfile;
 
 #if OSC_DEBUG >= 2
-    mess_debug(s.nodePath().c_str(),_("Thread <%u> started. TID: %ld"),pthread_self(),(long int)syscall(224));
+    mess_debug(s.nodePath().c_str(),_("Thread <%u> is started. TID: %ld"),pthread_self(),(long int)syscall(224));
 #endif
 
     //- Client's sockets attrs init
@@ -330,7 +330,7 @@ void *TSocketIn::Task( void *sock_in )
 	//- Write certificate and private key to temorary file -
 	cfile = tmpnam(err);
 	int icfile = open(cfile.c_str(),O_EXCL|O_CREAT|O_WRONLY,0644);
-	if( icfile < 0 ) throw TError(s.nodePath().c_str(),_("Open temporaty file '%s' is error: '%s'"),cfile.c_str(),strerror(errno));
+	if( icfile < 0 ) throw TError(s.nodePath().c_str(),_("Open temporaty file '%s' error: '%s'"),cfile.c_str(),strerror(errno));
 	write(icfile,s.certKey().data(),s.certKey().size());
 	close(icfile);
 
@@ -405,7 +405,7 @@ void *TSocketIn::Task( void *sock_in )
 	    //- Make client's socket thread -
 	    else if( pthread_create( &th, &pthr_attr, ClTask, new SSockIn(&s,cbio) ) < 0 )
 	    {
-		mess_err(s.nodePath().c_str(),_("Error create thread!"));
+		mess_err(s.nodePath().c_str(),_("Error creation of the thread!"));
 		BIO_reset(cbio);
 		BIO_free(cbio);
 	    }
@@ -415,7 +415,7 @@ void *TSocketIn::Task( void *sock_in )
 
     //- Client tasks stop command -
     s.endrun_cl = true;
-    TSYS::eventWait( s.cl_free, true, string(MOD_ID)+": "+s.id()+" client tasks is stoping....");
+    TSYS::eventWait( s.cl_free, true, string(MOD_ID)+": "+s.id()+" client tasks is stopping....");
 
     //- Free context -
     if( abio )	BIO_reset(abio);
@@ -441,10 +441,10 @@ void *TSocketIn::ClTask( void *s_inf )
     int cSock = s.s->clientReg( pthread_self() );
 
 #if OSC_DEBUG >= 2
-    mess_debug(s.s->nodePath().c_str(),_("Thread <%u> started. TID: %ld"),pthread_self(),(long int)syscall(224));
+    mess_debug(s.s->nodePath().c_str(),_("Thread <%u> is started. TID: %ld"),pthread_self(),(long int)syscall(224));
 #endif
 #if OSC_DEBUG >= 3
-    mess_debug(s.s->nodePath().c_str(),_("Socket have been connected (%d)."),cSock);
+    mess_debug(s.s->nodePath().c_str(),_("Connecting to the socket (%d)."),cSock);
 #endif
 
     if( BIO_do_handshake(s.bio) <= 0 )
@@ -480,7 +480,7 @@ void *TSocketIn::ClTask( void *s_inf )
 	rez=BIO_read(s.bio,buf,sizeof(buf)); s.s->trIn += (float)rez/1024;
 	if( rez == 0 )	break;		//Connection closed by client
 #if OSC_DEBUG >= 4
-	mess_debug(s.s->nodePath().c_str(),_("Receive message size <%d>."),rez);
+        mess_debug(s.s->nodePath().c_str(),_("The message is received with the size <%d>."),rez);
 #endif
 	req.assign(buf,rez);
 
@@ -488,7 +488,7 @@ void *TSocketIn::ClTask( void *s_inf )
 	if( prot_in.freeStat() && answ.size() )
 	{
 #if OSC_DEBUG >= 4
-	    mess_debug(s.s->nodePath().c_str(),_("Reply message size <%d>."),answ.size());
+            mess_debug(s.s->nodePath().c_str(),_("The message is replied with the size <%d>."),answ.size());
 #endif
 	    rez = BIO_write(s.bio,answ.data(),answ.size()); s.s->trOut += (float)rez/1024;
 	}
@@ -511,7 +511,7 @@ void *TSocketIn::ClTask( void *s_inf )
     s.s->clientUnreg( pthread_self() );
 
 #if OSC_DEBUG >= 3
-    mess_debug(s.s->nodePath().c_str(),_("Socket have been disconnected (%d)."),s.s->cl_id.size() );
+    mess_debug(s.s->nodePath().c_str(),_("Socket has been disconnected (%d)."),s.s->cl_id.size() );
 #endif
 
     delete (SSockIn*)s_inf;
@@ -540,7 +540,7 @@ void TSocketIn::messPut( int sock, string &request, string &answer, AutoHD<TProt
 	if( !proto.freeStat() && proto.at().openStat(n_pr) ) proto.at().close( n_pr );
 
 	mess_err(nodePath().c_str(),"%s",err.mess.c_str() );
-	mess_err(nodePath().c_str(),_("Error request into protocol."));
+	mess_err(nodePath().c_str(),_("Error request to protocol."));
     }
 }
 
@@ -592,9 +592,9 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
     {
 	TTransportIn::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","root",2,"tp","str","help",
-	    _("SSL input transport have address format:\n"
+	    _("SSL input transport has address format:\n"
 	    "  [addr]:[port]:[mode] - where:\n"
-	    "    addr - address for SSL open, '*' address open for all interfaces;\n"
+	    "    addr - address for SSL to be opened, '*' address opens for all interfaces;\n"
 	    "    port - network port (/etc/services);\n"
 	    "    mode - SSL mode and version (SSLv2, SSLv3, SSLv23 and TLSv1)."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/certKey",_("Certificates and private key"),0660,"root","root",4,"tp","str","cols","90","rows","7","help",_("SSL PAM certificates chain and private key."));
@@ -692,7 +692,7 @@ void TSocketOut::start()
 	    //-- Write certificate and private key to temorary file --
 	    cfile = tmpnam(err);
 	    int icfile = open(cfile.c_str(),O_EXCL|O_CREAT|O_WRONLY,0644);
-	    if( icfile < 0 ) throw TError(nodePath().c_str(),_("Open temporaty file '%s' is error: '%s'"),cfile.c_str(),strerror(errno));
+	    if( icfile < 0 ) throw TError(nodePath().c_str(),_("Open temporaty file '%s' error: '%s'"),cfile.c_str(),strerror(errno));
 	    write(icfile,certKey().data(),certKey().size());
 	    close(icfile);
 
@@ -768,7 +768,7 @@ int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, in
 
     ResAlloc res( wres, true );
 
-    if( !run_st ) throw TError(nodePath().c_str(),_("Transport no started!"));
+    if( !run_st ) throw TError(nodePath().c_str(),_("Transport is not started!"));
 
     //- Write request -
     if( obuf != NULL && len_ob > 0 && (ret=BIO_write(conn,obuf,len_ob)) != len_ob )
@@ -782,7 +782,7 @@ int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, in
     }
     trOut += (float)ret/1024;
 #if OSC_DEBUG >= 4
-    if( ret > 0 ) mess_debug(nodePath().c_str(),_("Send message size <%d>."),ret);
+    if( ret > 0 ) mess_debug(nodePath().c_str(),_("The message is sent with the size <%d>."),ret);
 #endif
 
     //- Read reply -
@@ -837,7 +837,7 @@ int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, in
     }
 
 #if OSC_DEBUG >= 4
-    if( ret > 0 ) mess_debug(nodePath().c_str(),_("Receive message size <%d>."),ret);
+    if( ret > 0 ) mess_debug(nodePath().c_str(),_("The message is received with the size <%d>."),ret);
 #endif
 
     return ret;
@@ -850,7 +850,7 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
     {
 	TTransportOut::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","root",2,"tp","str","help",
-	    _("SSL output transport have address format:\n"
+	    _("SSL output transport has address format:\n"
 	    "  [addr]:[port]:[mode] - where:\n"
 	    "    addr - remote SSL host address;\n"
 	    "    port - network port (/etc/services);\n"

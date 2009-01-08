@@ -223,7 +223,7 @@ void ModArch::modStop( )
 	itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
     timer_settime(tmId, 0, &itval, NULL);
     if( TSYS::eventWait( prc_st, false, nodePath()+"stop",5) )
-	throw TError(nodePath().c_str(),_("Check archives thread no stoped!"));
+	throw TError(nodePath().c_str(),_("Check archives thread is not stopped!"));
 }
 
 void ModArch::Task( union sigval obj )

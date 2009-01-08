@@ -146,7 +146,7 @@ void TUIMod::postDisable( int flag )
     {
 	end_run = true;
 	if( TSYS::eventWait( run_st, false, nodePath()+"stop",5) )
-	    throw TError(nodePath().c_str(),_("QT main thread is not stoped!"));
+	    throw TError(nodePath().c_str(),_("QT main thread is not stopped!"));
 	pthread_join(pthr_tsk,NULL);
     }
 }

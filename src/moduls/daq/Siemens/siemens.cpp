@@ -279,7 +279,7 @@ void TTpContr::initCIF( int dev )
     // Load parameters to board 
     //- Running board aplications -
     if( (sRet = DevSetHostState( dev, HOST_READY, 0L )) != DRV_NO_ERROR )
-	throw TError( nodePath().c_str(), _("CIF device %d running (DevSetHostState(HOST_READY)) is error!"), dev);
+	throw TError( nodePath().c_str(), _("CIF device %d running (DevSetHostState(HOST_READY)) error!"), dev);
     //- Load the protocol task parameters -
     memset(&DPParameter,0,sizeof(DPM_PLC_PARAMETER));
     DPParameter.bMode=DPM_SET_MODE_UNCONTROLLED;
@@ -348,9 +348,9 @@ void TTpContr::initCIF( int dev )
     ptBusDpm->abOctet[3] = 0;
     tMsg.ln = sizeof(DPM_BUS_DP)+sizeof(DDLM_DOWNLOAD_REQUEST)- DPM_MAX_LEN_DATA_UNIT;
     if((sRet=DevPutMessage(dev,(MSG_STRUC *)&tMsg, 200L))!=DRV_NO_ERROR)
-	throw TError( nodePath().c_str(), _("Put request is error: %d."),sRet);
+	throw TError( nodePath().c_str(), _("Sending request error: %d."),sRet);
     if((sRet = DevGetMessage(dev,sizeof(RCS_MESSAGE),(MSG_STRUC *)&tMsg, 200L))!=DRV_NO_ERROR)
-	throw TError( nodePath().c_str(), _("Get request is error: %d."),sRet);
+	throw TError( nodePath().c_str(), _("Getting request error: %d."),sRet);
     //-- Wait for operation start with new parameters of PLC task --
     do
     {
@@ -367,7 +367,7 @@ void TTpContr::getLifeListPB( unsigned board, string &buffer )
     int res;
 
     if( !cif_devs[board].present )
-	throw TError(nodePath().c_str(),_("15:Board %d no present."),board); 
+	throw TError(nodePath().c_str(),_("15:Board %d is not present."),board); 
 
     ResAlloc resource(cif_devs[board].res,true);
 
@@ -391,9 +391,9 @@ void TTpContr::getLifeListPB( unsigned board, string &buffer )
     ptRcsTelegramheader10->function   = TASK_TFC_READ;
     //- Put message -
     if((res = DevPutMessage(board,(MSG_STRUC *)&tMsg, 500L))!=DRV_NO_ERROR)
-	throw TError(nodePath().c_str(),_("12:Put request is error %d."),res);
+	throw TError(nodePath().c_str(),_("12:Sending request error %d."),res);
     if((res = DevGetMessage(board,sizeof(RCS_MESSAGE),(MSG_STRUC *)&tMsg, 200L))!=DRV_NO_ERROR)
-	throw TError(nodePath().c_str(),_("13:Get request is error %d."),res);
+	throw TError(nodePath().c_str(),_("13:Getting request error %d."),res);
 
     buffer.assign((char*)&tMsg.d[sizeof(RCS_TELEGRAMHEADER_10)],DPM_MAX_NUM_DEVICES+1);
 }
@@ -594,7 +594,7 @@ void TMdContr::start_( )
 	pthread_create(&procPthr,&pthr_attr,TMdContr::Task,this);
 	pthread_attr_destroy(&pthr_attr);
 	if( TSYS::eventWait(prc_st, true, nodePath()+"start",5) )
-	    throw TError(nodePath().c_str(),_("Acquisition task no started!"));
+	    throw TError(nodePath().c_str(),_("Acquisition task is not started!"));
     }
 }
 
@@ -606,7 +606,7 @@ void TMdContr::stop_( )
 	endrun_req = true;
 	pthread_kill( procPthr, SIGALRM );
 	if( TSYS::eventWait(prc_st,false,nodePath()+"stop",5) )
-	    throw TError(nodePath().c_str(),_("Acquisition task no stoped!"));
+	    throw TError(nodePath().c_str(),_("Acquisition task is not stopped!"));
 	pthread_join( procPthr, NULL );
     }
     //- Clear proccess parameters list -
@@ -722,14 +722,14 @@ void TMdContr::connectRemotePLC( )
     {
 	case CIF_PB:
 	    if( !(owner().cif_devs[0].present||owner().cif_devs[1].present||owner().cif_devs[2].present||owner().cif_devs[3].present) )
-		throw TError(nodePath().c_str(),_("Driver or no one boards no present."));
+		throw TError(nodePath().c_str(),_("No one driver or board are present."));
 	    break;
 	case ISO_TCP:
 	{
 	    //- Full Libnodave API -
 	    _daveOSserialType fds;
 	    fds.wfd = fds.rfd = openSocket(102,m_addr.c_str());
-	    if( fds.rfd <= 0 ) throw TError(nodePath().c_str(),_("Open socket of remote PLC is error."));
+	    if( fds.rfd <= 0 ) throw TError(nodePath().c_str(),_("Open socket of remote PLC error."));
 	    di = daveNewInterface(fds,(char*)(string("IF")+id()).c_str(),0,daveProtoISOTCP,daveSpeed187k);
 	    daveSetTimeout(di,5000000);
 	    dc = daveNewConnection(di,2,0,m_slot);
@@ -738,7 +738,7 @@ void TMdContr::connectRemotePLC( )
 		close(fds.wfd);
 		delete dc;
 		delete di;
-		throw TError(nodePath().c_str(),_("Connection to PLC is error."));
+		throw TError(nodePath().c_str(),_("Connection to PLC error."));
 	    }
 
 	    //- Self OpenSCADA API -
@@ -793,7 +793,7 @@ void TMdContr::connectRemotePLC( )
 
 	    break;
 	}
-	default: throw TError(nodePath().c_str(),_("Connection type '%d' no supported."),m_type);
+	default: throw TError(nodePath().c_str(),_("Connection type '%d' is not supported."),m_type);
     }
 }
 
@@ -819,8 +819,8 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 	    RCS_MESSAGE tMsg;
 	    int res, e_try = 4;
 
-	    if( buffer.size() > 240 )			throw TError(nodePath().c_str(),_("14:Request block too big."));
-	    if( !owner().cif_devs[m_dev].present )	throw TError(nodePath().c_str(),_("15:Board %d no present."),m_dev);
+	    if( buffer.size() > 240 )			throw TError(nodePath().c_str(),_("14:Request block is too big."));
+	    if( !owner().cif_devs[m_dev].present )	throw TError(nodePath().c_str(),_("15:Board %d is not present."),m_dev);
 	
 	    ResAlloc resource(owner().cif_devs[m_dev].res,true);
 
@@ -851,7 +851,7 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 		//- Put message to remote host -
 		res = DevPutMessage(m_dev,(MSG_STRUC *)&tMsg, 200L);
 		if( res == DRV_DEV_PUT_TIMEOUT )
-		    throw TError(nodePath().c_str(),_("12:Put request is timeouted."));
+		    throw TError(nodePath().c_str(),_("12:Sending request is timeouted."));
 		//- Get remote host's response -
 		if( res == DRV_NO_ERROR )
 		    res = DevGetMessage(m_dev,sizeof(RCS_MESSAGE),(MSG_STRUC *)&tMsg,200L);
@@ -861,8 +861,8 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 	    //- Process errors -
 	    if( res != DRV_NO_ERROR )		throw TError(nodePath().c_str(),_("19:Request to DB error %d."),res);
 	    if( res == DRV_DEV_GET_TIMEOUT )	throw TError(nodePath().c_str(),_("13:Get request is timeouted."));
-	    if( tMsg.f == 17 )	throw TError(nodePath().c_str(),_("17:No response of the remote station."));
-	    if( tMsg.f == 18 )	throw TError(nodePath().c_str(),_("18:Master not into the logical token ring."));
+	    if( tMsg.f == 17 )	throw TError(nodePath().c_str(),_("17:There is no response from the remote station."));
+	    if( tMsg.f == 18 )	throw TError(nodePath().c_str(),_("18:Master is out of the logical token ring."));
 	    if( tMsg.f == 0x85 )throw TError(nodePath().c_str(),_("20:Specified offset address or DB error."));
 
 	    //printf("Get DB %d:%d DB%d.%d(%d) -- %d\n",m_dev,vmax(0,vmin(126,atoi(m_addr.c_str()))),n_db,offset,buffer.size(),tMsg.f);
@@ -954,8 +954,8 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 	    RCS_MESSAGE tMsg;
 	    int res, e_try = 4;
 
-	    if( buffer.size() > 240 )			throw TError(nodePath().c_str(),_("16:Transmit block too big."));
-	    if( !owner().cif_devs[m_dev].present )	throw TError(nodePath().c_str(),_("15:Board %d no present."),m_dev);
+	    if( buffer.size() > 240 )			throw TError(nodePath().c_str(),_("16:Transmitted block is too big."));
+	    if( !owner().cif_devs[m_dev].present )	throw TError(nodePath().c_str(),_("15:Board %d is not present."),m_dev);
 
 	    ResAlloc resource(owner().cif_devs[m_dev].res,true);
 
@@ -988,7 +988,7 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 		//- Put message to remote host -
 		res = DevPutMessage(m_dev,(MSG_STRUC *)&tMsg,200L);
 		if( res == DRV_DEV_PUT_TIMEOUT )
-		    throw TError(nodePath().c_str(),_("12:Put request is timeouted."));
+		    throw TError(nodePath().c_str(),_("12:Sending request is timeouted."));
 		//- Get remote host's response -
 		if( res == DRV_NO_ERROR)
 		    res = DevGetMessage(m_dev,sizeof(RCS_MESSAGE),(MSG_STRUC *)&tMsg, 200L);
@@ -999,9 +999,9 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 
 	    //- Process errors -
 	    if( res != DRV_NO_ERROR )		throw TError(nodePath().c_str(),_("19:Request to DB error %d."),res);
-	    if( res == DRV_DEV_GET_TIMEOUT )	throw TError(nodePath().c_str(),_("13:Get request is timeouted."));
-	    if( tMsg.f == 17 )	throw TError(nodePath().c_str(),_("17:No response of the remote station."));
-	    if( tMsg.f == 18 )	throw TError(nodePath().c_str(),_("18:Master not into the logical token ring."));
+	    if( res == DRV_DEV_GET_TIMEOUT )	throw TError(nodePath().c_str(),_("13:Getting request is timeouted."));
+	    if( tMsg.f == 17 )	throw TError(nodePath().c_str(),_("17:There is no response from the remote station."));
+	    if( tMsg.f == 18 )	throw TError(nodePath().c_str(),_("18:Master is out of the logical token ring."));
 	    if( tMsg.f == 0x85 )throw TError(nodePath().c_str(),_("20:Specified offset address or DB error."));
 	    break;
 	}
@@ -1063,7 +1063,7 @@ char TMdContr::getValB( SValData ival, string &err )
 	    else err = acqBlks[i_b].err;
 	    break;
 	}
-    err = err.size()?err:_("11:Value not gathered.");
+    err = err.size()?err:_("11:Value is not gathered.");
 
     return EVAL_BOOL;
 }
@@ -1085,7 +1085,7 @@ int TMdContr::getValI( SValData ival, string &err )
 	    else err = acqBlks[i_b].err;
 	    break;
 	}
-    err = err.size()?err:_("11:Value not gathered.");
+    err = err.size()?err:_("11:Value is not gathered.");
 
     return EVAL_INT;
 }
@@ -1106,7 +1106,7 @@ double TMdContr::getValR( SValData ival, string &err )
 	    else err = acqBlks[i_b].err;
 	    break;
 	}
-    err = err.size()?err:_("11:Value not gathered.");
+    err = err.size()?err:_("11:Value is not gathered.");
 
     return EVAL_REAL;
 }
@@ -1123,7 +1123,7 @@ string TMdContr::getValS( SValData ival, string &err )
 	    else err = acqBlks[i_b].err;
 	    break;
 	}
-    err = err.size()?err:_("11:Value not gathered.");
+    err = err.size()?err:_("11:Value is not gathered.");
 
     return EVAL_STR;
 }
@@ -1240,7 +1240,7 @@ int TMdContr::valSize( IO::Type itp, int iv_sz )
 	case IO::Real:		return (iv_sz==4||iv_sz==8)?iv_sz:4;
 	case IO::Boolean:	return 1;
     }
-    throw TError(nodePath().c_str(),_("Value type is error."));
+    throw TError(nodePath().c_str(),_("Value type error."));
 }
 
 void *TMdContr::Task( void *icntr )
@@ -1248,7 +1248,7 @@ void *TMdContr::Task( void *icntr )
     TMdContr &cntr = *(TMdContr *)icntr;
 
 #if OSC_DEBUG >= 2
-    mess_debug(cntr.nodePath().c_str(),_("Thread <%u> started. TID: %ld"),pthread_self(),(long int)syscall(224));
+    mess_debug(cntr.nodePath().c_str(),_("Thread <%u> is started. TID: %ld"),pthread_self(),(long int)syscall(224));
 #endif
 
     cntr.endrun_req = false;
@@ -1499,7 +1499,7 @@ void TMdPrm::vlGet( TVal &val )
 	if( val.name() == "err" )
 	{
 	    if(!enableStat())
-		val.setS(_("1:Parameter had disabled."),0,true);
+		val.setS(_("1:Parameter is disabled."),0,true);
 	    else if(!owner().startStat())
 		val.setS(_("2:Controller is stoped."),0,true);
 	}
@@ -1582,14 +1582,14 @@ void TMdPrm::vlArchMake( TVal &val )
 int TMdPrm::lnkSize()
 {
     if( !enableStat() )
-	throw TError(nodePath().c_str(),_("Parameter disabled."));
+	throw TError(nodePath().c_str(),_("Parameter is disabled."));
     return plnk.size();
 }
 
 int TMdPrm::lnkId( int id )
 {
     if( !enableStat() )
-	throw TError(nodePath().c_str(),_("Parameter disabled."));
+	throw TError(nodePath().c_str(),_("Parameter is disabled."));
     for( int i_l = 0; i_l < plnk.size(); i_l++ )
 	if( lnk(i_l).io_id == id )
 	    return i_l;
@@ -1599,7 +1599,7 @@ int TMdPrm::lnkId( int id )
 int TMdPrm::lnkId( const string &id )
 {
     if( !enableStat() )
-	throw TError(nodePath().c_str(),_("Parameter disabled."));
+	throw TError(nodePath().c_str(),_("Parameter is disabled."));
     for( int i_l = 0; i_l < plnk.size(); i_l++ )
     if( func()->io(lnk(i_l).io_id)->id() == id )
 	return i_l;
@@ -1609,7 +1609,7 @@ int TMdPrm::lnkId( const string &id )
 TMdPrm::SLnk &TMdPrm::lnk( int num )
 {
     if( !enableStat() || num < 0 || num >= plnk.size() )
-	throw TError(nodePath().c_str(),_("Parameter disabled or id error."));
+	throw TError(nodePath().c_str(),_("Parameter is disabled or id error."));
     return plnk[num];
 }
 
@@ -1708,7 +1708,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/prm/cfg/TMPL",cfg("TMPL").fld().descr(),0660,"root","root",3,"tp","str","dest","sel_ed","select","/cfg/prmp_lst");
 	if( enableStat() && ctrMkNode("area",opt,1,"/cfg",_("Template config")) )
 	{
-	    ctrMkNode("fld",opt,-1,"/cfg/only_off",_("Only DB offsets show"),0664,"root","root",1,"tp","bool");
+	    ctrMkNode("fld",opt,-1,"/cfg/only_off",_("Only DB offsets are to be shown"),0664,"root","root",1,"tp","bool");
 	    if(ctrMkNode("area",opt,-1,"/cfg/prm",_("Parameters")))
 		for( int i_io = 0; i_io < ioSize(); i_io++ )
 		{

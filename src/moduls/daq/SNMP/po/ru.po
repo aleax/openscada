@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.SNMP 0.3.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-04 19:12+0200\n"
+"POT-Creation-Date: 2009-01-07 13:30+0200\n"
 "PO-Revision-Date: 2007-10-29 11:14+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -189,7 +189,7 @@ msgid "start"
 msgstr ""
 
 #: snmp_client.cpp:192
-msgid "Gathering task no started!"
+msgid "Gathering task is not started!"
 msgstr "Задача сбора данных не запущена!"
 
 #: snmp_client.cpp:203
@@ -197,12 +197,12 @@ msgid "stop"
 msgstr ""
 
 #: snmp_client.cpp:204
-msgid "Gathering task no stoped!"
+msgid "Gathering task is not stopped!"
 msgstr "Задача сбора данных не остановлена!"
 
 #: snmp_client.cpp:226
 #, c-format
-msgid "Thread <%u> started. TID: %ld"
+msgid "Thread <%u> is started. TID: %ld"
 msgstr ""
 
 #: snmp_client.cpp:244 snmp_client.cpp:347

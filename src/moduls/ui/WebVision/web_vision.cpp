@@ -356,7 +356,7 @@ void TWEB::modStop( )
     itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
     timer_settime(chkSessTm, 0, &itval, NULL);
     if( TSYS::eventWait( chck_st, false, nodePath()+"chck_stop",5) )
-	throw TError(nodePath().c_str(),_("Checking of session no stoped!"));
+	throw TError(nodePath().c_str(),_("Checking if session is not stopped!"));
 
     run_st = false;
 }
@@ -490,7 +490,7 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		    sesPrjOk = true;
 		}
 		ses.page += "</table></center>";
-		if( !sesPrjOk )	messPost(ses.page,nodePath(),_("No one sessions and projects VCA engine present for user!"),TWEB::Warning);
+		if( !sesPrjOk )	messPost(ses.page,nodePath(),_("No one sessions and projects of VCA engine are present for user!"),TWEB::Warning);
 	    }
 	    //> New session create
 	    else if( zero_lev.size() > 4 && zero_lev.substr(0,4) == "prj_" )
@@ -530,7 +530,7 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		page = ses.page;
 		return;
 	    }
-	    else mess_err(nodePath().c_str(),_("No permit request is received: '%s'"),zero_lev.c_str());
+            else mess_err(nodePath().c_str(),_("An unaccessible request is received: '%s'"),zero_lev.c_str());
 	}
     }catch(TError err)
     {
@@ -639,7 +639,7 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	    return;
 	}
 	ses.page = pgHead()+"<h1 class='head'>"+PACKAGE_NAME+". "+_(MOD_NAME)+"</h1>\n<hr/><br/>\n";
-	messPost(ses.page,nodePath(),_("Auth wrong! Retry please."),TWEB::Error);
+	messPost(ses.page,nodePath(),_("Auth is wrong! Retry please."),TWEB::Error);
 	ses.page += "\n";
 	getAuth( ses );
 	ses.page += pgTail();

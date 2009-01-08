@@ -189,7 +189,7 @@ void TMdContr::start_( )
 {
     //- Check inited of Diamond API -
     if( !mod->drvInitOk() )
-	throw TError(nodePath().c_str(),_("DSC driver not inited!"));
+	throw TError(nodePath().c_str(),_("DSC driver is not initialized!"));
 
     //- DSC strucures init -
     ERRPARAMS errorParams;
@@ -233,7 +233,7 @@ void TMdContr::start_( )
 	pthread_create(&ad_dsc_pthr,&pthr_attr,AD_DSCTask,this);
 	pthread_attr_destroy(&pthr_attr);
 	if( TSYS::eventWait(ad_dsc_st, true, nodePath()+"addsc_task_start",5) )
-	    throw TError(nodePath().c_str(),_("AD DSC driver task no started!"));
+	    throw TError(nodePath().c_str(),_("AD DSC driver task is not started!"));
     }
 }
 
@@ -245,7 +245,7 @@ void TMdContr::stop_( )
         endrun_req_ad_dsc = true;
         pthread_kill( ad_dsc_pthr, SIGALRM );
         if( TSYS::eventWait(ad_dsc_st,false,nodePath()+"addsc_task_stop",5) )
-            throw TError(nodePath().c_str(),_("AD DSC task no stoped!"));
+            throw TError(nodePath().c_str(),_("AD DSC task is not stopped!"));
         pthread_join( ad_dsc_pthr, NULL );
     }
 
@@ -293,7 +293,7 @@ void *TMdContr::AD_DSCTask( void *param )
     cntr.ad_dsc_st = true;
 
 #if OSC_DEBUG >= 2
-    mess_debug(cntr.nodePath().c_str(),_("Thread <%u> started. TID: %ld"),pthread_self(),(long int)syscall(224));
+    mess_debug(cntr.nodePath().c_str(),_("Thread <%u> is started. TID: %ld"),pthread_self(),(long int)syscall(224));
 #endif
 
     //- DSC strucures init -
@@ -650,9 +650,9 @@ void TMdPrm::vlGet( TVal &val )
     if( aid == 0 )
     {
 	if( !owner().startStat() )
-	    val.setS(_("2:Controller stoped"),0,true);
+	    val.setS(_("2:Controller is stoped"),0,true);
 	else if( !enableStat() )
-	    val.setS(_("1:Parameter disabled"),0,true);
+	    val.setS(_("1:Parameter is disabled"),0,true);
 	else val.setS("0",0,true);
 	return;
     }

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.DBF 1.9.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-04 11:19+0200\n"
+"POT-Creation-Date: 2009-01-07 12:09+0200\n"
 "PO-Revision-Date: 2008-12-22 11:55+0300\n"
 "Last-Translator: aleksey <aleksey@psniip.ru>\n"
 "Language-Team:  <ru@li.org>\n"
@@ -89,7 +89,7 @@ msgid "Error create DB directory <%s>!"
 msgstr "Fehler in der Erschaffung  des DB-Verzeichnisses <%s>!"
 
 #: dbf_mod.cpp:163
-msgid "Restore previous directory as curent is error."
+msgid "Restore previous directory as current error."
 msgstr ""
 " Wiederherstellung des Vorverzeichnisses in der Rolle des laufenden ist "
 "falsch."
@@ -113,7 +113,7 @@ msgstr ""
 
 #: dbf_mod.cpp:192
 #, c-format
-msgid "Error open table <%s>. DB disabled."
+msgid "Error open table <%s>. DB is disabled."
 msgstr "Fehler der Offnung der Tabelle<%s>. Die DB ist ausgeschaltet."
 
 #: dbf_mod.cpp:199
@@ -146,7 +146,7 @@ msgstr ""
 
 #: dbf_mod.cpp:204
 msgid ""
-"For DBF address DB is directory which contain files of tables (*.dbf).\n"
+"For DBF address DB is the directory which contains files of tables (*.dbf).\n"
 "For example: /opt/dbf ."
 msgstr ""
 "Fuer DBF die BD-Adresse ist das Verzeichnis, das enthaelt die "
@@ -167,7 +167,7 @@ msgid "Cell error!"
 msgstr "Fehler der Zelle!"
 
 #: dbf_mod.cpp:316 dbf_mod.cpp:479
-msgid "Field no present!"
+msgid "Field is not present!"
 msgstr "Das Feld ist nicht vorhanden!"
 
 #: dbf_mod.cpp:385 dbf_mod.cpp:411
@@ -197,5 +197,5 @@ msgstr "Fehler der Linie!"
 
 #: dbf_mod.cpp:512
 #, c-format
-msgid "Key column <%s> no present!"
+msgid "Key column <%s> is not present!"
 msgstr "Die Schluesselkolumne<%s> ist nicht vorhanden!"

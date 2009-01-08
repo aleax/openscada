@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.DBF 1.9.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-04 11:19+0200\n"
+"POT-Creation-Date: 2009-01-07 12:09+0200\n"
 "PO-Revision-Date: 2007-10-23 12:09+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -85,7 +85,7 @@ msgid "Error create DB directory <%s>!"
 msgstr "Помилка створення директорії БД <%s>!"
 
 #: dbf_mod.cpp:163
-msgid "Restore previous directory as curent is error."
+msgid "Restore previous directory as current error."
 msgstr "Помилка відновлення минулої директорії як поточну."
 
 #: dbf_mod.cpp:180
@@ -107,7 +107,7 @@ msgstr ""
 
 #: dbf_mod.cpp:192
 #, c-format
-msgid "Error open table <%s>. DB disabled."
+msgid "Error open table <%s>. DB is disabled."
 msgstr "Помилка відкриття таблиці <%s>. БД вимкнено."
 
 #: dbf_mod.cpp:199
@@ -140,7 +140,7 @@ msgstr ""
 
 #: dbf_mod.cpp:204
 msgid ""
-"For DBF address DB is directory which contain files of tables (*.dbf).\n"
+"For DBF address DB is the directory which contains files of tables (*.dbf).\n"
 "For example: /opt/dbf ."
 msgstr ""
 "Для DBF адреса БД це директорія, яка містить файли таблиць (*.dbf).\n"
@@ -160,7 +160,7 @@ msgid "Cell error!"
 msgstr "Помилка чарунки!"
 
 #: dbf_mod.cpp:316 dbf_mod.cpp:479
-msgid "Field no present!"
+msgid "Field is not present!"
 msgstr "Поле відсутне!"
 
 #: dbf_mod.cpp:385 dbf_mod.cpp:411
@@ -190,5 +190,5 @@ msgstr "Помилка лінії!"
 
 #: dbf_mod.cpp:512
 #, c-format
-msgid "Key column <%s> no present!"
+msgid "Key column <%s> is not present!"
 msgstr "Ключовий стовпчик <%s> відсутнії!"

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.DBArch 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-04 10:41+0200\n"
+"POT-Creation-Date: 2009-01-07 11:51+0200\n"
 "PO-Revision-Date: 2007-10-21 22:40+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -289,7 +289,7 @@ msgid "%s"
 msgstr ""
 
 #: mess.cpp:115 mess.cpp:164
-msgid "Archive no started!"
+msgid "Archive is not started!"
 msgstr "Архів не запущено!"
 
 #: mess.cpp:206 mess.cpp:215

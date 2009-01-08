@@ -1146,7 +1146,7 @@ void TVArchive::archivatorAttach( const string &arch )
 					    valAt(TSYS::strSepParse(arch,1,'.'));
 
     if(!archivat.at().startStat())
-	throw TError(nodePath().c_str(),"Archivator <%s> error or no started.",arch.c_str());
+	throw TError(nodePath().c_str(),"Archivator <%s> error or it is not started.",arch.c_str());
 
     //- Find already present archivator -
     for( int i_l = 0; i_l < arch_el.size(); i_l++ )
@@ -2082,7 +2082,7 @@ void TVArchivator::stop( bool full_del )
     itval.it_interval.tv_sec = itval.it_interval.tv_nsec = itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
     timer_settime(tmId, 0, &itval, NULL);
     if( TSYS::eventWait( prc_st, false, nodePath()+"stop",5) )
-	throw TError(nodePath().c_str(),_("Archive thread is not stoped!"));
+	throw TError(nodePath().c_str(),_("Archive thread is not stopped!"));
 
     //- Detach from all archives -
     ResAlloc res(a_res,false);

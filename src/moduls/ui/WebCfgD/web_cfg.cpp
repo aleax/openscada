@@ -478,7 +478,7 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	    return;
 	}
 	ses.page = pgHead()+"<h1 class='head'>"+PACKAGE_NAME+". "+_(MOD_NAME)+"</h1>\n<hr/><br/>\n";
-	messPost(ses.page,nodePath(),_("Auth wrong! Retry please."),TWEB::Error);
+	messPost(ses.page,nodePath(),_("Auth is wrong! Retry please."),TWEB::Error);
 	ses.page += "\n";
 	getAuth( ses );
 	ses.page += pgTail();

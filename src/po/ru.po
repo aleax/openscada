@@ -46,11 +46,11 @@
 #: ttransports.cpp:429 ttransports.cpp:430 ttransports.cpp:431
 #: ttransports.cpp:432 ttransports.cpp:433 ttransports.cpp:434
 #: ttransports.cpp:446 ttransports.cpp:450 tvalue.cpp:223 tvalue.cpp:224
-#: tvalue.cpp:230 tvalue.cpp:309 xml.cpp:156 xml.cpp:197 xml.cpp:217
-#: xml.cpp:238 autohd.h:41 tarchives.h:85 tarchives.h:204 tarchives.h:205
+#: tvalue.cpp:230 xml.cpp:156 xml.cpp:197 xml.cpp:217 xml.cpp:238 autohd.h:41
+#: resalloc.h:78 tarchives.h:85 tarchives.h:204 tarchives.h:205
 #: tarchives.h:206 tarchives.h:207 tarchval.h:192 tarchval.h:209
 #: tarchval.h:210 tarchval.h:211 tarchval.h:212 tarchval.h:213 tbds.h:224
-#: tcntrnode.h:89 tcntrnode.h:129 tcntrnode.h:171 telem.h:63 telem.h:64
+#: tcntrnode.h:93 tcntrnode.h:133 tcntrnode.h:175 telem.h:63 telem.h:64
 #: telem.h:143 tfunction.h:53 tfunction.h:54 tfunction.h:102 tfunction.h:103
 #: tfunction.h:155 tmess.h:58 tmess.h:97 tmodule.h:51 tprmtmpl.h:54
 #: tprmtmpl.h:124 tprotocols.h:48 ttipdaq.h:52 ttipdaq.h:64 ttransports.h:256
@@ -60,7 +60,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.6.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-26 17:02+0200\n"
+"POT-Creation-Date: 2009-01-07 14:11+0200\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -370,7 +370,7 @@ msgstr "Адрес"
 #: tsys.cpp:1030 tsys.cpp:1035 tsys.cpp:1040 ttipdaq.cpp:43 ttipdaq.cpp:44
 #: ttipdaq.cpp:113 ttransports.cpp:654 ttransports.cpp:685 ttransports.cpp:807
 #: ttransports.cpp:833 tuis.cpp:169 tvalue.cpp:240 tvalue.cpp:242
-#: tvalue.cpp:620
+#: tvalue.cpp:626
 msgid "0"
 msgstr ""
 
@@ -776,8 +776,8 @@ msgstr "Ошибка запуска архива значений <%s>."
 #: tuis.cpp:161 tuis.cpp:169 tuis.cpp:170 tvalue.cpp:133 tvalue.cpp:148
 #: tvalue.cpp:151 tvalue.cpp:162 tvalue.cpp:173 tvalue.cpp:177 tvalue.cpp:178
 #: tvalue.cpp:186 tvalue.cpp:204 tvalue.cpp:211 tvalue.cpp:219 tvalue.cpp:245
-#: tvalue.cpp:615 tvalue.cpp:624 tbds.h:225 tbds.h:226 tcntrnode.h:96
-#: tcntrnode.h:97 tcntrnode.h:98 tcntrnode.h:132 tconfig.h:125 tconfig.h:127
+#: tvalue.cpp:621 tvalue.cpp:630 tbds.h:225 tbds.h:226 tcntrnode.h:100
+#: tcntrnode.h:101 tcntrnode.h:102 tcntrnode.h:136 tconfig.h:125 tconfig.h:127
 #: telem.h:110
 msgid "root"
 msgstr ""
@@ -800,11 +800,11 @@ msgid "mess_stop"
 msgstr ""
 
 #: tarchives.cpp:385
-msgid "Archive messages thread is not stoped!"
+msgid "Archive messages thread is not stopped!"
 msgstr "Поток архива сообщений не остановлен!"
 
 #: tarchives.cpp:393
-msgid "Archive values task is not stoped!"
+msgid "Archive values task is not stopped!"
 msgstr "Задача архивирования значений не остановлена!"
 
 #: tarchives.cpp:407
@@ -849,7 +849,7 @@ msgstr "Поток <%u> запущен. TID: %ld"
 #: tprotocols.cpp:83 tsecurity.cpp:273 tsecurity.cpp:394 tsecurity.cpp:540
 #: tspecials.cpp:78 tspecials.cpp:103 tsubsys.cpp:140 tsys.cpp:953
 #: ttipdaq.cpp:147 ttransports.cpp:409 ttransports.cpp:517 ttransports.cpp:650
-#: ttransports.cpp:803 tuis.cpp:140 tuis.cpp:166 tvalue.cpp:128 tvalue.cpp:611
+#: ttransports.cpp:803 tuis.cpp:140 tuis.cpp:166 tvalue.cpp:128 tvalue.cpp:617
 msgid "path"
 msgstr ""
 
@@ -866,7 +866,7 @@ msgstr ""
 #: tsecurity.cpp:374 tsecurity.cpp:526 tspecials.cpp:71 tspecials.cpp:94
 #: tsubsys.cpp:124 tsys.cpp:905 ttipdaq.cpp:138 ttransports.cpp:389
 #: ttransports.cpp:504 ttransports.cpp:624 ttransports.cpp:778 tuis.cpp:133
-#: tuis.cpp:156 tvalue.cpp:159 tvalue.cpp:615 tvalue.cpp:640
+#: tuis.cpp:156 tvalue.cpp:159 tvalue.cpp:621 tvalue.cpp:646
 msgid "info"
 msgstr ""
 
@@ -875,11 +875,11 @@ msgstr ""
 msgid "arch"
 msgstr ""
 
-#: tarchives.cpp:710 tarchval.cpp:1453 tvalue.cpp:620
+#: tarchives.cpp:710 tarchval.cpp:1453 tvalue.cpp:626
 msgid "end"
 msgstr ""
 
-#: tarchives.cpp:711 tarchval.cpp:1454 tvalue.cpp:620
+#: tarchives.cpp:711 tarchval.cpp:1454 tvalue.cpp:626
 msgid "beg"
 msgstr ""
 
@@ -922,17 +922,17 @@ msgstr ""
 #: ttransports.cpp:675 ttransports.cpp:680 ttransports.cpp:685
 #: ttransports.cpp:807 ttransports.cpp:812 ttransports.cpp:818
 #: ttransports.cpp:823 ttransports.cpp:828 ttransports.cpp:833 tuis.cpp:141
-#: tuis.cpp:169 tvalue.cpp:148 tvalue.cpp:204 tvalue.cpp:219 tvalue.cpp:624
-#: tcntrnode.h:97
+#: tuis.cpp:169 tvalue.cpp:148 tvalue.cpp:204 tvalue.cpp:219 tvalue.cpp:630
+#: tcntrnode.h:101
 msgid "get"
 msgstr ""
 
 #: tarchives.cpp:715 tarchval.cpp:1468 tarchval.cpp:1477 tarchval.cpp:1649
-#: tvalue.cpp:628 tvalue.cpp:630
+#: tvalue.cpp:634 tvalue.cpp:636
 msgid "tm"
 msgstr ""
 
-#: tarchives.cpp:716 tarchval.cpp:1469 tarchval.cpp:1650 tvalue.cpp:626
+#: tarchives.cpp:716 tarchval.cpp:1469 tarchval.cpp:1650 tvalue.cpp:632
 msgid "tm_grnd"
 msgstr ""
 
@@ -1881,7 +1881,7 @@ msgstr ""
 
 #: tarchval.cpp:1149
 #, c-format
-msgid "Archivator <%s> error or no started."
+msgid "Archivator <%s> error or it is not started."
 msgstr "Ошибка архиватора <%s> или он не запущен."
 
 #: tarchval.cpp:1276 tarchval.cpp:1311
@@ -1929,16 +1929,16 @@ msgstr ""
 msgid "%g"
 msgstr ""
 
-#: tarchval.cpp:1448 tvalue.cpp:613
+#: tarchval.cpp:1448 tvalue.cpp:619
 msgid "/serv/val"
 msgstr ""
 
-#: tarchval.cpp:1455 tvalue.cpp:621
+#: tarchval.cpp:1455 tvalue.cpp:627
 msgid "vtp"
 msgstr ""
 
 #: tarchval.cpp:1457 tarchval.cpp:1463 tarchval.cpp:1510 tarchval.cpp:1651
-#: tvalue.cpp:620
+#: tvalue.cpp:626
 msgid "per"
 msgstr ""
 
@@ -2283,7 +2283,7 @@ msgid "stop"
 msgstr ""
 
 #: tarchval.cpp:2085
-msgid "Archive thread is not stoped!"
+msgid "Archive thread is not stopped!"
 msgstr "Поток архива не остановлен!"
 
 #: tarchval.cpp:2291
@@ -3521,7 +3521,7 @@ msgstr ""
 "\n"
 
 #: tmodschedul.cpp:114
-msgid "Module scheduler thread is not stoped!"
+msgid "Module scheduler thread is not stopped!"
 msgstr "Поток управления модулями не остановлен!"
 
 #: tmodschedul.cpp:117
@@ -5314,20 +5314,20 @@ msgstr ""
 msgid "key_atr"
 msgstr ""
 
-#: tvalue.cpp:365 tvalue.cpp:485 tvalue.cpp:509 tvalue.cpp:535 tvalue.cpp:566
-#: tvalue.cpp:597
+#: tvalue.cpp:365 tvalue.cpp:488 tvalue.cpp:512 tvalue.cpp:539 tvalue.cpp:571
+#: tvalue.cpp:603
 msgid "Val"
 msgstr ""
 
-#: tvalue.cpp:365 tvalue.cpp:485
+#: tvalue.cpp:365 tvalue.cpp:488
 msgid "Not select type!"
 msgstr "Не выборочный тип!"
 
-#: tvalue.cpp:509 tvalue.cpp:535 tvalue.cpp:566 tvalue.cpp:597
+#: tvalue.cpp:512 tvalue.cpp:539 tvalue.cpp:571 tvalue.cpp:603
 msgid "Write access is denied!"
 msgstr "Нет доступа на запись!"
 
-#: tvalue.cpp:633
+#: tvalue.cpp:639
 msgid "Attribute doesn't have archive"
 msgstr "Атрибут не имеет архива"
 
@@ -5483,7 +5483,7 @@ msgstr ""
 msgid "openBD"
 msgstr ""
 
-#: tcntrnode.h:126
+#: tcntrnode.h:130
 msgid "NO Named!"
 msgstr "Безымянный"
 
@@ -5557,10 +5557,10 @@ msgstr "Выходных транспорт не поддерживается!"
 msgid "<EVAL>"
 msgstr ""
 
-#: tvalue.h:150
+#: tvalue.h:152
 msgid "Direct access to write value no admit."
 msgstr "Прямой доступ на запись значений недопустим."
 
-#: tvalue.h:153
+#: tvalue.h:155
 msgid "Direct access to read value no admit."
 msgstr "Прямой доступ на чтение недопустим."

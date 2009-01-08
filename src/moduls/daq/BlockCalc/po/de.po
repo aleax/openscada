@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.BlockCalc 1.1.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-04 18:01+0200\n"
+"POT-Creation-Date: 2009-01-07 14:17+0200\n"
 "PO-Revision-Date: 2008-12-25 00:01+0300\n"
 "Last-Translator: aleksey <aleksey@psniip.ru>\n"
 "Language-Team:  <ru@li.org>\n"
@@ -118,7 +118,7 @@ msgstr "Fehler in der Knuepfung %d!"
 
 #: block.cpp:379
 #, c-format
-msgid "Error read block's <%s> links."
+msgid "Error reading block's <%s> links."
 msgstr "Fehler des Lesens der Blocklinks <%s>."
 
 #: block.cpp:392
@@ -128,7 +128,7 @@ msgstr "Fehler der Berechnung des Blocks <%s>."
 
 #: block.cpp:427
 #, c-format
-msgid "Error write block's <%s> links."
+msgid "Error writing block's <%s> links."
 msgstr "Fehler des Eintragens der Blocklinks <%s>."
 
 #: block.cpp:436 virtual.cpp:182 virtual.cpp:443 virtual.cpp:651
@@ -355,7 +355,7 @@ msgid "/lio/show/hide"
 msgstr ""
 
 #: block.cpp:464 block.cpp:489
-msgid "Hiden"
+msgid "Hidden"
 msgstr "Geheim"
 
 #: block.cpp:465 block.cpp:573
@@ -684,7 +684,7 @@ msgid "start"
 msgstr ""
 
 #: virtual.cpp:340
-msgid "Acquisition task no started!"
+msgid "Acquisition task is not started!"
 msgstr "Sammlungstask ist nicht gestartet!"
 
 #: virtual.cpp:351
@@ -692,12 +692,12 @@ msgid "stop"
 msgstr ""
 
 #: virtual.cpp:352
-msgid "Acquisition task no stoped!"
+msgid "Acquisition task is not stopped!"
 msgstr "Sammlungstask ist nicht gestoppt!"
 
 #: virtual.cpp:369
 #, c-format
-msgid "Thread <%u> started. TID: %ld"
+msgid "Thread <%u> is started. TID: %ld"
 msgstr ""
 
 #: virtual.cpp:392
@@ -707,7 +707,7 @@ msgstr "Fehler <%s> der Berechnung des Blocks."
 
 #: virtual.cpp:395
 #, c-format
-msgid "Block <%s> stoped."
+msgid "Block <%s> is stoped."
 msgstr "Block <%s> ist gestoppt."
 
 #: virtual.cpp:446
@@ -800,11 +800,11 @@ msgid "err"
 msgstr ""
 
 #: virtual.cpp:615
-msgid "2:Controller stoped"
+msgid "2:Controller is stoped"
 msgstr "2:Controller ist gestoppt"
 
 #: virtual.cpp:617
-msgid "1:Parameter disabled"
+msgid "1:Parameter is disabled"
 msgstr "1:Parameter ist nicht aktiv"
 
 #: virtual.cpp:654
@@ -813,14 +813,14 @@ msgstr ""
 
 #: virtual.cpp:655
 msgid ""
-"Attributes configuration list. List writed by lines in format: [<blk>."
-"<blk_io>:<aid>:<anm>]\n"
+"Attributes configuration list. List must be written by lines in format: "
+"[<blk>.<blk_io>:<aid>:<anm>]\n"
 "Where:\n"
 "  blk - block identifier from block's scheme;\n"
 "  blk_io - block's parameter from block's scheme;\n"
 "  aid - created attribute identifier;\n"
 "  anm - created attribute name.\n"
-"If 'aid' or 'anm' no set then it will be generated from selected block's "
+"If 'aid' or 'anm' are not set they will be generated from selected block's "
 "parameter."
 msgstr ""
 "Liste der Konfiguration der Attribute. Die Liste wird mit Zeilen im "

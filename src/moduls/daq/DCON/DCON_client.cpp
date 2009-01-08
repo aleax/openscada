@@ -179,7 +179,7 @@ void TTpContr::load_( )
     }catch( TError err )
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	mess_err(nodePath().c_str(),_("Search and load serial devices' DB is error."));
+	mess_err(nodePath().c_str(),_("Search and load serial devices' DB error."));
     }
 }
 
@@ -497,13 +497,13 @@ void SSerial::setParity( int val )
 string SSerial::req( const string &vl, int req_len )
 {
     ResAlloc res( m_res, true );
-    if( !hasOpen() )	throw TError(mod->nodePath().c_str(),_("Serial port '%s' no opened."),id().c_str());
+    if( !hasOpen() )	throw TError(mod->nodePath().c_str(),_("Serial port '%s' is not opened."),id().c_str());
 
     tcflush( fd, TCIFLUSH );
 
     //- Write request -
     if( write( fd, vl.data(), vl.size() ) == -1 )
-	throw TError(mod->nodePath().c_str(),_("Write to serial port '%s' is error."),id().c_str());
+	throw TError(mod->nodePath().c_str(),_("Write to serial port '%s' error."),id().c_str());
 
     //- Read reply -
     char buf[1000];
@@ -592,7 +592,7 @@ void TMdContr::start_( )
 	pthread_create( &procPthr, &pthr_attr, TMdContr::Task, this );
 	pthread_attr_destroy( &pthr_attr );
 	if( TSYS::eventWait( prc_st, true, nodePath()+"start", 5 ) )
-	    throw TError( nodePath().c_str(), _("Gathering task no started!") );
+	    throw TError( nodePath().c_str(), _("Gathering task is not started!") );
     }
 }
 
@@ -604,7 +604,7 @@ void TMdContr::stop_( )
 	endrun_req = true;
 	pthread_kill( procPthr, SIGALRM );
 	if( TSYS::eventWait( prc_st, false, nodePath()+"stop", 5 ) )
-	    throw TError( nodePath().c_str(), _("Gathering task no stoped!") );
+	    throw TError( nodePath().c_str(), _("Gathering task is not stopped!") );
 	pthread_join( procPthr, NULL );
     }
 }
@@ -646,7 +646,7 @@ string TMdContr::DCONReq( string &pdu , int req_len)
     }catch( TError err )
     {
 	//mess_err( err.cat.c_str(), err.mess.c_str() );
-	return _("14:Request is error: ")+err.mess;
+	return _("14:Request error: ")+err.mess;
     }
     pdu = rez;
     return "";
@@ -1086,7 +1086,7 @@ void TMdPrm::vlGet( TVal &val )
     {
 	if( val.name() == "err" )
 	{
-	    if( !enableStat() )			val.setS(_("1:Parameter had disabled."),0,true);
+	    if( !enableStat() )			val.setS(_("1:Parameter is disabled."),0,true);
 	    else if(!owner().startStat())	val.setS(_("2:Acquisition is stoped."),0,true);
 	}
 	else val.setS(EVAL_STR,0,true);

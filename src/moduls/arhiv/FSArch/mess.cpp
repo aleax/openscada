@@ -94,7 +94,7 @@ void ModMArch::put( vector<TMess::SRec> &mess )
 
     ResAlloc res(m_res,false);
 
-    if(!run_st) throw TError(nodePath().c_str(),_("Archive no started!"));
+    if(!run_st) throw TError(nodePath().c_str(),_("Archive is not started!"));
     for( unsigned i_m = 0; i_m < mess.size(); i_m++)
     {
 	if( !chkMessOK(mess[i_m].categ,mess[i_m].level) ) continue;
@@ -142,7 +142,7 @@ void ModMArch::put( vector<TMess::SRec> &mess )
 void ModMArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category, char level )
 {
     if( e_tm <= b_tm ) return;
-    if(!run_st) throw TError(nodePath().c_str(),_("Archive no started!"));
+    if(!run_st) throw TError(nodePath().c_str(),_("Archive is not started!"));
 
     ResAlloc res(m_res,false);
     for( int i_arh = arh_s.size()-1; i_arh >= 0 && mess.size() < TArchiveS::max_req_mess; i_arh-- )
@@ -469,7 +469,7 @@ void MFileArch::attach( const string &iname, bool full )
 		m_node->load(s_buf);
 		if( m_node->name() != mod->modId() )
 		{
-		    mess_err(owner().nodePath().c_str(),_("No my Archive file: <%s>"),name().c_str());
+                    mess_err(owner().nodePath().c_str(),_("Archive file: <%s> is not mine."),name().c_str());
 		    m_node->clear();
 		    m_err = true;
 		    return;
@@ -545,7 +545,7 @@ void MFileArch::attach( const string &iname, bool full )
 
 void MFileArch::put( TMess::SRec mess )
 {
-    if( m_err ) throw TError(owner().nodePath().c_str(),_("Put message to error Archive file!"));
+    if( m_err ) throw TError(owner().nodePath().c_str(),_("Inserting message to an error Archive file!"));
     if( m_pack ) { m_name = mod->unPackArch(name()); m_pack = false; }
     if( !m_load )
     {
@@ -553,7 +553,7 @@ void MFileArch::put( TMess::SRec mess )
 	if( m_err || !m_load )
 	{
 	    m_err = true;
-	    throw TError(owner().nodePath().c_str(),_("Archive file '%s' isn't attaching!"),m_name.c_str());
+	    throw TError(owner().nodePath().c_str(),_("Archive file '%s' isn't attached!"),m_name.c_str());
 	}
     }
 
@@ -669,12 +669,12 @@ void MFileArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const 
 {
     TMess::SRec b_rec;
 
-    if( m_err ) throw TError(owner().nodePath().c_str(),_("Get messages from error Archive file!"));
+    if( m_err ) throw TError(owner().nodePath().c_str(),_("Getting messages from an error Archive file!"));
     if( m_pack ){ m_name = mod->unPackArch(name()); m_pack = false; }
     if( !m_load )
     {
 	attach( m_name );
-	if( m_err || !m_load )	throw TError(owner().nodePath().c_str(),_("Archive file isn't attaching!"));
+	if( m_err || !m_load )	throw TError(owner().nodePath().c_str(),_("Archive file isn't attached!"));
     }
 
     ResAlloc res(m_res,false);

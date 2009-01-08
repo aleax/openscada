@@ -203,7 +203,7 @@ void MBD::allowList( vector<string> &list )
 TTable *MBD::openTable( const string &inm, bool create )
 {
     if( !enableStat() )
-	throw TError(TSYS::DBOpenTable,nodePath().c_str(),_("Error open table <%s>. DB disabled."),inm.c_str());
+	throw TError(TSYS::DBOpenTable,nodePath().c_str(),_("Error open table <%s>. DB is disabled."),inm.c_str());
 
     return new MTable(inm,this,create);
 }
@@ -237,7 +237,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
     {
 	//-- Fix transaction --
 	if( trans_reqs>1 && (commCnt-1)<0 )	commCnt=trans_reqs;
-	throw TError(100+rc,nodePath().c_str(),_("Get table error: %s"),zErrMsg);
+	throw TError(100+rc,nodePath().c_str(),_("Getting table error: %s"),zErrMsg);
     }
     if( tbl && ncol > 0 )
     {
@@ -266,7 +266,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
 	TBD::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","BD",2,
 		    "tp","str","help",
-		    _("SQLite DB address writet as: [<FileDBPath>;<nTransReq>].\n"
+		    _("SQLite DB address must be written as: [<FileDBPath>;<nTransReq>].\n"
 		      "Where:\n"
 		      "  FileDBPath - full path to DB file (./oscada/Main.db);\n"
 		      "  nTransReq - number requests into transaction (default 1)."));
@@ -417,7 +417,7 @@ void MTable::fieldGet( TConfig &cfg )
 
     //- Query -
     owner().sqlReq( req, &tbl );
-    if( tbl.size() < 2 ) throw TError(TSYS::DBRowNoPresent,nodePath().c_str(),_("Row no present."));
+    if( tbl.size() < 2 ) throw TError(TSYS::DBRowNoPresent,nodePath().c_str(),_("Row is not present."));
 
     //- Processing of query -
     for( int i_fld = 0; i_fld < tbl[0].size(); i_fld++ )
@@ -559,7 +559,7 @@ void MTable::fieldDel( TConfig &cfg )
     catch( TError err )
     {
 	if( (err.cod-100) == SQLITE_READONLY )
-	    throw TError(TSYS::DBReadOnly,nodePath().c_str(),_("Deletion no permit. Data base is read only.\n"));
+	    throw TError(TSYS::DBReadOnly,nodePath().c_str(),_("Deletion is not permited. Data base is read only.\n"));
 	throw;
     }
 }

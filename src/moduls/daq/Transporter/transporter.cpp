@@ -225,7 +225,7 @@ void TMdContr::enable_( )
 		}
 	    }catch(TError err){ }
 
-    if( en_err ) throw TError(nodePath().c_str(),_("Some enable errors is present"));
+    if( en_err ) throw TError(nodePath().c_str(),_("Some enable errors are present"));
 }
 
 void TMdContr::start_( )
@@ -245,7 +245,7 @@ void TMdContr::start_( )
 	pthread_create(&procPthr,&pthr_attr,TMdContr::Task,this);
 	pthread_attr_destroy(&pthr_attr);
 	if( TSYS::eventWait(prc_st, true, nodePath()+"start",5) )
-	    throw TError(nodePath().c_str(),_("Gathering task no started!"));
+	    throw TError(nodePath().c_str(),_("Gathering task is not started!"));
     }
 }
 
@@ -257,7 +257,7 @@ void TMdContr::stop_( )
 	endrun_req = true;
 	pthread_kill( procPthr, SIGALRM );
 	if( TSYS::eventWait(prc_st,false,nodePath()+"stop",5) )
-	    throw TError(nodePath().c_str(),_("Gathering task no stoped!"));
+	    throw TError(nodePath().c_str(),_("Gathering task is not stopped!"));
 	pthread_join( procPthr, NULL );
     }
 }
@@ -279,7 +279,7 @@ void *TMdContr::Task( void *icntr )
     TMdContr &cntr = *(TMdContr *)icntr;
 
 #if OSC_DEBUG >= 2
-    mess_debug(cntr.nodePath().c_str(),_("Thread <%u> started. TID: %ld"),pthread_self(),(long int)syscall(224));
+    mess_debug(cntr.nodePath().c_str(),_("Thread <%u> is started. TID: %ld"),pthread_self(),(long int)syscall(224));
 #endif
 
     cntr.endrun_req = false;
@@ -545,7 +545,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )   opt->setText(enableStat()?"1":"0");
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
 	{
-	    if( !owner().enableStat() ) throw TError(nodePath().c_str(),"Controller no started!");
+	    if( !owner().enableStat() ) throw TError(nodePath().c_str(),"Controller is not started!");
 	    else atoi(opt->text().c_str())?enable():disable();
 	}
     }

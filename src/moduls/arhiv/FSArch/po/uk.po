@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.FSArch 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-04 09:52+0200\n"
+"POT-Creation-Date: 2009-01-07 14:15+0200\n"
 "PO-Revision-Date: 2007-10-21 22:21+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -295,7 +295,7 @@ msgid "stop"
 msgstr ""
 
 #: base.cpp:226
-msgid "Check archives thread no stoped!"
+msgid "Check archives thread is not stopped!"
 msgstr "Поток перевірки архівів не зупинено!"
 
 #: base.cpp:243 base.cpp:254 mess.cpp:538 val.cpp:69 val.cpp:946
@@ -388,7 +388,7 @@ msgid "get"
 msgstr ""
 
 #: mess.cpp:97 mess.cpp:145
-msgid "Archive no started!"
+msgid "Archive is not started!"
 msgstr "Архів не запущено!"
 
 #: mess.cpp:126
@@ -555,8 +555,8 @@ msgstr ""
 
 #: mess.cpp:472
 #, c-format
-msgid "No my Archive file: <%s>"
-msgstr "Не мій архівний файл: <%s>"
+msgid "Archive file: <%s> is not mine."
+msgstr "Файл архіву <%s> не відкрито!"
 
 #: mess.cpp:497 mess.cpp:506
 #, c-format
@@ -564,12 +564,12 @@ msgid "Archive <%s> file error."
 msgstr "Помилка у файлі архіву <%s>."
 
 #: mess.cpp:548
-msgid "Put message to error Archive file!"
+msgid "Inserting message to an error Archive file!"
 msgstr "Вставлення повідомлення до архівного файлу з помилкою!"
 
 #: mess.cpp:556
 #, c-format
-msgid "Archive file '%s' isn't attaching!"
+msgid "Archive file '%s' isn't attached!"
 msgstr "Файл архіву '%s' не підєднано!"
 
 #: mess.cpp:567 mess.cpp:571 mess.cpp:688
@@ -613,11 +613,11 @@ msgid "%x %*d"
 msgstr ""
 
 #: mess.cpp:672
-msgid "Get messages from error Archive file!"
+msgid "Getting messages from an error Archive file!"
 msgstr "Отримання повідомлень з файлу архіва з помилкою!"
 
 #: mess.cpp:677
-msgid "Archive file isn't attaching!"
+msgid "Archive file isn't attached!"
 msgstr "Файл архіву не підєднано!"
 
 #: mess.cpp:725
@@ -812,3 +812,6 @@ msgstr "Помилка у файлі архіву!"
 msgid "Error archive file structure: <%s>. Margin = %d byte. Will try fix it!"
 msgstr ""
 "Помилка структури файлу: <%s>. Різниця = %d байт. Спробую виправити це!"
+
+#~ msgid "No my Archive file: <%s>"
+#~ msgstr "Не мій архівний файл: <%s>"

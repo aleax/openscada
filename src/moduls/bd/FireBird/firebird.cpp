@@ -225,7 +225,7 @@ void MBD::allowList( vector<string> &list )
 TTable *MBD::openTable( const string &inm, bool create )
 {
     if( !enableStat() )
-	throw TError(TSYS::DBOpenTable,nodePath().c_str(),_("Error open table <%s>. DB disabled."),inm.c_str());
+	throw TError(TSYS::DBOpenTable,nodePath().c_str(),_("Error open table <%s>. DB is disabled."),inm.c_str());
 
     return new MTable(inm,this,create);
 }
@@ -441,7 +441,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
 	TBD::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","BD",2,
 	    "tp","str","help",
-	    _("FireBird address to DB writed as: [<file>;<user>;<pass>].\n"
+	    _("FireBird address to DB must be written as: [<file>;<user>;<pass>].\n"
 	      "Where:\n"
 	      "  file - full DB file;\n"
 	      "  user - DB user;\n"
@@ -469,7 +469,7 @@ MTable::MTable(string inm, MBD *iown, bool create ) : TTable(inm), trans(0)
     //- Get table structure description -
     getStructDB( tblStrct );
     if( tblStrct.size() <= 1 )
-	throw TError(TSYS::DBOpenTable,nodePath().c_str(),_("Table '%s' no present."),name().c_str());
+	throw TError(TSYS::DBOpenTable,nodePath().c_str(),_("Table '%s' is not present."),name().c_str());
 }
 
 MTable::~MTable(  )
@@ -625,7 +625,7 @@ void MTable::fieldGet( TConfig &cfg )
 
     //- Query -
     owner().sqlReq( req, &tbl );
-    if( tbl.size() < 2 ) throw TError(TSYS::DBRowNoPresent,nodePath().c_str(),_("Row no present."));
+    if( tbl.size() < 2 ) throw TError(TSYS::DBRowNoPresent,nodePath().c_str(),_("Row is not present."));
 
     //- Processing of query -
     for( int i_fld = 0; i_fld < tbl[0].size(); i_fld++ )

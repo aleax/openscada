@@ -183,7 +183,7 @@ void TTest::modStart(  )
     pthread_create(&pthr_tsk,&pthr_attr,Task,this);
     pthread_attr_destroy(&pthr_attr);
     if( TSYS::eventWait( run_st, true, string(MOD_ID)+": Is starting....",5) )
-	throw TError(nodePath().c_str(),_("No started!"));
+	throw TError(nodePath().c_str(),_("Not started!"));
 }
 
 void TTest::modStop(  )
@@ -191,8 +191,8 @@ void TTest::modStop(  )
     if( !run_st ) return;
 
     endrun = true;
-    if( TSYS::eventWait( run_st, false, string(MOD_ID)+": Is stoping....",5) )
-	throw TError(nodePath().c_str(),_("No stoped!"));
+    if( TSYS::eventWait( run_st, false, string(MOD_ID)+": Is stopping....",5) )
+	throw TError(nodePath().c_str(),_("Not stopped!"));
     pthread_join( pthr_tsk, NULL );
 }
 
@@ -205,7 +205,7 @@ void *TTest::Task( void *CfgM )
     tst->endrun = false;
 
 #if OSC_DEBUG >= 2
-    mess_debug(tst->nodePath().c_str(),_("Thread <%u> started. TID: %ld"),pthread_self(),(long int)syscall(224));
+    mess_debug(tst->nodePath().c_str(),_("Thread <%u> is started. TID: %ld"),pthread_self(),(long int)syscall(224));
 #endif
 
     //Task counter

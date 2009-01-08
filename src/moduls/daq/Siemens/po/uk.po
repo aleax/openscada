@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Siemens 1.1.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-04 19:44+0200\n"
+"POT-Creation-Date: 2009-01-07 13:27+0200\n"
 "PO-Revision-Date: 2007-10-28 09:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -291,7 +291,7 @@ msgstr "Помилка пристрою %d або драйверу!"
 
 #: siemens.cpp:282
 #, c-format
-msgid "CIF device %d running (DevSetHostState(HOST_READY)) is error!"
+msgid "CIF device %d running (DevSetHostState(HOST_READY)) error!"
 msgstr "Помилка запуску (DevSetHostState(HOST_READY)) пристрою %d!"
 
 #: siemens.cpp:289
@@ -311,27 +311,27 @@ msgstr "CIF пристрій %d. Помилка DevGetMessage()!"
 
 #: siemens.cpp:351
 #, c-format
-msgid "Put request is error: %d."
-msgstr "Помилка відправлення запиту: %d."
+msgid "Sending request error: %d."
+msgstr "Помилка отримання запиту: %d."
 
 #: siemens.cpp:353
 #, c-format
-msgid "Get request is error: %d."
+msgid "Getting request error: %d."
 msgstr "Помилка отримання запиту: %d."
 
 #: siemens.cpp:370 siemens.cpp:823 siemens.cpp:958
 #, c-format
-msgid "15:Board %d no present."
+msgid "15:Board %d is not present."
 msgstr "15:Плата %d відсутня."
 
 #: siemens.cpp:394
 #, c-format
-msgid "12:Put request is error %d."
+msgid "12:Sending request error %d."
 msgstr "12:Помилка надсилання запиту %d."
 
 #: siemens.cpp:396
 #, c-format
-msgid "13:Get request is error %d."
+msgid "13:Getting request error %d."
 msgstr "13:Помилка отримання запиту %d."
 
 #: siemens.cpp:404 siemens.cpp:1312 siemens.cpp:1705
@@ -663,7 +663,7 @@ msgid "start"
 msgstr ""
 
 #: siemens.cpp:597
-msgid "Acquisition task no started!"
+msgid "Acquisition task is not started!"
 msgstr "Задачу збору даних не запущено!"
 
 #: siemens.cpp:608
@@ -671,15 +671,15 @@ msgid "stop"
 msgstr ""
 
 #: siemens.cpp:609
-msgid "Acquisition task no stoped!"
+msgid "Acquisition task is not stopped!"
 msgstr "Задачу збору даних не зупинено!"
 
 #: siemens.cpp:725
-msgid "Driver or no one boards no present."
+msgid "No one driver or board are present."
 msgstr "Немає ні одного пристрою або драйвер відсутній."
 
 #: siemens.cpp:732
-msgid "Open socket of remote PLC is error."
+msgid "Open socket of remote PLC error."
 msgstr "Помилка відкриття сокету віддаленого ПЛК."
 
 #: siemens.cpp:733
@@ -687,20 +687,20 @@ msgid "IF"
 msgstr ""
 
 #: siemens.cpp:741
-msgid "Connection to PLC is error."
+msgid "Connection to PLC error."
 msgstr "Помилка підключення до ПЛК."
 
 #: siemens.cpp:796
 #, c-format
-msgid "Connection type '%d' no supported."
+msgid "Connection type '%d' is not supported."
 msgstr "Тип підключення '%d' не підтримується."
 
 #: siemens.cpp:822
-msgid "14:Request block too big."
+msgid "14:Request block is too big."
 msgstr "14:Запитаний блок дуже великий."
 
 #: siemens.cpp:854 siemens.cpp:991
-msgid "12:Put request is timeouted."
+msgid "12:Sending request is timeouted."
 msgstr "12:Вийшов час очікування відправлення запиту."
 
 #: siemens.cpp:862 siemens.cpp:1001
@@ -708,16 +708,16 @@ msgstr "12:Вийшов час очікування відправлення з�
 msgid "19:Request to DB error %d."
 msgstr "19:Помилка запиту до DB: %d."
 
-#: siemens.cpp:863 siemens.cpp:1002
+#: siemens.cpp:863
 msgid "13:Get request is timeouted."
 msgstr "13:Вийшов час очікування отримання запиту."
 
 #: siemens.cpp:864 siemens.cpp:1003
-msgid "17:No response of the remote station."
+msgid "17:There is no response from the remote station."
 msgstr "17:Немає відповіді від віддаленої станції."
 
 #: siemens.cpp:865 siemens.cpp:1004
-msgid "18:Master not into the logical token ring."
+msgid "18:Master is out of the logical token ring."
 msgstr "18:Майстер не в середині логічного кола."
 
 #: siemens.cpp:866 siemens.cpp:1005
@@ -734,8 +734,12 @@ msgid "Read DB from controller error."
 msgstr "Помилка запиту до БД контролера."
 
 #: siemens.cpp:957
-msgid "16:Transmit block too big."
+msgid "16:Transmitted block is too big."
 msgstr "16:Передаваємий блок дуже великий."
+
+#: siemens.cpp:1002
+msgid "13:Getting request is timeouted."
+msgstr "13:Вийшов час очікування отримання запиту."
 
 #: siemens.cpp:1013
 #, c-format
@@ -747,17 +751,16 @@ msgid "Write DB to controller error."
 msgstr "Помилка запису до БД контролера."
 
 #: siemens.cpp:1066 siemens.cpp:1088 siemens.cpp:1109 siemens.cpp:1126
-#: siemens.h:216
-msgid "11:Value not gathered."
+msgid "11:Value is not gathered."
 msgstr "11:Значення не отримані."
 
 #: siemens.cpp:1243
-msgid "Value type is error."
+msgid "Value type error."
 msgstr "Помилковий тип значення."
 
 #: siemens.cpp:1251
 #, c-format
-msgid "Thread <%u> started. TID: %ld"
+msgid "Thread <%u> is started. TID: %ld"
 msgstr ""
 
 #: siemens.cpp:1315 siemens.cpp:1321
@@ -797,7 +800,7 @@ msgid "err"
 msgstr ""
 
 #: siemens.cpp:1502
-msgid "1:Parameter had disabled."
+msgid "1:Parameter is disabled."
 msgstr "1:Параметр вимкнено."
 
 #: siemens.cpp:1504
@@ -805,11 +808,11 @@ msgid "2:Controller is stoped."
 msgstr "2:Контролер зупинено."
 
 #: siemens.cpp:1585 siemens.cpp:1592 siemens.cpp:1602
-msgid "Parameter disabled."
+msgid "Parameter is disabled."
 msgstr "Параметр вимкнено."
 
 #: siemens.cpp:1612
-msgid "Parameter disabled or id error."
+msgid "Parameter is disabled or id error."
 msgstr "Параметр вимкнено або помилковий id параметру."
 
 #: siemens.cpp:1624
@@ -855,7 +858,7 @@ msgid "/cfg/only_off"
 msgstr ""
 
 #: siemens.cpp:1711
-msgid "Only DB offsets show"
+msgid "Only DB offsets are to be shown"
 msgstr "Показувати тільки зміщення"
 
 #: siemens.cpp:1712
@@ -887,3 +890,10 @@ msgstr ""
 #, c-format
 msgid "::%s(L%.4d): "
 msgstr ""
+
+#: siemens.h:216
+msgid "11:Value not gathered."
+msgstr "11:Значення не отримані."
+
+#~ msgid "Put request is error: %d."
+#~ msgstr "Помилка відправлення запиту: %d."

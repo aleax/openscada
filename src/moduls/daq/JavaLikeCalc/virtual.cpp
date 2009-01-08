@@ -97,7 +97,7 @@ void TipContr::postEnable( int flag )
     fldAdd( new TFld("FUNC",_("Controller's function"),TFld::String,TFld::NoFlag,"40") );
     fldAdd( new TFld("PERIOD",_("Calc period (ms)"),TFld::Integer,TFld::NoFlag,"7","1000","0;1000000") );
     fldAdd( new TFld("PRIOR",_("Calc task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
-    fldAdd( new TFld("ITER",_("Iteration number into calc period"),TFld::Integer,TFld::NoFlag,"2","1","0;99") );
+    fldAdd( new TFld("ITER",_("Iteration number in the calc period"),TFld::Integer,TFld::NoFlag,"2","1","0;99") );
 
     //> Controller value db structure
     val_el.fldAdd( new TFld("ID",_("IO ID"),TFld::String,TCfg::Key,"20") );
@@ -178,7 +178,7 @@ void TipContr::compileFuncLangs( vector<string> &ls )
 
 string TipContr::compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text, const string &usings )
 {
-    if( lang != "JavaScript" )	throw TError(nodePath().c_str(),_("Compile the program language %s is no support."),lang.c_str());
+    if( lang != "JavaScript" )	throw TError(nodePath().c_str(),_("Compilation with the help of the program language %s is not supported."),lang.c_str());
     if( !lbPresent("sys_compile") )	lbReg( new Lib("sys_compile","","") );
     if( !lbAt("sys_compile").at().present(fnc_cfg.id()) )
 	lbAt("sys_compile").at().add(fnc_cfg.id().c_str(),"");
@@ -383,7 +383,7 @@ void Contr::postDisable(int flag)
 void Contr::enable_( )
 {
     if( !mod->lbPresent(TSYS::strSepParse(mFnc,0,'.')) )
-	throw TError(nodePath().c_str(),_("Functions library <%s> no present. Please, create functions library!"),TSYS::strSepParse(mFnc,0,'.').c_str());
+	throw TError(nodePath().c_str(),_("Functions library <%s> is not present. Please, create functions library!"),TSYS::strSepParse(mFnc,0,'.').c_str());
     if( !mod->lbAt(TSYS::strSepParse(mFnc,0,'.')).at().present(TSYS::strSepParse(mFnc,1,'.')) )
     {
 	mess_info(nodePath().c_str(),_("Create new function <%s>."),mFnc.c_str());
@@ -485,7 +485,7 @@ void Contr::start_( )
 	pthread_create(&procPthr,&pthr_attr,Contr::Task,this);
 	pthread_attr_destroy(&pthr_attr);
 	if( TSYS::eventWait(prc_st, true, nodePath()+"start",5) )
-	    throw TError(nodePath().c_str(),_("Acquisition task no started!"));
+	    throw TError(nodePath().c_str(),_("Acquisition task is not started!"));
     }
 }
 
@@ -497,7 +497,7 @@ void Contr::stop_( )
 	endrun_req = true;
 	pthread_kill( procPthr, SIGALRM );
 	if( TSYS::eventWait(prc_st,false,nodePath()+"stop",5) )
-	    throw TError(nodePath().c_str(),_("Acquisition task no stoped!"));
+	    throw TError(nodePath().c_str(),_("Acquisition task is not stopped!"));
 	pthread_join( procPthr, NULL );
     }
 }
@@ -507,7 +507,7 @@ void *Contr::Task( void *icntr )
     Contr &cntr = *(Contr *)icntr;
 
 #if OSC_DEBUG >= 2
-    mess_debug(cntr.nodePath().c_str(),_("Thread <%u> started. TID: %ld"),pthread_self(),(long int)syscall(224));
+    mess_debug(cntr.nodePath().c_str(),_("Thread <%u> is started. TID: %ld"),pthread_self(),(long int)syscall(224));
 #endif
 
     cntr.endrun_req = false;
@@ -625,7 +625,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	    int row = atoi(opt->attr("row").c_str());
 	    int col = atoi(opt->attr("col").c_str());
 	    if( (col == 0 || col == 1) && !opt->text().size() )
-		throw TError(nodePath().c_str(),_("Empty value no valid."));
+		throw TError(nodePath().c_str(),_("Empty value is not valid."));
 	    switch(col)
 	    {
 		case 0:	func()->io(row)->setId(opt->text());	break;
@@ -754,8 +754,8 @@ void Prm::vlGet( TVal &val )
 {
     if( val.name() == "err" )
     {
-	if( !owner().startStat() )	val.setS(_("2:Controller stoped"),0,true);
-	else if( !enableStat() )	val.setS(_("1:Parameter disabled"),0,true);
+	if( !owner().startStat() )	val.setS(_("2:Controller is stoped"),0,true);
+	else if( !enableStat() )	val.setS(_("1:Parameter is disabled"),0,true);
 	else val.setS("0",0,true);
 	return;
     }

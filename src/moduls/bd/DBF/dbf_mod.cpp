@@ -160,7 +160,7 @@ void MBD::enable( )
     char *rez = getcwd(buf,sizeof(buf));
     if( chdir(addr().c_str()) != 0 && mkdir(addr().c_str(),S_IRWXU|S_IRGRP|S_IROTH) != 0 )
 	throw TError(TSYS::DBInit,nodePath().c_str(),_("Error create DB directory <%s>!"),addr().c_str());
-    if( rez && chdir(buf) ) throw TError(TSYS::DBInit,nodePath().c_str(),_("Restore previous directory as curent is error."));
+    if( rez && chdir(buf) ) throw TError(TSYS::DBInit,nodePath().c_str(),_("Restore previous directory as current error."));
 
     TBD::enable( );
 }
@@ -189,7 +189,7 @@ void MBD::allowList( vector<string> &list )
 TTable *MBD::openTable( const string &nm, bool create )
 {
     if( !enableStat() )
-	throw TError(TSYS::DBOpenTable,nodePath().c_str(),_("Error open table <%s>. DB disabled."),nm.c_str());
+	throw TError(TSYS::DBOpenTable,nodePath().c_str(),_("Error open table <%s>. DB is disabled."),nm.c_str());
     return new MTable(nm,this,create);
 }
 
@@ -201,7 +201,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
 	TBD::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","BD",2,
 	    "tp","str","help",
-	    _("For DBF address DB is directory which contain files of tables (*.dbf).\n"
+	    _("For DBF address DB is the directory which contains files of tables (*.dbf).\n"
 	      "For example: /opt/dbf ."));
 	return;
     }
@@ -313,7 +313,7 @@ void MTable::fieldGet( TConfig &cfg )
 
     //- Get key line -
     i_ln = findKeyLine( cfg );
-    if( i_ln < 0 ) throw TError(TSYS::DBRowNoPresent,nodePath().c_str(),_("Field no present!"));
+    if( i_ln < 0 ) throw TError(TSYS::DBRowNoPresent,nodePath().c_str(),_("Field is not present!"));
 
     //- Get config fields list -
     vector<string> cf_el;
@@ -476,7 +476,7 @@ void MTable::fieldDel( TConfig &cfg )
 	i_ok = true;
 	m_modify = true;
     }
-    if( !i_ok ) throw TError(TSYS::DBInernal,nodePath().c_str(),_("Field no present!"));
+    if( !i_ok ) throw TError(TSYS::DBInernal,nodePath().c_str(),_("Field is not present!"));
 }
 
 int MTable::findKeyLine( TConfig &cfg, int cnt )
@@ -509,7 +509,7 @@ int MTable::findKeyLine( TConfig &cfg, int cnt )
 	    for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
 		if( cf_el[i_cf].substr(0,10) == fld_rec->name ) break;
 	    if(fld_rec == NULL) 
-		throw TError(TSYS::DBInernal,nodePath().c_str(),_("Key column <%s> no present!"),cf_el[i_cf].c_str());
+		throw TError(TSYS::DBInernal,nodePath().c_str(),_("Key column <%s> is not present!"),cf_el[i_cf].c_str());
 	    //-- Get table volume --
 	    string val;
 	    if( basa->GetFieldIt( i_ln, i_clm, val ) < 0) 

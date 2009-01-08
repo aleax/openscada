@@ -376,7 +376,7 @@ void Block::calc( bool first, bool last )
     {
 	err_cnt++;
 	lnk_res.resReleaseR( );
-	throw TError(nodePath().c_str(),_("Error read block's <%s> links."),id().c_str());
+	throw TError(nodePath().c_str(),_("Error reading block's <%s> links."),id().c_str());
     }
     lnk_res.resReleaseR( );
 
@@ -424,7 +424,7 @@ void Block::calc( bool first, bool last )
     {
 	err_cnt++;
 	lnk_res.resReleaseR( );
-	throw TError(nodePath().c_str(),_("Error write block's <%s> links."),id().c_str());
+	throw TError(nodePath().c_str(),_("Error writing block's <%s> links."),id().c_str());
     }
     lnk_res.resReleaseR( );
     err_cnt=0;
@@ -461,7 +461,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/lio",_("IO")))
 	    {
 		ctrMkNode("area",opt,-1,"/lio/show",_("Show"));
-		ctrMkNode("fld",opt,-1,"/lio/show/hide",_("Hiden"),0664,"root","root",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/lio/show/hide",_("Hidden"),0664,"root","root",1,"tp","bool");
 		if(ctrMkNode("area",opt,-1,"/lio/io",_("IO")))
 		{
 		    vector<string> list;
@@ -486,7 +486,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/lnk",_("Links")))
 	    {
 		ctrMkNode("area",opt,-1,"/lnk/show",_("Show"));
-		ctrMkNode("fld",opt,-1,"/lnk/show/hide",_("Hiden"),0664,"root","root",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/lnk/show/hide",_("Hidden"),0664,"root","root",1,"tp","bool");
 		if(ctrMkNode("area",opt,-1,"/lnk/io",_("IO")))
 		{
 		    vector<string> list;

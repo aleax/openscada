@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.ModBus 0.9.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-04 19:28+0200\n"
+"POT-Creation-Date: 2009-01-07 14:37+0200\n"
 "PO-Revision-Date: 2007-10-29 10:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -332,7 +332,7 @@ msgid "%s"
 msgstr ""
 
 #: modbus_client.cpp:190
-msgid "Search and load serial devices' DB is error."
+msgid "Search and load serial devices' DB error."
 msgstr "Помилка пошуку та завантаження БД послідовних пристроїв."
 
 #: modbus_client.cpp:337 modbus_client.cpp:1227 modbus_client.cpp:1391
@@ -650,12 +650,12 @@ msgstr "Помилка відкриття послідовного порту '%
 
 #: modbus_client.cpp:642
 #, c-format
-msgid "Serial port '%s' no opened."
+msgid "Serial port '%s' is not opened."
 msgstr "Послідовний порт '%s' не відкрито."
 
 #: modbus_client.cpp:648
 #, c-format
-msgid "Write to serial port '%s' is error."
+msgid "Writing to serial port '%s' error."
 msgstr "Помилка запису до послідовного порту '%s'."
 
 #: modbus_client.cpp:664
@@ -690,11 +690,11 @@ msgid "start"
 msgstr ""
 
 #: modbus_client.cpp:757
-msgid "Gathering task no started!"
+msgid "Gathering task is not started!"
 msgstr "Задачу збору даних не запущено!"
 
 #: modbus_client.cpp:769
-msgid "Gathering task no stoped!"
+msgid "Gathering task is not stopped!"
 msgstr "Задачу збору даних не зупинено!"
 
 #: modbus_client.cpp:794
@@ -739,11 +739,11 @@ msgstr "13:Помилка відповіді"
 
 #: modbus_client.cpp:1035
 #, c-format
-msgid "1:Function %xh no support."
+msgid "1:Function %xh is not supported."
 msgstr "1:Функція %xh не підтримується."
 
 #: modbus_client.cpp:1038
-msgid "2:Requested registers length too long."
+msgid "2:Requested registers' length is too long."
 msgstr "2:Довжина запитаних регістрів дуже велика."
 
 #: modbus_client.cpp:1039
@@ -755,11 +755,11 @@ msgid "4:Server failure."
 msgstr "4:Збій серверу"
 
 #: modbus_client.cpp:1041
-msgid "5:Request require too long time for execute."
+msgid "5:Request requires too long time for execute."
 msgstr "5:Запит вимагає дуже багато часу для виконання."
 
 #: modbus_client.cpp:1042
-msgid "6:Server busy."
+msgid "6:Server is busy."
 msgstr "6:Сервер зайнятий."
 
 #: modbus_client.cpp:1043
@@ -834,7 +834,7 @@ msgstr ""
 
 #: modbus_client.cpp:1095
 #, c-format
-msgid "Thread <%u> started. TID: %ld"
+msgid "Thread <%u> is started. TID: %ld"
 msgstr ""
 
 #: modbus_client.cpp:1111
@@ -874,7 +874,7 @@ msgid "err"
 msgstr ""
 
 #: modbus_client.cpp:1340
-msgid "1:Parameter had disabled."
+msgid "1:Parameter is disabled."
 msgstr "1:Параметр вимкнено."
 
 #: modbus_client.cpp:1341
@@ -887,8 +887,8 @@ msgstr ""
 
 #: modbus_client.cpp:1395
 msgid ""
-"Attributes configuration list. List writed by lines in format: [dt:numb:rw:"
-"id:name]\n"
+"Attributes configuration list. List must be written by lines in format: [dt:"
+"numb:rw:id:name]\n"
 "Where:\n"
 "  dt - Modbus data type (R-register,C-coil,RI-input register,CI-input "
 "coil);\n"

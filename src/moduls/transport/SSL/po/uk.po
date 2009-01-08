@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-05 10:29+0200\n"
+"POT-Creation-Date: 2009-01-08 11:17+0200\n"
 "PO-Revision-Date: 2008-10-13 19:06+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -206,7 +206,7 @@ msgid "open"
 msgstr "відкриття"
 
 #: modssl.cpp:271
-msgid "No open!"
+msgid "Not opened!"
 msgstr "Не відкрився!"
 
 #: modssl.cpp:285
@@ -214,12 +214,12 @@ msgid "close"
 msgstr "закриття"
 
 #: modssl.cpp:286
-msgid "No close!"
+msgid "Not closed!"
 msgstr "Не закрився!"
 
 #: modssl.cpp:300 modssl.cpp:444
 #, c-format
-msgid "Thread <%u> started. TID: %ld"
+msgid "Thread <%u> is started. TID: %ld"
 msgstr ""
 
 #: modssl.cpp:317 modssl.cpp:673
@@ -241,7 +241,7 @@ msgstr ""
 
 #: modssl.cpp:333 modssl.cpp:695
 #, c-format
-msgid "Open temporaty file '%s' is error: '%s'"
+msgid "Open temporaty file '%s' error: '%s'"
 msgstr "Помилка відкриття тимчасового файлу '%s': '%s'"
 
 #: modssl.cpp:343 modssl.cpp:705
@@ -269,7 +269,7 @@ msgid "BIO_do_accept: %s"
 msgstr ""
 
 #: modssl.cpp:408
-msgid "Error create thread!"
+msgid "Error creation of the thread!"
 msgstr "Помилка створення потоку!"
 
 #: modssl.cpp:414 modssl.cpp:542
@@ -282,13 +282,13 @@ msgid ": "
 msgstr ""
 
 #: modssl.cpp:418
-msgid " client tasks is stoping...."
+msgid " client tasks is stopping...."
 msgstr " зупинка клієнтських задач...."
 
 #: modssl.cpp:447
 #, c-format
-msgid "Socket have been connected (%d)."
-msgstr "Підключення до сокету (%d)."
+msgid "Connecting to the socket (%d)."
+msgstr ""
 
 #: modssl.cpp:459
 #, c-format
@@ -297,17 +297,17 @@ msgstr ""
 
 #: modssl.cpp:483 modssl.cpp:840
 #, c-format
-msgid "Receive message size <%d>."
-msgstr "Отримано повідомлення розміром <%d>."
+msgid "The message is received with the size <%d>."
+msgstr "Надсилання повідомлення розміром <%d>."
 
 #: modssl.cpp:491
 #, c-format
-msgid "Reply message size <%d>."
-msgstr "Відповідь повідомленням розміром <%d>."
+msgid "The message is replied with the size <%d>."
+msgstr "Надсилання повідомлення розміром <%d>."
 
 #: modssl.cpp:514
 #, c-format
-msgid "Socket have been disconnected (%d)."
+msgid "Socket has been disconnected (%d)."
 msgstr "Відключення від сокету (%d)."
 
 #: modssl.cpp:525
@@ -315,7 +315,7 @@ msgid "_"
 msgstr ""
 
 #: modssl.cpp:543
-msgid "Error request into protocol."
+msgid "Error request to protocol."
 msgstr "Помилка запиту до протоколу."
 
 #: modssl.cpp:594 modssl.cpp:852
@@ -328,9 +328,10 @@ msgstr ""
 
 #: modssl.cpp:595
 msgid ""
-"SSL input transport have address format:\n"
+"SSL input transport has address format:\n"
 "  [addr]:[port]:[mode] - where:\n"
-"    addr - address for SSL open, '*' address open for all interfaces;\n"
+"    addr - address for SSL to be opened, '*' address opens for all "
+"interfaces;\n"
 "    port - network port (/etc/services);\n"
 "    mode - SSL mode and version (SSLv2, SSLv3, SSLv23 and TLSv1)."
 msgstr ""
@@ -406,7 +407,7 @@ msgid "BIO_do_connect: %s"
 msgstr ""
 
 #: modssl.cpp:771
-msgid "Transport no started!"
+msgid "Transport is not started!"
 msgstr "Транспорт не запущено!"
 
 #: modssl.cpp:780
@@ -416,7 +417,7 @@ msgstr ""
 
 #: modssl.cpp:785
 #, c-format
-msgid "Send message size <%d>."
+msgid "The message is sent with the size <%d>."
 msgstr "Надсилання повідомлення розміром <%d>."
 
 #: modssl.cpp:798 modssl.cpp:832
@@ -434,7 +435,7 @@ msgstr "Помилка сокету!"
 
 #: modssl.cpp:853
 msgid ""
-"SSL output transport have address format:\n"
+"SSL output transport has address format:\n"
 "  [addr]:[port]:[mode] - where:\n"
 "    addr - remote SSL host address;\n"
 "    port - network port (/etc/services);\n"
@@ -445,3 +446,12 @@ msgstr ""
 "    addr - адреса віддаленого SSL хосту;\n"
 "    port - мережевий порт (/etc/services);\n"
 "    mode - SSL режим та версія (SSLv2, SSLv3, SSLv23 and TLSv1)."
+
+#~ msgid "Socket have been connected (%d)."
+#~ msgstr "Підключення до сокету (%d)."
+
+#~ msgid "Receive message size <%d>."
+#~ msgstr "Отримано повідомлення розміром <%d>."
+
+#~ msgid "Reply message size <%d>."
+#~ msgstr "Відповідь повідомленням розміром <%d>."

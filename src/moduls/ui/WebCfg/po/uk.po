@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebCfg 1.5.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-05 12:30+0200\n"
+"POT-Creation-Date: 2009-01-07 11:29+0200\n"
 "PO-Revision-Date: 2007-10-29 22:29+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -483,12 +483,16 @@ msgid "/img_reload' alt='"
 msgstr ""
 
 #: web_cfg.cpp:325
-msgid "Previos page"
+msgid "Previous page"
 msgstr "Попередня сторінка"
 
 #: web_cfg.cpp:325
 msgid "/img_up' alt='"
 msgstr ""
+
+#: web_cfg.cpp:325
+msgid "Previos page"
+msgstr "Попередня сторінка"
 
 #: web_cfg.cpp:327
 msgid "/about' title='"
@@ -1284,7 +1288,7 @@ msgid "; path=/;\n"
 msgstr ""
 
 #: web_cfg.cpp:844
-msgid "Auth wrong! Retry please."
+msgid "Auth is wrong! Retry please."
 msgstr "Помилка аутентифікації! Повторіть будьласка."
 
 #: web_cfg.cpp:853
