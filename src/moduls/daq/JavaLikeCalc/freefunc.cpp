@@ -1105,7 +1105,7 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
 {
     while( !(dt.flg&0x01) )
     {
-	//- Calc time control mechanism -
+	//> Calc time control mechanism
 	if( !((dt.com_cnt++)%1000) )
 	{
 	    if( !dt.start_tm )	dt.start_tm = time(NULL);
@@ -1116,9 +1116,10 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
 		return;
 	    }
 	}
-	//- Calc operation -
+	//> Calc operation
 	switch(*cprg)
 	{
+	    case Reg::EndFull: dt.flg |= 0x01;
 	    case Reg::End: return;
 	    //-- MVI codes --
 	    case Reg::MviB:

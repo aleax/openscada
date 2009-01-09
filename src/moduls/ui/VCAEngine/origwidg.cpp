@@ -885,6 +885,7 @@ bool OrigDocument::attrChange( Attr &cfg, void *prev )
 	    int aCur = cfg.owner()->attrAt("aCur").at().getI();
 	    mkDk = cfg.owner()->attrAt("doc"+TSYS::int2str(aCur)).at().getS();
 	    if( mkDk.empty() )	mkDk = cfg.owner()->attrAt("tmpl").at().getS();
+
 	    mkDk = makeDoc(mkDk,cfg.owner());
 	    cfg.owner()->attrAt("doc"+TSYS::int2str(aCur)).at().setS(mkDk);
 	    if( aCur == cfg.owner()->attrAt("vCur").at().getI() )
@@ -1124,6 +1125,7 @@ void OrigDocument::nodeProcess( XMLNode *xcur, TValFunc &funcV, TFunction &funcI
 	    long long lstTime = (long long)funcV.getI(3)*1000000;
 	    long long perRpt = (long long)(1000000*dRpt);
 	    long long rTime = bTime + perRpt*((lstTime-bTime)/perRpt);
+	    if( lstTime && lstTime<bTime ) rTime-=perRpt;
 	    if( ((time-rTime)/perRpt) > 1000 ) continue;
 	    while( rTime < time )
 	    {

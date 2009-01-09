@@ -86,6 +86,7 @@ class Reg
 	enum Code	//Byte codes
 	{
 	    End,	//[E]: End programm.
+	    EndFull,	//[E]: Full end from programm.
 	    MviB,	//[CRB]: Load boolean <B> to register <R>.
 	    MviI,	//[CR____]: Load integer <____> to register <R>.
 	    MviR,	//[CR______]: Load real <______> to register <R>.

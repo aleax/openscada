@@ -560,7 +560,7 @@ msgstr ""
 #: mess.cpp:472
 #, c-format
 msgid "Archive file: <%s> is not mine."
-msgstr "Archivdatei <%s> ist nicht geoeffnet!"
+msgstr "Nicht meine Archivdatei <%s>."
 
 #: mess.cpp:497 mess.cpp:506
 #, c-format
@@ -818,6 +818,3 @@ msgid "Error archive file structure: <%s>. Margin = %d byte. Will try fix it!"
 msgstr ""
 "Fehler in der Dateistruktur: <%s>.Differenz = %d .byte. Versuch es zu "
 "korrigieren!"
-
-#~ msgid "No my Archive file: <%s>"
-#~ msgstr "Nicht meine Archivdatei <%s>"

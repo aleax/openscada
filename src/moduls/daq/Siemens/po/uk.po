@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Siemens 1.1.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-07 13:27+0200\n"
+"POT-Creation-Date: 2009-01-09 15:16+0200\n"
 "PO-Revision-Date: 2007-10-28 09:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -312,7 +312,7 @@ msgstr "CIF пристрій %d. Помилка DevGetMessage()!"
 #: siemens.cpp:351
 #, c-format
 msgid "Sending request error: %d."
-msgstr "Помилка отримання запиту: %d."
+msgstr "Помилка відправлення запиту: %d."
 
 #: siemens.cpp:353
 #, c-format
@@ -726,8 +726,8 @@ msgstr "20:Помилка у вказанному DB або у адресі."
 
 #: siemens.cpp:894
 #, c-format
-msgid "Read block '%d' error: %d\n"
-msgstr ""
+msgid "Read block '%d' error: %d"
+msgstr "Помилка читання блока '%d': %d"
 
 #: siemens.cpp:895
 msgid "Read DB from controller error."
@@ -743,8 +743,8 @@ msgstr "13:Вийшов час очікування отримання запи�
 
 #: siemens.cpp:1013
 #, c-format
-msgid "Write block '%d' error: %d\n"
-msgstr ""
+msgid "Write block '%d' error: %d"
+msgstr "Помилка запису блока '%d': %d"
 
 #: siemens.cpp:1014
 msgid "Write DB to controller error."
@@ -894,6 +894,3 @@ msgstr ""
 #: siemens.h:216
 msgid "11:Value not gathered."
 msgstr "11:Значення не отримані."
-
-#~ msgid "Put request is error: %d."
-#~ msgstr "Помилка відправлення запиту: %d."

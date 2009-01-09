@@ -1,3 +1,11 @@
+2009-01-09 Roman
+- FIX:/DAQ/JavaLikeCalc: Keyword 'return' is fixed. Recursive exit is added.
+- FIX:/UI/VCAEngine: Last document's time greed calc is fixed for bTime > lastTime.
+- FIX:/UI/Vision: x and y scaling by kadr in development mode is fixed using.
+- /SYS: RPM build spec-file is updated for 0.6.3 build.
+- !!!:/DemoDB: Document's close last document algoritm is final fixed and tested.
+
+
 2009-01-08 Maxim
 - FIX:/SYS: Some fixes to English variant of translation is done.
 - FIX:/DAQ/DCON: Some fixes to English variant of translation is done.
@@ -20,7 +28,6 @@
 - FIX:/Special/SystemTests: Some fixes to English variant of translation is done.
 - FIX:/Transport/SSL: Some fixes to English variant of translation is done.
 - FIX:/Transport/Socket: Some fixes to English variant of translation is done.
-
 
 
 2009-01-07 Roman

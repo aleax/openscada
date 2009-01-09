@@ -288,7 +288,7 @@ msgstr " клиентская задача остановлена...."
 #: modssl.cpp:447
 #, c-format
 msgid "Connecting to the socket (%d)."
-msgstr ""
+msgstr "Подключение к сокету (%d)."
 
 #: modssl.cpp:459
 #, c-format
@@ -298,12 +298,12 @@ msgstr ""
 #: modssl.cpp:483 modssl.cpp:840
 #, c-format
 msgid "The message is received with the size <%d>."
-msgstr "Отправлено сообщение размером <%d>."
+msgstr "Получено сообщение размером <%d>."
 
 #: modssl.cpp:491
 #, c-format
 msgid "The message is replied with the size <%d>."
-msgstr "Отправлено сообщение размером <%d>."
+msgstr "Отвечено сообщением размером <%d>."
 
 #: modssl.cpp:514
 #, c-format
@@ -445,12 +445,3 @@ msgstr ""
 "    addr - адрес удалённого SSL хоста;\n"
 "    port - сетевой порт (/etc/services);\n"
 "    mode - режим SSL и версия (SSLv2, SSLv3, SSLv23 and TLSv1)."
-
-#~ msgid "Socket have been connected (%d)."
-#~ msgstr "Подключение к сокету (%d)."
-
-#~ msgid "Receive message size <%d>."
-#~ msgstr "Получено сообщение размером <%d>."
-
-#~ msgid "Reply message size <%d>."
-#~ msgstr "Отвечено сообщением размером <%d>."

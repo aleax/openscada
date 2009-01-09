@@ -1,7 +1,7 @@
 #===== Generic Info ======
 Summary: Open SCADA system project
 Name: openscada
-Version: 0.6.2
+Version: 0.6.3
 Release: 1
 Source: openscada-%version.tar.gz
 License: GPL
@@ -14,7 +14,7 @@ URL: http://oscada.diyaorg.dp.ua
 #= Individual distributives seting =
 %if %_vendor == "alt"
 %set_verify_elf_method no
-BuildRequires: glibc-devel gcc4.1-c++ libgd2-devel libexpat-devel libMySQL-devel libsqlite3-devel libsensors-devel libnet-snmp-devel libqt4-devel
+BuildRequires: glibc-devel gcc4.1-c++ libgd2-devel libexpat-devel libMySQL-devel libsqlite3-devel libsensors-devel libnet-snmp-devel libqt4-devel firebird-devel
 %else
 %define _initdir /etc/init.d
 %define _desktopdir %_datadir/applications
@@ -83,7 +83,7 @@ The %{name}-demo package includes demo data bases and configs. For start use com
 %setup -q -n %srcname
 
 %build
-%configure
+%configure CFLAGS="-O2" CXXFLAGS="-O2"
 %__make
 
 %install

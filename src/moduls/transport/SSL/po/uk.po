@@ -288,7 +288,7 @@ msgstr " зупинка клієнтських задач...."
 #: modssl.cpp:447
 #, c-format
 msgid "Connecting to the socket (%d)."
-msgstr ""
+msgstr "Підключення до сокету (%d)."
 
 #: modssl.cpp:459
 #, c-format
@@ -298,12 +298,12 @@ msgstr ""
 #: modssl.cpp:483 modssl.cpp:840
 #, c-format
 msgid "The message is received with the size <%d>."
-msgstr "Надсилання повідомлення розміром <%d>."
+msgstr "Отримано повідомлення розміром <%d>."
 
 #: modssl.cpp:491
 #, c-format
 msgid "The message is replied with the size <%d>."
-msgstr "Надсилання повідомлення розміром <%d>."
+msgstr "Відповідь повідомленням розміром <%d>."
 
 #: modssl.cpp:514
 #, c-format
@@ -446,12 +446,3 @@ msgstr ""
 "    addr - адреса віддаленого SSL хосту;\n"
 "    port - мережевий порт (/etc/services);\n"
 "    mode - SSL режим та версія (SSLv2, SSLv3, SSLv23 and TLSv1)."
-
-#~ msgid "Socket have been connected (%d)."
-#~ msgstr "Підключення до сокету (%d)."
-
-#~ msgid "Receive message size <%d>."
-#~ msgstr "Отримано повідомлення розміром <%d>."
-
-#~ msgid "Reply message size <%d>."
-#~ msgstr "Відповідь повідомленням розміром <%d>."

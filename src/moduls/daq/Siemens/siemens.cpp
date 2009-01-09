@@ -891,7 +891,7 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 	    int res;
 	    if( (res = daveReadBytes(dc,daveDB,n_db,offset,buffer.size(),NULL)) )
 	    {
-		mess_debug(nodePath().c_str(),_("Read block '%d' error: %d\n"),n_db,res);
+		mess_debug(nodePath().c_str(),_("Read block '%d' error: %d"),n_db,res);
 		throw TError(nodePath().c_str(),_("Read DB from controller error."));
 	    }
 	    buffer.assign((char*)dc->resultPointer,buffer.size());
@@ -1010,7 +1010,7 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 	    int res;
 	    if( (res = daveWriteBytes(dc,daveDB,n_db,offset,buffer.size(),(char*)buffer.c_str())) )
 	    {
-		mess_debug(nodePath().c_str(),_("Write block '%d' error: %d\n"),n_db,res);
+		mess_debug(nodePath().c_str(),_("Write block '%d' error: %d"),n_db,res);
 		throw TError(nodePath().c_str(),_("Write DB to controller error."));
 	    }
 

@@ -556,7 +556,7 @@ msgstr ""
 #: mess.cpp:472
 #, c-format
 msgid "Archive file: <%s> is not mine."
-msgstr "Файл архива <%s> не открыт!"
+msgstr "Не мой архивный файл <%s>."
 
 #: mess.cpp:497 mess.cpp:506
 #, c-format
@@ -812,6 +812,3 @@ msgstr "Ошибка в файле архива!"
 msgid "Error archive file structure: <%s>. Margin = %d byte. Will try fix it!"
 msgstr ""
 "Ошибка в структуре файла: <%s>. Разница = %d байт. Попробую исправить это!"
-
-#~ msgid "No my Archive file: <%s>"
-#~ msgstr "Не мой архивный файл <%s>"
