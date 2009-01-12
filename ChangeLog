@@ -1,3 +1,12 @@
+2009-01-12 Roman OpenSCADA 0.6.3
+- !!!!:/DemoDB: Translation to English is added. DB files separated to English and Russian.
+- !!:/SYS: Add release 0.6.3 anounce documents.
+- !!:/SYS: Updated FAQ, TODO and README documents.
+- !!:/SYS: RPM build spec file is updated for new demo DB files configuration support.
+- FIX:/DB: DB system table cache limit process is fixed.
+- FIX:/UI/QTCfg: Wrap mode for text field is fixed.
+
+
 2009-01-09 Roman
 - FIX:/DAQ/JavaLikeCalc: Keyword 'return' is fixed. Recursive exit is added.
 - FIX:/UI/VCAEngine: Last document's time greed calc is fixed for bTime > lastTime.

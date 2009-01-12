@@ -50,9 +50,9 @@ TBDS::TBDS( ) : TSubSYS("BD","Data Bases",true)
 TBDS::~TBDS(  )
 {
     ResAlloc res(genDBCacheRes,true);
-    while(genDBCache.size())
+    while( genDBCache.size() )
     {
-	delete genDBCache[0];
+	delete genDBCache.front();
 	genDBCache.pop_front();
     }
     res.release();
@@ -304,18 +304,15 @@ void TBDS::genDBSet(const string &path, const string &val, const string &user)
 	for( int i_cel = 0; i_cel < dbs.at().genDBCache.size(); i_cel++ )
 	    if( dbs.at().genDBCache[i_cel]->cfg("user").getS() == user &&
 		dbs.at().genDBCache[i_cel]->cfg("id").getS() == path )
-	    {
-		dbs.at().genDBCache[i_cel]->cfg("val").setS(val);
-		return;
-	    }
+	    { dbs.at().genDBCache[i_cel]->cfg("val").setS(val); return; }
 	TConfig *db_el = new TConfig(&dbs.at());
 	db_el->cfg("user").setS(user);
 	db_el->cfg("id").setS(path);
 	db_el->cfg("val").setS(val);
 	dbs.at().genDBCache.push_front(db_el);
-	if(dbs.at().genDBCache.size() > 100)
+	while( dbs.at().genDBCache.size() > 100 )
 	{
-	    delete dbs.at().genDBCache[0];
+	    delete dbs.at().genDBCache.back();
 	    dbs.at().genDBCache.pop_back();
 	}
     }
@@ -330,7 +327,7 @@ string TBDS::genDBGet(const string &path, const string &oval, const string &user
     {
 	AutoHD<TBDS> dbs = SYS->db();
 
-	//- Get from cache -
+	//> Get from cache
 	ResAlloc res(dbs.at().genDBCacheRes,false);
 	for( int i_cel = 0; i_cel < dbs.at().genDBCache.size(); i_cel++ )
 	    if( dbs.at().genDBCache[i_cel]->cfg("user").getS() == user &&
@@ -338,7 +335,7 @@ string TBDS::genDBGet(const string &path, const string &oval, const string &user
 		return dbs.at().genDBCache[i_cel]->cfg("val").getS();
 	res.release();
 
-	//- Get from generic DB -
+	//> Get from generic DB
 	if(!onlyCfg)
 	{
 	    AutoHD<TTable> tbl = dbs.at().open(SYS->db().at().fullDBSYS());
@@ -375,9 +372,9 @@ string TBDS::genDBGet(const string &path, const string &oval, const string &user
 	db_el->cfg("id").setS(path);
 	db_el->cfg("val").setS(rez);
 	dbs.at().genDBCache.push_front(db_el);
-	if(dbs.at().genDBCache.size() > 100)
+	while( dbs.at().genDBCache.size() > 100 )
 	{
-	    delete dbs.at().genDBCache[0];
+	    delete dbs.at().genDBCache.back();
 	    dbs.at().genDBCache.pop_back();
 	}
     }

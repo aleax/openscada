@@ -72,11 +72,11 @@ BuildArch: noarch
 %endif
 Requires: %name
 %description demo
-The %{name}-demo package includes demo data bases and configs. For start use command <openscada_demo>. For access use account "root" and password "openscada" or account "user" without password.
+The %{name}-demo package includes demo data bases and configs. For start use command <openscada_demo_en>. For access use account "root" and password "openscada" or account "user" without password.
 %description demo -l ru_RU.UTF8
-Пакет %{name}-demo включает демонстрационные базы данных и конфигурации. Для старта используйте команду <openscada_demo>. Для доступа используйте запись "root" и пароль "openscada" или запись "user" без пароля.
+Пакет %{name}-demo включает демонстрационные базы данных и конфигурации. Для старта используйте команду <openscada_demo_ru>. Для доступа используйте запись "root" и пароль "openscada" или запись "user" без пароля.
 %description demo -l uk_UA.UTF8
-Пакет %{name}-demo включає демонстраційні бази даних та конфігурації. Для старту використовуйте команду <openscada_demo>. Для доступу використовуйте запис "root" та пароль "openscada" або запис "user" без пароля.
+Пакет %{name}-demo включає демонстраційні бази даних та конфігурації. Для старту використовуйте команду <openscada_demo_ru>. Для доступу використовуйте запис "root" та пароль "openscada" або запис "user" без пароля.
 
 
 %prep
@@ -97,19 +97,26 @@ install -m 755 -pD data/openscada_start %buildroot/%_bindir/openscada_start
 install -m 644 -pD data/openscada.desktop %buildroot/%_desktopdir/openscada.desktop
 install -m 644 -pD data/openscada.png %buildroot/%_iconsdir/openscada.png
 install -m 755 -pD data/oscada.init %buildroot/%_initdir/oscadad
-install -m 644 -pD demo/oscada_demo.xml %buildroot/%_sysconfdir/oscada_demo.xml
-install -m 755 -pD demo/openscada_demo %buildroot/%_bindir/openscada_demo
-install -m 644 -pD demo/openscada_demo.desktop %buildroot/%_desktopdir/openscada_demo.desktop
-install -m 644 -pD demo/openscada_demo.png %buildroot/%_iconsdir/openscada_demo.png
 install -m 755 -d %buildroot/var/spool/openscada/DATA
 install -m 755 -d %buildroot/var/spool/openscada/icons
 echo "OpenSCADA data dir" > %buildroot/var/spool/openscada/DATA/.info
-install -m 644 demo/*.db %buildroot/var/spool/openscada/DATA
 install -m 644 data/icons/* %buildroot/var/spool/openscada/icons
 install -m 755 -d %buildroot/var/spool/openscada/ARCHIVES/MESS
 install -m 755 -d %buildroot/var/spool/openscada/ARCHIVES/VAL
 echo "OpenSCADA messages archive dir" > %buildroot/var/spool/openscada/ARCHIVES/MESS/.info
 echo "OpenSCADA values archive dir" > %buildroot/var/spool/openscada/ARCHIVES/VAL/.info
+install -m 644 -pD demo/en/oscada_demo_en.xml %buildroot/%_sysconfdir/oscada_demo_en.xml
+install -m 755 -pD demo/en/openscada_demo_en %buildroot/%_bindir/openscada_demo_en
+install -m 644 -pD demo/en/openscada_demo_en.desktop %buildroot/%_desktopdir/openscada_demo_en.desktop
+install -m 644 -pD demo/en/openscada_demo_en.png %buildroot/%_iconsdir/openscada_demo_en.png
+install -m 755 -d %buildroot/var/spool/openscada/DEMO_EN
+install -m 644 demo/en/*.db %buildroot/var/spool/openscada/DEMO_EN
+install -m 644 -pD demo/ru/oscada_demo_ru.xml %buildroot/%_sysconfdir/oscada_demo_ru.xml
+install -m 755 -pD demo/ru/openscada_demo_ru %buildroot/%_bindir/openscada_demo_ru
+install -m 644 -pD demo/ru/openscada_demo_ru.desktop %buildroot/%_desktopdir/openscada_demo_ru.desktop
+install -m 644 -pD demo/ru/openscada_demo_ru.png %buildroot/%_iconsdir/openscada_demo_ru.png
+install -m 755 -d %buildroot/var/spool/openscada/DEMO_RU
+install -m 644 demo/ru/*.db %buildroot/var/spool/openscada/DEMO_RU
 
 %clean
 #rm -rf %buildroot %buildroot/%name-%version
@@ -146,11 +153,16 @@ echo "OpenSCADA values archive dir" > %buildroot/var/spool/openscada/ARCHIVES/VA
 
 %files demo
 %defattr(-,root,root)
-%config(noreplace) %_sysconfdir/oscada_demo.xml
-%_bindir/openscada_demo
-%_desktopdir/openscada_demo.desktop
-%_iconsdir/openscada_demo.png
-/var/spool/openscada/DATA/*.db
+%config(noreplace) %_sysconfdir/oscada_demo_en.xml
+%_bindir/openscada_demo_en
+%_desktopdir/openscada_demo_en.desktop
+%_iconsdir/openscada_demo_en.png
+/var/spool/openscada/DEMO_EN/*.db
+%config(noreplace) %_sysconfdir/oscada_demo_ru.xml
+%_bindir/openscada_demo_ru
+%_desktopdir/openscada_demo_ru.desktop
+%_iconsdir/openscada_demo_ru.png
+/var/spool/openscada/DEMO_RU/*.db
 
 %changelog
 * Mon Dec 22 2008 Roman Savochenko <rom_as@diyaorg.dp.ua>

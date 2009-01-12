@@ -192,7 +192,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	    {
 		ctrMkNode("fld",opt,-1,"/func/cfg/id",_("Id"),0444,"root","root",1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/func/cfg/name",_("Name"),0444,"root","root",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/func/cfg/descr",_("Description"),0444,"root","root",3,"tp","str","cols","70","rows","4");
+		ctrMkNode("fld",opt,-1,"/func/cfg/descr",_("Description"),0444,"root","root",3,"tp","str","cols","90","rows","5");
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/io",_("IO")))
@@ -303,14 +303,14 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	for( int i_io = 0; i_io < mIO.size(); i_io++ )
 	    if( io_id == io(i_io)->id() )
 	    {
-		if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	
+		if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
 		    opt->setText( (mTVal->ioType(i_io)==IO::Real) ? TSYS::real2str(mTVal->getR(i_io),6) : mTVal->getS(i_io) );
 		if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
 		    mTVal->setS(i_io,opt->text());
 		break;
 	    }
     }
-    else if( a_path == "/exec/calc" && mTVal && ctrChkNode(opt,"set",0666,"root","root",SEQ_WR) )	
+    else if( a_path == "/exec/calc" && mTVal && ctrChkNode(opt,"set",0666,"root","root",SEQ_WR) )
     {
         double c_rez = 0;
 	int n_tcalc = atoi(TBDS::genDBGet(nodePath()+"ntCalc","10",opt->attr("user")).c_str());

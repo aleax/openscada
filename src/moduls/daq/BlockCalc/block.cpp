@@ -469,7 +469,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 		    for( int i_io = 0; i_io < list.size(); i_io++ )
 		    {
 			int id = ioId(list[i_io]);
-			if( ioHide(id) && !atoi(TBDS::genDBGet(nodePath()+"showHide","0",opt->attr("user")).c_str()) ) continue;
+			if( ioHide(id) && !atoi(TBDS::genDBGet(owner().nodePath()+"showHide","0",opt->attr("user")).c_str()) ) continue;
 			const char *tip;
 			switch(ioType(id))
 			{
@@ -496,7 +496,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 		    {
 			int id = ioId(list[i_io]);
 
-			if( ioHide(id) && !atoi(TBDS::genDBGet(nodePath()+"showHide","0",opt->attr("user")).c_str()) ) continue;
+			if( ioHide(id) && !atoi(TBDS::genDBGet(owner().nodePath()+"showHide","0",opt->attr("user")).c_str()) ) continue;
 
 			//-- Add link's type --
 			ctrMkNode("fld",opt,-1,(string("/lnk/io/1|")+list[i_io]).c_str(),
@@ -567,8 +567,8 @@ void Block::cntrCmdProc( XMLNode *opt )
     }
     else if( (a_path == "/lio/show/hide" || a_path == "/lnk/show/hide") && enable() )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(TBDS::genDBGet(nodePath()+"showHide","0",opt->attr("user")));
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	TBDS::genDBSet(nodePath()+"showHide",opt->text(),opt->attr("user"));
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(TBDS::genDBGet(owner().nodePath()+"showHide","0",opt->attr("user")));
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	TBDS::genDBSet(owner().nodePath()+"showHide",opt->text(),opt->attr("user"));
     }
     else if( a_path.substr(0,7) == "/lio/io" && enable() )
     {

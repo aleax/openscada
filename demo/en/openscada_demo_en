@@ -1,0 +1,2 @@
+#!/bin/sh
+openscada --Config=/etc/oscada_demo_en.xml $@

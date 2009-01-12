@@ -541,7 +541,7 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/wdg/cfg/root",_("Root"),R_R_R_,"root","UI",1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/wdg/cfg/path",_("Path"),R_R_R_,"root","UI",1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/wdg/cfg/name",_("Name"),RWRWR_,"root","UI",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/wdg/cfg/descr",_("Description"),RWRWR_,"root","UI",3,"tp","str","cols","50","rows","3");
+		ctrMkNode("fld",opt,-1,"/wdg/cfg/descr",_("Description"),RWRWR_,"root","UI",3,"tp","str","cols","90","rows","4");
 		ctrMkNode("img",opt,-1,"/wdg/cfg/ico",_("Icon"),(isLink()?R_R_R_:RWRWR_),"root","UI",2,"v_sz","64","h_sz","64");
 		ctrMkNode("fld",opt,-1,"/wdg/cfg/owner",_("Owner and group"),RWRWR_,"root","UI",3,"tp","str","dest","select","select","/wdg/u_lst");
 		ctrMkNode("fld",opt,-1,"/wdg/cfg/grp","",RWRWR_,"root","UI",3,"tp","str","dest","select","select","/wdg/g_lst");

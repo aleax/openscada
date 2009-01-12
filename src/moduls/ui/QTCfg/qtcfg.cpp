@@ -1412,7 +1412,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 
 		edit = new TextEdit(widget,br_path.c_str());
 		edit->setStatusTip((sel_path+"/"+br_path).c_str());
-		if(atoi(t_s.attr("rows").c_str()) < 10)
+		if( atoi(t_s.attr("rows").c_str()) < 10 )
 		{
 		    edit->setSizePolicy( QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed) );
 		    edit->edit()->setFixedHeight(2*edit->edit()->currentFont().pointSize()*atoi(t_s.attr("rows").c_str()));
@@ -1424,7 +1424,11 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    edit->setSizePolicy( sp );
 		    edit->edit()->setMinimumHeight(2*edit->edit()->currentFont().pointSize()*atoi(t_s.attr("rows").c_str()));
 		}
-		edit->edit()->setLineWrapMode(QTextEdit::NoWrap);
+		if( atoi(t_s.attr("cols").c_str()) )
+		{
+		    edit->edit()->setLineWrapMode(QTextEdit::FixedColumnWidth);
+		    edit->edit()->setLineWrapColumnOrWidth(atoi(t_s.attr("cols").c_str()));
+		}else edit->edit()->setLineWrapMode(QTextEdit::NoWrap);
 		widget->layout()->addWidget( edit );
 		
 		if( !wr )	edit->edit()->setReadOnly( true );
@@ -1454,7 +1458,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	//> View Data-Time fields
 	else if( t_s.attr("tp") == "time" )
 	{
-	    QLabel	*lab, *val_r = NULL;
+	    QLabel	*lab = NULL, *val_r = NULL;
 	    LineEdit	*val_w = NULL;
 
 	    if( widget )
@@ -1535,8 +1539,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	//> View other string and numberic fields
 	else
 	{
-	    QLabel *lab		= NULL;
-	    QLabel *val_r	= NULL;
+	    QLabel *lab = NULL, *val_r	= NULL;
 	    LineEdit *val_w	= NULL;
 	    if( widget )
 	    {

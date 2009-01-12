@@ -447,8 +447,8 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,-1,"/scheme",_("Blocks scheme")))
 	{
 	    ctrMkNode("fld",opt,-1,"/scheme/ctm",_("Calk time (usek)"),0444,"root","root",1,"tp","real");
-	    ctrMkNode("list",opt,-1,"/scheme/sch",_("Blocks"),0664,"root","root",5,"tp","br","idm","1","s_com","add,del","br_pref","blk_","idSz","20");
 	    ctrMkNode("fld",opt,-1,"/scheme/nmb",_("Number"),0444,"root","root",1,"tp","str");
+	    ctrMkNode("list",opt,-1,"/scheme/sch",_("Blocks"),0664,"root","root",5,"tp","br","idm","1","s_com","add,del","br_pref","blk_","idSz","20");
 	}
 	return;
     }
@@ -481,9 +481,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	    if( blkAt(lst[i_b]).at().enable( ) )	enCnt++;
 	    if( blkAt(lst[i_b]).at().process( ) )	prcCnt++;
 	}
-	char buf[100];
-	snprintf(buf,sizeof(buf),_("All: %d; Enabled: %d; Process: %d"),lst.size(),enCnt,prcCnt);
-	opt->setText(buf);
+	opt->setText(TSYS::strMess(_("All: %d; Enabled: %d; Process: %d"),lst.size(),enCnt,prcCnt));
     }
     else TController::cntrCmdProc(opt);
 }

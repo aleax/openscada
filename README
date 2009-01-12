@@ -1,27 +1,27 @@
 
 	     Welcome to open SCADA system OpenSCADA.
 
-Documentation about system you may find together this document. Usually, OpenSCASA system is accompanied by next
+Documentation about this programm you may find together this document. Usually, OpenSCASA system is accompanied by next
 documentetion:
  - AboutOpenSCADA.pdf: Contain the generic information about system;
  - APIOpenSCADA.pdf: Contain OpenSCADA system API for developers;
- - FAQ_ru.pdf: Frequently ask questions about system;
- - mod_*: Module's documentation directory;
- - release_*.html: Release preview document.
- 
-For OpenSCADA starting we should write shell command <# openscada>. The system will be started in default configuration.
+ - FAQ.pdf: Frequently ask questions about system;
+ - Modules/*: Module's documentation directory;
+ - release_*.pdf: The release preview document for last version.
+
+For OpenSCADA starting you should write shell command <# openscada>. The system will be started in default configuration.
 This mode not have one DB configuration, but data into the configuration file enough for:
- - working into the graphical configurator QTCfg;
- - working into WEB-configurator (adress: http://localhost:10002 or http://localhost:10004 )
+ - working into the graphical configurator UI.QTCfg;
+ - working into WEB-configurators (adress: http://localhost:10002 or http://localhost:10004 )
 
 Default cofiguration can used for demon mode run. For starting the system into demon mode you should write shell command
 <# service oscadad start>.
 
-For first experience geting you may use OpenSCADA demo package. This package contain DB with the system and subsystems
-configuration examples. For starting into demo configurations you should write shell command <# openscada_demo>.
+For first experience geting you can use OpenSCADA demo package. This package contain DB with the system and subsystems
+configuration examples. For starting into demo configurations you should write shell command <# openscada_demo_en>.
 
-For using the system you may want passwords. Default configuration have next users:
+For using the system you can need passwords. Default configuration have next users:
  - root: system administrator, have password: "openscada";
  - user: unprivileged user, have empty password.
 
-If you have some questions then apply to WWW project site http://diyaorg.dp.ua/oscada for more information.
+If you have some questions then apply to WWW project site http://oscada.diyaorg.dp.ua for more information.

@@ -1566,7 +1566,7 @@ void Func::cntrCmdProc( XMLNode *opt )
 	TFunction::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Function: ")+name(),owner().DB().empty()?0444:0664,"root","root");
 	ctrMkNode("fld",opt,-1,"/func/cfg/name",_("Name"),owner().DB().empty()?0444:0664,"root","root",2,"tp","str","len","50");
-	ctrMkNode("fld",opt,-1,"/func/cfg/descr",_("Description"),owner().DB().empty()?0444:0664,"root","root",3,"tp","str","cols","90","rows","3");
+	ctrMkNode("fld",opt,-1,"/func/cfg/descr",_("Description"),owner().DB().empty()?0444:0664,"root","root",3,"tp","str","cols","90","rows","5");
 	ctrMkNode("fld",opt,-1,"/func/cfg/m_calc_tm",_("Maximum calc time (sec)"),0664,"root","root",1,"tp","dec");
 	if(ctrMkNode("area",opt,-1,"/io",_("Programm")))
 	{
@@ -1583,7 +1583,7 @@ void Func::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/io/io/4",_("Hide"),0664,"root","root",1,"tp","bool");
 		ctrMkNode("list",opt,-1,"/io/io/5",_("Default"),0664,"root","root",1,"tp","str");
 	    }
-	    ctrMkNode("fld",opt,-1,"/io/prog",_("Programm"),0664,"root","root",3,"tp","str","cols","90","rows","10");
+	    ctrMkNode("fld",opt,-1,"/io/prog",_("Programm"),0664,"root","root",2,"tp","str","rows","10");
 	}
 	return;
     }
