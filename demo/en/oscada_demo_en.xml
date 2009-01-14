@@ -58,9 +58,9 @@
 		    ADDR="TCP::10002:0"
 		    PROT="HTTP"
 		    START="1"
-		    SocketsBufLen="5"
-		    SocketsMaxQueue="10"
-		    SocketsMaxClient="10"/>
+		    BufLen="5"
+		    MaxClients="100"
+		    SocketsMaxQueue="10"/>
 		<fld
 		    ID="WEB_2"
 		    MODULE="Sockets"
@@ -69,9 +69,9 @@
 		    ADDR="TCP::10004:0"
 		    PROT="HTTP"
 		    START="1"
-		    SocketsBufLen="5"
-		    SocketsMaxQueue="10"
-		    SocketsMaxClient="10"/>
+		    BufLen="5"
+		    MaxClients="100"
+		    SocketsMaxQueue="10"/>
 	    </tbl>
 	    <tbl id="Transport_out">
 	        <fld

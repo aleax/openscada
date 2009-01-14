@@ -1,3 +1,7 @@
+2009-01-14 Roman
+- FIX:/SYS: Config files for Transport.Sockets format is fixed. No work connection by default config.
+
+
 2009-01-12 Roman OpenSCADA 0.6.3
 - !!!!:/DemoDB: Translation to English is added. DB files separated to English and Russian.
 - !!:/SYS: Add release 0.6.3 anounce documents.
