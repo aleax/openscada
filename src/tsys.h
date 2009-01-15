@@ -192,7 +192,7 @@ class TSYS : public TCntrNode
 
 	//- Path and string parse -
 	static string fNameFix( const string &fname );
-	static bool strEmpty( const string &val );
+	static string strNoSpace( const string &val );
 	static string strSepParse( const string &str, int level, char sep, int *off = NULL );
 	static string pathLev( const string &path, int level, bool encode = true, int *off = NULL );
 	static string path2sepstr( const string &path, char sep = '.' );

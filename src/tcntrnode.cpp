@@ -378,7 +378,7 @@ void TCntrNode::chldAdd( char igr, TCntrNode *node, int pos )
     if( nodeMode() != Enable )	throw TError(nodePath().c_str(),"Node is not enabled!");
 
     TMap::iterator p;
-    if( TSYS::strEmpty(node->nodeName()) )
+    if( TSYS::strNoSpace(node->nodeName()).empty() )
     {
 	delete node;
 	throw TError(nodePath().c_str(),"Add child id is empty!");

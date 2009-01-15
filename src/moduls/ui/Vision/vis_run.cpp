@@ -491,7 +491,7 @@ void VisRun::printDiag( const string &idg )
 	for( int i_e = 0; i_e < sD->prms.size(); i_e++ )
 	{
 	    QPoint pnt((i_e/elLine)*(pagl.width()/2),im.height()+fntSize*(2+i_e%elLine));
-	    if( TSYS::strEmpty(sD->prms[i_e].addr()) ) continue;
+	    if( TSYS::strNoSpace(sD->prms[i_e].addr()).empty() ) continue;
 	    painter.fillRect(QRect(pnt.x()+2,pnt.y()+2,fntSize-5,fntSize-5),QBrush(QColor(sD->prms[i_e].color().c_str())));
 	    painter.drawRect(QRect(pnt.x()+2,pnt.y()+2,fntSize-5,fntSize-5));
 	    painter.drawText(QRect(pnt.x()+fntSize,pnt.y(),pagl.width()/2,fntSize),Qt::AlignLeft,

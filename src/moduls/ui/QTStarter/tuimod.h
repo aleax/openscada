@@ -24,6 +24,7 @@
 
 #include <QObject>
 #include <QApplication>
+#include <QTranslator>
 
 #include <tuis.h>
 
@@ -34,6 +35,20 @@ class QTimer;
 
 namespace QTStarter
 {
+
+//*************************************************
+//* I18NTranslator                                *
+//*************************************************
+class I18NTranslator: public QTranslator
+{
+    public:
+	//Methods
+	I18NTranslator( );
+
+	bool isEmpty( ) const;
+
+	QString translate( const char *context, const char *sourceText, const char *comment = 0 ) const;
+};
 
 //*************************************************
 //* WinControl                                    *

@@ -210,7 +210,7 @@ void Widget::setEnable( bool val )
 	{
 	    try
 	    {
-		if( TSYS::strEmpty(parentNm()) ) throw TError(nodePath().c_str(),"%s",_("Empty parent!"));
+		if( TSYS::strNoSpace(parentNm()).empty() ) throw TError(nodePath().c_str(),"%s",_("Empty parent!"));
 		if( parentNm() == ".." ) mParent=AutoHD<TCntrNode>(nodePrev());
 		else mParent=mod->nodeAt(parentNm());
 		//- Check for enable parent widget and enable if not -

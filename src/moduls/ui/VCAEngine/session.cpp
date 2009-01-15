@@ -948,7 +948,7 @@ void SessWdg::setProcess( bool val )
     if( val && !enable() ) setEnable(true);
 
     //- Prepare process function value level -
-    if( val && !TSYS::strEmpty(calcProg()) )
+    if( val && !TSYS::strNoSpace(calcProg()).empty() )
     {
 	//-- Prepare function io structure --
 	TFunction fio(parent().at().calcId());

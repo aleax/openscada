@@ -485,12 +485,13 @@ void *TSocketIn::ClTask( void *s_inf )
 	req.assign(buf,rez);
 
 	s.s->messPut(cSock,req,answ,prot_in);
-	if( prot_in.freeStat() && answ.size() )
+	if( answ.size() )
 	{
 #if OSC_DEBUG >= 4
             mess_debug(s.s->nodePath().c_str(),_("The message is replied with the size <%d>."),answ.size());
 #endif
 	    rez = BIO_write(s.bio,answ.data(),answ.size()); s.s->trOut += (float)rez/1024;
+	    answ = "";
 	}
     }
 
@@ -687,7 +688,7 @@ void TSocketOut::start()
 	}
 
 	//- Certificates, private key and it password loading -
-	if( !TSYS::strEmpty(certKey()) )
+	if( !TSYS::strNoSpace(certKey()).empty() )
 	{
 	    //-- Write certificate and private key to temorary file --
 	    cfile = tmpnam(err);

@@ -156,14 +156,18 @@ void *TSYS::str2addr( const string &str )
     return (void *)strtoul(str.c_str(),NULL,16);
 }
 
-bool TSYS::strEmpty( const string &val )
+string TSYS::strNoSpace( const string &val )
 {
-    if( !val.size() )	return true;
+    int beg = -1, end = -1;
+
     for( int i_s = 0; i_s < val.size(); i_s++ )
 	if( val[i_s] != ' ' && val[i_s] != '\n' && val[i_s] != '\t' )
-	    return false;
+	{
+	    if( beg < 0 ) beg = i_s;
+	    end = i_s;
+	}
 
-    return true;
+    return (beg>=0) ? val.substr(beg,end-beg+1) : "";
 }
 
 string TSYS::strMess( const char *fmt, ... )

@@ -150,10 +150,11 @@ string TProtIn::http_head( const string &rcode, int cln, const string &addattr )
 
 bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 {
-    string req;
+    bool KeepAlive = false;
+    string req, sel;
     vector<string> vars;
 
-    //- Continue for full reqst -
+    //> Continue for full reqst
     if( m_nofull )
     {
 	m_buf = m_buf+reqst;
@@ -167,33 +168,40 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
     if( request.size() > 0 )
     {
 	int    pos = 0;
-	//mess_debug("DEBUG","Content: <%s>!",request.c_str());
+#if OSC_DEBUG >= 3
+	mess_debug(nodePath().c_str(),_("Content:\n%s"),request.c_str());
+#endif
 
-	//- Parse first record -
+	//> Parse first record
 	req = TSYS::strSepParse(request,0,'\n',&pos);
 	if( !req.empty() ) req.resize(req.size()-1);
 	string method   = TSYS::strSepParse(req,0,' ');
 	string url      = TSYS::strSepParse(req,1,' ');
 	string protocol = TSYS::strSepParse(req,2,' ');
 
-	//- Parse parameters -
+	//> Parse parameters
 	int c_lng=-1;
 	while( true )
 	{
 	    req = TSYS::strSepParse(request,0,'\n',&pos);
 	    if( !req.empty() ) req.resize(req.size()-1);
 	    if( req.empty() )   break;
-	    string var = TSYS::strSepParse(req,0,':');
-	    if( var.empty() )	break;
-	    else if( strcasecmp(var.c_str(),"content-length") == 0 )	c_lng = atoi(TSYS::strSepParse(req,1,':').c_str());
+	    int sepPos = req.find(":",0);
+	    if( sepPos == 0 || sepPos == string::npos ) break;
+	    string var = req.substr(0,sepPos);
+	    if( strcasecmp(var.c_str(),"content-length") == 0 )	c_lng = atoi(req.substr(sepPos+1).c_str());
+	    else if( strcasecmp(var.c_str(),"connection") == 0 )
+		for( int off = 0; (sel=TSYS::strSepParse(req.substr(sepPos+1),0,',',&off)).size(); )
+		    if( strcasecmp(TSYS::strNoSpace(sel).c_str(),"keep-alive") == 0 )
+		    { KeepAlive = true; break; }
 	    vars.push_back( req );
 	}
 
-	//- Check content length -
+	//> Check content length
 	if( (c_lng >= 0 && c_lng > (request.size()-pos)) || (c_lng < 0 && method == "POST") ) m_nofull = true;
 	if( m_nofull ) return m_nofull;
 
-	//- Check protocol version -
+	//> Check protocol version
 	if( protocol != "HTTP/1.0" && protocol != "HTTP/1.1" )
 	{
 	    answer = "<html>\n"
@@ -206,7 +214,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	    return m_nofull;
 	}
 
-	//- Send request to module -
+	//> Send request to module
 	int url_pos = 0;
 	string name_mod = TSYS::pathLev(url,0,false,&url_pos);
 	while( url_pos < url.size() && url[url_pos] == '/' ) url_pos++;
@@ -215,10 +223,9 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	try
 	{
 	    AutoHD<TModule> mod = SYS->ui().at().modAt(name_mod);
-	    if( mod.at().modInfo("SubType") != "WWW" )
-		throw TError(nodePath().c_str(),"Find no WWW subtype module!");
+	    if( mod.at().modInfo("SubType") != "WWW" ) throw TError(nodePath().c_str(),"Find no one WWW subtype module!");
 
-	    //- Check metods -
+	    //>> Check metods
 	    if( method == "GET" )
 	    {
 		void(TModule::*HttpGet)( const string &url, string &page, const string &sender, vector<string> &vars);
@@ -226,7 +233,9 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 		    (void (TModule::**)()) &HttpGet);
 
 		((&mod.at())->*HttpGet)(url,answer,sender,vars);
-		//mess_debug("DEBUG","Get Content: <%s>!",request.c_str());
+#if OSC_DEBUG >= 4
+		mess_debug(nodePath().c_str(),"Get Content:\n%s",request.c_str());
+#endif
 	    }
 	    else if( method == "POST" )
 	    {
@@ -235,7 +244,9 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 		    (void (TModule::**)()) &HttpPost);
 
 		((&mod.at())->*HttpPost)(url,answer,sender,vars,request.substr(pos));
-		//mess_debug(nodePath().c_str(),"Post Content: <%s>!",request.c_str());
+#if OSC_DEBUG >= 4
+		mess_debug(nodePath().c_str(),"Post Content:\n%s",request.c_str());
+#endif
 	    }
 	    else
 	    {
@@ -251,7 +262,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	catch(TError err){ index(answer); }
     }
 
-    return m_nofull;
+    return m_nofull||KeepAlive;
 }
 
 string TProtIn::w_head( )

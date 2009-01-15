@@ -469,12 +469,13 @@ void *TSocketIn::ClTask( void *s_inf )
 	req.assign(buf,r_len);
 
 	s.s->messPut(s.cSock,req,answ,s.sender,prot_in);
-	if( prot_in.freeStat() && answ.size() )
+	if( answ.size() )
 	{
 #if OSC_DEBUG >= 5
 	    mess_debug(s.s->nodePath().c_str(),_("Socket replied message <%d> to <%s>."), answ.size(), s.sender.c_str() );
 #endif
 	    r_len = write(s.cSock,answ.c_str(),answ.size()); s.s->trOut += (float)r_len/1024;
+	    answ = "";
 	}
     }while( !s.s->endrun_cl && (s.s->mode || !prot_in.freeStat()) );
 

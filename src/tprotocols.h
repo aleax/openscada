@@ -38,12 +38,13 @@ class TProtocol;
 class TProtocolIn : public TCntrNode
 {
     public:
+	//Methods
 	TProtocolIn( const string &name );
 	virtual ~TProtocolIn( );
 
 	string &name( )		{ return m_name; }
 
-	//- Process input messages -
+	//> Process input messages
 	virtual bool mess( const string &request, string &answer, const string &sender )
 	{ answer = ""; }
 

@@ -1,3 +1,12 @@
+2009-01-15 Roman
+- !:/SYS: Function for extracting space symbols from begin and end of string is added, TSYS::strNoSpace().
+    Function TSYS::strEmpty() is deleted and replaced by TSYS::strNoSpace() everywhere.
+- !!!:/Protocol/HTTP: Keep-Alive from HTTP protocol support is added. Critical for Opera.
+- !!!:/UI/QTStarter: I18NTranslator QT traslator is added for transporting QT's translation requests to gettext I18N engine.
+    QT's self dialogs' messages is translated to Russian and Ukrainian.
+- /DemoDB: English translation of DB is updated for some translation fix.
+
+
 2009-01-14 Roman
 - FIX:/SYS: Config files for Transport.Sockets format is fixed. No work connection by default config.
 

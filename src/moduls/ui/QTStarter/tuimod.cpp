@@ -85,6 +85,28 @@ TUIMod::TUIMod( string name ) : end_run(false), demon_mode(false), start_com(fal
     mSource	= name;
 
     mod		= this;
+
+    //> Massages not for compile but for indexing by gettext
+#if 0
+    char mess[][100] =
+    {
+	"&Yes","&No","Cancel","&OK","Apply","Close","Back","Forward","Parent Directory",
+	"Look in:","Computer","File","Folder","File &name:","Open","&Open","Cancel","Save","&Save","Date Modified","All Files (*)",
+	"Create New Folder","List View","Detail View","Files of type:","New Folder","&New Folder","Show &hidden files","&Delete","&Rename","Remove",
+	"&Undo","&Redo","Cu&t","&Copy","&Paste","Delete","Select All","Insert Unicode control character",
+	"%1 bytes","%1 KB",
+	"Are sure you want to delete '%1'?",
+	"<p>This program uses Qt Open Source Edition version %1.</p><p>Qt Open Source Edition is intended for the development of Open Source applications. You need a commercial Qt license for development of proprietary (closed source) applications.</p><p>Please see <a href=\"http://www.trolltech.com/company/model/\">www.trolltech.com/company/model/</a> for an overview of Qt licensing.</p>",
+	"<h3>About Qt</h3>%1<p>Qt is a C++ toolkit for cross-platform application development.</p><p>Qt provides single-source portability across MS&nbsp;Windows, Mac&nbsp;OS&nbsp;X, Linux, and all major commercial Unix variants. Qt is also available for embedded devices as Qt for Embedded Linux and Qt for Windows CE.</p><p>Qt is a Nokia product. See <a href=\"http://www.trolltech.com/qt/\">www.trolltech.com/qt/</a> for more information.</p>",
+	"Hu&e:","&Sat:","&Val:","&Red:","&Green:","Bl&ue:","A&lpha channel:","&Basic colors","&Custom colors","&Add to Custom Colors","Select color",
+	"Form","Printer","&Name:","P&roperties","Location:","Preview","Type:","Output &file:","Print range","Print all",
+	"Pages from","to","Selection","Output Settings","Copies:","Collate","Reverse","Copies","Color Mode","Color","Grayscale",
+	"Duplex Printing","None","Long side","Short side","Options","&Options >>","&Options <<","&Print","Print to File (PDF)","Print to File (Postscript)",
+	"Local file","Write %1 file","Paper","Page size:","Width:","Height:","Paper source:","Orientation","Portrait","Landscape","Reverse landscape",
+	"Reverse portrait","Margins","top margin","left margin","right margin","bottom margin","Points (pt)","Inches (in)",
+	"Millimeters (mm)","Centimeters (cm)","Page","Advanced"
+    };
+#endif
 }
 
 TUIMod::~TUIMod()
@@ -235,13 +257,17 @@ void *TUIMod::Task( void * )
     mess_debug(mod->nodePath().c_str(),_("Thread <%u> is started. TID: %ld"),pthread_self(),(long int)syscall(224));
 #endif
 
-    //- QT application object init -
+    //> QT application object init
     QApplication *QtApp = new QApplication( (int&)SYS->argc,(char **)SYS->argv );
     setlocale(LC_NUMERIC,"C");		//Standart numeric separator restore
     QtApp->setQuitOnLastWindowClosed(false);
     mod->run_st = true;
 
-    //- Start splash create -
+    //> Create I18N translator
+    I18NTranslator translator;
+    QtApp->installTranslator(&translator);
+
+    //> Start splash create
     if( !ico_t.load(TUIS::icoPath("splash").c_str()) )	ico_t.load(":/images/splash.png");
     QSplashScreen *splash = new QSplashScreen(QPixmap::fromImage(ico_t));
     splash->show();
@@ -257,7 +283,7 @@ void *TUIMod::Task( void * )
     }
     delete splash;
 
-    //- Start external modules -
+    //> Start external modules
     WinControl *winCntr = new WinControl( );
 
     int op_wnd = 0;
@@ -266,7 +292,7 @@ void *TUIMod::Task( void * )
 	if( mod->owner().modAt(list[i_l]).at().modInfo("SubType") == "QT" &&
 		mod->owner().modAt(list[i_l]).at().modFuncPresent("QMainWindow *openWindow();") )
 	{
-	    //-- Search module into start list --
+	    //>> Search module into start list
 	    int i_off = 0;
 	    string s_el;
 	    while( (s_el=TSYS::strSepParse(mod->start_mod,0,';',&i_off)).size() )
@@ -275,14 +301,14 @@ void *TUIMod::Task( void * )
 		if( winCntr->callQTModule(list[i_l]) ) op_wnd++;
 	}
 
-    //- Start call dialog -
+    //> Start call dialog
     if(!op_wnd) winCntr->startDialog( );
 
     QObject::connect( QtApp, SIGNAL(lastWindowClosed()), winCntr, SLOT(lastWinClose()) );
     QtApp->exec();
     delete winCntr;
 
-    //- Stop splash create -
+    //> Stop splash create
     if( !ico_t.load(TUIS::icoPath("splash_exit").c_str()) )	ico_t.load(":/images/splash.png");
     splash = new QSplashScreen(QPixmap::fromImage(ico_t));
     splash->show();
@@ -299,7 +325,7 @@ void *TUIMod::Task( void * )
     }
     delete splash;
 
-    //- QT application object free -
+    //> QT application object free
     delete QtApp;
     first_ent = false;
 
@@ -459,4 +485,29 @@ void WinControl::startDialog( )
     new_wnd_lay->addWidget( butt, 0, 0 );
 
     new_wnd->show();
+}
+
+//*************************************************
+//* I18NTranslator                                *
+//*************************************************
+I18NTranslator::I18NTranslator( ) : QTranslator(0)
+{
+
+}
+
+bool I18NTranslator::isEmpty( ) const
+{
+    return false;
+}
+
+QString I18NTranslator::translate( const char *context, const char *sourceText, const char *comment ) const
+{
+    if( !sourceText ) return "";
+
+#if OSC_DEBUG >= 3
+    if( string(sourceText) == _(sourceText) )
+	mess_debug(mod->nodePath().c_str(),_("No translated QT message: '%s'"),sourceText);
+#endif
+
+    return _(sourceText);
 }
