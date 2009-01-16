@@ -1,3 +1,8 @@
+2009-01-16 Roman
+- !!:/UI/QTCfg: Status update for remote stations is added.
+- /UI/WebCfgD: Connection error's code changed to 10.
+
+
 2009-01-15 Roman
 - !:/SYS: Function for extracting space symbols from begin and end of string is added, TSYS::strNoSpace().
     Function TSYS::strEmpty() is deleted and replaced by TSYS::strNoSpace() everywhere.

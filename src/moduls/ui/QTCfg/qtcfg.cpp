@@ -686,7 +686,10 @@ void ConfApp::treeUpdate( )
 void ConfApp::userSel()
 {
     pg_info.setAttr("path","");
-    pageDisplay( mod->startPath() );
+
+    try{ pageDisplay(mod->startPath()); }
+    catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
+
     initHosts();
 }
 
@@ -766,7 +769,11 @@ void ConfApp::selectPage( const string &path )
 	//> Display page
 	pageDisplay( path );
     }
-    catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
+    catch(TError err)
+    {
+	mod->postMess(err.cat,err.mess,TUIMod::Error,this);
+	if( err.cod == 10 ) initHosts( );
+    }
 }
 
 void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWidget *widget )
@@ -1724,8 +1731,7 @@ void ConfApp::pageDisplay( const string &path )
 	sel_path = path;
 
 	pg_info.clear()->setAttr("path",sel_path);
-	if( cntrIfCmd(pg_info) )
-	{ mod->postMess(pg_info.attr("mcat"),pg_info.text(),TUIMod::Error,this); return; }
+	if( cntrIfCmd(pg_info) ) { throw TError(atoi(pg_info.attr("rez").c_str()),pg_info.attr("mcat").c_str(),"%s",pg_info.text().c_str()); }
 	root = pg_info.childGet(0);
     }
     else
@@ -1733,8 +1739,7 @@ void ConfApp::pageDisplay( const string &path )
 	//>> Check the new node structure and the old node
 	XMLNode n_node("info");
 	n_node.setAttr("path",sel_path);
-	if( cntrIfCmd(n_node) )
-	{ mod->postMess(n_node.attr("mcat"),n_node.text(),TUIMod::Error,this); return; }
+	if( cntrIfCmd(n_node) ) { throw TError(atoi(n_node.attr("rez").c_str()),n_node.attr("mcat").c_str(),"%s",n_node.text().c_str()); }
 	upStruct( *root, *n_node.childGet(0) );
     }
 
@@ -1950,7 +1955,12 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 	string grpDscr = TSYS::strSepParse(grps[0].toAscii().data(),2,'\n');
 	XMLNode req("chlds");
 	req.setAttr("path",path+"/%2fobj")->setAttr("grp",grpId);
-	if( cntrIfCmd(req) ) { mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this); return; }
+	if( cntrIfCmd(req) )
+	{
+	    if( atoi(req.attr("rez").c_str()) == 10 ) initHosts( );
+	    mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this);
+	    return;
+	}
 	//> Add and update present
 	for( int i_e = 0; i_e < req.childSize(); i_e++ )
 	{
@@ -2005,6 +2015,8 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 		}
 		if( i_e >= req.childSize() ) { delete i->takeChild(i_it); i_it--; }
 	    }
+
+	if( !i->parent() && i->data(0,Qt::UserRole).toInt() == 10 ) initHosts( );
     }
 
 #if OSC_DEBUG >= 3
@@ -2039,7 +2051,7 @@ int ConfApp::cntrIfCmd( XMLNode &node )
 	node.load(tr.at().messProtIO("0\n"+host.user+"\n"+host.pass+"\n"+node.save(),"SelfSystem"));
 	node.setAttr("path",path);
     }catch( TError err )
-    { node.setAttr("mcat",err.cat)->setAttr("rez","3")->setText(err.mess); }
+    { node.setAttr("mcat",err.cat)->setAttr("rez","10")->setText(err.mess); }
     return atoi(node.attr("rez").c_str());
 }
 
@@ -2063,6 +2075,8 @@ void ConfApp::initHosts( )
     bool emptyTree = !CtrTree->topLevelItemCount();
     for( int i_st = 0; i_st < stls.size(); i_st++ )
     {
+	int errCon = 0;
+
 	QTreeWidgetItem *nit = NULL;
 	if( !emptyTree )
 	    for( int i_top = 0; i_top < CtrTree->topLevelItemCount(); i_top++ )
@@ -2086,17 +2100,29 @@ void ConfApp::initHosts( )
 	//>>>> Check icon
 	QImage img; string simg;
 	XMLNode reqIco("get"); reqIco.setAttr("path","/"+stls[i_st]+"/%2fico");
-	if( !cntrIfCmd(reqIco) ) simg = TSYS::strDecode(reqIco.text(),TSYS::base64);
-	else simg = TUIS::icoGet("disconnect");
-	if( img.loadFromData((const uchar*)simg.c_str(),simg.size()) )
+	errCon = cntrIfCmd(reqIco);
+	if( !errCon )
+	{ simg = TSYS::strDecode(reqIco.text(),TSYS::base64);
+	  if( img.loadFromData((const uchar*)simg.c_str(),simg.size()) )
 	    nit->setIcon(0,QPixmap::fromImage(img).scaled(16,16,Qt::KeepAspectRatio,Qt::SmoothTransformation));
+	  else nit->setIcon(0,QPixmap());
+	}
 	//>>>> Process groups
 	QStringList it_grp;
 	XMLNode brReq("info"); brReq.setAttr("path","/"+SYS->id()+"/%2fbr");
-	cntrIfCmd(brReq);
+	if( cntrIfCmd(brReq) == 10 ) errCon = 10;
 	for( int i_br = 0; brReq.childSize() && i_br < brReq.childGet(0)->childSize(); i_br++ )
 	    it_grp.push_back(("1\n"+brReq.childGet(0)->childGet(i_br)->attr("id")+"\n"+brReq.childGet(0)->childGet(i_br)->attr("dscr")).c_str());
 	nit->setData(2,Qt::UserRole,it_grp);
+
+	if( errCon == 10 )
+	{
+	    simg = TUIS::icoGet("disconnect");
+	    if( img.loadFromData((const uchar*)simg.c_str(),simg.size()) )
+		nit->setIcon(0,QPixmap::fromImage(img).scaled(16,16,Qt::KeepAspectRatio,Qt::SmoothTransformation));
+	    nit->setExpanded(false);
+	}
+	nit->setData(0,Qt::UserRole,errCon);
     }
 }
 

@@ -581,7 +581,7 @@ int TWEB::cntrIfCmd( XMLNode &node, const string &user )
 	node.load(tr.at().messProtIO("0\n"+host.user+"\n"+host.pass+"\n"+node.save(),"SelfSystem"));
 	node.setAttr("path",path);
     }catch( TError err )
-    { node.setAttr("mcat",err.cat)->setAttr("rez","3")->setText(err.mess); }
+    { node.setAttr("mcat",err.cat)->setAttr("rez","10")->setText(err.mess); }
 
     return atoi(node.attr("rez").c_str());
 }
