@@ -242,11 +242,11 @@ void TMdContr::stop_( )
     //- Close AI DAQ task -
     if( ad_dsc_st )
     {
-        endrun_req_ad_dsc = true;
-        pthread_kill( ad_dsc_pthr, SIGALRM );
-        if( TSYS::eventWait(ad_dsc_st,false,nodePath()+"addsc_task_stop",5) )
-            throw TError(nodePath().c_str(),_("AD DSC task is not stopped!"));
-        pthread_join( ad_dsc_pthr, NULL );
+	endrun_req_ad_dsc = true;
+	pthread_kill( ad_dsc_pthr, SIGALRM );
+	if( TSYS::eventWait(ad_dsc_st,false,nodePath()+"addsc_task_stop",5) )
+	    throw TError(nodePath().c_str(),_("AD DSC task is not stopped!"));
+	pthread_join( ad_dsc_pthr, NULL );
     }
 
     if( !dataEmul() )	dscFreeBoard(dscb);

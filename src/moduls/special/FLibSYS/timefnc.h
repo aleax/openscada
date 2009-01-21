@@ -107,6 +107,7 @@ class tmTime : public TFunction
 	tmTime( ) : TFunction("tmTime")
 	{
 	    ioAdd( new IO("sec",_("Seconds"),IO::Integer,IO::Return,"0") );
+	    ioAdd( new IO("usec",_("Microseconds"),IO::Integer,IO::Output,"-1") );
 	}
 
 	string name( )	{ return _("Time: Time"); }
@@ -114,7 +115,13 @@ class tmTime : public TFunction
 
 	void calc( TValFunc *val )
 	{
-	    val->setI(0,time(NULL));
+	    if( val->getI(1) < 0 ) val->setI(0,time(NULL));
+	    else
+	    {
+		long long tm = TSYS::curTime();
+		val->setI(0,tm/1000000);
+		val->setI(1,tm%1000000);
+	    }
 	}
 };
 

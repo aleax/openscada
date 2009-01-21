@@ -1,3 +1,10 @@
+2009-01-21 Roman
+- !:/Special/FLibSYS: Microseconds time parameter is added to user's function tmTime().
+    Geting microseconds is more resource dependent function then for get microseconds used preset it attribute to no negative value.
+- !:/UI/QTCfg: Identical tabs selection saving on item changing is added.
+- FIX:/UI/WebCfgD: DB load and save actions updating after save DB action activation is fixed.
+
+
 2009-01-16 Roman
 - !!:/UI/QTCfg: Status update for remote stations is added.
 - /UI/WebCfgD: Connection error's code changed to 10.

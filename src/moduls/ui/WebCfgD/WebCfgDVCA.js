@@ -1895,6 +1895,7 @@ function itDBSave( )
 {
   var rez = servSet(selPath+'/%2fobj','com=com','<save/>',true);
   if( rez && parseInt(rez.getAttribute('rez')) != 0 ) alert(nodeText(rez));
+  else setTimeout('pageRefresh()',500);
 }
 /**************************************************
  * pageUp - Select up page.                       *

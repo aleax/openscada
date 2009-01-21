@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-15 17:26+0200\n"
+"POT-Creation-Date: 2009-01-19 16:48+0200\n"
 "PO-Revision-Date: 2007-10-29 22:03+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -715,7 +715,7 @@ msgstr ""
 msgid "Exit from system"
 msgstr "Выйти из программы"
 
-#: tuimod.cpp:508
+#: tuimod.cpp:509
 #, c-format
-msgid "TEST 00: '%s'\n"
+msgid "No translated QT message: '%s'"
 msgstr ""

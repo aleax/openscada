@@ -808,6 +808,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	titleLab->setText((string("<p align='center'><i><b>")+TSYS::strEncode(node.attr("dscr"),TSYS::Html)+"</b></i></p>").c_str());
 
 	//>> Delete tabs of deleted areas
+	bool actRemoved = false;
 	for( int i_tbs = 0; i_tbs < tabs->count(); i_tbs++ )
 	{
 	    unsigned i_cf;
@@ -817,6 +818,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    break;
 	    if( i_cf >= node.childSize() )
 	    {
+		if( tabs->currentIndex() == i_tbs ) actRemoved = true;
 		tabs->blockSignals(true);
 		if( i_tbs == tabs->currentIndex() ) node.childGet(i_tbs)->setAttr("qview","0");
 		tabs->widget(i_tbs)->deleteLater();
@@ -843,21 +845,27 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	    }
 
 	    //>>> Find and prepare current tab
+	    if( actRemoved && i_area == 0 )
+	    {
+		tabs->blockSignals(true);
+		tabs->setCurrentIndex(0);
+		tabs->blockSignals(false);
+	    }
 	    if( tabs->currentIndex() == i_area )
 	    {
 		if( !atoi(t_s.attr("qview").c_str()) )
 		{
 		    QScrollArea *scrl = (QScrollArea*)tabs->widget(i_area);
 		    QWidget *wdg = scrl->widget();
-		
+
 		    int v_scrl = (scrl->verticalScrollBar()) ? scrl->verticalScrollBar()->value() : 0;
 		    if( wdg != NULL ) wdg->deleteLater(); // delete wdg;
-		
+
 		    wdg = new QFrame(scrl);
 		    QVBoxLayout *wdg_lay = new QVBoxLayout(wdg);
 		    wdg_lay->setSpacing(3);
 		    wdg_lay->setAlignment( Qt::AlignTop );
-		
+
 		    selectChildRecArea(t_s,a_path+t_s.attr("id")+'/',wdg);
 		    wdg_lay->addItem( new QSpacerItem( 20, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 		    scrl->setWidget(wdg);
@@ -1720,14 +1728,6 @@ void ConfApp::pageDisplay( const string &path )
 	//>> Stop refresh
 	pageCyclRefrStop();
 
-	//> Delete all tabs for new node
-	tabs->blockSignals(true);
-	while( tabs->widget(0) )
-	{
-	    tabs->widget(0)->deleteLater();
-	    tabs->removeTab(0);
-	}
-	tabs->blockSignals(false);
 	sel_path = path;
 
 	pg_info.clear()->setAttr("path",sel_path);
@@ -1890,7 +1890,7 @@ void ConfApp::ctrTreePopup( )
     }catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 }
 
-void ConfApp::tabSelect(  QWidget * wdg )
+void ConfApp::tabSelect( QWidget *wdg )
 {
     try
     {
