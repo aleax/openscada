@@ -23,6 +23,7 @@
 #include <getopt.h>
 #include <signal.h>
 #include <sys/time.h>
+#include <string.h>
 
 #include "tsys.h"
 #include "tarchives.h"
@@ -83,6 +84,7 @@ TArchiveS::TArchiveS( ) :
 
     //- Create message archive timer -
     struct sigevent sigev;
+    memset(&sigev,0,sizeof(sigev));
     sigev.sigev_notify = SIGEV_THREAD;
     sigev.sigev_value.sival_ptr = this;
     sigev.sigev_notify_function = ArhMessTask;
@@ -114,7 +116,7 @@ int TArchiveS::valPeriod( )
 
 void TArchiveS::load_( )
 {
-    //- Load parameters from command line -
+    //> Load parameters from command line
     int next_opt;
     const char *short_opt="h";
     struct option long_opt[] =
@@ -134,15 +136,15 @@ void TArchiveS::load_( )
 	}
     } while(next_opt != -1);
 
-    //- Load parameters -
+    //> Load parameters
     setMessBufLen( atoi(TBDS::genDBGet(nodePath()+"MessBufSize",TSYS::int2str(messBufLen())).c_str()) );
     setMessPeriod( atoi(TBDS::genDBGet(nodePath()+"MessPeriod",TSYS::int2str(m_mess_per)).c_str()) );
     setValPeriod( atoi(TBDS::genDBGet(nodePath()+"ValPeriod",TSYS::int2str(m_val_per)).c_str()) );
     setValPrior( atoi(TBDS::genDBGet(nodePath()+"ValPriority",TSYS::int2str(m_val_prior)).c_str()) );
     max_req_mess = atoi(TBDS::genDBGet(nodePath()+"MaxReqMess",TSYS::int2str(max_req_mess)).c_str());
 
-    //- LidDB -
-    //-- Message archivators load --
+    //> LidDB
+    //>> Message archivators load
     string id,type;
     try
     {
@@ -150,12 +152,11 @@ void TArchiveS::load_( )
 	c_el.cfgViewAll(false);
 	vector<string> db_ls;
 
-	//-- Search int DB and create new archivators --
-	SYS->db().at().dbList(db_ls);
+	//>> Search int DB and create new archivators
+	if( !SYS->selDB( ).empty() ) db_ls.push_back(SYS->selDB());
+	else SYS->db().at().dbList(db_ls);
 	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
-	{
-	    int fld_cnt=0;
-	    while( SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_mess_proc","",fld_cnt++,c_el) )
+	    for( int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_mess_proc","",fld_cnt++,c_el); )
 	    {
 		id = c_el.cfg("ID").getS();
 		type = c_el.cfg("MODUL").getS();
@@ -164,37 +165,34 @@ void TArchiveS::load_( )
 		c_el.cfg("ID").setS("");
 		c_el.cfg("MODUL").setS("");
 	    }
-	}
-	//-- Search int config file and create new archivators --
-	int fld_cnt=0;
-	while( SYS->db().at().dataSeek("",nodePath()+subId()+"_mess_proc",fld_cnt++,c_el) )
-	{
-	    id = c_el.cfg("ID").getS();
-	    type = c_el.cfg("MODUL").getS();
-	    if( !at(type).at().messPresent(id) ) 
-		at(type).at().messAdd(id,"*.*");
-	    c_el.cfg("ID").setS("");
-	    c_el.cfg("MODUL").setS("");
-	}
+	//>> Search into config file and create new archivators
+	if( SYS->selDB( ).empty() )
+	    for( int fld_cnt=0; SYS->db().at().dataSeek("",nodePath()+subId()+"_mess_proc",fld_cnt++,c_el); )
+	    {
+		id = c_el.cfg("ID").getS();
+		type = c_el.cfg("MODUL").getS();
+		if( !at(type).at().messPresent(id) ) at(type).at().messAdd(id,"*.*");
+		c_el.cfg("ID").setS("");
+		c_el.cfg("MODUL").setS("");
+	    }
     }catch( TError err )
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Message archivators load error."));
     }
 
-    //-- Value archivators load --
+    //>> Value archivators load
     try
     {
 	TConfig c_el(&el_val);
 	c_el.cfgViewAll(false);
 	vector<string> db_ls;
 
-	//-- Search into DB and create new archivators --
-	SYS->db().at().dbList(db_ls);
+	//>> Search into DB and create new archivators
+	if( !SYS->selDB( ).empty() ) db_ls.push_back(SYS->selDB());
+	else SYS->db().at().dbList(db_ls);
 	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
-	{
-	    int fld_cnt=0;
-	    while( SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_val_proc","",fld_cnt++,c_el) )
+	    for( int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_val_proc","",fld_cnt++,c_el); )
 	    {
 		id = c_el.cfg("ID").getS();
 		type = c_el.cfg("MODUL").getS();
@@ -203,51 +201,47 @@ void TArchiveS::load_( )
 		c_el.cfg("ID").setS("");
 		c_el.cfg("MODUL").setS("");
 	    }
-	}
-	//-- Search into config file and create new archivators --
-	int fld_cnt=0;
-	while( SYS->db().at().dataSeek("",nodePath()+subId()+"_val_proc",fld_cnt++,c_el) )
-	{
-	    id = c_el.cfg("ID").getS();
-	    type = c_el.cfg("MODUL").getS();
-	    if( !at(type).at().valPresent(id) )
-		at(type).at().valAdd(id,"*.*");
-	    c_el.cfg("ID").setS("");
-	    c_el.cfg("MODUL").setS("");
-	}
+	//>> Search into config file and create new archivators
+	if( SYS->selDB( ).empty() )
+	    for( int fld_cnt=0; SYS->db().at().dataSeek("",nodePath()+subId()+"_val_proc",fld_cnt++,c_el); )
+	    {
+		id = c_el.cfg("ID").getS();
+		type = c_el.cfg("MODUL").getS();
+		if( !at(type).at().valPresent(id) ) at(type).at().valAdd(id,"*.*");
+		c_el.cfg("ID").setS("");
+		c_el.cfg("MODUL").setS("");
+	    }
     }catch( TError err )
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str()); 
 	mess_err(nodePath().c_str(),_("Value archivators load error."));
     }
 
-    //-- Value archives load --
+    //>> Value archives load
     try
     {
 	TConfig c_el(&el_aval);
 	c_el.cfgViewAll(false);
 	vector<string> db_ls;
 
-	//-- Search into DB and create new archives --
-	SYS->db().at().dbList(db_ls);
+	//>> Search into DB and create new archives
+	if( !SYS->selDB( ).empty() ) db_ls.push_back(SYS->selDB());
+	else SYS->db().at().dbList(db_ls);
 	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
-	{
-	    int fld_cnt=0;
-	    while( SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_val","",fld_cnt++,c_el) )
+	    for( int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_val","",fld_cnt++,c_el); )
 	    {
 	        id = c_el.cfg("ID").getS();
 	        if( !valPresent(id) ) valAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
 	        c_el.cfg("ID").setS("");
 	    }
-	}
-	//-- Search into config file and create new archives --
-	int fld_cnt=0;
-	while( SYS->db().at().dataSeek("",nodePath()+subId()+"_val",fld_cnt++,c_el) )
-	{
-	    id = c_el.cfg("ID").getS();
-	    if( !valPresent(id) ) valAdd(id,"*.*");
-	    c_el.cfg("ID").setS("");
-	}
+	//>> Search into config file and create new archives
+	if( SYS->selDB( ).empty() )
+	    for( int fld_cnt=0; SYS->db().at().dataSeek("",nodePath()+subId()+"_val",fld_cnt++,c_el); )
+	    {
+		id = c_el.cfg("ID").getS();
+		if( !valPresent(id) ) valAdd(id,"*.*");
+		c_el.cfg("ID").setS("");
+	    }
     }catch( TError err )
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
@@ -626,6 +620,10 @@ void TArchiveS::ArhMessTask(union sigval obj)
     TArchiveS &arh = *(TArchiveS *)obj.sival_ptr;
     if( arh.prc_st_mess )  return;
     arh.prc_st_mess = true;
+
+#if OSC_DEBUG >= 2
+    mess_debug(arh.nodePath().c_str(),_("Timer's thread <%u> call. TID: %ld"),pthread_self(),(long int)syscall(224));
+#endif
 
     //- Message bufer read -
     if( arh.head_lstread != arh.head_buf )
@@ -1016,6 +1014,7 @@ string TMArchivator::tbl( )
 
 void TMArchivator::load_( )
 {
+    if( !SYS->selDB( ).empty() && SYS->selDB( ) != TBDS::realDBName(DB()) ) return;
     SYS->db().at().dataGet(fullDB(),SYS->archive().at().nodePath()+tbl(),*this);
 }
 

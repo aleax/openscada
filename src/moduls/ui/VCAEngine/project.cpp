@@ -161,14 +161,15 @@ void Project::setFullDB( const string &it )
 
 void Project::load_( )
 {
+    if( !SYS->selDB( ).empty() && SYS->selDB( ) != TBDS::realDBName(DB()) ) return;
+
     SYS->db().at().dataGet(DB()+"."+mod->prjTable(),mod->nodePath()+"PRJ/",*this);
 
-    //- Create new pages -
+    //> Create new pages
     TConfig c_el(&mod->elPage());
     c_el.cfgViewAll(false);
-    int fld_cnt = 0;
     c_el.cfg("OWNER").setS("/"+id());
-    while( SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl()+"/", fld_cnt++,c_el) )
+    for( int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl()+"/", fld_cnt++,c_el); )
     {
 	string f_id = c_el.cfg("ID").getS();
 	c_el.cfg("ID").setS("");
@@ -770,6 +771,8 @@ void Page::setPrjFlags( int val )
 
 void Page::load_( )
 {
+    if( !SYS->selDB( ).empty() && SYS->selDB( ) != TBDS::realDBName(ownerProj()->DB()) ) return;
+
     //> Load generic widget's data
     string db  = ownerProj()->DB();
     string tbl = ownerProj()->tbl();
@@ -797,9 +800,8 @@ void Page::load_( )
     //> Create new pages
     c_el.setElem(&mod->elPage());
     c_el.cfgViewAll(false);
-    int fld_cnt = 0;
     c_el.cfg("OWNER").setS(ownerFullId()+"/"+id());
-    while( SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el) )
+    for( int fld_cnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el); )
     {
 	string f_id = c_el.cfg("ID").getS();
 	c_el.cfg("ID").setS("");
@@ -860,8 +862,7 @@ void Page::loadIO( )
     c_el.setElem(&mod->elWdgUIO());
     c_el.cfg("IDW").setS(path());
     c_el.cfg("ID").setS("");
-    int fld_cnt = 0;
-    while( SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el) )
+    for( int fld_cnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el); )
     {
 	string sid = c_el.cfg("ID").getS();
 	unsigned flg = c_el.cfg("IO_TYPE").getI();
@@ -880,14 +881,13 @@ void Page::loadIO( )
 	attr.at().setCfgVal(c_el.cfg("CFG_VAL").getS());
     }
 
-    //- Load cotainer widgets -
+    //> Load cotainer widgets
     if( !enable() || !isContainer() ) return;
     c_el.setElem(&mod->elInclWdg());
     tbl=ownerProj()->tbl()+"_incl";
     c_el.cfg("IDW").setS(path());
     c_el.cfg("ID").setS("");
-    fld_cnt=0;
-    while( SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el) )
+    for( int fld_cnt=0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el); )
     {
 	string sid  = c_el.cfg("ID").getS();
 	c_el.cfg("ID").setS("");
@@ -1299,6 +1299,8 @@ int PageWdg::calcPer(  )
 
 void PageWdg::load_( )
 {
+    if( !SYS->selDB( ).empty() && SYS->selDB( ) != TBDS::realDBName(ownerPage().ownerProj()->DB()) ) return;
+
     //> Load generic widget's data
     string db  = ownerPage().ownerProj()->DB();
     string tbl = ownerPage().ownerProj()->tbl()+"_incl";
@@ -1370,8 +1372,7 @@ void PageWdg::loadIO( )
     c_el.setElem(&mod->elWdgUIO());
     c_el.cfg("IDW").setS(ownerPage().path());
     c_el.cfg("ID").setS("");
-    int fld_cnt = 0;
-    while( SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el) )
+    for( int fld_cnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el); )
     {
 	string sid = c_el.cfg("ID").getS();
 	unsigned flg = c_el.cfg("IO_TYPE").getI();

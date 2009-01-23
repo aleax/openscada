@@ -71,7 +71,7 @@ string TTransportS::extHostsDB()
 
 void TTransportS::load_( )
 {
-    //- Load parameters from command line -
+    //> Load parameters from command line
     int next_opt;
     const char *short_opt="h";
     struct option long_opt[] =
@@ -91,23 +91,22 @@ void TTransportS::load_( )
 	}
     } while(next_opt != -1);
 
-    //- Load parameters from config file -
+    //> Load parameters from config file
 
-    //- Load DB -
+    //> Load DB
     string id,type;
-    //-- Search and create new input transports --
+    //>> Search and create new input transports
     try
     {
 	TConfig c_el(&el_in);
 	c_el.cfgViewAll(false);
 	vector<string> db_ls;
-	
-	//--- Search into DB ---
-	SYS->db().at().dbList(db_ls);
+
+	//>>> Search into DB
+	if( !SYS->selDB( ).empty() ) db_ls.push_back(SYS->selDB());
+	else SYS->db().at().dbList(db_ls);
 	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
-	{
-	    int fld_cnt=0;
-	    while( SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_in","",fld_cnt++,c_el) )
+	    for( int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_in","",fld_cnt++,c_el); )
 	    {
 		id   = c_el.cfg("ID").getS();
 		type = c_el.cfg("MODULE").getS();
@@ -116,19 +115,17 @@ void TTransportS::load_( )
 		c_el.cfg("ID").setS("");
 		c_el.cfg("MODULE").setS("");
 	    }
-	}
 
-	//--- Search into config file ---
-	int fld_cnt=0;
-	while( SYS->db().at().dataSeek("",nodePath()+subId()+"_in",fld_cnt++,c_el) )
-	{
-	    id   = c_el.cfg("ID").getS();
-	    type = c_el.cfg("MODULE").getS();
-	    if( !at(type).at().inPresent(id) )
-		at(type).at().inAdd(id,"*.*");
-	    c_el.cfg("ID").setS("");
-	    c_el.cfg("MODULE").setS("");
-	}
+	//>>> Search into config file
+	if( SYS->selDB( ).empty() )
+	    for( int fld_cnt=0; SYS->db().at().dataSeek("",nodePath()+subId()+"_in",fld_cnt++,c_el); )
+	    {
+		id   = c_el.cfg("ID").getS();
+		type = c_el.cfg("MODULE").getS();
+		if( !at(type).at().inPresent(id) ) at(type).at().inAdd(id,"*.*");
+		c_el.cfg("ID").setS("");
+		c_el.cfg("MODULE").setS("");
+	    }
 
     }catch( TError err )
     {
@@ -136,19 +133,18 @@ void TTransportS::load_( )
 	mess_err(nodePath().c_str(),_("Search and create new input transports error.")); 
     }
 
-    //-- Search and create new output transports --
+    //>> Search and create new output transports
     try
     {
 	TConfig c_el(&el_out);
 	c_el.cfgViewAll(false);
 	vector<string> tdb_ls, db_ls;
 
-	//--- Search into DB ---
-	SYS->db().at().dbList(db_ls);
+	//>>> Search into DB
+	if( !SYS->selDB( ).empty() ) db_ls.push_back(SYS->selDB());
+	else SYS->db().at().dbList(db_ls);
 	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
-	{
-	    int fld_cnt=0;
-	    while( SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_out","",fld_cnt++,c_el) )
+	    for( int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_out","",fld_cnt++,c_el); )
 	    {
 		id = c_el.cfg("ID").getS();
 		type = c_el.cfg("MODULE").getS();
@@ -157,18 +153,16 @@ void TTransportS::load_( )
 		c_el.cfg("ID").setS("");
 		c_el.cfg("MODULE").setS("");
 	    }
-	}
-	//--- Search into config file ---
-	int fld_cnt=0;
-	while( SYS->db().at().dataSeek("",nodePath()+subId()+"_out",fld_cnt++,c_el) )
-	{
-	    id = c_el.cfg("ID").getS();
-	    type = c_el.cfg("MODULE").getS();
-	    if( !at(type).at().outPresent(id) )
-		at(type).at().outAdd(id,"*.*");
-	    c_el.cfg("ID").setS("");
-	    c_el.cfg("MODULE").setS("");
-	}
+	//>>> Search into config file
+	if( SYS->selDB( ).empty() )
+	    for( int fld_cnt=0; SYS->db().at().dataSeek("",nodePath()+subId()+"_out",fld_cnt++,c_el); )
+	    {
+		id = c_el.cfg("ID").getS();
+		type = c_el.cfg("MODULE").getS();
+		if( !at(type).at().outPresent(id) ) at(type).at().outAdd(id,"*.*");
+		c_el.cfg("ID").setS("");
+		c_el.cfg("MODULE").setS("");
+	    }
     }catch( TError err )
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
@@ -604,6 +598,7 @@ string TTransportIn::getStatus( )
 
 void TTransportIn::load_( )
 {
+    if( !SYS->selDB( ).empty() && SYS->selDB( ) != TBDS::realDBName(DB()) ) return;
     SYS->db().at().dataGet(fullDB(),SYS->transport().at().nodePath()+tbl(),*this);
 }
 
@@ -751,6 +746,7 @@ string TTransportOut::getStatus( )
 
 void TTransportOut::load_( )
 {
+    if( !SYS->selDB( ).empty() && SYS->selDB( ) != TBDS::realDBName(DB()) ) return;
     SYS->db().at().dataGet(fullDB(),SYS->transport().at().nodePath()+tbl(),*this);
 }
 

@@ -27,6 +27,7 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <getopt.h>
+#include <string.h>
 
 #include <string>
 
@@ -41,6 +42,7 @@ TModSchedul::TModSchedul( ) :
 {
     //- Create calc timer -
     struct sigevent sigev;
+    memset(&sigev,0,sizeof(sigev));
     sigev.sigev_notify = SIGEV_THREAD;
     sigev.sigev_value.sival_ptr = this;
     sigev.sigev_notify_function = SchedTask;
@@ -130,9 +132,13 @@ void TModSchedul::setChkPer( int per )
 
 void TModSchedul::SchedTask(union sigval obj)
 {
-    TModSchedul  *shed = (TModSchedul *)obj.sival_ptr;
+    TModSchedul *shed = (TModSchedul *)obj.sival_ptr;
     if( shed->prcSt )  return;
     shed->prcSt = true;
+
+#if OSC_DEBUG >= 2
+    mess_debug(shed->nodePath().c_str(),_("Timer's thread <%u> call. TID: %ld"),pthread_self(),(long int)syscall(224));
+#endif
 
     try
     {

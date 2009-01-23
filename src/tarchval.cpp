@@ -919,6 +919,7 @@ void TVArchive::setUpBuf( )
 
 void TVArchive::load_( )
 {
+    if( !SYS->selDB( ).empty() && SYS->selDB( ) != TBDS::realDBName(DB()) ) return;
     SYS->db().at().dataGet(fullDB(),owner().nodePath()+tbl(),*this);
     setUpBuf();
 }
@@ -1988,6 +1989,7 @@ TVArchivator::TVArchivator( const string &iid, const string &idb, TElem *cf_el )
 
     //- Create calc timer -
     struct sigevent sigev;
+    memset(&sigev,0,sizeof(sigev));
     sigev.sigev_notify = SIGEV_THREAD;
     sigev.sigev_value.sival_ptr = this;
     sigev.sigev_notify_function = Task;
@@ -2147,6 +2149,7 @@ TTipArchivator &TVArchivator::owner()
 
 void TVArchivator::load_( )
 {
+    if( !SYS->selDB( ).empty() && SYS->selDB( ) != TBDS::realDBName(DB()) ) return;
     SYS->db().at().dataGet(fullDB(),SYS->archive().at().nodePath()+tbl(),*this);
 }
 
@@ -2160,6 +2163,10 @@ void TVArchivator::Task(union sigval obj)
     TVArchivator *arch = (TVArchivator*)obj.sival_ptr;
     if( arch->prc_st )  return;
     arch->prc_st = true;
+
+#if OSC_DEBUG >= 2
+    mess_debug(arch->nodePath().c_str(),_("Timer's thread <%u> call. TID: %ld"),pthread_self(),(long int)syscall(224));
+#endif
 
     //- Archiving -
     try

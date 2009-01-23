@@ -218,7 +218,7 @@ string TipContr::optDescr( )
 
 void TipContr::load_( )
 {
-    //- Load parameters from command line -
+    //> Load parameters from command line
     int next_opt;
     const char *short_opt="h";
     struct option long_opt[] =
@@ -238,37 +238,35 @@ void TipContr::load_( )
 	}
     } while(next_opt != -1);
 
-    //- Load parameters -
+    //> Load parameters
 
-    //- Load function's libraries -
+    //> Load function's libraries
     try
     {
-	//-- Search and create new libraries --
+	//>> Search and create new libraries
 	TConfig c_el(&elLib());
 	c_el.cfgViewAll(false);
 	vector<string> db_ls;
 
-	//-- Search into DB --
-	SYS->db().at().dbList(db_ls);
+	//>> Search into DB
+	if( !SYS->selDB( ).empty() ) db_ls.push_back(SYS->selDB());
+	else SYS->db().at().dbList(db_ls);
 	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
-	{
-	    int lib_cnt = 0;
-	    while(SYS->db().at().dataSeek(db_ls[i_db]+"."+libTable(),"",lib_cnt++,c_el) )
+	    for( int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+libTable(),"",lib_cnt++,c_el); )
 	    {
 		string l_id = c_el.cfg("ID").getS();
 		if(!lbPresent(l_id)) lbReg(new Lib(l_id.c_str(),"",(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]));
 		c_el.cfg("ID").setS("");
 	    }
-	}
 
-	//-- Search into config file --
-	int lib_cnt = 0;
-	while(SYS->db().at().dataSeek("",nodePath()+"lib/",lib_cnt++,c_el) )
-	{
-	    string l_id = c_el.cfg("ID").getS();
-	    if(!lbPresent(l_id)) lbReg(new Lib(l_id.c_str(),"","*.*"));
-	    c_el.cfg("ID").setS("");
-	}
+	//>> Search into config file
+	if( SYS->selDB( ).empty() )
+	    for( int lib_cnt = 0; SYS->db().at().dataSeek("",nodePath()+"lib/",lib_cnt++,c_el); )
+	    {
+		string l_id = c_el.cfg("ID").getS();
+		if(!lbPresent(l_id)) lbReg(new Lib(l_id.c_str(),"","*.*"));
+		c_el.cfg("ID").setS("");
+	    }
     }catch( TError err )
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());

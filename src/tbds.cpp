@@ -395,7 +395,7 @@ string TBDS::optDescr(  )
 
 void TBDS::load_( )
 {
-    //- Load parameters from command line -
+    //> Load parameters from command line
     int next_opt;
     const char *short_opt="h";
     struct option long_opt[] =
@@ -415,10 +415,10 @@ void TBDS::load_( )
 	}
     } while(next_opt != -1);
 
-    //- Load parameters from config file -
+    //> Load parameters from config file
 
-    //- Open DB load -
-    //Load and enable other DB store DB
+    //> Open DB load
+    //>> Load and enable other DB stored into DB
     string db_tp = TSYS::strSepParse(fullDB(),0,'.');
     string db_nm = TSYS::strSepParse(fullDB(),1,'.');
     if( !at(db_tp).at().openStat(db_nm) )
@@ -429,20 +429,23 @@ void TBDS::load_( )
     }
 
     string id,type;
-    //- Search and open new DB -
+    //> Search and open new DB
     try
     {
-	TConfig c_el(&el_db);
-	c_el.cfgViewAll(false);
-	int fld_cnt = 0;
-	while( SYS->db().at().dataSeek(fullDB(),nodePath()+"DB/",fld_cnt++,c_el) )
+	if( SYS->selDB( ).empty() || SYS->selDB( ) == fullDB() )
 	{
-	    id = c_el.cfg("ID").getS();
-	    type = c_el.cfg("TYPE").getS();
-	    if( (type+"."+id) != SYS->workDB() && modPresent(type) && !at(type).at().openStat(id) )
-		at(type).at().open(id);
-	    c_el.cfg("ID").setS("");
-	    c_el.cfg("TYPE").setS("");
+	    TConfig c_el(&el_db);
+	    c_el.cfgViewAll(false);
+	    int fld_cnt = 0;
+	    while( SYS->db().at().dataSeek(fullDB(),nodePath()+"DB/",fld_cnt++,c_el) )
+	    {
+		id = c_el.cfg("ID").getS();
+		type = c_el.cfg("TYPE").getS();
+		if( (type+"."+id) != SYS->workDB() && modPresent(type) && !at(type).at().openStat(id) )
+		    at(type).at().open(id);
+		c_el.cfg("ID").setS("");
+		c_el.cfg("TYPE").setS("");
+	    }
 	}
     }catch( TError err )
     {
@@ -628,6 +631,7 @@ void TBD::open( const string &table, bool create )
 
 void TBD::load_( )
 {
+    if( !SYS->selDB( ).empty() && SYS->selDB( ) != SYS->workDB() ) return;
     SYS->db().at().dataGet(owner().owner().fullDB(),SYS->db().at().nodePath()+"DB/",*this);
     if( !enableStat() && toEnable() )	enable();
 }
@@ -651,8 +655,9 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))
 	    {
 		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Enable"),0664,"root","BD",1,"tp","bool");
-                ctrMkNode("list",opt,-1,"/prm/st/allow_tbls",_("Accessible tables"),0664,"root","BD",3,
+		ctrMkNode("list",opt,-1,"/prm/st/allow_tbls",_("Accessible tables"),0664,"root","BD",3,
 		    "tp","str","s_com","del","help",_("Tables which are in the DB, tables which are not opened at that moment."));
+		ctrMkNode("comm",opt,-1,"/prm/st/load",_("Load system from this DB"),0660,"root","root");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Config")))
 	    {
@@ -692,6 +697,13 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	    open( opt->text(), false );
 	    close( opt->text(), true );
 	}
+    }
+    else if( a_path == "/prm/st/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )
+    {
+	SYS->setSelDB(owner().modId()+"."+id());
+	SYS->modifG();
+	SYS->load();
+	SYS->setSelDB("");
     }
     else if( a_path == "/prm/cfg/id" && ctrChkNode(opt) )		opt->setText(id());
     else if( a_path == "/prm/cfg/nm" )

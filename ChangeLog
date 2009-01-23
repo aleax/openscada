@@ -1,3 +1,9 @@
+2009-01-23 Roman
+- !!!:/SYS: Loading from individual DB support is added. Used for loading from connected now DB. Function TSYS::selDB() for this is added.
+- FIX:/SYS: Clearing thread's timer's structure before creation is added.
+- /SYS: Debug messages is added for thread's timers. TID and thread id is showing.
+
+
 2009-01-21 Roman
 - !:/Special/FLibSYS: Microseconds time parameter is added to user's function tmTime().
     Geting microseconds is more resource dependent function then for get microseconds used preset it attribute to no negative value.

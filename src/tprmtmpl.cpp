@@ -146,10 +146,12 @@ AutoHD<TFunction> TPrmTempl::func()
 
 void TPrmTempl::load_( )
 {
-    //- Self load -
+    if( !SYS->selDB( ).empty() && SYS->selDB( ) != TBDS::realDBName(owner().DB()) ) return;
+
+    //> Self load
     SYS->db().at().dataGet(owner().fullDB(),owner().owner().nodePath()+owner().tbl(),*this);
 
-    //- Load IO -
+    //> Load IO
     vector<string> u_pos;
     TConfig cfg(&owner().owner().tplIOE());
     cfg.cfg("TMPL_ID").setS(id());
@@ -479,13 +481,14 @@ void TPrmTmplLib::setFullDB( const string &vl )
 
 void TPrmTmplLib::load_( )
 {
-    SYS->db().at().dataGet(work_lib_db+"."+owner().tmplLibTable(),owner().nodePath()+"tmplib",*this);
+    if( !SYS->selDB( ).empty() && SYS->selDB( ) != TBDS::realDBName(DB()) ) return;
 
-    //- Load templates -
+    SYS->db().at().dataGet(DB()+"."+owner().tmplLibTable(),owner().nodePath()+"tmplib",*this);
+
+    //> Load templates
     TConfig c_el(&owner().tplE());
     c_el.cfgViewAll(false);
-    int fld_cnt = 0;
-    while( SYS->db().at().dataSeek(fullDB(),owner().nodePath()+tbl(), fld_cnt++,c_el) )
+    for( int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),owner().nodePath()+tbl(), fld_cnt++,c_el); )
     {
 	string f_id = c_el.cfg("ID").getS();
 	c_el.cfg("ID").setS("");
@@ -496,7 +499,7 @@ void TPrmTmplLib::load_( )
 
 void TPrmTmplLib::save_( )
 {
-    SYS->db().at().dataSet(work_lib_db+"."+owner().tmplLibTable(),owner().nodePath()+"tmplib",*this);
+    SYS->db().at().dataSet(DB()+"."+owner().tmplLibTable(),owner().nodePath()+"tmplib",*this);
 }
 
 void TPrmTmplLib::start( bool val )

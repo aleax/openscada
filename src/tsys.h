@@ -136,7 +136,9 @@ class TSYS : public TCntrNode
 
 	//- Default DB -
 	string workDB( )	{ return mWorkDB; }
+	string selDB( )		{ return mSelDB; }
 	void setWorkDB( const string &wdb )	{ mWorkDB = wdb; modifG(); }
+	void setSelDB( const string &vl )	{ mSelDB = vl; }
 	bool saveAtExit( )	{ return mSaveAtExit; }
 	void setSaveAtExit( bool vl )		{ mSaveAtExit = vl; modif(); }
 	int  savePeriod( )	{ return mSavePeriod; }
@@ -235,7 +237,7 @@ class TSYS : public TCntrNode
 
 	bool	mSysOptCfg;	// Get system options from config only
 
-	string	mWorkDB;	// Work DB
+	string	mWorkDB,mSelDB;	// Work and selected DB
 	bool	mSaveAtExit;	// Save at exit
 	int	mSavePeriod;	// Save period (s) for periodic system saving to DB
 

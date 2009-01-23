@@ -257,6 +257,8 @@ void Contr::postDisable(int flag)
 
 void Contr::load_( )
 {
+    if( !SYS->selDB( ).empty() && SYS->selDB( ) != TBDS::realDBName(DB()) ) return;
+
     TController::load_( );
 
     //- Load block's configuration -
@@ -264,8 +266,7 @@ void Contr::load_( )
     c_el.cfgViewAll(false);
     string bd = DB()+"."+cfg("BLOCK_SH").getS();
 
-    int fld_cnt = 0;
-    while( SYS->db().at().dataSeek(bd,mod->nodePath()+cfg("BLOCK_SH").getS(),fld_cnt++,c_el) )
+    for( int fld_cnt = 0; SYS->db().at().dataSeek(bd,mod->nodePath()+cfg("BLOCK_SH").getS(),fld_cnt++,c_el); )
     {
 	string id = c_el.cfg("ID").getS();
 	if( !chldPresent(m_bl,id) )

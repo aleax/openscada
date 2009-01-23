@@ -88,6 +88,7 @@ TWEB::TWEB( string name ) : mTAuth(10), chck_st(false)
 
     //- Create check sessions timer -
     struct sigevent sigev;
+    memset(&sigev,0,sizeof(sigev));
     sigev.sigev_notify = SIGEV_THREAD;
     sigev.sigev_value.sival_ptr = this;
     sigev.sigev_notify_function = TaskSessCheck;
@@ -366,6 +367,10 @@ void TWEB::TaskSessCheck( union sigval obj )
     TWEB *web = (TWEB *)obj.sival_ptr;
     if( web->chck_st )  return;
     web->chck_st = true;
+
+#if OSC_DEBUG >= 2
+    mess_debug(web->nodePath().c_str(),_("Timer's thread <%u> call. TID: %ld"),pthread_self(),(long int)syscall(224));
+#endif
 
     time_t cur_tm = time(NULL);
 

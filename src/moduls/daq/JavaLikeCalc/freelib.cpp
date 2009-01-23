@@ -106,15 +106,14 @@ void Lib::setFullDB( const string &idb )
 
 void Lib::load_( )
 {
-    if( DB().empty() )	return;
+    if( DB().empty() || (!SYS->selDB( ).empty() && SYS->selDB( ) != TBDS::realDBName(DB())) )	return;
 
-    SYS->db().at().dataGet(work_lib_db+"."+mod->libTable(),mod->nodePath()+"lib/",*this);
+    SYS->db().at().dataGet(DB()+"."+mod->libTable(),mod->nodePath()+"lib/",*this);
 
     //- Load functions -
     TConfig c_el(&mod->elFnc());
     c_el.cfgViewAll(false);
-    int fld_cnt = 0;
-    while( SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl(), fld_cnt++,c_el) )
+    for( int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl(), fld_cnt++,c_el); )
     {
 	string f_id = c_el.cfg("ID").getS();
 
@@ -129,7 +128,7 @@ void Lib::save_( )
 {
     if( DB().empty() )    return;
 
-    SYS->db().at().dataSet(work_lib_db+"."+mod->libTable(),mod->nodePath()+"lib/",*this);
+    SYS->db().at().dataSet(DB()+"."+mod->libTable(),mod->nodePath()+"lib/",*this);
 }
 
 void Lib::setStart( bool val )

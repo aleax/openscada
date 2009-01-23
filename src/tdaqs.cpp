@@ -68,7 +68,7 @@ TDAQS::~TDAQS( )
 
 void TDAQS::load_( )
 {
-    //- Load parameters from command line -
+    //> Load parameters from command line
     int next_opt;
     const char *short_opt="h";
     struct option long_opt[] =
@@ -88,42 +88,40 @@ void TDAQS::load_( )
 	}
     } while(next_opt != -1);
 
-    //- Load templates libraries of parameter -
+    //> Load templates libraries of parameter
     try
     {
-        //-- Search and create new libraries --
+	//>> Search and create new libraries
 	TConfig c_el(&elLib());
 	c_el.cfgViewAll(false);
 	vector<string> db_ls;
 
-	//--- Search into DB ---
-	SYS->db().at().dbList(db_ls);
+	//>>> Search into DB
+	if( !SYS->selDB( ).empty() ) db_ls.push_back(SYS->selDB());
+	else SYS->db().at().dbList(db_ls);
 	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
-	{
-	    int lib_cnt = 0;
-	    while(SYS->db().at().dataSeek(db_ls[i_db]+"."+tmplLibTable(),"",lib_cnt++,c_el) )
+	    for( int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+tmplLibTable(),"",lib_cnt++,c_el); )
 	    {
 		string l_id = c_el.cfg("ID").getS();
 		c_el.cfg("ID").setS("");
 		if(!tmplLibPresent(l_id)) tmplLibReg(new TPrmTmplLib(l_id.c_str(),"",(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]));
 	    }
-	}
 
-	//--- Search into config file ---
-	int lib_cnt = 0;
-	while(SYS->db().at().dataSeek("",nodePath()+"tmplib",lib_cnt++,c_el) )
-	{
-	    string l_id = c_el.cfg("ID").getS();
-	    if(!tmplLibPresent(l_id)) tmplLibReg(new TPrmTmplLib(l_id.c_str(),"","*.*"));
-	    c_el.cfg("ID").setS("");
-	}
+	//>>> Search into config file
+	if( SYS->selDB( ).empty() )
+	    for( int lib_cnt = 0; SYS->db().at().dataSeek("",nodePath()+"tmplib",lib_cnt++,c_el); )
+	    {
+		string l_id = c_el.cfg("ID").getS();
+		if(!tmplLibPresent(l_id)) tmplLibReg(new TPrmTmplLib(l_id.c_str(),"","*.*"));
+		c_el.cfg("ID").setS("");
+	    }
     }catch( TError err )
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Load template's libraries error."));
     }
 
-    //- Load parameters -
+    //> Load parameters
     try
     {
 	AutoHD<TTipDAQ> wmod;
@@ -135,43 +133,38 @@ void TDAQS::load_( )
 	    wmod = at(mod_ls[i_md]);
 	    TConfig g_cfg(&wmod.at());
 	    g_cfg.cfgViewAll(false);
-	
-	    //-- Search into DB and create new controllers --
-	    SYS->db().at().dbList(db_ls);
+
+	    //>> Search into DB and create new controllers
+	    if( !SYS->selDB( ).empty() ) db_ls.push_back(SYS->selDB());
+	    else SYS->db().at().dbList(db_ls);
 	    for( int i_db = 0; i_db < db_ls.size(); i_db++ )
-	    {
-		int fld_cnt=0;
-		while( SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_"+wmod.at().modId(),"",fld_cnt++,g_cfg) )
+		for( int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_"+wmod.at().modId(),"",fld_cnt++,g_cfg); )
 		{
 		    string m_id = g_cfg.cfg("ID").getS();
 		    try
 		    {
-		        if( !wmod.at().present(m_id) )
-			wmod.at().add(m_id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+			if( !wmod.at().present(m_id) )
+			    wmod.at().add(m_id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
 		    }catch(TError err)
 		    {
-		        mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		        mess_err(nodePath().c_str(),_("Add controller <%s> error."),m_id.c_str());
+			mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+			mess_err(nodePath().c_str(),_("Add controller <%s> error."),m_id.c_str());
 		    }
 		    g_cfg.cfg("ID").setS("");
 		}
-	    }
-	    //-- Search into config file and create new controllers --
-	    int fld_cnt=0;
-	    while( SYS->db().at().dataSeek("",wmod.at().nodePath()+"DAQ",fld_cnt++,g_cfg) )
-	    {
-		string m_id = g_cfg.cfg("ID").getS();
-		try
+	    //>> Search into config file and create new controllers
+	    if( SYS->selDB( ).empty() )
+		for( int fld_cnt=0; SYS->db().at().dataSeek("",wmod.at().nodePath()+"DAQ",fld_cnt++,g_cfg); )
 		{
-		    if( !wmod.at().present(m_id) )
-			wmod.at().add(m_id,"*.*");
-		}catch(TError err)
-		{
-		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    mess_err(nodePath().c_str(),_("Add controller <%s> error."),m_id.c_str());
+		    string m_id = g_cfg.cfg("ID").getS();
+		    try { if( !wmod.at().present(m_id) ) wmod.at().add(m_id,"*.*"); }
+		    catch(TError err)
+		    {
+			mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+			mess_err(nodePath().c_str(),_("Add controller <%s> error."),m_id.c_str());
+		    }
+		    g_cfg.cfg("ID").setS("");
 		}
-		g_cfg.cfg("ID").setS("");
-	    }
 	}
     }catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }

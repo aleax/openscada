@@ -129,7 +129,7 @@ void Func::setProg( const string &prg )
 
 void Func::load_( )
 {
-    if( owner().DB().empty() )	return;
+    if( owner().DB().empty() || (!SYS->selDB( ).empty() && SYS->selDB( ) != TBDS::realDBName(owner().DB())) )	return;
 
     SYS->db().at().dataGet(owner().fullDB(),mod->nodePath()+owner().tbl(),*this);
 

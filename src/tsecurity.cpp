@@ -136,7 +136,7 @@ char TSecurity::access( const string &user, char mode, const string &owner, cons
 
 void TSecurity::load_( )
 {
-    //- Load commandline data -
+    //> Load commandline data
     int next_opt;
     const char *short_opt="h";
     struct option long_opt[] =
@@ -156,83 +156,69 @@ void TSecurity::load_( )
 	}
     } while(next_opt != -1);
 
-    //- Load parametrs -
+    //> Load parametrs
 
-    //- Load DB -
+    //> Load DB
     string	name;
 
-    //-- Search and create new users --
+    //>> Search and create new users
     try
     {
 	TConfig g_cfg(&user_el);
 	g_cfg.cfgViewAll(false);
-	vector<string> tdb_ls, db_ls;
+	vector<string> db_ls;
 
-	//--- Search into DB ---
-	SYS->db().at().modList(tdb_ls);
-	for( int i_tp = 0; i_tp < tdb_ls.size(); i_tp++ )
-	{
-	    SYS->db().at().at(tdb_ls[i_tp]).at().list(db_ls);
-	    for( int i_db = 0; i_db < db_ls.size(); i_db++ )
+	//>>> Search into DB
+	if( !SYS->selDB( ).empty() ) db_ls.push_back(SYS->selDB());
+	else SYS->db().at().dbList(db_ls);
+	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
+	    for( int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_user","",fld_cnt++,g_cfg); )
 	    {
-		string wbd = tdb_ls[i_tp]+"."+db_ls[i_db];
-		int fld_cnt=0;
-		while( SYS->db().at().dataSeek(wbd+"."+subId()+"_user","",fld_cnt++,g_cfg) )
-		{
-		    name = g_cfg.cfg("NAME").getS();
-		    if( !usrPresent(name) )	usrAdd(name,(wbd==SYS->workDB())?"*.*":wbd);
-		    g_cfg.cfg("NAME").setS("");
-		}
+		name = g_cfg.cfg("NAME").getS();
+		if( !usrPresent(name) )	usrAdd(name,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+		g_cfg.cfg("NAME").setS("");
 	    }
-	}
 
-	//--- Search into config file ---
-	int fld_cnt=0;
-	while( SYS->db().at().dataSeek("",nodePath()+subId()+"_user",fld_cnt++,g_cfg) )
-	{
-	    name = g_cfg.cfg("NAME").getS();
-	    if( !usrPresent(name) )	usrAdd(name,"*.*");
-	    g_cfg.cfg("NAME").setS("");
-	}
+	//>>> Search into config file
+	if( SYS->selDB( ).empty() )
+	    for( int fld_cnt=0; SYS->db().at().dataSeek("",nodePath()+subId()+"_user",fld_cnt++,g_cfg); )
+	    {
+		name = g_cfg.cfg("NAME").getS();
+		if( !usrPresent(name) )	usrAdd(name,"*.*");
+		g_cfg.cfg("NAME").setS("");
+	    }
     }catch(TError err)
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Search and create new users error."));
     }
 
-    //-- Search and create new user groups --
+    //>> Search and create new user groups
     try
     {
 	TConfig g_cfg(&grp_el);
 	g_cfg.cfgViewAll(false);
-	vector<string> tdb_ls, db_ls;
+	vector<string> db_ls;
 
-	//--- Search into DB ---
-	SYS->db().at().modList(tdb_ls);
-	for( int i_tp = 0; i_tp < tdb_ls.size(); i_tp++ )
-	{
-	    SYS->db().at().at(tdb_ls[i_tp]).at().list(db_ls);
-	    for( int i_db = 0; i_db < db_ls.size(); i_db++ )
+	//>>> Search into DB
+	if( !SYS->selDB( ).empty() ) db_ls.push_back(SYS->selDB());
+	else SYS->db().at().dbList(db_ls);
+	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
+	    for( int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_grp","",fld_cnt++,g_cfg); )
 	    {
-		string wbd = tdb_ls[i_tp]+"."+db_ls[i_db];
-		int fld_cnt=0;
-		while( SYS->db().at().dataSeek(wbd+"."+subId()+"_grp","",fld_cnt++,g_cfg) )
-		{
-		    name = g_cfg.cfg("NAME").getS();
-		    if( !grpPresent(name) )	grpAdd(name,(wbd==SYS->workDB())?"*.*":wbd);
-		    g_cfg.cfg("NAME").setS("");
-		}
+		name = g_cfg.cfg("NAME").getS();
+		if( !grpPresent(name) )	grpAdd(name,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+		g_cfg.cfg("NAME").setS("");
 	    }
-	}
 
-	//--- Search into config file ---
-	int fld_cnt=0;
-	while( SYS->db().at().dataSeek("",nodePath()+subId()+"_grp",fld_cnt++,g_cfg) )
-	{
-	    name = g_cfg.cfg("NAME").getS();
-	    if( !grpPresent(name) )	grpAdd(name,"*.*");
-	    g_cfg.cfg("NAME").setS("");
-	}
+	//>>> Search into config file
+	if( SYS->selDB( ).empty() )
+	    for( int fld_cnt=0; SYS->db().at().dataSeek("",nodePath()+subId()+"_grp",fld_cnt++,g_cfg); )
+	    {
+		name = g_cfg.cfg("NAME").getS();
+		if( !grpPresent(name) )	grpAdd(name,"*.*");
+		g_cfg.cfg("NAME").setS("");
+	    }
     }catch(TError err)
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
@@ -360,6 +346,7 @@ string TUser::tbl( )
 
 void TUser::load_( )
 {
+    if( !SYS->selDB( ).empty() && SYS->selDB( ) != TBDS::realDBName(DB()) ) return;
     SYS->db().at().dataGet(fullDB(),owner().nodePath()+tbl(),*this);
 }
 
@@ -485,6 +472,7 @@ string TGroup::tbl( )
 
 void TGroup::load_( )
 {
+    if( !SYS->selDB( ).empty() && SYS->selDB( ) != TBDS::realDBName(DB()) ) return;
     SYS->db().at().dataGet(fullDB(),owner().nodePath()+tbl(),*this);
 }
 

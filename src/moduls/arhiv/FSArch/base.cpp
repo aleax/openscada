@@ -22,6 +22,7 @@
 #include <sys/stat.h>
 #include <signal.h>
 #include <getopt.h>
+#include <string.h>
 #include <string>
 
 #include <tsys.h>
@@ -80,6 +81,7 @@ ModArch::ModArch( const string &name) : prc_st(false)
 
     //- Create checking archivators timer -
     struct sigevent sigev;
+    memset(&sigev,0,sizeof(sigev));
     sigev.sigev_notify = SIGEV_THREAD;
     sigev.sigev_value.sival_ptr = this;
     sigev.sigev_notify_function = Task;
@@ -231,6 +233,10 @@ void ModArch::Task( union sigval obj )
     ModArch *arh = (ModArch *)obj.sival_ptr;
     if( arh->prc_st )  return;
     arh->prc_st = true;
+
+#if OSC_DEBUG >= 2
+    mess_debug(arh->nodePath().c_str(),_("Timer's thread <%u> call. TID: %ld"),pthread_self(),(long int)syscall(224));
+#endif
 
     vector<string> a_list;
     //- Check message archivators -

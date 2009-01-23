@@ -227,7 +227,7 @@ void Engine::load_( )
 {
     mess_info(nodePath().c_str(),_("Load module."));
 
-    //- Load parameters from command line -
+    //> Load parameters from command line
     int next_opt;
     const char *short_opt="h";
     struct option long_opt[] =
@@ -247,41 +247,39 @@ void Engine::load_( )
 	}
     } while(next_opt != -1);
 
-    //- Load parameters from config file and DB -
+    //> Load parameters from config file and DB
     setSynthCom( TBDS::genDBGet(nodePath()+"SynthCom",synthCom()) );
     setSynthCode( TBDS::genDBGet(nodePath()+"SynthCode",synthCode()) );
 
-    //-- Load widget's libraries --
+    //>> Load widget's libraries
     try
     {
-	//--- Search and create new libraries ---
+	//>>> Search and create new libraries
 	TConfig c_el(&elWdgLib());
 	c_el.cfgViewAll(false);
 	vector<string> db_ls;
 
-	//---- Search into DB ----
-	SYS->db().at().dbList(db_ls);
+	//>>>> Search into DB
+	if( !SYS->selDB( ).empty() ) db_ls.push_back(SYS->selDB());
+	else SYS->db().at().dbList(db_ls);
 	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
-	{
-	    int lib_cnt = 0;
-	    while(SYS->db().at().dataSeek(db_ls[i_db]+"."+wlbTable(),"",lib_cnt++,c_el) )
+	    for( int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+wlbTable(),"",lib_cnt++,c_el); )
 	    {
 		string l_id = c_el.cfg("ID").getS();
 		c_el.cfg("ID").setS("");
 		if(!wlbPresent(l_id)) wlbAdd(l_id,"",(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
 	    }
-	}
 
-	//---- Search into config file ----
-	int lib_cnt = 0;
-	while(SYS->db().at().dataSeek("",nodePath()+"LIB/",lib_cnt++,c_el) )
-	{
-	    string l_id = c_el.cfg("ID").getS();
-	    c_el.cfg("ID").setS("");
-	    if( !wlbPresent(l_id) )	wlbAdd(l_id,"","*.*");
-	}
+	//>>>> Search into config file
+	if( SYS->selDB( ).empty() )
+	    for( int lib_cnt = 0; SYS->db().at().dataSeek("",nodePath()+"LIB/",lib_cnt++,c_el); )
+	    {
+		string l_id = c_el.cfg("ID").getS();
+		c_el.cfg("ID").setS("");
+		if( !wlbPresent(l_id) )	wlbAdd(l_id,"","*.*");
+	    }
 
-	//--- Load present libraries ---
+	//>>>> Load present libraries
 	wlbList(db_ls);
 	for( int l_id = 0; l_id < db_ls.size(); l_id++ )
 	    wlbAt(db_ls[l_id]).at().load();
@@ -291,38 +289,36 @@ void Engine::load_( )
 	mess_err(nodePath().c_str(),_("Load widget's libraries error."));
     }
 
-    //-- Load projects --
+    //>> Load projects
     try
     {
-	//--- Search and create new projects ---
+	//>>> Search and create new projects
 	TConfig c_el(&elProject());
 	c_el.cfgViewAll(false);
 	vector<string> db_ls;
 
-	//---- Search into DB ----
-	SYS->db().at().dbList(db_ls);
+	//>>>> Search into DB
+	if( !SYS->selDB( ).empty() ) db_ls.push_back(SYS->selDB());
+	else SYS->db().at().dbList(db_ls);
 	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
-	{
-	    int lib_cnt = 0;
-	    while(SYS->db().at().dataSeek(db_ls[i_db]+"."+prjTable(),"",lib_cnt++,c_el) )
+	    for( int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+prjTable(),"",lib_cnt++,c_el); )
 	    {
 		string prj_id = c_el.cfg("ID").getS();
 		c_el.cfg("ID").setS("");
 		if( !prjPresent(prj_id) )
 		    prjAdd(prj_id,"",(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
 	    }
-	}
 
-	//---- Search into config file ----
-	int el_cnt = 0;
-	while(SYS->db().at().dataSeek("",nodePath()+"PRJ/",el_cnt++,c_el) )
-	{
-	    string prj_id = c_el.cfg("ID").getS();
-	    c_el.cfg("ID").setS("");
-	    if( !prjPresent(prj_id) )	prjAdd(prj_id,"","*.*");
-	}
+	//>>>> Search into config file
+	if( SYS->selDB( ).empty() )
+	    for( int el_cnt = 0; SYS->db().at().dataSeek("",nodePath()+"PRJ/",el_cnt++,c_el); )
+	    {
+		string prj_id = c_el.cfg("ID").getS();
+		c_el.cfg("ID").setS("");
+		if( !prjPresent(prj_id) )	prjAdd(prj_id,"","*.*");
+	    }
 
-	//--- Load present projects ---
+	//>>>> Load present projects
 	prjList(db_ls);
 	for( int el_id = 0; el_id < db_ls.size(); el_id++ )
 	    prjAt(db_ls[el_id]).at().load();
@@ -332,13 +328,13 @@ void Engine::load_( )
 	mess_err(nodePath().c_str(),_("Load projects error."));
     }
 
-    //- Libraries enable -
+    //> Libraries enable
     vector<string> ls;
     wlbList(ls);
     for( int l_id = 0; l_id < ls.size(); l_id++ )
 	wlbAt(ls[l_id]).at().setEnable(true);
 
-    //- Projects enable -
+    //> Projects enable
     prjList(ls);
     for( int l_id = 0; l_id < ls.size(); l_id++ )
 	prjAt(ls[l_id]).at().setEnable(true);

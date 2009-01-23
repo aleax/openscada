@@ -134,15 +134,16 @@ void WidgetLib::setFullDB( const string &it )
 
 void WidgetLib::load_( )
 {
+    if( !SYS->selDB( ).empty() && SYS->selDB( ) != TBDS::realDBName(DB()) ) return;
+
     mess_info(nodePath().c_str(),_("Load widget library."));
 
     SYS->db().at().dataGet(DB()+"."+mod->wlbTable(),mod->nodePath()+"LIB/",*this);
 
-    //- Create new widgets -
+    //> Create new widgets
     TConfig c_el(&mod->elWdg());
     c_el.cfgViewAll(false);
-    int fld_cnt = 0;
-    while( SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl(), fld_cnt++,c_el) )
+    for( int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl(), fld_cnt++,c_el); )
     {
 	string f_id = c_el.cfg("ID").getS();
 	c_el.cfg("ID").setS("");
@@ -586,6 +587,8 @@ void LWidget::setCalcPer( int vl )
 
 void LWidget::load_( )
 {
+    if( !SYS->selDB( ).empty() && SYS->selDB( ) != TBDS::realDBName(ownerLib().DB()) ) return;
+
     //> Load generic widget's data
     string db  = ownerLib().DB();
     string tbl = ownerLib().tbl();
@@ -656,8 +659,7 @@ void LWidget::loadIO( )
     c_el.setElem(&mod->elWdgUIO());
     c_el.cfg("IDW").setS(id());
     c_el.cfg("ID").setS("");
-    int fld_cnt = 0;
-    while( SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el) )
+    for( int fld_cnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el); )
     {
 	string sid = c_el.cfg("ID").getS();
 	unsigned flg = c_el.cfg("IO_TYPE").getI();
@@ -682,8 +684,7 @@ void LWidget::loadIO( )
     tbl=ownerLib().tbl()+"_incl";
     c_el.cfg("IDW").setS(id());
     c_el.cfg("ID").setS("");
-    fld_cnt=0;
-    while( SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el) )
+    for( int fld_cnt=0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el); )
     {
 	string sid  = c_el.cfg("ID").getS();
 	c_el.cfg("ID").setS("");
@@ -778,10 +779,9 @@ void LWidget::saveIO( )
     }
 
     //- Clear no present IO for user io table -
-    int fld_cnt=0;
     c_elu.cfg("ID").setS("");
     c_elu.cfgViewAll(false);
-    while( SYS->db().at().dataSeek(db+"."+utbl,mod->nodePath()+utbl,fld_cnt++,c_elu) )
+    for( int fld_cnt=0; SYS->db().at().dataSeek(db+"."+utbl,mod->nodePath()+utbl,fld_cnt++,c_elu); )
     {
 	string sid = c_elu.cfg("ID").getS();
 	if( TSYS::pathLev(sid,1).empty() && !attrPresent(TSYS::pathLev(sid,0)) )
@@ -975,6 +975,8 @@ int CWidget::calcPer( )
 
 void CWidget::load_( )
 {
+    if( !SYS->selDB( ).empty() && SYS->selDB( ) != TBDS::realDBName(ownerLWdg().ownerLib().DB()) ) return;
+
     //> Load generic widget's data
     string db  = ownerLWdg().ownerLib().DB();
     string tbl = ownerLWdg().ownerLib().tbl()+"_incl";
@@ -1044,8 +1046,7 @@ void CWidget::loadIO( )
     c_el.setElem(&mod->elWdgUIO());
     c_el.cfg("IDW").setS(ownerLWdg().id());
     c_el.cfg("ID").setS("");
-    int fld_cnt = 0;
-    while( SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el) )
+    for( int fld_cnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el); )
     {
 	string sid = c_el.cfg("ID").getS();
 	unsigned flg = c_el.cfg("IO_TYPE").getI();
