@@ -2177,7 +2177,7 @@ function ReqIdNameDlg( ico, mess, actPath )
 //>> Tool bar init
 //>>> Update actions
 var actUpdate = document.getElementById('actUpdate');
-if( actUpdate ) actUpdate.onclick = function() { if( this.className=='active' ) pageRefresh(); return false; }
+if( actUpdate ) actUpdate.onclick = function() { if( this.className=='active' ) { treeUpdate(); pageRefresh(); } return false; }
 var actStart = document.getElementById('actStart');
 if( actStart ) actStart.onclick = function() { if( this.className=='active' ) pageCyclRefrStart(); return false; }
 var actStop = document.getElementById('actStop');

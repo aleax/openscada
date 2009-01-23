@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebCfgD 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-09 15:28+0200\n"
+"POT-Creation-Date: 2009-01-23 17:01+0200\n"
 "PO-Revision-Date: 2007-10-29 15:28+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -125,8 +125,8 @@ msgid "Paste item"
 msgstr "Вставити елемент"
 
 #: web_cfg.cpp:100
-msgid "Reload item"
-msgstr "Перевантажити елемент"
+msgid "Reload item and tree"
+msgstr "Перевантажити елемент та дерево"
 
 #: web_cfg.cpp:100
 msgid "Start periodic update"
@@ -839,7 +839,7 @@ msgid "mcat"
 msgstr ""
 
 #: web_cfg.cpp:584
-msgid "3"
+msgid "10"
 msgstr ""
 
 #: web_cfg.cpp:622

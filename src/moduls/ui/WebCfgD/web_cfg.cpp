@@ -97,7 +97,7 @@ TWEB::TWEB( string name ) : mTAuth(10), lst_ses_chk(0)
 	"OpenSCADA. Dynamic WEB configurator", "About",
 	"Load", "Save", "Up", "Previous", "Next", "Add item","Delete item",
 	"Copy item", "Cut item", "Paste item",
-	"Reload item", "Start periodic update", "Stop periodic update",
+	"Reload item and tree", "Start periodic update", "Stop periodic update",
 	"Ready",
 	"Go", "Add", "Insert", "Edit", "Delete", "Item up", "Item down",
 	"Add new element.", "Insert new element.", "Rename element.",
