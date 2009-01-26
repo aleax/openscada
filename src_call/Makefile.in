@@ -33,8 +33,8 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
-oscd_modul_PROGRAMS = daq_SNMP.so$(EXEEXT)
-subdir = src/moduls/daq/SNMP
+bin_PROGRAMS = openscada$(EXEEXT)
+subdir = src_call
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.in
@@ -43,12 +43,15 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
-am__installdirs = "$(DESTDIR)$(oscd_moduldir)"
-oscd_modulPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
-PROGRAMS = $(oscd_modul_PROGRAMS)
-am_daq_SNMP_so_OBJECTS = snmp_client.$(OBJEXT)
-daq_SNMP_so_OBJECTS = $(am_daq_SNMP_so_OBJECTS)
-daq_SNMP_so_DEPENDENCIES =
+am__installdirs = "$(DESTDIR)$(bindir)"
+binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
+PROGRAMS = $(bin_PROGRAMS)
+am_openscada_OBJECTS = main.$(OBJEXT)
+openscada_OBJECTS = $(am_openscada_OBJECTS)
+openscada_LDADD = $(LDADD)
+openscada_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
+	$(CXXFLAGS) $(openscada_LDFLAGS) $(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -61,8 +64,8 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(daq_SNMP_so_SOURCES)
-DIST_SOURCES = $(daq_SNMP_so_SOURCES)
+SOURCES = $(openscada_SOURCES)
+DIST_SOURCES = $(openscada_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -203,15 +206,12 @@ target_vendor = @target_vendor@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-EXTRA_DIST = *.h po/* doc/*
-AM_CXXFLAGS = -I$(top_srcdir)/src -fPIC -DPIC
-AM_LDFLAGS = -shared -module
-daq_SNMP_so_SOURCES = snmp_client.cpp
-daq_SNMP_so_LDADD = -lnetsnmp -lcrypto
+EXTRA_DIST = *.h
+AM_CXXFLAGS = -I../src
 
-#PO files process and doc install
-doc_name = $(oscd_docmodul)DAQ.SNMP
-m_name = $(oscd_modulpref)SNMP
+#---------- Dinamic linking -----------------------------------------------
+openscada_SOURCES = main.cpp
+openscada_LDFLAGS = $(EXTRA_LDFLAGS) -Wl,-rpath,$(libdir) -loscada -L../src/
 all: all-am
 
 .SUFFIXES:
@@ -225,9 +225,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/moduls/daq/SNMP/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src_call/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  src/moduls/daq/SNMP/Makefile
+	  $(AUTOMAKE) --gnu  src_call/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -245,37 +245,37 @@ $(top_srcdir)/configure:  $(am__configure_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
-install-oscd_modulPROGRAMS: $(oscd_modul_PROGRAMS)
+install-binPROGRAMS: $(bin_PROGRAMS)
 	@$(NORMAL_INSTALL)
-	test -z "$(oscd_moduldir)" || $(MKDIR_P) "$(DESTDIR)$(oscd_moduldir)"
-	@list='$(oscd_modul_PROGRAMS)'; for p in $$list; do \
+	test -z "$(bindir)" || $(MKDIR_P) "$(DESTDIR)$(bindir)"
+	@list='$(bin_PROGRAMS)'; for p in $$list; do \
 	  p1=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
 	  if test -f $$p \
 	     || test -f $$p1 \
 	  ; then \
 	    f=`echo "$$p1" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`; \
-	   echo " $(INSTALL_PROGRAM_ENV) $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(oscd_modulPROGRAMS_INSTALL) '$$p' '$(DESTDIR)$(oscd_moduldir)/$$f'"; \
-	   $(INSTALL_PROGRAM_ENV) $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(oscd_modulPROGRAMS_INSTALL) "$$p" "$(DESTDIR)$(oscd_moduldir)/$$f" || exit 1; \
+	   echo " $(INSTALL_PROGRAM_ENV) $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(binPROGRAMS_INSTALL) '$$p' '$(DESTDIR)$(bindir)/$$f'"; \
+	   $(INSTALL_PROGRAM_ENV) $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(binPROGRAMS_INSTALL) "$$p" "$(DESTDIR)$(bindir)/$$f" || exit 1; \
 	  else :; fi; \
 	done
 
-uninstall-oscd_modulPROGRAMS:
+uninstall-binPROGRAMS:
 	@$(NORMAL_UNINSTALL)
-	@list='$(oscd_modul_PROGRAMS)'; for p in $$list; do \
+	@list='$(bin_PROGRAMS)'; for p in $$list; do \
 	  f=`echo "$$p" | sed 's,^.*/,,;s/$(EXEEXT)$$//;$(transform);s/$$/$(EXEEXT)/'`; \
-	  echo " rm -f '$(DESTDIR)$(oscd_moduldir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(oscd_moduldir)/$$f"; \
+	  echo " rm -f '$(DESTDIR)$(bindir)/$$f'"; \
+	  rm -f "$(DESTDIR)$(bindir)/$$f"; \
 	done
 
-clean-oscd_modulPROGRAMS:
-	@list='$(oscd_modul_PROGRAMS)'; for p in $$list; do \
+clean-binPROGRAMS:
+	@list='$(bin_PROGRAMS)'; for p in $$list; do \
 	  f=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-daq_SNMP.so$(EXEEXT): $(daq_SNMP_so_OBJECTS) $(daq_SNMP_so_DEPENDENCIES) 
-	@rm -f daq_SNMP.so$(EXEEXT)
-	$(CXXLINK) $(daq_SNMP_so_OBJECTS) $(daq_SNMP_so_LDADD) $(LIBS)
+openscada$(EXEEXT): $(openscada_OBJECTS) $(openscada_DEPENDENCIES) 
+	@rm -f openscada$(EXEEXT)
+	$(openscada_LINK) $(openscada_OBJECTS) $(openscada_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -283,7 +283,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/snmp_client.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -389,7 +389,7 @@ check-am: all-am
 check: check-am
 all-am: Makefile $(PROGRAMS)
 installdirs:
-	for dir in "$(DESTDIR)$(oscd_moduldir)"; do \
+	for dir in "$(DESTDIR)$(bindir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-am
@@ -418,8 +418,7 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-generic clean-libtool clean-local \
-	clean-oscd_modulPROGRAMS mostlyclean-am
+clean-am: clean-binPROGRAMS clean-generic clean-libtool mostlyclean-am
 
 distclean: distclean-am
 	-rm -rf ./$(DEPDIR)
@@ -437,11 +436,11 @@ info: info-am
 
 info-am:
 
-install-data-am: install-data-local install-oscd_modulPROGRAMS
+install-data-am:
 
 install-dvi: install-dvi-am
 
-install-exec-am:
+install-exec-am: install-binPROGRAMS
 
 install-html: install-html-am
 
@@ -473,57 +472,27 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-local uninstall-oscd_modulPROGRAMS
+uninstall-am: uninstall-binPROGRAMS
 
 .MAKE: install-am install-strip
 
-.PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
-	clean-libtool clean-local clean-oscd_modulPROGRAMS ctags \
-	distclean distclean-compile distclean-generic \
-	distclean-libtool distclean-tags distdir dvi dvi-am html \
-	html-am info info-am install install-am install-data \
-	install-data-am install-data-local install-dvi install-dvi-am \
-	install-exec install-exec-am install-html install-html-am \
-	install-info install-info-am install-man \
-	install-oscd_modulPROGRAMS install-pdf install-pdf-am \
-	install-ps install-ps-am install-strip installcheck \
-	installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-compile \
-	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	tags uninstall uninstall-am uninstall-local \
-	uninstall-oscd_modulPROGRAMS
+.PHONY: CTAGS GTAGS all all-am check check-am clean clean-binPROGRAMS \
+	clean-generic clean-libtool ctags distclean distclean-compile \
+	distclean-generic distclean-libtool distclean-tags distdir dvi \
+	dvi-am html html-am info info-am install install-am \
+	install-binPROGRAMS install-data install-data-am install-dvi \
+	install-dvi-am install-exec install-exec-am install-html \
+	install-html-am install-info install-info-am install-man \
+	install-pdf install-pdf-am install-ps install-ps-am \
+	install-strip installcheck installcheck-am installdirs \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
+	pdf pdf-am ps ps-am tags uninstall uninstall-am \
+	uninstall-binPROGRAMS
 
-
-messages:
-	@catalogs=`find ./po -name \*.po` ; \
-	name=po/$(m_name).pot ; \
-	xgettext -o $$name -C -a *.cpp *.h &> /dev/null ; \
-	for cat in $$catalogs; do \
-	msgmerge -U $$cat $$name ; \
-	done
-
-install-data-local:
-	@catalogs=`find ./po -name \*.po` ; \
-	name=$(m_name).mo ; \
-	for cat in $$catalogs; do \
-	mkdir -p $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES ; \
-	msgfmt -vo $$name $$cat ; \
-	cp $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
-	rm $$name ; \
-	done
-	install -m 755 -d $(doc_name)
-	install -m 644 doc/*.pdf $(doc_name)
-
-uninstall-local:
-	@catalogs=`find ./po -name \*.po` ; \
-	name=$(m_name).mo ; \
-	for cat in $$catalogs; do \
-	rm -f $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
-	done
-
-clean-local:
-	rm -f po/$(m_name).pot ; \
-	rm -f po/*~ ;
+#---------- Static linking -----------------------------------------------
+#OpenScada_SOURCES = main.cpp
+#OpenScada_LDFLAGS = -export-dynamic -static -loscada
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

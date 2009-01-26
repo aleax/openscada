@@ -2,8 +2,8 @@
 AC_PREREQ(2.50)
 
 AC_INIT([OpenSCADA],[0.6.3],[rom_as@fromru.com])
+AC_PREFIX_DEFAULT([/usr])
 oscd_LIBREVISION="0:10:0"
-oscd_defprefix="/usr"
 oscd_modulpref="oscd_"
 oscd_docmodul="../../../../doc/Modules/"
 
@@ -101,7 +101,7 @@ AC_FUNC_STAT
 
 AC_ISC_POSIX
 
-AC_PREFIX_DEFAULT(oscd_defprefix)
+
 oscd_moduldir="\${libdir}/${PACKAGE}"
 oscd_localedir="\${DESTDIR}\${datadir}/locale"
 AC_SUBST(oscd_LIBREVISION)
@@ -112,8 +112,8 @@ AC_SUBST(oscd_docmodul)
 
 AC_SUBST(subdir_mod)
 
-AC_CONFIG_FILES(Makefile src/Makefile src/moduls/Makefile
-	src/moduls/arhiv/Makefile src/moduls/bd/Makefile src/moduls/protocol/Makefile 
+AC_CONFIG_FILES(Makefile src/Makefile src_call/Makefile src/moduls/Makefile
+	src/moduls/arhiv/Makefile src/moduls/bd/Makefile src/moduls/protocol/Makefile
 	src/moduls/special/Makefile src/moduls/daq/Makefile src/moduls/transport/Makefile
 	src/moduls/ui/Makefile)
 

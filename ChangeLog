@@ -1,3 +1,8 @@
+2009-01-26 Roman
+- !!:/SYS: Main call programm building is moved to separated directory src_call/.
+- FIS:/SYS: AC_PREFIX_DEFAULT value is fixed on file configure.in.
+
+
 2009-01-23 Roman
 - !!!:/SYS: Loading from individual DB support is added. Used for loading from connected now DB. Function TSYS::selDB() for this is added.
 - FIX:/SYS: Clearing thread's timer's structure before creation is added.
