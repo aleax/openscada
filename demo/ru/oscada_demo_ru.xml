@@ -43,7 +43,8 @@
 	</node>
 
 	<node id="sub_ModSched">
-	    <prm id="ModAuto">*</prm>
+	    <prm id="ModAllow">*</prm>
+	    <prm id="ModDeny"></prm>
 	    <prm id="ChkPer">0</prm>
 	</node>
 

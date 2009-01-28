@@ -106,7 +106,7 @@ void Lib::setFullDB( const string &idb )
 
 void Lib::load_( )
 {
-    if( DB().empty() || (!SYS->selDB( ).empty() && SYS->selDB( ) != TBDS::realDBName(DB())) )	return;
+    if( DB().empty() || (!SYS->chkSelDB(DB())) )	return;
 
     SYS->db().at().dataGet(DB()+"."+mod->libTable(),mod->nodePath()+"lib/",*this);
 

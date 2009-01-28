@@ -153,8 +153,7 @@ void TArchiveS::load_( )
 	vector<string> db_ls;
 
 	//>> Search int DB and create new archivators
-	if( !SYS->selDB( ).empty() ) db_ls.push_back(SYS->selDB());
-	else SYS->db().at().dbList(db_ls);
+	SYS->db().at().dbList(db_ls,true);
 	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
 	    for( int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_mess_proc","",fld_cnt++,c_el); )
 	    {
@@ -166,7 +165,7 @@ void TArchiveS::load_( )
 		c_el.cfg("MODUL").setS("");
 	    }
 	//>> Search into config file and create new archivators
-	if( SYS->selDB( ).empty() )
+	if( SYS->chkSelDB("<cfg>") )
 	    for( int fld_cnt=0; SYS->db().at().dataSeek("",nodePath()+subId()+"_mess_proc",fld_cnt++,c_el); )
 	    {
 		id = c_el.cfg("ID").getS();
@@ -189,8 +188,7 @@ void TArchiveS::load_( )
 	vector<string> db_ls;
 
 	//>> Search into DB and create new archivators
-	if( !SYS->selDB( ).empty() ) db_ls.push_back(SYS->selDB());
-	else SYS->db().at().dbList(db_ls);
+	SYS->db().at().dbList(db_ls,true);
 	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
 	    for( int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_val_proc","",fld_cnt++,c_el); )
 	    {
@@ -202,7 +200,7 @@ void TArchiveS::load_( )
 		c_el.cfg("MODUL").setS("");
 	    }
 	//>> Search into config file and create new archivators
-	if( SYS->selDB( ).empty() )
+	if( SYS->chkSelDB("<cfg>") )
 	    for( int fld_cnt=0; SYS->db().at().dataSeek("",nodePath()+subId()+"_val_proc",fld_cnt++,c_el); )
 	    {
 		id = c_el.cfg("ID").getS();
@@ -225,8 +223,7 @@ void TArchiveS::load_( )
 	vector<string> db_ls;
 
 	//>> Search into DB and create new archives
-	if( !SYS->selDB( ).empty() ) db_ls.push_back(SYS->selDB());
-	else SYS->db().at().dbList(db_ls);
+	SYS->db().at().dbList(db_ls,true);
 	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
 	    for( int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_val","",fld_cnt++,c_el); )
 	    {
@@ -235,7 +232,7 @@ void TArchiveS::load_( )
 	        c_el.cfg("ID").setS("");
 	    }
 	//>> Search into config file and create new archives
-	if( SYS->selDB( ).empty() )
+	if( SYS->chkSelDB("<cfg>") )
 	    for( int fld_cnt=0; SYS->db().at().dataSeek("",nodePath()+subId()+"_val",fld_cnt++,c_el); )
 	    {
 		id = c_el.cfg("ID").getS();
@@ -1014,7 +1011,7 @@ string TMArchivator::tbl( )
 
 void TMArchivator::load_( )
 {
-    if( !SYS->selDB( ).empty() && SYS->selDB( ) != TBDS::realDBName(DB()) ) return;
+    if( !SYS->chkSelDB(DB()) ) return;
     SYS->db().at().dataGet(fullDB(),SYS->archive().at().nodePath()+tbl(),*this);
 }
 

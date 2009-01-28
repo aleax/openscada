@@ -60,7 +60,7 @@ class TDAQS : public TSubSYS
 	AutoHD<TPrmTmplLib> tmplLibAt( const string &id )	{ return chldAt(m_tmplib,id); }
 
 	TElem &elLib( )	{ return lb_el; }
-	TElem &tplE( ) 	{ return el_tmpl; }
+	TElem &tplE( )	{ return el_tmpl; }
 	TElem &tplIOE( ){ return el_tmpl_io; }
 
 	TElem &errE( )	{ return el_err; }	//Error atributes structure

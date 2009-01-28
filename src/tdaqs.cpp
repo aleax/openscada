@@ -97,8 +97,7 @@ void TDAQS::load_( )
 	vector<string> db_ls;
 
 	//>>> Search into DB
-	if( !SYS->selDB( ).empty() ) db_ls.push_back(SYS->selDB());
-	else SYS->db().at().dbList(db_ls);
+	SYS->db().at().dbList(db_ls,true);
 	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
 	    for( int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+tmplLibTable(),"",lib_cnt++,c_el); )
 	    {
@@ -108,7 +107,7 @@ void TDAQS::load_( )
 	    }
 
 	//>>> Search into config file
-	if( SYS->selDB( ).empty() )
+	if( SYS->chkSelDB("<cfg>") )
 	    for( int lib_cnt = 0; SYS->db().at().dataSeek("",nodePath()+"tmplib",lib_cnt++,c_el); )
 	    {
 		string l_id = c_el.cfg("ID").getS();
@@ -135,8 +134,7 @@ void TDAQS::load_( )
 	    g_cfg.cfgViewAll(false);
 
 	    //>> Search into DB and create new controllers
-	    if( !SYS->selDB( ).empty() ) db_ls.push_back(SYS->selDB());
-	    else SYS->db().at().dbList(db_ls);
+	    SYS->db().at().dbList(db_ls,true);
 	    for( int i_db = 0; i_db < db_ls.size(); i_db++ )
 		for( int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_"+wmod.at().modId(),"",fld_cnt++,g_cfg); )
 		{
@@ -153,7 +151,7 @@ void TDAQS::load_( )
 		    g_cfg.cfg("ID").setS("");
 		}
 	    //>> Search into config file and create new controllers
-	    if( SYS->selDB( ).empty() )
+	    if( SYS->chkSelDB("<cfg>") )
 		for( int fld_cnt=0; SYS->db().at().dataSeek("",wmod.at().nodePath()+"DAQ",fld_cnt++,g_cfg); )
 		{
 		    string m_id = g_cfg.cfg("ID").getS();

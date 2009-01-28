@@ -127,6 +127,7 @@ class TCntrNode
 	enum ModifFlag	{ Self = 0x01, Child = 0x02, All = 0x03 };
 
 	//Methods
+	Res &nodeAccess( )		{ return hd_res; }
 	virtual string nodeName( )	{ return "NO Named!"; }
 	string nodePath( char sep = 0, bool from_root = false );
 

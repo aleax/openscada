@@ -161,7 +161,7 @@ void Project::setFullDB( const string &it )
 
 void Project::load_( )
 {
-    if( !SYS->selDB( ).empty() && SYS->selDB( ) != TBDS::realDBName(DB()) ) return;
+    if( !SYS->chkSelDB(DB()) ) return;
 
     SYS->db().at().dataGet(DB()+"."+mod->prjTable(),mod->nodePath()+"PRJ/",*this);
 
@@ -771,7 +771,7 @@ void Page::setPrjFlags( int val )
 
 void Page::load_( )
 {
-    if( !SYS->selDB( ).empty() && SYS->selDB( ) != TBDS::realDBName(ownerProj()->DB()) ) return;
+    if( !SYS->chkSelDB(ownerProj()->DB()) ) return;
 
     //> Load generic widget's data
     string db  = ownerProj()->DB();
@@ -1299,7 +1299,7 @@ int PageWdg::calcPer(  )
 
 void PageWdg::load_( )
 {
-    if( !SYS->selDB( ).empty() && SYS->selDB( ) != TBDS::realDBName(ownerPage().ownerProj()->DB()) ) return;
+    if( !SYS->chkSelDB(ownerPage().ownerProj()->DB()) ) return;
 
     //> Load generic widget's data
     string db  = ownerPage().ownerProj()->DB();

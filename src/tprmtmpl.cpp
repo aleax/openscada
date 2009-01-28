@@ -146,7 +146,7 @@ AutoHD<TFunction> TPrmTempl::func()
 
 void TPrmTempl::load_( )
 {
-    if( !SYS->selDB( ).empty() && SYS->selDB( ) != TBDS::realDBName(owner().DB()) ) return;
+    if( !SYS->chkSelDB(owner().DB()) ) return;
 
     //> Self load
     SYS->db().at().dataGet(owner().fullDB(),owner().owner().nodePath()+owner().tbl(),*this);
@@ -481,7 +481,7 @@ void TPrmTmplLib::setFullDB( const string &vl )
 
 void TPrmTmplLib::load_( )
 {
-    if( !SYS->selDB( ).empty() && SYS->selDB( ) != TBDS::realDBName(DB()) ) return;
+    if( !SYS->chkSelDB(DB()) ) return;
 
     SYS->db().at().dataGet(DB()+"."+owner().tmplLibTable(),owner().nodePath()+"tmplib",*this);
 

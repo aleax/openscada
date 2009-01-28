@@ -109,7 +109,7 @@ string TController::tbl( )
 
 void TController::load_( )
 {
-    if( !SYS->selDB( ).empty() && SYS->selDB( ) != TBDS::realDBName(DB()) ) return;
+    if( !SYS->chkSelDB(DB()) ) return;
 
     mess_info(nodePath().c_str(),_("Load controller's configs!"));
 

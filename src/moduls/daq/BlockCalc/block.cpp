@@ -99,7 +99,7 @@ string Block::name( )
 
 void Block::load_( )
 {
-    if( !SYS->selDB( ).empty() && SYS->selDB( ) != TBDS::realDBName(owner().DB()) ) return;
+    if( !SYS->chkSelDB(owner().DB()) ) return;
 
     string bd = owner().DB()+"."+owner().cfg("BLOCK_SH").getS();
     SYS->db().at().dataGet(bd,mod->nodePath()+owner().cfg("BLOCK_SH").getS(),*this);

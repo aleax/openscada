@@ -169,8 +169,7 @@ void TSecurity::load_( )
 	vector<string> db_ls;
 
 	//>>> Search into DB
-	if( !SYS->selDB( ).empty() ) db_ls.push_back(SYS->selDB());
-	else SYS->db().at().dbList(db_ls);
+	SYS->db().at().dbList(db_ls,true);
 	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
 	    for( int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_user","",fld_cnt++,g_cfg); )
 	    {
@@ -180,7 +179,7 @@ void TSecurity::load_( )
 	    }
 
 	//>>> Search into config file
-	if( SYS->selDB( ).empty() )
+	if( SYS->chkSelDB("<cfg>") )
 	    for( int fld_cnt=0; SYS->db().at().dataSeek("",nodePath()+subId()+"_user",fld_cnt++,g_cfg); )
 	    {
 		name = g_cfg.cfg("NAME").getS();
@@ -201,8 +200,7 @@ void TSecurity::load_( )
 	vector<string> db_ls;
 
 	//>>> Search into DB
-	if( !SYS->selDB( ).empty() ) db_ls.push_back(SYS->selDB());
-	else SYS->db().at().dbList(db_ls);
+	SYS->db().at().dbList(db_ls,true);
 	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
 	    for( int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_grp","",fld_cnt++,g_cfg); )
 	    {
@@ -212,7 +210,7 @@ void TSecurity::load_( )
 	    }
 
 	//>>> Search into config file
-	if( SYS->selDB( ).empty() )
+	if( SYS->chkSelDB("<cfg>") )
 	    for( int fld_cnt=0; SYS->db().at().dataSeek("",nodePath()+subId()+"_grp",fld_cnt++,g_cfg); )
 	    {
 		name = g_cfg.cfg("NAME").getS();
@@ -346,7 +344,7 @@ string TUser::tbl( )
 
 void TUser::load_( )
 {
-    if( !SYS->selDB( ).empty() && SYS->selDB( ) != TBDS::realDBName(DB()) ) return;
+    if( !SYS->chkSelDB(DB()) ) return;
     SYS->db().at().dataGet(fullDB(),owner().nodePath()+tbl(),*this);
 }
 
@@ -472,7 +470,7 @@ string TGroup::tbl( )
 
 void TGroup::load_( )
 {
-    if( !SYS->selDB( ).empty() && SYS->selDB( ) != TBDS::realDBName(DB()) ) return;
+    if( !SYS->chkSelDB(DB()) ) return;
     SYS->db().at().dataGet(fullDB(),owner().nodePath()+tbl(),*this);
 }
 

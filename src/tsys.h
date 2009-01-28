@@ -134,9 +134,9 @@ class TSYS : public TCntrNode
 	string cfgFile( )	{ return mConfFile; }
 	XMLNode &cfgRoot( )	{ return rootN; }
 
-	//- Default DB -
 	string workDB( )	{ return mWorkDB; }
 	string selDB( )		{ return mSelDB; }
+	bool chkSelDB( const string& wDB );
 	void setWorkDB( const string &wdb )	{ mWorkDB = wdb; modifG(); }
 	void setSelDB( const string &vl )	{ mSelDB = vl; }
 	bool saveAtExit( )	{ return mSaveAtExit; }
@@ -242,6 +242,8 @@ class TSYS : public TCntrNode
 	int	mSavePeriod;	// Save period (s) for periodic system saving to DB
 
 	XMLNode rootN;		// Root of the config file tree
+	string	rootCfgFl;	// Root node's config file name
+	time_t	rootFlTm;	// Root node's config file's modify time
 
 	int	mStopSignal,	// Stop station signal
 		mSubst;		// Subsystem tree id

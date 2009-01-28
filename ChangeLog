@@ -1,3 +1,17 @@
+2009-01-28 Roman
+- !!!!:/SYS: Selected loading mode is unified for support loading only from config file or DB.
+    Selected mode support is added to function TDBS::dbList().
+    Created function for simple checking it mode TSYS::chkSelDB().
+- !!!:FIX:/SYS,/Special/SystemTests: The resource is added for access to the config file's XML tree. For access to XML tree nodes used no exception mode,
+    resources (stack) leak is fixed for some contexts.
+- !:FIX:/DB: Generic's DB cache using mode is changed for use cache only if main DB no accessable.
+- !:/SYS/Control: Add function TCntrNode::nodeAccess( ) for allow access to node using resource into heirs.
+- /SYS: Function TSYS::cfgFileScan() is rewrited.
+- !!!:/TModSchedul: Realised full support of AllowList and DenyList loading modules, replaced AutoList. Used node's resource without self.
+    Realised table for controll to loaded shared libraries (modules). Manual attach/detach modules is realised.
+    Config files is updated.
+
+
 2009-01-26 Roman
 - !!:/SYS: Main call programm building is moved to separated directory src_call/.
 - FIS:/SYS: AC_PREFIX_DEFAULT value is fixed on file configure.in.

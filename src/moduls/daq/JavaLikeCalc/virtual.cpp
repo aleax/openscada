@@ -249,8 +249,7 @@ void TipContr::load_( )
 	vector<string> db_ls;
 
 	//>> Search into DB
-	if( !SYS->selDB( ).empty() ) db_ls.push_back(SYS->selDB());
-	else SYS->db().at().dbList(db_ls);
+	SYS->db().at().dbList(db_ls,true);
 	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
 	    for( int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+libTable(),"",lib_cnt++,c_el); )
 	    {
@@ -260,7 +259,7 @@ void TipContr::load_( )
 	    }
 
 	//>> Search into config file
-	if( SYS->selDB( ).empty() )
+	if( SYS->chkSelDB("<cfg>") )
 	    for( int lib_cnt = 0; SYS->db().at().dataSeek("",nodePath()+"lib/",lib_cnt++,c_el); )
 	    {
 		string l_id = c_el.cfg("ID").getS();

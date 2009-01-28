@@ -68,12 +68,17 @@ string TBDS::realDBName( const string &bdn )
 	   ((bd_n=="*") ? TSYS::strSepParse(SYS->workDB(),1,'.') : bd_n)+(bd_tbl.empty() ? "" : "."+bd_tbl);
 }
 
-void TBDS::dbList( vector<string> &ls )
+void TBDS::dbList( vector<string> &ls, bool checkSel )
 {
-    vector<string> tdb_ls, db_ls;
-
     ls.clear();
 
+    if( checkSel && !SYS->selDB().empty() )
+    {
+	if( SYS->selDB() != "<cfg>" ) ls.push_back(SYS->selDB());
+	return;
+    }
+
+    vector<string> tdb_ls, db_ls;
     modList(tdb_ls);
     for( int i_tp = 0; i_tp < tdb_ls.size(); i_tp++ )
     {
@@ -148,6 +153,7 @@ bool TBDS::dataSeek( const string &bdn, const string &path, int lev, TConfig &cf
     {
 	try
 	{
+	    ResAlloc res(SYS->nodeAccess(),false);
 	    XMLNode *nd = ctrId(&SYS->cfgRoot(),path);
 	    for( int i_fld = 0; i_fld < nd->childSize(); i_fld++ )
 	    {
@@ -212,6 +218,7 @@ bool TBDS::dataGet( const string &bdn, const string &path, TConfig &cfg )
     }
     //- Load from Config file if tbl no present -
     XMLNode *nd;
+    ResAlloc res(SYS->nodeAccess(),false);
     try{ nd = ctrId(&SYS->cfgRoot(),path); }
     catch(...){ return false; }
 
@@ -298,22 +305,24 @@ void TBDS::genDBSet(const string &path, const string &val, const string &user)
 	    tbl.free();
 	    dbs.at().close(dbs.at().fullDBSYS());
 	}
-
-	//Put to cache
-	ResAlloc res(dbs.at().genDBCacheRes,true);
-	for( int i_cel = 0; i_cel < dbs.at().genDBCache.size(); i_cel++ )
-	    if( dbs.at().genDBCache[i_cel]->cfg("user").getS() == user &&
-		dbs.at().genDBCache[i_cel]->cfg("id").getS() == path )
-	    { dbs.at().genDBCache[i_cel]->cfg("val").setS(val); return; }
-	TConfig *db_el = new TConfig(&dbs.at());
-	db_el->cfg("user").setS(user);
-	db_el->cfg("id").setS(path);
-	db_el->cfg("val").setS(val);
-	dbs.at().genDBCache.push_front(db_el);
-	while( dbs.at().genDBCache.size() > 100 )
+	else
 	{
-	    delete dbs.at().genDBCache.back();
-	    dbs.at().genDBCache.pop_back();
+	    //Put to cache
+	    ResAlloc res(dbs.at().genDBCacheRes,true);
+	    for( int i_cel = 0; i_cel < dbs.at().genDBCache.size(); i_cel++ )
+		if( dbs.at().genDBCache[i_cel]->cfg("user").getS() == user &&
+		    dbs.at().genDBCache[i_cel]->cfg("id").getS() == path )
+		{ dbs.at().genDBCache[i_cel]->cfg("val").setS(val); return; }
+	    TConfig *db_el = new TConfig(&dbs.at());
+	    db_el->cfg("user").setS(user);
+	    db_el->cfg("id").setS(path);
+	    db_el->cfg("val").setS(val);
+	    dbs.at().genDBCache.push_front(db_el);
+	    while( dbs.at().genDBCache.size() > 100 )
+	    {
+		delete dbs.at().genDBCache.back();
+		dbs.at().genDBCache.pop_back();
+	    }
 	}
     }
 }
@@ -323,60 +332,46 @@ string TBDS::genDBGet(const string &path, const string &oval, const string &user
     bool bd_ok=false;
     string rez = oval;
 
-    if( SYS->present("BD") )
+    //> Get from generic DB
+    if( SYS->present("BD") && !onlyCfg )
     {
 	AutoHD<TBDS> dbs = SYS->db();
-
-	//> Get from cache
-	ResAlloc res(dbs.at().genDBCacheRes,false);
-	for( int i_cel = 0; i_cel < dbs.at().genDBCache.size(); i_cel++ )
-	    if( dbs.at().genDBCache[i_cel]->cfg("user").getS() == user &&
-			dbs.at().genDBCache[i_cel]->cfg("id").getS() == path )
-		return dbs.at().genDBCache[i_cel]->cfg("val").getS();
-	res.release();
-
-	//> Get from generic DB
-	if(!onlyCfg)
+	AutoHD<TTable> tbl = dbs.at().open(SYS->db().at().fullDBSYS());
+	if( !tbl.freeStat() )
 	{
-	    AutoHD<TTable> tbl = dbs.at().open(SYS->db().at().fullDBSYS());
-	    if( !tbl.freeStat() )
+	    TConfig db_el(&dbs.at());
+	    db_el.cfg("user").setS(user);
+	    db_el.cfg("id").setS(path);
+	    try
 	    {
-		TConfig db_el(&dbs.at());
-		db_el.cfg("user").setS(user);
-		db_el.cfg("id").setS(path);
-		try
-		{
-		    tbl.at().fieldGet(db_el);
-		    rez = db_el.cfg("val").getS();
-		    bd_ok = true;
-		}
-		catch(TError err){  }
-
-		tbl.free();
-		dbs.at().close(dbs.at().fullDBSYS());
+		tbl.at().fieldGet(db_el);
+		rez = db_el.cfg("val").getS();
+		bd_ok = true;
 	    }
+	    catch(TError err){  }
+
+	    tbl.free();
+	    dbs.at().close(dbs.at().fullDBSYS());
 	}
     }
-    //- Get from config file -
-    if(!bd_ok)
-	try{ rez = SYS->ctrId(&SYS->cfgRoot(),path)->text(); }
-	catch(...){ }
 
-    //Put to cache
-    if( SYS->present("BD") )
+    if(!bd_ok)
     {
-	AutoHD<TBDS> dbs = SYS->db();
-	ResAlloc res(dbs.at().genDBCacheRes,true);
-	TConfig *db_el = new TConfig(&dbs.at());
-	db_el->cfg("user").setS(user);
-	db_el->cfg("id").setS(path);
-	db_el->cfg("val").setS(rez);
-	dbs.at().genDBCache.push_front(db_el);
-	while( dbs.at().genDBCache.size() > 100 )
+	//> Get from cache
+	if( SYS->present("BD") )
 	{
-	    delete dbs.at().genDBCache.back();
-	    dbs.at().genDBCache.pop_back();
+	    AutoHD<TBDS> dbs = SYS->db();
+	    ResAlloc res(dbs.at().genDBCacheRes,false);
+	    for( int i_cel = 0; i_cel < dbs.at().genDBCache.size(); i_cel++ )
+		if( dbs.at().genDBCache[i_cel]->cfg("user").getS() == user &&
+			dbs.at().genDBCache[i_cel]->cfg("id").getS() == path )
+		    return dbs.at().genDBCache[i_cel]->cfg("val").getS();
 	}
+
+	//> Get from config file
+	ResAlloc res(SYS->nodeAccess(),false);
+	XMLNode *tgtN = TCntrNode::ctrId(&SYS->cfgRoot(),path,true);
+	if( tgtN ) rez = tgtN->text();
     }
 
     return rez;
@@ -432,7 +427,7 @@ void TBDS::load_( )
     //> Search and open new DB
     try
     {
-	if( SYS->selDB( ).empty() || SYS->selDB( ) == fullDB() )
+	if( SYS->chkSelDB(fullDB()) )
 	{
 	    TConfig c_el(&el_db);
 	    c_el.cfgViewAll(false);
@@ -631,7 +626,7 @@ void TBD::open( const string &table, bool create )
 
 void TBD::load_( )
 {
-    if( !SYS->selDB( ).empty() && SYS->selDB( ) != SYS->workDB() ) return;
+    if( !SYS->chkSelDB(SYS->workDB()) ) return;
     SYS->db().at().dataGet(owner().owner().fullDB(),SYS->db().at().nodePath()+"DB/",*this);
     if( !enableStat() && toEnable() )	enable();
 }

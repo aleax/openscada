@@ -134,7 +134,7 @@ void WidgetLib::setFullDB( const string &it )
 
 void WidgetLib::load_( )
 {
-    if( !SYS->selDB( ).empty() && SYS->selDB( ) != TBDS::realDBName(DB()) ) return;
+    if( !SYS->chkSelDB(DB()) ) return;
 
     mess_info(nodePath().c_str(),_("Load widget library."));
 
@@ -587,7 +587,7 @@ void LWidget::setCalcPer( int vl )
 
 void LWidget::load_( )
 {
-    if( !SYS->selDB( ).empty() && SYS->selDB( ) != TBDS::realDBName(ownerLib().DB()) ) return;
+    if( !SYS->chkSelDB(ownerLib().DB()) ) return;
 
     //> Load generic widget's data
     string db  = ownerLib().DB();
@@ -975,7 +975,7 @@ int CWidget::calcPer( )
 
 void CWidget::load_( )
 {
-    if( !SYS->selDB( ).empty() && SYS->selDB( ) != TBDS::realDBName(ownerLWdg().ownerLib().DB()) ) return;
+    if( !SYS->chkSelDB(ownerLWdg().ownerLib().DB()) ) return;
 
     //> Load generic widget's data
     string db  = ownerLWdg().ownerLib().DB();

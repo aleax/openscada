@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tmodschedul.h
 /***************************************************************************
- *   Copyright (C) 2003-2007 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2009 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -37,13 +37,13 @@ class TModSchedul : public TSubSYS
 	{
 	    public:
 		//Methods
-		SHD( ) : hd(NULL), m_tm(0)	{ }
-		SHD( void *ihd, time_t itm, const string &iname ) : hd(ihd), m_tm(itm), name(iname)	{ }
-		
+		SHD( ) : hd(NULL), tm(0)	{ }
+		SHD( void *ihd, time_t itm, const string &iname ) : hd(ihd), tm(itm), name(iname)	{ }
+
 		//Attributes
 		void		*hd;		// NULL - share lib present but no attached
 		vector<string>	use;		// if share lib attached to show who modules used
-		time_t		m_tm;		// data modify of share lib for automatic update
+		time_t		tm;		// data modify of share lib for automatic update
 		string		name;		// share lib path
 	};
 
@@ -51,14 +51,18 @@ class TModSchedul : public TSubSYS
 	TModSchedul( );
 	~TModSchedul( );
 
+	string allowList( )	{ return mAllow; }
+	string denyList( )	{ return mDeny; }
 	int chkPer( )		{ return mPer; }
 
+	void setAllowList( const string &vl )	{ mAllow = vl; modif(); }
+	void setDenyList( const string &vl )	{ mDeny = vl; modif(); }
 	void setChkPer( int per );
 
 	void subStart( );
 	void subStop( );
 
-	void loadLibS( );				// Load/Init/Start all share libs and registry moduls into TSubSYS	
+	void loadLibS( );				// Load/Init/Start all share libs and registry moduls into TSubSYS
 
 	SHD &lib( const string &name );			// Get stat share lib <name>
 	void libList( vector<string> &list );		// List present share libs
@@ -79,16 +83,15 @@ class TModSchedul : public TSubSYS
 	bool CheckFile( const string &name );			//Check file to OpenSCADA share libs
 	int  libReg( const string &name );			//Registre present share lib
 	void libUnreg( const string &name );			//Unreg deleted share lib
-	bool CheckAuto( const string &name) const;		//Check file to auto attaching
+	bool chkAllowMod( const string &name );			//Check for allow file to attaching
 
 	void cntrCmdProc( XMLNode *opt );		//Control interface command process
 
 	static void SchedTask( union sigval obj );
 
 	//Attributes
-	vector<string>	mAmList;
+	string	mAllow, mDeny;
 
-	Res		hdRes;
 	int		mPer;				//Check to new modules period
 	vector<SHD>	SchHD;
 	timer_t		tmId;				//Thread timer

@@ -248,7 +248,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	    bool v_get = atoi(opt->text().c_str());
 	    string attr = opt->attr("key_atr");
 	    string col  = opt->attr("col");
-			
+
 	    //--- Check for create new ---
 	    if( v_get && vlAt(attr).at().arch().freeStat() )
 	    {

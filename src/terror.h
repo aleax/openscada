@@ -23,10 +23,8 @@
 #define TERROR_H
 
 #include <string>
-#include <exception>
 
 using std::string;
-using std::exception;
 
 //*************************************************
 //* TError                                        *
@@ -37,12 +35,11 @@ class TError
 	//Methods
 	TError( const char *cat, const char *fmt, ... );
 	TError( int cod, const char *cat, const char *fmt, ... );
-	
+
 	//Attributes
 	int	cod;
-	string  cat;
-	string  mess;
+	string	cat;
+	string	mess;
 };
-
 
 #endif // TERROR_H

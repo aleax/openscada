@@ -259,8 +259,7 @@ bool TSYS::cfgFileLoad()
 
     //Load config file
     int hd = open(mConfFile.c_str(),O_RDONLY);
-    if( hd < 0 )
-	mess_err(nodePath().c_str(),_("Config file <%s> error: %s"),mConfFile.c_str(),strerror(errno));
+    if( hd < 0 ) mess_err(nodePath().c_str(),_("Config file <%s> error: %s"),mConfFile.c_str(),strerror(errno));
     else
     {
 	int cf_sz = lseek(hd,0,SEEK_END);
@@ -273,6 +272,7 @@ bool TSYS::cfgFileLoad()
 	free(buf);
 	try
 	{
+	    ResAlloc res(nodeAccess(),true);
 	    rootN.load(s_buf);
 	    if( rootN.name() == "OpenSCADA" )
 	    {
@@ -342,6 +342,7 @@ void TSYS::load_()
 
 	//> First DB subsystem load
 	db().at().load();
+	modSchedul().at().modifG();	// For try reload from DB
 
 	//> Second load for load from generic DB
 	cfgPrmLoad();
@@ -429,6 +430,14 @@ void TSYS::stop( )
     mStopSignal = SIGINT;
 }
 
+bool TSYS::chkSelDB( const string& wDB )
+{
+    if( selDB().empty() ) return true;
+    if( selDB() == "<cfg>" && (wDB == "<cfg>" || TBDS::realDBName(wDB) == workDB()) ) return true;
+    if( SYS->selDB( ) == TBDS::realDBName(wDB) ) return true;
+    return false;
+}
+
 void TSYS::sighandler( int signal )
 {
     switch(signal)
@@ -468,22 +477,21 @@ void TSYS::sighandler( int signal )
 
 void TSYS::cfgFileScan( bool first )
 {
-    static string cfg_fl;
-    static struct stat f_stat;
+    struct stat f_stat;
 
-    struct stat f_stat_t;
-    bool   up = false;
+    stat(cfgFile().c_str(),&f_stat);
+    bool up = false;
+    if( rootCfgFl != cfgFile() || rootFlTm != f_stat.st_mtime ) up = true;
+    rootCfgFl = cfgFile();
+    rootFlTm = f_stat.st_mtime;
 
-    if( cfg_fl == cfgFile() )
+    if( up && !first )
     {
-	stat(cfg_fl.c_str(),&f_stat_t);
-	if( f_stat.st_mtime != f_stat_t.st_mtime ) up = true;
+	modifG();
+	setSelDB("<cfg>");
+	load();
+	setSelDB("");
     }
-    else up = true;
-    cfg_fl = cfgFile();
-    stat(cfg_fl.c_str(),&f_stat);
-
-    if( up && !first )	{ modifG(); load(); }
 }
 
 long long TSYS::curTime()

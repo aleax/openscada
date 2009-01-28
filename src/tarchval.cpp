@@ -919,7 +919,7 @@ void TVArchive::setUpBuf( )
 
 void TVArchive::load_( )
 {
-    if( !SYS->selDB( ).empty() && SYS->selDB( ) != TBDS::realDBName(DB()) ) return;
+    if( !SYS->chkSelDB(DB()) ) return;
     SYS->db().at().dataGet(fullDB(),owner().nodePath()+tbl(),*this);
     setUpBuf();
 }
@@ -2149,7 +2149,7 @@ TTipArchivator &TVArchivator::owner()
 
 void TVArchivator::load_( )
 {
-    if( !SYS->selDB( ).empty() && SYS->selDB( ) != TBDS::realDBName(DB()) ) return;
+    if( !SYS->chkSelDB(DB()) ) return;
     SYS->db().at().dataGet(fullDB(),SYS->archive().at().nodePath()+tbl(),*this);
 }
 

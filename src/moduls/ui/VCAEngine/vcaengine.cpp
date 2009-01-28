@@ -260,8 +260,7 @@ void Engine::load_( )
 	vector<string> db_ls;
 
 	//>>>> Search into DB
-	if( !SYS->selDB( ).empty() ) db_ls.push_back(SYS->selDB());
-	else SYS->db().at().dbList(db_ls);
+	SYS->db().at().dbList(db_ls,true);
 	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
 	    for( int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+wlbTable(),"",lib_cnt++,c_el); )
 	    {
@@ -271,7 +270,7 @@ void Engine::load_( )
 	    }
 
 	//>>>> Search into config file
-	if( SYS->selDB( ).empty() )
+	if( SYS->chkSelDB("<cfg>") )
 	    for( int lib_cnt = 0; SYS->db().at().dataSeek("",nodePath()+"LIB/",lib_cnt++,c_el); )
 	    {
 		string l_id = c_el.cfg("ID").getS();
@@ -298,8 +297,7 @@ void Engine::load_( )
 	vector<string> db_ls;
 
 	//>>>> Search into DB
-	if( !SYS->selDB( ).empty() ) db_ls.push_back(SYS->selDB());
-	else SYS->db().at().dbList(db_ls);
+	SYS->db().at().dbList(db_ls,true);
 	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
 	    for( int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+prjTable(),"",lib_cnt++,c_el); )
 	    {
@@ -310,7 +308,7 @@ void Engine::load_( )
 	    }
 
 	//>>>> Search into config file
-	if( SYS->selDB( ).empty() )
+	if( SYS->chkSelDB("<cfg>") )
 	    for( int el_cnt = 0; SYS->db().at().dataSeek("",nodePath()+"PRJ/",el_cnt++,c_el); )
 	    {
 		string prj_id = c_el.cfg("ID").getS();

@@ -218,23 +218,17 @@ void *TTest::Task( void *CfgM )
 	    if( ++count == 1000000 ) count = 0;
 
 	    //Get All fields
-	    try
-	    {
-		int nd_cnt = 0;
-		while(true)
-		{
-		    XMLNode *t_n = tst->ctrId(&SYS->cfgRoot(),tst->nodePath())->childGet("prm",nd_cnt++);
-
-		    if( t_n->attr("on") == "1" && atoi(t_n->attr("per").c_str()) && 
-			    !( count % atoi(t_n->attr("per").c_str()) ) )
+	    ResAlloc res(SYS->nodeAccess(),false);
+	    XMLNode *mn, *t_n;
+	    mn = TCntrNode::ctrId(&SYS->cfgRoot(),tst->nodePath(),true);
+	    if( mn )
+		for( int nd_cnt = 0; t_n=mn->childGet("prm",nd_cnt++,true); )
+		    if( t_n->attr("on") == "1" && atoi(t_n->attr("per").c_str()) && !( count % atoi(t_n->attr("per").c_str()) ) )
 		    {
 			string id = t_n->attr("id");
 			try{ tst->Test( id, t_n ); }
-			catch( TError err )
-			{ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+			catch( TError err ) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 		    }
-		}
-	    }catch(...){ }
 	}
 	usleep(STD_WAIT_DELAY*1000);
     }

@@ -257,7 +257,7 @@ void Contr::postDisable(int flag)
 
 void Contr::load_( )
 {
-    if( !SYS->selDB( ).empty() && SYS->selDB( ) != TBDS::realDBName(DB()) ) return;
+    if( !SYS->chkSelDB(DB()) ) return;
 
     TController::load_( );
 

@@ -105,7 +105,7 @@ void TParamContr::postDisable(int flag)
 
 void TParamContr::load_( )
 {
-    if( !SYS->selDB( ).empty() && SYS->selDB( ) != TBDS::realDBName(owner().DB()) ) return;
+    if( !SYS->chkSelDB(owner().DB()) ) return;
 
     SYS->db().at().dataGet(owner().DB()+"."+owner().cfg(type().db).getS(),
 			   owner().owner().nodePath()+owner().cfg(type().db).getS(),*this);
