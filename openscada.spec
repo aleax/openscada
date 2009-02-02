@@ -1,7 +1,7 @@
 #===== Generic Info ======
 Summary: Open SCADA system project
 Name: openscada
-Version: 0.6.3
+Version: 0.6.3.1
 Release: 1
 Source: openscada-%version.tar.gz
 License: GPL
@@ -14,7 +14,7 @@ URL: http://oscada.diyaorg.dp.ua
 #= Individual distributives seting =
 %if %_vendor == "alt"
 %set_verify_elf_method no
-BuildRequires: glibc-devel gcc4.1-c++ libgd2-devel libexpat-devel libMySQL-devel libsqlite3-devel libsensors-devel libnet-snmp-devel libqt4-devel firebird-devel
+BuildRequires: glibc-devel gcc4.3-c++ libgd2-devel libexpat-devel libMySQL-devel libsqlite3-devel libsensors-devel libnet-snmp-devel libqt4-devel firebird-devel
 %else
 %define _initdir /etc/init.d
 %define _desktopdir %_datadir/applications
@@ -83,7 +83,7 @@ The %{name}-demo package includes demo data bases and configs. For start use com
 %setup -q -n %srcname
 
 %build
-%configure CFLAGS="-O2" CXXFLAGS="-O2"
+%configure CFLAGS="-O2" CXXFLAGS="-O2 -Wno-deprecated"
 %__make
 
 %install
@@ -146,7 +146,6 @@ install -m 644 demo/ru/*.db %buildroot/var/spool/openscada/DEMO_RU
 
 %files devel
 %defattr(-,root,root)
-#_libdir/*.*
 %_libdir/*.so
 %_libdir/*.*a
 %_includedir/openscada/*
@@ -165,6 +164,9 @@ install -m 644 demo/ru/*.db %buildroot/var/spool/openscada/DEMO_RU
 /var/spool/openscada/DEMO_RU/*.db
 
 %changelog
+* Mon Feb 2 2009 Roman Savochenko <rom_as@diyaorg.dp.ua>
+- OpenSCADA update 0.6.3.1 release build.
+
 * Mon Dec 22 2008 Roman Savochenko <rom_as@diyaorg.dp.ua>
 - Documentation pack is unified and separated to project info files and documentation.
 - Dynamic librarie's links packing into main package and development is fixed.
