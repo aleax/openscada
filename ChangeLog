@@ -1,3 +1,10 @@
+2009-02-02 Roman OpenSCADA 0.6.3.1
+- !!!:/SYS: Core translation to German is added by Aleksey Popkov.
+- !!!:/DB/SQLite,/DB/MySQL,/DB/FireBird,/DB/DBF,/Archive/DBArch,/Archive/FSArch: The document's translation to english is added by Maxim Lisenko.
+- /Special/FLibSYS: The libraries functions is made ordered.
+- FIX:/UI/VCAEngine: Cycled list for previous value of primitive "Document" is fixed.
+
+
 2009-01-28 Roman
 - !!!!:/SYS: Selected loading mode is unified for support loading only from config file or DB.
     Selected mode support is added to function TDBS::dbList().

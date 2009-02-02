@@ -76,7 +76,7 @@ Lib::Lib( string src )
 
     mod		= this;
 
-    m_fnc = grpAdd("fnc_");
+    m_fnc = grpAdd("fnc_",true);
 }
 
 Lib::~Lib()
@@ -90,7 +90,24 @@ void Lib::postEnable( int flag )
 
     if( flag&TCntrNode::NodeRestore )	return;
 
-    //- Reg functions -
+    //> Reg functions
+    reg( new tmDate() );
+    reg( new tmTime() );
+    reg( new tmFStr() );
+    reg( new tmStr2Tm() );
+
+    reg( new messPut() );
+
+    reg( new strSize() );
+    reg( new strSubstr() );
+    reg( new strInsert() );
+    reg( new strReplace() );
+    reg( new strParse() );
+    reg( new strParsePath() );
+    reg( new strPath2Sep() );
+    reg( new strEnc2HTML() );
+    reg( new real2str() );
+
     reg( new varhOpen() );
     reg( new varhBufOpen() );
     reg( new varhClose() );
@@ -105,20 +122,6 @@ void Lib::postEnable( int flag )
     reg( new varhSetR() );
     reg( new varhSetB() );
     reg( new varhSetS() );
-    reg( new messPut() );
-    reg( new tmDate() );
-    reg( new tmTime() );
-    reg( new tmFStr() );
-    reg( new tmStr2Tm() );
-    reg( new strSize() );
-    reg( new strSubstr() );
-    reg( new strInsert() );
-    reg( new strReplace() );
-    reg( new strParse() );
-    reg( new strParsePath() );
-    reg( new strPath2Sep() );
-    reg( new strEnc2HTML() );
-    reg( new real2str() );
 }
 
 void Lib::modStart( )

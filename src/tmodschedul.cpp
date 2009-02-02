@@ -473,7 +473,7 @@ void TModSchedul::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/ms/mod_path",_("Path to shared libs(modules)"),0444,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/ms/mod_allow",_("Allowed modules"),0444,"root","root",2,"tp","str",
 		"help",_("List of shared libs(modules) allow for auto conection.\nElements separated by symbol ';'.\nValue '*' is used for allow all modules."));
-	    ctrMkNode("fld",opt,-1,"/ms/mod_deny",_("Denyed modules"),0444,"root","root",2,"tp","str",
+	    ctrMkNode("fld",opt,-1,"/ms/mod_deny",_("Denied modules"),0444,"root","root",2,"tp","str",
 		"help",_("List of shared libs(modules) deny for auto conection.\nElements separated by symbol ';'."));
 	    ctrMkNode("fld",opt,-1,"/ms/chk_per",_("Check modules period (sec)"),0664,"root","root",1,"tp","dec");
 	    ctrMkNode("comm",opt,-1,"/ms/chk_now",_("Check modules now."),0660,"root","root");

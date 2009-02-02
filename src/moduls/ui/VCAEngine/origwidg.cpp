@@ -982,7 +982,8 @@ bool OrigDocument::attrChange( Attr &cfg, void *prev )
 	    else
 	    {
 		if( --docN < 0 ) docN = n-1;
-		if( cfg.owner()->attrAt("doc"+TSYS::int2str(docN)).at().getS().empty() )	docN = *(int*)prev;
+		if( docN == aCur || cfg.owner()->attrAt("doc"+TSYS::int2str(docN)).at().getS().empty() )
+		    docN = *(int*)prev;
 	    }
 	    if( docN != cfg.getI() )	cfg.setI(docN,false,true);
 	}

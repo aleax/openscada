@@ -1,7 +1,7 @@
 
 AC_PREREQ(2.50)
 
-AC_INIT([OpenSCADA],[0.6.3],[rom_as@fromru.com])
+AC_INIT([OpenSCADA],[0.6.3.1],[rom_as@fromru.com])
 AC_PREFIX_DEFAULT([/usr])
 oscd_LIBREVISION="0:10:0"
 oscd_modulpref="oscd_"
@@ -26,7 +26,6 @@ AC_LIBTOOL_DLOPEN
 # Checks for programs.
 AC_PROG_CC
 AC_PROG_CXX
-AC_PROG_RANLIB
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
