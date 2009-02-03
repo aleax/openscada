@@ -27,12 +27,12 @@
 //*************************************************
 //* TElem                                         *
 //*************************************************
-TElem::TElem( const string &name ) : m_name(name) 
+TElem::TElem( const string &name ) : m_name(name)
 {
 
 }
 
-TElem::~TElem()
+TElem::~TElem( )
 {
     while(cont.size())	cont[0]->detElem(this);
     while(elem.size())	fldDel(0);
@@ -40,17 +40,20 @@ TElem::~TElem()
 
 int TElem::fldAdd( TFld *fld, int id )
 {
-    //- Find dublicates -
+    ResAlloc res( mResEl, false );
+    //> Find dublicates
     for( int i_f = 0; i_f < elem.size(); i_f++)
-	if(elem[i_f]->name() == fld->name())
+	if( elem[i_f]->name() == fld->name() )
 	{
 	    delete fld;
 	    return i_f;
 	}
     if( id > elem.size() || id < 0 ) id = elem.size();
+    res.request(true);
     elem.insert(elem.begin()+id,fld);
-    //- Add value and set them default -
-    for(unsigned cfg_i=0; cfg_i < cont.size(); cfg_i++)
+    //> Add value and set them default
+    res.request(false);
+    for( int cfg_i=0; cfg_i < cont.size(); cfg_i++ )
 	cont[cfg_i]->addFld(this,id);
 
     return id;
@@ -58,51 +61,58 @@ int TElem::fldAdd( TFld *fld, int id )
 
 void TElem::fldDel( unsigned int id )
 {
+    ResAlloc res( mResEl, false );
     if( id >= elem.size() ) throw TError("Elem",_("Id error!"));
-    for(unsigned cfg_i=0; cfg_i < cont.size(); cfg_i++)
+    for( int cfg_i=0; cfg_i < cont.size(); cfg_i++ )
 	cont[cfg_i]->delFld(this,id);
+    res.request(true);
     delete elem[id];
     elem.erase(elem.begin()+id);
 }
 
 void TElem::valAtt( TValElem *cnt )
 {
-    for(unsigned i=0; i < cont.size() ;i++)
-	if(cont[i] == cnt) throw TError("Elem",_("The element container is already attached!"));
+    ResAlloc res( mResEl, true );
+    for( int i=0; i < cont.size(); i++ )
+	if( cont[i] == cnt ) throw TError("Elem",_("The element container is already attached!"));
     cont.push_back(cnt);
 }
 
 void TElem::valDet( TValElem *cnt )
 {
-    for(unsigned i=0; i < cont.size() ;i++)
-	if(cont[i] == cnt) { cont.erase(cont.begin()+i); break; }
+    ResAlloc res( mResEl, true );
+    for( int i=0; i < cont.size(); i++ )
+	if( cont[i] == cnt ) { cont.erase(cont.begin()+i); break; }
 }
 
 unsigned TElem::fldId( const string &name )
 {
-    for(unsigned i=0; i < elem.size(); i++)
-	if(elem[i]->name() == name) return(i);
+    ResAlloc res( mResEl, false );
+    for( int i=0; i < elem.size(); i++ )
+	if( elem[i]->name() == name ) return i;
     throw TError("Elem",_("Element <%s> is not present!"),name.c_str());
 }
 
 bool TElem::fldPresent( const string &name )
 {
-    for(unsigned i=0; i < elem.size(); i++)
-	if(elem[i]->name() == name) return true;
+    ResAlloc res( mResEl, false );
+    for( int i=0; i < elem.size(); i++ )
+	if( elem[i]->name() == name ) return true;
     return false;
 }
 
 void TElem::fldList( vector<string> &list )
 {
     list.clear();
-    for(unsigned i = 0; i < elem.size(); i++)
+    ResAlloc res( mResEl, false );
+    for( int i = 0; i < elem.size(); i++ )
 	list.push_back(elem[i]->name());
 }
 
 TFld &TElem::fldAt( unsigned int id )
 {
     if( id >= elem.size() ) throw TError("Elem",_("Id error!"));
-    return(*elem[id]);
+    return *elem[id];
 }
 
 //*************************************************

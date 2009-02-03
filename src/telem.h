@@ -25,6 +25,8 @@
 #include <string>
 #include <vector>
 
+#include "resalloc.h"
+
 using std::string;
 using std::vector;
 
@@ -161,6 +163,7 @@ class TElem
 	string			m_name;
 	vector<TFld*>		elem;
 	vector<TValElem*>	cont;		//Conteiners
+	Res			mResEl;
 };
 
 //*************************************************

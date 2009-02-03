@@ -1,3 +1,8 @@
+2009-02-03 Roman
+- !:FIX:/SYS: Resource is added to TElem for prevent crash on multithreading by using TConfig.
+    Crash detected on UI.WebVision and more images on a visual user interface.
+
+
 2009-02-02 Roman OpenSCADA 0.6.3.1
 - !!!:/SYS: Core translation to German is added by Aleksey Popkov.
 - !!!:/DB/SQLite,/DB/MySQL,/DB/FireBird,/DB/DBF,/Archive/DBArch,/Archive/FSArch: The document's translation to english is added by Maxim Lisenko.
