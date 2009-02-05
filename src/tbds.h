@@ -52,7 +52,8 @@ class TTable : public TCntrNode
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	string &name( )		{ return m_name; }
+	string &name( )		{ return mName; }
+	time_t lstUse( )	{ return mLstUse; }
 
 	virtual void fieldStruct( TConfig &cfg )
 	{ throw TError(nodePath().c_str(),_("Function <%s> no support!"),"fieldStruct"); }
@@ -71,12 +72,15 @@ class TTable : public TCntrNode
 	//Protected methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
+	//Protected attributes
+	time_t	mLstUse;
+
     private:
 	//Private methods
-	string nodeName( )	{ return m_name; }
+	string nodeName( )	{ return mName; }
 
 	//Private attributes
-	string m_name;
+	string	mName;
 };
 
 //************************************************
@@ -93,20 +97,20 @@ class TBD : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string	&id( )		{ return m_id; }
+	const string	&id( )		{ return mId; }
 	string		name( );
-	const string	&dscr( )	{ return m_dscr; }
-	const string	&addr( )	{ return m_addr; }
-	const string	&codePage( )	{ return m_codepage; }
+	const string	&dscr( )	{ return mDscr; }
+	const string	&addr( )	{ return mAddr; }
+	const string	&codePage( )	{ return mCodepage; }
 
-	bool enableStat( )		{ return m_en; }
-	bool toEnable( )		{ return m_toen; }
+	bool enableStat( )		{ return mEn; }
+	bool toEnable( )		{ return mToEn; }
 
-	void setName( const string &inm )	{ m_name = inm; modif(); }
-	void setDscr( const string &idscr )	{ m_dscr = idscr; modif(); }
-	void setAddr( const string &iaddr )	{ m_addr = iaddr; modif(); }
-	void setCodePage( const string &icp )	{ m_codepage = icp; modif(); }
-	void setToEnable( bool ivl )		{ m_toen = ivl; modif(); }
+	void setName( const string &inm )	{ mName = inm; modif(); }
+	void setDscr( const string &idscr )	{ mDscr = idscr; modif(); }
+	void setAddr( const string &iaddr )	{ mAddr = iaddr; modif(); }
+	void setCodePage( const string &icp )	{ mCodepage = icp; modif(); }
+	void setToEnable( bool ivl )		{ mToEn = ivl; modif(); }
 
 	virtual void enable( );
 	virtual void disable( );
@@ -114,11 +118,11 @@ class TBD : public TCntrNode, public TConfig
 	//- Opened DB tables -
 	virtual void allowList( vector<string> &list )
 	{ throw TError(nodePath().c_str(),_("Function <%s> no support!"),"allowList"); }
-	void list( vector<string> &list )	{ chldList(m_tbl,list); }
-	bool openStat( const string &table )	{ return chldPresent(m_tbl,table); }
+	void list( vector<string> &list )	{ chldList(mTbl,list); }
+	bool openStat( const string &table )	{ return chldPresent(mTbl,table); }
 	void open( const string &table, bool create );
-	void close( const string &table, bool del = false )	{ chldDel(m_tbl,table,-1,del); }
-	AutoHD<TTable> at( const string &name )	{ return chldAt(m_tbl,name); }
+	void close( const string &table, bool del = false )	{ chldDel(mTbl,table,-1,del); }
+	AutoHD<TTable> at( const string &name )	{ return chldAt(mTbl,name); }
 
 	//- SQL request interface -
 	virtual void sqlReq( const string &req, vector< vector<string> > *tbl = NULL )
@@ -142,20 +146,20 @@ class TBD : public TCntrNode, public TConfig
     private:
 	//Private methods
 	void postEnable( int flag );
-	string nodeName( )	{ return m_id; }
+	string nodeName( )	{ return mId; }
 
 	//Private attributes
 	//- Base options -
-	string	&m_id,		//ID
-		&m_name,	//Name
-		&m_dscr,	//Description
-		&m_addr,	//Individual address
-		&m_codepage;	//DB codepage
-	bool	&m_toen;
+	string	&mId,		//ID
+		&mName,		//Name
+		&mDscr,		//Description
+		&mAddr,		//Individual address
+		&mCodepage;	//DB codepage
+	bool	&mToEn;
 
-	bool	m_en;
+	bool	mEn;
 	//- Special options -
-	int	m_tbl;
+	int	mTbl;
 };
 
 //************************************************
@@ -209,6 +213,8 @@ class TBDS : public TSubSYS, public TElem
 
 	static string realDBName( const string &bdn );
 	void dbList( vector<string> &ls, bool checkSel = false );
+
+	void closeOldTables( int secOld = 60 );
 
 	//- Open/close table. -
 	AutoHD<TTable> open( const string &bdn, bool create = false );

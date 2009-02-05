@@ -7,7 +7,7 @@ Source: openscada-%version.tar.gz
 License: GPL
 Group: Graphics
 Packager: Roman Savochenko <rom_as@fromru.com>
-URL: http://oscada.diyaorg.dp.ua
+URL: http://oscada.org.ua
 
 %define srcname openscada-%version
 
@@ -41,9 +41,6 @@ test -h /usr/lib/openscada && rm -f /usr/lib/openscada || :;
 %package doc
 Summary: Open SCADA documents.
 Group: Documentation
-%if %_vendor == "alt"
-BuildArch: noarch
-%endif
 %description doc
 The %name-doc package include documents files.
 %description doc -l ru_RU.UTF8
@@ -83,7 +80,7 @@ The %{name}-demo package includes demo data bases and configs. For start use com
 %setup -q -n %srcname
 
 %build
-%configure CFLAGS="-O2" CXXFLAGS="-O2 -Wno-deprecated"
+%configure CFLAGS="-O2" CXXFLAGS="-O2 -Wno-deprecated --disable-gcc-warnings"
 %__make
 
 %install

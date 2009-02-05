@@ -337,6 +337,7 @@ void MTable::postDisable(int flag)
 void MTable::fieldStruct( TConfig &cfg )
 {
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty!"));
+    mLstUse = time(NULL);
 
     for( int i_fld = 1; i_fld < tblStrct.size(); i_fld++ )
     {
@@ -368,6 +369,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
     vector< vector<string> > tbl;
 
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty!"));
+    mLstUse = time(NULL);
 
     //- Make SELECT and WHERE -
     string req = "SELECT ";
@@ -411,6 +413,7 @@ void MTable::fieldGet( TConfig &cfg )
     vector< vector<string> > tbl;
 
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty!"));
+    mLstUse = time(NULL);
 
     //- Prepare request -
     string req = "SELECT ";
@@ -453,6 +456,7 @@ void MTable::fieldSet( TConfig &cfg )
     vector< vector<string> > tbl;
 
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty!"));
+    mLstUse = time(NULL);
 
     //- Get config fields list -
     vector<string> cf_el;
@@ -525,6 +529,7 @@ void MTable::fieldSet( TConfig &cfg )
 void MTable::fieldDel( TConfig &cfg )
 {
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty!"));
+    mLstUse = time(NULL);
 
     //- Get config fields list -
     vector<string> cf_el;

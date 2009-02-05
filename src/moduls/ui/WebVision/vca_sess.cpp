@@ -75,6 +75,10 @@ void VCASess::getReq( SSess &ses )
 
 	ses.page = mod->pgHead("",prjNm)+"<SCRIPT>\n"+mod->trMessReplace(WebVisionVCA_js)+"\n</SCRIPT>\n"+mod->pgTail();
 	ses.page = mod->httpHead("200 OK",ses.page.size())+ses.page;
+
+	//>> Cache clear
+	ResAlloc res(nodeAccess(),true);
+	mCacheRes.clear();
     }
     //> Session/projects icon
     else if( wp_com == "ico" )
@@ -151,11 +155,9 @@ void VCASess::getReq( SSess &ses )
 	prmEl = ses.prm.find("val");
 	if( prmEl != ses.prm.end() )
 	{
-	    XMLNode req("get");
-	    req.setAttr("path",ses.url+"/%2fwdg%2fres")->setAttr("id",prmEl->second);
-	    mod->cntrIfCmd(req,ses.user);
-	    ses.page = TSYS::strDecode(req.text(),TSYS::base64);
-	    ses.page = mod->httpHead("200 OK",ses.page.size(),req.attr("mime"))+ses.page;
+	    string mime;
+	    ses.page = resGet(prmEl->second,ses.url,ses.user,&mime);
+	    ses.page = mod->httpHead("200 OK",ses.page.size(),mime)+ses.page;
 	} else ses.page = mod->httpHead("404 Not Found");
     }
     //> Request to primitive object. Used for data caching
@@ -218,6 +220,51 @@ void VCASess::objAdd( VCAObj *obj )
     if( !obj )	return;
     if( objPresent(obj->id()) )	delete obj;
     else chldAdd( id_objs, obj );
+}
+
+string VCASess::resGet( const string &res, const string &path, const string &user, string *mime )
+{
+    if( res.empty() )	return "";
+
+    string ret = cacheResGet(res,mime);
+    if( ret.empty() )
+    {
+	XMLNode req("get");
+	req.setAttr("path",path+"/%2fwdg%2fres")->setAttr("id",res);
+	mod->cntrIfCmd(req,user);
+	ret = TSYS::strDecode(req.text(),TSYS::base64);
+	if( !ret.empty() )
+	{
+	    if( mime ) *mime = req.attr("mime");
+	    cacheResSet(res,ret,req.attr("mime"));
+	}
+    }
+
+    return ret;
+}
+
+string VCASess::cacheResGet( const string &res, string *mime )
+{
+    ResAlloc resAlc(nodeAccess(),false);
+    map<string,CacheEl>::iterator ires = mCacheRes.find(res);
+    if( ires == mCacheRes.end() ) return "";
+    ires->second.tm = time(NULL);
+    if( mime ) *mime = ires->second.mime;
+    return ires->second.val;
+}
+
+void VCASess::cacheResSet( const string &res, const string &val, const string &mime )
+{
+    if( val.size() > 1024*1024 ) return;
+    ResAlloc resAlc(nodeAccess(),true);
+    mCacheRes[res] = CacheEl(time(NULL),val,mime);
+    if( mCacheRes.size() > 100 )
+    {
+	map<string,CacheEl>::iterator ilast = mCacheRes.begin();
+	for( map<string,CacheEl>::iterator ires = mCacheRes.begin(); ires != mCacheRes.end(); ++ires )
+	    if( ires->second.tm < ilast->second.tm )	ilast = ires;
+	mCacheRes.erase(ilast);
+    }
 }
 
 //*************************************************
@@ -1884,10 +1931,7 @@ void VCAElFigure::getReq( SSess &ses )
                         while ( t < 1 );
                     }
                 }
-                XMLNode req("get");
-                req.setAttr("path",id()+"/%2fwdg%2fres")->setAttr("id",inundationItems[i].imgFill);
-                mod->cntrIfCmd(req,ses.user);
-                string imgDef_temp = TSYS::strDecode(req.text(),TSYS::base64);
+		string imgDef_temp = owner().resGet(inundationItems[i].imgFill,id(),ses.user);
                 gdImagePtr im_fill_in = gdImageCreateFromPngPtr(imgDef_temp.size(), (void*)imgDef_temp.data());
                 gdImagePtr im_fill_out = gdImageCreate((int)TSYS::realRound( xMax - xMin ), (int)TSYS::realRound( yMax - yMin ) );
                 double imXScale = ( xMax - xMin )/im_fill_in->sx;
@@ -3760,10 +3804,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                 else if( fl_img.size() ) img = fl_img;
                 else img = imgDef;
 
-                XMLNode req("get");
-                req.setAttr("path",id()+"/%2fwdg%2fres")->setAttr("id",img);
-                mod->cntrIfCmd(req,user);
-                string imgDef_temp = TSYS::strDecode(req.text(),TSYS::base64);
+		string imgDef_temp = owner().resGet(img,id(),user);
                 if( imgDef_temp == "" ) img = "";
                 inundationItems.push_back( InundationItem(fl_pnts, fl_color, -1, img) );
             }

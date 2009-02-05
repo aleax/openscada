@@ -400,13 +400,16 @@ int TSYS::start(  )
     unsigned int i_cnt = 1;
     while( !mStopSignal )
     {
-	//- CPU frequency calc
+	//> CPU frequency calc
 	if( !(i_cnt%(10*1000/STD_WAIT_DELAY)) )	clkCalc( );
-	//- Config file change periodic check -
+	//> Config file change periodic check
 	if( !(i_cnt%(10*1000/STD_WAIT_DELAY)) )	cfgFileScan( );
-	//- Periodic changes saving to DB -
+	//> Old tables closing
+	if( !(i_cnt%(10*1000/STD_WAIT_DELAY)) )	db().at().closeOldTables();
+	//> Periodic changes saving to DB
 	if( savePeriod() && !(i_cnt%(savePeriod()*1000/STD_WAIT_DELAY)) )
 	    save();
+
 
 	usleep( STD_WAIT_DELAY*1000 );
 	i_cnt++;

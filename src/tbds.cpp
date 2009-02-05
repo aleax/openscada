@@ -88,6 +88,34 @@ void TBDS::dbList( vector<string> &ls, bool checkSel )
     }
 }
 
+void TBDS::closeOldTables( int secOld )
+{
+    vector<string> tdbs, dbs, tbls;
+
+    try
+    {
+	modList(tdbs);
+	for( int i_tdb = 0; i_tdb < tdbs.size(); i_tdb++ )
+	{
+	    at(tdbs[i_tdb]).at().list(dbs);
+	    for( int i_db = 0; i_db < dbs.size(); i_db++ )
+	    {
+		AutoHD<TBD> db = at(tdbs[i_tdb]).at().at(dbs[i_db]);
+		db.at().list(tbls);
+		for( int i_tbl = 0; i_tbl < tbls.size(); i_tbl++ )
+		{
+		    AutoHD<TTable> tbl = db.at().at(tbls[i_tbl]);
+		    if( (time(NULL)-tbl.at().lstUse()) > secOld )
+		    {
+			tbl.free();
+			db.at().close(tbls[i_tbl]);
+		    }
+		}
+	    }
+	}
+    }catch(...){  }
+}
+
 AutoHD<TTable> TBDS::open( const string &bdn, bool create )
 {
     bool bd_op = false;
@@ -188,8 +216,7 @@ bool TBDS::dataSeek( const string &bdn, const string &path, int lev, TConfig &cf
 	if( !tbl.freeStat() )
 	{
 	    bool rez = tbl.at().fieldSeek(lev-c_lev,cfg);
-	    tbl.free();
-	    close(bdn);
+	    //tbl.free(); close(bdn);
 	    return rez;
 	}
     }
@@ -212,8 +239,7 @@ bool TBDS::dataGet( const string &bdn, const string &path, TConfig &cfg )
 		mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
 	    db_true = false;
 	}
-	tbl.free();
-	close(bdn);
+	//tbl.free(); close(bdn);
 	if(db_true) return true;
     }
     //- Load from Config file if tbl no present -
@@ -257,9 +283,9 @@ bool TBDS::dataSet( const string &bdn, const string &path, TConfig &cfg )
 	bool db_true = true;
 	try{ tbl.at().fieldSet(cfg); }
 	catch(TError err) { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); db_true = false; }
-	tbl.free();
-	try{ close(bdn); }
-	catch(TError err) { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
+	//tbl.free();
+	//try{ close(bdn); }
+	//catch(TError err) { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 	return db_true;
     }
     //throw TError("BD","Field no present.");
@@ -275,8 +301,7 @@ bool TBDS::dataDel( const string &bdn, const string &path, TConfig &cfg )
 	bool db_true = true;
 	try{ tbl.at().fieldDel(cfg); }
 	catch(TError err) { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); db_true = false; }
-	tbl.free();
-	close(bdn);
+	//tbl.free(); close(bdn);
 	return db_true;
     }
 
@@ -302,8 +327,7 @@ void TBDS::genDBSet(const string &path, const string &val, const string &user)
 	    try{ tbl.at().fieldSet(db_el); }
 	    catch(TError err){ }
 	
-	    tbl.free();
-	    dbs.at().close(dbs.at().fullDBSYS());
+	    //tbl.free(); dbs.at().close(dbs.at().fullDBSYS());
 	}
 	else
 	{
@@ -350,8 +374,7 @@ string TBDS::genDBGet(const string &path, const string &oval, const string &user
 	    }
 	    catch(TError err){  }
 
-	    tbl.free();
-	    dbs.at().close(dbs.at().fullDBSYS());
+	    //tbl.free(); dbs.at().close(dbs.at().fullDBSYS());
 	}
     }
 
@@ -529,11 +552,11 @@ void TTipBD::cntrCmdProc( XMLNode *opt )
 //* TBD                                          *
 //************************************************
 TBD::TBD( const string &iid, TElem *cf_el ) : TConfig( cf_el ),
-    m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()), m_dscr(cfg("DESCR").getSd()),
-    m_addr(cfg("ADDR").getSd()), m_codepage(cfg("CODEPAGE").getSd()), m_toen(cfg("EN").getBd()), m_en(false)
+    mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()), mDscr(cfg("DESCR").getSd()),
+    mAddr(cfg("ADDR").getSd()), mCodepage(cfg("CODEPAGE").getSd()), mToEn(cfg("EN").getBd()), mEn(false)
 {
-    m_id = iid;
-    m_tbl = grpAdd("tbl_");
+    mId = iid;
+    mTbl = grpAdd("tbl_");
 }
 
 TCntrNode &TBD::operator=( TCntrNode &node )
@@ -546,7 +569,7 @@ TCntrNode &TBD::operator=( TCntrNode &node )
 	string tid = id();
 	*(TConfig*)this = *(TConfig*)src_n;
 	cfg("TYPE").setS(owner().modId());
-	m_id = tid;
+	mId = tid;
     }
 
     if( src_n->enableStat() && enableStat() )
@@ -596,14 +619,14 @@ void TBD::postDisable(int flag)
 
 string TBD::name()
 {
-    return (m_name.size())?m_name:id();
+    return (mName.size())?mName:id();
 }
 
 void TBD::enable( )
 {
     if( enableStat() ) return;
 
-    m_en = true;
+    mEn = true;
 }
 
 void TBD::disable( )
@@ -615,13 +638,13 @@ void TBD::disable( )
     for(int i_l = 0; i_l < t_list.size(); i_l++)
 	close(t_list[i_l]);
 
-    m_en = false;
+    mEn = false;
 }
 
 void TBD::open( const string &table, bool create )
 {
-    if( chldPresent(m_tbl,table) ) return;
-    chldAdd(m_tbl,openTable(table, create));
+    if( chldPresent(mTbl,table) ) return;
+    chldAdd(mTbl,openTable(table, create));
 }
 
 void TBD::load_( )
@@ -744,9 +767,10 @@ void TBD::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* TTable                                       *
 //************************************************
-TTable::TTable( const string &name ) :  m_name(name)
+TTable::TTable( const string &name ) :  mName(name)
 {
     modifClr();
+    mLstUse = time(NULL);
 }
 
 TTable::~TTable()

@@ -483,6 +483,8 @@ int MTable::findKeyLine( TConfig &cfg, int cnt )
 {
     int i_ln, i_clm, i_cnt = 0;
 
+    mLstUse = time(NULL);
+
     //- Get config fields list -
     vector<string> cf_el;
     cfg.cfgList(cf_el);

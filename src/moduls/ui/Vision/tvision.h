@@ -77,8 +77,7 @@ class TVision : public TUI
 	QIcon icon( );
 
 	//- Put message -
-	void postMess( const QString &cat, const QString &mess,
-		MessLev type = Info, QWidget *parent = NULL );
+	void postMess( const QString &cat, const QString &mess, MessLev type = Info, QWidget *parent = NULL );
 
 	static QWidget *getFocusedWdg( QWidget *wcntr );
 

@@ -103,7 +103,7 @@ void BDMod::load_( )
 {
     //- Load parameters from command line -
     int next_opt;
-    char *short_opt="h";
+    const char *short_opt="h";
     struct option long_opt[] =
     {
 	{"help"    ,0,NULL,'h'},
@@ -517,6 +517,7 @@ void MTable::getStructDB( vector< vector<string> > &tblStrct )
 void MTable::fieldStruct( TConfig &cfg )
 {
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty."));
+    mLstUse = time(NULL);
 
     for( int i_fld = 1; i_fld < tblStrct.size(); i_fld++ )
     {
@@ -542,6 +543,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
     vector< vector<string> > tbl;
 
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty."));
+    mLstUse = time(NULL);
 
     owner().transCommit(&trans);
     //- Make WHERE -
@@ -596,6 +598,7 @@ void MTable::fieldGet( TConfig &cfg )
     vector< vector<string> > tbl;
 
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty."));
+    mLstUse = time(NULL);
 
     owner().transCommit(&trans);
     //- Prepare request -
@@ -647,6 +650,7 @@ void MTable::fieldSet( TConfig &cfg )
 {
     vector< vector<string> > tbl;
 
+    mLstUse = time(NULL);
     if( tblStrct.empty() ) fieldFix(cfg);
 
     owner().transOpen(&trans);
@@ -731,6 +735,7 @@ void MTable::fieldSet( TConfig &cfg )
 void MTable::fieldDel( TConfig &cfg )
 {
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty."));
+    mLstUse = time(NULL);
 
     owner().transOpen(&trans);
     //- Get config fields list -

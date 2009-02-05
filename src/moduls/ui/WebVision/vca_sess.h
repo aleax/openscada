@@ -296,23 +296,41 @@ class VCASess : public TCntrNode
 	void getReq( SSess &ses );
 	void postReq( SSess &ses );
 
-	//- Objects -
+	//> Objects
 	void objList( vector<string> &list )		{ chldList(id_objs,list); }
 	bool objPresent( const string &name )		{ return chldPresent(id_objs,name); }
 	void objAdd( VCAObj *obj );
 	void objDel( const string &name )		{ chldDel(id_objs,name); }
 	AutoHD<VCAObj> objAt( const string &name )	{ return chldAt(id_objs,name); }
 
+	string resGet( const string &res, const string &path, const string &user, string *mime = NULL );
+
+	string cacheResGet( const string &res, string *mime = NULL );
+	void cacheResSet( const string &res, const string &val, const string &mime );
+
     private:
+	//Data
+	class CacheEl
+	{
+	    public:
+	    CacheEl( time_t itm, const string &ival, const string &imime ) : tm(itm), val(ival), mime(imime)	{ }
+	    CacheEl( )	{ }
+
+	    time_t	tm;
+	    string	val;
+	    string	mime;
+	};
+
 	//Methods
 	string nodeName( )		{ return m_id; }
 	void postDisable( int flag );
 
 	//Attributes
 	string	m_id;
-	int	id_objs;		//Primitive object's container identifier
+	int	id_objs;			//Primitive object's container identifier
 	time_t	lst_ses_req;
 	bool	mIsCreate;
+	map<string,CacheEl>	mCacheRes;	//Resources cache
 };
 
 }

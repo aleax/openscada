@@ -383,6 +383,7 @@ void TCntrNode::chldAdd( char igr, TCntrNode *node, int pos )
 	delete node;
 	throw TError(nodePath().c_str(),"Add child id is empty!");
     }
+
     if( (p=chGrp[igr].elem.find(node->nodeName())) != chGrp[igr].elem.end() )
     {
 	delete node;
@@ -414,7 +415,7 @@ void TCntrNode::chldDel( char igr, const string &name, long tm, int flag, bool s
     if( !(nodeMode() == Enable || nodeMode() == Disable) )
         throw TError(nodePath().c_str(),"Node is beign processed now!");
 
-    TMap::iterator p=chGrp[igr].elem.find(name);
+    TMap::iterator p = chGrp[igr].elem.find(name);
     if( p == chGrp[igr].elem.end() )
 	throw TError(nodePath().c_str(),"Child <%s> is not present!", name.c_str());
 
@@ -424,6 +425,8 @@ void TCntrNode::chldDel( char igr, const string &name, long tm, int flag, bool s
     if( !shDel )
     {
 	res.request( true );
+	p = chGrp[igr].elem.find(name);
+	if( p == chGrp[igr].elem.end() ) return;
 	if( chGrp[igr].ordered )
 	{
 	    int pos = p->second->m_oi;

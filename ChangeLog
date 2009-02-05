@@ -1,5 +1,19 @@
+2009-02-05 Roman
+- /SYS: RPM build spec file changes:
+  - official site set to http://oscada.org.ua.
+  - openscada-doc package build platform dependent for ALTLinux.
+  - build flag --disable-gcc-warnings is added.
+- /DOC: Official site set to http://oscada.org.ua into README*.
+- /SYS: Checking for old tables closing is added to main systems' task.
+- /SYS: Official site set to http://oscada.org.ua
+- /DAQ/Tmpl: The using counter field is added to a template object, for busy control. All selectable fields of IO a table of a template is made statical.
+- !!:FIX:/SYS/Control: Multiply deletion try of child nodes crash is fixed.
+- !!:/DB: Work with DB's tables is made no closed now table mode. Opened tables will close after 60 second not using. Significant rise DB-working performance!
+- !!:/UI/WebVision: Resource cache is added for sessions.
+
+
 2009-02-03 Roman
-- !:FIX:/SYS: Resource is added to TElem for prevent crash on multithreading by using TConfig.
+- !!:FIX:/SYS: Resource is added to TElem for prevent crash on multithreading by using TConfig.
     Crash detected on UI.WebVision and more images on a visual user interface.
 
 

@@ -150,8 +150,8 @@ class TCntrNode
 	void load( );						//Load node, if modified
 	void save( );						//Save node, if modified
 
-	void AHDConnect( );
-	void AHDDisConnect( );
+	virtual void AHDConnect( );
+	virtual void AHDDisConnect( );
 
     protected:
 	//Data

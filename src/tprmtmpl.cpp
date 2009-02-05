@@ -242,7 +242,10 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,-1,"/tmpl",_("Template")))
 	{
 	    if(ctrMkNode("area",opt,-1,"/tmpl/st",_("State")))
+	    {
 		ctrMkNode("fld",opt,-1,"/tmpl/st/st",_("Accessing"),0664,"root","root",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/tmpl/st/use",_("Used"),0444,"root","root",1,"tp","dec");
+	    }
 	    if(ctrMkNode("area",opt,-1,"/tmpl/cfg",_("Config")))
 	    {
 		ctrMkNode("fld",opt,-1,"/tmpl/cfg/id",_("Id"),0444,"root","root",1,"tp","str");
@@ -256,10 +259,17 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	    {
 		ctrMkNode("list",opt,-1,"/io/io/0",_("Id"),0664,"root","root",1,"tp","str");
 		ctrMkNode("list",opt,-1,"/io/io/1",_("Name"),0664,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/io/io/2",_("Type"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/io/tp");
-		ctrMkNode("list",opt,-1,"/io/io/3",_("Mode"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/io/md");
-		ctrMkNode("list",opt,-1,"/io/io/4",_("Attribute"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/io/attr_mods");
-		ctrMkNode("list",opt,-1,"/io/io/5",_("Access"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/io/accs_mods");
+		ctrMkNode("list",opt,-1,"/io/io/2",_("Type"),0664,"root","root",5,"tp","dec","idm","1","dest","select",
+		    "sel_id",(TSYS::int2str(IO::Real)+";"+TSYS::int2str(IO::Integer)+";"+TSYS::int2str(IO::Boolean)+";"+TSYS::int2str(IO::String)).c_str(),
+		    "sel_list",_("Real;Integer;Boolean;String"));
+		ctrMkNode("list",opt,-1,"/io/io/3",_("Mode"),0664,"root","root",5,"tp","dec","idm","1","dest","select",
+		    "sel_id",(TSYS::int2str(IO::Default)+";"+TSYS::int2str(IO::Output)).c_str(),"sel_list",_("Input;Output"));
+		ctrMkNode("list",opt,-1,"/io/io/4",_("Attribute"),0664,"root","root",5,"tp","dec","idm","1","dest","select",
+		    "sel_id",(TSYS::int2str(IO::Default)+";"+TSYS::int2str(TPrmTempl::AttrRead)+";"+TSYS::int2str(TPrmTempl::AttrFull)).c_str(),
+		    "sel_list",_("No attribute;Read only;Full access"));
+		ctrMkNode("list",opt,-1,"/io/io/5",_("Access"),0664,"root","root",5,"tp","dec","idm","1","dest","select",
+		    "sel_id",(TSYS::int2str(IO::Default)+";"+TSYS::int2str(TPrmTempl::CfgPublConst)+";"+TSYS::int2str(TPrmTempl::CfgLink)).c_str(),
+		    "sel_list",_("Constant;Public constant;Link"));
 		ctrMkNode("list",opt,-1,"/io/io/6",_("Value"),0664,"root","root",1,"tp","str");
 	    }
 	    ctrMkNode("fld",opt,-1,"/io/prog_lang",_("Programm language"),0664,"root","root",3,"tp","str","dest","sel_ed","select","/io/plang_ls");
@@ -276,6 +286,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(startStat()?"1":"0");
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setStart(atoi(opt->text().c_str()));
     }
+    else if( a_path == "/tmpl/st/use" && ctrChkNode(opt) )	opt->setText(TSYS::int2str(startStat()?func().at().use():0));
     else if( a_path == "/tmpl/cfg/id" && ctrChkNode(opt) )	opt->setText(id());
     else if( a_path == "/tmpl/cfg/name" )
     {
@@ -375,31 +386,6 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	}
 	for(int i_l = 0; i_l < ls.size(); i_l++)
 	    opt->childAdd("el")->setText(c_path+ls[i_l]);
-    }
-    else if( a_path == "/io/tp" && ctrChkNode(opt) )
-    {
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(IO::Real))->setText(_("Real"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(IO::Integer))->setText(_("Integer"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(IO::Boolean))->setText(_("Boolean"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(IO::String))->setText(_("String"));
-    }
-    else if( a_path == "/io/md" && ctrChkNode(opt) )
-    {
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(IO::Default))->setText(_("Input"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(IO::Output))->setText(_("Output"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(IO::Return))->setText(_("Return"));
-    }
-    else if( a_path == "/io/attr_mods" && ctrChkNode(opt) )
-    {
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(IO::Default))->setText(_("No attribute"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(TPrmTempl::AttrRead))->setText(_("Read only"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(TPrmTempl::AttrFull))->setText(_("Full access"));
-    }
-    else if( a_path == "/io/accs_mods" && ctrChkNode(opt) )
-    {
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(IO::Default))->setText(_("Constant"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(TPrmTempl::CfgPublConst))->setText(_("Public constant"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(TPrmTempl::CfgLink))->setText(_("Link"));
     }
     else TCntrNode::cntrCmdProc(opt);
 }
