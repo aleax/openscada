@@ -167,7 +167,7 @@ class SessWdg : public Widget, public TValFunc
 	string calcLang( );
 	string calcProg( );
 	int    calcPer( );
-	bool   process( )	{ return m_proc; }		//Process stat
+	bool   process( )	{ return mProc; }		//Process stat
 
 	void setEnable( bool val );
 	virtual void setProcess( bool val );
@@ -195,6 +195,8 @@ class SessWdg : public Widget, public TValFunc
 	SessPage *ownerPage( );
 	Session  *ownerSess( )	{ return mSess; }
 
+	void inheritAttr( const string &attr = "" );
+
     protected:
 	//Methods
 	void postEnable( int flag );
@@ -208,14 +210,15 @@ class SessWdg : public Widget, public TValFunc
 
     private:
 	//Attributes
-	bool	m_proc, inLnkGet;
-	string	work_prog;
-	unsigned int m_mdfClc;
-	Res	mCalcRes;
+	char		mProc	: 1;
+	char		inLnkGet: 1;
+	
+	string		mWorkProg;
+	unsigned int	mMdfClc;
+	Res		mCalcRes;
 
-	vector<string>	m_wdgChldAct,	//Active childs widget's list
-			m_attrUILs,	//UI attributes list
-			m_attrLnkLs;	//Linked attributes list
+	vector<string>	mWdgChldAct,	//Active childs widget's list
+			mAttrLnkLs;	//Linked attributes list
 
 	Session		*mSess;
 };

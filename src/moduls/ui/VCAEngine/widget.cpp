@@ -326,7 +326,7 @@ void Widget::inheritAttr( const string &iattr )
 	}
 	attr  = attrAt(ls[i_l]);
 	pattr = parent().at().attrAt(ls[i_l]);
-	if( ls[i_l]=="id" || ls[i_l]=="path" || attr.at().modif() )	continue;
+	if( ls[i_l]=="id" || ls[i_l]=="path" || (attr.at().modif() && !(attr.at().flgSelf()&Attr::SessAttrInh)) )	continue;
 	attr.at().setFlgSelf(pattr.at().flgSelf());
 	bool active = attr.at().flgGlob()&Attr::Active;
 	switch( attr.at().type() )

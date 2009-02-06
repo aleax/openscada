@@ -1,3 +1,9 @@
+2009-02-06 Roman
+- /SYS/Control: Reserve memory to node's list is added. For memory realocation prevent.
+- !:/UI/VCAEngine: Update widget's attributes for runing sessions if it changed on development mode of based widget's is added.
+- FIX:/UI/VCAEngine: Empty attributes list responding is fixed for new created widgets into running session.
+
+
 2009-02-05 Roman
 - /SYS: RPM build spec file changes:
   - official site set to http://oscada.org.ua.

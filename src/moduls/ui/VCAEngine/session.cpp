@@ -873,8 +873,8 @@ bool SessPage::cntrCmdGeneric( XMLNode *opt )
 //************************************************
 //* SessWdg: Session page's widget               *
 //************************************************
-SessWdg::SessWdg( const string &iid, const string &iparent, Session *isess ) : 
-    Widget(iid,iparent), m_proc(false), TValFunc(iid+"_wdg",NULL), m_mdfClc(0), 
+SessWdg::SessWdg( const string &iid, const string &iparent, Session *isess ) :
+    Widget(iid,iparent), mProc(false), TValFunc(iid+"_wdg",NULL), mMdfClc(0),
     mSess(isess), inLnkGet(true)
 {
 
@@ -1008,17 +1008,17 @@ void SessWdg::setProcess( bool val )
 	//-- Compile function --
 	try
 	{
-	    work_prog = SYS->daq().at().at(TSYS::strSepParse(calcLang(),0,'.')).at().
+	    mWorkProg = SYS->daq().at().at(TSYS::strSepParse(calcLang(),0,'.')).at().
 		compileFunc(TSYS::strSepParse(calcLang(),1,'.'),fio,calcProg());
 	    //-- Connect to compiled function --
-	    TValFunc::setFunc(&((AutoHD<TFunction>)SYS->nodeAt(work_prog,1)).at());
+	    TValFunc::setFunc(&((AutoHD<TFunction>)SYS->nodeAt(mWorkProg,1)).at());
 	}catch( TError err )
 	{ mess_err(nodePath().c_str(),_("Compile function '%s' by language '%s' for widget error: %s"),fio.id().c_str(),calcLang().c_str(),err.mess.c_str()); }
     }
     if( !val )
     {
 	//-- Free function link --
-	m_proc = false;
+	mProc = false;
 	TValFunc::setFunc(NULL);
     }
 
@@ -1028,10 +1028,10 @@ void SessWdg::setProcess( bool val )
     for(int i_l = 0; i_l < ls.size(); i_l++ )
 	wdgAt(ls[i_l]).at().setProcess(val);
 
+    mProc = val;
+
     //-- Make process element's lists --
     if( val ) prcElListUpdate( );
-
-    m_proc = val;
 }
 
 string SessWdg::ico( )
@@ -1098,6 +1098,20 @@ void SessWdg::wdgAdd( const string &iid, const string &name, const string &ipare
     if( wdgPresent(iid) ) return;
 
     chldAdd(inclWdg,new SessWdg(iid,iparent,ownerSess()));
+
+//    if( ownerSess( )->start( ) ) printf("TEST 00: Add widget '%s' to '%s'\n",iid.c_str(),path().c_str());
+}
+
+void SessWdg::inheritAttr( const string &aid )
+{
+    Widget::inheritAttr(aid);
+
+    if( !aid.empty() && ownerSess( )->start( ) && attrPresent(aid) )
+    {
+	AutoHD<Attr> attr = attrAt(aid);
+	if( !(attr.at().flgGlob()&Attr::IsUser) )
+	    attr.at().setFlgSelf((Attr::SelfAttrFlgs)(attr.at().flgSelf()|Attr::SessAttrInh));
+    }
 }
 
 AutoHD<SessWdg> SessWdg::wdgAt( const string &wdg )
@@ -1173,37 +1187,36 @@ void SessWdg::alarmQuittance( ui8 quit_tmpl, bool isSet )
 void SessWdg::prcElListUpdate( )
 {
     vector<string> ls;
+
     wdgList(ls);
-    m_wdgChldAct.clear();
+    mWdgChldAct.clear();
     for( int i_l = 0; i_l < ls.size(); i_l++ )
 	if( wdgAt(ls[i_l]).at().process() )
-	    m_wdgChldAct.push_back(ls[i_l]);
+	    mWdgChldAct.push_back(ls[i_l]);
+
     attrList(ls);
-    m_attrLnkLs.clear();
-    m_attrUILs.clear();
+    mAttrLnkLs.clear();
     for( int i_a = 0; i_a < ls.size(); i_a++ )
     {
 	AutoHD<Attr> attr = attrAt(ls[i_a]);
-	if( attr.at().flgSelf()&(Attr::CfgConst|Attr::CfgLnkIn|Attr::CfgLnkOut) && !attr.at().cfgVal().empty() )
-	    m_attrLnkLs.push_back(ls[i_a]);
-	if( !(attr.at().flgGlob()&Attr::IsUser) )	m_attrUILs.push_back(ls[i_a]);
-	if( attr.at().flgSelf()&Attr::CfgLnkIn && attr.at().cfgVal().empty() )
-	    attr.at().setS(EVAL_STR);
+	if( attr.at().flgSelf()&(Attr::CfgConst|Attr::CfgLnkIn|Attr::CfgLnkOut) )
+	    mAttrLnkLs.push_back(ls[i_a]);
     }
 }
 
 void SessWdg::getUpdtWdg( const string &path, unsigned int tm, vector<string> &els )
 {
     string wpath = path+"/"+id();
-    if( m_mdfClc >= tm ) els.push_back(wpath);
-    for( int i_ch = 0; i_ch < m_wdgChldAct.size(); i_ch++ )
-	wdgAt(m_wdgChldAct[i_ch]).at().getUpdtWdg(wpath,tm,els);
+    if( mMdfClc >= tm ) els.push_back(wpath);
+    for( int i_ch = 0; i_ch < mWdgChldAct.size(); i_ch++ )
+	if( wdgPresent(mWdgChldAct[i_ch]) )
+	    wdgAt(mWdgChldAct[i_ch]).at().getUpdtWdg(wpath,tm,els);
 }
 
 unsigned int SessWdg::modifVal( Attr &cfg )
 {
     int m_clc = ownerSess()->calcClk( );
-    if( atoi(cfg.fld().reserve().c_str()) ) m_mdfClc = m_clc;
+    if( atoi(cfg.fld().reserve().c_str()) ) mMdfClc = m_clc;
     return m_clc;
 }
 
@@ -1215,12 +1228,12 @@ void SessWdg::calc( bool first, bool last )
 
     string sw_attr, s_attr, obj_tp;
 
-    if( !(ownerSess()->calcClk()%100) ) prcElListUpdate( );
+    if( !(ownerSess()->calcClk()%vmax(1,10000/ownerSess()->period())) ) prcElListUpdate( );
 
     //- Calculate include widgets -
-    for(int i_l = 0; i_l < m_wdgChldAct.size(); i_l++ )
-	if( wdgPresent(m_wdgChldAct[i_l]) )
-	    wdgAt(m_wdgChldAct[i_l]).at().calc(first,last);
+    for(int i_l = 0; i_l < mWdgChldAct.size(); i_l++ )
+	if( wdgPresent(mWdgChldAct[i_l]) )
+	    wdgAt(mWdgChldAct[i_l]).at().calc(first,last);
 
     try
     {
@@ -1231,10 +1244,13 @@ void SessWdg::calc( bool first, bool last )
 	    //- Process input links and constants -
 	    AutoHD<Attr> attr, attr1;
 	    AutoHD<TVal> vl;
+//	    vector<string> als;
+//	    attrList(als);
 	    inLnkGet = true;
-	    for( int i_a = 0; i_a < m_attrLnkLs.size(); i_a++ )
+	    for( int i_a = 0; i_a < mAttrLnkLs.size(); i_a++ )
 	    {
-		attr = attrAt(m_attrLnkLs[i_a]);
+		attr = attrAt(mAttrLnkLs[i_a]);
+//		if( !attr.at().flgSelf()&(Attr::CfgConst|Attr::CfgLnkIn) || attr.at().cfgVal().empty() ) continue;
 		if( attr.at().flgSelf()&Attr::CfgConst )	attr.at().setS(attr.at().cfgVal());
 		else if( attr.at().flgSelf()&Attr::CfgLnkIn && !attr.at().cfgVal().empty() )
 		{
@@ -1383,6 +1399,7 @@ bool SessWdg::attrChange( Attr &cfg, void *prev )
     //- External link process -
     if( !inLnkGet && prev && cfg.flgSelf()&Attr::CfgLnkOut && !cfg.cfgVal().empty() )
     {
+	if( cfg.flgSelf()&Attr::SessAttrInh ) cfg.setFlgSelf((Attr::SelfAttrFlgs)(cfg.flgSelf()&(~Attr::SessAttrInh)));
 	string obj_tp = TSYS::strSepParse(cfg.cfgVal(),0,':')+":";
 	try
 	{
@@ -1437,14 +1454,16 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 		opt->childAdd("el")->setAttr("id","perm")->setAttr("p","-3")->
 		    setText(TSYS::int2str(ownerSess()->sec.at().access(opt->attr("user"),SEQ_RD|SEQ_WR,owner(),grp(),permit())) );
 	    }
-	    if( !tm || m_mdfClc >= tm )
+	    if( !tm || mMdfClc >= tm )
 	    {
 		AutoHD<Attr> attr;
-		for( int i_l = 0; i_l < m_attrUILs.size(); i_l++ )
+		vector<string> als;
+		attrList(als);
+		for( int i_l = 0; i_l < als.size(); i_l++ )
 		{
-		    attr = attrAt(m_attrUILs[i_l]);
-		    if( attr.at().modif() >= tm && atoi(attr.at().fld().reserve().c_str()) )
-			opt->childAdd("el")->setAttr("id",m_attrUILs[i_l].c_str())->
+		    attr = attrAt(als[i_l]);
+		    if( !(attr.at().flgGlob()&Attr::IsUser) && attr.at().modif() >= tm && atoi(attr.at().fld().reserve().c_str()) )
+			opt->childAdd("el")->setAttr("id",als[i_l].c_str())->
 					     setAttr("p",attr.at().fld().reserve())->
 					     setText(attr.at().getS());
 		}
@@ -1464,7 +1483,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	int perm = ownerSess()->sec.at().access(opt->attr("user"),(tm?SEQ_RD:SEQ_RD|SEQ_WR),owner(),grp(),permit());
 
 	//>> Self attributes put
-	if( !tm || m_mdfClc >= tm )
+	if( !tm || mMdfClc >= tm )
 	{
 	    if( !tm )
 	    {
@@ -1472,11 +1491,13 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 		opt->childAdd("el")->setAttr("id","perm")->setAttr("p","-3")->setText(TSYS::int2str(perm));
 	    }
 	    AutoHD<Attr> attr;
-	    for( int i_l = 0; i_l < m_attrUILs.size(); i_l++ )
+	    vector<string> als;
+	    attrList(als);
+	    for( int i_l = 0; i_l < als.size(); i_l++ )
 	    {
-		attr = attrAt(m_attrUILs[i_l]);
-		if( attr.at().modif() >= tm && atoi(attr.at().fld().reserve().c_str()) )
-		    opt->childAdd("el")->setAttr("id",m_attrUILs[i_l].c_str())->
+		attr = attrAt(als[i_l]);
+		if( !(attr.at().flgGlob()&Attr::IsUser) && attr.at().modif() >= tm && atoi(attr.at().fld().reserve().c_str()) )
+		    opt->childAdd("el")->setAttr("id",als[i_l].c_str())->
 				     setAttr("p",attr.at().fld().reserve())->
 				     setText(attr.at().getS());
 	    }

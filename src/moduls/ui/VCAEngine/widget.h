@@ -58,7 +58,9 @@ class Attr : public TCntrNode
 	    CfgConst	= 0x01,		//Constant
 	    CfgLnkIn	= 0x02,		//Input link
 	    CfgLnkOut	= 0x04,		//Output link
-	    ProcAttr	= 0x08		//Process attribute
+	    ProcAttr	= 0x08,		//Process attribute
+
+	    SessAttrInh	= 0x10		//Inherit attribute into running session
 	};
 
 	//Methods

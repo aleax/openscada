@@ -336,6 +336,7 @@ void TCntrNode::chldList( char igr, vector<string> &list )
     if( nodeMode() == Disable )	throw TError(nodePath().c_str(),"Node is disabled!");
 
     list.clear();
+    list.reserve(chGrp[igr].elem.size());
     if( !chGrp[igr].ordered )
     {
 	for( TMap::iterator p=chGrp[igr].elem.begin(); p!=chGrp[igr].elem.end(); ++p )
