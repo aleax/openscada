@@ -19,8 +19,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef TArchiveS_H
-#define TArchiveS_H
+#ifndef TARCHIVES_H
+#define TARCHIVES_H
 
 #define  VER_ARH 1    //ArchiveS type modules version
 
@@ -34,8 +34,6 @@
 
 using std::string;
 using std::vector;
-
-#define BUF_ARCH_NM "<bufer>"
 
 //************************************************
 //* Message archivator                           *
@@ -258,4 +256,4 @@ class TArchiveS : public TSubSYS
 	vector< AutoHD<TVArchive> > act_up_src;
 };
 
-#endif // TArchiveS_H
+#endif // TARCHIVES_H

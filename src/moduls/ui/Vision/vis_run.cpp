@@ -970,7 +970,7 @@ void VisRun::pgCacheClear( )
     }
 }
 
-void VisRun::pgCacheAdd( RunWdgView *wdg )
+void VisRun::pgCacheAdd( RunPageView *wdg )
 {
     if( !wdg ) return;
     cache_pg.push_front(wdg);
@@ -981,9 +981,9 @@ void VisRun::pgCacheAdd( RunWdgView *wdg )
     }
 }
 
-RunWdgView *VisRun::pgCacheGet( const string &id )
+RunPageView *VisRun::pgCacheGet( const string &id )
 {
-    RunWdgView *pg = NULL;
+    RunPageView *pg = NULL;
 
     for( int i_pg = 0; i_pg < cache_pg.size(); i_pg++ )
 	if( cache_pg[i_pg]->id() == id )
@@ -1190,9 +1190,19 @@ void VisRun::updatePage( )
 	    }
 	}
 
-	//-- Set alarm --
+	//>> Set alarm
 	alarmSet( wAlrmSt );
     }
+
+    //> Old pages from cache for close checking
+    RunWdgView *pg = NULL;
+    for( int i_pg = 0; i_pg < cache_pg.size(); i_pg++ )
+	if( (period()*(reqTm()-cache_pg[i_pg]->reqTm())/1000) > 60*60 )
+	{
+	    delete cache_pg[i_pg];
+	    cache_pg.erase(cache_pg.begin()+i_pg);
+	    i_pg--;
+	}
 
 #if OSC_DEBUG >= 3
     upd_tm+=1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());

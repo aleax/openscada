@@ -49,7 +49,6 @@ class TModSchedul : public TSubSYS
 
 	//Methods
 	TModSchedul( );
-	~TModSchedul( );
 
 	string allowList( )	{ return mAllow; }
 	string denyList( )	{ return mDeny; }
@@ -57,10 +56,7 @@ class TModSchedul : public TSubSYS
 
 	void setAllowList( const string &vl )	{ mAllow = vl; modif(); }
 	void setDenyList( const string &vl )	{ mDeny = vl; modif(); }
-	void setChkPer( int per );
-
-	void subStart( );
-	void subStop( );
+	void setChkPer( int per )		{ mPer = per; modif(); }
 
 	void loadLibS( );				// Load/Init/Start all share libs and registry moduls into TSubSYS
 
@@ -94,8 +90,6 @@ class TModSchedul : public TSubSYS
 
 	int		mPer;				//Check to new modules period
 	vector<SHD>	SchHD;
-	timer_t		tmId;				//Thread timer
-	bool		prcSt;
 };
 
 #endif // TMODSCHEDUL_H

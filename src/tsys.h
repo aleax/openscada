@@ -43,6 +43,7 @@ typedef unsigned long long ui64;
 #define STR_BUF_LEN	3000	// Len of string buffers (no string class)
 #define STD_WAIT_DELAY	100	// Standart wait dalay (ms)
 #define STD_WAIT_TM	10	// Standart timeouts length (s)
+#define BUF_ARCH_NM	"<buffer>"
 
 #include <math.h>
 #include <stdio.h>

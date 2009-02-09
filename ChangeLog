@@ -1,3 +1,15 @@
+2009-02-09 Roman
+- FIX:/Archive: #define BUF_ARCH_NM"<buffer>" syntax error is fixed and declaration is moved to TSYS.
+- /Archive: Some inline helps is added to config-fields. Selection is added to archivator select string of accessing to values.
+    Core translation is updated to Russian, Ukrainian and German (partially).
+- !!:/UI/VCAEngune: Checking for widget's parts update is moved to separated function modifChk() for RunTime session.
+    Realised support main calc clock reseting by resolution limit.
+- /UI/VCAEngine: Disable prcElListUpdate() periodic call on RunTime session. Call only after setProcess() call.
+- FIX:/UI/VCAEngine: Empty constant's setup is fixed on RunTime session.
+- /UI/Vision: Page's cache of RunTime clearing of too old pages (oldest by 1 hour) is added. Page's cache type element is changed to RunPageView.
+- !:/ModSchedule: Checking shared libraries task's function is moved to main system checking task.
+
+
 2009-02-06 Roman
 - /SYS/Control: Reserve memory to node's list is added. For memory realocation prevent.
 - !:/UI/VCAEngine: Update widget's attributes for runing sessions if it changed on development mode of based widget's is added.

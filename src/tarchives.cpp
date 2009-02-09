@@ -738,10 +738,13 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/m_arch/view",_("View messages"),0444,"root",my_gr.c_str()))
 	    {
 		ctrMkNode("fld",opt,-1,"/m_arch/view/tm",_("Time"),0664,"root",my_gr.c_str(),1,"tp","time");
-		ctrMkNode("fld",opt,-1,"/m_arch/view/size",_("Size"),0664,"root",my_gr.c_str(),1,"tp","dec");
-		ctrMkNode("fld",opt,-1,"/m_arch/view/cat",_("Category"),0664,"root",my_gr.c_str(),1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/m_arch/view/lvl",_("Level"),0664,"root",my_gr.c_str(),3,"tp","dec","min","0","max","7");
-		ctrMkNode("fld",opt,-1,"/m_arch/view/archtor",_("Archivator"),0664,"root",my_gr.c_str(),1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/m_arch/view/size",_("Size (s)"),0664,"root",my_gr.c_str(),1,"tp","dec");
+		ctrMkNode("fld",opt,-1,"/m_arch/view/cat",_("Category pattern"),0664,"root",my_gr.c_str(),2,"tp","str",
+		    "help",_("Messages category. Use template symbols for group selection:\n  '*' - any substring;\n  '?' - any symbol."));
+		ctrMkNode("fld",opt,-1,"/m_arch/view/lvl",_("Level"),0664,"root",my_gr.c_str(),4,"tp","dec","min","0","max","7",
+		    "help",_("Get messages for level more and equaly it."));
+		ctrMkNode("fld",opt,-1,"/m_arch/view/archtor",_("Archivator"),0664,"root",my_gr.c_str(),4,"tp","str","dest","select","select","/m_arch/lstAMess",
+		    "help",_("Messages archivator.\nNo set archivator for process by buffer and all archivators.\nSet '<buffer>' for process by buffer."));
 		if(ctrMkNode("table",opt,-1,"/m_arch/view/mess",_("Messages"),0440,"root",my_gr.c_str()))
 		{
 		    ctrMkNode("list",opt,-1,"/m_arch/view/mess/0",_("Time"),0440,"root",my_gr.c_str(),1,"tp","time");
@@ -802,10 +805,23 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",0664,"root",my_gr.c_str(),SEQ_RD) )	opt->setText(TBDS::genDBGet(nodePath()+"messLev","0",opt->attr("user")));
 	if( ctrChkNode(opt,"set",0664,"root",my_gr.c_str(),SEQ_WR) )	TBDS::genDBSet(nodePath()+"messLev",opt->text(),opt->attr("user"));
     }
-    else if( a_path == "/m_arch/view/archtor" ) 
+    else if( a_path == "/m_arch/view/archtor" )
     {
 	if( ctrChkNode(opt,"get",0664,"root",my_gr.c_str(),SEQ_RD) )	opt->setText(TBDS::genDBGet(nodePath()+"messArch","",opt->attr("user")));
 	if( ctrChkNode(opt,"set",0664,"root",my_gr.c_str(),SEQ_WR) )	TBDS::genDBSet(nodePath()+"messArch",opt->text(),opt->attr("user"));
+    }
+    else if( a_path == "/m_arch/lstAMess"  && ctrChkNode(opt,"get",0440) )
+    {
+	opt->childAdd("el")->setText("");
+	opt->childAdd("el")->setText(BUF_ARCH_NM);
+	vector<string> lsm, lsa;
+	modList(lsm);
+	for( int i_m = 0; i_m < lsm.size(); i_m++ )
+	{
+	    at(lsm[i_m]).at().messList(lsa);
+	    for( int i_a = 0; i_a < lsa.size(); i_a++ )
+		opt->childAdd("el")->setText(lsm[i_m]+"."+lsa[i_a]);
+	}
     }
     else if( a_path == "/m_arch/view/mess" && ctrChkNode(opt,"get",0440) )
     {
@@ -1064,22 +1080,29 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/cfg/nm",cfg("NAME").fld().descr(),0664,"root","Archive",2,"tp","str","len","50");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCR").fld().descr(),0664,"root","Archive",3,"tp","str","cols","50","rows","3");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","Archive",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/lvl",cfg("LEVEL").fld().descr(),0664,"root","Archive",1,"tp","dec");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/cats",cfg("CATEG").fld().descr(),0664,"root","Archive",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/lvl",cfg("LEVEL").fld().descr(),0664,"root","Archive",2,"tp","dec",
+		    "help",_("Get messages for level more and equaly it."));
+		ctrMkNode("fld",opt,-1,"/prm/cfg/cats",cfg("CATEG").fld().descr(),0664,"root","Archive",2,"tp","str",
+		    "help",_("Messages categories to processing by archivator, separated by symbol ';'.\n"
+			   "Use template symbols for group selection:\n  '*' - any substring;\n  '?' - any symbol."));
 		ctrMkNode("fld",opt,-1,"/prm/cfg/start",_("To start"),0664,"root","Archive",1,"tp","bool");
 	    }
 	}
 	if( run_st && ctrMkNode("area",opt,-1,"/mess",_("Messages"),0440,"root","Archive") )
 	{
 	    ctrMkNode("fld",opt,-1,"/mess/tm",_("Time"),0660,"root","Archive",1,"tp","time");
-	    ctrMkNode("fld",opt,-1,"/mess/size",_("Size"),0660,"root","Archive",1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/mess/cat",_("Category pattern"),0660,"root","Archive",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/mess/lvl",_("Level"),0660,"root","Archive",3,"tp","dec","min","0","max","7");
-	    ctrMkNode("table",opt,-1,"/mess/mess",_("Messages"),0440,"root","Archive");
-	    ctrMkNode("list",opt,-1,"/mess/mess/0",_("Time"),0440,"root","Archive",1,"tp","time");
-	    ctrMkNode("list",opt,-1,"/mess/mess/1",_("Category"),0440,"root","Archive",1,"tp","str");
-	    ctrMkNode("list",opt,-1,"/mess/mess/2",_("Level"),0440,"root","Archive",1,"tp","dec");
-	    ctrMkNode("list",opt,-1,"/mess/mess/3",_("Message"),0440,"root","Archive",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/mess/size",_("Size (s)"),0660,"root","Archive",1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/mess/cat",_("Category pattern"),0660,"root","Archive",2,"tp","str",
+		"help",_("Messages category. Use template symbols for group selection:\n  '*' - any substring;\n  '?' - any symbol."));
+	    ctrMkNode("fld",opt,-1,"/mess/lvl",_("Level"),0660,"root","Archive",4,"tp","dec","min","0","max","7",
+		"help",_("Get messages for level more and equaly it."));
+	    if( ctrMkNode("table",opt,-1,"/mess/mess",_("Messages"),0440,"root","Archive") )
+	    {
+		ctrMkNode("list",opt,-1,"/mess/mess/0",_("Time"),0440,"root","Archive",1,"tp","time");
+		ctrMkNode("list",opt,-1,"/mess/mess/1",_("Category"),0440,"root","Archive",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/mess/mess/2",_("Level"),0440,"root","Archive",1,"tp","dec");
+		ctrMkNode("list",opt,-1,"/mess/mess/3",_("Message"),0440,"root","Archive",1,"tp","str");
+	    }
 	}
 	return;
     }

@@ -38,21 +38,9 @@
 //* TModSchedul                                   *
 //*************************************************
 TModSchedul::TModSchedul( ) :
-    TSubSYS("ModSched","Modules sheduler",false), prcSt(false), mPer(10), mAllow("*")
+    TSubSYS("ModSched","Modules sheduler",false), mPer(10), mAllow("*")
 {
-    //> Create calc timer
-    struct sigevent sigev;
-    memset(&sigev,0,sizeof(sigev));
-    sigev.sigev_notify = SIGEV_THREAD;
-    sigev.sigev_value.sival_ptr = this;
-    sigev.sigev_notify_function = SchedTask;
-    sigev.sigev_notify_attributes = NULL;
-    timer_create(CLOCK_REALTIME,&sigev,&tmId);
-}
 
-TModSchedul::~TModSchedul(  )
-{
-    timer_delete(tmId);
 }
 
 void TModSchedul::preDisable(int flag)
@@ -88,67 +76,6 @@ string TModSchedul::optDescr( )
 	),nodePath().c_str());
 
     return(buf);
-}
-
-void TModSchedul::subStart(  )
-{
-#if OSC_DEBUG >= 1
-    mess_debug(nodePath().c_str(),_("Start subsystem."));
-#endif
-
-    //- Start interval timer for periodic thread creating -
-    struct itimerspec itval;
-    itval.it_interval.tv_sec = itval.it_value.tv_sec = chkPer();
-    itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
-    timer_settime(tmId, 0, &itval, NULL);
-}
-
-void TModSchedul::subStop(  )
-{
-#if OSC_DEBUG >= 1
-    mess_debug(nodePath().c_str(),_("Stop subsystem."));
-#endif
-
-    //- Stop interval timer for periodic thread creating -
-    struct itimerspec itval;
-    itval.it_interval.tv_sec = itval.it_interval.tv_nsec =
-	itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
-    timer_settime(tmId, 0, &itval, NULL);
-    if( TSYS::eventWait( prcSt, false, nodePath()+"stop",20) )
-	throw TError(nodePath().c_str(),_("Module scheduler thread is not stopped!"));
-
-#if OSC_DEBUG >= 2
-    mess_debug(nodePath().c_str(),_("Stop subsystem. OK"));
-#endif
-}
-
-void TModSchedul::setChkPer( int per )
-{
-    mPer = per;
-    modif();
-
-    struct itimerspec itval;
-    itval.it_interval.tv_sec = itval.it_value.tv_sec = mPer;
-    itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
-    timer_settime(tmId, 0, &itval, NULL);
-}
-
-void TModSchedul::SchedTask(union sigval obj)
-{
-    TModSchedul *shed = (TModSchedul *)obj.sival_ptr;
-    if( shed->prcSt )  return;
-    shed->prcSt = true;
-
-#if OSC_DEBUG >= 2
-    mess_debug(shed->nodePath().c_str(),_("Timer's thread <%u> call. TID: %ld"),pthread_self(),(long int)syscall(224));
-#endif
-
-    try
-    {
-	shed->libLoad(SYS->modDir(),true);
-    } catch(TError err){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-
-    shed->prcSt = false;
 }
 
 void TModSchedul::loadLibS(  )

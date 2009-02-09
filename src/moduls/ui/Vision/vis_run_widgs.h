@@ -40,7 +40,7 @@ namespace VISION
 	Q_OBJECT
 
 	public:
-	    //- Public methods -
+	    //Public methods
 	    RunWdgView( const string &iwid, int ilevel, VisRun *mainWind, QWidget* parent = 0, Qt::WindowFlags f = 0 );
 	    ~RunWdgView( );
 
@@ -69,13 +69,13 @@ namespace VISION
 	    string resGet( const string &res );
 
 	protected:
-	    //- Protected methods -
+	    //Protected methods
 	    bool event( QEvent * event );
 	    int cntrIfCmd( XMLNode &node, bool glob = false );
 	    void orderUpdate( );
 
 	private:
-	    //- Attributes -
+	    //Attributes
 	    char	mPermCntr :1;	//Control widget's permition
 	    char	mPermView :1;	//View widget's permition
     };

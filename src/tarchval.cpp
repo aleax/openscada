@@ -1701,8 +1701,9 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	{
 	    ctrMkNode("fld",opt,-1,"/val/tm",_("Time"),0660,"root","Archive",1,"tp","time");
 	    ctrMkNode("fld",opt,-1,"/val/utm","",0660,"root","Archive",4,"tp","dec","len","6","min","0","max","999999");
-	    ctrMkNode("fld",opt,-1,"/val/size",_("Size"),0660,"root","Archive",1,"tp","real");
-	    ctrMkNode("fld",opt,-1,"/val/arch",_("Archivator"),0660,"root","Archive",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/val/size",_("Size (s)"),0660,"root","Archive",1,"tp","real");
+	    ctrMkNode("fld",opt,-1,"/val/arch",_("Archivator"),0660,"root","Archive",4,"tp","str","dest","select","select","/val/lstAVal",
+		"help",_("Values archivator.\nNo set archivator for process by buffer and all archivators.\nSet '<buffer>' for process by buffer."));
 	    ctrMkNode("fld",opt,-1,"/val/sw_trend",_("Show trend"),0660,"root","Archive",1,"tp","bool");
 	    if(!atoi(TBDS::genDBGet(owner().nodePath()+"vShowTrnd","0",opt->attr("user")).c_str()))
 	    {
@@ -1929,6 +1930,19 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
     {
         if( ctrChkNode(opt,"get",0660,"root","Archive",SEQ_RD) )	opt->setText(TBDS::genDBGet(owner().nodePath()+"vMin","0",opt->attr("user")));
         if( ctrChkNode(opt,"set",0660,"root","Archive",SEQ_WR) )	TBDS::genDBSet(owner().nodePath()+"vMin",opt->text(),opt->attr("user"));
+    }
+    else if( a_path == "/val/lstAVal" && ctrChkNode(opt,"get",0440) )
+    {
+	opt->childAdd("el")->setText("");
+	opt->childAdd("el")->setText(BUF_ARCH_NM);
+	vector<string> lsm, lsa;
+	owner().modList(lsm);
+	for( int i_m = 0; i_m < lsm.size(); i_m++ )
+	{
+	    owner().at(lsm[i_m]).at().valList(lsa);
+	    for( int i_a = 0; i_a < lsa.size(); i_a++ )
+	    opt->childAdd("el")->setText(lsm[i_m]+"."+lsa[i_a]);
+	}
     }
     else if( a_path == "/val/val" && ctrChkNode(opt,"get",0440,"root","Archive",SEQ_RD) )
     {

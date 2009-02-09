@@ -156,7 +156,7 @@ class SessWdg : public Widget, public TValFunc
 	SessWdg( const string &id, const string &parent, Session *sess );
 	~SessWdg( );
 
-	//- Main parameters -
+	//> Main parameters
 	string path( );
 	string ownerFullId( bool contr = false );
 	string type( )		{ return "SessWidget"; }
@@ -176,19 +176,19 @@ class SessWdg : public Widget, public TValFunc
 	virtual void calc( bool first, bool last );
 	void getUpdtWdg( const string &path, unsigned int tm, vector<string> &els );
 
-	//- Include widgets -
+	//> Include widgets
 	void wdgAdd( const string &wid, const string &name, const string &parent );	//Implicit widget's creating on inherit
 	AutoHD<SessWdg> wdgAt( const string &wdg );
 
-	//- Events process -
+	//> Events process
 	void eventAdd( const string &ev );
 	string eventGet( bool clear = false );
 
-	//- Alarms process -
+	//> Alarms process
 	virtual void alarmSet( bool isSet = false );
 	virtual void alarmQuittance( ui8 quit_tmpl, bool isSet = false );
 
-	//- Access to mime resource -
+	//> Access to mime resource
 	string resourceGet( const string &id, string *mime = NULL );
 
 	SessWdg  *ownerSessWdg( bool base = false );
@@ -206,7 +206,9 @@ class SessWdg : public Widget, public TValFunc
 	bool cntrCmdAttributes( XMLNode *opt );
 	void cntrCmdProc( XMLNode *opt );			//Control interface command process
 	bool attrChange( Attr &cfg, void *prev );
+
 	unsigned int modifVal( Attr &cfg );
+	bool modifChk( unsigned int tm );
 
     private:
 	//Attributes

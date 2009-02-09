@@ -276,7 +276,7 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TMArchivator::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/st/fsz",_("Archive files size (kB)"),0444,"root","Archive",1,"tp","real");
+	ctrMkNode("fld",opt,-1,"/prm/st/fsz",_("Archivator files size (kB)"),0444,"root","Archive",1,"tp","real");
 	ctrMkNode("fld",opt,-1,"/prm/st/tarch",_("Archiving time (msek)"),0444,"root","Archive",1,"tp","real");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","Archive",2,
 	    "tp","str","help",_("Path to directory for archivator's of messages files."));

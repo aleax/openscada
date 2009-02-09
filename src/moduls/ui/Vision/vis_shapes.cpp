@@ -2786,7 +2786,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    shD->inclScrl->setWidget(lab);
 		    qApp->processEvents();
 
-		    shD->inclWidget = (RunPageView *)(((RunWdgView*)w)->mainWin()->pgCacheGet(val));
+		    shD->inclWidget = ((RunWdgView*)w)->mainWin()->pgCacheGet(val);
 		    if( shD->inclWidget )
 		    {
 			shD->inclWidget->setProperty("cntPg",TSYS::addr2str(w).c_str());

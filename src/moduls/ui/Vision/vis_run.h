@@ -74,8 +74,8 @@ class VisRun : public QMainWindow
 
 	//> Page cache commands
 	void pgCacheClear( );
-	void pgCacheAdd( RunWdgView *wdg );
-	RunWdgView *pgCacheGet( const string &id );
+	void pgCacheAdd( RunPageView *wdg );
+	RunPageView *pgCacheGet( const string &id );
 
 	//> Attributes commands
 	string wAttrGet( const string &path, const string &attr );
@@ -160,7 +160,7 @@ class VisRun : public QMainWindow
 	QLabel		*mWStat;		//VCA engine station
 	string 		work_sess, src_prj;	//Work session and source project
 	RunPageView	*master_pg;		//Master page of runtime session
-	int 		mPeriod;		//Clock's period
+	int		mPeriod;		//Clock's period
 	unsigned	w_prc_cnt;		//Process counter
 	float		upd_tm;
 	unsigned	reqtm;			//Requested time
@@ -175,7 +175,7 @@ class VisRun : public QMainWindow
 	vector<string>	pgList;			//Pages list
 
 	//> Page and resource cache
-	deque<RunWdgView *>	cache_pg;	//Pages cache
+	deque<RunPageView*>	cache_pg;	//Pages cache
 	map<string,CacheEl>	mCacheRes;	//Resources cache
 };
 

@@ -404,12 +404,14 @@ int TSYS::start(  )
 	if( !(i_cnt%(10*1000/STD_WAIT_DELAY)) )	clkCalc( );
 	//> Config file change periodic check
 	if( !(i_cnt%(10*1000/STD_WAIT_DELAY)) )	cfgFileScan( );
+	//> Periodic shared libraries checking
+	if( modSchedul( ).at().chkPer() && !(i_cnt%(modSchedul( ).at().chkPer()*1000/STD_WAIT_DELAY)) )
+	    modSchedul( ).at().libLoad(modDir(),true);
 	//> Old tables closing
 	if( !(i_cnt%(10*1000/STD_WAIT_DELAY)) )	db().at().closeOldTables();
 	//> Periodic changes saving to DB
 	if( savePeriod() && !(i_cnt%(savePeriod()*1000/STD_WAIT_DELAY)) )
 	    save();
-
 
 	usleep( STD_WAIT_DELAY*1000 );
 	i_cnt++;

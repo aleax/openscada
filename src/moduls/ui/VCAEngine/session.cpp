@@ -1207,7 +1207,7 @@ void SessWdg::prcElListUpdate( )
 void SessWdg::getUpdtWdg( const string &path, unsigned int tm, vector<string> &els )
 {
     string wpath = path+"/"+id();
-    if( mMdfClc >= tm ) els.push_back(wpath);
+    if( modifChk(tm) ) els.push_back(wpath);
     for( int i_ch = 0; i_ch < mWdgChldAct.size(); i_ch++ )
 	if( wdgPresent(mWdgChldAct[i_ch]) )
 	    wdgAt(mWdgChldAct[i_ch]).at().getUpdtWdg(wpath,tm,els);
@@ -1220,6 +1220,12 @@ unsigned int SessWdg::modifVal( Attr &cfg )
     return m_clc;
 }
 
+bool SessWdg::modifChk( unsigned int tm )
+{
+    int m_clc = ownerSess()->calcClk( );
+    return (m_clc>tm) ? (mMdfClc >= tm && mMdfClc <= m_clc) : (mMdfClc >= tm || mMdfClc <= m_clc);
+}
+
 void SessWdg::calc( bool first, bool last )
 {
     if( !process() )	return;
@@ -1228,7 +1234,7 @@ void SessWdg::calc( bool first, bool last )
 
     string sw_attr, s_attr, obj_tp;
 
-    if( !(ownerSess()->calcClk()%vmax(1,10000/ownerSess()->period())) ) prcElListUpdate( );
+//    if( !(ownerSess()->calcClk()%vmax(1,10000/ownerSess()->period())) ) prcElListUpdate( );
 
     //- Calculate include widgets -
     for(int i_l = 0; i_l < mWdgChldAct.size(); i_l++ )
@@ -1244,14 +1250,11 @@ void SessWdg::calc( bool first, bool last )
 	    //- Process input links and constants -
 	    AutoHD<Attr> attr, attr1;
 	    AutoHD<TVal> vl;
-//	    vector<string> als;
-//	    attrList(als);
 	    inLnkGet = true;
 	    for( int i_a = 0; i_a < mAttrLnkLs.size(); i_a++ )
 	    {
 		attr = attrAt(mAttrLnkLs[i_a]);
-//		if( !attr.at().flgSelf()&(Attr::CfgConst|Attr::CfgLnkIn) || attr.at().cfgVal().empty() ) continue;
-		if( attr.at().flgSelf()&Attr::CfgConst )	attr.at().setS(attr.at().cfgVal());
+		if( attr.at().flgSelf()&Attr::CfgConst && !attr.at().cfgVal().empty() )	attr.at().setS(attr.at().cfgVal());
 		else if( attr.at().flgSelf()&Attr::CfgLnkIn && !attr.at().cfgVal().empty() )
 		{
 		    obj_tp = TSYS::strSepParse(attr.at().cfgVal(),0,':')+":";
@@ -1383,20 +1386,16 @@ bool SessWdg::attrChange( Attr &cfg, void *prev )
 {
     Widget::attrChange( cfg, prev );
 
-    //- Special session atributes process -
-    //-- Focus attribute process for active active --
-    if( cfg.id() == "active" )
-    {
-	if( cfg.getB() && !cfg.owner()->attrPresent("focus") )
-	    cfg.owner()->attrAdd( new TFld("focus",_("Focus"),TFld::Boolean,TFld::NoFlag,"1","false","","","-2") );
-//	else	cfg.owner()->attrDel("focus");
-    }
-    //- Alarm event for widget process -
+    //> Special session atributes process
+    //>> Focus attribute process for active active
+    if( cfg.id() == "active" && cfg.getB() && !cfg.owner()->attrPresent("focus") )
+	cfg.owner()->attrAdd( new TFld("focus",_("Focus"),TFld::Boolean,TFld::NoFlag,"1","false","","","-2") );
+    //> Alarm event for widget process
     else if( cfg.id() == "alarm" && enable() && prev )		alarmSet( true );
-    //- Alarm status process -
+    //> Alarm status process
     else if( cfg.id() == "alarmSt" && cfg.getI()&0x10000 )	ownerSess( )->alarmQuittance( path(), (cfg.getI()>>16)&0xFF );
 
-    //- External link process -
+    //> External link process
     if( !inLnkGet && prev && cfg.flgSelf()&Attr::CfgLnkOut && !cfg.cfgVal().empty() )
     {
 	if( cfg.flgSelf()&Attr::SessAttrInh ) cfg.setFlgSelf((Attr::SelfAttrFlgs)(cfg.flgSelf()&(~Attr::SessAttrInh)));
@@ -1454,7 +1453,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 		opt->childAdd("el")->setAttr("id","perm")->setAttr("p","-3")->
 		    setText(TSYS::int2str(ownerSess()->sec.at().access(opt->attr("user"),SEQ_RD|SEQ_WR,owner(),grp(),permit())) );
 	    }
-	    if( !tm || mMdfClc >= tm )
+	    if( !tm || modifChk(tm) )
 	    {
 		AutoHD<Attr> attr;
 		vector<string> als;
@@ -1483,7 +1482,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	int perm = ownerSess()->sec.at().access(opt->attr("user"),(tm?SEQ_RD:SEQ_RD|SEQ_WR),owner(),grp(),permit());
 
 	//>> Self attributes put
-	if( !tm || mMdfClc >= tm )
+	if( !tm || modifChk(tm) )
 	{
 	    if( !tm )
 	    {
