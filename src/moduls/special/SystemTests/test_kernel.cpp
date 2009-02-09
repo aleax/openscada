@@ -145,7 +145,7 @@ string TTest::optDescr( )
 	"\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 
-    return(buf);
+    return buf;
 }
 
 void TTest::load_( )
@@ -165,7 +165,7 @@ void TTest::load_( )
 	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
-	    case 'h': fprintf(stdout,optDescr().c_str()); break;
+	    case 'h': fprintf(stdout,TSYS::strEncode(optDescr(),TSYS::FormatPrint).c_str()); break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);

@@ -8,6 +8,8 @@
 - FIX:/UI/VCAEngine: Empty constant's setup is fixed on RunTime session.
 - /UI/Vision: Page's cache of RunTime clearing of too old pages (oldest by 1 hour) is added. Page's cache type element is changed to RunPageView.
 - !:/ModSchedule: Checking shared libraries task's function is moved to main system checking task.
+- FIX:/SYS: Symbols '%' process is fixed for commandline --help messages print.
+    Double printing help message for subsystem "Module sheduler" is fixed by commandline --help.
 
 
 2009-02-06 Roman

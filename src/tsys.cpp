@@ -247,7 +247,7 @@ bool TSYS::cfgFileLoad()
 	switch(next_opt)
 	{
 	    case 'h':
-		fprintf(stdout,optDescr().c_str());
+		fprintf(stdout,TSYS::strEncode(optDescr(),TSYS::FormatPrint).c_str());
 		Mess->setMessLevel(7);
 		cmd_help = true;
 		break;
@@ -342,7 +342,7 @@ void TSYS::load_()
 
 	//> First DB subsystem load
 	db().at().load();
-	modSchedul().at().modifG();	// For try reload from DB
+	if( !cmd_help ) modSchedul().at().modifG();	// For try reload from DB
 
 	//> Second load for load from generic DB
 	cfgPrmLoad();
