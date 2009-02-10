@@ -1,3 +1,7 @@
+2009-02-10 Roman
+- FIX:/UI/Vision,/UI/WebVision: Folowing mode for primitive 'Protocol' is fixed.
+
+
 2009-02-09 Roman
 - FIX:/Archive: #define BUF_ARCH_NM"<buffer>" syntax error is fixed and declaration is moved to TSYS.
 - /Archive: Some inline helps is added to config-fields. Selection is added to archivator select string of accessing to values.

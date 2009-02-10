@@ -1168,7 +1168,7 @@ function makeEl( pgBr, inclPg )
 
 	//> Correct request to present data
 	var toUp = false;
-	if( valEnd && tTime > valEnd ) { tTimeGrnd = valEnd; toUp = true; }
+	if( valEnd && tTime >= valEnd ) { tTimeGrnd = valEnd; toUp = true; }
 	else if( valBeg && tTimeGrnd < valBeg ) tTime = valBeg-1;
 
 	var rez = servSet('/Archive/%2fserv%2fmess','com=com',

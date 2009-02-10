@@ -2234,11 +2234,13 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	}
     }
     if( !shD->addrWdg->columnCount() || !arhBeg || !arhEnd )	return;
+
     //> Correct request to archive border
     tTime     = vmin(tTime,arhEnd);
     tTimeGrnd = vmax(tTimeGrnd,arhBeg);
     //> Clear data at time error
     unsigned int valEnd = 0, valBeg = 0;
+
     if( shD->addrWdg->rowCount() && shD->addrWdg->columnCount() )
     {
 	while( shD->addrWdg->rowCount() && (valEnd=shD->addrWdg->item(0,0)->data(Qt::UserRole).toUInt()) > tTime )
@@ -2254,7 +2256,7 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
     }
     //> Correct request to present data
     bool toUp = false;
-    if( valEnd && tTime > valEnd )	{ tTimeGrnd = valEnd; toUp = true; }
+    if( valEnd && tTime >= valEnd )	{ tTimeGrnd = valEnd; toUp = true; }
     else if( valBeg && tTimeGrnd < valBeg )	tTime = valBeg-1;
     //> Get values data -
     unsigned int rtm;			//Record's data
