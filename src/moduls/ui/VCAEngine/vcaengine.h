@@ -64,28 +64,33 @@ class Engine : public TUI
 
 	string callSynth( const string &txt );
 
-	//- Widget's libraries -
-	void wlbList( vector<string> &ls )			{ chldList( id_wlb, ls ); }
-	bool wlbPresent( const string &id )			{ return chldPresent( id_wlb, id ); }
+	//> Widget's libraries
+	void wlbList( vector<string> &ls )			{ chldList( idWlb, ls ); }
+	bool wlbPresent( const string &id )			{ return chldPresent( idWlb, id ); }
 	void wlbAdd( const string &iid, const string &inm = "", const string &idb = "*.*" );
-	void wlbDel( const string &iid, bool full = false )	{ chldDel( id_wlb, iid, -1, full ); }
+	void wlbDel( const string &iid, bool full = false )	{ chldDel( idWlb, iid, -1, full ); }
 	AutoHD<WidgetLib> wlbAt( const string &id );
 
-	//- Projects -
-	void prjList( vector<string> &ls )			{ chldList( id_prj, ls ); }
-	bool prjPresent( const string &id )			{ return chldPresent( id_prj, id ); }
+	//> Projects
+	void prjList( vector<string> &ls )			{ chldList( idPrj, ls ); }
+	bool prjPresent( const string &id )			{ return chldPresent( idPrj, id ); }
 	void prjAdd( const string &iid, const string &inm = "", const string &idb = "*.*" );
-	void prjDel( const string &iid, bool full = false )	{ chldDel( id_prj, iid, -1, full ); }
+	void prjDel( const string &iid, bool full = false )	{ chldDel( idPrj, iid, -1, full ); }
 	AutoHD<Project> prjAt( const string &id );
 
-	//- Sessions -
-	void sesList( vector<string> &ls )			{ chldList( id_ses, ls ); }
-	bool sesPresent( const string &id )			{ return chldPresent( id_ses, id ); }
+	//> Sessions
+	void sesList( vector<string> &ls )			{ chldList( idSes, ls ); }
+	bool sesPresent( const string &id )			{ return chldPresent( idSes, id ); }
 	void sesAdd( const string &id, const string &proj = "" );
-	void sesDel( const string &iid, bool full = false )	{ chldDel( id_ses, iid, -1, full ); }
+	void sesDel( const string &iid, bool full = false )	{ chldDel( idSes, iid, -1, full ); }
 	AutoHD<Session> sesAt( const string &id );
 
-	//- DB structures -
+	//> User functions
+	void fList( vector<string> &ls )			{ chldList( idFnc, ls ); }
+	bool fPresent( const string &id )			{ return chldPresent( idFnc, id ); }
+	AutoHD<TFunction> fAt( const string &id );
+
+	//> DB structures
 	TElem &elWdgLib( )	{ return lbwdg_el; }
 	TElem &elWdgData( )	{ return wdgdata_el; }
 	TElem &elWdg( )		{ return wdg_el; }
@@ -108,7 +113,7 @@ class Engine : public TUI
 
     private:
 	//Attributes
-	int	id_wlb, id_prj, id_ses;
+	int	idWlb, idPrj, idSes, idFnc;
 	TElem	lbwdg_el,	//The generic table structure of libraries
 		wdgdata_el,	//Media and other data what use by widgets and stored into DB
 		wdg_el,		//The table structure of library widgets

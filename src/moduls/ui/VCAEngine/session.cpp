@@ -27,7 +27,6 @@
 #include "vcaengine.h"
 #include "session.h"
 
-
 using namespace VCA;
 
 //************************************************
@@ -1009,7 +1008,7 @@ void SessWdg::setProcess( bool val )
 	try
 	{
 	    mWorkProg = SYS->daq().at().at(TSYS::strSepParse(calcLang(),0,'.')).at().
-		compileFunc(TSYS::strSepParse(calcLang(),1,'.'),fio,calcProg());
+		compileFunc(TSYS::strSepParse(calcLang(),1,'.'),fio,calcProg(),mod->nodePath('.',true)+";");
 	    //-- Connect to compiled function --
 	    TValFunc::setFunc(&((AutoHD<TFunction>)SYS->nodeAt(mWorkProg,1)).at());
 	}catch( TError err )

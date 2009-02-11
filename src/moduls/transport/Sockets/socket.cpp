@@ -460,9 +460,9 @@ void *TSocketIn::ClTask( void *s_inf )
 
 	int kz = select(s.cSock+1,&rd_fd,NULL,NULL,&tv);
 	if( kz == 0 || (kz == -1 && errno == EINTR) || kz < 0 || !FD_ISSET(s.cSock, &rd_fd) ) continue;
-
-	r_len = read(s.cSock,buf,s.s->bufLen()*1000); s.s->trIn += (float)r_len/1024;
+	r_len = read(s.cSock,buf,s.s->bufLen()*1000);
 	if(r_len <= 0) break;
+	s.s->trIn += (float)r_len/1024;
 #if OSC_DEBUG >= 5
 	mess_debug(s.s->nodePath().c_str(),_("Socket received message <%d> from <%s>."), r_len, s.sender.c_str() );
 #endif

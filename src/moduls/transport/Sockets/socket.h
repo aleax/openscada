@@ -61,7 +61,7 @@ class SSockIn
 //************************************************
 struct SSockCl
 {
-    pid_t	cl_id;    // Client's pids
+    pthread_t	cl_id;    // Client's thread id
     int		cl_sock;
 };
 

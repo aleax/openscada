@@ -1,3 +1,8 @@
+2009-02-11 Roman
+- FIX:/Transport/Socket: Client tasks registration is fixed for x86_64. pthread_t type not equal pid_t on x86_64!
+- /UI/VCAEngune: First interface control users functions is added.
+
+
 2009-02-10 Roman
 - FIX:/UI/Vision,/UI/WebVision: Folowing mode for primitive 'Protocol' is fixed.
 
@@ -11,7 +16,7 @@
 - /UI/VCAEngine: Disable prcElListUpdate() periodic call on RunTime session. Call only after setProcess() call.
 - FIX:/UI/VCAEngine: Empty constant's setup is fixed on RunTime session.
 - /UI/Vision: Page's cache of RunTime clearing of too old pages (oldest by 1 hour) is added. Page's cache type element is changed to RunPageView.
-- !:/ModSchedule: Checking shared libraries task's function is moved to main system checking task.
+- !:/ModSchedule: Periodic checking shared libraries task's function is moved to main system checking task.
 - FIX:/SYS: Symbols '%' process is fixed for commandline --help messages print.
     Double printing help message for subsystem "Module sheduler" is fixed by commandline --help.
 
@@ -54,7 +59,7 @@
     Created function for simple checking it mode TSYS::chkSelDB().
 - !!!:FIX:/SYS,/Special/SystemTests: The resource is added for access to the config file's XML tree. For access to XML tree nodes used no exception mode,
     resources (stack) leak is fixed for some contexts.
-- !:FIX:/DB: Generic's DB cache using mode is changed for use cache only if main DB no accessable.
+- !:FIX:/DB: Generic's DB system table cache using mode is changed for use cache only if main DB no accessable.
 - !:/SYS/Control: Add function TCntrNode::nodeAccess( ) for allow access to node using resource into heirs.
 - /SYS: Function TSYS::cfgFileScan() is rewrited.
 - !!!:/TModSchedul: Realised full support of AllowList and DenyList loading modules, replaced AutoList. Used node's resource without self.
@@ -146,13 +151,13 @@
 
 
 2009-01-06 Maxim
-- !!!!:FIX:/UI/Vision: map erasing is fixed for primitive ElFigure.
+- !!!!:FIX:/UI/Vision: Map erasing is fixed for primitive ElFigure.
 - FIX:/UI/Vision: appending point, common for several elementary figures, when connections are disabled is fixed for primitive ElFigure.
 - FIX:/UI/WebVision: repainting ElFigure is fixed when dynamic attribute is changed.
 
 
 2009-01-06 Roman
-- !!:/SYS: ResString object for resourcing string access.
+- !!:/SYS: ResString object is added for resourcing string access.
 - !!!!:FIX:/Value,/Function,/TConfig,/UI/VCAEngine: For resource sharing by string use ResString.
 - FIX:/UI/WebVision: Text primitive vertical align is fixed.
 - FIX:/UI/QTCfg: Not view current value if it empty into Editable combbox element is fixed.

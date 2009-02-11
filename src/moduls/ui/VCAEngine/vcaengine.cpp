@@ -60,6 +60,327 @@ extern "C"
     }
 }
 
+namespace VCA
+{
+//*************************************************
+//* Widget's list                                 *
+//*************************************************
+class wdgList : public TFunction
+{
+    public:
+	wdgList( ) : TFunction("WdgList")
+	{
+	    ioAdd( new IO("list",_("List"),IO::String,IO::Return) );
+	    ioAdd( new IO("addr",_("Address"),IO::String,IO::Default) );
+	    ioAdd( new IO("pg",_("Pages"),IO::Boolean,IO::Default,"0") );
+	    setStart(true);
+	}
+
+	string name( )	{ return _("Widgets list"); }
+	string descr( )	{ return _("Return widget list into widget container or child's list. If set <pg> then return pages list for project's and sessions."); }
+
+	void calc( TValFunc *val )
+	{
+	    string sls;
+	    vector<string> ls;
+	    try
+	    {
+		AutoHD<TCntrNode> nd = nodePrev()->nodeAt(val->getS(1));
+		if( (Session*)&nd.at() && val->getB(2) )	((Session*)&nd.at())->list(ls);
+		if( (SessPage*)&nd.at() ) val->getB(2) ? ((SessPage*)&nd.at())->pageList(ls) : ((SessPage*)&nd.at())->wdgList(ls);
+		if( (Project*)&nd.at() && val->getB(2) )	((Project*)&nd.at())->list(ls);
+		if( (Page*)&nd.at() ) val->getB(2) ? ((Page*)&nd.at())->pageList(ls) : ((Page*)&nd.at())->wdgList(ls);
+		if( (Widget*)&nd.at() && !val->getB(2) )	((Widget*)&nd.at())->wdgList(ls);
+	    }
+	    catch(TError err) { }
+	    for( int i_l = 0; i_l < ls.size(); i_l++ ) sls += ls[i_l]+"\n";
+	    val->setS(0,sls);
+	}
+};
+
+//*************************************************
+//* Node present. Include widgets, attributes and *
+//* other objects.                                *
+//*************************************************
+class nodePresent : public TFunction
+{
+    public:
+	nodePresent( ) : TFunction("NodePresent")
+	{
+	    ioAdd( new IO("rez",_("Rezult"),IO::Boolean,IO::Return) );
+	    ioAdd( new IO("addr",_("Address"),IO::String,IO::Default) );
+	    setStart(true);
+	}
+
+	string name( )	{ return _("Node present"); }
+	string descr( )	{ return _("Checking for node, include widgets, attributes and other present."); }
+
+	void calc( TValFunc *val )
+	{
+	    try
+	    {
+		nodePrev()->nodeAt(val->getS(1));
+		val->setB(0,true);
+	    }
+	    catch(TError err) { val->setB(0,false); }
+	}
+};
+
+//*************************************************
+//* Attr's list                                 *
+//*************************************************
+class attrList : public TFunction
+{
+    public:
+	attrList( ) : TFunction("AttrList")
+	{
+	    ioAdd( new IO("list",_("List"),IO::String,IO::Return) );
+	    ioAdd( new IO("addr",_("Address"),IO::String,IO::Default) );
+	    ioAdd( new IO("noUser",_("Not user"),IO::Boolean,IO::Default,"1") );
+	    setStart(true);
+	}
+
+	string name( )	{ return _("Attributes list"); }
+	string descr( )	{ return _("Return attributes list for widget. If set <noUser> then return only not user's attributes."); }
+
+	void calc( TValFunc *val )
+	{
+	    string sls;
+	    vector<string> ls;
+	    try
+	    {
+		AutoHD<Widget> nd = nodePrev()->nodeAt(val->getS(1));
+		nd.at().attrList(ls);
+		if( val->getB(2) )
+		    for( int i_a = 0; i_a < ls.size(); i_a++ )
+			if( nd.at().attrAt(ls[i_a]).at().flgGlob()&Attr::IsUser )
+			{ ls.erase(ls.begin()+i_a); i_a--; }
+	    }
+	    catch(TError err) { }
+	    for( int i_a = 0; i_a < ls.size(); i_a++ ) sls += ls[i_a]+"\n";
+	    val->setS(0,sls);
+	}
+};
+
+//*************************************************
+//* Attr get, string                              *
+//*************************************************
+class attrGetS : public TFunction
+{
+    public:
+	attrGetS( ) : TFunction("AttrGetS")
+	{
+	    ioAdd( new IO("val",_("Value"),IO::String,IO::Return) );
+	    ioAdd( new IO("addr",_("Address"),IO::String,IO::Default) );
+	    setStart(true);
+	}
+
+	string name( )	{ return _("Attribute get, string"); }
+	string descr( )	{ return _("Getting widget's attribute by string value."); }
+
+	void calc( TValFunc *val )
+	{
+	    try
+	    {
+		AutoHD<Attr> nd = nodePrev()->nodeAt(val->getS(1));
+		val->setS(0,nd.at().getS());
+	    }
+	    catch(TError err) { }
+	}
+};
+
+//*************************************************
+//* Attr get, integer                             *
+//*************************************************
+class attrGetI : public TFunction
+{
+    public:
+	attrGetI( ) : TFunction("AttrGetI")
+	{
+	    ioAdd( new IO("val",_("Value"),IO::Integer,IO::Return) );
+	    ioAdd( new IO("addr",_("Address"),IO::String,IO::Default) );
+	    setStart(true);
+	}
+
+	string name( )	{ return _("Attribute get, integer"); }
+	string descr( )	{ return _("Getting widget's attribute by integer value."); }
+
+	void calc( TValFunc *val )
+	{
+	    try
+	    {
+		AutoHD<Attr> nd = nodePrev()->nodeAt(val->getS(1));
+		val->setI(0,nd.at().getI());
+	    }
+	    catch(TError err) { }
+	}
+};
+
+//*************************************************
+//* Attr get, real                                *
+//*************************************************
+class attrGetR : public TFunction
+{
+    public:
+	attrGetR( ) : TFunction("AttrGetR")
+	{
+	    ioAdd( new IO("val",_("Value"),IO::Real,IO::Return) );
+	    ioAdd( new IO("addr",_("Address"),IO::String,IO::Default) );
+	    setStart(true);
+	}
+
+	string name( )	{ return _("Attribute get, real"); }
+	string descr( )	{ return _("Getting widget's attribute by real value."); }
+
+	void calc( TValFunc *val )
+	{
+	    try
+	    {
+		AutoHD<Attr> nd = nodePrev()->nodeAt(val->getS(1));
+		val->setR(0,nd.at().getR());
+	    }
+	    catch(TError err) { }
+	}
+};
+
+//*************************************************
+//* Attr get, boolean                             *
+//*************************************************
+class attrGetB : public TFunction
+{
+    public:
+	attrGetB( ) : TFunction("AttrGetB")
+	{
+	    ioAdd( new IO("val",_("Value"),IO::Boolean,IO::Return) );
+	    ioAdd( new IO("addr",_("Address"),IO::String,IO::Default) );
+	    setStart(true);
+	}
+
+	string name( )	{ return _("Attribute get, boolean"); }
+	string descr( )	{ return _("Getting widget's attribute by boolean value."); }
+
+	void calc( TValFunc *val )
+	{
+	    try
+	    {
+		AutoHD<Attr> nd = nodePrev()->nodeAt(val->getS(1));
+		val->setB(0,nd.at().getB());
+	    }
+	    catch(TError err) { }
+	}
+};
+
+//*************************************************
+//* Attr set, string                              *
+//*************************************************
+class attrSetS : public TFunction
+{
+    public:
+	attrSetS( ) : TFunction("AttrSetS")
+	{
+	    ioAdd( new IO("addr",_("Address"),IO::String,IO::Default) );
+	    ioAdd( new IO("val",_("Value"),IO::String,IO::Default) );
+	    setStart(true);
+	}
+
+	string name( )	{ return _("Attribute set, string"); }
+	string descr( )	{ return _("Setup widget's attribute to string value."); }
+
+	void calc( TValFunc *val )
+	{
+	    try
+	    {
+		AutoHD<Attr> nd = nodePrev()->nodeAt(val->getS(0));
+		if( !(nd.at().flgGlob()&TFld::NoWrite) ) nd.at().setS(val->getS(1));
+	    }
+	    catch(TError err) { }
+	}
+};
+
+//*************************************************
+//* Attr set, integer                             *
+//*************************************************
+class attrSetI : public TFunction
+{
+    public:
+	attrSetI( ) : TFunction("AttrSetI")
+	{
+	    ioAdd( new IO("addr",_("Address"),IO::String,IO::Default) );
+	    ioAdd( new IO("val",_("Value"),IO::Integer,IO::Default) );
+	    setStart(true);
+	}
+
+	string name( )	{ return _("Attribute set, integer"); }
+	string descr( )	{ return _("Setup widget's attribute to integer value."); }
+
+	void calc( TValFunc *val )
+	{
+	    try
+	    {
+		AutoHD<Attr> nd = nodePrev()->nodeAt(val->getS(0));
+		if( !(nd.at().flgGlob()&TFld::NoWrite) ) nd.at().setI(val->getI(1));
+	    }
+	    catch(TError err) { }
+	}
+};
+
+//*************************************************
+//* Attr set, real                                *
+//*************************************************
+class attrSetR : public TFunction
+{
+    public:
+	attrSetR( ) : TFunction("AttrSetR")
+	{
+	    ioAdd( new IO("addr",_("Address"),IO::String,IO::Default) );
+	    ioAdd( new IO("val",_("Value"),IO::Real,IO::Default) );
+	    setStart(true);
+	}
+
+	string name( )	{ return _("Attribute set, real"); }
+	string descr( )	{ return _("Setup widget's attribute to real value."); }
+
+	void calc( TValFunc *val )
+	{
+	    try
+	    {
+		AutoHD<Attr> nd = nodePrev()->nodeAt(val->getS(0));
+		if( !(nd.at().flgGlob()&TFld::NoWrite) ) nd.at().setR(val->getR(1));
+	    }
+	    catch(TError err) { }
+	}
+};
+
+//*************************************************
+//* Attr set, boolean                             *
+//*************************************************
+class attrSetB : public TFunction
+{
+    public:
+	attrSetB( ) : TFunction("AttrSetB")
+	{
+	    ioAdd( new IO("addr",_("Address"),IO::String,IO::Default) );
+	    ioAdd( new IO("val",_("Value"),IO::Boolean,IO::Default) );
+	    setStart(true);
+	}
+
+	string name( )	{ return _("Attribute set, boolean"); }
+	string descr( )	{ return _("Setup widget's attribute to boolean value."); }
+
+	void calc( TValFunc *val )
+	{
+	    try
+	    {
+		AutoHD<Attr> nd = nodePrev()->nodeAt(val->getS(0));
+		if( !(nd.at().flgGlob()&TFld::NoWrite) ) nd.at().setB(val->getB(1));
+	    }
+	    catch(TError err) { }
+	}
+};
+
+}
+
+
 using namespace VCA;
 
 //************************************************
@@ -78,9 +399,10 @@ Engine::Engine( string name ) : mSynthCom("echo \"%t\" | ru_tts | sox -t raw -s 
 
     mod		= this;
 
-    id_wlb = grpAdd("wlb_");
-    id_prj = grpAdd("prj_");
-    id_ses = grpAdd("ses_");
+    idWlb = grpAdd("wlb_");
+    idPrj = grpAdd("prj_");
+    idSes = grpAdd("ses_");
+    idFnc = grpAdd("vca");
 }
 
 Engine::~Engine( )
@@ -214,6 +536,19 @@ void Engine::postEnable( int flag )
     wlbAt("originals").at().add( new OrigFunction() );
     wlbAt("originals").at().add( new OrigBox() );
     wlbAt("originals").at().add( new OrigLink() );
+
+    //>> User functions
+    chldAdd( idFnc, new nodePresent() );
+    chldAdd( idFnc, new wdgList() );
+    chldAdd( idFnc, new attrList() );
+    chldAdd( idFnc, new attrGetS() );
+    chldAdd( idFnc, new attrGetI() );
+    chldAdd( idFnc, new attrGetR() );
+    chldAdd( idFnc, new attrGetB() );
+    chldAdd( idFnc, new attrSetS() );
+    chldAdd( idFnc, new attrSetI() );
+    chldAdd( idFnc, new attrSetR() );
+    chldAdd( idFnc, new attrSetB() );
 }
 
 void Engine::preDisable( int flag )
@@ -394,34 +729,39 @@ void Engine::modStop()
 void Engine::wlbAdd( const string &iid, const string &inm, const string &idb )
 {
     if(wlbPresent(iid))	return;
-    chldAdd(id_wlb, new WidgetLib(iid,inm,idb));
+    chldAdd(idWlb, new WidgetLib(iid,inm,idb));
 }
 
 AutoHD<WidgetLib> Engine::wlbAt( const string &id )
 {
-    return chldAt(id_wlb,id);
+    return chldAt(idWlb,id);
 }
 
 void Engine::prjAdd( const string &iid, const string &inm, const string &idb )
 {
     if(prjPresent(iid))	return;
-    chldAdd(id_prj, new Project(iid,inm,idb));
+    chldAdd(idPrj, new Project(iid,inm,idb));
 }
 
 AutoHD<Project> Engine::prjAt( const string &id )
 {
-    return chldAt(id_prj,id);
+    return chldAt(idPrj,id);
 }
 
 void Engine::sesAdd( const string &iid, const string &iproj )
 {
     if(sesPresent(iid))	return;
-    chldAdd(id_ses, new Session(iid,iproj));
+    chldAdd(idSes, new Session(iid,iproj));
 }
 
 AutoHD<Session> Engine::sesAt( const string &id )
 {
-    return chldAt(id_ses,id);
+    return chldAt(idSes,id);
+}
+
+AutoHD<TFunction> Engine::fAt( const string &id )
+{
+    return chldAt(idFnc,id);
 }
 
 string Engine::callSynth( const string &itxt )
@@ -580,6 +920,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("grp",opt,-1,"/br/prj_",_("Project"),0664,"root","UI",2,"idm","1","idSz","30");
 	ctrMkNode("grp",opt,-1,"/br/wlb_",_("Widget's library"),0664,"root","UI",2,"idm","1","idSz","30");
 	ctrMkNode("grp",opt,-1,"/br/ses_",_("Session"),0664,"root","UI");
+	ctrMkNode("grp",opt,-1,"/br/vca",_("Functions"),R_R_R_,"root","UI",1,"idm","1");
 	if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"),0444,"root","UI"))
 	{
 	    ctrMkNode("list",opt,-1,"/prm/cfg/prj",_("Project"),0664,"root","UI",5,"tp","br","idm","1","s_com","add,del","br_pref","prj_","idSz","30");
@@ -665,6 +1006,13 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    sesAdd(vid); sesAt(vid).at().setUser(opt->attr("user")); sesAt(vid).at().setBackgrnd(true);
 	}
 	if( ctrChkNode(opt,"del",0664,"root","UI",SEQ_WR) )   sesDel(opt->text(),true);
+    }
+    else if( a_path == "/br/vca" && ctrChkNode(opt) )
+    {
+	vector<string> lst;
+	fList(lst);
+	for( unsigned i_f=0; i_f < lst.size(); i_f++ )
+	    opt->childAdd("el")->setAttr("id",lst[i_f])->setText(fAt(lst[i_f]).at().name());
     }
     else if( a_path == "/tts/code" )
     {
