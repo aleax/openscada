@@ -1,3 +1,10 @@
+2009-02-13 Roman
+- !!:/UI/VCAEngine: User's functions removed to self file (vcaFuncs.h), tested and translated to Russian and Ukrainian.
+- /UI/VCAEngine: Access to attributes is enable for no parent linked widgets, include container pages.
+- /Archive: Wait for archivations closing timeoute is rise to 10 seconds, for messages and values.
+- /Archive/DBArch: DB field's size is rise to 1000 symbols for messages and string values.
+
+
 2009-02-11 Roman
 - FIX:/Transport/Socket: Client tasks registration is fixed for x86_64. pthread_t type not equal pid_t on x86_64!
 - /UI/VCAEngune: First interface control users functions is added.

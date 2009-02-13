@@ -1161,9 +1161,9 @@ void Page::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	cntrCmdGeneric(opt);
+	cntrCmdAttributes(opt);
 	if( !parent( ).freeStat() )
 	{
-	    cntrCmdAttributes(opt);
 	    cntrCmdLinks(opt);
 	    cntrCmdProcess(opt);
 	}
@@ -1171,8 +1171,7 @@ void Page::cntrCmdProc( XMLNode *opt )
     }
 
     //- Process command to page -
-    if( !(cntrCmdGeneric(opt) || (parent( ).freeStat() ? false : cntrCmdAttributes(opt) ||
-	    cntrCmdLinks(opt) || cntrCmdProcess(opt))) )
+    if( !(cntrCmdGeneric(opt) || cntrCmdAttributes(opt) || (parent( ).freeStat() ? false : cntrCmdLinks(opt) || cntrCmdProcess(opt))) )
 	TCntrNode::cntrCmdProc(opt);
 }
 

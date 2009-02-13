@@ -102,7 +102,7 @@ void ModArch::postEnable( int flag )
 	//- Message DB archive DB structure -
 	el_mess.fldAdd( new TFld("TM",_("Time (s)"),TFld::Integer,TCfg::Key|TFld::DateTimeDec,"10") );
 	el_mess.fldAdd( new TFld("CATEG",_("Category"),TFld::String,TCfg::Key,"100") );
-	el_mess.fldAdd( new TFld("MESS",_("Message"),TFld::String,TCfg::Key,"255") );
+	el_mess.fldAdd( new TFld("MESS",_("Message"),TFld::String,TCfg::Key,"1000") );
 	el_mess.fldAdd( new TFld("LEV",_("Level"),TFld::Integer,TFld::NoFlag,"1") );
 
 	//- Boolean and integer value DB archive DB structure -
@@ -118,7 +118,7 @@ void ModArch::postEnable( int flag )
 	//- String value DB archive DB structure -
 	el_vl_str.fldAdd( new TFld("TM",_("Time (s)"),TFld::Integer,TCfg::Key|TFld::DateTimeDec,"10") );
 	el_vl_str.fldAdd( new TFld("TMU",_("Time (us)"),TFld::Integer,TCfg::Key,"10") );
-	el_vl_str.fldAdd( new TFld("VAL",_("Value"),TFld::String,TFld::NoFlag,"255") );
+	el_vl_str.fldAdd( new TFld("VAL",_("Value"),TFld::String,TFld::NoFlag,"1000") );
     }
 }
 

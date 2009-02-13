@@ -372,7 +372,7 @@ void TArchiveS::subStop( )
     itval.it_interval.tv_sec = itval.it_interval.tv_nsec =
 	itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
     timer_settime(tmIdMess, 0, &itval, NULL);
-    if( TSYS::eventWait( prc_st_mess, false, nodePath()+"mess_stop",5) )
+    if( TSYS::eventWait( prc_st_mess, false, nodePath()+"mess_stop",10) )
 	throw TError(nodePath().c_str(),_("Archive messages thread is not stopped!"));
 
     //- Values acquisition task stop -
@@ -380,7 +380,7 @@ void TArchiveS::subStop( )
     {
 	endrun_req_val = true;
 	pthread_kill( m_val_pthr, SIGALRM );
-	if( TSYS::eventWait(prc_st_val,false,nodePath()+"val_task_stop",5) )
+	if( TSYS::eventWait(prc_st_val,false,nodePath()+"val_task_stop",10) )
 	    throw TError(nodePath().c_str(),_("Archive values task is not stopped!"));
 	pthread_join( m_val_pthr, NULL );
     }
