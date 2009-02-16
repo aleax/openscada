@@ -170,10 +170,9 @@ void TTransportS::load_( )
     //-- Load external hosts --
     try
     {
-        TConfig c_el(&el_ext);
-        int fld_cnt = 0;
-        while( SYS->db().at().dataSeek(extHostsDB(),nodePath()+"ExtTansp/",fld_cnt++,c_el) )
-        {
+	TConfig c_el(&el_ext);
+	for( int fld_cnt = 0; SYS->db().at().dataSeek(extHostsDB(),nodePath()+"ExtTansp/",fld_cnt++,c_el); )
+	{
 	    ExtHost host("","","","","","","");
 	    host.user_open	= c_el.cfg("OP_USER").getS();
 	    host.id		= c_el.cfg("ID").getS();
@@ -198,7 +197,7 @@ void TTransportS::save_( )
     //- Save external transports -
     ResAlloc res(extHostRes,false);
     TConfig c_el(&el_ext);
-    for(int i_h = 0; i_h < extHostLs.size(); i_h++)
+    for( int i_h = 0; i_h < extHostLs.size(); i_h++ )
     {
 	c_el.cfg("OP_USER").setS(extHostLs[i_h].user_open);
 	c_el.cfg("ID").setS(extHostLs[i_h].id);
@@ -210,11 +209,10 @@ void TTransportS::save_( )
 	SYS->db().at().dataSet(extHostsDB(),nodePath()+"ExtTansp/",c_el);
     }
     //-- Clear external transports --
-    int fld_cnt=0;
     c_el.cfg("OP_USER").setS("");
     c_el.cfg("ID").setS("");
     c_el.cfgViewAll(false);
-    while( SYS->db().at().dataSeek(extHostsDB(),nodePath()+"ExtTansp/",fld_cnt++,c_el) )
+    for( int fld_cnt=0; SYS->db().at().dataSeek(extHostsDB(),nodePath()+"ExtTansp/",fld_cnt++,c_el); )
     {
 	if( !extHostGet(c_el.cfg("OP_USER").getS(),c_el.cfg("ID").getS()).id.size() )
 	{
@@ -316,7 +314,7 @@ void TTransportS::extHostList( const string &user, vector<string> &list )
 {
     list.clear();
     ResAlloc res(extHostRes,false);
-    for(int i_h = 0; i_h < extHostLs.size(); i_h++)
+    for( int i_h = 0; i_h < extHostLs.size(); i_h++ )
 	if( !user.size() || user == extHostLs[i_h].user_open )
 	    list.push_back(extHostLs[i_h].id);
 }
@@ -324,7 +322,7 @@ void TTransportS::extHostList( const string &user, vector<string> &list )
 bool TTransportS::extHostPresent( const string &user, const string &iid )
 {
     ResAlloc res(extHostRes,false);
-    for(int i_h = 0; i_h < extHostLs.size(); i_h++)
+    for( int i_h = 0; i_h < extHostLs.size(); i_h++ )
 	if( (!user.size() || user == extHostLs[i_h].user_open) && extHostLs[i_h].id == iid )
 	    return true;
     return false;
@@ -333,7 +331,7 @@ bool TTransportS::extHostPresent( const string &user, const string &iid )
 void TTransportS::extHostSet( const ExtHost &host )
 {
     ResAlloc res(extHostRes,true);
-    for(int i_h = 0; i_h < extHostLs.size(); i_h++)
+    for( int i_h = 0; i_h < extHostLs.size(); i_h++ )
 	if( host.user_open == extHostLs[i_h].user_open && extHostLs[i_h].id == host.id )
 	{ extHostLs[i_h] = host; modif(); return; }
     extHostLs.push_back(host);
@@ -343,7 +341,7 @@ void TTransportS::extHostSet( const ExtHost &host )
 void TTransportS::extHostDel( const string &user, const string &id )
 {
     ResAlloc res(extHostRes,true);
-    for(int i_h = 0; i_h < extHostLs.size(); )
+    for( int i_h = 0; i_h < extHostLs.size(); )
 	if( (!user.size() || user == extHostLs[i_h].user_open) && extHostLs[i_h].id == id )
 	    extHostLs.erase(extHostLs.begin()+i_h);
 	else i_h++;
@@ -353,7 +351,7 @@ void TTransportS::extHostDel( const string &user, const string &id )
 TTransportS::ExtHost TTransportS::extHostGet( const string &user, const string &id )
 {
     ResAlloc res(extHostRes,false);
-    for(int i_h = 0; i_h < extHostLs.size(); i_h++)
+    for( int i_h = 0; i_h < extHostLs.size(); i_h++ )
 	if( (user.empty() || user == extHostLs[i_h].user_open) && extHostLs[i_h].id == id )
 	    return extHostLs[i_h];
     return ExtHost(user,"","","","","","");
@@ -427,7 +425,7 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 
 	    vector<string> list;
 	    extHostList(sysHost()?"*":opt->attr("user"),list);
-	    for(int i_h = 0; i_h < list.size(); i_h++)
+	    for( int i_h = 0; i_h < list.size(); i_h++ )
 	    {
 		ExtHost host = extHostGet(sysHost()?"*":opt->attr("user"),list[i_h]);
 		if( n_id )	n_id->childAdd("el")->setText(host.id);

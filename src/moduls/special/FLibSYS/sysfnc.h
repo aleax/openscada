@@ -32,6 +32,39 @@ namespace FLibSYS
 {
 
 //*************************************************
+//* System access functions                       *
+
+//*************************************************
+//* System's commands call                        *
+//*************************************************
+class sysCall : public TFunction
+{
+    public:
+	sysCall( ) : TFunction("sysCall")
+	{
+	    ioAdd( new IO("rez",_("Rezult"),IO::String,IO::Return|IO::FullText) );
+	    ioAdd( new IO("com",_("Command"),IO::String,IO::Default) );
+	}
+
+	string name( )	{ return _("Sys: Call"); }
+	string descr( )	{ return _("System call commands."); }
+
+	void calc( TValFunc *val )
+	{
+	    FILE *fp = popen(val->getS(1).c_str(),"r");
+	    if( !fp ) return;
+
+	    char buf[STR_BUF_LEN];
+	    string rez;
+	    for( int r_cnt = 0; (r_cnt=fread(buf,1,sizeof(buf),fp)); )
+	    rez.append(buf,r_cnt);
+
+	    pclose(fp);
+	    val->setS(0,rez);
+	}
+};
+
+//*************************************************
 //* Archive subsystem's functions                 *
 
 //*************************************************
@@ -775,6 +808,70 @@ class real2str : public TFunction
 	{
 	    val->setS(0,TSYS::real2str(val->getR(1),val->getI(2),val->getS(3).size()?val->getS(3)[0]:'f') );
 	}
+};
+
+//*************************************************
+//* Convert integer to string                     *
+//*************************************************
+class int2str : public TFunction
+{
+    public:
+	int2str( ) : TFunction("int2str")
+	{
+	    ioAdd( new IO("rez",_("Rezult"),IO::String,IO::Return) );
+	    ioAdd( new IO("val",_("Value"),IO::Integer,IO::Default) );
+	    ioAdd( new IO("base",_("Base"),IO::Integer,IO::Default,"10") );
+	}
+
+	string name( )	{ return _("String: Integer to string"); }
+	string descr( )	{ return _("Convert integer to string."); }
+
+	void calc( TValFunc *val )
+	{
+	    switch( val->getI(2) )
+	    {
+		case 8:	val->setS(0,TSYS::int2str(val->getI(1),TSYS::Oct));	break;
+		case 10:val->setS(0,TSYS::int2str(val->getI(1),TSYS::Dec));	break;
+		case 16:val->setS(0,TSYS::int2str(val->getI(1),TSYS::Hex));	break;
+		default: val->setS(0,"");
+	    }
+	}
+};
+
+//*************************************************
+//* Convert string to real                        *
+//*************************************************
+class str2real : public TFunction
+{
+    public:
+	str2real( ) : TFunction("str2real")
+	{
+	    ioAdd( new IO("rez",_("Rezult"),IO::Real,IO::Return) );
+	    ioAdd( new IO("val",_("Value"),IO::String,IO::Default) );
+	}
+
+	string name( )	{ return _("String: String to real"); }
+	string descr( )	{ return _("Convert string to real."); }
+
+	void calc( TValFunc *val )	{ val->setR(0,atof(val->getS(1).c_str())); }
+};
+
+//*************************************************
+//* Convert string to integer                     *
+//*************************************************
+class str2int : public TFunction
+{
+    public:
+	str2int( ) : TFunction("str2int")
+	{
+	    ioAdd( new IO("rez",_("Rezult"),IO::Integer,IO::Return) );
+	    ioAdd( new IO("val",_("Value"),IO::String,IO::Default) );
+	}
+
+	string name( )	{ return _("String: String to integer"); }
+	string descr( )	{ return _("Convert string to integer."); }
+
+	void calc( TValFunc *val )	{ val->setI(0,strtol(val->getS(1).c_str(),NULL,0)); }
 };
 
 }

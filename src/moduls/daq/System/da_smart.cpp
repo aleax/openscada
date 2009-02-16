@@ -96,7 +96,7 @@ void HddSmart::dList( vector<string> &list, bool part )
 		access_true = true;
 		break;
 	    }
-	    fclose(fp);
+	    pclose(fp);
 	    if( access_true )	list.push_back(name);
 	}
     }

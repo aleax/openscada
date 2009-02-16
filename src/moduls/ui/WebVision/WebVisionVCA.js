@@ -318,6 +318,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
     {
       this.wdgs[i].attrs['pgOpenSrc'] = pgId;
       this.wdgs[i].makeEl(null,true);
+      setWAttrs(this.wdgs[i].addr,'pgOpenSrc',pgId);
       return true;
     }
   //> Put checking to child pages
@@ -957,6 +958,7 @@ function makeEl( pgBr, inclPg )
 	  formObj.className = 'vertalign';
 	  formObj.style.font = fontCfg;
 	  elStyle+='border-style: '+((this.place.checkable && parseInt(this.attrs['value']))?'inset':'outset')+'; cursor: pointer; border-width: 2px; ';
+	  if( this.attrs['colorText'] ) elStyle+='color: '+this.attrs['colorText']+'; ';
 	  if( this.attrs['color'] ) elStyle+='background-color: '+this.attrs['color']+'; ';
 	  else elStyle+='background-color: snow; ';
 	  if( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEQ_WR )
@@ -999,6 +1001,7 @@ function makeEl( pgBr, inclPg )
 	  formObj.onclick = function() { setWAttrs(this.wdgLnk.addr,'event','ws_BtPress'); return false; }
 	  formObj.wdgLnk = this;
 	  if( this.attrs['color'] ) formObj.style.backgroundColor=this.attrs['color'];
+	  if( this.attrs['colorText'] ) formObj.style.color=this.attrs['colorText'];
 	}
 	formObj.style.width = geomW+'px'; formObj.style.height = geomH+'px';
 	this.place.appendChild(formObj);

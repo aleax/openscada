@@ -304,6 +304,7 @@ bool OrigFormEl::attrChange( Attr &cfg, void *prev )
 		cfg.owner()->attrDel("value");
 		cfg.owner()->attrDel("img");
 		cfg.owner()->attrDel("color");
+		cfg.owner()->attrDel("colorText");
 		cfg.owner()->attrDel("checkable");
 		cfg.owner()->attrDel("font");
 		cfg.owner()->attrAt("name").at().fld().setReserve("");
@@ -342,7 +343,8 @@ bool OrigFormEl::attrChange( Attr &cfg, void *prev )
 	    case 3:	//Button
 		cfg.owner()->attrAdd( new TFld("value",_("Value"),TFld::Boolean,Attr::Mutable,"","","","","21") );
 		cfg.owner()->attrAdd( new TFld("img",_("Image"),TFld::String,Attr::Image|Attr::Mutable,"","","","","22") );
-		cfg.owner()->attrAdd( new TFld("color",_("Color"),TFld::String,Attr::Color|Attr::Mutable,"20","","","","23") );
+		cfg.owner()->attrAdd( new TFld("color",_("Color:button"),TFld::String,Attr::Color|Attr::Mutable,"20","","","","23") );
+		cfg.owner()->attrAdd( new TFld("colorText",_("Color:text"),TFld::String,Attr::Color|Attr::Mutable,"20","","","","27") );
 		cfg.owner()->attrAdd( new TFld("checkable",_("Checkable"),TFld::Boolean,Attr::Mutable,"","","","","24") );
 		cfg.owner()->attrAdd( new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","","25") );
 		cfg.owner()->attrAt("name").at().fld().setReserve("26");

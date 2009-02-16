@@ -36,7 +36,7 @@ class wdgList : public TFunction
     public:
 	wdgList( ) : TFunction("WdgList")
 	{
-	    ioAdd( new IO("list",_("List"),IO::String,IO::Return) );
+	    ioAdd( new IO("list",_("List"),IO::String,IO::Return|IO::FullText) );
 	    ioAdd( new IO("addr",_("Address"),IO::String,IO::Default) );
 	    ioAdd( new IO("pg",_("Pages"),IO::Boolean,IO::Default,"0") );
 	    setStart(true);
@@ -57,6 +57,7 @@ class wdgList : public TFunction
 		else if( dynamic_cast<SessPage*>(&nd.at()) && val->getB(2) )	((SessPage*)&nd.at())->pageList(ls);
 		else if( dynamic_cast<Project*>(&nd.at()) && val->getB(2) )	((Project*)&nd.at())->list(ls);
 		else if( dynamic_cast<Page*>(&nd.at()) && val->getB(2) )	((Page*)&nd.at())->pageList(ls);
+		else if( dynamic_cast<WidgetLib*>(&nd.at()) && !val->getB(2) )	((WidgetLib*)&nd.at())->list(ls);
 		else if( dynamic_cast<Widget*>(&nd.at()) && !val->getB(2) )	((Widget*)&nd.at())->wdgList(ls);
 	    }
 	    catch(TError err) { }
@@ -101,7 +102,7 @@ class attrList : public TFunction
     public:
 	attrList( ) : TFunction("AttrList")
 	{
-	    ioAdd( new IO("list",_("List"),IO::String,IO::Return) );
+	    ioAdd( new IO("list",_("List"),IO::String,IO::Return|IO::FullText) );
 	    ioAdd( new IO("addr",_("Address"),IO::String,IO::Default) );
 	    ioAdd( new IO("noUser",_("Without user's"),IO::Boolean,IO::Default,"1") );
 	    setStart(true);
@@ -119,9 +120,9 @@ class attrList : public TFunction
 		AutoHD<Widget> nd = nodePrev()->nodeAt(val->getS(1));
 		nd.at().attrList(ls);
 		if( val->getB(2) )
-		    for( int i_a = 0; i_a < ls.size(); i_a++ )
-			if( nd.at().attrAt(ls[i_a]).at().flgGlob()&Attr::IsUser )
-			{ ls.erase(ls.begin()+i_a); i_a--; }
+		for( int i_a = 0; i_a < ls.size(); i_a++ )
+		    if( nd.at().attrAt(ls[i_a]).at().flgGlob()&Attr::IsUser )
+		    { ls.erase(ls.begin()+i_a); i_a--; }
 	    }
 	    catch(TError err) { }
 	    for( int i_a = 0; i_a < ls.size(); i_a++ ) sls += ls[i_a]+"\n";
@@ -130,221 +131,100 @@ class attrList : public TFunction
 };
 
 //*************************************************
-//* Attr get, string                              *
+//* Attr get                                      *
 //*************************************************
-class attrGetS : public TFunction
+class attrGet : public TFunction
 {
     public:
-	attrGetS( ) : TFunction("AttrGetS")
+	attrGet( ) : TFunction("AttrGet")
 	{
 	    ioAdd( new IO("val",_("Value"),IO::String,IO::Return) );
 	    ioAdd( new IO("addr",_("Address"),IO::String,IO::Default) );
+	    ioAdd( new IO("attr",_("Attribute"),IO::String,IO::Default) );
 	    setStart(true);
 	}
 
-	string name( )	{ return _("Attribute get, string"); }
-	string descr( )	{ return _("Getting widget's attribute by string value."); }
+	string name( )	{ return _("Attribute get"); }
+	string descr( )	{ return _("Getting widget's attribute value."); }
 
 	void calc( TValFunc *val )
 	{
-	    try
+	    string a = val->getS(2);
+	    string addr = val->getS(1);
+	    val->setS(0,EVAL_STR);
+	    if( a.empty() )
 	    {
-		AutoHD<Attr> nd = nodePrev()->nodeAt(val->getS(1));
-		val->setS(0,nd.at().getS());
+		string c_val;
+		addr = "";
+		for( int i_off = 0; (c_val=TSYS::pathLev(val->getS(1),0,true,&i_off)).size(); )
+		{ if(!a.empty()) addr += "/"+a; a = c_val; }
+		if( a.size() < 2 || a.substr(0,2) != "a_" ) return;
+		a = a.substr(2);
 	    }
-	    catch(TError err) { }
+	    if( addr.empty() || a.empty() ) return;
+
+	    XMLNode req("get");
+	    req.setAttr("user",val->user())->setAttr("path",addr+"/%2fattr%2f"+a);
+	    mod->cntrCmd(&req);
+	    if( !atoi(req.attr("rez").c_str()) ) val->setS(0,req.text());
+
+	    /*try
+	    {
+		AutoHD<TCntrNode> nd = nodePrev()->nodeAt(val->getS(1));
+		if( dynamic_cast<Attr*>(&nd.at()) )		val->setS(0,((Attr*)&nd.at())->getS());
+		else if( dynamic_cast<Widget*>(&nd.at()) )	val->setS(0,((Widget*)&nd.at())->attrAt(val->getS(2)).at().getS());
+		else val->setS(0,"");
+	    }
+	    catch(TError err) { }*/
 	}
 };
 
 //*************************************************
-//* Attr get, integer                             *
+//* Attr set                                      *
 //*************************************************
-class attrGetI : public TFunction
+class attrSet : public TFunction
 {
     public:
-	attrGetI( ) : TFunction("AttrGetI")
-	{
-	    ioAdd( new IO("val",_("Value"),IO::Integer,IO::Return) );
-	    ioAdd( new IO("addr",_("Address"),IO::String,IO::Default) );
-	    setStart(true);
-	}
-
-	string name( )	{ return _("Attribute get, integer"); }
-	string descr( )	{ return _("Getting widget's attribute by integer value."); }
-
-	void calc( TValFunc *val )
-	{
-	    try
-	    {
-		AutoHD<Attr> nd = nodePrev()->nodeAt(val->getS(1));
-		val->setI(0,nd.at().getI());
-	    }
-	    catch(TError err) { }
-	}
-};
-
-//*************************************************
-//* Attr get, real                                *
-//*************************************************
-class attrGetR : public TFunction
-{
-    public:
-	attrGetR( ) : TFunction("AttrGetR")
-	{
-	    ioAdd( new IO("val",_("Value"),IO::Real,IO::Return) );
-	    ioAdd( new IO("addr",_("Address"),IO::String,IO::Default) );
-	    setStart(true);
-	}
-
-	string name( )	{ return _("Attribute get, real"); }
-	string descr( )	{ return _("Getting widget's attribute by real value."); }
-
-	void calc( TValFunc *val )
-	{
-	    try
-	    {
-		AutoHD<Attr> nd = nodePrev()->nodeAt(val->getS(1));
-		val->setR(0,nd.at().getR());
-	    }
-	    catch(TError err) { }
-	}
-};
-
-//*************************************************
-//* Attr get, boolean                             *
-//*************************************************
-class attrGetB : public TFunction
-{
-    public:
-	attrGetB( ) : TFunction("AttrGetB")
-	{
-	    ioAdd( new IO("val",_("Value"),IO::Boolean,IO::Return) );
-	    ioAdd( new IO("addr",_("Address"),IO::String,IO::Default) );
-	    setStart(true);
-	}
-
-	string name( )	{ return _("Attribute get, boolean"); }
-	string descr( )	{ return _("Getting widget's attribute by boolean value."); }
-
-	void calc( TValFunc *val )
-	{
-	    try
-	    {
-		AutoHD<Attr> nd = nodePrev()->nodeAt(val->getS(1));
-		val->setB(0,nd.at().getB());
-	    }
-	    catch(TError err) { }
-	}
-};
-
-//*************************************************
-//* Attr set, string                              *
-//*************************************************
-class attrSetS : public TFunction
-{
-    public:
-	attrSetS( ) : TFunction("AttrSetS")
+	attrSet( ) : TFunction("AttrSet")
 	{
 	    ioAdd( new IO("addr",_("Address"),IO::String,IO::Default) );
 	    ioAdd( new IO("val",_("Value"),IO::String,IO::Default) );
+	    ioAdd( new IO("attr",_("Attribute"),IO::String,IO::Default) );
 	    setStart(true);
 	}
 
-	string name( )	{ return _("Attribute set, string"); }
-	string descr( )	{ return _("Setup widget's attribute to string value."); }
+	string name( )	{ return _("Attribute set"); }
+	string descr( )	{ return _("Setup widget's attribute to value."); }
 
 	void calc( TValFunc *val )
 	{
-	    try
+	    string a = val->getS(2);
+	    string addr = val->getS(0);
+	    if( a.empty() )
 	    {
-		AutoHD<Attr> nd = nodePrev()->nodeAt(val->getS(0));
-		if( !(nd.at().flgGlob()&TFld::NoWrite) ) nd.at().setS(val->getS(1));
+		string c_val;
+		addr = "";
+		for( int i_off = 0; (c_val=TSYS::pathLev(val->getS(0),0,true,&i_off)).size(); )
+		{ if(!a.empty()) addr += "/"+a; a = c_val; }
+		if( a.size() < 2 || a.substr(0,2) != "a_" ) return;
+		a = a.substr(2);
 	    }
-	    catch(TError err) { }
+	    if( addr.empty() || a.empty() ) return;
+
+	    XMLNode req("set");
+	    req.setAttr("user",val->user())->setAttr("path",addr+"/%2fattr%2f"+a)->setText(val->getS(1));
+	    mod->cntrCmd(&req);
+
+	    /*try
+	    {
+		AutoHD<TCntrNode> nd = nodePrev()->nodeAt(val->getS(0));
+		if( dynamic_cast<Attr*>(&nd.at()) )		((Attr*)&nd.at())->setS(val->getS(1));
+		else if( dynamic_cast<Widget*>(&nd.at()) )	((Widget*)&nd.at())->attrAt(val->getS(2)).at().setS(val->getS(1));
+	    }
+	    catch(TError err) { }*/
 	}
 };
 
-//*************************************************
-//* Attr set, integer                             *
-//*************************************************
-class attrSetI : public TFunction
-{
-    public:
-	attrSetI( ) : TFunction("AttrSetI")
-	{
-	    ioAdd( new IO("addr",_("Address"),IO::String,IO::Default) );
-	    ioAdd( new IO("val",_("Value"),IO::Integer,IO::Default) );
-	    setStart(true);
-	}
-
-	string name( )	{ return _("Attribute set, integer"); }
-	string descr( )	{ return _("Setup widget's attribute to integer value."); }
-
-	void calc( TValFunc *val )
-	{
-	    try
-	    {
-		AutoHD<Attr> nd = nodePrev()->nodeAt(val->getS(0));
-		if( !(nd.at().flgGlob()&TFld::NoWrite) ) nd.at().setI(val->getI(1));
-	    }
-	    catch(TError err) { }
-	}
-};
-
-//*************************************************
-//* Attr set, real                                *
-//*************************************************
-class attrSetR : public TFunction
-{
-    public:
-	attrSetR( ) : TFunction("AttrSetR")
-	{
-	    ioAdd( new IO("addr",_("Address"),IO::String,IO::Default) );
-	    ioAdd( new IO("val",_("Value"),IO::Real,IO::Default) );
-	    setStart(true);
-	}
-
-	string name( )	{ return _("Attribute set, real"); }
-	string descr( )	{ return _("Setup widget's attribute to real value."); }
-
-	void calc( TValFunc *val )
-	{
-	    try
-	    {
-		AutoHD<Attr> nd = nodePrev()->nodeAt(val->getS(0));
-		if( !(nd.at().flgGlob()&TFld::NoWrite) ) nd.at().setR(val->getR(1));
-	    }
-	    catch(TError err) { }
-	}
-};
-
-//*************************************************
-//* Attr set, boolean                             *
-//*************************************************
-class attrSetB : public TFunction
-{
-    public:
-	attrSetB( ) : TFunction("AttrSetB")
-	{
-	    ioAdd( new IO("addr",_("Address"),IO::String,IO::Default) );
-	    ioAdd( new IO("val",_("Value"),IO::Boolean,IO::Default) );
-	    setStart(true);
-	}
-
-	string name( )	{ return _("Attribute set, boolean"); }
-	string descr( )	{ return _("Setup widget's attribute to boolean value."); }
-
-	void calc( TValFunc *val )
-	{
-	    try
-	    {
-		AutoHD<Attr> nd = nodePrev()->nodeAt(val->getS(0));
-		if( !(nd.at().flgGlob()&TFld::NoWrite) ) nd.at().setB(val->getB(1));
-	    }
-	    catch(TError err) { }
-	}
-};
-
-} 
+}
 
 #endif //VCAFUNCS_H

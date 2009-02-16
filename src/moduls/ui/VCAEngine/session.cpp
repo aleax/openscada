@@ -1011,6 +1011,7 @@ void SessWdg::setProcess( bool val )
 		compileFunc(TSYS::strSepParse(calcLang(),1,'.'),fio,calcProg(),mod->nodePath('.',true)+";");
 	    //-- Connect to compiled function --
 	    TValFunc::setFunc(&((AutoHD<TFunction>)SYS->nodeAt(mWorkProg,1)).at());
+	    TValFunc::setUser(ownerSess()->user());
 	}catch( TError err )
 	{ mess_err(nodePath().c_str(),_("Compile function '%s' by language '%s' for widget error: %s"),fio.id().c_str(),calcLang().c_str(),err.mess.c_str()); }
     }
@@ -1300,7 +1301,7 @@ void SessWdg::calc( bool first, bool last )
 		if( evId >= 0 )	setS(evId,wevent);
 
 		//-- Load data to calc area --
-		setR(0,1000./ownerSess()->period());
+		setR(0,1000./vmax(calcPer(),ownerSess()->period()));
 		setB(1,first);
 		setB(2,last);
 		for( int i_io = 3; i_io < ioSize( ); i_io++ )

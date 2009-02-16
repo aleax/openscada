@@ -264,8 +264,7 @@ void ModArch::Task( union sigval obj )
     //- Check to nopresent archive files -
     TConfig c_el(&mod->packFE());
     c_el.cfgViewAll(false);
-    int fld_cnt=0;
-    while( SYS->db().at().dataSeek(mod->filesDB(),mod->nodePath()+"Pack/",fld_cnt++,c_el) )
+    for( int fld_cnt=0; SYS->db().at().dataSeek(mod->filesDB(),mod->nodePath()+"Pack/",fld_cnt++,c_el); )
     {
 	struct stat file_stat;
 	if( stat(c_el.cfg("FILE").getS().c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG )

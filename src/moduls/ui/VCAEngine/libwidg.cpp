@@ -1094,17 +1094,9 @@ void CWidget::save_( )
 	    c_el.cfg("ID").setS(id()+"/"+m_attrs[i_a]);
 	    SYS->db().at().dataDel( db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", c_el );
 	}
-	/*int io_cnt = 0;
-	while( SYS->db().at().dataSeek( db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", io_cnt++, c_el ) )
-	{
-	    if( c_el.cfg("ID").getS().find(id()+"/") == 0 )
-	    { SYS->db().at().dataDel( db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", c_el ); io_cnt--; }
-	    c_el.cfg("ID").setS("");
-	}*/
 	c_el.setElem(&mod->elWdgUIO());
 	c_el.cfg("IDW").setS( ownerLWdg().id() );
-	int io_cnt = 0;
-	while( SYS->db().at().dataSeek( db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", io_cnt++, c_el ) )
+	for( int io_cnt = 0; SYS->db().at().dataSeek( db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", io_cnt++, c_el ); )
 	{
 	    if( c_el.cfg("ID").getS().find(id()+"/") == 0 )
 	    { SYS->db().at().dataDel( db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", c_el ); io_cnt--; }
@@ -1186,10 +1178,9 @@ void CWidget::saveIO( )
 	}
     }
     //- Clear no present IO for user io table -
-    int fld_cnt=0;
     c_elu.cfg("ID").setS("");
     c_elu.cfgViewAll(false);
-    while( SYS->db().at().dataSeek(db+"."+utbl,mod->nodePath()+utbl,fld_cnt++,c_elu) )
+    for( int fld_cnt=0; SYS->db().at().dataSeek(db+"."+utbl,mod->nodePath()+utbl,fld_cnt++,c_elu); )
     {
 	string sid = c_elu.cfg("ID").getS();
 	if( TSYS::pathLev(sid,0) == id() && TSYS::pathLev(sid,1).size() && !attrPresent(TSYS::pathLev(sid,1)) )

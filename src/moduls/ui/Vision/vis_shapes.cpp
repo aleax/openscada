@@ -296,6 +296,10 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    if( shD->welType == 2)	((QCheckBox*)shD->addrWdg)->setText(val.c_str());
 	    else if( shD->welType == 3 )	((QPushButton*)shD->addrWdg)->setText(val.c_str());
 	    break;
+	case 27:	//colorText
+	    shD->colorText = val;
+	    rel_cfg = true;
+	    break;
     }
     if( rel_cfg && !w->allAttrLoad() )
     {
@@ -394,8 +398,12 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    ((QPushButton*)shD->addrWdg)->setIcon(QPixmap::fromImage(img));
 		} else ((QPushButton*)shD->addrWdg)->setIcon(QPixmap());
 		//- Color -
+		QPalette plt;
 		QColor clr(shD->color.c_str());
-		((QPushButton*)shD->addrWdg)->setPalette( clr.isValid() ? QPalette(clr) : QPalette() );
+		if( clr.isValid() )	plt.setColor(QPalette::Button,clr);
+		clr = QColor(shD->colorText.c_str());
+		if( clr.isValid() )	plt.setColor(QPalette::ButtonText,clr);
+		((QPushButton*)shD->addrWdg)->setPalette(plt);
 		//- Checkable -
 		((QPushButton*)shD->addrWdg)->setCheckable(shD->checkable);
 		//- Value -

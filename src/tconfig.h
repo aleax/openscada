@@ -60,7 +60,7 @@ class TCfg
 	bool	view( )			{ return m_view; }
 	void	setView( bool vw )	{ m_view = vw; }
 
-	TFld &fld( )			{ return *m_fld; }
+	TFld &fld( )			{ return *mFld; }
 
 	//- Universal access -
 	string	getSEL( );
@@ -93,8 +93,8 @@ class TCfg
 	//Attributes
 	bool m_view;
 
-	TFld	*m_fld;
-	TConfig	&m_owner;
+	TFld	*mFld;
+	TConfig	&mOwner;
 };
 
 //*************************************************

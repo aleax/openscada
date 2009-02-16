@@ -140,10 +140,9 @@ void Func::loadIO( )
 {
     TConfig cfg(&mod->elFncIO());
 
-    int fld_cnt=0;
     vector<string> u_pos;
     cfg.cfg("F_ID").setS(id());
-    while( SYS->db().at().dataSeek(owner().fullDB()+"_io",mod->nodePath()+owner().tbl()+"_io",fld_cnt++,cfg) )
+    for( int fld_cnt=0; SYS->db().at().dataSeek(owner().fullDB()+"_io",mod->nodePath()+owner().tbl()+"_io",fld_cnt++,cfg); )
     {
 	string sid = cfg.cfg("ID").getS();
 
@@ -207,10 +206,9 @@ void Func::saveIO( )
     }
 
     //- Clear IO -
-    int fld_cnt=0;
     cfg.cfg("ID").setS("");
     cfg.cfgViewAll(false);
-    while( SYS->db().at().dataSeek(io_bd,io_cfgpath,fld_cnt++,cfg ) )
+    for( int fld_cnt=0; SYS->db().at().dataSeek(io_bd,io_cfgpath,fld_cnt++,cfg ); )
     {
 	if( ioId(cfg.cfg("ID").getS()) < 0 )
 	{
@@ -1524,12 +1522,12 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
 			}
 		    }
 		    //--- Make calc ---
-		    vfnc.calc();
+		    vfnc.calc(vfnc.user());
 		    //--- Process outputs ---
 		    for( i_p = 0; i_p < *(BYTE *)(cprg+2); i_p++ )
 		    {
 			p_p = (i_p>=r_pos)?i_p+1:i_p;
-		if( vfnc.ioFlg(p_p)&IO::Output )
+			if( vfnc.ioFlg(p_p)&IO::Output )
 			    switch(vfnc.ioType(p_p))
 			    {
 				case IO::String:  setValS(val,reg[*(BYTE *)(cprg+4+i_p)],vfnc.getS(p_p)); break;

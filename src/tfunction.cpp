@@ -215,16 +215,20 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 		    for( int i_io = 0; i_io < ioSize(); i_io++ )
 		    {
 			if( mIO[i_io]->hide() ) continue;
-
-			const char *tp = "";
-			switch(io(i_io)->type())
+			XMLNode *nd = ctrMkNode("fld",opt,-1,("/exec/io/"+io(i_io)->id()).c_str(),io(i_io)->name(),0664,"root","root");
+			if( nd )
 			{
-			    case IO::String:	tp = "str";	break;
-			    case IO::Integer:	tp = "dec";	break;
-			    case IO::Real:	tp = "real";	break;
-			    case IO::Boolean:	tp = "bool";	break;
+			    switch(io(i_io)->type())
+			    {
+				case IO::String:
+				    nd->setAttr("tp","str");
+				    if( io(i_io)->flg( )&IO::FullText ) nd->setAttr("cols","100")->setAttr("rows","4");
+				    break;
+				case IO::Integer:	nd->setAttr("tp","dec");	break;
+				case IO::Real:	nd->setAttr("tp","real");		break;
+				case IO::Boolean:	nd->setAttr("tp","bool");	break;
+			    }
 			}
-			ctrMkNode("fld",opt,-1,("/exec/io/"+io(i_io)->id()).c_str(),io(i_io)->name(),0664,"root","root",1,"tp",tp);
 		    }
 		//-- Add Calc button and Calc time --
 		ctrMkNode("fld",opt,-1,"/exec/n_clc",_("Number calcs"),0664,"root","root",1,"tp","dec");
@@ -316,7 +320,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	int n_tcalc = atoi(TBDS::genDBGet(nodePath()+"ntCalc","10",opt->attr("user")).c_str());
 	for(int i_c = 0; i_c < n_tcalc; i_c++ )
 	{
-	    mTVal->calc();
+	    mTVal->calc(opt->attr("user"));
 	    c_rez += mTVal->calcTm();
 	}
         mTVal->setCalcTm(c_rez);
@@ -409,8 +413,8 @@ void IO::setRez( const string &val )
 //*************************************************
 //* TValFunc                                      *
 //*************************************************
-TValFunc::TValFunc( const string &iname, TFunction *ifunc, bool iblk ) :
-    mName(iname), mFunc(NULL), mDimens(false), tm_calc(0.0), mBlk(iblk)
+TValFunc::TValFunc( const string &iname, TFunction *ifunc, bool iblk, const string &iuser ) :
+    mName(iname), mFunc(NULL), mDimens(false), tm_calc(0.0), mBlk(iblk), mUser(iuser)
 {
     setFunc(ifunc);
 }
@@ -579,9 +583,10 @@ void TValFunc::setB( unsigned id, char val )
     }
 }
 
-void TValFunc::calc( )
+void TValFunc::calc( const string &user )
 {
     if( !mFunc || !mFunc->startStat() ) return;
+    if( !user.empty() ) mUser = user;
     if( !mDimens ) mFunc->calc(this);
     else
     {

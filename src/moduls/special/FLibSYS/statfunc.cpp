@@ -91,6 +91,8 @@ void Lib::postEnable( int flag )
     if( flag&TCntrNode::NodeRestore )	return;
 
     //> Reg functions
+    reg( new sysCall() );
+
     reg( new tmDate() );
     reg( new tmTime() );
     reg( new tmFStr() );
@@ -107,6 +109,9 @@ void Lib::postEnable( int flag )
     reg( new strPath2Sep() );
     reg( new strEnc2HTML() );
     reg( new real2str() );
+    reg( new int2str() );
+    reg( new str2real() );
+    reg( new str2int() );
 
     reg( new varhOpen() );
     reg( new varhBufOpen() );

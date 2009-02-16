@@ -46,7 +46,8 @@ class IO
 	{
 	    Default = 0x00,	//Default mode (Input IO)
 	    Output  = 0x01,
-	    Return  = 0x02
+	    Return  = 0x02,
+	    FullText= 0x04
 	};
 
 	//Methods
@@ -152,10 +153,13 @@ class TValFunc
 {
     public:
 	//Methods
-	TValFunc( const string &iname = "", TFunction *ifunc = NULL, bool iblk = true );
+	TValFunc( const string &iname = "", TFunction *ifunc = NULL, bool iblk = true, const string &iuser = "root" );
 	virtual ~TValFunc( );
 
+	string user( )				{ return mUser; }
 	const string &vfName( )			{ return mName; }
+
+	void setUser( const string &iuser )	{ mUser = iuser; }
 	void setVfName( const string &inm )	{ mName = inm; }
 
 	void ioList( vector<string> &list );
@@ -197,7 +201,7 @@ class TValFunc
 	void	setDimens( bool set )	{ mDimens = set; }
 
 	//- Calc function -
-	virtual void calc( );
+	virtual void calc( const string &user = "" );
 	//- Calc time function -
 	double  calcTm( )		{ return tm_calc; }
 	void setCalcTm( double ivl )	{ tm_calc = ivl; }
@@ -216,10 +220,10 @@ class TValFunc
 	    IO::Type	tp;
 	    union
 	    {
-	        ResString *s;
-	        double r;
-	        int    i;
-	        char   b;
+		ResString *s;
+		double r;
+		int    i;
+		char   b;
 	    }val;
 	};
 
@@ -231,7 +235,8 @@ class TValFunc
 	void funcDisConnect( bool det = true );
 
 	//Attributes
-	string	mName;		//Value name
+	string	mName,		//Value name
+		mUser;		//Link to user
 	bool	mBlk,		//Blocked values screen
 		mDimens;	//Make dimension of the calc time
 

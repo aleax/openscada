@@ -82,7 +82,7 @@ Engine::Engine( string name ) : mSynthCom("echo \"%t\" | ru_tts | sox -t raw -s 
     idWlb = grpAdd("wlb_");
     idPrj = grpAdd("prj_");
     idSes = grpAdd("ses_");
-    idFnc = grpAdd("vca");
+    idFnc = grpAdd("vca",true);
 }
 
 Engine::~Engine( )
@@ -221,14 +221,8 @@ void Engine::postEnable( int flag )
     chldAdd( idFnc, new nodePresent() );
     chldAdd( idFnc, new wdgList() );
     chldAdd( idFnc, new attrList() );
-    chldAdd( idFnc, new attrGetS() );
-    chldAdd( idFnc, new attrGetI() );
-    chldAdd( idFnc, new attrGetR() );
-    chldAdd( idFnc, new attrGetB() );
-    chldAdd( idFnc, new attrSetS() );
-    chldAdd( idFnc, new attrSetI() );
-    chldAdd( idFnc, new attrSetR() );
-    chldAdd( idFnc, new attrSetB() );
+    chldAdd( idFnc, new attrGet() );
+    chldAdd( idFnc, new attrSet() );
 }
 
 void Engine::preDisable( int flag )

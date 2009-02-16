@@ -151,7 +151,7 @@ class ShapeFormEl : public WdgShape
 		string	img;
 		string	items;
 		string	cfg;
-		string	color;
+		string	color, colorText;
 	};
 
 	//Methods

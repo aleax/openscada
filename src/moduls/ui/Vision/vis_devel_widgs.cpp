@@ -363,7 +363,7 @@ QVariant ModInspAttr::data( const QModelIndex &index, int role ) const
 		case Qt::EditRole:		val = it->dataEdit();	break;
 		case Qt::UserRole:		val = it->flag();	break;
 		case Qt::DecorationRole:
-		    if( it->flag()&ModInspAttr::Item::Color )
+		    if( it->flag()&ModInspAttr::Item::Color && QColor(it->data().toString()).isValid() )
 		    {
 			QPixmap pct(16,16);
 			QPainter painter(&pct);

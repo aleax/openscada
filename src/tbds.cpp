@@ -454,8 +454,7 @@ void TBDS::load_( )
 	{
 	    TConfig c_el(&el_db);
 	    c_el.cfgViewAll(false);
-	    int fld_cnt = 0;
-	    while( SYS->db().at().dataSeek(fullDB(),nodePath()+"DB/",fld_cnt++,c_el) )
+	    for( int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),nodePath()+"DB/",fld_cnt++,c_el); )
 	    {
 		id = c_el.cfg("ID").getS();
 		type = c_el.cfg("TYPE").getS();

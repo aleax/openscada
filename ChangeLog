@@ -1,3 +1,15 @@
+2009-02-16 Roman
+- /Functions: FullText flag is added for IO string type. Used for string IO into fulltext mode.
+- !!:/Functions, /UI/VCAEngine: The attribute "user" is added to TFunction's content object (TValFunc) for permission control allowing into called functions.
+- !!!:/Special/FLibSYS: Added user's functions: sysCall(), int2str(), str2real(), str2int().
+- !:/UI/VCAEngine,/UI/Vision,/UI/WebVision: Attribute "colorText" to view "Button" of primitive "FormEl" is added and released.
+    It used for control to button text's color.
+- FIX:/UI/VCAEngine: Real frequency for widget's call into RunTime by attribute "f_frq" is fixed.
+- !:/UI/VCAEngine: Realised user's dependent access by function attrGet() and attrSet(). Used type independent functions for access to attributes value.
+- FIX:/UI/Vision: Not display the colored rectangle for an empty color into the attributes inspector.
+- FIX:/UI/WebVision: Setup "pgOpenSrc" attribute for widget-container is fixed.
+
+
 2009-02-13 Roman
 - !!:/UI/VCAEngine: User's functions removed to self file (vcaFuncs.h), tested and translated to Russian and Ukrainian.
 - /UI/VCAEngine: Access to attributes is enable for no parent linked widgets, include container pages.

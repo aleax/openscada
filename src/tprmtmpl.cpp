@@ -155,8 +155,7 @@ void TPrmTempl::load_( )
     vector<string> u_pos;
     TConfig cfg(&owner().owner().tplIOE());
     cfg.cfg("TMPL_ID").setS(id());
-    int io_cnt = 0;
-    while(SYS->db().at().dataSeek(owner().fullDB()+"_io",owner().owner().nodePath()+owner().tbl()+"_io",io_cnt++,cfg) )
+    for( int io_cnt = 0; SYS->db().at().dataSeek(owner().fullDB()+"_io",owner().owner().nodePath()+owner().tbl()+"_io",io_cnt++,cfg); )
     {
 	string sid = cfg.cfg("ID").getS();
 	cfg.cfg("ID").setS("");
@@ -211,10 +210,9 @@ void TPrmTempl::save_( )
 	SYS->db().at().dataSet(w_db+"_io",w_cfgpath+"_io",cfg);
     }
     //- Clear IO -
-    int fld_cnt=0;
     cfg.cfg("ID").setS("");
     cfg.cfgViewAll(false);
-    while( SYS->db().at().dataSeek(w_db+"_io",w_cfgpath+"_io",fld_cnt++,cfg ) )
+    for( int fld_cnt=0; SYS->db().at().dataSeek(w_db+"_io",w_cfgpath+"_io",fld_cnt++,cfg); )
     {
 	string sio = cfg.cfg("ID").getS( );
 	if( ioId(sio) < 0 || sio == "f_frq" || sio == "f_start" ||
