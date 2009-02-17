@@ -756,7 +756,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
 		    else wdg = wdgAt(incllist[i_w]);
 		    wdg.at().attrList(alist);
 		    for( int i_a = 0; i_a < alist.size(); i_a++ )
-		{
+		    {
 			string grpprm;
 			string idprm = alist[i_a];
 			string nprm  = wdg.at().attrAt(alist[i_a]).at().id();
@@ -771,7 +771,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
 			//-- Get attributes --
 			bool shwTmpl = wdg.at().attrAt(alist[i_a]).at().cfgTempl().size();
 			if( shwTmpl )	grpprm = TSYS::strSepParse(wdg.at().attrAt(alist[i_a]).at().cfgTempl(),0,'|');
-			
+
 			//-- Check select param --
 			if( shwTmpl && !shwAttr )
 			{
@@ -791,11 +791,13 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
 			}
 			else
 			{
+			    XMLNode *nel = NULL;
 			    if( wdg.at().attrAt(alist[i_a]).at().flgSelf()&Attr::CfgConst )
-				ctrMkNode("fld",opt,-1,(string("/links/lnk/el_")+idprm).c_str(),nprm,RWRWR_,"root","UI",2,"tp","str","elGrp",grpprm.c_str());
+				nel = ctrMkNode("fld",opt,-1,(string("/links/lnk/el_")+idprm).c_str(),nprm,RWRWR_,"root","UI",2,"tp","str","elGrp",grpprm.c_str());
 			    else
-				ctrMkNode("fld",opt,-1,(string("/links/lnk/el_")+idprm).c_str(),
+				nel = ctrMkNode("fld",opt,-1,(string("/links/lnk/el_")+idprm).c_str(),
 				    nprm,RWRWR_,"root","UI",4,"tp","str","dest","sel_ed","select",(string("/links/lnk/ls_")+idprm).c_str(),"elGrp",grpprm.c_str());
+			    if( nel && atoi(opt->attr("inclValue").c_str()) ) nel->setText(wdg.at().attrAt(alist[i_a]).at().cfgVal());
 			}
 		    }
 		}
@@ -822,6 +824,14 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
 	if( nattr.size() )	srcwdg = wdgAt(nwdg);
 	else nattr = nwdg;
 	string p_nm = TSYS::strSepParse(srcwdg.at().attrAt(nattr).at().cfgTempl(),0,'|');
+	//> Search first not config field if default field is config.
+	if( srcwdg.at().attrAt(nattr).at().flgSelf()&Attr::CfgConst )
+	{
+	    srcwdg.at().attrList(a_ls);
+	    for( int i_a = 0; i_a < a_ls.size(); i_a++ )
+		if( p_nm == TSYS::strSepParse(srcwdg.at().attrAt(a_ls[i_a]).at().cfgTempl(),0,'|') && !(srcwdg.at().attrAt(a_ls[i_a]).at().flgSelf()&Attr::CfgConst) )
+		{ nattr = a_ls[i_a]; break; }
+	}
 
 	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )
 	{

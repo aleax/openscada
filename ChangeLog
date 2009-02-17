@@ -1,3 +1,10 @@
+2009-02-17 Roman
+- FIX:/UI/VCAEngine: Real frequency for widget's call into RunTime by attribute "f_frq" is fixed.
+- /UI/VCAEngine: To links info request is added including values.
+- FIX:/UI/VCAEngine: Group value is fixed for groups included fields of constants.
+- /UI/Vision: For links getting is made performance improvement.
+
+
 2009-02-16 Roman
 - /Functions: FullText flag is added for IO string type. Used for string IO into fulltext mode.
 - !!:/Functions, /UI/VCAEngine: The attribute "user" is added to TFunction's content object (TValFunc) for permission control allowing into called functions.

@@ -1301,7 +1301,7 @@ void SessWdg::calc( bool first, bool last )
 		if( evId >= 0 )	setS(evId,wevent);
 
 		//-- Load data to calc area --
-		setR(0,1000./vmax(calcPer(),ownerSess()->period()));
+		setR(0,1000.0/(ownerSess()->period()*vmax(calcPer()/ownerSess()->period(),1)));
 		setB(1,first);
 		setB(2,last);
 		for( int i_io = 3; i_io < ioSize( ); i_io++ )

@@ -794,7 +794,8 @@ bool InspLnk::event( QEvent *event )
 
 void InspLnk::setWdg( const string &iwdg )
 {
-    string lnid, lngrp, lnwdg, lnatr;
+    string lnid, lngrp, lnwdg, lnatr, grpcd;
+    map<string,bool> ugrps;
 
     if( it_wdg != TSYS::strSepParse(iwdg,0,';') )
     {
@@ -808,7 +809,7 @@ void InspLnk::setWdg( const string &iwdg )
 
     //- Get links info -
     XMLNode info_req("info");
-    info_req.setAttr("path",it_wdg+"/%2flinks%2flnk")->setAttr("showAttr","1");
+    info_req.setAttr("path",it_wdg+"/%2flinks%2flnk")->setAttr("showAttr","1")->setAttr("inclValue","1");
     if( mainWin()->cntrIfCmd(info_req) ) return;
     XMLNode *rootel = info_req.childGet(0);
     //- Create widget's root items -
@@ -848,9 +849,13 @@ void InspLnk::setWdg( const string &iwdg )
 		wdg_it->setData(0,Qt::UserRole,QString(lnid.substr(3).c_str()));
 	    }
 	    //--- Get group value ---
-	    req.clear()->setAttr("path",it_wdg+"/%2flinks%2flnk%2fpr_"+lnid.substr(3));
-	    if( !mainWin()->cntrIfCmd(req) )
-	        wdg_it->setText(1,req.text().c_str());
+	    grpcd = TSYS::addr2str(wdg_it)+lngrp;
+	    if( ugrps.find(grpcd) == ugrps.end() )
+	    {
+		req.clear()->setAttr("path",it_wdg+"/%2flinks%2flnk%2fpr_"+lnid.substr(3));
+		if( !mainWin()->cntrIfCmd(req) ) wdg_it->setText(1,req.text().c_str());
+		ugrps.insert(std::pair<string,bool>(grpcd,true));
+	    }
 	}
 	//-- Search parameter --
 	QTreeWidgetItem *prm_it;
@@ -866,9 +871,10 @@ void InspLnk::setWdg( const string &iwdg )
 	    prm_it->setData(0,Qt::UserRole,QString(lnid.substr(3).c_str()));
 	}
 	//--- Get parameter's value ---
-	req.clear()->setAttr("path",it_wdg+"/%2flinks%2flnk%2f"+lnid);
-	if( !mainWin()->cntrIfCmd(req) )
-	    prm_it->setText(1,req.text().c_str());
+	prm_it->setText(1,rootel->childGet(i_l)->text().c_str());
+	//req.clear()->setAttr("path",it_wdg+"/%2flinks%2flnk%2f"+lnid);
+	//if( !mainWin()->cntrIfCmd(req) )
+	//    prm_it->setText(1,req.text().c_str());
     }
 
     //- Check for deleted links -
