@@ -363,14 +363,26 @@ QVariant ModInspAttr::data( const QModelIndex &index, int role ) const
 		case Qt::EditRole:		val = it->dataEdit();	break;
 		case Qt::UserRole:		val = it->flag();	break;
 		case Qt::DecorationRole:
-		    if( it->flag()&ModInspAttr::Item::Color && QColor(it->data().toString()).isValid() )
+		    if( it->flag()&ModInspAttr::Item::Color )
 		    {
 			QPixmap pct(16,16);
 			QPainter painter(&pct);
-			painter.fillRect(pct.rect(),QBrush(QColor(it->data().toString())));
-			painter.drawRect(pct.rect().adjusted(0,0,-1,-1));
-			painter.end();
-			val = pct;
+			QColor clr;
+			size_t found = it->data().toString().toStdString().find("-");
+			if (found != string::npos)
+			{
+			    clr = QColor( it->data().toString().toStdString().substr(0,found).c_str() );
+			    clr.setAlpha( atoi(it->data().toString().toStdString().substr(found+1).c_str()) );
+			}
+			else clr = QColor(it->data().toString());
+
+			if( clr.isValid() )
+			{
+			    painter.fillRect(pct.rect(),QBrush(clr));
+			    painter.drawRect(pct.rect().adjusted(0,0,-1,-1));
+			    painter.end();
+			    val = pct;
+			}
 		    }
 		    else if( it->flag()&ModInspAttr::Item::Font )
 		    {
@@ -1768,7 +1780,14 @@ void LineEditProp::callDlg( )
     }
     else if( type() == LineEditProp::Color )
     {
-	QColor clr(value());
+        QColor clr;
+        size_t found = value().toStdString().find("-");
+        if (found != string::npos)
+        {
+            clr = QColor( value().toStdString().substr(0,found).c_str() );
+            clr.setAlpha( atoi(value().toStdString().substr(found+1).c_str()) );
+        }
+        else clr = QColor(value());
 	clr = QColorDialog::getColor(clr,this);
 	if( clr.isValid() ) setValue(clr.name());
 	setFocus();

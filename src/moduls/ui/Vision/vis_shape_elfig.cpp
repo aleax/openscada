@@ -84,7 +84,6 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
     float MotionWidth;
     QVector<inundationItem> inundationItems_temp;
     QVector<ShapeItem> shapeItems_temp;
-
     string backimg;
     QImage img;
     rect_num = -1;
@@ -92,6 +91,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
     {
         case -4:
             // This have no matter for the Primitive ID, its done only for outer needs
+            if( runW ) break;
             shapePnts_temp = elFD->shapePnts;
             shapeWidths_temp = elFD->shapeWidths;
             shapeColors_temp = elFD->shapeColors;
@@ -120,9 +120,20 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
             rel_list = true;
             break;
         case 21:	//lineClr
-            (*colors)[-5] = QColor(val.c_str());
+        {
+            QColor res_color;
+            size_t found;
+            found = val.find("-");
+            if (found!=string::npos)
+            {
+                res_color = QColor( val.substr(0,found).c_str() );
+                res_color.setAlpha( atoi(val.substr(found+1).c_str()) );
+                (*colors)[-5] = res_color;
+            }
+            else (*colors)[-5] = QColor(val.c_str());
             rel_list = true;
             break;
+        }
         case 22:	//lineStyle
             switch(atoi(val.c_str()))
             {
@@ -143,13 +154,35 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
             rel_list = true;
             break;
         case 24:	//bordClr
-            (*colors)[-6] = QColor(val.c_str());
+        {
+            QColor res_color;
+            size_t found;
+            found = val.find("-");
+            if (found!=string::npos)
+            {
+                res_color = QColor( val.substr(0,found).c_str() );
+                res_color.setAlpha( atoi(val.substr(found+1).c_str()) );
+                (*colors)[-6] = res_color;
+            }
+            else (*colors)[-6] = QColor(val.c_str());
             rel_list = true;
             break;
+        }
         case 25:	//fillClr
-            (*colors)[-7] = QColor(val.c_str());
+        {
+            QColor res_color;
+            size_t found;
+            found = val.find("-");
+            if (found!=string::npos)
+            {
+                res_color = QColor( val.substr(0,found).c_str() );
+                res_color.setAlpha( atoi(val.substr(found+1).c_str()) );
+                (*colors)[-7] = res_color;
+            }
+            else (*colors)[-7] = QColor(val.c_str());
 	    rel_list = true;
             break;
+        }
         case 26:	//fillImg
         {
             backimg = w->resGet(val);
@@ -185,9 +218,20 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                     case 2 : 
                         (*widths)[pnt] = atof(val.c_str());
                         break;
-                    case 3 : 
-                        (*colors)[pnt] = QColor(val.c_str());
+                    case 3 :
+                    {
+                        QColor res_color;
+                        size_t found;
+                        found = val.find("-");
+                        if (found!=string::npos)
+                        {
+                            res_color = QColor( val.substr(0,found).c_str() );
+                            res_color.setAlpha( atoi(val.substr(found+1).c_str()) );
+                            (*colors)[pnt] = res_color;
+                        }
+                        else (*colors)[pnt] = QColor(val.c_str());
                         break;
+                    }
                     case 4 :
                         backimg = w->resGet(val);
                         if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
@@ -340,10 +384,19 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 //-- Line color --
                 el_s = TSYS::strSepParse(sel,0,':',&el_off);
                 if( sscanf(el_s.c_str(), "c%d", &w) == 1 ) color  = w;
-                else if( QColor(el_s.c_str()).isValid() )
+                else if( el_s.size() )
                 {
                     color = c_index;
-                    (*colors)[c_index] = QColor(el_s.c_str());
+                    QColor res_color;
+                    size_t found;
+                    found = el_s.find("-");
+                    if (found!=string::npos)
+                    {
+                        res_color = QColor( el_s.substr(0,found).c_str() );
+                        res_color.setAlpha( atoi(el_s.substr(found+1).c_str()) );
+                        (*colors)[c_index] = res_color;
+                    }
+                    else (*colors)[c_index] = QColor(el_s.c_str());
                     c_index -= 1;
                 }
                 else color = -5;
@@ -361,10 +414,19 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 //-- Border color --
                 el_s = TSYS::strSepParse(sel,0,':',&el_off);
                 if( sscanf(el_s.c_str(), "c%d", &w) == 1 ) bord_color  = w;
-                else if( QColor(el_s.c_str()).isValid() )
+                else if( el_s.size() )
                 {
                     bord_color = c_index;
-                    (*colors)[c_index] = QColor(el_s.c_str());
+                    QColor res_color;
+                    size_t found;
+                    found = el_s.find("-");
+                    if (found!=string::npos)
+                    {
+                        res_color = QColor( el_s.substr(0,found).c_str() );
+                        res_color.setAlpha( atoi(el_s.substr(found+1).c_str()) );
+                        (*colors)[c_index] = res_color;
+                    }
+                    else (*colors)[c_index] = QColor(el_s.c_str());
                     c_index -= 1;
                 }
                 else bord_color = -6;
@@ -474,10 +536,19 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 //-- Line color --
                 el_s = TSYS::strSepParse(sel,0,':',&el_off);
                 if( sscanf(el_s.c_str(), "c%d", &w) == 1 ) color  = w;
-                else if( QColor(el_s.c_str()).isValid() )
+                else if( el_s.size() )
                 {
                     color = c_index;
-                    (*colors)[c_index] = QColor(el_s.c_str());
+                    QColor res_color;
+                    size_t found;
+                    found = el_s.find("-");
+                    if (found!=string::npos)
+                    {
+                        res_color = QColor( el_s.substr(0,found).c_str() );
+                        res_color.setAlpha( atoi(el_s.substr(found+1).c_str()) );
+                        (*colors)[c_index] = res_color;
+                    }
+                    else (*colors)[c_index] = QColor(el_s.c_str());
                     c_index -= 1;
                 }
                 else color = -5;
@@ -496,10 +567,19 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 //-- Border color --
                 el_s = TSYS::strSepParse(sel,0,':',&el_off);
                 if( sscanf(el_s.c_str(), "c%d", &w) == 1 ) bord_color  = w;
-                else if( QColor(el_s.c_str()).isValid() )
+                else if( el_s.size() )
                 {
                     bord_color = c_index;
-                    (*colors)[c_index] = QColor(el_s.c_str());
+                    QColor res_color;
+                    size_t found;
+                    found = el_s.find("-");
+                    if (found!=string::npos)
+                    {
+                        res_color = QColor( el_s.substr(0,found).c_str() );
+                        res_color.setAlpha( atoi(el_s.substr(found+1).c_str()) );
+                        (*colors)[c_index] = res_color;
+                    }
+                    else (*colors)[c_index] = QColor(el_s.c_str());
                     c_index -= 1;
                 }
                 else bord_color = -6;
@@ -538,20 +618,20 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 StartMotionPos  = unRotate( StartMotionPos, ang, CtrlMotionPos_1.x(), CtrlMotionPos_1.y() );
                 if( StartMotionPos.x() >= a )	StartMotionPos = QPointF( a, (StartMotionPos.y()/StartMotionPos.x())*a );
                 if( StartMotionPos.x() < -a )	StartMotionPos = QPointF( -a, (StartMotionPos.y()/StartMotionPos.x())*(-a) );
-		t_start = acos(StartMotionPos.x()/a)/(2*M_PI);
-		if( StartMotionPos.y() > 0 )	t_start = 1-t_start;
+                t_start = acos(StartMotionPos.x()/a)/(2*M_PI);
+                if( StartMotionPos.y() > 0 )	t_start = 1-t_start;
                 EndMotionPos = unRotate( EndMotionPos, ang, CtrlMotionPos_1.x(), CtrlMotionPos_1.y() );
                 if( EndMotionPos.x() < -a )	EndMotionPos = QPointF( -a, (EndMotionPos.y()/EndMotionPos.x())*(-a) );
                 if( EndMotionPos.x() >= a )	EndMotionPos = QPointF( a, (EndMotionPos.y()/EndMotionPos.x())*(a) );
-		t_end = acos(EndMotionPos.x()/a)/(2*M_PI);
+                t_end = acos(EndMotionPos.x()/a)/(2*M_PI);
                 if( EndMotionPos.y() > 0 )	t_end = 1-t_end;
                 if( t_start > t_end ) 		t_end+=1;
                 if( (t_end-1) > t_start ) 	t_end-=1;
-                if( t_start == t_end ) 		t_end+=1;
+                if( fabs(t_start - t_end) < 0.0027777777777 ) t_end+=1;
                 if( t_end > t_start && t_start >= 1 && t_end > 1 )	{ t_start-=1; t_end-=1; }
                 CtrlMotionPos_4 = QPointF( t_start, t_end );
-               
-		//-- Building the path of the line and adding it to container --
+
+                //-- Building the path of the line and adding it to container --
                 if( (*widths)[bord_width] > 0.01 )
                     shapeItems.push_back( ShapeItem(newPath, newPath, p[0], p[1], p[2], p[3], p[4], CtrlMotionPos_4,
                                           color, bord_color, style, width, bord_width, 2, angle_temp) );
@@ -639,10 +719,19 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 //-- Line color --
                 el_s = TSYS::strSepParse(sel,0,':',&el_off);
                 if( sscanf(el_s.c_str(), "c%d", &w) == 1 ) color  = w;
-                else if( QColor(el_s.c_str()).isValid() )
+                else if( el_s.size() )
                 {
                     color = c_index;
-                    (*colors)[c_index] = QColor(el_s.c_str());
+                    QColor res_color;
+                    size_t found;
+                    found = el_s.find("-");
+                    if (found!=string::npos)
+                    {
+                        res_color = QColor( el_s.substr(0,found).c_str() );
+                        res_color.setAlpha( atoi(el_s.substr(found+1).c_str()) );
+                        (*colors)[c_index] = res_color;
+                    }
+                    else (*colors)[c_index] = QColor(el_s.c_str());
                     c_index -= 1;
                 }
                 else color = -5;
@@ -660,10 +749,19 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 //-- Border color --
                 el_s = TSYS::strSepParse(sel,0,':',&el_off);
                 if( sscanf(el_s.c_str(), "c%d", &w) == 1 ) bord_color  = w;
-                else if( QColor(el_s.c_str()).isValid() )
+                else if( el_s.size() )
                 {
                     bord_color = c_index;
-                    (*colors)[c_index] = QColor(el_s.c_str());
+                    QColor res_color;
+                    size_t found;
+                    found = el_s.find("-");
+                    if (found!=string::npos)
+                    {
+                        res_color = QColor( el_s.substr(0,found).c_str() );
+                        res_color.setAlpha( atoi(el_s.substr(found+1).c_str()) );
+                        (*colors)[c_index] = res_color;
+                    }
+                    else (*colors)[c_index] = QColor(el_s.c_str());
                     c_index -= 1;
                 }
                 else bord_color = -6;
@@ -726,10 +824,19 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 }
                 //- Check fill color -
                 if( sscanf(fl_color.c_str(), "c%d", &wn) == 1 ) color  = wn;
-                else if( QColor(fl_color.c_str()).isValid() )
+                else if( fl_color.size() )
                 {
                     color = c_index;
-                    (*colors)[c_index] = QColor(fl_color.c_str());
+                    QColor res_color;
+                    size_t found;
+                    found = fl_color.find("-");
+                    if (found!=string::npos)
+                    {
+                        res_color = QColor( fl_color.substr(0,found).c_str() );
+                        res_color.setAlpha( atoi(fl_color.substr(found+1).c_str()) );
+                        (*colors)[c_index] = res_color;
+                    }
+                    else (*colors)[c_index] = QColor(fl_color.c_str());
                     c_index -= 1;
                 }
                 else color = -7;
@@ -745,7 +852,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 else img = -5;
 
                 //- Make elements -
-                if( fl_pnts.size() > 1 ) 
+                if( fl_pnts.size() > 1 )
                     inundationItems.push_back( inundationItem(newPath,color,img, fl_pnts, fl_pnts) );
             }
         }
@@ -862,43 +969,43 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
             {
                 //-- Detecting if the shapeItems have changed --
                 if( shapeItems[i].path != shapeItems_temp[i].path )
-                    { fill_build = true; break; }
+                    { fill_build = true; break;}
                 if( shapeItems[i].pathSimple != shapeItems_temp[i].pathSimple )
-                    { fill_build = true; break; }
+                    { fill_build = true; break;}
                 if( (int)TSYS::realRound(shapeItems[i].ctrlPos4.x(), 3, true) != 
                     (int)TSYS::realRound(shapeItems_temp[i].ctrlPos4.x(), 3, true) ||
                     (int)TSYS::realRound(shapeItems[i].ctrlPos4.y(), 3, true) != 
-                     (int)TSYS::realRound(shapeItems_temp[i].ctrlPos4.y(), 3, true) )
-                    { fill_build = true; break; }
+                    (int)TSYS::realRound(shapeItems_temp[i].ctrlPos4.y(), 3, true) )
+                    { fill_build = true; break;}
                 if( TSYS::realRound((*pnts)[shapeItems[i].n1].x(),2,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n1].x(),2,true) ||
                     TSYS::realRound((*pnts)[shapeItems[i].n1].y(),2,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n1].y(),2,true) )
-                    { fill_build = true; break; }
+                    { fill_build = true; break;}
                 if( TSYS::realRound((*pnts)[shapeItems[i].n2].x(),2,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n2].x(),2,true) ||
                     TSYS::realRound((*pnts)[shapeItems[i].n2].y(),2,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n2].y(),2,true) )
-                    { fill_build = true; break; }
+                    { fill_build = true; break;}
                 if( TSYS::realRound((*pnts)[shapeItems[i].n3].x(),2,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n3].x(),2,true) ||
                     TSYS::realRound((*pnts)[shapeItems[i].n3].y(),2,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n3].y(),2,true) )
-                    { fill_build = true; break; }
+                    { fill_build = true; break;}
                 if( TSYS::realRound((*pnts)[shapeItems[i].n4].x(),2,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n4].x(),2,true) ||
                     TSYS::realRound((*pnts)[shapeItems[i].n4].y(),2,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n4].y(),2,true) )
-                    { fill_build = true; break; }
+                    { fill_build = true; break;}
                 if( TSYS::realRound((*pnts)[shapeItems[i].n5].x(),2,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n5].x(),2,true) ||
                     TSYS::realRound((*pnts)[shapeItems[i].n5].y(),2,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n5].y(),2,true) )
-                    { fill_build = true; break; }
-                if( (*colors)[shapeItems[i].lineColor].rgb() != shapeColors_temp[shapeItems_temp[i].lineColor].rgb() )
-                    { fill_build = true; break; }
-                if( (*colors)[shapeItems[i].borderColor].rgb() != shapeColors_temp[shapeItems_temp[i].borderColor].rgb() )
-                    { fill_build = true; break; }
+                    { fill_build = true; break;}
+                if( (*colors)[shapeItems[i].lineColor].rgba() != shapeColors_temp[shapeItems_temp[i].lineColor].rgba() )
+                    { fill_build = true; break;}
+                if( (*colors)[shapeItems[i].borderColor].rgba() != shapeColors_temp[shapeItems_temp[i].borderColor].rgba() )
+                    { fill_build = true; break;}
                 if( (*styles)[shapeItems[i].style] != shapeStyles_temp[shapeItems_temp[i].style] )
-                    { fill_build = true; break; }
+                    { fill_build = true; break;}
                 if( (*widths)[shapeItems[i].width] != shapeWidths_temp[shapeItems_temp[i].width] )
-                    { fill_build = true; break; }
+                    { fill_build = true; break;}
                 if( (*widths)[shapeItems[i].border_width] != shapeWidths_temp[shapeItems_temp[i].border_width] )
-                    { fill_build = true; break; }
+                    { fill_build = true; break;}
                 if( shapeItems[i].type != shapeItems_temp[i].type )
-                    { fill_build = true; break; }
+                    { fill_build = true; break;}
                 if( (int)TSYS::realRound(shapeItems[i].angle_temp, 2, true) != (int)TSYS::realRound(shapeItems_temp[i].angle_temp, 2, true) )
-                    { fill_build = true; break; }
+                    { fill_build = true; break;}
             }
         paint = fill_build;
         //-- Detecting the difference beetwen inundationItems --
@@ -909,6 +1016,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
             paint = true;
         }
         else
+        {
             for( int i_f = 0; i_f < inundationItems.size(); i_f++ )
             {
                 if( (inundationItems[i_f].number_shape != inundationItems_temp[i_f].number_point) || fill_build )// && shapeItems != shapeItems_temp
@@ -918,7 +1026,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                     paint = true;
                     continue;
                 }
-                if( (*colors)[inundationItems[i_f].brush].rgb() != shapeColors_temp[inundationItems_temp[i_f].brush].rgb() ||
+                if( (*colors)[inundationItems[i_f].brush].rgba() != shapeColors_temp[inundationItems_temp[i_f].brush].rgba() ||
                       inundationItems_temp[i_f].brush != inundationItems[i_f].brush)
                     {
                         inundationItems_temp[i_f].brush = inundationItems[i_f].brush;
@@ -931,6 +1039,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                         paint = true;
                     }
             }
+        }
 
         inundationItems.clear();
         inundationItems = in_build;
@@ -1014,13 +1123,33 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
     }
     if( up && !w->allAttrLoad( ) && uiPrmPos == -1 && 
         (paint || (shapeItems_temp.size() == 0) || (inundationItems_temp.size() == 0)) )
+        {
             paintImage( w );
+            if( runW )
+            {
+                shapePnts_temp = elFD->shapePnts;
+                shapeWidths_temp = elFD->shapeWidths;
+                shapeColors_temp = elFD->shapeColors;
+                shapeImages_temp = elFD->shapeImages;
+                shapeStyles_temp = elFD->shapeStyles;
+            }
+
+        }
 
     if( up && !w->allAttrLoad( ) && uiPrmPos != -1 &&
         (paint || (shapeItems_temp.size() == 0) || (inundationItems_temp.size() == 0)) )
         {
             paintImage( w );
             w->update();
+            if( runW )
+            {
+                shapePnts_temp = elFD->shapePnts;
+                shapeWidths_temp = elFD->shapeWidths;
+                shapeColors_temp = elFD->shapeColors;
+                shapeImages_temp = elFD->shapeImages;
+                shapeStyles_temp = elFD->shapeStyles;
+            }
+
         }
     return up;
 }
@@ -1065,8 +1194,18 @@ bool ShapeElFigure::shapeSave( WdgView *w )
                                 TSYS::int2str((int)TSYS::realRound((*widths)[shapeItems[i_s].width]/scale)))+":";
                 else if( shapeItems[i_s].width > 0  ) elList += "w" +  TSYS::int2str(shapeItems[i_s].width) + ":";
                 if( shapeItems[i_s].lineColor <= -10 || shapeItems[i_s].lineColor == -5 )
-                    elList = elList + (((*colors)[shapeItems[i_s].lineColor].name() == (*colors)[-5].name()) ? "" : 
-                                        (*colors)[shapeItems[i_s].lineColor].name().toAscii().data())+":";
+                {
+                    if( (*colors)[shapeItems[i_s].lineColor].alpha() < 255 )
+                    {
+                        if( (*colors)[shapeItems[i_s].lineColor].rgba() == (*colors)[-5].rgba() )
+                            elList = elList + "" + ":";
+                        else
+                            elList = elList + (*colors)[shapeItems[i_s].lineColor].name().toAscii().data()+"-"+
+                                              TSYS::int2str((*colors)[shapeItems[i_s].lineColor].alpha())+":";
+                    }
+                    else elList = elList + (((*colors)[shapeItems[i_s].lineColor].name() == (*colors)[-5].name()) ? "" : 
+                                  (*colors)[shapeItems[i_s].lineColor].name().toAscii().data())+":";
+                }
                 else if( shapeItems[i_s].lineColor > 0  ) elList = elList + "c" +  TSYS::int2str(shapeItems[i_s].lineColor) + ":";
 
                 if( shapeItems[i_s].border_width <= -10 || shapeItems[i_s].border_width == -6 )
@@ -1074,8 +1213,18 @@ bool ShapeElFigure::shapeSave( WdgView *w )
                             TSYS::int2str((int)TSYS::realRound((*widths)[shapeItems[i_s].border_width]/scale)))+":";
                 else if( shapeItems[i_s].border_width > 0  ) elList += "w" +  TSYS::int2str(shapeItems[i_s].border_width) + ":";
                 if( shapeItems[i_s].borderColor <= -10 || shapeItems[i_s].borderColor == -6 )
-                    elList = elList + (((*colors)[shapeItems[i_s].borderColor].name() == (*colors)[-6].name()) ? "" : 
-                                        (*colors)[shapeItems[i_s].borderColor].name().toAscii().data())+":";
+                {
+                    if( (*colors)[shapeItems[i_s].borderColor].alpha() < 255 )
+                    {
+                        if( (*colors)[shapeItems[i_s].borderColor].rgba() == (*colors)[-6].rgba() )
+                            elList = elList + "" + ":";
+                        else
+                            elList = elList +  (*colors)[shapeItems[i_s].borderColor].name().toAscii().data()+"-"+
+                                               TSYS::int2str((*colors)[shapeItems[i_s].borderColor].alpha())+":";
+                    }
+                    else elList = elList + (((*colors)[shapeItems[i_s].borderColor].name() == (*colors)[-6].name()) ? "" : 
+                                             (*colors)[shapeItems[i_s].borderColor].name().toAscii().data())+":";
+                }
                 else if( shapeItems[i_s].borderColor > 0  ) elList = elList + "c" +  TSYS::int2str(shapeItems[i_s].borderColor) + ":";
                 if( shapeItems[i_s].style <= -10 || shapeItems[i_s].style == -5 )
                     elList = elList + (((*styles)[shapeItems[i_s].style] == (*styles)[-5]) ? "" : 
@@ -1114,16 +1263,36 @@ bool ShapeElFigure::shapeSave( WdgView *w )
                             TSYS::int2str((int)TSYS::realRound((*widths)[shapeItems[i_s].width]/scale)))+":";
                 else if( shapeItems[i_s].width > 0  ) elList += "w" +  TSYS::int2str(shapeItems[i_s].width) + ":";
                 if( shapeItems[i_s].lineColor <= -10 || shapeItems[i_s].lineColor == -5 )
-                    elList = elList + (((*colors)[shapeItems[i_s].lineColor].name() == (*colors)[-5].name()) ? "" : 
-                                        (*colors)[shapeItems[i_s].lineColor].name().toAscii().data())+":";
+                {
+                    if( (*colors)[shapeItems[i_s].lineColor].alpha() < 255 )
+                    {
+                        if( (*colors)[shapeItems[i_s].lineColor].rgba() == (*colors)[-5].rgba() )
+                            elList = elList + "" + ":";
+                        else
+                            elList = elList + (*colors)[shapeItems[i_s].lineColor].name().toAscii().data()+"-"+
+                                              TSYS::int2str((*colors)[shapeItems[i_s].lineColor].alpha())+":";
+                    }
+                    else elList = elList + (((*colors)[shapeItems[i_s].lineColor].name() == (*colors)[-5].name()) ? "" : 
+                                             (*colors)[shapeItems[i_s].lineColor].name().toAscii().data())+":";
+                }
                 else if( shapeItems[i_s].lineColor > 0  ) elList = elList + "c" +  TSYS::int2str(shapeItems[i_s].lineColor) + ":";
                 if( shapeItems[i_s].border_width <= -10 || shapeItems[i_s].border_width == -6 )
                     elList += (((int)TSYS::realRound((*widths)[shapeItems[i_s].border_width]) == (int)TSYS::realRound((*widths)[-6])) ? "" : 
                             TSYS::int2str((int)TSYS::realRound((*widths)[shapeItems[i_s].border_width]/scale)))+":";
                 else if( shapeItems[i_s].border_width > 0  ) elList += "w" +  TSYS::int2str(shapeItems[i_s].border_width) + ":";
                 if( shapeItems[i_s].borderColor <= -10 || shapeItems[i_s].borderColor == -6 )
-                    elList = elList + (((*colors)[shapeItems[i_s].borderColor].name() == (*colors)[-6].name()) ? "" : 
-                                        (*colors)[shapeItems[i_s].borderColor].name().toAscii().data())+":";
+                {
+                    if( (*colors)[shapeItems[i_s].borderColor].alpha() < 255 )
+                    {
+                        if( (*colors)[shapeItems[i_s].borderColor].rgba() == (*colors)[-6].rgba() )
+                            elList = elList + "" + ":";
+                        else
+                            elList = elList +  (*colors)[shapeItems[i_s].borderColor].name().toAscii().data()+"-"+
+                                               TSYS::int2str((*colors)[shapeItems[i_s].borderColor].alpha())+":";
+                    }
+                    else elList = elList + (((*colors)[shapeItems[i_s].borderColor].name() == (*colors)[-6].name()) ? "" : 
+                                             (*colors)[shapeItems[i_s].borderColor].name().toAscii().data())+":";
+                }
                 else if( shapeItems[i_s].borderColor > 0  ) elList = elList + "c" +  TSYS::int2str(shapeItems[i_s].borderColor) + ":";
 
                 if( shapeItems[i_s].style <= -10 || shapeItems[i_s].style == -5 )
@@ -1158,16 +1327,36 @@ bool ShapeElFigure::shapeSave( WdgView *w )
                             TSYS::int2str((int)TSYS::realRound((*widths)[shapeItems[i_s].width]/scale)))+":";
                 else if( shapeItems[i_s].width > 0  ) elList += "w" +  TSYS::int2str(shapeItems[i_s].width) + ":";
                 if( shapeItems[i_s].lineColor <= -10 || shapeItems[i_s].lineColor == -5 )
-                    elList = elList + (((*colors)[shapeItems[i_s].lineColor].name() == (*colors)[-5].name()) ? "" : 
-                                        (*colors)[shapeItems[i_s].lineColor].name().toAscii().data())+":";
+                {
+                    if( (*colors)[shapeItems[i_s].lineColor].alpha() < 255 )
+                    {
+                        if( (*colors)[shapeItems[i_s].lineColor].rgba() == (*colors)[-5].rgba() )
+                            elList = elList + "" + ":";
+                        else
+                            elList = elList + (*colors)[shapeItems[i_s].lineColor].name().toAscii().data()+"-"+
+                                              TSYS::int2str((*colors)[shapeItems[i_s].lineColor].alpha())+":";
+                    }
+                    else elList = elList + (((*colors)[shapeItems[i_s].lineColor].name() == (*colors)[-5].name()) ? "" : 
+                                              (*colors)[shapeItems[i_s].lineColor].name().toAscii().data())+":";
+                }
                 else if( shapeItems[i_s].lineColor > 0  ) elList = elList + "c" +  TSYS::int2str(shapeItems[i_s].lineColor) + ":";
                 if( shapeItems[i_s].border_width <= -10 || shapeItems[i_s].border_width == -6 )
                     elList += (((int)TSYS::realRound((*widths)[shapeItems[i_s].border_width]) == (int)TSYS::realRound((*widths)[-6])) ? "" : 
                             TSYS::int2str((int)TSYS::realRound((*widths)[shapeItems[i_s].border_width]/scale)))+":";
                 else if( shapeItems[i_s].border_width > 0  ) elList += "w" +  TSYS::int2str(shapeItems[i_s].border_width) + ":";
                 if( shapeItems[i_s].borderColor <= -10 || shapeItems[i_s].borderColor == -6 )
-                    elList = elList + (((*colors)[shapeItems[i_s].borderColor].name() == (*colors)[-6].name()) ? "" : 
-                            (*colors)[shapeItems[i_s].borderColor].name().toAscii().data())+":";
+                {
+                    if( (*colors)[shapeItems[i_s].borderColor].alpha() < 255 )
+                    {
+                        if( (*colors)[shapeItems[i_s].borderColor].rgba() == (*colors)[-6].rgba() )
+                            elList = elList + "" + ":";
+                        else
+                            elList = elList +  (*colors)[shapeItems[i_s].borderColor].name().toAscii().data()+"-"+
+                                               TSYS::int2str((*colors)[shapeItems[i_s].borderColor].alpha())+":";
+                    }
+                    else elList = elList + (((*colors)[shapeItems[i_s].borderColor].name() == (*colors)[-6].name()) ? "" : 
+                                             (*colors)[shapeItems[i_s].borderColor].name().toAscii().data())+":";
+                }
                 else if( shapeItems[i_s].borderColor > 0  ) elList = elList + "c" +  TSYS::int2str(shapeItems[i_s].borderColor) + ":";
 
                 if( shapeItems[i_s].style <= -10 || shapeItems[i_s].style == -5 )
@@ -1220,39 +1409,39 @@ bool ShapeElFigure::shapeSave( WdgView *w )
                         elList +="(" + TSYS::real2str( TSYS::realRound((*pnts)[shapeItems[inundationItems[i].number_shape[k]].n2].x(),2) ) + "|" 
                                      + TSYS::real2str( TSYS::realRound((*pnts)[shapeItems[inundationItems[i].number_shape[k]].n2].y(),2) ) + ")" + ":";
                 }
-		temp.push_back( shapeItems[inundationItems[i].number_shape[k]].n1 );
-		temp.push_back( shapeItems[inundationItems[i].number_shape[k]].n2 );
-	    }
-	    else
+                temp.push_back( shapeItems[inundationItems[i].number_shape[k]].n1 );
+                temp.push_back( shapeItems[inundationItems[i].number_shape[k]].n2 );
+            }
+            else
 	    {
-		for( int p=0; p < temp.size(); p++ )
-		{
-		    if( shapeItems[inundationItems[i].number_shape[k]].n1 == temp[p] )
-		    { flag_n1 = true; flag_n2 = false; break; }
-		    else { flag_n2=true; flag_n1=false; }
-		}
-    		if( flag_n1 && temp.size()<inundationItems[i].number_shape.size() )
-		{
+                for( int p=0; p < temp.size(); p++ )
+                {
+                    if( shapeItems[inundationItems[i].number_shape[k]].n1 == temp[p] )
+                    { flag_n1 = true; flag_n2 = false; break; }
+                    else { flag_n2=true; flag_n1=false; }
+                }
+                if( flag_n1 && temp.size()<inundationItems[i].number_shape.size() )
+                {
                     if( shapeItems[inundationItems[i].number_shape[k]].n2 > 0 )
                         elList += TSYS::int2str(shapeItems[inundationItems[i].number_shape[k]].n2)+":";
                     else if( shapeItems[inundationItems[i].number_shape[k]].n2 <= -10 )
                         elList +="(" + TSYS::real2str( TSYS::realRound((*pnts)[shapeItems[inundationItems[i].number_shape[k]].n2].x(),2) ) + "|" 
                                      + TSYS::real2str( TSYS::realRound((*pnts)[shapeItems[inundationItems[i].number_shape[k]].n2].y(),2) ) + ")" + ":";
 
-		    temp.push_back( shapeItems[inundationItems[i].number_shape[k]].n2 );
-		}
-		if( flag_n2 && temp.size()<inundationItems[i].number_shape.size() )
-		{
+                    temp.push_back( shapeItems[inundationItems[i].number_shape[k]].n2 );
+                }
+                if( flag_n2 && temp.size()<inundationItems[i].number_shape.size() )
+                {
                     if( shapeItems[inundationItems[i].number_shape[k]].n1 > 0 )
                         elList += TSYS::int2str(shapeItems[inundationItems[i].number_shape[k]].n1)+":";
                     else if( shapeItems[inundationItems[i].number_shape[k]].n1 <= -10 )
                         elList +="(" + TSYS::real2str( TSYS::realRound((*pnts)[shapeItems[inundationItems[i].number_shape[k]].n1].x(),2) ) + "|" 
                                      + TSYS::real2str( TSYS::realRound((*pnts)[shapeItems[inundationItems[i].number_shape[k]].n1].y(),2) ) + ")" + ":";
-		    temp.push_back(shapeItems[inundationItems[i].number_shape[k]].n1);
-		}
-	    }
-	}
-	if( inundationItems[i].number_shape.size() <= 2 )
+                    temp.push_back(shapeItems[inundationItems[i].number_shape[k]].n1);
+                }
+            }
+        }
+        if( inundationItems[i].number_shape.size() <= 2 )
         {
             if( shapeItems[inundationItems[i].number_shape[0]].n1 > 0 )
                 elList += TSYS::int2str(shapeItems[inundationItems[i].number_shape[0]].n1)+":";
@@ -1265,10 +1454,21 @@ bool ShapeElFigure::shapeSave( WdgView *w )
                 elList +="(" + TSYS::real2str( TSYS::realRound((*pnts)[shapeItems[inundationItems[i].number_shape[0]].n2].x(),2) ) + "|" 
                              + TSYS::real2str( TSYS::realRound((*pnts)[shapeItems[inundationItems[i].number_shape[0]].n2].y(),2) ) + ")" + ":";
         }
-        
+
         if( inundationItems[i].brush <= -10 || inundationItems[i].brush == -7 )
-                    elList = elList + (((*colors)[inundationItems[i].brush].name() == (*colors)[-7].name()) ? "" : 
-                                        (*colors)[inundationItems[i].brush].name().toAscii().data())+":";
+        {
+            if( (*colors)[inundationItems[i].brush].alpha() < 255 )
+            {
+                if( (*colors)[inundationItems[i].brush].rgba() == (*colors)[-7].rgba() )
+                    elList = elList + "" + ":";
+                else
+                    elList = elList + (*colors)[inundationItems[i].brush].name().toAscii().data()+"-"+
+                                      TSYS::int2str((*colors)[inundationItems[i].brush].alpha())+":";
+            }
+            else elList = elList + (((*colors)[inundationItems[i].brush].name() == (*colors)[-7].name()) ? "" : 
+                                     (*colors)[inundationItems[i].brush].name().toAscii().data())+":";
+
+        }
         else if( inundationItems[i].brush > 0  ) elList = elList + "c" +  TSYS::int2str(inundationItems[i].brush) + ":";
 
         if( inundationItems[i].brush_img <= -10 || inundationItems[i].brush_img == -5 )
@@ -1292,7 +1492,11 @@ bool ShapeElFigure::shapeSave( WdgView *w )
      //- Write shapes colors to data model -
     for( ColorMap::iterator pi = colors->begin(); pi != colors->end(); pi++ )
         if(pi->first > 0 )
-            w->attrSet( "c"+TSYS::int2str(pi->first), pi->second.name().toAscii().data() );
+        {
+            if( pi->second.alpha() < 255 )
+                w->attrSet( "c"+TSYS::int2str(pi->first), pi->second.name().toStdString() + "-" + TSYS::int2str( pi->second.alpha() ) );
+            else w->attrSet( "c"+TSYS::int2str(pi->first), pi->second.name().toAscii().data() );
+        }
      //- Write fills images to data model -
     for( ImageMap::iterator pi = images->begin(); pi != images->end(); pi++ )
         if(pi->first > 0 )
@@ -1305,15 +1509,15 @@ bool ShapeElFigure::shapeSave( WdgView *w )
 }
 
 void ShapeElFigure::editEnter( WdgView *view )
-{    
+{
     ((VisDevelop *)view->mainWin())->elFigTool->setVisible(true);
-    
+
     //- Self-shape tools -
     connect( ((VisDevelop *)view->mainWin())->elFigTool, SIGNAL(actionTriggered(QAction*)), this, SLOT(toolAct(QAction*)) );
     //-- Init actions' address --
     for( int i_a = 0; i_a < ((VisDevelop *)view->mainWin())->elFigTool->actions().size(); i_a++ )
     {
-	((VisDevelop *)view->mainWin())->elFigTool->actions().at(i_a)->setEnabled(true);
+        ((VisDevelop *)view->mainWin())->elFigTool->actions().at(i_a)->setEnabled(true);
         ((VisDevelop *)view->mainWin())->elFigTool->actions().at(i_a)->setProperty("wdgAddr",TSYS::addr2str(view).c_str());
     }
     //- Main tools (copy) -
@@ -1340,14 +1544,14 @@ void ShapeElFigure::editExit( WdgView *view )
     for( int i_a = 0; i_a < ((VisDevelop *)view->mainWin())->elFigTool->actions().size(); i_a++ )
     {
         ((VisDevelop *)view->mainWin())->elFigTool->actions().at(i_a)->setProperty("wdgAddr","");
-	((VisDevelop *)view->mainWin())->elFigTool->actions().at(i_a)->setEnabled(false);
+        ((VisDevelop *)view->mainWin())->elFigTool->actions().at(i_a)->setEnabled(false);
     }
     ((VisDevelop *)view->mainWin())->actElFigLine->setChecked(false);
     ((VisDevelop *)view->mainWin())->actElFigArc->setChecked(false);
     ((VisDevelop *)view->mainWin())->actElFigBesie->setChecked(false);
     ((VisDevelop *)view->mainWin())->actElFigCheckAct->setChecked(true);
     ((VisDevelop *)view->mainWin())->actElFigCursorAct->setChecked(true);
- 
+
     disconnect( ((VisDevelop *)view->mainWin())->visItToolBar, SIGNAL(actionTriggered(QAction*)), this, SLOT(toolAct(QAction*)) );
     ((VisDevelop *)view->mainWin())->actVisItCopy->setProperty("wdgAddr","");
     ((VisDevelop *)view->mainWin())->actVisItPaste->setProperty("wdgAddr","");
@@ -1355,7 +1559,11 @@ void ShapeElFigure::editExit( WdgView *view )
     disconnect( ((VisDevelop *)view->mainWin())->wdgToolView, SIGNAL(actionTriggered(QAction*)), this, SLOT(toolAct(QAction*)) );
     ((VisDevelop *)view->mainWin())->actLevRise->setProperty("wdgAddr","");
     ((VisDevelop *)view->mainWin())->actLevLower->setProperty("wdgAddr","");
-    
+
+    ((VisDevelop *)view->mainWin())->actVisItCut->setVisible(true); 
+    ((VisDevelop *)view->mainWin())->actVisItCopy->setEnabled(true); 
+    ((VisDevelop *)view->mainWin())->actVisItPaste->setEnabled(false);
+
     shapeSave(view);
     view->unsetCursor();
     status = false;
@@ -1376,7 +1584,7 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
     {
         bool actDyn = false;
         ElFigDt *elFD = (ElFigDt*)w->shpData;
-        
+
         PntMap *pnts = &elFD->shapePnts;
         WidthMap *widths = &elFD->shapeWidths;
         ColorMap *colors = &elFD->shapeColors;
@@ -1385,9 +1593,9 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
 
         QVector<ShapeItem> &shapeItems = elFD->shapeItems;
         QVector<inundationItem> &inundationItems = elFD->inundationItems;
-	for( int i_a = 0; i_a < ((VisDevelop *)w->mainWin())->elFigTool->actions().size(); i_a++ )
-	    menu.addAction(((VisDevelop *)w->mainWin())->elFigTool->actions().at(i_a));
-	menu.addSeparator();
+        for( int i_a = 0; i_a < ((VisDevelop *)w->mainWin())->elFigTool->actions().size(); i_a++ )
+            menu.addAction(((VisDevelop *)w->mainWin())->elFigTool->actions().at(i_a));
+        menu.addSeparator();
         menu.addAction(((VisDevelop *)w->mainWin())->actVisItCopy);
         menu.addAction(((VisDevelop *)w->mainWin())->actVisItPaste);
         menu.addSeparator();
@@ -1477,7 +1685,7 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
                 connect( actDynamicStyle, SIGNAL(activated()), elFD, SLOT(dynamic()) ); 
                 menu.addAction(actDynamicStyle);
             }
-            
+
             if( fl ) menu.addSeparator();
         }
         else if( index == -1 && (int)pop_pos.x() != -1 && (int)pop_pos.y() != -1 )
@@ -1556,7 +1764,7 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
         pop_pos = QPointF(-1,-1);
     }
 }
-	
+
 void ShapeElFigure::toolAct( QAction *act )
 {
     bool ptr_line,ptr_arc,ptr_bezier;
@@ -5392,6 +5600,7 @@ void ShapeElFigure::paintImage( WdgView *view )
     QRect draw_area = view->rect().adjusted(0,0,-2*margin,-2*margin);	    
     pnt.setWindow(draw_area);
     pnt.setViewport(view->rect().adjusted(margin,margin,-margin,-margin));
+    vector<int> shape_inund_all;
     //- Drawing all fills(inundations) -
     for( int i=0; i < inundationItems.size(); i++ )
     {
@@ -5407,104 +5616,109 @@ void ShapeElFigure::paintImage( WdgView *view )
             PntMap tmp_pnts;
             QVector<int> number_vector;
             bool fl_;
+            bool isAlpha = false;
             for( int p = 0; p < inundationItems[i].number_shape.size(); p++ )
+            {
                 if( shapeItems[inundationItems[i].number_shape[p]].type == 1 )
-            {
-                fl_ = false;
-                for( int k = 0; k < number_vector.size(); k ++ )
-                    if(shapeItems[inundationItems[i].number_shape[p]].n1 == number_vector[k])
                 {
-                    fl_ = true;
-                    break;
+                    fl_ = false;
+                    for( int k = 0; k < number_vector.size(); k ++ )
+                        if(shapeItems[inundationItems[i].number_shape[p]].n1 == number_vector[k])
+                        {
+                            fl_ = true;
+                            break;
+                        }
+                    if( !fl_ )
+                    {
+                        p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n1], view, true, true);
+                        tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n1] = unScaleRotate( p1, view, false, true);
+                        number_vector.push_back(shapeItems[inundationItems[i].number_shape[p]].n1);
+                    }
+                    fl_ = false;
+                    for( int k = 0; k < number_vector.size(); k ++ )
+                        if(shapeItems[inundationItems[i].number_shape[p]].n2 == number_vector[k])
+                        {
+                            fl_ = true;
+                            break;
+                        }
+                    if( !fl_ )
+                    {
+                        p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n2], view, true, true);
+                        tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n2] = unScaleRotate( p1, view, false, true);
+                        number_vector.push_back(shapeItems[inundationItems[i].number_shape[p]].n2);
+                    }
                 }
-                if( !fl_ )
+                else if( shapeItems[inundationItems[i].number_shape[p]].type == 2 )
                 {
-                    p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n1], view, true, true);
-                    tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n1] = unScaleRotate( p1, view, false, true);
-                    number_vector.push_back(shapeItems[inundationItems[i].number_shape[p]].n1);
-                }
-                fl_ = false;
-                for( int k = 0; k < number_vector.size(); k ++ )
-                    if(shapeItems[inundationItems[i].number_shape[p]].n2 == number_vector[k])
-                {
-                    fl_ = true;
-                    break;
-                }
-                if( !fl_ )
-                {
-                    p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n2], view, true, true);
-                    tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n2] = unScaleRotate( p1, view, false, true);
-                    number_vector.push_back(shapeItems[inundationItems[i].number_shape[p]].n2);
-                }
-            }
-            else if( shapeItems[inundationItems[i].number_shape[p]].type == 2 )
-            {
-                fl_ = false;
-                for( int k = 0; k < number_vector.size(); k ++ )
-                    if(shapeItems[inundationItems[i].number_shape[p]].n1 == number_vector[k])
-                {
-                    fl_ = true;
-                    break;
-                }
-                if( !fl_ )
-                {
-                    p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n1], view, true, true);
-                    tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n1] = unScaleRotate( p1, view, false, true);
-                    number_vector.push_back(shapeItems[inundationItems[i].number_shape[p]].n1);
-                }
-                fl_ = false;
-                for( int k = 0; k < number_vector.size(); k ++ )
-                    if(shapeItems[inundationItems[i].number_shape[p]].n2 == number_vector[k])
-                {
-                    fl_ = true;
-                    break;
-                }
-                if( !fl_ )
-                {
-                    p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n2], view, true, true);
-                    tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n2] = unScaleRotate( p1, view, false, true);
-                    number_vector.push_back(shapeItems[inundationItems[i].number_shape[p]].n2);
-                }
+                    fl_ = false;
+                    for( int k = 0; k < number_vector.size(); k ++ )
+                        if(shapeItems[inundationItems[i].number_shape[p]].n1 == number_vector[k])
+                        {
+                            fl_ = true;
+                            break;
+                        }
+                    if( !fl_ )
+                    {
+                        p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n1], view, true, true);
+                        tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n1] = unScaleRotate( p1, view, false, true);
+                        number_vector.push_back(shapeItems[inundationItems[i].number_shape[p]].n1);
+                    }
+                    fl_ = false;
+                    for( int k = 0; k < number_vector.size(); k ++ )
+                        if(shapeItems[inundationItems[i].number_shape[p]].n2 == number_vector[k])
+                        {
+                            fl_ = true;
+                            break;
+                        }
+                    if( !fl_ )
+                    {
+                        p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n2], view, true, true);
+                        tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n2] = unScaleRotate( p1, view, false, true);
+                        number_vector.push_back(shapeItems[inundationItems[i].number_shape[p]].n2);
+                    }
 
-                p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n3], view, true, true);
-                tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n3] = unScaleRotate( p1, view, false, true);
-                p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n4], view, true, true);
-                tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n4] = unScaleRotate( p1, view, false, true);
-                p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n5], view, true, true);
-                tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n5] = unScaleRotate( p1, view, false, true);
-            }
-            else if( shapeItems[inundationItems[i].number_shape[p]].type == 3 )
-            {
-                fl_ = false;
-                for( int k = 0; k < number_vector.size(); k ++ )
-                    if(shapeItems[inundationItems[i].number_shape[p]].n1 == number_vector[k])
-                {
-                    fl_ = true;
-                    break;
+                    p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n3], view, true, true);
+                    tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n3] = unScaleRotate( p1, view, false, true);
+                    p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n4], view, true, true);
+                    tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n4] = unScaleRotate( p1, view, false, true);
+                    p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n5], view, true, true);
+                    tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n5] = unScaleRotate( p1, view, false, true);
                 }
-                if( !fl_ )
+                else if( shapeItems[inundationItems[i].number_shape[p]].type == 3 )
                 {
-                    p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n1], view, true, true);
-                    tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n1] = unScaleRotate( p1, view, false, true);
-                    number_vector.push_back(shapeItems[inundationItems[i].number_shape[p]].n1);
+                    fl_ = false;
+                    for( int k = 0; k < number_vector.size(); k ++ )
+                        if(shapeItems[inundationItems[i].number_shape[p]].n1 == number_vector[k])
+                        {
+                            fl_ = true;
+                            break;
+                    }
+                    if( !fl_ )
+                    {
+                        p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n1], view, true, true);
+                        tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n1] = unScaleRotate( p1, view, false, true);
+                        number_vector.push_back(shapeItems[inundationItems[i].number_shape[p]].n1);
+                    }
+                    fl_ = false;
+                    for( int k = 0; k < number_vector.size(); k ++ )
+                        if(shapeItems[inundationItems[i].number_shape[p]].n2 == number_vector[k])
+                        {
+                            fl_ = true;
+                        break;
+                        }
+                    if( !fl_ )
+                    {
+                        p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n2], view, true, true);
+                        tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n2] = unScaleRotate( p1, view, false, true);
+                        number_vector.push_back(shapeItems[inundationItems[i].number_shape[p]].n2);
+                    }
+                    p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n3], view, true, true);
+                    tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n3] = unScaleRotate( p1, view, false, true);
+                    p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n4], view, true, true);
+                    tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n4] = unScaleRotate( p1, view, false, true);
                 }
-                fl_ = false;
-                for( int k = 0; k < number_vector.size(); k ++ )
-                    if(shapeItems[inundationItems[i].number_shape[p]].n2 == number_vector[k])
-                {
-                    fl_ = true;
-                    break;
-                }
-                if( !fl_ )
-                {
-                    p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n2], view, true, true);
-                    tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n2] = unScaleRotate( p1, view, false, true);
-                    number_vector.push_back(shapeItems[inundationItems[i].number_shape[p]].n2);
-                }
-                p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n3], view, true, true);
-                tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n3] = unScaleRotate( p1, view, false, true);
-                p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n4], view, true, true);
-                tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n4] = unScaleRotate( p1, view, false, true);
+                if( !isAlpha && ( (*colors)[shapeItems[inundationItems[i].number_shape[p]].lineColor].alpha() < 255 ||
+                    (*colors)[shapeItems[inundationItems[i].number_shape[p]].borderColor].alpha() < 255 ) ) isAlpha = true;
             }
             number_vector.clear();
             flag_rotate = false;
@@ -5546,14 +5760,19 @@ void ShapeElFigure::paintImage( WdgView *view )
                 t += 0.01;
             }
             while( t < 1 );
+
             //-- Scaling image for filling --
             img = img.scaled ( QSize( (int)TSYS::realRound( xMax - xMin )+1, (int)TSYS::realRound( yMax - yMin )+1 ), Qt::IgnoreAspectRatio, Qt::SmoothTransformation  );
             double im_x, im_y;
+            float inc;
             QColor color;
             double alpha, color_r, color_g, color_b;
+            double alpha_col = (double)(*colors)[inundationItems[i].brush].alpha()/255;
             QRgb rgb;
             QPointF drw_pnt,drw_pnt1;
             QPen im_pen;
+            if( isAlpha ) inc = 0.5;
+            else inc = 1;
             im_y = yMin_rot;
             //-- Calculating the resulting color of the image and drawing the scaled and rotated points of it into the inundation path --
             do
@@ -5561,17 +5780,22 @@ void ShapeElFigure::paintImage( WdgView *view )
                 im_x = xMin_rot;
                 do
                 {
-                    if( in_path_rot.contains( QPointF(im_x, im_y) ) )
+                    if( in_path_rot.contains( QPointF( im_x, im_y) ) )
                     {
                         drw_pnt = unScaleRotate( QPointF( im_x, im_y ), view, false, true );
                         if( img.valid ( (int)TSYS::realRound(  drw_pnt.x() - xMin, 2, true ), (int)TSYS::realRound(  drw_pnt.y() - yMin, 2, true ) ) )
                         {
                             rgb = img.pixel ((int)TSYS::realRound(  drw_pnt.x() - xMin, 2, true ), (int)TSYS::realRound(  drw_pnt.y() - yMin, 2, true ));
                             alpha = (double)((rgb>>24)&0xff)/255;
-                            color_r = alpha*((rgb>>16)&0xff) + (1-alpha)*(*colors)[inundationItems[i].brush].red();
-                            color_g = alpha*((rgb>>8)&0xff) + (1-alpha)*(*colors)[inundationItems[i].brush].green();
-                            color_b = alpha*(rgb&0xff) + (1-alpha)*(*colors)[inundationItems[i].brush].blue();
-                            im_pen.setColor ( QColor((int)(color_r), (int)(color_g), (int)(color_b) ) );
+                            /*color_r = (1-alpha_col+alpha_col*alpha)*((rgb>>16)&0xff) + (1-alpha)*alpha_col*(*colors)[inundationItems[i].brush].red();
+                            color_g = (1-alpha_col+alpha_col*alpha)*((rgb>>8)&0xff) + (1-alpha)*alpha_col*(*colors)[inundationItems[i].brush].green();
+                            color_b = (1-alpha_col+alpha_col*alpha)*(rgb&0xff) + (1-alpha)*alpha_col*(*colors)[inundationItems[i].brush].blue();*/
+                            //im_pen.setColor ( QColor((int)(color_r), (int)(color_g), (int)(color_b), (int)TSYS::realRound(255*alpha_col, 2, true)) );
+                            color_r = alpha*((rgb>>16)&0xff) + (1-alpha)*alpha_col*(*colors)[inundationItems[i].brush].red();
+                            color_g = alpha*((rgb>>8)&0xff) + (1-alpha)*alpha_col*(*colors)[inundationItems[i].brush].green();
+                            color_b = alpha*(rgb&0xff) + (1-alpha)*alpha_col*(*colors)[inundationItems[i].brush].blue();
+
+                            im_pen.setColor ( QColor((int)(color_r), (int)(color_g), (int)(color_b)) );
                             pnt.setPen( im_pen );
                             drw_pnt1 = scaleRotate( drw_pnt, view, false, true );
 
@@ -5579,12 +5803,12 @@ void ShapeElFigure::paintImage( WdgView *view )
                                            (int)TSYS::realRound( drw_pnt1.y(), 2, true) ) );
                         }
                     }
-                    im_x += 1;
+                    im_x += inc;
                 }
-                while( im_x > xMin_rot && im_x < xMax_rot + 1 );
-                im_y += 1;
+                while( im_x > xMin_rot && im_x < xMax_rot );
+                im_y += inc;
             }
-            while( im_y > yMin_rot && im_y < yMax_rot + 1 ); 
+            while( im_y > yMin_rot && im_y < yMax_rot ); 
         }
         else
         {
@@ -5592,24 +5816,65 @@ void ShapeElFigure::paintImage( WdgView *view )
             pnt.setPen( Qt::NoPen );
             pnt.drawPath( inundationItems[i].path );
         }
+        QVector<int> number_shape;
+        number_shape = inundationItems[i].number_shape;
+        std::sort(number_shape.begin(), number_shape.end());
+        for( int j = 0; j < number_shape.size(); j++ )
+        {
+            shape_inund_all.push_back(number_shape[j]);
+            if( (*widths)[shapeItems[number_shape[j]].border_width] > 0.01 )
+            {
+                pnt.setBrush( QBrush( (*colors)[shapeItems[number_shape[j]].lineColor], Qt::SolidPattern ) );
+                pnt.setPen( QPen( (*colors)[shapeItems[number_shape[j]].borderColor], 
+                                  (*widths)[shapeItems[number_shape[j]].border_width], 
+                                  (*styles)[shapeItems[number_shape[j]].style], Qt::FlatCap, Qt::MiterJoin ) );
+                pnt.drawPath( shapeItems[number_shape[j]].path );
+            }
+            else if( ( (*widths)[shapeItems[number_shape[j]].border_width] >= 0) && 
+                       (fabs((*widths)[shapeItems[number_shape[j]].border_width] - 0) < 0.01) )
+            {
+                pnt.setBrush(Qt::NoBrush);
+                if( (*widths)[shapeItems[number_shape[j]].width] < 3 )
+                    pnt.setPen( QPen( (*colors)[shapeItems[number_shape[j]].lineColor], 
+                                      (*widths)[shapeItems[number_shape[j]].width], 
+                                      (*styles)[shapeItems[number_shape[j]].style], Qt::SquareCap, Qt::RoundJoin ) );
+                else
+                    pnt.setPen( QPen( (*colors)[shapeItems[number_shape[j]].lineColor], 
+                                      (*widths)[shapeItems[number_shape[j]].width], 
+                                      (*styles)[shapeItems[number_shape[j]].style], Qt::FlatCap, Qt::RoundJoin ) );
+                pnt.drawPath( shapeItems[number_shape[j]].pathSimple );
+            }
+
+        }
     }
+    bool flag_draw;
     //- Drawing all el_figures -
     for( int k=0; k < shapeItems.size(); k++ )
     {
-        if( (*widths)[shapeItems[k].border_width] > 0.01 )
+        flag_draw = true;
+        for( int j = 0; j < shape_inund_all.size(); j ++ )
+            if( k == shape_inund_all[j] )
+            {
+                flag_draw = false;
+                break;
+            }
+        if( flag_draw )
         {
-            pnt.setBrush( QBrush( (*colors)[shapeItems[k].lineColor], Qt::SolidPattern ) );
-            pnt.setPen( QPen( (*colors)[shapeItems[k].borderColor], (*widths)[shapeItems[k].border_width], (*styles)[shapeItems[k].style], Qt::FlatCap, Qt::MiterJoin ) );
-            pnt.drawPath( shapeItems[k].path );
-        }
-        else if( ( (*widths)[shapeItems[k].border_width] >= 0) && (fabs((*widths)[shapeItems[k].border_width] - 0) < 0.01) )
-        {
-            pnt.setBrush(Qt::NoBrush);
-            if( (*widths)[shapeItems[k].width] < 3 )
-                pnt.setPen( QPen( (*colors)[shapeItems[k].lineColor], (*widths)[shapeItems[k].width], (*styles)[shapeItems[k].style], Qt::SquareCap, Qt::RoundJoin ) );
-            else
-                pnt.setPen( QPen( (*colors)[shapeItems[k].lineColor], (*widths)[shapeItems[k].width], (*styles)[shapeItems[k].style], Qt::FlatCap, Qt::RoundJoin ) );
-            pnt.drawPath( shapeItems[k].pathSimple );
+            if( (*widths)[shapeItems[k].border_width] > 0.01 )
+            {
+                pnt.setBrush( QBrush( (*colors)[shapeItems[k].lineColor], Qt::SolidPattern ) );
+                pnt.setPen( QPen( (*colors)[shapeItems[k].borderColor], (*widths)[shapeItems[k].border_width], (*styles)[shapeItems[k].style], Qt::FlatCap, Qt::MiterJoin ) );
+                pnt.drawPath( shapeItems[k].path );
+            }
+            else if( ( (*widths)[shapeItems[k].border_width] >= 0) && (fabs((*widths)[shapeItems[k].border_width] - 0) < 0.01) )
+            {
+                pnt.setBrush(Qt::NoBrush);
+                if( (*widths)[shapeItems[k].width] < 3 )
+                    pnt.setPen( QPen( (*colors)[shapeItems[k].lineColor], (*widths)[shapeItems[k].width], (*styles)[shapeItems[k].style], Qt::SquareCap, Qt::RoundJoin ) );
+                else
+                    pnt.setPen( QPen( (*colors)[shapeItems[k].lineColor], (*widths)[shapeItems[k].width], (*styles)[shapeItems[k].style], Qt::FlatCap, Qt::RoundJoin ) );
+                pnt.drawPath( shapeItems[k].pathSimple );
+            }
         }
     }
     //- Drawing all rects for choosen el_figures -

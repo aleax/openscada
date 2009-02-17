@@ -46,19 +46,19 @@ string TSubSYS::subName()
 
 void TSubSYS::modList( vector<string> &list )
 {
-    if( !subModule() ) throw TError(nodePath().c_str(),_("No modules subsystem!"));
+    if( !subModule() ) throw TError(nodePath().c_str(),_("The subsystem is not modular!"));
     chldList(m_mod,list);
 }
 
 bool TSubSYS::modPresent( const string &name )
 {
-    if( !subModule() ) throw TError(nodePath().c_str(),_("No modules subsystem!")); 
+    if( !subModule() ) throw TError(nodePath().c_str(),_("The subsystem is not modular!")); 
     return chldPresent(m_mod,name); 
 }
 
 void TSubSYS::modAdd( TModule *modul )
 {
-    if( !subModule() ) throw TError(nodePath().c_str(),_("No modules subsystem!"));
+    if( !subModule() ) throw TError(nodePath().c_str(),_("The subsystem is not modular!"));
     if( chldPresent(m_mod,modul->modId()) ) return;
     chldAdd(m_mod,modul);
 #if OSC_DEBUG >= 1
@@ -71,14 +71,14 @@ void TSubSYS::modAdd( TModule *modul )
 
 void TSubSYS::modDel( const string &name )
 {
-    if( !subModule() ) throw TError(nodePath().c_str(),_("No modules subsystem!"));
-    mess_info(nodePath().c_str(),_("Disconnect modul <%s>!"),name.c_str());
+    if( !subModule() ) throw TError(nodePath().c_str(),_("The subsystem is not modular!"));
+    mess_info(nodePath().c_str(),_("Disconnect module <%s>!"),name.c_str());
     chldDel(m_mod,name);
 }
 
 AutoHD<TModule> TSubSYS::modAt( const string &name )
 {
-    if( !subModule() ) throw TError(nodePath().c_str(),_("No modules subsystem!")); 
+    if( !subModule() ) throw TError(nodePath().c_str(),_("The subsystem is not modular!")); 
     return chldAt(m_mod,name);
 }
 

@@ -730,19 +730,31 @@ void TWEB::cntrCmdProc( XMLNode *opt )
     else TUI::cntrCmdProc(opt);
 }
 
-int TWEB::colorParse( const string &clr )
+int TWEB::colorParse( const string &tclr )
 {
+    string clr = tclr;
+    int alpha;
+    size_t found = clr.find("-");
+    if (found != string::npos)
+    {
+        clr = tclr.substr(0,found);
+        alpha =  atoi(tclr.substr(found+1).c_str());
+    }
+    else alpha = 255;
+
     if( clr.size() >= 4 && clr[0] == '#' )
     {
 	int el_sz = clr.size()/3;
-	return (strtol(clr.substr(1,el_sz).c_str(),NULL,16)<<16)+
-		(strtol(clr.substr(1+el_sz,el_sz).c_str(),NULL,16)<<8)+
+        return ((int)vmin(127,(alpha/2+0.5))<<24)+
+               (strtol(clr.substr(1,el_sz).c_str(),NULL,16)<<16)+
+               (strtol(clr.substr(1+el_sz,el_sz).c_str(),NULL,16)<<8)+
 		strtol(clr.substr(1+2*el_sz,el_sz).c_str(),NULL,16);
     }
-    else
+    else if( clr.size() )
     {
 	map<string,int>::iterator iclr = colors.find(clr);
-	if( iclr != colors.end() )	return iclr->second;
+        if( iclr != colors.end() )
+            return ((int)vmin(127,(alpha/2+0.5))<<24)+ iclr->second;
     }
     return -1;
 }

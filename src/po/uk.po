@@ -4388,7 +4388,7 @@ msgid "mod_"
 msgstr ""
 
 #: tsubsys.cpp:49 tsubsys.cpp:55 tsubsys.cpp:61 tsubsys.cpp:74 tsubsys.cpp:81
-msgid "No modules subsystem!"
+msgid "The subsystem is not modular!"
 msgstr "Підсистема не модульна!"
 
 #: tsubsys.cpp:68
@@ -4398,7 +4398,7 @@ msgstr ""
 
 #: tsubsys.cpp:75
 #, c-format
-msgid "Disconnect modul <%s>!"
+msgid "Disconnect module <%s>!"
 msgstr "Від'єднання модуля <%s>!"
 
 #: tsubsys.cpp:103

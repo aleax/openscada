@@ -1,3 +1,17 @@
+2009-02-17 Maxim
+- !!:/UI/Vision, UI/WebVision: Transparency of color is added for the primitive ElFigure.
+- !!:/UI/WebVision: Conception of painting is changed for primitive ElFigure(every 'fill' and figures from which it consists of
+                    are now drawn on their own image and after that the resulting image is formed from the accessorial ones).
+- !:/UI/WebVision, UI/Vision: The order of the drawing of the figures is changed for the primitive ElFigure. At first the 'fill' and the figures
+                               from which it consists of are drawn, after that with the same way the second 'fill' is drawn and so on... After the.
+                              all fills are drawn its the time for other figures to be drawn.
+- !:/UI/WebVision: Resampling of the images for 'fill' is added.
+- !:/UI/WebVision: Transparency of color is added into the 'colorParse' function.
+- FIX:/UI/Vision: Repainting of the primitive ElFigure in the runtime mode is fixed.
+- FIX:/UI/WebVision: 'fill' of the simple arc with dynamic points is fixed for primitive ElFigure.
+- FIX:/UI/WebVision, /UI/Vision: Painting of the simple arc(in its closed variant) is fixed for primitive ElFigure.
+
+
 2009-02-17 Roman
 - FIX:/UI/VCAEngine: Real frequency for widget's call into RunTime by attribute "f_frq" is fixed.
 - /UI/VCAEngine: To links info request is added including values.
