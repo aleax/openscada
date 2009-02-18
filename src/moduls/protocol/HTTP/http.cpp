@@ -139,13 +139,14 @@ TProtIn::~TProtIn()
 
 string TProtIn::http_head( const string &rcode, int cln, const string &addattr )
 {
-    return  "HTTP/1.0 "+rcode+"\n"
-	    "Server: "+PACKAGE_STRING+"\n"
-	    "Accept-Ranges: bytes\n"
-	    "Content-Length: "+TSYS::int2str(cln)+"\n"
-	    "Connection: close\n"
-	    "Content-type: text/html\n"
-	    "Charset="+Mess->charset()+"\n"+addattr+"\n";
+    return  "HTTP/1.0 "+rcode+"\r\n"
+	    "Server: "+PACKAGE_STRING+"\r\n"
+	    "Accept-Ranges: bytes\r\n"
+	    "Content-Length: "+TSYS::int2str(cln)+"\r\n"
+	    "Keep-Alive: timeout=5, max=100\r\n"
+	    "Connection: Keep-Alive\r\n"
+	    "Content-type: text/html\r\n"
+	    "Charset="+Mess->charset()+"\r\n"+addattr+"\r\n";
 }
 
 bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
@@ -184,8 +185,9 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	while( true )
 	{
 	    req = TSYS::strSepParse(request,0,'\n',&pos);
-	    if( !req.empty() ) req.resize(req.size()-1);
-	    if( req.empty() )   break;
+	    if( req.empty() ) { m_nofull=true; break; }
+	    if( req == "\r" ) break;
+	    req.resize(req.size()-1);
 	    int sepPos = req.find(":",0);
 	    if( sepPos == 0 || sepPos == string::npos ) break;
 	    string var = req.substr(0,sepPos);

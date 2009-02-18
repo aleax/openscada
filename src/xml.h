@@ -45,7 +45,9 @@ class XMLNode
 	    BrClosePast		= 0x04,		//Break past close tag
 	    BrTextPast		= 0x08,		//Break past text
 	    BrPrcInstrPast	= 0x10,		//Break past process instruction
-	    BrAllPast		= 0x1E		//Break past all
+	    BrAllPast		= 0x1E,		//Break past all
+	    XMLHeader		= 0x20,		//Include XML header
+	    InclNode		= 0x80		//Included node, not root
 	};
 
 	//Methods

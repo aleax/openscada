@@ -223,7 +223,15 @@ XMLNode* XMLNode::clear()
 
 string XMLNode::save( unsigned char flg )
 {
-    string xml = ((flg&XMLNode::BrOpenPrev)?"\n<":"<") + encode(name());
+    string xml;
+    if( (flg&XMLHeader) && !(flg&InclNode) )
+    {
+	xml += "<?xml version='1.0' encoding='UTF-8' ?>";
+	if( flg&XMLNode::BrClosePast ) xml+="\n";
+	flg|=InclNode;
+    }
+
+    xml += ((flg&XMLNode::BrOpenPrev)?"\n<":"<") + encode(name());
 
     for( unsigned i_a = 0; i_a < mAttr.size(); i_a++ )
 	xml = xml + " " + encode(mAttr[i_a].first) + "=\"" + Mess->codeConvOut("UTF-8",encode(mAttr[i_a].second)) + "\"";

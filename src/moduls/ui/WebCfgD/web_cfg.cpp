@@ -184,14 +184,13 @@ void TWEB::modStop()
 
 string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const string &addattr )
 {
-    return  "HTTP/1.0 "+rcode+"\n"
-	    "Server: "+PACKAGE_STRING+"\n"
-	    "Accept-Ranges: bytes\n"
-	    "Content-Length: "+TSYS::int2str(cln)+"\n"
-	    "Connection: close\n"
-	    "Content-Type: "+cnt_tp+"\n"
-	    "Cache-Control: no-cache\n"
-	    "Charset="+Mess->charset()+"\n"+addattr+"\n";
+    return  "HTTP/1.0 "+rcode+"\r\n"
+	    "Server: "+PACKAGE_STRING+"\r\n"
+	    "Accept-Ranges: bytes\r\n"
+	    "Content-Length: "+TSYS::int2str(cln)+"\r\n"
+	    "Content-Type: "+cnt_tp+"\r\n"
+	    "Cache-Control: no-cache\r\n"
+	    "Charset="+Mess->charset()+"\r\n"+addattr+"\r\n";
 }
 
 string TWEB::pgHead( string head_els )
@@ -362,7 +361,7 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 			req.setAttr("path",ses.url+"/%2fobj")->setAttr("grp",gbr)->setAttr("icoCheck","1");
 			mod->cntrIfCmd(req,ses.user);
 		    }
-		    ses.page = req.save();
+		    ses.page = req.save(XMLNode::XMLHeader);
 		    page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
 		    return;
 		}
@@ -370,7 +369,7 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 		{
 		    XMLNode req("info"); req.setAttr("path",ses.url);
 		    mod->cntrIfCmd(req,ses.user);
-		    ses.page = req.save();
+		    ses.page = req.save(XMLNode::XMLHeader);
 		    page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
 		    return;
 		}
@@ -378,7 +377,7 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 		{
 		    XMLNode req("modify"); req.setAttr("path",ses.url+"/%2fobj");
 		    mod->cntrIfCmd(req,ses.user);
-		    ses.page = req.save();
+		    ses.page = req.save(XMLNode::XMLHeader);
 		    page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
 		    return;
 		}
@@ -386,7 +385,7 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 		{
 		    XMLNode req("get"); req.setAttr("path",ses.url);
 		    mod->cntrIfCmd(req,ses.user);
-		    ses.page = req.save();
+		    ses.page = req.save(XMLNode::XMLHeader);
 		    page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
 		    return;
 		}
@@ -474,7 +473,7 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	{
 	    ses.page = pgHead("<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/"MOD_ID"/"+url+"'/>")+pgTail();
 	    page=httpHead("200 OK",ses.page.size(),"text/html",
-		"Set-Cookie: oscdAuthQtCfgDId="+TSYS::int2str(sesOpen(ses.user))+"; path=/;\n")+ses.page;
+		"Set-Cookie: oscdAuthQtCfgDId="+TSYS::int2str(sesOpen(ses.user))+"; path=/;\r\n")+ses.page;
 	    return;
 	}
 	ses.page = pgHead()+"<h1 class='head'>"+PACKAGE_NAME+". "+_(MOD_NAME)+"</h1>\n<hr/><br/>\n";
@@ -490,7 +489,7 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
     if( !ses.user.size() || ses.cnt.find("auth_ch") != ses.cnt.end() )
     {
 	ses.page = pgHead("<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/"MOD_ID"/"+url+"'/>")+pgTail();
-	page=httpHead("200 OK",ses.page.size(),"text/html","Set-Cookie: oscdAuthQtCfgDId=""; path=/;\n")+ses.page;
+	page=httpHead("200 OK",ses.page.size(),"text/html","Set-Cookie: oscdAuthQtCfgDId=""; path=/;\r\n")+ses.page;
 	return;
     }
 
@@ -502,7 +501,7 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
     {
 	XMLNode req(""); req.load(ses.content); req.setAttr("path",ses.url);
 	mod->cntrIfCmd(req,ses.user);
-	ses.page = req.save();
+	ses.page = req.save(XMLNode::XMLHeader);
 	page = httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
     }
     else if( wp_com == "img" )
@@ -578,7 +577,7 @@ int TWEB::cntrIfCmd( XMLNode &node, const string &user )
 	TTransportS::ExtHost host = SYS->transport().at().extHostGet(user,station);
 	AutoHD<TTransportOut> tr = SYS->transport().at().extHost(host,"TrCntr");
 	if( !tr.at().startStat() ) tr.at().start();
-	node.load(tr.at().messProtIO("0\n"+host.user+"\n"+host.pass+"\n"+node.save(),"SelfSystem"));
+	node.load(tr.at().messProtIO("0\n"+host.user+"\n"+host.pass+"\n"+node.save(XMLNode::XMLHeader),"SelfSystem"));
 	node.setAttr("path",path);
     }catch( TError err )
     { node.setAttr("mcat",err.cat)->setAttr("rez","10")->setText(err.mess); }

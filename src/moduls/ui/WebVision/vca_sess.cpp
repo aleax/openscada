@@ -98,7 +98,7 @@ void VCASess::getReq( SSess &ses )
 	req.setAttr("path",ses.url+"/%2fserv%2fpg")->
 	    setAttr("tm",(prmEl!=ses.prm.end())?prmEl->second:"0");
 	mod->cntrIfCmd(req,ses.user);
-	ses.page = req.save();
+	ses.page = req.save(XMLNode::XMLHeader);
 	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
     }
     //> Attribute get
@@ -109,7 +109,7 @@ void VCASess::getReq( SSess &ses )
 
 	XMLNode req("get"); req.setAttr("path",ses.url+"/%2fattr%2f"+attr);
 	mod->cntrIfCmd(req,ses.user);
-	ses.page = req.save();
+	ses.page = req.save(XMLNode::XMLHeader);
 	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
     }
     //> Widget's (page) full attributes branch request
@@ -147,7 +147,7 @@ void VCASess::getReq( SSess &ses )
 	}
 
 	//>> Send request to browser
-	ses.page = req.save();
+	ses.page = req.save(XMLNode::XMLHeader);
 	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
     }
     //> Resources request (images and other files)

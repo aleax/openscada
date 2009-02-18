@@ -1594,7 +1594,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 	    }
 	    val_w.appendChild(spinImg);
 	  }
-	  else if( tp == 'hex' || tp == 'oct' || tp == 'real' ) { val_w.className += ' number'; val_w.childNodes[0].size = 7; }
+	  else if( tp == 'hex' || tp == 'oct' || tp == 'real' ) { val_w.className += ' number'; val_w.childNodes[0].size = 10; }
 	  else
 	  {
 	    val_w.childNodes[0].size = 30;

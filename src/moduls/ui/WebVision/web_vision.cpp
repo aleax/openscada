@@ -393,13 +393,13 @@ void TWEB::TaskSessCheck( union sigval obj )
 
 string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const string &addattr )
 {
-    return "HTTP/1.0 "+rcode+"\n"
-	"Server: "+PACKAGE_STRING+"\n"
-	"Accept-Ranges: bytes\n"
-	"Content-Length: "+TSYS::int2str(cln)+"\n"
-	"Connection: close\n"
-	"Content-type: "+cnt_tp+"\n"
-	"Charset="+Mess->charset()+"\n"+addattr+"\n";
+    return "HTTP/1.0 "+rcode+"\r\n"
+	"Server: "+PACKAGE_STRING+"\r\n"
+	"Accept-Ranges: bytes\r\n"
+	"Content-Length: "+TSYS::int2str(cln)+"\r\n"
+	"Connection: close\r\n"
+	"Content-type: "+cnt_tp+"\r\n"
+	"Charset="+Mess->charset()+"\r\n"+addattr+"\r\n";
 }
 
 string TWEB::pgHead( const string &head_els, const string &title )
@@ -640,7 +640,7 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	{
 	    ses.page = pgHead("<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/"MOD_ID"/"+url+"'/>")+pgTail();
 	    page=httpHead("200 OK",ses.page.size(),"text/html",
-		"Set-Cookie: oscdAuthVisionId="+TSYS::int2str(sesOpen(ses.user))+"; path=/;\n")+ses.page;
+		"Set-Cookie: oscdAuthVisionId="+TSYS::int2str(sesOpen(ses.user))+"; path=/;\r\n")+ses.page;
 	    return;
 	}
 	ses.page = pgHead()+"<h1 class='head'>"+PACKAGE_NAME+". "+_(MOD_NAME)+"</h1>\n<hr/><br/>\n";
@@ -657,7 +657,7 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
     {
 	ses.page = pgHead("<META HTTP-EQUIV='Refresh' CONTENT='0; URL="MOD_ID"/"+url+"'/>")+pgTail();
 	page=httpHead("200 OK",ses.page.size(),"text/html",
-	    "Set-Cookie: oscdAuthVisionId=""; path=/;\n")+ses.page;
+	    "Set-Cookie: oscdAuthVisionId=""; path=/;\r\n")+ses.page;
 	return;
     }
 
@@ -668,7 +668,7 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	{
 	    XMLNode req(""); req.load(ses.content); req.setAttr("path",ses.url);
 	    cntrIfCmd(req,ses.user,false);
-	    ses.page = req.save();
+	    ses.page = req.save(XMLNode::XMLHeader);
 	    page = httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
 	    return;
 	}

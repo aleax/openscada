@@ -1,3 +1,10 @@
+2009-02-18 Roman
+- /XML: Including XML-header to result text by function XMLNode::save is added.
+- FIX:/Protocol/HTTP,/UI/WebCfg,/UI/WebCfgD,/UI/WebVision: No inserting and not full processing simbol '\r' into HTTP protocol's end line.
+    Fixed work into Konqueror 4.
+- FIX:/UI/WebCfgD,/UI/WebVision: XML-header is added to XML-text of result of AJAX XML-request. Fixed work into Konqueror 4.
+
+
 2009-02-18 Maxim
 - !:/UI/WebVision: Conception of filling with the image is completely changed and now it is synchronized with the simple filling with the color for primitive ElFigure.
 - FIX:/UI/Vision: Scaling of the widths of the lines in the runtime mode is fixed for the primitive ElFigure.
