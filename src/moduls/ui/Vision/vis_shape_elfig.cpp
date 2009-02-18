@@ -703,7 +703,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                         (*pnts)[map_index] = QPointF(x_s,y_s);
                         map_index -= 1;
                 }
-                
+
                 //-- Line width --
                 int w;
                 el_s = TSYS::strSepParse(sel,0,':',&el_off);
@@ -1151,6 +1151,8 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
             }
 
         }
+        if( rel_list && !w->allAttrLoad( ) )
+            elFD->shapeWidths = shapeWidths_unScale;
     return up;
 }
 
@@ -2465,7 +2467,7 @@ void ElFigDt::dynamic( )
                 for( int i = 0; i < shapeItems.size(); i++ )
                 {
                     if( shapeItems[i].n1 == tmp ) { shapeItems[i].n1 = real; elF->rectItems.clear(); elF->rect_num = -1; upd = true; }
-                    else if( shapeItems[i].n2 == tmp ) { shapeItems[i].n2 = real; elF->rectItems.clear(); elF->rect_num = -1; upd = true; }
+                    if( shapeItems[i].n2 == tmp ) { shapeItems[i].n2 = real; elF->rectItems.clear(); elF->rect_num = -1; upd = true; }
                     else if( shapeItems[i].n3 == tmp ) { shapeItems[i].n3 = real; elF->rectItems.clear(); elF->rect_num = -1; upd = true; }
                     else if( shapeItems[i].n4 == tmp ) { shapeItems[i].n4 = real; elF->rectItems.clear(); elF->rect_num = -1; upd = true; }
                     else if( shapeItems[i].n5 == tmp ) { shapeItems[i].n5 = real; elF->rectItems.clear(); elF->rect_num = -1; upd = true; }
@@ -2541,8 +2543,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
             if( dashedRect.isValid() )
                 pnt_v.drawImage( QPoint(0,0), rect_img );
             pnt_v.end();
-            if( runW )
-                elFD->shapeWidths = shapeWidths_unScale;
             return true;
         }
         case QEvent::MouseButtonPress:

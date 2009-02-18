@@ -1,3 +1,9 @@
+2009-02-18 Maxim
+- !:/UI/WebVision: Conception of filling with the image is completely changed and now it is synchronized with the simple filling with the color for primitive ElFigure.
+- FIX:/UI/Vision: Scaling of the widths of the lines in the runtime mode is fixed for the primitive ElFigure.
+- FIX:/UI/Vision: Dynamization of the first or second point of the closed arc is fixed for the primitive ElFigure.
+
+
 2009-02-17 Maxim
 - !!:/UI/Vision, UI/WebVision: Transparency of color is added for the primitive ElFigure.
 - !!:/UI/WebVision: Conception of painting is changed for primitive ElFigure(every 'fill' and figures from which it consists of
