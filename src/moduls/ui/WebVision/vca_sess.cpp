@@ -98,8 +98,8 @@ void VCASess::getReq( SSess &ses )
 	req.setAttr("path",ses.url+"/%2fserv%2fpg")->
 	    setAttr("tm",(prmEl!=ses.prm.end())?prmEl->second:"0");
 	mod->cntrIfCmd(req,ses.user);
-	ses.page = req.save(XMLNode::XMLHeader);
-	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
+	ses.page = req.save();
+	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml; charset=UTF-8")+ses.page;
     }
     //> Attribute get
     else if( wp_com == "attr" )
@@ -109,8 +109,8 @@ void VCASess::getReq( SSess &ses )
 
 	XMLNode req("get"); req.setAttr("path",ses.url+"/%2fattr%2f"+attr);
 	mod->cntrIfCmd(req,ses.user);
-	ses.page = req.save(XMLNode::XMLHeader);
-	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
+	ses.page = req.save();
+	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml; charset=UTF-8")+ses.page;
     }
     //> Widget's (page) full attributes branch request
     else if( wp_com == "attrsBr" )
@@ -147,8 +147,8 @@ void VCASess::getReq( SSess &ses )
 	}
 
 	//>> Send request to browser
-	ses.page = req.save(XMLNode::XMLHeader);
-	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
+	ses.page = req.save();
+	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml; charset=UTF-8")+ses.page;
     }
     //> Resources request (images and other files)
     else if( wp_com == "res" )
@@ -1070,7 +1070,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
     double el_width, el_border_width;
     //-- Arc --
     if( item.type == 2 )
-        if( !isPaintable( item, xScale, yScale ) ) mess_debug(nodePath().c_str(),_("At least one of the points of the 'arc' is out of the drawing area. The 'arc' is not drawn.\n"));
+        if( !isPaintable( item, xScale, yScale ) ) mess_debug(nodePath().c_str(),_("At least one of the points of the 'arc' is out of the drawing area. The 'arc' is not drawn."));
         else
             if( item.border_width == 0 )//--- Drawing the arc with borders' width == 0 ---
             {
@@ -1579,7 +1579,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
             }
     //-- bezier curve --
     if( item.type == 3)
-        if( !isPaintable( item, xScale, yScale ) ) mess_debug(nodePath().c_str(),_("At least one of the points of the 'bezier curve' is out of the drawing area. The 'bezier curve' is not drawn.\n"));
+        if( !isPaintable( item, xScale, yScale ) ) mess_debug(nodePath().c_str(),_("At least one of the points of the 'bezier curve' is out of the drawing area. The 'bezier curve' is not drawn."));
         else
         if( item.border_width == 0 )//--- Drawing the bezier curve with borders' width == 0 ---
         {
@@ -2031,7 +2031,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
         }
     //-- Line --
     if( item.type == 1 )
-        if( !isPaintable( item, xScale, yScale ) ) mess_debug(nodePath().c_str(),_("At least one of the points of the 'line' is out of the drawing area. The 'line' is not drawn.\n"));
+        if( !isPaintable( item, xScale, yScale ) ) mess_debug(nodePath().c_str(),_("At least one of the points of the 'line' is out of the drawing area. The 'line' is not drawn."));
         else
             if( item.border_width == 0 )//--- Drawing the line with borders' width == 0 ---
             {
@@ -2474,7 +2474,7 @@ void VCAElFigure::getReq( SSess &ses )
                     flag_fill = false;
                     break;
                 }
-            if( !flag_fill ) mess_debug(nodePath().c_str(),_("At least one of the elementary figures from each the 'fill' consists of is out of drawing area. The 'fill' is not drawn.\n"));
+            if( !flag_fill ) mess_debug(nodePath().c_str(),_("At least one of the elementary figures from each the 'fill' consists of is out of drawing area. The 'fill' is not drawn."));
             else
             {
                 int tmp_clr;

@@ -31,26 +31,13 @@ namespace WebCfgD
 {
 
 //*************************************************
-//* SAuth                                         *
-//*************************************************
-class SAuth
-{
-    public:
-	SAuth( ) : tAuth(0), name("")	{ }
-	SAuth( string inm, time_t itAuth ) : tAuth(itAuth), name(inm)	{ }
-
-	time_t tAuth;
-	string name;
-};
-
-//*************************************************
 //* SSess                                         *
 //*************************************************
 class SSess
 {
     public:
 	//Methods
-	SSess( const string &iurl, const string &ipage, const string &isender,
+	SSess( const string &iurl, const string &isender, const string &iuser,
 		vector<string> &ivars, const string &icontent );
 
 	//Attributes
@@ -79,17 +66,12 @@ class TWEB: public TUI
 	TWEB( string name );
 	~TWEB( );
 
-	int authTime( )				{ return mTAuth; }
-
-	void setAuthTime( int vl )		{ mTAuth = vl; modif(); }
-
 	void modStart( );
 	void modStop( );
 
     protected:
 	//Methods
 	void load_( );
-	void save_( );
 
     private:
 	//Methods
@@ -97,17 +79,11 @@ class TWEB: public TUI
 	string pgHead( string head_els = "" );
 	string pgTail( );
 
-	void HttpGet( const string &url, string &page, const string &sender, vector<string> &vars );
+	void HttpGet( const string &url, string &page, const string &sender, vector<string> &vars, const string &user );
 	void getAbout( SSess &ses );
-	void getAuth( SSess &ses );
 	string getCookie( string name, vector<string> &vars );
 
-	void HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &contain );
-	//> Post message dialog
-	void messPost( string &page, const string &cat, const string &mess, MessLev type = Info );
-	//> Sesion manipulation function
-	int sesOpen( string name );
-	void sesCheck( SSess &ses );
+	void HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &user );
 
 	//> Get form content for name
 	string cntGet( SSess &ses, const string &nm );
@@ -121,12 +97,6 @@ class TWEB: public TUI
 	string trMessReplace( const string &tsrc );
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
-
-	//Attributes
-	Res		mRes;
-	map<int,SAuth>	mAuth;
-	int		mTAuth;			//Time of sesion life (minutes)
-	time_t		lst_ses_chk;		//Last time of sessions check
 };
 
 extern TWEB *mod;

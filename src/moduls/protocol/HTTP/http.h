@@ -23,6 +23,7 @@
 #define HTTP_H
 
 #include <string>
+#include <map>
 
 #include <tprotocols.h>
 
@@ -30,6 +31,7 @@
 #define _(mess) mod->I18N(mess)
 
 using std::string;
+using std::map;
 
 namespace PrHTTP
 {
@@ -48,11 +50,13 @@ class TProtIn: public TProtocolIn
 
     private:
 	//Methods
-	void index( string &answer );
+	string getIndex( const string &user );
+	string getAuth( const string& url = "/", const string &mess = "" );
+	void getCnt( const vector<string> &vars, const string &content, map<string,string> &cnt );
 
-	string http_head( const string &rcode, int cln, const string &addattr = "" );
-	string w_head( );
-	string w_tail( );
+	string httpHead( const string &rcode, int cln, const string &addattr = "" );
+	string pgHead( string head_els = "" );
+	string pgTail( );
 
 	//Attributes
 	bool m_nofull;
@@ -69,14 +73,45 @@ class TProt: public TProtocol
 	TProt( string name );
 	~TProt( );
 
+	int authTime( )			{ return mTAuth; }
+
+	void setAuthTime( int vl )	{ mTAuth = vl; modif(); }
+
+	//> Auth session manipulation functions
+	int sesOpen( string name );
+	string sesCheck( int sid );
+
     protected:
 	//Methods
 	void load_( );
+	void save_( );
 
     private:
+	//Data
+	//*************************************************
+	//* SAuth                                         *
+	//*************************************************
+	class SAuth
+	{
+	    public:
+		SAuth( ) : tAuth(0), name("")	{ }
+		SAuth( string inm, time_t itAuth ) : tAuth(itAuth), name(inm)	{ }
+
+		time_t tAuth;
+		string name;
+	};
+
 	//Methods
 	string optDescr( );
 	TProtocolIn *in_open( const string &name );
+
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+
+	//Attributes
+	map<int,SAuth>	mAuth;
+	int		mTAuth;
+	time_t		lst_ses_chk;
+
 };
 
 extern TProt *mod;

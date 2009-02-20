@@ -149,6 +149,7 @@ function servGet( adr, prm )
 {
   var req = getXmlHttp();
   req.open('GET',encodeURI('/'+MOD_ID+adr+'?'+prm),false);
+//  req.setRequestHeader('Content-Type','text/xml; charset=utf-8');
   try
   { req.send(null);
     if( req.status == 200 && req.responseXML.childNodes.length )

@@ -36,7 +36,7 @@
 #define MOD_ID		"JavaLikeCalc"
 #define MOD_NAME	"Java-like based calculator"
 #define MOD_TYPE	"DAQ"
-#define VER_TYPE	VER_SPC
+#define VER_TYPE	VER_CNTR
 #define SUB_TYPE	"LIB"
 #define VERSION		"1.3.0"
 #define AUTORS		"Roman Savochenko"

@@ -4,1780 +4,20 @@
 # Roman Savochenko <rom_as@fromru.com>, 2007-2009.
 #
 #: vca_sess.cpp:64 vca_sess.cpp:77 vca_sess.cpp:108 vca_sess.cpp:198
-#: vca_sess.cpp:228 vca_sess.cpp:251 vca_sess.cpp:4050 vca_sess.cpp:4651
-#: web_vision.cpp:53 web_vision.cpp:434 web_vision.cpp:522 web_vision.cpp:595
-#: web_vision.cpp:599 web_vision.cpp:669 web_vision.h:51 web_vision.h:121
-#: web_vision.h:122
+#: vca_sess.cpp:228 vca_sess.cpp:251 vca_sess.cpp:3982 vca_sess.cpp:4584
+#: web_vision.cpp:53 web_vision.cpp:429 web_vision.cpp:510 web_vision.cpp:583
+#: web_vision.cpp:587 web_vision.cpp:600 web_vision.h:107 web_vision.h:108
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 0.6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-12 10:09+0200\n"
+"POT-Creation-Date: 2009-02-19 21:45+0200\n"
 "PO-Revision-Date: 2007-12-03 11:05+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-
-#: VCAjs.cpp:2
-msgid ""
-"\n"
-"//OpenSCADA system module UI.WebVision file: VCA.js\n"
-"/"
-"***************************************************************************\n"
-" *   Copyright (C) 2007-2008 by Roman Savochenko                           "
-"*\n"
-" *   rom_as@fromru.com                                                     "
-"*\n"
-" *                                                                         "
-"*\n"
-" *   This program is free software; you can redistribute it and/or modify  "
-"*\n"
-" *   it under the terms of the GNU General Public License as published by  "
-"*\n"
-" *   the Free Software Foundation; version 2 of the License.               "
-"*\n"
-" *                                                                         "
-"*\n"
-" *   This program is distributed in the hope that it will be useful,       "
-"*\n"
-" *   but WITHOUT ANY WARRANTY; without even the implied warranty of        "
-"*\n"
-" *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         "
-"*\n"
-" *   GNU General Public License for more details.                          "
-"*\n"
-" *                                                                         "
-"*\n"
-" *   You should have received a copy of the GNU General Public License     "
-"*\n"
-" *   along with this program; if not, write to the                         "
-"*\n"
-" *   Free Software Foundation, Inc.,                                       "
-"*\n"
-" *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             "
-"*\n"
-" ***************************************************************************/\n"
-"\n"
-"MOD_ID = 'WebVision';\n"
-"var isNN = navigator.appName.indexOf('Netscape') != -1;\n"
-"var isIE = navigator.appName.indexOf('Microsoft') != -1;\n"
-"var isOpera = navigator.appName.indexOf('Opera') != -1;\n"
-"var isKonq = navigator.appName.indexOf('Konqueror') != -1;\n"
-"/***************************************************\n"
-" * pathLev - Path parsing function.                *\n"
-" ***************************************************/\n"
-"pathLev.off = 0;\n"
-"function pathLev( path, level, scan )\n"
-"{\n"
-"  var an_dir = scan ? pathLev.off : 0;\n"
-"  var t_lev = 0;\n"
-"  var t_dir;\n"
-"  while( an_dir<path.length && path.charAt(an_dir)=='/' ) an_dir++;\n"
-"  if( an_dir >= path.length ) return '';\n"
-"  while( true )\n"
-"  {\n"
-"    t_dir = path.indexOf('/',an_dir);\n"
-"    if( t_dir < 0 ) { pathLev.off=path.length; return (t_lev==level)?path."
-"substr(an_dir):''; }\n"
-"    if( t_lev==level ) { pathLev.off=t_dir; return path.substr(an_dir,t_dir-"
-"an_dir); }\n"
-"    an_dir = t_dir;\n"
-"    t_lev++;\n"
-"    while( an_dir<path.length && path.charAt(an_dir)=='/' ) an_dir++;\n"
-"  }\n"
-"}\n"
-"/***************************************************\n"
-" * noSpace - Get no space string                   *\n"
-" ***************************************************/\n"
-"function noSpace( str )\n"
-"{\n"
-"  var posSt = -1; var posEnd = 0;\n"
-"  for( var i = 0; i < str.length; i++ )\n"
-"    if( str[i] != ' ' ) { if(posSt<0) posSt=i; posEnd = i; }\n"
-"  return (posSt>=0)?str.substr(posSt,posEnd-posSt+1):'';\n"
-"}\n"
-"/***************************************************\n"
-" * nodeText - Get DOM node text                    *\n"
-" ***************************************************/\n"
-"function nodeText( node )\n"
-"{\n"
-"  var rez = '';\n"
-"  for( var i = 0; i < node.childNodes.length; i++ )\n"
-"    if( node.childNodes[i].nodeType == 3 ) rez += node.childNodes[i].data;\n"
-"  return rez;\n"
-"}\n"
-"/***************************************************\n"
-" * setNodeText - Set DOM node text                 *\n"
-" ***************************************************/\n"
-"function setNodeText( node, val )\n"
-"{\n"
-"  if( !node ) return;\n"
-"  for( var i = 0; i < node.childNodes.length; i++ )\n"
-"    if( node.childNodes[i].nodeType == 3 )\n"
-"    { node.childNodes[i].data = val; return; }\n"
-"  node.appendChild(node.ownerDocument.createTextNode(val));\n"
-"}\n"
-"/*****************************************************\n"
-" * nodeTextByTagId - Get DOM node by tag name and id *\n"
-" *****************************************************/\n"
-"function nodeTextByTagId( node, tag, avl )\n"
-"{\n"
-"  for( var i = 0; i < node.childNodes.length; i++ )\n"
-"    if( node.childNodes[i].nodeName == tag && node.childNodes[i].getAttribute"
-"('id') == avl )\n"
-"      return nodeText(node.childNodes[i]);\n"
-"  return '';\n"
-"}\n"
-"/***************************************************\n"
-" * posGetX - Get absolute position                 *\n"
-" **************************************************/\n"
-"function posGetX(obj)\n"
-"{\n"
-"  var posX = 0;\n"
-"  for( ; obj && obj.nodeName != 'BODY' ; obj=obj.parentNode )\n"
-"    posX += (obj.style.left?parseInt(obj.style.left):0)+\n"
-"\t(obj.parentNode.style.borderLeftWidth?parseInt(obj.parentNode.style."
-"borderLeftWidth):0)+\n"
-"\t(obj.parentNode.style.marginLeft?parseInt(obj.parentNode.style."
-"marginLeft):0);\n"
-"  return posX;\n"
-"}\n"
-"/***************************************************\n"
-" * posGetY - Get absolute position                 *\n"
-" **************************************************/\n"
-"function posGetY(obj)\n"
-"{\n"
-"  var posY = 0;\n"
-"  for( ; obj && obj.nodeName != 'BODY' ; obj=obj.parentNode )\n"
-"    posY += (obj.style.top?parseInt(obj.style.top):0)+\n"
-"\t(obj.parentNode.style.borderTopWidth?parseInt(obj.parentNode.style."
-"borderTopWidth):0)+\n"
-"\t(obj.parentNode.style.marginTop?parseInt(obj.parentNode.style."
-"marginTop):0);\n"
-"  return posY;\n"
-"}\n"
-"/***************************************************\n"
-" * getXmlHttp - Check and return XMLHttpRequest for*\n"
-" *  various browsers.                              *\n"
-" ***************************************************/\n"
-"function getXmlHttp( )\n"
-"{\n"
-"  if( window.XMLHttpRequest ) return new XMLHttpRequest();\n"
-"  else if( window.ActiveXObject )\n"
-"  {\n"
-"    try { return new ActiveXObject('Msxml2.XMLHTTP'); }\n"
-"    catch(e) { return new ActiveXObject('Microsoft.XMLHTTP'); }\n"
-"  }\n"
-"  return null;\n"
-"}\n"
-"/***************************************************\n"
-" * realRound - Real numbers round                  *\n"
-" ***************************************************/\n"
-"function realRound( val, dig, toInt )\n"
-"{\n"
-"  rez = Math.floor(val*Math.pow(10,dig?dig:0)+0.5)/Math.pow(10,dig?dig:0);\n"
-"  if( toInt ) return Math.floor(rez+0.5);\n"
-"  return rez;\n"
-"}\n"
-"/***************************************************\n"
-" * evMouseGet - Get mouse key code from event      *\n"
-" ***************************************************/\n"
-"function evMouseGet( e )\n"
-"{\n"
-"    if(e.which == 1) return 'Left';\n"
-"    else if(e.which == 2) return 'Midle';\n"
-"    else if(e.which == 3) return 'Right';\n"
-"}\n"
-"/***************************************************\n"
-" * evKeyGet - Get key code from event              *\n"
-" ***************************************************/\n"
-"function evKeyGet( e )\n"
-"{\n"
-"  if( (e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 65 && e.keyCode "
-"<= 90) )\n"
-"    return String.fromCharCode(e.keyCode);\n"
-"  switch(e.keyCode)\n"
-"  {\n"
-"    case 27: return 'Esc';\n"
-"    case 8:  return 'BackSpace';\n"
-"    case 13: return 'Enter';\n"
-"    case 45: return 'Insert';\n"
-"    case 19: return 'Pause';\n"
-"    case 36: return 'Home';\n"
-"    case 35: return 'End';\n"
-"    case 37: return 'Left';\n"
-"    case 38: return 'Up';\n"
-"    case 39: return 'Right';\n"
-"    case 40: return 'Down';\n"
-"    case 33: return 'PageUp';\n"
-"    case 34: return 'PageDown';\n"
-"    case 112: return 'F1';\n"
-"    case 113: return 'F2';\n"
-"    case 114: return 'F3';\n"
-"    case 115: return 'F4';\n"
-"    case 116: return 'F5';\n"
-"    case 117: return 'F6';\n"
-"    case 118: return 'F7';\n"
-"    case 119: return 'F8';\n"
-"    case 120: return 'F9';\n"
-"    case 121: return 'F10';\n"
-"    case 122: return 'F11';\n"
-"    case 123: return 'F12';\n"
-"    case 32: return 'Space';\n"
-"    case 59: return 'Semicolon';\n"
-"    case 61: return 'Equal';\n"
-"  }\n"
-"  if(isNN) switch(e.keyCode)\n"
-"  {\n"
-"    case 46: return 'Delete';\n"
-"    case 44: return 'Print';\n"
-"    case 192: return 'Apostrophe';\n"
-"    case 106: return 'Asterisk';\n"
-"    case 107: return 'Plus';\n"
-"    case 188: return 'Comma';\n"
-"    case 109: return 'Minus';\n"
-"    case 190: return 'Period';\n"
-"    case 220: return 'Slash';\n"
-"    case 219: return 'BracketLeft';\n"
-"    case 191: return 'BackSlash';\n"
-"    case 221: return 'BracketRight';\n"
-"    case 222: return 'QuoteLeft';\n"
-"  }\n"
-"  else switch(e.keyCode)\n"
-"  {\n"
-"    case 127: return 'Delete';\n"
-"    case 96: return 'Apostrophe';\n"
-"    case 42: return 'Asterisk';\n"
-"    case 43: return 'Plus';\n"
-"    case 44: return 'Comma';\n"
-"    case 45: return 'Minus';\n"
-"    case 46: return 'Period';\n"
-"    case 92: return 'Slash';\n"
-"    case 91: return 'BracketLeft';\n"
-"    case 47: return 'BackSlash';\n"
-"    case 93: return 'BracketRight';\n"
-"    case 39: return 'QuoteLeft';\n"
-"  }\n"
-"  return '#'+e.keyCode.toString(16);\n"
-"}\n"
-"/***************************************************\n"
-" * servGet - XML get request to server             *\n"
-" ***************************************************/\n"
-"function servGet( adr, prm )\n"
-"{\n"
-"  var req = getXmlHttp();\n"
-"  req.open('GET',encodeURI('/'+MOD_ID+adr+'?'+prm),false);\n"
-"  try\n"
-"  { req.send(null);\n"
-"    if( req.status == 200 && req.responseXML.childNodes.length )\n"
-"      return req.responseXML.childNodes[0];\n"
-"  } catch( e ) { window.location='/'+MOD_ID; }\n"
-"}\n"
-"/***************************************************\n"
-" * servSet - XML set request to server             *\n"
-" ***************************************************/\n"
-"function servSet( adr, prm, body, waitRez )\n"
-"{\n"
-"  var req = getXmlHttp();\n"
-"  req.open('POST',encodeURI('/'+MOD_ID+adr+'?'+prm),!waitRez);\n"
-"  try\n"
-"  { req.send(body);\n"
-"    if( waitRez && req.status == 200 && req.responseXML.childNodes.length )\n"
-"      return req.responseXML.childNodes[0];\n"
-"  }\n"
-"  catch( e ) { window.location='/'+MOD_ID; }\n"
-"  return null;\n"
-"}\n"
-"/***************************************************\n"
-" * getWAttrs - request page/widget attributes      *\n"
-" ***************************************************/\n"
-"/*function getWAttrs( wId, tm )\n"
-"{\n"
-"  var rNode = servGet(wId,'com=attrs'+(tm?('&tm='+tm):''))\n"
-"  if( !rNode ) return;\n"
-"  var atrLs = new Object();\n"
-"  for( var i = 0; i < rNode.childNodes.length; i++ )\n"
-"    if( rNode.childNodes[i].nodeType == 1 )\n"
-"      atrLs[rNode.childNodes[i].getAttribute('id')] = nodeText(rNode."
-"childNodes[i]);\n"
-"  return atrLs;\n"
-"}*/\n"
-"/***************************************************\n"
-" * getWAttr - request page/widget attribute        *\n"
-" ***************************************************/\n"
-"function getWAttr( wId, attr )\n"
-"{\n"
-"  var rNode = servGet(wId,'com=attr&attr='+attr);\n"
-"  if( !rNode ) return null;\n"
-"  return nodeText(rNode);\n"
-"}\n"
-"/***************************************************\n"
-" * setWAttrs - set page/widget attributes          *\n"
-" ***************************************************/\n"
-"function setWAttrs( wId, attrs, val )\n"
-"{\n"
-"  var body = '<set>';\n"
-"  if( typeof(attrs) == 'string' ) body+='<el id=\\''+attrs+'\\'>'+val+'</"
-"el>';\n"
-"  else for( var i in attrs ) body+='<el id=\\''+i+'\\'>'+attrs[i]+'</el>';\n"
-"  body+='</set>';\n"
-"  servSet(wId,'com=attrs',body);\n"
-"}\n"
-"/***************************************************\n"
-" * setFocus - Command for set focus                *\n"
-" ***************************************************/\n"
-"function setFocus( wdg, onlyClr )\n"
-"{\n"
-"  if( masterPage.focusWdf && masterPage.focusWdf == wdg ) return;\n"
-"  var attrs = new Object();\n"
-"  if( masterPage.focusWdf ) { attrs.focus = '0'; attrs.event = "
-"'ws_FocusOut'; setWAttrs(masterPage.focusWdf,attrs); }\n"
-"  masterPage.focusWdf = wdg;\n"
-"  if( onlyClr ) return;\n"
-"  attrs.focus = '1'; attrs.event = 'ws_FocusIn'; setWAttrs(masterPage."
-"focusWdf,attrs);\n"
-"}\n"
-"/***************************************************\n"
-" * pwDescr - Page/widget descriptor object         *\n"
-" ***************************************************/\n"
-"function callPage( pgId, updWdg, pgGrp, pgOpenSrc )\n"
-"{\n"
-"  if( !pgId ) return true;\n"
-"  //> Check and update present page\n"
-"  if( this == masterPage )\n"
-"  {\n"
-"    var opPg = this.findOpenPage(pgId);\n"
-"    if( opPg && updWdg ) opPg.makeEl(servGet"
-"(pgId,'com=attrsBr&tm='+tmCnt));\n"
-"    if( opPg ) return true;\n"
-"  }\n"
-"  //> Create or replace main page\n"
-"  if( !pgGrp ) pgGrp = getWAttr(pgId,'pgGrp');\n"
-"  if( !pgOpenSrc ) pgOpenSrc = getWAttr(pgId,'pgOpenSrc');\n"
-"  if( !this.addr.length || (this == masterPage && pgGrp == 'main') || pgGrp "
-"== this.attrs['pgGrp'] )\n"
-"  {\n"
-"    this.addr  = pgId;\n"
-"    this.place = document.createElement('div');\n"
-"    this.makeEl(servGet(pgId,'com=attrsBr'));\n"
-"    document.body.appendChild(this.place);\n"
-"    //> Set project's icon and RunTime page title\n"
-"    document.getElementsByTagName('link')[0].setAttribute('href',location."
-"pathname+'?com=ico');\n"
-"    return true;\n"
-"  }\n"
-"  //> Find for include page creation\n"
-"  for( var i in this.wdgs )\n"
-"    if( this.wdgs[i].attrs['root'] == 'Box' && pgGrp == this.wdgs[i].attrs"
-"['pgGrp'] && pgId != this.wdgs[i].attrs['pgOpenSrc'] )\n"
-"    {\n"
-"      this.wdgs[i].attrs['pgOpenSrc'] = pgId;\n"
-"      this.wdgs[i].makeEl(null,true);\n"
-"      return true;\n"
-"    }\n"
-"  //> Put checking to child pages\n"
-"  for( var i in this.pages )\n"
-"    if( this.pages[i].callPage(pgId,updWdg,pgGrp,pgOpenSrc) ) return true;\n"
-"  //> Check for open child page or for unknown and empty source pages open "
-"as master page child windows\n"
-"  if( pgOpenSrc == this.addr || this == masterPage )\n"
-"  {\n"
-"    var iPg = new pwDescr(pgId,true,this);\n"
-"    iPg.window = window.open('',pgId,'width=600,height=400,directories=no,"
-"menubar=no,toolbar=no,scrollbars=yes,dependent=yes,location=no,"
-"locationbar=no,status=no,statusbar=no,alwaysRaised=yes');\n"
-"    if( !iPg.window ) return true;\n"
-"    iPg.window.document.open( );\n"
-"    iPg.window.document.write(\"<html><body style='background-color: "
-"#E6E6E6;'><div id='main'/></body></html>\\n\");\n"
-"    iPg.window.document.close( );\n"
-"    var mainDiv = iPg.window.document.getElementById('main');\n"
-"    iPg.place = mainDiv;\n"
-"    this.pages[pgId] = iPg;\n"
-"    iPg.makeEl( servGet(pgId,'com=attrsBr') );\n"
-"    return true;\n"
-"  }\n"
-"\n"
-"  return false;\n"
-"}\n"
-"function findOpenPage( pgId )\n"
-"{\n"
-"  if( pgId == this.addr ) return this;\n"
-"  //> Check from included widgets\n"
-"  for( var i in this.wdgs )\n"
-"    if( this.wdgs[i].attrs['root'] == 'Box' && pgId == this.wdgs[i].attrs"
-"['pgOpenSrc'] )\n"
-"      return this.wdgs[i].pages[pgId];\n"
-"  //> Put checking to child pages\n"
-"  for( var i in this.pages )\n"
-"  {\n"
-"    var opPg = this.pages[i].findOpenPage(pgId);\n"
-"    if( opPg ) return opPg;\n"
-"  }\n"
-"  return null;\n"
-"}\n"
-"function makeEl( pgBr, inclPg )\n"
-"{\n"
-"  var margBrdUpd = false; var newAttr = false;\n"
-"  if( !inclPg && pgBr )\n"
-"    for( var j = 0; j < pgBr.childNodes.length; j++ )\n"
-"    {\n"
-"      if( pgBr.childNodes[j].nodeName != 'el' ) continue;\n"
-"      var i = pgBr.childNodes[j].getAttribute('id');\n"
-"      if( (i == 'bordWidth' || i == 'geomMargin') && this.attrs[i] != "
-"nodeText(pgBr.childNodes[j]) ) margBrdUpd = true;\n"
-"      this.attrs[i] = nodeText(pgBr.childNodes[j]);\n"
-"      newAttr = true;\n"
-"    }\n"
-"  if( newAttr || inclPg || !pgBr )\n"
-"  {\n"
-"  var elMargin = parseInt(this.attrs['geomMargin']);\n"
-"  var elBorder = 0;\n"
-"  if( this.attrs['bordWidth'] ) elBorder=parseInt(this.attrs['bordWidth']);\n"
-"  var elStyle = '';\n"
-"  if( !parseInt(this.attrs['en']) ) elStyle+='visibility : hidden; ';\n"
-"  var geomX = parseFloat(this.attrs['geomX']);\n"
-"  var geomY = parseFloat(this.attrs['geomY']);\n"
-"  if( this.pg ) geomX = geomY = 0;\n"
-"  else{ geomX *= this.parent.xScale(true); geomY *= this.parent.yScale"
-"(true); }\n"
-"  if( this.parent && !(this.pg && this.parent.pg) )\n"
-"  {\n"
-"    geomX -= parseInt(this.parent.attrs['geomMargin'])+parseInt(this.parent."
-"attrs['bordWidth']);\n"
-"    geomY -= parseInt(this.parent.attrs['geomMargin'])+parseInt(this.parent."
-"attrs['bordWidth']);\n"
-"  }\n"
-"  elStyle+='position: absolute; left: '+realRound(geomX)+'px; top: "
-"'+realRound(geomY)+'px; ';\n"
-"  var geomW = parseFloat(this.attrs['geomW'])-2*(elMargin+elBorder);\n"
-"  var geomH = parseFloat(this.attrs['geomH'])-2*(elMargin+elBorder);\n"
-"\n"
-"  if( this.pg && this.parent && this.parent.inclOpen && this.parent.inclOpen "
-"== this.addr )\n"
-"  {\n"
-"    elStyle += 'overflow: auto; ';\n"
-"    geomW = parseFloat(this.parent.attrs['geomW'])-2*(elMargin+elBorder);\n"
-"    geomH = parseFloat(this.parent.attrs['geomH'])-2*(elMargin+elBorder);\n"
-"  }\n"
-"  else elStyle += 'overflow: hidden; ';\n"
-"\n"
-"  var xSc = this.xScale(true);\n"
-"  var ySc = this.yScale(true);\n"
-"  geomW = realRound(geomW*xSc); geomH = realRound(geomH*ySc);\n"
-"\n"
-"  //> Set included window geometry to widget size\n"
-"//  if( this == masterPage ) resizeTo(geomW,geomH);\n"
-"  if( this.pg && this.window )\n"
-"  {\n"
-"    var pgWin = this.window;\n"
-"    pgWin.document.body.style.backgroundColor = this.attrs['backColor'];\n"
-"    pgWin.resizeTo(geomW+20,geomH+40);\n"
-"  }\n"
-"\n"
-"  if( parseInt(this.attrs['focus']) ) setFocus(this.addr,true);\n"
-"\n"
-"  if( !(parseInt(this.attrs['perm'])&SEQ_RD) )\n"
-"  {\n"
-"    if( this.pg )\n"
-"    {\n"
-"      elStyle+='background-color: #818181; border: 1px solid black; color: "
-"red; overflow: auto; ';\n"
-"      this.place.innerHTML = \"<div class='vertalign' style='width: "
-"\"+(geomW-2)+\"px; height: \"+(geomH-2)+\"px;'>Page: '\"+this.addr+\"'.<br/"
-">View access is no permited.</div>\";\n"
-"    }\n"
-"  }\n"
-"  else if( this.attrs['root'] == 'ElFigure' )\n"
-"  {\n"
-"    if( this.attrs['backColor'] ) elStyle+='background-color: '+this.attrs"
-"['backColor']+'; ';\n"
-"    if( this.attrs['backImg'] )\n"
-"      elStyle+='background-image: url(\\'/'+MOD_ID+this.addr+'?"
-"com=res&val='+this.attrs['backImg']+'\\'); ';\n"
-"    var figObj = this.place.childNodes[0];\n"
-"    if( !figObj )\n"
-"    {\n"
-"      figObj = this.place.ownerDocument.createElement('img');\n"
-"      figObj.width = geomW; figObj.height = geomH;\n"
-"      figObj.border = 0;\n"
-"      figObj.wdgLnk = this;\n"
-"      this.place.appendChild(figObj);\n"
-"    }\n"
-"    figObj.src = '/'+MOD_ID+this.addr+'?com=obj&tm='+tmCnt+'&xSc='+xSc."
-"toFixed(2)+'&ySc='+ySc.toFixed(2);\n"
-"    if( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])"
-"&SEQ_WR )\n"
-"    {\n"
-"      figObj.onclick = function(e)\n"
-"      {\n"
-"\tif(!e) e = window.event;\n"
-"\tservSet(this.wdgLnk.addr,'com=obj&sub=point&x='+(e.offsetX?e.offsetX:(e."
-"clientX-posGetX(this)+window.pageXOffset))+\n"
-"\t\t\t\t\t\t  '&y='+(e.offsetY?e.offsetY:(e.clientY-posGetY(this)+window."
-"pageYOffset))+\n"
-"\t\t\t\t\t\t  '&key='+evMouseGet(e),'');\n"
-"\treturn false;\n"
-"      }\n"
-"      figObj.ondblclick = function(e)\n"
-"      {\n"
-"\tif(!e) e = window.event;\n"
-"\tservSet(this.wdgLnk.addr,'com=obj&sub=point&x='+(e.offsetX?e.offsetX:(e."
-"clientX-posGetX(this)+window.pageXOffset))+\n"
-"\t\t\t\t\t\t  '&y='+(e.offsetY?e.offsetY:(e.clientY-posGetY(this)+window."
-"pageYOffset))+\n"
-"\t\t\t\t\t\t  '&key=DblClick','');\n"
-"      }\n"
-"    }\n"
-"    else { figObj.onclick = ''; figObj.ondblclick = ''; }\n"
-"  }\n"
-"  else if( this.attrs['root'] == 'Box' )\n"
-"  {\n"
-"    if( this.attrs['backColor'] ) elStyle+='background-color: '+this.attrs"
-"['backColor']+'; ';\n"
-"    if( this.attrs['backImg'] )   elStyle+='background-image: url"
-"(\\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\\'); ';\n"
-"    if( parseInt(this.attrs['focus']) ) elStyle+='border-style: ridge; "
-"border-width: 2px; border-color: white; ';\n"
-"    else {\n"
-"      elStyle+='border-style: solid; border-width: '+this.attrs['bordWidth']"
-"+'px; ';\n"
-"      if( this.attrs['bordColor'] ) elStyle+='border-color: '+this.attrs"
-"['bordColor']+'; ';\n"
-"    }\n"
-"    switch( parseInt(this.attrs['bordStyle']) )\n"
-"    {\n"
-"      case 1: elStyle+='border-style: dotted; '; break;\n"
-"      case 2: elStyle+='border-style: dashed; '; break;\n"
-"      case 3: elStyle+='border-style: solid; ';  break;\n"
-"      case 4: elStyle+='border-style: double; '; break;\n"
-"      case 5: elStyle+='border-style: groove; '; break;\n"
-"      case 6: elStyle+='border-style: ridge; ';  break;\n"
-"      case 7: elStyle+='border-style: inset; ';  break;\n"
-"      case 8: elStyle+='border-style: outset; '; break;\n"
-"    }\n"
-"    if( (this.inclOpen && this.attrs['pgOpenSrc'] != this.inclOpen) || (!"
-"this.inclOpen && this.attrs['pgOpenSrc'].length) )\n"
-"    {\n"
-"      if( this.inclOpen )\n"
-"      {\n"
-"\tservSet(this.inclOpen,'com=pgClose','');\n"
-"\tpgCache[this.inclOpen] = this.pages[this.inclOpen];\n"
-"\tpgCache[this.inclOpen].reqTm = tmCnt;\n"
-"\tthis.place.removeChild(this.pages[this.inclOpen].place);\n"
-"\tthis.pages[this.inclOpen].perUpdtEn(false);\n"
-"\tdelete this.pages[this.inclOpen];\n"
-"\tthis.inclOpen = null;\n"
-"      }\n"
-"      if( this.attrs['pgOpenSrc'].length )\n"
-"      {\n"
-"        this.inclOpen = this.attrs['pgOpenSrc'];\n"
-"        if( pgCache[this.inclOpen] )\n"
-"        {\n"
-"\t  this.pages[this.inclOpen] = pgCache[this.inclOpen];\n"
-"\t  this.place.appendChild(this.pages[this.inclOpen].place);\n"
-"\t  pgBr = servGet(this.inclOpen,'com=attrsBr&tm='+pgCache[this.inclOpen]."
-"reqTm);\n"
-"\t  this.pages[this.inclOpen].perUpdtEn(true);\n"
-"\t  this.pages[this.inclOpen].makeEl(pgBr);\n"
-"\t  delete pgCache[this.inclOpen];\n"
-"        }\n"
-"        else\n"
-"        {\n"
-"\t  var iPg = new pwDescr(this.inclOpen,true,this);\n"
-"\t  iPg.place = this.place.ownerDocument.createElement('div');\n"
-"\t  iPg.makeEl( servGet(this.inclOpen,'com=attrsBr') );\n"
-"\t  this.pages[this.inclOpen] = iPg;\n"
-"\t  this.place.appendChild(iPg.place);\n"
-"        }\n"
-"      }\n"
-"    }\n"
-"    this.place.wdgLnk = this;\n"
-"    if( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])"
-"&SEQ_WR )\n"
-"      this.place.onclick = function() { setFocus(this.wdgLnk.addr); return "
-"false; };\n"
-"    else this.place.onclick = '';\n"
-"  }\n"
-"  else if( this.attrs['root'] == 'Text' )\n"
-"  {\n"
-"    if( this.attrs['backColor'] ) elStyle+='background-color: '+this.attrs"
-"['backColor']+'; ';\n"
-"    if( this.attrs['backImg'] )   elStyle+='background-image: url"
-"(\\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\\'); ';\n"
-"    elStyle+='border-style: solid; border-width: '+this.attrs['bordWidth']"
-"+'px; ';\n"
-"    if( this.attrs['bordColor'] ) elStyle+='border-color: '+this.attrs"
-"['bordColor']+'; ';\n"
-"    var txtAlign = parseInt(this.attrs['alignment']);\n"
-"    var spanStyle = 'display: table-cell; width: '+geomW+'px; height: '+geomH"
-"+'px; ';\n"
-"    switch(txtAlign&0x3)\n"
-"    {\n"
-"      case 0: spanStyle+='text-align: left; '; break;\n"
-"      case 1: spanStyle+='text-align: right; '; break;\n"
-"      case 2: spanStyle+='text-align: center; '; break;\n"
-"      case 3: spanStyle+='text-align: justify; '; break;\n"
-"    }\n"
-"    switch(txtAlign>>2)\n"
-"    {\n"
-"      case 0: spanStyle+='vertical-align: top; '; break;\n"
-"      case 1: spanStyle+='vertical-align: bottom; '; break;\n"
-"      case 2: spanStyle+='vertical-align: middle; '; break;\n"
-"    }\n"
-"    var allFnt = this.attrs['font'].split(' ');\n"
-"    if( allFnt.length >= 1 ) spanStyle+='font-family: '+allFnt[0].replace(/_/"
-"g,' ')+'; ';\n"
-"    if( allFnt.length >= 2 ) spanStyle+='font-size: '+(parseInt(allFnt[1])"
-"*Math.min(xSc,ySc)).toFixed(0)+'px; ';\n"
-"    if( allFnt.length >= 3 ) spanStyle+='font-weight: '+(parseInt(allFnt"
-"[2])?'bold':'normal')+'; ';\n"
-"    if( allFnt.length >= 4 ) spanStyle+='font-style: '+(parseInt(allFnt"
-"[3])?'italic':'normal')+'; ';\n"
-"    spanStyle+='color: '+(this.attrs['color']?this.attrs['color']:'black')"
-"+'; ';\n"
-"    var txtVal = this.attrs['text'];\n"
-"    for( var i = 0; i < parseInt(this.attrs['numbArg']); i++ )\n"
-"    {\n"
-"      var argVal;\n"
-"      var argCfg = new Array();\n"
-"      switch(parseInt(this.attrs['arg'+i+'tp']))\n"
-"      {\n"
-"\tcase 0: case 2:\n"
-"\t  argCfg[0]=this.attrs['arg'+i+'cfg'];\n"
-"\t  argVal=this.attrs['arg'+i+'val'];\n"
-"\t  break;\n"
-"\tcase 1:\n"
-"\t  argCfg=this.attrs['arg'+i+'cfg'].split(';');\n"
-"\t  if( argCfg[1] == 'g' )      argVal=parseFloat(this.attrs['arg'+i+'val'])."
-"toPrecision(argCfg[2]);\n"
-"\t  else if( argCfg[1] == 'f' ) argVal=parseFloat(this.attrs['arg'+i+'val'])."
-"toFixed(argCfg[2]);\n"
-"\t  else argVal=this.attrs['arg'+i+'val'];\n"
-"\t  break;\n"
-"      }\n"
-"      var argSize = parseInt(argCfg[0]);\n"
-"      var argPad = '';\n"
-"      for( var j = argVal.length; j < Math.abs(argSize); j++ ) argPad"
-"+='&nbsp;';\n"
-"      if( argSize > 0 ) argVal=argPad+argVal; else argVal+=argPad;\n"
-"      txtVal = txtVal.replace('%'+(i+1),argVal);\n"
-"    }\n"
-"    var txtVal1 = '';\n"
-"    for( var j = 0; j < txtVal.length; j++ )\n"
-"      if( txtVal[j] == '\\n' ) txtVal1+='<br />'; else txtVal1+=txtVal[j];\n"
-"//    txtVal.replace(/\\n/g,'<br />');\n"
-"//    while(this.place.childNodes.length) this.place.removeChild(this.place."
-"childNodes[0]);\n"
-"    this.place.innerHTML = \"<span style='\"+spanStyle+\"'>\"+txtVal1+\"</"
-"span>\";\n"
-"    this.place.wdgLnk = this;\n"
-"    if( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])"
-"&SEQ_WR )\n"
-"      this.place.onclick = function() { setFocus(this.wdgLnk.addr); return "
-"false; };\n"
-"    else this.place.onclick = '';\n"
-"  }\n"
-"  else if( this.attrs['root'] == 'Media' )\n"
-"  {\n"
-"    if( this.attrs['backColor'] ) elStyle+='background-color: '+this.attrs"
-"['backColor']+'; ';\n"
-"    if( this.attrs['backImg'] )\n"
-"      elStyle+='background-image: url(\\'/'+MOD_ID+this.addr+'?"
-"com=res&val='+this.attrs['backImg']+'\\'); ';\n"
-"    elStyle+='border-style: solid; border-width: '+this.attrs['bordWidth']"
-"+'px; ';\n"
-"    if( this.attrs['bordColor'] ) elStyle+='border-color: '+this.attrs"
-"['bordColor']+'; ';\n"
-"    while(this.place.childNodes.length) this.place.removeChild(this.place."
-"childNodes[0]);\n"
-"    var medObj = this.place.ownerDocument.createElement('img');\n"
-"    medObj.src = this.attrs['src'].length ? ('/'+MOD_ID+this.addr+'?"
-"com=res&val='+this.attrs['src']) : '';\n"
-"    medObj.border = 0;\n"
-"    if( this.attrs['fit'] == 1 ) { medObj.width = geomW; medObj.height = "
-"geomH; }\n"
-"    if( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])"
-"&SEQ_WR )\n"
-"    {\n"
-"      if( parseInt(this.attrs['areas']) )\n"
-"      {\n"
-"\tvar mapObj = this.place.ownerDocument.createElement('map');\n"
-"\tmapObj.name = this.addr;\n"
-"\tfor( var i = 0; i <  parseInt(this.attrs['areas']); i++ )\n"
-"\t{\n"
-"\t  var arObj = this.place.ownerDocument.createElement('area');\n"
-"\t  switch(parseInt(this.attrs['area'+i+'shp']))\n"
-"\t  {\n"
-"\t    case 0: arObj.shape = 'rect'; break;\n"
-"\t    case 1: arObj.shape = 'poly'; break;\n"
-"\t    case 2: arObj.shape = 'circle'; break;\n"
-"\t  }\n"
-"\t  arObj.coords = this.attrs['area'+i+'coord'];\n"
-"\t  arObj.title = this.attrs['area'+i+'title'];\n"
-"\t  arObj.href = '';\n"
-"\t  arObj.onclick = function() { setWAttrs(this.wdgLnk."
-"addr,'event','ws_MapAct'+i+'Left'); return false; }\n"
-"\t  arObj.wdgLnk = this;\n"
-"\t  mapObj.appendChild(arObj);\n"
-"\t}\n"
-"\tthis.place.appendChild(mapObj);\n"
-"\tmedObj.setAttribute('usemap','#'+this.addr);\n"
-"\tthis.place.appendChild(medObj);\n"
-"      }\n"
-"    }\n"
-"    else this.place.appendChild(medObj);\n"
-"  }\n"
-"  else if( this.attrs['root'] == 'FormEl' && !this.place.isModify )\n"
-"  {\n"
-"    var elTp = parseInt(this.attrs['elType']);\n"
-"    while( this.place.childNodes.length ) this.place.removeChild(this.place."
-"childNodes[0]);\n"
-"    var fontCfg = '';\n"
-"    if( this.attrs['font'] )\n"
-"    {\n"
-"      var allFnt = this.attrs['font'].split(' ');\n"
-"      if( allFnt.length >= 3 && parseInt(allFnt[2]) ) fontCfg += 'bold ';\n"
-"      if( allFnt.length >= 4 && parseInt(allFnt[3]) ) fontCfg += 'italic ';\n"
-"      if( allFnt.length >= 2 ) fontCfg += (parseInt(allFnt[1])*Math.min(xSc,"
-"ySc)).toFixed(0)+'px ';\n"
-"      if( allFnt.length >= 1 ) fontCfg += allFnt[0].replace(/_/g,' ')+' ';\n"
-"    }\n"
-"    switch(elTp)\n"
-"    {\n"
-"      case 0:\t//Line edit\n"
-"\tvar formObj = this.place.ownerDocument.createElement('input');\n"
-"\tformObj.disabled = !( parseInt(this.attrs['active']) && parseInt(this.attrs"
-"['perm'])&SEQ_WR );\n"
-"\tformObj.tabIndex = parseInt(this.attrs['geomZ'])+1;\n"
-"\tthis.place.appendChild(formObj);\n"
-"\tvar geomWint = geomW-4;\n"
-"\tformObj.wdgLnk = this;\n"
-"\tformObj.style.cssText = 'position: absolute; top: '+((geomH-20)/2)+'px; "
-"width: '+geomWint+'px; height: '+Math.min(geomH,16)+'px; border: 1px solid "
-"black; font: '+fontCfg+'; padding: 1px;';\n"
-"\tthis.place.view = parseInt(this.attrs['view']);\n"
-"\tthis.place.cfg = this.attrs['cfg'];\n"
-"\tif( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])"
-"&SEQ_WR )\n"
-"\t{\n"
-"\t switch(this.place.view)\n"
-"\t {\n"
-"\t  case 1:\t\t//Combo\n"
-"\t    var combImg = this.place.ownerDocument.createElement('img');\n"
-"\t    combImg.src = '/'+MOD_ID+'/img_combar';\n"
-"\t    combImg.style.cssText = 'position: absolute; left: '+(geomW-16)+'px; "
-"top: '+((geomH-20)/2)+'px; width: 16px; height: 20px; cursor: pointer; ';\n"
-"\t    this.place.appendChild(combImg);\n"
-"\t    formObj.style.width = (geomWint-16)+'px';\n"
-"\t    combImg.onclick = function()\n"
-"\t    {\n"
-"\t      var formObj = this.parentNode.childNodes[0];\n"
-"\t      var combList = this.ownerDocument.getElementById('#combo');\n"
-"\t      if( !combList )\n"
-"\t      {\n"
-"\t\tcombList = this.ownerDocument.createElement('div');\n"
-"\t\tcombList.id = '#combo';\n"
-"\t\tcombList.appendChild(this.ownerDocument.createElement('select'));\n"
-"\t\tcombList.childNodes[0].size='100';\n"
-"\t\tcombList.childNodes[0].onchange = function() { this.formObj.value = this."
-"options[this.selectedIndex].value; this.formObj.setModify(true); this."
-"parentNode.style.visibility = 'hidden'; }\n"
-"\t\tcombList.childNodes[0].onblur = function() { this.parentNode.style."
-"visibility = 'hidden'; this.parentNode.style.top = \"-100px\"; }\n"
-"\t\tthis.ownerDocument.body.appendChild(combList);\n"
-"\t      }\n"
-"\t      while(combList.childNodes[0].childNodes.length) combList.childNodes"
-"[0].removeChild(combList.childNodes[0].childNodes[0]);\n"
-"\t      var elLst = formObj.parentNode.cfg.split('\\n');\n"
-"\t      for( var i = 0; i < elLst.length; i++ )\n"
-"\t      {\n"
-"\t\tvar optEl = this.ownerDocument.createElement('option');\n"
-"\t\toptEl.appendChild(this.ownerDocument.createTextNode(elLst[i]));\n"
-"\t\tif( formObj.valGet() == elLst[i] ) optEl.defaultSelected=optEl."
-"selected=true;\n"
-"\t\tcombList.childNodes[0].appendChild(optEl);\n"
-"\t      }\n"
-"\t      if( combList.childNodes[0].childNodes.length )\n"
-"\t      {\n"
-"\t\tcombList.style.cssText = 'position: absolute; visibility : visible; "
-"left: '+posGetX(formObj)+'px; top: '+(posGetY(formObj)+formObj.offsetHeight)"
-"+'px; width: '+formObj.offsetWidth+'px; height: '+Math.min(elLst."
-"length*15,70)+'px; border: 0; ';\n"
-"\t\tcombList.childNodes[0].style.cssText = 'width: '+formObj.offsetWidth"
-"+'px; height: '+Math.min(elLst.length*15,70)+'px; border-width: 2px; font: "
-"'+fontCfg+'; padding: 1px;';\n"
-"\t\tcombList.childNodes[0].formObj = formObj;\n"
-"\t\tcombList.childNodes[0].focus();\n"
-"\t      }\n"
-"\t      return false;\n"
-"\t    }\n"
-"\t    break;\n"
-"\t  case 2: case 3:\t//Integer, Real\n"
-"\t    var spinImg = this.place.ownerDocument.createElement('img');\n"
-"\t    spinImg.src = '/'+MOD_ID+'/img_spinar';\n"
-"\t    spinImg.style.cssText = 'position: absolute; left: '+(geomW-16)+'px; "
-"top: '+((geomH-20)/2)+'px; width: 16px; height: 20px; cursor: pointer; ';\n"
-"\t    spinImg.border = '0';\n"
-"\t    formObj.style.width = (geomWint-16)+'px';\n"
-"\t    spinImg.onclick = function(e)\n"
-"\t    {\n"
-"\t      if( !e ) e = window.event;\n"
-"\t      var formObj = this.parentNode.childNodes[0];\n"
-"\t      var argCfg = this.parentNode.cfg.split(':');\n"
-"\t      if( (e.clientY-posGetY(this)) < 10 )\n"
-"\t\tformObj.valSet(formObj.valGet()+((argCfg.length>2)?((this.parentNode."
-"view==2)?parseInt(argCfg[2]):parseFloat(argCfg[2])):1));\n"
-"\t      else formObj.valSet(formObj.valGet()-((argCfg.length>2)?((this."
-"parentNode.view==2)?parseInt(argCfg[2]):parseFloat(argCfg[2])):1));\n"
-"\t      formObj.setModify(true);\n"
-"\t      return false;\n"
-"\t    }\n"
-"\t    this.place.appendChild(spinImg);\n"
-"\t    break;\n"
-"\t }\n"
-"\t formObj.onkeyup = function(e)\n"
-"\t {\n"
-"\t  if( !e ) e = window.event;\n"
-"\t  if( this.modify() && e.keyCode == 13 ) this.chApply();\n"
-"\t  if( this.modify() && e.keyCode == 27 ) this.chEscape();\n"
-"\t  if( this.saveVal != this.value ) this.setModify(true);\n"
-"\t }\n"
-"\t formObj.modify = function( )\n"
-"\t { return (this.parentNode.childNodes[(this.parentNode.view>=1&&this."
-"parentNode.view<=3)?2:1].style.visibility == 'visible'); }\n"
-"\t formObj.setModify = function( on )\n"
-"\t {\n"
-"\t  if( this.modify() == on ) return;\n"
-"\t  var posOkImg = (this.parentNode.view>=1&&this.parentNode.view<=3)?2:1;\n"
-"\t  var okImg = this.parentNode.childNodes[posOkImg];\n"
-"\t  if( on ) { this.style.width = (parseInt(this.style.width)-16)+'px'; if"
-"(posOkImg==2) this.parentNode.childNodes[1].style.left = (parseInt(this."
-"parentNode.childNodes[1].style.left)-16)+'px'; okImg.style.visibility = "
-"'visible'; }\n"
-"\t  else     { this.style.width = (parseInt(this.style.width)+16)+'px'; if"
-"(posOkImg==2) this.parentNode.childNodes[1].style.left = (parseInt(this."
-"parentNode.childNodes[1].style.left)+16)+'px'; okImg.style.visibility = "
-"'hidden'; }\n"
-"\t  this.parentNode.isModify = on;\n"
-"\t }\n"
-"\t}\n"
-"\tformObj.valSet = function(val)\n"
-"\t{\n"
-"\t  switch(this.parentNode.view)\n"
-"\t  {\n"
-"\t    case 0: case 1: this.value = val; break;\n"
-"\t    case 2:\n"
-"\t      var argCfg = this.parentNode.cfg.split(':');\n"
-"\t      this.value = ((argCfg.length>3)?argCfg[3]:'')+Math.max((argCfg."
-"length>1)?parseInt(argCfg[0]):0,Math.min((argCfg.length>1)?parseInt(argCfg"
-"[1]):100,parseInt(val)))+((argCfg.length>4)?argCfg[4]:'');\n"
-"\t      break;\n"
-"\t    case 3:\n"
-"\t      var argCfg = this.parentNode.cfg.split(':');\n"
-"\t      this.value = ((argCfg.length>3)?argCfg[3]:'')+Math.max((argCfg."
-"length>1)?parseFloat(argCfg[0]):0,Math.min((argCfg.length>1)?parseFloat"
-"(argCfg[1]):100,parseFloat(val))).toFixed((argCfg.length>5)?parseInt(argCfg"
-"[5]):2)+((argCfg.length>4)?argCfg[4]:'');\n"
-"\t      break;\n"
-"\t    case 4:\n"
-"\t      var rez = (this.parentNode.cfg.length) ? this.parentNode.cfg : 'hh:"
-"mm';\n"
-"\t      var v = (Math.floor(val/3600)%(ap?12:24)).toString(10); rez = rez."
-"replace('hh',(v.length==1)?'0'+v:v); rez = rez.replace('h',v);\n"
-"\t      v = (Math.floor(val/60)%60).toString(10); rez = rez.replace('mm',(v."
-"length==1)?'0'+v:v); rez = rez.replace('m',v);\n"
-"\t      v = (val%60).toString(10); rez = rez.replace('ss',(v."
-"length==1)?'0'+v:v); rez = rez.replace('s',v);\n"
-"\t      if( rez.indexOf('ap') >= 0 ) { rez = rez.replace('ap',"
-"(val>=43200)?'pm':'am'); var ap = true; }\n"
-"\t      if( rez.indexOf('AP') >= 0 ) { rez = rez.replace('AP',"
-"(val>=43200)?'PM':'AM'); var ap = true; }\n"
-"\t      this.value = rez;\n"
-"\t      break;\n"
-"\t    case 5:\n"
-"\t      var rez = (this.parentNode.cfg.length) ? this.parentNode.cfg : 'dd."
-"MM.yy';\n"
-"\t      var dt = new Date(parseInt(val)*1000);\n"
-"\t      var v = dt.getDate().toString(10); rez = rez.replace('dddd',(v."
-"length==1)?'0'+v:v); rez = rez.replace('ddd',(v.length==1)?'0'+v:v); rez = "
-"rez.replace('dd',(v.length==1)?'0'+v:v); rez = rez.replace('d',v);\n"
-"\t      v = (dt.getMonth()+1).toString(10); rez = rez.replace('MMMM',(v."
-"length==1)?'0'+v:v); rez = rez.replace('MMM',(v.length==1)?'0'+v:v); rez = "
-"rez.replace('MM',(v.length==1)?'0'+v:v); rez = rez.replace('M',v);\n"
-"\t      v = dt.getFullYear().toString(10); rez = rez.replace('yyyy',v); rez "
-"= rez.replace('yy',v.substr(2,2));\n"
-"\t      delete dt;\n"
-"\t      this.value = rez;\n"
-"\t      break;\n"
-"\t    case 6:\n"
-"\t      var rez = (this.parentNode.cfg.length) ? this.parentNode.cfg : 'dd."
-"MM.yy hh:mm';\n"
-"\t      var dt = new Date(parseInt(val)*1000);\n"
-"\t      var v = dt.getDate().toString(10); rez = rez.replace('dddd',(v."
-"length==1)?'0'+v:v); rez = rez.replace('ddd',(v.length==1)?'0'+v:v); rez = "
-"rez.replace('dd',(v.length==1)?'0'+v:v); rez = rez.replace('d',v);\n"
-"\t      v = (dt.getMonth()+1).toString(10); rez = rez.replace('MMMM',(v."
-"length==1)?'0'+v:v); rez = rez.replace('MMM',(v.length==1)?'0'+v:v); rez = "
-"rez.replace('MM',(v.length==1)?'0'+v:v); rez = rez.replace('M',v);\n"
-"\t      v = dt.getFullYear().toString(10); rez = rez.replace('yyyy',v); rez "
-"= rez.replace('yy',v.substr(2,2));\n"
-"\t      v = dt.getHours().toString(10); rez = rez.replace('hh',(v."
-"length==1)?'0'+v:v); rez = rez.replace('h',v);\n"
-"\t      v = dt.getMinutes().toString(10); rez = rez.replace('mm',(v."
-"length==1)?'0'+v:v); rez = rez.replace('m',v);\n"
-"\t      v = dt.getSeconds().toString(10); rez = rez.replace('ss',(v."
-"length==1)?'0'+v:v); rez = rez.replace('s',v);\n"
-"\t      if( rez.indexOf('ap') >= 0 ) { rez = rez.replace('ap',"
-"(val>=43200)?'pm':'am'); var ap = true; }\n"
-"\t      if( rez.indexOf('AP') >= 0 ) { rez = rez.replace('AP',"
-"(val>=43200)?'PM':'AM'); var ap = true; }\n"
-"\t      delete dt;\n"
-"\t      this.value = rez;\n"
-"\t      break;\n"
-"\t  }\n"
-"\t  this.saveVal = this.value;\n"
-"\t  this.srcVal = val;\n"
-"\t}\n"
-"\tformObj.valGet = function( )\n"
-"\t{\n"
-"\t  switch(this.parentNode.view)\n"
-"\t  {\n"
-"\t    case 0: case 1: return this.value;\n"
-"\t    case 2:\n"
-"\t      var rez = this.value;\n"
-"\t      var argCfg = this.parentNode.cfg.split(':');\n"
-"\t      var tmp = (argCfg&&argCfg.length>3)?noSpace(argCfg[3]):'';\n"
-"\t      if( tmp.length && rez.indexOf(tmp) >= 0 ) rez=rez.substring(rez."
-"indexOf(tmp)+tmp.length);\n"
-"\t      tmp = (argCfg&&argCfg.length>4)?noSpace(argCfg[4]):'';\n"
-"\t      if( tmp.length && rez.indexOf(tmp) >= 0 ) rez=rez.substring(0,rez."
-"indexOf(tmp));\n"
-"\t      return parseInt(rez);\n"
-"\t    case 3:\n"
-"\t      var rez = this.value;\n"
-"\t      var argCfg = this.parentNode.cfg.split(':');\n"
-"\t      var tmp = (argCfg&&argCfg.length>3)?noSpace(argCfg[3]):'';\n"
-"\t      if( tmp.length && rez.indexOf(tmp) >= 0 ) rez=rez.substring(rez."
-"indexOf(tmp)+tmp.length);\n"
-"\t      tmp = (argCfg&&argCfg.length>4)?noSpace(argCfg[4]):'';\n"
-"\t      if( tmp.length && rez.indexOf(tmp) >= 0 ) rez=rez.substring(0,rez."
-"indexOf(tmp));\n"
-"\t      return parseFloat(rez);\n"
-"\t    case 4:\n"
-"\t      var cfg  = (this.parentNode.cfg.length) ? this.parentNode.cfg : 'hh:"
-"mm';\n"
-"\t      var rez  = this.value;\n"
-"\t      if( cfg.indexOf('ap') >= 0 || cfg.indexOf('AP') >= 0 )\n"
-"\t      { cfg = cfg.replace('ap',''); cfg = cfg.replace('AP',''); rez = rez."
-"replace('am',''); rez = rez.replace('AM',''); rez = rez.replace('pm',''); "
-"rez = rez.replace('PM',''); }\n"
-"\t      var hour = Math.floor(this.srcVal/3600);\n"
-"\t      var min  = Math.floor(this.srcVal/60)%60;\n"
-"\t      var sec  = this.srcVal%60;\n"
-"\t      var i = 0; var lstS = ''; var lenS = 0;\n"
-"\t      while( true )\n"
-"\t      {\n"
-"\t\tif( i >= cfg.length || cfg.charAt(i) == 'h' || cfg.charAt(i) == 'm' || "
-"cfg.charAt(i) == 's' )\n"
-"\t\t{\n"
-"\t\t  var space = lenS ? noSpace(cfg.substr(i-lenS,lenS)) : ''; if( lenS && !"
-"space.length ) space = ' ';\n"
-"\t\t  if( (space.length && lstS != '') || i >= cfg.length )\n"
-"\t\t  {\n"
-"\t\t    if( space.length && rez.indexOf(space) == -1 ) return 0;\n"
-"\t\t    var val = parseInt(space.length?rez.substr(0,rez.indexOf(space)):"
-"rez,10);\n"
-"\t\t    rez = rez.substr(rez.indexOf(space));\n"
-"\t\t    if( lstS == 'h' ) hour = val; else if( lstS == 'm' ) min = val; else "
-"if( lstS == 's' ) sec = val;\n"
-"\t\t    if( i >= cfg.length ) break;\n"
-"\t\t  }\n"
-"\t\t  if( space.length )\n"
-"\t\t  {\n"
-"\t\t    if( rez.indexOf(space) == -1 ) return 0;\n"
-"\t\t    rez = rez.substr(rez.indexOf(space)+space.length);\n"
-"\t\t  }\n"
-"\t\t  lstS = cfg.charAt(i); lenS = 0; i++; continue;\n"
-"\t\t}\n"
-"\t\tlenS++; i++;\n"
-"\t      }\n"
-"\t      if( this.value.indexOf('pm') >= 0 || this.value.indexOf('PM') >= 0 ) "
-"hour+=12;\n"
-"\t      return (hour%24)*3600+(min%60)*60+(sec%60);\n"
-"\t    case 5:\n"
-"\t      var cfg  = (this.parentNode.cfg.length) ? this.parentNode.cfg : 'd."
-"MM.yy';\n"
-"\t      var rez  = this.value;\n"
-"\t      var dt = new Date(this.srcVal*1000);\n"
-"\t      var i = 0; var lstS = ''; var lenS = 0;\n"
-"\t      while( true )\n"
-"\t      {\n"
-"\t\tif( i >= cfg.length || cfg.charAt(i) == 'd' || cfg.charAt(i) == 'M' || "
-"cfg.charAt(i) == 'y' )\n"
-"\t\t{\n"
-"\t\t  var space = lenS ? noSpace(cfg.substr(i-lenS,lenS)) : ''; if( lenS && !"
-"space.length ) space = ' ';\n"
-"\t\t  if( (space.length && lstS != '') || i >= cfg.length )\n"
-"\t\t  {\n"
-"\t\t    if( space.length && rez.indexOf(space) == -1 ) return 0;\n"
-"\t\t    var val = parseInt(space.length?rez.substr(0,rez.indexOf(space)):"
-"rez,10);\n"
-"\t\t    rez = rez.substr(rez.indexOf(space));\n"
-"\t\t    if( lstS == 'd' ) dt.setDate(val); else if( lstS == 'M' ) dt.setMonth"
-"(val-1); else if( lstS == 'y' ) dt.setFullYear((val<100)?2000+val:val);\n"
-"\t\t    if( i >= cfg.length ) break;\n"
-"\t\t  }\n"
-"\t\t  if( space.length )\n"
-"\t\t  {\n"
-"\t\t    if( rez.indexOf(space) == -1 ) return 0;\n"
-"\t\t    rez = rez.substr(rez.indexOf(space)+space.length);\n"
-"\t\t  }\n"
-"\t\t  lstS = cfg.charAt(i); lenS = 0; i++; continue;\n"
-"\t\t}\n"
-"\t\tlenS++; i++;\n"
-"\t      }\n"
-"\t      return dt.getTime()/1000;\n"
-"\t    case 6:\n"
-"\t      var cfg = (this.parentNode.cfg.length) ? this.parentNode.cfg : 'dd."
-"MM.yy hh:mm';\n"
-"\t      var rez  = this.value;\n"
-"\t      if( cfg.indexOf('ap') >= 0 || cfg.indexOf('AP') >= 0 )\n"
-"\t      { cfg = cfg.replace('ap',''); cfg = cfg.replace('AP',''); rez = rez."
-"replace('am',''); rez = rez.replace('AM',''); rez = rez.replace('pm',''); "
-"rez = rez.replace('PM',''); }\n"
-"\t      var dt = new Date(this.srcVal*1000);\n"
-"\t      var i = 0; var lstS = ''; var lenS = 0;\n"
-"\t      while( true )\n"
-"\t      {\n"
-"\t\tif( i >= cfg.length || cfg.charAt(i) == 'd' || cfg.charAt(i) == 'M' || "
-"cfg.charAt(i) == 'y' || cfg.charAt(i) == 'h' || cfg.charAt(i) == 'm' || cfg."
-"charAt(i) == 's' )\n"
-"\t\t{\n"
-"\t\t  var space = lenS ? noSpace(cfg.substr(i-lenS,lenS)) : ''; if( lenS && !"
-"space.length ) space = ' ';\n"
-"\t\t  if( (space.length && lstS != '') || i >= cfg.length )\n"
-"\t\t  {\n"
-"\t\t    if( space.length && rez.indexOf(space) == -1 ) return 0;\n"
-"\t\t    var val = parseInt(space.length?rez.substr(0,rez.indexOf(space)):"
-"rez,10);\n"
-"\t\t    rez = rez.substr(rez.indexOf(space));\n"
-"\t\t    if( lstS == 'd' ) dt.setDate(val); else if( lstS == 'M' ) dt.setMonth"
-"(val-1); else if( lstS == 'y' ) dt.setFullYear((val<100)?2000+val:val);\n"
-"\t\t    else if( lstS == 'h' ) dt.setHours(val); else if( lstS == 'm' ) dt."
-"setMinutes(val); else if( lstS == 's' ) dt.setSeconds(val);\n"
-"\t\t    if( i >= cfg.length ) break;\n"
-"\t\t  }\n"
-"\t\t  if( space.length )\n"
-"\t\t  {\n"
-"\t\t    if( rez.indexOf(space) == -1 ) return 0;\n"
-"\t\t    rez = rez.substr(rez.indexOf(space)+space.length);\n"
-"\t\t  }\n"
-"\t\t  lstS = cfg.charAt(i); lenS = 0; i++; continue;\n"
-"\t\t}\n"
-"\t\tlenS++; i++;\n"
-"\t      }\n"
-"\t      if( this.value.indexOf('pm') >= 0 || this.value.indexOf('PM') >= 0 ) "
-"dt.setHours(dt.getHours()+12);\n"
-"\t      return dt.getTime()/1000;\n"
-"\t  }\n"
-"\t}\n"
-"\tformObj.chApply = function( )\n"
-"\t{\n"
-"\t  var val = this.valGet();\n"
-"\t  this.valSet(val);\n"
-"\t  var okImg = this.parentNode.childNodes[(this.parentNode.view>=1&&this."
-"parentNode.view<=3)?2:1];\n"
-"\t  this.setModify(false);\n"
-"\t  var attrs = new Object(); attrs.value = val; attrs.event = "
-"'ws_LnAccept';\n"
-"\t  setWAttrs(this.wdgLnk.addr,attrs);\n"
-"\t}\n"
-"\tformObj.chEscape = function( )\n"
-"\t{\n"
-"\t  this.value = this.saveVal;\n"
-"\t  var okImg = this.parentNode.childNodes[(this.parentNode.view>=1&&this."
-"parentNode.view<=3)?2:1];\n"
-"\t  this.setModify(false);\n"
-"\t}\n"
-"\tvar okImg = this.place.ownerDocument.createElement('img');\n"
-"\tokImg.src = '/'+MOD_ID+'/img_button_ok';\n"
-"\tokImg.style.cssText = 'visibility: hidden; position: absolute; left: "
-"'+(geomW-16)+'px; top: '+((geomH-16)/2)+'px; width: 16px; height: 16px; "
-"cursor: pointer;';\n"
-"\tokImg.onclick = function() { this.parentNode.childNodes[0].chApply(); "
-"return false; };\n"
-"\tthis.place.appendChild(okImg);\n"
-"\tformObj.valSet(this.attrs['value']);\n"
-"\tbreak;\n"
-"      case 1:\t//Text edit\n"
-"\tvar formObj = this.place.ownerDocument.createElement('textarea');\n"
-"\tformObj.disabled = !( parseInt(this.attrs['active']) && parseInt(this.attrs"
-"['perm'])&SEQ_WR );\n"
-"\tformObj.wdgLnk = this;\n"
-"\tformObj.tabIndex = parseInt(this.attrs['geomZ'])+1;\n"
-"\tformObj.style.cssText = 'width: '+(geomW-5)+'px; height: '+(geomH-5)+'px; "
-"border: 1px solid black; font: '+fontCfg+'; padding: 1px;';\n"
-"\tformObj.appendChild(this.place.ownerDocument.createTextNode(this.attrs"
-"['value']));\n"
-"\tformObj.saveVal = formObj.value = this.attrs['value'];\n"
-"\tformObj.onkeyup = function( ) { if( this.saveVal != this.value ) this."
-"setModify(true); };\n"
-"\tformObj.modify = function( ) { return (this.parentNode.childNodes[1].style."
-"visibility == 'visible'); }\n"
-"\tformObj.setModify = function( on )\n"
-"\t{\n"
-"\t  if( this.modify() == on ) return;\n"
-"\t  if( on ) { this.style.height = (parseInt(this.style.height)-16)+'px'; "
-"this.parentNode.childNodes[1].style.visibility = this.parentNode.childNodes"
-"[2].style.visibility = 'visible'; }\n"
-"\t  else     { this.style.height = (parseInt(this.style.height)+16)+'px'; "
-"this.parentNode.childNodes[1].style.visibility = this.parentNode.childNodes"
-"[2].style.visibility = 'hidden'; }\n"
-"\t}\n"
-"\tvar okImg = this.place.ownerDocument.createElement('img');\n"
-"\tokImg.src = '/'+MOD_ID+'/img_button_ok';\n"
-"\tokImg.style.cssText = 'visibility: hidden; position: absolute; left: "
-"'+(geomW-35)+'px; top: '+(geomH-16)+'px; width: 16px; height: 16px; cursor: "
-"pointer;';\n"
-"\tokImg.onclick = function() { var attrs = new Object(); attrs.value = this."
-"parentNode.childNodes[0].value; attrs.event = 'ws_TxtAccept'; setWAttrs(this."
-"parentNode.childNodes[0].wdgLnk.addr,attrs); this.parentNode.childNodes[0]."
-"setModify(false); return false; };\n"
-"\tvar cancelImg = this.place.ownerDocument.createElement('img');\n"
-"\tcancelImg.src = '/\"MOD_ID\"/img_button_cancel';\n"
-"\tcancelImg.style.cssText = 'visibility: hidden; position: absolute; left: "
-"'+(geomW-16)+'px; top: '+(geomH-16)+'px; width: 16px; height: 16px; cursor: "
-"pointer;';\n"
-"\tcancelImg.onclick = function() { this.parentNode.childNodes[0].value = "
-"this.parentNode.childNodes[0].saveVal; this.parentNode.childNodes[0]."
-"setModify(false); return false; };\n"
-"\tthis.place.appendChild(formObj); this.place.appendChild(okImg); this.place."
-"appendChild(cancelImg);\n"
-"\tbreak;\n"
-"      case 2:\t//Chek box\n"
-"\tvar tblCell = this.place.ownerDocument.createElement('div');\n"
-"\ttblCell.style.cssText = 'position: absolute; top: '+((geomH-15)/2)+'px; "
-"width: '+geomW+'px; height: '+Math.min(geomH,15)+'px; text-align: left; "
-"font: '+fontCfg+'; ';\n"
-"\tvar formObj = this.place.ownerDocument.createElement('input');\n"
-"\tformObj.disabled = !( parseInt(this.attrs['active']) && parseInt(this.attrs"
-"['perm'])&SEQ_WR );\n"
-"\tformObj.tabIndex = parseInt(this.attrs['geomZ'])+1;\n"
-"\tformObj.type='checkbox'; formObj.checked=parseInt(this.attrs['value']);\n"
-"\tformObj.wdgLnk = this;\n"
-"\tformObj.onchange = function( ) { var attrs = new Object(); attrs.value = "
-"(this.checked)?'1':'0'; attrs.event = 'ws_ChkChange'; setWAttrs(this.wdgLnk."
-"addr,attrs); }\n"
-"\ttblCell.appendChild(formObj); tblCell.appendChild(this.place.ownerDocument."
-"createTextNode(this.attrs['name'])); this.place.appendChild(tblCell);\n"
-"\tbreak;\n"
-"      case 3:\t//Button\n"
-"\tvar formObj;\n"
-"\tvar iconImg = this.attrs['img'];\n"
-"\tthis.place.checkable = parseInt(this.attrs['checkable']);\n"
-"\tif( iconImg || this.place.checkable )\n"
-"\t{\n"
-"\t  formObj = this.place.ownerDocument.createElement('div');\n"
-"\t  formObj.className = 'vertalign';\n"
-"\t  formObj.style.font = fontCfg;\n"
-"\t  elStyle+='border-style: '+((this.place.checkable && parseInt(this.attrs"
-"['value']))?'inset':'outset')+'; cursor: pointer; border-width: 2px; ';\n"
-"\t  if( this.attrs['color'] ) elStyle+='background-color: '+this.attrs"
-"['color']+'; ';\n"
-"\t  else elStyle+='background-color: snow; ';\n"
-"\t  if( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])"
-"&SEQ_WR )\n"
-"\t  {\n"
-"\t    this.place.onmouseup  = function() { if( !this.checkable ) this.style."
-"borderStyle='outset'; };\n"
-"\t    this.place.onmousedown= function() { if( !this.checkable ) this.style."
-"borderStyle='inset';  };\n"
-"\t    this.place.onmouseout = function() { if( !this.checkable ) this.style."
-"borderStyle='outset'; };\n"
-"\t    this.place.onclick = function()\n"
-"\t    {\n"
-"\t      if( !this.checkable ) setWAttrs(this.wdgLnk."
-"addr,'event','ws_BtPress');\n"
-"\t      else {\n"
-"\t        var attrs = new Object();\n"
-"\t        if(this.style.borderLeftStyle=='outset') { attrs.value = '1'; this."
-"style.borderStyle='inset'; }\n"
-"\t        else { attrs.value = '0'; this.style.borderStyle='outset'; }\n"
-"\t        attrs.event = 'ws_BtToggleChange'; setWAttrs(this.wdgLnk.addr,"
-"attrs);\n"
-"\t      }\n"
-"\t      return false;\n"
-"\t    };\n"
-"\t    this.place.wdgLnk = this;\n"
-"\t  }\n"
-"\t  if( iconImg )\n"
-"\t  {\n"
-"\t    var btImg = this.place.ownerDocument.createElement('IMG');\n"
-"\t    btImg.src = '/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['img'];\n"
-"\t    btImg.width = btImg.height = Math.min(geomW-8,geomH-8);\n"
-"\t    btImg.float = 'left';\n"
-"\t    formObj.appendChild(btImg);\n"
-"\t  }\n"
-"\t  if( this.attrs['name'].length ) formObj.appendChild(this.place."
-"ownerDocument.createTextNode(this.attrs['name']));\n"
-"\t  geomW-=6; geomH-=6;\n"
-"\t}\n"
-"\telse\n"
-"\t{\n"
-"\t  formObj = this.place.ownerDocument.createElement('input');\n"
-"\t  formObj.disabled = !( parseInt(this.attrs['active']) && parseInt(this."
-"attrs['perm'])&SEQ_WR );\n"
-"\t  formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;\n"
-"\t  formObj.style.font = fontCfg;\n"
-"\t  formObj.type='button';\n"
-"\t  formObj.value=this.attrs['name'];\n"
-"\t  formObj.onclick = function() { setWAttrs(this.wdgLnk."
-"addr,'event','ws_BtPress'); return false; }\n"
-"\t  formObj.wdgLnk = this;\n"
-"\t  if( this.attrs['color'] ) formObj.style.backgroundColor=this.attrs"
-"['color'];\n"
-"\t}\n"
-"\tformObj.style.width = geomW+'px'; formObj.style.height = geomH+'px';\n"
-"\tthis.place.appendChild(formObj);\n"
-"\tbreak;\n"
-"      case 4: case 5:\t//Combo box, List\n"
-"\tvar formObj = this.place.ownerDocument.createElement('select');\n"
-"\tformObj.disabled = !( parseInt(this.attrs['active']) && parseInt(this.attrs"
-"['perm'])&SEQ_WR );\n"
-"\tformObj.tabIndex = parseInt(this.attrs['geomZ'])+1;\n"
-"\tformObj.style.cssText = 'position: absolute; top: '+((elTp==4)?(geomH-"
-"20)/2:0)+'px; height: '+((elTp==4)?Math.min(geomH,20):(geomH-4))+'px; width: "
-"'+(geomW-4)+'px; border: 1px solid black; font: '+fontCfg+'; padding: 1px; "
-"';\n"
-"\tformObj.wdgLnk = this;\n"
-"//\tif( elTp == 5 ) formObj.setAttribute('size',100);\n"
-"\tif( elTp == 4 )\n"
-"\t  formObj.onchange = function( ) { var attrs = new Object(); attrs.value = "
-"this.options[this.selectedIndex].value; attrs.event = 'ws_CombChange'; "
-"setWAttrs(this.wdgLnk.addr,attrs); }\n"
-"\telse\n"
-"\t{\n"
-"\t  formObj.size = 100;\n"
-"\t  formObj.onchange = function( ) { var attrs = new Object(); attrs.value = "
-"this.options[this.selectedIndex].value; attrs.event = 'ws_ListChange'; "
-"setWAttrs(this.wdgLnk.addr,attrs); }\n"
-"\t}\n"
-"\tvar selVal = this.attrs['value'];\n"
-"\tvar elLst = this.attrs['items'].split('\\n');\n"
-"\tvar selOk = false;\n"
-"\tfor( var i = 0; i < elLst.length; i++ )\n"
-"\t{\n"
-"\t  var optEl = this.place.ownerDocument.createElement('option');\n"
-"\t  optEl.appendChild(this.place.ownerDocument.createTextNode(elLst[i]));\n"
-"\t  if( selVal == elLst[i] ) selOk=optEl.defaultSelected=optEl."
-"selected=true;\n"
-"\t  formObj.appendChild(optEl);\n"
-"\t}\n"
-"\tif( !selOk && elTp == 4 )\n"
-"\t{\n"
-"\t  var optEl = this.place.ownerDocument.createElement('option');\n"
-"\t  optEl.textContent = selVal;\n"
-"\t  optEl.selected = optEl.defaultSelected = true;\n"
-"\t  formObj.appendChild(optEl);\n"
-"\t}\n"
-"\tthis.place.appendChild(formObj);\n"
-"\tbreak;\n"
-"    }\n"
-"  }\n"
-"  else if( this.attrs['root'] == 'Diagram' )\n"
-"  {\n"
-"    if( this.attrs['backColor'] ) elStyle+='background-color: '+this.attrs"
-"['backColor']+'; ';\n"
-"    if( this.attrs['backImg'] )   elStyle+='background-image: url"
-"(\\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\\'); ';\n"
-"    elStyle+='border-style: solid; border-width: '+this.attrs['bordWidth']"
-"+'px; ';\n"
-"    if( this.attrs['bordColor'] ) elStyle+='border-color: '+this.attrs"
-"['bordColor']+'; ';\n"
-"    var anchObj = this.place.childNodes[0];\n"
-"    if( !anchObj )\n"
-"    {\n"
-"      anchObj = this.place.ownerDocument.createElement('a');\n"
-"      anchObj.wdgLnk = this;\n"
-"      var dgrObj = this.place.ownerDocument.createElement('img');\n"
-"      dgrObj.border = 0;\n"
-"      anchObj.appendChild(dgrObj); this.place.appendChild(anchObj);\n"
-"    }\n"
-"    anchObj.isActive = (parseInt(this.attrs['active']) && parseInt(this.attrs"
-"['perm'])&SEQ_WR);\n"
-"    anchObj.href = '#';\n"
-"    anchObj.tabIndex = parseInt(this.attrs['geomZ'])+1;\n"
-"    anchObj.onfocus = function( ) { if(this.isActive) setFocus(this.wdgLnk."
-"addr); }\n"
-"    anchObj.onkeydown = function(e) { if(this.isActive) setWAttrs(this."
-"wdgLnk.addr,'event','key_pres'+evKeyGet(e?e:window.event)); }\n"
-"    anchObj.onkeyup = function(e) { if(this.isActive) setWAttrs(this.wdgLnk."
-"addr,'event','key_rels'+evKeyGet(e?e:window.even)); }\n"
-"    anchObj.onclick = function(e)\n"
-"    {\n"
-"      if( !this.isActive ) return false;\n"
-"      if(!e) e = window.event;\n"
-"      servSet(this.wdgLnk.addr,'com=obj&sub=point&x='+(e.offsetX?e.offsetX:"
-"(e.clientX-posGetX(this)+window.pageXOffset))+\n"
-"\t\t\t\t\t\t'&y='+(e.offsetY?e.offsetY:(e.clientY-posGetY(this)+window."
-"pageYOffset))+\n"
-"\t\t\t\t\t\t'&key='+evMouseGet(e),'');\n"
-"      setFocus(this.wdgLnk.addr);\n"
-"      return false;\n"
-"    }\n"
-"    var dgrObj = anchObj.childNodes[0];\n"
-"    dgrObj.src = '/'+MOD_ID+this.addr+'?com=obj&tm='+tmCnt+'&xSc='+xSc."
-"toFixed(2)+'&ySc='+ySc.toFixed(2);\n"
-"    this.perUpdtEn( this.isEnabled() && parseInt(this.attrs['trcPer']) );\n"
-"  }\n"
-"  else if( this.attrs['root'] == 'Protocol' )\n"
-"  {\n"
-"    if( this.attrs['backColor'] ) elStyle += 'background-color: '+this.attrs"
-"['backColor']+'; ';\n"
-"    else elStyle+='background-color: white; ';\n"
-"    if( this.attrs['backImg'] )   elStyle += 'background-image: url"
-"(\\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\\'); ';\n"
-"    elStyle += 'border: 1px solid black; overflow: auto; padding: 2px; ';\n"
-"    geomW -= 4; geomH -= 4;\n"
-"\n"
-"    this.wFont = '';\n"
-"    var allFnt = this.attrs['font'].split(' ');\n"
-"    if( allFnt.length >= 1 ) this.wFont+='font-family: '+allFnt[0].replace(/"
-"_/g,' ')+'; ';\n"
-"    if( allFnt.length >= 2 ) this.wFont+='font-size: '+(parseInt(allFnt[1])"
-"*Math.min(xSc,ySc)).toFixed(0)+'px; ';\n"
-"    if( allFnt.length >= 3 ) this.wFont+='font-weight: '+(parseInt(allFnt"
-"[2])?'bold':'normal')+'; ';\n"
-"    if( allFnt.length >= 4 ) this.wFont+='font-style: '+(parseInt(allFnt"
-"[3])?'italic':'normal')+'; ';\n"
-"\n"
-"    if( !this.place.firstChild )\n"
-"    {\n"
-"      this.place.appendChild(document.createElement('table'));\n"
-"      this.place.firstChild.wdgLnk = this;\n"
-"      this.place.firstChild.isActive = (parseInt(this.attrs['active']) && "
-"parseInt(this.attrs['perm'])&SEQ_WR);\n"
-"      this.place.firstChild.onclick = function(e)\n"
-"      {\n"
-"        if( this.isActive ) setFocus(this.wdgLnk.addr);\n"
-"        return false;\n"
-"      }\n"
-"      this.place.firstChild.className='prot';\n"
-"      this.loadData = function( )\n"
-"      {\n"
-"        var tblB = this.place.firstChild;\n"
-"\n"
-"\t//> Check for columns present and order\n"
-"\tif( !this.curCols || this.curCols != this.attrs['col'] || this.curArch != "
-"this.attrs['arch'] || this.curTmpl != this.attrs['tmpl'] || this.curLev != "
-"this.attrs['lev'] )\n"
-"\t{\n"
-"\t  this['col_pos'] = this['col_tm'] = this['col_lev'] = this['col_cat'] = "
-"this['col_mess'] = -1;\n"
-"\t  this.curCols = this.attrs['col'];\n"
-"\t  this.curArch = this.attrs['arch'];\n"
-"\t  this.curTmpl = this.attrs['tmpl'];\n"
-"\t  this.curLev = this.attrs['lev'];\n"
-"\t  var rowEl = document.createElement('tr');\n"
-"\t  tblB.appendChild(rowEl);\n"
-"\t  var colCfg = '';\n"
-"\t  var clm = this.curCols.split(';');\n"
-"\t  for( var c_off = 0; c_off < clm.length; c_off++ )\n"
-"\t    if( clm[c_off] == 'pos' || clm[c_off] == 'tm' || clm[c_off] == 'lev' "
-"|| clm[c_off] == 'cat' || clm[c_off] == 'mess' )\n"
-"\t    {\n"
-"\t      colCfg += \"<th ind='\"+clm[c_off]+\"' \"+\n"
-"\t\t\t  \"style='\"+this.wFont+\"'>\"+((clm[c_off]=='pos') ? '#' :\n"
-"\t\t\t\t\t\t    (clm[c_off]=='tm') ? '###Time###' :\n"
-"\t\t\t\t\t\t    (clm[c_off]=='lev') ? '###Level###' :\n"
-"\t\t\t\t\t\t    (clm[c_off]=='cat') ? '###Category###' :\n"
-"\t\t\t\t\t\t    (clm[c_off]=='mess') ? '###Message###' : '')+\"</th>\";\n"
-"\t      this['col_'+clm[c_off]] = c_off;\n"
-"\t    }\n"
-"\t  rowEl.innerHTML = colCfg;\n"
-"\t  this.arhBeg = this.arhEnd = 0;\n"
-"\t}\n"
-"\n"
-"\t//> Get archive parameters\n"
-"\tvar tTime = parseInt(this.attrs['time']);\n"
-"\tvar tTimeGrnd = tTime - parseInt(this.attrs['tSize']);\n"
-"\n"
-"\tif( !this.arhBeg || !this.arhEnd || !tTime || tTime > this.arhEnd )\n"
-"\t{\n"
-"\t  var rez = servSet('/Archive/%2fserv%2fmess','com=com',\"<info "
-"arch='\"+this.curArch+\"'/>\",true);\n"
-"\t  if( !rez || parseInt(rez.getAttribute('rez')) != 0 ) { this.arhBeg = "
-"this.arhEnd = 0; }\n"
-"\t  else\n"
-"\t  {\n"
-"\t    this.arhBeg = parseInt(rez.getAttribute('beg'));\n"
-"\t    this.arhEnd = parseInt(rez.getAttribute('end'));\n"
-"\t    if( !tTime ) { tTime = this.arhEnd; tTimeGrnd += tTime; }\n"
-"\t  }\n"
-"\t}\n"
-"\tif( tblB.firstChild.childNodes.length <= 1 || !this.arhBeg || !this."
-"arhEnd ) return;\n"
-"\n"
-"\t//> Correct request to archive border\n"
-"\ttTime = Math.min(tTime,this.arhEnd); tTimeGrnd = Math.max(tTimeGrnd,this."
-"arhBeg);\n"
-"\t//> Clear data at time error\n"
-"\tvar valEnd = 0; var valBeg = 0;\n"
-"\tif( tblB.childNodes.length>1 && tblB.firstChild.childNodes.length )\n"
-"\t{\n"
-"\t  while( tblB.childNodes.length>1 && (valEnd=parseInt(tblB.childNodes[1]."
-"childNodes[0].getAttribute('time'))) > tTime )\n"
-"\t    tblB.removeChild(tblB.childNodes[1]);\n"
-"\t  while( tblB.childNodes.length>1 && (valBeg=parseInt(tblB.lastChild."
-"childNodes[0].getAttribute('time'))) < tTimeGrnd )\n"
-"\t    tblB.removeChild(tblB.lastChild);\n"
-"\t}\n"
-"\n"
-"\tif( tTime <= tTimeGrnd || (tTime < valEnd && tTimeGrnd > valBeg) )\n"
-"\t{\n"
-"\t  while( tblB.childNodes.length > 1 ) tblB.removeChild(tblB.lastChild);\n"
-"\t  valEnd = valBeg = 0;\n"
-"\t  return;\n"
-"\t}\n"
-"\n"
-"\t//> Correct request to present data\n"
-"\tvar toUp = false;\n"
-"\tif( valEnd && tTime > valEnd ) { tTimeGrnd = valEnd; toUp = true; }\n"
-"\telse if( valBeg && tTimeGrnd < valBeg ) tTime = valBeg-1;\n"
-"\n"
-"\tvar rez = servSet('/Archive/%2fserv%2fmess','com=com',\n"
-"\t    \"<get arch='\"+this.curArch+\"' tm='\"+tTime+\"' tm_grnd='\"+tTimeGrnd"
-"+\"' cat='\"+this.curTmpl+\"' lev='\"+this.curLev+\"' />\",true);\n"
-"\tif( !rez || parseInt(rez.getAttribute('rez')) != 0 ) return;\n"
-"\n"
-"\t//> Process records\n"
-"\tif( toUp )\n"
-"\t  for( var i_req = 0; i_req < rez.childNodes.length; i_req++ )\n"
-"\t  {\n"
-"\t    var rcd = rez.childNodes[i_req];\n"
-"\t    var rtm = parseInt(rcd.getAttribute('time'));\n"
-"\t    var rlev = rcd.getAttribute('lev');\n"
-"\t    var rcat = rcd.getAttribute('cat');\n"
-"\t    var rmess = nodeText(rcd);\n"
-"\n"
-"\t    //>> Check for dublicates\n"
-"\t    var i_p;\n"
-"\t    for( i_p = 1; i_p < tblB.childNodes.length; i_p++ )\n"
-"\t    {\n"
-"\t      if( rtm > parseInt(tblB.childNodes[1].childNodes[0].getAttribute"
-"('time')) && i_p>1 ) continue;\n"
-"\t      if( (this.col_lev<0 || nodeText(tblB.childNodes[i_p].childNodes[this."
-"col_lev]) == rlev) &&\n"
-"\t\t    (this.col_cat<0 || nodeText(tblB.childNodes[i_p].childNodes[this."
-"col_cat]) == rcat) &&\n"
-"\t\t    (this.col_mess<0 || nodeText(tblB.childNodes[i_p].childNodes[this."
-"col_mess]) == rmess ) )\n"
-"\t\tbreak;\n"
-"\t    }\n"
-"\t    if( i_p < tblB.childNodes.length ) continue;\n"
-"\n"
-"\t    var rowEl = document.createElement('tr');\n"
-"\t    for( var i_cel = 0; i_cel < tblB.childNodes[0].childNodes.length; i_cel"
-"++ )\n"
-"\t    {\n"
-"\t      var celEl = document.createElement('td'); celEl.style.cssText = this."
-"wFont;\n"
-"\t      if( i_cel == 0 ) celEl.setAttribute('time',rtm);\n"
-"\t      if( this.col_pos == i_cel ) { setNodeText(celEl,0); celEl.style."
-"cssText+=' text-align: center; '; }\n"
-"\t      else if( this.col_tm == i_cel )\n"
-"\t      {\n"
-"\t\tvar dt = new Date(rtm*1000);\n"
-"\t\tsetNodeText(celEl,dt.getDate()+'.'+(dt.getMonth()+1)+'.'+dt.getFullYear()"
-"+' '+dt.getHours()+':'+\n"
-"\t\t\t\t  ((dt.getMinutes()<10)?('0'+dt.getMinutes()):dt.getMinutes())"
-"+':'+((dt.getSeconds()<10)?('0'+dt.getSeconds()):dt.getSeconds()));\n"
-"\t      }\n"
-"\t      else if( this.col_lev == i_cel ) setNodeText(celEl,rlev);\n"
-"\t      else if( this.col_cat == i_cel ) setNodeText(celEl,rcat);\n"
-"\t      else if( this.col_mess == i_cel ) setNodeText(celEl,rmess);\n"
-"\t      rowEl.appendChild(celEl);\n"
-"\t    }\n"
-"\t    tblB.insertBefore(rowEl,tblB.childNodes[1]);\n"
-"\t  }\n"
-"\telse\n"
-"\t  for( var i_req = rez.childNodes.length-1; i_req >= 0; i_req-- )\n"
-"\t  {\n"
-"\t    var rcd = rez.childNodes[i_req];\n"
-"\t    var rtm = parseInt(rcd.getAttribute('time'));\n"
-"\t    var rlev = rcd.getAttribute('lev');\n"
-"\t    var rcat = rcd.getAttribute('cat');\n"
-"\t    var rmess = nodeText(rcd);\n"
-"\n"
-"\t    //>> Check for dublicates\n"
-"\t    var i_p;\n"
-"\t    for( i_p = tblB.childNodes.length-1; i_p >= 1; i_p-- )\n"
-"\t    {\n"
-"\t      if( rtm < parseInt(tblB.childNodes[1].childNodes[0].getAttribute"
-"('time')) && (i_p<(tblB.childNodes.length-1)) ) continue;\n"
-"\t      if( (this.col_lev<0 || nodeText(tblB.childNodes[i_p].childNodes[this."
-"col_lev]) == rlev) &&\n"
-"\t\t    (this.col_cat<0 || nodeText(tblB.childNodes[i_p].childNodes[this."
-"col_cat]) == rcat) &&\n"
-"\t\t    (this.col_mess<0 || nodeText(tblB.childNodes[i_p].childNodes[this."
-"col_mess]) == rmess) )\n"
-"\t\tbreak;\n"
-"\t    }\n"
-"\t    if( i_p >= 1 ) continue;\n"
-"\n"
-"\t    var rowEl = document.createElement('tr');\n"
-"\t    for( var i_cel = 0; i_cel < tblB.childNodes[0].childNodes.length; i_cel"
-"++ )\n"
-"\t    {\n"
-"\t      var celEl = document.createElement('td'); celEl.style.cssText = this."
-"wFont;\n"
-"\t      if( i_cel == 0 ) celEl.setAttribute('time',rtm);\n"
-"\t      if( this.col_pos == i_cel ) { setNodeText(celEl,0); celEl.style."
-"cssText+=' text-align: center; '; }\n"
-"\t      else if( this.col_tm == i_cel )\n"
-"\t      {\n"
-"\t\tvar dt = new Date(rtm*1000);\n"
-"\t\tsetNodeText(celEl,dt.getDate()+'.'+(dt.getMonth()+1)+'.'+dt.getFullYear()"
-"+' '+dt.getHours()+':'+\n"
-"\t\t\t\t  ((dt.getMinutes()<10)?('0'+dt.getMinutes()):dt.getMinutes())"
-"+':'+((dt.getSeconds()<10)?('0'+dt.getSeconds()):dt.getSeconds()));\n"
-"\t      }\n"
-"\t      else if( this.col_lev == i_cel ) setNodeText(celEl,rlev);\n"
-"\t      else if( this.col_cat == i_cel ) setNodeText(celEl,rcat);\n"
-"\t      else if( this.col_mess == i_cel ) setNodeText(celEl,rmess);\n"
-"\t      rowEl.appendChild(celEl);\n"
-"\t    }\n"
-"\t    tblB.appendChild(rowEl);\n"
-"\t  }\n"
-"\t//> Update position collumn\n"
-"\tif( this.col_pos >= 0 )\n"
-"\t  for( var i_rw = 1; i_rw < tblB.childNodes.length; i_rw++ )\n"
-"\t    setNodeText(tblB.childNodes[i_rw].childNodes[this.col_pos],i_rw);\n"
-"      }\n"
-"    }\n"
-"\n"
-"    if( this.isEnabled() && parseInt(this.attrs['trcPer']) ) this.perUpdtEn"
-"( true );\n"
-"    else { this.perUpdtEn( false ); this.loadData(); }\n"
-"  }\n"
-"  else if( this.attrs['root'] == 'Document' )\n"
-"  {\n"
-"    elStyle+='background-color: white; ';\n"
-"\n"
-"    this.wFont = '';\n"
-"    var allFnt = this.attrs['font'].split(' ');\n"
-"    if( allFnt.length >= 1 ) this.wFont+='font-family: '+allFnt[0].replace(/"
-"_/g,' ')+'; ';\n"
-"    if( allFnt.length >= 2 ) this.wFont+='font-size: '+(parseInt(allFnt[1])"
-"*Math.min(xSc,ySc)).toFixed(0)+'px; ';\n"
-"    if( allFnt.length >= 3 ) this.wFont+='font-weight: '+(parseInt(allFnt"
-"[2])?'bold':'normal')+'; ';\n"
-"    if( allFnt.length >= 4 ) this.wFont+='font-style: '+(parseInt(allFnt"
-"[3])?'italic':'normal')+'; ';\n"
-"\n"
-"    var ifrmObj = this.place.childNodes[0];\n"
-"    if( !ifrmObj )\n"
-"    {\n"
-"      ifrmObj = this.place.ownerDocument.createElement('iframe');\n"
-"      this.place.appendChild(ifrmObj);\n"
-"    }\n"
-"    ifrmObj.style.cssText = 'width: '+(geomW-14)+'px; height: '+(geomH-14)"
-"+'px; border-style: ridge; border-width: 2px; padding: 5px;';\n"
-"    this.perUpdtEn(true);\n"
-"  }\n"
-"  elStyle+='width: '+geomW+'px; height: '+geomH+'px; z-index: '+this.attrs"
-"['geomZ']+'; margin: '+elMargin+'px; ';\n"
-"  this.place.style.cssText = elStyle;\n"
-"  }\n"
-"  if( margBrdUpd ) for( var i in this.wdgs ) i.makeEl();\n"
-"  if( pgBr && !inclPg && parseInt(this.attrs['perm'])&SEQ_RD )\n"
-"  {\n"
-"    for( var j = 0; j < pgBr.childNodes.length; j++ )\n"
-"    {\n"
-"      if( pgBr.childNodes[j].nodeName != 'w' ) continue;\n"
-"      var chEl = pgBr.childNodes[j].getAttribute('id');\n"
-"      if( this.wdgs[chEl] ) this.wdgs[chEl].makeEl(pgBr.childNodes[j]);\n"
-"      else\n"
-"      {\n"
-"        var wdgO = new pwDescr(this.addr+'/wdg_'+chEl,false,this);\n"
-"        wdgO.place = this.place.ownerDocument.createElement('div');\n"
-"        wdgO.makeEl(pgBr.childNodes[j]);\n"
-"        this.place.appendChild(wdgO.place);\n"
-"        this.wdgs[chEl] = wdgO;\n"
-"      }\n"
-"    }\n"
-"  }\n"
-"}\n"
-"function perUpdtEn( en )\n"
-"{\n"
-"  if( this.attrs['root'] == 'Diagram' || this.attrs['root'] == 'Protocol' )\n"
-"  {\n"
-"     if( en && this.isEnabled() && !perUpdtWdgs[this.addr] && parseInt(this."
-"attrs['trcPer']) ) perUpdtWdgs[this.addr] = this;\n"
-"     if( !en && perUpdtWdgs[this.addr] ) delete perUpdtWdgs[this.addr];\n"
-"  }\n"
-"  else if( this.attrs['root'] == 'Document' ) { if(en) perUpdtWdgs[this."
-"addr] = this; else delete perUpdtWdgs[this.addr]; }\n"
-"  for( var i in this.wdgs ) this.wdgs[i].perUpdtEn(en);\n"
-"}\n"
-"function perUpdt( )\n"
-"{\n"
-"  if( this.attrs['root'] == 'Diagram' && (this.updCntr % parseInt(this.attrs"
-"['trcPer'])) == 0 )\n"
-"  {\n"
-"    var dgrObj = this.place.childNodes[0].childNodes[0];\n"
-"    if( dgrObj ) dgrObj.src = '/'+MOD_ID+this.addr+'?com=obj&tm='+tmCnt"
-"+'&xSc='+this.xScale(true).toFixed(2)+'&ySc='+this.yScale(true).toFixed(2);\n"
-"  }\n"
-"  else if( this.attrs['root'] == 'Protocol' && (this.updCntr % parseInt(this."
-"attrs['trcPer'])) == 0 ) this.loadData();\n"
-"  else if( this.attrs['root'] == 'Document' )\n"
-"  {\n"
-"    var frDoc = this.place.childNodes[0].contentDocument || this.place."
-"childNodes[0].contentWindow || this.place.childNodes[0].document;\n"
-"    frDoc.open();\n"
-"    frDoc.write(\"<html><head>\"+\n"
-"\t\t\"<style type='text/css'>\"+\n"
-"\t\t\" * { \"+this.wFont+\" }\\n\"+\n"
-"\t\t\" big { font-size: 120%; }\\n\"+\n"
-"\t\t\" small { font-size: 90%; }\\n\"+\n"
-"\t\t\" h1 { font-size: 200%; }\\n\"+\n"
-"\t\t\" h2 { font-size: 150%; }\\n\"+\n"
-"\t\t\" h3 { font-size: 120%; }\\n\"+\n"
-"\t\t\" h4 { font-size: 105%; }\\n\"+\n"
-"\t\t\" h5 { font-size: 95%; }\\n\"+\n"
-"\t\t\" h6 { font-size: 70%; }\\n\"+\n"
-"\t\t\" u,b,i { font-size : inherit; }\\n\"+\n"
-"\t\t\" sup,sub { font-size: 80%; }\\n\"+\n"
-"\t\tthis.attrs['style']+\"</style>\"+\n"
-"\t\t\"</head>\"+(this.attrs['doc']?this.attrs['doc']:this.attrs['tmpl'])+\"</"
-"html>\");\n"
-"    frDoc.close();\n"
-"    frDoc.wdgLnk = this;\n"
-"    frDoc.isActive = (parseInt(this.attrs['active']) && parseInt(this.attrs"
-"['perm'])&SEQ_WR);\n"
-"    frDoc.onclick = function(e)\n"
-"    {\n"
-"      if( this.isActive ) setFocus(this.wdgLnk.addr);\n"
-"      return false;\n"
-"    }\n"
-"    this.perUpdtEn( false );\n"
-"  }\n"
-"  this.updCntr++;\n"
-"}\n"
-"function xScale( full )\n"
-"{\n"
-"  var rez = parseFloat(this.attrs['geomXsc'])\n"
-"  if( !full ) return rez;\n"
-"  if( !this.pg ) return rez*this.parent.xScale(full);\n"
-"  if( this != masterPage ) return masterPage.xScale()*rez;\n"
-"  return rez;\n"
-"}\n"
-"function yScale( full )\n"
-"{\n"
-"  var rez = parseFloat(this.attrs['geomYsc'])\n"
-"  if( !full ) return rez;\n"
-"  if( !this.pg ) return rez*this.parent.yScale(full);\n"
-"  if( this != masterPage ) return masterPage.yScale()*rez;\n"
-"  return rez;\n"
-"}\n"
-"function isEnabled( )\n"
-"{\n"
-"  var rez = parseInt(this.attrs['en']);\n"
-"  if( !rez || this.pg ) return rez;\n"
-"  return this.parent.isEnabled();\n"
-"}\n"
-"function pwDescr( pgAddr, pg, parent )\n"
-"{\n"
-"  this.addr = pgAddr;\n"
-"  this.pages = new Object();\n"
-"  this.wdgs = new Object();\n"
-"  this.attrs = new Object();\n"
-"  this.pg = pg;\n"
-"  this.parent = parent;\n"
-"  this.window = null;\n"
-"  this.place = null;\n"
-"  this.callPage = callPage;\n"
-"  this.findOpenPage = findOpenPage;\n"
-"  this.makeEl = makeEl;\n"
-"  this.perUpdtEn = perUpdtEn;\n"
-"  this.perUpdt = perUpdt;\n"
-"  this.xScale = xScale;\n"
-"  this.yScale = yScale;\n"
-"  this.isEnabled = isEnabled;\n"
-"  this.updCntr = 0;\n"
-"}\n"
-"/***************************************************\n"
-" * makeUI                                          *\n"
-" ***************************************************/\n"
-"function makeUI()\n"
-"{\n"
-"  //> Get open pages list\n"
-"  var pgNode = servGet('/'+sessId,'com=pgOpenList&tm='+tmCnt);\n"
-"  if( pgNode )\n"
-"  {\n"
-"    //>> Check for delete pages\n"
-"    for( var i_p = 0; i_p < pgList.length; i_p++ )\n"
-"    {\n"
-"      var opPg; var i_ch;\n"
-"      for( i_ch = 0; i_ch < pgNode.childNodes.length; i_ch++ )\n"
-"        if( pgNode.childNodes[i_ch].nodeName == 'pg' && nodeText(pgNode."
-"childNodes[i_ch]) == pgList[i_p] )\n"
-"          break;\n"
-"      if( i_ch < pgNode.childNodes.length || !(opPg=masterPage.findOpenPage"
-"(pgList[i_p])) ) continue;\n"
-"      if( opPg.window ) { opPg.window.close(); delete opPg.parent.pages"
-"[pgList[i_p]]; }\n"
-"      else if( opPg.parent && opPg.parent.inclOpen && opPg.parent.inclOpen "
-"== pgList[i_p] )\n"
-"      { opPg.parent.attrs['pgOpenSrc'] = ''; opPg.parent.makeEl(null,"
-"true); }\n"
-"    }\n"
-"    //>> Process opened pages\n"
-"    pgList = new Array();\n"
-"    for( var i = 0; i < pgNode.childNodes.length; i++ )\n"
-"      if( pgNode.childNodes[i].nodeName == 'pg' )\n"
-"      {\n"
-"        var prPath = nodeText(pgNode.childNodes[i]);\n"
-"        //>>> Check for closed window\n"
-"        var opPg = masterPage.findOpenPage(prPath);\n"
-"        if( opPg && opPg.window && opPg.window.closed )\n"
-"        { servSet(prPath,'com=pgClose',''); delete opPg.parent.pages"
-"[prPath]; continue; }\n"
-"        //>>> Call page\n"
-"        pgList.push(prPath);\n"
-"        masterPage.callPage(prPath,parseInt(pgNode.childNodes[i].getAttribute"
-"('updWdg')));\n"
-"      }\n"
-"    tmCnt = parseInt(pgNode.getAttribute('tm'));\n"
-"  }\n"
-"  //> Update some widgets\n"
-"  for( var i in perUpdtWdgs ) perUpdtWdgs[i].perUpdt();\n"
-"  setTimeout(makeUI,1000);\n"
-"}\n"
-"/***************************************************\n"
-" * Main start code                                 *\n"
-" ***************************************************/\n"
-"SEQ_XT = 0x01;\t//Extended\n"
-"SEQ_WR = 0x02;\t//Write access\n"
-"SEQ_RD = 0x04;\t//Read access\n"
-"//Call session identifier\n"
-"sessId = location.pathname.split('/');\n"
-"for( var i_el = sessId.length-1; i_el >= 0; i_el-- )\n"
-"  if( sessId[i_el].length )\n"
-"  { sessId = sessId[i_el]; break; }\n"
-"\n"
-"tmCnt = 0;\t\t\t\t//Call counter\n"
-"pgList = new Array();\t\t\t//Opened pages list\n"
-"pgCache = new Object();\t\t\t//Cached pages' data\n"
-"perUpdtWdgs = new Object();\t\t//Periodic updated widgets register\n"
-"masterPage = new pwDescr('',true);\t//Master page create\n"
-"\n"
-"setTimeout(makeUI,1000);\t\t//First call init\n"
-msgstr ""
 
 #: vca_sess.cpp:41
 msgid "obj_"
@@ -1790,33 +30,33 @@ msgstr ""
 #: vca_sess.cpp:52 vca_sess.cpp:70 vca_sess.cpp:73 vca_sess.cpp:88
 #: vca_sess.cpp:98 vca_sess.cpp:110 vca_sess.cpp:120 vca_sess.cpp:172
 #: vca_sess.cpp:179 vca_sess.cpp:204 vca_sess.cpp:211 vca_sess.cpp:234
-#: vca_sess.cpp:4061 vca_sess.cpp:5250 vca_sess.cpp:5327 vca_sess.cpp:5344
-#: vca_sess.cpp:5387 web_vision.cpp:468 web_vision.cpp:483 web_vision.cpp:504
-#: web_vision.cpp:521 web_vision.cpp:669 web_vision.cpp:705 web_vision.cpp:723
+#: vca_sess.cpp:3993 vca_sess.cpp:5183 vca_sess.cpp:5260 vca_sess.cpp:5277
+#: vca_sess.cpp:5320 web_vision.cpp:456 web_vision.cpp:471 web_vision.cpp:492
+#: web_vision.cpp:509 web_vision.cpp:600 web_vision.cpp:636 web_vision.cpp:654
 msgid "path"
 msgstr ""
 
-#: vca_sess.cpp:52 web_vision.cpp:504
+#: vca_sess.cpp:52 web_vision.cpp:492
 #, c-format
 msgid "/%2fserv%2fsess"
 msgstr ""
 
-#: vca_sess.cpp:52 web_vision.cpp:509 web_vision.cpp:510 web_vision.cpp:511
+#: vca_sess.cpp:52 web_vision.cpp:497 web_vision.cpp:498 web_vision.cpp:499
 msgid "sess"
 msgstr ""
 
-#: vca_sess.cpp:53 vca_sess.cpp:5272 vca_sess.cpp:5304 web_vision.cpp:717
-#: web_vision.cpp:718 web_vision.cpp:726 web_vision.cpp:727
+#: vca_sess.cpp:53 vca_sess.cpp:5205 vca_sess.cpp:5237 web_vision.cpp:648
+#: web_vision.cpp:649 web_vision.cpp:657 web_vision.cpp:658
 msgid "root"
 msgstr ""
 
-#: vca_sess.cpp:62 vca_sess.cpp:197 web_vision.cpp:667
+#: vca_sess.cpp:62 vca_sess.cpp:197 web_vision.cpp:598
 msgid "com"
 msgstr ""
 
 #: vca_sess.cpp:69 vca_sess.cpp:87 vca_sess.cpp:110 vca_sess.cpp:119
-#: vca_sess.cpp:171 vca_sess.cpp:233 vca_sess.cpp:5343 vca_sess.cpp:5384
-#: web_vision.cpp:467 web_vision.cpp:521 web_vision.cpp:726 web_vision.cpp:729
+#: vca_sess.cpp:171 vca_sess.cpp:233 vca_sess.cpp:5276 vca_sess.cpp:5317
+#: web_vision.cpp:455 web_vision.cpp:509 web_vision.cpp:657 web_vision.cpp:660
 msgid "get"
 msgstr ""
 
@@ -1825,7 +65,7 @@ msgstr ""
 msgid "/%2fobj%2fst%2fprj"
 msgstr ""
 
-#: vca_sess.cpp:73 web_vision.cpp:492
+#: vca_sess.cpp:73 web_vision.cpp:480
 msgid "/prj_"
 msgstr ""
 
@@ -1846,13 +86,12 @@ msgstr ""
 
 #: vca_sess.cpp:78 vca_sess.cpp:91 vca_sess.cpp:102 vca_sess.cpp:113
 #: vca_sess.cpp:151 vca_sess.cpp:161 vca_sess.cpp:190 vca_sess.cpp:216
-#: vca_sess.cpp:2313 vca_sess.cpp:4033 vca_sess.cpp:4758 vca_sess.cpp:4941
-#: vca_sess.cpp:5102 web_vision.cpp:447 web_vision.cpp:548 web_vision.cpp:642
-#: web_vision.cpp:651 web_vision.cpp:659 web_vision.cpp:672
+#: vca_sess.cpp:2363 vca_sess.cpp:3965 vca_sess.cpp:4691 vca_sess.cpp:4874
+#: vca_sess.cpp:5035 web_vision.cpp:442 web_vision.cpp:536 web_vision.cpp:603
 msgid "200 OK"
 msgstr ""
 
-#: vca_sess.cpp:85 web_vision.cpp:443 web_vision.cpp:446
+#: vca_sess.cpp:85 web_vision.cpp:438 web_vision.cpp:441
 msgid "ico"
 msgstr ""
 
@@ -1861,8 +100,8 @@ msgstr ""
 msgid "/%2fico"
 msgstr ""
 
-#: vca_sess.cpp:91 vca_sess.cpp:2313 vca_sess.cpp:4033 vca_sess.cpp:4758
-#: vca_sess.cpp:4941 vca_sess.cpp:5102
+#: vca_sess.cpp:91 vca_sess.cpp:2363 vca_sess.cpp:3965 vca_sess.cpp:4691
+#: vca_sess.cpp:4874 vca_sess.cpp:5035
 msgid "image/png"
 msgstr ""
 
@@ -1871,7 +110,7 @@ msgid "pgOpenList"
 msgstr ""
 
 #: vca_sess.cpp:96 vca_sess.cpp:99 vca_sess.cpp:118 vca_sess.cpp:120
-#: vca_sess.cpp:5345 vca_sess.cpp:5349 vca_sess.cpp:5388 vca_sess.cpp:5397
+#: vca_sess.cpp:5278 vca_sess.cpp:5282 vca_sess.cpp:5321 vca_sess.cpp:5330
 msgid "tm"
 msgstr ""
 
@@ -1884,11 +123,11 @@ msgstr ""
 msgid "/%2fserv%2fpg"
 msgstr ""
 
-#: vca_sess.cpp:99 vca_sess.cpp:120 vca_sess.cpp:5346 vca_sess.cpp:5393
+#: vca_sess.cpp:99 vca_sess.cpp:120 vca_sess.cpp:5279 vca_sess.cpp:5326
 msgid "0"
 msgstr ""
 
-#: vca_sess.cpp:102 vca_sess.cpp:113 vca_sess.cpp:151 web_vision.cpp:672
+#: vca_sess.cpp:102 vca_sess.cpp:113 vca_sess.cpp:151 web_vision.cpp:603
 msgid "text/xml"
 msgstr ""
 
@@ -1918,9 +157,9 @@ msgstr ""
 msgid "/wdg_"
 msgstr ""
 
-#: vca_sess.cpp:137 vca_sess.cpp:234 vca_sess.cpp:4062 vca_sess.cpp:4063
-#: vca_sess.cpp:4064 vca_sess.cpp:5251 vca_sess.cpp:5252 vca_sess.cpp:5262
-#: web_vision.cpp:492
+#: vca_sess.cpp:137 vca_sess.cpp:234 vca_sess.cpp:3994 vca_sess.cpp:3995
+#: vca_sess.cpp:3996 vca_sess.cpp:5184 vca_sess.cpp:5185 vca_sess.cpp:5195
+#: web_vision.cpp:480
 msgid "id"
 msgstr ""
 
@@ -1928,11 +167,11 @@ msgstr ""
 msgid "res"
 msgstr ""
 
-#: vca_sess.cpp:156 vca_sess.cpp:5262
+#: vca_sess.cpp:156 vca_sess.cpp:5195
 msgid "val"
 msgstr ""
 
-#: vca_sess.cpp:162 web_vision.cpp:543 web_vision.cpp:678 web_vision.cpp:685
+#: vca_sess.cpp:162 web_vision.cpp:531 web_vision.cpp:609 web_vision.cpp:616
 msgid "404 Not Found"
 msgstr "404 Не найдено"
 
@@ -1953,7 +192,7 @@ msgstr ""
 msgid "Diagram"
 msgstr ""
 
-#: vca_sess.cpp:179 vca_sess.cpp:204 vca_sess.cpp:4061 vca_sess.cpp:5250
+#: vca_sess.cpp:179 vca_sess.cpp:204 vca_sess.cpp:3993 vca_sess.cpp:5183
 #, c-format
 msgid "/%2fserv%2fattr"
 msgstr ""
@@ -1971,7 +210,7 @@ msgstr ""
 msgid "' command: '"
 msgstr ""
 
-#: vca_sess.cpp:189 web_vision.cpp:510
+#: vca_sess.cpp:189 web_vision.cpp:498
 msgid ""
 "'</center>\n"
 "<br/>"
@@ -1981,7 +220,7 @@ msgstr ""
 msgid "attrs"
 msgstr ""
 
-#: vca_sess.cpp:202 vca_sess.cpp:4060 vca_sess.cpp:5249 web_vision.cpp:727
+#: vca_sess.cpp:202 vca_sess.cpp:3992 vca_sess.cpp:5182 web_vision.cpp:658
 msgid "set"
 msgstr ""
 
@@ -2001,7 +240,7 @@ msgstr ""
 msgid "close"
 msgstr ""
 
-#: vca_sess.cpp:211 web_vision.cpp:641 web_vision.cpp:658
+#: vca_sess.cpp:211
 msgid "/"
 msgstr ""
 
@@ -2009,8 +248,7 @@ msgstr ""
 msgid "pg"
 msgstr ""
 
-#: vca_sess.cpp:216 web_vision.cpp:642 web_vision.cpp:651 web_vision.cpp:659
-#: web_vision.h:121
+#: vca_sess.cpp:216 web_vision.h:107
 msgid "text/html"
 msgstr ""
 
@@ -2023,294 +261,265 @@ msgstr ""
 msgid "mime"
 msgstr ""
 
-#: vca_sess.cpp:1018
+#: vca_sess.cpp:1073
 msgid ""
 "At least one of the points of the 'arc' is out of the drawing area. The "
-"'arc' is not drawn.\n"
+"'arc' is not drawn."
 msgstr ""
 "По крайней мере одна точка 'дуги' вне пределов области рисования. 'Дуга' не "
 "нарисована."
 
-#: vca_sess.cpp:1527
+#: vca_sess.cpp:1582
 msgid ""
 "At least one of the points of the 'bezier curve' is out of the drawing area. "
-"The 'bezier curve' is not drawn.\n"
+"The 'bezier curve' is not drawn."
 msgstr ""
 "По крайней мере одна точка 'кривой безье' вне пределов области рисования. "
 "'Кривая безье' не нарисована."
 
-#: vca_sess.cpp:1979
+#: vca_sess.cpp:2034
 msgid ""
 "At least one of the points of the 'line' is out of the drawing area. The "
-"'line' is not drawn.\n"
+"'line' is not drawn."
 msgstr ""
 "По крайней мере одна точка 'линии' вне пределов области рисования. 'Линия' "
 "не нарисована."
 
-#: vca_sess.cpp:2305 vca_sess.cpp:4763
+#: vca_sess.cpp:2355 vca_sess.cpp:4696
 msgid "xSc"
 msgstr ""
 
-#: vca_sess.cpp:2307 vca_sess.cpp:4765
+#: vca_sess.cpp:2357 vca_sess.cpp:4698
 msgid "ySc"
 msgstr ""
 
-#: vca_sess.cpp:2433
+#: vca_sess.cpp:2477
 msgid ""
 "At least one of the elementary figures from each the 'fill' consists of is "
-"out of drawing area. The 'fill' is not drawn.\n"
+"out of drawing area. The 'fill' is not drawn."
 msgstr ""
-"По крайней мере одна из элементарных фигур, из которых состоит 'заливка', вне "
-"пределов области рисования. 'Заливка' не нарисована."
+"По крайней мере одна из элементарных фигур, из которых состоит 'заливка', "
+"вне пределов области рисования. 'Заливка' не нарисована."
 
-#: vca_sess.cpp:2611
-#, c-format
-msgid "xMin_rot = %f\n"
-msgstr ""
-
-#: vca_sess.cpp:2612
-#, c-format
-msgid "xMax_rot = %f\n"
-msgstr ""
-
-#: vca_sess.cpp:2613
-#, c-format
-msgid "yMin_rot = %f\n"
-msgstr ""
-
-#: vca_sess.cpp:2614
-#, c-format
-msgid "yMax_rot = %f\n"
-msgstr ""
-
-#: vca_sess.cpp:2655
-#, c-format
-msgid "pointImage.size() = %i\n"
-msgstr ""
-
-#: vca_sess.cpp:2725
-#, c-format
-msgid "After 2 pointImage.size() = %i\n"
-msgstr ""
-
-#: vca_sess.cpp:4042 vca_sess.cpp:5111
+#: vca_sess.cpp:3974 vca_sess.cpp:5044
 msgid "sub"
 msgstr ""
 
-#: vca_sess.cpp:4043 vca_sess.cpp:5112
+#: vca_sess.cpp:3975 vca_sess.cpp:5045
 msgid "point"
 msgstr ""
 
-#: vca_sess.cpp:4045 vca_sess.cpp:5114
+#: vca_sess.cpp:3977 vca_sess.cpp:5047
 msgid "x"
 msgstr ""
 
-#: vca_sess.cpp:4047 vca_sess.cpp:5116
+#: vca_sess.cpp:3979 vca_sess.cpp:5049
 msgid "y"
 msgstr ""
 
-#: vca_sess.cpp:4049
+#: vca_sess.cpp:3981
 msgid "key"
 msgstr ""
 
-#: vca_sess.cpp:4057
+#: vca_sess.cpp:3989
 msgid "ws_Fig"
 msgstr ""
 
-#: vca_sess.cpp:4062 vca_sess.cpp:4063 vca_sess.cpp:4064 vca_sess.cpp:4086
-#: vca_sess.cpp:5137 vca_sess.cpp:5251 vca_sess.cpp:5252 vca_sess.cpp:5262
+#: vca_sess.cpp:3994 vca_sess.cpp:3995 vca_sess.cpp:3996 vca_sess.cpp:4018
+#: vca_sess.cpp:5070 vca_sess.cpp:5184 vca_sess.cpp:5185 vca_sess.cpp:5195
 msgid "el"
 msgstr ""
 
-#: vca_sess.cpp:4062 vca_sess.cpp:4063
+#: vca_sess.cpp:3994 vca_sess.cpp:3995
 msgid "event"
 msgstr ""
 
-#: vca_sess.cpp:4063
+#: vca_sess.cpp:3995
 msgid "ws_FocusIn"
 msgstr ""
 
-#: vca_sess.cpp:4064
+#: vca_sess.cpp:3996
 msgid "focus"
 msgstr ""
 
-#: vca_sess.cpp:4064 vca_sess.cpp:5391 web_vision.cpp:468 web_vision.cpp:483
+#: vca_sess.cpp:3996 vca_sess.cpp:5324 web_vision.cpp:280 web_vision.cpp:456
+#: web_vision.cpp:471
 msgid "1"
 msgstr ""
 
-#: vca_sess.cpp:4087 vca_sess.cpp:5138
+#: vca_sess.cpp:4019 vca_sess.cpp:5071
 msgid "p"
 msgstr ""
 
-#: vca_sess.cpp:4213
+#: vca_sess.cpp:4145
 msgid "line"
 msgstr ""
 
-#: vca_sess.cpp:4219 vca_sess.cpp:4241 vca_sess.cpp:4322 vca_sess.cpp:4344
-#: vca_sess.cpp:4366 vca_sess.cpp:4374 vca_sess.cpp:4382 vca_sess.cpp:4493
-#: vca_sess.cpp:4515 vca_sess.cpp:4537 vca_sess.cpp:4545 vca_sess.cpp:4613
+#: vca_sess.cpp:4151 vca_sess.cpp:4173 vca_sess.cpp:4254 vca_sess.cpp:4276
+#: vca_sess.cpp:4298 vca_sess.cpp:4306 vca_sess.cpp:4314 vca_sess.cpp:4426
+#: vca_sess.cpp:4448 vca_sess.cpp:4470 vca_sess.cpp:4478 vca_sess.cpp:4546
 #, c-format
 msgid "(%f|%f)"
 msgstr ""
 
-#: vca_sess.cpp:4265 vca_sess.cpp:4279 vca_sess.cpp:4392 vca_sess.cpp:4406
-#: vca_sess.cpp:4556 vca_sess.cpp:4570
+#: vca_sess.cpp:4197 vca_sess.cpp:4211 vca_sess.cpp:4324 vca_sess.cpp:4338
+#: vca_sess.cpp:4489 vca_sess.cpp:4503
 #, c-format
 msgid "w%d"
 msgstr ""
 
-#: vca_sess.cpp:4266 vca_sess.cpp:4280 vca_sess.cpp:4393 vca_sess.cpp:4407
-#: vca_sess.cpp:4557 vca_sess.cpp:4571 vca_sess.cpp:4880
+#: vca_sess.cpp:4198 vca_sess.cpp:4212 vca_sess.cpp:4325 vca_sess.cpp:4339
+#: vca_sess.cpp:4490 vca_sess.cpp:4504 vca_sess.cpp:4813
 #, c-format
 msgid "%d"
 msgstr ""
 
-#: vca_sess.cpp:4270 vca_sess.cpp:4284 vca_sess.cpp:4397 vca_sess.cpp:4411
-#: vca_sess.cpp:4561 vca_sess.cpp:4575 vca_sess.cpp:4642
+#: vca_sess.cpp:4202 vca_sess.cpp:4216 vca_sess.cpp:4329 vca_sess.cpp:4343
+#: vca_sess.cpp:4494 vca_sess.cpp:4508 vca_sess.cpp:4575
 #, c-format
 msgid "c%d"
 msgstr ""
 
-#: vca_sess.cpp:4293 vca_sess.cpp:4420 vca_sess.cpp:4584
+#: vca_sess.cpp:4225 vca_sess.cpp:4352 vca_sess.cpp:4517
 #, c-format
 msgid "s%d"
 msgstr ""
 
-#: vca_sess.cpp:4316
+#: vca_sess.cpp:4248
 msgid "arc"
 msgstr ""
 
-#: vca_sess.cpp:4487
+#: vca_sess.cpp:4420
 msgid "bezier"
 msgstr ""
 
-#: vca_sess.cpp:4603
+#: vca_sess.cpp:4536
 msgid "fill"
 msgstr ""
 
-#: vca_sess.cpp:4646
+#: vca_sess.cpp:4579
 #, c-format
 msgid "i%d"
 msgstr ""
 
-#: vca_sess.cpp:4789 vca_sess.cpp:5204
+#: vca_sess.cpp:4722 vca_sess.cpp:5137
 msgid "Test"
 msgstr ""
 
-#: vca_sess.cpp:4837 vca_sess.cpp:4879
+#: vca_sess.cpp:4770 vca_sess.cpp:4812
 #, c-format
 msgid "%d-%02d-%d"
 msgstr ""
 
-#: vca_sess.cpp:4839 vca_sess.cpp:4882
+#: vca_sess.cpp:4772 vca_sess.cpp:4815
 #, c-format
 msgid "%d:%02d"
 msgstr ""
 
-#: vca_sess.cpp:4841 vca_sess.cpp:4884
+#: vca_sess.cpp:4774 vca_sess.cpp:4817
 #, c-format
 msgid "%d:%02d:%02d"
 msgstr ""
 
-#: vca_sess.cpp:4842 vca_sess.cpp:4887
+#: vca_sess.cpp:4775 vca_sess.cpp:4820
 #, c-format
 msgid "%d:%02d:%g"
 msgstr ""
 
-#: vca_sess.cpp:4885
+#: vca_sess.cpp:4818
 #, c-format
 msgid "%ds"
 msgstr ""
 
-#: vca_sess.cpp:4888
+#: vca_sess.cpp:4821
 #, c-format
 msgid "%gs"
 msgstr ""
 
-#: vca_sess.cpp:4889
+#: vca_sess.cpp:4822
 #, c-format
 msgid "%gms"
 msgstr ""
 
-#: vca_sess.cpp:5194
+#: vca_sess.cpp:5127
 msgid "Arial"
 msgstr ""
 
-#: vca_sess.cpp:5197
+#: vca_sess.cpp:5130
 #, c-format
 msgid "%100s %d %d %d"
 msgstr ""
 
-#: vca_sess.cpp:5200
+#: vca_sess.cpp:5133
 msgid ":bold"
 msgstr ""
 
-#: vca_sess.cpp:5201
+#: vca_sess.cpp:5134
 msgid ":italic"
 msgstr ""
 
-#: vca_sess.cpp:5251
+#: vca_sess.cpp:5184
 msgid "curSek"
 msgstr ""
 
-#: vca_sess.cpp:5252
+#: vca_sess.cpp:5185
 msgid "curUSek"
 msgstr ""
 
-#: vca_sess.cpp:5262
+#: vca_sess.cpp:5195
 msgid "prm"
 msgstr ""
 
-#: vca_sess.cpp:5326 web_vision.cpp:713
+#: vca_sess.cpp:5259 web_vision.cpp:644
 msgid "info"
 msgstr ""
 
-#: vca_sess.cpp:5327 vca_sess.cpp:5386
+#: vca_sess.cpp:5260 vca_sess.cpp:5319
 msgid "arch"
 msgstr ""
 
-#: vca_sess.cpp:5327 vca_sess.cpp:5344 vca_sess.cpp:5387
+#: vca_sess.cpp:5260 vca_sess.cpp:5277 vca_sess.cpp:5320
 #, c-format
 msgid "/%2fserv%2fval"
 msgstr ""
 
-#: vca_sess.cpp:5328 vca_sess.cpp:5332
+#: vca_sess.cpp:5261 vca_sess.cpp:5265
 msgid "vtp"
 msgstr ""
 
-#: vca_sess.cpp:5333
+#: vca_sess.cpp:5266
 msgid "beg"
 msgstr ""
 
-#: vca_sess.cpp:5334
+#: vca_sess.cpp:5267
 msgid "end"
 msgstr ""
 
-#: vca_sess.cpp:5335 vca_sess.cpp:5390 vca_sess.cpp:5398
+#: vca_sess.cpp:5268 vca_sess.cpp:5323 vca_sess.cpp:5331
 msgid "per"
 msgstr ""
 
-#: vca_sess.cpp:5346 vca_sess.cpp:5389 vca_sess.cpp:5396
+#: vca_sess.cpp:5279 vca_sess.cpp:5322 vca_sess.cpp:5329
 msgid "tm_grnd"
 msgstr ""
 
-#: vca_sess.cpp:5391
+#: vca_sess.cpp:5324
 msgid "mode"
 msgstr ""
 
-#: vca_sess.cpp:5392
+#: vca_sess.cpp:5325
 msgid "real_prec"
 msgstr ""
 
-#: vca_sess.cpp:5392
+#: vca_sess.cpp:5325
 msgid "6"
 msgstr ""
 
-#: vca_sess.cpp:5393
+#: vca_sess.cpp:5326
 msgid "round_perc"
 msgstr ""
 
-#: vca_sess.cpp:5405
+#: vca_sess.cpp:5338
 #, c-format
 msgid "%d %lf"
 msgstr ""
@@ -2358,12 +567,14 @@ msgstr ""
 msgid "C"
 msgstr ""
 
-#: web_vision.cpp:81 web_vision.cpp:515 web_vision.cpp:678
+#: web_vision.cpp:81 web_vision.cpp:503 web_vision.cpp:609
 msgid "ses_"
 msgstr ""
 
 #: web_vision.cpp:84
-msgid "void HttpGet(const string&,string&,const string&,vector<string>&);"
+msgid ""
+"void HttpGet(const string&,string&,const string&,vector<string>&,const "
+"string&);"
 msgstr ""
 
 #: web_vision.cpp:85
@@ -3017,21 +1228,24 @@ msgstr "Категория"
 msgid "Message"
 msgstr "Сообщение"
 
-#: web_vision.cpp:279 web_vision.cpp:287
+#: web_vision.cpp:279 web_vision.cpp:288
 msgid "SubType"
 msgstr "Подтип"
 
-#: web_vision.cpp:280 web_vision.cpp:288
+#: web_vision.cpp:280 web_vision.cpp:289
+msgid "Auth"
+msgstr ""
+
+#: web_vision.cpp:281 web_vision.cpp:290
 msgid "Developers"
 msgstr "Разработчики"
 
-#: web_vision.cpp:302
+#: web_vision.cpp:304
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
 "---------- Parameters of the module section <%s> in config file ----------\n"
-"\n"
-"SessTimeLife <time>      Time of the sesion life, minutes (default 10).\n"
+"SessTimeLife <time>      Time of the session life, minutes (default 10).\n"
 "\n"
 msgstr ""
 "======================== Опции модуля <%s:%s> ============================\n"
@@ -3039,66 +1253,66 @@ msgstr ""
 "SessTimeLife <время>     Время жизни сессии, минуты (по умолчанию 10).\n"
 "\n"
 
-#: web_vision.cpp:314
+#: web_vision.cpp:316
 msgid "h"
 msgstr ""
 
-#: web_vision.cpp:317
+#: web_vision.cpp:319
 msgid "help"
 msgstr ""
 
-#: web_vision.cpp:333 web_vision.cpp:338
+#: web_vision.cpp:335 web_vision.cpp:340
 msgid "SessTimeLife"
 msgstr ""
 
-#: web_vision.cpp:359
+#: web_vision.cpp:361
 msgid "chck_stop"
 msgstr ""
 
-#: web_vision.cpp:360
+#: web_vision.cpp:362
 msgid "Checking if session is not stopped!"
 msgstr ""
 
-#: web_vision.cpp:372
+#: web_vision.cpp:374
 #, c-format
 msgid "Timer's thread <%u> call. TID: %ld"
 msgstr ""
 
-#: web_vision.cpp:396
+#: web_vision.cpp:391
 msgid "HTTP/1.0 "
 msgstr ""
 
-#: web_vision.cpp:396
+#: web_vision.cpp:391
 msgid ""
-"\n"
+"\r\n"
 "Server: "
 msgstr ""
 
-#: web_vision.cpp:397
+#: web_vision.cpp:392
 msgid ""
-"\n"
-"Accept-Ranges: bytes\n"
+"\r\n"
+"Accept-Ranges: bytes\r\n"
 "Content-Length: "
 msgstr ""
 
-#: web_vision.cpp:399
+#: web_vision.cpp:394
 msgid ""
-"\n"
-"Connection: close\n"
+"\r\n"
+"Connection: close\r\n"
 "Content-type: "
 msgstr ""
 
-#: web_vision.cpp:401
+#: web_vision.cpp:396
 msgid ""
-"\n"
+"\r\n"
 "Charset="
 msgstr ""
 
-#: web_vision.cpp:402 web_vision.cpp:648
-msgid "\n"
+#: web_vision.cpp:397 web_vision.cpp:744
+msgid "\r\n"
 msgstr ""
 
-#: web_vision.cpp:408
+#: web_vision.cpp:403
 msgid ""
 "<?xml version='1.0' ?>\n"
 "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
@@ -3108,7 +1322,7 @@ msgid ""
 "  <meta http-equiv='Content-Type' content='text/html; charset="
 msgstr ""
 
-#: web_vision.cpp:413
+#: web_vision.cpp:408
 msgid ""
 "'/>\n"
 "  <meta http-equiv='Cache-Control' content='no-store, no-cache, must-"
@@ -3118,193 +1332,187 @@ msgid ""
 "  <link rel='shortcut icon' href='/"
 msgstr ""
 
-#: web_vision.cpp:417
+#: web_vision.cpp:412
 msgid ""
 "/ico' type='image' />\n"
 "  <title>"
 msgstr ""
 
-#: web_vision.cpp:418 web_vision.cpp:456 web_vision.cpp:464 web_vision.cpp:646
+#: web_vision.cpp:413 web_vision.cpp:452
 msgid ". "
 msgstr ""
 
-#: web_vision.cpp:418
+#: web_vision.cpp:413
 msgid ""
 "</title>\n"
 "  <style type='text/css'>\n"
 msgstr ""
 
-#: web_vision.cpp:419
+#: web_vision.cpp:414
 msgid "</style>\n"
 msgstr ""
 
-#: web_vision.cpp:421
+#: web_vision.cpp:416
 msgid ""
 "</head>\n"
 "<body alink='#33ccff' link='#3366ff' text='#000000' vlink='#339999'>\n"
 msgstr ""
 
-#: web_vision.cpp:429
+#: web_vision.cpp:424
 msgid ""
 "</body>\n"
 "</html>"
 msgstr ""
 
-#: web_vision.cpp:441
+#: web_vision.cpp:436
 msgid "about"
 msgstr ""
 
-#: web_vision.cpp:443
+#: web_vision.cpp:438
 msgid "img_"
 msgstr ""
 
-#: web_vision.cpp:446
+#: web_vision.cpp:441
 msgid "UI."
 msgstr ""
 
-#: web_vision.cpp:447
+#: web_vision.cpp:442
 msgid "image/"
 msgstr ""
 
-#: web_vision.cpp:456 web_vision.cpp:464 web_vision.cpp:646
+#: web_vision.cpp:452
 msgid "<h1 class='head'>"
 msgstr ""
 
-#: web_vision.cpp:456 web_vision.cpp:646
-msgid ""
-"</h1>\n"
-"<hr/><br/>\n"
-msgstr ""
-
-#: web_vision.cpp:464
+#: web_vision.cpp:452
 msgid ""
 "</h1>\n"
 "<hr/><br/>\n"
 "<center><table class='page_auth'>\n"
 msgstr ""
 
-#: web_vision.cpp:468
+#: web_vision.cpp:456
 #, c-format
 msgid "/%2fses%2fses"
 msgstr ""
 
-#: web_vision.cpp:468 web_vision.cpp:483
+#: web_vision.cpp:456 web_vision.cpp:471
 msgid "chkUserPerm"
 msgstr ""
 
-#: web_vision.cpp:473 web_vision.cpp:488
+#: web_vision.cpp:461 web_vision.cpp:476
 msgid "<tr><td><b>"
 msgstr ""
 
-#: web_vision.cpp:473
+#: web_vision.cpp:461
 msgid "Connect to opened session"
 msgstr "Подключение к открытой сессии"
 
-#: web_vision.cpp:473 web_vision.cpp:488
+#: web_vision.cpp:461 web_vision.cpp:476
 msgid ""
 "</b></td></tr>\n"
 "<tr class='content'><td align='center'>\n"
 "<table border='0'>\n"
 msgstr ""
 
-#: web_vision.cpp:477 web_vision.cpp:492
+#: web_vision.cpp:465 web_vision.cpp:480
 msgid "<tr><td><a href='/"
 msgstr ""
 
-#: web_vision.cpp:477 web_vision.cpp:509
+#: web_vision.cpp:465 web_vision.cpp:497
 msgid "/ses_"
 msgstr ""
 
-#: web_vision.cpp:477 web_vision.cpp:492
+#: web_vision.cpp:465 web_vision.cpp:480
 msgid "/'>"
 msgstr ""
 
-#: web_vision.cpp:478 web_vision.cpp:493
+#: web_vision.cpp:466 web_vision.cpp:481
 msgid "</a></td></tr>"
 msgstr ""
 
-#: web_vision.cpp:479 web_vision.cpp:494
+#: web_vision.cpp:467 web_vision.cpp:482
 msgid "</table></td></tr>\n"
 msgstr ""
 
-#: web_vision.cpp:483
+#: web_vision.cpp:471
 #, c-format
 msgid "/%2fprm%2fcfg%2fprj"
 msgstr ""
 
-#: web_vision.cpp:488
+#: web_vision.cpp:476
 msgid "Create new session for present project"
 msgstr "Создание новой сессии для доступного проекта"
 
-#: web_vision.cpp:497
+#: web_vision.cpp:485
 msgid "</table></center>"
 msgstr ""
 
-#: web_vision.cpp:498
+#: web_vision.cpp:486
 msgid "No one sessions and projects of VCA engine are present for user!"
 msgstr "Нет ни одного сеанса и проекта движка СВУ для пользователя!"
 
-#: web_vision.cpp:501
+#: web_vision.cpp:489
 msgid "prj_"
 msgstr ""
 
-#: web_vision.cpp:503
+#: web_vision.cpp:491
 msgid "connect"
 msgstr ""
 
-#: web_vision.cpp:504
+#: web_vision.cpp:492
 msgid "prj"
 msgstr ""
 
-#: web_vision.cpp:506
+#: web_vision.cpp:494
 msgid "mcat"
 msgstr ""
 
-#: web_vision.cpp:509 web_vision.cpp:641
+#: web_vision.cpp:497
 msgid "<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/"
 msgstr ""
 
-#: web_vision.cpp:509
+#: web_vision.cpp:497
 msgid "/'/>"
 msgstr ""
 
-#: web_vision.cpp:510
+#: web_vision.cpp:498
 msgid "<center>Open new session '"
 msgstr ""
 
-#: web_vision.cpp:510
+#: web_vision.cpp:498
 msgid "' for project: '"
 msgstr ""
 
-#: web_vision.cpp:521
+#: web_vision.cpp:509
 #, c-format
 msgid "/%2fobj%2fst%2fen"
 msgstr ""
 
-#: web_vision.cpp:538
+#: web_vision.cpp:526
 #, c-format
 msgid "An unaccessible request is received: '%s'"
 msgstr "Получен недопустимый запрос: '%s'"
 
-#: web_vision.cpp:542
+#: web_vision.cpp:530
 msgid "Page <"
 msgstr ""
 
-#: web_vision.cpp:542
+#: web_vision.cpp:530
 msgid "> error: "
 msgstr ""
 
-#: web_vision.cpp:553
+#: web_vision.cpp:541
 msgid ""
 "<center><table class='page_auth'>\n"
 "<TR><TD>"
 msgstr ""
 
-#: web_vision.cpp:554 web_vision.cpp:563
+#: web_vision.cpp:542 web_vision.cpp:551
 msgid " "
 msgstr ""
 
-#: web_vision.cpp:554 web_vision.cpp:563
+#: web_vision.cpp:542 web_vision.cpp:551
 msgid ""
 "</TD></TR>\n"
 "<TR class='content'><TD>\n"
@@ -3312,31 +1520,31 @@ msgid ""
 "<TR><TD><font color='Blue'>"
 msgstr ""
 
-#: web_vision.cpp:557 web_vision.cpp:566
+#: web_vision.cpp:545 web_vision.cpp:554
 msgid "Name: "
 msgstr "Имя: "
 
-#: web_vision.cpp:557
+#: web_vision.cpp:545
 msgid ""
 "</font></TD><TD>OpenSCADA</TD></TR>\n"
 "<TR><TD><font color='Blue'>"
 msgstr ""
 
-#: web_vision.cpp:558 web_vision.cpp:568
+#: web_vision.cpp:546 web_vision.cpp:556
 msgid "License: "
 msgstr "Лицензия: "
 
-#: web_vision.cpp:558
+#: web_vision.cpp:546
 msgid ""
 "</font></TD><TD>GPL</TD></TR>\n"
 "<TR><TD><font color='Blue'>"
 msgstr ""
 
-#: web_vision.cpp:559 web_vision.cpp:569
+#: web_vision.cpp:547 web_vision.cpp:557
 msgid "Author: "
 msgstr "Автор: "
 
-#: web_vision.cpp:559
+#: web_vision.cpp:547
 msgid ""
 "</font></TD><TD>Roman Savochenko</TD></TR>\n"
 "</table>\n"
@@ -3345,83 +1553,83 @@ msgid ""
 "<TR><TD>"
 msgstr ""
 
-#: web_vision.cpp:566 web_vision.cpp:567 web_vision.cpp:568 web_vision.cpp:569
+#: web_vision.cpp:554 web_vision.cpp:555 web_vision.cpp:556 web_vision.cpp:557
 msgid "</font></TD><TD>"
 msgstr ""
 
-#: web_vision.cpp:566 web_vision.cpp:567 web_vision.cpp:568
+#: web_vision.cpp:554 web_vision.cpp:555 web_vision.cpp:556
 msgid "</TD></TR><TR><TD><font color='Blue'>"
 msgstr ""
 
-#: web_vision.cpp:567
+#: web_vision.cpp:555
 msgid "Desription: "
 msgstr "Описание: "
 
-#: web_vision.cpp:569
+#: web_vision.cpp:557
 msgid ""
 "</TD></TR></table>\n"
 "</TD></TR>\n"
 "</table><br/></center>\n"
 msgstr ""
 
-#: web_vision.cpp:576
+#: web_vision.cpp:564
 msgid "<center><table class='page_auth'><tr><td><b>"
 msgstr ""
 
-#: web_vision.cpp:577
+#: web_vision.cpp:565
 msgid "Enter to module"
 msgstr "Вход в модуль"
 
-#: web_vision.cpp:577
+#: web_vision.cpp:565
 msgid ""
 "</b></td></tr>\n"
 "<tr class='content'> <td align='center'>\n"
 "<form method='post' action='/"
 msgstr ""
 
-#: web_vision.cpp:579
+#: web_vision.cpp:567
 msgid ""
 "' enctype='multipart/form-data'>\n"
 "<table cellpadding='3px'>\n"
 "<tr><td><b>"
 msgstr ""
 
-#: web_vision.cpp:581
+#: web_vision.cpp:569
 msgid "User name"
 msgstr "Имя пользователя"
 
-#: web_vision.cpp:581
+#: web_vision.cpp:569
 msgid ""
 "</b></td><td><input type='text' name='user' size='20'/></td></tr>\n"
 "<tr><td><b>"
 msgstr ""
 
-#: web_vision.cpp:582
+#: web_vision.cpp:570
 msgid "Password"
 msgstr "Пароль"
 
-#: web_vision.cpp:582
+#: web_vision.cpp:570
 msgid ""
 "</b></td><td><input type='password' name='pass' size='20'/></td></tr>\n"
 "<tr><td colspan='2' align='center'><input type='submit' name='auth_enter' "
 "value='"
 msgstr ""
 
-#: web_vision.cpp:583
+#: web_vision.cpp:571
 msgid "Enter"
 msgstr "Принять"
 
-#: web_vision.cpp:583
+#: web_vision.cpp:571
 msgid ""
 "'/>\n"
 "<input type='reset' name='clean' value='"
 msgstr ""
 
-#: web_vision.cpp:584
+#: web_vision.cpp:572
 msgid "Clean"
 msgstr "Очистить"
 
-#: web_vision.cpp:584
+#: web_vision.cpp:572
 msgid ""
 "'/>\n"
 "</td></tr></table>\n"
@@ -3429,212 +1637,168 @@ msgid ""
 "</td></tr></table></center>\n"
 msgstr ""
 
-#: web_vision.cpp:592 web_vision.cpp:821
+#: web_vision.cpp:580 web_vision.cpp:751
 msgid ":"
 msgstr ""
 
-#: web_vision.cpp:592
+#: web_vision.cpp:580
 msgid "Cookie"
 msgstr ""
 
-#: web_vision.cpp:594 web_vision.cpp:804
+#: web_vision.cpp:582 web_vision.cpp:734
 msgid "="
 msgstr ""
 
-#: web_vision.cpp:597
+#: web_vision.cpp:585
 msgid ";"
 msgstr ""
 
-#: web_vision.cpp:620
-msgid "oscdAuthVisionId"
-msgstr ""
-
-#: web_vision.cpp:634
-msgid "auth_enter"
-msgstr ""
-
-#: web_vision.cpp:637 web_vision.cpp:704
-msgid "user"
-msgstr ""
-
-#: web_vision.cpp:638
-msgid "pass"
-msgstr ""
-
-#: web_vision.cpp:641 web_vision.cpp:658
-msgid "'/>"
-msgstr ""
-
-#: web_vision.cpp:643
-msgid "Set-Cookie: oscdAuthVisionId="
-msgstr ""
-
-#: web_vision.cpp:643
-msgid "; path=/;\n"
-msgstr ""
-
-#: web_vision.cpp:647
-msgid "Auth is wrong! Retry please."
-msgstr "Ошибка авторизации! Повторите пожалуйста."
-
-#: web_vision.cpp:656
-msgid "auth_ch"
-msgstr ""
-
-#: web_vision.cpp:658
-msgid "<META HTTP-EQUIV='Refresh' CONTENT='0; URL="
-msgstr ""
-
-#: web_vision.cpp:660
-msgid "Set-Cookie: oscdAuthVisionId=; path=/;\n"
-msgstr ""
-
-#: web_vision.cpp:691
+#: web_vision.cpp:622
 #, c-format
 msgid "%s"
 msgstr ""
 
-#: web_vision.cpp:694
+#: web_vision.cpp:625
 #, c-format
 msgid "<table border='2' width='40%' align='center'><tbody>\n"
 msgstr ""
 
-#: web_vision.cpp:695
+#: web_vision.cpp:626
 msgid "<tr bgcolor='yellow'><td align='center'><b>Warning!</b></td></tr>\n"
 msgstr ""
 
-#: web_vision.cpp:696
+#: web_vision.cpp:627
 msgid "<tr bgcolor='red'><td align='center'><b>Error!</b></td></tr>\n"
 msgstr ""
 
-#: web_vision.cpp:697
+#: web_vision.cpp:628
 msgid "<tr bgcolor='#9999ff'><td align='center'><b>Message!</b></td></tr>\n"
 msgstr ""
 
-#: web_vision.cpp:698
+#: web_vision.cpp:629
 msgid "<tr bgcolor='#cccccc'> <td align='center'>"
 msgstr ""
 
-#: web_vision.cpp:698
+#: web_vision.cpp:629
 msgid "</td></tr>\n"
 msgstr ""
 
-#: web_vision.cpp:699
+#: web_vision.cpp:630
 msgid "</tbody></table>\n"
 msgstr ""
 
-#: web_vision.cpp:705
+#: web_vision.cpp:635
+msgid "user"
+msgstr ""
+
+#: web_vision.cpp:636
 msgid "/UI/VCAEngine"
 msgstr ""
 
-#: web_vision.cpp:707
+#: web_vision.cpp:638
 msgid "rez"
 msgstr ""
 
-#: web_vision.cpp:716
+#: web_vision.cpp:647
 msgid "area"
 msgstr ""
 
-#: web_vision.cpp:716
+#: web_vision.cpp:647
 msgid "/prm/cfg"
 msgstr ""
 
-#: web_vision.cpp:716
+#: web_vision.cpp:647
 msgid "Module options"
 msgstr "Опции модуля"
 
-#: web_vision.cpp:717 web_vision.cpp:718
+#: web_vision.cpp:648 web_vision.cpp:649
 msgid "fld"
 msgstr ""
 
-#: web_vision.cpp:717 web_vision.cpp:724
+#: web_vision.cpp:648 web_vision.cpp:655
 msgid "/prm/cfg/lf_tm"
 msgstr ""
 
-#: web_vision.cpp:717
-msgid "Life time of auth sesion(min)"
-msgstr "Время жизни сеанса авторизации (мин)"
+#: web_vision.cpp:648
+msgid "Life time of session (min)"
+msgstr "Время жизни сеанса (мин)"
 
-#: web_vision.cpp:717 web_vision.cpp:718
+#: web_vision.cpp:648 web_vision.cpp:649
 msgid "tp"
 msgstr ""
 
-#: web_vision.cpp:717
+#: web_vision.cpp:648
 msgid "dec"
 msgstr ""
 
-#: web_vision.cpp:718 web_vision.cpp:729
+#: web_vision.cpp:649 web_vision.cpp:660
 msgid "/help/g_help"
 msgstr ""
 
-#: web_vision.cpp:718
+#: web_vision.cpp:649
 msgid "Options help"
 msgstr "Помощь по опциям"
 
-#: web_vision.cpp:718
+#: web_vision.cpp:649
 msgid "str"
 msgstr ""
 
-#: web_vision.cpp:718
+#: web_vision.cpp:649
 msgid "cols"
 msgstr ""
 
-#: web_vision.cpp:718
+#: web_vision.cpp:649
 msgid "90"
 msgstr ""
 
-#: web_vision.cpp:718
+#: web_vision.cpp:649
 msgid "rows"
 msgstr ""
 
-#: web_vision.cpp:718
+#: web_vision.cpp:649
 msgid "5"
 msgstr ""
 
-#: web_vision.cpp:737
+#: web_vision.cpp:668
 msgid "-"
 msgstr ""
 
-#: web_vision.cpp:768 web_vision.cpp:772
+#: web_vision.cpp:699 web_vision.cpp:703
 msgid "###"
 msgstr ""
 
-#: web_vision.cpp:796
+#: web_vision.cpp:726
 msgid "?"
 msgstr ""
 
-#: web_vision.cpp:805
+#: web_vision.cpp:735
 msgid "true"
 msgstr ""
 
-#: web_vision.cpp:813
+#: web_vision.cpp:743
 msgid "boundary="
 msgstr ""
 
-#: web_vision.cpp:814
-msgid "\r\n"
-msgstr ""
-
-#: web_vision.cpp:815 web_vision.cpp:831
+#: web_vision.cpp:745 web_vision.cpp:761
 msgid "--"
 msgstr ""
 
-#: web_vision.cpp:816
+#: web_vision.cpp:746
 msgid "Content-Disposition: form-data;"
 msgstr ""
 
-#: web_vision.cpp:817
+#: web_vision.cpp:747
 msgid "name=\""
 msgstr ""
 
-#: web_vision.cpp:818
+#: web_vision.cpp:748
 msgid "filename=\""
 msgstr ""
 
-#: web_vision.cpp:821
+#: web_vision.cpp:751
 msgid "Content-Type"
 msgstr ""
 
-#: web_vision.cpp:838 web_vision.cpp:851
+#: web_vision.cpp:768 web_vision.cpp:781
 msgid "\""
 msgstr ""

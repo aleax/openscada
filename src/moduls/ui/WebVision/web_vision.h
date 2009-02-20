@@ -43,27 +43,13 @@ namespace WebVision
 {
 
 //*************************************************
-//* SAuth                                         *
-//*************************************************
-class SAuth
-{
-    public:
-	SAuth( ) : tAuth(0), name("")	{ }
-	SAuth( string inm, time_t itAuth ) : tAuth(itAuth), name(inm)	{ }
-
-	time_t tAuth;
-	string name;
-};
-
-//*************************************************
 //* SSess                                         *
 //*************************************************
 class SSess
 {
     public:
 	//Methods
-	SSess( const string &iurl, const string &ipage, const string &isender,
-		vector<string> &ivars, const string &icontent );
+	SSess( const string &iurl, const string &isender, const string &iuser, vector<string> &ivars, const string &icontent );
 
 	//Attributes
 	string url;		//request URL
@@ -90,10 +76,10 @@ class TWEB: public TUI
 	TWEB( string name );
 	~TWEB( );
 
-	time_t authTime( )				{ return mTAuth; }
+	time_t sessTime( )				{ return mTSess; }
 	string CSStables( )				{ return mCSStables; }
 
-	void setAuthTime( time_t vl )			{ mTAuth = vl; modif(); }
+	void setSessTime( time_t vl )			{ mTSess = vl; modif(); }
 	void setCSStables( const string &vl )		{ mCSStables = vl; modif(); }
 
 	//- VCA sessions -
@@ -107,12 +93,12 @@ class TWEB: public TUI
 	void modStop( );
 
 	//- Web process methods -
-	void HttpGet( const string &url, string &page, const string &sender, vector<string> &vars );
+	void HttpGet( const string &url, string &page, const string &sender, vector<string> &vars, const string &user );
 	void getAbout( SSess &ses );
 	void getAuth( SSess &ses );
 	string getCookie( string name, vector<string> &vars );
 
-	void HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &contain );
+	void HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &user );
 
 	string optDescr( );
 	string modInfo( const string &name );
@@ -137,17 +123,11 @@ class TWEB: public TUI
 	//Methods
 	static void TaskSessCheck( union sigval obj );	//Sessions check task
 
-	//- Sesion manipulation function -
-	int sesOpen( string name );
-	void sesCheck( SSess &ses );
-
 	//- Post message dialog -
 	void messPost( string &page, const string &cat, const string &mess, MessLev type = Info );
 
 	//Attributes
-	Res		mRes;
-	map<int,SAuth>	mAuth;
-	int		mTAuth;				//Time of sesion life (minutes)
+	int		mTSess;				//Time of sesion life (minutes)
 	timer_t		chkSessTm;			//Check session's timer
 	bool		chck_st;			//Check session's status
 	int		id_vcases;			//VCA session's container identifier

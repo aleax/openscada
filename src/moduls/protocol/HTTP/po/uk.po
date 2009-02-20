@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the OpenSCADA.Protocol.HTTP package module.
 # Roman Savochenko <rom_as@fromru.com>, 2003-2009.
 #
-#: http.cpp:51 http.cpp:166 http.h:53
+#: http.cpp:51 http.cpp:173 http.cpp:241 http.h:54 http.h:57 http.h:58
+#: http.h:97
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.HTTP 1.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-15 13:12+0200\n"
+"POT-Creation-Date: 2009-02-20 11:29+0200\n"
 "PO-Revision-Date: 2007-10-23 18:02+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -24,7 +25,7 @@ msgstr ""
 msgid "HTTP-realisation"
 msgstr "HTTP-реалізація"
 
-#: http.cpp:36
+#: http.cpp:36 http.cpp:182
 msgid "Protocol"
 msgstr "Протокол"
 
@@ -54,66 +55,180 @@ msgstr ""
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
 "---------- Parameters of the module section <%s> in config file ----------\n"
+"AuthTime <min>      Life time of the authentication, minutes (default 10).\n"
 "\n"
 msgstr ""
 "======================= Опції модуля <%s:%s> =============================\n"
 "------- Параметри модульної секції <%s> у конфігураційному файлі ---------\n"
+"AuthTime <хвил>     Час життя аутентифікації, хвилин (по замовченню 10).\n"
 "\n"
 
-#: http.cpp:101
+#: http.cpp:102
 msgid "h"
 msgstr ""
 
-#: http.cpp:104
+#: http.cpp:105
 msgid "help"
 msgstr ""
 
-#: http.cpp:142
+#: http.cpp:121 http.cpp:126
+msgid "AuthTime"
+msgstr ""
+
+#: http.cpp:179
+msgid "info"
+msgstr ""
+
+#: http.cpp:182
+msgid "area"
+msgstr ""
+
+#: http.cpp:182
+msgid "/prm"
+msgstr ""
+
+#: http.cpp:183 http.cpp:184
+msgid "fld"
+msgstr ""
+
+#: http.cpp:183 http.cpp:190
+msgid "/prm/lf_tm"
+msgstr ""
+
+#: http.cpp:183
+msgid "Life time of the authentication (min)"
+msgstr "Час життя аутентифікації (хвил)"
+
+#: http.cpp:183 http.cpp:184 http.cpp:192 http.cpp:193
+msgid "root"
+msgstr ""
+
+#: http.cpp:183 http.cpp:184
+msgid "tp"
+msgstr ""
+
+#: http.cpp:183
+msgid "dec"
+msgstr ""
+
+#: http.cpp:184 http.cpp:195
+msgid "/help/g_help"
+msgstr ""
+
+#: http.cpp:184
+msgid "Options help"
+msgstr "Допомога по опціям"
+
+#: http.cpp:184
+msgid "str"
+msgstr ""
+
+#: http.cpp:184
+msgid "cols"
+msgstr ""
+
+#: http.cpp:184
+msgid "90"
+msgstr ""
+
+#: http.cpp:184
+msgid "rows"
+msgstr ""
+
+#: http.cpp:184
+msgid "5"
+msgstr ""
+
+#: http.cpp:189
+msgid "path"
+msgstr ""
+
+#: http.cpp:192 http.cpp:195
+msgid "get"
+msgstr ""
+
+#: http.cpp:193
+msgid "set"
+msgstr ""
+
+#: http.cpp:215
 msgid "HTTP/1.0 "
 msgstr ""
 
-#: http.cpp:142
+#: http.cpp:215
 msgid ""
-"\n"
+"\r\n"
 "Server: "
 msgstr ""
 
-#: http.cpp:143
+#: http.cpp:216
 msgid ""
-"\n"
-"Accept-Ranges: bytes\n"
+"\r\n"
+"Accept-Ranges: bytes\r\n"
 "Content-Length: "
 msgstr ""
 
-#: http.cpp:145
+#: http.cpp:218
 msgid ""
-"\n"
-"Connection: close\n"
-"Content-type: text/html\n"
+"\r\n"
+"Keep-Alive: timeout=5, max=100\r\n"
+"Connection: Keep-Alive\r\n"
+"Content-type: text/html\r\n"
 "Charset="
 msgstr ""
 
-#: http.cpp:148
-msgid "\n"
+#: http.cpp:222 http.cpp:488
+msgid "\r\n"
 msgstr ""
 
-#: http.cpp:188
+#: http.cpp:246
+#, c-format
+msgid ""
+"Content:\n"
+"%s"
+msgstr ""
+
+#: http.cpp:263
+msgid "\r"
+msgstr ""
+
+#: http.cpp:265 http.cpp:495
+msgid ":"
+msgstr ""
+
+#: http.cpp:271
 msgid "content-length"
 msgstr ""
 
-#: http.cpp:193 http.cpp:231
+#: http.cpp:272
+msgid "connection"
+msgstr ""
+
+#: http.cpp:275
+msgid "keep-alive"
+msgstr ""
+
+#: http.cpp:278
+msgid "cookie"
+msgstr ""
+
+#: http.cpp:280
+msgid "oscd_u_id="
+msgstr ""
+
+#: http.cpp:286 http.cpp:311 http.cpp:368
 msgid "POST"
 msgstr ""
 
-#: http.cpp:197
+#: http.cpp:290
 msgid "HTTP/1.0"
 msgstr ""
 
-#: http.cpp:197
+#: http.cpp:290
 msgid "HTTP/1.1"
 msgstr ""
 
-#: http.cpp:199
+#: http.cpp:292
 msgid ""
 "<html>\n"
 " <body>\n"
@@ -123,41 +238,136 @@ msgid ""
 "</html>\n"
 msgstr ""
 
-#: http.cpp:205
+#: http.cpp:298
 msgid "400 Bad Request"
 msgstr "400 Поганий запит"
 
-#: http.cpp:213
+#: http.cpp:305 http.cpp:338 http.h:54
 msgid "/"
 msgstr ""
 
-#: http.cpp:218 http.cpp:291
-msgid "SubType"
+#: http.cpp:308
+msgid "login"
 msgstr ""
 
-#: http.cpp:218 http.cpp:291
-msgid "WWW"
-msgstr ""
-
-#: http.cpp:219
-msgid "Find no WWW subtype module!"
-msgstr "Не знайдено жодного модуля WWW підтипу!"
-
-#: http.cpp:222
+#: http.cpp:310 http.cpp:335 http.cpp:357
 msgid "GET"
 msgstr ""
 
-#: http.cpp:225
-msgid "void HttpGet(const string&,string&,const string&,vector<string>&);"
+#: http.cpp:316
+msgid "auth_enter"
 msgstr ""
 
-#: http.cpp:234
+#: http.cpp:319
+msgid "user"
+msgstr ""
+
+#: http.cpp:320
+msgid "pass"
+msgstr ""
+
+#: http.cpp:324
+msgid "<META HTTP-EQUIV='Refresh' CONTENT='0; URL="
+msgstr ""
+
+#: http.cpp:324 http.cpp:350
+msgid "'/>"
+msgstr ""
+
+#: http.cpp:325 http.cpp:338 http.cpp:351
+msgid "<h1 class='head'>"
+msgstr ""
+
+#: http.cpp:325 http.cpp:338 http.cpp:351
+#, c-format
+msgid "Going to page: <b>%s</b>"
+msgstr "Перехід до сторінки: <b>%s</b>"
+
+#: http.cpp:325 http.cpp:338 http.cpp:351
+msgid "</h1>\n"
+msgstr ""
+
+#: http.cpp:326 http.cpp:339 http.cpp:352 http.cpp:460 http.cpp:479
+msgid "200 OK"
+msgstr ""
+
+#: http.cpp:326
+msgid "Set-Cookie: oscd_u_id="
+msgstr ""
+
+#: http.cpp:326
+msgid "; path=/;\r\n"
+msgstr ""
+
+#: http.cpp:331
+msgid "<p style='color: #CF8122;'>Auth is wrong! Retry please.</p>"
+msgstr ""
+"<p style='color: #CF8122;'>Помилка аутентифікації! Повторіть будь ласка.</p>"
+
+#: http.cpp:335
+msgid "logout"
+msgstr ""
+
+#: http.cpp:337
+msgid "<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/'/>"
+msgstr ""
+
+#: http.cpp:339
+msgid "Set-Cookie: oscd_u_id=0; path=/;\r\n"
+msgstr ""
+
+#: http.cpp:347 http.cpp:455
+msgid "SubType"
+msgstr ""
+
+#: http.cpp:347 http.cpp:455
+msgid "WWW"
+msgstr ""
+
+#: http.cpp:347
+msgid "Find no one WWW subtype module!"
+msgstr "Не знайдено жодного модуля WWW підтипу!"
+
+#: http.cpp:348
+msgid "Auth"
+msgstr ""
+
+#: http.cpp:350
+msgid "<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/login/"
+msgstr ""
+
+#: http.cpp:351
+#, fuzzy
+msgid "/login/"
+msgstr "Вхід"
+
+#: http.cpp:360
+msgid ""
+"void HttpGet(const string&,string&,const string&,vector<string>&,const "
+"string&);"
+msgstr ""
+
+#: http.cpp:365
+#, c-format
+msgid ""
+"Get Content:\n"
+"%s"
+msgstr ""
+
+#: http.cpp:371
 msgid ""
 "void HttpPost(const string&,string&,const string&,vector<string>&,const "
 "string&);"
 msgstr ""
 
-#: http.cpp:242
+#: http.cpp:377
+#, c-format
+msgid ""
+"Post Content:\n"
+"%s"
+msgstr ""
+
+#: http.cpp:382
 msgid ""
 "<html>\n"
 " <body>\n"
@@ -165,18 +375,18 @@ msgid ""
 "  <p>The method "
 msgstr ""
 
-#: http.cpp:245
+#: http.cpp:385
 msgid ""
 " is not implemented by this server.</p>\n"
 " </body>\n"
 "</html>\n"
 msgstr ""
 
-#: http.cpp:248
+#: http.cpp:388
 msgid "501 Method Not Implemented"
 msgstr "501 Метод не імплементовано"
 
-#: http.cpp:260
+#: http.cpp:400
 msgid ""
 "<?xml version='1.0' ?>\n"
 "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
@@ -186,77 +396,238 @@ msgid ""
 "<meta http-equiv='Content-Type' content='text/html; charset="
 msgstr ""
 
-#: http.cpp:264
-msgid ""
-"'/>\n"
-"<title>"
+#: http.cpp:404
+msgid "'/>\n"
 msgstr ""
 
-#: http.cpp:265
+#: http.cpp:406
+msgid "<title>"
+msgstr ""
+
+#: http.cpp:406
 msgid "!"
 msgstr ""
 
-#: http.cpp:265
+#: http.cpp:406
 msgid ""
 "</title>\n"
+"<style type='text/css'>\n"
+"  hr { width: 95%; }\n"
+"  p { margin: 0px; text-indent: 10px; margin-bottom: 5px; }\n"
+"  body { background-color: #818181; margin: 0px; }\n"
+"  h1.head { text-align: center; color: #ffff00; }\n"
+"  table.work { background-color: #9999ff; border: 3px ridge #a9a9a9; "
+"padding: 2px;  }\n"
+"  table.work td { background-color:#cccccc; text-align: left; }\n"
+"  table.work td.content { padding: 5px; padding-bottom: 20px; }\n"
+"  table.work ul { margin: 0px; padding: 0px; padding-left: 20px; }\n"
+"</style>\n"
 "</head>\n"
-"<body bgcolor='#818181' text='#000000' link='#3366ff' vlink='#339999' "
-"alink='#33ccff'>\n"
-"<h1 align='center'><font color='#ffff00'>"
+"<body>\n"
+"<h1 class='head'>"
 msgstr ""
 
-#: http.cpp:268
-#, c-format
+#: http.cpp:419
 msgid ""
-"!</font></h1>\n"
-"<hr width='100%' size='3'/><br/>\n"
-"<br/><br/>\n"
+"</h1>\n"
+"<hr/><br/>\n"
 msgstr ""
 
-#: http.cpp:275
-#, c-format
+#: http.cpp:426
 msgid ""
-"<hr width='100%' size='2'/>\n"
+"<hr/>\n"
 "</body>\n"
 "</html>\n"
 msgstr ""
 
-#: http.cpp:283
+#: http.cpp:433
 msgid ""
-"<table border='2' align='center' width='40%' bgcolor='#A9A9A9'>\n"
-"<tr bgcolor='#9999ff'><td><b>"
+"<center><table class='work' width='50%'>\n"
+"<tr><th>"
 msgstr ""
 
-#: http.cpp:284
+#: http.cpp:434
+msgid "Login"
+msgstr "Вхід"
+
+#: http.cpp:434
+msgid "</th></tr><tr><td class='content'><p>"
+msgstr ""
+
+#: http.cpp:436
+msgid "Welcome to Web-interfaces of OpenSCADA system."
+msgstr "Ласкаво просимо до Web-інтерфейсів системи OpenSCADA."
+
+#: http.cpp:436 http.cpp:440 http.cpp:444
+msgid "</p>"
+msgstr ""
+
+#: http.cpp:439
+msgid "<p style='color: green;'>"
+msgstr ""
+
+#: http.cpp:439
+#, c-format
+msgid "You are login as <b>'%s'</b>."
+msgstr "Ви увійшли як <b>'%s'</b>."
+
+#: http.cpp:439 http.cpp:443
+msgid "</p><p>"
+msgstr ""
+
+#: http.cpp:440
+msgid ""
+"Select need Web-module from list below or press <a href='/logout'>here</a> "
+"for logout or <a href='/login'>here</a> for login as other user."
+msgstr ""
+"Виберіть потрібний Web-модуль із переліку нижче або натисніть <a href='/"
+"logout'>тут</a> для виходу або <a href='/login'>тут</a> для входу від ім'я "
+"іншого користувача."
+
+#: http.cpp:443
+msgid "<p style='color: #CF8122;'>"
+msgstr ""
+
+#: http.cpp:443
+msgid "You are not login now!"
+msgstr "Ви не увійшли до системи!"
+
+#: http.cpp:444
+msgid ""
+"For use some modules you must be login. For login now click <a href='/"
+"login'>here</a>."
+msgstr ""
+"Для використання окремих модулів Ви маєте увійти у систему. Для входу зараз "
+"натисніть <a href='/login'>тут</a>."
+
+#: http.cpp:445
+msgid "</td></tr>"
+msgstr ""
+
+#: http.cpp:448
+msgid "<tr><th>"
+msgstr ""
+
+#: http.cpp:448
 msgid "Present web modules"
 msgstr "Наявні web модулі"
 
-#: http.cpp:284
+#: http.cpp:448
 msgid ""
-"</b></td></tr>\n"
-"<tr bgcolor='#cccccc'><td><ul>\n"
+"</th></tr>\n"
+"<tr><td class='content'><ul>\n"
 msgstr ""
 
-#: http.cpp:292
+#: http.cpp:456
 msgid "<li><a href='"
 msgstr ""
 
-#: http.cpp:292
+#: http.cpp:456
 msgid "/'>"
 msgstr ""
 
-#: http.cpp:292
+#: http.cpp:456
 msgid "Name"
 msgstr "Ім'я"
 
-#: http.cpp:292
+#: http.cpp:456
 msgid "</a></li>\n"
 msgstr ""
 
-#: http.cpp:294
-msgid "</ul></td></tr></table>\n"
+#: http.cpp:458
+msgid "</ul></td></tr></table></center>\n"
 msgstr ""
 
-#: http.cpp:295
-msgid "200 OK"
+#: http.cpp:465
+msgid "<center><table class='work'><tr><th>"
+msgstr ""
+
+#: http.cpp:466
+msgid "Login to system"
+msgstr "Вхід у систему"
+
+#: http.cpp:466
+msgid ""
+"</th></tr>\n"
+"<tr><td>\n"
+"<form method='post' action='/login"
+msgstr ""
+
+#: http.cpp:468
+msgid ""
+"' enctype='multipart/form-data'>\n"
+"<table cellpadding='3px'>\n"
+"<tr><td><b>"
+msgstr ""
+
+#: http.cpp:470
+msgid "User name"
+msgstr "Ім'я користувача"
+
+#: http.cpp:470
+msgid ""
+"</b></td><td><input type='text' name='user' size='20'/></td></tr>\n"
+"<tr><td><b>"
+msgstr ""
+
+#: http.cpp:471
+msgid "Password"
+msgstr "Пароль"
+
+#: http.cpp:471
+msgid ""
+"</b></td><td><input type='password' name='pass' size='20'/></td></tr>\n"
+"<tr><td colspan='2' style='text-align: center'><input type='submit' "
+"name='auth_enter' value='"
+msgstr ""
+
+#: http.cpp:472
+msgid "Enter"
+msgstr "Прийняти"
+
+#: http.cpp:472
+msgid "'/>&nbsp;<input type='reset' name='clean' value='"
+msgstr ""
+
+#: http.cpp:473
+msgid "Clean"
+msgstr "Очистити"
+
+#: http.cpp:473
+msgid ""
+"'/></td></tr></table>\n"
+"</form>\n"
+"</td></tr><tr><td>"
+msgstr ""
+
+#: http.cpp:476
+msgid "</td></tr></table></center>\n"
+msgstr ""
+
+#: http.cpp:487
+msgid "boundary="
+msgstr ""
+
+#: http.cpp:489 http.cpp:505
+msgid "--"
+msgstr ""
+
+#: http.cpp:490
+msgid "Content-Disposition: form-data;"
+msgstr ""
+
+#: http.cpp:491
+msgid "name=\""
+msgstr ""
+
+#: http.cpp:492
+msgid "filename=\""
+msgstr ""
+
+#: http.cpp:495
+msgid "Content-Type"
+msgstr ""
+
+#: http.cpp:512 http.cpp:525
+msgid "\""
 msgstr ""

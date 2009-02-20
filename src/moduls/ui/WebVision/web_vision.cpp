@@ -66,7 +66,7 @@ using namespace WebVision;
 //************************************************
 //* TWEB                                         *
 //************************************************
-TWEB::TWEB( string name ) : mTAuth(10), chck_st(false)
+TWEB::TWEB( string name ) : mTSess(10), chck_st(false)
 {
     mId		= MOD_ID;
     mName	= MOD_NAME;
@@ -81,7 +81,7 @@ TWEB::TWEB( string name ) : mTAuth(10), chck_st(false)
     id_vcases	= grpAdd("ses_");
 
     //- Reg export functions -
-    modFuncReg( new ExpFunc("void HttpGet(const string&,string&,const string&,vector<string>&);",
+    modFuncReg( new ExpFunc("void HttpGet(const string&,string&,const string&,vector<string>&,const string&);",
         "Process Get comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpGet) );
     modFuncReg( new ExpFunc("void HttpPost(const string&,string&,const string&,vector<string>&,const string&);",
         "Process Set comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpPost) );
@@ -246,19 +246,16 @@ TWEB::TWEB( string name ) : mTAuth(10), chck_st(false)
 
     //> Default CSS init
     mCSStables =
-	"hr {width:100%}\n"
-	"body {background-color:#818181; margin:0px}\n"
-	"h1.head {text-align:center; color:#ffff00 }\n"
-	"h2.title {text-align:center; font-style:italic; margin: 0px; padding: 0px; border-width:0 }\n"
-	"table.page_head {background-color:#cccccc; border:3px ridge blue; width:100% }\n"
-	"table.page_head td.tool {text-align:center; border:1px solid blue; width:120px;  white-space: nowrap }\n"
-	"table.page_head td.user {text-align:left; border:1px solid blue; width:120px; white-space: nowrap }\n"
-	"table.page_area {background-color:#9999ff; border:3px ridge #a9a9a9; width:100%; padding:2px }\n"
-	"table.page_area tr.content {background-color:#cccccc; border:5px ridge #9999ff; padding:5px }\n"
-	"table.page_auth {background-color:#9999ff; border:3px ridge #a9a9a9; padding:2px }\n"
-	"table.page_auth tr.content {background-color:#cccccc; border:5px ridge #9999ff; padding:5px }\n"
+	"hr { width: 95%; }\n"
+	"body { background-color: #818181; margin: 0px; }\n"
+	"h1.head { text-align:center; color:#ffff00; }\n"
+	"h2.title { text-align:center; font-style: italic; margin: 0px; padding: 0px; border-width:0; }\n"
+	"table.work { background-color: #9999ff; border: 3px ridge #a9a9a9; padding: 2px; }\n"
+	"table.work td { background-color:#cccccc; text-align: left; }\n"
+	"table.work td.content { padding: 5px; padding-bottom: 20px; }\n"
+	"table.work ul { margin: 0px; padding: 0px; padding-left: 20px; }\n"
 	".vertalign { display: table-cell; text-align: center; vertical-align: middle; }\n"
-	".vertalign * { vertical-align: middle;	}\n"
+	".vertalign * { vertical-align: middle; }\n"
 	"table.prot { border: 1px solid black; border-collapse: collapse; empty-cells: show; }\n"
 	"table.prot th { border: 1px solid black; background-color: #E6E6E6; text-align: center; white-space: nowrap; }\n"
 	"table.prot td { border: 1px solid black; white-space: nowrap; }\n"
@@ -277,6 +274,7 @@ TWEB::~TWEB()
 string TWEB::modInfo( const string &name )
 {
     if( name == "SubType" )		return SUB_TYPE;
+    else if( name == "Auth" )		return "1";
     else if( name == _("Developers") )	return DEVELOPERS;
     else return TModule::modInfo(name);
 }
@@ -285,6 +283,7 @@ void TWEB::modInfo( vector<string> &list )
 {
     TModule::modInfo(list);
     list.push_back("SubType");
+    list.push_back("Auth");
     list.push_back(_("Developers"));
 }
 
@@ -300,8 +299,8 @@ string TWEB::optDescr( )
 
     snprintf(buf,sizeof(buf),_(
 	"======================= The module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section <%s> in config file ----------\n\n"
-	"SessTimeLife <time>      Time of the sesion life, minutes (default 10).\n\n"),
+	"---------- Parameters of the module section <%s> in config file ----------\n"
+	"SessTimeLife <time>      Time of the session life, minutes (default 10).\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 
     return buf;
@@ -309,7 +308,7 @@ string TWEB::optDescr( )
 
 void TWEB::load_( )
 {
-    //- Load parameters from command line -
+    //> Load parameters from command line
     int next_opt;
     const char *short_opt="h";
     struct option long_opt[] =
@@ -329,13 +328,13 @@ void TWEB::load_( )
 	}
     } while(next_opt != -1);
 
-    //- Load parameters from config file -
-    mTAuth = atoi( TBDS::genDBGet(nodePath()+"SessTimeLife",TSYS::int2str(mTAuth)).c_str() );
+    //> Load parameters from config file
+    mTSess = atoi( TBDS::genDBGet(nodePath()+"SessTimeLife",TSYS::int2str(mTSess)).c_str() );
 }
 
 void TWEB::save_( )
 {
-    TBDS::genDBSet(nodePath()+"SessTimeLife",TSYS::int2str(mTAuth));
+    TBDS::genDBSet(nodePath()+"SessTimeLife",TSYS::int2str(mTSess));
 }
 
 void TWEB::modStart( )
@@ -378,15 +377,8 @@ void TWEB::TaskSessCheck( union sigval obj )
     vector<string> list;
     web->vcaSesList( list );
     for( int i_s = 0; i_s < list.size(); i_s++ )
-	if( cur_tm > web->vcaSesAt(list[i_s]).at().lstReq()+web->authTime()*60 )
+	if( cur_tm > web->vcaSesAt(list[i_s]).at().lstReq()+web->sessTime()*60 )
 	    web->vcaSesDel(list[i_s]);
-
-    //> Check for user auth session timeout
-    ResAlloc res(web->mRes,false);
-    for( map<int,SAuth>::iterator authEl = web->mAuth.begin(); authEl != web->mAuth.end(); )
-	if( cur_tm > authEl->second.tAuth+web->authTime()*60 )
-	    web->mAuth.erase(authEl++);
-	else authEl++;
 
     web->chck_st = false;
 }
@@ -429,9 +421,9 @@ string TWEB::pgTail( )
     return "</body>\n</html>";
 }
 
-void TWEB::HttpGet( const string &url, string &page, const string &sender, vector<string> &vars )
+void TWEB::HttpGet( const string &url, string &page, const string &sender, vector<string> &vars, const string &user )
 {
-    SSess ses(TSYS::strDecode(url,TSYS::HttpURL),page,sender,vars,"");
+    SSess ses(TSYS::strDecode(url,TSYS::HttpURL),sender,user,vars,"");
     ses.page = pgHead();
 
     try
@@ -449,20 +441,13 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 	}
 	else
 	{
-	    sesCheck(ses);
-	    //> Auth dialog preparing
-	    if( !ses.user.size() )
-	    {
-		ses.page = ses.page+"<h1 class='head'>"PACKAGE_NAME". "+_(MOD_NAME)+"</h1>\n<hr/><br/>\n";
-		getAuth( ses );
-	    }
 	    //> Session select or new session for project creation
-	    else if( zero_lev.empty() )
+	    if( zero_lev.empty() )
 	    {
 		bool sesPrjOk = false;
 		ses.page = ses.page+
 		    "<h1 class='head'>"+PACKAGE_NAME+". "+_(MOD_NAME)+"</h1>\n<hr/><br/>\n"
-		    "<center><table class='page_auth'>\n";
+		    "<center><table class='work'>\n";
 		//>> Get present sessions list
 		XMLNode req("get");
 		req.setAttr("path","/%2fses%2fses")->setAttr("chkUserPerm","1");
@@ -470,11 +455,11 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		if( req.childSize() )
 		{
 		    ses.page = ses.page+
-			"<tr><td><b>"+_("Connect to opened session")+"</b></td></tr>\n"
-			"<tr class='content'><td align='center'>\n"
-			"<table border='0'>\n";
+			"<tr><th>"+_("Connect to opened session")+"</th></tr>\n"
+			"<tr><td class='content'>\n"
+			"<table border='0' cellspacing='3px' width='100%'>\n";
 		    for( int i_ch = 0; i_ch < req.childSize(); i_ch++ )
-			ses.page += "<tr><td><a href='/"MOD_ID"/ses_"+req.childGet(i_ch)->text()+"/'>"+
+			ses.page += "<tr><td style='text-align: center;'><a href='/"MOD_ID"/ses_"+req.childGet(i_ch)->text()+"/'>"+
 			    req.childGet(i_ch)->text()+"</a></td></tr>";
 		    ses.page += "</table></td></tr>\n";
 		    sesPrjOk = true;
@@ -485,11 +470,11 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		if( req.childSize() )
 		{
 		    ses.page = ses.page +
-			"<tr><td><b>"+_("Create new session for present project")+"</b></td></tr>\n"
-			"<tr class='content'><td align='center'>\n"
-			"<table border='0'>\n";
+			"<tr><th>"+_("Create new session for present project")+"</th></tr>\n"
+			"<tr><td class='content'>\n"
+			"<table border='0' cellspacing='3px' width='100%'>\n";
 		    for( int i_ch = 0; i_ch < req.childSize(); i_ch++ )
-			ses.page += "<tr><td><a href='/"MOD_ID"/prj_"+req.childGet(i_ch)->attr("id")+"/'>"+
+			ses.page += "<tr><td style='text-align: center;'><a href='/"MOD_ID"/prj_"+req.childGet(i_ch)->attr("id")+"/'>"+
 			    req.childGet(i_ch)->text()+"</a></td></tr>";
 		    ses.page += "</table></td></tr>\n";
 		    sesPrjOk = true;
@@ -519,7 +504,7 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		if( !ses.prm.size() )
 		{
 		    XMLNode req("get"); req.setAttr("path",ses.url+"/%2fobj%2fst%2fen");
-		    if( cntrIfCmd(req,ses.user) || !atoi(req.text().c_str()) )	{ HttpGet( "", page, sender, vars ); return; }
+		    if( cntrIfCmd(req,ses.user) || !atoi(req.text().c_str()) )	{ HttpGet( "", page, sender, vars, user ); return; }
 		}
 		//>> Call to session
 		try{ vcaSesAt(sesnm).at().getReq(ses); }
@@ -599,67 +584,10 @@ string TWEB::getCookie( string name, vector<string> &vars )
     return "";
 }
 
-int TWEB::sesOpen( string name )
-{
-    int sess_id;
-    ResAlloc res(mRes,true);
-
-    //- Get free identifier -
-    do{ sess_id = rand(); }
-    while( sess_id == 0 || mAuth.find(sess_id) != mAuth.end() );
-
-    //- Add new session authentification -
-    mAuth[sess_id] = SAuth(name,time(NULL));
-
-    return sess_id;
-}
-
-void TWEB::sesCheck( SSess &ses )
-{
-    ResAlloc res(mRes,false);
-    map<int,SAuth>::iterator authEl = mAuth.find(atoi(getCookie( "oscdAuthVisionId", ses.vars ).c_str()));
-    if( authEl != mAuth.end() )
-    {
-	ses.user = authEl->second.name;
-	authEl->second.tAuth = time(NULL);
-    }
-}
-
-void TWEB::HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &contain )
+void TWEB::HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &user )
 {
     map<string,string>::iterator cntEl;
-    SSess ses(TSYS::strDecode(url,TSYS::HttpURL),page,sender,vars,contain);
-
-    //> Check for autentification POST requests
-    if( ses.cnt.find("auth_enter") != ses.cnt.end() )
-    {
-	string pass;
-	if( (cntEl=ses.cnt.find("user")) != ses.cnt.end() )	ses.user = cntEl->second;
-	if( (cntEl=ses.cnt.find("pass")) != ses.cnt.end() )	pass = cntEl->second;
-	if( SYS->security().at().usrPresent(ses.user) && SYS->security().at().usrAt(ses.user).at().auth(pass) )
-	{
-	    ses.page = pgHead("<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/"MOD_ID"/"+url+"'/>")+pgTail();
-	    page=httpHead("200 OK",ses.page.size(),"text/html",
-		"Set-Cookie: oscdAuthVisionId="+TSYS::int2str(sesOpen(ses.user))+"; path=/;\r\n")+ses.page;
-	    return;
-	}
-	ses.page = pgHead()+"<h1 class='head'>"+PACKAGE_NAME+". "+_(MOD_NAME)+"</h1>\n<hr/><br/>\n";
-	messPost(ses.page,nodePath(),_("Auth is wrong! Retry please."),TWEB::Error);
-	ses.page += "\n";
-	getAuth( ses );
-	ses.page += pgTail();
-	page = httpHead("200 OK",ses.page.size(),"text/html")+ses.page;
-	return;
-    }
-    //> Session check
-    sesCheck( ses );
-    if( !ses.user.size() || ses.cnt.find("auth_ch") != ses.cnt.end() )
-    {
-	ses.page = pgHead("<META HTTP-EQUIV='Refresh' CONTENT='0; URL="MOD_ID"/"+url+"'/>")+pgTail();
-	page=httpHead("200 OK",ses.page.size(),"text/html",
-	    "Set-Cookie: oscdAuthVisionId=""; path=/;\r\n")+ses.page;
-	return;
-    }
+    SSess ses(TSYS::strDecode(url,TSYS::HttpURL),sender,user,vars,page);
 
     try
     {
@@ -668,8 +596,8 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	{
 	    XMLNode req(""); req.load(ses.content); req.setAttr("path",ses.url);
 	    cntrIfCmd(req,ses.user,false);
-	    ses.page = req.save(XMLNode::XMLHeader);
-	    page = httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
+	    ses.page = req.save();
+	    page = httpHead("200 OK",ses.page.size(),"text/xml; charset=UTF-8")+ses.page;
 	    return;
 	}
 
@@ -714,7 +642,7 @@ void TWEB::cntrCmdProc( XMLNode *opt )
     {
 	TUI::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of auth sesion(min)"),0660,"root","root",1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of session (min)"),0660,"root","root",1,"tp","dec");
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
 	return;
     }
@@ -723,8 +651,8 @@ void TWEB::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/prm/cfg/lf_tm" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )   opt->setText( TSYS::int2str(authTime()) );
-	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )   setAuthTime( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )   opt->setText( TSYS::int2str(sessTime()) );
+	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )   setSessTime( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )   opt->setText(optDescr());
     else TUI::cntrCmdProc(opt);
@@ -788,9 +716,8 @@ string TWEB::trMessReplace( const string &tsrc )
 //*************************************************
 //* SSess                                         *
 //*************************************************
-SSess::SSess( const string &iurl, const string &ipage, const string &isender,
-	vector<string> &ivars, const string &icontent ) :
-    url(iurl), page(ipage), sender(isender), vars(ivars), content(icontent)
+SSess::SSess( const string &iurl, const string &isender, const string &iuser, vector<string> &ivars, const string &icontent ) :
+    url(iurl), sender(isender), user(iuser), vars(ivars), content(icontent)
 {
     //- URL parameters parse -
     int prmSep = iurl.find("?");

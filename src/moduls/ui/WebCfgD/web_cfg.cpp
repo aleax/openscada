@@ -71,7 +71,7 @@ using namespace WebCfgD;
 //*************************************************
 //* TWEB                                          *
 //*************************************************
-TWEB::TWEB( string name ) : mTAuth(10), lst_ses_chk(0)
+TWEB::TWEB( string name )
 {
     mId		= MOD_ID;
     mName	= MOD_NAME;
@@ -85,7 +85,7 @@ TWEB::TWEB( string name ) : mTAuth(10), lst_ses_chk(0)
     mod		= this;
 
     //- Reg export functions -
-    modFuncReg( new ExpFunc("void HttpGet(const string&,string&,const string&,vector<string>&);",
+    modFuncReg( new ExpFunc("void HttpGet(const string&,string&,const string&,vector<string>&,const string&);",
 	"Process Get comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpGet) );
     modFuncReg( new ExpFunc("void HttpPost(const string&,string&,const string&,vector<string>&,const string&);",
 	"Process Set comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpPost) );
@@ -119,14 +119,16 @@ TWEB::~TWEB()
 
 string TWEB::modInfo( const string &name )
 {
-    if( name == "SubType" ) return(SUB_TYPE);
-    else return( TModule::modInfo( name) );
+    if( name == "SubType" )	return SUB_TYPE;
+    else if( name == "Auth" )	return "1";
+    else return TModule::modInfo(name);
 }
 
 void TWEB::modInfo( vector<string> &list )
 {
     TModule::modInfo(list);
     list.push_back("SubType");
+    list.push_back("Auth");
 }
 
 string TWEB::optDescr( )
@@ -134,8 +136,7 @@ string TWEB::optDescr( )
     char buf[STR_BUF_LEN];
     snprintf(buf,sizeof(buf),_(
 	"======================= The module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section <%s> in config file ----------\n"
-	"SessTimeLife <time>      Time of the sesion life, minutes (default 10).\n\n"),
+	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 
     return buf;
@@ -164,12 +165,6 @@ void TWEB::load_( )
     } while(next_opt != -1);
 
     //- Load parameters from config file -
-    mTAuth = atoi( TBDS::genDBGet(nodePath()+"SessTimeLife",TSYS::int2str(mTAuth)).c_str() );
-}
-
-void TWEB::save_( )
-{
-    TBDS::genDBSet(nodePath()+"SessTimeLife",TSYS::int2str(mTAuth));
 }
 
 void TWEB::modStart()
@@ -209,20 +204,17 @@ string TWEB::pgHead( string head_els )
 	"  <link rel='shortcut icon' href='/"MOD_ID"/ico' type='image' />\n"
 	"  <title>"PACKAGE_NAME". "+_(MOD_NAME)+"</title>\n"
 	"  <style type='text/css'>\n"
-	"    hr {width:100%}\n"
-	"    body {background-color:#818181}\n"
-	"    h1.head {text-align:center; color:#ffff00 }\n"
-	"    h2.title {text-align:center; font-style:italic; margin: 0px; padding: 0px; border-width:0px }\n"
-	"    table.page_head {background-color:#cccccc; border:3px ridge blue; width: 100% }\n"
-	"    table.page_head td.tool {text-align:center; border:1px solid blue; width: 120px;  white-space: nowrap }\n"
-	"    table.page_head td.user {text-align:left; border:1px solid blue; width: 120px; white-space: nowrap }\n"
-	"    table.page_area {background-color:#9999ff; border:3px ridge #a9a9a9; width: 100%; padding:2px }\n"
-	"    table.page_area tr.content {background-color:#cccccc; border:5px ridge #9999ff; padding:5px }\n"
-	"    table.page_auth {background-color:#9999ff; border:3px ridge #a9a9a9; padding: 2px; }\n"
-	"    table.page_auth tr.content {background-color:#cccccc; border:5px ridge #9999ff; padding: 5px; }\n"
+	"    hr { width: 95%; }\n"
+	"    body { background-color: #818181; }\n"
+	"    h1.head { text-align: center; color:#ffff00; }\n"
+	"    h2.title { text-align: center; font-style: italic; margin: 0px; padding: 0px; border-width: 0px; }\n"
+	"    table.work { background-color: #9999ff; border: 3px ridge #a9a9a9; padding: 2px; }\n"
+	"    table.work td { background-color:#cccccc; text-align: left; }\n"
+	"    table.work td.content { padding: 5px; padding-bottom: 20px; }\n"
+	"    table.work ul { margin: 0px; padding: 0px; padding-left: 20px; }\n"
 	"  </style>\n"
 	"</head>\n"
-	"<body alink='#33ccff' link='#3366ff' text='#000000' vlink='#339999'>\n";
+	"<body>\n";
 }
 
 string TWEB::pgTail( )
@@ -230,10 +222,10 @@ string TWEB::pgTail( )
     return "</body>\n</html>";
 }
 
-void TWEB::HttpGet( const string &urli, string &page, const string &sender, vector<string> &vars )
+void TWEB::HttpGet( const string &urli, string &page, const string &sender, vector<string> &vars, const string &user )
 {
     map<string,string>::iterator prmEl;
-    SSess ses(TSYS::strDecode(urli,TSYS::HttpURL),page,sender,vars,"");
+    SSess ses(TSYS::strDecode(urli,TSYS::HttpURL),sender,user,vars,"");
     ses.page = pgHead();
 
     try
@@ -284,126 +276,116 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 	}
 	else
 	{
-	    sesCheck( ses );
-	    //> Auth dialog preparing
-	    if( !ses.user.size() )
-	    {
-		ses.page = ses.page+"<h1 class='head'>"PACKAGE_NAME". "+_(MOD_NAME)+"</h1>\n<hr/><br/>\n";
-		getAuth( ses );
-	    }
-	    else
-	    {
-		prmEl = ses.prm.find("com");
-		string wp_com = (prmEl!=ses.prm.end()) ? prmEl->second : "";
+	    prmEl = ses.prm.find("com");
+	    string wp_com = (prmEl!=ses.prm.end()) ? prmEl->second : "";
 
-		if( wp_com.empty() && zero_lev == "script.js" )
+	    if( wp_com.empty() && zero_lev == "script.js" )
+	    {
+		ses.page = trMessReplace(WebCfgDVCA_js);
+		page = httpHead("200 OK",ses.page.size(),"text/javascript")+ses.page;
+		return;
+	    }
+	    //> Main work page create.
+	    else if( wp_com.empty() )
+	    {
+		ses.page = trMessReplace(WebCfgDVCA_html);
+		page = httpHead("200 OK",ses.page.size(),"text/html")+ses.page;
+		return;
+	    }
+	    //> Get node icon
+	    else if( wp_com == "ico" )
+	    {
+		string itp = "png";
+		XMLNode req("get"); req.setAttr("path",ses.url+"/%2fico");
+		if( !mod->cntrIfCmd(req,ses.user) ) ses.page = TSYS::strDecode(req.text(),TSYS::base64);
+		else ses.page = TUIS::icoGet("disconnect",&itp);
+		page = httpHead("200 OK",ses.page.size(),string("image/")+itp)+ses.page;
+		return;
+	    }
+	    //> Get node childs
+	    else if( wp_com == "chlds" )
+	    {
+		XMLNode req("chlds");
+		prmEl = ses.prm.find("grp");
+		string gbr = (prmEl!=ses.prm.end()) ? prmEl->second : "";
+		//>> Get information about allow stations
+		if( zero_lev.empty() )
 		{
-		    ses.page = trMessReplace(WebCfgDVCA_js);
-		    page = httpHead("200 OK",ses.page.size(),"text/javascript")+ses.page;
-		    return;
-		}
-		//> Main work page create.
-		else if( wp_com.empty() )
-		{
-		    ses.page = trMessReplace(WebCfgDVCA_html);
-		    page = httpHead("200 OK",ses.page.size(),"text/html")+ses.page;
-		    return;
-		}
-		//> Get node icon
-		else if( wp_com == "ico" )
-		{
-		    string itp = "png";
-		    XMLNode req("get"); req.setAttr("path",ses.url+"/%2fico");
-		    if( !mod->cntrIfCmd(req,ses.user) ) ses.page = TSYS::strDecode(req.text(),TSYS::base64);
-		    else ses.page = TUIS::icoGet("disconnect",&itp);
-		    page = httpHead("200 OK",ses.page.size(),string("image/")+itp)+ses.page;
-		    return;
-		}
-		//> Get node childs
-		else if( wp_com == "chlds" )
-		{
-		    XMLNode req("chlds");
-		    prmEl = ses.prm.find("grp");
-		    string gbr = (prmEl!=ses.prm.end()) ? prmEl->second : "";
-		    //>> Get information about allow stations
-		    if( zero_lev.empty() )
+		    vector<string> stls;
+		    SYS->transport().at().extHostList(ses.user,stls);
+		    stls.insert(stls.begin(),SYS->id());
+		    for( int i_st = 0; i_st < stls.size(); i_st++ )
 		    {
-			vector<string> stls;
-			SYS->transport().at().extHostList(ses.user,stls);
-			stls.insert(stls.begin(),SYS->id());
-			for( int i_st = 0; i_st < stls.size(); i_st++ )
+			XMLNode *chN;
+			if( stls[i_st] == SYS->id() )
+			    chN = req.childAdd("el")->setAttr("id",SYS->id())->setText(SYS->name());
+			else
 			{
-			    XMLNode *chN;
-			    if( stls[i_st] == SYS->id() )
-				chN = req.childAdd("el")->setAttr("id",SYS->id())->setText(SYS->name());
-			    else
-			    {
-				TTransportS::ExtHost host = SYS->transport().at().extHostGet(ses.user,stls[i_st]);
-				chN = req.childAdd("el")->setAttr("id",host.id)->setText(host.name);
-			    }
-			    //>>>> Check icon
-			    XMLNode reqIco("get"); reqIco.setAttr("path","/"+stls[i_st]+"/%2fico");
-			    if( mod->cntrIfCmd(reqIco,ses.user) ) chN->setAttr("icoSize","1000");
-			    else chN->setAttr("icoSize",TSYS::int2str(reqIco.text().size()));
-			    //>>>> Process groups
-			    XMLNode brReq("info"); brReq.setAttr("path","/"+SYS->id()+"/%2fbr");
-			    mod->cntrIfCmd(brReq,ses.user);
-			    for( int i_br = 0; brReq.childSize() && i_br < brReq.childGet(0)->childSize(); i_br++ )
-			    {
-				XMLNode *chB = chN->childAdd();
-				*chB = *brReq.childGet(0)->childGet(i_br);
-				chB->setAttr("chPresent","1");
-			    }
+			    TTransportS::ExtHost host = SYS->transport().at().extHostGet(ses.user,stls[i_st]);
+			    chN = req.childAdd("el")->setAttr("id",host.id)->setText(host.name);
+			}
+			//>>>> Check icon
+			XMLNode reqIco("get"); reqIco.setAttr("path","/"+stls[i_st]+"/%2fico");
+			if( mod->cntrIfCmd(reqIco,ses.user) ) chN->setAttr("icoSize","1000");
+			else chN->setAttr("icoSize",TSYS::int2str(reqIco.text().size()));
+			//>>>> Process groups
+			XMLNode brReq("info"); brReq.setAttr("path","/"+SYS->id()+"/%2fbr");
+			mod->cntrIfCmd(brReq,ses.user);
+			for( int i_br = 0; brReq.childSize() && i_br < brReq.childGet(0)->childSize(); i_br++ )
+			{
+			    XMLNode *chB = chN->childAdd();
+			    *chB = *brReq.childGet(0)->childGet(i_br);
+			    chB->setAttr("chPresent","1");
 			}
 		    }
-		    else
-		    {
-			req.setAttr("path",ses.url+"/%2fobj")->setAttr("grp",gbr)->setAttr("icoCheck","1");
-			mod->cntrIfCmd(req,ses.user);
-		    }
-		    ses.page = req.save(XMLNode::XMLHeader);
-		    page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
-		    return;
-		}
-		else if( wp_com == "info" )
-		{
-		    XMLNode req("info"); req.setAttr("path",ses.url);
-		    mod->cntrIfCmd(req,ses.user);
-		    ses.page = req.save(XMLNode::XMLHeader);
-		    page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
-		    return;
-		}
-		else if( wp_com == "modify" )
-		{
-		    XMLNode req("modify"); req.setAttr("path",ses.url+"/%2fobj");
-		    mod->cntrIfCmd(req,ses.user);
-		    ses.page = req.save(XMLNode::XMLHeader);
-		    page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
-		    return;
-		}
-		else if( wp_com == "get" )
-		{
-		    XMLNode req("get"); req.setAttr("path",ses.url);
-		    mod->cntrIfCmd(req,ses.user);
-		    ses.page = req.save(XMLNode::XMLHeader);
-		    page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
-		    return;
-		}
-		else if( wp_com == "img" )
-		{
-		    string itp = "png";
-		    XMLNode req("get"); req.setAttr("path",ses.url);
-		    if( mod->cntrIfCmd(req,ses.user) || atoi(req.attr("rez").c_str()) || req.text().empty() )
-			ses.page = TUIS::icoGet("stop",&itp);
-		    else ses.page = TSYS::strDecode(req.text(),TSYS::base64);
-		    page = mod->httpHead("200 OK",ses.page.size(),"image/"+itp)+ses.page;
-		    return;
 		}
 		else
 		{
-		    mess_warning(nodePath().c_str(),_("Unknown command: %s."),wp_com.c_str());
-		    ses.page = ses.page+"<center>Call page/widget '"+ses.url+"' command: '"+wp_com+"'</center>\n<br/>";
+		    req.setAttr("path",ses.url+"/%2fobj")->setAttr("grp",gbr)->setAttr("icoCheck","1");
+		    mod->cntrIfCmd(req,ses.user);
 		}
+		ses.page = req.save();
+		page = mod->httpHead("200 OK",ses.page.size(),"text/xml; charset=UTF-8")+ses.page;
+		return;
+	    }
+	    else if( wp_com == "info" )
+	    {
+		XMLNode req("info"); req.setAttr("path",ses.url);
+		mod->cntrIfCmd(req,ses.user);
+		ses.page = req.save();
+		page = mod->httpHead("200 OK",ses.page.size(),"text/xml; charset=UTF-8")+ses.page;
+		return;
+	    }
+	    else if( wp_com == "modify" )
+	    {
+		XMLNode req("modify"); req.setAttr("path",ses.url+"/%2fobj");
+		mod->cntrIfCmd(req,ses.user);
+		ses.page = req.save();
+		page = mod->httpHead("200 OK",ses.page.size(),"text/xml; charset=UTF-8")+ses.page;
+		return;
+	    }
+	    else if( wp_com == "get" )
+	    {
+		XMLNode req("get"); req.setAttr("path",ses.url);
+		mod->cntrIfCmd(req,ses.user);
+		ses.page = req.save();
+		page = mod->httpHead("200 OK",ses.page.size(),"text/xml; charset=UTF-8")+ses.page;
+		return;
+	    }
+	    else if( wp_com == "img" )
+	    {
+		string itp = "png";
+		XMLNode req("get"); req.setAttr("path",ses.url);
+		if( mod->cntrIfCmd(req,ses.user) || atoi(req.attr("rez").c_str()) || req.text().empty() )
+		    ses.page = TUIS::icoGet("stop",&itp);
+		else ses.page = TSYS::strDecode(req.text(),TSYS::base64);
+		page = mod->httpHead("200 OK",ses.page.size(),"image/"+itp)+ses.page;
+		return;
+	    }
+	    else
+	    {
+		mess_warning(nodePath().c_str(),_("Unknown command: %s."),wp_com.c_str());
+		ses.page = ses.page+"<center>Call page/widget '"+ses.url+"' command: '"+wp_com+"'</center>\n<br/>";
 	    }
 	}
     }catch( TError err )
@@ -420,78 +402,33 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 void TWEB::getAbout( SSess &ses )
 {
     ses.page = ses.page+"<center>\n"
-	"<table class='page_auth'>\n"
-	"<TR><TD>"+MOD_ID+" v"+MOD_VERSION+"</TD></TR>\n"
-	"<TR class='content'><TD>\n"
-	"<table border='0'>\n"
-	"<TR><TD><font color='Blue'>"+_("Name: ")+"</font></TD><TD align='left'>"+_(MOD_NAME)+"</TD></TR>"
-	"<TR><TD><font color='Blue'>"+_("Desription: ")+"</font></TD><TD align='left'>"+_(DESCRIPTION)+"</TD></TR>"
-	"<TR><TD><font color='Blue'>"+_("License: ")+"</font></TD><TD align='left'>"+_(LICENSE)+"</TD></TR>"
-	"<TR><TD><font color='Blue'>"+_("Author: ")+"</font></TD><TD align='left'>"+_(AUTORS)+"</TD></TR>"
+	"<table class='work'>\n"
+	"<TR><th>"+MOD_ID+" v"+MOD_VERSION+"</th></TR>\n"
+	"<TR><TD class='content'>\n"
+	"<table border='0px' cellspacing='3px'>\n"
+	"<TR><TD style='color: blue;'>"+_("Name: ")+"</TD><TD>"+_(MOD_NAME)+"</TD></TR>\n"
+	"<TR><TD style='color: blue;'>"+_("Desription: ")+"</TD><TD>"+_(DESCRIPTION)+"</TD></TR>\n"
+	"<TR><TD style='color: blue;'>"+_("License: ")+"</TD><TD>"+_(LICENSE)+"</TD></TR>\n"
+	"<TR><TD style='color: blue;'>"+_("Author: ")+"</TD><TD>"+_(AUTORS)+"</TD></TR>\n"
 	"</table>\n"
 	"</TD></TR>\n</table><br/>\n"
-	"<table class='page_auth'>\n"
-	"<TR><TD>"+PACKAGE+" v"+VERSION+"</TD></TR>\n"
-	"<TR class='content'><TD>\n"
-	"<table border='0'>\n"
-	"<TR><TD><font color='Blue'>"+_("Name: ")+"</font></TD><TD align='left'>"+_(PACKAGE_DESCR)+"</TD></TR>\n"
-	"<TR><TD><font color='Blue'>"+_("License: ")+"</font></TD><TD align='left'>"+PACKAGE_LICENSE+"</TD></TR>\n"
-	"<TR><TD><font color='Blue'>"+_("Author: ")+"</font></TD><TD align='left'>"+_(PACKAGE_AUTHOR)+"</TD></TR>\n"
-	"<TR><TD><font color='Blue'>"+_("Web site: ")+"</font></TD><TD align='left'>"+PACKAGE_SITE+"</TD></TR>\n"
+	"<table class='work'>\n"
+	"<TR><th>"+PACKAGE+" v"+VERSION+"</th></TR>\n"
+	"<TR><TD class='content'>\n"
+	"<table border='0' cellspacing='3px'>\n"
+	"<TR><TD style='color: blue;'>"+_("Name: ")+"</TD><TD>"+_(PACKAGE_DESCR)+"</TD></TR>\n"
+	"<TR><TD style='color: blue;'>"+_("License: ")+"</TD><TD>"+PACKAGE_LICENSE+"</TD></TR>\n"
+	"<TR><TD style='color: blue;'>"+_("Author: ")+"</TD><TD>"+_(PACKAGE_AUTHOR)+"</TD></TR>\n"
+	"<TR><TD style='color: blue;'>"+_("Web site: ")+"</TD><TD>"+PACKAGE_SITE+"</TD></TR>\n"
 	"</table>\n"
 	"</TD></TR></table><br/>\n"
 	"</center>\n";
 }
 
-void TWEB::getAuth( SSess &ses )
-{
-    ses.page = ses.page+"<center><table class='page_auth'>"
-	"<tr><td><b>"+_("Enter to module")+"</b></td></tr>\n"
-	"<tr class='content'> <td align='center'>\n"
-	"<form method='post' action='/"+MOD_ID+ses.url+"' enctype='multipart/form-data'>\n"
-	"<table cellpadding='3'>\n"
-	"<tr><td><b>"+_("User name")+"</b></td><td><input type='text' name='user' size='20'/></td></tr>\n"
-	"<tr><td><b>"+_("Password")+"</b></td><td><input type='password' name='pass' size='20'/></td></tr>\n"
-	"<tr><td colspan='2' align='center'><input type='submit' name='auth_enter' value='"+_("Enter")+"'/>\n"
-	"<input type='reset' name='clean' value='"+_("Clean")+"'/>\n"
-	"</td></tr></table>\n</form>\n"
-	"</td></tr></table></center>\n";
-}
-
-void TWEB::HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &contain )
+void TWEB::HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &user )
 {
     map<string,string>::iterator cntEl;
-    SSess ses(TSYS::strDecode(url,TSYS::HttpURL),page,sender,vars,contain);
-
-    //> Check for autentification POST requests
-    if( ses.cnt.find("auth_enter") != ses.cnt.end() )
-    {
-	string pass;
-	if( (cntEl=ses.cnt.find("user")) != ses.cnt.end() )	ses.user = cntEl->second;
-	if( (cntEl=ses.cnt.find("pass")) != ses.cnt.end() )	pass = cntEl->second;
-	if( SYS->security().at().usrPresent(ses.user) && SYS->security().at().usrAt(ses.user).at().auth(pass) )
-	{
-	    ses.page = pgHead("<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/"MOD_ID"/"+url+"'/>")+pgTail();
-	    page=httpHead("200 OK",ses.page.size(),"text/html",
-		"Set-Cookie: oscdAuthQtCfgDId="+TSYS::int2str(sesOpen(ses.user))+"; path=/;\r\n")+ses.page;
-	    return;
-	}
-	ses.page = pgHead()+"<h1 class='head'>"+PACKAGE_NAME+". "+_(MOD_NAME)+"</h1>\n<hr/><br/>\n";
-	messPost(ses.page,nodePath(),_("Auth is wrong! Retry please."),TWEB::Error);
-	ses.page += "\n";
-	getAuth( ses );
-	ses.page += pgTail();
-	page = httpHead("200 OK",ses.page.size(),"text/html")+ses.page;
-	return;
-    }
-    //> Session check
-    sesCheck( ses );
-    if( !ses.user.size() || ses.cnt.find("auth_ch") != ses.cnt.end() )
-    {
-	ses.page = pgHead("<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/"MOD_ID"/"+url+"'/>")+pgTail();
-	page=httpHead("200 OK",ses.page.size(),"text/html","Set-Cookie: oscdAuthQtCfgDId=""; path=/;\r\n")+ses.page;
-	return;
-    }
+    SSess ses(TSYS::strDecode(url,TSYS::HttpURL),sender,user,vars,page);
 
     //> Commands process
     cntEl = ses.prm.find("com");
@@ -501,8 +438,8 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
     {
 	XMLNode req(""); req.load(ses.content); req.setAttr("path",ses.url);
 	mod->cntrIfCmd(req,ses.user);
-	ses.page = req.save(XMLNode::XMLHeader);
-	page = httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
+	ses.page = req.save();
+	page = httpHead("200 OK",ses.page.size(),"text/xml; charset=UTF-8")+ses.page;
     }
     else if( wp_com == "img" )
     {
@@ -513,20 +450,6 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	}
 	page = httpHead("204 No Content",0,"");
     }
-}
-
-void TWEB::messPost( string &page, const string &cat, const string &mess, MessLev type )
-{
-    //> Put system message.
-    message(cat.c_str(), (type==Error) ? TMess::Error : (type==Warning) ? TMess::Warning : TMess::Info,"%s",mess.c_str());
-
-    //> Prepare HTML messages
-    page = page+"<table border='2' width='40%' align='center'><tbody>\n";
-    if( type == Warning )	page = page+"<tr bgcolor='yellow'><td align='center'><b>Warning!</b></td></tr>\n";
-    else if(type == Error )	page = page+"<tr bgcolor='red'><td align='center'><b>Error!</b></td></tr>\n";
-    else page = page+"<tr bgcolor='#9999ff'><td align='center'><b>Message!</b></td></tr>\n";
-    page = page+"<tr bgcolor='#cccccc'> <td align='center'>"+TSYS::strEncode(mess,TSYS::Html)+"</td></tr>\n";
-    page = page+"</tbody></table>\n";
 }
 
 string TWEB::trMessReplace( const string &tsrc )
@@ -577,53 +500,12 @@ int TWEB::cntrIfCmd( XMLNode &node, const string &user )
 	TTransportS::ExtHost host = SYS->transport().at().extHostGet(user,station);
 	AutoHD<TTransportOut> tr = SYS->transport().at().extHost(host,"TrCntr");
 	if( !tr.at().startStat() ) tr.at().start();
-	node.load(tr.at().messProtIO("0\n"+host.user+"\n"+host.pass+"\n"+node.save(XMLNode::XMLHeader),"SelfSystem"));
+	node.load(tr.at().messProtIO("0\n"+host.user+"\n"+host.pass+"\n"+node.save(),"SelfSystem"));
 	node.setAttr("path",path);
     }catch( TError err )
     { node.setAttr("mcat",err.cat)->setAttr("rez","10")->setText(err.mess); }
 
     return atoi(node.attr("rez").c_str());
-}
-
-int TWEB::sesOpen( string name )
-{
-    int sess_id;
-    ResAlloc res(mRes,true);
-
-    //- Get free identifier -
-    do{ sess_id = rand(); }
-    while( sess_id == 0 || mAuth.find(sess_id) != mAuth.end() );
-
-    //- Add new session authentification -
-    mAuth[sess_id] = SAuth(name,time(NULL));
-
-    return sess_id;
-}
-
-void TWEB::sesCheck( SSess &ses )
-{
-    time_t cur_tm = time(NULL);
-    map<int,SAuth>::iterator authEl;
-
-    ResAlloc res(mRes,false);
-
-    //- Check for close old sessions -
-    if( cur_tm > lst_ses_chk+10 )
-    {
-	for( authEl = mAuth.begin(); authEl != mAuth.end(); )
-	    if( cur_tm > authEl->second.tAuth+mTAuth*60 )
-		mAuth.erase(authEl++);
-	    else authEl++;
-	lst_ses_chk = cur_tm;
-    }
-
-    //- Check for session and close old sessions -
-    authEl = mAuth.find(atoi(getCookie("oscdAuthQtCfgDId",ses.vars).c_str()));
-    if( authEl != mAuth.end() )
-    {
-	ses.user = authEl->second.name;
-	authEl->second.tAuth = cur_tm;
-    }
 }
 
 string TWEB::getCookie( string name, vector<string> &vars )
@@ -653,22 +535,14 @@ void TWEB::cntrCmdProc( XMLNode *opt )
     {
 	TUI::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
-	{
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of auth sesion(min)"),0660,"root","root",1,"tp","dec");
 	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to remote stations list configuration"),0660,"root","root",1,"tp","lnk");
-	}
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
         return;
     }
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/prm/cfg/lf_tm" )
-    {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(authTime()) );
-	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	setAuthTime( atoi(opt->text().c_str()) );
-    }
-    else if( a_path == "/prm/cfg/host_lnk" && ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )
+    if( a_path == "/prm/cfg/host_lnk" && ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )
     {
 	SYS->transport().at().setSysHost(false);
 	opt->setText("/Transport");
@@ -680,9 +554,9 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* SSess                                         *
 //*************************************************
-SSess::SSess( const string &iurl, const string &ipage, const string &isender,
+SSess::SSess( const string &iurl, const string &isender, const string &iuser,
 	vector<string> &ivars, const string &icontent ) :
-    url(iurl), page(ipage), sender(isender), vars(ivars), content(icontent)
+    url(iurl), sender(isender), user(iuser), vars(ivars), content(icontent)
 {
     //> URL parameters parse
     int prmSep = iurl.find("?");
