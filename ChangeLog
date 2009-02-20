@@ -1,3 +1,7 @@
+2009-02-20 Maxim
+- FIX:/UI/WebVision: Release of memory which was allocated for each image is fixed.
+
+
 2009-02-20 Roman
 - !!:/DAQ: Rise sybsystem "DAQ" modules' API version to level 2.
 - FIX:/DAQ/JavaLikeCalc: Subsystem's modules API version fixed from VER_SPC to VER_CNTR.

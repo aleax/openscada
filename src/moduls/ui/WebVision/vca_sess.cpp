@@ -329,60 +329,6 @@ bool VCAElFigure::lineIntersect( double x1, double y1, double x2, double y2,
 }
 
 
-/*vector<Point> VCAElFigure::floodFill(gdImagePtr im, int xMin, int yMin, int xMax, int yMax, int x, int y, int border_color)
-{
-    int x_left,x_right,YY,i;
-    vector<Point> fillPoints;
-    int fill_color;
-    if( (ui8)(border_color>>16) < 255 )
-        fill_color = gdImageColorResolveAlpha(im,(ui8)(border_color>>16)+1,0,0,0);
-    else if( (ui8)(border_color>>8) < 255 )
-        fill_color = gdImageColorResolveAlpha(im,0,(ui8)(border_color>>8)+1,0,0);
-    else if( (ui8)(border_color) < 255 )
-        fill_color = gdImageColorResolveAlpha(im,0,0,(ui8)(border_color)+1,0);
-    else fill_color = gdImageColorResolveAlpha(im,1,2,3,0);
-    
- 
-    x_left=x_right=x;
-    while (gdImageGetPixel(im,x_left,y)!=border_color && x_left>xMin)
-    {
-        gdImageSetPixel(im,x_left,y,fill_color);
-        fillPoints.push_back( Point(x_left,y) );
-        x_left--;
-    }
-    x_right++;
-    while (gdImageGetPixel(im,x_right,y)!=border_color && x_right<xMax)
-    {
-        gdImageSetPixel(im,x_right,y,fill_color);
-        fillPoints.push_back( Point(x_right,y) );
-        x_right++;
-    }
-    // Recursive calls of FloodFill for two remote points
-    x=(x_right+x_left)>>1; //shifting means division by 2
-    for(i=-1;i<=1;i+=2)
-    {
-        YY=y;
-        while (gdImageGetPixel(im,x,YY)!=border_color && YY<yMax && YY>yMin) YY+=i;
-        YY=(y+YY)>>1;
-        if (gdImageGetPixel(im,x,YY)!=border_color && gdImageGetPixel(im,x,YY)!=fill_color)
-            floodFill(im, xMin, yMin, xMax, yMax, x, YY, border_color);
-    }
-    // Recursive calls for all "dark" (not filled) pixels next
-    // to the line y (with x values between x_left and x_right
-    for(YY=y-1;YY<=y+1;YY+=2)
-    {
-        x=x_left+1;
-        while (x<x_right && YY>yMin && YY<yMax)
-        {
-            if (gdImageGetPixel(im,x,YY)!=border_color && gdImageGetPixel(im,x,YY)!=fill_color) floodFill(im, xMin, yMin, xMax, yMax, x,YY,border_color);
-            x++;
-        }
-    }
-    //printf("fillPoints.size() = %i\n", fillPoints.size());
-    return fillPoints;
-    //if( im2 ) gdImageDestroy(im2);
-} */
-
 //- rotation of the point -
 Point VCAElFigure::rotate( const Point pnt, double alpha )
 {
@@ -454,25 +400,6 @@ double VCAElFigure::length( const Point pt1, const Point pt2 )
     return sqrt( x*x + y*y );
 }
 
-//- Scaling and rotating the point -
-/*Point VCAElFigure::scaleRotate( const Point point, double xScale, double yScale,  bool flag_scale, bool flag_rotate )
-{
-    Point rpnt = Point( point.x, point.y );
-    Point center;
-    if( flag_rotate )
-    {
-        if( !flag_scale ) center = Point( TSYS::realRound( width*xScale/2 ), TSYS::realRound( height*yScale/2 ) );
-        else center = Point( TSYS::realRound( width/2 ), TSYS::realRound( height/2 ) );
-        rpnt.x = rpnt.x - center.x;
-        rpnt.y = rpnt.y - center.y;
-        rpnt = rotate( rpnt, orient);
-        rpnt.x = rpnt.x + center.x;
-        rpnt.y = rpnt.y + center.y;
-    }
-    if( flag_scale ) rpnt = Point( rpnt.x*xScale, rpnt.y*yScale );
-
-    return rpnt;
-}*/
 Point VCAElFigure::scaleRotate( const Point point, double xScale, double yScale,  bool flag_scale, bool flag_rotate )
 {
     Point rpnt = Point( point.x, point.y );
@@ -492,24 +419,6 @@ Point VCAElFigure::scaleRotate( const Point point, double xScale, double yScale,
     return rpnt;
 }
 
-//- Unscaling and unrotating the point -
-/*Point VCAElFigure::unscaleUnrotate( const Point point, double xScale, double yScale, bool flag_scale, bool flag_rotate )
-{
-    Point rpnt = Point( point.x, point.y );
-    Point center;
-    if( flag_scale ) rpnt = Point( rpnt.x/xScale, rpnt.y/yScale );
-    if( flag_rotate )
-    {
-        if( !flag_scale ) center = Point( TSYS::realRound( width*xScale/2 ), TSYS::realRound( height*yScale/ 2 ) );
-        else center = Point( TSYS::realRound( width/2 ), TSYS::realRound( height/2 ) );
-        rpnt.x = rpnt.x - center.x;
-        rpnt.y = rpnt.y - center.y;
-        rpnt = rotate( rpnt, 360 - orient );
-        rpnt.x = rpnt.x + center.x;
-        rpnt.y = rpnt.y + center.y;
-    }
-    return rpnt;
-}*/
 Point VCAElFigure::unscaleUnrotate( const Point point, double xScale, double yScale, bool flag_scale, bool flag_rotate )
 {
     Point rpnt = Point( point.x, point.y );
@@ -1280,6 +1189,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                     gdImageAlphaBlending(im2,1);
                     gdImageSaveAlpha(im2, 1);
                     gdImageCopy(im, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
+                    if( im2 ) gdImageDestroy(im2);
 
                 }
                 //---- Drawing the solid arc with borders' width <4 ----
@@ -1425,6 +1335,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                     gdImageAlphaBlending(im2,1);
                     gdImageSaveAlpha(im2, 1);
                     gdImageCopy(im, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
+                    if( im2 ) gdImageDestroy(im2);
                 }
                 //---- Drawing the solid arc with borders' width >=4 ----
                 if( item.border_width >= 4 && ( item.style == 0 || !flag_style ) )
@@ -1553,6 +1464,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                     gdImageAlphaBlending(im2,1);
                     gdImageSaveAlpha(im2, 1);
                     gdImageCopy(im, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
+                    if( im2 ) gdImageDestroy(im2);
                 }
                 //---- Recalculating the points of the arc to make them really belonging to the arc ----
                 el_p1 = scaleRotate( (pnts)[item.n1], xScale, yScale, true, true );
@@ -1781,6 +1693,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                 gdImageAlphaBlending(im2,1);
                 gdImageSaveAlpha(im2, 1);
                 gdImageCopy(im, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
+                if( im2 ) gdImageDestroy(im2);
 
             }
             //----- Drawing the solid bezier curve with borders' width < 4 -----
@@ -1913,6 +1826,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                 gdImageAlphaBlending(im2,1);
                 gdImageSaveAlpha(im2, 1);
                 gdImageCopy(im, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
+                if( im2 ) gdImageDestroy(im2);
 
             }
             if( item.border_width >=4 && ( item.style == 0 || !flag_style ) )//----- Drawing the solid bezier curve with borders' width >= 4 -----
@@ -2027,6 +1941,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                 gdImageAlphaBlending(im2,1);
                 gdImageSaveAlpha(im2, 1);
                 gdImageCopy(im, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
+                if( im2 ) gdImageDestroy(im2);
             }
         }
     //-- Line --
@@ -2163,6 +2078,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                     gdImageAlphaBlending(im2,1);
                     gdImageSaveAlpha(im2, 1);
                     gdImageCopy(im, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
+                    if( im2 ) gdImageDestroy(im2);
 
                 }
                 //----- Drawing the solid line with borders' width == 1(for lines with width > 3) -----
@@ -2258,6 +2174,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                     gdImageAlphaBlending(im2,1);
                     gdImageSaveAlpha(im2, 1);
                     gdImageCopy(im, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
+                    if( im2 ) gdImageDestroy(im2);
 
                 }
                 //----- Drawing the solid borders of the line -----
@@ -2338,6 +2255,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                     gdImageAlphaBlending(im2,1);
                     gdImageSaveAlpha(im2, 1);
                     gdImageCopy(im, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
+                    if( im2 ) gdImageDestroy(im2);
                 }
             }
 }
@@ -3856,9 +3774,10 @@ void VCAElFigure::getReq( SSess &ses )
                                     im_y += 1;
                                 }
                                 while( im_y <= yMax_rot );
+                                if( im_fill_out ) gdImageDestroy(im_fill_out);
+                                if( im_fill_in ) gdImageDestroy(im_fill_in);
                             }
-                            else
-                                paintFill( im1, delta_point_center, inundationItems[i] );
+                            else paintFill( im1, delta_point_center, inundationItems[i] );
                         }
                     }
                 for( int j = 0; j < shape_temp.size(); j++ )
@@ -3886,6 +3805,7 @@ void VCAElFigure::getReq( SSess &ses )
                         gdImageAlphaBlending(im2,1);
                         gdImageSaveAlpha(im2, 1);
                         gdImageCopy(im1, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
+                        if( im2 ) gdImageDestroy(im2);
                     }
                 for( int j = 0; j < shape_temp.size(); j++ )
                     if( shapeItems[shape_temp[j]].type != 2 )
@@ -3900,6 +3820,7 @@ void VCAElFigure::getReq( SSess &ses )
                         gdImageAlphaBlending(im2,1);
                         gdImageSaveAlpha(im2, 1);
                         gdImageCopy(im1, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
+                        if( im2 ) gdImageDestroy(im2);
                     }
                 gdImageAlphaBlending(im,1);
                 gdImageSaveAlpha(im,1);
