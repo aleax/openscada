@@ -8,6 +8,7 @@
 - !!!!:/Protocol/HTTP,/UI/WebCfg,/UI/WebCfgD,/UI/WebVision: HTTP modules auth mechanism moved to Protocol.HTTP from all WEB-modules, separated.
     CSS is made unified.
 - FIX:/UI/Web: Access from Web-browser Konqueror 3.5 and 4 final fixed into using AJAX requests by 'Content-Type' setting to 'text/xml; charset=utf-8'.
+- FIX:/UI/WebVision: Window scroll is fixed for spinbox.
 
 
 2009-02-18 Roman
@@ -34,7 +35,7 @@
 - !:/UI/WebVision: Transparency of color is added into the 'colorParse' function.
 - FIX:/UI/Vision: Repainting of the primitive ElFigure in the runtime mode is fixed.
 - FIX:/UI/WebVision: 'fill' of the simple arc with dynamic points is fixed for primitive ElFigure.
-- FIX:/UI/WebVision, /UI/Vision: Painting of the simple arc(in its closed variant) is fixed for primitive ElFigure.
+- FIX:/UI/WebVision, /UI/Vision: Painting of the simple arc (in its closed variant) is fixed for primitive ElFigure.
 
 
 2009-02-17 Roman

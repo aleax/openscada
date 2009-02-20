@@ -89,26 +89,26 @@ function nodeTextByTagId( node, tag, avl )
 /***************************************************
  * posGetX - Get absolute position                 *
  **************************************************/
-function posGetX(obj)
+function posGetX(obj,noWScrl)
 {
   var posX = 0;
   for( ; obj && obj.nodeName != 'BODY' ; obj=obj.parentNode )
     posX += (obj.style.left?parseInt(obj.style.left):0)+
 	(obj.parentNode.style.borderLeftWidth?parseInt(obj.parentNode.style.borderLeftWidth):0)+
 	(obj.parentNode.style.marginLeft?parseInt(obj.parentNode.style.marginLeft):0);
-  return posX;
+  return posX+(!noWScrl?-window.pageXOffset:0);
 }
 /***************************************************
  * posGetY - Get absolute position                 *
  **************************************************/
-function posGetY(obj)
+function posGetY(obj,noWScrl)
 {
   var posY = 0;
   for( ; obj && obj.nodeName != 'BODY' ; obj=obj.parentNode )
     posY += (obj.style.top?parseInt(obj.style.top):0)+
 	(obj.parentNode.style.borderTopWidth?parseInt(obj.parentNode.style.borderTopWidth):0)+
 	(obj.parentNode.style.marginTop?parseInt(obj.parentNode.style.marginTop):0);
-  return posY;
+  return posY+(!noWScrl?-window.pageYOffset:0);
 }
 /***************************************************
  * getXmlHttp - Check and return XMLHttpRequest for*
@@ -440,16 +440,16 @@ function makeEl( pgBr, inclPg )
       figObj.onclick = function(e)
       {
 	if(!e) e = window.event;
-	servSet(this.wdgLnk.addr,'com=obj&sub=point&x='+(e.offsetX?e.offsetX:(e.clientX-posGetX(this)+window.pageXOffset))+
-						  '&y='+(e.offsetY?e.offsetY:(e.clientY-posGetY(this)+window.pageYOffset))+
+	servSet(this.wdgLnk.addr,'com=obj&sub=point&x='+(e.offsetX?e.offsetX:(e.clientX-posGetX(this)))+
+						  '&y='+(e.offsetY?e.offsetY:(e.clientY-posGetY(this)))+
 						  '&key='+evMouseGet(e),'');
 	return false;
       }
       figObj.ondblclick = function(e)
       {
 	if(!e) e = window.event;
-	servSet(this.wdgLnk.addr,'com=obj&sub=point&x='+(e.offsetX?e.offsetX:(e.clientX-posGetX(this)+window.pageXOffset))+
-						  '&y='+(e.offsetY?e.offsetY:(e.clientY-posGetY(this)+window.pageYOffset))+
+	servSet(this.wdgLnk.addr,'com=obj&sub=point&x='+(e.offsetX?e.offsetX:(e.clientX-posGetX(this)))+
+						  '&y='+(e.offsetY?e.offsetY:(e.clientY-posGetY(this)))+
 						  '&key=DblClick','');
       }
     }
@@ -677,7 +677,7 @@ function makeEl( pgBr, inclPg )
 	      }
 	      if( combList.childNodes[0].childNodes.length )
 	      {
-		combList.style.cssText = 'position: absolute; visibility : visible; left: '+posGetX(formObj)+'px; top: '+(posGetY(formObj)+formObj.offsetHeight)+'px; width: '+formObj.offsetWidth+'px; height: '+Math.min(elLst.length*15,70)+'px; border: 0; ';
+		combList.style.cssText = 'position: absolute; visibility : visible; left: '+posGetX(formObj,true)+'px; top: '+(posGetY(formObj,true)+formObj.offsetHeight)+'px; width: '+formObj.offsetWidth+'px; height: '+Math.min(elLst.length*15,70)+'px; border: 0; ';
 		combList.childNodes[0].style.cssText = 'width: '+formObj.offsetWidth+'px; height: '+Math.min(elLst.length*15,70)+'px; border-width: 2px; font: '+fontCfg+'; padding: 1px;';
 		combList.childNodes[0].formObj = formObj;
 		combList.childNodes[0].focus();
@@ -1066,8 +1066,8 @@ function makeEl( pgBr, inclPg )
     {
       if( !this.isActive ) return false;
       if(!e) e = window.event;
-      servSet(this.wdgLnk.addr,'com=obj&sub=point&x='+(e.offsetX?e.offsetX:(e.clientX-posGetX(this)+window.pageXOffset))+
-						'&y='+(e.offsetY?e.offsetY:(e.clientY-posGetY(this)+window.pageYOffset))+
+      servSet(this.wdgLnk.addr,'com=obj&sub=point&x='+(e.offsetX?e.offsetX:(e.clientX-posGetX(this)))+
+						'&y='+(e.offsetY?e.offsetY:(e.clientY-posGetY(this)))+
 						'&key='+evMouseGet(e),'');
       setFocus(this.wdgLnk.addr);
       return false;
