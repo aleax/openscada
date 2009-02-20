@@ -366,6 +366,7 @@ QVariant ModInspAttr::data( const QModelIndex &index, int role ) const
 		    if( it->flag()&ModInspAttr::Item::Color )
 		    {
 			QPixmap pct(16,16);
+			pct.fill("white");
 			QPainter painter(&pct);
 			QColor clr;
 			size_t found = it->data().toString().toStdString().find("-");

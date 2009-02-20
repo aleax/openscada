@@ -9,6 +9,7 @@
     CSS is made unified.
 - FIX:/UI/Web: Access from Web-browser Konqueror 3.5 and 4 final fixed into using AJAX requests by 'Content-Type' setting to 'text/xml; charset=utf-8'.
 - FIX:/UI/WebVision: Window scroll is fixed for spinbox.
+- FIX:/UI/Vision: A color preview into the inspector attributes for transparent colors is fixed.
 
 
 2009-02-18 Roman
