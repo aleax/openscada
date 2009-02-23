@@ -817,7 +817,7 @@ void TVArchive::postDisable(int flag)
     try
     {
 	if( flag )
-	    SYS->db().at().dataDel(fullDB(),owner().nodePath()+tbl(),*this);
+	    SYS->db().at().dataDel(fullDB(),owner().nodePath()+tbl(),*this,true);
     }catch(TError err)
     { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
@@ -2070,7 +2070,7 @@ void TVArchivator::postDisable( int flag )
     try
     {
 	if( flag )
-	    SYS->db().at().dataDel(fullDB(),SYS->archive().at().nodePath()+tbl(),*this);
+	    SYS->db().at().dataDel(fullDB(),SYS->archive().at().nodePath()+tbl(),*this,true);
     }catch(TError err)
     { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 }

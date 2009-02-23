@@ -350,7 +350,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
 	string sid = tblStrct[i_fld][1];
 	if( !cfg.cfgPresent(sid) ) continue;
 	TCfg &u_cfg = cfg.cfg(sid);
-	if( u_cfg.fld().flg()&TCfg::Key && u_cfg.getS().size() )
+	if( u_cfg.fld().flg()&TCfg::Key && u_cfg.keyUse() )
 	{
 	    if( !next ) next = true; 
 	    else req_where=req_where+"AND ";
@@ -552,7 +552,7 @@ void MTable::fieldDel( TConfig &cfg )
     for( int i_el = 0; i_el < cf_el.size(); i_el++ )
     {
 	TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
-	if( u_cfg.fld().flg()&TCfg::Key && u_cfg.getS().size() )
+	if( u_cfg.fld().flg()&TCfg::Key && u_cfg.keyUse() )
 	{
 	    if( !next ) next = true; else req=req+"AND ";
 	    req=req+"\""+mod->sqlReqCode(cf_el[i_el],'"')+"\"='"+

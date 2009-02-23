@@ -1109,7 +1109,7 @@ function makeEl( pgBr, inclPg )
 	//> Check for columns present and order
 	if( !this.curCols || this.curCols != this.attrs['col'] || this.curArch != this.attrs['arch'] || this.curTmpl != this.attrs['tmpl'] || this.curLev != this.attrs['lev'] )
 	{
-	  this['col_pos'] = this['col_tm'] = this['col_lev'] = this['col_cat'] = this['col_mess'] = -1;
+	  this['col_pos'] = this['col_tm'] = this['col_utm'] = this['col_lev'] = this['col_cat'] = this['col_mess'] = -1;
 	  this.curCols = this.attrs['col'];
 	  this.curArch = this.attrs['arch'];
 	  this.curTmpl = this.attrs['tmpl'];
@@ -1119,11 +1119,12 @@ function makeEl( pgBr, inclPg )
 	  var colCfg = '';
 	  var clm = this.curCols.split(';');
 	  for( var c_off = 0; c_off < clm.length; c_off++ )
-	    if( clm[c_off] == 'pos' || clm[c_off] == 'tm' || clm[c_off] == 'lev' || clm[c_off] == 'cat' || clm[c_off] == 'mess' )
+	    if( clm[c_off] == 'pos' || clm[c_off] == 'tm' || clm[c_off] == 'utm' || clm[c_off] == 'lev' || clm[c_off] == 'cat' || clm[c_off] == 'mess' )
 	    {
 	      colCfg += "<th ind='"+clm[c_off]+"' "+
 			  "style='"+this.wFont+"'>"+((clm[c_off]=='pos') ? '#' :
 						    (clm[c_off]=='tm') ? '###Time###' :
+						    (clm[c_off]=='utm') ? '###mcsec###' :
 						    (clm[c_off]=='lev') ? '###Level###' :
 						    (clm[c_off]=='cat') ? '###Category###' :
 						    (clm[c_off]=='mess') ? '###Message###' : '')+"</th>";
@@ -1184,6 +1185,7 @@ function makeEl( pgBr, inclPg )
 	  {
 	    var rcd = rez.childNodes[i_req];
 	    var rtm = parseInt(rcd.getAttribute('time'));
+	    var rutm = rcd.getAttribute('utime');
 	    var rlev = rcd.getAttribute('lev');
 	    var rcat = rcd.getAttribute('cat');
 	    var rmess = nodeText(rcd);
@@ -1193,7 +1195,8 @@ function makeEl( pgBr, inclPg )
 	    for( i_p = 1; i_p < tblB.childNodes.length; i_p++ )
 	    {
 	      if( rtm > parseInt(tblB.childNodes[1].childNodes[0].getAttribute('time')) && i_p>1 ) continue;
-	      if( (this.col_lev<0 || nodeText(tblB.childNodes[i_p].childNodes[this.col_lev]) == rlev) &&
+	      if( (this.col_utm<0 || nodeText(tblB.childNodes[i_p].childNodes[this.col_utm]) == rutm) &&
+		    (this.col_lev<0 || nodeText(tblB.childNodes[i_p].childNodes[this.col_lev]) == rlev) &&
 		    (this.col_cat<0 || nodeText(tblB.childNodes[i_p].childNodes[this.col_cat]) == rcat) &&
 		    (this.col_mess<0 || nodeText(tblB.childNodes[i_p].childNodes[this.col_mess]) == rmess ) )
 		break;
@@ -1212,6 +1215,7 @@ function makeEl( pgBr, inclPg )
 		setNodeText(celEl,dt.getDate()+'.'+(dt.getMonth()+1)+'.'+dt.getFullYear()+' '+dt.getHours()+':'+
 				  ((dt.getMinutes()<10)?('0'+dt.getMinutes()):dt.getMinutes())+':'+((dt.getSeconds()<10)?('0'+dt.getSeconds()):dt.getSeconds()));
 	      }
+	      else if( this.col_utm == i_cel ) setNodeText(celEl,rutm);
 	      else if( this.col_lev == i_cel ) setNodeText(celEl,rlev);
 	      else if( this.col_cat == i_cel ) setNodeText(celEl,rcat);
 	      else if( this.col_mess == i_cel ) setNodeText(celEl,rmess);
@@ -1224,6 +1228,7 @@ function makeEl( pgBr, inclPg )
 	  {
 	    var rcd = rez.childNodes[i_req];
 	    var rtm = parseInt(rcd.getAttribute('time'));
+	    var rutm = rcd.getAttribute('utime');
 	    var rlev = rcd.getAttribute('lev');
 	    var rcat = rcd.getAttribute('cat');
 	    var rmess = nodeText(rcd);
@@ -1233,7 +1238,8 @@ function makeEl( pgBr, inclPg )
 	    for( i_p = tblB.childNodes.length-1; i_p >= 1; i_p-- )
 	    {
 	      if( rtm < parseInt(tblB.childNodes[1].childNodes[0].getAttribute('time')) && (i_p<(tblB.childNodes.length-1)) ) continue;
-	      if( (this.col_lev<0 || nodeText(tblB.childNodes[i_p].childNodes[this.col_lev]) == rlev) &&
+	      if( (this.col_utm<0 || nodeText(tblB.childNodes[i_p].childNodes[this.col_utm]) == rutm) &&
+		    (this.col_lev<0 || nodeText(tblB.childNodes[i_p].childNodes[this.col_lev]) == rlev) &&
 		    (this.col_cat<0 || nodeText(tblB.childNodes[i_p].childNodes[this.col_cat]) == rcat) &&
 		    (this.col_mess<0 || nodeText(tblB.childNodes[i_p].childNodes[this.col_mess]) == rmess) )
 		break;
@@ -1252,6 +1258,7 @@ function makeEl( pgBr, inclPg )
 		setNodeText(celEl,dt.getDate()+'.'+(dt.getMonth()+1)+'.'+dt.getFullYear()+' '+dt.getHours()+':'+
 				  ((dt.getMinutes()<10)?('0'+dt.getMinutes()):dt.getMinutes())+':'+((dt.getSeconds()<10)?('0'+dt.getSeconds()):dt.getSeconds()));
 	      }
+	      else if( this.col_utm == i_cel ) setNodeText(celEl,rutm);
 	      else if( this.col_lev == i_cel ) setNodeText(celEl,rlev);
 	      else if( this.col_cat == i_cel ) setNodeText(celEl,rcat);
 	      else if( this.col_mess == i_cel ) setNodeText(celEl,rmess);

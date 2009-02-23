@@ -29,7 +29,7 @@
 //*************************************************
 //* TSubSYS                                       *
 //*************************************************
-TSubSYS::TSubSYS( const char *id, const char *name, bool modi ) : m_id(id), m_name(name), m_mod_sys(modi), m_mod(-1)
+TSubSYS::TSubSYS( const char *id, const char *name, bool modi ) : m_id(id), m_name(name), m_mod_sys(modi), m_mod(-1), mStart(false)
 {
     if(subModule()) m_mod = grpAdd("mod_");
 }
@@ -102,6 +102,8 @@ void TSubSYS::subStart( )
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	    mess_err(nodePath().c_str(),_("Start module '%s' error."),list[i_m].c_str());
 	}
+
+    mStart = true;
 }
 
 void TSubSYS::subStop( )
@@ -116,6 +118,8 @@ void TSubSYS::subStop( )
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str()); 
 	    mess_err(nodePath().c_str(),_("Stop module '%s' error."),list[i_m].c_str());
 	}
+
+    mStart = false;
 }
 
 void TSubSYS::cntrCmdProc( XMLNode *opt )

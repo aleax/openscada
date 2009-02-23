@@ -82,10 +82,10 @@ void TController::postDisable(int flag)
     {
 	if( flag )
 	{
-	    //- Delete DB record -
-	    SYS->db().at().dataDel(fullDB(),owner().nodePath()+"DAQ",*this);
+	    //> Delete DB record
+	    SYS->db().at().dataDel(fullDB(),owner().nodePath()+"DAQ",*this,true);
 
-	    //- Delete parameter's tables -
+	    //> Delete parameter's tables
 	    for(unsigned i_tp = 0; i_tp < owner().tpPrmSize(); i_tp++)
 	    {
 		string tbl = DB()+"."+cfg(owner().tpPrmAt(i_tp).db).getS();
@@ -232,19 +232,17 @@ void TController::LoadParmCfg(  )
 	    {
 		try
 		{
-		    if( !present(c_el.cfg("SHIFR").getS()) ) 
-			add( c_el.cfg("SHIFR").getS(), i_tp ); 
+		    if( !present(c_el.cfg("SHIFR").getS()) ) add( c_el.cfg("SHIFR").getS(), i_tp );
 		}
 		catch(TError err)
 		{
-		    mess_err(err.cat.c_str(),"%s",err.mess.c_str()); 
+		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		    mess_err(nodePath().c_str(),_("Add parameter <%s> error."),c_el.cfg("SHIFR").getS().c_str());
 		}
-		c_el.cfg("SHIFR").setS("");
 	    }
 	}catch(TError err)
 	{
-	    mess_err(err.cat.c_str(),"%s",err.mess.c_str()); 
+	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	    mess_err(nodePath().c_str(),_("Search and create new parameters error."));
 	}
     }

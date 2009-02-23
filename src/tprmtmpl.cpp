@@ -70,11 +70,10 @@ void TPrmTempl::postDisable(int flag)
     {
 	if( flag )
 	{
-	    SYS->db().at().dataDel(owner().fullDB(),owner().owner().nodePath()+owner().tbl(),*this);
-	    //- Delete template's IO -
+	    SYS->db().at().dataDel(owner().fullDB(),owner().owner().nodePath()+owner().tbl(),*this,true);
+	    //> Delete template's IO
 	    TConfig cfg(&owner().owner().tplIOE());
-	    cfg.cfg("TMPL_ID").setS(id());
-	    cfg.cfg("ID").setS("");
+	    cfg.cfg("TMPL_ID").setS(id(),true);
 	    SYS->db().at().dataDel(owner().fullDB()+"_io",owner().owner().nodePath()+owner().tbl()+"_io/",cfg);
 	}
     }catch(TError err)
@@ -154,13 +153,12 @@ void TPrmTempl::load_( )
     //> Load IO
     vector<string> u_pos;
     TConfig cfg(&owner().owner().tplIOE());
-    cfg.cfg("TMPL_ID").setS(id());
+    cfg.cfg("TMPL_ID").setS(id(),true);
     for( int io_cnt = 0; SYS->db().at().dataSeek(owner().fullDB()+"_io",owner().owner().nodePath()+owner().tbl()+"_io",io_cnt++,cfg); )
     {
 	string sid = cfg.cfg("ID").getS();
-	cfg.cfg("ID").setS("");
 
-	//- Position storing -
+	//> Position storing
 	int pos = cfg.cfg("POS").getI();
 	while( u_pos.size() <= pos )	u_pos.push_back("");
 	u_pos[pos] = sid;
@@ -191,12 +189,12 @@ void TPrmTempl::save_( )
 {
     string w_db = owner().fullDB();
     string w_cfgpath = owner().owner().nodePath()+owner().tbl();
-    //- Self save -
+    //> Self save
     SYS->db().at().dataSet(w_db,w_cfgpath,*this);
 
-    //- Save IO -
+    //> Save IO
     TConfig cfg(&owner().owner().tplIOE());
-    cfg.cfg("TMPL_ID").setS(id());
+    cfg.cfg("TMPL_ID").setS(id(),true);
     for(int i_io = 0; i_io < ioSize(); i_io++)
     {
 	if( io(i_io)->id() == "f_frq" || io(i_io)->id() == "f_start" ||
@@ -209,8 +207,7 @@ void TPrmTempl::save_( )
 	cfg.cfg("POS").setI(i_io);
 	SYS->db().at().dataSet(w_db+"_io",w_cfgpath+"_io",cfg);
     }
-    //- Clear IO -
-    cfg.cfg("ID").setS("");
+    //> Clear IO
     cfg.cfgViewAll(false);
     for( int fld_cnt=0; SYS->db().at().dataSeek(w_db+"_io",w_cfgpath+"_io",fld_cnt++,cfg); )
     {
@@ -218,10 +215,9 @@ void TPrmTempl::save_( )
 	if( ioId(sio) < 0 || sio == "f_frq" || sio == "f_start" ||
 		sio == "f_stop" || sio == "f_err" )
 	{
-	    SYS->db().at().dataDel(w_db+"_io",w_cfgpath+"_io",cfg);
+	    SYS->db().at().dataDel(w_db+"_io",w_cfgpath+"_io",cfg,true);
 	    fld_cnt--;
 	}
-	cfg.cfg("ID").setS("");
     }
 }
 
@@ -439,10 +435,10 @@ void TPrmTmplLib::postDisable(int flag)
 {
     if( flag )
     {
-	//- Delete libraries record -
-	SYS->db().at().dataDel(work_lib_db+"."+owner().tmplLibTable(),owner().nodePath()+"tmplib",*this);
+	//> Delete libraries record
+	SYS->db().at().dataDel(work_lib_db+"."+owner().tmplLibTable(),owner().nodePath()+"tmplib",*this,true);
 
-	//- Delete temlate librarie's DBs -
+	//> Delete temlate librarie's DBs
 	SYS->db().at().open(fullDB());
 	SYS->db().at().close(fullDB(),true);
 
@@ -475,8 +471,6 @@ void TPrmTmplLib::load_( )
     for( int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),owner().nodePath()+tbl(), fld_cnt++,c_el); )
     {
 	string f_id = c_el.cfg("ID").getS();
-	c_el.cfg("ID").setS("");
-
 	if( !present(f_id) )	add(f_id.c_str());
     }
 }

@@ -22,7 +22,7 @@
 #ifndef TARCHIVES_H
 #define TARCHIVES_H
 
-#define  VER_ARH 1    //ArchiveS type modules version
+#define  VER_ARH 2    //ArchiveS type modules version
 
 #include <time.h>
 
@@ -132,18 +132,18 @@ class TTipArchivator: public TModule
 	virtual ~TTipArchivator( );
 
 	//- Messages -
-	void messList( vector<string> &list )	{ chldList(m_mess,list); }
-	bool messPresent( const string &iid )	{ return chldPresent(m_mess,iid); }
+	void messList( vector<string> &list )	{ chldList(mMess,list); }
+	bool messPresent( const string &iid )	{ return chldPresent(mMess,iid); }
 	void messAdd( const string &iid, const string &idb = "*.*" );
-	void messDel( const string &iid, bool full = false )	{ chldDel(m_mess,iid,-1,full); }
-	AutoHD<TMArchivator> messAt( const string &iid )	{ return chldAt(m_mess,iid); }
+	void messDel( const string &iid, bool full = false )	{ chldDel(mMess,iid,-1,full); }
+	AutoHD<TMArchivator> messAt( const string &iid )	{ return chldAt(mMess,iid); }
 
 	//- Values -
-	void valList( vector<string> &list )	{ chldList(m_val,list); }
-	bool valPresent( const string &iid )	{ return chldPresent(m_val,iid); }
+	void valList( vector<string> &list )	{ chldList(mVal,list); }
+	bool valPresent( const string &iid )	{ return chldPresent(mVal,iid); }
 	void valAdd( const string &iid, const string &idb = "*.*" );
-	void valDel( const string &iid, bool full = false )	{ chldDel(m_val,iid,-1,full); }
-	AutoHD<TVArchivator> valAt( const string &iid )		{ return chldAt(m_val,iid); }
+	void valDel( const string &iid, bool full = false )	{ chldDel(mVal,iid,-1,full); }
+	AutoHD<TVArchivator> valAt( const string &iid )		{ return chldAt(mVal,iid); }
 
 	TArchiveS &owner( );
 
@@ -158,7 +158,7 @@ class TTipArchivator: public TModule
 
     private:
 	//Private attributes
-	int	m_mess, m_val;
+	int	mMess, mVal;
 };
 
 //************************************************
@@ -173,40 +173,40 @@ class TArchiveS : public TSubSYS
 
 	int subVer( )		{ return VER_ARH; }
 
-	int messPeriod( )	{ return m_mess_per; }
+	int messPeriod( )	{ return mMessPer; }
 	int valPeriod( );
-	int valPrior( )		{ return m_val_prior; }
+	int valPrior( )		{ return mValPrior; }
 
 	void setMessPeriod( int ivl );
-	void setValPeriod( int ivl )	{ m_val_per = ivl; modif(); }
-	void setValPrior( int ivl )	{ m_val_prior = ivl; modif(); }
+	void setValPeriod( int ivl )	{ mValPer = ivl; modif(); }
+	void setValPrior( int ivl )	{ mValPrior = ivl; modif(); }
 
 	void subStart( );
 	void subStop( );
 
-	//- Value archives functions -
-	void valList( vector<string> &list )			{ chldList(m_aval,list); }
-	bool valPresent( const string &iid )			{ return chldPresent(m_aval,iid); }
+	//> Value archives functions
+	void valList( vector<string> &list )			{ chldList(mAval,list); }
+	bool valPresent( const string &iid )			{ return chldPresent(mAval,iid); }
 	void valAdd( const string &iid, const string &idb = "*.*" );
-	void valDel( const string &iid, bool db = false )	{ chldDel(m_aval,iid,-1,db); }
-	AutoHD<TVArchive> valAt( const string &iid )		{ return chldAt(m_aval,iid); }
+	void valDel( const string &iid, bool db = false )	{ chldDel(mAval,iid,-1,db); }
+	AutoHD<TVArchive> valAt( const string &iid )		{ return chldAt(mAval,iid); }
 
 	void setActValArch( const string &id, bool val );
 
-	//- Archivators -
+	//> Archivators
 	AutoHD<TTipArchivator> at( const string &name )		{ return modAt(name); }
 
-	//- Message archive function -
-	void messPut( time_t tm, const string &categ, TMess::Type level, const string &mess );
+	//> Message archive function
+	void messPut( time_t tm, int utm, const string &categ, TMess::Type level, const string &mess );
 	void messPut( const vector<TMess::SRec> &recs );
 	void messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const string &category = "",
 		TMess::Type level = TMess::Debug, const string &arch = "" );
 	time_t messBeg( const string &arch = "" );
 	time_t messEnd( const string &arch = "" );
 
-	TElem &messE( )		{ return el_mess; }
-	TElem &valE( ) 		{ return el_val; }
-	TElem &aValE( )		{ return el_aval; }
+	TElem &messE( )		{ return elMess; }
+	TElem &valE( ) 		{ return elVal; }
+	TElem &aValE( )		{ return elAval; }
 
 	//Public attributes
 	static int max_req_mess;
@@ -225,35 +225,35 @@ class TArchiveS : public TSubSYS
 
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
-	int messBufLen( )	{ return m_buf.size(); }
+	int messBufLen( )	{ return mBuf.size(); }
 	void setMessBufLen( int len );
 
 	//Private attributes
-	TElem		el_mess,	//Message archivator's DB elements
-			el_val,		//Value archivator's DB elements
-			el_aval;	//Value archives DB elements
+	TElem		elMess,		//Message archivator's DB elements
+			elVal,		//Value archivator's DB elements
+			elAval;		//Value archives DB elements
 
-	//- Messages archiving -
-	char	buf_err;		//Buffer error
-	int	m_mess_per;		//Message arhiving period
+	//> Messages archiving
+	char	bufErr;			//Buffer error
+	int	mMessPer;		//Message arhiving period
 	timer_t	tmIdMess;		//Messages timer
-	bool	prc_st_mess;		//Process messages flag
-	//-- Messages buffer --
-	Res	m_res;			//Mess access resource
-	unsigned head_buf,		//Head of messages buffer
-		head_lstread;		//Last read and archived head of messages buffer
-	vector<TMess::SRec> m_buf;	//Messages buffer
+	bool	prcStMess;		//Process messages flag
+	//>> Messages buffer
+	Res	mRes;			//Mess access resource
+	unsigned headBuf,		//Head of messages buffer
+		headLstread;		//Last read and archived head of messages buffer
+	vector<TMess::SRec> mBuf;	//Messages buffer
 
-	//- Value archiving -
-	Res	v_res;			//Value access resource
-	int	m_val_per;		//Value arhiving period
-	int	m_val_prior;		//Value archive task priority
-	pthread_t m_val_pthr;		//Value get realtime pthread
-	bool	prc_st_val;		//Process value flag
-	bool	endrun_req_val;		//Endrun value request
-	int	m_aval;
+	//> Value archiving
+	Res	vRes;			//Value access resource
+	int	mValPer;		//Value arhiving period
+	int	mValPrior;		//Value archive task priority
+	pthread_t mValPthr;		//Value get realtime pthread
+	bool	prcStVal;		//Process value flag
+	bool	endrunReqVal;		//Endrun value request
+	int	mAval;
 
-	vector< AutoHD<TVArchive> > act_up_src;
+	vector< AutoHD<TVArchive> > actUpSrc;
 };
 
 #endif // TARCHIVES_H

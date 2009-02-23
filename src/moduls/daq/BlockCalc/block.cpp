@@ -77,15 +77,14 @@ void Block::postDisable( int flag )
     {
 	if( flag )
 	{
-	    //- Delete block from BD -
+	    //> Delete block from BD
 	    string tbl = owner().DB()+"."+owner().cfg("BLOCK_SH").getS();
-	    SYS->db().at().dataDel(tbl,mod->nodePath()+owner().cfg("BLOCK_SH").getS(),*this);
+	    SYS->db().at().dataDel(tbl,mod->nodePath()+owner().cfg("BLOCK_SH").getS(),*this,true);
 
-	    //- Delete block's IO from BD -
+	    //> Delete block's IO from BD
 	    TConfig cfg(&owner().owner().blockIOE());
 	    tbl=tbl+"_io";
-	    cfg.cfg("BLK_ID").setS(id());   //Delete all block id records
-	    cfg.cfg("ID").setS("");
+	    cfg.cfg("BLK_ID").setS(id(),true);   //Delete all block id records
 	    SYS->db().at().dataDel(tbl,mod->nodePath()+owner().cfg("BLOCK_SH").getS()+"_io",cfg);
 	}
     }catch(TError err)

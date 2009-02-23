@@ -37,7 +37,7 @@
 #define MOD_NAME	"File system archivator"
 #define MOD_TYPE	"Archive"
 #define VER_TYPE	VER_ARH
-#define VERSION		"1.0.1"
+#define VERSION		"1.1.0"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"The Archive module. Allow functions for messages and values arhiving to file system."
 #define LICENSE		"GPL"
@@ -261,19 +261,16 @@ void ModArch::Task( union sigval obj )
 		mess_err(arh->nodePath().c_str(),_("Check value archivator <%s> error."),a_list[i_a].c_str());
 	    }
 
-    //- Check to nopresent archive files -
+    //> Check to nopresent archive files
+    struct stat file_stat;
     TConfig c_el(&mod->packFE());
     c_el.cfgViewAll(false);
     for( int fld_cnt=0; SYS->db().at().dataSeek(mod->filesDB(),mod->nodePath()+"Pack/",fld_cnt++,c_el); )
-    {
-	struct stat file_stat;
 	if( stat(c_el.cfg("FILE").getS().c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG )
 	{
-	    if( !SYS->db().at().dataDel(mod->filesDB(),mod->nodePath()+"Pack/",c_el) )	break;
+	    if( !SYS->db().at().dataDel(mod->filesDB(),mod->nodePath()+"Pack/",c_el,true) )	break;
 	    fld_cnt--;
 	}
-	c_el.cfg("FILE").setS("");
-    }
 
     arh->prc_st = false;
 }

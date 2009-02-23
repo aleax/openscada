@@ -72,7 +72,7 @@ class MTable : public TTable
 	//Private methods
 	void postDisable(int flag);
 	void save( );
-	int  findKeyLine( TConfig &cfg, int cnt = 0 );
+	int  findKeyLine( TConfig &cfg, int cnt = 0, bool useKey = false );
 	void fieldPrmSet( TCfg &e_cfg, db_str_rec &n_rec );
 
 	//Private atributes

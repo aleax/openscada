@@ -518,9 +518,9 @@ void TTest::Test( const string &id, XMLNode *t_n )
 
 	//Delete fields
 	st_time = times(NULL);
-	for(int i_fld = 0; i_fld < experem; i_fld++)
+	for( int i_fld = 0; i_fld < experem; i_fld++ )
 	{
-	    bd_cfg.cfg("name").setS("Sh"+SYS->int2str(i_fld));
+	    bd_cfg.cfg("name").setS("Sh"+SYS->int2str(i_fld),true);
 	    tbl.at().fieldDel(bd_cfg);
 	}
 	mess_info(test_cat,"Del %d fields time <%f>sek!",experem,(float)(times(NULL)-st_time)/TSYS::HZ());

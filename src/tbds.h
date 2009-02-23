@@ -22,7 +22,7 @@
 #ifndef TBDS_H
 #define TBDS_H
 
-#define  VER_BD 1    //BDS type modules version
+#define  VER_BD 2    //BDS type modules version
 
 #include <stdio.h>
 
@@ -115,7 +115,7 @@ class TBD : public TCntrNode, public TConfig
 	virtual void enable( );
 	virtual void disable( );
 
-	//- Opened DB tables -
+	//> Opened DB tables
 	virtual void allowList( vector<string> &list )
 	{ throw TError(nodePath().c_str(),_("Function <%s> no support!"),"allowList"); }
 	void list( vector<string> &list )	{ chldList(mTbl,list); }
@@ -124,7 +124,7 @@ class TBD : public TCntrNode, public TConfig
 	void close( const string &table, bool del = false )	{ chldDel(mTbl,table,-1,del); }
 	AutoHD<TTable> at( const string &name )	{ return chldAt(mTbl,name); }
 
-	//- SQL request interface -
+	//> SQL request interface
 	virtual void sqlReq( const string &req, vector< vector<string> > *tbl = NULL )
 	{ throw TError(nodePath().c_str(),_("Function <%s> no support!"),"sqlReq"); }
 
@@ -149,7 +149,7 @@ class TBD : public TCntrNode, public TConfig
 	string nodeName( )	{ return mId; }
 
 	//Private attributes
-	//- Base options -
+	//> Base options
 	string	&mId,		//ID
 		&mName,		//Name
 		&mDscr,		//Description
@@ -158,7 +158,7 @@ class TBD : public TCntrNode, public TConfig
 	bool	&mToEn;
 
 	bool	mEn;
-	//- Special options -
+	//> Special options
 	int	mTbl;
 };
 
@@ -176,7 +176,7 @@ class TTipBD : public TModule
 
 	bool fullDeleteDB( )	{ return full_db_del; }
 
-	//- Opened DB -
+	//> Opened DB
 	void list( vector<string> &list )	{ chldList(m_db,list); }
 	bool openStat( const string &idb )	{ return chldPresent(m_db,idb); }
 	void open( const string &iid );
@@ -199,7 +199,7 @@ class TTipBD : public TModule
 
 //************************************************
 //* TBDS                                         *
-//************************************************ 
+//************************************************
 class TSYS;
 
 class TBDS : public TSubSYS, public TElem
@@ -216,17 +216,17 @@ class TBDS : public TSubSYS, public TElem
 
 	void closeOldTables( int secOld = 60 );
 
-	//- Open/close table. -
+	//> Open/close table.
 	AutoHD<TTable> open( const string &bdn, bool create = false );
 	void close( const string &bdn, bool del = false );
 
-	//- Get Data from DB or config file. If <tbl> cleaned then load from config file -
+	//> Get Data from DB or config file. If <tbl> cleaned then load from config file
 	bool dataSeek( const string &bdn, const string &path, int lev, TConfig &cfg );
 	bool dataGet( const string &bdn, const string &path, TConfig &cfg );
 	bool dataSet( const string &bdn, const string &path, TConfig &cfg );
-	bool dataDel( const string &bdn, const string &path, TConfig &cfg );
+	bool dataDel( const string &bdn, const string &path, TConfig &cfg, bool useKeyAll = false );
 
-	//- Generic DB table -
+	//> Generic DB table
 	static string genDBGet( const string &path, const string &oval = "",
 		const string &user = "root", bool onlyCfg = false );
 	static void genDBSet( const string &path, const string &val, const string &user = "root" );
@@ -249,7 +249,6 @@ class TBDS : public TSubSYS, public TElem
 
 	//Private attributes
 	TElem	el_db;
-	Res	genDBCacheRes;
 	deque<TConfig*> genDBCache;
 };
 

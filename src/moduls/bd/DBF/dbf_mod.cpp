@@ -259,7 +259,7 @@ bool MTable::fieldSeek( int i_ln, TConfig &cfg )
 
     ResAlloc res(m_res,false);
 
-    i_ln = findKeyLine(cfg,i_ln);
+    i_ln = findKeyLine(cfg,i_ln,true);
     if( i_ln < 0 ) return false;
 
     //- Get config fields list -
@@ -468,7 +468,7 @@ void MTable::fieldDel( TConfig &cfg )
     //- Get key line -
     bool i_ok = false;
     int i_ln;
-    while((i_ln = findKeyLine(cfg)) >= 0)
+    while((i_ln = findKeyLine(cfg,0,true)) >= 0)
     {
 	if( basa->DeleteItems(i_ln,1) < 0 )
 	    throw TError(TSYS::DBInernal,nodePath().c_str(),_("Line error!"));
@@ -479,31 +479,27 @@ void MTable::fieldDel( TConfig &cfg )
     if( !i_ok ) throw TError(TSYS::DBInernal,nodePath().c_str(),_("Field is not present!"));
 }
 
-int MTable::findKeyLine( TConfig &cfg, int cnt )
+int MTable::findKeyLine( TConfig &cfg, int cnt, bool useKey )
 {
     int i_ln, i_clm, i_cnt = 0;
 
     mLstUse = time(NULL);
 
-    //- Get config fields list -
+    //> Get config fields list
     vector<string> cf_el;
     cfg.cfgList(cf_el);
-    //- Left only keys into list -
+    //> Left only keys into list
     for( int i_cf = 0; i_cf < cf_el.size(); )
 	if( cfg.cfg(cf_el[i_cf]).fld().flg()&TCfg::Key ) i_cf++;
 	else cf_el.erase(cf_el.begin()+i_cf);
 
-    //- Find want field -
+    //> Find want field
     for( i_ln = 0; i_ln < basa->GetCountItems(  ); i_ln++ )
     {
 	int cnt_key = 0;
 	for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
 	{
-	    if( !cfg.cfg(cf_el[i_cf]).getS().size() )
-	    {
-		cnt_key++;
-		continue;
-	    }
+	    if( useKey && !cfg.cfg(cf_el[i_cf]).keyUse( ) )	{ cnt_key++; continue; }
 	    //string key = cfg.cfg(cf_el[i_cf]).name();
 	    //- Check key -
 	    //-- Find collumn --

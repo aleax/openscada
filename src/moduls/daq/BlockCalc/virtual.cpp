@@ -275,7 +275,6 @@ void Contr::load_( )
 	    ((TConfig &)blkAt(id).at()) = c_el;
 	}
 	blkAt(id).at().load();
-	c_el.cfg("ID").setS("");
     }
 }
 

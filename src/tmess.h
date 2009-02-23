@@ -29,6 +29,7 @@
 #include <exception>
 
 #define _(mess) Mess->I18N(mess)
+#define FTM(rec) ((long long)rec.time*1000000 + rec.utime)
 #define message(cat,lev,fmt,args...) Mess->put(cat,lev,fmt,##args)
 #define mess_debug(cat,fmt,args...) Mess->put(cat,TMess::Debug,fmt,##args)
 #define mess_info(cat,fmt,args...) Mess->put(cat,TMess::Info,fmt,##args)
@@ -55,14 +56,15 @@ class TMess
 	class SRec
 	{
 	    public:
-		SRec() : time(0), categ(""), level(TMess::Debug), mess("") { }
-		SRec(time_t itm, const string &icat, Type ilev, const string &imess) :
-		    time(itm), categ(icat), level(ilev), mess(imess) { }
+		SRec( ) : time(0), categ(""), level(TMess::Debug), mess("") { }
+		SRec( time_t itm, int iutime, const string &icat, Type ilev, const string &imess ) :
+		    time(itm), utime(iutime), categ(icat), level(ilev), mess(imess) { }
 
-		time_t time;
-		string categ;
-		Type   level;
-		string mess;
+		time_t	time;
+		int	utime;
+		string	categ;
+		Type	level;
+		string	mess;
 	};
 
 	//Methods

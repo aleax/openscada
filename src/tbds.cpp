@@ -49,7 +49,7 @@ TBDS::TBDS( ) : TSubSYS("BD","Data Bases",true)
 
 TBDS::~TBDS(  )
 {
-    ResAlloc res(genDBCacheRes,true);
+    ResAlloc res(nodeAccess(),true);
     while( genDBCache.size() )
     {
 	delete genDBCache.front();
@@ -292,14 +292,33 @@ bool TBDS::dataSet( const string &bdn, const string &path, TConfig &cfg )
     return false;
 }
 
-bool TBDS::dataDel( const string &bdn, const string &path, TConfig &cfg )
+bool TBDS::dataDel( const string &bdn, const string &path, TConfig &cfg, bool useKeyAll )
 {
+    vector<string> cels;
     AutoHD<TTable> tbl = open(bdn);
 
     if( !tbl.freeStat() )
     {
 	bool db_true = true;
-	try{ tbl.at().fieldDel(cfg); }
+	try
+	{
+	    //> Select for using all keys
+	    if( useKeyAll )
+	    {
+		cfg.cfgList(cels);
+		for( int i_el = 0; i_el < cels.size(); i_el++ )
+		    if( (cfg.cfg(cels[i_el]).fld().flg()&TCfg::Key) && !cfg.cfg(cels[i_el]).keyUse() )
+			cfg.cfg(cels[i_el]).setKeyUse(true);
+		    else { cels.erase(cels.begin()+i_el); i_el--; }
+	    }
+	
+	    tbl.at().fieldDel(cfg);
+
+	    //> Restore not using keys selection
+	    if( useKeyAll )
+		for( int i_el = 0; i_el < cels.size(); i_el++ )
+		    cfg.cfg(cels[i_el]).setKeyUse(false);
+	}
 	catch(TError err) { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); db_true = false; }
 	//tbl.free(); close(bdn);
 	return db_true;
@@ -332,7 +351,7 @@ void TBDS::genDBSet(const string &path, const string &val, const string &user)
 	else
 	{
 	    //Put to cache
-	    ResAlloc res(dbs.at().genDBCacheRes,true);
+	    ResAlloc res(dbs.at().nodeAccess(),true);
 	    for( int i_cel = 0; i_cel < dbs.at().genDBCache.size(); i_cel++ )
 		if( dbs.at().genDBCache[i_cel]->cfg("user").getS() == user &&
 		    dbs.at().genDBCache[i_cel]->cfg("id").getS() == path )
@@ -384,7 +403,7 @@ string TBDS::genDBGet(const string &path, const string &oval, const string &user
 	if( SYS->present("BD") )
 	{
 	    AutoHD<TBDS> dbs = SYS->db();
-	    ResAlloc res(dbs.at().genDBCacheRes,false);
+	    ResAlloc res(dbs.at().nodeAccess(),false);
 	    for( int i_cel = 0; i_cel < dbs.at().genDBCache.size(); i_cel++ )
 		if( dbs.at().genDBCache[i_cel]->cfg("user").getS() == user &&
 			dbs.at().genDBCache[i_cel]->cfg("id").getS() == path )
@@ -460,8 +479,6 @@ void TBDS::load_( )
 		type = c_el.cfg("TYPE").getS();
 		if( (type+"."+id) != SYS->workDB() && modPresent(type) && !at(type).at().openStat(id) )
 		    at(type).at().open(id);
-		c_el.cfg("ID").setS("");
-		c_el.cfg("TYPE").setS("");
 	    }
 	}
     }catch( TError err )
@@ -611,7 +628,7 @@ void TBD::postDisable(int flag)
     try
     {
 	if( flag )
-	    SYS->db().at().dataDel(owner().owner().fullDB(),SYS->db().at().nodePath()+"DB/",*this);
+	    SYS->db().at().dataDel(owner().owner().fullDB(),SYS->db().at().nodePath()+"DB/",*this,true);
     }catch(TError err)
     { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
@@ -782,18 +799,11 @@ TCntrNode &TTable::operator=( TCntrNode &node )
     TTable *src_n = dynamic_cast<TTable*>(&node);
     if( !src_n || !src_n->owner().enableStat() || !owner().enableStat() ) return *this;
 
-    //- Table content copy -
+    //> Table content copy
     TConfig req;
     src_n->fieldStruct(req);
-    //-- Scan source table and write to destination table
-    for( int row = 0; src_n->fieldSeek(row,req); row++ )
-    {
-	fieldSet(req);
-	//--- Clear key fields ---
-	for( int i_e = 0; i_e < req.elem().fldSize(); i_e++ )
-	    if( req.elem().fldAt(i_e).flg()&TCfg::Key )
-		req.cfg(req.elem().fldAt(i_e).name()).setS("");
-    }
+    //>> Scan source table and write to destination table
+    for( int row = 0; src_n->fieldSeek(row,req); row++ ) fieldSet(req);
 
     return *this;
 }
@@ -844,8 +854,6 @@ void TTable::cntrCmdProc( XMLNode *opt )
 		    if( i_r == 0 )	//Prepare columns
 			ctrMkNode("list",opt,-1,("/prm/tbl/"+eid).c_str(),"",0664);
 		    opt->childGet(i_f)->childAdd("el")->setText(req.cfg(eid).getS());
-		    if( req.elem().fldAt(i_f).flg()&TCfg::Key )
-			req.cfg(eid).setS("");
 		}
 	if( ctrChkNode(opt,"add",0664,"root","BD",SEQ_WR) )
 	{
@@ -861,25 +869,25 @@ void TTable::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"del",0664,"root","BD",SEQ_WR) )
 	{
 	    for( int i_f = 0; i_f < req.elem().fldSize(); i_f++ )
-	    {
-	        eid = req.elem().fldAt(i_f).name();
-	        if( !(req.elem().fldAt(i_f).flg()&TCfg::Key) ) continue;
-	        req.cfg(eid).setS(opt->attr("key_"+eid));
-	    }
+		if( req.elem().fldAt(i_f).flg()&TCfg::Key )
+		{
+		    eid = req.elem().fldAt(i_f).name();
+		    req.cfg(eid).setS(opt->attr("key_"+eid),true);
+		}
 	    fieldDel(req);
 	}
 	if( ctrChkNode(opt,"set",0664,"root","BD",SEQ_WR) )
 	{
-	    //- Get structure -
+	    //> Get structure
 	    string  col = opt->attr("col");
 	    bool key_chng = false;
 	    for( int i_f = 0; i_f < req.elem().fldSize(); i_f++ )
-	    {
-	        eid = req.elem().fldAt(i_f).name();
-	        if( !(req.elem().fldAt(i_f).flg()&TCfg::Key) ) continue;
-	        req.cfg(eid).setS(opt->attr("key_"+eid));
-	        if( eid == col ) key_chng = true;
-	    }
+		if( req.elem().fldAt(i_f).flg()&TCfg::Key )
+		{
+		    eid = req.elem().fldAt(i_f).name();
+		    req.cfg(eid).setS(opt->attr("key_"+eid),true);
+		    if( eid == col ) key_chng = true;
+		}
 	    if( key_chng )
 	    {
 	        fieldGet(req);

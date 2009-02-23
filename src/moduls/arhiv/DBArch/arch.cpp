@@ -85,13 +85,13 @@ void ModArch::postEnable( int flag )
 
     if( flag&TCntrNode::NodeConnect )
     {
-	//- Add self DB-fields for messages archive -
+	//> Add self DB-fields for messages archive
 	owner().messE().fldAdd( new TFld("DBArchSize",_("Archive size (hours)"),TFld::Real,TFld::NoFlag,"20.5","24") );
 
-	//- Add self DB-fields for value archive -
+	//> Add self DB-fields for value archive
 	owner().valE().fldAdd( new TFld("DBArchSize",_("Archive size (hours)"),TFld::Real,TFld::NoFlag,"20.5","24") );
 
-	//- Archivators info table DB structure -
+	//> Archivators info table DB structure
 	el_arch.fldAdd( new TFld("TBL",_("Table"),TFld::String,TCfg::Key,"50") );
 	el_arch.fldAdd( new TFld("BEGIN",_("Begin"),TFld::String,TFld::NoFlag,"20") );
 	el_arch.fldAdd( new TFld("END",_("End"),TFld::String,TFld::NoFlag,"20") );
@@ -99,23 +99,24 @@ void ModArch::postEnable( int flag )
 	el_arch.fldAdd( new TFld("PRM2",_("Parameter 2"),TFld::String,TFld::NoFlag,"20") );
 	el_arch.fldAdd( new TFld("PRM3",_("Parameter 3"),TFld::String,TFld::NoFlag,"20") );
 
-	//- Message DB archive DB structure -
+	//> Message DB archive DB structure
 	el_mess.fldAdd( new TFld("TM",_("Time (s)"),TFld::Integer,TCfg::Key|TFld::DateTimeDec,"10") );
+	el_mess.fldAdd( new TFld("TMU",_("Time (us)"),TFld::Integer,TCfg::Key,"6","0") );
 	el_mess.fldAdd( new TFld("CATEG",_("Category"),TFld::String,TCfg::Key,"100") );
 	el_mess.fldAdd( new TFld("MESS",_("Message"),TFld::String,TCfg::Key,"1000") );
 	el_mess.fldAdd( new TFld("LEV",_("Level"),TFld::Integer,TFld::NoFlag,"1") );
 
-	//- Boolean and integer value DB archive DB structure -
+	//> Boolean and integer value DB archive DB structure
 	el_vl_int.fldAdd( new TFld("TM",_("Time (s)"),TFld::Integer,TCfg::Key|TFld::DateTimeDec,"10") );
 	el_vl_int.fldAdd( new TFld("TMU",_("Time (us)"),TFld::Integer,TCfg::Key,"10") );
 	el_vl_int.fldAdd( new TFld("VAL",_("Value"),TFld::Integer,TFld::NoFlag,"10") );
 
-	//- Real value DB archive DB structure -
+	//> Real value DB archive DB structure
 	el_vl_real.fldAdd( new TFld("TM",_("Time (s)"),TFld::Integer,TCfg::Key|TFld::DateTimeDec,"10") );
 	el_vl_real.fldAdd( new TFld("TMU",_("Time (us)"),TFld::Integer,TCfg::Key,"10") );
 	el_vl_real.fldAdd( new TFld("VAL",_("Value"),TFld::Real,TFld::NoFlag,"30.15") );
 
-	//- String value DB archive DB structure -
+	//> String value DB archive DB structure
 	el_vl_str.fldAdd( new TFld("TM",_("Time (s)"),TFld::Integer,TCfg::Key|TFld::DateTimeDec,"10") );
 	el_vl_str.fldAdd( new TFld("TMU",_("Time (us)"),TFld::Integer,TCfg::Key,"10") );
 	el_vl_str.fldAdd( new TFld("VAL",_("Value"),TFld::String,TFld::NoFlag,"1000") );

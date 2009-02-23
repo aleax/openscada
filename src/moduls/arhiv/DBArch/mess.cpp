@@ -53,12 +53,12 @@ void ModMArch::postDisable( int flag )
     {
 	if( flag )
 	{
-	    //- Remove info record -
+	    //> Remove info record
 	    TConfig cfg(&mod->archEl());
-	    cfg.cfg("TBL").setS(archTbl());
+	    cfg.cfg("TBL").setS(archTbl(),true);
 	    SYS->db().at().dataDel(addr()+"."+mod->mainTbl(),"",cfg);
 
-	    //- Remove archive's DB table -
+	    //> Remove archive's DB table
 	    SYS->db().at().open( addr()+"."+archTbl() );
 	    SYS->db().at().close( addr()+"."+archTbl(), true );
 	}
@@ -70,17 +70,17 @@ void ModMArch::load_( )
 {
     TMArchivator::load_();
 
-    //- Init address to DB -
+    //> Init address to DB
     if( addr().empty() ) setAddr("*.*");
 
-    //- Load message archive parameters -
+    //> Load message archive parameters
     TConfig cfg(&mod->archEl());
     cfg.cfg("TBL").setS(archTbl());
     if(SYS->db().at().dataGet(addr()+"."+mod->mainTbl(),"",cfg))
     {
 	m_beg = atoi(cfg.cfg("BEGIN").getS().c_str());
 	m_end = atoi(cfg.cfg("END").getS().c_str());
-	//-- Check for delete archivator table --
+	//>> Check for delete archivator table
 	if( m_end <= (time(NULL)-(time_t)(maxSize()*3600.)) )
 	{
 	    SYS->db().at().open(addr()+"."+archTbl());
@@ -123,24 +123,25 @@ void ModMArch::put( vector<TMess::SRec> &mess )
     {
 	if( !chkMessOK(mess[i_m].categ,mess[i_m].level) ) continue;
 
-	//- Put record to DB -
+	//> Put record to DB
 	cfg.cfg("TM").setI(mess[i_m].time);
+	cfg.cfg("TMU").setI(mess[i_m].utime);
 	cfg.cfg("CATEG").setS(mess[i_m].categ);
 	cfg.cfg("MESS").setS(mess[i_m].mess);
 	cfg.cfg("LEV").setI(mess[i_m].level);
 	tbl.at().fieldSet(cfg);
-	//- Archive time border update -
-	m_beg=m_beg?vmin(m_beg,mess[i_m].time):mess[i_m].time;
-	m_end=m_end?vmax(m_end,mess[i_m].time):mess[i_m].time;
+	//> Archive time border update
+	m_beg = m_beg ? vmin(m_beg,mess[i_m].time) : mess[i_m].time;
+	m_end = m_end ? vmax(m_end,mess[i_m].time) : mess[i_m].time;
     }
 
-    //- Archive size limit process -
+    //> Archive size limit process
     if( (m_end-m_beg) > (time_t)(maxSize()*3600.) )
     {
 	time_t n_end = m_end-(time_t)(maxSize()*3600.);
 	for( time_t t_c = vmax(m_beg,n_end-3600); t_c < n_end; t_c++ )
 	{
-	    cfg.cfg("TM").setI(t_c);
+	    cfg.cfg("TM").setI(t_c,true);
 	    tbl.at().fieldDel(cfg);
 	}
 	m_beg=n_end;
@@ -148,7 +149,7 @@ void ModMArch::put( vector<TMess::SRec> &mess )
     tbl.free();
     SYS->db().at().close(addr()+"."+archTbl());
 
-    //- Update archive info -
+    //> Update archive info
     cfg.setElem(&mod->archEl());
     cfg.cfgViewAll(false);
     cfg.cfg("TBL").setS(archTbl(),true);
@@ -168,23 +169,23 @@ void ModMArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const s
     if( e_tm <= b_tm ) return;
 
     TConfig cfg(&mod->messEl());
-    //- Get values from DB -
+    //> Get values from DB
     for( time_t t_c = b_tm; t_c <= e_tm; t_c++ )
     {
-	cfg.cfg("TM").setI(t_c);
+	cfg.cfg("TM").setI(t_c,true);
 	for( int e_c = 0; SYS->db().at().dataSeek(addr()+"."+archTbl(),"",e_c++,cfg); )
 	{
-	    TMess::SRec rc(t_c,cfg.cfg("CATEG").getS(),(TMess::Type)cfg.cfg("LEV").getI(),cfg.cfg("MESS").getS());
+	    TMess::SRec rc(t_c,cfg.cfg("TMU").getI(),cfg.cfg("CATEG").getS(),(TMess::Type)cfg.cfg("LEV").getI(),cfg.cfg("MESS").getS());
 	    if( rc.level >= level && TMess::chkPattern(rc.categ,category) )
 	    {
 		bool equal = false;
 		int i_p = mess.size();
 		for( int i_m = mess.size()-1; i_m >= 0; i_m-- )
 		{
-		    if( mess[i_m].time > rc.time )   i_p = i_m;
-		    else if( rc.time == mess[i_m].time && rc.level == mess[i_m].level && rc.mess == mess[i_m].mess )
+		    if( FTM(mess[i_m]) > FTM(rc) ) i_p = i_m;
+		    else if( FTM(mess[i_m]) == FTM(rc) && rc.level == mess[i_m].level && rc.mess == mess[i_m].mess )
 		    { equal = true; break; }
-		    else if( mess[i_m].time < rc.time ) break;
+		    else if( FTM(mess[i_m]) < FTM(rc) ) break;
 		}
 		if( !equal )
 		{
@@ -192,7 +193,6 @@ void ModMArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const s
 		    if( mess.size() >= TArchiveS::max_req_mess ) return;
 		}
 	    }
-	    cfg.cfg("CATEG").setS(""); cfg.cfg("MESS").setS("");
 	}
     }
 }

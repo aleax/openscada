@@ -107,6 +107,13 @@ void TConfig::cfgViewAll( bool val )
 	p->second->setView(val);
 }
 
+void TConfig::cfgKeyUseAll( bool val )
+{
+    for( TCfgMap::iterator p = value.begin(); p != value.end(); ++p )
+	if( p->second->fld().flg()&TCfg::Key )
+	    p->second->setKeyUse(val);
+}
+
 void TConfig::setElem(TElem *Elements, bool first)
 {
     if(m_elem == Elements && !first ) return;
@@ -180,7 +187,7 @@ void TConfig::cntrCmdProc( XMLNode *opt, const string &elem, const string &user,
 //*************************************************
 //* TCfg                                          *
 //*************************************************
-TCfg::TCfg( TFld &fld, TConfig &owner ) : m_view(true), mOwner(owner)
+TCfg::TCfg( TFld &fld, TConfig &owner ) : mView(true), mKeyUse(false), mOwner(owner)
 {
     //- Chek for self field for dinamic elements -
     if( fld.flg()&TFld::SelfFld )
@@ -200,7 +207,7 @@ TCfg::TCfg( TFld &fld, TConfig &owner ) : m_view(true), mOwner(owner)
 	case TFld::Real:	m_val.r_val = atof(mFld->def().c_str());	break;
 	case TFld::Boolean:	m_val.b_val = atoi(mFld->def().c_str());	break;
     }
-    if( fld.flg()&TCfg::Hide )	m_view = false;
+    if( fld.flg()&TCfg::Hide )	mView = false;
 }
 
 TCfg::~TCfg(  )
@@ -303,20 +310,20 @@ bool TCfg::getB( )
     }
 }
 
-void TCfg::setSEL( const string &val, bool forcView )
+void TCfg::setSEL( const string &val, bool forcUse )
 {
     if( !(mFld->flg()&TFld::Selected) )
 	throw TError("Cfg",_("Element type is not selected!"));
     switch( mFld->type() )
     {
-	case TFld::String:	setS( mFld->selNm2VlS(val),forcView );	break;
-	case TFld::Integer:	setI( mFld->selNm2VlI(val),forcView );	break;
-	case TFld::Real:	setR( mFld->selNm2VlR(val),forcView );	break;
-	case TFld::Boolean:	setB( mFld->selNm2VlB(val),forcView );	break;
+	case TFld::String:	setS( mFld->selNm2VlS(val),forcUse );	break;
+	case TFld::Integer:	setI( mFld->selNm2VlI(val),forcUse );	break;
+	case TFld::Real:	setR( mFld->selNm2VlR(val),forcUse );	break;
+	case TFld::Boolean:	setB( mFld->selNm2VlB(val),forcUse );	break;
     }
 }
 
-void TCfg::setS( const string &val, bool forcView )
+void TCfg::setS( const string &val, bool forcUse )
 {
     switch( mFld->type() )
     {
@@ -325,21 +332,21 @@ void TCfg::setS( const string &val, bool forcView )
 	    string t_str = m_val.s_val->getVal();
 	    m_val.s_val->setVal(val);
 	    if( !mOwner.cfgChange(*this) )	m_val.s_val->setVal(t_str);
-	    if( forcView ) setView(true);
+	    if( forcUse ) { setView(true); setKeyUse(true); }
 	    break;
 	}
-	case TFld::Integer:	setI( atoi(val.c_str()),forcView );	break;
-	case TFld::Real:	setR( atof(val.c_str()),forcView );	break;
-	case TFld::Boolean:	setB( atoi(val.c_str()),forcView );	break;
+	case TFld::Integer:	setI( atoi(val.c_str()), forcUse );	break;
+	case TFld::Real:	setR( atof(val.c_str()), forcUse );	break;
+	case TFld::Boolean:	setB( atoi(val.c_str()), forcUse );	break;
     }
 }
 
-void TCfg::setR( double val, bool forcView )
+void TCfg::setR( double val, bool forcUse )
 {
     switch( mFld->type() )
     {
-	case TFld::String:	setS( TSYS::real2str(val),forcView );	break;
-	case TFld::Integer:	setI( (int)val, forcView );	break;
+	case TFld::String:	setS( TSYS::real2str(val), forcUse );	break;
+	case TFld::Integer:	setI( (int)val, forcUse );	break;
 	case TFld::Real:
 	{
 	    if( !(mFld->flg()&TFld::Selected) && mFld->selValR()[0] < mFld->selValR()[1] )
@@ -350,18 +357,18 @@ void TCfg::setR( double val, bool forcView )
 	    double t_val = m_val.r_val;
 	    m_val.r_val = val;
 	    if( !mOwner.cfgChange(*this) )	m_val.r_val = t_val;
-	    if( forcView ) setView(true);
+	    if( forcUse ) { setView(true); setKeyUse(true); }
 	    break;
 	}
-	case TFld::Boolean:	setB( val, forcView );	break;
+	case TFld::Boolean:	setB( val, forcUse );	break;
     }
 }
 
-void TCfg::setI( int val, bool forcView )
+void TCfg::setI( int val, bool forcUse )
 {
     switch( mFld->type() )
     {
-	case TFld::String:	setS( TSYS::int2str(val),forcView );	break;
+	case TFld::String:	setS( TSYS::int2str(val), forcUse );	break;
 	case TFld::Integer:
 	{
 	    if( !(mFld->flg()&TFld::Selected) && mFld->selValI()[0] < mFld->selValI()[1] )
@@ -372,33 +379,33 @@ void TCfg::setI( int val, bool forcView )
 	    int t_val = m_val.i_val;
 	    m_val.i_val = val;
 	    if( !mOwner.cfgChange(*this) )	m_val.i_val = t_val;
-	    if( forcView ) setView(true);
+	    if( forcUse ) { setView(true); setKeyUse(true); }
 	    break;
 	}
-	case TFld::Real:	setR( val,forcView );	break;
-	case TFld::Boolean:	setB( val,forcView );	break;
+	case TFld::Real:	setR( val, forcUse );	break;
+	case TFld::Boolean:	setB( val, forcUse );	break;
     }
 }
 
-void TCfg::setB( bool val, bool forcView )
+void TCfg::setB( bool val, bool forcUse )
 {
     switch( mFld->type() )
     {
-	case TFld::String:	setS( TSYS::int2str(val),forcView );	break;
-	case TFld::Integer:	setI( val,forcView );	break;
-	case TFld::Real:	setR( val,forcView );	break;
+	case TFld::String:	setS( TSYS::int2str(val), forcUse );	break;
+	case TFld::Integer:	setI( val, forcUse );	break;
+	case TFld::Real:	setR( val, forcUse );	break;
 	case TFld::Boolean:
 	{
 	    bool t_val = m_val.b_val;
 	    m_val.b_val = val;
 	    if( !mOwner.cfgChange(*this) )	m_val.b_val = t_val;
-	    if( forcView ) setView(true);
+	    if( forcUse ) { setView(true); setKeyUse(true); }
 	    break;
 	}
     }
 }
 
-bool TCfg::operator==(TCfg & cfg)
+bool TCfg::operator==( TCfg &cfg )
 {
     switch(fld().type())
     {

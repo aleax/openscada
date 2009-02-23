@@ -92,10 +92,10 @@ class TCntrNode
 
 	void cntrCmd( XMLNode *opt, int lev = 0, const string &path = "", int off = 0 );
 
-	//- Static functions -
+	//> Static functions
 	static XMLNode *ctrId( XMLNode *inf, const string &n_id, bool noex = false );      //get node for it full identifier
 
-	//-- Controll Field --
+	//> Controll Field
 	static XMLNode *ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const char *req, const string &dscr,
 	    int perm=0777, const char *user="root", const char *grp="root", int n_attr=0, ... );
 	static bool ctrChkNode( XMLNode *nd, const char *cmd="get", int perm=0444, const char *user="root",
@@ -110,12 +110,12 @@ class TCntrNode
 	//Data
 	enum Flag
 	{
-	    //- Modes -
+	    //> Modes
 	    MkDisable	= 0x00,		//Node make disable
 	    Disable	= 0x01,		//Node disabled
 	    MkEnable	= 0x02,		//Node make enable
 	    Enable	= 0x03,		//Node enabled
-	    //- Flags -
+	    //> Flags
 	    SelfModify	= 0x04,		//Self modify
 	};
 	enum EnFlag
@@ -141,7 +141,7 @@ class TCntrNode
 	char	 nodeMode( )		{ return m_flg&0x3; }
 	unsigned nodeUse( );
 
-	//- Modify process methods -
+	//> Modify process methods
 	int  isModify( int mflg = TCntrNode::All );		//Check for modify want
 	void modif( )	{ m_flg |= SelfModify; }		//Set local modify
 	void modifG( );						//Set group modify
@@ -163,7 +163,7 @@ class TCntrNode
 	};
 
 	//Methods
-	//- Commands -
+	//> Commands
 	void nodeEn( int flag = 0 );
 	void nodeDis( long tm = 0, int flag = 0 );
 
@@ -172,14 +172,14 @@ class TCntrNode
 	void setNodePrev( TCntrNode *node )	{ prev.node = node; }
 	void setNodeMode( char mode )		{ m_flg = (m_flg&(~0x03))|(mode&0x03); }
 
-	//- Childs -
+	//> Childs
 	AutoHD<TCntrNode> chldAt( char igr, const string &name, const string &user = "" );
 	void chldList( char igr, vector<string> &list );
 	bool chldPresent( char igr, const string &name );
 	void chldAdd( char igr, TCntrNode *node, int pos = -1 );
 	void chldDel( char igr, const string &name, long tm = -1, int flag = 0, bool shDel = false );
 
-	//- Conteiners -
+	//> Conteiners
 	char	grpSize( )	{ return chGrp.size(); }
 	char	grpId( const string &sid );
 	GrpEl	&grpAt( char id );
@@ -203,13 +203,13 @@ class TCntrNode
 	} prev;
 
 	//Attributes
-	//- Childs -
+	//> Childs
 	Res	hd_res,			//Resource HD
 		conn_res;		//Connect resource
 
 	vector<GrpEl>	chGrp;		//Child groups
 
-	//- Curent node -
+	//> Curent node
 	unsigned char		m_use;	//Use counter
 	unsigned short int	m_oi;	//Order index
 

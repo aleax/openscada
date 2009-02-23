@@ -274,7 +274,6 @@ void Engine::load_( )
 	    for( int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+wlbTable(),"",lib_cnt++,c_el); )
 	    {
 		string l_id = c_el.cfg("ID").getS();
-		c_el.cfg("ID").setS("");
 		if(!wlbPresent(l_id)) wlbAdd(l_id,"",(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
 	    }
 
@@ -283,7 +282,6 @@ void Engine::load_( )
 	    for( int lib_cnt = 0; SYS->db().at().dataSeek("",nodePath()+"LIB/",lib_cnt++,c_el); )
 	    {
 		string l_id = c_el.cfg("ID").getS();
-		c_el.cfg("ID").setS("");
 		if( !wlbPresent(l_id) )	wlbAdd(l_id,"","*.*");
 	    }
 
@@ -311,9 +309,7 @@ void Engine::load_( )
 	    for( int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+prjTable(),"",lib_cnt++,c_el); )
 	    {
 		string prj_id = c_el.cfg("ID").getS();
-		c_el.cfg("ID").setS("");
-		if( !prjPresent(prj_id) )
-		    prjAdd(prj_id,"",(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+		if( !prjPresent(prj_id) )	prjAdd(prj_id,"",(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
 	    }
 
 	//>>>> Search into config file
@@ -321,7 +317,6 @@ void Engine::load_( )
 	    for( int el_cnt = 0; SYS->db().at().dataSeek("",nodePath()+"PRJ/",el_cnt++,c_el); )
 	    {
 		string prj_id = c_el.cfg("ID").getS();
-		c_el.cfg("ID").setS("");
 		if( !prjPresent(prj_id) )	prjAdd(prj_id,"","*.*");
 	    }
 

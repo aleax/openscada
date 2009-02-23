@@ -1,3 +1,13 @@
+2009-02-23 Roman
+- !!!!:/Config,/DB,/DB/DBF,/DB/MySQL,/DB/SQLite,/DB/FireBird: The special flag for key using into requests dataSeek() and dataDel() is added 
+    Allow select all types keys, not only string. All objects is used new flag now. The subsystem's archive modules API version rise to 2.
+- !!!!:/Archive,/Mess,/Archive/FSArch,/Archive/DBArch,/UI/VCAEngine,/UI/Vision,/UI/WebVision:
+    The subsystem's archive modules API version rise to 2. Microseconds time part is added for mesages.
+- FIX:/Archive: The archivation of messages task is fixed for first and last call.
+- /SYS: The control flag for running check is added to subsystem's object.
+- !:/Archive/FSArch: Released version 1.1.0.
+
+
 2009-02-20 Maxim
 - FIX:/UI/WebVision: Release of memory which was allocated for each image is fixed.
 

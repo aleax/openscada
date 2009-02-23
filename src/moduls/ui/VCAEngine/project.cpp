@@ -100,23 +100,23 @@ void Project::postDisable( int flag )
 {
     if( flag )
     {
-	//- Delete libraries record -
-	SYS->db().at().dataDel(DB()+"."+mod->prjTable(),mod->nodePath()+"PRJ/",*this);
+	//> Delete libraries record
+	SYS->db().at().dataDel(DB()+"."+mod->prjTable(),mod->nodePath()+"PRJ/",*this,true);
 
-	//- Delete function's files -
-	//-- Delete widgets table --
+	//> Delete function's files
+	//>> Delete widgets table
 	SYS->db().at().open(fullDB());
 	SYS->db().at().close(fullDB(),true);
-	//-- Delete attributes table --
+	//>> Delete attributes table
 	SYS->db().at().open(fullDB()+"_io");
 	SYS->db().at().close(fullDB()+"_io",true);
-	//-- Delete users attributes table --
+	//>> Delete users attributes table
 	SYS->db().at().open(fullDB()+"_uio");
 	SYS->db().at().close(fullDB()+"_uio",true);
-	//-- Delete include widgets table --
+	//>> Delete include widgets table
 	SYS->db().at().open(fullDB()+"_incl");
 	SYS->db().at().close(fullDB()+"_incl",true);
-	//-- Delete mime-data table --
+	//>> Delete mime-data table
 	SYS->db().at().open(fullDB()+"_mime");
 	SYS->db().at().close(fullDB()+"_mime",true);
     }
@@ -168,11 +168,10 @@ void Project::load_( )
     //> Create new pages
     TConfig c_el(&mod->elPage());
     c_el.cfgViewAll(false);
-    c_el.cfg("OWNER").setS("/"+id());
+    c_el.cfg("OWNER").setS("/"+id(),true);
     for( int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl()+"/", fld_cnt++,c_el); )
     {
 	string f_id = c_el.cfg("ID").getS();
-	c_el.cfg("ID").setS("");
 	if( !present(f_id) )	add(f_id,"","");
     }
 
@@ -199,10 +198,7 @@ void Project::save_( )
 	string wtbl = tbl()+"_ses";
 	TConfig c_el(&mod->elPrjSes());
 	for( int fld_cnt = 0; SYS->db().at().dataSeek(mOldDB+"."+wtbl,"",fld_cnt,c_el); fld_cnt++ )
-	{
 	    SYS->db().at().dataSet(DB()+"."+wtbl,"",c_el);
-	    c_el.cfg("IDW").setS(""); c_el.cfg("ID").setS("");
-	}
     }
 
     mOldDB = TBDS::realDBName(DB());
@@ -250,10 +246,7 @@ void Project::mimeDataList( vector<string> &list, const string &idb )
 
     list.clear();
     for( int fld_cnt = 0; SYS->db().at().dataSeek(wdb+"."+wtbl,mod->nodePath()+wtbl,fld_cnt,c_el); fld_cnt++ )
-    {
         list.push_back(c_el.cfg("ID").getS());
-        c_el.cfg("ID").setS("");
-    }
 }
 
 bool Project::mimeDataGet( const string &iid, string &mimeType, string *mimeData, const string &idb )
@@ -314,7 +307,7 @@ void Project::mimeDataDel( const string &iid, const string &idb )
     string wtbl = tbl()+"_mime";
     string wdb  = idb.empty() ? DB() : idb;
     TConfig c_el(&mod->elWdgData());
-    c_el.cfg("ID").setS(iid);
+    c_el.cfg("ID").setS(iid,true);
     SYS->db().at().dataDel(wdb+"."+wtbl,mod->nodePath()+wtbl,c_el);
 }
 
@@ -627,25 +620,22 @@ void Page::postDisable( int flag )
 	string db  = ownerProj()->DB();
 	string tbl = ownerProj()->tbl();
 
-	//-- Remove from library table --
-	SYS->db().at().dataDel( db+"."+tbl, mod->nodePath()+tbl, *this );
+	//> Remove from library table
+	SYS->db().at().dataDel( db+"."+tbl, mod->nodePath()+tbl, *this, true );
 
-	//-- Remove widget's IO from library IO table --
+	//> Remove widget's IO from library IO table
 	TConfig c_el(&mod->elWdgIO());
-	c_el.cfg("IDW").setS(path());
-	c_el.cfg("ID").setS("");
+	c_el.cfg("IDW").setS(path(),true);
 	SYS->db().at().dataDel( db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", c_el );
 
-	//-- Remove widget's user IO from library IO table --
+	//> Remove widget's user IO from library IO table
 	c_el.setElem(&mod->elWdgUIO());
-	c_el.cfg("IDW").setS(path());
-	c_el.cfg("ID").setS("");
+	c_el.cfg("IDW").setS(path(),true);
 	SYS->db().at().dataDel( db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", c_el );
 
-	//-- Remove widget's included widgets from library include table --
+	//> Remove widget's included widgets from library include table
 	c_el.setElem(&mod->elInclWdg());
-	c_el.cfg("IDW").setS(path());
-	c_el.cfg("ID").setS("");
+	c_el.cfg("IDW").setS(path(),true);
 	SYS->db().at().dataDel( db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", c_el );
     }
 }
@@ -800,11 +790,10 @@ void Page::load_( )
     //> Create new pages
     c_el.setElem(&mod->elPage());
     c_el.cfgViewAll(false);
-    c_el.cfg("OWNER").setS(ownerFullId()+"/"+id());
+    c_el.cfg("OWNER").setS(ownerFullId()+"/"+id(),true);
     for( int fld_cnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el); )
     {
 	string f_id = c_el.cfg("ID").getS();
-	c_el.cfg("ID").setS("");
 	if( !pagePresent(f_id) )
 	    try{ pageAdd(f_id,"",""); }
 	    catch(TError err) { mess_err(err.cat.c_str(),err.mess.c_str()); }
@@ -860,13 +849,11 @@ void Page::loadIO( )
     //> Load widget's user attributes
     tbl = ownerProj()->tbl()+"_uio";
     c_el.setElem(&mod->elWdgUIO());
-    c_el.cfg("IDW").setS(path());
-    c_el.cfg("ID").setS("");
+    c_el.cfg("IDW").setS(path(),true);
     for( int fld_cnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el); )
     {
 	string sid = c_el.cfg("ID").getS();
 	unsigned flg = c_el.cfg("IO_TYPE").getI();
-	c_el.cfg("ID").setS("");
 
 	if( !TSYS::pathLev(sid,1).empty() ) continue;
 	if( !attrPresent(sid) )
@@ -885,12 +872,10 @@ void Page::loadIO( )
     if( !enable() || !isContainer() ) return;
     c_el.setElem(&mod->elInclWdg());
     tbl=ownerProj()->tbl()+"_incl";
-    c_el.cfg("IDW").setS(path());
-    c_el.cfg("ID").setS("");
+    c_el.cfg("IDW").setS(path(),true);
     for( int fld_cnt=0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el); )
     {
 	string sid  = c_el.cfg("ID").getS();
-	c_el.cfg("ID").setS("");
 	if( c_el.cfg("PARENT").getS() == "<deleted>" )
 	{
 	    if( wdgPresent(sid) )	wdgDel(sid);
@@ -944,7 +929,7 @@ void Page::saveIO( )
 
     if( !enable() ) return;
 
-    //- Save widget's attributes -
+    //> Save widget's attributes
     string db  = ownerProj()->DB();
     string tbl = ownerProj()->tbl()+"_io";
     string utbl = ownerProj()->tbl()+"_uio";
@@ -953,14 +938,14 @@ void Page::saveIO( )
     TConfig c_el(&mod->elWdgIO());
     c_el.cfg("IDW").setS(path());
     TConfig c_elu(&mod->elWdgUIO());
-    c_elu.cfg("IDW").setS(path());
+    c_elu.cfg("IDW").setS(path(),true);
     for( int i_a = 0; i_a < als.size(); i_a++ )
     {
 	AutoHD<Attr> attr = attrAt(als[i_a]);
 	if( !attr.at().modif() || attr.at().flgGlob()&Attr::Generic )	continue;
 	if( !(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser )
 	{
-	    //-- User attribute store --
+	    //>> User attribute store
 	    c_elu.cfg("ID").setS(als[i_a]);
 	    c_elu.cfg("IO_VAL").setS(attr.at().getS()+"|"+
 				    attr.at().fld().values()+"|"+
@@ -974,7 +959,7 @@ void Page::saveIO( )
 	}
 	else
 	{
-	    //-- Work attribute store --
+	    //>> Work attribute store
 	    c_el.cfg("ID").setS(als[i_a]);
 	    c_el.cfg("IO_VAL").setS(attr.at().getS());
 	    c_el.cfg("SELF_FLG").setI(attr.at().flgSelf());
@@ -984,18 +969,16 @@ void Page::saveIO( )
 	}
     }
 
-    //- Clear no present IO for user io table -
-    c_elu.cfg("ID").setS("");
+    //> Clear no present IO for user io table
     c_elu.cfgViewAll(false);
     for( int fld_cnt=0; SYS->db().at().dataSeek(db+"."+utbl,mod->nodePath()+utbl,fld_cnt++,c_elu); )
     {
 	string sid = c_elu.cfg("ID").getS();
 	if( TSYS::pathLev(sid,1).empty() && !attrPresent(TSYS::pathLev(sid,0)) )
 	{
-	    SYS->db().at().dataDel(db+"."+utbl,mod->nodePath()+utbl,c_elu);
+	    SYS->db().at().dataDel(db+"."+utbl,mod->nodePath()+utbl,c_elu,true);
 	    fld_cnt--;
 	}
-	c_elu.cfg("ID").setS("");
     }
 }
 
@@ -1020,7 +1003,7 @@ void Page::wdgAdd( const string &wid, const string &name, const string &ipath )
     if( !isContainer() )  throw TError(nodePath().c_str(),_("Widget is not container!"));
     if( wdgPresent(wid) ) return;
 
-    //- Check for label <deleted> -
+    //> Check for label <deleted>
     string db = ownerProj()->DB();
     string tbl = ownerProj()->tbl()+"_incl";
     TConfig c_el( &mod->elInclWdg() );
@@ -1028,15 +1011,15 @@ void Page::wdgAdd( const string &wid, const string &name, const string &ipath )
     c_el.cfg("ID").setS(wid);
     if( SYS->db().at().dataGet( db+"."+tbl, mod->nodePath()+tbl, c_el ) && c_el.cfg("PARENT").getS() == "<deleted>" )
     {
-	if( !parent().at().wdgPresent(wid) )	SYS->db().at().dataDel( db+"."+tbl, mod->nodePath()+tbl, c_el );
+	if( !parent().at().wdgPresent(wid) )	SYS->db().at().dataDel( db+"."+tbl, mod->nodePath()+tbl, c_el, true );
 	return;
     }
 
-    //- Same widget add -
+    //> Same widget add
     chldAdd(inclWdg,new PageWdg(wid,ipath));
     wdgAt(wid).at().setName(name);
 
-    //- Call heritors include widgets update -
+    //> Call heritors include widgets update
     for( int i_h = 0; i_h < m_herit.size(); i_h++ )
 	if( m_herit[i_h].at().enable( ) )
 	    m_herit[i_h].at().inheritIncl(wid);
@@ -1368,13 +1351,11 @@ void PageWdg::loadIO( )
     //> Load widget's user attributes
     tbl = ownerPage().ownerProj()->tbl()+"_uio";
     c_el.setElem(&mod->elWdgUIO());
-    c_el.cfg("IDW").setS(ownerPage().path());
-    c_el.cfg("ID").setS("");
+    c_el.cfg("IDW").setS(ownerPage().path(),true);
     for( int fld_cnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el); )
     {
 	string sid = c_el.cfg("ID").getS();
 	unsigned flg = c_el.cfg("IO_TYPE").getI();
-	c_el.cfg("ID").setS("");
 
 	if( TSYS::pathLev(sid,0) == id() && !TSYS::pathLev(sid,1).empty() )
 	    sid = TSYS::pathLev(sid,1);
@@ -1408,24 +1389,21 @@ void PageWdg::save_( )
 	    mParent = "<deleted>";
 	    SYS->db().at().dataSet( db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this );
 	}
-	else SYS->db().at().dataDel( db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this );	
+	else SYS->db().at().dataDel( db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this, true );
 
 	//>> Remove widget's work and users IO from library IO table
 	TConfig c_el( &mod->elWdgIO() );
-	c_el.cfg("IDW").setS( ownerPage().path() );
+	c_el.cfg("IDW").setS( ownerPage().path(), true );
 	for( int i_a = 0; i_a < m_attrs.size(); i_a++ )
 	{
-	    c_el.cfg("ID").setS(id()+"/"+m_attrs[i_a]);
+	    c_el.cfg("ID").setS(id()+"/"+m_attrs[i_a],true);
 	    SYS->db().at().dataDel( db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", c_el );
 	}
 	c_el.setElem(&mod->elWdgUIO());
-	c_el.cfg("IDW").setS( ownerPage().path() );
+	c_el.cfg("IDW").setS( ownerPage().path(), true );
 	for( int io_cnt = 0; SYS->db().at().dataSeek( db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", io_cnt++, c_el ); )
-	{
 	    if( c_el.cfg("ID").getS().find(id()+"/") == 0 )
-	    { SYS->db().at().dataDel( db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", c_el ); io_cnt--; }
-	    c_el.cfg("ID").setS("");
-	}
+	    { SYS->db().at().dataDel( db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", c_el, true ); io_cnt--; }
     }
     //> Save widget's data
     else
@@ -1464,7 +1442,7 @@ void PageWdg::saveIO( )
 
     if( !enable() ) return;
 
-    //- Save widget's attributes -
+    //> Save widget's attributes
     string db  = ownerPage().ownerProj()->DB();
     string tbl = ownerPage().ownerProj()->tbl()+"_io";
     string utbl = ownerPage().ownerProj()->tbl()+"_uio";
@@ -1473,14 +1451,14 @@ void PageWdg::saveIO( )
     TConfig c_el(&mod->elWdgIO());
     c_el.cfg("IDW").setS(ownerPage().path());
     TConfig c_elu(&mod->elWdgUIO());
-    c_elu.cfg("IDW").setS(ownerPage().path());
+    c_elu.cfg("IDW").setS(ownerPage().path(),true);
     for( int i_a = 0; i_a < als.size(); i_a++ )
     {
 	AutoHD<Attr> attr = attrAt(als[i_a]);
 	if( !attr.at().modif() || attr.at().flgGlob()&Attr::Generic )	continue;
 	if( !(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser )
 	{
-	    //-- User attribute store --
+	    //>> User attribute store
 	    c_elu.cfg("ID").setS( id()+"/"+als[i_a] );
 	    c_elu.cfg("IO_VAL").setS(attr.at().getS()+"|"+
 				    attr.at().fld().values()+"|"+
@@ -1494,7 +1472,7 @@ void PageWdg::saveIO( )
 	}
 	else
 	{
-	    //-- Work attribute store --
+	    //>> Work attribute store
 	    c_el.cfg("ID").setS( id()+"/"+als[i_a] );
 	    c_el.cfg("IO_VAL").setS(attr.at().getS());
 	    c_el.cfg("SELF_FLG").setI(attr.at().flgSelf());
@@ -1503,18 +1481,16 @@ void PageWdg::saveIO( )
 	    SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,c_el);
 	}
     }
-    //- Clear no present IO for user io table -
-    c_elu.cfg("ID").setS("");
+    //> Clear no present IO for user io table
     c_elu.cfgViewAll(false);
     for( int fld_cnt=0; SYS->db().at().dataSeek(db+"."+utbl,mod->nodePath()+utbl,fld_cnt++,c_elu); )
     {
 	string sid = c_elu.cfg("ID").getS();
 	if( TSYS::pathLev(sid,0) == id() && TSYS::pathLev(sid,1).size() && !attrPresent(TSYS::pathLev(sid,1)) )
 	{
-	    SYS->db().at().dataDel(db+"."+utbl,mod->nodePath()+utbl,c_elu);
+	    SYS->db().at().dataDel(db+"."+utbl,mod->nodePath()+utbl,c_elu,true);
 	    fld_cnt--;
 	}
-	c_elu.cfg("ID").setS("");
     }
 }
 

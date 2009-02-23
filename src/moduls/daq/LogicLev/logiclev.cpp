@@ -328,8 +328,7 @@ void TMdPrm::postDisable(int flag)
 	{
 	    string io_bd = owner().DB()+"."+owner().cfg(type().db).getS()+"_io";
 	    TConfig cfg(&mod->prmIOE());
-	    cfg.cfg("PRM_ID").setS(id());
-	    cfg.cfg("ID").setS("");
+	    cfg.cfg("PRM_ID").setS(id(),true);
 	    SYS->db().at().dataDel(io_bd,owner().owner().nodePath()+owner().cfg(type().db).getS()+"_io",cfg);
 	}
     }catch(TError err)

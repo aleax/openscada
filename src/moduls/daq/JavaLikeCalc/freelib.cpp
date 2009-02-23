@@ -80,10 +80,10 @@ void Lib::postDisable( int flag )
 {
     if( flag && DB().size() )
     {
-	//- Delete libraries record -
-	SYS->db().at().dataDel(DB()+"."+mod->libTable(),mod->nodePath()+"lib/",*this);
+	//> Delete libraries record
+	SYS->db().at().dataDel(DB()+"."+mod->libTable(),mod->nodePath()+"lib/",*this,true);
 
-	//- Delete function's files -
+	//> Delete function's files
 	SYS->db().at().open(fullDB());
 	SYS->db().at().close(fullDB(),true);
 
@@ -110,17 +110,14 @@ void Lib::load_( )
 
     SYS->db().at().dataGet(DB()+"."+mod->libTable(),mod->nodePath()+"lib/",*this);
 
-    //- Load functions -
+    //> Load functions
     TConfig c_el(&mod->elFnc());
     c_el.cfgViewAll(false);
     for( int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl(), fld_cnt++,c_el); )
     {
 	string f_id = c_el.cfg("ID").getS();
-
 	if( !present(f_id) )	add(f_id.c_str());
 	at(f_id).at().load();
-
-	c_el.cfg("ID").setS("");
     }
 }
 

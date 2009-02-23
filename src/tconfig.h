@@ -57,8 +57,10 @@ class TCfg
 	bool operator==( TCfg &cfg );
 	TCfg &operator=( TCfg &cfg );
 
-	bool	view( )			{ return m_view; }
-	void	setView( bool vw )	{ m_view = vw; }
+	bool	view( )			{ return mView; }
+	bool	keyUse( )		{ return mKeyUse; }
+	void	setView( bool vw )	{ mView = vw; }
+	void	setKeyUse( bool vl )	{ if( fld().flg()&Key ) mKeyUse = vl; }
 
 	TFld &fld( )			{ return *mFld; }
 
@@ -74,11 +76,11 @@ class TCfg
 	int	&getId( );
 	bool	&getBd( );
 
-	void setSEL( const string &val, bool forcView = false );
-	void setS( const string &val, bool forcView = false );
-	void setR( double val, bool forcView = false );
-	void setI( int val, bool forcView = false );
-	void setB( bool val, bool forcView = false );
+	void setSEL( const string &val, bool forcUse = false );
+	void setS( const string &val, bool forcUse = false );
+	void setR( double val, bool forcUse = false );
+	void setI( int val, bool forcUse = false );
+	void setB( bool val, bool forcUse = false );
 
     private:
 	//Data
@@ -91,7 +93,8 @@ class TCfg
 	}m_val;
 
 	//Attributes
-	bool m_view;
+	char mView	: 1;
+	char mKeyUse	: 1;
 
 	TFld	*mFld;
 	TConfig	&mOwner;
@@ -117,6 +120,7 @@ class TConfig: public TValElem
 	bool cfgPresent( const string &n_val );
 	TCfg &cfg( const string &n_val );
 	void cfgViewAll( bool val = true );	//Hide all no key elements
+	void cfgKeyUseAll( bool val );
 
 	TElem &elem( );
 	void setElem( TElem *Elements, bool first = false );

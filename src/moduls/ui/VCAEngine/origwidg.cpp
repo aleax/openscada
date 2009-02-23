@@ -741,7 +741,7 @@ void OrigProtocol::postEnable( int flag )
 	attrAdd( new TFld("lev",_("Level"),TFld::Integer,TFld::NoFlag,"","0","","","29") );
 //	attrAdd( new TFld("viewOrd",_("View order"),TFld::Integer,TFld::Selected,"","0",
 //	    "0;1;2",_("On time;On level;On level and trigered"),"30") );
-	attrAdd( new TFld("col",_("View columns"),TFld::String,TFld::NoFlag,"","pos;tm;lev;cat;mess","","","31") );
+	attrAdd( new TFld("col",_("View columns"),TFld::String,TFld::NoFlag,"","pos;tm;utm;lev;cat;mess","","","31") );
 //	attrAdd( new TFld("itProp",_("Items properties"),TFld::Integer,Attr::Active,"","0","0;10","","32") );
     }
 }
@@ -1033,9 +1033,10 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
     funcIO.ioIns( new IO("rTimeU",_("Repeat time (us)"),IO::Integer,IO::Default),5);
     funcIO.ioIns( new IO("rPer",_("Repeat period"),IO::Real,IO::Default),6);
     funcIO.ioIns( new IO("mTime",_("Message time"),IO::Integer,IO::Default),7);
-    funcIO.ioIns( new IO("mLev",_("Message level"),IO::Integer,IO::Default),8);
-    funcIO.ioIns( new IO("mCat",_("Message category"),IO::String,IO::Default),9);
-    funcIO.ioIns( new IO("mVal",_("Message value"),IO::String,IO::Default),10);
+    funcIO.ioIns( new IO("mTimeU",_("Message time (microsec.)"),IO::Integer,IO::Default),8);
+    funcIO.ioIns( new IO("mLev",_("Message level"),IO::Integer,IO::Default),9);
+    funcIO.ioIns( new IO("mCat",_("Message category"),IO::String,IO::Default),10);
+    funcIO.ioIns( new IO("mVal",_("Message value"),IO::String,IO::Default),11);
     //>> Add user io
     wdg->attrList(als);
     for( int i_a = 0; i_a < als.size(); i_a++ )
@@ -1063,11 +1064,11 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
 	funcV.setI(2,wdg->attrAt("bTime").at().getI());
 	funcV.setI(3,lstTime);
 	//>> Load values of user IO
-	for( int i_a = 11; i_a < funcV.ioSize( ); i_a++ )
+	for( int i_a = 12; i_a < funcV.ioSize( ); i_a++ )
 	    funcV.setS(i_a,wdg->attrAt(funcV.func()->io(i_a)->id()).at().getS());
     }catch( TError err )
     {
-	mess_err(nodePath().c_str(),_("Compile function for document is error: %s"),err.mess.c_str());
+	mess_err(wdg->nodePath().c_str(),_("Compile function for document is error: %s"),err.mess.c_str());
 	return "";
     }
 
@@ -1107,7 +1108,7 @@ void OrigDocument::nodeProcess( XMLNode *xcur, TValFunc &funcV, TFunction &funcI
 	    if( instrDel )	xcur->prcInstrDel("dp");
 	}
 	catch( TError err )
-	{ mess_err(nodePath().c_str(),_("Instruction processing error: %s"),err.mess.c_str()); }
+	{ mess_err(nodePath().c_str(),_("Instruction proc <%s> error: %s"),TSYS::strSepParse(iLang,1,'.').c_str(),err.mess.c_str()); }
     }
 
     float dRpt;
@@ -1171,13 +1172,14 @@ void OrigDocument::nodeProcess( XMLNode *xcur, TValFunc &funcV, TFunction &funcI
 		    rCnt++;
 		}
 		funcV.setI(7,mess[i_r].time);
-		funcV.setI(8,mess[i_r].level);
-		funcV.setS(9,mess[i_r].categ);
-		funcV.setS(10,mess[i_r].mess);
+		funcV.setI(8,mess[i_r].utime);
+		funcV.setI(9,mess[i_r].level);
+		funcV.setS(10,mess[i_r].categ);
+		funcV.setS(11,mess[i_r].mess);
 		nodeProcess(reptN,funcV,funcIO,iLang);
 		reptN->setAttr("docRptEnd","1");
 	    }
-	    funcV.setI(7,0); funcV.setI(8,0); funcV.setS(9,""); funcV.setS(10,"");
+	    funcV.setI(7,0); funcV.setI(8,0); funcV.setI(9,0); funcV.setS(10,""); funcV.setS(11,"");
 	    if( docRevers ) i_c += rCnt;
 	}
 	else nodeProcess(xcur->childGet(i_c),funcV,funcIO,iLang,instrDel);

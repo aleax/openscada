@@ -135,12 +135,12 @@ string ModVArchEl::archTbl( )
 
 void ModVArchEl::fullErase()
 {
-    //- Remove info record -
+    //> Remove info record
     TConfig cfg(&mod->archEl());
-    cfg.cfg("TBL").setS(archTbl());
+    cfg.cfg("TBL").setS(archTbl(),true);
     SYS->db().at().dataDel(archivator().addr()+"."+mod->mainTbl(),"",cfg);
 
-    //- Remove archive's DB table -
+    //> Remove archive's DB table
     SYS->db().at().open( archivator().addr()+"."+archTbl() );
     SYS->db().at().close( archivator().addr()+"."+archTbl(), true );
 }
@@ -341,14 +341,14 @@ void ModVArchEl::setVal( TValBuf &buf, long long beg, long long end )
 	m_end = m_end ? vmax(m_end,ctm) : ctm;
     }
 
-    //- Archive size limit process -
+    //> Archive size limit process
     if( (m_end-m_beg) > (long long)(archivator().maxSize()*3600000000.) )
     {
 	long long n_end = ((m_end-(long long)(archivator().maxSize()*3600000000.))/period())*period();
 	for( long long t_c = vmax(m_beg,n_end-3600ll*period()); t_c < n_end; t_c+=period() )
 	{
-	    cfg.cfg("TM").setI(t_c/1000000);
-	    cfg.cfg("TMU").setI(t_c%1000000);
+	    cfg.cfg("TM").setI(t_c/1000000,true);
+	    cfg.cfg("TMU").setI(t_c%1000000,true);
 	    tbl.at().fieldDel(cfg);
 	}
 	m_beg=n_end;

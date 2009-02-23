@@ -102,7 +102,6 @@ void TDAQS::load_( )
 	    for( int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+tmplLibTable(),"",lib_cnt++,c_el); )
 	    {
 		string l_id = c_el.cfg("ID").getS();
-		c_el.cfg("ID").setS("");
 		if(!tmplLibPresent(l_id)) tmplLibReg(new TPrmTmplLib(l_id.c_str(),"",(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]));
 	    }
 
@@ -112,7 +111,6 @@ void TDAQS::load_( )
 	    {
 		string l_id = c_el.cfg("ID").getS();
 		if(!tmplLibPresent(l_id)) tmplLibReg(new TPrmTmplLib(l_id.c_str(),"","*.*"));
-		c_el.cfg("ID").setS("");
 	    }
     }catch( TError err )
     {
@@ -148,7 +146,6 @@ void TDAQS::load_( )
 			mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 			mess_err(nodePath().c_str(),_("Add controller <%s> error."),m_id.c_str());
 		    }
-		    g_cfg.cfg("ID").setS("");
 		}
 	    //>> Search into config file and create new controllers
 	    if( SYS->chkSelDB("<cfg>") )
@@ -161,7 +158,6 @@ void TDAQS::load_( )
 			mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 			mess_err(nodePath().c_str(),_("Add controller <%s> error."),m_id.c_str());
 		    }
-		    g_cfg.cfg("ID").setS("");
 		}
 	}
     }catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }

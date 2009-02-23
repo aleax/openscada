@@ -109,10 +109,7 @@ void TTransportS::load_( )
 	    {
 		id   = c_el.cfg("ID").getS();
 		type = c_el.cfg("MODULE").getS();
-		if( !at(type).at().inPresent(id) )
-		    at(type).at().inAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
-		c_el.cfg("ID").setS("");
-		c_el.cfg("MODULE").setS("");
+		if( !at(type).at().inPresent(id) ) at(type).at().inAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
 	    }
 
 	//>>> Search into config file
@@ -122,8 +119,6 @@ void TTransportS::load_( )
 		id   = c_el.cfg("ID").getS();
 		type = c_el.cfg("MODULE").getS();
 		if( !at(type).at().inPresent(id) ) at(type).at().inAdd(id,"*.*");
-		c_el.cfg("ID").setS("");
-		c_el.cfg("MODULE").setS("");
 	    }
 
     }catch( TError err )
@@ -146,10 +141,7 @@ void TTransportS::load_( )
 	    {
 		id = c_el.cfg("ID").getS();
 		type = c_el.cfg("MODULE").getS();
-		if( !at(type).at().outPresent(id) )
-		    at(type).at().outAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
-		c_el.cfg("ID").setS("");
-		c_el.cfg("MODULE").setS("");
+		if( !at(type).at().outPresent(id) ) at(type).at().outAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
 	    }
 	//>>> Search into config file
 	if( SYS->chkSelDB("<cfg>") )
@@ -158,8 +150,6 @@ void TTransportS::load_( )
 		id = c_el.cfg("ID").getS();
 		type = c_el.cfg("MODULE").getS();
 		if( !at(type).at().outPresent(id) ) at(type).at().outAdd(id,"*.*");
-		c_el.cfg("ID").setS("");
-		c_el.cfg("MODULE").setS("");
 	    }
     }catch( TError err )
     {
@@ -182,8 +172,6 @@ void TTransportS::load_( )
 	    host.user		= c_el.cfg("USER").getS();
 	    host.pass		= c_el.cfg("PASS").getS();
 	    extHostSet(host);
-	    c_el.cfg("OP_USER").setS("");
-	    c_el.cfg("ID").setS("");
 	}
     }catch( TError err )
     {
@@ -194,7 +182,7 @@ void TTransportS::load_( )
 
 void TTransportS::save_( )
 {
-    //- Save external transports -
+    //> Save external transports
     ResAlloc res(extHostRes,false);
     TConfig c_el(&el_ext);
     for( int i_h = 0; i_h < extHostLs.size(); i_h++ )
@@ -208,20 +196,14 @@ void TTransportS::save_( )
 	c_el.cfg("PASS").setS(extHostLs[i_h].pass);
 	SYS->db().at().dataSet(extHostsDB(),nodePath()+"ExtTansp/",c_el);
     }
-    //-- Clear external transports --
-    c_el.cfg("OP_USER").setS("");
-    c_el.cfg("ID").setS("");
+    //> Clear external transports
     c_el.cfgViewAll(false);
     for( int fld_cnt=0; SYS->db().at().dataSeek(extHostsDB(),nodePath()+"ExtTansp/",fld_cnt++,c_el); )
-    {
 	if( !extHostGet(c_el.cfg("OP_USER").getS(),c_el.cfg("ID").getS()).id.size() )
 	{
-	    SYS->db().at().dataDel(extHostsDB(),nodePath()+"ExtTansp/",c_el);
+	    SYS->db().at().dataDel(extHostsDB(),nodePath()+"ExtTansp/",c_el,true);
 	    fld_cnt--;
 	}
-	c_el.cfg("OP_USER").setS("");
-	c_el.cfg("ID").setS("");
-    }
 }
 
 void TTransportS::subStart( )
@@ -582,7 +564,7 @@ void TTransportIn::postDisable(int flag)
 {
     try
     {
-        if( flag ) SYS->db().at().dataDel(fullDB(),SYS->transport().at().nodePath()+tbl(),*this);
+        if( flag ) SYS->db().at().dataDel(fullDB(),SYS->transport().at().nodePath()+tbl(),*this,true);
     }catch(TError err)
     { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
@@ -730,7 +712,7 @@ void TTransportOut::postDisable(int flag)
 {
     try
     {
-	if( flag ) SYS->db().at().dataDel(fullDB(),SYS->transport().at().nodePath()+tbl(),*this);
+	if( flag ) SYS->db().at().dataDel(fullDB(),SYS->transport().at().nodePath()+tbl(),*this,true);
     }catch(TError err)
     { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }

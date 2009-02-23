@@ -2214,12 +2214,13 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	shD->indMap.clear();
 	string clm;
 	for( int c_off = 0; (clm=TSYS::strSepParse(shD->col,0,';',&c_off)).size(); )
-	    if( clm == "tm" || clm == "lev" || clm == "cat" || clm == "mess" )
+	    if( clm == "tm" || clm == "utm" || clm == "lev" || clm == "cat" || clm == "mess" )
 	    {
 		int ncl = shD->addrWdg->columnCount();
 		shD->addrWdg->setColumnCount(ncl+1);
 		shD->addrWdg->setHorizontalHeaderItem(ncl,new QTableWidgetItem());
 		if( clm == "tm" )	shD->addrWdg->horizontalHeaderItem(ncl)->setText(_("Time"));
+		else if( clm == "utm" )	shD->addrWdg->horizontalHeaderItem(ncl)->setText(_("mcsec"));
 		else if( clm == "lev" )	shD->addrWdg->horizontalHeaderItem(ncl)->setText(_("Level"));
 		else if( clm == "cat" )	shD->addrWdg->horizontalHeaderItem(ncl)->setText(_("Category"));
 		else if( clm == "mess" )shD->addrWdg->horizontalHeaderItem(ncl)->setText(_("Message"));
@@ -2267,9 +2268,9 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
     if( valEnd && tTime >= valEnd )	{ tTimeGrnd = valEnd; toUp = true; }
     else if( valBeg && tTimeGrnd < valBeg )	tTime = valBeg-1;
     //> Get values data -
-    unsigned int rtm;			//Record's data
-    QDateTime    dtm;
-    QString   rlev, rcat, rmess;	//Record's level category and message
+    unsigned int rtm;				//Record's data
+    QDateTime	dtm;
+    QString	rutm, rlev, rcat, rmess;	//Record's level category and message
 
     XMLNode req("get");
     req.clear()->
@@ -2284,10 +2285,11 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
     bool newFill = (shD->addrWdg->rowCount()==0);
 
     //> Get collumns indexes -
-    int c_tm   = shD->indMap.value("tm",-1),
-	c_lev  = shD->indMap.value("lev",-1),
-	c_cat  = shD->indMap.value("cat",-1),
-	c_mess = shD->indMap.value("mess",-1);
+    int c_tm	= shD->indMap.value("tm",-1),
+	c_tmu	= shD->indMap.value("utm",-1),
+	c_lev	= shD->indMap.value("lev",-1),
+	c_cat	= shD->indMap.value("cat",-1),
+	c_mess	= shD->indMap.value("mess",-1);
 
     QTableWidgetItem *tit;
     //> Process records
@@ -2298,6 +2300,7 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 
 	    //>> Get parameters
 	    rtm  = strtoul(rcd->attr("time").c_str(),0,10);
+	    rutm = rcd->attr("utime").c_str();
 	    rlev = rcd->attr("lev").c_str();
 	    rcat = rcd->attr("cat").c_str();
 	    rmess = rcd->text().c_str();
@@ -2307,7 +2310,8 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	    for( i_p = 0; i_p < shD->addrWdg->rowCount(); i_p++ )
 	    {
 		if( rtm > shD->addrWdg->item(0,0)->data(Qt::UserRole).toUInt() && i_p )	continue;
-		if( (c_lev<0 || shD->addrWdg->item(i_p,c_lev)->text() == rlev) &&
+		if( (c_tmu<0 || shD->addrWdg->item(i_p,c_tmu)->text() == rutm) &&
+			(c_lev<0 || shD->addrWdg->item(i_p,c_lev)->text() == rlev) &&
 			(c_cat<0 || shD->addrWdg->item(i_p,c_cat)->text() == rcat) &&
 			(c_mess<0 || shD->addrWdg->item(i_p,c_mess)->text() == rmess ) )
 		    break;
@@ -2321,6 +2325,7 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 		shD->addrWdg->setItem( 0, c_tm, tit=new QTableWidgetItem(dtm.toString("dd.MM.yyyy hh:mm:ss")) );
 		tit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
 	    }
+	    if( c_tmu >= 0 )	{ shD->addrWdg->setItem( 0, c_tmu, tit=new QTableWidgetItem(rutm) ); tit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable); }
 	    if( c_lev >= 0 )	{ shD->addrWdg->setItem( 0, c_lev, tit=new QTableWidgetItem(rlev) ); tit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable); }
 	    if( c_cat >= 0 )	{ shD->addrWdg->setItem( 0, c_cat, tit=new QTableWidgetItem(rcat) ); tit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable); }
 	    if( c_mess >= 0 )	{ shD->addrWdg->setItem( 0, c_mess, tit=new QTableWidgetItem(rmess) ); tit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable); }
@@ -2330,8 +2335,10 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	for( int i_req = req.childSize()-1; i_req >= 0; i_req-- )
 	{
 	    XMLNode *rcd = req.childGet(i_req);
+
 	    //>> Get parameters
 	    rtm  = strtoul(rcd->attr("time").c_str(),0,10);
+	    rutm = rcd->attr("utime").c_str();
 	    rlev = rcd->attr("lev").c_str();
 	    rcat = rcd->attr("cat").c_str();
 	    rmess = rcd->text().c_str();
@@ -2341,7 +2348,8 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	    for( i_p = shD->addrWdg->rowCount()-1; i_p >= 0; i_p-- )
 	    {
 		if( rtm < shD->addrWdg->item(0,0)->data(Qt::UserRole).toUInt() && (i_p<(shD->addrWdg->rowCount()-1)) )	continue;
-		if( (c_lev<0 || shD->addrWdg->item(i_p,c_lev)->text() == rlev) &&
+		if( (c_tmu<0 || shD->addrWdg->item(i_p,c_tmu)->text() == rutm) &&
+			(c_lev<0 || shD->addrWdg->item(i_p,c_lev)->text() == rlev) &&
 			(c_cat<0 || shD->addrWdg->item(i_p,c_cat)->text() == rcat)  &&
 			(c_mess<0 || shD->addrWdg->item(i_p,c_mess)->text() == rmess ) )
 		    break;
@@ -2357,6 +2365,7 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 		shD->addrWdg->setItem( row, c_tm, tit=new QTableWidgetItem(dtm.toString("dd.MM.yyyy hh:mm:ss")) );
 		tit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
 	    }
+	    if( c_tmu >= 0 )	{ shD->addrWdg->setItem( row, c_tmu, tit=new QTableWidgetItem(rutm) ); tit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable); }
 	    if( c_lev >= 0 )	{ shD->addrWdg->setItem( row, c_lev, tit=new QTableWidgetItem(rlev) ); tit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable); }
 	    if( c_cat >= 0 )	{ shD->addrWdg->setItem( row, c_cat, tit=new QTableWidgetItem(rcat) ); tit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable); }
 	    if( c_mess >= 0 )	{ shD->addrWdg->setItem( row, c_mess, tit=new QTableWidgetItem(rmess) ); tit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable); }

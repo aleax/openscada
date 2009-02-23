@@ -45,6 +45,7 @@ class TSubSYS : public TCntrNode
 
 	string subId( )		{ return m_id; }
 	string subName( );
+	bool subStartStat( )	{ return mStart; }
 
 	bool subModule( )	{ return m_mod_sys; }	//Module subsystem
 
@@ -66,6 +67,9 @@ class TSubSYS : public TCntrNode
     protected:
 	//Protected methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+
+	//Private attributes
+	bool	mStart;
 
     private:
 	//Private methods

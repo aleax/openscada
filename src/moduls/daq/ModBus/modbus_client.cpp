@@ -176,7 +176,6 @@ void TTpContr::load_( )
 	for( int fld_cnt = 0; SYS->db().at().dataSeek(serDevDB(),nodePath()+"sDevs/",fld_cnt,c_el); fld_cnt++ )
 	{
 	    string id = c_el.cfg("ID").getS();
-	    c_el.cfg("ID").setS("");
 	    try
 	    {
 		if( !serDevPresent(id) )	serDevAdd(id);
@@ -461,11 +460,11 @@ SSerial::SSerial( const string &iDev, TTpContr *iown ) :
 void SSerial::postDisable( int flag )
 {
     if( hasOpen() )	setOpen(false);
-    //- Delete serial device from DB -
+    //> Delete serial device from DB
     try
     {
 	if( flag )
-	    SYS->db().at().dataDel(owner().serDevDB(),mod->nodePath()+"sDevs/",*this);
+	    SYS->db().at().dataDel(owner().serDevDB(),mod->nodePath()+"sDevs/",*this,true);
     }catch(TError err)
     { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }

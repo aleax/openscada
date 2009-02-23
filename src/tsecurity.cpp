@@ -175,7 +175,6 @@ void TSecurity::load_( )
 	    {
 		name = g_cfg.cfg("NAME").getS();
 		if( !usrPresent(name) )	usrAdd(name,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
-		g_cfg.cfg("NAME").setS("");
 	    }
 
 	//>>> Search into config file
@@ -184,7 +183,6 @@ void TSecurity::load_( )
 	    {
 		name = g_cfg.cfg("NAME").getS();
 		if( !usrPresent(name) )	usrAdd(name,"*.*");
-		g_cfg.cfg("NAME").setS("");
 	    }
     }catch(TError err)
     {
@@ -206,7 +204,6 @@ void TSecurity::load_( )
 	    {
 		name = g_cfg.cfg("NAME").getS();
 		if( !grpPresent(name) )	grpAdd(name,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
-		g_cfg.cfg("NAME").setS("");
 	    }
 
 	//>>> Search into config file
@@ -215,7 +212,6 @@ void TSecurity::load_( )
 	    {
 		name = g_cfg.cfg("NAME").getS();
 		if( !grpPresent(name) )	grpAdd(name,"*.*");
-		g_cfg.cfg("NAME").setS("");
 	    }
     }catch(TError err)
     {
@@ -327,8 +323,8 @@ void TUser::postDisable(int flag)
     try
     {
 	if( flag )
-	    SYS->db().at().dataDel(fullDB(),owner().nodePath()+tbl(),*this);
-	//- Remove user from groups -
+	    SYS->db().at().dataDel(fullDB(),owner().nodePath()+tbl(),*this,true);
+	//> Remove user from groups
 	vector<string> gls;
 	owner().usrGrpList(name(),gls);
 	for(int i_g = 0; i_g < gls.size(); i_g++)
@@ -458,7 +454,7 @@ void TGroup::postDisable(int flag)
     try
     {
 	if( flag )
-	    SYS->db().at().dataDel(fullDB(),owner().nodePath()+tbl(),*this);
+	    SYS->db().at().dataDel(fullDB(),owner().nodePath()+tbl(),*this,true);
     }catch(TError err)
     { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }

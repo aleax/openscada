@@ -141,12 +141,12 @@ void Func::loadIO( )
     TConfig cfg(&mod->elFncIO());
 
     vector<string> u_pos;
-    cfg.cfg("F_ID").setS(id());
+    cfg.cfg("F_ID").setS(id(),true);
     for( int fld_cnt=0; SYS->db().at().dataSeek(owner().fullDB()+"_io",mod->nodePath()+owner().tbl()+"_io",fld_cnt++,cfg); )
     {
 	string sid = cfg.cfg("ID").getS();
 
-	//- Position storing -
+	//> Position storing
 	int pos = cfg.cfg("POS").getI();
 	while( u_pos.size() <= pos )    u_pos.push_back("");
 	u_pos[pos] = sid;
@@ -154,17 +154,15 @@ void Func::loadIO( )
 	if( ioId(sid) < 0 )
 	    ioIns( new IO(sid.c_str(),"",IO::Real,IO::Default), pos );
 
-	//- Set values -
+	//> Set values
 	int id = ioId(sid);
 	io(id)->setName(cfg.cfg("NAME").getS());
 	io(id)->setType((IO::Type)cfg.cfg("TYPE").getI());
 	io(id)->setFlg(cfg.cfg("MODE").getI());
 	io(id)->setDef(cfg.cfg("DEF").getS());
 	io(id)->setHide(cfg.cfg("HIDE").getB());
-
-	cfg.cfg("ID").setS("");
     }
-    //- Position fixing -
+    //> Position fixing
     for( int i_p = 0; i_p < u_pos.size(); i_p++ )
     {
 	if( u_pos[i_p].empty() ) continue;
@@ -191,8 +189,8 @@ void Func::saveIO( )
     string io_bd = owner().fullDB()+"_io";
     string io_cfgpath = mod->nodePath()+owner().tbl()+"_io/";
 
-    //- Save allow IO -
-    cfg.cfg("F_ID").setS(id());
+    //> Save allow IO
+    cfg.cfg("F_ID").setS(id(),true);
     for( int i_io = 0; i_io < ioSize(); i_io++ )
     {
 	cfg.cfg("ID").setS(io(i_io)->id());
@@ -205,35 +203,30 @@ void Func::saveIO( )
 	SYS->db().at().dataSet(io_bd,io_cfgpath,cfg);
     }
 
-    //- Clear IO -
-    cfg.cfg("ID").setS("");
+    //> Clear IO
     cfg.cfgViewAll(false);
     for( int fld_cnt=0; SYS->db().at().dataSeek(io_bd,io_cfgpath,fld_cnt++,cfg ); )
-    {
 	if( ioId(cfg.cfg("ID").getS()) < 0 )
 	{
-	    SYS->db().at().dataDel(io_bd,io_cfgpath,cfg);
+	    SYS->db().at().dataDel(io_bd,io_cfgpath,cfg,true);
 	    fld_cnt--;
 	}
-	cfg.cfg("ID").setS("");
-    }
 }
 
 void Func::del( )
 {
     if( !owner().DB().size() )  return;
 
-    SYS->db().at().dataDel(owner().fullDB(),mod->nodePath()+owner().tbl(),*this);
+    SYS->db().at().dataDel(owner().fullDB(),mod->nodePath()+owner().tbl(),*this,true);
 
-    //- Delete io from DB -
+    //> Delete io from DB
     delIO( );
 }
 
 void Func::delIO( )
 {
     TConfig cfg(&mod->elFncIO());
-    cfg.cfg("F_ID").setS(id());
-    cfg.cfg("ID").setS("");
+    cfg.cfg("F_ID").setS(id(),true);
     SYS->db().at().dataDel(owner().fullDB()+"_io",mod->nodePath()+owner().tbl()+"_io",cfg);
 }
 

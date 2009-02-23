@@ -255,7 +255,6 @@ void TipContr::load_( )
 	    {
 		string l_id = c_el.cfg("ID").getS();
 		if(!lbPresent(l_id)) lbReg(new Lib(l_id.c_str(),"",(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]));
-		c_el.cfg("ID").setS("");
 	    }
 
 	//>> Search into config file
@@ -264,7 +263,6 @@ void TipContr::load_( )
 	    {
 		string l_id = c_el.cfg("ID").getS();
 		if(!lbPresent(l_id)) lbReg(new Lib(l_id.c_str(),"","*.*"));
-		c_el.cfg("ID").setS("");
 	    }
     }catch( TError err )
     {
@@ -413,18 +411,14 @@ void Contr::loadFunc( )
     {
 	((Func *)func())->load();
 
-	//- Load values -
+	//> Load values
 	TConfig cfg(&mod->elVal());
 	string bd_tbl = TController::id()+"_val";
 	string bd = DB()+"."+bd_tbl;
 
-	int fld_cnt=0;
-	while( SYS->db().at().dataSeek(bd,mod->nodePath()+bd_tbl,fld_cnt++,cfg) )
-	{
+	for( int fld_cnt=0; SYS->db().at().dataSeek(bd,mod->nodePath()+bd_tbl,fld_cnt++,cfg); )
 	    if( func()->ioId(cfg.cfg("ID").getS()) >= 0 )
 		setS(func()->ioId(cfg.cfg("ID").getS()),cfg.cfg("VAL").getS());
-	    cfg.cfg("ID").setS("");
-	}
     }
 }
 
@@ -436,7 +430,7 @@ void Contr::save_( )
     {
 	((Func *)func())->save();
 
-	//- Save values -
+	//> Save values
 	TConfig cfg(&mod->elVal());
 	string bd_tbl = TController::id()+"_val";
 	string val_bd = DB()+"."+bd_tbl;
@@ -447,19 +441,14 @@ void Contr::save_( )
 	    SYS->db().at().dataSet(val_bd,mod->nodePath()+bd_tbl,cfg);
 	}
 
-	//- Clear VAL -
-	int fld_cnt=0;
-	cfg.cfg("ID").setS("");
+	//> Clear VAL
 	cfg.cfgViewAll(false);
-	while( SYS->db().at().dataSeek(val_bd,mod->nodePath()+bd_tbl,fld_cnt++,cfg) )
-	{
+	for( int fld_cnt=0; SYS->db().at().dataSeek(val_bd,mod->nodePath()+bd_tbl,fld_cnt++,cfg); )
 	    if( ioId(cfg.cfg("ID").getS()) < 0 )
 	    {
-		SYS->db().at().dataDel(val_bd,mod->nodePath()+bd_tbl,cfg);
+		SYS->db().at().dataDel(val_bd,mod->nodePath()+bd_tbl,cfg,true);
 		fld_cnt--;
 	    }
-	    cfg.cfg("ID").setS("");
-	}
     }
 }
 
