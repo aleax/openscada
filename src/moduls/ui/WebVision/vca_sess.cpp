@@ -78,7 +78,7 @@ void VCASess::getReq( SSess &ses )
 	ses.page = mod->httpHead("200 OK",ses.page.size())+ses.page;
 
 	//>> Cache clear
-	ResAlloc res(nodeAccess(),true);
+	ResAlloc res(nodeRes(),true);
 	mCacheRes.clear();
     }
     //> Session/projects icon
@@ -246,7 +246,7 @@ string VCASess::resGet( const string &res, const string &path, const string &use
 
 string VCASess::cacheResGet( const string &res, string *mime )
 {
-    ResAlloc resAlc(nodeAccess(),false);
+    ResAlloc resAlc(nodeRes(),false);
     map<string,CacheEl>::iterator ires = mCacheRes.find(res);
     if( ires == mCacheRes.end() ) return "";
     ires->second.tm = time(NULL);
@@ -257,7 +257,7 @@ string VCASess::cacheResGet( const string &res, string *mime )
 void VCASess::cacheResSet( const string &res, const string &val, const string &mime )
 {
     if( val.size() > 1024*1024 ) return;
-    ResAlloc resAlc(nodeAccess(),true);
+    ResAlloc resAlc(nodeRes(),true);
     mCacheRes[res] = CacheEl(time(NULL),val,mime);
     if( mCacheRes.size() > 100 )
     {

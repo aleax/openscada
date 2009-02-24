@@ -1,3 +1,9 @@
+2009-02-24 Roman
+- !!!:/SYS,/UI/VCAEngine: Realised object TVariant for storing different data types.
+    The object is used for direct access to system's ("id" and "path") atributes of widgets of UI.VCAEngine.
+- !:/SYS: TCntrNode::nodeAccess() is renamed to TCntrNode::nodeRes().
+
+
 2009-02-23 Roman
 - !!!!:/Config,/DB,/DB/DBF,/DB/MySQL,/DB/SQLite,/DB/FireBird: The special flag for key using into requests dataSeek() and dataDel() is added 
     Allow select all types keys, not only string. All objects is used new flag now. The subsystem's archive modules API version rise to 2.

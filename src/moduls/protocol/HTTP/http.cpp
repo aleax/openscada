@@ -134,7 +134,7 @@ TProtocolIn *TProt::in_open( const string &name )
 int TProt::sesOpen( string name )
 {
     int sess_id;
-    ResAlloc res(nodeAccess(),true);
+    ResAlloc res(nodeRes(),true);
 
     //> Get free identifier
     do{ sess_id = rand(); }
@@ -152,7 +152,7 @@ string TProt::sesCheck( int sid )
     map<int,SAuth>::iterator authEl;
 
     //> Check for close old sessions
-    ResAlloc res(nodeAccess(),true);
+    ResAlloc res(nodeRes(),true);
     if( cur_tm > lst_ses_chk+10 )
     {
 	for( authEl = mAuth.begin(); authEl != mAuth.end(); )

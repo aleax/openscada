@@ -116,11 +116,11 @@ void Widget::postEnable( int flag )
     if( flag&TCntrNode::NodeRestore )	setEnable(true);
     if( flag&TCntrNode::NodeConnect )
     {
-	//- Add main attributes -
-	attrAdd( new TFld("id",_("Id"),TFld::String,TFld::NoWrite|Attr::Generic) );
+	//> Add main attributes
+	attrAdd( new TFld("id",_("Id"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic) );
 	attrAdd( new TFld("name",_("Name"),TFld::String,Attr::Generic) );
 	attrAdd( new TFld("dscr",_("Description"),TFld::String,TFld::FullText|Attr::Generic) );
-	attrAdd( new TFld("path",_("Path"),TFld::String,TFld::NoWrite|Attr::Generic) );
+	attrAdd( new TFld("path",_("Path"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic) );
 	attrAdd( new TFld("en",_("Enabled"),TFld::Boolean,Attr::Generic,"","1","","","5") );
 	attrAdd( new TFld("active",_("Active"),TFld::Boolean,Attr::Active,"","0","","","6") );
 	attrAdd( new TFld("geomX",_("Geometry:x"),TFld::Real,Attr::Generic,"","0","0;10000","","7") );
@@ -134,8 +134,8 @@ void Widget::postEnable( int flag )
 	attrAdd( new TFld("evProc",_("Events process"),TFld::String,TFld::FullText,"200") );
     }
 
-    attrAt("id").at().setS(id());	attrAt("id").at().setModif(0);
-    attrAt("path").at().setS(path());	attrAt("path").at().setModif(0);
+//    attrAt("id").at().setS(id());	attrAt("id").at().setModif(0);
+//    attrAt("path").at().setS(path());	attrAt("path").at().setModif(0);
 }
 
 void Widget::preDisable( int flag )
@@ -448,6 +448,14 @@ void Widget::delFld( TElem *el, unsigned iid )
 void Widget::detElem( TElem *el )
 {
 
+}
+
+TVariant Widget::vlGet( Attr &a )
+{
+    if( a.id() == "id" )	return TVariant(id());
+    else if( a.id() == "path" )	return TVariant(path());
+
+    return TVariant();
 }
 
 bool Widget::cntrCmdServ( XMLNode *opt )
@@ -1325,16 +1333,17 @@ string Attr::getSEL( )
     if( !(fld().flg()&TFld::Selected) ) throw TError("Cfg",_("Element type is not selected!"));
     switch( fld().type() )
     {
-	case TFld::String:	return fld().selVl2Nm(m_val.s_val->getVal());
-	case TFld::Integer:	return fld().selVl2Nm(m_val.i_val);
-	case TFld::Real:	return fld().selVl2Nm(m_val.r_val);
-	case TFld::Boolean:	return fld().selVl2Nm(m_val.b_val);
+	case TFld::String:	return fld().selVl2Nm(getS());
+	case TFld::Integer:	return fld().selVl2Nm(getI());
+	case TFld::Real:	return fld().selVl2Nm(getR());
+	case TFld::Boolean:	return fld().selVl2Nm(getB());
     }
 }
 
 string Attr::getS( )
 {
-    switch(fld().type())
+    if( flgGlob()&Attr::DirRead )	return owner()->vlGet(*this).getS();
+    switch( fld().type() )
     {
 	case TFld::Integer:	return (m_val.i_val!=EVAL_INT) ? TSYS::int2str(m_val.i_val) : EVAL_STR;
 	case TFld::Real:	return (m_val.r_val!=EVAL_REAL) ? TSYS::real2str(m_val.r_val) : EVAL_STR;
@@ -1345,7 +1354,8 @@ string Attr::getS( )
 
 int Attr::getI( )
 {
-    switch(fld().type())
+    if( flgGlob()&Attr::DirRead )	return owner()->vlGet(*this).getI();
+    switch( fld().type() )
     {
 	case TFld::String:	return (m_val.s_val->getVal()!=EVAL_STR) ? atoi(m_val.s_val->getVal().c_str()) : EVAL_INT;
 	case TFld::Real:	return (m_val.r_val!=EVAL_REAL) ? (int)m_val.r_val : EVAL_INT;
@@ -1356,7 +1366,8 @@ int Attr::getI( )
 
 double Attr::getR( )
 {
-    switch(fld().type())
+    if( flgGlob()&Attr::DirRead )	return owner()->vlGet(*this).getR();
+    switch( fld().type() )
     {
 	case TFld::String:	return (m_val.s_val->getVal()!=EVAL_STR) ? atof(m_val.s_val->getVal().c_str()) : EVAL_REAL;
 	case TFld::Integer:	return (m_val.i_val!=EVAL_INT) ? m_val.i_val : EVAL_REAL;
@@ -1367,7 +1378,8 @@ double Attr::getR( )
 
 char Attr::getB( )
 {
-    switch(fld().type())
+    if( flgGlob()&Attr::DirRead )	return owner()->vlGet(*this).getB();
+    switch( fld().type() )
     {
 	case TFld::String:	return (m_val.s_val->getVal()!=EVAL_STR) ? (bool)atoi(m_val.s_val->getVal().c_str()) : EVAL_BOOL;
 	case TFld::Integer:	return (m_val.i_val!=EVAL_INT) ? (bool)m_val.i_val : EVAL_BOOL;

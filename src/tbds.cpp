@@ -49,7 +49,7 @@ TBDS::TBDS( ) : TSubSYS("BD","Data Bases",true)
 
 TBDS::~TBDS(  )
 {
-    ResAlloc res(nodeAccess(),true);
+    ResAlloc res(nodeRes(),true);
     while( genDBCache.size() )
     {
 	delete genDBCache.front();
@@ -181,7 +181,7 @@ bool TBDS::dataSeek( const string &bdn, const string &path, int lev, TConfig &cf
     {
 	try
 	{
-	    ResAlloc res(SYS->nodeAccess(),false);
+	    ResAlloc res(SYS->nodeRes(),false);
 	    XMLNode *nd = ctrId(&SYS->cfgRoot(),path);
 	    for( int i_fld = 0; i_fld < nd->childSize(); i_fld++ )
 	    {
@@ -244,7 +244,7 @@ bool TBDS::dataGet( const string &bdn, const string &path, TConfig &cfg )
     }
     //- Load from Config file if tbl no present -
     XMLNode *nd;
-    ResAlloc res(SYS->nodeAccess(),false);
+    ResAlloc res(SYS->nodeRes(),false);
     try{ nd = ctrId(&SYS->cfgRoot(),path); }
     catch(...){ return false; }
 
@@ -351,7 +351,7 @@ void TBDS::genDBSet(const string &path, const string &val, const string &user)
 	else
 	{
 	    //Put to cache
-	    ResAlloc res(dbs.at().nodeAccess(),true);
+	    ResAlloc res(dbs.at().nodeRes(),true);
 	    for( int i_cel = 0; i_cel < dbs.at().genDBCache.size(); i_cel++ )
 		if( dbs.at().genDBCache[i_cel]->cfg("user").getS() == user &&
 		    dbs.at().genDBCache[i_cel]->cfg("id").getS() == path )
@@ -403,7 +403,7 @@ string TBDS::genDBGet(const string &path, const string &oval, const string &user
 	if( SYS->present("BD") )
 	{
 	    AutoHD<TBDS> dbs = SYS->db();
-	    ResAlloc res(dbs.at().nodeAccess(),false);
+	    ResAlloc res(dbs.at().nodeRes(),false);
 	    for( int i_cel = 0; i_cel < dbs.at().genDBCache.size(); i_cel++ )
 		if( dbs.at().genDBCache[i_cel]->cfg("user").getS() == user &&
 			dbs.at().genDBCache[i_cel]->cfg("id").getS() == path )
@@ -411,7 +411,7 @@ string TBDS::genDBGet(const string &path, const string &oval, const string &user
 	}
 
 	//> Get from config file
-	ResAlloc res(SYS->nodeAccess(),false);
+	ResAlloc res(SYS->nodeRes(),false);
 	XMLNode *tgtN = TCntrNode::ctrId(&SYS->cfgRoot(),path,true);
 	if( tgtN ) rez = tgtN->text();
     }

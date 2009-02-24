@@ -46,7 +46,7 @@ TModSchedul::TModSchedul( ) :
 void TModSchedul::preDisable(int flag)
 {
     //> Detach all share libs
-    ResAlloc res(nodeAccess(),true);
+    ResAlloc res(nodeRes(),true);
     for( unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++ )
 	if( SchHD[i_sh].hd )
 	{
@@ -167,7 +167,7 @@ bool TModSchedul::CheckFile( const string &iname )
     }
     else dlclose(h_lib);
 
-    ResAlloc res(nodeAccess(),false);
+    ResAlloc res(nodeRes(),false);
     for( int i_sh=0; i_sh < SchHD.size(); i_sh++ )
 	if( SchHD[i_sh].name == iname )
 	    if(file_stat.st_mtime > SchHD[i_sh].tm) return true;
@@ -180,7 +180,7 @@ int TModSchedul::libReg( const string &name )
 {
     struct stat file_stat;
 
-    ResAlloc res(nodeAccess(),true);
+    ResAlloc res(nodeRes(),true);
     stat(name.c_str(),&file_stat);
     unsigned i_sh;
     for( i_sh = 0; i_sh < SchHD.size(); i_sh++ )
@@ -193,7 +193,7 @@ int TModSchedul::libReg( const string &name )
 
 void TModSchedul::libUnreg( const string &iname )
 {
-    ResAlloc res(nodeAccess(),true);
+    ResAlloc res(nodeRes(),true);
     for(unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++)
 	if( SchHD[i_sh].name == iname ) 
 	{
@@ -206,7 +206,7 @@ void TModSchedul::libUnreg( const string &iname )
 
 void TModSchedul::libAtt( const string &iname, bool full )
 {
-    ResAlloc res(nodeAccess(),true);
+    ResAlloc res(nodeRes(),true);
     for( int i_sh = 0; i_sh < SchHD.size(); i_sh++ )
 	if( SchHD[i_sh].name == iname )
 	{
@@ -291,7 +291,7 @@ void TModSchedul::libAtt( const string &iname, bool full )
 
 void TModSchedul::libDet( const string &iname )
 {
-    ResAlloc res(nodeAccess(),true);
+    ResAlloc res(nodeRes(),true);
     for( int i_sh = 0; i_sh < SchHD.size(); i_sh++ )
 	if( SchHD[i_sh].name == iname && SchHD[i_sh].hd )
 	{
@@ -341,7 +341,7 @@ bool TModSchedul::chkAllowMod( const string &name )
 
 void TModSchedul::libList( vector<string> &list )
 {
-    ResAlloc res(nodeAccess(),false);
+    ResAlloc res(nodeRes(),false);
     list.clear();
     for(unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++)
 	list.push_back( SchHD[i_sh].name );
@@ -349,7 +349,7 @@ void TModSchedul::libList( vector<string> &list )
 
 TModSchedul::SHD &TModSchedul::lib( const string &iname )
 {
-    ResAlloc res(nodeAccess(),false);
+    ResAlloc res(nodeRes(),false);
     //string nm_t = SYS->fNameFix(name);
     for(unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++)
 	if( SchHD[i_sh].name == iname )
@@ -366,7 +366,7 @@ void TModSchedul::libLoad( const string &iname, bool full )
     {
 	int i_sh;
 	bool st_auto = chkAllowMod(files[i_f]);
-	ResAlloc res(nodeAccess(),false);
+	ResAlloc res(nodeRes(),false);
 	for( i_sh = 0; i_sh < SchHD.size(); i_sh++ )
 	    if( SchHD[i_sh].name == files[i_f] ) break;
 	if( i_sh < SchHD.size() )
@@ -436,7 +436,7 @@ void TModSchedul::cntrCmdProc( XMLNode *opt )
 	    XMLNode *n_tm	= ctrMkNode("list",opt,-1,"/ms/libs/tm","");
 	    XMLNode *n_mods	= ctrMkNode("list",opt,-1,"/ms/libs/mods","");
 	    XMLNode *n_en	= ctrMkNode("list",opt,-1,"/ms/libs/en","");
-	    ResAlloc res(nodeAccess(),false);
+	    ResAlloc res(nodeRes(),false);
 	    for( int i_sl = 0; i_sl < SchHD.size(); i_sl++ )
 	    {
 		if( n_nm ) n_nm->childAdd("el")->setText(SchHD[i_sl].name);

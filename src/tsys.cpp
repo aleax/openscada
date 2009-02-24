@@ -272,7 +272,7 @@ bool TSYS::cfgFileLoad()
 	free(buf);
 	try
 	{
-	    ResAlloc res(nodeAccess(),true);
+	    ResAlloc res(nodeRes(),true);
 	    rootN.load(s_buf);
 	    if( rootN.name() == "OpenSCADA" )
 	    {

@@ -23,6 +23,7 @@
 #define WIDGET_H
 
 #include <tcntrnode.h>
+#include <tvariant.h>
 #include <tconfig.h>
 
 namespace VCA
@@ -49,7 +50,8 @@ class Attr : public TCntrNode
 	    IsUser	= 0x02000,	//User created element
 	    IsInher	= 0x04000,	//Inherit attribute
 	    Mutable	= 0x08000,	//Mutable attribute, present depend from "Active" attribute value
-	    Generic	= 0x10000	//Generic atributes' flag. This atributes loaded independent from enabled state
+	    Generic	= 0x10000,	//Generic atributes' flag. This atributes loaded independent from enabled state
+	    DirRead	= 0x20000	//Direct read attribute, through widget
 	};
 
 	//- Link types -
@@ -219,6 +221,7 @@ class Widget : public TCntrNode, public TValElem
 	void addFld( TElem *el, unsigned id );
 	void delFld( TElem *el, unsigned id );
 	void detElem( TElem *el );
+	TVariant vlGet( Attr &a );
 
 	//Attributes
 	//- Generic data -

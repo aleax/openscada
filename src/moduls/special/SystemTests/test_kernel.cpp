@@ -218,7 +218,7 @@ void *TTest::Task( void *CfgM )
 	    if( ++count == 1000000 ) count = 0;
 
 	    //Get All fields
-	    ResAlloc res(SYS->nodeAccess(),false);
+	    ResAlloc res(SYS->nodeRes(),false);
 	    XMLNode *mn, *t_n;
 	    mn = TCntrNode::ctrId(&SYS->cfgRoot(),tst->nodePath(),true);
 	    if( mn )
