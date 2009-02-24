@@ -1,3 +1,8 @@
+2009-02-24 Maxim
+- FIX:/UI/WebVision: Filling with the image is fixed and  modified.
+- FIX:/UI/Vision: Filling with the image is fixed and  modified, scaling of the image for filling is modified.
+
+
 2009-02-24 Roman
 - !!!:/SYS,/UI/VCAEngine: Realised object TVariant for storing different data types.
     The object is used for direct access to system's ("id" and "path") atributes of widgets of UI.VCAEngine.

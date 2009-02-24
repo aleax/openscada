@@ -5616,7 +5616,7 @@ void ShapeElFigure::paintImage( WdgView *view )
             PntMap tmp_pnts;
             QVector<int> number_vector;
             bool fl_;
-            bool isAlpha = false;
+            //bool isAlpha = false;
             for( int p = 0; p < inundationItems[i].number_shape.size(); p++ )
             {
                 if( shapeItems[inundationItems[i].number_shape[p]].type == 1 )
@@ -5717,8 +5717,6 @@ void ShapeElFigure::paintImage( WdgView *view )
                     p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n4], view, true, true);
                     tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n4] = unScaleRotate( p1, view, false, true);
                 }
-                if( !isAlpha && ( (*colors)[shapeItems[inundationItems[i].number_shape[p]].lineColor].alpha() < 255 ||
-                    (*colors)[shapeItems[inundationItems[i].number_shape[p]].borderColor].alpha() < 255 ) ) isAlpha = true;
             }
             number_vector.clear();
             flag_rotate = false;
@@ -5761,52 +5759,51 @@ void ShapeElFigure::paintImage( WdgView *view )
             }
             while( t < 1 );
 
+            xMin_rot = (int)TSYS::realRound( xMin_rot, 2, true );
+            yMin_rot = (int)TSYS::realRound( yMin_rot, 2, true );
+            xMax_rot = (int)TSYS::realRound( xMax_rot, 2, true );
+            yMax_rot = (int)TSYS::realRound( yMax_rot, 2, true );
+
             //-- Scaling image for filling --
-            img = img.scaled ( QSize( (int)TSYS::realRound( xMax - xMin )+1, (int)TSYS::realRound( yMax - yMin )+1 ), Qt::IgnoreAspectRatio, Qt::SmoothTransformation  );
-            double im_x, im_y;
-            float inc;
+            img = img.scaled ( QSize( (int)TSYS::realRound( xMax - xMin )+1, (int)TSYS::realRound( yMax - yMin )+1 ), Qt::IgnoreAspectRatio, Qt::FastTransformation  );
+            int im_x, im_y;
             QColor color;
             double alpha, color_r, color_g, color_b;
             double alpha_col = (double)(*colors)[inundationItems[i].brush].alpha()/255;
             QRgb rgb;
             QPointF drw_pnt,drw_pnt1;
             QPen im_pen;
-            if( isAlpha ) inc = 0.5;
-            else inc = 1;
-            im_y = yMin_rot;
+
+            im_y = (int)yMin_rot;
             //-- Calculating the resulting color of the image and drawing the scaled and rotated points of it into the inundation path --
             do
             {
-                im_x = xMin_rot;
+                im_x = (int)xMin_rot;
                 do
                 {
-                    if( in_path_rot.contains( QPointF( im_x, im_y) ) )
+                    if( in_path_rot.contains( QPoint( im_x, im_y) ) )
                     {
-                        drw_pnt = unScaleRotate( QPointF( im_x, im_y ), view, false, true );
+                        drw_pnt = unScaleRotate( QPoint( im_x, im_y ), view, false, true );
                         if( img.valid ( (int)TSYS::realRound(  drw_pnt.x() - xMin, 2, true ), (int)TSYS::realRound(  drw_pnt.y() - yMin, 2, true ) ) )
                         {
                             rgb = img.pixel ((int)TSYS::realRound(  drw_pnt.x() - xMin, 2, true ), (int)TSYS::realRound(  drw_pnt.y() - yMin, 2, true ));
                             alpha = (double)((rgb>>24)&0xff)/255;
-                            /*color_r = (1-alpha_col+alpha_col*alpha)*((rgb>>16)&0xff) + (1-alpha)*alpha_col*(*colors)[inundationItems[i].brush].red();
-                            color_g = (1-alpha_col+alpha_col*alpha)*((rgb>>8)&0xff) + (1-alpha)*alpha_col*(*colors)[inundationItems[i].brush].green();
-                            color_b = (1-alpha_col+alpha_col*alpha)*(rgb&0xff) + (1-alpha)*alpha_col*(*colors)[inundationItems[i].brush].blue();*/
-                            //im_pen.setColor ( QColor((int)(color_r), (int)(color_g), (int)(color_b), (int)TSYS::realRound(255*alpha_col, 2, true)) );
                             color_r = alpha*((rgb>>16)&0xff) + (1-alpha)*alpha_col*(*colors)[inundationItems[i].brush].red();
                             color_g = alpha*((rgb>>8)&0xff) + (1-alpha)*alpha_col*(*colors)[inundationItems[i].brush].green();
                             color_b = alpha*(rgb&0xff) + (1-alpha)*alpha_col*(*colors)[inundationItems[i].brush].blue();
 
-                            im_pen.setColor ( QColor((int)(color_r), (int)(color_g), (int)(color_b)) );
+                            im_pen.setColor ( QColor((int)(color_r), (int)(color_g), (int)(color_b), (*colors)[inundationItems[i].brush].alpha()) );
                             pnt.setPen( im_pen );
                             drw_pnt1 = scaleRotate( drw_pnt, view, false, true );
 
                             pnt.drawPoint( QPointF( (int)TSYS::realRound( drw_pnt1.x(), 2, true),
-                                           (int)TSYS::realRound( drw_pnt1.y(), 2, true) ) );
+                                                    (int)TSYS::realRound( drw_pnt1.y(), 2, true) ) );
                         }
                     }
-                    im_x += inc;
+                    im_x += 1;
                 }
                 while( im_x > xMin_rot && im_x < xMax_rot );
-                im_y += inc;
+                im_y += 1;
             }
             while( im_y > yMin_rot && im_y < yMax_rot ); 
         }

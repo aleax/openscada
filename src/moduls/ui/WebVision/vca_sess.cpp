@@ -3726,10 +3726,13 @@ void VCAElFigure::getReq( SSess &ses )
                                 string imgDef_temp = owner().resGet(inundationItems[i].imgFill,id(),ses.user);
                                 gdImagePtr im_fill_in = gdImageCreateFromPngPtr(imgDef_temp.size(), (void*)imgDef_temp.data());
                                 gdImagePtr im_fill_out = gdImageCreateTrueColor((int)TSYS::realRound( xMax - xMin ) + 1, (int)TSYS::realRound( yMax - yMin ) + 1 );
-                                int alpha = gdImageAlpha( im_fill_in, gdImageGetPixel( im_fill_in, (int)im_fill_in->sx/2, (int)im_fill_in->sy/2 ) );
-                                double alpha_pr = (double)alpha / 127;
-                                gdImageCopyResampled(im_fill_out, im_fill_in, 0, 0, 0, 0, im_fill_out->sx, im_fill_out->sy, im_fill_in->sx, im_fill_in->sy);
+                                gdImageAlphaBlending(im_fill_out, 0);
+                                gdImageAlphaBlending(im_fill_in, 0);
+                                int alpha;
+                                double alpha_pr;
 
+
+                                gdImageCopyResampled(im_fill_out, im_fill_in, 0, 0, 0, 0, im_fill_out->sx, im_fill_out->sy, im_fill_in->sx, im_fill_in->sy);
                                 int im_x, im_y, im_x_temp1, im_x_temp2;
                                 Point drw_pnt,drw_pnt1;
                                 int c_new;
@@ -3741,6 +3744,8 @@ void VCAElFigure::getReq( SSess &ses )
                                 paintFill( im1, delta_point_center, inundationItems[i] );
                                 double alpha_col = (double)(ui8)(inundationItems[i].P_color>>24)/127;
                                 double color_r, color_g, color_b;
+                                gdImageAlphaBlending(im1,0);
+
                                 im_y = (int)yMin_rot;
                                 do
                                 {
@@ -3752,20 +3757,22 @@ void VCAElFigure::getReq( SSess &ses )
                                             Point drw_pnt = unscaleUnrotate( Point( im_x, im_y ), xSc, ySc, false, true );
                                             int rgb = gdImageGetPixel( im_fill_out, (int)TSYS::realRound( drw_pnt.x - xMin, 2, true ),
                                                                                     (int)TSYS::realRound( drw_pnt.y - yMin, 2, true ) );
+                                            alpha = gdImageAlpha( im_fill_out, rgb );
+                                            alpha_pr = 1 - (double)alpha / 127;
                                             drw_pnt1.x = scaleRotate( drw_pnt, xSc, ySc, false, true ).x;
                                             drw_pnt1.y = scaleRotate( drw_pnt, xSc, ySc, false, true ).y;
-    
+
                                             if( fabs(alpha_pr - 0) < 0.001 ) alpha_pr = 1;
-                                            color_r = alpha_pr*( gdImageRed( im_fill_out, rgb ) ) + (1-alpha_pr)*alpha_col*( (ui8)( inundationItems[i].P_color>>16 ) );
-                                            color_g = alpha_pr*( gdImageGreen( im_fill_out, rgb ) ) + (1-alpha_pr)*alpha_col*( (ui8)( inundationItems[i].P_color>>8 ) );
-                                            color_b = alpha_pr*( gdImageBlue( im_fill_out, rgb ) ) + (1-alpha_pr)*alpha_col*( ( ui8)inundationItems[i].P_color );
-                                            /*int color = gdImageColorResolveAlpha( im1, (int)TSYS::realRound( color_r, 2, true ),
-                                            (int)TSYS::realRound( color_g, 2, true ),
-                                            (int)TSYS::realRound( color_b, 2, true ),
-                                            (int)TSYS::realRound(127 - 127*alpha_col, 2, true) );*/
-                                            int color = gdImageColorResolve( im1, (int)TSYS::realRound( color_r, 2, true ),
-                                                    (int)TSYS::realRound( color_g, 2, true ),
-                                                            (int)TSYS::realRound( color_b, 2, true ) );
+                                            color_r = alpha_pr*((rgb>>16)&0xff) + (1-alpha_pr)*alpha_col*( (ui8)( inundationItems[i].P_color>>16 ) );
+                                            color_g = alpha_pr*((rgb>>8)&0xff) + (1-alpha_pr)*alpha_col*( (ui8)( inundationItems[i].P_color>>8 ) );
+                                            color_b = alpha_pr*(rgb&0xff) + (1-alpha_pr)*alpha_col*( (ui8)inundationItems[i].P_color );
+                                            /*int color = gdImageColorResolve( im1, (int)TSYS::realRound( color_r, 2, true ),
+                                                                                  (int)TSYS::realRound( color_g, 2, true ),
+                                                                                  (int)TSYS::realRound( color_b, 2, true ) );*/
+                                            int color = gdImageColorResolveAlpha( im1, (int)TSYS::realRound( color_r, 2, true ),
+                                                                                       (int)TSYS::realRound( color_g, 2, true ),
+                                                                                       (int)TSYS::realRound( color_b, 2, true ),
+                                                                                        127 - (ui8)(inundationItems[i].P_color>>24) );
                                             gdImageSetPixel( im1, (int)TSYS::realRound( drw_pnt1.x, 2, true ) , (int)TSYS::realRound( drw_pnt1.y, 2, true ), color );
                                         }
                                         im_x += 1;
@@ -3776,6 +3783,7 @@ void VCAElFigure::getReq( SSess &ses )
                                 while( im_y <= yMax_rot );
                                 if( im_fill_out ) gdImageDestroy(im_fill_out);
                                 if( im_fill_in ) gdImageDestroy(im_fill_in);
+                                gdImageAlphaBlending(im1,1);
                             }
                             else paintFill( im1, delta_point_center, inundationItems[i] );
                         }
