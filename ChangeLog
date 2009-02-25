@@ -1,3 +1,7 @@
+2009-02-25 Roman
+- FIX:/UI/Vision: No scaling included pages after opening from cache is fixed.
+
+
 2009-02-24 Maxim
 - FIX:/UI/WebVision: Filling with the image is fixed and  modified.
 - FIX:/UI/Vision: Filling with the image is fixed and  modified, scaling of the image for filling is modified.

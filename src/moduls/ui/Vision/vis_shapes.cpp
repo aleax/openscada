@@ -2812,6 +2812,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 			shD->inclScrl->setWidget(shD->inclWidget);
 			shD->inclWidget->setEnabled(true);
 			shD->inclWidget->setVisible(true);
+			shD->inclWidget->setMinimumSize(w->size());
 			if( shD->inclWidget->wx_scale != shD->inclWidget->mainWin()->xScale() ||
 				shD->inclWidget->wy_scale != shD->inclWidget->mainWin()->yScale() )
 			    shD->inclWidget->load("");
@@ -2828,9 +2829,9 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 			shD->inclWidget = new RunPageView(val,(VisRun*)w->mainWin(),shD->inclScrl,Qt::SubWindow);
 			shD->inclWidget->setProperty("cntPg",TSYS::addr2str(w).c_str());
 			shD->inclScrl->setWidget(shD->inclWidget);
+			shD->inclWidget->setMinimumSize(w->size());
 			shD->inclWidget->load("");
 		    }
-		    shD->inclWidget->setMinimumSize(w->size());
 		    w->setProperty("inclPg",TSYS::addr2str(shD->inclWidget).c_str());
 		}
 	    } else up = false;

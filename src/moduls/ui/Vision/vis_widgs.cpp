@@ -753,9 +753,9 @@ void WdgView::moveF( const QPointF &pos )
     move( QPoint((int)TSYS::realRound(pos.x()),(int)TSYS::realRound(pos.y())) );
 }
 
-void WdgView::resizeF( const QSizeF &size )
+void WdgView::resizeF( const QSizeF &isz )
 {
-    mWSize = size;
+    mWSize = isz;
     mWSize.setWidth(vmax(mWSize.width(),3));
     mWSize.setHeight(vmax(mWSize.height(),3));
     resize( QSize((int)TSYS::realRound(mWSize.width()), (int)TSYS::realRound(mWSize.height())) );
