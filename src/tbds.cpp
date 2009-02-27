@@ -477,7 +477,6 @@ void TBDS::load_( )
 	    {
 		id = c_el.cfg("ID").getS();
 		type = c_el.cfg("TYPE").getS();
-		printf("TEST 00: %s,%s %d\n",type.c_str(),id.c_str(),fld_cnt);
 		if( (type+"."+id) != SYS->workDB() && modPresent(type) && !at(type).at().openStat(id) )
 		    at(type).at().open(id);
 	    }
