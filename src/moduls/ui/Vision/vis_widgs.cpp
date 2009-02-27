@@ -821,6 +821,8 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 	    y_scale = atof(val.c_str());
 	    up = true;
 	    break;
+	case 15:	setToolTip(val.c_str());	break;
+	case 16:	setStatusTip(val.c_str());	break;
     }
     if( up && !allAttrLoad( ) )
     {

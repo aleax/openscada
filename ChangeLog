@@ -1,3 +1,8 @@
+2009-02-27 Roman
+- !!:/UI/VCAEngine,/UI/Vision,/UI/WebVision: The attribute 'root' moved to main attributes container. Added atribute 'parent' for parent widget info allow.
+    Added attribute 'tipTool' and 'tipStatus' for tooltips and statustips support into widgets.
+
+
 2009-02-25 Roman
 - FIX:/UI/Vision: No scaling included pages after opening from cache is fixed.
 

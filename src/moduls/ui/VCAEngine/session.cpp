@@ -1448,11 +1448,8 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	{
 	    unsigned  tm = strtoul(opt->attr("tm").c_str(),0,10);
 	    if( !tm )
-	    {
-		opt->childAdd("el")->setAttr("id","root")->setAttr("p","-4")->setText(rootId());
 		opt->childAdd("el")->setAttr("id","perm")->setAttr("p","-3")->
 		    setText(TSYS::int2str(ownerSess()->sec.at().access(opt->attr("user"),SEQ_RD|SEQ_WR,owner(),grp(),permit())) );
-	    }
 	    if( !tm || modifChk(tm) )
 	    {
 		AutoHD<Attr> attr;
@@ -1485,10 +1482,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	if( !tm || modifChk(tm) )
 	{
 	    if( !tm )
-	    {
-		opt->childAdd("el")->setAttr("id","root")->setAttr("p","-4")->setText(rootId());
 		opt->childAdd("el")->setAttr("id","perm")->setAttr("p","-3")->setText(TSYS::int2str(perm));
-	    }
 	    AutoHD<Attr> attr;
 	    vector<string> als;
 	    attrList(als);

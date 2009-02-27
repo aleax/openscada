@@ -262,7 +262,7 @@ TWEB::TWEB( string name ) : mTSess(10), chck_st(false)
 	"table.prot td.hd { background-color: #E6E6E6; font-weight: bold; text-align: center; }\n";
 
 #if 0
-    char mess[][100] = { "Time", "Level", "Category", "Message", "mcsec" };
+    char mess[][100] = { "Time", "Level", "Category", "Message", "mcsec", "Ready" };
 #endif
 }
 

@@ -82,11 +82,11 @@ TCntrNode &Widget::operator=( TCntrNode &node )
 	    attrAdd( new TFld(src_n->attrAt(els[i_a]).at().fld()) );
 	    attrAt(els[i_a]).at().setModif(1);
 	}
-	if( els[i_a]=="id" || els[i_a]=="path" ) continue;
 	attr  = attrAt(els[i_a]);
+	if( pattr.at().flgGlob( )&Attr::DirRead ) continue;
 	pattr = src_n->attrAt(els[i_a]);
 	attr.at().setFlgSelf(pattr.at().flgSelf());
-	switch(attr.at().type())
+	switch( attr.at().type() )
 	{
 	    case TFld::Boolean:	attr.at().setB(pattr.at().getB());	break;
 	    case TFld::Integer:	attr.at().setI(pattr.at().getI());	break;
@@ -118,9 +118,11 @@ void Widget::postEnable( int flag )
     {
 	//> Add main attributes
 	attrAdd( new TFld("id",_("Id"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic) );
+	attrAdd( new TFld("path",_("Path"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic) );
+	attrAdd( new TFld("parent",_("Parent"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic) );
+	attrAdd( new TFld("root",_("Root"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic,"","","","","-4") );
 	attrAdd( new TFld("name",_("Name"),TFld::String,Attr::Generic) );
 	attrAdd( new TFld("dscr",_("Description"),TFld::String,TFld::FullText|Attr::Generic) );
-	attrAdd( new TFld("path",_("Path"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic) );
 	attrAdd( new TFld("en",_("Enabled"),TFld::Boolean,Attr::Generic,"","1","","","5") );
 	attrAdd( new TFld("active",_("Active"),TFld::Boolean,Attr::Active,"","0","","","6") );
 	attrAdd( new TFld("geomX",_("Geometry:x"),TFld::Real,Attr::Generic,"","0","0;10000","","7") );
@@ -131,11 +133,10 @@ void Widget::postEnable( int flag )
 	attrAdd( new TFld("geomYsc",_("Geometry:y scale"),TFld::Real,Attr::Generic,"","1","0.1;100","","14") );
 	attrAdd( new TFld("geomZ",_("Geometry:z"),TFld::Integer,Attr::Generic,"","0","0;1000000","","11") );
 	attrAdd( new TFld("geomMargin",_("Geometry:margin"),TFld::Integer,Attr::Generic,"","0","0;1000","","12") );
+	attrAdd( new TFld("tipTool",_("Tip:tool"),TFld::String,Attr::Generic,"","","","","15") );
+	attrAdd( new TFld("tipStatus",_("Tip:status"),TFld::String,Attr::Generic,"","","","","16") );
 	attrAdd( new TFld("evProc",_("Events process"),TFld::String,TFld::FullText,"200") );
     }
-
-//    attrAt("id").at().setS(id());	attrAt("id").at().setModif(0);
-//    attrAt("path").at().setS(path());	attrAt("path").at().setModif(0);
 }
 
 void Widget::preDisable( int flag )
@@ -326,7 +327,7 @@ void Widget::inheritAttr( const string &iattr )
 	}
 	attr  = attrAt(ls[i_l]);
 	pattr = parent().at().attrAt(ls[i_l]);
-	if( ls[i_l]=="id" || ls[i_l]=="path" || (attr.at().modif() && !(attr.at().flgSelf()&Attr::SessAttrInh)) )	continue;
+	if( (attr.at().flgGlob( )&Attr::DirRead) || (attr.at().modif() && !(attr.at().flgSelf()&Attr::SessAttrInh)) )	continue;
 	attr.at().setFlgSelf(pattr.at().flgSelf());
 	bool active = attr.at().flgGlob()&Attr::Active;
 	switch( attr.at().type() )
@@ -454,6 +455,8 @@ TVariant Widget::vlGet( Attr &a )
 {
     if( a.id() == "id" )	return TVariant(id());
     else if( a.id() == "path" )	return TVariant(path());
+    else if( a.id() == "root" )	return TVariant(rootId());
+    else if( a.id() == "parent" )	return TVariant(parentNm());
 
     return TVariant();
 }
@@ -466,8 +469,6 @@ bool Widget::cntrCmdServ( XMLNode *opt )
     {
 	if( ctrChkNode(opt,"get",RWRWRW,"root","root",SEQ_RD) )		//Get values
 	{
-	    opt->childAdd("el")->setAttr("id","root")->setAttr("p","-4")->setText(rootId());
-
 	    vector<string> ls;
 	    attrList(ls);
 	    AutoHD<Attr> attr;
@@ -487,8 +488,6 @@ bool Widget::cntrCmdServ( XMLNode *opt )
     else if( a_path == "/serv/attrBr" && ctrChkNode(opt,"get",R_R_R_,"root","root",SEQ_RD) )	//Get attributes all updated elements' of the branch
     {
 	//>> Self attributes put
-	opt->childAdd("el")->setAttr("id","root")->setAttr("p","-4")->setText(rootId());
-
 	vector<string> ls;
 	attrList(ls);
 	AutoHD<Attr> attr;
@@ -1390,6 +1389,7 @@ char Attr::getB( )
 
 void Attr::setSEL( const string &val, bool strongPrev, bool sys )
 {
+    if( flgGlob( )&Attr::DirRead ) return;
     if( !(fld().flg()&TFld::Selected) )
 	throw TError("Cfg",_("Element type is not selected!"));
     switch( fld().type() )
@@ -1403,6 +1403,7 @@ void Attr::setSEL( const string &val, bool strongPrev, bool sys )
 
 void Attr::setS( const string &val, bool strongPrev, bool sys )
 {
+    if( flgGlob( )&Attr::DirRead ) return;
     switch( fld().type() )
     {
 	case TFld::Integer:	setI( (val!=EVAL_STR) ? atoi(val.c_str()) : EVAL_INT, strongPrev, sys );	break;
@@ -1426,6 +1427,7 @@ void Attr::setS( const string &val, bool strongPrev, bool sys )
 
 void Attr::setI( int val, bool strongPrev, bool sys )
 {
+    if( flgGlob( )&Attr::DirRead ) return;
     switch( fld().type() )
     {
 	case TFld::String:	setS( (val!=EVAL_INT) ? TSYS::int2str(val) : EVAL_STR, strongPrev, sys );	break;
@@ -1455,6 +1457,7 @@ void Attr::setI( int val, bool strongPrev, bool sys )
 
 void Attr::setR( double val, bool strongPrev, bool sys )
 {
+    if( flgGlob( )&Attr::DirRead ) return;
     switch( fld().type() )
     {
 	case TFld::String:	setS( (val!=EVAL_REAL) ? TSYS::real2str(val) : EVAL_STR, strongPrev, sys );	break;
@@ -1485,6 +1488,7 @@ void Attr::setR( double val, bool strongPrev, bool sys )
 
 void Attr::setB( char val, bool strongPrev, bool sys )
 {
+    if( flgGlob( )&Attr::DirRead ) return;
     switch( fld().type() )
     {
 	case TFld::String:	setS( (val!=EVAL_BOOL) ? TSYS::int2str((bool)val) : EVAL_STR, strongPrev, sys );	break;

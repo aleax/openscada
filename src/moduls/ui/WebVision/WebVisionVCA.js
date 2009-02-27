@@ -360,6 +360,7 @@ function findOpenPage( pgId )
 function makeEl( pgBr, inclPg )
 {
   var margBrdUpd = false; var newAttr = false;
+  this.place.wdgLnk = this;
   if( !inclPg && pgBr )
     for( var j = 0; j < pgBr.childNodes.length; j++ )
     {
@@ -440,7 +441,8 @@ function makeEl( pgBr, inclPg )
       figObj.onclick = function(e)
       {
 	if(!e) e = window.event;
-	servSet(this.wdgLnk.addr,'com=obj&sub=point&x='+(e.offsetX?e.offsetX:(e.clientX-posGetX(this)))+
+	servSet(this.wdgLnk.addr,'com=obj&sub=point&xSc='+xSc.toFixed(2)+'&ySc='+ySc.toFixed(2)+
+						  '&x='+(e.offsetX?e.offsetX:(e.clientX-posGetX(this)))+
 						  '&y='+(e.offsetY?e.offsetY:(e.clientY-posGetY(this)))+
 						  '&key='+evMouseGet(e),'');
 	return false;
@@ -448,7 +450,8 @@ function makeEl( pgBr, inclPg )
       figObj.ondblclick = function(e)
       {
 	if(!e) e = window.event;
-	servSet(this.wdgLnk.addr,'com=obj&sub=point&x='+(e.offsetX?e.offsetX:(e.clientX-posGetX(this)))+
+	servSet(this.wdgLnk.addr,'com=obj&sub=point&xSc='+xSc.toFixed(2)+'&ySc='+ySc.toFixed(2)+
+						  '&x='+(e.offsetX?e.offsetX:(e.clientX-posGetX(this)))+
 						  '&y='+(e.offsetY?e.offsetY:(e.clientY-posGetY(this)))+
 						  '&key=DblClick','');
       }
@@ -1300,8 +1303,9 @@ function makeEl( pgBr, inclPg )
   this.place.style.cssText = elStyle;
   }
   if( margBrdUpd ) for( var i in this.wdgs ) i.makeEl();
+  this.place.setAttribute('title',this.attrs['tipTool']);
+  this.place.onmouseover = function() { if( this.wdgLnk.attrs['tipStatus'] ) setStatus(this.wdgLnk.attrs['tipStatus'],10000); };
   if( pgBr && !inclPg && parseInt(this.attrs['perm'])&SEQ_RD )
-  {
     for( var j = 0; j < pgBr.childNodes.length; j++ )
     {
       if( pgBr.childNodes[j].nodeName != 'w' ) continue;
@@ -1316,7 +1320,6 @@ function makeEl( pgBr, inclPg )
         this.wdgs[chEl] = wdgO;
       }
     }
-  }
 }
 function perUpdtEn( en )
 {
@@ -1450,6 +1453,18 @@ function makeUI()
   for( var i in perUpdtWdgs ) perUpdtWdgs[i].perUpdt();
   setTimeout(makeUI,1000);
 }
+
+/***************************************************
+ * setStatus - Setup status message.               *
+ ***************************************************/
+function setStatus( mess, tm )
+{
+  window.status = mess ? mess : '###Ready###';
+  if( !mess ) return;
+  if( stTmID ) clearTimeout(stTmID);
+  if( !tm || tm > 0 ) stTmID = setTimeout('setStatus(null)',tm?tm:1000);
+}
+
 /***************************************************
  * Main start code                                 *
  ***************************************************/
@@ -1467,5 +1482,6 @@ pgList = new Array();			//Opened pages list
 pgCache = new Object();			//Cached pages' data
 perUpdtWdgs = new Object();		//Periodic updated widgets register
 masterPage = new pwDescr('',true);	//Master page create
+stTmID = null;				//Status line timer identifier
 
 setTimeout(makeUI,1000);		//First call init

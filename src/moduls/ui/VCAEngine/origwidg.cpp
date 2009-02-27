@@ -1033,7 +1033,7 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
     funcIO.ioIns( new IO("rTimeU",_("Repeat time (us)"),IO::Integer,IO::Default),5);
     funcIO.ioIns( new IO("rPer",_("Repeat period"),IO::Real,IO::Default),6);
     funcIO.ioIns( new IO("mTime",_("Message time"),IO::Integer,IO::Default),7);
-    funcIO.ioIns( new IO("mTimeU",_("Message time (microsec.)"),IO::Integer,IO::Default),8);
+    funcIO.ioIns( new IO("mTimeU",_("Message time (mcs)"),IO::Integer,IO::Default),8);
     funcIO.ioIns( new IO("mLev",_("Message level"),IO::Integer,IO::Default),9);
     funcIO.ioIns( new IO("mCat",_("Message category"),IO::String,IO::Default),10);
     funcIO.ioIns( new IO("mVal",_("Message value"),IO::String,IO::Default),11);
