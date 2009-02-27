@@ -366,6 +366,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
 
     //- Request -
     req = req+" FROM '"+mod->sqlReqCode(name())+"' "+((next)?req_where:"")+" LIMIT "+TSYS::int2str(row)+",1;";
+    if( name() == "DB" ) printf("TEST 10: %s\n",req.c_str());
     owner().sqlReq( req, &tbl );
     if( tbl.size() < 2 ) return false;
     //- Processing of query -

@@ -156,6 +156,7 @@ class VCAElFigure : public VCAObj
 	void paintFill( gdImagePtr im, Point pnt, InundationItem &in_item );
 	Point unscaleUnrotate( Point point, double xScale, double yScale, bool flag_scale, bool flag_rotate );
         Point scaleRotate( Point point, double xScale, double yScale, bool flag_scale, bool flag_rotate );
+        int drawElF( SSess &ses, double xSc, double ySc, Point clickPnt );
 	//Attributes
 	double	width,		//Widget geometry
 		height;

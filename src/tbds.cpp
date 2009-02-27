@@ -196,7 +196,7 @@ bool TBDS::dataSeek( const string &bdn, const string &path, int lev, TConfig &cf
 		    int i_el;
 		    for( i_el = 0; i_el < cf_el.size(); i_el++ )
 			if( cfg.cfg(cf_el[i_el]).fld().flg()&TCfg::Key &&
-			    cfg.cfg(cf_el[i_el]).getS().size() && 
+			    cfg.cfg(cf_el[i_el]).keyUse() &&
 			    cfg.cfg(cf_el[i_el]).getS() != el->attr(cf_el[i_el]) ) break;
 		    if( i_el == cf_el.size() && lev <= c_lev++ )
 		    {
@@ -477,6 +477,7 @@ void TBDS::load_( )
 	    {
 		id = c_el.cfg("ID").getS();
 		type = c_el.cfg("TYPE").getS();
+		printf("TEST 00: %s,%s %d\n",type.c_str(),id.c_str(),fld_cnt);
 		if( (type+"."+id) != SYS->workDB() && modPresent(type) && !at(type).at().openStat(id) )
 		    at(type).at().open(id);
 	    }
