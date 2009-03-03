@@ -770,6 +770,20 @@ void Page::load_( )
     SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,*this);
     setParentNm(mParent);
 
+    //> Inherit modify attributes
+    vector<string> als;
+    attrList( als );
+    for( int i_a = 0; i_a < als.size(); i_a++ )
+    {
+	if( !attrPresent(als[i_a]) ) continue;
+	AutoHD<Attr> attr = attrAt(als[i_a]);
+	if( attr.at().modif() && m_attrs.find(als[i_a]) == string::npos )
+	{
+	    attr.at().setModif(0);
+	    inheritAttr(als[i_a]);
+	}
+    }
+
     //> Load generic attributes
     TConfig c_el(&mod->elWdgIO());
     c_el.cfg("IDW").setS(path());
@@ -815,19 +829,6 @@ void Page::loadIO( )
     //> Load widget's work attributes
     string db  = ownerProj()->DB();
     string tbl = ownerProj()->tbl()+"_io";
-
-    //- Inherit modify attributes -
-    /*attrList( als );
-    for( int i_a = 0; i_a < als.size(); i_a++ )
-    {
-        AutoHD<Attr> attr = attrAt(als[i_a]);
-        if( attr.at().flgGlob()&Attr::IsInher && attr.at().modif() && m_attrs.find(als[i_a]) == string::npos )
-        {
-            attr.at().setModif(0);
-            inheritAttr(als[i_a]);
-	}
-    }
-    als.clear();*/
 
     //> Same attributes load
     TConfig c_el(&mod->elWdgIO());
@@ -982,6 +983,13 @@ void Page::saveIO( )
     }
 }
 
+void Page::wClear( )
+{
+    Widget::wClear();
+
+    m_proc = m_attrs = "";
+}
+
 void Page::setEnable( bool val )
 {
     if( enable() == val ) return;
@@ -998,21 +1006,24 @@ void Page::setEnable( bool val )
 	catch( TError err )     { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
-void Page::wdgAdd( const string &wid, const string &name, const string &ipath )
+void Page::wdgAdd( const string &wid, const string &name, const string &ipath, bool force )
 {
     if( !isContainer() )  throw TError(nodePath().c_str(),_("Widget is not container!"));
     if( wdgPresent(wid) ) return;
 
     //> Check for label <deleted>
-    string db = ownerProj()->DB();
-    string tbl = ownerProj()->tbl()+"_incl";
-    TConfig c_el( &mod->elInclWdg() );
-    c_el.cfg("IDW").setS(path());
-    c_el.cfg("ID").setS(wid);
-    if( SYS->db().at().dataGet( db+"."+tbl, mod->nodePath()+tbl, c_el ) && c_el.cfg("PARENT").getS() == "<deleted>" )
+    if( !force )
     {
-	if( !parent().at().wdgPresent(wid) )	SYS->db().at().dataDel( db+"."+tbl, mod->nodePath()+tbl, c_el, true );
-	return;
+	string db = ownerProj()->DB();
+	string tbl = ownerProj()->tbl()+"_incl";
+	TConfig c_el( &mod->elInclWdg() );
+	c_el.cfg("IDW").setS(path());
+	c_el.cfg("ID").setS(wid);
+	if( SYS->db().at().dataGet( db+"."+tbl, mod->nodePath()+tbl, c_el ) && c_el.cfg("PARENT").getS() == "<deleted>" )
+	{
+	    if( !parent().at().wdgPresent(wid) )	SYS->db().at().dataDel( db+"."+tbl, mod->nodePath()+tbl, c_el, true );
+	    return;
+	}
     }
 
     //> Same widget add
@@ -1287,6 +1298,20 @@ void PageWdg::load_( )
     string tbl = ownerPage().ownerProj()->tbl()+"_incl";
     SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,*this);
 
+    //> Inherit modify attributes
+    vector<string> als;
+    attrList( als );
+    for( int i_a = 0; i_a < als.size(); i_a++ )
+    {
+	if( !attrPresent(als[i_a]) ) continue;
+	AutoHD<Attr> attr = attrAt(als[i_a]);
+	if( attr.at().modif() && m_attrs.find(als[i_a]) == string::npos )
+	{
+	    attr.at().setModif(0);
+	    inheritAttr(als[i_a]);
+	}
+    }
+
     //> Load generic attributes
     tbl = ownerPage().ownerProj()->tbl()+"_io";
     TConfig c_el(&mod->elWdgIO());
@@ -1316,20 +1341,6 @@ void PageWdg::loadIO( )
     //> Load widget's work attributes
     string db  = ownerPage().ownerProj()->DB();
     string tbl = ownerPage().ownerProj()->tbl()+"_io";
-
-    //- Inherit modify attributes -
-    /*attrList( als );
-    for( int i_a = 0; i_a < als.size(); i_a++ )
-    {
-        AutoHD<Attr> attr = attrAt(als[i_a]);
-        if( attr.at().flgGlob()&Attr::IsInher && attr.at().modif() && m_attrs.find(als[i_a]) == string::npos )
-        {
-            attr.at().setModif(0);
-    	    inheritAttr(als[i_a]);
-        }
-    }
-
-    als.clear();*/
 
     //> Same load
     TConfig c_el(&mod->elWdgIO());
@@ -1492,6 +1503,13 @@ void PageWdg::saveIO( )
 	    fld_cnt--;
 	}
     }
+}
+
+void PageWdg::wClear( )
+{
+    Widget::wClear();
+
+    m_attrs = "";
 }
 
 void PageWdg::inheritAttr( const string &attr )

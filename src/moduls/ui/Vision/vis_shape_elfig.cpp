@@ -2552,11 +2552,11 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
             RunWdgView   *runW = qobject_cast<RunWdgView*>(view);
             if( runW && elFD->active && runW->permCntr() )
             {
-                string sev;
-                for( int i=0; i < inundationItems.size(); i++ )
-                    if( inundationItems[i].path.contains(ev->pos()) )
-                    	sev="ws_Fig"+TSYS::int2str(i);
-                if( !sev.empty() )
+		string sev;
+		for( int i=0; i < inundationItems.size(); i++ )
+		    if( inundationItems[i].path.contains(ev->pos()) )
+			sev="ws_Fig"+TSYS::int2str(i);
+		if( !sev.empty() )
 		{
 		    if( !runW->hasFocus() )	runW->setFocus( Qt::MouseFocusReason );
 		    if( ev->buttons() & Qt::LeftButton )	sev += "Left";

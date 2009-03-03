@@ -100,6 +100,7 @@ class VisDevelop : public QMainWindow
 	void visualItDel( const string &itms = "" );	//Delete selected visual items
 	void visualItProp( );	//Visual item (widget, library, project or page) properties
 	void visualItEdit( );	//Visual item graphical edit
+	void visualItClear( );	//Visual item changes clear
 	void visualItCut( );	//Visual item cut
 	void visualItCopy( );	//Visual item copy
 	void visualItPaste( );	//Visual item paste
@@ -117,6 +118,7 @@ class VisDevelop : public QMainWindow
 		*actVisItDel,		//Delete visual item (library, widget, project or page)
 		*actVisItProp,		//Visual item (library, widget, project or page) properties
 		*actVisItEdit,		//Graphical edit of visual item (widget or page)
+		*actVisItClear,		//Clear of visual item changes (widget or page)
 		*actVisItCut,		//Cut visual item
 		*actVisItCopy,		//Copy visual item
 		*actVisItPaste,		//Paste visual item

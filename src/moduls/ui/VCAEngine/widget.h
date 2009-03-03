@@ -38,7 +38,7 @@ class Attr : public TCntrNode
 {
     public:
 	//Data
-	//- Attribute flags -
+	//> Attribute flags
 	enum GlobalAttrFlgs
 	{
 	    Active	= 0x00100,	//Active attribute for primitives process
@@ -54,7 +54,7 @@ class Attr : public TCntrNode
 	    DirRead	= 0x20000	//Direct read attribute, through widget
 	};
 
-	//- Link types -
+	//> Link types
 	enum SelfAttrFlgs
 	{
 	    CfgConst	= 0x01,		//Constant
@@ -66,7 +66,7 @@ class Attr : public TCntrNode
 	};
 
 	//Methods
-	//- Main -
+	//> Main
 	Attr( TFld &fld );
 	~Attr( );
 
@@ -84,14 +84,14 @@ class Attr : public TCntrNode
 	void setCfgTempl( const string &vl );
 	void setCfgVal( const string &vl );
 
-	//- Get value -
+	//> Get value
 	string getSEL( );
 	string getS( );
 	double getR( );
 	int    getI( );
 	char   getB( );
 
-	//- Set value -
+	//> Set value
 	void setSEL( const string &val, bool strongPrev = false, bool sys = false );
 	void setS( const string &val, bool strongPrev = false, bool sys = false );
 	void setR( double val, bool strongPrev = false, bool sys = false );
@@ -108,7 +108,7 @@ class Attr : public TCntrNode
 
     private:
 	//Data
-	//- Storing -
+	//> Storing
 	union
 	{
 	    ResString	*s_val;		//String
@@ -116,7 +116,7 @@ class Attr : public TCntrNode
 	    int		i_val;		//Integer
 	    char	b_val;		//Boolean
 	}m_val;
-	//- Attributes -
+	//> Attributes
 	TFld	*m_fld;			//Base field
 	unsigned m_modif;		//Modify counter
 	char	self_flg;		//Self attributes flags
@@ -164,15 +164,16 @@ class Widget : public TCntrNode, public TValElem
 	virtual void setCalcProg( const string &iprg )	{ };
 	virtual void setCalcPer( int vl )		{ };
 
-	//- Storing -
+	//> Storing
 	virtual void loadIO( )		{ }			//Load widget's IO
 	virtual void saveIO( )		{ }			//Save widget's IO
+	virtual void wClear( );					//Widget's changing clear
 
-	//- Enable stat -
+	//> Enable stat
 	bool enable( );
 	virtual void setEnable( bool val );
 
-	//- Inheritance methods -
+	//> Inheritance methods
 	virtual string parentNm( )	{ return mParentNm; }	//Parent widget name
 	virtual string rootId( );				//Root widget id
 	AutoHD<Widget> parent( );				//Parent widget
@@ -184,7 +185,7 @@ class Widget : public TCntrNode, public TValElem
 	virtual void inheritAttr( const string &attr = "" );	//Inherit parent attributes
 	void inheritIncl( const string &wdg = "" );		//Inherit parent include widgets
 
-	//- Widget's attributes -
+	//> Widget's attributes
 	void attrList( vector<string> &list )		{ attr_cfg.fldList(list); }
 	void attrAdd( TFld *attr, int pos = -1, bool inher = false );
 	void attrDel( const string &attr );
@@ -192,14 +193,14 @@ class Widget : public TCntrNode, public TValElem
 	int  attrPos( const string &attr )		{ return attr_cfg.fldId(attr); }
 	AutoHD<Attr> attrAt( const string &attr )	{ return chldAt(attrId,attr); }
 
-	//- Include widgets -
+	//> Include widgets
 	void wdgList( vector<string> &list );
 	bool wdgPresent( const string &wdg );
-	virtual void wdgAdd( const string &wid, const string &name, const string &path );
+	virtual void wdgAdd( const string &wid, const string &name, const string &path, bool force = false );
 	void wdgDel( const string &wid, bool full = false );
 	AutoHD<Widget> wdgAt( const string &wdg );
 
-	//- Data access -
+	//> Data access
 	virtual string resourceGet( const string &id, string *mime = NULL )	{ return ""; }
 
     protected:
@@ -215,7 +216,7 @@ class Widget : public TCntrNode, public TValElem
 	virtual bool cntrCmdLinks( XMLNode *opt );
 	virtual bool cntrCmdProcess( XMLNode *opt );
 
-	virtual bool attrChange( Attr &cfg, void *prev );   //Process attribute change local and into terminator
+	virtual bool attrChange( Attr &cfg, TVariant prev );   //Process attribute change local and into terminator
 	virtual unsigned int modifVal( Attr &cfg )	{ return 0; }
 
 	void addFld( TElem *el, unsigned id );
@@ -224,7 +225,7 @@ class Widget : public TCntrNode, public TValElem
 	TVariant vlGet( Attr &a );
 
 	//Attributes
-	//- Generic data -
+	//> Generic data
 	string	mId;			//Widget identifier
 
 	char	mEnable	:1;		//Enable status
@@ -235,7 +236,7 @@ class Widget : public TCntrNode, public TValElem
 	AutoHD<Widget>	mParent;	//Parent widget
 	vector< AutoHD<Widget> > m_herit;	//Heritators
 
-	//- Attributes data -
+	//> Attributes data
 	TElem	attr_cfg;		//Attributes structure element
 };
 

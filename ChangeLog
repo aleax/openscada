@@ -1,5 +1,17 @@
+2009-03-03 Roman
+- !!!:/UI/VCAEngine,/UI/Vision: Widget's changes clearing mechanism is released.
+- FIX:/UI/VCAEngine: Restoring attributes on reload to inherited or default values is fixed.
+- /UI/VCAEngine: Previous values on time attributes changing is made send into type TVariant.
+- FIX:/UI/VCAEngine: Alarm's quittance from widget's call procedures is fixed.
+- FIX:/UI/VCAEngine: Copy widgets is fixed.
+- !!!:/UI/VCAEngine,/UI/Vision,/UI/WebVision: The RunTime context menu for active widgets is released.
+- !!!:/DemoDB: Realised the full feature signal objects. The result graphics template cadr is created. Context and status tips is added.
+    The navigation panel is updated and quittance buttons is added. Volumed pipe elements is added to library and used for all mnemos.
+    Context menu is added for digital taps. Value's text font is rised for input's views.
+
+
 2009-02-27 Roman,Maxim
-- FIX:/UI/WebVision: postReq is modified and fixed.
+- FIX:/UI/WebVision: postReq() for primitive 'ElFigure' is modified and fixed.
 - FIX:/SYS: New DB seek mechanizm for config file is fixed.
 
 

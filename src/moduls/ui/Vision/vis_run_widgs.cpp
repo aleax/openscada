@@ -167,9 +167,9 @@ void RunWdgView::shapeList( const string &snm, vector<string> &ls )
 
 RunWdgView *RunWdgView::findOpenWidget( const string &iwdg )
 {
-    //- Self check -
+    //> Self check
     if( id() == iwdg ) return this;
-    //- Check to included widgets -
+    //> Check to included widgets
     RunWdgView *wdg;
     for( int i_ch = 0; i_ch < children().size(); i_ch++ )
 	if( qobject_cast<RunWdgView*>(children().at(i_ch)) && !qobject_cast<RunPageView*>(children().at(i_ch)) && ((RunWdgView*)children().at(i_ch))->isEnabled() &&
@@ -214,6 +214,12 @@ bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 	case 3:		//pgOpenSrc
 	    setProperty("pgOpenSrc",val.c_str());
 	    return true;
+	case 6:		//active
+	    setProperty("active",(bool)atoi(val.c_str()));
+	    return true;
+	case 17:	//contextMenu
+	    setProperty("contextMenu",val.c_str());
+	    return true;
     }
 
     return rez;
@@ -231,29 +237,54 @@ string RunWdgView::resGet( const string &res )
 
 bool RunWdgView::event( QEvent *event )
 {
-    //> Paint message about access denied
-    if( event->type() == QEvent::Paint && !permView() )
+    //> Force event's process
+    switch( event->type() )
     {
-        if( dynamic_cast<RunPageView*>(this) )
-        {
-	    QPainter pnt(this);
-	    //>> Fill page and draw border
-	    pnt.fillRect(rect(),QBrush(QColor("black"),Qt::Dense4Pattern));
-	    pnt.setPen(QPen(QBrush(QColor("black")),1));
-	    pnt.drawRect(rect().adjusted(0,0,-1,-1));
-	    //>> Draw message
-	    QTextOption to;
-	    pnt.setPen(QColor("red"));
-	    to.setAlignment(Qt::AlignCenter);
-	    to.setWrapMode(QTextOption::WordWrap);
-	    pnt.drawText(rect(),QString(_("Page: '%1'.\nView access is not permited.")).arg(id().c_str()),to);
-	}
-	return true;
+	case QEvent::Paint:
+	    if( permView() )	break;
+	    //> Paint message about access denied
+	    if( dynamic_cast<RunPageView*>(this) )
+	    {
+		QPainter pnt(this);
+		//>> Fill page and draw border
+		pnt.fillRect(rect(),QBrush(QColor("black"),Qt::Dense4Pattern));
+		pnt.setPen(QPen(QBrush(QColor("black")),1));
+		pnt.drawRect(rect().adjusted(0,0,-1,-1));
+		//>> Draw message
+		QTextOption to;
+		pnt.setPen(QColor("red"));
+		to.setAlignment(Qt::AlignCenter);
+		to.setWrapMode(QTextOption::WordWrap);
+		pnt.drawText(rect(),QString(_("Page: '%1'.\nView access is not permited.")).arg(id().c_str()),to);
+	    }
+	    return true;
+	case QEvent::MouseButtonPress:
+	    if( ((QMouseEvent*)event)->button() == Qt::RightButton && !property("contextMenu").toString().isEmpty() && property("active").toBool() && permCntr() )
+	    {
+		QAction *actTmp;
+		QMenu popup;
+		string sln;
+		for( int off = 0; (sln=TSYS::strSepParse(property("contextMenu").toString().toAscii().data(),0,'\n',&off)).size(); )
+		{
+		    actTmp = new QAction(TSYS::strSepParse(sln,0,':').c_str(),this);
+		    actTmp->setWhatsThis(TSYS::strSepParse(sln,1,':').c_str());
+		    popup.addAction(actTmp);
+		}
+		if( !popup.isEmpty() )
+		{
+		    actTmp = popup.exec(QCursor::pos());
+		    if( actTmp && !actTmp->whatsThis().isEmpty() ) attrSet("event","usr_"+actTmp->whatsThis().toStdString());
+		    popup.clear();
+		    return true;
+		}
+	    }
+	    break;
     }
 
+    //> Call to shape for event process
     if( WdgView::event(event) || (shape&&shape->event(this,event)) )	return true;
 
-    //- Key events process for send to model -
+    //> Key events process for send to model
     string mod_ev;
     switch( event->type() )
     {

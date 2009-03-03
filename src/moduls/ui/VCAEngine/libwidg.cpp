@@ -587,6 +587,20 @@ void LWidget::load_( )
     string tbl = ownerLib().tbl();
     SYS->db().at().dataGet( db+"."+tbl, mod->nodePath()+tbl, *this );
 
+    //> Inherit modify attributes
+    vector<string> als;
+    attrList( als );
+    for( int i_a = 0; i_a < als.size(); i_a++ )
+    {
+	if( !attrPresent(als[i_a]) ) continue;
+	AutoHD<Attr> attr = attrAt(als[i_a]);
+	if( attr.at().modif() && m_attrs.find(als[i_a]) == string::npos )
+	{
+	    attr.at().setModif(0);
+	    inheritAttr(als[i_a]);
+	}
+    }
+
     //> Load generic attributes
     tbl = tbl+"_io";
     TConfig c_el(&mod->elWdgIO());
@@ -616,19 +630,6 @@ void LWidget::loadIO( )
     //> Load widget's work attributes
     string db  = ownerLib().DB();
     string tbl = ownerLib().tbl()+"_io";
-
-    //> Inherit modify attributes
-    /*attrList( als );
-    for( int i_a = 0; i_a < als.size(); i_a++ )
-    {
-        AutoHD<Attr> attr = attrAt(als[i_a]);
-        if( attr.at().flgGlob()&Attr::IsInher && attr.at().modif() && m_attrs.find(als[i_a]) == string::npos )
-        {
-            attr.at().setModif(0);
-            inheritAttr(als[i_a]);
-        }
-    }
-    als.clear();*/
 
     //> Same attributes load
     TConfig c_el(&mod->elWdgIO());
@@ -780,21 +781,31 @@ void LWidget::saveIO( )
     }
 }
 
-void LWidget::wdgAdd( const string &wid, const string &name, const string &path )
+void LWidget::wClear( )
+{
+    Widget::wClear();
+
+    m_proc = m_attrs = "";
+}
+
+void LWidget::wdgAdd( const string &wid, const string &name, const string &path, bool force )
 {
     if( !isContainer() )  throw TError(nodePath().c_str(),_("Widget is not container!"));
     if( wdgPresent(wid) ) return;
 
     //> Check for label <deleted>
-    string db  = ownerLib().DB();
-    string tbl = ownerLib().tbl()+"_incl";
-    TConfig c_el( &mod->elInclWdg() );
-    c_el.cfg("IDW").setS(id());
-    c_el.cfg("ID").setS(wid);
-    if( SYS->db().at().dataGet( db+"."+tbl, mod->nodePath()+tbl, c_el ) && c_el.cfg("PARENT").getS() == "<deleted>" )
+    if( !force )
     {
-	if( !parent().at().wdgPresent(wid) )	SYS->db().at().dataDel( db+"."+tbl, mod->nodePath()+tbl, c_el, true );
-	return;
+	string db  = ownerLib().DB();
+	string tbl = ownerLib().tbl()+"_incl";
+	TConfig c_el( &mod->elInclWdg() );
+	c_el.cfg("IDW").setS(id());
+	c_el.cfg("ID").setS(wid);
+	if( SYS->db().at().dataGet( db+"."+tbl, mod->nodePath()+tbl, c_el ) && c_el.cfg("PARENT").getS() == "<deleted>" )
+	{
+	    if( !parent().at().wdgPresent(wid) )	SYS->db().at().dataDel( db+"."+tbl, mod->nodePath()+tbl, c_el, true );
+	    return;
+	}
     }
 
     //> Same widget add
@@ -833,7 +844,7 @@ void LWidget::inheritAttr( const string &attr )
 void LWidget::cntrCmdProc( XMLNode *opt )
 {
     if( cntrCmdServ(opt) ) return;
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	cntrCmdGeneric(opt);
@@ -878,9 +889,9 @@ LWidget &CWidget::ownerLWdg()
 
 void CWidget::postEnable( int flag )
 {
-    //- Call parent methos -
+    //> Call parent methos
     Widget::postEnable(flag);
-    //- Set container widget id -
+    //> Set container widget id
     cfg("IDW").setS(ownerLWdg().id());
 }
 
@@ -905,7 +916,7 @@ string CWidget::owner( )
 void CWidget::setOwner( const string &iown )
 {
     m_owner = iown;
-    //- Group update -
+    //> Group update
     if( SYS->security().at().grpAt("UI").at().user(iown) ) setGrp("UI");
     else
     {
@@ -969,6 +980,20 @@ void CWidget::load_( )
     string tbl = ownerLWdg().ownerLib().tbl()+"_incl";
     SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,*this);
 
+    //> Inherit modify attributes
+    vector<string> als;
+    attrList( als );
+    for( int i_a = 0; i_a < als.size(); i_a++ )
+    {
+	if( !attrPresent(als[i_a]) ) continue;
+	AutoHD<Attr> attr = attrAt(als[i_a]);
+	if( attr.at().modif() && m_attrs.find(als[i_a]) == string::npos )
+	{
+	    attr.at().setModif(0);
+	    inheritAttr(als[i_a]);
+	}
+    }
+
     //> Load generic attributes
     tbl = ownerLWdg().ownerLib().tbl()+"_io";
     TConfig c_el(&mod->elWdgIO());
@@ -998,19 +1023,6 @@ void CWidget::loadIO( )
     //> Load widget's work attributes
     string db  = ownerLWdg().ownerLib().DB();
     string tbl = ownerLWdg().ownerLib().tbl()+"_io";
-
-    //- Inherit modify attributes -
-    /*attrList( als );
-    for( int i_a = 0; i_a < als.size(); i_a++ )
-    {
-	AutoHD<Attr> attr = attrAt(als[i_a]);
-	if( attr.at().flgGlob()&Attr::IsInher && attr.at().modif() && m_attrs.find(als[i_a]) == string::npos )
-	{
-	    attr.at().setModif(0);
-	    inheritAttr(als[i_a]);
-	}
-    }
-    als.clear();*/
 
     //> Same load
     TConfig c_el(&mod->elWdgIO());
@@ -1169,6 +1181,13 @@ void CWidget::saveIO( )
 	    fld_cnt--;
 	}
     }
+}
+
+void CWidget::wClear( )
+{
+    Widget::wClear();
+
+    m_attrs = "";
 }
 
 string CWidget::resourceGet( const string &id, string *mime )

@@ -1454,6 +1454,7 @@ void WdgTree::ctrTreePopup( )
     popup.addAction(owner()->actLibNew);
     popup.addAction(owner()->actVisItAdd);
     popup.addAction(owner()->actVisItDel);
+    popup.addAction(owner()->actVisItClear);
     popup.addAction(owner()->actVisItProp);
     popup.addAction(owner()->actVisItEdit);
     popup.addSeparator();
@@ -1468,7 +1469,7 @@ void WdgTree::ctrTreePopup( )
     popup.addAction(owner()->actDBLoad);
     popup.addAction(owner()->actDBSave);
     popup.addSeparator();
-    //- Reload action -
+    //> Reload action
     QImage ico_t;
     if(!ico_t.load(TUIS::icoPath("reload").c_str())) ico_t.load(":/images/reload.png");
     QAction *actRefresh = new QAction(QPixmap::fromImage(ico_t),_("Refresh libraries"),this);
@@ -1710,6 +1711,7 @@ void ProjTree::ctrTreePopup( )
     popup.addAction(owner()->actPrjNew);
     popup.addAction(owner()->actVisItAdd);
     popup.addAction(owner()->actVisItDel);
+    popup.addAction(owner()->actVisItClear);
     popup.addAction(owner()->actVisItProp);
     popup.addAction(owner()->actVisItEdit);
     popup.addSeparator();
@@ -2185,6 +2187,7 @@ void DevelWdgView::wdgPopup( )
 	if( !selectChilds(&sel_cnt,&sel_wdgs).empty() )
 	{
 	    popup.addAction(mainWin()->actVisItDel);
+	    popup.addAction(mainWin()->actVisItClear);
 	    if( sel_cnt == 1 )
 	    {
 		popup.addAction(mainWin()->actVisItProp);

@@ -76,11 +76,11 @@ class Project : public TCntrNode, public TConfig
 	void setTbl( const string &it )		{ m_dbt = it; }
 	void setFullDB( const string &it );
 
-	//- Enable stat -
+	//> Enable stat
 	bool enable( )			{ return mEnable; }
 	void setEnable( bool val );
 
-	//- Pages -
+	//> Pages
 	void list( vector<string> &ls ) 	{ chldList(mPage,ls); }
 	bool present( const string &id )	{ return chldPresent(mPage,id); }
 	AutoHD<Page> at( const string &id );
@@ -89,7 +89,7 @@ class Project : public TCntrNode, public TConfig
 	void del( const string &id, bool full = false )
 	{ chldDel( mPage, id, -1, full ); }
 
-	//- Mime data access -
+	//> Mime data access
 	void mimeDataList( vector<string> &list, const string &idb = "" );
 	bool mimeDataGet( const string &id, string &mimeType, string *mimeData = NULL, const string &idb = "" );
 	void mimeDataSet( const string &id, const string &mimeType, const string &mimeData, const string &idb = "" );
@@ -173,17 +173,17 @@ class Page : public Widget, public TConfig
 	void setParentNm( const string &isw );
 	void setPrjFlags( int val );
 
-	//- Storing -
+	//> Storing
 	void loadIO( );
 	void saveIO( );
 
 	void setEnable( bool val );
 
-	//- Include widgets -
-	void wdgAdd( const string &wid, const string &name, const string &path );
+	//> Include widgets
+	void wdgAdd( const string &wid, const string &name, const string &path, bool force = false );
 	AutoHD<PageWdg> wdgAt( const string &wdg );
 
-	//- Pages -
+	//> Pages
 	void pageList( vector<string> &ls )	{ chldList(mPage,ls); }
 	bool pagePresent( const string &id )	{ return chldPresent(mPage,id); }
 	AutoHD<Page> pageAt( const string &id );
@@ -192,7 +192,7 @@ class Page : public Widget, public TConfig
 	void pageDel( const string &id, bool full = false )
 	{ chldDel( mPage, id, -1, full ); }
 
-	//- Data access -
+	//> Data access
 	string resourceGet( const string &id, string *mime = NULL );
 
 	void inheritAttr( const string &attr = "" );
@@ -205,9 +205,10 @@ class Page : public Widget, public TConfig
 	void postEnable( int flag );
 	void postDisable( int flag );
 
-	//- Storing -
+	//> Storing
 	void load_( );
 	void save_( );
+	void wClear( );
 
 	unsigned int modifVal( Attr &cfg )	{ modif(); return 0; }
 
@@ -240,7 +241,7 @@ class PageWdg : public Widget, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	//- Main parameters -
+	//> Main parameters
 	string path( );
 	string ico( );
 	string type( )		{ return "ProjLink"; }
@@ -259,11 +260,11 @@ class PageWdg : public Widget, public TConfig
 	void setPermit( short iperm )		{ mPermit = iperm; modif(); }
 	void setParentNm( const string &isw )	{ mParent = isw; modif(); }
 
-	//- Storing -
+	//> Storing
 	void loadIO( );
 	void saveIO( );
 
-	//- Data access -
+	//> Data access
 	string resourceGet( const string &id, string *mime = NULL );
 
 	void inheritAttr( const string &attr = "" );
@@ -275,9 +276,10 @@ class PageWdg : public Widget, public TConfig
 	void postEnable( int flag );
 	void preDisable( int flag );
 
-	//- Storing -
+	//> Storing
 	void load_( );
 	void save_( );
+	void wClear( );
 
 	unsigned int modifVal( Attr &cfg )	{ modif(); return 0; }
 

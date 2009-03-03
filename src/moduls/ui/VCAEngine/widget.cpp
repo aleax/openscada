@@ -52,7 +52,7 @@ TCntrNode &Widget::operator=( TCntrNode &node )
 
     if( !src_n->enable() ) return *this;
 
-    //- Parent link copy -
+    //> Parent link copy
     if( src_n->parentNm() != path() )
     {
 	if( parentNm() != src_n->parentNm() && enable() ) setEnable(false);
@@ -60,7 +60,7 @@ TCntrNode &Widget::operator=( TCntrNode &node )
     }
     if( !enable() ) setEnable(true);
 
-    //- Copy generic configuration -
+    //> Copy generic configuration
     if( src_n->parent().freeStat() || src_n->name() != src_n->parent().at().name() )	setName(src_n->name());
     if( src_n->parent().freeStat() || src_n->descr() != src_n->parent().at().descr() )	setDescr(src_n->descr());
     if( src_n->parent().freeStat() || src_n->ico() != src_n->parent().at().ico() )	setIco(src_n->ico());
@@ -71,7 +71,7 @@ TCntrNode &Widget::operator=( TCntrNode &node )
     if( src_n->parent().freeStat() || src_n->calcProg() != src_n->parent().at().calcProg() )	setCalcProg(src_n->calcProg());
     if( src_n->parent().freeStat() || src_n->calcPer() != src_n->parent().at().calcPer() )	setCalcPer(src_n->calcPer());
 
-    //- Copy attributes -
+    //> Copy attributes
     vector<string> els;
     src_n->attrList( els );
     AutoHD<Attr> attr, pattr;
@@ -83,7 +83,7 @@ TCntrNode &Widget::operator=( TCntrNode &node )
 	    attrAt(els[i_a]).at().setModif(1);
 	}
 	attr  = attrAt(els[i_a]);
-	if( pattr.at().flgGlob( )&Attr::DirRead ) continue;
+	if( attr.at().flgGlob( )&Attr::DirRead ) continue;
 	pattr = src_n->attrAt(els[i_a]);
 	attr.at().setFlgSelf(pattr.at().flgSelf());
 	switch( attr.at().type() )
@@ -97,7 +97,7 @@ TCntrNode &Widget::operator=( TCntrNode &node )
 	attr.at().setCfgVal( pattr.at().cfgVal() );
     }
 
-    //- Include widgets copy -
+    //> Include widgets copy
     if( !isLink( ) && src_n->isContainer() )
     {
 	src_n->wdgList(els);
@@ -135,16 +135,17 @@ void Widget::postEnable( int flag )
 	attrAdd( new TFld("geomMargin",_("Geometry:margin"),TFld::Integer,Attr::Generic,"","0","0;1000","","12") );
 	attrAdd( new TFld("tipTool",_("Tip:tool"),TFld::String,Attr::Generic,"","","","","15") );
 	attrAdd( new TFld("tipStatus",_("Tip:status"),TFld::String,Attr::Generic,"","","","","16") );
+	attrAdd( new TFld("contextMenu",_("Context menu"),TFld::String,TFld::FullText|Attr::Generic,"","","","","17") );
 	attrAdd( new TFld("evProc",_("Events process"),TFld::String,TFld::FullText,"200") );
     }
 }
 
 void Widget::preDisable( int flag )
 {
-    //- Delete heritors widgets -
+    //> Delete heritors widgets
     while( herit().size() )	mod->nodeDel( herit()[0].at().path(), 0, 0x10, true );
 
-    //- Disable widget -
+    //> Disable widget
     if( enable() )  setEnable(false);
 }
 
@@ -212,8 +213,8 @@ void Widget::setEnable( bool val )
 	    try
 	    {
 		if( TSYS::strNoSpace(parentNm()).empty() ) throw TError(nodePath().c_str(),"%s",_("Empty parent!"));
-		if( parentNm() == ".." ) mParent=AutoHD<TCntrNode>(nodePrev());
-		else mParent=mod->nodeAt(parentNm());
+		if( parentNm() == ".." ) mParent = AutoHD<TCntrNode>(nodePrev());
+		else mParent = mod->nodeAt(parentNm());
 		//- Check for enable parent widget and enable if not -
 		if( !parent().at().enable() )	parent().at().setEnable(true);
 		//- Inherit -
@@ -302,14 +303,15 @@ void Widget::heritUnreg( Widget *wdg )
 
 void Widget::inheritAttr( const string &iattr )
 {
-    if( parent().freeStat() )	return;
+    bool loadDef = parent().freeStat();
 
     //> Create no present attributes
     vector<string>  ls;
-    if( iattr.empty() )	parent().at().attrList(ls);
+    if( iattr.empty() )	(loadDef ? attrList(ls) : parent().at().attrList(ls));
     else
     {
-	if( parent().at().attrPresent(iattr) )	ls.push_back(iattr);
+	if( !loadDef && parent().at().attrPresent(iattr) )	ls.push_back(iattr);
+	else if( attrPresent(iattr) )	{ loadDef = true; ls.push_back(iattr); }
 	else return;
     }
 
@@ -319,25 +321,38 @@ void Widget::inheritAttr( const string &iattr )
     {
 	if( !attrPresent(ls[i_l]) )
 	{
+	    if( loadDef ) continue;
 	    if( parent().at().attrAt(ls[i_l]).at().flgGlob()&Attr::Mutable )	continue;
 	    TFld *fel = new TFld(parent().at().attrAt(ls[i_l]).at().fld());
-	    //-- Clear user attribute flag and set inherit flag --
+	    //>> Clear user attribute flag and set inherit flag
 	    fel->setFlg(fel->flg()|Attr::IsInher);
 	    attrAdd(fel);
 	}
 	attr  = attrAt(ls[i_l]);
-	pattr = parent().at().attrAt(ls[i_l]);
-	if( (attr.at().flgGlob( )&Attr::DirRead) || (attr.at().modif() && !(attr.at().flgSelf()&Attr::SessAttrInh)) )	continue;
-	attr.at().setFlgSelf(pattr.at().flgSelf());
-	bool active = attr.at().flgGlob()&Attr::Active;
-	switch( attr.at().type() )
+	if( loadDef )
 	{
-	    case TFld::Boolean:	attr.at().setB( pattr.at().getB(), active );	break;
-	    case TFld::Integer:	attr.at().setI( pattr.at().getI(), active );	break;
-	    case TFld::Real:	attr.at().setR( pattr.at().getR(), active );	break;
-	    case TFld::String:	attr.at().setS( pattr.at().getS(), active );	break;
+	    attr.at().setS( attr.at().fld().def(), attr.at().flgGlob()&Attr::Active );
+	    attr.at().setFlgSelf((Attr::SelfAttrFlgs)0);
+	    attr.at().setCfgTempl("");
+	    attr.at().setCfgVal("");
+	    attr.at().setModif(0);
+	    continue;
 	}
-	//-- No inherit calc flag for links --
+	pattr = parent().at().attrAt(ls[i_l]);
+	if( attr.at().modif() && !(attr.at().flgSelf()&Attr::SessAttrInh) )	continue;
+	attr.at().setFlgSelf(pattr.at().flgSelf());
+	if( !(attr.at().flgGlob( )&Attr::DirRead) )
+	{
+	    bool active = attr.at().flgGlob()&Attr::Active;
+	    switch( attr.at().type() )
+	    {
+		case TFld::Boolean:	attr.at().setB( pattr.at().getB(), active );	break;
+		case TFld::Integer:	attr.at().setI( pattr.at().getI(), active );	break;
+		case TFld::Real:	attr.at().setR( pattr.at().getR(), active );	break;
+		case TFld::String:	attr.at().setS( pattr.at().getS(), active );	break;
+	    }
+	}
+	//>> No inherit calc flag for links
 	if( isLink() && !parent().at().isLink() )
 	    attr.at().setFlgSelf((Attr::SelfAttrFlgs)(attr.at().flgSelf()&(~Attr::ProcAttr)));
 	attr.at().setCfgTempl(pattr.at().cfgTempl());
@@ -353,7 +368,7 @@ void Widget::inheritIncl( const string &iwdg )
 	parw = parw.at().parent();
     if( parw.freeStat() ) return;
 
-    //- Create no present include widgets for no link and container widgets -
+    //> Create no present include widgets for no link and container widgets
     vector<string>  ls;
     if( !iwdg.empty() && parw.at().wdgPresent(iwdg) )
 	ls.push_back(iwdg);
@@ -361,6 +376,48 @@ void Widget::inheritIncl( const string &iwdg )
     for( int i_w = 0; i_w < ls.size(); i_w++ )
 	if( !wdgPresent(ls[i_w]) )
 	    wdgAdd(ls[i_w],"",parw.at().wdgAt(ls[i_w]).at().path());
+}
+
+void Widget::wClear( )
+{
+    //> Generic clear
+    setIco("");
+
+    //> Inherit modify attributes
+    vector<string> ls;
+    attrList( ls );
+    for( int i_a = 0; i_a < ls.size(); i_a++ )
+    {
+	if( !attrPresent(ls[i_a]) ) continue;
+	AutoHD<Attr> attr = attrAt(ls[i_a]);
+	if( attr.at().modif() )
+	{
+	    attr.at().setModif(0);
+	    inheritAttr(ls[i_a]);
+	}
+    }
+    //> Check for included widgets
+    if( isContainer( ) && !isLink( ) )
+    {
+	AutoHD<Widget> parw = parent();
+	while( !parw.freeStat() && parw.at().isLink() )
+	    parw = parw.at().parent();
+	if( !parw.freeStat() )
+	{
+	    //> Check for widget's deletion
+	    wdgList(ls);
+	    for( int i_w = 0; i_w < ls.size(); i_w++ )
+		if( !parw.at().wdgPresent(ls[i_w]) )
+		    wdgDel(ls[i_w],true);
+
+	    //> No present widget's add and clear call
+	    parw.at().wdgList(ls);
+	    for( int i_w = 0; i_w < ls.size(); i_w++ )
+		if( !wdgPresent(ls[i_w]) )
+		    wdgAdd(ls[i_w],"",parw.at().wdgAt(ls[i_w]).at().path(),true);
+		else wdgAt(ls[i_w]).at().wClear();
+	}
+    }
 }
 
 void Widget::attrAdd( TFld *attr, int pos, bool inher )
@@ -387,10 +444,10 @@ void Widget::attrDel( const string &attr )
 		m_herit[i_h].at().attrDel( attr );
 }
 
-bool Widget::attrChange( Attr &cfg, void *prev )
+bool Widget::attrChange( Attr &cfg, TVariant prev )
 {
-    //- Process Active attribute's mode
-    if( cfg.flgGlob()&Attr::Active && prev && !parent().freeStat() )	parent().at().attrChange(cfg,prev);
+    //> Process Active attribute's mode
+    if( cfg.flgGlob()&Attr::Active && !prev.isNull() && !parent().freeStat() )	parent().at().attrChange(cfg,prev);
     if( cfg.owner() != this )	return false;
 
     //- Update heritors attributes -
@@ -411,7 +468,7 @@ bool Widget::wdgPresent( const string &wdg )
     return chldPresent( inclWdg, wdg );
 }
 
-void Widget::wdgAdd( const string &wid, const string &name, const string &path )
+void Widget::wdgAdd( const string &wid, const string &name, const string &path, bool force )
 {
     if( !isContainer() )  throw TError(nodePath().c_str(),_("Widget is not container!"));
     if( wdgPresent(wid) ) return;
@@ -419,7 +476,7 @@ void Widget::wdgAdd( const string &wid, const string &name, const string &path )
     chldAdd( inclWdg, new Widget(wid,path) );
     wdgAt(wid).at().setName(name);
 
-    //- Call heritors include widgets update -
+    //> Call heritors include widgets update
     for( int i_h = 0; i_h < m_herit.size(); i_h++ )
 	if( m_herit[i_h].at().enable( ) )
 	    m_herit[i_h].at().inheritIncl(wid);
@@ -558,6 +615,7 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 		    "sel_id","0;4;6","sel_list",_("No access;View;View and control"));
 		ctrMkNode("fld",opt,-1,"/wdg/cfg/o_a","",RWRWR_,"root","UI",4,"tp","dec","dest","select",
 		    "sel_id","0;4;6","sel_list",_("No access;View;View and control"));
+		ctrMkNode("comm",opt,-1,"/wdg/cfg/clear",_("Clear widget's changing"),RWRWR_,"root","UI");
 	    }
 	}
 	if(isContainer() && (!isLink()) && ctrMkNode("area",opt,-1,"/inclwdg",_("Include widgets")))
@@ -634,6 +692,7 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( descr() );
 	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setDescr( opt->text() );
     }
+    else if( a_path == "/wdg/cfg/clear" && ctrChkNode(opt,"set",RWRWR_,"root","UI") )	wClear();
     else if( a_path == "/wdg/u_lst" && ctrChkNode(opt) )
     {
 	vector<string> ls;
@@ -1414,7 +1473,7 @@ void Attr::setS( const string &val, bool strongPrev, bool sys )
 	    if( !strongPrev && m_val.s_val->getVal() == val )	break;
 	    string t_str = m_val.s_val->getVal();
 	    m_val.s_val->setVal(val);
-	    if( !sys && !owner()->attrChange(*this,&t_str) )	m_val.s_val->setVal(t_str);
+	    if( !sys && !owner()->attrChange(*this,TVariant(t_str)) )	m_val.s_val->setVal(t_str);
 	    else
 	    {
 		unsigned imdf = owner()->modifVal(*this);
@@ -1443,8 +1502,7 @@ void Attr::setI( int val, bool strongPrev, bool sys )
 	    if( !strongPrev && m_val.i_val == val )	break;
 	    int t_val = m_val.i_val;
 	    m_val.i_val = val;
-	    if( !sys && !owner()->attrChange(*this,&t_val) )
-		m_val.i_val = t_val;
+	    if( !sys && !owner()->attrChange(*this,TVariant(t_val)) )	m_val.i_val = t_val;
 	    else
 	    {
 		unsigned imdf = owner()->modifVal(*this);
@@ -1474,8 +1532,7 @@ void Attr::setR( double val, bool strongPrev, bool sys )
 	    double t_val = m_val.r_val;
 	    m_val.r_val = val;
 
-	    if( !sys && !owner()->attrChange(*this,&t_val) )
-		m_val.r_val = t_val;
+	    if( !sys && !owner()->attrChange(*this,TVariant(t_val)) )	m_val.r_val = t_val;
 	    else
 	    {
 		unsigned imdf = owner()->modifVal(*this);
@@ -1499,7 +1556,7 @@ void Attr::setB( char val, bool strongPrev, bool sys )
 	    if( !strongPrev && m_val.b_val == val )	break;
 	    bool t_val = m_val.b_val;
 	    m_val.b_val = val;
-	    if( !sys && !owner()->attrChange(*this,&t_val) )
+	    if( !sys && !owner()->attrChange(*this,TVariant(t_val)) )
 		m_val.b_val = t_val;
 	    else
 	    {
@@ -1516,7 +1573,7 @@ void Attr::setCfgTempl( const string &vl )
     if( cfg_tmpl == vl ) return;
     string t_tmpl = cfg_tmpl;
     cfg_tmpl = vl;
-    if( !owner()->attrChange(*this,NULL) )	cfg_tmpl = t_tmpl;
+    if( !owner()->attrChange(*this,TVariant()) )	cfg_tmpl = t_tmpl;
     else
     {
 	unsigned imdf = owner()->modifVal(*this);
@@ -1529,7 +1586,7 @@ void Attr::setCfgVal( const string &vl )
     if( cfg_val == vl ) return;
     string t_val = cfg_val;
     cfg_val = vl;
-    if( !owner()->attrChange(*this,NULL) )	cfg_val = t_val;
+    if( !owner()->attrChange(*this,TVariant()) )	cfg_val = t_val;
     else
     {
 	unsigned imdf = owner()->modifVal(*this);
@@ -1542,7 +1599,7 @@ void Attr::setFlgSelf( SelfAttrFlgs flg )
     if( self_flg == flg )	return;
     SelfAttrFlgs t_flg = (SelfAttrFlgs)self_flg;
     self_flg = flg;
-    if( !owner()->attrChange(*this,NULL) )	self_flg = t_flg;
+    if( !owner()->attrChange(*this,TVariant()) )	self_flg = t_flg;
     else
     {
 	unsigned imdf = owner()->modifVal(*this);

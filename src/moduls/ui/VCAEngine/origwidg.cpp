@@ -151,12 +151,12 @@ void OrigElFigure::postEnable( int flag )
     }
 }
 
-bool OrigElFigure::attrChange( Attr &cfg, void *prev )
+bool OrigElFigure::attrChange( Attr &cfg, TVariant prev )
 {
     if( cfg.flgGlob()&Attr::Active && cfg.id() == "elLst" )
     {
 	string sel, sel1;
-	string ls_prev = *(string*)prev;
+	string ls_prev = prev.getS();
 	map<int,char> pntls, pntls_prev, wls, wls_prev, clrls, clrls_prev, imgls, imgls_prev, lstls, lstls_prev;
 	//- Parse last attributes list and make point list -
 	for( int i_p = 0; i_p < 2; i_p++ )
@@ -277,12 +277,12 @@ void OrigFormEl::postEnable( int flag )
 				    _("Line edit;Text edit;Chek box;Button;Combo box;List;Slider;Scroll Bar"),"20") );
 }
 
-bool OrigFormEl::attrChange( Attr &cfg, void *prev )
+bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 {
     if( cfg.flgGlob()&Attr::Active && cfg.id() == "elType" )
     {
 	//- Delete specific attributes -
-	switch(*(int*)prev)
+	switch( prev.getI() )
 	{
 	    case 0:	//Line edit
 		cfg.owner()->attrDel("value");
@@ -429,7 +429,7 @@ void OrigText::postEnable( int flag )
     }
 }
 
-bool OrigText::attrChange( Attr &cfg, void *prev )
+bool OrigText::attrChange( Attr &cfg, TVariant prev )
 {
     if( cfg.flgGlob()&Attr::Active )
     {
@@ -463,7 +463,7 @@ bool OrigText::attrChange( Attr &cfg, void *prev )
 		    TFld::String,Attr::Mutable,"","","","",TSYS::int2str(52+10*i_p).c_str()) );
 	    }
 	}
-	else if( aid >= 50 && (aid%10) == 1 && *(int*)prev != cfg.getI() )
+	else if( aid >= 50 && (aid%10) == 1 && prev.getI() != cfg.getI() )
 	{
 	    int narg = (aid/10)-5;
 	    string fid = "arg"+TSYS::int2str(narg)+"val";
@@ -517,14 +517,14 @@ void OrigMedia::postEnable( int flag )
     }
 }
 
-bool OrigMedia::attrChange( Attr &cfg, void *prev )
+bool OrigMedia::attrChange( Attr &cfg, TVariant prev )
 {
     if( cfg.flgGlob()&Attr::Active )
     {
 	if( cfg.id() == "type" )
 	{
 	    //- Delete specific attributes -
-	    if( *(int*)prev == 1 ) cfg.owner()->attrDel("speed");
+	    if( prev.getI() == 1 ) cfg.owner()->attrDel("speed");
 
 	    //- Create specific attributes -
 	    if(cfg.getI() == 1 )
@@ -598,11 +598,11 @@ void OrigDiagram::postEnable( int flag )
     }
 }
 
-bool OrigDiagram::attrChange( Attr &cfg, void *prev )
+bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 {
     if( !(cfg.flgGlob()&Attr::Active) )	return Widget::attrChange(cfg,prev);
 
-    if( cfg.id() == "active" && cfg.getB() != *(bool*)prev && cfg.owner()->attrPresent("type") &&
+    if( cfg.id() == "active" && cfg.getB() != prev.getB() && cfg.owner()->attrPresent("type") &&
 	cfg.owner()->attrAt("type").at().getI() == 0 )
     {
 	if( !cfg.getB() )
@@ -621,7 +621,7 @@ bool OrigDiagram::attrChange( Attr &cfg, void *prev )
     else if( cfg.id() == "type" )
     {
 	//- Delete specific attributes -
-	switch(*(int*)prev)
+	switch( prev.getI() )
 	{
 	    case 0:
 		cfg.owner()->attrDel("tSek");
@@ -746,7 +746,7 @@ void OrigProtocol::postEnable( int flag )
     }
 }
 
-bool OrigProtocol::attrChange( Attr &cfg, void *prev )
+bool OrigProtocol::attrChange( Attr &cfg, TVariant prev )
 {
     if( cfg.flgGlob()&Attr::Active )
     {
@@ -829,12 +829,12 @@ void OrigDocument::postEnable( int flag )
     }
 }
 
-bool OrigDocument::attrChange( Attr &cfg, void *prev )
+bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 {
     int off = 0;
 
     //> Document's number change process
-    if( cfg.id() == "n" && cfg.getI() != *(int*)prev )
+    if( cfg.id() == "n" && cfg.getI() != prev.getI() )
     {
 	if( !cfg.getI() )
 	{
@@ -871,7 +871,7 @@ bool OrigDocument::attrChange( Attr &cfg, void *prev )
     if( !sw )	return Widget::attrChange(cfg,prev);
 
     //> Make document after time set
-    if( cfg.id() == "time" && cfg.getI() != *(int*)prev )
+    if( cfg.id() == "time" && cfg.getI() != prev.getI() )
     {
 	string mkDk;
 	int n = cfg.owner()->attrAt("n").at().getI();
@@ -895,7 +895,7 @@ bool OrigDocument::attrChange( Attr &cfg, void *prev )
 	}
     }
     //> Load document's from project's DB
-    else if( cfg.id() == "n" && cfg.getI() != *(int*)prev )
+    else if( cfg.id() == "n" && cfg.getI() != prev.getI() )
     {
 	string db  = sw->ownerSess()->parent().at().DB();
 	string tbl = sw->ownerSess()->parent().at().tbl()+"_ses";
@@ -908,7 +908,7 @@ bool OrigDocument::attrChange( Attr &cfg, void *prev )
 	if( SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el) )
 	    cfg.owner()->attrAt("aCur").at().setI(c_el.cfg("IO_VAL").getI(),false,true);
 	//>> Documents load
-	for( int i_d = *(int*)prev; i_d < cfg.getI(); i_d++ )
+	for( int i_d = prev.getI(); i_d < cfg.getI(); i_d++ )
 	{
 	    c_el.cfg("ID").setS("doc"+TSYS::int2str(i_d));
 	    if( SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el) )
@@ -927,19 +927,19 @@ bool OrigDocument::attrChange( Attr &cfg, void *prev )
 	}
     }
     //> Move archive cursor
-    else if( cfg.id() == "aCur" && cfg.getI() != *(int*)prev )
+    else if( cfg.id() == "aCur" && cfg.getI() != prev.getI() )
     {
 	int n = cfg.owner()->attrAt("n").at().getI();
-	if( cfg.getI() < 0 )		cfg.setI( ((*(int*)prev)+1 >= n) ? 0 : (*(int*)prev)+1, false,true );
+	if( cfg.getI() < 0 )		cfg.setI( (prev.getI()+1 >= n) ? 0 : prev.getI()+1, false,true );
 	else if( cfg.getI() >= n )	cfg.setI( n-1, false,true );
-	if( cfg.getI() != *(int*)prev )
+	if( cfg.getI() != prev.getI() )
 	{
 	    cfg.owner()->attrAt("doc"+TSYS::int2str(cfg.getI())).at().setS(cfg.owner()->attrAt("tmpl").at().getS());
-	    if( *(int*)prev == cfg.owner()->attrAt("vCur").at().getI() )
+	    if( prev.getI() == cfg.owner()->attrAt("vCur").at().getI() )
 		cfg.owner()->attrAt("vCur").at().setI(cfg.getI());
 
 	    //>> Save cursor to document to project's DB
-	    if( *(int*)prev < n && *(int*)prev >=0 )
+	    if( prev.getI() < n && prev.getI() >=0 )
 	    {
 		string db  = sw->ownerSess()->parent().at().DB();
 		string tbl = sw->ownerSess()->parent().at().tbl()+"_ses";
@@ -954,7 +954,7 @@ bool OrigDocument::attrChange( Attr &cfg, void *prev )
 	}
     }
     //> Document save
-    else if( cfg.id().substr(0,3) == "doc" && cfg.getS() != *(string*)prev )
+    else if( cfg.id().substr(0,3) == "doc" && cfg.getS() != prev.getS() )
     {
 	string db  = sw->ownerSess()->parent().at().DB();
 	string tbl = sw->ownerSess()->parent().at().tbl()+"_ses";
@@ -967,17 +967,17 @@ bool OrigDocument::attrChange( Attr &cfg, void *prev )
 	SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,c_el);
     }
     //> Move archive view cursor
-    else if( cfg.id() == "vCur" && cfg.getI() != *(int*)prev )
+    else if( cfg.id() == "vCur" && cfg.getI() != prev.getI() )
     {
 	int aCur = cfg.owner()->attrAt("aCur").at().getI();
 	int n = cfg.owner()->attrAt("n").at().getI();
 	if( cfg.getI() < 0 )
 	{
-	    int docN = *(int*)prev;
+	    int docN = prev.getI();
 	    //>> Search next document
 	    if( cfg.getI() == -1 )
 	    {
-		while( docN != aCur && (docN == *(int*)prev || cfg.owner()->attrAt("doc"+TSYS::int2str(docN)).at().getS().empty()) )
+		while( docN != aCur && (docN == prev.getI() || cfg.owner()->attrAt("doc"+TSYS::int2str(docN)).at().getS().empty()) )
 		    if( ++docN >= n )	docN = 0;
 	    }
 	    //>> Search previous document
@@ -985,12 +985,12 @@ bool OrigDocument::attrChange( Attr &cfg, void *prev )
 	    {
 		if( --docN < 0 ) docN = n-1;
 		if( docN == aCur || cfg.owner()->attrAt("doc"+TSYS::int2str(docN)).at().getS().empty() )
-		    docN = *(int*)prev;
+		    docN = prev.getI();
 	    }
 	    if( docN != cfg.getI() )	cfg.setI(docN,false,true);
 	}
 	else if( cfg.getI() >= n )	cfg.setI( cfg.owner()->attrAt("aCur").at().getI(), false, true );
-	if( cfg.getI() != *(int*)prev )
+	if( cfg.getI() != prev.getI() )
 	    cfg.owner()->attrAt("doc").at().setS( cfg.owner()->attrAt("doc"+TSYS::int2str(cfg.getI())).at().getS() );
     }
 

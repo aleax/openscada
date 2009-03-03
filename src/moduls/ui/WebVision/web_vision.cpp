@@ -259,7 +259,9 @@ TWEB::TWEB( string name ) : mTSess(10), chck_st(false)
 	"table.prot { border: 1px solid black; border-collapse: collapse; empty-cells: show; }\n"
 	"table.prot th { border: 1px solid black; background-color: #E6E6E6; text-align: center; white-space: nowrap; }\n"
 	"table.prot td { border: 1px solid black; white-space: nowrap; }\n"
-	"table.prot td.hd { background-color: #E6E6E6; font-weight: bold; text-align: center; }\n";
+	"table.prot td.hd { background-color: #E6E6E6; font-weight: bold; text-align: center; }\n"
+	"#popupmenu { position: absolute; border: 0; width: 150px; height: 150px; overflow : auto; z-index: 1000; }\n"
+	"#popupmenu select { background-color: #E6E6E6; border: 1px solid black; padding: 1px; }\n";
 
 #if 0
     char mess[][100] = { "Time", "Level", "Category", "Message", "mcsec", "Ready" };

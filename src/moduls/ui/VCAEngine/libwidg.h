@@ -133,15 +133,15 @@ class LWidget : public Widget, public TConfig
 	void setCalcPer( int vl );
 	void setParentNm( const string &isw )	{ mParent = isw; modif(); }
 
-	//- Include widgets -
-	void wdgAdd( const string &wid, const string &name, const string &path );
+	//> Include widgets
+	void wdgAdd( const string &wid, const string &name, const string &path, bool force = false );
 	AutoHD<CWidget> wdgAt( const string &wdg );
 
-        //- Storing -
+        //> Storing
 	void loadIO( );
 	void saveIO( );
 
-	//- Data access -
+	//> Data access
 	string resourceGet( const string &id, string *mime = NULL );
 
 	void inheritAttr( const string &attr = "" );
@@ -153,9 +153,10 @@ class LWidget : public Widget, public TConfig
 	void postDisable( int flag );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
-	//- Storing -
+	//> Storing
 	void load_( );
 	void save_( );
+	void wClear( );
 
 	unsigned int modifVal( Attr &cfg )      { modif(); return 0; }
 
@@ -181,7 +182,7 @@ class CWidget : public Widget, public TConfig
 	CWidget( const string &id, const string &isrcwdg = "" );
 	~CWidget( );
 
-	//- Main parameters -
+	//> Main parameters
 	string path( );
 	string ico( );
 	string type( )		{ return "LibLink"; }
@@ -200,11 +201,11 @@ class CWidget : public Widget, public TConfig
 	void setPermit( short iperm )		{ mPermit = iperm; modif(); }
 	void setParentNm( const string &isw )	{ mParent = isw; modif(); }
 
-	//- Storing -
+	//> Storing
 	void loadIO( );
 	void saveIO( );
 
-	//- Data access -
+	//> Data access
 	string resourceGet( const string &id, string *mime = NULL );
 
 	void inheritAttr( const string &attr = "" );
@@ -216,9 +217,10 @@ class CWidget : public Widget, public TConfig
 	void postEnable( int flag );
 	void preDisable( int flag );
 
-	//- Storing -
+	//> Storing
 	void load_( );
 	void save_( );
+	void wClear( );
 
 	unsigned int modifVal( Attr &cfg )	{ modif(); return 0; }
 

@@ -1305,6 +1305,42 @@ function makeEl( pgBr, inclPg )
   if( margBrdUpd ) for( var i in this.wdgs ) i.makeEl();
   this.place.setAttribute('title',this.attrs['tipTool']);
   this.place.onmouseover = function() { if( this.wdgLnk.attrs['tipStatus'] ) setStatus(this.wdgLnk.attrs['tipStatus'],10000); };
+
+  //> Context menu setup
+  if( parseInt(this.attrs['perm'])&(SEQ_RD|SEQ_WR) && parseInt(this.attrs['active']) && this.attrs['contextMenu'].length )
+  {
+    var ctxEv = function(e)
+    {
+      if( !e ) e = window.event;
+      if( (isKonq || isOpera) && evMouseGet(e) != 'Right' ) return true;
+      var popUpMenu = getPopup();
+      var optEl = '';
+      var cntxEls = this.wdgLnk.attrs['contextMenu'].split('\n');
+      for( var i_ce = 0; i_ce < cntxEls.length; i_ce++ )
+	optEl += "<option sign='"+cntxEls[i_ce].split(':')[1]+"'>"+cntxEls[i_ce].split(':')[0]+"</option>";
+      popUpMenu.childNodes[0].innerHTML = optEl;
+      if( popUpMenu.childNodes[0].childNodes.length )
+      {
+	popUpMenu.childNodes[0].wdgLnk = this.wdgLnk;
+	popUpMenu.childNodes[0].size = Math.max(3,popUpMenu.childNodes[0].childNodes.length);
+	popUpMenu.style.cssText = 'visibility: visible; left: '+(e.clientX+window.pageXOffset)+'px; top: '+(e.clientY+window.pageYOffset)+'px;';
+	popUpMenu.childNodes[0].selectedIndex = -1;
+	popUpMenu.childNodes[0].onclick = function()
+	{
+	    this.parentNode.style.cssText = 'visibility: hidden; left: -200px; top: -200px;';
+	    if( this.selectedIndex < 0 ) return false;
+	    setWAttrs(this.wdgLnk.addr,'event','usr_'+this.options[this.selectedIndex].getAttribute('sign'));
+	    return false;
+	}
+      }
+      return false;
+    }
+    if( isKonq || isOpera ) this.place.onmousedown = ctxEv;
+    else this.place.oncontextmenu = ctxEv;
+  }
+  else this.place.oncontextmenu = this.place.onmousedown = null;
+
+  //> Child widgets process
   if( pgBr && !inclPg && parseInt(this.attrs['perm'])&SEQ_RD )
     for( var j = 0; j < pgBr.childNodes.length; j++ )
     {
@@ -1465,6 +1501,22 @@ function setStatus( mess, tm )
   if( !tm || tm > 0 ) stTmID = setTimeout('setStatus(null)',tm?tm:1000);
 }
 
+/**************************************************
+ * getPopup - Get popup menu.                     *
+ **************************************************/
+function getPopup( )
+{
+  var popUpMenu = document.getElementById('popupmenu');
+  if( !popUpMenu )
+  {
+    popUpMenu = document.createElement('div'); popUpMenu.id = 'popupmenu';
+    popUpMenu.appendChild(document.createElement('select'));
+    document.body.appendChild(popUpMenu);
+    popUpMenu.style.visibility = 'hidden';
+  }
+  return popUpMenu;
+}
+
 /***************************************************
  * Main start code                                 *
  ***************************************************/
@@ -1476,6 +1528,14 @@ sessId = location.pathname.split('/');
 for( var i_el = sessId.length-1; i_el >= 0; i_el-- )
   if( sessId[i_el].length )
   { sessId = sessId[i_el]; break; }
+
+document.body.onmouseup = function(e)
+{
+  if( !e ) e = window.event;
+  if( evMouseGet(e) != 'Left' ) return true;
+  var popUpMenu = document.getElementById('popupmenu');
+  if( popUpMenu ) popUpMenu.style.visibility = 'hidden';
+}
 
 tmCnt = 0;				//Call counter
 pgList = new Array();			//Opened pages list

@@ -373,7 +373,7 @@ void Session::alarmQuittance( const string &wpath, ui8 quit_tmpl )
 	    at(ls[i_p]).at().alarmQuittance( quit_tmpl, true );
     }
 
-    //- Queue alarms quittance -
+    //> Queue alarms quittance
     ResAlloc res( mAlrmRes, false );
 
     for( int i_q = 0; i_q < mAlrm.size(); i_q++ )
@@ -742,20 +742,20 @@ AutoHD<SessPage> SessPage::pageAt( const string &iid )
 
 void SessPage::calc( bool first, bool last )
 {
-    //- Process self data -
+    //> Process self data
     if( process() ) SessWdg::calc(first,last);
 
-    //- Put calculate to include pages -
+    //> Put calculate to include pages
     vector<string> ls;
     pageList(ls);
     for(int i_l = 0; i_l < ls.size(); i_l++ )
         pageAt(ls[i_l]).at().calc(first,last);
 }
 
-bool SessPage::attrChange( Attr &cfg, void *prev )
+bool SessPage::attrChange( Attr &cfg, TVariant prev )
 {
     //- Page open process -
-    if( enable() && prev && cfg.id() == "pgOpen" )
+    if( enable() && !prev.isNull() && cfg.id() == "pgOpen" )
     {
 	if( cfg.getB() )
 	{
@@ -782,7 +782,7 @@ void SessPage::alarmSet( bool isSet )
     if( isSet ) aqtp |= atp;
 
     vector<string> lst;
-    //- Included pages process -
+    //> Included pages process
     pageList( lst );
     for( int i_p = 0; i_p < lst.size(); i_p++ )
     {
@@ -791,7 +791,7 @@ void SessPage::alarmSet( bool isSet )
 	atp |= (iacur>>8) & 0xFF;
 	aqtp |= (iacur>>16) & 0xFF;
     }
-    //- Included widgets process -
+    //> Included widgets process
     wdgList( lst );
     for( int i_w = 0; i_w < lst.size(); i_w++ )
     {
@@ -1092,14 +1092,12 @@ string SessWdg::resourceGet( const string &id, string *mime )
     return mimeData;
 }
 
-void SessWdg::wdgAdd( const string &iid, const string &name, const string &iparent )
+void SessWdg::wdgAdd( const string &iid, const string &name, const string &iparent, bool force )
 {
     if( !isContainer() )  throw TError(nodePath().c_str(),_("Widget is not container!"));
     if( wdgPresent(iid) ) return;
 
     chldAdd(inclWdg,new SessWdg(iid,iparent,ownerSess()));
-
-//    if( ownerSess( )->start( ) ) printf("TEST 00: Add widget '%s' to '%s'\n",iid.c_str(),path().c_str());
 }
 
 void SessWdg::inheritAttr( const string &aid )
@@ -1172,11 +1170,11 @@ void SessWdg::alarmQuittance( ui8 quit_tmpl, bool isSet )
     int alarmSt = attrAt("alarmSt").at().getI();
     if( !((((alarmSt>>16)&0xFF)^quit_tmpl)&((alarmSt>>16)&0xFF)) ) return;
 
-    //- Self quittance -
+    //> Self quittance
     attrAt("alarmSt").at().setI( alarmSt & (quit_tmpl<<16|0xFFFF) );
 
     vector<string> lst;
-    //- Include widgets quittance -
+    //> Include widgets quittance
     wdgList( lst );
     for( int i_w = 0; i_w < lst.size(); i_w++ )
 	wdgAt( lst[i_w] ).at().alarmQuittance(quit_tmpl);
@@ -1382,7 +1380,7 @@ void SessWdg::calc( bool first, bool last )
     }
 }
 
-bool SessWdg::attrChange( Attr &cfg, void *prev )
+bool SessWdg::attrChange( Attr &cfg, TVariant prev )
 {
     Widget::attrChange( cfg, prev );
 
@@ -1391,20 +1389,25 @@ bool SessWdg::attrChange( Attr &cfg, void *prev )
     if( cfg.id() == "active" && cfg.getB() && !cfg.owner()->attrPresent("focus") )
 	cfg.owner()->attrAdd( new TFld("focus",_("Focus"),TFld::Boolean,TFld::NoFlag,"1","false","","","-2") );
     //> Alarm event for widget process
-    else if( cfg.id() == "alarm" && enable() && prev )		alarmSet( true );
+    else if( cfg.id() == "alarm" && enable() && !prev.isNull() ) alarmSet( true );
     //> Alarm status process
-    else if( cfg.id() == "alarmSt" && cfg.getI()&0x10000 )	ownerSess( )->alarmQuittance( path(), (cfg.getI()>>16)&0xFF );
+    else if( cfg.id() == "alarmSt" && cfg.getI()&0x1000000 )
+    {
+	int tmpl = ~(cfg.getI()&0xFF);
+	cfg.setI(prev.getI(),false,true);
+	ownerSess( )->alarmQuittance(path(),tmpl);
+    }
 
     //> External link process
-    if( !inLnkGet && prev && cfg.flgSelf()&Attr::CfgLnkOut && !cfg.cfgVal().empty() )
+    if( !inLnkGet && !prev.isNull() && cfg.flgSelf()&Attr::CfgLnkOut && !cfg.cfgVal().empty() )
     {
 	if( cfg.flgSelf()&Attr::SessAttrInh ) cfg.setFlgSelf((Attr::SelfAttrFlgs)(cfg.flgSelf()&(~Attr::SessAttrInh)));
 	string obj_tp = TSYS::strSepParse(cfg.cfgVal(),0,':')+":";
 	try
 	{
 	    if( obj_tp == "prm:" )
-	        switch( cfg.type() )
-	        {
+		switch( cfg.type() )
+		{
 		    case TFld::Boolean:
 		        ((AutoHD<TVal>)SYS->daq().at().nodeAt(cfg.cfgVal(),0,0,obj_tp.size())).at().setB(cfg.getB());
 		        break;

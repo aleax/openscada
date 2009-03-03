@@ -177,7 +177,7 @@ class SessWdg : public Widget, public TValFunc
 	void getUpdtWdg( const string &path, unsigned int tm, vector<string> &els );
 
 	//> Include widgets
-	void wdgAdd( const string &wid, const string &name, const string &parent );	//Implicit widget's creating on inherit
+	void wdgAdd( const string &wid, const string &name, const string &parent, bool force = false );	//Implicit widget's creating on inherit
 	AutoHD<SessWdg> wdgAt( const string &wdg );
 
 	//> Events process
@@ -205,7 +205,7 @@ class SessWdg : public Widget, public TValFunc
 	bool cntrCmdGeneric( XMLNode *opt );
 	bool cntrCmdAttributes( XMLNode *opt );
 	void cntrCmdProc( XMLNode *opt );			//Control interface command process
-	bool attrChange( Attr &cfg, void *prev );
+	bool attrChange( Attr &cfg, TVariant prev );
 
 	unsigned int modifVal( Attr &cfg );
 	bool modifChk( unsigned int tm );
@@ -260,7 +260,7 @@ class SessPage : public SessWdg
 	//Methods
 	bool cntrCmdGeneric( XMLNode *opt );
 
-	bool attrChange( Attr &cfg, void *prev );
+	bool attrChange( Attr &cfg, TVariant prev );
 
     private:
 	//Attributes

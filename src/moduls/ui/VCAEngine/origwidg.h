@@ -76,7 +76,7 @@ class OrigElFigure : public PrWidget
     protected:
 	//Methods
 	void postEnable( int flag );
-	bool attrChange( Attr &cfg, void *prev );
+	bool attrChange( Attr &cfg, TVariant prev );
 };
 
 //*************************************************
@@ -94,7 +94,7 @@ class OrigFormEl : public PrWidget
     protected:
 	//Methods
 	void postEnable( int flag );
-	bool attrChange( Attr &cfg, void *prev );
+	bool attrChange( Attr &cfg, TVariant prev );
 };
 
 //************************************************
@@ -112,7 +112,7 @@ class OrigText : public PrWidget
      protected:
 	//Methods
 	void postEnable( int flag );
-	bool attrChange( Attr &cfg, void *prev );
+	bool attrChange( Attr &cfg, TVariant prev );
 };
 
 //************************************************
@@ -130,7 +130,7 @@ class OrigMedia : public PrWidget
     protected:
 	//Methods
 	void postEnable( int flag );
-	bool attrChange( Attr &cfg, void *prev );
+	bool attrChange( Attr &cfg, TVariant prev );
 };
 
 //************************************************
@@ -148,7 +148,7 @@ class OrigDiagram : public PrWidget
     protected:
 	//Methods
 	void postEnable( int flag );
-	bool attrChange( Attr &cfg, void *prev );
+	bool attrChange( Attr &cfg, TVariant prev );
 };
 
 //************************************************
@@ -166,7 +166,7 @@ class OrigProtocol : public PrWidget
     protected:
 	//Methods
 	void postEnable( int flag );
-	bool attrChange( Attr &cfg, void *prev );
+	bool attrChange( Attr &cfg, TVariant prev );
 };
 
 //************************************************
@@ -184,7 +184,7 @@ class OrigDocument : public PrWidget
     protected:
 	//Methods
 	void postEnable( int flag );
-	bool attrChange( Attr &cfg, void *prev );
+	bool attrChange( Attr &cfg, TVariant prev );
 
 	string makeDoc( const string &tmpl, Widget *wdg );
 	void nodeProcess( XMLNode *xcur, TValFunc &funcV, TFunction &funcIO, const string &iLang, bool instrDel = false );
