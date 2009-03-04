@@ -244,20 +244,24 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	}
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
 	{
-	    bool create = false;	//--- Create archive ---
+	    bool create = false;	//Create archive
 	    bool v_get = atoi(opt->text().c_str());
 	    string attr = opt->attr("key_atr");
 	    string col  = opt->attr("col");
 
-	    //--- Check for create new ---
+	    //>>> Check for create new
 	    if( v_get && vlAt(attr).at().arch().freeStat() )
 	    {
-		//---- Make archive name ----
+		//>>>> Make archive name
 		string a_nm = nodeName()+"_"+attr;
+		if( a_nm.size() > 20 ) a_nm = (nodeName().substr(0,nodeName().size()-nodeName().size()*(a_nm.size()-19)/21)+"_"+attr).substr(0,20);
 		string rez_nm = a_nm;
 		for( int p_cnt = 0; SYS->archive().at().valPresent(rez_nm); p_cnt++ )
+		{
 		    rez_nm = a_nm+TSYS::int2str(p_cnt);
-		//---- Create new archive ----
+		    if( rez_nm.size() > 20 ) rez_nm = a_nm.substr(0,a_nm.size()-(rez_nm.size()-20))+TSYS::int2str(p_cnt);
+		}
+		//>>>> Create new archive
 		SYS->archive().at().valAdd(rez_nm);
 		SYS->archive().at().valAt(rez_nm).at().setValType(vlAt(attr).at().fld().type());
 		SYS->archive().at().valAt(rez_nm).at().setSrcMode(TVArchive::PassiveAttr,
@@ -266,14 +270,14 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		SYS->archive().at().valAt(rez_nm).at().start();
 		vlArchMake(vlAt(attr).at());
 	    }
-	    //--- Check for delete archive ---
+	    //>>> Check for delete archive
 	    if( col == "prc" && !v_get && !vlAt(attr).at().arch().freeStat() )
 	    {
 		string a_id = vlAt(attr).at().arch().at().id();
 		SYS->archive().at().valDel(a_id,true);
 		modif();
 	    }
-	    //--- Change archivator status ---
+	    //>>> Change archivator status
 	    if( col != "prc" && !vlAt(attr).at().arch().freeStat() )
 	    {
 		if( v_get )	vlAt(attr).at().arch().at().archivatorAttach(col);

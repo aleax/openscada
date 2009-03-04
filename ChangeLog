@@ -1,3 +1,7 @@
+2009-03-04 Roman
+- /Archive/Value: Value's archive identifier limit on generation set to 20 symbols.
+
+
 2009-03-03 Roman
 - !!!:/UI/VCAEngine,/UI/Vision: Widget's changes clearing mechanism is released.
 - FIX:/UI/VCAEngine: Restoring attributes on reload to inherited or default values is fixed.
