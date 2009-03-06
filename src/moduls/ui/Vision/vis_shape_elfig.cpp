@@ -376,7 +376,11 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 else if( sscanf(el_s.c_str(), "%d", &w) == 1 )
                 {
                         width = w_index;
-                        if( fabs( w - 0 ) >= 1 ) (*widths)[w_index] = vmin(1000,vmax(1,w*scale));
+                        if( fabs( w - 0 ) >= 1 )
+                        {
+                            (*widths)[w_index] = vmin(1000,vmax(1,w*scale));
+                            shapeWidths_unScale[w_index] = vmin(1000,vmax(1,w));
+                        }
                         else (*widths)[w_index] = 0;
                         w_index -= 1;
                 }
@@ -406,7 +410,11 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 else if( sscanf(el_s.c_str(), "%d", &w) == 1 )
                 {
                     bord_width = w_index;
-                    if( fabs( w - 0 ) >= 1 ) (*widths)[w_index] = vmin(1000,vmax(1,w*scale));
+                    if( fabs( w - 0 ) >= 1 )
+                    {
+                        (*widths)[w_index] = vmin(1000,vmax(1,w*scale));
+                        shapeWidths_unScale[w_index] = vmin(1000,vmax(1,w));
+                    }
                     else (*widths)[w_index] = 0;
                     w_index -= 1;
                 }
@@ -528,7 +536,11 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 else if( sscanf(el_s.c_str(), "%d", &w) == 1 )
                 {
                     width = w_index;
-                    if( fabs( w - 0 ) >= 1 ) (*widths)[w_index] = vmin(1000,vmax(1,w*scale));
+                    if( fabs( w - 0 ) >= 1 )
+                    {
+                        (*widths)[w_index] = vmin(1000,vmax(1,w*scale));
+                        shapeWidths_unScale[w_index] = vmin(1000,vmax(1,w));
+                    }
                     else (*widths)[w_index] = 0;
                     w_index -= 1;
                 }
@@ -558,7 +570,11 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 else if( sscanf(el_s.c_str(), "%d", &w) == 1 )
                 {
                     bord_width = w_index;
-                    if( fabs( w - 0 ) >= 1 ) (*widths)[w_index] = vmin(1000,vmax(1,w*scale));
+                    if( fabs( w - 0 ) >= 1 )
+                    {
+                        (*widths)[w_index] = vmin(1000,vmax(1,w*scale));
+                        shapeWidths_unScale[w_index] = vmin(1000,vmax(1,w));
+                    }
                     else (*widths)[w_index] = 0;
                     w_index -= 1;
                 }
@@ -711,7 +727,11 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 else if( sscanf(el_s.c_str(), "%d", &w) == 1 )
                 {
                     width = w_index;
-                    if( fabs( w - 0 ) >= 1 ) (*widths)[w_index] = vmin(1000,vmax(1,w*scale));
+                    if( fabs( w - 0 ) >= 1 )
+                    {
+                        (*widths)[w_index] = vmin(1000,vmax(1,w*scale));
+                        shapeWidths_unScale[w_index] = vmin(1000,vmax(1,w));
+                    }
                     else (*widths)[w_index] = 0;
                     w_index -= 1;
                 }
@@ -741,7 +761,11 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 else if( sscanf(el_s.c_str(), "%d", &w) == 1 )
                 {
                     bord_width = w_index;
-                    if( fabs( w - 0 ) >= 1 ) (*widths)[w_index] = vmin(1000,vmax(1,w*scale));
+                    if( fabs( w - 0 ) >= 1 )
+                    {
+                        (*widths)[w_index] = vmin(1000,vmax(1,w*scale));
+                        shapeWidths_unScale[w_index] = vmin(1000,vmax(1,w));
+                    }
                     else (*widths)[w_index] = 0;
                     w_index -= 1;
                 }
@@ -1151,8 +1175,8 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
             }
 
         }
-        if( rel_list && !w->allAttrLoad( ) )
-            elFD->shapeWidths = shapeWidths_unScale;
+    if( rel_list && !w->allAttrLoad( ) && runW )
+        elFD->shapeWidths = shapeWidths_unScale;
     return up;
 }
 
@@ -1173,8 +1197,8 @@ bool ShapeElFigure::shapeSave( WdgView *w )
     double scale;
     if( w->xScale(true) < w->yScale(true) ) scale = w->xScale(true);
     else scale = w->yScale(true);
-    //- Building attributes for all el_figures and fills -
-    //--for el_figures--
+    //> Building attributes for all el_figures and fills
+    //>>for el_figures
     for( int i_s = 0; i_s < shapeItems.size(); i_s++ )
     {
 	switch( shapeItems[i_s].type )
@@ -2008,6 +2032,12 @@ void ShapeElFigure::toolAct( QAction *act )
                                           inundationItems[pi->first].brush,inundationItems[pi->first].brush_img, pi->second, pi->second));
             flag_A = true;
             flag_copy = true;
+            if( rect_array.size() )
+            {
+                flag_rect = false;
+                rect_array.clear();
+            }
+            rect_num = -1;
             flag_ctrl_move = 1;
             count_Shapes = index_array.size();
             moveAll( QPointF(0,0), shapeItems, pnts, inundationItems, w );
@@ -4518,8 +4548,7 @@ void ShapeElFigure::moveUpDown( QVector<ShapeItem> &shapeItems, PntMap *pnts, QV
     int rect_num_temp;
     count_moveItemTo = 0;
     bool flag_break_move;
-    if( flag_ctrl && count_Shapes )
-        moveAll( QPointF(0,0), shapeItems, pnts, inundationItems, view );
+    if( flag_ctrl && count_Shapes ) moveAll( QPointF(0,0), shapeItems, pnts, inundationItems, view );
     else
     { 
         if( !flag_first_move )
@@ -4531,16 +4560,14 @@ void ShapeElFigure::moveUpDown( QVector<ShapeItem> &shapeItems, PntMap *pnts, QV
             if( count_holds )// if the Ctrl is pressed and there are connected figures
             {
                 count_Shapes = count_holds + 1;//getting the number of figures to move
-                if( rect_num != -1 )// if ther is rect under the mouse pointer
+                if( rect_num != -1 )// if there is rect under the mouse pointer
                 {
                     rect_num_temp = rect_num;
                     rect_num = realRectNum ( rect_num, shapeItems );// detecting the number of the rect for moveItemTo
                     if( ( rect_num == 2 || rect_num == 3 ) && shapeItems[index].type == 3 )// if there is rect of unconnected point of bexier curve
                         flag_rect=false;
                     if( rect_num == 0 || rect_num == 1 )// if there is the rect of start or end point of the figure
-                    {
                         rectNum0_1( shapeItems, rect_num_temp, pnts, view );
-                    }
                     if( (rect_num == 3 || rect_num == 4) && shapeItems[index].type == 2 )
                         rectNum3_4( shapeItems );
                 }
@@ -4551,7 +4578,7 @@ void ShapeElFigure::moveUpDown( QVector<ShapeItem> &shapeItems, PntMap *pnts, QV
         if( flag_rect || flag_arc_rect_3_4 || ( rect_num == -1 && count_holds ) )
             moveAll( QPointF(0,0), shapeItems, pnts, inundationItems, view );
     }
-    if( ( !flag_ctrl  || (!flag_rect && rect_num != -1 ) ) && !flag_arc_rect_3_4 )// if there is simple figure or one of its rects
+    if( ( !flag_ctrl  || (!flag_rect && rect_num != -1 ) ) && !flag_arc_rect_3_4 && !flag_copy )// if there is simple figure or one of its rects
         if(index != -1)
         {
             num_vector.clear();
@@ -5041,11 +5068,12 @@ int ShapeElFigure::itemAt( const QPointF &pos, const QVector<ShapeItem> &shapeIt
     QPointF point;
     rect_num = -1;
     bool flag_break = false;
-    for(int j = 0; j <= rectItems.size()-1; j++) 
-    {
-        const RectItem &item1 = rectItems[j];
-        if( item1.path.contains(pos) ) rect_num = j;
-    }
+    if( !flag_copy )
+        for(int j = 0; j <= rectItems.size()-1; j++) 
+        {
+            const RectItem &item1 = rectItems[j];
+            if( item1.path.contains(pos) ) rect_num = j;
+        }
     index = -1;
     if( rect_num != -1)
         for( int i = 0; i <= shapeItems.size()-1; i++ )
@@ -5469,8 +5497,11 @@ bool ShapeElFigure::inundation1_2( const QPointF &point, const QVector<ShapeItem
                         if( inundationItems[i].path == inundationPath_1_2 )
                         {
                             inundationItems.remove(i);
-                            fl_brk = true;
-                            break;
+                            paintImage(view);
+                            view->repaint();
+                            return true;
+                            //fl_brk = true;
+                            //break;
                         }
                     if( !fl_brk )
                     {

@@ -2001,7 +2001,7 @@ TVArchivator::TVArchivator( const string &iid, const string &idb, TElem *cf_el )
 {
     m_id = iid;
 
-    //- Create calc timer -
+    //> Create calc timer
     struct sigevent sigev;
     memset(&sigev,0,sizeof(sigev));
     sigev.sigev_notify = SIGEV_THREAD;
@@ -2093,14 +2093,14 @@ void TVArchivator::start()
 
 void TVArchivator::stop( bool full_del )
 {
-    //- Stop interval timer for periodic thread creating -
+    //> Stop interval timer for periodic thread creating
     struct itimerspec itval;
     itval.it_interval.tv_sec = itval.it_interval.tv_nsec = itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
     timer_settime(tmId, 0, &itval, NULL);
     if( TSYS::eventWait( prc_st, false, nodePath()+"stop",5) )
 	throw TError(nodePath().c_str(),_("Archive thread is not stopped!"));
 
-    //- Detach from all archives -
+    //> Detach from all archives
     ResAlloc res(a_res,false);
     while(archEl.size())
     {

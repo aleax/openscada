@@ -1,3 +1,8 @@
+2009-03-06 Maxim
+- FIX:/UI/Vision: Copy function for primitive 'ElFigure' is fixed.
+- FIX:/UI/Vision: Width scaling for development mode for primitive ElFigure is fixed.
+
+
 2009-03-04 Roman
 - /Archive/Value: Value's archive identifier limit on generation set to 20 symbols.
 
