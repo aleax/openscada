@@ -76,10 +76,10 @@ void TParamContr::preDisable(int flag)
 {
     if( flag )
     {
-	//- Delete archives -
+	//> Delete archives
 	vector<string> a_ls;
 	vlList(a_ls);
-	for(int i_a = 0; i_a < a_ls.size(); i_a++)
+	for( int i_a = 0; i_a < a_ls.size(); i_a++ )
 	    if( !vlAt(a_ls[i_a]).at().arch().freeStat() )
 	    {
 		string arh_id = vlAt(a_ls[i_a]).at().arch().at().id();

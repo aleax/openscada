@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.SoundCard file: sound.h
 /***************************************************************************
- *   Copyright (C) 2008 by Roman Savochenko                                *
+ *   Copyright (C) 2008-2009 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -51,7 +51,12 @@ class TMdPrm : public TParamContr
 	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );
 
+	int iCnl( )			{ return mCnl; }
+	void setICnl( int val )		{ mCnl = val; modif(); }
+
 	void load_( );
+	void enable( );
+	void disable( );
 
 	TMdContr &owner( )	{ return (TMdContr &)TParamContr::owner(); }
 
@@ -59,12 +64,13 @@ class TMdPrm : public TParamContr
 	//Methods
 	void vlArchMake( TVal &val );
 
+	void cntrCmdProc( XMLNode *opt );
+
 	void postEnable( int flag );
 
     private:
 	//Attributes
-	string	&m_in;
-	TElem	p_el;		//Work atribute elements
+	int	&mCnl;
 };
 
 //*************************************************
@@ -77,26 +83,45 @@ class TMdContr: public TController
     friend class TMdPrm;
     public:
 	//Methods
-	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem);
+	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem );
 	~TMdContr( );
 
+	virtual string getStatus( );
+	int channelAllow( );
+
 	TParamContr *ParamAttach( const string &name, int type );
+
+	TElem &prmEL( )		{ return pEl; }
 
 	void load_( );
 	void save_( );
 	void start_( );
 	void stop_( );
 
+	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
+
 	TTpContr &owner( )	{ return (TTpContr&)TController::owner(); }
 
-    private:
+    protected:
 	//Methods
-	static void *Task( void *param );
+	void prmEn( const string &id, bool val );	//Enable parameter to process list
+	static int recordCallback( const void *iBuf, void *oBuf, unsigned long framesPerBuffer,
+		const PaStreamCallbackTimeInfo* timeInfo, PaStreamCallbackFlags statusFlags, void *userData );
 
+	void cntrCmdProc( XMLNode *opt );		//Control interface command process
+
+    private:
 	//Attributes
-	pthread_t procPthr;
-	bool	prc_st, endrun_req;
-	string	&m_card;
+	TElem	pEl;					//Work atribute elements
+	string	&mCard;
+	int	&mSmplRate, &mSmplType;
+	bool	prcSt, endrunReq;
+	int	numChan, smplSize;
+	vector< AutoHD<TMdPrm> > pHd;			// Parameter's process list
+
+	PaStream *stream;
+	long long wTm, sdTm;
+	float	acqSize;
 };
 
 //*************************************************

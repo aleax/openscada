@@ -70,7 +70,7 @@ extern "C"
 using namespace Siemens;
 
 //************************************************
-//* TTpContr                                     * 
+//* TTpContr                                     *
 //************************************************
 TTpContr::TTpContr( string name ) : drv_CIF_OK(false)
 {
@@ -530,7 +530,7 @@ void TMdContr::postDisable( int flag )
     {
 	if( flag )
 	{
-	    //- Delete parameter's io table -
+	    //> Delete parameter's io table
 	    string tbl = DB()+"."+cfg("PRM_BD").getS()+"_io";
 	    SYS->db().at().open(tbl);
 	    SYS->db().at().close(tbl,true);
@@ -563,7 +563,7 @@ void TMdContr::enable_( )
 
 void TMdContr::disable_( )
 {
-    //- Clear acquisition data blocks and asynchronous write mode data blocks -
+    //> Clear acquisition data blocks and asynchronous write mode data blocks
     acqBlks.clear();
     writeBlks.clear();
 }
@@ -572,14 +572,14 @@ void TMdContr::start_( )
 {
     connectRemotePLC( );
 
-    //- Former proccess parameters list -
+    //> Former proccess parameters list
     vector<string> list_p;
     list(list_p);
     for(int i_prm=0; i_prm < list_p.size(); i_prm++)
 	if( at(list_p[i_prm]).at().enableStat() )
 	    prmEn( list_p[i_prm], true );
 
-    //- Start the request data task -
+    //> Start the request data task
     if( !prc_st )
     {
 	pthread_attr_t pthr_attr;
@@ -600,7 +600,7 @@ void TMdContr::start_( )
 
 void TMdContr::stop_( )
 {
-    //- Stop the request and calc data task -
+    //> Stop the request and calc data task
     if( prc_st )
     {
 	endrun_req = true;
@@ -609,8 +609,8 @@ void TMdContr::stop_( )
 	    throw TError(nodePath().c_str(),_("Acquisition task is not stopped!"));
 	pthread_join( procPthr, NULL );
     }
-    //- Clear proccess parameters list -
-    p_hd.clear();
+    //> Clear proccess parameters list
+    pHd.clear();
 
     disconnectRemotePLC( );
 }
@@ -632,14 +632,12 @@ void TMdContr::prmEn( const string &id, bool val )
 {
     int i_prm;
 
-    ResAlloc res(en_res,true);
-    for( i_prm = 0; i_prm < p_hd.size(); i_prm++)
-	if( p_hd[i_prm].at().id() == id ) break;
+    ResAlloc res(nodeRes(),true);
+    for( i_prm = 0; i_prm < pHd.size(); i_prm++)
+	if( pHd[i_prm].at().id() == id ) break;
 
-    if( val && i_prm >= p_hd.size() )
-	p_hd.push_back(at(id));
-    if( !val && i_prm < p_hd.size() )
-	p_hd.erase(p_hd.begin()+i_prm);
+    if( val && i_prm >= pHd.size() )	pHd.push_back(at(id));
+    if( !val && i_prm < pHd.size() )	pHd.erase(pHd.begin()+i_prm);
 }
 
 void TMdContr::regVal( SValData ival, IO::Type itp, bool wr )
@@ -648,7 +646,7 @@ void TMdContr::regVal( SValData ival, IO::Type itp, bool wr )
 
     int iv_sz = valSize(itp,ival.sz); //Get real value's size
 
-    ResAlloc res(en_res,true);
+    ResAlloc res(nodeRes(),true);
 
     //- Register to acquisition block -
     int i_b;
@@ -1262,7 +1260,7 @@ void *TMdContr::Task( void *icntr )
 	long long t_cnt = SYS->shrtCnt();
 
 	//- Update controller's data -
-	cntr.en_res.resRequestR( );
+	cntr.nodeRes().resRequestR( );
 	//- Process write data blocks -
 	if( cntr.assincWrite( ) )
 	    for(int i_b = 0; i_b < cntr.writeBlks.size(); i_b++)
@@ -1286,11 +1284,11 @@ void *TMdContr::Task( void *icntr )
 	    catch(TError err) { cntr.acqBlks[i_b].err=err.mess; }
 
 	//- Calc parameters -
-	for(unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++)
-	    try{ cntr.p_hd[i_p].at().calc(is_start,is_stop); }
+	for(unsigned i_p=0; i_p < cntr.pHd.size(); i_p++)
+	    try{ cntr.pHd[i_p].at().calc(is_start,is_stop); }
 	    catch(TError err)
 	    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-	cntr.en_res.resReleaseR( );
+	cntr.nodeRes().resReleaseR( );
 	cntr.tm_calc = 1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
 
 	if(is_stop) break;

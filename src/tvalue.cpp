@@ -269,6 +269,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		SYS->archive().at().valAt(rez_nm).at().setToStart(true);
 		SYS->archive().at().valAt(rez_nm).at().start();
 		vlArchMake(vlAt(attr).at());
+		modif();
 	    }
 	    //>>> Check for delete archive
 	    if( col == "prc" && !v_get && !vlAt(attr).at().arch().freeStat() )
@@ -285,6 +286,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		modif();
 		vlAt(attr).at().arch().at().modif();
 	    }
+
 	}
     }
     else TCntrNode::cntrCmdProc(opt);

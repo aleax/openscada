@@ -375,7 +375,7 @@ void *TMdContr::AD_DSCTask( void *param )
 		    if(!vtm)	vtm = SYS->curTime()-1000000;
 		    int v_a_step;
 		    int p_cnt = p_end-p_beg+1;
-		    for(int i_p = 0; i_p < ai_prm.size(); i_p++ )
+		    for( int i_p = 0; i_p < ai_prm.size(); i_p++ )
 		    {
 			if( !cntr.present(ai_prm[i_p]) )	continue;
 			AutoHD<TMdPrm> prm = cntr.at(ai_prm[i_p]);
@@ -385,7 +385,7 @@ void *TMdContr::AD_DSCTask( void *param )
 			int voff = (dscs.transfers+dscaioint.dump_threshold)%dscaioint.num_conversions;
 			//- Get code -
 			AutoHD<TVal> val = prm.at().vlAt("code");
-			if(!val.at().arch().freeStat() && val.at().arch().at().srcMode() == TVArchive::PassiveAttr)
+			if( !val.at().arch().freeStat() && val.at().arch().at().srcMode() == TVArchive::PassiveAttr )
 			{
 			    v_a_step = vmax(1,val.at().arch().at().period()*(int)dscaioint.conversion_rate/1000000);
 			    for( int i_smpl = 0; i_smpl < dscaioint.conversion_rate; i_smpl+=v_a_step )

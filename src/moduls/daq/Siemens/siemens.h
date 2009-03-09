@@ -222,7 +222,6 @@ class TMdContr: public TController
 	};
 
 	//Attributes
-	Res	en_res;			// Resource for enable params
 	int	&m_per,			// ms
 		&m_prior,		// Process task priority
 		&m_type,		// Connection type
@@ -233,7 +232,7 @@ class TMdContr: public TController
 
 	bool	prc_st,			// Process task active
 		endrun_req;		// Request to stop of the Process task
-	vector< AutoHD<TMdPrm> > p_hd;	// Parameter's process list
+	vector< AutoHD<TMdPrm> > pHd;	// Parameter's process list
 	vector< SDataRec > acqBlks;	// Acquisition data blocks
 	vector< SDataRec > writeBlks;	// Data block for write to a data source, for asynchronous write mode
 

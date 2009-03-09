@@ -1,12 +1,12 @@
 ## process this file with automake to generate Makefile.in
-EXTRA_DIST = *.h
+EXTRA_DIST = *.h po/* doc/*
 
 AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
 AM_LDFLAGS= -shared -module
 
 oscd_modul_PROGRAMS = daq_SoundCard.so
 daq_SoundCard_so_SOURCES = sound.cpp
-daq_SoundCard_so_LDADD = -lasound
+daq_SoundCard_so_LDADD = -lportaudio
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)DAQ.SoundCard
@@ -29,8 +29,8 @@ install-data-local:
 	cp $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
 	rm $$name ; \
 	done
-#	install -m 755 -d $(doc_name)
-#	install -m 644 doc/*.pdf $(doc_name)
+	install -m 755 -d $(doc_name)
+	install -m 644 doc/*.pdf $(doc_name)
 
 uninstall-local:
 	@catalogs=`find ./po -name \*.po` ; \

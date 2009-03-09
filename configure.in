@@ -171,8 +171,8 @@ AC_ARG_ENABLE(DCON,AC_HELP_STRING([--disable-DCON], [disable build module DAQ/DC
 [ if test $enableval = yes; then ModDCON=true; else ModDCON=false; fi],[ ModDCON=true; ])
 AC_ARG_ENABLE(DAQTransporter,AC_HELP_STRING([--disable-DAQTransporter], [disable build module DAQ/Transporter]),
 [ if test $enableval = yes; then ModDAQTransporter=true; else ModDAQTransporter=false; fi],[ ModDAQTransporter=true; ])
-AC_ARG_ENABLE(SoundCard,AC_HELP_STRING([--enable-SoundCard], [enable build module DAQ/SoundCard]),
-[ if test $enableval = yes; then ModSoundCard=true; else ModSoundCard=false; fi],[ ModSoundCard=false; ])
+AC_ARG_ENABLE(SoundCard,AC_HELP_STRING([--disable-SoundCard], [disable build module DAQ/SoundCard]),
+[ if test $enableval = yes; then ModSoundCard=true; else ModSoundCard=false; fi],[ ModSoundCard=true; ])
 #-- UI modules --
 AC_ARG_ENABLE(VCAEngine,AC_HELP_STRING([--disable-VCAEngine], [disable build module UI/VCAEngine]),
 [ if test $enableval = yes; then ModVCAEngine=true; else ModVCAEngine=false; fi],[ ModVCAEngine=true; ])
@@ -373,10 +373,10 @@ if test ${ModSoundCard} = true; then
     AC_CONFIG_FILES(src/moduls/daq/SoundCard/Makefile)
     DAQSub_mod="${DAQSub_mod}SoundCard "
     #--- Modules checkings ---
-    AC_CHECK_HEADERS([alsa/asoundlib.h],[],
-	[AC_MSG_ERROR(DAQ/SoundCard: Some ALSA headers not found. Install or check ALSA developing package!)])
-    AC_CHECK_LIB([asound],[snd_pcm_stream_name],[AC_MSG_NOTICE(Pass global library using)],
-	[AC_MSG_ERROR(ALSA library not found. Install or check ALSA library package!)])
+    AC_CHECK_HEADERS([portaudio.h],[],
+	[AC_MSG_ERROR(DAQ/SoundCard: Some Portaudio headers not found. Install or check Portaudio developing package!)])
+    AC_CHECK_LIB([portaudio],[Pa_Initialize],[AC_MSG_NOTICE(Pass global library using)],
+	[AC_MSG_ERROR(Portaudio library not found. Install or check Portaudio library package!)])
 fi
 #-- UI modules --
 AC_SUBST(UISub_mod)

@@ -6,9 +6,6 @@
 /* Define to 1 if you have the `alarm' function. */
 #undef HAVE_ALARM
 
-/* Define to 1 if you have the <alsa/asoundlib.h> header file. */
-#undef HAVE_ALSA_ASOUNDLIB_H
-
 /* Define to 1 if you have the <arpa/inet.h> header file. */
 #undef HAVE_ARPA_INET_H
 
@@ -108,6 +105,9 @@
 
 /* Define to 1 if you have the <openssl/ssl.h> header file. */
 #undef HAVE_OPENSSL_SSL_H
+
+/* Define to 1 if you have the <portaudio.h> header file. */
+#undef HAVE_PORTAUDIO_H
 
 /* Define to 1 if you have the <pthread.h> header file. */
 #undef HAVE_PTHREAD_H

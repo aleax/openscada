@@ -47,6 +47,7 @@ class TController : public TCntrNode, public TConfig
 	const string &id( )	{ return m_id; }
 	string name( );
 	string descr( )		{ return m_descr; }
+	virtual string getStatus( );
 
 	string DB( )		{ return m_db; }
 	string tbl( );

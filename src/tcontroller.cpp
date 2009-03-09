@@ -107,6 +107,11 @@ string TController::tbl( )
     return owner().owner().subId()+"_"+owner().modId();
 }
 
+string TController::getStatus( )
+{
+    return startStat() ? _("Started. ") : (enableStat( )?_("Enabled. "):_("Disabled. "));
+}
+
 void TController::load_( )
 {
     if( !SYS->chkSelDB(DB()) ) return;
@@ -270,7 +275,7 @@ TParamContr *TController::ParamAttach( const string &name, int type)
 
 void TController::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	TCntrNode::cntrCmdProc(opt);
@@ -280,6 +285,7 @@ void TController::cntrCmdProc( XMLNode *opt )
 	{
 	    if(ctrMkNode("area",opt,-1,"/cntr/st",_("State")))
 	    {
+		ctrMkNode("fld",opt,-1,"/cntr/st/status",_("Status"),0444,"root","root",1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/cntr/st/en_st",_("Enable"),0664,"root","root",1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/cntr/st/run_st",_("Run"),0664,"root","root",1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/cntr/st/db",_("Controller DB"),0664,"root","root",4,"tp","str","dest","select","select","/db/list",
@@ -302,10 +308,11 @@ void TController::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //- Process command to page -
+    //> Process command to page
     vector<string> c_list;
     string a_path = opt->attr("path");
-    if( a_path == "/prm/nmb" && ctrChkNode(opt) )
+    if( a_path == "/cntr/st/status" && ctrChkNode(opt) )	opt->setText(getStatus());
+    else if( a_path == "/prm/nmb" && ctrChkNode(opt) )
     {
 	list(c_list);
 	int e_c = 0;

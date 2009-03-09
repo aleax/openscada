@@ -504,7 +504,6 @@ XMLNode *TFld::cntrCmdMake( XMLNode *opt, const string &path, int pos, const str
 	if( flg()&TFld::Selected )
 	    n_e->setAttr("tp","str")->setAttr("len","")->setAttr("dest","select")->
 		setAttr("sel_list",selNames());
-		//setAttr("select",path+"/sel_"+name());
 	else switch(type())
 	{
 	    case TFld::String:
@@ -518,5 +517,3 @@ XMLNode *TFld::cntrCmdMake( XMLNode *opt, const string &path, int pos, const str
     }
     return n_e;
 }
-
-

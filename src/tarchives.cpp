@@ -63,7 +63,7 @@ TArchiveS::TArchiveS( ) :
     elVal.fldAdd( new TFld("DESCR",_("Description"),TFld::String,0,"200") );
     elVal.fldAdd( new TFld("START",_("Start archive"),TFld::Boolean,0,"1","0") );
     elVal.fldAdd( new TFld("ADDR",_("Address"),TFld::String,0,"50") );
-    elVal.fldAdd( new TFld("V_PER",_("Value period (sec)"),TFld::Real,0,"8.2","1.0","0;1000000") );
+    elVal.fldAdd( new TFld("V_PER",_("Value period (sec)"),TFld::Real,0,"12.6","1","0;1000000") );
     elVal.fldAdd( new TFld("A_PER",_("Period archiving (sec)"),TFld::Integer,0,"4","60","0;1000") );
 
     //> Value archive DB structure
@@ -74,7 +74,7 @@ TArchiveS::TArchiveS( ) :
     elAval.fldAdd( new TFld("SrcMode",_("Source mode"),TFld::Integer,0,"1") );
     elAval.fldAdd( new TFld("Source",_("Source"),TFld::String,0,"100") );
     elAval.fldAdd( new TFld("VTYPE",_("Value type"),TFld::Integer,0,"1") );
-    elAval.fldAdd( new TFld("BPER",_("Buffer period (sec)"),TFld::Real,0,"5.2","1","0;10000") );
+    elAval.fldAdd( new TFld("BPER",_("Buffer period (sec)"),TFld::Real,0,"9.6","1","0;10000") );
     elAval.fldAdd( new TFld("BSIZE",_("Buffer size (items)"),TFld::Integer,0,"6","100","0;1000000") );
     elAval.fldAdd( new TFld("BHGRD",_("Buffer hard time griding"),TFld::Boolean,0,"1","1") );
     elAval.fldAdd( new TFld("BHRES",_("Buffer high time resolution"),TFld::Boolean,0,"1","0") );

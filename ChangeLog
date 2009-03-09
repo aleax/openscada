@@ -1,3 +1,12 @@
+2009-03-09 Roman
+- !!!!:/DAQ/SoundCard: Releasing module is finished. Version 0.5.0 is released. The documentation is created.
+- FIX:/Archive: The values' archive and archivator variables period format, for DB storing, is expanded up to precision 6 (microseconds).
+- FIX:/Node: Node's resource changed from hd_res to conn_res. Used for preventing locking on time control interface's call.
+- !!:/DAQ: Status controller's mechanism is added.
+- FIX:/DAQ/Value: Seting parameter's modify flag on time archivation for attributes enabling is fixed.
+- /DAQ/Siemens: Node's resource is used.
+
+
 2009-03-06 Maxim
 - FIX:/UI/Vision: Copy function for primitive 'ElFigure' is fixed.
 - FIX:/UI/Vision: Width scaling for development mode for primitive ElFigure is fixed.
