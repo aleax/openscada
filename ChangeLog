@@ -1,6 +1,10 @@
 2009-03-10 Roman
 - !!:/UI/VCAEngine;/UI/Vision;/UI/WebVision: Attributes index for base widgets is reordered.
 - /UI/VCAEngine;/UI/Vision: Not released primitives Function and Link is disabled.
+- !:/SYS: Programm version is changed to 0.6.3.2.
+- /SYS: Set hard depend to bison.
+- /SYS: To RPM-build specification file is added ALTLinux build depend to libportaudio2-devel
+- FIX:/SYS: Removed broken build parameter --disable-gcc-warnings.
 
 
 2009-03-09 Roman

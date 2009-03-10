@@ -1,7 +1,7 @@
 
 AC_PREREQ(2.50)
 
-AC_INIT([OpenSCADA],[0.6.3.1],[rom_as@fromru.com])
+AC_INIT([OpenSCADA],[0.6.3.2],[rom_as@fromru.com])
 AC_PREFIX_DEFAULT([/usr])
 oscd_LIBREVISION="0:10:0"
 oscd_modulpref="oscd_"
@@ -317,8 +317,8 @@ if test ${ModJavaLikeCalc} = true; then
     DAQSub_mod="${DAQSub_mod}JavaLikeCalc "
     #--- Modules checkings ---
     AC_PROG_YACC
-    AC_CHECK_PROG(YACC_OK, ${YACC}, true, false)
-    if test ${YACC_OK} = false; then AC_MSG_ERROR([No one syntax generator present! Install YACC like programm: bison, zubr or byacc.]) fi
+    AC_CHECK_PROG(YACC_OK, bison, true, false)
+    if test ${YACC_OK} = false; then AC_MSG_ERROR([No syntax generator present! Install YACC like programm bison.]) fi
 fi
 if test ${ModDiamondBoards} = true && test $target_cpu != "x86_64"; then
     AC_MSG_RESULT(Build module: DAQ/DiamondBoards)
