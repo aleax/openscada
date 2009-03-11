@@ -5049,10 +5049,12 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
 	    case 22:	//bordWidth
 		bordWidth = atoi(req_el->text().c_str());
 		break;
-	    case 24:	//trcPer
+	    case 25:	//trcPer
 		trcPer = atoi(req_el->text().c_str());
 		break;
-	    case 26:	//tSek
+	    //case 26:	//type
+	    //	break;
+	    case 27:	//tSek
 		tTimeCurent = false;
 		if( atoll(req_el->text().c_str()) == 0 )
 		{
@@ -5062,30 +5064,30 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
 		lstTrc = time(NULL);
 		reld_tr_dt = 1;
 		break;
-	    case 27:	//tUSek
+	    case 28:	//tUSek
 		tTime = 1000000ll*(tTime/1000000)+atoll(req_el->text().c_str());
 		lstTrc = time(NULL);
 		reld_tr_dt = 1;
 		break;
-	    case 28:	//tSize
+	    case 29:	//tSize
 		tSize = atof(req_el->text().c_str());
 		reld_tr_dt = 1;
 		break;
-	    case 29:	//curSek
+	    case 30:	//curSek
 		curTime = atoll(req_el->text().c_str())*1000000 + curTime%1000000;	break;
-	    case 30:	//curUSek
+	    case 31:	//curUSek
 		curTime = 1000000ll*(curTime/1000000)+atoll(req_el->text().c_str());	break;
-	    case 36:	//curColor
+	    case 32:	//curColor
 		curColor = mod->colorParse(req_el->text());				break;
-	    case 31:	//sclColor
+	    case 33:	//sclColor
 		sclColor = mod->colorParse(req_el->text());				break;
-	    case 32:	//sclHor
+	    case 34:	//sclHor
 		sclHor = atoi(req_el->text().c_str());					break;
-	    case 33:	//sclVer
+	    case 35:	//sclVer
 		sclVer = atoi(req_el->text().c_str());					break;
-	    case 37:	//sclMarkColor
+	    case 36:	//sclMarkColor
 		sclMarkColor = mod->colorParse(req_el->text());				break;
-	    case 38:	//sclMarkFont
+	    case 37:	//sclMarkFont
 	    {
 		char family[101]; strcpy(family,"Arial");
 		int bold = 0, italic = 0;
@@ -5102,11 +5104,11 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
 		    sclMarkFontSize = (int)((float)sclMarkFontSize*((float)sclMarkFontSize/(float)(brect[3]-brect[7])));
 		break;
 	    }
-	    case 34:	//valArch
+	    case 38:	//valArch
 		valArch == req_el->text();
 		reld_tr_dt = 2;
 		break;
-	    case 35:	//parNum
+	    case 39:	//parNum
 	    {
 		int parNum = atoi(req_el->text().c_str());
 		if( parNum == trnds.size() )	break;

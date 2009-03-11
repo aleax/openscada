@@ -729,9 +729,9 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    shD->border.setWidth(atoi(val.c_str()));	up = true;	break;
 	case 23:	//bordColor
 	    shD->border.setColor(QColor(val.c_str()));	up = true;	break;
-	case 19:	//bordStyle
+	case 24:	//bordStyle
 	    shD->bordStyle = atoi(val.c_str()); up = true; break;
-	case 24:	//font
+	case 25:	//font
 	{
 	    char family[101]; strcpy(family,"Arial");
 	    int size = 10, bold = 0, italic = 0, underline = 0, strike = 0;
@@ -745,17 +745,17 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    up = true;
 	    break;
 	}
-	case 25:	//color
+	case 26:	//color
 	    shD->color = QColor(val.c_str()); break;
-	case 26:	//orient
+	case 27:	//orient
 	    shD->orient = atoi(val.c_str()); break;
-	case 27:	//wordWrap
+	case 28:	//wordWrap
 	{
 	    if( atoi(val.c_str()) )	shD->text_flg |= Qt::TextWordWrap;
 	    else			shD->text_flg &= (~Qt::TextWordWrap);
 	    break;
 	}
-	case 28:	//alignment
+	case 29:	//alignment
 	{
 	    shD->text_flg &= ~(Qt::AlignLeft|Qt::AlignRight|Qt::AlignHCenter|Qt::AlignTop|Qt::AlignBottom|Qt::AlignVCenter);
 	    switch( atoi(val.c_str())&0x3 )
@@ -772,14 +772,14 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    }
 	    break;
 	}
-	case 29:	//text
+	case 30:	//text
 	{
 	    if( shD->text_tmpl == val.c_str() )	break;
 	    shD->text_tmpl = val;
 	    reform = true;
 	    break;
 	}
-	case 30:	//numbArg
+	case 40:	//numbArg
 	{
 	    int numbArg = atoi(val.c_str());
 	    while( shD->args.size() < numbArg )	shD->args.push_back(ArgObj());
@@ -994,9 +994,9 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    shD->border.setWidth(atoi(val.c_str()));	break;
 	case 23:	//bordColor
 	    shD->border.setColor(QColor(val.c_str()));	break;
-	case 19:	//bordStyle
+	case 24:	//bordStyle
 	    shD->bordStyle = atoi(val.c_str());		break;
-	case 24:	//src
+	case 25:	//src
 	    if( shD->mediaSrc == val )	break;
 	    shD->mediaSrc = val;
 	    reld_src = true;
@@ -1005,13 +1005,19 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    shD->mediaFit = (bool)atoi(val.c_str());
 	    shD->labWdg->setScaledContents( shD->mediaFit );
 	    break;
-	case 25:	//type
+	case 27:	//type
 	    if( shD->mediaType == atoi(val.c_str()) )	break;
 	    shD->mediaType = atoi(val.c_str());
 	    reld_src = true;
 	    break;
-	case 27: 	//speed
+	case 28:	//areas
 	{
+	    int numbMAr = atoi(val.c_str());
+	    while( shD->maps.size() < numbMAr )	shD->maps.push_back(MapArea());
+	    while( shD->maps.size() > numbMAr )	shD->maps.pop_back();
+	    break;
+	}
+	case 29: 	//speed
 	    shD->mediaSpeed = atoi(val.c_str());
 	    if( !shD->labWdg->movie() ) break;
 	    if( shD->mediaSpeed <= 1 ) shD->labWdg->movie()->stop();
@@ -1021,14 +1027,6 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 		shD->labWdg->movie()->start();
 	    }
 	    break;
-	}
-	case 28:	//areas
-	{
-	    int numbMAr = atoi(val.c_str());
-	    while( shD->maps.size() < numbMAr )	shD->maps.push_back(MapArea());
-	    while( shD->maps.size() > numbMAr )	shD->maps.pop_back();
-	    break;
-	}
 	default:
 	    //- Individual arguments process -
 	    if( uiPrmPos >= 40 )
@@ -1303,48 +1301,53 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    shD->border.setWidth(atoi(val.c_str())); make_pct = true; break;
 	case 23:	//bordColor
 	    shD->border.setColor(QColor(val.c_str())); up = true; break;
-	case 19:	//bordStyle
+	case 24:	//bordStyle
 	    shD->bordStyle = atoi(val.c_str()); up = true; break;
-	case 24:	//trcPer
+	case 25:	//trcPer
 	    shD->trcPer = atoi(val.c_str());
 	    if( shD->trcPer )	shD->trcTimer->start(shD->trcPer*1000);
 	    else shD->trcTimer->stop();
 	    break;
-	//case 25:	//type
+	//case 26:	//type
 	//    shD->type = atoi(val.c_str()); make_pct = true; break;
-	case 26:	//tSek
+	case 27:	//tSek
 	    shD->tTimeCurent = false;
 	    if( atoll(val.c_str()) == 0 )
 	    {
 		shD->tTime = (long long)time(NULL)*1000000;
 		shD->tTimeCurent = true;
 	    } else shD->tTime = atoll(val.c_str())*1000000 + shD->tTime%1000000;
-	    reld_tr_dt = 1;	break;
-	case 27: 	//tUSek
+	    reld_tr_dt = 1;
+	    break;
+	case 28: 	//tUSek
 	    shD->tTime = 1000000ll*(shD->tTime/1000000)+atoll(val.c_str());
-	    reld_tr_dt = 1;	break;
-	case 28:	//tSize
+	    reld_tr_dt = 1;
+	    break;
+	case 29:	//tSize
 	    shD->tSize = atof(val.c_str());
-	    reld_tr_dt = 1;  break;
-	case 29:	//curSek
+	    reld_tr_dt = 1;
+	    break;
+	case 30:	//curSek
 	    if( (shD->curTime/1000000) == atoi(val.c_str()) ) break;
 	    shD->curTime = atoll(val.c_str())*1000000 + shD->curTime%1000000;
-	    up = true;	break;
-	case 30:	//curUSek
+	    up = true;
+	    break;
+	case 31:	//curUSek
 	    if( (shD->curTime%1000000) == atoi(val.c_str()) ) break;
 	    shD->curTime = 1000000ll*(shD->curTime/1000000)+atoll(val.c_str());
-	    up = true;	break;
-	case 36:	//curColor
+	    up = true;
+	    break;
+	case 32:	//curColor
 	    shD->curColor = QColor(val.c_str());	up = true;		break;
-	case 31:	//sclColor
+	case 33:	//sclColor
 	    shD->sclColor = QColor(val.c_str());	make_pct = true;	break;
-	case 32:	//sclHor
+	case 34:	//sclHor
 	    shD->sclHor = atoi(val.c_str());		make_pct = true;	break;
-	case 33:	//sclVer
+	case 35:	//sclVer
 	    shD->sclVer = atoi(val.c_str());		make_pct = true;	break;
-	case 37:	//sclMarkColor
+	case 36:	//sclMarkColor
 	    shD->sclMarkColor = QColor(val.c_str());	make_pct = true;	break;
-	case 38:	//sclMarkFont
+	case 37:	//sclMarkFont
 	{
 	    char family[101]; strcpy(family,"Arial");
 	    int size = 10, bold = 0, italic = 0, underline = 0, strike = 0;
@@ -1358,11 +1361,12 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    make_pct = true;
 	    break;
 	}
-	case 34:	//valArch
+	case 38:	//valArch
 	    if( shD->valArch == val )	break;
 	    shD->valArch = val;
-	    reld_tr_dt = 2;	break;
-	case 35:	//parNum
+	    reld_tr_dt = 2;
+	    break;
+	case 39:	//parNum
 	{
 	    int parNum = atoi(val.c_str());
 	    while( shD->prms.size() < parNum )	shD->prms.push_back(TrendObj(w));
@@ -1867,8 +1871,8 @@ void ShapeDiagram::setCursor( WdgView *w, long long itm )
     long long curTime   = vmax(vmin(itm,shD->tTime),tTimeGrnd);
 
     w->setAllAttrLoad(true);
-    w->attrSet("curSek",TSYS::int2str(curTime/1000000),29);
-    w->attrSet("curUSek",TSYS::int2str(curTime%1000000),30);
+    w->attrSet("curSek",TSYS::int2str(curTime/1000000),30);
+    w->attrSet("curUSek",TSYS::int2str(curTime%1000000),31);
 
     //- Update trend's current values -
     for( int i_p = 0; i_p < shD->prms.size(); i_p++ )
@@ -1928,7 +1932,7 @@ void ShapeDiagram::TrendObj::loadData( bool full )
     long long tTimeGrnd = tTime - tSize;
     long long wantPer = tSize/view->size().width();
 
-    //- Clear trend for empty address and the full reload data -
+    //> Clear trend for empty address and the full reload data
     if( full || addr().empty() )
     {
 	arh_per = arh_beg = arh_end = 0;
@@ -1936,7 +1940,7 @@ void ShapeDiagram::TrendObj::loadData( bool full )
 	vals.clear();
 	if( addr().empty() )	return;
     }
-    //- Get archive parameters -
+    //> Get archive parameters
     if( !arh_per || tTime > arh_end )
     {
 	XMLNode req("info");
@@ -1951,7 +1955,7 @@ void ShapeDiagram::TrendObj::loadData( bool full )
 	    arh_per = atoi(req.attr("per").c_str());
 	}
     }
-    //- One request check and prepare -
+    //> One request check and prepare
     int trcPer = shD->trcPer*1000000;
     if( shD->tTimeCurent && trcPer && (!arh_per || (arh_per >= trcPer && (tTime-valEnd())/trcPer < 2)) )
     {
@@ -1974,20 +1978,21 @@ void ShapeDiagram::TrendObj::loadData( bool full )
     }
 
     if( !arh_per )	return;
-    //- Correct request to archive border -
+    //> Correct request to archive border
     wantPer   = (vmax(wantPer,arh_per)/arh_per)*arh_per;
     tTime     = vmin(tTime,arh_end);
     tTimeGrnd = vmax(tTimeGrnd,arh_beg);
-    //- Clear data at time error -
+
+    //> Clear data at time error
     if( tTime <= tTimeGrnd || tTimeGrnd/wantPer > valEnd()/wantPer || tTime/wantPer < valBeg()/wantPer )
 	vals.clear();
     if( tTime <= tTimeGrnd ) return;
-    //- Check for request to present in buffer data -
+    //> Check for request to present in buffer data
     if( tTime/wantPer <= valEnd()/wantPer && tTimeGrnd/wantPer >= valBeg()/wantPer )	return;
-    //- Correct request to present data -
+    //> Correct request to present data
     if( valEnd() && tTime > valEnd() )		tTimeGrnd = valEnd()+1;
     else if( valBeg() && tTimeGrnd < valBeg() )	tTime = valBeg()-1;
-    //- Get values data -
+    //> Get values data
     long long bbeg, bend;
     int bper;
     int		curPos, prevPos;
@@ -2008,7 +2013,7 @@ void ShapeDiagram::TrendObj::loadData( bool full )
 	    setAttr("round_perc","0");//TSYS::real2str(100.0/(float)view->size().height()));
     if( view->cntrIfCmd(req,true) )	return;
 
-    //- Get data buffer parameters -
+    //> Get data buffer parameters
     bbeg = atoll(req.attr("tm_grnd").c_str());
     bend = atoll(req.attr("tm").c_str());
     bper = atoi(req.attr("per").c_str());
@@ -2025,7 +2030,8 @@ void ShapeDiagram::TrendObj::loadData( bool full )
 	prevPos = curPos; prevVal = curVal;
     }
     for( ; prevPos < (bend-bbeg)/bper; prevPos++ ) buf.push_back(SHg(bbeg+(prevPos+1)*bper,prevVal));
-    //- Append buffer to values deque -
+
+    //> Append buffer to values deque
     if( toEnd )
     {
 	vals.insert(vals.end()-endBlks,buf.begin(),buf.end());
@@ -2037,7 +2043,7 @@ void ShapeDiagram::TrendObj::loadData( bool full )
 	vals.insert(vals.begin(),buf.begin(),buf.end());
 	while( vals.size() > 2000 )	vals.pop_back();
     }
-    //- Check for archive jump -
+    //> Check for archive jump
     if( shD->valArch.empty() && (bbeg-tTimeGrnd)/bper )	{ tTime = bbeg-bper; goto m1; }
 }
 
@@ -2762,11 +2768,11 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    shD->border.setWidth(atoi(val.c_str()));	break;
 	case 23:	//bordColor
 	    shD->border.setColor(QColor(val.c_str()));	break;
-	case 19:	//bordStyle
+	case 24:	//bordStyle
 	    shD->bordStyle = atoi(val.c_str());	break;
 	case 3:		//pgOpenSrc
 	{
-	    if( !qobject_cast<RunWdgView*>(w) )	{ up = false; break; }
+	    if( !qobject_cast<RunWdgView*>(w) || qobject_cast<RunPageView*>(w) )	{ up = false; break; }
 
 	    //-- Put previous include widget to page cache --
 	    if( (shD->inclWidget && val != shD->inclWidget->id()) || (!shD->inclWidget && !val.empty()) )
@@ -2879,16 +2885,3 @@ bool ShapeBox::event( WdgView *w, QEvent *event )
     }
     return false;
 }
-
-//************************************************
-//* Link shape widget                            *
-//************************************************
-ShapeLink::ShapeLink( ) : WdgShape("Link")
-{
-
-}
-
-/*bool ShapeLink::event( WdgView *view, QEvent *event )
-{
-
-}*/

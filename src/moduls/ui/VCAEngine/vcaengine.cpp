@@ -213,9 +213,8 @@ void Engine::postEnable( int flag )
     wlbAt("originals").at().add( new OrigDiagram() );
     wlbAt("originals").at().add( new OrigProtocol() );
     wlbAt("originals").at().add( new OrigDocument() );
-    wlbAt("originals").at().add( new OrigFunction() );
+    //wlbAt("originals").at().add( new OrigFunction() );
     wlbAt("originals").at().add( new OrigBox() );
-    wlbAt("originals").at().add( new OrigLink() );
 
     //>> User functions
     chldAdd( idFnc, new nodePresent() );

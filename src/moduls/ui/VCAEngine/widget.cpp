@@ -120,7 +120,7 @@ void Widget::postEnable( int flag )
 	attrAdd( new TFld("id",_("Id"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic) );
 	attrAdd( new TFld("path",_("Path"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic) );
 	attrAdd( new TFld("parent",_("Parent"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic) );
-	attrAdd( new TFld("root",_("Root"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic,"","","","","-4") );
+	attrAdd( new TFld("root",_("Root"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic,"","","","","1") );
 	attrAdd( new TFld("name",_("Name"),TFld::String,Attr::Generic) );
 	attrAdd( new TFld("dscr",_("Description"),TFld::String,TFld::FullText|Attr::Generic) );
 	attrAdd( new TFld("en",_("Enabled"),TFld::Boolean,Attr::Generic,"","1","","","5") );

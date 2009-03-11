@@ -68,22 +68,22 @@ void Session::setEnable( bool val )
     {
 	try
 	{
-	    //- Connect to project -
+	    //> Connect to project
 	    mParent = mod->prjAt(mPrjnm);
 
-	    //- Get data from project -
+	    //> Get data from project
 	    mOwner	= parent().at().owner( );
 	    mGrp	= parent().at().grp( );
 	    mPermit	= parent().at().permit( );
 	    setPeriod( parent().at().period( ) );
 
-	    //- Create root pages -
+	    //> Create root pages
 	    parent().at().list(pg_ls);
 	    for( int i_p = 0; i_p < pg_ls.size(); i_p++ )
 		if( !present(pg_ls[i_p]) )
 		    add(pg_ls[i_p],parent().at().at(pg_ls[i_p]).at().path());
 
-	    //- Pages enable -
+	    //> Pages enable
 	    list(pg_ls);
 	    for( int i_ls = 0; i_ls < pg_ls.size(); i_ls++ )
 		try{ at(pg_ls[i_ls]).at().setEnable(true); }
@@ -97,16 +97,16 @@ void Session::setEnable( bool val )
     {
 	if( start() )	setStart(false);
 
-	//- Pages disable -
+	//> Pages disable
 	list(pg_ls);
 	for( int i_ls = 0; i_ls < pg_ls.size(); i_ls++ )
 	    at(pg_ls[i_ls]).at().setEnable(false);
 
-	//- Delete pages -
+	//> Delete pages
 	for( int i_ls = 0; i_ls < pg_ls.size(); i_ls++ )
 	    del(pg_ls[i_ls]);
 
-	//- Disconnect from project -
+	//> Disconnect from project
 	mParent.free();
     }
 
@@ -119,15 +119,15 @@ void Session::setStart( bool val )
 
     if( val )
     {
-	//- Enable session if it disabled -
+	//> Enable session if it disabled
 	if( !enable() )	setEnable(true);
 
-	//- Process all pages is on -
+	//> Process all pages is on
 	list(pg_ls);
 	for( int i_ls = 0; i_ls < pg_ls.size(); i_ls++ )
 	    at(pg_ls[i_ls]).at().setProcess(true);
 
-	//- Start process task -
+	//> Start process task
 	if( !mStart )
 	{
 	    pthread_attr_t pthr_attr;
@@ -145,7 +145,7 @@ void Session::setStart( bool val )
     }
     else
     {
-	//- Stop process task -
+	//> Stop process task
 	if( mStart )
 	{
 	    endrun_req = true;
@@ -155,7 +155,7 @@ void Session::setStart( bool val )
 	    pthread_join( calcPthr, NULL );
 	}
 
-	//- Process all pages is off -
+	//> Process all pages is off
 	list(pg_ls);
 	for( int i_ls = 0; i_ls < pg_ls.size(); i_ls++ )
 	    at(pg_ls[i_ls]).at().setProcess(false);
@@ -396,10 +396,10 @@ void *Session::Task( void *icontr )
     ses.list(pls);
     while( !ses.endrun_req )
     {
-	//- Check calk time -
+	//> Check calk time
 	unsigned long long t_cnt = SYS->shrtCnt();
 
-	//- Calc session pages and all other items at recursion -
+	//> Calc session pages and all other items at recursion
 	for( int i_l = 0; i_l < pls.size(); i_l++ )
 	    try{ ses.at(pls[i_l]).at().calc(false,false); }
 	    catch( TError err )
@@ -429,7 +429,7 @@ void *Session::Task( void *icontr )
 void Session::cntrCmdProc( XMLNode *opt )
 {
     string a_path = opt->attr("path");
-    //- Service commands process -
+    //> Service commands process
     if( a_path == "/serv/pg" )	//Pages operations
     {
 	if( ctrChkNode(opt,"openlist",permit(),owner().c_str(),grp().c_str(),SEQ_RD) )	//Open pages list
@@ -443,11 +443,11 @@ void Session::cntrCmdProc( XMLNode *opt )
 
 		if( tm )
 		{
-		    //- Permission to view page check -
+		    //> Permission to view page check
 		    AutoHD<SessWdg> swdg = nodeAt(lst[i_f],1);
 		    if( !SYS->security().at().access(opt->attr("user"),SEQ_RD,swdg.at().owner(),swdg.at().grp(),swdg.at().permit()) )
 			continue;
-		    //- Changed widgets list add -
+		    //> Changed widgets list add
 		    vector<string> updEl;
 		    swdg.at().getUpdtWdg("",tm,updEl);
 		    pel->setAttr("updWdg",TSYS::int2str(updEl.size()));
@@ -465,16 +465,16 @@ void Session::cntrCmdProc( XMLNode *opt )
     {
 	if( ctrChkNode(opt,"get",permit(),owner().c_str(),grp().c_str(),SEQ_RD) )
 	{
-	    //- Get alarm status -
+	    //> Get alarm status
 	    opt->setAttr("alarmSt",TSYS::int2str(alarmStat()));
 
-	    //- Get alarm from sound queue -
+	    //> Get alarm from sound queue
 	    if( opt->attr("mode") == "sound" )
 	    {
 		unsigned a_tm  = strtoul(opt->attr("tm").c_str(),NULL,10);
 		opt->setAttr("tm",TSYS::uint2str(calcClk()));
 
-		//- Find event, return it and alarm resource -
+		//> Find event, return it and alarm resource
 		ResAlloc res( mAlrmRes, false );
 		string wdg = opt->attr("wdg");
 		int i_q, i_first = -1, i_next = -1;
@@ -500,7 +500,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	TCntrNode::cntrCmdProc(opt);
@@ -549,7 +549,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //- Process command to page -
+    //> Process command to page
     if( a_path == "/ico" && ctrChkNode(opt) )   opt->setText(ico());
     else if( a_path == "/obj/st/en" )
     {
@@ -605,7 +605,7 @@ void Session::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/alarm/alarm" && ctrChkNode(opt) )
     {
-	//Fill Archivators table
+	//> Fill Archivators table
 	XMLNode *n_wdg	= ctrMkNode("list",opt,-1,"/alarm/alarm/wdg","",0444);
 	XMLNode *n_lev	= ctrMkNode("list",opt,-1,"/alarm/alarm/lev","",0444);
 	XMLNode *n_cat	= ctrMkNode("list",opt,-1,"/alarm/alarm/cat","",0444);
@@ -664,32 +664,32 @@ void SessPage::setEnable( bool val )
     if( !val )
     {
 	vector<string> pg_ls;
-	//- Unregister opened page -
-	if( !(parent().at().prjFlags( )&Page::Empty) && attrPresent("pgOpen") && attrAt("pgOpen").at().getB() ) 
+	//> Unregister opened page
+	if( !(parent().at().prjFlags( )&Page::Empty) && attrPresent("pgOpen") && attrAt("pgOpen").at().getB() )
 	    ownerSess()->openUnreg(path());
-	//- Disable include pages -
+	//> Disable include pages
 	pageList(pg_ls);
 	for(int i_l = 0; i_l < pg_ls.size(); i_l++ )
 	    pageAt(pg_ls[i_l]).at().setEnable(false);
-	//- Delete included widgets -
+	//> Delete included widgets
 	for(int i_l = 0; i_l < pg_ls.size(); i_l++ )
 	    pageDel(pg_ls[i_l]);
     }
 
-    //- Call parrent enable method -
+    //> Call parrent enable method
     SessWdg::setEnable(val);
 
     if( val )
     {
 	vector<string> pg_ls;
-	//- Register opened page -
+	//> Register opened page
 	if( !(parent().at().prjFlags( )&Page::Empty) && attrAt("pgOpen").at().getB() ) ownerSess()->openReg(path());
-	//- Create included pages -
+	//> Create included pages
 	parent().at().pageList(pg_ls);
 	for( int i_p = 0; i_p < pg_ls.size(); i_p++ )
 	    if( !pagePresent(pg_ls[i_p]) )
 		pageAdd(pg_ls[i_p],parent().at().pageAt(pg_ls[i_p]).at().path());
-	//- Enable included pages -
+	//> Enable included pages
 	pageList(pg_ls);
 	for(int i_l = 0; i_l < pg_ls.size(); i_l++ )
 	    try{ pageAt(pg_ls[i_l]).at().setEnable(true); }
@@ -754,7 +754,7 @@ void SessPage::calc( bool first, bool last )
 
 bool SessPage::attrChange( Attr &cfg, TVariant prev )
 {
-    //- Page open process -
+    //> Page open process
     if( enable() && !prev.isNull() && cfg.id() == "pgOpen" )
     {
 	if( cfg.getB() )
@@ -812,15 +812,15 @@ void SessPage::alarmQuittance( ui8 quit_tmpl, bool isSet )
     int alarmSt = attrAt("alarmSt").at().getI();
     if( !((((alarmSt>>16)&0xFF)^quit_tmpl)&((alarmSt>>16)&0xFF)) ) return;
 
-    //- Self quittance -
+    //> Self quittance
     attrAt("alarmSt").at().setI( alarmSt & (quit_tmpl<<16|0xFFFF) );
 
     vector<string> lst;
-    //- Included pages quitance -
+    //> Included pages quitance
     pageList( lst );
     for( int i_p = 0; i_p < lst.size(); i_p++ )
 	pageAt( lst[i_p] ).at().alarmQuittance(quit_tmpl);
-    //- Include widgets quittance -
+    //> Include widgets quittance
     wdgList( lst );
     for( int i_w = 0; i_w < lst.size(); i_w++ )
 	wdgAt( lst[i_w] ).at().alarmQuittance(quit_tmpl);
@@ -830,7 +830,7 @@ void SessPage::alarmQuittance( ui8 quit_tmpl, bool isSet )
 
 bool SessPage::cntrCmdGeneric( XMLNode *opt )
 {
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	SessWdg::cntrCmdGeneric(opt);
@@ -934,10 +934,10 @@ void SessWdg::setEnable( bool val )
 
     if( !val )
     {
-	//- Delete included widgets -
+	//> Delete included widgets
 	vector<string> ls;
 	wdgList(ls);
-	for(int i_l = 0; i_l < ls.size(); i_l++ )
+	for( int i_l = 0; i_l < ls.size(); i_l++ )
 	    wdgDel(ls[i_l]);
     }
 }
@@ -946,18 +946,18 @@ void SessWdg::setProcess( bool val )
 {
     if( val && !enable() ) setEnable(true);
 
-    //- Prepare process function value level -
+    //> Prepare process function value level
     if( val && !TSYS::strNoSpace(calcProg()).empty() )
     {
-	//-- Prepare function io structure --
+	//>> Prepare function io structure
 	TFunction fio(parent().at().calcId());
-	//--- Add generic io ---
+	//>>> Add generic io
 	fio.ioIns( new IO("f_frq",_("Function calculate frequency (Hz)"),IO::Real,IO::Default,"1000",false),0);
 	fio.ioIns( new IO("f_start",_("Function start flag"),IO::Boolean,IO::Default,"0",false),1);
 	fio.ioIns( new IO("f_stop",_("Function stop flag"),IO::Boolean,IO::Default,"0",false),2);
-	//--- Add calc widget's attributes ---
+	//>>> Add calc widget's attributes
 	vector<string> iwls, als;
-	//--- Self attributes check ---
+	//>>> Self attributes check
 	attrList(als);
 	AutoHD<Widget> fulw = parentNoLink();
 	for( int i_a = 0; i_a < als.size(); i_a++ )
@@ -976,7 +976,7 @@ void SessWdg::setProcess( bool val )
 		fio.ioAdd( new IO(als[i_a].c_str(),cattr.at().name().c_str(),tp,IO::Output,"",false,("./"+als[i_a]).c_str()) );
 	    }
 	}
-	//--- Include attributes check ---
+	//>>> Include attributes check
 	wdgList(iwls);
 	for( int i_w = 0; i_w < iwls.size(); i_w++ )
 	{
@@ -1004,12 +1004,12 @@ void SessWdg::setProcess( bool val )
 	fio.ioAdd( new IO("alarmSt",_("Alarm status"),IO::Integer,IO::Output,"",false,"./alarmSt") );
 	fio.ioAdd( new IO("alarm",_("Alarm"),IO::String,IO::Output,"",false,"./alarm") );
 
-	//-- Compile function --
+	//>> Compile function
 	try
 	{
 	    mWorkProg = SYS->daq().at().at(TSYS::strSepParse(calcLang(),0,'.')).at().
 		compileFunc(TSYS::strSepParse(calcLang(),1,'.'),fio,calcProg(),mod->nodePath('.',true)+";");
-	    //-- Connect to compiled function --
+	    //>> Connect to compiled function
 	    TValFunc::setFunc(&((AutoHD<TFunction>)SYS->nodeAt(mWorkProg,1)).at());
 	    TValFunc::setUser(ownerSess()->user());
 	}catch( TError err )
@@ -1017,12 +1017,12 @@ void SessWdg::setProcess( bool val )
     }
     if( !val )
     {
-	//-- Free function link --
+	//>> Free function link
 	mProc = false;
 	TValFunc::setFunc(NULL);
     }
 
-    //- Change process for included widgets -
+    //> Change process for included widgets
     vector<string> ls;
     wdgList(ls);
     for(int i_l = 0; i_l < ls.size(); i_l++ )
@@ -1030,7 +1030,7 @@ void SessWdg::setProcess( bool val )
 
     mProc = val;
 
-    //-- Make process element's lists --
+    //>> Make process element's lists
     if( val ) prcElListUpdate( );
 }
 
@@ -1149,7 +1149,7 @@ void SessWdg::alarmSet( bool isSet )
     if( isSet )	aqtp |= atp;
 
     vector<string> lst;
-    //- Included widgets process -
+    //> Included widgets process
     wdgList( lst );
     for( int i_w = 0; i_w < lst.size(); i_w++ )
     {
@@ -1234,18 +1234,18 @@ void SessWdg::calc( bool first, bool last )
 
 //    if( !(ownerSess()->calcClk()%vmax(1,10000/ownerSess()->period())) ) prcElListUpdate( );
 
-    //- Calculate include widgets -
+    //> Calculate include widgets
     for(int i_l = 0; i_l < mWdgChldAct.size(); i_l++ )
 	if( wdgPresent(mWdgChldAct[i_l]) )
 	    wdgAt(mWdgChldAct[i_l]).at().calc(first,last);
 
     try
     {
-	//- Load events to process -
+	//> Load events to process
 	if( !((ownerSess()->calcClk())%(vmax(calcPer()/ownerSess()->period(),1))) || first || last )
 	{
 	    string wevent = eventGet(true);
-	    //- Process input links and constants -
+	    //> Process input links and constants
 	    AutoHD<Attr> attr, attr1;
 	    AutoHD<TVal> vl;
 	    inLnkGet = true;
@@ -1294,11 +1294,11 @@ void SessWdg::calc( bool first, bool last )
 
 	    if( TValFunc::func() )
 	    {
-		//- Load events to calc procedure -
+		//> Load events to calc procedure
 		int evId = ioId("event");
 		if( evId >= 0 )	setS(evId,wevent);
 
-		//-- Load data to calc area --
+		//>> Load data to calc area
 		setR(0,1000.0/(ownerSess()->period()*vmax(calcPer()/ownerSess()->period(),1)));
 		setB(1,first);
 		setB(2,last);
@@ -1316,9 +1316,9 @@ void SessWdg::calc( bool first, bool last )
 			case IO::Boolean:	setB(i_io,attr.at().getB());	break;
 		    }
 		}
-		//-- Calc --
+		//>> Calc
 		TValFunc::calc();
-		//-- Load data from calc area --
+		//>> Load data from calc area
 		for( int i_io = 3; i_io < ioSize( ); i_io++ )
 		{
 		    if( func()->io(i_io)->rez().empty() ) continue;
@@ -1333,18 +1333,18 @@ void SessWdg::calc( bool first, bool last )
 			case IO::Boolean:	attr.at().setB(getB(i_io));	break;
 		    }
 		}
-		//-- Save events from calc procedure --
+		//>> Save events from calc procedure
 		if( evId >= 0 ) wevent = getS(evId);
 	    }
 
-	    //-- Process widget's events --
+	    //>> Process widget's events
 	    if( !wevent.empty() )
 	    {
 		int t_off;
 		string sevup, sev, sev_ev, sev_path, sprc_lst, sprc, sprc_ev, sprc_path;
 		for( int el_off = 0; (sev=TSYS::strSepParse(wevent,0,'\n',&el_off)).size(); )
 		{
-		    //-- Check for process events --
+		    //>> Check for process events
 		    t_off = 0;
 		    sev_ev   = TSYS::strSepParse(sev,0,':',&t_off);
 		    sev_path = TSYS::strSepParse(sev,0,':',&t_off);
@@ -1365,7 +1365,7 @@ void SessWdg::calc( bool first, bool last )
 		    }
 		    if( !evProc ) sevup+=sev_ev+":/"+id()+sev_path+"\n";
 		}
-		//-- Put left events to parent widget --
+		//>> Put left events to parent widget
 		SessWdg *owner = ownerSessWdg(true);
 		if( owner && !sevup.empty() ) owner->eventAdd(sevup);
 	    }
@@ -1527,7 +1527,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 
 bool SessWdg::cntrCmdGeneric( XMLNode *opt )
 {
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	Widget::cntrCmdGeneric(opt);
@@ -1535,7 +1535,7 @@ bool SessWdg::cntrCmdGeneric( XMLNode *opt )
 	return true;
     }
 
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
     if( a_path == "/wdg/st/proc" )
     {
@@ -1549,13 +1549,13 @@ bool SessWdg::cntrCmdGeneric( XMLNode *opt )
 
 bool SessWdg::cntrCmdAttributes( XMLNode *opt )
 {
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	Widget::cntrCmdAttributes(opt);
 	if( ctrMkNode("area",opt,-1,"/attr",_("Attributes")) )
 	{
-	    //-- Properties form create --
+	    //>> Properties form create
 	    vector<string> list_a;
 	    attrList(list_a);
 	    for( unsigned i_el = 0; i_el < list_a.size(); i_el++ )
@@ -1567,11 +1567,10 @@ bool SessWdg::cntrCmdAttributes( XMLNode *opt )
 	return true;
     }
 
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
     if( a_path.substr(0,6) == "/attr/" )
     {
-	//unsigned tm = ownerSess()->calcClk( );//time(NULL);
 	AutoHD<Attr> attr = attrAt(TSYS::pathLev(a_path,1));
 	if( ctrChkNode(opt,"get",((attr.at().fld().flg()&TFld::NoWrite)?(permit()&~0222):permit())|R_R_R_,owner().c_str(),grp().c_str(),SEQ_RD) )
 	{
@@ -1595,7 +1594,7 @@ void SessWdg::cntrCmdProc( XMLNode *opt )
 {
     if( cntrCmdServ(opt) ) return;
 
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	cntrCmdGeneric(opt);

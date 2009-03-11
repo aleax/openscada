@@ -475,17 +475,6 @@ class ShapeDocument : public WdgShape
 };
 
 //************************************************
-//* User function shape widget                   *
-//************************************************
-class ShapeFunction : public WdgShape
-{
-    public:
-	//Methods
-	ShapeFunction( );
-	//bool event( WdgView *view, QEvent *event );
-};
-
-//************************************************
 //* User element shape widget                    *
 //************************************************
 class RunPageView;
@@ -522,13 +511,13 @@ class ShapeBox : public WdgShape
 };
 
 //************************************************
-//* Link shape widget                            *
+//* User function shape widget                   *
 //************************************************
-class ShapeLink : public WdgShape
+class ShapeFunction : public WdgShape
 {
     public:
 	//Methods
-	ShapeLink( );
+	ShapeFunction( );
 	//bool event( WdgView *view, QEvent *event );
 };
 

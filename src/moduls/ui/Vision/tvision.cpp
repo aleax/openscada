@@ -215,9 +215,8 @@ QMainWindow *TVision::openWindow()
 	shapesWdg.push_back( new ShapeDiagram );
 	shapesWdg.push_back( new ShapeProtocol );
 	shapesWdg.push_back( new ShapeDocument );
-	shapesWdg.push_back( new ShapeFunction );
 	shapesWdg.push_back( new ShapeBox );
-	shapesWdg.push_back( new ShapeLink );
+	shapesWdg.push_back( new ShapeFunction );
     }
 
     string user_open = startUser( );

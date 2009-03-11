@@ -1,3 +1,8 @@
+2009-03-10 Roman
+- !!:/UI/VCAEngine;/UI/Vision;/UI/WebVision: Attributes index for base widgets is reordered.
+- /UI/VCAEngine;/UI/Vision: Not released primitives Function and Link is disabled.
+
+
 2009-03-09 Roman
 - !!!!:/DAQ/SoundCard: Releasing module is finished. Version 0.5.0 is released. The documentation is created.
 - FIX:/Archive: The values' archive and archivator variables period format, for DB storing, is expanded up to precision 6 (microseconds).

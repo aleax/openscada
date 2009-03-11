@@ -778,20 +778,18 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
     }
     bool up = false;
 
-//    if( shape && (shape->id() == "ElFigure" || shape->id() == "Text") && uiPrmPos == 11 ) return true;
-
     switch( uiPrmPos )
     {
-	case -4:
+	case -1:	//load
+	    up = true;
+	    break;
+	case 0:	return false;
+	case 1:		//root
 	    if( shape && shape->id() == val )	break;
 	    if( shape ) shape->destroy(this);
 	    shape = mod->getWdgShape(val);
 	    if( shape ) shape->init(this);
 	    break;
-	case -1:
-	    up = true;
-	    break;
-	case 0:	return false;
 	case 7:
 	    if( wLevel( ) == 0 )	break;
 	    mWPos = QPointF(((WdgView*)parentWidget())->xScale(true)*atof(val.c_str()),posF().y());

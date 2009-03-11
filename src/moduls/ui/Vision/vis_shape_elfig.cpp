@@ -89,26 +89,26 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
     rect_num = -1;
     switch( uiPrmPos )
     {
-        case -4:
-            // This have no matter for the Primitive ID, its done only for outer needs
-            if( runW ) break;
-            shapePnts_temp = elFD->shapePnts;
-            shapeWidths_temp = elFD->shapeWidths;
-            shapeColors_temp = elFD->shapeColors;
-            shapeImages_temp = elFD->shapeImages;
-            shapeStyles_temp = elFD->shapeStyles;
-            break;
 	case -1:	//load
 	    rel_list = true;
 	    break;
+	case 1:		//root
+	    // This have no matter for the Primitive ID, its done only for outer needs
+	    if( runW ) break;
+	    shapePnts_temp = elFD->shapePnts;
+	    shapeWidths_temp = elFD->shapeWidths;
+	    shapeColors_temp = elFD->shapeColors;
+	    shapeImages_temp = elFD->shapeImages;
+	    shapeStyles_temp = elFD->shapeStyles;
+	    break;
 	case 5:		//en
 	    if( !runW )	break;
-            elFD->en = (bool)atoi(val.c_str());
+	    elFD->en = (bool)atoi(val.c_str());
 	    w->setVisible(atoi(val.c_str()));
 	    break;
 	case 6:		//active
 	    if( !runW )	break;
-            elFD->active = (bool)atoi(val.c_str());
+	    elFD->active = (bool)atoi(val.c_str());
 	    w->setFocusPolicy( (atoi(val.c_str()) && ((RunWdgView*)w)->permCntr()) ? Qt::TabFocus : Qt::NoFocus );
 	    break;
 	case 12:	//geomMargin

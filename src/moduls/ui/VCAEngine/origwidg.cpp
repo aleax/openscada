@@ -146,7 +146,7 @@ void OrigElFigure::postEnable( int flag )
 	attrAdd( new TFld("bordClr",_("Border:color"),TFld::String,Attr::Color,"","#000000","","","24") );
 	attrAdd( new TFld("fillColor",_("Fill:color"),TFld::String,Attr::Color,"","","","","25") );
 	attrAdd( new TFld("fillImg",_("Fill:image"),TFld::String,Attr::Image,"","","","","26") );
-	attrAdd( new TFld("orient",_("Orientation angle"),TFld::Integer,TFld::NoFlag,"","0","-180;180","","28") );
+	attrAdd( new TFld("orient",_("Orientation angle"),TFld::Integer,TFld::NoFlag,"","0","-360;360","","28") );
 	attrAdd( new TFld("elLst",_("Element's list"),TFld::String,TFld::FullText|Attr::Active,"","","","","27") );
     }
 }
@@ -415,17 +415,17 @@ void OrigText::postEnable( int flag )
 	attrAdd( new TFld("bordWidth",_("Border:width"),TFld::Integer,TFld::NoFlag,"","0","","","22") );
 	attrAdd( new TFld("bordColor",_("Border:color"),TFld::String,Attr::Color,"","#000000","","","23") );
 	attrAdd( new TFld("bordStyle",_("Border:style"),TFld::Integer,TFld::Selected,"","3","0;1;2;3;4;5;6;7;8",
-					_("None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"),"19") );
-	attrAdd( new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","","24") );
-	attrAdd( new TFld("color",_("Color"),TFld::String,Attr::Color,"20","#000000","","","25") );
-	attrAdd( new TFld("orient",_("Orientation angle"),TFld::Integer,TFld::NoFlag,"3","0","-180;180","","26") );
-	attrAdd( new TFld("wordWrap",_("Word wrap"),TFld::Boolean,TFld::NoFlag,"1","1","","","27") );
+					_("None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"),"24") );
+	attrAdd( new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","","25") );
+	attrAdd( new TFld("color",_("Color"),TFld::String,Attr::Color,"20","#000000","","","26") );
+	attrAdd( new TFld("orient",_("Orientation angle"),TFld::Integer,TFld::NoFlag,"3","0","-360;360","","27") );
+	attrAdd( new TFld("wordWrap",_("Word wrap"),TFld::Boolean,TFld::NoFlag,"1","1","","","28") );
 	attrAdd( new TFld("alignment",_("Alignment"),TFld::Integer,TFld::Selected,"1","0","0;1;2;3;4;5;6;7;8;9;10;11",
 			    _("Top left;Top right;Top center;Top justify;"
 			    "Bottom left;Bottom right;Bottom center;Bottom justify;"
-			    "V center left; V center right; Center; V center justify"),"28") );
-	attrAdd( new TFld("text",_("Text"),TFld::String,TFld::FullText,"0","Text","","","29") );
-	attrAdd( new TFld("numbArg",_("Arguments number"),TFld::Integer,Attr::Active,"","0","0;20","","30") );
+			    "V center left; V center right; Center; V center justify"),"29") );
+	attrAdd( new TFld("text",_("Text"),TFld::String,TFld::FullText,"0","Text","","","30") );
+	attrAdd( new TFld("numbArg",_("Arguments number"),TFld::Integer,Attr::Active,"","0","0;20","","40") );
     }
 }
 
@@ -509,10 +509,10 @@ void OrigMedia::postEnable( int flag )
 	attrAdd( new TFld("bordWidth",_("Border:width"),TFld::Integer,TFld::NoFlag,"","0","","","22") );
 	attrAdd( new TFld("bordColor",_("Border:color"),TFld::String,Attr::Color,"","#000000","","","23") );
 	attrAdd( new TFld("bordStyle",_("Border:style"),TFld::Integer,TFld::Selected,"","3","0;1;2;3;4;5;6;7;8",
-						_("None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"),"19") );
-	attrAdd( new TFld("src",_("Source"),TFld::String,TFld::NoFlag,"50","","","","24") );
+						_("None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"),"24") );
+	attrAdd( new TFld("src",_("Source"),TFld::String,TFld::NoFlag,"50","","","","25") );
 	attrAdd( new TFld("fit",_("Fit to widget size"),TFld::Boolean,TFld::NoFlag,"","","","","26") );
-	attrAdd( new TFld("type",_("Type"),TFld::Integer,TFld::Selected|Attr::Active,"1","0","0;1",_("Image;Movie"),"25") );
+	attrAdd( new TFld("type",_("Type"),TFld::Integer,TFld::Selected|Attr::Active,"1","0","0;1",_("Image;Movie"),"27") );
 	attrAdd( new TFld("areas",_("Map areas"),TFld::Integer,Attr::Active,"2","0","0;10","","28") );
     }
 }
@@ -528,7 +528,7 @@ bool OrigMedia::attrChange( Attr &cfg, TVariant prev )
 
 	    //- Create specific attributes -
 	    if(cfg.getI() == 1 )
-		cfg.owner()->attrAdd( new TFld("speed",_("Play speed"),TFld::Integer,Attr::Mutable,"3","100","1;900","","27") );
+		cfg.owner()->attrAdd( new TFld("speed",_("Play speed"),TFld::Integer,Attr::Mutable,"3","100","1;900","","29") );
 	}
 	else if( cfg.id() == "areas" )
 	{
@@ -592,9 +592,9 @@ void OrigDiagram::postEnable( int flag )
 	attrAdd( new TFld("bordWidth",_("Border:width"),TFld::Integer,TFld::NoFlag,"","0","","","22") );
 	attrAdd( new TFld("bordColor",_("Border:color"),TFld::String,Attr::Color,"","#000000","","","23") );
 	attrAdd( new TFld("bordStyle",_("Border:style"),TFld::Integer,TFld::Selected,"","3","0;1;2;3;4;5;6;7;8",
-						_("None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"),"19") );
-	attrAdd( new TFld("trcPer",_("Tracing period (s)"),TFld::Integer,TFld::NoFlag,"","0","0;360","","24") );
-	attrAdd( new TFld("type",_("Type"),TFld::Integer,TFld::Selected|Attr::Active,"1","0","0",_("Trend"),"25") );
+						_("None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"),"24") );
+	attrAdd( new TFld("trcPer",_("Tracing period (s)"),TFld::Integer,TFld::NoFlag,"","0","0;360","","25") );
+	attrAdd( new TFld("type",_("Type"),TFld::Integer,TFld::Selected|Attr::Active,"1","0","0",_("Trend"),"26") );
     }
 }
 
@@ -613,9 +613,9 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 	}
 	else
 	{
-	    cfg.owner()->attrAdd( new TFld("curSek",_("Cursor:sek"),TFld::Integer,Attr::DataTime|Attr::Mutable,"","","","","29") );
-	    cfg.owner()->attrAdd( new TFld("curUSek",_("Cursor:usek"),TFld::Integer,Attr::Mutable,"","","","","30") );
-	    cfg.owner()->attrAdd( new TFld("curColor",_("Cursor:color"),TFld::String,Attr::Color|Attr::Mutable,"","white","","","36") );
+	    cfg.owner()->attrAdd( new TFld("curSek",_("Cursor:sek"),TFld::Integer,Attr::DataTime|Attr::Mutable,"","","","","30") );
+	    cfg.owner()->attrAdd( new TFld("curUSek",_("Cursor:usek"),TFld::Integer,Attr::Mutable,"","","","","31") );
+	    cfg.owner()->attrAdd( new TFld("curColor",_("Cursor:color"),TFld::String,Attr::Color|Attr::Mutable,"","white","","","32") );
 	}
     }
     else if( cfg.id() == "type" )
@@ -644,24 +644,24 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 	switch(cfg.getI())
 	{
 	    case 0:
-		cfg.owner()->attrAdd( new TFld("tSek",_("Time:sek"),TFld::Integer,Attr::DataTime|Attr::Mutable,"","","","","26") );
-		cfg.owner()->attrAdd( new TFld("tUSek",_("Time:usek"),TFld::Integer,Attr::Mutable,"","","","","27") );
-		cfg.owner()->attrAdd( new TFld("tSize",_("Size, sek"),TFld::Real,Attr::Mutable,"","60","","","28") );
+		cfg.owner()->attrAdd( new TFld("tSek",_("Time:sek"),TFld::Integer,Attr::DataTime|Attr::Mutable,"","","","","27") );
+		cfg.owner()->attrAdd( new TFld("tUSek",_("Time:usek"),TFld::Integer,Attr::Mutable,"","","","","28") );
+		cfg.owner()->attrAdd( new TFld("tSize",_("Size, sek"),TFld::Real,Attr::Mutable,"","60","0;1000","","29") );
 		if( cfg.owner()->attrAt("active").at().getB() )
 		{
-		    cfg.owner()->attrAdd( new TFld("curSek",_("Cursor:sek"),TFld::Integer,Attr::DataTime|Attr::Mutable,"","","","","29") );
-		    cfg.owner()->attrAdd( new TFld("curUSek",_("Cursor:usek"),TFld::Integer,Attr::Mutable,"","","","","30") );
-		    cfg.owner()->attrAdd( new TFld("curColor",_("Cursor:color"),TFld::String,Attr::Color|Attr::Mutable,"","white","","","36") );
+		    cfg.owner()->attrAdd( new TFld("curSek",_("Cursor:sek"),TFld::Integer,Attr::DataTime|Attr::Mutable,"","","","","30") );
+		    cfg.owner()->attrAdd( new TFld("curUSek",_("Cursor:usek"),TFld::Integer,Attr::Mutable,"","","","","31") );
+		    cfg.owner()->attrAdd( new TFld("curColor",_("Cursor:color"),TFld::String,Attr::Color|Attr::Mutable,"","white","","","32") );
 		}
-		cfg.owner()->attrAdd( new TFld("sclColor",_("Scale:color"),TFld::String,Attr::Color|Attr::Mutable,"","grey","","","31") );
+		cfg.owner()->attrAdd( new TFld("sclColor",_("Scale:color"),TFld::String,Attr::Color|Attr::Mutable,"","grey","","","33") );
 		cfg.owner()->attrAdd( new TFld("sclHor",_("Scale:horizontal"),TFld::Integer,Attr::Mutable|TFld::Selected,
-		    "1","0","0;1;2;3",_("No draw;Grid;Markers;Grid and markers"),"32") );
+		    "1","0","0;1;2;3",_("No draw;Grid;Markers;Grid and markers"),"34") );
 		cfg.owner()->attrAdd( new TFld("sclVer",_("Scale:vertical"),TFld::Integer,Attr::Mutable|TFld::Selected,
-		    "1","0","0;1;2;3;5;6;7",_("No draw;Grid;Markers;Grid and markers;Grid (log);Marker (log);Grid and markers (log)"),"33") );
-		cfg.owner()->attrAdd( new TFld("sclMarkColor",_("Scale:Markers:color"),TFld::String,Attr::Color|Attr::Mutable,"","white","","","37") );
-		cfg.owner()->attrAdd( new TFld("sclMarkFont",_("Scale:Markers:font"),TFld::String,Attr::Font|Attr::Mutable,"","Arial 10","","","38") );
-		cfg.owner()->attrAdd( new TFld("valArch",_("Value archivator"),TFld::String,Attr::Mutable,"","","","","34") );
-		cfg.owner()->attrAdd( new TFld("parNum",_("Parameters number"),TFld::Integer,Attr::Mutable|Attr::Active,"1","1","0;10","","35") );
+		    "1","0","0;1;2;3;5;6;7",_("No draw;Grid;Markers;Grid and markers;Grid (log);Marker (log);Grid and markers (log)"),"35") );
+		cfg.owner()->attrAdd( new TFld("sclMarkColor",_("Scale:Markers:color"),TFld::String,Attr::Color|Attr::Mutable,"","white","","","36") );
+		cfg.owner()->attrAdd( new TFld("sclMarkFont",_("Scale:Markers:font"),TFld::String,Attr::Font|Attr::Mutable,"","Arial 10","","","37") );
+		cfg.owner()->attrAdd( new TFld("valArch",_("Value archivator"),TFld::String,Attr::Mutable,"","","","","38") );
+		cfg.owner()->attrAdd( new TFld("parNum",_("Parameters number"),TFld::Integer,Attr::Mutable|Attr::Active,"1","1","0;10","","39") );
 		break;
 	}
     }
@@ -1240,46 +1240,13 @@ void OrigBox::postEnable( int flag )
 
     if( flag&TCntrNode::NodeConnect )
     {
+	attrAdd( new TFld("pgOpenSrc",_("Page:open source"),TFld::String,TFld::NoFlag,"","","","","3") );
+	attrAdd( new TFld("pgGrp",_("Page:group"),TFld::String,TFld::NoFlag,"","","","","4") );
 	attrAdd( new TFld("backColor",_("Background:color"),TFld::String,Attr::Color,"","#FFFFFF","","","20") );
 	attrAdd( new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","","","","21") );
 	attrAdd( new TFld("bordWidth",_("Border:width"),TFld::Integer,TFld::NoFlag,"","0","","","22") );
 	attrAdd( new TFld("bordColor",_("Border:color"),TFld::String,Attr::Color,"","#000000","","","23") );
 	attrAdd( new TFld("bordStyle",_("Border:style"),TFld::Integer,TFld::Selected,"","3","0;1;2;3;4;5;6;7;8",
-						_("None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"),"19") );
-	attrAdd( new TFld("pgOpenSrc",_("Page:open source"),TFld::String,TFld::NoFlag,"","","","","3") );
-	attrAdd( new TFld("pgGrp",_("Page:group"),TFld::String,TFld::NoFlag,"","","","","4") );
-    }
-}
-
-//************************************************
-//* OrigLink: Link original widget               *
-//************************************************
-OrigLink::OrigLink( ) : PrWidget("Link")
-{
-
-}
-
-string OrigLink::name( )
-{
-    return _("Interwidget link");
-}
-
-string OrigLink::descr( )
-{
-    return _("Interwidget link of the finite visualisation.");
-}
-
-void OrigLink::postEnable( int flag )
-{
-    LWidget::postEnable(flag);
-
-    if( flag&TCntrNode::NodeConnect )
-    {
-	attrAdd( new TFld("out",_("Output"),TFld::String,TFld::NoFlag,"50","","","","20") );
-	attrAdd( new TFld("in",_("Input"),TFld::String,TFld::NoFlag,"50","","","","21") );
-	attrAdd( new TFld("lineWdth",_("Line:width"),TFld::Integer,TFld::NoFlag,"2","1","0;99","","22") );
-	attrAdd( new TFld("lineClr",_("Line:color"),TFld::String,Attr::Color,"20","#000000","","","23") );
-	attrAdd( new TFld("lineSquare",_("Line:square angle"),TFld::Boolean,TFld::NoFlag,"1","0","","","24") );
-	//Next is dynamic created internal points
+						_("None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"),"24") );
     }
 }
