@@ -1325,7 +1325,7 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    break;
 	case 29:	//tSize
 	    shD->tSize = atof(val.c_str());
-	    reld_tr_dt = 1;
+	    reld_tr_dt = 2;
 	    break;
 	case 30:	//curSek
 	    if( (shD->curTime/1000000) == atoi(val.c_str()) ) break;
@@ -1957,21 +1957,22 @@ void ShapeDiagram::TrendObj::loadData( bool full )
     }
     //> One request check and prepare
     int trcPer = shD->trcPer*1000000;
-    if( shD->tTimeCurent && trcPer && (!arh_per || (arh_per >= trcPer && (tTime-valEnd())/trcPer < 2)) )
+    if( shD->tTimeCurent && trcPer && shD->valArch.empty() && (!arh_per || (arh_per >= trcPer && (tTime-valEnd())/trcPer < 2)) )
     {
 	XMLNode req("get");
 	req.setAttr("path",addr()+"/%2fserv%2fval")->
 	    setAttr("tm",TSYS::ll2str(tTime))->
 	    setAttr("tm_grnd","0");
 	if( view->cntrIfCmd(req,true) )	return;
-	
+
 	long long lst_tm = atoll(req.attr("tm").c_str());
 	if( lst_tm > valEnd() )
 	{
 	    double curVal = atof(req.text().c_str());
 	    if( (val_tp == 0 && curVal == EVAL_BOOL) || (val_tp == 1 && curVal == EVAL_INT) ) curVal = EVAL_REAL;
 	    if( valEnd() && (lst_tm-valEnd())/trcPer > 2 ) vals.push_back(SHg(lst_tm-trcPer,EVAL_REAL));
-	    vals.push_back(SHg(lst_tm,curVal));
+	    if( (lst_tm-valEnd()) >= wantPer ) vals.push_back(SHg(lst_tm,curVal));
+	    else vals[vals.size()-1].val = (curVal+vals[vals.size()-1].val)/2;
 	    while( vals.size() > 2000 )	vals.pop_front();
 	}
 	return;
@@ -1992,9 +1993,9 @@ void ShapeDiagram::TrendObj::loadData( bool full )
     //> Correct request to present data
     if( valEnd() && tTime > valEnd() )		tTimeGrnd = valEnd()+1;
     else if( valBeg() && tTimeGrnd < valBeg() )	tTime = valBeg()-1;
+
     //> Get values data
-    long long bbeg, bend;
-    int bper;
+    long long bbeg, bend, bper;
     int		curPos, prevPos;
     double	curVal, prevVal;
     string	svl;
@@ -2016,7 +2017,7 @@ void ShapeDiagram::TrendObj::loadData( bool full )
     //> Get data buffer parameters
     bbeg = atoll(req.attr("tm_grnd").c_str());
     bend = atoll(req.attr("tm").c_str());
-    bper = atoi(req.attr("per").c_str());
+    bper = atoll(req.attr("per").c_str());
 
     prevPos = 0;
     prevVal = EVAL_REAL;
@@ -2025,7 +2026,7 @@ void ShapeDiagram::TrendObj::loadData( bool full )
     {
 	sscanf(svl.c_str(),"%d %lf",&curPos,&curVal);
 	if( (val_tp == 0 && curVal == EVAL_BOOL) || (val_tp == 1 && curVal == EVAL_INT) ) curVal = EVAL_REAL;
-	for( ; prevPos < curPos-1; prevPos++ )	buf.push_back(SHg(bbeg+(prevPos+1)*bper,prevVal));
+	for( ; prevPos < curPos-1; prevPos++ ) buf.push_back(SHg(bbeg+(prevPos+1)*bper,prevVal));
 	buf.push_back(SHg(bbeg+curPos*bper,curVal));
 	prevPos = curPos; prevVal = curVal;
     }

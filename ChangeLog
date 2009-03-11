@@ -1,3 +1,10 @@
+2009-03-11 Roman
+- FIX:/Archive/FSArch: Real archives end border is fixed for real present data, no archive files end limit.
+- FIX:/UI/VCAEngine: Trend's size limit for primitive "Diagram" is fixed.
+- !!:FIX:/UI/Vision,/UI/WebVision: Working a Trend mechanism of primitive "Diagram" is fixed for long time intervals.
+    Fixed working for selected one archivator.
+
+
 2009-03-10 Roman
 - !!:/UI/VCAEngine;/UI/Vision;/UI/WebVision: Attributes index for base widgets is reordered.
 - /UI/VCAEngine;/UI/Vision: Not released primitives Function and Link is disabled.

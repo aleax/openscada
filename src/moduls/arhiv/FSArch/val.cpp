@@ -431,7 +431,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 ModVArchEl::ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator ) :
     TVArchEl(iachive,iarchivator)
 {
-
+    realEnd = TSYS::curTime();
 }
 
 ModVArchEl::~ModVArchEl( )
@@ -558,7 +558,7 @@ long long ModVArchEl::end()
     ResAlloc res(m_res,false);
     for( int i_a = arh_f.size()-1; i_a >= 0; i_a-- )
 	if( !arh_f[i_a]->err() )
-	    return arh_f[i_a]->end();
+	    return vmin(arh_f[i_a]->end(),realEnd);
 
     return 0;
 }
@@ -666,6 +666,8 @@ void ModVArchEl::setVal( TValBuf &buf, long long beg, long long end )
     if( !buf.vOK(beg,end) )	return;
     beg = vmax(beg,buf.begin());
     end = vmin(end,buf.end());
+
+    realEnd = vmax(realEnd,buf.end());
 
     //- Put values to files -
     ResAlloc res(m_res,false);

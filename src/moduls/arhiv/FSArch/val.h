@@ -172,6 +172,7 @@ class ModVArchEl: public TVArchEl
     private:
 	Res	m_res;		// resource to access;
 	deque<VFileArch *>	arh_f;
+	long long realEnd;
 };
 
 //************************************************

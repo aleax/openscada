@@ -5071,7 +5071,7 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
 		break;
 	    case 29:	//tSize
 		tSize = atof(req_el->text().c_str());
-		reld_tr_dt = 1;
+		reld_tr_dt = 2;
 		break;
 	    case 30:	//curSek
 		curTime = atoll(req_el->text().c_str())*1000000 + curTime%1000000;	break;
@@ -5236,7 +5236,7 @@ void VCADiagram::TrendObj::loadData( const string &user, bool full )
 
     //- One request check and prepare -
     int trcPer = owner().trcPer*1000000;
-    if( owner().tTimeCurent && trcPer && (!arh_per || (arh_per >= trcPer && (tTime-valEnd())/trcPer < 2)) )
+    if( owner().tTimeCurent && trcPer && owner().valArch.empty() && (!arh_per || (arh_per >= trcPer && (tTime-valEnd())/trcPer < 2)) )
     {
 	XMLNode req("get");
 	req.setAttr("path",addr()+"/%2fserv%2fval")->
@@ -5250,7 +5250,8 @@ void VCADiagram::TrendObj::loadData( const string &user, bool full )
 	    double curVal = atof(req.text().c_str());
 	    if( (val_tp == 0 && curVal == EVAL_BOOL) || (val_tp == 1 && curVal == EVAL_INT) ) curVal = EVAL_REAL;
 	    if( valEnd() && (lst_tm-valEnd())/trcPer > 2 ) vals.push_back(SHg(lst_tm-trcPer,EVAL_REAL));
-	    vals.push_back(SHg(lst_tm,curVal));
+	    if( (lst_tm-valEnd()) >= wantPer ) vals.push_back(SHg(lst_tm,curVal));
+	    else vals[vals.size()-1].val = (curVal+vals[vals.size()-1].val)/2;
 	    while( vals.size() > 2000 ) vals.pop_front();
 	}
 	return;
@@ -5271,8 +5272,7 @@ void VCADiagram::TrendObj::loadData( const string &user, bool full )
     if( valEnd() && tTime > valEnd() )          tTimeGrnd = valEnd()+1;
     else if( valBeg() && tTimeGrnd < valBeg() ) tTime = valBeg()-1;
     //- Get values data -
-    long long bbeg, bend;
-    int bper;
+    long long bbeg, bend, bper;
     int         curPos, prevPos;
     double      curVal, prevVal;
     string      svl;
@@ -5293,7 +5293,7 @@ void VCADiagram::TrendObj::loadData( const string &user, bool full )
     //- Get data buffer parameters -
     bbeg = atoll(req.attr("tm_grnd").c_str());
     bend = atoll(req.attr("tm").c_str());
-    bper = atoi(req.attr("per").c_str());
+    bper = atoll(req.attr("per").c_str());
 
     prevPos = 0;
     prevVal = EVAL_REAL;
