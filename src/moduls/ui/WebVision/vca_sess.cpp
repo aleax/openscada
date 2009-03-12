@@ -400,25 +400,27 @@ double VCAElFigure::length( const Point pt1, const Point pt2 )
     return sqrt( x*x + y*y );
 }
 
+//- Scaling and rotating the point -
 Point VCAElFigure::scaleRotate( const Point point, double xScale, double yScale,  bool flag_scale, bool flag_rotate )
 {
     Point rpnt = Point( point.x, point.y );
     Point center;
     if( flag_rotate )
-    {
-        if( !flag_scale ) center = Point( width*xScale/2 , height*yScale/2 );
-        else center = Point( width/2, height/2 );
+{
+        if( !flag_scale ) center = Point( TSYS::realRound( width*xScale/2 ), TSYS::realRound( height*yScale/2 ) );
+        else center = Point( TSYS::realRound( width/2 ), TSYS::realRound( height/2 ) );
         rpnt.x = rpnt.x - center.x;
         rpnt.y = rpnt.y - center.y;
         rpnt = rotate( rpnt, orient);
         rpnt.x = rpnt.x + center.x;
         rpnt.y = rpnt.y + center.y;
-    }
+}
     if( flag_scale ) rpnt = Point( rpnt.x*xScale, rpnt.y*yScale );
 
     return rpnt;
 }
 
+//- Unscaling and unrotating the point -
 Point VCAElFigure::unscaleUnrotate( const Point point, double xScale, double yScale, bool flag_scale, bool flag_rotate )
 {
     Point rpnt = Point( point.x, point.y );
@@ -426,8 +428,8 @@ Point VCAElFigure::unscaleUnrotate( const Point point, double xScale, double ySc
     if( flag_scale ) rpnt = Point( rpnt.x/xScale, rpnt.y/yScale );
     if( flag_rotate )
     {
-        if( !flag_scale ) center = Point( width*xScale/2, height*yScale/ 2 );
-        else center = Point( width/2 , height/2 );
+        if( !flag_scale ) center = Point( TSYS::realRound( width*xScale/2 ), TSYS::realRound( height*yScale/ 2 ) );
+        else center = Point( TSYS::realRound( width/2 ), TSYS::realRound( height/2 ) );
         rpnt.x = rpnt.x - center.x;
         rpnt.y = rpnt.y - center.y;
         rpnt = rotate( rpnt, 360 - orient );
@@ -3720,6 +3722,11 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
                             }
                             else
                             {
+                                xMin = (int)TSYS::realRound( xMin, 2, true );
+                                yMin = (int)TSYS::realRound( yMin, 2, true );
+                                xMax = (int)TSYS::realRound( xMax, 2, true );
+                                yMax = (int)TSYS::realRound( yMax, 2, true );
+
                                 string imgDef_temp = owner().resGet(inundationItems[i].imgFill,id(),ses.user);
                                 gdImagePtr im_fill_in = gdImageCreateFromPngPtr(imgDef_temp.size(), (void*)imgDef_temp.data());
                                 gdImagePtr im_fill_out = gdImageCreateTrueColor((int)TSYS::realRound( xMax - xMin ) + 1, (int)TSYS::realRound( yMax - yMin ) + 1 );
@@ -3738,6 +3745,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 
                                 double alpha_col = (double)(ui8)(inundationItems[i].P_color>>24)/127;
                                 double color_r, color_g, color_b;
+                                int rgb;
                                 gdImageAlphaBlending(im1,0);
 
                                 im_y = (int)yMin_rot;
@@ -3749,8 +3757,15 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
                                         if(  gdImageGetPixel( im1, im_x, im_y ) == tmp_clr )
                                         {
                                             Point drw_pnt = unscaleUnrotate( Point( im_x, im_y ), xSc, ySc, false, true );
-                                            int rgb = gdImageGetPixel( im_fill_out, (int)TSYS::realRound( drw_pnt.x - xMin, 2, true ),
+                                            rgb = gdImageGetPixel( im_fill_out, (int)TSYS::realRound( drw_pnt.x - xMin, 2, true ),
+                                                                                (int)TSYS::realRound( drw_pnt.y - yMin, 2, true ) );
+                                            if( ((int)TSYS::realRound( drw_pnt.x - xMin, 2, true ) == (int)TSYS::realRound( xMax - xMin ) + 1) && rgb == 0 )
+                                                rgb = gdImageGetPixel( im_fill_out, (int)TSYS::realRound( drw_pnt.x - xMin - 1, 2, true ),
                                                                                     (int)TSYS::realRound( drw_pnt.y - yMin, 2, true ) );
+                                            else if( ((int)TSYS::realRound( drw_pnt.y - yMin, 2, true ) == (int)TSYS::realRound( yMax - yMin ) + 1) && rgb == 0 )
+                                                rgb = gdImageGetPixel( im_fill_out, (int)TSYS::realRound( drw_pnt.x - xMin, 2, true ),
+                                                                                    (int)TSYS::realRound( drw_pnt.y - yMin - 1, 2, true ) );
+
                                             alpha = gdImageAlpha( im_fill_out, rgb );
                                             alpha_pr = 1 - (double)alpha / 127;
                                             drw_pnt1.x = scaleRotate( drw_pnt, xSc, ySc, false, true ).x;
@@ -3764,9 +3779,9 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
                                                                                 (int)TSYS::realRound( color_g, 2, true ),
                                                                                 (int)TSYS::realRound( color_b, 2, true ) );*/
                                             int color = gdImageColorResolveAlpha( im1, (int)TSYS::realRound( color_r, 2, true ),
-                                                                                    (int)TSYS::realRound( color_g, 2, true ),
-                                                                                    (int)TSYS::realRound( color_b, 2, true ),
-                                                                                        127 - (ui8)(inundationItems[i].P_color>>24) );
+                                                                                       (int)TSYS::realRound( color_g, 2, true ),
+                                                                                       (int)TSYS::realRound( color_b, 2, true ),
+                                                                                       127 - (ui8)(inundationItems[i].P_color>>24) );
                                             gdImageSetPixel( im1, (int)TSYS::realRound( drw_pnt1.x, 2, true ) , (int)TSYS::realRound( drw_pnt1.y, 2, true ), color );
                                         }
                                         im_x += 1;

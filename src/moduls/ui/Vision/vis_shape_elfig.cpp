@@ -1593,7 +1593,7 @@ void ShapeElFigure::editExit( WdgView *view )
     shapeSave(view);
     view->unsetCursor();
     status = false;
-    flag_ctrl = flag_A = flag_copy = false;
+    flag_ctrl = flag_A = flag_copy = flag_up = flag_down = flag_left = flag_right =  false;
     itemInMotion = 0;
     count_Shapes = 0;
     index_array.clear();
@@ -2598,7 +2598,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
             }
             else if( devW )
             {
-                if( flag_down==0 && flag_up==0 && flag_left==0 && flag_right==0 )
+                if( !flag_down && !flag_up && !flag_left && !flag_right )
                 {
                     if( ev->button()==Qt::LeftButton && !status )
                     {
@@ -2845,7 +2845,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                 if( !flag_down && !flag_up && !flag_left && !flag_right )
                 {
                     index = itemAt( ev->pos(), shapeItems, view );
-                   
                     // - getting fill by double click -
                     if( ev->button() == Qt::LeftButton && shapeItems.size() && index == -1 )
                     {
@@ -3595,7 +3594,8 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                 }
                 else
                 {
-                    if( flag_down || flag_left || flag_right || flag_up ) break;
+                    if( flag_down || flag_left || flag_right || flag_up )
+                        break;
                     if( flag_first_move && !flag_A )
                     {
                         shapeSave( view );
@@ -5479,9 +5479,8 @@ bool ShapeElFigure::inundation1_2( const QPointF &point, const QVector<ShapeItem
     ColorMap *colors = &elFD->shapeColors;
     QPainterPath inundationPath_1_2;
     QVector<int> in_fig_num;
-    bool flag_break, fl_brk;
+    bool flag_break;
     flag_break = false;
-    fl_brk = false;
     for( int i = 0; i < shapeItems.size(); i++ )
     {
         if( shapeItems[i].type == 2 )
@@ -5500,31 +5499,25 @@ bool ShapeElFigure::inundation1_2( const QPointF &point, const QVector<ShapeItem
                             paintImage(view);
                             view->repaint();
                             return true;
-                            //fl_brk = true;
-                            //break;
                         }
-                    if( !fl_brk )
+                    if( number == -1 && status_hold )
+                        inundationItems.push_back( inundationItem( inundationPath_1_2, -7, -5, in_fig_num, in_fig_num ) );
+                    else
                     {
-                        if( number == -1 && status_hold )
-                            inundationItems.push_back( inundationItem( inundationPath_1_2, -7, -5, in_fig_num, in_fig_num ) );
+                        if( !flag_scale && !flag_rotate )
+                        {
+                            inundation_vector = in_fig_num;
+                            inundationPath = inundationPath_1_2;
+                        }
                         else
                         {
-                            if( !flag_scale && !flag_rotate )
-                            {
-                                inundation_vector = in_fig_num;
-                                inundationPath = inundationPath_1_2;
-                            }
-                            else
-                            {
-                                inundationItems[number].path = inundationPath_1_2;
-                                inundationItems[number].number_shape = in_fig_num;
-                            }
+                            inundationItems[number].path = inundationPath_1_2;
+                            inundationItems[number].number_shape = in_fig_num;
                         }
-                        flag_break = true;
                     }
+                    return true;
                 }
             }
-        if( flag_break ) return true;
         if( shapeItems[i].type == 2 || shapeItems[i].type == 3 )
         {
             for( int j = 0; j < shapeItems.size(); j++ )
@@ -5545,32 +5538,29 @@ bool ShapeElFigure::inundation1_2( const QPointF &point, const QVector<ShapeItem
                                 if( inundationItems[i].path == inundationPath_1_2 )
                                 {
                                     inundationItems.remove(i);
-                                    fl_brk = true;
-                                    break;
+                                    paintImage(view);
+                                    view->repaint();
+                                    return true;
                                 }
-                            if( !fl_brk )
+                            if( number == -1  && status_hold )
+                                inundationItems.push_back( inundationItem( inundationPath_1_2, -7, -5, in_fig_num, in_fig_num ) );
+                            else
                             {
-                                if( number == -1  && status_hold )
-                                    inundationItems.push_back( inundationItem( inundationPath_1_2, -7, -5, in_fig_num, in_fig_num ) );
+                                if( !flag_scale && !flag_rotate )
+                                {
+                                    inundation_vector = in_fig_num;
+                                    inundationPath = inundationPath_1_2;
+                                }
                                 else
                                 {
-                                    if( !flag_scale && !flag_rotate )
-                                    {
-                                        inundation_vector = in_fig_num;
-                                        inundationPath = inundationPath_1_2;
-                                    }
-                                    else
-                                    {
-                                        inundationItems[number].path = inundationPath_1_2;
-                                        inundationItems[number].number_shape = in_fig_num;
-                                    }
+                                    inundationItems[number].path = inundationPath_1_2;
+                                    inundationItems[number].number_shape = in_fig_num;
                                 }
-                                flag_break = true;
                             }
+                            return true;
                         }
                     }
-                if( flag_break ) return true;
-            }
+             }
         }
     }
     return false;
@@ -5598,7 +5588,7 @@ QPointF ShapeElFigure::unScaleRotate( const QPointF &point, WdgView *view, bool 
     ElFigDt *elFD = (ElFigDt*)view->shpData;
     QPointF rpnt = point;
     QPointF center;
-    if(flag_scale) rpnt = QPointF( rpnt.x()/view->xScale(true), rpnt.y()/view->yScale(true) );
+    if( flag_scale ) rpnt = QPointF( rpnt.x()/view->xScale(true), rpnt.y()/view->yScale(true) );
     if( flag_rotate )
     {
         if( !flag_scale ) center = QPointF( view->sizeF().width()/2, view->sizeF().height()/2 ).toPoint();
@@ -5647,7 +5637,6 @@ void ShapeElFigure::paintImage( WdgView *view )
             PntMap tmp_pnts;
             QVector<int> number_vector;
             bool fl_;
-            //bool isAlpha = false;
             for( int p = 0; p < inundationItems[i].number_shape.size(); p++ )
             {
                 if( shapeItems[inundationItems[i].number_shape[p]].type == 1 )
@@ -5773,6 +5762,11 @@ void ShapeElFigure::paintImage( WdgView *view )
             }
             while( t < 1 );
 
+            xMin = (int)TSYS::realRound( xMin, 2, true );
+            yMin = (int)TSYS::realRound( yMin, 2, true );
+            xMax = (int)TSYS::realRound( xMax, 2, true );
+            yMax = (int)TSYS::realRound( yMax, 2, true );
+
             in_path_rot = createInundationPath( inundationItems[i].number_shape, shapeItems, *pnts, view );
             double xMax_rot = in_path_rot.pointAtPercent ( 0 ).x();
             double xMin_rot = in_path_rot.pointAtPercent ( 0 ).x();
@@ -5794,6 +5788,7 @@ void ShapeElFigure::paintImage( WdgView *view )
             yMin_rot = (int)TSYS::realRound( yMin_rot, 2, true );
             xMax_rot = (int)TSYS::realRound( xMax_rot, 2, true );
             yMax_rot = (int)TSYS::realRound( yMax_rot, 2, true );
+
 
             //-- Scaling image for filling --
             img = img.scaled ( QSize( (int)TSYS::realRound( xMax - xMin )+1, (int)TSYS::realRound( yMax - yMin )+1 ), Qt::IgnoreAspectRatio, Qt::FastTransformation  );
@@ -5836,7 +5831,7 @@ void ShapeElFigure::paintImage( WdgView *view )
                 while( im_x > xMin_rot && im_x < xMax_rot );
                 im_y += 1;
             }
-            while( im_y > yMin_rot && im_y < yMax_rot ); 
+            while( im_y > yMin_rot && im_y < yMax_rot );
         }
         else
         {

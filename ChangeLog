@@ -1,3 +1,8 @@
+2009-03-12 Maxim
+- FIX:/UI/Vision: Some fixes with the moving figures with the help of keyboard are done for primitive ElFigure.
+- FIX:/UI/WebVision: Scaling the imege for filling for primitive ElFigure is modified.
+
+
 2009-03-12 Roman
 - !:/DemoDB: Some DB updates and fixes. Document's finalize document is fixed.
 
