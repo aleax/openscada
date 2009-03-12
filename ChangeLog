@@ -1,3 +1,7 @@
+2009-03-12 Roman
+- !:/DemoDB: Some DB updates and fixes. Document's finalize document is fixed.
+
+
 2009-03-11 Roman
 - FIX:/Archive/FSArch: Real archives end border is fixed for real present data, no archive files end limit.
 - FIX:/UI/VCAEngine: Trend's size limit for primitive "Diagram" is fixed.

@@ -1693,11 +1693,8 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	inbuf = TSYS::strDecode(outbuf,TSYS::base64);
 	mess_info(test_cat,"  Encode %d size text time %f ms!",outbuf.size(),1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
 	for(int i_s = 0; i_s < 256; i_s++) 
-	{
-	    //printf("TEST 00: %d -> %d\n",i_s,(unsigned char)inbuf[i_s]);
 	    if((unsigned char)inbuf[i_s] != i_s) 
 		throw TError("","Test1 failed! Coding error!" );
-	}
 	mess_info(test_cat,"Test1 passed.");
     }
 }

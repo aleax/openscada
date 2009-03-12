@@ -1013,6 +1013,8 @@ void VFileArch::getVal( TValBuf &buf, long long beg, long long end )
 
     voff_beg = calcVlOff(hd,vpos_beg,&vlen_beg);
 
+
+
     //- Get the pack index block and the value block -
     if( fixVl )
     {
@@ -1024,7 +1026,7 @@ void VFileArch::getVal( TValBuf &buf, long long beg, long long end )
 	read(hd,pid_b,i_end-i_beg);
 	//-- Calc end offset --
 	voff_end=voff_beg;
-	for(int i_pos = vpos_beg+1; i_pos <= vpos_end; i_pos++ )
+	for( int i_pos = vpos_beg+1; i_pos <= vpos_end; i_pos++ )
 	    voff_end += vSize*(bool)((0x01<<(i_pos%8))&pid_b[(i_pos/8)-(vpos_beg/8)]);
 	//-- Get value block --
 	i_beg=voff_beg;

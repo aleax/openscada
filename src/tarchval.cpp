@@ -1950,7 +1950,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	if( !(end/1000000) ) end = (long long)time(NULL) * 1000000;
 	end += atoi(TBDS::genDBGet(owner().nodePath()+"vaTm_u","0",opt->attr("user")).c_str());
 	long long beg = end - (long long)(atof(TBDS::genDBGet(owner().nodePath()+"vaSize","1",opt->attr("user")).c_str())*1e6);
-	
+
 	TValBuf buf( TFld::String, 0, 0, false, true );
 	getVal( buf, beg, end, TBDS::genDBGet(owner().nodePath()+"vArch","",opt->attr("user")), 2000 );
 
