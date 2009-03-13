@@ -269,52 +269,8 @@ void Session::uiComm( const string &com, const string &prm, SessWdg *src )
 	//> Open found page
 	if( !cpg.freeStat() )
 	{
-	    //>> Close previous page
-	    if( !oppg.empty() )	((AutoHD<SessPage>)mod->nodeAt(oppg)).at().attrAt("pgOpen").at().setB(false);
-	    //>>> Set interwidget's links for new page
-	    bool emptyPresnt = false;
-	    string atr_id, prm_lnk;
-	    vector<string> cAtrLs;
-	    cpg.at().attrList(cAtrLs);
-	    for( int i_al = 0; i_al < cAtrLs.size(); i_al++ )
-	    {
-		AutoHD<Attr> attr = cpg.at().attrAt(cAtrLs[i_al]);
-		if( !(attr.at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut) && TSYS::strSepParse(attr.at().cfgTempl(),0,'|') == "<page>" ) ) continue;
-		atr_id = TSYS::strSepParse(attr.at().cfgTempl(),1,'|');
-		if( src->attrPresent(atr_id) )
-		{
-		    if( src->attrAt(atr_id).at().cfgVal().size() > 4 && src->attrAt(atr_id).at().cfgVal().substr(0,4) == "prm:" )
-		    {
-			if( prm_lnk.empty() ) prm_lnk = src->attrAt(atr_id).at().cfgVal().substr(4);
-			attr.at().setCfgVal(src->attrAt(atr_id).at().cfgVal());
-		    }
-		    else attr.at().setCfgVal("wdg:"+src->path()+"/a_"+atr_id);
-		}
-		else
-		{
-		    attr.at().setCfgVal("");
-		    attr.at().setS(EVAL_STR);
-		    emptyPresnt = true;
-		}
-	    }
-	    //>>> Fill parameter's links for other attributes
-	    if( emptyPresnt && !prm_lnk.empty() )
-	    {
-		AutoHD<TValue> prml;
-		prm_lnk = "/"+TSYS::pathLev(prm_lnk,0)+"/"+TSYS::pathLev(prm_lnk,1)+"/"+TSYS::pathLev(prm_lnk,2);
-		try{ prml = SYS->daq().at().nodeAt(prm_lnk); } catch(TError err) { }
-		for( int i_al = 0; !prml.freeStat() && i_al < cAtrLs.size(); i_al++ )
-		{
-		    AutoHD<Attr> attr = cpg.at().attrAt(cAtrLs[i_al]);
-		    if( !(attr.at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut) &&
-			    TSYS::strSepParse(attr.at().cfgTempl(),0,'|') == "<page>" &&
-			    (attr.at().cfgVal().empty() || attr.at().flgGlob()&Attr::Address) ) )	continue;
-		    atr_id = TSYS::strSepParse(attr.at().cfgTempl(),1,'|');
-		    if( prml.at().vlPresent(atr_id) )	attr.at().setCfgVal("prm:"+prm_lnk+"/a_"+atr_id);
-		}
-	    }
-	    //>>> Open new page
-	    cpg.at().attrAt("pgOpen").at().setB(true);
+	    if( !oppg.empty() )	((AutoHD<SessPage>)mod->nodeAt(oppg)).at().attrAt("pgOpenSrc").at().setS("");
+	    cpg.at().attrAt("pgOpenSrc").at().setS(src->path());
 	}
     }catch(...){ }
 }
@@ -755,17 +711,75 @@ void SessPage::calc( bool first, bool last )
 bool SessPage::attrChange( Attr &cfg, TVariant prev )
 {
     //> Page open process
-    if( enable() && !prev.isNull() && cfg.id() == "pgOpen" )
+    if( enable() && !prev.isNull() )
     {
-	if( cfg.getB() )
+	if( cfg.id() == "pgOpen" )
 	{
-	    if( !process() )	setProcess(true);
-	    ownerSess()->openReg(path());
+	    if( cfg.getB() )
+	    {
+		if( !process() )	setProcess(true);
+		ownerSess()->openReg(path());
+	    }
+	    else
+	    {
+		ownerSess()->openUnreg(path());
+		if( process() && !attrAt("pgNoOpenProc").at().getB() )	setProcess(false);
+	    }
 	}
-	else
+	else if( cfg.id() == "pgOpenSrc" )
 	{
-	    ownerSess()->openUnreg(path());
-	    if( process() && !attrAt("pgNoOpenProc").at().getB() )	setProcess(false);
+	    if( !cfg.getS().empty() )
+	    {
+		try
+		{
+		    AutoHD<SessWdg> src = mod->nodeAt(cfg.getS());
+		    //> Set interwidget's links for new page
+		    bool emptyPresnt = false;
+		    string atr_id, prm_lnk;
+		    vector<string> cAtrLs;
+		    attrList(cAtrLs);
+		    for( int i_al = 0; i_al < cAtrLs.size(); i_al++ )
+		    {
+			AutoHD<Attr> attr = attrAt(cAtrLs[i_al]);
+			if( !(attr.at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut) &&
+			      TSYS::strSepParse(attr.at().cfgTempl(),0,'|') == "<page>") ) continue;
+			atr_id = TSYS::strSepParse(attr.at().cfgTempl(),1,'|');
+			if( src.at().attrPresent(atr_id) )
+			{
+			    if( src.at().attrAt(atr_id).at().cfgVal().size() > 4 && src.at().attrAt(atr_id).at().cfgVal().substr(0,4) == "prm:" )
+			    {
+				if( prm_lnk.empty() ) prm_lnk = src.at().attrAt(atr_id).at().cfgVal().substr(4);
+				attr.at().setCfgVal(src.at().attrAt(atr_id).at().cfgVal());
+			    }
+			    else attr.at().setCfgVal("wdg:"+cfg.getS()+"/a_"+atr_id);
+			}
+			else
+			{
+			    attr.at().setCfgVal("");
+			    attr.at().setS(EVAL_STR);
+			    emptyPresnt = true;
+			}
+		    }
+		    //> Fill parameter's links for other attributes
+		    if( emptyPresnt && !prm_lnk.empty() )
+		    {
+			AutoHD<TValue> prml;
+			prm_lnk = "/"+TSYS::pathLev(prm_lnk,0)+"/"+TSYS::pathLev(prm_lnk,1)+"/"+TSYS::pathLev(prm_lnk,2);
+			try{ prml = SYS->daq().at().nodeAt(prm_lnk); } catch(TError err) { }
+			for( int i_al = 0; !prml.freeStat() && i_al < cAtrLs.size(); i_al++ )
+			{
+			    AutoHD<Attr> attr = attrAt(cAtrLs[i_al]);
+			    if( !(attr.at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut) &&
+				  TSYS::strSepParse(attr.at().cfgTempl(),0,'|') == "<page>" &&
+				  (attr.at().cfgVal().empty() || attr.at().flgGlob()&Attr::Address) ) )	continue;
+			    atr_id = TSYS::strSepParse(attr.at().cfgTempl(),1,'|');
+			    if( prml.at().vlPresent(atr_id) )	attr.at().setCfgVal("prm:"+prm_lnk+"/a_"+atr_id);
+			}
+		    }
+		}
+		catch(TError err) { }
+	    }
+	    cfg.owner()->attrAt("pgOpen").at().setB(!cfg.getS().empty());
 	}
     }
 
@@ -1272,8 +1286,6 @@ void SessWdg::calc( bool first, bool last )
 			    case TFld::String:	attr.at().setS(vl.at().getS());	break;
 			}
 		    }
-		    else if( obj_tp == "addr:" )
-			attr.at().setS(attr.at().cfgVal().substr(obj_tp.size()));
 		    else if( obj_tp == "wdg:" )
 		    {
 			try{ attr1 = mod->nodeAt(attr.at().cfgVal(),0,0,obj_tp.size()); }

@@ -119,7 +119,7 @@ class VisRun : public QMainWindow
 
 	void about( );					//About at programm
 	void aboutQt( );				//About at QT library
-	void enterWhatsThis( );				//What is GUI components
+	//void enterWhatsThis( );				//What is GUI components
 	void updatePage( );				//Update page data
 	void endRunChk( );				//End run flag check
 

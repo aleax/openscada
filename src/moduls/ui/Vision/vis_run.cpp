@@ -164,12 +164,12 @@ VisRun::VisRun( const string &prj_it, const string &open_user, const string &use
     actQtAbout->setStatusTip(_("Press to get the using QT information."));
     connect(actQtAbout, SIGNAL(activated()), this, SLOT(aboutQt()));
     //>>> What is
-    if(!ico_t.load(TUIS::icoPath("contexthelp").c_str())) ico_t.load(":/images/contexthelp.png");
-    QAction *actWhatIs = new QAction(QPixmap::fromImage(ico_t),_("What's &This"),this);
-    actWhatIs->setToolTip(_("The button for requestion about GUI elements"));
-    actWhatIs->setWhatsThis(_("Get request about user interface elements"));
-    actWhatIs->setStatusTip(_("Press for requesting about user interface elements."));
-    connect(actWhatIs, SIGNAL(activated()), this, SLOT(enterWhatsThis()));
+    //if(!ico_t.load(TUIS::icoPath("contexthelp").c_str())) ico_t.load(":/images/contexthelp.png");
+    //QAction *actWhatIs = new QAction(QPixmap::fromImage(ico_t),_("What's &This"),this);
+    //actWhatIs->setToolTip(_("The button for requestion about GUI elements"));
+    //actWhatIs->setWhatsThis(_("Get request about user interface elements"));
+    //actWhatIs->setStatusTip(_("Press for requesting about user interface elements."));
+    //connect(actWhatIs, SIGNAL(activated()), this, SLOT(enterWhatsThis()));
 
     //>> Alarms actions
     //>>> Alarm level display button and full alarms quitance
@@ -222,7 +222,7 @@ VisRun::VisRun( const string &prj_it, const string &open_user, const string &use
     mn_help->addAction(actAbout);
     mn_help->addAction(actQtAbout);
     mn_help->addSeparator();
-    mn_help->addAction(actWhatIs);
+    //mn_help->addAction(actWhatIs);
 
     //> Init tool bars
     //>> Alarms tools bar
@@ -732,10 +732,10 @@ void VisRun::fullScreen( bool vl )
     else setWindowState(Qt::WindowNoState);
 }
 
-void VisRun::enterWhatsThis()
+/*void VisRun::enterWhatsThis()
 {
     QWhatsThis::enterWhatsThisMode();
-}
+}*/
 
 void VisRun::alarmAct( QAction *alrm )
 {

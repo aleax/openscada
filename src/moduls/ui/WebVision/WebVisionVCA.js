@@ -478,7 +478,7 @@ function makeEl( pgBr, inclPg )
       case 7: elStyle+='border-style: inset; ';  break;
       case 8: elStyle+='border-style: outset; '; break;
     }
-    if( (this.inclOpen && this.attrs['pgOpenSrc'] != this.inclOpen) || (!this.inclOpen && this.attrs['pgOpenSrc'].length) )
+    if( !this.pg && ((this.inclOpen && this.attrs['pgOpenSrc'] != this.inclOpen) || (!this.inclOpen && this.attrs['pgOpenSrc'].length)) )
     {
       if( this.inclOpen )
       {

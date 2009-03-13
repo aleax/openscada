@@ -1001,13 +1001,9 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
 	//-- Link interface process --
 	int c_lv = 0;
 	string obj_tp = TSYS::strSepParse(m_prm,0,':')+":";
-	if( obj_tp.empty() || !(obj_tp == "val:" || obj_tp == "prm:" || obj_tp == "wdg:" || obj_tp == "addr:") )
+	if( obj_tp.empty() || !(obj_tp == "val:" || obj_tp == "prm:" || obj_tp == "wdg:") )
 	{
-	    if( !is_pl )
-	    {
-		opt->childAdd("el")->setText(_("val:Constant value"));
-		opt->childAdd("el")->setText("addr:");
-	    }
+	    if( !is_pl ) opt->childAdd("el")->setText(_("val:Constant value"));
 	    opt->childAdd("el")->setText("prm:");
 	    opt->childAdd("el")->setText("wdg:");
 	}
@@ -1026,48 +1022,42 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
 	    }
 	    vector<string> ls;
 	    c_off = obj_tp.size();
-	    //--- Address interface elements list process ---
-	    if( obj_tp == "addr:" && !is_pl )
-		SYS->nodeAt(m_prm,0,0,c_off).at().nodeList(ls);
-	    //--- Other interface elements list process ---
-	    else
+	
+	    string prm1 = TSYS::pathLev(m_prm,0,true,&c_off);
+	    string prm2 = TSYS::pathLev(m_prm,0,true,&c_off);
+	    string prm3 = TSYS::pathLev(m_prm,0,true,&c_off);
+	    switch(c_lv)
 	    {
-		string prm1 = TSYS::pathLev(m_prm,0,true,&c_off);
-		string prm2 = TSYS::pathLev(m_prm,0,true,&c_off);
-		string prm3 = TSYS::pathLev(m_prm,0,true,&c_off);
-		switch(c_lv)
-		{
-		    case 0:
-			if( obj_tp == "prm:" ) SYS->daq().at().modList(ls);
-			if( obj_tp == "wdg:" )
-			{
-			    wdgList(ls);
-			    ls.push_back("self");
-			}
-			break;
-		    case 1:
-			if( obj_tp == "prm:" && SYS->daq().at().modPresent(prm1) )
-			    SYS->daq().at().at(prm1).at().list(ls);
-			if( !is_pl && obj_tp == "wdg:" )
-			{
-			    AutoHD<Widget> wdg;
-			    if( prm1 == "self")	wdg = this;
-			    else wdg = wdgAt(prm1);
-			    if( !wdg.freeStat() ) wdg.at().attrList(ls);
-			}
-			break;
-		    case 2:
-			if( obj_tp == "prm:" && SYS->daq().at().modPresent(prm1)
-			          && SYS->daq().at().at(prm1).at().present(prm2) )
-			    SYS->daq().at().at(prm1).at().at(prm2).at().list(ls);
-			break;
-		    case 3:
- 			if( !is_pl && obj_tp=="prm:" && SYS->daq().at().modPresent(prm1)
-			          && SYS->daq().at().at(prm1).at().present(prm2)
-			          && SYS->daq().at().at(prm1).at().at(prm2).at().present(prm3) )
+		case 0:
+		    if( obj_tp == "prm:" ) SYS->daq().at().modList(ls);
+		    if( obj_tp == "wdg:" )
+		    {
+			wdgList(ls);
+			ls.push_back("self");
+		    }
+		    break;
+		case 1:
+		    if( obj_tp == "prm:" && SYS->daq().at().modPresent(prm1) )
+			SYS->daq().at().at(prm1).at().list(ls);
+		    if( !is_pl && obj_tp == "wdg:" )
+		    {
+			AutoHD<Widget> wdg;
+			if( prm1 == "self")	wdg = this;
+			else wdg = wdgAt(prm1);
+			if( !wdg.freeStat() ) wdg.at().attrList(ls);
+		    }
+		    break;
+		case 2:
+		    if( obj_tp == "prm:" && SYS->daq().at().modPresent(prm1)
+			      && SYS->daq().at().at(prm1).at().present(prm2) )
+			SYS->daq().at().at(prm1).at().at(prm2).at().list(ls);
+		    break;
+		case 3:
+ 		    if( !is_pl && obj_tp=="prm:" && SYS->daq().at().modPresent(prm1)
+			      && SYS->daq().at().at(prm1).at().present(prm2)
+			      && SYS->daq().at().at(prm1).at().at(prm2).at().present(prm3) )
 			SYS->daq().at().at(prm1).at().at(prm2).at().at(prm3).at().vlList(ls);
 		    break;
-		}
 	    }
 	    for(int i_l = 0; i_l < ls.size(); i_l++)
 		opt->childAdd("el")->setText(c_path+"/"+ls[i_l]);

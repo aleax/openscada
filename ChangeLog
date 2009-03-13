@@ -1,6 +1,15 @@
+2009-03-13 Roman
+- /Doc: OpenSCADA API documentation is updated. DAQ description document is included to source tree.
+- /Archive/FSArch: Document is updated and released version 1.2.0.
+- !:/UI/VCAEngine: Session's pages opening dynamic links code is moved to attribute "pgOpenSrc" changes handler.
+- /UI/VCAEngine: Not used link's type "addr:" is removed.
+- /UI/Vision: RunTime mode's "WhatIs" action is disabled.
+- FIX:/UI/WebVision: Included page enabling is fixed only for widgets, no pages.
+
+
 2009-03-12 Maxim
 - FIX:/UI/Vision: Some fixes with the moving figures with the help of keyboard are done for primitive ElFigure.
-- FIX:/UI/WebVision: Scaling the imege for filling for primitive ElFigure is modified.
+- FIX:/UI/WebVision: Scaling the image for filling for primitive ElFigure is modified.
 
 
 2009-03-12 Roman
