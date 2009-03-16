@@ -1464,7 +1464,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
     long long aVbeg;			//Corrected for allow data the trend begin point
     long long hDiv = 1, hDivBase = 1;	//Horisontal scale divisor
 
-    int hmax_ln = tAr.width() / (int)(((sclHor&0x2)?40.0:15.0)*vmin(w->xScale(true),w->yScale(true)));
+    int hmax_ln = tAr.width() / (int)(((sclHor&0x2)?pnt.fontMetrics().width("000000"):15.0)*vmin(w->xScale(true),w->yScale(true)));
     if( hmax_ln >= 2 )
     {
 	int hvLev = 0;

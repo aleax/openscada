@@ -4697,7 +4697,7 @@ void VCADiagram::getReq( SSess &ses )
 	    //>> Set markers font and color
 	    mrkFontSize = (int)((float)sclMarkFontSize*vmin(xSc,ySc));
 	    clr_mrk = gdImageColorAllocate(im,(ui8)(sclMarkColor>>16),(ui8)(sclMarkColor>>8),(ui8)sclMarkColor);
-	    gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.,0,0,"Test");
+	    gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.,0,0,"000000");
 	    mrkHeight = brect[3]-brect[7];
 	    if( sclHor&0x2 )
 	    {
@@ -4712,7 +4712,7 @@ void VCADiagram::getReq( SSess &ses )
     long long aVbeg;							//Corrected for allow data the trend begin point
     long long hDiv = 1, hDivBase = 1;					//Horisontal scale divisor
 
-    int hmax_ln = tArW / (int)(((sclHor&0x2)?40.0:15.0)*vmin(xSc,ySc));
+    int hmax_ln = tArW / (int)(((sclHor&0x2)?(brect[2]-brect[6]):15.0)*vmin(xSc,ySc));
     if( hmax_ln >= 2 )
     {
 	int hvLev = 0;

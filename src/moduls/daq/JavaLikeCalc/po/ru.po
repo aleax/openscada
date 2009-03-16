@@ -3,30 +3,27 @@
 # This file is distributed under the same license as the OpenSCADA.DAQ.JavaLikeCalc package module.
 # Roman Savochenko <rom_as@fromru.com>, 2005-2009.
 #
-#: freefunc.cpp:152 freefunc.cpp:156 freefunc.cpp:166 freefunc.cpp:211
-#: freefunc.cpp:220 freefunc.cpp:238 freefunc.cpp:271 freefunc.cpp:309
-#: freefunc.cpp:311 freefunc.cpp:318 freefunc.cpp:1604 freefunc.cpp:1605
-#: freefunc.cpp:1606 freefunc.cpp:1607 freefunc.cpp:1608 freefunc.cpp:1609
-#: freefunc.cpp:1670 freelib.cpp:124 freelib.cpp:163 freelib.cpp:224
-#: virtual.cpp:54 virtual.cpp:182 virtual.cpp:184 virtual.cpp:256
-#: virtual.cpp:259 virtual.cpp:260 virtual.cpp:266 virtual.cpp:269
-#: virtual.cpp:270 virtual.cpp:429 virtual.cpp:455 virtual.cpp:464
-#: virtual.cpp:576 virtual.cpp:600 virtual.cpp:601 virtual.cpp:602
-#: virtual.cpp:603 virtual.cpp:604 freefunc.h:261 freelib.h:67 virtual.h:182
-#: func_analise.ypp:72
+#: freefunc.cpp:151 freefunc.cpp:155 freefunc.cpp:262 freefunc.cpp:300
+#: freefunc.cpp:302 freefunc.cpp:309 freefunc.cpp:1595 freefunc.cpp:1596
+#: freefunc.cpp:1597 freefunc.cpp:1598 freefunc.cpp:1599 freefunc.cpp:1600
+#: freefunc.cpp:1661 freelib.cpp:159 freelib.cpp:220 func_analise.ypp:72
+#: virtual.cpp:54 virtual.cpp:182 virtual.cpp:184 virtual.cpp:254
+#: virtual.cpp:257 virtual.cpp:262 virtual.cpp:265 virtual.cpp:562
+#: virtual.cpp:586 virtual.cpp:587 virtual.cpp:588 virtual.cpp:589
+#: virtual.cpp:590 freefunc.h:261 freelib.h:67 virtual.h:182
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.3.0\n"
+"Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-09 15:09+0200\n"
+"POT-Creation-Date: 2009-03-16 12:51+0200\n"
 "PO-Revision-Date: 2007-10-28 10:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: freefunc.cpp:39 freefunc.cpp:160 freefunc.cpp:200 freelib.cpp:35
+#: freefunc.cpp:39 freefunc.cpp:159 freefunc.cpp:197 freelib.cpp:35
 #: virtual.cpp:112 virtual.cpp:118 virtual.cpp:126
 msgid "NAME"
 msgstr ""
@@ -43,63 +40,61 @@ msgstr ""
 msgid "FORMULA"
 msgstr ""
 
-#: freefunc.cpp:42 freefunc.cpp:92 freefunc.cpp:103 freefunc.cpp:148
-#: freefunc.cpp:166 freefunc.cpp:199 freefunc.cpp:211 freefunc.cpp:215
-#: freefunc.cpp:220 freefunc.cpp:238 freelib.cpp:35 freelib.cpp:119
-#: freelib.cpp:124 virtual.cpp:103 virtual.cpp:111 virtual.cpp:117
-#: virtual.cpp:125 virtual.cpp:258 virtual.cpp:260 virtual.cpp:268
-#: virtual.cpp:270 virtual.cpp:427 virtual.cpp:428 virtual.cpp:429
-#: virtual.cpp:448 virtual.cpp:455 virtual.cpp:459 virtual.cpp:464
+#: freefunc.cpp:42 freefunc.cpp:92 freefunc.cpp:103 freefunc.cpp:147
+#: freefunc.cpp:196 freefunc.cpp:209 freelib.cpp:35 freelib.cpp:118
+#: virtual.cpp:103 virtual.cpp:111 virtual.cpp:117 virtual.cpp:125
+#: virtual.cpp:256 virtual.cpp:264 virtual.cpp:420 virtual.cpp:421
+#: virtual.cpp:439 virtual.cpp:447
 msgid "ID"
 msgstr ""
 
-#: freefunc.cpp:69 freefunc.cpp:323 freefunc.cpp:1099 freelib.cpp:141
-#: virtual.cpp:274 virtual.cpp:378 virtual.cpp:396 virtual.cpp:526
+#: freefunc.cpp:69 freefunc.cpp:314 freefunc.cpp:1090 freelib.cpp:137
+#: virtual.cpp:269 virtual.cpp:373 virtual.cpp:391 virtual.cpp:512
 #, c-format
 msgid "%s"
 msgstr ""
 
-#: freefunc.cpp:145 freefunc.cpp:196 freefunc.cpp:237 virtual.cpp:124
+#: freefunc.cpp:144 freefunc.cpp:193 freefunc.cpp:229 virtual.cpp:124
 msgid "F_ID"
 msgstr ""
 
-#: freefunc.cpp:146 freefunc.cpp:192 freefunc.cpp:239 freelib.cpp:90
+#: freefunc.cpp:145 freefunc.cpp:189 freefunc.cpp:230 freelib.cpp:90
 #: freelib.cpp:91
 msgid "_io"
 msgstr ""
 
-#: freefunc.cpp:151 freefunc.cpp:205 virtual.cpp:131
+#: freefunc.cpp:150 freefunc.cpp:202 virtual.cpp:131
 msgid "POS"
 msgstr ""
 
-#: freefunc.cpp:161 freefunc.cpp:201 virtual.cpp:127
+#: freefunc.cpp:160 freefunc.cpp:198 virtual.cpp:127
 msgid "TYPE"
 msgstr ""
 
-#: freefunc.cpp:162 freefunc.cpp:202 virtual.cpp:128
+#: freefunc.cpp:161 freefunc.cpp:199 virtual.cpp:128
 msgid "MODE"
 msgstr ""
 
-#: freefunc.cpp:163 freefunc.cpp:203 virtual.cpp:129
+#: freefunc.cpp:162 freefunc.cpp:200 virtual.cpp:129
 msgid "DEF"
 msgstr ""
 
-#: freefunc.cpp:164 freefunc.cpp:204 virtual.cpp:130
+#: freefunc.cpp:163 freefunc.cpp:201 virtual.cpp:130
 msgid "HIDE"
 msgstr ""
 
-#: freefunc.cpp:193
+#: freefunc.cpp:190
 msgid "_io/"
 msgstr ""
 
-#: freefunc.cpp:340 freefunc.cpp:343 freefunc.cpp:349 freelib.cpp:84
-#: freelib.cpp:102 freelib.cpp:111 freelib.cpp:132 virtual.cpp:256
-#: virtual.cpp:373 virtual.cpp:422 virtual.cpp:445 virtual.cpp:580
-#: virtual.cpp:583
+#: freefunc.cpp:331 freefunc.cpp:334 freefunc.cpp:340 freelib.cpp:84
+#: freelib.cpp:102 freelib.cpp:111 freelib.cpp:128 virtual.cpp:254
+#: virtual.cpp:368 virtual.cpp:417 virtual.cpp:436 virtual.cpp:566
+#: virtual.cpp:569
 msgid "."
 msgstr ""
 
-#: freefunc.cpp:417 func_analise.ypp:119 func_analise.ypp:127
+#: freefunc.cpp:408 func_analise.ypp:119 func_analise.ypp:127
 #: func_analise.ypp:135 func_analise.ypp:143 func_analise.ypp:151
 #: func_analise.ypp:160 func_analise.ypp:171 func_analise.ypp:188
 #: func_analise.ypp:198 func_analise.ypp:208 func_analise.ypp:218
@@ -107,665 +102,665 @@ msgstr ""
 msgid "Variable <%s> is used but undefined"
 msgstr "Переменная <%s> не определена но использована"
 
-#: freefunc.cpp:563
+#: freefunc.cpp:554
 #, c-format
 msgid "Operation %d don't support bool type"
 msgstr "Операция %d не поддеривает логический тип"
 
-#: freefunc.cpp:584 freefunc.cpp:751
+#: freefunc.cpp:575 freefunc.cpp:742
 #, c-format
 msgid "Operation %d don't support string type"
 msgstr "Операция %d не поддеривает строковый тип"
 
-#: freefunc.cpp:905
+#: freefunc.cpp:896
 msgid "Buildin functions don't support string type"
 msgstr "Встроенные функции не поддерживают строковый тип."
 
-#: freefunc.cpp:936
+#: freefunc.cpp:927
 #, c-format
 msgid "More than %d parameters are specified for function <%s>"
 msgstr "Указанно более %d параметров для функции <%s>"
 
-#: freefunc.cpp:940
+#: freefunc.cpp:931
 #, c-format
 msgid "Function is requested <%s>, but it doesn't have return of IO"
 msgstr "Вызвана функция <%s>, но она не имеет IO возврата"
 
-#: freefunc.cpp:1114
+#: freefunc.cpp:1105
 msgid "Timeouted function calc."
 msgstr "Исчерпано предельное время вычисления функции."
 
-#: freefunc.cpp:1127
+#: freefunc.cpp:1118
 #, c-format
 msgid "CODE: Load bool %d to reg %d.\n"
 msgstr ""
 
-#: freefunc.cpp:1133
+#: freefunc.cpp:1124
 #, c-format
 msgid "CODE: Load integer %d to reg %d.\n"
 msgstr ""
 
-#: freefunc.cpp:1139
+#: freefunc.cpp:1130
 #, c-format
 msgid "CODE: Load real %f to reg %d.\n"
 msgstr ""
 
-#: freefunc.cpp:1145
+#: freefunc.cpp:1136
 #, c-format
 msgid "CODE: Load string %s(%d) to reg %d.\n"
 msgstr ""
 
-#: freefunc.cpp:1152
+#: freefunc.cpp:1143
 #, c-format
 msgid "CODE: Assign boolean from %d to %d.\n"
 msgstr ""
 
-#: freefunc.cpp:1158
+#: freefunc.cpp:1149
 #, c-format
 msgid "CODE: Assign integer from %d to %d.\n"
 msgstr ""
 
-#: freefunc.cpp:1164
+#: freefunc.cpp:1155
 #, c-format
 msgid "CODE: Assign real from %d to %d.\n"
 msgstr ""
 
-#: freefunc.cpp:1170
+#: freefunc.cpp:1161
 #, c-format
 msgid "CODE: Assign string from %d to %d.\n"
 msgstr ""
 
-#: freefunc.cpp:1177
+#: freefunc.cpp:1168
 #, c-format
 msgid "CODE: Move boolean from %d to %d.\n"
 msgstr ""
 
-#: freefunc.cpp:1183
+#: freefunc.cpp:1174
 #, c-format
 msgid "CODE: Move integer from %d to %d.\n"
 msgstr ""
 
-#: freefunc.cpp:1189
+#: freefunc.cpp:1180
 #, c-format
 msgid "CODE: Move real from %d to %d.\n"
 msgstr ""
 
-#: freefunc.cpp:1195
+#: freefunc.cpp:1186
 #, c-format
 msgid "CODE: Move string from %d to %d.\n"
 msgstr ""
 
-#: freefunc.cpp:1202
+#: freefunc.cpp:1193
 #, c-format
 msgid "CODE: Real %d = %d + %d.\n"
 msgstr ""
 
-#: freefunc.cpp:1208
+#: freefunc.cpp:1199
 #, c-format
 msgid "CODE: String %d = %d + %d.\n"
 msgstr ""
 
-#: freefunc.cpp:1214
+#: freefunc.cpp:1205
 #, c-format
 msgid "CODE: Real %d = %d - %d.\n"
 msgstr ""
 
-#: freefunc.cpp:1220
+#: freefunc.cpp:1211
 #, c-format
 msgid "CODE: Real %d = %d * %d.\n"
 msgstr ""
 
-#: freefunc.cpp:1226
+#: freefunc.cpp:1217
 #, c-format
 msgid "CODE: Real %d = %d / %d.\n"
 msgstr ""
 
-#: freefunc.cpp:1232
+#: freefunc.cpp:1223
 #, c-format
 msgid "CODE: %d = %d % %d.\n"
 msgstr ""
 
-#: freefunc.cpp:1238
+#: freefunc.cpp:1229
 #, c-format
 msgid "CODE: %d = %d | %d.\n"
 msgstr ""
 
-#: freefunc.cpp:1244
+#: freefunc.cpp:1235
 #, c-format
 msgid "CODE: %d = %d & %d.\n"
 msgstr ""
 
-#: freefunc.cpp:1250
+#: freefunc.cpp:1241
 #, c-format
 msgid "CODE: %d = %d ^ %d.\n"
 msgstr ""
 
-#: freefunc.cpp:1256
+#: freefunc.cpp:1247
 #, c-format
 msgid "CODE: %d = %d << %d.\n"
 msgstr ""
 
-#: freefunc.cpp:1262
+#: freefunc.cpp:1253
 #, c-format
 msgid "CODE: %d = %d >> %d.\n"
 msgstr ""
 
-#: freefunc.cpp:1268
+#: freefunc.cpp:1259
 #, c-format
 msgid "CODE: %d = %d || %d.\n"
 msgstr ""
 
-#: freefunc.cpp:1274
+#: freefunc.cpp:1265
 #, c-format
 msgid "CODE: %d = %d && %d.\n"
 msgstr ""
 
-#: freefunc.cpp:1280
+#: freefunc.cpp:1271
 #, c-format
 msgid "CODE: Real %d = %d < %d.\n"
 msgstr ""
 
-#: freefunc.cpp:1286
+#: freefunc.cpp:1277
 #, c-format
 msgid "CODE: Real %d = %d > %d.\n"
 msgstr ""
 
-#: freefunc.cpp:1292
+#: freefunc.cpp:1283
 #, c-format
 msgid "CODE: Real %d = %d <= %d.\n"
 msgstr ""
 
-#: freefunc.cpp:1298
+#: freefunc.cpp:1289
 #, c-format
 msgid "CODE: Real %d = %d >= %d.\n"
 msgstr ""
 
-#: freefunc.cpp:1304
+#: freefunc.cpp:1295
 #, c-format
 msgid "CODE: Real %d = %d == %d.\n"
 msgstr ""
 
-#: freefunc.cpp:1310
+#: freefunc.cpp:1301
 #, c-format
 msgid "CODE: String %d = %d == %d.\n"
 msgstr ""
 
-#: freefunc.cpp:1316
+#: freefunc.cpp:1307
 #, c-format
 msgid "CODE: Real %d = %d != %d.\n"
 msgstr ""
 
-#: freefunc.cpp:1322
+#: freefunc.cpp:1313
 #, c-format
 msgid "CODE: String %d = %d != %d.\n"
 msgstr ""
 
-#: freefunc.cpp:1329
+#: freefunc.cpp:1320
 #, c-format
 msgid "CODE: %d = !%d.\n"
 msgstr ""
 
-#: freefunc.cpp:1335
+#: freefunc.cpp:1326
 #, c-format
 msgid "CODE: %d = ~%d.\n"
 msgstr ""
 
-#: freefunc.cpp:1341
+#: freefunc.cpp:1332
 #, c-format
 msgid "CODE: Real %d = -%d.\n"
 msgstr ""
 
-#: freefunc.cpp:1348
+#: freefunc.cpp:1339
 #, c-format
 msgid "CODE: Condition %d: %d|%d|%d.\n"
 msgstr ""
 
-#: freefunc.cpp:1358
+#: freefunc.cpp:1349
 #, c-format
 msgid "CODE: Cycle %d: %d|%d|%d|%d.\n"
 msgstr ""
 
-#: freefunc.cpp:1379
+#: freefunc.cpp:1370
 #, c-format
 msgid "CODE: Function %d=sin(%d).\n"
 msgstr ""
 
-#: freefunc.cpp:1385
+#: freefunc.cpp:1376
 #, c-format
 msgid "CODE: Function %d=cos(%d).\n"
 msgstr ""
 
-#: freefunc.cpp:1391
+#: freefunc.cpp:1382
 #, c-format
 msgid "CODE: Function %d=tan(%d).\n"
 msgstr ""
 
-#: freefunc.cpp:1397
+#: freefunc.cpp:1388
 #, c-format
 msgid "CODE: Function %d=sinh(%d).\n"
 msgstr ""
 
-#: freefunc.cpp:1403
+#: freefunc.cpp:1394
 #, c-format
 msgid "CODE: Function %d=cosh(%d).\n"
 msgstr ""
 
-#: freefunc.cpp:1409
+#: freefunc.cpp:1400
 #, c-format
 msgid "CODE: Function %d=tanh(%d).\n"
 msgstr ""
 
-#: freefunc.cpp:1415
+#: freefunc.cpp:1406
 #, c-format
 msgid "CODE: Function %d=asin(%d).\n"
 msgstr ""
 
-#: freefunc.cpp:1421
+#: freefunc.cpp:1412
 #, c-format
 msgid "CODE: Function %d=acos(%d).\n"
 msgstr ""
 
-#: freefunc.cpp:1427
+#: freefunc.cpp:1418
 #, c-format
 msgid "CODE: Function %d=atan(%d).\n"
 msgstr ""
 
-#: freefunc.cpp:1433
+#: freefunc.cpp:1424
 #, c-format
 msgid "CODE: Function %d=rand(%d).\n"
 msgstr ""
 
-#: freefunc.cpp:1439
+#: freefunc.cpp:1430
 #, c-format
 msgid "CODE: Function %d=lg(%d).\n"
 msgstr ""
 
-#: freefunc.cpp:1445
+#: freefunc.cpp:1436
 #, c-format
 msgid "CODE: Function %d=ln(%d).\n"
 msgstr ""
 
-#: freefunc.cpp:1451
+#: freefunc.cpp:1442
 #, c-format
 msgid "CODE: Function %d=exp(%d).\n"
 msgstr ""
 
-#: freefunc.cpp:1457
+#: freefunc.cpp:1448
 #, c-format
 msgid "CODE: Function %d=pow(%d,%d).\n"
 msgstr ""
 
-#: freefunc.cpp:1463
+#: freefunc.cpp:1454
 #, c-format
 msgid "CODE: Function %d=min(%d,%d).\n"
 msgstr ""
 
-#: freefunc.cpp:1469
+#: freefunc.cpp:1460
 #, c-format
 msgid "CODE: Function %d=max(%d,%d).\n"
 msgstr ""
 
-#: freefunc.cpp:1475
+#: freefunc.cpp:1466
 #, c-format
 msgid "CODE: Function %d=sqrt(%d).\n"
 msgstr ""
 
-#: freefunc.cpp:1481
+#: freefunc.cpp:1472
 #, c-format
 msgid "CODE: Function %d=abs(%d).\n"
 msgstr ""
 
-#: freefunc.cpp:1487
+#: freefunc.cpp:1478
 #, c-format
 msgid "CODE: Function %d=sign(%d).\n"
 msgstr ""
 
-#: freefunc.cpp:1493
+#: freefunc.cpp:1484
 #, c-format
 msgid "CODE: Function %d=ceil(%d).\n"
 msgstr ""
 
-#: freefunc.cpp:1499
+#: freefunc.cpp:1490
 #, c-format
 msgid "CODE: Function %d=floor(%d).\n"
 msgstr ""
 
-#: freefunc.cpp:1506
+#: freefunc.cpp:1497
 msgid "JavaLikeFuncCalc"
 msgstr ""
 
-#: freefunc.cpp:1508
+#: freefunc.cpp:1499
 #, c-format
 msgid "CODE: Call function/procedure %d = %s(%d).\n"
 msgstr ""
 
-#: freefunc.cpp:1556
+#: freefunc.cpp:1547
 #, c-format
 msgid "Operation %c(%xh) error. Function <%s> is stoped."
 msgstr "Ошибка операции %c(%xh). Функция <%s> остановлена."
 
-#: freefunc.cpp:1564 freelib.cpp:159 virtual.cpp:308 virtual.cpp:546
+#: freefunc.cpp:1555 freelib.cpp:155 virtual.cpp:303 virtual.cpp:532
 msgid "info"
 msgstr ""
 
-#: freefunc.cpp:1567 freelib.cpp:162
+#: freefunc.cpp:1558 freelib.cpp:158
 msgid "oscada_cntr"
 msgstr ""
 
-#: freefunc.cpp:1567 freelib.cpp:162
+#: freefunc.cpp:1558 freelib.cpp:158
 msgid "/"
 msgstr ""
 
-#: freefunc.cpp:1567
+#: freefunc.cpp:1558
 msgid "Function: "
 msgstr "Функция: "
 
-#: freefunc.cpp:1567 freefunc.cpp:1568 freefunc.cpp:1569 freefunc.cpp:1570
-#: freefunc.cpp:1573 freefunc.cpp:1575 freefunc.cpp:1576 freefunc.cpp:1577
-#: freefunc.cpp:1580 freefunc.cpp:1583 freefunc.cpp:1584 freefunc.cpp:1586
-#: freefunc.cpp:1593 freefunc.cpp:1594 freefunc.cpp:1597 freefunc.cpp:1598
-#: freefunc.cpp:1602 freefunc.cpp:1620 freefunc.cpp:1621 freefunc.cpp:1622
-#: freefunc.cpp:1623 freefunc.cpp:1624 freefunc.cpp:1641 freefunc.cpp:1642
-#: freelib.cpp:162 freelib.cpp:164 freelib.cpp:169 freelib.cpp:171
-#: freelib.cpp:176 freelib.cpp:177 freelib.cpp:178 freelib.cpp:182
-#: freelib.cpp:190 freelib.cpp:191 freelib.cpp:195 freelib.cpp:196
-#: freelib.cpp:201 freelib.cpp:202 freelib.cpp:206 freelib.cpp:207
-#: freelib.cpp:211 freelib.cpp:218 freelib.cpp:219 virtual.cpp:311
-#: virtual.cpp:313 virtual.cpp:321 virtual.cpp:328 virtual.cpp:329
-#: virtual.cpp:479 virtual.cpp:549 virtual.cpp:552 virtual.cpp:553
-#: virtual.cpp:555 virtual.cpp:556 virtual.cpp:557 virtual.cpp:560
-#: virtual.cpp:563 virtual.cpp:565 virtual.cpp:598 virtual.cpp:615
-#: virtual.cpp:617 virtual.cpp:619 virtual.cpp:621 virtual.cpp:623
-#: virtual.cpp:643 virtual.cpp:644
+#: freefunc.cpp:1558 freefunc.cpp:1559 freefunc.cpp:1560 freefunc.cpp:1561
+#: freefunc.cpp:1564 freefunc.cpp:1566 freefunc.cpp:1567 freefunc.cpp:1568
+#: freefunc.cpp:1571 freefunc.cpp:1574 freefunc.cpp:1575 freefunc.cpp:1577
+#: freefunc.cpp:1584 freefunc.cpp:1585 freefunc.cpp:1588 freefunc.cpp:1589
+#: freefunc.cpp:1593 freefunc.cpp:1611 freefunc.cpp:1612 freefunc.cpp:1613
+#: freefunc.cpp:1614 freefunc.cpp:1615 freefunc.cpp:1632 freefunc.cpp:1633
+#: freelib.cpp:158 freelib.cpp:160 freelib.cpp:165 freelib.cpp:167
+#: freelib.cpp:172 freelib.cpp:173 freelib.cpp:174 freelib.cpp:178
+#: freelib.cpp:186 freelib.cpp:187 freelib.cpp:191 freelib.cpp:192
+#: freelib.cpp:197 freelib.cpp:198 freelib.cpp:202 freelib.cpp:203
+#: freelib.cpp:207 freelib.cpp:214 freelib.cpp:215 func_analise.cpp:567
+#: virtual.cpp:306 virtual.cpp:308 virtual.cpp:316 virtual.cpp:323
+#: virtual.cpp:324 virtual.cpp:465 virtual.cpp:535 virtual.cpp:538
+#: virtual.cpp:539 virtual.cpp:541 virtual.cpp:542 virtual.cpp:543
+#: virtual.cpp:546 virtual.cpp:549 virtual.cpp:551 virtual.cpp:584
+#: virtual.cpp:601 virtual.cpp:603 virtual.cpp:605 virtual.cpp:607
+#: virtual.cpp:609 virtual.cpp:629 virtual.cpp:630
 msgid "root"
 msgstr ""
 
-#: freefunc.cpp:1568 freefunc.cpp:1569 freefunc.cpp:1570 freefunc.cpp:1586
-#: freelib.cpp:169 freelib.cpp:171 freelib.cpp:176 freelib.cpp:177
-#: freelib.cpp:178 virtual.cpp:549 virtual.cpp:552 virtual.cpp:565
+#: freefunc.cpp:1559 freefunc.cpp:1560 freefunc.cpp:1561 freefunc.cpp:1577
+#: freelib.cpp:165 freelib.cpp:167 freelib.cpp:172 freelib.cpp:173
+#: freelib.cpp:174 virtual.cpp:535 virtual.cpp:538 virtual.cpp:551
 msgid "fld"
 msgstr ""
 
-#: freefunc.cpp:1568 freefunc.cpp:1593
+#: freefunc.cpp:1559 freefunc.cpp:1584
 msgid "/func/cfg/name"
 msgstr ""
 
-#: freefunc.cpp:1568 freefunc.cpp:1576 freelib.cpp:177 virtual.cpp:112
-#: virtual.cpp:118 virtual.cpp:126 virtual.cpp:556
+#: freefunc.cpp:1559 freefunc.cpp:1567 freelib.cpp:173 virtual.cpp:112
+#: virtual.cpp:118 virtual.cpp:126 virtual.cpp:542
 msgid "Name"
 msgstr "Имя"
 
-#: freefunc.cpp:1568 freefunc.cpp:1569 freefunc.cpp:1570 freefunc.cpp:1575
-#: freefunc.cpp:1576 freefunc.cpp:1577 freefunc.cpp:1580 freefunc.cpp:1583
-#: freefunc.cpp:1584 freefunc.cpp:1586 freelib.cpp:169 freelib.cpp:171
-#: freelib.cpp:176 freelib.cpp:177 freelib.cpp:178 freelib.cpp:182
-#: virtual.cpp:313 virtual.cpp:549 virtual.cpp:552 virtual.cpp:555
-#: virtual.cpp:556 virtual.cpp:557 virtual.cpp:560 virtual.cpp:563
-#: virtual.cpp:565
+#: freefunc.cpp:1559 freefunc.cpp:1560 freefunc.cpp:1561 freefunc.cpp:1566
+#: freefunc.cpp:1567 freefunc.cpp:1568 freefunc.cpp:1571 freefunc.cpp:1574
+#: freefunc.cpp:1575 freefunc.cpp:1577 freelib.cpp:165 freelib.cpp:167
+#: freelib.cpp:172 freelib.cpp:173 freelib.cpp:174 freelib.cpp:178
+#: virtual.cpp:308 virtual.cpp:535 virtual.cpp:538 virtual.cpp:541
+#: virtual.cpp:542 virtual.cpp:543 virtual.cpp:546 virtual.cpp:549
+#: virtual.cpp:551
 msgid "tp"
 msgstr ""
 
-#: freefunc.cpp:1568 freefunc.cpp:1569 freefunc.cpp:1575 freefunc.cpp:1576
-#: freefunc.cpp:1584 freefunc.cpp:1586 freelib.cpp:171 freelib.cpp:176
-#: freelib.cpp:177 freelib.cpp:178 virtual.cpp:549 virtual.cpp:555
-#: virtual.cpp:556 virtual.cpp:563 virtual.cpp:565
+#: freefunc.cpp:1559 freefunc.cpp:1560 freefunc.cpp:1566 freefunc.cpp:1567
+#: freefunc.cpp:1575 freefunc.cpp:1577 freelib.cpp:167 freelib.cpp:172
+#: freelib.cpp:173 freelib.cpp:174 virtual.cpp:535 virtual.cpp:541
+#: virtual.cpp:542 virtual.cpp:549 virtual.cpp:551
 msgid "str"
 msgstr ""
 
-#: freefunc.cpp:1568 freelib.cpp:177
+#: freefunc.cpp:1559 freelib.cpp:173
 msgid "len"
 msgstr ""
 
-#: freefunc.cpp:1568 freelib.cpp:177 freelib.cpp:178 virtual.cpp:104
+#: freefunc.cpp:1559 freelib.cpp:173 freelib.cpp:174 virtual.cpp:104
 #: virtual.cpp:108 virtual.cpp:112 virtual.cpp:118 virtual.cpp:126
 msgid "50"
 msgstr ""
 
-#: freefunc.cpp:1569 freefunc.cpp:1594
+#: freefunc.cpp:1560 freefunc.cpp:1585
 msgid "/func/cfg/descr"
 msgstr ""
 
-#: freefunc.cpp:1569 freelib.cpp:178 virtual.cpp:113 virtual.cpp:119
+#: freefunc.cpp:1560 freelib.cpp:174 virtual.cpp:113 virtual.cpp:119
 msgid "Description"
 msgstr "Описание"
 
-#: freefunc.cpp:1569 freefunc.cpp:1586 freelib.cpp:178 virtual.cpp:565
+#: freefunc.cpp:1560 freelib.cpp:174 virtual.cpp:551
 msgid "cols"
 msgstr ""
 
-#: freefunc.cpp:1569 freefunc.cpp:1586 virtual.cpp:565
+#: freefunc.cpp:1560 virtual.cpp:551
 msgid "90"
 msgstr ""
 
-#: freefunc.cpp:1569 freefunc.cpp:1586 freelib.cpp:178 virtual.cpp:553
-#: virtual.cpp:565
+#: freefunc.cpp:1560 freefunc.cpp:1577 freelib.cpp:174 virtual.cpp:539
+#: virtual.cpp:551
 msgid "rows"
 msgstr ""
 
-#: freefunc.cpp:1569 freelib.cpp:178 virtual.cpp:120 virtual.cpp:131
-msgid "3"
+#: freefunc.cpp:1560 freelib.cpp:174
+msgid "5"
 msgstr ""
 
-#: freefunc.cpp:1570 freefunc.cpp:1595
+#: freefunc.cpp:1561 freefunc.cpp:1586
 msgid "/func/cfg/m_calc_tm"
 msgstr ""
 
-#: freefunc.cpp:1570
+#: freefunc.cpp:1561
 msgid "Maximum calc time (sec)"
 msgstr "Максимальное время вычисления (сек)"
 
-#: freefunc.cpp:1570 freefunc.cpp:1577 freefunc.cpp:1580 virtual.cpp:557
-#: virtual.cpp:560
+#: freefunc.cpp:1561 freefunc.cpp:1568 freefunc.cpp:1571 virtual.cpp:543
+#: virtual.cpp:546
 msgid "dec"
 msgstr ""
 
-#: freefunc.cpp:1571 freelib.cpp:165 freelib.cpp:167 freelib.cpp:174
-#: freelib.cpp:181 virtual.cpp:312 virtual.cpp:550
+#: freefunc.cpp:1562 freelib.cpp:161 freelib.cpp:163 freelib.cpp:170
+#: freelib.cpp:177 virtual.cpp:307 virtual.cpp:536
 msgid "area"
 msgstr ""
 
-#: freefunc.cpp:1571
+#: freefunc.cpp:1562
 msgid "/io"
 msgstr ""
 
-#: freefunc.cpp:1571 freefunc.cpp:1586 virtual.cpp:565
+#: freefunc.cpp:1562 freefunc.cpp:1577 virtual.cpp:551
 msgid "Programm"
 msgstr "Программа"
 
-#: freefunc.cpp:1573 virtual.cpp:553
+#: freefunc.cpp:1564 virtual.cpp:539
 msgid "table"
 msgstr ""
 
-#: freefunc.cpp:1573 freefunc.cpp:1600
+#: freefunc.cpp:1564 freefunc.cpp:1591
 msgid "/io/io"
 msgstr ""
 
-#: freefunc.cpp:1573
+#: freefunc.cpp:1564
 msgid "IO"
 msgstr ""
 
-#: freefunc.cpp:1573 freelib.cpp:182 virtual.cpp:313 virtual.cpp:553
+#: freefunc.cpp:1564 freelib.cpp:178 virtual.cpp:308 virtual.cpp:539
 msgid "s_com"
 msgstr ""
 
-#: freefunc.cpp:1573 virtual.cpp:553
+#: freefunc.cpp:1564 virtual.cpp:539
 msgid "add,del,ins,move"
 msgstr ""
 
-#: freefunc.cpp:1575 freefunc.cpp:1576 freefunc.cpp:1577 freefunc.cpp:1580
-#: freefunc.cpp:1583 freefunc.cpp:1584 freefunc.cpp:1604 freefunc.cpp:1605
-#: freefunc.cpp:1606 freefunc.cpp:1607 freefunc.cpp:1608 freefunc.cpp:1609
-#: freelib.cpp:182 virtual.cpp:313 virtual.cpp:555 virtual.cpp:556
-#: virtual.cpp:557 virtual.cpp:560 virtual.cpp:563 virtual.cpp:600
-#: virtual.cpp:601 virtual.cpp:602 virtual.cpp:603 virtual.cpp:604
+#: freefunc.cpp:1566 freefunc.cpp:1567 freefunc.cpp:1568 freefunc.cpp:1571
+#: freefunc.cpp:1574 freefunc.cpp:1575 freefunc.cpp:1595 freefunc.cpp:1596
+#: freefunc.cpp:1597 freefunc.cpp:1598 freefunc.cpp:1599 freefunc.cpp:1600
+#: freelib.cpp:178 virtual.cpp:308 virtual.cpp:541 virtual.cpp:542
+#: virtual.cpp:543 virtual.cpp:546 virtual.cpp:549 virtual.cpp:586
+#: virtual.cpp:587 virtual.cpp:588 virtual.cpp:589 virtual.cpp:590
 msgid "list"
 msgstr ""
 
-#: freefunc.cpp:1575 freefunc.cpp:1604
+#: freefunc.cpp:1566 freefunc.cpp:1595
 msgid "/io/io/0"
 msgstr ""
 
-#: freefunc.cpp:1575 freelib.cpp:176 virtual.cpp:555
+#: freefunc.cpp:1566 freelib.cpp:172 virtual.cpp:541
 msgid "Id"
 msgstr ""
 
-#: freefunc.cpp:1576 freefunc.cpp:1605
+#: freefunc.cpp:1567 freefunc.cpp:1596
 msgid "/io/io/1"
 msgstr ""
 
-#: freefunc.cpp:1577 freefunc.cpp:1606
+#: freefunc.cpp:1568 freefunc.cpp:1597
 msgid "/io/io/2"
 msgstr ""
 
-#: freefunc.cpp:1577 virtual.cpp:127 virtual.cpp:557
+#: freefunc.cpp:1568 virtual.cpp:127 virtual.cpp:543
 msgid "Type"
 msgstr "Тип"
 
-#: freefunc.cpp:1577 freefunc.cpp:1580 freelib.cpp:164 freelib.cpp:182
-#: virtual.cpp:311 virtual.cpp:313 virtual.cpp:557 virtual.cpp:560
+#: freefunc.cpp:1568 freefunc.cpp:1571 freelib.cpp:160 freelib.cpp:178
+#: virtual.cpp:306 virtual.cpp:308 virtual.cpp:543 virtual.cpp:546
 msgid "idm"
 msgstr ""
 
-#: freefunc.cpp:1577 freefunc.cpp:1580 freefunc.cpp:1616 freelib.cpp:164
-#: freelib.cpp:182 freelib.cpp:190 virtual.cpp:100 virtual.cpp:127
-#: virtual.cpp:128 virtual.cpp:130 virtual.cpp:311 virtual.cpp:313
-#: virtual.cpp:557 virtual.cpp:560
+#: freefunc.cpp:1568 freefunc.cpp:1571 freefunc.cpp:1607 freelib.cpp:160
+#: freelib.cpp:178 freelib.cpp:186 virtual.cpp:100 virtual.cpp:127
+#: virtual.cpp:128 virtual.cpp:130 virtual.cpp:306 virtual.cpp:308
+#: virtual.cpp:543 virtual.cpp:546
 msgid "1"
 msgstr ""
 
-#: freefunc.cpp:1577 freefunc.cpp:1580 freelib.cpp:171 virtual.cpp:549
-#: virtual.cpp:557 virtual.cpp:560
+#: freefunc.cpp:1568 freefunc.cpp:1571 freelib.cpp:167 virtual.cpp:535
+#: virtual.cpp:543 virtual.cpp:546
 msgid "dest"
 msgstr ""
 
-#: freefunc.cpp:1577 freefunc.cpp:1580 freelib.cpp:171 virtual.cpp:549
-#: virtual.cpp:557 virtual.cpp:560
+#: freefunc.cpp:1568 freefunc.cpp:1571 freelib.cpp:167 virtual.cpp:535
+#: virtual.cpp:543 virtual.cpp:546
 msgid "select"
 msgstr ""
 
-#: freefunc.cpp:1578 freefunc.cpp:1581 virtual.cpp:558 virtual.cpp:561
+#: freefunc.cpp:1569 freefunc.cpp:1572 virtual.cpp:544 virtual.cpp:547
 msgid "sel_id"
 msgstr ""
 
-#: freefunc.cpp:1578 freefunc.cpp:1581 virtual.cpp:558 virtual.cpp:561
-#: func_analise.ypp:454
+#: freefunc.cpp:1569 freefunc.cpp:1572 func_analise.ypp:454 virtual.cpp:544
+#: virtual.cpp:547
 msgid ";"
 msgstr ""
 
-#: freefunc.cpp:1579 freefunc.cpp:1582 virtual.cpp:559 virtual.cpp:562
+#: freefunc.cpp:1570 freefunc.cpp:1573 virtual.cpp:545 virtual.cpp:548
 msgid "sel_list"
 msgstr ""
 
-#: freefunc.cpp:1579 virtual.cpp:559
+#: freefunc.cpp:1570 virtual.cpp:545
 msgid "Real;Integer;Boolean;String"
 msgstr "Веществ.;Целый;Логич.;Строка"
 
-#: freefunc.cpp:1580 freefunc.cpp:1607
+#: freefunc.cpp:1571 freefunc.cpp:1598
 msgid "/io/io/3"
 msgstr ""
 
-#: freefunc.cpp:1580 virtual.cpp:128 virtual.cpp:560
+#: freefunc.cpp:1571 virtual.cpp:128 virtual.cpp:546
 msgid "Mode"
 msgstr "Режим"
 
-#: freefunc.cpp:1582 virtual.cpp:562
+#: freefunc.cpp:1573 virtual.cpp:548
 msgid "Input;Output;Return"
 msgstr "Вход;Выход;Возврат"
 
-#: freefunc.cpp:1583 freefunc.cpp:1608
+#: freefunc.cpp:1574 freefunc.cpp:1599
 msgid "/io/io/4"
 msgstr ""
 
-#: freefunc.cpp:1583 virtual.cpp:130
+#: freefunc.cpp:1574 virtual.cpp:130
 msgid "Hide"
 msgstr "Скрытый"
 
-#: freefunc.cpp:1583 freelib.cpp:169
+#: freefunc.cpp:1574 freelib.cpp:165
 msgid "bool"
 msgstr ""
 
-#: freefunc.cpp:1584 freefunc.cpp:1609
+#: freefunc.cpp:1575 freefunc.cpp:1600
 msgid "/io/io/5"
 msgstr ""
 
-#: freefunc.cpp:1584
+#: freefunc.cpp:1575
 msgid "Default"
 msgstr "Умолч."
 
-#: freefunc.cpp:1586 freefunc.cpp:1639
+#: freefunc.cpp:1577 freefunc.cpp:1630
 msgid "/io/prog"
 msgstr ""
 
-#: freefunc.cpp:1586 virtual.cpp:120 virtual.cpp:565
+#: freefunc.cpp:1577 virtual.cpp:120 virtual.cpp:551
 msgid "10"
 msgstr ""
 
-#: freefunc.cpp:1592 freelib.cpp:187 virtual.cpp:318 virtual.cpp:571
+#: freefunc.cpp:1583 freelib.cpp:183 virtual.cpp:313 virtual.cpp:557
 msgid "path"
 msgstr ""
 
-#: freefunc.cpp:1593 freefunc.cpp:1594 freefunc.cpp:1598 freefunc.cpp:1624
-#: freefunc.cpp:1642 freelib.cpp:191 freelib.cpp:196 freelib.cpp:202
-#: freelib.cpp:207 virtual.cpp:623 virtual.cpp:644
+#: freefunc.cpp:1584 freefunc.cpp:1585 freefunc.cpp:1589 freefunc.cpp:1615
+#: freefunc.cpp:1633 freelib.cpp:187 freelib.cpp:192 freelib.cpp:198
+#: freelib.cpp:203 virtual.cpp:609 virtual.cpp:630
 msgid "set"
 msgstr ""
 
-#: freefunc.cpp:1597 freefunc.cpp:1602 freefunc.cpp:1641 freelib.cpp:190
-#: freelib.cpp:195 freelib.cpp:201 freelib.cpp:206 freelib.cpp:211
-#: virtual.cpp:321 virtual.cpp:598 virtual.cpp:643
+#: freefunc.cpp:1588 freefunc.cpp:1593 freefunc.cpp:1632 freelib.cpp:186
+#: freelib.cpp:191 freelib.cpp:197 freelib.cpp:202 freelib.cpp:207
+#: virtual.cpp:316 virtual.cpp:584 virtual.cpp:629
 msgid "get"
 msgstr ""
 
-#: freefunc.cpp:1612 freefunc.cpp:1613 freefunc.cpp:1614 freefunc.cpp:1615
-#: freefunc.cpp:1616 freefunc.cpp:1617 freelib.cpp:216 freelib.cpp:224
-#: freelib.cpp:227 virtual.cpp:326 virtual.cpp:577 virtual.cpp:581
-#: virtual.cpp:593 virtual.cpp:608 virtual.cpp:609 virtual.cpp:610
-#: virtual.cpp:611 virtual.cpp:612
+#: freefunc.cpp:1603 freefunc.cpp:1604 freefunc.cpp:1605 freefunc.cpp:1606
+#: freefunc.cpp:1607 freefunc.cpp:1608 freelib.cpp:212 freelib.cpp:220
+#: freelib.cpp:223 virtual.cpp:321 virtual.cpp:563 virtual.cpp:567
+#: virtual.cpp:579 virtual.cpp:594 virtual.cpp:595 virtual.cpp:596
+#: virtual.cpp:597 virtual.cpp:598
 msgid "el"
 msgstr ""
 
-#: freefunc.cpp:1616 freelib.cpp:190 virtual.cpp:99 virtual.cpp:759
+#: freefunc.cpp:1607 freelib.cpp:186 virtual.cpp:99 virtual.cpp:745
 msgid "0"
 msgstr ""
 
-#: freefunc.cpp:1620 freelib.cpp:218 virtual.cpp:328 virtual.cpp:615
+#: freefunc.cpp:1611 freelib.cpp:214 virtual.cpp:323 virtual.cpp:601
 msgid "add"
 msgstr ""
 
-#: freefunc.cpp:1620 freefunc.cpp:1621 virtual.cpp:616 virtual.cpp:618
+#: freefunc.cpp:1611 freefunc.cpp:1612 virtual.cpp:602 virtual.cpp:604
 msgid "new"
 msgstr ""
 
-#: freefunc.cpp:1620 freefunc.cpp:1621 virtual.cpp:616 virtual.cpp:618
+#: freefunc.cpp:1611 freefunc.cpp:1612 virtual.cpp:602 virtual.cpp:604
 msgid "New IO"
 msgstr "Новый IO"
 
-#: freefunc.cpp:1621 virtual.cpp:617
+#: freefunc.cpp:1612 virtual.cpp:603
 msgid "ins"
 msgstr ""
 
-#: freefunc.cpp:1621 freefunc.cpp:1622 freefunc.cpp:1623 freefunc.cpp:1626
-#: virtual.cpp:618 virtual.cpp:620 virtual.cpp:622 virtual.cpp:625
+#: freefunc.cpp:1612 freefunc.cpp:1613 freefunc.cpp:1614 freefunc.cpp:1617
+#: virtual.cpp:604 virtual.cpp:606 virtual.cpp:608 virtual.cpp:611
 msgid "row"
 msgstr ""
 
-#: freefunc.cpp:1622 freelib.cpp:219 virtual.cpp:329 virtual.cpp:619
+#: freefunc.cpp:1613 freelib.cpp:215 virtual.cpp:324 virtual.cpp:605
 msgid "del"
 msgstr ""
 
-#: freefunc.cpp:1623 virtual.cpp:621
+#: freefunc.cpp:1614 virtual.cpp:607
 msgid "move"
 msgstr ""
 
-#: freefunc.cpp:1623 virtual.cpp:622
+#: freefunc.cpp:1614 virtual.cpp:608
 msgid "to"
 msgstr ""
 
-#: freefunc.cpp:1627 virtual.cpp:626
+#: freefunc.cpp:1618 virtual.cpp:612
 msgid "col"
 msgstr ""
 
-#: freefunc.cpp:1629 virtual.cpp:628
+#: freefunc.cpp:1620 virtual.cpp:614
 msgid "Empty value is not valid."
 msgstr "Пустое значение не допустимо."
 
@@ -777,149 +772,708 @@ msgstr ""
 msgid "flb_"
 msgstr ""
 
-#: freelib.cpp:41 freelib.cpp:182
+#: freelib.cpp:41 freelib.cpp:178
 msgid "fnc_"
 msgstr ""
 
-#: freelib.cpp:84 freelib.cpp:111 freelib.cpp:132 virtual.cpp:266
+#: freelib.cpp:84 freelib.cpp:111 freelib.cpp:128 virtual.cpp:262
 msgid "lib/"
 msgstr ""
 
-#: freelib.cpp:162
+#: freelib.cpp:158
 msgid "Function's library: "
 msgstr "Библиотека функций: "
 
-#: freelib.cpp:163
+#: freelib.cpp:159
 msgid "branches"
 msgstr ""
 
-#: freelib.cpp:163
+#: freelib.cpp:159
 msgid "/br"
 msgstr ""
 
-#: freelib.cpp:164 virtual.cpp:311
+#: freelib.cpp:160 virtual.cpp:306
 msgid "grp"
 msgstr ""
 
-#: freelib.cpp:164 freelib.cpp:209
+#: freelib.cpp:160 freelib.cpp:205
 msgid "/br/fnc_"
 msgstr ""
 
-#: freelib.cpp:164
+#: freelib.cpp:160
 msgid "Function"
 msgstr "Функция"
 
-#: freelib.cpp:164 freelib.cpp:182 virtual.cpp:311 virtual.cpp:313
+#: freelib.cpp:160 freelib.cpp:178 virtual.cpp:306 virtual.cpp:308
 msgid "idSz"
 msgstr ""
 
-#: freelib.cpp:164 freelib.cpp:182 virtual.cpp:103 virtual.cpp:111
+#: freelib.cpp:160 freelib.cpp:178 virtual.cpp:103 virtual.cpp:111
 #: virtual.cpp:117 virtual.cpp:124 virtual.cpp:125 virtual.cpp:129
-#: virtual.cpp:311 virtual.cpp:313
+#: virtual.cpp:306 virtual.cpp:308
 msgid "20"
 msgstr ""
 
-#: freelib.cpp:165
+#: freelib.cpp:161
 msgid "/lib"
 msgstr ""
 
-#: freelib.cpp:165 virtual.cpp:311
+#: freelib.cpp:161 virtual.cpp:306
 msgid "Library"
 msgstr "Библиотека"
 
-#: freelib.cpp:167
+#: freelib.cpp:163
 msgid "/lib/st"
 msgstr ""
 
-#: freelib.cpp:167
+#: freelib.cpp:163
 msgid "State"
 msgstr "Состояние"
 
-#: freelib.cpp:169 freelib.cpp:188
+#: freelib.cpp:165 freelib.cpp:184
 msgid "/lib/st/st"
 msgstr ""
 
-#: freelib.cpp:169
+#: freelib.cpp:165
 msgid "Accessing"
 msgstr "Доступен"
 
-#: freelib.cpp:171 freelib.cpp:193
+#: freelib.cpp:167 freelib.cpp:189
 msgid "/lib/st/db"
 msgstr ""
 
-#: freelib.cpp:171
+#: freelib.cpp:167
 msgid "Library DB"
 msgstr "БД библиотеки"
 
-#: freelib.cpp:171 virtual.cpp:549
+#: freelib.cpp:167 virtual.cpp:535
 msgid "sel_ed"
 msgstr ""
 
-#: freelib.cpp:171
+#: freelib.cpp:167
 msgid "/db/tblList"
 msgstr ""
 
-#: freelib.cpp:172 virtual.cpp:226
+#: freelib.cpp:168 virtual.cpp:226
 msgid "help"
 msgstr ""
 
-#: freelib.cpp:172
+#: freelib.cpp:168
 msgid ""
 "DB address in format [<DB module>.<DB name>.<Table name>].\n"
 "For use main work DB set '*.*'."
 msgstr ""
 
-#: freelib.cpp:174
+#: freelib.cpp:170
 msgid "/lib/cfg"
 msgstr ""
 
-#: freelib.cpp:174
+#: freelib.cpp:170
 msgid "Config"
 msgstr "Конфигурация"
 
-#: freelib.cpp:176 freelib.cpp:198
+#: freelib.cpp:172 freelib.cpp:194
 msgid "/lib/cfg/id"
 msgstr ""
 
-#: freelib.cpp:177 freelib.cpp:199
+#: freelib.cpp:173 freelib.cpp:195
 msgid "/lib/cfg/name"
 msgstr ""
 
-#: freelib.cpp:178 freelib.cpp:204
+#: freelib.cpp:174 freelib.cpp:200
 msgid "/lib/cfg/descr"
 msgstr ""
 
-#: freelib.cpp:181
+#: freelib.cpp:177
 msgid "/func"
 msgstr ""
 
-#: freelib.cpp:181 freelib.cpp:182
+#: freelib.cpp:177 freelib.cpp:178
 msgid "Functions"
 msgstr "Функции"
 
-#: freelib.cpp:182 freelib.cpp:209
+#: freelib.cpp:178 freelib.cpp:205
 msgid "/func/func"
 msgstr ""
 
-#: freelib.cpp:182 virtual.cpp:313
+#: freelib.cpp:178 virtual.cpp:308
 msgid "br"
 msgstr ""
 
-#: freelib.cpp:182 virtual.cpp:313
+#: freelib.cpp:178 virtual.cpp:308
 msgid "add,del"
 msgstr ""
 
-#: freelib.cpp:182 virtual.cpp:313
+#: freelib.cpp:178 virtual.cpp:308
 msgid "br_pref"
 msgstr ""
 
-#: freelib.cpp:216 freelib.cpp:218 freelib.cpp:219 freelib.cpp:224
-#: freelib.cpp:227 virtual.cpp:326 virtual.cpp:328 virtual.cpp:329
+#: freelib.cpp:212 freelib.cpp:214 freelib.cpp:215 freelib.cpp:220
+#: freelib.cpp:223 virtual.cpp:321 virtual.cpp:323 virtual.cpp:324
 msgid "id"
 msgstr ""
 
-#: freelib.cpp:221
+#: freelib.cpp:217
 msgid "/func/ls_lib"
+msgstr ""
+
+#: func_analise.cpp:50
+msgid "2.3"
+msgstr ""
+
+#: func_analise.cpp:53
+msgid "yacc.c"
+msgstr ""
+
+#: func_analise.cpp:282
+msgid "bison-runtime"
+msgstr ""
+
+#: func_analise.cpp:561
+msgid "$end"
+msgstr ""
+
+#: func_analise.cpp:561
+msgid "error"
+msgstr ""
+
+#: func_analise.cpp:561
+msgid "$undefined"
+msgstr ""
+
+#: func_analise.cpp:561
+msgid "ERR"
+msgstr ""
+
+#: func_analise.cpp:561
+msgid "IF"
+msgstr ""
+
+#: func_analise.cpp:561
+msgid "ELSE"
+msgstr ""
+
+#: func_analise.cpp:561
+msgid "WHILE"
+msgstr ""
+
+#: func_analise.cpp:561
+msgid "FOR"
+msgstr ""
+
+#: func_analise.cpp:562
+msgid "BREAK"
+msgstr ""
+
+#: func_analise.cpp:562
+msgid "CONTINUE"
+msgstr ""
+
+#: func_analise.cpp:562
+msgid "ADDEQ"
+msgstr ""
+
+#: func_analise.cpp:562
+msgid "SUBEQ"
+msgstr ""
+
+#: func_analise.cpp:562
+msgid "MULEQ"
+msgstr ""
+
+#: func_analise.cpp:562
+msgid "DIVEQ"
+msgstr ""
+
+#: func_analise.cpp:562
+msgid "BITSHLEFT"
+msgstr ""
+
+#: func_analise.cpp:563
+msgid "BITSHRIGHT"
+msgstr ""
+
+#: func_analise.cpp:563
+msgid "RETURN"
+msgstr ""
+
+#: func_analise.cpp:563 virtual.cpp:97 virtual.cpp:350 virtual.cpp:535
+msgid "FUNC"
+msgstr ""
+
+#: func_analise.cpp:563
+msgid "B_FUNC"
+msgstr ""
+
+#: func_analise.cpp:563
+msgid "B_FUNC1"
+msgstr ""
+
+#: func_analise.cpp:563
+msgid "B_FUNC2"
+msgstr ""
+
+#: func_analise.cpp:563
+msgid "VAR"
+msgstr ""
+
+#: func_analise.cpp:564
+msgid "CONST"
+msgstr ""
+
+#: func_analise.cpp:564
+msgid "'='"
+msgstr ""
+
+#: func_analise.cpp:564
+msgid "'?'"
+msgstr ""
+
+#: func_analise.cpp:564
+msgid "':'"
+msgstr ""
+
+#: func_analise.cpp:564
+msgid "OR"
+msgstr ""
+
+#: func_analise.cpp:564
+msgid "AND"
+msgstr ""
+
+#: func_analise.cpp:564
+msgid "'|'"
+msgstr ""
+
+#: func_analise.cpp:564
+msgid "'&'"
+msgstr ""
+
+#: func_analise.cpp:564
+msgid "'^'"
+msgstr ""
+
+#: func_analise.cpp:564
+msgid "'>'"
+msgstr ""
+
+#: func_analise.cpp:565
+msgid "'<'"
+msgstr ""
+
+#: func_analise.cpp:565
+msgid "NE"
+msgstr ""
+
+#: func_analise.cpp:565
+msgid "EQ"
+msgstr ""
+
+#: func_analise.cpp:565
+msgid "LE"
+msgstr ""
+
+#: func_analise.cpp:565
+msgid "GE"
+msgstr ""
+
+#: func_analise.cpp:565
+msgid "'+'"
+msgstr ""
+
+#: func_analise.cpp:565
+msgid "'-'"
+msgstr ""
+
+#: func_analise.cpp:565
+msgid "'*'"
+msgstr ""
+
+#: func_analise.cpp:565
+msgid "'/'"
+msgstr ""
+
+#: func_analise.cpp:565
+msgid "'%'"
+msgstr ""
+
+#: func_analise.cpp:565
+msgid "'!'"
+msgstr ""
+
+#: func_analise.cpp:566
+msgid "'~'"
+msgstr ""
+
+#: func_analise.cpp:566
+msgid "UN_MINUS"
+msgstr ""
+
+#: func_analise.cpp:566
+msgid "DECREM"
+msgstr ""
+
+#: func_analise.cpp:566
+msgid "INCREM"
+msgstr ""
+
+#: func_analise.cpp:566
+msgid "';'"
+msgstr ""
+
+#: func_analise.cpp:566
+msgid "'('"
+msgstr ""
+
+#: func_analise.cpp:566
+msgid "')'"
+msgstr ""
+
+#: func_analise.cpp:566
+msgid "'{'"
+msgstr ""
+
+#: func_analise.cpp:566
+msgid "'}'"
+msgstr ""
+
+#: func_analise.cpp:567
+msgid "','"
+msgstr ""
+
+#: func_analise.cpp:567
+msgid "$accept"
+msgstr ""
+
+#: func_analise.cpp:567
+msgid "solver"
+msgstr ""
+
+#: func_analise.cpp:567
+msgid "solve"
+msgstr ""
+
+#: func_analise.cpp:567
+msgid "assign"
+msgstr ""
+
+#: func_analise.cpp:567
+msgid "expr"
+msgstr ""
+
+#: func_analise.cpp:567
+msgid "prmlst"
+msgstr ""
+
+#: func_analise.cpp:568 func_analise.ypp:433
+msgid "if"
+msgstr ""
+
+#: func_analise.cpp:568
+msgid "if_expr"
+msgstr ""
+
+#: func_analise.cpp:568
+msgid "cycl"
+msgstr ""
+
+#: func_analise.cpp:568
+msgid "end"
+msgstr ""
+
+#: func_analise.cpp:831
+msgid "syntax error: cannot back up"
+msgstr ""
+
+#: func_analise.cpp:874
+#, c-format
+msgid "%d.%d-%d.%d"
+msgstr ""
+
+#: func_analise.cpp:909
+#, c-format
+msgid "%s "
+msgstr ""
+
+#: func_analise.cpp:912 func_analise.cpp:999 func_analise.cpp:1037
+#, c-format
+msgid "\n"
+msgstr ""
+
+#: func_analise.cpp:970
+#, c-format
+msgid "token %s ("
+msgstr ""
+
+#: func_analise.cpp:972
+#, c-format
+msgid "nterm %s ("
+msgstr ""
+
+#: func_analise.cpp:975
+msgid ": "
+msgstr ""
+
+#: func_analise.cpp:977
+msgid ")"
+msgstr ""
+
+#: func_analise.cpp:996
+msgid "Stack now"
+msgstr ""
+
+#: func_analise.cpp:998
+#, c-format
+msgid " %d"
+msgstr ""
+
+#: func_analise.cpp:1028
+#, c-format
+msgid "Reducing stack by rule %d (line %lu):\n"
+msgstr ""
+
+#: func_analise.cpp:1033
+#, c-format
+msgid "   $%d = "
+msgstr ""
+
+#: func_analise.cpp:1205 func_analise.cpp:1213
+#, c-format
+msgid "syntax error, unexpected %s"
+msgstr ""
+
+#: func_analise.cpp:1206
+#, c-format
+msgid "syntax error, unexpected %s, expecting %s"
+msgstr ""
+
+#: func_analise.cpp:1207
+#, c-format
+msgid "syntax error, unexpected %s, expecting %s or %s"
+msgstr ""
+
+#: func_analise.cpp:1208
+#, c-format
+msgid "syntax error, unexpected %s, expecting %s or %s or %s"
+msgstr ""
+
+#: func_analise.cpp:1209
+#, c-format
+msgid "syntax error, unexpected %s, expecting %s or %s or %s or %s"
+msgstr ""
+
+#: func_analise.cpp:1214
+#, c-format
+msgid ", expecting %s"
+msgstr ""
+
+#: func_analise.cpp:1215
+#, c-format
+msgid " or %s"
+msgstr ""
+
+#: func_analise.cpp:1309
+msgid "Deleting"
+msgstr ""
+
+#: func_analise.cpp:1431
+msgid "Starting parse\n"
+msgstr ""
+
+#: func_analise.cpp:1483 func_analise.cpp:2218
+msgid "memory exhausted"
+msgstr ""
+
+#: func_analise.cpp:1523
+#, c-format
+msgid "Stack size increased to %lu\n"
+msgstr ""
+
+#: func_analise.cpp:1530
+#, c-format
+msgid "Entering state %d\n"
+msgstr ""
+
+#: func_analise.cpp:1552
+msgid "Reading a token: "
+msgstr ""
+
+#: func_analise.cpp:1559
+msgid "Now at end of input.\n"
+msgstr ""
+
+#: func_analise.cpp:1564
+msgid "Next token is"
+msgstr ""
+
+#: func_analise.cpp:1590 func_analise.cpp:2193
+msgid "Shifting"
+msgstr ""
+
+#: func_analise.ypp:255 func_analise.ypp:256
+msgid "R00nn"
+msgstr ""
+
+#: func_analise.ypp:257
+msgid "Rbbaann"
+msgstr ""
+
+#: func_analise.cpp:2033
+msgid "-> $$ ="
+msgstr ""
+
+#: func_analise.cpp:2066 func_analise.cpp:2094
+msgid "syntax error"
+msgstr ""
+
+#: func_analise.cpp:2117
+msgid "Error: discarding"
+msgstr ""
+
+#: func_analise.cpp:2174
+msgid "Error: popping"
+msgstr ""
+
+#: func_analise.cpp:2225
+msgid "Cleanup: discarding lookahead"
+msgstr ""
+
+#: func_analise.cpp:2233
+msgid "Cleanup: popping"
+msgstr ""
+
+#: func_analise.ypp:264
+#, c-format
+msgid "%s, pos: (%d,%d)-(%d,%d).\n"
+msgstr ""
+
+#: func_analise.ypp:295
+msgid "//"
+msgstr ""
+
+#: func_analise.ypp:301
+msgid "/*"
+msgstr ""
+
+#: func_analise.ypp:304
+msgid "*/"
+msgstr ""
+
+#: func_analise.ypp:405
+msgid "Unexpected end programm, expect end string symbol '\"', "
+msgstr ""
+
+#: func_analise.ypp:410
+msgid "The next line symbol failed into string, "
+msgstr ""
+
+#: func_analise.ypp:434
+msgid "else"
+msgstr ""
+
+#: func_analise.ypp:435
+msgid "while"
+msgstr ""
+
+#: func_analise.ypp:436
+msgid "for"
+msgstr ""
+
+#: func_analise.ypp:437
+msgid "break"
+msgstr ""
+
+#: func_analise.ypp:438
+msgid "continue"
+msgstr ""
+
+#: func_analise.ypp:439
+msgid "return"
+msgstr ""
+
+#: func_analise.ypp:440
+msgid "using"
+msgstr ""
+
+#: func_analise.ypp:445
+#, c-format
+msgid "using %254s"
+msgstr ""
+
+#: func_analise.ypp:448
+msgid "Using namespace is error or empty, "
+msgstr "Ошибка использования области имён или она пуста, "
+
+#: func_analise.ypp:459 func_analise.ypp:462
+msgid "true"
+msgstr ""
+
+#: func_analise.ypp:459
+msgid "false"
+msgstr ""
+
+#: func_analise.ypp:490
+msgid "Build in function have to mach parameters, "
+msgstr "Встроенная функция имеет слишком много параметров, "
+
+#: func_analise.ypp:525
+msgid "Symbol error, "
+msgstr "Ошибка символа, "
+
+#: func_analise.ypp:549
+msgid "++"
+msgstr ""
+
+#: func_analise.ypp:550
+msgid "--"
+msgstr ""
+
+#: func_analise.ypp:551
+msgid "||"
+msgstr ""
+
+#: func_analise.ypp:552
+msgid "&&"
+msgstr ""
+
+#: func_analise.ypp:553
+msgid ">="
+msgstr ""
+
+#: func_analise.ypp:554
+msgid "<="
+msgstr ""
+
+#: func_analise.ypp:555
+msgid "=="
+msgstr ""
+
+#: func_analise.ypp:556
+msgid "!="
+msgstr ""
+
+#: func_analise.ypp:557
+msgid "<<"
+msgstr ""
+
+#: func_analise.ypp:558
+msgid ">>"
+msgstr ""
+
+#: func_analise.ypp:559
+msgid "+="
+msgstr ""
+
+#: func_analise.ypp:560
+msgid "-="
+msgstr ""
+
+#: func_analise.ypp:561
+msgid "*="
+msgstr ""
+
+#: func_analise.ypp:562
+msgid "/="
 msgstr ""
 
 #: virtual.cpp:36
@@ -939,7 +1493,7 @@ msgid "LIB"
 msgstr ""
 
 #: virtual.cpp:41
-msgid "1.3.0"
+msgid "1.3.1"
 msgstr ""
 
 #: virtual.cpp:42
@@ -963,11 +1517,11 @@ msgstr ""
 msgid "C"
 msgstr ""
 
-#: virtual.cpp:83 virtual.cpp:313
+#: virtual.cpp:83 virtual.cpp:308
 msgid "lib_"
 msgstr ""
 
-#: virtual.cpp:96 virtual.cpp:107 virtual.cpp:357
+#: virtual.cpp:96 virtual.cpp:107 virtual.cpp:352
 msgid "PRM_BD"
 msgstr ""
 
@@ -983,10 +1537,6 @@ msgstr ""
 msgid "system"
 msgstr ""
 
-#: virtual.cpp:97 virtual.cpp:355 virtual.cpp:549
-msgid "FUNC"
-msgstr ""
-
 #: virtual.cpp:97
 msgid "Controller's function"
 msgstr "Функция контроллера"
@@ -995,7 +1545,7 @@ msgstr "Функция контроллера"
 msgid "40"
 msgstr ""
 
-#: virtual.cpp:98 virtual.cpp:354
+#: virtual.cpp:98 virtual.cpp:349
 msgid "PERIOD"
 msgstr ""
 
@@ -1015,7 +1565,7 @@ msgstr ""
 msgid "0;1000000"
 msgstr ""
 
-#: virtual.cpp:99 virtual.cpp:354
+#: virtual.cpp:99 virtual.cpp:349
 msgid "PRIOR"
 msgstr ""
 
@@ -1031,7 +1581,7 @@ msgstr ""
 msgid "0;100"
 msgstr ""
 
-#: virtual.cpp:100 virtual.cpp:355
+#: virtual.cpp:100 virtual.cpp:350
 msgid "ITER"
 msgstr ""
 
@@ -1047,7 +1597,7 @@ msgstr ""
 msgid "IO ID"
 msgstr ""
 
-#: virtual.cpp:104 virtual.cpp:428 virtual.cpp:449
+#: virtual.cpp:104 virtual.cpp:421 virtual.cpp:440
 msgid "VAL"
 msgstr ""
 
@@ -1063,7 +1613,7 @@ msgstr ""
 msgid "Standard"
 msgstr "Стандартный"
 
-#: virtual.cpp:108 virtual.cpp:680 virtual.cpp:710
+#: virtual.cpp:108 virtual.cpp:666 virtual.cpp:696
 msgid "FLD"
 msgstr ""
 
@@ -1086,6 +1636,10 @@ msgstr ""
 #: virtual.cpp:120
 msgid "Maximum calc time"
 msgstr "Максимальное время вычисления"
+
+#: virtual.cpp:120 virtual.cpp:131
+msgid "3"
+msgstr ""
 
 #: virtual.cpp:120
 msgid "0;999"
@@ -1253,309 +1807,167 @@ msgstr ""
 msgid "h"
 msgstr ""
 
-#: virtual.cpp:259 virtual.cpp:269 virtual.cpp:328
+#: virtual.cpp:257 virtual.cpp:265 virtual.cpp:323
 msgid "*.*"
 msgstr ""
 
-#: virtual.cpp:275
+#: virtual.cpp:261
+msgid "<cfg>"
+msgstr ""
+
+#: virtual.cpp:270
 msgid "Load function's libraries error."
 msgstr "Ошибка загрузки библиотеки функций."
 
-#: virtual.cpp:311 virtual.cpp:319
+#: virtual.cpp:306 virtual.cpp:314
 msgid "/br/lib_"
 msgstr ""
 
-#: virtual.cpp:312
+#: virtual.cpp:307
 msgid "/libs"
 msgstr ""
 
-#: virtual.cpp:312
+#: virtual.cpp:307
 msgid "Functions' Libraries"
 msgstr "Библиотеки функций"
 
-#: virtual.cpp:313 virtual.cpp:319
+#: virtual.cpp:308 virtual.cpp:314
 msgid "/libs/lb"
 msgstr ""
 
-#: virtual.cpp:313
+#: virtual.cpp:308
 msgid "Libraries"
 msgstr "Библиотеки"
 
-#: virtual.cpp:357
+#: virtual.cpp:352
 msgid "JavaLikePrm_"
 msgstr ""
 
-#: virtual.cpp:373 virtual.cpp:421 virtual.cpp:444
+#: virtual.cpp:368 virtual.cpp:416 virtual.cpp:435
 msgid "_val"
 msgstr ""
 
-#: virtual.cpp:386
+#: virtual.cpp:381
 #, c-format
 msgid ""
 "Functions library <%s> is not present. Please, create functions library!"
 msgstr ""
 "Библиотека функций <%s> отсутствует. Пожалуйста. создайте библиотеку функций!"
 
-#: virtual.cpp:389
+#: virtual.cpp:384
 #, c-format
 msgid "Create new function <%s>."
 msgstr "Создание новой функции <%s>."
 
-#: virtual.cpp:397
+#: virtual.cpp:392
 msgid "Load function and its io error."
 msgstr "Ошибка загрузки функции и её IO."
 
-#: virtual.cpp:487
+#: virtual.cpp:473
 msgid "start"
 msgstr ""
 
-#: virtual.cpp:488
+#: virtual.cpp:474
 msgid "Acquisition task is not started!"
 msgstr "Задача сбора не запущена!"
 
-#: virtual.cpp:499
+#: virtual.cpp:485
 msgid "stop"
 msgstr ""
 
-#: virtual.cpp:500
+#: virtual.cpp:486
 msgid "Acquisition task is not stopped!"
 msgstr "Задача сбора не остановлена!"
 
-#: virtual.cpp:510
+#: virtual.cpp:496
 #, c-format
 msgid "Thread <%u> is started. TID: %ld"
 msgstr ""
 
-#: virtual.cpp:527
+#: virtual.cpp:513
 msgid "Calc controller's function error."
 msgstr "Ошибка вычисления функции контроллера"
 
-#: virtual.cpp:549
+#: virtual.cpp:535
 msgid "/cntr/cfg/FUNC"
 msgstr ""
 
-#: virtual.cpp:549 virtual.cpp:572
+#: virtual.cpp:535 virtual.cpp:558
 msgid "/cntr/flst"
 msgstr ""
 
-#: virtual.cpp:550
+#: virtual.cpp:536
 msgid "/fnc"
 msgstr ""
 
-#: virtual.cpp:550
+#: virtual.cpp:536
 msgid "Calcing"
 msgstr "Вычисления"
 
-#: virtual.cpp:552 virtual.cpp:595
+#: virtual.cpp:538 virtual.cpp:581
 msgid "/fnc/clc_tm"
 msgstr ""
 
-#: virtual.cpp:552
+#: virtual.cpp:538
 msgid "Calc time (mks)"
 msgstr "Время вычисления (мкс)"
 
-#: virtual.cpp:552
+#: virtual.cpp:538
 msgid "real"
 msgstr ""
 
-#: virtual.cpp:553 virtual.cpp:596
+#: virtual.cpp:539 virtual.cpp:582
 msgid "/fnc/io"
 msgstr ""
 
-#: virtual.cpp:553
+#: virtual.cpp:539
 msgid "Data"
 msgstr "Данные"
 
-#: virtual.cpp:553
+#: virtual.cpp:539
 msgid "15"
 msgstr ""
 
-#: virtual.cpp:555 virtual.cpp:600
+#: virtual.cpp:541 virtual.cpp:586
 msgid "/fnc/io/0"
 msgstr ""
 
-#: virtual.cpp:556 virtual.cpp:601
+#: virtual.cpp:542 virtual.cpp:587
 msgid "/fnc/io/1"
 msgstr ""
 
-#: virtual.cpp:557 virtual.cpp:602
+#: virtual.cpp:543 virtual.cpp:588
 msgid "/fnc/io/2"
 msgstr ""
 
-#: virtual.cpp:560 virtual.cpp:603
+#: virtual.cpp:546 virtual.cpp:589
 msgid "/fnc/io/3"
 msgstr ""
 
-#: virtual.cpp:563 virtual.cpp:604
+#: virtual.cpp:549 virtual.cpp:590
 msgid "/fnc/io/4"
 msgstr ""
 
-#: virtual.cpp:563
+#: virtual.cpp:549
 msgid "Value"
 msgstr "Значение"
 
-#: virtual.cpp:565 virtual.cpp:641
+#: virtual.cpp:551 virtual.cpp:627
 msgid "/fnc/prog"
 msgstr ""
 
-#: virtual.cpp:755
+#: virtual.cpp:741
 msgid "err"
 msgstr ""
 
-#: virtual.cpp:757
+#: virtual.cpp:743
 msgid "2:Controller is stoped"
 msgstr "2:Контроллер остановлен!"
 
-#: virtual.cpp:758
+#: virtual.cpp:744
 msgid "1:Parameter is disabled"
 msgstr "1:Параметр отключен"
 
 #: virtual.h:160
 msgid "UserFuncLibs"
-msgstr ""
-
-#: func_analise.ypp:255 func_analise.ypp:256
-msgid "R00nn"
-msgstr ""
-
-#: func_analise.ypp:257
-msgid "Rbbaann"
-msgstr ""
-
-#: func_analise.ypp:264
-#, c-format
-msgid "%s, pos: (%d,%d)-(%d,%d).\n"
-msgstr ""
-
-#: func_analise.ypp:295
-msgid "//"
-msgstr ""
-
-#: func_analise.ypp:301
-msgid "/*"
-msgstr ""
-
-#: func_analise.ypp:304
-msgid "*/"
-msgstr ""
-
-#: func_analise.ypp:405
-msgid "Unexpected end programm, expect end string symbol '\"', "
-msgstr ""
-
-#: func_analise.ypp:410
-msgid "The next line symbol failed into string, "
-msgstr ""
-
-#: func_analise.ypp:433
-msgid "if"
-msgstr ""
-
-#: func_analise.ypp:434
-msgid "else"
-msgstr ""
-
-#: func_analise.ypp:435
-msgid "while"
-msgstr ""
-
-#: func_analise.ypp:436
-msgid "for"
-msgstr ""
-
-#: func_analise.ypp:437
-msgid "break"
-msgstr ""
-
-#: func_analise.ypp:438
-msgid "continue"
-msgstr ""
-
-#: func_analise.ypp:439
-msgid "return"
-msgstr ""
-
-#: func_analise.ypp:440
-msgid "using"
-msgstr ""
-
-#: func_analise.ypp:445
-#, c-format
-msgid "using %254s"
-msgstr ""
-
-#: func_analise.ypp:448
-msgid "Using namespace is error or empty, "
-msgstr "Ошибка использования области имён или она пуста, "
-
-#: func_analise.ypp:459 func_analise.ypp:462
-msgid "true"
-msgstr ""
-
-#: func_analise.ypp:459
-msgid "false"
-msgstr ""
-
-#: func_analise.ypp:490
-msgid "Build in function have to mach parameters, "
-msgstr "Встроенная функция имеет слишком много параметров, "
-
-#: func_analise.ypp:525
-msgid "Symbol error, "
-msgstr "Ошибка символа, "
-
-#: func_analise.ypp:549
-msgid "++"
-msgstr ""
-
-#: func_analise.ypp:550
-msgid "--"
-msgstr ""
-
-#: func_analise.ypp:551
-msgid "||"
-msgstr ""
-
-#: func_analise.ypp:552
-msgid "&&"
-msgstr ""
-
-#: func_analise.ypp:553
-msgid ">="
-msgstr ""
-
-#: func_analise.ypp:554
-msgid "<="
-msgstr ""
-
-#: func_analise.ypp:555
-msgid "=="
-msgstr ""
-
-#: func_analise.ypp:556
-msgid "!="
-msgstr ""
-
-#: func_analise.ypp:557
-msgid "<<"
-msgstr ""
-
-#: func_analise.ypp:558
-msgid ">>"
-msgstr ""
-
-#: func_analise.ypp:559
-msgid "+="
-msgstr ""
-
-#: func_analise.ypp:560
-msgid "-="
-msgstr ""
-
-#: func_analise.ypp:561
-msgid "*="
-msgstr ""
-
-#: func_analise.ypp:562
-msgid "/="
 msgstr ""

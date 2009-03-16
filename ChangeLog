@@ -1,3 +1,28 @@
+2009-03-16 Roman
+- !!:/DOC: OpenSCADA manual document formated for print is added to repository.
+- !!:/Archive/DBArch: Document is updated and released version 0.8.0.
+- !!:/DB/DBF: Document is updated and released version 2.0.0.
+- !!:/DB/FireBird: Document is updated and released version 0.9.0.
+- !!:/DB/MySQL: Document is updated and released version 1.5.0.
+- !!:/DB/SQLite: Document is updated and released version 1.5.0.
+- !!:/DAQ/JavaLikeCalc: Document is updated and released version 1.3.1.
+- !!:/Protocol/HTTP: Document is updated and released version 1.4.0.
+- !!:/Protocol/FLibSYS: Document is updated and released version 0.8.0.
+- !!:/UI/QTStarter: Document is updated and released version 1.5.2.
+- !!:/UI/QTCfg: Document is updated and released version 1.7.1.
+- !!:/UI/VCAEngine: Document is updated and released version 0.8.5.
+- !!:/UI/Vision: Document is updated and released version 0.8.5.
+- !!:/UI/WebCfg: Document is updated and released version 1.5.3.
+- !!:/UI/WebCfgD: Document is updated and released version 0.6.0.
+- !!:/UI/WebVision: Document is updated and released version 0.6.5.
+- !:/UI/Vision: Multi-display base support is added.
+- !:/UI/Vision: The time field display is added to thr statusbar of runtime window and on fullscreen mode.
+- !:/UI/Vision: Menu bar on runtime window hiding for no privileged users is released.
+- FIX:/UI/Vision,/UI/WebVision: For minimal width of grid calcing of primitive "Diagram" is used font metric of 6 symbols of used font.
+- FIX:/Archive/FSArch: Last value's time is aligned to period on start.
+- FIX:/Archive: Values request from archive period allign is fixed.
+
+
 2009-03-13 Roman
 - /Doc: OpenSCADA API documentation is updated. DAQ description document is included to source tree.
 - /Archive/FSArch: Document is updated and released version 1.2.0.

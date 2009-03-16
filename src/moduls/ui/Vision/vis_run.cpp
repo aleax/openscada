@@ -57,8 +57,8 @@
 
 using namespace VISION;
 
-VisRun::VisRun( const string &prj_it, const string &open_user, const string &user_pass, const string &VCAstat, bool crSessForce ) :
-    winClose(false), master_pg(NULL), mPeriod(1000), w_prc_cnt(0), reqtm(1), x_scale(1.0), y_scale(1.0), mAlrmSt(0xFFFFFF)
+VisRun::VisRun( const string &prj_it, const string &open_user, const string &user_pass, const string &VCAstat, bool crSessForce, QWidget *parent ) :
+    QMainWindow(parent), winClose(false), master_pg(NULL), mPeriod(1000), wPrcCnt(0), reqtm(1), x_scale(1.0), y_scale(1.0), mAlrmSt(0xFFFFFF)
 {
     QImage ico_t;
 
@@ -226,15 +226,22 @@ VisRun::VisRun( const string &prj_it, const string &open_user, const string &use
 
     //> Init tool bars
     //>> Alarms tools bar
-    toolBarAlarm = new QToolBar(_("Alarms (status)"),this);
-    connect( toolBarAlarm, SIGNAL(actionTriggered(QAction*)), this, SLOT(alarmAct(QAction*)) );
-    toolBarAlarm->setIconSize(QSize(16,16));
-    toolBarAlarm->addAction(actAlrmLev);
-    toolBarAlarm->addAction(actAlrmLight);
-    toolBarAlarm->addAction(actAlrmAlarm);
-    toolBarAlarm->addAction(actAlrmSound);
+    toolBarStatus = new QToolBar(_("Alarms (status)"),this);
+    connect( toolBarStatus, SIGNAL(actionTriggered(QAction*)), this, SLOT(alarmAct(QAction*)) );
+    toolBarStatus->setIconSize(QSize(16,16));
+    toolBarStatus->addAction(menuPrint->menuAction());
+    toolBarStatus->addAction(menuExport->menuAction());
+    toolBarStatus->addSeparator();
+    toolBarStatus->addAction(actAlrmLev);
+    toolBarStatus->addAction(actAlrmLight);
+    toolBarStatus->addAction(actAlrmAlarm);
+    toolBarStatus->addAction(actAlrmSound);
 
     //> Init status bar
+    mWTime = new QLabel( this );
+    mWTime->setVisible(false);
+    mWTime->setWhatsThis(_("This label displays curent system's time."));
+    statusBar()->insertPermanentWidget(0,mWTime);
     mWUser = new UserStBar( open_user.c_str(), user_pass.c_str(), VCAstat.c_str(), this );
     mWUser->setWhatsThis(_("This label displays curent user."));
     mWUser->setToolTip(_("Field for display of the current user."));
@@ -245,7 +252,7 @@ VisRun::VisRun( const string &prj_it, const string &open_user, const string &use
     mWStat->setWhatsThis(_("This label displays used VCA engine station."));
     mWStat->setToolTip(_("Field for display of the used VCA engine station."));
     statusBar()->insertPermanentWidget(0,mWStat);
-    statusBar()->insertPermanentWidget(0,toolBarAlarm);
+    statusBar()->insertPermanentWidget(0,toolBarStatus);
 
     //> Init scroller
     QScrollArea *scrl = new QScrollArea;
@@ -264,6 +271,8 @@ VisRun::VisRun( const string &prj_it, const string &open_user, const string &use
     connect(updateTimer, SIGNAL(timeout()), this, SLOT(updatePage()));
 
     alrmPlay = new SndPlay(this);
+
+    menuBar()->setVisible(SYS->security().at().access(user(),SEQ_WR,"root","root",RWRWR_));
 
     resize( 600, 400 );
 
@@ -337,6 +346,7 @@ void VisRun::resizeEvent( QResizeEvent *ev )
 	}else x_scale = y_scale = 1.0;
 	if( x_scale_old != x_scale || y_scale_old != y_scale )	fullUpdatePgs();
     }
+    mWTime->setVisible(windowState()==Qt::WindowFullScreen);
 }
 
 void VisRun::endRunChk( )
@@ -703,7 +713,7 @@ void VisRun::about()
 
 void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
 {
-    //- Try second connect to session for permition check -
+    //> Try second connect to session for permition check
     XMLNode req("connect");
     req.setAttr("path","/%2fserv%2fsess")->setAttr("sess",workSess());
     if( cntrIfCmd(req) )
@@ -716,9 +726,20 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
     req.clear()->setName("disconnect")->setAttr("path","/%2fserv%2fsess")->setAttr("sess",workSess());
     cntrIfCmd(req);
 
-    //- Update pages after user change -
+    //> Update pages after user change
     pgCacheClear();
-    if( master_pg ) fullUpdatePgs();
+    bool oldMenuVis = menuBar()->isVisible();
+    menuBar()->setVisible(SYS->security().at().access(user(),SEQ_WR,"root","root",RWRWR_));
+    QApplication::processEvents();
+    if( master_pg )
+    {
+	if( oldMenuVis != menuBar()->isVisible() )
+	{
+	    x_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().width()/(float)master_pg->size().width();
+	    y_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().height()/(float)master_pg->size().height();
+	}
+	fullUpdatePgs();
+    }
 }
 
 void VisRun::aboutQt()
@@ -831,7 +852,8 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
 	ls_wdg->setCurrentRow(0);
 
 	//--- Execute dialog ---
-	if( conreq.exec() == QDialog::Accepted && ls_wdg->currentItem() )
+	int rez = 0;
+	if( (rez=conreq.exec()) == QDialog::Accepted && ls_wdg->currentItem() )
 	    work_sess = ls_wdg->currentItem()->text().toAscii().data();
     }
 
@@ -1036,9 +1058,18 @@ void VisRun::alarmSet( unsigned alarm )
 {
     unsigned ch_tp = alarm^mAlrmSt;
 
-    //- Alarm types init -
-    //-- Set momo sound alarm --
-    if( (ch_tp>>16)&TVision::Alarm )
+    //> Check for early this session running equalent project
+    bool isMaster = true;
+    for( int i_w = 0; i_w < mod->mn_winds.size(); i_w++ )
+	if( qobject_cast<VisRun*>(mod->mn_winds[i_w]) && ((VisRun*)mod->mn_winds[i_w])->srcProject( ) == srcProject( ) )
+	{
+	    if( ((VisRun*)mod->mn_winds[i_w])->workSess( ) != workSess( ) ) isMaster = false;
+	    break;
+	}
+
+    //> Alarm types init
+    //>> Set momo sound alarm
+    if( isMaster && (ch_tp>>16)&TVision::Alarm )
     {
 	const char *spkEvDev = "/dev/input/by-path/platform-pcspkr-event-spkr";
 	int hd = open(spkEvDev,O_WRONLY);
@@ -1054,12 +1085,12 @@ void VisRun::alarmSet( unsigned alarm )
 	    ::close(hd);
 	}
     }
-    //-- Set speach or sound alarm --
-    if( (alarm>>16)&TVision::Sound && !alrmPlay->isRunning() && !alrmPlay->playData().empty() )
+    //>> Set speach or sound alarm
+    if( isMaster && (alarm>>16)&TVision::Sound && !alrmPlay->isRunning() && !alrmPlay->playData().empty() )
 	alrmPlay->start( );
 
-    //- Alarm action indicators update
-    //-- Alarm level icon update --
+    //> Alarm action indicators update
+    //>> Alarm level icon update
     if( ch_tp&0xFF || (alarm>>16)&(TVision::Light|TVision::Alarm|TVision::Sound) || !alrLevSet )
     {
 	int alarmLev = alarm&0xFF;
@@ -1088,7 +1119,7 @@ void VisRun::alarmSet( unsigned alarm )
 	painter.end();
 	actAlrmLev->setIcon(QPixmap::fromImage(levImage));
     }
-    //- Alarm buttons status process -
+    //> Alarm buttons status process
     for( int i_b = 0; i_b < 3; i_b++ )
     {
 	QAction *actAlrm = (i_b==0) ? actAlrmLight : ((i_b==1) ? actAlrmAlarm : actAlrmSound);
@@ -1163,7 +1194,7 @@ void VisRun::updatePage( )
     reqtm = strtoul(req.attr("tm").c_str(),NULL,10);
 
     //> Alarms update (one seconds update)
-    if( w_prc_cnt%(500/period()) == 0 )
+    if( wPrcCnt%(500/period()) == 0 )
     {
 	//>> Get alarm status
 	unsigned wAlrmSt = alarmSt( );
@@ -1206,12 +1237,18 @@ void VisRun::updatePage( )
 
 #if OSC_DEBUG >= 3
     upd_tm+=1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
-    if( !(1000/period() && w_prc_cnt%(1000/period())) )
+    if( !(1000/period() && wPrcCnt%(1000/period())) )
     {
 	mess_debug("VCA DEBUG",_("Session '%s' update time %f ms."),workSess().c_str(),upd_tm);
 	upd_tm = 0;
     }
 #endif
 
-    w_prc_cnt++;
+    if( mWTime->isVisible() && !(wPrcCnt%vmax(1000/period(),1)) )
+    {
+	mWTime->setText(QTime::currentTime().toString("hh:mm:ss"));
+	mWTime->setToolTip(QDate::currentDate().toString("dddd, dd-MMM-yyyy"));
+    }
+
+    wPrcCnt++;
 }

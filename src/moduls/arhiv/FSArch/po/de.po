@@ -7,7 +7,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Archive.FSArch 1.0.1\n"
+"Project-Id-Version: OpenSCADA.Archive.FSArch 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-03-13 12:06+0200\n"
 "PO-Revision-Date: 2008-12-14 23:02+0300\n"

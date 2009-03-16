@@ -84,6 +84,9 @@ class TVision : public TUI
 	//- Request to OpenSCADA control interface -
 	int cntrIfCmd( XMLNode &node, const string &user, const string &password, const string &VCAStat, bool glob = false );
 
+	//Attributes
+	vector<QMainWindow*>	mn_winds;
+
     protected:
 	//Methods
 	void postEnable( int flag );
@@ -96,12 +99,11 @@ class TVision : public TUI
 	QMainWindow *openWindow();
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
-	//Attributes
-	vector<QMainWindow *>	mn_winds;
+
 	string			start_user,	//No question start user
 				user_pass,	//No quest user password
 				run_prjs;	//Run projects list on the module start
-	vector<WdgShape *>	shapesWdg;
+	vector<WdgShape*>	shapesWdg;
 	bool			end_run;	//End run command. Close all windows
 
 	string			vca_station;	//VCA station id ('.' - for local station)

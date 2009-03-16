@@ -8,9 +8,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Protocol.HTTP 1.3.2\n"
+"Project-Id-Version: OpenSCADA.Protocol.HTTP 1.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-20 11:29+0200\n"
+"POT-Creation-Date: 2009-03-16 15:06+0200\n"
 "PO-Revision-Date: 2007-10-23 18:02+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -30,7 +30,7 @@ msgid "Protocol"
 msgstr "Протокол"
 
 #: http.cpp:38
-msgid "1.3.2"
+msgid "1.4.0"
 msgstr ""
 
 #: http.cpp:39
@@ -177,7 +177,7 @@ msgid ""
 "Charset="
 msgstr ""
 
-#: http.cpp:222 http.cpp:488
+#: http.cpp:222 http.cpp:489
 msgid "\r\n"
 msgstr ""
 
@@ -192,7 +192,7 @@ msgstr ""
 msgid "\r"
 msgstr ""
 
-#: http.cpp:265 http.cpp:495
+#: http.cpp:265 http.cpp:496
 msgid ":"
 msgstr ""
 
@@ -275,7 +275,7 @@ msgid "'/>"
 msgstr ""
 
 #: http.cpp:325 http.cpp:338 http.cpp:351
-msgid "<h1 class='head'>"
+msgid "<h2 class='title'>"
 msgstr ""
 
 #: http.cpp:325 http.cpp:338 http.cpp:351
@@ -284,10 +284,10 @@ msgid "Going to page: <b>%s</b>"
 msgstr "Переход к странице: <b>%s</b>"
 
 #: http.cpp:325 http.cpp:338 http.cpp:351
-msgid "</h1>\n"
+msgid "</h2>\n"
 msgstr ""
 
-#: http.cpp:326 http.cpp:339 http.cpp:352 http.cpp:460 http.cpp:479
+#: http.cpp:326 http.cpp:339 http.cpp:352 http.cpp:461 http.cpp:480
 msgid "200 OK"
 msgstr ""
 
@@ -316,11 +316,11 @@ msgstr ""
 msgid "Set-Cookie: oscd_u_id=0; path=/;\r\n"
 msgstr ""
 
-#: http.cpp:347 http.cpp:455
+#: http.cpp:347 http.cpp:456
 msgid "SubType"
 msgstr ""
 
-#: http.cpp:347 http.cpp:455
+#: http.cpp:347 http.cpp:456
 msgid "WWW"
 msgstr ""
 
@@ -337,9 +337,8 @@ msgid "<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/login/"
 msgstr ""
 
 #: http.cpp:351
-#, fuzzy
 msgid "/login/"
-msgstr "Вход"
+msgstr ""
 
 #: http.cpp:360
 msgid ""
@@ -416,6 +415,8 @@ msgid ""
 "  p { margin: 0px; text-indent: 10px; margin-bottom: 5px; }\n"
 "  body { background-color: #818181; margin: 0px; }\n"
 "  h1.head { text-align: center; color: #ffff00; }\n"
+"  h2.title { text-align: center; font-style: italic; margin: 0px; padding: "
+"0px; border-width: 0px; }\n"
 "  table.work { background-color: #9999ff; border: 3px ridge #a9a9a9; "
 "padding: 2px;  }\n"
 "  table.work td { background-color:#cccccc; text-align: left; }\n"
@@ -427,55 +428,55 @@ msgid ""
 "<h1 class='head'>"
 msgstr ""
 
-#: http.cpp:419
+#: http.cpp:420
 msgid ""
 "</h1>\n"
 "<hr/><br/>\n"
 msgstr ""
 
-#: http.cpp:426
+#: http.cpp:427
 msgid ""
 "<hr/>\n"
 "</body>\n"
 "</html>\n"
 msgstr ""
 
-#: http.cpp:433
+#: http.cpp:434
 msgid ""
 "<center><table class='work' width='50%'>\n"
 "<tr><th>"
 msgstr ""
 
-#: http.cpp:434
+#: http.cpp:435
 msgid "Login"
 msgstr "Вход"
 
-#: http.cpp:434
+#: http.cpp:435
 msgid "</th></tr><tr><td class='content'><p>"
 msgstr ""
 
-#: http.cpp:436
+#: http.cpp:437
 msgid "Welcome to Web-interfaces of OpenSCADA system."
 msgstr "Добро пожаловать в Web-интерфейсы системы OpenSCADA."
 
-#: http.cpp:436 http.cpp:440 http.cpp:444
+#: http.cpp:437 http.cpp:441 http.cpp:445
 msgid "</p>"
 msgstr ""
 
-#: http.cpp:439
+#: http.cpp:440
 msgid "<p style='color: green;'>"
 msgstr ""
 
-#: http.cpp:439
+#: http.cpp:440
 #, c-format
 msgid "You are login as <b>'%s'</b>."
 msgstr "Вы вошли как <b>'%s'</b>."
 
-#: http.cpp:439 http.cpp:443
+#: http.cpp:440 http.cpp:444
 msgid "</p><p>"
 msgstr ""
 
-#: http.cpp:440
+#: http.cpp:441
 msgid ""
 "Select need Web-module from list below or press <a href='/logout'>here</a> "
 "for logout or <a href='/login'>here</a> for login as other user."
@@ -484,15 +485,15 @@ msgstr ""
 "a> для выхода или <a href='/login'>тут</a> для входа от имени другого "
 "пользователя."
 
-#: http.cpp:443
+#: http.cpp:444
 msgid "<p style='color: #CF8122;'>"
 msgstr ""
 
-#: http.cpp:443
+#: http.cpp:444
 msgid "You are not login now!"
 msgstr "Вы не вошли в систему!"
 
-#: http.cpp:444
+#: http.cpp:445
 msgid ""
 "For use some modules you must be login. For login now click <a href='/"
 "login'>here</a>."
@@ -500,134 +501,134 @@ msgstr ""
 "Для использования некоторых модулей Вы должны войти в систему. Для входа "
 "сейчас нажмите <a href='/login'>здесь</a>."
 
-#: http.cpp:445
+#: http.cpp:446
 msgid "</td></tr>"
 msgstr ""
 
-#: http.cpp:448
+#: http.cpp:449
 msgid "<tr><th>"
 msgstr ""
 
-#: http.cpp:448
+#: http.cpp:449
 msgid "Present web modules"
 msgstr "Доступные web-модули"
 
-#: http.cpp:448
+#: http.cpp:449
 msgid ""
 "</th></tr>\n"
 "<tr><td class='content'><ul>\n"
 msgstr ""
 
-#: http.cpp:456
+#: http.cpp:457
 msgid "<li><a href='"
 msgstr ""
 
-#: http.cpp:456
+#: http.cpp:457
 msgid "/'>"
 msgstr ""
 
-#: http.cpp:456
+#: http.cpp:457
 msgid "Name"
 msgstr "Имя"
 
-#: http.cpp:456
+#: http.cpp:457
 msgid "</a></li>\n"
 msgstr ""
 
-#: http.cpp:458
+#: http.cpp:459
 msgid "</ul></td></tr></table></center>\n"
 msgstr ""
 
-#: http.cpp:465
+#: http.cpp:466
 msgid "<center><table class='work'><tr><th>"
 msgstr ""
 
-#: http.cpp:466
+#: http.cpp:467
 msgid "Login to system"
 msgstr "Вход в систему"
 
-#: http.cpp:466
+#: http.cpp:467
 msgid ""
 "</th></tr>\n"
 "<tr><td>\n"
 "<form method='post' action='/login"
 msgstr ""
 
-#: http.cpp:468
+#: http.cpp:469
 msgid ""
 "' enctype='multipart/form-data'>\n"
 "<table cellpadding='3px'>\n"
 "<tr><td><b>"
 msgstr ""
 
-#: http.cpp:470
+#: http.cpp:471
 msgid "User name"
 msgstr "Имя пользователя"
 
-#: http.cpp:470
+#: http.cpp:471
 msgid ""
 "</b></td><td><input type='text' name='user' size='20'/></td></tr>\n"
 "<tr><td><b>"
 msgstr ""
 
-#: http.cpp:471
+#: http.cpp:472
 msgid "Password"
 msgstr "Пароль"
 
-#: http.cpp:471
+#: http.cpp:472
 msgid ""
 "</b></td><td><input type='password' name='pass' size='20'/></td></tr>\n"
 "<tr><td colspan='2' style='text-align: center'><input type='submit' "
 "name='auth_enter' value='"
 msgstr ""
 
-#: http.cpp:472
+#: http.cpp:473
 msgid "Enter"
 msgstr "Принять"
 
-#: http.cpp:472
+#: http.cpp:473
 msgid "'/>&nbsp;<input type='reset' name='clean' value='"
 msgstr ""
 
-#: http.cpp:473
+#: http.cpp:474
 msgid "Clean"
 msgstr "Очистить"
 
-#: http.cpp:473
+#: http.cpp:474
 msgid ""
 "'/></td></tr></table>\n"
 "</form>\n"
 "</td></tr><tr><td>"
 msgstr ""
 
-#: http.cpp:476
+#: http.cpp:477
 msgid "</td></tr></table></center>\n"
 msgstr ""
 
-#: http.cpp:487
+#: http.cpp:488
 msgid "boundary="
 msgstr ""
 
-#: http.cpp:489 http.cpp:505
+#: http.cpp:490 http.cpp:506
 msgid "--"
 msgstr ""
 
-#: http.cpp:490
+#: http.cpp:491
 msgid "Content-Disposition: form-data;"
 msgstr ""
 
-#: http.cpp:491
+#: http.cpp:492
 msgid "name=\""
 msgstr ""
 
-#: http.cpp:492
+#: http.cpp:493
 msgid "filename=\""
 msgstr ""
 
-#: http.cpp:495
+#: http.cpp:496
 msgid "Content-Type"
 msgstr ""
 
-#: http.cpp:512 http.cpp:525
+#: http.cpp:513 http.cpp:526
 msgid "\""
 msgstr ""

@@ -27,6 +27,7 @@
 #include <tsys.h>
 #include <tmess.h>
 
+#include <QDesktopWidget>
 #include <QIcon>
 #include <QMessageBox>
 #include <QErrorMessage>
@@ -45,7 +46,7 @@
 #define MOD_TYPE	"UI"
 #define VER_TYPE	VER_UI
 #define SUB_TYPE	"QT"
-#define VERSION		"0.8.0"
+#define VERSION		"0.8.5"
 #define AUTORS		"Roman Savochenko"
 #define DEVELOPERS	"Roman Savochenko, Lysenko Maxim, Yashina Kseniya"
 #define DESCRIPTION	"Visual operation user interface."
@@ -222,7 +223,7 @@ QMainWindow *TVision::openWindow()
     string user_open = startUser( );
     string user_pass = userPass( );
 
-    //- Check for start user set OK -
+    //> Check for start user set OK
     int err;
     XMLNode req("get");
     req.setAttr("path",string("/Security/")+user_open+"/%2fauth")->setAttr("password",user_pass);
@@ -244,18 +245,26 @@ QMainWindow *TVision::openWindow()
 	    break;
 	}
 
-    //- Check for run projects need -
+    //> Check for run projects need
     bool runPrj = false;
     string sprj;
+    int  screen;
     for( int p_off = 0; (sprj=TSYS::strSepParse(run_prjs,0,';',&p_off)).size(); )
     {
-	//-- Find for already opened run window --
+	screen = 0;
+	int iSep = sprj.find("-");
+	if( iSep != string::npos ) screen = atoi(sprj.substr(iSep+1).c_str());
+	sprj = sprj.substr(0,iSep);
+
+	//QDesktopWidget().screen(1)
+	//>> Find for already opened run window
 	int i_w = 0;
 	for( ; i_w < mn_winds.size(); i_w++ )
-	    if( qobject_cast<VisRun*>(mn_winds[i_w]) && ((VisRun*)mn_winds[i_w])->srcProject( ) == sprj )
+	    if( qobject_cast<VisRun*>(mn_winds[i_w]) && ((VisRun*)mn_winds[i_w])->srcProject( ) == sprj &&
+		    QDesktopWidget().screenNumber(mn_winds[i_w]) == screen )
 		break;
-	if( i_w < mn_winds.size() ) continue;
-	VisRun *sess = new VisRun( "/prj_"+sprj, user_open, user_pass, VCAStation(), true );
+	if( i_w < mn_winds.size() || screen >= QDesktopWidget().numScreens() ) continue;
+	VisRun *sess = new VisRun( "/prj_"+sprj, user_open, user_pass, VCAStation(), true, QDesktopWidget().screen(screen) );
 	sess->show();
 	sess->raise();
 	sess->activateWindow();

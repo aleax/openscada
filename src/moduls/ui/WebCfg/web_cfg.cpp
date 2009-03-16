@@ -38,7 +38,7 @@
 #define MOD_TYPE	"UI"
 #define VER_TYPE	VER_UI
 #define SUB_TYPE	"WWW"
-#define MOD_VERSION	"1.5.2"
+#define MOD_VERSION	"1.5.3"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow the WEB based OpenSCADA system configurator."
 #define LICENSE		"GPL"

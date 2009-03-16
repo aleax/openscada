@@ -1015,7 +1015,10 @@ string TVArchive::getS( long long *tm, bool up_ord, const string &arch )
 	ResAlloc res(a_res,false);
 	for( int i_a = 0; i_a < arch_el.size(); i_a++ )
 	    if( (arch.empty() || arch == arch_el[i_a]->archivator().workId()) &&
-		    (!tm || (*tm >= arch_el[i_a]->begin() && *tm <= arch_el[i_a]->end())) )
+		    (!tm ||
+			(up_ord && *tm <= arch_el[i_a]->end() && *tm > arch_el[i_a]->begin()-(long long)(1000000.*arch_el[i_a]->archivator( ).valPeriod())) ||
+			(!up_ord && *tm < arch_el[i_a]->end()+(long long)(1000000.*arch_el[i_a]->archivator( ).valPeriod()) && *tm >= arch_el[i_a]->begin()) ) )
+		    //(!tm || (*tm >= arch_el[i_a]->begin() && *tm <= arch_el[i_a]->end())) )
 		return arch_el[i_a]->getS(tm,up_ord);
     }
     return EVAL_STR;
@@ -1032,7 +1035,10 @@ double TVArchive::getR( long long *tm, bool up_ord, const string &arch )
 	ResAlloc res(a_res,false);
 	for( int i_a = 0; i_a < arch_el.size(); i_a++ )
 	    if( (arch.empty() || arch == arch_el[i_a]->archivator().workId()) &&
-		    (!tm || (*tm >= arch_el[i_a]->begin() && *tm <= arch_el[i_a]->end())) )
+		    (!tm ||
+			(up_ord && *tm <= arch_el[i_a]->end() && *tm > arch_el[i_a]->begin()-(long long)(1000000.*arch_el[i_a]->archivator( ).valPeriod())) ||
+			(!up_ord && *tm < arch_el[i_a]->end()+(long long)(1000000.*arch_el[i_a]->archivator( ).valPeriod()) && *tm >= arch_el[i_a]->begin()) ) )
+		    //(!tm || (*tm >= arch_el[i_a]->begin() && *tm <= arch_el[i_a]->end())) )
 		return arch_el[i_a]->getR(tm,up_ord);
     }
     return EVAL_REAL;
@@ -1040,16 +1046,19 @@ double TVArchive::getR( long long *tm, bool up_ord, const string &arch )
 
 int TVArchive::getI( long long *tm, bool up_ord, const string &arch )
 {
-    //- Get from buffer -
+    //> Get from buffer
     if( (arch.empty() || arch == BUF_ARCH_NM) && (!tm || (*tm >= begin() && *tm <= end())) )
 	return TValBuf::getI(tm,up_ord);
-    //- Get from archivators -
+    //> Get from archivators
     else
     {
 	ResAlloc res(a_res,false);
 	for( int i_a = 0; i_a < arch_el.size(); i_a++ )
 	    if( (arch.empty() || arch == arch_el[i_a]->archivator().workId()) &&
-		    (!tm || (*tm >= arch_el[i_a]->begin() && *tm <= arch_el[i_a]->end())) )
+		    (!tm ||
+			(up_ord && *tm <= arch_el[i_a]->end() && *tm > arch_el[i_a]->begin()-(long long)(1000000.*arch_el[i_a]->archivator( ).valPeriod())) ||
+			(!up_ord && *tm < arch_el[i_a]->end()+(long long)(1000000.*arch_el[i_a]->archivator( ).valPeriod()) && *tm >= arch_el[i_a]->begin()) ) )
+		    //(!tm || (*tm >= arch_el[i_a]->begin() && *tm <= arch_el[i_a]->end())) )
 		return arch_el[i_a]->getI(tm,up_ord);
     }
     return EVAL_INT;
@@ -1066,7 +1075,10 @@ char TVArchive::getB( long long *tm, bool up_ord, const string &arch )
 	ResAlloc res(a_res,false);
 	for( int i_a = 0; i_a < arch_el.size(); i_a++ )
 	    if( (arch.empty() || arch == arch_el[i_a]->archivator().workId()) &&
-		    (!tm || (*tm >= arch_el[i_a]->begin() && *tm <= arch_el[i_a]->end())) )
+		    (!tm ||
+			(up_ord && *tm <= arch_el[i_a]->end() && *tm > arch_el[i_a]->begin()-(long long)(1000000.*arch_el[i_a]->archivator( ).valPeriod())) ||
+			(!up_ord && *tm < arch_el[i_a]->end()+(long long)(1000000.*arch_el[i_a]->archivator( ).valPeriod()) && *tm >= arch_el[i_a]->begin()) ) )
+		    //(!tm || (*tm >= arch_el[i_a]->begin() && *tm <= arch_el[i_a]->end())) )
 		return arch_el[i_a]->getB(tm,up_ord);
     }
     return EVAL_BOOL;

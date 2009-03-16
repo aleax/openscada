@@ -50,7 +50,7 @@ class VisRun : public QMainWindow
     public:
 	//Public methods
 	VisRun( const string &prj_it, const string &open_user, const string &user_pass,
-	    const string &VCAstat, bool crSessForce = false );
+	    const string &VCAstat, bool crSessForce = false, QWidget * parent = 0 );
 	~VisRun( );
 
 	string user( );
@@ -143,7 +143,7 @@ class VisRun : public QMainWindow
 		*mn_help;			//Menu "Help"
 
 	//> Tool bars
-	QToolBar	*toolBarAlarm;		//Alarms toolbar
+	QToolBar	*toolBarStatus;		//Status toolbar
 
 	//> Actions
 	QAction *actFullScr,			//Full screen action
@@ -158,10 +158,11 @@ class VisRun : public QMainWindow
 	bool		winClose;		//Close window flag
 	UserStBar	*mWUser;			//User status widget
 	QLabel		*mWStat;		//VCA engine station
+	QLabel		*mWTime;		//Runtime time display for fullscreen
 	string 		work_sess, src_prj;	//Work session and source project
 	RunPageView	*master_pg;		//Master page of runtime session
 	int		mPeriod;		//Clock's period
-	unsigned	w_prc_cnt;		//Process counter
+	unsigned	wPrcCnt;		//Process counter
 	float		upd_tm;
 	unsigned	reqtm;			//Requested time
 

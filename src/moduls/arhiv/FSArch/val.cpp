@@ -431,7 +431,8 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 ModVArchEl::ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator ) :
     TVArchEl(iachive,iarchivator)
 {
-    realEnd = TSYS::curTime();
+    long long per = (long long)archivator().valPeriod()*1000000.;
+    realEnd = (TSYS::curTime()/per)*per;
 }
 
 ModVArchEl::~ModVArchEl( )
