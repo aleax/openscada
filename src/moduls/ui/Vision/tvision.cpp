@@ -246,9 +246,9 @@ QMainWindow *TVision::openWindow()
 	}
 
     //> Check for run projects need
-    bool runPrj = false;
     string sprj;
     int  screen;
+    VisRun *fsess = NULL;
     for( int p_off = 0; (sprj=TSYS::strSepParse(run_prjs,0,';',&p_off)).size(); )
     {
 	screen = 0;
@@ -268,10 +268,11 @@ QMainWindow *TVision::openWindow()
 	sess->show();
 	sess->raise();
 	sess->activateWindow();
-	runPrj = true;
+	if( !fsess ) fsess = sess;
     }
 
-    return runPrj ? NULL : new VisDevelop( user_open, user_pass, VCAStation() );
+    if( fsess ) return fsess;
+    return new VisDevelop( user_open, user_pass, VCAStation() );
 }
 
 void TVision::modStart()
@@ -338,7 +339,8 @@ void TVision::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/cfg/start_user",_("Start user"),0664,"root","UI",1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/u_pass",_("User password"),0664,"root","UI",1,"tp","str");
 	    }
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/run_prj",_("Run projects list (';' - sep)"),0664,"root","UI",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/run_prj",_("Run projects list"),0664,"root","UI",2,"tp","str",
+		"help",_("Automatic started project's list separated by symbol ';'.\nFor opening a project's window to need display (1) use project's name format: 'PrjName-1'."));
 	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to remote stations list configuration"),0660,"root","UI",1,"tp","lnk");
 	}
 	if(ctrMkNode("area",opt,2,"/alarm",_("Alarms"),0444,"root","UI"))

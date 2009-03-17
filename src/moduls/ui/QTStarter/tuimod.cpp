@@ -23,6 +23,7 @@
 #include <unistd.h>
 
 #include <QMainWindow>
+#include <QMenuBar>
 #include <QToolBar>
 #include <QAction>
 #include <QImage>
@@ -302,7 +303,7 @@ void *TUIMod::Task( void * )
 	}
 
     //> Start call dialog
-    if(!op_wnd) winCntr->startDialog( );
+    if( QApplication::topLevelWidgets().isEmpty() ) winCntr->startDialog( );
 
     QObject::connect( QtApp, SIGNAL(lastWindowClosed()), winCntr, SLOT(lastWinClose()) );
     QtApp->exec();
@@ -403,11 +404,18 @@ bool WinControl::callQTModule( const string &nm )
     QMainWindow *new_wnd = ((&qt_mod.at())->*openWindow)( );
     if( !new_wnd ) return false;
 
-    //- Make QT starter toolbar -
-    QToolBar *toolBar = new QToolBar(_("QTStarter toolbar"), new_wnd);
-    toolBar->setObjectName("QTStarterTool");
-    new_wnd->addToolBar(toolBar);
-    //, Qt::DockTop );
+    //> Make QT starter toolbar
+    QToolBar *toolBar = NULL;
+    QMenu *menu = NULL;
+    if( !new_wnd->property("QTStarterToolDis").toBool() )
+    {
+	toolBar = new QToolBar("QTStarter",new_wnd);
+	toolBar->setObjectName("QTStarterTool");
+	new_wnd->addToolBar(toolBar);
+    }
+    if( !new_wnd->property("QTStarterMenuDis").toBool() && !new_wnd->menuBar()->actions().empty() )
+	menu = new_wnd->menuBar()->addMenu("QTStarter");
+
     mod->owner().modList(list);
     for( unsigned i_l = 0; i_l < list.size(); i_l++ )
 	if( mod->owner().modAt(list[i_l]).at().modInfo("SubType") == "QT" &&
@@ -425,12 +433,13 @@ bool WinControl::callQTModule( const string &nm )
 	else icon = QIcon(":/images/oscada_qt.png");
 	QAction *act_1 = new QAction(icon,qt_mod.at().modName().c_str(),new_wnd);
 	act_1->setObjectName(list[i_l].c_str());
-	act_1->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_1);
+	//act_1->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_1);
 	act_1->setToolTip(qt_mod.at().modName().c_str());
 	act_1->setWhatsThis(qt_mod.at().modInfo("Descript").c_str());
 	QObject::connect(act_1, SIGNAL(activated()), this, SLOT(callQTModule()));
 
-	toolBar->addAction(act_1);
+	if( toolBar ) toolBar->addAction(act_1);
+	if( menu ) menu->addAction(act_1);
     }
 
     new_wnd->show();
@@ -465,7 +474,7 @@ void WinControl::startDialog( )
 	}
 	else icon = QIcon(":/images/oscada_qt.png");
 
-	AutoHD<TModule> qt_mod = mod->owner().modAt(list[i_l]);	
+	AutoHD<TModule> qt_mod = mod->owner().modAt(list[i_l]);
 	QPushButton *butt = new QPushButton(icon,qt_mod.at().modName().c_str(),new_wnd->centralWidget());
 	butt->setObjectName(list[i_l].c_str());
 	QObject::connect(butt, SIGNAL(clicked(bool)), this, SLOT(callQTModule()));

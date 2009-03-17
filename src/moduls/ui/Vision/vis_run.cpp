@@ -68,6 +68,8 @@ VisRun::VisRun( const string &prj_it, const string &open_user, const string &use
     setWindowTitle(_("Vision runtime"));
     setWindowIcon(mod->icon());
 
+    setProperty("QTStarterToolDis",true);
+
     //> Create actions
     //>> Generic actions
     //>>> Print

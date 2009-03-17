@@ -2,6 +2,8 @@
 - !:/DemoDB: Trend's and document's panels is updated. Double archives document's closing is fixed.
 - FIX:/UI/VCAEngine: The pgOpenSrc attribute of page checking is added on time page closing.
 - FIX:/UI/Vision: Hold cursor on current time for tracing into the trand view of primitive "Diagram" is fixed.
+- !:/UI/QTStarter: Self menu inserting to opened windows is added. True window's opening control is changed to real top level widget's number.
+    Special properties "QTStarterToolDis" and "QTStarterMenuDis" is added for exclude QTStarter's toolbar or menu.
 
 
 2009-03-16 Roman
@@ -55,8 +57,8 @@
 
 
 2009-03-10 Roman
-- !!:/UI/VCAEngine;/UI/Vision;/UI/WebVision: Attributes index for base widgets is reordered.
-- /UI/VCAEngine;/UI/Vision: Not released primitives Function and Link is disabled.
+- !!:/UI/VCAEngine,/UI/Vision,/UI/WebVision: Attributes index for base widgets is reordered.
+- /UI/VCAEngine,/UI/Vision: Not released primitives Function and Link is disabled.
 - !:/SYS: Programm version is changed to 0.6.3.2.
 - /SYS: Set hard depend to bison.
 - /SYS: To RPM-build specification file is added ALTLinux build depend to libportaudio2-devel
@@ -108,8 +110,8 @@
 
 
 2009-02-24 Maxim
-- FIX:/UI/WebVision: Filling with the image is fixed and  modified.
-- FIX:/UI/Vision: Filling with the image is fixed and  modified, scaling of the image for filling is modified.
+- FIX:/UI/WebVision: Filling with the image is fixed and modified.
+- FIX:/UI/Vision: Filling with the image is fixed and modified, scaling of the image for filling is modified.
 
 
 2009-02-24 Roman
@@ -144,7 +146,7 @@
 
 2009-02-18 Roman
 - /XML: Including XML-header to result text by function XMLNode::save is added.
-- FIX:/Protocol/HTTP,/UI/WebCfg,/UI/WebCfgD,/UI/WebVision: No inserting and not full processing simbol '\r' into HTTP protocol's end line.
+- !!:FIX:/Protocol/HTTP,/UI/WebCfg,/UI/WebCfgD,/UI/WebVision: No inserting and not full processing symbol '\r' into HTTP protocol's end line.
     Fixed work into Konqueror 4.
 - FIX:/UI/WebCfgD,/UI/WebVision: XML-header is added to XML-text of result of AJAX XML-request. Fixed work into Konqueror 4.
 

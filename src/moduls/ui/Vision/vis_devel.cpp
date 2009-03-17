@@ -50,6 +50,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     prjLibPropDlg(NULL), visItPropDlg(NULL), winClose(false), copy_buf("0")
 {
     setAttribute(Qt::WA_DeleteOnClose,true);
+
 #if QT_VERSION >= 0x040301
     setDockOptions(dockOptions() | QMainWindow::VerticalTabs);
 #endif
