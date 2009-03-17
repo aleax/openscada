@@ -1,3 +1,9 @@
+2009-03-17 Roman
+- !:/DemoDB: Trend's and document's panels is updated. Double archives document's closing is fixed.
+- FIX:/UI/VCAEngine: The pgOpenSrc attribute of page checking is added on time page closing.
+- FIX:/UI/Vision: Hold cursor on current time for tracing into the trand view of primitive "Diagram" is fixed.
+
+
 2009-03-16 Roman
 - !!:/DOC: OpenSCADA manual document formated for print is added to repository.
 - !!:/Archive/DBArch: Document is updated and released version 0.8.0.

@@ -724,6 +724,7 @@ bool SessPage::attrChange( Attr &cfg, TVariant prev )
 	    {
 		ownerSess()->openUnreg(path());
 		if( process() && !attrAt("pgNoOpenProc").at().getB() )	setProcess(false);
+		if( !attrAt("pgOpenSrc").at().getS().empty() ) attrAt("pgOpenSrc").at().setS("");
 	    }
 	}
 	else if( cfg.id() == "pgOpenSrc" )
@@ -779,7 +780,8 @@ bool SessPage::attrChange( Attr &cfg, TVariant prev )
 		}
 		catch(TError err) { }
 	    }
-	    cfg.owner()->attrAt("pgOpen").at().setB(!cfg.getS().empty());
+	    if( cfg.owner()->attrAt("pgOpen").at().getB() != !cfg.getS().empty() )
+		cfg.owner()->attrAt("pgOpen").at().setB(!cfg.getS().empty());
 	}
     }
 

@@ -1773,13 +1773,9 @@ void ShapeDiagram::tracing( )
     loadTrendsData(w);
     makeTrendsPicture(w);
 
-    //- Trace cursors value -
-    if( shD->active )
-    {
-	long long tTimeGrnd = shD->tTime - (long long)(shD->tSize*1000000.);
-	if( shD->curTime >= (shD->tTime-2*trcPer) || shD->curTime <= tTimeGrnd )
-	    setCursor( w, shD->tTime );
-    }
+    //> Trace cursors value
+    if( shD->active && (shD->holdCur || shD->curTime <= (shD->tPict-(long long)(shD->tSize*1000000.))) )
+	setCursor( w, shD->tTime );
     w->update();
 }
 
@@ -1789,36 +1785,36 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 
     if( !shD->en ) return false;
 
-    //- Get generic data -
+    //> Get generic data
     long long tTimeGrnd = shD->tPict - (long long)(shD->tSize*1000000.);
     long long curTime	= vmax(vmin(shD->curTime,shD->tPict),tTimeGrnd);
 
-    //- Process event -
+    //> Process event
     switch( event->type() )
     {
 	case QEvent::Paint:
 	{
 	    QPainter pnt( w );
 	
-	    //- Decoration draw -
+	    //> Decoration draw
 	    QRect dA = w->rect().adjusted(0,0,-2*shD->geomMargin,-2*shD->geomMargin);
 	    pnt.setWindow(dA);
 	    pnt.setViewport(w->rect().adjusted(shD->geomMargin,shD->geomMargin,-shD->geomMargin,-shD->geomMargin));
 	
-	    //- Draw decoration -
+	    //> Draw decoration
 	    if( shD->backGrnd.color().isValid() ) pnt.fillRect(dA,shD->backGrnd.color());
 	    if( !shD->backGrnd.textureImage().isNull() ) pnt.fillRect(dA,shD->backGrnd.textureImage());
 
-	    //- Draw border -
+	    //> Draw border
 	    borderDraw( pnt, dA, shD->border, shD->bordStyle );
 
-	    //- Trend's picture -
+	    //> Trend's picture
 	    pnt.drawPicture(shD->border.width(),shD->border.width(),shD->pictObj);
 
-	    //- Draw focused border -
+	    //> Draw focused border
 	    if( w->hasFocus() )	qDrawShadeRect(&pnt,dA.x(),dA.y(),dA.width(),dA.height(),w->palette());
 
-	    //- Draw cursor -
+	    //> Draw cursor
 	    if( shD->active && curTime && tTimeGrnd && shD->tPict && (curTime >= tTimeGrnd || curTime <= shD->tPict) )
 	    {
 		int curPos = shD->pictRect.x()+shD->pictRect.width()*(curTime-tTimeGrnd)/(shD->tPict-tTimeGrnd);
@@ -1869,6 +1865,8 @@ void ShapeDiagram::setCursor( WdgView *w, long long itm )
 
     long long tTimeGrnd = shD->tTime - (long long)(shD->tSize*1000000.);
     long long curTime   = vmax(vmin(itm,shD->tTime),tTimeGrnd);
+
+    shD->holdCur = (curTime==shD->tTime);
 
     w->setAllAttrLoad(true);
     w->attrSet("curSek",TSYS::int2str(curTime/1000000),30);
