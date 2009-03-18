@@ -2,6 +2,7 @@
 - /DOC: OpenSCADA manual document is updated and renamed to openscada_ru.pdf.
 - /DemoDB: ToolTips and StatusTips is setup for all active elements.
 - FIX:/Special/FLibSYS: Function's varhGet*() is fixed for correct proceesing broken parameters.
+- FIX:/UI/Vision: Not full hiding widgets of primitive "FormEl" is fixed.
 
 
 2009-03-17 Roman
@@ -30,8 +31,8 @@
 - !!:/UI/WebCfgD: Document is updated and released version 0.6.0.
 - !!:/UI/WebVision: Document is updated and released version 0.6.5.
 - !:/UI/Vision: Multi-display base support is added.
-- !:/UI/Vision: The time field display is added to thr statusbar of runtime window and on fullscreen mode.
-- !:/UI/Vision: Menu bar on runtime window hiding for no privileged users is released.
+- !:/UI/Vision: The time field display is added to the statusbar of runtime window and on fullscreen mode.
+- !:/UI/Vision: Menu bar on runtime window hiding for no privileged users is realised.
 - FIX:/UI/Vision,/UI/WebVision: For minimal width of grid calcing of primitive "Diagram" is used font metric of 6 symbols of used font.
 - FIX:/Archive/FSArch: Last value's time is aligned to period on start.
 - FIX:/Archive: Values request from archive period allign is fixed.
@@ -64,7 +65,7 @@
 
 2009-03-10 Roman
 - !!:/UI/VCAEngine,/UI/Vision,/UI/WebVision: Attributes index for base widgets is reordered.
-- /UI/VCAEngine,/UI/Vision: Not released primitives Function and Link is disabled.
+- /UI/VCAEngine,/UI/Vision: Not realised primitives Function and Link is disabled.
 - !:/SYS: Programm version is changed to 0.6.3.2.
 - /SYS: Set hard depend to bison.
 - /SYS: To RPM-build specification file is added ALTLinux build depend to libportaudio2-devel
@@ -90,12 +91,12 @@
 
 
 2009-03-03 Roman
-- !!!:/UI/VCAEngine,/UI/Vision: Widget's changes clearing mechanism is released.
+- !!!:/UI/VCAEngine,/UI/Vision: Widget's changes clearing mechanism is realised.
 - FIX:/UI/VCAEngine: Restoring attributes on reload to inherited or default values is fixed.
 - /UI/VCAEngine: Previous values on time attributes changing is made send into type TVariant.
 - FIX:/UI/VCAEngine: Alarm's quittance from widget's call procedures is fixed.
 - FIX:/UI/VCAEngine: Copy widgets is fixed.
-- !!!:/UI/VCAEngine,/UI/Vision,/UI/WebVision: The RunTime context menu for active widgets is released.
+- !!!:/UI/VCAEngine,/UI/Vision,/UI/WebVision: The RunTime context menu for active widgets is realised.
 - !!!:/DemoDB: Realised the full feature signal objects. The result graphics template cadr is created. Context and status tips is added.
     The navigation panel is updated and quittance buttons is added. Volumed pipe elements is added to library and used for all mnemos.
     Context menu is added for digital taps. Value's text font is rised for input's views.
@@ -188,7 +189,7 @@
 - /Functions: FullText flag is added for IO string type. Used for string IO into fulltext mode.
 - !!:/Functions, /UI/VCAEngine: The attribute "user" is added to TFunction's content object (TValFunc) for permission control allowing into called functions.
 - !!!:/Special/FLibSYS: Added user's functions: sysCall(), int2str(), str2real(), str2int().
-- !:/UI/VCAEngine,/UI/Vision,/UI/WebVision: Attribute "colorText" to view "Button" of primitive "FormEl" is added and released.
+- !:/UI/VCAEngine,/UI/Vision,/UI/WebVision: Attribute "colorText" to view "Button" of primitive "FormEl" is added and realised.
     It used for control to button text's color.
 - FIX:/UI/VCAEngine: Real frequency for widget's call into RunTime by attribute "f_frq" is fixed.
 - !:/UI/VCAEngine: Realised user's dependent access by function attrGet() and attrSet(). Used type independent functions for access to attributes value.
@@ -433,20 +434,20 @@
 - !:/UI/VCAEngine: To primitives 'Protocol' and 'Document' is added attribute 'font'. From primitive 'Protocol' is removed not realised attributes.
 - !:/UI/Vision: Storing background's color and image is made optimal, move int Brash object.
 - FIX:/UI/Vision: The background loading into widget's pallete is fixed.
-- !!:/UI/Vision, /UI/WebVision: Font scaling is released for all primitives. For primitive 'Diagram' scaling is done.
+- !!:/UI/Vision, /UI/WebVision: Font scaling is realised for all primitives. For primitive 'Diagram' scaling is done.
 - FIX:/UI/Vision: Not fit movie scaling is fixed.
 - FIX:/UI/Vision: Primitive 'Protocol' is made some fixes. Old data clearing is added. Mouse tracking is enabled for internal table's widgets.
 - FIX:/UI/Vision: Primitive 'Document' catch QEvent::Wheel events is fixed.
 - FIX:/UI/WebCfgD: Time's minutes and seconds view is fixed.
-- !!!:/UI/WebVision: Primitive 'Protocol' is released.
+- !!!:/UI/WebVision: Primitive 'Protocol' is realised.
 - !:/UI/WebVision: Base font support is added to primitive 'Document'.
-- !:/UI/WebVision: JavaScript translation mechanism is released for JavaScript messages.
+- !:/UI/WebVision: JavaScript translation mechanism is realised for JavaScript messages.
 
 
 2008-12-26 Roman
 - !:/DB/SQLite,/DB/MySQL,/DB/FireBird,/DB/DBF,/DAQ/BlockCalc: Translation to German is added by Aleksey and Irina Popkov.
 - FIX:/SYS: RPM build spec file is fixed for *.la including.
-- !!:/UI/WebCfgD: The table's fields support is released.
+- !!:/UI/WebCfgD: The table's fields support is realised.
 - FIX:/UI/WebCfgD: Some fixes made.
 - !:/UI/WebCfgD: HTML and CSS code of work page is moved to separated file (WebCfgDVCA.html)
 - !:/UI/WebCfgD: Full translation to Russian and Ukrainian is done.
@@ -463,7 +464,7 @@
 2008-12-23 Roman
 - FIX:/UI/Vision: Visual scale unified and fixed.
 - !:/UI/WebCfgD: The scroll offset added for absolute tag position calc.
-- !!:/UI/WebCfgD: Command's fields is released.
+- !!:/UI/WebCfgD: Command's fields is realised.
 
 
 2008-12-23 Maxim
@@ -475,7 +476,7 @@
     Dynamic librarie's links packing into main package and development is fixed.
 - !:/SYS: Remove documentation default installation.
 - !:/SYS: Change project's library revision to "0:10:0".
-- !!:/UI/WebCfgD: Fields of images is released.
+- !!:/UI/WebCfgD: Fields of images is realised.
 
 
 2008-12-19 Roman
@@ -495,7 +496,7 @@
 - /UI/QTCfg: Some algoritms is optimized.
 - FIX:/UI/WebCfgD: Statusbar access is fixed.
 - FIX:/UI/WebCfgD,/UI/WebVision: Call to options of 'select' is made through option[].
-- !:/UI/WebCfgD: Delete item action is released. Copy, Cut and Paste actions is released.
+- !:/UI/WebCfgD: Delete item action is realised. Copy, Cut and Paste actions is realised.
 
 
 2008-12-15 Roman
@@ -1366,7 +1367,7 @@
 
 
 2008-03-27 Roman
-- !!:/DAQ/SoundCard: New module source tree is added. It's only module template, no one target functions is released now.
+- !!:/DAQ/SoundCard: New module source tree is added. It's only module template, no one target functions is realised now.
 - FIX:/Archive: Archive task made stop first and next archives archivators stop.
 - !!:/Archive: Message archivator's values access form is updated.
 - !!:/UI/Vision: Hide pages on time it loading and initing is made. On time loading is displayed messages about page loading.
@@ -1594,7 +1595,7 @@
 2008-02-13 Roman
 - !!!:/DAQ/ModBus: Support Modbus protocols RTU and ASCII is added.
 - FIX:/DAQ/ModBus: Resource dead lock into main acquisition task is fixed.
-- !:/DAQ/ModBus: Update translation to Russian and Ukranian. Version 0.7.0 is released.
+- !:/DAQ/ModBus: Update translation to Russian and Ukranian. Version 0.7.0 is realised.
 - FIX:/UI/VCAEngine, /UI/Vision, /UI/WebVision: Z - level is fixed.
 - FIX:/UI/Vision: Identifier generator is fixed for project's page and widget manipulation.
 - FIX:/UI/Vision: Proxy focus is fixed for text elements of primitive "ElForm"

@@ -198,7 +198,8 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	case 5:		//en
 	    if(!runW)	break;
 	    shD->en = (bool)atoi(val.c_str());
-	    if( shD->elType >= 0 ) shD->addrWdg->setVisible(atoi(val.c_str()));
+	    runW->setVisible(atoi(val.c_str()));
+	    //if( shD->elType >= 0 ) shD->addrWdg->setVisible(atoi(val.c_str()));
 	    break;
 	case 6:		//active
 	    if(!runW)	break;

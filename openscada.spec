@@ -161,6 +161,9 @@ install -m 644 demo/ru/*.db %buildroot/var/spool/openscada/DEMO_RU
 /var/spool/openscada/DEMO_RU/*.db
 
 %changelog
+* Wed Mar 18 2009 Roman Savochenko <rom_as@diyaorg.dp.ua>
+- OpenSCADA update 0.6.3.2 release build.
+
 * Mon Feb 2 2009 Roman Savochenko <rom_as@diyaorg.dp.ua>
 - OpenSCADA update 0.6.3.1 release build.
 
