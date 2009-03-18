@@ -1,3 +1,9 @@
+2009-03-18 Roman OpenSCADA 0.6.3.2
+- /DOC: OpenSCADA manual document is updated and renamed to openscada_ru.pdf.
+- /DemoDB: ToolTips and StatusTips is setup for all active elements.
+- FIX:/Special/FLibSYS: Function's varhGet*() is fixed for correct proceesing broken parameters.
+
+
 2009-03-17 Roman
 - !:/DemoDB: Trend's and document's panels is updated. Double archives document's closing is fixed.
 - FIX:/UI/VCAEngine: The pgOpenSrc attribute of page checking is added on time page closing.
@@ -15,7 +21,7 @@
 - !!:/DB/SQLite: Document is updated and released version 1.5.0.
 - !!:/DAQ/JavaLikeCalc: Document is updated and released version 1.3.1.
 - !!:/Protocol/HTTP: Document is updated and released version 1.4.0.
-- !!:/Protocol/FLibSYS: Document is updated and released version 0.8.0.
+- !!:/Special/FLibSYS: Document is updated and released version 0.8.0.
 - !!:/UI/QTStarter: Document is updated and released version 1.5.2.
 - !!:/UI/QTCfg: Document is updated and released version 1.7.1.
 - !!:/UI/VCAEngine: Document is updated and released version 0.8.5.

@@ -284,7 +284,7 @@ class varhGetI : public TFunction
 	varhGetI( ) : TFunction("varhGetI")
 	{
 	    ioAdd( new IO("val",_("Return value"),IO::Integer,IO::Return) );
-	    ioAdd( new IO("id",_("Buffer id"),IO::Integer,IO::Default) );
+	    ioAdd( new IO("id",_("Buffer id"),IO::Integer,IO::Default,"-1") );
 	    ioAdd( new IO("sec",_("Seconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("usec",_("Microseconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("up_ord",_("Up order"),IO::Boolean,IO::Default,"0") );
@@ -299,20 +299,24 @@ class varhGetI : public TFunction
 	{
 	    int id = val->getI(1);
 	    string addr = val->getS(6);
-	    if( !addr.empty() )	id = mod->varchOpen(addr);
-
-	    long long vtm = (long long)val->getI(2)*1000000+val->getI(3);
-	    if(mod->isArch(id))
-		val->setI(0,mod->varch(id).at().getI(&vtm,val->getB(4),val->getS(5)));
-	    else
+	    try
 	    {
-		TValBuf* vb = mod->vbuf(id);
-		if( !vb )	return;
-		val->setI(0,vb->getI(&vtm,val->getB(4)));
-	    }
-	    val->setI(2,vtm/1000000); val->setI(3,vtm%1000000);
+		if( !addr.empty() )	id = mod->varchOpen(addr);
 
-	    if( !addr.empty() )	mod->varchClose(id);
+		long long vtm = (long long)val->getI(2)*1000000+val->getI(3);
+		if(mod->isArch(id))
+		    val->setI(0,mod->varch(id).at().getI(&vtm,val->getB(4),val->getS(5)));
+		else
+		{
+		    TValBuf* vb = mod->vbuf(id);
+		    if( !vb )	return;
+		    val->setI(0,vb->getI(&vtm,val->getB(4)));
+		}
+		val->setI(2,vtm/1000000); val->setI(3,vtm%1000000);
+
+		if( !addr.empty() )	mod->varchClose(id);
+	    }
+	    catch(TError err) { val->setI(0,EVAL_INT); }
 	}
 };
 
@@ -325,7 +329,7 @@ class varhGetR : public TFunction
 	varhGetR( ) : TFunction("varhGetR")
 	{
 	    ioAdd( new IO("val",_("Return value"),IO::Real,IO::Return) );
-	    ioAdd( new IO("id",_("Buffer id"),IO::Integer,IO::Default) );
+	    ioAdd( new IO("id",_("Buffer id"),IO::Integer,IO::Default,"-1") );
 	    ioAdd( new IO("sec",_("Seconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("usec",_("Microseconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("up_ord",_("Up order"),IO::Boolean,IO::Default,"0") );
@@ -340,20 +344,24 @@ class varhGetR : public TFunction
 	{
 	    int id = val->getI(1);
 	    string addr = val->getS(6);
-	    if( !addr.empty() )	id = mod->varchOpen(addr);
-
-	    long long vtm = (long long)val->getI(2)*1000000+val->getI(3);
-	    if(mod->isArch(id))
-		val->setR(0,mod->varch(id).at().getR(&vtm,val->getB(4),val->getS(5)));
-	    else
+	    try
 	    {
-		TValBuf* vb = mod->vbuf(id);
-		if(!vb)     return;
-		val->setR(0,vb->getR(&vtm,val->getB(4)));
-	    }
-	    val->setI(2,vtm/1000000); val->setI(3,vtm%1000000);
+		if( !addr.empty() )	id = mod->varchOpen(addr);
 
-	    if( !addr.empty() )	mod->varchClose(id);
+		long long vtm = (long long)val->getI(2)*1000000+val->getI(3);
+		if(mod->isArch(id))
+		    val->setR(0,mod->varch(id).at().getR(&vtm,val->getB(4),val->getS(5)));
+		else
+		{
+		    TValBuf* vb = mod->vbuf(id);
+		    if( !vb )	return;
+		    val->setR(0,vb->getR(&vtm,val->getB(4)));
+		}
+		val->setI(2,vtm/1000000); val->setI(3,vtm%1000000);
+
+		if( !addr.empty() )	mod->varchClose(id);
+	    }
+	    catch(TError err) { val->setR(0,EVAL_REAL); }
 	}
 };
 
@@ -366,7 +374,7 @@ class varhGetB : public TFunction
 	varhGetB( ) : TFunction("varhGetB")
 	{
 	    ioAdd( new IO("val",_("Return value"),IO::Boolean,IO::Return) );
-	    ioAdd( new IO("id",_("Buffer id"),IO::Integer,IO::Default) );
+	    ioAdd( new IO("id",_("Buffer id"),IO::Integer,IO::Default,"-1") );
 	    ioAdd( new IO("sec",_("Seconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("usec",_("Microseconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("up_ord",_("Up order"),IO::Boolean,IO::Default,"0") );
@@ -381,20 +389,24 @@ class varhGetB : public TFunction
 	{
 	    int id = val->getI(1);
 	    string addr = val->getS(6);
-	    if( !addr.empty() )	id = mod->varchOpen(addr);
-
-	    long long vtm = (long long)val->getI(2)*1000000+val->getI(3);
-	    if(mod->isArch(id))
-		val->setB(0,mod->varch(id).at().getB(&vtm,val->getB(4),val->getS(5)));
-	    else
+	    try
 	    {
-		TValBuf* vb = mod->vbuf(id);
-		if( !vb )	return;
-		val->setB(0,vb->getB(&vtm,val->getB(4)));
-	    }
-	    val->setI(2,vtm/1000000); val->setI(3,vtm%1000000);
+		if( !addr.empty() )	id = mod->varchOpen(addr);
 
-	    if( !addr.empty() )	mod->varchClose(id);
+		long long vtm = (long long)val->getI(2)*1000000+val->getI(3);
+		if(mod->isArch(id))
+		    val->setB(0,mod->varch(id).at().getB(&vtm,val->getB(4),val->getS(5)));
+		else
+		{
+		    TValBuf* vb = mod->vbuf(id);
+		    if( !vb )	return;
+		    val->setB(0,vb->getB(&vtm,val->getB(4)));
+		}
+		val->setI(2,vtm/1000000); val->setI(3,vtm%1000000);
+
+		if( !addr.empty() )	mod->varchClose(id);
+	    }
+	    catch(TError err) { val->setB(0,EVAL_BOOL); }
 	}
 };
 
@@ -407,7 +419,7 @@ class varhGetS : public TFunction
 	varhGetS( ) : TFunction("varhGetS")
 	{
 	    ioAdd( new IO("val",_("Return value"),IO::String,IO::Return) );
-	    ioAdd( new IO("id",_("Buffer id"),IO::Integer,IO::Default) );
+	    ioAdd( new IO("id",_("Buffer id"),IO::Integer,IO::Default,"-1") );
 	    ioAdd( new IO("sec",_("Seconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("usec",_("Microseconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("up_ord",_("Up order"),IO::Boolean,IO::Default,"0") );
@@ -422,20 +434,24 @@ class varhGetS : public TFunction
 	{
 	    int id = val->getI(1);
 	    string addr = val->getS(6);
-	    if( !addr.empty() )	id = mod->varchOpen(addr);
-
-	    long long vtm = (long long)val->getI(2)*1000000+val->getI(3);
-	    if(mod->isArch(id))
-		val->setS(0,mod->varch(id).at().getS(&vtm,val->getB(4),val->getS(5)));
-	    else
+	    try
 	    {
-		TValBuf* vb = mod->vbuf(id);
-		if( !vb )	return;
-		val->setS(0,vb->getS(&vtm,val->getB(4)));
-	    }
-	    val->setI(2,vtm/1000000); val->setI(3,vtm%1000000);
+		if( !addr.empty() )	id = mod->varchOpen(addr);
 
-	    if( !addr.empty() )	mod->varchClose(id);
+		long long vtm = (long long)val->getI(2)*1000000+val->getI(3);
+		if(mod->isArch(id))
+		val->setS(0,mod->varch(id).at().getS(&vtm,val->getB(4),val->getS(5)));
+		else
+		{
+		    TValBuf* vb = mod->vbuf(id);
+		    if( !vb )	return;
+		    val->setS(0,vb->getS(&vtm,val->getB(4)));
+		}
+		val->setI(2,vtm/1000000); val->setI(3,vtm%1000000);
+
+		if( !addr.empty() )	mod->varchClose(id);
+	    }
+	    catch(TError err) { val->setS(0,EVAL_STR); }
 	}
 };
 

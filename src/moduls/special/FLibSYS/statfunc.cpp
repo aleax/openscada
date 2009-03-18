@@ -177,7 +177,7 @@ int Lib::varchOpen( const string &inm )
 	    varch_el.isArch = true;
 	    varch_lst.push_back(varch_el);
 	}
-    }catch(TError err){	return -1; }
+    }catch(TError err){ return -1; }
 
     return	i_id;
 }
@@ -196,7 +196,7 @@ void Lib::varchClose( int id )
 bool Lib::isArch(int id)
 {
     ResAlloc res(varch_res,false);
-    if( id >= 0 && id < varch_lst.size() )	return varch_lst[id].isArch;
+    if( id >= 0 && id < varch_lst.size() && varch_lst[id].arch )	return varch_lst[id].isArch;
     return false;
 }
 
@@ -204,7 +204,7 @@ AutoHD<TVArchive> Lib::varch( int id )
 {
     AutoHD<TVArchive> rez;
     ResAlloc res(varch_res,false);
-    if( id >= 0 && id < varch_lst.size() && varch_lst[id].isArch )
+    if( id >= 0 && id < varch_lst.size() && varch_lst[id].isArch && varch_lst[id].arch )
 	rez = *varch_lst[id].arch;
     return rez;
 }
