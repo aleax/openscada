@@ -1,3 +1,7 @@
+2009-03-19 Roman
+- FIX:/UI/Vision: Not full hiding widgets of "FormEl" fixing is fixed.
+
+
 2009-03-18 Roman OpenSCADA 0.6.3.2
 - /DOC: OpenSCADA manual document is updated and renamed to openscada_ru.pdf.
 - /DemoDB: ToolTips and StatusTips is setup for all active elements.
