@@ -4789,7 +4789,7 @@ void VCADiagram::getReq( SSess &ses )
 		    if( hvLev == 5 || chLev >= 4 )					//Date
 			(chLev>=5 || chLev==-1) ? snprintf(lab_dt,sizeof(lab_dt),"%d-%02d-%d",ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900) :
 				     snprintf(lab_dt,sizeof(lab_dt),"%d",ttm.tm_mday);
-		    if( (hvLev == 4 || hvLev == 3 || ttm.tm_min) && !ttm.tm_sec )	//Hours and minuts
+		    if( (hvLev == 4 || hvLev == 3 || ttm.tm_hour || ttm.tm_min) && !ttm.tm_sec )	//Hours and minuts
 			snprintf(lab_tm,sizeof(lab_tm),"%d:%02d",ttm.tm_hour,ttm.tm_min);
 		    else if( (hvLev == 2 || ttm.tm_sec) && !(i_h%1000000) )		//Seconds
 			(chLev>=2 || chLev==-1) ? snprintf(lab_tm,sizeof(lab_tm),"%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec) :
@@ -5251,7 +5251,7 @@ void VCADiagram::TrendObj::loadData( const string &user, bool full )
 
     //- One request check and prepare -
     int trcPer = owner().trcPer*1000000;
-    if( owner().tTimeCurent && trcPer && owner().valArch.empty() && (!arh_per || (arh_per >= trcPer && (tTime-valEnd())/trcPer < 2)) )
+    if( owner().tTimeCurent && trcPer && owner().valArch.empty() && (!arh_per || (arh_per >= trcPer && (tTime-valEnd())/vmax(wantPer,trcPer) < 2)) )
     {
 	XMLNode req("get");
 	req.setAttr("path",addr()+"/%2fserv%2fval")->
@@ -5264,9 +5264,14 @@ void VCADiagram::TrendObj::loadData( const string &user, bool full )
 	{
 	    double curVal = atof(req.text().c_str());
 	    if( (val_tp == 0 && curVal == EVAL_BOOL) || (val_tp == 1 && curVal == EVAL_INT) ) curVal = EVAL_REAL;
-	    if( valEnd() && (lst_tm-valEnd())/trcPer > 2 ) vals.push_back(SHg(lst_tm-trcPer,EVAL_REAL));
-	    if( (lst_tm-valEnd()) >= wantPer ) vals.push_back(SHg(lst_tm,curVal));
-	    else vals[vals.size()-1].val = (curVal+vals[vals.size()-1].val)/2;
+	    if( valEnd() && (lst_tm-valEnd())/vmax(wantPer,trcPer) > 2 ) vals.push_back(SHg(lst_tm-trcPer,EVAL_REAL));
+	    else if( (lst_tm-valEnd()) >= wantPer ) vals.push_back(SHg(lst_tm,curVal));
+	    else if( vals[vals.size()-1].val == EVAL_REAL ) vals[vals.size()-1].val = curVal;
+	    else if( curVal != EVAL_REAL )
+	    {
+		int s_k = lst_tm-wantPer*(lst_tm/wantPer), n_k = trcPer;
+		vals[vals.size()-1].val = (vals[vals.size()-1].val*s_k+curVal*n_k)/(s_k+n_k);
+	    }
 	    while( vals.size() > 2000 ) vals.pop_front();
 	}
 	return;

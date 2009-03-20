@@ -1,3 +1,9 @@
+2009-03-20 Roman
+- FIX:/UI/Vision: Not resolved function VISION::ShapeDocument::tracing() is removed.
+- FIX:/UI/Vision,/UI/WebVision: Not display hour:minute on x-axis on trend of primitive "Diagram" for 48 hour trend's size is fixed.
+- FIX:/UI/Vision,/UI/WebVision: Current time averaging in tracing mode is fixed for trends of primitive "Diagram".
+
+
 2009-03-19 Roman
 - FIX:/UI/Vision: Not full hiding widgets of "FormEl" fixing is fixed.
 

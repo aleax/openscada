@@ -1601,7 +1601,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 			double tval = buf.getR(&ibeg,true);
 			vpos_cur = (ibeg-buf.begin())/period;
 			if( vpos_cur <= vpos_end )
-			{	
+			{
 			    if( tval == EVAL_REAL ) tval = tval_pr;
 			    if( tval != EVAL_REAL && tval_pr != EVAL_REAL )
 			    {

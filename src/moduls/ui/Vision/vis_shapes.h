@@ -460,10 +460,6 @@ class ShapeDocument : public WdgShape
 	bool event( WdgView *view, QEvent *event );
 	bool eventFilter( WdgView *view, QObject *object, QEvent *event );
 
-    private slots:
-	//Private slots
-	void tracing( );	//Document tracing
-
     private:
 	//Methods
 	//Recursively widgets process for disable focusable and events filter set
