@@ -260,7 +260,7 @@ void *TMdContr::Task( void *icntr )
     {
 	long long t_cnt = SYS->shrtCnt();
 
-	//- Update controller's data -
+	//> Update controller's data
 	cntr.en_res.resRequestR( );
 	for(unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++)
 	    try{ cntr.p_hd[i_p].at().calc(is_start,is_stop); }
@@ -269,11 +269,9 @@ void *TMdContr::Task( void *icntr )
 	cntr.en_res.resReleaseR( );
 	cntr.tm_calc = 1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
 
-	if(is_stop) break;
-
+	if( is_stop ) break;
 	TSYS::taskSleep((long long)cntr.period()*1000000);
-
-	if(cntr.endrun_req) is_stop = true;
+	if( cntr.endrun_req ) is_stop = true;
 	is_start = false;
     }
 

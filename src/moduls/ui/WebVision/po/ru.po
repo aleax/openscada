@@ -5,14 +5,15 @@
 #
 #: vca_sess.cpp:64 vca_sess.cpp:77 vca_sess.cpp:108 vca_sess.cpp:198
 #: vca_sess.cpp:228 vca_sess.cpp:251 vca_sess.cpp:3964 vca_sess.cpp:4562
-#: web_vision.cpp:53 web_vision.cpp:428 web_vision.cpp:509 web_vision.cpp:582
-#: web_vision.cpp:586 web_vision.cpp:599 web_vision.h:107 web_vision.h:108
+#: vca_sess.cpp:4790 vca_sess.cpp:4913 vca_sess.cpp:5201 web_vision.cpp:53
+#: web_vision.cpp:428 web_vision.cpp:509 web_vision.cpp:582 web_vision.cpp:586
+#: web_vision.cpp:599 web_vision.h:107 web_vision.h:108
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 0.6.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-16 17:44+0200\n"
+"POT-Creation-Date: 2009-03-25 10:09+0200\n"
 "PO-Revision-Date: 2007-12-03 11:05+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -30,9 +31,10 @@ msgstr ""
 #: vca_sess.cpp:52 vca_sess.cpp:70 vca_sess.cpp:73 vca_sess.cpp:88
 #: vca_sess.cpp:98 vca_sess.cpp:110 vca_sess.cpp:120 vca_sess.cpp:172
 #: vca_sess.cpp:179 vca_sess.cpp:204 vca_sess.cpp:211 vca_sess.cpp:234
-#: vca_sess.cpp:3971 vca_sess.cpp:5163 vca_sess.cpp:5240 vca_sess.cpp:5257
-#: vca_sess.cpp:5300 web_vision.cpp:455 web_vision.cpp:470 web_vision.cpp:491
-#: web_vision.cpp:508 web_vision.cpp:599 web_vision.cpp:635 web_vision.cpp:653
+#: vca_sess.cpp:3971 vca_sess.cpp:5266 vca_sess.cpp:5445 vca_sess.cpp:5466
+#: vca_sess.cpp:5560 vca_sess.cpp:5577 vca_sess.cpp:5625 web_vision.cpp:455
+#: web_vision.cpp:470 web_vision.cpp:491 web_vision.cpp:508 web_vision.cpp:599
+#: web_vision.cpp:635 web_vision.cpp:653
 msgid "path"
 msgstr ""
 
@@ -45,7 +47,7 @@ msgstr ""
 msgid "sess"
 msgstr ""
 
-#: vca_sess.cpp:53 vca_sess.cpp:5185 vca_sess.cpp:5217 web_vision.cpp:647
+#: vca_sess.cpp:53 vca_sess.cpp:5491 vca_sess.cpp:5528 web_vision.cpp:647
 #: web_vision.cpp:648 web_vision.cpp:656 web_vision.cpp:657
 msgid "root"
 msgstr ""
@@ -55,7 +57,7 @@ msgid "com"
 msgstr ""
 
 #: vca_sess.cpp:69 vca_sess.cpp:87 vca_sess.cpp:110 vca_sess.cpp:119
-#: vca_sess.cpp:171 vca_sess.cpp:233 vca_sess.cpp:5256 vca_sess.cpp:5297
+#: vca_sess.cpp:171 vca_sess.cpp:233 vca_sess.cpp:5576 vca_sess.cpp:5622
 #: web_vision.cpp:454 web_vision.cpp:508 web_vision.cpp:656 web_vision.cpp:659
 msgid "get"
 msgstr ""
@@ -86,8 +88,9 @@ msgstr ""
 
 #: vca_sess.cpp:78 vca_sess.cpp:91 vca_sess.cpp:102 vca_sess.cpp:113
 #: vca_sess.cpp:151 vca_sess.cpp:161 vca_sess.cpp:190 vca_sess.cpp:216
-#: vca_sess.cpp:3932 vca_sess.cpp:3943 vca_sess.cpp:4669 vca_sess.cpp:4852
-#: vca_sess.cpp:5013 web_vision.cpp:441 web_vision.cpp:535 web_vision.cpp:602
+#: vca_sess.cpp:3932 vca_sess.cpp:3943 vca_sess.cpp:4676 vca_sess.cpp:4856
+#: vca_sess.cpp:5020 vca_sess.cpp:5047 vca_sess.cpp:5286 web_vision.cpp:441
+#: web_vision.cpp:535 web_vision.cpp:602
 msgid "200 OK"
 msgstr ""
 
@@ -100,8 +103,8 @@ msgstr ""
 msgid "/%2fico"
 msgstr ""
 
-#: vca_sess.cpp:91 vca_sess.cpp:3932 vca_sess.cpp:3943 vca_sess.cpp:4669
-#: vca_sess.cpp:4852 vca_sess.cpp:5013
+#: vca_sess.cpp:91 vca_sess.cpp:3932 vca_sess.cpp:3943 vca_sess.cpp:4676
+#: vca_sess.cpp:4856 vca_sess.cpp:5020 vca_sess.cpp:5047 vca_sess.cpp:5286
 msgid "image/png"
 msgstr ""
 
@@ -110,7 +113,7 @@ msgid "pgOpenList"
 msgstr ""
 
 #: vca_sess.cpp:96 vca_sess.cpp:99 vca_sess.cpp:118 vca_sess.cpp:120
-#: vca_sess.cpp:5258 vca_sess.cpp:5262 vca_sess.cpp:5301 vca_sess.cpp:5310
+#: vca_sess.cpp:5578 vca_sess.cpp:5582 vca_sess.cpp:5626 vca_sess.cpp:5635
 msgid "tm"
 msgstr ""
 
@@ -123,7 +126,7 @@ msgstr ""
 msgid "/%2fserv%2fpg"
 msgstr ""
 
-#: vca_sess.cpp:99 vca_sess.cpp:120 vca_sess.cpp:5259 vca_sess.cpp:5306
+#: vca_sess.cpp:99 vca_sess.cpp:120 vca_sess.cpp:5579 vca_sess.cpp:5631
 msgid "0"
 msgstr ""
 
@@ -158,7 +161,8 @@ msgid "/wdg_"
 msgstr ""
 
 #: vca_sess.cpp:137 vca_sess.cpp:234 vca_sess.cpp:3972 vca_sess.cpp:3973
-#: vca_sess.cpp:3974 vca_sess.cpp:5164 vca_sess.cpp:5165 vca_sess.cpp:5175
+#: vca_sess.cpp:3974 vca_sess.cpp:5267 vca_sess.cpp:5446 vca_sess.cpp:5447
+#: vca_sess.cpp:5457 vca_sess.cpp:5467 vca_sess.cpp:5468 vca_sess.cpp:5480
 #: web_vision.cpp:479
 msgid "id"
 msgstr ""
@@ -167,7 +171,7 @@ msgstr ""
 msgid "res"
 msgstr ""
 
-#: vca_sess.cpp:156 vca_sess.cpp:5175
+#: vca_sess.cpp:156 vca_sess.cpp:5457
 msgid "val"
 msgstr ""
 
@@ -192,7 +196,8 @@ msgstr ""
 msgid "Diagram"
 msgstr ""
 
-#: vca_sess.cpp:179 vca_sess.cpp:204 vca_sess.cpp:3971 vca_sess.cpp:5163
+#: vca_sess.cpp:179 vca_sess.cpp:204 vca_sess.cpp:3971 vca_sess.cpp:5266
+#: vca_sess.cpp:5445 vca_sess.cpp:5466
 #, c-format
 msgid "/%2fserv%2fattr"
 msgstr ""
@@ -220,7 +225,8 @@ msgstr ""
 msgid "attrs"
 msgstr ""
 
-#: vca_sess.cpp:202 vca_sess.cpp:3970 vca_sess.cpp:5162 web_vision.cpp:657
+#: vca_sess.cpp:202 vca_sess.cpp:3970 vca_sess.cpp:5265 vca_sess.cpp:5444
+#: vca_sess.cpp:5465 web_vision.cpp:657
 msgid "set"
 msgstr ""
 
@@ -293,27 +299,27 @@ msgstr ""
 "По крайней мере одна из элементарных фигур, из которых состоит 'заливка', "
 "вне пределов области рисования. 'Заливка' не нарисована."
 
-#: vca_sess.cpp:3924 vca_sess.cpp:3955 vca_sess.cpp:4674
+#: vca_sess.cpp:3924 vca_sess.cpp:3955 vca_sess.cpp:4681 vca_sess.cpp:5052
 msgid "xSc"
 msgstr ""
 
-#: vca_sess.cpp:3926 vca_sess.cpp:3957 vca_sess.cpp:4676
+#: vca_sess.cpp:3926 vca_sess.cpp:3957 vca_sess.cpp:4683 vca_sess.cpp:5054
 msgid "ySc"
 msgstr ""
 
-#: vca_sess.cpp:3952 vca_sess.cpp:5022
+#: vca_sess.cpp:3952 vca_sess.cpp:5295
 msgid "sub"
 msgstr ""
 
-#: vca_sess.cpp:3953 vca_sess.cpp:5023
+#: vca_sess.cpp:3953 vca_sess.cpp:5296
 msgid "point"
 msgstr ""
 
-#: vca_sess.cpp:3959 vca_sess.cpp:5025
+#: vca_sess.cpp:3959 vca_sess.cpp:5298
 msgid "x"
 msgstr ""
 
-#: vca_sess.cpp:3961 vca_sess.cpp:5027
+#: vca_sess.cpp:3961 vca_sess.cpp:5300
 msgid "y"
 msgstr ""
 
@@ -322,7 +328,8 @@ msgid "key"
 msgstr ""
 
 #: vca_sess.cpp:3972 vca_sess.cpp:3973 vca_sess.cpp:3974 vca_sess.cpp:3996
-#: vca_sess.cpp:5048 vca_sess.cpp:5164 vca_sess.cpp:5165 vca_sess.cpp:5175
+#: vca_sess.cpp:5267 vca_sess.cpp:5326 vca_sess.cpp:5446 vca_sess.cpp:5447
+#: vca_sess.cpp:5457 vca_sess.cpp:5467 vca_sess.cpp:5468 vca_sess.cpp:5480
 msgid "el"
 msgstr ""
 
@@ -342,12 +349,12 @@ msgstr ""
 msgid "focus"
 msgstr ""
 
-#: vca_sess.cpp:3974 vca_sess.cpp:5304 web_vision.cpp:279 web_vision.cpp:455
+#: vca_sess.cpp:3974 vca_sess.cpp:5629 web_vision.cpp:279 web_vision.cpp:455
 #: web_vision.cpp:470
 msgid "1"
 msgstr ""
 
-#: vca_sess.cpp:3997 vca_sess.cpp:5049
+#: vca_sess.cpp:3997 vca_sess.cpp:5327
 msgid "p"
 msgstr ""
 
@@ -369,7 +376,7 @@ msgid "w%d"
 msgstr ""
 
 #: vca_sess.cpp:4176 vca_sess.cpp:4190 vca_sess.cpp:4303 vca_sess.cpp:4317
-#: vca_sess.cpp:4468 vca_sess.cpp:4482 vca_sess.cpp:4791
+#: vca_sess.cpp:4468 vca_sess.cpp:4482 vca_sess.cpp:4793
 #, c-format
 msgid "%d"
 msgstr ""
@@ -402,128 +409,150 @@ msgstr ""
 msgid "i%d"
 msgstr ""
 
-#: vca_sess.cpp:4700
+#: vca_sess.cpp:4707 vca_sess.cpp:5079
 msgid "000000"
 msgstr ""
 
-#: vca_sess.cpp:4748 vca_sess.cpp:4790
+#: vca_sess.cpp:4752 vca_sess.cpp:4793
 #, c-format
 msgid "%d-%02d-%d"
 msgstr ""
 
-#: vca_sess.cpp:4750 vca_sess.cpp:4793
+#: vca_sess.cpp:4753 vca_sess.cpp:4795
 #, c-format
 msgid "%d:%02d"
 msgstr ""
 
-#: vca_sess.cpp:4752 vca_sess.cpp:4795
+#: vca_sess.cpp:4754 vca_sess.cpp:4798
 #, c-format
 msgid "%d:%02d:%02d"
 msgstr ""
 
-#: vca_sess.cpp:4753 vca_sess.cpp:4798
+#: vca_sess.cpp:4755 vca_sess.cpp:4801
 #, c-format
 msgid "%d:%02d:%g"
 msgstr ""
 
-#: vca_sess.cpp:4796
+#: vca_sess.cpp:4798
 #, c-format
 msgid "%ds"
-msgstr ""
+msgstr "%dс"
 
-#: vca_sess.cpp:4799
+#: vca_sess.cpp:4802
 #, c-format
 msgid "%gs"
-msgstr ""
+msgstr "%gс"
 
-#: vca_sess.cpp:4800
+#: vca_sess.cpp:4803
 #, c-format
 msgid "%gms"
+msgstr "%gмс"
+
+#: vca_sess.cpp:4913 vca_sess.cpp:5118 vca_sess.cpp:5134 vca_sess.cpp:5201
+#, c-format
+msgid "%0.4g"
 msgstr ""
 
-#: vca_sess.cpp:5107
+#: vca_sess.cpp:4913 vca_sess.cpp:5201
+msgid " %"
+msgstr ""
+
+#: vca_sess.cpp:5118
+msgid "kHz"
+msgstr "кГц"
+
+#: vca_sess.cpp:5118
+msgid "Hz"
+msgstr "Гц"
+
+#: vca_sess.cpp:5267 vca_sess.cpp:5480
+#, c-format
+msgid "prm%dval"
+msgstr ""
+
+#: vca_sess.cpp:5387
 msgid "Arial"
 msgstr ""
 
-#: vca_sess.cpp:5110
+#: vca_sess.cpp:5390
 #, c-format
 msgid "%100s %d %d %d"
 msgstr ""
 
-#: vca_sess.cpp:5113
+#: vca_sess.cpp:5393
 msgid ":bold"
 msgstr ""
 
-#: vca_sess.cpp:5114
+#: vca_sess.cpp:5394
 msgid ":italic"
 msgstr ""
 
-#: vca_sess.cpp:5117
+#: vca_sess.cpp:5397
 msgid "Test"
 msgstr ""
 
-#: vca_sess.cpp:5164
+#: vca_sess.cpp:5446 vca_sess.cpp:5467
 msgid "curSek"
 msgstr ""
 
-#: vca_sess.cpp:5165
+#: vca_sess.cpp:5447 vca_sess.cpp:5468
 msgid "curUSek"
 msgstr ""
 
-#: vca_sess.cpp:5175
+#: vca_sess.cpp:5457
 msgid "prm"
 msgstr ""
 
-#: vca_sess.cpp:5239 web_vision.cpp:643
+#: vca_sess.cpp:5559 web_vision.cpp:643
 msgid "info"
 msgstr ""
 
-#: vca_sess.cpp:5240 vca_sess.cpp:5299
+#: vca_sess.cpp:5560 vca_sess.cpp:5624
 msgid "arch"
 msgstr ""
 
-#: vca_sess.cpp:5240 vca_sess.cpp:5257 vca_sess.cpp:5300
+#: vca_sess.cpp:5560 vca_sess.cpp:5577 vca_sess.cpp:5625
 #, c-format
 msgid "/%2fserv%2fval"
 msgstr ""
 
-#: vca_sess.cpp:5241 vca_sess.cpp:5245
+#: vca_sess.cpp:5561 vca_sess.cpp:5565
 msgid "vtp"
 msgstr ""
 
-#: vca_sess.cpp:5246
+#: vca_sess.cpp:5566
 msgid "beg"
 msgstr ""
 
-#: vca_sess.cpp:5247
+#: vca_sess.cpp:5567
 msgid "end"
 msgstr ""
 
-#: vca_sess.cpp:5248 vca_sess.cpp:5303 vca_sess.cpp:5311
+#: vca_sess.cpp:5568 vca_sess.cpp:5628 vca_sess.cpp:5636
 msgid "per"
 msgstr ""
 
-#: vca_sess.cpp:5259 vca_sess.cpp:5302 vca_sess.cpp:5309
+#: vca_sess.cpp:5579 vca_sess.cpp:5627 vca_sess.cpp:5634
 msgid "tm_grnd"
 msgstr ""
 
-#: vca_sess.cpp:5304
+#: vca_sess.cpp:5629
 msgid "mode"
 msgstr ""
 
-#: vca_sess.cpp:5305
+#: vca_sess.cpp:5630
 msgid "real_prec"
 msgstr ""
 
-#: vca_sess.cpp:5305
+#: vca_sess.cpp:5630
 msgid "6"
 msgstr ""
 
-#: vca_sess.cpp:5306
+#: vca_sess.cpp:5631
 msgid "round_perc"
 msgstr ""
 
-#: vca_sess.cpp:5318
+#: vca_sess.cpp:5643
 #, c-format
 msgid "%d %lf"
 msgstr ""

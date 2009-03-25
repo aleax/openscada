@@ -27,6 +27,8 @@
 #include <deque>
 #include <vector>
 
+#include <fftw3.h>
+
 #include <QObject>
 #include <QMap>
 #include <QVariant>
@@ -277,7 +279,7 @@ class ShapeDiagram : public WdgShape
 
     public:
 	//Data
-	//- Trend object's class -
+	//> Trend object's class
 	class TrendObj
 	{
 	    public:
@@ -291,6 +293,7 @@ class ShapeDiagram : public WdgShape
 		};
 		//Methods
 		TrendObj( WdgView *view );
+		~TrendObj( );
 
 		string	addr( )		{ return m_addr; }
 		double	bordL( )	{ return m_bord_low; }
@@ -310,6 +313,13 @@ class ShapeDiagram : public WdgShape
 		void setCurVal( double vl )	{ m_curvl = vl; }
 
 		void loadData( bool full = false );
+		void loadTrendsData( bool full = false );
+		void loadSpectrumData( bool full = false );
+
+		//Attributes
+		//> FFT
+		int		fftN;		//Spectrum samples number
+		fftw_complex	*fftOut;	//Spectrum out buffer, size = fftN/2+1
 
 	    private:
 		//Attributes
@@ -317,17 +327,17 @@ class ShapeDiagram : public WdgShape
 		double m_bord_low, m_bord_up;	//Borders
 		double		m_curvl;	//Curent value
 		string		m_color;	//Values line color
-		//- Archive -
+		//> Archive
 		int		arh_per;	//Archive period
 		long long	arh_beg;	//Archive begin time
 		long long	arh_end;	//Archive end time
-		//- Values -
+		//> Values
 		int		val_tp;		//Values type
 		deque<SHg>	vals;		//Values buffer
 
 		WdgView 	*view;
 	};
-	//- Shape node date -
+	//> Shape node date
 	class ShpDt
 	{
 	    public:
@@ -337,6 +347,7 @@ class ShapeDiagram : public WdgShape
 		//Attributes
 		short	en		:1;
 		short	active		:1;
+		short	type		:3;
 		short	holdCur		:1;
 		short	geomMargin	:8;
 		short	bordStyle	:5;
@@ -354,6 +365,7 @@ class ShapeDiagram : public WdgShape
 		vector<TrendObj>	prms;
 		long long	tTime, tPict, curTime;
 		float		tSize;
+		float		fftBeg, fftEnd;
 		string		valArch;
 	};
 
@@ -371,8 +383,11 @@ class ShapeDiagram : public WdgShape
 
     private:
 	//Methods
+	void makePicture( WdgView *view );
 	void makeTrendsPicture( WdgView *view );
-	void loadTrendsData( WdgView *view, bool full = false );
+	void makeSpectrumPicture( WdgView *view );
+
+	void loadData( WdgView *view, bool full = false );
 	void setCursor( WdgView *view, long long itm );
 };
 

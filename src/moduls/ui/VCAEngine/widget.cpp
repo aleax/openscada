@@ -426,7 +426,8 @@ void Widget::attrAdd( TFld *attr, int pos, bool inher )
     if( attrPresent(anm) )
     {
 	delete attr;
-	throw TError(nodePath().c_str(),_("Attribut %s is already present."),anm.c_str());
+	return;
+	//throw TError(nodePath().c_str(),_("Attribut %s is already present."),anm.c_str());
     }
     attr_cfg.fldAdd(attr,pos);
     if( inher )	inheritAttr(anm);
@@ -437,7 +438,8 @@ void Widget::attrDel( const string &attr )
     if( !attrPresent(attr) )	return;
     int flg = attrAt(attr).at().flgGlob();
     attr_cfg.fldDel(attr_cfg.fldId(attr));
-    //- Delete from inheritant wigets -
+
+    //> Delete from inheritant wigets
     if( !(flg&Attr::Mutable) )
 	for( int i_h = 0; i_h < m_herit.size(); i_h++ )
 	    if( m_herit[i_h].at().enable( ) )
@@ -450,7 +452,7 @@ bool Widget::attrChange( Attr &cfg, TVariant prev )
     if( cfg.flgGlob()&Attr::Active && !prev.isNull() && !parent().freeStat() )	parent().at().attrChange(cfg,prev);
     if( cfg.owner() != this )	return false;
 
-    //- Update heritors attributes -
+    //> Update heritors attributes
     for( int i_h = 0; i_h < m_herit.size(); i_h++ )
 	if( m_herit[i_h].at().enable( ) )
 	    m_herit[i_h].at().inheritAttr(cfg.id());

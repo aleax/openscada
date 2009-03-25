@@ -49,7 +49,7 @@ PROGRAMS = $(oscd_modul_PROGRAMS)
 am_ui_WebVision_so_OBJECTS = web_vision.$(OBJEXT) vca_sess.$(OBJEXT) \
 	VCAjs.$(OBJEXT)
 ui_WebVision_so_OBJECTS = $(am_ui_WebVision_so_OBJECTS)
-ui_WebVision_so_LDADD = $(LDADD)
+ui_WebVision_so_DEPENDENCIES =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -208,6 +208,7 @@ EXTRA_DIST = WebVisionVCA.js *.h po/* doc/*
 AM_CXXFLAGS = -I$(top_srcdir)/src -fPIC -DPIC
 AM_LDFLAGS = -shared -module
 ui_WebVision_so_SOURCES = web_vision.cpp vca_sess.cpp VCAjs.cpp
+ui_WebVision_so_LDADD = -lfftw3
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)UI.WebVision
@@ -225,9 +226,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/moduls/ui/WebVision/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/moduls/ui/WebVision/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  src/moduls/ui/WebVision/Makefile
+	  $(AUTOMAKE) --gnu  src/moduls/ui/WebVision/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \

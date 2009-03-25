@@ -389,7 +389,12 @@ if test ${ModVision} = true; then
     AC_MSG_RESULT(Build module: UI/Vision)
     AC_CONFIG_FILES(src/moduls/ui/Vision/Makefile)
     UISub_mod="${UISub_mod}Vision "
+    #--- Modules checkings ---
     QT4use=true;
+    AC_CHECK_HEADERS([fftw3.h],[],
+	[AC_MSG_ERROR(UI/Vision: Some FFTW3 headers not found. Install or check FFTW3 developing package!)])
+    AC_CHECK_LIB([fftw3],[fftw_execute],[AC_MSG_NOTICE(Pass global library using)],
+	[AC_MSG_ERROR(FFTW3 library not found. Install or check FFTW3 library package!)])
 fi
 if test ${ModQTStarter} = true; then
     AC_MSG_RESULT(Build module: UI/QTStarter)
@@ -417,6 +422,11 @@ if test ${ModWebVision} = true; then
     AC_MSG_RESULT(Build module: UI/WebVision)
     AC_CONFIG_FILES(src/moduls/ui/WebVision/Makefile)
     UISub_mod="${UISub_mod}WebVision "
+    #--- Modules checkings ---
+    AC_CHECK_HEADERS([fftw3.h],[],
+	[AC_MSG_ERROR(UI/WebVision: Some FFTW3 headers not found. Install or check FFTW3 developing package!)])
+    AC_CHECK_LIB([fftw3],[fftw_execute],[AC_MSG_NOTICE(Pass global library using)],
+	[AC_MSG_ERROR(FFTW3 library not found. Install or check FFTW3 library package!)])
 fi
 AC_MSG_RESULT(===========================================)
 

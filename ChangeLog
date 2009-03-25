@@ -1,3 +1,14 @@
+2009-03-25 Roman
+- !!!!:/UI/VCAEngine, /UI/Vision, /UI/WebVision: Spectrum type view is added to primitive "Diagram". Spectrum building is based on FFTW3 library.
+- !:/UI/Vision, /UI/WebVision: Trends build algorithm is updated for primitive "Diagram".
+- /UI/Vision: Disable QTStarter's toolbar for development mode.
+- FIX:/UI/WebVision: Not full working checkbox of primitive "FormEl" is fixed.
+- FIX:/UI/VCAEngine: The "aScale" attribute removing for parameter's of primitive "Diagram" is fixed.
+- !:/Archive: Values trends build algorithm is updated.
+- !:/DAQ/JavaLikeCalc: Specials IO support is added. To controller's calc procedure is added special IO "f_frq", "f_start" and "f_stop".
+- /DemoDB: Spectrum view is added for the graphics view pages.
+
+
 2009-03-20 Roman
 - FIX:/UI/Vision: Not resolved function VISION::ShapeDocument::tracing() is removed.
 - FIX:/UI/Vision,/UI/WebVision: Not display hour:minute on x-axis on trend of primitive "Diagram" for 48 hour trend's size is fixed.

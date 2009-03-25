@@ -7,6 +7,7 @@ AM_LDFLAGS= -shared -module
 
 oscd_modul_PROGRAMS = ui_WebVision.so
 ui_WebVision_so_SOURCES = web_vision.cpp vca_sess.cpp VCAjs.cpp
+ui_WebVision_so_LDADD = -lfftw3
 
 VCAjs.cpp: WebVisionVCA.js
 	@lc=`cat $< | wc -l` ; \

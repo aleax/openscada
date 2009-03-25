@@ -594,7 +594,7 @@ void OrigDiagram::postEnable( int flag )
 	attrAdd( new TFld("bordStyle",_("Border:style"),TFld::Integer,TFld::Selected,"","3","0;1;2;3;4;5;6;7;8",
 						_("None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"),"24") );
 	attrAdd( new TFld("trcPer",_("Tracing period (s)"),TFld::Integer,TFld::NoFlag,"","0","0;360","","25") );
-	attrAdd( new TFld("type",_("Type"),TFld::Integer,TFld::Selected|Attr::Active,"1","0","0",_("Trend"),"26") );
+	attrAdd( new TFld("type",_("Type"),TFld::Integer,TFld::Selected|Attr::Active,"1","0","0;1",_("Trend;Spectrum"),"26") );
     }
 }
 
@@ -602,8 +602,7 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 {
     if( !(cfg.flgGlob()&Attr::Active) )	return Widget::attrChange(cfg,prev);
 
-    if( cfg.id() == "active" && cfg.getB() != prev.getB() && cfg.owner()->attrPresent("type") &&
-	cfg.owner()->attrAt("type").at().getI() == 0 )
+    if( cfg.id() == "active" && cfg.getB() != prev.getB() )
     {
 	if( !cfg.getB() )
 	{
@@ -620,10 +619,11 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
     }
     else if( cfg.id() == "type" )
     {
-	//- Delete specific attributes -
+	//> Delete specific attributes
 	switch( prev.getI() )
 	{
-	    case 0:
+	    case 0: case 1:
+		if( cfg.getI() == 0 || cfg.getI() == 1 ) break;
 		cfg.owner()->attrDel("tSek");
 		cfg.owner()->attrDel("tUSek");
 		cfg.owner()->attrDel("tSize");
@@ -640,10 +640,10 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 		break;
 	}
 
-	//- Create specific attributes -
-	switch(cfg.getI())
+	//> Create specific attributes
+	switch( cfg.getI() )
 	{
-	    case 0:
+	    case 0: case 1:
 		cfg.owner()->attrAdd( new TFld("tSek",_("Time:sek"),TFld::Integer,Attr::DataTime|Attr::Mutable,"","","","","27") );
 		cfg.owner()->attrAdd( new TFld("tUSek",_("Time:usek"),TFld::Integer,Attr::Mutable,"","","","","28") );
 		cfg.owner()->attrAdd( new TFld("tSize",_("Size, sek"),TFld::Real,Attr::Mutable,"","60","0;3000000","","29") );
@@ -668,7 +668,7 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
     else if( cfg.id() == "parNum" )
     {
 	string fid("prm"), fnm(_("Parametr ")), fidp, fnmp;
-	//- Delete specific unnecessary attributes of parameters -
+	//> Delete specific unnecessary attributes of parameters
 	for( int i_p = 0; true; i_p++ )
 	{
 	    fidp = fid+TSYS::int2str(i_p);
@@ -678,11 +678,12 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 		cfg.owner()->attrDel(fidp+"addr");
 		cfg.owner()->attrDel(fidp+"bordL");
 		cfg.owner()->attrDel(fidp+"bordU");
+		cfg.owner()->attrDel(fidp+"aScale");
 		cfg.owner()->attrDel(fidp+"color");
 		cfg.owner()->attrDel(fidp+"val");
 	    }
 	}
-	//- Create ullage attributes of parameters -
+	//> Create ullage attributes of parameters
 	for( int i_p = 0; i_p < cfg.getI(); i_p++ )
 	{
 	    fidp = fid+TSYS::int2str(i_p);

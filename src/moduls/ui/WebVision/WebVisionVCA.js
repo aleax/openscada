@@ -948,7 +948,7 @@ function makeEl( pgBr, inclPg )
 	formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 	formObj.type='checkbox'; formObj.checked=parseInt(this.attrs['value']);
 	formObj.wdgLnk = this;
-	formObj.onchange = function( ) { var attrs = new Object(); attrs.value = (this.checked)?'1':'0'; attrs.event = 'ws_ChkChange'; setWAttrs(this.wdgLnk.addr,attrs); }
+	formObj.onclick = function( ) { var attrs = new Object(); attrs.value = (this.checked)?'1':'0'; attrs.event = 'ws_ChkChange'; setWAttrs(this.wdgLnk.addr,attrs); return true; }
 	tblCell.appendChild(formObj); tblCell.appendChild(this.place.ownerDocument.createTextNode(this.attrs['name'])); this.place.appendChild(tblCell);
 	break;
       case 3:	//Button

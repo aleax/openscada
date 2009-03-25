@@ -25,6 +25,8 @@
 
 #include <gd.h>
 
+#include <fftw3.h>
+
 #include <string>
 #include <vector>
 #include <map>
@@ -201,23 +203,29 @@ class VCADiagram : public VCAObj
 	void postReq( SSess &ses );
 	void setAttrs( XMLNode &node, const string &user );
 
+	void makeTrendsPicture( SSess &ses );
+	void makeSpectrumPicture( SSess &ses );
+
 	//Attributes
 	int		width,height,		//Widget geometry
-			tArX,tArY,tArW,tArH,	//Trend area geometry
-			geomMargin,		//Margin
-			bordWidth;		//Border width
-	bool		active,			//Active diagram
-			tTimeCurent;		//Curent time
+			tArX,tArY,tArW,tArH;	//Trend area geometry
+	short		active		:1;	//Active diagram
+	short		type		:3;	//Diagram type
+	short		bordWidth	:8;	//Border width
+	short		geomMargin	:8;	//Margin
+	short		tTimeCurent	:1;	//Curent time
+	short		trcPer		:10;	//Tracing period
+	short		sclHor		:4;	//Horisontal scale mode
+	short		sclVer		:4;	//Vertical scale mode
 	long long	tTime, curTime, tPict;	//Trend time, trend cursor's time position and picture time
-	int		trcPer;			//Tracing period
 	float		tSize;			//Trend size (s)
+	float		fftBeg, fftEnd;
 	int		curColor, 		//Cursor line color
 			sclColor,		//Scale grid color
 			sclMarkColor,		//Scale markers color
 			sclMarkFontSize;	//Scale markers font size
 	string		sclMarkFont,		//Scale markers font
 			valArch;		//Value archivator
-	int		sclHor, sclVer;		//Horisontal and Vertical scale mode 
 	time_t		lstTrc;			//Last trace
 
     private:
@@ -237,6 +245,7 @@ class VCADiagram : public VCAObj
 
 		//Methods
 		TrendObj( VCADiagram *owner );
+		~TrendObj( );
 
 		string addr( )		{ return m_addr; }
 		double bordL( )		{ return m_bord_low; }
@@ -256,8 +265,15 @@ class VCADiagram : public VCAObj
 		void setCurVal( double vl )	{ m_curvl = vl; }
 
 		void loadData( const string &user, bool full = false );
+		void loadTrendsData( const string &user, bool full );
+		void loadSpectrumData( const string &user, bool full );
 
 		VCADiagram &owner( );
+
+		//Attributes
+		//> FFT
+		int	fftN;			//Spectrum samples number
+		fftw_complex	*fftOut;	//Spectrum out buffer, size = fftN/2+1
 
 	    private:
 		//Attributes

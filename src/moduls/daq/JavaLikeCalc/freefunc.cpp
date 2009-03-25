@@ -193,6 +193,7 @@ void Func::saveIO( )
     cfg.cfg("F_ID").setS(id(),true);
     for( int i_io = 0; i_io < ioSize(); i_io++ )
     {
+	if( io(i_io)->flg()&Func::SysAttr ) continue;
 	cfg.cfg("ID").setS(io(i_io)->id());
 	cfg.cfg("NAME").setS(io(i_io)->name());
 	cfg.cfg("TYPE").setI(io(i_io)->type());

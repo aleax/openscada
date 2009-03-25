@@ -1395,7 +1395,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		    "Where:\n"
 		    "  dt - Modbus data type (R-register,C-coil,RI-input register,CI-input coil);\n"
 		    "  numb - ModBus device's data address (dec, hex or octal);\n"
-		    "  wr - read-write mode (r-read; w-write; rw-readwrite);\n"
+		    "  rw - read-write mode (r-read; w-write; rw-readwrite);\n"
 		    "  id - created attribute identifier;\n"
 		    "  name - created attribute name.\n"
 		    "Example:\n"

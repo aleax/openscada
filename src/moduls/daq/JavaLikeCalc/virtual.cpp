@@ -364,7 +364,7 @@ void Contr::postDisable(int flag)
     {
 	if( flag )
 	{
-	    //- Delete IO value's table -
+	    //> Delete IO value's table
 	    string db = DB()+"."+TController::id()+"_val";
 	    SYS->db().at().open(db);
 	    SYS->db().at().close(db,true);
@@ -411,14 +411,22 @@ void Contr::loadFunc( )
     {
 	((Func *)func())->load();
 
+	//> Creating special IO
+	if( func()->ioId("f_frq") < 0 ) func()->ioIns( new IO("f_frq",_("Function calculate frequency (Hz)"),IO::Real,Func::SysAttr,"1000",false),0);
+	if( func()->ioId("f_start") < 0 ) func()->ioIns( new IO("f_start",_("Function start flag"),IO::Boolean,Func::SysAttr,"0",false),1);
+	if( func()->ioId("f_stop") < 0 ) func()->ioIns( new IO("f_stop",_("Function stop flag"),IO::Boolean,Func::SysAttr,"0",false),2);
+
 	//> Load values
 	TConfig cfg(&mod->elVal());
 	string bd_tbl = TController::id()+"_val";
 	string bd = DB()+"."+bd_tbl;
 
 	for( int fld_cnt=0; SYS->db().at().dataSeek(bd,mod->nodePath()+bd_tbl,fld_cnt++,cfg); )
-	    if( func()->ioId(cfg.cfg("ID").getS()) >= 0 )
-		setS(func()->ioId(cfg.cfg("ID").getS()),cfg.cfg("VAL").getS());
+	{
+	    int ioId = func()->ioId(cfg.cfg("ID").getS());
+	    if( ioId < 0 || func()->io(ioId)->flg()&Func::SysAttr ) continue;
+	    setS(ioId,cfg.cfg("VAL").getS());
+	}
     }
 }
 
@@ -436,6 +444,7 @@ void Contr::save_( )
 	string val_bd = DB()+"."+bd_tbl;
 	for( int iio = 0; iio < ioSize(); iio++ )
 	{
+	    if( func()->io(iio)->flg()&Func::SysAttr ) continue;
 	    cfg.cfg("ID").setS(func()->io(iio)->id());
 	    cfg.cfg("VAL").setS(getS(iio));
 	    SYS->db().at().dataSet(val_bd,mod->nodePath()+bd_tbl,cfg);
@@ -499,21 +508,29 @@ void *Contr::Task( void *icntr )
     cntr.endrun_req = false;
     cntr.prc_st = true;
 
-    while(!cntr.endrun_req)
+    bool is_start = true;
+    bool is_stop  = false;
+
+    while( true )
     {
+	//> Setting special IO
+	int ioI = cntr.ioId("f_frq");	if( ioI >= 0 ) cntr.setR(ioI,(float)cntr.iterate()*1000/(float)cntr.period());
+	ioI = cntr.ioId("f_start");	if( ioI >= 0 ) cntr.setB(ioI,is_start);
+	ioI = cntr.ioId("f_stop");	if( ioI >= 0 ) cntr.setB(ioI,is_stop);
+
 	for( int i_it = 0; i_it < cntr.mIter; i_it++ )
-	    try
-	    {
-		cntr.calc();
-		cntr.modif();
-	    }
+	    try { cntr.calc(); }
 	    catch(TError err)
 	    {
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str() ); 
 		mess_err(cntr.nodePath().c_str(),_("Calc controller's function error."));
 	    }
 
+	if( is_stop ) break;
 	TSYS::taskSleep((long long)cntr.period()*1000000);
+	if( cntr.endrun_req ) is_stop = true;
+	is_start = false;
+	cntr.modif();
     }
 
     cntr.prc_st = false;
@@ -528,7 +545,7 @@ TParamContr *Contr::ParamAttach( const string &name, int type )
 
 void Contr::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	TController::cntrCmdProc(opt);
@@ -603,7 +620,13 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"ins",0664,"root","root",SEQ_WR) )
 	{ ((Func *)func())->ioIns( new IO("new","New IO",IO::Real,IO::Default), atoi(opt->attr("row").c_str()) ); modif(); }
 	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )
-	{ ((Func *)func())->ioDel( atoi(opt->attr("row").c_str()) ); modif(); }
+	{
+	    int row = atoi(opt->attr("row").c_str());
+	    if( func()->io(row)->flg()&Func::SysAttr )
+		throw TError(nodePath().c_str(),_("Deleting lock atribute in not allow."));
+	    ((Func *)func())->ioDel( row ); 
+	    modif();
+	}
 	if( ctrChkNode(opt,"move",0664,"root","root",SEQ_WR) )
 	{ ((Func *)func())->ioMove( atoi(opt->attr("row").c_str()), atoi(opt->attr("to").c_str()) ); modif(); }
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
@@ -612,7 +635,9 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	    int col = atoi(opt->attr("col").c_str());
 	    if( (col == 0 || col == 1) && !opt->text().size() )
 		throw TError(nodePath().c_str(),_("Empty value is not valid."));
-	    switch(col)
+	    if( func()->io(row)->flg()&Func::SysAttr )
+		throw TError(nodePath().c_str(),_("Changing locked atribute is not allowed."));
+	    switch( col )
 	    {
 		case 0:	func()->io(row)->setId(opt->text());	break;
 		case 1:	func()->io(row)->setName(opt->text());	break;

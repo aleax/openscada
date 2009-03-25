@@ -4622,17 +4622,24 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
     }
 }
 
-
-
 //*************************************************
 //* VCADiagram                                    *
 //*************************************************
-VCADiagram::VCADiagram( const string &iid ) : VCAObj(iid), tTimeCurent(false), tTime(0), lstTrc(false)
+VCADiagram::VCADiagram( const string &iid ) : VCAObj(iid), tTimeCurent(false), tTime(0), lstTrc(false), type(0)
 {
 
 }
 
 void VCADiagram::getReq( SSess &ses )
+{
+    switch( type )
+    {
+	case 0:	makeTrendsPicture(ses);		break;
+	case 1:	makeSpectrumPicture(ses);	break;
+    }
+}
+
+void VCADiagram::makeTrendsPicture( SSess &ses )
 {
     ResAlloc res(mRes,true);
 
@@ -4708,20 +4715,17 @@ void VCADiagram::getReq( SSess &ses )
 	}
     }
     //> Calc horizontal scale
-    long long aVend;							//Corrected for allow data the trend end point
-    long long aVbeg;							//Corrected for allow data the trend begin point
-    long long hDiv = 1, hDivBase = 1;					//Horisontal scale divisor
-
-    int hmax_ln = tArW / (int)(((sclHor&0x2)?(brect[2]-brect[6]):15.0)*vmin(xSc,ySc));
+    long long hDiv = 1;					//Horisontal scale divisor
+    int hmax_ln = tArW / (int)((sclHor&0x2)?(brect[2]-brect[6]):15.0*vmin(xSc,ySc));
     if( hmax_ln >= 2 )
     {
 	int hvLev = 0;
 	long long hLen = tEnd - tBeg;
-	if( hLen/86400000000ll >= 2 )    { hvLev = 5; hDivBase = hDiv = 86400000000ll; }	//Days
-	else if( hLen/3600000000ll >= 2 ){ hvLev = 4; hDivBase = hDiv =  3600000000ll; }	//Hours
-	else if( hLen/60000000 >= 2 )    { hvLev = 3; hDivBase = hDiv =    60000000; }		//Minutes
-	else if( hLen/1000000 >= 2 )     { hvLev = 2; hDivBase = hDiv =     1000000; }		//Seconds
-	else if( hLen/1000 >= 2 )        { hvLev = 1; hDivBase = hDiv =        1000; }		//Milliseconds
+	if( hLen/86400000000ll >= 2 )    { hvLev = 5; hDiv = 86400000000ll; }	//Days
+	else if( hLen/3600000000ll >= 2 ){ hvLev = 4; hDiv =  3600000000ll; }	//Hours
+	else if( hLen/60000000 >= 2 )    { hvLev = 3; hDiv =    60000000; }	//Minutes
+	else if( hLen/1000000 >= 2 )     { hvLev = 2; hDiv =     1000000; }	//Seconds
+	else if( hLen/1000 >= 2 )        { hvLev = 1; hDiv =        1000; }	//Milliseconds
 	while( hLen/hDiv > hmax_ln )     hDiv *= 10;
 	while( hLen/hDiv < hmax_ln/2 )   hDiv /= 2;
 	if( hLen/hDiv >= 5 && trcPer )
@@ -4735,7 +4739,7 @@ void VCADiagram::getReq( SSess &ses )
 	{
 	    time_t tm_t;
 	    struct tm ttm, ttm1;
-	    char lab_tm[50], lab_dt[50];
+	    string lab_tm, lab_dt;
 	    //>>> Draw generic grid line
 	    gdImageLine(im,tArX,tArY+tArH,tArX+tArW,tArY+tArH,clr_grid);
 	    //>>> Draw full trend's data and time to the trend end position
@@ -4745,20 +4749,18 @@ void VCADiagram::getReq( SSess &ses )
 	    {
 		tm_t = tPict/1000000;
 		localtime_r(&tm_t,&ttm);
-		snprintf(lab_dt,sizeof(lab_dt),"%d-%02d-%d",ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900);
-		if( ttm.tm_sec == 0 && tPict%1000000 == 0 )
-		    snprintf(lab_tm,sizeof(lab_tm),"%d:%02d",ttm.tm_hour,ttm.tm_min);
-		else if( tPict%1000000 == 0 )
-		    snprintf(lab_tm,sizeof(lab_tm),"%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec);
-		else snprintf(lab_tm,sizeof(lab_tm),"%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(tPict%1000000)/1e6);
-		gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,lab_dt);
+		lab_dt = TSYS::strMess("%d-%02d-%d",ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900);
+		if( ttm.tm_sec == 0 && tPict%1000000 == 0 ) lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
+		else if( tPict%1000000 == 0 ) lab_tm = TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec);
+		else lab_tm = TSYS::strMess("%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(tPict%1000000)/1e6);
+		gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)lab_dt.c_str());
 		int markBrd = tArX+tArW-(brect[2]-brect[6]);
 		endMarkBrd = markBrd;
-		gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,markBrd,tArY+tArH+3+2*(brect[3]-brect[7]),lab_dt);
-		gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,lab_tm);
+		gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,markBrd,tArY+tArH+3+2*(brect[3]-brect[7]),(char*)lab_dt.c_str());
+		gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)lab_tm.c_str());
 		markBrd = tArX+tArW-(brect[2]-brect[6]);
 		endMarkBrd = vmin(endMarkBrd,markBrd);
-		gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,markBrd,tArY+tArH+3+(brect[3]-brect[7]),lab_tm);
+		gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,markBrd,tArY+tArH+3+(brect[3]-brect[7]),(char*)lab_tm.c_str());
 	    }
 
 	    //>>> Draw grid and/or markers
@@ -4785,39 +4787,40 @@ void VCADiagram::getReq( SSess &ses )
 			else chLev = 0;
 		    }
 		    //Check for data present
-		    lab_dt[0] = lab_tm[0] = 0;
-		    if( hvLev == 5 || chLev >= 4 )					//Date
-			(chLev>=5 || chLev==-1) ? snprintf(lab_dt,sizeof(lab_dt),"%d-%02d-%d",ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900) :
-				     snprintf(lab_dt,sizeof(lab_dt),"%d",ttm.tm_mday);
-		    if( (hvLev == 4 || hvLev == 3 || ttm.tm_hour || ttm.tm_min) && !ttm.tm_sec )	//Hours and minuts
-			snprintf(lab_tm,sizeof(lab_tm),"%d:%02d",ttm.tm_hour,ttm.tm_min);
-		    else if( (hvLev == 2 || ttm.tm_sec) && !(i_h%1000000) )		//Seconds
-			(chLev>=2 || chLev==-1) ? snprintf(lab_tm,sizeof(lab_tm),"%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec) :
-				     snprintf(lab_tm,sizeof(lab_tm),"%ds",ttm.tm_sec);
-		    else if( hvLev <= 1 || i_h%1000000 )				//Milliseconds
-			(chLev>=2 || chLev==-1) ? snprintf(lab_tm,sizeof(lab_tm),"%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(i_h%1000000)/1e6) :
-			(chLev>=1) ? snprintf(lab_tm,sizeof(lab_tm),"%gs",(float)ttm.tm_sec+(float)(i_h%1000000)/1e6) :
-				     snprintf(lab_tm,sizeof(lab_tm),"%gms",(double)(i_h%1000000)/1000.);
+		    lab_dt = lab_tm = "";
+		    //Date
+		    if( hvLev == 5 || chLev >= 4 )
+			lab_dt = (chLev>=5 || chLev==-1) ? TSYS::strMess("%d-%02d-%d",ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900) : TSYS::strMess("%d",ttm.tm_mday);
+		    //Hours and minuts
+		    if( (hvLev == 4 || hvLev == 3 || ttm.tm_hour || ttm.tm_min) && !ttm.tm_sec ) lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
+		    //Seconds
+		    else if( (hvLev == 2 || ttm.tm_sec) && !(i_h%1000000) )
+			lab_tm = (chLev>=2 || chLev==-1) ? TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec) : TSYS::strMess(_("%ds"),ttm.tm_sec);
+		    //Milliseconds
+		    else if( hvLev <= 1 || i_h%1000000 )
+			lab_tm = (chLev>=2 || chLev==-1) ? TSYS::strMess("%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(i_h%1000000)/1e6) :
+				 (chLev>=1) ? TSYS::strMess(_("%gs"),(float)ttm.tm_sec+(float)(i_h%1000000)/1e6) :
+					      TSYS::strMess(_("%gms"),(double)(i_h%1000000)/1000.);
 		    int wdth, tpos, endPosTm = 0, endPosDt = 0;
-		    if( lab_tm[0] )
+		    if( lab_tm.size() )
 		    {
-			gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,lab_tm);
+			gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)lab_tm.c_str());
 			wdth = brect[2]-brect[6];
 			tpos = vmax(h_pos-wdth/2,0);
 			if( (tpos+wdth) < endMarkBrd && tpos > begMarkBrd )
 			{
-			    gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tpos,tArY+tArH+3+(brect[3]-brect[7]),lab_tm);
+			    gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tpos,tArY+tArH+3+(brect[3]-brect[7]),(char*)lab_tm.c_str());
 			    endPosTm = tpos+wdth;
 			}
 		    }
-		    if( lab_dt[0] )
+		    if( lab_dt.size() )
 		    {
-			gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,lab_dt);
+			gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)lab_dt.c_str());
 			wdth = brect[2]-brect[6];
 			tpos = vmax(h_pos-wdth/2,0);
 			if( (tpos+wdth) < endMarkBrd && tpos > begMarkBrd )
 			{
-			    gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tpos,tArY+tArH+3+2*(brect[3]-brect[7]),lab_dt);
+			    gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tpos,tArY+tArH+3+2*(brect[3]-brect[7]),(char*)lab_dt.c_str());
 			    endPosDt = tpos+wdth;
 			}
 		    }
@@ -4833,8 +4836,9 @@ void VCADiagram::getReq( SSess &ses )
 	}
     }
 
-    //>>> Calc vertical scale
-    //>>>> Check for scale mode
+    //> Calc vertical scale
+    long long aVend;					//Corrected for allow data the trend end point
+    long long aVbeg;					//Corrected for allow data the trend begin point
     double vsMax = 100, vsMin = 0;      //Trend's vertical scale border
     bool   vsPerc = true;               //Vertical scale percent mode
     if( parNum == 1 )
@@ -4842,7 +4846,7 @@ void VCADiagram::getReq( SSess &ses )
 	vsPerc = false;
 	if( trnds[0].bordU() <= trnds[0].bordL() )
 	{
-	    //>>>>> Check trend for valid data
+	    //>> Check trend for valid data
 	    aVbeg = vmax(tBeg,trnds[0].valBeg());
 	    aVend = vmin(tEnd,trnds[0].valEnd());
 
@@ -4852,7 +4856,7 @@ void VCADiagram::getReq( SSess &ses )
 		ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page;
 		return;
 	    }
-	    //>>>>> Calc value borders
+	    //>> Calc value borders
 	    vsMax = -3e300, vsMin = 3e300;
 	    bool end_vl = false;
 	    int ipos = trnds[0].val(aVbeg);
@@ -4880,49 +4884,52 @@ void VCADiagram::getReq( SSess &ses )
 	else { vsMax = trnds[0].bordU(); vsMin = trnds[0].bordL(); }
     }
 
-    float vmax_ln = tArH / (int)(20.0*vmin(xSc,ySc));
+    float vmax_ln = tArH / ( (sclVer&0x2)?(2*mrkHeight):(int)(15.0*vmin(xSc,ySc)) );
     if( vmax_ln >= 2 )
     {
-	double vDiv = 1.;
+	double vDiv = 1;
 	double v_len = vsMax - vsMin;
-	while( v_len > vmax_ln )	{ vDiv*=10.; v_len/=10.; }
-	while( v_len < vmax_ln/10 )	{ vDiv/=10.; v_len*=10.; }
+	while( v_len > vmax_ln )	{ vDiv *= 10; v_len /= 10; }
+	while( v_len < vmax_ln/10 )	{ vDiv /= 10; v_len *= 10; }
 	vsMin = floor(vsMin/vDiv)*vDiv;
 	vsMax = ceil(vsMax/vDiv)*vDiv;
-	while(((vsMax-vsMin)/vDiv) < vmax_ln/2) vDiv/=2;
+	while( ((vsMax-vsMin)/vDiv) < vmax_ln/2 ) vDiv/=2;
 
-	//>>> Draw vertical grid and markers
+	//>> Draw vertical grid and markers
 	if( sclVer&0x3 )
 	{
-	    char lab_vl[50];
 	    gdImageLine(im,tArX,tArY,tArX,tArH,clr_grid);
-	    for( double i_v = vsMin; i_v <= vsMax; i_v+=vDiv )
+	    for( double i_v = vsMin; (vsMax-i_v)/vDiv > -0.1; i_v+=vDiv )
 	    {
-		//>>>> Draw grid
+		//>>> Draw grid
 		int v_pos = tArY+tArH-(int)((double)tArH*(i_v-vsMin)/(vsMax-vsMin));
 		if( sclVer&0x1 ) gdImageLine(im,tArX,v_pos,tArX+tArW,v_pos,clr_grid);
 		else gdImageLine(im,tArX-3,v_pos,tArX+3,v_pos,clr_grid);
-		//>>>> Draw markers
+		//>>> Draw markers
 		if( sclVer&0x2 )
-		    gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tArX+2,v_pos+((i_v==vsMax)?mrkHeight:0),(char*)TSYS::real2str(i_v).c_str());
+		{
+		    bool isMax = (fabs((vsMax-i_v)/vDiv) < 0.1);
+		    gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tArX+2,v_pos+(isMax?mrkHeight:0),
+			(char*)(TSYS::strMess("%0.4g",i_v)+((vsPerc&&isMax)?" %":"")).c_str());
+		}
 	    }
 	}
     }
 
-    //-- Draw trends --
+    //> Draw trends
     for( int i_t = 0; i_t < parNum; i_t++ )
     {
-	//--- Set trend's pen ---
+	//>> Set trend's pen
 	int clr_t = gdImageColorAllocate(im,(ui8)(trnds[i_t].color()>>16),(ui8)(trnds[i_t].color()>>8),(ui8)trnds[i_t].color());
 
-	//--- Prepare generic parameters ---
+	//>> Prepare generic parameters
 	aVbeg = vmax(tBeg,trnds[i_t].valBeg());
 	aVend = vmin(tEnd,trnds[i_t].valEnd());
 	if( aVbeg >= aVend ) continue;
 	int aPosBeg = trnds[i_t].val(aVbeg);;
 	if( aPosBeg && trnds[i_t].val()[aPosBeg].tm > aVbeg ) aPosBeg--;
 
-	//--- Prepare border for percent trend ---
+	//>> Prepare border for percent trend
 	float bordL = trnds[i_t].bordL();
 	float bordU = trnds[i_t].bordU();
 	if( vsPerc && bordL >= bordU )
@@ -4942,11 +4949,11 @@ void VCADiagram::getReq( SSess &ses )
 		ipos++;
 	    }
 	    float vMarg = (bordU-bordL)/10;
-	    bordL-= vMarg;
-	    bordU+= vMarg;
+	    bordL -= vMarg;
+	    bordU += vMarg;
 	}
 
-	//--- Draw trend ---
+	//>> Draw trend
 	bool	end_vl = false;
 	double	curVl, averVl = EVAL_REAL, prevVl = EVAL_REAL;
 	int	curPos, averPos = 0, prevPos = 0;
@@ -4997,16 +5004,282 @@ void VCADiagram::getReq( SSess &ses )
 	}
     }
 
-    //- Draw cursor -
+    //> Draw cursor
     if( active && curTime && tBeg && tPict && (curTime >= tBeg || curTime <= tPict) )
     {
-	//--- Set trend's pen ---
+	//>> Set trend's pen
 	int clr_cur = gdImageColorAllocate(im,(ui8)(curColor>>16),(ui8)(curColor>>8),(ui8)curColor);
 	int curPos = tArX+tArW*(curTime-tBeg)/(tPict-tBeg);
 	gdImageLine(im,curPos,tArY,curPos,tArY+tArH,clr_cur);
     }
 
-    //- Get image and transfer it -
+    //> Get image and transfer it
+    int img_sz;
+    char *img_ptr = (char *)gdImagePngPtr(im, &img_sz);
+    ses.page.assign(img_ptr,img_sz);
+    ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page;
+    gdFree(img_ptr);
+    gdImageDestroy(im);
+}
+
+void VCADiagram::makeSpectrumPicture( SSess &ses )
+{
+    ResAlloc res(mRes,true);
+
+    //> Check for trend's data reload
+    bool rld = true;
+    if( tTimeCurent )	tTime = (long long)time(NULL)*1000000;
+    else if( trcPer && lstTrc < time(NULL) )
+    { tTime += (time(NULL)-lstTrc)*1000000; lstTrc = time(NULL); }
+    else rld = false;
+    if( rld ) for( int i_p = 0; i_p < trnds.size(); i_p++ ) trnds[i_p].loadData(ses.user);
+
+    int mrkFontSize = 0;
+    int mrkHeight = 0;
+    int clr_grid, clr_mrk;						//Colors
+
+    //> Get generic parameters
+    long long tSz  = (long long)(tSize*1000000.);			//Time size (us)
+    long long tEnd = tTime;						//Time end point (us)
+    long long tBeg  = tEnd - tSz;					//Time begin point (us)
+    if( !trnds.size() || tSz <= 0 )
+    {
+	ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page;
+	return;
+    }
+
+    //> Get scale
+    map<string,string>::iterator prmEl = ses.prm.find("xSc");
+    double xSc = (prmEl!=ses.prm.end()) ? atof(prmEl->second.c_str()) : 1.0;
+    prmEl = ses.prm.find("ySc");
+    double ySc = (prmEl!=ses.prm.end()) ? atof(prmEl->second.c_str()) : 1.0;
+    int imW = (int)TSYS::realRound((double)width*xSc,2,true);
+    int imH = (int)TSYS::realRound((double)height*ySc,2,true);
+
+    //> Prepare picture
+    gdImagePtr im = gdImageCreate(imW,imH);
+    gdImageFilledRectangle(im,0,0,imW-1,imH-1,gdImageColorResolveAlpha(im,0,0,0,127));
+    int brect[8];
+
+    //> Make decoration and prepare trends area
+    tArX = 1, tArY = 1,						//Curves of trends area rect
+    tArW = imW-2*(geomMargin+bordWidth+1),
+    tArH = imH-2*(geomMargin+bordWidth+1);
+
+    //> Process scale
+    if( sclHor&0x3 || sclVer&0x3 )
+    {
+	//>> Set grid color
+	clr_grid = gdImageColorAllocate(im,(ui8)(sclColor>>16),(ui8)(sclColor>>8),(ui8)sclColor);
+	if( sclHor&0x2 || sclVer&0x2 )
+	{
+	    //>> Set markers font and color
+	    mrkFontSize = (int)((double)sclMarkFontSize*vmin(xSc,ySc));
+	    clr_mrk = gdImageColorAllocate(im,(ui8)(sclMarkColor>>16),(ui8)(sclMarkColor>>8),(ui8)sclMarkColor);
+	    gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.,0,0,"000000");
+	    mrkHeight = brect[3]-brect[7];
+	    if( sclHor&0x2 )
+	    {
+		if( tArH < (int)(100.0*vmin(xSc,ySc)) ) sclHor &= ~(0x02);
+		else tArH -= mrkHeight+4;
+	    }
+	    if( sclVer&0x2 && tArW < (int)(100.0*vmin(xSc,ySc)) ) sclVer &= ~(0x02);
+	}
+    }
+
+    //> Calc horizontal scale
+    int fftN = (int)(width+0.5);
+    fftBeg = 1e6/(double)tSz;			//Minimum frequency or maximum period time (s)
+    fftEnd = (double)fftN*fftBeg/2;		//Maximum frequency or minimum period time (s)
+    double hDiv = 1;				//Horisontal scale divisor
+    int hmax_ln = tArW / (int)((sclHor&0x2)?(brect[2]-brect[6]):15.0*vmin(xSc,ySc));
+    if( hmax_ln >= 2 )
+    {
+	double hLen = fftEnd-fftBeg;
+	while( hLen/hDiv > hmax_ln )	hDiv *= 10;
+	while( hLen/hDiv < hmax_ln/10)	hDiv /= 10;
+	fftBeg = floor(10*fftBeg/hDiv)*hDiv/10;
+	fftEnd = ceil(10*fftEnd/hDiv)*hDiv/10;
+	while(((fftEnd-fftBeg)/hDiv) < hmax_ln/2) hDiv/=2;
+
+	//>> Draw horisontal grid and markers
+	if( sclHor&0x3 )
+	{
+	    string labH;
+	    double labDiv = 1;
+	    if( fftEnd>1000 ) labDiv = 1000;
+	    //>>> Draw generic grid line
+	    gdImageLine(im,tArX,tArY+tArH,tArX+tArW,tArY+tArH,clr_grid);
+	    //>>> Draw full trend's data and time to the trend end position
+	    int begMarkBrd = -1;
+	    int endMarkBrd = tArX+tArW;
+	    if( sclHor&0x2 )
+	    {
+		labH = TSYS::strMess("%0.4g",fftEnd/labDiv)+((labDiv==1000)?_("kHz"):_("Hz"));
+		gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)labH.c_str());
+		int markBrd = tArX+tArW-(brect[2]-brect[6]);
+		endMarkBrd = vmin(endMarkBrd,markBrd);
+		gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,markBrd,tArY+tArH+3+(brect[3]-brect[7]),(char*)labH.c_str());
+	    }
+	    //>>> Draw grid and/or markers
+	    for( double i_h = fftBeg; (fftEnd-i_h)/hDiv > -0.1; i_h+=hDiv )
+	    {
+		//>>>> Draw grid
+		int h_pos = tArX+(int)((double)tArW*(i_h-fftBeg)/(fftEnd-fftBeg));
+		if( sclHor&0x1 ) gdImageLine(im,h_pos,tArY,h_pos,tArY+tArH,clr_grid);
+		else gdImageLine(im,h_pos,tArY+tArH-3,h_pos,tArY+tArH+3,clr_grid);
+
+		if( sclHor&0x2 )
+		{
+		    labH = TSYS::strMess("%0.4g",i_h/labDiv);
+		    gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)labH.c_str());
+		    int wdth = brect[2]-brect[6];
+		    int tpos = vmax(h_pos-wdth/2,0);
+		    if( (tpos+wdth) < endMarkBrd && tpos > begMarkBrd )
+			gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tpos,tArY+tArH+3+(brect[3]-brect[7]),(char*)labH.c_str());
+		    begMarkBrd = vmax(begMarkBrd,tpos+wdth);
+		}
+	    }
+	}
+    }
+
+    //>> Calc vertical scale
+    double vsMax = 100, vsMin = 0, curVl;	//Trend's vertical scale border
+    bool   vsPerc = true;			//Vertical scale percent mode
+    if( trnds.size() == 1 )
+    {
+	if( !trnds[0].fftN ) return;
+
+	vsPerc = false;
+	if( trnds[0].bordU() > trnds[0].bordL() )
+	{ vsMax = trnds[0].bordU(); vsMin = trnds[0].bordL(); }
+	else
+	{
+	    //>>> Calc value borders
+	    vsMax = -3e300, vsMin = 3e300;
+	    double vlOff = trnds[0].fftOut[0][0]/trnds[0].fftN;
+	    for( int i_v = 1; i_v < (trnds[0].fftN/2+1); i_v++ )
+	    {
+		curVl = vlOff+pow(pow(trnds[0].fftOut[i_v][0],2)+pow(trnds[0].fftOut[i_v][1],2),0.5)/(trnds[0].fftN/2+1);
+		vsMin = vmin(vsMin,curVl);
+		vsMax = vmax(vsMax,curVl);
+	    }
+	    if( vsMax == vsMin )	{ vsMax += 1.0; vsMin -= 1.0; }
+	    else if( (vsMax-vsMin) / fabs(vsMin+(vsMax-vsMin)/2) < 0.001 )
+	    {
+		double wnt_dp = 0.001*fabs(vsMin+(vsMax-vsMin)/2)-(vsMax-vsMin);
+		vsMin -= wnt_dp/2;
+		vsMax += wnt_dp/2;
+	    }
+	}
+    }
+
+    double vmax_ln = tArH / ( (sclVer&0x2)?(2*mrkHeight):(int)(15.0*vmin(xSc,ySc)) );
+    if( vmax_ln >= 2 )
+    {
+	double vDiv = 1.;
+	double v_len = vsMax - vsMin;
+	while( v_len > vmax_ln )	{ vDiv *= 10; v_len /= 10; }
+	while( v_len < vmax_ln/10 )	{ vDiv /= 10; v_len *= 10; }
+	vsMin = floor(vsMin/vDiv)*vDiv;
+	vsMax = ceil(vsMax/vDiv)*vDiv;
+	while( ((vsMax-vsMin)/vDiv) < vmax_ln/2 ) vDiv/=2;
+
+	//>>> Draw vertical grid and markers
+	if( sclVer&0x3 )
+	{
+	    gdImageLine(im,tArX,tArY,tArX,tArH,clr_grid);
+	    for( double i_v = vsMin; (vsMax-i_v)/vDiv > -0.1; i_v += vDiv )
+	    {
+		int v_pos = tArY+tArH-(int)((double)tArH*(i_v-vsMin)/(vsMax-vsMin));
+		if( sclVer&0x1 ) gdImageLine(im,tArX,v_pos,tArX+tArW,v_pos,clr_grid);
+		else gdImageLine(im,tArX-3,v_pos,tArX+3,v_pos,clr_grid);
+		if( sclVer&0x2 )
+		{
+		    bool isMax = (fabs((vsMax-i_v)/vDiv) < 0.1);
+		    gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tArX+2,v_pos+(isMax?mrkHeight:0),
+			(char*)(TSYS::strMess("%0.4g",i_v)+((vsPerc&&isMax)?" %":"")).c_str());
+		}
+	    }
+	}
+    }
+
+    //>> Draw trends trnds[i_t];
+    for( int i_t = 0; i_t < trnds.size(); i_t++ )
+    {
+	if( !trnds[i_t].fftN ) continue;
+
+	int clr_t = gdImageColorAllocate(im,(ui8)(trnds[i_t].color()>>16),(ui8)(trnds[i_t].color()>>8),(ui8)trnds[i_t].color());
+	double vlOff = trnds[i_t].fftOut[0][0]/trnds[i_t].fftN;
+	double fftDt = (1e6/(double)tSz)*(double)width/trnds[i_t].fftN;
+
+	//>>> Prepare border for percent trend
+	double bordL = trnds[i_t].bordL();
+	double bordU = trnds[i_t].bordU();
+	if( vsPerc && bordL >= bordU )
+	{
+	    bordU = -3e300, bordL = 3e300;
+	    for( int i_v = 1; i_v < (trnds[i_t].fftN/2+1); i_v++ )
+	    {
+		curVl = vlOff+pow(pow(trnds[i_t].fftOut[i_v][0],2)+pow(trnds[i_t].fftOut[i_v][1],2),0.5)/(trnds[i_t].fftN/2+1);
+		bordL = vmin(bordL,curVl);
+		bordU = vmax(bordU,curVl);
+	    }
+	    double vMarg = (bordU-bordL)/10;
+	    bordL -= vMarg;
+	    bordU += vMarg;
+	}
+
+	//>>> Draw trend
+	double prevVl = EVAL_REAL;
+	int curPos = 0, prevPos = 0;
+	for( int i_v = 1; i_v < (trnds[i_t].fftN/2+1); i_v++ )
+	{
+	    curVl = vlOff+pow(pow(trnds[i_t].fftOut[i_v][0],2)+pow(trnds[i_t].fftOut[i_v][1],2),0.5)/(trnds[i_t].fftN/2+1);
+	    if( vsPerc )
+	    {
+		curVl = 100.*(curVl-bordL)/(bordU-bordL);
+		curVl = (curVl>100) ? 100 : (curVl<0) ? 0 : curVl;
+	    }
+	    curPos = tArX+(int)((double)tArW*(fftDt*i_v-fftBeg)/(fftEnd-fftBeg));
+
+	    int c_vpos = tArY+tArH-(int)((double)tArH*(curVl-vsMin)/(vsMax-vsMin));
+	    if( prevVl == EVAL_REAL ) gdImageSetPixel(im,curPos,c_vpos,clr_t);
+	    else
+	    {
+		int c_vpos_prv = tArY+tArH-(int)((double)tArH*(prevVl-vsMin)/(vsMax-vsMin));
+		gdImageLine(im,prevPos,c_vpos_prv,curPos,c_vpos,clr_t);
+	    }
+	    prevPos = curPos;
+	    prevVl = curVl;
+	}
+
+	//>>> Update value on cursor
+	if( active )
+	{
+	    double curFrq = vmax(vmin(1e6/(double)curTime,fftEnd),fftBeg);
+	    curPos = (int)(curFrq/fftDt);
+	    if( curPos >= 1 && curPos < (trnds[i_t].fftN/2+1) )
+	    {
+		double val = trnds[i_t].fftOut[0][0]/trnds[i_t].fftN + pow(pow(trnds[i_t].fftOut[curPos][0],2)+pow(trnds[i_t].fftOut[curPos][1],2),0.5)/(trnds[i_t].fftN/2+1);
+		XMLNode req("set");
+		req.setAttr("path",id()+"/%2fserv%2fattr")->
+		    childAdd("el")->setAttr("id",TSYS::strMess("prm%dval",i_t))->setText(TSYS::real2str(val,6));
+		mod->cntrIfCmd(req,ses.user);
+	    }
+	}
+    }
+
+    //> Draw cursor
+    if( active && tSz )
+    {
+	float curFrq = vmax(vmin(1e6/(float)curTime,fftEnd),fftBeg);
+	int curPos = tArX+(int)(tArW*(curFrq-fftBeg)/(fftEnd-fftBeg));
+	int clr_cur = gdImageColorAllocate(im,(ui8)(curColor>>16),(ui8)(curColor>>8),(ui8)curColor);
+	gdImageLine(im,curPos,tArY,curPos,tArY+tArH,clr_cur);
+    }
+
+    //> Get image and transfer it
     int img_sz;
     char *img_ptr = (char *)gdImagePngPtr(im, &img_sz);
     ses.page.assign(img_ptr,img_sz);
@@ -5029,8 +5302,13 @@ void VCADiagram::postReq( SSess &ses )
 
 	if( x_coord >= tArX && x_coord <= tArX+tArW )
 	{
-	    long long tTimeGrnd = tPict - (long long)(tSize*1000000.);
-	    setCursor(  tTimeGrnd + (tPict-tTimeGrnd)*(x_coord-tArX)/tArW, ses.user );
+	    if( type == 0 )
+	    {
+		long long tTimeGrnd = tPict - (long long)(tSize*1000000.);
+		setCursor( tTimeGrnd + (tPict-tTimeGrnd)*(x_coord-tArX)/tArW, ses.user );
+	    }
+	    else if( type == 1 )
+		setCursor( (long long)(1e6/(fftBeg+(fftEnd-fftBeg)*(x_coord-tArX)/tArW)), ses.user );
 	}
     }
 }
@@ -5067,8 +5345,10 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
 	    case 25:	//trcPer
 		trcPer = atoi(req_el->text().c_str());
 		break;
-	    //case 26:	//type
-	    //	break;
+	    case 26:	//type
+		type = atoi(req_el->text().c_str());
+		reld_tr_dt = 2;
+		break;
 	    case 27:	//tSek
 		tTimeCurent = false;
 		if( atoll(req_el->text().c_str()) == 0 )
@@ -5156,33 +5436,64 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
 
 void VCADiagram::setCursor( long long itm, const string& user )
 {
-    long long tTimeGrnd = tTime - (long long)(tSize*1000000.);
-    curTime = vmax(vmin(itm,tTime),tTimeGrnd);
-
-    XMLNode req("set");
-    req.setAttr("path",id()+"/%2fserv%2fattr");
-    req.childAdd("el")->setAttr("id","curSek")->setText(TSYS::int2str(curTime/1000000));
-    req.childAdd("el")->setAttr("id","curUSek")->setText(TSYS::int2str(curTime%1000000));
-
-    //- Update trend's current values -
-    for( int i_p = 0; i_p < trnds.size(); i_p++ )
+    if( type == 0 )
     {
-	int vpos = trnds[i_p].val(curTime);
-	if( vpos >= trnds[i_p].val().size() ) continue;
-	if( vpos && trnds[i_p].val()[vpos].tm > curTime ) vpos--;
-	double val = trnds[i_p].val()[vpos].val;
-	if( val != trnds[i_p].curVal() )
-	    req.childAdd("el")->setAttr("id","prm"+TSYS::int2str(i_p)+"val")->setText(TSYS::real2str(val,6));
+	long long tTimeGrnd = tTime - (long long)(tSize*1000000.);
+	curTime = vmax(vmin(itm,tTime),tTimeGrnd);
+
+	XMLNode req("set");
+	req.setAttr("path",id()+"/%2fserv%2fattr");
+	req.childAdd("el")->setAttr("id","curSek")->setText(TSYS::int2str(curTime/1000000));
+	req.childAdd("el")->setAttr("id","curUSek")->setText(TSYS::int2str(curTime%1000000));
+
+	//> Update trend's current values
+	for( int i_p = 0; i_p < trnds.size(); i_p++ )
+	{
+	    int vpos = trnds[i_p].val(curTime);
+	    if( vpos >= trnds[i_p].val().size() ) continue;
+	    if( vpos && trnds[i_p].val()[vpos].tm > curTime ) vpos--;
+	    double val = trnds[i_p].val()[vpos].val;
+	    if( val != trnds[i_p].curVal() )
+		req.childAdd("el")->setAttr("id","prm"+TSYS::int2str(i_p)+"val")->setText(TSYS::real2str(val,6));
+	}
+	mod->cntrIfCmd(req,user);
     }
-    mod->cntrIfCmd(req,user);
+    else if( type == 1 )
+    {
+	float curFrq = vmax(vmin(1e6/(float)itm,fftEnd),fftBeg);
+
+	XMLNode req("set");
+	req.setAttr("path",id()+"/%2fserv%2fattr");
+	req.childAdd("el")->setAttr("id","curSek")->setText(TSYS::int2str(((long long)(1e6/curFrq))/1000000));
+	req.childAdd("el")->setAttr("id","curUSek")->setText(TSYS::int2str(((long long)(1e6/curFrq))%1000000));
+
+	//> Update trend's current values
+	for( int i_p = 0; i_p < trnds.size(); i_p++ )
+	{
+	    if( !trnds[i_p].fftN ) continue;
+	    float fftDt = (1/tSize)*(float)width/trnds[i_p].fftN;
+	    int vpos = (int)(curFrq/fftDt);
+	    double val = EVAL_REAL;
+	    if( vpos >= 1 && vpos < (trnds[i_p].fftN/2+1) )
+		val = trnds[i_p].fftOut[0][0]/trnds[i_p].fftN +
+		    pow(pow(trnds[i_p].fftOut[vpos][0],2)+pow(trnds[i_p].fftOut[vpos][1],2),0.5)/(trnds[i_p].fftN/2+1);
+	    req.childAdd("el")->setAttr("id",TSYS::strMess("prm%dval",i_p))->setText(TSYS::real2str(val,6));
+	}
+	mod->cntrIfCmd(req,user);
+    }
 }
 
 //* Trend object's class                         *
 //************************************************
 VCADiagram::TrendObj::TrendObj( VCADiagram *iowner ) :
-    m_owner(iowner), m_bord_low(0), m_bord_up(0), m_curvl(EVAL_REAL), arh_beg(0), arh_end(0), arh_per(0),val_tp(0)
+    m_owner(iowner), m_bord_low(0), m_bord_up(0), m_curvl(EVAL_REAL), arh_beg(0), arh_end(0), arh_per(0), val_tp(0), fftOut(NULL), fftN(0)
 {
     loadData("root");
+}
+
+VCADiagram::TrendObj::~TrendObj( )
+{
+    if( fftOut ) { delete fftOut; fftN = 0; }
 }
 
 VCADiagram &VCADiagram::TrendObj::owner( )
@@ -5219,13 +5530,22 @@ void VCADiagram::TrendObj::setAddr( const string &vl )
 
 void VCADiagram::TrendObj::loadData( const string &user, bool full )
 {
+    switch( owner().type )
+    {
+	case 0:	loadTrendsData(user,full);	break;
+	case 1:	loadSpectrumData(user,full);	break;
+    }
+}
+
+void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
+{
     long long tSize     = (long long)(owner().tSize*1000000.);
     long long tTime     = owner().tTime;
     long long tTimeGrnd = tTime - tSize;
     long long wantPer   = tSize/(int)(owner().width+0.5);
     string arch = owner().valArch;
 
-    //- Clear trend for empty address and the full reload data -
+    //> Clear trend for empty address and the full reload data
     if( full || addr().empty() )
     {
 	arh_per = arh_beg = arh_end = 0;
@@ -5233,7 +5553,7 @@ void VCADiagram::TrendObj::loadData( const string &user, bool full )
 	vals.clear();
 	if( addr().empty() )    return;
     }
-    //- Get archive parameters -
+    //> Get archive parameters
     if( !arh_per || tTime > arh_end )
     {
 	XMLNode req("info");
@@ -5249,7 +5569,7 @@ void VCADiagram::TrendObj::loadData( const string &user, bool full )
 	}
     }
 
-    //- One request check and prepare -
+    //> One request check and prepare
     int trcPer = owner().trcPer*1000000;
     if( owner().tTimeCurent && trcPer && owner().valArch.empty() && (!arh_per || (arh_per >= trcPer && (tTime-valEnd())/vmax(wantPer,trcPer) < 2)) )
     {
@@ -5278,20 +5598,20 @@ void VCADiagram::TrendObj::loadData( const string &user, bool full )
     }
 
     if( !arh_per )      return;
-    //- Correct request to archive border -
+    //> Correct request to archive border
     wantPer	= (vmax(wantPer,arh_per)/arh_per)*arh_per;
     tTime	= vmin(tTime,arh_end);
     tTimeGrnd	= vmax(tTimeGrnd,arh_beg);
-    //- Clear data at time error -
+    //> Clear data at time error
     if( tTime <= tTimeGrnd || tTimeGrnd/wantPer > valEnd()/wantPer || tTime/wantPer < valBeg()/wantPer )
 	vals.clear();
     if( tTime <= tTimeGrnd ) return;
-    //- Check for request to present in buffer data -
+    //> Check for request to present in buffer data
     if( tTime/wantPer <= valEnd()/wantPer && tTimeGrnd/wantPer >= valBeg()/wantPer )    return;
-    //- Correct request to present data -
+    //> Correct request to present data
     if( valEnd() && tTime > valEnd() )          tTimeGrnd = valEnd()+1;
     else if( valBeg() && tTimeGrnd < valBeg() ) tTime = valBeg()-1;
-    //- Get values data -
+    //> Get values data
     long long bbeg, bend, bper;
     int         curPos, prevPos;
     double      curVal, prevVal;
@@ -5310,7 +5630,7 @@ void VCADiagram::TrendObj::loadData( const string &user, bool full )
 	    setAttr("real_prec","6")->
 	    setAttr("round_perc","0");//TSYS::real2str(100.0/(float)owner().height));
     if( mod->cntrIfCmd(req,user,false) )     return;
-    //- Get data buffer parameters -
+    //> Get data buffer parameters
     bbeg = atoll(req.attr("tm_grnd").c_str());
     bend = atoll(req.attr("tm").c_str());
     bper = atoll(req.attr("per").c_str());
@@ -5327,7 +5647,7 @@ void VCADiagram::TrendObj::loadData( const string &user, bool full )
 	prevPos = curPos; prevVal = curVal;
     }
     for( ; prevPos < (bend-bbeg)/bper; prevPos++ ) buf.push_back(SHg(bbeg+(prevPos+1)*bper,prevVal));
-    //- Append buffer to values deque -
+    //> Append buffer to values deque
     if( toEnd )
     {
 	vals.insert(vals.end()-endBlks,buf.begin(),buf.end());
@@ -5339,6 +5659,50 @@ void VCADiagram::TrendObj::loadData( const string &user, bool full )
 	vals.insert(vals.begin(),buf.begin(),buf.end());
 	while( vals.size() > 2000 )     vals.pop_back();
     }
-    //- Check for archive jump -
+    //> Check for archive jump
     if( arch.empty() && (bbeg-tTimeGrnd)/bper ) { tTime = bbeg-bper; goto m1; }
+}
+
+void VCADiagram::TrendObj::loadSpectrumData( const string &user, bool full )
+{
+    loadTrendsData(user,full);
+
+    if( !valBeg( ) || !valEnd( ) ) return;
+
+    if( fftOut ) { delete fftOut; fftN = 0; }
+
+    long long tSize	= (long long)(owner().tSize*1000000.);
+    long long tTime	= owner().tTime;
+    long long tTimeGrnd	= tTime - tSize;
+    long long workPer	= tSize/(int)(owner().width+0.5);
+
+    tTimeGrnd = vmax(tTimeGrnd,valBeg());
+    tTime = vmin(tTime,valEnd());
+
+    fftN = (tTime-tTimeGrnd)/workPer;
+    double fftIn[fftN];
+    fftOut = (fftw_complex*)malloc(sizeof(fftw_complex)*(fftN/2+1));
+
+    int fftFirstPos = -1, fftLstPos = -1;
+    for( int a_pos = val(tTimeGrnd); a_pos < val().size() && val()[a_pos].tm <= tTime; a_pos++ )
+    {
+	int fftPos = (val()[a_pos].tm-tTimeGrnd)/workPer;
+	if( fftPos >= fftN ) break;
+	if( val()[a_pos].val == EVAL_REAL ) continue;
+	if( fftFirstPos < 0 ) fftFirstPos = fftPos;
+
+	if( fftLstPos == fftPos ) fftIn[fftPos-fftFirstPos] = (fftIn[fftPos-fftFirstPos]+val()[a_pos].val)/2;
+	else fftIn[fftPos-fftFirstPos] = val()[a_pos].val;
+
+	for( ; fftLstPos >= 0 && (fftLstPos+1) < fftPos; fftLstPos++ )
+	    fftIn[fftLstPos-fftFirstPos+1] = fftIn[fftLstPos-fftFirstPos];
+	fftLstPos = fftPos;
+    }
+
+    fftN = fftLstPos-fftFirstPos;
+    if( fftN < 20 ) { delete fftOut; fftOut = NULL; fftN = 0; return; }
+
+    fftw_plan p = fftw_plan_dft_r2c_1d( fftN, fftIn, fftOut, FFTW_ESTIMATE );
+    fftw_execute(p);
+    fftw_destroy_plan(p);
 }

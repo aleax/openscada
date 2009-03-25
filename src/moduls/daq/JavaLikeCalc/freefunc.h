@@ -257,6 +257,12 @@ class Func : public TConfig, public TFunction
     friend int yyparse( );
     friend void yyerror(const char*);
     public:
+	//> Addition flags for IO
+	enum IOSpecFlgs
+	{
+	    SysAttr	= 0x10	//Lock attribute
+	};
+
 	//Attributes
 	Func( const char *, const char *name = "" );
 	~Func( );

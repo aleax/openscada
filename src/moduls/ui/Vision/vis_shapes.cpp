@@ -1309,8 +1309,10 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    if( shD->trcPer )	shD->trcTimer->start(shD->trcPer*1000);
 	    else shD->trcTimer->stop();
 	    break;
-	//case 26:	//type
-	//    shD->type = atoi(val.c_str()); make_pct = true; break;
+	case 26:	//type
+	    shD->type = atoi(val.c_str());
+	    reld_tr_dt = 2;
+	    break;
 	case 27:	//tSek
 	    shD->tTimeCurent = false;
 	    if( atoll(val.c_str()) == 0 )
@@ -1376,7 +1378,7 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    break;
 	}
 	default:
-	    //- Individual trend's attributes process -
+	    //> Individual trend's attributes process
 	    if( uiPrmPos >= 50 && uiPrmPos < 150 )
 	    {
 		int trndN = (uiPrmPos/10)-5;
@@ -1395,20 +1397,274 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 
     if( !w->allAttrLoad( ) )
     {
-	if( reld_tr_dt )	{ loadTrendsData(w,reld_tr_dt==2); make_pct = true; }
-	if( make_pct )		{ makeTrendsPicture(w); up = true; }
+	if( reld_tr_dt )	{ loadData(w,reld_tr_dt==2); make_pct = true; }
+	if( make_pct )		{ makePicture(w); up = true; }
 	if( up && uiPrmPos != -1 )	w->update();
     }
 
     return (reld_tr_dt|make_pct|up);
 }
 
-void ShapeDiagram::loadTrendsData( WdgView *w, bool full )
+void ShapeDiagram::loadData( WdgView *w, bool full )
 {
     ShpDt *shD = (ShpDt*)w->shpData;
 
     for( int i_p = 0; i_p < shD->prms.size(); i_p++ )
 	shD->prms[i_p].loadData(full);
+}
+
+void ShapeDiagram::makePicture( WdgView *w )
+{
+    ShpDt *shD = (ShpDt*)w->shpData;
+    if( !shD->en )	return;
+    switch(shD->type)
+    {
+	case 0:	makeTrendsPicture(w);	break;
+	case 1:	makeSpectrumPicture(w);	break;
+    }
+}
+
+void ShapeDiagram::makeSpectrumPicture( WdgView *w )
+{
+    QPen grdPen, mrkPen;
+    int  mrkHeight = 0;
+
+    ShpDt *shD = (ShpDt*)w->shpData;
+
+    //> Prepare picture
+    QPainter pnt( &shD->pictObj );
+
+    //> Get generic parameters
+    long long tSize = (long long)(shD->tSize*1000000.);			//Time size (us)
+    long long tEnd  = shD->tTime;					//Time end point (us)
+    long long tBeg  = tEnd - tSize;					//Time begin point (us)
+    if( shD->prms.empty() || tSize <= 0 ) return;
+
+    //> Make decoration and prepare trends area
+    QRect tAr  = w->rect().adjusted(1,1,-2*(shD->geomMargin+shD->border.width()+1),-2*(shD->geomMargin+shD->border.width()+1));	//Curves of spectrum area rect
+    int sclHor = shD->sclHor;						//Horisontal scale mode
+    int sclVer = shD->sclVer;						//Vertical scale mode
+
+    //> Process scale
+    if( sclHor&0x3 || sclVer&0x3 )
+    {
+	//>> Set grid pen
+	grdPen.setColor(shD->sclColor);
+	grdPen.setStyle(Qt::SolidLine);
+	grdPen.setWidth( (int)vmax(1.0,vmin(w->xScale(true),w->yScale(true))) );
+	//>> Set markers font and color
+	if( sclHor&0x2 || sclVer&0x2 )
+	{
+	    mrkPen.setColor(shD->sclMarkColor);
+	    QFont mrkFnt = shD->sclMarkFont;
+	    mrkFnt.setPixelSize( (int)((double)mrkFnt.pixelSize()*vmin(w->xScale(true),w->yScale(true))) );
+	    pnt.setFont(mrkFnt);
+	    mrkHeight = pnt.fontMetrics().height()-pnt.fontMetrics().descent();
+	    if( sclHor&0x2 )
+	    {
+		if( tAr.height() < (int)(100.0*vmin(w->xScale(true),w->yScale(true))) ) sclHor &= ~(0x02);
+		else tAr.adjust(0,0,0,-mrkHeight);
+	    }
+	    if( sclVer&0x2 && tAr.width() < (int)(100.0*vmin(w->xScale(true),w->yScale(true))) )
+		sclVer &= ~(0x02);
+	}
+    }
+
+    //> Calc horizontal scale
+    int fftN = w->size().width();
+    double fftBeg = 1e6/(double)tSize;			//Minimum frequency or maximum period time (s)
+    double fftEnd = (double)fftN*fftBeg/2;		//Maximum frequency or minimum period time (s)
+    double hDiv = 1;					//Horisontal scale divisor
+    int hmax_ln = tAr.width() / (int)((sclHor&0x2)?pnt.fontMetrics().width("000000"):15.0*vmin(w->xScale(true),w->yScale(true)));
+    if( hmax_ln >= 2 )
+    {
+	double hLen = fftEnd-fftBeg;
+	while( hLen/hDiv > hmax_ln )	hDiv *= 10;
+	while( hLen/hDiv < hmax_ln/10)	hDiv /= 10;
+	fftBeg = floor(10*fftBeg/hDiv)*hDiv/10;
+	fftEnd = ceil(10*fftEnd/hDiv)*hDiv/10;
+	while(((fftEnd-fftBeg)/hDiv) < hmax_ln/2) hDiv/=2;
+
+	//>> Draw horisontal grid and markers
+	if( sclHor&0x3 )
+	{
+	    string labH;
+	    double labDiv = 1;
+	    if( fftEnd>1000 ) labDiv = 1000;
+	    //>>> Draw generic grid line
+	    pnt.setPen(grdPen);
+	    pnt.drawLine(tAr.x(),tAr.y()+tAr.height(),tAr.x()+tAr.width(),tAr.y()+tAr.height());
+	    //>>> Draw full trend's data and time to the trend end position
+	    int begMarkBrd = -1;
+	    int endMarkBrd = tAr.x()+tAr.width();
+	    if( sclHor&0x2 )
+	    {
+		pnt.setPen(mrkPen);
+		labH = TSYS::strMess("%0.4g",fftEnd/labDiv)+((labDiv==1000)?_("kHz"):_("Hz"));
+
+		int markBrd = tAr.x()+tAr.width()-pnt.fontMetrics().boundingRect(labH.c_str()).width();
+		endMarkBrd = vmin(endMarkBrd,markBrd);
+		pnt.drawText(markBrd,tAr.y()+tAr.height()+mrkHeight,labH.c_str());
+	    }
+	    //>>> Draw grid and/or markers
+	    for( double i_h = fftBeg; (fftEnd-i_h)/hDiv > -0.1; i_h+=hDiv )
+	    {
+		//>>>> Draw grid
+		pnt.setPen(grdPen);
+		int h_pos = tAr.x()+(int)((double)tAr.width()*(i_h-fftBeg)/(fftEnd-fftBeg));
+		if( sclHor&0x1 ) pnt.drawLine(h_pos,tAr.y(),h_pos,tAr.y()+tAr.height());
+		else pnt.drawLine(h_pos,tAr.y()+tAr.height()-3,h_pos,tAr.y()+tAr.height()+3);
+
+		if( sclHor&0x2 )
+		{
+		    pnt.setPen(mrkPen);
+		    labH = TSYS::strMess("%0.4g",i_h/labDiv);
+		    int wdth = pnt.fontMetrics().boundingRect(labH.c_str()).width();
+		    int tpos = vmax(h_pos-wdth/2,0);
+		    if( (tpos+wdth) < endMarkBrd && tpos > begMarkBrd )
+			pnt.drawText( tpos, tAr.y()+tAr.height()+mrkHeight, labH.c_str() );
+		    begMarkBrd = vmax(begMarkBrd,tpos+wdth);
+		}
+	    }
+	}
+    }
+
+    //>> Calc vertical scale
+    double vsMax = 100, vsMin = 0, curVl;	//Trend's vertical scale border
+    bool   vsPerc = true;			//Vertical scale percent mode
+    if( shD->prms.size() == 1 )
+    {
+	if( !shD->prms[0].fftN ) return;
+
+	vsPerc = false;
+	if( shD->prms[0].bordU() > shD->prms[0].bordL() )
+	{ vsMax = shD->prms[0].bordU(); vsMin = shD->prms[0].bordL(); }
+	else
+	{
+	    //>>> Calc value borders
+	    vsMax = -3e300, vsMin = 3e300;
+	    double vlOff = shD->prms[0].fftOut[0][0]/shD->prms[0].fftN;
+	    for( int i_v = 1; i_v < (shD->prms[0].fftN/2+1); i_v++ )
+	    {
+		curVl = vlOff+pow(pow(shD->prms[0].fftOut[i_v][0],2)+pow(shD->prms[0].fftOut[i_v][1],2),0.5)/(shD->prms[0].fftN/2+1);
+		vsMin = vmin(vsMin,curVl);
+		vsMax = vmax(vsMax,curVl);
+	    }
+	    if( vsMax == vsMin )	{ vsMax += 1.0; vsMin -= 1.0; }
+	    else if( (vsMax-vsMin) / fabs(vsMin+(vsMax-vsMin)/2) < 0.001 )
+	    {
+		double wnt_dp = 0.001*fabs(vsMin+(vsMax-vsMin)/2)-(vsMax-vsMin);
+		vsMin -= wnt_dp/2;
+		vsMax += wnt_dp/2;
+	    }
+	}
+    }
+
+    double vmax_ln = tAr.height() / ( (sclVer&0x2)?(2*mrkHeight):(int)(15.0*vmin(w->xScale(true),w->yScale(true))) );
+    if( vmax_ln >= 2 )
+    {
+	double vDiv = 1.;
+	double v_len = vsMax - vsMin;
+	while( v_len > vmax_ln )	{ vDiv *= 10; v_len /= 10; }
+	while( v_len < vmax_ln/10 )	{ vDiv /= 10; v_len *= 10; }
+	vsMin = floor(vsMin/vDiv)*vDiv;
+	vsMax = ceil(vsMax/vDiv)*vDiv;
+	while( ((vsMax-vsMin)/vDiv) < vmax_ln/2 ) vDiv/=2;
+
+	//>>> Draw vertical grid and markers
+	if( sclVer&0x3 )
+	{
+	    pnt.setPen(grdPen);
+	    pnt.drawLine(tAr.x(),tAr.y(),tAr.x(),tAr.height());
+	    for( double i_v = vsMin; (vsMax-i_v)/vDiv > -0.1; i_v+=vDiv )
+	    {
+		int v_pos = tAr.y()+tAr.height()-(int)((double)tAr.height()*(i_v-vsMin)/(vsMax-vsMin));
+		pnt.setPen(grdPen);
+		if( sclVer&0x1 ) pnt.drawLine(tAr.x(),v_pos,tAr.x()+tAr.width(),v_pos);
+		else pnt.drawLine(tAr.x()-3,v_pos,tAr.x()+3,v_pos);
+
+		if( sclVer&0x2 )
+		{
+		    bool isMax = (fabs((vsMax-i_v)/vDiv) < 0.1);
+		    pnt.setPen(mrkPen);
+		    pnt.drawText(tAr.x()+2,v_pos-1+(isMax?mrkHeight:0),(TSYS::strMess("%0.4g",i_v)+((vsPerc&&isMax)?" %":"")).c_str());
+		}
+	    }
+	}
+    }
+
+    //>> Draw trends
+    for( int i_t = 0; i_t < shD->prms.size(); i_t++ )
+    {
+	TrendObj *sTr = &shD->prms[i_t];
+	if( !sTr->fftN ) continue;
+
+	//>>> Set trend's pen
+	QPen trpen(QColor(sTr->color().c_str()));
+	trpen.setStyle(Qt::SolidLine);
+	trpen.setWidth(1);
+	pnt.setPen(trpen);
+
+	double vlOff = sTr->fftOut[0][0]/sTr->fftN;
+	double fftDt = (1e6/(double)tSize)*(double)w->size().width()/sTr->fftN;
+
+	//>>> Prepare border for percent trend
+	double bordL = sTr->bordL();
+	double bordU = sTr->bordU();
+	if( vsPerc && bordL >= bordU )
+	{
+	    bordU = -3e300, bordL = 3e300;
+	    for( int i_v = 1; i_v < (sTr->fftN/2+1); i_v++ )
+	    {
+		curVl = vlOff+pow(pow(sTr->fftOut[i_v][0],2)+pow(sTr->fftOut[i_v][1],2),0.5)/(sTr->fftN/2+1);
+		bordL = vmin(bordL,curVl);
+		bordU = vmax(bordU,curVl);
+	    }
+	    double vMarg = (bordU-bordL)/10;
+	    bordL -= vMarg;
+	    bordU += vMarg;
+	}
+
+	//>>> Draw trend
+	double prevVl = EVAL_REAL;
+	int curPos = 0, prevPos = 0;
+	for( int i_v = 1; i_v < (sTr->fftN/2+1); i_v++ )
+	{
+	    curVl = vlOff+pow(pow(sTr->fftOut[i_v][0],2)+pow(sTr->fftOut[i_v][1],2),0.5)/(sTr->fftN/2+1);
+	    if( vsPerc )
+	    {
+		curVl = 100.*(curVl-bordL)/(bordU-bordL);
+		curVl = (curVl>100) ? 100 : (curVl<0) ? 0 : curVl;
+	    }
+	    curPos = tAr.x()+(int)((double)tAr.width()*(fftDt*i_v-fftBeg)/(fftEnd-fftBeg));
+
+	    int c_vpos = tAr.y()+tAr.height()-(int)((double)tAr.height()*(curVl-vsMin)/(vsMax-vsMin));
+	    if( prevVl == EVAL_REAL ) pnt.drawPoint(curPos,c_vpos);
+	    else
+	    {
+		int c_vpos_prv = tAr.y()+tAr.height()-(int)((double)tAr.height()*(prevVl-vsMin)/(vsMax-vsMin));
+		pnt.drawLine(prevPos,c_vpos_prv,curPos,c_vpos);
+	    }
+	    prevPos = curPos;
+	    prevVl = curVl;
+	}
+
+	//>>> Update value on cursor
+	if( shD->active && shD->tTimeCurent && shD->trcPer )
+	{
+	    double curFrq = vmax(vmin(1e6/(double)shD->curTime,fftEnd),fftBeg);
+	    curPos = (int)(curFrq/fftDt);
+	    if( curPos >= 1 && curPos < (sTr->fftN/2+1) )
+	    {
+		double val = sTr->fftOut[0][0]/sTr->fftN + pow(pow(sTr->fftOut[curPos][0],2)+pow(sTr->fftOut[curPos][1],2),0.5)/(sTr->fftN/2+1);
+		w->attrSet(TSYS::strMess("prm%dval",i_t),TSYS::real2str(val,6),54+10*i_t);
+	    }
+	}
+    }
+
+    shD->fftBeg = fftBeg;
+    shD->fftEnd = fftEnd;
+    shD->pictRect = tAr;
 }
 
 void ShapeDiagram::makeTrendsPicture( WdgView *w )
@@ -1418,35 +1674,34 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 
     ShpDt *shD = (ShpDt*)w->shpData;
 
-    if( !shD->en )	return;
-
     //> Prepare picture
     QPainter pnt( &shD->pictObj );
 
-    //>> Get generic parameters
+    //> Get generic parameters
     long long tSize = (long long)(shD->tSize*1000000.);			//Trends size (us)
     long long tEnd  = shD->tTime;					//Trends end point (us)
     long long tPict = tEnd;
     long long tBeg  = tEnd - tSize;					//Trends begin point (us)
     if( shD->prms.empty() || tSize <= 0 ) return;
 
-    //>> Make decoration and prepare trends area
+    //> Make decoration and prepare trends area
     QRect tAr  = w->rect().adjusted(1,1,-2*(shD->geomMargin+shD->border.width()+1),-2*(shD->geomMargin+shD->border.width()+1));	//Curves of trends area rect
     int sclHor = shD->sclHor;						//Horisontal scale mode
     int sclVer = shD->sclVer;						//Vertical scale mode
 
+    //> Process scale
     if( sclHor&0x3 || sclVer&0x3 )
     {
-	//>>> Set grid pen
+	//>> Set grid pen
 	grdPen.setColor(shD->sclColor);
 	grdPen.setStyle(Qt::SolidLine);
 	grdPen.setWidth( (int)vmax(1.0,vmin(w->xScale(true),w->yScale(true))) );
+	//>> Set markers font and color
 	if( sclHor&0x2 || sclVer&0x2 )
 	{
-	    //>>> Set markers font and color
 	    mrkPen.setColor(shD->sclMarkColor);
 	    QFont mrkFnt = shD->sclMarkFont;
-	    mrkFnt.setPixelSize( (int)((float)mrkFnt.pixelSize()*vmin(w->xScale(true),w->yScale(true))) );
+	    mrkFnt.setPixelSize( (int)((double)mrkFnt.pixelSize()*vmin(w->xScale(true),w->yScale(true))) );
 	    pnt.setFont(mrkFnt);
 	    mrkHeight = pnt.fontMetrics().height()-pnt.fontMetrics().descent();
 
@@ -1460,23 +1715,21 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	}
     }
 
-    //>>> Calc horizontal scale
-    long long aVend;			//Corrected for allow data the trend end point
-    long long aVbeg;			//Corrected for allow data the trend begin point
-    long long hDiv = 1, hDivBase = 1;	//Horisontal scale divisor
+    //> Calc horizontal scale
+    long long hDiv = 1;	//Horisontal scale divisor
 
-    int hmax_ln = tAr.width() / (int)(((sclHor&0x2)?pnt.fontMetrics().width("000000"):15.0)*vmin(w->xScale(true),w->yScale(true)));
+    int hmax_ln = tAr.width() / (int)((sclHor&0x2)?pnt.fontMetrics().width("000000"):15.0*vmin(w->xScale(true),w->yScale(true)));
     if( hmax_ln >= 2 )
     {
 	int hvLev = 0;
 	long long hLen = tEnd - tBeg;
-	if( hLen/86400000000ll >= 2 )	{ hvLev = 5; hDivBase = hDiv = 86400000000ll; }		//Days
-	else if( hLen/3600000000ll >= 2 ){ hvLev = 4; hDivBase = hDiv =  3600000000ll; }	//Hours
-	else if( hLen/60000000 >= 2 )	{ hvLev = 3; hDivBase = hDiv =    60000000; }		//Minutes
-	else if( hLen/1000000 >= 2 )	{ hvLev = 2; hDivBase = hDiv =     1000000; }		//Seconds
-	else if( hLen/1000 >= 2 )	{ hvLev = 1; hDivBase = hDiv =        1000; }		//Milliseconds
+	if( hLen/86400000000ll >= 2 )		{ hvLev = 5; hDiv = 86400000000ll; }	//Days
+	else if( hLen/3600000000ll >= 2 )	{ hvLev = 4; hDiv =  3600000000ll; }	//Hours
+	else if( hLen/60000000 >= 2 )		{ hvLev = 3; hDiv =    60000000; }	//Minutes
+	else if( hLen/1000000 >= 2 )		{ hvLev = 2; hDiv =     1000000; }	//Seconds
+	else if( hLen/1000 >= 2 )		{ hvLev = 1; hDiv =        1000; }	//Milliseconds
 	while( hLen/hDiv > hmax_ln )	hDiv *= 10;
-	while( hLen/hDiv < hmax_ln/2 )	hDiv/=2;
+	while( hLen/hDiv < hmax_ln/2 )	hDiv /= 2;
 
 	if( (hLen/hDiv) >= 5 && shD->trcPer )
 	{
@@ -1489,7 +1742,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	{
 	    time_t tm_t;
 	    struct tm ttm, ttm1;
-	    QString lab_tm, lab_dt;
+	    string lab_tm, lab_dt;
 	    //>>>> Draw generic grid line
 	    pnt.setPen(grdPen);
 	    pnt.drawLine(tAr.x(),tAr.y()+tAr.height(),tAr.x()+tAr.width(),tAr.y()+tAr.height());
@@ -1501,18 +1754,16 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		pnt.setPen(mrkPen);
 		tm_t = tPict/1000000;
 		localtime_r(&tm_t,&ttm);
-		lab_dt = QString("%1-%2-%3").arg(ttm.tm_mday).arg(ttm.tm_mon+1,2,10,QChar('0')).arg(ttm.tm_year+1900);
-		if( ttm.tm_sec == 0 && tPict%1000000 == 0 )
-		    lab_tm = QString("%1:%2").arg(ttm.tm_hour).arg(ttm.tm_min,2,10,QChar('0'));
-		else if( tPict%1000000 == 0 )
-		    lab_tm = QString("%1:%2:%3").arg(ttm.tm_hour).arg(ttm.tm_min,2,10,QChar('0')).arg(ttm.tm_sec,2,10,QChar('0'));
-		else lab_tm = QString("%1:%2:%3").arg(ttm.tm_hour).arg(ttm.tm_min,2,10,QChar('0')).arg((float)ttm.tm_sec+(float)(tPict%1000000)/1e6);
-		int markBrd = tAr.x()+tAr.width()-pnt.fontMetrics().boundingRect(lab_tm).width();
+		lab_dt = TSYS::strMess("%d-%02d-%d",ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900);
+		if( ttm.tm_sec == 0 && tPict%1000000 == 0 ) lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
+		else if( tPict%1000000 == 0 ) lab_tm = TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec);
+		else lab_tm = TSYS::strMess("%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(tPict%1000000)/1e6);
+		int markBrd = tAr.x()+tAr.width()-pnt.fontMetrics().boundingRect(lab_tm.c_str()).width();
 		endMarkBrd = vmin(endMarkBrd,markBrd);
-		pnt.drawText(markBrd,tAr.y()+tAr.height()+mrkHeight,lab_tm);
-		markBrd = tAr.x()+tAr.width()-pnt.fontMetrics().boundingRect(lab_dt).width();
+		pnt.drawText(markBrd,tAr.y()+tAr.height()+mrkHeight,lab_tm.c_str());
+		markBrd = tAr.x()+tAr.width()-pnt.fontMetrics().boundingRect(lab_dt.c_str()).width();
 		endMarkBrd = vmin(endMarkBrd,markBrd);
-		pnt.drawText(markBrd,tAr.y()+tAr.height()+2*mrkHeight,lab_dt);
+		pnt.drawText(markBrd,tAr.y()+tAr.height()+2*mrkHeight,lab_dt.c_str());
 	    }
 	    //>>>> Draw grid and/or markers
 	    bool first_m = true;
@@ -1541,37 +1792,38 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 
 		    //Check for data present
 		    lab_dt.clear(), lab_tm.clear();
-		    if( hvLev == 5 || chLev >= 4 )					//Date
-			lab_dt = (chLev>=5 || chLev==-1) ? QString("%1-%2-%3").arg(ttm.tm_mday).arg(ttm.tm_mon+1,2,10,QChar('0')).arg(ttm.tm_year+1900) :
-							   QString::number(ttm.tm_mday);
-		    if( (hvLev == 4 || hvLev == 3 || ttm.tm_hour || ttm.tm_min) && !ttm.tm_sec )	//Hours and minuts
-			lab_tm =  QString("%1:%2").arg(ttm.tm_hour).arg(ttm.tm_min,2,10,QChar('0'));
-		    else if( (hvLev == 2 || ttm.tm_sec) && !(i_h%1000000) )		//Seconds
-			lab_tm = (chLev>=2 || chLev==-1) ? QString("%1:%2:%3").arg(ttm.tm_hour).arg(ttm.tm_min,2,10,QChar('0')).arg(ttm.tm_sec,2,10,QChar('0')) :
-							   QString("%1s").arg(ttm.tm_sec);
-		    else if( hvLev <= 1 || i_h%1000000 )				//Milliseconds
-			lab_tm = (chLev>=2 || chLev==-1) ? QString("%1:%2:%3").arg(ttm.tm_hour).arg(ttm.tm_min,2,10,QChar('0')).arg((float)ttm.tm_sec+(float)(i_h%1000000)/1e6) :
-				 (chLev>=1) ? QString("%1s").arg((float)ttm.tm_sec+(float)(i_h%1000000)/1e6) :
-					      QString("%1ms").arg((double)(i_h%1000000)/1000.,0,'g');
+		    //Date
+		    if( hvLev == 5 || chLev >= 4 )
+			lab_dt = (chLev>=5 || chLev==-1) ? TSYS::strMess("%d-%02d-%d",ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900) : TSYS::strMess("%d",ttm.tm_mday);
+		    //Hours and minuts
+		    if( (hvLev == 4 || hvLev == 3 || ttm.tm_hour || ttm.tm_min) && !ttm.tm_sec ) lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
+		    //Seconds
+		    else if( (hvLev == 2 || ttm.tm_sec) && !(i_h%1000000) )
+			lab_tm = (chLev>=2 || chLev==-1) ? TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec) : TSYS::strMess(_("%ds"),ttm.tm_sec);
+		    //Milliseconds
+		    else if( hvLev <= 1 || i_h%1000000 )
+			lab_tm = (chLev>=2 || chLev==-1) ? TSYS::strMess("%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(i_h%1000000)/1e6) :
+				 (chLev>=1) ? TSYS::strMess(_("%gs"),(float)ttm.tm_sec+(float)(i_h%1000000)/1e6) :
+					      TSYS::strMess(_("%gms"),(double)(i_h%1000000)/1000.);
 		    int wdth, tpos, endPosTm = 0, endPosDt = 0;
 		    pnt.setPen(mrkPen);
 		    if( lab_tm.size() )
 		    {
-			wdth = pnt.fontMetrics().boundingRect(lab_tm).width();
+			wdth = pnt.fontMetrics().boundingRect(lab_tm.c_str()).width();
 			tpos = vmax(h_pos-wdth/2,0);
 			if( (tpos+wdth) < endMarkBrd && tpos > begMarkBrd )
 			{
-			    pnt.drawText( tpos, tAr.y()+tAr.height()+mrkHeight, lab_tm );
+			    pnt.drawText( tpos, tAr.y()+tAr.height()+mrkHeight, lab_tm.c_str() );
 			    endPosTm = tpos+wdth;
 			}
 		    }
 		    if( lab_dt.size() )
 		    {
-			wdth = pnt.fontMetrics().boundingRect(lab_dt).width();
+			wdth = pnt.fontMetrics().boundingRect(lab_dt.c_str()).width();
 			tpos = vmax(h_pos-wdth/2,0);
 			if( (tpos+wdth) < endMarkBrd && tpos > begMarkBrd )
 			{
-			    pnt.drawText( tpos, tAr.y()+tAr.height()+2*mrkHeight, lab_dt );
+			    pnt.drawText( tpos, tAr.y()+tAr.height()+2*mrkHeight, lab_dt.c_str() );
 			    endPosDt = tpos+wdth;
 			}
 		    }
@@ -1587,8 +1839,9 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	}
     }
 
-    //--- Calc vertical scale ---
-    //---- Check for scale mode ----
+    //>> Calc vertical scale
+    long long aVend;			//Corrected for allow data the trend end point
+    long long aVbeg;			//Corrected for allow data the trend begin point
     double vsMax = 100, vsMin = 0;	//Trend's vertical scale border
     bool   vsPerc = true;		//Vertical scale percent mode
     if( shD->prms.size() == 1 )
@@ -1596,12 +1849,12 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	vsPerc = false;
 	if( shD->prms[0].bordU() <= shD->prms[0].bordL() )
 	{
-	    //----- Check trend for valid data -----
+	    //>>> Check trend for valid data
 	    aVbeg = vmax(tBeg,shD->prms[0].valBeg());
 	    aVend = vmin(tEnd,shD->prms[0].valEnd());
 
 	    if( aVbeg >= aVend ) return;
-	    //----- Calc value borders -----
+	    //>>> Calc value borders
 	    vsMax = -3e300, vsMin = 3e300;
 	    bool end_vl = false;
 	    int ipos = shD->prms[0].val(aVbeg);
@@ -1629,23 +1882,23 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	else { vsMax = shD->prms[0].bordU(); vsMin = shD->prms[0].bordL(); }
     }
 
-    float vmax_ln = tAr.height() / (int)(20.0*vmin(w->xScale(true),w->yScale(true)));
+    float vmax_ln = tAr.height() / ( (sclVer&0x2)?(2*mrkHeight):(int)(15.0*vmin(w->xScale(true),w->yScale(true))) );
     if( vmax_ln >= 2 )
     {
 	double vDiv = 1.;
 	double v_len = vsMax - vsMin;
-	while(v_len > vmax_ln)	{ vDiv*=10.; v_len/=10.; }
-	while(v_len < vmax_ln/10){ vDiv/=10.; v_len*=10.; }
+	while( v_len > vmax_ln )	{ vDiv *= 10; v_len /= 10; }
+	while( v_len < vmax_ln/10 )	{ vDiv /= 10; v_len *= 10; }
 	vsMin = floor(vsMin/vDiv)*vDiv;
 	vsMax = ceil(vsMax/vDiv)*vDiv;
-	while(((vsMax-vsMin)/vDiv) < vmax_ln/2) vDiv/=2;
+	while( ((vsMax-vsMin)/vDiv) < vmax_ln/2 ) vDiv/=2;
 
-	//--- Draw vertical grid and markers ---
+	//>>> Draw vertical grid and markers
 	if( sclVer&0x3 )
 	{
 	    pnt.setPen(grdPen);
 	    pnt.drawLine(tAr.x(),tAr.y(),tAr.x(),tAr.height());
-	    for(double i_v = vsMin; i_v <= vsMax; i_v+=vDiv)
+	    for( double i_v = vsMin; (vsMax-i_v)/vDiv > -0.1; i_v+=vDiv )
 	    {
 		int v_pos = tAr.y()+tAr.height()-(int)((double)tAr.height()*(i_v-vsMin)/(vsMax-vsMin));
 		pnt.setPen(grdPen);
@@ -1654,25 +1907,26 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		
 		if( sclVer&0x2 )
 		{
+		    bool isMax = (fabs((vsMax-i_v)/vDiv) < 0.1);
 		    pnt.setPen(mrkPen);
-		    pnt.drawText(tAr.x()+2,v_pos-1+((i_v==vsMax)?mrkHeight:0),QString::number(i_v,'g',4)+((vsPerc&&i_v==vsMax)?" %":""));
+		    pnt.drawText(tAr.x()+2,v_pos-1+(isMax?mrkHeight:0),(TSYS::strMess("%0.4g",i_v)+((vsPerc&&isMax)?" %":"")).c_str());
 		}
 	    }
 	}
     }
 
-    //-- Draw trends --
+    //>> Draw trends
     for( int i_t = 0; i_t < shD->prms.size(); i_t++ )
     {
 	TrendObj *sTr = &shD->prms[i_t];
 
-	//--- Set trend's pen ---
+	//>>> Set trend's pen
 	QPen trpen(QColor(sTr->color().c_str()));
 	trpen.setStyle(Qt::SolidLine);
 	trpen.setWidth(1);
 	pnt.setPen(trpen);
 
-	//--- Prepare generic parameters ---
+	//>>> Prepare generic parameters
 	aVbeg = vmax(tBeg,sTr->valBeg());
 	aVend = vmin(tEnd,sTr->valEnd());
 
@@ -1680,7 +1934,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	int aPosBeg = sTr->val(aVbeg);
 	if( aPosBeg && sTr->val()[aPosBeg].tm > aVbeg ) aPosBeg--;
 
-	//--- Prepare border for percent trend ---
+	//>>> Prepare border for percent trend
 	float bordL = sTr->bordL();
 	float bordU = sTr->bordU();
 	if( vsPerc && bordL >= bordU )
@@ -1700,11 +1954,11 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		ipos++;
 	    }
 	    float vMarg = (bordU-bordL)/10;
-	    bordL-= vMarg;
-	    bordU+= vMarg;
+	    bordL -= vMarg;
+	    bordU += vMarg;
 	}
 
-	//--- Draw trend ---
+	//>>> Draw trend
 	bool end_vl = false;
 	double curVl, averVl = EVAL_REAL, prevVl = EVAL_REAL;
 	int    curPos, averPos = 0, prevPos = 0;
@@ -1771,11 +2025,11 @@ void ShapeDiagram::tracing( )
     long long trcPer = (long long)shD->trcPer*1000000;
     if( shD->tTimeCurent )	shD->tTime = (long long)time(NULL)*1000000;
     else if( shD->tTime )	shD->tTime += trcPer;
-    loadTrendsData(w);
-    makeTrendsPicture(w);
+    loadData(w);
+    makePicture(w);
 
     //> Trace cursors value
-    if( shD->active && (shD->holdCur || shD->curTime <= (shD->tPict-(long long)(shD->tSize*1000000.))) )
+    if( shD->type == 0 && shD->active && (shD->holdCur || shD->curTime <= (shD->tPict-(long long)(shD->tSize*1000000.))) )
 	setCursor( w, shD->tTime );
     w->update();
 }
@@ -1785,10 +2039,6 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
     ShpDt *shD = (ShpDt*)w->shpData;
 
     if( !shD->en ) return false;
-
-    //> Get generic data
-    long long tTimeGrnd = shD->tPict - (long long)(shD->tSize*1000000.);
-    long long curTime	= vmax(vmin(shD->curTime,shD->tPict),tTimeGrnd);
 
     //> Process event
     switch( event->type() )
@@ -1816,9 +2066,21 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 	    if( w->hasFocus() )	qDrawShadeRect(&pnt,dA.x(),dA.y(),dA.width(),dA.height(),w->palette());
 
 	    //> Draw cursor
-	    if( shD->active && curTime && tTimeGrnd && shD->tPict && (curTime >= tTimeGrnd || curTime <= shD->tPict) )
+	    int curPos = -1;
+	    if( shD->type == 0 && shD->active )
 	    {
-		int curPos = shD->pictRect.x()+shD->pictRect.width()*(curTime-tTimeGrnd)/(shD->tPict-tTimeGrnd);
+		long long tTimeGrnd = shD->tPict - (long long)(shD->tSize*1000000.);
+		long long curTime = vmax(vmin(shD->curTime,shD->tPict),tTimeGrnd);
+		if( curTime && tTimeGrnd && shD->tPict && (curTime >= tTimeGrnd || curTime <= shD->tPict) )
+		    curPos = shD->pictRect.x()+shD->pictRect.width()*(curTime-tTimeGrnd)/(shD->tPict-tTimeGrnd);
+	    }
+	    else if( shD->type == 1 && shD->active && shD->tSize )
+	    {
+		float curFrq = vmax(vmin(1e6/(float)shD->curTime,shD->fftEnd),shD->fftBeg);
+		curPos = shD->pictRect.x()+(int)(shD->pictRect.width()*(curFrq-shD->fftBeg)/(shD->fftEnd-shD->fftBeg));
+	    }
+	    if( curPos >= 0 && curPos <= shD->pictRect.width() )
+	    {
 		QPen curpen(shD->curColor);
 		curpen.setWidth(1);
 		pnt.setPen(curpen);
@@ -1831,16 +2093,22 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 	{
 	    QKeyEvent *key = static_cast<QKeyEvent*>(event);
 
-	    switch(key->key())
+	    switch( key->key() )
 	    {
-		case Qt::Key_Left:
-		    if( curTime <= tTimeGrnd ) break;
-		    setCursor( w, curTime-(shD->tTime-tTimeGrnd)/shD->pictRect.width() );
-		    w->update();
-		    return true;
-		case Qt::Key_Right:
-		    if( curTime >= shD->tTime ) break;
-		    setCursor( w, curTime+(shD->tTime-tTimeGrnd)/shD->pictRect.width() );
+		case Qt::Key_Left: case Qt::Key_Right:
+		    if( !shD->active ) break;
+		    if( shD->type == 0 )
+		    {
+			long long tTimeGrnd = shD->tPict - (long long)(shD->tSize*1000000.);
+			long long curTime = vmax(vmin(shD->curTime,shD->tPict),tTimeGrnd);
+			setCursor( w, curTime+((key->key()==Qt::Key_Left)?-1:1)*(shD->tTime-tTimeGrnd)/shD->pictRect.width() );
+		    }
+		    else if( shD->type == 1 )
+		    {
+			if( !shD->tSize ) break;
+			float curFrq = vmax(vmin(1e6/(float)shD->curTime,shD->fftEnd),shD->fftBeg);
+			setCursor( w, (long long)(1e6/(curFrq+((key->key()==Qt::Key_Left)?-1:1)*(shD->fftEnd-shD->fftBeg)/shD->pictRect.width())) );
+		    }
 		    w->update();
 		    return true;
 	    }
@@ -1848,10 +2116,16 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 	}
 	case QEvent::MouseButtonPress:
 	{
-	    if( !w->hasFocus() ) break;
+	    if( !shD->active || !w->hasFocus() ) break;
 	    QPoint curp = w->mapFromGlobal(w->cursor().pos());
 	    if( curp.x() < shD->pictRect.x() || curp.x() > (shD->pictRect.x()+shD->pictRect.width()) ) break;
-	    setCursor( w, tTimeGrnd + (shD->tPict-tTimeGrnd)*(curp.x()-shD->pictRect.x())/shD->pictRect.width() );
+	    if( shD->type == 0 )
+	    {
+		long long tTimeGrnd = shD->tPict - (long long)(shD->tSize*1000000.);
+		setCursor( w, tTimeGrnd + (shD->tPict-tTimeGrnd)*(curp.x()-shD->pictRect.x())/shD->pictRect.width() );
+	    }
+	    else if( shD->type == 1 )
+		setCursor( w, (long long)(1e6/(shD->fftBeg+(shD->fftEnd-shD->fftBeg)*(curp.x()-shD->pictRect.x())/shD->pictRect.width())) );
 	    w->update();
 	    break;
 	}
@@ -1864,35 +2138,65 @@ void ShapeDiagram::setCursor( WdgView *w, long long itm )
 {
     ShpDt *shD = (ShpDt*)w->shpData;
 
-    long long tTimeGrnd = shD->tTime - (long long)(shD->tSize*1000000.);
-    long long curTime   = vmax(vmin(itm,shD->tTime),tTimeGrnd);
-
-    shD->holdCur = (curTime==shD->tTime);
-
-    w->setAllAttrLoad(true);
-    w->attrSet("curSek",TSYS::int2str(curTime/1000000),30);
-    w->attrSet("curUSek",TSYS::int2str(curTime%1000000),31);
-
-    //- Update trend's current values -
-    for( int i_p = 0; i_p < shD->prms.size(); i_p++ )
+    if( shD->type == 0 )
     {
-	int vpos = shD->prms[i_p].val(curTime);
-	if( vpos >= shD->prms[i_p].val().size() )	continue;
-	if( vpos && shD->prms[i_p].val()[vpos].tm > curTime )	vpos--;
-	double val = shD->prms[i_p].val()[vpos].val;
-	if( val != shD->prms[i_p].curVal() )
-	    w->attrSet(QString("prm%1val").arg(i_p).toAscii().data(),TSYS::real2str(val,6),54+10*i_p);
+	long long tTimeGrnd = shD->tTime - (long long)(shD->tSize*1000000.);
+	long long curTime   = vmax(vmin(itm,shD->tTime),tTimeGrnd);
+
+	shD->holdCur = (curTime==shD->tTime);
+
+	w->setAllAttrLoad(true);
+	w->attrSet("curSek",TSYS::int2str(curTime/1000000),30);
+	w->attrSet("curUSek",TSYS::int2str(curTime%1000000),31);
+
+	//> Update trend's current values
+	for( int i_p = 0; i_p < shD->prms.size(); i_p++ )
+	{
+	    int vpos = shD->prms[i_p].val(curTime);
+	    if( vpos >= shD->prms[i_p].val().size() )	continue;
+	    if( vpos && shD->prms[i_p].val()[vpos].tm > curTime )	vpos--;
+	    double val = shD->prms[i_p].val()[vpos].val;
+	    if( val != shD->prms[i_p].curVal() )
+		w->attrSet(TSYS::strMess("prm%dval",i_p),TSYS::real2str(val,6),54+10*i_p);
+	}
+	w->setAllAttrLoad(false);
     }
-    w->setAllAttrLoad(false);
+    else if( shD->type == 1 )
+    {
+	float curFrq = vmax(vmin(1e6/(float)itm,shD->fftEnd),shD->fftBeg);
+
+	w->setAllAttrLoad(true);
+	w->attrSet("curSek",TSYS::int2str(((long long)(1e6/curFrq))/1000000),30);
+	w->attrSet("curUSek",TSYS::int2str(((long long)(1e6/curFrq))%1000000),31);
+
+	//> Update trend's current values
+	for( int i_p = 0; i_p < shD->prms.size(); i_p++ )
+	{
+	    if( !shD->prms[i_p].fftN )	continue;
+	    float fftDt = (1/shD->tSize)*(float)w->size().width()/shD->prms[i_p].fftN;
+	    int vpos = (int)(curFrq/fftDt);
+	    double val = EVAL_REAL;
+	    if( vpos >= 1 && vpos < (shD->prms[i_p].fftN/2+1) )
+		val = shD->prms[i_p].fftOut[0][0]/shD->prms[i_p].fftN +
+		    pow(pow(shD->prms[i_p].fftOut[vpos][0],2)+pow(shD->prms[i_p].fftOut[vpos][1],2),0.5)/(shD->prms[i_p].fftN/2+1);
+	    w->attrSet(TSYS::strMess("prm%dval",i_p),TSYS::real2str(val,6),54+10*i_p);
+	}
+	w->setAllAttrLoad(false);
+    }
 }
 
 //* Trend object's class                         *
 //************************************************
 ShapeDiagram::TrendObj::TrendObj( WdgView *iview ) : view(iview),
     m_bord_low(0), m_bord_up(0), m_curvl(EVAL_REAL),
-    arh_beg(0), arh_end(0), arh_per(0),val_tp(0)
+    arh_beg(0), arh_end(0), arh_per(0), val_tp(0), fftN(0), fftOut(NULL)
 {
     loadData();
+}
+
+ShapeDiagram::TrendObj::~TrendObj( )
+{
+    if( fftOut ) { delete fftOut; fftN = 0; }
 }
 
 long long ShapeDiagram::TrendObj::valBeg()
@@ -1925,13 +2229,23 @@ void ShapeDiagram::TrendObj::setAddr( const string &vl )
 void ShapeDiagram::TrendObj::loadData( bool full )
 {
     ShpDt *shD = (ShpDt*)view->shpData;
+    switch( shD->type )
+    {
+	case 0: loadTrendsData(full);	break;
+	case 1: loadSpectrumData(full);	break;
+    }
+}
+
+void ShapeDiagram::TrendObj::loadTrendsData( bool full )
+{
+    ShpDt *shD = (ShpDt*)view->shpData;
 
     long long tSize     = (long long)(shD->tSize*1000000.);
     long long tTime     = shD->tTime;
     long long tTimeGrnd = tTime - tSize;
     long long wantPer = tSize/view->size().width();
 
-    //> Clear trend for empty address and the full reload data
+    //> Clear trend for empty address and for full reload data
     if( full || addr().empty() )
     {
 	arh_per = arh_beg = arh_end = 0;
@@ -2050,6 +2364,52 @@ void ShapeDiagram::TrendObj::loadData( bool full )
     }
     //> Check for archive jump
     if( shD->valArch.empty() && (bbeg-tTimeGrnd)/bper )	{ tTime = bbeg-bper; goto m1; }
+}
+
+void ShapeDiagram::TrendObj::loadSpectrumData( bool full )
+{
+    ShpDt *shD = (ShpDt*)view->shpData;
+
+    loadTrendsData(true);
+
+    if( !valBeg( ) || !valEnd( ) ) return;
+
+    if( fftOut ) { delete fftOut; fftN = 0; }
+
+    long long tSize	= (long long)(shD->tSize*1000000.);
+    long long tTime	= shD->tTime;
+    long long tTimeGrnd	= tTime - tSize;
+    long long workPer	= tSize/view->size().width();
+
+    tTimeGrnd = vmax(tTimeGrnd,valBeg());
+    tTime = vmin(tTime,valEnd());
+
+    fftN = (tTime-tTimeGrnd)/workPer;
+    double fftIn[fftN];
+    fftOut = (fftw_complex*)malloc(sizeof(fftw_complex)*(fftN/2+1));
+
+    int fftFirstPos = -1, fftLstPos = -1;
+    for( int a_pos = val(tTimeGrnd); a_pos < val().size() && val()[a_pos].tm <= tTime; a_pos++ )
+    {
+	int fftPos = (val()[a_pos].tm-tTimeGrnd)/workPer;
+	if( fftPos >= fftN ) break;
+	if( val()[a_pos].val == EVAL_REAL ) continue;
+	if( fftFirstPos < 0 ) fftFirstPos = fftPos;
+
+	if( fftLstPos == fftPos ) fftIn[fftPos-fftFirstPos] = (fftIn[fftPos-fftFirstPos]+val()[a_pos].val)/2;
+	else fftIn[fftPos-fftFirstPos] = val()[a_pos].val;
+
+	for( ; fftLstPos >= 0 && (fftLstPos+1) < fftPos; fftLstPos++ )
+	    fftIn[fftLstPos-fftFirstPos+1] = fftIn[fftLstPos-fftFirstPos];
+	fftLstPos = fftPos;
+    }
+
+    fftN = fftLstPos-fftFirstPos;
+    if( fftN < 20 ) { delete fftOut; fftOut = NULL; fftN = 0; return; }
+
+    fftw_plan p = fftw_plan_dft_r2c_1d( fftN, fftIn, fftOut, FFTW_ESTIMATE );
+    fftw_execute(p);
+    fftw_destroy_plan(p);
 }
 
 //************************************************

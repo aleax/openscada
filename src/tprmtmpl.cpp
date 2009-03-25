@@ -320,9 +320,9 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )
 	{
 	    int row = atoi(opt->attr("row").c_str());
-	    if(io(row)->flg()&TPrmTempl::LockAttr)
+	    if( io(row)->flg()&TPrmTempl::LockAttr )
 		throw TError(nodePath().c_str(),_("Deleting lock atribute in not allow."));
-	    ioDel( atoi(opt->attr("row").c_str()) );
+	    ioDel( row );
 	    modif();
 	}
 	if( ctrChkNode(opt,"move",0664,"root","root",SEQ_WR) )  { ioMove( atoi(opt->attr("row").c_str()), atoi(opt->attr("to").c_str()) ); modif(); }

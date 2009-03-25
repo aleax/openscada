@@ -51,6 +51,8 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
 {
     setAttribute(Qt::WA_DeleteOnClose,true);
 
+    setProperty("QTStarterToolDis",true);
+
 #if QT_VERSION >= 0x040301
     setDockOptions(dockOptions() | QMainWindow::VerticalTabs);
 #endif
