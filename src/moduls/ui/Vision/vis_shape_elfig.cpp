@@ -1089,9 +1089,10 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                                         if( (shapeItems[inundation_fig_num[p]].type==3 && shapeItems[j].type==1) && (inundation_fig_num[p]!=j) )
                                             inundation_fig_num[p]=j;
                                         if( (shapeItems[inundation_fig_num[p]].type==2 && shapeItems[j].type==3) && (inundation_fig_num[p]!=j) )
-					    inundation_fig_num[p]=j;
+                                            inundation_fig_num[p]=j;
                                     }
-                                if( flag_push_back ) inundation_fig_num.push_back(j);
+                                if( flag_push_back )
+                                    inundation_fig_num.push_back(j);
                             }
                     for( int j=0; j < shapeItems.size(); j++ )
                         if( (shapeItems[j].n1 == inundationItems[i].number_shape[inundationItems[i].number_shape.size()-1] && shapeItems[j].n2 == inundationItems[i].number_shape[0]) ||
@@ -1110,7 +1111,8 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                                     if( (shapeItems[inundation_fig_num[p]].type==2 && shapeItems[j].type==3) && (inundation_fig_num[p]!=j) )
                                         inundation_fig_num[p] = j;
                                 }
-                                if( flag_push_back ) inundation_fig_num.push_back(j);
+                                if( flag_push_back )
+                                    inundation_fig_num.push_back(j);
                         }
                     QPainterPath temp_path = createInundationPath( inundation_fig_num, shapeItems, *pnts,w );
                     inundation_fig_num = inundationSort( temp_path, inundation_fig_num, shapeItems, pnts, w );
@@ -4548,7 +4550,84 @@ void ShapeElFigure::moveUpDown( QVector<ShapeItem> &shapeItems, PntMap *pnts, QV
     int rect_num_temp;
     count_moveItemTo = 0;
     bool flag_break_move;
-    if( flag_ctrl && count_Shapes ) moveAll( QPointF(0,0), shapeItems, pnts, inundationItems, view );
+    if( flag_ctrl && count_Shapes )
+    {
+        if( !flag_first_move )
+            for( int j = 0; j < count_Shapes; j++ )
+                for( int i = 0; i < shapeItems.size(); i++ )
+                {
+                    if( i != index_array[j] )
+                    {
+                        if( shapeItems[index_array[j]].type == 2 )
+                        {
+                            if( (shapeItems[index_array[j]].n5 == shapeItems[i].n1) || 
+                                (shapeItems[index_array[j]].n5 == shapeItems[i].n2) ||
+                                (shapeItems[index_array[j]].n5 == shapeItems[i].n3) || 
+                                (shapeItems[index_array[j]].n5 == shapeItems[i].n4) ||
+                                (shapeItems[index_array[j]].n5 == shapeItems[i].n5) )
+                            {
+                                QPointF Temp = (*pnts)[shapeItems[index_array[j]].n5];
+                                if( shapeItems[index_array[j]].n5 > 0 )
+                                    shapeItems[index_array[j]].n5 = appendPoint( Temp, shapeItems, pnts, 0 );
+                                else if( shapeItems[index_array[j]].n5 <= -10 )
+                                    shapeItems[index_array[j]].n5 = appendPoint( Temp, shapeItems, pnts, 1 );
+                            }
+                        }
+                        if( shapeItems[index_array[j]].type == 2 || shapeItems[index_array[j]].type == 3 )
+                        {
+                            if( (shapeItems[index_array[j]].n4 == shapeItems[i].n1) || 
+                                (shapeItems[index_array[j]].n4 == shapeItems[i].n2) ||
+                                (shapeItems[index_array[j]].n4 == shapeItems[i].n3) || 
+                                (shapeItems[index_array[j]].n4 == shapeItems[i].n4) ||
+                                (shapeItems[index_array[j]].n4 == shapeItems[i].n5) )
+                            {
+                                QPointF Temp = (*pnts)[shapeItems[index_array[j]].n4];
+                                if( shapeItems[index_array[j]].n4 > 0 )
+                                    shapeItems[index_array[j]].n4 = appendPoint( Temp, shapeItems, pnts, 0 );
+                                else if( shapeItems[index_array[j]].n4 <= -10 )
+                                    shapeItems[index_array[j]].n4 = appendPoint( Temp, shapeItems, pnts, 1 );
+                            }
+                            if( (shapeItems[index_array[j]].n3 == shapeItems[i].n1) || 
+                                (shapeItems[index_array[j]].n3 == shapeItems[i].n2) ||
+                                (shapeItems[index_array[j]].n3 == shapeItems[i].n3) || 
+                                (shapeItems[index_array[j]].n3 == shapeItems[i].n4) ||
+                                (shapeItems[index_array[j]].n3 == shapeItems[i].n5) )
+                            {
+                                QPointF Temp = (*pnts)[shapeItems[index_array[j]].n3];
+                                if( shapeItems[index_array[j]].n3 > 0 )
+                                    shapeItems[index_array[j]].n3 = appendPoint( Temp, shapeItems, pnts, 0 );
+                                else if( shapeItems[index_array[j]].n3 <= -10 )
+                                    shapeItems[index_array[j]].n3 = appendPoint( Temp, shapeItems, pnts, 1 );
+                            }
+                        }
+                        if( (shapeItems[index_array[j]].n1 == shapeItems[i].n1) || 
+                            (shapeItems[index_array[j]].n1 == shapeItems[i].n2) ||
+                            (shapeItems[index_array[j]].n1 == shapeItems[i].n3) || 
+                            (shapeItems[index_array[j]].n1 == shapeItems[i].n4) ||
+                            (shapeItems[index_array[j]].n1 == shapeItems[i].n5) )
+                        {
+                            QPointF Temp = (*pnts)[shapeItems[index_array[j]].n1];
+                            if( shapeItems[index_array[j]].n1 > 0 )
+                                shapeItems[index_array[j]].n1 = appendPoint( Temp, shapeItems, pnts, 0 );
+                            else if( shapeItems[index_array[j]].n1 <= -10 )
+                                shapeItems[index_array[j]].n1 = appendPoint( Temp, shapeItems, pnts, 1 );
+                        }
+                        if( (shapeItems[index_array[j]].n2 == shapeItems[i].n1) || 
+                            (shapeItems[index_array[j]].n2 == shapeItems[i].n2) ||
+                            (shapeItems[index_array[j]].n2 == shapeItems[i].n3) ||
+                            (shapeItems[index_array[j]].n2 == shapeItems[i].n4) ||
+                            (shapeItems[index_array[j]].n2 == shapeItems[i].n5) )
+                        {
+                            QPointF Temp = (*pnts)[shapeItems[index_array[j]].n2];
+                            if( shapeItems[index_array[j]].n2 > 0 )
+                                shapeItems[index_array[j]].n2 = appendPoint( Temp, shapeItems, pnts, 0 );
+                            else if( shapeItems[index_array[j]].n2 <= -10 )
+                                shapeItems[index_array[j]].n2 = appendPoint( Temp, shapeItems, pnts, 1 );
+                        }
+                    }
+                }
+        moveAll( QPointF(0,0), shapeItems, pnts, inundationItems, view );
+    }
     else
     { 
         if( !flag_first_move )
@@ -4586,7 +4665,8 @@ void ShapeElFigure::moveUpDown( QVector<ShapeItem> &shapeItems, PntMap *pnts, QV
             flag_ctrl_move = false;
             count_moveItemTo = 1;
             count_Shapes = 1;
-            if( !status_hold )
+            if( !status_hold && !flag_first_move )
+            {
                 for( int i = 0; i < shapeItems.size(); i++ )
                 {
                     if( i != index )
@@ -4659,6 +4739,7 @@ void ShapeElFigure::moveUpDown( QVector<ShapeItem> &shapeItems, PntMap *pnts, QV
                         }
                     }
                 }
+            }
             itemInMotion = &shapeItems[index];
             moveItemTo( (*pnts)[itemInMotion->n1], shapeItems, pnts, view );
             if( inundationItems.size() )

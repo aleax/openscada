@@ -2275,6 +2275,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
     double el_width;
     double border_width;
     bool flag_min;
+    bool flag_push_back;
     scaleHeight = (int)TSYS::realRound(height*ySc, 2, true);
     scaleWidth = (int)TSYS::realRound(width*xSc, 2, true);
     if( xSc < ySc ) scale = xSc;
@@ -2344,6 +2345,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
                     line_color_shape.push_back( shapeItems[k].lineColor );
                     if( shapeItems[k].border_width != 0 ) border_color_shape.push_back( shapeItems[k].borderColor );
                     else border_color_shape.push_back( shapeItems[k].lineColor );
+                    if( shape_temp.size() == 2 ) break;
                 }
         }
         else
@@ -2353,6 +2355,94 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
                     if( ((inundationItems[i].number_point[j] == shapeItems[k].n1) && (inundationItems[i].number_point[j+1] == shapeItems[k].n2)) ||
                         ((inundationItems[i].number_point[j] == shapeItems[k].n2) && (inundationItems[i].number_point[j+1] == shapeItems[k].n1)) )
                     {
+                        flag_push_back = true;
+                        for( int p=0; p < shape_temp.size(); p++ )
+                            if( (shapeItems[shape_temp[p]].n1 == shapeItems[k].n1 && shapeItems[shape_temp[p]].n2 == shapeItems[k].n2) ||
+                                 (shapeItems[shape_temp[p]].n1 == shapeItems[k].n2 && shapeItems[shape_temp[p]].n2 == shapeItems[k].n1) )
+                            {
+                                flag_push_back = false;
+                                if( (shapeItems[shape_temp[p]].type==2 && shapeItems[k].type==1) && (shape_temp[p]!=k) )
+                                {
+                                    shape_temp[p]=k;
+                                    width_shape[p] = shapeItems[k].width;
+                                    border_width_shape[p] = shapeItems[k].border_width;
+                                    line_color_shape[p] = shapeItems[k].lineColor;
+                                    if( shapeItems[k].border_width != 0 ) border_color_shape[p] = shapeItems[k].borderColor;
+                                    else border_color_shape[p] = shapeItems[k].lineColor ;
+                                }
+                                if( (shapeItems[shape_temp[p]].type==3 && shapeItems[k].type==1) && (shape_temp[p]!=k) )
+                                {
+                                    shape_temp[p]=k;
+                                    width_shape[p] = shapeItems[k].width;
+                                    border_width_shape[p] = shapeItems[k].border_width;
+                                    line_color_shape[p] = shapeItems[k].lineColor;
+                                    if( shapeItems[k].border_width != 0 ) border_color_shape[p] = shapeItems[k].borderColor;
+                                    else border_color_shape[p] = shapeItems[k].lineColor ;
+
+                                }
+                                if( (shapeItems[shape_temp[p]].type==2 && shapeItems[k].type==3) && (shape_temp[p]!=k) )
+                                {
+                                    shape_temp[p]=k;
+                                    width_shape[p] = shapeItems[k].width;
+                                    border_width_shape[p] = shapeItems[k].border_width;
+                                    line_color_shape[p] = shapeItems[k].lineColor;
+                                    if( shapeItems[k].border_width != 0 ) border_color_shape[p] = shapeItems[k].borderColor;
+                                    else border_color_shape[p] = shapeItems[k].lineColor ;
+
+                                }
+                            }
+                        if( flag_push_back )// inundation_fig_num.push_back(j);
+                        {
+                            shape_temp.push_back(k);
+                            width_shape.push_back( shapeItems[k].width );
+                            border_width_shape.push_back( shapeItems[k].border_width );
+                            line_color_shape.push_back( shapeItems[k].lineColor );
+                            if( shapeItems[k].border_width != 0 ) border_color_shape.push_back( shapeItems[k].borderColor );
+                            else border_color_shape.push_back( shapeItems[k].lineColor );
+                        }
+                    }
+            for( int k = 0; k < shapeItems.size(); k++ )
+                if( ((inundationItems[i].number_point[inundationItems[i].number_point.size()-1] == shapeItems[k].n1) && (inundationItems[i].number_point[0] == shapeItems[k].n2)) ||
+                    ((inundationItems[i].number_point[inundationItems[i].number_point.size()-1] == shapeItems[k].n2) && (inundationItems[i].number_point[0] == shapeItems[k].n1)) )
+                {
+                    flag_push_back = true;
+                    for( int p=0; p < shape_temp.size(); p++ )
+                        if( (shapeItems[shape_temp[p]].n1 == shapeItems[k].n1 && shapeItems[shape_temp[p]].n2 == shapeItems[k].n2) ||
+                             (shapeItems[shape_temp[p]].n1 == shapeItems[k].n2 && shapeItems[shape_temp[p]].n2 == shapeItems[k].n1) )
+                        {
+                            flag_push_back = false;
+                            if( (shapeItems[shape_temp[p]].type==2 && shapeItems[k].type==1) && (shape_temp[p]!=k) )
+                            {
+                                shape_temp[p]=k;
+                                width_shape[p] = shapeItems[k].width;
+                                border_width_shape[p] = shapeItems[k].border_width;
+                                line_color_shape[p] = shapeItems[k].lineColor;
+                                if( shapeItems[k].border_width != 0 ) border_color_shape[p] = shapeItems[k].borderColor;
+                                else border_color_shape[p] = shapeItems[k].lineColor ;
+                            }
+                            if( (shapeItems[shape_temp[p]].type==3 && shapeItems[k].type==1) && (shape_temp[p]!=k) )
+                            {
+                                shape_temp[p]=k;
+                                width_shape[p] = shapeItems[k].width;
+                                border_width_shape[p] = shapeItems[k].border_width;
+                                line_color_shape[p] = shapeItems[k].lineColor;
+                                if( shapeItems[k].border_width != 0 ) border_color_shape[p] = shapeItems[k].borderColor;
+                                else border_color_shape[p] = shapeItems[k].lineColor ;
+
+                            }
+                            if( (shapeItems[shape_temp[p]].type==2 && shapeItems[k].type==3) && (shape_temp[p]!=k) )
+                            {
+                                shape_temp[p]=k;
+                                width_shape[p] = shapeItems[k].width;
+                                border_width_shape[p] = shapeItems[k].border_width;
+                                line_color_shape[p] = shapeItems[k].lineColor;
+                                if( shapeItems[k].border_width != 0 ) border_color_shape[p] = shapeItems[k].borderColor;
+                                else border_color_shape[p] = shapeItems[k].lineColor ;
+
+                            }
+                        }
+                    if( flag_push_back )
+                    {
                         shape_temp.push_back(k);
                         width_shape.push_back( shapeItems[k].width );
                         border_width_shape.push_back( shapeItems[k].border_width );
@@ -2360,16 +2450,6 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
                         if( shapeItems[k].border_width != 0 ) border_color_shape.push_back( shapeItems[k].borderColor );
                         else border_color_shape.push_back( shapeItems[k].lineColor );
                     }
-            for( int k = 0; k < shapeItems.size(); k++ )
-                if( ((inundationItems[i].number_point[inundationItems[i].number_point.size()-1] == shapeItems[k].n1) && (inundationItems[i].number_point[0] == shapeItems[k].n2)) ||
-                    ((inundationItems[i].number_point[inundationItems[i].number_point.size()-1] == shapeItems[k].n2) && (inundationItems[i].number_point[0] == shapeItems[k].n1)) )
-                {
-                    shape_temp.push_back(k);
-                    width_shape.push_back( shapeItems[k].width );
-                    border_width_shape.push_back( shapeItems[k].border_width );
-                    line_color_shape.push_back( shapeItems[k].lineColor );
-                    if( shapeItems[k].border_width != 0 ) border_color_shape.push_back( shapeItems[k].borderColor );
-                    else border_color_shape.push_back( shapeItems[k].lineColor );
                 }
         }
         //- Changing the color of the figure for the same for all figures from which the each fill is consist and painting them -
@@ -2437,23 +2517,24 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
                 else if( count_max_x < 3 ) num_pnt = max_x;
                 else if( count_min_y < 3 ) num_pnt = min_y;
                 else if( count_max_y < 3 ) num_pnt = max_y;
+
                 //- Detecting two figures and their "free" points for computing the real "filling" point
-                for( int j = 0; j < shapeItems.size(); j++ )
+                for( int j = 0; j < shape_temp.size(); j++ )
                 {
-                    if( shapeItems[j].n1 == num_pnt )
+                    if( shapeItems[shape_temp[j]].n1 == num_pnt )
                         for( int k = 0; k < inundationItems[i].number_point.size(); k++ )
-                            if( shapeItems[j].n2 == inundationItems[i].number_point[k] )
+                            if( shapeItems[shape_temp[j]].n2 == inundationItems[i].number_point[k] )
                             {
-                                fig.push_back(j);
-                                point_num.push_back( shapeItems[j].n2 );
+                                fig.push_back(shape_temp[j]);
+                                point_num.push_back( shapeItems[shape_temp[j]].n2 );
                                 break;
                             }
-                    if( shapeItems[j].n2 == num_pnt )
+                    if( shapeItems[shape_temp[j]].n2 == num_pnt )
                         for( int k = 0; k < inundationItems[i].number_point.size(); k++ )
-                            if( shapeItems[j].n1 == inundationItems[i].number_point[k] )
+                            if( shapeItems[shape_temp[j]].n1 == inundationItems[i].number_point[k] )
                             {
-                                fig.push_back(j);
-                                point_num.push_back( shapeItems[j].n1 );
+                                fig.push_back(shape_temp[j]);
+                                point_num.push_back( shapeItems[shape_temp[j]].n1 );
                                 break;
                             }
                 }
