@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the OpenSCADA.DAQ.Transporter package module.
 # Roman Savochenko <rom_as@fromru.com>, 2007-2009.
 #
-#: transporter.cpp:49 transporter.cpp:130 transporter.cpp:443
+#: transporter.cpp:49 transporter.cpp:130 transporter.cpp:449
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Transporter 0.3.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-07 13:37+0200\n"
+"POT-Creation-Date: 2009-03-26 17:36+0200\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -67,7 +67,7 @@ msgstr ""
 msgid "h"
 msgstr ""
 
-#: transporter.cpp:103
+#: transporter.cpp:103 transporter.cpp:340 transporter.cpp:342
 msgid "help"
 msgstr ""
 
@@ -83,7 +83,7 @@ msgstr "Період збору даних (с)"
 msgid "6.2"
 msgstr ""
 
-#: transporter.cpp:124 transporter.cpp:545
+#: transporter.cpp:124 transporter.cpp:551
 msgid "1"
 msgstr ""
 
@@ -103,7 +103,7 @@ msgstr "Рівень пріорітету задачі збору даних"
 msgid "2"
 msgstr ""
 
-#: transporter.cpp:125 transporter.cpp:545
+#: transporter.cpp:125 transporter.cpp:551
 msgid "0"
 msgstr ""
 
@@ -123,7 +123,7 @@ msgstr ""
 msgid "0;1000"
 msgstr ""
 
-#: transporter.cpp:127 transporter.cpp:163
+#: transporter.cpp:127 transporter.cpp:163 transporter.cpp:339
 msgid "STATIONS"
 msgstr ""
 
@@ -131,11 +131,11 @@ msgstr ""
 msgid "Remote stations list"
 msgstr "Перелік віддалених станцій"
 
-#: transporter.cpp:127
+#: transporter.cpp:127 transporter.cpp:339 transporter.cpp:341
 msgid "100"
 msgstr ""
 
-#: transporter.cpp:128 transporter.cpp:163
+#: transporter.cpp:128 transporter.cpp:163 transporter.cpp:341
 msgid "CNTRPRM"
 msgstr ""
 
@@ -156,10 +156,10 @@ msgid "Standard"
 msgstr "Стандарт"
 
 #: transporter.cpp:144 transporter.cpp:146 transporter.cpp:153
-#: transporter.cpp:203 transporter.cpp:216 transporter.cpp:344
-#: transporter.cpp:417 transporter.cpp:421 transporter.cpp:426
-#: transporter.cpp:466 transporter.cpp:482 transporter.cpp:499
-#: transporter.cpp:528 transporter.cpp:561 transporter.cpp:564
+#: transporter.cpp:203 transporter.cpp:216 transporter.cpp:350
+#: transporter.cpp:423 transporter.cpp:427 transporter.cpp:432
+#: transporter.cpp:472 transporter.cpp:488 transporter.cpp:505
+#: transporter.cpp:534 transporter.cpp:567 transporter.cpp:570
 msgid "path"
 msgstr ""
 
@@ -187,11 +187,11 @@ msgstr ""
 msgid "rez"
 msgstr ""
 
-#: transporter.cpp:182 transporter.cpp:426
+#: transporter.cpp:182 transporter.cpp:432
 msgid "list"
 msgstr ""
 
-#: transporter.cpp:197 transporter.cpp:508 transporter.cpp:561
+#: transporter.cpp:197 transporter.cpp:514 transporter.cpp:567
 msgid "/"
 msgstr ""
 
@@ -199,8 +199,8 @@ msgstr ""
 msgid "/DAQ/"
 msgstr ""
 
-#: transporter.cpp:203 transporter.cpp:216 transporter.cpp:346
-#: transporter.cpp:410 transporter.cpp:460 transporter.cpp:545
+#: transporter.cpp:203 transporter.cpp:216 transporter.cpp:352
+#: transporter.cpp:416 transporter.cpp:466 transporter.cpp:551
 msgid "get"
 msgstr ""
 
@@ -209,12 +209,12 @@ msgstr ""
 msgid "%2fprm%2fprm"
 msgstr ""
 
-#: transporter.cpp:206 transporter.cpp:432 transporter.cpp:441
-#: transporter.cpp:469 transporter.cpp:483
+#: transporter.cpp:206 transporter.cpp:438 transporter.cpp:447
+#: transporter.cpp:475 transporter.cpp:489
 msgid "id"
 msgstr ""
 
-#: transporter.cpp:216 transporter.cpp:417
+#: transporter.cpp:216 transporter.cpp:423
 #, c-format
 msgid "/%2fprm%2fcfg%2fNAME"
 msgstr ""
@@ -224,9 +224,9 @@ msgid "Some enable errors are present"
 msgstr "Присутні деякі помилки включення"
 
 #: transporter.cpp:239 transporter.cpp:338 transporter.cpp:339
-#: transporter.cpp:346 transporter.cpp:513 transporter.cpp:515
-#: transporter.cpp:516 transporter.cpp:517 transporter.cpp:545
-#: transporter.cpp:546
+#: transporter.cpp:341 transporter.cpp:345 transporter.cpp:352
+#: transporter.cpp:519 transporter.cpp:521 transporter.cpp:522
+#: transporter.cpp:523 transporter.cpp:551 transporter.cpp:552
 msgid "root"
 msgstr ""
 
@@ -251,16 +251,17 @@ msgstr "Задачу збору даних не зупинено!"
 msgid "Thread <%u> is started. TID: %ld"
 msgstr ""
 
-#: transporter.cpp:335 transporter.cpp:505 transporter.cpp:524
+#: transporter.cpp:335 transporter.cpp:511 transporter.cpp:530
 msgid "info"
 msgstr ""
 
-#: transporter.cpp:338 transporter.cpp:513 transporter.cpp:515
-#: transporter.cpp:516 transporter.cpp:517
+#: transporter.cpp:338 transporter.cpp:339 transporter.cpp:341
+#: transporter.cpp:519 transporter.cpp:521 transporter.cpp:522
+#: transporter.cpp:523
 msgid "fld"
 msgstr ""
 
-#: transporter.cpp:338 transporter.cpp:345
+#: transporter.cpp:338 transporter.cpp:351
 msgid "/cntr/st/gath_tm"
 msgstr ""
 
@@ -268,9 +269,9 @@ msgstr ""
 msgid "Gather data time (ms)"
 msgstr "Час збору даних (мс)"
 
-#: transporter.cpp:338 transporter.cpp:339 transporter.cpp:433
-#: transporter.cpp:513 transporter.cpp:515 transporter.cpp:516
-#: transporter.cpp:517
+#: transporter.cpp:338 transporter.cpp:339 transporter.cpp:341
+#: transporter.cpp:345 transporter.cpp:439 transporter.cpp:519
+#: transporter.cpp:521 transporter.cpp:522 transporter.cpp:523
 msgid "tp"
 msgstr ""
 
@@ -279,166 +280,202 @@ msgid "real"
 msgstr ""
 
 #: transporter.cpp:339
+msgid "/cntr/cfg/STATIONS"
+msgstr ""
+
+#: transporter.cpp:339 transporter.cpp:341 transporter.cpp:519
+#: transporter.cpp:522 transporter.cpp:523
+msgid "str"
+msgstr ""
+
+#: transporter.cpp:339 transporter.cpp:341
+msgid "cols"
+msgstr ""
+
+#: transporter.cpp:339 transporter.cpp:341
+msgid "rows"
+msgstr ""
+
+#: transporter.cpp:339 transporter.cpp:341
+msgid "4"
+msgstr ""
+
+#: transporter.cpp:340
+msgid "Remote OpenSCADA stations' identifiers list used into it controller."
+msgstr "Перелік ідентифікаторів віддалених OpenSCADA станцій використаних у цьому контролері."
+
+#: transporter.cpp:341
+msgid "/cntr/cfg/CNTRPRM"
+msgstr ""
+
+#: transporter.cpp:342
+msgid ""
+"Remote OpenSCADA full controller's or separated controller's parameters "
+"list. Address example:\n"
+"  System.AutoDA - for controller;\n"
+"  System.AutoDA.UpTimeStation - for controller's parameter."
+msgstr ""
+"Перелік віддалених OpenSCADA повних контролерів або окремих параметрів контролерів. Приклад адреси:\n"
+"  System.AutoDA - для контролерів;\n"
+"  System.AutoDA.UpTimeStation - для параметрів контролерів."
+
+#: transporter.cpp:345
 msgid "comm"
 msgstr ""
 
-#: transporter.cpp:339 transporter.cpp:346
+#: transporter.cpp:345 transporter.cpp:352
 msgid "/cntr/cfg/host_lnk"
 msgstr ""
 
-#: transporter.cpp:339
+#: transporter.cpp:345
 msgid "Go to remote stations list configuration"
 msgstr "Перехід до конфігурації переліку віддалених станцій"
 
-#: transporter.cpp:339
+#: transporter.cpp:345
 msgid "lnk"
 msgstr ""
 
-#: transporter.cpp:349
+#: transporter.cpp:355
 msgid "/Transport"
 msgstr ""
 
-#: transporter.cpp:358
+#: transporter.cpp:364
 msgid "w_attr"
 msgstr ""
 
-#: transporter.cpp:404
+#: transporter.cpp:410
 msgid ";"
 msgstr ""
 
-#: transporter.cpp:418 transporter.cpp:422 transporter.cpp:427
-#: transporter.cpp:467 transporter.cpp:484 transporter.cpp:529
-#: transporter.cpp:562
+#: transporter.cpp:424 transporter.cpp:428 transporter.cpp:433
+#: transporter.cpp:473 transporter.cpp:490 transporter.cpp:535
+#: transporter.cpp:568
 msgid "mcat"
 msgstr ""
 
-#: transporter.cpp:421
+#: transporter.cpp:427
 #, c-format
 msgid "/%2fprm%2fcfg%2fDESCR"
 msgstr ""
 
-#: transporter.cpp:426 transporter.cpp:466 transporter.cpp:482
+#: transporter.cpp:432 transporter.cpp:472 transporter.cpp:488
 #, c-format
 msgid "/%2fserv%2fattr"
 msgstr ""
 
-#: transporter.cpp:441
+#: transporter.cpp:447
 msgid "nm"
 msgstr ""
 
-#: transporter.cpp:442
+#: transporter.cpp:448
 msgid "flg"
 msgstr ""
 
-#: transporter.cpp:443
+#: transporter.cpp:449
 msgid "vals"
 msgstr ""
 
-#: transporter.cpp:443
+#: transporter.cpp:449
 msgid "names"
 msgstr ""
 
-#: transporter.cpp:481 transporter.cpp:546
+#: transporter.cpp:487 transporter.cpp:552
 msgid "set"
 msgstr ""
 
-#: transporter.cpp:483
+#: transporter.cpp:489
 msgid "el"
 msgstr ""
 
-#: transporter.cpp:502
+#: transporter.cpp:508
 msgid "/serv/"
 msgstr ""
 
-#: transporter.cpp:508
+#: transporter.cpp:514
 msgid "oscada_cntr"
 msgstr ""
 
-#: transporter.cpp:508
+#: transporter.cpp:514
 msgid "Parameter: "
 msgstr "Параметр: "
 
-#: transporter.cpp:509 transporter.cpp:511 transporter.cpp:519
+#: transporter.cpp:515 transporter.cpp:517 transporter.cpp:525
 msgid "area"
 msgstr ""
 
-#: transporter.cpp:509
+#: transporter.cpp:515
 msgid "/prm"
 msgstr ""
 
-#: transporter.cpp:509
+#: transporter.cpp:515
 msgid "Parameter"
 msgstr "Параметр"
 
-#: transporter.cpp:511
+#: transporter.cpp:517
 msgid "/prm/st"
 msgstr ""
 
-#: transporter.cpp:511
+#: transporter.cpp:517
 msgid "State"
 msgstr "Стан"
 
-#: transporter.cpp:513 transporter.cpp:542
+#: transporter.cpp:519 transporter.cpp:548
 msgid "/prm/st/type"
 msgstr ""
 
-#: transporter.cpp:513
+#: transporter.cpp:519
 msgid "Type"
 msgstr "Тип"
 
-#: transporter.cpp:513 transporter.cpp:516 transporter.cpp:517
-msgid "str"
-msgstr ""
-
-#: transporter.cpp:515 transporter.cpp:543
+#: transporter.cpp:521 transporter.cpp:549
 msgid "/prm/st/en"
 msgstr ""
 
-#: transporter.cpp:515
+#: transporter.cpp:521
 msgid "Enable"
 msgstr "Ввімкнено"
 
-#: transporter.cpp:515
+#: transporter.cpp:521
 msgid "bool"
 msgstr ""
 
-#: transporter.cpp:516 transporter.cpp:552
+#: transporter.cpp:522 transporter.cpp:558
 msgid "/prm/st/id"
 msgstr ""
 
-#: transporter.cpp:516
+#: transporter.cpp:522
 msgid "Id"
 msgstr ""
 
-#: transporter.cpp:517 transporter.cpp:553
+#: transporter.cpp:523 transporter.cpp:559
 msgid "/prm/st/nm"
 msgstr ""
 
-#: transporter.cpp:517
+#: transporter.cpp:523
 msgid "Name"
 msgstr "Ім'я"
 
-#: transporter.cpp:519 transporter.cpp:554
+#: transporter.cpp:525 transporter.cpp:560
 msgid "/prm/cfg"
 msgstr ""
 
-#: transporter.cpp:519
+#: transporter.cpp:525
 msgid "Config"
 msgstr "Кофігурація"
 
-#: transporter.cpp:528
+#: transporter.cpp:534
 #, c-format
 msgid "/%2fprm%2fcfg"
 msgstr ""
 
-#: transporter.cpp:535
+#: transporter.cpp:541
 msgid "dscr"
 msgstr ""
 
-#: transporter.cpp:535
+#: transporter.cpp:541
 msgid "Remote station config"
 msgstr "Конфігурація віддаленої станції"
 
-#: transporter.cpp:548
+#: transporter.cpp:554
 msgid "Controller is not started!"
 msgstr "Контролер не запущено!"

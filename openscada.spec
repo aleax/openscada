@@ -14,7 +14,7 @@ URL: http://oscada.org.ua
 #= Individual distributives seting =
 %if %_vendor == "alt"
 %set_verify_elf_method no
-BuildRequires: glibc-devel gcc4.3-c++ libgd2-devel libexpat-devel libMySQL-devel libsqlite3-devel libsensors-devel libnet-snmp-devel libqt4-devel firebird-devel libportaudio2-devel
+BuildRequires: glibc-devel gcc4.3-c++ libgd2-devel libexpat-devel libMySQL-devel libsqlite3-devel libsensors-devel libnet-snmp-devel libqt4-devel firebird-devel libportaudio2-devel libfftw3-devel
 %else
 %define _initdir /etc/init.d
 %define _desktopdir %_datadir/applications

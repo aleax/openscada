@@ -232,7 +232,7 @@ void TMdContr::start_( )
 {
     if( !prc_st )
     {
-	//- Start the gathering data task -
+	//> Start the gathering data task
 	pthread_attr_t pthr_attr;
 	pthread_attr_init(&pthr_attr);
 	struct sched_param prior;
@@ -253,7 +253,7 @@ void TMdContr::stop_( )
 {
     if( prc_st )
     {
-	//- Stop the request and calc data task -
+	//> Stop the request and calc data task
 	endrun_req = true;
 	pthread_kill( procPthr, SIGALRM );
 	if( TSYS::eventWait(prc_st,false,nodePath()+"stop",5) )
@@ -289,21 +289,22 @@ void *TMdContr::Task( void *icntr )
     {
 	for( unsigned int it_cnt = 0; !cntr.endrun_req; it_cnt++ )
 	{
-	    long long t_cnt = SYS->shrtCnt();
+	    long long t_cnt = TSYS::curTime();
+
 	    cntr.en_res.resRequestR( );
 
-	    //- Update controller's data -
+	    //> Update controller's data
 	    for( int i_p=0; i_p < cntr.p_hd.size(); i_p++)
 	    {
-		//-- Update parameter's values --
+		//>> Update parameter's values
 		cntr.p_hd[i_p].at().update();
-		//-- Check sync moment and sync parameter's structure --
+		//>> Check sync moment and sync parameter's structure
 		unsigned int div = (unsigned int)(cntr.m_sync/cntr.period());
 		if( div && (it_cnt+i_p)%div == 0 )
 		{
 		    cntr.p_hd[i_p].at().modifG();
 		    cntr.p_hd[i_p].at().load();
-		    //-- Check for delete parameter --
+		    //>> Check for delete parameter
 		    if( cntr.p_hd[i_p].at().isDel() )
 		    {
 			cntr.en_res.resReleaseR( );
@@ -316,9 +317,9 @@ void *TMdContr::Task( void *icntr )
 		}
 	    }
 
-	    //- Calc acquisition process time -
+	    //> Calc acquisition process time
 	    cntr.en_res.resReleaseR( );
-	    cntr.tm_gath = 1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
+	    cntr.tm_gath = 1e-3*(TSYS::curTime()-t_cnt);
 
 	    TSYS::taskSleep((long long)cntr.period()*1000000000);
 	}
@@ -331,11 +332,17 @@ void *TMdContr::Task( void *icntr )
 
 void TMdContr::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	TController::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/cntr/st/gath_tm",_("Gather data time (ms)"),0444,"root","root",1,"tp","real");
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/STATIONS",cfg("STATIONS").fld().descr(),0664,"root","root",4,"tp","str","cols","100","rows","4",
+	    "help",_("Remote OpenSCADA stations' identifiers list used into it controller."));
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/CNTRPRM",cfg("CNTRPRM").fld().descr(),0664,"root","root",4,"tp","str","cols","100","rows","4",
+	    "help",_("Remote OpenSCADA full controller's or separated controller's parameters list. Address example:\n"
+		     "  System.AutoDA - for controller;\n"
+		     "  System.AutoDA.UpTimeStation - for controller's parameter."));
 	ctrMkNode("comm",opt,-1,"/cntr/cfg/host_lnk",_("Go to remote stations list configuration"),0660,"root","root",1,"tp","lnk");
 	return;
     }

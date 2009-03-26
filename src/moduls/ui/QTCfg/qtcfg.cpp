@@ -77,7 +77,7 @@ using namespace QTCFG;
 ConfApp::ConfApp( string open_user ) :
     que_sz(20), pg_info("info"), root(&pg_info), tbl_init(false), copy_buf("0")
 {
-    //- Main window settings -
+    //> Main window settings
     setAttribute(Qt::WA_DeleteOnClose,true);
     QImage ico_t;
     mod->regWin( this );
@@ -85,17 +85,18 @@ ConfApp::ConfApp( string open_user ) :
     setWindowTitle(_("QT Configurator of OpenSCADA"));
     setWindowIcon(mod->icon());
 
-    //-- Init centrall widget --
+    //> Init centrall widget
     setCentralWidget( new QWidget(this) );
     QGridLayout *QTCfgLayout = new QGridLayout(centralWidget());
     QTCfgLayout->setMargin( 3 );
-    //-- Init splitter --
+    //> Init splitter
     QSplitter *splitter = new QSplitter( centralWidget() );
     splitter->setOrientation( Qt::Horizontal );
 
-    //- Create Navigator tree -
+    //> Create Navigator tree
     CtrTree = new QTreeWidget( splitter );
     CtrTree->setContextMenuPolicy(Qt::CustomContextMenu);
+    CtrTree->setSelectionMode(QAbstractItemView::ExtendedSelection);
     //splitter->setSizeConstraint(QSplitter::KeepSize);
     QStringList headerLabels;
     headerLabels << _("Name") << _("Type") << _("Path");
@@ -536,40 +537,49 @@ void ConfApp::itAdd( )
 
 void ConfApp::itDel( const string &iit )
 {
-    string rmit = iit.empty() ? sel_path : iit;
-    if( rmit.empty() )	return;
+    string rmits = iit, rmit;
+    if( iit.empty() )
+    {
+	QList<QTreeWidgetItem *> sel_ls = CtrTree->selectedItems();
+	if( sel_ls.size() <= 1 ) rmits = sel_path;
+	else for( int i_el = 0; i_el < sel_ls.size(); i_el++ )
+	    rmits = rmits + sel_ls.at(i_el)->text(2).toAscii().data() + "\n";
+    }
+    if( rmits.empty() )	return;
 
     if( iit.empty() )
     {
 	InputDlg dlg(this,actItDel->icon(),
-		QString(_("Are you sure of deleting node: '%1'?")).arg(rmit.c_str()),
-		_("Delete node"),0,0);
+		QString(_("Are you sure of deleting nodes: '%1'?")).arg(rmits.c_str()),_("Delete node"),0,0);
 	if( dlg.exec() != QDialog::Accepted )   return;
     }
 
-    string t_el, sel_own, sel_el;
-    int n_obj = 0;
-    for( int off = 0; !(t_el=TSYS::pathLev(rmit,0,true,&off)).empty(); n_obj++ )
-    { if( n_obj ) sel_own += ("/"+sel_el); sel_el = t_el; }
-    if( n_obj > 2 )
+    for( int roff = 0; (rmit=TSYS::strSepParse(rmits,0,'\n',&roff)).size(); )
     {
-	XMLNode req("info");
-	req.setAttr("path",sel_own+"/%2fbr");
-	if( cntrIfCmd(req) || !req.childGet(0,true) ) return;
-
-	XMLNode *branch = req.childGet(0);
-	for( int i_b = 0; i_b < branch->childSize(); i_b++ )
+	string t_el, sel_own, sel_el;
+	int n_obj = 0;
+	for( int off = 0; !(t_el=TSYS::pathLev(rmit,0,true,&off)).empty(); n_obj++ )
+	{ if( n_obj ) sel_own += ("/"+sel_el); sel_el = t_el; }
+	if( n_obj > 2 )
 	{
-	    string b_id = branch->childGet(i_b)->attr("id");
-	    if( b_id == sel_el.substr(0,b_id.size()) && atoi(branch->childGet(i_b)->attr("acs").c_str())&SEQ_WR )
+	    XMLNode req("info");
+	    req.setAttr("path",sel_own+"/%2fbr");
+	    if( cntrIfCmd(req) || !req.childGet(0,true) ) return;
+
+	    XMLNode *branch = req.childGet(0);
+	    for( int i_b = 0; i_b < branch->childSize(); i_b++ )
 	    {
-		bool idm = atoi(branch->childGet(i_b)->attr("idm").c_str());
-		req.clear()->setName("del")->setAttr("path",sel_own+"/%2fbr%2f"+b_id);
-		if( idm ) req.setAttr("id",sel_el.substr(b_id.size()));
-		else req.setText(sel_el.substr(b_id.size()));
-		if( cntrIfCmd(req) ) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Info,this);
-		else treeUpdate();
-		break;
+		string b_id = branch->childGet(i_b)->attr("id");
+		if( b_id == sel_el.substr(0,b_id.size()) && atoi(branch->childGet(i_b)->attr("acs").c_str())&SEQ_WR )
+		{
+		    bool idm = atoi(branch->childGet(i_b)->attr("idm").c_str());
+		    req.clear()->setName("del")->setAttr("path",sel_own+"/%2fbr%2f"+b_id);
+		    if( idm ) req.setAttr("id",sel_el.substr(b_id.size()));
+		    else req.setText(sel_el.substr(b_id.size()));
+		    if( cntrIfCmd(req) ) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Info,this);
+		    else treeUpdate();
+		    break;
+		}
 	    }
 	}
     }
@@ -2047,7 +2057,7 @@ int ConfApp::cntrIfCmd( XMLNode &node )
 	//> Request to remote host
 	TTransportS::ExtHost host = SYS->transport().at().extHostGet(w_user->user().toAscii().data(),station);
 	AutoHD<TTransportOut> tr = SYS->transport().at().extHost(host,"TrCntr");
-	if(!tr.at().startStat()) tr.at().start();
+	if( !tr.at().startStat() ) tr.at().start();
 	node.load(tr.at().messProtIO("0\n"+host.user+"\n"+host.pass+"\n"+node.save(),"SelfSystem"));
 	node.setAttr("path",path);
     }catch( TError err )

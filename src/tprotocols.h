@@ -69,14 +69,14 @@ class TProtocol: public TModule
 	TProtocol( );
 	virtual ~TProtocol( );
 
-	//- Input protocol -
+	//> Input protocol
 	void list( vector<string> &list )		{ chldList(m_pr,list); }
 	bool openStat( const string &name )		{ return chldPresent(m_pr,name); } 
 	void open( const string &name );
 	void close( const string &name );
 	AutoHD<TProtocolIn> at( const string &name )	{ return chldAt(m_pr,name); }
 
-	//- Output protocol -
+	//> Output protocol
 	virtual string outMess( const string &in, TTransportOut &tro )
 	{ throw TError(nodePath().c_str(),"Function <%s> no support!","outMess"); }
 

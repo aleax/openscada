@@ -1,3 +1,9 @@
+2009-03-26 Roman
+- /SYS: ALTLinux depending to libfftw3-devel is added to RPM build specification file.
+- /DAQ/Transporter: Context help is added to self controller's configurations.
+- !:/UI/QTCfg: Multiselection is added to navigation tree for group items deletion allowing.
+
+
 2009-03-25 Maxim
 - FIX:/UI/Vision: Appending of the point while moving several selected with the CTRL figures is fixed for primitive ElFigure.
 - FIX:/UI/WebVision: Locating the figures for searching for the start filling point is modified and improved for primitive ElFigure.

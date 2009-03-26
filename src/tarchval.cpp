@@ -2021,12 +2021,17 @@ TVArchivator::TVArchivator( const string &iid, const string &idb, TElem *cf_el )
     timer_create(CLOCK_REALTIME,&sigev,&tmId);
 }
 
+TVArchivator::~TVArchivator()
+{
+    timer_delete(tmId);
+}
+
 TCntrNode &TVArchivator::operator=( TCntrNode &node )
 {
     TVArchivator *src_n = dynamic_cast<TVArchivator*>(&node);
     if( !src_n ) return *this;
 
-    //- Configuration copy -
+    //> Configuration copy
     string tid = id();
     *(TConfig*)this = *(TConfig*)src_n;
     m_id = tid;
@@ -2036,11 +2041,6 @@ TCntrNode &TVArchivator::operator=( TCntrNode &node )
         start( );
 
     return *this;
-}
-
-TVArchivator::~TVArchivator()
-{
-    timer_delete(tmId);
 }
 
 string TVArchivator::name()
@@ -2057,7 +2057,7 @@ void TVArchivator::setValPeriod( double iper )
 {
     m_v_per = iper ? iper : 1.;
 
-    //- Call sort for all archives -
+    //> Call sort for all archives
     ResAlloc res(a_res,false);
     for( map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); ++iel )
 	iel->second->archive().archivatorSort();
@@ -2092,7 +2092,8 @@ string TVArchivator::workId()
 
 void TVArchivator::start()
 {
-    //- Start interval timer for periodic thread creating -
+    if( run_st ) return;
+    //> Start interval timer for periodic thread creating
     struct itimerspec itval;
     itval.it_interval.tv_sec = itval.it_value.tv_sec = m_a_per;
     itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
@@ -2103,6 +2104,8 @@ void TVArchivator::start()
 
 void TVArchivator::stop( bool full_del )
 {
+    if( !run_st ) return;
+
     //> Stop interval timer for periodic thread creating
     struct itimerspec itval;
     itval.it_interval.tv_sec = itval.it_interval.tv_nsec = itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
