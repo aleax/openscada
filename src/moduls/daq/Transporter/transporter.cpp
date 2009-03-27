@@ -177,29 +177,29 @@ TParamContr *TMdContr::ParamAttach( const string &name, int type )
 
 void TMdContr::enable_( )
 {
-    string statv, cp_el, daqtp, cntrnm, prmnm, cntrpath;
+    string statv, cp_el, daqtp, cntrnm, prmnm, cntrpath, gPrmLs;
     vector<string> prm_ls;
     XMLNode req("list");
 
     bool en_err = false;
 
-    //- Remote station scaning -
+    //> Remote station scaning
     for( int st_off = 0; (statv=TSYS::strSepParse(m_stations,0,'\n',&st_off)).size(); )
-	//- Controllers and parameters scaning -
+	//> Controllers and parameters scaning
 	for( int cp_off = 0; (cp_el=TSYS::strSepParse(m_contr_prm,0,'\n',&cp_off)).size(); )
 	    try
 	    {
-		//-- Parse parameter template --
+		//>> Parse parameter template
 		daqtp  = TSYS::strSepParse(cp_el,0,'.');
 		cntrnm = TSYS::strSepParse(cp_el,1,'.');
 		prmnm  = TSYS::strSepParse(cp_el,2,'.');
 		if( daqtp.empty() || cntrnm.empty() )	continue;
 		cntrpath = "/"+statv+"/DAQ/"+daqtp+"/"+cntrnm+"/";
-		//-- Get parameters list --
+		//>> Get parameters list
 		prm_ls.clear();
 		if( prmnm.empty() || prmnm == "*" )
 		{
-		    //-- Get attributes list --
+		    //>> Get attributes list
 		    req.clear()->setName("get")->setAttr("path",cntrpath+"%2fprm%2fprm");
 		    if( mod->cntrIfCmd(req) || req.childSize() == 0 )	en_err = true;
 		    else for( int i_ch = 0; i_ch < req.childSize(); i_ch++ )
@@ -207,23 +207,34 @@ void TMdContr::enable_( )
 		}
 		else prm_ls.push_back(prmnm);
 
-		//-- Process remote parameters --
+		//>> Process remote parameters
 		for( int i_p = 0; i_p < prm_ls.size(); i_p++ )
 		{
 		    if( !present(prm_ls[i_p]) )
 		    {
-			//--- Parameter name request and make new parameter object ---
+			//>>> Parameter name request and make new parameter object
 			req.clear()->setName("get")->setAttr("path",cntrpath+prm_ls[i_p]+"/%2fprm%2fcfg%2fNAME");
 			if( mod->cntrIfCmd(req) ) { en_err = true; continue; }
 			add(prm_ls[i_p],owner().tpPrmToId("std"));
 			at(prm_ls[i_p]).at().setName(req.text());
 		    }
-		    if( !at(prm_ls[i_p]).at().enableStat() )
-			at(prm_ls[i_p]).at().enable();
+		    if( !at(prm_ls[i_p]).at().enableStat() ) at(prm_ls[i_p]).at().enable();
 		    at(prm_ls[i_p]).at().setCntrAdr(cntrpath);
 		    at(prm_ls[i_p]).at().load();
+		    gPrmLs += prm_ls[i_p]+";";
 		}
 	    }catch(TError err){ }
+
+    //> Removing parameter's try
+    list(prm_ls);
+    for( int i_p = 0; i_p < prm_ls.size(); i_p++ )
+	if( gPrmLs.find(prm_ls[i_p]+";",0) == string::npos )
+	    try{ del(prm_ls[i_p]); }
+	    catch( TError err )
+	    {
+		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+		mess_err(nodePath().c_str(),_("Deletion parameter '%s' is error but it no present on configuration or remote station.\n"),prm_ls[i_p].c_str());
+	    }
 
     if( en_err ) throw TError(nodePath().c_str(),_("Some enable errors are present"));
 }
@@ -362,7 +373,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //* TMdPrm                                             *
 //******************************************************
 TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
-    TParamContr(name,tp_prm), p_el("w_attr"), m_pdel(false)
+    TParamContr(name,tp_prm), p_el("w_attr"), mPdel(false)
 {
     setToEnable(true);
 }
@@ -406,33 +417,33 @@ void TMdPrm::disable()
 void TMdPrm::setCntrAdr( const string &vl )
 {
     string scntr;
-    for( int off = 0; (scntr=TSYS::strSepParse(m_cntr_adr,0,';',&off)).size(); )
+    for( int off = 0; (scntr=TSYS::strSepParse(mCntrAdr,0,';',&off)).size(); )
 	if( scntr == vl ) return;
-    m_cntr_adr+=vl+";";
+    mCntrAdr += vl+";";
 }
 
 void TMdPrm::load_( )
 {
     string scntr;
     XMLNode req("get");
-    //- Request and update attributes list -
+    //> Request and update attributes list
     for( int c_off = 0; (scntr=TSYS::strSepParse(cntrAdr(),0,';',&c_off)).size(); )
     {
 	try
 	{
-	    //-- Parameter name request ---
+	    //>> Parameter name request
 	    req.setAttr("path",scntr+id()+"/%2fprm%2fcfg%2fNAME");
 	    if( mod->cntrIfCmd(req) )	throw TError(req.attr("mcat").c_str(),req.text().c_str());
 	    setName(req.text());
-	    //-- Parameter description request --
+	    //>> Parameter description request
 	    req.clear()->setAttr("path",scntr+id()+"/%2fprm%2fcfg%2fDESCR");
 	    if( mod->cntrIfCmd(req) )	throw TError(req.attr("mcat").c_str(),req.text().c_str());
 	    setDescr(req.text());
 
-	    //-- Attributes list request --
+	    //>> Attributes list request
 	    req.clear()->setName("list")->setAttr("path",scntr+id()+"/%2fserv%2fattr");
 	    if( mod->cntrIfCmd(req) )	throw TError(req.attr("mcat").c_str(),req.text().c_str());
-	    //--- Check and create new attributes ---
+	    //>>> Check and create new attributes
 	    for( int i_a = 0; req.childSize(); i_a++ )
 	    {
 		XMLNode *ael = req.childGet(i_a);
@@ -449,7 +460,7 @@ void TMdPrm::load_( )
 		    atoi(ael->attr("flg").c_str())&(TFld::Selected|TFld::NoWrite|TFld::HexDec|TFld::OctDec|TFld::FullText)|TVal::DirWrite,
 		    "",dvl.c_str(),ael->attr("vals").c_str(),ael->attr("names").c_str()) );
 	    }
-	    //--- Remove attributes ---
+	    //>>> Remove attributes
 	    //????
 	    return;
 	}catch(TError err) { continue; }
@@ -465,11 +476,11 @@ void TMdPrm::update( )
 {
     string scntr;
     XMLNode req("get");
-    //- Request and update attributes list -
+    //> Request and update attributes list
     for( int c_off = 0; (scntr=TSYS::strSepParse(cntrAdr(),0,';',&c_off)).size(); )
 	try
 	{
-	    //-- Attributes values request --
+	    //>> Attributes values request
 	    req.clear()->setAttr("path",scntr+id()+"/%2fserv%2fattr");
 	    if( mod->cntrIfCmd(req) )	throw TError(req.attr("mcat").c_str(),req.text().c_str());
 	    for( int i_a = 0; req.childSize(); i_a++ )

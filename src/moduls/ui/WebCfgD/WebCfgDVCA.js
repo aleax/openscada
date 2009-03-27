@@ -256,7 +256,7 @@ function expand( el, val, upTree )
     {
       var grpId = el.grps[0].getAttribute('id');
       var hostN = servGet(el.getAttribute('id'),'com=chlds&grp='+grpId);
-      if( hostN && parseInt(hostN.getAttribute('rez'))==0 && hostN.childNodes.length )
+      if( hostN && parseInt(hostN.getAttribute('rez'))==0 )
       {
 	//> Add and update present
 	for( var i_e = 0; i_e < hostN.childNodes.length; i_e++ )

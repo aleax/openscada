@@ -50,8 +50,8 @@ class TMdPrm : public TParamContr
 	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );
 
-	bool isDel( )		{ return m_pdel; }
-	string cntrAdr( )	{ return m_cntr_adr; }
+	bool isDel( )		{ return mPdel; }
+	string cntrAdr( )	{ return mCntrAdr; }
 
 	void setCntrAdr( const string &vl );
 
@@ -77,8 +77,8 @@ class TMdPrm : public TParamContr
 
 	//Attributes
 	TElem	p_el;				//Work atribute elements
-	bool	m_pdel;				//Remote parameter deleted flag
-	string	m_cntr_adr;			//Parameter's remote controller address'
+	bool	mPdel;				//Remote parameter deleted flag
+	string	mCntrAdr;			//Parameter's remote controller address'
 };
 
 //******************************************************

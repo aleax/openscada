@@ -67,7 +67,7 @@ class TController : public TCntrNode, public TConfig
 	void enable( );
 	void disable( );
 
-	//- Parameters -
+	//> Parameters
 	void list( vector<string> &list )	{ chldList(m_prm,list); }
 	bool present( const string &name )	{ return chldPresent(m_prm,name); }
 	void add( const string &name, unsigned type );

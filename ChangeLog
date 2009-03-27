@@ -1,3 +1,9 @@
+2009-03-27 Roman
+- /DAQ/Transporter: No configured controller's parameters clearing is added.
+- /UI/VCAEngine,/UI/WebVision: Multiply sessions opening for one projet is blocked for users not administrators of OpenSCADA into Web.
+- FIX:/UI/WebCfgD: No clearing last item into branch after it deletion is fixed.
+
+
 2009-03-26 Roman
 - /SYS: ALTLinux depending to libfftw3-devel is added to RPM build specification file.
 - /DAQ/Transporter: Context help is added to self controller's configurations.

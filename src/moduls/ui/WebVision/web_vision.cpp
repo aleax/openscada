@@ -454,6 +454,7 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		XMLNode req("get");
 		req.setAttr("path","/%2fses%2fses")->setAttr("chkUserPerm","1");
 		cntrIfCmd(req,ses.user);
+		string self_sess;
 		if( req.childSize() )
 		{
 		    ses.page = ses.page+
@@ -461,8 +462,11 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 			"<tr><td class='content'>\n"
 			"<table border='0' cellspacing='3px' width='100%'>\n";
 		    for( int i_ch = 0; i_ch < req.childSize(); i_ch++ )
+		    {
 			ses.page += "<tr><td style='text-align: center;'><a href='/"MOD_ID"/ses_"+req.childGet(i_ch)->text()+"/'>"+
 			    req.childGet(i_ch)->text()+"</a></td></tr>";
+			if( req.childGet(i_ch)->attr("user") == user ) self_sess += req.childGet(i_ch)->text()+";";
+		    }
 		    ses.page += "</table></td></tr>\n";
 		    sesPrjOk = true;
 		}
@@ -476,8 +480,12 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 			"<tr><td class='content'>\n"
 			"<table border='0' cellspacing='3px' width='100%'>\n";
 		    for( int i_ch = 0; i_ch < req.childSize(); i_ch++ )
+		    {
+			if( !SYS->security().at().access(user,SEQ_WR,"root","root",RWRWR_) && self_sess.find(req.childGet(i_ch)->text()+";",0) != string::npos )
+			    continue;
 			ses.page += "<tr><td style='text-align: center;'><a href='/"MOD_ID"/prj_"+req.childGet(i_ch)->attr("id")+"/'>"+
 			    req.childGet(i_ch)->text()+"</a></td></tr>";
+		    }
 		    ses.page += "</table></td></tr>\n";
 		    sesPrjOk = true;
 		}
