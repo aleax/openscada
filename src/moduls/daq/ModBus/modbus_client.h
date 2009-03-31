@@ -135,7 +135,7 @@ class TMdContr: public TController
 		&m_node;			//Node
 	string	&m_addr;			//Transport device address
 	bool	&m_merge;			//Fragments of register merge
-	int	&reqTm;				//Request timeout in ms
+	int	&reqTm;				//Request timeout in s
 
 	bool	prc_st,				//Process task active
 		endrun_req;			//Request to stop of the Process task

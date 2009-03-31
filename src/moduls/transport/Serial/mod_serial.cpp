@@ -547,7 +547,7 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
 	    int bytes = 0;
 	    ioctl( fd, FIONREAD, &bytes );
 	    //>> Reset old broken session's data
-	    if( bytes && isEnter ) { read( fd, ibuf, len_ib ); continue; }
+	    if( bytes && isEnter && len_ob ) { read( fd, ibuf, len_ib ); continue; }
 	    if( bytes > 2 ) break;
 	    //>> Connection timeout
 	    mLstReqTm = TSYS::curTime();
@@ -574,27 +574,6 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
 	    mLstReqTm = TSYS::curTime();
 	    if( (mLstReqTm-tmptm) > wFrTm )	break;
 	}
-
-	/*tmptm = TSYS::curTime();
-	FD_ZERO( &fdset );
-	FD_SET( fd, &fdset );
-	struct timeval tv;
-	while( true )
-	{
-	    //>> Char timeout
-	    tv.tv_sec = 0; tv.tv_usec = (int)(1000.0*wCharTm);
-	    if( select(fd+1,&fdset,NULL,NULL,&tv) <= 0 )
-	    {
-		if( blen ) break;
-		else if( (TSYS::curTime()-tmptm) >= wReqTm ) throw TError(nodePath().c_str(),_("Respond from remote device is timeouted."));
-		continue;
-	    }
-	    else tmptm = TSYS::curTime();
-	    blen += read( fd, ibuf+blen, len_ib-blen );
-	    //>> Frame timeout
-	    mLstReqTm = TSYS::curTime();
-	    if( (mLstReqTm-tmptm) > wFrTm )	break;
-	}*/
 	trIn += (float)blen/1024;
     }
 

@@ -322,7 +322,8 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) :
 	TController( name_c, daq_db, cfgelem ), prc_st(false), endrun_req(false), tm_gath(0), tm_delay(0),
 	m_per(cfg("PERIOD").getRd()), m_prior(cfg("PRIOR").getId()), m_prt(cfg("PROT").getId()),
-	m_addr(cfg("ADDR").getSd()), m_node(cfg("NODE").getId()), m_merge(cfg("FRAG_MERGE").getBd()), reqTm(cfg("TM_REQ").getId())
+	m_addr(cfg("ADDR").getSd()), m_node(cfg("NODE").getId()), m_merge(cfg("FRAG_MERGE").getBd()),
+	reqTm(cfg("TM_REQ").getId())
 {
     cfg("PRM_BD").setS("ModBusPrm_"+name_c);
 }
@@ -635,7 +636,7 @@ string TMdContr::modBusReq( string &pdu )
 		mbap += crc;
 
 		//> Send request
-		int resp_len = tr.at().messIO( mbap.data(), mbap.size(), buf, sizeof(buf), 1000*reqTm );
+		int resp_len = tr.at().messIO( mbap.data(), mbap.size(), buf, sizeof(buf), reqTm );
 		rez.assign(buf,resp_len);
 		//>> Wait tail
 		while( resp_len == sizeof(buf) )
@@ -662,7 +663,7 @@ string TMdContr::modBusReq( string &pdu )
 		mbap += mod->LRC(mbap);
 
 		//> Send request
-		int resp_len = tr.at().messIO( mbap.data(), mbap.size(), buf, sizeof(buf), 1000*reqTm );
+		int resp_len = tr.at().messIO( mbap.data(), mbap.size(), buf, sizeof(buf), reqTm );
 		rez.assign(buf,resp_len);
 		//>> Wait tail
 		while( resp_len == sizeof(buf) )
