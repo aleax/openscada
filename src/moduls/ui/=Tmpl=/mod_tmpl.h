@@ -1,6 +1,6 @@
 
-//OpenSCADA system module UI.Tmpl file: mod_tmpl.h
 //!!! Module name, file name and module's license. Change for your need.
+//OpenSCADA system module UI.Tmpl file: mod_tmpl.h
 /***************************************************************************
  *   Copyright (C) 2008 by Roman Savochenko                                *
  *   rom_as@fromru.com                                                     *
@@ -50,9 +50,9 @@ class TWEB: public TUI
 {
     public:
 	//Methods
-	//!!! Constructor for module's root object. Append into for your need.
+	//!!! Constructor for module's root object.
 	TWEB( string name );
-	//!!! Destructor for module's root object. Append into for your need.
+	//!!! Destructor for module's root object.
 	~TWEB( );
 
 	//!!! Individual module's get methods
@@ -81,7 +81,7 @@ class TWEB: public TUI
 	void HttpGet( const string &url, string &page, const string &sender, vector<string> &vars );
 	void HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &contein );
 
-	//!!! Module's comandline options the print help function.
+	//!!! Module's comandline options for print help function.
 	string optDescr( );
 	//!!! Append module's info attributes create and get functions.
 	string modInfo( const string &name );

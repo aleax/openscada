@@ -58,13 +58,13 @@ class TTransportIn : public TCntrNode, public TConfig
 	string tbl( );
 	string fullDB( )	{ return DB()+'.'+tbl(); }
 
-	void setName( const string &inm )	{ m_name = inm; modif(); }
-	void setDscr( const string &idscr )	{ m_dscr = idscr; modif(); }
-	void setAddr( const string &addr )	{ m_addr = addr; modif(); }
-	void setProtocol( const string &prt )	{ m_prot = prt; modif(); }
-	void setToStart( bool val )             { m_start = val; modif(); }
+	void setName( const string &inm )		{ m_name = inm; modif(); }
+	void setDscr( const string &idscr )		{ m_dscr = idscr; modif(); }
+	virtual void setAddr( const string &addr )	{ m_addr = addr; modif(); }
+	void setProtocol( const string &prt )		{ m_prot = prt; modif(); }
+	void setToStart( bool val )			{ m_start = val; modif(); }
 
-	void setDB( const string &vl )          { m_db = vl; modifG(); }
+	void setDB( const string &vl )			{ m_db = vl; modifG(); }
 
 	virtual void start( )	{ };
 	virtual void stop( )	{ };
@@ -124,14 +124,14 @@ class TTransportOut : public TCntrNode, public TConfig
 	string tbl( );
 	string fullDB( )	{ return DB()+'.'+tbl(); }
 
-	void setName( const string &inm )	{ m_name = inm; modif(); }
-	void setDscr( const string &idscr )	{ m_dscr = idscr; modif(); }
-	void setAddr( const string &addr )	{ m_addr = addr; modif(); }
-	void setPrm1( int vl )			{ m_prm1 = vl; }
-	void setPrm2( int vl )			{ m_prm2 = vl; }
-	void setToStart( bool val )		{ m_start = val; modif(); }
+	void setName( const string &inm )		{ m_name = inm; modif(); }
+	void setDscr( const string &idscr )		{ m_dscr = idscr; modif(); }
+	virtual void setAddr( const string &addr )	{ m_addr = addr; modif(); }
+	void setPrm1( int vl )				{ m_prm1 = vl; }
+	void setPrm2( int vl )				{ m_prm2 = vl; }
+	void setToStart( bool val )			{ m_start = val; modif(); }
 
-	void setDB( const string &vl )		{ m_db = vl; modifG(); }
+	void setDB( const string &vl )			{ m_db = vl; modifG(); }
 
 	virtual void start( )			{ };
 	virtual void stop( )			{ };

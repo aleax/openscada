@@ -1,0 +1,316 @@
+# OpenSCADA.Transport.Serial translate to Ukrainian.
+# Copyright (C) 2009 Roman Savochenko
+# This file is distributed under the same license as the OpenSCADA.Transport.Serial package module.
+# Roman Savochenko <rom_as@fromru.com>, 2009.
+#
+#: mod_serial.cpp:58 mod_serial.cpp:337 mod_serial.cpp:351
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenSCADA.Transport.Serial 0.3.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-03-31 18:44+0300\n"
+"PO-Revision-Date: 2009-03-31 18:44+0300\n"
+"Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
+"Language-Team: <uk@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+#: mod_serial.cpp:41
+msgid "Serial"
+msgstr ""
+
+#: mod_serial.cpp:42
+msgid "Serial interfaces"
+msgstr "Послідовні інтерфейси"
+
+#: mod_serial.cpp:43
+msgid "Transport"
+msgstr "Транспорт"
+
+#: mod_serial.cpp:45
+msgid "0.3.0"
+msgstr ""
+
+#: mod_serial.cpp:46
+msgid "Roman Savochenko"
+msgstr "Роман Савоченко"
+
+#: mod_serial.cpp:47
+msgid ""
+"Allow serial based interfaces. Used for data exchanging through serial "
+"interfaces like RS232, RS485, GSM and other."
+msgstr ""
+"Надає послідовні інтерфейси. Використовується для обміну даними через послідовні інтерфейсти типу RS232, RS485, GSM та інше."
+
+#: mod_serial.cpp:48
+msgid "GPL"
+msgstr ""
+
+#: mod_serial.cpp:53
+msgid "C"
+msgstr ""
+
+#: mod_serial.cpp:100 mod_serial.cpp:172
+msgid "BufLen"
+msgstr ""
+
+#: mod_serial.cpp:100
+msgid "Input buffer length (kB)"
+msgstr "Довжина вхідного буферу (кбайт)"
+
+#: mod_serial.cpp:100
+msgid "4"
+msgstr ""
+
+#: mod_serial.cpp:100 mod_serial.cpp:158
+msgid "5"
+msgstr ""
+
+#: mod_serial.cpp:103 mod_serial.cpp:398
+msgid "TMS"
+msgstr ""
+
+#: mod_serial.cpp:103 mod_serial.cpp:617
+msgid "Timings"
+msgstr "Інтервали часу"
+
+#: mod_serial.cpp:103
+msgid "100"
+msgstr ""
+
+#: mod_serial.cpp:103
+msgid "640:1.88:320"
+msgstr ""
+
+#: mod_serial.cpp:112
+#, c-format
+msgid ""
+"======================= The module <%s:%s> options =======================\n"
+"---------- Parameters of the module section <%s> in config file ----------\n"
+"\n"
+msgstr ""
+"======================== Опції модуля <%s:%s> ============================\n"
+"------- Параметри модульної секції <%s> у конфігураційному файлі ---------\n"
+"\n"
+
+#: mod_serial.cpp:123
+msgid "h"
+msgstr ""
+
+#: mod_serial.cpp:126 mod_serial.cpp:374 mod_serial.cpp:610 mod_serial.cpp:617
+msgid "help"
+msgstr ""
+
+#: mod_serial.cpp:155 mod_serial.cpp:371 mod_serial.cpp:607
+msgid "info"
+msgstr ""
+
+#: mod_serial.cpp:158 mod_serial.cpp:374 mod_serial.cpp:381 mod_serial.cpp:610
+#: mod_serial.cpp:617
+msgid "fld"
+msgstr ""
+
+#: mod_serial.cpp:158 mod_serial.cpp:164
+msgid "/help/g_help"
+msgstr ""
+
+#: mod_serial.cpp:158
+msgid "Options help"
+msgstr "Допомога по опціям"
+
+#: mod_serial.cpp:158 mod_serial.cpp:374 mod_serial.cpp:381 mod_serial.cpp:388
+#: mod_serial.cpp:389 mod_serial.cpp:610 mod_serial.cpp:617 mod_serial.cpp:629
+#: mod_serial.cpp:630
+msgid "root"
+msgstr ""
+
+#: mod_serial.cpp:158 mod_serial.cpp:374 mod_serial.cpp:381 mod_serial.cpp:610
+#: mod_serial.cpp:617
+msgid "tp"
+msgstr ""
+
+#: mod_serial.cpp:158 mod_serial.cpp:374 mod_serial.cpp:610 mod_serial.cpp:617
+msgid "str"
+msgstr ""
+
+#: mod_serial.cpp:158
+msgid "cols"
+msgstr ""
+
+#: mod_serial.cpp:158
+msgid "90"
+msgstr ""
+
+#: mod_serial.cpp:158
+msgid "rows"
+msgstr ""
+
+#: mod_serial.cpp:163 mod_serial.cpp:385 mod_serial.cpp:626
+msgid "path"
+msgstr ""
+
+#: mod_serial.cpp:164 mod_serial.cpp:388 mod_serial.cpp:629
+msgid "get"
+msgstr ""
+
+#: mod_serial.cpp:174 mod_serial.cpp:400
+msgid "/dev/ttyS0:19200:8:2:p"
+msgstr ""
+
+#: mod_serial.cpp:186 mod_serial.cpp:412
+#, c-format
+msgid "Traffic in %.4g kb, out %.4g kb."
+msgstr "Трафік вхідний %.4g кб, вихідний %.4g кб."
+
+#: mod_serial.cpp:204 mod_serial.cpp:439
+#, c-format
+msgid "Serial port '%s' open error."
+msgstr "Помилка відкриття послідовного порту '%s'."
+
+#: mod_serial.cpp:216 mod_serial.cpp:451
+#, c-format
+msgid "Char length '%d' error."
+msgstr "Помилка довжини '%d' символу."
+
+#: mod_serial.cpp:229 mod_serial.cpp:464
+#, c-format
+msgid "Stop bits '%d' error."
+msgstr "Помилка кількості стопових бітів '%d'."
+
+#: mod_serial.cpp:232 mod_serial.cpp:467
+msgid "p"
+msgstr ""
+
+#: mod_serial.cpp:233 mod_serial.cpp:468
+msgid "n"
+msgstr ""
+
+#: mod_serial.cpp:234 mod_serial.cpp:469
+msgid "0"
+msgstr ""
+
+#: mod_serial.cpp:235 mod_serial.cpp:470
+#, c-format
+msgid "Parity checking mode '%s' error."
+msgstr "Помилка у режимі '%s' перевірки парності."
+
+#: mod_serial.cpp:253 mod_serial.cpp:488
+#, c-format
+msgid "Speed '%d' error."
+msgstr "Помилкова швидкість '%d'."
+
+#: mod_serial.cpp:267
+msgid "open"
+msgstr ""
+
+#: mod_serial.cpp:268
+msgid "Not opened!"
+msgstr "Не відкрився!"
+
+#: mod_serial.cpp:285
+msgid "close"
+msgstr ""
+
+#: mod_serial.cpp:286
+msgid "Not closed!"
+msgstr "Не закрився!"
+
+#: mod_serial.cpp:297
+#, c-format
+msgid "Thread <%u> is started. TID: %ld"
+msgstr ""
+
+#: mod_serial.cpp:323
+#, c-format
+msgid "Serial received message <%d>."
+msgstr "Serial отримав повідомлення <%d>."
+
+#: mod_serial.cpp:340
+#, c-format
+msgid "%s"
+msgstr ""
+
+#: mod_serial.cpp:341
+msgid "Error request to protocol."
+msgstr "Помилка запиту до протоколу."
+
+#: mod_serial.cpp:348
+#, c-format
+msgid "Serial replied message <%d>."
+msgstr "Serial відповів повідомленням <%d>."
+
+#: mod_serial.cpp:374 mod_serial.cpp:610
+msgid "/prm/cfg/addr"
+msgstr ""
+
+#: mod_serial.cpp:374 mod_serial.cpp:610
+msgid "ADDR"
+msgstr ""
+
+#: mod_serial.cpp:375 mod_serial.cpp:611
+msgid ""
+"Serial transport has address format: \"[dev]:[speed]:[len]:[stop]:[parity]"
+"\". Where:\n"
+"    dev - serial device address (/dev/ttyS0);\n"
+"    speed - device speed "
+"(300,600,1200,2400,4800,9600,19200,38400,57600,115200 or 230400);\n"
+"    len - symbol length (bites: 7,8);\n"
+"    stop - stop bites number (1 or 2);\n"
+"    parity - parity check (p-parity,n-odd parity,0-disable)."
+msgstr ""
+"Послідовний транспорт має адресу у форматі: \"[dev]:[speed]:[len]:[stop]:[parity]\". Де:\n"
+"    dev - адреса послідовного пристрою (/dev/ttyS0);\n"
+"    speed - швидкість пристрою (300,600,1200,2400,4800,9600,19200,38400,57600,115200 або 230400);\n"
+"    len - розмір символу (бітів: 7,8);\n"
+"    stop - кількість стоп бітів (1 або 2);\n"
+"    parity - перевірка на парність (p-парність,n-не парність,0-вимкнено)."
+
+#: mod_serial.cpp:381 mod_serial.cpp:386
+msgid "/prm/cfg/bf_ln"
+msgstr ""
+
+#: mod_serial.cpp:381
+msgid "Input buffer (kbyte)"
+msgstr "Вхідний буфер (кбайт)"
+
+#: mod_serial.cpp:381
+msgid "dec"
+msgstr ""
+
+#: mod_serial.cpp:389 mod_serial.cpp:630
+msgid "set"
+msgstr ""
+
+#: mod_serial.cpp:423
+msgid ":"
+msgstr ""
+
+#: mod_serial.cpp:524
+msgid "Transport is not started!"
+msgstr "Транспорт не запущено!"
+
+#: mod_serial.cpp:538
+msgid "Writing request error."
+msgstr "Помилка надсилання запиту."
+
+#: mod_serial.cpp:555
+msgid "Respond from remote device is timeouted."
+msgstr "Перевищено час очікування відповіді."
+
+#: mod_serial.cpp:617 mod_serial.cpp:627
+msgid "/prm/cfg/TMS"
+msgstr ""
+
+#: mod_serial.cpp:618
+msgid ""
+"Connection timings in format: \"[conn]:[symbol]:[frm]\". Where:\n"
+"    conn - maximum time for connection respond wait, in ms;\n"
+"    symbol - one symbol maximum time, used for frame end detection, in ms;\n"
+"    frm - maximum frame length, in ms."
+msgstr ""
+"Часи з'єднання у форматі: \"[conn]:[symbol]:[frm]\". Де:\n"
+"    conn - максимальний час очікування відповіді з'єднання, у мс;\n"
+"    symbol - максимальний час одного символу, використовується для виявлення закінчення фрейму, у мс;\n"
+"    frm - максимальний розмір фрейму, у мс."
+н

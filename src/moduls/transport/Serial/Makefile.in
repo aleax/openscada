@@ -33,8 +33,8 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
-oscd_modul_PROGRAMS = daq_SNMP.so$(EXEEXT)
-subdir = src/moduls/daq/SNMP
+oscd_modul_PROGRAMS = tr_Serial.so$(EXEEXT)
+subdir = src/moduls/transport/Serial
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.in
@@ -46,9 +46,9 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(oscd_moduldir)"
 oscd_modulPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(oscd_modul_PROGRAMS)
-am_daq_SNMP_so_OBJECTS = snmp_client.$(OBJEXT)
-daq_SNMP_so_OBJECTS = $(am_daq_SNMP_so_OBJECTS)
-daq_SNMP_so_DEPENDENCIES =
+am_tr_Serial_so_OBJECTS = mod_serial.$(OBJEXT)
+tr_Serial_so_OBJECTS = $(am_tr_Serial_so_OBJECTS)
+tr_Serial_so_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -61,8 +61,8 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(daq_SNMP_so_SOURCES)
-DIST_SOURCES = $(daq_SNMP_so_SOURCES)
+SOURCES = $(tr_Serial_so_SOURCES)
+DIST_SOURCES = $(tr_Serial_so_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -206,12 +206,11 @@ top_srcdir = @top_srcdir@
 EXTRA_DIST = *.h po/* doc/*
 AM_CXXFLAGS = -I$(top_srcdir)/src -fPIC -DPIC
 AM_LDFLAGS = -shared -module
-daq_SNMP_so_SOURCES = snmp_client.cpp
-daq_SNMP_so_LDADD = -lnetsnmp -lcrypto
+tr_Serial_so_SOURCES = mod_serial.cpp
 
 #PO files process and doc install
-doc_name = $(oscd_docmodul)DAQ.SNMP
-m_name = $(oscd_modulpref)SNMP
+doc_name = $(oscd_docmodul)Transport.Serial
+m_name = $(oscd_modulpref)Serial
 all: all-am
 
 .SUFFIXES:
@@ -225,9 +224,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/moduls/daq/SNMP/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/moduls/transport/Serial/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  src/moduls/daq/SNMP/Makefile
+	  $(AUTOMAKE) --gnu  src/moduls/transport/Serial/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -273,9 +272,9 @@ clean-oscd_modulPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-daq_SNMP.so$(EXEEXT): $(daq_SNMP_so_OBJECTS) $(daq_SNMP_so_DEPENDENCIES) 
-	@rm -f daq_SNMP.so$(EXEEXT)
-	$(CXXLINK) $(daq_SNMP_so_OBJECTS) $(daq_SNMP_so_LDADD) $(LIBS)
+tr_Serial.so$(EXEEXT): $(tr_Serial_so_OBJECTS) $(tr_Serial_so_DEPENDENCIES) 
+	@rm -f tr_Serial.so$(EXEEXT)
+	$(CXXLINK) $(tr_Serial_so_OBJECTS) $(tr_Serial_so_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -283,7 +282,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/snmp_client.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mod_serial.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -511,8 +510,8 @@ install-data-local:
 	cp $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
 	rm $$name ; \
 	done
-	install -m 755 -d $(doc_name)
-	install -m 644 doc/*.pdf $(doc_name)
+#	install -m 755 -d $(doc_name)
+#	install -m 644 doc/*.pdf $(doc_name)
 
 uninstall-local:
 	@catalogs=`find ./po -name \*.po` ; \
@@ -523,7 +522,7 @@ uninstall-local:
 
 clean-local:
 	rm -f po/$(m_name).pot ; \
-	rm -f po/*~ ;
+	rm -f po/*~ ; 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

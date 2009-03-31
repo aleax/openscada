@@ -947,6 +947,7 @@ enable_SQLite
 enable_FireBird
 enable_Sockets
 enable_SSL
+enable_Serial
 enable_HTTP
 enable_SelfSystem
 enable_SystemTests
@@ -1636,6 +1637,7 @@ Optional Features:
   --disable-FireBird      disable build module DB/FireBird
   --disable-Sockets       disable build module Transport/Sockets
   --disable-SSL           disable build module Transport/SSL
+  --disable-Serial        disable build module Transport/Serial
   --disable-HTTP          disable build module Protocol/HTTP
   --disable-SelfSystem    disable build module Protocol/SelfSystem
   --disable-SystemTests   disable build module Special/SystemTests
@@ -5188,7 +5190,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 5191 "configure"' > conftest.$ac_ext
+  echo '#line 5193 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -8053,11 +8055,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8056: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8058: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8060: \$? = $ac_status" >&5
+   echo "$as_me:8062: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8343,11 +8345,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8346: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8348: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8350: \$? = $ac_status" >&5
+   echo "$as_me:8352: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8447,11 +8449,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8450: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8452: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:8454: \$? = $ac_status" >&5
+   echo "$as_me:8456: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -10969,7 +10971,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 10972 "configure"
+#line 10974 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -11069,7 +11071,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 11072 "configure"
+#line 11074 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -13481,11 +13483,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13484: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13486: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:13488: \$? = $ac_status" >&5
+   echo "$as_me:13490: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -13585,11 +13587,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13588: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13590: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:13592: \$? = $ac_status" >&5
+   echo "$as_me:13594: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -16495,11 +16497,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16498: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16500: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16502: \$? = $ac_status" >&5
+   echo "$as_me:16504: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16599,11 +16601,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16602: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16604: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:16606: \$? = $ac_status" >&5
+   echo "$as_me:16608: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -18186,11 +18188,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:18189: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:18191: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:18193: \$? = $ac_status" >&5
+   echo "$as_me:18195: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -18290,11 +18292,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:18293: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:18295: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:18297: \$? = $ac_status" >&5
+   echo "$as_me:18299: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -20509,11 +20511,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:20512: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:20514: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:20516: \$? = $ac_status" >&5
+   echo "$as_me:20518: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -20799,11 +20801,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:20802: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:20804: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:20806: \$? = $ac_status" >&5
+   echo "$as_me:20808: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -20903,11 +20905,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:20906: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:20908: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:20910: \$? = $ac_status" >&5
+   echo "$as_me:20912: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -27873,7 +27875,7 @@ ac_config_files="$ac_config_files Makefile src/Makefile src_call/Makefile src/mo
 
 
 #====== Check build modules ======
-#-- Archive modules --
+#> Archive modules
 # Check whether --enable-FSArch was given.
 if test "${enable_FSArch+set}" = set; then
   enableval=$enable_FSArch;  if test $enableval = yes; then ModFSArch=true; else ModFSArch=false; fi
@@ -27888,7 +27890,7 @@ else
    ModDBArch=true;
 fi
 
-#-- DB modules --
+#> DB modules
 # Check whether --enable-DBF was given.
 if test "${enable_DBF+set}" = set; then
   enableval=$enable_DBF;  if test $enableval = yes; then ModDBF=true; else ModDBF=false; fi
@@ -27917,7 +27919,7 @@ else
    ModFireBird=true;
 fi
 
-#-- Transport modules --
+#> Transport modules
 # Check whether --enable-Sockets was given.
 if test "${enable_Sockets+set}" = set; then
   enableval=$enable_Sockets;  if test $enableval = yes; then ModSockets=true; else ModSockets=false; fi
@@ -27932,7 +27934,14 @@ else
    ModSSL=true;
 fi
 
-#-- Transport protocol modules --
+# Check whether --enable-Serial was given.
+if test "${enable_Serial+set}" = set; then
+  enableval=$enable_Serial;  if test $enableval = yes; then ModSerial=true; else ModSerial=false; fi
+else
+   ModSerial=true;
+fi
+
+#> Transport protocol modules
 # Check whether --enable-HTTP was given.
 if test "${enable_HTTP+set}" = set; then
   enableval=$enable_HTTP;  if test $enableval = yes; then ModHTTP=true; else ModHTTP=false; fi
@@ -27947,7 +27956,7 @@ else
    ModSelfSystem=true;
 fi
 
-#-- Special modules --
+#> Special modules
 # Check whether --enable-SystemTests was given.
 if test "${enable_SystemTests+set}" = set; then
   enableval=$enable_SystemTests;  if test $enableval = yes; then ModSystemTests=true; else ModSystemTests=false; fi
@@ -27976,7 +27985,7 @@ else
    ModFLibSYS=true;
 fi
 
-#-- DAQ modules --
+#> DAQ modules
 # Check whether --enable-System was given.
 if test "${enable_System+set}" = set; then
   enableval=$enable_System;  if test $enableval = yes; then ModSystem=true; else ModSystem=false; fi
@@ -28054,7 +28063,7 @@ else
    ModSoundCard=true;
 fi
 
-#-- UI modules --
+#> UI modules
 # Check whether --enable-VCAEngine was given.
 if test "${enable_VCAEngine+set}" = set; then
   enableval=$enable_VCAEngine;  if test $enableval = yes; then ModVCAEngine=true; else ModVCAEngine=false; fi
@@ -28108,7 +28117,7 @@ fi
 
 { $as_echo "$as_me:$LINENO: result: ========== Build modules list =============" >&5
 $as_echo "========== Build modules list =============" >&6; }
-#-- Archive modules --
+#> Archive modules
 
 if test ${ModFSArch} = true; then
     { $as_echo "$as_me:$LINENO: result: Build module: Archive/FSArch" >&5
@@ -28124,7 +28133,7 @@ $as_echo "Build module: Archive/DBArch" >&6; }
 
     ArchSub_mod="${ArchSub_mod}DBArch "
 fi
-#-- DB modules --
+#> DB modules
 
 if test ${ModDBF} = true; then
     { $as_echo "$as_me:$LINENO: result: Build module: DB/DBF" >&5
@@ -28139,7 +28148,7 @@ $as_echo "Build module: DB/MySQL" >&6; }
     ac_config_files="$ac_config_files src/moduls/bd/MySQL/Makefile"
 
     DBSub_mod="${DBSub_mod}MySQL "
-    #--- Modules checkings ---
+    #>> Modules checkings
 
 
 for ac_header in mysql/mysql.h mysql/errmsg.h
@@ -28377,7 +28386,7 @@ $as_echo "Build module: DB/SQLite" >&6; }
     ac_config_files="$ac_config_files src/moduls/bd/SQLite/Makefile"
 
     DBSub_mod="${DBSub_mod}SQLite "
-    #--- Modules checkings ---
+    #>> Modules checkings
 
 for ac_header in sqlite3.h
 do
@@ -28614,7 +28623,7 @@ $as_echo "Build module: DB/FireBird" >&6; }
     ac_config_files="$ac_config_files src/moduls/bd/FireBird/Makefile"
 
     DBSub_mod="${DBSub_mod}FireBird "
-    #--- Modules checkings ---
+    #>> Modules checkings
 
 for ac_header in ibase.h
 do
@@ -28845,7 +28854,7 @@ $as_echo "$as_me: error: DB/FireBird: FireBird API client library not found. Ins
 fi
 
 fi
-#-- Transport modules --
+#> Transport modules
 
 if test ${ModSockets} = true; then
     { $as_echo "$as_me:$LINENO: result: Build module: Transport/Sockets" >&5
@@ -29254,7 +29263,14 @@ $as_echo "$as_me: error: Transport/SSL: OpenSSL library not found. Install or ch
 fi
 
 fi
-#-- Transport protocol modules --
+if test ${ModSerial} = true; then
+    { $as_echo "$as_me:$LINENO: result: Build module: Transport/Serial" >&5
+$as_echo "Build module: Transport/Serial" >&6; }
+    ac_config_files="$ac_config_files src/moduls/transport/Serial/Makefile"
+
+    TranspSub_mod="${TranspSub_mod}Serial "
+fi
+#> Transport protocol modules
 
 if test ${ModHTTP} = true; then
     { $as_echo "$as_me:$LINENO: result: Build module: Protocol/HTTP" >&5
@@ -29270,7 +29286,7 @@ $as_echo "Build module: Protocol/SelfSystem" >&6; }
 
     ProtSub_mod="${ProtSub_mod}SelfSystem "
 fi
-#-- Special modules --
+#> Special modules
 
 if test ${ModSystemTests} = true; then
     { $as_echo "$as_me:$LINENO: result: Build module: Special/SystemTests" >&5
@@ -29300,7 +29316,7 @@ $as_echo "Build module: Special/FLibSYS" >&6; }
 
     SpecSub_mod="${SpecSub_mod}FLibSYS "
 fi
-#-- DAQ modules --
+#> DAQ modules
 
 if test ${ModSystem} = true; then
     { $as_echo "$as_me:$LINENO: result: Build module: DAQ/System" >&5
@@ -29308,7 +29324,7 @@ $as_echo "Build module: DAQ/System" >&6; }
     ac_config_files="$ac_config_files src/moduls/daq/System/Makefile"
 
     DAQSub_mod="${DAQSub_mod}System "
-    #--- Modules checkings ---
+    #>> Modules checkings
 
 for ac_header in sensors/sensors.h
 do
@@ -29552,7 +29568,7 @@ $as_echo "Build module: DAQ/JavaLikeCalc" >&6; }
     ac_config_files="$ac_config_files src/moduls/daq/JavaLikeCalc/Makefile"
 
     DAQSub_mod="${DAQSub_mod}JavaLikeCalc "
-    #--- Modules checkings ---
+    #>> Modules checkings
     for ac_prog in 'bison -y' byacc
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
@@ -29658,7 +29674,7 @@ $as_echo "Build module: DAQ/SNMP" >&6; }
     ac_config_files="$ac_config_files src/moduls/daq/SNMP/Makefile"
 
     DAQSub_mod="${DAQSub_mod}SNMP "
-    #--- Modules checkings ---
+    #>> Modules checkings
 
 for ac_header in net-snmp/net-snmp-config.h
 do
@@ -29826,7 +29842,7 @@ $as_echo "Build module: DAQ/Siemens" >&6; }
     ac_config_files="$ac_config_files src/moduls/daq/Siemens/Makefile"
 
     DAQSub_mod="${DAQSub_mod}Siemens "
-    #--- Modules checkings ---
+    #>> Modules checkings
 
 for ac_header in ctype.h
 do
@@ -30165,7 +30181,7 @@ $as_echo "Build module: DAQ/SoundCard" >&6; }
     ac_config_files="$ac_config_files src/moduls/daq/SoundCard/Makefile"
 
     DAQSub_mod="${DAQSub_mod}SoundCard "
-    #--- Modules checkings ---
+    #>> Modules checkings
 
 for ac_header in portaudio.h
 do
@@ -30396,7 +30412,7 @@ $as_echo "$as_me: error: Portaudio library not found. Install or check Portaudio
 fi
 
 fi
-#-- UI modules --
+#> UI modules
 
 if test ${ModVCAEngine} = true; then
     { $as_echo "$as_me:$LINENO: result: Build module: UI/VCAEngine" >&5
@@ -30411,7 +30427,7 @@ $as_echo "Build module: UI/Vision" >&6; }
     ac_config_files="$ac_config_files src/moduls/ui/Vision/Makefile"
 
     UISub_mod="${UISub_mod}Vision "
-    #--- Modules checkings ---
+    #>> Modules checkings
     QT4use=true;
 
 for ac_header in fftw3.h
@@ -30679,7 +30695,7 @@ $as_echo "Build module: UI/WebVision" >&6; }
     ac_config_files="$ac_config_files src/moduls/ui/WebVision/Makefile"
 
     UISub_mod="${UISub_mod}WebVision "
-    #--- Modules checkings ---
+    #>> Modules checkings
 
 for ac_header in fftw3.h
 do
@@ -31681,6 +31697,7 @@ do
     "src/moduls/bd/FireBird/Makefile") CONFIG_FILES="$CONFIG_FILES src/moduls/bd/FireBird/Makefile" ;;
     "src/moduls/transport/Sockets/Makefile") CONFIG_FILES="$CONFIG_FILES src/moduls/transport/Sockets/Makefile" ;;
     "src/moduls/transport/SSL/Makefile") CONFIG_FILES="$CONFIG_FILES src/moduls/transport/SSL/Makefile" ;;
+    "src/moduls/transport/Serial/Makefile") CONFIG_FILES="$CONFIG_FILES src/moduls/transport/Serial/Makefile" ;;
     "src/moduls/protocol/HTTP/Makefile") CONFIG_FILES="$CONFIG_FILES src/moduls/protocol/HTTP/Makefile" ;;
     "src/moduls/protocol/SelfSystem/Makefile") CONFIG_FILES="$CONFIG_FILES src/moduls/protocol/SelfSystem/Makefile" ;;
     "src/moduls/special/SystemTests/Makefile") CONFIG_FILES="$CONFIG_FILES src/moduls/special/SystemTests/Makefile" ;;

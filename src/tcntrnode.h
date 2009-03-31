@@ -32,6 +32,7 @@
 #define RWRWRW  0666
 #define RWRWR_  0664
 #define RWR_R_  0644
+#define RWRW__  0660
 #define RWR___  0640
 #define RW____  0600
 

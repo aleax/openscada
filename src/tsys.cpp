@@ -764,6 +764,15 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 		    default:	sout+=in[i_sz];
 		}
 	    break;
+	case TSYS::Bin:
+	{
+	    string svl, evl;
+	    sout.reserve(in.size());
+	    for( int off = 0; (svl=TSYS::strSepParse(in,0,'\n',&off)).size(); )
+		for( int offE = 0; (evl=TSYS::strSepParse(svl,0,' ',&offE)).size(); )
+		    sout+=(char)strtol(evl.c_str(),NULL,16);
+	    break;
+	}
     }
     return sout;
 }
@@ -822,6 +831,11 @@ string TSYS::strDecode( const string &in, TSYS::Code tp )
 		    }
 		i_sz+=4;
 	    }
+	    break;
+	case TSYS::Bin:
+	    sout.reserve(in.size());
+	    for( i_sz = 0; i_sz < in.size(); i_sz++ )
+		sout += TSYS::strMess(((i_sz+1)%16)?"%0.2x ":"%0.2x\n",(unsigned char)in[i_sz]);
 	    break;
     }
 

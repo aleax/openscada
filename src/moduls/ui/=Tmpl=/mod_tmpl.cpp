@@ -1,6 +1,6 @@
 
-//OpenSCADA system module UI.Tmpl file: mod_tmpl.cpp
 //!!! Module name, file name and module's license. Change for your need.
+//OpenSCADA system module UI.Tmpl file: mod_tmpl.cpp
 /***************************************************************************
  *   Copyright (C) 2008 by Roman Savochenko                                *
  *   rom_as@fromru.com                                                     *
@@ -29,10 +29,10 @@
 #include <tsys.h>
 #include <tmess.h>
 
-//> Self your module's includings. Add need for your module includings.
+//!!! Self your module's includings. Add need for your module includings.
 #include "mod_tmpl.h"
 
-//> Module's meta-information. Change for your module.
+//!!! Module's meta-information. Change for your module.
 //************************************************
 //* Modul info!                                  *
 #define MOD_ID		"Tmpl"
@@ -48,8 +48,8 @@
 
 ModTmpl::TWEB *ModTmpl::mod;
 
-//> Required section for binding OpenSCADA kernel's to this module. Gives information and create module's root object.
-//> Not remove this section!
+//!!! Required section for binding OpenSCADA kernel's to this module. Gives information and create module's root object.
+//!!! Not remove this section!
 extern "C"
 {
     TModule::SAt module( int n_mod )
@@ -69,10 +69,10 @@ extern "C"
 //!!! Include for default call into your module's namespace.
 using namespace ModTmpl;
 
-//!!! Constructor for module's root object. Append into for your need.
 //************************************************
 //* TWEB                                         *
 //************************************************
+//!!! Constructor for module's root object. Append into for your need.
 TWEB::TWEB( string name )
 {
     //!!! Loading module's meta-information into root object. No change it.
@@ -97,7 +97,7 @@ TWEB::TWEB( string name )
 }
 
 //!!! Destructor for module's root object. Append into for your need.
-TWEB::~TWEB()
+TWEB::~TWEB( )
 {
 
 }

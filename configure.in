@@ -117,12 +117,12 @@ AC_CONFIG_FILES(Makefile src/Makefile src_call/Makefile src/moduls/Makefile
 	src/moduls/ui/Makefile)
 
 #====== Check build modules ======
-#-- Archive modules --
+#> Archive modules
 AC_ARG_ENABLE(FSArch,AC_HELP_STRING([--disable-FSArch], [disable build module Archive/FSArch]),
 [ if test $enableval = yes; then ModFSArch=true; else ModFSArch=false; fi],[ ModFSArch=true; ])
 AC_ARG_ENABLE(DBArch,AC_HELP_STRING([--disable-DBArch], [disable build module Archive/DBArch]),
 [ if test $enableval = yes; then ModDBArch=true; else ModDBArch=false; fi],[ ModDBArch=true; ])
-#-- DB modules --
+#> DB modules
 AC_ARG_ENABLE(DBF,AC_HELP_STRING([--disable-DBF], [disable build module DB/DBF]),
 [ if test $enableval = yes; then ModDBF=true; else ModDBF=false; fi],[ ModDBF=true; ])
 AC_ARG_ENABLE(MySQL,AC_HELP_STRING([--disable-MySQL], [disable build module DB/MySQL]),
@@ -131,17 +131,19 @@ AC_ARG_ENABLE(SQLite,AC_HELP_STRING([--disable-SQLite], [disable build module DB
 [ if test $enableval = yes; then ModSQLite=true; else ModSQLite=false; fi],[ ModSQLite=true; ])
 AC_ARG_ENABLE(FireBird,AC_HELP_STRING([--disable-FireBird], [disable build module DB/FireBird]),
 [ if test $enableval = yes; then ModFireBird=true; else ModFireBird=false; fi],[ ModFireBird=true; ])
-#-- Transport modules --
+#> Transport modules
 AC_ARG_ENABLE(Sockets,AC_HELP_STRING([--disable-Sockets], [disable build module Transport/Sockets]),
 [ if test $enableval = yes; then ModSockets=true; else ModSockets=false; fi],[ ModSockets=true; ])
 AC_ARG_ENABLE(SSL,AC_HELP_STRING([--disable-SSL], [disable build module Transport/SSL]),
 [ if test $enableval = yes; then ModSSL=true; else ModSSL=false; fi],[ ModSSL=true; ])
-#-- Transport protocol modules --
+AC_ARG_ENABLE(Serial,AC_HELP_STRING([--disable-Serial], [disable build module Transport/Serial]),
+[ if test $enableval = yes; then ModSerial=true; else ModSerial=false; fi],[ ModSerial=true; ])
+#> Transport protocol modules
 AC_ARG_ENABLE(HTTP,AC_HELP_STRING([--disable-HTTP], [disable build module Protocol/HTTP]),
 [ if test $enableval = yes; then ModHTTP=true; else ModHTTP=false; fi],[ ModHTTP=true; ])
 AC_ARG_ENABLE(SelfSystem,AC_HELP_STRING([--disable-SelfSystem], [disable build module Protocol/SelfSystem]),
 [ if test $enableval = yes; then ModSelfSystem=true; else ModSelfSystem=false; fi],[ ModSelfSystem=true; ])
-#-- Special modules --
+#> Special modules
 AC_ARG_ENABLE(SystemTests,AC_HELP_STRING([--disable-SystemTests], [disable build module Special/SystemTests]),
 [ if test $enableval = yes; then ModSystemTests=true; else ModSystemTests=false; fi],[ ModSystemTests=true; ])
 AC_ARG_ENABLE(FLibComplex1,AC_HELP_STRING([--disable-FLibComplex1], [disable build module Special/FLibComplex1]),
@@ -150,7 +152,7 @@ AC_ARG_ENABLE(FLibMath,AC_HELP_STRING([--disable-FLibMath], [disable build modul
 [ if test $enableval = yes; then ModFLibMath=true; else ModFLibMath=false; fi],[ ModFLibMath=true; ])
 AC_ARG_ENABLE(FLibSYS,AC_HELP_STRING([--disable-FLibSYS], [disable build module Special/FLibSYS]),
 [ if test $enableval = yes; then ModFLibSYS=true; else ModFLibSYS=false; fi],[ ModFLibSYS=true; ])
-#-- DAQ modules --
+#> DAQ modules
 AC_ARG_ENABLE(System,AC_HELP_STRING([--disable-System], [disable build module DAQ/System]),
 [ if test $enableval = yes; then ModSystem=true; else ModSystem=false; fi],[ ModSystem=true; ])
 AC_ARG_ENABLE(BlockCalc,AC_HELP_STRING([--disable-BlockCalc], [disable build module DAQ/BlockCalc]),
@@ -173,7 +175,7 @@ AC_ARG_ENABLE(DAQTransporter,AC_HELP_STRING([--disable-DAQTransporter], [disable
 [ if test $enableval = yes; then ModDAQTransporter=true; else ModDAQTransporter=false; fi],[ ModDAQTransporter=true; ])
 AC_ARG_ENABLE(SoundCard,AC_HELP_STRING([--disable-SoundCard], [disable build module DAQ/SoundCard]),
 [ if test $enableval = yes; then ModSoundCard=true; else ModSoundCard=false; fi],[ ModSoundCard=true; ])
-#-- UI modules --
+#> UI modules
 AC_ARG_ENABLE(VCAEngine,AC_HELP_STRING([--disable-VCAEngine], [disable build module UI/VCAEngine]),
 [ if test $enableval = yes; then ModVCAEngine=true; else ModVCAEngine=false; fi],[ ModVCAEngine=true; ])
 AC_ARG_ENABLE(Vision,AC_HELP_STRING([--disable-Vision], [disable build module UI/Vision]),
@@ -191,7 +193,7 @@ AC_ARG_ENABLE(WebVision,AC_HELP_STRING([--disable-WebVision], [disable build mod
 
 
 AC_MSG_RESULT(========== Build modules list =============)
-#-- Archive modules --
+#> Archive modules
 AC_SUBST(ArchSub_mod)
 if test ${ModFSArch} = true; then
     AC_MSG_RESULT(Build module: Archive/FSArch)
@@ -203,7 +205,7 @@ if test ${ModDBArch} = true; then
     AC_CONFIG_FILES(src/moduls/arhiv/DBArch/Makefile)
     ArchSub_mod="${ArchSub_mod}DBArch "
 fi
-#-- DB modules --
+#> DB modules
 AC_SUBST(DBSub_mod)
 if test ${ModDBF} = true; then
     AC_MSG_RESULT(Build module: DB/DBF)
@@ -214,7 +216,7 @@ if test ${ModMySQL} = true; then
     AC_MSG_RESULT(Build module: DB/MySQL)
     AC_CONFIG_FILES(src/moduls/bd/MySQL/Makefile)
     DBSub_mod="${DBSub_mod}MySQL "
-    #--- Modules checkings ---
+    #>> Modules checkings
     AC_CHECK_HEADERS([mysql/mysql.h mysql/errmsg.h],[],
 	[AC_MSG_ERROR(DB/MySQL: Some MySQL API headers not found. Install or check MySQL library developing package!)])
     AC_CHECK_LIB([mysqlclient],[mysql_init],[AC_MSG_NOTICE(Pass global library using)],
@@ -224,7 +226,7 @@ if test ${ModSQLite} = true; then
     AC_MSG_RESULT(Build module: DB/SQLite)
     AC_CONFIG_FILES(src/moduls/bd/SQLite/Makefile)
     DBSub_mod="${DBSub_mod}SQLite "
-    #--- Modules checkings ---
+    #>> Modules checkings
     AC_CHECK_HEADERS([sqlite3.h],[],
 	[AC_MSG_ERROR(DB/SQLite: Some SQLite3 API headers not found. Install or check SQLite3 library developing package!)])
     AC_CHECK_LIB([sqlite3],[sqlite3_open],[AC_MSG_NOTICE(Pass global library using)],
@@ -234,13 +236,13 @@ if test ${ModFireBird} = true; then
     AC_MSG_RESULT(Build module: DB/FireBird)
     AC_CONFIG_FILES(src/moduls/bd/FireBird/Makefile)
     DBSub_mod="${DBSub_mod}FireBird "
-    #--- Modules checkings ---
+    #>> Modules checkings
     AC_CHECK_HEADERS([ibase.h],[],
 	[AC_MSG_ERROR(DB/FireBird: Some FireBird API headers not found. Install or check FireBird installation!)])
     AC_CHECK_LIB([fbclient],[isc_attach_database],[AC_MSG_NOTICE(Pass global library using)],
 	[AC_MSG_ERROR(DB/FireBird: FireBird API client library not found. Install or check FireBird installation!)])
 fi
-#-- Transport modules --
+#> Transport modules
 AC_SUBST(TranspSub_mod)
 if test ${ModSockets} = true; then
     AC_MSG_RESULT(Build module: Transport/Sockets)
@@ -260,7 +262,12 @@ if test ${ModSSL} = true; then
     AC_CHECK_LIB([ssl],[SSL_library_init],[AC_MSG_NOTICE(Pass global library using)],
 	[AC_MSG_ERROR(Transport/SSL: OpenSSL library not found. Install or check OpenSSL installation!)])
 fi
-#-- Transport protocol modules --
+if test ${ModSerial} = true; then
+    AC_MSG_RESULT(Build module: Transport/Serial)
+    AC_CONFIG_FILES(src/moduls/transport/Serial/Makefile)
+    TranspSub_mod="${TranspSub_mod}Serial "
+fi
+#> Transport protocol modules
 AC_SUBST(ProtSub_mod)
 if test ${ModHTTP} = true; then
     AC_MSG_RESULT(Build module: Protocol/HTTP)
@@ -272,7 +279,7 @@ if test ${ModSelfSystem} = true; then
     AC_CONFIG_FILES(src/moduls/protocol/SelfSystem/Makefile)
     ProtSub_mod="${ProtSub_mod}SelfSystem "
 fi
-#-- Special modules --
+#> Special modules
 AC_SUBST(SpecSub_mod)
 if test ${ModSystemTests} = true; then
     AC_MSG_RESULT(Build module: Special/SystemTests)
@@ -294,13 +301,13 @@ if test ${ModFLibSYS} = true; then
     AC_CONFIG_FILES(src/moduls/special/FLibSYS/Makefile)
     SpecSub_mod="${SpecSub_mod}FLibSYS "
 fi
-#-- DAQ modules --
+#> DAQ modules
 AC_SUBST(DAQSub_mod)
 if test ${ModSystem} = true; then
     AC_MSG_RESULT(Build module: DAQ/System)
     AC_CONFIG_FILES(src/moduls/daq/System/Makefile)
     DAQSub_mod="${DAQSub_mod}System "
-    #--- Modules checkings ---
+    #>> Modules checkings
     AC_CHECK_HEADERS([sensors/sensors.h],[],
 	[AC_MSG_ERROR(DAQ/System: Libsensors headers not found. Install or check of libsensors developing package!)])
     AC_CHECK_LIB([sensors],[sensors_init],[AC_MSG_NOTICE(Pass global library using)],
@@ -315,7 +322,7 @@ if test ${ModJavaLikeCalc} = true; then
     AC_MSG_RESULT(Build module: DAQ/JavaLikeCalc)
     AC_CONFIG_FILES(src/moduls/daq/JavaLikeCalc/Makefile)
     DAQSub_mod="${DAQSub_mod}JavaLikeCalc "
-    #--- Modules checkings ---
+    #>> Modules checkings
     AC_PROG_YACC
     AC_CHECK_PROG(YACC_OK, bison, true, false)
     if test ${YACC_OK} = false; then AC_MSG_ERROR([No syntax generator present! Install YACC like programm bison.]) fi
@@ -334,7 +341,7 @@ if test ${ModSNMP} = true; then
     AC_MSG_RESULT(Build module: DAQ/SNMP)
     AC_CONFIG_FILES(src/moduls/daq/SNMP/Makefile)
     DAQSub_mod="${DAQSub_mod}SNMP "
-    #--- Modules checkings ---
+    #>> Modules checkings
     AC_CHECK_HEADERS([net-snmp/net-snmp-config.h],[],
 	[AC_MSG_ERROR(DAQ/SNMP: Net SNMP library headers not found. Install or check of Net SNMP developing package!)])
 #    AC_CHECK_LIB([crypto],[SSL_CTX_use_certificate],[AC_MSG_NOTICE(Pass global library using)],
@@ -347,7 +354,7 @@ if test ${ModSiemens} = true; then
     AC_MSG_RESULT(Build module: DAQ/Siemens)
     AC_CONFIG_FILES(src/moduls/daq/Siemens/Makefile)
     DAQSub_mod="${DAQSub_mod}Siemens "
-    #--- Modules checkings ---
+    #>> Modules checkings
     AC_CHECK_HEADERS([ctype.h],[],
 	[AC_MSG_ERROR(DAQ/Siemens: Some GLibC network headers not found. Install or check GLibC developing package!)])
     AC_CHECK_HEADERS([linux/kd.h],[],
@@ -372,13 +379,13 @@ if test ${ModSoundCard} = true; then
     AC_MSG_RESULT(Build module: DAQ/SoundCard)
     AC_CONFIG_FILES(src/moduls/daq/SoundCard/Makefile)
     DAQSub_mod="${DAQSub_mod}SoundCard "
-    #--- Modules checkings ---
+    #>> Modules checkings
     AC_CHECK_HEADERS([portaudio.h],[],
 	[AC_MSG_ERROR(DAQ/SoundCard: Some Portaudio headers not found. Install or check Portaudio developing package!)])
     AC_CHECK_LIB([portaudio],[Pa_Initialize],[AC_MSG_NOTICE(Pass global library using)],
 	[AC_MSG_ERROR(Portaudio library not found. Install or check Portaudio library package!)])
 fi
-#-- UI modules --
+#> UI modules
 AC_SUBST(UISub_mod)
 if test ${ModVCAEngine} = true; then
     AC_MSG_RESULT(Build module: UI/VCAEngine)
@@ -389,7 +396,7 @@ if test ${ModVision} = true; then
     AC_MSG_RESULT(Build module: UI/Vision)
     AC_CONFIG_FILES(src/moduls/ui/Vision/Makefile)
     UISub_mod="${UISub_mod}Vision "
-    #--- Modules checkings ---
+    #>> Modules checkings
     QT4use=true;
     AC_CHECK_HEADERS([fftw3.h],[],
 	[AC_MSG_ERROR(UI/Vision: Some FFTW3 headers not found. Install or check FFTW3 developing package!)])
@@ -422,7 +429,7 @@ if test ${ModWebVision} = true; then
     AC_MSG_RESULT(Build module: UI/WebVision)
     AC_CONFIG_FILES(src/moduls/ui/WebVision/Makefile)
     UISub_mod="${UISub_mod}WebVision "
-    #--- Modules checkings ---
+    #>> Modules checkings
     AC_CHECK_HEADERS([fftw3.h],[],
 	[AC_MSG_ERROR(UI/WebVision: Some FFTW3 headers not found. Install or check FFTW3 developing package!)])
     AC_CHECK_LIB([fftw3],[fftw_execute],[AC_MSG_NOTICE(Pass global library using)],

@@ -116,13 +116,13 @@ void TTransSock::postEnable( int flag )
 
     if( flag&TCntrNode::NodeConnect )
     {
-	//- Add self DB-fields to input transport -
+	//> Add self DB-fields to input transport
 	owner().inEl().fldAdd( new TFld("BufLen",_("Input socket buffer length (kB)"),TFld::Integer,0,"4","5") );
 	owner().inEl().fldAdd( new TFld("MaxClients",_("Maximum clients process"),TFld::Integer,0,"3","10") );
 	owner().inEl().fldAdd( new TFld("SSLCertKey",_("SSL PEM certificat and private key"),TFld::String,TFld::FullText,"10000") );
 	owner().inEl().fldAdd( new TFld("SSLKeyPass",_("SSL key password"),TFld::String,0,"20") );
 
-	//- Add self DB-fields to input transport -
+	//> Add self DB-fields to input transport
 	owner().outEl().fldAdd( new TFld("SSLCertKey",_("SSL PEM certificat and private key"),TFld::String,TFld::FullText,"10000") );
 	owner().outEl().fldAdd( new TFld("SSLKeyPass",_("SSL key password"),TFld::String,0,"20") );
     }
@@ -206,7 +206,7 @@ TTransportOut *TTransSock::Out( const string &name, const string &idb )
 
 void TTransSock::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	TTipTransport::cntrCmdProc(opt);
@@ -214,7 +214,7 @@ void TTransSock::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
     if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )   opt->setText(optDescr());
     else TTipTransport::cntrCmdProc(opt);
@@ -598,33 +598,33 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	    "    addr - address for SSL to be opened, '*' address opens for all interfaces;\n"
 	    "    port - network port (/etc/services);\n"
 	    "    mode - SSL mode and version (SSLv2, SSLv3, SSLv23 and TLSv1)."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/certKey",_("Certificates and private key"),0660,"root","root",4,"tp","str","cols","90","rows","7","help",_("SSL PAM certificates chain and private key."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/pkey_pass",_("Private key password"),0660,"root","root",1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/cl_n",_("Clients maximum"),0660,"root","root",1,"tp","dec");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/bf_ln",_("Input buffer (kbyte)"),0660,"root","root",1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/certKey",_("Certificates and private key"),0664,"root","root",4,"tp","str","cols","90","rows","7","help",_("SSL PAM certificates chain and private key."));
+	ctrMkNode("fld",opt,-1,"/prm/cfg/pkey_pass",_("Private key password"),0664,"root","root",1,"tp","str");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/cl_n",_("Clients maximum"),0664,"root","root",1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/bf_ln",_("Input buffer (kbyte)"),0664,"root","root",1,"tp","dec");
 	return;
     }
     //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/prm/cfg/certKey" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText(certKey());
-	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	setCertKey(opt->text());
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(certKey());
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setCertKey(opt->text());
     }
     else if( a_path == "/prm/cfg/pkey_pass" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText(string(pKeyPass().size(),'*'));
-	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	setPKeyPass(opt->text());
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(string(pKeyPass().size(),'*'));
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setPKeyPass(opt->text());
     }
     else if( a_path == "/prm/cfg/cl_n" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(maxFork()) );
-	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	setMaxFork( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(maxFork()) );
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setMaxFork( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/prm/cfg/bf_ln" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(bufLen()) );
-	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	setBufLen( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(bufLen()) );
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setBufLen( atoi(opt->text().c_str()) );
     }
     else TTransportIn::cntrCmdProc(opt);
 }

@@ -99,8 +99,8 @@ void TTransSock::postEnable( int flag )
 
     if( flag&TCntrNode::NodeConnect )
     {
-	//- Add self DB-fields to input transport -
-	owner().inEl().fldAdd( new TFld("BufLen",_("Input socket buffer length (kB)"),TFld::Integer,0,"4","5") );
+	//> Add self DB-fields to input transport
+	owner().inEl().fldAdd( new TFld("BufLen",_("Input buffer length (kB)"),TFld::Integer,0,"4","5") );
 	owner().inEl().fldAdd( new TFld("MaxClients",_("Maximum clients process"),TFld::Integer,0,"3","10") );
 	owner().inEl().fldAdd( new TFld("SocketsMaxQueue",_("Maximum queue of input socket"),TFld::Integer,0,"2","10") );
     }
@@ -551,7 +551,7 @@ void TSocketIn::clientUnreg( pthread_t thrid )
 
 void TSocketIn::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	TTransportIn::cntrCmdProc(opt);
@@ -567,27 +567,27 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	    "  UNIX:[name]:[mode] - UNIX socket:\n"
 	    "    name - UNIX-socket's file name;\n"
 	    "    mode - work mode (0 - break connection; 1 - keep alive)."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/q_ln",_("Queue length"),0660,"root","root",2,"tp","dec","help",_("Used for TCP and UNIX sockets."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/cl_n",_("Clients maximum"),0660,"root","root",2,"tp","dec","help",_("Used for TCP and UNIX sockets."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/bf_ln",_("Input buffer (kbyte)"),0660,"root","root",1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/q_ln",_("Queue length"),0664,"root","root",2,"tp","dec","help",_("Used for TCP and UNIX sockets."));
+	ctrMkNode("fld",opt,-1,"/prm/cfg/cl_n",_("Clients maximum"),0664,"root","root",2,"tp","dec","help",_("Used for TCP and UNIX sockets."));
+	ctrMkNode("fld",opt,-1,"/prm/cfg/bf_ln",_("Input buffer (kbyte)"),0664,"root","root",1,"tp","dec");
 	return;
     }
     //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/prm/cfg/q_ln" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(maxQueue()) );
-	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	setMaxQueue( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(maxQueue()) );
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setMaxQueue( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/prm/cfg/cl_n" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(maxFork()) );
-	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	setMaxFork( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(maxFork()) );
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setMaxFork( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/prm/cfg/bf_ln" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(bufLen()) );
-	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	setBufLen( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(bufLen()) );
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setBufLen( atoi(opt->text().c_str()) );
     }
     else TTransportIn::cntrCmdProc(opt);
 }
@@ -721,7 +721,7 @@ int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, in
 
     if( !run_st ) throw TError(nodePath().c_str(),_("Transport is not started!"));
 
-    //- Write request -
+    //> Write request
     if( obuf != NULL && len_ob > 0 )
 	while( (kz = write(sock_fd,obuf,len_ob)) <= 0 )
 	{
@@ -739,7 +739,7 @@ int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, in
 	}
     trOut += (float)kz/1024;
 
-    //- Read reply -
+    //> Read reply
     int i_b = 0;
     if( ibuf != NULL && len_ib > 0 && time > 0 )
     {
@@ -779,7 +779,7 @@ int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, in
 
 void TSocketOut::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	TTransportOut::cntrCmdProc(opt);
@@ -796,6 +796,6 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //- Process command to page -
+    //> Process command to page
     TTransportOut::cntrCmdProc(opt);
 }

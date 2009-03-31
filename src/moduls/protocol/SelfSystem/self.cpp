@@ -206,7 +206,7 @@ string TProt::outMess( const string &in, TTransportOut &tro )
 	    if( !isDir && tro.prm1() < 0 )
 	    {
 		req = "SES_OPEN "+user+" "+pass+"\n";
-		resp_len = tro.messIO(req.c_str(),req.size(),buf,sizeof(buf),20);
+		resp_len = tro.messIO(req.c_str(),req.size(),buf,sizeof(buf)-1,20);
 		buf[resp_len] = 0;
 		buf1[0] = 0;
 		sscanf(buf,"REZ %d %255s\n",&rez,buf1);

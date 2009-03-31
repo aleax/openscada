@@ -135,8 +135,6 @@ class TMdContr: public TController
 		&m_node;			//Node
 	string	&m_addr;			//Transport device address
 	bool	&m_merge;			//Fragments of register merge
-	int	&frTm;				//Frame timeout in ms
-	double	&charTm;			//Char timeout in ms
 	int	&reqTm;				//Request timeout in ms
 
 	bool	prc_st,				//Process task active
@@ -153,67 +151,6 @@ class TMdContr: public TController
 };
 
 //*************************************************
-//* SSerial                                       *
-//*************************************************
-class TTpContr;
-
-class SSerial : public TCntrNode, public TConfig
-{
-    public:
-	//Data
-	enum	Prot	{ Free, ASCII, RTU };
-
-	//Methods
-	SSerial( const string &dev, TTpContr *iown );
-
-	string	id( )		{ return m_id; }
-	int	speed( )	{ return m_speed; }
-	int	len( )		{ return m_len; }
-	bool	twostop( )	{ return m_twostop; }
-	int	parity( )	{ return m_parity; }
-	int	timeoutFrame( )	{ return frTm; }
-	double	timeoutChar( )	{ return charTm; }
-	int	timeoutReq( )	{ return reqTm; }
-	bool	hasOpen( )	{ return (fd>0); }
-
-	void	setSpeed( int val, bool tmAdj = false );
-	void	setLen( int val );
-	void	setTwostop( bool val );
-	void	setParity( int val );
-	void	setTimeoutFrame( int val )	{ frTm = val; modif(); }
-	void	setTimeoutChar( double val )	{ charTm = val; modif(); }
-	void	setTimeoutReq( int val )	{ reqTm = val; modif(); }
-	void	setOpen( bool vl );
-
-	string req( const string &vl, int iFrTm = 0, double iCharTm = 0, int iReqTm = 0 );
-
-	TTpContr &owner( )	{ return *(TTpContr *)nodePrev(); }
-
-    protected:
-	//Methods
-	string	nodeName( )	{ return id(); }
-	void	postDisable( int flag );
-
-	//- DB commands -
-	void load_( );
-	void save_( );
-
-    private:
-	//Attributes
-	string	&m_id;				//Serial port device
-	int	&m_speed;			//Speed
-	int	&m_len;				//Length
-	bool	&m_twostop;			//Two stop bits
-	int	&m_parity;			//Parity check
-	int	&frTm;				//Frame timeout in ms
-	double	&charTm;			//Char timeout in ms
-	int	&reqTm;				//Request timeout in ms
-
-	Res	m_res;				//Serial port resource
-	int	fd;				//Serial port
-};
-
-//*************************************************
 //* TTpContr                                      *
 //*************************************************
 class TTpContr: public TTipDAQ
@@ -223,26 +160,16 @@ class TTpContr: public TTipDAQ
 	TTpContr( string name );
 	~TTpContr( );
 
-	int serConnResume( )	{ return mSerConnResume; }
-	void setSerConnResume( int vl )	{ mSerConnResume = vl; modif(); }
+	int connResume( )	{ return mConnResume; }
+	void setConnResume( int vl )	{ mConnResume = vl; modif(); }
 
-	TElem &serDevE( )	{ return el_ser_dev; }
-
-	//- Serial devices -
-	string serDevDB( );
-	void serDevList( vector<string> &list )		{ chldList(m_sdev,list); }
-	void serDevAdd( const string &dev );
-	void serDevDel( const string &dev, bool full = false )		{ chldDel(m_sdev,dev,-1,full); }
-	bool serDevPresent( const string &dev )		{ return chldPresent(m_sdev,dev); }
-	AutoHD<SSerial> serDevAt( const string &dev )	{ return chldAt(m_sdev,dev); }
-
-	//- Special modbus protocol's -
+	//> Special modbus protocol's
 	ui16	CRC16( const string &mbap );
 	ui8	LRC( const string &mbap );
 	string	DataToASCII( const string &in );
 	string	ASCIIToData( const string &in );
 
-	//- Protocol -
+	//> Protocol
 	int prtLen( )	{ return mPrtLen; }
 	void setPrtLen( int vl );
 	void pushPrtMess( const string &vl );
@@ -259,18 +186,15 @@ class TTpContr: public TTipDAQ
 	TController *ContrAttach( const string &name, const string &daq_db );
 	string	optDescr( );
 
-	int	mSerConnResume;
+	int	mConnResume;
 
 	//Attributes
-	TElem	el_ser_dev;
-	int	m_sdev;
-
-	//- Protocol -
+	//> Protocol
 	Res	mPrtRes;
 	int	mPrtLen;
 	deque<string>	mPrt;
 
-	//- Special modbus protocol's -
+	//> Special modbus protocol's
 	static ui8 CRCHi[];
 	static ui8 CRCLo[];
 };
