@@ -339,7 +339,7 @@ string TMdContr::getStatus( )
     string val = TController::getStatus( );
 
     if( startStat( ) )
-	val+= TSYS::strMess(_("Read %d(%d) registers, %d(%d) coils. Write %d registers, %d coils. Connection errors %d(%d)."),
+	val+= TSYS::strMess(_("Read %g(%g) registers, %g(%g) coils. Write %g registers, %g coils. Errors of connection %g, of respond %g."),
 	    numRReg,numRRegIn,numRCoil,numRCoilIn,numWReg,numWCoil,numErrCon,numErrResp);
 
     return val;
