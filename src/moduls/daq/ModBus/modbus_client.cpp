@@ -321,7 +321,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 //******************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) :
 	TController( name_c, daq_db, cfgelem ), prc_st(false), endrun_req(false), tm_gath(0), tm_delay(0),
-	numRReg(0), numRRegIn(0), numRCoil(0), numRCoilIn(0), numWReg(0), numWCoil(0), numErrCon(0), numErrResp(0),
+	numRReg(0), numRRegIn(0), numRCoil(0), numRCoilIn(0), numWReg(0), numWCoil(0), numErrCon(0), numErrResp(0), numErrRespRep(0),
 	m_per(cfg("PERIOD").getRd()), m_prior(cfg("PRIOR").getId()), m_prt(cfg("PROT").getId()),
 	m_addr(cfg("ADDR").getSd()), m_node(cfg("NODE").getId()), m_merge(cfg("FRAG_MERGE").getBd()),
 	reqTm(cfg("TM_REQ").getId())
@@ -339,8 +339,8 @@ string TMdContr::getStatus( )
     string val = TController::getStatus( );
 
     if( startStat( ) )
-	val+= TSYS::strMess(_("Read %g(%g) registers, %g(%g) coils. Write %g registers, %g coils. Errors of connection %g, of respond %g."),
-	    numRReg,numRRegIn,numRCoil,numRCoilIn,numWReg,numWCoil,numErrCon,numErrResp);
+	val+= TSYS::strMess(_("Read %g(%g) registers, %g(%g) coils. Write %g registers, %g coils. Errors of connection %g, of respond %g(%g)."),
+	    numRReg,numRRegIn,numRCoil,numRCoilIn,numWReg,numWCoil,numErrCon,numErrResp,numErrRespRep);
 
     return val;
 }
@@ -384,7 +384,7 @@ void TMdContr::start_( )
 	}
 
 	//> Clear statistic
-	numRReg = numRRegIn = numRCoil = numRCoilIn = numWReg = numWCoil = numErrCon = numErrResp = 0;
+	numRReg = numRRegIn = numRCoil = numRCoilIn = numWReg = numWCoil = numErrCon = numErrResp = numErrRespRep = 0;
 
 	//> Start the gathering data task
 	pthread_attr_t pthr_attr;
@@ -415,7 +415,7 @@ void TMdContr::stop_( )
 	pthread_join( procPthr, NULL );
 
 	//> Clear statistic
-	numRReg = numRRegIn = numRCoil = numRCoilIn = numWReg = numWCoil = numErrCon = numErrResp = 0;
+	numRReg = numRRegIn = numRCoil = numRCoilIn = numWReg = numWCoil = numErrCon = numErrResp = numErrRespRep = 0;
 
 	//> Dissconnection
 	if( m_prt == 0 && SYS->transport().at().at("Sockets").at().outPresent(mod->modId()+id()) )
@@ -654,13 +654,19 @@ string TMdContr::modBusReq( string &pdu )
 		mbap += crc;
 
 		//> Send request
-		int resp_len = tr.at().messIO( mbap.data(), mbap.size(), buf, sizeof(buf), reqTm );
-		rez.assign(buf,resp_len);
+		for( int i_tr = 0; i_tr < 3; i_tr++ )
+		{
+		    int resp_len = tr.at().messIO( mbap.data(), mbap.size(), buf, sizeof(buf), reqTm );
+		    rez.assign(buf,resp_len);
+		    if( i_tr ) numErrRespRep++;
 
-		if( rez.size() < 2 )	{ err = _("13:Error respond: Too short."); break; }
-		if( mod->CRC16(rez.substr(0,rez.size()-2)) != (ui16)((rez[rez.size()-2]<<8)+(ui8)rez[rez.size()-1]) )
-		{ err = _("13:Error respond: CRC check error."); break; }
-		pdu = rez.substr( 1, rez.size()-3 );
+		    if( rez.size() < 2 )	{ err = _("13:Error respond: Too short."); continue; }
+		    if( mod->CRC16(rez.substr(0,rez.size()-2)) != (ui16)((rez[rez.size()-2]<<8)+(ui8)rez[rez.size()-1]) )
+		    { err = _("13:Error respond: CRC check error."); continue; }
+		    pdu = rez.substr( 1, rez.size()-3 );
+		    err = "";
+		    break;
+		}
 		break;
 	    }
 	    case 2:	// Modbus/ASCII protocol process
@@ -675,15 +681,21 @@ string TMdContr::modBusReq( string &pdu )
 		mbap += mod->LRC(mbap);
 
 		//> Send request
-		int resp_len = tr.at().messIO( mbap.data(), mbap.size(), buf, sizeof(buf), reqTm );
-		rez.assign(buf,resp_len);
+		for( int i_tr = 0; i_tr < 3; i_tr++ )
+		{
+		    int resp_len = tr.at().messIO( mbap.data(), mbap.size(), buf, sizeof(buf), reqTm );
+		    rez.assign(buf,resp_len);
+		    if( i_tr ) numErrRespRep++;
 
-		if( rez.size() < 3 || rez[0] != ':' || rez[rez.size()-2] != 0x0D || rez[rez.size()-1] != 0x0A )
-		{ err = _("13:Error respond: Error format."); break; }
-		rez = mod->ASCIIToData(rez.substr(1,rez.size()-3));
-		if( mod->LRC(rez.substr(0,rez.size()-1)) != rez[rez.size()-1] )
-		{ err = _("13:Error respond: LRC check error."); break; }
-		pdu = rez.substr(1,rez.size()-2);
+		    if( rez.size() < 3 || rez[0] != ':' || rez[rez.size()-2] != 0x0D || rez[rez.size()-1] != 0x0A )
+		    { err = _("13:Error respond: Error format."); continue; }
+		    rez = mod->ASCIIToData(rez.substr(1,rez.size()-3));
+		    if( mod->LRC(rez.substr(0,rez.size()-1)) != rez[rez.size()-1] )
+		    { err = _("13:Error respond: LRC check error."); continue; }
+		    pdu = rez.substr(1,rez.size()-2);
+		    err = "";
+		    break;
+		}
 		break;
 	    }
 	}

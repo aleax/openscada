@@ -151,7 +151,7 @@ class TMdContr: public TController
 	double	tm_gath;			//Gathering time
 	float	tm_delay;			//Delay time for next try connect
 
-	float numRReg, numRRegIn, numRCoil, numRCoilIn, numWReg, numWCoil, numErrCon, numErrResp;
+	float numRReg, numRRegIn, numRCoil, numRCoilIn, numWReg, numWCoil, numErrCon, numErrResp, numErrRespRep;
 };
 
 //*************************************************

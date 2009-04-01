@@ -1,6 +1,7 @@
 2009-04-01 Roman
 - !:/DAQ/ModBus: Status mechanism is added for controller.
 - FIX:/Transport/Serial: Clear input buffer from previous broken request is added.
+- !:/DAQ/ModBus: Three try is added for request to device after broken respond.
 
 
 2009-03-31 Roman
