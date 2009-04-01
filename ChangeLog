@@ -2,6 +2,8 @@
 - !:/DAQ/ModBus: Status mechanism is added for controller.
 - FIX:/Transport/Serial: Clear input buffer from previous broken request is added.
 - !:/DAQ/ModBus: Three try is added for request to device after broken respond.
+- !!!:/Protocol: Template module "=Tmpl=" is added.
+- FIX:/SYS: User mode start script "openscada_start" is fixed for copy config file oscada_start.xml to ~/.openscada/oscada.xml and use it.
 
 
 2009-03-31 Roman

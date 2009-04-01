@@ -5,8 +5,8 @@ if [ ! -d ~/.openscada ]; then
     install -m 755 -d ~/.openscada/ARCHIVES/MESS
     install -m 755 -d ~/.openscada/ARCHIVES/VAL
     ln -s /var/spool/openscada/icons ~/.openscada/icons
+    install -m 644 /etc/oscada_start.xml ~/.openscada/oscada.xml
 fi
 
 cd ~/.openscada
-
-openscada --Config=/etc/oscada_start.xml $@
+openscada --Config=./oscada.xml $@
