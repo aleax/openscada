@@ -88,6 +88,8 @@ class TMdContr: public TController
 	TMdContr( string name_c, const string &daq_db, TElem *cfgelem);
 	~TMdContr( );
 
+	string getStatus( );
+
 	double	period( )	{ return vmax(m_per,0.01); }
 	int	prior( )	{ return m_prior; }
 
@@ -148,6 +150,8 @@ class TMdContr: public TController
 
 	double	tm_gath;			//Gathering time
 	float	tm_delay;			//Delay time for next try connect
+
+	float numRReg, numRRegIn, numRCoil, numRCoilIn, numWReg, numWCoil, numErrCon, numErrResp;
 };
 
 //*************************************************

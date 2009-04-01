@@ -1,3 +1,8 @@
+2009-04-01 Roman
+- !:/DAQ/ModBus: Status mechanism is added for controller.
+- FIX:/Transport/Serial: Clear input buffer from previous broken request is added.
+
+
 2009-03-31 Roman
 - !!!:/Transport: Template module "=Tmpl=" is added.
 - !!!!:/Transport: Base realization of module "Serial" is added. Input transport not tested yet.

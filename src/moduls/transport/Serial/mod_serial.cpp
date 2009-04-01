@@ -534,9 +534,12 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
     if( (tmptm-mLstReqTm) < (3000*wCharTm) ) usleep( (int)((3000*wCharTm)-(tmptm-mLstReqTm)) );
 
     //> Write request
-    if( obuf && len_ob > 0 && write(fd,obuf,len_ob) == -1 )
-	throw TError(nodePath().c_str(),_("Writing request error."));
-    trOut += (float)len_ob/1024;
+    if( obuf && len_ob > 0 )
+    {
+	tcflush( fd, TCIFLUSH );
+	if( write(fd,obuf,len_ob) == -1 ) throw TError(nodePath().c_str(),_("Writing request error."));
+	trOut += (float)len_ob/1024;
+    }
 
     //> Read reply
     if( ibuf != NULL && len_ib > 0 )
@@ -547,7 +550,6 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
 	    int bytes = 0;
 	    ioctl( fd, FIONREAD, &bytes );
 	    //>> Reset old broken session's data
-	    if( bytes && isEnter && len_ob ) { read( fd, ibuf, len_ib ); continue; }
 	    if( bytes > 2 ) break;
 	    //>> Connection timeout
 	    mLstReqTm = TSYS::curTime();

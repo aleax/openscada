@@ -86,7 +86,7 @@ class TMdContr: public TController
 	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem );
 	~TMdContr( );
 
-	virtual string getStatus( );
+	string getStatus( );
 	int channelAllow( );
 
 	TParamContr *ParamAttach( const string &name, int type );
