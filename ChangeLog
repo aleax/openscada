@@ -1,3 +1,17 @@
+2009-04-06 Roman
+- !!!!:/DAQ/ModBus: Include to ModBbus modules container module "Protocol" module transport and move Protocol's functions to it.
+- FIX:/DAQ/ModBus: ASCII protocol mode is fixed.
+- !!!!:/Protocol: Output protocol's API function is changed to void outMess( XMLNode &io, TTransportOut &tro ).
+- !!!!:/DAQ/Transporter,/Protocol/SelfSystem,/UI/QTCfg,/UI/Vision,/UI/WebCfgD: Used new "Protocol" API.
+- /Transport: Added functions for getting full list input and output transports.
+- !!!!:/DAQ/DCON: Removed self modules Serial API and used instead new OpenSCADA serial transport module.
+- FIX:/DAQ/Transporter: Not save parameter's archives is fixed.
+- !!:/Transport/Serial: Input transport is released and tested.
+- !!FIX:/Transport/Serial: No init FD_SET structure before any call function select() is fixed.
+- FIX:/UI/QTCfg,/UI/WebCfgD: Clearing update flag for deleted tab is removed.
+- FIX:/UI/Vision: Crash on time try call widget, no page, for open to project's run from development mode.
+
+
 2009-04-01 Roman
 - !:/DAQ/ModBus: Status mechanism is added for controller.
 - FIX:/Transport/Serial: Clear input buffer from previous broken request is added.

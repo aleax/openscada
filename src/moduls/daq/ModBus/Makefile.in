@@ -46,7 +46,8 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(oscd_moduldir)"
 oscd_modulPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(oscd_modul_PROGRAMS)
-am_daq_ModBus_so_OBJECTS = modbus_client.$(OBJEXT)
+am_daq_ModBus_so_OBJECTS = moduls.$(OBJEXT) modbus_daq.$(OBJEXT) \
+	modbus_prt.$(OBJEXT)
 daq_ModBus_so_OBJECTS = $(am_daq_ModBus_so_OBJECTS)
 daq_ModBus_so_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
@@ -206,7 +207,7 @@ top_srcdir = @top_srcdir@
 EXTRA_DIST = *.h po/* doc/*
 AM_CXXFLAGS = -I$(top_srcdir)/src -fPIC -DPIC
 AM_LDFLAGS = -shared -module
-daq_ModBus_so_SOURCES = modbus_client.cpp
+daq_ModBus_so_SOURCES = moduls.cpp modbus_daq.cpp modbus_prt.cpp
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)DAQ.ModBus
@@ -282,7 +283,9 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/modbus_client.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/modbus_daq.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/modbus_prt.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moduls.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

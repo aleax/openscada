@@ -98,7 +98,7 @@ class TMdContr: public TController
 
 	void prmEn( const string &id, bool val );
 	string DCONCRC( string str );
-	string DCONReq( string &pdu, int req_len );
+	string DCONReq( string &pdu );
 
     protected:
 	//Methods
@@ -129,67 +129,6 @@ class TMdContr: public TController
 };
 
 //*************************************************
-//* SSerial                                       *
-//*************************************************
-class TTpContr;
-
-class SSerial : public TCntrNode, public TConfig
-{
-    public:
-	//Data
-	enum	Prot 	{ Free, ASCII, RTU };
-
-	//Methods
-	SSerial( const string &dev, TTpContr *iown );
-
-	string	id( )		{ return m_id; }
-	int	speed( )	{ return m_speed; }
-	int	len( )		{ return m_len; }
-	bool	twostop( )	{ return m_twostop; }
-	int	parity( )	{ return m_parity; }
-	int	timeoutFrame( )	{ return frTm; }
-	double	timeoutChar( )	{ return charTm; }
-	int	timeoutReq( )	{ return reqTm; }
-	bool	hasOpen( )	{ return (fd>0); }
-
-	void	setSpeed( int val, bool tmAdj = false );
-	void	setLen( int val );
-	void	setTwostop( bool val );
-	void	setParity( int val );
-	void	setTimeoutFrame( int val )	{ frTm = val; modif(); }
-	void	setTimeoutChar( double val )	{ charTm = val; modif(); }
-	void	setTimeoutReq( int val )	{ reqTm = val; modif(); }
-	void	setOpen( bool vl );
-
-	string req( const string &vl, int req_len );
-
-	TTpContr &owner( )	{ return *(TTpContr *)nodePrev(); }
-
-    protected:
-	//Methods
-	string nodeName( )	{ return id(); }
-	void postDisable( int flag );
-
-	//- DB commands -
-	void load_( );
-	void save_( );
-
-    private:
-	//Attributes
-	string	&m_id;				//Serial port device
-	int	&m_speed;			//Speed
-	int	&m_len;				//Length
-	bool	&m_twostop;			//Two stop bits
-	int	&m_parity;			//Parity check
-	int 	&frTm;				//Frame timeout in ms
-	double	&charTm;			//Char timeout in ms
-	int	&reqTm;				//Request timeout in ms
-
-	Res	m_res;				//Serial port resource
-	int	fd;				//Serial port
-};
-
-//*************************************************
 //* TTpContr                                      *
 //*************************************************
 class TTpContr: public TTipDAQ
@@ -199,19 +138,8 @@ class TTpContr: public TTipDAQ
 	TTpContr( string name );
 	~TTpContr( );
 
-	TElem &serDevE( )	{ return el_ser_dev; }
-
-	//- Serial devices -
-	string serDevDB( );
-	void serDevList( vector<string> &list )		{ chldList(m_sdev,list); }
-	void serDevAdd( const string &dev );
-	void serDevDel( const string &dev, bool full = false )		{ chldDel(m_sdev,dev,-1,full); }
-	bool serDevPresent( const string &dev )		{ return chldPresent(m_sdev,dev); }
-	AutoHD<SSerial> serDevAt( const string &dev )	{ return chldAt(m_sdev,dev); }
-
     protected:
 	//Methods
-	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 	void load_( );
 	void save_( );
 
@@ -220,10 +148,6 @@ class TTpContr: public TTipDAQ
 	void postEnable( int flag );
 	TController *ContrAttach( const string &name, const string &daq_db );
 	string optDescr( );
-
-	//Attributes
-	TElem		el_ser_dev;
-	int		m_sdev;
 };
 
 extern TTpContr *mod;

@@ -555,7 +555,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	    tr.at().outAt(addr).at().setAddr(addr);
 	}
 	if( !tr.at().outAt(addr).at().startStat() ) tr.at().outAt(addr).at().start();
-	int len = tr.at().outAt(addr).at().messIO(req.c_str(),req.size(),buf,sizeof(buf)-1,1);
+	int len = tr.at().outAt(addr).at().messIO(req.c_str(),req.size(),buf,sizeof(buf)-1,1000);
 	tr.at().outAt(addr).at().stop();
 	buf[len] = 0;
 	mess_info(test_cat,"%s: Put <%s>. Get: <%s>",addr.c_str(),req.c_str(),buf);

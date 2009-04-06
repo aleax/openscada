@@ -488,7 +488,7 @@ bool RunPageView::callPage( const string &pg_it, const string &pgGrp, const stri
     //> Check for set include page
     for( int i_ch = 0; i_ch < children().size(); i_ch++ )
 	if( !pgGrp.empty() && !qobject_cast<RunPageView*>(children().at(i_ch)) &&
-		((RunWdgView *)children().at(i_ch))->root() == "Box" &&
+		((RunWdgView*)children().at(i_ch))->root() == "Box" &&
 		((RunWdgView*)children().at(i_ch))->pgGrp() == pgGrp )
 	{
 	    string pg_it_prev = ((RunWdgView*)children().at(i_ch))->pgOpenSrc();

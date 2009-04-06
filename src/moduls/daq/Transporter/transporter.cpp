@@ -145,12 +145,15 @@ int TTpContr::cntrIfCmd( XMLNode &node )
     string station = TSYS::pathLev(path,0,false,&path_off);
     node.setAttr("path",path.substr(path_off));
 
-    //-- Connect to transport --
+    //> Connect to transport
     TTransportS::ExtHost host = SYS->transport().at().extHostGet("*",station);
     AutoHD<TTransportOut> tr = SYS->transport().at().extHost(host,"TrCntr");
     if( !tr.at().startStat() )	tr.at().start();
-    node.load(tr.at().messProtIO("0\n"+host.user+"\n"+host.pass+"\n"+node.save(),"SelfSystem"));
+
+    node.setAttr("rqDir","0")->setAttr("rqUser",host.user)->setAttr("rqPass",host.pass);
+    tr.at().messProtIO(node,"SelfSystem");
     node.setAttr("path",path);
+
     return atoi(node.attr("rez").c_str());
 }
 
@@ -469,7 +472,12 @@ void TMdPrm::load_( )
 
 void TMdPrm::save_( )
 {
-
+    //> Save archives
+    vector<string> a_ls;
+    vlList(a_ls);
+    for(int i_a = 0; i_a < a_ls.size(); i_a++)
+	if( !vlAt(a_ls[i_a]).at().arch().freeStat() )
+	vlAt(a_ls[i_a]).at().arch().at().save();
 }
 
 void TMdPrm::update( )

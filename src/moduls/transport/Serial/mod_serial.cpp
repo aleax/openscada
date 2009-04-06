@@ -98,6 +98,7 @@ void TTr::postEnable( int flag )
     {
 	//> Add self DB-fields to input transport
 	owner().inEl().fldAdd( new TFld("BufLen",_("Input buffer length (kB)"),TFld::Integer,0,"4","5") );
+	owner().inEl().fldAdd( new TFld("TMS",_("Timings"),TFld::String,0,"100","1.88:320") );
 
 	//> Add self DB-fields to input transport
 	owner().outEl().fldAdd( new TFld("TMS",_("Timings"),TFld::String,0,"100","640:1.88:320") );
@@ -169,7 +170,7 @@ void TTr::cntrCmdProc( XMLNode *opt )
 //* TTrIn                                        *
 //************************************************
 TTrIn::TTrIn( string name, const string &idb, TElem *el ) :
-    TTransportIn(name,idb,el), mBufLen(cfg("BufLen").getId()), trIn(0), trOut(0), fd(-1)
+    TTransportIn(name,idb,el), trIn(0), trOut(0), fd(-1), mTimings(cfg("TMS").getSd())
 {
     setAddr("/dev/ttyS0:19200:8:2:p");
 }
@@ -304,25 +305,43 @@ void *TTrIn::Task( void *tr_in )
     struct timeval tv;
     int r_len;
     string req, answ;
-    char buf[tr->bufLen()*1000+1];
+    char buf[1000];
     fd_set fdset;
-    FD_ZERO( &fdset );
-    FD_SET( tr->fd, &fdset );
+
+    double wCharTm = atof(TSYS::strSepParse(tr->timings(),0,':').c_str());
+    wCharTm = vmax(0.001,wCharTm);
+    int wFrTm = atoi(TSYS::strSepParse(tr->timings(),1,':').c_str());
+    wFrTm = 1000*vmin(10000,wFrTm);
+    long long stFrTm;
+
+    fcntl( tr->fd, F_SETFL, 0 );
 
     while( !tr->endrun )
     {
 	//>> Char timeout
-	tv.tv_sec = 0; tv.tv_usec = STD_WAIT_DELAY*1000;
-	int kz = select( tr->fd+1, &fdset, NULL, NULL, &tv );
-	if( kz == 0 || (kz == -1 && errno == EINTR) || kz < 0 || !FD_ISSET(tr->fd, &fdset) ) continue;
-	r_len = read( tr->fd, buf, tr->bufLen()*1000);
-	if( r_len <= 0 ) break;
-	tr->trIn += (float)r_len/1024;
+	while(true)
+	{
+	    tv.tv_sec = 0; tv.tv_usec = (int)(1000.0*wCharTm);
+	    FD_ZERO( &fdset ); FD_SET( tr->fd, &fdset );
+
+	    if( select( tr->fd+1, &fdset, NULL, NULL, &tv ) <= 0 )
+	    {
+		if( tr->endrun || !req.empty() )	break;
+		continue;
+	    }
+	    r_len = read( tr->fd, buf, sizeof(buf));
+	    if( r_len <= 0 ) break;
+	    if( req.empty() ) stFrTm = TSYS::curTime();
+	    req += string(buf,r_len);
+	    if( (TSYS::curTime()-stFrTm) > wFrTm )	break;
+	}
+	if( tr->endrun || req.empty() ) break;
+
+	tr->trIn += (float)req.size()/1024;
 
 #if OSC_DEBUG >= 5
-	mess_debug( nodePath().c_str(), _("Serial received message <%d>."), r_len );
+	mess_debug( nodePath().c_str(), _("Serial received message <%d>."), req.size() );
 #endif
-	req.assign(buf,r_len);
 
 	//> Send message to protocol
 	try
@@ -350,6 +369,7 @@ void *TTrIn::Task( void *tr_in )
 	    r_len = write( tr->fd, answ.c_str(), answ.size() ); tr->trOut += (float)r_len/1024;
 	    answ = "";
 	}
+	req = "";
     }
 
     //> Close protocol
@@ -378,15 +398,19 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 	    "    len - symbol length (bites: 7,8);\n"
 	    "    stop - stop bites number (1 or 2);\n"
 	    "    parity - parity check (p-parity,n-odd parity,0-disable)."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/bf_ln",_("Input buffer (kbyte)"),0664,"root","root",1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),0664,"root","root",2,"tp","str","help",
+	    _("Connection timings in format: \"[symbol]:[frm]\". Where:\n"
+	    "    symbol - one symbol maximum time, used for frame end detection, in ms;\n"
+	    "    frm - maximum frame length, in ms."));
 	return;
     }
+
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/prm/cfg/bf_ln" )
+    if( a_path == "/prm/cfg/TMS" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(bufLen()) );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setBufLen( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(timings());
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setTimings(opt->text());
     }
     else TTransportIn::cntrCmdProc(opt);
 }
@@ -524,18 +548,18 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
     if( !run_st ) throw TError(nodePath().c_str(),_("Transport is not started!"));
 
     int wReqTm = atoi(TSYS::strSepParse(timings(),0,':',&off).c_str());
-    wReqTm = time?(1000000*time):(1000*vmin(10000,wReqTm));
+    wReqTm = time?(1000*time):(1000*vmin(10000,wReqTm));
     double wCharTm = atof(TSYS::strSepParse(timings(),0,':',&off).c_str());
     wCharTm = vmax(0.001,wCharTm);
     int wFrTm = atoi(TSYS::strSepParse(timings(),0,':',&off).c_str());
     wFrTm = 1000*vmin(10000,wFrTm);
 
     long long tmptm = TSYS::curTime();
-    if( (tmptm-mLstReqTm) < (3000*wCharTm) ) usleep( (int)((3000*wCharTm)-(tmptm-mLstReqTm)) );
 
     //> Write request
     if( obuf && len_ob > 0 )
     {
+	if( (tmptm-mLstReqTm) < (3000*wCharTm) ) usleep( (int)((3000*wCharTm)-(tmptm-mLstReqTm)) );
 	tcflush( fd, TCIFLUSH );
 	if( write(fd,obuf,len_ob) == -1 ) throw TError(nodePath().c_str(),_("Writing request error."));
 	trOut += (float)len_ob/1024;
@@ -563,13 +587,13 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
 
 	//>> Wait tail
 	tmptm = mLstReqTm;
-	FD_ZERO( &fdset );
-	FD_SET( fd, &fdset );
 	struct timeval tv;
 	while( true )
 	{
 	    //>> Char timeout
 	    tv.tv_sec = 0; tv.tv_usec = (int)(1000.0*wCharTm);
+	    FD_ZERO( &fdset ); FD_SET( fd, &fdset );
+
 	    if( select(fd+1,&fdset,NULL,NULL,&tv) <= 0 ) break;
 	    blen += read( fd, ibuf+blen, len_ib-blen );
 	    //>> Frame timeout

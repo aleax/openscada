@@ -500,7 +500,9 @@ int TWEB::cntrIfCmd( XMLNode &node, const string &user )
 	TTransportS::ExtHost host = SYS->transport().at().extHostGet(user,station);
 	AutoHD<TTransportOut> tr = SYS->transport().at().extHost(host,"TrCntr");
 	if( !tr.at().startStat() ) tr.at().start();
-	node.load(tr.at().messProtIO("0\n"+host.user+"\n"+host.pass+"\n"+node.save(),"SelfSystem"));
+
+	node.setAttr("rqDir","0")->setAttr("rqUser",host.user)->setAttr("rqPass",host.pass);
+	tr.at().messProtIO(node,"SelfSystem");
 	node.setAttr("path",path);
     }catch( TError err )
     { node.setAttr("mcat",err.cat)->setAttr("rez","10")->setText(err.mess); }

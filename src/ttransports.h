@@ -139,7 +139,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	virtual int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0 )
 	{ return 0; }
 
-	string messProtIO( const string &in, const string &prot );
+	void messProtIO( XMLNode &io, const string &prot );
 
 	TTipTransport &owner( )	{ return *(TTipTransport*)nodePrev(); }
 
@@ -154,7 +154,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	void save_( );
 
 	//Attributes
-	bool    run_st;
+	bool	run_st;
 
     private:
 	//Methods
@@ -184,14 +184,14 @@ class TTipTransport: public TModule
 	TTipTransport( );
 	virtual ~TTipTransport( );
 
-	//- Input transports -
+	//> Input transports
 	void inList( vector<string> &list )			{ chldList(m_in,list); }
 	bool inPresent( const string &name )			{ return chldPresent(m_in,name); }
 	void inAdd( const string &name, const string &db = "*.*" );
 	void inDel( const string &name, bool complete = false )	{ chldDel(m_in,name,-1,complete); }
 	AutoHD<TTransportIn> inAt( const string &name )		{ return chldAt(m_in,name); }
 
-	//- Output transports -
+	//> Output transports
 	void outList( vector<string> &list )			{ chldList(m_out,list); }
 	bool outPresent( const string &name )			{ return chldPresent(m_out,name); }
 	void outAdd( const string &name, const string &idb = "*.*" );
@@ -246,8 +246,10 @@ class TTransportS : public TSubSYS
 	~TTransportS( );
 
 	int subVer( )			{ return VER_TR; }
+	void inTrList( vector<string> &ls );
+	void outTrList( vector<string> &ls );
 
-	//- External hosts -
+	//> External hosts
 	bool sysHost( )			{ return sys_host; }
 	void setSysHost( bool vl )	{ sys_host = vl; }
 	string extHostsDB( );

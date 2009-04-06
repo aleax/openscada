@@ -46,7 +46,7 @@ string TProtocolS::optDescr(  )
 
 void TProtocolS::load_()
 {
-    //- Load parameters from command line -
+    //> Load parameters from command line
     int next_opt;
     const char *short_opt="h";
     struct option long_opt[] =
@@ -66,20 +66,20 @@ void TProtocolS::load_()
 	}
     } while(next_opt != -1);
 
-    //- Load parameters from config file -
+    //> Load parameters from config file
 
 }
 
 void TProtocolS::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	TSubSYS::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root",subId().c_str(),3,"tp","str","cols","90","rows","10");
 	return;
     }
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
     if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440,"root",subId().c_str()) )	opt->setText(optDescr());
     else TSubSYS::cntrCmdProc(opt);
@@ -96,6 +96,7 @@ TProtocol::TProtocol()
 
 TProtocol::~TProtocol()
 {
+
 }
 
 void TProtocol::open( const string &name )

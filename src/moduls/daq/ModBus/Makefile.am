@@ -6,7 +6,7 @@ AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
 AM_LDFLAGS= -shared -module
 
 oscd_modul_PROGRAMS = daq_ModBus.so
-daq_ModBus_so_SOURCES = modbus_client.cpp
+daq_ModBus_so_SOURCES = moduls.cpp modbus_daq.cpp modbus_prt.cpp
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)DAQ.ModBus

@@ -430,10 +430,10 @@ void TVision::postMess( const QString &cat, const QString &mess, TVision::MessLe
 
 int TVision::cntrIfCmd( XMLNode &node, const string &user, const string &password, const string &VCAStat, bool glob )
 {
-    //- Check for local VCAEngine path -
+    //> Check for local VCAEngine path
     if( !glob ) node.setAttr("path","/UI/VCAEngine"+node.attr("path"));
 
-    //- Local station request -
+    //> Local station request
     if( VCAStat.empty() || VCAStat == "." )
     {
 	node.setAttr("user",user);
@@ -441,15 +441,18 @@ int TVision::cntrIfCmd( XMLNode &node, const string &user, const string &passwor
 	return atoi(node.attr("rez").c_str());
     }
 
-    //- Request remote host -
+    //> Request remote host
     try
     {
 	TTransportS::ExtHost host = SYS->transport().at().extHostGet("*",VCAStat);
 	AutoHD<TTransportOut> tr = SYS->transport().at().extHost(host,"VCAStat");
 	if( !tr.at().startStat() )	tr.at().start();
-	if( user.empty() || user == host.user )
-	    node.load(tr.at().messProtIO("0\n"+host.user+"\n"+host.pass+"\n"+node.save(),"SelfSystem"));
-	else node.load(tr.at().messProtIO("1\n"+user+"\n"+password+"\n"+node.save(),"SelfSystem"));
+
+	bool trUser = (user.empty()||user==host.user);
+	node.setAttr("rqDir",trUser?"0":"1")->
+	    setAttr("rqUser",trUser?host.user:user)->
+	    setAttr("rqPass",trUser?host.pass:password);
+	tr.at().messProtIO(node,"SelfSystem");
 
 	return atoi(node.attr("rez").c_str());
     }

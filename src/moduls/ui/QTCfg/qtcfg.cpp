@@ -813,7 +813,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		else titleIco->clear();
 	    }
 	}else titleIco->clear();
-	
+
 	//>> Set title
 	titleLab->setText((string("<p align='center'><i><b>")+TSYS::strEncode(node.attr("dscr"),TSYS::Html)+"</b></i></p>").c_str());
 
@@ -822,7 +822,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	for( int i_tbs = 0; i_tbs < tabs->count(); i_tbs++ )
 	{
 	    unsigned i_cf;
-	    for( i_cf = 0; i_cf < node.childSize(); i_cf++)
+	    for( i_cf = 0; i_cf < node.childSize(); i_cf++ )
 		if( node.childGet(i_cf)->name() == "area" &&
 			tabs->tabText(i_tbs) == node.childGet(i_cf)->attr("dscr").c_str() )
 		    break;
@@ -830,7 +830,6 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	    {
 		if( tabs->currentIndex() == i_tbs ) actRemoved = true;
 		tabs->blockSignals(true);
-		if( i_tbs == tabs->currentIndex() ) node.childGet(i_tbs)->setAttr("qview","0");
 		tabs->widget(i_tbs)->deleteLater();
 		tabs->removeTab(i_tbs);
 		i_tbs--;
@@ -2058,7 +2057,9 @@ int ConfApp::cntrIfCmd( XMLNode &node )
 	TTransportS::ExtHost host = SYS->transport().at().extHostGet(w_user->user().toAscii().data(),station);
 	AutoHD<TTransportOut> tr = SYS->transport().at().extHost(host,"TrCntr");
 	if( !tr.at().startStat() ) tr.at().start();
-	node.load(tr.at().messProtIO("0\n"+host.user+"\n"+host.pass+"\n"+node.save(),"SelfSystem"));
+
+	node.setAttr("rqDir","0")->setAttr("rqUser",host.user)->setAttr("rqPass",host.pass);
+	tr.at().messProtIO(node,"SelfSystem");
 	node.setAttr("path",path);
     }catch( TError err )
     { node.setAttr("mcat",err.cat)->setAttr("rez","10")->setText(err.mess); }

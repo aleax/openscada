@@ -1,7 +1,7 @@
 
-//OpenSCADA system module DAQ.ModBus file: modbus_client.h
+//OpenSCADA system module DAQ.ModBus file: modbus_daq.h
 /***************************************************************************
- *   Copyright (C) 2007-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2009 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -19,17 +19,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
  
-#ifndef MODBUS_CLIENT_H
-#define MODBUS_CLIENT_H
-
-#include <tcontroller.h>
-#include <ttipdaq.h>
-#include <tparamcontr.h>
+#ifndef MODBUS_DAQ_H
+#define MODBUS_DAQ_H
 
 #include <string>
 #include <vector>
 #include <map>
 #include <deque>
+
+#include <tsys.h>
 
 #undef _
 #define _(mess) mod->I18N(mess)
@@ -41,7 +39,19 @@ using std::vector;
 using std::map;
 using std::deque;
 
-namespace ModBusDAQ
+//*************************************************
+//* DAQ modul info!                               *
+#define DAQ_ID		"ModBus"
+#define DAQ_NAME	"ModBus"
+#define DAQ_TYPE	"DAQ"
+#define DAQ_SUBVER	VER_CNTR
+#define DAQ_MVER	"0.9.1"
+#define DAQ_AUTORS	"Roman Savochenko"
+#define DAQ_DESCR	"Allow realisation of ModBus client service. Supported Modbus/TCP, Modbus/RTU and Modbus/ASCII protocols."
+#define DAQ_LICENSE	"GPL"
+//*************************************************
+
+namespace ModBus
 {
 
 //******************************************************
@@ -90,8 +100,8 @@ class TMdContr: public TController
 
 	string getStatus( );
 
-	double	period( )	{ return vmax(m_per,0.01); }
-	int	prior( )	{ return m_prior; }
+	double	period( )	{ return vmax(mPer,0.01); }
+	int	prior( )	{ return mPrior; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
@@ -130,28 +140,30 @@ class TMdContr: public TController
 	void setCntrDelay( const string &err );
 
 	//Attributes
-	Res	en_res, req_res;		//Resource for enable params and request values
-	double	&m_per;				//Acquisition task (seconds)
-	int	&m_prior,			//Process task priority
-		&m_prt,				//Protocol
-		&m_node;			//Node
-	string	&m_addr;			//Transport device address
-	bool	&m_merge;			//Fragments of register merge
-	int	&reqTm;				//Request timeout in s
+	Res     req_res;
+	double	&mPer;				//Acquisition task (seconds)
+	int	&mPrior,			//Process task priority
+		&mNode;				//Node
+	string	&mPrt,				//Protocol
+		&mAddr;				//Transport device address
+	bool	&mMerge;			//Fragments of register merge
+	int	&reqTm,				//Request timeout in ms
+		&restTm,			//Restore timeout in s
+		&connTry;			//Connections try
 
 	bool	prc_st,				//Process task active
 		endrun_req;			//Request to stop of the Process task
-	vector< SDataRec >	acqBlks;	//Acquisition data blocks for registers
-	vector< SDataRec >	acqBlksIn;	//Acquisition data blocks for input registers
-	vector< SDataRec >	acqBlksCoil;	//Acquisition data blocks for coils
-	vector< SDataRec >	acqBlksCoilIn;	//Acquisition data blocks for input coils
+	vector<SDataRec>	acqBlks;	//Acquisition data blocks for registers
+	vector<SDataRec>	acqBlksIn;	//Acquisition data blocks for input registers
+	vector<SDataRec>	acqBlksCoil;	//Acquisition data blocks for coils
+	vector<SDataRec>	acqBlksCoilIn;	//Acquisition data blocks for input coils
 
 	pthread_t	procPthr;		//Process task thread
 
 	double	tm_gath;			//Gathering time
 	float	tm_delay;			//Delay time for next try connect
 
-	float numRReg, numRRegIn, numRCoil, numRCoilIn, numWReg, numWCoil, numErrCon, numErrResp, numErrRespRep;
+	float numRReg, numRRegIn, numRCoil, numRCoilIn, numWReg, numWCoil, numErrCon, numErrResp;
 };
 
 //*************************************************
@@ -164,23 +176,8 @@ class TTpContr: public TTipDAQ
 	TTpContr( string name );
 	~TTpContr( );
 
-	int connResume( )	{ return mConnResume; }
-	void setConnResume( int vl )	{ mConnResume = vl; modif(); }
-
-	//> Special modbus protocol's
-	ui16	CRC16( const string &mbap );
-	ui8	LRC( const string &mbap );
-	string	DataToASCII( const string &in );
-	string	ASCIIToData( const string &in );
-
-	//> Protocol
-	int prtLen( )	{ return mPrtLen; }
-	void setPrtLen( int vl );
-	void pushPrtMess( const string &vl );
-
     protected:
 	//Methods
-	void	cntrCmdProc( XMLNode *opt );	//Control interface command process
 	void	load_( );
 	void	save_( );
 
@@ -189,22 +186,10 @@ class TTpContr: public TTipDAQ
 	void	postEnable( int flag );
 	TController *ContrAttach( const string &name, const string &daq_db );
 	string	optDescr( );
-
-	int	mConnResume;
-
-	//Attributes
-	//> Protocol
-	Res	mPrtRes;
-	int	mPrtLen;
-	deque<string>	mPrt;
-
-	//> Special modbus protocol's
-	static ui8 CRCHi[];
-	static ui8 CRCLo[];
 };
 
 extern TTpContr *mod;
 
 } //End namespace
 
-#endif //MODBUS_CLIENT_H
+#endif //MODBUS_DAQ_H

@@ -451,7 +451,6 @@ function selectChildRecArea( node, aPath, cBlk )
 	  break;
       if( i_cf >= node.childNodes.length )
       {
-	if( tabs.childNodes[i_tbs].className == 'active' ) node.childNodes[i_tbs].setAttribute('qview','0');
 	tabs.removeChild(tabs.childNodes[i_tbs]);
 	i_tbs--;
       }

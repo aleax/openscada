@@ -1,7 +1,7 @@
 
-//OpenSCADA system module DAQ.ModBus file: modbus_client.cpp
+//OpenSCADA system module DAQ.ModBus file: modbus_daq.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2009 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -29,55 +29,26 @@
 #include <sys/ioctl.h>
 #include <string.h>
 
-#include <tsys.h>
 #include <ttiparam.h>
 
-#include "modbus_client.h"
+#include "modbus_daq.h"
 
-//*************************************************
-//* Modul info!                                   *
-#define MOD_ID		"ModBus"
-#define MOD_NAME	"ModBus client"
-#define MOD_TYPE	"DAQ"
-#define VER_TYPE	VER_CNTR
-#define VERSION		"0.9.1"
-#define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"Allow realisation of ModBus client service. Supported Modbus/TCP, Modbus/RTU and Modbus/ASCII protocols."
-#define LICENSE		"GPL"
-//*************************************************
+ModBus::TTpContr *ModBus::mod;
 
-ModBusDAQ::TTpContr *ModBusDAQ::mod;  //Pointer for direct access to module
-
-extern "C"
-{
-    TModule::SAt module( int n_mod )
-    {
-	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
-	return TModule::SAt("");
-    }
-
-    TModule *attach( const TModule::SAt &AtMod, const string &source )
-    {
-	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
-	    return new ModBusDAQ::TTpContr( source );
-	return NULL;
-    }
-}
-
-using namespace ModBusDAQ;
+using namespace ModBus;
 
 //******************************************************
 //* TTpContr                                           *
 //******************************************************
-TTpContr::TTpContr( string name ) : mConnResume(30), mPrtLen(0)
+TTpContr::TTpContr( string name )
 {
-    mId		= MOD_ID;
-    mName	= MOD_NAME;
-    mType	= MOD_TYPE;
-    mVers	= VERSION;
-    mAutor	= AUTORS;
-    mDescr	= DESCRIPTION;
-    mLicense	= LICENSE;
+    mId		= DAQ_ID;
+    mName	= DAQ_NAME;
+    mType	= DAQ_TYPE;
+    mVers	= DAQ_MVER;
+    mAutor	= DAQ_AUTORS;
+    mDescr	= DAQ_DESCR;
+    mLicense	= DAQ_LICENSE;
     mSource	= name;
 
     mod		= this;
@@ -95,7 +66,7 @@ string TTpContr::optDescr( )
     snprintf(buf,sizeof(buf),_(
 	"======================= The module <%s:%s> options =======================\n"
 	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
-	MOD_TYPE,MOD_ID,nodePath().c_str());
+	DAQ_TYPE,DAQ_ID,nodePath().c_str());
 
     return buf;
 }
@@ -108,11 +79,13 @@ void TTpContr::postEnable( int flag )
     fldAdd( new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30","") );
     fldAdd( new TFld("PERIOD",_("Gather data period (s)"),TFld::Real,TFld::NoFlag,"6.2","1","0.01;100") );
     fldAdd( new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
-    fldAdd( new TFld("PROT",_("Modbus protocol"),TFld::Integer,TFld::Selected,"1","0","0;1;2",_("TCP/IP;RTU;ASCII")) );
-    fldAdd( new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"30","devhost.org:502") );
+    fldAdd( new TFld("PROT",_("Modbus protocol"),TFld::String,TFld::Selected,"5","TCP","TCP;RTU;ASCII",_("TCP/IP;RTU;ASCII")) );
+    fldAdd( new TFld("ADDR",_("Transport address"),TFld::String,TFld::NoFlag,"30","") );
     fldAdd( new TFld("NODE",_("Destination node"),TFld::Integer,TFld::NoFlag,"20","1","0;255") );
     fldAdd( new TFld("FRAG_MERGE",_("Data fragments merge"),TFld::Boolean,TFld::NoFlag,"1","0") );
-    fldAdd( new TFld("TM_REQ",_("Connection timeout"),TFld::Integer,TFld::NoFlag,"5","0") );
+    fldAdd( new TFld("TM_REQ",_("Connection timeout (ms)"),TFld::Integer,TFld::NoFlag,"5","0") );
+    fldAdd( new TFld("TM_REST",_("Restore timeout (s)"),TFld::Integer,TFld::NoFlag,"3","30") );
+    fldAdd( new TFld("CONN_TRY",_("Connection tries"),TFld::Integer,TFld::NoFlag,"1","3") );
 
     //> Parameter type bd structure
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
@@ -140,15 +113,11 @@ void TTpContr::load_( )
 	    case -1 : break;
 	}
     } while( next_opt != -1 );
-
-    //> Load parameters from config file
-    setConnResume( atoi(TBDS::genDBGet(nodePath()+"ConnResume",TSYS::int2str(connResume())).c_str()) );
 }
 
 void TTpContr::save_()
 {
-    //> Save parameters to config file
-    TBDS::genDBSet(nodePath()+"ConnResume",TSYS::int2str(connResume()).c_str());
+
 }
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
@@ -156,175 +125,15 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
     return new TMdContr(name,daq_db,this);
 }
 
-ui8 TTpContr::CRCHi[] =
-{
-    0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40,
-    0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41,
-    0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41,
-    0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40,
-    0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41,
-    0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40,
-    0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40,
-    0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41,
-    0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41,
-    0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40,
-    0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40,
-    0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41,
-    0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40,
-    0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41,
-    0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41,
-    0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40
-};
-
-ui8 TTpContr::CRCLo[] =
-{
-    0x00, 0xC0, 0xC1, 0x01, 0xC3, 0x03, 0x02, 0xC2, 0xC6, 0x06, 0x07, 0xC7, 0x05, 0xC5, 0xC4, 0x04,
-    0xCC, 0x0C, 0x0D, 0xCD, 0x0F, 0xCF, 0xCE, 0x0E, 0x0A, 0xCA, 0xCB, 0x0B, 0xC9, 0x09, 0x08, 0xC8,
-    0xD8, 0x18, 0x19, 0xD9, 0x1B, 0xDB, 0xDA, 0x1A, 0x1E, 0xDE, 0xDF, 0x1F, 0xDD, 0x1D, 0x1C, 0xDC,
-    0x14, 0xD4, 0xD5, 0x15, 0xD7, 0x17, 0x16, 0xD6, 0xD2, 0x12, 0x13, 0xD3, 0x11, 0xD1, 0xD0, 0x10,
-    0xF0, 0x30, 0x31, 0xF1, 0x33, 0xF3, 0xF2, 0x32, 0x36, 0xF6, 0xF7, 0x37, 0xF5, 0x35, 0x34, 0xF4,
-    0x3C, 0xFC, 0xFD, 0x3D, 0xFF, 0x3F, 0x3E, 0xFE, 0xFA, 0x3A, 0x3B, 0xFB, 0x39, 0xF9, 0xF8, 0x38,
-    0x28, 0xE8, 0xE9, 0x29, 0xEB, 0x2B, 0x2A, 0xEA, 0xEE, 0x2E, 0x2F, 0xEF, 0x2D, 0xED, 0xEC, 0x2C,
-    0xE4, 0x24, 0x25, 0xE5, 0x27, 0xE7, 0xE6, 0x26, 0x22, 0xE2, 0xE3, 0x23, 0xE1, 0x21, 0x20, 0xE0,
-    0xA0, 0x60, 0x61, 0xA1, 0x63, 0xA3, 0xA2, 0x62, 0x66, 0xA6, 0xA7, 0x67, 0xA5, 0x65, 0x64, 0xA4,
-    0x6C, 0xAC, 0xAD, 0x6D, 0xAF, 0x6F, 0x6E, 0xAE, 0xAA, 0x6A, 0x6B, 0xAB, 0x69, 0xA9, 0xA8, 0x68,
-    0x78, 0xB8, 0xB9, 0x79, 0xBB, 0x7B, 0x7A, 0xBA, 0xBE, 0x7E, 0x7F, 0xBF, 0x7D, 0xBD, 0xBC, 0x7C,
-    0xB4, 0x74, 0x75, 0xB5, 0x77, 0xB7, 0xB6, 0x76, 0x72, 0xB2, 0xB3, 0x73, 0xB1, 0x71, 0x70, 0xB0,
-    0x50, 0x90, 0x91, 0x51, 0x93, 0x53, 0x52, 0x92, 0x96, 0x56, 0x57, 0x97, 0x55, 0x95, 0x94, 0x54,
-    0x9C, 0x5C, 0x5D, 0x9D, 0x5F, 0x9F, 0x9E, 0x5E, 0x5A, 0x9A, 0x9B, 0x5B, 0x99, 0x59, 0x58, 0x98,
-    0x88, 0x48, 0x49, 0x89, 0x4B, 0x8B, 0x8A, 0x4A, 0x4E, 0x8E, 0x8F, 0x4F, 0x8D, 0x4D, 0x4C, 0x8C,
-    0x44, 0x84, 0x85, 0x45, 0x87, 0x47, 0x46, 0x86, 0x82, 0x42, 0x43, 0x83, 0x41, 0x81, 0x80, 0x40
-};
-
-ui16 TTpContr::CRC16( const string &mbap )
-{
-    ui8	hi = 0xFF;
-    ui8	lo = 0xFF;
-    ui16 index;
-    for( int i_b = 0; i_b < mbap.size(); i_b++ )
-    {
-	index = lo^(ui8)mbap[i_b];
-	lo = hi^CRCHi[index];
-	hi = CRCLo[index];
-    }
-    return hi|(lo<<8);
-}
-
-ui8 TTpContr::LRC( const string &mbap )
-{
-    ui8 ch = 0;
-    for( int i_b = 0; i_b < mbap.size(); i_b++ )
-	ch += (ui8)mbap[i_b];
-
-    return ch;
-}
-
-string TTpContr::DataToASCII( const string &in )
-{
-    ui8 ch;
-    string rez;
-
-    for( int i = 0; i < in.size(); i++ )
-    {
-	ch = (in[i]&0xF0)>>4;
-	rez += (ch + ((ch <= 9)?'0':('A' - 10)));
-	ch = in[i]&0x0F;
-	rez += (ch + ((ch <= 9) ? '0' : ('A' - 10)));
-    }
-
-    return rez;
-}
-
-string TTpContr::ASCIIToData( const string &in )
-{
-    ui8 ch1, ch2;
-    string rez;
-
-    for( int i=0; i < (in.size()&(~0x01)); i+=2 )
-    {
-	ch2 = 0;
-	ch1 = in[i];
-	if( ch1 >= '0' && ch1 <= '9' )		ch1 -= '0';
-	else if( ch1 >= 'A' && ch1 <= 'F' )	ch1 -= ('A' + 10);
-	else 					ch1 = 0;
-	ch2 = ch1 << 4;
-	ch1 = in[i+1];
-	if( ch1 >= '0' && ch1 <= '9' )		ch1 -= '0';
-	else if ( ch1 >= 'A' && ch1 <= 'F' )	ch1 -= ('A' + 10);
-	else					ch1 = 0;
-	rez += ch2|ch1;
-    }
-
-    return rez;
-}
-
-void TTpContr::setPrtLen( int vl )
-{
-    ResAlloc res(mPrtRes,true);
-
-    while( mPrt.size() > vl )	mPrt.pop_back();
-
-    mPrtLen = vl;
-}
-
-void TTpContr::pushPrtMess( const string &vl )
-{
-    ResAlloc res(mPrtRes,true);
-
-    if( !prtLen() )	return;
-
-    mPrt.push_front(vl);
-
-    while( mPrt.size() > prtLen() )	mPrt.pop_back();
-}
-
-void TTpContr::cntrCmdProc( XMLNode *opt )
-{
-    //- Get page info -
-    if( opt->name() == "info" )
-    {
-	TTipDAQ::cntrCmdProc( opt );
-	if( ctrMkNode("area",opt,0,"/mod",_("ModBus")) )
-	{
-	    ctrMkNode("fld",opt,-1,"/mod/resConn",_("Devices resume timeout"),0664,"root","DAQ",2,"tp","dec",
-		"help",_("Resume timeout for connection to dead devices in seconds."));
-	    ctrMkNode("fld",opt,-1,"/mod/protLen",_("Protocol length"),0664,"root","DAQ",4,"tp","dec","min","0","max","10000",
-		"help",_("Zero use for protocol disabling"));
-	    if( prtLen() )
-		ctrMkNode("fld",opt,-1,"/mod/prot",_("Protocol"),0444,"root","DAQ",3,"tp","str","cols","90","rows","20");
-	}
-	return;
-    }
-    //- Process command to page -
-    string a_path = opt->attr("path");
-    if( a_path == "/mod/resConn" )
-    {
-	if( ctrChkNode(opt,"get",0664,"root","DAQ",SEQ_RD) )	opt->setText( TSYS::int2str(connResume()) );
-	if( ctrChkNode(opt,"set",0664,"root","DAQ",SEQ_WR) )	setConnResume( atoi(opt->text().c_str()) );
-    }
-    else if( a_path == "/mod/protLen" )
-    {
-	if( ctrChkNode(opt,"get",0664,"root","DAQ",SEQ_RD) )	opt->setText( TSYS::int2str(prtLen()) );
-	if( ctrChkNode(opt,"set",0664,"root","DAQ",SEQ_WR) )	setPrtLen( atoi(opt->text().c_str()) );
-    }
-    else if( a_path == "/mod/prot" && ctrChkNode(opt) )
-    {
-	ResAlloc res(mPrtRes,true);
-	for( int i_p = 0; i_p < mPrt.size(); i_p++ )
-	    opt->setText(opt->text()+mPrt[i_p]+"\n");
-    }
-    else TTipDAQ::cntrCmdProc( opt );
-}
-
 //******************************************************
 //* TMdContr                                           *
 //******************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) :
 	TController( name_c, daq_db, cfgelem ), prc_st(false), endrun_req(false), tm_gath(0), tm_delay(0),
-	numRReg(0), numRRegIn(0), numRCoil(0), numRCoilIn(0), numWReg(0), numWCoil(0), numErrCon(0), numErrResp(0), numErrRespRep(0),
-	m_per(cfg("PERIOD").getRd()), m_prior(cfg("PRIOR").getId()), m_prt(cfg("PROT").getId()),
-	m_addr(cfg("ADDR").getSd()), m_node(cfg("NODE").getId()), m_merge(cfg("FRAG_MERGE").getBd()),
-	reqTm(cfg("TM_REQ").getId())
+	numRReg(0), numRRegIn(0), numRCoil(0), numRCoilIn(0), numWReg(0), numWCoil(0), numErrCon(0), numErrResp(0),
+	mPer(cfg("PERIOD").getRd()), mPrior(cfg("PRIOR").getId()), mPrt(cfg("PROT").getSd()),
+	mAddr(cfg("ADDR").getSd()), mNode(cfg("NODE").getId()), mMerge(cfg("FRAG_MERGE").getBd()),
+	reqTm(cfg("TM_REQ").getId()), restTm(cfg("TM_REST").getId()), connTry(cfg("CONN_TRY").getId())
 {
     cfg("PRM_BD").setS("ModBusPrm_"+name_c);
 }
@@ -339,8 +148,8 @@ string TMdContr::getStatus( )
     string val = TController::getStatus( );
 
     if( startStat( ) )
-	val+= TSYS::strMess(_("Read %g(%g) registers, %g(%g) coils. Write %g registers, %g coils. Errors of connection %g, of respond %g(%g)."),
-	    numRReg,numRRegIn,numRCoil,numRCoilIn,numWReg,numWCoil,numErrCon,numErrResp,numErrRespRep);
+	val += TSYS::strMess(_("Read %g(%g) registers, %g(%g) coils. Write %g registers, %g coils. Errors of connection %g, of respond %g."),
+	    numRReg,numRRegIn,numRCoil,numRCoilIn,numWReg,numWCoil,numErrCon,numErrResp);
 
     return val;
 }
@@ -364,36 +173,21 @@ void TMdContr::start_( )
     if( !prc_st )
     {
 	//> Establish connection
-	switch( m_prt )
-	{
-	    case 0:
-	    {
-		if( !SYS->transport().at().at("Sockets").at().outPresent(mod->modId()+id()) )
-		    SYS->transport().at().at("Sockets").at().outAdd(mod->modId()+id());
-		string trAddr = "TCP:"+TSYS::strSepParse(m_addr,0,':')+":"+
-		    (TSYS::strSepParse(m_addr,1,':').empty() ? "502" : TSYS::strSepParse(m_addr,1,':'));
-		SYS->transport().at().at("Sockets").at().outAt(mod->modId()+id()).at().setAddr(trAddr);
-		SYS->transport().at().at("Sockets").at().outAt(mod->modId()+id()).at().start();
-		break;
-	    }
-	    case 1: case 2:
-	    {
-		SYS->transport().at().at("Serial").at().outAt(m_addr).at().start();
-		break;
-	    }
-	}
+	SYS->transport().at().at(TSYS::strSepParse(mAddr,0,'.')).at().outAt(TSYS::strSepParse(mAddr,1,'.')).at().start();
 
 	//> Clear statistic
-	numRReg = numRRegIn = numRCoil = numRCoilIn = numWReg = numWCoil = numErrCon = numErrResp = numErrRespRep = 0;
+	numRReg = numRRegIn = numRCoil = numRCoilIn = numWReg = numWCoil = numErrCon = numErrResp = 0;
+
+
 
 	//> Start the gathering data task
 	pthread_attr_t pthr_attr;
 	pthread_attr_init( &pthr_attr );
 	struct sched_param prior;
-	if( m_prior && SYS->user() == "root" )
+	if( mPrior && SYS->user() == "root" )
 	    pthread_attr_setschedpolicy( &pthr_attr, SCHED_RR );
 	else pthread_attr_setschedpolicy( &pthr_attr, SCHED_OTHER );
-	prior.__sched_priority = m_prior;
+	prior.__sched_priority = mPrior;
 	pthread_attr_setschedparam( &pthr_attr, &prior );
 
 	pthread_create( &procPthr, &pthr_attr, TMdContr::Task, this );
@@ -415,11 +209,7 @@ void TMdContr::stop_( )
 	pthread_join( procPthr, NULL );
 
 	//> Clear statistic
-	numRReg = numRRegIn = numRCoil = numRCoilIn = numWReg = numWCoil = numErrCon = numErrResp = numErrRespRep = 0;
-
-	//> Dissconnection
-	if( m_prt == 0 && SYS->transport().at().at("Sockets").at().outPresent(mod->modId()+id()) )
-	    SYS->transport().at().at("Sockets").at().outDel(mod->modId()+id());
+	numRReg = numRRegIn = numRCoil = numRCoilIn = numWReg = numWCoil = numErrCon = numErrResp = 0;
     }
 }
 
@@ -429,16 +219,8 @@ bool TMdContr::cfgChange( TCfg &icfg )
 
     if( icfg.fld().name() == "PROT" )
     {
-	if( icfg.getI() == 0 )
-	{
-	    cfg("TM_REQ").setView(false);
-	    //cfg("ADDR").setS("devhost.org:502");
-	}
-	else
-	{
-	    cfg("TM_REQ").setView(true);
-	    //cfg("ADDR").setS("/dev/ttyS0");
-	}
+	if( icfg.getS() == "TCP" )	cfg("CONN_TRY").setView(false);
+	else				cfg("CONN_TRY").setView(true);
 	if(startStat())	stop();
     }
 
@@ -449,7 +231,7 @@ void TMdContr::regVal( int reg, const string &dt )
 {
     if( reg < 0 )	return;
 
-    ResAlloc res( en_res, true );
+    ResAlloc res( req_res, true );
 
     //> Register to acquisition block
     if( dt == "R" || dt == "RI" )
@@ -460,7 +242,7 @@ void TMdContr::regVal( int reg, const string &dt )
 	{
 	    if( (reg*2) < workCnt[i_b].off )
 	    {
-		if( (m_merge || (reg*2+2) >= workCnt[i_b].off) && (workCnt[i_b].val.size()+workCnt[i_b].off-(reg*2)) < MaxLenReq )
+		if( (mMerge || (reg*2+2) >= workCnt[i_b].off) && (workCnt[i_b].val.size()+workCnt[i_b].off-(reg*2)) < MaxLenReq )
 		{
 		    workCnt[i_b].val.insert(0,workCnt[i_b].off-reg*2,0);
 		    workCnt[i_b].off = reg*2;
@@ -469,11 +251,11 @@ void TMdContr::regVal( int reg, const string &dt )
 	    }
 	    else if( (reg*2+2) > (workCnt[i_b].off+workCnt[i_b].val.size()) )
 	    {
-		if( (m_merge || reg*2 <= (workCnt[i_b].off+workCnt[i_b].val.size())) && (reg*2+2-workCnt[i_b].off) < MaxLenReq )
+		if( (mMerge || reg*2 <= (workCnt[i_b].off+workCnt[i_b].val.size())) && (reg*2+2-workCnt[i_b].off) < MaxLenReq )
 		{
 		    workCnt[i_b].val.append((reg*2+2)-(workCnt[i_b].off+workCnt[i_b].val.size()),0);
 		    //>> Check for allow mergin to next block
-		    if( !m_merge && i_b+1 < workCnt.size() && (workCnt[i_b].off+workCnt[i_b].val.size()) >= workCnt[i_b+1].off )
+		    if( !mMerge && i_b+1 < workCnt.size() && (workCnt[i_b].off+workCnt[i_b].val.size()) >= workCnt[i_b+1].off )
 		    {
 			workCnt[i_b].val.append(workCnt[i_b+1].val,workCnt[i_b].off+workCnt[i_b].val.size()-workCnt[i_b+1].off,string::npos);
 			workCnt.erase(workCnt.begin()+i_b+1);
@@ -495,7 +277,7 @@ void TMdContr::regVal( int reg, const string &dt )
 	{
 	    if( reg < workCnt[i_b].off )
 	    {
-		if( (m_merge || (reg+1) >= workCnt[i_b].off) && (workCnt[i_b].val.size()+workCnt[i_b].off-reg) < MaxLenReq*8 )
+		if( (mMerge || (reg+1) >= workCnt[i_b].off) && (workCnt[i_b].val.size()+workCnt[i_b].off-reg) < MaxLenReq*8 )
 		{
 		    workCnt[i_b].val.insert(0,workCnt[i_b].off-reg,0);
 		    workCnt[i_b].off = reg;
@@ -504,11 +286,11 @@ void TMdContr::regVal( int reg, const string &dt )
 	    }
 	    else if( (reg+1) > (workCnt[i_b].off+workCnt[i_b].val.size()) )
 	    {
-		if( (m_merge || reg <= (workCnt[i_b].off+workCnt[i_b].val.size())) && (reg+1-workCnt[i_b].off) < MaxLenReq*8 )
+		if( (mMerge || reg <= (workCnt[i_b].off+workCnt[i_b].val.size())) && (reg+1-workCnt[i_b].off) < MaxLenReq*8 )
 		{
 		    workCnt[i_b].val.append((reg+1)-(workCnt[i_b].off+workCnt[i_b].val.size()),0);
 		    //>> Check for allow mergin to next block
-		    if( !m_merge && i_b+1 < workCnt.size() && (workCnt[i_b].off+workCnt[i_b].val.size()) >= workCnt[i_b+1].off )
+		    if( !mMerge && i_b+1 < workCnt.size() && (workCnt[i_b].off+workCnt[i_b].val.size()) >= workCnt[i_b+1].off )
 		    {
 			workCnt[i_b].val.append(workCnt[i_b+1].val,workCnt[i_b].off+workCnt[i_b].val.size()-workCnt[i_b+1].off,string::npos);
 			workCnt.erase(workCnt.begin()+i_b+1);
@@ -598,169 +380,25 @@ void TMdContr::setValC( char val, int addr, string &err )
 
 string TMdContr::modBusReq( string &pdu )
 {
-    ResAlloc res( req_res, true );
+    AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strSepParse(mAddr,0,'.')).at().outAt(TSYS::strSepParse(mAddr,1,'.'));
+    if( !tr.at().startStat() ) tr.at().start();
 
-    string mbap, err, rez;
-    char buf[1000];
+    XMLNode req(mPrt);
+    req.setAttr("id",id())->
+	setAttr("reqTm",TSYS::int2str(reqTm))->
+	setAttr("node",TSYS::int2str(mNode))->
+	setAttr("reqTry",TSYS::int2str(connTry))->
+	setText(pdu);
+    tr.at().messProtIO(req,"ModBus");
 
-    try
+    if( !req.attr("err").empty() )
     {
-	switch( m_prt )
-	{
-	    case 0:	// Modbus/TCP protocol process
-	    {
-		AutoHD<TTransportOut> tr;
-		try{ tr = SYS->transport().at().at("Sockets").at().outAt(mod->modId()+id()); }
-		catch(...) { tr.at().stop(); throw; }
-		if( !tr.at().startStat() )	tr.at().start();
-
-		//> Encode MBAP (Modbus Application Protocol)
-		mbap  = (char)0x15;			//Transaction ID MSB
-		mbap += (char)0x01;			//Transaction ID LSB
-		mbap += (char)0x00;			//Protocol ID MSB
-		mbap += (char)0x00;			//Protocol ID LSB
-		mbap += (char)((pdu.size()+1)>>8);	//PDU size MSB
-		mbap += (char)(pdu.size()+1);		//PDU size LSB
-		mbap += (char)m_node;			//Unit identifier
-		mbap += pdu;
-
-		//> Send request
-		int resp_len = tr.at().messIO( mbap.data(), mbap.size(), buf, sizeof(buf), 3 );
-		rez.assign(buf,resp_len);
-		if( rez.size() < 7 )	{ err = _("13:Error server respond"); break; }
-		int resp_sz = (unsigned short)(rez[4]<<8)|(unsigned char)rez[5];
-
-		//> Wait tail
-		while( rez.size() < (resp_sz+6) )
-		{
-		    resp_len = tr.at().messIO( NULL, 0, buf, sizeof(buf), 10 );
-		    rez.append( buf, resp_len );
-		}
-		pdu = rez.substr(7);
-
-		break;
-	    }
-	    case 1:	// Modbus/RTU protocol process
-	    {
-		AutoHD<TTransportOut> tr;
-		try{ tr = SYS->transport().at().at("Serial").at().outAt(m_addr); }
-		catch(...) { tr.at().stop(); throw; }
-		if( !tr.at().startStat() )	tr.at().start();
-
-		mbap = (ui8)m_node;		//Unit identifier
-		mbap += pdu;
-		ui16 crc = mod->CRC16( mbap );
-		mbap += crc >> 8;
-		mbap += crc;
-
-		//> Send request
-		for( int i_tr = 0; i_tr < 3; i_tr++ )
-		{
-		    int resp_len = tr.at().messIO( mbap.data(), mbap.size(), buf, sizeof(buf), reqTm );
-		    rez.assign(buf,resp_len);
-		    if( i_tr ) numErrRespRep++;
-
-		    if( rez.size() < 2 )	{ err = _("13:Error respond: Too short."); continue; }
-		    if( mod->CRC16(rez.substr(0,rez.size()-2)) != (ui16)((rez[rez.size()-2]<<8)+(ui8)rez[rez.size()-1]) )
-		    { err = _("13:Error respond: CRC check error."); continue; }
-		    pdu = rez.substr( 1, rez.size()-3 );
-		    err = "";
-		    break;
-		}
-		break;
-	    }
-	    case 2:	// Modbus/ASCII protocol process
-	    {
-		AutoHD<TTransportOut> tr;
-		try{ tr = SYS->transport().at().at("Serial").at().outAt(m_addr); }
-		catch(...) { tr.at().stop(); throw; }
-		if( !tr.at().startStat() )	tr.at().start();
-
-		mbap = (ui8)m_node;		//Unit identifier
-		mbap += pdu;
-		mbap += mod->LRC(mbap);
-
-		//> Send request
-		for( int i_tr = 0; i_tr < 3; i_tr++ )
-		{
-		    int resp_len = tr.at().messIO( mbap.data(), mbap.size(), buf, sizeof(buf), reqTm );
-		    rez.assign(buf,resp_len);
-		    if( i_tr ) numErrRespRep++;
-
-		    if( rez.size() < 3 || rez[0] != ':' || rez[rez.size()-2] != 0x0D || rez[rez.size()-1] != 0x0A )
-		    { err = _("13:Error respond: Error format."); continue; }
-		    rez = mod->ASCIIToData(rez.substr(1,rez.size()-3));
-		    if( mod->LRC(rez.substr(0,rez.size()-1)) != rez[rez.size()-1] )
-		    { err = _("13:Error respond: LRC check error."); continue; }
-		    pdu = rez.substr(1,rez.size()-2);
-		    err = "";
-		    break;
-		}
-		break;
-	    }
-	}
-	//> Check respond pdu
-	if( err.empty() )
-	{
-	    if( pdu.size() < 2 ) err = _("13:Error respond");
-	    if( pdu[0]&0x80 )
-		switch( pdu[1] )
-		{
-		    case 0x1:
-			snprintf( buf, sizeof(buf), _("1:Function %xh is not supported."), pdu[0]&(~0x80) );
-			err = buf;
-			break;
-		    case 0x2: err = _("2:Requested registers' length is too long.");	break;
-		    case 0x3: err = _("3:Illegal data value.");				break;
-		    case 0x4: err = _("4:Server failure.");				break;
-		    case 0x5: err = _("5:Request requires too long time for execute.");	break;
-		    case 0x6: err = _("6:Server is busy.");				break;
-		    case 0xA: case 0xB: err = _("10:Gateway problem.");			break;
-		    default:
-			snprintf( buf, sizeof(buf), _("12:Unknown error: %xh."), pdu[1] );
-			err = buf;
-			break;
-		}
-	}
-	if( !err.empty() ) numErrResp++;
-    }catch( TError er )
-    {
-	//mess_err( err.cat.c_str(), er.mess.c_str() );
-	err = _("14:Device error: ")+er.mess;
-	numErrCon++;
+	if( atoi(req.attr("err").c_str()) == 14 ) numErrCon++;
+	else numErrResp++;
+	return req.attr("err");
     }
-
-    //> Prepare log
-    if( mod->prtLen( ) )
-    {
-	time_t tm_t = time(NULL);
-	string mess = TSYS::strSepParse(ctime(&tm_t),0,'\n');
-	switch( m_prt )
-	{
-	    case 0:	mess += " '"+id()+"' TCP:"+m_addr;	break;
-	    case 1:	mess += " '"+id()+"' RTU:"+TSYS::int2str(m_node)+"("+m_addr+")";	break;
-	    case 2:	mess += " '"+id()+"' ASCII:"+TSYS::int2str(m_node)+"("+m_addr+")";	break;
-	}
-	mess += _("\nREQ -> ");
-	for( int i_d = 0; i_d < mbap.size(); i_d++ )
-	{
-	    sprintf(buf,"%0.2X",(unsigned char)mbap[i_d]);
-	    mess += string(buf) + " ";
-	}
-	if( !err.empty() )	mess += _("\nERR -> ")+err;
-	else
-	{
-	    mess += _("\nRESP -> ");
-	    for( int i_d = 0; i_d < rez.size(); i_d++ )
-	    {
-		sprintf(buf,"%0.2X",(unsigned char)rez[i_d]);
-		mess += string(buf) + " ";
-	    }
-	}
-	mod->pushPrtMess(mess+"\n");
-    }
-
-    return err;
+    pdu = req.text();
+    return "";
 }
 
 void *TMdContr::Task( void *icntr )
@@ -787,7 +425,7 @@ void *TMdContr::Task( void *icntr )
 #if OSC_DEBUG >= 3
 		mess_debug(cntr.nodePath().c_str(),_("Fetch coils' and registers' blocks."));
 #endif
-		ResAlloc res( cntr.en_res, false );
+		ResAlloc res( cntr.req_res, false );
 
 		//> Get coils
 		for( int i_b = 0; i_b < cntr.acqBlksCoil.size(); i_b++ )
@@ -904,8 +542,8 @@ void *TMdContr::Task( void *icntr )
 
 void TMdContr::setCntrDelay( const string &err )
 {
-    tm_delay = mod->connResume( );
-    ResAlloc res( en_res, false );
+    tm_delay = restTm;
+    ResAlloc res( req_res, false );
     for( int i_b = 0; i_b < acqBlksCoil.size(); i_b++ )	acqBlksCoil[i_b].err = err;
     for( int i_b = 0; i_b < acqBlks.size(); i_b++ )	acqBlks[i_b].err = err;
 }
@@ -917,19 +555,16 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     {
 	TController::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/cntr/st/gath_tm",_("Gather data time (ms)"),R_R_R_,"root","root",1,"tp","real");
-	if( m_prt == 1 || m_prt == 2 )
-	    ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",cfg("ADDR").fld().descr(),0664,"root","root",3,"tp","str","dest","select","select","/cntr/cfg/serDevLst");
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",cfg("ADDR").fld().descr(),0664,"root","root",3,"tp","str","dest","select","select","/cntr/cfg/trLst");
 	return;
     }
     //- Process command to page -
     string a_path = opt->attr("path");
     if( a_path == "/cntr/st/gath_tm" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(tm_gath,6));
-    else if( a_path == "/cntr/cfg/serDevLst" && ctrChkNode(opt) )
+    else if( a_path == "/cntr/cfg/trLst" && ctrChkNode(opt) )
     {
 	vector<string> sls;
-	if( SYS->transport().at().modPresent("Serial") )
-	    SYS->transport().at().at("Serial").at().outList(sls);
-	//mod->serDevList(sls);
+	SYS->transport().at().outTrList(sls);
 	for( int i_s = 0; i_s < sls.size(); i_s++ )
 	    opt->childAdd("el")->setText(sls[i_s]);
     }

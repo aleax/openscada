@@ -1,7 +1,7 @@
 
-//OpenSCADA system module Protocol.SelfSystem file: self.h
+//OpenSCADA system module Protocol.ModBus file: modbus_prt.h
 /***************************************************************************
- *   Copyright (C) 2007-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2009 by Roman Savochenko                                *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -19,15 +19,30 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef SELF_H
-#define SELF_H
+#ifndef MODBUS_PRT_H
+#define MODBUS_PRT_H
+
+#include <string>
+#include <map>
 
 #include <tprotocols.h>
 
-#undef _
-#define _(mess) mod->I18N(mess)
+using std::string;
+using std::map;
 
-namespace SelfPr
+//*************************************************
+//* Protocol modul info!                          *
+#define PRT_ID		"ModBus"
+#define PRT_NAME	"ModBus"
+#define PRT_TYPE	"Protocol"
+#define PRT_SUBVER	VER_PROT
+#define PRT_MVER	"0.1.0"
+#define PRT_AUTORS	"Roman Savochenko"
+#define PRT_DESCR	"Allow realisation of ModBus protocols. Supported Modbus/TCP, Modbus/RTU and Modbus/ASCII protocols."
+#define PRT_LICENSE	"GPL"
+//*************************************************
+
+namespace ModBus
 {
 
 //*************************************************
@@ -41,11 +56,6 @@ class TProtIn: public TProtocolIn
 	~TProtIn( );
 
 	bool mess( const string &request, string &answer, const string &sender );
-
-    private:
-	//Attributes
-	bool m_nofull;
-	string req_buf;
 };
 
 //*************************************************
@@ -54,57 +64,47 @@ class TProtIn: public TProtocolIn
 class TProt: public TProtocol
 {
     public:
-	//Data
-	//*****************************************
-	//* SAuth                                 *
-	class SAuth
-	{
-	    public:
-		//Methods
-		SAuth(time_t itm, string inm, int ises) :
-		    t_auth(itm), name(inm), id_ses(ises) { }
-		//Attributes
-		time_t t_auth;
-		string name;
-		int    id_ses;
-	};
-
 	//Methods
 	TProt( string name );
-	~TProt();
-
-	int authTime( )			{ return m_t_auth; }
-	int comprLev( )			{ return mComprLev; }
-	int comprBrd( )			{ return mComprBrd; }
-
-	void setAuthTime( int vl )	{ m_t_auth = vl; modif(); }
-	void setComprLev( int vl )	{ mComprLev = vl; modif(); }
-	void setComprBrd( int vl )	{ mComprBrd = vl; modif(); }
-
-	int sesOpen( const char *user, const char *pass );
-	void sesClose( int id_ses );
-	SAuth sesGet( int id_ses );
+	~TProt( );
 
 	void outMess( XMLNode &io, TTransportOut &tro );
 
+	//> Special modbus protocol's functions
+	ui16	CRC16( const string &mbap );
+	ui8	LRC( const string &mbap );
+	string	DataToASCII( const string &in );
+	string	ASCIIToData( const string &in );
+
+	//> Protocol
+	int prtLen( )	{ return mPrtLen; }
+	void setPrtLen( int vl );
+	void pushPrtMess( const string &vl );
+
     protected:
+	//Methods
 	void load_( );
 	void save_( );
 
     private:
+	//Attribute
+	//> Protocol
+	int	mPrtLen;
+	deque<string>	mPrt;
+
+	//> Special modbus protocol's attributes
+	static ui8 CRCHi[];
+	static ui8 CRCLo[];
+
 	//Methods
-	void cntrCmdProc( XMLNode *opt );
 	string optDescr( );
 	TProtocolIn *in_open( const string &name );
 
-	//Attributes
-	Res		ses_res;
-	Res		ores;
-	vector<SAuth>	auth_lst;
-	int		m_t_auth, mComprLev, mComprBrd;
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+
 };
 
-extern TProt *mod;
-} //End namespace SelfPr
+extern TProt *modPrt;
+} //End namespace ModBus
 
-#endif //SELF_H
+#endif //MODBUS_PRT_H

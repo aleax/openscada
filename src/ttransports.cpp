@@ -64,6 +64,34 @@ TTransportS::~TTransportS(  )
 
 }
 
+void TTransportS::inTrList( vector<string> &ls )
+{
+    ls.clear();
+
+    vector<string> t_ls, m_ls;
+    modList(t_ls);
+    for( int i_tp = 0; i_tp < t_ls.size(); i_tp++ )
+    {
+	at(t_ls[i_tp]).at().inList(m_ls);
+	for( int i_t = 0; i_t < m_ls.size(); i_t++ )
+	    ls.push_back(t_ls[i_tp]+"."+m_ls[i_t]);
+    }
+}
+
+void TTransportS::outTrList( vector<string> &ls )
+{
+    ls.clear();
+
+    vector<string> t_ls, m_ls;
+    modList(t_ls);
+    for( int i_tp = 0; i_tp < t_ls.size(); i_tp++ )
+    {
+	at(t_ls[i_tp]).at().outList(m_ls);
+	for( int i_t = 0; i_t < m_ls.size(); i_t++ )
+	    ls.push_back(t_ls[i_tp]+"."+m_ls[i_t]);
+    }
+}
+
 string TTransportS::extHostsDB()
 {
     return SYS->workDB()+".CfgExtHosts";
@@ -739,11 +767,11 @@ void TTransportOut::preEnable(int flag)
     try{ load(); }catch(...){ }
 }
 
-string TTransportOut::messProtIO( const string &in, const string &prot )
+void TTransportOut::messProtIO( XMLNode &io, const string &prot )
 {
     if( !SYS->protocol().at().modPresent(prot) )
 	throw TError(nodePath().c_str(),_("Transport protocol '%s' no present"),prot.c_str());
-    return SYS->protocol().at().at(prot).at().outMess( in, *this );
+    SYS->protocol().at().at(prot).at().outMess( io, *this );
 }
 
 void TTransportOut::cntrCmdProc( XMLNode *opt )
@@ -845,12 +873,12 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	{
 	    long long stm = TSYS::curTime( );
 	    char buf[STR_BUF_LEN];
-	    int resp_len = messIO(req.data(),req.size(),buf,sizeof(buf),5);
+	    int resp_len = messIO(req.data(),req.size(),buf,sizeof(buf),5000);
 	    answ.assign(buf,resp_len);
 
 	    while( resp_len == sizeof(buf) )
 	    {
-		resp_len = messIO(NULL,0,buf,sizeof(buf),5);
+		resp_len = messIO(NULL,0,buf,sizeof(buf),1000);
 		answ.append(buf,resp_len);
 	    }
 	    TBDS::genDBSet(owner().nodePath()+"ReqTm",TSYS::real2str(1e-3*(TSYS::curTime()-stm)),opt->attr("user"));

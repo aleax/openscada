@@ -43,9 +43,9 @@ class TTrIn: public TTransportIn
 
 	string getStatus( );
 
-	int bufLen( )			{ return mBufLen; }
+	string timings( )			{ return mTimings; }
 
-	void setBufLen( int vl )	{ mBufLen = vl; modif(); }
+	void setTimings( const string &vl )	{ mTimings = vl; modif(); }
 
 	void start( );
 	void stop( );
@@ -57,7 +57,7 @@ class TTrIn: public TTransportIn
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
-	int		&mBufLen;
+	string		&mTimings;
 	int		fd;
 
 	pthread_t	pthr_tsk;

@@ -384,10 +384,8 @@ void *TSocketIn::Task( void *sock_in )
 	fd_set  rd_fd;
 	while( !s.endrun )
         {
-	    tv.tv_sec  = 0;
-	    tv.tv_usec = STD_WAIT_DELAY*1000;
-	    FD_ZERO(&rd_fd);
-	    FD_SET(BIO_get_fd(abio,NULL),&rd_fd);
+	    tv.tv_sec  = 0; tv.tv_usec = STD_WAIT_DELAY*1000;
+	    FD_ZERO(&rd_fd); FD_SET(BIO_get_fd(abio,NULL),&rd_fd);
 
 	    int kz = select(BIO_get_fd(abio,NULL)+1,&rd_fd,NULL,NULL,&tv);
 	    if( kz == 0 || (kz == -1 && errno == EINTR) || kz < 0 || !FD_ISSET(BIO_get_fd(abio,NULL),&rd_fd) ) continue;
@@ -469,10 +467,8 @@ void *TSocketIn::ClTask( void *s_inf )
     fd_set  rd_fd;
     while( !s.s->endrun_cl )
     {
-	tv.tv_sec  = 0;
-	tv.tv_usec = STD_WAIT_DELAY*1000;
-	FD_ZERO(&rd_fd);
-	FD_SET(BIO_get_fd(s.bio,NULL),&rd_fd);
+	tv.tv_sec  = 0; tv.tv_usec = STD_WAIT_DELAY*1000;
+	FD_ZERO(&rd_fd); FD_SET(BIO_get_fd(s.bio,NULL),&rd_fd);
 
 	int kz = select(BIO_get_fd(s.bio,NULL)+1,&rd_fd,NULL,NULL,&tv);
 	if( kz == 0 || (kz == -1 && errno == EINTR) || kz < 0 || !FD_ISSET(BIO_get_fd(s.bio,NULL),&rd_fd) ) continue;
@@ -771,7 +767,7 @@ int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, in
 
     if( !run_st ) throw TError(nodePath().c_str(),_("Transport is not started!"));
 
-    //- Write request -
+    //> Write request
     if( obuf != NULL && len_ob > 0 && (ret=BIO_write(conn,obuf,len_ob)) != len_ob )
     {
 	if( ret == 0 )	{ stop(); return 0; }
@@ -786,10 +782,10 @@ int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, in
     if( ret > 0 ) mess_debug(nodePath().c_str(),_("The message is sent with the size <%d>."),ret);
 #endif
 
-    //- Read reply -
+    //> Read reply
     if( ibuf != NULL && len_ib > 0 && time > 0 )
     {
-	//-- Continue read --
+	//>> Continue read
 	if( !obuf || len_ob <= 0 )
 	{
 	    ret=BIO_read(conn,ibuf,len_ib);
@@ -807,10 +803,8 @@ int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, in
 	    fd_set		rd_fd;
 	    struct timeval	tv;
 
-	    tv.tv_sec	= time;
-	    tv.tv_usec	= 0;
-	    FD_ZERO(&rd_fd);
-	    FD_SET(BIO_get_fd(conn,NULL),&rd_fd);
+	    tv.tv_sec = time/1000; tv.tv_usec = 1000*(time%1000);
+	    FD_ZERO(&rd_fd); FD_SET(BIO_get_fd(conn,NULL),&rd_fd);
 
 	    do{ kz = select(BIO_get_fd(conn,NULL)+1,&rd_fd,NULL,NULL,&tv); }
 	    while( kz == -1 && errno == EINTR );

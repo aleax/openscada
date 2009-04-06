@@ -116,7 +116,7 @@ void TParamContr::save_( )
     SYS->db().at().dataSet(owner().DB()+"."+owner().cfg(type().db).getS(),
 			   owner().owner().nodePath()+owner().cfg(type().db).getS(),*this);
 
-    //- Save archives -
+    //> Save archives
     vector<string> a_ls;
     vlList(a_ls);
     for(int i_a = 0; i_a < a_ls.size(); i_a++)

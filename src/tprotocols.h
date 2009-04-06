@@ -77,7 +77,7 @@ class TProtocol: public TModule
 	AutoHD<TProtocolIn> at( const string &name )	{ return chldAt(m_pr,name); }
 
 	//> Output protocol
-	virtual string outMess( const string &in, TTransportOut &tro )
+	virtual void outMess( XMLNode &io, TTransportOut &tro )
 	{ throw TError(nodePath().c_str(),"Function <%s> no support!","outMess"); }
 
     private:

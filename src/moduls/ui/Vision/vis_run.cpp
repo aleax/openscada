@@ -785,18 +785,18 @@ void VisRun::alarmAct( QAction *alrm )
 
 void VisRun::initSess( const string &prj_it, bool crSessForce )
 {
-    //- Connect/create session -
+    //> Connect/create session
     src_prj = TSYS::pathLev(prj_it,0);
     if( src_prj.empty() ) return;
     src_prj = src_prj.substr(4);
     work_sess = "";
 
-    //-- Get opened sessions list for our page and put dialog for connection --
+    //> Get opened sessions list for our page and put dialog for connection
     XMLNode req("list");
     req.setAttr("path","/%2fserv%2fsess")->setAttr("prj",src_prj);
     if( !crSessForce && !cntrIfCmd(req) && req.childSize() )
     {
-	//--- Prepare dialog ---
+	//>> Prepare dialog
 	QImage ico_t;
 	if(!ico_t.load(TUIS::icoPath("vision_prj_run").c_str())) ico_t.load(":/images/prj_run.png");
 	QDialog conreq(this);
@@ -848,12 +848,12 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
 	dlg_lay->addWidget( but_box );
 	conreq.resize(400,300);
 
-	//--- Load session list ---
+	//>> Load session list
 	for( int i_ch = 0; i_ch < req.childSize(); i_ch++ )
 	    ls_wdg->addItem(req.childGet(i_ch)->text().c_str());
 	ls_wdg->setCurrentRow(0);
 
-	//--- Execute dialog ---
+	//>> Execute dialog
 	int rez = 0;
 	if( (rez=conreq.exec()) == QDialog::Accepted && ls_wdg->currentItem() )
 	    work_sess = ls_wdg->currentItem()->text().toAscii().data();
@@ -871,13 +871,13 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
 
     work_sess = req.attr("sess");
 
-    //-- Set window title --
-    //--- Get project's name ---
+    //> Set window title
+    //>> Get project's name
     req.clear()->setName("get")->setAttr("path","/prj_"+src_prj+"/%2fobj%2fcfg%2fname");
     if( !cntrIfCmd(req) )	setWindowTitle(req.text().c_str());
     else setWindowTitle(QString(_("Runing project: %1")).arg(src_prj.c_str()));
 
-    //-- Set project's icon to window --
+    //> Set project's icon to window
     req.clear()->setAttr("path","/ses_"+work_sess+"/%2fico");
     if( !cntrIfCmd(req) )
     {
@@ -888,11 +888,11 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
     }
     else setWindowIcon(mod->icon());
 
-    //- Get update period -
+    //> Get update period
     req.clear()->setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fper");
     if( !cntrIfCmd(req) ) mPeriod = atoi(req.text().c_str());
 
-    //- Get project's flags -
+    //> Get project's flags
     req.clear()->setName("get")->setAttr("path","/prj_"+src_prj+"/%2fobj%2fcfg%2frunWin");
     if( !cntrIfCmd(req) )
     {
@@ -900,7 +900,7 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
 	else if( atoi(req.text().c_str())&0x02 )actFullScr->setChecked( true );
     }
 
-    //- Get open pages list -
+    //> Get open pages list
     req.clear()->setName("openlist")->setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg");
     if( !cntrIfCmd(req) )
 	for( int i_ch = 0; i_ch < req.childSize(); i_ch++ )
@@ -913,14 +913,15 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
     //> Open direct-selected page
     if( !TSYS::pathLev(prj_it,1).empty() )
     {
-	//- Convert project path to session path -
+	//>> Convert project path to session path
 	string prj_el;
 	string ses_it = "/ses_"+work_sess;
 	int i_el = 1;
 	while( (prj_el=TSYS::pathLev(prj_it,i_el++)).size() )
-	    ses_it = ses_it+"/"+prj_el;
+	    if( prj_el.substr(0,3) != "pg_" ) break;
+	    else ses_it = ses_it+"/"+prj_el;
 
-	//- Send open command -
+	//>> Send open command
 	req.clear()->setName("open")->setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg")->setAttr("pg",ses_it);
 	cntrIfCmd(req);
 

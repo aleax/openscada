@@ -348,10 +348,8 @@ void *TSocketIn::Task(void *sock_in)
 
     while( !sock->endrun )
     {
-	tv.tv_sec  = 0;
-	tv.tv_usec = STD_WAIT_DELAY*1000;
-	FD_ZERO(&rd_fd);
-	FD_SET(sock->sock_fd,&rd_fd);
+	tv.tv_sec  = 0; tv.tv_usec = STD_WAIT_DELAY*1000;
+	FD_ZERO(&rd_fd); FD_SET(sock->sock_fd,&rd_fd);
 
 	int kz = select(sock->sock_fd+1,&rd_fd,NULL,NULL,&tv);
 	if( kz == 0 || (kz == -1 && errno == EINTR) || kz < 0 || !FD_ISSET(sock->sock_fd, &rd_fd) ) continue;
@@ -453,10 +451,8 @@ void *TSocketIn::ClTask( void *s_inf )
 
     do
     {
-	tv.tv_sec  = 0;
-	tv.tv_usec = STD_WAIT_DELAY*1000;
-	FD_ZERO(&rd_fd);
-	FD_SET(s.cSock,&rd_fd);
+	tv.tv_sec  = 0; tv.tv_usec = STD_WAIT_DELAY*1000;
+	FD_ZERO(&rd_fd); FD_SET(s.cSock,&rd_fd);
 
 	int kz = select(s.cSock+1,&rd_fd,NULL,NULL,&tv);
 	if( kz == 0 || (kz == -1 && errno == EINTR) || kz < 0 || !FD_ISSET(s.cSock, &rd_fd) ) continue;
@@ -746,10 +742,8 @@ int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, in
 	fd_set rd_fd;
 	struct timeval tv;
 
-	tv.tv_sec  = time;
-	tv.tv_usec = 0;
-	FD_ZERO(&rd_fd);
-	FD_SET(sock_fd,&rd_fd);
+	tv.tv_sec  = time/1000; tv.tv_usec = 1000*(time%1000);
+	FD_ZERO(&rd_fd); FD_SET(sock_fd,&rd_fd);
 
 	do{ kz = select(sock_fd+1,&rd_fd,NULL,NULL,&tv); }
 	while( kz == -1 && errno == EINTR );

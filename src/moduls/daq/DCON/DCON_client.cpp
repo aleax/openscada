@@ -80,8 +80,6 @@ TTpContr::TTpContr( string name )
     mSource	= name;
 
     mod		= this;
-
-    m_sdev	= grpAdd("sdev_");
 }
 
 TTpContr::~TTpContr()
@@ -101,17 +99,6 @@ string TTpContr::optDescr( )
     return buf;
 }
 
-string TTpContr::serDevDB( )
-{
-    return SYS->workDB()+"."+modId()+"_sdevs";
-}
-
-void TTpContr::serDevAdd( const string &dev )
-{
-    if( chldPresent(m_sdev,dev) ) return;
-    chldAdd( m_sdev, new SSerial(dev,this) );
-}
-
 void TTpContr::postEnable( int flag )
 {
     TModule::postEnable( flag );
@@ -120,23 +107,13 @@ void TTpContr::postEnable( int flag )
     fldAdd( new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30","") );
     fldAdd( new TFld("PERIOD",_("Gather data period (s)"),TFld::Real,TFld::NoFlag,"6.2","1","0.01;100") );
     fldAdd( new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
-    fldAdd( new TFld("ADDR",_("Serial port"),TFld::String,TFld::NoFlag,"30","/dev/ttyUSB0") );
+    fldAdd( new TFld("ADDR",_("Serial transport"),TFld::String,TFld::NoFlag,"30","") );
 
     //- Parameter type bd structure -
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
     tpPrmAt(t_prm).fldAdd( new TFld("MOD_TP",_("I-7000 module type"),TFld::Integer,TFld::Selected|TCfg::NoVal,"1","0","0;1;2;3;4",_("I-7051;I-7045;I-7063;I-7017;I-7024")) );
     tpPrmAt(t_prm).fldAdd( new TFld("MOD_ADDR",_("I-7000 module address"),TFld::Integer,TFld::NoFlag|TCfg::NoVal,"20","1","0;255") );
     tpPrmAt(t_prm).fldAdd( new TFld("CRC_CTRL",_("CRC control"),TFld::Boolean,TFld::NoFlag|TCfg::NoVal,"1","1") );
-
-    //- Serial devices DB structure -
-    el_ser_dev.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
-    el_ser_dev.fldAdd( new TFld("SPEED",_("Speed"),TFld::Integer,TFld::NoFlag,"6","9600") );
-    el_ser_dev.fldAdd( new TFld("LEN",_("Length"),TFld::Integer,TFld::NoFlag,"1","8") );
-    el_ser_dev.fldAdd( new TFld("TWOSTOP",_("Two stop bit"),TFld::Boolean,TFld::NoFlag,"1","1") );
-    el_ser_dev.fldAdd( new TFld("PARITY",_("Parity"),TFld::Integer,TFld::NoFlag,"1","0") );
-    el_ser_dev.fldAdd( new TFld("TM_FRM",_("Time frame"),TFld::Integer,TFld::NoFlag,"5","1000") );
-    el_ser_dev.fldAdd( new TFld("TM_CHAR",_("Time char"),TFld::Real,TFld::NoFlag,"5.2","4") );
-    el_ser_dev.fldAdd( new TFld("TM_REQ",_("Time request"),TFld::Integer,TFld::NoFlag,"5","2000") );
 }
 
 void TTpContr::load_( )
@@ -160,36 +137,11 @@ void TTpContr::load_( )
 	    case -1 : break;
 	}
     } while( next_opt != -1 );
-
-    //- Load Serial devices configuration -
-    try
-    {
-	TConfig c_el(&serDevE());
-	for( int fld_cnt = 0; SYS->db().at().dataSeek(serDevDB(),nodePath()+"sDevs/",fld_cnt,c_el); fld_cnt++ )
-	{
-	    string id = c_el.cfg("ID").getS();
-	    try
-	    {
-		if( !serDevPresent(id) )	serDevAdd(id);
-		serDevAt(id).at().load();
-		if( !serDevAt(id).at().hasOpen() )	serDevAt(id).at().setOpen(true);
-	    }catch( TError err ) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-	}
-    }catch( TError err )
-    {
-	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	mess_err(nodePath().c_str(),_("Search and load serial devices' DB error."));
-    }
 }
 
 void TTpContr::save_()
 {
-    //- Save Serial devices configuration -
-    TConfig cfg(&serDevE());
-    vector<string> lst;
-    serDevList(lst);
-    for( int i_l = 0; i_l < lst.size(); i_l++ )
-	serDevAt(lst[i_l]).at().save();
+
 }
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
@@ -197,353 +149,6 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
     return new TMdContr(name,daq_db,this);
 }
 
-void TTpContr::cntrCmdProc( XMLNode *opt )
-{
-    //- Get page info -
-    if( opt->name() == "info" )
-    {
-	TTipDAQ::cntrCmdProc( opt );
-	if( ctrMkNode("area",opt,0,"/mod",_("DCON")) )
-	{
-	    if( ctrMkNode("table",opt,-1,"/mod/dev",_("Serial devices"),0664,"root","root",2,"s_com","add,del","key","dev") )
-	    {
-		ctrMkNode("list",opt,-1,"/mod/dev/dev",_("Device"),0664,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/mod/dev/speed",_("Speed"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/mod/dev/lsspd");
-		ctrMkNode("list",opt,-1,"/mod/dev/len",_("Char length (bit)"),0664,"root","root",3,"tp","dec","min","5","max","8");
-		ctrMkNode("list",opt,-1,"/mod/dev/stop",_("Stop bits"),0664,"root","root",3,"tp","dec","min","1","max","2");
-		ctrMkNode("list",opt,-1,"/mod/dev/parity",_("Parity"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/mod/dev/lsprt");
-		ctrMkNode("list",opt,-1,"/mod/dev/frTm",_("Time frame"),0664,"root","root",1,"tp","dec");
-		ctrMkNode("list",opt,-1,"/mod/dev/charTm",_("Time char"),0664,"root","root",1,"tp","real");
-		ctrMkNode("list",opt,-1,"/mod/dev/reqTm",_("Time request"),0664,"root","root",1,"tp","dec");
-		ctrMkNode("list",opt,-1,"/mod/dev/open",_("Opened"),0664,"root","root",1,"tp","bool");
-	    }
-	}
-	return;
-    }
-    //- Process command to page -
-    string a_path = opt->attr("path");
-    if( a_path == "/mod/dev" )
-    {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
-	{
-	    //- Fill Archives table -
-	    XMLNode *n_dev	= ctrMkNode("list",opt,-1,"/mod/dev/dev","");
-	    XMLNode *n_speed	= ctrMkNode("list",opt,-1,"/mod/dev/speed","");
-	    XMLNode *n_len	= ctrMkNode("list",opt,-1,"/mod/dev/len","");
-	    XMLNode *n_stop	= ctrMkNode("list",opt,-1,"/mod/dev/stop","");
-	    XMLNode *n_parity	= ctrMkNode("list",opt,-1,"/mod/dev/parity","");
-	    XMLNode *n_frTm	= ctrMkNode("list",opt,-1,"/mod/dev/frTm","");
-	    XMLNode *n_charTm	= ctrMkNode("list",opt,-1,"/mod/dev/charTm","");
-	    XMLNode *n_reqTm	= ctrMkNode("list",opt,-1,"/mod/dev/reqTm","");
-	    XMLNode *n_open	= ctrMkNode("list",opt,-1,"/mod/dev/open","");
-	    vector<string> lst;
-	    serDevList(lst);
-	    for( int i_s = 0; i_s < lst.size(); i_s++ )
-	    {
-		AutoHD<SSerial>	ser = serDevAt(lst[i_s]);
-		if( n_dev )	n_dev->childAdd("el")->setText(lst[i_s]);
-		if( n_speed )	n_speed->childAdd("el")->setText(TSYS::int2str(ser.at().speed()));
-		if( n_len )	n_len->childAdd("el")->setText(TSYS::int2str(ser.at().len()));
-		if( n_stop )	n_stop->childAdd("el")->setText(TSYS::int2str(ser.at().twostop()?2:1));
-		if( n_parity )	n_parity->childAdd("el")->setText(TSYS::int2str(ser.at().parity()));
-		if( n_frTm )	n_frTm->childAdd("el")->setText(TSYS::int2str(ser.at().timeoutFrame()));
-		if( n_charTm )	n_charTm->childAdd("el")->setText(TSYS::real2str(ser.at().timeoutChar()));
-		if( n_reqTm )	n_reqTm->childAdd("el")->setText(TSYS::int2str(ser.at().timeoutReq()));
-		if( n_open )	n_open->childAdd("el")->setText(TSYS::int2str(ser.at().hasOpen()));
-	    }
-	}
-	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )
-	{
-	    string devNm = "/dev/NewSDev";
-	    if( serDevPresent(devNm) )
-		for( int i_d = 0; true; i_d++ )
-		    if( !serDevPresent(devNm+TSYS::int2str(i_d)) )
-		    { devNm = devNm+TSYS::int2str(i_d); break; }
-	    serDevAdd(devNm);
-	}
-	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )
-	    serDevDel(opt->attr("key_dev"),true);
-	if( ctrChkNode(opt,"set",0666,"root","root",SEQ_WR) )
-	{
-	    string col	= opt->attr("col");
-	    string dev  = opt->attr("key_dev");
-	    if( col == "dev" )
-	    {
-		serDevAdd(opt->text());
-		(TConfig&)serDevAt(opt->text()).at() = (TConfig&)serDevAt(dev).at();
-		serDevAt(opt->text()).at().cfg("ID").setS(opt->text());
-		serDevDel(dev,true);
-	    }
-	    else if( col == "speed" )	serDevAt(dev).at().setSpeed(atoi(opt->text().c_str()),true);
-	    else if( col == "len" )	serDevAt(dev).at().setLen(atoi(opt->text().c_str()));
-	    else if( col == "stop" )	serDevAt(dev).at().setTwostop(atoi(opt->text().c_str())==2);
-	    else if( col == "parity" )	serDevAt(dev).at().setParity(atoi(opt->text().c_str()));
-	    else if( col == "frTm" )	serDevAt(dev).at().setTimeoutFrame(atoi(opt->text().c_str()));
-	    else if( col == "charTm" )	serDevAt(dev).at().setTimeoutChar(atof(opt->text().c_str()));
-	    else if( col == "reqTm" )	serDevAt(dev).at().setTimeoutReq(atoi(opt->text().c_str()));
-	    else if( col == "open" )	serDevAt(dev).at().setOpen(atoi(opt->text().c_str()));
-	}
-    }
-    else if( a_path == "/mod/dev/lsspd" && ctrChkNode(opt) )
-    {
-	opt->childAdd("el")->setAttr("id","300")->setText("300");
-	opt->childAdd("el")->setAttr("id","600")->setText("600");
-	opt->childAdd("el")->setAttr("id","1200")->setText("1200");
-	opt->childAdd("el")->setAttr("id","2400")->setText("2400");
-	opt->childAdd("el")->setAttr("id","4800")->setText("4800");
-	opt->childAdd("el")->setAttr("id","9600")->setText("9600");
-	opt->childAdd("el")->setAttr("id","19200")->setText("19.2k");
-	opt->childAdd("el")->setAttr("id","38400")->setText("38.4k");
-	opt->childAdd("el")->setAttr("id","57600")->setText("57.6k");
-	opt->childAdd("el")->setAttr("id","115200")->setText("115.2k");
-	opt->childAdd("el")->setAttr("id","230400")->setText("230.4k");
-	opt->childAdd("el")->setAttr("id","460800")->setText("460.8k");
-    }
-    else if( a_path == "/mod/dev/lsprt" && ctrChkNode(opt) )
-    {
-	opt->childAdd("el")->setAttr("id","0")->setText(_("No check"));
-	opt->childAdd("el")->setAttr("id","1")->setText(_("Parity"));
-	opt->childAdd("el")->setAttr("id","2")->setText(_("Odd parity"));
-    }
-    else TTipDAQ::cntrCmdProc( opt );
-}
-
-//*************************************************
-//* SSerial                                       *
-//*************************************************
-SSerial::SSerial( const string &iDev, TTpContr *iown ) :
-    TCntrNode(iown), TConfig( &iown->serDevE() ), fd(-1),
-    m_id(cfg("ID").getSd()), m_speed(cfg("SPEED").getId()), m_len(cfg("LEN").getId()),
-    m_twostop(cfg("TWOSTOP").getBd()), m_parity(cfg("PARITY").getId()),
-    frTm(cfg("TM_FRM").getId()), charTm(cfg("TM_CHAR").getRd()), reqTm(cfg("TM_REQ").getId())
-{
-    m_id = iDev;
-}
-
-void SSerial::postDisable( int flag )
-{
-    if( hasOpen() )	setOpen(false);
-    //> Delete serial device from DB
-    try
-    {
-	if( flag )
-	    SYS->db().at().dataDel(owner().serDevDB(),mod->nodePath()+"sDevs/",*this,true);
-    }catch(TError err)
-    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-}
-
-void SSerial::load_( )
-{
-    SYS->db().at().dataGet(owner().serDevDB(),mod->nodePath()+"sDevs/",*this);
-}
-
-void SSerial::save_( )
-{
-    SYS->db().at().dataSet(owner().serDevDB(),mod->nodePath()+"sDevs/",*this);
-}
-
-void SSerial::setOpen( bool vl )
-{
-    ResAlloc res(m_res,true);
-    if( vl == hasOpen() )	return;
-
-    if( vl )
-    {
-	//- Serial port open -
-	fd = open( id().c_str(), O_RDWR|O_NOCTTY );
-	if( fd < 0 )	throw TError(mod->nodePath().c_str(),_("Serial port '%s' open error."),id().c_str());
-	//-- Set serial port parameters --
-	struct termios tio;
-	bzero( &tio, sizeof(tio) );
-	tio.c_iflag = 0;
-	tio.c_oflag = 0;
-	tio.c_cflag = B9600|CS8|CREAD|CLOCAL;
-	tio.c_lflag = 0;
-	tio.c_cc[VTIME] = 0;           ///< inter-character timer unused
-	tio.c_cc[VMIN] = 0;            ///< blocking read until 1 character arrives
-	tcflush( fd, TCIFLUSH );
-	tcsetattr( fd, TCSANOW, &tio );
-	res.release();
-	//-- Set byte length --
-	setLen(len());
-	//-- Set stop bits number --
-	setTwostop(twostop());
-	//-- Set parity --
-	setParity(parity());
-	//-- Set speed --
-	setSpeed(speed());
-    }
-    else
-    {
-	close(fd);
-	fd = -1;
-    }
-}
-
-void SSerial::setSpeed( int val, bool tmAdj )
-{
-    m_speed = val;
-
-    if( hasOpen() )
-    {
-	ResAlloc res( m_res, true );
-
-	struct termios tio;
-	tcgetattr( fd, &tio );
-	speed_t tspd = B9600;
-	switch( val )
-	{
-	    case 300:	tspd = B300;	break;
-	    case 600:	tspd = B600;	break;
-	    case 1200:	tspd = B1200;	break;
-	    case 2400:	tspd = B2400;	break;
-	    case 4800:	tspd = B4800;	break;
-	    case 9600:	tspd = B9600;	break;
-	    case 19200:	tspd = B19200;	break;
-	    case 38400:	tspd = B38400;	break;
-	    case 57600:	tspd = B57600;	break;
-	    case 115200:tspd = B115200;	break;
-	    case 230400:tspd = B230400;	break;
-	    case 460800:tspd = B460800;	break;
-	}
-	cfsetispeed( &tio, tspd );
-	cfsetospeed( &tio, tspd );
-	tcflush( fd, TCIFLUSH );
-	tcsetattr( fd, TCSANOW, &tio );
-    }
-    //- Times adjust -
-    if( tmAdj )
-    {
-	setTimeoutChar(TSYS::realRound((12.*1000.*3.)/(double)val,2));
-	setTimeoutFrame((12*1000*512)/val);
-	setTimeoutReq(timeoutFrame()*2);
-    }
-    modif();
-}
-
-void SSerial::setLen( int val )
-{
-    m_len = vmin(8,vmax(5,val));
-
-    if( hasOpen() )
-    {
-	ResAlloc res( m_res, true );
-
-	struct termios tio;
-	tcgetattr( fd, &tio );
-	tio.c_cflag &= ~CSIZE;
-	switch(m_len)
-	{
-	    case 5:	tio.c_cflag |= CS5;	break;
-	    case 6:	tio.c_cflag |= CS6;	break;
-	    case 7:	tio.c_cflag |= CS7;	break;
-	    case 8:	tio.c_cflag |= CS8;	break;
-	}
-	tcflush( fd, TCIFLUSH );
-	tcsetattr( fd, TCSANOW, &tio );
-    }
-    modif();
-}
-
-void SSerial::setTwostop( bool val )
-{
-    m_twostop = val;
-
-    if( hasOpen() )
-    {
-	ResAlloc res( m_res, true );
-
-	struct termios tio;
-	tcgetattr( fd, &tio );
-	if( val )	tio.c_cflag &= ~CSTOPB;
-	else		tio.c_cflag |= CSTOPB;
-	tcflush( fd, TCIFLUSH );
-	tcsetattr( fd, TCSANOW, &tio );
-    }
-    modif();
-}
-
-void SSerial::setParity( int val )
-{
-    m_parity = val;
-
-    if( hasOpen() )
-    {
-	ResAlloc res( m_res, true );
-
-	struct termios tio;
-	tcgetattr( fd, &tio );
-	switch(val)
-	{
-	    case 0:
-		tio.c_cflag &= ~PARENB;
-		break;
-	    case 1:
-		tio.c_cflag |= PARENB;
-		tio.c_cflag &= ~PARODD;
-		break;
-	    case 2:
-		tio.c_cflag |= PARENB;
-		tio.c_cflag |= PARODD;
-		break;
-	}
-	tcflush( fd, TCIFLUSH );
-	tcsetattr( fd, TCSANOW, &tio );
-    }
-    modif();
-}
-
-string SSerial::req( const string &vl, int req_len )
-{
-    ResAlloc res( m_res, true );
-    if( !hasOpen() )	throw TError(mod->nodePath().c_str(),_("Serial port '%s' is not opened."),id().c_str());
-
-    tcflush( fd, TCIFLUSH );
-
-    //- Write request -
-    if( write( fd, vl.data(), vl.size() ) == -1 )
-	throw TError(mod->nodePath().c_str(),_("Write to serial port '%s' error."),id().c_str());
-
-    //- Read reply -
-    char buf[1000];
-    int  blen = 0;
-    long long tmptm;
-    fd_set fdset;
-
-    //-- Char timeout init --
-    struct timeval tv;
-    tv.tv_sec = 0;
-    tv.tv_usec = vmax((int)(timeoutChar()*1000.0),1);
-
-    //--- Serial timeout ---
-    tmptm = TSYS::curTime();
-    while( true )
-    {
-	int bytes = 0;
-	ioctl( fd, FIONREAD, &bytes );
-	if( bytes > req_len )	break;
-	if( (TSYS::curTime() - tmptm) >= vmin(timeoutReq()*1000,10000000) )
-	    throw TError(mod->nodePath().c_str(),_("Respond from serial port '%s' is timeouted."),id().c_str());
-	usleep( 1000 );
-    }
-    fcntl( fd, F_SETFL, 0 );
-    blen = read( fd, buf, sizeof(buf) );
-
-//    cout << blen << "\n";
-
-    //--- Frame timeout ---
-    tmptm = TSYS::curTime();
-    FD_ZERO( &fdset );
-    FD_SET( fd, &fdset );
-    while( true )
-    {
-        if( select(fd+1,&fdset,NULL,NULL,&tv) <= 0 )	break;
-        blen += read( fd, buf+blen, sizeof(buf)-blen );
-	if( (TSYS::curTime()-tmptm) > vmin(timeoutFrame()*1000,10000000) )	break;
-    }
-
-    return string( buf, blen );
-}
 
 //******************************************************
 //* TMdContr                                           *
@@ -575,10 +180,9 @@ void TMdContr::start_( )
 {
     if( !prc_st )
     {
-	//- Establish connection -
-	mod->serDevAt(m_addr);
+        SYS->transport().at().at("Serial").at().outAt(m_addr).at().start();
 
-	//- Start the gathering data task -
+	//> Start the gathering data task
 	pthread_attr_t pthr_attr;
 	pthread_attr_init( &pthr_attr );
 	struct sched_param prior;
@@ -635,19 +239,24 @@ string TMdContr::DCONCRC( string str )
     return HexSymbol[15 & (iCRC>>4)] + HexSymbol[15 & iCRC];
 }
 
-string TMdContr::DCONReq( string &pdu , int req_len)
+string TMdContr::DCONReq( string &pdu )
 {
     ResAlloc res( req_res, true );
+    char buf[1000];
     string rez = "";
+
+    AutoHD<TTransportOut> tr;
+    try{ tr = SYS->transport().at().at("Serial").at().outAt(m_addr); }
+    catch(...) { tr.at().stop(); throw; }
+    if( !tr.at().startStat() )      tr.at().start();
+
     try
     {
-	rez = mod->serDevAt(m_addr).at().req(pdu+"\r", req_len);
-    }catch( TError err )
-    {
-	//mess_err( err.cat.c_str(), err.mess.c_str() );
-	return _("14:Request error: ")+err.mess;
-    }
+	int resp_len = tr.at().messIO((pdu+"\r").data(),pdu.size()+1,buf,sizeof(buf));
+	rez.assign(buf,resp_len);
+    }catch( TError err ) { return _("14:Request error: ")+err.mess; }
     pdu = rez;
+
     return "";
 }
 
@@ -655,7 +264,6 @@ void *TMdContr::Task( void *icntr )
 {
     const string HexSymbol[16] = {"0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"};
     string pdu;
-    int acq_len;
     long long work_tm, last_tm = 0;
     struct timespec get_tm;
     TMdContr &cntr = *(TMdContr *)icntr;
@@ -687,14 +295,12 @@ void *TMdContr::Task( void *icntr )
 			    //- Request with I-7051 module
 			    pdu = "@" + HexSymbol[15 & (cntr.p_hd[i_p].at().mod_addr>>4)] + HexSymbol[15 & cntr.p_hd[i_p].at().mod_addr];
 			    if (cntr.p_hd[i_p].at().crc_ctrl) pdu+=cntr.DCONCRC(pdu);
-			    if (cntr.p_hd[i_p].at().crc_ctrl) acq_len=7; else acq_len=5;
 //			    cout << pdu.substr(0,pdu.size()) << " writing\n";
-			    cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu,acq_len);
+			    cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu);
 //			    cout << pdu.substr(0,pdu.size()-1) << " reading\n";
 
 			    //Check errors
 			    cntr.p_hd[i_p].at().module_err=false;
-			    if ((pdu.size()-1)!=acq_len) cntr.p_hd[i_p].at().module_err=true;
 			    if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") cntr.p_hd[i_p].at().module_err=true;
 			    if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(5,2))!=(cntr.DCONCRC(pdu.substr(0,5)))) cntr.p_hd[i_p].at().module_err=true;
 
@@ -732,14 +338,12 @@ void *TMdContr::Task( void *icntr )
 			    pdu+=HexSymbol[8*(1&cntr.p_hd[i_p].at().DO[7])+4*(1&cntr.p_hd[i_p].at().DO[6])+2*(1&cntr.p_hd[i_p].at().DO[5])+(1&cntr.p_hd[i_p].at().DO[4])];
 			    pdu+=HexSymbol[8*(1&cntr.p_hd[i_p].at().DO[3])+4*(1&cntr.p_hd[i_p].at().DO[2])+2*(1&cntr.p_hd[i_p].at().DO[1])+(1&cntr.p_hd[i_p].at().DO[0])];
 			    if (cntr.p_hd[i_p].at().crc_ctrl) pdu+=cntr.DCONCRC(pdu);
-			    if (cntr.p_hd[i_p].at().crc_ctrl) acq_len=3; else acq_len=1;
 //			    cout << pdu.substr(0,pdu.size()) << " writing\n";
-			    cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu,acq_len);
+			    cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu);
 //			    cout << pdu.substr(0,pdu.size()-1) << " reading\n";
 
 			    //Check errors
 			    cntr.p_hd[i_p].at().module_err=false;
-			    if ((pdu.size()-1)!=acq_len) cntr.p_hd[i_p].at().module_err=true;
 			    if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") cntr.p_hd[i_p].at().module_err=true;
 			    if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) cntr.p_hd[i_p].at().module_err=true;
 			    break;
@@ -750,14 +354,12 @@ void *TMdContr::Task( void *icntr )
 			    //- Request with I-7063 module
 			    pdu = "@" + HexSymbol[15 & (cntr.p_hd[i_p].at().mod_addr>>4)] + HexSymbol[15 & cntr.p_hd[i_p].at().mod_addr];
 			    if (cntr.p_hd[i_p].at().crc_ctrl) pdu+=cntr.DCONCRC(pdu);
-			    if (cntr.p_hd[i_p].at().crc_ctrl) acq_len=7; else acq_len=5;
 //			    cout << pdu.substr(0,pdu.size()) << " writing\n";
-			    cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu,acq_len);
+			    cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu);
 //			    cout << pdu.substr(0,pdu.size()-1) << " reading\n";
 
 			    //Check errors
 			    cntr.p_hd[i_p].at().module_err=false;
-			    if ((pdu.size()-1)!=acq_len) cntr.p_hd[i_p].at().module_err=true;
 			    if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") cntr.p_hd[i_p].at().module_err=true;
 			    if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(5,2))!=(cntr.DCONCRC(pdu.substr(0,5)))) cntr.p_hd[i_p].at().module_err=true;
 
@@ -780,13 +382,11 @@ void *TMdContr::Task( void *icntr )
 			    pdu = "@" + HexSymbol[15 & (cntr.p_hd[i_p].at().mod_addr>>4)] + HexSymbol[15 & cntr.p_hd[i_p].at().mod_addr];
 			    pdu+=HexSymbol[4*(1&cntr.p_hd[i_p].at().DO[2])+2*(1&cntr.p_hd[i_p].at().DO[1])+(1&cntr.p_hd[i_p].at().DO[0])];
 			    if (cntr.p_hd[i_p].at().crc_ctrl) pdu+=cntr.DCONCRC(pdu);
-			    if (cntr.p_hd[i_p].at().crc_ctrl) acq_len=3; else acq_len=1;
 //			    cout << pdu.substr(0,pdu.size()) << " writing\n";
-			    cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu,acq_len);
+			    cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu);
 //			    cout << pdu.substr(0,pdu.size()-1) << " reading\n";
 
 			    //Check errors
-			    if ((pdu.size()-1)!=acq_len) cntr.p_hd[i_p].at().module_err=true;
 			    if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") cntr.p_hd[i_p].at().module_err=true;
 			    if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) cntr.p_hd[i_p].at().module_err=true;
 			    break;
@@ -797,14 +397,12 @@ void *TMdContr::Task( void *icntr )
 			    //- Request with I-7017 module
 			    pdu = "#" + HexSymbol[15 & (cntr.p_hd[i_p].at().mod_addr>>4)] + HexSymbol[15 & cntr.p_hd[i_p].at().mod_addr];
 			    if (cntr.p_hd[i_p].at().crc_ctrl) pdu+=cntr.DCONCRC(pdu);
-			    if (cntr.p_hd[i_p].at().crc_ctrl) acq_len=59; else acq_len=57;
 //			    cout << pdu.substr(0,pdu.size()) << " writing\n";
-			    cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu,57);
+			    cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu);
 //			    cout << pdu.substr(0,pdu.size()-1) << " reading\n";
 
 			    //Check errors
 			    cntr.p_hd[i_p].at().module_err=false;
-			    if ((pdu.size()-1)!=acq_len) cntr.p_hd[i_p].at().module_err=true;
 			    if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") cntr.p_hd[i_p].at().module_err=true;
 			    if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(57,2))!=(cntr.DCONCRC(pdu.substr(0,57)))) cntr.p_hd[i_p].at().module_err=true;
 
@@ -834,14 +432,12 @@ void *TMdContr::Task( void *icntr )
 			    str="+"+str.substr(0,2)+"."+str.substr(2,3);
 			    pdu = "#" + HexSymbol[15 & (cntr.p_hd[i_p].at().mod_addr>>4)] + HexSymbol[15 & cntr.p_hd[i_p].at().mod_addr]+"0"+str;
 			    if (cntr.p_hd[i_p].at().crc_ctrl) pdu+=cntr.DCONCRC(pdu);
-			    if (cntr.p_hd[i_p].at().crc_ctrl) acq_len=3; else acq_len=1;
 //			    cout << pdu.substr(0,pdu.size()) << " writing\n";
-			    cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu,acq_len);
+			    cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu);
 //			    cout << pdu.substr(0,pdu.size()-1) << " reading\n";
 
 			    //Check errors
 			    cntr.p_hd[i_p].at().module_err=false;
-			    if ((pdu.size()-1)!=acq_len) cntr.p_hd[i_p].at().module_err=true;
 			    if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") cntr.p_hd[i_p].at().module_err=true;
 			    if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) cntr.p_hd[i_p].at().module_err=true;
 
@@ -851,13 +447,11 @@ void *TMdContr::Task( void *icntr )
 			    str="+"+str.substr(0,2)+"."+str.substr(2,3);
 			    pdu = "#" + HexSymbol[15 & (cntr.p_hd[i_p].at().mod_addr>>4)] + HexSymbol[15 & cntr.p_hd[i_p].at().mod_addr]+"1"+str;
 			    if (cntr.p_hd[i_p].at().crc_ctrl) pdu+=cntr.DCONCRC(pdu);
-			    if (cntr.p_hd[i_p].at().crc_ctrl) acq_len=3; else acq_len=1;
 //			    cout << pdu.substr(0,pdu.size()) << " writing\n";
-			    cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu,acq_len);
+			    cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu);
 //			    cout << pdu.substr(0,pdu.size()-1) << " reading\n";
 
 			    //Check errors
-			    if ((pdu.size()-1)!=acq_len) cntr.p_hd[i_p].at().module_err=true;
 			    if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") cntr.p_hd[i_p].at().module_err=true;
 			    if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) cntr.p_hd[i_p].at().module_err=true;
 
@@ -867,13 +461,11 @@ void *TMdContr::Task( void *icntr )
 			    str="+"+str.substr(0,2)+"."+str.substr(2,3);
 			    pdu = "#" + HexSymbol[15 & (cntr.p_hd[i_p].at().mod_addr>>4)] + HexSymbol[15 & cntr.p_hd[i_p].at().mod_addr]+"2"+str;
 			    if (cntr.p_hd[i_p].at().crc_ctrl) pdu+=cntr.DCONCRC(pdu);
-			    if (cntr.p_hd[i_p].at().crc_ctrl) acq_len=3; else acq_len=1;
 //			    cout << pdu.substr(0,pdu.size()) << " writing\n";
-			    cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu,acq_len);
+			    cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu);
 //			    cout << pdu.substr(0,pdu.size()-1) << " reading\n";
 
 			    //Check errors
-			    if ((pdu.size()-1)!=acq_len) cntr.p_hd[i_p].at().module_err=true;
 			    if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") cntr.p_hd[i_p].at().module_err=true;
 			    if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) cntr.p_hd[i_p].at().module_err=true;
 
@@ -883,13 +475,11 @@ void *TMdContr::Task( void *icntr )
 			    str="+"+str.substr(0,2)+"."+str.substr(2,3);
 			    pdu = "#" + HexSymbol[15 & (cntr.p_hd[i_p].at().mod_addr>>4)] + HexSymbol[15 & cntr.p_hd[i_p].at().mod_addr]+"3"+str;
 			    if (cntr.p_hd[i_p].at().crc_ctrl) pdu+=cntr.DCONCRC(pdu);
-			    if (cntr.p_hd[i_p].at().crc_ctrl) acq_len=3; else acq_len=1;
 //			    cout << pdu.substr(0,pdu.size()) << " writing\n";
-			    cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu,acq_len);
+			    cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu);
 //			    cout << pdu.substr(0,pdu.size()-1) << " reading\n";
 
 			    //Check errors
-			    if ((pdu.size()-1)!=acq_len) cntr.p_hd[i_p].at().module_err=true;
 			    if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") cntr.p_hd[i_p].at().module_err=true;
 			    if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) cntr.p_hd[i_p].at().module_err=true;
 
@@ -924,16 +514,25 @@ void *TMdContr::Task( void *icntr )
 
 void TMdContr::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	TController::cntrCmdProc(opt);
-	ctrMkNode( "fld", opt, -1, "/cntr/st/gath_tm", _("Gather data time (ms)"), 0444, "root", "root", 1, "tp", "real" );
+	ctrMkNode("fld",opt,-1,"/cntr/st/gath_tm",_("Gather data time (ms)"),0444,"root","root",1,"tp","real");
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",cfg("ADDR").fld().descr(),0664,"root","root",3,"tp","str","dest","select","select","/cntr/cfg/serDevLst");
 	return;
     }
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
     if( a_path == "/cntr/st/gath_tm" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(tm_gath,6));
+    else if( a_path == "/cntr/cfg/serDevLst" && ctrChkNode(opt) )
+    {
+	vector<string> sls;
+	if( SYS->transport().at().modPresent("Serial") )
+	    SYS->transport().at().at("Serial").at().outList(sls);
+	for( int i_s = 0; i_s < sls.size(); i_s++ )
+            opt->childAdd("el")->setText(sls[i_s]);
+    }
     else TController::cntrCmdProc(opt);
 }
 
