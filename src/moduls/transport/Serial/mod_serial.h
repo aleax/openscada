@@ -45,6 +45,7 @@ class TTrIn: public TTransportIn
 
 	string timings( )			{ return mTimings; }
 
+	void setAddr( const string &addr );
 	void setTimings( const string &vl )	{ mTimings = vl; modif(); }
 
 	void start( );

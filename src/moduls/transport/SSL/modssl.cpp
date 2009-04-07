@@ -26,6 +26,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <sys/ioctl.h>
 #include <openssl/rand.h>
 
 #include <tsys.h>
@@ -435,6 +436,7 @@ void *TSocketIn::ClTask( void *s_inf )
     char	buf[s.s->bufLen()*1024];
     string	req, answ;
     AutoHD<TProtocolIn> prot_in;
+    SSL		*ssl;
 
     int cSock = s.s->clientReg( pthread_self() );
 
@@ -462,23 +464,26 @@ void *TSocketIn::ClTask( void *s_inf )
 	}
     }
 
-    //- Select mode -
+    int sock_fd = BIO_get_fd(s.bio,NULL);
+
+    //> Select mode
     struct  timeval tv;
     fd_set  rd_fd;
     while( !s.s->endrun_cl )
     {
 	tv.tv_sec  = 0; tv.tv_usec = STD_WAIT_DELAY*1000;
-	FD_ZERO(&rd_fd); FD_SET(BIO_get_fd(s.bio,NULL),&rd_fd);
+	FD_ZERO(&rd_fd); FD_SET(sock_fd,&rd_fd);
 
-	int kz = select(BIO_get_fd(s.bio,NULL)+1,&rd_fd,NULL,NULL,&tv);
-	if( kz == 0 || (kz == -1 && errno == EINTR) || kz < 0 || !FD_ISSET(BIO_get_fd(s.bio,NULL),&rd_fd) ) continue;
+	int kz = select(sock_fd+1,&rd_fd,NULL,NULL,&tv);
+	if( kz == 0 || (kz == -1 && errno == EINTR) || kz < 0 || !FD_ISSET(sock_fd,&rd_fd) ) continue;
 
-	rez=BIO_read(s.bio,buf,sizeof(buf)); s.s->trIn += (float)rez/1024;
+	rez = BIO_read(s.bio,buf,sizeof(buf));
 	if( rez == 0 )	break;		//Connection closed by client
 #if OSC_DEBUG >= 4
         mess_debug(s.s->nodePath().c_str(),_("The message is received with the size <%d>."),rez);
 #endif
 	req.assign(buf,rez);
+	s.s->trIn += (float)rez/1024;
 
 	s.s->messPut(cSock,req,answ,prot_in);
 	if( answ.size() )
@@ -492,7 +497,7 @@ void *TSocketIn::ClTask( void *s_inf )
     }
 
     BIO_flush(s.bio);
-    close(BIO_get_fd(s.bio,NULL));
+    close(sock_fd);
     //BIO_reset(s.bio);
     BIO_free(s.bio);
 
@@ -651,21 +656,20 @@ string TSocketOut::getStatus( )
 void TSocketOut::start()
 {
     string	cfile;
-    SSL		*ssl;
     char	err[255];
     ResAlloc res( wres, true );
 
     if( run_st ) return;
 
-    //- Status clear -
+    //> Status clear
     trIn = trOut = 0;
 
-    //- SSL context init -
+    //> SSL context init
     string ssl_host = TSYS::strSepParse(addr(),0,':');
     string ssl_port = TSYS::strSepParse(addr(),1,':');
     string ssl_method = TSYS::strSepParse(addr(),2,':');
 
-    //-- Set SSL method --
+    //> Set SSL method
     SSL_METHOD *meth = SSLv23_client_method();
     if( ssl_method == "SSLv2" )		meth = SSLv2_client_method();
     else if( ssl_method == "SSLv3" )	meth = SSLv3_client_method();
@@ -683,32 +687,32 @@ void TSocketOut::start()
 	    throw TError(nodePath().c_str(),"SSL_CTX_new: %s",err);
 	}
 
-	//- Certificates, private key and it password loading -
+	//> Certificates, private key and it password loading
 	if( !TSYS::strNoSpace(certKey()).empty() )
 	{
-	    //-- Write certificate and private key to temorary file --
+	    //>> Write certificate and private key to temorary file
 	    cfile = tmpnam(err);
 	    int icfile = open(cfile.c_str(),O_EXCL|O_CREAT|O_WRONLY,0644);
 	    if( icfile < 0 ) throw TError(nodePath().c_str(),_("Open temporaty file '%s' error: '%s'"),cfile.c_str(),strerror(errno));
 	    write(icfile,certKey().data(),certKey().size());
 	    close(icfile);
 
-	    //-- Set private key password --
+	    //>> Set private key password
 	    SSL_CTX_set_default_passwd_cb_userdata(ctx,(char*)pKeyPass().c_str());
-	    //-- Load certificate --
+	    //>> Load certificate
 	    if( SSL_CTX_use_certificate_chain_file(ctx,cfile.c_str()) != 1 )
 	    {
 		ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
 		throw TError(nodePath().c_str(),_("SSL_CTX_use_certificate_chain_file: %s"),err);
 	    }
-	    //-- Load private key --
+	    //>> Load private key
 	    if( SSL_CTX_use_PrivateKey_file(ctx,cfile.c_str(),SSL_FILETYPE_PEM) != 1 )
 	    {
 		ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
 		throw TError(nodePath().c_str(),_("SSL_CTX_use_PrivateKey_file: %s"),err);
 	    }
 
-	    //-- Remove temporary certificate file --
+	    //>> Remove temporary certificate file
 	    remove(cfile.c_str()); cfile = "";
 	}
 
@@ -728,6 +732,10 @@ void TSocketOut::start()
 	    ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
 	    throw TError(nodePath().c_str(),"BIO_do_connect: %s",err);
 	}
+
+	int sock_fd = BIO_get_fd(conn,NULL);
+	int flags = fcntl(sock_fd,F_GETFL,0);
+	fcntl(sock_fd,F_SETFL,flags|O_NONBLOCK);
     }
     catch(TError err)
     {
@@ -763,18 +771,22 @@ int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, in
     int		ret = 0;
     char	err[255];
 
+    if( !time ) time = 5000;
     ResAlloc res( wres, true );
 
     if( !run_st ) throw TError(nodePath().c_str(),_("Transport is not started!"));
 
     //> Write request
-    if( obuf != NULL && len_ob > 0 && (ret=BIO_write(conn,obuf,len_ob)) != len_ob )
+    if( obuf != NULL && len_ob > 0 )
     {
-	if( ret == 0 )	{ stop(); return 0; }
-	else
+	if( (ret=BIO_write(conn,obuf,len_ob)) != len_ob )
 	{
-	    ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
-	    throw TError(nodePath().c_str(),"BIO_write: %s",err);
+	    if( ret == 0 )	{ res.release(); stop(); return 0; }
+	    else
+	    {
+		ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
+		throw TError(nodePath().c_str(),"BIO_write: %s",err);
+	    }
 	}
     }
     trOut += (float)ret/1024;
@@ -783,49 +795,37 @@ int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, in
 #endif
 
     //> Read reply
-    if( ibuf != NULL && len_ib > 0 && time > 0 )
+    if( ibuf != NULL && len_ib > 0 )
     {
-	//>> Continue read
-	if( !obuf || len_ob <= 0 )
+	ret=BIO_read(conn,ibuf,len_ib);
+	if( ret > 0 ) trIn += (float)ret/1024;
+	else if( ret == 0 ) { res.release(); stop(); return 0; }
+	else if( ret < 0 && SSL_get_error(ssl,ret) != SSL_ERROR_WANT_READ )
 	{
-	    ret=BIO_read(conn,ibuf,len_ib);
-	    if( ret < 0 )
-	    {
-		run_st = false;
-		throw TError(nodePath().c_str(),_("Read reply error: %s"),strerror(errno));
-	    }
-	    trIn += (float)ret/1024;
+	    ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
+	    throw TError(nodePath().c_str(),"BIO_read: %s",err);
 	}
-	//-- First reply white --
 	else
 	{
-	    int		kz;
-	    fd_set		rd_fd;
-	    struct timeval	tv;
+	    //> Wait data from socket
+	    int kz = 0;
+	    fd_set rd_fd;
+	    struct timeval tv;
+	    int sock_fd = BIO_get_fd(conn,NULL);
 
-	    tv.tv_sec = time/1000; tv.tv_usec = 1000*(time%1000);
-	    FD_ZERO(&rd_fd); FD_SET(BIO_get_fd(conn,NULL),&rd_fd);
-
-	    do{ kz = select(BIO_get_fd(conn,NULL)+1,&rd_fd,NULL,NULL,&tv); }
+	    do
+	    {
+		tv.tv_sec  = time/1000; tv.tv_usec = 1000*(time%1000);
+		FD_ZERO(&rd_fd); FD_SET(sock_fd,&rd_fd);
+		kz = select(sock_fd+1,&rd_fd,NULL,NULL,&tv);
+	    }
 	    while( kz == -1 && errno == EINTR );
-	    if( kz == 0 )
+	    if( kz == 0 )	{ res.release(); stop(); throw TError(nodePath().c_str(),_("Timeouted!")); }
+	    else if( kz < 0)	{ res.release(); stop(); throw TError(nodePath().c_str(),_("Socket error!")); }
+	    else if( FD_ISSET(sock_fd, &rd_fd) )
 	    {
-		run_st = false;
-		throw TError(nodePath().c_str(),_("Timeouted!"));
-	    }
-	    else if( kz < 0)
-	    {
-		run_st = false;
-		throw TError(nodePath().c_str(),_("Socket error!"));
-	    }
-	    else if( FD_ISSET(BIO_get_fd(conn,NULL), &rd_fd) )
-	    {
-		ret=BIO_read(conn,ibuf,len_ib);
-		if( ret < 0 )
-		{
-		    run_st = false;
-		    throw TError(nodePath().c_str(),_("Read reply error: %s"),strerror(errno));
-		}
+		ret = BIO_read(conn,ibuf,len_ib);
+		if( ret < 0 )	{ res.release(); stop(); throw TError(nodePath().c_str(),_("Read reply error: %s"),strerror(errno)); }
 		trIn += (float)ret/1024;
 	    }
 	}

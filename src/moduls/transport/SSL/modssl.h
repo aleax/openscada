@@ -147,6 +147,7 @@ class TSocketOut: public TTransportOut
 	Res		wres;
 	SSL_CTX		*ctx;
 	BIO		*conn;
+	SSL		*ssl;
 
 	//- Status atributes -
 	float		trIn, trOut;		// Traffic in and out counter

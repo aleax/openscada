@@ -59,6 +59,54 @@ class TProtIn: public TProtocolIn
 };
 
 //*************************************************
+//* Node: ModBus input protocol node.             *
+//*************************************************
+class TProt;
+
+class Node : public TCntrNode, public TValFunc, public TConfig
+{
+    public:
+	//Methods
+	Node( const string &iid, const string &db, TElem *el );
+	~Node( );
+
+	const string &id( )	{ return mId; }
+	string name( );
+	string descr( )		{ return mDscr; }
+	bool toEnable( )	{ return mAEn; }
+	bool enableStat( )	{ return mEn; }
+
+	string DB( )		{ return mDB; }
+	string tbl( );
+	string fullDB( )	{ return DB()+'.'+tbl(); }
+
+	void setName( const string &name )	{ mName = name; modif(); }
+	void setDescr( const string &idsc )	{ mDscr = idsc; modif(); }
+	void setToEnable( bool vl )		{ mAEn = vl; modif(); }
+	void setEnable( bool vl )		{ mEn = vl; }
+
+	void setDB( const string &vl )		{ mDB = vl; modifG(); }
+
+	TProt &owner( )		{ return *(TProt*)nodePrev(); }
+
+    protected:
+	//Methods
+	void load_( );
+	void save_( );
+
+    private:
+	//Methods
+	string nodeName( )	{ return mId; }
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+	void postDisable( int flag );		//Delete all DB if flag 1
+
+	//Attributes
+	string	&mId, &mName, &mDscr;
+	bool	&mAEn, mEn;
+	string	mDB;
+};
+
+//*************************************************
 //* TProt                                         *
 //*************************************************
 class TProt: public TProtocol
@@ -67,6 +115,13 @@ class TProt: public TProtocol
 	//Methods
 	TProt( string name );
 	~TProt( );
+
+	//> Node's functions
+	void nList( vector<string> &ls )	{ chldList(mNode,ls); }
+	bool nPresent( const string &id )	{ return chldPresent(mNode,id); }
+	void nAdd( const string &id, const string &db = "*.*" );
+	void nDel( const string &id )		{ chldDel(mNode,id); }
+	AutoHD<Node> nAt( const string &id )	{ return chldAt(mNode,id); }
 
 	void outMess( XMLNode &io, TTransportOut &tro );
 
@@ -101,6 +156,11 @@ class TProt: public TProtocol
 	TProtocolIn *in_open( const string &name );
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+
+	//Attributes
+	int	mNode;
+
+	TElem	nodeEl;
 
 };
 

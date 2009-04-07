@@ -49,9 +49,9 @@ class TParamContr : public TConfig, public TValue
 	bool toEnable( )	{ return m_aen; }
 	bool enableStat( )	{ return m_en; }
 
-	void setName( const string &inm )	{ m_name = inm; }
-	void setDescr( const string &idsc )	{ m_descr = idsc; }
-	void setToEnable( bool vl )		{ m_aen = vl; }
+	void setName( const string &inm )	{ m_name = inm; modif(); }
+	void setDescr( const string &idsc )	{ m_descr = idsc; modif(); }
+	void setToEnable( bool vl )		{ m_aen = vl; modif(); }
 
 	TTipParam &type( )	{ return *tipparm; }
 

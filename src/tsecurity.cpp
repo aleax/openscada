@@ -156,7 +156,7 @@ void TSecurity::load_( )
 	}
     } while(next_opt != -1);
 
-    //> Load parametrs
+    //> Load parameters
 
     //> Load DB
     string	name;

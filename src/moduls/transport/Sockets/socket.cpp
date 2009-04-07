@@ -713,6 +713,7 @@ int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, in
 {
     int kz = 0;
 
+    if( !time ) time = 5000;
     ResAlloc res( wres, true );
 
     if( !run_st ) throw TError(nodePath().c_str(),_("Transport is not started!"));
@@ -737,15 +738,17 @@ int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, in
 
     //> Read reply
     int i_b = 0;
-    if( ibuf != NULL && len_ib > 0 && time > 0 )
+    if( ibuf != NULL && len_ib > 0 )
     {
 	fd_set rd_fd;
 	struct timeval tv;
 
-	tv.tv_sec  = time/1000; tv.tv_usec = 1000*(time%1000);
-	FD_ZERO(&rd_fd); FD_SET(sock_fd,&rd_fd);
-
-	do{ kz = select(sock_fd+1,&rd_fd,NULL,NULL,&tv); }
+	do
+	{
+	    tv.tv_sec  = time/1000; tv.tv_usec = 1000*(time%1000);
+	    FD_ZERO(&rd_fd); FD_SET(sock_fd,&rd_fd);
+	    kz = select(sock_fd+1,&rd_fd,NULL,NULL,&tv);
+	}
 	while( kz == -1 && errno == EINTR );
 	if( kz == 0 )
 	{
@@ -759,12 +762,13 @@ int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, in
 	}
 	else if( FD_ISSET(sock_fd, &rd_fd) )
 	{
-	    i_b = read(sock_fd,ibuf,len_ib); trIn += (float)i_b/1024;
+	    i_b = read(sock_fd,ibuf,len_ib);
 	    if(i_b < 0)
 	    {
 		run_st = false;
 		throw TError(nodePath().c_str(),_("Read reply error: %s"),strerror(errno));
 	    }
+	    trIn += (float)i_b/1024;
 	}
     }
 

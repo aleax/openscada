@@ -55,13 +55,13 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	//- Link comands -
 	enum LnkCmd { INIT, DEINIT, SET };
 
-	//Attributes
+	//Methods
 	Block( const string &iid, Contr *iown );
 	~Block( );
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	//- Block's parameters -
+	//> Block's parameters
 	const string &id( )	{ return m_id; }
 	string name( );
 	string descr( ) 	{ return m_descr; }
@@ -80,12 +80,12 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	void setToProcess( bool val )		{ m_to_prc = val; modif(); }
 	void setWFunc( const string &vl )	{ m_func = vl; modif(); }
 
-	//- Link IO -
+	//> Link IO
 	LnkT link( unsigned id );
 	bool linkActive( unsigned id );	
 	void setLink( unsigned id, LnkCmd cmd, LnkT lnk = FREE, const string &vlnk = "" );
 
-	//- Calc block -
+	//> Calc block
 	void calc( bool first, bool last );
 
 	Contr &owner( )		{ return *(Contr *)nodePrev(); }

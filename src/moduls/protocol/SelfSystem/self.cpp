@@ -227,7 +227,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
 	    //>> Get head
 	    buf1[0] = 0;
-	    if(sscanf(resp.c_str(),"REZ %d %255s\n",&rez,buf1)<=0)
+	    if( sscanf(resp.c_str(),"REZ %d %255s\n",&rez,buf1) <= 0 )
 		throw TError(nodePath().c_str(),_("Station respond <%s> error!"),tro.id().c_str());
 	    if( rez == 1 )	{ tro.setPrm1(-1); if( isDir ) break; else continue; }
 	    if( rez > 0 )	throw TError(nodePath().c_str(),_("Station <%s> error: %d:%s!"),tro.id().c_str(),rez,buf1);

@@ -50,11 +50,25 @@ TProt::TProt( string name ) : mPrtLen(0)
     mSource	= name;
 
     modPrt	= this;
+
+    mNode = grpAdd("n_");
+
+    //> Node DB structure
+    nodeEl.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
+    nodeEl.fldAdd( new TFld("NAME",_("Name"),TFld::String,0,"50") );
+    nodeEl.fldAdd( new TFld("DESCR",_("Description"),TFld::String,0,"300") );
+    nodeEl.fldAdd( new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0") );
 }
 
 TProt::~TProt()
 {
 
+}
+
+void TProt::nAdd( const string &iid, const string &db )
+{
+    if( chldPresent(mNode,iid) ) return;
+    chldAdd( mNode, new Node(iid,db,&nodeEl) );
 }
 
 string TProt::optDescr( )
@@ -89,6 +103,36 @@ void TProt::load_( )
 	    case -1 : break;
 	}
     } while(next_opt != -1);
+
+    //> Load DB
+    //>> Search and create new nodes
+    try
+    {
+	TConfig g_cfg(&nodeEl);
+	g_cfg.cfgViewAll(false);
+	vector<string> db_ls;
+
+	//>>> Search into DB
+	SYS->db().at().dbList(db_ls,true);
+	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
+	    for( int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+modId()+"_node","",fld_cnt++,g_cfg); )
+	    {
+		string id = g_cfg.cfg("ID").getS();
+		if( !nPresent(id) )	nAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+	    }
+
+	    //>>> Search into config file
+	if( SYS->chkSelDB("<cfg>") )
+	    for( int fld_cnt=0; SYS->db().at().dataSeek("",nodePath()+modId()+"_node",fld_cnt++,g_cfg); )
+	    {
+		string id = g_cfg.cfg("ID").getS();
+		if( !nPresent(id) )	nAdd(id,"*.*");
+	    }
+    }catch(TError err)
+    {
+	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+	mess_err(nodePath().c_str(),_("Search and create new node error."));
+    }
 }
 
 void TProt::save_( )
@@ -148,9 +192,9 @@ ui16 TProt::CRC16( const string &mbap )
     ui16 index;
     for( int i_b = 0; i_b < mbap.size(); i_b++ )
     {
-        index = lo^(ui8)mbap[i_b];
-        lo = hi^CRCHi[index];
-        hi = CRCLo[index];
+	index = lo^(ui8)mbap[i_b];
+	lo = hi^CRCHi[index];
+	hi = CRCLo[index];
     }
     return hi|(lo<<8);
 }
@@ -159,7 +203,7 @@ ui8 TProt::LRC( const string &mbap )
 {
     ui8 ch = 0;
     for( int i_b = 0; i_b < mbap.size(); i_b++ )
-        ch += (ui8)mbap[i_b];
+	ch += (ui8)mbap[i_b];
 
     return ch;
 }
@@ -171,10 +215,10 @@ string TProt::DataToASCII( const string &in )
 
     for( int i = 0; i < in.size(); i++ )
     {
-        ch = (in[i]&0xF0)>>4;
-        rez += (ch + ((ch <= 9)?'0':('A' - 10)));
-        ch = in[i]&0x0F;
-        rez += (ch + ((ch <= 9) ? '0' : ('A' - 10)));
+	ch = (in[i]&0xF0)>>4;
+	rez += (ch + ((ch <= 9)?'0':('A' - 10)));
+	ch = in[i]&0x0F;
+	rez += (ch + ((ch <= 9) ? '0' : ('A' - 10)));
     }
 
     return rez;
@@ -187,17 +231,17 @@ string TProt::ASCIIToData( const string &in )
 
     for( int i=0; i < (in.size()&(~0x01)); i+=2 )
     {
-        ch2 = 0;
-        ch1 = in[i];
-        if( ch1 >= '0' && ch1 <= '9' )          ch1 -= '0';
-        else if( ch1 >= 'A' && ch1 <= 'F' )     ch1 -= ('A' + 10);
-        else                                    ch1 = 0;
-        ch2 = ch1 << 4;
-        ch1 = in[i+1];
-        if( ch1 >= '0' && ch1 <= '9' )          ch1 -= '0';
-        else if ( ch1 >= 'A' && ch1 <= 'F' )    ch1 -= ('A' + 10);
-        else                                    ch1 = 0;
-        rez += ch2|ch1;
+	ch2 = 0;
+	ch1 = in[i];
+	if( ch1 >= '0' && ch1 <= '9' )		ch1 -= '0';
+	else if( ch1 >= 'A' && ch1 <= 'F' )	ch1 -= ('A' + 10);
+	else					ch1 = 0;
+	ch2 = ch1 << 4;
+	ch1 = in[i+1];
+	if( ch1 >= '0' && ch1 <= '9' )		ch1 -= '0';
+	else if ( ch1 >= 'A' && ch1 <= 'F' )	ch1 -= ('A' + 10);
+	else					ch1 = 0;
+	rez += ch2|ch1;
     }
 
     return rez;
@@ -235,12 +279,12 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    if( rez.size() < 7 )	err = _("13:Error server respond");
 	    else
 	    {
-	    	int resp_sz = (unsigned short)(rez[4]<<8)|(unsigned char)rez[5];
+		int resp_sz = (unsigned short)(rez[4]<<8)|(unsigned char)rez[5];
 
-	    	//> Wait tail
-	    	while( rez.size() < (resp_sz+6) )
-	    	{
-		    resp_len = tro.messIO( NULL, 0, buf, sizeof(buf), 10000 );
+		//> Wait tail
+		while( rez.size() < (resp_sz+6) )
+		{
+		    resp_len = tro.messIO( NULL, 0, buf, sizeof(buf), reqTm );
 		    rez.append( buf, resp_len );
 		}
 		pdu = rez.substr(7);
@@ -353,6 +397,9 @@ void TProt::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TProtocol::cntrCmdProc(opt);
+	ctrMkNode("grp",opt,-1,"/br/n_",_("Node"),0664,"root","root",2,"idm","1","idSz","20");
+	if( ctrMkNode("area",opt,-1,"/node",_("Nodes")) )
+	    ctrMkNode("list",opt,-1,"/node/node",_("Nodes"),0664,"root","root",5,"tp","br","idm","1","s_com","add,del","br_pref","n_","idSz","20");
 	if( ctrMkNode("area",opt,-1,"/out",_("Output")) )
 	{
 	    ctrMkNode("fld",opt,-1,"/out/protLen",_("Protocol length"),0664,"root","DAQ",4,"tp","dec","min","0","max","10000",
@@ -366,7 +413,23 @@ void TProt::cntrCmdProc( XMLNode *opt )
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/out/protLen" )
+    if( a_path == "/br/n_" || a_path == "/node/node" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
+	{
+	    vector<string> lst;
+	    nList(lst);
+	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
+		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(nAt(lst[i_f]).at().name());
+	}
+	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )
+	{
+	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::ID);
+	    nAdd(vid); nAt(vid).at().setName(opt->text());
+	}
+	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	chldDel(mNode,opt->attr("id"),-1,1);
+    }
+    else if( a_path == "/out/protLen" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","DAQ",SEQ_RD) )	opt->setText( TSYS::int2str(prtLen()) );
 	if( ctrChkNode(opt,"set",0664,"root","DAQ",SEQ_WR) )	setPrtLen( atoi(opt->text().c_str()) );
@@ -401,4 +464,105 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
     answer = reqst;
 
     return false;
+}
+
+//*************************************************
+//* Node: ModBus input protocol node.             *
+//*************************************************
+Node::Node( const string &iid, const string &idb, TElem *el ) :
+    TConfig(el), mDB(idb), TValFunc(iid+"_node",NULL), mEn(false),
+    mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()), mDscr(cfg("DESCR").getSd()), mAEn(cfg("EN").getBd())
+{
+    mId = iid;
+}
+
+Node::~Node( )
+{
+
+}
+
+void Node::postDisable( int flag )
+{
+    try
+    {
+	if( flag ) SYS->db().at().dataDel(fullDB(),owner().nodePath()+tbl(),*this,true);
+    }catch(TError err)
+    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+}
+
+string Node::name( )
+{
+    return mName.size() ? mName : id();
+}
+
+string Node::tbl( )
+{
+    return owner().modId()+"_node";
+}
+
+void Node::load_( )
+{
+    if( !SYS->chkSelDB(DB()) ) return;
+    SYS->db().at().dataGet(fullDB(),owner().nodePath()+tbl(),*this);
+}
+
+void Node::save_( )
+{
+    SYS->db().at().dataSet(fullDB(),owner().nodePath()+tbl(),*this);
+}
+
+void Node::cntrCmdProc( XMLNode *opt )
+{
+    //> Get page info
+    if( opt->name() == "info" )
+    {
+	TCntrNode::cntrCmdProc(opt);
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Node ")+name(),0664,"root","root");
+	if( ctrMkNode("area",opt,-1,"/nd",_("Node")) )
+	{
+	    if( ctrMkNode("area",opt,-1,"/nd/st",_("State")) )
+	    {
+		ctrMkNode("fld",opt,-1,"/nd/st/en_st",_("Enable"),RWRWR_,"root","root",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/nd/st/db",_("DB"),RWRWR_,"root","root",4,"tp","str","dest","select","select","/db/list",
+		    "help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
+	    }
+	    if( ctrMkNode("area",opt,-1,"/nd/cfg",_("Config")) )
+	    {
+		ctrMkNode("fld",opt,-1,"/nd/cfg/id",cfg("ID").fld().descr(),R_R_R_,"root","root",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/nd/cfg/name",cfg("NAME").fld().descr(),RWRWR_,"root","root",2,"tp","str","len","50");
+		ctrMkNode("fld",opt,-1,"/nd/cfg/dscr",cfg("DESCR").fld().descr(),RWRWR_,"root","root",3,"tp","str","cols","90","rows","3");
+		ctrMkNode("fld",opt,-1,"/nd/cfg/en",cfg("EN").fld().descr(),RWRWR_,"root","root",1,"tp","bool");
+	    }
+	}
+	return;
+    }
+    //> Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/nd/st/en_st" )
+    {
+	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText(enableStat()?"1":"0");
+	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEQ_WR) )	setEnable(atoi(opt->text().c_str()));
+    }
+    else if( a_path == "/nd/st/db" )
+    {
+	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText(DB());
+	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEQ_WR) )	setDB(opt->text());
+    }
+    if( a_path == "/nd/cfg/id" && ctrChkNode(opt) )	opt->setText(id());
+    else if( a_path == "/nd/cfg/name" )
+    {
+	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText(name());
+	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEQ_WR) )	setName(opt->text());
+    }
+    else if( a_path == "/nd/cfg/dscr" )
+    {
+	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText(descr());
+	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEQ_WR) )	setDescr(opt->text());
+    }
+    else if( a_path == "/nd/cfg/en" )
+    {
+	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText(toEnable()?"1":"0");
+	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEQ_WR) )	setToEnable(atoi(opt->text().c_str()));
+    }
+    else TCntrNode::cntrCmdProc(opt);
 }

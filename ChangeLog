@@ -1,4 +1,11 @@
 2009-04-06 Roman
+- /Protocol/ModBus: Node object is base realised.
+- FIX:/Transpot/SSL: No working on timeout of output transport is fixed. Discovered system's hung. Zero timeout for output transport is set to 5 second.
+- /Transport/Serial: The timings recalcing on time speed changing for input transport is released.
+- /Transpot/Socket: Zero timeout for output transport is set to 5 second.
+
+
+2009-04-06 Roman
 - !!!!:/DAQ/ModBus: Include to ModBbus modules container module "Protocol" module transport and move Protocol's functions to it.
 - FIX:/DAQ/ModBus: ASCII protocol mode is fixed.
 - !!!!:/Protocol: Output protocol's API function is changed to void outMess( XMLNode &io, TTransportOut &tro ).

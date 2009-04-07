@@ -189,6 +189,15 @@ string TTrIn::getStatus( )
     return rez;
 }
 
+void TTrIn::setAddr( const string &iaddr )
+{
+    TTransportIn::setAddr(iaddr);
+
+    //> Times adjust
+    int speed = atoi(TSYS::strSepParse(iaddr,1,':').c_str());
+    if( speed )	setTimings(TSYS::real2str((3*12*1000)/(float)speed,2,'f')+":"+TSYS::int2str((512*12*1000)/speed));
+}
+
 void TTrIn::start()
 {
     if( run_st ) return;
