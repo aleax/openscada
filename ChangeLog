@@ -1,3 +1,19 @@
+2009-04-10 Roman
+- !!!!:/Protocol/ModBus: Full support input protocol and ModBus data mirroring node structure is released.
+    Supported multinode data mirroring and gateway to remote devices. Translation is updated.
+- FIX:/Protocol/ModBus:
+- !:/Transporter/Serial: ModBus char timing is unified for real char time to selected speed. Speed variants is expanded to up.
+- /SYS/TConfig: Used templates "vmin" and "vmax" for config elements borders checking.
+- /SYS/TFunction: To function ioIns() is added result position for control.
+- FIX:/SYS/TFunction: Position present parameters of function fixing on time functions copy is added.
+- /SYS/TPrmTmpl: Some code improvement.
+- /SYS/Protocol: A transport address is added to input protocol API.
+- /SYS: "Reverse" mode is added for encoding string function strEncode().
+- /SYS/Transport: Work identifier (real address) function workId() is added for transports.
+- /SYS/XML: Function for child deletion by child node address is added.
+- /UI/QTCfg: Table elements vertical size expanding is updated for expanding from 100 to 300 pixels, minimum.
+
+
 2009-04-06 Roman
 - /Protocol/ModBus: Node object is base realised.
 - FIX:/Transpot/SSL: No working on timeout of output transport is fixed. Discovered system's hung. Zero timeout for output transport is set to 5 second.

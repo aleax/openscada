@@ -45,6 +45,7 @@ class TTransportIn : public TCntrNode, public TConfig
 	TCntrNode &operator=( TCntrNode &node );
 
 	const string &id( )	{ return m_id; }
+	string workId( );
 	string name( );
 	string dscr( )		{ return m_dscr; }
 	string addr( )		{ return m_addr; }
@@ -111,6 +112,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	TCntrNode &operator=( TCntrNode &node );
 
 	const string &id( )	{ return m_id; }
+	string	workId( );
 	string	name( );
 	string	dscr( )		{ return m_dscr; }
 	string	addr( )		{ return m_addr; }

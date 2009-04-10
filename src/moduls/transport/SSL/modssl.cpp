@@ -530,7 +530,7 @@ void TSocketIn::messPut( int sock, string &request, string &answer, AutoHD<TProt
 	proto = SYS->protocol().at().modAt(protocol());
 	if( prot_in.freeStat() )
 	{
-	    if( !proto.at().openStat(n_pr) ) proto.at().open( n_pr );
+	    if( !proto.at().openStat(n_pr) ) proto.at().open( n_pr, workId() );
 	    prot_in = proto.at().at( n_pr );
 	}
 	if( prot_in.at().mess(request,answer,"") ) return;

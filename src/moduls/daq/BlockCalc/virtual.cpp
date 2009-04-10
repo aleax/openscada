@@ -203,7 +203,7 @@ Contr::Contr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     m_bl = grpAdd("blk_");
 }
 
-Contr::~Contr()
+Contr::~Contr( )
 {
 
 }

@@ -42,7 +42,10 @@ class TProtocolIn : public TCntrNode
 	TProtocolIn( const string &name );
 	virtual ~TProtocolIn( );
 
-	string &name( )		{ return m_name; }
+	const string &name( )		{ return mName; }
+	const string &srcTr( )		{ return mSrcTr; }
+
+	void setSrcTr( const string &vl )	{ mSrcTr = vl; }
 
 	//> Process input messages
 	virtual bool mess( const string &request, string &answer, const string &sender )
@@ -52,10 +55,11 @@ class TProtocolIn : public TCntrNode
 
     private:
 	//Methods
-	string nodeName( )	{ return m_name; }
+	string nodeName( )	{ return mName; }
 
 	//Attributes
-	string            m_name;
+	string		mName;
+	string		mSrcTr;
 };
 
 //************************************************
@@ -72,7 +76,7 @@ class TProtocol: public TModule
 	//> Input protocol
 	void list( vector<string> &list )		{ chldList(m_pr,list); }
 	bool openStat( const string &name )		{ return chldPresent(m_pr,name); } 
-	void open( const string &name );
+	void open( const string &name, const string &tr );
 	void close( const string &name );
 	AutoHD<TProtocolIn> at( const string &name )	{ return chldAt(m_pr,name); }
 

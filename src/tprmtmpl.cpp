@@ -54,7 +54,7 @@ TCntrNode &TPrmTempl::operator=( TCntrNode &node )
 
 void TPrmTempl::postEnable( int flag )
 {
-    //- Create default IOs -
+    //> Create default IOs
     if( flag&TCntrNode::NodeConnect )
     {
 	ioIns( new IO("f_frq",_("Function calculate frequency (Hz)"),IO::Real,TPrmTempl::LockAttr,"1000",false),0);
@@ -87,37 +87,28 @@ string TPrmTempl::name()
 
 string TPrmTempl::progLang()
 {
-    if(m_prog.find("\n")==string::npos)	m_prog=m_prog+"\n";
     return m_prog.substr(0,m_prog.find("\n"));
 }
 
 string TPrmTempl::prog()
 {
-    int lng_end = m_prog.find("\n");
-    if(lng_end == string::npos)	lng_end=0;
-    else lng_end++;
-    return m_prog.substr(lng_end);
+    int lngEnd = m_prog.find("\n");
+    return m_prog.substr( (lngEnd==string::npos)?0:lngEnd+1 );
 }
 
 void TPrmTempl::setProgLang( const string &ilng )
 {
-    if(startStat()) setStart(false);
+    if( startStat() ) setStart(false);
 
-    m_prog.replace(0,m_prog.find("\n"),ilng);
+    m_prog = ilng+"\n"+prog();
     modif();
 }
 
 void TPrmTempl::setProg( const string &iprg )
 {
-    if(startStat()) setStart(false);
+    if( startStat() ) setStart(false);
 
-    int lng_end = m_prog.find("\n");
-    if(lng_end == string::npos)
-    {
-	m_prog=m_prog+"\n";
-	lng_end=m_prog.find("\n");
-    }
-    m_prog.replace(lng_end+1,string::npos,iprg);
+    m_prog = progLang()+"\n"+iprg;
     modif();
 }
 
@@ -197,8 +188,7 @@ void TPrmTempl::save_( )
     cfg.cfg("TMPL_ID").setS(id(),true);
     for(int i_io = 0; i_io < ioSize(); i_io++)
     {
-	if( io(i_io)->id() == "f_frq" || io(i_io)->id() == "f_start" ||
-		io(i_io)->id() == "f_stop" || io(i_io)->id() == "f_err" ) continue;
+	if( io(i_io)->flg()&TPrmTempl::LockAttr ) continue;
 	cfg.cfg("ID").setS(io(i_io)->id());
 	cfg.cfg("NAME").setS(io(i_io)->name());
 	cfg.cfg("TYPE").setI(io(i_io)->type());
@@ -212,8 +202,7 @@ void TPrmTempl::save_( )
     for( int fld_cnt=0; SYS->db().at().dataSeek(w_db+"_io",w_cfgpath+"_io",fld_cnt++,cfg); )
     {
 	string sio = cfg.cfg("ID").getS( );
-	if( ioId(sio) < 0 || sio == "f_frq" || sio == "f_start" ||
-		sio == "f_stop" || sio == "f_err" )
+	if( ioId(sio) < 0 || io(ioId(sio))->flg()&TPrmTempl::LockAttr )
 	{
 	    SYS->db().at().dataDel(w_db+"_io",w_cfgpath+"_io",cfg,true);
 	    fld_cnt--;
@@ -330,10 +319,8 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	{
 	    int row = atoi(opt->attr("row").c_str());
 	    int col = atoi(opt->attr("col").c_str());
-	    if( (col == 0 || col == 1) && !opt->text().size() )
-		throw TError(nodePath().c_str(),_("Empty value is not valid."));
-	    if( io(row)->flg()&TPrmTempl::LockAttr )
-		throw TError(nodePath().c_str(),_("Changing locked atribute is not allowed."));
+	    if( io(row)->flg()&TPrmTempl::LockAttr )	throw TError(nodePath().c_str(),_("Changing locked atribute is not allowed."));
+	    if( (col == 0 || col == 1) && !opt->text().size() )	throw TError(nodePath().c_str(),_("Empty value is not valid."));
 	    switch(col)
 	    {
 		case 0:	io(row)->setId(opt->text());	break;

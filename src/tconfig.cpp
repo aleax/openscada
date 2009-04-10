@@ -350,10 +350,7 @@ void TCfg::setR( double val, bool forcUse )
 	case TFld::Real:
 	{
 	    if( !(mFld->flg()&TFld::Selected) && mFld->selValR()[0] < mFld->selValR()[1] )
-	    {
-		if( val < mFld->selValR()[0] )	val = mFld->selValR()[0];
-		if( val > mFld->selValR()[1] )	val = mFld->selValR()[1];
-	    }
+		val = vmin(mFld->selValR()[1],vmax(mFld->selValR()[0],val));
 	    double t_val = m_val.r_val;
 	    m_val.r_val = val;
 	    if( !mOwner.cfgChange(*this) )	m_val.r_val = t_val;
@@ -372,10 +369,7 @@ void TCfg::setI( int val, bool forcUse )
 	case TFld::Integer:
 	{
 	    if( !(mFld->flg()&TFld::Selected) && mFld->selValI()[0] < mFld->selValI()[1] )
-	    {
-		if( val < mFld->selValI()[0] )	val = mFld->selValI()[0];
-		if( val > mFld->selValI()[1] )	val = mFld->selValI()[1];
-	    }
+		val = vmin(mFld->selValI()[1],vmax(mFld->selValI()[0],val));
 	    int t_val = m_val.i_val;
 	    m_val.i_val = val;
 	    if( !mOwner.cfgChange(*this) )	m_val.i_val = t_val;

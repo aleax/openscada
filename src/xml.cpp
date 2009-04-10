@@ -75,6 +75,17 @@ void XMLNode::childDel( const unsigned id )
     mChildren.erase( mChildren.begin()+id );
 }
 
+void XMLNode::childDel( XMLNode *nd )
+{
+    for( int i_ch = 0; i_ch < mChildren.size(); i_ch++ )
+	if( mChildren[i_ch] == nd )
+	{
+	    delete mChildren[i_ch];
+	    mChildren.erase( mChildren.begin()+i_ch );
+	    break;
+	}
+}
+
 void XMLNode::childClear( const string &name )
 {
     for( int i_ch = 0; i_ch < mChildren.size(); i_ch++ )

@@ -19,6 +19,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <signal.h>
 #include <getopt.h>
 #include <string.h>
 
@@ -54,21 +55,41 @@ TProt::TProt( string name ) : mPrtLen(0)
     mNode = grpAdd("n_");
 
     //> Node DB structure
-    nodeEl.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
-    nodeEl.fldAdd( new TFld("NAME",_("Name"),TFld::String,0,"50") );
-    nodeEl.fldAdd( new TFld("DESCR",_("Description"),TFld::String,0,"300") );
-    nodeEl.fldAdd( new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0") );
+    mNodeEl.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,"20") );
+    mNodeEl.fldAdd( new TFld("NAME",_("Name"),TFld::String,0,"50") );
+    mNodeEl.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::FullText,"300") );
+    mNodeEl.fldAdd( new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0") );
+    mNodeEl.fldAdd( new TFld("ADDR",_("Address"),TFld::Integer,0,"3","1","0;247") );
+    mNodeEl.fldAdd( new TFld("InTR",_("Input transport"),TFld::String,0,"20","*") );
+    mNodeEl.fldAdd( new TFld("PRT",_("Protocol"),TFld::String,TFld::Selected,"5","*","RTU;ASCII;TCP;*",_("RTU;ASCII;TCP/IP;All")) );
+    mNodeEl.fldAdd( new TFld("MODE",_("Mode"),TFld::Integer,TFld::Selected,"1","0","0;1",_("Data;Gateway")) );
+    //>> For "Data" mode
+    mNodeEl.fldAdd( new TFld("DT_PER",_("Calc data period (s)"),TFld::Real,0,"5.3","1","0.001;99") );
+    mNodeEl.fldAdd( new TFld("DT_PROG",_("Programm"),TFld::String,TFld::NoFlag,"10000") );
+    //>> For "Gateway" mode
+    mNodeEl.fldAdd( new TFld("TO_TR",_("To transport"),TFld::String,0,"20") );
+    mNodeEl.fldAdd( new TFld("TO_PRT",_("To protocol"),TFld::String,TFld::Selected,"5","RTU","RTU;ASCII;TCP",_("RTU;ASCII;TCP/IP")) );
+    mNodeEl.fldAdd( new TFld("TO_ADDR",_("To address"),TFld::Integer,0,"3","1","1;247") );
+
+    //> Node data IO DB structure
+    mNodeIOEl.fldAdd( new TFld("NODE_ID",_("Node ID"),TFld::String,TCfg::Key,"20") );
+    mNodeIOEl.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
+    mNodeIOEl.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
+    mNodeIOEl.fldAdd( new TFld("TYPE",_("Value type"),TFld::Integer,TFld::NoFlag,"1") );
+    mNodeIOEl.fldAdd( new TFld("FLAGS",_("Flags"),TFld::Integer,TFld::NoFlag,"4") );
+    mNodeIOEl.fldAdd( new TFld("VALUE",_("Value"),TFld::String,TFld::NoFlag,"100") );
+    mNodeIOEl.fldAdd( new TFld("POS",_("Real position"),TFld::Integer,TFld::NoFlag,"4") );
 }
 
 TProt::~TProt()
 {
-
+    nodeDelAll();
 }
 
 void TProt::nAdd( const string &iid, const string &db )
 {
     if( chldPresent(mNode,iid) ) return;
-    chldAdd( mNode, new Node(iid,db,&nodeEl) );
+    chldAdd( mNode, new Node(iid,db,&nodeEl()) );
 }
 
 string TProt::optDescr( )
@@ -108,7 +129,7 @@ void TProt::load_( )
     //>> Search and create new nodes
     try
     {
-	TConfig g_cfg(&nodeEl);
+	TConfig g_cfg(&nodeEl());
 	g_cfg.cfgViewAll(false);
 	vector<string> db_ls;
 
@@ -138,6 +159,23 @@ void TProt::load_( )
 void TProt::save_( )
 {
 
+}
+
+void TProt::modStart( )
+{
+    vector<string> ls;
+    nList(ls);
+    for( int i_n = 0; i_n < ls.size(); i_n++ )
+	if( nAt(ls[i_n]).at().toEnable( ) )
+	    nAt(ls[i_n]).at().setEnable(true);
+}
+
+void TProt::modStop( )
+{
+    vector<string> ls;
+    nList(ls);
+    for( int i_n = 0; i_n < ls.size(); i_n++ )
+	nAt(ls[i_n]).at().setEnable(false);
 }
 
 TProtocolIn *TProt::in_open( const string &name )
@@ -460,8 +498,69 @@ TProtIn::~TProtIn()
 
 bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 {
-    //!!!! No released yet
-    answer = reqst;
+    //> Check for protocol type
+    unsigned char node = 0;
+    string prt, pdu;
+    //>> ASCII check
+    if( reqst.size() > 3 && reqst[0] == ':' && reqst.substr(reqst.size()-2,2) == "\r\n" )
+    {
+	prt = "ASCII";
+	string req = modPrt->ASCIIToData(reqst.substr(1,reqst.size()-3));
+	if( modPrt->LRC(req.substr(0,req.size()-1)) != req[req.size()-1] ) return false;
+	node = req[0];
+	pdu = req.substr( 1, req.size()-2 );
+    }
+    //>> RTU check
+    else if( reqst.size() > 3 && reqst.size() <= 256 &&
+	modPrt->CRC16(reqst.substr(0,reqst.size()-2)) == (ui16)((reqst[reqst.size()-2]<<8)+(ui8)reqst[reqst.size()-1]) )
+    {
+	prt = "RTU";
+	node = reqst[0];
+	pdu = reqst.substr( 1, reqst.size()-3 );
+    }
+    //>> TCP check
+    else if( reqst.size() > 7 && reqst.size() <= 260 &&
+	reqst.size() == ((unsigned short)(reqst[4]<<8)|(unsigned char)reqst[5])+6 )
+    {
+	prt = "TCP";
+	node = reqst[6];
+	pdu = reqst.substr(7);
+    }
+
+    vector<string> nls;
+    modPrt->nList(nls);
+    int i_n;
+    for( i_n = 0; i_n < nls.size(); i_n++ )
+	if( modPrt->nAt(nls[i_n]).at().req(srcTr(),prt,node,pdu) ) break;
+    if( i_n >= nls.size() ) return false;
+
+    if( prt == "TCP" )
+    {
+	//> Encode MBAP (Modbus Application Protocol)
+	answer = reqst[0];			//Transaction ID MSB
+	answer += reqst[1];			//Transaction ID LSB
+	answer += reqst[2];			//Protocol ID MSB
+	answer += reqst[3];			//Protocol ID LSB
+	answer += (char)((pdu.size()+1)>>8);	//PDU size MSB
+	answer += (char)(pdu.size()+1);		//PDU size LSB
+	answer += (char)node;			//Unit identifier
+	answer += pdu;
+    }
+    else if( prt == "RTU" )
+    {
+	answer = (ui8)node;			//Unit identifier
+	answer += pdu;
+	ui16 crc = modPrt->CRC16( answer );
+	answer += crc>>8;
+	answer += crc;
+    }
+    else if( prt == "ASCII" )
+    {
+	answer = (ui8)node;			//Unit identifier
+	answer += pdu;
+	answer += modPrt->LRC(answer);
+	answer = ":"+modPrt->DataToASCII(answer)+"\r\n";
+    }
 
     return false;
 }
@@ -470,46 +569,491 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 //* Node: ModBus input protocol node.             *
 //*************************************************
 Node::Node( const string &iid, const string &idb, TElem *el ) :
-    TConfig(el), mDB(idb), TValFunc(iid+"_node",NULL), mEn(false),
-    mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()), mDscr(cfg("DESCR").getSd()), mAEn(cfg("EN").getBd())
+    TFunction("ModBusNode_"+iid), TConfig(el), mDB(idb), mEn(false), prcSt(false), endrunRun(false), data(NULL), cntReq(0),
+    mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()), mDscr(cfg("DESCR").getSd()), mAEn(cfg("EN").getBd()),
+    mPer(cfg("DT_PER").getRd())
 {
     mId = iid;
+
+    cfg("MODE").setI(0);
 }
 
 Node::~Node( )
 {
+    try{ setEnable(false); } catch(...) { }
+    if( data ) { delete data; data = NULL; }
+}
 
+void Node::postEnable( int flag )
+{
+    //> Create default IOs
+    if( flag&TCntrNode::NodeConnect )
+    {
+	ioIns( new IO("f_frq",_("Function calculate frequency (Hz)"),IO::Real,TPrmTempl::LockAttr,"1000",false),0);
+	ioIns( new IO("f_start",_("Function start flag"),IO::Boolean,TPrmTempl::LockAttr,"0",false),1);
+	ioIns( new IO("f_stop",_("Function stop flag"),IO::Boolean,TPrmTempl::LockAttr,"0",false),2);
+    }
 }
 
 void Node::postDisable( int flag )
 {
     try
     {
-	if( flag ) SYS->db().at().dataDel(fullDB(),owner().nodePath()+tbl(),*this,true);
+	if( flag )
+	{
+	    SYS->db().at().dataDel(fullDB(),owner().nodePath()+tbl(),*this,true);
+	    TConfig cfg(&owner().nodeIOEl());
+	    cfg.cfg("NODE_ID").setS(id(),true);
+	    SYS->db().at().dataDel(fullDB()+"_io",owner().nodePath()+tbl()+"_io",cfg);
+	}
     }catch(TError err)
     { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
-string Node::name( )
+string Node::name( )		{ return mName.size() ? mName : id(); }
+
+string Node::tbl( )		{ return owner().modId()+"_node"; }
+
+int Node::addr( )		{ return cfg("ADDR").getI(); }
+
+string Node::inTransport( )	{ return cfg("InTR").getS(); }
+
+string Node::prt( )		{ return cfg("PRT").getS(); }
+
+int Node::mode( )		{ return cfg("MODE").getI(); }
+
+string Node::progLang()
 {
-    return mName.size() ? mName : id();
+    string mProg = cfg("DT_PROG").getS();
+    return mProg.substr(0,mProg.find("\n"));
 }
 
-string Node::tbl( )
+string Node::prog()
 {
-    return owner().modId()+"_node";
+    string mProg = cfg("DT_PROG").getS();
+    int lngEnd = mProg.find("\n");
+    return mProg.substr( (lngEnd==string::npos)?0:lngEnd+1 );
+}
+
+void Node::setProgLang( const string &ilng )
+{
+    cfg("DT_PROG").setS( ilng+"\n"+prog() );
+    modif();
+}
+
+void Node::setProg( const string &iprg )
+{
+    cfg("DT_PROG").setS( progLang()+"\n"+iprg );
+    modif();
+}
+
+bool Node::cfgChange( TCfg &ce )
+{
+    if( ce.name() == "MODE" )
+    {
+	setEnable(false);
+	//> Hide all specific
+	cfg("DT_PER").setView(false); cfg("DT_PROG").setView(false); cfg("TO_TR").setView(false); cfg("TO_PRT").setView(false); cfg("TO_ADDR").setView(false);
+
+	//> Show selected
+	if( ce.getI() == 0 )		{ cfg("DT_PER").setView(true); cfg("DT_PROG").setView(true); }
+	else if( ce.getI() == 1 )	{ cfg("TO_TR").setView(true); cfg("TO_PRT").setView(true); cfg("TO_ADDR").setView(true); }
+    }
+
+    modif();
+    return true;
 }
 
 void Node::load_( )
 {
     if( !SYS->chkSelDB(DB()) ) return;
+    cfgViewAll(true);
     SYS->db().at().dataGet(fullDB(),owner().nodePath()+tbl(),*this);
+    cfg("MODE").setI(cfg("MODE").getI());
+
+    //> Load IO
+    vector<string> u_pos;
+    TConfig cfg(&owner().nodeIOEl());
+    cfg.cfg("NODE_ID").setS(id(),true);
+    for( int io_cnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",io_cnt++,cfg); )
+    {
+	string sid = cfg.cfg("ID").getS();
+
+	//> Position storing
+	int pos = cfg.cfg("POS").getI();
+	while( u_pos.size() <= pos )	u_pos.push_back("");
+	u_pos[pos] = sid;
+
+	int iid = ioId(sid);
+	
+	if( iid < 0 )
+	    iid = ioIns( new IO(sid.c_str(),cfg.cfg("NAME").getS().c_str(),(IO::Type)cfg.cfg("TYPE").getI(),cfg.cfg("FLAGS").getI(),"",false),pos );
+	else
+	{
+	    io(iid)->setName(cfg.cfg("NAME").getS());
+	    io(iid)->setType((IO::Type)cfg.cfg("TYPE").getI());
+	    io(iid)->setFlg(cfg.cfg("FLAGS").getI());
+	}
+	if( io(iid)->flg()&Node::IsLink ) io(iid)->setRez(cfg.cfg("VALUE").getS());
+	else io(iid)->setDef(cfg.cfg("VALUE").getS());
+    }
+    //> Position fixing
+    for( int i_p = 0; i_p < u_pos.size(); i_p++ )
+    {
+	if( u_pos[i_p].empty() ) continue;
+	int iid = ioId(u_pos[i_p]);
+	if( iid != i_p )
+	    try{ ioMove(iid,i_p); } catch(...){ }
+    }
 }
 
 void Node::save_( )
 {
     SYS->db().at().dataSet(fullDB(),owner().nodePath()+tbl(),*this);
+
+    //> Save IO
+    TConfig cfg(&owner().nodeIOEl());
+    cfg.cfg("NODE_ID").setS(id(),true);
+    for( int i_io = 0; i_io < ioSize(); i_io++ )
+    {
+	if( io(i_io)->flg()&Node::LockAttr ) continue;
+	cfg.cfg("ID").setS(io(i_io)->id());
+	cfg.cfg("NAME").setS(io(i_io)->name());
+	cfg.cfg("TYPE").setI(io(i_io)->type());
+	cfg.cfg("FLAGS").setI(io(i_io)->flg());
+	cfg.cfg("POS").setI(i_io);
+	if( io(i_io)->flg()&Node::IsLink ) cfg.cfg("VALUE").setS(io(i_io)->rez());
+	else if( data && data->val.func( ) ) cfg.cfg("VALUE").setS(data->val.getS(i_io));
+	else cfg.cfg("VALUE").setS(io(i_io)->def());
+	SYS->db().at().dataSet(fullDB()+"_io",owner().nodePath()+tbl()+"_io",cfg);
+    }
+    //> Clear IO
+    cfg.cfgViewAll(false);
+    for( int fld_cnt=0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",fld_cnt++,cfg); )
+    {
+	string sio = cfg.cfg("ID").getS( );
+	if( ioId(sio) < 0 || io(ioId(sio))->flg()&Node::LockAttr )
+	{
+	    SYS->db().at().dataDel(fullDB()+"_io",owner().nodePath()+tbl()+"_io",cfg,true);
+	    fld_cnt--;
+	}
+    }
 }
+
+void Node::setEnable( bool vl )
+{
+    if( mEn == vl ) return;
+
+    cntReq = 0;
+
+    ResAlloc res(nodeRes(),true);
+
+    //> Enable node
+    if( vl && mode( ) == 0 )
+    {
+	//>> Data structure allocate
+	if( !data ) data = new SData;
+
+	//>> Compile function
+	try
+	{
+	    if( progLang().empty() ) data->val.setFunc(this);
+	    else
+	    {
+		string mWorkProg = SYS->daq().at().at(TSYS::strSepParse(progLang(),0,'.')).at().compileFunc(TSYS::strSepParse(progLang(),1,'.'),*this,prog());
+		data->val.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(mWorkProg,1)).at());
+	    }
+	}catch( TError err )
+	{ mess_err(nodePath().c_str(),_("Compile function by language '%s' error: %s"),progLang().c_str(),err.mess.c_str()); throw; }
+
+	//>> Links, registers and coins init
+	for( int i_io = 0; i_io < ioSize(); i_io++ )
+	{
+	    if( io(i_io)->flg()&Node::IsLink )
+	    {
+		AutoHD<TVal> lnk;
+		try
+		{
+		    lnk = SYS->daq().at().at(TSYS::strSepParse(io(i_io)->rez(),0,'.')).at().
+					  at(TSYS::strSepParse(io(i_io)->rez(),1,'.')).at().
+					  at(TSYS::strSepParse(io(i_io)->rez(),2,'.')).at().
+					  vlAt(TSYS::strSepParse(io(i_io)->rez(),3,'.'));
+		}catch( TError err ){  }
+		data->lnk[i_io] = lnk;
+	    }
+	    if( (tolower(io(i_io)->id()[0]) == 'c' || tolower(io(i_io)->id()[0]) == 'r') && io(i_io)->id().size() > 1 && isdigit(io(i_io)->id()[1]) )
+	    {
+		bool wr = (tolower(io(i_io)->id()[io(i_io)->id().size()-1])=='w');
+		int tca = atoi(io(i_io)->id().data()+1);
+		if( tolower(io(i_io)->id()[0]) == 'c' )
+		{
+		    data->coil[tca] = i_io;
+		    if( wr ) data->coil[-tca] = i_io;
+		}
+		else
+		{
+		    data->reg[tca] = i_io;
+		    if( wr ) data->reg[-tca] = i_io;
+		}
+	    }
+	}
+
+	//>> Start task
+	pthread_attr_t pthrAttr;
+	pthread_attr_init( &pthrAttr );
+	pthread_attr_setschedpolicy( &pthrAttr, SCHED_OTHER );
+	pthread_create( &pthrTsk, &pthrAttr, Task, this );
+	pthread_attr_destroy( &pthrAttr );
+	if( TSYS::eventWait(prcSt,true,nodePath()+"start",5) )
+	    throw TError(nodePath().c_str(),_("Not started!"));
+    }
+    //> Disable node
+    if( !vl )
+    {
+	//> Stop the calc data task
+	if( prcSt )
+	{
+	    endrunRun = true;
+	    pthread_kill( pthrTsk, SIGALRM );
+	    if( TSYS::eventWait(prcSt,false,nodePath()+"stop",5) )
+		throw TError(nodePath().c_str(),_("Data process task is not stopped!"));
+	    pthread_join( pthrTsk, NULL );
+	}
+
+	//> Data structure delete
+	if( data ) { delete data; data = NULL; }
+    }
+
+    mEn = vl;
+}
+
+string Node::getStatus( )
+{
+    string rez = _("Disabled. ");
+    if( enableStat( ) )
+    {
+	rez = _("Enabled. ");
+	if( mode( ) == 0 )
+	    rez += TSYS::strMess( _("Process time %.2f ms. Requests %.4g. Read registars %.4g, coils %.4g. Writed registars %.4g, coils %.4g."),
+		tmProc, cntReq, data->rReg, data->rCoil, data->wReg, data->wCoil );
+	else if( mode() == 1 )
+	    rez += TSYS::strMess( _("Requests %.4g."), cntReq );
+    }
+
+    return rez;
+}
+
+bool Node::req( const string &itr, const string &iprt, unsigned char inode, string &pdu )
+{
+    ResAlloc res(nodeRes(),false);
+
+    //> Check for allow request
+    if( !enableStat( ) || pdu.empty() ||
+	!(inTransport( ) == "*" || inTransport( ) == itr) ||
+	!((addr() && addr( )==inode)) ||
+	!(prt()=="*" || iprt==prt()) ) return false;
+
+    cntReq++;
+
+    //> Data mode requests process
+    if( mode() == 0 )
+	switch( pdu[0] )
+	{
+	    case 0x01:	//Read multiple coils
+	    {
+		int c_sz = 0;
+		if( pdu.size() == 5 ) c_sz = ((unsigned short)(pdu[3]<<8)|(unsigned char)pdu[4]);
+		if( c_sz < 1 || c_sz > 2000 ) { pdu = pdu[0]|0x80; pdu += 0x1; return true; }
+		int c_addr = ((unsigned short)(pdu[1]<<8)|(unsigned char)pdu[2]);
+		pdu = pdu[0];
+		pdu += (char)(c_sz/8+((c_sz%8)?1:0));
+		pdu += string(pdu[1],(char)0);
+
+		map<int,int>::iterator itc;
+		for( int i_c = c_addr; i_c < (c_addr+c_sz); i_c++ )
+		    if( (itc=data->coil.find(i_c)) != data->coil.end() && data->val.getB(itc->second) )
+			pdu[2+(i_c-c_addr)/8] |= (1<<((i_c-c_addr)%8));
+
+		data->rCoil += c_sz;
+
+		return true;
+	    }
+	    case 0x03:	//Read multiple registers
+	    {
+		int r_sz = 0;
+		if( pdu.size() == 5 ) r_sz = ((unsigned short)(pdu[3]<<8)|(unsigned char)pdu[4]);
+		if( r_sz < 1 || r_sz > 125 ) { pdu = pdu[0]|0x80; pdu += 0x1; return true; }
+		int r_addr = ((unsigned short)(pdu[1]<<8)|(unsigned char)pdu[2]);
+		pdu = pdu[0];
+		pdu += (char)(r_sz*2);
+
+		map<int,int>::iterator itr;
+		for( int i_r = r_addr; i_r < (r_addr+r_sz); i_r++ )
+		{
+		    unsigned short val = 0;
+		    if( (itr=data->reg.find(i_r)) != data->reg.end() ) val = data->val.getI(itr->second);
+		    pdu += TSYS::strEncode(string((char*)&val,2),TSYS::Reverse);
+		}
+
+		data->rReg += r_sz;
+
+		return true;
+	    }
+	    case 0x05:	//Preset single coil
+	    {
+		if( pdu.size() != 5 ) { pdu = pdu[0]|0x80; pdu += 0x1; return true; }
+		int c_addr = ((unsigned short)(pdu[1]<<8)|(unsigned char)pdu[2]);
+
+		map<int,int>::iterator ic = data->coil.find(-c_addr);
+		if( ic == data->coil.end() ) { pdu = pdu[0]|0x80; pdu += 0x2; }
+		else
+		{
+		    data->val.setB(ic->second,(bool)pdu[3]);
+		    map<int,AutoHD<TVal> >::iterator il = data->lnk.find(ic->second);
+		    if( il != data->lnk.end() && !il->second.freeStat() ) il->second.at().setB((bool)pdu[3]);
+		}
+
+		data->wCoil++;
+
+		return true;
+	    }
+	    case 0x06:	//Preset single register
+	    {
+		if( pdu.size() != 5 ) { pdu = pdu[0]|0x80; pdu += 0x1; return true; }
+		int r_addr = ((unsigned short)(pdu[1]<<8)|(unsigned char)pdu[2]);
+
+		map<int,int>::iterator ir = data->reg.find(-r_addr);
+		if( ir == data->reg.end() ) { pdu = pdu[0]|0x80; pdu += 0x2; }
+		else
+		{
+		    data->val.setI(ir->second,(unsigned short)(pdu[3]<<8)|(unsigned char)pdu[4]);
+		    map<int,AutoHD<TVal> >::iterator il = data->lnk.find(ir->second);
+		    if( il != data->lnk.end() && !il->second.freeStat() )
+			il->second.at().setI((unsigned short)(pdu[3]<<8)|(unsigned char)pdu[4]);
+		}
+
+		data->wReg++;
+
+		return true;
+	    }
+	    default:
+		pdu = pdu[0]|0x80;
+		pdu += 0x1;
+		return true;
+	}
+    //> Gateway mode requests process
+    else if( mode() == 1 )
+    {
+	try
+	{
+	    AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strSepParse(cfg("TO_TR").getS(),0,'.')).at().
+							 outAt(TSYS::strSepParse(cfg("TO_TR").getS(),1,'.'));
+	    if( !tr.at().startStat() ) tr.at().start();
+
+	    XMLNode req(cfg("TO_PRT").getS());
+	    req.setAttr("id",id())->setAttr("node",cfg("TO_ADDR").getS())->setAttr("reqTry","3")->setText(pdu);
+	    tr.at().messProtIO(req,"ModBus");
+
+	    if( !req.attr("err").empty() ) { pdu = pdu[0]|0x80; pdu += 0xA; }
+	    pdu = req.text();
+	}catch(TError err) { pdu = pdu[0]|0x80; pdu += 0xA; }
+
+	return true;
+    }
+
+    return true;
+}
+
+void *Node::Task( void *ind )
+{
+    Node &nd = *(Node*)ind;
+
+#if OSC_DEBUG >= 2
+    mess_debug(nd.nodePath().c_str(),_("Thread <%u> is started. TID: %ld"),pthread_self(),(long int)syscall(224));
+#endif
+
+    nd.endrunRun = false;
+    nd.prcSt = true;
+
+    bool isStart = true;
+    bool isStop  = false;
+
+    int ioFrq = nd.data->val.ioId("f_frq");
+    int ioStart = nd.data->val.ioId("f_start");
+    int ioStop = nd.data->val.ioId("f_stop");
+
+    for( unsigned int clc = 0; true; clc++ )
+    {
+	long long t_cnt = TSYS::curTime();
+
+	//> Setting special IO
+	if( ioFrq >= 0 ) nd.data->val.setR(ioFrq,(float)1/nd.period());
+	if( ioStart >= 0 ) nd.data->val.setB(ioStart,isStart);
+	if( ioStop >= 0 ) nd.data->val.setB(ioStop,isStop);
+
+	try
+	{
+	    //> Get input links
+	    map< int, AutoHD<TVal> >::iterator li;
+	    for( li = nd.data->lnk.begin(); li != nd.data->lnk.end(); li++ )
+	    {
+		if( li->second.freeStat() )
+		{
+		    nd.data->val.setS(li->first,EVAL_STR);
+		    if( !(clc%(int)vmax(1,(float)1/nd.period())) )
+		    {
+			try
+			{
+			    li->second = SYS->daq().at().at(TSYS::strSepParse(nd.io(li->first)->rez(),0,'.')).at().
+					       at(TSYS::strSepParse(nd.io(li->first)->rez(),1,'.')).at().
+					       at(TSYS::strSepParse(nd.io(li->first)->rez(),2,'.')).at().
+					       vlAt(TSYS::strSepParse(nd.io(li->first)->rez(),3,'.'));
+			}catch( TError err ){ continue; }
+		    }else continue;
+		}
+		switch( nd.data->val.ioType(li->first) )
+		{
+		    case IO::String:	nd.data->val.setS(li->first,li->second.at().getS());	break;
+		    case IO::Integer:	nd.data->val.setI(li->first,li->second.at().getI());	break;
+		    case IO::Real:	nd.data->val.setR(li->first,li->second.at().getR());	break;
+		    case IO::Boolean:	nd.data->val.setB(li->first,li->second.at().getB());	break;
+		}
+	    }
+
+	    nd.data->val.calc();
+
+	    //> Put output links
+	    for( li = nd.data->lnk.begin(); li != nd.data->lnk.end(); li++ )
+		if( !li->second.freeStat() && !(li->second.at().fld().flg()&TFld::NoWrite) )
+		switch( nd.data->val.ioType(li->first) )
+		{
+		    case IO::String:	li->second.at().setS(nd.data->val.getS(li->first));	break;
+		    case IO::Integer:	li->second.at().setI(nd.data->val.getI(li->first));	break;
+		    case IO::Real:	li->second.at().setR(nd.data->val.getR(li->first));	break;
+		    case IO::Boolean:	li->second.at().setB(nd.data->val.getB(li->first));	break;
+		}
+	}
+	catch(TError err)
+	{
+	    mess_err(err.cat.c_str(),"%s",err.mess.c_str() );
+	    mess_err(nd.nodePath().c_str(),_("Calc node's function error."));
+	}
+
+	if( isStop ) break;
+	TSYS::taskSleep((long long)(1e6*nd.period()));
+	if( nd.endrunRun ) isStop = true;
+	isStart = false;
+	nd.modif();
+
+	//> Calc acquisition process time
+	nd.tmProc = 1e-3*(TSYS::curTime()-t_cnt);
+    }
+
+    nd.prcSt = false;
+
+    return NULL;
+}
+
 
 void Node::cntrCmdProc( XMLNode *opt )
 {
@@ -517,28 +1061,54 @@ void Node::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TCntrNode::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Node ")+name(),0664,"root","root");
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Node: ")+name(),0664,"root","root");
 	if( ctrMkNode("area",opt,-1,"/nd",_("Node")) )
 	{
 	    if( ctrMkNode("area",opt,-1,"/nd/st",_("State")) )
 	    {
+		ctrMkNode("fld",opt,-1,"/nd/st/status",_("Status"),R_R_R_,"root","root",1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/nd/st/en_st",_("Enable"),RWRWR_,"root","root",1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/nd/st/db",_("DB"),RWRWR_,"root","root",4,"tp","str","dest","select","select","/db/list",
 		    "help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
 	    }
 	    if( ctrMkNode("area",opt,-1,"/nd/cfg",_("Config")) )
 	    {
-		ctrMkNode("fld",opt,-1,"/nd/cfg/id",cfg("ID").fld().descr(),R_R_R_,"root","root",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/nd/cfg/name",cfg("NAME").fld().descr(),RWRWR_,"root","root",2,"tp","str","len","50");
-		ctrMkNode("fld",opt,-1,"/nd/cfg/dscr",cfg("DESCR").fld().descr(),RWRWR_,"root","root",3,"tp","str","cols","90","rows","3");
-		ctrMkNode("fld",opt,-1,"/nd/cfg/en",cfg("EN").fld().descr(),RWRWR_,"root","root",1,"tp","bool");
+		TConfig::cntrCmdMake(opt,"/nd/cfg",0,"root","root",RWRWR_);
+		//>> Append configuration properties
+		XMLNode *xt = ctrId(opt->childGet(0),"/nd/cfg/InTR",true);
+		if( xt ) xt->setAttr("dest","sel_ed")->setAttr("select","/nd/cfg/ls_itr");
+		xt = ctrId(opt->childGet(0),"/nd/cfg/TO_TR",true);
+		if( xt ) xt->setAttr("dest","sel_ed")->setAttr("select","/nd/cfg/ls_otr");
+		xt = ctrId(opt->childGet(0),"/nd/cfg/DT_PROG",true);
+		if( xt ) xt->parent()->childDel(xt);
 	    }
 	}
+	if( mode( ) == 0 && ctrMkNode("area",opt,-1,"/dt",_("Data")) )
+	{
+	    if(ctrMkNode("table",opt,-1,"/dt/io",_("IO"),RWRWR_,"root","root",2,"s_com","add,del,ins,move","rows","15"))
+	    {
+		ctrMkNode("list",opt,-1,"/dt/io/id",_("Id"),RWRWR_,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/dt/io/nm",_("Name"),RWRWR_,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/dt/io/tp",_("Type"),RWRWR_,"root","root",5,"tp","dec","idm","1","dest","select",
+		    "sel_id",(TSYS::int2str(IO::Real)+";"+TSYS::int2str(IO::Integer)+";"+TSYS::int2str(IO::Boolean)+";"+TSYS::int2str(IO::String)).c_str(),
+		    "sel_list",_("Real;Integer;Boolean;String"));
+		ctrMkNode("list",opt,-1,"/dt/io/lnk",_("Link"),RWRWR_,"root","root",1,"tp","bool");
+		ctrMkNode("list",opt,-1,"/dt/io/vl",_("Value"),RWRWR_,"root","root",1,"tp","str");
+	    }
+	    ctrMkNode("fld",opt,-1,"/dt/progLang",_("Programm language"),RWRWR_,"root","root",3,"tp","str","dest","sel_ed","select","/dt/plang_ls");
+	    ctrMkNode("fld",opt,-1,"/dt/prog",_("Programm"),RWRWR_,"root","root",2,"tp","str","rows","10");
+	}
+	if( mode( ) == 0 && ctrMkNode("area",opt,-1,"/lnk",_("Links")) )
+	    for( int i_io = 0; i_io < ioSize(); i_io++ )
+		if( io(i_io)->flg()&IsLink )
+		    ctrMkNode("fld",opt,-1,("/lnk/el_"+TSYS::int2str(i_io)).c_str(),io(i_io)->name(),enableStat()?R_R_R_:RWRWR_,"root","root",
+			3,"tp","str","dest","sel_ed","select",("/lnk/ls_"+TSYS::int2str(i_io)).c_str());
 	return;
     }
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/nd/st/en_st" )
+    if( a_path == "/nd/st/status" && ctrChkNode(opt) )	opt->setText(getStatus());
+    else if( a_path == "/nd/st/en_st" )
     {
 	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText(enableStat()?"1":"0");
 	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEQ_WR) )	setEnable(atoi(opt->text().c_str()));
@@ -548,21 +1118,156 @@ void Node::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText(DB());
 	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEQ_WR) )	setDB(opt->text());
     }
-    if( a_path == "/nd/cfg/id" && ctrChkNode(opt) )	opt->setText(id());
-    else if( a_path == "/nd/cfg/name" )
+    else if( a_path == "/nd/cfg/ls_itr" && ctrChkNode(opt) )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText(name());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEQ_WR) )	setName(opt->text());
+	opt->childAdd("el")->setText("*");
+	vector<string> sls;
+	SYS->transport().at().inTrList(sls);
+	for( int i_s = 0; i_s < sls.size(); i_s++ )
+	    opt->childAdd("el")->setText(sls[i_s]);
     }
-    else if( a_path == "/nd/cfg/dscr" )
+    else if( a_path == "/nd/cfg/ls_otr" && ctrChkNode(opt) )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText(descr());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEQ_WR) )	setDescr(opt->text());
+	vector<string> sls;
+	SYS->transport().at().outTrList(sls);
+	for( int i_s = 0; i_s < sls.size(); i_s++ )
+	    opt->childAdd("el")->setText(sls[i_s]);
     }
-    else if( a_path == "/nd/cfg/en" )
+    else if( a_path.substr(0,7) == "/nd/cfg" ) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root","root",RWRWR_);
+    else if( a_path == "/dt/io" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText(toEnable()?"1":"0");
-	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEQ_WR) )	setToEnable(atoi(opt->text().c_str()));
+	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )
+	{
+	    XMLNode *nId   = ctrMkNode("list",opt,-1,"/dt/io/id","");
+	    XMLNode *nNm   = ctrMkNode("list",opt,-1,"/dt/io/nm","");
+	    XMLNode *nType = ctrMkNode("list",opt,-1,"/dt/io/tp","");
+	    XMLNode *nLnk  = ctrMkNode("list",opt,-1,"/dt/io/lnk","");
+	    XMLNode *nVal  = ctrMkNode("list",opt,-1,"/dt/io/vl","");
+
+	    for( int id = 0; id < ioSize(); id++ )
+	    {
+		if( nId )	nId->childAdd("el")->setText(io(id)->id());
+		if( nNm )	nNm->childAdd("el")->setText(io(id)->name());
+		if( nType )	nType->childAdd("el")->setText(TSYS::int2str(io(id)->type()));
+		if( nLnk )	nLnk->childAdd("el")->setText((io(id)->flg()&Node::IsLink)?"1":"0");
+		if( nVal )	nVal->childAdd("el")->setText( (data && data->val.func()) ? data->val.getS(id) : io(id)->def() );
+	    }
+	}
+	if( ctrChkNode(opt,"add",RWRWR_,"root","root",SEQ_WR) )
+	{
+	    if( enableStat( ) ) throw TError(nodePath().c_str(),_("Disable node for this operation"));
+	    ioAdd( new IO("new",_("New IO"),IO::Integer,IO::Default) ); modif();
+	}
+	if( ctrChkNode(opt,"ins",RWRWR_,"root","root",SEQ_WR) )
+	{
+	    if( enableStat( ) ) throw TError(nodePath().c_str(),_("Disable node for this operation"));
+	    ioIns( new IO("new",_("New IO"),IO::Integer,IO::Default), atoi(opt->attr("row").c_str()) ); modif();
+	}
+	if( ctrChkNode(opt,"del",RWRWR_,"root","root",SEQ_WR) )
+	{
+	    if( enableStat( ) ) throw TError(nodePath().c_str(),_("Disable node for this operation"));
+	    int row = atoi(opt->attr("row").c_str());
+	    if( io(row)->flg()&TPrmTempl::LockAttr )
+		throw TError(nodePath().c_str(),_("Deleting lock atribute in not allow."));
+	    ioDel( row );
+	    modif();
+	}
+	if( ctrChkNode(opt,"move",RWRWR_,"root","root",SEQ_WR) )
+	{
+	    if( enableStat( ) ) throw TError(nodePath().c_str(),_("Disable node for this operation"));
+	    ioMove( atoi(opt->attr("row").c_str()), atoi(opt->attr("to").c_str()) ); modif();
+	}
+	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEQ_WR) )
+	{
+	    int row = atoi(opt->attr("row").c_str());
+	    string col = opt->attr("col");
+	    if( enableStat( ) && col != "vl" ) throw TError(nodePath().c_str(),_("Disable node for this operation"));
+	    if( io(row)->flg()&TPrmTempl::LockAttr )	throw TError(nodePath().c_str(),_("Changing locked atribute is not allowed."));
+	    if( (col == "id" || col == "nm") && !opt->text().size() )	throw TError(nodePath().c_str(),_("Empty value is not valid."));
+	    if( col == "id" )		io(row)->setId(opt->text());
+	    else if( col == "nm" )	io(row)->setName(opt->text());
+	    else if( col == "tp" )	io(row)->setType((IO::Type)atoi(opt->text().c_str()));
+	    else if( col == "lnk" )	io(row)->setFlg( atoi(opt->text().c_str()) ? (io(row)->flg()|Node::IsLink) : (io(row)->flg() & ~Node::IsLink) );
+	    else if( col == "vl" )	(data && data->val.func()) ? data->val.setS(row,opt->text()) : io(row)->setDef(opt->text());
+	    modif();
+	}
+    }
+    else if( a_path == "/dt/progLang" )
+    {
+	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText(progLang());
+	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEQ_WR) )	setProgLang(opt->text());
+    }
+    else if( a_path == "/dt/prog" )
+    {
+	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText(prog());
+	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEQ_WR) )	setProg(opt->text());
+    }
+    else if( a_path == "/dt/plang_ls" && ctrChkNode(opt) )
+    {
+	string tplng = progLang();
+	int c_lv = 0;
+	string c_path = "", c_el;
+	opt->childAdd("el")->setText(c_path);
+	for( int c_off = 0; (c_el=TSYS::strSepParse(tplng,0,'.',&c_off)).size(); c_lv++ )
+	{
+	    c_path += c_lv ? "."+c_el : c_el;
+	    opt->childAdd("el")->setText(c_path);
+	}
+	if(c_lv) c_path+=".";
+	vector<string>  ls;
+	switch(c_lv)
+	{
+	    case 0:	SYS->daq().at().modList(ls);	break;
+	    case 1:
+		if( SYS->daq().at().modPresent(TSYS::strSepParse(tplng,0,'.')) )
+		    SYS->daq().at().at(TSYS::strSepParse(tplng,0,'.')).at().compileFuncLangs(ls);
+		break;
+	}
+	for(int i_l = 0; i_l < ls.size(); i_l++)
+	    opt->childAdd("el")->setText(c_path+ls[i_l]);
+    }
+    else if( a_path.substr(0,8) == "/lnk/ls_" && ctrChkNode(opt) )
+    {
+	int c_lv = 0;
+	string l_prm = io(atoi(a_path.substr(8).c_str()))->rez();
+	string c_path = "", c_el;
+	opt->childAdd("el")->setText(c_path);
+	for( int c_off = 0; (c_el=TSYS::strSepParse(l_prm,0,'.',&c_off)).size(); c_lv++ )
+	{
+	    c_path += c_lv ? "."+c_el : c_el;
+	    opt->childAdd("el")->setText(c_path);
+	}
+	if( c_lv ) c_path+=".";
+	string prm0 = TSYS::strSepParse(l_prm,0,'.');
+	string prm1 = TSYS::strSepParse(l_prm,1,'.');
+	string prm2 = TSYS::strSepParse(l_prm,2,'.');
+	vector<string>  ls;
+	switch( c_lv )
+	{
+	    case 0:	SYS->daq().at().modList(ls);	break;
+	    case 1:
+		if( SYS->daq().at().modPresent(prm0) )
+		    SYS->daq().at().at(prm0).at().list(ls);
+		break;
+	    case 2:
+		if( SYS->daq().at().modPresent(prm0) && SYS->daq().at().at(prm0).at().present(prm1) )
+		    SYS->daq().at().at(prm0).at().at(prm1).at().list(ls);
+		break;
+	    case 3:
+		if( SYS->daq().at().modPresent(prm0) && SYS->daq().at().at(prm0).at().present(prm1)
+			&& SYS->daq().at().at(prm0).at().at(prm1).at().present(prm2) )
+		    SYS->daq().at().at(prm0).at().at(prm1).at().at(prm2).at().vlList(ls);
+		break;
+	}
+	for(int i_l = 0; i_l < ls.size(); i_l++)
+	    opt->childAdd("el")->setText(c_path+ls[i_l]);
+    }
+    else if( a_path.substr(0,8) == "/lnk/el_" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
+	    opt->setText(io(atoi(a_path.substr(8).c_str()))->rez());
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
+	{ io(atoi(a_path.substr(8).c_str()))->setRez(opt->text()); modif(); }
     }
     else TCntrNode::cntrCmdProc(opt);
 }

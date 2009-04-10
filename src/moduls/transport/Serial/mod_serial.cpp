@@ -98,10 +98,10 @@ void TTr::postEnable( int flag )
     {
 	//> Add self DB-fields to input transport
 	owner().inEl().fldAdd( new TFld("BufLen",_("Input buffer length (kB)"),TFld::Integer,0,"4","5") );
-	owner().inEl().fldAdd( new TFld("TMS",_("Timings"),TFld::String,0,"100","1.88:320") );
+	owner().inEl().fldAdd( new TFld("TMS",_("Timings"),TFld::String,0,"100","0.57:320") );
 
 	//> Add self DB-fields to input transport
-	owner().outEl().fldAdd( new TFld("TMS",_("Timings"),TFld::String,0,"100","640:1.88:320") );
+	owner().outEl().fldAdd( new TFld("TMS",_("Timings"),TFld::String,0,"100","640:0.57:320") );
     }
 }
 
@@ -195,7 +195,7 @@ void TTrIn::setAddr( const string &iaddr )
 
     //> Times adjust
     int speed = atoi(TSYS::strSepParse(iaddr,1,':').c_str());
-    if( speed )	setTimings(TSYS::real2str((3*12*1000)/(float)speed,2,'f')+":"+TSYS::int2str((512*12*1000)/speed));
+    if( speed )	setTimings(TSYS::real2str((11*1000)/(float)speed,2,'f')+":"+TSYS::int2str((512*11*1000)/speed));
 }
 
 void TTrIn::start()
@@ -260,6 +260,9 @@ void TTrIn::start()
 	    case 115200:tspd = B115200;	break;
 	    case 230400:tspd = B230400;	break;
 	    case 460800:tspd = B460800;	break;
+	    case 500000:tspd = B500000;	break;
+	    case 576000:tspd = B576000;	break;
+	    case 921600:tspd = B921600;	break;
 	    default: throw TError(nodePath().c_str(),_("Speed '%d' error."),speed);
 	}
 	cfsetispeed( &tio, tspd );
@@ -330,7 +333,7 @@ void *TTrIn::Task( void *tr_in )
 	//>> Char timeout
 	while(true)
 	{
-	    tv.tv_sec = 0; tv.tv_usec = (int)(1000.0*wCharTm);
+	    tv.tv_sec = 0; tv.tv_usec = (int)(1500.0*wCharTm);
 	    FD_ZERO( &fdset ); FD_SET( tr->fd, &fdset );
 
 	    if( select( tr->fd+1, &fdset, NULL, NULL, &tv ) <= 0 )
@@ -359,7 +362,7 @@ void *TTrIn::Task( void *tr_in )
 	    {
 		AutoHD<TProtocol> proto = SYS->protocol().at().modAt(tr->protocol());
 		string n_pr = tr->id()+TSYS::int2str(tr->fd);
-		if( !proto.at().openStat(n_pr) ) proto.at().open( n_pr );
+		if( !proto.at().openStat(n_pr) ) proto.at().open( n_pr, tr->workId() );
 		prot_in = proto.at().at( n_pr );
 	    }
 	    prot_in.at().mess(req,answ,"");
@@ -403,7 +406,8 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","root",2,"tp","str","help",
 	    _("Serial transport has address format: \"[dev]:[speed]:[len]:[stop]:[parity]\". Where:\n"
 	    "    dev - serial device address (/dev/ttyS0);\n"
-	    "    speed - device speed (300,600,1200,2400,4800,9600,19200,38400,57600,115200 or 230400);\n"
+	    "    speed - device speed (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200,\n"
+	    "                          230400, 460800, 500000, 576000 or 921600);\n"
 	    "    len - symbol length (bites: 7,8);\n"
 	    "    stop - stop bites number (1 or 2);\n"
 	    "    parity - parity check (p-parity,n-odd parity,0-disable)."));
@@ -453,7 +457,7 @@ void TTrOut::setAddr( const string &iaddr )
 
     //> Times adjust
     int speed = atoi(TSYS::strSepParse(iaddr,1,':').c_str());
-    if( speed )	setTimings(TSYS::int2str((1024*12*1000)/speed)+":"+TSYS::real2str((3*12*1000)/(float)speed,2,'f')+":"+TSYS::int2str((512*12*1000)/speed));
+    if( speed )	setTimings(TSYS::int2str((1024*11*1000)/speed)+":"+TSYS::real2str((11*1000)/(float)speed,2,'f')+":"+TSYS::int2str((512*11*1000)/speed));
 }
 
 void TTrOut::start( )
@@ -518,6 +522,9 @@ void TTrOut::start( )
 	    case 115200:tspd = B115200;	break;
 	    case 230400:tspd = B230400;	break;
 	    case 460800:tspd = B460800;	break;
+	    case 500000:tspd = B500000;	break;
+	    case 576000:tspd = B576000;	break;
+	    case 921600:tspd = B921600;	break;
 	    default: throw TError(nodePath().c_str(),_("Speed '%d' error."),speed);
 	}
 	cfsetispeed( &tio, tspd );
@@ -568,7 +575,7 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
     //> Write request
     if( obuf && len_ob > 0 )
     {
-	if( (tmptm-mLstReqTm) < (3000*wCharTm) ) usleep( (int)((3000*wCharTm)-(tmptm-mLstReqTm)) );
+	if( (tmptm-mLstReqTm) < (5500*wCharTm) ) usleep( (int)((5500*wCharTm)-(tmptm-mLstReqTm)) );
 	tcflush( fd, TCIFLUSH );
 	if( write(fd,obuf,len_ob) == -1 ) throw TError(nodePath().c_str(),_("Writing request error."));
 	trOut += (float)len_ob/1024;
@@ -591,7 +598,7 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
 	    usleep( 1000 );
 	    isEnter = false;
 	}
-	fcntl( fd, F_SETFL, 0 );
+	//fcntl( fd, F_SETFL, 0 );
 	blen = read( fd, ibuf, len_ib );
 
 	//>> Wait tail
@@ -600,7 +607,7 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
 	while( true )
 	{
 	    //>> Char timeout
-	    tv.tv_sec = 0; tv.tv_usec = (int)(1000.0*wCharTm);
+	    tv.tv_sec = 0; tv.tv_usec = (int)(1500.0*wCharTm);
 	    FD_ZERO( &fdset ); FD_SET( fd, &fdset );
 
 	    if( select(fd+1,&fdset,NULL,NULL,&tv) <= 0 ) break;
@@ -624,7 +631,8 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","root",2,"tp","str","help",
 	    _("Serial transport has address format: \"[dev]:[speed]:[len]:[stop]:[parity]\". Where:\n"
 	    "    dev - serial device address (/dev/ttyS0);\n"
-	    "    speed - device speed (300,600,1200,2400,4800,9600,19200,38400,57600,115200 or 230400);\n"
+	    "    speed - device speed (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200,\n"
+	    "                          230400, 460800, 500000, 576000 or 921600 );\n"
 	    "    len - symbol length (bites: 7,8);\n"
 	    "    stop - stop bites number (1 or 2);\n"
 	    "    parity - parity check (p-parity,n-odd parity,0-disable)."));

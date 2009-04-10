@@ -1123,6 +1123,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    for( int i_c = 0; i_c < tbl->columnCount(); i_c++ )
 			tbl->setColumnWidth(i_c,vmin(max_col_sz,tbl->columnWidth(i_c)));
 		}
+		tbl->setMinimumSize( QSize( 100, vmin(300,100+10*tbl->rowCount()) ) );
 
 		tbl_init = false;
 	    }

@@ -46,7 +46,7 @@ TDAQS::TDAQS( ) : TSubSYS("DAQ","Data acquisition",true), el_err("Error")
     el_tmpl.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
     el_tmpl.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
     el_tmpl.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::FullText,"200") );
-    el_tmpl.fldAdd( new TFld("PROGRAM",_("Template programm"),TFld::String,TFld::NoFlag,"1000") );
+    el_tmpl.fldAdd( new TFld("PROGRAM",_("Template programm"),TFld::String,TFld::NoFlag,"10000") );
 
     //> Parameter template IO DB structure
     el_tmpl_io.fldAdd( new TFld("TMPL_ID",_("Template ID"),TFld::String,TCfg::Key,"20") );

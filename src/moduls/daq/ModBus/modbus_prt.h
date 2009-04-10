@@ -63,9 +63,16 @@ class TProtIn: public TProtocolIn
 //*************************************************
 class TProt;
 
-class Node : public TCntrNode, public TValFunc, public TConfig
+class Node : public TFunction, public TConfig
 {
     public:
+	//> Addition flags for IO
+	enum IONodeFlgs
+	{
+	    IsLink	= 0x10,	//Link to subsystem's "DAQ" data
+	    LockAttr	= 0x20	//Lock attribute
+	};
+
 	//Methods
 	Node( const string &iid, const string &db, TElem *el );
 	~Node( );
@@ -75,6 +82,16 @@ class Node : public TCntrNode, public TValFunc, public TConfig
 	string descr( )		{ return mDscr; }
 	bool toEnable( )	{ return mAEn; }
 	bool enableStat( )	{ return mEn; }
+	int addr( );
+	string inTransport( );
+	string prt( );
+	int mode( );
+
+	double period( )	{ return mPer; }
+	string progLang( );
+	string prog( );
+
+	string getStatus( );
 
 	string DB( )		{ return mDB; }
 	string tbl( );
@@ -83,9 +100,13 @@ class Node : public TCntrNode, public TValFunc, public TConfig
 	void setName( const string &name )	{ mName = name; modif(); }
 	void setDescr( const string &idsc )	{ mDscr = idsc; modif(); }
 	void setToEnable( bool vl )		{ mAEn = vl; modif(); }
-	void setEnable( bool vl )		{ mEn = vl; }
+	void setEnable( bool vl );
+	void setProgLang( const string &ilng );
+	void setProg( const string &iprg );
 
 	void setDB( const string &vl )		{ mDB = vl; modifG(); }
+
+	bool req( const string &tr, const string &prt, unsigned char node, string &pdu );
 
 	TProt &owner( )		{ return *(TProt*)nodePrev(); }
 
@@ -95,15 +116,40 @@ class Node : public TCntrNode, public TValFunc, public TConfig
 	void save_( );
 
     private:
+	//Data
+	class SData
+	{
+	    public:
+		SData( ) : rReg(0), wReg(0), rCoil(0), wCoil(0)	{ }
+
+		TValFunc	val;
+		map<int,AutoHD<TVal> > lnk;
+		map<int,int> reg, coil;
+		float rReg, wReg, rCoil, wCoil;
+	};
+
 	//Methods
 	string nodeName( )	{ return mId; }
+
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+
+	void postEnable( int flag );
 	void postDisable( int flag );		//Delete all DB if flag 1
+	bool cfgChange( TCfg &cfg );
+
+	static void *Task( void *icntr );
 
 	//Attributes
+	SData	*data;
 	string	&mId, &mName, &mDscr;
+	double	&mPer;
 	bool	&mAEn, mEn;
 	string	mDB;
+
+	bool	prcSt, endrunRun;
+	pthread_t pthrTsk;			// Process task thread
+
+	float	tmProc, cntReq;
 };
 
 //*************************************************
@@ -115,6 +161,9 @@ class TProt: public TProtocol
 	//Methods
 	TProt( string name );
 	~TProt( );
+
+	void modStart( );
+	void modStop( );
 
 	//> Node's functions
 	void nList( vector<string> &ls )	{ chldList(mNode,ls); }
@@ -132,9 +181,12 @@ class TProt: public TProtocol
 	string	ASCIIToData( const string &in );
 
 	//> Protocol
-	int prtLen( )	{ return mPrtLen; }
+	int prtLen( )		{ return mPrtLen; }
 	void setPrtLen( int vl );
 	void pushPrtMess( const string &vl );
+
+	TElem &nodeEl( )	{ return mNodeEl; }
+	TElem &nodeIOEl( )	{ return mNodeIOEl; }
 
     protected:
 	//Methods
@@ -160,7 +212,7 @@ class TProt: public TProtocol
 	//Attributes
 	int	mNode;
 
-	TElem	nodeEl;
+	TElem	mNodeEl, mNodeIOEl;
 
 };
 

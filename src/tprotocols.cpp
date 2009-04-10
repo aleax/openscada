@@ -99,10 +99,11 @@ TProtocol::~TProtocol()
 
 }
 
-void TProtocol::open( const string &name )
+void TProtocol::open( const string &name, const string &tr )
 {
     if( chldPresent(m_pr,name) ) return;
     chldAdd(m_pr,in_open(name));
+    at(name).at().setSrcTr(tr);
 }
 
 void TProtocol::close( const string &name )
@@ -113,7 +114,7 @@ void TProtocol::close( const string &name )
 //************************************************
 //* TProtocolIn                                  *
 //************************************************
-TProtocolIn::TProtocolIn( const string &name ) : m_name(name)
+TProtocolIn::TProtocolIn( const string &name ) : mName(name)
 {
     modifClr( );
 }

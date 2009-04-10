@@ -113,7 +113,7 @@ class TFunction : public TCntrNode
 	int ioSize( );
 	IO *io( int id );
 	void ioAdd( IO *io );
-	void ioIns( IO *io, int pos );
+	int ioIns( IO *io, int pos );
 	void ioDel( int pos );
 	void ioMove( int pos, int to );
 

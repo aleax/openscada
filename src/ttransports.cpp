@@ -583,6 +583,11 @@ string TTransportIn::name()
     return (m_name.size())?m_name:m_id;
 }
 
+string TTransportIn::workId( )
+{
+    return owner().modId()+"."+id();
+}
+
 string TTransportIn::tbl( )
 {
     return owner().owner().subId()+"_in";
@@ -729,6 +734,11 @@ TCntrNode &TTransportOut::operator=( TCntrNode &node )
 string TTransportOut::name()
 {
     return (m_name.size())?m_name:m_id;
+}
+
+string TTransportOut::workId( )
+{
+    return owner().modId()+"."+id();
 }
 
 string TTransportOut::tbl( )

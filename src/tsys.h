@@ -77,7 +77,7 @@ class TSYS : public TCntrNode
 
     public:
 	//Data
-	enum Code	{ PathEl, HttpURL, Html, JavaSc, SQL, Custom, base64, FormatPrint, ID, Bin };
+	enum Code	{ PathEl, HttpURL, Html, JavaSc, SQL, Custom, base64, FormatPrint, ID, Bin, Reverse };
 	enum IntView	{ Dec, Oct, Hex };
 	enum Errors
 	{

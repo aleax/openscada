@@ -728,7 +728,7 @@ void TMdPrm::calc( bool first, bool last )
 	if(id_start>=0)	tmpl->val.setB(id_start,first);
 	if(id_stop>=0)	tmpl->val.setB(id_stop,last);
 
-        //- Get input links -
+	//- Get input links -
 	for( int i_l = 0; i_l < lnkSize(); i_l++ )
 	    if( lnk(i_l).aprm.freeStat() )	tmpl->val.setS(lnk(i_l).io_id,EVAL_STR);
 	    else switch(tmpl->val.ioType(lnk(i_l).io_id))

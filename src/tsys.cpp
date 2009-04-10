@@ -773,6 +773,9 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 		    sout+=(char)strtol(evl.c_str(),NULL,16);
 	    break;
 	}
+	case TSYS::Reverse:
+	    for( i_sz = in.size()-1; i_sz >= 0; i_sz-- ) sout += in[i_sz];
+	    break;
     }
     return sout;
 }
