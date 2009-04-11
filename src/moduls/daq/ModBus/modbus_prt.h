@@ -140,6 +140,7 @@ class Node : public TFunction, public TConfig
 	static void *Task( void *icntr );
 
 	//Attributes
+	Res	nRes;
 	SData	*data;
 	string	&mId, &mName, &mDscr;
 	double	&mPer;

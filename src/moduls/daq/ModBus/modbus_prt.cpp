@@ -746,7 +746,7 @@ void Node::setEnable( bool vl )
 
     cntReq = 0;
 
-    ResAlloc res(nodeRes(),true);
+    ResAlloc res(nRes,true);
 
     //> Enable node
     if( vl && mode( ) == 0 )
@@ -845,7 +845,7 @@ string Node::getStatus( )
 
 bool Node::req( const string &itr, const string &iprt, unsigned char inode, string &pdu )
 {
-    ResAlloc res(nodeRes(),false);
+    ResAlloc res(nRes,false);
 
     //> Check for allow request
     if( !enableStat( ) || pdu.empty() ||
