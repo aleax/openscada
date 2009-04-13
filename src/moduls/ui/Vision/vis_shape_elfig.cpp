@@ -111,6 +111,12 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    elFD->active = (bool)atoi(val.c_str());
 	    w->setFocusPolicy( (atoi(val.c_str()) && ((RunWdgView*)w)->permCntr()) ? Qt::TabFocus : Qt::NoFocus );
 	    break;
+        case 9: 	//geomW
+            up = true;
+	    break;
+        case 10:	//geomH
+            up = true;
+	    break;
 	case 12:	//geomMargin
             elFD->geomMargin = atoi(val.c_str());
 	    up=true;

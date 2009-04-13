@@ -1,3 +1,7 @@
+2009-04-13 Maxim
+- FIX:/UI/Vision: Repainting the widget when its geometry is changed is fixed for primitive ElFigure.
+
+
 2009-04-10 Roman
 - !!!!:/Protocol/ModBus: Full support input protocol and ModBus data mirroring node structure is released.
     Supported multinode data mirroring and gateway to remote devices. Translation is updated.
