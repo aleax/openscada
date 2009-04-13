@@ -596,6 +596,7 @@ void TCntrNode::AHDConnect()
 {
     conn_res.resRequestW( );
     m_use++;
+    if( m_use > 65000 ) mess_err(nodePath().c_str(),_("Too more users for node!!!"));
     conn_res.resReleaseW( );
 }
 

@@ -26,9 +26,11 @@
 //********************************************
 //* Resource object                          *
 //********************************************
+Res Res::readRes;
+
 Res::Res( unsigned val ) : rd_c(0)
 {
-    if( sem_init(&sem,0,val) || sem_init(&sem_rc,0,1) )
+    if( sem_init(&sem,0,val) )
 	throw TError("ResAlloc",_("Error open semaphor!"));
 }
 
@@ -37,7 +39,6 @@ Res::~Res( )
     sem_wait( &sem );
     while( rd_c ) usleep(STD_WAIT_DELAY*1000);
     sem_destroy( &sem );
-    sem_destroy( &sem_rc );
 }
 
 void Res::resRequestW( long tm )
@@ -48,7 +49,7 @@ void Res::resRequestW( long tm )
 	timespec wtm = { tm, 0 };
 	if( sem_timedwait( &sem, &wtm ) ) throw TError("ResAlloc",_("Timeouted!"));
     }
-    //- Wait of readers free -
+    //> Wait of readers free
     if( rd_c )
     {
 	time_t st_tm = time(NULL);
@@ -73,18 +74,16 @@ void Res::resRequestR( long tm )
 	timespec wtm = { tm, 0 };
 	if( sem_timedwait( &sem, &wtm ) ) throw TError("ResAlloc",_("Timeouted!"));
     }
-    sem_wait( &sem_rc );
-    rd_c++;
-    sem_post( &sem_rc );
+
+    if( rd_c > 250 ) throw TError("ResAlloc",_("Readers count %d too big for resource %xh\n"),rd_c,this);
+    readRes.resRequestW(); rd_c++; readRes.resReleaseW();
 
     sem_post( &sem );
 }
 
 void Res::resReleaseR( )
 {
-    sem_wait( &sem_rc );
-    if( rd_c > 0 ) rd_c--;
-    sem_post( &sem_rc );
+    readRes.resRequestW(); if( rd_c > 0 ) rd_c--; readRes.resReleaseW();
 }
 
 //********************************************

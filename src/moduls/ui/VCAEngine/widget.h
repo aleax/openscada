@@ -76,8 +76,8 @@ class Attr : public TCntrNode
 	int flgGlob( );		//Global attribite's flags
 	SelfAttrFlgs flgSelf( )	{ return (SelfAttrFlgs)self_flg; }
 	unsigned modif( )	{ return m_modif; }
-	string cfgTempl( )	{ return cfg_tmpl; }
-	string cfgVal( )	{ return cfg_val; }
+	string cfgTempl( );
+	string cfgVal( );
 
 	void setFlgSelf( SelfAttrFlgs flg );
 	void setModif( unsigned set )	{ m_modif = set; }
@@ -121,7 +121,7 @@ class Attr : public TCntrNode
 	unsigned m_modif;		//Modify counter
 	char	self_flg;		//Self attributes flags
 
-	string	cfg_tmpl, cfg_val;	//Config template and value
+	string	cfg;			//Config template and value
 };
 
 //************************************************

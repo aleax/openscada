@@ -211,7 +211,7 @@ class TCntrNode
 	vector<GrpEl>	chGrp;		//Child groups
 
 	//> Curent node
-	unsigned char		m_use;	//Use counter
+	unsigned short int	m_use;	//Use counter
 	unsigned short int	m_oi;	//Order index
 
 	char	m_flg;

@@ -1338,6 +1338,8 @@ Attr::Attr( TFld &ifld ) : m_modif(0), self_flg((SelfAttrFlgs)0)
     switch(fld().type())
     {
 	case TFld::String:
+	    m_val.s_val = NULL;
+	    if( ifld.flg()&Attr::DirRead ) break;
 	    m_val.s_val    = new ResString();
 	    m_val.s_val->setVal(fld().def());
 	    break;
@@ -1349,7 +1351,7 @@ Attr::Attr( TFld &ifld ) : m_modif(0), self_flg((SelfAttrFlgs)0)
 
 Attr::~Attr(  )
 {
-    if( fld().type() == TFld::String )	delete m_val.s_val;
+    if( fld().type() == TFld::String && m_val.s_val )	delete m_val.s_val;
     if( fld().flg()&TFld::SelfFld )	delete m_fld;
 }
 
@@ -1560,12 +1562,23 @@ void Attr::setB( char val, bool strongPrev, bool sys )
     }
 }
 
+string Attr::cfgTempl( )
+{
+    return cfg.substr(0,cfg.find("\n"));
+}
+
+string Attr::cfgVal( )
+{
+    int sepp = cfg.find("\n");
+    return (sepp!=string::npos) ? cfg.substr(sepp+1) : "";
+}
+
 void Attr::setCfgTempl( const string &vl )
 {
-    if( cfg_tmpl == vl ) return;
-    string t_tmpl = cfg_tmpl;
-    cfg_tmpl = vl;
-    if( !owner()->attrChange(*this,TVariant()) )	cfg_tmpl = t_tmpl;
+    string t_tmpl = cfgTempl();
+    if( t_tmpl == vl ) return;
+    cfg = vl+"\n"+cfgVal();
+    if( !owner()->attrChange(*this,TVariant()) ) cfg = t_tmpl+"\n"+cfgVal();
     else
     {
 	unsigned imdf = owner()->modifVal(*this);
@@ -1575,10 +1588,10 @@ void Attr::setCfgTempl( const string &vl )
 
 void Attr::setCfgVal( const string &vl )
 {
-    if( cfg_val == vl ) return;
-    string t_val = cfg_val;
-    cfg_val = vl;
-    if( !owner()->attrChange(*this,TVariant()) )	cfg_val = t_val;
+    string t_val = cfgVal();
+    if( t_val == vl ) return;
+    cfg = cfgTempl()+"\n"+vl;
+    if( !owner()->attrChange(*this,TVariant()) ) cfg = cfgTempl()+"\n"+t_val;
     else
     {
 	unsigned imdf = owner()->modifVal(*this);

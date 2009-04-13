@@ -42,7 +42,7 @@
 #define MOD_NAME	"Serial interfaces"
 #define MOD_TYPE	"Transport"
 #define VER_TYPE	VER_TR
-#define VERSION		"0.3.0"
+#define VERSION		"0.5.0"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow serial based interfaces. Used for data exchanging through serial interfaces like RS232, RS485, GSM and other."
 #define LICENSE		"GPL"

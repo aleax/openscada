@@ -44,8 +44,8 @@ class Res
 
     private:
 	sem_t	sem;				// semaphore id
-	sem_t	sem_rc;				// read counter semaphore
-	int	rd_c;				// readers counter
+	unsigned char	rd_c;			// readers counter
+	static Res readRes;
 };
 
 //********************************************

@@ -1071,7 +1071,7 @@ void Func::setValB( TValFunc *io, RegW &rg, char val )
 
 void Func::calc( TValFunc *val )
 {
-    calc_res.resRequestR( );
+    ResAlloc res(calc_res,false);
     if( !startStat( ) )	return;
 
     //> Init list of registers
@@ -1089,7 +1089,7 @@ void Func::calc( TValFunc *val )
     ExecData dt = { 1, 0, 0 };
     try{ exec(val,reg,(const BYTE *)prg.c_str(),dt); }
     catch(TError err){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-    calc_res.resReleaseR( );
+    res.release();
     if( dt.flg&0x07 == 0x01 )	setStart(false);
 }
 
