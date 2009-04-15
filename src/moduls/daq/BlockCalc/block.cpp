@@ -387,11 +387,7 @@ void Block::calc( bool first, bool last )
 	TValFunc::calc( );
 	modif();
     }
-    catch(TError err)
-    {
-	err_cnt++;
-	throw TError(nodePath().c_str(),_("Error calc block <%s>."),id().c_str());
-    }
+    catch(TError err) { err_cnt++; throw; }
 
     //- Put values to output links -
     lnk_res.resRequestR( );

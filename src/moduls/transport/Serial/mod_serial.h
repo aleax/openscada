@@ -64,7 +64,7 @@ class TTrIn: public TTransportIn
 	pthread_t	pthr_tsk;
 	bool		endrun;			// Command for stop task
 
-	float		trIn, trOut;		// Traffic in and out counter
+	float		trIn, trOut, tmMax;	// Traffic in and out counter
 };
 
 //************************************************
@@ -97,7 +97,7 @@ class TTrOut: public TTransportOut
 	int	fd;
 	long long mLstReqTm;
 
-	float	trIn, trOut;	// Traffic in and out counter
+	float	trIn, trOut, tmMax;		// Traffic in and out counter and maximum respond timeout
 };
 
 //************************************************

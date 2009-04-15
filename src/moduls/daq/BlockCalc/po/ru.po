@@ -122,7 +122,7 @@ msgstr "Ошибка чтения связей блока <%s>."
 #: block.cpp:392
 #, c-format
 msgid "Error calc block <%s>."
-msgstr "Ошибка вічисления блока <%s>."
+msgstr "Ошибка вычисления блока <%s>."
 
 #: block.cpp:427
 #, c-format

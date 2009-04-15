@@ -357,7 +357,6 @@ class TVArchivator : public TCntrNode, public TConfig
 	timer_t	tmId;		//Thread timer
 };
 
-
 //*************************************************
 //* TVArchEl                                      *
 //*************************************************

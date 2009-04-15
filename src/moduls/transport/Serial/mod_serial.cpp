@@ -170,9 +170,9 @@ void TTr::cntrCmdProc( XMLNode *opt )
 //* TTrIn                                        *
 //************************************************
 TTrIn::TTrIn( string name, const string &idb, TElem *el ) :
-    TTransportIn(name,idb,el), trIn(0), trOut(0), fd(-1), mTimings(cfg("TMS").getSd())
+    TTransportIn(name,idb,el), trIn(0), trOut(0), tmMax(0), fd(-1), mTimings(cfg("TMS").getSd())
 {
-    setAddr("/dev/ttyS0:19200:8:2:p");
+    setAddr("/dev/ttyS0:19200:8E2");
 }
 
 TTrIn::~TTrIn()
@@ -184,7 +184,8 @@ string TTrIn::getStatus( )
 {
     string rez = TTransportIn::getStatus( );
 
-    if( startStat() ) rez += TSYS::strMess(_("Traffic in %.4g kb, out %.4g kb."),trIn,trOut);
+    if( startStat() )
+	rez += TSYS::strMess(_("Traffic in %.4g kb, out %.4g kb. Maximum char timeout %.4g ms."),trIn,trOut,tmMax);
 
     return rez;
 }
@@ -203,7 +204,7 @@ void TTrIn::start()
     if( run_st ) return;
 
     //> Status clear
-    trIn = trOut = 0;
+    trIn = trOut = tmMax = 0;
 
     try
     {
@@ -221,28 +222,6 @@ void TTrIn::start()
 	tio.c_lflag = 0;
 	tio.c_cc[VTIME] = 0;           ///< inter-character timer unused
 	tio.c_cc[VMIN] = 1;            ///< blocking read until 1 character arrives
-	//>> Set byte length
-	int len = atoi(TSYS::strSepParse(addr(),2,':').c_str());
-	if( len < 5 || len > 8 ) throw TError(nodePath().c_str(),_("Char length '%d' error."),len);
-	tio.c_cflag &= ~CSIZE;
-	switch(len)
-	{
-	    case 5:	tio.c_cflag |= CS5;	break;
-	    case 6:	tio.c_cflag |= CS6;	break;
-	    case 7:	tio.c_cflag |= CS7;	break;
-	    case 8:	tio.c_cflag |= CS8;	break;
-	}
-	//>> Set stop bits number
-	int stopbt = atoi(TSYS::strSepParse(addr(),3,':').c_str());
-	if( stopbt == 1 ) tio.c_cflag |= CSTOPB;
-	else if( stopbt == 2 ) tio.c_cflag &= ~CSTOPB;
-	else throw TError(nodePath().c_str(),_("Stop bits '%d' error."),stopbt);
-	//>> Set parity
-	string parity = TSYS::strNoSpace(TSYS::strSepParse(addr(),4,':'));
-	if( parity == "p" )		{ tio.c_cflag |= PARENB; tio.c_cflag &= ~PARODD; }
-	else if( parity == "n" )	{ tio.c_cflag |= PARENB; tio.c_cflag |= PARODD; }
-	else if( parity == "0" )	tio.c_cflag &= ~PARENB;
-	else throw TError(nodePath().c_str(),_("Parity checking mode '%s' error."),parity.c_str());
 	//>> Set speed
 	int speed = atoi(TSYS::strSepParse(addr(),1,':').c_str());
 	speed_t tspd = B9600;
@@ -267,6 +246,34 @@ void TTrIn::start()
 	}
 	cfsetispeed( &tio, tspd );
 	cfsetospeed( &tio, tspd );
+	//>> Set asynchronous data format
+	string format = TSYS::strNoSpace(TSYS::strSepParse(addr(),2,':'));
+	if( format.size() != 3 ) throw TError(nodePath().c_str(),_("Asynchronous data format '%s' error."),format.c_str());
+	//>>> Set byte length
+	int len =  format[0]-'0';
+	if( len < 5 || len > 8 ) throw TError(nodePath().c_str(),_("Char length '%d' error."),len);
+	tio.c_cflag &= ~CSIZE;
+	switch(len)
+	{
+	    case 5:	tio.c_cflag |= CS5;	break;
+	    case 6:	tio.c_cflag |= CS6;	break;
+	    case 7:	tio.c_cflag |= CS7;	break;
+	    case 8:	tio.c_cflag |= CS8;	break;
+	}
+	//>>> Set parity
+	char parity = tolower(format[1]);
+	switch( parity )
+	{
+	    case 'e': tio.c_cflag |= PARENB; tio.c_cflag &= ~PARODD;	break;
+	    case 'o': tio.c_cflag |= PARENB; tio.c_cflag |= PARODD;	break;
+	    case 'n': tio.c_cflag &= ~PARENB;	break;
+	    default: throw TError(nodePath().c_str(),_("Parity checking mode '%c' error."),parity);
+	}
+	//>>> Set stop bits number
+ 	int stopbt = format[2]-'0';
+	if( stopbt == 1 ) tio.c_cflag |= CSTOPB;
+	else if( stopbt == 2 ) tio.c_cflag &= ~CSTOPB;
+	else throw TError(nodePath().c_str(),_("Stop bits '%d' error."),stopbt); 
 	//>> Set port's data
 	tcflush( fd, TCIFLUSH );
 	tcsetattr( fd, TCSANOW, &tio );
@@ -292,7 +299,7 @@ void TTrIn::stop()
     if( !run_st ) return;
 
     //> Status clear
-    trIn = trOut = 0;
+    trIn = trOut = tmMax = 0;
 
     endrun = true;
     if( TSYS::eventWait( run_st, false, nodePath()+"close",5) )
@@ -324,7 +331,7 @@ void *TTrIn::Task( void *tr_in )
     wCharTm = vmax(0.001,wCharTm);
     int wFrTm = atoi(TSYS::strSepParse(tr->timings(),1,':').c_str());
     wFrTm = 1000*vmin(10000,wFrTm);
-    long long stFrTm;
+    long long stFrTm, tmW = 0, tmTmp1;
 
     fcntl( tr->fd, F_SETFL, 0 );
 
@@ -343,7 +350,13 @@ void *TTrIn::Task( void *tr_in )
 	    }
 	    r_len = read( tr->fd, buf, sizeof(buf));
 	    if( r_len <= 0 ) break;
-	    if( req.empty() ) stFrTm = TSYS::curTime();
+
+	    //>> Requests statistic
+	    tmTmp1 = TSYS::curTime();
+	    if( req.empty() ) stFrTm = tmW = tmTmp1;
+	    if( tmW ) tr->tmMax = vmax(tr->tmMax,1e-3*(tmTmp1-tmW));
+	    tmW = tmTmp1;
+
 	    req += string(buf,r_len);
 	    if( (TSYS::curTime()-stFrTm) > wFrTm )	break;
 	}
@@ -404,13 +417,11 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
     {
 	TTransportIn::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","root",2,"tp","str","help",
-	    _("Serial transport has address format: \"[dev]:[speed]:[len]:[stop]:[parity]\". Where:\n"
+	    _("Serial transport has address format: \"[dev]:[speed]:[format]\". Where:\n"
 	    "    dev - serial device address (/dev/ttyS0);\n"
 	    "    speed - device speed (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200,\n"
 	    "                          230400, 460800, 500000, 576000 or 921600);\n"
-	    "    len - symbol length (bites: 7,8);\n"
-	    "    stop - stop bites number (1 or 2);\n"
-	    "    parity - parity check (p-parity,n-odd parity,0-disable)."));
+	    "    format - asynchronous data format '<size><parity><stop>' (8N1, 7E1, 5O2)."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),0664,"root","root",2,"tp","str","help",
 	    _("Connection timings in format: \"[symbol]:[frm]\". Where:\n"
 	    "    symbol - one symbol maximum time, used for frame end detection, in ms;\n"
@@ -432,9 +443,9 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 //* TTrOut                                   *
 //************************************************
 TTrOut::TTrOut(string name, const string &idb, TElem *el) :
-    TTransportOut(name,idb,el), mTimings(cfg("TMS").getSd()), fd(-1), mLstReqTm(0)
+    TTransportOut(name,idb,el), mTimings(cfg("TMS").getSd()), fd(-1), mLstReqTm(0), tmMax(0)
 {
-    setAddr("/dev/ttyS0:19200:8:2:p");
+    setAddr("/dev/ttyS0:19200:8E2");
 }
 
 TTrOut::~TTrOut()
@@ -446,7 +457,8 @@ string TTrOut::getStatus( )
 {
     string rez = TTransportOut::getStatus( );
 
-    if( startStat() )	rez += TSYS::strMess(_("Traffic in %.4g kb, out %.4g kb."),trIn,trOut);
+    if( startStat() )
+	rez += TSYS::strMess(_("Traffic in %.4g kb, out %.4g kb. Maximum char timeout %.4g ms."),trIn,trOut,tmMax);
 
     return rez;
 }
@@ -465,7 +477,7 @@ void TTrOut::start( )
     if( run_st ) return;
 
     //> Status clear
-    trIn = trOut = 0;
+    trIn = trOut = tmMax = 0;
 
     try
     {
@@ -483,28 +495,6 @@ void TTrOut::start( )
 	tio.c_lflag = 0;
 	tio.c_cc[VTIME] = 0;           ///< inter-character timer unused
 	tio.c_cc[VMIN] = 1;            ///< blocking read until 1 character arrives
-	//>> Set byte length
-	int len = atoi(TSYS::strSepParse(addr(),2,':').c_str());
-	if( len < 5 || len > 8 ) throw TError(nodePath().c_str(),_("Char length '%d' error."),len);
-	tio.c_cflag &= ~CSIZE;
-	switch(len)
-	{
-	    case 5:	tio.c_cflag |= CS5;	break;
-	    case 6:	tio.c_cflag |= CS6;	break;
-	    case 7:	tio.c_cflag |= CS7;	break;
-	    case 8:	tio.c_cflag |= CS8;	break;
-	}
-	//>> Set stop bits number
- 	int stopbt = atoi(TSYS::strSepParse(addr(),3,':').c_str());
-	if( stopbt == 1 ) tio.c_cflag |= CSTOPB;
-	else if( stopbt == 2 ) tio.c_cflag &= ~CSTOPB;
-	else throw TError(nodePath().c_str(),_("Stop bits '%d' error."),stopbt); 
-	//>> Set parity
-	string parity = TSYS::strNoSpace(TSYS::strSepParse(addr(),4,':'));
-	if( parity == "p" )		{ tio.c_cflag |= PARENB; tio.c_cflag &= ~PARODD; }
-	else if( parity == "n" )	{ tio.c_cflag |= PARENB; tio.c_cflag |= PARODD; }
-	else if( parity == "0" )	tio.c_cflag &= ~PARENB;
-	else throw TError(nodePath().c_str(),_("Parity checking mode '%s' error."),parity.c_str());
 	//>> Set speed
 	int speed = atoi(TSYS::strSepParse(addr(),1,':').c_str());
 	speed_t tspd = B9600;
@@ -529,6 +519,34 @@ void TTrOut::start( )
 	}
 	cfsetispeed( &tio, tspd );
 	cfsetospeed( &tio, tspd );
+	//>> Set asynchronous data format
+	string format = TSYS::strNoSpace(TSYS::strSepParse(addr(),2,':'));
+	if( format.size() != 3 ) throw TError(nodePath().c_str(),_("Asynchronous data format '%s' error."),format.c_str());
+	//>>> Set byte length
+	int len =  format[0]-'0';
+	if( len < 5 || len > 8 ) throw TError(nodePath().c_str(),_("Char length '%d' error."),len);
+	tio.c_cflag &= ~CSIZE;
+	switch(len)
+	{
+	    case 5:	tio.c_cflag |= CS5;	break;
+	    case 6:	tio.c_cflag |= CS6;	break;
+	    case 7:	tio.c_cflag |= CS7;	break;
+	    case 8:	tio.c_cflag |= CS8;	break;
+	}
+	//>>> Set parity
+	char parity = tolower(format[1]);
+	switch( parity )
+	{
+	    case 'e': tio.c_cflag |= PARENB; tio.c_cflag &= ~PARODD;	break;
+	    case 'o': tio.c_cflag |= PARENB; tio.c_cflag |= PARODD;	break;
+	    case 'n': tio.c_cflag &= ~PARENB;	break;
+	    default: throw TError(nodePath().c_str(),_("Parity checking mode '%c' error."),parity);
+	}
+	//>>> Set stop bits number
+ 	int stopbt = format[2]-'0';
+	if( stopbt == 1 ) tio.c_cflag |= CSTOPB;
+	else if( stopbt == 2 ) tio.c_cflag &= ~CSTOPB;
+	else throw TError(nodePath().c_str(),_("Stop bits '%d' error."),stopbt); 
 	//>> Set port's data
 	tcflush( fd, TCIFLUSH );
 	tcsetattr( fd, TCSANOW, &tio );
@@ -547,7 +565,7 @@ void TTrOut::stop()
     if( !run_st ) return;
 
     //> Status clear
-    trIn = trOut = 0;
+    trIn = trOut = tmMax = 0;
 
     close(fd); fd = -1;
 
@@ -570,12 +588,12 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
     int wFrTm = atoi(TSYS::strSepParse(timings(),0,':',&off).c_str());
     wFrTm = 1000*vmin(10000,wFrTm);
 
-    long long tmptm = TSYS::curTime();
+    long long tmW = TSYS::curTime(), tmTmp1;
 
     //> Write request
     if( obuf && len_ob > 0 )
     {
-	if( (tmptm-mLstReqTm) < (5500*wCharTm) ) usleep( (int)((5500*wCharTm)-(tmptm-mLstReqTm)) );
+	if( (tmW-mLstReqTm) < (5500*wCharTm) ) usleep( (int)((5500*wCharTm)-(tmW-mLstReqTm)) );
 	tcflush( fd, TCIFLUSH );
 	if( write(fd,obuf,len_ob) == -1 ) throw TError(nodePath().c_str(),_("Writing request error."));
 	trOut += (float)len_ob/1024;
@@ -593,7 +611,7 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
 	    if( bytes > 2 ) break;
 	    //>> Connection timeout
 	    mLstReqTm = TSYS::curTime();
-	    if( (mLstReqTm-tmptm) >= wReqTm )
+	    if( (mLstReqTm-tmW) >= wReqTm )
 		throw TError(nodePath().c_str(),_("Respond from remote device is timeouted."));
 	    usleep( 1000 );
 	    isEnter = false;
@@ -602,7 +620,7 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
 	blen = read( fd, ibuf, len_ib );
 
 	//>> Wait tail
-	tmptm = mLstReqTm;
+	tmW = mLstReqTm;
 	struct timeval tv;
 	while( true )
 	{
@@ -612,10 +630,16 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
 
 	    if( select(fd+1,&fdset,NULL,NULL,&tv) <= 0 ) break;
 	    blen += read( fd, ibuf+blen, len_ib-blen );
+
+	    //>> Respond statistic
+	    tmTmp1 = TSYS::curTime();
+	    tmMax = vmax(tmMax,1e-3*(tmTmp1-mLstReqTm));
+	    mLstReqTm = tmTmp1;
+
 	    //>> Frame timeout
-	    mLstReqTm = TSYS::curTime();
-	    if( (mLstReqTm-tmptm) > wFrTm )	break;
+	    if( (mLstReqTm-tmW) > wFrTm )	break;
 	}
+	mLstReqTm = TSYS::curTime();
 	trIn += (float)blen/1024;
     }
 
@@ -629,13 +653,11 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
     {
 	TTransportOut::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","root",2,"tp","str","help",
-	    _("Serial transport has address format: \"[dev]:[speed]:[len]:[stop]:[parity]\". Where:\n"
+	    _("Serial transport has address format: \"[dev]:[speed]:[format]\". Where:\n"
 	    "    dev - serial device address (/dev/ttyS0);\n"
 	    "    speed - device speed (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200,\n"
 	    "                          230400, 460800, 500000, 576000 or 921600 );\n"
-	    "    len - symbol length (bites: 7,8);\n"
-	    "    stop - stop bites number (1 or 2);\n"
-	    "    parity - parity check (p-parity,n-odd parity,0-disable)."));
+	    "    format - asynchronous data format '<size><parity><stop>' (8N1, 7E1, 5O2)."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),0664,"root","root",2,"tp","str","help",
 	    _("Connection timings in format: \"[conn]:[symbol]:[frm]\". Where:\n"
 	    "    conn - maximum time for connection respond wait, in ms;\n"

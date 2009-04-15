@@ -441,13 +441,14 @@ void *TSocketIn::ClTask( void *s_inf )
 
     s.s->clientReg( pthread_self(), s.cSock );
 
-    //- Client socket process -
+    //> Client socket process
     struct  timeval tv;
     fd_set  rd_fd;
     int     r_len;
     string  req, answ;
     char    buf[s.s->bufLen()*1000 + 1];
     AutoHD<TProtocolIn> prot_in;
+    bool sessOk = false;
 
     do
     {
@@ -459,6 +460,7 @@ void *TSocketIn::ClTask( void *s_inf )
 	r_len = read(s.cSock,buf,s.s->bufLen()*1000);
 	if(r_len <= 0) break;
 	s.s->trIn += (float)r_len/1024;
+
 #if OSC_DEBUG >= 5
 	mess_debug(s.s->nodePath().c_str(),_("Socket received message <%d> from <%s>."), r_len, s.sender.c_str() );
 #endif
@@ -473,7 +475,8 @@ void *TSocketIn::ClTask( void *s_inf )
 	    r_len = write(s.cSock,answ.c_str(),answ.size()); s.s->trOut += (float)r_len/1024;
 	    answ = "";
 	}
-    }while( !s.s->endrun_cl && (s.s->mode || !prot_in.freeStat()) );
+	sessOk = true;
+    }while( !s.s->endrun_cl && (!sessOk || s.s->mode || !prot_in.freeStat()) );
 
     //> Close protocol on broken connection
     if( !prot_in.freeStat() )
@@ -711,29 +714,23 @@ void TSocketOut::stop()
 
 int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int time )
 {
-    int kz = 0;
+    int kz = 0, reqTry = 0;
 
     if( !time ) time = 5000;
     ResAlloc res( wres, true );
 
     if( !run_st ) throw TError(nodePath().c_str(),_("Transport is not started!"));
 
+repeate:
+    if( reqTry++ >= 2 ) throw TError(nodePath().c_str(),_("Read reply error: %s"),strerror(errno));
     //> Write request
-    if( obuf != NULL && len_ob > 0 )
-	while( (kz = write(sock_fd,obuf,len_ob)) <= 0 )
-	{
-	    run_st = false;
-	    for( int i_tr = 0; true; )
-	    {
-		try{ start(); }
-		catch( TError err )
-		{
-		    if( i_tr++ < 3 )	continue;
-		    throw err;
-		}
-		break;
-	    }
-	}
+    if( obuf != NULL && len_ob > 0 && (kz=write(sock_fd,obuf,len_ob)) <= 0 )
+    {
+	res.release();
+	stop(); start();
+	res.request(true);
+	goto repeate;
+    }
     trOut += (float)kz/1024;
 
     //> Read reply
@@ -750,24 +747,12 @@ int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, in
 	    kz = select(sock_fd+1,&rd_fd,NULL,NULL,&tv);
 	}
 	while( kz == -1 && errno == EINTR );
-	if( kz == 0 )
-	{
-	    run_st = false;
-	    throw TError(nodePath().c_str(),_("Timeouted!"));
-	}
-	else if( kz < 0)
-	{
-	    run_st = false;
-	    throw TError(nodePath().c_str(),_("Socket error!"));
-	}
+	if( kz == 0 )	{ res.release(); stop( ); throw TError(nodePath().c_str(),_("Timeouted!")); }
+	else if( kz < 0){ res.release(); stop( ); throw TError(nodePath().c_str(),_("Socket error!")); }
 	else if( FD_ISSET(sock_fd, &rd_fd) )
 	{
 	    i_b = read(sock_fd,ibuf,len_ib);
-	    if(i_b < 0)
-	    {
-		run_st = false;
-		throw TError(nodePath().c_str(),_("Read reply error: %s"),strerror(errno));
-	    }
+	    if(i_b <= 0) { res.release(); stop(); start(); res.request(true); goto repeate; }
 	    trIn += (float)i_b/1024;
 	}
     }

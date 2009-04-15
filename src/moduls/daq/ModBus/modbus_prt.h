@@ -48,6 +48,8 @@ namespace ModBus
 //*************************************************
 //* TProtIn                                       *
 //*************************************************
+class TProt;
+
 class TProtIn: public TProtocolIn
 {
     public:
@@ -56,13 +58,17 @@ class TProtIn: public TProtocolIn
 	~TProtIn( );
 
 	bool mess( const string &request, string &answer, const string &sender );
+
+	TProt &owner( )	{ return *(TProt*)nodePrev(); }
+
+    public:
+	//Attributes
+	string req_buf;
 };
 
 //*************************************************
 //* Node: ModBus input protocol node.             *
 //*************************************************
-class TProt;
-
 class Node : public TFunction, public TConfig
 {
     public:

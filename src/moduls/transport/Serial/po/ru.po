@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the OpenSCADA.Transport.Serial package module.
 # Roman Savochenko <rom_as@fromru.com>, 2009.
 #
-#: mod_serial.cpp:58 mod_serial.cpp:368 mod_serial.cpp:382 mod_serial.cpp:384
+#: mod_serial.cpp:58 mod_serial.cpp:381 mod_serial.cpp:395 mod_serial.cpp:397
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-08 09:08+0300\n"
+"POT-Creation-Date: 2009-04-15 12:21+0300\n"
 "PO-Revision-Date: 2009-03-31 18:28+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -29,7 +29,7 @@ msgid "Transport"
 msgstr "Транспорт"
 
 #: mod_serial.cpp:45
-msgid "0.3.0"
+msgid "0.5.0"
 msgstr ""
 
 #: mod_serial.cpp:46
@@ -68,11 +68,11 @@ msgstr ""
 msgid "5"
 msgstr ""
 
-#: mod_serial.cpp:101 mod_serial.cpp:104 mod_serial.cpp:173 mod_serial.cpp:435
+#: mod_serial.cpp:101 mod_serial.cpp:104 mod_serial.cpp:173 mod_serial.cpp:446
 msgid "TMS"
 msgstr ""
 
-#: mod_serial.cpp:101 mod_serial.cpp:104 mod_serial.cpp:414 mod_serial.cpp:639
+#: mod_serial.cpp:101 mod_serial.cpp:104 mod_serial.cpp:425 mod_serial.cpp:661
 msgid "Timings"
 msgstr "Временные интервалы"
 
@@ -81,11 +81,11 @@ msgid "100"
 msgstr ""
 
 #: mod_serial.cpp:101
-msgid "1.88:320"
+msgid "0.57:320"
 msgstr ""
 
 #: mod_serial.cpp:104
-msgid "640:1.88:320"
+msgid "640:0.57:320"
 msgstr ""
 
 #: mod_serial.cpp:113
@@ -103,17 +103,17 @@ msgstr ""
 msgid "h"
 msgstr ""
 
-#: mod_serial.cpp:127 mod_serial.cpp:406 mod_serial.cpp:414 mod_serial.cpp:631
-#: mod_serial.cpp:639
+#: mod_serial.cpp:127 mod_serial.cpp:419 mod_serial.cpp:425 mod_serial.cpp:655
+#: mod_serial.cpp:661
 msgid "help"
 msgstr ""
 
-#: mod_serial.cpp:156 mod_serial.cpp:403 mod_serial.cpp:628
+#: mod_serial.cpp:156 mod_serial.cpp:416 mod_serial.cpp:652
 msgid "info"
 msgstr ""
 
-#: mod_serial.cpp:159 mod_serial.cpp:406 mod_serial.cpp:414 mod_serial.cpp:631
-#: mod_serial.cpp:639
+#: mod_serial.cpp:159 mod_serial.cpp:419 mod_serial.cpp:425 mod_serial.cpp:655
+#: mod_serial.cpp:661
 msgid "fld"
 msgstr ""
 
@@ -125,19 +125,19 @@ msgstr ""
 msgid "Options help"
 msgstr "Помощь по опциям"
 
-#: mod_serial.cpp:159 mod_serial.cpp:406 mod_serial.cpp:414 mod_serial.cpp:425
-#: mod_serial.cpp:426 mod_serial.cpp:631 mod_serial.cpp:639 mod_serial.cpp:651
-#: mod_serial.cpp:652
+#: mod_serial.cpp:159 mod_serial.cpp:419 mod_serial.cpp:425 mod_serial.cpp:436
+#: mod_serial.cpp:437 mod_serial.cpp:655 mod_serial.cpp:661 mod_serial.cpp:673
+#: mod_serial.cpp:674
 msgid "root"
 msgstr ""
 
-#: mod_serial.cpp:159 mod_serial.cpp:406 mod_serial.cpp:414 mod_serial.cpp:631
-#: mod_serial.cpp:639
+#: mod_serial.cpp:159 mod_serial.cpp:419 mod_serial.cpp:425 mod_serial.cpp:655
+#: mod_serial.cpp:661
 msgid "tp"
 msgstr ""
 
-#: mod_serial.cpp:159 mod_serial.cpp:406 mod_serial.cpp:414 mod_serial.cpp:631
-#: mod_serial.cpp:639
+#: mod_serial.cpp:159 mod_serial.cpp:419 mod_serial.cpp:425 mod_serial.cpp:655
+#: mod_serial.cpp:661
 msgid "str"
 msgstr ""
 
@@ -153,138 +153,130 @@ msgstr ""
 msgid "rows"
 msgstr ""
 
-#: mod_serial.cpp:164 mod_serial.cpp:422 mod_serial.cpp:648
+#: mod_serial.cpp:164 mod_serial.cpp:433 mod_serial.cpp:670
 msgid "path"
 msgstr ""
 
-#: mod_serial.cpp:165 mod_serial.cpp:425 mod_serial.cpp:651
+#: mod_serial.cpp:165 mod_serial.cpp:436 mod_serial.cpp:673
 msgid "get"
 msgstr ""
 
-#: mod_serial.cpp:175 mod_serial.cpp:437
-msgid "/dev/ttyS0:19200:8:2:p"
+#: mod_serial.cpp:175 mod_serial.cpp:448
+msgid "/dev/ttyS0:19200:8E2"
 msgstr ""
 
-#: mod_serial.cpp:187 mod_serial.cpp:449
+#: mod_serial.cpp:188 mod_serial.cpp:461
 #, c-format
-msgid "Traffic in %.4g kb, out %.4g kb."
-msgstr "Трафик входящий %.4g кб, исходящий %.4g кб."
+msgid "Traffic in %.4g kb, out %.4g kb. Maximum char timeout %.4g ms."
+msgstr ""
+"Трафик входящий %.4g кб, исходящий %.4g кб. Макс. время ожидания символа %.4g мс."
 
-#: mod_serial.cpp:198 mod_serial.cpp:460
+#: mod_serial.cpp:199 mod_serial.cpp:472
 msgid ":"
 msgstr ""
 
-#: mod_serial.cpp:214 mod_serial.cpp:476
+#: mod_serial.cpp:215 mod_serial.cpp:488
 #, c-format
 msgid "Serial port '%s' open error."
 msgstr "Ошибка открытия последовательного порта '%s'."
 
-#: mod_serial.cpp:226 mod_serial.cpp:488
-#, c-format
-msgid "Char length '%d' error."
-msgstr "Ошибка в длине символа '%d'."
-
-#: mod_serial.cpp:239 mod_serial.cpp:501
-#, c-format
-msgid "Stop bits '%d' error."
-msgstr "Ошибка в количестве стоп битов '%d'."
-
-#: mod_serial.cpp:242 mod_serial.cpp:504
-msgid "p"
-msgstr ""
-
-#: mod_serial.cpp:243 mod_serial.cpp:505
-msgid "n"
-msgstr ""
-
-#: mod_serial.cpp:244 mod_serial.cpp:506
-msgid "0"
-msgstr ""
-
-#: mod_serial.cpp:245 mod_serial.cpp:507
-#, c-format
-msgid "Parity checking mode '%s' error."
-msgstr "Ошибка в режиме '%s' проверки чётности."
-
-#: mod_serial.cpp:266 mod_serial.cpp:528
+#: mod_serial.cpp:245 mod_serial.cpp:518
 #, c-format
 msgid "Speed '%d' error."
 msgstr "Ошибка скорости '%d'."
 
-#: mod_serial.cpp:280
+#: mod_serial.cpp:251 mod_serial.cpp:524
+#, c-format
+msgid "Asynchronous data format '%s' error."
+msgstr "Ошибка формата асинхронных данных '%s'."
+
+#: mod_serial.cpp:254 mod_serial.cpp:527
+#, c-format
+msgid "Char length '%d' error."
+msgstr "Ошибка в длине символа '%d'."
+
+#: mod_serial.cpp:270 mod_serial.cpp:543
+#, c-format
+msgid "Parity checking mode '%c' error."
+msgstr "Ошибка в режиме '%c' проверки чётности."
+
+#: mod_serial.cpp:276 mod_serial.cpp:549
+#, c-format
+msgid "Stop bits '%d' error."
+msgstr "Ошибка в количестве стоп битов '%d'."
+
+#: mod_serial.cpp:287
 msgid "open"
 msgstr ""
 
-#: mod_serial.cpp:281
+#: mod_serial.cpp:288
 msgid "Not opened!"
 msgstr "Не открылся!"
 
-#: mod_serial.cpp:298
+#: mod_serial.cpp:305
 msgid "close"
 msgstr ""
 
-#: mod_serial.cpp:299
+#: mod_serial.cpp:306
 msgid "Not closed!"
 msgstr "Не закрылся!"
 
-#: mod_serial.cpp:310
+#: mod_serial.cpp:317
 #, c-format
 msgid "Thread <%u> is started. TID: %ld"
 msgstr ""
 
-#: mod_serial.cpp:355
+#: mod_serial.cpp:368
 #, c-format
 msgid "Serial received message <%d>."
 msgstr "Serial получил сообщение <%d>."
 
-#: mod_serial.cpp:371
+#: mod_serial.cpp:384
 #, c-format
 msgid "%s"
 msgstr ""
 
-#: mod_serial.cpp:372
+#: mod_serial.cpp:385
 msgid "Error request to protocol."
 msgstr "Ошибка запроса к протоколу."
 
-#: mod_serial.cpp:379
+#: mod_serial.cpp:392
 #, c-format
 msgid "Serial replied message <%d>."
 msgstr "Serial ответил сообщением <%d>."
 
-#: mod_serial.cpp:406 mod_serial.cpp:631
+#: mod_serial.cpp:419 mod_serial.cpp:655
 msgid "/prm/cfg/addr"
 msgstr ""
 
-#: mod_serial.cpp:406 mod_serial.cpp:631
+#: mod_serial.cpp:419 mod_serial.cpp:655
 msgid "ADDR"
 msgstr ""
 
-#: mod_serial.cpp:407
+#: mod_serial.cpp:420
 msgid ""
-"Serial transport has address format: \"[dev]:[speed]:[len]:[stop]:[parity]"
-"\". Where:\n"
+"Serial transport has address format: \"[dev]:[speed]:[format]\". Where:\n"
 "    dev - serial device address (/dev/ttyS0);\n"
 "    speed - device speed (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, "
 "57600, 115200,\n"
 "                          230400, 460800, 500000, 576000 or 921600);\n"
-"    len - symbol length (bites: 7,8);\n"
-"    stop - stop bites number (1 or 2);\n"
-"    parity - parity check (p-parity,n-odd parity,0-disable)."
+"    format - asynchronous data format '<size><parity><stop>' (8N1, 7E1, 5O2)."
 msgstr ""
-"Последовательный транспорт имеет адрес в формате: \"[dev]:[speed]:[len]:"
-"[stop]:[parity]\". Где:\n"
+"Последовательный транспорт имеет адрес в формате: \"[dev]:[speed]:[format]"
+"\". Где:\n"
 "    dev - адрес последовательного устройства (/dev/ttyS0);\n"
-"    speed - скорость устройства (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200,\n"
-"                                 230400, 460800, 500000, 576000 или 921600);\n"
-"    len - длина символа (битов: 7,8);\n"
-"    stop - количество стоп битов (1 или 2);\n"
-"    parity - проверка чётности (p-чётность,n-не чётность,0-отключено)."
+"    speed - скорость устройства (300, 600, 1200, 2400, 4800, 9600, 19200, "
+"38400, 57600, 115200,\n"
+"                                 230400, 460800, 500000, 576000 или "
+"921600);\n"
+"    format - формат асинхронных данных '<размер><чётность><стоп>' (8N1, 7E1, "
+"5O2)."
 
-#: mod_serial.cpp:414 mod_serial.cpp:423 mod_serial.cpp:639 mod_serial.cpp:649
+#: mod_serial.cpp:425 mod_serial.cpp:434 mod_serial.cpp:661 mod_serial.cpp:671
 msgid "/prm/cfg/TMS"
 msgstr ""
 
-#: mod_serial.cpp:415
+#: mod_serial.cpp:426
 msgid ""
 "Connection timings in format: \"[symbol]:[frm]\". Where:\n"
 "    symbol - one symbol maximum time, used for frame end detection, in ms;\n"
@@ -295,44 +287,42 @@ msgstr ""
 "окончания фрейма, в мс;\n"
 "    frm - максимальная длина фрейма, в мс."
 
-#: mod_serial.cpp:426 mod_serial.cpp:652
+#: mod_serial.cpp:437 mod_serial.cpp:674
 msgid "set"
 msgstr ""
 
-#: mod_serial.cpp:564
+#: mod_serial.cpp:582
 msgid "Transport is not started!"
 msgstr "Транспорт не запущен!"
 
-#: mod_serial.cpp:580
+#: mod_serial.cpp:598
 msgid "Writing request error."
 msgstr "Ошибка отправки запроса."
 
-#: mod_serial.cpp:597
+#: mod_serial.cpp:615
 msgid "Respond from remote device is timeouted."
 msgstr "Исчерпано время ожидания ответа от устройства."
 
-#: mod_serial.cpp:632
+#: mod_serial.cpp:656
 msgid ""
-"Serial transport has address format: \"[dev]:[speed]:[len]:[stop]:[parity]"
-"\". Where:\n"
+"Serial transport has address format: \"[dev]:[speed]:[format]\". Where:\n"
 "    dev - serial device address (/dev/ttyS0);\n"
 "    speed - device speed (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, "
 "57600, 115200,\n"
 "                          230400, 460800, 500000, 576000 or 921600 );\n"
-"    len - symbol length (bites: 7,8);\n"
-"    stop - stop bites number (1 or 2);\n"
-"    parity - parity check (p-parity,n-odd parity,0-disable)."
+"    format - asynchronous data format '<size><parity><stop>' (8N1, 7E1, 5O2)."
 msgstr ""
-"Последовательный транспорт имеет адрес в формате: \"[dev]:[speed]:[len]:"
-"[stop]:[parity]\". Где:\n"
+"Последовательный транспорт имеет адрес в формате: \"[dev]:[speed]:[format]"
+"\". Где:\n"
 "    dev - адрес последовательного устройства (/dev/ttyS0);\n"
-"    speed - скорость устройства (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200,\n"
-"                                 230400, 460800, 500000, 576000 или 921600 );\n"
-"    len - длина символа (битов: 7,8);\n"
-"    stop - количество стоп битов (1 или 2);\n"
-"    parity - проверка чётности (p-чётность,n-не чётность,0-отключено)."
+"    speed - скорость устройства (300, 600, 1200, 2400, 4800, 9600, 19200, "
+"38400, 57600, 115200,\n"
+"                                 230400, 460800, 500000, 576000 или "
+"921600 );\n"
+"    format - формат асинхронных данных '<размер><чётность><стоп>' (8N1, 7E1, "
+"5O2)."
 
-#: mod_serial.cpp:640
+#: mod_serial.cpp:662
 msgid ""
 "Connection timings in format: \"[conn]:[symbol]:[frm]\". Where:\n"
 "    conn - maximum time for connection respond wait, in ms;\n"

@@ -85,7 +85,7 @@ void TTpContr::postEnable( int flag )
     fldAdd( new TFld("FRAG_MERGE",_("Data fragments merge"),TFld::Boolean,TFld::NoFlag,"1","0") );
     fldAdd( new TFld("TM_REQ",_("Connection timeout (ms)"),TFld::Integer,TFld::NoFlag,"5","0") );
     fldAdd( new TFld("TM_REST",_("Restore timeout (s)"),TFld::Integer,TFld::NoFlag,"3","30") );
-    fldAdd( new TFld("CONN_TRY",_("Connection tries"),TFld::Integer,TFld::NoFlag,"1","3") );
+    fldAdd( new TFld("REQ_TRY",_("Request tries"),TFld::Integer,TFld::NoFlag,"1","3") );
 
     //> Parameter type bd structure
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
@@ -133,7 +133,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) :
 	numRReg(0), numRRegIn(0), numRCoil(0), numRCoilIn(0), numWReg(0), numWCoil(0), numErrCon(0), numErrResp(0),
 	mPer(cfg("PERIOD").getRd()), mPrior(cfg("PRIOR").getId()), mPrt(cfg("PROT").getSd()),
 	mAddr(cfg("ADDR").getSd()), mNode(cfg("NODE").getId()), mMerge(cfg("FRAG_MERGE").getBd()),
-	reqTm(cfg("TM_REQ").getId()), restTm(cfg("TM_REST").getId()), connTry(cfg("CONN_TRY").getId())
+	reqTm(cfg("TM_REQ").getId()), restTm(cfg("TM_REST").getId()), connTry(cfg("REQ_TRY").getId())
 {
     cfg("PRM_BD").setS("ModBusPrm_"+name_c);
 }
@@ -148,8 +148,8 @@ string TMdContr::getStatus( )
     string val = TController::getStatus( );
 
     if( startStat( ) )
-	val += TSYS::strMess(_("Read %g(%g) registers, %g(%g) coils. Write %g registers, %g coils. Errors of connection %g, of respond %g."),
-	    numRReg,numRRegIn,numRCoil,numRCoilIn,numWReg,numWCoil,numErrCon,numErrResp);
+	val += TSYS::strMess(_("Gather data time %.6g ms. Read %g(%g) registers, %g(%g) coils. Write %g registers, %g coils. Errors of connection %g, of respond %g."),
+	    tm_gath,numRReg,numRRegIn,numRCoil,numRCoilIn,numWReg,numWCoil,numErrCon,numErrResp);
 
     return val;
 }
@@ -177,8 +177,6 @@ void TMdContr::start_( )
 
 	//> Clear statistic
 	numRReg = numRRegIn = numRCoil = numRCoilIn = numWReg = numWCoil = numErrCon = numErrResp = 0;
-
-
 
 	//> Start the gathering data task
 	pthread_attr_t pthr_attr;
@@ -219,10 +217,11 @@ bool TMdContr::cfgChange( TCfg &icfg )
 
     if( icfg.fld().name() == "PROT" )
     {
-	if( icfg.getS() == "TCP" )	cfg("CONN_TRY").setView(false);
-	else				cfg("CONN_TRY").setView(true);
+	if( icfg.getS() == "TCP" )	cfg("REQ_TRY").setView(false);
+	else				cfg("REQ_TRY").setView(true);
 	if(startStat())	stop();
     }
+    else if( icfg.fld().name() == "FRAG_MERGE" && enableStat( ) ) disable( );
 
     return true;
 }
@@ -530,7 +529,7 @@ void *TMdContr::Task( void *icntr )
 	    //> Calc acquisition process time
 	    cntr.tm_gath = 1e-3*(TSYS::curTime()-t_cnt);
 
-	    TSYS::taskSleep((long long)cntr.period()*1000000000);
+	    TSYS::taskSleep((long long)(1e9*cntr.period()));
 	}
     }
     catch( TError err )	{ mess_err( err.cat.c_str(), err.mess.c_str() ); }
@@ -554,14 +553,12 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TController::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/cntr/st/gath_tm",_("Gather data time (ms)"),R_R_R_,"root","root",1,"tp","real");
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",cfg("ADDR").fld().descr(),0664,"root","root",3,"tp","str","dest","select","select","/cntr/cfg/trLst");
 	return;
     }
     //- Process command to page -
     string a_path = opt->attr("path");
-    if( a_path == "/cntr/st/gath_tm" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(tm_gath,6));
-    else if( a_path == "/cntr/cfg/trLst" && ctrChkNode(opt) )
+    if( a_path == "/cntr/cfg/trLst" && ctrChkNode(opt) )
     {
 	vector<string> sls;
 	SYS->transport().at().outTrList(sls);

@@ -1,3 +1,21 @@
+2009-04-15 Roman
+- /DAQ/ModBus: Gather controller's time is moved to status string. Connection try config parameter is renamed to request try.
+- /DAQ/ModBus: Disabling controller on config parameter "Fragments merging" changing is made.
+- FIX:/DAQ/ModBus: Real period for ModBus protocol node's table calc is fixed.
+- !!:/DAQ/ModBus: Input request's fragments buffering is added.
+- !:/DAQ/ModBus: Gateway mode is splited to Gataeway node and Gataeway network.
+- FIX:/DAQ/ModBus: ASCIIToData() function's encoding algorithm is fixed.
+- !!:FIX:/DAQ/ModBus: ModBus/ASCII protocol variant is final fixed and tested for everywhere.
+- FIX:/DAQ/ModBus: ~ModBus error's messages is some fixed.
+- /DAQ/ModBus: Input request's to protocol is added to ~ModBus report.
+- /DAQ/ModBus: Error respond for no one present data request is added.
+- /DAQ/ModBus, Transport/Serial: The module documentation and translation is updated.
+- /Transport/Serial: The maximum char timeout a realtime control is added. Can be used for correct char timeout setting.
+- /Transport/Serial: The asynchronous data format writing is changed to traditional.
+- FIX:/Transport/Socket: Close after connection mode is fixed for wait one request.
+- FIX:/Transport/Socket: Reconnection is fixed and session restore is added for output transport, especially for server's close after connection mode.
+
+
 2009-04-13 Roman
 - /Transport/Serial: Documentation for module is added.
 - !!!!:/SYS/Resource: Object Res is made optimal for size by move readers counter's resource to separated resource, one for all resource objects.
