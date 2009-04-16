@@ -33,8 +33,8 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
-oscd_modul_PROGRAMS = daq_Transporter.so$(EXEEXT)
-subdir = src/moduls/daq/Transporter
+oscd_modul_PROGRAMS = daq_DAQGate.so$(EXEEXT)
+subdir = src/moduls/daq/DAQGate
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.in
@@ -46,9 +46,9 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(oscd_moduldir)"
 oscd_modulPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(oscd_modul_PROGRAMS)
-am_daq_Transporter_so_OBJECTS = transporter.$(OBJEXT)
-daq_Transporter_so_OBJECTS = $(am_daq_Transporter_so_OBJECTS)
-daq_Transporter_so_LDADD = $(LDADD)
+am_daq_DAQGate_so_OBJECTS = daq_gate.$(OBJEXT)
+daq_DAQGate_so_OBJECTS = $(am_daq_DAQGate_so_OBJECTS)
+daq_DAQGate_so_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -61,8 +61,8 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(daq_Transporter_so_SOURCES)
-DIST_SOURCES = $(daq_Transporter_so_SOURCES)
+SOURCES = $(daq_DAQGate_so_SOURCES)
+DIST_SOURCES = $(daq_DAQGate_so_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -206,11 +206,11 @@ top_srcdir = @top_srcdir@
 EXTRA_DIST = *.h po/* doc/*
 AM_CXXFLAGS = -I$(top_srcdir)/src -fPIC -DPIC
 AM_LDFLAGS = -shared -module
-daq_Transporter_so_SOURCES = transporter.cpp
+daq_DAQGate_so_SOURCES = daq_gate.cpp
 
 #PO files process and doc install
-doc_name = $(oscd_docmodul)DAQ.Transporter
-m_name = $(oscd_modulpref)Transporter
+doc_name = $(oscd_docmodul)DAQ.DAQGate
+m_name = $(oscd_modulpref)DAQGate
 all: all-am
 
 .SUFFIXES:
@@ -224,9 +224,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/moduls/daq/Transporter/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/moduls/daq/DAQGate/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  src/moduls/daq/Transporter/Makefile
+	  $(AUTOMAKE) --gnu  src/moduls/daq/DAQGate/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -272,9 +272,9 @@ clean-oscd_modulPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-daq_Transporter.so$(EXEEXT): $(daq_Transporter_so_OBJECTS) $(daq_Transporter_so_DEPENDENCIES) 
-	@rm -f daq_Transporter.so$(EXEEXT)
-	$(CXXLINK) $(daq_Transporter_so_OBJECTS) $(daq_Transporter_so_LDADD) $(LIBS)
+daq_DAQGate.so$(EXEEXT): $(daq_DAQGate_so_OBJECTS) $(daq_DAQGate_so_DEPENDENCIES) 
+	@rm -f daq_DAQGate.so$(EXEEXT)
+	$(CXXLINK) $(daq_DAQGate_so_OBJECTS) $(daq_DAQGate_so_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -282,7 +282,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/transporter.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/daq_gate.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

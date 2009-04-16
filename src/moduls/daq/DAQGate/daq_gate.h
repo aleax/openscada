@@ -1,7 +1,7 @@
 
-//OpenSCADA system module DAQ.Transporter file: transporter.h
+//OpenSCADA system module DAQ.DAQGate file: daq_gate.h
 /***************************************************************************
- *   Copyright (C) 2007-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2009 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -18,9 +18,9 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
- 
-#ifndef TRANSPORTER_H
-#define TRANSPORTER_H
+
+#ifndef DAQ_GATE_H
+#define DAQ_GATE_H
 
 #include <tcontroller.h>
 #include <ttipdaq.h>
@@ -35,7 +35,7 @@
 using std::string;
 using std::vector;
 
-namespace DAQTrasport
+namespace DAQGate
 {
 
 //******************************************************
@@ -180,4 +180,4 @@ extern TTpContr *mod;
 
 } //End namespace
 
-#endif //TRANSPORTER_H
+#endif //DAQ_GATE_H

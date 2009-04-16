@@ -160,8 +160,8 @@ class TMdContr: public TController
 
 	pthread_t	procPthr;		//Process task thread
 
-	double	tm_gath;			//Gathering time
-	float	tm_delay;			//Delay time for next try connect
+	double	tmGath;			//Gathering time
+	float	tmDelay;			//Delay time for next try connect
 
 	float numRReg, numRRegIn, numRCoil, numRCoilIn, numWReg, numWCoil, numErrCon, numErrResp;
 };

@@ -3,56 +3,56 @@
 # This file is distributed under the same license as the OpenSCADA.DAQ.Transporter package module.
 # Roman Savochenko <rom_as@fromru.com>, 2007-2009.
 #
-#: transporter.cpp:49 transporter.cpp:130 transporter.cpp:449
+#: daq_gate.cpp:49 daq_gate.cpp:129 daq_gate.cpp:463
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Transporter 0.3.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-26 17:36+0200\n"
+"POT-Creation-Date: 2009-04-16 10:36+0300\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: transporter.cpp:32
-msgid "Transporter"
-msgstr "Транспортёр"
+#: daq_gate.cpp:32
+msgid "DAQGate"
+msgstr ""
 
-#: transporter.cpp:33
-msgid "Data sources transporter"
-msgstr "Транспортёр источников данных"
+#: daq_gate.cpp:33
+msgid "Data sources gate"
+msgstr "Шлюз источников данных"
 
-#: transporter.cpp:34
+#: daq_gate.cpp:34
 msgid "DAQ"
 msgstr ""
 
-#: transporter.cpp:36
+#: daq_gate.cpp:36
 msgid "0.3.3"
 msgstr ""
 
-#: transporter.cpp:37
+#: daq_gate.cpp:37
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-#: transporter.cpp:38
+#: daq_gate.cpp:38
 msgid ""
-"Allow to make transport data sources of remote OpenSCADA station to local "
+"Allow to make gate data sources of remote OpenSCADA station to local "
 "OpenSCADA station."
 msgstr ""
-"Позволяет выполнять транпортировку источников данных удалённых OpenSCADA "
-"станций на локальные."
+"Позволяет выполнять шлюзование источников данных удалённых OpenSCADA станций "
+"в локальные."
 
-#: transporter.cpp:39
+#: daq_gate.cpp:39
 msgid "GPL"
 msgstr ""
 
-#: transporter.cpp:44
+#: daq_gate.cpp:44
 msgid "C"
 msgstr ""
 
-#: transporter.cpp:89
+#: daq_gate.cpp:88
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
@@ -63,420 +63,436 @@ msgstr ""
 "-------- Параметры модульной секции <%s> в конфигурационном файле --------\n"
 "\n"
 
-#: transporter.cpp:100
+#: daq_gate.cpp:99
 msgid "h"
 msgstr ""
 
-#: transporter.cpp:103 transporter.cpp:340 transporter.cpp:342
+#: daq_gate.cpp:102 daq_gate.cpp:354 daq_gate.cpp:356
 msgid "help"
 msgstr ""
 
-#: transporter.cpp:124 transporter.cpp:162
+#: daq_gate.cpp:123 daq_gate.cpp:164
 msgid "PERIOD"
 msgstr ""
 
-#: transporter.cpp:124
+#: daq_gate.cpp:123
 msgid "Gather data period (s)"
 msgstr "Период сбора данных (с)"
 
-#: transporter.cpp:124 transporter.cpp:126
+#: daq_gate.cpp:123 daq_gate.cpp:125
 msgid "6.2"
 msgstr ""
 
-#: transporter.cpp:124 transporter.cpp:551
+#: daq_gate.cpp:123 daq_gate.cpp:570
 msgid "1"
 msgstr ""
 
-#: transporter.cpp:124 transporter.cpp:125
+#: daq_gate.cpp:123 daq_gate.cpp:124
 msgid "0;100"
 msgstr ""
 
-#: transporter.cpp:125 transporter.cpp:162
+#: daq_gate.cpp:124 daq_gate.cpp:164
 msgid "PRIOR"
 msgstr ""
 
-#: transporter.cpp:125
+#: daq_gate.cpp:124
 msgid "Gather task priority"
 msgstr "Уровень приоритета задачи сбора данных"
 
-#: transporter.cpp:125
+#: daq_gate.cpp:124
 msgid "2"
 msgstr ""
 
-#: transporter.cpp:125 transporter.cpp:551
+#: daq_gate.cpp:124 daq_gate.cpp:152 daq_gate.cpp:570
 msgid "0"
 msgstr ""
 
-#: transporter.cpp:126 transporter.cpp:162
+#: daq_gate.cpp:125 daq_gate.cpp:164
 msgid "SYNCPER"
 msgstr ""
 
-#: transporter.cpp:126
+#: daq_gate.cpp:125
 msgid "Sync inter remote station period (s)"
 msgstr "Периодичность синхронизации с удалённой станцией (с)"
 
-#: transporter.cpp:126
+#: daq_gate.cpp:125
 msgid "60"
 msgstr ""
 
-#: transporter.cpp:126
+#: daq_gate.cpp:125
 msgid "0;1000"
 msgstr ""
 
-#: transporter.cpp:127 transporter.cpp:163 transporter.cpp:339
+#: daq_gate.cpp:126 daq_gate.cpp:165 daq_gate.cpp:353
 msgid "STATIONS"
 msgstr ""
 
-#: transporter.cpp:127
+#: daq_gate.cpp:126
 msgid "Remote stations list"
 msgstr "Список удалённых станций"
 
-#: transporter.cpp:127 transporter.cpp:339 transporter.cpp:341
+#: daq_gate.cpp:126 daq_gate.cpp:353 daq_gate.cpp:355
 msgid "100"
 msgstr ""
 
-#: transporter.cpp:128 transporter.cpp:163 transporter.cpp:341
+#: daq_gate.cpp:127 daq_gate.cpp:165 daq_gate.cpp:355
 msgid "CNTRPRM"
 msgstr ""
 
-#: transporter.cpp:128
+#: daq_gate.cpp:127
 msgid "Remote cotrollers and parameters list"
 msgstr "Список удалённых контроллеров и параметров"
 
-#: transporter.cpp:128
+#: daq_gate.cpp:127
 msgid "200"
 msgstr ""
 
-#: transporter.cpp:130 transporter.cpp:218
+#: daq_gate.cpp:129 daq_gate.cpp:220
 msgid "std"
 msgstr ""
 
-#: transporter.cpp:130
+#: daq_gate.cpp:129
 msgid "Standard"
 msgstr "Стандарт"
 
-#: transporter.cpp:144 transporter.cpp:146 transporter.cpp:153
-#: transporter.cpp:203 transporter.cpp:216 transporter.cpp:350
-#: transporter.cpp:423 transporter.cpp:427 transporter.cpp:432
-#: transporter.cpp:472 transporter.cpp:488 transporter.cpp:505
-#: transporter.cpp:534 transporter.cpp:567 transporter.cpp:570
+#: daq_gate.cpp:143 daq_gate.cpp:145 daq_gate.cpp:154 daq_gate.cpp:205
+#: daq_gate.cpp:218 daq_gate.cpp:364 daq_gate.cpp:437 daq_gate.cpp:441
+#: daq_gate.cpp:446 daq_gate.cpp:491 daq_gate.cpp:507 daq_gate.cpp:524
+#: daq_gate.cpp:553 daq_gate.cpp:586 daq_gate.cpp:589
 msgid "path"
 msgstr ""
 
-#: transporter.cpp:149 transporter.cpp:200
+#: daq_gate.cpp:148 daq_gate.cpp:202
 msgid "*"
 msgstr ""
 
-#: transporter.cpp:150
+#: daq_gate.cpp:149
 msgid "TrCntr"
 msgstr ""
 
-#: transporter.cpp:152
-msgid "0\n"
+#: daq_gate.cpp:152
+msgid "rqDir"
 msgstr ""
 
-#: transporter.cpp:152
-msgid "\n"
+#: daq_gate.cpp:152
+msgid "rqUser"
 msgstr ""
 
-#: transporter.cpp:152
+#: daq_gate.cpp:152
+msgid "rqPass"
+msgstr ""
+
+#: daq_gate.cpp:153
 msgid "SelfSystem"
 msgstr ""
 
-#: transporter.cpp:154
+#: daq_gate.cpp:156
 msgid "rez"
 msgstr ""
 
-#: transporter.cpp:182 transporter.cpp:432
+#: daq_gate.cpp:184 daq_gate.cpp:446
 msgid "list"
 msgstr ""
 
-#: transporter.cpp:197 transporter.cpp:514 transporter.cpp:567
+#: daq_gate.cpp:199 daq_gate.cpp:533 daq_gate.cpp:586
 msgid "/"
 msgstr ""
 
-#: transporter.cpp:197
+#: daq_gate.cpp:199
 msgid "/DAQ/"
 msgstr ""
 
-#: transporter.cpp:203 transporter.cpp:216 transporter.cpp:352
-#: transporter.cpp:416 transporter.cpp:466 transporter.cpp:551
+#: daq_gate.cpp:205 daq_gate.cpp:218 daq_gate.cpp:366 daq_gate.cpp:430
+#: daq_gate.cpp:485 daq_gate.cpp:570
 msgid "get"
 msgstr ""
 
-#: transporter.cpp:203
+#: daq_gate.cpp:205
 #, c-format
 msgid "%2fprm%2fprm"
 msgstr ""
 
-#: transporter.cpp:206 transporter.cpp:438 transporter.cpp:447
-#: transporter.cpp:475 transporter.cpp:489
+#: daq_gate.cpp:208 daq_gate.cpp:452 daq_gate.cpp:461 daq_gate.cpp:494
+#: daq_gate.cpp:508
 msgid "id"
 msgstr ""
 
-#: transporter.cpp:216 transporter.cpp:423
+#: daq_gate.cpp:218 daq_gate.cpp:437
 #, c-format
 msgid "/%2fprm%2fcfg%2fNAME"
 msgstr ""
 
-#: transporter.cpp:228
+#: daq_gate.cpp:226 daq_gate.cpp:233 daq_gate.cpp:424
+msgid ";"
+msgstr ""
+
+#: daq_gate.cpp:237
+#, c-format
+msgid "%s"
+msgstr ""
+
+#: daq_gate.cpp:238
+#, c-format
+msgid ""
+"Deletion parameter '%s' is error but it no present on configuration or "
+"remote station."
+msgstr ""
+"Ошибка удаления параметра '%s', однако он отсутствует в конфигурации или на "
+"удалённой станции."
+
+#: daq_gate.cpp:241
 msgid "Some enable errors are present"
 msgstr "Присутствуют некоторые ошибки включения"
 
-#: transporter.cpp:239 transporter.cpp:338 transporter.cpp:339
-#: transporter.cpp:341 transporter.cpp:345 transporter.cpp:352
-#: transporter.cpp:519 transporter.cpp:521 transporter.cpp:522
-#: transporter.cpp:523 transporter.cpp:551 transporter.cpp:552
+#: daq_gate.cpp:252 daq_gate.cpp:352 daq_gate.cpp:353 daq_gate.cpp:355
+#: daq_gate.cpp:359 daq_gate.cpp:366 daq_gate.cpp:538 daq_gate.cpp:540
+#: daq_gate.cpp:541 daq_gate.cpp:542 daq_gate.cpp:570 daq_gate.cpp:571
 msgid "root"
 msgstr ""
 
-#: transporter.cpp:247
+#: daq_gate.cpp:260
 msgid "start"
 msgstr ""
 
-#: transporter.cpp:248
+#: daq_gate.cpp:261
 msgid "Gathering task is not started!"
 msgstr "Задача сбора данных не запущена!"
 
-#: transporter.cpp:259
+#: daq_gate.cpp:272
 msgid "stop"
 msgstr ""
 
-#: transporter.cpp:260
+#: daq_gate.cpp:273
 msgid "Gathering task is not stopped!"
 msgstr "Задача сбора данных не остановлена!"
 
-#: transporter.cpp:282
+#: daq_gate.cpp:295
 #, c-format
 msgid "Thread <%u> is started. TID: %ld"
 msgstr ""
 
-#: transporter.cpp:335 transporter.cpp:511 transporter.cpp:530
+#: daq_gate.cpp:349 daq_gate.cpp:530 daq_gate.cpp:549
 msgid "info"
 msgstr ""
 
-#: transporter.cpp:338 transporter.cpp:339 transporter.cpp:341
-#: transporter.cpp:519 transporter.cpp:521 transporter.cpp:522
-#: transporter.cpp:523
+#: daq_gate.cpp:352 daq_gate.cpp:353 daq_gate.cpp:355 daq_gate.cpp:538
+#: daq_gate.cpp:540 daq_gate.cpp:541 daq_gate.cpp:542
 msgid "fld"
 msgstr ""
 
-#: transporter.cpp:338 transporter.cpp:351
+#: daq_gate.cpp:352 daq_gate.cpp:365
 msgid "/cntr/st/gath_tm"
 msgstr ""
 
-#: transporter.cpp:338
+#: daq_gate.cpp:352
 msgid "Gather data time (ms)"
 msgstr "Время сбора данных (мс)"
 
-#: transporter.cpp:338 transporter.cpp:339 transporter.cpp:341
-#: transporter.cpp:345 transporter.cpp:439 transporter.cpp:519
-#: transporter.cpp:521 transporter.cpp:522 transporter.cpp:523
+#: daq_gate.cpp:352 daq_gate.cpp:353 daq_gate.cpp:355 daq_gate.cpp:359
+#: daq_gate.cpp:453 daq_gate.cpp:538 daq_gate.cpp:540 daq_gate.cpp:541
+#: daq_gate.cpp:542
 msgid "tp"
 msgstr ""
 
-#: transporter.cpp:338
+#: daq_gate.cpp:352
 msgid "real"
 msgstr ""
 
-#: transporter.cpp:339
+#: daq_gate.cpp:353
 msgid "/cntr/cfg/STATIONS"
 msgstr ""
 
-#: transporter.cpp:339 transporter.cpp:341 transporter.cpp:519
-#: transporter.cpp:522 transporter.cpp:523
+#: daq_gate.cpp:353 daq_gate.cpp:355 daq_gate.cpp:538 daq_gate.cpp:541
+#: daq_gate.cpp:542
 msgid "str"
 msgstr ""
 
-#: transporter.cpp:339 transporter.cpp:341
+#: daq_gate.cpp:353 daq_gate.cpp:355
 msgid "cols"
 msgstr ""
 
-#: transporter.cpp:339 transporter.cpp:341
+#: daq_gate.cpp:353 daq_gate.cpp:355
 msgid "rows"
 msgstr ""
 
-#: transporter.cpp:339 transporter.cpp:341
+#: daq_gate.cpp:353 daq_gate.cpp:355
 msgid "4"
 msgstr ""
 
-#: transporter.cpp:340
+#: daq_gate.cpp:354
 msgid "Remote OpenSCADA stations' identifiers list used into it controller."
 msgstr ""
 "Список идентификаторов удалённых OpenSCADA станций используемых в этом "
 "контроллере."
 
-#: transporter.cpp:341
+#: daq_gate.cpp:355
 msgid "/cntr/cfg/CNTRPRM"
 msgstr ""
 
-#: transporter.cpp:342
+#: daq_gate.cpp:356
 msgid ""
 "Remote OpenSCADA full controller's or separated controller's parameters "
 "list. Address example:\n"
 "  System.AutoDA - for controller;\n"
 "  System.AutoDA.UpTimeStation - for controller's parameter."
-msgstr "Список удалённых OpenSCADA полных контроллеров или отдельных параметров контроллеров. Пример адреса:\n"
+msgstr ""
+"Список удалённых OpenSCADA полных контроллеров или отдельных параметров "
+"контроллеров. Пример адреса:\n"
 "  System.AutoDA - для контроллера;\n"
 "  System.AutoDA.UpTimeStation - для параметра контроллера."
 
-#: transporter.cpp:345
+#: daq_gate.cpp:359
 msgid "comm"
 msgstr ""
 
-#: transporter.cpp:345 transporter.cpp:352
+#: daq_gate.cpp:359 daq_gate.cpp:366
 msgid "/cntr/cfg/host_lnk"
 msgstr ""
 
-#: transporter.cpp:345
+#: daq_gate.cpp:359
 msgid "Go to remote stations list configuration"
 msgstr "Переход к конфигурации перечня удалённых станций"
 
-#: transporter.cpp:345
+#: daq_gate.cpp:359
 msgid "lnk"
 msgstr ""
 
-#: transporter.cpp:355
+#: daq_gate.cpp:369
 msgid "/Transport"
 msgstr ""
 
-#: transporter.cpp:364
+#: daq_gate.cpp:378
 msgid "w_attr"
 msgstr ""
 
-#: transporter.cpp:410
-msgid ";"
-msgstr ""
-
-#: transporter.cpp:424 transporter.cpp:428 transporter.cpp:433
-#: transporter.cpp:473 transporter.cpp:490 transporter.cpp:535
-#: transporter.cpp:568
+#: daq_gate.cpp:438 daq_gate.cpp:442 daq_gate.cpp:447 daq_gate.cpp:492
+#: daq_gate.cpp:509 daq_gate.cpp:554 daq_gate.cpp:587
 msgid "mcat"
 msgstr ""
 
-#: transporter.cpp:427
+#: daq_gate.cpp:441
 #, c-format
 msgid "/%2fprm%2fcfg%2fDESCR"
 msgstr ""
 
-#: transporter.cpp:432 transporter.cpp:472 transporter.cpp:488
+#: daq_gate.cpp:446 daq_gate.cpp:491 daq_gate.cpp:507
 #, c-format
 msgid "/%2fserv%2fattr"
 msgstr ""
 
-#: transporter.cpp:447
+#: daq_gate.cpp:461
 msgid "nm"
 msgstr ""
 
-#: transporter.cpp:448
+#: daq_gate.cpp:462
 msgid "flg"
 msgstr ""
 
-#: transporter.cpp:449
+#: daq_gate.cpp:463
 msgid "vals"
 msgstr ""
 
-#: transporter.cpp:449
+#: daq_gate.cpp:463
 msgid "names"
 msgstr ""
 
-#: transporter.cpp:487 transporter.cpp:552
+#: daq_gate.cpp:506 daq_gate.cpp:571
 msgid "set"
 msgstr ""
 
-#: transporter.cpp:489
+#: daq_gate.cpp:508
 msgid "el"
 msgstr ""
 
-#: transporter.cpp:508
+#: daq_gate.cpp:527
 msgid "/serv/"
 msgstr ""
 
-#: transporter.cpp:514
+#: daq_gate.cpp:533
 msgid "oscada_cntr"
 msgstr ""
 
-#: transporter.cpp:514
+#: daq_gate.cpp:533
 msgid "Parameter: "
 msgstr "Параметры: "
 
-#: transporter.cpp:515 transporter.cpp:517 transporter.cpp:525
+#: daq_gate.cpp:534 daq_gate.cpp:536 daq_gate.cpp:544
 msgid "area"
 msgstr ""
 
-#: transporter.cpp:515
+#: daq_gate.cpp:534
 msgid "/prm"
 msgstr ""
 
-#: transporter.cpp:515
+#: daq_gate.cpp:534
 msgid "Parameter"
 msgstr "Параметр"
 
-#: transporter.cpp:517
+#: daq_gate.cpp:536
 msgid "/prm/st"
 msgstr ""
 
-#: transporter.cpp:517
+#: daq_gate.cpp:536
 msgid "State"
 msgstr "Состояние"
 
-#: transporter.cpp:519 transporter.cpp:548
+#: daq_gate.cpp:538 daq_gate.cpp:567
 msgid "/prm/st/type"
 msgstr ""
 
-#: transporter.cpp:519
+#: daq_gate.cpp:538
 msgid "Type"
 msgstr "Тип"
 
-#: transporter.cpp:521 transporter.cpp:549
+#: daq_gate.cpp:540 daq_gate.cpp:568
 msgid "/prm/st/en"
 msgstr ""
 
-#: transporter.cpp:521
+#: daq_gate.cpp:540
 msgid "Enable"
 msgstr "Включен"
 
-#: transporter.cpp:521
+#: daq_gate.cpp:540
 msgid "bool"
 msgstr ""
 
-#: transporter.cpp:522 transporter.cpp:558
+#: daq_gate.cpp:541 daq_gate.cpp:577
 msgid "/prm/st/id"
 msgstr ""
 
-#: transporter.cpp:522
+#: daq_gate.cpp:541
 msgid "Id"
 msgstr ""
 
-#: transporter.cpp:523 transporter.cpp:559
+#: daq_gate.cpp:542 daq_gate.cpp:578
 msgid "/prm/st/nm"
 msgstr ""
 
-#: transporter.cpp:523
+#: daq_gate.cpp:542
 msgid "Name"
 msgstr "Имя"
 
-#: transporter.cpp:525 transporter.cpp:560
+#: daq_gate.cpp:544 daq_gate.cpp:579
 msgid "/prm/cfg"
 msgstr ""
 
-#: transporter.cpp:525
+#: daq_gate.cpp:544
 msgid "Config"
 msgstr "Конфигурация"
 
-#: transporter.cpp:534
+#: daq_gate.cpp:553
 #, c-format
 msgid "/%2fprm%2fcfg"
 msgstr ""
 
-#: transporter.cpp:541
+#: daq_gate.cpp:560
 msgid "dscr"
 msgstr ""
 
-#: transporter.cpp:541
+#: daq_gate.cpp:560
 msgid "Remote station config"
 msgstr "Конфигурация удалённой станции"
 
-#: transporter.cpp:554
+#: daq_gate.cpp:573
 msgid "Controller is not started!"
 msgstr "Контроллер не запущен!"

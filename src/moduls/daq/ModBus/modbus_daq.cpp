@@ -129,7 +129,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //* TMdContr                                           *
 //******************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) :
-	TController( name_c, daq_db, cfgelem ), prc_st(false), endrun_req(false), tm_gath(0), tm_delay(0),
+	TController( name_c, daq_db, cfgelem ), prc_st(false), endrun_req(false), tmGath(0), tmDelay(0),
 	numRReg(0), numRRegIn(0), numRCoil(0), numRCoilIn(0), numWReg(0), numWCoil(0), numErrCon(0), numErrResp(0),
 	mPer(cfg("PERIOD").getRd()), mPrior(cfg("PRIOR").getId()), mPrt(cfg("PROT").getSd()),
 	mAddr(cfg("ADDR").getSd()), mNode(cfg("NODE").getId()), mMerge(cfg("FRAG_MERGE").getBd()),
@@ -148,8 +148,11 @@ string TMdContr::getStatus( )
     string val = TController::getStatus( );
 
     if( startStat( ) )
-	val += TSYS::strMess(_("Gather data time %.6g ms. Read %g(%g) registers, %g(%g) coils. Write %g registers, %g coils. Errors of connection %g, of respond %g."),
-	    tm_gath,numRReg,numRRegIn,numRCoil,numRCoilIn,numWReg,numWCoil,numErrCon,numErrResp);
+    {
+	if( tmDelay ) val += TSYS::strMess(_("Connection error. Restoring in %.6g s."),tmDelay);
+	else val += TSYS::strMess(_("Gather data time %.6g ms. Read %g(%g) registers, %g(%g) coils. Write %g registers, %g coils. Errors of connection %g, of respond %g."),
+				    tmGath,numRReg,numRRegIn,numRCoil,numRCoilIn,numWReg,numWCoil,numErrCon,numErrResp);
+    }
 
     return val;
 }
@@ -176,7 +179,7 @@ void TMdContr::start_( )
 	SYS->transport().at().at(TSYS::strSepParse(mAddr,0,'.')).at().outAt(TSYS::strSepParse(mAddr,1,'.')).at().start();
 
 	//> Clear statistic
-	numRReg = numRRegIn = numRCoil = numRCoilIn = numWReg = numWCoil = numErrCon = numErrResp = 0;
+	numRReg = numRRegIn = numRCoil = numRCoilIn = numWReg = numWCoil = numErrCon = numErrResp = tmDelay = 0;
 
 	//> Start the gathering data task
 	pthread_attr_t pthr_attr;
@@ -418,7 +421,7 @@ void *TMdContr::Task( void *icntr )
 	{
 	    long long t_cnt = TSYS::curTime();
 
-	    if( cntr.tm_delay > 0 )	cntr.tm_delay-=cntr.period();
+	    if( cntr.tmDelay > 0 )	cntr.tmDelay-=cntr.period();
 	    else
 	    {
 #if OSC_DEBUG >= 3
@@ -450,7 +453,7 @@ void *TMdContr::Task( void *icntr )
 			break;
 		    }
 		}
-		if( cntr.tm_delay > 0 )	continue;
+		if( cntr.tmDelay > 0 )	continue;
 		//> Get input's coils
 		for( int i_b = 0; i_b < cntr.acqBlksCoilIn.size(); i_b++ )
 		{
@@ -475,7 +478,7 @@ void *TMdContr::Task( void *icntr )
 			break;
 		    }
 		}
-		if( cntr.tm_delay > 0 )	continue;
+		if( cntr.tmDelay > 0 )	continue;
 		//> Get registers
 		for( int i_b = 0; i_b < cntr.acqBlks.size(); i_b++ )
 		{
@@ -499,7 +502,7 @@ void *TMdContr::Task( void *icntr )
 			break;
 		    }
 		}
-		if( cntr.tm_delay > 0 )	continue;
+		if( cntr.tmDelay > 0 )	continue;
 		//> Get input registers
 		for( int i_b = 0; i_b < cntr.acqBlksIn.size(); i_b++ )
 		{
@@ -527,7 +530,7 @@ void *TMdContr::Task( void *icntr )
 	    }
 
 	    //> Calc acquisition process time
-	    cntr.tm_gath = 1e-3*(TSYS::curTime()-t_cnt);
+	    cntr.tmGath = 1e-3*(TSYS::curTime()-t_cnt);
 
 	    TSYS::taskSleep((long long)(1e9*cntr.period()));
 	}
@@ -541,7 +544,7 @@ void *TMdContr::Task( void *icntr )
 
 void TMdContr::setCntrDelay( const string &err )
 {
-    tm_delay = restTm;
+    tmDelay = restTm;
     ResAlloc res( req_res, false );
     for( int i_b = 0; i_b < acqBlksCoil.size(); i_b++ )	acqBlksCoil[i_b].err = err;
     for( int i_b = 0; i_b < acqBlks.size(); i_b++ )	acqBlks[i_b].err = err;

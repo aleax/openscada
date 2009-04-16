@@ -5,12 +5,12 @@ EXTRA_DIST = *.h po/* doc/*
 AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
 AM_LDFLAGS= -shared -module
 
-oscd_modul_PROGRAMS = daq_Transporter.so
-daq_Transporter_so_SOURCES = transporter.cpp
+oscd_modul_PROGRAMS = daq_DAQGate.so
+daq_DAQGate_so_SOURCES = daq_gate.cpp
 
 #PO files process and doc install
-doc_name = $(oscd_docmodul)DAQ.Transporter
-m_name = $(oscd_modulpref)Transporter
+doc_name = $(oscd_docmodul)DAQ.DAQGate
+m_name = $(oscd_modulpref)DAQGate
 
 messages:
 	@catalogs=`find ./po -name \*.po` ; \

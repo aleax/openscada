@@ -1,3 +1,9 @@
+2009-04-16 Roman
+- !!!!:/DAQ/Transport: Module is renamed to DAQGate.
+- /DAQ/ModBus: Delay connection time is displayed in state field on time connection error.
+- !!:/DemoDB: Russian DB is updated for DAQ.ModBus changes and DAQ.Transport to DAQ.DAQGate renaming.
+
+
 2009-04-15 Roman
 - /DAQ/ModBus: Gather controller's time is moved to status string. Connection try config parameter is renamed to request try.
 - /DAQ/ModBus: Disabling controller on config parameter "Fragments merging" changing is made.

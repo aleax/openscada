@@ -117,11 +117,6 @@ AC_CONFIG_FILES(Makefile src/Makefile src_call/Makefile src/moduls/Makefile
 	src/moduls/ui/Makefile)
 
 #====== Check build modules ======
-#> Archive modules
-AC_ARG_ENABLE(FSArch,AC_HELP_STRING([--disable-FSArch], [disable build module Archive/FSArch]),
-[ if test $enableval = yes; then ModFSArch=true; else ModFSArch=false; fi],[ ModFSArch=true; ])
-AC_ARG_ENABLE(DBArch,AC_HELP_STRING([--disable-DBArch], [disable build module Archive/DBArch]),
-[ if test $enableval = yes; then ModDBArch=true; else ModDBArch=false; fi],[ ModDBArch=true; ])
 #> DB modules
 AC_ARG_ENABLE(DBF,AC_HELP_STRING([--disable-DBF], [disable build module DB/DBF]),
 [ if test $enableval = yes; then ModDBF=true; else ModDBF=false; fi],[ ModDBF=true; ])
@@ -131,27 +126,6 @@ AC_ARG_ENABLE(SQLite,AC_HELP_STRING([--disable-SQLite], [disable build module DB
 [ if test $enableval = yes; then ModSQLite=true; else ModSQLite=false; fi],[ ModSQLite=true; ])
 AC_ARG_ENABLE(FireBird,AC_HELP_STRING([--disable-FireBird], [disable build module DB/FireBird]),
 [ if test $enableval = yes; then ModFireBird=true; else ModFireBird=false; fi],[ ModFireBird=true; ])
-#> Transport modules
-AC_ARG_ENABLE(Sockets,AC_HELP_STRING([--disable-Sockets], [disable build module Transport/Sockets]),
-[ if test $enableval = yes; then ModSockets=true; else ModSockets=false; fi],[ ModSockets=true; ])
-AC_ARG_ENABLE(SSL,AC_HELP_STRING([--disable-SSL], [disable build module Transport/SSL]),
-[ if test $enableval = yes; then ModSSL=true; else ModSSL=false; fi],[ ModSSL=true; ])
-AC_ARG_ENABLE(Serial,AC_HELP_STRING([--disable-Serial], [disable build module Transport/Serial]),
-[ if test $enableval = yes; then ModSerial=true; else ModSerial=false; fi],[ ModSerial=true; ])
-#> Transport protocol modules
-AC_ARG_ENABLE(HTTP,AC_HELP_STRING([--disable-HTTP], [disable build module Protocol/HTTP]),
-[ if test $enableval = yes; then ModHTTP=true; else ModHTTP=false; fi],[ ModHTTP=true; ])
-AC_ARG_ENABLE(SelfSystem,AC_HELP_STRING([--disable-SelfSystem], [disable build module Protocol/SelfSystem]),
-[ if test $enableval = yes; then ModSelfSystem=true; else ModSelfSystem=false; fi],[ ModSelfSystem=true; ])
-#> Special modules
-AC_ARG_ENABLE(SystemTests,AC_HELP_STRING([--disable-SystemTests], [disable build module Special/SystemTests]),
-[ if test $enableval = yes; then ModSystemTests=true; else ModSystemTests=false; fi],[ ModSystemTests=true; ])
-AC_ARG_ENABLE(FLibComplex1,AC_HELP_STRING([--disable-FLibComplex1], [disable build module Special/FLibComplex1]),
-[ if test $enableval = yes; then ModFLibComplex1=true; else ModFLibComplex1=false; fi],[ ModFLibComplex1=true; ])
-AC_ARG_ENABLE(FLibMath,AC_HELP_STRING([--disable-FLibMath], [disable build module Special/FLibMath]),
-[ if test $enableval = yes; then ModFLibMath=true; else ModFLibMath=false; fi],[ ModFLibMath=true; ])
-AC_ARG_ENABLE(FLibSYS,AC_HELP_STRING([--disable-FLibSYS], [disable build module Special/FLibSYS]),
-[ if test $enableval = yes; then ModFLibSYS=true; else ModFLibSYS=false; fi],[ ModFLibSYS=true; ])
 #> DAQ modules
 AC_ARG_ENABLE(System,AC_HELP_STRING([--disable-System], [disable build module DAQ/System]),
 [ if test $enableval = yes; then ModSystem=true; else ModSystem=false; fi],[ ModSystem=true; ])
@@ -171,10 +145,27 @@ AC_ARG_ENABLE(ModBus,AC_HELP_STRING([--disable-ModBus], [disable build module DA
 [ if test $enableval = yes; then ModModBus=true; else ModModBus=false; fi],[ ModModBus=true; ])
 AC_ARG_ENABLE(DCON,AC_HELP_STRING([--disable-DCON], [disable build module DAQ/DCON]),
 [ if test $enableval = yes; then ModDCON=true; else ModDCON=false; fi],[ ModDCON=true; ])
-AC_ARG_ENABLE(DAQTransporter,AC_HELP_STRING([--disable-DAQTransporter], [disable build module DAQ/Transporter]),
-[ if test $enableval = yes; then ModDAQTransporter=true; else ModDAQTransporter=false; fi],[ ModDAQTransporter=true; ])
+AC_ARG_ENABLE(DAQGate,AC_HELP_STRING([--disable-DAQGate], [disable build module DAQ/DAQGate]),
+[ if test $enableval = yes; then ModDAQGate=true; else ModDAQGate=false; fi],[ ModDAQGate=true; ])
 AC_ARG_ENABLE(SoundCard,AC_HELP_STRING([--disable-SoundCard], [disable build module DAQ/SoundCard]),
 [ if test $enableval = yes; then ModSoundCard=true; else ModSoundCard=false; fi],[ ModSoundCard=true; ])
+#> Archive modules
+AC_ARG_ENABLE(FSArch,AC_HELP_STRING([--disable-FSArch], [disable build module Archive/FSArch]),
+[ if test $enableval = yes; then ModFSArch=true; else ModFSArch=false; fi],[ ModFSArch=true; ])
+AC_ARG_ENABLE(DBArch,AC_HELP_STRING([--disable-DBArch], [disable build module Archive/DBArch]),
+[ if test $enableval = yes; then ModDBArch=true; else ModDBArch=false; fi],[ ModDBArch=true; ])
+#> Transport modules
+AC_ARG_ENABLE(Sockets,AC_HELP_STRING([--disable-Sockets], [disable build module Transport/Sockets]),
+[ if test $enableval = yes; then ModSockets=true; else ModSockets=false; fi],[ ModSockets=true; ])
+AC_ARG_ENABLE(SSL,AC_HELP_STRING([--disable-SSL], [disable build module Transport/SSL]),
+[ if test $enableval = yes; then ModSSL=true; else ModSSL=false; fi],[ ModSSL=true; ])
+AC_ARG_ENABLE(Serial,AC_HELP_STRING([--disable-Serial], [disable build module Transport/Serial]),
+[ if test $enableval = yes; then ModSerial=true; else ModSerial=false; fi],[ ModSerial=true; ])
+#> Transport protocol modules
+AC_ARG_ENABLE(HTTP,AC_HELP_STRING([--disable-HTTP], [disable build module Protocol/HTTP]),
+[ if test $enableval = yes; then ModHTTP=true; else ModHTTP=false; fi],[ ModHTTP=true; ])
+AC_ARG_ENABLE(SelfSystem,AC_HELP_STRING([--disable-SelfSystem], [disable build module Protocol/SelfSystem]),
+[ if test $enableval = yes; then ModSelfSystem=true; else ModSelfSystem=false; fi],[ ModSelfSystem=true; ])
 #> UI modules
 AC_ARG_ENABLE(VCAEngine,AC_HELP_STRING([--disable-VCAEngine], [disable build module UI/VCAEngine]),
 [ if test $enableval = yes; then ModVCAEngine=true; else ModVCAEngine=false; fi],[ ModVCAEngine=true; ])
@@ -190,21 +181,18 @@ AC_ARG_ENABLE(WebCfgD,AC_HELP_STRING([--disable-WebCfgD], [disable build module 
 [ if test $enableval = yes; then ModWebCfgD=true; else ModWebCfgD=false; fi],[ ModWebCfgD=true; ])
 AC_ARG_ENABLE(WebVision,AC_HELP_STRING([--disable-WebVision], [disable build module UI/WebVision]),
 [ if test $enableval = yes; then ModWebVision=true; else ModWebVision=false; fi],[ ModWebVision=true; ])
+#> Special modules
+AC_ARG_ENABLE(SystemTests,AC_HELP_STRING([--disable-SystemTests], [disable build module Special/SystemTests]),
+[ if test $enableval = yes; then ModSystemTests=true; else ModSystemTests=false; fi],[ ModSystemTests=true; ])
+AC_ARG_ENABLE(FLibComplex1,AC_HELP_STRING([--disable-FLibComplex1], [disable build module Special/FLibComplex1]),
+[ if test $enableval = yes; then ModFLibComplex1=true; else ModFLibComplex1=false; fi],[ ModFLibComplex1=true; ])
+AC_ARG_ENABLE(FLibMath,AC_HELP_STRING([--disable-FLibMath], [disable build module Special/FLibMath]),
+[ if test $enableval = yes; then ModFLibMath=true; else ModFLibMath=false; fi],[ ModFLibMath=true; ])
+AC_ARG_ENABLE(FLibSYS,AC_HELP_STRING([--disable-FLibSYS], [disable build module Special/FLibSYS]),
+[ if test $enableval = yes; then ModFLibSYS=true; else ModFLibSYS=false; fi],[ ModFLibSYS=true; ])
 
 
 AC_MSG_RESULT(========== Build modules list =============)
-#> Archive modules
-AC_SUBST(ArchSub_mod)
-if test ${ModFSArch} = true; then
-    AC_MSG_RESULT(Build module: Archive/FSArch)
-    AC_CONFIG_FILES(src/moduls/arhiv/FSArch/Makefile)
-    ArchSub_mod="${ArchSub_mod}FSArch "
-fi
-if test ${ModDBArch} = true; then
-    AC_MSG_RESULT(Build module: Archive/DBArch)
-    AC_CONFIG_FILES(src/moduls/arhiv/DBArch/Makefile)
-    ArchSub_mod="${ArchSub_mod}DBArch "
-fi
 #> DB modules
 AC_SUBST(DBSub_mod)
 if test ${ModDBF} = true; then
@@ -241,65 +229,6 @@ if test ${ModFireBird} = true; then
 	[AC_MSG_ERROR(DB/FireBird: Some FireBird API headers not found. Install or check FireBird installation!)])
     AC_CHECK_LIB([fbclient],[isc_attach_database],[AC_MSG_NOTICE(Pass global library using)],
 	[AC_MSG_ERROR(DB/FireBird: FireBird API client library not found. Install or check FireBird installation!)])
-fi
-#> Transport modules
-AC_SUBST(TranspSub_mod)
-if test ${ModSockets} = true; then
-    AC_MSG_RESULT(Build module: Transport/Sockets)
-    AC_CONFIG_FILES(src/moduls/transport/Sockets/Makefile)
-    TranspSub_mod="${TranspSub_mod}Sockets "
-    #--- Modules checkings ---
-    AC_CHECK_HEADERS([sys/un.h sys/socket.h sys/select.h arpa/inet.h netinet/in.h netdb.h],[],
-	[AC_MSG_ERROR(Transport/Sockets: Some GLibC network headers not found. Install or check GLibC developing package!)])
-fi
-if test ${ModSSL} = true; then
-    AC_MSG_RESULT(Build module: Transport/SSL)
-    AC_CONFIG_FILES(src/moduls/transport/SSL/Makefile)
-    TranspSub_mod="${TranspSub_mod}SSL "
-    #--- Modules checkings ---
-    AC_CHECK_HEADERS([openssl/ssl.h openssl/err.h openssl/bio.h],[],
-	[AC_MSG_ERROR(Transport/SSL: Some OpenSSL headers not found. Install or check OpenSSL developing package!)])
-    AC_CHECK_LIB([ssl],[SSL_library_init],[AC_MSG_NOTICE(Pass global library using)],
-	[AC_MSG_ERROR(Transport/SSL: OpenSSL library not found. Install or check OpenSSL installation!)])
-fi
-if test ${ModSerial} = true; then
-    AC_MSG_RESULT(Build module: Transport/Serial)
-    AC_CONFIG_FILES(src/moduls/transport/Serial/Makefile)
-    TranspSub_mod="${TranspSub_mod}Serial "
-fi
-#> Transport protocol modules
-AC_SUBST(ProtSub_mod)
-if test ${ModHTTP} = true; then
-    AC_MSG_RESULT(Build module: Protocol/HTTP)
-    AC_CONFIG_FILES(src/moduls/protocol/HTTP/Makefile)
-    ProtSub_mod="${ProtSub_mod}HTTP "
-fi
-if test ${ModSelfSystem} = true; then
-    AC_MSG_RESULT(Build module: Protocol/SelfSystem)
-    AC_CONFIG_FILES(src/moduls/protocol/SelfSystem/Makefile)
-    ProtSub_mod="${ProtSub_mod}SelfSystem "
-fi
-#> Special modules
-AC_SUBST(SpecSub_mod)
-if test ${ModSystemTests} = true; then
-    AC_MSG_RESULT(Build module: Special/SystemTests)
-    AC_CONFIG_FILES(src/moduls/special/SystemTests/Makefile)
-    SpecSub_mod="${SpecSub_mod}SystemTests "
-fi
-if test ${ModFLibComplex1} = true; then
-    AC_MSG_RESULT(Build module: Special/FLibComplex1)
-    AC_CONFIG_FILES(src/moduls/special/FLibComplex1/Makefile)
-    SpecSub_mod="${SpecSub_mod}FLibComplex1 "
-fi
-if test ${ModFLibMath} = true; then
-    AC_MSG_RESULT(Build module: Special/FLibMath)
-    AC_CONFIG_FILES(src/moduls/special/FLibMath/Makefile)
-    SpecSub_mod="${SpecSub_mod}FLibMath "
-fi
-if test ${ModFLibSYS} = true; then
-    AC_MSG_RESULT(Build module: Special/FLibSYS)
-    AC_CONFIG_FILES(src/moduls/special/FLibSYS/Makefile)
-    SpecSub_mod="${SpecSub_mod}FLibSYS "
 fi
 #> DAQ modules
 AC_SUBST(DAQSub_mod)
@@ -370,10 +299,10 @@ if test ${ModDCON} = true; then
     AC_CONFIG_FILES(src/moduls/daq/DCON/Makefile)
     DAQSub_mod="${DAQSub_mod}DCON "
 fi
-if test ${ModDAQTransporter} = true; then
-    AC_MSG_RESULT(Build module: DAQ/Transporter)
-    AC_CONFIG_FILES(src/moduls/daq/Transporter/Makefile)
-    DAQSub_mod="${DAQSub_mod}Transporter "
+if test ${ModDAQGate} = true; then
+    AC_MSG_RESULT(Build module: DAQ/DAQGate)
+    AC_CONFIG_FILES(src/moduls/daq/DAQGate/Makefile)
+    DAQSub_mod="${DAQSub_mod}DAQGate "
 fi
 if test ${ModSoundCard} = true; then
     AC_MSG_RESULT(Build module: DAQ/SoundCard)
@@ -384,6 +313,55 @@ if test ${ModSoundCard} = true; then
 	[AC_MSG_ERROR(DAQ/SoundCard: Some Portaudio headers not found. Install or check Portaudio developing package!)])
     AC_CHECK_LIB([portaudio],[Pa_Initialize],[AC_MSG_NOTICE(Pass global library using)],
 	[AC_MSG_ERROR(Portaudio library not found. Install or check Portaudio library package!)])
+fi
+#> Archive modules
+AC_SUBST(ArchSub_mod)
+if test ${ModFSArch} = true; then
+    AC_MSG_RESULT(Build module: Archive/FSArch)
+    AC_CONFIG_FILES(src/moduls/arhiv/FSArch/Makefile)
+    ArchSub_mod="${ArchSub_mod}FSArch "
+fi
+if test ${ModDBArch} = true; then
+    AC_MSG_RESULT(Build module: Archive/DBArch)
+    AC_CONFIG_FILES(src/moduls/arhiv/DBArch/Makefile)
+    ArchSub_mod="${ArchSub_mod}DBArch "
+fi
+#> Transport modules
+AC_SUBST(TranspSub_mod)
+if test ${ModSockets} = true; then
+    AC_MSG_RESULT(Build module: Transport/Sockets)
+    AC_CONFIG_FILES(src/moduls/transport/Sockets/Makefile)
+    TranspSub_mod="${TranspSub_mod}Sockets "
+    #--- Modules checkings ---
+    AC_CHECK_HEADERS([sys/un.h sys/socket.h sys/select.h arpa/inet.h netinet/in.h netdb.h],[],
+	[AC_MSG_ERROR(Transport/Sockets: Some GLibC network headers not found. Install or check GLibC developing package!)])
+fi
+if test ${ModSSL} = true; then
+    AC_MSG_RESULT(Build module: Transport/SSL)
+    AC_CONFIG_FILES(src/moduls/transport/SSL/Makefile)
+    TranspSub_mod="${TranspSub_mod}SSL "
+    #--- Modules checkings ---
+    AC_CHECK_HEADERS([openssl/ssl.h openssl/err.h openssl/bio.h],[],
+	[AC_MSG_ERROR(Transport/SSL: Some OpenSSL headers not found. Install or check OpenSSL developing package!)])
+    AC_CHECK_LIB([ssl],[SSL_library_init],[AC_MSG_NOTICE(Pass global library using)],
+	[AC_MSG_ERROR(Transport/SSL: OpenSSL library not found. Install or check OpenSSL installation!)])
+fi
+if test ${ModSerial} = true; then
+    AC_MSG_RESULT(Build module: Transport/Serial)
+    AC_CONFIG_FILES(src/moduls/transport/Serial/Makefile)
+    TranspSub_mod="${TranspSub_mod}Serial "
+fi
+#> Transport protocol modules
+AC_SUBST(ProtSub_mod)
+if test ${ModHTTP} = true; then
+    AC_MSG_RESULT(Build module: Protocol/HTTP)
+    AC_CONFIG_FILES(src/moduls/protocol/HTTP/Makefile)
+    ProtSub_mod="${ProtSub_mod}HTTP "
+fi
+if test ${ModSelfSystem} = true; then
+    AC_MSG_RESULT(Build module: Protocol/SelfSystem)
+    AC_CONFIG_FILES(src/moduls/protocol/SelfSystem/Makefile)
+    ProtSub_mod="${ProtSub_mod}SelfSystem "
 fi
 #> UI modules
 AC_SUBST(UISub_mod)
@@ -434,6 +412,28 @@ if test ${ModWebVision} = true; then
 	[AC_MSG_ERROR(UI/WebVision: Some FFTW3 headers not found. Install or check FFTW3 developing package!)])
     AC_CHECK_LIB([fftw3],[fftw_execute],[AC_MSG_NOTICE(Pass global library using)],
 	[AC_MSG_ERROR(FFTW3 library not found. Install or check FFTW3 library package!)])
+fi
+#> Special modules
+AC_SUBST(SpecSub_mod)
+if test ${ModSystemTests} = true; then
+    AC_MSG_RESULT(Build module: Special/SystemTests)
+    AC_CONFIG_FILES(src/moduls/special/SystemTests/Makefile)
+    SpecSub_mod="${SpecSub_mod}SystemTests "
+fi
+if test ${ModFLibComplex1} = true; then
+    AC_MSG_RESULT(Build module: Special/FLibComplex1)
+    AC_CONFIG_FILES(src/moduls/special/FLibComplex1/Makefile)
+    SpecSub_mod="${SpecSub_mod}FLibComplex1 "
+fi
+if test ${ModFLibMath} = true; then
+    AC_MSG_RESULT(Build module: Special/FLibMath)
+    AC_CONFIG_FILES(src/moduls/special/FLibMath/Makefile)
+    SpecSub_mod="${SpecSub_mod}FLibMath "
+fi
+if test ${ModFLibSYS} = true; then
+    AC_MSG_RESULT(Build module: Special/FLibSYS)
+    AC_CONFIG_FILES(src/moduls/special/FLibSYS/Makefile)
+    SpecSub_mod="${SpecSub_mod}FLibSYS "
 fi
 AC_MSG_RESULT(===========================================)
 

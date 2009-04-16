@@ -1,7 +1,7 @@
 
-//OpenSCADA system module DAQ.Transporter file: transporter.cpp
+//OpenSCADA system module DAQ.DAQGate file: daq_gate.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2009 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -25,39 +25,38 @@
 #include <tsys.h>
 #include <ttiparam.h>
 
-#include "transporter.h"
+#include "daq_gate.h"
 
 //******************************************************
 //* Modul info!                                        *
-#define MOD_ID		"Transporter"
-#define MOD_NAME	"Data sources transporter"
+#define MOD_ID		"DAQGate"
+#define MOD_NAME	"Data sources gate"
 #define MOD_TYPE	"DAQ"
 #define VER_TYPE	VER_CNTR
 #define VERSION		"0.3.3"
 #define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"Allow to make transport data sources of remote OpenSCADA station to local OpenSCADA station."
+#define DESCRIPTION	"Allow to make gate data sources of remote OpenSCADA station to local OpenSCADA station."
 #define LICENSE		"GPL"
 //******************************************************
 
-DAQTrasport::TTpContr *DAQTrasport::mod;  //Pointer for direct access to main module object
+DAQGate::TTpContr *DAQGate::mod;  //Pointer for direct access to main module object
 
 extern "C"
 {
     TModule::SAt module( int n_mod )
     {
-	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	if( n_mod==0 ) return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
 	return TModule::SAt("");
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
-	    return new DAQTrasport::TTpContr( source );
+	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) ) return new DAQGate::TTpContr( source );
 	return NULL;
     }
 }
 
-using namespace DAQTrasport;
+using namespace DAQGate;
 
 //******************************************************
 //* TTpContr                                           *
@@ -236,7 +235,7 @@ void TMdContr::enable_( )
 	    catch( TError err )
 	    {
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		mess_err(nodePath().c_str(),_("Deletion parameter '%s' is error but it no present on configuration or remote station.\n"),prm_ls[i_p].c_str());
+		mess_err(nodePath().c_str(),_("Deletion parameter '%s' is error but it no present on configuration or remote station."),prm_ls[i_p].c_str());
 	    }
 
     if( en_err ) throw TError(nodePath().c_str(),_("Some enable errors are present"));
