@@ -112,10 +112,10 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    w->setFocusPolicy( (atoi(val.c_str()) && ((RunWdgView*)w)->permCntr()) ? Qt::TabFocus : Qt::NoFocus );
 	    break;
         case 9: 	//geomW
-            up = true;
+            rel_list = true;
 	    break;
         case 10:	//geomH
-            up = true;
+            rel_list = true;
 	    break;
 	case 12:	//geomMargin
             elFD->geomMargin = atoi(val.c_str());
@@ -1070,7 +1070,6 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                     }
             }
         }
-
         inundationItems.clear();
         inundationItems = in_build;
         //-Building fills-

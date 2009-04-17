@@ -1,3 +1,6 @@
+2009-04-17 Maxim
+- FIX:/UI/Vision: Repainting the widget when its geometry is changed is modified for primitive ElFigure.
+
 2009-04-16 Roman
 - !!!!:/DAQ/Transport: Module is renamed to DAQGate.
 - /DAQ/ModBus: Delay connection time is displayed in state field on time connection error.
