@@ -22,7 +22,7 @@
 #ifndef RESALLOC_H
 #define RESALLOC_H
 
-#include <semaphore.h>
+#include <pthread.h>
 
 #include <string>
 
@@ -34,18 +34,15 @@ using std::string;
 class Res
 {
     public:
-	Res( unsigned val = 1 );
+	Res( );
 	~Res( );
 
 	void resRequestW( long tm = 0 );	// Write request
-	void resReleaseW( );			// Write release
 	void resRequestR( long tm = 0 );	// Read request
-	void resReleaseR( );			// Read release
+	void resRelease( );			// Release
 
     private:
-	sem_t	sem;				// semaphore id
-	unsigned char	rd_c;			// readers counter
-	static Res readRes;
+	pthread_rwlock_t rwc;
 };
 
 //********************************************
@@ -64,8 +61,8 @@ class ResAlloc
 
     private:
 	//Attributes
-	Res	&m_id;
-	char	m_wr;				//0x01 - alloc; 0x02 - write
+	Res	&mId;
+	bool	mAlloc;
 };
 
 //********************************************

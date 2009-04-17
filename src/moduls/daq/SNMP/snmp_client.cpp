@@ -345,7 +345,7 @@ void *TMdContr::Task( void *icntr )
 	    }
 	    catch(TError err)
 	    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-	cntr.en_res.resReleaseR( );
+	cntr.en_res.resRelease( );
 	cntr.tm_gath = 1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
 
 	TSYS::taskSleep((long long)cntr.period()*1000000000);

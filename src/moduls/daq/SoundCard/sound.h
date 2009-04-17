@@ -102,6 +102,8 @@ class TMdContr: public TController
 
 	TTpContr &owner( )	{ return (TTpContr&)TController::owner(); }
 
+	Res &nodeRes( )		{ return nRes; }
+
     protected:
 	//Methods
 	void prmEn( const string &id, bool val );	//Enable parameter to process list
@@ -122,6 +124,8 @@ class TMdContr: public TController
 	PaStream *stream;
 	long long wTm, sdTm;
 	float	acqSize;
+
+	Res	nRes;
 };
 
 //*************************************************

@@ -240,6 +240,8 @@ class TBDS : public TSubSYS, public TElem
 
 	string optDescr( );
 
+	Res &nodeRes( )		{ return nRes; }
+
     protected:
 	void load_( );
 
@@ -250,6 +252,8 @@ class TBDS : public TSubSYS, public TElem
 	//Private attributes
 	TElem	el_db;
 	deque<TConfig*> genDBCache;
+
+	Res	nRes;
 };
 
 #endif // TBDS_H

@@ -43,9 +43,9 @@
 //*************************************************
 TMess::TMess(  ) : IOCharSet("UTF-8"), m_mess_level(0), log_dir(0x2)
 {
+    setenv("LC_NUMERIC","C",1);
     openlog(PACKAGE,0,LOG_USER);
     setlocale(LC_ALL,"");
-    setlocale(LC_NUMERIC,"C");	//For true float type conversion
     IOCharSet = nl_langinfo(CODESET);
 
     bindtextdomain(PACKAGE,LOCALEDIR);
@@ -125,7 +125,6 @@ void TMess::setLang( const string &lng )
     setlocale(LC_ALL,"");
 
     IOCharSet = nl_langinfo(CODESET);
-    setlocale(LC_NUMERIC,"C");
 }
 
 string TMess::codeConv( const string &fromCH, const string &toCH, const string &mess)

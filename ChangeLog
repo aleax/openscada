@@ -1,5 +1,13 @@
+2009-04-17 Roman
+- FIX:/UI: To QT 4.5 adaptation is made. Set environment LC_NUMERIC=C for float dot separator always process.
+- !!!!:/SYS/Resource: For read-write resources used POSIX functions pthread_rwlock_*() and Res object API some changed.
+- !!:/SYS/TCntrNode: Connect/disconnect counter resource is made common for all objects by mutex. Memory consumption is optimised.
+- !!:/SYS: The nodeRes() function of TCntrNode redefined for all used it objects.
+
+
 2009-04-17 Maxim
 - FIX:/UI/Vision: Repainting the widget when its geometry is changed is modified for primitive ElFigure.
+
 
 2009-04-16 Roman
 - !!!!:/DAQ/Transport: Module is renamed to DAQGate.

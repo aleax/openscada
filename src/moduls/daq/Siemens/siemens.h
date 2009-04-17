@@ -169,6 +169,8 @@ class TMdContr: public TController
 
 	TTpContr &owner( )	{ return *(TTpContr *)nodePrev(); }
 
+	Res &nodeRes( )		{ return nRes; }
+
     protected:
 	//Methods
 	void load_( );
@@ -240,6 +242,8 @@ class TMdContr: public TController
 
 	daveInterface	*di;
 	daveConnection	*dc;
+
+	Res	nRes;
 
 	double	tm_calc;		// Template functions calc time
 };

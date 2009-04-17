@@ -1139,7 +1139,7 @@ void SessWdg::eventAdd( const string &ev )
     Res &res = ownerSess()->eventRes();
     res.resRequestW( );
     attrAt("event").at().setS(attrAt("event").at().getS()+ev);
-    res.resReleaseW( );
+    res.resRelease( );
 }
 
 string SessWdg::eventGet( bool clear )
@@ -1150,7 +1150,7 @@ string SessWdg::eventGet( bool clear )
     res.resRequestW( );
     string rez = attrAt("event").at().getS();
     if( clear )	attrAt("event").at().setS("");
-    res.resReleaseW( );
+    res.resRelease( );
 
     return rez;
 }

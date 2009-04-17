@@ -376,10 +376,10 @@ void Block::calc( bool first, bool last )
     }catch(TError err)
     {
 	err_cnt++;
-	lnk_res.resReleaseR( );
+	lnk_res.resRelease( );
 	throw TError(nodePath().c_str(),_("Error reading block's <%s> links."),id().c_str());
     }
-    lnk_res.resReleaseR( );
+    lnk_res.resRelease( );
 
     //- Calc function -
     try
@@ -420,10 +420,10 @@ void Block::calc( bool first, bool last )
     }catch(TError err)
     {
 	err_cnt++;
-	lnk_res.resReleaseR( );
+	lnk_res.resRelease( );
 	throw TError(nodePath().c_str(),_("Error writing block's <%s> links."),id().c_str());
     }
-    lnk_res.resReleaseR( );
+    lnk_res.resRelease( );
     err_cnt=0;
 }
 

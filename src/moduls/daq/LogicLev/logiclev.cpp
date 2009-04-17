@@ -266,7 +266,7 @@ void *TMdContr::Task( void *icntr )
 	    try{ cntr.p_hd[i_p].at().calc(is_start,is_stop); }
 	    catch(TError err)
 	    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-	cntr.en_res.resReleaseR( );
+	cntr.en_res.resRelease( );
 	cntr.tm_calc = 1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
 
 	if( is_stop ) break;

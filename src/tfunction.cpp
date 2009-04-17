@@ -177,7 +177,7 @@ void TFunction::valDet( TValFunc *vfnc )
 	    used.erase(used.begin()+i);
 	    break;
 	}
-    f_res.resReleaseW();
+    f_res.resRelease();
 }
 
 void TFunction::cntrCmdProc( XMLNode *opt )

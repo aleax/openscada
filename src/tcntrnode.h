@@ -22,6 +22,8 @@
 #ifndef TCNTRNODE_H
 #define TCNTRNODE_H
 
+#include <pthread.h>
+
 #include <string>
 #include <vector>
 
@@ -128,7 +130,7 @@ class TCntrNode
 	enum ModifFlag	{ Self = 0x01, Child = 0x02, All = 0x03 };
 
 	//Methods
-	Res &nodeRes( )			{ return conn_res; }
+	virtual Res &nodeRes( )		{ return hd_res; }
 	virtual string nodeName( )	{ return "NO Named!"; }
 	string nodePath( char sep = 0, bool from_root = false );
 
@@ -205,8 +207,8 @@ class TCntrNode
 
 	//Attributes
 	//> Childs
-	Res	hd_res,			//Resource HD
-		conn_res;		//Connect resource
+	Res	hd_res;			//Resource HD
+	static pthread_mutex_t connM;	//Connection mutex
 
 	vector<GrpEl>	chGrp;		//Child groups
 

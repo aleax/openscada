@@ -391,13 +391,13 @@ void *Contr::Task( void *icontr )
 		    string blck = cntr.clc_blks[i_blk].at().id();
 		    mess_err(cntr.nodePath().c_str(),_("Block <%s> calc error."),blck.c_str());
 		    if( cntr.clc_blks[i_blk].at().errCnt() < 10 ) continue;
-		    cntr.hd_res.resReleaseR( );
+		    cntr.hd_res.resRelease( );
 		    mess_err(cntr.nodePath().c_str(),_("Block <%s> is stoped."),blck.c_str());
 		    cntr.blkAt(blck).at().setProcess(false);
 		    cntr.hd_res.resRequestR( );
 		}
 	    }
-	cntr.hd_res.resReleaseR( );
+	cntr.hd_res.resRelease( );
 
 	cntr.tm_calc = 1.0e6*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
 

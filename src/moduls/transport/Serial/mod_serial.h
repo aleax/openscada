@@ -88,6 +88,8 @@ class TTrOut: public TTransportOut
 
 	int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0 );
 
+	Res &nodeRes( )				{ return nRes; }
+
     private:
 	//Methods
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
@@ -96,6 +98,8 @@ class TTrOut: public TTransportOut
 	string	&mTimings;
 	int	fd;
 	long long mLstReqTm;
+
+	Res	nRes;
 
 	float	trIn, trOut, tmMax;		// Traffic in and out counter and maximum respond timeout
 };

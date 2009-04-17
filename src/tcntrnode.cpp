@@ -36,6 +36,7 @@
 //*************************************************
 //* TCntrNode                                     *
 //*************************************************
+pthread_mutex_t TCntrNode::connM = PTHREAD_MUTEX_INITIALIZER;
 
 //*************************************************
 //* Controll scenaries language section           *
@@ -594,17 +595,17 @@ void TCntrNode::save( )
 
 void TCntrNode::AHDConnect()
 {
-    conn_res.resRequestW( );
+    pthread_mutex_lock(&connM);
     m_use++;
     if( m_use > 65000 ) mess_err(nodePath().c_str(),_("Too more users for node!!!"));
-    conn_res.resReleaseW( );
+    pthread_mutex_unlock(&connM);
 }
 
 void TCntrNode::AHDDisConnect()
 {
-    conn_res.resRequestW( );
+    pthread_mutex_lock(&connM);
     m_use--;
-    conn_res.resReleaseW( );
+    pthread_mutex_unlock(&connM);
 }
 
 XMLNode *TCntrNode::ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const char *path, const string &dscr,

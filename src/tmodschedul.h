@@ -66,6 +66,8 @@ class TModSchedul : public TSubSYS
 	void libAtt( const string &name, bool full = false);	// Attach share libs
 	void libDet( const string &name );		// Detach share libs
 
+	Res &nodeRes( )		{ return nRes; }
+
     protected:
 	//Methods
 	void load_( );
@@ -90,6 +92,8 @@ class TModSchedul : public TSubSYS
 
 	int		mPer;				//Check to new modules period
 	vector<SHD>	SchHD;
+
+	Res		nRes;
 };
 
 #endif // TMODSCHEDUL_H

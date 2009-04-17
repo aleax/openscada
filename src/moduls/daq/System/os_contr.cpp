@@ -299,7 +299,7 @@ void *TMdContr::Task( void *icntr )
 	    cntr.en_res.resRequestR();
 	    for(unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++)
 		cntr.p_hd[i_p].at().getVal();
-	    cntr.en_res.resReleaseR();
+	    cntr.en_res.resRelease();
 
 	    cntr.tm_calc = 1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
 	} catch(TError err)

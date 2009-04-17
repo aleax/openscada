@@ -81,6 +81,8 @@ class TProt: public TProtocol
 	int sesOpen( string name );
 	string sesCheck( int sid );
 
+	Res &nodeRes( )			{ return nRes; }
+
     protected:
 	//Methods
 	void load_( );
@@ -112,6 +114,7 @@ class TProt: public TProtocol
 	int		mTAuth;
 	time_t		lst_ses_chk;
 
+	Res		nRes;
 };
 
 extern TProt *mod;

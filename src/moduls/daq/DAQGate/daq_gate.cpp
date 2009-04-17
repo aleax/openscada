@@ -320,7 +320,7 @@ void *TMdContr::Task( void *icntr )
 		    //>> Check for delete parameter
 		    if( cntr.p_hd[i_p].at().isDel() )
 		    {
-			cntr.en_res.resReleaseR( );
+			cntr.en_res.resRelease( );
 			string pid = cntr.p_hd[i_p].at().id();
 			cntr.at(pid).at().disable();
 			cntr.del(pid);
@@ -331,7 +331,7 @@ void *TMdContr::Task( void *icntr )
 	    }
 
 	    //> Calc acquisition process time
-	    cntr.en_res.resReleaseR( );
+	    cntr.en_res.resRelease( );
 	    cntr.tm_gath = 1e-3*(TSYS::curTime()-t_cnt);
 
 	    TSYS::taskSleep((long long)cntr.period()*1000000000);

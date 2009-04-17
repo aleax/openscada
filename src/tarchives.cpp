@@ -683,7 +683,7 @@ void *TArchiveS::ArhValTask( void *param )
 	    }
 	    catch(TError err)
 	    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-	arh.vRes.resReleaseR( );
+	arh.vRes.resRelease( );
 
 	TSYS::taskSleep((long long)arh.valPeriod()*1000000);
     }

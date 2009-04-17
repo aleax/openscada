@@ -625,7 +625,7 @@ void TMdPrm::vlSet( TVal &val )
 		dscGetLastError(&errorParams);
 		mess_err(nodePath().c_str(),_("dscDAConvert error: %s %s"),dscGetErrorString(errorParams.ErrCode),errorParams.errstring );
 	    }
-	    owner().ao_res.resReleaseW( );
+	    owner().ao_res.resRelease( );
 	    break;
 	}
 	case DO:
@@ -639,7 +639,7 @@ void TMdPrm::vlSet( TVal &val )
 		dscGetLastError(&errorParams);
 		mess_err(nodePath().c_str(),_("dscDIOOutputBit error: %s %s"),dscGetErrorString(errorParams.ErrCode),errorParams.errstring );
 	    }
-	    owner().dio_res.resReleaseW( );
+	    owner().dio_res.resRelease( );
 	}
     }
 }
@@ -687,7 +687,7 @@ void TMdPrm::vlGet( TVal &val )
 			mess_err(nodePath().c_str(),_("dscADSample error: %s %s"), dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
 		    }
 		    gval = smpl;
-		    owner().ai_res.resReleaseW( );
+		    owner().ai_res.resRelease( );
 		}
 	    }
 	    switch( aid )
@@ -716,7 +716,7 @@ void TMdPrm::vlGet( TVal &val )
 			mess_err(nodePath().c_str(),_("dscDIOInputBit error: %s %s"), dscGetErrorString(errorParams.ErrCode),errorParams.errstring );
 		    }
 		    gval = i_bt;
-		    owner().dio_res.resReleaseW( );
+		    owner().dio_res.resRelease( );
 		}
 	    }
 	    val.setB(gval,0,true);

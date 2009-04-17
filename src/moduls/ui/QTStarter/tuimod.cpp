@@ -260,7 +260,6 @@ void *TUIMod::Task( void * )
 
     //> QT application object init
     QApplication *QtApp = new QApplication( (int&)SYS->argc,(char **)SYS->argv );
-    setlocale(LC_NUMERIC,"C");		//Standart numeric separator restore
     QtApp->setQuitOnLastWindowClosed(false);
     mod->run_st = true;
 
@@ -272,6 +271,7 @@ void *TUIMod::Task( void * )
     if( !ico_t.load(TUIS::icoPath("splash").c_str()) )	ico_t.load(":/images/splash.png");
     QSplashScreen *splash = new QSplashScreen(QPixmap::fromImage(ico_t));
     splash->show();
+
     while( !mod->startCom( ) && !mod->endRun( ) )
     {
 	SYS->archive().at().messGet( st_time, time(NULL), recs, "", TMess::Debug, BUF_ARCH_NM );
@@ -306,6 +306,7 @@ void *TUIMod::Task( void * )
     if( QApplication::topLevelWidgets().isEmpty() ) winCntr->startDialog( );
 
     QObject::connect( QtApp, SIGNAL(lastWindowClosed()), winCntr, SLOT(lastWinClose()) );
+
     QtApp->exec();
     delete winCntr;
 

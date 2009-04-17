@@ -213,6 +213,8 @@ class TSYS : public TCntrNode
 	const char **argv;	//Comand line seting buffer.
 	const char **envp;	//System environment.
 
+	Res &nodeRes( )		{ return nRes; }
+
     protected:
 	//Protected methods
 	void load_( );
@@ -248,6 +250,8 @@ class TSYS : public TCntrNode
 
 	int	mStopSignal,	// Stop station signal
 		mSubst;		// Subsystem tree id
+
+	Res	nRes;
 
 	unsigned long long mSysclc;
 };

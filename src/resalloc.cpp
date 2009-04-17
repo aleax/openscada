@@ -22,104 +22,82 @@
 #include "tsys.h"
 #include "resalloc.h"
 
-
 //********************************************
 //* Resource object                          *
 //********************************************
-Res Res::readRes;
-
-Res::Res( unsigned val ) : rd_c(0)
+Res::Res( )
 {
-    if( sem_init(&sem,0,val) )
+    if( pthread_rwlock_init(&rwc,NULL) )
 	throw TError("ResAlloc",_("Error open semaphor!"));
 }
 
 Res::~Res( )
 {
-    sem_wait( &sem );
-    while( rd_c ) usleep(STD_WAIT_DELAY*1000);
-    sem_destroy( &sem );
+    pthread_rwlock_wrlock(&rwc);
+    pthread_rwlock_destroy(&rwc);
 }
 
 void Res::resRequestW( long tm )
 {
-    if( !tm ) sem_wait( &sem );
+    if( !tm ) pthread_rwlock_wrlock(&rwc);
     else
     {
-	timespec wtm = { tm, 0 };
-	if( sem_timedwait( &sem, &wtm ) ) throw TError("ResAlloc",_("Timeouted!"));
+	timespec wtm;
+	clock_gettime(CLOCK_REALTIME,&wtm);
+	wtm.tv_sec += tm;
+	if( pthread_rwlock_timedwrlock(CLOCK_REALTIME,&wtm) )
+	    throw TError("ResAlloc",_("Timeouted!"));
     }
-    //> Wait of readers free
-    if( rd_c )
-    {
-	time_t st_tm = time(NULL);
-	while( rd_c )
-	{
-	    if( tm && st_tm+tm > time(NULL) ) throw TError("ResAlloc",_("Timeouted!"));
-	    usleep(STD_WAIT_DELAY*1000);
-	}
-    }
-}
-
-void Res::resReleaseW( )
-{
-    sem_post( &sem );
 }
 
 void Res::resRequestR( long tm )
 {
-    if( !tm ) sem_wait( &sem );
+    if( !tm ) pthread_rwlock_rdlock(&rwc);
     else
     {
-	timespec wtm = { tm, 0 };
-	if( sem_timedwait( &sem, &wtm ) ) throw TError("ResAlloc",_("Timeouted!"));
+	timespec wtm;
+	clock_gettime(CLOCK_REALTIME,&wtm);
+	wtm.tv_sec += tm;
+	if( pthread_rwlock_timedrdlock(CLOCK_REALTIME,&wtm) )
+	    throw TError("ResAlloc",_("Timeouted!"));
     }
-
-    if( rd_c > 250 ) throw TError("ResAlloc",_("Readers count %d too big for resource %xh\n"),rd_c,this);
-    readRes.resRequestW(); rd_c++; readRes.resReleaseW();
-
-    sem_post( &sem );
 }
 
-void Res::resReleaseR( )
+void Res::resRelease( )
 {
-    readRes.resRequestW(); if( rd_c > 0 ) rd_c--; readRes.resReleaseW();
+    pthread_rwlock_unlock(&rwc);
 }
 
 //********************************************
 //* Automatic resource allocator/deallocator *
 //********************************************
-ResAlloc::ResAlloc( Res &rid ) : m_id(rid), m_wr(0)
+ResAlloc::ResAlloc( Res &rid ) : mId(rid), mAlloc(false)
 {
 
 }
 
-ResAlloc::ResAlloc( Res &rid, bool write, long tm ) : m_id(rid), m_wr(0)
+ResAlloc::ResAlloc( Res &rid, bool write, long tm ) : mId(rid), mAlloc(false)
 {
     request( write, tm );
 }
 
 ResAlloc::~ResAlloc( )
 {
-    if( m_wr&0x01 ) release();
+    if( mAlloc ) release();
 }
 
 void ResAlloc::request( bool write, long tm )
 {
-    if( m_wr&0x01 ) release();
-    m_wr |= 0x01;
-    if( write )
-    {
-	m_wr |= 0x02;
-	m_id.resRequestW(tm);
-    }
-    else m_id.resRequestR(tm);
+    if( mAlloc ) release();
+    mAlloc = false;
+    if( write ) mId.resRequestW(tm);
+    else mId.resRequestR(tm);
+    mAlloc = true;
 }
 
 void ResAlloc::release()
 {
-    if( !(m_wr&0x01) )	return;
-    if( m_wr&0x02 ) m_id.resReleaseW( );
-    else            m_id.resReleaseR( );
-    m_wr &= ~0x03;
+    if( !mAlloc ) return;
+    mId.resRelease( );
+    mAlloc = false;
 }

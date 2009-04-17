@@ -195,6 +195,8 @@ class TProt: public TProtocol
 	TElem &nodeEl( )	{ return mNodeEl; }
 	TElem &nodeIOEl( )	{ return mNodeIOEl; }
 
+	Res &nodeRes( )		{ return nRes; }
+
     protected:
 	//Methods
 	void load_( );
@@ -221,6 +223,7 @@ class TProt: public TProtocol
 
 	TElem	mNodeEl, mNodeIOEl;
 
+	Res	nRes;
 };
 
 extern TProt *modPrt;
