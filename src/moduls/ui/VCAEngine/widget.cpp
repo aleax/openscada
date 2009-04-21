@@ -34,15 +34,12 @@ Widget::Widget( const string &id, const string &isrcwdg ) :
     mId(id), mEnable(false), m_lnk(false), mParentNm(isrcwdg)
 {
     inclWdg = grpAdd("wdg_");
-    attrId  = grpAdd("a_");
-
-    attr_cfg.valAtt(this);
+    attrId  = grpAdd("a_",true);
 }
 
 Widget::~Widget()
 {
     nodeDelAll( );
-    attr_cfg.valDet(this);
 }
 
 TCntrNode &Widget::operator=( TCntrNode &node )
@@ -79,7 +76,8 @@ TCntrNode &Widget::operator=( TCntrNode &node )
     {
 	if( !attrPresent(els[i_a]) )
 	{
-	    attrAdd( new TFld(src_n->attrAt(els[i_a]).at().fld()) );
+	    bool isInher = pattr.at().flgSelf()&Attr::IsInher;
+	    attrAdd( isInher ? &src_n->attrAt(els[i_a]).at().fld() : new TFld(src_n->attrAt(els[i_a]).at().fld()), -1, isInher );
 	    attrAt(els[i_a]).at().setModif(1);
 	}
 	attr  = attrAt(els[i_a]);
@@ -215,14 +213,13 @@ void Widget::setEnable( bool val )
 		if( TSYS::strNoSpace(parentNm()).empty() ) throw TError(nodePath().c_str(),"%s",_("Empty parent!"));
 		if( parentNm() == ".." ) mParent = AutoHD<TCntrNode>(nodePrev());
 		else mParent = mod->nodeAt(parentNm());
-		//- Check for enable parent widget and enable if not -
+		//> Check for enable parent widget and enable if not
 		if( !parent().at().enable() )	parent().at().setEnable(true);
-		//- Inherit -
+		//> Inherit
 		inheritAttr( );
 		inheritIncl( );
-		//- Register of heritater -
+		//> Register of heritater
 		parent().at().heritReg(this);
-		
 	    }catch(TError err)
 	    {
 		mess_err(err.cat.c_str(),err.mess.c_str());
@@ -236,37 +233,46 @@ void Widget::setEnable( bool val )
     }
     if(!val)
     {
-	//- Disable heritors widgets -
+	//> Free no base attributes and restore base
+	vector<string>  ls;
+	attrList(ls);
+	for( int i_l = 0; i_l < ls.size(); i_l++ )
+	{
+	    if( !(attrAt(ls[i_l]).at().flgGlob()&Attr::Generic) ) attrDel( ls[i_l], true );
+	    else if( attrAt(ls[i_l]).at().flgSelf( )&Attr::IsInher )
+		attrAt(ls[i_l]).at().setFld( new TFld(attrAt(ls[i_l]).at().fld()), false );
+	}
+
+	//> Disable heritors widgets
 	for( int i_h = 0; i_h < herit().size(); i_h++ )
 	    if( herit()[i_h].at().enable( ) )
 		try { herit()[i_h].at().setEnable(false); }
-		catch(...)
-		{ mess_err(nodePath().c_str(),_("Ingeriting widget <%s> disable error"),herit()[i_h].at().id().c_str()); }
-
-	//- Free no base attributes -
-	vector<string>  ls;
-	attrList(ls);
-	for(int i_l = 0; i_l < ls.size(); i_l++)
-	    if( atoi(attrAt(ls[i_l]).at().fld().reserve().c_str()) > 15 )
-		attrDel( ls[i_l] );
+		catch(TError err)
+		{
+		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+		    mess_err(nodePath().c_str(),_("Ingeriting widget <%s> disable error"),herit()[i_h].at().id().c_str());
+		}
 
 	if( !mParent.freeStat() )
 	{
-	    //- Unregister heritater -
+	    //> Unregister heritater
 	    parent().at().heritUnreg(this);
-	    //- Disconnect parent widget -
+	    //> Disconnect parent widget
 	    mParent.free();
 	}
     }
 
-    //- Enable/disable process widgets from container -
-    vector<string>	ls;
+    //> Enable/disable process widgets from container
+    vector<string> ls;
     wdgList(ls);
     for(int i_l = 0; i_l < ls.size(); i_l++ )
 	if( val != wdgAt(ls[i_l]).at().enable() )
 	    try { wdgAt(ls[i_l]).at().setEnable(val); }
-	    catch(...)
-	    { mess_err(nodePath().c_str(),_("Child widget <%s> enable/disable error"),ls[i_l].c_str()); }
+	    catch( TError err )
+	    {
+		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+		mess_err(nodePath().c_str(),_("Child widget <%s> enable/disable error"),ls[i_l].c_str());
+	    }
 
     mEnable = val;
 }
@@ -323,10 +329,7 @@ void Widget::inheritAttr( const string &iattr )
 	{
 	    if( loadDef ) continue;
 	    if( parent().at().attrAt(ls[i_l]).at().flgGlob()&Attr::Mutable )	continue;
-	    TFld *fel = new TFld(parent().at().attrAt(ls[i_l]).at().fld());
-	    //>> Clear user attribute flag and set inherit flag
-	    fel->setFlg(fel->flg()|Attr::IsInher);
-	    attrAdd(fel);
+	    attrAdd( &parent().at().attrAt(ls[i_l]).at().fld(), -1, true );
 	}
 	attr  = attrAt(ls[i_l]);
 	if( loadDef )
@@ -339,8 +342,9 @@ void Widget::inheritAttr( const string &iattr )
 	    continue;
 	}
 	pattr = parent().at().attrAt(ls[i_l]);
+	if( !(attr.at().flgSelf()&Attr::IsInher) ) attr.at().setFld(&pattr.at().fld(),true);
 	if( attr.at().modif() && !(attr.at().flgSelf()&Attr::SessAttrInh) )	continue;
-	attr.at().setFlgSelf(pattr.at().flgSelf());
+	attr.at().setFlgSelf((Attr::SelfAttrFlgs)pattr.at().flgSelf());
 	if( !(attr.at().flgGlob( )&Attr::DirRead) )
 	{
 	    bool active = attr.at().flgGlob()&Attr::Active;
@@ -425,25 +429,24 @@ void Widget::attrAdd( TFld *attr, int pos, bool inher )
     string anm = attr->name();
     if( attrPresent(anm) )
     {
-	delete attr;
+	if( !inher ) delete attr;
 	return;
-	//throw TError(nodePath().c_str(),_("Attribut %s is already present."),anm.c_str());
     }
-    attr_cfg.fldAdd(attr,pos);
-    if( inher )	inheritAttr(anm);
+    chldAdd( attrId, new Attr(attr,inher), pos );
 }
 
-void Widget::attrDel( const string &attr )
+void Widget::attrDel( const string &attr, bool allInher  )
 {
     if( !attrPresent(attr) )	return;
-    int flg = attrAt(attr).at().flgGlob();
-    attr_cfg.fldDel(attr_cfg.fldId(attr));
 
     //> Delete from inheritant wigets
-    if( !(flg&Attr::Mutable) )
+    if( !(attrAt(attr).at().flgGlob()&Attr::Mutable) || allInher )
 	for( int i_h = 0; i_h < m_herit.size(); i_h++ )
 	    if( m_herit[i_h].at().enable( ) )
 		m_herit[i_h].at().attrDel( attr );
+
+    //> Self delete
+    chldDel(attrId,attr);
 }
 
 bool Widget::attrChange( Attr &cfg, TVariant prev )
@@ -492,22 +495,6 @@ void Widget::wdgDel( const string &wid, bool full )
 AutoHD<Widget> Widget::wdgAt( const string &wdg )
 {
     return chldAt( inclWdg, wdg );
-}
-
-void Widget::addFld( TElem *el, unsigned iid )
-{
-    chldAdd( attrId, new Attr(el->fldAt(iid)) );
-}
-
-void Widget::delFld( TElem *el, unsigned iid )
-{
-    if( nodeMode() == TCntrNode::Enable && chldPresent(attrId,el->fldAt(iid).name()) )
-	chldDel( attrId, el->fldAt(iid).name() );
-}
-
-void Widget::detElem( TElem *el )
-{
-
 }
 
 TVariant Widget::vlGet( Attr &a )
@@ -1055,7 +1042,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
 			SYS->daq().at().at(prm1).at().at(prm2).at().list(ls);
 		    break;
 		case 3:
- 		    if( !is_pl && obj_tp=="prm:" && SYS->daq().at().modPresent(prm1)
+		    if( !is_pl && obj_tp=="prm:" && SYS->daq().at().modPresent(prm1)
 			      && SYS->daq().at().at(prm1).at().present(prm2)
 			      && SYS->daq().at().at(prm1).at().at(prm2).at().present(prm3) )
 			SYS->daq().at().at(prm1).at().at(prm2).at().at(prm3).at().vlList(ls);
@@ -1187,7 +1174,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	    AutoHD<Widget> wdg = (wattr==".")?AutoHD<Widget>(this):wdgAt(wattr);
 	    if( !wdg.at().attrPresent(opt->attr("key_id")) )
                 throw TError(nodePath().c_str(),_("Deleting the enclosed widget's elements error."));
-	    if( !(wdg.at().attrAt(opt->attr("key_id")).at().fld().flg()&Attr::IsInher) &&
+	    if( !(wdg.at().attrAt(opt->attr("key_id")).at().flgSelf()&Attr::IsInher) &&
 		    wdg.at().attrAt(opt->attr("key_id")).at().fld().flg()&Attr::IsUser )
 		wdg.at().attrDel(opt->attr("key_id"));
 	    else throw TError(nodePath().c_str(),_("Deletint the not user element error."));
@@ -1207,12 +1194,12 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		unsigned	tflg	= wdg.at().attrAt(idattr).at().fld().flg();
 		string		tvals	= wdg.at().attrAt(idattr).at().fld().values();
 		string		tsels	= wdg.at().attrAt(idattr).at().fld().selNames();
+		Attr::SelfAttrFlgs sflgs = wdg.at().attrAt(idattr).at().flgSelf();
 
-		if( !(!(tflg&Attr::IsInher) && tflg&Attr::IsUser) )
+		if( !(!(sflgs&Attr::IsInher) && tflg&Attr::IsUser) )
 		    throw TError(nodePath().c_str(),_("Changing of not user attribute is no permited"));
 
 		string tvl	= wdg.at().attrAt(idattr).at().getS();
-		Attr::SelfAttrFlgs sflgs = wdg.at().attrAt(idattr).at().flgSelf();
 		string tmpl	= wdg.at().attrAt(idattr).at().cfgTempl();
 		string cfgval	= wdg.at().attrAt(idattr).at().cfgVal();
 
@@ -1325,60 +1312,45 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 //************************************************
 //* Attr: Widget atribute                        *
 //************************************************
-Attr::Attr( TFld &ifld ) : m_modif(0), self_flg((SelfAttrFlgs)0)
+Attr::Attr( TFld *ifld, bool inher ) : mFld(NULL), m_modif(0), self_flg((SelfAttrFlgs)0)
 {
-    //> Chek for self field for dinamic elements
-    if( ifld.flg()&TFld::SelfFld )
-    {
-	m_fld = new TFld();
-	*m_fld = ifld;
-    }
-    else m_fld = &ifld;
-
-    switch(fld().type())
+    setFld( ifld, inher );
+    switch( fld().type() )
     {
 	case TFld::String:
 	    m_val.s_val = NULL;
-	    if( ifld.flg()&Attr::DirRead ) break;
+	    if( fld().flg()&Attr::DirRead ) break;
 	    m_val.s_val    = new ResString();
 	    m_val.s_val->setVal(fld().def());
 	    break;
-	case TFld::Integer:	m_val.i_val = atoi(m_fld->def().c_str());	break;
-	case TFld::Real:	m_val.r_val = atof(m_fld->def().c_str());	break;
-	case TFld::Boolean:	m_val.b_val = atoi(m_fld->def().c_str());	break;
+	case TFld::Integer:	m_val.i_val = atoi(mFld->def().c_str());	break;
+	case TFld::Real:	m_val.r_val = atof(mFld->def().c_str());	break;
+	case TFld::Boolean:	m_val.b_val = atoi(mFld->def().c_str());	break;
     }
 }
 
 Attr::~Attr(  )
 {
     if( fld().type() == TFld::String && m_val.s_val )	delete m_val.s_val;
-    if( fld().flg()&TFld::SelfFld )	delete m_fld;
+    setFld(NULL,false);
 }
 
-string Attr::id()
+void Attr::setFld( TFld *fld, bool inher )
 {
-    return fld().name();
+    if( mFld && !(self_flg&Attr::IsInher) ) delete mFld;
+    mFld = fld;
+    self_flg = inher ? self_flg|Attr::IsInher : self_flg & ~Attr::IsInher;
 }
 
-string Attr::name()
-{
-    return fld().descr();
-}
+string Attr::id()	{ return fld().name(); }
 
-TFld::Type Attr::type()
-{
-    return fld().type();
-}
+string Attr::name()	{ return fld().descr(); }
 
-Widget *Attr::owner()
-{
-    return (Widget *)nodePrev();
-}
+TFld::Type Attr::type()	{ return fld().type(); }
 
-int Attr::flgGlob()
-{
-    return fld().flg();
-}
+Widget *Attr::owner()	{ return (Widget *)nodePrev(); }
+
+int Attr::flgGlob()	{ return fld().flg(); }
 
 string Attr::getSEL( )
 {
@@ -1490,8 +1462,8 @@ void Attr::setI( int val, bool strongPrev, bool sys )
 	{
 	    if( !(fld().flg()&TFld::Selected) && fld().selValI()[0] < fld().selValI()[1] )
 	    {
-		val = vmax(val,m_fld->selValI()[0]);
-		val = vmin(val,m_fld->selValI()[1]);
+		val = vmax(val,mFld->selValI()[0]);
+		val = vmin(val,mFld->selValI()[1]);
 	    }
 	    if( !strongPrev && m_val.i_val == val )	break;
 	    int t_val = m_val.i_val;
@@ -1603,7 +1575,7 @@ void Attr::setFlgSelf( SelfAttrFlgs flg )
 {
     if( self_flg == flg )	return;
     SelfAttrFlgs t_flg = (SelfAttrFlgs)self_flg;
-    self_flg = flg;
+    self_flg = (flg & ~Attr::IsInher) | (t_flg&Attr::IsInher);
     if( !owner()->attrChange(*this,TVariant()) )	self_flg = t_flg;
     else
     {

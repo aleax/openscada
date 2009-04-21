@@ -376,20 +376,20 @@ void Engine::modStop()
 
     vector<string> ls;
 
-    //- Stop sessions -
+    //> Stop sessions
     sesList(ls);
     for( int l_id = 0; l_id < ls.size(); l_id++ )
 	sesAt(ls[l_id]).at().setEnable(false);
 
-    //- Libraries stop -
-    wlbList(ls);
-    for( int l_id = 0; l_id < ls.size(); l_id++ )
-	wlbAt(ls[l_id]).at().setEnable(false);
-
-    //- Projects stop -
+    //> Projects stop
     prjList(ls);
     for( int l_id = 0; l_id < ls.size(); l_id++ )
 	prjAt(ls[l_id]).at().setEnable(false);
+
+    //> Libraries stop
+    wlbList(ls);
+    for( int l_id = 0; l_id < ls.size(); l_id++ )
+	wlbAt(ls[l_id]).at().setEnable(false);
 
     run_st = false;
 }

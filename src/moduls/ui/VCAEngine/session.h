@@ -60,7 +60,7 @@ class Session : public TCntrNode
 	AutoHD<Project> parent( );
 
 	void setProjNm( const string &it )	{ mPrjnm = it; }
-	void setUser( const string &it )	{ mUser = it; }
+	void setUser( const string &it );
 	void setPeriod( int val )		{ mPer = val; }
 	void setEnable( bool val );
 	void setStart( bool val );

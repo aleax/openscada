@@ -845,9 +845,9 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	else
 	{
 	    if( !cfg.owner()->attrPresent("vCur") )
-		cfg.owner()->attrAdd( new TFld("vCur",_("Cursor:view"),TFld::Integer,Attr::Mutable|Attr::Active,"","0","-2;99"), -1, true );
+		cfg.owner()->attrAdd( new TFld("vCur",_("Cursor:view"),TFld::Integer,Attr::Mutable|Attr::Active,"","0","-2;99") );
 	    if( !cfg.owner()->attrPresent("aCur") )
-		cfg.owner()->attrAdd( new TFld("aCur",_("Cursor:archive"),TFld::Integer,Attr::Mutable|Attr::Active,"","0","-1;99"), -1, true );
+		cfg.owner()->attrAdd( new TFld("aCur",_("Cursor:archive"),TFld::Integer,Attr::Mutable|Attr::Active,"","0","-1;99") );
 	}
 
 	string fidp;

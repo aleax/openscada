@@ -27,7 +27,7 @@
 #include <string>
 #include <vector>
 
-//- Security standard permissions -
+//> Security standard permissions
 #define R_R_R_  0444
 #define R_R___  0440
 #define R_____  0400
@@ -143,6 +143,7 @@ class TCntrNode
 	char	 nodeFlg( )		{ return m_flg; }
 	char	 nodeMode( )		{ return m_flg&0x3; }
 	unsigned nodeUse( );
+	unsigned nodePos( )		{ return mOi; }
 
 	//> Modify process methods
 	int  isModify( int mflg = TCntrNode::All );		//Check for modify want
@@ -183,7 +184,7 @@ class TCntrNode
 	void chldDel( char igr, const string &name, long tm = -1, int flag = 0, bool shDel = false );
 
 	//> Conteiners
-	char	grpSize( )	{ return chGrp.size(); }
+	char	grpSize( );
 	char	grpId( const string &sid );
 	GrpEl	&grpAt( char id );
 	unsigned grpAdd( const string &id, bool ordered = false );
@@ -210,11 +211,11 @@ class TCntrNode
 	Res	hd_res;			//Resource HD
 	static pthread_mutex_t connM;	//Connection mutex
 
-	vector<GrpEl>	chGrp;		//Child groups
+	vector<GrpEl>	*chGrp;		//Child groups
 
 	//> Curent node
-	unsigned short int	m_use;	//Use counter
-	unsigned short int	m_oi;	//Order index
+	unsigned short int	mUse;	//Use counter
+	unsigned short int	mOi;	//Order index
 
 	char	m_flg;
 };

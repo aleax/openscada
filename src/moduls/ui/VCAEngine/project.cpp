@@ -593,10 +593,10 @@ string Page::ownerFullId( bool contr )
 
 void Page::postEnable( int flag )
 {
-    //- Call parent method -
+    //> Call parent method
     Widget::postEnable(flag);
 
-    //- Add main attributes -
+    //> Add main attributes
     if( flag&TCntrNode::NodeConnect )
     {
 	attrAdd( new TFld("pgOpen",_("Page:open state"),TFld::Boolean,TFld::NoFlag) );
@@ -605,10 +605,10 @@ void Page::postEnable( int flag )
 	attrAdd( new TFld("pgOpenSrc",_("Page:open source"),TFld::String,TFld::NoFlag,"","","","","3") );
     }
 
-    //- Set owner key for this page -
+    //> Set owner key for this page
     cfg("OWNER").setS(ownerFullId());
 
-    //- Set default parent for parent template page -
+    //> Set default parent for parent template page
     if( ownerPage() && ownerPage()->prjFlags()&Page::Template )
 	setParentNm("..");
 }
@@ -838,7 +838,7 @@ void Page::loadIO( )
     {
 	if( !attrPresent(tstr) )    continue;
 	AutoHD<Attr> attr = attrAt(tstr);
-	if( attr.at().flgGlob()&Attr::Generic || (!(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser) ) continue;
+	if( attr.at().flgGlob()&Attr::Generic || (!(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser) ) continue;
 	c_el.cfg("ID").setS(tstr);
 	if( !SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el) ) continue;
 	attr.at().setS(c_el.cfg("IO_VAL").getS());
@@ -860,7 +860,7 @@ void Page::loadIO( )
 	if( !attrPresent(sid) )
 	    attrAdd( new TFld(sid.c_str(),c_el.cfg("NAME").getS().c_str(),(TFld::Type)(flg&0x0f),flg>>4) );
 	AutoHD<Attr> attr = attrAt(sid);
-	if( !(!(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser) ) continue;
+	if( !(!(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser) ) continue;
 	attr.at().setS(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),0,'|'));
 	attr.at().fld().setValues(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),1,'|'));
 	attr.at().fld().setSelNames(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),2,'|'));
@@ -907,7 +907,7 @@ void Page::save_( )
     {
 	AutoHD<Attr> attr = attrAt(als[i_a]);
 	if( !attr.at().modif() ) continue;
-	if( !(!(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser) ) m_attrs+=als[i_a]+";";
+	if( !(!(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser) ) m_attrs+=als[i_a]+";";
 	if( attr.at().flgGlob()&Attr::Generic )
 	{
 	    c_el.cfg("ID").setS(als[i_a]);
@@ -944,7 +944,7 @@ void Page::saveIO( )
     {
 	AutoHD<Attr> attr = attrAt(als[i_a]);
 	if( !attr.at().modif() || attr.at().flgGlob()&Attr::Generic )	continue;
-	if( !(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser )
+	if( !(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser )
 	{
 	    //>> User attribute store
 	    c_elu.cfg("ID").setS(als[i_a]);
@@ -1350,7 +1350,7 @@ void PageWdg::loadIO( )
     {
 	if( !attrPresent(tstr) )	continue;
 	AutoHD<Attr> attr = attrAt(tstr);
-	if( attr.at().flgGlob()&Attr::Generic || (!(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser) ) continue;
+	if( attr.at().flgGlob()&Attr::Generic || (!(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser) ) continue;
 	c_el.cfg("ID").setS(id()+"/"+tstr);
 	if( !SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el) ) continue;
 	attr.at().setS(c_el.cfg("IO_VAL").getS());
@@ -1375,7 +1375,7 @@ void PageWdg::loadIO( )
 	if( !attrPresent(sid) )
 	    attrAdd( new TFld(sid.c_str(),c_el.cfg("NAME").getS().c_str(),(TFld::Type)(flg&0x0f),flg>>4) );
 	AutoHD<Attr> attr = attrAt(sid);
-	if( !(!(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser) ) continue;
+	if( !(!(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser) ) continue;
 	attr.at().setS(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),0,'|'));
 	attr.at().fld().setValues(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),1,'|'));
 	attr.at().fld().setSelNames(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),2,'|'));
@@ -1429,7 +1429,7 @@ void PageWdg::save_( )
 	{
 	    AutoHD<Attr> attr = attrAt(als[i_a]);
 	    if( !attr.at().modif() ) continue;
-	    if( !(!(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser) )	m_attrs+=als[i_a]+";";
+	    if( !(!(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser) )	m_attrs+=als[i_a]+";";
 	    if( attr.at().flgGlob()&Attr::Generic )
 	    {
 		c_el.cfg("ID").setS( id()+"/"+als[i_a] );
@@ -1467,7 +1467,7 @@ void PageWdg::saveIO( )
     {
 	AutoHD<Attr> attr = attrAt(als[i_a]);
 	if( !attr.at().modif() || attr.at().flgGlob()&Attr::Generic )	continue;
-	if( !(attr.at().flgGlob()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser )
+	if( !(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser )
 	{
 	    //>> User attribute store
 	    c_elu.cfg("ID").setS( id()+"/"+als[i_a] );

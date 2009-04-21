@@ -35,7 +35,7 @@ using namespace VCA;
 Session::Session( const string &iid, const string &iproj ) :
     mEnable(false), mStart(false), endrun_req(false), tm_calc(0.0),
     mUser("root"), mPrjnm(iproj), mPer(100), mCalcClk(1),
-    mOwner("root"), mGrp("UI"), mPermit(R_R_R_),
+    mOwner("root"), mGrp("UI"), mPermit(RWRWR_),
     mBackgrnd(false), mConnects(0)
 {
     mId = iid;
@@ -56,6 +56,12 @@ void Session::postEnable( int flag )
 void Session::preDisable( int flag )
 {
     if( enable() )  setEnable(false);
+}
+
+void Session::setUser( const string &it )
+{
+    mUser = it;
+    if( !enable() ) mOwner = it;
 }
 
 void Session::setEnable( bool val )

@@ -1,3 +1,10 @@
+2009-04-21 Roman
+- !!:/SYS/TCntrNode: Child's groups container is made dynamic, for memory consumption is optimisation.
+- !!:/UI/VCAEngine: Attributes storing into widget is changed to direct object "Attr" storing into TCntrNode container.
+- !!!!:/UI/VCAEngine: Attributes description object TFld is made inherited from inherited attribute.
+- FIX:/UI/VCAEngine: The permition to new crated session by user is fixed.
+
+
 2009-04-17 Roman
 - FIX:/UI: To QT 4.5 adaptation is made. Set environment LC_NUMERIC=C for float dot separator always process.
 - !!!!:/SYS/Resource: For read-write resources used POSIX functions pthread_rwlock_*() and Res object API some changed.

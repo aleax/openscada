@@ -48,7 +48,7 @@ class Attr : public TCntrNode
 	    Font	= 0x00800,	//Store font
 	    Address	= 0x01000,	//Store address to a parameter or an attribute
 	    IsUser	= 0x02000,	//User created element
-	    IsInher	= 0x04000,	//Inherit attribute
+
 	    Mutable	= 0x08000,	//Mutable attribute, present depend from "Active" attribute value
 	    Generic	= 0x10000,	//Generic atributes' flag. This atributes loaded independent from enabled state
 	    DirRead	= 0x20000	//Direct read attribute, through widget
@@ -62,12 +62,13 @@ class Attr : public TCntrNode
 	    CfgLnkOut	= 0x04,		//Output link
 	    ProcAttr	= 0x08,		//Process attribute
 
-	    SessAttrInh	= 0x10		//Inherit attribute into running session
+	    SessAttrInh	= 0x10,		//Inherit attribute into running session
+	    IsInher	= 0x20		//Inherit attribute
 	};
 
 	//Methods
 	//> Main
-	Attr( TFld &fld );
+	Attr( TFld *fld, bool inher );
 	~Attr( );
 
 	string id( );
@@ -98,7 +99,8 @@ class Attr : public TCntrNode
 	void setI( int val, bool strongPrev = false, bool sys = false );
 	void setB( char val, bool strongPrev = false, bool sys = false );
 
-	TFld &fld()			{ return *m_fld; }
+	TFld &fld( )			{ return *mFld; }
+	void setFld( TFld *fld, bool inher );
 
 	Widget *owner();
 
@@ -117,7 +119,7 @@ class Attr : public TCntrNode
 	    char	b_val;		//Boolean
 	}m_val;
 	//> Attributes
-	TFld	*m_fld;			//Base field
+	TFld	*mFld;			//Base field
 	unsigned m_modif;		//Modify counter
 	char	self_flg;		//Self attributes flags
 
@@ -127,7 +129,7 @@ class Attr : public TCntrNode
 //************************************************
 //* Widget                                       *
 //************************************************
-class Widget : public TCntrNode, public TValElem
+class Widget : public TCntrNode
 {
     friend class Attr;
 
@@ -186,11 +188,11 @@ class Widget : public TCntrNode, public TValElem
 	void inheritIncl( const string &wdg = "" );		//Inherit parent include widgets
 
 	//> Widget's attributes
-	void attrList( vector<string> &list )		{ attr_cfg.fldList(list); }
+	void attrList( vector<string> &list )		{ chldList(attrId,list); }
 	void attrAdd( TFld *attr, int pos = -1, bool inher = false );
-	void attrDel( const string &attr );
+	void attrDel( const string &attr, bool allInher = false );
 	bool attrPresent( const string &attr )		{ return chldPresent(attrId,attr); }
-	int  attrPos( const string &attr )		{ return attr_cfg.fldId(attr); }
+	int  attrPos( const string &attr )		{ return attrAt(attr).at().nodePos(); }
 	AutoHD<Attr> attrAt( const string &attr )	{ return chldAt(attrId,attr); }
 
 	//> Include widgets
@@ -219,9 +221,6 @@ class Widget : public TCntrNode, public TValElem
 	virtual bool attrChange( Attr &cfg, TVariant prev );   //Process attribute change local and into terminator
 	virtual unsigned int modifVal( Attr &cfg )	{ return 0; }
 
-	void addFld( TElem *el, unsigned id );
-	void delFld( TElem *el, unsigned id );
-	void detElem( TElem *el );
 	TVariant vlGet( Attr &a );
 
 	//Attributes
@@ -235,9 +234,6 @@ class Widget : public TCntrNode, public TValElem
 	string	mParentNm;		//Parent widget name
 	AutoHD<Widget>	mParent;	//Parent widget
 	vector< AutoHD<Widget> > m_herit;	//Heritators
-
-	//> Attributes data
-	TElem	attr_cfg;		//Attributes structure element
 };
 
 }

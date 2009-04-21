@@ -441,7 +441,7 @@ msgstr ""
 
 #: da_sensors.cpp:209
 msgid "Data sensors"
-msgstr "Сенсори даних"
+msgstr "Дані сенсорів"
 
 #: da_smart.cpp:35
 msgid "smartctl -A -v N,raw48 /dev/"
