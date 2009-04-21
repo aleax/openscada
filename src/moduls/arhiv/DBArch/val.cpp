@@ -61,13 +61,18 @@ void ModVArch::load_( )
 
 void ModVArch::start()
 {
-    //- Start getting data cycle -
+    //> Connection to DB and enable status check
+    string wdb = TBDS::realDBName(addr());
+    AutoHD<TBD> db = SYS->db().at().nodeAt(wdb,0,'.');
+    if( !db.at().enableStat( ) ) db.at().enable();
+
+    //> Start getting data cycle
     TVArchivator::start();
 }
 
 void ModVArch::stop()
 {
-    //- Stop getting data cicle an detach archives -
+    //> Stop getting data cicle an detach archives
     TVArchivator::stop();
 }
 

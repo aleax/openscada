@@ -92,6 +92,11 @@ void ModMArch::load_( )
 
 void ModMArch::start( )
 {
+    //> Connection to DB and enable status check
+    string wdb = TBDS::realDBName(addr());
+    AutoHD<TBD> db = SYS->db().at().nodeAt(wdb,0,'.');
+    if( !db.at().enableStat( ) ) db.at().enable();
+
     run_st = true;
 }
 

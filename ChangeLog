@@ -3,6 +3,7 @@
 - !!:/UI/VCAEngine: Attributes storing into widget is changed to direct object "Attr" storing into TCntrNode container.
 - !!!!:/UI/VCAEngine: Attributes description object TFld is made inherited from inherited attribute.
 - FIX:/UI/VCAEngine: The permition to new crated session by user is fixed.
+- /Archive/DBArch: DB present and enable checking is added
 
 
 2009-04-17 Roman

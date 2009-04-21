@@ -309,7 +309,7 @@ class TVArchivator : public TCntrNode, public TConfig
 	virtual void start( );
 	virtual void stop( bool full_del = false );
 
-	//- Place archive functions -
+	//> Place archive functions
 	void archiveList( vector<string> &ls );
 	bool archivePresent( const string &iid );
 
