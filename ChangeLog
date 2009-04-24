@@ -1,3 +1,9 @@
+2009-04-24 Maxim
+- FIX:/UI/Vision: Condition of the orientation angle is added to the repainting the widget when its geometry is changed for primitive ElFigure.
+- FIX:/UI/Vision: Processing the "fill" elements with the empty path is corrected for primitive ElFigure.
+- FIX:/UI/Vision: Selecting the rect of one of the figures, selected by means of CTRL+A, is denied for primitive ElFigure.
+
+
 2009-04-21 Roman
 - !!:/SYS/TCntrNode: Child's groups container is made dynamic, for memory consumption is optimisation.
 - !!:/UI/VCAEngine: Attributes storing into widget is changed to direct object "Attr" storing into TCntrNode container.

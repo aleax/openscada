@@ -223,11 +223,11 @@ class ShapeElFigure : public WdgShape
         QVector<int> copy_index, index_array_copy, index_array_copy_flag_A;
             
 	int count_Shapes, count_moveItemTo,
-	    index, fill_index, index_temp, index_del,index_inund,
+	    index, fill_index, index_temp, index_del,
 	    rect_num;
 	bool flag_cursor, flag_key, flag_up, flag_down, flag_left, flag_right, 
              flag_ctrl, flag_ctrl_move, flag_m, flag_hold_arc, flag_A, flag_copy, flag_check_pnt_inund;
-					    	
+
         bool flag_rect, flag_arc_rect_3_4, flag_first_move, flag_move, flag_release;
         int count_rects, rect_num_arc, arc_rect;
         bool flag_hold_move;			
@@ -243,6 +243,7 @@ class ShapeElFigure : public WdgShape
         QVector< QVector<int> > minroad;
         int len, clen;
         int found;
+        int geomH, geomW;
         QVector<int> road;
         QVector<int> incl;
         QVector<int> inundation_vector;

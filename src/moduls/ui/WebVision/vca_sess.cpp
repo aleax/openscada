@@ -406,7 +406,7 @@ Point VCAElFigure::scaleRotate( const Point point, double xScale, double yScale,
     Point rpnt = Point( point.x, point.y );
     Point center;
     if( flag_rotate )
-{
+    {
         if( !flag_scale ) center = Point( TSYS::realRound( width*xScale/2 ), TSYS::realRound( height*yScale/2 ) );
         else center = Point( TSYS::realRound( width/2 ), TSYS::realRound( height/2 ) );
         rpnt.x = rpnt.x - center.x;
@@ -414,7 +414,7 @@ Point VCAElFigure::scaleRotate( const Point point, double xScale, double yScale,
         rpnt = rotate( rpnt, orient);
         rpnt.x = rpnt.x + center.x;
         rpnt.y = rpnt.y + center.y;
-}
+    }
     if( flag_scale ) rpnt = Point( rpnt.x*xScale, rpnt.y*yScale );
 
     return rpnt;
@@ -544,8 +544,8 @@ void VCAElFigure::dashDotFigureBorders( gdImagePtr im, Point el_p1, Point el_p2,
                                         el_p3.y - rotate( arc( t_start, arc_a, arc_b ), ang ).y ),
                                  Point( el_p3.x + rotate( arc( t_start+0.00277777777778, arc_a, arc_b ), ang ).x,
                                         el_p3.y - rotate( arc( t_start+0.00277777777778, arc_a, arc_b ), ang ).y ) );
-            int kol = (int)TSYS::realRound( wdt/len, 2, true);
-            int kol_1 = (int)TSYS::realRound( wdt_1/len, 2, true);
+            int kol = (int)TSYS::realRound( wdt/len, 2, true) ;
+            int kol_1 = (int)TSYS::realRound( wdt_1/len, 2, true );
             if( kol_1 < 1 ) kol_1 = 1;
             double t = t_start;
             do
@@ -567,7 +567,7 @@ void VCAElFigure::dashDotFigureBorders( gdImagePtr im, Point el_p1, Point el_p2,
                     break;
                 }
             }
-            while ( true );
+            while( true );
         }
             break;
         case 3:
@@ -596,7 +596,7 @@ void VCAElFigure::dashDotFigureBorders( gdImagePtr im, Point el_p1, Point el_p2,
                     break;
                 }
             }
-            while ( true );
+            while( true );
         }
             break;
     }
@@ -634,8 +634,8 @@ void VCAElFigure::paintFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, P
                              (int)TSYS::realRound( el_p1.y - rotate( Point( -el_border_width, -(el_width/2+el_border_width) ), el_ang ).y, 2, true ), clr_el );
             x_center = (el_p1.x + el_p2.x)/2;
             y_center = (el_p1.y + el_p2.y)/2;
-            if( (int)(x_center+0.5) < s_width && (int)(y_center+0.5) < s_height )
-                gdImageFillToBorder( im, (int)(x_center+0.5), (int)(y_center+0.5), clr_el, clr_el_line );
+            if( (int)(x_center + 0.5) < s_width && (int)(y_center + 0.5) < s_height )
+                gdImageFillToBorder( im, (int)(x_center + 0.5), (int)(y_center + 0.5), clr_el, clr_el_line );
             break;
         case 3:
             gdImageSetThickness( im, (int)(el_border_width) );
@@ -651,7 +651,7 @@ void VCAElFigure::paintFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, P
             t_start = el_p5.x;
             t_end = el_p5.y;
             p_center = Point( (int)TSYS::realRound( el_p1.x + rotate( bezier( t_start + (t_end - t_start)/2, p1, p2, p3, p4 ), el_ang ).x, 2, true ),
-                               (int)TSYS::realRound( el_p1.y  - rotate( bezier( t_start + (t_end - t_start)/2, p1, p2, p3, p4 ), el_ang ).y, 2, true ) );
+                              (int)TSYS::realRound( el_p1.y  - rotate( bezier( t_start + (t_end - t_start)/2, p1, p2, p3, p4 ), el_ang ).y, 2, true ) );
             t = t_start;
             do
             {
@@ -677,7 +677,7 @@ void VCAElFigure::paintFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, P
                                  Point( p4.x, p4.y+(el_width/2+el_border_width/2) ) ), el_ang ).y, 2, true ), clr_el );
                 t += delta;
             }
-            while ( t < t_end );
+            while( t < t_end );
             t = t_start;
             do
             {
@@ -703,7 +703,7 @@ void VCAElFigure::paintFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, P
                                  Point( p4.x, p4.y-(el_width/2+el_border_width/2) ) ), el_ang ).y, 2, true ), clr_el );
                 t += delta;
             }
-            while ( t < t_end );
+            while( t < t_end );
             pb1 = Point(
                     (int)TSYS::realRound( el_p1.x + rotate( bezier( t,
                     Point( p1.x, p1.y-(el_width/2+el_border_width/2) ),
@@ -762,7 +762,7 @@ void VCAElFigure::paintFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, P
                                  (int)TSYS::realRound( el_p3.y - rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).y, 2, true ), clr_el );
                 t += 0.00277777777778;
             }
-            while ( t < t_end );
+            while( t < t_end );
             gdImageLine( im, (int)TSYS::realRound( el_p3.x + rotate( arc( t_end, arc_a, arc_b ), ang ).x, 2, true ),
                              (int)TSYS::realRound( el_p3.y - rotate( arc( t_end, arc_a, arc_b ), ang ).y, 2, true ),
                              (int)TSYS::realRound( el_p3.x + rotate( arc( t_end, arc_a_small, arc_b_small ), ang ).x, 2, true ),
@@ -776,7 +776,7 @@ void VCAElFigure::paintFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, P
                                  (int)TSYS::realRound( el_p3.y - rotate( arc( t+0.00277777777778, arc_a_small, arc_b_small ), ang ).y, 2, true ),clr_el );
                 t += 0.00277777777778;
             }
-            while ( t < t_end );
+            while( t < t_end );
             gdImageLine( im, (int)TSYS::realRound( el_p3.x + rotate( arc( t_start, arc_a, arc_b ), ang ).x, 2,
                              true ),
                              (int)TSYS::realRound( el_p3.y - rotate( arc( t_start, arc_a, arc_b ), ang ).y, 2,
@@ -922,7 +922,7 @@ void VCAElFigure::dashDot( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3,
                 }
                 t += 0.00277777777778;
             }
-            while ( t < t_end );
+            while( t < t_end );
             break;
         }
         case 3:
@@ -965,7 +965,7 @@ void VCAElFigure::dashDot( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3,
                 else  calc_1++;
                 t += delta;
             }
-            while ( t < 1 );
+            while( t < 1 );
 
         }
             break;
@@ -1020,7 +1020,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                                          (int)TSYS::realRound( el_p3.y - rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).y, 2, true ), clr_el );
                         t += 0.00277777777778;
                     }
-                    while ( t < t_end );
+                    while( t < t_end );
                     gdImageAlphaBlending(im,1);
                 }
                 (pnts)[item.n1] = unscaleUnrotate( Point( el_p3.x + rotate( arc( t_start, arc_a, arc_b ), ang ).x,
@@ -1092,7 +1092,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                                          (int)TSYS::realRound( el_p3.y - rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).y, 2, true ), clr_el_line );
                         t += 0.00277777777778;
                     }
-                    while ( t < t_end );
+                    while( t < t_end );
 
                     el_pb1 = Point( el_p3.x + rotate(  arc( t_start, arc_a, arc_b ), ang  ).x,
                                     el_p3.y - rotate(  arc( t_start, arc_a, arc_b ), ang  ).y );
@@ -1111,7 +1111,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                                          (int)TSYS::realRound( el_p3.y - rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).y, 2, true ), clr_el_line );
                         t += 0.00277777777778;
                     }
-                    while ( t < t_end );
+                    while( t < t_end );
 
                     el_pb3 = Point( el_p3.x + rotate(  arc( t_start, arc_a, arc_b ), ang  ).x,
                                     el_p3.y - rotate(  arc( t_start, arc_a, arc_b ), ang  ).y );
@@ -1360,7 +1360,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                                          (int)TSYS::realRound( el_p3.y - rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).y, 2, true ), clr_el_line );
                         t += 0.00277777777778;
                     }
-                    while ( t < t_end );
+                    while( t < t_end );
 
                     el_pb1 = Point( el_p3.x + rotate(  arc( t_start, arc_a, arc_b ), ang  ).x,
                                     el_p3.y - rotate(  arc( t_start, arc_a, arc_b ), ang  ).y );
@@ -1379,7 +1379,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                                          (int)TSYS::realRound( el_p3.y - rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).y, 2, true ), clr_el_line );
                         t += 0.00277777777778;
                     }
-                    while ( t < t_end );
+                    while( t < t_end );
 
                     el_pb3 = Point( el_p3.x + rotate(  arc( t_start, arc_a, arc_b ), ang  ).x,
                                     el_p3.y - rotate(  arc( t_start, arc_a, arc_b ), ang  ).y );
@@ -1651,7 +1651,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 
                 gdImageAlphaBlending(im, 1);
                 Point p_center = Point( (int)TSYS::realRound(el_p1.x + rotate( bezier( 0.5, p1, p3, p4, p2 ), el_ang ).x, 2, true ),
-                                         (int)TSYS::realRound( el_p1.y - rotate( bezier( 0.5, p1, p3, p4, p2 ), el_ang ).y, 2, true ) );
+                                        (int)TSYS::realRound( el_p1.y - rotate( bezier( 0.5, p1, p3, p4, p2 ), el_ang ).y, 2, true ) );
                 gdImageFillToBorder( im, (int)( p_center.x + 0.5 ), (int)( p_center.y + 0.5 ), clr_el_line, clr_el_line );
                 //----- Drawing the lines with their real width on the other image and merging it with the previous one -----
                 gdImagePtr im2 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
@@ -1899,7 +1899,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 
                 gdImageAlphaBlending(im, 1);
                 Point p_center = Point( (int)TSYS::realRound(el_p1.x + rotate( bezier( 0.5, p1, p3, p4, p2 ), el_ang ).x, 2, true ),
-                                         (int)TSYS::realRound( el_p1.y - rotate( bezier( 0.5, p1, p3, p4, p2 ), el_ang ).y, 2, true ) );
+                                        (int)TSYS::realRound( el_p1.y - rotate( bezier( 0.5, p1, p3, p4, p2 ), el_ang ).y, 2, true ) );
                 gdImageFillToBorder( im, (int)( p_center.x + 0.5 ), (int)( p_center.y + 0.5 ), clr_el_line, clr_el_line );
                 //----- Drawing the lines with their real width on the other image and merging it with the previous one -----
                 gdImagePtr im2 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
@@ -1917,13 +1917,13 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                 paintFigureBorders( im2, el_pb1, el_pb2, el_pb3, el_pb4, Point(0.0,1.0), Point(0,0), clr_el, clr_el, el_border_width-2, 1, 3, xScale, yScale );
 
                 el_pb1 = Point( el_p1.x + rotate( Point(p1.x, p1.y+(-el_width/2-el_border_width/2)), el_ang ).x,
-                                      el_p1.y - rotate( Point( p1.x, p1.y+(-el_width/2-el_border_width/2)), el_ang ).y );
+                                el_p1.y - rotate( Point( p1.x, p1.y+(-el_width/2-el_border_width/2)), el_ang ).y );
                 el_pb2 = Point( el_p1.x + rotate( Point(p2.x, p2.y+(-el_width/2-el_border_width/2)), el_ang ).x,
-                                      el_p1.y - rotate( Point( p2.x, p2.y+(-el_width/2-el_border_width/2) ), el_ang ).y );
+                                el_p1.y - rotate( Point( p2.x, p2.y+(-el_width/2-el_border_width/2) ), el_ang ).y );
                 el_pb3 = Point( el_p1.x + rotate( Point(p3.x, p3.y+(-el_width/2-el_border_width/2)), el_ang ).x,
-                                      el_p1.y - rotate( Point( p3.x, p3.y+(-el_width/2-el_border_width/2) ), el_ang ).y );
+                                el_p1.y - rotate( Point( p3.x, p3.y+(-el_width/2-el_border_width/2) ), el_ang ).y );
                 el_pb4 = Point( el_p1.x + rotate( Point(p4.x, p4.y+(-el_width/2-el_border_width/2)), el_ang ).x,
-                                      el_p1.y - rotate( Point( p4.x, p4.y+(-el_width/2-el_border_width/2) ), el_ang ).y );
+                                el_p1.y - rotate( Point( p4.x, p4.y+(-el_width/2-el_border_width/2) ), el_ang ).y );
                 paintFigureBorders( im2, el_pb1, el_pb2, el_pb3, el_pb4, Point(0.0,1.0), Point(0,0), clr_el, clr_el, el_border_width-2, 1, 3, xScale, yScale );
 
                 el_pb1 = Point( el_p1.x + rotate( Point( p1.x-el_border_width/2, p1.y+el_width/2+el_border_width-1 ), el_ang ).x, 
@@ -1966,9 +1966,9 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                 else//---- Drawing the solid line with borders' width == 0 ----
                 {
                     gdImageLine( im, (int)TSYS::realRound( scaleRotate( (pnts)[item.n1], xScale, yScale, true, true ).x, 2, true ),
-                    (int)TSYS::realRound( scaleRotate( (pnts)[item.n1], xScale, yScale, true, true ).y, 2, true ),
-                    (int)TSYS::realRound( scaleRotate( (pnts)[item.n2], xScale, yScale, true, true ).x, 2, true ),
-                    (int)TSYS::realRound( scaleRotate( (pnts)[item.n2], xScale, yScale, true, true ).y, 2, true ),  clr_el );
+                                     (int)TSYS::realRound( scaleRotate( (pnts)[item.n1], xScale, yScale, true, true ).y, 2, true ),
+                                     (int)TSYS::realRound( scaleRotate( (pnts)[item.n2], xScale, yScale, true, true ).x, 2, true ),
+                                     (int)TSYS::realRound( scaleRotate( (pnts)[item.n2], xScale, yScale, true, true ).y, 2, true ),  clr_el );
                 }
             }
             else//--- Drawing the line with borders' width > 0 ---
@@ -2018,7 +2018,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                     el_pb2 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, el_width/2+el_border_width ), el_ang ).x,
                                     el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, el_width/2+el_border_width ), el_ang ).y );
                     gdImageLine( im, (int)TSYS::realRound( el_pb1.x, 2, true ),(int)TSYS::realRound( el_pb1.y, 2, true ),
-                                    (int)TSYS::realRound( el_pb2.x, 2, true ),(int)TSYS::realRound( el_pb2.y, 2, true ),clr_el_line );
+                                     (int)TSYS::realRound( el_pb2.x, 2, true ),(int)TSYS::realRound( el_pb2.y, 2, true ),clr_el_line );
                     el_pb1 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, el_width/2+el_border_width  ), el_ang ).x,
                                     el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, el_width/2+el_border_width  ), el_ang ).y );
                     el_pb2 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, -el_width/2-el_border_width ), el_ang ).x,
