@@ -75,7 +75,7 @@ class TController : public TCntrNode, public TConfig
 	AutoHD<TParamContr> at( const string &name, const string &who = "th_contr" )
 	{ return chldAt(m_prm,name); }
 
-	TTipDAQ &owner( )	{ return *(TTipDAQ *)nodePrev(); }
+	TTipDAQ &owner( );
 
     protected:
 	//Protected attributes

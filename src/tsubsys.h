@@ -62,7 +62,7 @@ class TSubSYS : public TCntrNode
 	void modDel( const string &name );
 	AutoHD<TModule> modAt( const string &name );
 
-	TSYS &owner( )		{ return *(TSYS *)nodePrev(); }
+	TSYS &owner( );
 
     protected:
 	//Protected methods

@@ -87,7 +87,7 @@ class Prm : public TParamContr
 	void enable( );
 	void disable( );
 
-	Contr &owner( )	{ return (Contr&)TParamContr::owner(); }
+	Contr &owner( );
 
     private:
 	//Methods

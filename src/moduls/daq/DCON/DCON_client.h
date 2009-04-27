@@ -57,7 +57,7 @@ class TMdPrm : public TParamContr
 	void disable( );
 
 	TElem &elem( )		{ return p_el; }
-	TMdContr &owner( )	{ return (TMdContr&)TParamContr::owner(); }
+	TMdContr &owner( );
 
 	//Attributes
 	TElem	p_el;		//Work atribute elements

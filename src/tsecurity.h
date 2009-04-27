@@ -65,7 +65,7 @@ class TUser : public TCntrNode, public TConfig
 	void load_( );
 	void save_( );
 
-	TSecurity &owner( )		{ return *(TSecurity*)nodePrev(); }
+	TSecurity &owner( );
 
     private:
 	//Methods
@@ -116,7 +116,7 @@ class TGroup : public TCntrNode, public TConfig
 	void load_( );
 	void save_( );
 
-	TSecurity &owner( )	{ return *(TSecurity*)nodePrev(); }
+	TSecurity &owner( );
 
     private:
 	//Methods

@@ -66,6 +66,8 @@ void TModule::postEnable( int flag )
     bindtextdomain(lc_id.c_str(),LOCALEDIR);
 }
 
+TSubSYS &TModule::owner( )	{ return *(TSubSYS*)nodePrev(); }
+
 void TModule::modFuncList( vector<string> &list )
 {
     list.clear();

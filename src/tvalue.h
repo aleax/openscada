@@ -55,22 +55,25 @@ class TVal : public TCntrNode
 	};
 
 	//Methods
-	TVal( TFld &fld, TValue *owner );
-	TVal( TCfg &cfg, TValue *owner );
+	TVal( );
+	TVal( TFld &fld );
+	TVal( TCfg &cfg );
 	~TVal( );
 
+	void setFld( TFld &fld );
+	void setCfg( TCfg &cfg );
+
 	const string &name( );
+	long long time()	{ return mTime; }
 
-	TFld &fld( );
-
-	//- Read curent value (direct) -
+	//> Read curent value (direct)
 	string	getSEL( long long *tm = NULL, bool sys = false );
 	string	getS( long long *tm = NULL, bool sys = false );
 	double	getR( long long *tm = NULL, bool sys = false );
 	int	getI( long long *tm = NULL, bool sys = false );
 	char	getB( long long *tm = NULL, bool sys = false );
 
-	//- Set curent value -
+	//> Set curent value
 	void setSEL( const string &value, long long tm = 0, bool sys = false );
 	void setS( const string &value, long long tm = 0, bool sys = false );
 	void setR( double value, long long tm = 0, bool sys = false );
@@ -79,6 +82,8 @@ class TVal : public TCntrNode
 
 	AutoHD<TVArchive> arch( );
 	void setArch( const AutoHD<TVArchive> &vl );
+
+	TFld &fld( );
 
     protected:
 	//Methods
@@ -99,14 +104,14 @@ class TVal : public TCntrNode
 	    char	val_b;		//boolean value
 	} val;
 
-	bool     m_cfg;		//Config id
+	bool	mCfg;		//Config id
 	union
 	{
 	    TFld *fld;
 	    TCfg *cfg;
 	} src;
-	long long time;		//Last value's time (usec)
-	AutoHD<TVArchive>	m_arch;
+	long long mTime;		//Last value's time (usec)
+	AutoHD<TVArchive>	mArch;
 };
 
 //*************************************************
@@ -132,7 +137,7 @@ class TValue: public TCntrNode, public TValElem
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//> Manipulation for config element
-	TConfig *vlCfg( )			{ return m_cfg; }
+	TConfig *vlCfg( )			{ return mCfg; }
 	void setVlCfg( TConfig *cfg );		//Set configs. NULL - clear configs.
 
 	//> Manipulation for elements of value
@@ -141,6 +146,7 @@ class TValue: public TCntrNode, public TValElem
 	void vlElemDet( TElem *ValEl );
 	TElem &vlElem( const string &name );
 
+	virtual TVal* vlNew( );
 	virtual void vlSet( TVal &val )		{ };
 	virtual void vlGet( TVal &val )		{ };
 	virtual void vlArchMake( TVal &val )	{ };
@@ -164,7 +170,7 @@ class TValue: public TCntrNode, public TValElem
 	vector<TElem*>	elem;   // Elements (dinamic parts)
 
 	short int	l_cfg;  // Config len
-	TConfig*	m_cfg;  // Configs (static parts)
+	TConfig*	mCfg;	// Configs (static parts)
 };
 
 #endif // TVALUE_H

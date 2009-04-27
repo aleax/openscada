@@ -352,6 +352,8 @@ TMdPrm::~TMdPrm( )
     nodeDelAll();
 }
 
+TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
+
 void TMdPrm::enable( )
 {
     if( enableStat() )	return;

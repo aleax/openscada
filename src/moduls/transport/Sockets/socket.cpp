@@ -700,10 +700,10 @@ void TSocketOut::stop()
 
     if( !run_st ) return;
 
-    //- Status clear -
+    //> Status clear
     trIn = trOut = 0;
 
-    //- Close connection -
+    //> Close connection
     if( sock_fd >= 0 )
     {
 	shutdown(sock_fd,SHUT_RDWR);

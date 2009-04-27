@@ -333,6 +333,8 @@ void TMdPrm::postDisable(int flag)
     { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
+TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
+
 void TMdPrm::enable()
 {
     if( enableStat() )	return;

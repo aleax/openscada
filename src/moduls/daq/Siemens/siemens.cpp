@@ -539,6 +539,8 @@ void TMdContr::postDisable( int flag )
     { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
+TTpContr &TMdContr::owner( )	{ return *(TTpContr*)nodePrev(); }
+
 TParamContr *TMdContr::ParamAttach( const string &name, int type )
 {
     return new TMdPrm(name,&owner().tpPrmAt(type));
@@ -1358,6 +1360,8 @@ void TMdPrm::postDisable(int flag)
     }catch(TError err)
     { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
+
+TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable()
 {

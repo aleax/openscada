@@ -733,6 +733,8 @@ void Prm::disable()
     TParamContr::disable();
 }
 
+Contr &Prm::owner( )	{ return (Contr&)TParamContr::owner(); }
+
 void Prm::vlSet( TVal &val )
 {
     if( !enableStat() ) return;

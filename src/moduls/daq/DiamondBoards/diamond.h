@@ -60,7 +60,7 @@ class TMdPrm : public TParamContr
 	int	cnl( )		{ return m_cnl; }
 	void	setType( Type val );
 
-	TMdContr &owner( )	{ return (TMdContr &)TParamContr::owner(); }
+	TMdContr &owner( );
 
     protected:
 	//Methods
@@ -101,7 +101,7 @@ class TMdContr: public TController
 
 	TParamContr *ParamAttach( const string &name, int type );
 
-	TTpContr &owner( )	{ return (TTpContr&)TController::owner(); }
+	TTpContr &owner( );
 
     protected:
 	//Methods

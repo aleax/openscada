@@ -70,7 +70,7 @@ class TTransportIn : public TCntrNode, public TConfig
 	virtual void start( )	{ };
 	virtual void stop( )	{ };
 
-	TTipTransport &owner( )	{ return *(TTipTransport*)nodePrev(); }
+	TTipTransport &owner( );
 
     protected:
 	//Methods
@@ -143,7 +143,7 @@ class TTransportOut : public TCntrNode, public TConfig
 
 	void messProtIO( XMLNode &io, const string &prot );
 
-	TTipTransport &owner( )	{ return *(TTipTransport*)nodePrev(); }
+	TTipTransport &owner( );
 
     protected:
 	//Methods
@@ -200,7 +200,7 @@ class TTipTransport: public TModule
 	void outDel( const string &name, bool complete = false ){ chldDel(m_out,name,-1,complete); }
 	AutoHD<TTransportOut> outAt( const string &name )	{ return chldAt(m_out,name); }
 
-	TTransportS &owner( )					{ return (TTransportS&)TModule::owner(); }
+	TTransportS &owner( );
 
     protected:
 	//Methods

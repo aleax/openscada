@@ -488,6 +488,8 @@ void MTable::postDisable(int flag)
     }
 }
 
+MBD &MTable::owner()	{ return (MBD&)TTable::owner(); }
+
 void MTable::getStructDB( vector< vector<string> > &tblStrct )
 {
     //- Get generic data structure -

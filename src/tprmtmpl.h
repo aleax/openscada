@@ -70,7 +70,7 @@ class TPrmTempl: public TFunction, public TConfig
 
 	AutoHD<TFunction>	func( );	//Programming language attached function
 
-	TPrmTmplLib &owner( )	{ return *(TPrmTmplLib*)nodePrev(); }
+	TPrmTmplLib &owner( );
 
     protected:
 	//Methods
@@ -124,7 +124,7 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 	void add( const char *id, const char *name = "" );
 	void del( const char *id, bool full_del = false )	{ chldDel(m_ptmpl,id,-1,full_del); }
 
-	TDAQS &owner( )				{ return *(TDAQS*)nodePrev(); }
+	TDAQS &owner( );
 
     protected:
 	//Methods

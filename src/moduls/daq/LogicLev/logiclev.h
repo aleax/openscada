@@ -67,7 +67,7 @@ class TMdPrm : public TParamContr
 	void load_( );
 	void save_( );
 
-	TMdContr &owner( )	{ return (TMdContr&)TParamContr::owner(); }
+	TMdContr &owner( );
 
     private:
 	//Data

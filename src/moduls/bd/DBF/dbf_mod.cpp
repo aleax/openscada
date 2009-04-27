@@ -253,6 +253,8 @@ void MTable::postDisable(int flag)
     }
 }
 
+MBD &MTable::owner( )	{ return (MBD&)TTable::owner(); }
+
 bool MTable::fieldSeek( int i_ln, TConfig &cfg )
 {
     int i_clm;

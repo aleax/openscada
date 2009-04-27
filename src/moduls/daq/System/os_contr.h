@@ -65,7 +65,7 @@ class TMdPrm : public TParamContr
 	void getVal( );
 	void setEval( );
 
-	TMdContr &owner( )	{ return (TMdContr&)TParamContr::owner(); }
+	TMdContr &owner( );
 
     protected:
 	//Methods

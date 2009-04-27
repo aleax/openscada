@@ -1,3 +1,17 @@
+2009-04-27 Roman
+- FIX:/SYS: owner() method is changed to no inline for all objects.
+- !!:/SYS/Archive: Added archive selection parameter to function TVArchive::period().
+- !!:/SYS/Value: Created mechanism for inherite TVal() into modules.
+- !!!!:/SYS/Value: Archive's data getting is added to attributes request service function.
+    Used for deadline connection compensation and preventing data lost.
+- !!!!:/DAQ/DAQGate: Deadline connection compensation is added. Working into reserve mode is improved.
+    Service requests for archive's data is made redirect to remote station for no local archive present.
+- /DAQ/DAQGate: Working status is added.
+- /Protocol/ModBus: Copy nodes operation is added.
+- !:/UI/QTCfg: Search item into selected one level branch is created.
+- FIX:/UI/QTCfg: Quick config mode flag clear is fixed on top level areas deletion.
+
+
 2009-04-27 Maxim
 - FIX:/UI/Vision: Moving figures, selected by means of CTRL+A or by means of rect-selection with the help of keyboerd is fixed and modified
   for primitive ElFigure.

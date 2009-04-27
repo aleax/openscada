@@ -98,7 +98,7 @@ class TModule : public TCntrNode
 	const char *I18N( const char *mess );
 	string I18Ns( const string &mess );
 
-	TSubSYS &owner( )		{ return *(TSubSYS *)nodePrev(); }
+	TSubSYS &owner( );
 
     protected:
 	//Methods

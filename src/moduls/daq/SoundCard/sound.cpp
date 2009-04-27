@@ -124,6 +124,8 @@ TMdContr::~TMdContr()
 
 }
 
+TTpContr &TMdContr::owner( )	{ return (TTpContr&)TController::owner(); }
+
 string TMdContr::getStatus( )
 {
     string val = TController::getStatus( );
@@ -337,6 +339,8 @@ void TMdPrm::postEnable( int flag )
 
     if( !vlElemPresent(&owner().prmEL()) ) vlElemAtt(&owner().prmEL());
 }
+
+TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::load_( )
 {

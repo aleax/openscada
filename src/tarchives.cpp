@@ -109,10 +109,9 @@ TArchiveS::~TArchiveS(  )
     nodeDelAll();
 }
 
-int TArchiveS::valPeriod( )
-{
-    return vmax(1,mValPer);
-}
+
+
+int TArchiveS::valPeriod( )		{ return vmax(1,mValPer); }
 
 void TArchiveS::load_( )
 {
@@ -1014,20 +1013,13 @@ void TMArchivator::postDisable(int flag)
     { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
-string TMArchivator::workId()
-{
-    return owner().modId()+"."+id();
-}
+TTipArchivator &TMArchivator::owner( )	{ return *(TTipArchivator*)nodePrev(); }
 
-string TMArchivator::name()
-{
-    return (m_name.size())?m_name:m_id;
-}
+string TMArchivator::workId( )		{ return owner().modId()+"."+id(); }
 
-string TMArchivator::tbl( )
-{
-    return owner().owner().subId()+"_mess_proc";
-}
+string TMArchivator::name()		{ return (m_name.size())?m_name:m_id; }
+
+string TMArchivator::tbl( )		{ return owner().owner().subId()+"_mess_proc"; }
 
 void TMArchivator::load_( )
 {

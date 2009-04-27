@@ -66,7 +66,7 @@ class TTable : public TCntrNode
 	virtual void fieldDel( TConfig &cfg )
 	{ throw TError(nodePath().c_str(),_("Function <%s> no support!"),"fieldDel"); }
 
-	TBD &owner( )		{ return *(TBD *)nodePrev(); }
+	TBD &owner( );
 
     protected:
 	//Protected methods
@@ -128,7 +128,7 @@ class TBD : public TCntrNode, public TConfig
 	virtual void sqlReq( const string &req, vector< vector<string> > *tbl = NULL )
 	{ throw TError(nodePath().c_str(),_("Function <%s> no support!"),"sqlReq"); }
 
-	TTipBD &owner( )		{ return *(TTipBD *)nodePrev(); }
+	TTipBD &owner( );
 
     protected:
 	//Protected methods
@@ -183,7 +183,7 @@ class TTipBD : public TModule
 	void close( const string &iid, bool erase = false )	{ chldDel(m_db,iid,-1,erase); }
 	AutoHD<TBD> at( const string &name )	{ return chldAt(m_db,name); }
 
-	TBDS &owner( )		{ return (TBDS&)TModule::owner(); }
+	TBDS &owner( );
 
     private:
 	//Private methods

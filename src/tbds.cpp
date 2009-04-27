@@ -522,6 +522,8 @@ void TTipBD::open( const string &iid )
     chldAdd(m_db,openBD(iid));
 }
 
+TBDS &TTipBD::owner( )	{ return (TBDS&)TModule::owner(); }
+
 void TTipBD::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
@@ -633,10 +635,9 @@ void TBD::postDisable(int flag)
     { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
-string TBD::name()
-{
-    return (mName.size())?mName:id();
-}
+TTipBD &TBD::owner( )	{ return *(TTipBD*)nodePrev(); }
+
+string TBD::name( )	{ return (mName.size())?mName:id(); }
 
 void TBD::enable( )
 {
@@ -807,6 +808,8 @@ TCntrNode &TTable::operator=( TCntrNode &node )
 
     return *this;
 }
+
+TBD &TTable::owner( )	{ return *(TBD*)nodePrev(); }
 
 void TTable::cntrCmdProc( XMLNode *opt )
 {

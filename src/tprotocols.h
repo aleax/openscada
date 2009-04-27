@@ -51,7 +51,7 @@ class TProtocolIn : public TCntrNode
 	virtual bool mess( const string &request, string &answer, const string &sender )
 	{ answer = ""; }
 
-	TProtocol &owner( )	{ return *(TProtocol *)nodePrev(); }
+	TProtocol &owner( );
 
     private:
 	//Methods

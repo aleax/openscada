@@ -39,6 +39,23 @@ namespace DAQGate
 {
 
 //******************************************************
+//* TMdVl                                              *
+//******************************************************
+class TMdPrm;
+
+class TMdVl : public TVal
+{
+    public:
+	TMdVl( )	{ }
+
+	TMdPrm &owner( );
+
+    protected:
+	//Methods
+	void cntrCmdProc( XMLNode *opt );
+};
+
+//******************************************************
 //* TMdPrm                                             *
 //******************************************************
 class TMdContr;
@@ -61,7 +78,7 @@ class TMdPrm : public TParamContr
 	void update( );				//Update parameter
 
 	TElem &elem( )		{ return p_el; }
-	TMdContr &owner( )	{ return (TMdContr&)TParamContr::owner(); }
+	TMdContr &owner( );
 
     protected:
 	//Methods
@@ -72,6 +89,7 @@ class TMdPrm : public TParamContr
     private:
 	//Methods
 	void postEnable( int flag );
+	TVal* vlNew( );
 	void vlSet( TVal &val );
 	void vlArchMake( TVal &val );
 
@@ -79,6 +97,7 @@ class TMdPrm : public TParamContr
 	TElem	p_el;				//Work atribute elements
 	bool	mPdel;				//Remote parameter deleted flag
 	string	mCntrAdr;			//Parameter's remote controller address'
+	long long tmLstReq;
 };
 
 //******************************************************
@@ -91,17 +110,24 @@ class TMdContr: public TController
 	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem );
 	~TMdContr( );
 
-	double	period( )	{ return vmax(m_per,0.1); }
-	int	prior( )	{ return m_prior; }
-	double	syncPer( )	{ return m_sync; }
+	string getStatus( );
+
+	double	period( )	{ return vmax(mPer,0.1); }
+	int	prior( )	{ return mPrior; }
+	double	syncPer( )	{ return mSync; }
+	double	restDtTm( )	{ return mRestDtTm; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
 	void prmEn( const string &id, bool val );
 
+	//> Request to OpenSCADA control interface
+	int cntrIfCmd( XMLNode &node, bool strongSt = false );
+
     protected:
 	//Methods
 	void enable_( );
+	void disable_( );
 	void start_( );
 	void stop_( );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
@@ -112,21 +138,25 @@ class TMdContr: public TController
 	static void *Task( void *icntr );
 
 	//Attributes
-	Res	en_res, req_res;		//Resource for enable params and request to remote OpenSCADA station
-	double	&m_per,				//Acquisition task (seconds)
-		&m_sync;			//Synchronization inter remote OpenSCADA station:
+	Res	enRes;				//Resource for enable params and request to remote OpenSCADA station
+	double	&mPer,				//Acquisition task (seconds)
+		&mSync,				//Synchronization inter remote OpenSCADA station:
 						//configuration update, attributes list update, local and remote archives sync.
-	int	&m_prior;			//Process task priority
-	string	&m_stations,			//Remote stations list
-		&m_contr_prm;			//Transported remote cotrollers and parameters list
+		&mRestDtTm;			//Restore data maximum length time (hour)
+	int	&mRestTm,			//Restore timeout in s
+		&mPrior;			//Process task priority
+	string	&mStations,			//Remote stations list
+		&mContrPrm;			//Transported remote cotrollers and parameters list
 
-	bool	prc_st,				//Process task active
-		endrun_req;			//Request to stop of the Process task
-	vector< AutoHD<TMdPrm> > p_hd;
+
+	bool	prcSt,				//Process task active
+		endrunReq;			//Request to stop of the Process task
+	vector< AutoHD<TMdPrm> > pHd;
+	map<string,float> mStatWork;		//Work stations and it status
 
 	pthread_t procPthr;			//Process task thread
 
-	double	tm_gath;			//Gathering time
+	double	tmGath;				//Gathering time
 };
 
 //******************************************************
@@ -159,7 +189,7 @@ class TTpContr: public TTipDAQ
 	TTpContr( string name );
 	~TTpContr( );
 
-	//- Request to OpenSCADA control interface -
+	//> Request to OpenSCADA control interface
 	int cntrIfCmd( XMLNode &node );
 
     protected:

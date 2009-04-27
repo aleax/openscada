@@ -80,15 +80,11 @@ void TPrmTempl::postDisable(int flag)
     { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
-string TPrmTempl::name()
-{
-    return (m_name.size())?m_name:m_id;
-}
+TPrmTmplLib &TPrmTempl::owner( )	{ return *(TPrmTmplLib*)nodePrev(); }
 
-string TPrmTempl::progLang()
-{
-    return m_prog.substr(0,m_prog.find("\n"));
-}
+string TPrmTempl::name()		{ return m_name.size()?m_name:m_id; }
+
+string TPrmTempl::progLang()		{ return m_prog.substr(0,m_prog.find("\n")); }
 
 string TPrmTempl::prog()
 {
@@ -434,10 +430,9 @@ void TPrmTmplLib::postDisable(int flag)
     }
 }
 
-string TPrmTmplLib::name()
-{
-    return (m_name.size())?m_name:m_id;
-}
+TDAQS &TPrmTmplLib::owner( )	{ return *(TDAQS*)nodePrev(); }
+
+string TPrmTmplLib::name( )	{ return m_name.size()?m_name:m_id; }
 
 void TPrmTmplLib::setFullDB( const string &vl )
 {

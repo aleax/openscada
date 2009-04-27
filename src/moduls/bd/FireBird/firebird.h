@@ -54,7 +54,7 @@ class MTable : public TTable
 	void fieldSet( TConfig &cfg );
 	void fieldDel( TConfig &cfg );
 
-	MBD &owner()	{ return (MBD&)TTable::owner(); }
+	MBD &owner( );
 
     private:
 	//Private methods

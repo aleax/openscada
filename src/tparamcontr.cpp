@@ -48,7 +48,7 @@ TCntrNode &TParamContr::operator=( TCntrNode &node )
     TParamContr *src_n = dynamic_cast<TParamContr*>(&node);
     if( !src_n ) return *this;
 
-    //- Configuration copy -
+    //> Configuration copy
     string tid = id();
     *(TConfig*)this = *(TConfig*)src_n;
     m_id = tid;
@@ -57,6 +57,8 @@ TCntrNode &TParamContr::operator=( TCntrNode &node )
 
     return *this;
 }
+
+TController &TParamContr::owner( )	{ return *(TController*)nodePrev(); }
 
 string TParamContr::name()
 {
@@ -161,10 +163,10 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 {
     string a_path = opt->attr("path");
 
-    //- Service commands process -
+    //> Service commands process
     if( a_path.substr(0,6) == "/serv/" ) { TValue::cntrCmdProc(opt); return; }
 
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	TValue::cntrCmdProc(opt);
@@ -182,7 +184,7 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 	}
         return;
     }
-    //- Process command to page -
+    //> Process command to page
     if( a_path == "/prm/st/type" && ctrChkNode(opt) )	opt->setText(type().name);
     else if( a_path == "/prm/st/en" )
     {

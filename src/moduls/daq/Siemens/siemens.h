@@ -107,7 +107,7 @@ class TMdPrm : public TParamContr, public TValFunc
 	int lnkId( const string &id );
 	SLnk &lnk( int num );
 
-	TMdContr &owner( )	{ return (TMdContr&)TParamContr::owner(); }
+	TMdContr &owner( );
 
     protected:
 	//Methods
@@ -167,7 +167,7 @@ class TMdContr: public TController
 	void getDB( unsigned n_db, long offset, string &buffer );
 	void putDB( unsigned n_db, long offset, const string &buffer );
 
-	TTpContr &owner( )	{ return *(TTpContr *)nodePrev(); }
+	TTpContr &owner( );
 
 	Res &nodeRes( )		{ return nRes; }
 

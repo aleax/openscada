@@ -39,10 +39,9 @@ TSubSYS::~TSubSYS(  )
     nodeDelAll();
 }
 
-string TSubSYS::subName()
-{
-    return m_name.size()?_(m_name.c_str()):m_id;
-}
+TSYS &TSubSYS::owner( )		{ return *(TSYS*)nodePrev(); }
+
+string TSubSYS::subName( )	{ return m_name.size()?_(m_name.c_str()):m_id; }
 
 void TSubSYS::modList( vector<string> &list )
 {

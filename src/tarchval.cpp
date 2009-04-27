@@ -875,6 +875,16 @@ long long TVArchive::begin( const string &arch )
     return rez;
 }
 
+long long TVArchive::period( const string &arch )
+{
+    if( arch.empty() || arch == BUF_ARCH_NM ) return TValBuf::period();
+    ResAlloc res(a_res,false);
+    for( int i_a = 0; i_a < arch_el.size(); i_a++ )
+	if( arch == arch_el[i_a]->archivator().workId() )
+	    return (long long)(1e6*arch_el[i_a]->archivator().valPeriod());
+    return 0;
+}
+
 void TVArchive::setValType( TFld::Type vl )
 {
     m_vtype = vl;

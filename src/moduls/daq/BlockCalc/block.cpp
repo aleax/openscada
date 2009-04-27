@@ -91,10 +91,9 @@ void Block::postDisable( int flag )
     { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
-string Block::name( )
-{
-    return m_name.size() ? m_name : id();
-}
+Contr &Block::owner( )	{ return *(Contr *)nodePrev(); }
+
+string Block::name( )	{ return m_name.size() ? m_name : id(); }
 
 void Block::load_( )
 {

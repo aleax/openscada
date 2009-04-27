@@ -29,14 +29,19 @@
 //*************************************************
 //* TValue                                        *
 //*************************************************
-TValue::TValue( ) : l_cfg(0), m_cfg(NULL)
+TValue::TValue( ) : l_cfg(0), mCfg(NULL)
 {
     m_vl = grpAdd("a_",true);
 }
 
 TValue::~TValue()
 {
-    while(elem.size())	vlElemDet(elem[0]);
+    while( elem.size() ) vlElemDet(elem[0]);
+}
+
+TVal* TValue::vlNew( )
+{
+    return new TVal( );
 }
 
 void TValue::detElem( TElem *el )
@@ -47,10 +52,13 @@ void TValue::detElem( TElem *el )
 void TValue::addFld( TElem *el, unsigned id_val )
 {
     int i_off = l_cfg;
-    for(unsigned i_e = 0; i_e < elem.size(); i_e++)
-	if(elem[i_e]->elName() == el->elName() ) break;
-	else i_off+=elem[i_e]->fldSize();
-    chldAdd(m_vl,new TVal(el->fldAt(id_val),this),i_off+id_val);
+    for( unsigned i_e = 0; i_e < elem.size(); i_e++ )
+	if( elem[i_e]->elName() == el->elName() ) break;
+	else i_off += elem[i_e]->fldSize();
+
+    TVal *vl = vlNew();
+    vl->setFld(el->fldAt(id_val));
+    chldAdd(m_vl,vl,i_off+id_val);
 }
 
 void TValue::delFld( TElem *el, unsigned id_val )
@@ -62,26 +70,32 @@ void TValue::delFld( TElem *el, unsigned id_val )
 void TValue::setVlCfg( TConfig *cfg )
 {
     vector<string> list;
-    //- Detach old configs -
-    if( m_cfg )
+    //> Detach old configs
+    if( mCfg )
     {
-	m_cfg->cfgList( list );
+	mCfg->cfgList( list );
 	for( unsigned i_cf = 0; i_cf < list.size(); i_cf++ )
-	    if( !(m_cfg->cfg(list[i_cf]).fld().flg()&TCfg::NoVal) && vlPresent(list[i_cf]) )
+	    if( !(mCfg->cfg(list[i_cf]).fld().flg()&TCfg::NoVal) && vlPresent(list[i_cf]) )
 	    {
 		chldDel(m_vl,list[i_cf]);
 		l_cfg--;
 	    }
-	m_cfg = NULL;
+	mCfg = NULL;
     }
-    //- Attach new config -
+    //> Attach new config
     if( cfg )
     {
 	cfg->cfgList( list );
 	for( unsigned i_cf = 0; i_cf < list.size(); i_cf++ )
 	    if( !(cfg->cfg(list[i_cf]).fld().flg()&TCfg::NoVal) && !vlPresent(list[i_cf]) )
-	        chldAdd(m_vl, new TVal(cfg->cfg(list[i_cf]),this),l_cfg++);
-	m_cfg = cfg;
+		//chldAdd(m_vl, new TVal(cfg->cfg(list[i_cf]),this),l_cfg++);
+	    {
+		TVal *vl = vlNew();
+		vl->setCfg(cfg->cfg(list[i_cf]));
+		chldAdd(m_vl,vl,l_cfg);
+		l_cfg++;
+	    }
+	mCfg = cfg;
     }
 }
 
@@ -126,7 +140,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 {
     vector<string> list_c;
     string a_path = opt->attr("path");
-    //- Service commands process -
+    //> Service commands process
     if( a_path == "/serv/attr"  )		//Attributes access
     {
 	vlList(list_c);
@@ -146,34 +160,68 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	    }
 	}
 	if( ctrChkNode(opt,"get",RWRWRW,"root","root",SEQ_RD) )		//All attributes values
+	{
+	    AutoHD<TVal> vl;
+	    long long tm = atoll(opt->attr("tm").c_str());
+	    opt->setAttr("tm",TSYS::ll2str(TSYS::curTime()));
 	    for( int i_el = 0; i_el < list_c.size(); i_el++ )
-		opt->childAdd("el")->setAttr("id",list_c[i_el])->setText(vlAt(list_c[i_el]).at().getS());
+	    {
+		vl = vlAt(list_c[i_el]);
+		//>> Get last value
+		if( !tm ||									//Current value request
+			(vl.at().arch( ).freeStat() && vl.at().time() > tm) ||			//Updated value request
+			(!vl.at().arch( ).freeStat() && ((vl.at().time()-tm)/vl.at().arch().at().period()) <= 1) )	//One value diff
+		    opt->childAdd("el")->setAttr("id",list_c[i_el])->setText(vl.at().getS());
+		//>> Get values from archive
+		else if( !vl.at().arch( ).freeStat() )
+		{
+		    AutoHD<TVArchive> arch = vl.at().arch();
+		    long long vper = arch.at().period(BUF_ARCH_NM);
+		    long long reqBeg = (tm/vper)*vper;
+		    long long vbeg = vmax(reqBeg,arch.at().begin(BUF_ARCH_NM));
+		    long long vend = arch.at().end(BUF_ARCH_NM);
+
+		    //>>> Longing to equivalent archivators
+		    if( vbeg == arch.at().begin(BUF_ARCH_NM) )
+		    {
+			vector<string> archLs;
+			arch.at().archivatorList(archLs);
+			for( int i_a = 0; i_a < archLs.size(); i_a++ )
+			    if( arch.at().period(archLs[i_a]) == vper )
+				vbeg = vmax(reqBeg,arch.at().begin(archLs[i_a]));
+		    }
+		    XMLNode *aNd = opt->childAdd("el")->setAttr("id",list_c[i_el])->
+			setAttr("tm",TSYS::ll2str(vbeg))->setAttr("per",TSYS::ll2str(vper));
+		    for( ; vbeg <= vend; vbeg++ )
+			aNd->childAdd("v")->setText(arch.at().getS(&vbeg,true));
+		}
+	    }
+	}
 	if( ctrChkNode(opt,"set",RWRWRW,"root","root",SEQ_WR) )		//Multi attributes set
 	    for( int i_el = 0; i_el < opt->childSize(); i_el++ )
 		vlAt(opt->childGet(i_el)->attr("id")).at().setS(opt->childGet(i_el)->text());
 	return;
     }
 
-    //- Interface comands process -
-    //-- Info command process --
+    //> Interface comands process
+    //>> Info command process
     if( opt->name() == "info" )
     {
 	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter: ")+nodeName(),0664,"root","root");
 	if(ctrMkNode("area",opt,-1,"/val",_("Atributes")))
 	{
-	    //--- Add atributes list ---
+	    //>>> Add atributes list
 	    vlList(list_c);
 	    for( int i_el = 0; i_el < list_c.size(); i_el++ )
 		vlAt(list_c[i_el]).at().fld().cntrCmdMake(opt,"/val",-1);
 	}
-	//--- Archiving ---
 	if(ctrMkNode("area",opt,-1,"/arch",_("Archiving")))
 	{
+	    //>>> Archiving
 	    if(ctrMkNode("table",opt,-1,"/arch/arch",_("Archiving"),0664,"root","root",1,"key","atr"))
 	    {
 		vector<string> list_c2;
-		//- Prepare table headers -
 		ctrMkNode("list",opt,-1,"/arch/arch/atr",_("Atribute"),0444,"root","root",1,"tp","str");
 		ctrMkNode("list",opt,-1,"/arch/arch/prc",_("Archiving"),0664,"root","root",1,"tp","bool");
 		SYS->archive().at().modList(list_c);
@@ -190,7 +238,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	}
 	return;
     }
-    //-- Process command to page --
+    //>> Process command to page
     if( a_path.substr(0,4) == "/val" )
     {
 	if( a_path.size() > 9 && a_path.substr(0,9) == "/val/sel_" && ctrChkNode(opt) )
@@ -219,7 +267,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
 	{
 	    vector<string> list_c2;
-	    //--- Prepare headers ---
+	    //>>> Prepare headers
 	    ctrMkNode("list",opt,-1,"/arch/arch/atr","",0444);
 	    ctrMkNode("list",opt,-1,"/arch/arch/prc","",0664);
 	    SYS->archive().at().modList(list_c);
@@ -229,7 +277,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		for( int i_a = 0; i_a < list_c2.size(); i_a++ )
 		    ctrMkNode("list",opt,-1,("/arch/arch/"+SYS->archive().at().at(list_c[i_ta]).at().valAt(list_c2[i_a]).at().workId()).c_str(),"",0664);
 	    }
-	    //--- Fill table ---
+	    //>>> Fill table
 	    vlList(list_c);
 	    for( int i_v = 0; i_v < list_c.size(); i_v++ )
 		for( int i_a = 0; i_a < opt->childSize(); i_a++ )
@@ -295,13 +343,39 @@ void TValue::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TVal                                          *
 //*************************************************
-TVal::TVal( TFld &fld, TValue *owner ) :
-    TCntrNode(owner), m_cfg(false)
+TVal::TVal( ) : mCfg(false), mTime(0)
 {
-    time = 0;
+    src.fld = NULL;
+}
+
+TVal::TVal( TFld &fld ) : mCfg(false), mTime(0)
+{
+    src.fld = NULL;
     modifClr();
 
-    //- Chek for self field for dinamic elements -
+    setFld(fld);
+}
+
+TVal::TVal( TCfg &cfg ) : mCfg(false), mTime(0)
+{
+    src.fld = NULL;
+
+    setCfg(cfg);
+}
+
+TVal::~TVal( )
+{
+    if( !mCfg && src.fld->type() == TFld::String )	delete val.val_s;
+    if( !mCfg && src.fld->flg()&TFld::SelfFld )		delete src.fld;
+}
+
+void TVal::setFld( TFld &fld )
+{
+    //> Delete previous
+    if( !mCfg && src.fld && src.fld->type() == TFld::String )	delete val.val_s;
+    if( !mCfg && src.fld && src.fld->flg()&TFld::SelfFld )	delete src.fld;
+
+    //> Chek for self field for dynamic elements
     if( fld.flg()&TFld::SelfFld )
     {
 	src.fld = new TFld();
@@ -319,30 +393,30 @@ TVal::TVal( TFld &fld, TValue *owner ) :
 	case TFld::Real:	val.val_r = atof(src.fld->def().c_str());	break;
 	case TFld::Boolean:	val.val_b = atoi(src.fld->def().c_str());	break;
     }
+
+    mCfg = false;
 }
 
-TVal::TVal(TCfg &cfg, TValue *owner ) :
-    TCntrNode(owner), m_cfg(true)
+void TVal::setCfg( TCfg &cfg )
 {
+    //> Delete previous
+    if( !mCfg && src.fld && src.fld->type() == TFld::String )	delete val.val_s;
+    if( !mCfg && src.fld && src.fld->flg()&TFld::SelfFld )	delete src.fld;
+
+    //> Set cfg
     src.cfg = &cfg;
-    time = 0;
-}
-
-TVal::~TVal( )
-{
-    if( !m_cfg && src.fld->type() == TFld::String )	delete val.val_s;
-    if( !m_cfg && src.fld->flg()&TFld::SelfFld )	delete src.fld;
+    mCfg = true;
 }
 
 const string &TVal::name()
 {
-    if( m_cfg )	return( src.cfg->name() );
+    if( mCfg )	return( src.cfg->name() );
     else	return( src.fld->name() );
 }
 
 TFld &TVal::fld()
 {
-    if( m_cfg )	return( src.cfg->fld() );
+    if( mCfg )	return( src.cfg->fld() );
     return( *src.fld );
 }
 
@@ -358,12 +432,12 @@ void TVal::vlGet(  )
 
 AutoHD<TVArchive> TVal::arch()
 {
-    return m_arch;
+    return mArch;
 }
 
 void TVal::setArch(const AutoHD<TVArchive> &vl)
 {
-    m_arch = vl;
+    mArch = vl;
 }
 
 string TVal::getSEL( long long *tm, bool sys )
@@ -390,17 +464,17 @@ string TVal::getS( long long *tm, bool sys )
 	{ char vl = getB(tm,sys);	return (vl!=EVAL_BOOL) ? TSYS::int2str((bool)vl) : EVAL_STR; }
 	case TFld::String:
 	    //> Get from archive
-	    if( tm && (*tm) && !m_arch.freeStat() && *tm/m_arch.at().period() < time/m_arch.at().period() )
-		return m_arch.at().getS(tm);
+	    if( tm && (*tm) && !mArch.freeStat() && *tm/mArch.at().period() < time()/mArch.at().period() )
+		return mArch.at().getS(tm);
 	    //> Get value from config
-	    if( m_cfg )
+	    if( mCfg )
 	    {
 		if(tm) *tm = TSYS::curTime();
 		return src.cfg->getS( );
 	    }
 	    //> Get current value
 	    if( fld().flg()&TVal::DirRead && !sys )	vlGet( );
-	    if( tm ) *tm = time;
+	    if( tm ) *tm = time();
 	    return val.val_s->getVal();
     }
 }
@@ -417,18 +491,17 @@ int TVal::getI( long long *tm, bool sys )
 	{ char vl = getB(tm,sys);	return (vl!=EVAL_BOOL) ? (bool)vl : EVAL_INT; }
 	case TFld::Integer:
 	    //- Get from archive -
-	    if( tm && (*tm) && !m_arch.freeStat() && *tm/m_arch.at().period() < time/m_arch.at().period() ) 
-		return m_arch.at().getI(tm);
-//	    ResAlloc res(aRes,false);
+	    if( tm && (*tm) && !mArch.freeStat() && *tm/mArch.at().period() < time()/mArch.at().period() ) 
+		return mArch.at().getI(tm);
 	    //- Get value from config -
-	    if( m_cfg )
+	    if( mCfg )
 	    {
 		if(tm) *tm = TSYS::curTime();
 		return src.cfg->getI( );
 	    }
 	    //- Get current value -
 	    if( fld().flg()&TVal::DirRead && !sys )	vlGet( );
-	    if( tm ) *tm = time;
+	    if( tm ) *tm = time();
 	    return val.val_i;
     }
 }
@@ -445,18 +518,17 @@ double TVal::getR( long long *tm, bool sys )
 	{ char vl = getB(tm,sys);	return (vl!=EVAL_BOOL) ? (bool)vl : EVAL_REAL; }
 	case TFld::Real:
 	    //- Get from archive -
-	    if( tm && (*tm) && !m_arch.freeStat() && *tm/m_arch.at().period() < time/m_arch.at().period() ) 
-		return m_arch.at().getR(tm);
-//	    ResAlloc res(aRes,false);
+	    if( tm && (*tm) && !mArch.freeStat() && *tm/mArch.at().period() < time()/mArch.at().period() ) 
+		return mArch.at().getR(tm);
 	    //- Get value from config -
-	    if( m_cfg )
+	    if( mCfg )
 	    {
 		if(tm) *tm = TSYS::curTime();
 		return src.cfg->getR( );
 	    }
 	    //- Get current value -
 	    if( fld().flg()&TVal::DirRead && !sys )	vlGet( );
-	    if( tm ) *tm = time;
+	    if( tm ) *tm = time();
 	    return val.val_r;
     }
 }
@@ -473,18 +545,17 @@ char TVal::getB( long long *tm, bool sys )
 	{ double vl = getR(tm,sys);	return (vl!=EVAL_REAL) ? (bool)vl : EVAL_BOOL; }
 	case TFld::Boolean:
 	    //- Get from archive -
-	    if( tm && (*tm) && !m_arch.freeStat() && *tm/m_arch.at().period() < time/m_arch.at().period() ) 
-		return m_arch.at().getB(tm);
-//	    ResAlloc res(aRes,false);
+	    if( tm && (*tm) && !mArch.freeStat() && *tm/mArch.at().period() < time()/mArch.at().period() ) 
+		return mArch.at().getB(tm);
 	    //- Get value from config -
-	    if( m_cfg )
+	    if( mCfg )
 	    {
 		if(tm) *tm = TSYS::curTime();
 		return src.cfg->getB( );
 	    }
 	    //- Get current value -
 	    if( fld().flg()&TVal::DirRead && !sys )	vlGet( );
-	    if( tm ) *tm = time;
+	    if( tm ) *tm = time();
 	    return val.val_b;
     }
 }
@@ -513,17 +584,17 @@ void TVal::setS( const string &value, long long tm, bool sys )
 	    setB( (value!=EVAL_STR) ? (bool)atoi(value.c_str()) : EVAL_BOOL, tm, sys );	break;
 	case TFld::String:
 	    //> Set value to config
-	    if( m_cfg )	{ src.cfg->setS( value ); return; }
+	    if( mCfg )	{ src.cfg->setS( value ); return; }
 	    //> Check to write
 	    if( !sys && fld().flg()&TFld::NoWrite )	throw TError("Val","Write access is denied!");
 	    //> Set current value and time
 	    val.val_s->setVal(value);
-	    time = tm;
-	    if(!time) time = TSYS::curTime();
-	    if(fld().flg()&TVal::DirWrite && !sys)	vlSet( );
+	    mTime = tm;
+	    if( !mTime ) mTime = TSYS::curTime();
+	    if( fld().flg()&TVal::DirWrite && !sys )	vlSet( );
 	    //> Set to archive
-	    if( !m_arch.freeStat() && m_arch.at().srcMode() == TVArchive::PassiveAttr )
-		m_arch.at().setS(value,time);
+	    if( !mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr )
+		mArch.at().setS(value,time());
     }
 }
 
@@ -540,7 +611,7 @@ void TVal::setI( int value, long long tm, bool sys )
 	case TFld::Integer:
 //	    ResAlloc res(aRes,true);
 	    //> Set value to config
-	    if( m_cfg )	{ src.cfg->setI( value ); return; }
+	    if( mCfg )	{ src.cfg->setI( value ); return; }
 	    //> Check to write
             if( !sys && fld().flg()&TFld::NoWrite )	throw TError("Val","Write access is denied!");
 	    //> Set current value and time
@@ -550,12 +621,12 @@ void TVal::setI( int value, long long tm, bool sys )
 		if( value < fld().selValI()[0] )value = fld().selValI()[0];
 	    }
 	    val.val_i = value;
-	    time = tm;
-	    if(!time) time = TSYS::curTime();
-	    if(fld().flg()&TVal::DirWrite && !sys) vlSet( );
+	    mTime = tm;
+	    if( !mTime ) mTime = TSYS::curTime();
+	    if( fld().flg()&TVal::DirWrite && !sys )	vlSet( );
 	    //> Set to archive
-	    if( !m_arch.freeStat() && m_arch.at().srcMode() == TVArchive::PassiveAttr )
-		m_arch.at().setI(value,time);
+	    if( !mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr )
+		mArch.at().setI(value,time());
     }
 }
 
@@ -572,7 +643,7 @@ void TVal::setR( double value, long long tm, bool sys )
 	case TFld::Real:
 //	    ResAlloc res(aRes,true);
 	    //> Set value to config
-	    if( m_cfg )	{ src.cfg->setR( value ); return; }
+	    if( mCfg )	{ src.cfg->setR( value ); return; }
 	    //> Check to write
             if( !sys && fld().flg()&TFld::NoWrite )	throw TError("Val","Write access is denied!");
 	    //> Set current value and time
@@ -582,12 +653,12 @@ void TVal::setR( double value, long long tm, bool sys )
 		if( value < fld().selValR()[0] )value = fld().selValR()[0];
 	    }
 	    val.val_r = value;
-	    time = tm;
-	    if(!time) time = TSYS::curTime();
-	    if(fld().flg()&TVal::DirWrite && !sys) vlSet( );
+	    mTime = tm;
+	    if( !mTime ) mTime = TSYS::curTime();
+	    if( fld().flg()&TVal::DirWrite && !sys ) vlSet( );
 	    //> Set to archive
-	    if( !m_arch.freeStat() && m_arch.at().srcMode() == TVArchive::PassiveAttr )
-		m_arch.at().setR(value,time);
+	    if( !mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr )
+		mArch.at().setR(value,time());
     }
 }
 
@@ -602,26 +673,25 @@ void TVal::setB( char value, long long tm, bool sys )
 	case TFld::Real:
 	    setR( (value!=EVAL_BOOL) ? (bool)value : EVAL_REAL, tm, sys);	break;
 	case TFld::Boolean:
-//	    ResAlloc res(aRes,true);
 	    //> Set value to config
-	    if( m_cfg )	{ src.cfg->setB( value ); return; }
+	    if( mCfg )	{ src.cfg->setB( value ); return; }
 	    //> Check to write
-            if( !sys && fld().flg()&TFld::NoWrite )	throw TError("Val","Write access is denied!");
+	    if( !sys && fld().flg()&TFld::NoWrite )	throw TError("Val","Write access is denied!");
 	    //> Set current value and time
 	    val.val_b = value;
-	    time = tm;
-	    if(!time) time = TSYS::curTime();
-	    if(fld().flg()&TVal::DirWrite && !sys)	vlSet( );
+	    mTime = tm;
+	    if( !mTime ) mTime = TSYS::curTime();
+	    if( fld().flg()&TVal::DirWrite && !sys )	vlSet( );
 	    //> Set to archive
-	    if( !m_arch.freeStat() && m_arch.at().srcMode() == TVArchive::PassiveAttr )
-		m_arch.at().setB(value,time);
+	    if( !mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr )
+		mArch.at().setB(value,time());
     }
 }
 
 void TVal::cntrCmdProc( XMLNode *opt )
 {
     string a_path = opt->attr("path");
-    //- Service commands process -
+    //> Service commands process
     if( a_path == "/serv/val"  )		//Values access
     {
 	if( ctrChkNode(opt,"info",RWRWRW,"root","root",SEQ_RD) )	//Value's data information
@@ -647,13 +717,13 @@ void TVal::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //- Interface comands process -
-    //-- Info command process --
+    //> Interface comands process
+    //>> Info command process
     if( opt->name() == "info" )
     {
 	TCntrNode::cntrCmdProc(opt);
 	return;
     }
-    //-- Process command to page --
+    //>> Process command to page
     TCntrNode::cntrCmdProc(opt);
 }

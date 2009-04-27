@@ -173,6 +173,8 @@ TMdContr::~TMdContr()
 
 }
 
+TTpContr &TMdContr::owner( )	{ return (TTpContr&)TController::owner(); }
+
 TParamContr *TMdContr::ParamAttach( const string &name, int type )
 {
     return new TMdPrm(name,&owner().tpPrmAt(type));
@@ -530,6 +532,8 @@ void TMdPrm::postEnable( int flag )
     if( TParamContr::type().name == "a_prm" )		setType(AI);
     else if( TParamContr::type().name == "d_prm" )	setType(DI);
 }
+
+TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::load_( )
 {

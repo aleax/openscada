@@ -57,7 +57,7 @@ TDAQS::TDAQS( ) : TSubSYS("DAQ","Data acquisition",true), el_err("Error")
     el_tmpl_io.fldAdd( new TFld("VALUE",_("Value"),TFld::String,TFld::NoFlag,"50") );
     el_tmpl_io.fldAdd( new TFld("POS",_("Real position"),TFld::Integer,TFld::NoFlag,"4") );
 
-    //- Error atributes -
+    //> Error atributes
     el_err.fldAdd( new TFld("err",_("Error"),TFld::String,TFld::NoWrite|TVal::DirRead) );
 }
 
@@ -96,7 +96,7 @@ void TDAQS::load_( )
 	c_el.cfgViewAll(false);
 	vector<string> db_ls;
 
-	//>>> Search into DB
+	//>> Search into DB
 	SYS->db().at().dbList(db_ls,true);
 	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
 	    for( int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+tmplLibTable(),"",lib_cnt++,c_el); )
@@ -105,7 +105,7 @@ void TDAQS::load_( )
 		if(!tmplLibPresent(l_id)) tmplLibReg(new TPrmTmplLib(l_id.c_str(),"",(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]));
 	    }
 
-	//>>> Search into config file
+	//>> Search into config file
 	if( SYS->chkSelDB("<cfg>") )
 	    for( int lib_cnt = 0; SYS->db().at().dataSeek("",nodePath()+"tmplib",lib_cnt++,c_el); )
 	    {
@@ -173,9 +173,11 @@ void TDAQS::subStart(  )
 
     bool reply   = false;
     int  try_cnt = 0;
-    //Start template's libraries
+
+
     do
     {
+	//> Start template's libraries
 	tmplLibList(tmpl_lst);
 	for( int i_lb = 0; i_lb < tmpl_lst.size(); i_lb++ )
 	    try { tmplLibAt(tmpl_lst[i_lb]).at().start(true); }
@@ -189,7 +191,7 @@ void TDAQS::subStart(  )
 		reply = true;
 	    }
 
-	//Enable controllers
+	//> Enable controllers
 	modList(m_l);
 	for( unsigned i_m = 0; i_m < m_l.size(); i_m++)
 	{
@@ -215,7 +217,7 @@ void TDAQS::subStart(  )
     }
     while( reply && try_cnt < 2 );
 
-    //Start controllers
+    //> Start controllers
     /*for( unsigned i_m = 0; i_m < m_l.size(); i_m++)
     {
 	vector<string> c_l;
@@ -244,7 +246,7 @@ void TDAQS::subStop( )
 
     vector<string> m_l;
 
-    //Stop
+    //> Stop
     modList(m_l);
     for( unsigned i_m = 0; i_m < m_l.size(); i_m++)
     {
@@ -262,7 +264,7 @@ void TDAQS::subStop( )
 		}
 	}
     }
-    //Disable
+    //> Disable
     for( unsigned i_m = 0; i_m < m_l.size(); i_m++)
     {
 	vector<string> c_l;
@@ -280,7 +282,7 @@ void TDAQS::subStop( )
 	}
     }
 
-    //Stop template's libraries
+    //> Stop template's libraries
     tmplLibList(m_l);
     for(int i_lb=0; i_lb < m_l.size(); i_lb++ )
 	tmplLibAt(m_l[i_lb]).at().start(false);
@@ -301,7 +303,7 @@ string TDAQS::optDescr( )
 
 void TDAQS::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	TSubSYS::cntrCmdProc(opt);
@@ -312,7 +314,7 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
     if( a_path == "/br/tmplb_" || a_path == "/tpllibs/lb" )
     {

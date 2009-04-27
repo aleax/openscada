@@ -497,6 +497,8 @@ TProtIn::~TProtIn()
 
 }
 
+TProt &TProtIn::owner( )	{ return *(TProt*)nodePrev(); }
+
 bool TProtIn::mess( const string &ireqst, string &answer, const string &sender )
 {
     //> Check for protocol type
@@ -611,6 +613,24 @@ Node::~Node( )
     if( data ) { delete data; data = NULL; }
 }
 
+TCntrNode &Node::operator=( TCntrNode &node )
+{
+    Node *src_n = dynamic_cast<Node*>(&node);
+    if( !src_n ) return *this;
+
+    if( enableStat( ) )	setEnable(false);
+
+    //> Copy parameters
+    string prevId = mId;
+    *(TConfig*)this = *(TConfig*)src_n;
+    *(TFunction*)this = *(TFunction*)src_n;
+    mId = prevId;
+    setDB(src_n->DB());
+
+    return *this;
+}
+
+
 void Node::postEnable( int flag )
 {
     //> Create default IOs
@@ -636,6 +656,8 @@ void Node::postDisable( int flag )
     }catch(TError err)
     { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
+
+TProt &Node::owner( )		{ return *(TProt*)nodePrev(); }
 
 string Node::name( )		{ return mName.size() ? mName : id(); }
 

@@ -82,7 +82,7 @@ class TMArchivator : public TCntrNode, public TConfig
 	virtual void put( vector<TMess::SRec> &mess ){ };
 	virtual void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0 ) { };
 
-	TTipArchivator &owner( ){ return *(TTipArchivator *)nodePrev(); }
+	TTipArchivator &owner( );
 
     protected:
 	//Protected methods

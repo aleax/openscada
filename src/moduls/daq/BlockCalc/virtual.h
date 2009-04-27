@@ -55,7 +55,7 @@ class Prm : public TParamContr
 	void enable( );
 	void disable( );
 
-	Contr &owner( )		{ return (Contr&)TParamContr::owner( ); }
+	Contr &owner( );
 
     protected:
 	//Protected methods
@@ -102,7 +102,7 @@ class Contr: public TController
 
 	Res &res( )				{ return hd_res; }
 
-	TipContr &owner( )			{ return (TipContr&)TController::owner( ); }
+	TipContr &owner( );
 
     protected:
 	//Protected methods

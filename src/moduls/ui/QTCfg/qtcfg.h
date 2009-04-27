@@ -102,6 +102,7 @@ class ConfApp: public QMainWindow
 	void onItem( QTreeWidgetItem * i );		//View item path
 	void ctrTreePopup( );
 	void treeUpdate( );				//Update expanded content of tree
+	void treeSearch( );
 
 	//> QTabWidget
 	void tabSelect( QWidget *wdg );			//Change curent widget

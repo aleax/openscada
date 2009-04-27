@@ -56,10 +56,10 @@ class TValBuf
 	bool highResTm( )	{ return m_hg_res_tm; }
 	int size( )		{ return m_size; }
 	int realSize( );
-	long long period( )	{ return m_per; }
 
 	long long begin( )	{ return m_beg; }
 	long long end( )	{ return m_end; }
+	long long period( )	{ return m_per; }
 
 	bool vOK( long long ibeg, long long iend );
 
@@ -178,11 +178,11 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 
 	long long end( const string &arch = BUF_ARCH_NM );
 	long long begin( const string &arch = BUF_ARCH_NM );
+	long long period( const string &arch = BUF_ARCH_NM );
 	TFld::Type valType( )	{ return TValBuf::valType(); }
 	bool hardGrid( )	{ return TValBuf::hardGrid(); }
 	bool highResTm( )	{ return TValBuf::highResTm(); }
 	int size( )		{ return TValBuf::size(); }
-	long long period( )	{ return TValBuf::period(); }
 
 	void setName( const string &inm )	{ m_name = inm; modif(); }
 	void setDscr( const string &idscr )	{ m_dscr = idscr; modif(); }

@@ -94,7 +94,11 @@ ConfApp::ConfApp( string open_user ) :
     splitter->setOrientation( Qt::Horizontal );
 
     //> Create Navigator tree
-    CtrTree = new QTreeWidget( splitter );
+    QFrame *frm = new QFrame(splitter);
+    QVBoxLayout *vlay = new QVBoxLayout;
+    vlay->setMargin(0);
+    CtrTree = new QTreeWidget;
+    vlay->addWidget(CtrTree);
     CtrTree->setContextMenuPolicy(Qt::CustomContextMenu);
     CtrTree->setSelectionMode(QAbstractItemView::ExtendedSelection);
     //splitter->setSizeConstraint(QSplitter::KeepSize);
@@ -116,7 +120,14 @@ ConfApp::ConfApp( string open_user ) :
     //connect( CtrTree, SIGNAL( itemEntered(QTreeWidgetItem*,int) ), this, SLOT( onItem(QTreeWidgetItem*) ) );
     connect( CtrTree, SIGNAL( customContextMenuRequested(const QPoint&) ), this, SLOT( ctrTreePopup() ) );
 
-    //- Right frame add -
+    //> Create search field
+    QLineEdit *trSrchW = new QLineEdit;
+    connect( trSrchW, SIGNAL( textChanged(const QString) ), this, SLOT( treeSearch() ) );
+    connect( trSrchW, SIGNAL( returnPressed() ), this, SLOT( treeSearch() ) );
+    vlay->addWidget(trSrchW);
+    frm->setLayout(vlay);
+
+    //> Right frame add
     QFrame *gFrame = new QFrame( splitter );
     gFrame->setWhatsThis(_("The main configurator frame."));
     QSizePolicy sp(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -447,6 +458,45 @@ void ConfApp::endRunChk( )
     if( mod->endRun() ) close();
 }
 
+void ConfApp::treeSearch( )
+{
+    if( !sender() ) return;
+    QLineEdit *sl = (QLineEdit*)sender();
+    QString wvl = TSYS::strNoSpace(sl->text().toStdString()).c_str();
+    bool fromCur = !sl->isModified();
+    sl->setModified(false);
+
+    //> Get current element selection
+    QTreeWidgetItem *si = (CtrTree->selectedItems().size()==1) ? CtrTree->selectedItems()[0] : NULL;
+    if( !si || wvl.isEmpty() ) return;
+
+    QTreeWidgetItem *pi = si->parent();
+    if( !pi || !pi->isExpanded() ) return;
+
+    bool curReach = false;
+    int i_c;
+    for( i_c = 0; i_c < pi->childCount(); i_c++ )
+    {
+	if( fromCur && !curReach )
+	{
+	    if( pi->child(i_c) == si ) curReach = true;
+	    continue;
+	}
+	if( pi->child(i_c)->text(0).contains(wvl,Qt::CaseInsensitive) ) break;
+	else
+	{
+	    //>> Get last item from path
+	    string itpth, tstr;
+	    for( int off = 0; (tstr=TSYS::pathLev(pi->child(i_c)->text(2).toStdString(),0,true,&off)).size(); )
+		itpth = tstr;
+	    if( QString(itpth.c_str()).contains(wvl,Qt::CaseInsensitive) ) break;
+	}
+    }
+    if( i_c < pi->childCount() )
+	pi->treeWidget()->setCurrentItem(pi->child(i_c),0,QItemSelectionModel::SelectCurrent);
+    else if( fromCur ) { sl->setModified(true); treeSearch(); }
+}
+
 void ConfApp::pageUp()
 {
     long i_l = string::npos;
@@ -705,7 +755,7 @@ void ConfApp::userSel()
 
 void ConfApp::pageRefresh( )
 {
-    try{ pageDisplay(sel_path); }
+    try { pageDisplay(sel_path); }
     catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 }
 
@@ -849,7 +899,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	    if( i_tbs >= tabs->count() )
 	    {
 		QScrollArea *scrl = new QScrollArea();
-		tabs->insertTab(i_area, scrl, t_s.attr("dscr").c_str() );
+		tabs->insertTab( i_area, scrl, t_s.attr("dscr").c_str() );
 		t_s.setAttr("qview","0");
 	    }
 
@@ -876,10 +926,9 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    wdg_lay->setAlignment( Qt::AlignTop );
 
 		    selectChildRecArea(t_s,a_path+t_s.attr("id")+'/',wdg);
-		    wdg_lay->addItem( new QSpacerItem( 20, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 		    scrl->setWidget(wdg);
+		    wdg_lay->addItem( new QSpacerItem( 20, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 		    scrl->setWidgetResizable(true);
-
 		    if( scrl->verticalScrollBar() ) scrl->verticalScrollBar()->setValue(v_scrl);
 
 		    //wdg->resize(wdg->size());
@@ -888,7 +937,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    //>>>> Mark last drawed tabs
 		    t_s.setAttr("qview","1");
 		}
-		else selectChildRecArea(t_s,a_path+t_s.attr("id")+'/');
+		else selectChildRecArea(t_s,a_path+t_s.attr("id")+"/");
 	    }
 	    //else t_s.attr("qview","0");	//Mark no view tabs
 	    i_area++;
@@ -1417,7 +1466,13 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 
 	    //>> Fill CheckBox
 	    if( lab )	lab->setText((t_s.attr("dscr")+":").c_str());
-	    if( val_w )	{ val_w->setToolTip(t_s.attr("help").c_str()); val_w->setChecked(atoi(data_req.text().c_str())); }
+	    if( val_w )
+	    {
+		val_w->setToolTip(t_s.attr("help").c_str());
+		val_w->blockSignals(true);
+		val_w->setChecked(atoi(data_req.text().c_str()));
+		val_w->blockSignals(false);
+	    }
 	    if( val_r )
 	    {
 		val_r->setToolTip(t_s.attr("help").c_str());
@@ -1802,7 +1857,7 @@ bool ConfApp::upStruct(XMLNode &w_nd, const XMLNode &n_nd)
 	if( i_n >= n_nd.childSize() )
 	{
 	    w_nd.childDel(i_w--);
-	    if( w_nd.name() != "table" && w_nd.name() != "list" ) str_ch = true;
+	    if( w_nd.name() != "table" && w_nd.name() != "list" && w_nd.name() != "oscada_cntr" ) str_ch = true;
 	}
     }
 

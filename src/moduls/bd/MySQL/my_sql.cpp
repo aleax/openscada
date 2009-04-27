@@ -334,6 +334,8 @@ void MTable::postDisable(int flag)
     }
 }
 
+MBD &MTable::owner()	{ return (MBD&)TTable::owner(); }
+
 void MTable::fieldStruct( TConfig &cfg )
 {
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty!"));

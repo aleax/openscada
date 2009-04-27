@@ -102,11 +102,11 @@ class Attr : public TCntrNode
 	TFld &fld( )			{ return *mFld; }
 	void setFld( TFld *fld, bool inher );
 
-	Widget *owner();
+	Widget *owner( );
 
     protected:
 	//Methods
-	string nodeName()	{ return id(); }
+	string nodeName( )	{ return id(); }
 
     private:
 	//Data

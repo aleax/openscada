@@ -123,3 +123,5 @@ TProtocolIn::~TProtocolIn()
 {
 
 }
+
+TProtocol &TProtocolIn::owner( )	{ return *(TProtocol*)nodePrev(); }

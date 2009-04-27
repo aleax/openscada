@@ -333,10 +333,9 @@ void TUser::postDisable(int flag)
     { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
-string TUser::tbl( )
-{
-    return owner().subId()+"_user";
-}
+TSecurity &TUser::owner( )	{ return *(TSecurity*)nodePrev(); }
+
+string TUser::tbl( )		{ return owner().subId()+"_user"; }
 
 void TUser::load_( )
 {
@@ -459,10 +458,9 @@ void TGroup::postDisable(int flag)
     { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
-string TGroup::tbl( )
-{
-    return owner().subId()+"_grp";
-}
+TSecurity &TGroup::owner( )	{ return *(TSecurity*)nodePrev(); }
+
+string TGroup::tbl( )		{ return owner().subId()+"_grp"; }
 
 void TGroup::load_( )
 {

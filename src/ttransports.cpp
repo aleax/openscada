@@ -485,6 +485,8 @@ TTipTransport::~TTipTransport()
     nodeDelAll();
 }
 
+TTransportS &TTipTransport::owner( )	{ return (TTransportS&)TModule::owner(); }
+
 void TTipTransport::inAdd( const string &name, const string &idb )
 {
     if( chldPresent(m_in,name) ) return;
@@ -578,20 +580,13 @@ TCntrNode &TTransportIn::operator=( TCntrNode &node )
     return *this;
 }
 
-string TTransportIn::name()
-{
-    return (m_name.size())?m_name:m_id;
-}
+TTipTransport &TTransportIn::owner( )	{ return *(TTipTransport*)nodePrev(); }
 
-string TTransportIn::workId( )
-{
-    return owner().modId()+"."+id();
-}
+string TTransportIn::name( )		{ return m_name.size()?m_name:m_id; }
 
-string TTransportIn::tbl( )
-{
-    return owner().owner().subId()+"_in";
-}
+string TTransportIn::workId( )		{ return owner().modId()+"."+id(); }
+
+string TTransportIn::tbl( )		{ return owner().owner().subId()+"_in"; }
 
 void TTransportIn::postDisable(int flag)
 {
@@ -712,7 +707,7 @@ TTransportOut::TTransportOut( const string &iid, const string &idb, TElem *el ) 
     m_id = iid;
 }
 
-TTransportOut::~TTransportOut()
+TTransportOut::~TTransportOut( )
 {
 
 }
@@ -731,20 +726,13 @@ TCntrNode &TTransportOut::operator=( TCntrNode &node )
     return *this;
 }
 
-string TTransportOut::name()
-{
-    return (m_name.size())?m_name:m_id;
-}
+TTipTransport &TTransportOut::owner( )	{ return *(TTipTransport*)nodePrev(); }
 
-string TTransportOut::workId( )
-{
-    return owner().modId()+"."+id();
-}
+string TTransportOut::name()		{ return m_name.size()?m_name:m_id; }
 
-string TTransportOut::tbl( )
-{
-    return owner().owner().subId()+"_out";
-}
+string TTransportOut::workId( )		{ return owner().modId()+"."+id(); }
+
+string TTransportOut::tbl( )		{ return owner().owner().subId()+"_out"; }
 
 void TTransportOut::postDisable(int flag)
 {

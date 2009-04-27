@@ -97,15 +97,11 @@ void TController::postDisable(int flag)
     { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
-string TController::name()
-{
-    return (m_name.size())?m_name:id();
-}
+TTipDAQ &TController::owner( )	{ return *(TTipDAQ*)nodePrev(); }
 
-string TController::tbl( )
-{
-    return owner().owner().subId()+"_"+owner().modId();
-}
+string TController::name()	{ return m_name.size()?m_name:id(); }
+
+string TController::tbl( )	{ return owner().owner().subId()+"_"+owner().modId(); }
 
 string TController::getStatus( )
 {

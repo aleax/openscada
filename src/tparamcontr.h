@@ -63,7 +63,7 @@ class TParamContr : public TConfig, public TValue
 
 	TParamContr &operator=( TParamContr & PrmCntr );
 
-	TController &owner( )	{ return *(TController *)nodePrev(); }
+	TController &owner( );
 
     protected:
 	//Methods

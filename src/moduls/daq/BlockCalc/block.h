@@ -88,7 +88,7 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	//> Calc block
 	void calc( bool first, bool last );
 
-	Contr &owner( )		{ return *(Contr *)nodePrev(); }
+	Contr &owner( );
 
     protected:
 	//Attributes

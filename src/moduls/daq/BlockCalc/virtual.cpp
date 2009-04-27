@@ -255,6 +255,8 @@ void Contr::postDisable(int flag)
     TController::postDisable(flag);
 }
 
+TipContr &Contr::owner( )	{ return (TipContr&)TController::owner( ); }
+
 void Contr::load_( )
 {
     if( !SYS->chkSelDB(DB()) ) return;
@@ -506,6 +508,8 @@ void Prm::postEnable( int flag )
     TParamContr::postEnable( flag );
     if(!vlElemPresent(&v_el))	vlElemAtt(&v_el);
 }
+
+Contr &Prm::owner( )	{ return (Contr&)TParamContr::owner( ); }
 
 void Prm::enable()
 {

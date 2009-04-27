@@ -59,7 +59,7 @@ class TProtIn: public TProtocolIn
 
 	bool mess( const string &request, string &answer, const string &sender );
 
-	TProt &owner( )	{ return *(TProt*)nodePrev(); }
+	TProt &owner( );
 
     public:
 	//Attributes
@@ -82,6 +82,8 @@ class Node : public TFunction, public TConfig
 	//Methods
 	Node( const string &iid, const string &db, TElem *el );
 	~Node( );
+
+	TCntrNode &operator=( TCntrNode &node );
 
 	const string &id( )	{ return mId; }
 	string name( );
@@ -114,7 +116,7 @@ class Node : public TFunction, public TConfig
 
 	bool req( const string &tr, const string &prt, unsigned char node, string &pdu );
 
-	TProt &owner( )		{ return *(TProt*)nodePrev(); }
+	TProt &owner( );
 
     protected:
 	//Methods
