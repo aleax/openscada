@@ -2935,6 +2935,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             offset = QPointF(0,0);
                             moveAll( QPointF(0,0), shapeItems, pnts, inundationItems, view );
                             paintImage(view);
+                            flag_check_pnt_inund = true;
                         }
                         ((VisDevelop *)view->mainWin())->actLevRise->setEnabled(true);
                         ((VisDevelop *)view->mainWin())->actLevLower->setEnabled(true);
@@ -3848,7 +3849,10 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     offset = QPointF(0,0);
                     moveAll( QPointF(0,0), shapeItems, pnts, inundationItems, view );
                     if( index_array.size() )
+                    {
                         ((VisDevelop *)view->mainWin())->actVisItCopy->setEnabled(true);
+                        flag_check_pnt_inund = true;
+                    }
                     paintImage(view);
 
                     view->repaint();
@@ -4560,80 +4564,11 @@ void ShapeElFigure::moveUpDown( QVector<ShapeItem> &shapeItems, PntMap *pnts, QV
     bool flag_break_move;
     if( flag_ctrl && count_Shapes )
     {
-        if( !flag_first_move )
-            for( int j = 0; j < count_Shapes; j++ )
-                for( int i = 0; i < shapeItems.size(); i++ )
-                {
-                    if( i != index_array[j] )
-                    {
-                        if( shapeItems[index_array[j]].type == 2 )
-                        {
-                            if( (shapeItems[index_array[j]].n5 == shapeItems[i].n1) || 
-                                (shapeItems[index_array[j]].n5 == shapeItems[i].n2) ||
-                                (shapeItems[index_array[j]].n5 == shapeItems[i].n3) || 
-                                (shapeItems[index_array[j]].n5 == shapeItems[i].n4) ||
-                                (shapeItems[index_array[j]].n5 == shapeItems[i].n5) )
-                            {
-                                QPointF Temp = (*pnts)[shapeItems[index_array[j]].n5];
-                                if( shapeItems[index_array[j]].n5 > 0 )
-                                    shapeItems[index_array[j]].n5 = appendPoint( Temp, shapeItems, pnts, 0 );
-                                else if( shapeItems[index_array[j]].n5 <= -10 )
-                                    shapeItems[index_array[j]].n5 = appendPoint( Temp, shapeItems, pnts, 1 );
-                            }
-                        }
-                        if( shapeItems[index_array[j]].type == 2 || shapeItems[index_array[j]].type == 3 )
-                        {
-                            if( (shapeItems[index_array[j]].n4 == shapeItems[i].n1) || 
-                                (shapeItems[index_array[j]].n4 == shapeItems[i].n2) ||
-                                (shapeItems[index_array[j]].n4 == shapeItems[i].n3) || 
-                                (shapeItems[index_array[j]].n4 == shapeItems[i].n4) ||
-                                (shapeItems[index_array[j]].n4 == shapeItems[i].n5) )
-                            {
-                                QPointF Temp = (*pnts)[shapeItems[index_array[j]].n4];
-                                if( shapeItems[index_array[j]].n4 > 0 )
-                                    shapeItems[index_array[j]].n4 = appendPoint( Temp, shapeItems, pnts, 0 );
-                                else if( shapeItems[index_array[j]].n4 <= -10 )
-                                    shapeItems[index_array[j]].n4 = appendPoint( Temp, shapeItems, pnts, 1 );
-                            }
-                            if( (shapeItems[index_array[j]].n3 == shapeItems[i].n1) || 
-                                (shapeItems[index_array[j]].n3 == shapeItems[i].n2) ||
-                                (shapeItems[index_array[j]].n3 == shapeItems[i].n3) || 
-                                (shapeItems[index_array[j]].n3 == shapeItems[i].n4) ||
-                                (shapeItems[index_array[j]].n3 == shapeItems[i].n5) )
-                            {
-                                QPointF Temp = (*pnts)[shapeItems[index_array[j]].n3];
-                                if( shapeItems[index_array[j]].n3 > 0 )
-                                    shapeItems[index_array[j]].n3 = appendPoint( Temp, shapeItems, pnts, 0 );
-                                else if( shapeItems[index_array[j]].n3 <= -10 )
-                                    shapeItems[index_array[j]].n3 = appendPoint( Temp, shapeItems, pnts, 1 );
-                            }
-                        }
-                        if( (shapeItems[index_array[j]].n1 == shapeItems[i].n1) || 
-                            (shapeItems[index_array[j]].n1 == shapeItems[i].n2) ||
-                            (shapeItems[index_array[j]].n1 == shapeItems[i].n3) || 
-                            (shapeItems[index_array[j]].n1 == shapeItems[i].n4) ||
-                            (shapeItems[index_array[j]].n1 == shapeItems[i].n5) )
-                        {
-                            QPointF Temp = (*pnts)[shapeItems[index_array[j]].n1];
-                            if( shapeItems[index_array[j]].n1 > 0 )
-                                shapeItems[index_array[j]].n1 = appendPoint( Temp, shapeItems, pnts, 0 );
-                            else if( shapeItems[index_array[j]].n1 <= -10 )
-                                shapeItems[index_array[j]].n1 = appendPoint( Temp, shapeItems, pnts, 1 );
-                        }
-                        if( (shapeItems[index_array[j]].n2 == shapeItems[i].n1) || 
-                            (shapeItems[index_array[j]].n2 == shapeItems[i].n2) ||
-                            (shapeItems[index_array[j]].n2 == shapeItems[i].n3) ||
-                            (shapeItems[index_array[j]].n2 == shapeItems[i].n4) ||
-                            (shapeItems[index_array[j]].n2 == shapeItems[i].n5) )
-                        {
-                            QPointF Temp = (*pnts)[shapeItems[index_array[j]].n2];
-                            if( shapeItems[index_array[j]].n2 > 0 )
-                                shapeItems[index_array[j]].n2 = appendPoint( Temp, shapeItems, pnts, 0 );
-                            else if( shapeItems[index_array[j]].n2 <= -10 )
-                                shapeItems[index_array[j]].n2 = appendPoint( Temp, shapeItems, pnts, 1 );
-                        }
-                    }
-                }
+        if( !flag_first_move && flag_check_pnt_inund )
+        {
+            checkPoint_checkInundation( shapeItems, pnts, inundationItems );
+            flag_check_pnt_inund = false;
+        }
         moveAll( QPointF(0,0), shapeItems, pnts, inundationItems, view );
     }
     else

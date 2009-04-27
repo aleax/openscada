@@ -1,3 +1,8 @@
+2009-04-27 Maxim
+- FIX:/UI/Vision: Moving figures, selected by means of CTRL+A or by means of rect-selection with the help of keyboerd is fixed and modified
+  for primitive ElFigure.
+
+
 2009-04-24 Maxim
 - FIX:/UI/Vision: Condition of the orientation angle is added to the repainting the widget when its geometry is changed for primitive ElFigure.
 - FIX:/UI/Vision: Processing the "fill" elements with the empty path is corrected for primitive ElFigure.
