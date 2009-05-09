@@ -135,7 +135,7 @@ ModVArchEl::~ModVArchEl( )
 
 string ModVArchEl::archTbl( )
 {
-    return "DBAVl_"+archivator().id()+"_"+archive().id(); 
+    return "DBAVl_"+archivator().id()+"_"+archive().id();
 }
 
 void ModVArchEl::fullErase()
@@ -314,7 +314,7 @@ char ModVArchEl::getB( long long *tm, bool up_ord )
     }
 }
 
-void ModVArchEl::setVal( TValBuf &buf, long long beg, long long end )
+void ModVArchEl::setValProc( TValBuf &buf, long long beg, long long end )
 {
     //- Check border -
     if( !buf.vOK(beg,end) )	return;

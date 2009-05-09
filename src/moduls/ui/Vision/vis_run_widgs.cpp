@@ -463,21 +463,30 @@ RunPageView *RunPageView::parent( )
 
 RunPageView *RunPageView::findOpenPage( const string &ipg )
 {
-    //- Self check -
+    RunPageView *pg;
+    //> Self check
     if( id() == ipg ) return this;
-    //- Check to included widgets -
+    //> Check to included widgets
     for( int i_ch = 0; i_ch < children().size(); i_ch++ )
     {
 	if( qobject_cast<RunPageView*>(children().at(i_ch)) )
 	{
-	    RunPageView *pg = ((RunPageView*)children().at(i_ch))->findOpenPage(ipg);
+	    pg = ((RunPageView*)children().at(i_ch))->findOpenPage(ipg);
 	    if( pg ) return pg;
 	    continue;
 	}
 	if( !qobject_cast<RunWdgView*>(children().at(i_ch)) )	continue;
 	RunWdgView *rwdg = (RunWdgView*)children().at(i_ch);
-	if( rwdg->root() == "Box" && rwdg->pgOpenSrc() == ipg && !rwdg->property("inclPg").toString().isEmpty() )
-	    return (RunPageView*)TSYS::str2addr(rwdg->property("inclPg").toString().toAscii().data());
+	if( rwdg->root() == "Box" )
+	{
+	    if( rwdg->pgOpenSrc() == ipg && !rwdg->property("inclPg").toString().isEmpty() )
+		return (RunPageView*)TSYS::str2addr(rwdg->property("inclPg").toString().toAscii().data());
+	    if( ((ShapeBox::ShpDt*)rwdg->shpData)->inclWidget )
+	    {
+		pg = ((ShapeBox::ShpDt*)rwdg->shpData)->inclWidget->findOpenPage(ipg);
+		if( pg ) return pg;
+	    }
+	}
     }
 
     return NULL;
@@ -488,21 +497,26 @@ bool RunPageView::callPage( const string &pg_it, const string &pgGrp, const stri
     //> Check for set include page
     for( int i_ch = 0; i_ch < children().size(); i_ch++ )
 	if( !pgGrp.empty() && !qobject_cast<RunPageView*>(children().at(i_ch)) &&
-		((RunWdgView*)children().at(i_ch))->root() == "Box" &&
-		((RunWdgView*)children().at(i_ch))->pgGrp() == pgGrp )
+		((RunWdgView*)children().at(i_ch))->root() == "Box" )
 	{
-	    string pg_it_prev = ((RunWdgView*)children().at(i_ch))->pgOpenSrc();
-	    if( pg_it != pg_it_prev )
+	    if( ((RunWdgView*)children().at(i_ch))->pgGrp() == pgGrp )
 	    {
-		if( !pg_it_prev.empty() )
+		string pg_it_prev = ((RunWdgView*)children().at(i_ch))->pgOpenSrc();
+		if( pg_it != pg_it_prev )
 		{
-		    XMLNode req("close");
-		    req.setAttr("path","/ses_"+mainWin()->workSess()+"/%2fserv%2fpg")->setAttr("pg",pg_it_prev);
-		    mainWin()->cntrIfCmd(req);
+		    if( !pg_it_prev.empty() )
+		    {
+			XMLNode req("close");
+			req.setAttr("path","/ses_"+mainWin()->workSess()+"/%2fserv%2fpg")->setAttr("pg",pg_it_prev);
+			mainWin()->cntrIfCmd(req);
+		    }
+		    ((RunWdgView*)children().at(i_ch))->setPgOpenSrc(pg_it);
 		}
-		((RunWdgView*)children().at(i_ch))->setPgOpenSrc(pg_it);
+		return true;
 	    }
-	    return true;
+	    if( ((ShapeBox::ShpDt*)((RunWdgView*)children().at(i_ch))->shpData)->inclWidget &&
+		    ((ShapeBox::ShpDt*)((RunWdgView*)children().at(i_ch))->shpData)->inclWidget->callPage(pg_it,pgGrp,pgSrc) )
+		return true;
         }
     //> Put checking to self include pages
     for( int i_ch = 0; i_ch < children().size(); i_ch++ )

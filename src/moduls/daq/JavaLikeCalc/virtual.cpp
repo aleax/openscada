@@ -90,7 +90,7 @@ TipContr::~TipContr()
 
 void TipContr::postEnable( int flag )
 {
-    TModule::postEnable( flag );
+    TTipDAQ::postEnable( flag );
 
     //> Controller db structure
     fldAdd( new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"60","system") );

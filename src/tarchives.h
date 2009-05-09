@@ -131,14 +131,14 @@ class TTipArchivator: public TModule
 	TTipArchivator( );
 	virtual ~TTipArchivator( );
 
-	//- Messages -
+	//> Messages
 	void messList( vector<string> &list )	{ chldList(mMess,list); }
 	bool messPresent( const string &iid )	{ return chldPresent(mMess,iid); }
 	void messAdd( const string &iid, const string &idb = "*.*" );
 	void messDel( const string &iid, bool full = false )	{ chldDel(mMess,iid,-1,full); }
 	AutoHD<TMArchivator> messAt( const string &iid )	{ return chldAt(mMess,iid); }
 
-	//- Values -
+	//> Values
 	void valList( vector<string> &list )	{ chldList(mVal,list); }
 	bool valPresent( const string &iid )	{ return chldPresent(mVal,iid); }
 	void valAdd( const string &iid, const string &idb = "*.*" );
@@ -229,16 +229,16 @@ class TArchiveS : public TSubSYS
 	void setMessBufLen( int len );
 
 	//Private attributes
-	TElem		elMess,		//Message archivator's DB elements
-			elVal,		//Value archivator's DB elements
-			elAval;		//Value archives DB elements
+	TElem	elMess,			//Message archivator's DB elements
+		elVal,			//Value archivator's DB elements
+		elAval;			//Value archives DB elements
 
 	//> Messages archiving
 	char	bufErr;			//Buffer error
 	int	mMessPer;		//Message arhiving period
 	timer_t	tmIdMess;		//Messages timer
 	bool	prcStMess;		//Process messages flag
-	//>> Messages buffer
+	//> Messages buffer
 	Res	mRes;			//Mess access resource
 	unsigned headBuf,		//Head of messages buffer
 		headLstread;		//Last read and archived head of messages buffer

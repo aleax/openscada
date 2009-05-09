@@ -38,6 +38,7 @@ class TTipParam;
 class TParamContr : public TConfig, public TValue
 {
     public:
+	//Methods
 	TParamContr( const string &name, TTipParam *tpprm );
 	virtual ~TParamContr( );
 
@@ -65,6 +66,9 @@ class TParamContr : public TConfig, public TValue
 
 	TController &owner( );
 
+	//Attributes
+	long long mRedntTmLast;
+
     protected:
 	//Methods
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
@@ -88,7 +92,7 @@ class TParamContr : public TConfig, public TValue
 	bool	&m_aen, m_en;
 	TElem	el_err;		//Error atributes
 
-	TTipParam   *tipparm;
+	TTipParam	*tipparm;
 };
 
 #endif // TPARAMCONTR_H

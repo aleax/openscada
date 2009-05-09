@@ -445,7 +445,7 @@ int TVision::cntrIfCmd( XMLNode &node, const string &user, const string &passwor
     try
     {
 	TTransportS::ExtHost host = SYS->transport().at().extHostGet("*",VCAStat);
-	AutoHD<TTransportOut> tr = SYS->transport().at().extHost(host,"VCAStat");
+	AutoHD<TTransportOut> tr = SYS->transport().at().extHost(host,"UIVision");
 	if( !tr.at().startStat() )	tr.at().start();
 
 	bool trUser = (user.empty()||user==host.user);

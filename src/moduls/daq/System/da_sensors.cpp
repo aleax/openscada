@@ -59,6 +59,7 @@ Sensors::~Sensors( )
 void Sensors::init( TMdPrm *prm )
 {
     prm->cfg("SUBT").setView(false);
+    getSensors(prm,true);
 }
 
 void Sensors::deInit( TMdPrm *prm )
@@ -67,6 +68,11 @@ void Sensors::deInit( TMdPrm *prm )
 }
 
 void Sensors::getVal( TMdPrm *prm )
+{
+    getSensors(prm);
+}
+
+void Sensors::getSensors( TMdPrm *prm, bool onlyCreate )
 {
     //> Use libsensor
     if( libsensor_ok )
@@ -100,7 +106,7 @@ void Sensors::getVal( TMdPrm *prm )
 		if( !prm->vlPresent(s_id) )
 		    fldAdd( new TFld(s_id.c_str(),(string(name->prefix)+" "+main_feature->name).c_str(),
 			TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
-		if( sensors_get_value( name, feature->number, &val) == 0 )
+		if( !onlyCreate && sensors_get_value( name, feature->number, &val) == 0 )
 		    prm->vlAt(s_id).at().setR(val,0,true);
 	    }
 	}
@@ -116,8 +122,11 @@ void Sensors::getVal( TMdPrm *prm )
 		    if( !prm->vlPresent(s_id) )
 			fldAdd( new TFld(s_id.c_str(),(string(name->prefix)+" "+feature->name).c_str(),
 				TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
-		    sensors_get_feature( *name, feature->number, &val);
-		    prm->vlAt(s_id).at().setR(val,0,true);
+		    if( !onlyCreate )
+		    {
+			sensors_get_feature( *name, feature->number, &val);
+			prm->vlAt(s_id).at().setR(val,0,true);
+		    }
 		}
 	}
 #endif
@@ -135,7 +144,7 @@ void Sensors::getVal( TMdPrm *prm )
 	    if( sscanf(buf, "%31s : %f", name, &val) != 2 ) continue;
 	    if( !prm->vlPresent(name) )
 		fldAdd( new TFld(name,name,TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
-	    prm->vlAt(name).at().setR(val,0,true);
+	    if( !onlyCreate ) prm->vlAt(name).at().setR(val,0,true);
 	}
 	pclose(fp);
     }

@@ -82,7 +82,7 @@ ConfApp::ConfApp( string open_user ) :
     QImage ico_t;
     mod->regWin( this );
 
-    setWindowTitle(_("QT Configurator of OpenSCADA"));
+    setWindowTitle(TSYS::strMess(_("QT Configurator of OpenSCADA: %s"),SYS->name().c_str()).c_str());
     setWindowIcon(mod->icon());
 
     //> Init centrall widget
@@ -1119,11 +1119,13 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 				string s_nm;
 				for( int ls_off = 0, id_off = 0, i_ls = 0; !(s_nm=TSYS::strSepParse(t_linf->attr("sel_list"),0,';',&ls_off)).empty(); i_ls++ )
 				{
-				    elms+=s_nm.c_str();
+				    if( !i_ls ) u_ind = t_linf->attr("sel_id").size();
+				    elms += s_nm.c_str();
 				    if( (u_ind && TSYS::strSepParse(t_linf->attr("sel_id"),0,';',&id_off) == t_linf->childGet(i_el)->text()) ||
 					    (!u_ind && s_nm == t_linf->childGet(i_el)->text()) )
 					sel_n = i_ls;
 				}
+
 			    }
 			    else
 			    {
@@ -1133,7 +1135,8 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 				else
 				    for( int i_ls = 0; i_ls < x_lst.childSize(); i_ls++ )
 				    {
-					elms+=x_lst.childGet(i_ls)->text().c_str();
+					if( !i_ls ) u_ind = x_lst.childGet(i_ls)->attr("id").size();
+					elms += x_lst.childGet(i_ls)->text().c_str();
 					if( (u_ind && x_lst.childGet(i_ls)->attr("id") == t_linf->childGet(i_el)->text()) ||
 						(!u_ind && x_lst.childGet(i_ls)->text() == t_linf->childGet(i_el)->text()) )
 					    sel_n = i_ls;
@@ -2092,33 +2095,13 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 
 int ConfApp::cntrIfCmd( XMLNode &node )
 {
-    int path_off = 0;
-    string path = node.attr("path");
-    string station = TSYS::pathLev(path,0,false,&path_off);
-    if( station.empty() ) station = sel_path = SYS->id();
-    else node.setAttr("path",path.substr(path_off));
-
+    if( TSYS::pathLev(node.attr("path"),0).empty() ) sel_path = SYS->id();
     try
     {
-	//> Check local station request
-	if( station == SYS->id() )
-	{
-	    node.setAttr("user",w_user->user().toAscii().data());
-	    SYS->cntrCmd(&node);
-	    node.setAttr("path",path);
-	    return atoi(node.attr("rez").c_str());
-	}
-
-	//> Request to remote host
-	TTransportS::ExtHost host = SYS->transport().at().extHostGet(w_user->user().toAscii().data(),station);
-	AutoHD<TTransportOut> tr = SYS->transport().at().extHost(host,"TrCntr");
-	if( !tr.at().startStat() ) tr.at().start();
-
-	node.setAttr("rqDir","0")->setAttr("rqUser",host.user)->setAttr("rqPass",host.pass);
-	tr.at().messProtIO(node,"SelfSystem");
-	node.setAttr("path",path);
-    }catch( TError err )
+	return SYS->transport().at().cntrIfCmd(node,"UIQtCfg",w_user->user().toStdString());
+    } catch( TError err )
     { node.setAttr("mcat",err.cat)->setAttr("rez","10")->setText(err.mess); }
+
     return atoi(node.attr("rez").c_str());
 }
 
@@ -2731,7 +2714,7 @@ void ConfApp::tableSet( int row, int col )
 		for( int ls_off = 0, c_el = 0; !(s_nm=TSYS::strSepParse(n_el->childGet(col)->attr("sel_list"),0,';',&ls_off)).empty(); c_el++ )
 		    if( s_nm == value )
 		    {
-			if( ind_ok )	value = TSYS::strSepParse(n_el->childGet(col)->attr("sel_id"),c_el,';');
+			if( ind_ok ) value = TSYS::strSepParse(n_el->childGet(col)->attr("sel_id"),c_el,';');
 			find_ok = true;
 		    }
 	    }
@@ -2741,13 +2724,16 @@ void ConfApp::tableSet( int row, int col )
 		if( cntrIfCmd(x_lst) )
 		{ mod->postMess(x_lst.attr("mcat"),x_lst.text(),TUIMod::Error,this); return; }
 
+		bool ind_ok = atoi(n_el->childGet(col)->attr("idm").c_str());
 		for( int i_el = 0; i_el < x_lst.childSize(); i_el++ )
+		{
+		    if( !i_el ) ind_ok = x_lst.childGet(i_el)->attr("id").size();
 		    if( x_lst.childGet(i_el)->text() == value )
 		    {
-			if( atoi(n_el->childGet(col)->attr("idm").c_str()) )
-			    value = x_lst.childGet(i_el)->attr("id");
+			if( ind_ok ) value = x_lst.childGet(i_el)->attr("id");
 			find_ok = true;
 		    }
+		}
 	    }
 	    if( !find_ok ) throw TError(mod->nodePath().c_str(),_("Value <%s> is not valid!"),value.c_str());
 	}

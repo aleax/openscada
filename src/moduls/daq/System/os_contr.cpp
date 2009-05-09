@@ -136,7 +136,7 @@ void TTpContr::load_( )
 
 void TTpContr::postEnable( int flag )
 {
-    TModule::postEnable(flag);
+    TTipDAQ::postEnable(flag);
 
     //- Init DA sources -
     daReg( new CPU() );
@@ -208,6 +208,13 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
 TMdContr::~TMdContr( )
 {
     if( run_st ) stop();
+}
+
+string TMdContr::getStatus( )
+{
+    string rez = TController::getStatus( );
+    if( startStat() && !redntUse( ) ) rez += TSYS::strMess(_("Get data %.6g ms. "),tm_calc);
+    return rez;
 }
 
 TParamContr *TMdContr::ParamAttach( const string &name, int type )
@@ -289,21 +296,24 @@ void *TMdContr::Task( void *icntr )
     cntr.endrun_req = false;
     cntr.prc_st = true;
 
-    while(!cntr.endrun_req)
+    while( !cntr.endrun_req )
     {
-	//- Update controller's data -
-	try
+	if( !cntr.redntUse( ) )
 	{
-	    unsigned long long t_cnt = SYS->shrtCnt();
+	    //> Update controller's data
+	    try
+	    {
+		long long t_cnt = TSYS::curTime();
 
-	    cntr.en_res.resRequestR();
-	    for(unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++)
-		cntr.p_hd[i_p].at().getVal();
-	    cntr.en_res.resRelease();
+		cntr.en_res.resRequestR();
+		for( unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++ )
+		    cntr.p_hd[i_p].at().getVal();
+		cntr.en_res.resRelease();
 
-	    cntr.tm_calc = 1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
-	} catch(TError err)
-	{ mess_err(err.cat.c_str(),"%s",err.mess.c_str() ); }
+		cntr.tm_calc = 1e-3*(TSYS::curTime()-t_cnt);
+	    } catch(TError err)
+	    { mess_err(err.cat.c_str(),"%s",err.mess.c_str() ); }
+	}
 
 	TSYS::taskSleep((long long)cntr.period()*1000000);
     }
@@ -311,22 +321,6 @@ void *TMdContr::Task( void *icntr )
     cntr.prc_st = false;
 
     return NULL;
-}
-
-void TMdContr::cntrCmdProc( XMLNode *opt )
-{
-    //- Get page info -
-    if( opt->name() == "info" )
-    {
-	TController::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/cntr/st/ctm",_("Calk time (msek)"),0444,"root","root",1,"tp","real");
-	return;
-    }
-
-    //- Process command to page -
-    string a_path = opt->attr("path");
-    if( a_path == "/cntr/st/ctm" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(tm_calc,6));
-    else TController::cntrCmdProc(opt);
 }
 
 //*************************************************
@@ -378,7 +372,14 @@ void TMdPrm::load_( )
 
 void TMdPrm::save_( )
 {
-    if(!m_auto) TParamContr::save_();
+    if( !m_auto ) TParamContr::save_();
+
+    //> Save archives
+    vector<string> a_ls;
+    vlList(a_ls);
+    for( int i_a = 0; i_a < a_ls.size(); i_a++ )
+	if( !vlAt(a_ls[i_a]).at().arch().freeStat() )
+	    vlAt(a_ls[i_a]).at().arch().at().save();
 }
 
 void TMdPrm::vlGet( TVal &val )

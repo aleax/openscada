@@ -107,7 +107,7 @@ string TTpContr::optDescr( )
 
 void TTpContr::postEnable( int flag )
 {
-    TModule::postEnable(flag);
+    TTipDAQ::postEnable(flag);
 
     //- Controler's DB structure -
     fldAdd( new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30","") );

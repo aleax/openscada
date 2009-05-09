@@ -84,7 +84,7 @@ TTpContr::~TTpContr()
 
 void TTpContr::postEnable( int flag )
 {
-    TModule::postEnable( flag );
+    TTipDAQ::postEnable( flag );
 
     PaError err = Pa_Initialize();
     if( err != paNoError ) mess_err(nodePath().c_str(),"Pa_Initialize: %s",Pa_GetErrorText(err));

@@ -28,12 +28,12 @@
 //* TController					  *
 //*************************************************
 TController::TController( const string &id_c, const string &daq_db, TElem *cfgelem ) :
-    m_db(daq_db), TConfig(cfgelem), run_st(false), en_st(false),
-    m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()), m_descr(cfg("DESCR").getSd()),
-    m_aen(cfg("ENABLE").getBd()), m_astart(cfg("START").getBd())
+    mDB(daq_db), TConfig(cfgelem), run_st(false), en_st(false), mRedntUse(true), mRedntFirst(true),
+    mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()), mDescr(cfg("DESCR").getSd()),
+    mAEn(cfg("ENABLE").getBd()), mAStart(cfg("START").getBd())
 {
-    m_id = id_c;
-    m_prm = grpAdd("prm_");
+    mId = id_c;
+    mPrm = grpAdd("prm_");
 }
 
 TController::~TController(  )
@@ -46,13 +46,13 @@ TCntrNode &TController::operator=( TCntrNode &node )
     TController *src_n = dynamic_cast<TController*>(&node);
     if( !src_n ) return *this;
 
-    //- Configuration copy -
+    //> Configuration copy
     string tid = id();
     *(TConfig*)this = *(TConfig*)src_n;
-    m_id = tid;
-    setDB(src_n->m_db);
+    mId = tid;
+    setDB(src_n->mDB);
 
-    //- Parameters copy -
+    //> Parameters copy
     if( src_n->enableStat( ) )
     {
 	if( !enableStat( ) )	enable();
@@ -99,13 +99,24 @@ void TController::postDisable(int flag)
 
 TTipDAQ &TController::owner( )	{ return *(TTipDAQ*)nodePrev(); }
 
-string TController::name()	{ return m_name.size()?m_name:id(); }
+string TController::workId( )	{ return owner().modId()+"."+id(); }
+
+string TController::name()	{ return mName.size() ? mName : id(); }
 
 string TController::tbl( )	{ return owner().owner().subId()+"_"+owner().modId(); }
 
 string TController::getStatus( )
 {
-    return startStat() ? _("Started. ") : (enableStat( )?_("Enabled. "):_("Disabled. "));
+    string rez;
+    if( startStat() )
+    {
+	rez = _("Started. ");
+	if( redntUse( ) ) rez += _("Geting data from remote station. ");
+    }
+    else if( enableStat() ) rez = _("Enabled. ");
+    else rez = _("Disabled. ");
+
+    return rez;
 }
 
 void TController::load_( )
@@ -137,13 +148,16 @@ bool TController::cfgChange( TCfg &cfg )
 
 void TController::start( )
 {
-    //- Enable if no enabled -
+    //> Enable if no enabled
     if( run_st ) return;
     if( !en_st ) enable();
 
     mess_info(nodePath().c_str(),_("Start controller!"));
 
-    //- Start for children -
+    //> First archives synchronization
+    if( owner().redntAllow() && redntMode( ) != TController::Off ) redntDataUpdate(true);
+
+    //> Start for children
     start_();
 
     run_st = true;
@@ -260,13 +274,96 @@ void TController::LoadParmCfg(  )
 
 void TController::add( const string &name, unsigned type )
 {
-    if( chldPresent(m_prm,name) ) return;
-    chldAdd(m_prm,ParamAttach( name, type ));
+    if( chldPresent(mPrm,name) ) return;
+    chldAdd(mPrm,ParamAttach( name, type ));
 }
 
 TParamContr *TController::ParamAttach( const string &name, int type)
 {
     return new TParamContr(name, &owner().tpPrmAt(type));
+}
+
+TController::Redundant TController::redntMode( )	{ return (TController::Redundant)cfg("REDNT").getI(); }
+
+void TController::setRedntMode( Redundant vl )		{ cfg("REDNT").setI(vl); modif(); }
+
+string TController::redntRun( )				{ return cfg("REDNT_RUN").getS(); }
+
+void TController::setRedntRun( const string &vl )	{ cfg("REDNT_RUN").setS(vl); modif(); }
+
+void TController::setRedntUse( bool vl )
+{
+    if( mRedntUse == vl ) return;
+    mRedntUse = mRedntFirst = vl;
+}
+
+void TController::redntDataUpdate( bool firstArchiveSync )
+{
+    vector<string> pls;
+    list(pls);
+
+    //> Prepare group request to parameters
+    AutoHD<TParamContr> prm;
+    XMLNode req("CntrReqs"); req.setAttr("path",nodePath(0,true));
+    if( firstArchiveSync || mRedntFirst ) req.setAttr("all","1");
+    for( int i_p = 0; i_p < pls.size(); i_p++ )
+    {
+	prm = at(pls[i_p]);
+	if( !prm.at().enableStat( ) ) { pls.erase(pls.begin()+i_p); i_p--; continue; }
+	//>> Check attributes last present data time into archives
+	if( firstArchiveSync || mRedntFirst )
+	{
+	    prm.at().mRedntTmLast = 0;
+	    vector<string> listV;
+	    prm.at().vlList(listV);
+	    for( int iV = 0; iV < listV.size(); iV++ )
+	    {
+		AutoHD<TVal> vl = prm.at().vlAt(listV[iV]);
+		prm.at().mRedntTmLast = vmax(prm.at().mRedntTmLast,vl.at().time());
+		if( !vl.at().arch().freeStat() )
+		    prm.at().mRedntTmLast = vmax(prm.at().mRedntTmLast,vl.at().arch().at().end(""));
+	    }
+	    if( prm.at().mRedntTmLast )
+		prm.at().mRedntTmLast = vmax(prm.at().mRedntTmLast,TSYS::curTime()-(long long)(3.6e9*owner().owner().rdRestDtTm()));
+	    else prm.at().mRedntTmLast = TSYS::curTime();
+	}
+	req.childAdd("get")->setAttr("path","/prm_"+pls[i_p]+"/%2fserv%2fattr")->
+	    setAttr("tm",TSYS::ll2str(prm.at().mRedntTmLast));
+    }
+
+    //> Send request to first active station for this controller
+    try{ owner().owner().rdStRequest(workId(),req); }
+    catch(TError err) { return; }
+
+    //> Write data to parameters
+    for( int i_p = 0; i_p < pls.size(); i_p++ )
+    {
+	prm = at(pls[i_p]);
+	prm.at().mRedntTmLast = atoll(req.childGet(i_p)->attr("tm").c_str());
+	for( int i_a = 0; i_a < req.childGet(i_p)->childSize(); i_a++ )
+	{
+	    XMLNode *aNd = req.childGet(i_p)->childGet(i_a);
+
+	    AutoHD<TVal> vl = prm.at().vlAt(aNd->attr("id"));
+
+	    if( aNd->attr("tm").empty() ) vl.at().setS(aNd->text(),prm.at().mRedntTmLast,true);
+	    else if( aNd->childSize() )
+	    {
+		long long btm = atoll(aNd->attr("tm").c_str());
+		long long per = atoll(aNd->attr("per").c_str());
+		if( !vl.at().arch().freeStat() )
+		{
+		    TValBuf buf(vl.at().arch().at().valType(),0,per,true,true);
+		    for( int i_v = 0; i_v < aNd->childSize(); i_v++ )
+			buf.setS(aNd->childGet(i_v)->text(),btm+per*i_v);
+		    vl.at().arch().at().setVal(buf,buf.begin(),buf.end(),"");
+		}
+		vl.at().setS(aNd->childGet(aNd->childSize()-1)->text(),btm+per*(aNd->childSize()-1),true);
+	    }
+	}
+    }
+
+    mRedntFirst = false;
 }
 
 void TController::cntrCmdProc( XMLNode *opt )
@@ -287,8 +384,13 @@ void TController::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/cntr/st/db",_("Controller DB"),0664,"root","root",4,"tp","str","dest","select","select","/db/list",
 		    "help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
 	    }
-	    if(ctrMkNode("area",opt,-1,"/cntr/cfg",_("Config")))
+	    if( ctrMkNode("area",opt,-1,"/cntr/cfg",_("Config")) )
+	    {
 		TConfig::cntrCmdMake(opt,"/cntr/cfg",0,"root","root",0664);
+		//>> Append configuration properties
+		XMLNode *xt = ctrId(opt->childGet(0),"/cntr/cfg/REDNT_RUN",true);
+		if( xt ) xt->setAttr("dest","select")->setAttr("select","/cntr/redRunLst");
+	    }
 	}
 	if( owner().tpPrmSize() )
 	{
@@ -366,6 +468,16 @@ void TController::cntrCmdProc( XMLNode *opt )
 	    for( int i_t = 0; i_t < owner().tpPrmSize( ); i_t++ )
 		if( owner().tpPrmAt(i_t).db == TSYS::pathLev(a_path,2) )
 		     modifG( );
+    }
+    else if( a_path == "/cntr/redRunLst" && ctrChkNode(opt) )
+    {
+	opt->childAdd("el")->setAttr("id","<high>")->setText(_("<High level>"));
+	opt->childAdd("el")->setAttr("id","<low>")->setText(_("<Low level>"));
+	opt->childAdd("el")->setAttr("id","<optimal>")->setText(_("<Optimal>"));
+	vector<string> sls;
+	owner().owner().rdStList(sls);
+	for( int i_s = 0; i_s < sls.size(); i_s++ )
+	    opt->childAdd("el")->setAttr("id",sls[i_s])->setText(SYS->transport().at().extHostGet("*",sls[i_s]).name);
     }
     else TCntrNode::cntrCmdProc(opt);
 }

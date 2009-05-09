@@ -117,7 +117,7 @@ void TTpContr::load_( )
 
 void TTpContr::postEnable( int flag )
 {
-    TModule::postEnable(flag);
+    TTipDAQ::postEnable(flag);
 
     //> Controler's DB structure
     fldAdd( new TFld("PERIOD",_("Gather data period (s)"),TFld::Real,TFld::NoFlag,"6.2","1","0;100") );
@@ -138,25 +138,6 @@ void TTpContr::postEnable( int flag )
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 {
     return new TMdContr(name,daq_db,this);
-}
-
-int TTpContr::cntrIfCmd( XMLNode &node )
-{
-    int path_off = 0;
-    string path = node.attr("path");
-    string station = TSYS::pathLev(path,0,false,&path_off);
-    node.setAttr("path",path.substr(path_off));
-
-    //> Connect to transport
-    TTransportS::ExtHost host = SYS->transport().at().extHostGet("*",station);
-    AutoHD<TTransportOut> tr = SYS->transport().at().extHost(host,"TrCntr");
-    if( !tr.at().startStat() )	tr.at().start();
-
-    node.setAttr("rqDir","0")->setAttr("rqUser",host.user)->setAttr("rqPass",host.pass);
-    tr.at().messProtIO(node,"SelfSystem");
-    node.setAttr("path",path);
-
-    return atoi(node.attr("rez").c_str());
 }
 
 //******************************************************
@@ -180,7 +161,7 @@ string TMdContr::getStatus( )
 {
     string val = TController::getStatus( );
 
-    if( startStat( ) )
+    if( startStat( ) && !redntUse( ) )
     {
 	val += TSYS::strMess(_("Gather data time %.6g ms. "),tmGath);
 	for( map<string,float>::iterator sti = mStatWork.begin(); sti != mStatWork.end(); sti++ )
@@ -340,33 +321,22 @@ void *TMdContr::Task( void *icntr )
 
 	    cntr.enRes.resRequestR( );
 
-	    //> Allow stations presenting
-	    bool isAccess = false;
-	    for( sti = cntr.mStatWork.begin(); sti != cntr.mStatWork.end(); sti++ )
-		if( sti->second > 0 ) sti->second = vmax(0,sti->second-cntr.period());
-		else isAccess = true;
-
-	    //> Update controller's data
-	    for( int i_p=0; isAccess && i_p < cntr.pHd.size(); i_p++)
+	    if( !cntr.redntUse( ) )
 	    {
-		//>> Update parameter's values
-		cntr.pHd[i_p].at().update();
-		//>> Check for sync moment and sync parameter's structure
-		unsigned int div = (unsigned int)(cntr.mSync/cntr.period());
-		if( div && (it_cnt+i_p)%div == 0 )
+		//> Allow stations presenting
+		bool isAccess = false;
+		for( sti = cntr.mStatWork.begin(); sti != cntr.mStatWork.end(); sti++ )
+		    if( sti->second > 0 ) sti->second = vmax(0,sti->second-cntr.period());
+		    else isAccess = true;
+
+		//> Update controller's data
+		for( int i_p=0; isAccess && i_p < cntr.pHd.size(); i_p++)
 		{
-		    cntr.pHd[i_p].at().modifG();
-		    cntr.pHd[i_p].at().load();
-		    //>> Check for delete parameter
-		    if( cntr.pHd[i_p].at().isDel() )
-		    {
-			cntr.enRes.resRelease( );
-			string pid = cntr.pHd[i_p].at().id();
-			cntr.at(pid).at().disable();
-			cntr.del(pid);
-			cntr.enRes.resRequestR( );
-			i_p--;
-		    }
+		    //>> Update parameter's values
+		    cntr.pHd[i_p].at().update();
+		    //>> Check for sync moment and sync parameter's structure
+		    unsigned int div = (unsigned int)(cntr.mSync/cntr.period());
+		    if( div && (it_cnt+i_p)%div == 0 ) cntr.pHd[i_p].at().load();
 		}
 	    }
 
@@ -391,14 +361,14 @@ int TMdContr::cntrIfCmd( XMLNode &node, bool strongSt )
 
     map<string,float>::iterator sti = mStatWork.find(reqStat);
     if( sti != mStatWork.end() && sti->second <= 0 )
-	try{ rez = mod->cntrIfCmd(node); sti->second-=1; return rez; }
+	try{ rez = SYS->transport().at().cntrIfCmd(node,"DAQGate"); sti->second-=1; return rez; }
 	catch(...){ sti->second = mRestTm; }
 
     for( sti = mStatWork.begin(); !strongSt && sti != mStatWork.end(); sti++ )
     {
 	if( sti->second > 0 || sti->first == reqStat ) continue;
 	node.setAttr("path","/"+sti->first+srcPath);
-	try { rez = mod->cntrIfCmd(node); sti->second-=1; return rez; }
+	try { rez = SYS->transport().at().cntrIfCmd(node,"DAQGate"); sti->second-=1; return rez; }
 	catch( TError err ) { sti->second = mRestTm; }
     }
     throw TError(nodePath().c_str(),_("Not one accessable stations present."));
@@ -433,8 +403,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //******************************************************
 //* TMdPrm                                             *
 //******************************************************
-TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
-    TParamContr(name,tp_prm), p_el("w_attr"), mPdel(false), tmLstReq(0)
+TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : TParamContr(name,tp_prm), p_el("w_attr")
 {
     setToEnable(true);
 }
@@ -459,7 +428,6 @@ void TMdPrm::enable()
 
     TParamContr::enable();
 
-    tmLstReq = 0;
     owner().prmEn( id(), true );
 }
 
@@ -489,28 +457,24 @@ void TMdPrm::setCntrAdr( const string &vl )
 void TMdPrm::load_( )
 {
     string scntr;
-    XMLNode req("get");
+    XMLNode req("CntrReqs");
     //> Request and update attributes list
     for( int c_off = 0; (scntr=TSYS::strSepParse(cntrAdr(),0,';',&c_off)).size(); )
     {
 	try
 	{
-	    //>> Parameter name request
-	    req.setAttr("path",scntr+id()+"/%2fprm%2fcfg%2fNAME");
+	    req.clear()->setAttr("path",scntr+id());
+	    req.childAdd("get")->setAttr("path","/%2fprm%2fcfg%2fNAME");
+	    req.childAdd("get")->setAttr("path","/%2fprm%2fcfg%2fDESCR");
+	    req.childAdd("list")->setAttr("path","/%2fserv%2fattr");
 	    if( owner().cntrIfCmd(req) ) throw TError(req.attr("mcat").c_str(),req.text().c_str());
-	    setName(req.text());
-	    //>> Parameter description request
-	    req.clear()->setAttr("path",scntr+id()+"/%2fprm%2fcfg%2fDESCR");
-	    if( owner().cntrIfCmd(req) ) throw TError(req.attr("mcat").c_str(),req.text().c_str());
-	    setDescr(req.text());
 
-	    //>> Attributes list request
-	    req.clear()->setName("list")->setAttr("path",scntr+id()+"/%2fserv%2fattr");
-	    if( owner().cntrIfCmd(req) ) throw TError(req.attr("mcat").c_str(),req.text().c_str());
+	    setName(req.childGet(0)->text());
+	    setDescr(req.childGet(1)->text());
 	    //>> Check and create new attributes
-	    for( int i_a = 0; req.childSize(); i_a++ )
+	    for( int i_a = 0; req.childGet(2)->childSize(); i_a++ )
 	    {
-		XMLNode *ael = req.childGet(i_a);
+		XMLNode *ael = req.childGet(2)->childGet(i_a);
 		if( vlPresent(ael->attr("id")) )	continue;
 		TFld::Type tp = (TFld::Type)atoi(ael->attr("tp").c_str());
 		string dvl    = EVAL_STR;
@@ -538,7 +502,7 @@ void TMdPrm::save_( )
     vlList(a_ls);
     for(int i_a = 0; i_a < a_ls.size(); i_a++)
 	if( !vlAt(a_ls[i_a]).at().arch().freeStat() )
-	vlAt(a_ls[i_a]).at().arch().at().save();
+	    vlAt(a_ls[i_a]).at().arch().at().save();
 }
 
 void TMdPrm::update( )
@@ -550,27 +514,29 @@ void TMdPrm::update( )
 	try
 	{
 	    //>> Attributes values request
-	    if( tmLstReq ) tmLstReq = vmax(tmLstReq,TSYS::curTime()-(long long)(3.6e9*owner().restDtTm()));
-	    req.clear()->setAttr("path",scntr+id()+"/%2fserv%2fattr")->setAttr("tm",TSYS::ll2str(tmLstReq));
+	    if( mRedntTmLast ) mRedntTmLast = vmax(mRedntTmLast,TSYS::curTime()-(long long)(3.6e9*owner().restDtTm()));
+	    req.clear()->setAttr("path",scntr+id()+"/%2fserv%2fattr")->setAttr("tm",TSYS::ll2str(mRedntTmLast));
 	    if( owner().cntrIfCmd(req) ) throw TError(req.attr("mcat").c_str(),req.text().c_str());
-	    tmLstReq = atoll(req.attr("tm").c_str());
+	    mRedntTmLast = atoll(req.attr("tm").c_str());
 	    for( int i_a = 0; req.childSize(); i_a++ )
 	    {
 		XMLNode *aNd = req.childGet(i_a);
+
 		AutoHD<TVal> vl = vlAt(aNd->attr("id"));
-		if( aNd->attr("tm").empty() )	vl.at().setS(aNd->text(),tmLstReq,true);
+		if( aNd->attr("tm").empty() ) vl.at().setS(aNd->text(),mRedntTmLast,true);
 		else
 		{
 		    long long btm = atoll(aNd->attr("tm").c_str());
 		    long long per = atoll(aNd->attr("per").c_str());
-		    if( vl.at().arch().freeStat() )
-			vl.at().setS(aNd->childGet(aNd->childSize()-1)->text(),btm+per*(aNd->childSize()-1),true);
-		    else for( int i_v = 0; i_v < aNd->childSize(); i_v++ )
-		    {
-			if( i_v < (aNd->childSize()-1) )
-			    vl.at().arch().at().setS(aNd->childGet(i_v)->text(),btm+per*i_v);
-			else vl.at().setS(aNd->childGet(i_v)->text(),btm+per*i_v,true);
-		    }
+		    if( !vl.at().arch().freeStat() )
+			for( int i_v = 0; i_v < aNd->childSize(); i_v++ )
+			{
+			    TValBuf buf(vl.at().arch().at().valType(),0,per,false,true);
+			    for( int i_v = 0; i_v < aNd->childSize(); i_v++ )
+			    buf.setS(aNd->childGet(i_v)->text(),btm+per*i_v);
+			    vl.at().arch().at().setVal(buf,buf.begin(),buf.end(),"");
+			}
+		    vl.at().setS(aNd->childGet(aNd->childSize()-1)->text(),btm+per*(aNd->childSize()-1),true);
 		}
 	    }
 	    return;
@@ -579,16 +545,29 @@ void TMdPrm::update( )
 
 void TMdPrm::vlSet( TVal &valo )
 {
-    if( !enableStat() )	valo.setI(EVAL_INT,0,true);
-    string scntr;
-    for( int c_off = 0; (scntr=TSYS::strSepParse(cntrAdr(),0,';',&c_off)).size(); )
-	try
-	{
-	    XMLNode req("set");
-	    req.clear()->setAttr("path",scntr+id()+"/%2fserv%2fattr")->
-		childAdd("el")->setAttr("id",valo.name())->setText(valo.getS());
-	    if( owner().cntrIfCmd(req,true) )   throw TError(req.attr("mcat").c_str(),req.text().c_str());
-	}catch(TError err) { continue; }
+    if( !enableStat() || !owner().startStat() )	valo.setI(EVAL_INT,0,true);
+
+    XMLNode req("set");
+
+    //> Send to active reserve station
+    if( owner().redntUse( ) )
+    {
+	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->
+	    childAdd("el")->setAttr("id",valo.name())->setText(valo.getS());
+	SYS->daq().at().rdStRequest(owner().workId(),req);
+    }
+    //> Direct write
+    else
+    {
+	string scntr;
+	for( int c_off = 0; (scntr=TSYS::strSepParse(cntrAdr(),0,';',&c_off)).size(); )
+	    try
+	    {
+		req.clear()->setAttr("path",scntr+id()+"/%2fserv%2fattr")->
+		    childAdd("el")->setAttr("id",valo.name())->setText(valo.getS());
+		if( owner().cntrIfCmd(req,true) )   throw TError(req.attr("mcat").c_str(),req.text().c_str());
+	    }catch(TError err) { continue; }
+    }
 }
 
 void TMdPrm::vlArchMake( TVal &val )
@@ -692,7 +671,6 @@ void TMdVl::cntrCmdProc( XMLNode *opt )
 	for( int c_off = 0; (scntr=TSYS::strSepParse(owner().cntrAdr(),0,';',&c_off)).size(); )
 	    try
 	    {
-
 		opt->setAttr("path",scntr+owner().id()+"/"+name()+"/"+TSYS::strEncode(a_path,TSYS::PathEl));
 		if( !owner().owner().cntrIfCmd(*opt) ) break;
 	    }catch(TError err) { continue; }

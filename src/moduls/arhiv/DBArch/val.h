@@ -57,9 +57,11 @@ class ModVArchEl: public TVArchEl
 	int    getI( long long *tm, bool up_ord );
 	char   getB( long long *tm, bool up_ord );
 
-	void setVal( TValBuf &buf, long long beg = 0, long long end = 0 );
-
 	ModVArch &archivator()	{ return (ModVArch&)TVArchEl::archivator(); }
+
+    protected:
+	//Methods
+	void setValProc( TValBuf &buf, long long beg, long long end );
 
     private:
 	//Attributes

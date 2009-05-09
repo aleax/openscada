@@ -91,7 +91,7 @@ TTpContr::~TTpContr()
 
 void TTpContr::postEnable( int flag )
 {
-    TModule::postEnable( flag );
+    TTipDAQ::postEnable( flag );
 
     //- Init DSCAD -
     if( dscInit( DSC_VERSION ) != DE_NONE )

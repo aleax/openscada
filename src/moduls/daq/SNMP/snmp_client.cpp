@@ -131,7 +131,7 @@ void TTpContr::load_( )
 
 void TTpContr::postEnable( int flag )
 {
-    TModule::postEnable(flag);
+    TTipDAQ::postEnable(flag);
 
     //- Controler's bd structure -
     fldAdd( new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30","") );

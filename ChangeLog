@@ -1,3 +1,23 @@
+2009-05-09 Roman
+- FIX:/SYS/Value: Archive's data getting service function is fixed from spare archive's data getting and expanded
+    for archive block request.
+- !!!:/Transport, /UI/WebCfgD, /UI/QTCfg, /DAQ/DAQGate: OpenSCADA control interface's request to remote stations
+    is unified and locate to function TTransportS::cntrIfCmd.
+- !!!!:/DAQ: Base redundant support is added.
+- !!!!:/SYS: OpenSCADA control interface's group request "CntrReqs" is added. Used for request several standard requests
+    into single action.
+- !!:/SYS/Archive/Value: Copy function is added to value buffer's object TValBuf. Store fixed size buffers is made
+    memory optimal.
+- !:/SYS/Archive/Value: Set values API some changed for archive's sync full support.
+- FIX:/SYS/Archive/Value: Trend build function for value archive is used TTF font. Cyrillic symbols display is fixed.
+- FIX:/UI/Vision, /UI/WebVision: Page including recursively to already included pages is fixed.
+- FIX:/UI/WebCfgD: Special symbols encoding is added to selected elements.
+    Tables process by Konqueror 4 is fixed and made typical.
+- /UI/QTCfg: Set up station name to window title of configurator window.
+- !!:/DAQ/System, /DAQ/DAQGate. The modules is adapted to work into redundant mode.
+- FIX:/Archive/FSArch: Real data into archive end calc mechanism is added.
+
+
 2009-04-27 Roman
 - FIX:/SYS: owner() method is changed to no inline for all objects.
 - !!:/SYS/Archive: Added archive selection parameter to function TVArchive::period().

@@ -96,6 +96,7 @@ TArchiveS::~TArchiveS(  )
 {
     //> Stop messages timer
     timer_delete(tmIdMess);
+
     //> Stop values archiving task
     if( prcStVal )
     {
@@ -108,8 +109,6 @@ TArchiveS::~TArchiveS(  )
     //> Free other resources
     nodeDelAll();
 }
-
-
 
 int TArchiveS::valPeriod( )		{ return vmax(1,mValPer); }
 
@@ -302,7 +301,7 @@ void TArchiveS::subStart( )
 		catch(TError err)
 		{
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    mess_err(nodePath().c_str(),_("Value archivator <%s> start error."),o_lst[i_o].c_str());
+		    mess_err(nodePath().c_str(),_("Value archivator <%s> start error."),val.at().workId().c_str());
 		}
 	}
     }

@@ -38,27 +38,36 @@ class TTipDAQ;
 class TController : public TCntrNode, public TConfig
 {
     public:
+	//Public Data
+	enum Redundant
+	{
+	    Off		= 0,
+	    Asymmetric	= 1,
+	    Symmetric	= 2
+	};
+
 	//Public methods
 	TController( const string &name_c, const string &daq_db, TElem *cfgelem );
 	virtual ~TController(  );
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return m_id; }
+	const string &id( )	{ return mId; }
+	string workId( );
 	string name( );
-	string descr( )		{ return m_descr; }
+	string descr( )		{ return mDescr; }
 	virtual string getStatus( );
 
-	string DB( )		{ return m_db; }
+	string DB( )		{ return mDB; }
 	string tbl( );
 	string fullDB( )	{ return DB()+'.'+tbl(); }
 
-	void setName( const string &nm )	{ m_name = nm; }
-	void setDescr( const string &dscr )	{ m_descr = dscr; }
-	void setDB( const string &idb )		{ m_db = idb; modifG(); }
+	void setName( const string &nm )	{ mName = nm; }
+	void setDescr( const string &dscr )	{ mDescr = dscr; }
+	void setDB( const string &idb )		{ mDB = idb; modifG(); }
 
-	bool toEnable( )	{ return m_aen; }
-	bool toStart( )		{ return m_astart; }
+	bool toEnable( )	{ return mAEn; }
+	bool toStart( )		{ return mAStart; }
 	bool enableStat( )	{ return en_st; }
 	bool startStat( )	{ return run_st; }
 
@@ -68,12 +77,21 @@ class TController : public TCntrNode, public TConfig
 	void disable( );
 
 	//> Parameters
-	void list( vector<string> &list )	{ chldList(m_prm,list); }
-	bool present( const string &name )	{ return chldPresent(m_prm,name); }
+	void list( vector<string> &list )	{ chldList(mPrm,list); }
+	bool present( const string &name )	{ return chldPresent(mPrm,name); }
 	void add( const string &name, unsigned type );
-	void del( const string &name, bool full = false )	{ chldDel(m_prm,name,-1,full); }
+	void del( const string &name, bool full = false )	{ chldDel(mPrm,name,-1,full); }
 	AutoHD<TParamContr> at( const string &name, const string &who = "th_contr" )
-	{ return chldAt(m_prm,name); }
+	{ return chldAt(mPrm,name); }
+
+	//> Redundance
+	bool redntUse( )			{ return mRedntUse; }
+	void setRedntUse( bool vl );
+	Redundant redntMode( );
+	void setRedntMode( Redundant vl );
+	string redntRun( );
+	void setRedntRun( const string &vl );
+	virtual void redntDataUpdate( bool firstArchiveSync = false );
 
 	TTipDAQ &owner( );
 
@@ -83,7 +101,7 @@ class TController : public TCntrNode, public TConfig
 	bool	run_st;
 
 	//Methods
-	//- User methods -
+	//> User methods
 	void load_( );
 	void save_( );
 	virtual void enable_( )		{ }
@@ -102,19 +120,22 @@ class TController : public TCntrNode, public TConfig
 
     private:
 	//Private methods
-	string nodeName( )       { return m_id; }
+	string nodeName( )       { return mId; }
 
 	void LoadParmCfg(  );
 
 	//Private attributes
-	string	&m_id;
-	string	&m_name;
-	string	&m_descr;
-	bool	&m_aen;
-	bool	&m_astart;
+	string	&mId;
+	string	&mName;
+	string	&mDescr;
+	bool	&mAEn;
+	bool	&mAStart;
 
-	string	m_db;
-	int	m_prm;
+	string	mDB;
+
+	unsigned mPrm		: 2;
+	unsigned mRedntUse	: 1;
+	unsigned mRedntFirst	: 1;
 };
 
 

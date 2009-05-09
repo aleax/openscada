@@ -46,6 +46,10 @@ class Sensors: public DA
 
 	void makeActiveDA( TMdContr *a_cntr );
 
+    protected:
+	//Methods
+	void getSensors( TMdPrm *prm, bool onlyCreate = false );
+
     private:
 	//Attributes
 	static const char *mbmon_cmd;

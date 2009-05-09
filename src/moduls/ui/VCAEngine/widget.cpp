@@ -1461,10 +1461,7 @@ void Attr::setI( int val, bool strongPrev, bool sys )
 	case TFld::Integer:
 	{
 	    if( !(fld().flg()&TFld::Selected) && fld().selValI()[0] < fld().selValI()[1] )
-	    {
-		val = vmax(val,mFld->selValI()[0]);
-		val = vmin(val,mFld->selValI()[1]);
-	    }
+		val = vmin(fld().selValI()[1],vmax(fld().selValI()[0],val));
 	    if( !strongPrev && m_val.i_val == val )	break;
 	    int t_val = m_val.i_val;
 	    m_val.i_val = val;
@@ -1490,10 +1487,7 @@ void Attr::setR( double val, bool strongPrev, bool sys )
 	case TFld::Real:
 	{
 	    if( !(fld().flg()&TFld::Selected) && fld().selValR()[0] < fld().selValR()[1] )
-	    {
-		val = vmax(val,fld().selValR()[0]);
-		val = vmin(val,fld().selValR()[1]);
-	    }
+		val = vmin(fld().selValR()[1],vmax(fld().selValR()[0],val));
 	    if( !strongPrev && m_val.r_val == val )	break;
 	    double t_val = m_val.r_val;
 	    m_val.r_val = val;

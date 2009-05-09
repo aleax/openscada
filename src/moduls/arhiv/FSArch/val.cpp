@@ -429,10 +429,9 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 //* FSArch::ModVArchEl - Value archive element    *
 //*************************************************
 ModVArchEl::ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator ) :
-    TVArchEl(iachive,iarchivator)
+    TVArchEl(iachive,iarchivator), realEnd(0)
 {
-    long long per = (long long)archivator().valPeriod()*1000000.;
-    realEnd = (TSYS::curTime()/per)*per;
+
 }
 
 ModVArchEl::~ModVArchEl( )
@@ -559,7 +558,10 @@ long long ModVArchEl::end()
     ResAlloc res(m_res,false);
     for( int i_a = arh_f.size()-1; i_a >= 0; i_a-- )
 	if( !arh_f[i_a]->err() )
+	{
+	    if( !realEnd ) realEnd = arh_f[i_a]->endData();
 	    return vmin(arh_f[i_a]->end(),realEnd);
+	}
 
     return 0;
 }
@@ -661,7 +663,7 @@ char ModVArchEl::getB( long long *tm, bool up_ord )
     return EVAL_BOOL;
 }
 
-void ModVArchEl::setVal( TValBuf &buf, long long beg, long long end )
+void ModVArchEl::setValProc( TValBuf &buf, long long beg, long long end )
 {
     //- Check border -
     if( !buf.vOK(beg,end) )	return;
@@ -921,8 +923,7 @@ void VFileArch::attach( const string &name )
 	if( hd == -1 )	throw TError(owner().archivator().nodePath().c_str(),_("Archive file <%s> no openned!"),name.c_str());
 	m_size = lseek(hd,0,SEEK_END);
 	mpos = (end()-begin())/period();
-	if( !m_pack && cur_tm >= begin() && cur_tm <= end() )
-	    repairFile(hd);
+	if( !m_pack && cur_tm >= begin() && cur_tm <= end() ) repairFile(hd);
 	close(hd);
 	res.release();
 
@@ -982,6 +983,40 @@ void VFileArch::check( )
     }
 }
 
+long long VFileArch::endData( )
+{
+    if( getS(mpos) != EVAL_STR ) return end();
+
+    ResAlloc res(m_res,false);
+    if( m_err ) throw TError(owner().archivator().nodePath().c_str(),_("Archive file error!"));
+
+    if( m_pack )
+    {
+	res.request(true);
+	m_name = mod->unPackArch(m_name);
+	m_pack = false;
+	res.request(false);
+    }
+
+    //> Open archive file
+    int hd = open(name().c_str(),O_RDONLY);
+    if( hd <= 0 ) { m_err = true; return end(); }
+
+    //> Find last value offset
+    int last_off = calcVlOff(hd,mpos);
+    int curPos = mpos;
+    for( int d_win = curPos/2; d_win > 3; d_win/=2 )
+	if( calcVlOff(hd,curPos-d_win) == last_off ) curPos-=d_win;
+    while( curPos > 0 && calcVlOff(hd,curPos) == last_off ) curPos--;
+
+    //> Free file resource and close file
+    close(hd);
+    m_acces = time(NULL);
+    res.release();
+
+    return begin() + curPos*period();
+}
+
 void VFileArch::getVal( TValBuf &buf, long long beg, long long end )
 {
     int vpos_beg, vpos_end, voff_beg, vlen_beg, voff_end, vlen_end;
@@ -1013,8 +1048,6 @@ void VFileArch::getVal( TValBuf &buf, long long beg, long long end )
     if( hd <= 0 ) { m_err = true; return; }
 
     voff_beg = calcVlOff(hd,vpos_beg,&vlen_beg);
-
-
 
     //- Get the pack index block and the value block -
     if( fixVl )
@@ -1480,6 +1513,8 @@ string VFileArch::getValue( int hd, int voff, int vsz )
     return get_vl;
 }
 
+
+
 int VFileArch::calcVlOff( int hd, int vpos, int *vsz, bool wr )
 {
     int b_sz = 0, i_bf = 0;
@@ -1500,7 +1535,7 @@ int VFileArch::calcVlOff( int hd, int vpos, int *vsz, bool wr )
 	    b_sz = vmin((vpos/8)-(cach_pos/8)+1,sizeof(buf));
 	    read(hd,buf,b_sz);
 	}
-	for(int i_ps = cach_pos; i_ps <= vpos; i_ps++)
+	for( int i_ps = cach_pos; i_ps <= vpos; i_ps++ )
 	{
 	    int rest = i_ps%8;
 	    if( !rest )
@@ -1527,10 +1562,10 @@ int VFileArch::calcVlOff( int hd, int vpos, int *vsz, bool wr )
 	else voff = sizeof(FHead)+mpos*vSize;
 	lseek(hd,sizeof(FHead)+cach_pos*vSize,SEEK_SET);
 
-	for(int i_ps = cach_pos; i_ps <= vpos; i_ps++)
+	for( int i_ps = cach_pos; i_ps <= vpos; i_ps++ )
 	{
 	    int pk_vl = 0;
-	    for(int i_e = 0; i_e < vSize; i_e++)
+	    for( int i_e = 0; i_e < vSize; i_e++ )
 	    {
 		if( ++i_bf >= b_sz )
 		{
@@ -1647,7 +1682,7 @@ void VFileArch::setPkVal( int hd, int vpos, int vl )
     }
 }
 
-void VFileArch::repairFile(int hd, bool fix)
+void VFileArch::repairFile( int hd, bool fix )
 {
     int v_sz;
     if( !m_pack )
@@ -1722,4 +1757,3 @@ void VFileArch::cacheDrop( int pos )
     if( cach_pr_wr.pos >= pos )
 	cach_pr_wr.off = cach_pr_wr.pos = cach_pr_wr.vsz = 0;
 }
-

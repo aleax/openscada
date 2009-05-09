@@ -64,7 +64,7 @@ class TVal : public TCntrNode
 	void setCfg( TCfg &cfg );
 
 	const string &name( );
-	long long time()	{ return mTime; }
+	long long time( )	{ return mTime; }
 
 	//> Read curent value (direct)
 	string	getSEL( long long *tm = NULL, bool sys = false );
@@ -167,10 +167,10 @@ class TValue: public TCntrNode, public TValElem
 
 	//Attributes
 	char		m_vl;
-	vector<TElem*>	elem;   // Elements (dinamic parts)
+	vector<TElem*>	elem;		// Elements (dinamic parts)
 
-	short int	l_cfg;  // Config len
-	TConfig*	mCfg;	// Configs (static parts)
+	short int	l_cfg;		// Config len
+	TConfig*	mCfg;		// Configs (static parts)
 };
 
 #endif // TVALUE_H

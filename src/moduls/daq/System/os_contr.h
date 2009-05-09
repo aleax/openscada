@@ -96,6 +96,8 @@ class TMdContr: public TController
 	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem );
 	~TMdContr( );
 
+	string getStatus( );
+
 	int period( )	{ return vmax(1,m_per); }
 	int prior( )	{ return m_prior; }
 
@@ -107,7 +109,6 @@ class TMdContr: public TController
 	void enable_( );
 	void start_( );
 	void stop_( );
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	void prmEn( const string &id, bool val );
 
     private:
@@ -146,6 +147,8 @@ class TTpContr: public TTipDAQ
 	//Methods
 	void postEnable( int flag );
 	void load_( );
+
+	bool redntAllow( )	{ return true; }
 
     private:
 	//Methods

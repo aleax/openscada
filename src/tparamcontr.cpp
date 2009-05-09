@@ -32,7 +32,7 @@
 //* TParamContr                                   *
 //*************************************************
 TParamContr::TParamContr( const string &name, TTipParam *tpprm ) :
-    TConfig(tpprm), tipparm(tpprm), m_en(false),
+    TConfig(tpprm), tipparm(tpprm), m_en(false), mRedntTmLast(0),
     m_id(cfg("SHIFR").getSd()), m_name(cfg("NAME").getSd()), m_descr(cfg("DESCR").getSd()), m_aen(cfg("EN").getBd())
 {
     m_id = m_name = name;
@@ -115,8 +115,8 @@ void TParamContr::load_( )
 
 void TParamContr::save_( )
 {
-    SYS->db().at().dataSet(owner().DB()+"."+owner().cfg(type().db).getS(),
-			   owner().owner().nodePath()+owner().cfg(type().db).getS(),*this);
+    SYS->db().at().dataSet( owner().DB()+"."+owner().cfg(type().db).getS(),
+			    owner().owner().nodePath()+owner().cfg(type().db).getS(),*this );
 
     //> Save archives
     vector<string> a_ls;

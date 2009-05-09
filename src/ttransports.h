@@ -262,6 +262,9 @@ class TTransportS : public TSubSYS
 	void extHostSet( const ExtHost &host );
 	void extHostDel( const string &user, const string &id );
 
+	//> Request to remote or local OpenSCADA control interface
+	int cntrIfCmd( XMLNode &node, const string &senderPref, const string &user = "" );
+
 	void subStart( );
 	void subStop( );
 

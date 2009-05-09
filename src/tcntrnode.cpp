@@ -117,10 +117,16 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 	    return;
 	}
 	//> Post command to node
-	opt->setAttr("path",s_br);
-	cntrCmdProc(opt);
-	if( opt->attr("rez") != "0" )
-	    throw TError("ContrItfc",_("%s:%s:> Control element <%s> error!"),opt->name().c_str(),path.c_str(),s_br.c_str());
+	if( opt->name() == "CntrReqs" )
+	    for( int i_n = 0; i_n < opt->childSize(); i_n++ )
+		cntrCmd(opt->childGet(i_n));
+	else
+	{
+	    opt->setAttr("path",s_br);
+	    cntrCmdProc(opt);
+	    if( opt->attr("rez") != "0" )
+		throw TError("ContrItfc",_("%s:%s:> Control element <%s> error!"),opt->name().c_str(),path.c_str(),s_br.c_str());
+	}
     }
     catch(TError err)
     {

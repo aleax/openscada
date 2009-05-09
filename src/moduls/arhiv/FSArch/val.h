@@ -55,6 +55,7 @@ class VFileArch
 	long long begin( )	{ return m_beg; }
 	long long end( )	{ return m_end; }
 	long long period( )	{ return m_per; }
+	long long endData( );
 	TFld::Type type( )	{ return m_tp; }
 	bool	err( )		{ return m_err; }
 	bool	isPack( )	{ return m_pack; }
@@ -146,7 +147,9 @@ class ModVArch;
 
 class ModVArchEl: public TVArchEl
 {
+    friend class VFileArch;
     public:
+	//Methods
 	ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator );
 	~ModVArchEl( );
 	void fullErase();
@@ -162,14 +165,17 @@ class ModVArchEl: public TVArchEl
 	int	getI( long long *tm, bool up_ord );
 	char	getB( long long *tm, bool up_ord );
 
-	void setVal( TValBuf &buf, long long beg = 0, long long end = 0 );
-
 	ModVArch &archivator()	{ return (ModVArch&)TVArchEl::archivator(); }
 
 	void checkArchivator( bool now = false );
 	void fileAdd( const string &file );
 
+    protected:
+	//Methods
+	void setValProc( TValBuf &buf, long long beg, long long end );
+
     private:
+	//Attributes
 	Res	m_res;		// resource to access;
 	deque<VFileArch *>	arh_f;
 	long long realEnd;

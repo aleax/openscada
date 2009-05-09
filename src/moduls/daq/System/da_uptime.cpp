@@ -54,7 +54,7 @@ void UpTime::init( TMdPrm *prm )
     TCfg &c_subt = prm->cfg("SUBT");
     c_subt.fld().setDescr("");
 
-    c_subt.fld().setValues("sys;stat"); 
+    c_subt.fld().setValues("sys;stat");
     c_subt.fld().setSelNames(string(_("System"))+";"+_("Station"));
     try{ c_subt.getSEL(); }
     catch(...) { c_subt.setS("sys"); }

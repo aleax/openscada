@@ -109,7 +109,7 @@ bool TValue::vlElemPresent( TElem *ValEl )
 void TValue::vlElemAtt( TElem *ValEl )
 {
     ValEl->valAtt(this);
-    for(unsigned i_elem = 0; i_elem < ValEl->fldSize(); i_elem++)
+    for( unsigned i_elem = 0; i_elem < ValEl->fldSize(); i_elem++ )
 	addFld(ValEl,i_elem);
     elem.push_back(ValEl);
 }
@@ -162,22 +162,24 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",RWRWRW,"root","root",SEQ_RD) )		//All attributes values
 	{
 	    AutoHD<TVal> vl;
+	    bool full = atoi(opt->attr("all").c_str());
 	    long long tm = atoll(opt->attr("tm").c_str());
-	    opt->setAttr("tm",TSYS::ll2str(TSYS::curTime()));
+	    long long ftm = tm;
 	    for( int i_el = 0; i_el < list_c.size(); i_el++ )
 	    {
 		vl = vlAt(list_c[i_el]);
+		ftm = vmax(ftm,vl.at().time());
 		//>> Get last value
-		if( !tm ||									//Current value request
-			(vl.at().arch( ).freeStat() && vl.at().time() > tm) ||			//Updated value request
-			(!vl.at().arch( ).freeStat() && ((vl.at().time()-tm)/vl.at().arch().at().period()) <= 1) )	//One value diff
+		if( !tm ||												//Current value request
+			(vl.at().arch( ).freeStat() && (full || vl.at().time() > tm)) ||				//Updated value request
+			(!vl.at().arch( ).freeStat() && (vl.at().time()/vl.at().arch().at().period()-tm/vl.at().arch().at().period()) <= 1) )	//One value diff
 		    opt->childAdd("el")->setAttr("id",list_c[i_el])->setText(vl.at().getS());
 		//>> Get values from archive
 		else if( !vl.at().arch( ).freeStat() )
 		{
 		    AutoHD<TVArchive> arch = vl.at().arch();
 		    long long vper = arch.at().period(BUF_ARCH_NM);
-		    long long reqBeg = (tm/vper)*vper;
+		    long long reqBeg = (tm/vper+1)*vper;
 		    long long vbeg = vmax(reqBeg,arch.at().begin(BUF_ARCH_NM));
 		    long long vend = arch.at().end(BUF_ARCH_NM);
 
@@ -192,10 +194,30 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		    }
 		    XMLNode *aNd = opt->childAdd("el")->setAttr("id",list_c[i_el])->
 			setAttr("tm",TSYS::ll2str(vbeg))->setAttr("per",TSYS::ll2str(vper));
-		    for( ; vbeg <= vend; vbeg++ )
-			aNd->childAdd("v")->setText(arch.at().getS(&vbeg,true));
+
+		    TValBuf buf(arch.at().valType(),0,0,false,true);
+		    arch.at().getVal( buf, vbeg, vend, "", (vend-vbeg)/vper );
+
+		    bool firstVal = true;
+		    string vl;
+		    for( vbeg = buf.begin(); vbeg <= buf.end(); vbeg++ )
+		    {
+			vl = buf.getS(&vbeg,true);
+			if( firstVal && vl == EVAL_STR ) continue;
+			if( firstVal && vl != EVAL_STR ) { aNd->setAttr("tm",TSYS::ll2str(vbeg)); firstVal = false; }
+			aNd->childAdd("v")->setText(vl);
+		    }
+
+		    /*for( ; vbeg <= vend; vbeg++ )
+		    {
+			vl = arch.at().getS(&vbeg,true);
+			if( firstVal && vl == EVAL_STR ) continue;
+			if( firstVal && vl != EVAL_STR ) { aNd->setAttr("tm",TSYS::ll2str(vbeg)); firstVal = false; }
+			aNd->childAdd("v")->setText(vl);
+		    }*/
 		}
 	    }
+	    opt->setAttr("tm",TSYS::ll2str(ftm));
 	}
 	if( ctrChkNode(opt,"set",RWRWRW,"root","root",SEQ_WR) )		//Multi attributes set
 	    for( int i_el = 0; i_el < opt->childSize(); i_el++ )
@@ -545,7 +567,7 @@ char TVal::getB( long long *tm, bool sys )
 	{ double vl = getR(tm,sys);	return (vl!=EVAL_REAL) ? (bool)vl : EVAL_BOOL; }
 	case TFld::Boolean:
 	    //- Get from archive -
-	    if( tm && (*tm) && !mArch.freeStat() && *tm/mArch.at().period() < time()/mArch.at().period() ) 
+	    if( tm && (*tm) && !mArch.freeStat() && *tm/mArch.at().period() < time()/mArch.at().period() )
 		return mArch.at().getB(tm);
 	    //- Get value from config -
 	    if( mCfg )
@@ -609,17 +631,13 @@ void TVal::setI( int value, long long tm, bool sys )
 	case TFld::Boolean:
 	    setB( (value!=EVAL_INT) ? (bool)value : EVAL_BOOL, tm, sys );	break;
 	case TFld::Integer:
-//	    ResAlloc res(aRes,true);
 	    //> Set value to config
 	    if( mCfg )	{ src.cfg->setI( value ); return; }
 	    //> Check to write
             if( !sys && fld().flg()&TFld::NoWrite )	throw TError("Val","Write access is denied!");
 	    //> Set current value and time
 	    if( !(fld().flg()&TFld::Selected) && fld().selValI()[1] > fld().selValI()[0] && value != EVAL_INT )
-	    {
-		if( value > fld().selValI()[1] )value = fld().selValI()[1];
-		if( value < fld().selValI()[0] )value = fld().selValI()[0];
-	    }
+		value = vmin(fld().selValI()[1],vmax(fld().selValI()[0],value));
 	    val.val_i = value;
 	    mTime = tm;
 	    if( !mTime ) mTime = TSYS::curTime();
@@ -641,17 +659,13 @@ void TVal::setR( double value, long long tm, bool sys )
 	case TFld::Boolean:
 	    setB( (value!=EVAL_REAL) ? (bool)value : EVAL_BOOL, tm, sys );		break;
 	case TFld::Real:
-//	    ResAlloc res(aRes,true);
 	    //> Set value to config
 	    if( mCfg )	{ src.cfg->setR( value ); return; }
 	    //> Check to write
-            if( !sys && fld().flg()&TFld::NoWrite )	throw TError("Val","Write access is denied!");
+	    if( !sys && fld().flg()&TFld::NoWrite )	throw TError("Val","Write access is denied!");
 	    //> Set current value and time
 	    if( !(fld().flg()&TFld::Selected) && fld().selValR()[1] > fld().selValR()[0] && value != EVAL_REAL )
-	    {
-		if( value > fld().selValR()[1] )value = fld().selValR()[1];
-		if( value < fld().selValR()[0] )value = fld().selValR()[0];
-	    }
+		value = vmin(fld().selValR()[1],vmax(fld().selValR()[0],value));
 	    val.val_r = value;
 	    mTime = tm;
 	    if( !mTime ) mTime = TSYS::curTime();

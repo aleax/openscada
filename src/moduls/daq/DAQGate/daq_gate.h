@@ -67,7 +67,6 @@ class TMdPrm : public TParamContr
 	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );
 
-	bool isDel( )		{ return mPdel; }
 	string cntrAdr( )	{ return mCntrAdr; }
 
 	void setCntrAdr( const string &vl );
@@ -95,9 +94,7 @@ class TMdPrm : public TParamContr
 
 	//Attributes
 	TElem	p_el;				//Work atribute elements
-	bool	mPdel;				//Remote parameter deleted flag
 	string	mCntrAdr;			//Parameter's remote controller address'
-	long long tmLstReq;
 };
 
 //******************************************************
@@ -189,8 +186,7 @@ class TTpContr: public TTipDAQ
 	TTpContr( string name );
 	~TTpContr( );
 
-	//> Request to OpenSCADA control interface
-	int cntrIfCmd( XMLNode &node );
+	bool redntAllow( )	{ return true; }
 
     protected:
 	//Methods

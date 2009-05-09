@@ -450,7 +450,7 @@ class ShapeDocument : public WdgShape
 
     public:
 	//Data
-	//- Shape node date -
+	//> Shape node date
 	class ShpDt
 	{
 	    public:
@@ -495,18 +495,8 @@ class RunPageView;
 class ShapeBox : public WdgShape
 {
     public:
-	//Methods
-	ShapeBox( );
-
-	void init( WdgView *view );
-	void destroy( WdgView *view );
-
-	bool attrSet( WdgView *view, int uiPrmPos, const string &val);
-	bool event( WdgView *view, QEvent *event );
-
-    private:
 	//Data
-	//- Shape node date -
+	//> Shape node date
 	class ShpDt
 	{
 	    public:
@@ -521,6 +511,15 @@ class ShapeBox : public WdgShape
 		RunPageView	*inclWidget;
 		QScrollArea 	*inclScrl;
 	};
+
+	//Methods
+	ShapeBox( );
+
+	void init( WdgView *view );
+	void destroy( WdgView *view );
+
+	bool attrSet( WdgView *view, int uiPrmPos, const string &val);
+	bool event( WdgView *view, QEvent *event );
 };
 
 //************************************************

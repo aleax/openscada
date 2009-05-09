@@ -184,11 +184,9 @@ string TSYS::strMess( const char *fmt, ... )
 
 string TSYS::optDescr( )
 {
-    char s_buf[STR_BUF_LEN];
     utsname buf;
-
     uname(&buf);
-    snprintf(s_buf,sizeof(s_buf),_(
+    return TSYS::strMess(_(
 	"***************************************************************************\n"
 	"********** %s v%s (%s-%s). *********\n"
 	"***************************************************************************\n\n"
@@ -221,8 +219,6 @@ string TSYS::optDescr( )
 	"SavePeriod <sec>	Save system period.\n"
 	"SYSOptCfg  <true>      Get system options from DB.\n\n"),
 	PACKAGE_NAME,VERSION,buf.sysname,buf.release,nodePath().c_str());
-
-    return s_buf;
 }
 
 bool TSYS::cfgFileLoad()

@@ -314,12 +314,16 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
   }
   //> Find for include page creation
   for( var i in this.wdgs )
-    if( this.wdgs[i].attrs['root'] == 'Box' && pgGrp == this.wdgs[i].attrs['pgGrp'] && pgId != this.wdgs[i].attrs['pgOpenSrc'] )
+    if( this.wdgs[i].attrs['root'] == 'Box' )
     {
-      this.wdgs[i].attrs['pgOpenSrc'] = pgId;
-      this.wdgs[i].makeEl(null,true);
-      setWAttrs(this.wdgs[i].addr,'pgOpenSrc',pgId);
-      return true;
+      if( pgGrp == this.wdgs[i].attrs['pgGrp'] && pgId != this.wdgs[i].attrs['pgOpenSrc'] )
+      {
+	this.wdgs[i].attrs['pgOpenSrc'] = pgId;
+	this.wdgs[i].makeEl(null,true);
+	setWAttrs(this.wdgs[i].addr,'pgOpenSrc',pgId);
+	return true;
+      }
+      if( this.wdgs[i].inclOpen && this.wdgs[i].pages[this.wdgs[i].inclOpen].callPage(pgId,updWdg,pgGrp,pgOpenSrc) ) return true;
     }
   //> Put checking to child pages
   for( var i in this.pages )
@@ -344,15 +348,23 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 }
 function findOpenPage( pgId )
 {
+  var opPg;
   if( pgId == this.addr ) return this;
   //> Check from included widgets
   for( var i in this.wdgs )
-    if( this.wdgs[i].attrs['root'] == 'Box' && pgId == this.wdgs[i].attrs['pgOpenSrc'] )
-      return this.wdgs[i].pages[pgId];
+    if( this.wdgs[i].attrs['root'] == 'Box' )
+    {
+      if( pgId == this.wdgs[i].attrs['pgOpenSrc'] ) return this.wdgs[i].pages[pgId];
+      if( this.wdgs[i].inclOpen )
+      {
+	opPg = this.wdgs[i].pages[this.wdgs[i].inclOpen].findOpenPage(pgId);
+	if( opPg ) return opPg;
+      }
+    }
   //> Put checking to child pages
   for( var i in this.pages )
   {
-    var opPg = this.pages[i].findOpenPage(pgId);
+    opPg = this.pages[i].findOpenPage(pgId);
     if( opPg ) return opPg;
   }
   return null;

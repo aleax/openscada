@@ -3,20 +3,20 @@
 # This file is distributed under the same license as the OpenSCADA.DAQ.Transporter package module.
 # Roman Savochenko <rom_as@fromru.com>, 2007-2009.
 #
-#: daq_gate.cpp:49 daq_gate.cpp:132 daq_gate.cpp:525
+#: daq_gate.cpp:49 daq_gate.cpp:132 daq_gate.cpp:489 daq_gate.cpp:537
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Transporter 0.3.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-27 18:49+0300\n"
+"POT-Creation-Date: 2009-05-09 19:59+0300\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: daq_gate.cpp:32
+#: daq_gate.cpp:32 daq_gate.cpp:364 daq_gate.cpp:371
 msgid "DAQGate"
 msgstr ""
 
@@ -67,11 +67,11 @@ msgstr ""
 msgid "h"
 msgstr ""
 
-#: daq_gate.cpp:102 daq_gate.cpp:414 daq_gate.cpp:416
+#: daq_gate.cpp:102 daq_gate.cpp:384 daq_gate.cpp:386
 msgid "help"
 msgstr ""
 
-#: daq_gate.cpp:123 daq_gate.cpp:167
+#: daq_gate.cpp:123 daq_gate.cpp:148
 msgid "PERIOD"
 msgstr ""
 
@@ -83,7 +83,7 @@ msgstr "Период сбора данных (с)"
 msgid "6.2"
 msgstr ""
 
-#: daq_gate.cpp:123 daq_gate.cpp:126 daq_gate.cpp:653
+#: daq_gate.cpp:123 daq_gate.cpp:126 daq_gate.cpp:632
 msgid "1"
 msgstr ""
 
@@ -91,7 +91,7 @@ msgstr ""
 msgid "0;100"
 msgstr ""
 
-#: daq_gate.cpp:124 daq_gate.cpp:167
+#: daq_gate.cpp:124 daq_gate.cpp:148
 msgid "PRIOR"
 msgstr ""
 
@@ -103,11 +103,11 @@ msgstr "Уровень приоритета задачи сбора данных
 msgid "2"
 msgstr ""
 
-#: daq_gate.cpp:124 daq_gate.cpp:155 daq_gate.cpp:653
+#: daq_gate.cpp:124 daq_gate.cpp:632
 msgid "0"
 msgstr ""
 
-#: daq_gate.cpp:125 daq_gate.cpp:168
+#: daq_gate.cpp:125 daq_gate.cpp:149
 msgid "TM_REST"
 msgstr ""
 
@@ -127,7 +127,7 @@ msgstr ""
 msgid "0;1000"
 msgstr ""
 
-#: daq_gate.cpp:126 daq_gate.cpp:168
+#: daq_gate.cpp:126 daq_gate.cpp:149
 msgid "TM_REST_DT"
 msgstr ""
 
@@ -139,7 +139,7 @@ msgstr "Интервал времени восстановления данны�
 msgid "0.01;12"
 msgstr ""
 
-#: daq_gate.cpp:127 daq_gate.cpp:167
+#: daq_gate.cpp:127 daq_gate.cpp:148
 msgid "SYNCPER"
 msgstr ""
 
@@ -151,7 +151,7 @@ msgstr "Периодичность синхронизации с удалённ�
 msgid "60"
 msgstr ""
 
-#: daq_gate.cpp:128 daq_gate.cpp:169 daq_gate.cpp:413
+#: daq_gate.cpp:128 daq_gate.cpp:150 daq_gate.cpp:383
 msgid "STATIONS"
 msgstr ""
 
@@ -159,11 +159,11 @@ msgstr ""
 msgid "Remote stations list"
 msgstr "Список удалённых станций"
 
-#: daq_gate.cpp:128 daq_gate.cpp:413 daq_gate.cpp:415
+#: daq_gate.cpp:128 daq_gate.cpp:383 daq_gate.cpp:385
 msgid "100"
 msgstr ""
 
-#: daq_gate.cpp:129 daq_gate.cpp:169 daq_gate.cpp:415
+#: daq_gate.cpp:129 daq_gate.cpp:150 daq_gate.cpp:385
 msgid "CNTRPRM"
 msgstr ""
 
@@ -175,7 +175,7 @@ msgstr "Список удалённых контроллеров и параме
 msgid "200"
 msgstr ""
 
-#: daq_gate.cpp:132 daq_gate.cpp:241
+#: daq_gate.cpp:132 daq_gate.cpp:222
 msgid "std"
 msgstr ""
 
@@ -183,101 +183,76 @@ msgstr ""
 msgid "Standard"
 msgstr "Стандарт"
 
-#: daq_gate.cpp:146 daq_gate.cpp:148 daq_gate.cpp:157 daq_gate.cpp:226
-#: daq_gate.cpp:239 daq_gate.cpp:389 daq_gate.cpp:390 daq_gate.cpp:400
-#: daq_gate.cpp:424 daq_gate.cpp:499 daq_gate.cpp:503 daq_gate.cpp:508
-#: daq_gate.cpp:554 daq_gate.cpp:588 daq_gate.cpp:607 daq_gate.cpp:636
-#: daq_gate.cpp:669 daq_gate.cpp:672 daq_gate.cpp:686 daq_gate.cpp:696
-#: daq_gate.cpp:699
-msgid "path"
-msgstr ""
-
-#: daq_gate.cpp:151 daq_gate.cpp:223
-msgid "*"
-msgstr ""
-
-#: daq_gate.cpp:152
-msgid "TrCntr"
-msgstr ""
-
-#: daq_gate.cpp:155
-msgid "rqDir"
-msgstr ""
-
-#: daq_gate.cpp:155
-msgid "rqUser"
-msgstr ""
-
-#: daq_gate.cpp:155
-msgid "rqPass"
-msgstr ""
-
-#: daq_gate.cpp:156
-msgid "SelfSystem"
-msgstr ""
-
-#: daq_gate.cpp:159
-msgid "rez"
-msgstr ""
-
-#: daq_gate.cpp:185
+#: daq_gate.cpp:166
 #, c-format
 msgid "Gather data time %.6g ms. "
 msgstr "Время сбора данных %.6g мс. "
 
-#: daq_gate.cpp:187
+#: daq_gate.cpp:168
 #, c-format
 msgid "Station '%s' error, restoring in %.6g s."
 msgstr "Ошибка станции '%s', восстановление через %.6g с."
 
-#: daq_gate.cpp:188
+#: daq_gate.cpp:169
 #, c-format
 msgid "Requests to station '%s': %.6g."
 msgstr "Запросов к станции '%s': %.6g."
 
-#: daq_gate.cpp:203 daq_gate.cpp:508
+#: daq_gate.cpp:184 daq_gate.cpp:469
 msgid "list"
 msgstr ""
 
-#: daq_gate.cpp:220 daq_gate.cpp:400 daq_gate.cpp:616 daq_gate.cpp:669
-#: daq_gate.cpp:696
+#: daq_gate.cpp:201 daq_gate.cpp:370 daq_gate.cpp:595 daq_gate.cpp:648
+#: daq_gate.cpp:674
 msgid "/"
 msgstr ""
 
-#: daq_gate.cpp:220
+#: daq_gate.cpp:201
 msgid "/DAQ/"
 msgstr ""
 
-#: daq_gate.cpp:226 daq_gate.cpp:239 daq_gate.cpp:425 daq_gate.cpp:492
-#: daq_gate.cpp:547 daq_gate.cpp:653
+#: daq_gate.cpp:204
+msgid "*"
+msgstr ""
+
+#: daq_gate.cpp:207 daq_gate.cpp:220 daq_gate.cpp:395 daq_gate.cpp:467
+#: daq_gate.cpp:468 daq_gate.cpp:511 daq_gate.cpp:632
 msgid "get"
 msgstr ""
 
-#: daq_gate.cpp:226
+#: daq_gate.cpp:207 daq_gate.cpp:220 daq_gate.cpp:359 daq_gate.cpp:360
+#: daq_gate.cpp:370 daq_gate.cpp:394 daq_gate.cpp:466 daq_gate.cpp:467
+#: daq_gate.cpp:468 daq_gate.cpp:469 daq_gate.cpp:518 daq_gate.cpp:555
+#: daq_gate.cpp:566 daq_gate.cpp:586 daq_gate.cpp:615 daq_gate.cpp:648
+#: daq_gate.cpp:651 daq_gate.cpp:665 daq_gate.cpp:674 daq_gate.cpp:677
+msgid "path"
+msgstr ""
+
+#: daq_gate.cpp:207
 #, c-format
 msgid "%2fprm%2fprm"
 msgstr ""
 
-#: daq_gate.cpp:229 daq_gate.cpp:514 daq_gate.cpp:523 daq_gate.cpp:560
-#: daq_gate.cpp:589
+#: daq_gate.cpp:210 daq_gate.cpp:478 daq_gate.cpp:487 daq_gate.cpp:525
+#: daq_gate.cpp:556 daq_gate.cpp:567
 msgid "id"
 msgstr ""
 
-#: daq_gate.cpp:239 daq_gate.cpp:499
+#: daq_gate.cpp:220 daq_gate.cpp:467
 #, c-format
 msgid "/%2fprm%2fcfg%2fNAME"
 msgstr ""
 
-#: daq_gate.cpp:247 daq_gate.cpp:255 daq_gate.cpp:486
+#: daq_gate.cpp:228 daq_gate.cpp:236 daq_gate.cpp:454
 msgid ";"
 msgstr ""
 
-#: daq_gate.cpp:259
+#: daq_gate.cpp:240
 #, c-format
 msgid "%s"
 msgstr ""
 
-#: daq_gate.cpp:260
+#: daq_gate.cpp:241
 #, c-format
 msgid ""
 "Deletion parameter '%s' is error but it no present on configuration or "
@@ -286,87 +261,87 @@ msgstr ""
 "Ошибка удаления параметра '%s', однако он отсутствует в конфигурации или на "
 "удалённой станции."
 
-#: daq_gate.cpp:263
+#: daq_gate.cpp:244
 msgid "Some enable errors are present"
 msgstr "Присутствуют некоторые ошибки включения"
 
-#: daq_gate.cpp:279 daq_gate.cpp:413 daq_gate.cpp:415 daq_gate.cpp:419
-#: daq_gate.cpp:425 daq_gate.cpp:621 daq_gate.cpp:623 daq_gate.cpp:624
-#: daq_gate.cpp:625 daq_gate.cpp:653 daq_gate.cpp:654
+#: daq_gate.cpp:260 daq_gate.cpp:383 daq_gate.cpp:385 daq_gate.cpp:389
+#: daq_gate.cpp:395 daq_gate.cpp:600 daq_gate.cpp:602 daq_gate.cpp:603
+#: daq_gate.cpp:604 daq_gate.cpp:632 daq_gate.cpp:633
 msgid "root"
 msgstr ""
 
-#: daq_gate.cpp:287
+#: daq_gate.cpp:268
 msgid "start"
 msgstr ""
 
-#: daq_gate.cpp:288
+#: daq_gate.cpp:269
 msgid "Gathering task is not started!"
 msgstr "Задача сбора данных не запущена!"
 
-#: daq_gate.cpp:305
+#: daq_gate.cpp:286
 msgid "stop"
 msgstr ""
 
-#: daq_gate.cpp:306
+#: daq_gate.cpp:287
 msgid "Gathering task is not stopped!"
 msgstr "Задача сбора данных не остановлена!"
 
-#: daq_gate.cpp:329
+#: daq_gate.cpp:310
 #, c-format
 msgid "Thread <%u> is started. TID: %ld"
 msgstr ""
 
-#: daq_gate.cpp:404
+#: daq_gate.cpp:374
 msgid "Not one accessable stations present."
 msgstr "Нет ни одной доступной станций."
 
-#: daq_gate.cpp:410 daq_gate.cpp:613 daq_gate.cpp:632
+#: daq_gate.cpp:380 daq_gate.cpp:592 daq_gate.cpp:611
 msgid "info"
 msgstr ""
 
-#: daq_gate.cpp:413 daq_gate.cpp:415 daq_gate.cpp:621 daq_gate.cpp:623
-#: daq_gate.cpp:624 daq_gate.cpp:625
+#: daq_gate.cpp:383 daq_gate.cpp:385 daq_gate.cpp:600 daq_gate.cpp:602
+#: daq_gate.cpp:603 daq_gate.cpp:604
 msgid "fld"
 msgstr ""
 
-#: daq_gate.cpp:413
+#: daq_gate.cpp:383
 msgid "/cntr/cfg/STATIONS"
 msgstr ""
 
-#: daq_gate.cpp:413 daq_gate.cpp:415 daq_gate.cpp:419 daq_gate.cpp:515
-#: daq_gate.cpp:621 daq_gate.cpp:623 daq_gate.cpp:624 daq_gate.cpp:625
+#: daq_gate.cpp:383 daq_gate.cpp:385 daq_gate.cpp:389 daq_gate.cpp:479
+#: daq_gate.cpp:600 daq_gate.cpp:602 daq_gate.cpp:603 daq_gate.cpp:604
 msgid "tp"
 msgstr ""
 
-#: daq_gate.cpp:413 daq_gate.cpp:415 daq_gate.cpp:621 daq_gate.cpp:624
-#: daq_gate.cpp:625
+#: daq_gate.cpp:383 daq_gate.cpp:385 daq_gate.cpp:600 daq_gate.cpp:603
+#: daq_gate.cpp:604
 msgid "str"
 msgstr ""
 
-#: daq_gate.cpp:413 daq_gate.cpp:415
+#: daq_gate.cpp:383 daq_gate.cpp:385
 msgid "cols"
 msgstr ""
 
-#: daq_gate.cpp:413 daq_gate.cpp:415
+#: daq_gate.cpp:383 daq_gate.cpp:385
 msgid "rows"
 msgstr ""
 
-#: daq_gate.cpp:413 daq_gate.cpp:415
+#: daq_gate.cpp:383 daq_gate.cpp:385
 msgid "4"
 msgstr ""
 
-#: daq_gate.cpp:414
+#: daq_gate.cpp:384
 msgid "Remote OpenSCADA stations' identifiers list used into it controller."
 msgstr ""
 "Список идентификаторов удалённых OpenSCADA станций используемых в этом "
 "контроллере."
 
-#: daq_gate.cpp:415
+#: daq_gate.cpp:385
 msgid "/cntr/cfg/CNTRPRM"
 msgstr ""
 
-#: daq_gate.cpp:416
+#: daq_gate.cpp:386
 msgid ""
 "Remote OpenSCADA full controller's or separated controller's parameters "
 "list. Address example:\n"
@@ -378,170 +353,174 @@ msgstr ""
 "  System.AutoDA - для контроллера;\n"
 "  System.AutoDA.UpTimeStation - для параметра контроллера."
 
-#: daq_gate.cpp:419
+#: daq_gate.cpp:389
 msgid "comm"
 msgstr ""
 
-#: daq_gate.cpp:419 daq_gate.cpp:425
+#: daq_gate.cpp:389 daq_gate.cpp:395
 msgid "/cntr/cfg/host_lnk"
 msgstr ""
 
-#: daq_gate.cpp:419
+#: daq_gate.cpp:389
 msgid "Go to remote stations list configuration"
 msgstr "Переход к конфигурации перечня удалённых станций"
 
-#: daq_gate.cpp:419
+#: daq_gate.cpp:389
 msgid "lnk"
 msgstr ""
 
-#: daq_gate.cpp:428
+#: daq_gate.cpp:398
 msgid "/Transport"
 msgstr ""
 
-#: daq_gate.cpp:437
+#: daq_gate.cpp:406
 msgid "w_attr"
 msgstr ""
 
-#: daq_gate.cpp:500 daq_gate.cpp:504 daq_gate.cpp:509 daq_gate.cpp:555
-#: daq_gate.cpp:590 daq_gate.cpp:637 daq_gate.cpp:670
-msgid "mcat"
+#: daq_gate.cpp:460
+msgid "CntrReqs"
 msgstr ""
 
-#: daq_gate.cpp:503
+#: daq_gate.cpp:468
 #, c-format
 msgid "/%2fprm%2fcfg%2fDESCR"
 msgstr ""
 
-#: daq_gate.cpp:508 daq_gate.cpp:554 daq_gate.cpp:588
+#: daq_gate.cpp:469 daq_gate.cpp:518 daq_gate.cpp:555 daq_gate.cpp:566
 #, c-format
 msgid "/%2fserv%2fattr"
 msgstr ""
 
-#: daq_gate.cpp:523
+#: daq_gate.cpp:470 daq_gate.cpp:519 daq_gate.cpp:568 daq_gate.cpp:616
+#: daq_gate.cpp:649
+msgid "mcat"
+msgstr ""
+
+#: daq_gate.cpp:487
 msgid "nm"
 msgstr ""
 
-#: daq_gate.cpp:524
+#: daq_gate.cpp:488
 msgid "flg"
 msgstr ""
 
-#: daq_gate.cpp:525
+#: daq_gate.cpp:489
 msgid "vals"
 msgstr ""
 
-#: daq_gate.cpp:525
+#: daq_gate.cpp:489
 msgid "names"
 msgstr ""
 
-#: daq_gate.cpp:554 daq_gate.cpp:556 daq_gate.cpp:561 daq_gate.cpp:564
+#: daq_gate.cpp:518 daq_gate.cpp:520 daq_gate.cpp:526 daq_gate.cpp:529
 msgid "tm"
 msgstr ""
 
-#: daq_gate.cpp:565
+#: daq_gate.cpp:530
 msgid "per"
 msgstr ""
 
-#: daq_gate.cpp:587 daq_gate.cpp:654
+#: daq_gate.cpp:550 daq_gate.cpp:633
 msgid "set"
 msgstr ""
 
-#: daq_gate.cpp:589
+#: daq_gate.cpp:556 daq_gate.cpp:567
 msgid "el"
 msgstr ""
 
-#: daq_gate.cpp:610
+#: daq_gate.cpp:589
 msgid "/serv/"
 msgstr ""
 
-#: daq_gate.cpp:616
+#: daq_gate.cpp:595
 msgid "oscada_cntr"
 msgstr ""
 
-#: daq_gate.cpp:616
+#: daq_gate.cpp:595
 msgid "Parameter: "
 msgstr "Параметры: "
 
-#: daq_gate.cpp:617 daq_gate.cpp:619 daq_gate.cpp:627
+#: daq_gate.cpp:596 daq_gate.cpp:598 daq_gate.cpp:606
 msgid "area"
 msgstr ""
 
-#: daq_gate.cpp:617
+#: daq_gate.cpp:596
 msgid "/prm"
 msgstr ""
 
-#: daq_gate.cpp:617
+#: daq_gate.cpp:596
 msgid "Parameter"
 msgstr "Параметр"
 
-#: daq_gate.cpp:619
+#: daq_gate.cpp:598
 msgid "/prm/st"
 msgstr ""
 
-#: daq_gate.cpp:619
+#: daq_gate.cpp:598
 msgid "State"
 msgstr "Состояние"
 
-#: daq_gate.cpp:621 daq_gate.cpp:650
+#: daq_gate.cpp:600 daq_gate.cpp:629
 msgid "/prm/st/type"
 msgstr ""
 
-#: daq_gate.cpp:621
+#: daq_gate.cpp:600
 msgid "Type"
 msgstr "Тип"
 
-#: daq_gate.cpp:623 daq_gate.cpp:651
+#: daq_gate.cpp:602 daq_gate.cpp:630
 msgid "/prm/st/en"
 msgstr ""
 
-#: daq_gate.cpp:623
+#: daq_gate.cpp:602
 msgid "Enable"
 msgstr "Включен"
 
-#: daq_gate.cpp:623
+#: daq_gate.cpp:602
 msgid "bool"
 msgstr ""
 
-#: daq_gate.cpp:624 daq_gate.cpp:660
+#: daq_gate.cpp:603 daq_gate.cpp:639
 msgid "/prm/st/id"
 msgstr ""
 
-#: daq_gate.cpp:624
+#: daq_gate.cpp:603
 msgid "Id"
 msgstr ""
 
-#: daq_gate.cpp:625 daq_gate.cpp:661
+#: daq_gate.cpp:604 daq_gate.cpp:640
 msgid "/prm/st/nm"
 msgstr ""
 
-#: daq_gate.cpp:625
+#: daq_gate.cpp:604
 msgid "Name"
 msgstr "Имя"
 
-#: daq_gate.cpp:627 daq_gate.cpp:662
+#: daq_gate.cpp:606 daq_gate.cpp:641
 msgid "/prm/cfg"
 msgstr ""
 
-#: daq_gate.cpp:627
+#: daq_gate.cpp:606
 msgid "Config"
 msgstr "Конфигурация"
 
-#: daq_gate.cpp:636
+#: daq_gate.cpp:615
 #, c-format
 msgid "/%2fprm%2fcfg"
 msgstr ""
 
-#: daq_gate.cpp:643
+#: daq_gate.cpp:622
 msgid "dscr"
 msgstr ""
 
-#: daq_gate.cpp:643
+#: daq_gate.cpp:622
 msgid "Remote station config"
 msgstr "Конфигурация удалённой станции"
 
-#: daq_gate.cpp:656
+#: daq_gate.cpp:635
 msgid "Controller is not started!"
 msgstr "Контроллер не запущен!"
 
-#: daq_gate.cpp:688
+#: daq_gate.cpp:667
 msgid "/serv/val"
 msgstr ""

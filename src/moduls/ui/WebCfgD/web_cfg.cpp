@@ -480,30 +480,9 @@ string TWEB::trMessReplace( const string &tsrc )
 
 int TWEB::cntrIfCmd( XMLNode &node, const string &user )
 {
-    int path_off = 0;
-    string path = node.attr("path");
-    string station = TSYS::pathLev(path,0,false,&path_off);
-    if( station.empty() ) station = SYS->id();
-    else node.setAttr("path",path.substr(path_off));
-
     try
     {
-	//> Check local station request
-	if( station == SYS->id() )
-	{
-	    node.setAttr("user",user);
-	    SYS->cntrCmd(&node);
-	    node.setAttr("path",path);
-	    return atoi(node.attr("rez").c_str());
-	}
-	//> Request to remote host
-	TTransportS::ExtHost host = SYS->transport().at().extHostGet(user,station);
-	AutoHD<TTransportOut> tr = SYS->transport().at().extHost(host,"TrCntr");
-	if( !tr.at().startStat() ) tr.at().start();
-
-	node.setAttr("rqDir","0")->setAttr("rqUser",host.user)->setAttr("rqPass",host.pass);
-	tr.at().messProtIO(node,"SelfSystem");
-	node.setAttr("path",path);
+	return SYS->transport().at().cntrIfCmd(node,"UIWebCfg",user);
     }catch( TError err )
     { node.setAttr("mcat",err.cat)->setAttr("rez","10")->setText(err.mess); }
 

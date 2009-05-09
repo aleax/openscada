@@ -55,6 +55,21 @@ TTipDAQ::~TTipDAQ( )
     }
 }
 
+TDAQS &TTipDAQ::owner( )	{ return *(TDAQS*)nodePrev(); }
+
+void TTipDAQ::postEnable( int flag )
+{
+    TModule::postEnable(flag);
+
+    if( redntAllow( ) )
+    {
+	fldAdd( new TFld("REDNT",_("Redundant"),TFld::Integer,TFld::Selected,"1","0",
+	    (TSYS::int2str(TController::Off)+";"+TSYS::int2str(TController::Asymmetric)+";"+TSYS::int2str(TController::Symmetric)).c_str(),
+	    _("Off;Asymmetric;Symmetric")) );
+	fldAdd( new TFld("REDNT_RUN",_("Preferable run"),TFld::String,0,"20","<high>") );
+    }
+}
+
 void TTipDAQ::modStart( )
 {
     vector<string> lst;
@@ -73,7 +88,7 @@ void TTipDAQ::modStart( )
 void TTipDAQ::modStop( )
 {
     vector<string> lst;
-    //- Stop all controllers -
+    //> Stop all controllers
     list(lst);
     for(int i_l=0; i_l < lst.size(); i_l++)
         at(lst[i_l]).at().stop( );
@@ -103,10 +118,10 @@ int TTipDAQ::tpParmAdd( const char *id, const char *n_db, const char *name )
 {
     if( tpPrmPresent(id) )	return tpPrmToId(id);
 
-    //- Add type -
+    //> Add type
     int i_t = paramt.size();
     paramt.push_back(new TTipParam(id, name, n_db) );
-    //- Add structure fields -
+    //> Add structure fields
     paramt[i_t]->fldAdd( new TFld("SHIFR",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,"20") );
     paramt[i_t]->fldAdd( new TFld("NAME",_("Name"),TFld::String,0,"50") );
     paramt[i_t]->fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::FullText,"200") );
@@ -134,7 +149,7 @@ string TTipDAQ::compileFunc( const string &lang, TFunction &fnc_cfg, const strin
 
 void TTipDAQ::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	TModule::cntrCmdProc(opt);
@@ -143,7 +158,7 @@ void TTipDAQ::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("list",opt,-1,"/tctr/ctr",_("Controllers"),0664,"root","root",5,"tp","br","idm","1","s_com","add,del","br_pref","cntr_","idSz","20");
 	return;
     }
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
     if( a_path == "/br/cntr_" || a_path == "/tctr/ctr" )
     {

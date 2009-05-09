@@ -38,8 +38,9 @@ class TTipParam;
 class TTipDAQ : public TModule, public TElem
 {
     public:
+	//Public methods
 	TTipDAQ( );
-	virtual ~TTipDAQ();
+	virtual ~TTipDAQ( );
 
 	void modStart( );
 	void modStop( );
@@ -63,12 +64,20 @@ class TTipDAQ : public TModule, public TElem
 	virtual void compileFuncLangs( vector<string> &ls )	{ }
 	virtual string compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text, const string &usings = "" );
 
+	//> Redundance
+	virtual bool redntAllow( )		{ return false; }
+
+	TDAQS &owner( );
+
     protected:
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	//Protected methods
+	void postEnable( int flag );
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 	virtual TController *ContrAttach( const string &name, const string &daq_db );
 
     private:
-	vector<TTipParam *>   paramt;  // List type parameter and Structure configs of parameter.
+	//Private attributes
+	vector<TTipParam *>	paramt;		// List type parameter and Structure configs of parameter.
 	int	m_cntr;
 };
 

@@ -383,6 +383,34 @@ AutoHD<TTransportOut> TTransportS::extHost( TTransportS::ExtHost host, const str
     return at(host.transp).at().outAt(pref+host.id);
 }
 
+int TTransportS::cntrIfCmd( XMLNode &node, const string &senderPref, const string &user )
+{
+    int path_off = 0;
+    string path = node.attr("path");
+    string station = TSYS::pathLev(path,0,false,&path_off);
+    if( station.empty() ) station = SYS->id();
+    else node.setAttr("path",path.substr(path_off));
+
+    if( station == SYS->id() )
+    {
+	node.setAttr("user",(user.empty()?"root":user));
+	SYS->cntrCmd(&node);
+	node.setAttr("path",path);
+	return atoi(node.attr("rez").c_str());
+    }
+
+    //> Connect to transport
+    TTransportS::ExtHost host = extHostGet((user.empty()?"*":user),station);
+    AutoHD<TTransportOut> tr = extHost(host,senderPref);
+    if( !tr.at().startStat() ) tr.at().start();
+
+    node.setAttr("rqDir","0")->setAttr("rqUser",host.user)->setAttr("rqPass",host.pass);
+    tr.at().messProtIO(node,"SelfSystem");
+    node.setAttr("path",path);
+
+    return atoi(node.attr("rez").c_str());
+}
+
 void TTransportS::cntrCmdProc( XMLNode *opt )
 {
     //- Get page info -

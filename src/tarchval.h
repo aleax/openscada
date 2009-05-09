@@ -49,17 +49,19 @@ class TValBuf
 	TValBuf( TFld::Type vtp, int isz, long long ipr, bool ihgrd = false, bool ihres = false );
 	~TValBuf( );
 
+	TValBuf &operator=( TValBuf &src );
+
 	void clear( );
 
-	TFld::Type valType( )	{ return m_val_tp; }
-	bool hardGrid( )	{ return m_hrd_grd; }
-	bool highResTm( )	{ return m_hg_res_tm; }
-	int size( )		{ return m_size; }
+	TFld::Type valType( )	{ return mValTp; }
+	bool hardGrid( )	{ return mHrdGrd; }
+	bool highResTm( )	{ return mHgResTm; }
+	int size( )		{ return mSize; }
 	int realSize( );
 
-	long long begin( )	{ return m_beg; }
-	long long end( )	{ return m_end; }
-	long long period( )	{ return m_per; }
+	long long begin( )	{ return mBeg; }
+	long long end( )	{ return mEnd; }
+	long long period( )	{ return mPer; }
 
 	bool vOK( long long ibeg, long long iend );
 
@@ -83,14 +85,13 @@ class TValBuf
 	virtual void setI( int value, long long tm = 0 );
 	virtual void setB( char value, long long tm = 0 );
 
-    protected:
-	//Protected methods
 	void makeBuf( TFld::Type v_tp, int isz, long long ipr, bool hd_grd, bool hg_res );	//Create new or change buffer mode (all data into buffer will lost)
 
     private:
 	//Private data and attributes
 	template <class TpVal> class TBuf
 	{
+	    friend class TValBuf;
 	    public:
 		//Public methods
 		TBuf( TpVal eval, int &isz, long long &ipr, bool &ihgrd, bool &ihres, long long& iend, long long& ibeg );
@@ -126,8 +127,8 @@ class TValBuf
 		}buf;
 	};
 
-	Res		b_res;		//Access resource
-	TFld::Type	m_val_tp;	//Store values type
+	Res		bRes;		//Access resource
+	TFld::Type	mValTp;		//Store values type
 	union
 	{
 	    TBuf<char>	*bl;
@@ -135,12 +136,12 @@ class TValBuf
 	    TBuf<double>*real;
 	    TBuf<string>*str;
 	} buf;
-	
-	bool	m_hg_res_tm,	//High resolution time use (microseconds)
-		m_hrd_grd;	//Set hard griding. It mode no support the zero periodic.
-	long long m_end, m_beg,	//Time of buffer begin and end (64 bit usec)
-		m_per;		//Periodic grid value (usec). If value = 0 then it no periodic buffer, error for time griding mode!
-	int	m_size;		//Buffer size limit.
+
+	bool	mHgResTm,		//High resolution time use (microseconds)
+		mHrdGrd;		//Set hard griding. It mode no support the zero periodic.
+	long long mEnd, mBeg,		//Time of buffer begin and end (64 bit usec)
+		mPer;			//Periodic grid value (usec). If value = 0 then it no periodic buffer, error for time griding mode!
+	int	mSize;			//Buffer size limit.
 };
 
 
@@ -372,7 +373,7 @@ class TVArchEl
 
 	virtual long long end( )	{ return 0; }		//Archive end
 	virtual long long begin( )	{ return 0; }		//Archive begin
-	long long lastGet( )		{ return m_last_get; }	//Last getted value time
+	long long lastGet( )		{ return mLastGet; }	//Last getted value time
 
 	virtual void getVal( TValBuf &buf, long long beg = 0, long long end = 0 ) { }
 	virtual string getS( long long *tm, bool up_ord ) { }
@@ -380,22 +381,25 @@ class TVArchEl
 	virtual int    getI( long long *tm, bool up_ord ) { }
 	virtual char   getB( long long *tm, bool up_ord ) { }
 
-	virtual void setVal( TValBuf &buf, long long beg = 0, long long end = 0 ) { }
+	void setVal( TValBuf &buf, long long beg = 0, long long end = 0 );
 
 	TVArchive &archive( );
 	TVArchivator &archivator( );
 
-	//Public atributes
-	//- Previous averaging value -
+    protected:
+	//Protected methods
+	virtual void setValProc( TValBuf &buf, long long beg, long long end )	{ }
+
+	//> Previous averaging value
 	long long prev_tm;
 	string prev_val;
 
     private:
 	//Private attributes
-	TVArchive	&m_achive;
-	TVArchivator	&m_archivator;
+	TVArchive	&mArchive;
+	TVArchivator	&mArchivator;
 
-	long long m_last_get;
+	long long mLastGet;
 };
 
 #endif // TArchVal_H

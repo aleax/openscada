@@ -41,6 +41,14 @@ var isIE = navigator.appName.indexOf('Microsoft') != -1;
 var isOpera = navigator.appName.indexOf('Opera') != -1;
 var isKonq = navigator.appName.indexOf('Konqueror') != -1;
 /***************************************************
+ * strEncode - String encoding.                    *
+ ***************************************************/
+function strEncode( vl, tp )
+{
+  if( !tp || tp == "html" ) return vl.replace('&','&amp;').replace('>','&gt;').replace('<','&lt;').replace('"','&quot;');
+  return vl;
+}
+/***************************************************
  * pathLev - Path parsing function.                *
  ***************************************************/
 pathLev.off = 0;
@@ -480,8 +488,8 @@ function selectChildRecArea( node, aPath, cBlk )
     for( var i_cf = 0; i_cf < node.childNodes.length; i_cf++ )
       if( node.childNodes[i_cf].nodeName.toLowerCase() == 'area' && nodeText(activeTab) == node.childNodes[i_cf].getAttribute('dscr') )
       {
-        var refresh = parseInt(node.childNodes[i_cf].getAttribute('qview'));
-        var cPg = document.getElementById('pgCont');
+	var refresh = parseInt(node.childNodes[i_cf].getAttribute('qview'));
+	var cPg = document.getElementById('pgCont');
 	if( !refresh )
 	{
 	  while( cPg.childNodes.length ) cPg.removeChild(cPg.childNodes[0]);
@@ -756,7 +764,7 @@ function selectChildRecArea( node, aPath, cBlk )
 		  if( this.srcNode.childNodes[i_el].getAttribute('id') == keys[i_off] )
 		  { com += "key_"+keys[i_off]+"='"+nodeText(this.srcNode.childNodes[i_el].childNodes[row])+"' "; break; }
 	     }
-	     com += ">"+val+"</set>";
+	     com += ">"+strEncode(val)+"</set>";
 
 	     var rez = servSet(this.itPath,'com=com',com,true);
 	     if( rez && parseInt(rez.getAttribute('rez')) != 0 ) alert(nodeText(rez));
@@ -769,6 +777,7 @@ function selectChildRecArea( node, aPath, cBlk )
 	t_s.addr_lab = lab; t_s.addr_tbl = table;
       }else { table = t_s.addr_tbl; lab = t_s.addr_lab; }
       //>>> Fill table
+
       if( lab ) setNodeText(lab,t_s.getAttribute('dscr')+':');
       if( table )
       {
@@ -777,6 +786,7 @@ function selectChildRecArea( node, aPath, cBlk )
 	var dataReq = servGet(selPath+'/'+brPath,'com=get');
 	if( !dataReq ) continue;
 	else if( parseInt(dataReq.getAttribute('rez'))!=0 ) { alert(nodeText(dataReq)); continue; }
+
 	//>>>> Copy values to info tree
 	for( var i_cl = 0; i_cl < dataReq.childNodes.length; i_cl++ )
 	  for( var i_cli = 0; i_cli < t_s.childNodes.length; i_cli++ )
@@ -784,13 +794,11 @@ function selectChildRecArea( node, aPath, cBlk )
 	    {
 	      while( t_s.childNodes[i_cli].lastChild ) t_s.childNodes[i_cli].removeChild(t_s.childNodes[i_cli].lastChild);
 	      for( var i_rw = 0; i_rw < dataReq.childNodes[i_cl].childNodes.length; i_rw++ )
-		if( !isKonq ) t_s.childNodes[i_cli].appendChild(dataReq.childNodes[i_cl].childNodes[i_rw].cloneNode(true));
-		else
-		{
-		  var el = t_s.ownerDocument.createElement(dataReq.childNodes[i_cl].childNodes[i_rw].nodeName);
-		  setNodeText(el,nodeText(dataReq.childNodes[i_cl].childNodes[i_rw]))
-		  t_s.childNodes[i_cli].appendChild(el);
-		}
+	      {
+		var el = t_s.ownerDocument.createElement(dataReq.childNodes[i_cl].childNodes[i_rw].nodeName);
+		setNodeText(el,nodeText(dataReq.childNodes[i_cl].childNodes[i_rw]))
+		t_s.childNodes[i_cli].appendChild(el);
+	      }
 	    }
 	//>>>> Calc rows and columns
 	var n_col = t_s.childNodes.length;
@@ -889,7 +897,7 @@ function selectChildRecArea( node, aPath, cBlk )
 		}
 		else if( prcCol.getAttribute('dest') == 'select' )
 		{
-		  this.innerHTML = "<select/>"
+		  this.innerHTML = "<select/>";
 		  this.firstChild.onchange = function( )
 		  {
 		    if( this.selectedIndex < 0 ) return;
@@ -902,12 +910,12 @@ function selectChildRecArea( node, aPath, cBlk )
 		  for( var i_el = 0; i_el < prcCol.val_ls.length; i_el++ )
 		  {
 		    valWCfg += "<option "+
-		      (prcCol.ind_ls.length ? ("vid='"+prcCol.ind_ls[i_el]+"' "+((prcCol.ind_ls[i_el]==cval)?"selected='true'":""))
-					    : ((prcCol.val_ls[i_el]==cval)?"selected='true'":""))+">"+prcCol.val_ls[i_el]+"</option>";
+		      (prcCol.ind_ls.length ? ("vid='"+strEncode(prcCol.ind_ls[i_el])+"' "+((prcCol.ind_ls[i_el]==cval)?"selected='true'":""))
+					    : ((prcCol.val_ls[i_el]==cval)?"selected='true'":""))+">"+strEncode(prcCol.val_ls[i_el])+"</option>";
 		    if( (prcCol.ind_ls.length && prcCol.ind_ls[i_el] == cval) || (!prcCol.ind_ls.length && prcCol.val_ls[i_el] == cval) )
 		      sel_ok = true;
 		  }
-		  if( !sel_ok ) valWCfg += "<option selected='true'>"+cval+"</option>";
+		  if( !sel_ok ) valWCfg += "<option selected='true'>"+strEncode(cval)+"</option>";
 		  this.firstChild.innerHTML = valWCfg;
 		}
 		else if( prcCol.getAttribute('tp') == 'time' )
@@ -1215,7 +1223,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 	  if( this.itComm ) setNodeText(this.srcNode,(selId?selId:selVal));
 	  else
 	  {
-	    var rez = servSet(this.itPath,'com=com','<set>'+(selId?selId:selVal)+'</set>',true);
+	    var rez = servSet(this.itPath,'com=com','<set>'+strEncode(selId?selId:selVal)+'</set>',true);
 	    if( rez && parseInt(rez.getAttribute('rez')) != 0 ) alert(nodeText(rez));
 	    setTimeout('pageRefresh()',500);
 	  }
@@ -1254,8 +1262,8 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 	for( var ls_i = 0; ls_i < val_ls.length; ls_i++ )
 	{
 	  if(val_w) valWCfg+="<option "+
-		(ind_ls.length ? ("vid='"+ind_ls[ls_i]+"' "+((ind_ls[ls_i]==nodeText(dataReq))?"selected='true'":""))
-			       : ((val_ls[ls_i]==nodeText(dataReq))?"selected='true'":""))+">"+val_ls[ls_i]+"</option>";
+		(ind_ls.length ? ("vid='"+strEncode(ind_ls[ls_i])+"' "+((ind_ls[ls_i]==nodeText(dataReq))?"selected='true'":""))
+			       : ((val_ls[ls_i]==nodeText(dataReq))?"selected='true'":""))+">"+strEncode(val_ls[ls_i])+"</option>";
 	  if( (ind_ls.length && ind_ls[ls_i] == nodeText(dataReq) ) || (!ind_ls.length && val_ls[ls_i] == nodeText(dataReq)) )
 	  { sel_ok = true; if(val_r) setNodeText(val_r,val_ls[ls_i]); }
 	}
@@ -1264,17 +1272,19 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
       {
 	var x_lst = servGet(selPath+'/'+(t_s.getAttribute('select').replace(/%/g,'%25').replace(/\//g,'%2f')),'com=get');
 	if( x_lst )
+	{
 	  for( var i_el = 0; i_el < x_lst.childNodes.length; i_el++ )
 	  {
 	    if( x_lst.childNodes[i_el].nodeName.toLowerCase() != 'el' ) continue;
 	    var curElId = x_lst.childNodes[i_el].getAttribute('id');
 	    var curElVl = nodeText(x_lst.childNodes[i_el]);
 	    if( val_w ) valWCfg+="<option "+
-		(curElId ? ("vid='"+curElId+"' "+((curElId==nodeText(dataReq))?"selected='true'":""))
-			 : ((curElVl==nodeText(dataReq))?"selected='true'":""))+">"+curElVl+"</option>";
+		(curElId ? ("vid='"+strEncode(curElId)+"' "+((curElId==nodeText(dataReq))?"selected='true'":""))
+			 : ((curElVl==nodeText(dataReq))?"selected='true'":""))+">"+strEncode(curElVl)+"</option>";
 	    if( (curElId && curElId == nodeText(dataReq)) || (!curElId && curElVl == nodeText(dataReq)) )
 	    { sel_ok = true; if(val_r) setNodeText(val_r,curElVl); }
 	  }
+	}
       }
       ///>>> Insert empty field if none selected
       if( !sel_ok )

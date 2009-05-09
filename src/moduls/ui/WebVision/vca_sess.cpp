@@ -5122,7 +5122,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     //> Get generic parameters
     long long tSz  = (long long)(tSize*1000000.);			//Time size (us)
     long long tEnd = tTime;						//Time end point (us)
-    long long tBeg  = tEnd - tSz;					//Time begin point (us)
+    long long tBeg = tEnd - tSz;					//Time begin point (us)
     if( !trnds.size() || tSz <= 0 )
     {
 	ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page;

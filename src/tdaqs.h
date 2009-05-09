@@ -51,13 +51,26 @@ class TDAQS : public TSubSYS
 
 	AutoHD<TTipDAQ> at( const string &name )		{ return modAt(name); }
 
-	//- Parameter's templates library -
+	//> Parameter's templates library
 	string tmplLibTable( )					{ return "ParamTemplLibs"; }
-	void tmplLibList( vector<string> &list )		{ chldList(m_tmplib,list); }
-	bool tmplLibPresent( const string &id )			{ return chldPresent(m_tmplib,id); }
-	void tmplLibReg( TPrmTmplLib *lib )			{ chldAdd(m_tmplib,lib); }
-	void tmplLibUnreg( const string &id, int flg = 0 )	{ chldDel(m_tmplib,id,-1,flg); }
-	AutoHD<TPrmTmplLib> tmplLibAt( const string &id )	{ return chldAt(m_tmplib,id); }
+	void tmplLibList( vector<string> &list )		{ chldList(mTmplib,list); }
+	bool tmplLibPresent( const string &id )			{ return chldPresent(mTmplib,id); }
+	void tmplLibReg( TPrmTmplLib *lib )			{ chldAdd(mTmplib,lib); }
+	void tmplLibUnreg( const string &id, int flg = 0 )	{ chldDel(mTmplib,id,-1,flg); }
+	AutoHD<TPrmTmplLib> tmplLibAt( const string &id )	{ return chldAt(mTmplib,id); }
+
+	//> Redundance
+	int rdStLevel( )		{ return mRdStLevel; }
+	void setRdStLevel( int vl );
+	int rdTaskPer( )		{ return mRdTaskPer; }
+	void setRdTaskPer( int vl );
+	int rdRestConnTm( )		{ return mRdRestConnTm; }
+	void setRdRestConnTm( int vl );
+	float rdRestDtTm( )		{ return mRdRestDtTm; }
+	void setRdRestDtTm( float vl );
+	void rdStList( vector<string> &ls );
+	void rdActCntrList( vector<string> &ls, bool isRun = false );
+	int rdStRequest( const string &cntr, XMLNode &req );
 
 	TElem &elLib( )	{ return lb_el; }
 	TElem &tplE( )	{ return el_tmpl; }
@@ -67,16 +80,40 @@ class TDAQS : public TSubSYS
 
     protected:
 	void load_( );
+	void save_( );
 
     private:
+	//Private data
+	class SStat
+	{
+	    public:
+		SStat( ) : isLive(false), cnt(0), lev(0) { }
+
+		bool	isLive;
+		float	cnt;
+		char	lev;
+		map<string,bool> actCntr;
+	};
+
 	//Private methods
 	string optDescr( );
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
+	static void *RdTask( void *param );
+
 	//Private attributes
 	TElem	el_err, lb_el, el_tmpl, el_tmpl_io;
-	int	m_tmplib;
+	int	mTmplib;
+
+	unsigned char	mRdStLevel,		//Current station level
+			mRdTaskPer,		//Redundant task period in seconds
+			mRdRestConnTm;		//Redundant restore connection to reserve stations timeout in seconds
+	float		mRdRestDtTm,		//Redundant history restore length time in hour
+			mRdPrcTm;		//Redundant process time
+	pthread_t	mRdPthr;
+	bool		prcStRd, endrunRd;
+	map<string,SStat> mSt;
 };
 
 #endif // TDAQS_H
