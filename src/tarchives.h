@@ -94,11 +94,11 @@ class TMArchivator : public TCntrNode, public TConfig
 	void load_( );
 	void save_( );
 
-	//- Check messages criteries -
+	//> Check messages criteries
 	bool chkMessOK( const string &icateg, TMess::Type ilvl );
 
 	//Protected atributes
-	bool           run_st;
+	bool	run_st;
 
     private:
 	//Private methods

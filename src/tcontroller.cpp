@@ -343,7 +343,7 @@ void TController::redntDataUpdate( bool firstArchiveSync )
 	for( int i_a = 0; i_a < req.childGet(i_p)->childSize(); i_a++ )
 	{
 	    XMLNode *aNd = req.childGet(i_p)->childGet(i_a);
-
+	    if( !prm.at().vlPresent(aNd->attr("id")) ) continue;
 	    AutoHD<TVal> vl = prm.at().vlAt(aNd->attr("id"));
 
 	    if( aNd->attr("tm").empty() ) vl.at().setS(aNd->text(),prm.at().mRedntTmLast,true);

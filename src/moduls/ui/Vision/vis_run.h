@@ -46,6 +46,7 @@ class SndPlay;
 
 class VisRun : public QMainWindow
 {
+    friend class RunPageView;
     Q_OBJECT
     public:
 	//Public methods

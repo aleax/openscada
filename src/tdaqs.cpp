@@ -361,22 +361,29 @@ void TDAQS::subStop( )
     TSubSYS::subStop( );
 }
 
-int TDAQS::rdStRequest( const string &cntr, XMLNode &req )
+string TDAQS::rdStRequest( const string &cntr, XMLNode &req, const string &prevSt, bool toRun )
 {
+    bool prevPresent = false;
     map<string,TDAQS::SStat>::iterator sit;
     map<string,bool>::iterator cit;
 
     string lcPath = req.attr("path");
     ResAlloc res(nodeRes(),false);
     for( sit = mSt.begin(); sit != mSt.end(); sit++ )
-	if( sit->second.isLive && (cit=sit->second.actCntr.find(cntr)) != sit->second.actCntr.end() && cit->second )
+	if( sit->second.isLive && (cit=sit->second.actCntr.find(cntr)) != sit->second.actCntr.end() && (!toRun || toRun && cit->second) )
 	{
+	    if( prevSt.size() && !prevPresent )
+	    {
+		if( sit->first == prevSt ) prevPresent = true;
+		continue;
+	    }
+	    //> Real request
 	    req.setAttr("path","/"+sit->first+lcPath);
 	    try
 	    {
-		int rez = SYS->transport().at().cntrIfCmd(req,"DAQRedundant");
+		SYS->transport().at().cntrIfCmd(req,"DAQRedundant");
 		sit->second.cnt++;
-		return rez;
+		return sit->first;
 	    }
 	    catch( TError err )
 	    {
@@ -390,7 +397,7 @@ int TDAQS::rdStRequest( const string &cntr, XMLNode &req )
 
     at(TSYS::strSepParse(cntr,0,'.')).at().at(TSYS::strSepParse(cntr,1,'.')).at().setRedntUse(false);
 
-    throw TError(nodePath().c_str(),_("No one active station present for request."));
+    return "";
 }
 
 void *TDAQS::RdTask( void *param )

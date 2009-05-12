@@ -436,7 +436,7 @@ void TMdPrm::mode( TMdPrm::Mode md, const string &prm )
 
     ResAlloc res(moderes,true);
 
-    //- Free old mode -
+    //> Free old mode
     if( md != mode() || prm != m_wprm )
     {
 	if( mode() == TMdPrm::DirRefl )
@@ -463,7 +463,7 @@ void TMdPrm::mode( TMdPrm::Mode md, const string &prm )
 	}
     }
 
-    //- Init/update new mode -
+    //> Init/update new mode
     if( md == TMdPrm::DirRefl )
     {
 	if( !prm_refl ) prm_refl = new AutoHD<TValue>;
@@ -499,9 +499,9 @@ void TMdPrm::mode( TMdPrm::Mode md, const string &prm )
 		tmpl->val.setVfName(id()+"_tmplprm");
 		to_make = true;
 	    }
-	    //-- Set mode --
+	    //>> Set mode
 	    m_wmode = md;
-	    //-- Init attrubutes --
+	    //>> Init attrubutes
 	    for( int i_io = 0; i_io < tmpl->val.func()->ioSize(); i_io++ )
 	    {
 		if( (tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink) && lnkId(i_io) < 0 )
@@ -524,7 +524,7 @@ void TMdPrm::mode( TMdPrm::Mode md, const string &prm )
 		}
 		if( to_make && (tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink) )	tmpl->val.setS(i_io,"0");
 	    }
-	    //-- Init links --
+	    //>> Init links
 	    initTmplLnks();
 	}catch(TError err)
 	{

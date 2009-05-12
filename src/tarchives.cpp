@@ -373,20 +373,6 @@ void TArchiveS::subStop( )
 	pthread_join( mValPthr, NULL );
     }
 
-    //> Value archives stop
-    valList(o_lst);
-    for( int i_o = 0; i_o < o_lst.size(); i_o++ )
-    {
-	AutoHD<TVArchive> aval = valAt(o_lst[i_o]);
-	if( aval.at().startStat() )
-	    try{ aval.at().stop(); }
-	    catch(TError err)
-	    {
-		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		mess_err(nodePath().c_str(),_("Value archive <%s> stop error."),o_lst[i_o].c_str());
-	    }
-    }
-
     //> Last messages archivation call
     sigval obj; obj.sival_ptr = this;
     ArhMessTask(obj);
@@ -422,6 +408,20 @@ void TArchiveS::subStop( )
 		    mess_err(nodePath().c_str(),_("Message archivator <%s> stop error."),o_lst[i_o].c_str());
 		}
 	}
+    }
+
+    //> Value archives stop
+    valList(o_lst);
+    for( int i_o = 0; i_o < o_lst.size(); i_o++ )
+    {
+	AutoHD<TVArchive> aval = valAt(o_lst[i_o]);
+	if( aval.at().startStat() )
+	    try{ aval.at().stop(); }
+	    catch(TError err)
+	    {
+		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+		mess_err(nodePath().c_str(),_("Value archive <%s> stop error."),o_lst[i_o].c_str());
+	    }
     }
 }
 

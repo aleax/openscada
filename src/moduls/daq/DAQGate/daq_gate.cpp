@@ -521,7 +521,7 @@ void TMdPrm::update( )
 	    for( int i_a = 0; req.childSize(); i_a++ )
 	    {
 		XMLNode *aNd = req.childGet(i_a);
-
+		if( !vlPresent(aNd->attr("id")) ) continue;
 		AutoHD<TVal> vl = vlAt(aNd->attr("id"));
 		if( aNd->attr("tm").empty() ) vl.at().setS(aNd->text(),mRedntTmLast,true);
 		else

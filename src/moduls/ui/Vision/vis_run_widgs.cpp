@@ -524,7 +524,7 @@ bool RunPageView::callPage( const string &pg_it, const string &pgGrp, const stri
 		((RunPageView *)children().at(i_ch))->callPage(pg_it,pgGrp,pgSrc))
 	    return true;
     //> Check for open child page or for unknown and empty source pages open as master page child windows
-    if( pgSrc == id().c_str() || !parent() )
+    if( pgSrc == id().c_str() || this == mainWin()->master_pg )
     {
 	RunPageView *pg = new RunPageView(pg_it,mainWin(),this);
 	pg->setAttribute(Qt::WA_DeleteOnClose);

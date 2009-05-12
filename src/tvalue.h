@@ -83,6 +83,7 @@ class TVal : public TCntrNode
 	AutoHD<TVArchive> arch( );
 	void setArch( const AutoHD<TVArchive> &vl );
 
+	TValue &owner( );
 	TFld &fld( );
 
     protected:

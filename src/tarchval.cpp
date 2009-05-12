@@ -857,14 +857,14 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
 //*  TVArchive                                    *
 //*************************************************
 TVArchive::TVArchive( const string &iid, const string &idb, TElem *cf_el ) :
-    TConfig(cf_el), run_st(false), m_db(idb),
-    m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()), m_dscr(cfg("DESCR").getSd()), m_start(cfg("START").getBd()),
-    m_vtype(cfg("VTYPE").getId()), m_bper(cfg("BPER").getRd()), m_bsize(cfg("BSIZE").getId()),
-    m_bhgrd(cfg("BHGRD").getBd()), m_bhres(cfg("BHRES").getBd()), m_srcmode(cfg("SrcMode").getId()),
-    m_dsourc(cfg("Source").getSd()), m_archs(cfg("ArchS").getSd())
+    TConfig(cf_el), run_st(false), mDB(idb),
+    mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()), mDscr(cfg("DESCR").getSd()), mStart(cfg("START").getBd()),
+    mVType(cfg("VTYPE").getId()), mBPer(cfg("BPER").getRd()), mBSize(cfg("BSIZE").getId()),
+    mBHGrd(cfg("BHGRD").getBd()), mBHRes(cfg("BHRES").getBd()), mSrcMode(cfg("SrcMode").getId()),
+    mDSourc(cfg("Source").getSd()), mArchs(cfg("ArchS").getSd())
 {
-    m_id = iid;
-    m_vtype = TFld::Real;
+    mId = iid;
+    mVType = TFld::Real;
 
     setUpBuf();
 }
@@ -882,8 +882,8 @@ TCntrNode &TVArchive::operator=( TCntrNode &node )
     //- Configuration copy -
     string tid = id();
     *(TConfig*)this = *(TConfig*)src_n;
-    m_id = tid;
-    m_db = src_n->m_db;
+    mId = tid;
+    mDB = src_n->mDB;
 
     if( src_n->startStat() && toStart() && !startStat() )
 	start( );
@@ -906,7 +906,7 @@ void TVArchive::postDisable(int flag)
     { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
-string TVArchive::name( )	{ return m_name.size() ? m_name : m_id; }
+string TVArchive::name( )	{ return mName.size() ? mName : mId; }
 
 TArchiveS &TVArchive::owner( )	{ return *(TArchiveS *)nodePrev(); }
 
@@ -962,28 +962,28 @@ long long TVArchive::period( const string &arch )
 
 void TVArchive::setValType( TFld::Type vl )
 {
-    m_vtype = vl;
+    mVType = vl;
     setUpBuf( );
     modif( );
 }
 
 void TVArchive::setHardGrid( bool vl )
 {
-    m_bhgrd = vl;
+    mBHGrd = vl;
     setUpBuf( );
     modif( );
 }
 
 void TVArchive::setHighResTm( bool vl )
 {
-    m_bhres = vl;
+    mBHRes = vl;
     setUpBuf( );
     modif( );
 }
 
 void TVArchive::setSize( int vl )
 {
-    m_bsize = vmax(10,vmin(10000000,vl));
+    mBSize = vmax(10,vmin(10000000,vl));
     setUpBuf( );
     modif( );
 }
@@ -991,15 +991,15 @@ void TVArchive::setSize( int vl )
 void TVArchive::setPeriod( long long vl )
 {
     if( !vl )	vl = 1000000;
-    m_bper = (double)vl/1000000.;
-    m_bsize = vmax(10,(int)vmin(1e7,100.0/m_bper));
+    mBPer = (double)vl/1000000.;
+    mBSize = vmax(10,(int)vmin(1e7,100.0/mBPer));
     setUpBuf( );
     modif( );
 }
 
 void TVArchive::setUpBuf( )
 {
-    makeBuf( (TFld::Type)m_vtype, m_bsize, (long long)(m_bper*1000000.), m_bhgrd, m_bhres );
+    makeBuf( (TFld::Type)mVType, mBSize, (long long)(mBPer*1000000.), mBHGrd, mBHRes );
 }
 
 void TVArchive::load_( )
@@ -1016,9 +1016,9 @@ void TVArchive::save_( )
     {
 	vector<string> arch_ls;
 	archivatorList(arch_ls);
-	m_archs = "";
+	mArchs = "";
 	for( int i_l = 0; i_l < arch_ls.size(); i_l++ )
-	    m_archs += arch_ls[i_l]+";";
+	    mArchs += arch_ls[i_l]+";";
     }
 
     SYS->db().at().dataSet(fullDB(),owner().nodePath()+tbl(),*this);
@@ -1030,11 +1030,11 @@ void TVArchive::start( )
 
     run_st = true;
 
-    setSrcMode((TVArchive::SrcMode)m_srcmode,m_dsourc);
+    setSrcMode((TVArchive::SrcMode)mSrcMode,mDSourc);
 
     //- Attach to archivators -
     string arch;
-    for( int i_off = 0; (arch = TSYS::strSepParse(m_archs,0,';',&i_off)).size();  )
+    for( int i_off = 0; (arch = TSYS::strSepParse(mArchs,0,';',&i_off)).size();  )
 	if(!archivatorPresent(arch))
 	    try{ archivatorAttach(arch); }
 	    catch(TError err)	{ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
@@ -1046,7 +1046,7 @@ void TVArchive::stop( bool full_del )
 
     run_st = false;
 
-    setSrcMode((TVArchive::SrcMode)m_srcmode,m_dsourc);
+    setSrcMode((TVArchive::SrcMode)mSrcMode,mDSourc);
 
     //- Detach all archivators -
     vector<string> arch_ls;
@@ -1058,18 +1058,18 @@ void TVArchive::stop( bool full_del )
 void TVArchive::setSrcMode( SrcMode vl, const string &isrc )
 {
     //- Disable all links -
-    if( (!run_st || vl != ActiveAttr || isrc != m_dsourc) && !pattr_src.freeStat() )
+    if( (!run_st || vl != ActiveAttr || isrc != mDSourc) && !pattr_src.freeStat() )
     {
 	owner().setActValArch( id(), false );
 	pattr_src.free();
-	dynamic_cast<TVal&>(SYS->nodeAt(m_dsourc,0,'.').at()).setArch(AutoHD<TVArchive>());
+	dynamic_cast<TVal&>(SYS->nodeAt(mDSourc,0,'.').at()).setArch(AutoHD<TVArchive>());
     }
 
     try
     {
-	if( (!run_st || vl != PassiveAttr || isrc != m_dsourc) &&
-		dynamic_cast<TVal *>(&SYS->nodeAt(m_dsourc,0,'.').at()) )
-	    dynamic_cast<TVal&>(SYS->nodeAt(m_dsourc,0,'.').at()).setArch(AutoHD<TVArchive>());
+	if( (!run_st || vl != PassiveAttr || isrc != mDSourc) &&
+		dynamic_cast<TVal *>(&SYS->nodeAt(mDSourc,0,'.').at()) )
+	    dynamic_cast<TVal&>(SYS->nodeAt(mDSourc,0,'.').at()).setArch(AutoHD<TVArchive>());
     }catch(...){  }
 
     //- Set all links -
@@ -1083,10 +1083,10 @@ void TVArchive::setSrcMode( SrcMode vl, const string &isrc )
     if( run_st && vl == PassiveAttr && dynamic_cast<TVal *>(&SYS->nodeAt(isrc,0,'.').at()) )
 	dynamic_cast<TVal&>(SYS->nodeAt(isrc,0,'.').at()).setArch(AutoHD<TVArchive>(this));
 
-    if( m_srcmode != vl || m_dsourc != isrc )	modif();
+    if( mSrcMode != vl || mDSourc != isrc )	modif();
 
-    m_srcmode = vl;
-    m_dsourc = isrc;
+    mSrcMode = vl;
+    mDSourc = isrc;
 }
 
 string TVArchive::getS( long long *tm, bool up_ord, const string &arch )
@@ -1177,16 +1177,30 @@ void TVArchive::getVal( TValBuf &buf, long long ibeg, long long iend, const stri
 	ibeg = vmax(ibeg,iend-TValBuf::period()*limit);
 	TValBuf::getVal(buf,ibeg,iend);
 	iend = buf.begin()-1;
+	if( (iend/TValBuf::period())*TValBuf::period() > ibeg )
+	buf.setS(EVAL_STR,(iend/TValBuf::period())*TValBuf::period());
     }
+
+    //> Check for redundant allow
+    AutoHD<TParamContr> sPrm(dynamic_cast<TParamContr*>(&pattr_src.at().owner()));
+    bool fillHole = (!sPrm.freeStat() && sPrm.at().owner().owner().redntAllow() && sPrm.at().owner().redntMode( ) != TController::Off);
+
     //> Get from archivators
     ResAlloc res(a_res,false);
     for( int i_a = 0; i_a < arch_el.size(); i_a++ )
 	if( (arch.empty() || arch == arch_el[i_a]->archivator().workId()) &&
 		((!ibeg || ibeg <= arch_el[i_a]->end()) && (!iend || iend > arch_el[i_a]->begin())) && ibeg <= iend )
 	{
+	    //> Local request to data
 	    ibeg = vmax(ibeg,iend-(long long)(1000000.*arch_el[i_a]->archivator().valPeriod())*(limit-buf.realSize()));
 	    arch_el[i_a]->getVal(buf,ibeg,iend);
 	    iend = buf.begin()-1;
+
+	    //> Filling holes process from reserve stations of the subsystem DAQ.
+	    if( fillHole /*&&*/ )
+	    {
+		//????
+	    }
 	}
 }
 
@@ -1206,10 +1220,10 @@ void TVArchive::getActiveData()
     {
 	switch(valType())
 	{
-	    case TFld::Boolean:	setB(pattr_src.at().getB(&tm),tm); break;
-	    case TFld::Integer:	setI(pattr_src.at().getI(&tm),tm); break;
-	    case TFld::Real:	setR(pattr_src.at().getR(&tm),tm); break;
-	    case TFld::String:	setS(pattr_src.at().getS(&tm),tm); break;
+	    case TFld::Boolean:	setB(pattr_src.at().getB(&tm),tm);	break;
+	    case TFld::Integer:	setI(pattr_src.at().getI(&tm),tm);	break;
+	    case TFld::Real:	setR(pattr_src.at().getR(&tm),tm);	break;
+	    case TFld::String:	setS(pattr_src.at().getS(&tm),tm);	break;
 	}
     }
 }
@@ -1551,7 +1565,7 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
 void TVArchive::cntrCmdProc( XMLNode *opt )
 {
     string a_path = opt->attr("path");
-    //- Service commands process -
+    //> Service commands process
     if( a_path == "/serv/val" )		//Values access
     {
 	if( ctrChkNode(opt,"info",RWRWRW,"root","root",SEQ_RD) )	//Value's data information
@@ -1576,7 +1590,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    long long tm_grnd = atoll(opt->attr("tm_grnd").c_str());
 	    string    arch    = opt->attr("arch");
 
-	    //-- Process one value request --
+	    //>> Process one value request
 	    if( !tm )	tm = TSYS::curTime();
 	    if( !tm_grnd )
 	    {
@@ -1586,10 +1600,10 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    }
 	    if( tm < tm_grnd )	throw TError(nodePath().c_str(),"Range error");
 
-	    //-- Process of archive block request --
+	    //>> Process of archive block request
 	    TValBuf buf( TValBuf::valType(), 100000, TValBuf::period(), true, true );
 
-	    //--- Get values buffer ---
+	    //>>> Get values buffer
 	    if( (arch.empty() || arch == BUF_ARCH_NM) && vOK(tm_grnd,tm) )
 	    {
 		TValBuf::getVal(buf,tm_grnd,tm);
@@ -1609,7 +1623,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		    }
 		res.release();
 	    }
-	    //--- Prepare buffer's data for transfer ---
+	    //>>> Prepare buffer's data for transfer
 	    bool    isEnd = false;	//Last archive value process
 	    string  text;
 	    text.reserve(100);
@@ -1859,37 +1873,37 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/prm/cfg/vtp" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","Archive",SEQ_RD) )	opt->setText(TSYS::int2str(m_vtype));
+	if( ctrChkNode(opt,"get",0664,"root","Archive",SEQ_RD) )	opt->setText(TSYS::int2str(mVType));
 	if( ctrChkNode(opt,"set",0664,"root","Archive",SEQ_WR) )	setValType((TFld::Type)atoi(opt->text().c_str()));
     }
     else if( a_path == "/prm/cfg/srcm" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","Archive",SEQ_RD) )	opt->setText(TSYS::int2str(m_srcmode));
-	if( ctrChkNode(opt,"set",0664,"root","Archive",SEQ_WR) )	setSrcMode((TVArchive::SrcMode)atoi(opt->text().c_str()),m_dsourc);
+	if( ctrChkNode(opt,"get",0664,"root","Archive",SEQ_RD) )	opt->setText(TSYS::int2str(mSrcMode));
+	if( ctrChkNode(opt,"set",0664,"root","Archive",SEQ_WR) )	setSrcMode((TVArchive::SrcMode)atoi(opt->text().c_str()),mDSourc);
     }
     else if( a_path == "/prm/cfg/src" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","Archive",SEQ_RD) )	opt->setText(m_dsourc);
-	if( ctrChkNode(opt,"set",0664,"root","Archive",SEQ_WR) )	setSrcMode((TVArchive::SrcMode)m_srcmode,opt->text());
+	if( ctrChkNode(opt,"get",0664,"root","Archive",SEQ_RD) )	opt->setText(mDSourc);
+	if( ctrChkNode(opt,"set",0664,"root","Archive",SEQ_WR) )	setSrcMode((TVArchive::SrcMode)mSrcMode,opt->text());
     }
     else if( a_path == "/prm/cfg/b_per" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","Archive",SEQ_RD) )	opt->setText(TSYS::real2str(m_bper,6));
+	if( ctrChkNode(opt,"get",0664,"root","Archive",SEQ_RD) )	opt->setText(TSYS::real2str(mBPer,6));
 	if( ctrChkNode(opt,"set",0664,"root","Archive",SEQ_WR) )	setPeriod((long long)(1000000.*atof(opt->text().c_str())));
     }
     else if( a_path == "/prm/cfg/b_size" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","Archive",SEQ_RD) )	opt->setText(TSYS::int2str(m_bsize));
+	if( ctrChkNode(opt,"get",0664,"root","Archive",SEQ_RD) )	opt->setText(TSYS::int2str(mBSize));
 	if( ctrChkNode(opt,"set",0664,"root","Archive",SEQ_WR) )	setSize(atoi(opt->text().c_str()));
     }
     else if( a_path == "/prm/cfg/b_hgrd" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","Archive",SEQ_RD) )	opt->setText(m_bhgrd?"1":"0");
+	if( ctrChkNode(opt,"get",0664,"root","Archive",SEQ_RD) )	opt->setText(mBHGrd?"1":"0");
 	if( ctrChkNode(opt,"set",0664,"root","Archive",SEQ_WR) )	setHardGrid(atoi(opt->text().c_str()));
     }
     else if( a_path == "/prm/cfg/b_hres" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","Archive",SEQ_RD) )	opt->setText(m_bhres?"1":"0");
+	if( ctrChkNode(opt,"get",0664,"root","Archive",SEQ_RD) )	opt->setText(mBHRes?"1":"0");
 	if( ctrChkNode(opt,"set",0664,"root","Archive",SEQ_WR) )	setHighResTm(atoi(opt->text().c_str()));
     }
     else if( a_path == "/cfg/vtp_ls" && ctrChkNode(opt) )
@@ -1910,7 +1924,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	vector<string> list;
 	int c_lv = 0;
 	string c_path = "", c_el;
-	for( int c_off = 0; (c_el=TSYS::strSepParse(m_dsourc,0,'.',&c_off)).size(); c_lv++ )
+	for( int c_off = 0; (c_el=TSYS::strSepParse(mDSourc,0,'.',&c_off)).size(); c_lv++ )
 	{
 	    opt->childAdd("el")->setText(c_path);
 	    if( c_lv ) c_path+=".";
@@ -2102,26 +2116,17 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TVArchivator                                  *
 //*************************************************
-TVArchivator::TVArchivator( const string &iid, const string &idb, TElem *cf_el ) : run_st(false), prc_st(false),
-    tm_calc(0.0), TConfig(cf_el), m_db(idb), m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()),
-    m_dscr(cfg("DESCR").getSd()), m_addr(cfg("ADDR").getSd()), m_start(cfg("START").getBd()),
-    m_v_per(cfg("V_PER").getRd()), m_a_per(cfg("A_PER").getId())
+TVArchivator::TVArchivator( const string &iid, const string &idb, TElem *cf_el ) : run_st(false), endrunReq(false),
+    tm_calc(0.0), TConfig(cf_el), mDB(idb), mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()),
+    mDscr(cfg("DESCR").getSd()), mAddr(cfg("ADDR").getSd()), mStart(cfg("START").getBd()),
+    mVPer(cfg("V_PER").getRd()), mAPer(cfg("A_PER").getId())
 {
-    m_id = iid;
-
-    //> Create calc timer
-    struct sigevent sigev;
-    memset(&sigev,0,sizeof(sigev));
-    sigev.sigev_notify = SIGEV_THREAD;
-    sigev.sigev_value.sival_ptr = this;
-    sigev.sigev_notify_function = Task;
-    sigev.sigev_notify_attributes = NULL;
-    timer_create(CLOCK_REALTIME,&sigev,&tmId);
+    mId = iid;
 }
 
 TVArchivator::~TVArchivator()
 {
-    timer_delete(tmId);
+
 }
 
 TCntrNode &TVArchivator::operator=( TCntrNode &node )
@@ -2132,8 +2137,8 @@ TCntrNode &TVArchivator::operator=( TCntrNode &node )
     //> Configuration copy
     string tid = id();
     *(TConfig*)this = *(TConfig*)src_n;
-    m_id = tid;
-    m_db = src_n->m_db;
+    mId = tid;
+    mDB = src_n->mDB;
 
     if( src_n->startStat() && toStart() && !startStat() )
         start( );
@@ -2141,19 +2146,13 @@ TCntrNode &TVArchivator::operator=( TCntrNode &node )
     return *this;
 }
 
-string TVArchivator::name()
-{
-    return (m_name.size())?m_name:m_id;
-}
+string TVArchivator::name( )	{ return mName.size() ? mName : mId; }
 
-string TVArchivator::tbl( )
-{
-    return owner().owner().subId()+"_val_proc";
-}
+string TVArchivator::tbl( )	{ return owner().owner().subId()+"_val_proc"; }
 
 void TVArchivator::setValPeriod( double iper )
 {
-    m_v_per = iper ? iper : 1.;
+    mVPer = iper ? iper : 1.;
 
     //> Call sort for all archives
     ResAlloc res(a_res,false);
@@ -2191,25 +2190,28 @@ string TVArchivator::workId()
 void TVArchivator::start()
 {
     if( run_st ) return;
-    //> Start interval timer for periodic thread creating
-    struct itimerspec itval;
-    itval.it_interval.tv_sec = itval.it_value.tv_sec = m_a_per;
-    itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
-    timer_settime(tmId, 0, &itval, NULL);
 
-    run_st = true;
+    //> Start archivator thread
+    pthread_attr_t pthr_attr;
+    pthread_attr_init(&pthr_attr);
+    pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
+
+    pthread_create(&mPthr,&pthr_attr,TVArchivator::Task,this);
+    pthread_attr_destroy(&pthr_attr);
+    if( TSYS::eventWait(run_st,true,nodePath()+"valArch_task_start",5) )
+	throw TError(nodePath().c_str(),_("Values archivation task is not started!"));
 }
 
 void TVArchivator::stop( bool full_del )
 {
     if( !run_st ) return;
 
-    //> Stop interval timer for periodic thread creating
-    struct itimerspec itval;
-    itval.it_interval.tv_sec = itval.it_interval.tv_nsec = itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
-    timer_settime(tmId, 0, &itval, NULL);
-    if( TSYS::eventWait( prc_st, false, nodePath()+"stop",5) )
-	throw TError(nodePath().c_str(),_("Archive thread is not stopped!"));
+    //> Values acquisition task stop
+    endrunReq = true;
+    pthread_kill( mPthr, SIGALRM );
+    if( TSYS::eventWait(run_st,false,nodePath()+"valArch_task_stop",10) )
+	throw TError(nodePath().c_str(),_("Values archivation task is not stopped!"));
+    pthread_join( mPthr, NULL );
 
     //> Detach from all archives
     ResAlloc res(a_res,false);
@@ -2220,8 +2222,6 @@ void TVArchivator::stop( bool full_del )
 	arch.at().archivatorDetach(workId(),full_del);
 	res.request(false);
     }
-
-    run_st = false;
 }
 
 void TVArchivator::archiveList( vector<string> &ls )
@@ -2283,57 +2283,46 @@ void TVArchivator::save_( )
     SYS->db().at().dataSet(fullDB(),SYS->archive().at().nodePath()+tbl(),*this);
 }
 
-void TVArchivator::Task(union sigval obj)
+void *TVArchivator::Task( void *param )
 {
-    TVArchivator *arch = (TVArchivator*)obj.sival_ptr;
-    if( arch->prc_st )  return;
-    arch->prc_st = true;
+    TVArchivator &arch = *(TVArchivator*)param;
+    arch.endrunReq = false;
+    arch.run_st = true;
 
 #if OSC_DEBUG >= 2
-    mess_debug(arch->nodePath().c_str(),_("Timer's thread <%u> call. TID: %ld"),pthread_self(),(long int)syscall(224));
+    mess_debug(arch.nodePath().c_str(),_("Timer's thread <%u> call. TID: %ld"),pthread_self(),(long int)syscall(224));
 #endif
 
     //> Archiving
-    try
-    {
-	unsigned long long t_cnt = SYS->shrtCnt();
+    while( !arch.endrunReq )
+	try
+	{
+	    TSYS::taskSleep((long long)(1e9*arch.archPeriod( )));
 
-	ResAlloc res(arch->a_res,false);
-	long long beg, end;
-	for( map<string,TVArchEl*>::iterator iel = arch->archEl.begin(); iel != arch->archEl.end(); ++iel )
-	    if( iel->second->archive().startStat() )
-	    {
-		TVArchEl *arch_el = iel->second;
-		beg = vmax(arch_el->mLastGet,arch_el->archive().begin());
-		end = arch_el->archive().end();
-		if( !beg || !end || beg > end )	continue;
-		arch_el->setVal( arch_el->archive(), beg, end );
-	    }
+	    unsigned long long t_cnt = SYS->shrtCnt();
 
-	arch->tm_calc = 1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
-    } catch(TError err)
-    { mess_err(err.cat.c_str(),"%s",err.mess.c_str() ); }
+	    ResAlloc res(arch.a_res,false);
+	    long long beg, end;
+	    for( map<string,TVArchEl*>::iterator iel = arch.archEl.begin(); iel != arch.archEl.end(); ++iel )
+		if( iel->second->archive().startStat() )
+		{
+		    TVArchEl *arch_el = iel->second;
+		    beg = vmax(arch_el->mLastGet,arch_el->archive().begin());
+		    end = arch_el->archive().end();
+		    if( !beg || !end || beg > end )	continue;
+		    arch_el->setVal( arch_el->archive(), beg, end );
+		}
+	    res.release();
 
-    arch->prc_st = false;
-}
+	    arch.tm_calc = 1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
+	} catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str() ); }
 
-void TVArchivator::setArchPeriod( int iper )
-{
-    m_a_per = iper ? iper : 1;
-    if( startStat() )
-    {
-	struct itimerspec itval;
-	itval.it_interval.tv_sec = itval.it_value.tv_sec = m_a_per;
-	itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
-	timer_settime(tmId, 0, &itval, NULL);
-    }
-
-    modif();
+    arch.run_st = false;
 }
 
 void TVArchivator::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	TCntrNode::cntrCmdProc(opt);
@@ -2368,7 +2357,7 @@ void TVArchivator::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
     if( a_path == "/prm/st/st" )
     {
@@ -2458,7 +2447,7 @@ void TVArchEl::setVal( TValBuf &ibuf, long long beg, long long end )
     if( !beg || !end || beg > end ) return;
     //>> Check for put to buffer
     if( &archive() != &ibuf && mLastGet && ((end-mLastGet)/archive().period()) < archive().size() )
-    { archive().TValBuf::setVal(ibuf,beg,end); return; }
+    { archive().TValBuf::setVal(ibuf,vmax(archive().end(),beg),end); return; }
     //>> Put direct to archive
     long long wPrevTm = 0;
     string wPrevVal;

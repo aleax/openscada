@@ -71,14 +71,14 @@ class TValBuf
 	void setSize( int vl );
 	void setPeriod( long long vl );
 
-	//Get value
+	//> Get value
 	virtual void getVal( TValBuf &buf, long long beg = 0, long long end = 0 );
 	virtual string getS( long long *tm = NULL, bool up_ord = false );
 	virtual double getR( long long *tm = NULL, bool up_ord = false );
 	virtual int    getI( long long *tm = NULL, bool up_ord = false );
 	virtual char   getB( long long *tm = NULL, bool up_ord = false );
 
-	//Set value
+	//> Set value
 	virtual void setVal( TValBuf &buf, long long beg = 0, long long end = 0 );
 	virtual void setS( const string &value, long long tm = 0 );
 	virtual void setR( double value, long long tm = 0 );
@@ -104,7 +104,7 @@ class TValBuf
 		TpVal get( long long *tm = NULL, bool up_ord = false );
 		void  set( TpVal value, long long tm = 0 );
 
-		//- Create new or change buffer mode (all data into buffer will lost) -
+		//> Create new or change buffer mode (all data into buffer will lost)
 		void makeBuf( int isz, long long ipr, bool hd_grd, bool hg_res );
 
 	    private:
@@ -164,16 +164,16 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	//- Base functions -
-	const string &id( )	{ return m_id; }
+	//> Base functions
+	const string &id( )	{ return mId; }
 	string name( );
-	string dscr( )		{ return m_dscr; }
-	SrcMode srcMode( )	{ return (TVArchive::SrcMode)m_srcmode; }
-	string  srcData( )	{ return m_dsourc; }
-	bool toStart( )  	{ return m_start; }
+	string dscr( )		{ return mDscr; }
+	SrcMode srcMode( )	{ return (TVArchive::SrcMode)mSrcMode; }
+	string  srcData( )	{ return mDSourc; }
+	bool toStart( )  	{ return mStart; }
 	bool startStat( )	{ return run_st; }
 
-	string DB( )		{ return m_db; }
+	string DB( )		{ return mDB; }
 	string tbl( );
 	string fullDB( )	{ return DB()+'.'+tbl(); }
 
@@ -185,12 +185,12 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	bool highResTm( )	{ return TValBuf::highResTm(); }
 	int size( )		{ return TValBuf::size(); }
 
-	void setName( const string &inm )	{ m_name = inm; modif(); }
-	void setDscr( const string &idscr )	{ m_dscr = idscr; modif(); }
+	void setName( const string &inm )	{ mName = inm; modif(); }
+	void setDscr( const string &idscr )	{ mDscr = idscr; modif(); }
 	void setSrcMode( SrcMode vl, const string &isrc = "" );
-	void setToStart( bool vl )		{ m_start = vl; modif(); }
+	void setToStart( bool vl )		{ mStart = vl; modif(); }
 
-	void setDB( const string &idb )		{ m_db = idb; modifG(); }
+	void setDB( const string &idb )		{ mDB = idb; modifG(); }
 
 	void setValType( TFld::Type vl );
 	void setHardGrid( bool vl );
@@ -198,11 +198,11 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	void setSize( int vl );
 	void setPeriod( long long vl );
 
-	//- Service -
+	//> Service
 	void start( );
 	void stop( bool full_del = false );
 
-	//- Get value -
+	//> Get value
 	void getVal( TValBuf &buf, long long beg = 0, long long end = 0,
 		const string &arch = "", int limit = 100000 );
 	string getS( long long *tm = NULL, bool up_ord = false, const string &arch = "" );
@@ -212,10 +212,10 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 
 	void setVal( TValBuf &buf, long long beg, long long end, const string &arch );
 
-	//- Active get data from atribute -
+	//> Active get data from atribute
 	void getActiveData( );
 
-	//- Phisical archivator's functions -
+	//> Phisical archivator's functions
 	void archivatorList( vector<string> &ls );
 	bool archivatorPresent( const string &arch );
 	void archivatorAttach( const string &arch );
@@ -239,29 +239,29 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
     private:
 	//Private methods
 	void setUpBuf( );
-	string nodeName( )	{ return m_id; }
+	string nodeName( )	{ return mId; }
 
 	//Private attributes
 	Res	a_res;
 	bool	run_st;
-	string	m_db;
-	//- Base params -
-	string  &m_id,		//ID
-		&m_name,	//Name
-		&m_dscr,	//Description
-		&m_dsourc,	//Data source (parameter atribute)
-		&m_archs;	//Use archivators list (separated whith ';')
-	bool	&m_start;	//Starting flag
-	int	&m_srcmode;	//Source mode
-	//- Buffer params -
-	int	&m_vtype;	//Value type (int, real, bool, string)
-	double	&m_bper;	//Buffer period
-	int	&m_bsize;	//Buffer size
-	bool	&m_bhgrd,	//Buffer use hard time griding
-		&m_bhres;	//Buffer use high time resolution
-	//- Mode params -
+	string	mDB;
+	//> Base params
+	string  &mId,		//ID
+		&mName,		//Name
+		&mDscr,		//Description
+		&mDSourc,	//Data source (parameter atribute)
+		&mArchs;	//Use archivators list (separated whith ';')
+	bool	&mStart;	//Starting flag
+	int	&mSrcMode;	//Source mode
+	//> Buffer params
+	int	&mVType;	//Value type (int, real, bool, string)
+	double	&mBPer;		//Buffer period
+	int	&mBSize;	//Buffer size
+	bool	&mBHGrd,	//Buffer use hard time griding
+		&mBHRes;	//Buffer use high time resolution
+	//> Mode params
 	AutoHD<TVal>	pattr_src;
-	//- Phisical archive's elements -
+	//> Phisical archive's elements
 	vector<TVArchEl*> arch_el;	//Links
 };
 
@@ -283,29 +283,29 @@ class TVArchivator : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return m_id; }
+	const string &id( )	{ return mId; }
 	string workId( );
 	string name( );
-	string dscr( )		{ return m_dscr; }
-	string addr( )		{ return m_addr; }
-	double valPeriod( )	{ return m_v_per; }
-	int    archPeriod( )	{ return m_a_per; }
+	string dscr( )		{ return mDscr; }
+	string addr( )		{ return mAddr; }
+	double valPeriod( )	{ return mVPer; }
+	int    archPeriod( )	{ return mAPer; }
 
-	bool toStart( )		{ return m_start; }
+	bool toStart( )		{ return mStart; }
 	bool startStat( )	{ return run_st; }
 
-	string DB( )		{ return m_db; }
+	string DB( )		{ return mDB; }
 	string tbl( );
 	string fullDB( )		{ return DB()+'.'+tbl(); }
 
-	void setName( const string &inm )	{ m_name = inm; modif(); }
-	void setDscr( const string &idscr )	{ m_dscr = idscr; modif(); }
-	void setAddr( const string &vl )	{ m_addr = vl; modif(); }
+	void setName( const string &inm )	{ mName = inm; modif(); }
+	void setDscr( const string &idscr )	{ mDscr = idscr; modif(); }
+	void setAddr( const string &vl )	{ mAddr = vl; modif(); }
 	virtual void setValPeriod( double per );
-	virtual void setArchPeriod( int per );
-	void setToStart( bool vl )		{ m_start = vl; modif(); }
+	virtual void setArchPeriod( int per )	{ mAPer = (per?per:1); modif(); }
+	void setToStart( bool vl )		{ mStart = vl; modif(); }
 
-	void setDB( const string &idb )		{ m_db = idb; modif(); }
+	void setDB( const string &idb )		{ mDB = idb; modif(); }
 
 	virtual void start( );
 	virtual void stop( bool full_del = false );
@@ -318,7 +318,7 @@ class TVArchivator : public TCntrNode, public TConfig
 
     protected:
 	//Protected methods
-	//- Protected place archive functions -
+	//> Protected place archive functions
 	TVArchEl *archivePlace( TVArchive &item );
 	void archiveRemove( const string &id, bool full = false );
 
@@ -334,28 +334,27 @@ class TVArchivator : public TCntrNode, public TConfig
 
 	//Protected attributes
 	Res	a_res;
-	bool	run_st;
-	//- Phisical elements storing -
+	bool	run_st, endrunReq;
+	//> Phisical elements storing
 	map<string,TVArchEl*> archEl;
 
     private:
 	//Private methods
-	string nodeName( )	{ return m_id; }
-	static void Task( union sigval obj );	//Process task
+	string nodeName( )	{ return mId; }
+	static void *Task( void *param );	//Process task
 
 	//Private attributes
-	string	&m_id,		//Var arch id
-		&m_name,	//Var arch name
-		&m_dscr,	//Var arch description
-		&m_addr;	//Mess arch phisical address
-	bool	&m_start;	//Var arch starting flag
-	double	&m_v_per;	//Value period (sec)
-	int	&m_a_per;	//Archivation period
-	string	m_db;
-	//- Archivate process -
+	string	&mId,		//Var arch id
+		&mName,		//Var arch name
+		&mDscr,		//Var arch description
+		&mAddr;		//Mess arch phisical address
+	bool	&mStart;	//Var arch starting flag
+	double	&mVPer;		//Value period (sec)
+	int	&mAPer;		//Archivation period
+	string	mDB;
+	//> Archivate process
 	double	tm_calc;	//Archiving time
-	bool	prc_st;		//Process stat
-	timer_t	tmId;		//Thread timer
+	pthread_t mPthr;
 };
 
 //*************************************************

@@ -391,6 +391,8 @@ TVal::~TVal( )
     if( !mCfg && src.fld->flg()&TFld::SelfFld )		delete src.fld;
 }
 
+TValue &TVal::owner( )	{ return *(TValue*)nodePrev(); }
+
 void TVal::setFld( TFld &fld )
 {
     //> Delete previous
@@ -409,11 +411,15 @@ void TVal::setFld( TFld &fld )
     {
 	case TFld::String:
 	    val.val_s = new ResString();
-	    val.val_s->setVal(src.fld->def());
+	    if( src.fld->def().empty() ) val.val_s->setVal(EVAL_STR);
+	    else val.val_s->setVal(src.fld->def());
 	    break;
-	case TFld::Integer:	val.val_i = atoi(src.fld->def().c_str());	break;
-	case TFld::Real:	val.val_r = atof(src.fld->def().c_str());	break;
-	case TFld::Boolean:	val.val_b = atoi(src.fld->def().c_str());	break;
+	case TFld::Integer:
+	    val.val_i = src.fld->def().empty() ? EVAL_INT : atoi(src.fld->def().c_str());	break;
+	case TFld::Real:
+	    val.val_r = src.fld->def().empty() ? EVAL_REAL : atof(src.fld->def().c_str());	break;
+	case TFld::Boolean:
+	    val.val_b = src.fld->def().empty() ? EVAL_BOOL : atoi(src.fld->def().c_str());	break;
     }
 
     mCfg = false;
@@ -442,25 +448,13 @@ TFld &TVal::fld()
     return( *src.fld );
 }
 
-void TVal::vlSet(  )
-{
-    ((TValue *)nodePrev())->vlSet( *this );
-}
+void TVal::vlSet(  )		{ owner().vlSet( *this ); }
 
-void TVal::vlGet(  )
-{
-    ((TValue *)nodePrev())->vlGet( *this );
-}
+void TVal::vlGet(  )		{ owner().vlGet( *this ); }
 
-AutoHD<TVArchive> TVal::arch()
-{
-    return mArch;
-}
+AutoHD<TVArchive> TVal::arch()	{ return mArch; }
 
-void TVal::setArch(const AutoHD<TVArchive> &vl)
-{
-    mArch = vl;
-}
+void TVal::setArch(const AutoHD<TVArchive> &vl)	{ mArch = vl; }
 
 string TVal::getSEL( long long *tm, bool sys )
 {
@@ -539,16 +533,16 @@ double TVal::getR( long long *tm, bool sys )
 	case TFld::Boolean:
 	{ char vl = getB(tm,sys);	return (vl!=EVAL_BOOL) ? (bool)vl : EVAL_REAL; }
 	case TFld::Real:
-	    //- Get from archive -
-	    if( tm && (*tm) && !mArch.freeStat() && *tm/mArch.at().period() < time()/mArch.at().period() ) 
+	    //> Get from archive
+	    if( tm && (*tm) && !mArch.freeStat() && *tm/mArch.at().period() < time()/mArch.at().period() )
 		return mArch.at().getR(tm);
-	    //- Get value from config -
+	    //> Get value from config
 	    if( mCfg )
 	    {
 		if(tm) *tm = TSYS::curTime();
 		return src.cfg->getR( );
 	    }
-	    //- Get current value -
+	    //> Get current value
 	    if( fld().flg()&TVal::DirRead && !sys )	vlGet( );
 	    if( tm ) *tm = time();
 	    return val.val_r;

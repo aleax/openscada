@@ -5716,6 +5716,8 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
     bend = atoll(req.attr("tm").c_str());
     bper = atoll(req.attr("per").c_str());
 
+    if( !bbeg || !bend ) return;
+
     prevPos = 0;
     prevVal = EVAL_REAL;
     buf.clear();

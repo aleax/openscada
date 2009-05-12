@@ -515,7 +515,7 @@ void Prm::enable()
 {
     if( enableStat() )  return;
 
-    //- Check and delete no used fields -
+    //> Check and delete no used fields
     for(int i_fld = 0; i_fld < v_el.fldSize(); i_fld++)
     {
 	string fel;
@@ -529,7 +529,7 @@ void Prm::enable()
 	}
     }
 
-    //- Init elements -
+    //> Init elements
     vector<string> pls;
     AutoHD<Block> blk;
     int io;
@@ -548,18 +548,19 @@ void Prm::enable()
 
 	unsigned	flg = TVal::DirWrite|TVal::DirRead;
 	TFld::Type	tp  = TFld::String;
+	string		def;
 	switch( blk.at().ioType(io) )
 	{
-	    case IO::String:	tp = TFld::String;	break;
-	    case IO::Integer:	tp = TFld::Integer;	break;
-	    case IO::Real:	tp = TFld::Real;	break;
-	    case IO::Boolean:	tp = TFld::Boolean;	break;
+	    case IO::String:	tp = TFld::String; def = EVAL_STR; break;
+	    case IO::Integer:	tp = TFld::Integer; def = TSYS::int2str(EVAL_INT);	break;
+	    case IO::Real:	tp = TFld::Real; def = TSYS::real2str(EVAL_REAL);	break;
+	    case IO::Boolean:	tp = TFld::Boolean; def = TSYS::int2str(EVAL_BOOL);	break;
 	}
 	if( !v_el.fldPresent(aid) || v_el.fldAt(v_el.fldId(aid)).type() != tp ||
 	    v_el.fldAt(v_el.fldId(aid)).flg() != flg )
 	{
 	    if(v_el.fldPresent(aid)) v_el.fldDel(v_el.fldId(aid));
-	    v_el.fldAdd( new TFld(aid.c_str(),"",tp,flg) );
+	    v_el.fldAdd( new TFld(aid.c_str(),"",tp,flg,"",def.c_str()) );
 	}
 	int el_id = v_el.fldId(aid);
 	v_el.fldAt(el_id).setDescr( anm.empty() ? blk.at().func()->io(io)->name() : anm );
@@ -568,7 +569,7 @@ void Prm::enable()
 	pls.push_back(aid);
     }
 
-    //- Check and delete no used attrs -
+    //> Check and delete no used attrs
     for( int i_fld = 0; i_fld < v_el.fldSize(); i_fld++ )
     {
 	int i_p;
@@ -623,17 +624,21 @@ void Prm::vlGet( TVal &val )
 
     try
     {
-	if( !enableStat() ) return;
+	//if( !enableStat() ) return;
 	AutoHD<Block> blk = ((Contr &)owner()).blkAt(TSYS::strSepParse(val.fld().reserve(),0,'.'));
 	int io_id = blk.at().ioId(TSYS::strSepParse(val.fld().reserve(),1,'.'));
 	if( io_id < 0 )	disable();
 	else
 	    switch(val.fld().type())
 	    {
-		case TFld::String:	val.setS( enableStat() ? blk.at().getS(io_id) : EVAL_STR, 0, true );	break;
-		case TFld::Integer:	val.setI( enableStat() ? blk.at().getI(io_id) : EVAL_INT, 0, true );	break;
-		case TFld::Real:	val.setR( enableStat() ? blk.at().getR(io_id) : EVAL_REAL, 0, true );	break;
-		case TFld::Boolean:	val.setB( enableStat() ? blk.at().getB(io_id) : EVAL_BOOL, 0, true );	break;
+		case TFld::String:
+		    val.setS( (enableStat()&&owner().startStat()) ? blk.at().getS(io_id) : EVAL_STR, 0, true );	break;
+		case TFld::Integer:
+		    val.setI( (enableStat()&&owner().startStat()) ? blk.at().getI(io_id) : EVAL_INT, 0, true );	break;
+		case TFld::Real:
+		    val.setR( (enableStat()&&owner().startStat()) ? blk.at().getR(io_id) : EVAL_REAL, 0, true );break;
+		case TFld::Boolean:
+		    val.setB( (enableStat()&&owner().startStat()) ? blk.at().getB(io_id) : EVAL_BOOL, 0, true );break;
 	    }
     }catch(TError err) { disable(); }
 }

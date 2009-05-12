@@ -1,3 +1,14 @@
+2009-05-12 Roman
+- FIX:/Archive/Value: EVAL value set after values requesting from buffer if next requested archive.
+- FIX:/Archive/Value: Last data into buffer lost is fixed on exit. Thread call by timer replaced by standalone thread.
+    Crash on some glibc version also fixed, after timer delete.
+- FIX:/DAQ, /DAQ/DAQGate: Checking for attribute present is added.
+- FIX:/DAQ/Values: For all attributes of DAQ set the EVAL variable on creation.
+- /DAQ: Function TDAQS::rdStRequest() for request to remoted stations is expanded.
+- FIX:/UI/Vision: Pages include on RunTime is fixed.
+- FIX:/UI/Vision,/UI/WebVision: No display archive data if on first request present data only from buffer is fixed.
+
+
 2009-05-09 Roman
 - FIX:/SYS/Value: Archive's data getting service function is fixed from spare archive's data getting and expanded
     for archive block request.

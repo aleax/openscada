@@ -70,7 +70,7 @@ class TDAQS : public TSubSYS
 	void setRdRestDtTm( float vl );
 	void rdStList( vector<string> &ls );
 	void rdActCntrList( vector<string> &ls, bool isRun = false );
-	int rdStRequest( const string &cntr, XMLNode &req );
+	string rdStRequest( const string &cntr, XMLNode &req, const string &prevSt = "", bool toRun = true );
 
 	TElem &elLib( )	{ return lb_el; }
 	TElem &tplE( )	{ return el_tmpl; }

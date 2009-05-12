@@ -93,7 +93,7 @@ class Contr: public TController
 	int period( )				{ return vmax(1,m_per); }
 	int iterate( )				{ return m_iter; }
 
-	//- Scheme's functions -
+	//> Scheme's functions
 	void blkList( vector<string> &ls )	{ chldList(m_bl,ls); }
 	bool blkPresent( const string &id )	{ return chldPresent(m_bl,id); }
 	void blkAdd( const string &id );
@@ -113,7 +113,7 @@ class Contr: public TController
 	void stop_( );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
-	//- Process stat -
+	//> Process stat
 	void blkProc( const string & id, bool val );
 
 	void postDisable(int flag);

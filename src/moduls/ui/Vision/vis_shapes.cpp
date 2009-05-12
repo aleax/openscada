@@ -2268,6 +2268,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 	    arh_per = atoi(req.attr("per").c_str());
 	}
     }
+
     //> One request check and prepare
     int trcPer = shD->trcPer*1000000;
     if( shD->tTimeCurent && trcPer && shD->valArch.empty() && (!arh_per || (arh_per >= trcPer && (tTime-valEnd())/vmax(wantPer,trcPer) < 2)) )
@@ -2336,6 +2337,8 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
     bbeg = atoll(req.attr("tm_grnd").c_str());
     bend = atoll(req.attr("tm").c_str());
     bper = atoll(req.attr("per").c_str());
+
+    if( !bbeg || !bend ) return;
 
     prevPos = 0;
     prevVal = EVAL_REAL;
