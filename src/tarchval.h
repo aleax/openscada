@@ -58,6 +58,7 @@ class TValBuf
 	bool highResTm( )	{ return mHgResTm; }
 	int size( )		{ return mSize; }
 	int realSize( );
+	unsigned int evalCnt( )	{ return mEvalCnt; }
 
 	long long begin( )	{ return mBeg; }
 	long long end( )	{ return mEnd; }
@@ -94,7 +95,8 @@ class TValBuf
 	    friend class TValBuf;
 	    public:
 		//Public methods
-		TBuf( TpVal eval, int &isz, long long &ipr, bool &ihgrd, bool &ihres, long long& iend, long long& ibeg );
+		TBuf( TpVal eval, int &isz, long long &ipr, bool &ihgrd, bool &ihres,
+		    long long& iend, long long& ibeg, unsigned int &iEvalCnt );
 		~TBuf( );
 
 		void clear( );
@@ -116,6 +118,7 @@ class TValBuf
 		int	&size,
 			cur;		//Curent position.
 		TpVal	eval;		//Error element value
+		unsigned int &mEvalCnt;
 
 		struct SLw  { time_t tm; TpVal val; };
 		struct SHg  { long long tm; TpVal val; };
@@ -142,6 +145,7 @@ class TValBuf
 	long long mEnd, mBeg,		//Time of buffer begin and end (64 bit usec)
 		mPer;			//Periodic grid value (usec). If value = 0 then it no periodic buffer, error for time griding mode!
 	int	mSize;			//Buffer size limit.
+	unsigned int mEvalCnt;
 };
 
 
@@ -204,7 +208,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 
 	//> Get value
 	void getVal( TValBuf &buf, long long beg = 0, long long end = 0,
-		const string &arch = "", int limit = 100000 );
+		const string &arch = "", int limit = 100000, bool onlyLocal = false );
 	string getS( long long *tm = NULL, bool up_ord = false, const string &arch = "" );
 	double getR( long long *tm = NULL, bool up_ord = false, const string &arch = "" );
 	int    getI( long long *tm = NULL, bool up_ord = false, const string &arch = "" );
@@ -374,7 +378,7 @@ class TVArchEl
 	virtual long long begin( )	{ return 0; }		//Archive begin
 	long long lastGet( )		{ return mLastGet; }	//Last getted value time
 
-	virtual void getVal( TValBuf &buf, long long beg = 0, long long end = 0 ) { }
+	void getVal( TValBuf &buf, long long beg = 0, long long end = 0, bool onlyLocal = false );
 	virtual string getS( long long *tm, bool up_ord ) { }
 	virtual double getR( long long *tm, bool up_ord ) { }
 	virtual int    getI( long long *tm, bool up_ord ) { }
@@ -387,6 +391,7 @@ class TVArchEl
 
     protected:
 	//Protected methods
+	virtual void getValProc( TValBuf &buf, long long beg, long long end )	{ }
 	virtual void setValProc( TValBuf &buf, long long beg, long long end )	{ }
 
 	//> Previous averaging value

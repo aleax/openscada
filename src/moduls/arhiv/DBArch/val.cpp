@@ -150,7 +150,7 @@ void ModVArchEl::fullErase()
     SYS->db().at().close( archivator().addr()+"."+archTbl(), true );
 }
 
-void ModVArchEl::getVal( TValBuf &buf, long long ibeg, long long iend )
+void ModVArchEl::getValProc( TValBuf &buf, long long ibeg, long long iend )
 {
     //- Going border to period time -
     ibeg = (ibeg/period())*period();

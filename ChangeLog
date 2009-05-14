@@ -1,3 +1,14 @@
+2009-05-14 Roman
+- /SYS: Spec file is some updated.
+- /Archive/Value: Eval counter is added to values buffer.
+- !!:/Archive/Value, /Archive/FSArch, /Archive/DBArch: Get values API some changed for archive's holes fill from
+    reserved DAQ-stations. There modify present data support is added to the value archive buffer of fixed grid mode.
+- !!!!:/Archive/Value: Holes compensation by help reserved stations archives support is added.
+    Compensation process in time user's request to data.
+- /DAQ: Redundant configuration active flag is added by function TDAQS::rdActive().
+- /UI/Vision: /UI/WebVision: There algoritm of packed archives data processing is unified for primitive Diagram.
+
+
 2009-05-12 Roman
 - FIX:/Archive/Value: EVAL value set after values requesting from buffer if next requested archive.
 - FIX:/Archive/Value: Last data into buffer lost is fixed on exit. Thread call by timer replaced by standalone thread.
@@ -5,8 +16,9 @@
 - FIX:/DAQ, /DAQ/DAQGate: Checking for attribute present is added.
 - FIX:/DAQ/Values: For all attributes of DAQ set the EVAL variable on creation.
 - /DAQ: Function TDAQS::rdStRequest() for request to remoted stations is expanded.
-- FIX:/UI/Vision: Pages include on RunTime is fixed.
-- FIX:/UI/Vision,/UI/WebVision: No display archive data if on first request present data only from buffer is fixed.
+- FIX:/UI/Vision: Pages include to other on RunTime is fixed.
+- FIX:/UI/Vision,/UI/WebVision: No display archive data if on first request present data only from buffer is fixed, 
+    for primitive Diagram.
 
 
 2009-05-09 Roman

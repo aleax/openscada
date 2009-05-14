@@ -2338,20 +2338,24 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
     bend = atoll(req.attr("tm").c_str());
     bper = atoll(req.attr("per").c_str());
 
-    if( !bbeg || !bend ) return;
+    if( !bbeg || !bend || req.text().empty() ) return;
 
     prevPos = 0;
     prevVal = EVAL_REAL;
     buf.clear();
-    for( int v_off = 0; (svl=TSYS::strSepParse(req.text(),0,'\n',&v_off)).size(); )
+    for( int v_off = 0; true; )
     {
-	sscanf(svl.c_str(),"%d %lf",&curPos,&curVal);
-	if( (val_tp == 0 && curVal == EVAL_BOOL) || (val_tp == 1 && curVal == EVAL_INT) ) curVal = EVAL_REAL;
-	for( ; prevPos < curPos-1; prevPos++ ) buf.push_back(SHg(bbeg+(prevPos+1)*bper,prevVal));
-	buf.push_back(SHg(bbeg+curPos*bper,curVal));
-	prevPos = curPos; prevVal = curVal;
+	svl = TSYS::strSepParse(req.text(),0,'\n',&v_off);
+	if( svl.size() )
+	{
+	    sscanf(svl.c_str(),"%d %lf",&curPos,&curVal);
+	    if( (val_tp == 0 && curVal == EVAL_BOOL) || (val_tp == 1 && curVal == EVAL_INT) ) curVal = EVAL_REAL;
+	}
+	else curPos = ((bend-bbeg)/bper)+1;
+	for( ; prevPos < curPos; prevPos++ ) buf.push_back(SHg(bbeg+prevPos*bper,prevVal));
+	prevVal = curVal;
+	if( prevPos > (bend-bbeg)/bper ) break;
     }
-    for( ; prevPos < (bend-bbeg)/bper; prevPos++ ) buf.push_back(SHg(bbeg+(prevPos+1)*bper,prevVal));
 
     //> Append buffer to values deque
     if( toEnd )

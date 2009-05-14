@@ -361,6 +361,14 @@ void TDAQS::subStop( )
     TSubSYS::subStop( );
 }
 
+bool TDAQS::rdActive( )
+{
+    ResAlloc res(nodeRes(),false);
+    for( map<string,TDAQS::SStat>::iterator sit = mSt.begin(); sit != mSt.end(); sit++ )
+	if( sit->second.isLive ) return true;
+    return false;
+}
+
 string TDAQS::rdStRequest( const string &cntr, XMLNode &req, const string &prevSt, bool toRun )
 {
     bool prevPresent = false;

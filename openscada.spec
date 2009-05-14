@@ -4,8 +4,8 @@ Name: openscada
 Version: 0.6.3.2
 Release: 1
 Source: openscada-%version.tar.gz
-License: GPL
-Group: Graphics
+License: GPLv2
+Group: Applications/Engineering
 Packager: Roman Savochenko <rom_as@fromru.com>
 URL: http://oscada.org.ua
 

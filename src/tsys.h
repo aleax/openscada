@@ -193,7 +193,7 @@ class TSYS : public TCntrNode
 	static string addr2str( void *addr );
 	static void *str2addr( const string &str );
 
-	//- Path and string parse -
+	//> Path and string parse
 	static string fNameFix( const string &fname );
 	static string strNoSpace( const string &val );
 	static string strSepParse( const string &str, int level, char sep, int *off = NULL );

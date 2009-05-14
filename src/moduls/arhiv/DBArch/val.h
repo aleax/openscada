@@ -51,7 +51,6 @@ class ModVArchEl: public TVArchEl
 	long long end( )	{ return m_end; }
 	long long period( )	{ return m_per; }
 
-	void getVal( TValBuf &buf, long long beg = 0, long long end = 0 );
 	string getS( long long *tm, bool up_ord );
 	double getR( long long *tm, bool up_ord );
 	int    getI( long long *tm, bool up_ord );
@@ -61,6 +60,7 @@ class ModVArchEl: public TVArchEl
 
     protected:
 	//Methods
+	void getValProc( TValBuf &buf, long long beg, long long end );
 	void setValProc( TValBuf &buf, long long beg, long long end );
 
     private:

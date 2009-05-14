@@ -196,7 +196,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 			setAttr("tm",TSYS::ll2str(vbeg))->setAttr("per",TSYS::ll2str(vper));
 
 		    TValBuf buf(arch.at().valType(),0,0,false,true);
-		    arch.at().getVal( buf, vbeg, vend, "", (vend-vbeg)/vper );
+		    arch.at().getVal( buf, vbeg, vend, "", (vend-vbeg)/vper, true );
 
 		    bool firstVal = true;
 		    string vl;
@@ -207,14 +207,6 @@ void TValue::cntrCmdProc( XMLNode *opt )
 			if( firstVal && vl != EVAL_STR ) { aNd->setAttr("tm",TSYS::ll2str(vbeg)); firstVal = false; }
 			aNd->childAdd("v")->setText(vl);
 		    }
-
-		    /*for( ; vbeg <= vend; vbeg++ )
-		    {
-			vl = arch.at().getS(&vbeg,true);
-			if( firstVal && vl == EVAL_STR ) continue;
-			if( firstVal && vl != EVAL_STR ) { aNd->setAttr("tm",TSYS::ll2str(vbeg)); firstVal = false; }
-			aNd->childAdd("v")->setText(vl);
-		    }*/
 		}
 	    }
 	    opt->setAttr("tm",TSYS::ll2str(ftm));

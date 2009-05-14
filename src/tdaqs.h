@@ -60,6 +60,7 @@ class TDAQS : public TSubSYS
 	AutoHD<TPrmTmplLib> tmplLibAt( const string &id )	{ return chldAt(mTmplib,id); }
 
 	//> Redundance
+	bool rdActive( );
 	int rdStLevel( )		{ return mRdStLevel; }
 	void setRdStLevel( int vl );
 	int rdTaskPer( )		{ return mRdTaskPer; }

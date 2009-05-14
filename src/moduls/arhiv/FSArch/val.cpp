@@ -576,7 +576,7 @@ long long ModVArchEl::begin()
     return 0;
 }
 
-void ModVArchEl::getVal( TValBuf &buf, long long ibeg, long long iend )
+void ModVArchEl::getValProc( TValBuf &buf, long long ibeg, long long iend )
 {
     iend = vmin( iend, end() );
     ibeg = vmax( ibeg, begin() );
