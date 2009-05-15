@@ -890,6 +890,55 @@ class str2int : public TFunction
 	void calc( TValFunc *val )	{ val->setI(0,strtol(val->getS(1).c_str(),NULL,0)); }
 };
 
+//*************************************************
+//* Split float to words                          *
+//*************************************************
+class floatSplitWord : public TFunction
+{
+    public:
+	floatSplitWord( ) : TFunction("floatSplitWord")
+	{
+	    ioAdd( new IO("val",_("Value"),IO::Real,IO::Default) );
+	    ioAdd( new IO("w1",_("Word 1"),IO::Integer,IO::Output) );
+	    ioAdd( new IO("w2",_("Word 2"),IO::Integer,IO::Output) );
+	}
+
+	string name( )	{ return _("Float: Split to words"); }
+	string descr( )	{ return _("Split float (8 byte) to words (4 byte)."); }
+
+	void calc( TValFunc *val )
+	{
+	    float vl = val->getR(0);
+	    val->setI(1,*((ui16*)&vl));
+	    val->setI(2,*(((ui16*)&vl)+1));
+	}
+};
+
+//*************************************************
+//* Merge float from words                        *
+//*************************************************
+class floatMergeWord : public TFunction
+{
+    public:
+	floatMergeWord( ) : TFunction("floatMergeWord")
+	{
+	    ioAdd( new IO("rez",_("Rezult"),IO::Real,IO::Return) );
+	    ioAdd( new IO("w1",_("Word 1"),IO::Integer,IO::Default) );
+	    ioAdd( new IO("w2",_("Word 2"),IO::Integer,IO::Default) );
+	}
+
+	string name( )	{ return _("Float: Merge from words"); }
+	string descr( )	{ return _("Merge float (8 byte) from words (4 byte)."); }
+
+	void calc( TValFunc *val )
+	{
+	    float vl;
+	    *((ui16*)&vl) = val->getI(1);
+	    *(((ui16*)&vl)+1) = val->getI(2);
+	    val->setR(0,vl);
+	}
+};
+
 }
 
 #endif //SYSFNC_H

@@ -2465,16 +2465,17 @@ void TVArchEl::getVal( TValBuf &buf, long long ibeg, long long iend, bool onlyLo
 		//> Request to remote station for data
 		if( (curVal != EVAL_STR || cbeg > iend) && firstEval )
 		{
-		    req.setAttr("local","1")->
+		    reqCall:
+		    req.clear()->setAttr("local","1")->
 			setAttr("path",TSYS::sepstr2path(archive().srcData())+"/%2fserv%2fval")->
 			setAttr("tm_grnd",TSYS::ll2str(firstEval))->
 			setAttr("tm",TSYS::ll2str(curEval))->
 			setAttr("arch",archivator().workId())->
 			setAttr("mode","1");
 
-//		    printf("TEST 00: '%s': Find hole (%lld - %lld)\n",archive().id().c_str(),firstEval/1000000,curEval/1000000);
+		    //printf("TEST 00: '%s': Find hole (%lld - %lld)\n",archive().id().c_str(),firstEval/1000000,curEval/1000000);
 		    lstStat = SYS->daq().at().rdStRequest(sPrm.at().owner().workId(),req,lstStat,false);
-		    bool noEvalOk = false;
+		    bool evalOk = false, noEvalOk = false;
 		    if( !lstStat.empty() && !atoi(req.attr("rez").c_str()) && atoll(req.attr("tm_grnd").c_str()) && atoll(req.attr("tm").c_str()) )
 		    {
 			//> Get values and put to buffer
@@ -2485,7 +2486,7 @@ void TVArchEl::getVal( TValBuf &buf, long long ibeg, long long iend, bool onlyLo
 			int prevPos = 0, curPos;
 			string prevVal = EVAL_STR, curVal;
 
-//			printf("TEST 01: %s Process hole (%lld-%lld)\n",archivator().workId().c_str(),bbeg/1000000,bend/1000000);
+			//printf("TEST 01: %s Process hole (%lld-%lld)\n",archivator().workId().c_str(),bbeg/1000000,bend/1000000);
 
 			for( int v_off = 0; true; )
 			{
@@ -2503,32 +2504,28 @@ void TVArchEl::getVal( TValBuf &buf, long long ibeg, long long iend, bool onlyLo
 				case TFld::Boolean:
 				{
 				    char vl = atoi(prevVal.c_str());
-				    if( vl == EVAL_BOOL ) prevPos = curPos;
-				    else for( ; prevPos < curPos; prevPos++ )
-				    { buf.setB(vl,bbeg+prevPos*bper); noEvalOk = true; }
+				    if( vl == EVAL_BOOL ) { evalOk = true; prevPos = curPos; }
+				    else { noEvalOk = true; for( ; prevPos < curPos; prevPos++ ) buf.setB(vl,bbeg+prevPos*bper); }
 				    break;
 				}
 				case TFld::Integer:
 				{
 				    int vl = atoi(prevVal.c_str());
-				    if( vl == EVAL_INT ) prevPos = curPos;
-				    else for( ; prevPos < curPos; prevPos++ )
-				    { buf.setI(vl,bbeg+prevPos*bper); noEvalOk = true; }
+				    if( vl == EVAL_INT ) { evalOk = true; prevPos = curPos; }
+				    else { noEvalOk = true; for( ; prevPos < curPos; prevPos++ ) buf.setI(vl,bbeg+prevPos*bper); }
 				    break;
 				}
 				case TFld::Real:
 				{
 				    double vl = atof(prevVal.c_str());
-				    if( vl == EVAL_REAL ) prevPos = curPos;
-				    else for( ; prevPos < curPos; prevPos++ )
-				    { buf.setR(vl,bbeg+prevPos*bper); noEvalOk = true; }
+				    if( vl == EVAL_REAL ) { evalOk = true; prevPos = curPos; }
+				    else { noEvalOk = true; for( ; prevPos < curPos; prevPos++ ) buf.setR(vl,bbeg+prevPos*bper); }
 				    break;
 				}
 				case TFld::String:
 				{
-				    if( prevVal == EVAL_STR ) prevPos = curPos;
-				    else for( ; prevPos < curPos; prevPos++ )
-				    { buf.setS(prevVal,bbeg+prevPos*bper); noEvalOk = true; }
+				    if( prevVal == EVAL_STR ) { evalOk = true; prevPos = curPos; }
+				    else { noEvalOk = true; for( ; prevPos < curPos; prevPos++ ) buf.setS(prevVal,bbeg+prevPos*bper); }
 				    break;
 				}
 			    }
@@ -2539,7 +2536,7 @@ void TVArchEl::getVal( TValBuf &buf, long long ibeg, long long iend, bool onlyLo
 			//> Put buffer part to archive
 			if( noEvalOk ) setVal(buf,firstEval,curEval);
 		    }
-		    if( !lstStat.empty() ) cbeg = firstEval;
+		    if( !lstStat.empty() && evalOk ) goto reqCall;
 		    firstEval = 0;
 		}
 	    }while( cbeg <= iend );

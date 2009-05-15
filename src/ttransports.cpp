@@ -271,6 +271,9 @@ void TTransportS::subStart( )
 		mess_err(nodePath().c_str(),_("Start output transport <%s> error."),o_lst[i_o].c_str());
 	    }
     }
+
+    //> Controllers start
+    TSubSYS::subStart( );
 }
 
 void TTransportS::subStop( )
@@ -307,6 +310,8 @@ void TTransportS::subStop( )
 		mess_err(nodePath().c_str(),_("Stop output transport <%s> error."),o_lst[i_o].c_str());
 	    }
     }
+
+    TSubSYS::subStop( );
 }
 
 string TTransportS::optDescr( )
@@ -413,33 +418,33 @@ int TTransportS::cntrIfCmd( XMLNode &node, const string &senderPref, const strin
 
 void TTransportS::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	TSubSYS::cntrCmdProc(opt);
-	if(ctrMkNode("area",opt,0,"/sub",_("Subsystem"),0440))
+	if( ctrMkNode("area",opt,0,"/sub",_("Subsystem"),0444) )
 	{
-	    ctrMkNode("fld",opt,-1,"/sub/sysHosts",_("System's external hosts"),0660,"root","root",1,"tp","bool");
-	    if(ctrMkNode("table",opt,-1,"/sub/ehost",_("External hosts poll"),0666,"root","root",2,"s_com","add,del","key","id"))
+	    ctrMkNode("fld",opt,-1,"/sub/sysHosts",_("System's external hosts"),0660,"root","Transport",1,"tp","bool");
+	    if(ctrMkNode("table",opt,-1,"/sub/ehost",_("External hosts poll"),0666,"root","Transport",2,"s_com","add,del","key","id"))
 	    {
-		ctrMkNode("list",opt,-1,"/sub/ehost/id",_("Id"),0666,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/sub/ehost/name",_("Name"),0666,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/sub/ehost/transp",_("Transport"),0666,"root","root",4,"tp","str","idm","1","dest","select","select","/sub/transps");
-	        ctrMkNode("list",opt,-1,"/sub/ehost/addr",_("Address"),0666,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/sub/ehost/user",_("User"),0666,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/sub/ehost/pass",_("Password"),0666,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/sub/ehost/id",_("Id"),0666,"root","Transport",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/sub/ehost/name",_("Name"),0666,"root","Transport",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/sub/ehost/transp",_("Transport"),0666,"root","Transport",4,"tp","str","idm","1","dest","select","select","/sub/transps");
+	        ctrMkNode("list",opt,-1,"/sub/ehost/addr",_("Address"),0666,"root","Transport",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/sub/ehost/user",_("User"),0666,"root","Transport",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/sub/ehost/pass",_("Password"),0666,"root","Transport",1,"tp","str");
 	    }
 	}
-	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","10");
+	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0444,"root","Transport",3,"tp","str","cols","90","rows","10");
 	return;
     }
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) ) opt->setText(optDescr());
+    if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0444) ) opt->setText(optDescr());
     else if( a_path == "/sub/sysHosts" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(sysHost()) );
-	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	setSysHost( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",0660,"root","Transport",SEQ_RD) )	opt->setText( TSYS::int2str(sysHost()) );
+	if( ctrChkNode(opt,"set",0660,"root","Transport",SEQ_WR) )	setSysHost( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/sub/transps" && ctrChkNode(opt) )
     {
@@ -452,7 +457,7 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
     {
 	TConfig c_el(&el_ext);
 	c_el.cfg("OP_USER").setS(opt->attr("user"));
-	if( ctrChkNode(opt,"get",0666,"root","root",SEQ_RD) )
+	if( ctrChkNode(opt,"get",0666,"root","Transport",SEQ_RD) )
 	{
 	    XMLNode *n_id	= ctrMkNode("list",opt,-1,"/sub/ehost/id","",0666);
 	    XMLNode *n_nm	= ctrMkNode("list",opt,-1,"/sub/ehost/name","",0666);
@@ -474,11 +479,11 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 		if( n_pass )	n_pass->childAdd("el")->setText(host.pass.size()?"*******":"");
 	    }
 	}
-	if( ctrChkNode(opt,"add",0666,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"add",0666,"root","Transport",SEQ_WR) )
 	    extHostSet(ExtHost(sysHost()?"*":opt->attr("user"),"newHost","New external host","","",opt->attr("user"),""));
-	if( ctrChkNode(opt,"del",0666,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"del",0666,"root","Transport",SEQ_WR) )
 	    extHostDel(sysHost()?"*":opt->attr("user"),opt->attr("key_id") );
-	if( ctrChkNode(opt,"set",0666,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"set",0666,"root","Transport",SEQ_WR) )
 	{
 	    string col  = opt->attr("col");
 	    ExtHost host = extHostGet(sysHost()?"*":opt->attr("user"),opt->attr("key_id"));
@@ -497,7 +502,6 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
     }
     else TSubSYS::cntrCmdProc(opt);
 }
-
 
 //************************************************
 //* TTipTransport                                *

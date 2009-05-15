@@ -113,6 +113,9 @@ void Lib::postEnable( int flag )
     reg( new str2real() );
     reg( new str2int() );
 
+    reg( new floatSplitWord() );
+    reg( new floatMergeWord() );
+
     reg( new varhOpen() );
     reg( new varhBufOpen() );
     reg( new varhClose() );

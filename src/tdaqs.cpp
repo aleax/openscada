@@ -586,6 +586,7 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/redund/sts/cnt",_("Counter"),R_R_R_,"root","DAQ",1,"tp","real");
 		ctrMkNode("list",opt,-1,"/redund/sts/run",_("Run"),R_R_R_,"root","DAQ",1,"tp","str");
 	    }
+	    ctrMkNode("comm",opt,-1,"/redund/hostLnk",_("Go to remote stations list configuration"),0660,"root","Transport",1,"tp","lnk");
 	    if( ctrMkNode("table",opt,-1,"/redund/cntr",_("Controllers"),RWRWR_,"root","DAQ",1,"key","id") )
 	    {
 		ctrMkNode("list",opt,-1,"/redund/cntr/id",_("Controller"),R_R_R_,"root","DAQ",1,"tp","str");
@@ -683,6 +684,11 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 	SYS->transport().at().extHostList("*",hls);
 	for( int i_h = 0; i_h < hls.size(); i_h++ )
 	    opt->childAdd("el")->setText(hls[i_h]);
+    }
+    else if( a_path == "/redund/hostLnk" && ctrChkNode(opt,"get",0660,"root","Transport",SEQ_RD) )
+    {
+	SYS->transport().at().setSysHost(true);
+	opt->setText("/Transport");
     }
     else if( a_path == "/redund/cntr" )
     {

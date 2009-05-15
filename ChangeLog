@@ -1,3 +1,10 @@
+2009-05-15 Roman
+- !:/Archive/Value: Holes fill algorithm is improved.
+- /DAQ: Link to external stations configuration is added to redundat configuration page.
+- FIX:/Transport: Security group "Transport" creation and using is fixed.
+- !:/Special/FLibSYS: User's function floatSplitWord() and floatMergeWord() is added.
+
+
 2009-05-14 Roman
 - /SYS: Spec file is some updated.
 - /Archive/Value: Eval counter is added to values buffer.

@@ -114,7 +114,7 @@ void TSubSYS::subStop( )
 	try{ modAt(list[i_m]).at().modStop( ); }
 	catch(TError err)
 	{
-	    mess_err(err.cat.c_str(),"%s",err.mess.c_str()); 
+	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	    mess_err(nodePath().c_str(),_("Stop module '%s' error."),list[i_m].c_str());
 	}
 
