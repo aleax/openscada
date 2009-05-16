@@ -2,12 +2,11 @@
 
 EXTRA_DIST = *.h po/* doc/*
 
-AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
-AM_LDFLAGS= -shared -module
+AM_CXXFLAGS= -I$(top_srcdir)/src $(SQLITE3_CFLAGS) -fPIC -DPIC
+AM_LDFLAGS= $(SQLITE3_LDFLAGS) -shared -module
 
 oscd_modul_PROGRAMS = bd_SQLite.so
 bd_SQLite_so_SOURCES = bd_sqlite.cpp
-bd_SQLite_so_LDADD = -lsqlite3
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)DB.SQLite

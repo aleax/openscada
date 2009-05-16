@@ -248,7 +248,7 @@ class varhCopyBuf : public TFunction
 		}
 		else vb = mod->vbuf(did);
 		if(!vb)     return;
-		mod->varch(sid).at().getVal(*vb,(long long)val->getI(2)*1000000+val->getI(3),
+		mod->varch(sid).at().getVals(*vb,(long long)val->getI(2)*1000000+val->getI(3),
 						(long long)val->getI(4)*1000000+val->getI(5),val->getS(6));
 	    }
 	    else if(mod->isArch(did))
@@ -261,7 +261,7 @@ class varhCopyBuf : public TFunction
 		}
 		else vb = mod->vbuf(sid);
 		if(!vb)     return;
-		mod->varch(did).at().setVal(*vb,(long long)val->getI(2)*1000000+val->getI(3),
+		mod->varch(did).at().setVals(*vb,(long long)val->getI(2)*1000000+val->getI(3),
 						(long long)val->getI(4)*1000000+val->getI(5),val->getS(6));
 	    }
 	    else
@@ -269,7 +269,7 @@ class varhCopyBuf : public TFunction
 		TValBuf* svb = mod->vbuf(sid);
 		TValBuf* dvb = mod->vbuf(did);
 		if(!svb || !dvb) return;
-		svb->getVal(*dvb,(long long)val->getI(2)*1000000+val->getI(3),
+		svb->getVals(*dvb,(long long)val->getI(2)*1000000+val->getI(3),
 				 (long long)val->getI(4)*1000000+val->getI(5));
 	    }
 	}

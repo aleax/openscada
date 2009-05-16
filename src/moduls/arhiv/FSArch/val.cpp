@@ -263,7 +263,7 @@ void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const stri
 	{
 	    long long end_tm = c_tm+buf_sz*buf_per;
 	    end_tm = vmin(end_tm,(long long)end*1000000);
-	    SYS->archive().at().valAt(arch_nm).at().getVal(buf,c_tm,end_tm,workId());
+	    SYS->archive().at().valAt(arch_nm).at().getVals(buf,c_tm,end_tm,workId());
 
 	    //-- Check scale --
 	    for( ; c_tm <= buf.end(); c_tm+=buf_per )
@@ -284,7 +284,7 @@ void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const stri
 	{
 	    long long end_tm = c_tm+buf_sz*buf_per;
 	    end_tm = vmin(end_tm,(long long)end*1000000);
-	    SYS->archive().at().valAt(arch_nm).at().getVal(buf,c_tm,end_tm,workId());
+	    SYS->archive().at().valAt(arch_nm).at().getVals(buf,c_tm,end_tm,workId());
 	
 	    for( ; c_tm <= buf.end(); c_tm+=buf_per, val_cnt++ )
 	    {
@@ -313,7 +313,7 @@ void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const stri
 	{
 	    long long end_tm = c_tm+buf_sz*buf_per;
 	    end_tm = vmin(end_tm,(long long)end*1000000);
-	    SYS->archive().at().valAt(arch_nm).at().getVal(buf,c_tm,end_tm,workId());
+	    SYS->archive().at().valAt(arch_nm).at().getVals(buf,c_tm,end_tm,workId());
 	    for(; c_tm <= buf.end(); c_tm+=buf_per )
 	    {
 		sprintf(c_val,"%g\n",buf.getR(&c_tm,true));
@@ -576,11 +576,8 @@ long long ModVArchEl::begin()
     return 0;
 }
 
-void ModVArchEl::getValProc( TValBuf &buf, long long ibeg, long long iend )
+void ModVArchEl::getValsProc( TValBuf &buf, long long ibeg, long long iend )
 {
-    iend = vmin( iend, end() );
-    ibeg = vmax( ibeg, begin() );
-
     ResAlloc res(m_res,false);
     for( int i_a = 0; i_a < arh_f.size(); i_a++ )
 	if( ibeg > iend ) break;
@@ -588,7 +585,7 @@ void ModVArchEl::getValProc( TValBuf &buf, long long ibeg, long long iend )
 	{
 	    for( ; ibeg < arh_f[i_a]->begin(); ibeg+=(long long)(archivator().valPeriod()*1000000.) )
 		buf.setI(EVAL_INT,ibeg);
-	    arh_f[i_a]->getVal(buf,ibeg,vmin(iend,arh_f[i_a]->end()));
+	    arh_f[i_a]->getVals(buf,ibeg,vmin(iend,arh_f[i_a]->end()));
 	    ibeg = arh_f[i_a]->end()+1;
 	}
     for( ; ibeg <= iend; ibeg+=(long long)(archivator().valPeriod()*1000000.) )
@@ -663,7 +660,7 @@ char ModVArchEl::getB( long long *tm, bool up_ord )
     return EVAL_BOOL;
 }
 
-void ModVArchEl::setValProc( TValBuf &buf, long long beg, long long end )
+void ModVArchEl::setValsProc( TValBuf &buf, long long beg, long long end )
 {
     //- Check border -
     if( !buf.vOK(beg,end) )	return;
@@ -701,7 +698,7 @@ void ModVArchEl::setValProc( TValBuf &buf, long long beg, long long end )
 	    if( beg <= arh_f[i_a]->end() && end >= arh_f[i_a]->begin() )
 	    {
 		long long n_end = (end > arh_f[i_a]->end())?arh_f[i_a]->end():end;
-		arh_f[i_a]->setVal(buf,beg,n_end);
+		arh_f[i_a]->setVals(buf,beg,n_end);
 		beg = n_end+(long long)(archivator().valPeriod()*1000000.);
 	    }
 	}
@@ -720,7 +717,7 @@ void ModVArchEl::setValProc( TValBuf &buf, long long beg, long long end )
 	long long n_end = beg+(long long)(((ModVArch &)archivator()).fileTimeSize()*60.*60.*1000000.);
 	arh_f.push_back(new VFileArch(AName,beg,n_end,(long long)(archivator().valPeriod()*1000000.),archive().valType(),this) );
 	n_end = (end > n_end)?n_end:end;
-	arh_f[arh_f.size()-1]->setVal(buf,beg,n_end);
+	arh_f[arh_f.size()-1]->setVals(buf,beg,n_end);
 	beg = n_end+(long long)(archivator().valPeriod()*1000000.);
     }
 }
@@ -1017,7 +1014,7 @@ long long VFileArch::endData( )
     return begin() + curPos*period();
 }
 
-void VFileArch::getVal( TValBuf &buf, long long beg, long long end )
+void VFileArch::getVals( TValBuf &buf, long long beg, long long end )
 {
     int vpos_beg, vpos_end, voff_beg, vlen_beg, voff_end, vlen_end;
     char *pid_b, *val_b;
@@ -1275,7 +1272,7 @@ char VFileArch::getB( int vpos )
     }
 }
 
-void VFileArch::setVal( TValBuf &buf, long long ibeg, long long iend )
+void VFileArch::setVals( TValBuf &buf, long long ibeg, long long iend )
 {
     int vpos_beg, vpos_end, vdif;
     string val_b, value, value_first, value_end;       //Set value

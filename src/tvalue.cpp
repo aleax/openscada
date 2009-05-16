@@ -196,7 +196,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 			setAttr("tm",TSYS::ll2str(vbeg))->setAttr("per",TSYS::ll2str(vper));
 
 		    TValBuf buf(arch.at().valType(),0,0,false,true);
-		    arch.at().getVal( buf, vbeg, vend, "", (vend-vbeg)/vper, true );
+		    arch.at().getVals( buf, vbeg, vend, "", (vend-vbeg)/vper, true );
 
 		    bool firstVal = true;
 		    string vl;

@@ -2,12 +2,11 @@
 
 EXTRA_DIST = *.h po/* doc/*
 
-AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
-AM_LDFLAGS= -shared -module
+AM_CXXFLAGS= -I$(top_srcdir)/src $(FIREBIRD_CFLAGS) -fPIC -DPIC
+AM_LDFLAGS= $(FIREBIRD_LDFLAGS) -shared -module
 
-oscd_modul_PROGRAMS = bd_FireBird.so 
+oscd_modul_PROGRAMS = bd_FireBird.so
 bd_FireBird_so_SOURCES = firebird.cpp
-bd_FireBird_so_LDADD = -lfbclient
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)DB.FireBird

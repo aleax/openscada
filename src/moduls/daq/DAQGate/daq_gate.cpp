@@ -534,7 +534,7 @@ void TMdPrm::update( )
 			    TValBuf buf(vl.at().arch().at().valType(),0,per,false,true);
 			    for( int i_v = 0; i_v < aNd->childSize(); i_v++ )
 			    buf.setS(aNd->childGet(i_v)->text(),btm+per*i_v);
-			    vl.at().arch().at().setVal(buf,buf.begin(),buf.end(),"");
+			    vl.at().arch().at().setVals(buf,buf.begin(),buf.end(),"");
 			}
 		    vl.at().setS(aNd->childGet(aNd->childSize()-1)->text(),btm+per*(aNd->childSize()-1),true);
 		}

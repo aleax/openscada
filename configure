@@ -807,6 +807,16 @@ YACC_OK
 YFLAGS
 YACC
 DAQSub_mod
+FIREBIRD_VERSION
+FIREBIRD_LDFLAGS
+FIREBIRD_CFLAGS
+SQLITE3_VERSION
+SQLITE3_LDFLAGS
+SQLITE3_CFLAGS
+MYSQL_LDFLAGS
+MYSQL_CFLAGS
+MYSQL_VERSION
+MYSQL_CONFIG
 DBSub_mod
 subdir_mod
 oscd_docmodul
@@ -972,6 +982,9 @@ enable_SystemTests
 enable_FLibComplex1
 enable_FLibMath
 enable_FLibSYS
+with_mysql
+with_sqlite3
+with_firebird
 with_qt4_dir
 '
       ac_precious_vars='build_alias
@@ -1670,6 +1683,12 @@ Optional Packages:
   --with-pic              try to use only PIC/non-PIC objects [default=use
                           both]
   --with-tags[=TAGS]      include additional configurations [automatic]
+  --with-mysql=[ARG]      use MySQL client library [default=yes], optionally
+                          specify path to mysql_config
+  --with-sqlite3=[ARG]    use SQLite 3 library [default=yes], optionally
+                          specify the prefix for sqlite3 library
+  --with-firebird=[ARG]   use Firebird client library [default=yes],
+                          optionally specify the prefix for firebird library
   --with-qt4-dir=DIR      Path to directory where QT4 instaled (/usr/lib/qt4 - default)
 
 Some influential environment variables:
@@ -5189,7 +5208,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 5192 "configure"' > conftest.$ac_ext
+  echo '#line 5211 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -8054,11 +8073,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8057: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8076: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8061: \$? = $ac_status" >&5
+   echo "$as_me:8080: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8344,11 +8363,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8347: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8366: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8351: \$? = $ac_status" >&5
+   echo "$as_me:8370: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8448,11 +8467,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8451: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8470: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:8455: \$? = $ac_status" >&5
+   echo "$as_me:8474: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -10970,7 +10989,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 10973 "configure"
+#line 10992 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -11070,7 +11089,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 11073 "configure"
+#line 11092 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -13482,11 +13501,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13485: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13504: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:13489: \$? = $ac_status" >&5
+   echo "$as_me:13508: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -13586,11 +13605,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13589: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13608: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:13593: \$? = $ac_status" >&5
+   echo "$as_me:13612: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -16496,11 +16515,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16499: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16518: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16503: \$? = $ac_status" >&5
+   echo "$as_me:16522: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16600,11 +16619,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16603: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16622: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:16607: \$? = $ac_status" >&5
+   echo "$as_me:16626: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -18187,11 +18206,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:18190: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:18209: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:18194: \$? = $ac_status" >&5
+   echo "$as_me:18213: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -18291,11 +18310,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:18294: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:18313: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:18298: \$? = $ac_status" >&5
+   echo "$as_me:18317: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -20510,11 +20529,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:20513: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:20532: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:20517: \$? = $ac_status" >&5
+   echo "$as_me:20536: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -20800,11 +20819,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:20803: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:20822: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:20807: \$? = $ac_status" >&5
+   echo "$as_me:20826: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -20904,11 +20923,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:20907: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:20926: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:20911: \$? = $ac_status" >&5
+   echo "$as_me:20930: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -28134,234 +28153,148 @@ $as_echo "Build module: DB/MySQL" >&6; }
     #>> Modules checkings
 
 
-for ac_header in mysql/mysql.h mysql/errmsg.h
+# Check whether --with-mysql was given.
+if test "${with_mysql+set}" = set; then
+  withval=$with_mysql;
+        if test "$withval" = "no"; then
+            want_mysql="no"
+        elif test "$withval" = "yes"; then
+            want_mysql="yes"
+        else
+            want_mysql="yes"
+            MYSQL_CONFIG="$withval"
+        fi
+
+else
+  want_mysql="yes"
+
+fi
+
+
+    MYSQL_CFLAGS=""
+    MYSQL_LDFLAGS=""
+    MYSQL_VERSION=""
+
+
+    if test "$want_mysql" = "yes"; then
+
+        if test -z "$MYSQL_CONFIG" -o test; then
+            # Extract the first word of "mysql_config", so it can be a program name with args.
+set dummy mysql_config; ac_word=$2
+{ $as_echo "$as_me:$LINENO: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if test "${ac_cv_path_MYSQL_CONFIG+set}" = set; then
+  $as_echo_n "(cached) " >&6
+else
+  case $MYSQL_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_MYSQL_CONFIG="$MYSQL_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
 do
-as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
-if { as_var=$as_ac_Header; eval "test \"\${$as_var+set}\" = set"; }; then
-  { $as_echo "$as_me:$LINENO: checking for $ac_header" >&5
-$as_echo_n "checking for $ac_header... " >&6; }
-if { as_var=$as_ac_Header; eval "test \"\${$as_var+set}\" = set"; }; then
-  $as_echo_n "(cached) " >&6
-fi
-ac_res=`eval 'as_val=${'$as_ac_Header'}
-		 $as_echo "$as_val"'`
-	       { $as_echo "$as_me:$LINENO: result: $ac_res" >&5
-$as_echo "$ac_res" >&6; }
-else
-  # Is the header compilable?
-{ $as_echo "$as_me:$LINENO: checking $ac_header usability" >&5
-$as_echo_n "checking $ac_header usability... " >&6; }
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-$ac_includes_default
-#include <$ac_header>
-_ACEOF
-rm -f conftest.$ac_objext
-if { (ac_try="$ac_compile"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-$as_echo "$ac_try_echo") >&5
-  (eval "$ac_compile") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_cxx_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest.$ac_objext; then
-  ac_header_compiler=yes
-else
-  $as_echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	ac_header_compiler=no
-fi
-
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-{ $as_echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
-$as_echo "$ac_header_compiler" >&6; }
-
-# Is the header present?
-{ $as_echo "$as_me:$LINENO: checking $ac_header presence" >&5
-$as_echo_n "checking $ac_header presence... " >&6; }
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-#include <$ac_header>
-_ACEOF
-if { (ac_try="$ac_cpp conftest.$ac_ext"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-$as_echo "$ac_try_echo") >&5
-  (eval "$ac_cpp conftest.$ac_ext") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } >/dev/null && {
-	 test -z "$ac_cxx_preproc_warn_flag$ac_cxx_werror_flag" ||
-	 test ! -s conftest.err
-       }; then
-  ac_header_preproc=yes
-else
-  $as_echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-  ac_header_preproc=no
-fi
-
-rm -f conftest.err conftest.$ac_ext
-{ $as_echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
-$as_echo "$ac_header_preproc" >&6; }
-
-# So?  What about this header?
-case $ac_header_compiler:$ac_header_preproc:$ac_cxx_preproc_warn_flag in
-  yes:no: )
-    { $as_echo "$as_me:$LINENO: WARNING: $ac_header: accepted by the compiler, rejected by the preprocessor!" >&5
-$as_echo "$as_me: WARNING: $ac_header: accepted by the compiler, rejected by the preprocessor!" >&2;}
-    { $as_echo "$as_me:$LINENO: WARNING: $ac_header: proceeding with the compiler's result" >&5
-$as_echo "$as_me: WARNING: $ac_header: proceeding with the compiler's result" >&2;}
-    ac_header_preproc=yes
-    ;;
-  no:yes:* )
-    { $as_echo "$as_me:$LINENO: WARNING: $ac_header: present but cannot be compiled" >&5
-$as_echo "$as_me: WARNING: $ac_header: present but cannot be compiled" >&2;}
-    { $as_echo "$as_me:$LINENO: WARNING: $ac_header:     check for missing prerequisite headers?" >&5
-$as_echo "$as_me: WARNING: $ac_header:     check for missing prerequisite headers?" >&2;}
-    { $as_echo "$as_me:$LINENO: WARNING: $ac_header: see the Autoconf documentation" >&5
-$as_echo "$as_me: WARNING: $ac_header: see the Autoconf documentation" >&2;}
-    { $as_echo "$as_me:$LINENO: WARNING: $ac_header:     section \"Present But Cannot Be Compiled\"" >&5
-$as_echo "$as_me: WARNING: $ac_header:     section \"Present But Cannot Be Compiled\"" >&2;}
-    { $as_echo "$as_me:$LINENO: WARNING: $ac_header: proceeding with the preprocessor's result" >&5
-$as_echo "$as_me: WARNING: $ac_header: proceeding with the preprocessor's result" >&2;}
-    { $as_echo "$as_me:$LINENO: WARNING: $ac_header: in the future, the compiler will take precedence" >&5
-$as_echo "$as_me: WARNING: $ac_header: in the future, the compiler will take precedence" >&2;}
-    ( cat <<\_ASBOX
-## -------------------------------- ##
-## Report this to rom_as@fromru.com ##
-## -------------------------------- ##
-_ASBOX
-     ) | sed "s/^/$as_me: WARNING:     /" >&2
-    ;;
-esac
-{ $as_echo "$as_me:$LINENO: checking for $ac_header" >&5
-$as_echo_n "checking for $ac_header... " >&6; }
-if { as_var=$as_ac_Header; eval "test \"\${$as_var+set}\" = set"; }; then
-  $as_echo_n "(cached) " >&6
-else
-  eval "$as_ac_Header=\$ac_header_preproc"
-fi
-ac_res=`eval 'as_val=${'$as_ac_Header'}
-		 $as_echo "$as_val"'`
-	       { $as_echo "$as_me:$LINENO: result: $ac_res" >&5
-$as_echo "$ac_res" >&6; }
-
-fi
-as_val=`eval 'as_val=${'$as_ac_Header'}
-		 $as_echo "$as_val"'`
-   if test "x$as_val" = x""yes; then
-  cat >>confdefs.h <<_ACEOF
-#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
-_ACEOF
-
-else
-  { { $as_echo "$as_me:$LINENO: error: DB/MySQL: Some MySQL API headers not found. Install or check MySQL library developing package!" >&5
-$as_echo "$as_me: error: DB/MySQL: Some MySQL API headers not found. Install or check MySQL library developing package!" >&2;}
-   { (exit 1); exit 1; }; }
-fi
-
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_path_MYSQL_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    $as_echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
 done
+done
+IFS=$as_save_IFS
 
-    { $as_echo "$as_me:$LINENO: checking for mysql_init in -lmysqlclient" >&5
-$as_echo_n "checking for mysql_init in -lmysqlclient... " >&6; }
-if test "${ac_cv_lib_mysqlclient_mysql_init+set}" = set; then
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lmysqlclient  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char mysql_init ();
-int
-main ()
-{
-return mysql_init ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (ac_try="$ac_link"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
+  test -z "$ac_cv_path_MYSQL_CONFIG" && ac_cv_path_MYSQL_CONFIG="no"
+  ;;
 esac
-eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-$as_echo "$ac_try_echo") >&5
-  (eval "$ac_link") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_cxx_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest$ac_exeext && {
-	 test "$cross_compiling" = yes ||
-	 $as_test_x conftest$ac_exeext
-       }; then
-  ac_cv_lib_mysqlclient_mysql_init=yes
+fi
+MYSQL_CONFIG=$ac_cv_path_MYSQL_CONFIG
+if test -n "$MYSQL_CONFIG"; then
+  { $as_echo "$as_me:$LINENO: result: $MYSQL_CONFIG" >&5
+$as_echo "$MYSQL_CONFIG" >&6; }
 else
-  $as_echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	ac_cv_lib_mysqlclient_mysql_init=no
+  { $as_echo "$as_me:$LINENO: result: no" >&5
+$as_echo "no" >&6; }
 fi
 
-rm -rf conftest.dSYM
-rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:$LINENO: result: $ac_cv_lib_mysqlclient_mysql_init" >&5
-$as_echo "$ac_cv_lib_mysqlclient_mysql_init" >&6; }
-if test "x$ac_cv_lib_mysqlclient_mysql_init" = x""yes; then
-  { $as_echo "$as_me:$LINENO: Pass global library using" >&5
-$as_echo "$as_me: Pass global library using" >&6;}
-else
-  { { $as_echo "$as_me:$LINENO: error: DB/MySQL: MySQL API library not found. Install or check MySQL library package!" >&5
-$as_echo "$as_me: error: DB/MySQL: MySQL API library not found. Install or check MySQL library package!" >&2;}
-   { (exit 1); exit 1; }; }
-fi
 
+        fi
+
+        if test "$MYSQL_CONFIG" != "no"; then
+            { $as_echo "$as_me:$LINENO: checking for MySQL libraries" >&5
+$as_echo_n "checking for MySQL libraries... " >&6; }
+
+            MYSQL_CFLAGS="`$MYSQL_CONFIG --cflags`"
+            MYSQL_LDFLAGS="`$MYSQL_CONFIG --libs`"
+
+            MYSQL_VERSION=`$MYSQL_CONFIG --version`
+
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_MYSQL 1
+_ACEOF
+
+
+            found_mysql="yes"
+            { $as_echo "$as_me:$LINENO: result: yes" >&5
+$as_echo "yes" >&6; }
+        else
+            found_mysql="no"
+            { $as_echo "$as_me:$LINENO: result: no" >&5
+$as_echo "no" >&6; }
+        fi
+    fi
+
+
+
+    mysql_version_req=
+
+    if test "$found_mysql" = "yes" -a -n "$mysql_version_req"; then
+
+        { $as_echo "$as_me:$LINENO: checking if MySQL version is >= $mysql_version_req" >&5
+$as_echo_n "checking if MySQL version is >= $mysql_version_req... " >&6; }
+
+                        mysql_version_req_major=`expr $mysql_version_req : '\([0-9]*\)'`
+        mysql_version_req_minor=`expr $mysql_version_req : '[0-9]*\.\([0-9]*\)'`
+        mysql_version_req_micro=`expr $mysql_version_req : '[0-9]*\.[0-9]*\.\([0-9]*\)'`
+        if test "x$mysql_version_req_micro" = "x"; then
+            mysql_version_req_micro="0"
+        fi
+
+        mysql_version_req_number=`expr $mysql_version_req_major \* 1000000 \
+                                   \+ $mysql_version_req_minor \* 1000 \
+                                   \+ $mysql_version_req_micro`
+
+                        mysql_version_major=`expr $MYSQL_VERSION : '\([0-9]*\)'`
+        mysql_version_minor=`expr $MYSQL_VERSION : '[0-9]*\.\([0-9]*\)'`
+        mysql_version_micro=`expr $MYSQL_VERSION : '[0-9]*\.[0-9]*\.\([0-9]*\)'`
+        if test "x$mysql_version_micro" = "x"; then
+            mysql_version_micro="0"
+        fi
+
+        mysql_version_number=`expr $mysql_version_major \* 1000000 \
+                                   \+ $mysql_version_minor \* 1000 \
+                                   \+ $mysql_version_micro`
+
+        mysql_version_check=`expr $mysql_version_number \>\= $mysql_version_req_number`
+        if test "$mysql_version_check" = "1"; then
+            { $as_echo "$as_me:$LINENO: result: yes" >&5
+$as_echo "yes" >&6; }
+        else
+            { $as_echo "$as_me:$LINENO: result: no" >&5
+$as_echo "no" >&6; }
+        fi
+    fi
+
+
+
+
+
+    if test "$found_mysql" != "yes"; then { { $as_echo "$as_me:$LINENO: error: DB/MySQL: MySQL development resources not found. Install or check MySQL development package!" >&5
+$as_echo "$as_me: error: DB/MySQL: MySQL development resources not found. Install or check MySQL development package!" >&2;}
+   { (exit 1); exit 1; }; }; fi
 fi
 if test ${ModSQLite} = true; then
     { $as_echo "$as_me:$LINENO: result: Build module: DB/SQLite" >&5
@@ -28371,31 +28304,99 @@ $as_echo "Build module: DB/SQLite" >&6; }
     DBSub_mod="${DBSub_mod}SQLite "
     #>> Modules checkings
 
-for ac_header in sqlite3.h
-do
-as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
-if { as_var=$as_ac_Header; eval "test \"\${$as_var+set}\" = set"; }; then
-  { $as_echo "$as_me:$LINENO: checking for $ac_header" >&5
-$as_echo_n "checking for $ac_header... " >&6; }
-if { as_var=$as_ac_Header; eval "test \"\${$as_var+set}\" = set"; }; then
-  $as_echo_n "(cached) " >&6
-fi
-ac_res=`eval 'as_val=${'$as_ac_Header'}
-		 $as_echo "$as_val"'`
-	       { $as_echo "$as_me:$LINENO: result: $ac_res" >&5
-$as_echo "$ac_res" >&6; }
+
+# Check whether --with-sqlite3 was given.
+if test "${with_sqlite3+set}" = set; then
+  withval=$with_sqlite3;
+        if test "$withval" = "no"; then
+            WANT_SQLITE3="no"
+        elif test "$withval" = "yes"; then
+            WANT_SQLITE3="yes"
+            ac_sqlite3_path=""
+        else
+            WANT_SQLITE3="yes"
+            ac_sqlite3_path="$withval"
+        fi
+
 else
-  # Is the header compilable?
-{ $as_echo "$as_me:$LINENO: checking $ac_header usability" >&5
-$as_echo_n "checking $ac_header usability... " >&6; }
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
+  WANT_SQLITE3="yes"
+
+fi
+
+
+    SQLITE3_CFLAGS=""
+    SQLITE3_LDFLAGS=""
+    SQLITE3_VERSION=""
+
+    if test "x$WANT_SQLITE3" = "xyes"; then
+
+        ac_sqlite3_header="sqlite3.h"
+
+        sqlite3_version_req=3.0.0
+        sqlite3_version_req_shorten=`expr $sqlite3_version_req : '\([0-9]*\.[0-9]*\)'`
+        sqlite3_version_req_major=`expr $sqlite3_version_req : '\([0-9]*\)'`
+        sqlite3_version_req_minor=`expr $sqlite3_version_req : '[0-9]*\.\([0-9]*\)'`
+        sqlite3_version_req_micro=`expr $sqlite3_version_req : '[0-9]*\.[0-9]*\.\([0-9]*\)'`
+        if test "x$sqlite3_version_req_micro" = "x" ; then
+            sqlite3_version_req_micro="0"
+        fi
+
+        sqlite3_version_req_number=`expr $sqlite3_version_req_major \* 1000000 \
+                                   \+ $sqlite3_version_req_minor \* 1000 \
+                                   \+ $sqlite3_version_req_micro`
+
+        { $as_echo "$as_me:$LINENO: checking for SQLite3 library >= $sqlite3_version_req" >&5
+$as_echo_n "checking for SQLite3 library >= $sqlite3_version_req... " >&6; }
+
+        if test "$ac_sqlite3_path" != ""; then
+            ac_sqlite3_ldflags="-L$ac_sqlite3_path/lib"
+            ac_sqlite3_cppflags="-I$ac_sqlite3_path/include"
+        else
+            for ac_sqlite3_path_tmp in /usr /usr/local /opt ; do
+                if test -f "$ac_sqlite3_path_tmp/include/$ac_sqlite3_header" \
+                    && test -r "$ac_sqlite3_path_tmp/include/$ac_sqlite3_header"; then
+                    ac_sqlite3_path=$ac_sqlite3_path_tmp
+                    ac_sqlite3_cppflags="-I$ac_sqlite3_path_tmp/include"
+                    ac_sqlite3_ldflags="-L$ac_sqlite3_path_tmp/lib"
+                    break;
+                fi
+            done
+        fi
+
+        ac_sqlite3_ldflags="$ac_sqlite3_ldflags -lsqlite3"
+
+        saved_CPPFLAGS="$CPPFLAGS"
+        CPPFLAGS="$CPPFLAGS $ac_sqlite3_cppflags"
+
+        ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+        cat >conftest.$ac_ext <<_ACEOF
+
+            /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-$ac_includes_default
-#include <$ac_header>
+#include <sqlite3.h>
+int
+main ()
+{
+
+#if (SQLITE_VERSION_NUMBER >= $sqlite3_version_req_number)
+// Everything is okay
+#else
+#  error SQLite version is too old
+#endif
+
+
+  ;
+  return 0;
+}
+
 _ACEOF
 rm -f conftest.$ac_objext
 if { (ac_try="$ac_compile"
@@ -28415,190 +28416,66 @@ $as_echo "$ac_try_echo") >&5
 	 test -z "$ac_cxx_werror_flag" ||
 	 test ! -s conftest.err
        } && test -s conftest.$ac_objext; then
-  ac_header_compiler=yes
+
+            { $as_echo "$as_me:$LINENO: result: yes" >&5
+$as_echo "yes" >&6; }
+            success="yes"
+
 else
   $as_echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-	ac_header_compiler=no
+
+            { $as_echo "$as_me:$LINENO: result: not found" >&5
+$as_echo "not found" >&6; }
+            succees="no"
+
+
 fi
 
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-{ $as_echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
-$as_echo "$ac_header_compiler" >&6; }
+        ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-# Is the header present?
-{ $as_echo "$as_me:$LINENO: checking $ac_header presence" >&5
-$as_echo_n "checking $ac_header presence... " >&6; }
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-#include <$ac_header>
-_ACEOF
-if { (ac_try="$ac_cpp conftest.$ac_ext"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-$as_echo "$ac_try_echo") >&5
-  (eval "$ac_cpp conftest.$ac_ext") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } >/dev/null && {
-	 test -z "$ac_cxx_preproc_warn_flag$ac_cxx_werror_flag" ||
-	 test ! -s conftest.err
-       }; then
-  ac_header_preproc=yes
-else
-  $as_echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
 
-  ac_header_preproc=no
-fi
+        CPPFLAGS="$saved_CPPFLAGS"
 
-rm -f conftest.err conftest.$ac_ext
-{ $as_echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
-$as_echo "$ac_header_preproc" >&6; }
+        if test "$success" = "yes"; then
 
-# So?  What about this header?
-case $ac_header_compiler:$ac_header_preproc:$ac_cxx_preproc_warn_flag in
-  yes:no: )
-    { $as_echo "$as_me:$LINENO: WARNING: $ac_header: accepted by the compiler, rejected by the preprocessor!" >&5
-$as_echo "$as_me: WARNING: $ac_header: accepted by the compiler, rejected by the preprocessor!" >&2;}
-    { $as_echo "$as_me:$LINENO: WARNING: $ac_header: proceeding with the compiler's result" >&5
-$as_echo "$as_me: WARNING: $ac_header: proceeding with the compiler's result" >&2;}
-    ac_header_preproc=yes
-    ;;
-  no:yes:* )
-    { $as_echo "$as_me:$LINENO: WARNING: $ac_header: present but cannot be compiled" >&5
-$as_echo "$as_me: WARNING: $ac_header: present but cannot be compiled" >&2;}
-    { $as_echo "$as_me:$LINENO: WARNING: $ac_header:     check for missing prerequisite headers?" >&5
-$as_echo "$as_me: WARNING: $ac_header:     check for missing prerequisite headers?" >&2;}
-    { $as_echo "$as_me:$LINENO: WARNING: $ac_header: see the Autoconf documentation" >&5
-$as_echo "$as_me: WARNING: $ac_header: see the Autoconf documentation" >&2;}
-    { $as_echo "$as_me:$LINENO: WARNING: $ac_header:     section \"Present But Cannot Be Compiled\"" >&5
-$as_echo "$as_me: WARNING: $ac_header:     section \"Present But Cannot Be Compiled\"" >&2;}
-    { $as_echo "$as_me:$LINENO: WARNING: $ac_header: proceeding with the preprocessor's result" >&5
-$as_echo "$as_me: WARNING: $ac_header: proceeding with the preprocessor's result" >&2;}
-    { $as_echo "$as_me:$LINENO: WARNING: $ac_header: in the future, the compiler will take precedence" >&5
-$as_echo "$as_me: WARNING: $ac_header: in the future, the compiler will take precedence" >&2;}
-    ( cat <<\_ASBOX
-## -------------------------------- ##
-## Report this to rom_as@fromru.com ##
-## -------------------------------- ##
-_ASBOX
-     ) | sed "s/^/$as_me: WARNING:     /" >&2
-    ;;
-esac
-{ $as_echo "$as_me:$LINENO: checking for $ac_header" >&5
-$as_echo_n "checking for $ac_header... " >&6; }
-if { as_var=$as_ac_Header; eval "test \"\${$as_var+set}\" = set"; }; then
-  $as_echo_n "(cached) " >&6
-else
-  eval "$as_ac_Header=\$ac_header_preproc"
-fi
-ac_res=`eval 'as_val=${'$as_ac_Header'}
-		 $as_echo "$as_val"'`
-	       { $as_echo "$as_me:$LINENO: result: $ac_res" >&5
-$as_echo "$ac_res" >&6; }
+            SQLITE3_CFLAGS="$ac_sqlite3_cppflags"
+            SQLITE3_LDFLAGS="$ac_sqlite3_ldflags"
 
-fi
-as_val=`eval 'as_val=${'$as_ac_Header'}
-		 $as_echo "$as_val"'`
-   if test "x$as_val" = x""yes; then
-  cat >>confdefs.h <<_ACEOF
-#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
+            ac_sqlite3_header_path="$ac_sqlite3_path/include/$ac_sqlite3_header"
+
+                        if test "x$ac_sqlite3_header_path" != "x"; then
+                ac_sqlite3_version=`cat $ac_sqlite3_header_path \
+                    | grep '#define.*SQLITE_VERSION.*\"' | sed -e 's/.* "//' \
+                        | sed -e 's/"//'`
+                if test $ac_sqlite3_version != ""; then
+                    SQLITE3_VERSION=$ac_sqlite3_version
+                else
+                    { $as_echo "$as_me:$LINENO: WARNING: Can not find SQLITE_VERSION macro in sqlite3.h header to retrieve SQLite version!" >&5
+$as_echo "$as_me: WARNING: Can not find SQLITE_VERSION macro in sqlite3.h header to retrieve SQLite version!" >&2;}
+                fi
+            fi
+
+
+
+
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_SQLITE3 /**/
 _ACEOF
 
-else
-  { { $as_echo "$as_me:$LINENO: error: DB/SQLite: Some SQLite3 API headers not found. Install or check SQLite3 library developing package!" >&5
-$as_echo "$as_me: error: DB/SQLite: Some SQLite3 API headers not found. Install or check SQLite3 library developing package!" >&2;}
-   { (exit 1); exit 1; }; }
-fi
+        fi
+    fi
 
-done
-
-    { $as_echo "$as_me:$LINENO: checking for sqlite3_open in -lsqlite3" >&5
-$as_echo_n "checking for sqlite3_open in -lsqlite3... " >&6; }
-if test "${ac_cv_lib_sqlite3_sqlite3_open+set}" = set; then
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lsqlite3  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char sqlite3_open ();
-int
-main ()
-{
-return sqlite3_open ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (ac_try="$ac_link"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-$as_echo "$ac_try_echo") >&5
-  (eval "$ac_link") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_cxx_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest$ac_exeext && {
-	 test "$cross_compiling" = yes ||
-	 $as_test_x conftest$ac_exeext
-       }; then
-  ac_cv_lib_sqlite3_sqlite3_open=yes
-else
-  $as_echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	ac_cv_lib_sqlite3_sqlite3_open=no
-fi
-
-rm -rf conftest.dSYM
-rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:$LINENO: result: $ac_cv_lib_sqlite3_sqlite3_open" >&5
-$as_echo "$ac_cv_lib_sqlite3_sqlite3_open" >&6; }
-if test "x$ac_cv_lib_sqlite3_sqlite3_open" = x""yes; then
-  { $as_echo "$as_me:$LINENO: Pass global library using" >&5
-$as_echo "$as_me: Pass global library using" >&6;}
-else
-  { { $as_echo "$as_me:$LINENO: error: DB/SQLite: SQLite3 API library not found. Install or check SQLite3 library package!" >&5
-$as_echo "$as_me: error: DB/SQLite: SQLite3 API library not found. Install or check SQLite3 library package!" >&2;}
-   { (exit 1); exit 1; }; }
-fi
-
+    if test "$success" != "yes"; then { { $as_echo "$as_me:$LINENO: error: DB/SQLite: SQLite3 development resources not found. Install or check SQLite3 development package!" >&5
+$as_echo "$as_me: error: DB/SQLite: SQLite3 development resources not found. Install or check SQLite3 development package!" >&2;}
+   { (exit 1); exit 1; }; }; fi
 fi
 if test ${ModFireBird} = true; then
     { $as_echo "$as_me:$LINENO: result: Build module: DB/FireBird" >&5
@@ -28608,31 +28485,106 @@ $as_echo "Build module: DB/FireBird" >&6; }
     DBSub_mod="${DBSub_mod}FireBird "
     #>> Modules checkings
 
-for ac_header in ibase.h
-do
-as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
-if { as_var=$as_ac_Header; eval "test \"\${$as_var+set}\" = set"; }; then
-  { $as_echo "$as_me:$LINENO: checking for $ac_header" >&5
-$as_echo_n "checking for $ac_header... " >&6; }
-if { as_var=$as_ac_Header; eval "test \"\${$as_var+set}\" = set"; }; then
-  $as_echo_n "(cached) " >&6
-fi
-ac_res=`eval 'as_val=${'$as_ac_Header'}
-		 $as_echo "$as_val"'`
-	       { $as_echo "$as_me:$LINENO: result: $ac_res" >&5
-$as_echo "$ac_res" >&6; }
+
+# Check whether --with-firebird was given.
+if test "${with_firebird+set}" = set; then
+  withval=$with_firebird;
+        if test "$withval" = "no"; then
+            WANT_FIREBIRD="no"
+        elif test "$withval" = "yes"; then
+            WANT_FIREBIRD="yes"
+            ac_firebird_path=""
+        else
+            WANT_FIREBIRD="yes"
+            ac_firebird_path="$withval"
+        fi
+
 else
-  # Is the header compilable?
-{ $as_echo "$as_me:$LINENO: checking $ac_header usability" >&5
-$as_echo_n "checking $ac_header usability... " >&6; }
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
+  WANT_FIREBIRD="yes"
+
+fi
+
+
+    FIREBIRD_CFLAGS=""
+    FIREBIRD_LDFLAGS=""
+    FIREBIRD_VERSION=""
+
+    if test "x$WANT_FIREBIRD" = "xyes"; then
+
+        ac_firebird_header="ibase.h"
+
+        firebird_version_req=2.0.0
+        firebird_version_req_shorten=`expr $firebird_version_req : '\([0-9]*\.[0-9]*\)'`
+        firebird_version_req_major=`expr $firebird_version_req : '\([0-9]*\)'`
+        firebird_version_req_minor=`expr $firebird_version_req : '[0-9]*\.\([0-9]*\)'`
+        firebird_version_req_micro=`expr $firebird_version_req : '[0-9]*\.[0-9]*\.\([0-9]*\)'`
+        if test "x$firebird_version_req_micro" = "x" ; then
+            firebird_version_req_micro="0"
+        fi
+
+
+        firebird_version_req_number=`expr $firebird_version_req_major \+ $firebird_version_req_minor`
+
+        { $as_echo "$as_me:$LINENO: checking for Firebird client library >= $firebird_version_req" >&5
+$as_echo_n "checking for Firebird client library >= $firebird_version_req... " >&6; }
+
+        if test "$ac_firebird_path" != ""; then
+            ac_firebird_ldflags="-L$ac_firebird_path/lib"
+            ac_firebird_cppflags="-I$ac_firebird_path/include"
+        else
+            for ac_firebird_path_tmp in /usr /usr/local /opt ; do
+                if test -f "$ac_firebird_path_tmp/include/$ac_firebird_header" \
+                    && test -r "$ac_firebird_path_tmp/include/$ac_firebird_header"; then
+                    ac_firebird_path=$ac_firebird_path_tmp
+                    ac_firebird_cppflags="-I$ac_firebird_path_tmp/include"
+                    ac_firebird_ldflags="-L$ac_firebird_path_tmp/lib"
+                    break;
+                fi
+            done
+        fi
+
+        ac_firebird_header_path="$ac_firebird_path/include/$ac_firebird_header"
+
+        if test ! -f "$ac_firebird_header_path"; then
+            { $as_echo "$as_me:$LINENO: result: no" >&5
+$as_echo "no" >&6; }
+            success="no"
+        else
+
+            ac_firebird_ldflags="$ac_firebird_ldflags -lfbclient -lpthread"
+
+            saved_CPPFLAGS="$CPPFLAGS"
+            CPPFLAGS="$CPPFLAGS $ac_firebird_cppflags"
+
+            ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+            cat >conftest.$ac_ext <<_ACEOF
+
+                /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-$ac_includes_default
-#include <$ac_header>
+#include <ibase.h>
+int
+main ()
+{
+
+#if (FB_API_VER >= $firebird_version_req_number)
+// Everything is okay
+#else
+#  error Firebird version is too old
+#endif
+
+
+  ;
+  return 0;
+}
+
 _ACEOF
 rm -f conftest.$ac_objext
 if { (ac_try="$ac_compile"
@@ -28652,190 +28604,64 @@ $as_echo "$ac_try_echo") >&5
 	 test -z "$ac_cxx_werror_flag" ||
 	 test ! -s conftest.err
        } && test -s conftest.$ac_objext; then
-  ac_header_compiler=yes
+
+                { $as_echo "$as_me:$LINENO: result: yes" >&5
+$as_echo "yes" >&6; }
+                success="yes"
+
 else
   $as_echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-	ac_header_compiler=no
+
+                { $as_echo "$as_me:$LINENO: result: not found" >&5
+$as_echo "not found" >&6; }
+                succees="no"
+
+
 fi
 
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-{ $as_echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
-$as_echo "$ac_header_compiler" >&6; }
+            ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-# Is the header present?
-{ $as_echo "$as_me:$LINENO: checking $ac_header presence" >&5
-$as_echo_n "checking $ac_header presence... " >&6; }
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-#include <$ac_header>
-_ACEOF
-if { (ac_try="$ac_cpp conftest.$ac_ext"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-$as_echo "$ac_try_echo") >&5
-  (eval "$ac_cpp conftest.$ac_ext") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } >/dev/null && {
-	 test -z "$ac_cxx_preproc_warn_flag$ac_cxx_werror_flag" ||
-	 test ! -s conftest.err
-       }; then
-  ac_header_preproc=yes
-else
-  $as_echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
 
-  ac_header_preproc=no
-fi
+            CPPFLAGS="$saved_CPPFLAGS"
 
-rm -f conftest.err conftest.$ac_ext
-{ $as_echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
-$as_echo "$ac_header_preproc" >&6; }
+            if test "$success" = "yes"; then
 
-# So?  What about this header?
-case $ac_header_compiler:$ac_header_preproc:$ac_cxx_preproc_warn_flag in
-  yes:no: )
-    { $as_echo "$as_me:$LINENO: WARNING: $ac_header: accepted by the compiler, rejected by the preprocessor!" >&5
-$as_echo "$as_me: WARNING: $ac_header: accepted by the compiler, rejected by the preprocessor!" >&2;}
-    { $as_echo "$as_me:$LINENO: WARNING: $ac_header: proceeding with the compiler's result" >&5
-$as_echo "$as_me: WARNING: $ac_header: proceeding with the compiler's result" >&2;}
-    ac_header_preproc=yes
-    ;;
-  no:yes:* )
-    { $as_echo "$as_me:$LINENO: WARNING: $ac_header: present but cannot be compiled" >&5
-$as_echo "$as_me: WARNING: $ac_header: present but cannot be compiled" >&2;}
-    { $as_echo "$as_me:$LINENO: WARNING: $ac_header:     check for missing prerequisite headers?" >&5
-$as_echo "$as_me: WARNING: $ac_header:     check for missing prerequisite headers?" >&2;}
-    { $as_echo "$as_me:$LINENO: WARNING: $ac_header: see the Autoconf documentation" >&5
-$as_echo "$as_me: WARNING: $ac_header: see the Autoconf documentation" >&2;}
-    { $as_echo "$as_me:$LINENO: WARNING: $ac_header:     section \"Present But Cannot Be Compiled\"" >&5
-$as_echo "$as_me: WARNING: $ac_header:     section \"Present But Cannot Be Compiled\"" >&2;}
-    { $as_echo "$as_me:$LINENO: WARNING: $ac_header: proceeding with the preprocessor's result" >&5
-$as_echo "$as_me: WARNING: $ac_header: proceeding with the preprocessor's result" >&2;}
-    { $as_echo "$as_me:$LINENO: WARNING: $ac_header: in the future, the compiler will take precedence" >&5
-$as_echo "$as_me: WARNING: $ac_header: in the future, the compiler will take precedence" >&2;}
-    ( cat <<\_ASBOX
-## -------------------------------- ##
-## Report this to rom_as@fromru.com ##
-## -------------------------------- ##
-_ASBOX
-     ) | sed "s/^/$as_me: WARNING:     /" >&2
-    ;;
-esac
-{ $as_echo "$as_me:$LINENO: checking for $ac_header" >&5
-$as_echo_n "checking for $ac_header... " >&6; }
-if { as_var=$as_ac_Header; eval "test \"\${$as_var+set}\" = set"; }; then
-  $as_echo_n "(cached) " >&6
-else
-  eval "$as_ac_Header=\$ac_header_preproc"
-fi
-ac_res=`eval 'as_val=${'$as_ac_Header'}
-		 $as_echo "$as_val"'`
-	       { $as_echo "$as_me:$LINENO: result: $ac_res" >&5
-$as_echo "$ac_res" >&6; }
+                FIREBIRD_CFLAGS="$ac_firebird_cppflags"
+                FIREBIRD_LDFLAGS="$ac_firebird_ldflags"
 
-fi
-as_val=`eval 'as_val=${'$as_ac_Header'}
-		 $as_echo "$as_val"'`
-   if test "x$as_val" = x""yes; then
-  cat >>confdefs.h <<_ACEOF
-#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
-_ACEOF
 
-else
-  { { $as_echo "$as_me:$LINENO: error: DB/FireBird: Some FireBird API headers not found. Install or check FireBird installation!" >&5
-$as_echo "$as_me: error: DB/FireBird: Some FireBird API headers not found. Install or check FireBird installation!" >&2;}
-   { (exit 1); exit 1; }; }
-fi
+                ac_firebird_version=`cat $ac_firebird_header_path | \
+                                     grep '#define.*FB_API_VER.*' | \
+                                     sed -e 's/.* //'`
 
-done
+                if test -n "$ac_firebird_version"; then
+                    ac_firebird_version_major=`expr $ac_firebird_version \/ 10`
+                    ac_firebird_version_minor=`expr $ac_firebird_version \% 10`
 
-    { $as_echo "$as_me:$LINENO: checking for isc_attach_database in -lfbclient" >&5
-$as_echo_n "checking for isc_attach_database in -lfbclient... " >&6; }
-if test "${ac_cv_lib_fbclient_isc_attach_database+set}" = set; then
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lfbclient  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
+                    FIREBIRD_VERSION="$ac_firebird_version_major.$ac_firebird_version_minor.x"
+                else
+                    { $as_echo "$as_me:$LINENO: WARNING: Could not find FB_API_VER macro in $ac_firebird_header to get Firebird version." >&5
+$as_echo "$as_me: WARNING: Could not find FB_API_VER macro in $ac_firebird_header to get Firebird version." >&2;}
+                fi
 
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char isc_attach_database ();
-int
-main ()
-{
-return isc_attach_database ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (ac_try="$ac_link"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-$as_echo "$ac_try_echo") >&5
-  (eval "$ac_link") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_cxx_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest$ac_exeext && {
-	 test "$cross_compiling" = yes ||
-	 $as_test_x conftest$ac_exeext
-       }; then
-  ac_cv_lib_fbclient_isc_attach_database=yes
-else
-  $as_echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
 
-	ac_cv_lib_fbclient_isc_attach_database=no
-fi
 
-rm -rf conftest.dSYM
-rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:$LINENO: result: $ac_cv_lib_fbclient_isc_attach_database" >&5
-$as_echo "$ac_cv_lib_fbclient_isc_attach_database" >&6; }
-if test "x$ac_cv_lib_fbclient_isc_attach_database" = x""yes; then
-  { $as_echo "$as_me:$LINENO: Pass global library using" >&5
-$as_echo "$as_me: Pass global library using" >&6;}
-else
-  { { $as_echo "$as_me:$LINENO: error: DB/FireBird: FireBird API client library not found. Install or check FireBird installation!" >&5
-$as_echo "$as_me: error: DB/FireBird: FireBird API client library not found. Install or check FireBird installation!" >&2;}
-   { (exit 1); exit 1; }; }
-fi
 
+#                AC_DEFINE(HAVE_FIREBIRD)
+            fi
+        fi
+    fi
+
+    if test "$success" != "yes"; then { { $as_echo "$as_me:$LINENO: error: DB/FireBird: FireBird development resources not found. Install or check FireBird development package!" >&5
+$as_echo "$as_me: error: DB/FireBird: FireBird development resources not found. Install or check FireBird development package!" >&2;}
+   { (exit 1); exit 1; }; }; fi
 fi
 #> DAQ modules
 

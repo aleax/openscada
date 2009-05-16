@@ -60,8 +60,8 @@ class ModVArchEl: public TVArchEl
 
     protected:
 	//Methods
-	void getValProc( TValBuf &buf, long long beg, long long end );
-	void setValProc( TValBuf &buf, long long beg, long long end );
+	void getValsProc( TValBuf &buf, long long beg, long long end );
+	void setValsProc( TValBuf &buf, long long beg, long long end );
 
     private:
 	//Attributes

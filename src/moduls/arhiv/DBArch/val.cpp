@@ -150,19 +150,20 @@ void ModVArchEl::fullErase()
     SYS->db().at().close( archivator().addr()+"."+archTbl(), true );
 }
 
-void ModVArchEl::getValProc( TValBuf &buf, long long ibeg, long long iend )
+void ModVArchEl::getValsProc( TValBuf &buf, long long ibegIn, long long iendIn )
 {
-    //- Going border to period time -
-    ibeg = (ibeg/period())*period();
-    iend = (iend/period())*period();
+    //> Going border to period time
+    ibegIn = (ibegIn/period())*period();
+    iendIn = (iendIn/period())*period();
 
-    //- Prepare border -
-    ibeg = vmax( ibeg, begin() );
-    iend = vmin( iend, end() );
+    //> Prepare border
+    long ibeg = vmax( ibegIn, begin() );
+    long iend = vmin( iendIn, end() );
 
     if( iend < ibeg )	return;
 
-    //- Get values -
+    //> Get values
+    for( long long c_tm = ibegIn; c_tm < ibeg; c_tm += period() ) buf.setI(EVAL_INT);
     switch(archive().valType())
     {
 	case TFld::Boolean: case TFld::Integer:
@@ -208,6 +209,7 @@ void ModVArchEl::getValProc( TValBuf &buf, long long ibeg, long long iend )
 	    break;
 	}
     }
+    for( long long c_tm = iend+period(); c_tm <= iendIn; c_tm += period() ) buf.setI(EVAL_INT);
 }
 
 string ModVArchEl::getS( long long *tm, bool up_ord )
@@ -314,7 +316,7 @@ char ModVArchEl::getB( long long *tm, bool up_ord )
     }
 }
 
-void ModVArchEl::setValProc( TValBuf &buf, long long beg, long long end )
+void ModVArchEl::setValsProc( TValBuf &buf, long long beg, long long end )
 {
     //- Check border -
     if( !buf.vOK(beg,end) )	return;

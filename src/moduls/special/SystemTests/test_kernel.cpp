@@ -1563,7 +1563,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	mess_info(test_cat,"Test1. Simple fill and check archive.");
 	for( int i_el = 0; i_el < buf_sz; i_el++)
 	    buf.setI((int)pow(10,i_el),wtm+i_el*per);
-	o_arch.at().setVal(buf,buf.begin(),buf.end(),"");
+	o_arch.at().setVals(buf,buf.begin(),buf.end(),"");
 	for( int i_el = 0; i_el < buf_sz+2; i_el++)
 	{
 	    ttm = wtm+i_el*per;
@@ -1577,7 +1577,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	mess_info(test_cat,"Test2. Internal insert double value (down).");
 	buf.clear();
 	buf.setI((int)pow(10,2),wtm+3*per);
-	o_arch.at().setVal(buf,wtm+3*per,wtm+3*per,"");
+	o_arch.at().setVals(buf,wtm+3*per,wtm+3*per,"");
 	for( int i_el = 0; i_el < buf_sz+2; i_el++)
 	{
 	    ttm = wtm+i_el*per;
@@ -1591,7 +1591,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	mess_info(test_cat,"Test3. Internal insert double value (up).");
 	buf.clear();
 	buf.setI((int)pow(10,4),wtm+3*per);
-	o_arch.at().setVal(buf,wtm+3*per,wtm+3*per,"");
+	o_arch.at().setVals(buf,wtm+3*per,wtm+3*per,"");
 	for( int i_el = 0; i_el < buf_sz+2; i_el++)
 	{
 	    ttm = wtm+i_el*per;
@@ -1605,7 +1605,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	mess_info(test_cat,"Test4. Internal insert double value (down).");
 	buf.clear();
 	buf.setI((int)pow(10,2),wtm+3*per);
-	o_arch.at().setVal(buf,wtm+3*per,wtm+3*per,"");
+	o_arch.at().setVals(buf,wtm+3*per,wtm+3*per,"");
 	for( int i_el = 0; i_el < buf_sz+2; i_el++)
 	{
 	    ttm = wtm+i_el*per;
@@ -1619,7 +1619,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	mess_info(test_cat,"Test5. Internal insert no double value.");
 	buf.clear();
 	buf.setI((int)pow(10,9),wtm+per);
-	o_arch.at().setVal(buf,wtm+per,wtm+per,"");
+	o_arch.at().setVals(buf,wtm+per,wtm+per,"");
 	for( int i_el = 0; i_el < buf_sz+2; i_el++)
 	{
 	    ttm = wtm+i_el*per;
@@ -1634,7 +1634,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	mess_info(test_cat,"Test6. Internal insert double (up) value.");
 	buf.clear();
 	buf.setI((int)pow(10,2),wtm+per);
-	o_arch.at().setVal(buf,wtm+per,wtm+per,"");
+	o_arch.at().setVals(buf,wtm+per,wtm+per,"");
 	for( int i_el = 0; i_el < buf_sz+2; i_el++)
 	{
 	    ttm = wtm+i_el*per;
@@ -1649,7 +1649,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	mess_info(test_cat,"Test7. Internal insert value instaead double value.");
 	buf.clear();
 	buf.setI((int)pow(10,3),wtm+3*per);
-	o_arch.at().setVal(buf,wtm+3*per,wtm+3*per,"");
+	o_arch.at().setVals(buf,wtm+3*per,wtm+3*per,"");
 	for( int i_el = 0; i_el < buf_sz+2; i_el++)
 	{
 	    ttm = wtm+i_el*per;
@@ -1666,7 +1666,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	buf.clear();
 	for( int i_el = -1; i_el <= 1; i_el++ )
 	    buf.setI(i_el,wtm+i_el*per);
-	o_arch.at().setVal(buf,buf.begin(),buf.end(),"");
+	o_arch.at().setVals(buf,buf.begin(),buf.end(),"");
 	for( int i_el = -1; i_el <= 1; i_el++)
 	{
 	    ttm = wtm+i_el*per;

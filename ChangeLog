@@ -1,3 +1,10 @@
+2009-05-16 Roman
+- !!!:/SYS/Build: Added autoconf macros for more detailed detection configuration for DB MySQL, FireBird and SQLite.
+- /Archive/Value: Function getVal() is renamed to getVals() and setVal() to setVals().
+- FIX:/Archive/Value, /Archive/DBArch, /Archive/FSArch: Filling no present value archves' areas to EVAL is fixed.
+- FIX:/UI/Vision: Last values display for primitive "Diagram" on trace mode is fixed.
+
+
 2009-05-15 Roman
 - !:/Archive/Value: Holes fill algorithm is improved.
 - /DAQ: Link to external stations configuration is added to redundat configuration page.

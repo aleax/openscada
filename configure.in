@@ -205,30 +205,24 @@ if test ${ModMySQL} = true; then
     AC_CONFIG_FILES(src/moduls/bd/MySQL/Makefile)
     DBSub_mod="${DBSub_mod}MySQL "
     #>> Modules checkings
-    AC_CHECK_HEADERS([mysql/mysql.h mysql/errmsg.h],[],
-	[AC_MSG_ERROR(DB/MySQL: Some MySQL API headers not found. Install or check MySQL library developing package!)])
-    AC_CHECK_LIB([mysqlclient],[mysql_init],[AC_MSG_NOTICE(Pass global library using)],
-	[AC_MSG_ERROR(DB/MySQL: MySQL API library not found. Install or check MySQL library package!)])
+    AX_LIB_MYSQL
+    if test "$found_mysql" != "yes"; then AC_MSG_ERROR(DB/MySQL: MySQL development resources not found. Install or check MySQL development package!); fi
 fi
 if test ${ModSQLite} = true; then
     AC_MSG_RESULT(Build module: DB/SQLite)
     AC_CONFIG_FILES(src/moduls/bd/SQLite/Makefile)
     DBSub_mod="${DBSub_mod}SQLite "
     #>> Modules checkings
-    AC_CHECK_HEADERS([sqlite3.h],[],
-	[AC_MSG_ERROR(DB/SQLite: Some SQLite3 API headers not found. Install or check SQLite3 library developing package!)])
-    AC_CHECK_LIB([sqlite3],[sqlite3_open],[AC_MSG_NOTICE(Pass global library using)],
-	[AC_MSG_ERROR(DB/SQLite: SQLite3 API library not found. Install or check SQLite3 library package!)])    
+    AX_LIB_SQLITE3([3.0.0])
+    if test "$success" != "yes"; then AC_MSG_ERROR(DB/SQLite: SQLite3 development resources not found. Install or check SQLite3 development package!); fi
 fi
 if test ${ModFireBird} = true; then
     AC_MSG_RESULT(Build module: DB/FireBird)
     AC_CONFIG_FILES(src/moduls/bd/FireBird/Makefile)
     DBSub_mod="${DBSub_mod}FireBird "
     #>> Modules checkings
-    AC_CHECK_HEADERS([ibase.h],[],
-	[AC_MSG_ERROR(DB/FireBird: Some FireBird API headers not found. Install or check FireBird installation!)])
-    AC_CHECK_LIB([fbclient],[isc_attach_database],[AC_MSG_NOTICE(Pass global library using)],
-	[AC_MSG_ERROR(DB/FireBird: FireBird API client library not found. Install or check FireBird installation!)])
+    AX_LIB_FIREBIRD([2.0.0])
+    if test "$success" != "yes"; then AC_MSG_ERROR(DB/FireBird: FireBird development resources not found. Install or check FireBird development package!); fi
 fi
 #> DAQ modules
 AC_SUBST(DAQSub_mod)

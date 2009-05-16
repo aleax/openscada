@@ -73,14 +73,14 @@ class TValBuf
 	void setPeriod( long long vl );
 
 	//> Get value
-	virtual void getVal( TValBuf &buf, long long beg = 0, long long end = 0 );
+	virtual void getVals( TValBuf &buf, long long beg = 0, long long end = 0 );
 	virtual string getS( long long *tm = NULL, bool up_ord = false );
 	virtual double getR( long long *tm = NULL, bool up_ord = false );
 	virtual int    getI( long long *tm = NULL, bool up_ord = false );
 	virtual char   getB( long long *tm = NULL, bool up_ord = false );
 
 	//> Set value
-	virtual void setVal( TValBuf &buf, long long beg = 0, long long end = 0 );
+	virtual void setVals( TValBuf &buf, long long beg = 0, long long end = 0 );
 	virtual void setS( const string &value, long long tm = 0 );
 	virtual void setR( double value, long long tm = 0 );
 	virtual void setI( int value, long long tm = 0 );
@@ -207,14 +207,14 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	void stop( bool full_del = false );
 
 	//> Get value
-	void getVal( TValBuf &buf, long long beg = 0, long long end = 0,
+	void getVals( TValBuf &buf, long long beg = 0, long long end = 0,
 		const string &arch = "", int limit = 100000, bool onlyLocal = false );
 	string getS( long long *tm = NULL, bool up_ord = false, const string &arch = "" );
 	double getR( long long *tm = NULL, bool up_ord = false, const string &arch = "" );
 	int    getI( long long *tm = NULL, bool up_ord = false, const string &arch = "" );
 	char   getB( long long *tm = NULL, bool up_ord = false, const string &arch = "" );
 
-	void setVal( TValBuf &buf, long long beg, long long end, const string &arch );
+	void setVals( TValBuf &buf, long long beg, long long end, const string &arch );
 
 	//> Active get data from atribute
 	void getActiveData( );
@@ -378,21 +378,21 @@ class TVArchEl
 	virtual long long begin( )	{ return 0; }		//Archive begin
 	long long lastGet( )		{ return mLastGet; }	//Last getted value time
 
-	void getVal( TValBuf &buf, long long beg = 0, long long end = 0, bool onlyLocal = false );
+	void getVals( TValBuf &buf, long long beg = 0, long long end = 0, bool onlyLocal = false );
 	virtual string getS( long long *tm, bool up_ord ) { }
 	virtual double getR( long long *tm, bool up_ord ) { }
 	virtual int    getI( long long *tm, bool up_ord ) { }
 	virtual char   getB( long long *tm, bool up_ord ) { }
 
-	void setVal( TValBuf &buf, long long beg = 0, long long end = 0 );
+	void setVals( TValBuf &buf, long long beg = 0, long long end = 0 );
 
 	TVArchive &archive( );
 	TVArchivator &archivator( );
 
     protected:
 	//Protected methods
-	virtual void getValProc( TValBuf &buf, long long beg, long long end )	{ }
-	virtual void setValProc( TValBuf &buf, long long beg, long long end )	{ }
+	virtual void getValsProc( TValBuf &buf, long long beg, long long end )	{ }
+	virtual void setValsProc( TValBuf &buf, long long beg, long long end )	{ }
 
 	//> Previous averaging value
 	long long prev_tm;
