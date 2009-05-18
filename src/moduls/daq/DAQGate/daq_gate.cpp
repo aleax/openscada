@@ -543,7 +543,7 @@ void TMdPrm::update( )
 	}catch(TError err) { continue; }
 }
 
-void TMdPrm::vlSet( TVal &valo )
+void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 {
     if( !enableStat() || !owner().startStat() )	valo.setI(EVAL_INT,0,true);
 
@@ -552,22 +552,20 @@ void TMdPrm::vlSet( TVal &valo )
     //> Send to active reserve station
     if( owner().redntUse( ) )
     {
-	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->
-	    childAdd("el")->setAttr("id",valo.name())->setText(valo.getS());
+	if( valo.getS() == pvl.getS() ) return;
+	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",valo.name())->setText(valo.getS());
 	SYS->daq().at().rdStRequest(owner().workId(),req);
+	return;
     }
     //> Direct write
-    else
-    {
-	string scntr;
-	for( int c_off = 0; (scntr=TSYS::strSepParse(cntrAdr(),0,';',&c_off)).size(); )
-	    try
-	    {
-		req.clear()->setAttr("path",scntr+id()+"/%2fserv%2fattr")->
-		    childAdd("el")->setAttr("id",valo.name())->setText(valo.getS());
-		if( owner().cntrIfCmd(req,true) )   throw TError(req.attr("mcat").c_str(),req.text().c_str());
-	    }catch(TError err) { continue; }
-    }
+    string scntr;
+    for( int c_off = 0; (scntr=TSYS::strSepParse(cntrAdr(),0,';',&c_off)).size(); )
+	try
+	{
+	    req.clear()->setAttr("path",scntr+id()+"/%2fserv%2fattr")->
+		childAdd("el")->setAttr("id",valo.name())->setText(valo.getS());
+	    if( owner().cntrIfCmd(req,true) )   throw TError(req.attr("mcat").c_str(),req.text().c_str());
+	}catch(TError err) { continue; }
 }
 
 void TMdPrm::vlArchMake( TVal &val )

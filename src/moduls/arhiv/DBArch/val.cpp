@@ -212,108 +212,34 @@ void ModVArchEl::getValsProc( TValBuf &buf, long long ibegIn, long long iendIn )
     for( long long c_tm = iend+period(); c_tm <= iendIn; c_tm += period() ) buf.setI(EVAL_INT);
 }
 
-string ModVArchEl::getS( long long *tm, bool up_ord )
+TVariant ModVArchEl::getValProc( long long *tm, bool up_ord )
 {
+    long long itm = tm?*tm:SYS->curTime();
+    itm = (itm/period())*period()+((up_ord && itm%period())?period():0);
+
+    TConfig cf(NULL);
+
     switch(archive().valType())
     {
-	case TFld::Boolean:	return TSYS::int2str(getB(tm,up_ord));
-	case TFld::Integer:	return TSYS::int2str(getI(tm,up_ord));
-	case TFld::Real:	return TSYS::real2str(getR(tm,up_ord));
-	case TFld::String:
-	{
-	    long long itm = tm?*tm:SYS->curTime();
-	    itm = (itm/period())*period()+((up_ord && itm%period())?period():0);
-
-	    TConfig cfg(&mod->vlStrEl());
-	    cfg.cfg("TM").setI(itm/1000000);
-	    cfg.cfg("TMU").setI(itm%1000000);
-	    if( SYS->db().at().dataGet(archivator().addr()+"."+archTbl(),"",cfg) )
-	    {
-		if(tm) *tm = itm;
-		return cfg.cfg("VAL").getS();
-	    }
-	    if(tm) *tm = 0;
-	    return EVAL_STR;
-	}
+	case TFld::Boolean: case TFld::Integer:	cf.setElem(&mod->vlIntEl());	break;
+	case TFld::Real:	cf.setElem(&mod->vlRealEl());	break;
+	case TFld::String:	cf.setElem(&mod->vlStrEl());	break;
     }
-}
-
-double ModVArchEl::getR( long long *tm, bool up_ord )
-{
-    switch(archive().valType())
+    cf.cfg("TM").setI(itm/1000000);
+    cf.cfg("TMU").setI(itm%1000000);
+    if( SYS->db().at().dataGet(archivator().addr()+"."+archTbl(),"",cf) )
     {
-	case TFld::Boolean:	return getB(tm,up_ord);
-	case TFld::Integer:	return getI(tm,up_ord);
-	case TFld::String:	return atof(getS(tm,up_ord).c_str());
-	case TFld::Real:
+	if(tm) *tm = itm;
+	switch(archive().valType())
 	{
-	    long long itm = tm?*tm:SYS->curTime();
-	    itm = (itm/period())*period()+((up_ord && itm%period())?period():0);
-
-	    TConfig cfg(&mod->vlRealEl());
-	    cfg.cfg("TM").setI(itm/1000000);
-	    cfg.cfg("TMU").setI(itm%1000000);
-	    if( SYS->db().at().dataGet(archivator().addr()+"."+archTbl(),"",cfg) )
-	    {
-		if(tm) *tm = itm;
-		return cfg.cfg("VAL").getR();
-	    }
-	    if(tm) *tm = 0;
-	    return EVAL_REAL;
+	    case TFld::Boolean:	return (char)cf.cfg("VAL").getI();
+	    case TFld::Integer:	return cf.cfg("VAL").getI();
+	    case TFld::Real:	return cf.cfg("VAL").getR();
+	    case TFld::String:	return cf.cfg("VAL").getS();
 	}
     }
-}
-
-int ModVArchEl::getI( long long *tm, bool up_ord )
-{
-    switch(archive().valType())
-    {
-	case TFld::Boolean:	return getB(tm,up_ord);
-	case TFld::Real:	return (int)getR(tm,up_ord);
-	case TFld::String:	return atoi(getS(tm,up_ord).c_str());
-	case TFld::Integer:
-	{
-	    long long itm = tm?*tm:SYS->curTime();
-	    itm = (itm/period())*period()+((up_ord && itm%period())?period():0);
-
-	    TConfig cfg(&mod->vlIntEl());
-	    cfg.cfg("TM").setI(itm/1000000);
-	    cfg.cfg("TMU").setI(itm%1000000);
-	    if( SYS->db().at().dataGet(archivator().addr()+"."+archTbl(),"",cfg) )
-	    {
-		if(tm) *tm = itm;
-		return cfg.cfg("VAL").getI();
-	    }
-	    if(tm) *tm = 0;
-	    return EVAL_INT;
-	}
-    }
-}
-
-char ModVArchEl::getB( long long *tm, bool up_ord )
-{
-    switch(archive().valType())
-    {
-	case TFld::Real:	return (int)getR(tm,up_ord);
-	case TFld::String:	return atoi(getS(tm,up_ord).c_str());
-	case TFld::Integer:	return getI(tm,up_ord);
-	case TFld::Boolean:
-	{
-	    long long itm = tm?*tm:SYS->curTime();
-	    itm = (itm/period())*period()+((up_ord && itm%period())?period():0);
-
-	    TConfig cfg(&mod->vlIntEl());
-	    cfg.cfg("TM").setI(itm/1000000);
-	    cfg.cfg("TMU").setI(itm%1000000);
-	    if( SYS->db().at().dataGet(archivator().addr()+"."+archTbl(),"",cfg) )
-	    {
-		if(tm) *tm = itm;
-		return cfg.cfg("VAL").getI();
-	    }
-	    if(tm) *tm = 0;
-	    return EVAL_BOOL;
-	}
-    }
+    if(tm) *tm = 0;
+    return EVAL_REAL;
 }
 
 void ModVArchEl::setValsProc( TValBuf &buf, long long beg, long long end )

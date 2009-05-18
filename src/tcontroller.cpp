@@ -28,7 +28,7 @@
 //* TController					  *
 //*************************************************
 TController::TController( const string &id_c, const string &daq_db, TElem *cfgelem ) :
-    mDB(daq_db), TConfig(cfgelem), run_st(false), en_st(false), mRedntUse(true), mRedntFirst(true),
+    mDB(daq_db), TConfig(cfgelem), run_st(false), en_st(false), mRedntUse(false), mRedntFirst(true),
     mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()), mDescr(cfg("DESCR").getSd()),
     mAEn(cfg("ENABLE").getBd()), mAStart(cfg("START").getBd())
 {
@@ -111,7 +111,7 @@ string TController::getStatus( )
     if( startStat() )
     {
 	rez = _("Started. ");
-	if( redntUse( ) ) rez += _("Geting data from remote station. ");
+	if( owner().redntAllow( ) && redntUse( ) ) rez += _("Geting data from remote station. ");
     }
     else if( enableStat() ) rez = _("Enabled. ");
     else rez = _("Disabled. ");

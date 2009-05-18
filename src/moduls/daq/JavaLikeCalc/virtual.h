@@ -93,7 +93,7 @@ class Prm : public TParamContr
 	//Methods
 	void postEnable( int flag );
 
-	void vlSet( TVal &val );
+	void vlSet( TVal &val, const TVariant &pvl );
 	void vlGet( TVal &val );
 	void vlArchMake( TVal &val );
 

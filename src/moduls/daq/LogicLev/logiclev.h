@@ -74,8 +74,7 @@ class TMdPrm : public TParamContr
 	class SLnk
 	{
 	    public:
-		SLnk( int iid, const string &iprm_attr = "" ) :
-		    io_id(iid), prm_attr(iprm_attr) { }
+		SLnk( int iid, const string &iprm_attr = "" ) : io_id(iid), prm_attr(iprm_attr) { }
 		int	io_id;
 		string	prm_attr;
 		AutoHD<TVal> aprm;
@@ -100,10 +99,10 @@ class TMdPrm : public TParamContr
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	void vlGet( TVal &val );
-	void vlSet( TVal &val );
+	void vlSet( TVal &val, const TVariant &pvl );
 	void vlArchMake( TVal &val );
 
-	//- Template link operations -
+	//> Template link operations
 	int lnkSize( );
 	int lnkId( int id );
 	int lnkId( const string &id );
@@ -136,9 +135,12 @@ class TMdContr: public TController
 	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem);
 	~TMdContr( );
 
+	string getStatus( );
 	int period( )	{ return vmax(1,m_per); }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
+
+	void redntDataUpdate( bool firstArchiveSync = false );
 
     protected:
 	//Methods
@@ -147,8 +149,6 @@ class TMdContr: public TController
 
 	void start_( );
 	void stop_( );
-
-	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
     private:
 	//Methods
@@ -185,6 +185,8 @@ class TTpContr: public TTipDAQ
 	//Methods
 	void postEnable( int flag );
 	void load_( );
+
+	bool redntAllow( )	{ return true; }
 
     private:
 	//Methods

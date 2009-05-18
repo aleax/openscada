@@ -81,8 +81,7 @@ class TController : public TCntrNode, public TConfig
 	bool present( const string &name )	{ return chldPresent(mPrm,name); }
 	void add( const string &name, unsigned type );
 	void del( const string &name, bool full = false )	{ chldDel(mPrm,name,-1,full); }
-	AutoHD<TParamContr> at( const string &name, const string &who = "th_contr" )
-	{ return chldAt(mPrm,name); }
+	AutoHD<TParamContr> at( const string &name, const string &who = "th_contr" )	{ return chldAt(mPrm,name); }
 
 	//> Redundance
 	bool redntUse( )			{ return mRedntUse; }

@@ -1,3 +1,19 @@
+2009-05-18 Roman
+- !!!!:/Archive/Value, /Archive/DBArch, /Archive/FSArch: Get values API some changed.
+    Replaced group functions getS,R,I,B to one getVal() with result TVariant.
+    And to getVal() is added EVAL hole filling from reserve station.
+- FIX:/Archive/Value, /UI/WebVision: GD's no support FontConfig crash is prevented.
+- FIX:/Archive/Value: Holes filling is fixed for multistations processing and direct block writing to archive.
+- FIX:/DAQ/Controller: No display gathering from remote station message for not support redundant controllers is fixed.
+- !!:/DAQ/Value, /DAQ/*: Previous value is added to set value prevent function.
+- !!:/SYS/TVariant: The object is expanded for support EVAL values.
+- FIX:/Archive/FSArch: Error message is display on time archivator enable error. Read EVAL value of Boolean type is fixed.
+- /DAC/DCON: Translation to German is added by Irina Popkova.
+- !!:/DAQ/LogicLev: Redundantce support is added.
+- FIX:/DAQ/ModBus: Protocol's nodes call after subsystem's "DAQ" starting is fixed.
+- FIX:/Special/FLibSYS: Float's functions description is fixed.
+
+
 2009-05-16 Roman
 - !!!:/SYS/Build: Added autoconf macros for more detailed detection configuration for DB MySQL, FireBird and SQLite.
 - /Archive/Value: Function getVal() is renamed to getVals() and setVal() to setVals().

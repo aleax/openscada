@@ -523,7 +523,7 @@ void *TDAQS::RdTask( void *param )
 
 	daq.mRdPrcTm = 1e-3*(SYS->curTime()-work_tm);
 
-	TSYS::taskSleep((long long)daq.rdTaskPer()*1000000000ll);
+	TSYS::taskSleep((long long)(daq.rdTaskPer()*1e9));
     } catch( TError err ) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     daq.prcStRd = false;

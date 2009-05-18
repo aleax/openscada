@@ -66,7 +66,7 @@ class TMdPrm : public TParamContr
 	//Methods
 	void load_( );
 	bool cfgChange( TCfg &cfg );
-	void vlSet( TVal &val );
+	void vlSet( TVal &val, const TVariant &pvl );
 	void vlGet( TVal &val );
 	void vlArchMake( TVal &val );
 

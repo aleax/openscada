@@ -1,4 +1,4 @@
-# OpenSCADA.DAQ.DCON translate to Ukrainian.
+# OpenSCADA.DAQ.DCON translate to Russian.
 # Copyright (C) 2008-2009 Almaz Karimov
 # This file is distributed under the same license as the OpenSCADA.DAQ.DCON package module.
 # Roman Savochenko <rom_as@fromru.com>, 2008-2009.
@@ -32,7 +32,7 @@ msgstr ""
 "POT-Creation-Date: 2009-05-18 14:39+0300\n"
 "PO-Revision-Date: 2008-10-22 13:05+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
-"Language-Team: <uk@li.org>\n"
+"Language-Team: <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
@@ -42,7 +42,7 @@ msgstr ""
 
 #: DCON_client.cpp:39
 msgid "DCON client"
-msgstr "DCON клієнт"
+msgstr "DCON Kunde"
 
 #: DCON_client.cpp:40
 msgid "DAQ"
@@ -54,14 +54,14 @@ msgstr ""
 
 #: DCON_client.cpp:43
 msgid "Almaz Karimov"
-msgstr "Алмаз Каримов"
+msgstr "Almaz Karimov"
 
 #: DCON_client.cpp:44
 msgid ""
 "Allow realisation of DCON client service. Supported I-7000 DCON protocol."
 msgstr ""
-"Надає реалізацію клієнтського сервісу DCON. Підтримується I-7000 DCON "
-"протокол."
+"Ermoeglicht Verwirklichung des Kundenservices des DCON-Protoklls. "
+"Unterstueuzung Prototkoll I-7000 DCON."
 
 #: DCON_client.cpp:45
 msgid "GPL"
@@ -78,8 +78,10 @@ msgid ""
 "---------- Parameters of the module section <%s> in config file ----------\n"
 "\n"
 msgstr ""
-"========================== Опції модуля <%s:%s> ==========================\n"
-"-------- Параметри модульної секції <%s> у конфігураційному файлі --------\n"
+"========================== Optionen des Moduls <%s:%s> "
+"==========================\n"
+"-------- Parameter der modularen Sektion <%s> in der Konfigurationsdatei "
+"--------\n"
 "\n"
 
 #: DCON_client.cpp:107 DCON_client.cpp:113 DCON_client.cpp:161
@@ -88,7 +90,7 @@ msgstr ""
 
 #: DCON_client.cpp:107
 msgid "Parameteres table"
-msgstr "Таблиця параметрів"
+msgstr "Tabelle der Parameter"
 
 #: DCON_client.cpp:107 DCON_client.cpp:110
 msgid "30"
@@ -100,7 +102,7 @@ msgstr ""
 
 #: DCON_client.cpp:108
 msgid "Gather data period (s)"
-msgstr "Період збору даних (с)"
+msgstr "Dateierfassungsperiode (s)"
 
 #: DCON_client.cpp:108
 msgid "6.2"
@@ -123,7 +125,7 @@ msgstr ""
 
 #: DCON_client.cpp:109
 msgid "Gather task priority"
-msgstr "Рівень пріорітету задачі збору даних"
+msgstr "Niveau der Prioritaet der Dateierfassungsaufgabe"
 
 #: DCON_client.cpp:109 DCON_client.cpp:235 DCON_client.cpp:265
 #: DCON_client.cpp:462
@@ -146,7 +148,7 @@ msgstr ""
 
 #: DCON_client.cpp:110
 msgid "Serial transport"
-msgstr "Послідовний транспорт"
+msgstr "Serieller Transport"
 
 #: DCON_client.cpp:113
 msgid "std"
@@ -154,7 +156,7 @@ msgstr ""
 
 #: DCON_client.cpp:113
 msgid "Standard"
-msgstr "Стандарт"
+msgstr "Standard"
 
 #: DCON_client.cpp:114 DCON_client.cpp:543
 msgid "MOD_TP"
@@ -162,7 +164,7 @@ msgstr ""
 
 #: DCON_client.cpp:114
 msgid "I-7000 module type"
-msgstr "Тип модуля I-7000"
+msgstr "Typ des Moduls I-7000"
 
 #: DCON_client.cpp:114
 msgid "0;1;2;3;4"
@@ -178,7 +180,7 @@ msgstr ""
 
 #: DCON_client.cpp:115
 msgid "I-7000 module address"
-msgstr "Адреса модуля I-7000"
+msgstr "Adresse des Moduls I-7000"
 
 #: DCON_client.cpp:115 DCON_client.cpp:657 DCON_client.cpp:658
 #: DCON_client.cpp:659 DCON_client.cpp:660
@@ -195,7 +197,7 @@ msgstr ""
 
 #: DCON_client.cpp:116
 msgid "CRC control"
-msgstr "Контроль CRC"
+msgstr "CRC-Kontrolle"
 
 #: DCON_client.cpp:123
 msgid "h"
@@ -212,7 +214,7 @@ msgstr ""
 #: DCON_client.cpp:183 DCON_client.cpp:249 DCON_client.cpp:531
 #: DCON_client.cpp:532
 msgid "Serial"
-msgstr "Послідовний"
+msgstr "Seriell"
 
 #: DCON_client.cpp:189 DCON_client.cpp:521 DCON_client.cpp:522
 msgid "root"
@@ -224,7 +226,7 @@ msgstr ""
 
 #: DCON_client.cpp:198
 msgid "Gathering task is not started!"
-msgstr "Задачу збору даних не запущено!"
+msgstr "Dateierfassungsaufgabe ist nicht gestartet!"
 
 #: DCON_client.cpp:209
 msgid "stop"
@@ -232,7 +234,7 @@ msgstr ""
 
 #: DCON_client.cpp:210
 msgid "Gathering task is not stopped!"
-msgstr "Задачу збору даних не зупинено!"
+msgstr "Dateierfassungsaufgabe ist nicht gestoppt!"
 
 #: DCON_client.cpp:235 DCON_client.cpp:265 DCON_client.cpp:476
 msgid "3"
@@ -288,7 +290,7 @@ msgstr ""
 
 #: DCON_client.cpp:257
 msgid "14:Request error: "
-msgstr "14:Помилка запиту: "
+msgstr "14:Anfragefehler: "
 
 #: DCON_client.cpp:272
 #, c-format
@@ -335,7 +337,7 @@ msgstr ""
 
 #: DCON_client.cpp:521
 msgid "Gather data time (ms)"
-msgstr "Час збору даних (мс)"
+msgstr "Dateierfassungszeit (ms)"
 
 #: DCON_client.cpp:521 DCON_client.cpp:522
 msgid "tp"
@@ -569,11 +571,11 @@ msgstr ""
 
 #: DCON_client.cpp:693
 msgid "1:Parameter is disabled."
-msgstr "1:Параметр вимкнено."
+msgstr "1:Parameter ist nicht aktiviert."
 
 #: DCON_client.cpp:694
 msgid "2:Acquisition is stoped."
-msgstr "2:Збір зупинено."
+msgstr "2:Befragung ist gestoppt."
 
 #: DCON_client.cpp:703 DCON_client.cpp:715
 msgid "DI"

@@ -179,6 +179,13 @@ void TMdContr::postDisable(int flag)
     { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
+string TMdContr::getStatus( )
+{
+    string rez = TController::getStatus( );
+    if( startStat() && !redntUse( ) ) rez += TSYS::strMess(_("Calc time %.6g ms. "),tm_calc);
+    return rez;
+}
+
 TParamContr *TMdContr::ParamAttach( const string &name, int type )
 {
     return new TMdPrm(name,&owner().tpPrmAt(type));
@@ -186,14 +193,14 @@ TParamContr *TMdContr::ParamAttach( const string &name, int type )
 
 void TMdContr::start_( )
 {
-    //- Former process parameters list -
+    //> Former process parameters list
     vector<string> list_p;
     list(list_p);
     for(int i_prm=0; i_prm < list_p.size(); i_prm++)
 	if( at(list_p[i_prm]).at().enableStat() )
 	    prmEn(list_p[i_prm],true);
 
-    //- Start the request data task -
+    //> Start the request data task
     if( !prc_st )
     {
 	pthread_attr_t pthr_attr;
@@ -214,7 +221,7 @@ void TMdContr::start_( )
 
 void TMdContr::stop_( )
 {
-    //- Stop the request and calc data task -
+    //> Stop the request and calc data task
     if( prc_st )
     {
 	endrun_req = true;
@@ -224,7 +231,7 @@ void TMdContr::stop_( )
 	pthread_join( procPthr, NULL );
     }
 
-    //- Clear process parameters list -
+    //> Clear process parameters list
     p_hd.clear();
 }
 
@@ -258,16 +265,18 @@ void *TMdContr::Task( void *icntr )
 
     while(true)
     {
-	long long t_cnt = SYS->shrtCnt();
-
 	//> Update controller's data
-	cntr.en_res.resRequestR( );
-	for(unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++)
-	    try{ cntr.p_hd[i_p].at().calc(is_start,is_stop); }
-	    catch(TError err)
-	    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-	cntr.en_res.resRelease( );
-	cntr.tm_calc = 1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
+	if( !cntr.redntUse( ) )
+	{
+	    long long t_cnt = SYS->shrtCnt();
+	    cntr.en_res.resRequestR( );
+	    for( unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++ )
+		try{ cntr.p_hd[i_p].at().calc(is_start,is_stop); }
+		catch(TError err)
+		{ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+	    cntr.en_res.resRelease( );
+	    cntr.tm_calc = 1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
+	}
 
 	if( is_stop ) break;
 	TSYS::taskSleep((long long)cntr.period()*1000000);
@@ -280,26 +289,39 @@ void *TMdContr::Task( void *icntr )
     return NULL;
 }
 
-void TMdContr::cntrCmdProc( XMLNode *opt )
+void TMdContr::redntDataUpdate( bool firstArchiveSync )
 {
-    //- Get page info -
-    if( opt->name() == "info" )
+    TController::redntDataUpdate(firstArchiveSync);
+
+    vector<string> pls; list(pls);
+
+    //> Request for template's attributes values
+    XMLNode req("CntrReqs"); req.setAttr("path",nodePath(0,true));
+    for( int i_p = 0; i_p < pls.size(); i_p++ )
     {
-	TController::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/cntr/st/calc_tm",_("Calc template functions time (ms)"),0444,"root","root",1,"tp","real");
-	return;
+	if( !at(pls[i_p]).at().enableStat( ) ) continue;
+	req.childAdd("get")->setAttr("path","/prm_"+pls[i_p]+"/%2fserv%2ftmplAttr");
     }
-    //- Process command to page -
-    string a_path = opt->attr("path");
-    if( a_path == "/cntr/st/calc_tm" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(tm_calc,6));
-    else TController::cntrCmdProc(opt);
+
+    //> Send request to first active station for this controller
+    try{ owner().owner().rdStRequest(workId(),req); }
+    catch(TError err) { return; }
+
+    //> Redirect respond to local parameters
+    req.setAttr("path","/");
+    for( int i_prm = 0; i_prm < req.childSize(); i_prm++ )
+    {
+	if( atoi(req.childGet(i_prm)->attr("err").c_str()) ) { req.childDel(i_prm--); continue; }
+	req.childGet(i_prm)->setName("set");
+    }
+    cntrCmd(&req);
 }
 
 //*************************************************
 //* TMdPrm                                        *
 //*************************************************
 TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : 
-    TParamContr(name,tp_prm), p_el("w_attr"), prm_refl(NULL), m_wmode(TMdPrm::Free), chk_lnk_need(false), 
+    TParamContr(name,tp_prm), p_el("w_attr"), prm_refl(NULL), m_wmode(TMdPrm::Free), chk_lnk_need(false),
     id_freq(-1), id_start(-1), id_stop(-1), m_mode(cfg("MODE").getId()), m_prm(cfg("PRM").getSd())
 {
 
@@ -347,7 +369,7 @@ void TMdPrm::enable()
 	loadIO();
 	if(mode() == TMdPrm::Template)
 	{
-	    //- Init system attributes identifiers -
+	    //> Init system attributes identifiers
 	    id_freq	= tmpl->val.func()->ioId("f_frq");
 	    id_start	= tmpl->val.func()->ioId("f_start");
 	    id_stop	= tmpl->val.func()->ioId("f_stop");
@@ -382,7 +404,7 @@ void TMdPrm::load_( )
 
 void TMdPrm::loadIO()
 {
-    //- Load IO and init links -
+    //> Load IO and init links
     if( mode() == TMdPrm::Template )
     {
 	TConfig cfg(&mod->prmIOE());
@@ -410,7 +432,7 @@ void TMdPrm::save_( )
 
 void TMdPrm::saveIO()
 {
-    //- Save IO and init links -
+    //> Save IO and init links
     if( mode() == TMdPrm::Template )
     {
 	TConfig cfg(&mod->prmIOE());
@@ -570,6 +592,7 @@ void TMdPrm::vlGet( TVal &val )
 	}
 	return;
     }
+    if( owner().redntUse( ) ) return;
     try
     {
 	ResAlloc res(moderes,false);
@@ -624,8 +647,19 @@ void TMdPrm::vlGet( TVal &val )
     }
 }
 
-void TMdPrm::vlSet( TVal &val )
+void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
 {
+    //> Send to active reserve station
+    if( owner().redntUse( ) )
+    {
+	if( val.getS() == pvl.getS() ) return;
+	XMLNode req("set");
+	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",val.name())->setText(val.getS());
+	SYS->daq().at().rdStRequest(owner().workId(),req);
+	return;
+    }
+
+    //> Direct write
     try
     {
 	ResAlloc res(moderes,false);
@@ -782,9 +816,28 @@ void TMdPrm::calc( bool first, bool last )
 
 void TMdPrm::cntrCmdProc( XMLNode *opt )
 {
-    //- Service commands process -
+    //> Service commands process
     string a_path = opt->attr("path");
-    if( a_path.substr(0,6) == "/serv/" )  { TParamContr::cntrCmdProc(opt); return; }
+    if( a_path.substr(0,6) == "/serv/" )
+    {
+	if( a_path == "/serv/tmplAttr" )
+	{
+	    ResAlloc res(moderes,false);
+	    if( mode( ) != TMdPrm::Template || !tmpl->val.func( ) ) throw TError(nodePath().c_str(),_("No template parameter or error."));
+	    if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )
+		for( int i_a = 0; i_a < tmpl->val.ioSize(); i_a++ )
+		    opt->childAdd("ta")->setAttr("id",tmpl->val.func()->io(i_a)->id())->setText(tmpl->val.getS(i_a));
+	    if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )
+		for( int i_a = 0; i_a < opt->childSize(); i_a++ )
+		{
+		    int io_id = -1;
+		    if( opt->childGet(i_a)->name() != "ta" || (io_id=tmpl->val.ioId(opt->childGet(i_a)->attr("id"))) < 0 ) continue;
+		    tmpl->val.setS(io_id,opt->childGet(i_a)->text());
+		}
+	}
+	else TParamContr::cntrCmdProc(opt);
+	return;
+    }
 
     vector<string> list;
     //- Get page info -
@@ -945,7 +998,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    }
 	}
     }
-    else if( (a_path.substr(0,12) == "/cfg/prm/pl_" || a_path.substr(0,12) == "/cfg/prm/ls_") && 
+    else if( (a_path.substr(0,12) == "/cfg/prm/pl_" || a_path.substr(0,12) == "/cfg/prm/ls_") &&
 	    mode() == TMdPrm::Template && ctrChkNode(opt) )
     {
 	int c_lv = 0;

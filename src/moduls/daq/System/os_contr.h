@@ -101,8 +101,7 @@ class TMdContr: public TController
 	int period( )	{ return vmax(1,m_per); }
 	int prior( )	{ return m_prior; }
 
-	AutoHD<TMdPrm> at( const string &nm )
-	{ return TController::at(nm); }
+	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
     protected:
 	//Methods

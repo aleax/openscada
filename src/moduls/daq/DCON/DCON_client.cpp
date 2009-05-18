@@ -708,7 +708,7 @@ void TMdPrm::vlGet( TVal &val )
 //    if (val.name()=="err") val.setS(_("No errors."),0,true);
 }
 
-void TMdPrm::vlSet( TVal &valo )
+void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 {
     if( !enableStat() )	valo.setI( EVAL_INT, 0, true );
 

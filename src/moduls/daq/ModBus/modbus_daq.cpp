@@ -688,7 +688,7 @@ void TMdPrm::vlGet( TVal &val )
     }
 }
 
-void TMdPrm::vlSet( TVal &valo )
+void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 {
     if( !enableStat() )	valo.setS( EVAL_STR, 0, true );
 

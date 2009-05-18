@@ -62,10 +62,7 @@ class VFileArch
 
 	void	setVals( TValBuf &buf, long long beg, long long end );
 	void	getVals( TValBuf &buf, long long beg, long long end );
-	string	getS( int pos );
-	double	getR( int pos );
-	int	getI( int pos );
-	char	getB( int pos );
+	TVariant getVal( int pos );
 
 	ModVArchEl &owner()	{ return *m_owner; }
 
@@ -159,11 +156,6 @@ class ModVArchEl: public TVArchEl
 	long long begin( );
 	long long end( );
 
-	string	getS( long long *tm, bool up_ord );
-	double	getR( long long *tm, bool up_ord );
-	int	getI( long long *tm, bool up_ord );
-	char	getB( long long *tm, bool up_ord );
-
 	ModVArch &archivator()	{ return (ModVArch&)TVArchEl::archivator(); }
 
 	void checkArchivator( bool now = false );
@@ -171,6 +163,7 @@ class ModVArchEl: public TVArchEl
 
     protected:
 	//Methods
+	TVariant getValProc( long long *tm, bool up_ord );
 	void getValsProc( TValBuf &buf, long long beg, long long end );
 	void setValsProc( TValBuf &buf, long long beg, long long end );
 

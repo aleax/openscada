@@ -26,17 +26,11 @@
 #include <vector>
 
 #include "terror.h"
+#include "tvariant.h"
 #include "tconfig.h"
 
 using std::string;
 using std::vector;
-
-//Error values
-#define EVAL_BOOL 2
-#define EVAL_INT  -2147483647
-#define EVAL_REAL -3.3E308
-#define EVAL_STR  "<EVAL>"
-
 
 //*************************************************
 //* TVal                                          *
@@ -89,8 +83,6 @@ class TVal : public TCntrNode
     protected:
 	//Methods
 	void cntrCmdProc( XMLNode *opt );
-	void vlSet( );
-	void vlGet( );
 
     private:
 	//Methods
@@ -148,19 +140,12 @@ class TValue: public TCntrNode, public TValElem
 	TElem &vlElem( const string &name );
 
 	virtual TVal* vlNew( );
-	virtual void vlSet( TVal &val )		{ };
+	virtual void vlSet( TVal &val, const TVariant &pvl )		{ };
 	virtual void vlGet( TVal &val )		{ };
 	virtual void vlArchMake( TVal &val )	{ };
 
     private:
 	//Methods
-	//> Set value direct into controller param's
-	virtual void vlSet( int id_elem )
-	{ throw TError(nodePath().c_str(),_("Direct access to write value no admit.")); }
-	//> Get value direct from controller param's
-	virtual void vlGet( int id_elem )
-	{ throw TError(nodePath().c_str(),_("Direct access to read value no admit.")); }
-
 	//> TElem commands
 	void detElem( TElem *el );
 	void addFld( TElem *el, unsigned id_val);

@@ -59,21 +59,16 @@ void ModVArch::setValPeriod( double iper )
 
 void ModVArch::start( )
 {
-    //- Start getting data cycle -
+    //> Start getting data cycle
     TVArchivator::start();
 
-    //- First scan dir. Load and connect archive files -
-    try{ checkArchivator(true); }
-    catch(TError err)
-    {
-	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	stop( );
-    }
+    //> First scan dir. Load and connect archive files
+    try{ checkArchivator(true); } catch( TError err ) { stop( ); throw; }
 }
 
 void ModVArch::stop( )
 {
-    //- Stop getting data cicle an detach archives -
+    //> Stop getting data cicle an detach archives
     TVArchivator::stop();
 }
 
@@ -592,7 +587,7 @@ void ModVArchEl::getValsProc( TValBuf &buf, long long ibeg, long long iend )
 	buf.setI(EVAL_INT,ibeg);
 }
 
-string ModVArchEl::getS( long long *tm, bool up_ord )
+TVariant ModVArchEl::getValProc( long long *tm, bool up_ord )
 {
     long long itm = tm?*tm:SYS->curTime();
     long long per;
@@ -603,73 +598,22 @@ string ModVArchEl::getS( long long *tm, bool up_ord )
 		(!up_ord && itm < arh_f[i_a]->end()+arh_f[i_a]->period() && itm >= arh_f[i_a]->begin()) ) )
 	{
 	    if(tm) { per = arh_f[i_a]->period(); *tm = (itm/per)*per+((up_ord&&itm%per)?per:0); }
-	    return arh_f[i_a]->getS(up_ord?arh_f[i_a]->maxPos()-(arh_f[i_a]->end()-itm)/arh_f[i_a]->period():(itm-arh_f[i_a]->begin())/arh_f[i_a]->period());
-	}
-    if(tm) { per = (long long)(archivator().valPeriod()*1000000.); *tm = (itm>=begin()||itm<=end()) ? (itm/per)*per+((up_ord&&itm%per)?per:0) : 0; }
-    return EVAL_STR;
-}
-
-double ModVArchEl::getR( long long *tm, bool up_ord )
-{
-    long long itm = tm?*tm:SYS->curTime();
-    long long per;
-    ResAlloc res(m_res,false);
-    for( int i_a = 0; i_a < arh_f.size(); i_a++ )
-	if( !arh_f[i_a]->err() && (
-		(up_ord && itm <= arh_f[i_a]->end() && itm > arh_f[i_a]->begin()-arh_f[i_a]->period()) ||
-		(!up_ord && itm < arh_f[i_a]->end()+arh_f[i_a]->period() && itm >= arh_f[i_a]->begin()) ) )
-	{
-	    if(tm) { per = arh_f[i_a]->period(); *tm = (itm/per)*per+((up_ord&&itm%per)?per:0); }
-	    return arh_f[i_a]->getR(up_ord?arh_f[i_a]->maxPos()-(arh_f[i_a]->end()-itm)/arh_f[i_a]->period():(itm-arh_f[i_a]->begin())/arh_f[i_a]->period());
+	    return arh_f[i_a]->getVal(up_ord?arh_f[i_a]->maxPos()-(arh_f[i_a]->end()-itm)/arh_f[i_a]->period():(itm-arh_f[i_a]->begin())/arh_f[i_a]->period());
 	}
     if(tm) { per = (long long)(archivator().valPeriod()*1000000.); *tm = (itm>=begin()||itm<=end()) ? (itm/per)*per+((up_ord&&itm%per)?per:0) : 0; }
     return EVAL_REAL;
 }
 
-int ModVArchEl::getI( long long *tm, bool up_ord )
-{
-    long long itm = tm?*tm:SYS->curTime();
-    long long per;
-    ResAlloc res(m_res,false);
-    for( int i_a = 0; i_a < arh_f.size(); i_a++ )
-	if( !arh_f[i_a]->err() && (
-		(up_ord && itm <= arh_f[i_a]->end() && itm > arh_f[i_a]->begin()-arh_f[i_a]->period()) ||
-		(!up_ord && itm < arh_f[i_a]->end()+arh_f[i_a]->period() && itm >= arh_f[i_a]->begin()) ) )
-	{
-	    if(tm) { per = arh_f[i_a]->period(); *tm = (itm/per)*per+((up_ord&&itm%per)?per:0); }
-	    return arh_f[i_a]->getI(up_ord?arh_f[i_a]->maxPos()-(arh_f[i_a]->end()-itm)/arh_f[i_a]->period():(itm-arh_f[i_a]->begin())/arh_f[i_a]->period());
-	}
-    if(tm) { per = (long long)(archivator().valPeriod()*1000000.); *tm = (itm>=begin()||itm<=end()) ? (itm/per)*per+((up_ord&&itm%per)?per:0) : 0; }
-    return EVAL_INT;
-}
-
-char ModVArchEl::getB( long long *tm, bool up_ord )
-{
-    long long itm = tm?*tm:SYS->curTime();
-    long long per;
-    ResAlloc res(m_res,false);
-    for( int i_a = 0; i_a < arh_f.size(); i_a++ )
-	if( !arh_f[i_a]->err() && (
-		(up_ord && itm <= arh_f[i_a]->end() && itm > arh_f[i_a]->begin()-arh_f[i_a]->period()) ||
-		(!up_ord && itm < arh_f[i_a]->end()+arh_f[i_a]->period() && itm >= arh_f[i_a]->begin()) ) )
-	{
-	    if(tm) { per = arh_f[i_a]->period(); *tm = (itm/per)*per+((up_ord&&itm%per)?per:0); }
-	    return arh_f[i_a]->getB(up_ord?arh_f[i_a]->maxPos()-(arh_f[i_a]->end()-itm)/arh_f[i_a]->period():(itm-arh_f[i_a]->begin())/arh_f[i_a]->period());
-	}
-    if(tm) { per = (long long)(archivator().valPeriod()*1000000.); *tm = (itm>=begin()||itm<=end()) ? (itm/per)*per+((up_ord&&itm%per)?per:0) : 0; }
-    return EVAL_BOOL;
-}
-
 void ModVArchEl::setValsProc( TValBuf &buf, long long beg, long long end )
 {
-    //- Check border -
+    //> Check border
     if( !buf.vOK(beg,end) )	return;
     beg = vmax(beg,buf.begin());
     end = vmin(end,buf.end());
 
     realEnd = vmax(realEnd,buf.end());
 
-    //- Put values to files -
+    //> Put values to files
     ResAlloc res(m_res,false);
     for( int i_a = 0; i_a < arh_f.size(); i_a++ )
 	if( !arh_f[i_a]->err() && beg <= end )
@@ -930,13 +874,13 @@ void VFileArch::attach( const string &name )
 	    {
 		case TFld::Integer:
 		{
-		    int tval = getI((cur_tm-begin())/period());
+		    int tval = getVal((cur_tm-begin())/period()).getI();
 		    owner().prev_val.assign((char*)&tval,vSize);
 		    break;
 		}
 		case TFld::Real:
 		{
-		    double tval = getR((cur_tm-begin())/period());
+		    double tval = getVal((cur_tm-begin())/period()).getR();
 		    owner().prev_val.assign((char*)&tval,vSize);
 		}
 		break;
@@ -982,7 +926,7 @@ void VFileArch::check( )
 
 long long VFileArch::endData( )
 {
-    if( getS(mpos) != EVAL_STR ) return end();
+    if( getVal(mpos).getS() != EVAL_STR ) return end();
 
     ResAlloc res(m_res,false);
     if( m_err ) throw TError(owner().archivator().nodePath().c_str(),_("Archive file error!"));
@@ -1110,7 +1054,7 @@ void VFileArch::getVals( TValBuf &buf, long long beg, long long end )
 	switch(type())
 	{
 	    case TFld::Boolean:
-		buf.setB((bool)*(val_b+voff_beg),begin()+vpos_beg*period());
+		buf.setB((char)*(val_b+voff_beg),begin()+vpos_beg*period());
 		break;
 	    case TFld::Integer:
 		buf.setI(*(int*)(val_b+voff_beg),begin()+vpos_beg*period());
@@ -1142,7 +1086,7 @@ void VFileArch::getVals( TValBuf &buf, long long beg, long long end )
     free(val_b);
 }
 
-string VFileArch::getS( int vpos )
+TVariant VFileArch::getVal( int vpos )
 {
     ResAlloc res(m_res,false);
     if( m_err ) throw TError(owner().archivator().nodePath().c_str(),_("Archive file error!"));
@@ -1154,121 +1098,40 @@ string VFileArch::getS( int vpos )
 	res.release();
     }
 
+    m_acces = time(NULL);
+    res.request(false);
+    //>Open archive file
+    int hd = open(name().c_str(),O_RDONLY);
+    if( hd <= 0 ) { m_err = true; return EVAL_REAL; }
+
     switch(type())
     {
 	case TFld::Boolean:
-	{ char vl = getB(vpos); return (vl==EVAL_BOOL)?EVAL_STR:TSYS::int2str((bool)vl); }
+	{
+	    char rez = *(char*)getValue(hd,calcVlOff(hd,vpos),sizeof(char)).c_str();
+	    close(hd);
+	    return rez;
+	}
 	case TFld::Integer:
-	{ int vl = getI(vpos); return (vl==EVAL_INT)?EVAL_STR:TSYS::int2str(vl); }
+	{
+	    int rez = *(int*)getValue(hd,calcVlOff(hd,vpos),sizeof(int)).c_str();
+	    close(hd);
+	    return rez;
+	}
 	case TFld::Real:
-	{ double vl = getR(vpos); return (vl==EVAL_REAL)?EVAL_STR:TSYS::real2str(vl); }
+	{
+	    double rez = *(double*)getValue(hd,calcVlOff(hd,vpos),sizeof(double)).c_str();
+	    close(hd);
+	    return rez;
+	}
 	case TFld::String:
-	    m_acces = time(NULL);
-	    res.request(false);
-	    //- Open archive file -
-	    int hd = open(name().c_str(),O_RDONLY);
-	    if( hd <= 0 ) { m_err = true; return EVAL_STR; }
+	{
 	    int v_sz;
 	    int v_off = calcVlOff(hd,vpos,&v_sz);
 	    string rez = getValue(hd,v_off,v_sz);
 	    close(hd);
 	    return rez;
-    }
-}
-
-double VFileArch::getR( int vpos )
-{
-    ResAlloc res(m_res,false);
-    if( m_err ) throw TError(owner().archivator().nodePath().c_str(),_("Archive file error!"));
-    if( m_pack )
-    {
-	res.request(true);
-	m_name = mod->unPackArch(m_name);
-	m_pack = false;
-	res.release();
-    }
-
-    switch(type())
-    {
-	case TFld::Boolean:
-	{ char vl = getB(vpos); return (vl==EVAL_BOOL)?EVAL_REAL:(bool)vl; }
-	case TFld::Integer:
-	{ int vl = getI(vpos); return (vl==EVAL_INT)?EVAL_REAL:(double)vl; }
-	case TFld::String:
-	{ string vl = getS(vpos); return (vl==EVAL_STR)?EVAL_REAL:atof(vl.c_str()); }
-	case TFld::Real:
-	    m_acces = time(NULL);
-	    res.request(false);
-	    //- Open archive file -
-	    int hd = open(name().c_str(),O_RDONLY);
-	    if( hd <= 0 ) { m_err = true; return EVAL_REAL; }
-	    double rez = *(double*)getValue(hd,calcVlOff(hd,vpos),sizeof(double)).c_str();
-	    close(hd);
-	    return rez;
-    }
-}
-
-int VFileArch::getI( int vpos )
-{
-    ResAlloc res(m_res,false);
-    if( m_err ) throw TError(owner().archivator().nodePath().c_str(),_("Archive file error!"));
-    if( m_pack )
-    {
-	res.request(true);
-	m_name = mod->unPackArch(m_name);
-	m_pack = false;
-	res.release();
-    }
-
-    switch(type())
-    {
-	case TFld::Boolean:
-	{ char vl = getB(vpos); return (vl==EVAL_BOOL)?EVAL_INT:(bool)vl; }
-	case TFld::String:
-	{ string vl = getS(vpos); return (vl==EVAL_STR)?EVAL_INT:atoi(vl.c_str()); }
-	case TFld::Real:
-	{ double vl = getR(vpos); return (vl==EVAL_REAL)?EVAL_INT:(int)vl; }
-	case TFld::Integer:
-	    m_acces = time(NULL);
-	    res.request(false);
-	    //- Open archive file -
-	    int hd = open(name().c_str(),O_RDONLY);
-	    if( hd <= 0 ) { m_err = true; return EVAL_INT; }
-	    int rez = *(int*)getValue(hd,calcVlOff(hd,vpos),sizeof(int)).c_str();
-	    close(hd);
-	    return rez;
-    }
-}
-
-char VFileArch::getB( int vpos )
-{
-    ResAlloc res(m_res,false);
-    if( m_err ) throw TError(owner().archivator().nodePath().c_str(),_("Archive file error!"));
-    if( m_pack )
-    {
-	res.request(true);
-	m_name = mod->unPackArch(m_name);
-	m_pack = false;
-	res.release();
-    }
-
-    switch(type())
-    {
-	case TFld::Integer:
-	{ int vl = getI(vpos); return (vl==EVAL_INT)?EVAL_BOOL:(bool)vl; }
-	case TFld::String:
-	{ string vl = getS(vpos); return (vl==EVAL_STR)?EVAL_BOOL:(bool)atoi(vl.c_str()); }
-	case TFld::Real:
-	{ double vl = getR(vpos); return (vl==EVAL_REAL)?EVAL_BOOL:(bool)vl; }
-	case TFld::Boolean:
-	    m_acces = time(NULL);
-	    res.request(false);
-	    //- Open archive file -
-	    int hd = open(name().c_str(),O_RDONLY);
-	    if( hd <= 0 ) { m_err = true; return EVAL_BOOL; }
-	    char rez = *(char*)getValue(hd,calcVlOff(hd,vpos),sizeof(char)).c_str();
-	    close(hd);
-	    return rez;
+	}
     }
 }
 
@@ -1509,8 +1372,6 @@ string VFileArch::getValue( int hd, int voff, int vsz )
     }
     return get_vl;
 }
-
-
 
 int VFileArch::calcVlOff( int hd, int vpos, int *vsz, bool wr )
 {

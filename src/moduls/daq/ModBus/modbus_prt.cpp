@@ -1047,63 +1047,66 @@ void *Node::Task( void *ind )
 
     for( unsigned int clc = 0; true; clc++ )
     {
-	long long t_cnt = TSYS::curTime();
-
-	//> Setting special IO
-	if( ioFrq >= 0 ) nd.data->val.setR(ioFrq,(float)1/nd.period());
-	if( ioStart >= 0 ) nd.data->val.setB(ioStart,isStart);
-	if( ioStop >= 0 ) nd.data->val.setB(ioStop,isStop);
-
-	try
+	if( SYS->daq().at().subStartStat( ) )
 	{
-	    //> Get input links
-	    map< int, AutoHD<TVal> >::iterator li;
-	    for( li = nd.data->lnk.begin(); li != nd.data->lnk.end(); li++ )
+	    long long t_cnt = TSYS::curTime();
+
+	    //> Setting special IO
+	    if( ioFrq >= 0 ) nd.data->val.setR(ioFrq,(float)1/nd.period());
+	    if( ioStart >= 0 ) nd.data->val.setB(ioStart,isStart);
+	    if( ioStop >= 0 ) nd.data->val.setB(ioStop,isStop);
+
+	    try
 	    {
-		if( li->second.freeStat() )
+		//> Get input links
+		map< int, AutoHD<TVal> >::iterator li;
+		for( li = nd.data->lnk.begin(); li != nd.data->lnk.end(); li++ )
 		{
-		    nd.data->val.setS(li->first,EVAL_STR);
-		    if( !(clc%(int)vmax(1,(float)1/nd.period())) )
+		    if( li->second.freeStat() )
 		    {
-			try
+			nd.data->val.setS(li->first,EVAL_STR);
+			if( !(clc%(int)vmax(1,(float)1/nd.period())) )
 			{
-			    li->second = SYS->daq().at().at(TSYS::strSepParse(nd.io(li->first)->rez(),0,'.')).at().
+			    try
+			    {
+				li->second = SYS->daq().at().at(TSYS::strSepParse(nd.io(li->first)->rez(),0,'.')).at().
 					       at(TSYS::strSepParse(nd.io(li->first)->rez(),1,'.')).at().
 					       at(TSYS::strSepParse(nd.io(li->first)->rez(),2,'.')).at().
 					       vlAt(TSYS::strSepParse(nd.io(li->first)->rez(),3,'.'));
-			}catch( TError err ){ continue; }
-		    }else continue;
+			    }catch( TError err ){ continue; }
+			}else continue;
+		    }
+		    switch( nd.data->val.ioType(li->first) )
+		    {
+			case IO::String:	nd.data->val.setS(li->first,li->second.at().getS());	break;
+			case IO::Integer:	nd.data->val.setI(li->first,li->second.at().getI());	break;
+			case IO::Real:	nd.data->val.setR(li->first,li->second.at().getR());	break;
+			case IO::Boolean:	nd.data->val.setB(li->first,li->second.at().getB());	break;
+		    }
 		}
-		switch( nd.data->val.ioType(li->first) )
-		{
-		    case IO::String:	nd.data->val.setS(li->first,li->second.at().getS());	break;
-		    case IO::Integer:	nd.data->val.setI(li->first,li->second.at().getI());	break;
-		    case IO::Real:	nd.data->val.setR(li->first,li->second.at().getR());	break;
-		    case IO::Boolean:	nd.data->val.setB(li->first,li->second.at().getB());	break;
-		}
+
+		nd.data->val.calc();
+
+		//> Put output links
+		for( li = nd.data->lnk.begin(); li != nd.data->lnk.end(); li++ )
+		    if( !li->second.freeStat() && !(li->second.at().fld().flg()&TFld::NoWrite) )
+		    switch( nd.data->val.ioType(li->first) )
+		    {
+			case IO::String:	li->second.at().setS(nd.data->val.getS(li->first));	break;
+			case IO::Integer:	li->second.at().setI(nd.data->val.getI(li->first));	break;
+			case IO::Real:		li->second.at().setR(nd.data->val.getR(li->first));	break;
+			case IO::Boolean:	li->second.at().setB(nd.data->val.getB(li->first));	break;
+		    }
+	    }
+	    catch(TError err)
+	    {
+		mess_err(err.cat.c_str(),"%s",err.mess.c_str() );
+		mess_err(nd.nodePath().c_str(),_("Calc node's function error."));
 	    }
 
-	    nd.data->val.calc();
-
-	    //> Put output links
-	    for( li = nd.data->lnk.begin(); li != nd.data->lnk.end(); li++ )
-		if( !li->second.freeStat() && !(li->second.at().fld().flg()&TFld::NoWrite) )
-		switch( nd.data->val.ioType(li->first) )
-		{
-		    case IO::String:	li->second.at().setS(nd.data->val.getS(li->first));	break;
-		    case IO::Integer:	li->second.at().setI(nd.data->val.getI(li->first));	break;
-		    case IO::Real:	li->second.at().setR(nd.data->val.getR(li->first));	break;
-		    case IO::Boolean:	li->second.at().setB(nd.data->val.getB(li->first));	break;
-		}
+	    //> Calc acquisition process time
+	    nd.tmProc = 1e-3*(TSYS::curTime()-t_cnt);
 	}
-	catch(TError err)
-	{
-	    mess_err(err.cat.c_str(),"%s",err.mess.c_str() );
-	    mess_err(nd.nodePath().c_str(),_("Calc node's function error."));
-	}
-
-	//> Calc acquisition process time
-	nd.tmProc = 1e-3*(TSYS::curTime()-t_cnt);
 
 	if( isStop ) break;
 	TSYS::taskSleep((long long)(1e9*nd.period()));

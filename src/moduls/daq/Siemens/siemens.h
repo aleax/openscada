@@ -122,7 +122,7 @@ class TMdPrm : public TParamContr, public TValFunc
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	void vlGet( TVal &val );
-	void vlSet( TVal &val );
+	void vlSet( TVal &val, const TVariant &pvl );
 	void vlArchMake( TVal &val );
 
 	void loadIO( );

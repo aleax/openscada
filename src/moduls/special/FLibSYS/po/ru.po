@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.FLibSYS 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-15 09:41+0300\n"
+"POT-Creation-Date: 2009-05-18 14:25+0300\n"
 "PO-Revision-Date: 2007-10-24 18:37+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -836,8 +836,8 @@ msgid "Float: Split to words"
 msgstr "Float: Резделение на слова"
 
 #: sysfnc.h:907
-msgid "Split float (8 byte) to words (4 byte)."
-msgstr "Разделение float (8 байтов) на слова (4 байта)."
+msgid "Split float (4 byte) to words (2 byte)."
+msgstr "Разделение float (4 байтов) на слова (2 байта)."
 
 #: sysfnc.h:923
 msgid "floatMergeWord"
@@ -848,8 +848,8 @@ msgid "Float: Merge from words"
 msgstr "Float: Объединение из слов"
 
 #: sysfnc.h:931
-msgid "Merge float (8 byte) from words (4 byte)."
-msgstr "Объединение float (8 байтов) из слов (4 байта)."
+msgid "Merge float (4 byte) from words (2 byte)."
+msgstr "Объединение float (4 байтов) из слов (2 байта)."
 
 #: timefnc.h:39
 msgid "tmFStr"

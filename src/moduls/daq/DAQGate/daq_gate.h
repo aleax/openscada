@@ -89,7 +89,7 @@ class TMdPrm : public TParamContr
 	//Methods
 	void postEnable( int flag );
 	TVal* vlNew( );
-	void vlSet( TVal &val );
+	void vlSet( TVal &val, const TVariant &pvl );
 	void vlArchMake( TVal &val );
 
 	//Attributes

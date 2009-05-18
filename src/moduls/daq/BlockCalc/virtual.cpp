@@ -591,7 +591,7 @@ void Prm::disable()
     TParamContr::disable();
 }
 
-void Prm::vlSet( TVal &val )
+void Prm::vlSet( TVal &val, const TVariant &pvl )
 {
     if( !enableStat() )	return;
     try

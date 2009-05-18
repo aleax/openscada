@@ -1542,7 +1542,7 @@ void TMdPrm::vlGet( TVal &val )
     }
 }
 
-void TMdPrm::vlSet( TVal &val )
+void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
 {
     try
     {

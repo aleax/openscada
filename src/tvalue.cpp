@@ -440,10 +440,6 @@ TFld &TVal::fld()
     return( *src.fld );
 }
 
-void TVal::vlSet(  )		{ owner().vlSet( *this ); }
-
-void TVal::vlGet(  )		{ owner().vlGet( *this ); }
-
 AutoHD<TVArchive> TVal::arch()	{ return mArch; }
 
 void TVal::setArch(const AutoHD<TVArchive> &vl)	{ mArch = vl; }
@@ -481,7 +477,7 @@ string TVal::getS( long long *tm, bool sys )
 		return src.cfg->getS( );
 	    }
 	    //> Get current value
-	    if( fld().flg()&TVal::DirRead && !sys )	vlGet( );
+	    if( fld().flg()&TVal::DirRead && !sys )	owner().vlGet( *this );
 	    if( tm ) *tm = time();
 	    return val.val_s->getVal();
     }
@@ -508,7 +504,7 @@ int TVal::getI( long long *tm, bool sys )
 		return src.cfg->getI( );
 	    }
 	    //- Get current value -
-	    if( fld().flg()&TVal::DirRead && !sys )	vlGet( );
+	    if( fld().flg()&TVal::DirRead && !sys )	owner().vlGet( *this );
 	    if( tm ) *tm = time();
 	    return val.val_i;
     }
@@ -535,7 +531,7 @@ double TVal::getR( long long *tm, bool sys )
 		return src.cfg->getR( );
 	    }
 	    //> Get current value
-	    if( fld().flg()&TVal::DirRead && !sys )	vlGet( );
+	    if( fld().flg()&TVal::DirRead && !sys )	owner().vlGet( *this );
 	    if( tm ) *tm = time();
 	    return val.val_r;
     }
@@ -562,7 +558,7 @@ char TVal::getB( long long *tm, bool sys )
 		return src.cfg->getB( );
 	    }
 	    //- Get current value -
-	    if( fld().flg()&TVal::DirRead && !sys )	vlGet( );
+	    if( fld().flg()&TVal::DirRead && !sys )	owner().vlGet( *this );
 	    if( tm ) *tm = time();
 	    return val.val_b;
     }
@@ -596,10 +592,10 @@ void TVal::setS( const string &value, long long tm, bool sys )
 	    //> Check to write
 	    if( !sys && fld().flg()&TFld::NoWrite )	throw TError("Val","Write access is denied!");
 	    //> Set current value and time
-	    val.val_s->setVal(value);
+	    string pvl = val.val_s->getVal(); val.val_s->setVal(value);
 	    mTime = tm;
 	    if( !mTime ) mTime = TSYS::curTime();
-	    if( fld().flg()&TVal::DirWrite && !sys )	vlSet( );
+	    if( fld().flg()&TVal::DirWrite && !sys )	owner().vlSet( *this, pvl );
 	    //> Set to archive
 	    if( !mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr )
 		mArch.at().setS(value,time());
@@ -617,6 +613,7 @@ void TVal::setI( int value, long long tm, bool sys )
 	case TFld::Boolean:
 	    setB( (value!=EVAL_INT) ? (bool)value : EVAL_BOOL, tm, sys );	break;
 	case TFld::Integer:
+	{
 	    //> Set value to config
 	    if( mCfg )	{ src.cfg->setI( value ); return; }
 	    //> Check to write
@@ -624,13 +621,14 @@ void TVal::setI( int value, long long tm, bool sys )
 	    //> Set current value and time
 	    if( !(fld().flg()&TFld::Selected) && fld().selValI()[1] > fld().selValI()[0] && value != EVAL_INT )
 		value = vmin(fld().selValI()[1],vmax(fld().selValI()[0],value));
-	    val.val_i = value;
+	    int pvl = val.val_i; val.val_i = value;
 	    mTime = tm;
 	    if( !mTime ) mTime = TSYS::curTime();
-	    if( fld().flg()&TVal::DirWrite && !sys )	vlSet( );
+	    if( fld().flg()&TVal::DirWrite && !sys )	owner().vlSet( *this, pvl );
 	    //> Set to archive
 	    if( !mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr )
 		mArch.at().setI(value,time());
+	}
     }
 }
 
@@ -645,6 +643,7 @@ void TVal::setR( double value, long long tm, bool sys )
 	case TFld::Boolean:
 	    setB( (value!=EVAL_REAL) ? (bool)value : EVAL_BOOL, tm, sys );		break;
 	case TFld::Real:
+	{
 	    //> Set value to config
 	    if( mCfg )	{ src.cfg->setR( value ); return; }
 	    //> Check to write
@@ -652,13 +651,14 @@ void TVal::setR( double value, long long tm, bool sys )
 	    //> Set current value and time
 	    if( !(fld().flg()&TFld::Selected) && fld().selValR()[1] > fld().selValR()[0] && value != EVAL_REAL )
 		value = vmin(fld().selValR()[1],vmax(fld().selValR()[0],value));
-	    val.val_r = value;
+	    double pvl = val.val_r; val.val_r = value;
 	    mTime = tm;
 	    if( !mTime ) mTime = TSYS::curTime();
-	    if( fld().flg()&TVal::DirWrite && !sys ) vlSet( );
+	    if( fld().flg()&TVal::DirWrite && !sys )	owner().vlSet( *this, pvl );
 	    //> Set to archive
 	    if( !mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr )
 		mArch.at().setR(value,time());
+	}
     }
 }
 
@@ -673,18 +673,20 @@ void TVal::setB( char value, long long tm, bool sys )
 	case TFld::Real:
 	    setR( (value!=EVAL_BOOL) ? (bool)value : EVAL_REAL, tm, sys);	break;
 	case TFld::Boolean:
+	{
 	    //> Set value to config
 	    if( mCfg )	{ src.cfg->setB( value ); return; }
 	    //> Check to write
 	    if( !sys && fld().flg()&TFld::NoWrite )	throw TError("Val","Write access is denied!");
 	    //> Set current value and time
-	    val.val_b = value;
+	    char pvl = val.val_b; val.val_b = value;
 	    mTime = tm;
 	    if( !mTime ) mTime = TSYS::curTime();
-	    if( fld().flg()&TVal::DirWrite && !sys )	vlSet( );
+	    if( fld().flg()&TVal::DirWrite && !sys )	owner().vlSet( *this, pvl );
 	    //> Set to archive
 	    if( !mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr )
 		mArch.at().setB(value,time());
+	}
     }
 }
 
@@ -705,7 +707,7 @@ void TVal::cntrCmdProc( XMLNode *opt )
 	}
 	else if( ctrChkNode(opt,"get",RWRWRW,"root","root",SEQ_RD) )    //Value's data request
 	{
-	    if( !atoll(opt->attr("tm_grnd").c_str()) )
+	    if( !atoll(opt->attr("tm_grnd").c_str()) && opt->attr("arch").empty() )
 	    {
 		long long tm = atoll(opt->attr("tm").c_str());
 		opt->setText(getS(&tm));

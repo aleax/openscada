@@ -27,6 +27,7 @@
 #include <map>
 
 #include "resalloc.h"
+#include "tvariant.h"
 
 using std::string;
 using std::vector;
@@ -207,13 +208,9 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	void stop( bool full_del = false );
 
 	//> Get value
+	TVariant getVal( long long *tm = NULL, bool up_ord = false, const string &arch = "", bool onlyLocal = false );
 	void getVals( TValBuf &buf, long long beg = 0, long long end = 0,
 		const string &arch = "", int limit = 100000, bool onlyLocal = false );
-	string getS( long long *tm = NULL, bool up_ord = false, const string &arch = "" );
-	double getR( long long *tm = NULL, bool up_ord = false, const string &arch = "" );
-	int    getI( long long *tm = NULL, bool up_ord = false, const string &arch = "" );
-	char   getB( long long *tm = NULL, bool up_ord = false, const string &arch = "" );
-
 	void setVals( TValBuf &buf, long long beg, long long end, const string &arch );
 
 	//> Active get data from atribute
@@ -378,12 +375,8 @@ class TVArchEl
 	virtual long long begin( )	{ return 0; }		//Archive begin
 	long long lastGet( )		{ return mLastGet; }	//Last getted value time
 
+	TVariant getVal( long long *tm, bool up_ord, bool onlyLocal = false );
 	void getVals( TValBuf &buf, long long beg = 0, long long end = 0, bool onlyLocal = false );
-	virtual string getS( long long *tm, bool up_ord ) { }
-	virtual double getR( long long *tm, bool up_ord ) { }
-	virtual int    getI( long long *tm, bool up_ord ) { }
-	virtual char   getB( long long *tm, bool up_ord ) { }
-
 	void setVals( TValBuf &buf, long long beg = 0, long long end = 0 );
 
 	TVArchive &archive( );
@@ -391,6 +384,7 @@ class TVArchEl
 
     protected:
 	//Protected methods
+	virtual TVariant getValProc( long long *tm, bool up_ord )	{ }
 	virtual void getValsProc( TValBuf &buf, long long beg, long long end )	{ }
 	virtual void setValsProc( TValBuf &buf, long long beg, long long end )	{ }
 

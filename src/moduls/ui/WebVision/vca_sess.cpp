@@ -4787,6 +4787,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    clr_mrk = gdImageColorAllocate(im,(ui8)(sclMarkColor>>16),(ui8)(sclMarkColor>>8),(ui8)sclMarkColor);
 	    gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.,0,0,"000000");
 	    mrkHeight = brect[3]-brect[7];
+	    if( mrkHeight <= 0 ) return;
 	    if( sclHor&0x2 )
 	    {
 	        if( tArH < (int)(100.0*vmin(xSc,ySc)) ) sclHor &= ~(0x02);
@@ -5159,6 +5160,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	    clr_mrk = gdImageColorAllocate(im,(ui8)(sclMarkColor>>16),(ui8)(sclMarkColor>>8),(ui8)sclMarkColor);
 	    gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.,0,0,"000000");
 	    mrkHeight = brect[3]-brect[7];
+	    if( mrkHeight <= 0 ) return;
 	    if( sclHor&0x2 )
 	    {
 		if( tArH < (int)(100.0*vmin(xSc,ySc)) ) sclHor &= ~(0x02);

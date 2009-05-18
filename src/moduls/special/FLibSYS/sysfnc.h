@@ -305,7 +305,7 @@ class varhGetI : public TFunction
 
 		long long vtm = (long long)val->getI(2)*1000000+val->getI(3);
 		if(mod->isArch(id))
-		    val->setI(0,mod->varch(id).at().getI(&vtm,val->getB(4),val->getS(5)));
+		    val->setI(0,mod->varch(id).at().getVal(&vtm,val->getB(4),val->getS(5)).getI());
 		else
 		{
 		    TValBuf* vb = mod->vbuf(id);
@@ -350,7 +350,7 @@ class varhGetR : public TFunction
 
 		long long vtm = (long long)val->getI(2)*1000000+val->getI(3);
 		if(mod->isArch(id))
-		    val->setR(0,mod->varch(id).at().getR(&vtm,val->getB(4),val->getS(5)));
+		    val->setR(0,mod->varch(id).at().getVal(&vtm,val->getB(4),val->getS(5)).getR());
 		else
 		{
 		    TValBuf* vb = mod->vbuf(id);
@@ -395,7 +395,7 @@ class varhGetB : public TFunction
 
 		long long vtm = (long long)val->getI(2)*1000000+val->getI(3);
 		if(mod->isArch(id))
-		    val->setB(0,mod->varch(id).at().getB(&vtm,val->getB(4),val->getS(5)));
+		    val->setB(0,mod->varch(id).at().getVal(&vtm,val->getB(4),val->getS(5)).getB());
 		else
 		{
 		    TValBuf* vb = mod->vbuf(id);
@@ -440,7 +440,7 @@ class varhGetS : public TFunction
 
 		long long vtm = (long long)val->getI(2)*1000000+val->getI(3);
 		if(mod->isArch(id))
-		val->setS(0,mod->varch(id).at().getS(&vtm,val->getB(4),val->getS(5)));
+		val->setS(0,mod->varch(id).at().getVal(&vtm,val->getB(4),val->getS(5)).getS());
 		else
 		{
 		    TValBuf* vb = mod->vbuf(id);
@@ -904,7 +904,7 @@ class floatSplitWord : public TFunction
 	}
 
 	string name( )	{ return _("Float: Split to words"); }
-	string descr( )	{ return _("Split float (8 byte) to words (4 byte)."); }
+	string descr( )	{ return _("Split float (4 byte) to words (2 byte)."); }
 
 	void calc( TValFunc *val )
 	{
@@ -928,7 +928,7 @@ class floatMergeWord : public TFunction
 	}
 
 	string name( )	{ return _("Float: Merge from words"); }
-	string descr( )	{ return _("Merge float (8 byte) from words (4 byte)."); }
+	string descr( )	{ return _("Merge float (4 byte) from words (2 byte)."); }
 
 	void calc( TValFunc *val )
 	{

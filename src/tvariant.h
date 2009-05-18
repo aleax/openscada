@@ -26,6 +26,11 @@
 
 using std::string;
 
+//Error values
+#define EVAL_BOOL 2
+#define EVAL_INT  -2147483647
+#define EVAL_REAL -3.3E308
+#define EVAL_STR  "<EVAL>"
 
 //*************************************************
 //* TVariant                                      *
@@ -45,7 +50,7 @@ class TVariant
 
 	//Methods
 	TVariant( );
-	TVariant( bool ivl );
+	TVariant( char ivl );
 	TVariant( int ivl );
 	TVariant( double ivl );
 	TVariant( string ivl );
@@ -55,15 +60,15 @@ class TVariant
 	bool operator==( TVariant &vr );
 	TVariant &operator=( TVariant &vr );
 
-	bool isNull( )	{ return (vl[0]==TVariant::Null); }
-	Type type( )	{ return (Type)vl[0]; }
+	bool isNull( ) const	{ return (vl[0]==TVariant::Null); }
+	Type type( ) const	{ return (Type)vl[0]; }
 
-	bool	getB( bool def = false );
-	int	getI( int def = 0 );
-	double	getR( double def = 0 );
-	string	getS( const string &def = "" );
+	char	getB( char def = EVAL_BOOL ) const;
+	int	getI( int def = EVAL_INT ) const;
+	double	getR( double def = EVAL_REAL ) const;
+	string	getS( const string &def = EVAL_STR ) const;
 
-	void setB( bool val );
+	void setB( char val );
 	void setI( int val );
 	void setR( double val );
 	void setS( const string &val );

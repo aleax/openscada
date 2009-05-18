@@ -32,7 +32,7 @@ using namespace Virtual;
 //*************************************************
 //* Block: Function block                         *
 //*************************************************
-Block::Block( const string &iid, Contr *iown ) : 
+Block::Block( const string &iid, Contr *iown ) :
     TCntrNode(iown), TConfig( &((TipContr &)iown->owner()).blockE() ), TValFunc(iid+"_block",NULL),
     m_enable(false), m_process(false), id_freq(-1), id_start(-1), id_stop(-1),
     m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()), m_descr(cfg("DESCR").getSd()),
@@ -142,11 +142,10 @@ void Block::loadIO( const string &blk_db, const string &blk_id )
 	}
 
 	cfg.cfg("ID").setS(func()->io(i_ln)->id());
-	if(!SYS->db().at().dataGet(bd,mod->nodePath()+bd_tbl,cfg))
-	    continue;
-	//- Value -
+	if( !SYS->db().at().dataGet(bd,mod->nodePath()+bd_tbl,cfg) ) continue;
+	//> Value
 	setS(i_ln,cfg.cfg("VAL").getS());
-	//- Config of link -
+	//> Config of link
 	setLink(i_ln,SET,(LnkT)cfg.cfg("TLNK").getI(),cfg.cfg("LNK").getS());
     }
 }

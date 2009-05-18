@@ -605,7 +605,7 @@ bool TMdPrm::cfgChange( TCfg &i_cfg )
     return true;
 }
 
-void TMdPrm::vlSet( TVal &val )
+void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
 {
     if( !owner().startStat() || !enableStat() )	return;
 

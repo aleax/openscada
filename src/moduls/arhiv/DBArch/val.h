@@ -51,15 +51,11 @@ class ModVArchEl: public TVArchEl
 	long long end( )	{ return m_end; }
 	long long period( )	{ return m_per; }
 
-	string getS( long long *tm, bool up_ord );
-	double getR( long long *tm, bool up_ord );
-	int    getI( long long *tm, bool up_ord );
-	char   getB( long long *tm, bool up_ord );
-
 	ModVArch &archivator()	{ return (ModVArch&)TVArchEl::archivator(); }
 
     protected:
 	//Methods
+	TVariant getValProc( long long *tm, bool up_ord );
 	void getValsProc( TValBuf &buf, long long beg, long long end );
 	void setValsProc( TValBuf &buf, long long beg, long long end );
 

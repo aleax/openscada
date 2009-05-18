@@ -32,7 +32,7 @@ TVariant::TVariant( )
     vl.assign(1,(char)TVariant::Null);
 }
 
-TVariant::TVariant( bool ivl )
+TVariant::TVariant( char ivl )
 {
     vl.assign(1,(char)TVariant::Null);
     setB(ivl);
@@ -67,62 +67,62 @@ TVariant &TVariant::operator=( TVariant &vr )
     return *this;
 }
 
-bool TVariant::getB( bool def )
+char TVariant::getB( char def ) const
 {
     switch( type() )
     {
-	case TVariant::String:	return atoi(getS().c_str());
-	case TVariant::Integer:	return getI();
-	case TVariant::Real:	return (int)getR();
-	case TVariant::Boolean:	return (bool)vl[1];
+	case TVariant::String:	return (getS()==EVAL_STR) ? EVAL_BOOL : (bool)atoi(getS().c_str());
+	case TVariant::Integer:	return (getI()==EVAL_INT) ? EVAL_BOOL : (bool)getI();
+	case TVariant::Real:	return (getR()==EVAL_REAL) ? EVAL_BOOL : (bool)getR();
+	case TVariant::Boolean:	return vl[1];
 	default: return def;
     }
 }
 
-int TVariant::getI( int def )
+int TVariant::getI( int def ) const
 {
     switch( type() )
     {
-	case TVariant::String:	return atoi(getS().c_str());
+	case TVariant::String:	return (getS()==EVAL_STR) ? EVAL_INT: atoi(getS().c_str());
 	case TVariant::Integer:	return *(int*)(vl.data()+1);
-	case TVariant::Real:	return (int)getR();
-	case TVariant::Boolean:	return getB();
+	case TVariant::Real:	return (getR()==EVAL_REAL) ? EVAL_INT : (int)getR();
+	case TVariant::Boolean:	return (getB()==EVAL_BOOL) ? EVAL_INT : getB();
 	default: return def;
     }
 }
 
-double TVariant::getR( double def )
+double TVariant::getR( double def ) const
 {
     switch( type() )
     {
-	case TVariant::String:	return atof(getS().c_str());
-	case TVariant::Integer:	return getI();
+	case TVariant::String:	return (getS()==EVAL_STR) ? EVAL_REAL : atof(getS().c_str());
+	case TVariant::Integer:	return (getI()==EVAL_INT) ? EVAL_REAL : getI();
 	case TVariant::Real:	return *(double*)(vl.data()+1);
-	case TVariant::Boolean:	return getB();
+	case TVariant::Boolean:	return (getB()==EVAL_BOOL) ? EVAL_REAL : getB();
 	default: return def;
     }
 }
 
-string TVariant::getS( const string &def )
+string TVariant::getS( const string &def ) const
 {
     switch( type() )
     {
 	case TVariant::String:	return vl.substr(1);
-	case TVariant::Integer:	return TSYS::int2str(getI());
-	case TVariant::Real:	return TSYS::real2str(getR());
-	case TVariant::Boolean:	return TSYS::int2str(getB());
+	case TVariant::Integer:	return (getI()==EVAL_INT) ? EVAL_STR : TSYS::int2str(getI());
+	case TVariant::Real:	return (getR()==EVAL_REAL) ? EVAL_STR : TSYS::real2str(getR());
+	case TVariant::Boolean:	return (getB()==EVAL_BOOL) ? EVAL_STR : TSYS::int2str(getB());
 	default: return def;
     }
 }
 
-void TVariant::setB( bool ivl )
+void TVariant::setB( char ivl )
 {
     if( type() != TVariant::Boolean )
     {
 	vl.assign(1,(char)TVariant::Boolean);
-	vl.reserve(1+sizeof(bool));
+	vl.reserve(1+sizeof(char));
     }
-    vl.replace(1,string::npos,(char*)&ivl,sizeof(bool));
+    vl.replace(1,string::npos,(char*)&ivl,sizeof(char));
 }
 
 void TVariant::setI( int ivl )
@@ -148,9 +148,7 @@ void TVariant::setR( double ivl )
 void TVariant::setS( const string &ivl )
 {
     if( type() != TVariant::String )
-    {
 	vl.assign(1,(char)TVariant::String);
-    }
     vl.replace(1,string::npos,ivl);
 }
 
