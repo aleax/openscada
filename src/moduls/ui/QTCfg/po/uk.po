@@ -298,11 +298,11 @@ msgstr "Вирізання елементу"
 
 #: qtcfg.cpp:237
 msgid "The button for cutting of the item"
-msgstr "Кнопка для додання елементу"
+msgstr "Кнопка для вирізання елементу"
 
 #: qtcfg.cpp:238
 msgid "Press to cut the item."
-msgstr "Натиснути для додання елементу."
+msgstr "Натиснути для виконання вирізання елементу."
 
 #: qtcfg.cpp:239
 msgid "Ctrl+X"
@@ -326,11 +326,11 @@ msgstr "Копіювання елементу"
 
 #: qtcfg.cpp:246
 msgid "The button for copying of the item"
-msgstr "Кнопка для додання елементу"
+msgstr "Кнопка для копіювання елементу"
 
 #: qtcfg.cpp:247
 msgid "Press to copy the item."
-msgstr "Натиснути для виконання вирізання елементу."
+msgstr "Натиснути для виконання копіювання елементу."
 
 #: qtcfg.cpp:248
 msgid "Ctrl+C"
@@ -354,11 +354,11 @@ msgstr "Вставлення елементу"
 
 #: qtcfg.cpp:255
 msgid "The button for pasting of the item"
-msgstr "Кнопка для додання елементу"
+msgstr "Кнопка для вставки елементу"
 
 #: qtcfg.cpp:256
 msgid "Press to paste the item."
-msgstr "Натиснути для додання елементу."
+msgstr "Натиснути для вставки елементу."
 
 #: qtcfg.cpp:257
 msgid "Ctrl+V"

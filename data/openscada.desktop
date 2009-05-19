@@ -1,11 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=OpenSCADA
 Categories=Application;Development;Graphics;
 Type=Application
 Exec=openscada_start
 Icon=openscada
 Terminal=false
+Name=OpenSCADA
 GenericName=Open SCADA system
 Comment=Open supervisory control and data acquisition
 GenericName[ru]=Открытая SCADA система

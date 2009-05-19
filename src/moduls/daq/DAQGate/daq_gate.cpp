@@ -33,7 +33,7 @@
 #define MOD_NAME	"Data sources gate"
 #define MOD_TYPE	"DAQ"
 #define VER_TYPE	VER_CNTR
-#define VERSION		"0.3.3"
+#define VERSION		"0.5.0"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow to make gate data sources of remote OpenSCADA station to local OpenSCADA station."
 #define LICENSE		"GPL"

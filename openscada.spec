@@ -28,6 +28,8 @@ Open SCADA system. For access use account "root" and password "openscada".
 Открытая SCADA система. Для доступа используйте запись "root" и пароль "openscada".
 %description -l uk_UA.UTF8
 Відкрита SCADA система. Для доступу використовуйте запис "root" та пароль "openscada".
+%description -l de_DE.UTF8
+Das offene SCADA System. Fuer den Zugang die Aufzeichnung "root" und das Kennwort "openscada" benutzen.
 
 %post
 test -e /usr/lib/openscada || ln -s %_libdir/openscada /usr/lib/openscada
@@ -47,6 +49,8 @@ The %name-doc package include documents files.
 Пакет %name-doc включает файлы документации.
 %description doc -l uk_UA.UTF8
 Пакет %name-doc включає файли документації.
+%description doc -l de_DE.UTF8
+Das Paket %name-doc enthaelt Dokumentationsdateien.
 
 
 %package devel
@@ -74,6 +78,8 @@ The %{name}-demo package includes demo data bases and configs. For start use com
 Пакет %{name}-demo включает демонстрационные базы данных и конфигурации. Для старта используйте команду <openscada_demo_ru>. Для доступа используйте запись "root" и пароль "openscada" или запись "user" без пароля.
 %description demo -l uk_UA.UTF8
 Пакет %{name}-demo включає демонстраційні бази даних та конфігурації. Для старту використовуйте команду <openscada_demo_ru>. Для доступу використовуйте запис "root" та пароль "openscada" або запис "user" без пароля.
+%description demo -l de_DE.UTF8
+Das Paket %{name}-demo enthaelt Demodatenbanken und Konfigurationen. Fuers Starten wird Kommando <openscada_demo_en> benutzt. Fuer den Zugang die Aufzeichnung "root" und das Kennwort "openscada" benutzen.
 
 
 %prep

@@ -1,3 +1,9 @@
+2009-05-19 Roman
+- /Demo: Some fixes into *.desktop files.
+- FIX:/UI/QTCfg: Some translation is fixed.
+- /SYS: Some RPM build spec-file is updated.
+
+
 2009-05-18 Roman
 - !!!!:/Archive/Value, /Archive/DBArch, /Archive/FSArch: Get values API some changed.
     Replaced group functions getS,R,I,B to one getVal() with result TVariant.
