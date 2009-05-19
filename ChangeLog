@@ -2,6 +2,7 @@
 - /Demo: Some fixes into *.desktop files.
 - FIX:/UI/QTCfg: Some translation is fixed.
 - /SYS: Some RPM build spec-file is updated.
+- /UI/QTCfg: Translation to German is added by Irina Popkova.
 
 
 2009-05-18 Roman
