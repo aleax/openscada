@@ -299,6 +299,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
     try
     {
+	if( !tro.startStat() ) tro.start();
 	if( prt == "TCP" )		// Modbus/TCP protocol process
 	{
 	    //> Encode MBAP (Modbus Application Protocol)

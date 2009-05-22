@@ -50,6 +50,9 @@ TMess::TMess(  ) : IOCharSet("UTF-8"), m_mess_level(0), log_dir(0x2)
 
     bindtextdomain(PACKAGE,LOCALEDIR);
     textdomain(PACKAGE);
+
+    //> Var text translation DB structure
+    //mVarTextCfg.elem().fldAdd( new TFld("base",_("Base language's text or hash"),TFld::String,TCfg::Key,"200") );
 }
 
 TMess::~TMess(  )
@@ -112,24 +115,29 @@ void TMess::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const str
 
 string TMess::lang( )
 {
-    if( getenv("LANGUAGE") )		return getenv("LANGUAGE");
-    else if( getenv("LC_MESSAGES") )	return getenv("LC_MESSAGES");
-    else if( getenv("LANG") )		return getenv("LANG");
-    else return("C");
+    char *lng = NULL;
+    if( ((lng=getenv("LANGUAGE")) && strlen(lng)) ||
+	    ((lng=getenv("LC_MESSAGES")) && strlen(lng)) ||
+	    ((lng=getenv("LANG")) && strlen(lng)) )
+	return lng;
+    else return "C";
 }
 
 void TMess::setLang( const string &lng )
 {
-    if( getenv("LANGUAGE") ) setenv("LANGUAGE", lng.c_str(), 1);
-    else setenv("LC_MESSAGES", lng.c_str(), 1);
+    char *prvLng = NULL;
+    if( (prvLng=getenv("LANGUAGE")) && strlen(prvLng) ) setenv( "LANGUAGE", lng.c_str(), 1 );
+    else setenv( "LC_MESSAGES", lng.c_str(), 1 );
     setlocale(LC_ALL,"");
 
     IOCharSet = nl_langinfo(CODESET);
+
+    //varTextActivate( );
 }
 
 string TMess::codeConv( const string &fromCH, const string &toCH, const string &mess)
 {
-    //- Make convert to blocks 100 bytes !!! -
+    //> Make convert to blocks 100 bytes !!!
     string buf = "";
     char   *ibuf, outbuf[100], *obuf;
     size_t ilen, olen;
@@ -172,6 +180,87 @@ const char *TMess::I18N( const char *mess, const char *d_name )
     return dgettext(d_name, mess);
 }
 
+void TMess::setBaseLang( const string &vl )
+{
+    mBaseLang = vl;
+    if( mBaseLang.size() < 2 || mBaseLang == "POSIX" || mBaseLang == "C" ) mBaseLang = "en";
+    else mBaseLang = mBaseLang.substr(0,2);
+
+    //varTextActivate( );
+    SYS->modif();
+}
+
+/*string TMess::getVarText( const string &baseText )
+{
+    ResAlloc res(mVarTextRes,true);
+
+    if( !mVarTextAct || mCurLang == mBaseLang ) return baseText;
+
+    mVarTextCfg.cfg("base").setS(baseText);
+    if( !SYS->db().at().dataGet(varTextFullDB( ),SYS->nodePath()+varTextTbl( ),mVarTextCfg) ) return baseText;
+    string rez = mVarTextCfg.cfg(mCurLang).getS();
+    return rez.empty() ? baseText : rez;
+}
+
+string TMess::setVarText( const string &newText, const string &baseText )
+{
+    ResAlloc res(mVarTextRes,true);
+
+    if( !mVarTextAct ) return newText;
+    //> Write to base language if it empty
+    if( mCurLang != mBaseLang && baseText.empty() ) return newText;
+
+    mVarTextCfg.cfg("base").setS(baseText);
+    if( mCurLang == mBaseLang )
+    {
+	SYS->db().at().dataDel(varTextFullDB(),SYS->nodePath()+varTextTbl( ),mVarTextCfg,true);
+	return newText;
+    }
+    //> Check for clear baseText if write empty twenty
+    if( newText.empty() )
+    {
+	if( !SYS->db().at().dataGet(varTextFullDB(),SYS->nodePath()+varTextTbl(),mVarTextCfg) ) return newText;
+	if( mVarTextCfg.cfg(mCurLang).getS().empty() )
+	{
+	    SYS->db().at().dataDel(varTextFullDB(),SYS->nodePath()+varTextTbl( ),mVarTextCfg,true);
+	    return newText;
+	}
+    }
+    mVarTextCfg.cfg(mCurLang).setS(newText);
+    SYS->db().at().dataSet(varTextFullDB(),SYS->nodePath()+varTextTbl(),mVarTextCfg);
+    return baseText;
+}
+
+void TMess::varTextActivate( )
+{
+    ResAlloc res(mVarTextRes,true);
+
+    //> Check for current languages collumn present
+    mCurLang = lang();
+    if( mCurLang.size() < 2 || mCurLang == "POSIX" || mCurLang == "C" ) mCurLang = "en";
+    else mCurLang = mCurLang.substr(0,2);
+
+    if( mBaseLang.empty() ) { mVarTextAct = false; return; }
+
+    AutoHD<TTable> tbl = SYS->db().at().open(varTextFullDB());
+    if( !tbl.freeStat() ) tbl.at().fieldStruct(mVarTextCfg);
+    mVarTextCfg.cfgViewAll(false);
+
+    if( mVarTextCfg.cfgPresent(mBaseLang) ) mVarTextCfg.elem().fldDel(mVarTextCfg.elem().fldId(mBaseLang));
+    if( mBaseLang != mCurLang )
+    {
+	if( !mVarTextCfg.cfgPresent(mCurLang) )
+	{
+	    mVarTextCfg.elem().fldAdd( new TFld(mCurLang.c_str(),TSYS::strMess(_("Language '%s'"),mCurLang.c_str()).c_str(),TFld::String,0,"100000") );
+	    mVarTextCfg.cfg("base").setS("*");
+	    SYS->db().at().dataSet(varTextFullDB(),SYS->nodePath()+varTextTbl(),mVarTextCfg);
+	}
+	else mVarTextCfg.cfg(mCurLang).setView(true);
+    }
+
+    mVarTextAct = true;
+}*/
+
 bool TMess::chkPattern( const string &val, const string &patt )
 {
     bool mult_s = false;
@@ -192,7 +281,7 @@ bool TMess::chkPattern( const string &val, const string &patt )
 	}
 	else
 	{
-	    if( mult_s ) 
+	    if( mult_s )
 	    {
 		if( v_bck >= 0 ) { v_cnt = v_bck; p_cnt = p_bck; v_bck = -1; }
 		else v_cnt++;
@@ -229,14 +318,18 @@ void TMess::load()
 	}
     } while(next_opt != -1);
 
-    //- Load params config file -
+    //> Load params config file
     i = atoi(TBDS::genDBGet(SYS->nodePath()+"MessLev",TSYS::int2str(messLevel()),"root",SYS->sysOptCfg()).c_str());
     if( i >= 0 && i <= 7 ) setMessLevel(i);
     setLogDirect(atoi(TBDS::genDBGet(SYS->nodePath()+"LogTarget",TSYS::int2str(logDirect()),"root",SYS->sysOptCfg()).c_str()));
+    mBaseLang = TBDS::genDBGet(SYS->nodePath()+"BaseLang",mBaseLang);
+
+    //if( SYS->present("BD") ) varTextActivate( );
 }
 
 void TMess::save()
 {
     TBDS::genDBSet(SYS->nodePath()+"MessLev",TSYS::int2str(messLevel()));
     TBDS::genDBSet(SYS->nodePath()+"LogTarget",TSYS::int2str(logDirect()));
+    TBDS::genDBSet(SYS->nodePath()+"BaseLang",mBaseLang);
 }

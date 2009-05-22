@@ -55,15 +55,15 @@ class TController : public TCntrNode, public TConfig
 	const string &id( )	{ return mId; }
 	string workId( );
 	string name( );
-	string descr( )		{ return mDescr; }
+	string descr( );
 	virtual string getStatus( );
 
 	string DB( )		{ return mDB; }
 	string tbl( );
 	string fullDB( )	{ return DB()+'.'+tbl(); }
 
-	void setName( const string &nm )	{ mName = nm; }
-	void setDescr( const string &dscr )	{ mDescr = dscr; }
+	void setName( const string &nm );
+	void setDescr( const string &dscr );
 	void setDB( const string &idb )		{ mDB = idb; modifG(); }
 
 	bool toEnable( )	{ return mAEn; }
@@ -125,8 +125,6 @@ class TController : public TCntrNode, public TConfig
 
 	//Private attributes
 	string	&mId;
-	string	&mName;
-	string	&mDescr;
 	bool	&mAEn;
 	bool	&mAStart;
 

@@ -103,9 +103,10 @@ class TSYS : public TCntrNode
 
 	int stopSignal( )	{ return mStopSignal; }
 
-        //- Programms options -
+	//> Programms options
 	string id( )		{ return mId; }
 	string name( )		{ return mName; }
+	void setName( const string &vl )	{ mName = vl; modif(); }
 	string user( )		{ return mUser; }	//Run user name
 
 	void list( vector<string> &list )	{ chldList(mSubst,list); }

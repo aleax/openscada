@@ -548,10 +548,10 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
     mLstUse = time(NULL);
 
     owner().transCommit(&trans);
-    //- Make WHERE -
+    //> Make WHERE
     string req = "SELECT FIRST 1 SKIP "+TSYS::int2str(row)+" ";
     string req_where = "WHERE ";
-    //-- Add use keys to list --
+    //>> Add use keys to list
     bool first_sel = true;
     bool next = false;
     for( int i_fld = 1; i_fld < tblStrct.size(); i_fld++ )
@@ -561,9 +561,9 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
 	TCfg &u_cfg = cfg.cfg(sid);
 	if( u_cfg.fld().flg()&TCfg::Key && u_cfg.keyUse() )
 	{
-	    if( !next ) next = true; 
+	    if( !next ) next = true;
 	    else req_where=req_where+"AND ";
-	    req_where=req_where+"\""+mod->sqlReqCode(sid,'"')+"\"='"+mod->sqlReqCode(u_cfg.getS())+"' ";
+	    req_where=req_where+"\""+mod->sqlReqCode(sid,'"')+"\"='"+mod->sqlReqCode(getVal(u_cfg))+"' ";
 	}
 	else if( u_cfg.fld().flg()&TCfg::Key || u_cfg.view() )
 	{
@@ -573,24 +573,14 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
 	}
     }
 
-    //- Request -
+    //> Request
     req = req+" FROM \""+mod->sqlReqCode(name(),'"')+"\" "+((next)?req_where:"");
     owner().sqlReq( req, &tbl );
     if( tbl.size() < 2 ) return false;
-    //- Processing of query -
+    //> Processing of query
     for( int i_fld = 0; i_fld < tbl[0].size(); i_fld++ )
-    {
-	if( !cfg.cfgPresent(tbl[0][i_fld]) ) continue;
-	string val = tbl[1][i_fld];
-	TCfg &u_cfg = cfg.cfg(tbl[0][i_fld]);
-	switch(u_cfg.fld().type())
-	{
-	    case TFld::String:	u_cfg.setS(val); break;
-	    case TFld::Integer:	u_cfg.setI(atoi(val.c_str()));	break;
-	    case TFld::Real:	u_cfg.setR(atof(val.c_str()));	break;
-	    case TFld::Boolean:	u_cfg.setB(atoi(val.c_str()));	break;
-	}
-    }
+	if( cfg.cfgPresent(tbl[0][i_fld]) )
+	    setVal(cfg.cfg(tbl[0][i_fld]),tbl[1][i_fld]);
 
     return true;
 }
@@ -603,10 +593,10 @@ void MTable::fieldGet( TConfig &cfg )
     mLstUse = time(NULL);
 
     owner().transCommit(&trans);
-    //- Prepare request -
+    //> Prepare request
     string req = "SELECT ";
     string req_where;
-    //-- Add fields list to queue --
+    //>> Add fields list to queue
     bool first_sel = true;
     bool next_wr = false;
     for( int i_fld = 1; i_fld < tblStrct.size(); i_fld++ )
@@ -616,8 +606,7 @@ void MTable::fieldGet( TConfig &cfg )
 	if( u_cfg.fld().flg()&TCfg::Key )
 	{
 	    if( !next_wr ) next_wr = true; else req_where=req_where+"AND ";
-	    req_where=req_where+"\""+mod->sqlReqCode(tblStrct[i_fld][0],'"')+"\"='"+
-				     mod->sqlReqCode(u_cfg.getS())+"'";
+	    req_where=req_where+"\""+mod->sqlReqCode(tblStrct[i_fld][0],'"')+"\"='"+mod->sqlReqCode(getVal(u_cfg))+"'";
 	}
 	else if( u_cfg.view() )
 	{
@@ -628,24 +617,14 @@ void MTable::fieldGet( TConfig &cfg )
     }
     req = req+" FROM \""+mod->sqlReqCode(name(),'"')+"\" WHERE "+req_where;
 
-    //- Query -
+    //> Query
     owner().sqlReq( req, &tbl );
     if( tbl.size() < 2 ) throw TError(TSYS::DBRowNoPresent,nodePath().c_str(),_("Row is not present."));
 
-    //- Processing of query -
+    //> Processing of query
     for( int i_fld = 0; i_fld < tbl[0].size(); i_fld++ )
-    {
-	if( !cfg.cfgPresent(tbl[0][i_fld]) ) continue;
-	string val = tbl[1][i_fld];
-	TCfg &u_cfg = cfg.cfg(tbl[0][i_fld]);
-	switch(u_cfg.fld().type())
-	{
-	    case TFld::String:	u_cfg.setS(val); break;
-	    case TFld::Integer:	u_cfg.setI(atoi(val.c_str()));	break;
-	    case TFld::Real:	u_cfg.setR(atof(val.c_str()));	break;
-	    case TFld::Boolean:	u_cfg.setB(atoi(val.c_str()));	break;
-	}
-    }
+	if( cfg.cfgPresent(tbl[0][i_fld]) )
+	    setVal(cfg.cfg(tbl[0][i_fld]),tbl[1][i_fld]);
 }
 
 void MTable::fieldSet( TConfig &cfg )
@@ -656,25 +635,24 @@ void MTable::fieldSet( TConfig &cfg )
     if( tblStrct.empty() ) fieldFix(cfg);
 
     owner().transOpen(&trans);
-    //- Get config fields list -
+    //> Get config fields list
     vector<string> cf_el;
     cfg.cfgList(cf_el);
 
-    //- Get present fields list -
+    //> Get present fields list
     string req_where = "WHERE ";
-    //-- Add key list to queue --
+    //>> Add key list to queue
     bool next = false;
     for( int i_el = 0; i_el < cf_el.size(); i_el++ )
     {
 	TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
 	if( !(u_cfg.fld().flg()&TCfg::Key) ) continue;
 	if( !next ) next = true; else req_where=req_where+"AND ";
-	req_where=req_where+"\""+mod->sqlReqCode(cf_el[i_el],'"')+"\"='"+
-				 mod->sqlReqCode(u_cfg.getS())+"' ";
+	req_where=req_where+"\""+mod->sqlReqCode(cf_el[i_el],'"')+"\"='"+mod->sqlReqCode(getVal(u_cfg))+"' ";
     }
 
-    //- Prepare query -
-    //-- Add new record --
+    //> Prepare query
+    //>> Add new record
     string reqi = "INSERT INTO \""+mod->sqlReqCode(name(),'"')+"\" ";
     string ins_name, ins_value;
     next = false;
@@ -690,21 +668,13 @@ void MTable::fieldSet( TConfig &cfg )
 	    ins_value=ins_value+",";
 	}
 	ins_name=ins_name+"\""+mod->sqlReqCode(cf_el[i_el],'"')+"\" ";
-	string val;
-	switch(u_cfg.fld().type())
-	{
-	    case TFld::String:	val = u_cfg.getS();			break;
-	    case TFld::Integer:	val = SYS->int2str(u_cfg.getI());	break;
-	    case TFld::Real:	val = SYS->real2str(u_cfg.getR());	break;
-	    case TFld::Boolean:	val = SYS->int2str(u_cfg.getB());	break;
-	}
-	ins_value=ins_value+"'"+mod->sqlReqCode(val)+"' ";
+	ins_value=ins_value+"'"+mod->sqlReqCode(getVal(u_cfg))+"' ";
     }
     reqi = reqi + "("+ins_name+") VALUES ("+ins_value+")";
     try{ owner().sqlReq( &trans, reqi ); }
     catch(TError err)
     {
-	//-- Update present record --
+	//>> Update present record
 	string requ = "UPDATE \""+mod->sqlReqCode(name(),'"')+"\" SET ";
 	next = false;
 	for( int i_el = 0; i_el < cf_el.size(); i_el++ )
@@ -713,15 +683,7 @@ void MTable::fieldSet( TConfig &cfg )
 	    if( u_cfg.fld().flg()&TCfg::Key || !u_cfg.view() ) continue;
 
 	    if( !next ) next = true; else requ=requ+",";
-	    string val;
-	    switch(u_cfg.fld().type())
-	    {
-		case TFld::String:	val = u_cfg.getS();	break;
-		case TFld::Integer:	val = SYS->int2str(u_cfg.getI());	break;
-		case TFld::Real:	val = SYS->real2str(u_cfg.getR());	break;
-		case TFld::Boolean:	val = SYS->int2str(u_cfg.getB());	break;
-	    }
-	    requ=requ+"\""+mod->sqlReqCode(cf_el[i_el],'"')+"\"='"+mod->sqlReqCode(val)+"' ";
+	    requ=requ+"\""+mod->sqlReqCode(cf_el[i_el],'"')+"\"='"+mod->sqlReqCode(getVal(u_cfg))+"' ";
 	}
 	requ = requ + req_where;
 	try{ owner().sqlReq( &trans, requ ); }
@@ -740,13 +702,13 @@ void MTable::fieldDel( TConfig &cfg )
     mLstUse = time(NULL);
 
     owner().transOpen(&trans);
-    //- Get config fields list -
+    //> Get config fields list
     vector<string> cf_el;
     cfg.cfgList(cf_el);
 
-    //- Prepare request -
+    //> Prepare request
     string req = "DELETE FROM \""+mod->sqlReqCode(name(),'"')+"\" WHERE ";
-    //-- Add key list to queue --
+    //>> Add key list to queue
     bool next = false;
     for( int i_el = 0; i_el < cf_el.size(); i_el++ )
     {
@@ -754,8 +716,7 @@ void MTable::fieldDel( TConfig &cfg )
 	if( u_cfg.fld().flg()&TCfg::Key && u_cfg.keyUse() )
 	{
 	    if( !next ) next = true; else req=req+"AND ";
-	    req=req+"\""+mod->sqlReqCode(cf_el[i_el],'"')+"\"='"+
-			 mod->sqlReqCode(u_cfg.getS())+"' ";
+	    req=req+"\""+mod->sqlReqCode(cf_el[i_el],'"')+"\"='"+mod->sqlReqCode(getVal(u_cfg))+"' ";
 	}
     }
     owner().sqlReq( &trans, req );
@@ -845,4 +806,27 @@ void MTable::fieldFix( TConfig &cfg )
     }
 
     owner().transOpen(&trans);
+}
+
+string MTable::getVal( TCfg &cfg )
+{
+    switch( cfg.fld().type() )
+    {
+	case TFld::String:	return cfg.getS();
+	case TFld::Integer:	return SYS->int2str(cfg.getI());
+	case TFld::Real:	return SYS->real2str(cfg.getR());
+	case TFld::Boolean:	return SYS->int2str(cfg.getB());
+    }
+    return "";
+}
+
+void MTable::setVal( TCfg &cfg, const string &val )
+{
+    switch( cfg.fld().type() )
+    {
+	case TFld::String:	cfg.setS(val);	break;
+	case TFld::Integer:	cfg.setI(atoi(val.c_str()));	break;
+	case TFld::Real:	cfg.setR(atof(val.c_str()));	break;
+	case TFld::Boolean:	cfg.setB(atoi(val.c_str()));	break;
+    }
 }

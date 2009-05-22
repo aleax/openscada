@@ -32,12 +32,10 @@ Open SCADA system. For access use account "root" and password "openscada".
 Das offene SCADA System. Fuer den Zugang die Aufzeichnung "root" und das Kennwort "openscada" benutzen.
 
 %post
-test -e /usr/lib/openscada || ln -s %_libdir/openscada /usr/lib/openscada
 /sbin/chkconfig --add oscadad
 /sbin/chkconfig oscadad off
 
 %preun
-test -h /usr/lib/openscada && rm -f /usr/lib/openscada || :;
 /sbin/chkconfig --del oscadad
 
 %package doc
@@ -120,6 +118,7 @@ install -m 644 -pD demo/ru/openscada_demo_ru.desktop %buildroot/%_desktopdir/ope
 install -m 644 -pD demo/ru/openscada_demo_ru.png %buildroot/%_iconsdir/openscada_demo_ru.png
 install -m 755 -d %buildroot/var/spool/openscada/DEMO_RU
 install -m 644 demo/ru/*.db %buildroot/var/spool/openscada/DEMO_RU
+sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 
 %clean
 #rm -rf %buildroot %buildroot/%name-%version

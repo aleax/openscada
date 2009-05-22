@@ -108,8 +108,7 @@ void TFunction::ioAdd( IO *io )
 
 int TFunction::ioIns( IO *io, int pos )
 {
-    if( pos < 0 || pos > mIO.size() )
-	pos = mIO.size();
+    if( pos < 0 || pos > mIO.size() ) pos = mIO.size();
 
     preIOCfgChange();
     mIO.insert(mIO.begin()+pos,io);
@@ -369,10 +368,7 @@ void IO::setId( const string &val )
 
 void IO::setName( const string &val )
 {
-    if(mName==val) return;
-    //owner->preIOCfgChange();
     mName = val;
-    //owner->postIOCfgChange();
 }
 
 void IO::setType( Type val )

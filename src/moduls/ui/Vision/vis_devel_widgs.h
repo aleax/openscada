@@ -81,8 +81,9 @@ class ModInspAttr: public QAbstractTableModel
 		string	id( )		{ return idItem; }
 		string	name( );
 		Type	type( )		{ return typeItem; }
-		bool	edited()	{ return edit_access; }
-		int	flag()		{ return flag_item; }
+		bool	edited( )	{ return edit_access; }
+		int	flag( )		{ return flag_item; }
+		bool	modify( )	{ return mModify; }
 		QVariant data( );
 		QVariant dataEdit( );
 
@@ -91,6 +92,7 @@ class ModInspAttr: public QAbstractTableModel
 		void setFlag( int iflg )		{ flag_item = iflg; }
 		void setData( const QVariant &idt )	{ dataItem = idt; }
 		void setDataEdit( const QVariant &idt )	{ dataEditItem = idt; }
+		void setModify( bool vl )		{ mModify = vl; }
 
 		void clean( );
 
@@ -107,6 +109,7 @@ class ModInspAttr: public QAbstractTableModel
 		Type	typeItem;
 		QVariant	dataItem, dataEditItem;
 		bool	edit_access;
+		bool	mModify;
 		int	flag_item;
 
 		QList<Item*>	childItems;

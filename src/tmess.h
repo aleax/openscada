@@ -28,6 +28,8 @@
 #include <vector>
 #include <exception>
 
+#include "tconfig.h"
+
 #define _(mess) Mess->I18N(mess)
 #define FTM(rec) ((long long)rec.time*1000000 + rec.utime)
 #define message(cat,lev,fmt,args...) Mess->put(cat,lev,fmt,##args)
@@ -84,6 +86,15 @@ class TMess
 	static string I18Ns( const string &mess, const char *d_name = NULL )
 	{ return I18N((char *)mess.c_str(), d_name); }
 
+	//> Variable texts translation
+	string baseLang( )	{ return mBaseLang; }
+	string curLang( )	{ return mCurLang; }
+	void setBaseLang( const string &vl );
+	//string varTextTbl( )	{ return "VarTextTrans"; }
+	//string varTextFullDB( )	{ return "*.*."+varTextTbl(); }
+	//string getVarText( const string &baseText );
+	//string setVarText( const string &newText, const string &baseText );
+
 	static bool chkPattern( const string &val, const string &patern );
 
 	string lang( );
@@ -99,10 +110,18 @@ class TMess
 	void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const string &category = "", Type level = Debug );
 
     private:
+	//Methods
+	void varTextActivate( );
+
 	//Attributes
 	string	IOCharSet;		//Internal charset
 	int	m_mess_level;		//Work messages level
 	int	log_dir;		//Log direction
+
+	string	mBaseLang, mCurLang;
+	//bool	mVarTextAct;
+	//TConfig	mVarTextCfg;
+	//Res	mVarTextRes;
 };
 
 extern TMess *Mess;

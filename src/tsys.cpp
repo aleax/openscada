@@ -195,7 +195,7 @@ string TSYS::optDescr( )
 	"===========================================================================\n"
 	"-h, --help             Info message about system options.\n"
 	"    --Config=<path>    Config file path.\n"
-	"    --Station=<name>   Station name.\n"
+	"    --Station=<id>     Station identifier.\n"
 	"    --demon            Start into demon mode.\n"
 	"    --MessLev=<level>  Process messages <level> (0-7).\n"
 	"    --log=<direct>     Direct messages to:\n"
@@ -204,6 +204,7 @@ string TSYS::optDescr( )
 	"                         <direct> & 4 - stderr;\n"
 	"                         <direct> & 8 - archive.\n"
 	"----------- The config file station <%s> parameters -----------\n"
+	"StName     <nm>	Station name.\n"
 	"Workdir    <path>	Work directory.\n"
 	"IcoDir     <path>	Icons directory.\n"
 	"ModDir     <path>	Modules directory.\n"
@@ -214,6 +215,7 @@ string TSYS::optDescr( )
 	"                           <direct> & 4 - stderr;\n"
 	"                           <direct> & 8 - archive.\n"
 	"SysLang    <lang>	Internal language.\n"
+	"BaseLang   <lang>	Base language for variable texts translation, two symbols code.\n"
 	"WorkDB     <Type.Name> Work DB (type and name).\n"
 	"SaveAtExit <true>      Save system at exit.\n"
 	"SavePeriod <sec>	Save system period.\n"
@@ -303,6 +305,7 @@ void TSYS::cfgPrmLoad()
     mSysOptCfg = atoi(TBDS::genDBGet(nodePath()+"SYSOptCfg",TSYS::int2str(mSysOptCfg),"root",true).c_str());
     setWorkDir(TBDS::genDBGet(nodePath()+"Workdir","","root",sysOptCfg()).c_str());
 
+    mName = TBDS::genDBGet(nodePath()+"StName",name());
     mWorkDB = TBDS::genDBGet(nodePath()+"WorkDB","*.*","root",sysOptCfg());
     setIcoDir( TBDS::genDBGet(nodePath()+"IcoDir",icoDir()) );
     setModDir( TBDS::genDBGet(nodePath()+"ModDir",modDir()) );
@@ -368,6 +371,7 @@ void TSYS::save_( )
 
     //> System parameters
     getcwd(buf,sizeof(buf));
+    TBDS::genDBSet(nodePath()+"StName",mName);
     TBDS::genDBSet(nodePath()+"Workdir",buf);
     TBDS::genDBSet(nodePath()+"WorkDB",mWorkDB);
     TBDS::genDBSet(nodePath()+"IcoDir",icoDir());
@@ -942,7 +946,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	if(TUIS::icoPresent(id())) ctrMkNode("img",opt,-1,"/ico","",0444);
 	if(ctrMkNode("area",opt,-1,"/gen",_("Station"),0444))
 	{
-	    ctrMkNode("fld",opt,-1,"/gen/stat",_("Station"),0444,"root","root",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/gen/stat",_("Station"),RWRWR_,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/prog",_("Programm"),0444,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/ver",_("Version"),0444,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/host",_("Host name"),0444,"root","root",1,"tp","str");
@@ -961,7 +965,9 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		"help",_("Select for automatic system saving to DB on exit."));
 	    ctrMkNode("fld",opt,-1,"/gen/savePeriod",_("Save system period"),0664,"root","root",2,"tp","dec",
 		"help",_("Use no zero period (seconds) for periodic saving of changed systems parts to DB."));
-	    ctrMkNode("fld",opt,-1,"/gen/lang",_("Language"),0664,"root","root",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/gen/lang",_("Language"),RWRWR_,"root","root",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/gen/baseLang",_("Variable texts' base language"),RWRWR_,"root","root",4,"tp","str","dest","select","select","/gen/baseLangLs",
+		"help",_("Multilangual for variable texts support enabling by base language selection."));
 	    if(ctrMkNode("area",opt,-1,"/gen/mess",_("Messages"),0444))
 	    {
 		ctrMkNode("fld",opt,-1,"/gen/mess/lev",_("Least level"),0664,"root","root",3,
@@ -1000,7 +1006,11 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     else if( a_path == "/gen/user" && ctrChkNode(opt) )	opt->setText(mUser);
     else if( a_path == "/gen/prog" && ctrChkNode(opt) )	opt->setText(PACKAGE_NAME);
     else if( a_path == "/gen/ver" && ctrChkNode(opt) )	opt->setText(VERSION);
-    else if( a_path == "/gen/stat" && ctrChkNode(opt) )	opt->setText(name());
+    else if( a_path == "/gen/stat" )
+    {
+	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText(name());
+	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEQ_WR) )	setName(opt->text());
+    }
     else if( a_path == "/gen/frq" && ctrChkNode(opt) )	opt->setText(TSYS::real2str((float)sysClk()/1000000.,6));
     else if( a_path == "/gen/clk_res" && ctrChkNode(opt) )
     {
@@ -1045,7 +1055,18 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(Mess->lang());
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	Mess->setLang(opt->text());
     }
-    else if( a_path == "/gen/mess/lev" ) 
+    else if( a_path == "/gen/baseLang" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(Mess->baseLang());
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	Mess->setBaseLang(opt->text());
+    }
+    else if( a_path == "/gen/baseLangLs" && ctrChkNode(opt) )
+    {
+	opt->childAdd("el")->setText(Mess->curLang());
+	if( !Mess->baseLang().empty() ) opt->childAdd("el")->setText(Mess->baseLang());
+	opt->childAdd("el")->setText("");
+    }
+    else if( a_path == "/gen/mess/lev" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(TSYS::int2str(Mess->messLevel()));
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	Mess->setMessLevel(atoi(opt->text().c_str()));

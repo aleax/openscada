@@ -55,7 +55,8 @@ class TFld
 	    HexDec	= 0x08,		//Decimal value type: hexodecimal view prefer
 	    OctDec	= 0x10,		//Decimal value type: octal view prefer
 	    DateTimeDec	= 0x20,		//Decimal value type: UTC date seconds counter
-	    FullText	= 0x08		//String value type: full, multiline text
+	    FullText	= 0x08,		//String value type: full, multiline text
+	    TransltText = 0x10		//String value type: Use translation variable texts mechanism
 	};
 
 	//Methods

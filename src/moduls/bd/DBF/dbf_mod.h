@@ -75,6 +75,9 @@ class MTable : public TTable
 	int  findKeyLine( TConfig &cfg, int cnt = 0, bool useKey = false );
 	void fieldPrmSet( TCfg &e_cfg, db_str_rec &n_rec );
 
+	string getVal( TCfg &cfg, db_str_rec *fld_rec = NULL );
+	void   setVal( TCfg &cfg, const string &vl );
+
 	//Private atributes
 	string n_table;
 	string codepage;

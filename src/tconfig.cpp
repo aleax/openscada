@@ -31,7 +31,7 @@ TConfig::TConfig( TElem *Elements ) : m_elem(NULL)
 
 TConfig::~TConfig()
 {
-    //- Deinit value -
+    //> Deinit value
     TCfgMap::iterator p;
     while( (p=value.begin())!=value.end() )
     {
@@ -116,9 +116,9 @@ void TConfig::cfgKeyUseAll( bool val )
 
 void TConfig::setElem(TElem *Elements, bool first)
 {
-    if(m_elem == Elements && !first ) return;
+    if( m_elem == Elements && !first ) return;
 
-    //- Clear previos setting -
+    //> Clear previos setting
     if(m_elem)
     {
 	TCfgMap::iterator p;
@@ -131,7 +131,7 @@ void TConfig::setElem(TElem *Elements, bool first)
 	if(single) delete m_elem;
     }
 
-    //- Set new setting -
+    //> Set new setting
     if( !Elements )
     {
 	m_elem = new TElem("single");
@@ -189,7 +189,7 @@ void TConfig::cntrCmdProc( XMLNode *opt, const string &elem, const string &user,
 //*************************************************
 TCfg::TCfg( TFld &fld, TConfig &owner ) : mView(true), mKeyUse(false), mOwner(owner)
 {
-    //- Chek for self field for dinamic elements -
+    //> Chek for self field for dinamic elements
     if( fld.flg()&TFld::SelfFld )
     {
 	mFld = new TFld();
@@ -221,132 +221,125 @@ const string &TCfg::name()
     return mFld->name();
 }
 
-string TCfg::getSEL( )
-{
-    if( !(mFld->flg()&TFld::Selected) )
-	throw TError("Cfg",_("Element type is not selected!"));
-    switch( mFld->type() )
-    {
-	case TFld::String:	return mFld->selVl2Nm(m_val.s_val->getVal());
-	case TFld::Integer:	return mFld->selVl2Nm(m_val.i_val);
-	case TFld::Real:	return mFld->selVl2Nm(m_val.r_val);
-	case TFld::Boolean:	return mFld->selVl2Nm(m_val.b_val);
-    }
-}
+
 
 string &TCfg::getSd( )
 {
-    if( mFld->type()!=TFld::String )
-	throw TError("Cfg",_("Element type is not string!"));
-
+    if( mFld->type()!=TFld::String )	throw TError("Cfg",_("Element type is not string!"));
     return m_val.s_val->str;
 }
 
 double &TCfg::getRd( )
 {
-    if( mFld->type()!=TFld::Real )
-	throw TError("Cfg",_("Element type is not real!"));
-
+    if( mFld->type()!=TFld::Real )	throw TError("Cfg",_("Element type is not real!"));
     return m_val.r_val;
 }
 
 int &TCfg::getId( )
 {
-    if( mFld->type()!=TFld::Integer )
-	throw TError("Cfg",_("Element type is not int!"));
-
+    if( mFld->type()!=TFld::Integer )	throw TError("Cfg",_("Element type is not int!"));
     return m_val.i_val;
 }
 
 bool &TCfg::getBd( )
 {
-    if( mFld->type()!=TFld::Boolean )
-	throw TError("Cfg",_("Element type is not boolean!"));
-
+    if( mFld->type()!=TFld::Boolean )	throw TError("Cfg",_("Element type is not boolean!"));
     return m_val.b_val;
 }
 
-string TCfg::getS( )
+string TCfg::getSEL( char RqFlg )
 {
-    switch(mFld->type())
+    if( !(mFld->flg()&TFld::Selected) )	throw TError("Cfg",_("Element type is not selected!"));
+    switch( mFld->type() )
     {
+	case TFld::String:	return mFld->selVl2Nm(getS(RqFlg));
+	case TFld::Integer:	return mFld->selVl2Nm(getI(RqFlg));
+	case TFld::Real:	return mFld->selVl2Nm(getR(RqFlg));
+	case TFld::Boolean:	return mFld->selVl2Nm(getB(RqFlg));
+    }
+}
+
+string TCfg::getS( char RqFlg )
+{
+    switch( mFld->type() )
+    {
+	case TFld::Integer:	return TSYS::int2str(getI(RqFlg));
+	case TFld::Real:	return TSYS::real2str(getR(RqFlg));
+	case TFld::Boolean:	return TSYS::int2str(getB(RqFlg));
 	case TFld::String:	return m_val.s_val->getVal();
-	case TFld::Integer:	return TSYS::int2str(m_val.i_val);
-	case TFld::Real:	return TSYS::real2str(m_val.r_val);
-	case TFld::Boolean:	return TSYS::int2str(m_val.b_val);
     }
 }
 
-double TCfg::getR( )
+double TCfg::getR( char RqFlg )
 {
-    switch(mFld->type())
+    switch( mFld->type() )
     {
-	case TFld::String:	return atof(m_val.s_val->getVal().c_str());
-	case TFld::Integer:	return m_val.i_val;
+	case TFld::String:	return atof(getS(RqFlg).c_str());
+	case TFld::Integer:	return getI(RqFlg);
+	case TFld::Boolean:	return getB(RqFlg);
 	case TFld::Real:	return m_val.r_val;
-	case TFld::Boolean:	return m_val.b_val;
     }
 }
 
-int TCfg::getI( )
-{
-    switch(mFld->type())
-    {
-	case TFld::String:	return atoi(m_val.s_val->getVal().c_str());
-	case TFld::Integer:	return m_val.i_val;
-	case TFld::Real:	return (int)m_val.r_val;
-	case TFld::Boolean:	return m_val.b_val;
-    }
-}
-
-bool TCfg::getB( )
-{
-    switch(mFld->type())
-    {
-	case TFld::String:	return atoi(m_val.s_val->getVal().c_str());
-	case TFld::Integer:	return m_val.i_val;
-	case TFld::Real:	return (int)m_val.r_val;
-	case TFld::Boolean:	return m_val.b_val;
-    }
-}
-
-void TCfg::setSEL( const string &val, bool forcUse )
-{
-    if( !(mFld->flg()&TFld::Selected) )
-	throw TError("Cfg",_("Element type is not selected!"));
-    switch( mFld->type() )
-    {
-	case TFld::String:	setS( mFld->selNm2VlS(val),forcUse );	break;
-	case TFld::Integer:	setI( mFld->selNm2VlI(val),forcUse );	break;
-	case TFld::Real:	setR( mFld->selNm2VlR(val),forcUse );	break;
-	case TFld::Boolean:	setB( mFld->selNm2VlB(val),forcUse );	break;
-    }
-}
-
-void TCfg::setS( const string &val, bool forcUse )
+int TCfg::getI( char RqFlg )
 {
     switch( mFld->type() )
     {
+	case TFld::String:	return atoi(getS(RqFlg).c_str());
+	case TFld::Real:	return (int)getR(RqFlg);
+	case TFld::Boolean:	return getB(RqFlg);
+	case TFld::Integer:	return m_val.i_val;
+    }
+}
+
+bool TCfg::getB( char RqFlg )
+{
+    switch( mFld->type() )
+    {
+	case TFld::String:	return atoi(getS(RqFlg).c_str());
+	case TFld::Integer:	return getI(RqFlg);
+	case TFld::Real:	return (int)getR(RqFlg);
+	case TFld::Boolean:	return m_val.b_val;
+    }
+}
+
+void TCfg::setSEL( const string &val, char RqFlg )
+{
+    if( !(mFld->flg()&TFld::Selected) ) throw TError("Cfg",_("Element type is not selected!"));
+    switch( mFld->type() )
+    {
+	case TFld::String:	setS( mFld->selNm2VlS(val), RqFlg );	break;
+	case TFld::Integer:	setI( mFld->selNm2VlI(val), RqFlg );	break;
+	case TFld::Real:	setR( mFld->selNm2VlR(val), RqFlg );	break;
+	case TFld::Boolean:	setB( mFld->selNm2VlB(val), RqFlg );	break;
+    }
+}
+
+void TCfg::setS( const string &val, char RqFlg )
+{
+    switch( mFld->type() )
+    {
+	case TFld::Integer:	setI( atoi(val.c_str()), RqFlg );	break;
+	case TFld::Real:	setR( atof(val.c_str()), RqFlg );	break;
+	case TFld::Boolean:	setB( atoi(val.c_str()), RqFlg );	break;
 	case TFld::String:
 	{
 	    string t_str = m_val.s_val->getVal();
 	    m_val.s_val->setVal(val);
-	    if( !mOwner.cfgChange(*this) )	m_val.s_val->setVal(t_str);
-	    if( forcUse ) { setView(true); setKeyUse(true); }
+	    if( !mOwner.cfgChange(*this) ) m_val.s_val->setVal(t_str);
+	    if( RqFlg&TCfg::ForceUse )	{ setView(true); setKeyUse(true); }
 	    break;
 	}
-	case TFld::Integer:	setI( atoi(val.c_str()), forcUse );	break;
-	case TFld::Real:	setR( atof(val.c_str()), forcUse );	break;
-	case TFld::Boolean:	setB( atoi(val.c_str()), forcUse );	break;
     }
 }
 
-void TCfg::setR( double val, bool forcUse )
+void TCfg::setR( double val, char RqFlg )
 {
     switch( mFld->type() )
     {
-	case TFld::String:	setS( TSYS::real2str(val), forcUse );	break;
-	case TFld::Integer:	setI( (int)val, forcUse );	break;
+	case TFld::String:	setS( TSYS::real2str(val), RqFlg );	break;
+	case TFld::Integer:	setI( (int)val, RqFlg );	break;
+	case TFld::Boolean:	setB( val, RqFlg );	break;
 	case TFld::Real:
 	{
 	    if( !(mFld->flg()&TFld::Selected) && mFld->selValR()[0] < mFld->selValR()[1] )
@@ -354,18 +347,19 @@ void TCfg::setR( double val, bool forcUse )
 	    double t_val = m_val.r_val;
 	    m_val.r_val = val;
 	    if( !mOwner.cfgChange(*this) )	m_val.r_val = t_val;
-	    if( forcUse ) { setView(true); setKeyUse(true); }
+	    if( RqFlg&TCfg::ForceUse )	{ setView(true); setKeyUse(true); }
 	    break;
 	}
-	case TFld::Boolean:	setB( val, forcUse );	break;
     }
 }
 
-void TCfg::setI( int val, bool forcUse )
+void TCfg::setI( int val, char RqFlg )
 {
     switch( mFld->type() )
     {
-	case TFld::String:	setS( TSYS::int2str(val), forcUse );	break;
+	case TFld::String:	setS( TSYS::int2str(val), RqFlg );	break;
+	case TFld::Real:	setR( val, RqFlg );	break;
+	case TFld::Boolean:	setB( val, RqFlg );	break;
 	case TFld::Integer:
 	{
 	    if( !(mFld->flg()&TFld::Selected) && mFld->selValI()[0] < mFld->selValI()[1] )
@@ -373,27 +367,25 @@ void TCfg::setI( int val, bool forcUse )
 	    int t_val = m_val.i_val;
 	    m_val.i_val = val;
 	    if( !mOwner.cfgChange(*this) )	m_val.i_val = t_val;
-	    if( forcUse ) { setView(true); setKeyUse(true); }
+	    if( RqFlg&TCfg::ForceUse )	{ setView(true); setKeyUse(true); }
 	    break;
 	}
-	case TFld::Real:	setR( val, forcUse );	break;
-	case TFld::Boolean:	setB( val, forcUse );	break;
     }
 }
 
-void TCfg::setB( bool val, bool forcUse )
+void TCfg::setB( bool val, char RqFlg )
 {
     switch( mFld->type() )
     {
-	case TFld::String:	setS( TSYS::int2str(val), forcUse );	break;
-	case TFld::Integer:	setI( val, forcUse );	break;
-	case TFld::Real:	setR( val, forcUse );	break;
+	case TFld::String:	setS( TSYS::int2str(val), RqFlg );	break;
+	case TFld::Integer:	setI( val, RqFlg );	break;
+	case TFld::Real:	setR( val, RqFlg );	break;
 	case TFld::Boolean:
 	{
 	    bool t_val = m_val.b_val;
 	    m_val.b_val = val;
 	    if( !mOwner.cfgChange(*this) )	m_val.b_val = t_val;
-	    if( forcUse ) { setView(true); setKeyUse(true); }
+	    if( RqFlg&TCfg::ForceUse )	{ setView(true); setKeyUse(true); }
 	    break;
 	}
     }

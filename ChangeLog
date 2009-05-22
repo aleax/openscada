@@ -1,3 +1,14 @@
+2009-05-22 Roman
+- !:/DAQ/System: Translated to English document is added.
+- !:/UI/WebVision: Translation to German is added by Irina Popkova.
+- FIX:/SYS: RPM build spec-file is some fixed.
+- !!:/TConfig: Added flags to request values functions.
+- !!:/SYS: Added flag "TransltText" to element's fields for multilangual variable texts support. First try is disabled!
+- !!:/DB/DBF, /DB/SQLite, /DB/FireBird: Data get mechanism is made unified.
+- FIX:/DAQ/ModBus: Tries connection restore is fixed.
+- !:/UI/VCAEngine, /UI/Vision: Highlighting modified attribute for widgets into the attributes inspector is added.
+
+
 2009-05-19 Roman
 - /Demo: Some fixes into *.desktop files.
 - FIX:/UI/QTCfg: Some translation is fixed.

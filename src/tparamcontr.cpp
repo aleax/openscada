@@ -32,10 +32,10 @@
 //* TParamContr                                   *
 //*************************************************
 TParamContr::TParamContr( const string &name, TTipParam *tpprm ) :
-    TConfig(tpprm), tipparm(tpprm), m_en(false), mRedntTmLast(0),
-    m_id(cfg("SHIFR").getSd()), m_name(cfg("NAME").getSd()), m_descr(cfg("DESCR").getSd()), m_aen(cfg("EN").getBd())
+    TConfig(tpprm), tipparm(tpprm), m_en(false), mRedntTmLast(0), m_id(cfg("SHIFR").getSd()), m_aen(cfg("EN").getBd())
 {
-    m_id = m_name = name;
+    m_id = name;
+    setName(name);
 }
 
 TParamContr::~TParamContr( )
@@ -60,10 +60,13 @@ TCntrNode &TParamContr::operator=( TCntrNode &node )
 
 TController &TParamContr::owner( )	{ return *(TController*)nodePrev(); }
 
-string TParamContr::name()
-{
-    return (m_name.size())?m_name:m_id;
-}
+string TParamContr::name( )	{ string nm = cfg("NAME").getS(); return nm.size() ? nm : id(); }
+
+void TParamContr::setName( const string &inm )	{ cfg("NAME").setS(inm); }
+
+string TParamContr::descr( )	{ return cfg("DESCR").getS(); }
+
+void TParamContr::setDescr( const string &idsc ){ cfg("DESCR").setS(idsc); }
 
 void TParamContr::postEnable(int flag)
 {
@@ -126,12 +129,7 @@ void TParamContr::save_( )
 	    vlAt(a_ls[i_a]).at().arch().at().save();
 }
 
-bool TParamContr::cfgChange( TCfg &cfg )
-{
-    modif( );
-
-    return true;
-}
+bool TParamContr::cfgChange( TCfg &cfg )	{ modif( ); return true; }
 
 TParamContr & TParamContr::operator=( TParamContr & PrmCntr )
 {

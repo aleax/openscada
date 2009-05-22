@@ -47,6 +47,10 @@ class TCfg
 	    Key		= 0x400,	//Primary key
 	    Hide	= 0x800		//Attribute hide
 	};
+	enum ReqFlg
+	{
+	    ForceUse	= 0x01		//Force use flag
+	};
 
 	//Methods
 	TCfg( TFld &fld, TConfig &owner );
@@ -65,22 +69,22 @@ class TCfg
 	TFld &fld( )			{ return *mFld; }
 
 	//- Universal access -
-	string	getSEL( );
-	string	getS( );
-	double	getR( );
-	int	getI( );
-	bool	getB( );
+	string	getSEL( char RqFlg = 0 );
+	string	getS( char RqFlg = 0 );
+	double	getR( char RqFlg = 0 );
+	int	getI( char RqFlg = 0 );
+	bool	getB( char RqFlg = 0 );
 	//- Direct access -
 	string	&getSd( );
 	double	&getRd( );
 	int	&getId( );
 	bool	&getBd( );
 
-	void setSEL( const string &val, bool forcUse = false );
-	void setS( const string &val, bool forcUse = false );
-	void setR( double val, bool forcUse = false );
-	void setI( int val, bool forcUse = false );
-	void setB( bool val, bool forcUse = false );
+	void setSEL( const string &val, char RqFlg = 0 );
+	void setS( const string &val, char RqFlg = 0 );
+	void setR( double val, char RqFlg = 0 );
+	void setI( int val, char RqFlg = 0 );
+	void setB( bool val, char RqFlg = 0 );
 
     private:
 	//Data
@@ -142,7 +146,7 @@ class TConfig: public TValElem
 	//Attributes
 	TCfgMap		value;
 	TElem		*m_elem;
-	bool		single;
+	char		single		: 1;
 };
 
 #endif // TCONFIG_H

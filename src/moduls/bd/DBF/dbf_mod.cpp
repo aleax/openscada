@@ -264,43 +264,28 @@ bool MTable::fieldSeek( int i_ln, TConfig &cfg )
     i_ln = findKeyLine(cfg,i_ln,true);
     if( i_ln < 0 ) return false;
 
-    //- Get config fields list -
+    //> Get config fields list
     vector<string> cf_el;
     cfg.cfgList(cf_el);
 
-    //- Write data to cfg -
+    //> Write data to cfg
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
     {
 	TCfg &e_cfg = cfg.cfg(cf_el[i_cf]);
 
-	//-- Find collumn --
+	//>> Find collumn
 	db_str_rec *fld_rec;
 	for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
 	    if( cf_el[i_cf].substr(0,10) == fld_rec->name ) break;
 	if(fld_rec == NULL) continue;
 
-	//-- Get table volume --
+	//>> Get table volume
 	string val;
-	if( basa->GetFieldIt( i_ln, i_clm, val ) < 0) 
+	if( basa->GetFieldIt( i_ln, i_clm, val ) < 0)
 	    throw TError(TSYS::DBInernal,nodePath().c_str(),_("Cell error!"));
 
-	//-- Write value --
-	switch(e_cfg.fld().type())
-	{
-	    case TFld::String:
-	    {
-		//--- Remove spaces from end ---
-		int i;
-		for(i = val.size(); i > 0; i--) if(val[i-1]!=' ') break;
-		if(i != (int)val.size()) val.resize(i);
-
-		e_cfg.setS(Mess->codeConvIn(codepage.c_str(),val));
-		break;
-	    }
-	    case TFld::Integer:	e_cfg.setI(atoi(val.c_str()));	break;
-	    case TFld::Real:    e_cfg.setR(atof(val.c_str()));	break;
-	    case TFld::Boolean:	e_cfg.setB((val.c_str()[0] == 'T')?true:false);	break;
-	}
+	//>> Write value
+	setVal(e_cfg,val);
     }
 
     return true;
@@ -310,50 +295,34 @@ void MTable::fieldGet( TConfig &cfg )
 {
     int i_ln, i_clm;
 
-    //- Alloc resource -
+    //> Alloc resource
     ResAlloc res(m_res,false);
 
-    //- Get key line -
+    //> Get key line
     i_ln = findKeyLine( cfg );
     if( i_ln < 0 ) throw TError(TSYS::DBRowNoPresent,nodePath().c_str(),_("Field is not present!"));
 
-    //- Get config fields list -
+    //> Get config fields list
     vector<string> cf_el;
     cfg.cfgList(cf_el);
 
-    //- Write data to cfg -
+    //> Write data to cfg
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
     {
 	TCfg &e_cfg = cfg.cfg(cf_el[i_cf]);
 
-	//-- Find collumn --
+	//>> Find collumn
 	db_str_rec *fld_rec;
 	for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
 	    if( cf_el[i_cf].substr(0,10) == fld_rec->name ) break;
 	if(fld_rec == NULL) continue;
 
-	//-- Get table volume --
+	//>> Get table volume
 	string val;
-	if( basa->GetFieldIt( i_ln, i_clm, val ) < 0) 
-	    throw TError(TSYS::DBInernal,nodePath().c_str(),_("Cell error!"));	
-
-	//-- Write value --
-	switch(e_cfg.fld().type())
-	{
-	    case TFld::String:
-	    {
-		//--- Remove spaces from end ---
-		int i;
-		for(i = val.size(); i > 0; i--) if(val[i-1]!=' ') break;
-		if(i != (int)val.size()) val.resize(i);
-
-		e_cfg.setS(Mess->codeConvIn(codepage.c_str(),val));
-		break;
-	    }
-	    case TFld::Integer:	e_cfg.setI(atoi(val.c_str()));	break;
-	    case TFld::Real:    e_cfg.setR(atof(val.c_str()));	break;
-	    case TFld::Boolean:	e_cfg.setB((val.c_str()[0] == 'T')?true:false);	break;
-	}
+	if( basa->GetFieldIt( i_ln, i_clm, val ) < 0)
+	    throw TError(TSYS::DBInernal,nodePath().c_str(),_("Cell error!"));
+	//>> Write value
+	setVal(e_cfg,val);
     }
 }
 
@@ -361,25 +330,25 @@ void MTable::fieldSet( TConfig &cfg )
 {
     int i_ln, i_clm;
 
-    //- Alloc resource -
+    //> Alloc resource
     ResAlloc res(m_res,true);
 
-    //- Get config fields list -
+    //> Get config fields list
     vector<string> cf_el;
     cfg.cfgList(cf_el);
 
-    //- Check and fix structure of table -
+    //> Check and fix structure of table
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
     {
 	TCfg &e_cfg = cfg.cfg(cf_el[i_cf]);
 
-	//-- Find collumn --
+	//>> Find collumn
 	db_str_rec *fld_rec;
 	for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
 	    if( cf_el[i_cf].substr(0,10) == fld_rec->name ) break;
 	if(fld_rec == NULL)
 	{
-	    //-- Create new collumn --
+	    //>> Create new collumn
 	    db_str_rec n_rec;
 
 	    fieldPrmSet( e_cfg, n_rec );
@@ -388,7 +357,7 @@ void MTable::fieldSet( TConfig &cfg )
 	}
 	else
 	{
-	    //-- Check collumn parameters --
+	    //>> Check collumn parameters
 	    switch(e_cfg.fld().type())
 	    {
 		case TFld::String:
@@ -409,11 +378,11 @@ void MTable::fieldSet( TConfig &cfg )
 	    db_str_rec n_rec;
 
 	    fieldPrmSet( e_cfg, n_rec );
-	    if( basa->setField(i_clm,&n_rec) < 0 ) 
+	    if( basa->setField(i_clm,&n_rec) < 0 )
 		throw TError(TSYS::DBInernal,nodePath().c_str(),_("Column error!"));
 	}
     }
-    //- Del no used collumn -
+    //> Del no used collumn
     db_str_rec *fld_rec;
     for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
     {
@@ -424,38 +393,22 @@ void MTable::fieldSet( TConfig &cfg )
 	    if( basa->DelField(i_clm) < 0 )
 		throw TError(TSYS::DBClose,nodePath().c_str(),_("Delete field error!"));
     }
-    //- Get key line -
+    //> Get key line
     i_ln = findKeyLine( cfg );
     if( i_ln < 0 ) i_ln = basa->CreateItems(-1);
-    //- Write data to bd -
+    //> Write data to bd
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
     {
 	TCfg &e_cfg = cfg.cfg(cf_el[i_cf]);
-	
-	//-- Find collumn --
+
+	//>> Find collumn
 	db_str_rec *fld_rec;
 	for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
 	    if( cf_el[i_cf].substr(0,10) == fld_rec->name ) break;
 	if(fld_rec == NULL) continue;
 
-	//-- Prepare value --
-	string val;
-	switch(e_cfg.fld().type())
-	{
-	    case TFld::String:	val = Mess->codeConvOut(codepage,e_cfg.getS());	break;
-	    case TFld::Integer:	val = SYS->int2str(e_cfg.getI());break;
-	    case TFld::Real:
-	    {
-		char str[200];
-		snprintf(str,sizeof(str),"%*.*f",fld_rec->len_fild,fld_rec->dec_field,e_cfg.getR());
-		val = str;
-		break;
-	    }
-	    case TFld::Boolean:	val = (e_cfg.getB() == true)?"T":"F";	break;
-	}
-	
-	//-- Set table volume --
-	if( basa->ModifiFieldIt( i_ln, i_clm,val.c_str() ) < 0 )
+	//>> Set table volume
+	if( basa->ModifiFieldIt( i_ln, i_clm, getVal(e_cfg,fld_rec).c_str() ) < 0 )
 	    throw TError(TSYS::DBInernal,nodePath().c_str(),_("Cell error!"));
     }
 
@@ -503,30 +456,30 @@ int MTable::findKeyLine( TConfig &cfg, int cnt, bool useKey )
 	{
 	    if( useKey && !cfg.cfg(cf_el[i_cf]).keyUse( ) )	{ cnt_key++; continue; }
 	    //string key = cfg.cfg(cf_el[i_cf]).name();
-	    //- Check key -
-	    //-- Find collumn --
+	    //> Check key
+	    //>> Find collumn
 	    db_str_rec *fld_rec;
 	    for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
 		if( cf_el[i_cf].substr(0,10) == fld_rec->name ) break;
-	    if(fld_rec == NULL) 
+	    if(fld_rec == NULL)
 		throw TError(TSYS::DBInernal,nodePath().c_str(),_("Key column <%s> is not present!"),cf_el[i_cf].c_str());
-	    //-- Get table volume --
+	    //>> Get table volume
 	    string val;
-	    if( basa->GetFieldIt( i_ln, i_clm, val ) < 0) 
+	    if( basa->GetFieldIt( i_ln, i_clm, val ) < 0)
 		throw TError(TSYS::DBInernal,nodePath().c_str(),_("Cell error!"));
-	    //-- Remove spaces from end --
+	    //>> Remove spaces from end
 	    int i;
 	    for(i = val.size(); i > 0; i--) if(val[i-1]!=' ') break;
 	    if(i != (int)val.size()) val.resize(i);
-	    //-- Compare value --
-	    if( val != cfg.cfg(cf_el[i_cf]).getS() )
+	    //>> Compare value
+	    if( val != getVal(cfg.cfg(cf_el[i_cf])) )
 	    {
 		cnt_key = 0;
 		break;
 	    }
 	    cnt_key++;
 	}
-	if(cnt_key && cnt <= i_cnt++) break;
+	if( cnt_key && cnt <= i_cnt++ ) break;
     }
     if(i_ln >= basa->GetCountItems(  )) return -1;
 
@@ -568,4 +521,41 @@ void MTable::save( )
     ResAlloc res(m_res,true);
     basa->SaveFile((char *)n_table.c_str());
     m_modify = false;
+}
+
+string MTable::getVal( TCfg &cfg, db_str_rec *fld_rec )
+{
+    switch(cfg.fld().type())
+    {
+	case TFld::String:	return Mess->codeConvOut(codepage,cfg.getS());
+	case TFld::Integer:	return TSYS::int2str(cfg.getI());
+	case TFld::Real:
+	{
+	    if( !fld_rec ) return TSYS::real2str(cfg.getR());
+
+	    char str[200];
+	    snprintf(str,sizeof(str),"%*.*f",fld_rec->len_fild,fld_rec->dec_field,cfg.getR());
+	    return str;
+	}
+	case TFld::Boolean:	return cfg.getB()?"T":"F";
+    }
+    return "";
+}
+
+void MTable::setVal( TCfg &cfg, const string &val )
+{
+    switch( cfg.fld().type() )
+    {
+	case TFld::String:
+	{
+	    //> Remove spaces from end
+	    int i;
+	    for( i = val.size(); i > 0; i--) if(val[i-1]!=' ' ) break;
+	    cfg.setS(Mess->codeConvIn(codepage.c_str(),val.substr(0,i)));
+	    break;
+	}
+	case TFld::Integer:	cfg.setI(atoi(val.c_str()));	break;
+	case TFld::Real:	cfg.setR(atof(val.c_str()));	break;
+	case TFld::Boolean:	cfg.setB(val.c_str()[0]=='T');	break;
+    }
 }

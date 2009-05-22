@@ -161,7 +161,7 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it ) // Item *it)
 	XMLNode info_req("info");
 	XMLNode req("get");
 
-        //- Set/update widget name -
+        //> Set/update widget name
 	req.setAttr("path",it->id()+"/"+TSYS::strEncode("/wdg/cfg/name",TSYS::PathEl));
 	if( !mainWin()->cntrIfCmd(req) )	it->setName(req.text().c_str());
 
@@ -169,25 +169,25 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it ) // Item *it)
 	mainWin()->cntrIfCmd(info_req);
 	XMLNode *root = info_req.childGet(0);
 
-	//- Delete items of a no present attributes -
+	//> Delete items of a no present attributes
 	vector<int> idst;
 	idst.push_back(0);
 	int it_lev = 0;
 	QModelIndex curmod = mod_it;
 	Item *curit = it;
-	//-- Get next item --
+	//>> Get next item
 	while( idst[it_lev] < curit->childCount() )
 	{
-	    //-- Process next attribute --
+	    //>> Process next attribute
 	    if( curit->child(idst[it_lev])->type( ) == Item::Attr )
 	    {
 		string it_id = curit->child(idst[it_lev])->id();
-		//--- Find into present attributes list ---
+		//>>> Find into present attributes list
 		int i_a;
 		for( i_a = 0; i_a < root->childSize(); i_a++ )
 		    if( root->childGet(i_a)->attr("id") == it_id )
 			break;
-		//--- Remove no present item ---
+		//>>> Remove no present item
 		if( i_a >= root->childSize() )
 		{
 		    beginRemoveRows(curmod,idst[it_lev],idst[it_lev]);
@@ -196,7 +196,7 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it ) // Item *it)
 		    idst[it_lev]--;
 		}
 	    }
-	    //-- Enter to group --
+	    //>> Enter to group
 	    else if( curit->child(idst[it_lev])->type( ) == Item::AttrGrp )
 	    {
 		curmod = index(idst[it_lev],0,curmod);
@@ -207,7 +207,7 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it ) // Item *it)
 		continue;
 	    }
 
-	    //-- Up to level --
+	    //>> Up to level
 	    idst[it_lev]++;
 	    while( idst[it_lev] >= curit->childCount() )
 	    {
@@ -231,14 +231,14 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it ) // Item *it)
 	    if( idst[it_lev] >= curit->childCount() && it_lev == 0 )	break;
 	}
 
-	//- Add items for present attributes -
+	//> Add items for present attributes
 	for( int i_a = 0; i_a < root->childSize(); i_a++ )
 	{
 	    XMLNode *gnd = root->childGet(i_a);
 	    string a_id = gnd->attr("id");
 	    string a_nm = gnd->attr("dscr");
 	    Item *cur_it = it;
-	    //-- Parse attributes group --
+	    //>> Parse attributes group
 	    if( TSYS::strSepParse(a_nm,1,':').size() )
 		for(int i_l = 0; true; i_l++)
 		{
@@ -256,13 +256,14 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it ) // Item *it)
 			break;
 		    }
 	    }
-	    //-- Check attribute item --
+	    //>> Check attribute item
 	    int ga_id = cur_it->childGet(a_id);
 	    if( ga_id < 0 ) ga_id = cur_it->childInsert(a_id,-1,Item::Attr);
 	    cur_it->child(ga_id)->setName(a_nm);
 	    cur_it->child(ga_id)->setEdited(atoi(gnd->attr("acs").c_str())&SEQ_WR);
 	    cur_it->child(ga_id)->setFlag( atoi(gnd->attr("wdgFlg").c_str()) );
-	    //-- Get Value --
+	    cur_it->child(ga_id)->setModify( atoi(gnd->attr("modif").c_str()) );
+	    //>> Get Value
 	    string sval;
 	    req.clear()->setAttr("path",it->id()+"/%2fattr%2f"+a_id);
 	    if( !mainWin()->cntrIfCmd(req) )	sval = req.text();
@@ -272,7 +273,7 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it ) // Item *it)
 					cur_it->child(ga_id)->setData(atoi(sval.c_str()));
 	    else if( stp == "real" )	cur_it->child(ga_id)->setData(atof(sval.c_str()));
 	    else if( stp == "str"  )	cur_it->child(ga_id)->setData(sval.c_str());
-	    //--- Get selected list ---
+	    //>>> Get selected list
 	    if( gnd->attr("dest") == "select" )
 		cur_it->child(ga_id)->setDataEdit( QString(gnd->attr("sel_list").c_str()).split(";") );
 	}
@@ -350,8 +351,14 @@ QVariant ModInspAttr::data( const QModelIndex &index, int role ) const
     {
 	Item *it = static_cast<Item*>(index.internalPointer());
 
-	if( index.column() == 0 && role == Qt::DisplayRole )
-	    val = it->name().c_str();
+	if( index.column() == 0 )
+	    switch(role)
+	    {
+		case Qt::DisplayRole:	val = it->name().c_str();	break;
+		case Qt::ForegroundRole:
+		    if( it->modify() )	val = QBrush(Qt::blue);
+		    break;
+	    }
 	if( index.column() == 1 )
 	    switch(role)
 	    {
@@ -469,7 +476,7 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &value, int 
 
 //* Item of the inspector of attributes model  *
 ModInspAttr::Item::Item( const string &iid, Type tp, Item *parent ) :
-        idItem(iid), parentItem(parent), typeItem(tp), edit_access(false), flag_item(0)
+        idItem(iid), parentItem(parent), typeItem(tp), edit_access(false), flag_item(0), mModify(false)
 {
 
 }

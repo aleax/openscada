@@ -227,8 +227,7 @@ class TBDS : public TSubSYS, public TElem
 	bool dataDel( const string &bdn, const string &path, TConfig &cfg, bool useKeyAll = false );
 
 	//> Generic DB table
-	static string genDBGet( const string &path, const string &oval = "",
-		const string &user = "root", bool onlyCfg = false );
+	static string genDBGet( const string &path, const string &oval = "", const string &user = "root", bool onlyCfg = false );
 	static void genDBSet( const string &path, const string &val, const string &user = "root" );
 
 	string fullDBSYS( );

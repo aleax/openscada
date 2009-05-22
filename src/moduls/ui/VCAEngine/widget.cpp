@@ -763,7 +763,8 @@ bool Widget::cntrCmdAttributes( XMLNode *opt )
 	    for( unsigned i_el = 0; i_el < list_a.size(); i_el++ )
 	    {
 		XMLNode *el = attrAt(list_a[i_el]).at().fld().cntrCmdMake(opt,"/attr",-1,"root","UI",RWRWR_);
-		if( el ) el->setAttr("wdgFlg",TSYS::int2str(attrAt(list_a[i_el]).at().flgGlob()));
+		if( el ) el->setAttr("wdgFlg",TSYS::int2str(attrAt(list_a[i_el]).at().flgGlob()))->
+			     setAttr("modif",TSYS::uint2str(attrAt(list_a[i_el]).at().modif()));
 	    }
 	}
 	return true;

@@ -29,8 +29,7 @@
 //*************************************************
 TController::TController( const string &id_c, const string &daq_db, TElem *cfgelem ) :
     mDB(daq_db), TConfig(cfgelem), run_st(false), en_st(false), mRedntUse(false), mRedntFirst(true),
-    mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()), mDescr(cfg("DESCR").getSd()),
-    mAEn(cfg("ENABLE").getBd()), mAStart(cfg("START").getBd())
+    mId(cfg("ID").getSd()), mAEn(cfg("ENABLE").getBd()), mAStart(cfg("START").getBd())
 {
     mId = id_c;
     mPrm = grpAdd("prm_");
@@ -101,7 +100,13 @@ TTipDAQ &TController::owner( )	{ return *(TTipDAQ*)nodePrev(); }
 
 string TController::workId( )	{ return owner().modId()+"."+id(); }
 
-string TController::name()	{ return mName.size() ? mName : id(); }
+string TController::name( )	{ string nm = cfg("NAME").getS(); return nm.empty() ? id() : nm; }
+
+void TController::setName( const string &nm )		{ cfg("NAME").setS(nm);  }
+
+string TController::descr( )	{ return cfg("DESCR").getS(); }
+
+void TController::setDescr( const string &dscr )	{ cfg("DESCR").setS(dscr); }
 
 string TController::tbl( )	{ return owner().owner().subId()+"_"+owner().modId(); }
 

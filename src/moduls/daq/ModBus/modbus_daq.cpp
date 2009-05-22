@@ -383,7 +383,7 @@ void TMdContr::setValC( char val, int addr, string &err )
 string TMdContr::modBusReq( string &pdu )
 {
     AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strSepParse(mAddr,0,'.')).at().outAt(TSYS::strSepParse(mAddr,1,'.'));
-    if( !tr.at().startStat() ) tr.at().start();
+    //if( !tr.at().startStat() ) tr.at().start();
 
     XMLNode req(mPrt);
     req.setAttr("id",id())->
@@ -391,6 +391,7 @@ string TMdContr::modBusReq( string &pdu )
 	setAttr("node",TSYS::int2str(mNode))->
 	setAttr("reqTry",TSYS::int2str(connTry))->
 	setText(pdu);
+
     tr.at().messProtIO(req,"ModBus");
 
     if( !req.attr("err").empty() )

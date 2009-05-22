@@ -46,12 +46,12 @@ class TParamContr : public TConfig, public TValue
 
 	const string &id( )	{ return m_id; }
 	string name( );
-	string descr( )		{ return m_descr; }
+	string descr( );
 	bool toEnable( )	{ return m_aen; }
 	bool enableStat( )	{ return m_en; }
 
-	void setName( const string &inm )	{ m_name = inm; modif(); }
-	void setDescr( const string &idsc )	{ m_descr = idsc; modif(); }
+	void setName( const string &inm );
+	void setDescr( const string &idsc );
 	void setToEnable( bool vl )		{ m_aen = vl; modif(); }
 
 	TTipParam &type( )	{ return *tipparm; }
@@ -88,7 +88,7 @@ class TParamContr : public TConfig, public TValue
 	string nodeName( )	{ return m_id; }
 
 	//Attributes
-	string	&m_id, &m_name,	&m_descr;
+	string	&m_id;
 	bool	&m_aen, m_en;
 	TElem	el_err;		//Error atributes
 

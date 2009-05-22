@@ -58,12 +58,12 @@ class TPrmTempl: public TFunction, public TConfig
 
 	const string &id( )	{ return m_id; }
 	string name( );
-	string descr( )		{ return m_descr; }
+	string descr( );
 	string progLang( );
 	string prog( );
 
-	void setName( const string &inm )	{ m_name = inm; modif(); }
-	void setDescr( const string &idsc )	{ m_descr = idsc; modif(); }
+	void setName( const string &inm );
+	void setDescr( const string &idsc );
 	void setProgLang( const string &ilng );
 	void setProg( const string &iprg );
 	void setStart( bool val );
@@ -87,7 +87,7 @@ class TPrmTempl: public TFunction, public TConfig
 	string nodeName( )	{ return m_id; }
 
 	//Attributes
-	string	&m_id, &m_name, &m_descr, &m_prog, work_prog;
+	string	&m_id, &m_prog, work_prog;
 };
 
 //*************************************************
@@ -105,7 +105,7 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 
 	const string &id( )	{ return m_id; }
 	string name( );
-	string descr( )		{ return m_descr; }
+	string descr( );
 
 	string DB( )		{ return work_lib_db; }
 	string tbl( )		{ return m_db; }
@@ -114,8 +114,8 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 	bool startStat( )	{ return run_st; }
 	void start( bool val );
 
-	void setName( const string &vl )	{ m_name = vl; modif(); }
-	void setDescr( const string &vl )	{ m_descr = vl; modif(); }
+	void setName( const string &vl );
+	void setDescr( const string &vl );
 	void setFullDB( const string &vl );
 
 	void list( vector<string> &ls )		{ chldList(m_ptmpl,ls); }
@@ -143,7 +143,7 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 	//Attributes
 	bool	run_st;
 	int	m_ptmpl;
-	string	&m_id, &m_name, &m_descr, &m_db, work_lib_db;
+	string	&m_id, &m_db, work_lib_db;
 };
 
 #endif // TPRMTMPL_H

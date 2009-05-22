@@ -62,6 +62,9 @@ class MTable : public TTable
 	void fieldFix( TConfig &cfg );
 	void getStructDB( vector< vector<string> > &tblStrct );
 
+	string getVal( TCfg &cfg );
+	void   setVal( TCfg &cfg, const string &vl );
+
 	//Private attributes
 	vector< vector<string> > tblStrct;
 	isc_tr_handle		trans;

@@ -26,12 +26,10 @@
 //* TPrmTempl                                     *
 //*************************************************
 TPrmTempl::TPrmTempl( const char *iid, const char *iname ) :
-    TFunction(string("tmpl_")+iid), TConfig(&SYS->daq().at().tplE()),
-    m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()),
-    m_descr(cfg("DESCR").getSd()), m_prog(cfg("PROGRAM").getSd())
+    TFunction(string("tmpl_")+iid), TConfig(&SYS->daq().at().tplE()), m_id(cfg("ID").getSd()), m_prog(cfg("PROGRAM").getSd())
 {
     m_id = iid;
-    m_name = iname;
+    setName(iname);
 }
 
 TPrmTempl::~TPrmTempl(  )
@@ -82,11 +80,17 @@ void TPrmTempl::postDisable(int flag)
 
 TPrmTmplLib &TPrmTempl::owner( )	{ return *(TPrmTmplLib*)nodePrev(); }
 
-string TPrmTempl::name()		{ return m_name.size()?m_name:m_id; }
+string TPrmTempl::name( )		{ string nm = cfg("NAME").getS(); return nm.size() ? nm : id(); }
+
+void TPrmTempl::setName( const string &inm )	{ cfg("NAME").setS(inm); modif(); }
+
+string TPrmTempl::descr( )		{ return cfg("DESCR").getS(); }
+
+void TPrmTempl::setDescr( const string &idsc )	{ cfg("DESCR").setS(idsc); modif(); }
 
 string TPrmTempl::progLang()		{ return m_prog.substr(0,m_prog.find("\n")); }
 
-string TPrmTempl::prog()
+string TPrmTempl::prog( )
 {
     int lngEnd = m_prog.find("\n");
     return m_prog.substr( (lngEnd==string::npos)?0:lngEnd+1 );
@@ -167,7 +171,7 @@ void TPrmTempl::load_( )
     {
 	if( u_pos[i_p].empty() ) continue;
 	int iid = ioId(u_pos[i_p]);
-	if( iid != i_p ) 
+	if( iid != i_p )
 	    try{ ioMove(iid,i_p); } catch(...){ }
     }
 }
@@ -371,8 +375,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 //* TPrmTmplLib                                   *
 //*************************************************
 TPrmTmplLib::TPrmTmplLib( const char *id, const char *name, const string &lib_db ) :
-    TConfig(&SYS->daq().at().elLib()), run_st(false), m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()),
-    m_descr(cfg("DESCR").getSd()), m_db(cfg("DB").getSd()), work_lib_db(lib_db)
+    TConfig(&SYS->daq().at().elLib()), run_st(false), m_id(cfg("ID").getSd()), m_db(cfg("DB").getSd()), work_lib_db(lib_db)
 {
     m_id = id;
     setName( name );
@@ -432,7 +435,13 @@ void TPrmTmplLib::postDisable(int flag)
 
 TDAQS &TPrmTmplLib::owner( )	{ return *(TDAQS*)nodePrev(); }
 
-string TPrmTmplLib::name( )	{ return m_name.size()?m_name:m_id; }
+string TPrmTmplLib::name( )	{ string nm = cfg("NAME").getS(); return nm.size() ? nm : id(); }
+
+void TPrmTmplLib::setName( const string &vl )	{ cfg("NAME").setS(vl); modif(); }
+
+string TPrmTmplLib::descr( )	{ return cfg("DESCR").getS(); }
+
+void TPrmTmplLib::setDescr( const string &vl )	{ cfg("DESCR").setS(vl); modif(); }
 
 void TPrmTmplLib::setFullDB( const string &vl )
 {
@@ -507,7 +516,7 @@ void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
 	    {
 		ctrMkNode("fld",opt,-1,"/lib/cfg/id",_("Id"),0444,"root","root",1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/lib/cfg/name",_("Name"),0664,"root","root",2,"tp","str","len","50");
-		ctrMkNode("fld",opt,-1,"/lib/cfg/descr",_("Description"),0664,"root","root",3,"tp","str","cols","50","rows","3");
+		ctrMkNode("fld",opt,-1,"/lib/cfg/descr",_("Description"),0664,"root","root",3,"tp","str","cols","100","rows","3");
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/tmpl",_("Parameter templates")))

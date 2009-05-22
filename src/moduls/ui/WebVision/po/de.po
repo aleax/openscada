@@ -1,7 +1,7 @@
-# OpenSCADA.UI.WebVision translate to Ukrainian.
-# Copyright (C) 2007-2009 Roman Savochenko
+# OpenSCADA.UI.WebVision translate to German.
+# Copyright (C) 2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.UI.WebVision package module.
-# Roman Savochenko <rom_as@fromru.com>, 2007-2009.
+# Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 #
 #: vca_sess.cpp:64 vca_sess.cpp:77 vca_sess.cpp:108 vca_sess.cpp:198
 #: vca_sess.cpp:228 vca_sess.cpp:251 vca_sess.cpp:4045 vca_sess.cpp:4643
@@ -14,9 +14,9 @@ msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 0.6.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-20 09:11+0300\n"
-"PO-Revision-Date: 2007-11-06 20:42+0200\n"
-"Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
-"Language-Team: <uk@li.org>\n"
+"PO-Revision-Date: 2007-12-03 11:05+0200\n"
+"Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
+"Language-Team: <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
@@ -177,7 +177,7 @@ msgstr ""
 
 #: vca_sess.cpp:162 web_vision.cpp:538 web_vision.cpp:616 web_vision.cpp:623
 msgid "404 Not Found"
-msgstr "404 Не знайдено"
+msgstr "404 Nicht gefunden"
 
 #: vca_sess.cpp:165 vca_sess.cpp:214
 msgid "obj"
@@ -205,7 +205,7 @@ msgstr ""
 #: vca_sess.cpp:188
 #, c-format
 msgid "Unknown command: %s."
-msgstr "Невідома команда: %s."
+msgstr "Unbekanntes Kommando: %s."
 
 #: vca_sess.cpp:189
 msgid "<center>Call page/widget '"
@@ -272,32 +272,33 @@ msgid ""
 "At least one of the points of the 'arc' is out of the drawing area. The "
 "'arc' is not drawn."
 msgstr ""
-"Хоча б одна точка 'дуги' поза кордоном області рисування. 'Дуга' не "
-"нарисована."
+"Mindestens ein Punkt 'des Bogens' ist ausser der Grenzen des Zeichnenfeldes. "
+"'Der Bogen' ist nicht gezeichnet."
 
 #: vca_sess.cpp:1496
 msgid ""
 "At least one of the points of the 'bezier curve' is out of the drawing area. "
 "The 'bezier curve' is not drawn."
 msgstr ""
-"Хоча б одна точка 'кривої безьє' поза кордоном області рисування. 'Крива "
-"безьє' не нарисована."
+"Mindestens ein Punkt 'der Bezier- Kurve' ist ausser der Grenzen des "
+"Zeichnenfeldes. 'Die Bezier-Kurve' ist nicht gezeichnet."
 
 #: vca_sess.cpp:1951
 msgid ""
 "At least one of the points of the 'line' is out of the drawing area. The "
 "'line' is not drawn."
 msgstr ""
-"Хоча б одна точка 'лінії' поза кордоном області рисування. 'Лінія' не "
-"нарисована."
+"Mindestens ein Punkt 'der Linie' ist ausser der Grenzen des Zeichnenfeldes . "
+"'Die Linie' ist nicht gezeichnet."
 
 #: vca_sess.cpp:2462
 msgid ""
 "At least one of the elementary figures from each the 'fill' consists of is "
 "out of drawing area. The 'fill' is not drawn."
 msgstr ""
-"Хоча б одна з елементарних фігур, з яких 'заповнення' складається, поза "
-"кордоном області рисування. 'Заповнення' не нарисоване."
+"Mindestens eine der Elementarfiguren, aus denen 'das Einfuellen' besteht, "
+"ist ausser der Grenzen des Zeichnenfeldes. 'das Einfuellen' ist nicht "
+"gezeichnet."
 
 #: vca_sess.cpp:4005 vca_sess.cpp:4036 vca_sess.cpp:4762 vca_sess.cpp:5134
 msgid "xSc"
@@ -459,11 +460,11 @@ msgstr ""
 
 #: vca_sess.cpp:5201
 msgid "kHz"
-msgstr "кГц"
+msgstr "KHz"
 
 #: vca_sess.cpp:5201
 msgid "Hz"
-msgstr "Гц"
+msgstr "Hz"
 
 #: vca_sess.cpp:5350 vca_sess.cpp:5563
 #, c-format
@@ -563,11 +564,11 @@ msgstr ""
 
 #: web_vision.cpp:35
 msgid "Operation user interface (WEB)"
-msgstr "Робочий інтерфейс користувача (WEB)"
+msgstr "Arbeitsnutzersinterface (WEB)"
 
 #: web_vision.cpp:36
 msgid "UI"
-msgstr "Інтерфейс користувача"
+msgstr "Nutzersinterface"
 
 #: web_vision.cpp:38
 msgid "WWW"
@@ -579,7 +580,7 @@ msgstr ""
 
 #: web_vision.cpp:40
 msgid "Roman Savochenko"
-msgstr "Роман Савоченко"
+msgstr "Roman Savotschenko"
 
 #: web_vision.cpp:41
 msgid "Roman Savochenko, Lysenko Maxim, Yashina Kseniya"
@@ -589,8 +590,8 @@ msgstr ""
 msgid ""
 "Web operation user interface for visual control area (VCA) projects playing."
 msgstr ""
-"Web робочий інтерфейс користувача для виконання візуального середовища "
-"керування (СВК)"
+"Web Arbeitsnutzersinterface fuer Ausfuehrung der visuellen Bereiche der "
+"Kontrolle (VBK)"
 
 #: web_vision.cpp:43
 msgid "GPL"
@@ -1242,31 +1243,31 @@ msgstr ""
 
 #: web_vision.cpp:267
 msgid "Time"
-msgstr "Час"
+msgstr "Zeit"
 
 #: web_vision.cpp:267
 msgid "Level"
-msgstr "Рівень"
+msgstr "Niveau"
 
 #: web_vision.cpp:267
 msgid "Category"
-msgstr "Категорія"
+msgstr "Kategorie"
 
 #: web_vision.cpp:267
 msgid "Message"
-msgstr "Повідомлення"
+msgstr "Bericht"
 
 #: web_vision.cpp:267
 msgid "mcsec"
-msgstr "мкс"
+msgstr "mcsek"
 
 #: web_vision.cpp:267
 msgid "Ready"
-msgstr "Готовий"
+msgstr "Fertig"
 
 #: web_vision.cpp:278 web_vision.cpp:287
 msgid "SubType"
-msgstr "Підтип"
+msgstr "Subtyp"
 
 #: web_vision.cpp:279 web_vision.cpp:288
 msgid "Auth"
@@ -1274,7 +1275,7 @@ msgstr ""
 
 #: web_vision.cpp:280 web_vision.cpp:289
 msgid "Developers"
-msgstr "Розробники"
+msgstr "Entwickler"
 
 #: web_vision.cpp:303
 #, c-format
@@ -1284,9 +1285,11 @@ msgid ""
 "SessTimeLife <time>      Time of the session life, minutes (default 10).\n"
 "\n"
 msgstr ""
-"======================== Опції модуля <%s:%s> ============================\n"
-"------- Параметри модульної секції <%s> у конфігураційному файлі ---------\n"
-"SessTimeLife <час>       Час життя сесії, хвилин (по замовченню 10).\n"
+"======================== Optione des Moduls <%s:%s> "
+"============================\n"
+"------- Parameter der modularen Sektion <%s> in der Konfigurationsdatei "
+"---------\n"
+"SessTimeLife <время>     Zeit des Sessionlebens, Minuten (default 10).\n"
 "\n"
 
 #: web_vision.cpp:315
@@ -1442,7 +1445,7 @@ msgstr ""
 
 #: web_vision.cpp:461
 msgid "Connect to opened session"
-msgstr "Підключення до відкритої сесії"
+msgstr "Anschluss zur offenen Session"
 
 #: web_vision.cpp:461 web_vision.cpp:479
 msgid ""
@@ -1486,7 +1489,7 @@ msgstr ""
 
 #: web_vision.cpp:479
 msgid "Create new session for present project"
-msgstr "Створення нової сесії для існуючого проекту"
+msgstr "Schaffung einer neuen Session fuers erreichbare Proekt"
 
 #: web_vision.cpp:492
 msgid "</table></center>"
@@ -1494,7 +1497,7 @@ msgstr ""
 
 #: web_vision.cpp:493
 msgid "No one sessions and projects of VCA engine are present for user!"
-msgstr "Немає жодного сеансу та проекту рушія СВК для користувача!"
+msgstr "Es gibt keine Session und Proekt des  VBK-Laufers fuer den Nutzer!"
 
 #: web_vision.cpp:496
 msgid "prj_"
@@ -1536,7 +1539,7 @@ msgstr ""
 #: web_vision.cpp:533
 #, c-format
 msgid "An unaccessible request is received: '%s'"
-msgstr "Отримано недозволений запит: '%s'"
+msgstr "Unzulaessige Anfrage ist empfangen: '%s'"
 
 #: web_vision.cpp:537
 msgid "Page <"
@@ -1566,7 +1569,7 @@ msgstr ""
 
 #: web_vision.cpp:552 web_vision.cpp:561
 msgid "Name: "
-msgstr "Ім'я: "
+msgstr "Name: "
 
 #: web_vision.cpp:552
 msgid ""
@@ -1576,7 +1579,7 @@ msgstr ""
 
 #: web_vision.cpp:553 web_vision.cpp:563
 msgid "License: "
-msgstr "Ліцензія: "
+msgstr "Lizenz: "
 
 #: web_vision.cpp:553
 msgid ""
@@ -1586,7 +1589,7 @@ msgstr ""
 
 #: web_vision.cpp:554 web_vision.cpp:564
 msgid "Author: "
-msgstr "Автор: "
+msgstr "Autor: "
 
 #: web_vision.cpp:554
 msgid ""
@@ -1607,7 +1610,7 @@ msgstr ""
 
 #: web_vision.cpp:562
 msgid "Desription: "
-msgstr "Опис: "
+msgstr "Beschreibung: "
 
 #: web_vision.cpp:564
 msgid ""
@@ -1622,7 +1625,7 @@ msgstr ""
 
 #: web_vision.cpp:572
 msgid "Enter to module"
-msgstr "Вхід до модуля"
+msgstr "Eingang ins Modul"
 
 #: web_vision.cpp:572
 msgid ""
@@ -1640,7 +1643,7 @@ msgstr ""
 
 #: web_vision.cpp:576
 msgid "User name"
-msgstr "Ім'я користувача"
+msgstr "Name des Nutzers"
 
 #: web_vision.cpp:576
 msgid ""
@@ -1650,7 +1653,7 @@ msgstr ""
 
 #: web_vision.cpp:577
 msgid "Password"
-msgstr "Пароль"
+msgstr "Kennwort"
 
 #: web_vision.cpp:577
 msgid ""
@@ -1661,7 +1664,7 @@ msgstr ""
 
 #: web_vision.cpp:578
 msgid "Enter"
-msgstr "Прийняти"
+msgstr "Enter"
 
 #: web_vision.cpp:578
 msgid ""
@@ -1671,7 +1674,7 @@ msgstr ""
 
 #: web_vision.cpp:579
 msgid "Clean"
-msgstr "Очистити"
+msgstr "Reinigen"
 
 #: web_vision.cpp:579
 msgid ""
@@ -1745,7 +1748,7 @@ msgstr ""
 
 #: web_vision.cpp:654
 msgid "Module options"
-msgstr "Опції модуля"
+msgstr "Optionen des Moduls"
 
 #: web_vision.cpp:655 web_vision.cpp:656
 msgid "fld"
@@ -1757,7 +1760,7 @@ msgstr ""
 
 #: web_vision.cpp:655
 msgid "Life time of session (min)"
-msgstr "Час життя сесії (хвил)"
+msgstr "Zeit des Sessionlebens (Min)"
 
 #: web_vision.cpp:655 web_vision.cpp:656
 msgid "tp"
@@ -1773,7 +1776,7 @@ msgstr ""
 
 #: web_vision.cpp:656
 msgid "Options help"
-msgstr "Допомога по опціям"
+msgstr "Optionenhilfe"
 
 #: web_vision.cpp:656
 msgid "str"

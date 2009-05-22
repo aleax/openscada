@@ -32,12 +32,12 @@
 //************************************************
 TBDS::TBDS( ) : TSubSYS("BD","Data Bases",true)
 {
-    //- Generic system DB -
+    //> Generic system DB
     fldAdd( new TFld("user","User",TFld::String,TCfg::Key,"20") );
     fldAdd( new TFld("id","Value ID",TFld::String,TCfg::Key,"100") );
     fldAdd( new TFld("val","Value"  ,TFld::String,TFld::NoFlag,"1000") );
 
-    //- Open data bases DB structure -
+    //> Open data bases DB structure
     el_db.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
     el_db.fldAdd( new TFld("TYPE",_("DB type (module)"),TFld::String,TCfg::Key,"20") );
     el_db.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
@@ -188,11 +188,11 @@ bool TBDS::dataSeek( const string &bdn, const string &path, int lev, TConfig &cf
 		XMLNode *el = nd->childGet(i_fld);
 		if( el->name() == "fld" )
 		{
-		    //- Check keywords -
+		    //> Check keywords
 		    vector<string> cf_el;
 		    cfg.cfgList(cf_el);
 		
-		    //- Check keywords -
+		    //> Check keywords
 		    int i_el;
 		    for( i_el = 0; i_el < cf_el.size(); i_el++ )
 			if( cfg.cfg(cf_el[i_el]).fld().flg()&TCfg::Key &&
@@ -260,7 +260,7 @@ bool TBDS::dataGet( const string &bdn, const string &path, TConfig &cfg )
 
 	    int i_el;
 	    for( i_el = 0; i_el < cf_el.size(); i_el++ )
-		if( cfg.cfg(cf_el[i_el]).fld().flg()&TCfg::Key && 
+		if( cfg.cfg(cf_el[i_el]).fld().flg()&TCfg::Key &&
 		    cfg.cfg(cf_el[i_el]).getS() != el->attr(cf_el[i_el]) ) break;
 	    if( i_el == cf_el.size() )
 	    {

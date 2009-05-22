@@ -38,16 +38,16 @@ TDAQS::TDAQS( ) : TSubSYS("DAQ","Data acquisition",true), el_err("Error"),
 {
     mTmplib = grpAdd("tmplb_");
 
-    //> Lib's db structure
+    //> Templates lib db structure
     lb_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
-    lb_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
-    lb_el.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::FullText,"300") );
+    lb_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,"50") );
+    lb_el.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300") );
     lb_el.fldAdd( new TFld("DB",_("Data base"),TFld::String,TFld::NoFlag,"30") );
 
-    //> Parameter template DB structure
+    //> Template DB structure
     el_tmpl.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
-    el_tmpl.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
-    el_tmpl.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::FullText,"200") );
+    el_tmpl.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,"50") );
+    el_tmpl.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"200") );
     el_tmpl.fldAdd( new TFld("PROGRAM",_("Template programm"),TFld::String,TFld::NoFlag,"10000") );
 
     //> Parameter template IO DB structure
