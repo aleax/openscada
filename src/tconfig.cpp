@@ -88,6 +88,14 @@ TCfg &TConfig::cfg( const string &n_val )
     return *p->second;
 }
 
+TCfg *TConfig::at( const string &n_val, bool noExpt )
+{
+    TCfgMap::iterator p=value.find(n_val);
+    if( p != value.end() ) return p->second;
+    if( noExpt ) return NULL;
+    throw TError("TConfig",_("Attribute '%s' is not present!"),n_val.c_str());
+}
+
 void TConfig::cfgList( vector<string> &list )
 {
     list.clear();
@@ -216,12 +224,7 @@ TCfg::~TCfg(  )
     if( mFld->flg()&TFld::SelfFld )	delete mFld;
 }
 
-const string &TCfg::name()
-{
-    return mFld->name();
-}
-
-
+const string &TCfg::name()	{ return mFld->name(); }
 
 string &TCfg::getSd( )
 {

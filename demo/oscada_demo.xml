@@ -3,22 +3,27 @@
     <!--
     This is the OpenSCADA configuration file.
     -->
-    <station id="DemoStation" name="Demo station">
+    <station id="DemoStation">
 	<!--
 	Discribe internal parameter for station.
 	Station this only OpenSCADA programm.
 	-->
-	<prm id="SYSOptCfg">1</prm>
+	<prm id="StName">Демо станция</prm>
+	<prm id="StName_en">Demo station</prm>
+	<prm id="StName_uk">Демо станція</prm>
+	<prm id="WorkDB">SQLite.GenDB</prm>
 	<prm id="Workdir">/var/spool/openscada</prm>
 	<prm id="IcoDir">./icons</prm>
 	<prm id="ModDir">/usr/lib/openscada</prm>
 	<prm id="LogTarget">10</prm>
 	<prm id="MessLev">0</prm>
-	<prm id="WorkDB">SQLite.GenDB</prm>
+	<prm id="Lang2CodeBase">ru</prm>
+	<prm id="SaveAtExit">0</prm>
+	<prm id="SavePeriod">0</prm>
 
 	<node id="sub_BD">
 	    <tbl id="DB">
-		<fld ID="GenDB" TYPE="SQLite" NAME="Generic DB" ADDR="./DEMO_RU/DemoSt.db" CODEPAGE="KOI8-R"/>
+		<fld ID="GenDB" TYPE="SQLite" NAME="Основная БД" NAME_en="Generic DB" NAME_uk="Основна БД" ADDR="./DEMO/DemoSt.db" CODEPAGE="KOI8-U"/>
 	    </tbl>
 	</node>
 
@@ -27,17 +32,23 @@
 	    <tbl id="Security_user">
 		<fld
 		    NAME="root"
-		    DESCR="Super user"
+		    DESCR="Супер пользователь"
+		    DESCR_en="Super user"
+		    DESCR_uk="Супер користувач"
 		    PASS="openscada"/>
 		<fld
 		    NAME="user"
-		    DESCR="System user"
+		    DESCR="Системный пользователь"
+		    DESCR_en="System user"
+		    DESCR_uk="Системний користувач"
 		    PASS=""/>
 	    </tbl>
 	    <tbl id="Security_grp">
 		<fld
 		    NAME="root"
-		    DESCR="Super users groups."
+		    DESCR="Группа суперпользователей"
+		    DESCR_en="Super users groups"
+		    DESCR_uk="Група суперкористувачів"
 		    USERS="root;user"/>
 	    </tbl>-->
 	</node>
@@ -54,8 +65,12 @@
 		<fld
 		    ID="WEB_1"
 		    MODULE="Sockets"
-		    NAME="Generic transport for WEB interface."
-		    DESCRIPT=""
+		    NAME="Основной WEB интерфейс"
+		    NAME_en="Generic WEB interface"
+		    NAME_uk="Основний WEB інтерфейс"
+		    DESCRIPT="Основной транспорт для WEB интерфейса."
+		    DESCRIPT_en="Generic transport for WEB interface."
+		    DESCRIPT="Основний транспорт для WEB інтерфейсу."
 		    ADDR="TCP::10002:0"
 		    PROT="HTTP"
 		    START="1"
@@ -65,8 +80,12 @@
 		<fld
 		    ID="WEB_2"
 		    MODULE="Sockets"
-		    NAME="Reserve transport for WEB interface."
-		    DESCRIPT=""
+		    NAME="Резервный WEB интерфейс"
+		    NAME_en="Reserve WEB interface"
+		    NAME_uk="Резервний WEB інтерфейс"
+		    DESCRIPT="Резервный транспорт для WEB интерфейса."
+		    DESCRIPT_en="Reserve transport for WEB interface."
+		    DESCRIPT_uk="Резервний транспорт для WEB інтерфейсу."
 		    ADDR="TCP::10004:0"
 		    PROT="HTTP"
 		    START="1"
@@ -76,11 +95,15 @@
 	    </tbl>
 	    <tbl id="Transport_out">
 	        <fld
-		    ID="WEB_test"
+		    ID="testModBus"
 		    MODULE="Sockets"
-		    NAME="WEB test"
-		    DESCRIPT="WEB output test"
-		    ADDR="TCP:127.0.0.1:10002"
+		    NAME="Тест ModBus"
+		    NAME_en="Test ModBus"
+		    NAME_uk="Тест ModBus"
+		    DESCRIPT="Тест обмена по протоколу ModBus."
+		    DESCRIPT_en="Data exchange by protocol ModBus test."
+		    DESCRIPT_uk="Тест обміну за протоколом ModBus."
+		    ADDR="TCP:localhost:10502"
 		    START="1"/>
 	    </tbl>-->
 	</node>

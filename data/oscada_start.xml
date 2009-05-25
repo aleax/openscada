@@ -3,22 +3,25 @@
     <!--
     This is the OpenSCADA configuration file.
     -->
-    <station id="WorkStation" name="Рабочая станция">
+    <station id="WorkStation">
 	<!--
 	Discribe internal parameter for station".
 	Station this OpenSCADA programm.
 	-->
-	<prm id="SYSOptCfg">1</prm>
+	<prm id="StName">Work station</prm>
+	<prm id="WorkDB">SQLite.GenDB</prm>
 	<prm id="Workdir">~/.openscada</prm>
 	<prm id="IcoDir">./icons</prm>
 	<prm id="ModDir">/usr/lib/openscada</prm>
 	<prm id="LogTarget">10</prm>
 	<prm id="MessLev">0</prm>
-	<prm id="WorkDB">SQLite.GenDB</prm>
+	<prm id="Lang2CodeBase"></prm>
+	<prm id="SaveAtExit">0</prm>
+	<prm id="SavePeriod">0</prm>
 
 	<node id="sub_BD">
 	    <tbl id="DB">
-		<fld ID="GenDB" TYPE="SQLite" NAME="Основная БД" ADDR="./DATA/MainSt.db" CODEPAGE="UTF8"/>
+		<fld ID="GenDB" TYPE="SQLite" NAME="Main DB" ADDR="./DATA/MainSt.db" CODEPAGE="UTF8"/>
 	    </tbl>
 	</node>
 
@@ -36,7 +39,7 @@
 		<fld
 		    ID="WEB_1"
 		    MODULE="Sockets"
-		    NAME="Главный WWW-интерфейс"
+		    NAME="Main WWW-interface"
 		    DESCRIPT=""
 		    ADDR="TCP::10002:0"
 		    PROT="HTTP"
@@ -47,7 +50,7 @@
 		<fld
 		    ID="WEB_2"
 		    MODULE="Sockets"
-		    NAME="Резервный WWW-интерфейс"
+		    NAME="Reserve WWW-interface"
 		    DESCRIPT=""
 		    ADDR="TCP::10004:0"
 		    PROT="HTTP"

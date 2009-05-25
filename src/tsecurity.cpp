@@ -34,14 +34,14 @@ TSecurity::TSecurity( ) : TSubSYS("Security","Security",false)
     m_usr = TCntrNode::grpAdd("usr_");
     m_grp = TCntrNode::grpAdd("grp_");
 
-    //- User BD structure -
+    //> User BD structure
     user_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::Key,"20") );
-    user_el.fldAdd( new TFld("DESCR",_("Full name"),TFld::String,0,"50") );
+    user_el.fldAdd( new TFld("DESCR",_("Full name"),TFld::String,TCfg::TransltText,"50") );
     user_el.fldAdd( new TFld("PASS",_("Password"),TFld::String,0,"20") );
     user_el.fldAdd( new TFld("PICTURE",_("User picture"),TFld::String,0,"100000") );
-    //- Group BD structure -
+    //> Group BD structure
     grp_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::Key,"20") );
-    grp_el.fldAdd( new TFld("DESCR",_("Full name"),TFld::String,0,"50") );
+    grp_el.fldAdd( new TFld("DESCR",_("Full name"),TFld::String,TCfg::TransltText,"50") );
     grp_el.fldAdd( new TFld("USERS",_("Users"),TFld::String,0,"200") );
 }
 

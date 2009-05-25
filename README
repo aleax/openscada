@@ -18,7 +18,7 @@ Default cofiguration can used for demon mode run. For starting the system into d
 <# service oscadad start>.
 
 For first experience geting you can use OpenSCADA demo package. This package contain DB with the system and subsystems
-configuration examples. For starting into demo configurations you should write shell command <# openscada_demo_en>.
+configuration examples. For starting into demo configurations you should write shell command <# openscada_demo>.
 
 For using the system you can need passwords. Default configuration have next users:
  - root: system administrator, have password: "openscada";

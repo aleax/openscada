@@ -341,6 +341,9 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty."));
     mLstUse = time(NULL);
 
+    string sid;
+    string lang2Code = cfg.lang2Code().empty() ? Mess->lang2Code() : cfg.lang2Code();
+    bool isVarTextTransl = (!Mess->lang2CodeBase().empty() && lang2Code != Mess->lang2CodeBase());
     //> Make WHERE
     string req = "SELECT ";
     string req_where = "WHERE ";
@@ -349,31 +352,44 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
     bool next = false;
     for( int i_fld = 1; i_fld < tblStrct.size(); i_fld++ )
     {
-	string sid = tblStrct[i_fld][1];
-	if( !cfg.cfgPresent(sid) ) continue;
-	TCfg &u_cfg = cfg.cfg(sid);
-	if( u_cfg.fld().flg()&TCfg::Key && u_cfg.keyUse() )
+	sid = tblStrct[i_fld][1];
+	TCfg *u_cfg = cfg.at(sid,true);
+	if( !u_cfg && isVarTextTransl && sid.size() > 3 && sid.substr(0,3) == (lang2Code+"#") )
 	{
-	    if( !next ) next = true;
-	    else req_where=req_where+"AND ";
-	    req_where=req_where+"\""+mod->sqlReqCode(sid,'"')+"\"='"+mod->sqlReqCode(getVal(u_cfg))+"' ";
+	    u_cfg = cfg.at(sid.substr(3),true);
+	    if( u_cfg && !(u_cfg->fld().flg()&TCfg::TransltText) ) continue;
 	}
-	else if( u_cfg.fld().flg()&TCfg::Key || u_cfg.view() )
+	if( !u_cfg ) continue;
+
+	if( u_cfg->fld().flg()&TCfg::Key && u_cfg->keyUse() )
 	{
-	    if( first_sel ) req=req+"\""+mod->sqlReqCode(sid,'"')+"\"";
-	    else req=req+",\""+mod->sqlReqCode(sid,'"')+"\"";
+	    req_where = req_where + (next?"AND \"":"\"") + mod->sqlReqCode(sid,'"') + "\"='" + mod->sqlReqCode(getVal(*u_cfg)) + "' ";
+	    next = true;
+	}
+	else if( u_cfg->fld().flg()&TCfg::Key || u_cfg->view() )
+	{
+	    req = req + (first_sel?"\"":",\"")+mod->sqlReqCode(sid,'"')+"\"";
 	    first_sel = false;
 	}
     }
 
     //> Request
-    req = req+" FROM '"+mod->sqlReqCode(name())+"' "+((next)?req_where:"")+" LIMIT "+TSYS::int2str(row)+",1;";
+    if( first_sel ) return false;
+    req = req + " FROM '" + mod->sqlReqCode(name()) + "' " + ((next)?req_where:"") + " LIMIT " +  TSYS::int2str(row) + ",1;";
     owner().sqlReq( req, &tbl );
     if( tbl.size() < 2 ) return false;
     //> Processing of query
     for( int i_fld = 0; i_fld < tbl[0].size(); i_fld++ )
-	if( cfg.cfgPresent(tbl[0][i_fld]) )
-	    setVal(cfg.cfg(tbl[0][i_fld]),tbl[1][i_fld]);
+    {
+	sid = tbl[0][i_fld];
+	TCfg *u_cfg = cfg.at(sid,true);
+	if( u_cfg ) setVal(*u_cfg,tbl[1][i_fld]);
+	else if( isVarTextTransl && sid.size() > 3 && sid.substr(0,3) == (lang2Code+"#") && tbl[1][i_fld].size() )
+	{
+	    u_cfg = cfg.at(sid.substr(3),true);
+	    if( u_cfg ) setVal(*u_cfg,tbl[1][i_fld]);
+	}
+    }
 
     return true;
 }
@@ -385,6 +401,9 @@ void MTable::fieldGet( TConfig &cfg )
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty."));
     mLstUse = time(NULL);
 
+    string sid;
+    string lang2Code = cfg.lang2Code().empty() ? Mess->lang2Code() : cfg.lang2Code();
+    bool isVarTextTransl = (!Mess->lang2CodeBase().empty() && lang2Code != Mess->lang2CodeBase());
     //> Prepare request
     string req = "SELECT ";
     string req_where;
@@ -393,21 +412,27 @@ void MTable::fieldGet( TConfig &cfg )
     bool next_wr = false;
     for( int i_fld = 1; i_fld < tblStrct.size(); i_fld++ )
     {
-	if( !cfg.cfgPresent(tblStrct[i_fld][1]) ) continue;
-	TCfg &u_cfg = cfg.cfg(tblStrct[i_fld][1]);
-	if( u_cfg.fld().flg()&TCfg::Key )
+	sid = tblStrct[i_fld][1];
+	TCfg *u_cfg = cfg.at(sid,true);
+	if( !u_cfg && isVarTextTransl && sid.size() > 3 && sid.substr(0,3) == (lang2Code+"#") )
 	{
-	    if( !next_wr ) next_wr = true; else req_where=req_where+"AND ";
-	    req_where=req_where+"\""+mod->sqlReqCode(tblStrct[i_fld][1],'"')+"\"='"+mod->sqlReqCode(getVal(u_cfg))+"'";
+	    u_cfg = cfg.at(sid.substr(3),true);
+	    if( u_cfg && !(u_cfg->fld().flg()&TCfg::TransltText) ) continue;
 	}
-	else if( u_cfg.view() )
+	if( !u_cfg ) continue;
+
+	if( u_cfg->fld().flg()&TCfg::Key )
 	{
-	    if( first_sel ) req=req+"\""+mod->sqlReqCode(tblStrct[i_fld][1],'"')+"\"";
-		    else req=req+",\""+mod->sqlReqCode(tblStrct[i_fld][1],'"')+"\"";
+	    req_where = req_where + (next_wr?"AND \"":"\"") + mod->sqlReqCode(sid,'"') + "\"='" + mod->sqlReqCode(getVal(*u_cfg)) + "'";
+	    next_wr = true;
+	}
+	else if( u_cfg->view() )
+	{
+	    req = req + (first_sel?"\"":",\"") + mod->sqlReqCode(sid,'"') + "\"";
 	    first_sel = false;
 	}
     }
-    req = req+" FROM '"+mod->sqlReqCode(name())+"' WHERE "+req_where+";";
+    req = req + " FROM '" + mod->sqlReqCode(name()) + "' WHERE " + req_where + ";";
 
     //> Query
     owner().sqlReq( req, &tbl );
@@ -415,8 +440,16 @@ void MTable::fieldGet( TConfig &cfg )
 
     //> Processing of query
     for( int i_fld = 0; i_fld < tbl[0].size(); i_fld++ )
-	if( cfg.cfgPresent(tbl[0][i_fld]) )
-	    setVal(cfg.cfg(tbl[0][i_fld]),tbl[1][i_fld]);
+    {
+	sid = tbl[0][i_fld];
+	TCfg *u_cfg = cfg.at(sid,true);
+	if( u_cfg ) setVal(*u_cfg,tbl[1][i_fld]);
+	else if( isVarTextTransl && sid.size() > 3 && sid.substr(0,3) == (lang2Code+"#") && tbl[1][i_fld].size() )
+	{
+	    u_cfg = cfg.at(sid.substr(3),true);
+	    if( u_cfg ) setVal(*u_cfg,tbl[1][i_fld]);
+	}
+    }
 }
 
 void MTable::fieldSet( TConfig &cfg )
@@ -426,24 +459,27 @@ void MTable::fieldSet( TConfig &cfg )
     if( tblStrct.empty() ) fieldFix(cfg);
     mLstUse = time(NULL);
 
-    //- Get config fields list -
+    string sid, sval;
+    string lang2Code = cfg.lang2Code().empty() ? Mess->lang2Code() : cfg.lang2Code();
+    bool isVarTextTransl = (!Mess->lang2CodeBase().empty() && lang2Code != Mess->lang2CodeBase());
+    //> Get config fields list
     vector<string> cf_el;
     cfg.cfgList(cf_el);
 
-    //- Get present fields list -
+    //> Get present fields list
     string req_where = "WHERE ";
-    //-- Add key list to queue --
+    //>> Add key list to queue
     bool next = false;
     for( int i_el = 0; i_el < cf_el.size(); i_el++ )
     {
 	TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
 	if( !(u_cfg.fld().flg()&TCfg::Key) ) continue;
-	if( !next ) next = true; else req_where=req_where+"AND ";
-	req_where=req_where+"\""+mod->sqlReqCode(cf_el[i_el],'"')+"\"='"+mod->sqlReqCode(getVal(u_cfg))+"' ";
+	req_where = req_where + (next?"AND \"":"\"") + mod->sqlReqCode(cf_el[i_el],'"') + "\"='" + mod->sqlReqCode(getVal(u_cfg)) + "' ";
+	next = true;
     }
 
-    //- Prepare query -
-    string req = "SELECT 1 FROM '"+mod->sqlReqCode(name())+"' "+req_where+";";
+    //> Prepare query
+    string req = "SELECT 1 FROM '" + mod->sqlReqCode(name()) + "' " + req_where + ";";
     try{ owner().sqlReq( req, &tbl ); }
     catch(TError err)
     {
@@ -452,8 +488,8 @@ void MTable::fieldSet( TConfig &cfg )
     }
     if( tbl.size() < 2 )
     {
-	//-- Add new record --
-	req = "INSERT INTO '"+mod->sqlReqCode(name())+"' ";
+	//> Add new record
+	req = "INSERT INTO '" + mod->sqlReqCode(name()) + "' ";
 	string ins_name, ins_value;
 	next = false;
 	for( int i_el = 0; i_el < cf_el.size(); i_el++ )
@@ -461,35 +497,36 @@ void MTable::fieldSet( TConfig &cfg )
 	    TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
 	    if( !(u_cfg.fld().flg()&TCfg::Key) && !u_cfg.view() ) continue;
 
-	    if( !next ) next = true;
-	    else
-	    {
-		ins_name=ins_name+",";
-		ins_value=ins_value+",";
-	    }
-	    ins_name=ins_name+"\""+mod->sqlReqCode(cf_el[i_el],'"')+"\" ";
-	    ins_value=ins_value+"'"+mod->sqlReqCode(getVal(u_cfg))+"' ";
+	    bool isTransl = (u_cfg.fld().flg()&TCfg::TransltText && isVarTextTransl);
+	    sid = isTransl ? (lang2Code+"#"+cf_el[i_el]) : cf_el[i_el];
+	    ins_name = ins_name + (next?",\"":"\"") + mod->sqlReqCode(sid,'"') + "\" ";
+	    sval = getVal(u_cfg); if( isTransl && sval.empty() ) sval = " ";
+	    ins_value = ins_value + (next?",'":"'") + mod->sqlReqCode(sval) + "' ";
+	    next = true;
 	}
 	req = req + "("+ins_name+") VALUES ("+ins_value+")";
     }
     else
     {
-	//-- Update present record --
-	req = "UPDATE '"+mod->sqlReqCode(name())+"' SET ";
+	//> Update present record
+	req = "UPDATE '" + mod->sqlReqCode(name()) + "' SET ";
 	next = false;
 	for( int i_el = 0; i_el < cf_el.size(); i_el++ )
 	{
 	    TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
 	    if( u_cfg.fld().flg()&TCfg::Key || !u_cfg.view() ) continue;
 
-	    if( !next ) next = true; else req=req+",";
-	    req=req+"\""+mod->sqlReqCode(cf_el[i_el],'"')+"\"='"+mod->sqlReqCode(getVal(u_cfg))+"' ";
+	    bool isTransl = (u_cfg.fld().flg()&TCfg::TransltText && isVarTextTransl);
+	    sid = isTransl ? (lang2Code+"#"+cf_el[i_el]) : cf_el[i_el];
+	    sval = getVal(u_cfg); if( isTransl && sval.empty() ) sval = " ";
+	    req = req + (next?",\"":"\"") + mod->sqlReqCode(sid,'"') + "\"='" + mod->sqlReqCode(sval) + "' ";
+	    next = true;
 	}
 	req = req + req_where;
     }
     req += ";";
 
-    //- Query -
+    //> Query
     //printf("TEST 02: query: <%s>\n",req.c_str());
     try{ owner().sqlReq( req ); }
     catch(TError err)
@@ -518,8 +555,8 @@ void MTable::fieldDel( TConfig &cfg )
 	TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
 	if( u_cfg.fld().flg()&TCfg::Key && u_cfg.keyUse() )
 	{
-	    if( !next ) next = true; else req=req+"AND ";
-	    req=req+"\""+mod->sqlReqCode(cf_el[i_el],'"')+"\"='"+mod->sqlReqCode(getVal(u_cfg))+"' ";
+	    req = req + (next?"AND \"":"\"") + mod->sqlReqCode(cf_el[i_el],'"') + "\"='" + mod->sqlReqCode(getVal(u_cfg)) + "' ";
+	    next = true;
 	}
     }
     req += ";";
@@ -539,77 +576,109 @@ void MTable::fieldFix( TConfig &cfg )
 
     string req;
 
-    //- Get config fields list -
+    string lang2Code = cfg.lang2Code().empty() ? Mess->lang2Code() : cfg.lang2Code();
+    bool isVarTextTransl = (!Mess->lang2CodeBase().empty() && lang2Code != Mess->lang2CodeBase());
+    //> Get config fields list
     vector<string> cf_el;
     cfg.cfgList(cf_el);
 
     if( !tblStrct.empty() )
     {
-	//- Check structure -
+	//> Check structure
 	bool next = false;
-	//-- Check present fields and find new fields --
+	//>> Check present fields and find new fields
 	for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
 	{
+	    TCfg &u_cfg = cfg.cfg(cf_el[i_cf]);
 	    int i_fld;
 	    for( i_fld = 1; i_fld < tblStrct.size(); i_fld++ )
-	        if( cf_el[i_cf] == tblStrct[i_fld][1] )
+		if( cf_el[i_cf] == tblStrct[i_fld][1] )
 		{
-		    if( !next ) next = true; else all_flds+=",";
-		    all_flds = all_flds+"\""+mod->sqlReqCode(cf_el[i_cf],'"')+"\"";
-		    switch(cfg.cfg(cf_el[i_cf]).fld().type())
-		    {
-			case TFld::String:	if( tblStrct[i_fld][2] != "TEXT")	fix = true;	break;
-			case TFld::Integer: case TFld::Boolean:
+		    all_flds = all_flds + (next?",\"":"\"") + mod->sqlReqCode(tblStrct[i_fld][1],'"') + "\"";
+		    next = true;
+		    if( !fix )
+			switch( u_cfg.fld().type() )
+			{
+			    case TFld::String:	if( tblStrct[i_fld][2] != "TEXT")	fix = true;	break;
+			    case TFld::Integer: case TFld::Boolean:
 						if( tblStrct[i_fld][2] != "INTEGER")	fix = true;	break;
-			case TFld::Real:	if( tblStrct[i_fld][2] != "DOUBLE" )	fix = true;	break;
-			default: fix = true;
+			    case TFld::Real:	if( tblStrct[i_fld][2] != "DOUBLE" )	fix = true;	break;
+			    default: fix = true;
+			}
+		    //> Put other languages to all list an find column for current language
+		    if( u_cfg.fld().flg()&TCfg::TransltText )
+		    {
+			bool col_cur = false;
+			for( int i_c = i_fld; i_c < tblStrct.size(); i_c++ )
+			    if( tblStrct[i_c][1].size() > 3 && tblStrct[i_c][1].substr(2) == ("#"+cf_el[i_cf]) )
+			    {
+				all_flds = all_flds + ",\"" + mod->sqlReqCode(tblStrct[i_c][1],'"') + "\"";
+				if( tblStrct[i_c][1].substr(0,2) == lang2Code ) col_cur = true;
+			    }
+			if( !col_cur && isVarTextTransl ) fix = true;
 		    }
 		    break;
 		}
 	    if( i_fld >= tblStrct.size() ) fix = true;
 	}
-	//-- Check delete fields --
-	for( int i_fld = 1; i_fld < tblStrct.size(); i_fld++ )
+	//>> Check delete fields
+	for( int i_fld = 1; i_fld < tblStrct.size() && !fix; i_fld++ )
 	{
 	    int i_cf;
 	    for( i_cf = 0; i_cf < cf_el.size(); i_cf++ )
-		if( cf_el[i_cf] == tblStrct[i_fld][1] ) break;
+		if( cf_el[i_cf] == tblStrct[i_fld][1] ||
+			(cfg.cfg(cf_el[i_cf]).fld().flg()&TCfg::TransltText && tblStrct[i_fld][1].size() > 3 && tblStrct[i_fld][1].substr(2) == ("#"+cf_el[i_cf])) )
+		    break;
 	    if( i_cf >= cf_el.size() ) fix = true;
 	}
 
 	if( !fix ) return;	//Structure OK!
-	//-- Fix structure --
-	//--- Move data to temporary DB ---
+	//>> Fix structure
+	//>>> Move data to temporary DB
 	req = "CREATE TEMPORARY TABLE 'temp_"+mod->sqlReqCode(name())+"'("+all_flds+");"
 	    "INSERT INTO 'temp_"+mod->sqlReqCode(name())+"' SELECT "+all_flds+" FROM '"+mod->sqlReqCode(name())+"';"
 	    "DROP TABLE '"+mod->sqlReqCode(name())+"';";
 	owner().sqlReq( req );
     }
 
-    //- Create new table -
+    //> Create new table
     req ="CREATE TABLE '"+mod->sqlReqCode(name())+"' (";
     bool next = false;
     bool next_key = false;
-    string pr_keys;
+    string pr_keys, tpCfg;
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
     {
-	if( !next ) next = true; else req=req+",";
 	TCfg &cf = cfg.cfg(cf_el[i_cf]);
-	req = req+"\""+mod->sqlReqCode(cf_el[i_cf],'"')+"\" ";
-	//-- Type param --
+	req = req + (next?",\"":"\"") + mod->sqlReqCode(cf_el[i_cf],'"') + "\" ";
+	next = true;
+	//>> Type param
 	switch(cf.fld().type())
 	{
-	    case TFld::String:	req+="TEXT DEFAULT '"+mod->sqlReqCode(cf.fld().def())+"' ";	break;
+	    case TFld::String:	tpCfg = "TEXT DEFAULT '" + mod->sqlReqCode(cf.fld().def()) + "' ";	break;
 	    case TFld::Integer: case TFld::Boolean:
-				req+="INTEGER DEFAULT '"+mod->sqlReqCode(cf.fld().def())+"' ";	break;
-	    case TFld::Real:	req+="DOUBLE DEFAULT '"+mod->sqlReqCode(cf.fld().def())+"' ";	break;
+				tpCfg = "INTEGER DEFAULT '" + mod->sqlReqCode(cf.fld().def()) + "' ";	break;
+	    case TFld::Real:	tpCfg = "DOUBLE DEFAULT '" + mod->sqlReqCode(cf.fld().def()) + "' ";	break;
 	}
-	//-- Primary key --
-	if( cf.fld().flg()&TCfg::Key )
+	req += tpCfg;
+
+	//> Other languages for translation process
+	if( cf.fld().flg()&TCfg::TransltText )
 	{
-	    if( !next_key ) next_key = true;
-	    else pr_keys=pr_keys+",";
-	    pr_keys=pr_keys+"\""+mod->sqlReqCode(cf_el[i_cf],'"')+"\"";
+	    bool col_cur = false;
+	    for( int i_c = 1; i_c < tblStrct.size(); i_c++ )
+		if( tblStrct[i_c][1].size() > 3 && tblStrct[i_c][1].substr(2) == ("#"+cf_el[i_cf]) )
+		{
+		    req = req + ",\"" + mod->sqlReqCode(tblStrct[i_c][1],'"') + "\" "+tpCfg;
+		    if( tblStrct[i_c][1].substr(0,2) == lang2Code ) col_cur = true;
+		}
+	    if( !col_cur && isVarTextTransl )
+		req = req + ",\"" + mod->sqlReqCode(lang2Code+"#"+cf_el[i_cf],'"') + "\" "+tpCfg;
+	}
+	//>> Primary key
+	else if( cf.fld().flg()&TCfg::Key )
+	{
+	    pr_keys = pr_keys + (next_key?",\"":"\"") + mod->sqlReqCode(cf_el[i_cf],'"') + "\"";
+	    next_key = true;
 	}
     }
     req += ", PRIMARY KEY ("+pr_keys+"));";

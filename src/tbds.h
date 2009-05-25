@@ -205,6 +205,13 @@ class TSYS;
 class TBDS : public TSubSYS, public TElem
 {
     public:
+	//Data
+	enum ReqGen
+	{
+	    OnlyCfg	= 0x01,		//Only from cinfig request
+	    UseTranslate= 0x02		//Use translation for request
+	};
+
 	//Public methods
 	TBDS( );
 	~TBDS( );
@@ -227,8 +234,8 @@ class TBDS : public TSubSYS, public TElem
 	bool dataDel( const string &bdn, const string &path, TConfig &cfg, bool useKeyAll = false );
 
 	//> Generic DB table
-	static string genDBGet( const string &path, const string &oval = "", const string &user = "root", bool onlyCfg = false );
-	static void genDBSet( const string &path, const string &val, const string &user = "root" );
+	static string genDBGet( const string &path, const string &oval = "", const string &user = "root", char rFlg = 0 );
+	static void genDBSet( const string &path, const string &val, const string &user = "root", char rFlg = 0 );
 
 	string fullDBSYS( );
 	string fullDB( );

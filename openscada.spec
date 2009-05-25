@@ -106,18 +106,12 @@ install -m 755 -d %buildroot/var/spool/openscada/ARCHIVES/MESS
 install -m 755 -d %buildroot/var/spool/openscada/ARCHIVES/VAL
 echo "OpenSCADA messages archive dir" > %buildroot/var/spool/openscada/ARCHIVES/MESS/.info
 echo "OpenSCADA values archive dir" > %buildroot/var/spool/openscada/ARCHIVES/VAL/.info
-install -m 644 -pD demo/en/oscada_demo_en.xml %buildroot/%_sysconfdir/oscada_demo_en.xml
-install -m 755 -pD demo/en/openscada_demo_en %buildroot/%_bindir/openscada_demo_en
-install -m 644 -pD demo/en/openscada_demo_en.desktop %buildroot/%_desktopdir/openscada_demo_en.desktop
-install -m 644 -pD demo/en/openscada_demo_en.png %buildroot/%_iconsdir/openscada_demo_en.png
-install -m 755 -d %buildroot/var/spool/openscada/DEMO_EN
-install -m 644 demo/en/*.db %buildroot/var/spool/openscada/DEMO_EN
-install -m 644 -pD demo/ru/oscada_demo_ru.xml %buildroot/%_sysconfdir/oscada_demo_ru.xml
-install -m 755 -pD demo/ru/openscada_demo_ru %buildroot/%_bindir/openscada_demo_ru
-install -m 644 -pD demo/ru/openscada_demo_ru.desktop %buildroot/%_desktopdir/openscada_demo_ru.desktop
-install -m 644 -pD demo/ru/openscada_demo_ru.png %buildroot/%_iconsdir/openscada_demo_ru.png
-install -m 755 -d %buildroot/var/spool/openscada/DEMO_RU
-install -m 644 demo/ru/*.db %buildroot/var/spool/openscada/DEMO_RU
+install -m 644 -pD demo/oscada_demo.xml %buildroot/%_sysconfdir/oscada_demo.xml
+install -m 755 -pD demo/openscada_demo %buildroot/%_bindir/openscada_demo
+install -m 644 -pD demo/openscada_demo.desktop %buildroot/%_desktopdir/openscada_demo.desktop
+install -m 644 -pD demo/openscada_demo.png %buildroot/%_iconsdir/openscada_demo.png
+install -m 755 -d %buildroot/var/spool/openscada/DEMO
+install -m 644 demo/*.db %buildroot/var/spool/openscada/DEMO
 sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 
 %clean
@@ -154,18 +148,16 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 
 %files demo
 %defattr(-,root,root)
-%config(noreplace) %_sysconfdir/oscada_demo_en.xml
-%_bindir/openscada_demo_en
-%_desktopdir/openscada_demo_en.desktop
-%_iconsdir/openscada_demo_en.png
-/var/spool/openscada/DEMO_EN/*.db
-%config(noreplace) %_sysconfdir/oscada_demo_ru.xml
-%_bindir/openscada_demo_ru
-%_desktopdir/openscada_demo_ru.desktop
-%_iconsdir/openscada_demo_ru.png
-/var/spool/openscada/DEMO_RU/*.db
+%config(noreplace) %_sysconfdir/oscada_demo.xml
+%_bindir/openscada_demo
+%_desktopdir/openscada_demo.desktop
+%_iconsdir/openscada_demo.png
+/var/spool/openscada/DEMO/*.db
 
 %changelog
+* Mon May 25 2009 Roman Savochenko <rom_as@diyaorg.dp.ua>
+- Merge demo DB from different languages to one multilanguage (Russian,English and Ukrainian) DB.
+
 * Wed Mar 18 2009 Roman Savochenko <rom_as@diyaorg.dp.ua>
 - OpenSCADA update 0.6.3.2 release build.
 

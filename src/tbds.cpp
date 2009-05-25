@@ -35,7 +35,7 @@ TBDS::TBDS( ) : TSubSYS("BD","Data Bases",true)
     //> Generic system DB
     fldAdd( new TFld("user","User",TFld::String,TCfg::Key,"20") );
     fldAdd( new TFld("id","Value ID",TFld::String,TCfg::Key,"100") );
-    fldAdd( new TFld("val","Value"  ,TFld::String,TFld::NoFlag,"1000") );
+    fldAdd( new TFld("val","Value"  ,TFld::String,TCfg::TransltText,"1000") );
 
     //> Open data bases DB structure
     el_db.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
@@ -228,7 +228,7 @@ bool TBDS::dataGet( const string &bdn, const string &path, TConfig &cfg )
 {
     AutoHD<TTable> tbl = open(bdn);
 
-    //- Load from DB -
+    //> Load from DB
     if( !tbl.freeStat() )
     {
 	bool db_true = true;
@@ -239,16 +239,15 @@ bool TBDS::dataGet( const string &bdn, const string &path, TConfig &cfg )
 		mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
 	    db_true = false;
 	}
-	//tbl.free(); close(bdn);
 	if(db_true) return true;
     }
-    //- Load from Config file if tbl no present -
+    //> Load from Config file if tbl no present
     XMLNode *nd;
     ResAlloc res(SYS->nodeRes(),false);
     try{ nd = ctrId(&SYS->cfgRoot(),path); }
     catch(...){ return false; }
 
-    //-- Scan fields and fill Config --
+    //>> Scan fields and fill Config
     for( int i_fld = 0; i_fld < nd->childSize(); i_fld++ )
     {
 	XMLNode *el = nd->childGet(i_fld);
@@ -265,7 +264,16 @@ bool TBDS::dataGet( const string &bdn, const string &path, TConfig &cfg )
 	    if( i_el == cf_el.size() )
 	    {
 		for( int i_el = 0; i_el < cf_el.size(); i_el++ )
-		    cfg.cfg(cf_el[i_el]).setS(el->attr(cf_el[i_el]));
+		{
+		    TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
+		    u_cfg.setS(el->attr(cf_el[i_el]));
+		    if( u_cfg.fld().flg()&TCfg::TransltText && !Mess->lang2CodeBase().empty() &&
+			((!cfg.lang2Code().empty() && cfg.lang2Code() != Mess->lang2CodeBase()) || (cfg.lang2Code().empty() && Mess->lang2Code() != Mess->lang2CodeBase())) )
+		    {
+			string vl = el->attr(cf_el[i_el]+"_"+(cfg.lang2Code().empty()?Mess->lang2Code():cfg.lang2Code()));
+			if( !vl.empty() ) u_cfg.setS(vl);
+		    }
+		}
 		return true;
 	    }
 	}
@@ -283,9 +291,6 @@ bool TBDS::dataSet( const string &bdn, const string &path, TConfig &cfg )
 	bool db_true = true;
 	try{ tbl.at().fieldSet(cfg); }
 	catch(TError err) { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); db_true = false; }
-	//tbl.free();
-	//try{ close(bdn); }
-	//catch(TError err) { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 	return db_true;
     }
     //throw TError("BD","Field no present.");
@@ -327,7 +332,7 @@ bool TBDS::dataDel( const string &bdn, const string &path, TConfig &cfg, bool us
     return false;
 }
 
-void TBDS::genDBSet(const string &path, const string &val, const string &user)
+void TBDS::genDBSet(const string &path, const string &val, const string &user, char rFlg )
 {
     string rez;
 
@@ -339,14 +344,13 @@ void TBDS::genDBSet(const string &path, const string &val, const string &user)
 	if( !tbl.freeStat() )
 	{
 	    TConfig db_el(&dbs.at());
+	    if( !(rFlg&TBDS::UseTranslate) ) db_el.setLang2Code(Mess->lang2CodeBase());
 	    db_el.cfg("user").setS(user);
 	    db_el.cfg("id").setS(path);
 	    db_el.cfg("val").setS(val);
-	
+
 	    try{ tbl.at().fieldSet(db_el); }
 	    catch(TError err){ }
-	
-	    //tbl.free(); dbs.at().close(dbs.at().fullDBSYS());
 	}
 	else
 	{
@@ -370,19 +374,20 @@ void TBDS::genDBSet(const string &path, const string &val, const string &user)
     }
 }
 
-string TBDS::genDBGet(const string &path, const string &oval, const string &user, bool onlyCfg )
+string TBDS::genDBGet(const string &path, const string &oval, const string &user, char rFlg )
 {
     bool bd_ok=false;
     string rez = oval;
 
     //> Get from generic DB
-    if( SYS->present("BD") && !onlyCfg )
+    if( SYS->present("BD") && !(rFlg&TBDS::OnlyCfg) )
     {
 	AutoHD<TBDS> dbs = SYS->db();
 	AutoHD<TTable> tbl = dbs.at().open(SYS->db().at().fullDBSYS());
 	if( !tbl.freeStat() )
 	{
 	    TConfig db_el(&dbs.at());
+	    if( !(rFlg&TBDS::UseTranslate) ) db_el.setLang2Code(Mess->lang2CodeBase());
 	    db_el.cfg("user").setS(user);
 	    db_el.cfg("id").setS(path);
 	    try
@@ -392,8 +397,6 @@ string TBDS::genDBGet(const string &path, const string &oval, const string &user
 		bd_ok = true;
 	    }
 	    catch(TError err){  }
-
-	    //tbl.free(); dbs.at().close(dbs.at().fullDBSYS());
 	}
     }
 
@@ -414,6 +417,11 @@ string TBDS::genDBGet(const string &path, const string &oval, const string &user
 	ResAlloc res(SYS->nodeRes(),false);
 	XMLNode *tgtN = TCntrNode::ctrId(&SYS->cfgRoot(),path,true);
 	if( tgtN ) rez = tgtN->text();
+	if( rFlg&TBDS::UseTranslate && !Mess->lang2CodeBase().empty() && Mess->lang2Code() != Mess->lang2CodeBase() )
+	{
+	    tgtN = TCntrNode::ctrId(&SYS->cfgRoot(),path+"_"+Mess->lang2Code(),true);
+	    if( tgtN ) rez = tgtN->text();
+	}
     }
 
     return rez;

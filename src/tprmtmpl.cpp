@@ -233,7 +233,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	    {
 		ctrMkNode("fld",opt,-1,"/tmpl/cfg/id",_("Id"),0444,"root","root",1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/tmpl/cfg/name",_("Name"),0664,"root","root",2,"tp","str","len","50");
-		ctrMkNode("fld",opt,-1,"/tmpl/cfg/descr",_("Description"),0664,"root","root",3,"tp","str","cols","70","rows","4");
+		ctrMkNode("fld",opt,-1,"/tmpl/cfg/descr",_("Description"),0664,"root","root",3,"tp","str","cols","100","rows","4");
 	    }
 	}
 	if( ctrMkNode("area",opt,-1,"/io",_("IO")) )

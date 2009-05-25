@@ -48,9 +48,8 @@ TSYS	*SYS;
 bool TSYS::finalKill = false;
 
 TSYS::TSYS( int argi, char ** argb, char **env ) :
-    mConfFile("/etc/oscada.xml"), mId("EmptySt"), mName("Empty Station"), mIcoDir("./icons/"), mModDir("./"),
-    mUser("root"),argc(argi), envp((const char **)env), argv((const char **)argb), mStopSignal(0),
-    mSysOptCfg(false), mWorkDB(""), mSaveAtExit(false), mSavePeriod(0)
+    mConfFile("/etc/oscada.xml"), mId("EmptySt"), mName(_("Empty Station")), mIcoDir("./icons/"), mModDir("./"),
+    mUser("root"),argc(argi), envp((const char **)env), argv((const char **)argb), mStopSignal(0), mWorkDB(""), mSaveAtExit(false), mSavePeriod(0)
 {
     finalKill = false;
     SYS = this;		//Init global access value
@@ -205,6 +204,7 @@ string TSYS::optDescr( )
 	"                         <direct> & 8 - archive.\n"
 	"----------- The config file station <%s> parameters -----------\n"
 	"StName     <nm>	Station name.\n"
+	"WorkDB     <Type.Name> Work DB (type and name).\n"
 	"Workdir    <path>	Work directory.\n"
 	"IcoDir     <path>	Icons directory.\n"
 	"ModDir     <path>	Modules directory.\n"
@@ -214,12 +214,9 @@ string TSYS::optDescr( )
 	"                           <direct> & 2 - stdout;\n"
 	"                           <direct> & 4 - stderr;\n"
 	"                           <direct> & 8 - archive.\n"
-	"SysLang    <lang>	Internal language.\n"
-	"BaseLang   <lang>	Base language for variable texts translation, two symbols code.\n"
-	"WorkDB     <Type.Name> Work DB (type and name).\n"
+	"Lang2CodeBase <lang>	Base language for variable texts translation, two symbols code.\n"
 	"SaveAtExit <true>      Save system at exit.\n"
-	"SavePeriod <sec>	Save system period.\n"
-	"SYSOptCfg  <true>      Get system options from DB.\n\n"),
+	"SavePeriod <sec>	Save system period.\n\n"),
 	PACKAGE_NAME,VERSION,buf.sysname,buf.release,nodePath().c_str());
 }
 
@@ -286,7 +283,6 @@ bool TSYS::cfgFileLoad()
                     mess_warning(nodePath().c_str(),_("Station <%s> is not present in the config file. Use <%s> station config!"),
 			mId.c_str(), stat_n->attr("id").c_str() );
 		    mId	= stat_n->attr("id");
-		    mName	= stat_n->attr("name");
 		}
 		if( !stat_n )	rootN.clear();
 	    } else rootN.clear();
@@ -302,11 +298,9 @@ bool TSYS::cfgFileLoad()
 void TSYS::cfgPrmLoad()
 {
     //System parameters
-    mSysOptCfg = atoi(TBDS::genDBGet(nodePath()+"SYSOptCfg",TSYS::int2str(mSysOptCfg),"root",true).c_str());
-    setWorkDir(TBDS::genDBGet(nodePath()+"Workdir","","root",sysOptCfg()).c_str());
-
-    mName = TBDS::genDBGet(nodePath()+"StName",name());
-    mWorkDB = TBDS::genDBGet(nodePath()+"WorkDB","*.*","root",sysOptCfg());
+    mName = TBDS::genDBGet(nodePath()+"StName",name(),"root",TBDS::UseTranslate);
+    mWorkDB = TBDS::genDBGet(nodePath()+"WorkDB","*.*","root",TBDS::OnlyCfg);
+    setWorkDir( TBDS::genDBGet(nodePath()+"Workdir").c_str() );
     setIcoDir( TBDS::genDBGet(nodePath()+"IcoDir",icoDir()) );
     setModDir( TBDS::genDBGet(nodePath()+"ModDir",modDir()) );
     setSaveAtExit( atoi(TBDS::genDBGet(nodePath()+"SaveAtExit","0").c_str()) );
@@ -344,8 +338,8 @@ void TSYS::load_()
 	if( !cmd_help ) modSchedul().at().modifG();	// For try reload from DB
 
 	//> Second load for load from generic DB
-	cfgPrmLoad();
 	Mess->load();
+	cfgPrmLoad();
     }
 
     //> Direct load subsystems and modules
@@ -371,9 +365,8 @@ void TSYS::save_( )
 
     //> System parameters
     getcwd(buf,sizeof(buf));
-    TBDS::genDBSet(nodePath()+"StName",mName);
+    TBDS::genDBSet(nodePath()+"StName",mName,"root",TBDS::UseTranslate);
     TBDS::genDBSet(nodePath()+"Workdir",buf);
-    TBDS::genDBSet(nodePath()+"WorkDB",mWorkDB);
     TBDS::genDBSet(nodePath()+"IcoDir",icoDir());
     TBDS::genDBSet(nodePath()+"ModDir",modDir());
     TBDS::genDBSet(nodePath()+"SaveAtExit",TSYS::int2str(saveAtExit()));
@@ -1057,13 +1050,13 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/gen/baseLang" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(Mess->baseLang());
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	Mess->setBaseLang(opt->text());
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(Mess->lang2CodeBase());
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	Mess->setLang2CodeBase(opt->text());
     }
     else if( a_path == "/gen/baseLangLs" && ctrChkNode(opt) )
     {
-	opt->childAdd("el")->setText(Mess->curLang());
-	if( !Mess->baseLang().empty() ) opt->childAdd("el")->setText(Mess->baseLang());
+	opt->childAdd("el")->setText(Mess->lang2Code());
+	if( !Mess->lang2CodeBase().empty() ) opt->childAdd("el")->setText(Mess->lang2CodeBase());
 	opt->childAdd("el")->setText("");
     }
     else if( a_path == "/gen/mess/lev" )

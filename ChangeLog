@@ -1,3 +1,11 @@
+2009-05-25 Roman
+- !!!!:/SYS,/DB/SQLite,/DB/MySQL: Multilanguage variable texts support is finished. Multilanguage included to DB.SQLite, DB.MySQL and for config file.
+- !!!!:/DemoDB: Demo DB from different languages is merged to one multilanguage (Russian,English and Ukrainian) DB.
+- !:/DAQ/LogicLev: English translation document is added.
+- !:/DB: Generic DB request API some expanded.
+- !:/Config: Config API some expanded.
+
+
 2009-05-22 Roman
 - !:/DAQ/System: Translated to English document is added.
 - !:/UI/WebVision: Translation to German is added by Irina Popkova.

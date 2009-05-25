@@ -43,6 +43,7 @@ class TCfg
 	//Data
 	enum AttrFlg
 	{
+	    TransltText = 0x100,	//String value type: Use translation variable texts mechanism
 	    NoVal	= 0x200,	//No value mirrored
 	    Key		= 0x400,	//Primary key
 	    Hide	= 0x800		//Attribute hide
@@ -123,6 +124,7 @@ class TConfig: public TValElem
 	void cfgList( vector<string> &list );
 	bool cfgPresent( const string &n_val );
 	TCfg &cfg( const string &n_val );
+	TCfg *at( const string &n_val, bool noExpt = false );
 	void cfgViewAll( bool val = true );	//Hide all no key elements
 	void cfgKeyUseAll( bool val );
 
@@ -133,6 +135,9 @@ class TConfig: public TValElem
 		const string &user = "root", const string &grp = "root", int perm = 0664 );
         void cntrCmdProc( XMLNode *fld, const string &elem,
 		const string &user = "root", const string &grp = "root", int perm = 0664 );
+
+	string lang2Code( )	{ return mLang2Code; }
+	void setLang2Code( const string &vl )	{ mLang2Code = vl; }
 
     protected:
 	//Methods
@@ -147,6 +152,7 @@ class TConfig: public TValElem
 	TCfgMap		value;
 	TElem		*m_elem;
 	char		single		: 1;
+	string		mLang2Code;
 };
 
 #endif // TCONFIG_H

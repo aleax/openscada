@@ -86,23 +86,17 @@ class TMess
 	static string I18Ns( const string &mess, const char *d_name = NULL )
 	{ return I18N((char *)mess.c_str(), d_name); }
 
-	//> Variable texts translation
-	string baseLang( )	{ return mBaseLang; }
-	string curLang( )	{ return mCurLang; }
-	void setBaseLang( const string &vl );
-	//string varTextTbl( )	{ return "VarTextTrans"; }
-	//string varTextFullDB( )	{ return "*.*."+varTextTbl(); }
-	//string getVarText( const string &baseText );
-	//string setVarText( const string &newText, const string &baseText );
-
 	static bool chkPattern( const string &val, const string &patern );
 
 	string lang( );
+	string lang2Code( )	{ return mLang2Code; }
+	string lang2CodeBase( )	{ return mLang2CodeBase; }
 	string &charset( )	{ return IOCharSet; }
 	int logDirect( )	{ return log_dir; }
 	int messLevel( )	{ return m_mess_level; }
 
 	void setLang( const string &lang );
+	void setLang2CodeBase( const string &vl );
 	void setLogDirect( int dir );
 	void setMessLevel( int level );
 
@@ -118,10 +112,7 @@ class TMess
 	int	m_mess_level;		//Work messages level
 	int	log_dir;		//Log direction
 
-	string	mBaseLang, mCurLang;
-	//bool	mVarTextAct;
-	//TConfig	mVarTextCfg;
-	//Res	mVarTextRes;
+	string	mLang2CodeBase, mLang2Code;
 };
 
 extern TMess *Mess;

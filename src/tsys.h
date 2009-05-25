@@ -146,9 +146,6 @@ class TSYS : public TCntrNode
 	int  savePeriod( )	{ return mSavePeriod; }
 	void setSavePeriod( int vl )		{ mSavePeriod = vl; modif(); }
 
-	//- Get system options from DB -
-	bool sysOptCfg( )	{ return mSysOptCfg; }
-
 	string optDescr( );	//print comand line options
 
 	static void sighandler( int signal );
@@ -238,8 +235,6 @@ class TSYS : public TCntrNode
 		mName,		// Station name
 		mIcoDir,	// Icons directory
 		mModDir;	// Modules directory
-
-	bool	mSysOptCfg;	// Get system options from config only
 
 	string	mWorkDB,mSelDB;	// Work and selected DB
 	bool	mSaveAtExit;	// Save at exit

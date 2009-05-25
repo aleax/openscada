@@ -66,7 +66,7 @@ extern "C"
 using namespace Diamond;
 
 //*************************************************
-//* TTpContr                                      * 
+//* TTpContr                                      *
 //*************************************************
 TTpContr::TTpContr( string name ) :
     m_init(false), elem_ai("AI"), elem_ao("AO"), elem_di("DI"), elem_do("DO")

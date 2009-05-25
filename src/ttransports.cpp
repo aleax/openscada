@@ -32,27 +32,27 @@
 //************************************************
 TTransportS::TTransportS( ) : TSubSYS("Transport","Transports",true)
 {
-    //- Input transport BD structure -
+    //> Input transport BD structure
     el_in.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
     el_in.fldAdd( new TFld("MODULE",_("Transport type"),TFld::String,TCfg::Key,"20") );
-    el_in.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
-    el_in.fldAdd( new TFld("DESCRIPT",_("Description"),TFld::String,TFld::NoFlag,"500") );
+    el_in.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
+    el_in.fldAdd( new TFld("DESCRIPT",_("Description"),TFld::String,TCfg::TransltText,"500") );
     el_in.fldAdd( new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"50") );
     el_in.fldAdd( new TFld("PROT",_("Transport protocol"),TFld::String,TFld::NoFlag,"20") );
     el_in.fldAdd( new TFld("START",_("To start"),TFld::Boolean,TFld::NoFlag,"1") );
 
-    //- Output transport BD structure -
+    //> Output transport BD structure
     el_out.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
     el_out.fldAdd( new TFld("MODULE",_("Transport type"),TFld::String,TCfg::Key,"20") );
-    el_out.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
-    el_out.fldAdd( new TFld("DESCRIPT",_("Description"),TFld::String,TFld::NoFlag,"500") );
+    el_out.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
+    el_out.fldAdd( new TFld("DESCRIPT",_("Description"),TFld::String,TCfg::TransltText,"500") );
     el_out.fldAdd( new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"50") );
     el_out.fldAdd( new TFld("START",_("To start"),TFld::Boolean,TFld::NoFlag,"1") );
 
-    //- External hosts' conection DB struct -
+    //> External hosts' conection DB struct
     el_ext.fldAdd( new TFld("OP_USER",_("Open user"),TFld::String,TCfg::Key,"20") );
     el_ext.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
-    el_ext.fldAdd( new TFld("NAME",_("Name"),TFld::String,0,"50") );
+    el_ext.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
     el_ext.fldAdd( new TFld("TRANSP",_("Transport"),TFld::String,0,"20") );
     el_ext.fldAdd( new TFld("ADDR",_("Transport address"),TFld::String,0,"50") );
     el_ext.fldAdd( new TFld("USER",_("Request user"),TFld::String,0,"20") );
@@ -653,7 +653,7 @@ void TTransportIn::preEnable(int flag)
 
 void TTransportIn::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	TCntrNode::cntrCmdProc(opt);
