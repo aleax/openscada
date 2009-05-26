@@ -144,7 +144,7 @@ MBD::MBD( const string &iid, TElem *cf_el ) : TBD(iid,cf_el), hdb(0)
 
 MBD::~MBD( )
 {
-
+    nodeDelAll();
 }
 
 void MBD::postDisable(int flag)
