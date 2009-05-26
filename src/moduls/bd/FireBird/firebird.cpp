@@ -76,9 +76,9 @@ BDMod::BDMod(string name)
     mod		= this;
 }
 
-BDMod::~BDMod()
+BDMod::~BDMod( )
 {
-
+    nodeDelAll();
 }
 
 TBD *BDMod::openBD( const string &iid )
