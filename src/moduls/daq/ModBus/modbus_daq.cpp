@@ -89,7 +89,7 @@ void TTpContr::postEnable( int flag )
 
     //> Parameter type bd structure
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
-    tpPrmAt(t_prm).fldAdd( new TFld("ATTR_LS",_("Attributes list"),TFld::String,TFld::FullText|TCfg::NoVal,"100","") );
+    tpPrmAt(t_prm).fldAdd( new TFld("ATTR_LS",_("Attributes list"),TFld::String,TFld::FullText|TCfg::NoVal|TCfg::TransltText,"100","") );
 }
 
 void TTpContr::load_( )
@@ -147,7 +147,7 @@ string TMdContr::getStatus( )
 {
     string val = TController::getStatus( );
 
-    if( startStat( ) )
+    if( startStat( ) && !redntUse( ) )
     {
 	if( tmDelay ) val += TSYS::strMess(_("Connection error. Restoring in %.6g s."),tmDelay);
 	else val += TSYS::strMess(_("Gather data time %.6g ms. Read %g(%g) registers, %g(%g) coils. Write %g registers, %g coils. Errors of connection %g, of respond %g."),
@@ -434,6 +434,7 @@ void *TMdContr::Task( void *icntr )
 		for( int i_b = 0; i_b < cntr.acqBlksCoil.size(); i_b++ )
 		{
 		    if( cntr.endrun_req ) break;
+		    if( cntr.redntUse( ) ) { cntr.acqBlksCoil[i_b].err = _("4:Server failure."); continue; }
 		    //>> Encode request PDU (Protocol Data Units)
 		    pdu = (char)0x1;					//Function, read multiple coils
 		    pdu += (char)(cntr.acqBlksCoil[i_b].off>>8);	//Address MSB
@@ -459,6 +460,7 @@ void *TMdContr::Task( void *icntr )
 		for( int i_b = 0; i_b < cntr.acqBlksCoilIn.size(); i_b++ )
 		{
 		    if( cntr.endrun_req ) break;
+		    if( cntr.redntUse( ) ) { cntr.acqBlksCoilIn[i_b].err = _("4:Server failure."); continue; }
 		    //>> Encode request PDU (Protocol Data Units)
 		    pdu = (char)0x2;					//Function, read multiple input's coils
 		    pdu += (char)(cntr.acqBlksCoilIn[i_b].off>>8);	//Address MSB
@@ -484,6 +486,7 @@ void *TMdContr::Task( void *icntr )
 		for( int i_b = 0; i_b < cntr.acqBlks.size(); i_b++ )
 		{
 		    if( cntr.endrun_req ) break;
+		    if( cntr.redntUse( ) ) { cntr.acqBlks[i_b].err = _("4:Server failure."); continue; }
 		    //>> Encode request PDU (Protocol Data Units)
 		    pdu = (char)0x3;				//Function, read multiple registers
 		    pdu += (char)((cntr.acqBlks[i_b].off/2)>>8);	//Address MSB
@@ -508,6 +511,7 @@ void *TMdContr::Task( void *icntr )
 		for( int i_b = 0; i_b < cntr.acqBlksIn.size(); i_b++ )
 		{
 		    if( cntr.endrun_req ) break;
+		    if( cntr.redntUse( ) ) { cntr.acqBlksIn[i_b].err = _("4:Server failure."); continue; }
 		    //>> Encode request PDU (Protocol Data Units)
 		    pdu = (char)0x4;				//Function, read multiple input registers
 		    pdu += (char)((cntr.acqBlksIn[i_b].off/2)>>8);	//Address MSB
@@ -673,6 +677,8 @@ void TMdPrm::vlGet( TVal &val )
 	return;
     }
 
+    if( owner().redntUse( ) ) return;
+
     int off = 0;
     string tp = TSYS::strSepParse(val.fld().reserve(),0,':',&off);
     int aid = atoi(TSYS::strSepParse(val.fld().reserve(),0,':',&off).c_str());
@@ -693,6 +699,17 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 {
     if( !enableStat() )	valo.setS( EVAL_STR, 0, true );
 
+    //> Send to active reserve station
+    if( owner().redntUse( ) )
+    {
+	if( valo.getS() == pvl.getS() ) return;
+	XMLNode req("set");
+	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",valo.name())->setText(valo.getS());
+	SYS->daq().at().rdStRequest(owner().workId(),req);
+	return;
+    }
+
+    //> Direct write
     int aid = atoi(TSYS::strSepParse(valo.fld().reserve(),1,':').c_str());
     switch(valo.fld().type())
     {

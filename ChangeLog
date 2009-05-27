@@ -1,3 +1,12 @@
+2009-05-27 Roman
+- !/DAQ/DCON, /DAQ/DAQGate, /DAQ/JavaLikeCalc, /DAQ/ModBus: English translation document is added.
+- /SYS/TFunction: x86 dependent short time intervals calc mechanism is replaced to standard.
+- /SYS: Station identifier information is added to information page.
+- /DB/MySQL, /DB/SQLite: Write empty text correction for translated messages is disabled.
+- !!!:/DAQ/DCON, /DAQ/JavaLikeCalc, /DAQ/ModBus, /Protocol/ModBus: Adapted for redundant support and for multilanguage variable texts support.
+- FIX:/UI/QTCfg: Drop horizontal scroll on item selection is fixed.
+
+
 2009-05-25 Roman
 - !!!!:/SYS,/DB/SQLite,/DB/MySQL: Multilanguage variable texts support is finished. Multilanguage included to DB.SQLite, DB.MySQL and for config file.
 - !!!!:/DemoDB: Demo DB from different languages is merged to one multilanguage (Russian,English and Ukrainian) DB.

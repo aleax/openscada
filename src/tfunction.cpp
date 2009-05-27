@@ -589,9 +589,9 @@ void TValFunc::calc( const string &user )
     if( !mDimens ) mFunc->calc(this);
     else
     {
-	unsigned long long t_cnt = SYS->shrtCnt();
+	long long t_cnt = TSYS::curTime();
 	mFunc->calc(this);
-	tm_calc = 1.0e6*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
+	tm_calc = TSYS::curTime()-t_cnt;
     }
 }
 

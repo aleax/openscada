@@ -111,8 +111,12 @@ class Contr: public TController, public TValFunc
 	Contr( string name_c, const string &daq_db, ::TElem *cfgelem );
 	~Contr( );
 
+	string getStatus( );
+
 	int period( )	{ return vmax(mPer,1); }
 	int iterate( )	{ return mIter; }
+
+	void redntDataUpdate( bool firstArchiveSync = false );
 
     protected:
 	//Methods
@@ -172,10 +176,10 @@ class TipContr : public TTipDAQ
 
 	Res &parseRes( )			{ return parse_res; }
 
-	//- Named constant -
+	//> Named constant
 	NConst *constGet( const char *nm );
 
-	//- BuildIn functions -
+	//> BuildIn functions
 	BFunc *bFuncGet( const char *nm );
 
 	void compileFuncLangs( vector<string> &ls );
@@ -187,6 +191,8 @@ class TipContr : public TTipDAQ
 	void load_( );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
+	bool redntAllow( )	{ return true; }
+
 	TController *ContrAttach( const string &name, const string &daq_db );
 	string optDescr( );
 
@@ -195,7 +201,7 @@ class TipContr : public TTipDAQ
 	int		mLib;		//Function libraries
 	TElem		val_el, lb_el, fnc_el, fncio_el;
 
-	//- General parse data -
+	//> General parse data
 	Res		parse_res;	//Syntax analisator
 	vector<NConst>	mConst;		//Name constant table
 	vector<BFunc>	mBFunc;		//Buildin functions

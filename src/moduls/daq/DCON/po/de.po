@@ -4,32 +4,32 @@
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 #
 #: DCON_client.cpp:55 DCON_client.cpp:107 DCON_client.cpp:110
-#: DCON_client.cpp:246 DCON_client.cpp:260 DCON_client.cpp:582
-#: DCON_client.cpp:583 DCON_client.cpp:584 DCON_client.cpp:585
-#: DCON_client.cpp:586 DCON_client.cpp:587 DCON_client.cpp:588
-#: DCON_client.cpp:589 DCON_client.cpp:590 DCON_client.cpp:591
-#: DCON_client.cpp:592 DCON_client.cpp:593 DCON_client.cpp:594
-#: DCON_client.cpp:595 DCON_client.cpp:596 DCON_client.cpp:597
-#: DCON_client.cpp:598 DCON_client.cpp:604 DCON_client.cpp:605
-#: DCON_client.cpp:606 DCON_client.cpp:607 DCON_client.cpp:608
-#: DCON_client.cpp:609 DCON_client.cpp:610 DCON_client.cpp:611
-#: DCON_client.cpp:612 DCON_client.cpp:613 DCON_client.cpp:614
-#: DCON_client.cpp:615 DCON_client.cpp:616 DCON_client.cpp:617
-#: DCON_client.cpp:618 DCON_client.cpp:619 DCON_client.cpp:620
+#: DCON_client.cpp:256 DCON_client.cpp:270 DCON_client.cpp:590
+#: DCON_client.cpp:591 DCON_client.cpp:592 DCON_client.cpp:593
+#: DCON_client.cpp:594 DCON_client.cpp:595 DCON_client.cpp:596
+#: DCON_client.cpp:597 DCON_client.cpp:598 DCON_client.cpp:599
+#: DCON_client.cpp:600 DCON_client.cpp:601 DCON_client.cpp:602
+#: DCON_client.cpp:603 DCON_client.cpp:604 DCON_client.cpp:605
+#: DCON_client.cpp:606 DCON_client.cpp:612 DCON_client.cpp:613
+#: DCON_client.cpp:614 DCON_client.cpp:615 DCON_client.cpp:616
+#: DCON_client.cpp:617 DCON_client.cpp:618 DCON_client.cpp:619
+#: DCON_client.cpp:620 DCON_client.cpp:621 DCON_client.cpp:622
+#: DCON_client.cpp:623 DCON_client.cpp:624 DCON_client.cpp:625
 #: DCON_client.cpp:626 DCON_client.cpp:627 DCON_client.cpp:628
-#: DCON_client.cpp:629 DCON_client.cpp:630 DCON_client.cpp:631
-#: DCON_client.cpp:632 DCON_client.cpp:633 DCON_client.cpp:634
-#: DCON_client.cpp:636 DCON_client.cpp:637 DCON_client.cpp:638
-#: DCON_client.cpp:643 DCON_client.cpp:644 DCON_client.cpp:645
-#: DCON_client.cpp:646 DCON_client.cpp:647 DCON_client.cpp:648
-#: DCON_client.cpp:649 DCON_client.cpp:650 DCON_client.cpp:651
-#: DCON_client.cpp:656
+#: DCON_client.cpp:634 DCON_client.cpp:635 DCON_client.cpp:636
+#: DCON_client.cpp:637 DCON_client.cpp:638 DCON_client.cpp:639
+#: DCON_client.cpp:640 DCON_client.cpp:641 DCON_client.cpp:642
+#: DCON_client.cpp:644 DCON_client.cpp:645 DCON_client.cpp:646
+#: DCON_client.cpp:651 DCON_client.cpp:652 DCON_client.cpp:653
+#: DCON_client.cpp:654 DCON_client.cpp:655 DCON_client.cpp:656
+#: DCON_client.cpp:657 DCON_client.cpp:658 DCON_client.cpp:659
+#: DCON_client.cpp:664
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DCON 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-18 14:39+0300\n"
+"POT-Creation-Date: 2009-05-26 17:14+0300\n"
 "PO-Revision-Date: 2008-10-22 13:05+0300\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: <de@li.org>\n"
@@ -67,7 +67,7 @@ msgstr ""
 msgid "GPL"
 msgstr ""
 
-#: DCON_client.cpp:50 DCON_client.cpp:235 DCON_client.cpp:265
+#: DCON_client.cpp:50 DCON_client.cpp:245 DCON_client.cpp:275
 msgid "C"
 msgstr ""
 
@@ -109,9 +109,9 @@ msgid "6.2"
 msgstr ""
 
 #: DCON_client.cpp:108 DCON_client.cpp:114 DCON_client.cpp:115
-#: DCON_client.cpp:116 DCON_client.cpp:235 DCON_client.cpp:265
-#: DCON_client.cpp:448 DCON_client.cpp:657 DCON_client.cpp:658
-#: DCON_client.cpp:659 DCON_client.cpp:660
+#: DCON_client.cpp:116 DCON_client.cpp:245 DCON_client.cpp:275
+#: DCON_client.cpp:460 DCON_client.cpp:665 DCON_client.cpp:666
+#: DCON_client.cpp:667 DCON_client.cpp:668
 msgid "1"
 msgstr ""
 
@@ -127,14 +127,14 @@ msgstr ""
 msgid "Gather task priority"
 msgstr "Niveau der Prioritaet der Dateierfassungsaufgabe"
 
-#: DCON_client.cpp:109 DCON_client.cpp:235 DCON_client.cpp:265
-#: DCON_client.cpp:462
+#: DCON_client.cpp:109 DCON_client.cpp:245 DCON_client.cpp:275
+#: DCON_client.cpp:474
 msgid "2"
 msgstr ""
 
-#: DCON_client.cpp:109 DCON_client.cpp:114 DCON_client.cpp:235
-#: DCON_client.cpp:265 DCON_client.cpp:431 DCON_client.cpp:433
-#: DCON_client.cpp:446 DCON_client.cpp:460 DCON_client.cpp:474
+#: DCON_client.cpp:109 DCON_client.cpp:114 DCON_client.cpp:245
+#: DCON_client.cpp:275 DCON_client.cpp:443 DCON_client.cpp:445
+#: DCON_client.cpp:458 DCON_client.cpp:472 DCON_client.cpp:486
 msgid "0"
 msgstr ""
 
@@ -142,7 +142,7 @@ msgstr ""
 msgid "0;100"
 msgstr ""
 
-#: DCON_client.cpp:110 DCON_client.cpp:159 DCON_client.cpp:522
+#: DCON_client.cpp:110 DCON_client.cpp:159 DCON_client.cpp:531
 msgid "ADDR"
 msgstr ""
 
@@ -158,7 +158,7 @@ msgstr ""
 msgid "Standard"
 msgstr "Standard"
 
-#: DCON_client.cpp:114 DCON_client.cpp:543
+#: DCON_client.cpp:114 DCON_client.cpp:551
 msgid "MOD_TP"
 msgstr ""
 
@@ -174,7 +174,7 @@ msgstr ""
 msgid "I-7051;I-7045;I-7063;I-7017;I-7024"
 msgstr ""
 
-#: DCON_client.cpp:115 DCON_client.cpp:544
+#: DCON_client.cpp:115 DCON_client.cpp:552
 msgid "MOD_ADDR"
 msgstr ""
 
@@ -182,8 +182,8 @@ msgstr ""
 msgid "I-7000 module address"
 msgstr "Adresse des Moduls I-7000"
 
-#: DCON_client.cpp:115 DCON_client.cpp:657 DCON_client.cpp:658
-#: DCON_client.cpp:659 DCON_client.cpp:660
+#: DCON_client.cpp:115 DCON_client.cpp:665 DCON_client.cpp:666
+#: DCON_client.cpp:667 DCON_client.cpp:668
 msgid "20"
 msgstr ""
 
@@ -191,7 +191,7 @@ msgstr ""
 msgid "0;255"
 msgstr ""
 
-#: DCON_client.cpp:116 DCON_client.cpp:543
+#: DCON_client.cpp:116 DCON_client.cpp:551
 msgid "CRC_CTRL"
 msgstr ""
 
@@ -211,384 +211,390 @@ msgstr ""
 msgid "DCONPrm_"
 msgstr ""
 
-#: DCON_client.cpp:183 DCON_client.cpp:249 DCON_client.cpp:531
-#: DCON_client.cpp:532
+#: DCON_client.cpp:173
+#, fuzzy, c-format
+msgid "Gather data time %.6g ms. "
+msgstr "Dateierfassungszeit (ms)"
+
+#: DCON_client.cpp:193 DCON_client.cpp:259 DCON_client.cpp:539
+#: DCON_client.cpp:540
 msgid "Serial"
 msgstr "Seriell"
 
-#: DCON_client.cpp:189 DCON_client.cpp:521 DCON_client.cpp:522
+#: DCON_client.cpp:199 DCON_client.cpp:531
 msgid "root"
 msgstr ""
 
-#: DCON_client.cpp:197
+#: DCON_client.cpp:207
 msgid "start"
 msgstr ""
 
-#: DCON_client.cpp:198
+#: DCON_client.cpp:208
 msgid "Gathering task is not started!"
 msgstr "Dateierfassungsaufgabe ist nicht gestartet!"
 
-#: DCON_client.cpp:209
+#: DCON_client.cpp:219
 msgid "stop"
 msgstr ""
 
-#: DCON_client.cpp:210
+#: DCON_client.cpp:220
 msgid "Gathering task is not stopped!"
 msgstr "Dateierfassungsaufgabe ist nicht gestoppt!"
 
-#: DCON_client.cpp:235 DCON_client.cpp:265 DCON_client.cpp:476
+#: DCON_client.cpp:245 DCON_client.cpp:275 DCON_client.cpp:488
 msgid "3"
 msgstr ""
 
-#: DCON_client.cpp:235 DCON_client.cpp:265
+#: DCON_client.cpp:245 DCON_client.cpp:275
 msgid "4"
 msgstr ""
 
-#: DCON_client.cpp:235 DCON_client.cpp:265
+#: DCON_client.cpp:245 DCON_client.cpp:275
 msgid "5"
 msgstr ""
 
-#: DCON_client.cpp:235 DCON_client.cpp:265
+#: DCON_client.cpp:245 DCON_client.cpp:275
 msgid "6"
 msgstr ""
 
-#: DCON_client.cpp:235 DCON_client.cpp:265
+#: DCON_client.cpp:245 DCON_client.cpp:275
 msgid "7"
 msgstr ""
 
-#: DCON_client.cpp:235 DCON_client.cpp:265
+#: DCON_client.cpp:245 DCON_client.cpp:275
 msgid "8"
 msgstr ""
 
-#: DCON_client.cpp:235 DCON_client.cpp:265
+#: DCON_client.cpp:245 DCON_client.cpp:275
 msgid "9"
 msgstr ""
 
-#: DCON_client.cpp:235 DCON_client.cpp:265
+#: DCON_client.cpp:245 DCON_client.cpp:275
 msgid "A"
 msgstr ""
 
-#: DCON_client.cpp:235 DCON_client.cpp:265
+#: DCON_client.cpp:245 DCON_client.cpp:275
 msgid "B"
 msgstr ""
 
-#: DCON_client.cpp:235 DCON_client.cpp:265
+#: DCON_client.cpp:245 DCON_client.cpp:275
 msgid "D"
 msgstr ""
 
-#: DCON_client.cpp:235 DCON_client.cpp:265
+#: DCON_client.cpp:245 DCON_client.cpp:275
 msgid "E"
 msgstr ""
 
-#: DCON_client.cpp:235 DCON_client.cpp:265
+#: DCON_client.cpp:245 DCON_client.cpp:275
 msgid "F"
 msgstr ""
 
-#: DCON_client.cpp:255
+#: DCON_client.cpp:265
 msgid "\r"
 msgstr ""
 
-#: DCON_client.cpp:257
+#: DCON_client.cpp:267
 msgid "14:Request error: "
 msgstr "14:Anfragefehler: "
 
-#: DCON_client.cpp:272
+#: DCON_client.cpp:282
 #, c-format
 msgid "Thread <%u> started. TID: %ld"
 msgstr ""
 
-#: DCON_client.cpp:296 DCON_client.cpp:335 DCON_client.cpp:355
-#: DCON_client.cpp:382
+#: DCON_client.cpp:308 DCON_client.cpp:347 DCON_client.cpp:367
+#: DCON_client.cpp:394
 msgid "@"
 msgstr ""
 
-#: DCON_client.cpp:304 DCON_client.cpp:347 DCON_client.cpp:363
-#: DCON_client.cpp:390 DCON_client.cpp:406 DCON_client.cpp:441
-#: DCON_client.cpp:455 DCON_client.cpp:469 DCON_client.cpp:483
+#: DCON_client.cpp:316 DCON_client.cpp:359 DCON_client.cpp:375
+#: DCON_client.cpp:402 DCON_client.cpp:418 DCON_client.cpp:453
+#: DCON_client.cpp:467 DCON_client.cpp:481 DCON_client.cpp:495
 msgid ">"
 msgstr ""
 
-#: DCON_client.cpp:398 DCON_client.cpp:433 DCON_client.cpp:448
-#: DCON_client.cpp:462 DCON_client.cpp:476
+#: DCON_client.cpp:410 DCON_client.cpp:445 DCON_client.cpp:460
+#: DCON_client.cpp:474 DCON_client.cpp:488
 msgid "#"
 msgstr ""
 
-#: DCON_client.cpp:432 DCON_client.cpp:447 DCON_client.cpp:461
-#: DCON_client.cpp:475
+#: DCON_client.cpp:444 DCON_client.cpp:459 DCON_client.cpp:473
+#: DCON_client.cpp:487
 msgid "+"
 msgstr ""
 
-#: DCON_client.cpp:432 DCON_client.cpp:447 DCON_client.cpp:461
-#: DCON_client.cpp:475
+#: DCON_client.cpp:444 DCON_client.cpp:459 DCON_client.cpp:473
+#: DCON_client.cpp:487
 msgid "."
 msgstr ""
 
-#: DCON_client.cpp:518
+#: DCON_client.cpp:528
 msgid "info"
 msgstr ""
 
-#: DCON_client.cpp:521 DCON_client.cpp:522
+#: DCON_client.cpp:531
 msgid "fld"
 msgstr ""
 
-#: DCON_client.cpp:521 DCON_client.cpp:527
-msgid "/cntr/st/gath_tm"
-msgstr ""
-
-#: DCON_client.cpp:521
-msgid "Gather data time (ms)"
-msgstr "Dateierfassungszeit (ms)"
-
-#: DCON_client.cpp:521 DCON_client.cpp:522
-msgid "tp"
-msgstr ""
-
-#: DCON_client.cpp:521
-msgid "real"
-msgstr ""
-
-#: DCON_client.cpp:522
+#: DCON_client.cpp:531
 msgid "/cntr/cfg/ADDR"
 msgstr ""
 
-#: DCON_client.cpp:522
+#: DCON_client.cpp:531
+msgid "tp"
+msgstr ""
+
+#: DCON_client.cpp:531
 msgid "str"
 msgstr ""
 
-#: DCON_client.cpp:522
+#: DCON_client.cpp:531
 msgid "dest"
 msgstr ""
 
-#: DCON_client.cpp:522
+#: DCON_client.cpp:531
 msgid "select"
 msgstr ""
 
-#: DCON_client.cpp:522 DCON_client.cpp:528
+#: DCON_client.cpp:531 DCON_client.cpp:536
 msgid "/cntr/cfg/serDevLst"
 msgstr ""
 
-#: DCON_client.cpp:526
+#: DCON_client.cpp:535 DCON_client.cpp:729
 msgid "path"
 msgstr ""
 
-#: DCON_client.cpp:534
+#: DCON_client.cpp:542 DCON_client.cpp:729
 msgid "el"
 msgstr ""
 
-#: DCON_client.cpp:543
+#: DCON_client.cpp:551
 msgid "w_attr"
 msgstr ""
 
-#: DCON_client.cpp:582 DCON_client.cpp:604 DCON_client.cpp:626
-#: DCON_client.cpp:643 DCON_client.cpp:656 DCON_client.cpp:702
+#: DCON_client.cpp:590 DCON_client.cpp:612 DCON_client.cpp:634
+#: DCON_client.cpp:651 DCON_client.cpp:664 DCON_client.cpp:711
 msgid "module_err"
 msgstr ""
 
-#: DCON_client.cpp:583 DCON_client.cpp:627
+#: DCON_client.cpp:591 DCON_client.cpp:635
 msgid "DI0"
 msgstr ""
 
-#: DCON_client.cpp:584 DCON_client.cpp:628
+#: DCON_client.cpp:592 DCON_client.cpp:636
 msgid "DI1"
 msgstr ""
 
-#: DCON_client.cpp:585 DCON_client.cpp:629
+#: DCON_client.cpp:593 DCON_client.cpp:637
 msgid "DI2"
 msgstr ""
 
-#: DCON_client.cpp:586 DCON_client.cpp:630
+#: DCON_client.cpp:594 DCON_client.cpp:638
 msgid "DI3"
 msgstr ""
 
-#: DCON_client.cpp:587 DCON_client.cpp:631
+#: DCON_client.cpp:595 DCON_client.cpp:639
 msgid "DI4"
 msgstr ""
 
-#: DCON_client.cpp:588 DCON_client.cpp:632
+#: DCON_client.cpp:596 DCON_client.cpp:640
 msgid "DI5"
 msgstr ""
 
-#: DCON_client.cpp:589 DCON_client.cpp:633
+#: DCON_client.cpp:597 DCON_client.cpp:641
 msgid "DI6"
 msgstr ""
 
-#: DCON_client.cpp:590 DCON_client.cpp:634
+#: DCON_client.cpp:598 DCON_client.cpp:642
 msgid "DI7"
 msgstr ""
 
-#: DCON_client.cpp:591
+#: DCON_client.cpp:599
 msgid "DI8"
 msgstr ""
 
-#: DCON_client.cpp:592
+#: DCON_client.cpp:600
 msgid "DI9"
 msgstr ""
 
-#: DCON_client.cpp:593
+#: DCON_client.cpp:601
 msgid "DI10"
 msgstr ""
 
-#: DCON_client.cpp:594
+#: DCON_client.cpp:602
 msgid "DI11"
 msgstr ""
 
-#: DCON_client.cpp:595
+#: DCON_client.cpp:603
 msgid "DI12"
 msgstr ""
 
-#: DCON_client.cpp:596
+#: DCON_client.cpp:604
 msgid "DI13"
 msgstr ""
 
-#: DCON_client.cpp:597
+#: DCON_client.cpp:605
 msgid "DI14"
 msgstr ""
 
-#: DCON_client.cpp:598
+#: DCON_client.cpp:606
 msgid "DI15"
 msgstr ""
 
-#: DCON_client.cpp:605 DCON_client.cpp:636
+#: DCON_client.cpp:613 DCON_client.cpp:644
 msgid "DO0"
 msgstr ""
 
-#: DCON_client.cpp:606 DCON_client.cpp:637
+#: DCON_client.cpp:614 DCON_client.cpp:645
 msgid "DO1"
 msgstr ""
 
-#: DCON_client.cpp:607 DCON_client.cpp:638
+#: DCON_client.cpp:615 DCON_client.cpp:646
 msgid "DO2"
 msgstr ""
 
-#: DCON_client.cpp:608
+#: DCON_client.cpp:616
 msgid "DO3"
 msgstr ""
 
-#: DCON_client.cpp:609
+#: DCON_client.cpp:617
 msgid "DO4"
 msgstr ""
 
-#: DCON_client.cpp:610
+#: DCON_client.cpp:618
 msgid "DO5"
 msgstr ""
 
-#: DCON_client.cpp:611
+#: DCON_client.cpp:619
 msgid "DO6"
 msgstr ""
 
-#: DCON_client.cpp:612
+#: DCON_client.cpp:620
 msgid "DO7"
 msgstr ""
 
-#: DCON_client.cpp:613
+#: DCON_client.cpp:621
 msgid "DO8"
 msgstr ""
 
-#: DCON_client.cpp:614
+#: DCON_client.cpp:622
 msgid "DO9"
 msgstr ""
 
-#: DCON_client.cpp:615
+#: DCON_client.cpp:623
 msgid "DO10"
 msgstr ""
 
-#: DCON_client.cpp:616
+#: DCON_client.cpp:624
 msgid "DO11"
 msgstr ""
 
-#: DCON_client.cpp:617
+#: DCON_client.cpp:625
 msgid "DO12"
 msgstr ""
 
-#: DCON_client.cpp:618
+#: DCON_client.cpp:626
 msgid "DO13"
 msgstr ""
 
-#: DCON_client.cpp:619
+#: DCON_client.cpp:627
 msgid "DO14"
 msgstr ""
 
-#: DCON_client.cpp:620
+#: DCON_client.cpp:628
 msgid "DO15"
 msgstr ""
 
-#: DCON_client.cpp:644
+#: DCON_client.cpp:652
 msgid "AI0"
 msgstr ""
 
-#: DCON_client.cpp:645
+#: DCON_client.cpp:653
 msgid "AI1"
 msgstr ""
 
-#: DCON_client.cpp:646
+#: DCON_client.cpp:654
 msgid "AI2"
 msgstr ""
 
-#: DCON_client.cpp:647
+#: DCON_client.cpp:655
 msgid "AI3"
 msgstr ""
 
-#: DCON_client.cpp:648
+#: DCON_client.cpp:656
 msgid "AI4"
 msgstr ""
 
-#: DCON_client.cpp:649
+#: DCON_client.cpp:657
 msgid "AI5"
 msgstr ""
 
-#: DCON_client.cpp:650
+#: DCON_client.cpp:658
 msgid "AI6"
 msgstr ""
 
-#: DCON_client.cpp:651
+#: DCON_client.cpp:659
 msgid "AI7"
 msgstr ""
 
-#: DCON_client.cpp:657
+#: DCON_client.cpp:665
 msgid "AO0"
 msgstr ""
 
-#: DCON_client.cpp:657 DCON_client.cpp:658 DCON_client.cpp:659
-#: DCON_client.cpp:660
+#: DCON_client.cpp:665 DCON_client.cpp:666 DCON_client.cpp:667
+#: DCON_client.cpp:668
 msgid "4;20"
 msgstr ""
 
-#: DCON_client.cpp:658
+#: DCON_client.cpp:666
 msgid "AO1"
 msgstr ""
 
-#: DCON_client.cpp:659
+#: DCON_client.cpp:667
 msgid "AO2"
 msgstr ""
 
-#: DCON_client.cpp:660
+#: DCON_client.cpp:668
 msgid "AO3"
 msgstr ""
 
-#: DCON_client.cpp:691
+#: DCON_client.cpp:699
 msgid "err"
 msgstr ""
 
-#: DCON_client.cpp:693
+#: DCON_client.cpp:701
 msgid "1:Parameter is disabled."
 msgstr "1:Parameter ist nicht aktiviert."
 
-#: DCON_client.cpp:694
+#: DCON_client.cpp:702
 msgid "2:Acquisition is stoped."
 msgstr "2:Befragung ist gestoppt."
 
-#: DCON_client.cpp:703 DCON_client.cpp:715
+#: DCON_client.cpp:712 DCON_client.cpp:735
 msgid "DI"
 msgstr ""
 
-#: DCON_client.cpp:704 DCON_client.cpp:716
+#: DCON_client.cpp:713 DCON_client.cpp:736
 msgid "DO"
 msgstr ""
 
-#: DCON_client.cpp:705 DCON_client.cpp:717
+#: DCON_client.cpp:714 DCON_client.cpp:737
 msgid "AI"
 msgstr ""
 
-#: DCON_client.cpp:706 DCON_client.cpp:718
+#: DCON_client.cpp:715 DCON_client.cpp:738
 msgid "AO"
+msgstr ""
+
+#: DCON_client.cpp:728
+msgid "set"
+msgstr ""
+
+#: DCON_client.cpp:729
+#, c-format
+msgid "/%2fserv%2fattr"
+msgstr ""
+
+#: DCON_client.cpp:729
+msgid "id"
 msgstr ""

@@ -993,8 +993,8 @@ msgstr "Включено. "
 #: modbus_prt.cpp:871
 #, c-format
 msgid ""
-"Process time %.2f ms. Requests %.4g. Read registars %.4g, coils %.4g. Writed "
-"registars %.4g, coils %.4g."
+"Process time %.2f ms. Requests %.4g. Read registers %.4g, coils %.4g. Writed "
+"registers %.4g, coils %.4g."
 msgstr ""
 "Час обробки %.2f мс. Запитів %.4g. Прочитано %.4g регістрів, %.4g бітів. "
 "Записано %.4g регістрів, %.4g бітів."

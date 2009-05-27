@@ -500,7 +500,7 @@ void MTable::fieldSet( TConfig &cfg )
 	    bool isTransl = (u_cfg.fld().flg()&TCfg::TransltText && isVarTextTransl);
 	    sid = isTransl ? (lang2Code+"#"+cf_el[i_el]) : cf_el[i_el];
 	    ins_name = ins_name + (next?",\"":"\"") + mod->sqlReqCode(sid,'"') + "\" ";
-	    sval = getVal(u_cfg); if( isTransl && sval.empty() ) sval = " ";
+	    sval = getVal(u_cfg); //if( isTransl && sval.empty() ) sval = " ";
 	    ins_value = ins_value + (next?",'":"'") + mod->sqlReqCode(sval) + "' ";
 	    next = true;
 	}
@@ -518,7 +518,7 @@ void MTable::fieldSet( TConfig &cfg )
 
 	    bool isTransl = (u_cfg.fld().flg()&TCfg::TransltText && isVarTextTransl);
 	    sid = isTransl ? (lang2Code+"#"+cf_el[i_el]) : cf_el[i_el];
-	    sval = getVal(u_cfg); if( isTransl && sval.empty() ) sval = " ";
+	    sval = getVal(u_cfg); //if( isTransl && sval.empty() ) sval = " ";
 	    req = req + (next?",\"":"\"") + mod->sqlReqCode(sid,'"') + "\"='" + mod->sqlReqCode(sval) + "' ";
 	    next = true;
 	}

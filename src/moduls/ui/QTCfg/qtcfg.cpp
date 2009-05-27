@@ -101,6 +101,7 @@ ConfApp::ConfApp( string open_user ) :
     vlay->addWidget(CtrTree);
     CtrTree->setContextMenuPolicy(Qt::CustomContextMenu);
     CtrTree->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    CtrTree->setAutoScroll(false);
     //splitter->setSizeConstraint(QSplitter::KeepSize);
     QStringList headerLabels;
     headerLabels << _("Name") << _("Type") << _("Path");

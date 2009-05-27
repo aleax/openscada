@@ -171,7 +171,7 @@ void Lib::cntrCmdProc( XMLNode *opt )
 	    {
 		ctrMkNode("fld",opt,-1,"/lib/cfg/id",_("Id"),0444,"root","root",1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/lib/cfg/name",_("Name"),DB().empty()?0444:0664,"root","root",2,"tp","str","len","50");
-		ctrMkNode("fld",opt,-1,"/lib/cfg/descr",_("Description"),DB().empty()?0444:0664,"root","root",3,"tp","str","cols","50","rows","5");
+		ctrMkNode("fld",opt,-1,"/lib/cfg/descr",_("Description"),DB().empty()?0444:0664,"root","root",3,"tp","str","cols","100","rows","5");
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/func",_("Functions")))

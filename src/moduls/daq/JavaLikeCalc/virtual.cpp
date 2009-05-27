@@ -109,24 +109,24 @@ void TipContr::postEnable( int flag )
 
     //> Lib's db structure
     lb_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
-    lb_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
-    lb_el.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::NoFlag,"300") );
+    lb_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
+    lb_el.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TCfg::TransltText,"300") );
     lb_el.fldAdd( new TFld("DB",_("Data base"),TFld::String,TFld::NoFlag,"30") );
 
     //> Function's structure
     fnc_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
-    fnc_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
-    fnc_el.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::NoFlag,"300") );
+    fnc_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
+    fnc_el.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TCfg::TransltText,"300") );
     fnc_el.fldAdd( new TFld("MAXCALCTM",_("Maximum calc time"),TFld::Integer,TFld::NoFlag,"3","10","0;999") );
-    fnc_el.fldAdd( new TFld("FORMULA",_("Formula"),TFld::String,TFld::NoFlag,"10000") );
+    fnc_el.fldAdd( new TFld("FORMULA",_("Formula"),TFld::String,TCfg::TransltText,"10000") );
 
     //> Function's IO structure
     fncio_el.fldAdd( new TFld("F_ID",_("Function ID"),TFld::String,TCfg::Key,"20") );
     fncio_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
-    fncio_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
+    fncio_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
     fncio_el.fldAdd( new TFld("TYPE",_("Type"),TFld::Integer,TFld::NoFlag,"1") );
     fncio_el.fldAdd( new TFld("MODE",_("Mode"),TFld::Integer,TFld::NoFlag,"1") );
-    fncio_el.fldAdd( new TFld("DEF",_("Default value"),TFld::String,TFld::NoFlag,"20") );
+    fncio_el.fldAdd( new TFld("DEF",_("Default value"),TFld::String,TCfg::TransltText,"20") );
     fncio_el.fldAdd( new TFld("HIDE",_("Hide"),TFld::Boolean,TFld::NoFlag,"1") );
     fncio_el.fldAdd( new TFld("POS",_("Position"),TFld::Integer,TFld::NoFlag,"3") );
 
@@ -375,6 +375,16 @@ void Contr::postDisable(int flag)
     TController::postDisable(flag);
 }
 
+string Contr::getStatus( )
+{
+    string val = TController::getStatus( );
+
+    if( startStat( ) && !redntUse( ) ) val += TSYS::strMess(_("Calc time %.6g mks. "),calcTm());
+
+    return val;
+}
+
+
 void Contr::enable_( )
 {
     if( !mod->lbPresent(TSYS::strSepParse(mFnc,0,'.')) )
@@ -513,18 +523,21 @@ void *Contr::Task( void *icntr )
 
     while( true )
     {
-	//> Setting special IO
-	int ioI = cntr.ioId("f_frq");	if( ioI >= 0 ) cntr.setR(ioI,(float)cntr.iterate()*1000/(float)cntr.period());
-	ioI = cntr.ioId("f_start");	if( ioI >= 0 ) cntr.setB(ioI,is_start);
-	ioI = cntr.ioId("f_stop");	if( ioI >= 0 ) cntr.setB(ioI,is_stop);
+	if( !cntr.redntUse( ) )
+	{
+	    //> Setting special IO
+	    int ioI = cntr.ioId("f_frq");	if( ioI >= 0 ) cntr.setR(ioI,(float)cntr.iterate()*1000/(float)cntr.period());
+	    ioI = cntr.ioId("f_start");		if( ioI >= 0 ) cntr.setB(ioI,is_start);
+	    ioI = cntr.ioId("f_stop");		if( ioI >= 0 ) cntr.setB(ioI,is_stop);
 
-	for( int i_it = 0; i_it < cntr.mIter; i_it++ )
-	    try { cntr.calc(); }
-	    catch(TError err)
-	    {
-		mess_err(err.cat.c_str(),"%s",err.mess.c_str() ); 
-		mess_err(cntr.nodePath().c_str(),_("Calc controller's function error."));
-	    }
+	    for( int i_it = 0; i_it < cntr.mIter; i_it++ )
+		try { cntr.calc(); }
+		catch(TError err)
+		{
+		    mess_err(err.cat.c_str(),"%s",err.mess.c_str() ); 
+		    mess_err(cntr.nodePath().c_str(),_("Calc controller's function error."));
+		}
+	}
 
 	if( is_stop ) break;
 	TSYS::taskSleep((long long)cntr.period()*1000000);
@@ -538,6 +551,23 @@ void *Contr::Task( void *icntr )
     return NULL;
 }
 
+void Contr::redntDataUpdate( bool firstArchiveSync )
+{
+    TController::redntDataUpdate(firstArchiveSync);
+
+    //> Request for template's attributes values
+    XMLNode req("get"); req.setAttr("path",nodePath(0,true)+"/%2fserv%2ffncAttr");
+
+    //> Send request to first active station for this controller
+    try{ owner().owner().rdStRequest(workId(),req); }
+    catch(TError err) { return; }
+
+    //> Redirect respond to local controller
+    req.setName("set")->setAttr("path","/%2fserv%2ffncAttr");
+    cntrCmd(&req);
+}
+
+
 TParamContr *Contr::ParamAttach( const string &name, int type )
 {
     return new Prm(name,&owner().tpPrmAt(type));
@@ -545,6 +575,28 @@ TParamContr *Contr::ParamAttach( const string &name, int type )
 
 void Contr::cntrCmdProc( XMLNode *opt )
 {
+    //> Service commands process
+    string a_path = opt->attr("path");
+    if( a_path.substr(0,6) == "/serv/" )
+    {
+	if( a_path == "/serv/fncAttr" )
+	{
+	    if( !startStat( ) || !func( ) ) throw TError(nodePath().c_str(),_("No started or no present function."));
+	    if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )
+		for( int i_a = 0; i_a < ioSize(); i_a++ )
+		    opt->childAdd("a")->setAttr("id",func()->io(i_a)->id())->setText(getS(i_a));
+	    if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )
+		for( int i_a = 0; i_a < opt->childSize(); i_a++ )
+		{
+		    int io_id = -1;
+		    if( opt->childGet(i_a)->name() != "a" || (io_id=ioId(opt->childGet(i_a)->attr("id"))) < 0 ) continue;
+		    setS(io_id,opt->childGet(i_a)->text());
+		}
+	}
+	else TController::cntrCmdProc(opt);
+	return;
+    }
+
     //> Get page info
     if( opt->name() == "info" )
     {
@@ -552,7 +604,6 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/FUNC",cfg("FUNC").fld().descr(),0660,"root","root",3,"tp","str","dest","sel_ed","select","/cntr/flst");
 	if( enableStat() && ctrMkNode("area",opt,-1,"/fnc",_("Calcing")) )
 	{
-	    ctrMkNode("fld",opt,-1,"/fnc/clc_tm",_("Calc time (mks)"),0444,"root","root",1,"tp","real");
 	    if(ctrMkNode("table",opt,-1,"/fnc/io",_("Data"),0664,"root","root",2,"s_com","add,del,ins,move","rows","15"))
 	    {
 		ctrMkNode("list",opt,-1,"/fnc/io/0",_("Id"),0664,"root","root",1,"tp","str");
@@ -570,8 +621,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //- Process command to page -
-    string a_path = opt->attr("path");
+    //> Process command to page
     if( a_path == "/cntr/flst" && ctrChkNode(opt) )
     {
 	vector<string> lst;
@@ -595,7 +645,6 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	for( unsigned i_a=0; i_a < lst.size(); i_a++ )
 	    opt->childAdd("el")->setText(c_path+lst[i_a]);
     }
-    else if( a_path == "/fnc/clc_tm" && enableStat() && ctrChkNode(opt) )	opt->setText(TSYS::real2str(calcTm( ),6));
     else if( a_path == "/fnc/io" && enableStat() )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
@@ -738,6 +787,18 @@ Contr &Prm::owner( )	{ return (Contr&)TParamContr::owner(); }
 void Prm::vlSet( TVal &val, const TVariant &pvl )
 {
     if( !enableStat() ) return;
+
+    //> Send to active reserve station
+    if( owner().redntUse( ) )
+    {
+	if( val.getS() == pvl.getS() ) return;
+	XMLNode req("set");
+	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",val.name())->setText(val.getS());
+	SYS->daq().at().rdStRequest(owner().workId(),req);
+	return;
+    }
+
+    //> Direct write
     try
     {
 	int io_id = ((Contr &)owner()).ioId(val.name());
@@ -772,6 +833,7 @@ void Prm::vlGet( TVal &val )
 	else val.setS("0",0,true);
 	return;
     }
+    if( owner().redntUse( ) ) return;
     try
     {
 	int io_id = ((Contr &)owner()).ioId(val.name());

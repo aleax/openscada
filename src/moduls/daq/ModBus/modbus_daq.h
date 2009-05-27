@@ -181,6 +181,8 @@ class TTpContr: public TTipDAQ
 	void	load_( );
 	void	save_( );
 
+	bool redntAllow( )	{ return true; }
+
     private:
 	//Methods
 	void	postEnable( int flag );

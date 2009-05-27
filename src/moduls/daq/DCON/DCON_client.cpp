@@ -166,6 +166,16 @@ TMdContr::~TMdContr()
     if( run_st ) stop();
 }
 
+string TMdContr::getStatus( )
+{
+    string val = TController::getStatus( );
+
+    if( startStat( ) && !redntUse( ) ) val += TSYS::strMess(_("Gather data time %.6g ms. "),tm_gath);
+
+    return val;
+}
+
+
 TParamContr *TMdContr::ParamAttach( const string &name, int type )
 {
     return new TMdPrm( name, &owner().tpPrmAt(type) );
@@ -279,222 +289,222 @@ void *TMdContr::Task( void *icntr )
     {
 	while( !cntr.endrun_req )
 	{
-	    long long t_cnt = SYS->shrtCnt();
+	    if( !cntr.redntUse( ) )
+	    {
+		long long t_cnt = TSYS::curTime();
 
-	    //- Update controller's data -
-	    ResAlloc res( cntr.en_res, false );
-	    for( int i_p = 0; i_p < cntr.p_hd.size(); i_p++ )
-		{
-		    if( cntr.endrun_req ) break;
-		    //- Request with I-7000 modules
-		    switch (cntr.p_hd[i_p].at().mod_tp)
+		//> Update controller's data
+		ResAlloc res( cntr.en_res, false );
+		for( int i_p = 0; i_p < cntr.p_hd.size(); i_p++ )
 		    {
-			//- Read DAQ parameter's for I-7051 module
-			case 0:
+			if( cntr.endrun_req ) break;
+			//> Request with I-7000 modules
+			switch (cntr.p_hd[i_p].at().mod_tp)
 			{
-			    //- Request with I-7051 module
-			    pdu = "@" + HexSymbol[15 & (cntr.p_hd[i_p].at().mod_addr>>4)] + HexSymbol[15 & cntr.p_hd[i_p].at().mod_addr];
-			    if (cntr.p_hd[i_p].at().crc_ctrl) pdu+=cntr.DCONCRC(pdu);
-//			    cout << pdu.substr(0,pdu.size()) << " writing\n";
-			    cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu);
-//			    cout << pdu.substr(0,pdu.size()-1) << " reading\n";
-
-			    //Check errors
-			    cntr.p_hd[i_p].at().module_err=false;
-			    if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") cntr.p_hd[i_p].at().module_err=true;
-			    if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(5,2))!=(cntr.DCONCRC(pdu.substr(0,5)))) cntr.p_hd[i_p].at().module_err=true;
-
-			    //Set DAQ atributes
-			    if (!cntr.p_hd[i_p].at().module_err)
+			    //> Read DAQ parameter's for I-7051 module
+			    case 0:
 			    {
-				unsigned int DI = strtoul(pdu.substr(1,4).c_str(),NULL,16);
-//				cout << DI << "\n";
-				cntr.p_hd[i_p].at().DI[0]=0x00001 & DI;
-				cntr.p_hd[i_p].at().DI[1]=0x00002 & DI;
-				cntr.p_hd[i_p].at().DI[2]=0x00004 & DI;
-				cntr.p_hd[i_p].at().DI[3]=0x00008 & DI;
-				cntr.p_hd[i_p].at().DI[4]=0x00010 & DI;
-				cntr.p_hd[i_p].at().DI[5]=0x00020 & DI;
-				cntr.p_hd[i_p].at().DI[6]=0x00040 & DI;
-				cntr.p_hd[i_p].at().DI[7]=0x00080 & DI;
-				cntr.p_hd[i_p].at().DI[8]=0x00100 & DI;
-				cntr.p_hd[i_p].at().DI[9]=0x00200 & DI;
-				cntr.p_hd[i_p].at().DI[10]=0x00400 & DI;
-				cntr.p_hd[i_p].at().DI[11]=0x00800 & DI;
-				cntr.p_hd[i_p].at().DI[12]=0x01000 & DI;
-				cntr.p_hd[i_p].at().DI[13]=0x02000 & DI;
-				cntr.p_hd[i_p].at().DI[14]=0x04000 & DI;
-				cntr.p_hd[i_p].at().DI[15]=0x08000 & DI;
+				//> Request with I-7051 module
+				pdu = "@" + HexSymbol[15 & (cntr.p_hd[i_p].at().mod_addr>>4)] + HexSymbol[15 & cntr.p_hd[i_p].at().mod_addr];
+				if (cntr.p_hd[i_p].at().crc_ctrl) pdu+=cntr.DCONCRC(pdu);
+//				cout << pdu.substr(0,pdu.size()) << " writing\n";
+				cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu);
+//				cout << pdu.substr(0,pdu.size()-1) << " reading\n";
+
+				//Check errors
+				cntr.p_hd[i_p].at().module_err=false;
+				if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") cntr.p_hd[i_p].at().module_err=true;
+				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(5,2))!=(cntr.DCONCRC(pdu.substr(0,5)))) cntr.p_hd[i_p].at().module_err=true;
+
+				//Set DAQ atributes
+				if (!cntr.p_hd[i_p].at().module_err)
+				{
+				    unsigned int DI = strtoul(pdu.substr(1,4).c_str(),NULL,16);
+//				    cout << DI << "\n";
+				    cntr.p_hd[i_p].at().DI[0]=0x00001 & DI;
+				    cntr.p_hd[i_p].at().DI[1]=0x00002 & DI;
+				    cntr.p_hd[i_p].at().DI[2]=0x00004 & DI;
+				    cntr.p_hd[i_p].at().DI[3]=0x00008 & DI;
+				    cntr.p_hd[i_p].at().DI[4]=0x00010 & DI;
+				    cntr.p_hd[i_p].at().DI[5]=0x00020 & DI;
+				    cntr.p_hd[i_p].at().DI[6]=0x00040 & DI;
+				    cntr.p_hd[i_p].at().DI[7]=0x00080 & DI;
+				    cntr.p_hd[i_p].at().DI[8]=0x00100 & DI;
+				    cntr.p_hd[i_p].at().DI[9]=0x00200 & DI;
+				    cntr.p_hd[i_p].at().DI[10]=0x00400 & DI;
+				    cntr.p_hd[i_p].at().DI[11]=0x00800 & DI;
+				    cntr.p_hd[i_p].at().DI[12]=0x01000 & DI;
+				    cntr.p_hd[i_p].at().DI[13]=0x02000 & DI;
+				    cntr.p_hd[i_p].at().DI[14]=0x04000 & DI;
+				    cntr.p_hd[i_p].at().DI[15]=0x08000 & DI;
+				}
+				break;
 			    }
-			    break;
-			}
-			//- Write DAQ parameter's for I-7045 module
-			case 1:
-			{
-			    //- Request with I-7045 module
-			    pdu = "@" + HexSymbol[15 & (cntr.p_hd[i_p].at().mod_addr>>4)] + HexSymbol[15 & cntr.p_hd[i_p].at().mod_addr];
-			    pdu+=HexSymbol[8*(1&cntr.p_hd[i_p].at().DO[15])+4*(1&cntr.p_hd[i_p].at().DO[14])+2*(1&cntr.p_hd[i_p].at().DO[13])+(1&cntr.p_hd[i_p].at().DO[12])];
-			    pdu+=HexSymbol[8*(1&cntr.p_hd[i_p].at().DO[11])+4*(1&cntr.p_hd[i_p].at().DO[10])+2*(1&cntr.p_hd[i_p].at().DO[9])+(1&cntr.p_hd[i_p].at().DO[8])];
-			    pdu+=HexSymbol[8*(1&cntr.p_hd[i_p].at().DO[7])+4*(1&cntr.p_hd[i_p].at().DO[6])+2*(1&cntr.p_hd[i_p].at().DO[5])+(1&cntr.p_hd[i_p].at().DO[4])];
-			    pdu+=HexSymbol[8*(1&cntr.p_hd[i_p].at().DO[3])+4*(1&cntr.p_hd[i_p].at().DO[2])+2*(1&cntr.p_hd[i_p].at().DO[1])+(1&cntr.p_hd[i_p].at().DO[0])];
-			    if (cntr.p_hd[i_p].at().crc_ctrl) pdu+=cntr.DCONCRC(pdu);
-//			    cout << pdu.substr(0,pdu.size()) << " writing\n";
-			    cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu);
-//			    cout << pdu.substr(0,pdu.size()-1) << " reading\n";
-
-			    //Check errors
-			    cntr.p_hd[i_p].at().module_err=false;
-			    if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") cntr.p_hd[i_p].at().module_err=true;
-			    if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) cntr.p_hd[i_p].at().module_err=true;
-			    break;
-			}
-			//- Read-Write DAQ parameter's for I-7063 module
-			case 2:
-			{
-			    //- Request with I-7063 module
-			    pdu = "@" + HexSymbol[15 & (cntr.p_hd[i_p].at().mod_addr>>4)] + HexSymbol[15 & cntr.p_hd[i_p].at().mod_addr];
-			    if (cntr.p_hd[i_p].at().crc_ctrl) pdu+=cntr.DCONCRC(pdu);
-//			    cout << pdu.substr(0,pdu.size()) << " writing\n";
-			    cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu);
-//			    cout << pdu.substr(0,pdu.size()-1) << " reading\n";
-
-			    //Check errors
-			    cntr.p_hd[i_p].at().module_err=false;
-			    if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") cntr.p_hd[i_p].at().module_err=true;
-			    if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(5,2))!=(cntr.DCONCRC(pdu.substr(0,5)))) cntr.p_hd[i_p].at().module_err=true;
-
-			    //Set DAQ atributes
-			    if (!cntr.p_hd[i_p].at().module_err)
+			    //> Write DAQ parameter's for I-7045 module
+			    case 1:
 			    {
-				unsigned int DI = strtoul(pdu.substr(3,2).c_str(),NULL,16);
-//				cout << DI << "\n";
-				cntr.p_hd[i_p].at().DI[0]=0x00001 & DI;
-				cntr.p_hd[i_p].at().DI[1]=0x00002 & DI;
-				cntr.p_hd[i_p].at().DI[2]=0x00004 & DI;
-				cntr.p_hd[i_p].at().DI[3]=0x00008 & DI;
-				cntr.p_hd[i_p].at().DI[4]=0x00010 & DI;
-				cntr.p_hd[i_p].at().DI[5]=0x00020 & DI;
-				cntr.p_hd[i_p].at().DI[6]=0x00040 & DI;
-				cntr.p_hd[i_p].at().DI[7]=0x00080 & DI;
+				//> Request with I-7045 module
+				pdu = "@" + HexSymbol[15 & (cntr.p_hd[i_p].at().mod_addr>>4)] + HexSymbol[15 & cntr.p_hd[i_p].at().mod_addr];
+				pdu+=HexSymbol[8*(1&cntr.p_hd[i_p].at().DO[15])+4*(1&cntr.p_hd[i_p].at().DO[14])+2*(1&cntr.p_hd[i_p].at().DO[13])+(1&cntr.p_hd[i_p].at().DO[12])];
+				pdu+=HexSymbol[8*(1&cntr.p_hd[i_p].at().DO[11])+4*(1&cntr.p_hd[i_p].at().DO[10])+2*(1&cntr.p_hd[i_p].at().DO[9])+(1&cntr.p_hd[i_p].at().DO[8])];
+				pdu+=HexSymbol[8*(1&cntr.p_hd[i_p].at().DO[7])+4*(1&cntr.p_hd[i_p].at().DO[6])+2*(1&cntr.p_hd[i_p].at().DO[5])+(1&cntr.p_hd[i_p].at().DO[4])];
+				pdu+=HexSymbol[8*(1&cntr.p_hd[i_p].at().DO[3])+4*(1&cntr.p_hd[i_p].at().DO[2])+2*(1&cntr.p_hd[i_p].at().DO[1])+(1&cntr.p_hd[i_p].at().DO[0])];
+				if (cntr.p_hd[i_p].at().crc_ctrl) pdu+=cntr.DCONCRC(pdu);
+//				cout << pdu.substr(0,pdu.size()) << " writing\n";
+				cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu);
+//				cout << pdu.substr(0,pdu.size()-1) << " reading\n";
+
+				//Check errors
+				cntr.p_hd[i_p].at().module_err=false;
+				if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") cntr.p_hd[i_p].at().module_err=true;
+				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) cntr.p_hd[i_p].at().module_err=true;
+				break;
 			    }
-
-			    //- Request with I-7063 module
-			    pdu = "@" + HexSymbol[15 & (cntr.p_hd[i_p].at().mod_addr>>4)] + HexSymbol[15 & cntr.p_hd[i_p].at().mod_addr];
-			    pdu+=HexSymbol[4*(1&cntr.p_hd[i_p].at().DO[2])+2*(1&cntr.p_hd[i_p].at().DO[1])+(1&cntr.p_hd[i_p].at().DO[0])];
-			    if (cntr.p_hd[i_p].at().crc_ctrl) pdu+=cntr.DCONCRC(pdu);
-//			    cout << pdu.substr(0,pdu.size()) << " writing\n";
-			    cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu);
-//			    cout << pdu.substr(0,pdu.size()-1) << " reading\n";
-
-			    //Check errors
-			    if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") cntr.p_hd[i_p].at().module_err=true;
-			    if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) cntr.p_hd[i_p].at().module_err=true;
-			    break;
-			}
-			//- Read DAQ parameter's for I-7017 module
-			case 3:
-			{
-			    //- Request with I-7017 module
-			    pdu = "#" + HexSymbol[15 & (cntr.p_hd[i_p].at().mod_addr>>4)] + HexSymbol[15 & cntr.p_hd[i_p].at().mod_addr];
-			    if (cntr.p_hd[i_p].at().crc_ctrl) pdu+=cntr.DCONCRC(pdu);
-//			    cout << pdu.substr(0,pdu.size()) << " writing\n";
-			    cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu);
-//			    cout << pdu.substr(0,pdu.size()-1) << " reading\n";
-
-			    //Check errors
-			    cntr.p_hd[i_p].at().module_err=false;
-			    if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") cntr.p_hd[i_p].at().module_err=true;
-			    if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(57,2))!=(cntr.DCONCRC(pdu.substr(0,57)))) cntr.p_hd[i_p].at().module_err=true;
-
-			    //Set DAQ atributes
-			    if (!cntr.p_hd[i_p].at().module_err)
+			    //> Read-Write DAQ parameter's for I-7063 module
+			    case 2:
 			    {
-				cntr.p_hd[i_p].at().AI[0]=atof(pdu.substr(1,7).c_str());
-				cntr.p_hd[i_p].at().AI[1]=atof(pdu.substr(8,7).c_str());
-				cntr.p_hd[i_p].at().AI[2]=atof(pdu.substr(15,7).c_str());
-				cntr.p_hd[i_p].at().AI[3]=atof(pdu.substr(22,7).c_str());
-				cntr.p_hd[i_p].at().AI[4]=atof(pdu.substr(29,7).c_str());
-				cntr.p_hd[i_p].at().AI[5]=atof(pdu.substr(36,7).c_str());
-				cntr.p_hd[i_p].at().AI[6]=atof(pdu.substr(43,7).c_str());
-				cntr.p_hd[i_p].at().AI[7]=atof(pdu.substr(50,7).c_str());
+				//> Request with I-7063 module
+				pdu = "@" + HexSymbol[15 & (cntr.p_hd[i_p].at().mod_addr>>4)] + HexSymbol[15 & cntr.p_hd[i_p].at().mod_addr];
+				if (cntr.p_hd[i_p].at().crc_ctrl) pdu+=cntr.DCONCRC(pdu);
+//				cout << pdu.substr(0,pdu.size()) << " writing\n";
+				cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu);
+//				cout << pdu.substr(0,pdu.size()-1) << " reading\n";
+
+				//Check errors
+				cntr.p_hd[i_p].at().module_err=false;
+				if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") cntr.p_hd[i_p].at().module_err=true;
+				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(5,2))!=(cntr.DCONCRC(pdu.substr(0,5)))) cntr.p_hd[i_p].at().module_err=true;
+
+				//Set DAQ atributes
+				if (!cntr.p_hd[i_p].at().module_err)
+				{
+				    unsigned int DI = strtoul(pdu.substr(3,2).c_str(),NULL,16);
+//				    cout << DI << "\n";
+				    cntr.p_hd[i_p].at().DI[0]=0x00001 & DI;
+				    cntr.p_hd[i_p].at().DI[1]=0x00002 & DI;
+				    cntr.p_hd[i_p].at().DI[2]=0x00004 & DI;
+				    cntr.p_hd[i_p].at().DI[3]=0x00008 & DI;
+				    cntr.p_hd[i_p].at().DI[4]=0x00010 & DI;
+				    cntr.p_hd[i_p].at().DI[5]=0x00020 & DI;
+				    cntr.p_hd[i_p].at().DI[6]=0x00040 & DI;
+				    cntr.p_hd[i_p].at().DI[7]=0x00080 & DI;
+				}
+
+				//> Request with I-7063 module
+				pdu = "@" + HexSymbol[15 & (cntr.p_hd[i_p].at().mod_addr>>4)] + HexSymbol[15 & cntr.p_hd[i_p].at().mod_addr];
+				pdu+=HexSymbol[4*(1&cntr.p_hd[i_p].at().DO[2])+2*(1&cntr.p_hd[i_p].at().DO[1])+(1&cntr.p_hd[i_p].at().DO[0])];
+				if (cntr.p_hd[i_p].at().crc_ctrl) pdu+=cntr.DCONCRC(pdu);
+//				cout << pdu.substr(0,pdu.size()) << " writing\n";
+				cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu);
+//				cout << pdu.substr(0,pdu.size()-1) << " reading\n";
+
+				//Check errors
+				if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") cntr.p_hd[i_p].at().module_err=true;
+				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) cntr.p_hd[i_p].at().module_err=true;
+				break;
 			    }
-			    break;
-			}
-			//- Write DAQ parameter's for I-7024 module
-			case 4:
-			{
-			    int dec, sign;
-			    int ndig = 3;
+			    //> Read DAQ parameter's for I-7017 module
+			    case 3:
+			    {
+				//> Request with I-7017 module
+				pdu = "#" + HexSymbol[15 & (cntr.p_hd[i_p].at().mod_addr>>4)] + HexSymbol[15 & cntr.p_hd[i_p].at().mod_addr];
+				if (cntr.p_hd[i_p].at().crc_ctrl) pdu+=cntr.DCONCRC(pdu);
+//				cout << pdu.substr(0,pdu.size()) << " writing\n";
+				cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu);
+//				cout << pdu.substr(0,pdu.size()-1) << " reading\n";
 
-			    //- Request with I-7024 module
-			    string str=fcvt(cntr.p_hd[i_p].at().AO[0],ndig,&dec,&sign);
-			    if (dec==1) str="0"+str;
-			    str="+"+str.substr(0,2)+"."+str.substr(2,3);
-			    pdu = "#" + HexSymbol[15 & (cntr.p_hd[i_p].at().mod_addr>>4)] + HexSymbol[15 & cntr.p_hd[i_p].at().mod_addr]+"0"+str;
-			    if (cntr.p_hd[i_p].at().crc_ctrl) pdu+=cntr.DCONCRC(pdu);
-//			    cout << pdu.substr(0,pdu.size()) << " writing\n";
-			    cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu);
-//			    cout << pdu.substr(0,pdu.size()-1) << " reading\n";
+				//Check errors
+				cntr.p_hd[i_p].at().module_err=false;
+				if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") cntr.p_hd[i_p].at().module_err=true;
+				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(57,2))!=(cntr.DCONCRC(pdu.substr(0,57)))) cntr.p_hd[i_p].at().module_err=true;
 
-			    //Check errors
-			    cntr.p_hd[i_p].at().module_err=false;
-			    if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") cntr.p_hd[i_p].at().module_err=true;
-			    if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) cntr.p_hd[i_p].at().module_err=true;
+				//Set DAQ atributes
+				if (!cntr.p_hd[i_p].at().module_err)
+				{
+				    cntr.p_hd[i_p].at().AI[0]=atof(pdu.substr(1,7).c_str());
+				    cntr.p_hd[i_p].at().AI[1]=atof(pdu.substr(8,7).c_str());
+				    cntr.p_hd[i_p].at().AI[2]=atof(pdu.substr(15,7).c_str());
+				    cntr.p_hd[i_p].at().AI[3]=atof(pdu.substr(22,7).c_str());
+				    cntr.p_hd[i_p].at().AI[4]=atof(pdu.substr(29,7).c_str());
+				    cntr.p_hd[i_p].at().AI[5]=atof(pdu.substr(36,7).c_str());
+				    cntr.p_hd[i_p].at().AI[6]=atof(pdu.substr(43,7).c_str());
+				    cntr.p_hd[i_p].at().AI[7]=atof(pdu.substr(50,7).c_str());
+				}
+				break;
+			    }
+			    //> Write DAQ parameter's for I-7024 module
+			    case 4:
+			    {
+				int dec, sign;
+				int ndig = 3;
 
-			    //- Request with I-7024 module
-			    str=fcvt(cntr.p_hd[i_p].at().AO[1],ndig,&dec,&sign);
-			    if (dec==1) str="0"+str;
-			    str="+"+str.substr(0,2)+"."+str.substr(2,3);
-			    pdu = "#" + HexSymbol[15 & (cntr.p_hd[i_p].at().mod_addr>>4)] + HexSymbol[15 & cntr.p_hd[i_p].at().mod_addr]+"1"+str;
-			    if (cntr.p_hd[i_p].at().crc_ctrl) pdu+=cntr.DCONCRC(pdu);
-//			    cout << pdu.substr(0,pdu.size()) << " writing\n";
-			    cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu);
-//			    cout << pdu.substr(0,pdu.size()-1) << " reading\n";
+				//> Request with I-7024 module
+				string str=fcvt(cntr.p_hd[i_p].at().AO[0],ndig,&dec,&sign);
+				if (dec==1) str="0"+str;
+				str="+"+str.substr(0,2)+"."+str.substr(2,3);
+				pdu = "#" + HexSymbol[15 & (cntr.p_hd[i_p].at().mod_addr>>4)] + HexSymbol[15 & cntr.p_hd[i_p].at().mod_addr]+"0"+str;
+				if (cntr.p_hd[i_p].at().crc_ctrl) pdu+=cntr.DCONCRC(pdu);
+//				cout << pdu.substr(0,pdu.size()) << " writing\n";
+				cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu);
+//				cout << pdu.substr(0,pdu.size()-1) << " reading\n";
 
-			    //Check errors
-			    if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") cntr.p_hd[i_p].at().module_err=true;
-			    if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) cntr.p_hd[i_p].at().module_err=true;
+				//Check errors
+				cntr.p_hd[i_p].at().module_err=false;
+				if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") cntr.p_hd[i_p].at().module_err=true;
+				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) cntr.p_hd[i_p].at().module_err=true;
 
-			    //- Request with I-7024 module
-			    str=fcvt(cntr.p_hd[i_p].at().AO[2],ndig,&dec,&sign);
-			    if (dec==1) str="0"+str;
-			    str="+"+str.substr(0,2)+"."+str.substr(2,3);
-			    pdu = "#" + HexSymbol[15 & (cntr.p_hd[i_p].at().mod_addr>>4)] + HexSymbol[15 & cntr.p_hd[i_p].at().mod_addr]+"2"+str;
-			    if (cntr.p_hd[i_p].at().crc_ctrl) pdu+=cntr.DCONCRC(pdu);
-//			    cout << pdu.substr(0,pdu.size()) << " writing\n";
-			    cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu);
-//			    cout << pdu.substr(0,pdu.size()-1) << " reading\n";
+				//> Request with I-7024 module
+				str=fcvt(cntr.p_hd[i_p].at().AO[1],ndig,&dec,&sign);
+				if (dec==1) str="0"+str;
+				str="+"+str.substr(0,2)+"."+str.substr(2,3);
+				pdu = "#" + HexSymbol[15 & (cntr.p_hd[i_p].at().mod_addr>>4)] + HexSymbol[15 & cntr.p_hd[i_p].at().mod_addr]+"1"+str;
+				if (cntr.p_hd[i_p].at().crc_ctrl) pdu+=cntr.DCONCRC(pdu);
+//				cout << pdu.substr(0,pdu.size()) << " writing\n";
+				cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu);
+//				cout << pdu.substr(0,pdu.size()-1) << " reading\n";
 
-			    //Check errors
-			    if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") cntr.p_hd[i_p].at().module_err=true;
-			    if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) cntr.p_hd[i_p].at().module_err=true;
+				//Check errors
+				if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") cntr.p_hd[i_p].at().module_err=true;
+				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) cntr.p_hd[i_p].at().module_err=true;
 
-			    //- Request with I-7024 module
-			    str=fcvt(cntr.p_hd[i_p].at().AO[3],ndig,&dec,&sign);
-			    if (dec==1) str="0"+str;
-			    str="+"+str.substr(0,2)+"."+str.substr(2,3);
-			    pdu = "#" + HexSymbol[15 & (cntr.p_hd[i_p].at().mod_addr>>4)] + HexSymbol[15 & cntr.p_hd[i_p].at().mod_addr]+"3"+str;
-			    if (cntr.p_hd[i_p].at().crc_ctrl) pdu+=cntr.DCONCRC(pdu);
-//			    cout << pdu.substr(0,pdu.size()) << " writing\n";
-			    cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu);
-//			    cout << pdu.substr(0,pdu.size()-1) << " reading\n";
+				//> Request with I-7024 module
+				str=fcvt(cntr.p_hd[i_p].at().AO[2],ndig,&dec,&sign);
+				if (dec==1) str="0"+str;
+				str="+"+str.substr(0,2)+"."+str.substr(2,3);
+				pdu = "#" + HexSymbol[15 & (cntr.p_hd[i_p].at().mod_addr>>4)] + HexSymbol[15 & cntr.p_hd[i_p].at().mod_addr]+"2"+str;
+				if (cntr.p_hd[i_p].at().crc_ctrl) pdu+=cntr.DCONCRC(pdu);
+//				cout << pdu.substr(0,pdu.size()) << " writing\n";
+				cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu);
+//				cout << pdu.substr(0,pdu.size()-1) << " reading\n";
 
-			    //Check errors
-			    if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") cntr.p_hd[i_p].at().module_err=true;
-			    if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) cntr.p_hd[i_p].at().module_err=true;
+				//Check errors
+				if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") cntr.p_hd[i_p].at().module_err=true;
+				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) cntr.p_hd[i_p].at().module_err=true;
 
-			    break;
-			}
-			default:
-			{
-			    break;
+				//- Request with I-7024 module
+				str=fcvt(cntr.p_hd[i_p].at().AO[3],ndig,&dec,&sign);
+				if (dec==1) str="0"+str;
+				str="+"+str.substr(0,2)+"."+str.substr(2,3);
+				pdu = "#" + HexSymbol[15 & (cntr.p_hd[i_p].at().mod_addr>>4)] + HexSymbol[15 & cntr.p_hd[i_p].at().mod_addr]+"3"+str;
+				if (cntr.p_hd[i_p].at().crc_ctrl) pdu+=cntr.DCONCRC(pdu);
+//				cout << pdu.substr(0,pdu.size()) << " writing\n";
+				cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu);
+//				cout << pdu.substr(0,pdu.size()-1) << " reading\n";
+
+				//Check errors
+				if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") cntr.p_hd[i_p].at().module_err=true;
+				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) cntr.p_hd[i_p].at().module_err=true;
+
+				break;
+			    }
+			    default:	break;
 			}
 		    }
-		}
-	    res.release();
+		res.release();
 
-	    //- Calc acquisition process time -
-	    cntr.tm_gath = 1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
+		//> Calc acquisition process time
+		cntr.tm_gath = 1e-3*(TSYS::curTime()-t_cnt);
+	    }
 
 	    //- Calc next work time and sleep -
 	    clock_gettime( CLOCK_REALTIME, &get_tm );
@@ -518,14 +528,12 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TController::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/cntr/st/gath_tm",_("Gather data time (ms)"),0444,"root","root",1,"tp","real");
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",cfg("ADDR").fld().descr(),0664,"root","root",3,"tp","str","dest","select","select","/cntr/cfg/serDevLst");
 	return;
     }
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/cntr/st/gath_tm" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(tm_gath,6));
-    else if( a_path == "/cntr/cfg/serDevLst" && ctrChkNode(opt) )
+    if( a_path == "/cntr/cfg/serDevLst" && ctrChkNode(opt) )
     {
 	vector<string> sls;
 	if( SYS->transport().at().modPresent("Serial") )
@@ -697,6 +705,7 @@ void TMdPrm::vlGet( TVal &val )
 	return;
     }
 
+    if( owner().redntUse( ) ) return;
 //    cout<<val.name().substr(0,2)<<"  "<<atoi(val.name().substr(2,val.name().size()-2).c_str())<<"\n";
 
     if (val.name()=="module_err") val.setB(module_err,0,true);
@@ -712,6 +721,17 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 {
     if( !enableStat() )	valo.setI( EVAL_INT, 0, true );
 
+    //> Send to active reserve station
+    if( owner().redntUse( ) )
+    {
+	if( valo.getS() == pvl.getS() ) return;
+	XMLNode req("set");
+	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",valo.name())->setText(valo.getS());
+	SYS->daq().at().rdStRequest(owner().workId(),req);
+	return;
+    }
+
+    //> Direct write
     if (valo.name().substr(0,2)=="DI") DI[atoi(valo.name().substr(2,valo.name().size()-2).c_str())]=valo.getB(NULL,true);
     if (valo.name().substr(0,2)=="DO") DO[atoi(valo.name().substr(2,valo.name().size()-2).c_str())]=valo.getB(NULL,true);
     if (valo.name().substr(0,2)=="AI") AI[atoi(valo.name().substr(2,valo.name().size()-2).c_str())]=valo.getR(NULL,true);

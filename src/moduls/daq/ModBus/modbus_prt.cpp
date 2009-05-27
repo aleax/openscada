@@ -56,8 +56,8 @@ TProt::TProt( string name ) : mPrtLen(0)
 
     //> Node DB structure
     mNodeEl.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,"20") );
-    mNodeEl.fldAdd( new TFld("NAME",_("Name"),TFld::String,0,"50") );
-    mNodeEl.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::FullText,"300") );
+    mNodeEl.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
+    mNodeEl.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300") );
     mNodeEl.fldAdd( new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0") );
     mNodeEl.fldAdd( new TFld("ADDR",_("Address"),TFld::Integer,0,"3","1","1;247") );
     mNodeEl.fldAdd( new TFld("InTR",_("Input transport"),TFld::String,0,"20","*") );
@@ -65,7 +65,7 @@ TProt::TProt( string name ) : mPrtLen(0)
     mNodeEl.fldAdd( new TFld("MODE",_("Mode"),TFld::Integer,TFld::Selected,"1","0","0;1;2",_("Data;Gateway node;Gateway net")) );
     //>> For "Data" mode
     mNodeEl.fldAdd( new TFld("DT_PER",_("Calc data period (s)"),TFld::Real,0,"5.3","1","0.001;99") );
-    mNodeEl.fldAdd( new TFld("DT_PROG",_("Programm"),TFld::String,TFld::NoFlag,"10000") );
+    mNodeEl.fldAdd( new TFld("DT_PROG",_("Programm"),TFld::String,TCfg::TransltText,"10000") );
     //>> For "Gateway" mode
     mNodeEl.fldAdd( new TFld("TO_TR",_("To transport"),TFld::String,0,"20") );
     mNodeEl.fldAdd( new TFld("TO_PRT",_("To protocol"),TFld::String,TFld::Selected,"5","RTU","RTU;ASCII;TCP",_("RTU;ASCII;TCP/IP")) );
@@ -74,10 +74,10 @@ TProt::TProt( string name ) : mPrtLen(0)
     //> Node data IO DB structure
     mNodeIOEl.fldAdd( new TFld("NODE_ID",_("Node ID"),TFld::String,TCfg::Key,"20") );
     mNodeIOEl.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
-    mNodeIOEl.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
+    mNodeIOEl.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
     mNodeIOEl.fldAdd( new TFld("TYPE",_("Value type"),TFld::Integer,TFld::NoFlag,"1") );
     mNodeIOEl.fldAdd( new TFld("FLAGS",_("Flags"),TFld::Integer,TFld::NoFlag,"4") );
-    mNodeIOEl.fldAdd( new TFld("VALUE",_("Value"),TFld::String,TFld::NoFlag,"100") );
+    mNodeIOEl.fldAdd( new TFld("VALUE",_("Value"),TFld::String,TCfg::TransltText,"100") );
     mNodeIOEl.fldAdd( new TFld("POS",_("Real position"),TFld::Integer,TFld::NoFlag,"4") );
 }
 
@@ -637,9 +637,9 @@ void Node::postEnable( int flag )
     //> Create default IOs
     if( flag&TCntrNode::NodeConnect )
     {
-	ioIns( new IO("f_frq",_("Function calculate frequency (Hz)"),IO::Real,TPrmTempl::LockAttr,"1000",false),0);
-	ioIns( new IO("f_start",_("Function start flag"),IO::Boolean,TPrmTempl::LockAttr,"0",false),1);
-	ioIns( new IO("f_stop",_("Function stop flag"),IO::Boolean,TPrmTempl::LockAttr,"0",false),2);
+	ioIns( new IO("f_frq",_("Function calculate frequency (Hz)"),IO::Real,Node::LockAttr,"1000",false),0);
+	ioIns( new IO("f_start",_("Function start flag"),IO::Boolean,Node::LockAttr,"0",false),1);
+	ioIns( new IO("f_stop",_("Function stop flag"),IO::Boolean,Node::LockAttr,"0",false),2);
     }
 }
 
@@ -891,7 +891,7 @@ string Node::getStatus( )
 	switch(mode())
 	{
 	    case 0:
-		rez += TSYS::strMess( _("Process time %.2f ms. Requests %.4g. Read registars %.4g, coils %.4g. Writed registars %.4g, coils %.4g."),
+		rez += TSYS::strMess( _("Process time %.2f ms. Requests %.4g. Read registers %.4g, coils %.4g. Writed registers %.4g, coils %.4g."),
 		tmProc, cntReq, data->rReg, data->rCoil, data->wReg, data->wCoil );
 		break;
 	    case 1: case 2:

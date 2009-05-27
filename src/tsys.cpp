@@ -939,6 +939,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	if(TUIS::icoPresent(id())) ctrMkNode("img",opt,-1,"/ico","",0444);
 	if(ctrMkNode("area",opt,-1,"/gen",_("Station"),0444))
 	{
+	    ctrMkNode("fld",opt,-1,"/gen/id",_("ID"),R_R_R_,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/stat",_("Station"),RWRWR_,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/prog",_("Programm"),0444,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/ver",_("Version"),0444,"root","root",1,"tp","str");
@@ -999,6 +1000,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     else if( a_path == "/gen/user" && ctrChkNode(opt) )	opt->setText(mUser);
     else if( a_path == "/gen/prog" && ctrChkNode(opt) )	opt->setText(PACKAGE_NAME);
     else if( a_path == "/gen/ver" && ctrChkNode(opt) )	opt->setText(VERSION);
+    else if( a_path == "/gen/id" && ctrChkNode(opt) )	opt->setText(id());
     else if( a_path == "/gen/stat" )
     {
 	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText(name());
@@ -1056,7 +1058,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     else if( a_path == "/gen/baseLangLs" && ctrChkNode(opt) )
     {
 	opt->childAdd("el")->setText(Mess->lang2Code());
-	if( !Mess->lang2CodeBase().empty() ) opt->childAdd("el")->setText(Mess->lang2CodeBase());
+	if( !Mess->lang2CodeBase().empty() && Mess->lang2CodeBase() != Mess->lang2Code() )
+	    opt->childAdd("el")->setText(Mess->lang2CodeBase());
 	opt->childAdd("el")->setText("");
     }
     else if( a_path == "/gen/mess/lev" )
