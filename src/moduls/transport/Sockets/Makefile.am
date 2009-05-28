@@ -2,11 +2,17 @@
 
 EXTRA_DIST = *.h po/* doc/*
 
-AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
-AM_LDFLAGS= -shared -module
+INCLUDES = -I$(top_srcdir)/src
 
-oscd_modul_PROGRAMS = tr_Sockets.so
-tr_Sockets_so_SOURCES = socket.cpp
+oscd_modul_LTLIBRARIES = tr_Sockets.la
+tr_Sockets_la_LDFLAGS = -module -avoid-version -no-undefined
+tr_Sockets_la_SOURCES = socket.cpp
+
+#AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
+#AM_LDFLAGS= -shared -module
+
+#oscd_modul_PROGRAMS = tr_Sockets.so
+#tr_Sockets_so_SOURCES = socket.cpp
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)Transport.Sockets

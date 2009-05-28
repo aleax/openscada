@@ -2,12 +2,19 @@
 
 EXTRA_DIST = *.h po/* doc/*
 
-AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
-AM_LDFLAGS= -shared -module
+INCLUDES = -I$(top_srcdir)/src
 
-oscd_modul_PROGRAMS = tr_SSL.so
-tr_SSL_so_SOURCES = modssl.cpp
-tr_SSL_so_LDADD = -lssl
+oscd_modul_LTLIBRARIES = tr_SSL.la
+tr_SSL_la_LDFLAGS = -module -avoid-version -no-undefined
+tr_SSL_la_SOURCES = modssl.cpp
+tr_SSL_la_LIBADD  = -lssl
+
+#AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
+#AM_LDFLAGS= -shared -module
+
+#oscd_modul_PROGRAMS = tr_SSL.so
+#tr_SSL_so_SOURCES = modssl.cpp
+#tr_SSL_so_LDADD = -lssl
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)Transport.SSL

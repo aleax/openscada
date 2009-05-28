@@ -1,10 +1,16 @@
 EXTRA_DIST = *.h po/* doc/*
 
-AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
-AM_LDFLAGS= -module -shared
+INCLUDES = -I$(top_srcdir)/src
 
-oscd_modul_PROGRAMS = arh_DBArch.so
-arh_DBArch_so_SOURCES = arch.cpp mess.cpp val.cpp
+oscd_modul_LTLIBRARIES = arh_DBArch.la
+arh_DBArch_la_LDFLAGS = -module -avoid-version -no-undefined
+arh_DBArch_la_SOURCES = arch.cpp mess.cpp val.cpp
+
+#AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
+#AM_LDFLAGS= -module -shared
+
+#oscd_modul_PROGRAMS = arh_DBArch.so
+#arh_DBArch_so_SOURCES = arch.cpp mess.cpp val.cpp
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)Archive.DBArch

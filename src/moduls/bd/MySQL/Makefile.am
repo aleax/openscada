@@ -2,11 +2,17 @@
 
 EXTRA_DIST = *.h po/* doc/*
 
-AM_CXXFLAGS= -I$(top_srcdir)/src $(MYSQL_CFLAGS) -fPIC -DPIC -DUSE_OLD_FUNCTIONS
-AM_LDFLAGS= $(MYSQL_LDFLAGS) -shared -module
+INCLUDES = -I$(top_srcdir)/src -DUSE_OLD_FUNCTIONS $(MYSQL_CFLAGS)
 
-oscd_modul_PROGRAMS = bd_MySQL.so
-bd_MySQL_so_SOURCES = my_sql.cpp
+oscd_modul_LTLIBRARIES = bd_MySQL.la
+bd_MySQL_la_LDFLAGS = -module -avoid-version -no-undefined $(MYSQL_LDFLAGS)
+bd_MySQL_la_SOURCES = my_sql.cpp
+
+#AM_CXXFLAGS= -I$(top_srcdir)/src $(MYSQL_CFLAGS) -fPIC -DPIC -DUSE_OLD_FUNCTIONS
+#AM_LDFLAGS= $(MYSQL_LDFLAGS) -shared -module
+
+#oscd_modul_PROGRAMS = bd_MySQL.so
+#bd_MySQL_so_SOURCES = my_sql.cpp
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)DB.MySQL

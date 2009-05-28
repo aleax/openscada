@@ -195,7 +195,7 @@ void TConfig::cntrCmdProc( XMLNode *opt, const string &elem, const string &user,
 //*************************************************
 //* TCfg                                          *
 //*************************************************
-TCfg::TCfg( TFld &fld, TConfig &owner ) : mView(true), mKeyUse(false), mOwner(owner)
+TCfg::TCfg( TFld &fld, TConfig &owner ) : mView(true), mKeyUse(false), mOwner(owner), mNoTransl(false)
 {
     //> Chek for self field for dinamic elements
     if( fld.flg()&TFld::SelfFld )

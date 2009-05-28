@@ -2,11 +2,18 @@
 
 EXTRA_DIST = *.h po/* doc/*
 
-AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
-AM_LDFLAGS= -shared -module 
+INCLUDES = -I$(top_srcdir)/src
 
-oscd_modul_PROGRAMS = spec_FLibSYS.so
-spec_FLibSYS_so_SOURCES = statfunc.cpp
+oscd_modul_LTLIBRARIES = spec_FLibSYS.la
+spec_FLibSYS_la_LDFLAGS = -module -avoid-version -no-undefined
+spec_FLibSYS_la_SOURCES = statfunc.cpp
+
+
+#AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
+#AM_LDFLAGS= -shared -module 
+
+#oscd_modul_PROGRAMS = spec_FLibSYS.so
+#spec_FLibSYS_so_SOURCES = statfunc.cpp
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)Special.FLibSYS

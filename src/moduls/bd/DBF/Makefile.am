@@ -2,11 +2,11 @@
 
 EXTRA_DIST = *.h po/* doc/*
 
-AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
-AM_LDFLAGS= -shared -module
+INCLUDES = -I$(top_srcdir)/src
 
-oscd_modul_PROGRAMS = bd_DBF.so
-bd_DBF_so_SOURCES = dbf_mod.cpp dbf.cpp
+oscd_modul_LTLIBRARIES = bd_DBF.la
+bd_DBF_la_LDFLAGS = -module -avoid-version -no-undefined
+bd_DBF_la_SOURCES = dbf_mod.cpp dbf.cpp
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)DB.DBF

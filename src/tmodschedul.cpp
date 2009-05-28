@@ -37,8 +37,7 @@
 //*************************************************
 //* TModSchedul                                   *
 //*************************************************
-TModSchedul::TModSchedul( ) :
-    TSubSYS("ModSched","Modules sheduler",false), mPer(10), mAllow("*")
+TModSchedul::TModSchedul( ) : TSubSYS("ModSched","Modules sheduler",false), mPer(10), mAllow("*")
 {
 
 }
@@ -140,8 +139,8 @@ void TModSchedul::ScanDir( const string &Paths, vector<string> &files )
 	while((scan_dirent = readdir(IdDir)) != NULL)
 	{
 	    if( string("..") == scan_dirent->d_name || string(".") == scan_dirent->d_name ) continue;
-	    NameMod=Path+"/"+scan_dirent->d_name;
-	    if( CheckFile(NameMod) ) files.push_back(NameMod); 
+	    NameMod = Path+"/"+scan_dirent->d_name;
+	    if( CheckFile(NameMod) ) files.push_back(NameMod);
 	}
 	closedir(IdDir);
 
@@ -155,15 +154,15 @@ bool TModSchedul::CheckFile( const string &iname )
 
     stat(iname.c_str(),&file_stat);
 
-    if( (file_stat.st_mode&S_IFMT) != S_IFREG ) return false;
+    if( /*iname.size() <= 3 || iname.substr(iname.size()-3,3) != ".so" ||*/ (file_stat.st_mode&S_IFMT) != S_IFREG ) return false;
     if( access(iname.c_str(),F_OK|R_OK) != 0 )  return false;
     NameMod=iname;
 
     void *h_lib = dlopen(iname.c_str(),RTLD_LAZY|RTLD_GLOBAL);
-    if(h_lib == NULL)
+    if( h_lib == NULL )
     {
-	mess_warning(nodePath().c_str(),_("SO <%s> error: %s !"),iname.c_str(),dlerror());
-	return(false);
+	//mess_warning(nodePath().c_str(),_("Module <%s> error: %s !"),iname.c_str(),dlerror());
+	return false;
     }
     else dlclose(h_lib);
 

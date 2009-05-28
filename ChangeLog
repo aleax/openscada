@@ -1,3 +1,9 @@
+2009-05-28 Roman
+- !!!!:/SYS: Modules build fixed for building on libtool 2.2.6.
+- !!:/DemoDB: DB OscadaLibs.db translation to multilanguage (Russian, English and Ukrainian) is finished.
+- !!:/SYS/TCfg: Disabling translation of text variable for one record on time one request is added.
+
+
 2009-05-27 Roman
 - !/DAQ/DCON, /DAQ/DAQGate, /DAQ/JavaLikeCalc, /DAQ/ModBus: English translation document is added.
 - /SYS/TFunction: x86 dependent short time intervals calc mechanism is replaced to standard.

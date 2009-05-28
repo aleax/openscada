@@ -2,13 +2,18 @@
 
 EXTRA_DIST = *.h po/* doc/*
 
-AM_CFLAGS= -I$(top_srcdir)/src -fPIC -DPIC -DLINUX -DDAVE_LITTLE_ENDIAN
-AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC -DLINUX -DDAVE_LITTLE_ENDIAN
-AM_LDFLAGS= -shared -module
+INCLUDES = -I$(top_srcdir)/src -DLINUX -DDAVE_LITTLE_ENDIAN
 
-oscd_modul_PROGRAMS = daq_Siemens.so
-daq_Siemens_so_SOURCES = siemens.cpp cif_api.c nodave.c openSocket.c setport.c
+oscd_modul_LTLIBRARIES = daq_Siemens.la
+daq_Siemens_la_LDFLAGS = -module -avoid-version -no-undefined
+daq_Siemens_la_SOURCES = siemens.cpp cif_api.c nodave.c openSocket.c setport.c
 
+#AM_CFLAGS= -I$(top_srcdir)/src -fPIC -DPIC -DLINUX -DDAVE_LITTLE_ENDIAN
+#AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC -DLINUX -DDAVE_LITTLE_ENDIAN
+#AM_LDFLAGS= -shared -module
+
+#oscd_modul_PROGRAMS = daq_Siemens.so
+#daq_Siemens_so_SOURCES = siemens.cpp cif_api.c nodave.c openSocket.c setport.c
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)DAQ.Siemens

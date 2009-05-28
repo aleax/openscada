@@ -2,11 +2,17 @@
 
 EXTRA_DIST = WebCfgDVCA.js *.h po/* doc/*
 
-AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
-AM_LDFLAGS= -shared -module
+INCLUDES = -I$(top_srcdir)/src
 
-oscd_modul_PROGRAMS = ui_WebCfgD.so
-ui_WebCfgD_so_SOURCES = web_cfg.cpp VCAjs.cpp VCAhtml.cpp
+oscd_modul_LTLIBRARIES = ui_WebCfgD.la
+ui_WebCfgD_la_LDFLAGS = -module -avoid-version -no-undefined
+ui_WebCfgD_la_SOURCES = web_cfg.cpp VCAjs.cpp VCAhtml.cpp
+
+#AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
+#AM_LDFLAGS= -shared -module
+
+#oscd_modul_PROGRAMS = ui_WebCfgD.so
+#ui_WebCfgD_so_SOURCES = web_cfg.cpp VCAjs.cpp VCAhtml.cpp
 
 VCAjs.cpp: WebCfgDVCA.js
 	@lc=`cat $< | wc -l` ; \

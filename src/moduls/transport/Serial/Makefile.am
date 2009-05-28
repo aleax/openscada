@@ -1,11 +1,17 @@
 ## process this file with automake to generate Makefile.in
 EXTRA_DIST = *.h po/* doc/*
 
-AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
-AM_LDFLAGS= -shared -module
+INCLUDES = -I$(top_srcdir)/src
 
-oscd_modul_PROGRAMS = tr_Serial.so
-tr_Serial_so_SOURCES = mod_serial.cpp
+oscd_modul_LTLIBRARIES = tr_Serial.la
+tr_Serial_la_LDFLAGS = -module -avoid-version -no-undefined
+tr_Serial_la_SOURCES = mod_serial.cpp
+
+#AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
+#AM_LDFLAGS= -shared -module
+
+#oscd_modul_PROGRAMS = tr_Serial.so
+#tr_Serial_so_SOURCES = mod_serial.cpp
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)Transport.Serial

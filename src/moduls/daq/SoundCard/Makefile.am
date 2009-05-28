@@ -1,12 +1,20 @@
 ## process this file with automake to generate Makefile.in
 EXTRA_DIST = *.h po/* doc/*
 
-AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
-AM_LDFLAGS= -shared -module
+INCLUDES = -I$(top_srcdir)/src
 
-oscd_modul_PROGRAMS = daq_SoundCard.so
-daq_SoundCard_so_SOURCES = sound.cpp
-daq_SoundCard_so_LDADD = -lportaudio
+oscd_modul_LTLIBRARIES = daq_SoundCard.la
+daq_SoundCard_la_LDFLAGS = -module -avoid-version -no-undefined
+daq_SoundCard_la_SOURCES = sound.cpp
+daq_SoundCard_la_LIBADD  = -lportaudio
+
+
+#AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
+#AM_LDFLAGS= -shared -module
+
+#oscd_modul_PROGRAMS = daq_SoundCard.so
+#daq_SoundCard_so_SOURCES = sound.cpp
+#daq_SoundCard_so_LDADD = -lportaudio
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)DAQ.SoundCard

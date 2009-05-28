@@ -50,7 +50,7 @@ class TCfg
 	};
 	enum ReqFlg
 	{
-	    ForceUse	= 0x01		//Force use flag
+	    ForceUse	= 0x01,		//Force use flag
 	};
 
 	//Methods
@@ -64,18 +64,20 @@ class TCfg
 
 	bool	view( )			{ return mView; }
 	bool	keyUse( )		{ return mKeyUse; }
+	bool	noTransl( )		{ return mNoTransl; }
 	void	setView( bool vw )	{ mView = vw; }
 	void	setKeyUse( bool vl )	{ if( fld().flg()&Key ) mKeyUse = vl; }
+	void	setNoTransl( bool vl )	{ mNoTransl = vl; }
 
 	TFld &fld( )			{ return *mFld; }
 
-	//- Universal access -
+	//> Universal access
 	string	getSEL( char RqFlg = 0 );
 	string	getS( char RqFlg = 0 );
 	double	getR( char RqFlg = 0 );
 	int	getI( char RqFlg = 0 );
 	bool	getB( char RqFlg = 0 );
-	//- Direct access -
+	//> Direct access
 	string	&getSd( );
 	double	&getRd( );
 	int	&getId( );
@@ -100,6 +102,7 @@ class TCfg
 	//Attributes
 	char mView	: 1;
 	char mKeyUse	: 1;
+	char mNoTransl	: 1;
 
 	TFld	*mFld;
 	TConfig	&mOwner;

@@ -2,11 +2,17 @@
 
 EXTRA_DIST = *.h po/* doc/*
 
-AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
-AM_LDFLAGS= -module -shared
+INCLUDES = -I$(top_srcdir)/src
 
-oscd_modul_PROGRAMS = arh_FSArch.so
-arh_FSArch_so_SOURCES = base.cpp mess.cpp val.cpp
+oscd_modul_LTLIBRARIES = arh_FSArch.la
+arh_FSArch_la_LDFLAGS = -module -avoid-version -no-undefined
+arh_FSArch_la_SOURCES = base.cpp mess.cpp val.cpp
+
+#AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
+#AM_LDFLAGS= -module -shared
+
+#oscd_modul_PROGRAMS = arh_FSArch.so
+#arh_FSArch_so_SOURCES = base.cpp mess.cpp val.cpp
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)Archive.FSArch

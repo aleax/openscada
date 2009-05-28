@@ -84,8 +84,8 @@ Das Paket %{name}-demo enthaelt Demodatenbanken und Konfigurationen. Fuers Start
 %setup -q -n %srcname
 
 %build
-%configure CFLAGS="-O2" CXXFLAGS="-O2 -Wno-deprecated"
-%__make
+%configure --disable-static CFLAGS="-O2" CXXFLAGS="-O2 -Wno-deprecated"
+%make
 
 %install
 %makeinstall

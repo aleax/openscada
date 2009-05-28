@@ -198,6 +198,7 @@ void Func::saveIO( )
 	cfg.cfg("NAME").setS(io(i_io)->name());
 	cfg.cfg("TYPE").setI(io(i_io)->type());
 	cfg.cfg("MODE").setI(io(i_io)->flg());
+	cfg.cfg("DEF").setNoTransl(io(i_io)->type()!=IO::String);
 	cfg.cfg("DEF").setS(io(i_io)->def());
 	cfg.cfg("HIDE").setB(io(i_io)->hide());
 	cfg.cfg("POS").setI(i_io);

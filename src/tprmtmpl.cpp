@@ -193,6 +193,7 @@ void TPrmTempl::save_( )
 	cfg.cfg("NAME").setS(io(i_io)->name());
 	cfg.cfg("TYPE").setI(io(i_io)->type());
 	cfg.cfg("FLAGS").setI(io(i_io)->flg());
+	cfg.cfg("VALUE").setNoTransl( !(io(i_io)->type()==IO::String || io(i_io)->flg()&TPrmTempl::CfgLink) );
 	cfg.cfg("VALUE").setS(io(i_io)->def());
 	cfg.cfg("POS").setI(i_io);
 	SYS->db().at().dataSet(w_db+"_io",w_cfgpath+"_io",cfg);

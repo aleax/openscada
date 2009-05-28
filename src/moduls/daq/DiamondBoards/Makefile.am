@@ -2,12 +2,20 @@
 
 EXTRA_DIST = *.h libdscud5.a po/* doc/*
 
-AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
-AM_LDFLAGS= -shared -module
+INCLUDES = -I$(top_srcdir)/src
 
-oscd_modul_PROGRAMS = daq_DiamondBoards.so
-daq_DiamondBoards_so_SOURCES = diamond.cpp
-daq_DiamondBoards_so_LDADD = -L./ -ldscud5
+oscd_modul_LTLIBRARIES = daq_DiamondBoards.la
+daq_DiamondBoards_la_LDFLAGS = -module -avoid-version -no-undefined
+daq_DiamondBoards_la_SOURCES = diamond.cpp
+daq_DiamondBoards_la_LIBADD  = -L./ -ldscud5
+
+
+#AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
+#AM_LDFLAGS= -shared -module
+
+#oscd_modul_PROGRAMS = daq_DiamondBoards.so
+#daq_DiamondBoards_so_SOURCES = diamond.cpp
+#daq_DiamondBoards_so_LDADD = -L./ -ldscud5
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)DAQ.DiamondBoards

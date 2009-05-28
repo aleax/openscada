@@ -33,7 +33,6 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
-oscd_modul_PROGRAMS = spec_FLibMath.so$(EXEEXT)
 subdir = src/moduls/special/FLibMath
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -44,12 +43,21 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
+am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
+am__vpath_adj = case $$p in \
+    $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
+    *) f=$$p;; \
+  esac;
+am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
 am__installdirs = "$(DESTDIR)$(oscd_moduldir)"
-oscd_modulPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
-PROGRAMS = $(oscd_modul_PROGRAMS)
-am_spec_FLibMath_so_OBJECTS = statfunc.$(OBJEXT)
-spec_FLibMath_so_OBJECTS = $(am_spec_FLibMath_so_OBJECTS)
-spec_FLibMath_so_LDADD = $(LDADD)
+oscd_modulLTLIBRARIES_INSTALL = $(INSTALL)
+LTLIBRARIES = $(oscd_modul_LTLIBRARIES)
+spec_FLibMath_la_LIBADD =
+am_spec_FLibMath_la_OBJECTS = statfunc.lo
+spec_FLibMath_la_OBJECTS = $(am_spec_FLibMath_la_OBJECTS)
+spec_FLibMath_la_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
+	$(CXXFLAGS) $(spec_FLibMath_la_LDFLAGS) $(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -62,8 +70,8 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(spec_FLibMath_so_SOURCES)
-DIST_SOURCES = $(spec_FLibMath_so_SOURCES)
+SOURCES = $(spec_FLibMath_la_SOURCES)
+DIST_SOURCES = $(spec_FLibMath_la_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -215,9 +223,16 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 EXTRA_DIST = *.h po/* doc/*
-AM_CXXFLAGS = -I$(top_srcdir)/src -fPIC -DPIC
-AM_LDFLAGS = -shared -module 
-spec_FLibMath_so_SOURCES = statfunc.cpp
+INCLUDES = -I$(top_srcdir)/src
+oscd_modul_LTLIBRARIES = spec_FLibMath.la
+spec_FLibMath_la_LDFLAGS = -module -avoid-version -no-undefined
+spec_FLibMath_la_SOURCES = statfunc.cpp
+
+#AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
+#AM_LDFLAGS= -shared -module 
+
+#oscd_modul_PROGRAMS = spec_FLibMath.so
+#spec_FLibMath_so_SOURCES = statfunc.cpp
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)Special.FLibMath
@@ -255,37 +270,35 @@ $(top_srcdir)/configure:  $(am__configure_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
-install-oscd_modulPROGRAMS: $(oscd_modul_PROGRAMS)
+install-oscd_modulLTLIBRARIES: $(oscd_modul_LTLIBRARIES)
 	@$(NORMAL_INSTALL)
 	test -z "$(oscd_moduldir)" || $(MKDIR_P) "$(DESTDIR)$(oscd_moduldir)"
-	@list='$(oscd_modul_PROGRAMS)'; for p in $$list; do \
-	  p1=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
-	  if test -f $$p \
-	     || test -f $$p1 \
-	  ; then \
-	    f=`echo "$$p1" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`; \
-	   echo " $(INSTALL_PROGRAM_ENV) $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(oscd_modulPROGRAMS_INSTALL) '$$p' '$(DESTDIR)$(oscd_moduldir)/$$f'"; \
-	   $(INSTALL_PROGRAM_ENV) $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(oscd_modulPROGRAMS_INSTALL) "$$p" "$(DESTDIR)$(oscd_moduldir)/$$f" || exit 1; \
+	@list='$(oscd_modul_LTLIBRARIES)'; for p in $$list; do \
+	  if test -f $$p; then \
+	    f=$(am__strip_dir) \
+	    echo " $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(oscd_modulLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) '$$p' '$(DESTDIR)$(oscd_moduldir)/$$f'"; \
+	    $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(oscd_modulLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) "$$p" "$(DESTDIR)$(oscd_moduldir)/$$f"; \
 	  else :; fi; \
 	done
 
-uninstall-oscd_modulPROGRAMS:
+uninstall-oscd_modulLTLIBRARIES:
 	@$(NORMAL_UNINSTALL)
-	@list='$(oscd_modul_PROGRAMS)'; for p in $$list; do \
-	  f=`echo "$$p" | sed 's,^.*/,,;s/$(EXEEXT)$$//;$(transform);s/$$/$(EXEEXT)/'`; \
-	  echo " rm -f '$(DESTDIR)$(oscd_moduldir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(oscd_moduldir)/$$f"; \
+	@list='$(oscd_modul_LTLIBRARIES)'; for p in $$list; do \
+	  p=$(am__strip_dir) \
+	  echo " $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f '$(DESTDIR)$(oscd_moduldir)/$$p'"; \
+	  $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f "$(DESTDIR)$(oscd_moduldir)/$$p"; \
 	done
 
-clean-oscd_modulPROGRAMS:
-	@list='$(oscd_modul_PROGRAMS)'; for p in $$list; do \
-	  f=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
-	  echo " rm -f $$p $$f"; \
-	  rm -f $$p $$f ; \
+clean-oscd_modulLTLIBRARIES:
+	-test -z "$(oscd_modul_LTLIBRARIES)" || rm -f $(oscd_modul_LTLIBRARIES)
+	@list='$(oscd_modul_LTLIBRARIES)'; for p in $$list; do \
+	  dir="`echo $$p | sed -e 's|/[^/]*$$||'`"; \
+	  test "$$dir" != "$$p" || dir=.; \
+	  echo "rm -f \"$${dir}/so_locations\""; \
+	  rm -f "$${dir}/so_locations"; \
 	done
-spec_FLibMath.so$(EXEEXT): $(spec_FLibMath_so_OBJECTS) $(spec_FLibMath_so_DEPENDENCIES) 
-	@rm -f spec_FLibMath.so$(EXEEXT)
-	$(CXXLINK) $(spec_FLibMath_so_OBJECTS) $(spec_FLibMath_so_LDADD) $(LIBS)
+spec_FLibMath.la: $(spec_FLibMath_la_OBJECTS) $(spec_FLibMath_la_DEPENDENCIES) 
+	$(spec_FLibMath_la_LINK) -rpath $(oscd_moduldir) $(spec_FLibMath_la_OBJECTS) $(spec_FLibMath_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -293,7 +306,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/statfunc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/statfunc.Plo@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -397,7 +410,7 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(PROGRAMS)
+all-am: Makefile $(LTLIBRARIES)
 installdirs:
 	for dir in "$(DESTDIR)$(oscd_moduldir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
@@ -429,7 +442,7 @@ maintainer-clean-generic:
 clean: clean-am
 
 clean-am: clean-generic clean-libtool clean-local \
-	clean-oscd_modulPROGRAMS mostlyclean-am
+	clean-oscd_modulLTLIBRARIES mostlyclean-am
 
 distclean: distclean-am
 	-rm -rf ./$(DEPDIR)
@@ -447,7 +460,7 @@ info: info-am
 
 info-am:
 
-install-data-am: install-data-local install-oscd_modulPROGRAMS
+install-data-am: install-data-local install-oscd_modulLTLIBRARIES
 
 install-dvi: install-dvi-am
 
@@ -483,25 +496,25 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-local uninstall-oscd_modulPROGRAMS
+uninstall-am: uninstall-local uninstall-oscd_modulLTLIBRARIES
 
 .MAKE: install-am install-strip
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
-	clean-libtool clean-local clean-oscd_modulPROGRAMS ctags \
+	clean-libtool clean-local clean-oscd_modulLTLIBRARIES ctags \
 	distclean distclean-compile distclean-generic \
 	distclean-libtool distclean-tags distdir dvi dvi-am html \
 	html-am info info-am install install-am install-data \
 	install-data-am install-data-local install-dvi install-dvi-am \
 	install-exec install-exec-am install-html install-html-am \
 	install-info install-info-am install-man \
-	install-oscd_modulPROGRAMS install-pdf install-pdf-am \
+	install-oscd_modulLTLIBRARIES install-pdf install-pdf-am \
 	install-ps install-ps-am install-strip installcheck \
 	installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
 	tags uninstall uninstall-am uninstall-local \
-	uninstall-oscd_modulPROGRAMS
+	uninstall-oscd_modulLTLIBRARIES
 
 
 messages:

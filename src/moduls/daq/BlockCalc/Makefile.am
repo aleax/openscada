@@ -2,12 +2,18 @@
 
 EXTRA_DIST = *.h po/* doc/*
 
-AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
-AM_LDFLAGS= -shared -module
+INCLUDES = -I$(top_srcdir)/src
 
-oscd_modul_PROGRAMS = daq_BlockCalc.so
-daq_BlockCalc_so_SOURCES = virtual.cpp block.cpp
+oscd_modul_LTLIBRARIES = daq_BlockCalc.la
+daq_BlockCalc_la_LDFLAGS = -module -avoid-version -no-undefined
+daq_BlockCalc_la_SOURCES = virtual.cpp block.cpp
 
+
+#AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
+#AM_LDFLAGS= -shared -module
+
+#oscd_modul_PROGRAMS = daq_BlockCalc.so
+#daq_BlockCalc_so_SOURCES = virtual.cpp block.cpp
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)DAQ.BlockCalc

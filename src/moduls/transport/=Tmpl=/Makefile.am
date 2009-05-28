@@ -2,11 +2,11 @@
 
 EXTRA_DIST = *.h po/* doc/*
 
-AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
-AM_LDFLAGS= -shared -module
+INCLUDES = -I$(top_srcdir)/src
 
-oscd_modul_PROGRAMS = tr_Tmpl.so
-tr_Tmpl_so_SOURCES = mod_tmpl.cpp
+oscd_modul_LTLIBRARIES = tr_Tmpl.la
+tr_Tmpl_la_LDFLAGS = -module -avoid-version -no-undefined
+tr_Tmpl_la_SOURCES = mod_tmpl.cpp
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)Transport.Tmpl
