@@ -167,6 +167,13 @@ TMdContr::~TMdContr( )
     if( run_st ) stop();
 }
 
+string TMdContr::getStatus( )
+{
+    string rez = TController::getStatus( );
+    if( startStat() && !redntUse( ) ) rez += TSYS::strMess(_("Gather data time %.6g ms. "),tm_gath);
+    return rez;
+}
+
 TParamContr *TMdContr::ParamAttach( const string &name, int type )
 {
     return new TMdPrm(name,&owner().tpPrmAt(type));
@@ -250,12 +257,12 @@ void *TMdContr::Task( void *icntr )
 
     while(!cntr.endrun_req)
     {
-	long long t_cnt = SYS->shrtCnt();
+	long long t_cnt = TSYS::curTime();
 
 	//-- Update controller's data --
 	el_cnt = 0;
 	cntr.en_res.resRequestR( );
-	for(unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++)
+	for( unsigned i_p=0; i_p < cntr.p_hd.size() && !cntr.redntUse(); i_p++ )
 	    try
 	    {
 		oid oid_root[MAX_OID_LEN], oid_next[MAX_OID_LEN];
@@ -346,7 +353,7 @@ void *TMdContr::Task( void *icntr )
 	    catch(TError err)
 	    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 	cntr.en_res.resRelease( );
-	cntr.tm_gath = 1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
+	cntr.tm_gath = 1e-3*(TSYS::curTime()-t_cnt);
 
 	TSYS::taskSleep((long long)cntr.period()*1000000000);
     }
@@ -364,21 +371,6 @@ string TMdContr::oid2str(oid *ioid, size_t isz)
     for(int i_el = 0; i_el < isz; i_el++)
 	rez=rez+"_"+TSYS::int2str(ioid[i_el]);
     return rez;
-}
-
-void TMdContr::cntrCmdProc( XMLNode *opt )
-{
-    //- Get page info -
-    if( opt->name() == "info" )
-    {
-	TController::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/cntr/st/gath_tm",_("Gather data time (ms)"),0444,"root","root",1,"tp","real");
-	return;
-    }
-    //- Process command to page -
-    string a_path = opt->attr("path");
-    if( a_path == "/cntr/st/gath_tm" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(tm_gath,6));
-    else TController::cntrCmdProc(opt);
 }
 
 //*************************************************

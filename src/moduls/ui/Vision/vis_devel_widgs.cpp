@@ -1177,7 +1177,7 @@ void WdgTree::selectItem( bool force )
 void WdgTree::updateTree( const string &vca_it )
 {
 #if OSC_DEBUG >= 3
-    unsigned long long t_cnt = SYS->shrtCnt();
+    long long t_cnt = TSYS::curTime();
 #endif
 
     bool is_create, root_allow;
@@ -1202,7 +1202,7 @@ void WdgTree::updateTree( const string &vca_it )
     owner()->cntrIfCmd(req);
 
 #if OSC_DEBUG >= 3
-    mess_debug("VCA DEBUG",_("Widgets' development tree '%s' request time %f ms."),vca_it.c_str(),1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk()));
+    mess_debug("VCA DEBUG",_("Widgets' development tree '%s' request time %f ms."),vca_it.c_str(),1e-3*(TSYS::curTime()-t_cnt));
 #endif
 
     //> Remove no present libraries
@@ -1448,7 +1448,7 @@ void WdgTree::updateTree( const string &vca_it )
     }
 
 #if OSC_DEBUG >= 3
-    mess_debug("VCA DEBUG",_("Widgets' development tree '%s' load time %f ms."),vca_it.c_str(),1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk()));
+    mess_debug("VCA DEBUG",_("Widgets' development tree '%s' load time %f ms."),vca_it.c_str(),1e-3*(TSYS::curTime()-t_cnt));
 #endif
 }
 
@@ -1580,7 +1580,7 @@ void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it )
     if( !it )
     {
 #if OSC_DEBUG >= 3
-	unsigned long long t_cnt = SYS->shrtCnt();
+	long long t_cnt = TSYS::curTime();
 #endif
 
 	//- Get elements number into VCA item -
@@ -1639,7 +1639,7 @@ void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it )
 	    updateTree(vca_it,nit);
 	}
 #if OSC_DEBUG >= 3
-	mess_debug("VCA DEBUG",_("Project's development tree '%s' load time %f ms."),vca_it.c_str(),1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk()));
+	mess_debug("VCA DEBUG",_("Project's development tree '%s' load time %f ms."),vca_it.c_str(),1e-3*(TSYS::curTime()-t_cnt));
 #endif
 	return;
     }

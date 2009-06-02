@@ -142,6 +142,10 @@ class TTpContr: public TTipDAQ
 
 	TController *ContrAttach( const string &name, const string &daq_db );
 
+    protected:
+	//Attributes
+	bool redntAllow( )	{ return true; }
+
     private:
 	//Attributes
 };

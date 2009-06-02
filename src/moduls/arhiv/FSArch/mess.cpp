@@ -90,7 +90,7 @@ time_t ModMArch::end()
 
 void ModMArch::put( vector<TMess::SRec> &mess )
 {
-    unsigned long long t_cnt = SYS->shrtCnt();
+    long long t_cnt = TSYS::curTime();
 
     ResAlloc res(m_res,false);
 
@@ -136,7 +136,7 @@ void ModMArch::put( vector<TMess::SRec> &mess )
 	    arh_s[0]->put(mess[i_m]);
 	}
     }
-    tm_calc = 1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
+    tm_calc = 1e-3*(TSYS::curTime()-t_cnt);
 }
 
 void ModMArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category, char level )

@@ -268,14 +268,14 @@ void *TMdContr::Task( void *icntr )
 	//> Update controller's data
 	if( !cntr.redntUse( ) )
 	{
-	    long long t_cnt = SYS->shrtCnt();
+	    long long t_cnt = TSYS::curTime();
 	    cntr.en_res.resRequestR( );
 	    for( unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++ )
 		try{ cntr.p_hd[i_p].at().calc(is_start,is_stop); }
 		catch(TError err)
 		{ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 	    cntr.en_res.resRelease( );
-	    cntr.tm_calc = 1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
+	    cntr.tm_calc = 1e-3*(TSYS::curTime()-t_cnt);
 	}
 
 	if( is_stop ) break;

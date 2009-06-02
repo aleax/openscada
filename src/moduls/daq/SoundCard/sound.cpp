@@ -60,7 +60,7 @@ extern "C"
 using namespace SoundCard;
 
 //*************************************************
-//* TTpContr                                      * 
+//* TTpContr                                      *
 //*************************************************
 TTpContr::TTpContr( string name )
 {
@@ -130,7 +130,7 @@ string TMdContr::getStatus( )
 {
     string val = TController::getStatus( );
     if( !startStat( ) ) val += TSYS::strMess(_("Allowed %d input channels"),channelAllow());
-    else val+= TSYS::strMess(_("Gathering from %d channels. Recieved %.2f MB."),numChan,acqSize);
+    else if( !redntUse( ) ) val+= TSYS::strMess(_("Gathering from %d channels. Recieved %.2f MB."),numChan,acqSize);
 
     return val;
 }
@@ -251,9 +251,19 @@ int TMdContr::recordCallback( const void *iBuf, void *oBuf, unsigned long frames
 {
     TMdContr &cntr = *(TMdContr*)userData;
     cntr.prcSt = true;
-
     const char *bptr = (const char*)iBuf;
 
+    if( cntr.redntUse( ) ) return cntr.endrunReq;
+
+    //> Check for current time correction
+    long long cTm = TSYS::curTime();
+    if( fabs((cntr.wTm+framesPerBuffer*cntr.sdTm)-cTm) > 1e6 )
+    {
+	cntr.wTm = cTm - framesPerBuffer*cntr.sdTm;
+	mess_warning(cntr.nodePath().c_str(),_("Sound card's counter run from system time is corrected."));
+    }
+
+    //> Input buffer process
     ResAlloc res(cntr.nodeRes(),false);
     for( int i_p = 0; i_p < cntr.pHd.size(); i_p++ )
     {
@@ -287,7 +297,6 @@ int TMdContr::recordCallback( const void *iBuf, void *oBuf, unsigned long frames
     cntr.wTm += framesPerBuffer*cntr.sdTm;
 
     cntr.acqSize += (float)(framesPerBuffer*cntr.smplSize*cntr.numChan)/1048576;
-//    printf("TEST 00: %lld\n",cntr.wTm);
 //    if( timeInfo ) printf("Samle time %f (%f).\n",timeInfo->currentTime,timeInfo->inputBufferAdcTime);
 
     cntr.prcSt = false;

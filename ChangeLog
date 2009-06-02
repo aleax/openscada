@@ -1,3 +1,10 @@
+2009-06-02 Roman
+- !!:/DAQ/SoundCard, /DAQ/Siemens, /DAQ/SNMP, /DAQ/DiamondBoards, /DAQ/BlockCalc: English translation document is added.
+- !!:/DAQ/SoundCard, /DAQ/Siemens, /DAQ/SNMP, /DAQ/DiamondBoards, /DAQ/BlockCalc: Adapted for redundant support and for multilanguage variable texts support.
+- !!:/DemoDB: DB AGLKSModel.db translation to multilanguage (Russian, English and Ukrainian) is finished.
+- !!!!:/SYS: x86 dependent short time intervals calc mechanism is replaced to standard everywhere.
+
+
 2009-05-28 Roman
 - !!!!:/SYS: Modules build fixed for building on libtool 2.2.6.
 - !!:/DemoDB: DB OscadaLibs.db translation to multilanguage (Russian, English and Ukrainian) is finished.

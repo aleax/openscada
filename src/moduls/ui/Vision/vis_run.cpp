@@ -1159,7 +1159,7 @@ void VisRun::updatePage( )
     if( winClose ) return;
 
 #if OSC_DEBUG >= 3
-    unsigned long long t_cnt = SYS->shrtCnt();
+    long long t_cnt = TSYS::curTime();
 #endif
 
     //> Pages update
@@ -1239,7 +1239,7 @@ void VisRun::updatePage( )
 	}
 
 #if OSC_DEBUG >= 3
-    upd_tm+=1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
+    upd_tm += 1e-3*(TSYS::curTime()-t_cnt);
     if( !(1000/period() && wPrcCnt%(1000/period())) )
     {
 	mess_debug("VCA DEBUG",_("Session '%s' update time %f ms."),workSess().c_str(),upd_tm);

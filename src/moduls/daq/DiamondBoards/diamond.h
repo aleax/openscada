@@ -150,6 +150,10 @@ class TTpContr: public TTipDAQ
 	TElem &elemDI( )	{ return elem_di; }
 	TElem &elemDO( )	{ return elem_do; }
 
+    protected:
+	//Attribute
+	bool redntAllow( )	{ return true; }
+
     private:
 	//Attributes
 	bool	m_init;

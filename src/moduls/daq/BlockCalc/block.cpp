@@ -427,7 +427,29 @@ void Block::calc( bool first, bool last )
 
 void Block::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
+    //> Service commands process
+    string a_path = opt->attr("path");
+    if( a_path.substr(0,6) == "/serv/" )
+    {
+	if( a_path == "/serv/attr" )
+	{
+	    if( !enable() || !func() ) throw TError(nodePath().c_str(),_("Block disabled or error."));
+	    if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )
+		for( int i_a = 0; i_a < ioSize(); i_a++ )
+		    opt->childAdd("a")->setAttr("id",func()->io(i_a)->id())->setText(getS(i_a));
+	    if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )
+		for( int i_a = 0; i_a < opt->childSize(); i_a++ )
+		{
+		    int io_id = -1;
+		    if( opt->childGet(i_a)->name() != "a" || (io_id=ioId(opt->childGet(i_a)->attr("id"))) < 0 ) continue;
+		    setS(io_id,opt->childGet(i_a)->text());
+		}
+	}
+	else TCntrNode::cntrCmdProc(opt);
+	return;
+    }
+
+    //> Get page info
     if( opt->name() == "info" )
     {
 	TCntrNode::cntrCmdProc(opt);
@@ -504,8 +526,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 	}
 	return;
     }
-    //- Process command to page -
-    string a_path = opt->attr("path");
+    //> Process command to page
     if( a_path == "/blck/st/en" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(enable()?"1":"0");

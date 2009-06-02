@@ -847,8 +847,8 @@ string WdgView::resGet( const string &res )
 void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 {
 #if OSC_DEBUG >= 3
-    unsigned long long t_cnt;
-    if( wLevel() == 0 ) t_cnt = SYS->shrtCnt();
+    long long t_cnt;
+    if( wLevel() == 0 ) t_cnt = TSYS::curTime();
 #endif
 
     isReload = shape;
@@ -864,7 +864,7 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 	    cntrIfCmd(*aBr);
 	    reqBrCr = true;
 #if OSC_DEBUG >= 3
-	    mess_debug("VCA DEBUG",_("Request to VCA engine '%s' time %f ms."),id().c_str(),1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk()));
+	    mess_debug("VCA DEBUG",_("Request to VCA engine '%s' time %f ms."),id().c_str(),1e-3*(TSYS::curTime()-t_cnt));
 #endif
 	}
 
@@ -925,8 +925,8 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
     if( wLevel() == 0 )
     {
 #if OSC_DEBUG >= 3
-	mess_debug("VCA DEBUG",_("Load '%s' time %f ms."),id().c_str(),1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk()));
-	t_cnt = SYS->shrtCnt();
+	mess_debug("VCA DEBUG",_("Load '%s' time %f ms."),id().c_str(),1e-3*(TSYS::curTime()-t_cnt));
+	t_cnt = TSYS::curTime();
 #endif
 
 	attrSet("","load",-1);
@@ -940,7 +940,7 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
         //repaint();
 
 #if OSC_DEBUG >= 3
-	mess_debug("VCA DEBUG",_("Init '%s' time %f ms."),id().c_str(),1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk()));
+	mess_debug("VCA DEBUG",_("Init '%s' time %f ms."),id().c_str(),1e-3*(TSYS::curTime()-t_cnt));
 #endif
     }
 }

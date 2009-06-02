@@ -4,13 +4,13 @@
 # Roman Savochenko <rom_as@fromru.com>, 2006-2009.
 #
 #: snmp_client.cpp:59 snmp_client.cpp:137 snmp_client.cpp:146
-#: snmp_client.cpp:297 snmp_client.cpp:300 snmp_client.cpp:303
+#: snmp_client.cpp:304 snmp_client.cpp:307 snmp_client.cpp:310
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.SNMP 0.3.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-07 13:30+0200\n"
+"POT-Creation-Date: 2009-06-02 14:40+0300\n"
 "PO-Revision-Date: 2007-10-29 11:14+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -168,7 +168,7 @@ msgstr ""
 msgid "Standard"
 msgstr "Стандарт"
 
-#: snmp_client.cpp:146 snmp_client.cpp:388 snmp_client.cpp:463
+#: snmp_client.cpp:146 snmp_client.cpp:380 snmp_client.cpp:457
 msgid "OID_LS"
 msgstr ""
 
@@ -180,93 +180,82 @@ msgstr "Список OID (разделение след. строкой)"
 msgid "SNMPPrm_"
 msgstr ""
 
-#: snmp_client.cpp:183 snmp_client.cpp:375 snmp_client.cpp:468
+#: snmp_client.cpp:173
+#, c-format
+msgid "Gather data time %.6g ms. "
+msgstr "Время сбора данных %.6g мс. "
+
+#: snmp_client.cpp:190 snmp_client.cpp:462
 msgid "root"
 msgstr ""
 
-#: snmp_client.cpp:191
+#: snmp_client.cpp:198
 msgid "start"
 msgstr ""
 
-#: snmp_client.cpp:192
+#: snmp_client.cpp:199
 msgid "Gathering task is not started!"
 msgstr "Задача сбора данных не запущена!"
 
-#: snmp_client.cpp:203
+#: snmp_client.cpp:210
 msgid "stop"
 msgstr ""
 
-#: snmp_client.cpp:204
+#: snmp_client.cpp:211
 msgid "Gathering task is not stopped!"
 msgstr "Задача сбора данных не остановлена!"
 
-#: snmp_client.cpp:226
+#: snmp_client.cpp:233
 #, c-format
 msgid "Thread <%u> is started. TID: %ld"
 msgstr ""
 
-#: snmp_client.cpp:244 snmp_client.cpp:347
+#: snmp_client.cpp:251 snmp_client.cpp:354
 #, c-format
 msgid "%s"
 msgstr ""
 
-#: snmp_client.cpp:244
+#: snmp_client.cpp:251
 msgid "Error SNMP session open."
 msgstr "Ошибка открытия SNMP сессии."
 
-#: snmp_client.cpp:338
+#: snmp_client.cpp:345
 #, c-format
 msgid "Timeout: No Response from %s."
 msgstr "Время ожидания ответа от %s превышено."
 
-#: snmp_client.cpp:365
+#: snmp_client.cpp:372
 msgid "_"
 msgstr ""
 
-#: snmp_client.cpp:372 snmp_client.cpp:460
-msgid "info"
-msgstr ""
-
-#: snmp_client.cpp:375 snmp_client.cpp:463
-msgid "fld"
-msgstr ""
-
-#: snmp_client.cpp:375 snmp_client.cpp:380
-msgid "/cntr/st/gath_tm"
-msgstr ""
-
-#: snmp_client.cpp:375
-msgid "Gather data time (ms)"
-msgstr "Время сбора данных (мс)"
-
-#: snmp_client.cpp:375
-msgid "tp"
-msgstr ""
-
-#: snmp_client.cpp:375
-msgid "real"
-msgstr ""
-
-#: snmp_client.cpp:379 snmp_client.cpp:456
-msgid "path"
-msgstr ""
-
-#: snmp_client.cpp:388
+#: snmp_client.cpp:380
 msgid "w_attr"
 msgstr ""
 
-#: snmp_client.cpp:457
+#: snmp_client.cpp:450
+msgid "path"
+msgstr ""
+
+#: snmp_client.cpp:451
 msgid "/serv/"
 msgstr ""
 
-#: snmp_client.cpp:463 snmp_client.cpp:468
+#: snmp_client.cpp:454
+msgid "info"
+msgstr ""
+
+#: snmp_client.cpp:457
+msgid "fld"
+msgstr ""
+
+#: snmp_client.cpp:457 snmp_client.cpp:462
 msgid "/prm/cfg/OID_LS"
 msgstr ""
 
-#: snmp_client.cpp:468
+#: snmp_client.cpp:462
 msgid "set"
 msgstr ""
 
-#: snmp_client.cpp:470
+#: snmp_client.cpp:464
 msgid "Parameter is enabled."
 msgstr "Параметр включен."

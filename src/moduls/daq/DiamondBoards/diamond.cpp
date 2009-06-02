@@ -326,8 +326,8 @@ void *TMdContr::AD_DSCTask( void *param )
 	}
 	//- Generic data -
 	int convRate = 2*(cntr.cfg("ADCONVRATE").getI()/2);
-	
-	if(!cntr.dataEmul())
+
+	if( !cntr.dataEmul() )
 	{
 	    if(ai_prm.size())
 	    {
@@ -350,10 +350,9 @@ void *TMdContr::AD_DSCTask( void *param )
 		dscaioint.dump_threshold = dscaioint.num_conversions/2;
 		dscaioint.fifo_enab = 1;
 		dscaioint.fifo_depth = dscaioint.num_conversions;
-		while(dscaioint.fifo_depth>46)
+		while( dscaioint.fifo_depth>46 )
 		{
-		    if( dscaioint.fifo_depth > 2*46 )
-			dscaioint.fifo_depth/=10;
+		    if( dscaioint.fifo_depth > 2*46 ) dscaioint.fifo_depth/=10;
 		    else dscaioint.fifo_depth/=2;
 		}
 		dscaioint.sample_values = (DSCSAMPLE*)malloc( sizeof(DSCSAMPLE) * dscaioint.num_conversions );
@@ -368,13 +367,20 @@ void *TMdContr::AD_DSCTask( void *param )
 		dscs.op_type = OP_TYPE_INT;
 	    }
 
-	    while(!cntr.endrun_req_ad_dsc)
+	    while( !cntr.endrun_req_ad_dsc )
 	    {
 		dscGetStatus(cntr.dscb, &dscs);
 		if( prev_trans < 0 ) prev_trans = dscs.transfers;
-		if( dscs.transfers != prev_trans )
+		if( dscs.transfers != prev_trans && !cntr.redntUse() )
 		{
-		    if(!vtm)	vtm = SYS->curTime()-1000000;
+		    //> Init current time and check for current time correction
+		    long long cTm = TSYS::curTime();
+		    if( !vtm || fabs((vtm+1000000)-cTm) > 1e6 )
+		    {
+			if( vtm ) mess_warning(cntr.nodePath().c_str(),_("DSC card's counter run from system time is corrected."));
+			vtm = cTm-1000000;
+		    }
+
 		    int v_a_step;
 		    int p_cnt = p_end-p_beg+1;
 		    for( int i_p = 0; i_p < ai_prm.size(); i_p++ )
@@ -407,24 +413,24 @@ void *TMdContr::AD_DSCTask( void *param )
 			//for( int i_smpl = 0; i_smpl < dscaioint.conversion_rate; i_smpl++ )
 			//	printf("Canal %d(%d): %xh\n",prm.at().cnl(),voff+prm.at().cnl()-p_beg+i_smpl*(p_end-p_beg+1),dscaioint.sample_values[voff+prm.at().cnl()-p_beg+i_smpl*(p_end-p_beg+1)]);
 		    }
-		    prev_trans = dscs.transfers;
-		    vtm+=1000000;
+		    vtm += 1000000;
 		}
+		prev_trans = dscs.transfers;
 		clock_nanosleep(CLOCK_REALTIME,0,&get_tm,NULL);
 	    }
 	}
 	else
-	    while(!cntr.endrun_req_ad_dsc)
+	    while( !cntr.endrun_req_ad_dsc )
 	    {
-		if(!vtm)	vtm = SYS->curTime()-1000000;
+		if( !vtm ) vtm = SYS->curTime()-1000000;
 		int v_a_step;
 		int p_cnt = p_end-p_beg+1;
-		for(int i_p = 0; i_p < ai_prm.size(); i_p++ )
+		for( int i_p = 0; i_p < ai_prm.size() && !cntr.redntUse(); i_p++ )
 		{
 		    if( !cntr.present(ai_prm[i_p]) )	continue;
 		    AutoHD<TMdPrm> prm = cntr.at(ai_prm[i_p]);
 		    int p_cnl = prm.at().cnl();
-		    if(prm.at().type() != TMdPrm::AI || p_cnl < p_beg || p_cnl > p_end || !prm.at().enableStat() )
+		    if( prm.at().type() != TMdPrm::AI || p_cnl < p_beg || p_cnl > p_end || !prm.at().enableStat() )
 		        continue;
 		    //- Get code -
 		    AutoHD<TVal> val = prm.at().vlAt("code");
@@ -609,6 +615,17 @@ void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
 {
     if( !owner().startStat() || !enableStat() )	return;
 
+    //> Send to active reserve station
+    if( owner().redntUse( ) )
+    {
+	if( val.getS() == pvl.getS() ) return;
+	XMLNode req("set");
+	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",val.name())->setText(val.getS());
+	SYS->daq().at().rdStRequest(owner().workId(),req);
+	return;
+    }
+
+    //> Direct write
     switch(type())
     {
 	case AO:
@@ -661,6 +678,8 @@ void TMdPrm::vlGet( TVal &val )
 	return;
     }
     if( !owner().startStat() || !enableStat() )	{ val.setS(EVAL_STR,0,true); return; }
+
+    if( owner().redntUse( ) ) return;
 
     switch(type())
     {

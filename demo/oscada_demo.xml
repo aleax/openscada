@@ -111,15 +111,15 @@
 	<node id="sub_DAQ">
 	    <!--
 	    <tbl id="tmplib">
-		<fld ID="test2" NAME="Test 2" DESCR="" DB="tmplib_test2"/>
+		<fld ID="test2" NAME="Тест 2" NAME_en="Test 2" NAME_uk="Тест 2" DESCR="" DESCR_en="" DESCR_uk="" DB="tmplib_test2"/>
 	    </tbl>
 	    <tbl id="tmplib_test2">
-		<fld ID="test2" NAME="Test 2" DESCR="" DB="test2"
-		    PROGRAM="JavaLikeCalc.JavaScript cnt=5*i"/>
+		<fld ID="test2" NAME="Тест 2" NAME_en="Test 2" NAME_uk="Тест 2" DESCR="" DESCR_en="" DESCR_uk="" DB="test2"
+		    PROGRAM="JavaLikeCalc.JavaScript&#010;cnt=5*i"/>
 	    </tbl>
 	    <tbl id="tmplib_test2_io">
-		<fld TMPL_ID="test2" ID="i" NAME="I" TYPE="4" FLAGS="160" VALUE="" POS="0"/>
-		<fld TMPL_ID="test2" ID="cnt" NAME="Cnt" TYPE="4" FLAGS="32" VALUE="" POS="0"/>
+		<fld TMPL_ID="test2" ID="i" NAME="I" NAME_en="I" NAME_uk="I" TYPE="4" FLAGS="160" VALUE="" POS="0"/>
+		<fld TMPL_ID="test2" ID="cnt" NAME="Cnt" NAME_en="Cnt" NAME_uk="Cnt" TYPE="4" FLAGS="32" VALUE="" POS="0"/>
 	    </tbl>-->
 
 	    <node id="mod_LogicLev">
@@ -127,8 +127,12 @@
 		<tbl id="DAQ">
 		    <fld
 			ID="test2"
-			NAME="Test 2"
+			NAME="Тест 2"
+			NAME_en="Test 2"
+			NAME_uk="Тест 2"
 			DESCR=""
+			DESCR_en=""
+			DESCR_uk=""
 			ENABLE="1"
 			START="1"
 			PRM_BD="test2prm"
@@ -136,7 +140,7 @@
 			PRIOR="0"/>
 		</tbl>
 		<tbl id="test2prm">
-		    <fld SHIFR="test2" NAME="Test 2" DESCR="" EN="1" MODE="2" PRM="test2.test2"/>
+		    <fld SHIFR="test2" NAME="Тест 2" NAME_en="Test 2" NAME_uk="Тест 2" DESCR="" DESCR_en="" DESCR_uk="" EN="1" MODE="2" PRM="test2.test2"/>
 		</tbl>-->
 	    </node>
 

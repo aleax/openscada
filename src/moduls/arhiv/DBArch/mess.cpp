@@ -123,7 +123,7 @@ void ModMArch::put( vector<TMess::SRec> &mess )
     if( tbl.freeStat() ) return;
 
     TConfig cfg(&mod->messEl());
-    unsigned long long t_cnt = SYS->shrtCnt();
+    long long t_cnt = TSYS::curTime();
     for( unsigned i_m = 0; i_m < mess.size(); i_m++)
     {
 	if( !chkMessOK(mess[i_m].categ,mess[i_m].level) ) continue;
@@ -162,7 +162,7 @@ void ModMArch::put( vector<TMess::SRec> &mess )
     cfg.cfg("END").setS(TSYS::int2str(m_end),true);
     SYS->db().at().dataSet(addr()+"."+mod->mainTbl(),"",cfg);
 
-    tm_calc = 1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
+    tm_calc = 1e-3*(TSYS::curTime()-t_cnt);
 }
 
 void ModMArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category, char level )

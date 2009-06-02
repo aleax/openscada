@@ -141,12 +141,12 @@ void TipContr::postEnable( int flag )
 
     //Add parameter types
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
-    tpPrmAt(t_prm).fldAdd( new TFld("IO",_("Blocks' IOs"),TFld::String,TFld::FullText|TCfg::NoVal,"200") );
+    tpPrmAt(t_prm).fldAdd( new TFld("IO",_("Blocks' IOs"),TFld::String,TFld::FullText|TCfg::TransltText|TCfg::NoVal,"200") );
 
     //Blok's db structure
     blk_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
-    blk_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
-    blk_el.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::NoFlag,"300") );
+    blk_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
+    blk_el.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TCfg::TransltText,"300") );
     blk_el.fldAdd( new TFld("FUNC",_("Function"),TFld::String,TFld::NoFlag,"75") );
     blk_el.fldAdd( new TFld("EN",_("To enable"),TFld::Boolean,TFld::NoFlag,"1","0") );
     blk_el.fldAdd( new TFld("PROC",_("To process"),TFld::Boolean,TFld::NoFlag,"1","0") );
@@ -233,6 +233,13 @@ TCntrNode &Contr::operator=( TCntrNode &node )
     return *this;
 }
 
+string Contr::getStatus( )
+{
+    string rez = TController::getStatus( );
+    if( startStat() && !redntUse( ) ) rez += TSYS::strMess(_("Calc time %g us. "),tm_calc);
+    return rez;
+}
+
 void Contr::postDisable(int flag)
 {
     if( run_st ) stop();
@@ -290,7 +297,7 @@ void Contr::enable_( )
 	try{ blkAt(lst[i_l]).at().setEnable(true); }
 	catch(TError err)
 	{
-	    mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); 
+	    mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
 	    mess_warning(nodePath().c_str(),_("Enable block <%s> error."),lst[i_l].c_str());
 	}
 }
@@ -305,7 +312,7 @@ void Contr::disable_( )
 	try{ blkAt(lst[i_l]).at().setEnable(false); }
 	    catch(TError err)
 	    {
-		mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); 
+		mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
 		mess_warning(nodePath().c_str(),_("Enable block <%s> error."),lst[i_l].c_str());
 	    }
 }
@@ -320,7 +327,7 @@ void Contr::start_( )
 	try{ blkAt(lst[i_l]).at().setProcess(true); }
 	catch(TError err)
 	{
-	    mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); 
+	    mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
 	    mess_warning(nodePath().c_str(),_("Process block <%s> error."),lst[i_l].c_str());
 	}
 
@@ -380,11 +387,11 @@ void *Contr::Task( void *icontr )
     while(true)
     {
 	//Check calk time
-	unsigned long long t_cnt = SYS->shrtCnt();
+	long long t_cnt = TSYS::curTime();
 
 	cntr.hd_res.resRequestR( );
-	for(unsigned i_it = 0; i_it < cntr.m_iter; i_it++)
-	    for(unsigned i_blk = 0; i_blk < cntr.clc_blks.size(); i_blk++)
+	for( unsigned i_it = 0; i_it < cntr.m_iter && !cntr.redntUse(); i_it++ )
+	    for( unsigned i_blk = 0; i_blk < cntr.clc_blks.size(); i_blk++ )
 	    {
 		try{ cntr.clc_blks[i_blk].at().calc(is_start,is_stop); }
 		catch(TError err)
@@ -401,7 +408,7 @@ void *Contr::Task( void *icontr )
 	    }
 	cntr.hd_res.resRelease( );
 
-	cntr.tm_calc = 1.0e6*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
+	cntr.tm_calc = TSYS::curTime()-t_cnt;
 
 	if(is_stop) break;
 
@@ -415,6 +422,35 @@ void *Contr::Task( void *icontr )
 
     return NULL;
 }
+
+void Contr::redntDataUpdate( bool firstArchiveSync )
+{
+    TController::redntDataUpdate(firstArchiveSync);
+
+    vector<string> bls; blkList(bls);
+
+    //> Request for template's attributes values
+    XMLNode req("CntrReqs"); req.setAttr("path",nodePath(0,true));
+    for( int i_b = 0; i_b < bls.size(); i_b++ )
+    {
+	if( !blkAt(bls[i_b]).at().enable( ) ) continue;
+	req.childAdd("get")->setAttr("path","/blk_"+bls[i_b]+"/%2fserv%2fattr");
+    }
+
+    //> Send request to first active station for this controller
+    try{ owner().owner().rdStRequest(workId(),req); }
+    catch(TError err) { return; }
+
+    //> Redirect respond to local parameters
+    req.setAttr("path","/");
+    for( int i_b = 0; i_b < req.childSize(); i_b++ )
+    {
+	if( atoi(req.childGet(i_b)->attr("err").c_str()) ) { req.childDel(i_b--); continue; }
+	req.childGet(i_b)->setName("set");
+    }
+    cntrCmd(&req);
+}
+
 
 TParamContr *Contr::ParamAttach( const string &name, int type )
 {
@@ -448,7 +484,6 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("grp",opt,-1,"/br/blk_",_("Block"),0664,"root","root",2,"idm","1","idSz","20");
 	if(ctrMkNode("area",opt,-1,"/scheme",_("Blocks scheme")))
 	{
-	    ctrMkNode("fld",opt,-1,"/scheme/ctm",_("Calk time (usek)"),0444,"root","root",1,"tp","real");
 	    ctrMkNode("fld",opt,-1,"/scheme/nmb",_("Number"),0444,"root","root",1,"tp","str");
 	    ctrMkNode("list",opt,-1,"/scheme/sch",_("Blocks"),0664,"root","root",5,"tp","br","idm","1","s_com","add,del","br_pref","blk_","idSz","20");
 	}
@@ -456,8 +491,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/scheme/ctm" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(tm_calc,6));
-    else if( a_path == "/br/blk_" || a_path == "/scheme/sch" )
+    if( a_path == "/br/blk_" || a_path == "/scheme/sch" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
 	{
@@ -594,6 +628,18 @@ void Prm::disable()
 void Prm::vlSet( TVal &val, const TVariant &pvl )
 {
     if( !enableStat() )	return;
+
+    //> Send to active reserve station
+    if( owner().redntUse( ) )
+    {
+	if( val.getS() == pvl.getS() ) return;
+	XMLNode req("set");
+	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",val.name())->setText(val.getS());
+	SYS->daq().at().rdStRequest(owner().workId(),req);
+	return;
+    }
+
+    //> Direct write
     try
     {
 	AutoHD<Block> blk = ((Contr &)owner()).blkAt(TSYS::strSepParse(val.fld().reserve(),0,'.'));
@@ -621,6 +667,8 @@ void Prm::vlGet( TVal &val )
 	else val.setS("0",0,true);
 	return;
     }
+
+    if( owner().redntUse( ) ) return;
 
     try
     {

@@ -1972,7 +1972,7 @@ void ConfApp::tabSelect( QWidget *wdg )
 void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 {
 #if OSC_DEBUG >= 3
-    unsigned long long t_cnt = SYS->shrtCnt();
+    long long t_cnt = TSYS::curTime();
 #endif
 
     QStringList grps = i->data(2,Qt::UserRole).toStringList();
@@ -2089,8 +2089,7 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
     }
 
 #if OSC_DEBUG >= 3
-    mess_debug("QTCfg DEBUG",_("Expand/update branch '%s' time %f ms."),i->text(2).toAscii().data(),1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk()));
-    t_cnt = SYS->shrtCnt();
+    mess_debug("QTCfg DEBUG",_("Expand/update branch '%s' time %f ms."),i->text(2).toAscii().data(),1e-3*(TSYS::curTime()-t_cnt));
 #endif
 }
 

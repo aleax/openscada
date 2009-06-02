@@ -157,6 +157,8 @@ class TMdContr: public TController
 	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem );
 	~TMdContr( );
 
+	string getStatus( );
+
 	int period( )		{ return vmax(1,m_per); }
 	bool assincWrite( )	{ return m_assinc_wr; }
 
@@ -166,6 +168,8 @@ class TMdContr: public TController
 	void disconnectRemotePLC( );
 	void getDB( unsigned n_db, long offset, string &buffer );
 	void putDB( unsigned n_db, long offset, const string &buffer );
+
+	void redntDataUpdate( bool firstArchiveSync = false );
 
 	TTpContr &owner( );
 
@@ -194,9 +198,8 @@ class TMdContr: public TController
 	void setValR( double ivl, SValData ival, string &err );
 	void setValS( const string &ivl, SValData ival, string &err );
 
-	//- Service -
+	//> Service
 	void postDisable( int flag );				//Delete all DB if flag 1
-	void cntrCmdProc( XMLNode *opt );			//Control interface command process
 
     private:
 	//Methods
@@ -275,6 +278,8 @@ class TTpContr: public TTipDAQ
 	void cntrCmdProc( XMLNode *opt );
 	void load_( );
 	void save_( );
+
+	bool redntAllow( )	{ return true; }
 
     private:
 	//Methods

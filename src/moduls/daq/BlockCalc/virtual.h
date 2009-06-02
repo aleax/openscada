@@ -89,6 +89,8 @@ class Contr: public TController
 
 	TCntrNode &operator=( TCntrNode &node );
 
+	string getStatus( );
+
 	TParamContr *ParamAttach( const string &name, int type );
 	int period( )				{ return vmax(1,m_per); }
 	int iterate( )				{ return m_iter; }
@@ -103,6 +105,8 @@ class Contr: public TController
 	Res &res( )				{ return hd_res; }
 
 	TipContr &owner( );
+
+	void redntDataUpdate( bool firstArchiveSync = false );
 
     protected:
 	//Protected methods
@@ -162,6 +166,8 @@ class TipContr: public TTipDAQ
 	//Protected methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	void load_( );
+
+	bool redntAllow( )	{ return true; }
 
     private:
 	//Private methods

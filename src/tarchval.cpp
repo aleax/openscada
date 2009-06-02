@@ -2225,7 +2225,7 @@ void *TVArchivator::Task( void *param )
 	{
 	    TSYS::taskSleep((long long)(1e9*arch.archPeriod( )));
 
-	    unsigned long long t_cnt = SYS->shrtCnt();
+	    long long t_cnt = TSYS::curTime();
 
 	    ResAlloc res(arch.a_res,false);
 	    long long beg, end;
@@ -2240,7 +2240,7 @@ void *TVArchivator::Task( void *param )
 		}
 	    res.release();
 
-	    arch.tm_calc = 1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
+	    arch.tm_calc = 1e-3*(TSYS::curTime()-t_cnt);
 	} catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str() ); }
 
     arch.run_st = false;

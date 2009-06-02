@@ -990,16 +990,16 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	mess_info(test_cat,"  Update buffer end ok.");
 
 	wtm += buf->period()*(buf->size()+5);
-	st_cnt = SYS->shrtCnt();
+	st_cnt = TSYS::curTime();
 	buf->setSize(1000);
 	for(int i=0; i<buf->size(); i++)
 	    buf->setS("Test: "+TSYS::int2str(i),wtm+i*buf->period());
-	mess_info(test_cat,"  Write 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+	mess_info(test_cat,"  Write 1000 values time %f ms!",1e-3*(TSYS::curTime()-st_cnt));
 
-	st_cnt = SYS->shrtCnt();
+	st_cnt = TSYS::curTime();
 	for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
 	{ rtm = i; buf->getS(&rtm); }
-	mess_info(test_cat,"  Read 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+	mess_info(test_cat,"  Read 1000 values time %f ms!",1e-3*(TSYS::curTime()-st_cnt));
 
 	mess_info(test_cat,"Test4 passed.");
 	delete buf;
@@ -1050,16 +1050,16 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	mess_info(test_cat,"  Update buffer end ok.");
 
 	wtm += buf->period()*(buf->size()+5);
-	st_cnt = SYS->shrtCnt();
+	st_cnt = TSYS::curTime();
 	buf->setSize(1000);
 	for(int i=0; i<buf->size(); i++)
 	    buf->setI(i,wtm+i*buf->period());
-	mess_info(test_cat,"  Write 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+	mess_info(test_cat,"  Write 1000 values time %f ms!",1e-3*(TSYS::curTime()-st_cnt));
 
-	st_cnt = SYS->shrtCnt();
+	st_cnt = TSYS::curTime();
 	for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
 	{ rtm = i; buf->getI(&rtm); }
-	mess_info(test_cat,"  Read 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+	mess_info(test_cat,"  Read 1000 values time %f ms!",1e-3*(TSYS::curTime()-st_cnt));
 
 	mess_info(test_cat,"Test5 passed.");
 	delete buf;
@@ -1112,16 +1112,16 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	mess_info(test_cat,"  Update buffer end ok.");
 
 	wtm += buf->period()*(buf->size()+5);
-	st_cnt = SYS->shrtCnt();
+	st_cnt = TSYS::curTime();
 	buf->setSize(1000);
 	for(int i=0; i<buf->size(); i++)
 	    buf->setS("Test: "+TSYS::int2str(i),wtm+i*buf->period());
-	mess_info(test_cat,"  Write 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+	mess_info(test_cat,"  Write 1000 values time %f ms!",1e-3*(TSYS::curTime()-st_cnt));
 
-	st_cnt = SYS->shrtCnt();
+	st_cnt = TSYS::curTime();
 	for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
 	{ rtm = i; buf->getS(&rtm); }
-	mess_info(test_cat,"  Read 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+	mess_info(test_cat,"  Read 1000 values time %f ms!",1e-3*(TSYS::curTime()-st_cnt));
 
 	mess_info(test_cat,"Test6 passed.");
 	delete buf;
@@ -1174,16 +1174,16 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	mess_info(test_cat,"  Update buffer end ok.");
 
 	wtm += buf->period()*(buf->size()+5);
-	st_cnt = SYS->shrtCnt();
+	st_cnt = TSYS::curTime();
 	buf->setSize(1000);
 	for(int i=0; i<buf->size(); i++)
 	    buf->setI(i,wtm+i*buf->period());
-	mess_info(test_cat,"  Write 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+	mess_info(test_cat,"  Write 1000 values time %f ms!",1e-3*(TSYS::curTime()-st_cnt));
 
-	st_cnt = SYS->shrtCnt();
+	st_cnt = TSYS::curTime();
 	for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
 	{ rtm = i; buf->getI(&rtm); }
-	mess_info(test_cat,"  Read 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+	mess_info(test_cat,"  Read 1000 values time %f ms!",1e-3*(TSYS::curTime()-st_cnt));
 
 	mess_info(test_cat,"Test7 passed.");
 	delete buf;
@@ -1236,16 +1236,16 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	mess_info(test_cat,"  Update buffer end ok.");
 
 	wtm += buf->period()*(buf->size()+5);
-	st_cnt = SYS->shrtCnt();
+	st_cnt = TSYS::curTime();
 	buf->setSize(1000);
 	for(int i=0; i<buf->size(); i++)
 	    buf->setS("Test: "+TSYS::int2str(i),wtm+i*buf->period());
-	mess_info(test_cat,"  Write 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+	mess_info(test_cat,"  Write 1000 values time %f ms!",1e-3*(TSYS::curTime()-st_cnt));
 
-	st_cnt = SYS->shrtCnt();
+	st_cnt = TSYS::curTime();
 	for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
 	{ rtm = i; buf->getS(&rtm); }
-	mess_info(test_cat,"  Read 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+	mess_info(test_cat,"  Read 1000 values time %f ms!",1e-3*(TSYS::curTime()-st_cnt));
 
 	mess_info(test_cat,"Test8 passed.");
 	delete buf;
@@ -1298,16 +1298,16 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	mess_info(test_cat,"  Update buffer end ok.");
 
 	wtm += buf->period()*(buf->size()+5);
-	st_cnt = SYS->shrtCnt();
+	st_cnt = TSYS::curTime();
 	buf->setSize(1000);
 	for(int i=0; i<buf->size(); i++)
 	    buf->setI(i,wtm+i*buf->period());
-	mess_info(test_cat,"  Write 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+	mess_info(test_cat,"  Write 1000 values time %f ms!",1e-3*(TSYS::curTime()-st_cnt));
 
-	st_cnt = SYS->shrtCnt();
+	st_cnt = TSYS::curTime();
 	for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
 	{ rtm = i; buf->getI(&rtm); }
-	mess_info(test_cat,"  Read 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+	mess_info(test_cat,"  Read 1000 values time %f ms!",1e-3*(TSYS::curTime()-st_cnt));
 
 	mess_info(test_cat,"Test9 passed.");
 	delete buf;
@@ -1358,16 +1358,16 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	mess_info(test_cat,"  Update buffer end ok.");
 
 	wtm += wper*(buf->size()+5);
-	st_cnt = SYS->shrtCnt();
+	st_cnt = TSYS::curTime();
 	buf->setSize(1000);
 	for(int i=0; i<buf->size(); i++)
 	    buf->setS("Test: "+TSYS::int2str(i),wtm+i*wper);
-	mess_info(test_cat,"  Write 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+	mess_info(test_cat,"  Write 1000 values time %f ms!",1e-3*(TSYS::curTime()-st_cnt));
 
-	st_cnt = SYS->shrtCnt();
+	st_cnt = TSYS::curTime();
 	for(long long i = buf->end(); i > buf->begin(); i=rtm-1)
 	{ rtm = i; buf->getS(&rtm); }
-	mess_info(test_cat,"  Read 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+	mess_info(test_cat,"  Read 1000 values time %f ms!",1e-3*(TSYS::curTime()-st_cnt));
 
 	mess_info(test_cat,"Test10 passed.");
 	delete buf;
@@ -1416,16 +1416,16 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	mess_info(test_cat,"  Update buffer end ok.");
 
 	wtm += wper*(buf->size()+5);
-	st_cnt = SYS->shrtCnt();
+	st_cnt = TSYS::curTime();
 	buf->setSize(1000);
 	for(int i=0; i<buf->size(); i++)
 	    buf->setI(i,wtm+i*wper);
-	mess_info(test_cat,"  Write 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+	mess_info(test_cat,"  Write 1000 values time %f ms!",1e-3*(TSYS::curTime()-st_cnt));
 
-	st_cnt = SYS->shrtCnt();
+	st_cnt = TSYS::curTime();
 	for(long long i = buf->end(); i > buf->begin(); i=rtm-1)
 	{ rtm = i; buf->getI(&rtm); }
-	mess_info(test_cat,"  Read 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+	mess_info(test_cat,"  Read 1000 values time %f ms!",1e-3*(TSYS::curTime()-st_cnt));
 
 	mess_info(test_cat,"Test11 passed.");
 	delete buf;
@@ -1474,16 +1474,16 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	mess_info(test_cat,"  Update buffer end ok.");
 
 	wtm += wper*(buf->size()+5);
-	st_cnt = SYS->shrtCnt();
+	st_cnt = TSYS::curTime();
 	buf->setSize(1000);
 	for(int i=0; i<buf->size(); i++)
 	    buf->setS("Test: "+TSYS::int2str(i),wtm+i*wper);
-	mess_info(test_cat,"  Write 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+	mess_info(test_cat,"  Write 1000 values time %f ms!",1e-3*(TSYS::curTime()-st_cnt));
 
-	st_cnt = SYS->shrtCnt();
+	st_cnt = TSYS::curTime();
 	for(long long i = buf->end(); i > buf->begin(); i=rtm-1)
 	{ rtm = i; buf->getS(&rtm); }
-	mess_info(test_cat,"  Read 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+	mess_info(test_cat,"  Read 1000 values time %f ms!",1e-3*(TSYS::curTime()-st_cnt));
 
 	mess_info(test_cat,"Test12 passed.");
 	delete buf;
@@ -1532,16 +1532,16 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	mess_info(test_cat,"  Update buffer end ok.");
 
 	wtm += wper*(buf->size()+5);
-	st_cnt = SYS->shrtCnt();
+	st_cnt = TSYS::curTime();
 	buf->setSize(1000);
 	for(int i=0; i<buf->size(); i++)
 	    buf->setI(i,wtm+i*wper);
-	mess_info(test_cat,"  Write 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+	mess_info(test_cat,"  Write 1000 values time %f ms!",1e-3*(TSYS::curTime()-st_cnt));
 
-	st_cnt = SYS->shrtCnt();
+	st_cnt = TSYS::curTime();
 	for(long long i = buf->end(); i > buf->begin(); i=rtm-1)
 	{ rtm = i; buf->getI(&rtm); }
-	mess_info(test_cat,"  Read 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+	mess_info(test_cat,"  Read 1000 values time %f ms!",1e-3*(TSYS::curTime()-st_cnt));
 
 	mess_info(test_cat,"Test13 passed.");
 	delete buf;
@@ -1684,14 +1684,14 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	string inbuf, outbuf;
 	for(int i_s = 0; i_s < 256; i_s++) inbuf.push_back((unsigned char)i_s);
 
-	long long st_cnt = SYS->shrtCnt();
+	long long st_cnt = TSYS::curTime();
 	outbuf = TSYS::strEncode(inbuf,TSYS::base64);
-	mess_info(test_cat,"  Code %d size text time %f ms!",inbuf.size(),1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+	mess_info(test_cat,"  Code %d size text time %f ms!",inbuf.size(),1e-3*(TSYS::curTime()-st_cnt));
 	mess_info(test_cat,(string("  Coded text: ")+outbuf).c_str());
 
-	st_cnt = SYS->shrtCnt();
+	st_cnt = TSYS::curTime();
 	inbuf = TSYS::strDecode(outbuf,TSYS::base64);
-	mess_info(test_cat,"  Encode %d size text time %f ms!",outbuf.size(),1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+	mess_info(test_cat,"  Encode %d size text time %f ms!",outbuf.size(),1e-3*(TSYS::curTime()-st_cnt));
 	for(int i_s = 0; i_s < 256; i_s++) 
 	    if((unsigned char)inbuf[i_s] != i_s) 
 		throw TError("","Test1 failed! Coding error!" );
