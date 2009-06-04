@@ -589,7 +589,7 @@ void ModVArchEl::getValsProc( TValBuf &buf, long long ibeg, long long iend )
 
 TVariant ModVArchEl::getValProc( long long *tm, bool up_ord )
 {
-    long long itm = tm?*tm:SYS->curTime();
+    long long itm = tm ? *tm : SYS->curTime();
     long long per;
     ResAlloc res(m_res,false);
     for( int i_a = 0; i_a < arh_f.size(); i_a++ )

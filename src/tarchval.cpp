@@ -1086,10 +1086,10 @@ TVariant TVArchive::getVal( long long *tm, bool up_ord, const string &arch, bool
     if( (arch.empty() || arch == BUF_ARCH_NM) && (!tm || (*tm >= begin() && *tm <= end())) )
 	switch( TValBuf::valType() )
 	{
-	    case TFld::Integer:	TValBuf::getI(tm,up_ord);	break;
-	    case TFld::String:	TValBuf::getS(tm,up_ord);	break;
-	    case TFld::Real:	TValBuf::getR(tm,up_ord);	break;
-	    case TFld::Boolean:	TValBuf::getB(tm,up_ord);	break;
+	    case TFld::Integer:	return TValBuf::getI(tm,up_ord);
+	    case TFld::String:	return TValBuf::getS(tm,up_ord);
+	    case TFld::Real:	return TValBuf::getR(tm,up_ord);
+	    case TFld::Boolean:	return TValBuf::getB(tm,up_ord);
 	}
     //> Get from archivators
     else
@@ -1101,6 +1101,7 @@ TVariant TVArchive::getVal( long long *tm, bool up_ord, const string &arch, bool
 			(up_ord && *tm <= arch_el[i_a]->end() && *tm > arch_el[i_a]->begin()-(long long)(1000000.*arch_el[i_a]->archivator( ).valPeriod())) ||
 			(!up_ord && *tm < arch_el[i_a]->end()+(long long)(1000000.*arch_el[i_a]->archivator( ).valPeriod()) && *tm >= arch_el[i_a]->begin()) ) )
 		return arch_el[i_a]->getVal(tm,up_ord,onlyLocal);
+
     }
     return EVAL_REAL;
 }
@@ -2398,6 +2399,12 @@ TVariant TVArchEl::getVal( long long *tm, bool up_ord, bool onlyLocal )
     }
 
     return vl;
+}
+
+TVariant TVArchEl::getValProc( long long *tm, bool up_ord )
+{
+    if(tm) *tm = 0;
+    return TVariant();
 }
 
 void TVArchEl::getVals( TValBuf &buf, long long ibeg, long long iend, bool onlyLocal )

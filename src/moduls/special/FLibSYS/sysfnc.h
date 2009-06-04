@@ -349,7 +349,7 @@ class varhGetR : public TFunction
 		if( !addr.empty() )	id = mod->varchOpen(addr);
 
 		long long vtm = (long long)val->getI(2)*1000000+val->getI(3);
-		if(mod->isArch(id))
+		if( mod->isArch(id) )
 		    val->setR(0,mod->varch(id).at().getVal(&vtm,val->getB(4),val->getS(5)).getR());
 		else
 		{

@@ -2323,7 +2323,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
     bool toEnd = (tTimeGrnd >= valEnd());
     int  endBlks = 0;
     XMLNode req("get");
-    m1: req.clear()->
+    m1:	req.clear()->
 	    setAttr("arch",shD->valArch)->
 	    setAttr("path",addr()+"/%2fserv%2fval")->
 	    setAttr("tm",TSYS::ll2str(tTime))->

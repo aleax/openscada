@@ -333,7 +333,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 	    {
 		ctrMkNode("fld",opt,-1,"/obj/cfg/id",_("Id"),R_R_R_,"root","UI",1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/obj/cfg/name",_("Name"),RWRWR_,"root","UI",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/obj/cfg/descr",_("Description"),RWRWR_,"root","UI",3,"tp","str","cols","50","rows","3");
+		ctrMkNode("fld",opt,-1,"/obj/cfg/descr",_("Description"),RWRWR_,"root","UI",3,"tp","str","cols","100","rows","3");
 		ctrMkNode("img",opt,-1,"/obj/cfg/ico",_("Icon"),RWRWR_,"root","UI",2,"v_sz","64","h_sz","64");
 		ctrMkNode("fld",opt,-1,"/obj/cfg/owner",_("Owner and group"),RWRWR_,"root","UI",3,"tp","str","dest","select","select","/obj/u_lst");
 		ctrMkNode("fld",opt,-1,"/obj/cfg/grp","",RWRWR_,"root","UI",3,"tp","str","dest","select","select","/obj/g_lst");
@@ -911,6 +911,7 @@ void Page::save_( )
 	if( attr.at().flgGlob()&Attr::Generic )
 	{
 	    c_el.cfg("ID").setS(als[i_a]);
+	    c_el.cfg("IO_VAL").setNoTransl( !(attr.at().type() == TFld::String && !(attr.at().flgGlob()&(Attr::Image|Attr::DataTime|Attr::Color|Attr::Font|Attr::Address))) );
 	    c_el.cfg("IO_VAL").setS(attr.at().getS());
 	    c_el.cfg("SELF_FLG").setI(attr.at().flgSelf());
 	    c_el.cfg("CFG_TMPL").setS(attr.at().cfgTempl());
@@ -948,6 +949,7 @@ void Page::saveIO( )
 	{
 	    //>> User attribute store
 	    c_elu.cfg("ID").setS(als[i_a]);
+	    c_elu.cfg("IO_VAL").setNoTransl( !(attr.at().type() == TFld::String && !(attr.at().flgGlob()&(Attr::Image|Attr::DataTime|Attr::Color|Attr::Font|Attr::Address))) );
 	    c_elu.cfg("IO_VAL").setS(attr.at().getS()+"|"+
 				    attr.at().fld().values()+"|"+
 				    attr.at().fld().selNames());
@@ -962,6 +964,7 @@ void Page::saveIO( )
 	{
 	    //>> Work attribute store
 	    c_el.cfg("ID").setS(als[i_a]);
+	    c_el.cfg("IO_VAL").setNoTransl( !(attr.at().type() == TFld::String && !(attr.at().flgGlob()&(Attr::Image|Attr::DataTime|Attr::Color|Attr::Font|Attr::Address))) );
 	    c_el.cfg("IO_VAL").setS(attr.at().getS());
 	    c_el.cfg("SELF_FLG").setI(attr.at().flgSelf());
 	    c_el.cfg("CFG_TMPL").setS(attr.at().cfgTempl());
@@ -1433,6 +1436,7 @@ void PageWdg::save_( )
 	    if( attr.at().flgGlob()&Attr::Generic )
 	    {
 		c_el.cfg("ID").setS( id()+"/"+als[i_a] );
+		c_el.cfg("IO_VAL").setNoTransl( !(attr.at().type() == TFld::String && !(attr.at().flgGlob()&(Attr::Image|Attr::DataTime|Attr::Color|Attr::Font|Attr::Address))) );
 		c_el.cfg("IO_VAL").setS(attr.at().getS());
 		c_el.cfg("SELF_FLG").setI(attr.at().flgSelf());
 		c_el.cfg("CFG_TMPL").setS(attr.at().cfgTempl());
@@ -1471,6 +1475,7 @@ void PageWdg::saveIO( )
 	{
 	    //>> User attribute store
 	    c_elu.cfg("ID").setS( id()+"/"+als[i_a] );
+	    c_elu.cfg("IO_VAL").setNoTransl( !(attr.at().type() == TFld::String && !(attr.at().flgGlob()&(Attr::Image|Attr::DataTime|Attr::Color|Attr::Font|Attr::Address))) );
 	    c_elu.cfg("IO_VAL").setS(attr.at().getS()+"|"+
 				    attr.at().fld().values()+"|"+
 				    attr.at().fld().selNames());
@@ -1485,6 +1490,7 @@ void PageWdg::saveIO( )
 	{
 	    //>> Work attribute store
 	    c_el.cfg("ID").setS( id()+"/"+als[i_a] );
+	    c_el.cfg("IO_VAL").setNoTransl( !(attr.at().type() == TFld::String && !(attr.at().flgGlob()&(Attr::Image|Attr::DataTime|Attr::Color|Attr::Font|Attr::Address))) );
 	    c_el.cfg("IO_VAL").setS(attr.at().getS());
 	    c_el.cfg("SELF_FLG").setI(attr.at().flgSelf());
 	    c_el.cfg("CFG_TMPL").setS(attr.at().cfgTempl());

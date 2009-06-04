@@ -49,8 +49,8 @@ TArchiveS::TArchiveS( ) :
     //> Message archivator DB structure
     elMess.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
     elMess.fldAdd( new TFld("MODUL",_("Module(plugin) name"),TFld::String,TCfg::Key,"20") );
-    elMess.fldAdd( new TFld("NAME",_("Name"),TFld::String,0,"50") );
-    elMess.fldAdd( new TFld("DESCR",_("Description"),TFld::String,0,"200") );
+    elMess.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
+    elMess.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TCfg::TransltText,"200") );
     elMess.fldAdd( new TFld("START",_("Start archive"),TFld::Boolean,0,"1") );
     elMess.fldAdd( new TFld("CATEG",_("Message categories"),TFld::String,0,"100") );
     elMess.fldAdd( new TFld("LEVEL",_("Message level"),TFld::Integer,0,"1","","0;7") );
@@ -59,8 +59,8 @@ TArchiveS::TArchiveS( ) :
     //> Value archivator DB structure
     elVal.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
     elVal.fldAdd( new TFld("MODUL",_("Module(plugin) name"),TFld::String,TCfg::Key,"20") );
-    elVal.fldAdd( new TFld("NAME",_("Name"),TFld::String,0,"50") );
-    elVal.fldAdd( new TFld("DESCR",_("Description"),TFld::String,0,"200") );
+    elVal.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
+    elVal.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TCfg::TransltText,"200") );
     elVal.fldAdd( new TFld("START",_("Start archive"),TFld::Boolean,0,"1","0") );
     elVal.fldAdd( new TFld("ADDR",_("Address"),TFld::String,0,"50") );
     elVal.fldAdd( new TFld("V_PER",_("Value period (sec)"),TFld::Real,0,"12.6","1","0;1000000") );
@@ -68,8 +68,8 @@ TArchiveS::TArchiveS( ) :
 
     //> Value archive DB structure
     elAval.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
-    elAval.fldAdd( new TFld("NAME",_("Name"),TFld::String,0,"50") );
-    elAval.fldAdd( new TFld("DESCR",_("Description"),TFld::String,0,"200") );
+    elAval.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
+    elAval.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TCfg::TransltText,"200") );
     elAval.fldAdd( new TFld("START",_("Start archive"),TFld::Boolean,0,"1","0") );
     elAval.fldAdd( new TFld("SrcMode",_("Source mode"),TFld::Integer,0,"1") );
     elAval.fldAdd( new TFld("Source",_("Source"),TFld::String,0,"100") );

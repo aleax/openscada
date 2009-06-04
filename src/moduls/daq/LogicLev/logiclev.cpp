@@ -140,7 +140,7 @@ void TTpContr::postEnable( int flag )
     //- Logical level parameter IO BD structure -
     el_prm_io.fldAdd( new TFld("PRM_ID",_("Parameter ID"),TFld::String,TCfg::Key,"20") );
     el_prm_io.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
-    el_prm_io.fldAdd( new TFld("VALUE",_("Value"),TFld::String,TFld::NoFlag,"200") );
+    el_prm_io.fldAdd( new TFld("VALUE",_("Value"),TFld::String,TCfg::TransltText,"200") );
 }
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
@@ -442,6 +442,7 @@ void TMdPrm::saveIO()
 	for( int i_io = 0; i_io < tmpl->val.func()->ioSize(); i_io++ )
 	{
 	    cfg.cfg("ID").setS(tmpl->val.func()->io(i_io)->id());
+	    cfg.cfg("VALUE").setNoTransl( !(tmpl->val.func()->io(i_io)->type()==IO::String && !(tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink)) );
 	    if( tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink )
 		cfg.cfg("VALUE").setS(lnk(lnkId(i_io)).prm_attr);
 	    else cfg.cfg("VALUE").setS(tmpl->val.getS(i_io));

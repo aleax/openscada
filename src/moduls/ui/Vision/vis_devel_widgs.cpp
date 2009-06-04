@@ -464,6 +464,7 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &value, int 
 	if( !mainWin()->cntrIfCmd(req) )
 	{
 	    it->setData( (it->data().type()==QVariant::Bool) ? value.toBool() : value );
+	    it->setModify(true);
 	    emit modified(nwdg);
 	    emit dataChanged(index,index);
 	    if( it->flag()&Item::Active ) setWdg(cur_wdg);
@@ -1843,7 +1844,7 @@ DevelWdgView::DevelWdgView( const string &iwid, int ilevel, VisDevelop *mainWind
 	setAcceptDrops(true);
 	setContextMenuPolicy(Qt::CustomContextMenu);
 	mainWin( )->setWdgVisScale( mVisScale );
-	connect( this, SIGNAL( customContextMenuRequested(const QPoint&) ), this, SLOT( wdgPopup() ) );	
+	connect( this, SIGNAL( customContextMenuRequested(const QPoint&) ), this, SLOT( wdgPopup() ) );
     }
     //> Select only created widgets by user
     else if( wLevel() == 1 && ((WdgView*)parentWidget())->isReload )

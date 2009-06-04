@@ -594,7 +594,7 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/wdg/cfg/root",_("Root"),R_R_R_,"root","UI",1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/wdg/cfg/path",_("Path"),R_R_R_,"root","UI",1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/wdg/cfg/name",_("Name"),RWRWR_,"root","UI",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/wdg/cfg/descr",_("Description"),RWRWR_,"root","UI",3,"tp","str","cols","90","rows","4");
+		ctrMkNode("fld",opt,-1,"/wdg/cfg/descr",_("Description"),RWRWR_,"root","UI",3,"tp","str","cols","100","rows","4");
 		ctrMkNode("img",opt,-1,"/wdg/cfg/ico",_("Icon"),(isLink()?R_R_R_:RWRWR_),"root","UI",2,"v_sz","64","h_sz","64");
 		ctrMkNode("fld",opt,-1,"/wdg/cfg/owner",_("Owner and group"),RWRWR_,"root","UI",3,"tp","str","dest","select","select","/wdg/u_lst");
 		ctrMkNode("fld",opt,-1,"/wdg/cfg/grp","",RWRWR_,"root","UI",3,"tp","str","dest","select","select","/wdg/g_lst");
@@ -1089,7 +1089,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/proc/wdg",_("Widget"),RWRWR_,"root","UI",3,"tp","str","dest","select","select","/proc/w_lst");
 	    wattr = TBDS::genDBGet(mod->nodePath()+"wdgAttr",".",opt->attr("user"));
 	    if( !wdgPresent(wattr) )	wattr = ".";
-	    if(ctrMkNode("table",opt,-1,"/proc/attr",_("Attributes"),RWRWR_,"root","UI",2,"s_com",((wattr==".")?"add,del":""),"key","id"))
+	    if(ctrMkNode("table",opt,-1,"/proc/attr",_("Attributes"),RWRWR_,"root","UI",2,"s_com","add,del","key","id"))
 	    {
 		ctrMkNode("list",opt,-1,"/proc/attr/id",_("Id"),RWRWR_,"root","UI",1,"tp","str");
 		ctrMkNode("list",opt,-1,"/proc/attr/name",_("Name"),RWRWR_,"root","UI",1,"tp","str");
@@ -1103,7 +1103,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	    {
 		ctrMkNode("fld",opt,-1,"/proc/calc/progLng",_("Programm language"),RWRWR_,"root","UI",3,"tp","str","dest","sel_ed","select","/proc/calc/plangLs");
 		ctrMkNode("fld",opt,-1,"/proc/calc/per",_("Calc period (ms)"),RWRWR_,"root","UI",1,"tp","dec");
-		ctrMkNode("fld",opt,-1,"/proc/calc/prog",_("Programm"),RWRWR_,"root","UI",3,"tp","str","cols","90","rows","8");
+		ctrMkNode("fld",opt,-1,"/proc/calc/prog",_("Programm"),RWRWR_,"root","UI",3,"tp","str","cols","100","rows","8");
 	    }
 	}
 	return true;
@@ -1169,6 +1169,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	    wdg.at().attrAdd( new TFld("newAttr",_("New attribute"),TFld::String,Attr::IsUser) );
 	    wdg.at().attrAt("newAttr").at().setS(EVAL_STR);
 	    wdg.at().attrAt("newAttr").at().setModif(1);
+	    wdg.at().modif();
 	}
 	if( ctrChkNode(opt,"del",RWRWR_,"root","UI",SEQ_WR) )
 	{
@@ -1179,6 +1180,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		    wdg.at().attrAt(opt->attr("key_id")).at().fld().flg()&Attr::IsUser )
 		wdg.at().attrDel(opt->attr("key_id"));
 	    else throw TError(nodePath().c_str(),_("Deletint the not user element error."));
+	    wdg.at().modif();
 	}
 	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )
 	{
@@ -1241,6 +1243,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		}
 		else if( idcol == "cfgtmpl" )	wdg.at().attrAt(idattr).at().setCfgTempl(opt->text());
 	    }
+	    wdg.at().modif();
 	}
     }
     else if( a_path == "/proc/calc/progLng" )

@@ -212,7 +212,7 @@ bool WidgetLib::mimeDataGet( const string &iid, string &mimeType, string *mimeDa
 	//- Get resource file from DB -
 	string dbid = is_res ? iid.substr(4) : iid;
 	string wtbl = tbl()+"_mime";
-	string wdb  = idb.empty() ? DB() : idb;	
+	string wdb  = idb.empty() ? DB() : idb;
 	TConfig c_el( &mod->elWdgData() );
 	if( !mimeData ) c_el.cfg("DATA").setView(false);
 	c_el.cfg("ID").setS( dbid );
@@ -305,7 +305,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 	    {
 		ctrMkNode("fld",opt,-1,"/obj/cfg/id",_("Id"),R_R_R_,"root","UI",1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/obj/cfg/name",_("Name"),RWRWR_,"root","UI",2,"tp","str","len","50");
-		ctrMkNode("fld",opt,-1,"/obj/cfg/descr",_("Description"),RWRWR_,"root","UI",3,"tp","str","cols","50","rows","3");
+		ctrMkNode("fld",opt,-1,"/obj/cfg/descr",_("Description"),RWRWR_,"root","UI",3,"tp","str","cols","100","rows","3");
 		ctrMkNode("img",opt,-1,"/obj/cfg/ico",_("Icon"),RWRWR_,"root","UI",2,"v_sz","64","h_sz","64");
 	    }
 	}
@@ -709,6 +709,7 @@ void LWidget::save_( )
 	if( attr.at().flgGlob()&Attr::Generic )
 	{
 	    c_el.cfg("ID").setS(als[i_a]);
+	    c_el.cfg("IO_VAL").setNoTransl( !(attr.at().type() == TFld::String && !(attr.at().flgGlob()&(Attr::Image|Attr::DataTime|Attr::Color|Attr::Font|Attr::Address))) );
 	    c_el.cfg("IO_VAL").setS(attr.at().getS());
 	    c_el.cfg("SELF_FLG").setI(attr.at().flgSelf());
 	    c_el.cfg("CFG_TMPL").setS(attr.at().cfgTempl());
@@ -746,6 +747,7 @@ void LWidget::saveIO( )
 	{
 	    //>> User attribute store
 	    c_elu.cfg("ID").setS(als[i_a]);
+	    c_elu.cfg("IO_VAL").setNoTransl( !(attr.at().type() == TFld::String && !(attr.at().flgGlob()&(Attr::Image|Attr::DataTime|Attr::Color|Attr::Font|Attr::Address))) );
 	    c_elu.cfg("IO_VAL").setS(attr.at().getS()+"|"+
 				    attr.at().fld().values()+"|"+
 				    attr.at().fld().selNames());
@@ -760,6 +762,7 @@ void LWidget::saveIO( )
 	{
 	    //>> Work attribute store
 	    c_el.cfg("ID").setS(als[i_a]);
+	    c_el.cfg("IO_VAL").setNoTransl( !(attr.at().type() == TFld::String && !(attr.at().flgGlob()&(Attr::Image|Attr::DataTime|Attr::Color|Attr::Font|Attr::Address))) );
 	    c_el.cfg("IO_VAL").setS(attr.at().getS());
 	    c_el.cfg("SELF_FLG").setI(attr.at().flgSelf());
 	    c_el.cfg("CFG_TMPL").setS(attr.at().cfgTempl());
@@ -1113,6 +1116,7 @@ void CWidget::save_( )
 	    if( attr.at().flgGlob()&Attr::Generic )
 	    {
 		c_el.cfg("ID").setS( id()+"/"+als[i_a] );
+		c_el.cfg("IO_VAL").setNoTransl( !(attr.at().type() == TFld::String && !(attr.at().flgGlob()&(Attr::Image|Attr::DataTime|Attr::Color|Attr::Font|Attr::Address))) );
 		c_el.cfg("IO_VAL").setS(attr.at().getS());
 		c_el.cfg("SELF_FLG").setI(attr.at().flgSelf());
 		c_el.cfg("CFG_TMPL").setS(attr.at().cfgTempl());
@@ -1149,6 +1153,7 @@ void CWidget::saveIO( )
 	{
 	    //-- User attribute store --
 	    c_elu.cfg("ID").setS( id()+"/"+als[i_a] );
+	    c_elu.cfg("IO_VAL").setNoTransl( !(attr.at().type() == TFld::String && !(attr.at().flgGlob()&(Attr::Image|Attr::DataTime|Attr::Color|Attr::Font|Attr::Address))) );
 	    c_elu.cfg("IO_VAL").setS(attr.at().getS()+"|"+
 				    attr.at().fld().values()+"|"+
 				    attr.at().fld().selNames());
@@ -1163,6 +1168,7 @@ void CWidget::saveIO( )
 	{
 	    //-- Work attribute store --
 	    c_el.cfg("ID").setS( id()+"/"+als[i_a] );
+	    c_el.cfg("IO_VAL").setNoTransl( !(attr.at().type() == TFld::String && !(attr.at().flgGlob()&(Attr::Image|Attr::DataTime|Attr::Color|Attr::Font|Attr::Address))) );
 	    c_el.cfg("IO_VAL").setS(attr.at().getS());
 	    c_el.cfg("SELF_FLG").setI(attr.at().flgSelf());
 	    c_el.cfg("CFG_TMPL").setS(attr.at().cfgTempl());

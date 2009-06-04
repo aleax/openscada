@@ -40,8 +40,8 @@ TBDS::TBDS( ) : TSubSYS("BD","Data Bases",true)
     //> Open data bases DB structure
     el_db.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
     el_db.fldAdd( new TFld("TYPE",_("DB type (module)"),TFld::String,TCfg::Key,"20") );
-    el_db.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
-    el_db.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::NoFlag,"200") );
+    el_db.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
+    el_db.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TCfg::TransltText,"200") );
     el_db.fldAdd( new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"100") );
     el_db.fldAdd( new TFld("CODEPAGE",_("Code page"),TFld::String,TFld::NoFlag,"20") );
     el_db.fldAdd( new TFld("EN",_("To enable"),TFld::Boolean,TFld::NoFlag,"1","1") );
@@ -706,7 +706,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	    {
 		ctrMkNode("fld",opt,-1,"/prm/cfg/id",cfg("ID").fld().descr(),0444,"root","BD",1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/nm",cfg("NAME").fld().descr(),0664,"root","BD",2,"tp","str","len","50");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCR").fld().descr(),0664,"root","BD",3,"tp","str","cols","50","rows","3");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCR").fld().descr(),0664,"root","BD",3,"tp","str","cols","100","rows","3");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","BD",1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/codep",cfg("CODEPAGE").fld().descr(),0664,"root","BD",2,
 		    "tp","str","help",_("Codepage of data into DB. For example: UTF-8, KOI8-R, KOI8-U ... ."));

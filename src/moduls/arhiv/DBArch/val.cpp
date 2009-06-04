@@ -157,8 +157,8 @@ void ModVArchEl::getValsProc( TValBuf &buf, long long ibegIn, long long iendIn )
     iendIn = (iendIn/period())*period();
 
     //> Prepare border
-    long ibeg = vmax( ibegIn, begin() );
-    long iend = vmin( iendIn, end() );
+    long long ibeg = vmax( ibegIn, begin() );
+    long long iend = vmin( iendIn, end() );
 
     if( iend < ibeg )	return;
 
@@ -214,7 +214,7 @@ void ModVArchEl::getValsProc( TValBuf &buf, long long ibegIn, long long iendIn )
 
 TVariant ModVArchEl::getValProc( long long *tm, bool up_ord )
 {
-    long long itm = tm?*tm:SYS->curTime();
+    long long itm = tm ? *tm : SYS->curTime();
     itm = (itm/period())*period()+((up_ord && itm%period())?period():0);
 
     TConfig cf(NULL);

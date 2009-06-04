@@ -42,13 +42,14 @@ class Attr : public TCntrNode
 	enum GlobalAttrFlgs
 	{
 	    Active	= 0x00100,	//Active attribute for primitives process
+
 	    Image	= 0x00200,	//Store image link to DB or to file
 	    DataTime	= 0x00200,	//Store data and time into integer attribute
 	    Color	= 0x00400,	//Store color
 	    Font	= 0x00800,	//Store font
 	    Address	= 0x01000,	//Store address to a parameter or an attribute
-	    IsUser	= 0x02000,	//User created element
 
+	    IsUser	= 0x02000,	//User created element
 	    Mutable	= 0x08000,	//Mutable attribute, present depend from "Active" attribute value
 	    Generic	= 0x10000,	//Generic atributes' flag. This atributes loaded independent from enabled state
 	    DirRead	= 0x20000	//Direct read attribute, through widget

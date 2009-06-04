@@ -384,7 +384,7 @@ class TVArchEl
 
     protected:
 	//Protected methods
-	virtual TVariant getValProc( long long *tm, bool up_ord )	{ }
+	virtual TVariant getValProc( long long *tm, bool up_ord );
 	virtual void getValsProc( TValBuf &buf, long long beg, long long end )	{ }
 	virtual void setValsProc( TValBuf &buf, long long beg, long long end )	{ }
 

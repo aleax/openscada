@@ -1,3 +1,15 @@
+2009-06-04 Roman
+- !!:/DemoDB: DB vcaBase.db, vcaTest.db and vcaAGLKS.db translation to multilanguage (Russian and English) is finished.
+- !!:/SYS: Demo config file translation to multilanguage (Russian, English and Ukrainian) is finished.
+- FIX:/Archive: Function TArchive::getVal() is fixed for buffer's data request.
+- FIX:/Archive/DBArch: Limited time variables is fixed into function ModVArchEl::getValProc().
+- !!:/SYS: Multilanguage text variables support is added to subsystem "Archive" and "DB".
+- !!:/DAQ/LogicLev: Multilanguage text variables into template's variable support is added.
+- !!:/UI/VCAEngine: Multilanguage text variables support is added.
+- FIX:/UI/VCAEngine: Process edit tab into configurators for widgets is fixed for child's attributes edit support and modify flag for widget setting.
+- FIX:/UI/Vision: Setting the modify flag for now changed attribute into the attributes inspector is added.
+
+
 2009-06-02 Roman
 - !!:/DAQ/SoundCard, /DAQ/Siemens, /DAQ/SNMP, /DAQ/DiamondBoards, /DAQ/BlockCalc: English translation document is added.
 - !!:/DAQ/SoundCard, /DAQ/Siemens, /DAQ/SNMP, /DAQ/DiamondBoards, /DAQ/BlockCalc: Adapted for redundant support and for multilanguage variable texts support.
