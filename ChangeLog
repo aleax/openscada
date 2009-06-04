@@ -8,6 +8,7 @@
 - !!:/UI/VCAEngine: Multilanguage text variables support is added.
 - FIX:/UI/VCAEngine: Process edit tab into configurators for widgets is fixed for child's attributes edit support and modify flag for widget setting.
 - FIX:/UI/Vision: Setting the modify flag for now changed attribute into the attributes inspector is added.
+- !:/Transport/Socket: Connection is made timeouted.
 
 
 2009-06-02 Roman

@@ -28,6 +28,7 @@
 #include <sys/select.h>
 #include <arpa/inet.h>
 
+#include <fcntl.h>
 #include <unistd.h>
 #include <getopt.h>
 #include <string>
@@ -620,10 +621,10 @@ void TSocketOut::start()
 
     if( run_st ) return;
 
-    //- Status clear -
+    //> Status clear
     trIn = trOut = 0;
 
-    //- Connect to remote host -
+    //> Connect to remote host
     string s_type = TSYS::strSepParse(addr(),0,':');
 
     if( s_type == S_NM_TCP )		type = SOCK_TCP;
@@ -646,13 +647,13 @@ void TSocketOut::start()
 	    name_in.sin_addr.s_addr = *( (int *) (loc_host_nm->h_addr_list[0]) );
 	}
 	else name_in.sin_addr.s_addr = INADDR_ANY;
-	//- Get system port for "oscada" /etc/services -
+	//> Get system port for "oscada" /etc/services
 	struct servent *sptr = getservbyname(port.c_str(),(type == SOCK_TCP)?"tcp":"udp");
 	if( sptr != NULL )                       name_in.sin_port = sptr->s_port;
 	else if( htons(atol(port.c_str())) > 0 ) name_in.sin_port = htons( atol(port.c_str()) );
 	else name_in.sin_port = 10001;
 
-	//- Create socket -
+	//> Create socket
 	if( type == SOCK_TCP )
 	{
 	    if( (sock_fd = socket(PF_INET,SOCK_STREAM,0) )== -1 )
@@ -665,8 +666,18 @@ void TSocketOut::start()
 	    if( (sock_fd = socket(PF_INET,SOCK_DGRAM,0) )== -1 )
 		throw TError(nodePath().c_str(),_("Error creation UDP socket: %s!"),strerror(errno));
 	}
-	//- Connect to socket -
-	if( ::connect(sock_fd, (sockaddr *)&name_in, sizeof(name_in)) == -1 )
+	//> Connect to socket
+	int flags = fcntl(sock_fd,F_GETFL,0);
+	fcntl(sock_fd,F_SETFL,flags|O_NONBLOCK);
+	time_t wTm = time(NULL);
+	int res = -1;
+	do
+	{
+	    res = ::connect(sock_fd, (sockaddr *)&name_in, sizeof(name_in));
+	    if( res == 0 || (res == -1 && !(errno == EINPROGRESS || errno == EALREADY)) ) break;
+	    usleep(10000);
+	}while( (time(NULL)-wTm) < 10 );
+	if( res == -1 )
 	{
 	    close(sock_fd);
 	    sock_fd = -1;
