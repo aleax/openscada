@@ -33,7 +33,7 @@
 #define MOD_NAME    "Sound card"
 #define MOD_TYPE    "DAQ"
 #define VER_TYPE    VER_CNTR
-#define VERSION     "0.5.0"
+#define VERSION     "0.6.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow access to sound card data."
 #define LICENSE     "GPL"

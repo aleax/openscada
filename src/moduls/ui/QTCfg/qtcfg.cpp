@@ -493,8 +493,7 @@ void ConfApp::treeSearch( )
 	    if( QString(itpth.c_str()).contains(wvl,Qt::CaseInsensitive) ) break;
 	}
     }
-    if( i_c < pi->childCount() )
-	pi->treeWidget()->setCurrentItem(pi->child(i_c),0,QItemSelectionModel::SelectCurrent);
+    if( i_c < pi->childCount() ) pi->treeWidget()->setCurrentItem(pi->child(i_c));
     else if( fromCur ) { sl->setModified(true); treeSearch(); }
 }
 

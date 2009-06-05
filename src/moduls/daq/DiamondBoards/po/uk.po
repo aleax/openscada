@@ -8,9 +8,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.DiamondBoards 1.1.0\n"
+"Project-Id-Version: OpenSCADA.DAQ.DiamondBoards 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-07 14:26+0200\n"
+"POT-Creation-Date: 2009-06-05 15:06+0300\n"
 "PO-Revision-Date: 2007-10-28 09:43+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: LANGUAGE <uk@li.org>\n"
@@ -30,7 +30,7 @@ msgid "DAQ"
 msgstr ""
 
 #: diamond.cpp:42
-msgid "1.1.0"
+msgid "1.2.0"
 msgstr ""
 
 #: diamond.cpp:43
@@ -72,7 +72,7 @@ msgstr ""
 msgid "dscInit error."
 msgstr "Помилка dscInit."
 
-#: diamond.cpp:102 diamond.cpp:206 diamond.cpp:210
+#: diamond.cpp:102 diamond.cpp:208 diamond.cpp:212
 msgid "BOARD"
 msgstr ""
 
@@ -126,7 +126,7 @@ msgstr "Таблиця дискретних параметрів"
 msgid "diamond_prm_d"
 msgstr ""
 
-#: diamond.cpp:107 diamond.cpp:157 diamond.cpp:275
+#: diamond.cpp:107 diamond.cpp:157 diamond.cpp:277
 msgid "DATA_EMUL"
 msgstr ""
 
@@ -137,13 +137,13 @@ msgstr "Емуляція даних"
 #: diamond.cpp:107 diamond.cpp:111 diamond.cpp:112 diamond.cpp:114
 #: diamond.cpp:116 diamond.cpp:123 diamond.cpp:125 diamond.cpp:129
 #: diamond.cpp:131 diamond.cpp:135 diamond.cpp:139 diamond.cpp:142
-#: diamond.cpp:144 diamond.cpp:496
+#: diamond.cpp:144 diamond.cpp:504
 msgid "1"
 msgstr ""
 
 #: diamond.cpp:107 diamond.cpp:110 diamond.cpp:111 diamond.cpp:123
-#: diamond.cpp:124 diamond.cpp:129 diamond.cpp:130 diamond.cpp:496
-#: diamond.cpp:656
+#: diamond.cpp:124 diamond.cpp:129 diamond.cpp:130 diamond.cpp:504
+#: diamond.cpp:677
 msgid "0"
 msgstr ""
 
@@ -163,8 +163,8 @@ msgstr ""
 msgid "640"
 msgstr ""
 
-#: diamond.cpp:109 diamond.cpp:163 diamond.cpp:205 diamond.cpp:263
-#: diamond.cpp:269
+#: diamond.cpp:109 diamond.cpp:163 diamond.cpp:207 diamond.cpp:265
+#: diamond.cpp:271
 msgid "INT"
 msgstr ""
 
@@ -176,8 +176,8 @@ msgstr "Вектор переривання"
 msgid "5"
 msgstr ""
 
-#: diamond.cpp:110 diamond.cpp:164 diamond.cpp:213 diamond.cpp:491
-#: diamond.cpp:501 diamond.cpp:506
+#: diamond.cpp:110 diamond.cpp:164 diamond.cpp:215 diamond.cpp:499
+#: diamond.cpp:509 diamond.cpp:514
 msgid "DIO_CFG"
 msgstr ""
 
@@ -185,7 +185,7 @@ msgstr ""
 msgid "Digit IO config byte"
 msgstr "Конфігураційний байт цифрових IO"
 
-#: diamond.cpp:111 diamond.cpp:157 diamond.cpp:185 diamond.cpp:259
+#: diamond.cpp:111 diamond.cpp:157 diamond.cpp:187 diamond.cpp:261
 msgid "ADMODE"
 msgstr ""
 
@@ -193,7 +193,7 @@ msgstr ""
 msgid "A/D interrupt mode"
 msgstr "Збір AI по перериванню"
 
-#: diamond.cpp:112 diamond.cpp:220
+#: diamond.cpp:112 diamond.cpp:222
 msgid "ADRANGE"
 msgstr ""
 
@@ -205,7 +205,7 @@ msgstr "Діапазон напруг AI"
 msgid "5v;10v"
 msgstr "5В;10В"
 
-#: diamond.cpp:114 diamond.cpp:221
+#: diamond.cpp:114 diamond.cpp:223
 msgid "ADPOLAR"
 msgstr ""
 
@@ -217,8 +217,8 @@ msgstr "Полярність AI"
 msgid "Bipolar;Unipolar"
 msgstr "Біполярний;Однополярний"
 
-#: diamond.cpp:116 diamond.cpp:166 diamond.cpp:222 diamond.cpp:265
-#: diamond.cpp:271
+#: diamond.cpp:116 diamond.cpp:166 diamond.cpp:224 diamond.cpp:267
+#: diamond.cpp:273
 msgid "ADGAIN"
 msgstr ""
 
@@ -230,8 +230,8 @@ msgstr "Підсилення для AI"
 msgid "x1;x2;x4;x8"
 msgstr ""
 
-#: diamond.cpp:118 diamond.cpp:165 diamond.cpp:264 diamond.cpp:270
-#: diamond.cpp:326 diamond.cpp:733
+#: diamond.cpp:118 diamond.cpp:165 diamond.cpp:266 diamond.cpp:272
+#: diamond.cpp:328 diamond.cpp:756
 msgid "ADCONVRATE"
 msgstr ""
 
@@ -251,7 +251,7 @@ msgstr ""
 msgid "100;100000"
 msgstr ""
 
-#: diamond.cpp:122 diamond.cpp:530
+#: diamond.cpp:122 diamond.cpp:538
 msgid "a_prm"
 msgstr ""
 
@@ -259,7 +259,7 @@ msgstr ""
 msgid "Analog parameter"
 msgstr "Аналоговий параметр"
 
-#: diamond.cpp:123 diamond.cpp:129 diamond.cpp:581
+#: diamond.cpp:123 diamond.cpp:129 diamond.cpp:591
 msgid "TYPE"
 msgstr ""
 
@@ -275,8 +275,8 @@ msgstr ""
 msgid "Input;Output"
 msgstr "Вхід;Вихід"
 
-#: diamond.cpp:124 diamond.cpp:131 diamond.cpp:516 diamond.cpp:566
-#: diamond.cpp:596 diamond.cpp:597
+#: diamond.cpp:124 diamond.cpp:131 diamond.cpp:524 diamond.cpp:576
+#: diamond.cpp:606 diamond.cpp:607
 msgid "CNL"
 msgstr ""
 
@@ -284,8 +284,8 @@ msgstr ""
 msgid "Channel"
 msgstr "Канал"
 
-#: diamond.cpp:125 diamond.cpp:556 diamond.cpp:557 diamond.cpp:558
-#: diamond.cpp:562 diamond.cpp:593
+#: diamond.cpp:125 diamond.cpp:566 diamond.cpp:567 diamond.cpp:568
+#: diamond.cpp:572 diamond.cpp:603
 msgid "GAIN"
 msgstr ""
 
@@ -293,7 +293,7 @@ msgstr ""
 msgid "A/D converter gain"
 msgstr "Підсилення A/D конвертора"
 
-#: diamond.cpp:128 diamond.cpp:531
+#: diamond.cpp:128 diamond.cpp:539
 msgid "d_prm"
 msgstr ""
 
@@ -305,7 +305,7 @@ msgstr "Цифровий параметр"
 msgid "Digital parameter type"
 msgstr "Тип цифрового параметра"
 
-#: diamond.cpp:130 diamond.cpp:566 diamond.cpp:596 diamond.cpp:597
+#: diamond.cpp:130 diamond.cpp:576 diamond.cpp:606 diamond.cpp:607
 msgid "PORT"
 msgstr ""
 
@@ -322,7 +322,7 @@ msgid "A;B;C"
 msgstr ""
 
 #: diamond.cpp:135 diamond.cpp:139 diamond.cpp:142 diamond.cpp:144
-#: diamond.cpp:396 diamond.cpp:437
+#: diamond.cpp:404 diamond.cpp:445
 msgid "value"
 msgstr ""
 
@@ -346,7 +346,7 @@ msgstr "Напруга, В"
 msgid "-10;10"
 msgstr ""
 
-#: diamond.cpp:137 diamond.cpp:387 diamond.cpp:428
+#: diamond.cpp:137 diamond.cpp:395 diamond.cpp:436
 msgid "code"
 msgstr ""
 
@@ -366,189 +366,206 @@ msgstr ""
 msgid "DiamPrmD_"
 msgstr ""
 
-#: diamond.cpp:192
+#: diamond.cpp:194
 msgid "DSC driver is not initialized!"
 msgstr "DSC драйвер не ініційовано!"
 
-#: diamond.cpp:209
+#: diamond.cpp:211
 #, c-format
 msgid "dscInitBoard %d(%xh) error: %s %s"
 msgstr "Помилка dscInitBoard %d(%xh): %s %s"
 
-#: diamond.cpp:217
+#: diamond.cpp:219
 #, c-format
 msgid "dscDIOSetConfig error: %s %s"
 msgstr "Помилка dscDIOSetConfig: %s %s"
 
-#: diamond.cpp:235
+#: diamond.cpp:237
 msgid "addsc_task_start"
 msgstr ""
 
-#: diamond.cpp:236
+#: diamond.cpp:238
 msgid "AD DSC driver task is not started!"
 msgstr "Задачу опитування аналогового параметру драйверу DSC не запущено!"
 
-#: diamond.cpp:247
+#: diamond.cpp:249
 msgid "addsc_task_stop"
 msgstr ""
 
-#: diamond.cpp:248
+#: diamond.cpp:250
 msgid "AD DSC task is not stopped!"
 msgstr "Задачу опитування аналогового параметру драйверу DSC не зупинено!"
 
-#: diamond.cpp:296
+#: diamond.cpp:298
 #, c-format
 msgid "Thread <%u> is started. TID: %ld"
 msgstr ""
 
-#: diamond.cpp:336 diamond.cpp:680
+#: diamond.cpp:338 diamond.cpp:703
 #, c-format
 msgid "dscADSetSettings error: %s %s"
 msgstr "Помилка dscADSetSettings: %s %s"
 
-#: diamond.cpp:361
+#: diamond.cpp:362
 #, c-format
 msgid "dscADScanInt error: %s %s"
 msgstr "Помилка dscADScanInt: %s %s"
 
-#: diamond.cpp:452
+#: diamond.cpp:380
+msgid "DSC card's counter run from system time is corrected."
+msgstr ""
+
+#: diamond.cpp:460
 #, c-format
 msgid "%s"
 msgstr ""
 
-#: diamond.cpp:453
+#: diamond.cpp:461
 msgid "AD DSC task error."
 msgstr "Помилка задачі DSC."
 
-#: diamond.cpp:470
+#: diamond.cpp:478
 msgid "info"
 msgstr ""
 
-#: diamond.cpp:473 diamond.cpp:474
+#: diamond.cpp:481 diamond.cpp:482
 msgid "area"
 msgstr ""
 
-#: diamond.cpp:473
+#: diamond.cpp:481
 msgid "/board"
 msgstr ""
 
-#: diamond.cpp:473
+#: diamond.cpp:481
 msgid "Board config"
 msgstr "Конфігурація плати"
 
-#: diamond.cpp:474
+#: diamond.cpp:482
 msgid "/board/dio"
 msgstr ""
 
-#: diamond.cpp:474
+#: diamond.cpp:482
 msgid "Digital IO ports. Select input!"
 msgstr "Порти цифрових IO. Вибрані є входами!"
 
-#: diamond.cpp:476 diamond.cpp:477 diamond.cpp:478 diamond.cpp:479
+#: diamond.cpp:484 diamond.cpp:485 diamond.cpp:486 diamond.cpp:487
 msgid "fld"
 msgstr ""
 
-#: diamond.cpp:476
+#: diamond.cpp:484
 msgid "/board/dio/a"
 msgstr ""
 
-#: diamond.cpp:476
+#: diamond.cpp:484
 msgid "Port A"
 msgstr "Порт A"
 
-#: diamond.cpp:476 diamond.cpp:477 diamond.cpp:478 diamond.cpp:479
-#: diamond.cpp:488 diamond.cpp:498
+#: diamond.cpp:484 diamond.cpp:485 diamond.cpp:486 diamond.cpp:487
+#: diamond.cpp:496 diamond.cpp:506
 msgid "root"
 msgstr ""
 
-#: diamond.cpp:476 diamond.cpp:477 diamond.cpp:478 diamond.cpp:479
+#: diamond.cpp:484 diamond.cpp:485 diamond.cpp:486 diamond.cpp:487
 msgid "tp"
 msgstr ""
 
-#: diamond.cpp:476 diamond.cpp:477 diamond.cpp:478 diamond.cpp:479
+#: diamond.cpp:484 diamond.cpp:485 diamond.cpp:486 diamond.cpp:487
 msgid "bool"
 msgstr ""
 
-#: diamond.cpp:477
+#: diamond.cpp:485
 msgid "/board/dio/b"
 msgstr ""
 
-#: diamond.cpp:477
+#: diamond.cpp:485
 msgid "Port B"
 msgstr "Порт B"
 
-#: diamond.cpp:478
+#: diamond.cpp:486
 msgid "/board/dio/c1"
 msgstr ""
 
-#: diamond.cpp:478
+#: diamond.cpp:486
 msgid "Port C1"
 msgstr "Порт C1"
 
-#: diamond.cpp:479
+#: diamond.cpp:487
 msgid "/board/dio/c2"
 msgstr ""
 
-#: diamond.cpp:479
+#: diamond.cpp:487
 msgid "Port C2"
 msgstr "Порт C2"
 
-#: diamond.cpp:485
+#: diamond.cpp:493 diamond.cpp:623
 msgid "path"
 msgstr ""
 
-#: diamond.cpp:486
+#: diamond.cpp:494
 msgid "/board/dio/"
 msgstr ""
 
-#: diamond.cpp:488
+#: diamond.cpp:496
 msgid "get"
 msgstr ""
 
-#: diamond.cpp:492 diamond.cpp:502
+#: diamond.cpp:500 diamond.cpp:510
 msgid "a"
 msgstr ""
 
-#: diamond.cpp:493 diamond.cpp:503
+#: diamond.cpp:501 diamond.cpp:511
 msgid "b"
 msgstr ""
 
-#: diamond.cpp:494 diamond.cpp:504
+#: diamond.cpp:502 diamond.cpp:512
 msgid "c1"
 msgstr ""
 
-#: diamond.cpp:495 diamond.cpp:505
+#: diamond.cpp:503 diamond.cpp:513
 msgid "c2"
 msgstr ""
 
-#: diamond.cpp:498
+#: diamond.cpp:506 diamond.cpp:622
 msgid "set"
 msgstr ""
 
-#: diamond.cpp:626
+#: diamond.cpp:623
+#, c-format
+msgid "/%2fserv%2fattr"
+msgstr ""
+
+#: diamond.cpp:623
+msgid "el"
+msgstr ""
+
+#: diamond.cpp:623
+msgid "id"
+msgstr ""
+
+#: diamond.cpp:647
 #, c-format
 msgid "dscDAConvert error: %s %s"
 msgstr "Помилка dscDAConvert: %s %s"
 
-#: diamond.cpp:640
+#: diamond.cpp:661
 #, c-format
 msgid "dscDIOOutputBit error: %s %s"
 msgstr "Помилка dscDIOOutputBit: %s %s"
 
-#: diamond.cpp:653
+#: diamond.cpp:674
 msgid "2:Controller is stoped"
 msgstr "2:Контролер зупинено"
 
-#: diamond.cpp:655
+#: diamond.cpp:676
 msgid "1:Parameter is disabled"
 msgstr "1:Параметр вимкнено"
 
-#: diamond.cpp:687
+#: diamond.cpp:710
 #, c-format
 msgid "dscADSample error: %s %s"
 msgstr "Помилка dscADSample: %s %s"
 
-#: diamond.cpp:716
+#: diamond.cpp:739
 #, c-format
 msgid "dscDIOInputBit error: %s %s"
 msgstr "Помилка dscDIOInputBit: %s %s"

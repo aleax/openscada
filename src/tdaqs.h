@@ -22,7 +22,7 @@
 #ifndef TDAQS_H
 #define TDAQS_H
 
-#define  VER_CNTR 2    //ControllerS type modules version
+#define  VER_CNTR 3    //ControllerS type modules version
 
 #include <string>
 

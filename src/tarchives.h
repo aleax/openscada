@@ -22,7 +22,7 @@
 #ifndef TARCHIVES_H
 #define TARCHIVES_H
 
-#define  VER_ARH 2    //ArchiveS type modules version
+#define  VER_ARH 3    //ArchiveS type modules version
 
 #include <time.h>
 

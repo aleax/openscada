@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the OpenSCADA.DB.DBF module.
 # Roman Savochenko <rom_as@fromru.com>, 2003-2009.
 #
-#: dbf_mod.cpp:56
+#: dbf_mod.cpp:56 dbf_mod.cpp:542
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DB.DBF 2.0.0\n"
+"Project-Id-Version: OpenSCADA.DB.DBF 2.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-16 11:52+0200\n"
+"POT-Creation-Date: 2009-06-05 15:03+0300\n"
 "PO-Revision-Date: 2007-10-23 12:09+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -37,7 +37,7 @@ msgid "BD"
 msgstr "БД"
 
 #: dbf_mod.cpp:43
-msgid "2.0.0"
+msgid "2.0.1"
 msgstr ""
 
 #: dbf_mod.cpp:44
@@ -155,40 +155,40 @@ msgstr "Помилка відкриття таблиці!"
 msgid "%s"
 msgstr ""
 
-#: dbf_mod.cpp:283 dbf_mod.cpp:336 dbf_mod.cpp:457 dbf_mod.cpp:514
+#: dbf_mod.cpp:285 dbf_mod.cpp:323 dbf_mod.cpp:412 dbf_mod.cpp:469
 msgid "Cell error!"
 msgstr "Помилка чарунки!"
 
-#: dbf_mod.cpp:316 dbf_mod.cpp:479
+#: dbf_mod.cpp:303 dbf_mod.cpp:434
 msgid "Field is not present!"
 msgstr "Поле відсутне!"
 
-#: dbf_mod.cpp:385 dbf_mod.cpp:411
+#: dbf_mod.cpp:356 dbf_mod.cpp:382
 msgid "Column error!"
 msgstr "Помилка стовпчику!"
 
-#: dbf_mod.cpp:423
+#: dbf_mod.cpp:394
 msgid "Delete field error!"
 msgstr "Помилка видалення поля!"
 
-#: dbf_mod.cpp:448
+#: dbf_mod.cpp:429
+msgid "Line error!"
+msgstr "Помилка лінії!"
+
+#: dbf_mod.cpp:465
+#, c-format
+msgid "Key column <%s> is not present!"
+msgstr "Ключовий стовпчик <%s> відсутнії!"
+
+#: dbf_mod.cpp:537
 #, c-format
 msgid "%*.*f"
 msgstr ""
 
-#: dbf_mod.cpp:452
+#: dbf_mod.cpp:540
 msgid "T"
 msgstr ""
 
-#: dbf_mod.cpp:452
+#: dbf_mod.cpp:540
 msgid "F"
 msgstr ""
-
-#: dbf_mod.cpp:474
-msgid "Line error!"
-msgstr "Помилка лінії!"
-
-#: dbf_mod.cpp:510
-#, c-format
-msgid "Key column <%s> is not present!"
-msgstr "Ключовий стовпчик <%s> відсутнії!"

@@ -46,7 +46,7 @@
 #define MOD_NAME	"Sockets"
 #define MOD_TYPE	"Transport"
 #define VER_TYPE	VER_TR
-#define VERSION		"1.3.6"
+#define VERSION		"1.4.0"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow sockets based transport. Support inet and unix sockets. Inet socket use TCP and UDP protocols."
 #define LICENSE		"GPL"
@@ -104,6 +104,9 @@ void TTransSock::postEnable( int flag )
 	owner().inEl().fldAdd( new TFld("BufLen",_("Input buffer length (kB)"),TFld::Integer,0,"4","5") );
 	owner().inEl().fldAdd( new TFld("MaxClients",_("Maximum clients process"),TFld::Integer,0,"3","10") );
 	owner().inEl().fldAdd( new TFld("SocketsMaxQueue",_("Maximum queue of input socket"),TFld::Integer,0,"2","10") );
+
+	//> Add self DB-fields to output transport
+	owner().outEl().fldAdd( new TFld("TMS",_("Timeout (ms)"),TFld::String,0,"30") );
     }
 }
 
@@ -595,10 +598,10 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* TSocketOut                                   *
 //************************************************
-TSocketOut::TSocketOut(string name, const string &idb, TElem *el) : 
-    TTransportOut(name,idb,el), sock_fd(-1)
+TSocketOut::TSocketOut(string name, const string &idb, TElem *el) : TTransportOut(name,idb,el), sock_fd(-1)
 {
     setAddr("TCP:localhost:10002");
+    setTimeout(1000);
 }
 
 TSocketOut::~TSocketOut()
@@ -614,6 +617,10 @@ string TSocketOut::getStatus( )
 
     return rez;
 }
+
+int TSocketOut::timeout( )	{ return vmax(1,vmin(100000,cfg("TMS").getI())); }
+
+void TSocketOut::setTimeout( int vl )	{ cfg("TMS").setI(vl); modif(); }
 
 void TSocketOut::start()
 {
@@ -669,20 +676,38 @@ void TSocketOut::start()
 	//> Connect to socket
 	int flags = fcntl(sock_fd,F_GETFL,0);
 	fcntl(sock_fd,F_SETFL,flags|O_NONBLOCK);
-	time_t wTm = time(NULL);
+	int res = ::connect(sock_fd, (sockaddr *)&name_in, sizeof(name_in));
+	if( res == -1 && errno == EINPROGRESS )
+	{
+	    struct timeval tv;
+	    socklen_t slen;
+	    fd_set fdset;
+	    tv.tv_sec = timeout()/1000; tv.tv_usec = 1000*(timeout()%1000);
+	    FD_ZERO( &fdset ); FD_SET( sock_fd, &fdset );
+	    if( (res=select( sock_fd+1, NULL, &fdset, NULL, &tv )) > 0 && !getsockopt(sock_fd,SOL_SOCKET,SO_ERROR,&res,&slen) && !res ) res = 0;
+	    else res = -1;
+	}
+	if( res )
+	{
+	    close(sock_fd);
+	    sock_fd = -1;
+	    throw TError(nodePath().c_str(),_("Connect to Internet socket error: %s!"),strerror(errno));
+	}
+
+	/*time_t wTm = time(NULL);
 	int res = -1;
 	do
 	{
 	    res = ::connect(sock_fd, (sockaddr *)&name_in, sizeof(name_in));
 	    if( res == 0 || (res == -1 && !(errno == EINPROGRESS || errno == EALREADY)) ) break;
 	    usleep(10000);
-	}while( (time(NULL)-wTm) < 10 );
+	}while( (time(NULL)-wTm) < timeout()/1000 );
 	if( res == -1 )
 	{
 	    close(sock_fd);
 	    sock_fd = -1;
 	    throw TError(nodePath().c_str(),_("Connect to Internet socket error: %s!"),strerror(errno));
-	}
+	}*/
     }
     else if( type == SOCK_UNIX )
     {
@@ -727,8 +752,9 @@ int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, in
 {
     int kz = 0, reqTry = 0;
 
-    if( !time ) time = 5000;
     ResAlloc res( wres, true );
+    int prevTmOut = timeout( );
+    if( time ) setTimeout(time);
 
     if( !run_st ) throw TError(nodePath().c_str(),_("Transport is not started!"));
 
@@ -753,7 +779,7 @@ repeate:
 
 	do
 	{
-	    tv.tv_sec  = time/1000; tv.tv_usec = 1000*(time%1000);
+	    tv.tv_sec  = timeout()/1000; tv.tv_usec = 1000*(timeout()%1000);
 	    FD_ZERO(&rd_fd); FD_SET(sock_fd,&rd_fd);
 	    kz = select(sock_fd+1,&rd_fd,NULL,NULL,&tv);
 	}
@@ -767,6 +793,8 @@ repeate:
 	    trIn += (float)i_b/1024;
 	}
     }
+
+    if( time ) setTimeout(prevTmOut);
 
     return i_b;
 }
@@ -787,9 +815,16 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
 	    "    port - network port (/etc/services).\n"
 	    "  UNIX:[name] - UNIX socket:\n"
 	    "    name - UNIX-socket's file name."));
+	ctrMkNode("fld",opt,-1,"/prm/cfg/tmOut",_("Timeout (ms)"),0664,"root","root",1,"tp","dec");
 	return;
     }
 
     //> Process command to page
-    TTransportOut::cntrCmdProc(opt);
+    string a_path = opt->attr("path");
+    if( a_path == "/prm/cfg/tmOut" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(TSYS::int2str(timeout()));
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setTimeout(atoi(opt->text().c_str()));
+    }
+    else TTransportOut::cntrCmdProc(opt);
 }

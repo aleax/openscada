@@ -45,7 +45,7 @@ using std::deque;
 #define DAQ_NAME	"ModBus"
 #define DAQ_TYPE	"DAQ"
 #define DAQ_SUBVER	VER_CNTR
-#define DAQ_MVER	"0.9.1"
+#define DAQ_MVER	"1.0.0"
 #define DAQ_AUTORS	"Roman Savochenko"
 #define DAQ_DESCR	"Allow realisation of ModBus client service. Supported Modbus/TCP, Modbus/RTU and Modbus/ASCII protocols."
 #define DAQ_LICENSE	"GPL"

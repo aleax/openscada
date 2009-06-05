@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the OpenSCADA.DB.FireBird module.
 # Roman Savochenko <rom_as@fromru.com>, 2007-2009.
 #
-#: firebird.cpp:49 firebird.cpp:355 firebird.cpp:400 firebird.cpp:512
-#: firebird.cpp:575
+#: firebird.cpp:49 firebird.cpp:355 firebird.cpp:400 firebird.cpp:514
+#: firebird.cpp:577 firebird.cpp:820
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DB.FireBird 0.9.0\n"
+"Project-Id-Version: OpenSCADA.DB.FireBird 0.9.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-16 12:26+0200\n"
+"POT-Creation-Date: 2009-06-05 15:05+0300\n"
 "PO-Revision-Date: 2007-10-23 12:52+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -30,7 +30,7 @@ msgid "BD"
 msgstr "БД"
 
 #: firebird.cpp:36
-msgid "0.9.0"
+msgid "0.9.1"
 msgstr ""
 
 #: firebird.cpp:37
@@ -85,8 +85,8 @@ msgstr ""
 msgid "' PASSWORD '"
 msgstr ""
 
-#: firebird.cpp:194 firebird.cpp:497 firebird.cpp:505 firebird.cpp:618
-#: firebird.cpp:699
+#: firebird.cpp:194 firebird.cpp:499 firebird.cpp:507 firebird.cpp:609
+#: firebird.cpp:671
 msgid "'"
 msgstr ""
 
@@ -219,9 +219,9 @@ msgstr "Таблиця '%s' відсутня."
 msgid "DROP TABLE \""
 msgstr ""
 
-#: firebird.cpp:486 firebird.cpp:564 firebird.cpp:568 firebird.cpp:569
-#: firebird.cpp:617 firebird.cpp:622 firebird.cpp:623 firebird.cpp:670
-#: firebird.cpp:690 firebird.cpp:722 firebird.cpp:755 firebird.cpp:785
+#: firebird.cpp:486 firebird.cpp:566 firebird.cpp:570 firebird.cpp:571
+#: firebird.cpp:609 firebird.cpp:613 firebird.cpp:614 firebird.cpp:651
+#: firebird.cpp:670 firebird.cpp:686 firebird.cpp:719 firebird.cpp:748
 msgid "\""
 msgstr ""
 
@@ -230,197 +230,197 @@ msgstr ""
 msgid "%s"
 msgstr ""
 
-#: firebird.cpp:495
+#: firebird.cpp:497
 msgid ""
 "SELECT R.RDB$FIELD_NAME, F.RDB$FIELD_TYPE, F.RDB$FIELD_LENGTH FROM RDB"
 "$FIELDS F, RDB$RELATION_FIELDS R where F.RDB$FIELD_NAME = R.RDB$FIELD_SOURCE "
 "and R.RDB$SYSTEM_FLAG = 0 and R.RDB$RELATION_NAME = '"
 msgstr ""
 
-#: firebird.cpp:502
+#: firebird.cpp:504
 msgid ""
 "SELECT I.RDB$FIELD_NAME, C.RDB$CONSTRAINT_TYPE FROM RDB$RELATION_CONSTRAINTS "
 "C, RDB$INDEX_SEGMENTS I WHERE C.RDB$INDEX_NAME = I.RDB$INDEX_NAME AND C.RDB"
 "$RELATION_NAME = '"
 msgstr ""
 
-#: firebird.cpp:506
+#: firebird.cpp:508
 msgid "Key"
 msgstr "Ключ"
 
-#: firebird.cpp:519 firebird.cpp:545 firebird.cpp:600 firebird.cpp:737
+#: firebird.cpp:521 firebird.cpp:547 firebird.cpp:592 firebird.cpp:701
 msgid "Table is empty."
 msgstr "Таблиця порожня."
 
-#: firebird.cpp:527
+#: firebird.cpp:529
 msgid "PRIMARY KEY"
 msgstr ""
 
-#: firebird.cpp:528 firebird.cpp:796
+#: firebird.cpp:530 firebird.cpp:759
 msgid "37"
 msgstr ""
 
-#: firebird.cpp:530 firebird.cpp:799
+#: firebird.cpp:532 firebird.cpp:762
 msgid "261"
 msgstr ""
 
-#: firebird.cpp:531
+#: firebird.cpp:533
 msgid "1048576"
 msgstr ""
 
-#: firebird.cpp:532 firebird.cpp:801
+#: firebird.cpp:534 firebird.cpp:764
 msgid "8"
 msgstr ""
 
-#: firebird.cpp:534 firebird.cpp:802
+#: firebird.cpp:536 firebird.cpp:765
 msgid "27"
 msgstr ""
 
-#: firebird.cpp:536 firebird.cpp:803
+#: firebird.cpp:538 firebird.cpp:766
 msgid "7"
 msgstr ""
 
-#: firebird.cpp:550
+#: firebird.cpp:552
 msgid "SELECT FIRST 1 SKIP "
 msgstr ""
 
-#: firebird.cpp:550
+#: firebird.cpp:552
 msgid " "
 msgstr ""
 
-#: firebird.cpp:551 firebird.cpp:662
+#: firebird.cpp:553 firebird.cpp:643
 msgid "WHERE "
 msgstr ""
 
-#: firebird.cpp:563 firebird.cpp:616 firebird.cpp:669 firebird.cpp:754
+#: firebird.cpp:565 firebird.cpp:608 firebird.cpp:650 firebird.cpp:718
 msgid "AND "
 msgstr ""
 
-#: firebird.cpp:564 firebird.cpp:617 firebird.cpp:670 firebird.cpp:722
-#: firebird.cpp:755
+#: firebird.cpp:566 firebird.cpp:609 firebird.cpp:651 firebird.cpp:686
+#: firebird.cpp:719
 msgid "\"='"
 msgstr ""
 
-#: firebird.cpp:564 firebird.cpp:671 firebird.cpp:699 firebird.cpp:722
-#: firebird.cpp:756
+#: firebird.cpp:566 firebird.cpp:651 firebird.cpp:671 firebird.cpp:686
+#: firebird.cpp:719
 msgid "' "
 msgstr ""
 
-#: firebird.cpp:569 firebird.cpp:623
+#: firebird.cpp:571 firebird.cpp:614
 msgid ",\""
 msgstr ""
 
-#: firebird.cpp:575 firebird.cpp:627
+#: firebird.cpp:577 firebird.cpp:618
 msgid " FROM \""
 msgstr ""
 
-#: firebird.cpp:575 firebird.cpp:676 firebird.cpp:690 firebird.cpp:807
-#: firebird.cpp:811 firebird.cpp:835
+#: firebird.cpp:577 firebird.cpp:656 firebird.cpp:670 firebird.cpp:770
+#: firebird.cpp:774 firebird.cpp:798
 msgid "\" "
 msgstr ""
 
-#: firebird.cpp:605
+#: firebird.cpp:597
 msgid "SELECT "
 msgstr ""
 
-#: firebird.cpp:627 firebird.cpp:746
+#: firebird.cpp:618 firebird.cpp:710
 msgid "\" WHERE "
 msgstr ""
 
-#: firebird.cpp:631
+#: firebird.cpp:622
 msgid "Row is not present."
 msgstr "Запис відсутній."
 
-#: firebird.cpp:676
+#: firebird.cpp:656
 msgid "INSERT INTO \""
 msgstr ""
 
-#: firebird.cpp:687 firebird.cpp:688 firebird.cpp:713 firebird.cpp:784
-#: firebird.cpp:806 firebird.cpp:809 firebird.cpp:834
+#: firebird.cpp:667 firebird.cpp:668 firebird.cpp:685 firebird.cpp:747
+#: firebird.cpp:769 firebird.cpp:772 firebird.cpp:797
 msgid ","
 msgstr ""
 
-#: firebird.cpp:701
+#: firebird.cpp:673
 msgid "("
 msgstr ""
 
-#: firebird.cpp:701
+#: firebird.cpp:673
 msgid ") VALUES ("
 msgstr ""
 
-#: firebird.cpp:701
+#: firebird.cpp:673
 msgid ")"
 msgstr ""
 
-#: firebird.cpp:706
+#: firebird.cpp:678
 msgid "UPDATE \""
 msgstr ""
 
-#: firebird.cpp:706
+#: firebird.cpp:678
 msgid "\" SET "
 msgstr ""
 
-#: firebird.cpp:746
+#: firebird.cpp:710
 msgid "DELETE FROM \""
 msgstr ""
 
-#: firebird.cpp:773
+#: firebird.cpp:736
 msgid "ALTER TABLE \""
 msgstr ""
 
-#: firebird.cpp:773
+#: firebird.cpp:736
 msgid "\" DROP CONSTRAINT \"pk_"
 msgstr ""
 
-#: firebird.cpp:774
+#: firebird.cpp:737
 msgid "\", "
 msgstr ""
 
-#: firebird.cpp:807 firebird.cpp:835
+#: firebird.cpp:770 firebird.cpp:798
 msgid "DROP \""
 msgstr ""
 
-#: firebird.cpp:811
+#: firebird.cpp:774
 msgid "ADD \""
 msgstr ""
 
-#: firebird.cpp:816
+#: firebird.cpp:779
 msgid "VARCHAR("
 msgstr ""
 
-#: firebird.cpp:816
+#: firebird.cpp:779
 msgid ") DEFAULT '"
 msgstr ""
 
-#: firebird.cpp:816 firebird.cpp:817 firebird.cpp:820 firebird.cpp:823
-#: firebird.cpp:826
+#: firebird.cpp:779 firebird.cpp:780 firebird.cpp:783 firebird.cpp:786
+#: firebird.cpp:789
 msgid "' NOT NULL "
 msgstr ""
 
-#: firebird.cpp:817
+#: firebird.cpp:780
 msgid "BLOB SUB_TYPE TEXT DEFAULT '"
 msgstr ""
 
-#: firebird.cpp:820
+#: firebird.cpp:783
 msgid "INTEGER DEFAULT '"
 msgstr ""
 
-#: firebird.cpp:823
+#: firebird.cpp:786
 msgid "DOUBLE PRECISION DEFAULT '"
 msgstr ""
 
-#: firebird.cpp:826
+#: firebird.cpp:789
 msgid "SMALLINT DEFAULT '"
 msgstr ""
 
-#: firebird.cpp:837
+#: firebird.cpp:800
 msgid ", ADD CONSTRAINT \"pk_"
 msgstr ""
 
-#: firebird.cpp:837
+#: firebird.cpp:800
 msgid "\" PRIMARY KEY ("
 msgstr ""
 
-#: firebird.cpp:837
+#: firebird.cpp:800
 msgid ") "
 msgstr ""

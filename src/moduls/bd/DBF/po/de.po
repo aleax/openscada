@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the OpenSCADA.DB.DBF module.
 # aleksey <aleksey@psniip.ru>, 2008-2009.
 #
-#: dbf_mod.cpp:56
+#: dbf_mod.cpp:56 dbf_mod.cpp:542
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DB.DBF 2.0.0\n"
+"Project-Id-Version: OpenSCADA.DB.DBF 2.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-16 11:52+0200\n"
+"POT-Creation-Date: 2009-06-05 15:03+0300\n"
 "PO-Revision-Date: 2008-12-22 11:55+0300\n"
 "Last-Translator: aleksey <aleksey@psniip.ru>\n"
 "Language-Team:  <ru@li.org>\n"
@@ -39,7 +39,7 @@ msgid "BD"
 msgstr "DB"
 
 #: dbf_mod.cpp:43
-msgid "2.0.0"
+msgid "2.0.1"
 msgstr ""
 
 #: dbf_mod.cpp:44
@@ -162,40 +162,40 @@ msgstr "Fehlrer der Offnung der Tabelle!"
 msgid "%s"
 msgstr ""
 
-#: dbf_mod.cpp:283 dbf_mod.cpp:336 dbf_mod.cpp:457 dbf_mod.cpp:514
+#: dbf_mod.cpp:285 dbf_mod.cpp:323 dbf_mod.cpp:412 dbf_mod.cpp:469
 msgid "Cell error!"
 msgstr "Fehler der Zelle!"
 
-#: dbf_mod.cpp:316 dbf_mod.cpp:479
+#: dbf_mod.cpp:303 dbf_mod.cpp:434
 msgid "Field is not present!"
 msgstr "Das Feld ist nicht vorhanden!"
 
-#: dbf_mod.cpp:385 dbf_mod.cpp:411
+#: dbf_mod.cpp:356 dbf_mod.cpp:382
 msgid "Column error!"
 msgstr "Fehler in der Kolumne!"
 
-#: dbf_mod.cpp:423
+#: dbf_mod.cpp:394
 msgid "Delete field error!"
 msgstr "Fehler des Loschens des Feldes!"
 
-#: dbf_mod.cpp:448
+#: dbf_mod.cpp:429
+msgid "Line error!"
+msgstr "Fehler der Linie!"
+
+#: dbf_mod.cpp:465
+#, c-format
+msgid "Key column <%s> is not present!"
+msgstr "Die Schluesselkolumne<%s> ist nicht vorhanden!"
+
+#: dbf_mod.cpp:537
 #, c-format
 msgid "%*.*f"
 msgstr ""
 
-#: dbf_mod.cpp:452
+#: dbf_mod.cpp:540
 msgid "T"
 msgstr ""
 
-#: dbf_mod.cpp:452
+#: dbf_mod.cpp:540
 msgid "F"
 msgstr ""
-
-#: dbf_mod.cpp:474
-msgid "Line error!"
-msgstr "Fehler der Linie!"
-
-#: dbf_mod.cpp:510
-#, c-format
-msgid "Key column <%s> is not present!"
-msgstr "Die Schluesselkolumne<%s> ist nicht vorhanden!"

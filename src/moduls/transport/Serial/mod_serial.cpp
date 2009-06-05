@@ -98,10 +98,10 @@ void TTr::postEnable( int flag )
     {
 	//> Add self DB-fields to input transport
 	owner().inEl().fldAdd( new TFld("BufLen",_("Input buffer length (kB)"),TFld::Integer,0,"4","5") );
-	owner().inEl().fldAdd( new TFld("TMS",_("Timings"),TFld::String,0,"100","0.57:320") );
+	owner().inEl().fldAdd( new TFld("TMS",_("Timings"),TFld::String,0,"30") );
 
-	//> Add self DB-fields to input transport
-	owner().outEl().fldAdd( new TFld("TMS",_("Timings"),TFld::String,0,"100","640:0.57:320") );
+	//> Add self DB-fields to output transport
+	owner().outEl().fldAdd( new TFld("TMS",_("Timings"),TFld::String,0,"30") );
     }
 }
 
@@ -173,6 +173,7 @@ TTrIn::TTrIn( string name, const string &idb, TElem *el ) :
     TTransportIn(name,idb,el), trIn(0), trOut(0), tmMax(0), fd(-1), mTimings(cfg("TMS").getSd())
 {
     setAddr("/dev/ttyS0:19200:8E2");
+    setTimings("0.57:320");
 }
 
 TTrIn::~TTrIn()
@@ -446,6 +447,7 @@ TTrOut::TTrOut(string name, const string &idb, TElem *el) :
     TTransportOut(name,idb,el), mTimings(cfg("TMS").getSd()), fd(-1), mLstReqTm(0), tmMax(0)
 {
     setAddr("/dev/ttyS0:19200:8E2");
+    setTimings("640:0.57:320");
 }
 
 TTrOut::~TTrOut()

@@ -35,7 +35,7 @@
 #define MOD_NAME	"DB MySQL"
 #define MOD_TYPE	"BD"
 #define VER_TYPE	VER_BD
-#define VERSION		"1.5.0"
+#define VERSION		"1.6.0"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"BD modul. Allow support of the BD MySQL."
 #define MOD_LICENSE	"GPL"

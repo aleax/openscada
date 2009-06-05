@@ -3,15 +3,15 @@
 # This file is distributed under the same license as the OpenSCADA.DAQ.LogicLev module.
 # Roman Savochenko <rom_as@fromru.com>, 2006-2009.
 #
-#: logiclev.cpp:56 logiclev.cpp:131 logiclev.cpp:138 logiclev.cpp:887
-#: logiclev.cpp:898 logiclev.cpp:911 logiclev.cpp:1007 logiclev.h:58
+#: logiclev.cpp:56 logiclev.cpp:131 logiclev.cpp:138 logiclev.cpp:888
+#: logiclev.cpp:899 logiclev.cpp:912 logiclev.cpp:1008 logiclev.h:58
 #: logiclev.h:77
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.LogicLev 0.9.2\n"
+"Project-Id-Version: OpenSCADA.DAQ.LogicLev 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-18 18:47+0300\n"
+"POT-Creation-Date: 2009-06-05 15:11+0300\n"
 "PO-Revision-Date: 2004-03-20 10:37+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -26,12 +26,12 @@ msgstr ""
 msgid "Logic level"
 msgstr "Логічний рівень"
 
-#: logiclev.cpp:41 logiclev.cpp:827 logiclev.cpp:830
+#: logiclev.cpp:41 logiclev.cpp:828 logiclev.cpp:831
 msgid "DAQ"
 msgstr ""
 
 #: logiclev.cpp:43
-msgid "0.9.2"
+msgid "1.0.0"
 msgstr ""
 
 #: logiclev.cpp:44
@@ -113,8 +113,8 @@ msgstr "Рівень пріорітету задачі отримання дан
 msgid "2"
 msgstr ""
 
-#: logiclev.cpp:133 logiclev.cpp:137 logiclev.cpp:547 logiclev.cpp:645
-#: logiclev.cpp:862 logiclev.cpp:945
+#: logiclev.cpp:133 logiclev.cpp:137 logiclev.cpp:548 logiclev.cpp:646
+#: logiclev.cpp:863 logiclev.cpp:946
 msgid "0"
 msgstr ""
 
@@ -130,7 +130,7 @@ msgstr ""
 msgid "Logical"
 msgstr "Логічний"
 
-#: logiclev.cpp:137 logiclev.cpp:325 logiclev.cpp:847
+#: logiclev.cpp:137 logiclev.cpp:325 logiclev.cpp:848
 msgid "MODE"
 msgstr ""
 
@@ -142,7 +142,7 @@ msgstr "Режим"
 msgid "1"
 msgstr ""
 
-#: logiclev.cpp:138 logiclev.cpp:325 logiclev.cpp:850
+#: logiclev.cpp:138 logiclev.cpp:325 logiclev.cpp:851
 msgid "PRM"
 msgstr ""
 
@@ -166,8 +166,8 @@ msgstr ""
 msgid "ID"
 msgstr ""
 
-#: logiclev.cpp:143 logiclev.cpp:420 logiclev.cpp:421 logiclev.cpp:446
-#: logiclev.cpp:447
+#: logiclev.cpp:143 logiclev.cpp:420 logiclev.cpp:421 logiclev.cpp:445
+#: logiclev.cpp:447 logiclev.cpp:448
 msgid "VALUE"
 msgstr ""
 
@@ -184,17 +184,17 @@ msgid "LogLevPrm_"
 msgstr ""
 
 #: logiclev.cpp:174 logiclev.cpp:349 logiclev.cpp:412 logiclev.cpp:440
-#: logiclev.cpp:904 logiclev.cpp:905 logiclev.cpp:915 logiclev.cpp:918
-#: logiclev.cpp:955 logiclev.cpp:986 logiclev.cpp:1012 logiclev.cpp:1015
+#: logiclev.cpp:905 logiclev.cpp:906 logiclev.cpp:916 logiclev.cpp:919
+#: logiclev.cpp:956 logiclev.cpp:987 logiclev.cpp:1013 logiclev.cpp:1016
 msgid "."
 msgstr ""
 
 #: logiclev.cpp:174 logiclev.cpp:349 logiclev.cpp:352 logiclev.cpp:412
-#: logiclev.cpp:417 logiclev.cpp:440 logiclev.cpp:448
+#: logiclev.cpp:417 logiclev.cpp:440 logiclev.cpp:449
 msgid "_io"
 msgstr ""
 
-#: logiclev.cpp:179 logiclev.cpp:276 logiclev.cpp:355 logiclev.cpp:812
+#: logiclev.cpp:179 logiclev.cpp:276 logiclev.cpp:355 logiclev.cpp:813
 #, c-format
 msgid "%s"
 msgstr ""
@@ -204,10 +204,10 @@ msgstr ""
 msgid "Calc time %.6g ms. "
 msgstr "Час обчислення %.6g мс."
 
-#: logiclev.cpp:209 logiclev.cpp:827 logiclev.cpp:830 logiclev.cpp:847
-#: logiclev.cpp:850 logiclev.cpp:853 logiclev.cpp:871 logiclev.cpp:886
-#: logiclev.cpp:894 logiclev.cpp:900 logiclev.cpp:945 logiclev.cpp:946
-#: logiclev.cpp:950 logiclev.cpp:958 logiclev.cpp:1042 logiclev.cpp:1050
+#: logiclev.cpp:209 logiclev.cpp:828 logiclev.cpp:831 logiclev.cpp:848
+#: logiclev.cpp:851 logiclev.cpp:854 logiclev.cpp:872 logiclev.cpp:887
+#: logiclev.cpp:895 logiclev.cpp:901 logiclev.cpp:946 logiclev.cpp:947
+#: logiclev.cpp:951 logiclev.cpp:959 logiclev.cpp:1043 logiclev.cpp:1051
 msgid "root"
 msgstr ""
 
@@ -236,13 +236,13 @@ msgstr ""
 msgid "CntrReqs"
 msgstr ""
 
-#: logiclev.cpp:299 logiclev.cpp:303 logiclev.cpp:311 logiclev.cpp:657
-#: logiclev.cpp:820
+#: logiclev.cpp:299 logiclev.cpp:303 logiclev.cpp:311 logiclev.cpp:658
+#: logiclev.cpp:821
 msgid "path"
 msgstr ""
 
-#: logiclev.cpp:303 logiclev.cpp:827 logiclev.cpp:945 logiclev.cpp:950
-#: logiclev.cpp:1042
+#: logiclev.cpp:303 logiclev.cpp:828 logiclev.cpp:946 logiclev.cpp:951
+#: logiclev.cpp:1043
 msgid "get"
 msgstr ""
 
@@ -259,12 +259,12 @@ msgstr ""
 msgid "/"
 msgstr ""
 
-#: logiclev.cpp:314 logiclev.cpp:586 logiclev.cpp:641
+#: logiclev.cpp:314 logiclev.cpp:587 logiclev.cpp:642
 msgid "err"
 msgstr ""
 
-#: logiclev.cpp:315 logiclev.cpp:656 logiclev.cpp:830 logiclev.cpp:894
-#: logiclev.cpp:900 logiclev.cpp:946 logiclev.cpp:958 logiclev.cpp:1050
+#: logiclev.cpp:315 logiclev.cpp:657 logiclev.cpp:831 logiclev.cpp:895
+#: logiclev.cpp:901 logiclev.cpp:947 logiclev.cpp:959 logiclev.cpp:1051
 msgid "set"
 msgstr ""
 
@@ -288,195 +288,195 @@ msgstr ""
 msgid "f_err"
 msgstr ""
 
-#: logiclev.cpp:521
+#: logiclev.cpp:522
 msgid "_tmplprm"
 msgstr ""
 
-#: logiclev.cpp:589
+#: logiclev.cpp:590
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр вимкнено."
 
-#: logiclev.cpp:591
+#: logiclev.cpp:592
 msgid "2:Controller is stoped."
 msgstr "2:Контролер зупинено."
 
-#: logiclev.cpp:657
+#: logiclev.cpp:658
 #, c-format
 msgid "/%2fserv%2fattr"
 msgstr ""
 
-#: logiclev.cpp:657 logiclev.cpp:912 logiclev.cpp:916 logiclev.cpp:941
-#: logiclev.cpp:1008 logiclev.cpp:1013 logiclev.cpp:1038
+#: logiclev.cpp:658 logiclev.cpp:913 logiclev.cpp:917 logiclev.cpp:942
+#: logiclev.cpp:1009 logiclev.cpp:1014 logiclev.cpp:1039
 msgid "el"
 msgstr ""
 
-#: logiclev.cpp:657 logiclev.cpp:829 logiclev.cpp:834
+#: logiclev.cpp:658 logiclev.cpp:830 logiclev.cpp:835
 msgid "id"
 msgstr ""
 
-#: logiclev.cpp:721 logiclev.cpp:728 logiclev.cpp:738 logiclev.cpp:748
+#: logiclev.cpp:722 logiclev.cpp:729 logiclev.cpp:739 logiclev.cpp:749
 msgid "Parameter is disabled or is not based on the template."
 msgstr "Параметр вимкнено або він не грунтується на шаблоні."
 
-#: logiclev.cpp:750
+#: logiclev.cpp:751
 msgid "Parameter id error."
 msgstr "Помилковий id параметру."
 
-#: logiclev.cpp:813
+#: logiclev.cpp:814
 msgid "Error calc template."
 msgstr "Помилка обчислення шаблону."
 
-#: logiclev.cpp:821
+#: logiclev.cpp:822
 msgid "/serv/"
 msgstr ""
 
-#: logiclev.cpp:823
+#: logiclev.cpp:824
 msgid "/serv/tmplAttr"
 msgstr ""
 
-#: logiclev.cpp:826
+#: logiclev.cpp:827
 msgid "No template parameter or error."
 msgstr "Помилка або не шаблоний параметр."
 
-#: logiclev.cpp:829 logiclev.cpp:834
+#: logiclev.cpp:830 logiclev.cpp:835
 msgid "ta"
 msgstr ""
 
-#: logiclev.cpp:844
+#: logiclev.cpp:845
 msgid "info"
 msgstr ""
 
-#: logiclev.cpp:847 logiclev.cpp:850 logiclev.cpp:853 logiclev.cpp:871
-#: logiclev.cpp:886
+#: logiclev.cpp:848 logiclev.cpp:851 logiclev.cpp:854 logiclev.cpp:872
+#: logiclev.cpp:887
 msgid "fld"
 msgstr ""
 
-#: logiclev.cpp:847 logiclev.cpp:894
+#: logiclev.cpp:848 logiclev.cpp:895
 msgid "/prm/cfg/MODE"
 msgstr ""
 
-#: logiclev.cpp:847 logiclev.cpp:850 logiclev.cpp:853 logiclev.cpp:872
-#: logiclev.cpp:887
+#: logiclev.cpp:848 logiclev.cpp:851 logiclev.cpp:854 logiclev.cpp:873
+#: logiclev.cpp:888
 msgid "tp"
 msgstr ""
 
-#: logiclev.cpp:847 logiclev.cpp:850 logiclev.cpp:872 logiclev.cpp:878
+#: logiclev.cpp:848 logiclev.cpp:851 logiclev.cpp:873 logiclev.cpp:879
 msgid "str"
 msgstr ""
 
-#: logiclev.cpp:847 logiclev.cpp:850 logiclev.cpp:872 logiclev.cpp:887
+#: logiclev.cpp:848 logiclev.cpp:851 logiclev.cpp:873 logiclev.cpp:888
 msgid "dest"
 msgstr ""
 
-#: logiclev.cpp:847 logiclev.cpp:850 logiclev.cpp:872 logiclev.cpp:887
+#: logiclev.cpp:848 logiclev.cpp:851 logiclev.cpp:873 logiclev.cpp:888
 msgid "select"
 msgstr ""
 
-#: logiclev.cpp:848
+#: logiclev.cpp:849
 msgid "sel_id"
 msgstr ""
 
-#: logiclev.cpp:848
+#: logiclev.cpp:849
 msgid ";"
 msgstr ""
 
-#: logiclev.cpp:849
+#: logiclev.cpp:850
 msgid "sel_list"
 msgstr ""
 
-#: logiclev.cpp:849
+#: logiclev.cpp:850
 msgid "Free;Direct reflection;Template"
 msgstr "Вільна;Пряме відображення;Шаблон"
 
-#: logiclev.cpp:850 logiclev.cpp:900
+#: logiclev.cpp:851 logiclev.cpp:901
 msgid "/prm/cfg/PRM"
 msgstr ""
 
-#: logiclev.cpp:850 logiclev.cpp:872 logiclev.cpp:887
+#: logiclev.cpp:851 logiclev.cpp:873 logiclev.cpp:888
 msgid "sel_ed"
 msgstr ""
 
-#: logiclev.cpp:850 logiclev.cpp:908
+#: logiclev.cpp:851 logiclev.cpp:909
 msgid "/prm/cfg/prmp_lst"
 msgstr ""
 
-#: logiclev.cpp:851 logiclev.cpp:854
+#: logiclev.cpp:852 logiclev.cpp:855
 msgid "area"
 msgstr ""
 
-#: logiclev.cpp:851
+#: logiclev.cpp:852
 msgid "/cfg"
 msgstr ""
 
-#: logiclev.cpp:851
+#: logiclev.cpp:852
 msgid "Template config"
 msgstr "Конфігурація шаблону"
 
-#: logiclev.cpp:853 logiclev.cpp:943
+#: logiclev.cpp:854 logiclev.cpp:944
 msgid "/cfg/attr_only"
 msgstr ""
 
-#: logiclev.cpp:853
+#: logiclev.cpp:854
 msgid "Only atributes are to be shown"
 msgstr "Показувати тільки атрибути"
 
-#: logiclev.cpp:853 logiclev.cpp:884
+#: logiclev.cpp:854 logiclev.cpp:885
 msgid "bool"
 msgstr ""
 
-#: logiclev.cpp:854
+#: logiclev.cpp:855
 msgid "/cfg/prm"
 msgstr ""
 
-#: logiclev.cpp:854
+#: logiclev.cpp:855
 msgid "Parameters"
 msgstr "Параметри"
 
-#: logiclev.cpp:862 logiclev.cpp:945 logiclev.cpp:946
+#: logiclev.cpp:863 logiclev.cpp:946 logiclev.cpp:947
 msgid "onlAttr"
 msgstr ""
 
-#: logiclev.cpp:862 logiclev.cpp:945 logiclev.cpp:946
+#: logiclev.cpp:863 logiclev.cpp:946 logiclev.cpp:947
 msgid "user"
 msgstr ""
 
-#: logiclev.cpp:871 logiclev.cpp:948
+#: logiclev.cpp:872 logiclev.cpp:949
 msgid "/cfg/prm/pr_"
 msgstr ""
 
-#: logiclev.cpp:872 logiclev.cpp:1001 logiclev.cpp:1006
+#: logiclev.cpp:873 logiclev.cpp:1002 logiclev.cpp:1007
 msgid "/cfg/prm/pl_"
 msgstr ""
 
-#: logiclev.cpp:882
+#: logiclev.cpp:883
 msgid "dec"
 msgstr ""
 
-#: logiclev.cpp:883
+#: logiclev.cpp:884
 msgid "real"
 msgstr ""
 
-#: logiclev.cpp:886 logiclev.cpp:1040
+#: logiclev.cpp:887 logiclev.cpp:1041
 msgid "/cfg/prm/el_"
 msgstr ""
 
-#: logiclev.cpp:887 logiclev.cpp:1001
+#: logiclev.cpp:888 logiclev.cpp:1002
 msgid "/cfg/prm/ls_"
 msgstr ""
 
-#: logiclev.cpp:972 logiclev.cpp:1058
+#: logiclev.cpp:973 logiclev.cpp:1059
 msgid "Self to self linking error."
 msgstr "Помилка, рекурсивне підключення."
 
-#: logiclev.cpp:990
+#: logiclev.cpp:991
 msgid ","
 msgstr ""
 
-#: logiclev.cpp:995
+#: logiclev.cpp:996
 msgid "Parameter has no one atribute!"
 msgstr "Параметр не має жодного атрибута!"
 
-#: logiclev.cpp:996
+#: logiclev.cpp:997
 #, c-format
 msgid "Parameter has not atributes: %s !"
 msgstr "Параметр не має атрибутів: %s !"

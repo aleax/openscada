@@ -149,6 +149,8 @@ class TSocketOut: public TTransportOut
 	~TSocketOut( );
 
 	string getStatus( );
+	int timeout( );
+	void setTimeout( int vl );
 
 	void start( );
 	void stop( );

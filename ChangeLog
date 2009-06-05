@@ -1,3 +1,29 @@
+2009-06-05 Roman
+- !:/SYS: Programm's work version is changed to 0.6.3.3.
+- !!!!:/Archives, /DAQS: The subsystems' modules API version rise to 3.
+- !!:/Archive/DBArch: Documents is updated and released version 0.8.0.
+- !!:/Archive/FSArch: Documents is updated and released version 1.3.0.
+- !!:/DB/DBF: Documents is updated and released version 2.0.1.
+- !!:/DB/FireBird: Documents is updated and released version 0.9.1.
+- !!:/DB/MySQL: Documents is updated and released version 1.6.0.
+- !!:/DB/SQLite: Documents is updated and released version 1.6.0.
+- !!:/DAQ/BlockCalc: Documents is updated and released version 1.2.0.
+- !!:/DAQ/DAQGate: Documents is updated and released version 0.7.0.
+- !!:/DAQ/DCON: Documents is updated and released version 0.2.0.
+- !!:/DAQ/DiamondBoards: Documents is updated and released version 1.2.0.
+- !!:/DAQ/JavaLikeCalc: Documents is updated and released version 1.4.0.
+- !!:/DAQ/LogicLev: Documents is updated and released version 1.0.0.
+- !!:/DAQ/ModBus: Documents is updated and released version 1.0.0.
+- !!:/DAQ/SNMP: Documents is updated and released version 0.4.0.
+- !!:/DAQ/Siemens: Documents is updated and released version 1.2.0.
+- !!:/DAQ/SoundCard: Documents is updated and released version 0.6.0.
+- !!:/DAQ/System: Documents is updated and released version 1.7.0.
+- !!:/Transport/Sockets: Document is updated and translated to English and released version 1.4.0.
+- FIX:/Transport/Serial: Default timings set is changed.
+- /Transport/Socket: Timeout is made optional and connect timeout changed for using function select().
+- /UI/QTCfg: Function setCurrentItem() from QT v4.4 is replaced equal from oldest versions.
+
+
 2009-06-04 Roman
 - !!:/DemoDB: DB vcaBase.db, vcaTest.db and vcaAGLKS.db translation to multilanguage (Russian and English) is finished.
 - !!:/SYS: Demo config file translation to multilanguage (Russian, English and Ukrainian) is finished.
@@ -197,7 +223,7 @@
 - /Transport/Serial: The maximum char timeout a realtime control is added. Can be used for correct char timeout setting.
 - /Transport/Serial: The asynchronous data format writing is changed to traditional.
 - FIX:/Transport/Socket: Close after connection mode is fixed for wait one request.
-- FIX:/Transport/Socket: Reconnection is fixed and session restore is added for output transport, especially for server's close after connection mode.
+- !!:FIX:/Transport/Socket: Reconnection is fixed and session restore is added for output transport, especially for server's closed after connection mode.
 
 
 2009-04-13 Roman
