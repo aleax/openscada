@@ -122,7 +122,7 @@ class Attr : public TCntrNode
 	//> Attributes
 	TFld	*mFld;			//Base field
 	unsigned m_modif;		//Modify counter
-	char	self_flg;		//Self attributes flags
+	short	self_flg;		//Self attributes flags
 
 	string	cfg;			//Config template and value
 };
@@ -221,6 +221,7 @@ class Widget : public TCntrNode
 
 	virtual bool attrChange( Attr &cfg, TVariant prev );   //Process attribute change local and into terminator
 	virtual unsigned int modifVal( Attr &cfg )	{ return 0; }
+	virtual void calc( Widget *base );
 
 	TVariant vlGet( Attr &a );
 

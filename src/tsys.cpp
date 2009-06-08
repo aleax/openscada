@@ -477,7 +477,7 @@ void TSYS::cfgFileScan( bool first )
 {
     struct stat f_stat;
 
-    stat(cfgFile().c_str(),&f_stat);
+    if( stat(cfgFile().c_str(),&f_stat) != 0 ) return;
     bool up = false;
     if( rootCfgFl != cfgFile() || rootFlTm != f_stat.st_mtime ) up = true;
     rootCfgFl = cfgFile();

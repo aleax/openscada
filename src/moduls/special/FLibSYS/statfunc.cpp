@@ -36,7 +36,7 @@
 #define MOD_LICENSE	"GPL"
 #define VER_TYPE	VER_SPC
 #define SUB_TYPE	"LIB"
-#define VERSION		"0.8.0"
+#define VERSION		"0.8.1"
 //*************************************************
 
 FLibSYS::Lib *FLibSYS::mod;
@@ -225,7 +225,7 @@ int Lib::varchBufOpen( TFld::Type vtp, int isz, int ipr, bool ihgrd, bool ihres 
 {
     ResAlloc res(varch_res,true);
 
-    TValBuf *vb = new TValBuf(vtp,isz,ipr,ihgrd,ihres); 
+    TValBuf *vb = new TValBuf(vtp,isz,ipr,ihgrd,ihres);
     if( !vb )	return -1;
 
     int i_id;

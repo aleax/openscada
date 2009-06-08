@@ -18,31 +18,22 @@ To do tasks of the project OpenSCADA
 
 5. Subsystem “Data acquisition” (DAQ)
   * Add functions of API of the user programming for management of controllers;
-  * Creation of the interface of the status of controllers of subsystem DAQ for the control over status of a source of data and statistics of data acquisition.
   * Data acquisition module realisation for data transfer through DB tables of free structure.
   * Data acquisition module realisation for data transfer through file of free structure.
-  * Make data acquisition module for gathering data from OPC-servers (for it should use OPC-server through Ethernet, based on drive Unidrive SP1202).
-
-5.1. Logic level parameters
-  * Make full parameters standby (include archives) on logical level parameters.
-
-5.2. System
-  * Data source support is added: file system stat (busy, free of disk area).
+  * Make data acquisition module for gathering data from OPC-servers by OPC UA.
 
 5.3. JavaLikeCalc
   * Add massif support.
 
 6. Subsystem “Transports”
   * Make realisation of SNMP protocol's agent.
-  * Transport “Serial” realisation.
 
 7. Subsystem “Protocols of transports”
-  * Make access protocol to OpenSCADA through ModBUS/TCP and ModBUS/RTU.
+  * Make module to protocol HTTP for service requests by OPC XML DA.
 
 8. Subsystem “User interfaces”
 
 8.1. VCAEngine
-  * Add functions of API of the user programming for management of a session (VCA).
   * Develope and making the “Function” primitive.
   * Develope and making the “Link” primitive.
   * Styles and the themes manager realisation.
@@ -56,17 +47,12 @@ To do tasks of the project OpenSCADA
   * Develope and making the “Link” primitive.
 
 9. Subsystem “Archives”
-  * Make module for export to mail and SMS.
 
 10. Subsystem “Security”
 
 11. Subsystem “Special”
 
 12. Documentation
-  * Make actual and detailed describe the conception of logical level parameters (RU).
-    Include this document into list of main documentation of OpenSCADA.
-    Include to this document chapter for methods of data gathering and comparative its analysis (simple synchronous, simple asynchronous, packet and passive).
-  * Describe deeply mechanisms of calculation, links, events process and the engine of visual area working.
   * Make manual for quick starting.
   * Translate the documentations to English and Ukrainian languages:
     * API of system;

@@ -1389,6 +1389,8 @@ void SessWdg::calc( bool first, bool last )
 		SessWdg *owner = ownerSessWdg(true);
 		if( owner && !sevup.empty() ) owner->eventAdd(sevup);
 	    }
+	    //> Generic calc
+	    Widget::calc(this);
 	}
     }
     catch(TError err)

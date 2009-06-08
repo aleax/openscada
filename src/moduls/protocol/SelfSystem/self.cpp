@@ -34,7 +34,7 @@
 #define MOD_NAME	"Self system OpenSCADA protocol"
 #define MOD_TYPE	"Protocol"
 #define VER_TYPE	VER_PROT
-#define VERSION		"0.8.0"
+#define VERSION		"0.9.0"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Self OpenSCADA protocol, support generic functions."
 #define LICENSE		"GPL"

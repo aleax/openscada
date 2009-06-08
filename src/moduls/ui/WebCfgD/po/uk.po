@@ -4,14 +4,14 @@
 # Roman Savochenko <rom_as@fromru.com>, 2008-2009.
 #
 #: web_cfg.cpp:55 web_cfg.cpp:228 web_cfg.cpp:280 web_cfg.cpp:310
-#: web_cfg.cpp:435 web_cfg.cpp:439 web_cfg.cpp:451 web_cfg.cpp:517
-#: web_cfg.cpp:521 web_cfg.h:78 web_cfg.h:79
+#: web_cfg.cpp:435 web_cfg.cpp:439 web_cfg.cpp:451 web_cfg.cpp:498
+#: web_cfg.cpp:502 web_cfg.h:78 web_cfg.h:79
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.UI.WebCfgD 0.6.0\n"
+"Project-Id-Version: OpenSCADA.UI.WebCfgD 0.6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-16 16:00+0200\n"
+"POT-Creation-Date: 2009-06-06 21:15+0300\n"
 "PO-Revision-Date: 2007-10-29 15:28+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -35,7 +35,7 @@ msgid "WWW"
 msgstr ""
 
 #: web_cfg.cpp:42
-msgid "0.6.0"
+msgid "0.6.1"
 msgstr ""
 
 #: web_cfg.cpp:43
@@ -327,7 +327,7 @@ msgid ""
 "Charset="
 msgstr ""
 
-#: web_cfg.cpp:188 web_cfg.cpp:580
+#: web_cfg.cpp:188 web_cfg.cpp:561
 msgid "\r\n"
 msgstr ""
 
@@ -452,14 +452,13 @@ msgid "text/html"
 msgstr ""
 
 #: web_cfg.cpp:299 web_cfg.cpp:328 web_cfg.cpp:367 web_cfg.cpp:369
-#: web_cfg.cpp:378 web_cfg.cpp:545 web_cfg.cpp:550
+#: web_cfg.cpp:378 web_cfg.cpp:526 web_cfg.cpp:531
 msgid "get"
 msgstr ""
 
 #: web_cfg.cpp:299 web_cfg.cpp:328 web_cfg.cpp:332 web_cfg.cpp:344
 #: web_cfg.cpp:353 web_cfg.cpp:361 web_cfg.cpp:369 web_cfg.cpp:378
-#: web_cfg.cpp:439 web_cfg.cpp:448 web_cfg.cpp:484 web_cfg.cpp:487
-#: web_cfg.cpp:496 web_cfg.cpp:504 web_cfg.cpp:544
+#: web_cfg.cpp:439 web_cfg.cpp:448 web_cfg.cpp:525
 msgid "path"
 msgstr ""
 
@@ -500,7 +499,7 @@ msgstr ""
 msgid "1000"
 msgstr ""
 
-#: web_cfg.cpp:332 web_cfg.cpp:351 web_cfg.cpp:353 web_cfg.cpp:534
+#: web_cfg.cpp:332 web_cfg.cpp:351 web_cfg.cpp:353 web_cfg.cpp:515
 msgid "info"
 msgstr ""
 
@@ -535,7 +534,7 @@ msgstr ""
 msgid "img"
 msgstr ""
 
-#: web_cfg.cpp:379 web_cfg.cpp:497 web_cfg.cpp:506 web_cfg.cpp:508
+#: web_cfg.cpp:379 web_cfg.cpp:487 web_cfg.cpp:489
 msgid "rez"
 msgstr ""
 
@@ -667,158 +666,142 @@ msgstr ""
 msgid "###"
 msgstr ""
 
-#: web_cfg.cpp:494
-msgid "user"
+#: web_cfg.cpp:485
+msgid "UIWebCfg"
 msgstr ""
 
-#: web_cfg.cpp:501
-msgid "TrCntr"
-msgstr ""
-
-#: web_cfg.cpp:503
-msgid "0\n"
-msgstr ""
-
-#: web_cfg.cpp:503
-msgid "\n"
-msgstr ""
-
-#: web_cfg.cpp:503
-msgid "SelfSystem"
-msgstr ""
-
-#: web_cfg.cpp:506
+#: web_cfg.cpp:487
 msgid "mcat"
 msgstr ""
 
-#: web_cfg.cpp:506
+#: web_cfg.cpp:487
 msgid "10"
 msgstr ""
 
-#: web_cfg.cpp:514 web_cfg.cpp:587
+#: web_cfg.cpp:495 web_cfg.cpp:568
 msgid ":"
 msgstr ""
 
-#: web_cfg.cpp:514
+#: web_cfg.cpp:495
 msgid "Cookie"
 msgstr ""
 
-#: web_cfg.cpp:516 web_cfg.cpp:570
+#: web_cfg.cpp:497 web_cfg.cpp:551
 msgid "="
 msgstr ""
 
-#: web_cfg.cpp:519
+#: web_cfg.cpp:500
 msgid ";"
 msgstr ""
 
-#: web_cfg.cpp:528
+#: web_cfg.cpp:509
 msgid "<empty>"
 msgstr ""
 
-#: web_cfg.cpp:537
+#: web_cfg.cpp:518
 msgid "area"
 msgstr ""
 
-#: web_cfg.cpp:537
+#: web_cfg.cpp:518
 msgid "/prm/cfg"
 msgstr ""
 
-#: web_cfg.cpp:537
+#: web_cfg.cpp:518
 msgid "Module options"
 msgstr "Опції модуля"
 
-#: web_cfg.cpp:538
+#: web_cfg.cpp:519
 msgid "comm"
 msgstr ""
 
-#: web_cfg.cpp:538 web_cfg.cpp:545
+#: web_cfg.cpp:519 web_cfg.cpp:526
 msgid "/prm/cfg/host_lnk"
 msgstr ""
 
-#: web_cfg.cpp:538
+#: web_cfg.cpp:519
 msgid "Go to remote stations list configuration"
 msgstr "Перейти до конфігурації переліку віддалених станцій"
 
-#: web_cfg.cpp:538 web_cfg.cpp:539 web_cfg.cpp:545
+#: web_cfg.cpp:519 web_cfg.cpp:520 web_cfg.cpp:526
 msgid "root"
 msgstr ""
 
-#: web_cfg.cpp:538 web_cfg.cpp:539
+#: web_cfg.cpp:519 web_cfg.cpp:520
 msgid "tp"
 msgstr ""
 
-#: web_cfg.cpp:538
+#: web_cfg.cpp:519
 msgid "lnk"
 msgstr ""
 
-#: web_cfg.cpp:539
+#: web_cfg.cpp:520
 msgid "fld"
 msgstr ""
 
-#: web_cfg.cpp:539 web_cfg.cpp:550
+#: web_cfg.cpp:520 web_cfg.cpp:531
 msgid "/help/g_help"
 msgstr ""
 
-#: web_cfg.cpp:539
+#: web_cfg.cpp:520
 msgid "Options help"
 msgstr "Допомога по опціям"
 
-#: web_cfg.cpp:539
+#: web_cfg.cpp:520
 msgid "str"
 msgstr ""
 
-#: web_cfg.cpp:539
+#: web_cfg.cpp:520
 msgid "cols"
 msgstr ""
 
-#: web_cfg.cpp:539
+#: web_cfg.cpp:520
 msgid "90"
 msgstr ""
 
-#: web_cfg.cpp:539
+#: web_cfg.cpp:520
 msgid "rows"
 msgstr ""
 
-#: web_cfg.cpp:539
+#: web_cfg.cpp:520
 msgid "5"
 msgstr ""
 
-#: web_cfg.cpp:548
+#: web_cfg.cpp:529
 msgid "/Transport"
 msgstr ""
 
-#: web_cfg.cpp:562
+#: web_cfg.cpp:543
 msgid "?"
 msgstr ""
 
-#: web_cfg.cpp:571
+#: web_cfg.cpp:552
 msgid "true"
 msgstr ""
 
-#: web_cfg.cpp:579
+#: web_cfg.cpp:560
 msgid "boundary="
 msgstr ""
 
-#: web_cfg.cpp:581 web_cfg.cpp:597
+#: web_cfg.cpp:562 web_cfg.cpp:578
 msgid "--"
 msgstr ""
 
-#: web_cfg.cpp:582
+#: web_cfg.cpp:563
 msgid "Content-Disposition: form-data;"
 msgstr ""
 
-#: web_cfg.cpp:583
+#: web_cfg.cpp:564
 msgid "name=\""
 msgstr ""
 
-#: web_cfg.cpp:584
+#: web_cfg.cpp:565
 msgid "filename=\""
 msgstr ""
 
-#: web_cfg.cpp:587 web_cfg.cpp:621
+#: web_cfg.cpp:568 web_cfg.cpp:602
 msgid "Content-Type"
 msgstr ""
 
-#: web_cfg.cpp:604 web_cfg.cpp:616
+#: web_cfg.cpp:585 web_cfg.cpp:597
 msgid "\""
 msgstr ""

@@ -830,6 +830,35 @@ void OrigDocument::postEnable( int flag )
     }
 }
 
+void OrigDocument::calc( Widget *base )
+{
+    //> Make document after time set
+    if( base->attrAt("time").at().flgSelf()&0x100 )
+    {
+	base->attrAt("time").at().setFlgSelf((Attr::SelfAttrFlgs)(base->attrAt("time").at().flgSelf()&(~0x100)));
+	string mkDk;
+	int n = base->attrAt("n").at().getI();
+	if( !n )
+	{
+	    mkDk = base->attrAt("doc").at().getS();
+	    if( mkDk.empty() )	mkDk = base->attrAt("tmpl").at().getS();
+	    mkDk = makeDoc(mkDk,base);
+	    base->attrAt("doc").at().setS(mkDk);
+	}
+	else
+	{
+	    int aCur = base->attrAt("aCur").at().getI();
+	    mkDk = base->attrAt("doc"+TSYS::int2str(aCur)).at().getS();
+	    if( mkDk.empty() )	mkDk = base->attrAt("tmpl").at().getS();
+
+	    mkDk = makeDoc(mkDk,base);
+	    base->attrAt("doc"+TSYS::int2str(aCur)).at().setS(mkDk);
+	    if( aCur == base->attrAt("vCur").at().getI() )
+		base->attrAt("doc").at().setS(mkDk);
+	}
+    }
+}
+
 bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 {
     int off = 0;
@@ -874,7 +903,8 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
     //> Make document after time set
     if( cfg.id() == "time" && cfg.getI() != prev.getI() )
     {
-	string mkDk;
+	cfg.setFlgSelf((Attr::SelfAttrFlgs)(cfg.flgSelf()|0x100));
+	/*string mkDk;
 	int n = cfg.owner()->attrAt("n").at().getI();
 	if( !n )
 	{
@@ -893,7 +923,7 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	    cfg.owner()->attrAt("doc"+TSYS::int2str(aCur)).at().setS(mkDk);
 	    if( aCur == cfg.owner()->attrAt("vCur").at().getI() )
 		cfg.owner()->attrAt("doc").at().setS(mkDk);
-	}
+	}*/
     }
     //> Load document's from project's DB
     else if( cfg.id() == "n" && cfg.getI() != prev.getI() )

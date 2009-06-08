@@ -449,6 +449,11 @@ void Widget::attrDel( const string &attr, bool allInher  )
     chldDel(attrId,attr);
 }
 
+void Widget::calc( Widget *base )
+{
+    if( !parent().freeStat() ) parent().at().calc(base);
+}
+
 bool Widget::attrChange( Attr &cfg, TVariant prev )
 {
     //> Process Active attribute's mode

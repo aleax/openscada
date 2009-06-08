@@ -1,3 +1,22 @@
+2009-06-08 Roman 0.6.3.3
+- !!!!:/Protocol: The subsystem modules API version rise to 2.
+- FIX:/SYS: No present config's file state error result process is added.
+- FIX:/UI/VCAEngine: Attributes write sequence for primitive "Document" is fixed by primitives main calc add.
+- !!!!:/DOC: OpenSCADA manual documents and API document and TODO is updated.
+- !!:/Protocol/HTTP: Document is updated and translated to English is added and released version 1.4.1.
+- !!:/Protocol/SelfSystem: Document is updated and translated to English is added and released version 0.9.0.
+- !!:/Special/FLibComplex1: Document is updated.
+- !!:/Special/FLibSYS: Document is updated. and released version 0.8.1.
+- !!:/Transport/SSL: Document is updated and translated to English is added and released version 0.8.1.
+- !!:/Transport/Serial: Document is updated and translated to English is added and released version 0.5.0.
+- !!:/UI/QTCfg: Document is updated and translated to English is added and released version 1.8.0.
+- !!:/UI/QTStarter: Document is updated and translated to English is added and released version 1.5.3.
+- !!:/UI/VCAEngine: Document is updated and released version 0.8.10.
+- !!:/UI/Vision: Released version 0.8.10.
+- !!:/UI/WebCfgD: Document is updated and translated to English is added and released version 0.6.1.
+- !!:/UI/WebVision: Released version 0.6.10.
+
+
 2009-06-05 Roman
 - !:/SYS: Programm's work version is changed to 0.6.3.3.
 - !!!!:/Archives, /DAQS: The subsystems' modules API version rise to 3.
@@ -192,7 +211,7 @@
 
 
 2009-04-17 Roman
-- FIX:/UI: To QT 4.5 adaptation is made. Set environment LC_NUMERIC=C for float dot separator always process.
+- !!:FIX:/UI: To QT 4.5 adaptation is made. Set environment LC_NUMERIC=C for float dot separator always process.
 - !!!!:/SYS/Resource: For read-write resources used POSIX functions pthread_rwlock_*() and Res object API some changed.
 - !!:/SYS/TCntrNode: Connect/disconnect counter resource is made common for all objects by mutex. Memory consumption is optimised.
 - !!:/SYS: The nodeRes() function of TCntrNode redefined for all used it objects.
@@ -269,7 +288,7 @@
 - !!!!:/Protocol: Output protocol's API function is changed to void outMess( XMLNode &io, TTransportOut &tro ).
 - !!!!:/DAQ/Transporter,/Protocol/SelfSystem,/UI/QTCfg,/UI/Vision,/UI/WebCfgD: Used new "Protocol" API.
 - /Transport: Added functions for getting full list input and output transports.
-- !!!!:/DAQ/DCON: Removed self modules Serial API and used instead new OpenSCADA serial transport module.
+- !!!!:/DAQ/DCON: Removed self module's Serial API and used instead new OpenSCADA serial transport module.
 - FIX:/DAQ/Transporter: Not save parameter's archives is fixed.
 - !!:/Transport/Serial: Output transport is released and tested.
 - !!FIX:/Transport/Serial: No init FD_SET structure before any call function select() is fixed.
@@ -282,7 +301,7 @@
 - FIX:/Transport/Serial: Clear input buffer from previous broken request is added.
 - !:/DAQ/ModBus: Three try is added for request to device after broken respond.
 - !!!:/Protocol: Template module "=Tmpl=" is added.
-- FIX:/SYS: User mode start script "openscada_start" is fixed for copy config file oscada_start.xml to ~/.openscada/oscada.xml and use it.
+- FIX:/SYS: User mode start script "openscada_start" is fixed for copy config file oscada_start.xml to ~/.openscada/oscada.xml and local use it.
 
 
 2009-03-31 Roman
@@ -295,7 +314,7 @@
 
 2009-03-27 Roman
 - /DAQ/Transporter: No configured controller's parameters clearing is added.
-- /UI/VCAEngine,/UI/WebVision: Multiply sessions opening for one project is blocked for users not administrators of OpenSCADA into Web.
+- /UI/VCAEngine, /UI/WebVision: Multiply sessions opening for one project is blocked for users not administrators of OpenSCADA into Web.
 - FIX:/UI/WebCfgD: No clearing last item into branch after it deletion is fixed.
 
 
@@ -312,11 +331,11 @@
 
 2009-03-25 Roman
 - !!!!:/UI/VCAEngine, /UI/Vision, /UI/WebVision: Spectrum type view is added to primitive "Diagram". Spectrum building is based on FFTW3 library.
-- !:/UI/Vision, /UI/WebVision: Trends build algorithm is updated for primitive "Diagram".
+- !:/UI/Vision, /UI/WebVision: Trends' build in algorithm is updated for primitive "Diagram".
 - /UI/Vision: Disable QTStarter's toolbar for development mode.
 - FIX:/UI/WebVision: Not full working checkbox of primitive "FormEl" is fixed.
 - FIX:/UI/VCAEngine: The "aScale" attribute removing for parameter's of primitive "Diagram" is fixed.
-- !:/Archive: Values trends build algorithm is updated.
+- !:/Archive: Values trends' build in algorithm is updated.
 - !:/DAQ/JavaLikeCalc: Specials IO support is added. To controller's calc procedure is added special IO "f_frq", "f_start" and "f_stop".
 - /DemoDB: Spectrum view is added for the graphics view pages.
 

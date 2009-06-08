@@ -22,7 +22,7 @@
 #ifndef TPROTOCOLS_H
 #define TPROTOCOLS_H
 
-#define  VER_PROT 1    //ProtocolS type modules version
+#define  VER_PROT 2    //ProtocolS type modules version
 
 #include <string>
 

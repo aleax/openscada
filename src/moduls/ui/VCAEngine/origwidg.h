@@ -45,8 +45,8 @@ class PrWidget : public LWidget
 	string name( )		{ return "Root primitive"; }
 	string descr( )		{ return "Abstract root primitive"; }
 
-	void setName( const string &inm )	{ };
-	void setDescr( const string &idscr )	{ };
+	void setName( const string &inm )	{ }
+	void setDescr( const string &idscr )	{ }
 	void setEnable( bool val );
 
     protected:
@@ -184,6 +184,7 @@ class OrigDocument : public PrWidget
     protected:
 	//Methods
 	void postEnable( int flag );
+	void calc( Widget *base );
 	bool attrChange( Attr &cfg, TVariant prev );
 
 	string makeDoc( const string &tmpl, Widget *wdg );
