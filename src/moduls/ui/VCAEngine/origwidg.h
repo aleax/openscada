@@ -188,7 +188,7 @@ class OrigDocument : public PrWidget
 	bool attrChange( Attr &cfg, TVariant prev );
 
 	string makeDoc( const string &tmpl, Widget *wdg );
-	void nodeProcess( XMLNode *xcur, TValFunc &funcV, TFunction &funcIO, const string &iLang, bool instrDel = false );
+	void nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFunction &funcIO, const string &iLang, bool instrDel = false );
 	void nodeClear( XMLNode *xcur );
 
 	//Attributes

@@ -1104,14 +1104,14 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
     }
 
     //> Node proocess
-    nodeProcess( &xdoc, funcV, funcIO, iLang );
+    nodeProcess( wdg, &xdoc, funcV, funcIO, iLang );
 
     xdoc.setAttr("docTime",TSYS::int2str(funcV.getI(1)));
 
     return xdoc.save(XMLNode::BrAllPast);
 }
 
-void OrigDocument::nodeProcess( XMLNode *xcur, TValFunc &funcV, TFunction &funcIO, const string &iLang, bool instrDel )
+void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFunction &funcIO, const string &iLang, bool instrDel )
 {
     //> Process instructions
     if( !xcur->prcInstr("dp").empty() )
@@ -1139,7 +1139,10 @@ void OrigDocument::nodeProcess( XMLNode *xcur, TValFunc &funcV, TFunction &funcI
 	    if( instrDel )	xcur->prcInstrDel("dp");
 	}
 	catch( TError err )
-	{ mess_err(nodePath().c_str(),_("Instruction proc <%s> error: %s"),TSYS::strSepParse(iLang,1,'.').c_str(),err.mess.c_str()); }
+	{
+	    mess_err(wdg->nodePath().c_str(),_("Instruction proc <%s> error: %s"),TSYS::strSepParse(iLang,1,'.').c_str(),err.mess.c_str());
+	    mess_err(wdg->nodePath().c_str(),_("Error code: %s"),xcur->prcInstr("dp").c_str());
+	}
     }
 
     float dRpt;
@@ -1174,7 +1177,7 @@ void OrigDocument::nodeProcess( XMLNode *xcur, TValFunc &funcV, TFunction &funcI
 		}
 		long long rTimeT = vmin(rTime+perRpt,time);
 		funcV.setI(4,rTimeT/1000000); funcV.setI(5,rTimeT%1000000); funcV.setR(6,(rTimeT-rTime)/1000000.0);
-		nodeProcess(reptN,funcV,funcIO,iLang);
+		nodeProcess(wdg,reptN,funcV,funcIO,iLang);
 		reptN->setAttr("docRptEnd",((rTimeT-rTime)==perRpt)?"1":"0");
 		rTime = rTimeT;
 	    }
@@ -1207,13 +1210,13 @@ void OrigDocument::nodeProcess( XMLNode *xcur, TValFunc &funcV, TFunction &funcI
 		funcV.setI(9,mess[i_r].level);
 		funcV.setS(10,mess[i_r].categ);
 		funcV.setS(11,mess[i_r].mess);
-		nodeProcess(reptN,funcV,funcIO,iLang);
+		nodeProcess(wdg,reptN,funcV,funcIO,iLang);
 		reptN->setAttr("docRptEnd","1");
 	    }
 	    funcV.setI(7,0); funcV.setI(8,0); funcV.setI(9,0); funcV.setS(10,""); funcV.setS(11,"");
 	    if( docRevers ) i_c += rCnt;
 	}
-	else nodeProcess(xcur->childGet(i_c),funcV,funcIO,iLang,instrDel);
+	else nodeProcess(wdg,xcur->childGet(i_c),funcV,funcIO,iLang,instrDel);
     }
 }
 

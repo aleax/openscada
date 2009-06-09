@@ -1,4 +1,11 @@
-2009-06-08 Roman 0.6.3.3
+2009-06-09 Roman 0.6.3.3
+- /DemoDB: Final fixes and clearings.
+- /SYS: Splash image is updated.
+- /SYS: RPM build spec file is adapted for 0.6.3.3 building.
+- /UI/VCAEngine: Detailed messages is added for primitive "Document" generation errors.
+
+
+2009-06-08 Roman
 - !!!!:/Protocol: The subsystem modules API version rise to 2.
 - FIX:/SYS: No present config's file state error result process is added.
 - FIX:/UI/VCAEngine: Attributes write sequence for primitive "Document" is fixed by primitives main calc add.
@@ -65,7 +72,7 @@
 
 2009-05-28 Roman
 - !!!!:/SYS: Modules build fixed for building on libtool 2.2.6.
-- !!:/DemoDB: DB OscadaLibs.db translation to multilanguage (Russian, English and Ukrainian) is finished.
+- !!:/DemoDB: DB OscadaLibs translation to multilanguage (Russian, English and Ukrainian) is finished.
 - !!:/SYS/TCfg: Disabling translation of text variable for one record on time one request is added.
 
 
@@ -79,7 +86,7 @@
 
 
 2009-05-25 Roman
-- !!!!:/SYS,/DB/SQLite,/DB/MySQL: Multilanguage variable texts support is finished. Multilanguage included to DB.SQLite, DB.MySQL and for config file.
+- !!!!:/SYS,/DB/SQLite,/DB/MySQL: Multilanguage variable texts support realisation is finished. Multilanguage included to DB.SQLite, DB.MySQL and for config file.
 - !!!!:/DemoDB: Demo DB from different languages is merged to one multilanguage (Russian,English and Ukrainian) DB.
 - !:/DAQ/LogicLev: English translation document is added.
 - !:/DB: Generic DB request API some expanded.
@@ -161,7 +168,7 @@
 - FIX:/SYS/Value: Archive's data getting service function is fixed from spare archive's data getting and expanded
     for archive block request.
 - !!!:/Transport, /UI/WebCfgD, /UI/QTCfg, /DAQ/DAQGate: OpenSCADA control interface's request to remote stations
-    is unified and locate to function TTransportS::cntrIfCmd.
+    is unified and locate to function TTransportS::cntrIfCmd().
 - !!!!:/DAQ: Base redundant support is added.
 - !!!!:/SYS: OpenSCADA control interface's group request "CntrReqs" is added. Used for request several standard requests
     into single action.

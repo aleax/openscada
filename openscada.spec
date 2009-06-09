@@ -1,7 +1,7 @@
 #===== Generic Info ======
 Summary: Open SCADA system project
 Name: openscada
-Version: 0.6.3.2
+Version: 0.6.3.3
 Release: 1
 Source: openscada-%version.tar.gz
 License: GPLv2
@@ -84,12 +84,14 @@ Das Paket %{name}-demo enthaelt Demodatenbanken und Konfigurationen. Fuers Start
 %setup -q -n %srcname
 
 %build
-%configure --disable-static CFLAGS="-O2" CXXFLAGS="-O2 -Wno-deprecated"
+%configure CFLAGS="-O2" CXXFLAGS="-O2 -Wno-deprecated"
 %make
 
 %install
 %makeinstall
 install -m 755 -d %buildroot/%_includedir/openscada/
+install -m 755 -d %buildroot/var/spool/openscada/{DATA,icons,DEMO}
+install -m 755 -d %buildroot/var/spool/openscada/ARCHIVES/{MESS,VAL}
 install -m 644 *.h %buildroot/%_includedir/openscada
 install -m 644 src/*.h %buildroot/%_includedir/openscada
 install -m 644 -pD data/oscada.xml %buildroot/%_sysconfdir/oscada.xml
@@ -98,19 +100,14 @@ install -m 755 -pD data/openscada_start %buildroot/%_bindir/openscada_start
 install -m 644 -pD data/openscada.desktop %buildroot/%_desktopdir/openscada.desktop
 install -m 644 -pD data/openscada.png %buildroot/%_iconsdir/openscada.png
 install -m 755 -pD data/oscada.init %buildroot/%_initdir/oscadad
-install -m 755 -d %buildroot/var/spool/openscada/DATA
-install -m 755 -d %buildroot/var/spool/openscada/icons
 echo "OpenSCADA data dir" > %buildroot/var/spool/openscada/DATA/.info
 install -m 644 data/icons/* %buildroot/var/spool/openscada/icons
-install -m 755 -d %buildroot/var/spool/openscada/ARCHIVES/MESS
-install -m 755 -d %buildroot/var/spool/openscada/ARCHIVES/VAL
 echo "OpenSCADA messages archive dir" > %buildroot/var/spool/openscada/ARCHIVES/MESS/.info
 echo "OpenSCADA values archive dir" > %buildroot/var/spool/openscada/ARCHIVES/VAL/.info
 install -m 644 -pD demo/oscada_demo.xml %buildroot/%_sysconfdir/oscada_demo.xml
 install -m 755 -pD demo/openscada_demo %buildroot/%_bindir/openscada_demo
 install -m 644 -pD demo/openscada_demo.desktop %buildroot/%_desktopdir/openscada_demo.desktop
 install -m 644 -pD demo/openscada_demo.png %buildroot/%_iconsdir/openscada_demo.png
-install -m 755 -d %buildroot/var/spool/openscada/DEMO
 install -m 644 demo/*.db %buildroot/var/spool/openscada/DEMO
 sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 
@@ -129,6 +126,8 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 %_iconsdir/openscada.png
 %_libdir/*.so.*
 %_libdir/openscada/*.so
+%exclude %_libdir/openscada/*.a
+%exclude %_libdir/openscada/*.la
 %_datadir/locale/*/LC_MESSAGES/*
 /var/spool/openscada/DATA/.info
 /var/spool/openscada/icons/*
@@ -155,6 +154,9 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 /var/spool/openscada/DEMO/*.db
 
 %changelog
+* Mon Jun 08 2009 Roman Savochenko <rom_as@oscada.org.ua>
+- Build 0.6.3.3 release.
+
 * Mon May 25 2009 Roman Savochenko <rom_as@diyaorg.dp.ua>
 - Merge demo DB from different languages to one multilanguage (Russian,English and Ukrainian) DB.
 
