@@ -357,7 +357,7 @@ int TMdContr::cntrIfCmd( XMLNode &node, bool strongSt )
 {
     int off = 0, rez;
     string reqStat = TSYS::pathLev(node.attr("path"),0,true,&off);
-    string srcPath = node.attr("path").substr(rez);
+    string srcPath = node.attr("path").substr(off);
 
     map<string,float>::iterator sti = mStatWork.find(reqStat);
     if( sti != mStatWork.end() && sti->second <= 0 )

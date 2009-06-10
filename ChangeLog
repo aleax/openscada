@@ -1,3 +1,7 @@
+2009-06-10 Roman
+- FIX:/DAQ/DAQGate: Vertical redundance is fixed.
+
+
 2009-06-09 Roman 0.6.3.3
 - /DemoDB: Final fixes and clearings.
 - /SYS: Splash image is updated.
