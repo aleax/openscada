@@ -74,6 +74,7 @@ void ModVArch::stop( )
 
 bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, long long *abeg, long long *aend, long long *aper )
 {
+    char buf[21]; buf[20] = 0;
     bool unpck = false;
     string a_fnm = anm;
     if( mod->filePack(anm) )
@@ -103,7 +104,7 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
     if( VFileArch::afl_id != head.f_tp || head.term != 0x55 )
 	return false;
     //-- Check to archive present --
-    if( archive )	*archive = head.archive;
+    if( archive )	{ strncpy(buf,head.archive,20); *archive = buf; }
     if( abeg )		*abeg = head.beg;
     if( aend )		*aend = head.end;
     if( aper )		*aper = head.period;
@@ -117,7 +118,8 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
 	c_el.cfg("FILE").setS(anm);
 	c_el.cfg("BEGIN").setS(TSYS::ll2str(head.beg,TSYS::Hex));
 	c_el.cfg("END").setS(TSYS::ll2str(head.end,TSYS::Hex));
-	c_el.cfg("PRM1").setS(head.archive);
+	strncpy(buf,head.archive,20);
+	c_el.cfg("PRM1").setS(buf);
 	c_el.cfg("PRM2").setS(TSYS::ll2str(head.period,TSYS::Hex));
 	c_el.cfg("PRM3").setS(TSYS::int2str(head.vtp));
 	SYS->db().at().dataSet(mod->filesDB(),mod->nodePath()+"Pack/",c_el);

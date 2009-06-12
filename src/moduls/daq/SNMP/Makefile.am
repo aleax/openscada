@@ -9,13 +9,6 @@ daq_SNMP_la_LDFLAGS = -module -avoid-version -no-undefined
 daq_SNMP_la_SOURCES = snmp_client.cpp
 daq_SNMP_la_LIBADD  = -lnetsnmp -lcrypto
 
-#AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
-#AM_LDFLAGS= -shared -module
-
-#oscd_modul_PROGRAMS = daq_SNMP.so
-#daq_SNMP_so_SOURCES = snmp_client.cpp
-#daq_SNMP_so_LDADD   = -lnetsnmp -lcrypto
-
 #PO files process and doc install
 doc_name = $(oscd_docmodul)DAQ.SNMP
 m_name = $(oscd_modulpref)SNMP

@@ -228,12 +228,6 @@ oscd_modul_LTLIBRARIES = prot_SelfSystem.la
 prot_SelfSystem_la_LDFLAGS = -module -avoid-version -no-undefined
 prot_SelfSystem_la_SOURCES = self.cpp
 
-#AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
-#AM_LDFLAGS= -shared -module
-
-#oscd_modul_PROGRAMS = prot_SelfSystem.so
-#prot_SelfSystem_so_SOURCES = self.cpp
-
 #PO files process and doc install
 doc_name = $(oscd_docmodul)Protocol.SelfSystem
 m_name = $(oscd_modulpref)SelfSystem

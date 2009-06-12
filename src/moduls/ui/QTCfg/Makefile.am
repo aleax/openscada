@@ -10,14 +10,6 @@ ui_QTCfg_la_LDFLAGS = -module -avoid-version -no-undefined
 ui_QTCfg_la_SOURCES = tuimod.cpp qrc_qtcfg.cpp qtcfg.cpp selfwidg.cpp moc_qtcfg.cpp moc_selfwidg.cpp
 ui_QTCfg_la_LIBADD = -L$(QT4_LIB) -lQtGui
 
-#AM_CXXFLAGS= -I$(QT4_INCL) -I$(QT4_INCL)/QtCore -I$(QT4_INCL)/QtGui -I$(top_srcdir)/src  -fPIC -DPIC -DQT_EDITION=QT_EDITION_DESKTOP \
-#    -DQT_USE_APPROXIMATE_CURSORS -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -DQT_GUI_LIB -DQT_CORE_LIB
-#AM_LDFLAGS= -shared -module
-
-#oscd_modul_PROGRAMS = ui_QTCfg.so
-#ui_QTCfg_so_SOURCES = tuimod.cpp qrc_qtcfg.cpp qtcfg.cpp selfwidg.cpp moc_qtcfg.cpp moc_selfwidg.cpp
-#ui_QTCfg_so_LDADD = -L$(QT4_LIB) -lQtGui
-
 qrc_qtcfg.cpp: qtcfg.qrc
 	$(QT4_RCC) -name QTCfg qtcfg.qrc -o qrc_qtcfg.cpp
 moc_qtcfg.cpp: qtcfg.h

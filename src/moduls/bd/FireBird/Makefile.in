@@ -228,12 +228,6 @@ oscd_modul_LTLIBRARIES = bd_FireBird.la
 bd_FireBird_la_LDFLAGS = -module -avoid-version -no-undefined $(FIREBIRD_LDFLAGS)
 bd_FireBird_la_SOURCES = firebird.cpp
 
-#AM_CXXFLAGS= -I$(top_srcdir)/src $(FIREBIRD_CFLAGS) -fPIC -DPIC
-#AM_LDFLAGS= $(FIREBIRD_LDFLAGS) -shared -module
-
-#oscd_modul_PROGRAMS = bd_FireBird.so
-#bd_FireBird_so_SOURCES = firebird.cpp
-
 #PO files process and doc install
 doc_name = $(oscd_docmodul)DB.FireBird
 m_name = $(oscd_modulpref)FireBird

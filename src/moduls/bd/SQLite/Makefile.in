@@ -228,12 +228,6 @@ oscd_modul_LTLIBRARIES = bd_SQLite.la
 bd_SQLite_la_LDFLAGS = -module -avoid-version -no-undefined $(SQLITE3_LDFLAGS)
 bd_SQLite_la_SOURCES = bd_sqlite.cpp
 
-#AM_CXXFLAGS= -I$(top_srcdir)/src $(SQLITE3_CFLAGS) -fPIC -DPIC
-#AM_LDFLAGS= $(SQLITE3_LDFLAGS) -shared -module
-
-#oscd_modul_PROGRAMS = bd_SQLite.so
-#bd_SQLite_so_SOURCES = bd_sqlite.cpp
-
 #PO files process and doc install
 doc_name = $(oscd_docmodul)DB.SQLite
 m_name = $(oscd_modulpref)SQLite

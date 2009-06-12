@@ -8,12 +8,6 @@ oscd_modul_LTLIBRARIES = spec_SystemTests.la
 spec_SystemTests_la_LDFLAGS = -module -avoid-version -no-undefined
 spec_SystemTests_la_SOURCES = test_kernel.cpp
 
-#AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
-#AM_LDFLAGS= -shared -module
-
-#oscd_modul_PROGRAMS = spec_SystemTests.so
-#spec_SystemTests_so_SOURCES = test_kernel.cpp
-
 #PO files process and doc install
 doc_name = $(oscd_docmodul)Special.SystemTests
 m_name = $(oscd_modulpref)SystemTests

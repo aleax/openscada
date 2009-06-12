@@ -10,13 +10,6 @@ ui_QTStarter_la_LDFLAGS = -module -avoid-version -no-undefined
 ui_QTStarter_la_SOURCES = tuimod.cpp moc_tuimod.cpp qrc_qtstarter.cpp
 ui_QTStarter_la_LIBADD = -L$(QT4_LIB) -lQtGui
 
-#AM_CXXFLAGS= -I$(QT4_INCL) -I$(QT4_INCL)/QtCore -I$(QT4_INCL)/QtGui -I$(top_srcdir)/src  -fPIC -DPIC
-#AM_LDFLAGS= -shared -module
-
-#oscd_modul_PROGRAMS = ui_QTStarter.so
-#ui_QTStarter_so_SOURCES = tuimod.cpp moc_tuimod.cpp qrc_qtstarter.cpp
-#ui_QTStarter_so_LDADD = -L$(QT4_LIB) -lQtGui
-
 qrc_qtstarter.cpp: qtstarter.qrc
 	$(QT4_RCC) -name QTStarter qtstarter.qrc -o qrc_qtstarter.cpp
 moc_tuimod.cpp: tuimod.h

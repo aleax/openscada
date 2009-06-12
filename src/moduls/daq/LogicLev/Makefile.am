@@ -8,12 +8,6 @@ oscd_modul_LTLIBRARIES = daq_LogicLev.la
 daq_LogicLev_la_LDFLAGS = -module -avoid-version -no-undefined
 daq_LogicLev_la_SOURCES = logiclev.cpp
 
-#AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
-#AM_LDFLAGS= -shared -module
-
-#oscd_modul_PROGRAMS = daq_LogicLev.so
-#daq_LogicLev_so_SOURCES = logiclev.cpp
-
 #PO files process and doc install
 doc_name = $(oscd_docmodul)DAQ.LogicLev
 m_name = $(oscd_modulpref)LogicLev

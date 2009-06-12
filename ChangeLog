@@ -1,3 +1,8 @@
+2009-06-12 Roman
+- /SYS: *.am files is clear
+- /Archive/FSArch: Value's archive id limit at 20 is fixed on time bordered to 20 simbols id reading from archive file.
+
+
 2009-06-10 Roman
 - FIX:/DAQ/DAQGate: Vertical redundance is fixed.
 

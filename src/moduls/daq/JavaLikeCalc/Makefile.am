@@ -8,12 +8,6 @@ oscd_modul_LTLIBRARIES = daq_JavaLikeCalc.la
 daq_JavaLikeCalc_la_LDFLAGS = -module -avoid-version -no-undefined
 daq_JavaLikeCalc_la_SOURCES = virtual.cpp freelib.cpp freefunc.cpp func_analise.ypp
 
-#AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
-#AM_LDFLAGS= -shared -module
-
-#oscd_modul_PROGRAMS = daq_JavaLikeCalc.so
-#daq_JavaLikeCalc_so_SOURCES = virtual.cpp freelib.cpp freefunc.cpp func_analise.ypp
-
 #PO files process and doc install
 doc_name = $(oscd_docmodul)DAQ.JavaLikeCalc
 m_name = $(oscd_modulpref)JavaLikeCalc

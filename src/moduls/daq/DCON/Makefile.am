@@ -8,12 +8,6 @@ oscd_modul_LTLIBRARIES = daq_DCON.la
 daq_DCON_la_LDFLAGS = -module -avoid-version -no-undefined
 daq_DCON_la_SOURCES = DCON_client.cpp
 
-#AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
-#AM_LDFLAGS= -shared -module
-
-#oscd_modul_PROGRAMS = daq_DCON.so
-#daq_DCON_so_SOURCES = DCON_client.cpp
-
 #PO files process and doc install
 doc_name = $(oscd_docmodul)DAQ.DCON
 m_name = $(oscd_modulpref)DCON

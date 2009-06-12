@@ -12,17 +12,6 @@ ui_Vision_la_SOURCES = tvision.cpp qrc_vision.cpp vis_widgs.cpp moc_vis_widgs.cp
     vis_run.cpp moc_vis_run.cpp vis_run_widgs.cpp moc_vis_run_widgs.cpp vis_shape_elfig.cpp moc_vis_shape_elfig.cpp
 ui_Vision_la_LIBADD = -L$(QT4_LIB) -lQtGui -lfftw3
 
-
-#AM_CXXFLAGS= -I$(QT4_INCL) -I$(QT4_INCL)/QtCore -I$(QT4_INCL)/QtGui -I$(top_srcdir)/src -fPIC -DPIC \
-#    -DQT_EDITION=QT_EDITION_DESKTOP -DQT_USE_APPROXIMATE_CURSORS -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -DQT_GUI_LIB -DQT_CORE_LIB
-#AM_LDFLAGS= -shared -module
-
-#oscd_modul_PROGRAMS = ui_Vision.so
-#ui_Vision_so_SOURCES = tvision.cpp qrc_vision.cpp vis_widgs.cpp moc_vis_widgs.cpp vis_shapes.cpp moc_vis_shapes.cpp \
-#    vis_devel.cpp moc_vis_devel.cpp vis_devel_dlgs.cpp moc_vis_devel_dlgs.cpp vis_devel_widgs.cpp moc_vis_devel_widgs.cpp \
-#    vis_run.cpp moc_vis_run.cpp vis_run_widgs.cpp moc_vis_run_widgs.cpp vis_shape_elfig.cpp moc_vis_shape_elfig.cpp
-#ui_Vision_so_LDADD = -L$(QT4_LIB) -lQtGui -lfftw3
-
 qrc_vision.cpp: vision.qrc
 	$(QT4_RCC) -name Vision vision.qrc -o qrc_vision.cpp
 moc_vis_devel.cpp: vis_devel.h
