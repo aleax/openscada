@@ -2027,7 +2027,7 @@ msgid ""
 "Are you sure of clear all changes for visual items: '%1'? All changes will "
 "be lost and variables are returning to default values or will be inherited!"
 msgstr ""
-"Вы действительно желаете очистить все изменения визуальных элементов: '%s'? "
+"Вы действительно желаете очистить все изменения визуальных элементов: '%1'? "
 "Все изменения будут утеряны и переменные вернутся к значениям по умолчанию "
 "или по наследованию!"
 

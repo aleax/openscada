@@ -1,3 +1,9 @@
+2009-06-15 Roman
+- /UI/VCAEngine: Clearing local changes of widget's programm is added by zero programm's language set.
+- /UI/VCAEngine, /UI/Vision: Individual attribute's local changin reset is added by conext menu item into the attributes inspector.
+- FIX:/UI/VCAEngine: No set modify flag for widget after local changes reset is fixed.
+
+
 2009-06-12 Roman
 - /SYS: *.am files is clear
 - /Archive/FSArch: Value's archive id limit at 20 is fixed on time bordered to 20 simbols id reading from archive file.

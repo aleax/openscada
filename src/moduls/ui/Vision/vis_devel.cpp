@@ -1191,21 +1191,37 @@ void VisDevelop::visualItEdit( )
     }
 }
 
-void VisDevelop::visualItClear( )
+void VisDevelop::visualItClear( const string &el_wa )
 {
     string clrW;
-    string work_wdg_loc = work_wdg;
+    string work_wdg_loc, work_attr;
 
-    InputDlg dlg(this,actVisItClear->icon(),
+    if( el_wa.empty() )
+    {
+	work_wdg_loc = work_wdg;
+
+	InputDlg dlg(this,actVisItClear->icon(),
 		QString(_("Are you sure of clear all changes for visual items: '%1'? "
 			  "All changes will be lost and variables are returning to default values or will be inherited!")).arg(work_wdg_loc.c_str()),
 		_("Visual items' changes clear"),false,false);
-    if( dlg.exec() != QDialog::Accepted )	return;
+	if( dlg.exec() != QDialog::Accepted )	return;
+    }
+    else
+    {
+	string work_tmp;
+	for( int off = 0; (work_tmp=TSYS::pathLev(el_wa,0,true,&off)).size(); )
+	{
+	    if( work_attr.size() ) work_wdg_loc += "/"+work_attr;
+	    work_attr = work_tmp;
+	}
+	if( work_attr.size() > 2 && work_attr.substr(0,2) == "a_" ) work_attr = work_attr.substr(2);
+	else { work_wdg_loc += "/"+work_attr; work_attr = ""; }
+    }
 
     for( int w_off = 0; (clrW=TSYS::strSepParse(work_wdg_loc,0,';',&w_off)).size(); )
     {
 	XMLNode req("set");
-	req.setAttr("path",clrW+"/%2fwdg%2fcfg%2fclear");
+	req.setAttr("path",clrW+"/%2fwdg%2fcfg%2fclear")->setAttr("attr",work_attr);;
 	if( cntrIfCmd(req) )
 	    mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 	else emit modifiedItem(clrW);

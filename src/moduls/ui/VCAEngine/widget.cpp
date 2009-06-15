@@ -422,6 +422,7 @@ void Widget::wClear( )
 		else wdgAt(ls[i_w]).at().wClear();
 	}
     }
+    modif();
 }
 
 void Widget::attrAdd( TFld *attr, int pos, bool inher )
@@ -686,7 +687,16 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( descr() );
 	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setDescr( opt->text() );
     }
-    else if( a_path == "/wdg/cfg/clear" && ctrChkNode(opt,"set",RWRWR_,"root","UI") )	wClear();
+    else if( a_path == "/wdg/cfg/clear" && ctrChkNode(opt,"set",RWRWR_,"root","UI") )
+    {
+	if( opt->attr("attr").empty() ) wClear();
+	else if( attrAt(opt->attr("attr")).at().modif() )
+	{
+	    attrAt(opt->attr("attr")).at().setModif(0);
+	    inheritAttr(opt->attr("attr"));
+	    modif();
+	}
+    }
     else if( a_path == "/wdg/u_lst" && ctrChkNode(opt) )
     {
 	vector<string> ls;

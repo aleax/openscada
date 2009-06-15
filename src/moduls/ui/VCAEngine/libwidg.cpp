@@ -562,7 +562,7 @@ int LWidget::calcPer( )
 
 void LWidget::setCalcLang( const string &ilng )
 {
-    m_proc = ilng+"\n"+calcProg();
+    m_proc = ilng.empty() ? "" : ilng+"\n"+calcProg();
     modif();
 }
 

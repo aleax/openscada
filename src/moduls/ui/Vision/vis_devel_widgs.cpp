@@ -561,6 +561,7 @@ InspAttr::InspAttr( QWidget * parent, VisDevelop *mainWind ) : QTreeView(parent)
     setModel(&modelData);
     setItemDelegate(new ItemDelegate);
     connect(&modelData, SIGNAL(modified(const string &)), this, SIGNAL(modified(const string &)));
+    setContextMenuPolicy(Qt::DefaultContextMenu);
 }
 
 InspAttr::~InspAttr( )
@@ -592,6 +593,54 @@ bool InspAttr::event( QEvent *event )
 	return true;
     }
     return QTreeView::event( event );
+}
+
+void InspAttr::contextMenuEvent( QContextMenuEvent *event )
+{
+    string nattr, nwdg;
+    QAction *actClr = NULL;
+    ModInspAttr::Item *it = NULL;
+
+    //Attribute
+    if( selectedIndexes().size() && selectedIndexes()[0].isValid() )
+    {
+	it = static_cast<ModInspAttr::Item*>(selectedIndexes()[0].internalPointer());
+	nattr = it->id();
+	//Attribute widget
+	ModInspAttr::Item *cit = it;
+	while(cit)
+	    if( cit->type() == ModInspAttr::Item::Wdg )
+	    {
+		nwdg = cit->id();
+		break;
+	    }
+	    else cit = cit->parent();
+    }
+
+    QMenu popup;
+
+    //Add actions
+    //> Changes clear action
+    if( it && it->modify() )
+    {
+	QImage ico_t;
+	if(!ico_t.load(TUIS::icoPath("reload").c_str())) ico_t.load(":/images/reload.png");
+	actClr = new QAction(QPixmap::fromImage(ico_t),_("Clear changes"),this);
+	actClr->setStatusTip(_("Press to clear attribute's changes."));
+	popup.addAction(actClr);
+    }
+
+    if( !popup.isEmpty() )
+    {
+	QAction *rez = popup.exec(QCursor::pos());
+	if( actClr && rez == actClr )
+	{
+	    modelData.mainWin()->visualItClear(nwdg+"/a_"+nattr);
+	    modelData.setWdg(modelData.curWdg());
+	}
+
+	popup.clear();
+    }
 }
 
 //* Attributes item delegate    *

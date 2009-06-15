@@ -122,6 +122,7 @@ class ModInspAttr: public QAbstractTableModel
 
 	string user( );
 
+	string curWdg( )	{ return cur_wdg; }
 	void setWdg( const string &iwdg );
 
 	Qt::ItemFlags flags( const QModelIndex &index ) const;
@@ -190,6 +191,7 @@ class InspAttr: public QTreeView
 
 	//Private methods
 	bool event( QEvent *event );
+	void contextMenuEvent( QContextMenuEvent *event );
 
 	//Private attributes
 	ModInspAttr modelData;
