@@ -64,6 +64,8 @@ class Engine : public TUI
 
 	string callSynth( const string &txt );
 
+	bool forceDBClear( )			{ return mFrcClr; }
+
 	//> Widget's libraries
 	void wlbList( vector<string> &ls )			{ chldList( idWlb, ls ); }
 	bool wlbPresent( const string &id )			{ return chldPresent( idWlb, id ); }
@@ -90,6 +92,10 @@ class Engine : public TUI
 	bool fPresent( const string &id )			{ return chldPresent( idFnc, id ); }
 	AutoHD<TFunction> fAt( const string &id );
 
+	//> Attributes process functions
+	void attrsLoad( Widget &w, const string &fullDB, int vDB, const string &idw, const string &idc, const string &attrs, bool ldGen = false );
+	string attrsSave( Widget &w, const string &fullDB, int vDB, const string &idw, const string &idc, bool ldGen = false );
+
 	//> DB structures
 	TElem &elWdgLib( )	{ return lbwdg_el; }
 	TElem &elWdgData( )	{ return wdgdata_el; }
@@ -114,6 +120,7 @@ class Engine : public TUI
     private:
 	//Attributes
 	int	idWlb, idPrj, idSes, idFnc;
+	bool	mFrcClr;
 	TElem	lbwdg_el,	//The generic table structure of libraries
 		wdgdata_el,	//Media and other data what use by widgets and stored into DB
 		wdg_el,		//The table structure of library widgets

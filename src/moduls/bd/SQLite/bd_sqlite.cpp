@@ -217,8 +217,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
     if( tbl ) tbl->clear();
     if(!enableStat())	return;
 
-    //printf("TEST 03: query: <%s>\n",req.c_str());
-    //- Commit set -
+    //> Commit set
     string req = ireq;
 
     ResAlloc res(conn_res,true);
@@ -231,22 +230,22 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
 	    commCnt=0;
 	}
     }
-    //- Put request -
+    //> Put request
     rc = sqlite3_get_table(m_db,Mess->codeConvOut(cd_pg.c_str(),req).c_str(),&result, &nrow, &ncol, &zErrMsg );
     if( rc != SQLITE_OK )
     {
-	//-- Fix transaction --
+	//>> Fix transaction
 	if( trans_reqs>1 && (commCnt-1)<0 )	commCnt=trans_reqs;
+	//mess_err(nodePath().c_str(),_("Request error: %s"),req.c_str());
 	throw TError(100+rc,nodePath().c_str(),_("Getting table error: %s"),zErrMsg);
     }
     if( tbl && ncol > 0 )
     {
 	vector<string> row;
-	//-- Add head --
-	for(int i=0; i < ncol; i++)
-	    row.push_back(result[i]?result[i]:"");
+	//>> Add head
+	for( int i=0; i < ncol; i++ ) row.push_back(result[i]?result[i]:"");
 	tbl->push_back(row);
-	//-- Add data --
+	//>> Add data
 	for(int i=0; i < nrow; i++)
 	{
 	    row.clear();

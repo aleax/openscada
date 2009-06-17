@@ -602,22 +602,7 @@ void LWidget::load_( )
     }
 
     //> Load generic attributes
-    tbl = tbl+"_io";
-    TConfig c_el(&mod->elWdgIO());
-    c_el.cfg("IDW").setS(id());
-    string tstr;
-    for( int off = 0; !(tstr = TSYS::strSepParse(m_attrs,0,';',&off)).empty(); )
-    {
-	if( !attrPresent(tstr) )    continue;
-	AutoHD<Attr> attr = attrAt(tstr);
-	if( !(attr.at().flgGlob()&Attr::Generic) ) continue;
-	c_el.cfg("ID").setS(tstr);
-	if( !SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el) ) continue;
-	attr.at().setS(c_el.cfg("IO_VAL").getS(),true);
-	attr.at().setFlgSelf((Attr::SelfAttrFlgs)c_el.cfg("SELF_FLG").getI());
-	attr.at().setCfgTempl(c_el.cfg("CFG_TMPL").getS());
-	attr.at().setCfgVal(c_el.cfg("CFG_VAL").getS());
-    }
+    mod->attrsLoad( *this, db+"."+tbl, cfg("DBV").getI(), id(), "", m_attrs, true );
 
     //> Other attributes load
     loadIO();
@@ -628,52 +613,13 @@ void LWidget::loadIO( )
     if( !enable() ) return;
 
     //> Load widget's work attributes
-    string db  = ownerLib().DB();
-    string tbl = ownerLib().tbl()+"_io";
-
-    //> Same attributes load
-    TConfig c_el(&mod->elWdgIO());
-    c_el.cfg("IDW").setS(id());
-    string tstr;
-    for( int off = 0; !(tstr = TSYS::strSepParse(m_attrs,0,';',&off)).empty(); )
-    {
-	if( !attrPresent(tstr) )    continue;
-	AutoHD<Attr> attr = attrAt(tstr);
-	if( attr.at().flgGlob()&Attr::Generic || (!(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser) ) continue;
-	c_el.cfg("ID").setS(tstr);
-	if( !SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el) ) continue;
-	attr.at().setS(c_el.cfg("IO_VAL").getS());
-	attr.at().setFlgSelf((Attr::SelfAttrFlgs)c_el.cfg("SELF_FLG").getI());
-	attr.at().setCfgTempl(c_el.cfg("CFG_TMPL").getS());
-	attr.at().setCfgVal(c_el.cfg("CFG_VAL").getS());
-    }
-
-    //> Load widget's user attributes
-    tbl = ownerLib().tbl()+"_uio";
-    c_el.setElem(&mod->elWdgUIO());
-    c_el.cfg("IDW").setS(id(),true);
-    for( int fld_cnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el); )
-    {
-	string sid = c_el.cfg("ID").getS();
-	unsigned flg = c_el.cfg("IO_TYPE").getI();
-
-	if( !TSYS::pathLev(sid,1).empty() ) continue;
-	if( !attrPresent(sid) )
-	    attrAdd( new TFld(sid.c_str(),c_el.cfg("NAME").getS().c_str(),(TFld::Type)(flg&0x0f),flg>>4) );
-	AutoHD<Attr> attr = attrAt(sid);
-	if( !(!(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser) ) continue;
-	attr.at().setS(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),0,'|'));
-	attr.at().fld().setValues(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),1,'|'));
-	attr.at().fld().setSelNames(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),2,'|'));
-	attr.at().setFlgSelf((Attr::SelfAttrFlgs)c_el.cfg("SELF_FLG").getI());
-	attr.at().setCfgTempl(c_el.cfg("CFG_TMPL").getS());
-	attr.at().setCfgVal(c_el.cfg("CFG_VAL").getS());
-    }
+    mod->attrsLoad( *this, ownerLib().DB()+"."+ownerLib().tbl(), cfg("DBV").getI(), id(), "", m_attrs );
 
     //> Load cotainer widgets
     if( !enable() || !isContainer() ) return;
-    c_el.setElem(&mod->elInclWdg());
-    tbl=ownerLib().tbl()+"_incl";
+    TConfig c_el(&mod->elInclWdg());
+    string db  = ownerLib().DB();
+    string tbl = ownerLib().tbl()+"_incl";
     c_el.cfg("IDW").setS(id(),true);
     for( int fld_cnt=0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el); )
     {
@@ -693,30 +639,13 @@ void LWidget::save_( )
 {
     string db  = ownerLib().DB();
     string tbl = ownerLib().tbl();
-    string tbl_io = tbl+"_io";
+
+    cfg("DBV").setI(2);
+
+    //> Save generic attributes
+    m_attrs = mod->attrsSave( *this, db+"."+tbl, cfg("DBV").getI(), id(), "", true );
 
     //> Save generic widget's data
-    m_attrs="";
-    vector<string> als;
-    attrList( als );
-    TConfig c_el(&mod->elWdgIO());
-    c_el.cfg("IDW").setS(id());
-    for( int i_a = 0; i_a < als.size(); i_a++ )
-    {
-	AutoHD<Attr> attr = attrAt(als[i_a]);
-	if( !attr.at().modif() ) continue;
-	if( !(!(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser) ) m_attrs+=als[i_a]+";";
-	if( attr.at().flgGlob()&Attr::Generic )
-	{
-	    c_el.cfg("ID").setS(als[i_a]);
-	    c_el.cfg("IO_VAL").setNoTransl( !(attr.at().type() == TFld::String && !(attr.at().flgGlob()&(Attr::Image|Attr::DataTime|Attr::Color|Attr::Font|Attr::Address))) );
-	    c_el.cfg("IO_VAL").setS(attr.at().getS());
-	    c_el.cfg("SELF_FLG").setI(attr.at().flgSelf());
-	    c_el.cfg("CFG_TMPL").setS(attr.at().cfgTempl());
-	    c_el.cfg("CFG_VAL").setS(attr.at().cfgVal());
-	    SYS->db().at().dataSet(db+"."+tbl_io,mod->nodePath()+tbl_io,c_el);
-	}
-    }
     SYS->db().at().dataSet( db+"."+tbl, mod->nodePath()+tbl, *this );
 
     //> Save widget's attributes
@@ -725,63 +654,10 @@ void LWidget::save_( )
 
 void LWidget::saveIO( )
 {
-    vector<string> als;
-
     if( !enable() ) return;
 
     //> Save widget's attributes
-    string db  = ownerLib().DB();
-    string tbl = ownerLib().tbl()+"_io";
-    string utbl = ownerLib().tbl()+"_uio";
-
-    attrList( als );
-    TConfig c_el(&mod->elWdgIO());
-    c_el.cfg("IDW").setS(id());
-    TConfig c_elu(&mod->elWdgUIO());
-    c_elu.cfg("IDW").setS(id(),true);
-    for( int i_a = 0; i_a < als.size(); i_a++ )
-    {
-	AutoHD<Attr> attr = attrAt(als[i_a]);
-	if( !attr.at().modif() || attr.at().flgGlob()&Attr::Generic )	continue;
-	if( !(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser )
-	{
-	    //>> User attribute store
-	    c_elu.cfg("ID").setS(als[i_a]);
-	    c_elu.cfg("IO_VAL").setNoTransl( !(attr.at().type() == TFld::String && !(attr.at().flgGlob()&(Attr::Image|Attr::DataTime|Attr::Color|Attr::Font|Attr::Address))) );
-	    c_elu.cfg("IO_VAL").setS(attr.at().getS()+"|"+
-				    attr.at().fld().values()+"|"+
-				    attr.at().fld().selNames());
-	    c_elu.cfg("NAME").setS(attr.at().name());
-	    c_elu.cfg("IO_TYPE").setI(attr.at().fld().type()+(attr.at().fld().flg()<<4));
-	    c_elu.cfg("SELF_FLG").setI(attr.at().flgSelf());
-	    c_elu.cfg("CFG_TMPL").setS(attr.at().cfgTempl());
-	    c_elu.cfg("CFG_VAL").setS(attr.at().cfgVal());
-	    SYS->db().at().dataSet(db+"."+utbl,mod->nodePath()+utbl,c_elu);
-	}
-	else
-	{
-	    //>> Work attribute store
-	    c_el.cfg("ID").setS(als[i_a]);
-	    c_el.cfg("IO_VAL").setNoTransl( !(attr.at().type() == TFld::String && !(attr.at().flgGlob()&(Attr::Image|Attr::DataTime|Attr::Color|Attr::Font|Attr::Address))) );
-	    c_el.cfg("IO_VAL").setS(attr.at().getS());
-	    c_el.cfg("SELF_FLG").setI(attr.at().flgSelf());
-	    c_el.cfg("CFG_TMPL").setS(attr.at().cfgTempl());
-	    c_el.cfg("CFG_VAL").setS(attr.at().cfgVal());
-	    SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,c_el);
-	}
-    }
-
-    //> Clear no present IO for user io table
-    c_elu.cfgViewAll(false);
-    for( int fld_cnt=0; SYS->db().at().dataSeek(db+"."+utbl,mod->nodePath()+utbl,fld_cnt++,c_elu); )
-    {
-	string sid = c_elu.cfg("ID").getS();
-	if( TSYS::pathLev(sid,1).empty() && !attrPresent(TSYS::pathLev(sid,0)) )
-	{
-	    SYS->db().at().dataDel(db+"."+utbl,mod->nodePath()+utbl,c_elu,true);
-	    fld_cnt--;
-	}
-    }
+    mod->attrsSave( *this, ownerLib().DB()+"."+ownerLib().tbl(), cfg("DBV").getI(), id(), "" );
 }
 
 void LWidget::wClear( )
@@ -998,22 +874,7 @@ void CWidget::load_( )
     }
 
     //> Load generic attributes
-    tbl = ownerLWdg().ownerLib().tbl()+"_io";
-    TConfig c_el(&mod->elWdgIO());
-    c_el.cfg("IDW").setS(ownerLWdg().id());
-    string tstr;
-    for( int off = 0; !(tstr = TSYS::strSepParse(m_attrs,0,';',&off)).empty(); )
-    {
-	if( !attrPresent(tstr) ) continue;
-	AutoHD<Attr> attr = attrAt(tstr);
-	if( !(attr.at().flgGlob()&Attr::Generic) ) continue;
-	c_el.cfg("ID").setS(id()+"/"+tstr);
-	if( !SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el) ) continue;
-	attr.at().setS(c_el.cfg("IO_VAL").getS(),true);
-	attr.at().setFlgSelf((Attr::SelfAttrFlgs)c_el.cfg("SELF_FLG").getI());
-	attr.at().setCfgTempl(c_el.cfg("CFG_TMPL").getS());
-	attr.at().setCfgVal(c_el.cfg("CFG_VAL").getS());
-    }
+    mod->attrsLoad( *this, db+"."+ownerLWdg().ownerLib().tbl(), cfg("DBV").getI(), ownerLWdg().id(), id(), m_attrs, true );
 
     //> Load widget's attributes
     loadIO();
@@ -1024,55 +885,13 @@ void CWidget::loadIO( )
     if( !enable() ) return;
 
     //> Load widget's work attributes
-    string db  = ownerLWdg().ownerLib().DB();
-    string tbl = ownerLWdg().ownerLib().tbl()+"_io";
-
-    //> Same load
-    TConfig c_el(&mod->elWdgIO());
-    c_el.cfg("IDW").setS(ownerLWdg().id());
-    string tstr;
-    for( int off = 0; !(tstr = TSYS::strSepParse(m_attrs,0,';',&off)).empty(); )
-    {
-	if( !attrPresent(tstr) )    continue;
-	AutoHD<Attr> attr = attrAt(tstr);
-	if( attr.at().flgGlob()&Attr::Generic || (!(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser) ) continue;
-	c_el.cfg("ID").setS(id()+"/"+tstr);
-	if( !SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el) ) continue;
-	attr.at().setS(c_el.cfg("IO_VAL").getS());
-	attr.at().setFlgSelf((Attr::SelfAttrFlgs)c_el.cfg("SELF_FLG").getI());
-	attr.at().setCfgTempl(c_el.cfg("CFG_TMPL").getS());
-	attr.at().setCfgVal(c_el.cfg("CFG_VAL").getS());
-    }
-    //> Load widget's user attributes
-    tbl = ownerLWdg().ownerLib().tbl()+"_uio";
-    c_el.setElem(&mod->elWdgUIO());
-    c_el.cfg("IDW").setS(ownerLWdg().id(),true);
-    for( int fld_cnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el); )
-    {
-	string sid = c_el.cfg("ID").getS();
-	unsigned flg = c_el.cfg("IO_TYPE").getI();
-
-	if( TSYS::pathLev(sid,0) == id() && !TSYS::pathLev(sid,1).empty() ) sid = TSYS::pathLev(sid,1);
-	else continue;
-
-	if( !attrPresent(sid) )
-	    attrAdd( new TFld(sid.c_str(),c_el.cfg("NAME").getS().c_str(),(TFld::Type)(flg&0x0f),flg>>4) );
-	AutoHD<Attr> attr = attrAt(sid);
-	if( !(!(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser) ) continue;
-	attr.at().setS(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),0,'|'));
-	attr.at().fld().setValues(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),1,'|'));
-	attr.at().fld().setSelNames(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),2,'|'));
-	attr.at().setFlgSelf((Attr::SelfAttrFlgs)c_el.cfg("SELF_FLG").getI());
-	attr.at().setCfgTempl(c_el.cfg("CFG_TMPL").getS());
-	attr.at().setCfgVal(c_el.cfg("CFG_VAL").getS());
-    }
+    mod->attrsLoad( *this, ownerLWdg().ownerLib().DB()+"."+ownerLWdg().ownerLib().tbl(), cfg("DBV").getI(), ownerLWdg().id(), id(), m_attrs );
 }
 
 void CWidget::save_( )
 {
     string db  = ownerLWdg().ownerLib().DB();
     string tbl = ownerLWdg().ownerLib().tbl();
-    string tbl_io = tbl+"_io";
 
     //> Delete from DB
     if( nodeMode() == TCntrNode::Disable )
@@ -1086,44 +905,39 @@ void CWidget::save_( )
 	else SYS->db().at().dataDel( db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this, true );
 
 	//>> Remove widget's work and users IO from library IO table
-	TConfig c_el( &mod->elWdgIO() );
-	c_el.cfg("IDW").setS( ownerLWdg().id(), true );
-	for( int i_a = 0; i_a < m_attrs.size(); i_a++ )
+	if( cfg("DBV").getI() == 1 )
 	{
-	    c_el.cfg("ID").setS(id()+"/"+m_attrs[i_a],true);
-	    SYS->db().at().dataDel( db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", c_el );
+	    TConfig c_el( &mod->elWdgIO() );
+	    c_el.cfg("IDW").setS( ownerLWdg().id(), true );
+	    for( int i_a = 0; i_a < m_attrs.size(); i_a++ )
+	    {
+		c_el.cfg("ID").setS(id()+"/"+m_attrs[i_a],true);
+		SYS->db().at().dataDel( db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", c_el );
+	    }
+	    c_el.setElem(&mod->elWdgUIO());
+	    c_el.cfg("IDW").setS( ownerLWdg().id(), true );
+	    for( int io_cnt = 0; SYS->db().at().dataSeek( db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", io_cnt++, c_el ); )
+		if( c_el.cfg("ID").getS().find(id()+"/") == 0 )
+		{ SYS->db().at().dataDel( db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", c_el, true ); io_cnt--; }
 	}
-	c_el.setElem(&mod->elWdgUIO());
-	c_el.cfg("IDW").setS( ownerLWdg().id(), true );
-	for( int io_cnt = 0; SYS->db().at().dataSeek( db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", io_cnt++, c_el ); )
-	    if( c_el.cfg("ID").getS().find(id()+"/") == 0 )
-	    { SYS->db().at().dataDel( db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", c_el, true ); io_cnt--; }
+	if( cfg("DBV").getI() == 2 )
+	{
+	    TConfig c_el( &mod->elWdgIO() );
+	    c_el.cfg("IDW").setS( ownerLWdg().id(), true ); c_el.cfg("IDC").setS( id(), true );
+	    SYS->db().at().dataDel( db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", c_el );
+	    c_el.setElem(&mod->elWdgUIO());
+	    c_el.cfg("IDW").setS( ownerLWdg().id(), true ); c_el.cfg("IDC").setS( id(), true );
+	    SYS->db().at().dataDel( db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", c_el );
+	}
     }
     //> Save widget's data
     else
     {
+	cfg("DBV").setI(2);
+	//> Save generic attributes
+	m_attrs = mod->attrsSave( *this, db+"."+tbl, cfg("DBV").getI(), ownerLWdg().id(), id(), true );
+
 	//> Save generic widget's data
-	m_attrs="";
-	vector<string> als;
-	attrList( als );
-	TConfig c_el(&mod->elWdgIO());
-	c_el.cfg("IDW").setS(ownerLWdg().id());
-	for( int i_a = 0; i_a < als.size(); i_a++ )
-	{
-	    AutoHD<Attr> attr = attrAt(als[i_a]);
-	    if( !attr.at().modif() ) continue;
-	    if( !(!(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser) ) m_attrs+=als[i_a]+";";
-	    if( attr.at().flgGlob()&Attr::Generic )
-	    {
-		c_el.cfg("ID").setS( id()+"/"+als[i_a] );
-		c_el.cfg("IO_VAL").setNoTransl( !(attr.at().type() == TFld::String && !(attr.at().flgGlob()&(Attr::Image|Attr::DataTime|Attr::Color|Attr::Font|Attr::Address))) );
-		c_el.cfg("IO_VAL").setS(attr.at().getS());
-		c_el.cfg("SELF_FLG").setI(attr.at().flgSelf());
-		c_el.cfg("CFG_TMPL").setS(attr.at().cfgTempl());
-	        c_el.cfg("CFG_VAL").setS(attr.at().cfgVal());
-		SYS->db().at().dataSet(db+"."+tbl_io,mod->nodePath()+tbl_io,c_el);
-	    }
-	}
 	SYS->db().at().dataSet(db+"."+tbl+"_incl",mod->nodePath()+tbl+"_incl",*this);
 
 	//>> Save widget's attributes
@@ -1133,60 +947,9 @@ void CWidget::save_( )
 
 void CWidget::saveIO( )
 {
-    vector<string> als;
+    if( !enable() ) return;
 
-    //- Save widget's attributes -
-    string db  = ownerLWdg().ownerLib().DB();
-    string tbl = ownerLWdg().ownerLib().tbl()+"_io";
-    string utbl = ownerLWdg().ownerLib().tbl()+"_uio";
-
-    attrList( als );
-    TConfig c_el(&mod->elWdgIO());
-    c_el.cfg("IDW").setS(ownerLWdg().id());
-    TConfig c_elu(&mod->elWdgUIO());
-    c_elu.cfg("IDW").setS(ownerLWdg().id(),true);
-    for( int i_a = 0; i_a < als.size(); i_a++ )
-    {
-	AutoHD<Attr> attr = attrAt(als[i_a]);
-	if( !attr.at().modif() || attr.at().flgGlob()&Attr::Generic )	continue;
-	if( !(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser )
-	{
-	    //-- User attribute store --
-	    c_elu.cfg("ID").setS( id()+"/"+als[i_a] );
-	    c_elu.cfg("IO_VAL").setNoTransl( !(attr.at().type() == TFld::String && !(attr.at().flgGlob()&(Attr::Image|Attr::DataTime|Attr::Color|Attr::Font|Attr::Address))) );
-	    c_elu.cfg("IO_VAL").setS(attr.at().getS()+"|"+
-				    attr.at().fld().values()+"|"+
-				    attr.at().fld().selNames());
-	    c_elu.cfg("NAME").setS(attr.at().name());
-	    c_elu.cfg("IO_TYPE").setI(attr.at().fld().type()+(attr.at().fld().flg()<<4));
-	    c_elu.cfg("SELF_FLG").setI(attr.at().flgSelf());
-	    c_elu.cfg("CFG_TMPL").setS(attr.at().cfgTempl());
-	    c_elu.cfg("CFG_VAL").setS(attr.at().cfgVal());
-	    SYS->db().at().dataSet(db+"."+utbl,mod->nodePath()+utbl,c_elu);
-	}
-	else
-	{
-	    //-- Work attribute store --
-	    c_el.cfg("ID").setS( id()+"/"+als[i_a] );
-	    c_el.cfg("IO_VAL").setNoTransl( !(attr.at().type() == TFld::String && !(attr.at().flgGlob()&(Attr::Image|Attr::DataTime|Attr::Color|Attr::Font|Attr::Address))) );
-	    c_el.cfg("IO_VAL").setS(attr.at().getS());
-	    c_el.cfg("SELF_FLG").setI(attr.at().flgSelf());
-	    c_el.cfg("CFG_TMPL").setS(attr.at().cfgTempl());
-	    c_el.cfg("CFG_VAL").setS(attr.at().cfgVal());
-	    SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,c_el);
-	}
-    }
-    //> Clear no present IO for user io table
-    c_elu.cfgViewAll(false);
-    for( int fld_cnt=0; SYS->db().at().dataSeek(db+"."+utbl,mod->nodePath()+utbl,fld_cnt++,c_elu); )
-    {
-	string sid = c_elu.cfg("ID").getS();
-	if( TSYS::pathLev(sid,0) == id() && TSYS::pathLev(sid,1).size() && !attrPresent(TSYS::pathLev(sid,1)) )
-	{
-	    SYS->db().at().dataDel(db+"."+utbl,mod->nodePath()+utbl,c_elu,true);
-	    fld_cnt--;
-	}
-    }
+    mod->attrsSave( *this, ownerLWdg().ownerLib().DB()+"."+ownerLWdg().ownerLib().tbl(), cfg("DBV").getI(), ownerLWdg().id(), id() );
 }
 
 void CWidget::wClear( )

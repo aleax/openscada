@@ -316,8 +316,7 @@ MTable::~MTable(  )
 
 int MTable::fieldLen( int len )
 {
-    if( owner().cd_pg.find("UTF") != string::npos || owner().cd_pg.find("utf") != string::npos )
-	return len*2;
+    //if( owner().cd_pg.find("UTF") != string::npos || owner().cd_pg.find("utf") != string::npos ) return len*2;
     return len;
 }
 

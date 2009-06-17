@@ -1,3 +1,9 @@
+2009-06-17 Roman
+- /DB/MySQL: Fields size multiplication is disabled for UTF-8 by key limit to 333 symbols on UTF-8.
+- !!!!:/UI/VCAEngine: DB structure version is changed to 2 for performance rise and lost records into DB prevent.
+- !!!!:/DemoDB: Updated for new VCA DB structures.
+
+
 2009-06-15 Roman
 - /UI/VCAEngine: Clearing local changes of widget's programm is added by zero programm's language set.
 - /UI/VCAEngine, /UI/Vision: Individual attribute's local changin reset is added by conext menu item into the attributes inspector.

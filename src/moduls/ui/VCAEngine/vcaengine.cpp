@@ -66,7 +66,7 @@ using namespace VCA;
 //************************************************
 //* Engine                                       *
 //************************************************
-Engine::Engine( string name ) : mSynthCom("echo \"%t\" | ru_tts | sox -t raw -s -b -r 10000 -c 1 -v 0.8 - -t ogg -")
+Engine::Engine( string name ) : mSynthCom("echo \"%t\" | ru_tts | sox -t raw -s -b -r 10000 -c 1 -v 0.8 - -t ogg -"), mFrcClr(false)
 {
     mId		= MOD_ID;
     mName	= MOD_NAME;
@@ -108,6 +108,7 @@ string Engine::optDescr( )
 
     snprintf(buf,sizeof(buf),_(
 	"======================= The module <%s:%s> options =======================\n"
+	"    --VCADBClearForce            Force clear VCA DB from data of API 1.\n"
 	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
 	    MOD_TYPE,MOD_ID,nodePath().c_str());
 
@@ -142,18 +143,21 @@ void Engine::postEnable( int flag )
     wdg_el.fldAdd( new TFld("GRP",_("Group"),TFld::String,TFld::NoFlag,"20","UI") );
     wdg_el.fldAdd( new TFld("PERMIT",_("Permision"),TFld::Integer,TFld::OctDec,"3","436") );
     wdg_el.fldAdd( new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*") );
+    wdg_el.fldAdd( new TFld("DBV",_("DB version"),TFld::Integer,TFld::NoFlag,"1","1") );
 
     //> Make include widgets' DB structure
     inclwdg_el.fldAdd( new TFld("IDW",_("IDW"),TFld::String,TCfg::Key,"100") );
     inclwdg_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
     inclwdg_el.fldAdd( new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200") );
-    inclwdg_el.fldAdd( new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*") );
     inclwdg_el.fldAdd( new TFld("USER",_("User"),TFld::String,TFld::NoFlag,"20","root") );
     inclwdg_el.fldAdd( new TFld("GRP",_("Group"),TFld::String,TFld::NoFlag,"20","UI") );
     inclwdg_el.fldAdd( new TFld("PERMIT",_("Permision"),TFld::Integer,TFld::OctDec,"3","436") );
+    inclwdg_el.fldAdd( new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*") );
+    inclwdg_el.fldAdd( new TFld("DBV",_("DB version"),TFld::Integer,TFld::NoFlag,"1","1") );
 
     //> Make widget's IO DB structure
     wdgio_el.fldAdd( new TFld("IDW",_("Widget ID"),TFld::String,TCfg::Key,"100") );
+    wdgio_el.fldAdd( new TFld("IDC",_("Child ID"),TFld::String,TCfg::Key,"30") );
     wdgio_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"61") );
     wdgio_el.fldAdd( new TFld("IO_VAL",_("Attribute value"),TFld::String,TCfg::TransltText,"100000") );
     wdgio_el.fldAdd( new TFld("SELF_FLG",_("Attribute self flags"),TFld::Integer,TFld::NoFlag,"5") );
@@ -162,6 +166,7 @@ void Engine::postEnable( int flag )
 
     //> Make widget's user IO DB structure
     wdguio_el.fldAdd( new TFld("IDW",_("Widget ID"),TFld::String,TCfg::Key,"100") );
+    wdguio_el.fldAdd( new TFld("IDC",_("Child ID"),TFld::String,TCfg::Key,"30") );
     wdguio_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"61") );
     wdguio_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
     wdguio_el.fldAdd( new TFld("IO_TYPE",_("Attribute generic flags and type"),TFld::Integer,TFld::NoFlag,"10") );
@@ -194,6 +199,7 @@ void Engine::postEnable( int flag )
     page_el.fldAdd( new TFld("PERMIT",_("Permision"),TFld::Integer,TFld::OctDec,"3","436") );
     page_el.fldAdd( new TFld("FLGS",_("Flags"),TFld::Integer,TFld::NoFlag,"1","0") );
     page_el.fldAdd( new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*") );
+    page_el.fldAdd( new TFld("DBV",_("DB version"),TFld::Integer,TFld::NoFlag,"1","1") );
 
     //> Make sessions' IO values of projects DB structure
     prj_ses_el.fldAdd( new TFld("IDW",_("Widget ID"),TFld::String,TCfg::Key,"200") );
@@ -241,6 +247,7 @@ void Engine::load_( )
     struct option long_opt[] =
     {
 	{"help"    ,0,NULL,'h'},
+	{"VCADBClearForce" ,0,NULL,'f'},
 	{NULL      ,0,NULL,0  }
     };
 
@@ -251,6 +258,7 @@ void Engine::load_( )
 	switch(next_opt)
 	{
 	    case 'h': fprintf(stdout,TSYS::strEncode(optDescr(),TSYS::FormatPrint).c_str()); break;
+	    case 'f': mFrcClr = true; break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);
@@ -258,6 +266,10 @@ void Engine::load_( )
     //> Load parameters from config file and DB
     setSynthCom( TBDS::genDBGet(nodePath()+"SynthCom",synthCom()) );
     setSynthCode( TBDS::genDBGet(nodePath()+"SynthCode",synthCode()) );
+
+#if OSC_DEBUG >= 3
+    long long w_tm = TSYS::curTime();
+#endif
 
     //>> Load widget's libraries
     try
@@ -284,10 +296,20 @@ void Engine::load_( )
 		if( !wlbPresent(l_id) )	wlbAdd(l_id,"","*.*");
 	    }
 
+#if OSC_DEBUG >= 3
+	w_tm = TSYS::curTime();
+#endif
+
 	//>>>> Load present libraries
 	wlbList(db_ls);
 	for( int l_id = 0; l_id < db_ls.size(); l_id++ )
+	{
 	    wlbAt(db_ls[l_id]).at().load();
+#if OSC_DEBUG >= 3
+	    mess_debug(nodePath().c_str(),_("Load library '%s' time: %f ms."),db_ls[l_id].c_str(),1e-3*(TSYS::curTime()-w_tm));
+	    w_tm = TSYS::curTime();
+#endif
+	}
     }catch( TError err )
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
@@ -319,10 +341,20 @@ void Engine::load_( )
 		if( !prjPresent(prj_id) )	prjAdd(prj_id,"","*.*");
 	    }
 
+#if OSC_DEBUG >= 3
+	w_tm = TSYS::curTime();
+#endif
+
 	//>>>> Load present projects
 	prjList(db_ls);
 	for( int el_id = 0; el_id < db_ls.size(); el_id++ )
+	{
 	    prjAt(db_ls[el_id]).at().load();
+#if OSC_DEBUG >= 3
+	    mess_debug(nodePath().c_str(),_("Load project '%s' time: %f ms."),db_ls[el_id].c_str(),1e-3*(TSYS::curTime()-w_tm));
+	    w_tm = TSYS::curTime();
+#endif
+	}
     }catch( TError err )
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
@@ -333,12 +365,24 @@ void Engine::load_( )
     vector<string> ls;
     wlbList(ls);
     for( int l_id = 0; l_id < ls.size(); l_id++ )
+    {
 	wlbAt(ls[l_id]).at().setEnable(true);
+#if OSC_DEBUG >= 3
+	mess_debug(nodePath().c_str(),_("Enable library '%s' time: %f ms."),ls[l_id].c_str(),1e-3*(TSYS::curTime()-w_tm));
+	w_tm = TSYS::curTime();
+#endif
+    }
 
     //> Projects enable
     prjList(ls);
     for( int l_id = 0; l_id < ls.size(); l_id++ )
+    {
 	prjAt(ls[l_id]).at().setEnable(true);
+#if OSC_DEBUG >= 3
+	mess_debug(nodePath().c_str(),_("Enable project '%s' time: %f ms."),ls[l_id].c_str(),1e-3*(TSYS::curTime()-w_tm));
+	w_tm = TSYS::curTime();
+#endif
+    }
 
     modifGClr( );
 }
@@ -480,6 +524,164 @@ string Engine::callSynth( const string &itxt )
     }
 
     return TSYS::strEncode( rez, TSYS::base64 );
+}
+
+void Engine::attrsLoad( Widget &w, const string &fullDB, int vDB, const string &idw, const string &idc, const string &attrs, bool ldGen )
+{
+    string wdb = fullDB+"_io";
+    string tbl = TSYS::strSepParse(wdb,2,';');
+
+    if( vDB < 1 || vDB > 2 ) return;
+
+    TConfig c_el(&elWdgIO());
+    c_el.cfg("IDW").setS(idw);
+    if( vDB == 2 ) c_el.cfg("IDC").setS(idc);
+    string tstr;
+    for( int off = 0; !(tstr = TSYS::strSepParse(attrs,0,';',&off)).empty(); )
+    {
+	if( !w.attrPresent(tstr) ) continue;
+	AutoHD<Attr> attr = w.attrAt(tstr);
+
+	if( (ldGen && !(attr.at().flgGlob()&Attr::Generic)) ||
+		(!ldGen && (attr.at().flgGlob()&Attr::Generic || (!(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser))) )
+	    continue;
+
+	if( vDB == 1 ) c_el.cfg("ID").setS( idc.empty() ? tstr : idc+"/"+tstr );
+	else if( vDB == 2 ) c_el.cfg("ID").setS(tstr);
+
+	if( !SYS->db().at().dataGet(wdb,nodePath()+tbl,c_el) ) continue;
+	attr.at().setS(c_el.cfg("IO_VAL").getS(),true);
+	attr.at().setFlgSelf((Attr::SelfAttrFlgs)c_el.cfg("SELF_FLG").getI());
+	attr.at().setCfgTempl(c_el.cfg("CFG_TMPL").getS());
+	attr.at().setCfgVal(c_el.cfg("CFG_VAL").getS());
+    }
+
+    if( ldGen ) return;
+
+    //> Load widget's user attributes
+    wdb = fullDB+"_uio";
+    tbl = TSYS::strSepParse(wdb,2,';');
+    c_el.setElem(&elWdgUIO());
+    c_el.cfg("IDW").setS(idw,true);
+    if( vDB == 2 ) c_el.cfg("IDC").setS(idc,true);
+
+    for( int fld_cnt = 0; SYS->db().at().dataSeek(wdb,nodePath()+tbl,fld_cnt++,c_el); )
+    {
+	string sid = c_el.cfg("ID").getS();
+	unsigned flg = c_el.cfg("IO_TYPE").getI();
+
+	if( vDB == 1 )
+	{
+	    if( idc.empty() && !TSYS::pathLev(sid,1).empty() ) continue;
+	    if( !idc.empty() )
+	    {
+		if( TSYS::pathLev(sid,0) == idc && !TSYS::pathLev(sid,1).empty() ) sid = TSYS::pathLev(sid,1);
+		else continue;
+	    }
+	}
+	else if( vDB == 2 && !TSYS::pathLev(sid,1).empty() ) continue;
+
+	if( !w.attrPresent(sid) )
+	    w.attrAdd( new TFld(sid.c_str(),c_el.cfg("NAME").getS().c_str(),(TFld::Type)(flg&0x0f),flg>>4) );
+	AutoHD<Attr> attr = w.attrAt(sid);
+	if( !(!(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser) ) continue;
+	attr.at().setS(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),0,'|'));
+	attr.at().fld().setValues(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),1,'|'));
+	attr.at().fld().setSelNames(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),2,'|'));
+	attr.at().setFlgSelf((Attr::SelfAttrFlgs)c_el.cfg("SELF_FLG").getI());
+	attr.at().setCfgTempl(c_el.cfg("CFG_TMPL").getS());
+	attr.at().setCfgVal(c_el.cfg("CFG_VAL").getS());
+    }
+}
+
+string Engine::attrsSave( Widget &w, const string &fullDB, int vDB, const string &idw, const string &idc, bool ldGen )
+{
+    string tbl = TSYS::strSepParse(fullDB,2,';');
+    string m_attrs = "";
+    vector<string> als;
+
+    if( vDB < 1 || vDB > 2 ) return m_attrs;
+
+    w.attrList( als );
+    TConfig c_el(&mod->elWdgIO()); c_el.cfg("IDW").setS(idw,true);
+    if( vDB == 2 ) c_el.cfg("IDC").setS(idc,true);
+    TConfig c_elu(&mod->elWdgUIO()); c_elu.cfg("IDW").setS(idw,true);
+    if( vDB == 2 ) c_elu.cfg("IDC").setS(idc,true);
+    for( int i_a = 0; i_a < als.size(); i_a++ )
+    {
+	AutoHD<Attr> attr = w.attrAt(als[i_a]);
+	if( !attr.at().modif() ) continue;
+	if( !(!(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser) ) m_attrs += als[i_a]+";";
+	if( ldGen != (bool)(attr.at().flgGlob()&Attr::Generic) ) continue;
+
+	//> Main attributes store
+	if( attr.at().flgSelf()&Attr::IsInher || !(attr.at().flgGlob()&Attr::IsUser) )
+	{
+	    if( vDB == 1 ) c_el.cfg("ID").setS( idc.empty() ? als[i_a] : idc+"/"+als[i_a] );
+	    if( vDB == 2 ) c_el.cfg("ID").setS( als[i_a] );
+	    c_el.cfg("IO_VAL").setNoTransl( !(attr.at().type() == TFld::String &&
+		    !(attr.at().flgGlob()&(Attr::Image|Attr::DataTime|Attr::Color|Attr::Font|Attr::Address))) );
+	    c_el.cfg("IO_VAL").setS(attr.at().getS());
+	    c_el.cfg("SELF_FLG").setI(attr.at().flgSelf());
+	    c_el.cfg("CFG_TMPL").setS(attr.at().cfgTempl());
+	    c_el.cfg("CFG_VAL").setS(attr.at().cfgVal());
+	    SYS->db().at().dataSet(fullDB+"_io",nodePath()+tbl+"_io",c_el);
+	}
+	//> User attributes store
+	else if( !ldGen )
+	{
+	    if( vDB == 1 ) c_elu.cfg("ID").setS( idc.empty() ? als[i_a] : idc+"/"+als[i_a] );
+	    if( vDB == 2 ) c_elu.cfg("ID").setS( als[i_a] );
+	    c_elu.cfg("IO_VAL").setNoTransl( !(attr.at().type() == TFld::String &&
+		    !(attr.at().flgGlob()&(Attr::Image|Attr::DataTime|Attr::Color|Attr::Font|Attr::Address))) );
+	    c_elu.cfg("IO_VAL").setS(attr.at().getS()+"|"+
+		    attr.at().fld().values()+"|"+
+		    attr.at().fld().selNames());
+	    c_elu.cfg("NAME").setS(attr.at().name());
+	    c_elu.cfg("IO_TYPE").setI(attr.at().fld().type()+(attr.at().fld().flg()<<4));
+	    c_elu.cfg("SELF_FLG").setI(attr.at().flgSelf());
+	    c_elu.cfg("CFG_TMPL").setS(attr.at().cfgTempl());
+	    c_elu.cfg("CFG_VAL").setS(attr.at().cfgVal());
+	    SYS->db().at().dataSet(fullDB+"_uio",nodePath()+tbl+"_uio",c_elu);
+	}
+    }
+
+    if( !ldGen )
+    {
+	//> Clear no present IO for main io table
+	c_el.cfgViewAll(false);
+	for( int fld_cnt=0; vDB == 2 && SYS->db().at().dataSeek(fullDB+"_io",nodePath()+tbl+"_io",fld_cnt++,c_el); )
+	{
+	    string sid = c_el.cfg("ID").getS();
+	    if( w.attrPresent(sid) || (idc.empty() && !TSYS::pathLev(sid,1).empty() && !forceDBClear()) ) continue;
+
+	    SYS->db().at().dataDel(fullDB+"_io",nodePath()+tbl+"_io",c_el,true);
+	    fld_cnt--;
+	}
+
+	//> Clear no present IO for user io table
+	c_elu.cfgViewAll(false);
+	for( int fld_cnt=0; SYS->db().at().dataSeek(fullDB+"_uio",nodePath()+tbl+"_uio",fld_cnt++,c_elu); )
+	{
+	    string sid = c_elu.cfg("ID").getS();
+	    if( vDB == 1 && idc.empty() && (!TSYS::pathLev(sid,1).empty() || w.attrPresent(sid)) ) continue;
+	    if( vDB == 1 && !idc.empty() && (TSYS::pathLev(sid,0) != idc || w.attrPresent(TSYS::pathLev(sid,1))) ) continue;
+	    if( vDB == 2 && (w.attrPresent(sid) || (idc.empty() && !TSYS::pathLev(sid,1).empty() && !forceDBClear())) ) continue;
+
+	    SYS->db().at().dataDel(fullDB+"_uio",nodePath()+tbl+"_uio",c_elu,true);
+	    fld_cnt--;
+
+	    /*if( (vDB == 1 && (idc.empty() && TSYS::pathLev(sid,1).empty() && !w.attrPresent(TSYS::pathLev(sid,0))) ||
+			    (!idc.empty() && TSYS::pathLev(sid,0) == idc && TSYS::pathLev(sid,1).size() && !w.attrPresent(TSYS::pathLev(sid,1)))) ||
+		(vDB == 2 && !w.attrPresent(sid)) )
+	    {
+		SYS->db().at().dataDel(fullDB+"_uio",nodePath()+tbl+"_uio",c_elu,true);
+		fld_cnt--;
+	    }*/
+	}
+    }
+
+    return m_attrs;
 }
 
 void Engine::cntrCmdProc( XMLNode *opt )
