@@ -167,6 +167,7 @@ void MBD::enable( )
     bd   = TSYS::strSepParse(addr(),3,';');
     port = atoi(TSYS::strSepParse(addr(),4,';').c_str());
     u_sock = TSYS::strSepParse(addr(),5,';');
+    names = TSYS::strSepParse(addr(),6,';');
     cd_pg  = codePage().size()?codePage():Mess->charset();
 
     if(!mysql_init(&connect))
@@ -177,8 +178,8 @@ void MBD::enable( )
 
     TBD::enable( );
 
-    string req = "CREATE DATABASE IF NOT EXISTS `"+TSYS::strEncode(bd,TSYS::SQL)+"`";
-    sqlReq(req);
+    sqlReq("CREATE DATABASE IF NOT EXISTS `"+TSYS::strEncode(bd,TSYS::SQL)+"`");
+    if( !names.empty() ) sqlReq("SET NAMES '"+names+"'");
 }
 
 void MBD::disable( )
@@ -272,15 +273,16 @@ void MBD::cntrCmdProc( XMLNode *opt )
 	TBD::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","BD",2,
 	    "tp","str","help",
-	    _("MySQL DB address must be written as: [<host>;<user>;<pass>;<db>;<port>;<u_sock>].\n"
+	    _("MySQL DB address must be written as: [<host>;<user>;<pass>;<db>;<port>;<u_sock>;<names>].\n"
 	      "Where:\n"
 	      "  host - MySQL server hostname;\n"
 	      "  user - DB user name;\n"
 	      "  pass - user's password for DB access;\n"
 	      "  db - DB name;\n"
 	      "  port - DB server port (default 3306);\n"
-	      "  u_sock - UNIX-socket name, for local access to DB (/var/lib/mysql/mysql.sock).\n"
-	      "For local DB: [;roman;123456;OpenSCADA;;/var/lib/mysql/mysql.sock].\n"
+	      "  u_sock - UNIX-socket name, for local access to DB (/var/lib/mysql/mysql.sock);\n"
+	      "  names - MySQL SET NAMES charset.\n"
+	      "For local DB: [;roman;123456;OpenSCADA;;/var/lib/mysql/mysql.sock;utf8].\n"
 	      "For remote DB: [server.nm.org;roman;123456;OpenSCADA;3306]."));
 	return;
     }
@@ -312,12 +314,6 @@ MTable::MTable(string name, MBD *iown, bool create ) : TTable(name)
 MTable::~MTable(  )
 {
 
-}
-
-int MTable::fieldLen( int len )
-{
-    //if( owner().cd_pg.find("UTF") != string::npos || owner().cd_pg.find("utf") != string::npos ) return len*2;
-    return len;
 }
 
 void MTable::postDisable(int flag)
@@ -627,9 +623,9 @@ void MTable::fieldFix( TConfig &cfg )
 	{
 	    switch(u_cfg.fld().type())
 	    {
-		    if( fieldLen(u_cfg.fld().len()) < 256 || u_cfg.fld().flg()&TCfg::Key )
-			f_tp = "varchar("+TSYS::int2str(vmax(1,vmin((u_cfg.fld().flg()&TCfg::Key)?200:255,fieldLen(u_cfg.fld().len()))))+")";
-		    else if( fieldLen(u_cfg.fld().len()) < 65536 )
+		    if( u_cfg.fld().len() < 256 || u_cfg.fld().flg()&TCfg::Key )
+			f_tp = "varchar("+TSYS::int2str(vmax(1,vmin((u_cfg.fld().flg()&TCfg::Key)?200:255,u_cfg.fld().len())))+")";
+		    else if( u_cfg.fld().len() < 65536 )
 			f_tp = "text";
 		    else f_tp = "mediumtext";
 		    break;
@@ -712,10 +708,10 @@ void MTable::fieldPrmSet( TCfg &cfg, const string &last, string &req )
     switch(cfg.fld().type())
     {
 	case TFld::String:
-	    if( fieldLen(cfg.fld().len()) < 256 || cfg.fld().flg()&TCfg::Key )
-		req=req+"varchar("+SYS->int2str(vmax(1,vmin((cfg.fld().flg()&TCfg::Key)?200:255,fieldLen(cfg.fld().len()))))+") "+
+	    if( cfg.fld().len() < 256 || cfg.fld().flg()&TCfg::Key )
+		req=req+"varchar("+SYS->int2str(vmax(1,vmin((cfg.fld().flg()&TCfg::Key)?200:255,cfg.fld().len())))+") "+
 			((cfg.fld().flg()&TCfg::Key)?"BINARY":"")+" NOT NULL DEFAULT '"+cfg.fld().def()+"' ";
-	    else if( fieldLen(cfg.fld().len()) < 65536 )
+	    else if( cfg.fld().len() < 65536 )
 		req=req+"text NOT NULL ";// DEFAULT '"+cfg.fld().def()+"' ";
 	    else req=req+"mediumtext NOT NULL ";// DEFAULT '"+cfg.fld().def()+"' ";
 	    break;

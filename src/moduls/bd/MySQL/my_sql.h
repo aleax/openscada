@@ -60,7 +60,6 @@ class MTable : public TTable
 	void postDisable(int flag);
 	void fieldFix( TConfig &cfg );
 	void fieldPrmSet( TCfg &cfg, const string &last, string &req );
-	int  fieldLen( int len );
 
 	string getVal( TCfg &cfg );
 	void   setVal( TCfg &cfg, const string &vl );
@@ -101,7 +100,7 @@ class MBD : public TBD
 	TTable *openTable( const string &name, bool create );
 
 	//Private attributes
-	string host, user, pass, bd, u_sock, cd_pg;
+	string host, user, pass, bd, u_sock, cd_pg, names;
 	int    port;
 
 	MYSQL  connect;

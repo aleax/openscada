@@ -282,43 +282,44 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
     if( cfg.flgGlob()&Attr::Active && cfg.id() == "elType" )
     {
 	//- Delete specific attributes -
-	switch( prev.getI() )
-	{
-	    case 0:	//Line edit
-		cfg.owner()->attrDel("value");
-		cfg.owner()->attrDel("view");
-		cfg.owner()->attrDel("cfg");
-		cfg.owner()->attrDel("font");
-		break;
-	    case 1:	//Text edit
-		cfg.owner()->attrDel("value");
-		cfg.owner()->attrDel("wordWrap");
-		cfg.owner()->attrDel("font");
-		break;
-	    case 2:	//Check box
-		cfg.owner()->attrDel("value");
-		cfg.owner()->attrDel("font");
-		cfg.owner()->attrAt("name").at().fld().setReserve("");
-		break;
-	    case 3:	//Button
-		cfg.owner()->attrDel("value");
-		cfg.owner()->attrDel("img");
-		cfg.owner()->attrDel("color");
-		cfg.owner()->attrDel("colorText");
-		cfg.owner()->attrDel("checkable");
-		cfg.owner()->attrDel("font");
-		cfg.owner()->attrAt("name").at().fld().setReserve("");
-		break;
-	    case 4: case 5:	//Combo box and list
-		cfg.owner()->attrDel("value");
-		cfg.owner()->attrDel("items");
-		cfg.owner()->attrDel("font");
-		break;
-	    case 6: case 7:	//Slider and scroll bar
-		cfg.owner()->attrDel("value");
-		cfg.owner()->attrDel("cfg");
-		break;
-	}
+	if( cfg.getI() != prev.getI() )
+	    switch( prev.getI() )
+	    {
+		case 0:	//Line edit
+		    cfg.owner()->attrDel("value");
+		    cfg.owner()->attrDel("view");
+		    cfg.owner()->attrDel("cfg");
+		    cfg.owner()->attrDel("font");
+		    break;
+		case 1:	//Text edit
+		    cfg.owner()->attrDel("value");
+		    cfg.owner()->attrDel("wordWrap");
+		    cfg.owner()->attrDel("font");
+		    break;
+		case 2:	//Check box
+		    cfg.owner()->attrDel("value");
+		    cfg.owner()->attrDel("font");
+		    cfg.owner()->attrAt("name").at().fld().setReserve("");
+		    break;
+		case 3:	//Button
+		    cfg.owner()->attrDel("value");
+		    cfg.owner()->attrDel("img");
+		    cfg.owner()->attrDel("color");
+		    cfg.owner()->attrDel("colorText");
+		    cfg.owner()->attrDel("checkable");
+		    cfg.owner()->attrDel("font");
+		    cfg.owner()->attrAt("name").at().fld().setReserve("");
+		    break;
+		case 4: case 5:	//Combo box and list
+		    cfg.owner()->attrDel("value");
+		    cfg.owner()->attrDel("items");
+		    cfg.owner()->attrDel("font");
+		    break;
+		case 6: case 7:	//Slider and scroll bar
+		    cfg.owner()->attrDel("value");
+		    cfg.owner()->attrDel("cfg");
+		    break;
+	    }
 
 	//- Create specific attributes -
 	switch(cfg.getI())
@@ -467,7 +468,7 @@ bool OrigText::attrChange( Attr &cfg, TVariant prev )
 	{
 	    int narg = (aid/10)-5;
 	    string fid = "arg"+TSYS::int2str(narg)+"val";
-	    string fnm = _("Argument ")+TSYS::int2str(narg)+":value";
+	    string fnm = _("Argument ")+TSYS::int2str(narg)+_(":value");
 	    int apos = cfg.owner()->attrPos(fid);
 	    VCA::Attr::SelfAttrFlgs sflg =  cfg.owner()->attrAt(fid).at().flgSelf();
 	    cfg.owner()->attrDel(fid);

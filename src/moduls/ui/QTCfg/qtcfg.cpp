@@ -82,7 +82,7 @@ ConfApp::ConfApp( string open_user ) :
     QImage ico_t;
     mod->regWin( this );
 
-    setWindowTitle(TSYS::strMess(_("QT Configurator of OpenSCADA: %s"),SYS->name().c_str()).c_str());
+    setWindowTitle(TSYS::strMess(_("OpenSCADA QTCfg: %s"),SYS->name().c_str()).c_str());
     setWindowIcon(mod->icon());
 
     //> Init centrall widget

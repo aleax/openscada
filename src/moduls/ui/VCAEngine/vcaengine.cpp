@@ -162,18 +162,18 @@ void Engine::postEnable( int flag )
     wdgio_el.fldAdd( new TFld("IO_VAL",_("Attribute value"),TFld::String,TCfg::TransltText,"100000") );
     wdgio_el.fldAdd( new TFld("SELF_FLG",_("Attribute self flags"),TFld::Integer,TFld::NoFlag,"5") );
     wdgio_el.fldAdd( new TFld("CFG_TMPL",_("Configuration template"),TFld::String,TCfg::TransltText,"30") );
-    wdgio_el.fldAdd( new TFld("CFG_VAL",_("Configuration value"),TFld::String,TFld::NoFlag,"1000") );
+    wdgio_el.fldAdd( new TFld("CFG_VAL",_("Configuration value"),TFld::String,TCfg::TransltText,"1000") );
 
     //> Make widget's user IO DB structure
     wdguio_el.fldAdd( new TFld("IDW",_("Widget ID"),TFld::String,TCfg::Key,"100") );
     wdguio_el.fldAdd( new TFld("IDC",_("Child ID"),TFld::String,TCfg::Key,"30") );
     wdguio_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"61") );
-    wdguio_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
+    wdguio_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"100") );
     wdguio_el.fldAdd( new TFld("IO_TYPE",_("Attribute generic flags and type"),TFld::Integer,TFld::NoFlag,"10") );
     wdguio_el.fldAdd( new TFld("IO_VAL",_("Attribute value"),TFld::String,TCfg::TransltText,"100000") );
     wdguio_el.fldAdd( new TFld("SELF_FLG",_("Attribute self flags"),TFld::Integer,TFld::NoFlag,"5") );
     wdguio_el.fldAdd( new TFld("CFG_TMPL",_("Configuration template"),TFld::String,TCfg::TransltText,"30") );
-    wdguio_el.fldAdd( new TFld("CFG_VAL",_("Configuration value"),TFld::String,TFld::NoFlag,"1000") );
+    wdguio_el.fldAdd( new TFld("CFG_VAL",_("Configuration value"),TFld::String,TCfg::TransltText,"1000") );
 
     //> Make project's DB structure
     prj_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
@@ -624,6 +624,9 @@ string Engine::attrsSave( Widget &w, const string &fullDB, int vDB, const string
 	    c_el.cfg("IO_VAL").setS(attr.at().getS());
 	    c_el.cfg("SELF_FLG").setI(attr.at().flgSelf());
 	    c_el.cfg("CFG_TMPL").setS(attr.at().cfgTempl());
+	    c_el.cfg("CFG_VAL").setNoTransl( !(attr.at().type() == TFld::String &&
+		    !(attr.at().flgGlob()&(Attr::Image|Attr::DataTime|Attr::Color|Attr::Font|Attr::Address)) &&
+		    (attr.at().flgSelf()&Attr::CfgConst || (attr.at().flgSelf()&Attr::CfgLnkIn && attr.at().cfgVal().substr(0,4) == "val:"))) );
 	    c_el.cfg("CFG_VAL").setS(attr.at().cfgVal());
 	    SYS->db().at().dataSet(fullDB+"_io",nodePath()+tbl+"_io",c_el);
 	}
@@ -641,6 +644,9 @@ string Engine::attrsSave( Widget &w, const string &fullDB, int vDB, const string
 	    c_elu.cfg("IO_TYPE").setI(attr.at().fld().type()+(attr.at().fld().flg()<<4));
 	    c_elu.cfg("SELF_FLG").setI(attr.at().flgSelf());
 	    c_elu.cfg("CFG_TMPL").setS(attr.at().cfgTempl());
+	    c_elu.cfg("CFG_VAL").setNoTransl( !(attr.at().type() == TFld::String &&
+		    !(attr.at().flgGlob()&(Attr::Image|Attr::DataTime|Attr::Color|Attr::Font|Attr::Address)) &&
+		    (attr.at().flgSelf()&Attr::CfgConst || (attr.at().flgSelf()&Attr::CfgLnkIn && attr.at().cfgVal().substr(0,4) == "val:"))) );
 	    c_elu.cfg("CFG_VAL").setS(attr.at().cfgVal());
 	    SYS->db().at().dataSet(fullDB+"_uio",nodePath()+tbl+"_uio",c_elu);
 	}
@@ -670,14 +676,6 @@ string Engine::attrsSave( Widget &w, const string &fullDB, int vDB, const string
 
 	    SYS->db().at().dataDel(fullDB+"_uio",nodePath()+tbl+"_uio",c_elu,true);
 	    fld_cnt--;
-
-	    /*if( (vDB == 1 && (idc.empty() && TSYS::pathLev(sid,1).empty() && !w.attrPresent(TSYS::pathLev(sid,0))) ||
-			    (!idc.empty() && TSYS::pathLev(sid,0) == idc && TSYS::pathLev(sid,1).size() && !w.attrPresent(TSYS::pathLev(sid,1)))) ||
-		(vDB == 2 && !w.attrPresent(sid)) )
-	    {
-		SYS->db().at().dataDel(fullDB+"_uio",nodePath()+tbl+"_uio",c_elu,true);
-		fld_cnt--;
-	    }*/
 	}
     }
 

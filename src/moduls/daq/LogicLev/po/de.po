@@ -1,0 +1,482 @@
+# OpenSCADA.DAQ.LogicLev translate to German.
+# Copyright (C) 2009 Irina Popkova
+# This file is distributed under the same license as the OpenSCADA.DAQ.LogicLev package module.
+# Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
+#
+#: logiclev.cpp:56 logiclev.cpp:131 logiclev.cpp:138 logiclev.cpp:888
+#: logiclev.cpp:899 logiclev.cpp:912 logiclev.cpp:1008 logiclev.h:58
+#: logiclev.h:77
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenSCADA.DAQ.LogicLev 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-06-18 15:11+0300\n"
+"PO-Revision-Date: 2007-10-29 09:45+0200\n"
+"Last-Translator: Irina Popkova <irischkapopkova@yandex.ru>\n"
+"Language-Team: <de@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+#: logiclev.cpp:39
+msgid "LogicLev"
+msgstr ""
+
+#: logiclev.cpp:40
+msgid "Logic level"
+msgstr "Logisches Niveau"
+
+#: logiclev.cpp:41 logiclev.cpp:828 logiclev.cpp:831
+msgid "DAQ"
+msgstr ""
+
+#: logiclev.cpp:43
+msgid "1.0.0"
+msgstr ""
+
+#: logiclev.cpp:44
+msgid "Roman Savochenko"
+msgstr "Roman Savotschenko"
+
+#: logiclev.cpp:45
+msgid "Allow logic level paramers."
+msgstr "Ermoeglicht das logische Parameterniveau."
+
+#: logiclev.cpp:46
+msgid "GPL"
+msgstr ""
+
+#: logiclev.cpp:51
+msgid "C"
+msgstr ""
+
+#: logiclev.cpp:96
+#, c-format
+msgid ""
+"======================= The module <%s:%s> options =======================\n"
+"---------- Parameters of the module section <%s> in config file ----------\n"
+"\n"
+msgstr ""
+"========================== Optionen des Moduls <%s:%s> ==========================\n"
+"-------- Parameter der modularen Sektion <%s> in der Konfigurationsdatei --------\n"
+"\n"
+
+#: logiclev.cpp:107
+msgid "h"
+msgstr ""
+
+#: logiclev.cpp:110
+msgid "help"
+msgstr ""
+
+#: logiclev.cpp:131 logiclev.cpp:136 logiclev.cpp:158 logiclev.cpp:174
+msgid "PRM_BD"
+msgstr ""
+
+#: logiclev.cpp:131
+msgid "Parameteres table"
+msgstr "Tabelle von Parametern"
+
+#: logiclev.cpp:131
+msgid "30"
+msgstr ""
+
+#: logiclev.cpp:132 logiclev.cpp:156
+msgid "PERIOD"
+msgstr ""
+
+#: logiclev.cpp:132
+msgid "Request data period (ms)"
+msgstr "Datenerfassungszeit (ms)"
+
+#: logiclev.cpp:132
+msgid "5"
+msgstr ""
+
+#: logiclev.cpp:132
+msgid "1000"
+msgstr ""
+
+#: logiclev.cpp:132
+msgid "0;10000"
+msgstr ""
+
+#: logiclev.cpp:133 logiclev.cpp:156
+msgid "PRIOR"
+msgstr ""
+
+#: logiclev.cpp:133
+msgid "Request task priority"
+msgstr "Prioritaetsniveau der Datenerfassungsaufgabe"
+
+#: logiclev.cpp:133
+msgid "2"
+msgstr ""
+
+#: logiclev.cpp:133 logiclev.cpp:137 logiclev.cpp:548 logiclev.cpp:646
+#: logiclev.cpp:863 logiclev.cpp:946
+msgid "0"
+msgstr ""
+
+#: logiclev.cpp:133
+msgid "0;100"
+msgstr ""
+
+#: logiclev.cpp:136
+msgid "std"
+msgstr ""
+
+#: logiclev.cpp:136
+msgid "Logical"
+msgstr "Logisch"
+
+#: logiclev.cpp:137 logiclev.cpp:325 logiclev.cpp:848
+msgid "MODE"
+msgstr ""
+
+#: logiclev.cpp:137
+msgid "Mode"
+msgstr "Mode"
+
+#: logiclev.cpp:137
+msgid "1"
+msgstr ""
+
+#: logiclev.cpp:138 logiclev.cpp:325 logiclev.cpp:851
+msgid "PRM"
+msgstr ""
+
+#: logiclev.cpp:138
+msgid "100"
+msgstr ""
+
+#: logiclev.cpp:141 logiclev.cpp:351 logiclev.cpp:411 logiclev.cpp:439
+msgid "PRM_ID"
+msgstr ""
+
+#: logiclev.cpp:141
+msgid "Parameter ID"
+msgstr "Bezeichner des Parameters"
+
+#: logiclev.cpp:141 logiclev.cpp:142
+msgid "20"
+msgstr ""
+
+#: logiclev.cpp:142 logiclev.cpp:416 logiclev.cpp:444
+msgid "ID"
+msgstr ""
+
+#: logiclev.cpp:143 logiclev.cpp:420 logiclev.cpp:421 logiclev.cpp:445
+#: logiclev.cpp:447 logiclev.cpp:448
+msgid "VALUE"
+msgstr ""
+
+#: logiclev.cpp:143
+msgid "Value"
+msgstr "Bedeutung"
+
+#: logiclev.cpp:143
+msgid "200"
+msgstr ""
+
+#: logiclev.cpp:158
+msgid "LogLevPrm_"
+msgstr ""
+
+#: logiclev.cpp:174 logiclev.cpp:349 logiclev.cpp:412 logiclev.cpp:440
+#: logiclev.cpp:905 logiclev.cpp:906 logiclev.cpp:916 logiclev.cpp:919
+#: logiclev.cpp:956 logiclev.cpp:987 logiclev.cpp:1013 logiclev.cpp:1016
+msgid "."
+msgstr ""
+
+#: logiclev.cpp:174 logiclev.cpp:349 logiclev.cpp:352 logiclev.cpp:412
+#: logiclev.cpp:417 logiclev.cpp:440 logiclev.cpp:449
+msgid "_io"
+msgstr ""
+
+#: logiclev.cpp:179 logiclev.cpp:276 logiclev.cpp:355 logiclev.cpp:813
+#, c-format
+msgid "%s"
+msgstr ""
+
+#: logiclev.cpp:185
+#, c-format
+msgid "Calc time %.6g ms. "
+msgstr "Berechnungszeit %.6g ms."
+
+#: logiclev.cpp:209 logiclev.cpp:828 logiclev.cpp:831 logiclev.cpp:848
+#: logiclev.cpp:851 logiclev.cpp:854 logiclev.cpp:872 logiclev.cpp:887
+#: logiclev.cpp:895 logiclev.cpp:901 logiclev.cpp:946 logiclev.cpp:947
+#: logiclev.cpp:951 logiclev.cpp:959 logiclev.cpp:1043 logiclev.cpp:1051
+msgid "root"
+msgstr ""
+
+#: logiclev.cpp:217
+msgid "start"
+msgstr ""
+
+#: logiclev.cpp:218
+msgid "Acquisition task is not started!"
+msgstr "Datenerfassungsaufgabe ist nicht aktiviert!"
+
+#: logiclev.cpp:229
+msgid "stop"
+msgstr ""
+
+#: logiclev.cpp:230
+msgid "Acquisition task is not stopped!"
+msgstr "Datenerfassungsaufgabe ist nicht gestoppt!"
+
+#: logiclev.cpp:257
+#, c-format
+msgid "Thread <%u> is started. TID: %ld"
+msgstr ""
+
+#: logiclev.cpp:299
+msgid "CntrReqs"
+msgstr ""
+
+#: logiclev.cpp:299 logiclev.cpp:303 logiclev.cpp:311 logiclev.cpp:658
+#: logiclev.cpp:821
+msgid "path"
+msgstr ""
+
+#: logiclev.cpp:303 logiclev.cpp:828 logiclev.cpp:946 logiclev.cpp:951
+#: logiclev.cpp:1043
+msgid "get"
+msgstr ""
+
+#: logiclev.cpp:303
+msgid "/prm_"
+msgstr ""
+
+#: logiclev.cpp:303
+#, c-format
+msgid "/%2fserv%2ftmplAttr"
+msgstr ""
+
+#: logiclev.cpp:311
+msgid "/"
+msgstr ""
+
+#: logiclev.cpp:314 logiclev.cpp:587 logiclev.cpp:642
+msgid "err"
+msgstr ""
+
+#: logiclev.cpp:315 logiclev.cpp:657 logiclev.cpp:831 logiclev.cpp:895
+#: logiclev.cpp:901 logiclev.cpp:947 logiclev.cpp:959 logiclev.cpp:1051
+msgid "set"
+msgstr ""
+
+#: logiclev.cpp:324
+msgid "w_attr"
+msgstr ""
+
+#: logiclev.cpp:373
+msgid "f_frq"
+msgstr ""
+
+#: logiclev.cpp:374
+msgid "f_start"
+msgstr ""
+
+#: logiclev.cpp:375
+msgid "f_stop"
+msgstr ""
+
+#: logiclev.cpp:376
+msgid "f_err"
+msgstr ""
+
+#: logiclev.cpp:522
+msgid "_tmplprm"
+msgstr ""
+
+#: logiclev.cpp:590
+msgid "1:Parameter is disabled."
+msgstr "1:Parameter ist disakiviert."
+
+#: logiclev.cpp:592
+msgid "2:Controller is stoped."
+msgstr "2:Controller ist gestoppt."
+
+#: logiclev.cpp:658
+#, c-format
+msgid "/%2fserv%2fattr"
+msgstr ""
+
+#: logiclev.cpp:658 logiclev.cpp:913 logiclev.cpp:917 logiclev.cpp:942
+#: logiclev.cpp:1009 logiclev.cpp:1014 logiclev.cpp:1039
+msgid "el"
+msgstr ""
+
+#: logiclev.cpp:658 logiclev.cpp:830 logiclev.cpp:835
+msgid "id"
+msgstr ""
+
+#: logiclev.cpp:722 logiclev.cpp:729 logiclev.cpp:739 logiclev.cpp:749
+msgid "Parameter is disabled or is not based on the template."
+msgstr "Parameter ist disaktiviert oder nicht auf der Schablone basiert."
+
+#: logiclev.cpp:751
+msgid "Parameter id error."
+msgstr "Fehler des Parameterbezeichners."
+
+#: logiclev.cpp:814
+msgid "Error calc template."
+msgstr "Fehler der Berechnung der Schablone."
+
+#: logiclev.cpp:822
+msgid "/serv/"
+msgstr ""
+
+#: logiclev.cpp:824
+msgid "/serv/tmplAttr"
+msgstr ""
+
+#: logiclev.cpp:827
+msgid "No template parameter or error."
+msgstr "Fehler oder nicht Schablonenparameter."
+
+#: logiclev.cpp:830 logiclev.cpp:835
+msgid "ta"
+msgstr ""
+
+#: logiclev.cpp:845
+msgid "info"
+msgstr ""
+
+#: logiclev.cpp:848 logiclev.cpp:851 logiclev.cpp:854 logiclev.cpp:872
+#: logiclev.cpp:887
+msgid "fld"
+msgstr ""
+
+#: logiclev.cpp:848 logiclev.cpp:895
+msgid "/prm/cfg/MODE"
+msgstr ""
+
+#: logiclev.cpp:848 logiclev.cpp:851 logiclev.cpp:854 logiclev.cpp:873
+#: logiclev.cpp:888
+msgid "tp"
+msgstr ""
+
+#: logiclev.cpp:848 logiclev.cpp:851 logiclev.cpp:873 logiclev.cpp:879
+msgid "str"
+msgstr ""
+
+#: logiclev.cpp:848 logiclev.cpp:851 logiclev.cpp:873 logiclev.cpp:888
+msgid "dest"
+msgstr ""
+
+#: logiclev.cpp:848 logiclev.cpp:851 logiclev.cpp:873 logiclev.cpp:888
+msgid "select"
+msgstr ""
+
+#: logiclev.cpp:849
+msgid "sel_id"
+msgstr ""
+
+#: logiclev.cpp:849
+msgid ";"
+msgstr ""
+
+#: logiclev.cpp:850
+msgid "sel_list"
+msgstr ""
+
+#: logiclev.cpp:850
+msgid "Free;Direct reflection;Template"
+msgstr "Frei;direkte Reflexion;Schablone"
+
+#: logiclev.cpp:851 logiclev.cpp:901
+msgid "/prm/cfg/PRM"
+msgstr ""
+
+#: logiclev.cpp:851 logiclev.cpp:873 logiclev.cpp:888
+msgid "sel_ed"
+msgstr ""
+
+#: logiclev.cpp:851 logiclev.cpp:909
+msgid "/prm/cfg/prmp_lst"
+msgstr ""
+
+#: logiclev.cpp:852 logiclev.cpp:855
+msgid "area"
+msgstr ""
+
+#: logiclev.cpp:852
+msgid "/cfg"
+msgstr ""
+
+#: logiclev.cpp:852
+msgid "Template config"
+msgstr "Konfiguration der Schablone"
+
+#: logiclev.cpp:854 logiclev.cpp:944
+msgid "/cfg/attr_only"
+msgstr ""
+
+#: logiclev.cpp:854
+msgid "Only atributes are to be shown"
+msgstr "Nur Attribute zeigen"
+
+#: logiclev.cpp:854 logiclev.cpp:885
+msgid "bool"
+msgstr ""
+
+#: logiclev.cpp:855
+msgid "/cfg/prm"
+msgstr ""
+
+#: logiclev.cpp:855
+msgid "Parameters"
+msgstr "Parameter"
+
+#: logiclev.cpp:863 logiclev.cpp:946 logiclev.cpp:947
+msgid "onlAttr"
+msgstr ""
+
+#: logiclev.cpp:863 logiclev.cpp:946 logiclev.cpp:947
+msgid "user"
+msgstr ""
+
+#: logiclev.cpp:872 logiclev.cpp:949
+msgid "/cfg/prm/pr_"
+msgstr ""
+
+#: logiclev.cpp:873 logiclev.cpp:1002 logiclev.cpp:1007
+msgid "/cfg/prm/pl_"
+msgstr ""
+
+#: logiclev.cpp:883
+msgid "dec"
+msgstr ""
+
+#: logiclev.cpp:884
+msgid "real"
+msgstr ""
+
+#: logiclev.cpp:887 logiclev.cpp:1041
+msgid "/cfg/prm/el_"
+msgstr ""
+
+#: logiclev.cpp:888 logiclev.cpp:1002
+msgid "/cfg/prm/ls_"
+msgstr ""
+
+#: logiclev.cpp:973 logiclev.cpp:1059
+msgid "Self to self linking error."
+msgstr "Fehler, Anschluss an sich selbst."
+
+#: logiclev.cpp:991
+msgid ","
+msgstr ""
+
+#: logiclev.cpp:996
+msgid "Parameter has no one atribute!"
+msgstr "Parameter hat kein Attribut!"
+
+#: logiclev.cpp:997
+#, c-format
+msgid "Parameter has not atributes: %s !"
+msgstr "Parameter hat keine Attribute: %s !"

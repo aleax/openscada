@@ -1,3 +1,13 @@
+2009-06-19 Roman
+- !!:/DAQ/LogicLev, /DAQ/DAQGate, /DAQ/DiamondBoards, /DAQ/ModBus: Interface translation to German is added by Irina Popkova.
+- /SYS: Init-file for OpenSCADA start as daemon is disabled for default and RPM-build spec file is updated for it.
+- !!!!:/DemoDB: Updated English translation for VCA DBs and added Ukrainian translation to its.
+- FIX:/TFunction: Try for IO order fixing is disabled for used now functions.
+- FIX:/DB/MySQL: Storing into latin1 by default is fixed. Added codepage for names into DB-address which used into SQL command "SET NAMES <cp>".
+- FIX:/UI/VCAEngine: Possible crash on time reloading primitive "FormEl" is fixed by prevent mutable attributes deletion for always.
+- /UI/VCAEngine: Config values translation support is added.
+
+
 2009-06-17 Roman
 - /DB/MySQL: Fields size multiplication is disabled for UTF-8 by key limit to 333 symbols on UTF-8.
 - !!!!:/UI/VCAEngine: DB structure version is changed to 2 for performance rise and lost records into DB prevent.

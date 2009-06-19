@@ -33,7 +33,6 @@ Das offene SCADA System. Fuer den Zugang die Aufzeichnung "root" und das Kennwor
 
 %post
 /sbin/chkconfig --add oscadad
-/sbin/chkconfig oscadad off
 
 %preun
 /sbin/chkconfig --del oscadad

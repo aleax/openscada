@@ -3,15 +3,15 @@
 # This file is distributed under the same license as the OpenSCADA.DB.MySQL package module.
 # Roman Savochenko <rom_as@fromru.com>, 2003-2009.
 #
-#: my_sql.cpp:51 my_sql.cpp:149 my_sql.cpp:175 my_sql.cpp:259 my_sql.cpp:411
-#: my_sql.cpp:652 my_sql.cpp:660 my_sql.cpp:673 my_sql.cpp:681 my_sql.cpp:718
-#: my_sql.cpp:750 my_sql.cpp:774
+#: my_sql.cpp:51 my_sql.cpp:149 my_sql.cpp:176 my_sql.cpp:260 my_sql.cpp:406
+#: my_sql.cpp:647 my_sql.cpp:655 my_sql.cpp:668 my_sql.cpp:676 my_sql.cpp:713
+#: my_sql.cpp:745 my_sql.cpp:769
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.MySQL 1.6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-06-05 15:04+0300\n"
+"POT-Creation-Date: 2009-06-18 17:43+0300\n"
 "PO-Revision-Date: 2007-10-23 12:23+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -26,7 +26,7 @@ msgstr ""
 msgid "DB MySQL"
 msgstr "БД MySQL"
 
-#: my_sql.cpp:36 my_sql.cpp:273
+#: my_sql.cpp:36 my_sql.cpp:274
 msgid "BD"
 msgstr "БД"
 
@@ -65,15 +65,15 @@ msgstr ""
 msgid "h"
 msgstr ""
 
-#: my_sql.cpp:110 my_sql.cpp:274
+#: my_sql.cpp:110 my_sql.cpp:275
 msgid "help"
 msgstr ""
 
-#: my_sql.cpp:147 my_sql.cpp:173
+#: my_sql.cpp:147 my_sql.cpp:174
 msgid "Error initializing client."
 msgstr "Ошибка инициализации клиента."
 
-#: my_sql.cpp:150 my_sql.cpp:176
+#: my_sql.cpp:150 my_sql.cpp:177
 #, c-format
 msgid "Connect to DB error: %s"
 msgstr "Ошибка подключения к БД: %s"
@@ -82,9 +82,9 @@ msgstr "Ошибка подключения к БД: %s"
 msgid "DROP DATABASE `"
 msgstr ""
 
-#: my_sql.cpp:152 my_sql.cpp:180 my_sql.cpp:199 my_sql.cpp:306 my_sql.cpp:331
-#: my_sql.cpp:398 my_sql.cpp:403 my_sql.cpp:458 my_sql.cpp:463 my_sql.cpp:510
-#: my_sql.cpp:532 my_sql.cpp:552 my_sql.cpp:582 my_sql.cpp:612 my_sql.cpp:705
+#: my_sql.cpp:152 my_sql.cpp:181 my_sql.cpp:200 my_sql.cpp:308 my_sql.cpp:326
+#: my_sql.cpp:393 my_sql.cpp:398 my_sql.cpp:453 my_sql.cpp:458 my_sql.cpp:505
+#: my_sql.cpp:527 my_sql.cpp:547 my_sql.cpp:577 my_sql.cpp:607 my_sql.cpp:700
 msgid "`"
 msgstr ""
 
@@ -93,61 +93,69 @@ msgstr ""
 msgid "Query to DB error: %s"
 msgstr "Ошибка запроса к БД: %s"
 
-#: my_sql.cpp:180
+#: my_sql.cpp:181
 msgid "CREATE DATABASE IF NOT EXISTS `"
 msgstr ""
 
-#: my_sql.cpp:199
+#: my_sql.cpp:182
+msgid "SET NAMES '"
+msgstr ""
+
+#: my_sql.cpp:182 my_sql.cpp:529
+msgid "'"
+msgstr ""
+
+#: my_sql.cpp:200
 msgid "SHOW TABLES FROM `"
 msgstr ""
 
-#: my_sql.cpp:207
+#: my_sql.cpp:208
 #, c-format
 msgid "Error open table <%s>. DB is disabled."
 msgstr "Ошибка открытия таблицы <%s>. БД отключена."
 
-#: my_sql.cpp:237
+#: my_sql.cpp:238
 #, c-format
 msgid "Query to DB error %d: %s"
 msgstr "Ошибка %d запроса к БД: %s"
 
-#: my_sql.cpp:242
+#: my_sql.cpp:243
 #, c-format
 msgid "Store result error: %s"
 msgstr "Ошибка сохранения результата: %s"
 
-#: my_sql.cpp:270
+#: my_sql.cpp:271
 msgid "info"
 msgstr ""
 
-#: my_sql.cpp:273
+#: my_sql.cpp:274
 msgid "fld"
 msgstr ""
 
-#: my_sql.cpp:273
+#: my_sql.cpp:274
 msgid "/prm/cfg/addr"
 msgstr ""
 
-#: my_sql.cpp:273
+#: my_sql.cpp:274
 msgid "ADDR"
 msgstr ""
 
-#: my_sql.cpp:273
+#: my_sql.cpp:274
 msgid "root"
 msgstr ""
 
-#: my_sql.cpp:274
+#: my_sql.cpp:275
 msgid "tp"
 msgstr ""
 
-#: my_sql.cpp:274
+#: my_sql.cpp:275
 msgid "str"
 msgstr ""
 
-#: my_sql.cpp:275
+#: my_sql.cpp:276
 msgid ""
 "MySQL DB address must be written as: [<host>;<user>;<pass>;<db>;<port>;"
-"<u_sock>].\n"
+"<u_sock>;<names>].\n"
 "Where:\n"
 "  host - MySQL server hostname;\n"
 "  user - DB user name;\n"
@@ -155,307 +163,296 @@ msgid ""
 "  db - DB name;\n"
 "  port - DB server port (default 3306);\n"
 "  u_sock - UNIX-socket name, for local access to DB (/var/lib/mysql/mysql."
-"sock).\n"
-"For local DB: [;roman;123456;OpenSCADA;;/var/lib/mysql/mysql.sock].\n"
+"sock);\n"
+"  names - MySQL SET NAMES charset.\n"
+"For local DB: [;roman;123456;OpenSCADA;;/var/lib/mysql/mysql.sock;utf8].\n"
 "For remote DB: [server.nm.org;roman;123456;OpenSCADA;3306]."
 msgstr ""
 "Адрес БД MySQL записывается в виде: [<host>;<user>;<pass>;<db>;<port>;"
-"<u_sock>].\n"
+"<u_sock>;<names>].\n"
 "Где:\n"
 "  host - имя хоста MySQL сервера;\n"
 "  user - имя пользователя БД;\n"
 "  pass - пароль пользователя для доступа к БД;\n"
 "  db - имя БД;\n"
 "  port - порт сервера БД (по умолчанию 3306);\n"
-"  u_sock - имя UNIX-сокета, для локального доступа к БД (/var/lib/mysql/"
-"mysql.sock).\n"
-"Для локальной БД: [;roman;123456;OpenSCADA;;/var/lib/mysql/mysql.sock].\n"
+"  u_sock - имя UNIX-сокета, для локального доступа к БД (/var/lib/mysql/mysql.sock);\n"
+"  names - MySQL кодировка передачи, устанавливаемая SET NAMES.\n"
+"Для локальной БД: [;roman;123456;OpenSCADA;;/var/lib/mysql/mysql.sock;utf8].\n"
 "Для удалённой БД: [server.nm.org;roman;123456;OpenSCADA;3306]."
 
-#: my_sql.cpp:301
+#: my_sql.cpp:303
 msgid "CREATE TABLE IF NOT EXISTS `"
 msgstr ""
 
-#: my_sql.cpp:301 my_sql.cpp:306 my_sql.cpp:330 my_sql.cpp:410 my_sql.cpp:467
-#: my_sql.cpp:516 my_sql.cpp:522 my_sql.cpp:542 my_sql.cpp:574 my_sql.cpp:603
-#: my_sql.cpp:705
+#: my_sql.cpp:303 my_sql.cpp:308 my_sql.cpp:325 my_sql.cpp:405 my_sql.cpp:462
+#: my_sql.cpp:511 my_sql.cpp:517 my_sql.cpp:537 my_sql.cpp:569 my_sql.cpp:598
+#: my_sql.cpp:700
 msgid "`.`"
 msgstr ""
 
-#: my_sql.cpp:302
+#: my_sql.cpp:304
 msgid "` (`name` char(20) NOT NULL DEFAULT '' PRIMARY KEY)"
 msgstr ""
 
-#: my_sql.cpp:306 my_sql.cpp:705
+#: my_sql.cpp:308 my_sql.cpp:700
 msgid "DESCRIBE `"
 msgstr ""
 
-#: my_sql.cpp:319
-msgid "UTF"
-msgstr ""
-
-#: my_sql.cpp:319
-msgid "utf"
-msgstr ""
-
-#: my_sql.cpp:330
+#: my_sql.cpp:325
 msgid "DROP TABLE `"
 msgstr ""
 
-#: my_sql.cpp:333
+#: my_sql.cpp:328
 #, c-format
 msgid "%s"
 msgstr ""
 
-#: my_sql.cpp:341 my_sql.cpp:373 my_sql.cpp:433 my_sql.cpp:492 my_sql.cpp:566
-#: my_sql.cpp:594
+#: my_sql.cpp:336 my_sql.cpp:368 my_sql.cpp:428 my_sql.cpp:487 my_sql.cpp:561
+#: my_sql.cpp:589
 msgid "Table is empty!"
 msgstr "Таблица пуста!"
 
-#: my_sql.cpp:350
+#: my_sql.cpp:345
 msgid "PRI"
 msgstr ""
 
-#: my_sql.cpp:351
+#: my_sql.cpp:346
 #, c-format
 msgid "char(%d)"
 msgstr ""
 
-#: my_sql.cpp:352
+#: my_sql.cpp:347
 #, c-format
 msgid "varchar(%d)"
 msgstr ""
 
-#: my_sql.cpp:354 my_sql.cpp:634
+#: my_sql.cpp:349 my_sql.cpp:629
 msgid "text"
 msgstr ""
 
-#: my_sql.cpp:355
+#: my_sql.cpp:350
 msgid "65535"
 msgstr ""
 
-#: my_sql.cpp:356 my_sql.cpp:635
+#: my_sql.cpp:351 my_sql.cpp:630
 msgid "mediumtext"
 msgstr ""
 
-#: my_sql.cpp:357
+#: my_sql.cpp:352
 msgid "16777215"
 msgstr ""
 
-#: my_sql.cpp:358
+#: my_sql.cpp:353
 #, c-format
 msgid "int(%d)"
 msgstr ""
 
-#: my_sql.cpp:360
+#: my_sql.cpp:355
 #, c-format
 msgid "double(%d,%d)"
 msgstr ""
 
-#: my_sql.cpp:361
+#: my_sql.cpp:356
 msgid "."
 msgstr ""
 
-#: my_sql.cpp:362 my_sql.cpp:645
+#: my_sql.cpp:357 my_sql.cpp:640
 msgid "tinyint(1)"
 msgstr ""
 
-#: my_sql.cpp:363
+#: my_sql.cpp:358
 msgid "1"
 msgstr ""
 
-#: my_sql.cpp:364 my_sql.cpp:638
+#: my_sql.cpp:359 my_sql.cpp:633
 msgid "datetime"
 msgstr ""
 
-#: my_sql.cpp:365
+#: my_sql.cpp:360
 msgid "10"
 msgstr ""
 
-#: my_sql.cpp:380 my_sql.cpp:440
+#: my_sql.cpp:375 my_sql.cpp:435
 msgid "SELECT "
 msgstr ""
 
-#: my_sql.cpp:381 my_sql.cpp:503
+#: my_sql.cpp:376 my_sql.cpp:498
 msgid "WHERE "
 msgstr ""
 
-#: my_sql.cpp:389 my_sql.cpp:419 my_sql.cpp:449 my_sql.cpp:480 my_sql.cpp:531
-#: my_sql.cpp:550 my_sql.cpp:667 my_sql.cpp:679 my_sql.cpp:691
+#: my_sql.cpp:384 my_sql.cpp:414 my_sql.cpp:444 my_sql.cpp:475 my_sql.cpp:526
+#: my_sql.cpp:545 my_sql.cpp:662 my_sql.cpp:674 my_sql.cpp:686
 msgid "#"
 msgstr ""
 
-#: my_sql.cpp:398 my_sql.cpp:458 my_sql.cpp:510 my_sql.cpp:582
+#: my_sql.cpp:393 my_sql.cpp:453 my_sql.cpp:505 my_sql.cpp:577
 msgid "AND `"
 msgstr ""
 
-#: my_sql.cpp:398 my_sql.cpp:458 my_sql.cpp:510 my_sql.cpp:552 my_sql.cpp:582
+#: my_sql.cpp:393 my_sql.cpp:453 my_sql.cpp:505 my_sql.cpp:547 my_sql.cpp:577
 msgid "`='"
 msgstr ""
 
-#: my_sql.cpp:398 my_sql.cpp:458 my_sql.cpp:510 my_sql.cpp:534 my_sql.cpp:552
-#: my_sql.cpp:582 my_sql.cpp:718 my_sql.cpp:725 my_sql.cpp:726 my_sql.cpp:729
-#: my_sql.cpp:732
+#: my_sql.cpp:393 my_sql.cpp:453 my_sql.cpp:505 my_sql.cpp:529 my_sql.cpp:547
+#: my_sql.cpp:577 my_sql.cpp:713 my_sql.cpp:720 my_sql.cpp:721 my_sql.cpp:724
+#: my_sql.cpp:727
 msgid "' "
 msgstr ""
 
-#: my_sql.cpp:403 my_sql.cpp:463 my_sql.cpp:532 my_sql.cpp:552 my_sql.cpp:612
+#: my_sql.cpp:398 my_sql.cpp:458 my_sql.cpp:527 my_sql.cpp:547 my_sql.cpp:607
 msgid ",`"
 msgstr ""
 
-#: my_sql.cpp:410 my_sql.cpp:467
+#: my_sql.cpp:405 my_sql.cpp:462
 msgid " FROM `"
 msgstr ""
 
-#: my_sql.cpp:410 my_sql.cpp:516 my_sql.cpp:522 my_sql.cpp:532 my_sql.cpp:650
-#: my_sql.cpp:658 my_sql.cpp:671 my_sql.cpp:679 my_sql.cpp:695
+#: my_sql.cpp:405 my_sql.cpp:511 my_sql.cpp:517 my_sql.cpp:527 my_sql.cpp:645
+#: my_sql.cpp:653 my_sql.cpp:666 my_sql.cpp:674 my_sql.cpp:690
 msgid "` "
 msgstr ""
 
-#: my_sql.cpp:411
+#: my_sql.cpp:406
 msgid " LIMIT "
 msgstr ""
 
-#: my_sql.cpp:411
+#: my_sql.cpp:406
 msgid ",1"
 msgstr ""
 
-#: my_sql.cpp:467 my_sql.cpp:574
+#: my_sql.cpp:462 my_sql.cpp:569
 msgid "` WHERE "
 msgstr ""
 
-#: my_sql.cpp:472
+#: my_sql.cpp:467
 msgid "Row is not present!"
 msgstr "Запись отсутствует!"
 
-#: my_sql.cpp:516
+#: my_sql.cpp:511
 msgid "SELECT 1 FROM `"
 msgstr ""
 
-#: my_sql.cpp:522
+#: my_sql.cpp:517
 msgid "INSERT INTO `"
 msgstr ""
 
-#: my_sql.cpp:534
+#: my_sql.cpp:529
 msgid ",'"
 msgstr ""
 
-#: my_sql.cpp:534
-msgid "'"
-msgstr ""
-
-#: my_sql.cpp:537
+#: my_sql.cpp:532
 msgid "("
 msgstr ""
 
-#: my_sql.cpp:537
+#: my_sql.cpp:532
 msgid ") VALUES ("
 msgstr ""
 
-#: my_sql.cpp:537 my_sql.cpp:632 my_sql.cpp:639 my_sql.cpp:642
+#: my_sql.cpp:532 my_sql.cpp:627 my_sql.cpp:634 my_sql.cpp:637
 msgid ")"
 msgstr ""
 
-#: my_sql.cpp:542
+#: my_sql.cpp:537
 msgid "UPDATE `"
 msgstr ""
 
-#: my_sql.cpp:542
+#: my_sql.cpp:537
 msgid "` SET "
 msgstr ""
 
-#: my_sql.cpp:574
+#: my_sql.cpp:569
 msgid "DELETE FROM `"
 msgstr ""
 
-#: my_sql.cpp:603
+#: my_sql.cpp:598
 msgid "ALTER TABLE `"
 msgstr ""
 
-#: my_sql.cpp:603
+#: my_sql.cpp:598
 msgid "` DROP PRIMARY KEY, "
 msgstr ""
 
-#: my_sql.cpp:632 my_sql.cpp:717
+#: my_sql.cpp:627 my_sql.cpp:712
 msgid "varchar("
 msgstr ""
 
-#: my_sql.cpp:639 my_sql.cpp:726
+#: my_sql.cpp:634 my_sql.cpp:721
 msgid "int("
 msgstr ""
 
-#: my_sql.cpp:642 my_sql.cpp:729
+#: my_sql.cpp:637 my_sql.cpp:724
 msgid "double("
 msgstr ""
 
-#: my_sql.cpp:642 my_sql.cpp:729
+#: my_sql.cpp:637 my_sql.cpp:724
 msgid ","
 msgstr ""
 
-#: my_sql.cpp:650 my_sql.cpp:671
+#: my_sql.cpp:645 my_sql.cpp:666
 msgid ",CHANGE `"
 msgstr ""
 
-#: my_sql.cpp:650 my_sql.cpp:671
+#: my_sql.cpp:645 my_sql.cpp:666
 msgid "CHANGE `"
 msgstr ""
 
-#: my_sql.cpp:650 my_sql.cpp:671
+#: my_sql.cpp:645 my_sql.cpp:666
 msgid "` `"
 msgstr ""
 
-#: my_sql.cpp:658 my_sql.cpp:679
+#: my_sql.cpp:653 my_sql.cpp:674
 msgid ",ADD `"
 msgstr ""
 
-#: my_sql.cpp:658 my_sql.cpp:679
+#: my_sql.cpp:653 my_sql.cpp:674
 msgid "ADD `"
 msgstr ""
 
-#: my_sql.cpp:695
+#: my_sql.cpp:690
 msgid ",DROP `"
 msgstr ""
 
-#: my_sql.cpp:695
+#: my_sql.cpp:690
 msgid "DROP `"
 msgstr ""
 
-#: my_sql.cpp:699
+#: my_sql.cpp:694
 msgid ",ADD PRIMARY KEY ("
 msgstr ""
 
-#: my_sql.cpp:699 my_sql.cpp:717
+#: my_sql.cpp:694 my_sql.cpp:712
 msgid ") "
 msgstr ""
 
-#: my_sql.cpp:718
+#: my_sql.cpp:713
 msgid "BINARY"
 msgstr ""
 
-#: my_sql.cpp:718
+#: my_sql.cpp:713
 msgid " NOT NULL DEFAULT '"
 msgstr ""
 
-#: my_sql.cpp:720
+#: my_sql.cpp:715
 msgid "text NOT NULL "
 msgstr ""
 
-#: my_sql.cpp:721
+#: my_sql.cpp:716
 msgid "mediumtext NOT NULL "
 msgstr ""
 
-#: my_sql.cpp:725
+#: my_sql.cpp:720
 msgid "datetime NOT NULL DEFAULT '"
 msgstr ""
 
-#: my_sql.cpp:726 my_sql.cpp:729
+#: my_sql.cpp:721 my_sql.cpp:724
 msgid ") NOT NULL DEFAULT '"
 msgstr ""
 
-#: my_sql.cpp:732
+#: my_sql.cpp:727
 msgid "tinyint(1) NOT NULL DEFAULT '"
 msgstr ""
 
-#: my_sql.cpp:772 my_sql.cpp:780
+#: my_sql.cpp:767 my_sql.cpp:775
 msgid "%Y-%m-%d %H:%M:%S"
 msgstr ""

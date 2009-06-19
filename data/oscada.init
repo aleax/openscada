@@ -2,7 +2,7 @@
 #
 # Init file for OpenSCADA system demon.
 #
-# chkconfig: 2345 99 05
+# chkconfig: - 99 05
 # description: Open SCADA System server daemon
 #
 # processname: openscada

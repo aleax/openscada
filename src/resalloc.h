@@ -73,6 +73,7 @@ class ResString
     public:
 	//Methods
 	ResString( const string &vl = "" ) : str(vl)	{ }
+	~ResString( )			{ ResAlloc wres(res,true); }
 
 	void setVal( const string &vl )	{ ResAlloc wres(res,true); str = vl; }
 	string getVal( )		{ ResAlloc wres(res,false); return str; }

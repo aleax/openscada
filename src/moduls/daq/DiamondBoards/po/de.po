@@ -1,0 +1,667 @@
+# OpenSCADA.DAQ.DiamondBoards translate to German.
+# Copyright (C) 2009 Irina Popkova
+# This file is distributed under the same license as the OpenSCADA.DAQ.DiamondBoards package module.
+# Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
+#
+#: diamond.cpp:55 diamond.cpp:135 diamond.cpp:136 diamond.cpp:137
+#: diamond.cpp:139 diamond.cpp:140 diamond.cpp:142 diamond.cpp:144
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenSCADA.DAQ.DiamondBoards 1.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-06-18 15:06+0300\n"
+"PO-Revision-Date: 2007-10-28 09:43+0200\n"
+"Last-Translator: Irina Popkova <irischkapopkova@yandex.ru>\n"
+"Language-Team: LANGUAGE <de@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+#: diamond.cpp:38
+msgid "DiamondBoards"
+msgstr ""
+
+#: diamond.cpp:39
+msgid "Diamond DA boards"
+msgstr "Diamond der Datenerfassungsplatte"
+
+#: diamond.cpp:40
+msgid "DAQ"
+msgstr ""
+
+#: diamond.cpp:42
+msgid "1.2.0"
+msgstr ""
+
+#: diamond.cpp:43
+msgid "Roman Savochenko"
+msgstr "Roman Savotschenko"
+
+#: diamond.cpp:44
+msgid ""
+"Allow access to Diamond systems DA boards. Include support of Athena board."
+msgstr ""
+"Ermoeglicht den Zugang zur Datenerfassungsplatten von Diamond systems. Enthaelt "
+"Unterstuetzung der Systemplatte Athena."
+
+#: diamond.cpp:45
+msgid "GPL"
+msgstr ""
+
+#: diamond.cpp:50 dscud.h:56
+msgid "C"
+msgstr ""
+
+#: diamond.cpp:72
+msgid "AI"
+msgstr ""
+
+#: diamond.cpp:72
+msgid "AO"
+msgstr ""
+
+#: diamond.cpp:72
+msgid "DI"
+msgstr ""
+
+#: diamond.cpp:72
+msgid "DO"
+msgstr ""
+
+#: diamond.cpp:98
+msgid "dscInit error."
+msgstr "Fehler dscInit."
+
+#: diamond.cpp:102 diamond.cpp:208 diamond.cpp:212
+msgid "BOARD"
+msgstr ""
+
+#: diamond.cpp:102
+msgid "Diamond system board"
+msgstr "Diamond Platte"
+
+#: diamond.cpp:102 diamond.cpp:109 diamond.cpp:110 diamond.cpp:124
+#: diamond.cpp:130 diamond.cpp:136 diamond.cpp:140
+msgid "2"
+msgstr ""
+
+#: diamond.cpp:102
+msgid "25"
+msgstr ""
+
+#: diamond.cpp:103 diamond.cpp:113 diamond.cpp:115 diamond.cpp:117
+#: diamond.cpp:126
+msgid ";"
+msgstr ""
+
+#: diamond.cpp:104
+msgid "DMM16;ATHENA;DMM32XAT"
+msgstr ""
+
+#: diamond.cpp:105 diamond.cpp:122 diamond.cpp:159
+msgid "PRM_BD_A"
+msgstr ""
+
+#: diamond.cpp:105
+msgid "Analog parameters' table"
+msgstr "Tabelle der Analogparameter"
+
+#: diamond.cpp:105 diamond.cpp:106
+msgid "30"
+msgstr ""
+
+#: diamond.cpp:105
+msgid "diamond_prm_a"
+msgstr ""
+
+#: diamond.cpp:106 diamond.cpp:128 diamond.cpp:160
+msgid "PRM_BD_D"
+msgstr ""
+
+#: diamond.cpp:106
+msgid "Digital parameters' table"
+msgstr "Tabelle der diskreten Parameter"
+
+#: diamond.cpp:106
+msgid "diamond_prm_d"
+msgstr ""
+
+#: diamond.cpp:107 diamond.cpp:157 diamond.cpp:277
+msgid "DATA_EMUL"
+msgstr ""
+
+#: diamond.cpp:107
+msgid "Data emulation"
+msgstr "Datenemulation"
+
+#: diamond.cpp:107 diamond.cpp:111 diamond.cpp:112 diamond.cpp:114
+#: diamond.cpp:116 diamond.cpp:123 diamond.cpp:125 diamond.cpp:129
+#: diamond.cpp:131 diamond.cpp:135 diamond.cpp:139 diamond.cpp:142
+#: diamond.cpp:144 diamond.cpp:504
+msgid "1"
+msgstr ""
+
+#: diamond.cpp:107 diamond.cpp:110 diamond.cpp:111 diamond.cpp:123
+#: diamond.cpp:124 diamond.cpp:129 diamond.cpp:130 diamond.cpp:504
+#: diamond.cpp:677
+msgid "0"
+msgstr ""
+
+#: diamond.cpp:108 diamond.cpp:157
+msgid "ADDR"
+msgstr ""
+
+#: diamond.cpp:108
+msgid "Base board address"
+msgstr "Grundlegende Adresse der Platte"
+
+#: diamond.cpp:108 diamond.cpp:137
+msgid "3"
+msgstr ""
+
+#: diamond.cpp:108
+msgid "640"
+msgstr ""
+
+#: diamond.cpp:109 diamond.cpp:163 diamond.cpp:207 diamond.cpp:265
+#: diamond.cpp:271
+msgid "INT"
+msgstr ""
+
+#: diamond.cpp:109
+msgid "Interrupt vector"
+msgstr "Vektor des Unterbrechens"
+
+#: diamond.cpp:109
+msgid "5"
+msgstr ""
+
+#: diamond.cpp:110 diamond.cpp:164 diamond.cpp:215 diamond.cpp:499
+#: diamond.cpp:509 diamond.cpp:514
+msgid "DIO_CFG"
+msgstr ""
+
+#: diamond.cpp:110
+msgid "Digit IO config byte"
+msgstr "Konfigurationbyte diskreter IO"
+
+#: diamond.cpp:111 diamond.cpp:157 diamond.cpp:187 diamond.cpp:261
+msgid "ADMODE"
+msgstr ""
+
+#: diamond.cpp:111
+msgid "A/D interrupt mode"
+msgstr "AI-Sammlung nach Unterbrechen"
+
+#: diamond.cpp:112 diamond.cpp:222
+msgid "ADRANGE"
+msgstr ""
+
+#: diamond.cpp:112
+msgid "A/D voltage range"
+msgstr "Spannungumfang AI"
+
+#: diamond.cpp:113
+msgid "5v;10v"
+msgstr "5В;10В"
+
+#: diamond.cpp:114 diamond.cpp:223
+msgid "ADPOLAR"
+msgstr ""
+
+#: diamond.cpp:114
+msgid "A/D polarity"
+msgstr "AI-Polaritaet"
+
+#: diamond.cpp:115
+msgid "Bipolar;Unipolar"
+msgstr "Bipolar;Monopolar"
+
+#: diamond.cpp:116 diamond.cpp:166 diamond.cpp:224 diamond.cpp:267
+#: diamond.cpp:273
+msgid "ADGAIN"
+msgstr ""
+
+#: diamond.cpp:116
+msgid "A/D gain"
+msgstr "Verstaerkung nach AI"
+
+#: diamond.cpp:117 diamond.cpp:126
+msgid "x1;x2;x4;x8"
+msgstr ""
+
+#: diamond.cpp:118 diamond.cpp:165 diamond.cpp:266 diamond.cpp:272
+#: diamond.cpp:328 diamond.cpp:756
+msgid "ADCONVRATE"
+msgstr ""
+
+#: diamond.cpp:118
+msgid "A/D convertion rate (Hz)"
+msgstr "Erfassungsrate nach einem Kanal AI (Гц)"
+
+#: diamond.cpp:118
+msgid "6"
+msgstr ""
+
+#: diamond.cpp:118
+msgid "200"
+msgstr ""
+
+#: diamond.cpp:118
+msgid "100;100000"
+msgstr ""
+
+#: diamond.cpp:122 diamond.cpp:538
+msgid "a_prm"
+msgstr ""
+
+#: diamond.cpp:122
+msgid "Analog parameter"
+msgstr "Analogparameter"
+
+#: diamond.cpp:123 diamond.cpp:129 diamond.cpp:591
+msgid "TYPE"
+msgstr ""
+
+#: diamond.cpp:123
+msgid "Analog parameter type"
+msgstr "Typ des Analogparameters"
+
+#: diamond.cpp:123 diamond.cpp:129
+msgid "0;1"
+msgstr ""
+
+#: diamond.cpp:123 diamond.cpp:129
+msgid "Input;Output"
+msgstr "Eingang;Ausgang"
+
+#: diamond.cpp:124 diamond.cpp:131 diamond.cpp:524 diamond.cpp:576
+#: diamond.cpp:606 diamond.cpp:607
+msgid "CNL"
+msgstr ""
+
+#: diamond.cpp:124 diamond.cpp:131
+msgid "Channel"
+msgstr "Kanal"
+
+#: diamond.cpp:125 diamond.cpp:566 diamond.cpp:567 diamond.cpp:568
+#: diamond.cpp:572 diamond.cpp:603
+msgid "GAIN"
+msgstr ""
+
+#: diamond.cpp:125
+msgid "A/D converter gain"
+msgstr "Verstaerkung A/D des Konverters"
+
+#: diamond.cpp:128 diamond.cpp:539
+msgid "d_prm"
+msgstr ""
+
+#: diamond.cpp:128
+msgid "Digital parameter"
+msgstr "Diskretparameter"
+
+#: diamond.cpp:129
+msgid "Digital parameter type"
+msgstr "Typ des Diskretparameters"
+
+#: diamond.cpp:130 diamond.cpp:576 diamond.cpp:606 diamond.cpp:607
+msgid "PORT"
+msgstr ""
+
+#: diamond.cpp:130
+msgid "Port"
+msgstr "Порт"
+
+#: diamond.cpp:130
+msgid "0;1;2"
+msgstr ""
+
+#: diamond.cpp:130
+msgid "A;B;C"
+msgstr ""
+
+#: diamond.cpp:135 diamond.cpp:139 diamond.cpp:142 diamond.cpp:144
+#: diamond.cpp:404 diamond.cpp:445
+msgid "value"
+msgstr ""
+
+#: diamond.cpp:135 diamond.cpp:139
+msgid "Value %"
+msgstr "Bedeutung %"
+
+#: diamond.cpp:135 diamond.cpp:139
+msgid "0;100"
+msgstr ""
+
+#: diamond.cpp:136 diamond.cpp:140
+msgid "voltage"
+msgstr ""
+
+#: diamond.cpp:136 diamond.cpp:140
+msgid "Voltage V"
+msgstr "Spannung,V"
+
+#: diamond.cpp:136 diamond.cpp:140
+msgid "-10;10"
+msgstr ""
+
+#: diamond.cpp:137 diamond.cpp:395 diamond.cpp:436
+msgid "code"
+msgstr ""
+
+#: diamond.cpp:137
+msgid "A/D code"
+msgstr "A/D Kode"
+
+#: diamond.cpp:142 diamond.cpp:144
+msgid "Value"
+msgstr "Bedeutung"
+
+#: diamond.cpp:159
+msgid "DiamPrmA_"
+msgstr ""
+
+#: diamond.cpp:160
+msgid "DiamPrmD_"
+msgstr ""
+
+#: diamond.cpp:194
+msgid "DSC driver is not initialized!"
+msgstr "DSC-Driver ist nicht inizialisiert!"
+
+#: diamond.cpp:211
+#, c-format
+msgid "dscInitBoard %d(%xh) error: %s %s"
+msgstr "Fehler dscInitBoard %d(%xh): %s %s"
+
+#: diamond.cpp:219
+#, c-format
+msgid "dscDIOSetConfig error: %s %s"
+msgstr "Fehler dscDIOSetConfig: %s %s"
+
+#: diamond.cpp:237
+msgid "addsc_task_start"
+msgstr ""
+
+#: diamond.cpp:238
+msgid "AD DSC driver task is not started!"
+msgstr "Aufgabe der Befragung der Analogparameter des DSC-Drivers ist nicht aktiviert!"
+
+#: diamond.cpp:249
+msgid "addsc_task_stop"
+msgstr ""
+
+#: diamond.cpp:250
+msgid "AD DSC task is not stopped!"
+msgstr "Aufgabe der Befragung der Analogparameter DSC ist nicht gestoppt!"
+
+#: diamond.cpp:298
+#, c-format
+msgid "Thread <%u> is started. TID: %ld"
+msgstr ""
+
+#: diamond.cpp:338 diamond.cpp:703
+#, c-format
+msgid "dscADSetSettings error: %s %s"
+msgstr "Fehler dscADSetSettings: %s %s"
+
+#: diamond.cpp:362
+#, c-format
+msgid "dscADScanInt error: %s %s"
+msgstr "Fehler dscADScanInt: %s %s"
+
+#: diamond.cpp:380
+msgid "DSC card's counter run from system time is corrected."
+msgstr ""
+
+#: diamond.cpp:460
+#, c-format
+msgid "%s"
+msgstr ""
+
+#: diamond.cpp:461
+msgid "AD DSC task error."
+msgstr "Fehler in der Aufgabe DSC."
+
+#: diamond.cpp:478
+msgid "info"
+msgstr ""
+
+#: diamond.cpp:481 diamond.cpp:482
+msgid "area"
+msgstr ""
+
+#: diamond.cpp:481
+msgid "/board"
+msgstr ""
+
+#: diamond.cpp:481
+msgid "Board config"
+msgstr "Konfiguration der Platte"
+
+#: diamond.cpp:482
+msgid "/board/dio"
+msgstr ""
+
+#: diamond.cpp:482
+msgid "Digital IO ports. Select input!"
+msgstr "Diskrete IO-Porte. Eingaenge sind gewaehlt!"
+
+#: diamond.cpp:484 diamond.cpp:485 diamond.cpp:486 diamond.cpp:487
+msgid "fld"
+msgstr ""
+
+#: diamond.cpp:484
+msgid "/board/dio/a"
+msgstr ""
+
+#: diamond.cpp:484
+msgid "Port A"
+msgstr "Port A"
+
+#: diamond.cpp:484 diamond.cpp:485 diamond.cpp:486 diamond.cpp:487
+#: diamond.cpp:496 diamond.cpp:506
+msgid "root"
+msgstr ""
+
+#: diamond.cpp:484 diamond.cpp:485 diamond.cpp:486 diamond.cpp:487
+msgid "tp"
+msgstr ""
+
+#: diamond.cpp:484 diamond.cpp:485 diamond.cpp:486 diamond.cpp:487
+msgid "bool"
+msgstr ""
+
+#: diamond.cpp:485
+msgid "/board/dio/b"
+msgstr ""
+
+#: diamond.cpp:485
+msgid "Port B"
+msgstr "Port B"
+
+#: diamond.cpp:486
+msgid "/board/dio/c1"
+msgstr ""
+
+#: diamond.cpp:486
+msgid "Port C1"
+msgstr "Port C1"
+
+#: diamond.cpp:487
+msgid "/board/dio/c2"
+msgstr ""
+
+#: diamond.cpp:487
+msgid "Port C2"
+msgstr "Port C2"
+
+#: diamond.cpp:493 diamond.cpp:623
+msgid "path"
+msgstr ""
+
+#: diamond.cpp:494
+msgid "/board/dio/"
+msgstr ""
+
+#: diamond.cpp:496
+msgid "get"
+msgstr ""
+
+#: diamond.cpp:500 diamond.cpp:510
+msgid "a"
+msgstr ""
+
+#: diamond.cpp:501 diamond.cpp:511
+msgid "b"
+msgstr ""
+
+#: diamond.cpp:502 diamond.cpp:512
+msgid "c1"
+msgstr ""
+
+#: diamond.cpp:503 diamond.cpp:513
+msgid "c2"
+msgstr ""
+
+#: diamond.cpp:506 diamond.cpp:622
+msgid "set"
+msgstr ""
+
+#: diamond.cpp:623
+#, c-format
+msgid "/%2fserv%2fattr"
+msgstr ""
+
+#: diamond.cpp:623
+msgid "el"
+msgstr ""
+
+#: diamond.cpp:623
+msgid "id"
+msgstr ""
+
+#: diamond.cpp:647
+#, c-format
+msgid "dscDAConvert error: %s %s"
+msgstr "Fehler dscDAConvert: %s %s"
+
+#: diamond.cpp:661
+#, c-format
+msgid "dscDIOOutputBit error: %s %s"
+msgstr "Fehler dscDIOOutputBit: %s %s"
+
+#: diamond.cpp:674
+msgid "2:Controller is stoped"
+msgstr "2:Controller ist gestoppt"
+
+#: diamond.cpp:676
+msgid "1:Parameter is disabled"
+msgstr "1:Parameter ist disaktiviert"
+
+#: diamond.cpp:710
+#, c-format
+msgid "dscADSample error: %s %s"
+msgstr "Fehler dscADSample: %s %s"
+
+#: diamond.cpp:739
+#, c-format
+msgid "dscDIOInputBit error: %s %s"
+msgstr "Fehler dscDIOInputBit: %s %s"
+
+#: dscud.h:431
+msgid "NO ERRORS REPORTED"
+msgstr ""
+
+#: dscud.h:432
+msgid "HARDWARE FAILURE"
+msgstr ""
+
+#: dscud.h:433
+msgid "SOFTWARE FAILURE"
+msgstr ""
+
+#: dscud.h:434
+msgid "OPERATION NOT SUPPORTED BY HARDWARE"
+msgstr ""
+
+#: dscud.h:435
+msgid "OPERATION NOT SUPPORTED BY SOFTWARE"
+msgstr ""
+
+#: dscud.h:436
+msgid "INVALID PARAMETER"
+msgstr ""
+
+#: dscud.h:437
+msgid "ALTERNATE INTERRUPT OPERATION IN PROGRESS"
+msgstr ""
+
+#: dscud.h:438
+msgid "NO INTERRUPT OPERATION IN PROGRESS"
+msgstr ""
+
+#: dscud.h:439
+msgid "POINTER + SIZE OF DATA OVERRUN BUFFER"
+msgstr ""
+
+#: dscud.h:440
+msgid "INVALID ERROR CODE, PLEASE IGNORE"
+msgstr ""
+
+#: dscud.h:441
+msgid "OPERATION ALREADY PAUSED"
+msgstr ""
+
+#: dscud.h:442
+msgid "AM9513A COUNTER FUNCTION OVERFLOWED OR BUFFER OVERFLOW"
+msgstr ""
+
+#: dscud.h:443
+msgid "INVALID FUNCTION FOR SELECTED BOARD"
+msgstr ""
+
+#: dscud.h:444
+msgid "LIBRARY HEADER VERSION MISMATCH"
+msgstr ""
+
+#: dscud.h:445
+msgid "INVALID BOARD TYPE SPECIFIED"
+msgstr ""
+
+#: dscud.h:446
+msgid "MAXIMUM NUMBER OF BOARDS REACHED"
+msgstr ""
+
+#: dscud.h:447
+msgid "ATTEMPT TO ACQUIRE BOARD TIMED OUT"
+msgstr ""
+
+#: dscud.h:448
+msgid "INVALID WINDRIVER HANDLE RETURNED"
+msgstr ""
+
+#: dscud.h:449
+msgid "INVALID WINDRIVER VERSION"
+msgstr ""
+
+#: dscud.h:450
+msgid "WINDRIVER BOARD INITIALIZATION FAILURE"
+msgstr ""
+
+#: dscud.h:451
+msgid "OPERATION TIMED OUT"
+msgstr ""
+
+#: dscud.h:452
+msgid "KERNEL PLUGIN INITIALIZATION FAILURE"
+msgstr ""
+
+#: dscud.h:453
+msgid "THREAD INITIALIZATION FAILURE"
+msgstr ""
+
+#: dscud.h:454
+msgid "MUTEX CREATION OR LOCKING OPERATION FAILED"
+msgstr ""
