@@ -649,7 +649,7 @@ bool TWEB::getVal( SSess &ses, XMLNode &node, string a_path, bool rd )
     {
 	if( wr ) ses.page = ses.page+"<form action='"+path+"' method='post' enctype='multipart/form-data'>\n";
 
-	XMLNode req("get"); 
+	XMLNode req("get");
 	req.setAttr("path",ses.url+"/"+TSYS::strEncode( a_path, TSYS::PathEl ))->
 	    setAttr("user",ses.user);
 	if(cntrIfCmd(req)) ses.mess.push_back(req.text().c_str());
@@ -663,7 +663,7 @@ bool TWEB::getVal( SSess &ses, XMLNode &node, string a_path, bool rd )
 	{
 	    XMLNode *t_lsel = req.childGet(i_cl);
 	    XMLNode *t_linf = node.childGet("id",t_lsel->attr("id"),true);
-	    if(!t_linf) continue;
+	    if( !t_linf ) { t_linf = node.childIns(i_cl); *t_linf = *t_lsel; }
 
 	    ses.page = ses.page + "<td>"+TSYS::strEncode(t_linf->attr("dscr"),TSYS::Html)+"</td>";
 	    //-- Calc column sizes --
@@ -679,7 +679,7 @@ bool TWEB::getVal( SSess &ses, XMLNode &node, string a_path, bool rd )
 	if( wr ) ses.page = ses.page + "<td bgcolor='Green'>*</td>";
 	ses.page = ses.page + "</tr>\n";
 
-	for( int i_rw=0; i_rw < req.childGet(0)->childSize(); i_rw++)
+	for( int i_rw=0; req.childSize() && i_rw < req.childGet(0)->childSize(); i_rw++)
 	{
 	    ses.page = ses.page + "<tr bgcolor='#cccccc'>";
 	    for( int i_cl=0; i_cl < req.childSize(); i_cl++)

@@ -716,6 +716,12 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,1,"/tbls",_("Tables"),0444))
 	    ctrMkNode("list",opt,-1,"/tbls/otbl",_("Opened tables"),0664,"root","BD",4,
 		"tp","br","s_com","add,del","br_pref","tbl_","help",_("Opened table list.\nAdding and deleting tables operations are really open and close tables operations."));
+	if( enableStat( ) && ctrMkNode("area",opt,-1,"/sql",_("SQL"),R_R___,"root","BD") )
+	{
+	    ctrMkNode("fld",opt,-1,"/sql/req",_("Request"),RWRW__,"root","BD",3,"tp","str","cols","100","rows","5");
+	    ctrMkNode("comm",opt,-1,"/sql/send",_("Send"),RWRW__,"root","BD");
+	    ctrMkNode("table",opt,-1,"/sql/tbl",_("Result"),R_R___,"root","BD");
+	}
 	return;
     }
 
@@ -786,6 +792,21 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"add",0664,"root","BD",SEQ_WR) )	open(opt->text(),true);
 	if( ctrChkNode(opt,"del",0664,"root","BD",SEQ_WR) )	close(opt->text());
     }
+    else if( a_path == "/sql/req" )
+    {
+	if( ctrChkNode(opt,"get",RWRW__,"root","BD") )	opt->setText(userSQLReq);
+	if( ctrChkNode(opt,"set",RWRW__,"root","BD") )	userSQLReq = opt->text();
+    }
+    else if( a_path == "/sql/send" && enableStat( ) && ctrChkNode(opt,"set",RWRW__,"root","BD",SEQ_WR) )
+	sqlReq(userSQLReq,&userSQLResTbl);
+    else if( a_path == "/sql/tbl" && ctrChkNode(opt,"get",R_R___,"root","BD",SEQ_RD) )
+	for( int i_r = 0; i_r < userSQLResTbl.size(); i_r++ )
+	    for( int i_c = 0; i_c < userSQLResTbl[i_r].size(); i_c++ )
+	    {
+		if( i_r == 0 )
+		    ctrMkNode("list",opt,i_c,("/sql/tbl/"+userSQLResTbl[0][i_c]).c_str(),userSQLResTbl[0][i_c],R_R___,"root","BD",1,"tp","str");
+		else opt->childGet(i_c)->childAdd("el")->setText(userSQLResTbl[i_r][i_c]);
+	    }
     else TCntrNode::cntrCmdProc(opt);
 }
 

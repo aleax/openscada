@@ -23,6 +23,7 @@
 #include <string>
 #include <mysql/mysql.h>
 #include <mysql/errmsg.h>
+#include <mysql/mysqld_error.h>
 
 #include <tsys.h>
 #include <tmess.h>
@@ -222,6 +223,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
     ResAlloc resource(conn_res,true);
 
     int irez;
+    rep:
     if( irez = mysql_real_query(&connect,req.c_str(),req.size()) )
     {
 	if( irez == CR_SERVER_GONE_ERROR || irez == CR_SERVER_LOST )
@@ -234,6 +236,13 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
 	}
 	if( irez )
 	{
+	    if( mysql_errno(&connect) == ER_NO_DB_ERROR )
+	    {
+		resource.release();
+		sqlReq("USE `"+TSYS::strEncode(bd,TSYS::SQL)+"`");
+		resource.request(true);
+		goto rep;
+	    }
 	    //mess_debug(nodePath().c_str(),_("Query <%s> is error."),ireq.c_str());
 	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("Query to DB error %d: %s"),irez,mysql_error(&connect));
 	}
@@ -249,7 +258,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
 
 	vector<string> fld;
 	//- Add head -
-	for(int i=0; i < num_fields; i++)
+	for( int i=0; i < num_fields; i++ )
 	    fld.push_back(mysql_fetch_field_direct(res,i)->name);
 	tbl->push_back(fld);
 	//- Add data -

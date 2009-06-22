@@ -1060,19 +1060,19 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	    if( cntrIfCmd(req) ) mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this);
 	    else
 	    {
+		//>>>> Collumns adjusting flag
+		bool adjCol = widget || !tbl->rowCount();
+
 		//>>>> Copy values to info tree
 		for( int i_col = 0; i_col < req.childSize(); i_col++ )
 		{
 		    XMLNode *t_lsel = req.childGet(i_col);
 		    XMLNode *t_linf = t_s.childGet("id",t_lsel->attr("id"),true);
-		    if( !t_linf ) continue;
+		    if( !t_linf ) { t_linf = t_s.childIns(i_col); *t_linf = *t_lsel; adjCol = true; }
 		    t_linf->childClear();
 		    for( int i_rw = 0; i_rw < t_lsel->childSize(); i_rw++ )
 			*t_linf->childAdd() = *t_lsel->childGet(i_rw);
 		}
-
-		//>>>> Collumns adjusting flag
-		bool adjCol = widget || !tbl->rowCount();
 
 		//>>>> Calc rows and columns
 		int n_col = t_s.childSize();
@@ -1166,7 +1166,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 			else thd_it->setFlags(Qt::ItemIsEnabled|Qt::ItemIsEditable);
 		    }
 		}
-		if(adjCol)
+		if( adjCol && tbl->columnCount() )
 		{
 		    tbl->resizeColumnsToContents();
 

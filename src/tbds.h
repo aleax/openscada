@@ -158,8 +158,12 @@ class TBD : public TCntrNode, public TConfig
 	bool	&mToEn;
 
 	bool	mEn;
+
 	//> Special options
 	int	mTbl;
+
+	string	userSQLReq;
+	vector< vector<string> >	userSQLResTbl;
 };
 
 //************************************************

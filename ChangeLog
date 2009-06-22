@@ -1,3 +1,10 @@
+2009-06-22 Roman
+- !!:/DAQ/SoundCard, /DAQ/Siemens, /DAQ/SNMP: Interface translation to German is added by Irina Popkova.
+- !!:/DB: SQL-requets sending tab is added to configuration page of DB.
+- FIX:/DB/MySQL: "USE" command is used for not full table address requests.
+- !!:/UI/QTCfg, /UI/WebCfg, /UI/WebCfgD: Full dynamic structured tables support is added.
+
+
 2009-06-19 Roman
 - !!:/DAQ/LogicLev, /DAQ/DAQGate, /DAQ/DiamondBoards, /DAQ/ModBus: Interface translation to German is added by Irina Popkova.
 - /SYS: Init-file for OpenSCADA start as daemon is disabled for default and RPM-build spec file is updated for it.

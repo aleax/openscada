@@ -789,17 +789,25 @@ function selectChildRecArea( node, aPath, cBlk )
 
 	//>>>> Copy values to info tree
 	for( var i_cl = 0; i_cl < dataReq.childNodes.length; i_cl++ )
-	  for( var i_cli = 0; i_cli < t_s.childNodes.length; i_cli++ )
-	    if( dataReq.childNodes[i_cl].getAttribute('id') == t_s.childNodes[i_cli].getAttribute('id') )
-	    {
-	      while( t_s.childNodes[i_cli].lastChild ) t_s.childNodes[i_cli].removeChild(t_s.childNodes[i_cli].lastChild);
-	      for( var i_rw = 0; i_rw < dataReq.childNodes[i_cl].childNodes.length; i_rw++ )
-	      {
-		var el = t_s.ownerDocument.createElement(dataReq.childNodes[i_cl].childNodes[i_rw].nodeName);
-		setNodeText(el,nodeText(dataReq.childNodes[i_cl].childNodes[i_rw]))
-		t_s.childNodes[i_cli].appendChild(el);
-	      }
-	    }
+	{
+	  var i_cli;
+	  for( i_cli = 0; i_cli < t_s.childNodes.length; i_cli++ )
+	    if( dataReq.childNodes[i_cl].getAttribute('id') == t_s.childNodes[i_cli].getAttribute('id') ) break;
+	  if( i_cli == t_s.childNodes.length )
+	  {
+	    var el = t_s.ownerDocument.createElement(dataReq.childNodes[i_cl].nodeName);
+	    for( var i_a = 0; i_a < dataReq.childNodes[i_cl].attributes.length; i_a++ )
+		el.setAttribute(dataReq.childNodes[i_cl].attributes[i_a].name,dataReq.childNodes[i_cl].attributes[i_a].value);
+	    t_s.appendChild(el);
+	  }
+	  while( t_s.childNodes[i_cli].lastChild ) t_s.childNodes[i_cli].removeChild(t_s.childNodes[i_cli].lastChild);
+	  for( var i_rw = 0; i_rw < dataReq.childNodes[i_cl].childNodes.length; i_rw++ )
+	  {
+	    var el = t_s.ownerDocument.createElement(dataReq.childNodes[i_cl].childNodes[i_rw].nodeName);
+	    setNodeText(el,nodeText(dataReq.childNodes[i_cl].childNodes[i_rw]))
+	    t_s.childNodes[i_cli].appendChild(el);
+	  }
+	}
 	//>>>> Calc rows and columns
 	var n_col = t_s.childNodes.length;
 	var n_row = n_col ? t_s.childNodes[0].childNodes.length : 0;

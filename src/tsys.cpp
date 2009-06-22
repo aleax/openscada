@@ -444,11 +444,12 @@ void TSYS::sighandler( int signal )
 	    SYS->mStopSignal=signal;
 	    break;
 	case SIGTERM:
-            mess_warning(SYS->nodePath().c_str(),_("The Terminate signal is received.. Server is being stoped!"));
+	    mess_warning(SYS->nodePath().c_str(),_("The Terminate signal is received.. Server is being stoped!"));
 	    SYS->mStopSignal=signal;
 	    break;
 	case SIGFPE:
-            mess_warning(SYS->nodePath().c_str(),_("Floating point exception is catched!"));
+	    mess_warning(SYS->nodePath().c_str(),_("Floating point exception is catched!"));
+            exit(1);
 	    break;
 	case SIGCHLD:
 	{
