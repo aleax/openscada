@@ -1,7 +1,7 @@
-# OpenSCADA.DAQ.JavaLikeCalc translate to Ukrainian.
-# Copyright (C) 2005-2009 Roman Savochenko
-# This file is distributed under the same license as the OpenSCADA.DAQ.JavaLikeCalc module.
-# Roman Savochenko <rom_as@fromru.com>, 2005-2009.
+# OpenSCADA.DAQ.JavaLikeCalc translate to German.
+# Copyright (C) 2009 Irina Popkova
+# This file is distributed under the same license as the OpenSCADA.DAQ.JavaLikeCalc package module.
+# Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 #
 #: freefunc.cpp:151 freefunc.cpp:155 freefunc.cpp:264 freefunc.cpp:302
 #: freefunc.cpp:304 freefunc.cpp:311 freefunc.cpp:1604 freefunc.cpp:1605
@@ -18,8 +18,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-25 17:46+0300\n"
 "PO-Revision-Date: 2007-10-28 10:40+0200\n"
-"Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
-"Language-Team: <uk@li.org>\n"
+"Last-Translator: Irina Popkova <irischkapopkova@yandex.ru>\n"
+"Language-Team: <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
@@ -100,35 +100,35 @@ msgstr ""
 #: func_analise.ypp:198 func_analise.ypp:208 func_analise.ypp:218
 #, c-format
 msgid "Variable <%s> is used but undefined"
-msgstr "Змінна <%s> не визначена але використана"
+msgstr "Die Variable <%s> ist nicht bestimmt doch angewandt"
 
 #: freefunc.cpp:560
 #, c-format
 msgid "Operation %d don't support bool type"
-msgstr "Операція %d не підтримує логічного типу"
+msgstr "Operation %d untersuetzt den logischen Typ nicht"
 
 #: freefunc.cpp:581 freefunc.cpp:749
 #, c-format
 msgid "Operation %d don't support string type"
-msgstr "Операція %d не підтримує строкового типу"
+msgstr "Die Operation %d unterstuetzt den Zeilentyp nicht"
 
 #: freefunc.cpp:906
 msgid "Buildin functions don't support string type"
-msgstr "Вбудовані функції не підтримують строкового типу"
+msgstr "Installierte Funktionen unterstuetzen den Zeilentyp nicht."
 
 #: freefunc.cpp:939
 #, c-format
 msgid "More than %d parameters are specified for function <%s>"
-msgstr "Вказано більш %d параметрів для функції <%s>"
+msgstr "Angegeben mehr %d Parameter fuer die Funktion <%s>"
 
 #: freefunc.cpp:943
 #, c-format
 msgid "Function is requested <%s>, but it doesn't have return of IO"
-msgstr "Викликано функцію <%s>, але вона не має IO-повернення"
+msgstr "Funktion ist ausgerufen <%s>, aber sie hat keinen IO Ruecklauf"
 
 #: freefunc.cpp:1117
 msgid "Timeouted function calc."
-msgstr "Перевищено час обчислення функції."
+msgstr "Zeitgrenze der Berechnung der Funktion ist erreicht."
 
 #: freefunc.cpp:1130
 #, c-format
@@ -437,7 +437,7 @@ msgstr ""
 #: freefunc.cpp:1556
 #, c-format
 msgid "Operation %c(%xh) error. Function <%s> is stoped."
-msgstr "Помилка операції %c(%xh). Функція <%s> зупинена."
+msgstr "Fehler der Operation %c(%xh). Funktion <%s> ist gestoppt."
 
 #: freefunc.cpp:1564 freelib.cpp:155 virtual.cpp:302 virtual.cpp:600
 msgid "info"
@@ -453,7 +453,7 @@ msgstr ""
 
 #: freefunc.cpp:1567
 msgid "Function: "
-msgstr "Функція: "
+msgstr "Funktion: "
 
 #: freefunc.cpp:1567 freefunc.cpp:1568 freefunc.cpp:1569 freefunc.cpp:1570
 #: freefunc.cpp:1573 freefunc.cpp:1575 freefunc.cpp:1576 freefunc.cpp:1577
@@ -488,7 +488,7 @@ msgstr ""
 #: freefunc.cpp:1568 freefunc.cpp:1576 freelib.cpp:173 virtual.cpp:112
 #: virtual.cpp:118 virtual.cpp:126 virtual.cpp:609
 msgid "Name"
-msgstr "Ім'я"
+msgstr "Name"
 
 #: freefunc.cpp:1568 freefunc.cpp:1569 freefunc.cpp:1570 freefunc.cpp:1575
 #: freefunc.cpp:1576 freefunc.cpp:1577 freefunc.cpp:1580 freefunc.cpp:1583
@@ -521,7 +521,7 @@ msgstr ""
 
 #: freefunc.cpp:1569 freelib.cpp:174 virtual.cpp:113 virtual.cpp:119
 msgid "Description"
-msgstr "Опис"
+msgstr "Beschreibung"
 
 #: freefunc.cpp:1569 freelib.cpp:174 virtual.cpp:618
 msgid "cols"
@@ -546,7 +546,7 @@ msgstr ""
 
 #: freefunc.cpp:1570
 msgid "Maximum calc time (sec)"
-msgstr "Максимальний час обрахунку (сек)"
+msgstr "Maximale Zeit der Berechnung (sek)"
 
 #: freefunc.cpp:1570 freefunc.cpp:1577 freefunc.cpp:1580 virtual.cpp:610
 #: virtual.cpp:613
@@ -564,7 +564,7 @@ msgstr ""
 
 #: freefunc.cpp:1571 freefunc.cpp:1586 virtual.cpp:618
 msgid "Programm"
-msgstr "Програма"
+msgstr "Programm"
 
 #: freefunc.cpp:1573 virtual.cpp:606
 msgid "table"
@@ -613,7 +613,7 @@ msgstr ""
 
 #: freefunc.cpp:1577 virtual.cpp:127 virtual.cpp:610
 msgid "Type"
-msgstr "Тип"
+msgstr "Typ"
 
 #: freefunc.cpp:1577 freefunc.cpp:1580 freelib.cpp:160 freelib.cpp:178
 #: virtual.cpp:305 virtual.cpp:307 virtual.cpp:610 virtual.cpp:613
@@ -652,7 +652,7 @@ msgstr ""
 
 #: freefunc.cpp:1579 virtual.cpp:612
 msgid "Real;Integer;Boolean;String"
-msgstr "Реальний;Цілий;Логічний;Строка"
+msgstr "Real;Integer;Logisch;Zeile"
 
 #: freefunc.cpp:1580 freefunc.cpp:1607
 msgid "/io/io/3"
@@ -660,11 +660,11 @@ msgstr ""
 
 #: freefunc.cpp:1580 virtual.cpp:128 virtual.cpp:613
 msgid "Mode"
-msgstr "Режим"
+msgstr "Mode"
 
 #: freefunc.cpp:1582 virtual.cpp:615
 msgid "Input;Output;Return"
-msgstr "Вхід;Вихід;Повернення"
+msgstr "Eingang;Ausgang;Ruecksprung"
 
 #: freefunc.cpp:1583 freefunc.cpp:1608
 msgid "/io/io/4"
@@ -672,7 +672,7 @@ msgstr ""
 
 #: freefunc.cpp:1583 virtual.cpp:130
 msgid "Hide"
-msgstr "Прихов."
+msgstr "Verborgen"
 
 #: freefunc.cpp:1583 freelib.cpp:165
 msgid "bool"
@@ -684,7 +684,7 @@ msgstr ""
 
 #: freefunc.cpp:1584
 msgid "Default"
-msgstr "Замовч."
+msgstr "Default"
 
 #: freefunc.cpp:1586 freefunc.cpp:1639
 msgid "/io/prog"
@@ -736,7 +736,7 @@ msgstr ""
 
 #: freefunc.cpp:1620 freefunc.cpp:1621 virtual.cpp:667 virtual.cpp:669
 msgid "New IO"
-msgstr "Нове IO"
+msgstr "Neu IO"
 
 #: freefunc.cpp:1621 virtual.cpp:668
 msgid "ins"
@@ -765,7 +765,7 @@ msgstr ""
 
 #: freefunc.cpp:1629 virtual.cpp:685
 msgid "Empty value is not valid."
-msgstr "Порожнє значення не припустиме."
+msgstr "Leere Bedeutung ist unzulaessig."
 
 #: freelib.cpp:36 virtual.cpp:114
 msgid "DB"
@@ -785,7 +785,7 @@ msgstr ""
 
 #: freelib.cpp:158
 msgid "Function's library: "
-msgstr "Бібліотека функцій: "
+msgstr "Funktionenbibliothek: "
 
 #: freelib.cpp:159
 msgid "branches"
@@ -805,7 +805,7 @@ msgstr ""
 
 #: freelib.cpp:160
 msgid "Function"
-msgstr "Функція"
+msgstr "Funktion"
 
 #: freelib.cpp:160 freelib.cpp:178 virtual.cpp:305 virtual.cpp:307
 msgid "idSz"
@@ -823,7 +823,7 @@ msgstr ""
 
 #: freelib.cpp:161 virtual.cpp:305
 msgid "Library"
-msgstr "Бібліотека"
+msgstr "Bibliothek"
 
 #: freelib.cpp:163
 msgid "/lib/st"
@@ -831,7 +831,7 @@ msgstr ""
 
 #: freelib.cpp:163
 msgid "State"
-msgstr "Стан"
+msgstr "Zustand"
 
 #: freelib.cpp:165 freelib.cpp:184
 msgid "/lib/st/st"
@@ -839,7 +839,7 @@ msgstr ""
 
 #: freelib.cpp:165
 msgid "Accessing"
-msgstr "Доступно"
+msgstr "Erreichbar"
 
 #: freelib.cpp:167 freelib.cpp:189
 msgid "/lib/st/db"
@@ -847,7 +847,7 @@ msgstr ""
 
 #: freelib.cpp:167
 msgid "Library DB"
-msgstr "БД бібліотеки"
+msgstr "DB der Bibliothek"
 
 #: freelib.cpp:167 virtual.cpp:603
 msgid "sel_ed"
@@ -873,7 +873,7 @@ msgstr ""
 
 #: freelib.cpp:170
 msgid "Config"
-msgstr "Конфігурація"
+msgstr "Konfiguration"
 
 #: freelib.cpp:172 freelib.cpp:194
 msgid "/lib/cfg/id"
@@ -893,7 +893,7 @@ msgstr ""
 
 #: freelib.cpp:177 freelib.cpp:178
 msgid "Functions"
-msgstr "Функції"
+msgstr "Funktionen"
 
 #: freelib.cpp:178 freelib.cpp:205
 msgid "/func/func"
@@ -927,7 +927,7 @@ msgstr ""
 
 #: virtual.cpp:37
 msgid "Java-like based calculator"
-msgstr "Обчислювач на мові схожій на Java"
+msgstr "Berechner auf java-aehnlicher Sprache"
 
 #: virtual.cpp:38 virtual.cpp:584 virtual.cpp:587
 msgid "DAQ"
@@ -943,15 +943,16 @@ msgstr ""
 
 #: virtual.cpp:42
 msgid "Roman Savochenko"
-msgstr "Роман Савоченко"
+msgstr "Roman Savotschenko"
 
 #: virtual.cpp:43
 msgid ""
 "Allow java-like based calculator and function's libraries engine. User can "
 "create and modify function and libraries."
 msgstr ""
-"Надає базовані на мові схожій на Java обчислювач та движок бібліотек функцї. "
-"Користувач може створювати та модифікувати функції та бібліотеки."
+"Gewaehrt die auf java-aehnlicher Sprache begruendeten Berechner und Laufer "
+"der Bibliotheken. Der Nutzer kann schaffen und modifizieren Funktionen "
+"undBibliotheken."
 
 #: virtual.cpp:44
 msgid "GPL"
@@ -971,7 +972,7 @@ msgstr ""
 
 #: virtual.cpp:96
 msgid "Parameters table"
-msgstr "Таблиця параметрів"
+msgstr "Tabelle der Parameter"
 
 #: virtual.cpp:96
 msgid "60"
@@ -987,7 +988,7 @@ msgstr ""
 
 #: virtual.cpp:97
 msgid "Controller's function"
-msgstr "Функція контролера"
+msgstr "Fnktion des Controllers"
 
 #: virtual.cpp:97
 msgid "40"
@@ -999,7 +1000,7 @@ msgstr ""
 
 #: virtual.cpp:98
 msgid "Calc period (ms)"
-msgstr "Період обрахування (мс)"
+msgstr "Zei der Berechnung (ms)"
 
 #: virtual.cpp:98
 msgid "7"
@@ -1019,7 +1020,7 @@ msgstr ""
 
 #: virtual.cpp:99
 msgid "Calc task priority"
-msgstr "Пріорітет задачі обчислення"
+msgstr "Prioritaet der Berechnungsaufgabe"
 
 #: virtual.cpp:99 virtual.cpp:100
 msgid "2"
@@ -1035,7 +1036,7 @@ msgstr ""
 
 #: virtual.cpp:100
 msgid "Iteration number in the calc period"
-msgstr "Кількість ітерацій у періоді"
+msgstr "Iterationenzahl in der Periode"
 
 #: virtual.cpp:100
 msgid "0;99"
@@ -1051,7 +1052,7 @@ msgstr ""
 
 #: virtual.cpp:104
 msgid "IO value"
-msgstr "Значення IO"
+msgstr "Bedeutung IO"
 
 #: virtual.cpp:107
 msgid "std"
@@ -1059,7 +1060,7 @@ msgstr ""
 
 #: virtual.cpp:107
 msgid "Standard"
-msgstr "Стандартний"
+msgstr "Standard"
 
 #: virtual.cpp:108 virtual.cpp:739 virtual.cpp:769
 msgid "FLD"
@@ -1067,7 +1068,7 @@ msgstr ""
 
 #: virtual.cpp:108
 msgid "Data fields(Sep - ';')"
-msgstr "Поля даних(Розд. - ';')"
+msgstr "Datenfelder(Teil - ';')"
 
 #: virtual.cpp:113 virtual.cpp:119
 msgid "300"
@@ -1075,7 +1076,7 @@ msgstr ""
 
 #: virtual.cpp:114
 msgid "Data base"
-msgstr "База даних"
+msgstr "Datenbase"
 
 #: virtual.cpp:114
 msgid "30"
@@ -1083,7 +1084,7 @@ msgstr ""
 
 #: virtual.cpp:120
 msgid "Maximum calc time"
-msgstr "Максимальний час обчислення"
+msgstr "Maximale Zeit der Berechnung"
 
 #: virtual.cpp:120 virtual.cpp:131
 msgid "3"
@@ -1095,7 +1096,7 @@ msgstr ""
 
 #: virtual.cpp:121
 msgid "Formula"
-msgstr "Формула"
+msgstr "Formel"
 
 #: virtual.cpp:121
 msgid "10000"
@@ -1103,15 +1104,15 @@ msgstr ""
 
 #: virtual.cpp:124
 msgid "Function ID"
-msgstr "ID функції"
+msgstr "ID Funktionen"
 
 #: virtual.cpp:129
 msgid "Default value"
-msgstr "Знач. по замовч."
+msgstr "Default Bedeutung"
 
 #: virtual.cpp:131
 msgid "Position"
-msgstr "Позиція"
+msgstr "Position"
 
 #: virtual.cpp:135
 msgid "pi"
@@ -1228,7 +1229,7 @@ msgstr ""
 #: virtual.cpp:181
 #, c-format
 msgid "Compilation with the help of the program language %s is not supported."
-msgstr "Компіляція на мові програмування %s не підтримується."
+msgstr "Kompilation auf der Programmierungssprache %s wird nicht unterstuetzt."
 
 #: virtual.cpp:182 virtual.cpp:183 virtual.cpp:185 virtual.cpp:199
 msgid "sys_compile"
@@ -1237,7 +1238,7 @@ msgstr ""
 #: virtual.cpp:201
 #, c-format
 msgid "Compile error: %s\n"
-msgstr "Помилка компіляції: %s\n"
+msgstr "Fehler der Kompilation: %s\n"
 
 #: virtual.cpp:211
 #, c-format
@@ -1246,8 +1247,10 @@ msgid ""
 "---------- Parameters of the module section <%s> in config file ----------\n"
 "\n"
 msgstr ""
-"========================= Опції модуля <%s:%s> ===========================\n"
-"---------- Параметри секції <%s> модуля у конфігураційному файлі ---------\n"
+"========================== Optionen des Moduls <%s:%s> "
+"==========================\n"
+"---------- Parameter der Sektion des Moduls <%s> in der Konfigurationsdatei "
+"---------\n"
 "\n"
 
 #: virtual.cpp:222
@@ -1264,7 +1267,7 @@ msgstr ""
 
 #: virtual.cpp:269
 msgid "Load function's libraries error."
-msgstr "Помилка завантаження бібліотеки функцій."
+msgstr "Fehler der Beladung der Funktionenbibliothek."
 
 #: virtual.cpp:305 virtual.cpp:313
 msgid "/br/lib_"
@@ -1276,7 +1279,7 @@ msgstr ""
 
 #: virtual.cpp:306
 msgid "Functions' Libraries"
-msgstr "Бібліотеки функцій"
+msgstr "Funktionenbibliothek"
 
 #: virtual.cpp:307 virtual.cpp:313
 msgid "/libs/lb"
@@ -1284,7 +1287,7 @@ msgstr ""
 
 #: virtual.cpp:307
 msgid "Libraries"
-msgstr "Бібліотеки"
+msgstr "Bibliotheken"
 
 #: virtual.cpp:351
 msgid "JavaLikePrm_"
@@ -1297,23 +1300,24 @@ msgstr ""
 #: virtual.cpp:381
 #, c-format
 msgid "Calc time %.6g mks. "
-msgstr "Час обрахунку %.6g мкс. "
+msgstr "Zeit der Berechnung %.6g mks. "
 
 #: virtual.cpp:390
 #, c-format
 msgid ""
 "Functions library <%s> is not present. Please, create functions library!"
 msgstr ""
-"Бібліотека функції <%s> відсутня. Будь ласка, створіть бібліотеку функцій!"
+"Funktionenbibliothek <%s> ist nicht vorhanden. Bitte, schaffen Sie eine "
+"Funktionenbibliothek!"
 
 #: virtual.cpp:393
 #, c-format
 msgid "Create new function <%s>."
-msgstr "Створення нової функції <%s>."
+msgstr "Schaffen eine neue Funktion <%s>."
 
 #: virtual.cpp:401
 msgid "Load function and its io error."
-msgstr "Помилка завантаження функції та її IO."
+msgstr "Fehler der Funktionbeladung und ihrer IO."
 
 #: virtual.cpp:424 virtual.cpp:528
 msgid "f_frq"
@@ -1321,7 +1325,7 @@ msgstr ""
 
 #: virtual.cpp:424
 msgid "Function calculate frequency (Hz)"
-msgstr ""
+msgstr "Frequenz der Funktionberechnung (Hz)"
 
 #: virtual.cpp:425 virtual.cpp:529
 msgid "f_start"
@@ -1329,7 +1333,7 @@ msgstr ""
 
 #: virtual.cpp:425
 msgid "Function start flag"
-msgstr "Прапорець запуску функції"
+msgstr "Flagge des Funktionstartes"
 
 #: virtual.cpp:426 virtual.cpp:530
 msgid "f_stop"
@@ -1337,7 +1341,7 @@ msgstr ""
 
 #: virtual.cpp:426
 msgid "Function stop flag"
-msgstr "Прапорець зупинки функції"
+msgstr "Flagge des Funktionstoppens"
 
 #: virtual.cpp:491
 msgid "start"
@@ -1345,7 +1349,7 @@ msgstr ""
 
 #: virtual.cpp:492
 msgid "Acquisition task is not started!"
-msgstr "Задачу збору не запущено!"
+msgstr "Erfassungsaufgabe ist nicht gestartet!"
 
 #: virtual.cpp:503
 msgid "stop"
@@ -1353,7 +1357,7 @@ msgstr ""
 
 #: virtual.cpp:504
 msgid "Acquisition task is not stopped!"
-msgstr "Задачу збору не зупинено!"
+msgstr "Erfassngsaufgabe ist nicht gestoppt!"
 
 #: virtual.cpp:514
 #, c-format
@@ -1362,7 +1366,7 @@ msgstr ""
 
 #: virtual.cpp:537
 msgid "Calc controller's function error."
-msgstr "Помилка обчислення функції контроллера."
+msgstr "Berechnungsfehler der Funktion des Controllers"
 
 #: virtual.cpp:558 virtual.cpp:565
 #, c-format
@@ -1399,7 +1403,7 @@ msgstr ""
 
 #: virtual.cpp:604
 msgid "Calcing"
-msgstr "Обчислення"
+msgstr "Berechnungen"
 
 #: virtual.cpp:606 virtual.cpp:647
 msgid "/fnc/io"
@@ -1407,7 +1411,7 @@ msgstr ""
 
 #: virtual.cpp:606
 msgid "Data"
-msgstr "Дані"
+msgstr "Daten"
 
 #: virtual.cpp:606
 msgid "15"
@@ -1435,7 +1439,7 @@ msgstr ""
 
 #: virtual.cpp:616
 msgid "Value"
-msgstr "Значення"
+msgstr "Bedeutung"
 
 #: virtual.cpp:618 virtual.cpp:700
 msgid "/fnc/prog"
@@ -1464,11 +1468,11 @@ msgstr ""
 
 #: virtual.cpp:830
 msgid "2:Controller is stoped"
-msgstr "2:Контролер зупинено!"
+msgstr "2:Controller ist gestoppt!"
 
 #: virtual.cpp:831
 msgid "1:Parameter is disabled"
-msgstr "1:Параметр вимкнено"
+msgstr "1:Parameter ist disaktiviert"
 
 #: virtual.h:164
 msgid "UserFuncLibs"
@@ -1546,7 +1550,7 @@ msgstr ""
 
 #: func_analise.ypp:448
 msgid "Using namespace is error or empty, "
-msgstr "Помилка площини найменувань або вона порожня, "
+msgstr "Fehler der Anwendung des Namenbereichs oder er ist leer, "
 
 #: func_analise.ypp:459 func_analise.ypp:462
 msgid "true"
@@ -1558,11 +1562,11 @@ msgstr ""
 
 #: func_analise.ypp:490
 msgid "Build in function have to mach parameters, "
-msgstr "Вбудована функція має дуже багато параметрів, "
+msgstr "Installierte Funktion hat zu viel Parameter, "
 
 #: func_analise.ypp:525
 msgid "Symbol error, "
-msgstr "Помилка символу, "
+msgstr "Fehler des Symbols, "
 
 #: func_analise.ypp:549
 msgid "++"

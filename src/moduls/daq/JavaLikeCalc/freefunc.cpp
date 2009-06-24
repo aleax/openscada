@@ -88,7 +88,7 @@ TCntrNode &Func::operator=( TCntrNode &node )
     *(TConfig *)this = *(TConfig*)src_n;
     *(TFunction *)this = *(TFunction*)src_n;
 
-    //- Set to DB -
+    //> Set to DB
     cfg("ID").setS(mId);
 
     if( src_n->startStat( ) && !startStat( ) )	setStart( true );
@@ -99,7 +99,7 @@ Func &Func::operator=(Func &func)
     *(TConfig *)this = (TConfig&)func;
     *(TFunction *)this = (TFunction&)func;
 
-    //- Set to DB -
+    //> Set to DB
     cfg("ID").setS(mId);
 }
 
@@ -178,7 +178,7 @@ void Func::save_( )
 
     SYS->db().at().dataSet(owner().fullDB(),mod->nodePath()+owner().tbl(),*this);
 
-    //- Save io config -
+    //> Save io config
     saveIO( );
 }
 
@@ -352,19 +352,20 @@ void Func::funcClear( )
 
 int Func::regNew( bool var )
 {
-    //- Get new register -
+    //> Get new register
     int i_rg = mRegs.size();
     if( !var )
 	for( i_rg = 0; i_rg < mRegs.size(); i_rg++ )
 	    if( !mRegs[i_rg]->lock() && mRegs[i_rg]->type() == Reg::Free )
 		break;
     if( i_rg >= mRegs.size() ) mRegs.push_back(new Reg(i_rg));
+
     return i_rg;
 }
 
 int Func::regGet( const char *nm )
 {
-    //- Check allow registers -
+    //> Check allow registers
     for( int i_rg = 0; i_rg < mRegs.size(); i_rg++ )
 	if( mRegs[i_rg]->name() == nm )
 	    return i_rg;
@@ -403,30 +404,31 @@ Reg *Func::cdMvi( Reg *op, bool no_code )
     *rez = *op;
     op->free();
     if( no_code ) return rez;
+    ui16 addr = rez->pos();
 
     switch(rez->type())
     {
 	case Reg::Free:
 	    throw TError(nodePath().c_str(),_("Variable <%s> is used but undefined"),rez->name().c_str());
 	case Reg::Bool:
-	    prg+=(BYTE)Reg::MviB;
-	    prg+=(BYTE)rez->pos();
-	    prg+=(BYTE)rez->val().b_el;
+	    prg+=(ui8)Reg::MviB;
+	    prg.append((char *)&addr,sizeof(ui16));
+	    prg+=(ui8)rez->val().b_el;
 	    break;
 	case Reg::Int:
-	    prg+=(BYTE)Reg::MviI;
-	    prg+=(BYTE)rez->pos();
-	    prg.append(((char *)&rez->val().i_el),sizeof(int));
+	    prg+=(ui8)Reg::MviI;
+	    prg.append((char *)&addr,sizeof(ui16));
+	    prg.append((char *)&rez->val().i_el,sizeof(int));
 	    break;
 	case Reg::Real:
-	    prg+=(BYTE)Reg::MviR;
-	    prg+=(BYTE)rez->pos();
-	    prg.append(((char *)&rez->val().r_el),sizeof(double));
+	    prg+=(ui8)Reg::MviR;
+	    prg.append((char *)&addr,sizeof(ui16));
+	    prg.append((char *)&rez->val().r_el,sizeof(double));
 	    break;
 	case Reg::String:
-	    prg+=(BYTE)Reg::MviS;
-	    prg+=(BYTE)rez->pos();
-	    prg+=(BYTE)rez->val().s_el->size();
+	    prg+=(ui8)Reg::MviS;
+	    prg.append((char *)&addr,sizeof(ui16));
+	    prg+=(ui8)rez->val().s_el->size();
 	    prg+= *rez->val().s_el;
 	    break;
     }
@@ -506,22 +508,24 @@ Reg *Func::cdTypeConv( Reg *op, Reg::Type tp, bool no_code )
 
 void Func::cdAssign( Reg *rez, Reg *op )
 {
+    ui16 addr;
     op = cdTypeConv(op,rez->vType(this));
     switch(rez->vType(this))
     {
-	case Reg::Bool:		prg+=(BYTE)Reg::AssB;	break;
-	case Reg::Int:		prg+=(BYTE)Reg::AssI;	break;
-	case Reg::Real:		prg+=(BYTE)Reg::AssR;	break;
-	case Reg::String:	prg+=(BYTE)Reg::AssS;	break;
+	case Reg::Bool:		prg += (ui8)Reg::AssB;	break;
+	case Reg::Int:		prg += (ui8)Reg::AssI;	break;
+	case Reg::Real:		prg += (ui8)Reg::AssR;	break;
+	case Reg::String:	prg += (ui8)Reg::AssS;	break;
     }
-    prg+=(BYTE)rez->pos();
-    prg+=(BYTE)op->pos();
-    //- Free temp operands -
+    addr = rez->pos(); prg.append((char*)&addr,sizeof(ui16));
+    addr = op->pos();  prg.append((char*)&addr,sizeof(ui16));
+    //> Free temp operands
     op->free();
 }
 
 Reg *Func::cdMove( Reg *rez, Reg *op )
 {
+    ui16 addr;
     Reg *rez_n=rez;
     op = cdMvi( op );
     if( rez_n == NULL ) rez_n = regAt(regNew());
@@ -529,15 +533,15 @@ Reg *Func::cdMove( Reg *rez, Reg *op )
     rez_n->setType(op->vType(this));
     switch(rez_n->vType(this))
     {
-        case Reg::Bool:         prg+=(BYTE)Reg::MovB;   break;
-        case Reg::Int:          prg+=(BYTE)Reg::MovI;   break;
-        case Reg::Real:         prg+=(BYTE)Reg::MovR;   break;
-        case Reg::String:       prg+=(BYTE)Reg::MovS;   break;
+        case Reg::Bool:		prg += (ui8)Reg::MovB;	break;
+        case Reg::Int:		prg += (ui8)Reg::MovI;	break;
+        case Reg::Real:		prg += (ui8)Reg::MovR;	break;
+        case Reg::String:	prg += (ui8)Reg::MovS;	break;
     }
-    prg+=(BYTE)rez_n->pos();
-    prg+=(BYTE)op->pos();
+    addr = rez_n->pos(); prg.append((char*)&addr,sizeof(ui16));
+    addr = op->pos();    prg.append((char*)&addr,sizeof(ui16));
 
-    //- Free temp operands -
+    //> Free temp operands
     op->free();
 
     return rez_n;
@@ -545,7 +549,7 @@ Reg *Func::cdMove( Reg *rez, Reg *op )
 
 Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 {
-    //- Check allowing type operations -
+    //> Check allowing type operations
     switch(op1->vType(this))
     {
 	case Reg::Bool:
@@ -579,7 +583,7 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 	    break;
     }
 
-    //- Check allow the buildin calc and calc -
+    //> Check allow the buildin calc and calc
     if( op1->pos() < 0 && op2->pos() < 0 )
     {
 	switch( cod )
@@ -653,8 +657,8 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 	return op1;
     }
 
-    //- Make operation cod -
-    //-- Prepare operands --
+    //> Make operation cod
+    //>> Prepare operands
     op1 = cdMvi( op1 );
     Reg::Type op1_tp = op1->vType(this);
     int op1_pos = op1->pos();
@@ -662,77 +666,78 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
     int op2_pos = op2->pos();
     op1->free();
     op2->free();
-    //-- Prepare rezult --
+    //>> Prepare rezult
     Reg *rez = regAt(regNew());
     rez->setType(op1_tp);
-    //-- Add code --
+    //>> Add code
     switch(op1_tp)
     {
 	case Reg::Bool:
 	case Reg::Int:
 	    switch(cod)
 	    {
-		case Reg::AddR:		prg+=(BYTE)Reg::AddR;		break;
-		case Reg::Sub:		prg+=(BYTE)Reg::Sub;		break;
-		case Reg::Mul:		prg+=(BYTE)Reg::Mul;		break;
-		case Reg::Div:		prg+=(BYTE)Reg::Div;		break;
-		case Reg::RstI:		prg+=(BYTE)Reg::RstI;		break;
-		case Reg::BitOr:	prg+=(BYTE)Reg::BitOr;		break;
-		case Reg::BitAnd:	prg+=(BYTE)Reg::BitAnd;		break;
-		case Reg::BitXor:	prg+=(BYTE)Reg::BitXor;		break;
-		case Reg::BitShLeft:	prg+=(BYTE)Reg::BitShLeft;	break;
-		case Reg::BitShRight:	prg+=(BYTE)Reg::BitShRight;	break;
-		case Reg::LOr:		 prg+=(BYTE)Reg::LOr;	rez->setType(Reg::Bool);	break;
-		case Reg::LAnd:		prg+=(BYTE)Reg::LAnd;	rez->setType(Reg::Bool);	break;
-		case Reg::LT:		prg+=(BYTE)Reg::LT;	rez->setType(Reg::Bool);	break;
-		case Reg::GT:		prg+=(BYTE)Reg::GT;	rez->setType(Reg::Bool);	break;
-		case Reg::LER:		prg+=(BYTE)Reg::LER;	rez->setType(Reg::Bool);	break;
-		case Reg::GER:		prg+=(BYTE)Reg::GER;	rez->setType(Reg::Bool);	break;
-		case Reg::EQR:		prg+=(BYTE)Reg::EQR;	rez->setType(Reg::Bool);	break;
-		case Reg::NER:		prg+=(BYTE)Reg::NER;	rez->setType(Reg::Bool);	break;
+		case Reg::AddR:		prg += (ui8)Reg::AddR;		break;
+		case Reg::Sub:		prg += (ui8)Reg::Sub;		break;
+		case Reg::Mul:		prg += (ui8)Reg::Mul;		break;
+		case Reg::Div:		prg += (ui8)Reg::Div;		break;
+		case Reg::RstI:		prg += (ui8)Reg::RstI;		break;
+		case Reg::BitOr:	prg += (ui8)Reg::BitOr;		break;
+		case Reg::BitAnd:	prg += (ui8)Reg::BitAnd;	break;
+		case Reg::BitXor:	prg += (ui8)Reg::BitXor;	break;
+		case Reg::BitShLeft:	prg += (ui8)Reg::BitShLeft;	break;
+		case Reg::BitShRight:	prg += (ui8)Reg::BitShRight;	break;
+		case Reg::LOr:		prg += (ui8)Reg::LOr;	rez->setType(Reg::Bool);	break;
+		case Reg::LAnd:		prg += (ui8)Reg::LAnd;	rez->setType(Reg::Bool);	break;
+		case Reg::LT:		prg += (ui8)Reg::LT;	rez->setType(Reg::Bool);	break;
+		case Reg::GT:		prg += (ui8)Reg::GT;	rez->setType(Reg::Bool);	break;
+		case Reg::LER:		prg += (ui8)Reg::LER;	rez->setType(Reg::Bool);	break;
+		case Reg::GER:		prg += (ui8)Reg::GER;	rez->setType(Reg::Bool);	break;
+		case Reg::EQR:		prg += (ui8)Reg::EQR;	rez->setType(Reg::Bool);	break;
+		case Reg::NER:		prg += (ui8)Reg::NER;	rez->setType(Reg::Bool);	break;
 	    }
 	    break;
 	case Reg::Real:
 	    switch(cod)
 	    {
-		case Reg::AddR:		prg+=(BYTE)Reg::AddR;	break;
-		case Reg::Sub:		prg+=(BYTE)Reg::Sub;	break;
-		case Reg::Mul:		prg+=(BYTE)Reg::Mul;	break;
-		case Reg::Div:		prg+=(BYTE)Reg::Div;	break;
-		case Reg::BitOr:	prg+=(BYTE)Reg::BitOr;	break;
-		case Reg::BitAnd:	prg+=(BYTE)Reg::BitAnd;	break;
-		case Reg::BitXor:	prg+=(BYTE)Reg::BitXor;	break;
-		case Reg::BitShLeft:	prg+=(BYTE)Reg::BitShLeft;	rez->setType(Reg::Int);	break;
-		case Reg::BitShRight:	prg+=(BYTE)Reg::BitShRight;	rez->setType(Reg::Int);	break;
-		case Reg::LOr:		prg+=(BYTE)Reg::LOr;	rez->setType(Reg::Bool);	break;
-		case Reg::LAnd:		prg+=(BYTE)Reg::LAnd;	rez->setType(Reg::Bool);	break;
-		case Reg::LT:		prg+=(BYTE)Reg::LT;	rez->setType(Reg::Bool);	break;
-		case Reg::GT:		prg+=(BYTE)Reg::GT;	rez->setType(Reg::Bool);	break;
-		case Reg::LER:		prg+=(BYTE)Reg::LER;	rez->setType(Reg::Bool);	break;
-		case Reg::GER:		prg+=(BYTE)Reg::GER;	rez->setType(Reg::Bool);	break;
-		case Reg::EQR:		prg+=(BYTE)Reg::EQR;	rez->setType(Reg::Bool);	break;
-		case Reg::NER:		prg+=(BYTE)Reg::NER;	rez->setType(Reg::Bool);	break;
+		case Reg::AddR:		prg += (ui8)Reg::AddR;	break;
+		case Reg::Sub:		prg += (ui8)Reg::Sub;	break;
+		case Reg::Mul:		prg += (ui8)Reg::Mul;	break;
+		case Reg::Div:		prg += (ui8)Reg::Div;	break;
+		case Reg::BitOr:	prg += (ui8)Reg::BitOr;	break;
+		case Reg::BitAnd:	prg += (ui8)Reg::BitAnd;	break;
+		case Reg::BitXor:	prg += (ui8)Reg::BitXor;	break;
+		case Reg::BitShLeft:	prg += (ui8)Reg::BitShLeft;	rez->setType(Reg::Int);	break;
+		case Reg::BitShRight:	prg += (ui8)Reg::BitShRight;	rez->setType(Reg::Int);	break;
+		case Reg::LOr:		prg += (ui8)Reg::LOr;	rez->setType(Reg::Bool);	break;
+		case Reg::LAnd:		prg += (ui8)Reg::LAnd;	rez->setType(Reg::Bool);	break;
+		case Reg::LT:		prg += (ui8)Reg::LT;	rez->setType(Reg::Bool);	break;
+		case Reg::GT:		prg += (ui8)Reg::GT;	rez->setType(Reg::Bool);	break;
+		case Reg::LER:		prg += (ui8)Reg::LER;	rez->setType(Reg::Bool);	break;
+		case Reg::GER:		prg += (ui8)Reg::GER;	rez->setType(Reg::Bool);	break;
+		case Reg::EQR:		prg += (ui8)Reg::EQR;	rez->setType(Reg::Bool);	break;
+		case Reg::NER:		prg += (ui8)Reg::NER;	rez->setType(Reg::Bool);	break;
 	    }
 	    break;
 	case Reg::String:
 	    switch(cod)
 	    {
-		case Reg::AddR:		prg+=(BYTE)Reg::AddS;	break;
-		case Reg::EQR:		prg+=(BYTE)Reg::EQS;	rez->setType(Reg::Bool);	break;
-		case Reg::NER:		prg+=(BYTE)Reg::NES;	rez->setType(Reg::Bool);	break;
+		case Reg::AddR:		prg += (ui8)Reg::AddS;	break;
+		case Reg::EQR:		prg += (ui8)Reg::EQS;	rez->setType(Reg::Bool);	break;
+		case Reg::NER:		prg += (ui8)Reg::NES;	rez->setType(Reg::Bool);	break;
 	    }
             break;
     }
-    prg+=(BYTE)rez->pos();
-    prg+=(BYTE)op1_pos;
-    prg+=(BYTE)op2_pos;
+    ui16 addr;
+    addr = rez->pos(); prg.append((char*)&addr,sizeof(ui16));
+    addr = op1_pos;    prg.append((char*)&addr,sizeof(ui16));
+    addr = op2_pos;    prg.append((char*)&addr,sizeof(ui16));
 
     return rez;
 }
 
 Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
 {
-    //- Check allowing type operations -
+    //> Check allowing type operations
     switch(op->type())
     {
 	case Reg::String:
@@ -745,7 +750,7 @@ Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
 	    }
     }
 
-    //- Check allow the buildin calc and calc -
+    //> Check allow the buildin calc and calc
     if( op->pos() < 0 )
     {
 	switch(op->vType(this))
@@ -777,38 +782,39 @@ Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
 	return op;
     }
 
-    //- Make operation cod -
-    //-- Prepare operand --
+    //> Make operation cod
+    //>> Prepare operand
     op = cdMvi( op );
     Reg::Type op_tp = op->vType(this);
     int op_pos = op->pos();
     op->free();
-    //-- Prepare rezult --
+    //>> Prepare rezult
     Reg *rez = regAt(regNew());
     rez->setType(op->vType(this));
-    //-- Add code --
+    //>> Add code
     switch(op_tp)
     {
 	case Reg::Bool:
 	case Reg::Int:
 	    switch(cod)
 	    {
-		case Reg::Not:		prg+=(BYTE)Reg::Not;	break;
-		case Reg::BitNot:	prg+=(BYTE)Reg::BitNot;	break;
-		case Reg::Neg:		prg+=(BYTE)Reg::Neg;	break;
+		case Reg::Not:		prg += (ui8)Reg::Not;	break;
+		case Reg::BitNot:	prg += (ui8)Reg::BitNot;	break;
+		case Reg::Neg:		prg += (ui8)Reg::Neg;	break;
 	    }
 	    break;
 	case Reg::Real:
 	    switch(cod)
 	    {
-		case Reg::Not:		prg+=(BYTE)Reg::Not;	break;
-		case Reg::BitNot:	prg+=(BYTE)Reg::BitNot;	break;
-		case Reg::Neg:		prg+=(BYTE)Reg::Neg;	break;
+		case Reg::Not:		prg += (ui8)Reg::Not;	break;
+		case Reg::BitNot:	prg += (ui8)Reg::BitNot;	break;
+		case Reg::Neg:		prg += (ui8)Reg::Neg;	break;
 	    }
 	    break;
     }
-    prg+=(BYTE)rez->pos();
-    prg+=(BYTE)op_pos;
+    ui16 addr;
+    addr = rez->pos(); prg.append((char*)&addr,sizeof(ui16));
+    addr = op_pos;     prg.append((char*)&addr,sizeof(ui16));
 
     return rez;
 }
@@ -816,56 +822,57 @@ Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
 Reg *Func::cdCond( Reg *cond, int p_cmd, int p_else, int p_end, Reg *thn, Reg *els )
 {
     Reg *rez = NULL;
-    int a_sz = sizeof(WORD);
+    int a_sz = sizeof(ui16);
     string cd_tmp;
 
-    //- Mvi cond register (insert to programm) -
+    //> Mvi cond register (insert to programm)
     cd_tmp = prg.substr(p_cmd);
     prg.erase(p_cmd);
     cond = cdMvi(cond);
-    p_else+=prg.size()-p_cmd;
-    p_end+=prg.size()-p_cmd;
-    p_cmd=prg.size();
-    prg+=cd_tmp;
-    int p_cond = cond->pos(); cond->free();
+    p_else += prg.size()-p_cmd;
+    p_end += prg.size()-p_cmd;
+    p_cmd = prg.size();
+    prg += cd_tmp;
+    ui16 p_cond = cond->pos(); cond->free();
 
     if( thn != NULL && els != NULL )
     {
-	//- Add Move command to "then" end (insert to programm) -
+	//> Add Move command to "then" end (insert to programm)
 	cd_tmp = prg.substr(p_else-1);	//-1 pass end command
 	prg.erase(p_else-1);
 	thn = cdMvi( thn );
 	rez = cdMove(NULL,thn);
-	p_end+=prg.size()-p_else+1;
+	p_end += prg.size()-p_else+1;
 	p_else = prg.size()+1;
 	prg+=cd_tmp;
-	//- Add Move command to "else" end (insert to programm) -
+	//> Add Move command to "else" end (insert to programm)
 	cd_tmp = prg.substr(p_end-1);   //-1 pass end command
 	prg.erase(p_end-1);
 	els = cdMvi( els );
 	cdMove(rez,els);
 	p_end = prg.size()+1;
-	prg+=cd_tmp;
+	prg += cd_tmp;
     }
 
-    //- Make apropos adress -
+    //> Make apropos adress
     p_else -= p_cmd;
     p_end  -= p_cmd;
 
-    prg[p_cmd+1] = (BYTE)p_cond;
-    prg.replace(p_cmd+2,a_sz,((char *)&p_else),a_sz);
-    prg.replace(p_cmd+2+a_sz,a_sz,((char *)&p_end),a_sz);
+    //> [CRR00nn]
+    prg.replace(p_cmd+1,sizeof(ui16),(char*)&p_cond,sizeof(ui16));
+    prg.replace(p_cmd+3,a_sz,((char *)&p_else),a_sz);
+    prg.replace(p_cmd+3+a_sz,a_sz,((char *)&p_end),a_sz);
 
     return rez;
 }
 
-void Func::cdCycle(int p_cmd, Reg *cond, int p_solve, int p_end, int p_postiter )
+void Func::cdCycle( int p_cmd, Reg *cond, int p_solve, int p_end, int p_postiter )
 {
-    int a_sz = sizeof(WORD);
+    int a_sz = sizeof(ui16);
     string cd_tmp;
     int p_body = (p_postiter?p_postiter:p_solve)-1;	//Include Reg::End command
 
-    //- Mvi cond register (insert to programm) -
+    //> Mvi cond register (insert to programm)
     cd_tmp = prg.substr(p_body);
     prg.erase(p_body);
     cond = cdMvi(cond);
@@ -873,42 +880,45 @@ void Func::cdCycle(int p_cmd, Reg *cond, int p_solve, int p_end, int p_postiter 
     p_end+=prg.size()-p_body;
     if( p_postiter ) p_postiter+=prg.size()-p_body;
     prg+=cd_tmp;
-    int p_cond = cond->pos();
+    ui16 p_cond = cond->pos();
     cond->free();
 
-    //- Make apropos adress -
+    //> Make apropos adress
     p_solve -= p_cmd;
     p_end   -= p_cmd;
     if( p_postiter ) p_postiter -= p_cmd;
 
-    //[CRbbaann]
-    prg[p_cmd+1] = (BYTE)p_cond;
-    prg.replace(p_cmd+2,a_sz,((char *)&p_solve),a_sz);
-    prg.replace(p_cmd+2+a_sz,a_sz,((char *)&p_postiter),a_sz);
-    prg.replace(p_cmd+2+2*a_sz,a_sz,((char *)&p_end),a_sz);
+    //> [CRRbbaann]
+    prg.replace(p_cmd+1,sizeof(ui16),(char*)&p_cond,sizeof(ui16));
+    prg.replace(p_cmd+3,a_sz,((char *)&p_solve),a_sz);
+    prg.replace(p_cmd+3+a_sz,a_sz,((char *)&p_postiter),a_sz);
+    prg.replace(p_cmd+3+2*a_sz,a_sz,((char *)&p_end),a_sz);
 }
 
 Reg *Func::cdBldFnc( int f_cod, Reg *prm1, Reg *prm2 )
 {
     Reg *rez;
-    int p1_pos=-1, p2_pos=-1;
+    ui16 addr;
+    int p1_pos = -1, p2_pos = -1;
 
     if( (prm1 && prm1->vType(this) == Reg::String) ||
 	(prm2 && prm2->vType(this) == Reg::String) )
 	throw TError(nodePath().c_str(),_("Buildin functions don't support string type"));
-    //- Free parameter's registers -
+    //> Free parameter's registers
     if( prm1 )	{ prm1 = cdMvi( prm1 ); p1_pos = prm1->pos(); }
     if( prm2 )	{ prm2 = cdMvi( prm2 ); p2_pos = prm2->pos(); }
     if( prm1 )	prm1->free();
     if( prm2 )	prm2->free();
-    //- Get rezult register -
+    //> Get rezult register
     rez = regAt(regNew());
     rez->setType(Reg::Real);
-    //- Make code -
-    prg+=(BYTE)f_cod;
-    prg+=(BYTE)rez->pos();
-    if( p1_pos >= 0 ) prg+=(BYTE)p1_pos;
-    if( p2_pos >= 0 ) prg+=(BYTE)p2_pos;
+    //> Make code
+    prg += (ui8)f_cod;
+    addr = rez->pos(); prg.append((char*)&addr,sizeof(ui16));
+    if( p1_pos >= 0 )
+    { addr = p1_pos; prg.append((char*)&addr,sizeof(ui16)); }
+    if( p2_pos >= 0 )
+    { addr = p2_pos; prg.append((char*)&addr,sizeof(ui16)); }
 
     return rez;
 }
@@ -919,29 +929,29 @@ Reg *Func::cdExtFnc( int f_id, int p_cnt, bool proc )
     Reg *rez = NULL;
     deque<int> p_pos;
 
-    //- Check return IO position -
+    //> Check return IO position
     bool ret_ok = false;
     for( r_pos = 0; r_pos < funcAt(f_id)->func().at().ioSize(); r_pos++ )
 	if( funcAt(f_id)->func().at().io(r_pos)->flg()&IO::Return )
 	{ ret_ok=true; break; }
-    //- Check IO and parameters count -
+    //> Check IO and parameters count
     if( p_cnt > funcAt(f_id)->func().at().ioSize()-ret_ok )
         throw TError(nodePath().c_str(),_("More than %d parameters are specified for function <%s>"),
 	    funcAt(f_id)->func().at().ioSize(),funcAt(f_id)->func().at().id().c_str());	
-    //- Check the present return for fuction -
+    //> Check the present return for fuction
     if( !proc && !ret_ok )
 	throw TError(nodePath().c_str(),_("Function is requested <%s>, but it doesn't have return of IO"),funcAt(f_id)->func().at().id().c_str());
-    //- Mvi all parameters -
+    //> Mvi all parameters
     for( int i_prm = 0; i_prm < p_cnt; i_prm++ )
 	f_prmst[i_prm] = cdMvi( f_prmst[i_prm] );
-    //- Get parameters. Add check parameters type !!!! -
+    //> Get parameters. Add check parameters type !!!!
     for( int i_prm = 0; i_prm < p_cnt; i_prm++ )
     {
 	p_pos.push_front( f_prmst.front()->pos() );
 	f_prmst.front()->free();
 	f_prmst.pop_front();
     }
-    //- Make result -
+    //> Make result
     if( !proc )
     {
 	rez = regAt(regNew());
@@ -954,14 +964,14 @@ Reg *Func::cdExtFnc( int f_id, int p_cnt, bool proc )
 	}
     }
 
-    //- Make code -
-    if( proc )	prg+=(BYTE)Reg::CProc;
-    else	prg+=(BYTE)Reg::CFunc;
-    prg+=(BYTE)f_id;
-    prg+=(BYTE)p_cnt;
-    prg+=(BYTE)((proc)?0:rez->pos());
+    //> Make code
+    ui16 addr;
+    prg += proc ? (ui8)Reg::CProc : (ui8)Reg::CFunc;
+    prg += (ui8)f_id;
+    prg += (ui8)p_cnt;
+    addr = proc ? 0 : rez->pos(); prg.append((char*)&addr,sizeof(ui16));
     for( int i_prm = 0; i_prm < p_pos.size(); i_prm++ )
-	prg+=(BYTE)p_pos[i_prm];
+    { addr = p_pos[i_prm]; prg.append((char*)&addr,sizeof(ui16)); }
 
     return rez;
 }
@@ -1088,13 +1098,13 @@ void Func::calc( TValFunc *val )
 
     //> Exec calc
     ExecData dt = { 1, 0, 0 };
-    try{ exec(val,reg,(const BYTE *)prg.c_str(),dt); }
+    try{ exec(val,reg,(const ui8*)prg.c_str(),dt); }
     catch(TError err){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
     res.release();
     if( dt.flg&0x07 == 0x01 )	setStart(false);
 }
 
-void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
+void Func::exec( TValFunc *val, RegW *reg, const ui8 *cprg, ExecData &dt )
 {
     while( !(dt.flg&0x01) )
     {
@@ -1114,436 +1124,433 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
 	{
 	    case Reg::EndFull: dt.flg |= 0x01;
 	    case Reg::End: return;
-	    //-- MVI codes --
+	    //>> MVI codes
 	    case Reg::MviB:
 #if OSC_DEBUG >= 5
-		printf("CODE: Load bool %d to reg %d.\n",*(BYTE *)(cprg+2),*(BYTE *)(cprg+1));
+		printf("CODE: Load bool %d to reg %d.\n",*(ui8*)(cprg+3),*(ui16*)(cprg+1));
 #endif
-		reg[*(BYTE *)(cprg+1)] = *(char*)(cprg+2);
-		cprg+=3; break;
+		reg[*(ui16*)(cprg+1)] = *(char*)(cprg+3);
+		cprg+=4; break;
 	    case Reg::MviI:
 #if OSC_DEBUG >= 5
-		printf("CODE: Load integer %d to reg %d.\n",*(int *)(cprg+2),*(BYTE *)(cprg+1));
+		printf("CODE: Load integer %d to reg %d.\n",*(int*)(cprg+3),*(ui16*)(cprg+1));
 #endif
-		reg[*(BYTE *)(cprg+1)] = *(int *)(cprg+2);
-		cprg+=2+sizeof(int); break;
+		reg[*(ui16*)(cprg+1)] = *(int*)(cprg+3);
+		cprg+=3+sizeof(int); break;
 	    case Reg::MviR:
 #if OSC_DEBUG >= 5
-		printf("CODE: Load real %f to reg %d.\n",*(double *)(cprg+2),*(BYTE *)(cprg+1));
+		printf("CODE: Load real %f to reg %d.\n",*(double *)(cprg+3),*(ui16*)(cprg+1));
 #endif
-		reg[*(BYTE *)(cprg+1)] = *(double *)(cprg+2);
-		cprg+=2+sizeof(double); break;
+		reg[*(ui16*)(cprg+1)] = *(double *)(cprg+3);
+		cprg+=3+sizeof(double); break;
 	    case Reg::MviS:
 #if OSC_DEBUG >= 5
-		printf("CODE: Load string %s(%d) to reg %d.\n",string((char *)cprg+3,*(BYTE *)(cprg+2)).c_str(),*(BYTE *)(cprg+2),*(BYTE *)(cprg+1));
+		printf("CODE: Load string %s(%d) to reg %d.\n",string((char*)cprg+4,*(ui8*)(cprg+3)).c_str(),*(ui8*)(cprg+3),*(ui16*)(cprg+1));
 #endif
-		reg[*(BYTE *)(cprg+1)] = string((char *)cprg+3,*(BYTE *)(cprg+2));
-		cprg+=3+ *(BYTE *)(cprg+2); break;
-	    //-- Assign codes --
+		reg[*(ui16*)(cprg+1)] = string((char*)cprg+4,*(ui8*)(cprg+3));
+		cprg+=4+ *(ui8*)(cprg+3); break;
+	    //>> Assign codes
 	    case Reg::AssB:
 #if OSC_DEBUG >= 5
-		printf("CODE: Assign boolean from %d to %d.\n",*(BYTE *)(cprg+2),*(BYTE *)(cprg+1));
+		printf("CODE: Assign boolean from %d to %d.\n",*(ui16*)(cprg+3),*(ui16*)(cprg+1));
 #endif		
-		setValB(val,reg[*(BYTE *)(cprg+1)],getValB(val,reg[*(BYTE *)(cprg+2)]));
-		cprg+=3; break;
+		setValB(val,reg[*(ui16*)(cprg+1)],getValB(val,reg[*(ui16*)(cprg+3)]));
+		cprg+=5; break;
 	    case Reg::AssI:
 #if OSC_DEBUG >= 5
-		printf("CODE: Assign integer from %d to %d.\n",*(BYTE *)(cprg+2),*(BYTE *)(cprg+1));
+		printf("CODE: Assign integer from %d to %d.\n",*(ui16*)(cprg+3),*(ui16*)(cprg+1));
 #endif
-		setValI(val,reg[*(BYTE *)(cprg+1)],getValI(val,reg[*(BYTE *)(cprg+2)]));
-		cprg+=3; break;
+		setValI(val,reg[*(ui16*)(cprg+1)],getValI(val,reg[*(ui16*)(cprg+3)]));
+		cprg+=5; break;
 	    case Reg::AssR:
 #if OSC_DEBUG >= 5
-		printf("CODE: Assign real from %d to %d.\n",*(BYTE *)(cprg+2),*(BYTE *)(cprg+1));
+		printf("CODE: Assign real from %d to %d.\n",*(ui16*)(cprg+3),*(ui16*)(cprg+1));
 #endif
-		setValR(val,reg[*(BYTE *)(cprg+1)],getValR(val,reg[*(BYTE *)(cprg+2)]));
-		cprg+=3; break;
-	    case Reg::AssS: 
+		setValR(val,reg[*(ui16*)(cprg+1)],getValR(val,reg[*(ui16*)(cprg+3)]));
+		cprg+=5; break;
+	    case Reg::AssS:
 #if OSC_DEBUG >= 5
-		printf("CODE: Assign string from %d to %d.\n",*(BYTE *)(cprg+2),*(BYTE *)(cprg+1));
+		printf("CODE: Assign string from %d to %d.\n",*(ui16*)(cprg+3),*(ui16*)(cprg+1));
 #endif
-		setValS(val,reg[*(BYTE *)(cprg+1)],getValS(val,reg[*(BYTE *)(cprg+2)]));
-		cprg+=3; break;
-	    //-- Mov codes --
+		setValS(val,reg[*(ui16*)(cprg+1)],getValS(val,reg[*(ui16*)(cprg+3)]));
+		cprg+=5; break;
+	    //>> Mov codes
 	    case Reg::MovB:
 #if OSC_DEBUG >= 5
-		printf("CODE: Move boolean from %d to %d.\n",*(BYTE *)(cprg+2),*(BYTE *)(cprg+1));
+		printf("CODE: Move boolean from %d to %d.\n",*(ui16*)(cprg+3),*(ui16*)(cprg+1));
 #endif
-		reg[*(BYTE *)(cprg+1)] = getValB(val,reg[*(BYTE *)(cprg+2)]);
-		cprg+=3; break;
+		reg[*(ui16*)(cprg+1)] = getValB(val,reg[*(ui16*)(cprg+3)]);
+		cprg+=5; break;
 	    case Reg::MovI:
 #if OSC_DEBUG >= 5
-		printf("CODE: Move integer from %d to %d.\n",*(BYTE *)(cprg+2),*(BYTE *)(cprg+1));
+		printf("CODE: Move integer from %d to %d.\n",*(ui16*)(cprg+3),*(ui16*)(cprg+1));
 #endif
-		reg[*(BYTE *)(cprg+1)] = getValI(val,reg[*(BYTE *)(cprg+2)]);
-		cprg+=3; break;
+		reg[*(ui16*)(cprg+1)] = getValI(val,reg[*(ui16*)(cprg+3)]);
+		cprg+=5; break;
 	    case Reg::MovR:
 #if OSC_DEBUG >= 5
-		printf("CODE: Move real from %d to %d.\n",*(BYTE *)(cprg+2),*(BYTE *)(cprg+1));
+		printf("CODE: Move real from %d to %d.\n",*(ui16*)(cprg+3),*(ui16*)(cprg+1));
 #endif
-		reg[*(BYTE *)(cprg+1)] = getValR(val,reg[*(BYTE *)(cprg+2)]);
-		cprg+=3; break;
+		reg[*(ui16*)(cprg+1)] = getValR(val,reg[*(ui16*)(cprg+3)]);
+		cprg+=5; break;
 	    case Reg::MovS:
 #if OSC_DEBUG >= 5
-		printf("CODE: Move string from %d to %d.\n",*(BYTE *)(cprg+2),*(BYTE *)(cprg+1));
+		printf("CODE: Move string from %d to %d.\n",*(ui16*)(cprg+3),*(ui16*)(cprg+1));
 #endif
-		reg[*(BYTE *)(cprg+1)] = getValS(val,reg[*(BYTE *)(cprg+2)]);
-		cprg+=3; break;
-	    //-- Binary operations --
+		reg[*(ui16*)(cprg+1)] = getValS(val,reg[*(ui16*)(cprg+3)]);
+		cprg+=5; break;
+	    //>> Binary operations
 	    case Reg::AddR:
 #if OSC_DEBUG >= 5
-		printf("CODE: Real %d = %d + %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
+		printf("CODE: %d = %d + %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
 #endif
-		reg[*(BYTE *)(cprg+1)] = getValR(val,reg[*(BYTE *)(cprg+2)]) + getValR(val,reg[*(BYTE *)(cprg+3)]);
-		cprg+=4; break;
+		reg[*(ui16*)(cprg+1)] = getValR(val,reg[*(ui16*)(cprg+3)]) + getValR(val,reg[*(ui16*)(cprg+5)]);
+		cprg+=7; break;
 	    case Reg::AddS:
 #if OSC_DEBUG >= 5
-		printf("CODE: String %d = %d + %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
+		printf("CODE: String %d = %d + %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
 #endif
-		reg[*(BYTE *)(cprg+1)] = getValS(val,reg[*(BYTE *)(cprg+2)]) + getValS(val,reg[*(BYTE *)(cprg+3)]);
-		cprg+=4; break;
+		reg[*(ui16*)(cprg+1)] = getValS(val,reg[*(ui16*)(cprg+3)]) + getValS(val,reg[*(ui16*)(cprg+5)]);
+		cprg+=7; break;
 	    case Reg::Sub:
 #if OSC_DEBUG >= 5
-		printf("CODE: Real %d = %d - %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
+		printf("CODE: %d = %d - %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
 #endif
-		reg[*(BYTE *)(cprg+1)] = getValR(val,reg[*(BYTE *)(cprg+2)]) - getValR(val,reg[*(BYTE *)(cprg+3)]);
-		cprg+=4; break;
+		reg[*(ui16*)(cprg+1)] = getValR(val,reg[*(ui16*)(cprg+3)]) - getValR(val,reg[*(ui16*)(cprg+5)]);
+		cprg+=7; break;
 	    case Reg::Mul:
 #if OSC_DEBUG >= 5
-		printf("CODE: Real %d = %d * %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
+		printf("CODE: %d = %d * %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
 #endif
-		reg[*(BYTE *)(cprg+1)] = getValR(val,reg[*(BYTE *)(cprg+2)]) * getValR(val,reg[*(BYTE *)(cprg+3)]);
-		cprg+=4; break;
+		reg[*(ui16*)(cprg+1)] = getValR(val,reg[*(ui16*)(cprg+3)]) * getValR(val,reg[*(ui16*)(cprg+5)]);
+		cprg+=7; break;
 	    case Reg::Div:
 #if OSC_DEBUG >= 5
-		printf("CODE: Real %d = %d / %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
+		printf("CODE: %d = %d / %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
 #endif
-		reg[*(BYTE *)(cprg+1)] = getValR(val,reg[*(BYTE *)(cprg+2)]) / getValR(val,reg[*(BYTE *)(cprg+3)]);
-		cprg+=4; break;
+		reg[*(ui16*)(cprg+1)] = getValR(val,reg[*(ui16*)(cprg+3)]) / getValR(val,reg[*(ui16*)(cprg+5)]);
+		cprg+=7; break;
 	    case Reg::RstI:
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d % %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
+		printf("CODE: %d = %d % %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
 #endif
-		reg[*(BYTE *)(cprg+1)] = getValI(val,reg[*(BYTE *)(cprg+2)]) % getValI(val,reg[*(BYTE *)(cprg+3)]);
-		cprg+=4; break;
+		reg[*(ui16*)(cprg+1)] = getValI(val,reg[*(ui16*)(cprg+3)]) % getValI(val,reg[*(ui16*)(cprg+5)]);
+		cprg+=7; break;
 	    case Reg::BitOr:
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d | %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
+		printf("CODE: %d = %d | %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
 #endif
-		reg[*(BYTE *)(cprg+1)] = getValI(val,reg[*(BYTE *)(cprg+2)]) | getValI(val,reg[*(BYTE *)(cprg+3)]);
-		cprg+=4; break;
+		reg[*(ui16*)(cprg+1)] = getValI(val,reg[*(ui16*)(cprg+3)]) | getValI(val,reg[*(ui16*)(cprg+5)]);
+		cprg+=7; break;
 	    case Reg::BitAnd:
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d & %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
+		printf("CODE: %d = %d & %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
 #endif
-		reg[*(BYTE *)(cprg+1)] = getValI(val,reg[*(BYTE *)(cprg+2)]) & getValI(val,reg[*(BYTE *)(cprg+3)]);
-		cprg+=4; break;
+		reg[*(ui16*)(cprg+1)] = getValI(val,reg[*(ui16*)(cprg+3)]) & getValI(val,reg[*(ui16*)(cprg+5)]);
+		cprg+=7; break;
 	    case Reg::BitXor:
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d ^ %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
+		printf("CODE: %d = %d ^ %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
 #endif
-		reg[*(BYTE *)(cprg+1)] = getValI(val,reg[*(BYTE *)(cprg+2)]) ^ getValI(val,reg[*(BYTE *)(cprg+3)]);
-		cprg+=4; break;
+		reg[*(ui16*)(cprg+1)] = getValI(val,reg[*(ui16*)(cprg+3)]) ^ getValI(val,reg[*(ui16*)(cprg+5)]);
+		cprg+=7; break;
 	    case Reg::BitShLeft:
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d << %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
+		printf("CODE: %d = %d << %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
 #endif
-		reg[*(BYTE *)(cprg+1)] = getValI(val,reg[*(BYTE *)(cprg+2)]) << getValI(val,reg[*(BYTE *)(cprg+3)]);
-		cprg+=4; break;
+		reg[*(ui16*)(cprg+1)] = getValI(val,reg[*(ui16*)(cprg+3)]) << getValI(val,reg[*(ui16*)(cprg+5)]);
+		cprg+=7; break;
 	    case Reg::BitShRight:
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d >> %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
+		printf("CODE: %d = %d >> %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
 #endif
-		reg[*(BYTE *)(cprg+1)] = getValI(val,reg[*(BYTE *)(cprg+2)]) >> getValI(val,reg[*(BYTE *)(cprg+3)]);
-		cprg+=4; break;
+		reg[*(ui16*)(cprg+1)] = getValI(val,reg[*(ui16*)(cprg+3)]) >> getValI(val,reg[*(ui16*)(cprg+5)]);
+		cprg+=7; break;
 	    case Reg::LOr:
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d || %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
+		printf("CODE: %d = %d || %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
 #endif
-		reg[*(BYTE *)(cprg+1)] = getValB(val,reg[*(BYTE *)(cprg+2)]) || getValB(val,reg[*(BYTE *)(cprg+3)]);
-		cprg+=4; break;
+		reg[*(ui16*)(cprg+1)] = getValB(val,reg[*(ui16*)(cprg+3)]) || getValB(val,reg[*(ui16*)(cprg+5)]);
+		cprg+=7; break;
 	    case Reg::LAnd:
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d && %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
+		printf("CODE: %d = %d && %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
 #endif
-		reg[*(BYTE *)(cprg+1)] = getValB(val,reg[*(BYTE *)(cprg+2)]) && getValB(val,reg[*(BYTE *)(cprg+3)]);
-		cprg+=4; break;
+		reg[*(ui16*)(cprg+1)] = getValB(val,reg[*(ui16*)(cprg+3)]) && getValB(val,reg[*(ui16*)(cprg+5)]);
+		cprg+=7; break;
 	    case Reg::LT:
 #if OSC_DEBUG >= 5
-		printf("CODE: Real %d = %d < %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
+		printf("CODE: %d = %d < %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
 #endif
-		reg[*(BYTE *)(cprg+1)] = getValR(val,reg[*(BYTE *)(cprg+2)]) < getValR(val,reg[*(BYTE *)(cprg+3)]);
-		cprg+=4; break;
+		reg[*(ui16*)(cprg+1)] = getValR(val,reg[*(ui16*)(cprg+3)]) < getValR(val,reg[*(ui16*)(cprg+5)]);
+		cprg+=7; break;
 	    case Reg::GT:
 #if OSC_DEBUG >= 5
-		printf("CODE: Real %d = %d > %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
+		printf("CODE: %d = %d > %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
 #endif
-		reg[*(BYTE *)(cprg+1)] = getValR(val,reg[*(BYTE *)(cprg+2)]) > getValR(val,reg[*(BYTE *)(cprg+3)]);
-		cprg+=4; break;
+		reg[*(ui16*)(cprg+1)] = getValR(val,reg[*(ui16*)(cprg+3)]) > getValR(val,reg[*(ui16*)(cprg+5)]);
+		cprg+=7; break;
 	    case Reg::LER:
 #if OSC_DEBUG >= 5
-		printf("CODE: Real %d = %d <= %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
+		printf("CODE: %d = %d <= %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
 #endif
-		reg[*(BYTE *)(cprg+1)] = getValR(val,reg[*(BYTE *)(cprg+2)]) <= getValR(val,reg[*(BYTE *)(cprg+3)]);
-		cprg+=4; break;
+		reg[*(ui16*)(cprg+1)] = getValR(val,reg[*(ui16*)(cprg+3)]) <= getValR(val,reg[*(ui16*)(cprg+5)]);
+		cprg+=7; break;
 	    case Reg::GER:
 #if OSC_DEBUG >= 5
-		printf("CODE: Real %d = %d >= %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
+		printf("CODE: %d = %d >= %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
 #endif
-		reg[*(BYTE *)(cprg+1)] = getValR(val,reg[*(BYTE *)(cprg+2)]) >= getValR(val,reg[*(BYTE *)(cprg+3)]);
-		cprg+=4; break;
+		reg[*(ui16*)(cprg+1)] = getValR(val,reg[*(ui16*)(cprg+3)]) >= getValR(val,reg[*(ui16*)(cprg+5)]);
+		cprg+=7; break;
 	    case Reg::EQR:
 #if OSC_DEBUG >= 5
-		printf("CODE: Real %d = %d == %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
+		printf("CODE: %d = %d == %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
 #endif
-		reg[*(BYTE *)(cprg+1)] = getValR(val,reg[*(BYTE *)(cprg+2)]) == getValR(val,reg[*(BYTE *)(cprg+3)]);
-		cprg+=4; break;
+		reg[*(ui16*)(cprg+1)] = getValR(val,reg[*(ui16*)(cprg+3)]) == getValR(val,reg[*(ui16*)(cprg+5)]);
+		cprg+=7; break;
 	    case Reg::EQS:
 #if OSC_DEBUG >= 5
-		printf("CODE: String %d = %d == %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
+		printf("CODE: String %d = %d == %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
 #endif
-		reg[*(BYTE *)(cprg+1)] = getValS(val,reg[*(BYTE *)(cprg+2)]) == getValS(val,reg[*(BYTE *)(cprg+3)]);
-		cprg+=4; break;
+		reg[*(ui16*)(cprg+1)] = getValS(val,reg[*(ui16*)(cprg+3)]) == getValS(val,reg[*(ui16*)(cprg+5)]);
+		cprg+=7; break;
 	    case Reg::NER:
 #if OSC_DEBUG >= 5
-		printf("CODE: Real %d = %d != %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
+		printf("CODE: %d = %d != %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
 #endif
-		reg[*(BYTE *)(cprg+1)] = getValR(val,reg[*(BYTE *)(cprg+2)]) != getValR(val,reg[*(BYTE *)(cprg+3)]);
-		cprg+=4; break;
+		reg[*(ui16*)(cprg+1)] = getValR(val,reg[*(ui16*)(cprg+3)]) != getValR(val,reg[*(ui16*)(cprg+5)]);
+		cprg+=7; break;
 	    case Reg::NES:
 #if OSC_DEBUG >= 5
-		printf("CODE: String %d = %d != %d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
+		printf("CODE: String %d = %d != %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
 #endif
-		reg[*(BYTE *)(cprg+1)] = getValS(val,reg[*(BYTE *)(cprg+2)]) != getValS(val,reg[*(BYTE *)(cprg+3)]);
-		cprg+=4; break;
-	    //-- Unary operations --
-	    case Reg::Not: 
+		reg[*(ui16*)(cprg+1)] = getValS(val,reg[*(ui16*)(cprg+3)]) != getValS(val,reg[*(ui16*)(cprg+5)]);
+		cprg+=7; break;
+	    //>> Unary operations
+	    case Reg::Not:
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = !%d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
+		printf("CODE: %d = !%d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
 #endif
-		reg[*(BYTE *)(cprg+1)] = !getValB(val,reg[*(BYTE *)(cprg+2)]);
-		cprg+=3; break;
+		reg[*(ui16*)(cprg+1)] = !getValB(val,reg[*(ui16*)(cprg+3)]);
+		cprg+=5; break;
 	    case Reg::BitNot:
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = ~%d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
+		printf("CODE: %d = ~%d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
 #endif
-		reg[*(BYTE *)(cprg+1)] = ~getValI(val,reg[*(BYTE *)(cprg+2)]);
-		cprg+=3; break;
+		reg[*(ui16*)(cprg+1)] = ~getValI(val,reg[*(ui16*)(cprg+3)]);
+		cprg+=5; break;
 	    case Reg::Neg:
 #if OSC_DEBUG >= 5
-		printf("CODE: Real %d = -%d.\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
+		printf("CODE: %d = -%d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
 #endif
-		reg[*(BYTE *)(cprg+1)] = -getValR(val,reg[*(BYTE *)(cprg+2)]);
-		cprg+=3; break;
-	    //-- Condition --
+		reg[*(ui16*)(cprg+1)] = -getValR(val,reg[*(ui16*)(cprg+3)]);
+		cprg+=5; break;
+	    //>> Condition
 	    case Reg::If:
 #if OSC_DEBUG >= 5
-		printf("CODE: Condition %d: %d|%d|%d.\n",*(BYTE *)(cprg+1),6,*(WORD *)(cprg+2),*(WORD *)(cprg+4));
+		printf("CODE: Condition %d: %d|%d|%d.\n",*(ui16*)(cprg+1),7,*(ui16*)(cprg+3),*(ui16*)(cprg+5));
 #endif
-		if(getValB(val,reg[*(BYTE *)(cprg+1)]))
-		    exec(val,reg,cprg+6,dt);
-		else if( *(WORD *)(cprg+2) != *(WORD *)(cprg+4) )
-		    exec(val,reg,cprg + *(WORD *)(cprg+2),dt);
-		cprg = cprg + *(WORD *)(cprg+4);
+		if( getValB(val,reg[*(ui16*)(cprg+1)]) )	exec(val,reg,cprg+7,dt);
+		else if( *(ui16*)(cprg+3) != *(ui16*)(cprg+5) )	exec(val,reg,cprg + *(ui16*)(cprg+3),dt);
+		cprg = cprg + *(ui16*)(cprg+5);
 		continue;
 	    case Reg::Cycle:
 #if OSC_DEBUG >= 5
-		printf("CODE: Cycle %d: %d|%d|%d|%d.\n",*(BYTE *)(cprg+1),8,*(WORD *)(cprg+2),*(WORD *)(cprg+4),*(WORD *)(cprg+6));
+		printf("CODE: Cycle %d: %d|%d|%d|%d.\n",*(ui16*)(cprg+1),9,*(ui16*)(cprg+3),*(ui16*)(cprg+5),*(ui16*)(cprg+7));
 #endif
 		while( !(dt.flg&0x01) )
 		{
-		    exec(val,reg,cprg+8,dt);
-		    if( !getValB(val,reg[*(BYTE *)(cprg+1)]) )	break;
-		    dt.flg&=(~(0x06));
-		    exec(val,reg,cprg + *(WORD *)(cprg+2),dt);
+		    exec(val,reg,cprg+9,dt);
+		    if( !getValB(val,reg[*(ui16*)(cprg+1)]) )	break;
+		    dt.flg &= ~0x06;
+		    exec( val, reg, cprg + *(ui16*)(cprg+3), dt );
 		    //Check break and continue operators
 		    if( dt.flg&0x02 )	{ dt.flg=0; break; }
 		    else if( dt.flg&0x04 ) dt.flg=0;
 
-		    if( *(WORD *)(cprg+4) ) exec(val,reg,cprg + *(WORD *)(cprg+4),dt);
+		    if( *(ui16*)(cprg+5) ) exec( val, reg, cprg + *(ui16*)(cprg+5),dt);
 		}
-		cprg = cprg + *(WORD *)(cprg+6);
+		cprg = cprg + *(ui16*)(cprg+7);
 		continue;
 	    case Reg::Break:	dt.flg|=0x03;	break;
 	    case Reg::Continue:	dt.flg|=0x05;	break;
-	    //-- Buildin functions --
+	    //>> Buildin functions
 	    case Reg::FSin:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=sin(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
+		printf("CODE: Function %d=sin(%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
 #endif
-		reg[*(BYTE *)(cprg+1)] = sin(getValR(val,reg[*(BYTE *)(cprg+2)]));
-		cprg+=3; break;
+		reg[*(ui16*)(cprg+1)] = sin(getValR(val,reg[*(ui16*)(cprg+3)]));
+		cprg+=5; break;
 	    case Reg::FCos:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=cos(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
+		printf("CODE: Function %d=cos(%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
 #endif
-		reg[*(BYTE *)(cprg+1)] = cos(getValR(val,reg[*(BYTE *)(cprg+2)]));
-		cprg+=3; break;
+		reg[*(ui16*)(cprg+1)] = cos(getValR(val,reg[*(ui16*)(cprg+3)]));
+		cprg+=5; break;
 	    case Reg::FTan:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=tan(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
+		printf("CODE: Function %d=tan(%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
 #endif
-		reg[*(BYTE *)(cprg+1)] = tan(getValR(val,reg[*(BYTE *)(cprg+2)]));
-		cprg+=3; break;
+		reg[*(ui16*)(cprg+1)] = tan(getValR(val,reg[*(ui16*)(cprg+3)]));
+		cprg+=5; break;
 	    case Reg::FSinh:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=sinh(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
+		printf("CODE: Function %d=sinh(%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
 #endif
-		reg[*(BYTE *)(cprg+1)] = sinh(getValR(val,reg[*(BYTE *)(cprg+2)]));
-		cprg+=3; break;
+		reg[*(ui16*)(cprg+1)] = sinh(getValR(val,reg[*(ui16*)(cprg+3)]));
+		cprg+=5; break;
 	    case Reg::FCosh:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=cosh(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
+		printf("CODE: Function %d=cosh(%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
 #endif
-		reg[*(BYTE *)(cprg+1)] = cosh(getValR(val,reg[*(BYTE *)(cprg+2)]));
-		cprg+=3; break;
+		reg[*(ui16*)(cprg+1)] = cosh(getValR(val,reg[*(ui16*)(cprg+3)]));
+		cprg+=5; break;
 	    case Reg::FTanh:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=tanh(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
+		printf("CODE: Function %d=tanh(%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
 #endif
-		reg[*(BYTE *)(cprg+1)] = tanh(getValR(val,reg[*(BYTE *)(cprg+2)]));
-		cprg+=3; break;
+		reg[*(ui16*)(cprg+1)] = tanh(getValR(val,reg[*(ui16*)(cprg+3)]));
+		cprg+=5; break;
 	    case Reg::FAsin:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=asin(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
+		printf("CODE: Function %d=asin(%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
 #endif
-		reg[*(BYTE *)(cprg+1)] = asin(getValR(val,reg[*(BYTE *)(cprg+2)]));
-		cprg+=3; break;
+		reg[*(ui16*)(cprg+1)] = asin(getValR(val,reg[*(ui16*)(cprg+3)]));
+		cprg+=5; break;
 	    case Reg::FAcos:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=acos(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
+		printf("CODE: Function %d=acos(%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
 #endif
-		reg[*(BYTE *)(cprg+1)] = acos(getValR(val,reg[*(BYTE *)(cprg+2)]));
-		cprg+=3; break;
+		reg[*(ui16*)(cprg+1)] = acos(getValR(val,reg[*(ui16*)(cprg+3)]));
+		cprg+=5; break;
 	    case Reg::FAtan:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=atan(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
+		printf("CODE: Function %d=atan(%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
 #endif
-		reg[*(BYTE *)(cprg+1)] = atan(getValR(val,reg[*(BYTE *)(cprg+2)]));
-		cprg+=3; break;
+		reg[*(ui16*)(cprg+1)] = atan(getValR(val,reg[*(ui16*)(cprg+3)]));
+		cprg+=5; break;
 	    case Reg::FRand:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=rand(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
+		printf("CODE: Function %d=rand(%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
 #endif
-		reg[*(BYTE *)(cprg+1)] = getValR(val,reg[*(BYTE *)(cprg+2)])*(double)rand()/(double)RAND_MAX;
-		cprg+=3; break;
+		reg[*(ui16*)(cprg+1)] = getValR(val,reg[*(ui16*)(cprg+3)])*(double)rand()/(double)RAND_MAX;
+		cprg+=5; break;
 	    case Reg::FLg:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=lg(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
+		printf("CODE: Function %d=lg(%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
 #endif
-		reg[*(BYTE *)(cprg+1)] = log10(getValR(val,reg[*(BYTE *)(cprg+2)]));
-		cprg+=3; break;
+		reg[*(ui16*)(cprg+1)] = log10(getValR(val,reg[*(ui16*)(cprg+3)]));
+		cprg+=5; break;
 	    case Reg::FLn:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=ln(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
+		printf("CODE: Function %d=ln(%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
 #endif
-		reg[*(BYTE *)(cprg+1)] = log(getValR(val,reg[*(BYTE *)(cprg+2)]));
-		cprg+=3; break;
+		reg[*(ui16*)(cprg+1)] = log(getValR(val,reg[*(ui16*)(cprg+3)]));
+		cprg+=5; break;
 	    case Reg::FExp:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=exp(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
+		printf("CODE: Function %d=exp(%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
 #endif
-		reg[*(BYTE *)(cprg+1)] = exp(getValR(val,reg[*(BYTE *)(cprg+2)]));
-		cprg+=3; break;
+		reg[*(ui16*)(cprg+1)] = exp(getValR(val,reg[*(ui16*)(cprg+3)]));
+		cprg+=5; break;
 	    case Reg::FPow:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=pow(%d,%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
+		printf("CODE: Function %d=pow(%d,%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
 #endif
-		reg[*(BYTE *)(cprg+1)] = pow(getValR(val,reg[*(BYTE *)(cprg+2)]),getValR(val,reg[*(BYTE *)(cprg+3)]));
-		cprg+=4; break;
+		reg[*(ui16*)(cprg+1)] = pow(getValR(val,reg[*(ui16*)(cprg+3)]),getValR(val,reg[*(ui16*)(cprg+5)]));
+		cprg+=7; break;
 	    case Reg::FMin:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=min(%d,%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
+		printf("CODE: Function %d=min(%d,%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
 #endif
-		reg[*(BYTE *)(cprg+1)] = vmin(getValR(val,reg[*(BYTE *)(cprg+2)]),getValR(val,reg[*(BYTE *)(cprg+3)]));
-		cprg+=4; break;
+		reg[*(ui16*)(cprg+1)] = vmin(getValR(val,reg[*(ui16*)(cprg+3)]),getValR(val,reg[*(ui16*)(cprg+5)]));
+		cprg+=7; break;
 	    case Reg::FMax:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=max(%d,%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2),*(BYTE *)(cprg+3));
+		printf("CODE: Function %d=max(%d,%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
 #endif
-		reg[*(BYTE *)(cprg+1)] = vmax(getValR(val,reg[*(BYTE *)(cprg+2)]),getValR(val,reg[*(BYTE *)(cprg+3)]));
-		cprg+=4; break;
+		reg[*(ui16*)(cprg+1)] = vmax(getValR(val,reg[*(ui16*)(cprg+3)]),getValR(val,reg[*(ui16*)(cprg+5)]));
+		cprg+=7; break;
 	    case Reg::FSqrt:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=sqrt(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
+		printf("CODE: Function %d=sqrt(%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
 #endif
-		reg[*(BYTE *)(cprg+1)] = sqrt(getValR(val,reg[*(BYTE *)(cprg+2)]));
-		cprg+=3; break;
+		reg[*(ui16*)(cprg+1)] = sqrt(getValR(val,reg[*(ui16*)(cprg+3)]));
+		cprg+=5; break;
 	    case Reg::FAbs:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=abs(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
+		printf("CODE: Function %d=abs(%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
 #endif
-		reg[*(BYTE *)(cprg+1)] = fabs(getValR(val,reg[*(BYTE *)(cprg+2)]));
-		cprg+=3; break;
+		reg[*(ui16*)(cprg+1)] = fabs(getValR(val,reg[*(ui16*)(cprg+3)]));
+		cprg+=5; break;
 	    case Reg::FSign:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=sign(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
+		printf("CODE: Function %d=sign(%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
 #endif
-		reg[*(BYTE *)(cprg+1)] = (getValR(val,reg[*(BYTE *)(cprg+2)])>=0)?1:-1;
-		cprg+=3; break;
+		reg[*(ui16*)(cprg+1)] = (getValR(val,reg[*(ui16*)(cprg+3)])>=0)?1:-1;
+		cprg+=5; break;
 	    case Reg::FCeil:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=ceil(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
+		printf("CODE: Function %d=ceil(%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
 #endif
-		reg[*(BYTE *)(cprg+1)] = ceil(getValR(val,reg[*(BYTE *)(cprg+2)]));
-		cprg+=3; break;
+		reg[*(ui16*)(cprg+1)] = ceil(getValR(val,reg[*(ui16*)(cprg+3)]));
+		cprg+=5; break;
 	    case Reg::FFloor:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=floor(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
+		printf("CODE: Function %d=floor(%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
 #endif
-		reg[*(BYTE *)(cprg+1)] = floor(getValR(val,reg[*(BYTE *)(cprg+2)]));
-		cprg+=3; break;
+		reg[*(ui16*)(cprg+1)] = floor(getValR(val,reg[*(ui16*)(cprg+3)]));
+		cprg+=5; break;
 	    case Reg::CProc:
 	    case Reg::CFunc:
-		{
-		    TValFunc vfnc("JavaLikeFuncCalc",&funcAt(*(BYTE *)(cprg+1))->func().at());
+	    {
+		TValFunc vfnc("JavaLikeFuncCalc",&funcAt(*(ui8*)(cprg+1))->func().at());
 #if OSC_DEBUG >= 5
-		    printf("CODE: Call function/procedure %d = %s(%d).\n",*(BYTE *)(cprg+3),vfnc.func()->id().c_str(),*(BYTE *)(cprg+2));
+		printf("CODE: Call function/procedure %d = %s(%d).\n",*(ui16*)(cprg+3),vfnc.func()->id().c_str(),*(ui8*)(cprg+2));
 #endif
-		    //--- Get return position ---
-		    int r_pos, i_p, p_p;
-		    for( r_pos = 0; r_pos < vfnc.func()->ioSize(); r_pos++ )
-		        if( vfnc.ioFlg(r_pos)&IO::Return ) break;
-		    //--- Process parameters ---
-		    for( i_p = 0; i_p < *(BYTE *)(cprg+2); i_p++ )
+		//>>> Get return position
+		int r_pos, i_p, p_p;
+		for( r_pos = 0; r_pos < vfnc.func()->ioSize(); r_pos++ )
+		    if( vfnc.ioFlg(r_pos)&IO::Return ) break;
+		//>>> Process parameters
+		for( i_p = 0; i_p < *(ui8*)(cprg+2); i_p++ )
+		{
+		    p_p = (i_p>=r_pos)?i_p+1:i_p;
+		    switch(vfnc.ioType(p_p))
 		    {
-		        p_p = (i_p>=r_pos)?i_p+1:i_p;
+			case IO::String:	vfnc.setS(p_p,getValS(val,reg[*(ui16*)(cprg+5+i_p*sizeof(ui16))])); break;
+			case IO::Integer:	vfnc.setI(p_p,getValI(val,reg[*(ui16*)(cprg+5+i_p*sizeof(ui16))])); break;
+			case IO::Real:		vfnc.setR(p_p,getValR(val,reg[*(ui16*)(cprg+5+i_p*sizeof(ui16))])); break;
+			case IO::Boolean:	vfnc.setB(p_p,getValB(val,reg[*(ui16*)(cprg+5+i_p*sizeof(ui16))])); break;
+		    }
+		}
+		//>>> Make calc
+		vfnc.calc(vfnc.user());
+		//>>> Process outputs
+		for( i_p = 0; i_p < *(ui8*)(cprg+2); i_p++ )
+		{
+		    p_p = (i_p>=r_pos)?i_p+1:i_p;
+		    if( vfnc.ioFlg(p_p)&IO::Output )
 			switch(vfnc.ioType(p_p))
 			{
-			    case IO::String:	vfnc.setS(p_p,getValS(val,reg[*(BYTE *)(cprg+4+i_p)])); break;
-			    case IO::Integer:	vfnc.setI(p_p,getValI(val,reg[*(BYTE *)(cprg+4+i_p)])); break;
-			    case IO::Real:	vfnc.setR(p_p,getValR(val,reg[*(BYTE *)(cprg+4+i_p)])); break;
-			    case IO::Boolean:	vfnc.setB(p_p,getValB(val,reg[*(BYTE *)(cprg+4+i_p)])); break;
+			    case IO::String:	setValS(val,reg[*(ui16*)(cprg+5+i_p*sizeof(ui16))],vfnc.getS(p_p)); break;
+			    case IO::Integer:	setValI(val,reg[*(ui16*)(cprg+5+i_p*sizeof(ui16))],vfnc.getI(p_p)); break;
+			    case IO::Real:	setValR(val,reg[*(ui16*)(cprg+5+i_p*sizeof(ui16))],vfnc.getR(p_p)); break;
+			    case IO::Boolean:	setValB(val,reg[*(ui16*)(cprg+5+i_p*sizeof(ui16))],vfnc.getB(p_p)); break;
 			}
-		    }
-		    //--- Make calc ---
-		    vfnc.calc(vfnc.user());
-		    //--- Process outputs ---
-		    for( i_p = 0; i_p < *(BYTE *)(cprg+2); i_p++ )
-		    {
-			p_p = (i_p>=r_pos)?i_p+1:i_p;
-			if( vfnc.ioFlg(p_p)&IO::Output )
-			    switch(vfnc.ioType(p_p))
-			    {
-				case IO::String:  setValS(val,reg[*(BYTE *)(cprg+4+i_p)],vfnc.getS(p_p)); break;
-				case IO::Integer: setValI(val,reg[*(BYTE *)(cprg+4+i_p)],vfnc.getI(p_p)); break;
-				case IO::Real:    setValR(val,reg[*(BYTE *)(cprg+4+i_p)],vfnc.getR(p_p)); break;
-				case IO::Boolean: setValB(val,reg[*(BYTE *)(cprg+4+i_p)],vfnc.getB(p_p)); break;
-			    }
-		    }
-		    //--- Set return ---
-		    if( *cprg == Reg::CFunc )
-		    {
-			switch(vfnc.ioType(r_pos))
-			{
-			    case IO::String:  reg[*(BYTE *)(cprg+3)] = vfnc.getS(r_pos); break;
-			    case IO::Integer: reg[*(BYTE *)(cprg+3)] = vfnc.getI(r_pos); break;
-			    case IO::Real:    reg[*(BYTE *)(cprg+3)] = vfnc.getR(r_pos); break;
-			    case IO::Boolean: reg[*(BYTE *)(cprg+3)] = vfnc.getB(r_pos); break;
-			}
-		    }
-		    cprg+=4+ *(BYTE *)(cprg+2); break;
 		}
+		//>>> Set return
+		if( *cprg == Reg::CFunc )
+		    switch(vfnc.ioType(r_pos))
+		    {
+			case IO::String:  reg[*(ui16*)(cprg+3)] = vfnc.getS(r_pos); break;
+			case IO::Integer: reg[*(ui16*)(cprg+3)] = vfnc.getI(r_pos); break;
+			case IO::Real:    reg[*(ui16*)(cprg+3)] = vfnc.getR(r_pos); break;
+			case IO::Boolean: reg[*(ui16*)(cprg+3)] = vfnc.getB(r_pos); break;
+		    }
+
+		cprg += 5 + (*(ui8*)(cprg+2))*sizeof(ui16); break;
+	    }
 	    default:
 		setStart(false);
 		throw TError(nodePath().c_str(),_("Operation %c(%xh) error. Function <%s> is stoped."),*cprg,*cprg,id().c_str());
@@ -1553,7 +1560,7 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
 
 void Func::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	TFunction::cntrCmdProc(opt);
@@ -1581,7 +1588,7 @@ void Func::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
     if( a_path == "/func/cfg/name" && ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )		setName( opt->text() );
     else if( a_path == "/func/cfg/descr" && ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setDescr( opt->text() );
@@ -1660,12 +1667,12 @@ Reg &Reg::operator=( Reg &irg )
 
 string Reg::name() const
 {
-    return (m_nm)? *m_nm:"";
+    return m_nm ? *m_nm : "";
 }
 
 void Reg::setName( const char *nm )
 {
-    if(!m_nm) m_nm = new string;
+    if( !m_nm ) m_nm = new string;
     *m_nm = nm;
 }
 
@@ -1696,11 +1703,11 @@ Reg::Type Reg::vType( Func *fnc )
 
 void Reg::free()
 {
-    if(!lock())
+    if( !lock() )
     {
 	setType(Free);
 	m_lock = false;
-	if(m_nm) 
+	if( m_nm )
 	{
 	    delete m_nm;
 	    m_nm = NULL;

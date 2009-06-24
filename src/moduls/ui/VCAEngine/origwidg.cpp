@@ -902,30 +902,7 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
     if( !sw )	return Widget::attrChange(cfg,prev);
 
     //> Make document after time set
-    if( cfg.id() == "time" && cfg.getI() != prev.getI() )
-    {
-	cfg.setFlgSelf((Attr::SelfAttrFlgs)(cfg.flgSelf()|0x100));
-	/*string mkDk;
-	int n = cfg.owner()->attrAt("n").at().getI();
-	if( !n )
-	{
-	    mkDk = cfg.owner()->attrAt("doc").at().getS();
-	    if( mkDk.empty() )	mkDk = cfg.owner()->attrAt("tmpl").at().getS();
-	    mkDk = makeDoc(mkDk,cfg.owner());
-	    cfg.owner()->attrAt("doc").at().setS(mkDk);
-	}
-	else
-	{
-	    int aCur = cfg.owner()->attrAt("aCur").at().getI();
-	    mkDk = cfg.owner()->attrAt("doc"+TSYS::int2str(aCur)).at().getS();
-	    if( mkDk.empty() )	mkDk = cfg.owner()->attrAt("tmpl").at().getS();
-
-	    mkDk = makeDoc(mkDk,cfg.owner());
-	    cfg.owner()->attrAt("doc"+TSYS::int2str(aCur)).at().setS(mkDk);
-	    if( aCur == cfg.owner()->attrAt("vCur").at().getI() )
-		cfg.owner()->attrAt("doc").at().setS(mkDk);
-	}*/
-    }
+    if( cfg.id() == "time" && cfg.getI() != prev.getI() ) cfg.setFlgSelf((Attr::SelfAttrFlgs)(cfg.flgSelf()|0x100));
     //> Load document's from project's DB
     else if( cfg.id() == "n" && cfg.getI() != prev.getI() )
     {

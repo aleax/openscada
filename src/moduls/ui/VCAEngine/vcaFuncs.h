@@ -28,6 +28,35 @@
 
 namespace VCA
 {
+
+//*************************************************
+//* Session's user                                *
+//*************************************************
+class sesUser : public TFunction
+{
+    public:
+	sesUser( ) : TFunction("SesUser")
+	{
+	    ioAdd( new IO("user",_("User"),IO::String,IO::Return) );
+	    ioAdd( new IO("addr",_("Address"),IO::String,IO::Default) );
+	    setStart(true);
+	}
+
+	string name( )	{ return _("Session user"); }
+	string descr( )	{ return _("Return session user by session's widget path."); }
+
+	void calc( TValFunc *val )
+	{
+	    try
+	    {
+		string sses = TSYS::pathLev(val->getS(1),0,true);
+		if( sses.substr(0,4) == "ses_" ) { val->setS(0,mod->sesAt(sses.substr(4)).at().user()); return; }
+	    }
+	    catch(TError err) { }
+	    val->setS(0,"");
+	}
+};
+
 //*************************************************
 //* Widget's list                                 *
 //*************************************************

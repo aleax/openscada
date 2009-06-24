@@ -228,6 +228,7 @@ void Engine::postEnable( int flag )
     chldAdd( idFnc, new attrList() );
     chldAdd( idFnc, new attrGet() );
     chldAdd( idFnc, new attrSet() );
+    chldAdd( idFnc, new sesUser() );
 }
 
 void Engine::preDisable( int flag )

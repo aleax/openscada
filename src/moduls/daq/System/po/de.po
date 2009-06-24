@@ -1,0 +1,788 @@
+# OpenSCADA.DAQ.System translate to German.
+# Copyright (C) 2009 Irina Popkova
+# This file is distributed under the same license as the OpenSCADA.DAQ.System package module.
+# Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
+#
+#: da_cpu.cpp:37 da_cpu.cpp:38 da_cpu.cpp:39 da_cpu.cpp:40 da_cpu.cpp:53
+#: da_hddstat.cpp:41 da_hddstat.cpp:42 da_hddtemp.cpp:35 da_hddtemp.cpp:36
+#: da_mem.cpp:37 da_mem.cpp:38 da_mem.cpp:39 da_mem.cpp:40 da_mem.cpp:41
+#: da_mem.cpp:42 da_mem.cpp:43 da_mem.cpp:44 da_netstat.cpp:40
+#: da_netstat.cpp:41 da_netstat.cpp:74 da_netstat.cpp:75 da_netstat.cpp:93
+#: da_netstat.cpp:94 da_sensors.cpp:108 da_sensors.cpp:124 da_sensors.cpp:146
+#: da_smart.cpp:87 da_smart.cpp:134 da_smart.cpp:143 da_uptime.cpp:39
+#: da_uptime.cpp:40 da_uptime.cpp:41 da_uptime.cpp:42 da_uptime.cpp:43
+#: da_uptime.cpp:55 os_contr.cpp:65 os_contr.cpp:170
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenSCADA.DAQ.System 1.7.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-06-05 15:07+0300\n"
+"PO-Revision-Date: OpenSCADA.DAQ.System 1.2.0\n"
+"Last-Translator: Irina Popkova <irischkapopkova@yandex.ru>\n"
+"Language-Team: LANGUAGE <de@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+#: da_cpu.cpp:37 da_cpu.cpp:138
+msgid "load"
+msgstr ""
+
+#: da_cpu.cpp:37
+msgid "Load (%)"
+msgstr "Beladung (%)"
+
+#: da_cpu.cpp:38 da_cpu.cpp:139 da_uptime.cpp:60 da_uptime.cpp:69
+#: da_uptime.cpp:96
+msgid "sys"
+msgstr ""
+
+#: da_cpu.cpp:38
+msgid "System (%)"
+msgstr "System (%)"
+
+#: da_cpu.cpp:39 da_cpu.cpp:140
+msgid "user"
+msgstr ""
+
+#: da_cpu.cpp:39
+msgid "User (%)"
+msgstr "Nutzer (%)"
+
+#: da_cpu.cpp:40 da_cpu.cpp:141
+msgid "idle"
+msgstr ""
+
+#: da_cpu.cpp:40
+msgid "Idle (%)"
+msgstr "Stillstand (%)"
+
+#: da_cpu.cpp:52 da_cpu.cpp:94 da_cpu.cpp:173 da_cpu.cpp:186 da_hddstat.cpp:52
+#: da_hddstat.cpp:96 da_hddstat.cpp:149 da_hddtemp.cpp:48 da_hddtemp.cpp:84
+#: da_hddtemp.cpp:150 da_mem.cpp:54 da_mem.cpp:59 da_netstat.cpp:51
+#: da_netstat.cpp:96 da_netstat.cpp:131 da_sensors.cpp:61 da_sensors.cpp:67
+#: da_smart.cpp:52 da_smart.cpp:114 da_smart.cpp:165 da_uptime.cpp:54
+#: da_uptime.cpp:67 da_uptime.cpp:96 da_uptime.cpp:108 os_contr.cpp:170
+msgid "SUBT"
+msgstr ""
+
+#: da_cpu.cpp:58 da_cpu.cpp:120 da_cpu.cpp:156
+msgid "/proc/stat"
+msgstr ""
+
+#: da_cpu.cpp:58 da_cpu.cpp:120 da_cpu.cpp:156 da_hddstat.cpp:78
+#: da_hddstat.cpp:97 da_hddstat.cpp:120 da_mem.cpp:67 da_mem.cpp:97
+#: da_netstat.cpp:77 da_netstat.cpp:97 da_sensors.cpp:44 da_sensors.cpp:139
+#: da_sensors.cpp:205 da_smart.cpp:78 da_smart.cpp:88 da_smart.cpp:135
+#: da_uptime.cpp:71 da_uptime.cpp:89
+msgid "r"
+msgstr ""
+
+#: da_cpu.cpp:65 da_cpu.cpp:163
+#, c-format
+msgid "cpu%d"
+msgstr ""
+
+#: da_cpu.cpp:69
+msgid "gen;"
+msgstr ""
+
+#: da_cpu.cpp:70
+msgid "General"
+msgstr "Im ganzen"
+
+#: da_cpu.cpp:70 da_cpu.cpp:75 da_cpu.cpp:76 da_hddstat.cpp:61
+#: da_hddtemp.cpp:57 da_netstat.cpp:60 da_smart.cpp:61 da_uptime.cpp:58
+#: os_contr.cpp:165 os_contr.cpp:166
+msgid ";"
+msgstr ""
+
+#: da_cpu.cpp:86 da_cpu.cpp:124 da_cpu.cpp:173
+msgid "gen"
+msgstr ""
+
+#: da_cpu.cpp:126
+#, c-format
+msgid "cpu %lu %lu %lu %lu %lu\n"
+msgstr ""
+
+#: da_cpu.cpp:131
+msgid "cpu"
+msgstr ""
+
+#: da_cpu.cpp:131
+#, c-format
+msgid " %lu %lu %lu %lu %lu\n"
+msgstr ""
+
+#: da_cpu.cpp:167 da_cpu.cpp:169 da_cpu.cpp:170 da_cpu.cpp:171 da_cpu.cpp:172
+#: da_cpu.cpp:173 da_cpu.cpp:174
+msgid "CPULoad"
+msgstr ""
+
+#: da_cpu.cpp:170
+msgid "Full CPU Load"
+msgstr "Totalbelastung des Prozessors"
+
+#: da_cpu.cpp:172 da_cpu.cpp:185 da_hddstat.cpp:148 da_hddtemp.cpp:149
+#: da_mem.cpp:103 da_netstat.cpp:130 da_sensors.cpp:220 da_smart.cpp:164
+#: da_uptime.cpp:95 da_uptime.cpp:107 os_contr.cpp:169 os_contr.cpp:341
+#: os_contr.cpp:354 os_contr.cpp:451
+msgid "TYPE"
+msgstr ""
+
+#: da_cpu.cpp:174 da_cpu.cpp:187 da_hddstat.cpp:150 da_hddtemp.cpp:151
+#: da_mem.cpp:104 da_netstat.cpp:132 da_sensors.cpp:221 da_smart.cpp:166
+#: da_uptime.cpp:97 da_uptime.cpp:109
+msgid "EN"
+msgstr ""
+
+#: da_cpu.cpp:179 da_cpu.h:40 da_cpu.h:41
+msgid "CPU"
+msgstr "Prozessor"
+
+#: da_cpu.cpp:179
+msgid "Load"
+msgstr ""
+
+#: da_cpu.cpp:183
+msgid "CPU Load :"
+msgstr "Belastung des Prozessors: "
+
+#: da_hddstat.cpp:41 da_hddstat.cpp:113 da_hddstat.cpp:127
+msgid "rd"
+msgstr ""
+
+#: da_hddstat.cpp:41
+msgid "Read (Kb)"
+msgstr "Gelesen (Kb)"
+
+#: da_hddstat.cpp:42 da_hddstat.cpp:114 da_hddstat.cpp:128
+msgid "wr"
+msgstr ""
+
+#: da_hddstat.cpp:42
+msgid "Write (Kb)"
+msgstr "Geschrieben (Kb)"
+
+#: da_hddstat.cpp:55
+msgid "Disk(part)"
+msgstr "Disk(Teil)"
+
+#: da_hddstat.cpp:78 da_hddstat.cpp:120 da_smart.cpp:78
+msgid "/proc/partitions"
+msgstr ""
+
+#: da_hddstat.cpp:83 da_smart.cpp:83
+#, c-format
+msgid "%d %d %*d %10s"
+msgstr ""
+
+#: da_hddstat.cpp:85
+msgid "md"
+msgstr ""
+
+#: da_hddstat.cpp:97
+msgid "/proc/diskstats"
+msgstr ""
+
+#: da_hddstat.cpp:103
+#, c-format
+msgid "%%*d %%*d %s %%*d %%lu %%lu %%lu %%*d %%*d %%lu"
+msgstr ""
+
+#: da_hddstat.cpp:124
+#, c-format
+msgid "%%*d %%*d %%*d %s %%*d %%*d %%lu %%*d %%*d %%*d %%lu"
+msgstr ""
+
+#: da_hddstat.cpp:136
+msgid "Statistic_"
+msgstr ""
+
+#: da_hddstat.cpp:146
+msgid "HD statistic: "
+msgstr "HD-Statistik: "
+
+#: da_hddtemp.cpp:32
+msgid "Sockets"
+msgstr "Sockets"
+
+#: da_hddtemp.cpp:32
+msgid "HDDTemp"
+msgstr ""
+
+#: da_hddtemp.cpp:35 da_hddtemp.cpp:90
+msgid "disk"
+msgstr ""
+
+#: da_hddtemp.cpp:35
+msgid "Name"
+msgstr "Name"
+
+#: da_hddtemp.cpp:36 da_hddtemp.cpp:92
+msgid "ed"
+msgstr ""
+
+#: da_hddtemp.cpp:36
+msgid "Measure unit"
+msgstr "Masseinheit"
+
+#: da_hddtemp.cpp:37 da_hddtemp.cpp:91
+msgid "t"
+msgstr ""
+
+#: da_hddtemp.cpp:37
+msgid "Temperature"
+msgstr "Temperatur"
+
+#: da_hddtemp.cpp:37 os_contr.cpp:152 os_contr.cpp:155 os_contr.cpp:391
+msgid "0"
+msgstr ""
+
+#: da_hddtemp.cpp:51 da_smart.cpp:55
+msgid "Disk"
+msgstr "Disk"
+
+#: da_hddtemp.cpp:77 da_hddtemp.cpp:96 da_hddtemp.cpp:155 os_contr.cpp:315
+#: os_contr.cpp:445
+#, c-format
+msgid "%s"
+msgstr ""
+
+#: da_hddtemp.cpp:109
+msgid "Parameter Hddtemp"
+msgstr "Parameter Hddtemp"
+
+#: da_hddtemp.cpp:110
+msgid "TCP:127.0.0.1:7634"
+msgstr ""
+
+#: da_hddtemp.cpp:135
+msgid "Temperature_hd"
+msgstr ""
+
+#: da_hddtemp.cpp:147
+msgid "HD temperature: "
+msgstr "HD-Temperatur: "
+
+#: da_mem.cpp:37 da_mem.cpp:81
+msgid "free"
+msgstr ""
+
+#: da_mem.cpp:37
+msgid "Free (kB)"
+msgstr "Frei (kB)"
+
+#: da_mem.cpp:38 da_mem.cpp:82
+msgid "total"
+msgstr ""
+
+#: da_mem.cpp:38
+msgid "Total (kB)"
+msgstr "Total (kB)"
+
+#: da_mem.cpp:39 da_mem.cpp:83
+msgid "use"
+msgstr ""
+
+#: da_mem.cpp:39
+msgid "Use (kB)"
+msgstr "Benutzt (kB)"
+
+#: da_mem.cpp:40 da_mem.cpp:84
+msgid "buff"
+msgstr ""
+
+#: da_mem.cpp:40
+msgid "Buffers (kB)"
+msgstr "Buffers (kB)"
+
+#: da_mem.cpp:41 da_mem.cpp:85
+msgid "cache"
+msgstr ""
+
+#: da_mem.cpp:41
+msgid "Cached (kB)"
+msgstr "Cashed (kB)"
+
+#: da_mem.cpp:42 da_mem.cpp:86
+msgid "sw_free"
+msgstr ""
+
+#: da_mem.cpp:42
+msgid "Swap free (kB)"
+msgstr "Swap frei (kB)"
+
+#: da_mem.cpp:43 da_mem.cpp:87
+msgid "sw_total"
+msgstr ""
+
+#: da_mem.cpp:43
+msgid "Swap total (kB)"
+msgstr "Swap total (kB)"
+
+#: da_mem.cpp:44 da_mem.cpp:88
+msgid "sw_use"
+msgstr ""
+
+#: da_mem.cpp:44
+msgid "Swap use (kB)"
+msgstr "Swap benutzt (kB)"
+
+#: da_mem.cpp:67 da_mem.cpp:97
+msgid "/proc/meminfo"
+msgstr ""
+
+#: da_mem.cpp:72
+#, c-format
+msgid "MemTotal: %d kB\n"
+msgstr ""
+
+#: da_mem.cpp:73
+#, c-format
+msgid "MemFree: %d kB\n"
+msgstr ""
+
+#: da_mem.cpp:74
+#, c-format
+msgid "Buffers: %d kB\n"
+msgstr ""
+
+#: da_mem.cpp:75
+#, c-format
+msgid "Cached: %d kB\n"
+msgstr ""
+
+#: da_mem.cpp:76
+#, c-format
+msgid "SwapTotal: %d kB\n"
+msgstr ""
+
+#: da_mem.cpp:77
+#, c-format
+msgid "SwapFree: %d kB\n"
+msgstr ""
+
+#: da_mem.cpp:93
+msgid "MemInfo"
+msgstr ""
+
+#: da_mem.cpp:101
+msgid "Memory info"
+msgstr "Speicherinformation"
+
+#: da_netstat.cpp:40 da_netstat.cpp:107
+msgid "rcv"
+msgstr ""
+
+#: da_netstat.cpp:40
+msgid "Receive (Kb)"
+msgstr "Empfangen (Kb)"
+
+#: da_netstat.cpp:41 da_netstat.cpp:108
+msgid "trns"
+msgstr ""
+
+#: da_netstat.cpp:41
+msgid "Transmit (Kb)"
+msgstr "Uebermitteln (Кб)"
+
+#: da_netstat.cpp:54
+msgid "Interface"
+msgstr "Interface"
+
+#: da_netstat.cpp:77 da_netstat.cpp:97
+msgid "/proc/net/dev"
+msgstr ""
+
+#: da_netstat.cpp:84
+#, c-format
+msgid "%10s %lu %*d %*d %*d %*d %*d %*d %*d %lu"
+msgstr ""
+
+#: da_netstat.cpp:100
+#, c-format
+msgid " %s %%lu %%*d %%*d %%*d %%*d %%*d %%*d %%*d %%lu"
+msgstr ""
+
+#: da_netstat.cpp:118
+msgid "Interface_"
+msgstr ""
+
+#: da_netstat.cpp:128
+msgid "Interface statistic: "
+msgstr "Interfacestatistik: "
+
+#: da_sensors.cpp:33
+msgid "mbmon -r -c 1"
+msgstr ""
+
+#: da_sensors.cpp:44
+msgid "/etc/sensors.conf"
+msgstr ""
+
+#: da_sensors.cpp:105 da_sensors.cpp:121
+msgid "_"
+msgstr ""
+
+#: da_sensors.cpp:107 da_sensors.cpp:123
+msgid " "
+msgstr ""
+
+#: da_sensors.cpp:144 da_sensors.cpp:209
+#, c-format
+msgid "%31s : %f"
+msgstr ""
+
+#: da_sensors.cpp:157
+msgid "SensorsData"
+msgstr ""
+
+#: da_sensors.cpp:218
+msgid "Data sensors"
+msgstr "Sensordaten"
+
+#: da_smart.cpp:35
+msgid "smartctl -A -v N,raw48 /dev/"
+msgstr ""
+
+#: da_smart.cpp:87 da_smart.cpp:134
+msgid " -d ata"
+msgstr ""
+
+#: da_smart.cpp:95
+#, c-format
+msgid "%*d %*s %*x %*d %*d %*d %*s %*s %*s %d\n"
+msgstr ""
+
+#: da_smart.cpp:140
+#, c-format
+msgid "%d %30s %*x %*d %*d %*d %*s %*s %*s %lu\n"
+msgstr ""
+
+#: da_smart.cpp:152
+msgid "Smart_"
+msgstr ""
+
+#: da_smart.cpp:162
+msgid "HD smart: "
+msgstr ""
+
+#: da_uptime.cpp:39 da_uptime.cpp:77
+msgid "full"
+msgstr ""
+
+#: da_uptime.cpp:39
+msgid "Full seconds"
+msgstr "Sekunden voll"
+
+#: da_uptime.cpp:40 da_uptime.cpp:81
+msgid "sec"
+msgstr ""
+
+#: da_uptime.cpp:40
+msgid "Seconds"
+msgstr "Sekunden"
+
+#: da_uptime.cpp:41 da_uptime.cpp:80
+msgid "min"
+msgstr ""
+
+#: da_uptime.cpp:41
+msgid "Minutes"
+msgstr "Minuten"
+
+#: da_uptime.cpp:42 da_uptime.cpp:79
+msgid "hour"
+msgstr ""
+
+#: da_uptime.cpp:42
+msgid "Hours"
+msgstr "Stunden"
+
+#: da_uptime.cpp:43 da_uptime.cpp:78
+msgid "day"
+msgstr ""
+
+#: da_uptime.cpp:43
+msgid "Days"
+msgstr "Tagen"
+
+#: da_uptime.cpp:57
+msgid "sys;stat"
+msgstr ""
+
+#: da_uptime.cpp:58 os_contr.cpp:48
+msgid "System"
+msgstr "System"
+
+#: da_uptime.cpp:58
+msgid "Station"
+msgstr "Station"
+
+#: da_uptime.cpp:71 da_uptime.cpp:89
+msgid "/proc/uptime"
+msgstr ""
+
+#: da_uptime.cpp:73
+#, c-format
+msgid "%lu"
+msgstr ""
+
+#: da_uptime.cpp:86
+msgid "UpTimeSystem"
+msgstr ""
+
+#: da_uptime.cpp:93
+msgid "System up time"
+msgstr "Arbeitszeit des Systems"
+
+#: da_uptime.cpp:101
+msgid "UpTimeStation"
+msgstr ""
+
+#: da_uptime.cpp:105
+msgid "Station up time"
+msgstr "Arbeitszeit der Station"
+
+#: da_uptime.cpp:108
+msgid "stat"
+msgstr ""
+
+#: os_contr.cpp:49
+msgid "System DA"
+msgstr "Systemdatenerfassung"
+
+#: os_contr.cpp:50
+msgid "DAQ"
+msgstr ""
+
+#: os_contr.cpp:52
+msgid "1.7.0"
+msgstr ""
+
+#: os_contr.cpp:53
+msgid "Roman Savochenko"
+msgstr "Roman Savotschenko"
+
+#: os_contr.cpp:54
+msgid ""
+"Allow operation system data acquisition. Support OS Linux data sources: "
+"HDDTemp, Sensors, Uptime, Memory, CPU and other."
+msgstr ""
+"Ermoeglicht die Datenerfassung des Operationssystems. Unterstuetzt werden die Datenquellen "
+"ОС Linux: HDDTemp, Sensors, Uptime, Memory, CPU und andere."
+
+#: os_contr.cpp:55
+msgid "GPL"
+msgstr ""
+
+#: os_contr.cpp:60
+msgid "C"
+msgstr ""
+
+#: os_contr.cpp:107
+#, c-format
+msgid ""
+"======================= The module <%s:%s> options =======================\n"
+"---------- Parameters of the module section <%s> in config file ----------\n"
+"\n"
+msgstr ""
+"======================= Optionen des Moduls <%s:%s> =============================\n"
+"------- Parameter der modularen Sektion <%s> in der Konfigurationsdatei ---------\n"
+"\n"
+
+#: os_contr.cpp:118
+msgid "h"
+msgstr ""
+
+#: os_contr.cpp:121
+msgid "help"
+msgstr ""
+
+#: os_contr.cpp:152 os_contr.cpp:227
+msgid "AUTO_FILL"
+msgstr ""
+
+#: os_contr.cpp:152
+msgid "Auto create active DA"
+msgstr "Automatisch aktive Datenquellen schaffen"
+
+#: os_contr.cpp:152
+msgid "1"
+msgstr ""
+
+#: os_contr.cpp:153 os_contr.cpp:168 os_contr.cpp:205
+msgid "PRM_BD"
+msgstr ""
+
+#: os_contr.cpp:153
+msgid "System parameteres table"
+msgstr "Tabelle der Systemparameter"
+
+#: os_contr.cpp:153
+msgid "30"
+msgstr ""
+
+#: os_contr.cpp:153
+msgid "system"
+msgstr ""
+
+#: os_contr.cpp:154 os_contr.cpp:203
+msgid "PERIOD"
+msgstr ""
+
+#: os_contr.cpp:154
+msgid "Request data period (ms)"
+msgstr "Datenbefragungszeit (ms)"
+
+#: os_contr.cpp:154
+msgid "5"
+msgstr ""
+
+#: os_contr.cpp:154
+msgid "1000"
+msgstr ""
+
+#: os_contr.cpp:154
+msgid "0;10000"
+msgstr ""
+
+#: os_contr.cpp:155 os_contr.cpp:203
+msgid "PRIOR"
+msgstr ""
+
+#: os_contr.cpp:155
+msgid "Request task priority"
+msgstr "Befragungsaufabeprioritaet"
+
+#: os_contr.cpp:155
+msgid "2"
+msgstr ""
+
+#: os_contr.cpp:155
+msgid "0;100"
+msgstr ""
+
+#: os_contr.cpp:168
+msgid "std"
+msgstr ""
+
+#: os_contr.cpp:168
+msgid "Standard"
+msgstr "Standard"
+
+#: os_contr.cpp:169
+msgid "System part"
+msgstr "Systemteil"
+
+#: os_contr.cpp:169 os_contr.cpp:170
+msgid "10"
+msgstr ""
+
+#: os_contr.cpp:205
+msgid "OSPrm_"
+msgstr ""
+
+#: os_contr.cpp:216
+#, c-format
+msgid "Get data %.6g ms. "
+msgstr "Datenempfang %.6g ms. "
+
+#: os_contr.cpp:244
+msgid "root"
+msgstr ""
+
+#: os_contr.cpp:252
+msgid "start"
+msgstr ""
+
+#: os_contr.cpp:253
+msgid "Acquisition task no started!"
+msgstr "Erfassungsaufgabe ist nicht gestartet!"
+
+#: os_contr.cpp:264
+msgid "stop"
+msgstr ""
+
+#: os_contr.cpp:265
+msgid "Acquisition task no stoped!"
+msgstr "Erfassungsaufgabe ist nicht gestoppt!"
+
+#: os_contr.cpp:293
+#, c-format
+msgid "Thread <%u> started. TID: %ld"
+msgstr ""
+
+#: os_contr.cpp:387
+msgid "err"
+msgstr ""
+
+#: os_contr.cpp:389
+msgid "2:Controller stoped"
+msgstr "2:Controller ist gestoppt"
+
+#: os_contr.cpp:390
+msgid "1:Parameter disabled"
+msgstr "1:Parameter ist disaktiviert"
+
+#: da.h:40
+msgid "da_el"
+msgstr ""
+
+#: da_hddstat.h:40
+msgid "hddstat"
+msgstr ""
+
+#: da_hddstat.h:41
+msgid "HDD statistic"
+msgstr "HDD Statistik"
+
+#: da_hddtemp.h:40
+msgid "hddtemp"
+msgstr ""
+
+#: da_hddtemp.h:41
+msgid "HDD temperature"
+msgstr "HDD Temperatur"
+
+#: da_mem.h:40
+msgid "MEM"
+msgstr ""
+
+#: da_mem.h:41
+msgid "Memory"
+msgstr "Gedaechtnis"
+
+#: da_netstat.h:40
+msgid "netstat"
+msgstr ""
+
+#: da_netstat.h:41
+msgid "Net statistic"
+msgstr "Netstatistik"
+
+#: da_sensors.h:40
+msgid "sensors"
+msgstr ""
+
+#: da_sensors.h:41
+msgid "Sensors"
+msgstr "Sensors"
+
+#: da_smart.h:40
+msgid "hddsmart"
+msgstr ""
+
+#: da_smart.h:41
+msgid "HDD Smart"
+msgstr ""
+
+#: da_uptime.h:40
+msgid "uptime"
+msgstr ""
+
+#: da_uptime.h:41
+msgid "Up time"
+msgstr "Arbeitszeit"

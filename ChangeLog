@@ -1,4 +1,13 @@
 2009-06-22 Roman
+- !!:/DAQ/System, /DAQ/JavaLikeCalc: Interface translation to German is added by Irina Popkova.
+- !!:/DemoDB: Hisories' documents make algoritm is updated. Document's functions for average and sum values is fixed for last value using.
+    Session's user name is added to operator's doings protocol.
+- !!!!:/DAQ/JavaLikeCalc: Limit to variables (registers) count is expanded fro 255 items to 65535.
+- !!:/UI/VCAEngine: The function vcaSesUser() is added to VCA user API.
+- FIX:/UI/Vision: No changed attribute write to model is fixed.
+
+
+2009-06-22 Roman
 - !!:/DAQ/SoundCard, /DAQ/Siemens, /DAQ/SNMP: Interface translation to German is added by Irina Popkova.
 - !!:/DB: SQL-requets sending tab is added to configuration page of DB.
 - FIX:/DB/MySQL: "USE" command is used for not full table address requests.

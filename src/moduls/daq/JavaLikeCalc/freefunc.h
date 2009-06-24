@@ -22,9 +22,6 @@
 #ifndef FREEFUNC_H
 #define FREEFUNC_H
 
-typedef unsigned short int WORD;
-typedef unsigned char BYTE;
-
 #include <string>
 #include <vector>
 #include <deque>
@@ -87,69 +84,69 @@ class Reg
 	{
 	    End,	//[E]: End programm.
 	    EndFull,	//[E]: Full end from programm.
-	    MviB,	//[CRB]: Load boolean <B> to register <R>.
-	    MviI,	//[CR____]: Load integer <____> to register <R>.
-	    MviR,	//[CR______]: Load real <______> to register <R>.
-	    MviS,	//[CRn_____]: Load string len <n> to to register <R>.
-	    AssB,	//[CRR]: Assign bool from register to register.
-	    AssI,	//[CRR]: Assign integer from register to register.
-	    AssR,	//[CRR]: Assign real from register to register.
-	    AssS,	//[CRR]: Assign string from register to register.
-	    MovB,	//[CRR]: Move bool from register to register.
-	    MovI,	//[CRR]: Move integer from register to register.
-	    MovR,	//[CRR]: Move real from register to register.
-	    MovS,	//[CRR]: Move string from register to register.
-	    AddR,	//[CRRR]: Real add.
-	    AddS,	//[CRRR]: String add.
-	    Sub,	//[CRRR]: Real subtract.
-	    Mul,	//[CRRR]: Real multiply.
-	    Div,	//[CRRR]: Real divide.
-	    RstI,	//[CRRR]: Integer divide rest.
-	    BitOr,	//[CRRR]: Integer bit or.
-	    BitAnd,	//[CRRR]: Integer bit and.
-	    BitXor,	//[CRRR]: Integer bit xor.
-	    BitShLeft,	//[CRRR]: Integer bit shift left.
-	    BitShRight,	//[CRRR]: Integer bit shift right.
-	    LOr,	//[CRRR]: Boolean OR.
-	    LAnd,	//[CRRR]: Boolean AND.
-	    LT,		//[CRRR]: Real least.
-	    GT,		//[CRRR]: Real great.
-	    LER,	//[CRRR]: Real least equal.
-	    GER,	//[CRRR]: Real great equal.
-	    EQR,	//[CRRR]: Real equal.
-	    EQS,	//[CRRR]: String equal.
-	    NER,	//[CRRR]: Real no equal.
-	    NES,	//[CRRR]: String no equal.
-	    Not,	//[CRR]: Boolean not.
-	    BitNot,	//[CRR]: Integer bit not.
-	    Neg,	//[CRR]: Negate real.
-	    If,		//[CR00nn]: Construction [if(R)  else <00>; <nn>]
-	    Cycle,	//[CRbbaann]: Cycles construction [for(<first_init>;R=<cond>;aa)<bb>;<nn>] [while(R=<cond>)<bb>;<nn>]
+	    MviB,	//[CRRB]: Load boolean <B> to register <R>.
+	    MviI,	//[CRR____]: Load integer <____> to register <R>.
+	    MviR,	//[CRR______]: Load real <______> to register <R>.
+	    MviS,	//[CRRn_____]: Load string len <n> to to register <R>.
+	    AssB,	//[CRRrr]: Assign bool from register to register.
+	    AssI,	//[CRRrr]: Assign integer from register to register.
+	    AssR,	//[CRRrr]: Assign real from register to register.
+	    AssS,	//[CRRrr]: Assign string from register to register.
+	    MovB,	//[CRRrr]: Move bool from register to register.
+	    MovI,	//[CRRrr]: Move integer from register to register.
+	    MovR,	//[CRRrr]: Move real from register to register.
+	    MovS,	//[CRRrr]: Move string from register to register.
+	    AddR,	//[CRRrrRR]: Real add.
+	    AddS,	//[CRRrrRR]: String add.
+	    Sub,	//[CRRrrRR]: Real subtract.
+	    Mul,	//[CRRrrRR]: Real multiply.
+	    Div,	//[CRRrrRR]: Real divide.
+	    RstI,	//[CRRrrRR]: Integer divide rest.
+	    BitOr,	//[CRRrrRR]: Integer bit or.
+	    BitAnd,	//[CRRrrRR]: Integer bit and.
+	    BitXor,	//[CRRrrRR]: Integer bit xor.
+	    BitShLeft,	//[CRRrrRR]: Integer bit shift left.
+	    BitShRight,	//[CRRrrRR]: Integer bit shift right.
+	    LOr,	//[CRRrrRR]: Boolean OR.
+	    LAnd,	//[CRRrrRR]: Boolean AND.
+	    LT,		//[CRRrrRR]: Real least.
+	    GT,		//[CRRrrRR]: Real great.
+	    LER,	//[CRRrrRR]: Real least equal.
+	    GER,	//[CRRrrRR]: Real great equal.
+	    EQR,	//[CRRrrRR]: Real equal.
+	    EQS,	//[CRRrrRR]: String equal.
+	    NER,	//[CRRrrRR]: Real no equal.
+	    NES,	//[CRRrrRR]: String no equal.
+	    Not,	//[CRRrr]: Boolean not.
+	    BitNot,	//[CRRrr]: Integer bit not.
+	    Neg,	//[CRRrr]: Negate real.
+	    If,		//[CRR00nn]: Construction [if(R)  else <00>; <nn>]
+	    Cycle,	//[CRRbbaann]: Cycles construction [for(<first_init>;R=<cond>;aa)<bb>;<nn>] [while(R=<cond>)<bb>;<nn>]
 	    Break,	//[C]: Break for cycles
 	    Continue,	//[C]: Continue for cycles
-	    FSin,	//[CRR]: Function sine.
-	    FCos,	//[CRR]: Function cosine.
-	    FTan,	//[CRR]: Function tangent.
-	    FSinh,	//[CRR]: Function sine hyperbolic.
-	    FCosh,	//[CRR]: Function cosine hyperbolic.
-	    FTanh,	//[CRR]: Function tangent hyperbolic.
-	    FAsin,	//[CRR]: Function arcsine.
-	    FAcos,	//[CRR]: Function arccosine.
-	    FAtan,	//[CRR]: Function arctangent.
-	    FRand,	//[CRR]: Function randomize.
-	    FLg,	//[CRR]: Function decimal logarithm.
-	    FLn,	//[CRR]: Function natural logarithm.
-	    FExp,	//[CRR]: Function exponent.
-	    FPow,	//[CRRR]: Function power.
-	    FMin,	//[CRRR]: Function minimum.
-	    FMax,	//[CRRR]: Function maximum.
-	    FSqrt,	//[CRR]: Function sqrt.
-	    FAbs,	//[CRR]: Function absolute.
-	    FSign,	//[CRR]: Function sign.
-	    FCeil,	//[CRR]: Function ceil.
-	    FFloor,	//[CRR]: Function floor.
-	    CProc,	//[CFnR____]: Procedure (R - don't used).
-	    CFunc	//[CFnR____]: Function.
+	    FSin,	//[CRRrr]: Function sine.
+	    FCos,	//[CRRrr]: Function cosine.
+	    FTan,	//[CRRrr]: Function tangent.
+	    FSinh,	//[CRRrr]: Function sine hyperbolic.
+	    FCosh,	//[CRRrr]: Function cosine hyperbolic.
+	    FTanh,	//[CRRrr]: Function tangent hyperbolic.
+	    FAsin,	//[CRRrr]: Function arcsine.
+	    FAcos,	//[CRRrr]: Function arccosine.
+	    FAtan,	//[CRRrr]: Function arctangent.
+	    FRand,	//[CRRrr]: Function randomize.
+	    FLg,	//[CRRrr]: Function decimal logarithm.
+	    FLn,	//[CRRrr]: Function natural logarithm.
+	    FExp,	//[CRRrr]: Function exponent.
+	    FPow,	//[CRRrrRR]: Function power.
+	    FMin,	//[CRRrrRR]: Function minimum.
+	    FMax,	//[CRRrrRR]: Function maximum.
+	    FSqrt,	//[CRRrr]: Function sqrt.
+	    FAbs,	//[CRRrr]: Function absolute.
+	    FSign,	//[CRRrr]: Function sign.
+	    FCeil,	//[CRRrr]: Function ceil.
+	    FFloor,	//[CRRrr]: Function floor.
+	    CProc,	//[CFnRR____]: Procedure (RR - don't used).
+	    CFunc	//[CFnRR____]: Function.
 	};
 
 	union El
@@ -364,7 +361,7 @@ class Func : public TConfig, public TFunction
 	void saveIO( );
 	void delIO( );
 
-	void exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt );
+	void exec( TValFunc *val, RegW *reg, const ui8 *cprg, ExecData &dt );
 
     private:
 	//Attributes

@@ -1491,12 +1491,15 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	    }
 	}
 	else if( ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEQ_WR) )	//Set values
+	{
+	    if( ownerSess()->user() != opt->attr("user") ) ownerSess()->setUser(opt->attr("user"));
 	    for( int i_ch = 0; i_ch < opt->childSize(); i_ch++ )
 	    {
 	        string aid = opt->childGet(i_ch)->attr("id");
 	        if( aid == "event" ) eventAdd(opt->childGet(i_ch)->text()+"\n");
 	        else attrAt(aid).at().setS(opt->childGet(i_ch)->text());
 	    }
+	}
     }
     else if( a_path == "/serv/attrBr" && ctrChkNode(opt,"get",R_R_R_,"root","UI",SEQ_RD) )	//Get attributes all updated elements' of the branch
     {

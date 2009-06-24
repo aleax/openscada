@@ -252,9 +252,9 @@ expr:	CONST	{ $$ = $1; }
 prmlst: /*empty*/		{ $$ = 0; }
 	| expr			{ $$ = 1; p_fnc->f_prmst.push_front($1); }
 	| prmlst ',' prmlst	{ $$ = $1 + $3; }
-if:	/*empty*/	{ $$ = p_fnc->prg.size(); p_fnc->prg=p_fnc->prg+(char)Reg::If+"R00nn"; }
-if_expr: '?'		{ $$ = p_fnc->prg.size(); p_fnc->prg=p_fnc->prg+(char)Reg::If+"R00nn"; }
-cycl:	/*empty*/	{ $$ = p_fnc->prg.size(); p_fnc->prg=p_fnc->prg+(char)Reg::Cycle+"Rbbaann"; }
+if:	/*empty*/	{ $$ = p_fnc->prg.size(); p_fnc->prg=p_fnc->prg+(char)Reg::If+"RR00nn"; }
+if_expr: '?'		{ $$ = p_fnc->prg.size(); p_fnc->prg=p_fnc->prg+(char)Reg::If+"RR00nn"; }
+cycl:	/*empty*/	{ $$ = p_fnc->prg.size(); p_fnc->prg=p_fnc->prg+(char)Reg::Cycle+"RRbbaann"; }
 end:	/*empty*/	{ p_fnc->prg+=(char)Reg::End; $$ = p_fnc->prg.size(); }
 /************************* END OF GRAMMAR ****************************/
 %%
