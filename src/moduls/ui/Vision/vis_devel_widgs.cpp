@@ -463,8 +463,8 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &value, int 
 			(value.toBool()?"1":"0") : value.toString().toAscii().data());
 	if( !mainWin()->cntrIfCmd(req) )
 	{
+	    if( it->data() != value ) it->setModify(true);
 	    it->setData( (it->data().type()==QVariant::Bool) ? value.toBool() : value );
-	    it->setModify(true);
 	    emit modified(nwdg);
 	    emit dataChanged(index,index);
 	    if( it->flag()&Item::Active ) setWdg(cur_wdg);

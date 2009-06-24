@@ -25,6 +25,8 @@
 
 #include <math.h>
 #include <map>
+
+#include <QPainterPath>
 #include <QPen>
 
 #include "vis_shapes.h"
@@ -43,26 +45,26 @@ namespace VISION
 //************************************************
 //* ShapeItem                                    *
 //************************************************
-class ShapeItem 
+class ShapeItem
 {
     public:
 	ShapeItem( )	{ }
-        ShapeItem( const QPainterPath &ipath, const QPainterPath &path_simple, short num_1, short num_2, short num_3, short num_4, short num_5,
+	ShapeItem( const QPainterPath &ipath, const QPainterPath &path_simple, short num_1, short num_2, short num_3, short num_4, short num_5,
 		    const QPointF &ctrlpos_4, const short &ilineColor, const short &iborderColor, const short &istyle , short iwidth, short bwidth, short itype, double iangle_temp ) : 
-    	    ctrlPos4(ctrlpos_4), n1(num_1), n2(num_2), n3(num_3), n4(num_4), n5(num_5), lineColor(ilineColor),
+	    ctrlPos4(ctrlpos_4), n1(num_1), n2(num_2), n3(num_3), n4(num_4), n5(num_5), lineColor(ilineColor),
 	    borderColor(iborderColor), style(istyle), width(iwidth), border_width(bwidth), type(itype), path(ipath), pathSimple(path_simple), angle_temp(iangle_temp)
-	{ };								
+	{ };
 
-	QPainterPath 	path, 
-		        pathSimple;
+	QPainterPath	path,
+			pathSimple;
 	QPointF		ctrlPos4;
-        short 		n1, n2, n3, n4, n5;
+        short		n1, n2, n3, n4, n5;
         short           lineColor, borderColor;
         short           style;
-	short 		width;
+	short		width;
         short           border_width;
-	short 		type :3;
-        double 		angle_temp;
+	short		type :3;
+        double		angle_temp;
 };
 
 //************************************************
