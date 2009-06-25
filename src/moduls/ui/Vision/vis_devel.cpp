@@ -53,9 +53,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
 
     setProperty("QTStarterToolDis",true);
 
-#if QT_VERSION >= 0x040301
     setDockOptions(dockOptions() | QMainWindow::VerticalTabs);
-#endif
     mod->regWin( this );
 
     setWindowTitle(_("Vision developing"));

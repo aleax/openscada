@@ -1200,11 +1200,7 @@ bool ShapeMedia::MapArea::containsPoint( const QPoint & point )
 	    if( pnts.size() < 2 ) return false;
 	    return QRect(pnts[0],pnts[1]).contains(point);
 	case 1:		//poly
-#if QT_VERSION >= 0x040300
 	    return QPolygon(pnts).containsPoint(point,Qt::OddEvenFill);
-#else
-	    return false;
-#endif
 	case 2: 	//circle
 	{
 	    if( pnts.size() < 2 ) return false;
