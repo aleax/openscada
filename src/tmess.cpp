@@ -186,7 +186,7 @@ const char *TMess::I18N( const char *mess, const char *d_name )
 void TMess::setLang2CodeBase( const string &vl )
 {
     mLang2CodeBase = vl;
-    if( mLang2CodeBase.size() < 2 || mLang2CodeBase == "POSIX" || mLang2CodeBase == "C" ) mLang2CodeBase = "en";
+    if( !mLang2CodeBase.empty() && mLang2CodeBase.size() < 2 || mLang2CodeBase == "POSIX" || mLang2CodeBase == "C" ) mLang2CodeBase = "en";
     else mLang2CodeBase = mLang2CodeBase.substr(0,2);
 
     SYS->modif();

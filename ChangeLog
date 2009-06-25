@@ -1,4 +1,9 @@
-2009-06-22 Roman
+2009-06-25 Roman
+- FIX:/SYS/Mess: Set base lang code to empty is fixed.
+- FIX:/DAQ/DAQGate: Request to local archives is fixed.
+
+
+2009-06-24 Roman
 - !!:/DAQ/System, /DAQ/JavaLikeCalc: Interface translation to German is added by Irina Popkova.
 - !!:/DemoDB: Hisories' documents make algoritm is updated. Document's functions for average and sum values is fixed for last value using.
     Session's user name is added to operator's doings protocol.

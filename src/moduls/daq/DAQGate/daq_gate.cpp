@@ -658,11 +658,11 @@ TMdPrm &TMdVl::owner( )	{ return *(dynamic_cast<TMdPrm*>(nodePrev())); }
 
 void TMdVl::cntrCmdProc( XMLNode *opt )
 {
-    if( !arch( ).freeStat() ) TVal::cntrCmdProc(opt);
+    if( !arch( ).freeStat() ) { TVal::cntrCmdProc(opt); return; }
 
     string a_path = opt->attr("path");
     //> Service commands process
-    if( a_path == "/serv/val"  )	//Values access
+    if( a_path == "/serv/val" )	//Values access
     {
 	//>> Request to remote station
 	string scntr;
