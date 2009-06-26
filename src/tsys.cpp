@@ -242,7 +242,7 @@ bool TSYS::cfgFileLoad()
 	switch(next_opt)
 	{
 	    case 'h':
-		fprintf(stdout,TSYS::strEncode(optDescr(),TSYS::FormatPrint).c_str());
+		fprintf(stdout,"%s",optDescr().c_str());
 		Mess->setMessLevel(7);
 		cmd_help = true;
 		break;

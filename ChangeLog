@@ -1,3 +1,7 @@
+2009-06-26 Roman
+- FIX:/SYS: Some warnings at build by gcc-4.4.0 is resolved.
+
+
 2009-06-25 Roman
 - FIX:/SYS/Mess: Set base lang code to empty is fixed.
 - FIX:/DAQ/DAQGate: Request to local archives is fixed.
