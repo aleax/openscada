@@ -172,7 +172,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		//>> Get last value
 		if( !tm ||												//Current value request
 			(vl.at().arch( ).freeStat() && (full || vl.at().time() > tm)) ||				//Updated value request
-			(!vl.at().arch( ).freeStat() && (vl.at().time()/vl.at().arch().at().period()-tm/vl.at().arch().at().period()) <= 1) )	//One value diff
+			(!vl.at().arch( ).freeStat() && (vl.at().arch().at().end()/vl.at().arch().at().period()-tm/vl.at().arch().at().period()) <= 1) )	//One value diff
 		    opt->childAdd("el")->setAttr("id",list_c[i_el])->setText(vl.at().getS());
 		//>> Get values from archive
 		else if( !vl.at().arch( ).freeStat() )

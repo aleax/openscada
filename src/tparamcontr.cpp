@@ -150,10 +150,15 @@ void TParamContr::disable()
 
 void TParamContr::vlGet( TVal &val )
 {
-    if(val.name() == "err" )
+    if( val.name() == "err" )
     {
-	if( enableStat() ) val.setS("0",0,true);
-	else val.setS(_("1:Parameter is disabled."),0,true);
+	if( !enableStat() ) val.setS(_("1:Parameter is disabled."),0,true);
+	else if( !owner().startStat( ) ) val.setS(_("2:Controller is stoped."),0,true);
+	else
+	{
+	    int code = atoi(val.getS(0,true).c_str());
+	    if( code == 1 || code == 2 ) val.setS("0",0,true);
+	}
     }
 }
 

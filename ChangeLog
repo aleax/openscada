@@ -1,3 +1,8 @@
+2009-06-27 Roman
+- FIX:/Value: Empty archives' records for DAQ parameters' service request is fixed.
+- FIX:/DAQ: Error attribute "err" no correct clear is fixed.
+
+
 2009-06-26 Roman
 - FIX:/SYS: Some warnings at build by gcc-4.4.0 is resolved.
 

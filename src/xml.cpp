@@ -114,7 +114,7 @@ XMLNode* XMLNode::childIns( unsigned id, const string &name )
 
 XMLNode* XMLNode::childGet( const int index, bool noex ) const
 {
-    if( index < childSize() )	return mChildren[index];
+    if( index >= 0 && index < childSize() )	return mChildren[index];
     if( noex )	return NULL;
     throw TError("XMLNode","Child %d is not present.",index);
 }
