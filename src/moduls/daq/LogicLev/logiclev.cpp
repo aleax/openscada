@@ -586,10 +586,8 @@ void TMdPrm::vlGet( TVal &val )
     {
 	if( val.name() == "err" )
 	{
-	    if(!enableStat())
-		val.setS(_("1:Parameter is disabled."),0,true);
-	    else if(!owner().startStat())
-		val.setS(_("2:Controller is stoped."),0,true);
+	    if( !enableStat() ) val.setS(_("1:Parameter is disabled."),0,true);
+	    else if( !owner().startStat( ) ) val.setS(_("2:Controller is stoped."),0,true);
 	}
 	return;
     }

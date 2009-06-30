@@ -206,7 +206,7 @@ void TController::enable( )
 	    }
 
     //- Set enable stat flag -
-    en_st=true;
+    en_st = true;
 }
 
 void TController::disable( )

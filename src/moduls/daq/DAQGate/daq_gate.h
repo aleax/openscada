@@ -62,6 +62,7 @@ class TMdContr;
 
 class TMdPrm : public TParamContr
 {
+    friend class TMdContr;
     public:
 	//Methods
 	TMdPrm( string name, TTipParam *tp_prm );
@@ -74,10 +75,13 @@ class TMdPrm : public TParamContr
 	void enable( );
 	void disable( );
 
-	void update( );				//Update parameter
+	//void update( );				//Update parameter
 
 	TElem &elem( )		{ return p_el; }
 	TMdContr &owner( );
+
+	//Attrinutes
+	bool isPrcOK;
 
     protected:
 	//Methods
@@ -116,8 +120,6 @@ class TMdContr: public TController
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
-	void prmEn( const string &id, bool val );
-
 	//> Request to OpenSCADA control interface
 	int cntrIfCmd( XMLNode &node, bool strongSt = false );
 
@@ -148,7 +150,6 @@ class TMdContr: public TController
 
 	bool	prcSt,				//Process task active
 		endrunReq;			//Request to stop of the Process task
-	vector< AutoHD<TMdPrm> > pHd;
 	map<string,float> mStatWork;		//Work stations and it status
 
 	pthread_t procPthr;			//Process task thread

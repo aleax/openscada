@@ -1,3 +1,13 @@
+2009-06-30 Roman
+- !!!!:/SYS: Alarms mechanism is added, based on Messages mechanism's API.
+- FIX:/Archive/Value: Error value archivator starting is fixed.
+- FIX:/DAQ: Reserve stations configuration saving is fixed.
+- FIX:/DAQ/Parameter: Errors generation is fixed.
+- !!:FIX:/DAQ/Value: The service function of parameter's attributes values request is fixed for synchronous attributes.
+- !!:/DAQ/DAQGate: Regular requests is grouped to one request for controller.
+- !!:/DAQ/DAQGate: Parameter's list update and archives connection update is added.
+
+
 2009-06-27 Roman
 - FIX:/Value: Empty archives' records for DAQ parameters' service request is fixed.
 - FIX:/DAQ: Error attribute "err" no correct clear is fixed.

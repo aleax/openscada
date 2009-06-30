@@ -41,7 +41,7 @@
 //*************************************************
 //* TMess                                         *
 //*************************************************
-TMess::TMess(  ) : IOCharSet("UTF-8"), m_mess_level(0), log_dir(0x2)
+TMess::TMess(  ) : IOCharSet("UTF-8"), mMessLevel(0), mLogDir(0x2)
 {
     setenv("LC_NUMERIC","C",1);
     openlog(PACKAGE,0,LOG_USER);
@@ -63,17 +63,17 @@ TMess::~TMess(  )
 
 void TMess::setMessLevel( int level )
 {
-    m_mess_level = level;
+    mMessLevel = level;
     SYS->modif();
 }
 
 void TMess::setLogDirect( int dir )
 {
-    log_dir = dir;
+    mLogDir = dir;
     SYS->modif();
 }
 
-void TMess::put( const char *categ, Type level, const char *fmt,  ... )
+void TMess::put( const char *categ, char level, const char *fmt,  ... )
 {
     char mess[STR_BUF_LEN];
     va_list argptr;
@@ -82,36 +82,38 @@ void TMess::put( const char *categ, Type level, const char *fmt,  ... )
     vsnprintf(mess,sizeof(mess),fmt,argptr);
     va_end(argptr);
 
-    level = (level<Debug)?Debug:(level>Emerg)?Emerg:level;
-    if(level<messLevel()) return; 
+    level = vmin(Emerg,vmax(-Emerg,level));
+    if( abs(level) < messLevel() ) return;
 
-    int level_sys;
-    switch(level)
-    {
-	case Debug:	level_sys = LOG_DEBUG;	break;
-	case Info:	level_sys = LOG_INFO;	break;
-	case Notice:	level_sys = LOG_NOTICE;	break;
-	case Warning:	level_sys = LOG_WARNING;break;
-	case Error:	level_sys = LOG_ERR;	break;
-	case Crit:	level_sys = LOG_CRIT;	break;
-	case Alert:	level_sys = LOG_ALERT;	break;
-	case Emerg:	level_sys = LOG_EMERG;	break;
-	default: 	level_sys = LOG_DEBUG;
-    }
+    long long ctm = TSYS::curTime();
     string s_mess = TSYS::int2str(level) + "|" + categ + " | " + mess;
-    if(log_dir&1) syslog(level_sys,TSYS::strEncode(s_mess,TSYS::FormatPrint).c_str());
-    if(log_dir&2) fprintf(stdout,"%s \n",s_mess.c_str());
-    if(log_dir&4) fprintf(stderr,"%s \n",s_mess.c_str());
-    if((log_dir&8) && SYS->present("Archive") )
+
+    if( mLogDir&1 )
     {
-	long long ctm = TSYS::curTime();
-	SYS->archive().at().messPut(ctm/1000000,ctm%1000000,categ,level,mess);
+	int level_sys;
+	switch( abs(level) )
+	{
+	    case Debug:		level_sys = LOG_DEBUG;	break;
+	    case Info:		level_sys = LOG_INFO;	break;
+	    case Notice:	level_sys = LOG_NOTICE;	break;
+	    case Warning:	level_sys = LOG_WARNING;break;
+	    case Error:		level_sys = LOG_ERR;	break;
+	    case Crit:		level_sys = LOG_CRIT;	break;
+	    case Alert:		level_sys = LOG_ALERT;	break;
+	    case Emerg:		level_sys = LOG_EMERG;	break;
+	    default: 		level_sys = LOG_DEBUG;
+	}
+	syslog(level_sys,TSYS::strEncode(s_mess,TSYS::FormatPrint).c_str());
     }
+    if( mLogDir&2 ) fprintf(stdout,"%s \n",s_mess.c_str());
+    if( mLogDir&4 ) fprintf(stderr,"%s \n",s_mess.c_str());
+    if( (mLogDir&8) && SYS->present("Archive") )
+	SYS->archive().at().messPut( ctm/1000000, ctm%1000000, categ, level, mess );
 }
 
-void TMess::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const string &category, Type level )
+void TMess::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &recs, const string &category, char level )
 {
-    if(log_dir&8) SYS->archive().at().messGet(b_tm,e_tm,recs,category,level);
+    if( mLogDir&8 ) SYS->archive().at().messGet(b_tm,e_tm,recs,category,level);
 }
 
 string TMess::lang( )

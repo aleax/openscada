@@ -425,14 +425,14 @@ void TArchiveS::subStop( )
     }
 }
 
-void TArchiveS::messPut( time_t tm, int utm, const string &categ, TMess::Type level, const string &mess )
+void TArchiveS::messPut( time_t tm, int utm, const string &categ, char level, const string &mess )
 {
     //> Put message to buffer
     ResAlloc res(mRes,true);
     mBuf[headBuf].time  = tm;
-    mBuf[headBuf].utime  = utm;
+    mBuf[headBuf].utime = utm;
     mBuf[headBuf].categ = categ;
-    mBuf[headBuf].level = level;
+    mBuf[headBuf].level = (TMess::Type)abs(level);
     mBuf[headBuf].mess  = mess;
     if( ++headBuf >= mBuf.size() ) headBuf = 0;
     //> Check to no archivated messages
@@ -459,6 +459,11 @@ void TArchiveS::messPut( time_t tm, int utm, const string &categ, TMess::Type le
 	}
     }
     else bufErr = 0;
+
+    //> Alarms processing. For level less 0 alarm is set
+    map<string,TMess::SRec>::iterator p;
+    if( level < 0 ) mAlarms[categ] = TMess::SRec(tm,utm,categ,(TMess::Type)abs(level),mess);
+    else if( (p=mAlarms.find(categ)) != mAlarms.end() ) mAlarms.erase(p);
 }
 
 void TArchiveS::messPut( const vector<TMess::SRec> &recs )
@@ -467,14 +472,15 @@ void TArchiveS::messPut( const vector<TMess::SRec> &recs )
 	messPut(recs[i_r].time,recs[i_r].utime,recs[i_r].categ,recs[i_r].level,recs[i_r].mess);
 }
 
-void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const string &category, TMess::Type level, const string &arch )
+void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const string &category, char level, const string &arch )
 {
     recs.clear();
 
     ResAlloc res(mRes,false);
+
     //> Get records from buffer
     int i_buf = headBuf;
-    while( !arch.size() || arch==BUF_ARCH_NM )
+    while( level >= 0 && (!arch.size() || arch==BUF_ARCH_NM) )
     {
 	if( mBuf[i_buf].time >= b_tm && mBuf[i_buf].time != 0 && mBuf[i_buf].time <= e_tm &&
 		mBuf[i_buf].level >= level && TMess::chkPattern( mBuf[i_buf].categ, category ) )
@@ -486,7 +492,7 @@ void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, c
     //> Get records from archives
     vector<string> t_lst, o_lst;
     modList(t_lst);
-    for( int i_t = 0; i_t < t_lst.size(); i_t++ )
+    for( int i_t = 0; level >= 0 && i_t < t_lst.size(); i_t++ )
     {
 	at(t_lst[i_t]).at().messList(o_lst);
 	for( int i_o = 0; i_o < o_lst.size(); i_o++ )
@@ -495,6 +501,19 @@ void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, c
 	    if( archtor.at().startStat() && (!arch.size() || arch==archtor.at().workId()) )
 		archtor.at().get(b_tm,e_tm,recs,category,level);
 	}
+    }
+
+    //> Alarms request processing
+    if( level < 0 )
+    {
+	vector< pair<long long,TMess::SRec* > > mb;
+	for( map<string,TMess::SRec>::iterator p = mAlarms.begin(); p != mAlarms.end(); p++ )
+	    if( p->second.time >= b_tm && p->second.time <= e_tm &&
+		    p->second.level >= abs(level) && Mess->chkPattern(p->second.categ,category) )
+	    mb.push_back(pair<long long,TMess::SRec* >(FTM(p->second),&p->second));
+	make_heap(mb.begin(),mb.end());
+	sort_heap(mb.begin(),mb.end());
+	for( int i_b = 0; i_b < mb.size(); i_b++ ) recs.push_back(*mb[i_b].second);
     }
 }
 
@@ -740,7 +759,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/m_arch/view/size",_("Size (s)"),0664,"root",my_gr.c_str(),1,"tp","dec");
 		ctrMkNode("fld",opt,-1,"/m_arch/view/cat",_("Category pattern"),0664,"root",my_gr.c_str(),2,"tp","str",
 		    "help",_("Messages category. Use template symbols for group selection:\n  '*' - any substring;\n  '?' - any symbol."));
-		ctrMkNode("fld",opt,-1,"/m_arch/view/lvl",_("Level"),0664,"root",my_gr.c_str(),4,"tp","dec","min","0","max","7",
+		ctrMkNode("fld",opt,-1,"/m_arch/view/lvl",_("Level"),0664,"root",my_gr.c_str(),4,"tp","dec","min","-7","max","7",
 		    "help",_("Get messages for level more and equaly it."));
 		ctrMkNode("fld",opt,-1,"/m_arch/view/archtor",_("Archivator"),0664,"root",my_gr.c_str(),4,"tp","str","dest","select","select","/m_arch/lstAMess",
 		    "help",_("Messages archivator.\nNo set archivator for process by buffer and all archivators.\nSet '<buffer>' for process by buffer."));
@@ -831,7 +850,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	int    gsz = atoi(TBDS::genDBGet(nodePath()+"messSize","60",opt->attr("user")).c_str());
 	messGet( gtm-gsz, gtm, rec,
 		 TBDS::genDBGet(nodePath()+"messCat","",opt->attr("user")),
-		 (TMess::Type)atoi(TBDS::genDBGet(nodePath()+"messLev","0",opt->attr("user")).c_str()),
+		 atoi(TBDS::genDBGet(nodePath()+"messLev","0",opt->attr("user")).c_str()),
 		 TBDS::genDBGet(nodePath()+"messArch","",opt->attr("user")) );
 
 	XMLNode *n_tm	= ctrMkNode("list",opt,-1,"/m_arch/view/mess/0","",0440);

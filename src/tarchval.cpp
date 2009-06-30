@@ -1021,14 +1021,17 @@ void TVArchive::start( )
 
     run_st = true;
 
-    setSrcMode((TVArchive::SrcMode)mSrcMode,mDSourc);
+    try
+    {
+	setSrcMode((TVArchive::SrcMode)mSrcMode,mDSourc);
 
-    //- Attach to archivators -
-    string arch;
-    for( int i_off = 0; (arch = TSYS::strSepParse(mArchs,0,';',&i_off)).size();  )
-	if(!archivatorPresent(arch))
-	    try{ archivatorAttach(arch); }
-	    catch(TError err)	{ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+	//> Attach to archivators
+	string arch;
+	for( int i_off = 0; (arch = TSYS::strSepParse(mArchs,0,';',&i_off)).size();  )
+	    if( !archivatorPresent(arch) )
+		try{ archivatorAttach(arch); }
+		catch(TError err)	{ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    }catch(...){ run_st = false; throw; }
 }
 
 void TVArchive::stop( bool full_del )
@@ -1039,7 +1042,7 @@ void TVArchive::stop( bool full_del )
 
     setSrcMode((TVArchive::SrcMode)mSrcMode,mDSourc);
 
-    //- Detach all archivators -
+    //> Detach all archivators
     vector<string> arch_ls;
     archivatorList(arch_ls);
     for( int i_l = 0; i_l < arch_ls.size(); i_l++ )
@@ -1059,20 +1062,20 @@ void TVArchive::setSrcMode( SrcMode vl, const string &isrc )
     try
     {
 	if( (!run_st || vl != PassiveAttr || isrc != mDSourc) &&
-		dynamic_cast<TVal *>(&SYS->nodeAt(mDSourc,0,'.').at()) )
+		dynamic_cast<TVal*>(&SYS->nodeAt(mDSourc,0,'.').at()) )
 	    dynamic_cast<TVal&>(SYS->nodeAt(mDSourc,0,'.').at()).setArch(AutoHD<TVArchive>());
     }catch(...){  }
 
     //> Set all links
-    if( run_st && vl == ActiveAttr && dynamic_cast<TVal *>(&SYS->nodeAt(isrc,0,'.').at()) )
+    if( run_st && vl == ActiveAttr && dynamic_cast<TVal*>(&SYS->nodeAt(isrc,0,'.').at()) )
     {
-	dynamic_cast<TVal&>(SYS->nodeAt(isrc,0,'.').at()).setArch(AutoHD<TVArchive>(this));
-	pattr_src = SYS->nodeAt(isrc,0,'.');
+	dynamic_cast<TVal&>(SYS->nodeAt(isrc,0,'.').at()).setArch( AutoHD<TVArchive>(this) );
+	pattr_src = SYS->nodeAt( isrc, 0, '.' );
 	owner().setActValArch( id(), true );
     }
 
-    if( run_st && vl == PassiveAttr && dynamic_cast<TVal *>(&SYS->nodeAt(isrc,0,'.').at()) )
-	dynamic_cast<TVal&>(SYS->nodeAt(isrc,0,'.').at()).setArch(AutoHD<TVArchive>(this));
+    if( run_st && vl == PassiveAttr && dynamic_cast<TVal*>(&SYS->nodeAt(isrc,0,'.').at()) )
+	dynamic_cast<TVal&>(SYS->nodeAt(isrc,0,'.').at()).setArch( AutoHD<TVArchive>(this) );
 
     if( mSrcMode != vl || mDSourc != isrc )	modif();
 

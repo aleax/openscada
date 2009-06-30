@@ -92,16 +92,16 @@ class TMess
 	string lang2Code( )	{ return mLang2Code; }
 	string lang2CodeBase( )	{ return mLang2CodeBase; }
 	string &charset( )	{ return IOCharSet; }
-	int logDirect( )	{ return log_dir; }
-	int messLevel( )	{ return m_mess_level; }
+	int logDirect( )	{ return mLogDir; }
+	int messLevel( )	{ return mMessLevel; }
 
 	void setLang( const string &lang );
 	void setLang2CodeBase( const string &vl );
 	void setLogDirect( int dir );
 	void setMessLevel( int level );
 
-	void put( const char *categ, Type level, const char *fmt,  ... );
-	void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const string &category = "", Type level = Debug );
+	void put( const char *categ, char level, const char *fmt,  ... );
+	void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &recs, const string &category = "", char level = Debug );
 
     private:
 	//Methods
@@ -109,8 +109,8 @@ class TMess
 
 	//Attributes
 	string	IOCharSet;		//Internal charset
-	int	m_mess_level;		//Work messages level
-	int	log_dir;		//Log direction
+	int	mMessLevel;		//Work messages level
+	int	mLogDir;		//Log direction
 
 	string	mLang2CodeBase, mLang2Code;
 };

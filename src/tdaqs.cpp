@@ -224,6 +224,7 @@ void TDAQS::save_( )
     string stLs;
     for( map<string,TDAQS::SStat>::iterator sit = mSt.begin(); sit != mSt.end(); sit++ )
 	stLs += sit->first+";";
+    printf("TEST 10: '%s'\n",stLs.c_str());
     TBDS::genDBSet(nodePath()+"RdStList",stLs);
     res.release();
 }
@@ -440,7 +441,7 @@ void *TDAQS::RdTask( void *param )
 		req.clear()->setAttr("path","/"+sit->first+"/DAQ/%2fserv%2fredundant");
 		try
 		{
-		    if( SYS->transport().at().cntrIfCmd(req,"DAQRedndt") ) continue;
+		    if( SYS->transport().at().cntrIfCmd(req,"DAQRedundant") ) continue;
 		    sit->second.lev = atoi(req.attr("StLevel").c_str());
 		    sit->second.actCntr.clear();
 		    for( int i_c = 0; i_c < req.childSize(); i_c++ )
@@ -670,12 +671,13 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 		}
 	    }
 	}
-	if( ctrChkNode(opt,"add",RWRWR_,"root","DAQ",SEQ_WR) )	mSt["<newStat>"] = SStat();
-	if( ctrChkNode(opt,"del",RWRWR_,"root","DAQ",SEQ_WR) )	mSt.erase(opt->attr("key_st"));
+	if( ctrChkNode(opt,"add",RWRWR_,"root","DAQ",SEQ_WR) )	{ mSt["<newStat>"] = SStat(); modif(); }
+	if( ctrChkNode(opt,"del",RWRWR_,"root","DAQ",SEQ_WR) )	{ mSt.erase(opt->attr("key_st")); modif(); }
 	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) && opt->attr("col") == "st" )
 	{
 	    mSt.erase(opt->attr("key_st"));
 	    mSt[opt->text()] = SStat();
+	    modif();
 	}
     }
     else if( a_path == "/redund/lsSt" && ctrChkNode(opt) )
