@@ -45,7 +45,8 @@ class TVariant
 	    Boolean	= 1,
 	    Integer	= 2,
 	    Real	= 3,
-	    String	= 4
+	    String	= 4,
+	    Object	= 5
 	};
 
 	//Methods
@@ -78,18 +79,28 @@ class TVariant
 	string vl;
 };
 
-/*class TVarObj
+//***********************************************************
+//* TVarObj                                                 *
+//*   Variable object, by default included properties       *
+//***********************************************************
+class TVarObj
 {
     public:
 	//Methods
 	TVarObj( );
 	~TVarObj( );
 
-	TVariant attrGet
+	TVarObj *dup( );
+	TVarObj &operator=( const TVarObj &obj );
+
+	virtual TVariant propGet( const string &id, bool onlyCntr = true );
+	void propSet( const string &id, TVariant val );
+
+	virtual TVariant funcCall( const string &id, vector<TVariant> prms );
 
     private:
 	//Attributes
-	map<string,TVariant> mAttrs;
-}*/
+	map<string,TVariant> mProps;
+};
 
 #endif // TVARIANT_H

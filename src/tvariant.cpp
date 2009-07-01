@@ -152,3 +152,35 @@ void TVariant::setS( const string &ivl )
     vl.replace(1,string::npos,ivl);
 }
 
+//***********************************************************
+//* TVarObj                                                 *
+//*   Variable object, by default included properties       *
+//***********************************************************
+TVarObj::TVarObj( )		{ }
+
+TVarObj::~TVarObj( )		{ }
+
+TVarObj *TVarObj::dup( )
+{
+    TVarObj *obj = new TVarObj();
+    *obj = *this;
+    return obj;
+}
+
+TVarObj &TVarObj::operator=( const TVarObj &obj )
+{
+    mProps = obj.mProps;
+    return *this;
+}
+
+TVariant TVarObj::propGet( const string &id, bool onlyCntr )
+{
+    map<string,TVariant>::iterator vit = mProps.find(id);
+    if( vit == mProps.end() ) return TVariant();
+
+    return vit->second;
+}
+
+void TVarObj::propSet( const string &id, TVariant val )		{ mProps[id] = val; }
+
+TVariant TVarObj::funcCall( const string &id, vector<TVariant> prms )	{ return TVariant(); }

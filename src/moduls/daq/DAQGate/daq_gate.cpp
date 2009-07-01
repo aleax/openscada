@@ -363,6 +363,18 @@ void *TMdContr::Task( void *icntr )
 			    for( int c_off = 0; (scntr=TSYS::strSepParse(prm.at().cntrAdr(),0,';',&c_off)).size(); )
 			    {
 				if( TSYS::pathLev(scntr,0) != sti->first ) continue;
+				if( !prm.at().mRedntTmLast )
+				{
+				    vector<string> listV;
+				    prm.at().vlList(listV);
+				    for( int iV = 0; iV < listV.size(); iV++ )
+				    {
+					AutoHD<TVal> vl = prm.at().vlAt(listV[iV]);
+					prm.at().mRedntTmLast = vmax(prm.at().mRedntTmLast,vl.at().time());
+					if( !vl.at().arch().freeStat() )
+					    prm.at().mRedntTmLast = vmax(prm.at().mRedntTmLast,vl.at().arch().at().end(""));
+				    }
+				}
 				if( prm.at().mRedntTmLast ) prm.at().mRedntTmLast = vmax(prm.at().mRedntTmLast,TSYS::curTime()-(long long)(3.6e9*cntr.restDtTm()));
 
 				req.childAdd("get")->setAttr("path","/"+TSYS::pathLev(scntr,2)+"/"+TSYS::pathLev(scntr,3)+"/"+prm.at().id()+"/%2fserv%2fattr")->
@@ -384,25 +396,26 @@ void *TMdContr::Task( void *icntr )
 			    if( prm.at().isPrcOK ) continue;
 			    prm.at().isPrcOK = true;
 			    prm.at().mRedntTmLast = atoll(prmNd->attr("tm").c_str());
+
 			    for( int i_a = 0; i_a < prmNd->childSize(); i_a++ )
 			    {
 				XMLNode *aNd = prmNd->childGet(i_a);
 				if( !prm.at().vlPresent(aNd->attr("id")) ) continue;
 				AutoHD<TVal> vl = prm.at().vlAt(aNd->attr("id"));
 				if( aNd->attr("tm").empty() ) vl.at().setS(aNd->text(),prm.at().mRedntTmLast,true);
-				else
+				else if( aNd->childSize() )
 				{
 				    long long btm = atoll(aNd->attr("tm").c_str());
 				    long long per = atoll(aNd->attr("per").c_str());
 				    if( !vl.at().arch().freeStat() )
+				    {
+					//printf("TEST 00: '%s' %d: %lld <=> %lld\n",vl.at().nodePath().c_str(),aNd->childSize(),prm.at().mRedntTmLast,btm);
+					TValBuf buf(vl.at().arch().at().valType(),0,per,false,true);
 					for( int i_v = 0; i_v < aNd->childSize(); i_v++ )
-					{
-					    TValBuf buf(vl.at().arch().at().valType(),0,per,false,true);
-					    for( int i_v = 0; i_v < aNd->childSize(); i_v++ )
 					    buf.setS(aNd->childGet(i_v)->text(),btm+per*i_v);
-					    vl.at().arch().at().setVals(buf,buf.begin(),buf.end(),"");
-					}
-				    if( aNd->childSize() ) vl.at().setS(aNd->childGet(aNd->childSize()-1)->text(),btm+per*(aNd->childSize()-1),true);
+					vl.at().arch().at().setVals(buf,buf.begin(),buf.end(),"");
+				    }
+				    vl.at().setS(aNd->childGet(aNd->childSize()-1)->text(),btm+per*(aNd->childSize()-1),true);
 				}
 			    }
 			}

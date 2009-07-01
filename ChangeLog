@@ -1,5 +1,6 @@
 2009-07-01 Roman
 - /DAQ/DAQGate: Start and enable controller and stations list control is unified.
+- FIX:/DAQ/DAQGate: Archives processing is fixed and restoring data from archive on start is added.
 
 
 2009-06-30 Roman
