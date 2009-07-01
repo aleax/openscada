@@ -187,18 +187,13 @@ void TMdContr::enable_( )
     bool en_err = false;
 
     //> Clear present parameters configuration
-    if( !enableStat( ) )
-    {
-	list(prm_ls);
-	for( int i_p = 0; i_p < prm_ls.size(); i_p++ )
-	    at(prm_ls[i_p]).at().setCntrAdr("");
-    }
+    list(prm_ls);
+    for( int i_p = 0; i_p < prm_ls.size(); i_p++ ) at(prm_ls[i_p]).at().setCntrAdr("");
 
-    //> Remote station scaning
+    //> Remote station scaning. Controllers and parameters scaning
     for( int st_off = 0; (statv=TSYS::strSepParse(mStations,0,'\n',&st_off)).size(); )
     {
 	if( !enableStat( ) ) mStatWork[statv] = 0;
-	//> Controllers and parameters scaning
 	for( int cp_off = 0; (cp_el=TSYS::strSepParse(mContrPrm,0,'\n',&cp_off)).size(); )
 	    try
 	    {
@@ -273,42 +268,38 @@ void TMdContr::disable_( )
 
 void TMdContr::start_( )
 {
-    if( !prcSt )
-    {
-	//> Start the gathering data task
-	pthread_attr_t pthr_attr;
-	pthread_attr_init(&pthr_attr);
-	struct sched_param prior;
-	if( mPrior && SYS->user() == "root" )
-	    pthread_attr_setschedpolicy(&pthr_attr,SCHED_RR);
-	else pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
-	prior.__sched_priority = mPrior;
-	pthread_attr_setschedparam(&pthr_attr,&prior);
+    if( prcSt ) return;
 
-	pthread_create(&procPthr,&pthr_attr,TMdContr::Task,this);
-	pthread_attr_destroy(&pthr_attr);
-	if( TSYS::eventWait(prcSt, true, nodePath()+"start",5) )
-	    throw TError(nodePath().c_str(),_("Gathering task is not started!"));
+    //> Clear stations request counter
+    for( map<string,float>::iterator sti = mStatWork.begin(); sti != mStatWork.end(); sti++ )
+	sti->second = 0;
 
-	//> Fill stations list
-	string statv;
-	for( int st_off = 0; (statv=TSYS::strSepParse(mStations,0,'\n',&st_off)).size(); )
-	    mStatWork[statv] = 0;
-    }
+    //> Start the gathering data task
+    pthread_attr_t pthr_attr;
+    pthread_attr_init(&pthr_attr);
+    struct sched_param prior;
+    if( mPrior && SYS->user() == "root" )
+	pthread_attr_setschedpolicy(&pthr_attr,SCHED_RR);
+    else pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
+    prior.__sched_priority = mPrior;
+    pthread_attr_setschedparam(&pthr_attr,&prior);
+
+    pthread_create(&procPthr,&pthr_attr,TMdContr::Task,this);
+    pthread_attr_destroy(&pthr_attr);
+    if( TSYS::eventWait(prcSt, true, nodePath()+"start",5) )
+	throw TError(nodePath().c_str(),_("Gathering task is not started!"));
 }
 
 void TMdContr::stop_( )
 {
-    if( prcSt )
-    {
+    if( !prcSt ) return;
 
-	//> Stop the request and calc data task
-	endrunReq = true;
-	pthread_kill( procPthr, SIGALRM );
-	if( TSYS::eventWait(prcSt,false,nodePath()+"stop",5) )
-	    throw TError(nodePath().c_str(),_("Gathering task is not stopped!"));
-	pthread_join( procPthr, NULL );
-    }
+    //> Stop the request and calc data task
+    endrunReq = true;
+    pthread_kill( procPthr, SIGALRM );
+    if( TSYS::eventWait(prcSt,false,nodePath()+"stop",5) )
+	throw TError(nodePath().c_str(),_("Gathering task is not stopped!"));
+    pthread_join( procPthr, NULL );
 }
 
 void *TMdContr::Task( void *icntr )
@@ -345,9 +336,10 @@ void *TMdContr::Task( void *icntr )
 		    vector<string> pLS;
 		    cntr.list(pLS);
 		    AutoHD<TMdPrm> prm;
+		    string scntr;
 
 		    //> Parameters list update
-		    if( (div && it_cnt%div == 0) || !pLS.size() )
+		    if( (it_cnt > div && it_cnt%div == 0) || !pLS.size() )
 			try { res.release( ); cntr.enable_( ); res.request(false); }
 			catch(TError err) { }
 
@@ -359,11 +351,10 @@ void *TMdContr::Task( void *icntr )
 		    }
 
 		    //> Station's cycle
-		    string statv, scntr;
-		    for( int st_off = 0; (statv=TSYS::strSepParse(cntr.mStations,0,'\n',&st_off)).size(); )
+		    for( sti = cntr.mStatWork.begin(); sti != cntr.mStatWork.end(); sti++ )
 		    {
-			if( cntr.mStatWork.find(statv) == cntr.mStatWork.end() || cntr.mStatWork[statv] > 0 ) continue;
-			XMLNode req("CntrReqs"); req.setAttr("path","/"+statv+"/DAQ/");
+			if( sti->second > 0 ) continue;
+			XMLNode req("CntrReqs"); req.setAttr("path","/"+sti->first+"/DAQ/");
 			//> Put attributes rquests
 			for( int i_p=0; i_p < pLS.size(); i_p++)
 			{
@@ -371,7 +362,7 @@ void *TMdContr::Task( void *icntr )
 			    if( prm.at().isPrcOK ) continue;
 			    for( int c_off = 0; (scntr=TSYS::strSepParse(prm.at().cntrAdr(),0,';',&c_off)).size(); )
 			    {
-				if( TSYS::pathLev(scntr,0) != statv ) continue;
+				if( TSYS::pathLev(scntr,0) != sti->first ) continue;
 				if( prm.at().mRedntTmLast ) prm.at().mRedntTmLast = vmax(prm.at().mRedntTmLast,TSYS::curTime()-(long long)(3.6e9*cntr.restDtTm()));
 
 				req.childAdd("get")->setAttr("path","/"+TSYS::pathLev(scntr,2)+"/"+TSYS::pathLev(scntr,3)+"/"+prm.at().id()+"/%2fserv%2fattr")->
@@ -381,8 +372,7 @@ void *TMdContr::Task( void *icntr )
 			if( !req.childSize() ) continue;
 
 			//> Same request
-			if( cntr.cntrIfCmd(req,true) )
-			{ mess_err(req.attr("mcat").c_str(),"%s",req.text().c_str()); continue; }
+			if( cntr.cntrIfCmd(req,true) ) { mess_err(req.attr("mcat").c_str(),"%s",req.text().c_str()); continue; }
 
 			//> Result process
 			for( int i_r = 0; i_r < req.childSize(); i_r++ )

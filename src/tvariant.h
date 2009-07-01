@@ -78,4 +78,18 @@ class TVariant
 	string vl;
 };
 
+/*class TVarObj
+{
+    public:
+	//Methods
+	TVarObj( );
+	~TVarObj( );
+
+	TVariant attrGet
+
+    private:
+	//Attributes
+	map<string,TVariant> mAttrs;
+}*/
+
 #endif // TVARIANT_H

@@ -1,3 +1,7 @@
+2009-07-01 Roman
+- /DAQ/DAQGate: Start and enable controller and stations list control is unified.
+
+
 2009-06-30 Roman
 - !!!!:/SYS: Alarms mechanism is added, based on Messages mechanism's API.
 - FIX:/Archive/Value: Error value archivator starting is fixed.
