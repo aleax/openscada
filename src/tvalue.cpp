@@ -164,18 +164,19 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	    AutoHD<TVal> vl;
 	    bool full = atoi(opt->attr("all").c_str());
 	    long long tm = atoll(opt->attr("tm").c_str());
-	    long long ftm = tm;
+	    long long ftm = TSYS::curTime();
 	    for( int i_el = 0; i_el < list_c.size(); i_el++ )
 	    {
 		vl = vlAt(list_c[i_el]);
 		long long vtm = 0;
 		string svl = vl.at().getS(&vtm);
-		ftm = vmax(ftm,vtm);
 		//>> Get last value
-		if( !tm ||										//Current value request
-			(vl.at().arch( ).freeStat() && (full || vtm > tm)) ||				//Updated value request
-			(!vl.at().arch( ).freeStat() && (vl.at().arch().at().end()/vl.at().arch().at().period()-tm/vl.at().arch().at().period()) <= 1) )	//One value diff
-		    opt->childAdd("el")->setAttr("id",list_c[i_el])->setText(svl);
+		if( !tm || vl.at().arch( ).freeStat() ||
+			(!vl.at().arch( ).freeStat() && (vtm/vl.at().arch().at().period()-tm/vl.at().arch().at().period()) <= 1) )
+		{
+		    XMLNode *el = opt->childAdd("el")->setAttr("id",list_c[i_el])->setText(svl);
+		    if( vtm < ftm ) el->setAttr("tm",TSYS::ll2str(vtm));
+		}
 		//>> Get values from archive
 		else if( !vl.at().arch( ).freeStat() )
 		{
@@ -209,6 +210,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 			if( firstVal && vl != EVAL_STR ) { aNd->setAttr("tm",TSYS::ll2str(vbeg)); firstVal = false; }
 			aNd->childAdd("v")->setText(vl);
 		    }
+		    if( !aNd->childSize() || ((vtm/vper)*vper) == (buf.end()+vper) ) aNd->childAdd("v")->setText(svl);
 		}
 	    }
 	    opt->setAttr("tm",TSYS::ll2str(ftm));

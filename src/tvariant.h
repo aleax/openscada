@@ -35,6 +35,8 @@ using std::string;
 //*************************************************
 //* TVariant                                      *
 //*************************************************
+class TVarObj;
+
 class TVariant
 {
     public:
@@ -54,7 +56,8 @@ class TVariant
 	TVariant( char ivl );
 	TVariant( int ivl );
 	TVariant( double ivl );
-	TVariant( string ivl );
+	TVariant( const string &ivl );
+	TVariant( const TVarObj &ivl );
 
 	~TVariant( )	{ }
 
@@ -68,11 +71,13 @@ class TVariant
 	int	getI( int def = EVAL_INT ) const;
 	double	getR( double def = EVAL_REAL ) const;
 	string	getS( const string &def = EVAL_STR ) const;
+	TVarObj	&getO( ) const;
 
 	void setB( char val );
 	void setI( int val );
 	void setR( double val );
 	void setS( const string &val );
+	void setO( const TVarObj &val );
 
     private:
 	//Attributes
@@ -90,7 +95,7 @@ class TVarObj
 	TVarObj( );
 	~TVarObj( );
 
-	TVarObj *dup( );
+	TVarObj *dup( ) const;
 	TVarObj &operator=( const TVarObj &obj );
 
 	virtual TVariant propGet( const string &id, bool onlyCntr = true );

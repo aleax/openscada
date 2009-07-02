@@ -93,6 +93,7 @@ class TMdPrm : public TParamContr
 	//Methods
 	void postEnable( int flag );
 	TVal* vlNew( );
+	void vlGet( TVal &val );
 	void vlSet( TVal &val, const TVariant &pvl );
 	void vlArchMake( TVal &val );
 
@@ -121,7 +122,7 @@ class TMdContr: public TController
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
 	//> Request to OpenSCADA control interface
-	int cntrIfCmd( XMLNode &node, bool strongSt = false );
+	int cntrIfCmd( XMLNode &node );
 
     protected:
 	//Methods
@@ -150,7 +151,7 @@ class TMdContr: public TController
 
 	bool	prcSt,				//Process task active
 		endrunReq;			//Request to stop of the Process task
-	map<string,float> mStatWork;		//Work stations and it status
+	vector< pair<string,float> > mStatWork;	//Work stations and it status
 
 	pthread_t procPthr;			//Process task thread
 
@@ -163,26 +164,6 @@ class TMdContr: public TController
 class TTpContr: public TTipDAQ
 {
     public:
-	//Data
-	class RemHost
-	{
-	    public:
-		//Methods
-		RemHost( const string &ist, const string &itransp, const string &iaddr,
-			const string &iuser, const string &ipass ) :
-		    stat(ist), transp(itransp), addr(iaddr), user(iuser), pass(ipass),
-		    ses_id(-1), link_ok(false) { }
-
-		//Attributes
-		string	stat;		//External station
-		string	transp;		//Connect transport
-		string	addr;		//External host address
-		string	user;		//External host user
-		string	pass;		//External host password
-		int	ses_id;		//Session ID
-		bool	link_ok;	//Link OK
-	};
-
 	//Methods
 	TTpContr( string name );
 	~TTpContr( );
@@ -198,9 +179,6 @@ class TTpContr: public TTipDAQ
 	//Methods
 	TController *ContrAttach( const string &name, const string &daq_db );
 	string optDescr( );
-
-	//Attributes
-	vector<RemHost>	openHosts;
 };
 
 extern TTpContr *mod;

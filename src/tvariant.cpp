@@ -27,45 +27,21 @@
 //*************************************************
 //* TVariant                                      *
 //*************************************************
-TVariant::TVariant( )
-{
-    vl.assign(1,(char)TVariant::Null);
-}
+TVariant::TVariant( )				{ vl.assign(1,(char)TVariant::Null); }
 
-TVariant::TVariant( char ivl )
-{
-    vl.assign(1,(char)TVariant::Null);
-    setB(ivl);
-}
+TVariant::TVariant( char ivl )			{ vl.assign(1,(char)TVariant::Null); setB(ivl); }
 
-TVariant::TVariant( int ivl )
-{
-    vl.assign(1,(char)TVariant::Null);
-    setI(ivl);
-}
+TVariant::TVariant( int ivl )			{ vl.assign(1,(char)TVariant::Null); setI(ivl); }
 
-TVariant::TVariant( double ivl )
-{
-    vl.assign(1,(char)TVariant::Null);
-    setR(ivl);
-}
+TVariant::TVariant( double ivl )		{ vl.assign(1,(char)TVariant::Null); setR(ivl); }
 
-TVariant::TVariant( string ivl )
-{
-    vl.assign(1,(char)TVariant::Null);
-    setS(ivl);
-}
+TVariant::TVariant( const string &ivl )		{ vl.assign(1,(char)TVariant::Null); setS(ivl); }
 
-bool TVariant::operator==( TVariant &vr )
-{
-    return vr.vl == vl;
-}
+TVariant::TVariant( const TVarObj &ivl )	{ vl.assign(1,(char)TVariant::Null); setO(ivl); }
 
-TVariant &TVariant::operator=( TVariant &vr )
-{
-    vl = vr.vl;
-    return *this;
-}
+bool TVariant::operator==( TVariant &vr )	{ return vr.vl == vl; }
+
+TVariant &TVariant::operator=( TVariant &vr )	{ vl = vr.vl; return *this; }
 
 char TVariant::getB( char def ) const
 {
@@ -115,8 +91,15 @@ string TVariant::getS( const string &def ) const
     }
 }
 
+TVarObj	&TVariant::getO( ) const
+{
+    if( type() != TVariant::Object ) throw TError("TVariant",_("Variable not object!"));
+    return *(TVarObj*)TSYS::str2addr(vl.substr(1));
+}
+
 void TVariant::setB( char ivl )
 {
+    if( type() == TVariant::Object ) delete &getO( );
     if( type() != TVariant::Boolean )
     {
 	vl.assign(1,(char)TVariant::Boolean);
@@ -127,6 +110,7 @@ void TVariant::setB( char ivl )
 
 void TVariant::setI( int ivl )
 {
+    if( type() == TVariant::Object ) delete &getO( );
     if( type() != TVariant::Integer )
     {
 	vl.assign(1,(char)TVariant::Integer);
@@ -137,6 +121,7 @@ void TVariant::setI( int ivl )
 
 void TVariant::setR( double ivl )
 {
+    if( type() == TVariant::Object ) delete &getO( );
     if( type() != TVariant::Real )
     {
 	vl.assign(1,(char)TVariant::Real);
@@ -147,9 +132,15 @@ void TVariant::setR( double ivl )
 
 void TVariant::setS( const string &ivl )
 {
-    if( type() != TVariant::String )
-	vl.assign(1,(char)TVariant::String);
+    if( type() == TVariant::Object ) delete &getO( );
+    if( type() != TVariant::String ) vl.assign(1,(char)TVariant::String);
     vl.replace(1,string::npos,ivl);
+}
+
+void TVariant::setO( const TVarObj &val )
+{
+    if( type() != TVariant::Object ) vl.assign(1,(char)TVariant::Object);
+    vl.replace(1,string::npos,TSYS::addr2str(val.dup()));
 }
 
 //***********************************************************
@@ -160,7 +151,7 @@ TVarObj::TVarObj( )		{ }
 
 TVarObj::~TVarObj( )		{ }
 
-TVarObj *TVarObj::dup( )
+TVarObj *TVarObj::dup( ) const
 {
     TVarObj *obj = new TVarObj();
     *obj = *this;

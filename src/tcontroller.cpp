@@ -310,7 +310,6 @@ void TController::redntDataUpdate( bool firstArchiveSync )
     //> Prepare group request to parameters
     AutoHD<TParamContr> prm;
     XMLNode req("CntrReqs"); req.setAttr("path",nodePath(0,true));
-    if( firstArchiveSync || mRedntFirst ) req.setAttr("all","1");
     for( int i_p = 0; i_p < pls.size(); i_p++ )
     {
 	prm = at(pls[i_p]);
@@ -343,6 +342,7 @@ void TController::redntDataUpdate( bool firstArchiveSync )
     //> Write data to parameters
     for( int i_p = 0; i_p < pls.size(); i_p++ )
     {
+	long long ctm;
 	prm = at(pls[i_p]);
 	prm.at().mRedntTmLast = atoll(req.childGet(i_p)->attr("tm").c_str());
 	for( int i_a = 0; i_a < req.childGet(i_p)->childSize(); i_a++ )
@@ -351,7 +351,11 @@ void TController::redntDataUpdate( bool firstArchiveSync )
 	    if( !prm.at().vlPresent(aNd->attr("id")) ) continue;
 	    AutoHD<TVal> vl = prm.at().vlAt(aNd->attr("id"));
 
-	    if( aNd->attr("tm").empty() ) vl.at().setS(aNd->text(),prm.at().mRedntTmLast,true);
+	    if( aNd->attr("per").empty() )
+	    {
+		ctm =  atoll(aNd->attr("tm").c_str());
+		vl.at().setS(aNd->text(),ctm?ctm:prm.at().mRedntTmLast,true);
+	    }
 	    else if( aNd->childSize() )
 	    {
 		long long btm = atoll(aNd->attr("tm").c_str());
