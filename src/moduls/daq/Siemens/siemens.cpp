@@ -1330,9 +1330,9 @@ void *TMdContr::Task( void *icntr )
     return NULL;
 }
 
-void TMdContr::redntDataUpdate( bool firstArchiveSync )
+void TMdContr::redntDataUpdate( )
 {
-    TController::redntDataUpdate(firstArchiveSync);
+    TController::redntDataUpdate( );
 
     vector<string> pls; list(pls);
 

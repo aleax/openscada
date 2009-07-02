@@ -90,7 +90,7 @@ class TController : public TCntrNode, public TConfig
 	void setRedntMode( Redundant vl );
 	string redntRun( );
 	void setRedntRun( const string &vl );
-	virtual void redntDataUpdate( bool firstArchiveSync = false );
+	virtual void redntDataUpdate( );
 
 	TTipDAQ &owner( );
 
@@ -132,7 +132,6 @@ class TController : public TCntrNode, public TConfig
 
 	unsigned mPrm		: 2;
 	unsigned mRedntUse	: 1;
-	unsigned mRedntFirst	: 1;
 };
 
 

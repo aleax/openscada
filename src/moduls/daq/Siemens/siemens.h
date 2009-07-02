@@ -169,7 +169,7 @@ class TMdContr: public TController
 	void getDB( unsigned n_db, long offset, string &buffer );
 	void putDB( unsigned n_db, long offset, const string &buffer );
 
-	void redntDataUpdate( bool firstArchiveSync = false );
+	void redntDataUpdate( );
 
 	TTpContr &owner( );
 

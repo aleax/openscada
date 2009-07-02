@@ -66,9 +66,6 @@ class TParamContr : public TConfig, public TValue
 
 	TController &owner( );
 
-	//Attributes
-	long long mRedntTmLast;
-
     protected:
 	//Methods
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process

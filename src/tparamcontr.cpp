@@ -32,7 +32,7 @@
 //* TParamContr                                   *
 //*************************************************
 TParamContr::TParamContr( const string &name, TTipParam *tpprm ) :
-    TConfig(tpprm), tipparm(tpprm), m_en(false), mRedntTmLast(0), m_id(cfg("SHIFR").getSd()), m_aen(cfg("EN").getBd())
+    TConfig(tpprm), tipparm(tpprm), m_en(false), m_id(cfg("SHIFR").getSd()), m_aen(cfg("EN").getBd())
 {
     m_id = name;
     setName(name);

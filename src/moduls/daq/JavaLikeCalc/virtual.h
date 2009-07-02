@@ -116,7 +116,7 @@ class Contr: public TController, public TValFunc
 	int period( )	{ return vmax(mPer,1); }
 	int iterate( )	{ return mIter; }
 
-	void redntDataUpdate( bool firstArchiveSync = false );
+	void redntDataUpdate( );
 
     protected:
 	//Methods

@@ -162,58 +162,55 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",RWRWRW,"root","root",SEQ_RD) )		//All attributes values
 	{
 	    AutoHD<TVal> vl;
-	    bool full = atoi(opt->attr("all").c_str());
-	    long long tm = atoll(opt->attr("tm").c_str());
-	    long long ftm = TSYS::curTime();
+
+	    //> Archive's requests process
+	    for( int i_a = 0; i_a < opt->childSize(); i_a++ )
+	    {
+		XMLNode *aNd = opt->childGet(i_a);
+		vl = vlAt(aNd->attr("id"));
+
+		if( vl.at().arch().freeStat() ) { opt->childDel(aNd); i_a--; continue; }
+
+		AutoHD<TVArchive> arch = vl.at().arch();
+		long long vper = arch.at().period(BUF_ARCH_NM);
+		long long reqBeg = (atoll(aNd->attr("tm").c_str())/vper+1)*vper;
+		long long vbeg = vmax(reqBeg,arch.at().begin(BUF_ARCH_NM));
+		long long vend = arch.at().end(BUF_ARCH_NM);
+
+		//>>> Longing to equivalent archivators
+		if( vbeg == arch.at().begin(BUF_ARCH_NM) )
+		{
+		    vector<string> archLs;
+		    arch.at().archivatorList(archLs);
+		    for( int i_a = 0; i_a < archLs.size(); i_a++ )
+			if( arch.at().period(archLs[i_a]) == vper )
+			    vbeg = vmax(reqBeg,arch.at().begin(archLs[i_a]));
+		}
+		aNd->setAttr("tm",TSYS::ll2str(vbeg))->setAttr("per",TSYS::ll2str(vper));
+
+		TValBuf buf(arch.at().valType(),0,0,false,true);
+		arch.at().getVals( buf, vbeg, vend, "", (vend-vbeg)/vper, true );
+
+		bool firstVal = true;
+		string vl;
+		for( vbeg = buf.begin(); vbeg <= buf.end(); vbeg++ )
+		{
+		    vl = buf.getS(&vbeg,true);
+		    if( firstVal && vl == EVAL_STR ) continue;
+		    if( firstVal && vl != EVAL_STR ) { aNd->setAttr("tm",TSYS::ll2str(vbeg)); firstVal = false; }
+		    aNd->childAdd("v")->setText(vl);
+		}
+
+		if( !aNd->childSize() ) { opt->childDel(aNd); i_a--; }
+	    }
+
 	    for( int i_el = 0; i_el < list_c.size(); i_el++ )
 	    {
 		vl = vlAt(list_c[i_el]);
 		long long vtm = 0;
 		string svl = vl.at().getS(&vtm);
-		//>> Get last value
-		if( !tm || vl.at().arch( ).freeStat() ||
-			(!vl.at().arch( ).freeStat() && (vtm/vl.at().arch().at().period()-tm/vl.at().arch().at().period()) <= 1) )
-		{
-		    XMLNode *el = opt->childAdd("el")->setAttr("id",list_c[i_el])->setText(svl);
-		    if( vtm < ftm ) el->setAttr("tm",TSYS::ll2str(vtm));
-		}
-		//>> Get values from archive
-		else if( !vl.at().arch( ).freeStat() )
-		{
-		    AutoHD<TVArchive> arch = vl.at().arch();
-		    long long vper = arch.at().period(BUF_ARCH_NM);
-		    long long reqBeg = (tm/vper+1)*vper;
-		    long long vbeg = vmax(reqBeg,arch.at().begin(BUF_ARCH_NM));
-		    long long vend = arch.at().end(BUF_ARCH_NM);
-
-		    //>>> Longing to equivalent archivators
-		    if( vbeg == arch.at().begin(BUF_ARCH_NM) )
-		    {
-			vector<string> archLs;
-			arch.at().archivatorList(archLs);
-			for( int i_a = 0; i_a < archLs.size(); i_a++ )
-			    if( arch.at().period(archLs[i_a]) == vper )
-				vbeg = vmax(reqBeg,arch.at().begin(archLs[i_a]));
-		    }
-		    XMLNode *aNd = opt->childAdd("el")->setAttr("id",list_c[i_el])->
-			setAttr("tm",TSYS::ll2str(vbeg))->setAttr("per",TSYS::ll2str(vper));
-
-		    TValBuf buf(arch.at().valType(),0,0,false,true);
-		    arch.at().getVals( buf, vbeg, vend, "", (vend-vbeg)/vper, true );
-
-		    bool firstVal = true;
-		    string vl;
-		    for( vbeg = buf.begin(); vbeg <= buf.end(); vbeg++ )
-		    {
-			vl = buf.getS(&vbeg,true);
-			if( firstVal && vl == EVAL_STR ) continue;
-			if( firstVal && vl != EVAL_STR ) { aNd->setAttr("tm",TSYS::ll2str(vbeg)); firstVal = false; }
-			aNd->childAdd("v")->setText(vl);
-		    }
-		    if( !aNd->childSize() || ((vtm/vper)*vper) == (buf.end()+vper) ) aNd->childAdd("v")->setText(svl);
-		}
+		opt->childAdd("el")->setAttr("id",list_c[i_el])->setText(svl)->setAttr("tm",TSYS::ll2str(vtm));
 	    }
-	    opt->setAttr("tm",TSYS::ll2str(ftm));
 	}
 	if( ctrChkNode(opt,"set",RWRWRW,"root","root",SEQ_WR) )		//Multi attributes set
 	    for( int i_el = 0; i_el < opt->childSize(); i_el++ )

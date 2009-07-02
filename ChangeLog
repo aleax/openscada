@@ -2,6 +2,7 @@
 - !!:/DAQ, /Value, /DAQ/DAQGate: Restore from archives mechanism is some updated for lost values fixing.
 - /TVariant: Object type is added.
 - !!:/DAQ/DAQGate: Stations list order is made significant. Some code clear. Error's attribute "err" get value is fixed.
+- !!!!:/Archive: Archive sync conception is changed for DAQ.DAQGate and DAQ-redundance.
 
 
 2009-07-01 Roman

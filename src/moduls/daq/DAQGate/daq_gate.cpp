@@ -363,22 +363,18 @@ void *TMdContr::Task( void *icntr )
 			    for( int c_off = 0; (scntr=TSYS::strSepParse(prm.at().cntrAdr(),0,';',&c_off)).size(); )
 			    {
 				if( TSYS::pathLev(scntr,0) != cntr.mStatWork[i_st].first ) continue;
-				if( !prm.at().mRedntTmLast )
-				{
-				    vector<string> listV;
-				    prm.at().vlList(listV);
-				    for( int iV = 0; iV < listV.size(); iV++ )
-				    {
-					AutoHD<TVal> vl = prm.at().vlAt(listV[iV]);
-					prm.at().mRedntTmLast = vmax(prm.at().mRedntTmLast,vl.at().time());
-					if( !vl.at().arch().freeStat() )
-					    prm.at().mRedntTmLast = vmax(prm.at().mRedntTmLast,vl.at().arch().at().end(""));
-				    }
-				}
-				if( prm.at().mRedntTmLast ) prm.at().mRedntTmLast = vmax(prm.at().mRedntTmLast,TSYS::curTime()-(long long)(3.6e9*cntr.restDtTm()));
 
-				req.childAdd("get")->setAttr("path","/"+TSYS::pathLev(scntr,2)+"/"+TSYS::pathLev(scntr,3)+"/"+prm.at().id()+"/%2fserv%2fattr")->
-						     setAttr("tm",TSYS::ll2str(prm.at().mRedntTmLast));
+				XMLNode *prmNd = req.childAdd("get")->setAttr("path","/"+TSYS::pathLev(scntr,2)+"/"+TSYS::pathLev(scntr,3)+"/"+prm.at().id()+"/%2fserv%2fattr");
+
+				//>> Put archive request
+				vector<string> listV;
+				prm.at().vlList(listV);
+				for( int iV = 0; iV < listV.size(); iV++ )
+				{
+				    AutoHD<TVal> vl = prm.at().vlAt(listV[iV]);
+				    if( vl.at().arch().freeStat() ) continue;
+				    prmNd->childAdd("el")->setAttr("id",listV[iV])->setAttr("tm",TSYS::ll2str(vmax(vl.at().arch().at().end(""),TSYS::curTime()-(long long)(3.6e9*cntr.restDtTm()))));
+				}
 			    }
 			}
 			if( !req.childSize() ) continue;
@@ -395,20 +391,14 @@ void *TMdContr::Task( void *icntr )
 			    prm = cntr.at(TSYS::pathLev(prmNd->attr("path"),2));
 			    if( prm.at().isPrcOK ) continue;
 			    prm.at().isPrcOK = true;
-			    prm.at().mRedntTmLast = atoll(prmNd->attr("tm").c_str());
 
 			    for( int i_a = 0; i_a < prmNd->childSize(); i_a++ )
 			    {
-				long long ctm;
 				XMLNode *aNd = prmNd->childGet(i_a);
 				if( !prm.at().vlPresent(aNd->attr("id")) ) continue;
 				AutoHD<TVal> vl = prm.at().vlAt(aNd->attr("id"));
 
-				if( aNd->attr("per").empty() )
-				{
-				    ctm =  atoll(aNd->attr("tm").c_str());
-				    vl.at().setS(aNd->text(),ctm?ctm:prm.at().mRedntTmLast,true);
-				}
+				if( aNd->attr("per").empty() ) vl.at().setS(aNd->text(),atoll(aNd->attr("tm").c_str()),true);
 				else if( aNd->childSize() )
 				{
 				    long long btm = atoll(aNd->attr("tm").c_str());
@@ -419,7 +409,6 @@ void *TMdContr::Task( void *icntr )
 					for( int i_v = 0; i_v < aNd->childSize(); i_v++ ) buf.setS(aNd->childGet(i_v)->text(),btm+per*i_v);
 					vl.at().arch().at().setVals(buf,buf.begin(),buf.end(),"");
 				    }
-				    vl.at().setS(aNd->childGet(aNd->childSize()-1)->text(),btm+per*(aNd->childSize()-1),true);
 				}
 			    }
 			}

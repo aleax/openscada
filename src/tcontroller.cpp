@@ -28,7 +28,7 @@
 //* TController					  *
 //*************************************************
 TController::TController( const string &id_c, const string &daq_db, TElem *cfgelem ) :
-    mDB(daq_db), TConfig(cfgelem), run_st(false), en_st(false), mRedntUse(false), mRedntFirst(true),
+    mDB(daq_db), TConfig(cfgelem), run_st(false), en_st(false), mRedntUse(false),
     mId(cfg("ID").getSd()), mAEn(cfg("ENABLE").getBd()), mAStart(cfg("START").getBd())
 {
     mId = id_c;
@@ -160,7 +160,7 @@ void TController::start( )
     mess_info(nodePath().c_str(),_("Start controller!"));
 
     //> First archives synchronization
-    if( owner().redntAllow() && redntMode( ) != TController::Off ) redntDataUpdate(true);
+    if( owner().redntAllow() && redntMode( ) != TController::Off ) redntDataUpdate( );
 
     //> Start for children
     start_();
@@ -299,10 +299,10 @@ void TController::setRedntRun( const string &vl )	{ cfg("REDNT_RUN").setS(vl); m
 void TController::setRedntUse( bool vl )
 {
     if( mRedntUse == vl ) return;
-    mRedntUse = mRedntFirst = vl;
+    mRedntUse = vl;
 }
 
-void TController::redntDataUpdate( bool firstArchiveSync )
+void TController::redntDataUpdate( )
 {
     vector<string> pls;
     list(pls);
@@ -314,25 +314,18 @@ void TController::redntDataUpdate( bool firstArchiveSync )
     {
 	prm = at(pls[i_p]);
 	if( !prm.at().enableStat( ) ) { pls.erase(pls.begin()+i_p); i_p--; continue; }
+
+	XMLNode *prmNd = req.childAdd("get")->setAttr("path","/prm_"+pls[i_p]+"/%2fserv%2fattr");
+
 	//>> Check attributes last present data time into archives
-	if( firstArchiveSync || mRedntFirst )
+	vector<string> listV;
+	prm.at().vlList(listV);
+	for( int iV = 0; iV < listV.size(); iV++ )
 	{
-	    prm.at().mRedntTmLast = 0;
-	    vector<string> listV;
-	    prm.at().vlList(listV);
-	    for( int iV = 0; iV < listV.size(); iV++ )
-	    {
-		AutoHD<TVal> vl = prm.at().vlAt(listV[iV]);
-		prm.at().mRedntTmLast = vmax(prm.at().mRedntTmLast,vl.at().time());
-		if( !vl.at().arch().freeStat() )
-		    prm.at().mRedntTmLast = vmax(prm.at().mRedntTmLast,vl.at().arch().at().end(""));
-	    }
-	    if( prm.at().mRedntTmLast )
-		prm.at().mRedntTmLast = vmax(prm.at().mRedntTmLast,TSYS::curTime()-(long long)(3.6e9*owner().owner().rdRestDtTm()));
-	    else prm.at().mRedntTmLast = TSYS::curTime();
+	    AutoHD<TVal> vl = prm.at().vlAt(listV[iV]);
+	    if( vl.at().arch().freeStat() ) continue;
+	    prmNd->childAdd("el")->setAttr("id",listV[iV])->setAttr("tm",TSYS::ll2str(vmax(vl.at().arch().at().end(""),TSYS::curTime()-(long long)(3.6e9*owner().owner().rdRestDtTm()))));
 	}
-	req.childAdd("get")->setAttr("path","/prm_"+pls[i_p]+"/%2fserv%2fattr")->
-	    setAttr("tm",TSYS::ll2str(prm.at().mRedntTmLast));
     }
 
     //> Send request to first active station for this controller
@@ -344,18 +337,13 @@ void TController::redntDataUpdate( bool firstArchiveSync )
     {
 	long long ctm;
 	prm = at(pls[i_p]);
-	prm.at().mRedntTmLast = atoll(req.childGet(i_p)->attr("tm").c_str());
 	for( int i_a = 0; i_a < req.childGet(i_p)->childSize(); i_a++ )
 	{
 	    XMLNode *aNd = req.childGet(i_p)->childGet(i_a);
 	    if( !prm.at().vlPresent(aNd->attr("id")) ) continue;
 	    AutoHD<TVal> vl = prm.at().vlAt(aNd->attr("id"));
 
-	    if( aNd->attr("per").empty() )
-	    {
-		ctm =  atoll(aNd->attr("tm").c_str());
-		vl.at().setS(aNd->text(),ctm?ctm:prm.at().mRedntTmLast,true);
-	    }
+	    if( aNd->attr("per").empty() ) vl.at().setS(aNd->text(),atoll(aNd->attr("tm").c_str()),true);
 	    else if( aNd->childSize() )
 	    {
 		long long btm = atoll(aNd->attr("tm").c_str());
@@ -363,16 +351,12 @@ void TController::redntDataUpdate( bool firstArchiveSync )
 		if( !vl.at().arch().freeStat() )
 		{
 		    TValBuf buf(vl.at().arch().at().valType(),0,per,true,true);
-		    for( int i_v = 0; i_v < aNd->childSize(); i_v++ )
-			buf.setS(aNd->childGet(i_v)->text(),btm+per*i_v);
+		    for( int i_v = 0; i_v < aNd->childSize(); i_v++ ) buf.setS(aNd->childGet(i_v)->text(),btm+per*i_v);
 		    vl.at().arch().at().setVals(buf,buf.begin(),buf.end(),"");
 		}
-		vl.at().setS(aNd->childGet(aNd->childSize()-1)->text(),btm+per*(aNd->childSize()-1),true);
 	    }
 	}
     }
-
-    mRedntFirst = false;
 }
 
 void TController::cntrCmdProc( XMLNode *opt )

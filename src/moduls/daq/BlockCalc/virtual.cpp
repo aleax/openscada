@@ -423,9 +423,9 @@ void *Contr::Task( void *icontr )
     return NULL;
 }
 
-void Contr::redntDataUpdate( bool firstArchiveSync )
+void Contr::redntDataUpdate( )
 {
-    TController::redntDataUpdate(firstArchiveSync);
+    TController::redntDataUpdate( );
 
     vector<string> bls; blkList(bls);
 

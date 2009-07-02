@@ -106,7 +106,7 @@ class Contr: public TController
 
 	TipContr &owner( );
 
-	void redntDataUpdate( bool firstArchiveSync = false );
+	void redntDataUpdate( );
 
     protected:
 	//Protected methods

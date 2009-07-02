@@ -140,7 +140,7 @@ class TMdContr: public TController
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
-	void redntDataUpdate( bool firstArchiveSync = false );
+	void redntDataUpdate( );
 
     protected:
 	//Methods

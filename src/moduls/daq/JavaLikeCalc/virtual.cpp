@@ -550,9 +550,9 @@ void *Contr::Task( void *icntr )
     return NULL;
 }
 
-void Contr::redntDataUpdate( bool firstArchiveSync )
+void Contr::redntDataUpdate( )
 {
-    TController::redntDataUpdate(firstArchiveSync);
+    TController::redntDataUpdate( );
 
     //> Request for template's attributes values
     XMLNode req("get"); req.setAttr("path",nodePath(0,true)+"/%2fserv%2ffncAttr");
