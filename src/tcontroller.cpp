@@ -324,7 +324,7 @@ void TController::redntDataUpdate( )
 	{
 	    AutoHD<TVal> vl = prm.at().vlAt(listV[iV]);
 	    if( vl.at().arch().freeStat() ) continue;
-	    prmNd->childAdd("el")->setAttr("id",listV[iV])->setAttr("tm",TSYS::ll2str(vmax(vl.at().arch().at().end(""),TSYS::curTime()-(long long)(3.6e9*owner().owner().rdRestDtTm()))));
+	    prmNd->childAdd("ael")->setAttr("id",listV[iV])->setAttr("tm",TSYS::ll2str(vmax(vl.at().arch().at().end(""),TSYS::curTime()-(long long)(3.6e9*owner().owner().rdRestDtTm()))));
 	}
     }
 
@@ -343,8 +343,8 @@ void TController::redntDataUpdate( )
 	    if( !prm.at().vlPresent(aNd->attr("id")) ) continue;
 	    AutoHD<TVal> vl = prm.at().vlAt(aNd->attr("id"));
 
-	    if( aNd->attr("per").empty() ) vl.at().setS(aNd->text(),atoll(aNd->attr("tm").c_str()),true);
-	    else if( aNd->childSize() )
+	    if( aNd->name() == "el" ) vl.at().setS(aNd->text(),atoll(aNd->attr("tm").c_str()),true);
+	    else if( aNd->name() == "ael" && aNd->childSize() )
 	    {
 		long long btm = atoll(aNd->attr("tm").c_str());
 		long long per = atoll(aNd->attr("per").c_str());

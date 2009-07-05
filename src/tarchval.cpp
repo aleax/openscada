@@ -187,14 +187,10 @@ string TValBuf::getS( long long *itm, bool up_ord )
 {
     switch(valType())
     {
-	case TFld::Boolean:
-	    { char vl = getB(itm,up_ord); return (vl==EVAL_BOOL)?EVAL_STR:TSYS::int2str((bool)vl); }
-	case TFld::Integer:
-	    { int vl = getI(itm,up_ord); return (vl==EVAL_INT)?EVAL_STR:TSYS::int2str(vl); }
-	case TFld::Real:
-	    { double vl = getR(itm,up_ord); return (vl==EVAL_REAL)?EVAL_STR:TSYS::real2str(vl); }
-	case TFld::String:
-	    ResAlloc res(bRes,false); return buf.str->get(itm,up_ord);
+	case TFld::Boolean:	{ char vl = getB(itm,up_ord); return (vl==EVAL_BOOL)?EVAL_STR:TSYS::int2str((bool)vl); }
+	case TFld::Integer:	{ int vl = getI(itm,up_ord); return (vl==EVAL_INT)?EVAL_STR:TSYS::int2str(vl); }
+	case TFld::Real:	{ double vl = getR(itm,up_ord); return (vl==EVAL_REAL)?EVAL_STR:TSYS::real2str(vl); }
+	case TFld::String:	{ ResAlloc res(bRes,false); return buf.str->get(itm,up_ord); }
     }
     return EVAL_STR;
 }
@@ -203,14 +199,10 @@ double TValBuf::getR( long long *itm, bool up_ord )
 {
     switch(valType())
     {
-	case TFld::Boolean:
-	    { char vl = getB(itm,up_ord); return (vl==EVAL_BOOL)?EVAL_REAL:(bool)vl; }
-	case TFld::Integer:
-	    { int vl = getI(itm,up_ord); return (vl==EVAL_INT)?EVAL_REAL:(double)vl; }
-	case TFld::String:
-	    { string vl = getS(itm,up_ord); return (vl==EVAL_STR)?EVAL_REAL:atof(vl.c_str()); }
-	case TFld::Real:
-	    ResAlloc res(bRes,false); return buf.real->get(itm,up_ord);
+	case TFld::Boolean:	{ char vl = getB(itm,up_ord); return (vl==EVAL_BOOL)?EVAL_REAL:(bool)vl; }
+	case TFld::Integer:	{ int vl = getI(itm,up_ord); return (vl==EVAL_INT)?EVAL_REAL:(double)vl; }
+	case TFld::String:	{ string vl = getS(itm,up_ord); return (vl==EVAL_STR)?EVAL_REAL:atof(vl.c_str()); }
+	case TFld::Real:	{ ResAlloc res(bRes,false); return buf.real->get(itm,up_ord); }
     }
     return EVAL_REAL;
 }
@@ -219,14 +211,10 @@ int TValBuf::getI( long long *itm, bool up_ord )
 {
     switch(valType())
     {
-	case TFld::Boolean:
-	    { char vl = getB(itm,up_ord); return (vl==EVAL_BOOL)?EVAL_INT:(bool)vl; }
-	case TFld::String:
-	    { string vl = getS(itm,up_ord); return (vl==EVAL_STR)?EVAL_INT:atoi(vl.c_str()); }
-	case TFld::Real:
-	    { double vl = getR(itm,up_ord); return (vl==EVAL_REAL)?EVAL_INT:(int)vl; }
-	case TFld::Integer:
-	    ResAlloc res(bRes,false); return buf.dec->get(itm,up_ord);
+	case TFld::Boolean:	{ char vl = getB(itm,up_ord); return (vl==EVAL_BOOL)?EVAL_INT:(bool)vl; }
+	case TFld::String:	{ string vl = getS(itm,up_ord); return (vl==EVAL_STR)?EVAL_INT:atoi(vl.c_str()); }
+	case TFld::Real:	{ double vl = getR(itm,up_ord); return (vl==EVAL_REAL)?EVAL_INT:(int)vl; }
+	case TFld::Integer:	{ ResAlloc res(bRes,false); return buf.dec->get(itm,up_ord); }
     }
     return EVAL_INT;
 }
@@ -235,14 +223,10 @@ char TValBuf::getB( long long *itm, bool up_ord )
 {
     switch(valType())
     {
-	case TFld::Integer:
-	    { int vl = getI(itm,up_ord); return (vl==EVAL_INT)?EVAL_BOOL:(bool)vl; }
-	case TFld::String:
-	    { string vl = getS(itm,up_ord); return (vl==EVAL_STR)?EVAL_BOOL:(bool)atoi(vl.c_str()); }
-	case TFld::Real:
-	    { double vl = getR(itm,up_ord); return (vl==EVAL_REAL)?EVAL_BOOL:(bool)vl; }
-	case TFld::Boolean:
-	    ResAlloc res(bRes,false); return buf.bl->get(itm,up_ord);
+	case TFld::Integer:	{ int vl = getI(itm,up_ord); return (vl==EVAL_INT)?EVAL_BOOL:(bool)vl; }
+	case TFld::String:	{ string vl = getS(itm,up_ord); return (vl==EVAL_STR)?EVAL_BOOL:(bool)atoi(vl.c_str()); }
+	case TFld::Real:	{ double vl = getR(itm,up_ord); return (vl==EVAL_REAL)?EVAL_BOOL:(bool)vl; }
+	case TFld::Boolean:	{ ResAlloc res(bRes,false); return buf.bl->get(itm,up_ord); }
     }
     return EVAL_BOOL;
 }
@@ -313,14 +297,14 @@ void TValBuf::getVals( TValBuf &buf, long long ibeg, long long iend )
     ibeg = vmax(ibeg,begin());
     iend = vmin(iend,end());
 
-    while( ibeg < iend )
+    while( ibeg <= iend )
     {
 	switch(valType())
 	{
-	    case TFld::Boolean:	buf.setB(getB(&ibeg,true),ibeg);	break;
-	    case TFld::Integer:	buf.setI(getI(&ibeg,true),ibeg);	break;
-	    case TFld::Real:	buf.setR(getR(&ibeg,true),ibeg);	break;
-	    case TFld::String:	buf.setS(getS(&ibeg,true),ibeg);	break;
+	    case TFld::Boolean:	{ char vl = getB(&ibeg,true); buf.setB(vl,ibeg); break; }
+	    case TFld::Integer:	{ int vl = getI(&ibeg,true); buf.setI(vl,ibeg); break; }
+	    case TFld::Real:	{ double vl = getR(&ibeg,true); buf.setR(vl,ibeg); break; }
+	    case TFld::String:	{ string vl = getS(&ibeg,true); buf.setS(vl,ibeg); break; }
 	}
 	ibeg++;
     }
@@ -1135,25 +1119,29 @@ void TVArchive::getVals( TValBuf &buf, long long ibeg, long long iend, const str
 
 void TVArchive::setVals( TValBuf &buf, long long ibeg, long long iend, const string &arch )
 {
-    //- Put to archivators -
+    //> Check for put to buffer
+    if( (arch.empty() || arch == BUF_ARCH_NM) && iend > TValBuf::begin() )
+	TValBuf::setVals(buf,vmax(ibeg,iend-TValBuf::size()*TValBuf::period()),iend);
+
+    //> Put to archivators
     ResAlloc res(a_res,false);
     for( int i_a = 0; i_a < arch_el.size(); i_a++ )
-	if( (arch.empty() || arch == arch_el[i_a]->archivator().workId()) )
-	    arch_el[i_a]->setVals(buf,ibeg,iend);
+	if( (arch.empty() || arch == arch_el[i_a]->archivator().workId()) &&
+		(!arch_el[i_a]->lastGet() || ibeg < arch_el[i_a]->lastGet()) )
+	    arch_el[i_a]->setVals(buf,ibeg,vmin(iend,arch_el[i_a]->lastGet()));
 }
 
 void TVArchive::getActiveData()
 {
+    if( pattr_src.freeStat() )	return;
+
     long long tm = TSYS::curTime();
-    if( !pattr_src.freeStat() )
+    switch( valType() )
     {
-	switch(valType())
-	{
-	    case TFld::Boolean:	setB(pattr_src.at().getB(&tm),tm);	break;
-	    case TFld::Integer:	setI(pattr_src.at().getI(&tm),tm);	break;
-	    case TFld::Real:	setR(pattr_src.at().getR(&tm),tm);	break;
-	    case TFld::String:	setS(pattr_src.at().getS(&tm),tm);	break;
-	}
+	case TFld::Boolean:	{ char vl = pattr_src.at().getB(&tm); setB(vl,tm); break; }
+	case TFld::Integer:	{ int vl = pattr_src.at().getI(&tm); setI(vl,tm); break; }
+	case TFld::Real:	{ double vl = pattr_src.at().getR(&tm); setR(vl,tm); break; }
+	case TFld::String:	{ string vl = pattr_src.at().getS(&tm); setS(vl,tm); break; }
     }
 }
 

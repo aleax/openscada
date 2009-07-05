@@ -163,10 +163,20 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	{
 	    AutoHD<TVal> vl;
 
-	    //> Archive's requests process
+	    //> Put last attribute's values
+	    for( int i_el = 0; i_el < list_c.size(); i_el++ )
+	    {
+		vl = vlAt(list_c[i_el]);
+		long long vtm = 0;
+		string svl = vl.at().getS(&vtm);
+		opt->childAdd("el")->setAttr("id",list_c[i_el])->setText(svl)->setAttr("tm",TSYS::ll2str(vtm));
+	    }
+
+	    //> Archives requests process
 	    for( int i_a = 0; i_a < opt->childSize(); i_a++ )
 	    {
 		XMLNode *aNd = opt->childGet(i_a);
+		if( aNd->name() != "ael" ) break;
 		vl = vlAt(aNd->attr("id"));
 
 		if( vl.at().arch().freeStat() ) { opt->childDel(aNd); i_a--; continue; }
@@ -202,14 +212,6 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		}
 
 		if( !aNd->childSize() ) { opt->childDel(aNd); i_a--; }
-	    }
-
-	    for( int i_el = 0; i_el < list_c.size(); i_el++ )
-	    {
-		vl = vlAt(list_c[i_el]);
-		long long vtm = 0;
-		string svl = vl.at().getS(&vtm);
-		opt->childAdd("el")->setAttr("id",list_c[i_el])->setText(svl)->setAttr("tm",TSYS::ll2str(vtm));
 	    }
 	}
 	if( ctrChkNode(opt,"set",RWRWRW,"root","root",SEQ_WR) )		//Multi attributes set

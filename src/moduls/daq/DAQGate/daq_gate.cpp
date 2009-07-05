@@ -355,7 +355,7 @@ void *TMdContr::Task( void *icntr )
 		    {
 			if( cntr.mStatWork[i_st].second > 0 ) continue;
 			XMLNode req("CntrReqs"); req.setAttr("path","/"+cntr.mStatWork[i_st].first+"/DAQ/");
-			//> Put attributes rquests
+			//> Put attributes reuests
 			for( int i_p=0; i_p < pLS.size(); i_p++)
 			{
 			    prm = cntr.at(pLS[i_p]);
@@ -373,7 +373,7 @@ void *TMdContr::Task( void *icntr )
 				{
 				    AutoHD<TVal> vl = prm.at().vlAt(listV[iV]);
 				    if( vl.at().arch().freeStat() ) continue;
-				    prmNd->childAdd("el")->setAttr("id",listV[iV])->setAttr("tm",TSYS::ll2str(vmax(vl.at().arch().at().end(""),TSYS::curTime()-(long long)(3.6e9*cntr.restDtTm()))));
+				    prmNd->childAdd("ael")->setAttr("id",listV[iV])->setAttr("tm",TSYS::ll2str(vmax(vl.at().arch().at().end(""),TSYS::curTime()-(long long)(3.6e9*cntr.restDtTm()))));
 				}
 			    }
 			}
@@ -398,8 +398,8 @@ void *TMdContr::Task( void *icntr )
 				if( !prm.at().vlPresent(aNd->attr("id")) ) continue;
 				AutoHD<TVal> vl = prm.at().vlAt(aNd->attr("id"));
 
-				if( aNd->attr("per").empty() ) vl.at().setS(aNd->text(),atoll(aNd->attr("tm").c_str()),true);
-				else if( aNd->childSize() )
+				if( aNd->name() == "el" ) vl.at().setS(aNd->text(),atoll(aNd->attr("tm").c_str()),true);
+				else if( aNd->name() == "ael" && aNd->childSize() )
 				{
 				    long long btm = atoll(aNd->attr("tm").c_str());
 				    long long per = atoll(aNd->attr("per").c_str());
